@@ -1,0 +1,10 @@
+# compiled object file
+*.o
+
+# roms
+*.gbc
+
+# for any of the poor souls with save game files in their working directory
+*.sgm
+*.sav
+*.sys
