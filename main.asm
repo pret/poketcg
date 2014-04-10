@@ -1,5 +1,4 @@
-SECTION "bank0",ROM0[0]
-INCBIN "baserom.gbc",$0,$4000
+INCLUDE "home.asm"
 
 SECTION "bank1",ROMX,BANK[$1]
 INCBIN "baserom.gbc",$4000,$4000
@@ -8,7 +7,9 @@ SECTION "bank2",ROMX,BANK[$2]
 INCBIN "baserom.gbc",$8000,$4000
 
 SECTION "bank3",ROMX,BANK[$3]
-INCBIN "baserom.gbc",$C000,$4000
+INCBIN "baserom.gbc",$C000,$CC42 - $C000
+RST20: ; cc42 (3:4c42)
+INCBIN "baserom.gbc",$CC42,$10000 - $CC42
 
 SECTION "bank4",ROMX,BANK[$4]
 INCBIN "baserom.gbc",$10000,$4000
@@ -182,7 +183,9 @@ SECTION "bank3C",ROMX,BANK[$3C]
 INCBIN "baserom.gbc",$F0000,$4000
 
 SECTION "bank3D",ROMX,BANK[$3D]
-INCBIN "baserom.gbc",$F4000,$4000
+INCBIN "baserom.gbc",$F4000,$F4003 - $F4000
+Func_f4003: ; f4003 (3d:4003)
+INCBIN "baserom.gbc",$F4003,$F8000 - $F4003
 
 SECTION "bank3E",ROMX,BANK[$3E]
 INCBIN "baserom.gbc",$F8000,$4000
