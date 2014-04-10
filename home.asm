@@ -295,7 +295,7 @@ Func_036a: ; 036a (0:036a)
 	ld de, $caf0
 	ld c, $10
 .asm_387
-	ld hl, Unknown_0399
+	ld hl, InitialPalette
 	ld b, $8
 .asm_38c
 	ld a, [hli]
@@ -308,8 +308,11 @@ Func_036a: ; 036a (0:036a)
 	call Func_0458
 	ret
 
-Unknown_0399: ; 0399 (0:0399)
-INCBIN "baserom.gbc",$0399,$03a1 - $0399
+InitialPalette: ; 0399 (0:0399)
+	RGB 28,28,24
+	RGB 21,21,16
+	RGB 10,10,08
+	RGB 00,00,00
 
 Func_03a1: ; 03a1 (0:03a1)
 	call Func_03c0
@@ -403,19 +406,19 @@ asm_44a
 	bit 6, a
 	jr nz, Func_0458
 	ld b, $8
-	call Func_0467
+	call InitializePalettes
 	jr asm_445
 
 Func_0458: ; 0458 (0:0458)
 	xor a
 	ld b, $40
-	call Func_0467
+	call InitializePalettes
 	ld a, $8
 	ld b, $40
-	call Func_0467
+	call InitializePalettes
 	jr asm_445
 
-Func_0467: ; 0467 (0:0467)
+InitializePalettes: ; 0467 (0:0467)
 	add a
 	add a
 	add a

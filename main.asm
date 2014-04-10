@@ -1,3 +1,5 @@
+INCLUDE "macros.asm"
+
 INCLUDE "home.asm"
 
 SECTION "bank1",ROMX,BANK[$1]
