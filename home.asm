@@ -1210,4 +1210,24 @@ Func_377f: ; 377f (0:377f)
 	ret
 ; 0x3784
 
-INCBIN "baserom.gbc",$3784,$4000 - $3784
+INCBIN "baserom.gbc",$3784,$3fe0 - $3784
+
+; jumps to 3f:hl
+Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
+	push af
+	ld a, $3f
+	ld [$ff80], a
+	ld [$2000], a
+	pop af
+	ld bc, Bankswitch3d
+	push bc
+	jp [hl]
+
+Bankswitch3d: ; 3fe0 (0:3fe0)
+	ld a, $3d
+	ld [$ff80], a
+	ld [$2000], a
+	ret
+; 0x3ff6
+
+INCBIN "baserom.gbc",$3ff6,$4000 - $3ff6
