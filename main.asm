@@ -29,10 +29,10 @@ SECTION "bank8",ROMX,BANK[$8]
 INCBIN "baserom.gbc",$20000,$4000
 
 SECTION "bank9",ROMX,BANK[$9]
-INCBIN "baserom.gbc",$24000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bankA",ROMX,BANK[$A]
-INCBIN "baserom.gbc",$28000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bankB",ROMX,BANK[$B]
 INCBIN "baserom.gbc",$2C000,$4000
@@ -80,10 +80,10 @@ SECTION "bank19",ROMX,BANK[$19]
 INCBIN "baserom.gbc",$64000,$4000
 
 SECTION "bank1A",ROMX,BANK[$1A]
-INCBIN "baserom.gbc",$68000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank1B",ROMX,BANK[$1B]
-INCBIN "baserom.gbc",$6C000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank1C",ROMX,BANK[$1C]
 INCBIN "baserom.gbc",$70000,$4000
@@ -95,7 +95,7 @@ SECTION "bank1E",ROMX,BANK[$1E]
 INCBIN "baserom.gbc",$78000,$4000
 
 SECTION "bank1F",ROMX,BANK[$1F]
-INCBIN "baserom.gbc",$7C000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank20",ROMX,BANK[$20]
 INCBIN "baserom.gbc",$80000,$4000
@@ -143,10 +143,10 @@ SECTION "bank2E",ROMX,BANK[$2E]
 INCBIN "baserom.gbc",$B8000,$4000
 
 SECTION "bank2F",ROMX,BANK[$2F]
-INCBIN "baserom.gbc",$BC000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank30",ROMX,BANK[$30]
-INCBIN "baserom.gbc",$C0000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank31",ROMX,BANK[$31]
 INCBIN "baserom.gbc",$C4000,$4000
@@ -182,7 +182,7 @@ SECTION "bank3B",ROMX,BANK[$3B]
 INCBIN "baserom.gbc",$EC000,$4000
 
 SECTION "bank3C",ROMX,BANK[$3C]
-INCBIN "baserom.gbc",$F0000,$4000
+INCLUDE "emptybank.asm"
 
 SECTION "bank3D",ROMX,BANK[$3D]
 
