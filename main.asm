@@ -186,11 +186,11 @@ INCLUDE "emptybank.asm"
 
 SECTION "bank3D",ROMX,BANK[$3D]
 
-INCLUDE "music1.asm"
+INCLUDE "music/engine/music1.asm"
 
 SECTION "bank3E",ROMX,BANK[$3E]
 
-INCLUDE "music2.asm"
+INCLUDE "music/engine/music2.asm"
 
 SECTION "bank3F",ROMX,BANK[$3F]
 INCBIN "baserom.gbc",$FC000,$4000
