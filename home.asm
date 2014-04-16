@@ -59,12 +59,12 @@ Start: ; 0150 (0:0150)
 	call Func_377f
 	call Func_0241
 	call Func_0ea6
-	call Func_0593
+	call CopyDMAFunction
 	call Func_080b
-	ld a, $1
+	ld a, BANK(Func_4000)
 	call BankswitchHome
 	ld sp, $e000
-	jp $4000
+	jp Func_4000
 
 VBlankHandler: ; 019b (0:019b)
 	push af
@@ -456,10 +456,10 @@ InitializePalettes: ; 0467 (0:0467)
 
 INCBIN "baserom.gbc",$0492,$0593 - $0492
 
-Func_0593: ; 0593 (0:0593)
+CopyDMAFunction: ; 0593 (0:0593)
 	ld c, $83
 	ld b, $a
-	ld hl, Func_05a1
+	ld hl, DMA
 .asm_59a
 	ld a, [hli]
 	ld [$ff00+c], a
@@ -468,8 +468,8 @@ Func_0593: ; 0593 (0:0593)
 	jr nz, .asm_59a
 	ret
 
-; Func_0593 copies this function to $ff83 
-Func_05a1: ; 05a1 (0:05a1)
+; CopyDMAFunction copies this function to $ff83 
+DMA: ; 05a1 (0:05a1)
 	ld a, $ca
 	ld [$ff46], a
 	ld a, $28
@@ -492,7 +492,86 @@ JumpToFunctionInTable: ; 05ab (0:05ab)
 	jp [hl]
 ; 0x5b6
 
-INCBIN "baserom.gbc",$05b6,$07a3 - $05b6
+INCBIN "baserom.gbc",$05b6,$0732 - $05b6
+
+CopyData_SaveRegisters: ; 0732 (0:0732)
+	push hl
+	push de
+	push bc
+	call CopyData
+	pop bc
+	pop de
+	pop hl
+	ret
+
+; copies bc bytes from hl to de
+CopyData: ; 073c (0:073c)
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec bc
+	ld a, c
+	or b
+	jr nz, CopyData
+	ret
+
+Func_0745: ; 0745 (0:0745)
+	push hl
+	push bc
+	push af
+	push de
+	ld e, l
+	ld d, h
+	ld hl, [sp+$9]
+	ld b, [hl]
+	dec hl
+	ld c, [hl]
+	dec hl
+	ld [hl], b
+	dec hl
+	ld [hl], c
+	ld hl, [sp+$9]
+	ld a, [$ff80]
+	ld [hld], a
+	ld [hl], $0
+	ld a, d
+	rlca
+	rlca
+	and $3
+	ld b, a
+	res 7, d
+	set 6, d
+	ld l, e
+	ld h, d
+	pop de
+	pop af
+	add b
+	call BankswitchHome
+	pop bc
+	ret
+; 0x76f
+
+INCBIN "baserom.gbc",$076f,$078e - $076f
+
+Func_078e: ; 078e (0:078e)
+	push hl
+	push de
+	ld hl, [sp+$7]
+	ld a, [hld]
+	call BankswitchHome
+	dec hl
+	ld d, [hl]
+	dec hl
+	ld e, [hl]
+	inc hl
+	inc hl
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	pop de
+	pop hl
+	pop af
+	ret
 
 BankswitchHome: ; 07a3 (0:07a3)
 	ld [$ff80], a
@@ -879,7 +958,31 @@ Wait: ; 0c08 (0:0c08)
 	ret
 ; 0xc19
 
-INCBIN "baserom.gbc",$0c19,$0c91 - $0c19
+INCBIN "baserom.gbc",$0c19,$0c32 - $0c19
+
+Func_0c32: ; 0c32 (0:0c32)
+	push bc
+.asm_c33
+	ei
+	di
+	ld a, [$ff41]
+	and $3
+	jr nz, .asm_c33
+	ld a, [de]
+	ld [hl], a
+	ld a, [$ff41]
+	and $3
+	jr nz, .asm_c33
+	ei
+	inc hl
+	inc de
+	dec c
+	jr nz, .asm_c33
+	pop bc
+	ret
+; 0xc4b
+
+INCBIN "baserom.gbc",$0c4b,$0c91 - $0c4b
 
 Func_0c91: ; 0c91 (0:0c91)
 	ld a, [$cb74]
@@ -1088,7 +1191,582 @@ Func_0ea6: ; 0ea6 (0:0ea6)
 	ret
 ; 0xebf
 
-INCBIN "baserom.gbc",$0ebf,$3189 - $0ebf
+INCBIN "baserom.gbc",$0ebf,$1dca - $0ebf
+
+Func_1dca: ; 1dca (0:1dca)
+	ld a, [$cabb]
+	bit 7, a
+	jr nz, .asm_1dd8
+.asm_1dd1
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec c
+	jr nz, .asm_1dd1
+	ret
+.asm_1dd8
+	jp Func_0c32
+
+Func_1ddb: ; 1ddb (0:1ddb)
+	ld l, e
+	ld h, $0
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld a, l
+	add d
+	ld l, a
+	ld a, h
+	adc $98
+	ld h, a
+	ret
+; 0x1deb
+
+INCBIN "baserom.gbc",$1deb,$21c5 - $1deb
+
+Func_21c5: ; 21c5 (0:21c5)
+	push de
+	push bc
+	call Func_2298
+	jr .asm_21e8
+.asm_21cc
+	cp $5
+	jr c, .asm_21d9
+	cp $10
+	jr nc, .asm_21d9
+	call Func_21f2
+	jr .asm_21e8
+.asm_21d9
+	ld e, a
+	ld d, [hl]
+	call Func_2546
+	jr nc, .asm_21e1
+	inc hl
+.asm_21e1
+	call Func_22ca
+	xor a
+	call Func_21f2
+.asm_21e8
+	ld a, [hli]
+	or a
+	jr nz, .asm_21cc
+	call Func_230f
+	pop bc
+	pop de
+	ret
+
+Func_21f2: ; 21f2 (0:21f2)
+	or a
+	jr z, .asm_2241
+	cp $e
+	jr z, .asm_2221
+	cp $f
+	jr z, .asm_2221
+	cp $a
+	jr z, .asm_224d
+	cp $5
+	jr z, .asm_2225
+	cp $6
+	jr z, .asm_220f
+	cp $7
+	jr z, .asm_2215
+	scf
+	ret
+.asm_220f
+	ld a, $1
+	ld [$cd0a], a
+	ret
+.asm_2215
+	call Func_230f
+	xor a
+	ld [$cd0a], a
+	ld a, $f
+	ld [$ffaf], a
+	ret
+.asm_2221
+	ld [$ffaf], a
+	xor a
+	ret
+.asm_2225
+	ld a, [$cd0a]
+	push af
+	ld a, $1
+	ld [$cd0a], a
+	call Func_230f
+	pop af
+	ld [$cd0a], a
+	ld a, [$ffb0]
+	or a
+	jr nz, .asm_2240
+	ld a, [hl]
+	push hl
+	call Func_22f2
+	pop hl
+.asm_2240
+	inc hl
+.asm_2241
+	ld a, [$ffae]
+	or a
+	ret z
+	ld b, a
+	ld a, [$ffac]
+	cp b
+	jr z, .asm_224d
+	xor a
+	ret
+.asm_224d
+	call Func_230f
+	ld a, [$cd08]
+	or a
+	call z, .asm_2257
+.asm_2257
+	xor a
+	ld [$ffac], a
+	ld a, [$ffad]
+	add $20
+	ld b, a
+	ld a, [$ffaa]
+	and $e0
+	add b
+	ld [$ffaa], a
+	ld a, [$ffab]
+	adc $0
+	ld [$ffab], a
+	ld a, [$cd09]
+	inc a
+	ld [$cd09], a
+	xor a
+	ret
+; 0x2275
+
+INCBIN "baserom.gbc",$2275,$2298 - $2275
+
+Func_2298: ; 2298 (0:2298)
+	xor a
+	ld [$cd0a], a
+	ld [$ffac], a
+	ld [$cd0b], a
+	ld a, $f
+	ld [$ffaf], a
+	ret
+; 0x22a6
+
+INCBIN "baserom.gbc",$22a6,$22ae - $22a6
+
+Func_22ae: ; 22ae (0:22ae)
+	push hl
+	ld a, d
+	ld [$ffad], a
+	xor a
+	ld [$ffae], a
+	ld [$cd09], a
+	call Func_1ddb
+	ld a, l
+	ld [$ffaa], a
+	ld a, h
+	ld [$ffab], a
+	call Func_2298
+	xor a
+	ld [$cd0b], a
+	pop hl
+	ret
+
+Func_22ca: ; 22ca (0:22ca)
+	push hl
+	push de
+	push bc
+	ld a, [$ffb0]
+	and $1
+	jr nz, .asm_22ed
+	call Func_2325
+	jr c, .asm_22de
+	or a
+	jr nz, .asm_22e9
+	call Func_24ac
+.asm_22de
+	ld a, [$ffb0]
+	and $2
+	jr nz, .asm_22e9
+	ld a, [$ffa9]
+	call Func_22f2
+.asm_22e9
+	pop bc
+	pop de
+	pop hl
+	ret
+.asm_22ed
+	call Func_235e
+	jr .asm_22e9
+
+Func_22f2: ; 22f2 (0:22f2)
+	ld [$cd05], a
+	ld hl, $ffaa
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc de
+	ld [hl], d
+	dec hl
+	ld [hl], e
+	dec de
+	ld l, e
+	ld h, d
+	ld de, $cd05
+	ld c, $1
+	call Func_1dca
+	ld hl, $ffac
+	inc [hl]
+	ret
+
+Func_230f: ; 230f (0:230f)
+	ld a, [$cd0a]
+	or a
+	ret z
+	ld a, [$cd0b]
+	or a
+	ret z
+	push hl
+	push de
+	push bc
+	ld e, $20
+	call Func_22ca
+	pop bc
+	pop de
+	pop hl
+	ret
+
+Func_2325: ; 2325 (0:2325)
+	call Func_235e
+	ret c
+	or a
+	ret nz
+	ld a, [$ffa8]
+	ld hl, $cd04
+	cp [hl]
+	jr nz, .asm_2345
+	ld a, [$ffa9]
+	ld h, $c8
+.asm_2337
+	ld l, a
+	ld a, [hl]
+	or a
+	jr nz, .asm_2337
+	ld h, $c9
+	ld c, [hl]
+	ld b, $c8
+	xor a
+	ld [bc], a
+	jr .asm_234a
+.asm_2345
+	inc [hl]
+	jr nz, .asm_2349
+	inc [hl]
+.asm_2349
+	ld l, [hl]
+.asm_234a
+	ld a, [$ffa9]
+	ld c, a
+	ld b, $c9
+	ld a, l
+	ld [$ffa9], a
+	ld [bc], a
+	ld h, $c8
+	ld [hl], c
+	ld h, $c6
+	ld [hl], e
+	inc h
+	ld [hl], d
+	ld b, l
+	xor a
+	ret
+
+Func_235e: ; 235e (0:235e)
+	ld a, [$cd0a]
+	or a
+	jr z, .asm_2376
+	call Func_23b1
+	ld a, [$cd0b]
+	ld d, a
+	or a
+	jr nz, .asm_2376
+	ld a, e
+	ld [$cd0b], a
+	ld a, $1
+	or a
+	ret
+.asm_2376
+	xor a
+	ld [$cd0b], a
+	ld a, [$ffa9]
+	ld l, a
+.asm_237d
+	ld h, $c6
+	ld a, [hl]
+	or a
+	ret z
+	cp e
+	jr nz, .asm_238a
+	inc h
+	ld a, [hl]
+	cp d
+	jr z, .asm_238f
+.asm_238a
+	ld h, $c8
+	ld l, [hl]
+	jr .asm_237d
+.asm_238f
+	ld a, [$ffa9]
+	cp l
+	jr z, .asm_23af
+	ld c, a
+	ld b, $c9
+	ld a, l
+	ld [bc], a
+	ld [$ffa9], a
+	ld h, $c9
+	ld b, [hl]
+	ld [hl], $0
+	ld h, $c8
+	ld a, c
+	ld c, [hl]
+	ld [hl], a
+	ld l, b
+	ld [hl], c
+	ld h, $c9
+	inc c
+	dec c
+	jr z, .asm_23af
+	ld l, c
+	ld [hl], b
+.asm_23af
+	scf
+	ret
+
+Func_23b1: ; 23b1 (0:23b1)
+	ld a, [$cd0d]
+	or a
+	ret z
+	ld a, e
+	cp $60
+	ret c
+	cp $7b
+	ret nc
+	sub $20
+	ld e, a
+	ret
+; 0x23c1
+
+INCBIN "baserom.gbc",$23c1,$24ac - $23c1
+
+Func_24ac: ; 24ac (0:24ac)
+	push hl
+	push de
+	push bc
+	ld a, [$cd0a]
+	or a
+	jr nz, .asm_24bf
+	call Func_2510
+	call Func_1dca
+.asm_24bb
+	pop bc
+	pop de
+	pop hl
+	ret
+.asm_24bf
+	call Func_24ca
+	call Func_2518
+	call Func_1dca
+	jr .asm_24bb
+
+Func_24ca: ; 24ca (0:24ca)
+	push bc
+	ld a, [$ff80]
+	push af
+	ld a, $1d
+	call BankswitchHome
+	push de
+	ld a, e
+	ld de, $ccf4
+	call Func_24fa
+	pop de
+	ld a, d
+	ld de, $ccf5
+	call Func_24fa
+	ld hl, $ccf4
+	ld b, $8
+.asm_24e8
+	ld a, [hli]
+	swap a
+	or [hl]
+	dec hl
+	ld [hli], a
+	ld [hli], a
+	dec b
+	jr nz, .asm_24e8
+	call Func_078e
+	pop bc
+	ld de, $ccf4
+	ret
+
+Func_24fa: ; 24fa (0:24fa)
+	sub $20
+	ld l, a
+	ld h, $0
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld bc, $6668
+	add hl, bc
+	ld b, $8
+.asm_2508
+	ld a, [hli]
+	ld [de], a
+	inc de
+	inc de
+	dec b
+	jr nz, .asm_2508
+	ret
+
+Func_2510: ; 2510 (0:2510)
+	push bc
+	call Func_256d
+	call Func_252e
+	pop bc
+Func_2518: ; 2518 (0:2518)
+	ld hl, $cd07
+	ld a, b
+	xor [hl]
+	ld h, $0
+	ld l, a
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld a, [$cd06]
+	ld b, a
+	ld c, $0
+	add hl, bc
+	ld c, $10
+	ret
+
+Func_252e: ; 252e (0:252e)
+	ld a, $1d
+	call Func_0745
+	ld de, $ccf4
+	push de
+	ld c, $8
+.asm_2539
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .asm_2539
+	pop de
+	call Func_078e
+	ret
+
+Func_2546: ; 2546 (0:2546)
+	ld a, [$cd0a]
+	or a
+	jr nz, .asm_255f
+	ld a, e
+	cp $10
+	jr c, .asm_2561
+	cp $60
+	jr nc, .asm_2565
+	ld a, [$ffaf]
+	cp $f
+	jr nz, .asm_2565
+	ld d, $f
+	or a
+	ret
+.asm_255f
+	or a
+	ret
+.asm_2561
+	cp $5
+	jr c, .asm_2569
+.asm_2565
+	ld d, $0
+	or a
+	ret
+.asm_2569
+	ld e, d
+	ld d, a
+	scf
+	ret
+
+Func_256d: ; 256d (0:256d)
+	ld bc, $0280
+	ld a, d
+	cp $e
+	jr z, .asm_2580
+	cp $f
+	jr nz, .asm_2582
+	ld bc, $0000
+	ld a, e
+	sub $10
+	ld e, a
+.asm_2580
+	ld d, $0
+.asm_2582
+	ld l, e
+	ld h, d
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, bc
+	ret
+; 0x2589
+
+INCBIN "baserom.gbc",$2589,$2c29 - $2589
+
+Func_2c29: ; 2c29 (0:2c29)
+	ld a, [$ff80]
+	push af
+	call Func_2ded
+	call Func_21c5
+	pop af
+	call BankswitchHome
+	ret
+; 0x2c37
+
+INCBIN "baserom.gbc",$2c37,$2ded - $2c37
+
+Func_2ded: ; 2ded (0:2ded)
+	push de
+	ld e, l
+	ld d, h
+	add hl, hl
+	add hl, de
+	set 6, h
+	ld a, $d
+	call BankswitchHome
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	ld a, [hl]
+	ld h, d
+	rl h
+	rla
+	rl h
+	rla
+	add $d
+	call BankswitchHome
+	res 7, d
+	set 6, d
+	ld l, e
+	ld h, d
+	pop de
+	ret
+; 0x2e12
+
+INCBIN "baserom.gbc",$2e12,$3189 - $2e12
 
 Func_3189: ; 3189 (0:3189)
 	ld hl, PointerTable_3190
@@ -1204,13 +1882,182 @@ INCBIN "baserom.gbc",$321d,$377f - $321d
 
 Func_377f: ; 377f (0:377f)
 	rst $28
-	dec a
-	nop
-	ld b, b
+	db BANK(Func_f4000)
+	dw Func_f4000
 	ret
-; 0x3784
 
-INCBIN "baserom.gbc",$3784,$3fe0 - $3784
+Func_3784: ; 3784 (0:3784)
+	xor a
+	rst $28
+	db BANK(Func_f4006)
+	dw Func_f4006
+	ret
+
+Func_378a: ; 378a (0:378a)
+	rst $28
+	db BANK(Func_f400f)
+	dw Func_f400f
+	ret
+
+Func_378f: ; 378f (0:378f)
+	rst $28
+	db BANK(Func_f4012)
+	dw Func_f4012
+	ret
+
+Func_3794: ; 3794 (0:3794)
+	ld a, $04
+Func_3796: ; 3796 (0:3796)
+	rst $28
+	db BANK(Func_f4009)
+	dw Func_f4009
+	ret
+
+Func_379b: ; 379b (0:379b)
+	rst $28
+	db BANK(Func_f401b)
+	dw Func_f401b
+	ret
+
+Func_37a0: ; 37a0 (0:37a0)
+	rst $28
+	db BANK(Func_f401e)
+	dw Func_f401e
+	ret
+; 0x37a5
+
+INCBIN "baserom.gbc",$37a5,$3bf5 - $37a5
+
+Func_3bf5: ; 3bf5 (0:3bf5)
+	ld a, [$ff80]
+	push af
+	push hl
+	ld a, [$d4c6]
+	call BankswitchHome
+	ld a, [$d4c4]
+	ld l, a
+	ld a, [$d4c5]
+	ld h, a
+	call CopyData_SaveRegisters
+	pop hl
+	pop af
+	call BankswitchHome
+	ret
+; 0x3c10
+
+INCBIN "baserom.gbc",$3c10,$3c5a - $3c10
+
+Func_3c5a: ; 3c5a (0:3c5a)
+	ld hl, $0000
+	rl c
+	rl b
+	ld a, $10
+.asm_3c63
+	ld [$ffb6], a
+	rl l
+	rl h
+	push hl
+	ld a, l
+	sub e
+	ld l, a
+	ld a, h
+	sbc d
+	ccf
+	jr nc, .asm_3c78
+	ld h, a
+	add sp, $2
+	scf
+	jr .asm_3c79
+.asm_3c78
+	pop hl
+.asm_3c79
+	rl c
+	rl b
+	ld a, [$ffb6]
+	dec a
+	jr nz, .asm_3c63
+	ret
+; 0x3c83
+
+INCBIN "baserom.gbc",$3c83,$3d72 - $3c83
+
+Func_3d72: ; 3d72 (0:3d72)
+	ld a, [$ff80]
+	push af
+	push hl
+	push hl
+	ld a, [$d4ca]
+	cp $ff
+	jr nz, .asm_3d84
+	ld de, $4e5a
+	xor a
+	jr .asm_3da1
+.asm_3d84
+	ld a, [$d4c4]
+	ld l, a
+	ld a, [$d4c5]
+	ld h, a
+	ld a, [$d4c6]
+	call BankswitchHome
+	ld a, [hli]
+	push af
+	ld a, [$d4ca]
+	rlca
+	ld e, [hl]
+	add e
+	ld e, a
+	inc hl
+	ld a, [hl]
+	adc $0
+	ld d, a
+	pop af
+.asm_3da1
+	add $20
+	pop hl
+	ld bc, $000b
+	add hl, bc
+	ld [hli], a
+	call BankswitchHome
+	ld a, [de]
+	ld [hli], a
+	inc de
+	ld a, [de]
+	ld [hl], a
+	pop hl
+	pop af
+	call BankswitchHome
+	ret
+
+Func_3db7: ; 3db7 (0:3db7)
+	push bc
+	ld c, $0
+	call Func_3dbf
+	pop bc
+	ret
+
+Func_3dbf: ; 3dbf (0:3dbf)
+	ld a, [$d4cf]
+	cp $10
+	jr c, .asm_3dc9
+	rst $38
+	ld a, $f
+.asm_3dc9
+	push bc
+	swap a
+	push af
+	and $f
+	ld b, a
+	pop af
+	and $f0
+	or c
+	ld c, a
+	ld hl, $d4d0
+	add hl, bc
+	pop bc
+	ret
+; 0x3ddb
+
+INCBIN "baserom.gbc",$3ddb,$3fe0 - $3ddb
 
 ; jumps to 3f:hl
 Bankswitch3dTo3f: ; 3fe0 (0:3fe0)

@@ -1,8 +1,11 @@
+INCLUDE "constants.asm"
+
 INCLUDE "macros.asm"
 
 INCLUDE "home.asm"
 
 SECTION "bank1",ROMX,BANK[$1]
+Func_4000: ; 4000 (1:4000)
 INCBIN "baserom.gbc",$4000,$4000
 
 SECTION "bank2",ROMX,BANK[$2]
@@ -14,7 +17,7 @@ RST20: ; cc42 (3:4c42)
 INCBIN "baserom.gbc",$CC42,$10000 - $CC42
 
 SECTION "bank4",ROMX,BANK[$4]
-INCBIN "baserom.gbc",$10000,$4000
+INCLUDE "overworldmap.asm"
 
 SECTION "bank5",ROMX,BANK[$5]
 INCBIN "baserom.gbc",$14000,$4000
