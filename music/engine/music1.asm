@@ -191,7 +191,7 @@ Func_f411c: ; f411c (3d:411c)
 	jr c, .asm_f4133
 	call Func_f414b
 	ld a, [$dd80]
-	call Func_f418c
+	call Music1_PlaySong
 	ld a, [$dd80]
 	or $80
 	ld [$dd80], a
@@ -247,7 +247,8 @@ Func_f414b: ; f414b (3d:414b)
 .asm_f418b
 	ret
 
-Func_f418c: ; f418c (3d:418c)
+; plays the song given by the id in a
+Music1_PlaySong: ; f418c (3d:418c)
 	push af
 	ld c, a
 	ld b, $0
@@ -414,7 +415,7 @@ Func_f42a5: ; f42a5 (3d:42a5)
 	ld a, [$dd95]
 	ld l, a
 	ld bc, $0000
-	call Func_f4414
+	call Music1_PlayNextNote
 	ld a, [$dd8d]
 	or a
 	jr z, .asm_f42fa
@@ -467,7 +468,7 @@ Func_f430a: ; f430a (3d:430a)
 	ld a, [$dd97]
 	ld l, a
 	ld bc, $0001
-	call Func_f4414
+	call Music1_PlayNextNote
 	ld a, [$dd8e]
 	or a
 	jr z, .asm_f435f
@@ -516,7 +517,7 @@ Func_f436f: ; f436f (3d:436f)
 	ld a, [$dd99]
 	ld l, a
 	ld bc, $0002
-	call Func_f4414
+	call Music1_PlayNextNote
 	ld a, [$dd8f]
 	or a
 	jr z, .asm_f43be
@@ -549,7 +550,7 @@ Func_f43ce: ; f43ce (3d:43ce)
 	ld a, [$dd9b]
 	ld l, a
 	ld bc, $0003
-	call Func_f4414
+	call Music1_PlayNextNote
 	ld a, [$dd90]
 	or a
 	jr z, .asm_f4400
@@ -574,17 +575,17 @@ Func_f43ce: ; f43ce (3d:43ce)
 .asm_f4413
 	ret
 
-Func_f4414: ; f4414 (3d:4414)
+Music1_PlayNextNote: ; f4414 (3d:4414)
 	ld a, [hli]
 	push hl
 	push af
 	cp $d0
-	jr c, .asm_f448c
+	jr c, Music1_Note
 	sub $d0
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, .data_f442c
+	ld hl, Music1_CommandTable
 	add hl, de
 	ld e, [hl]
 	inc hl
@@ -594,57 +595,57 @@ Func_f4414: ; f4414 (3d:4414)
 	pop af
 	jp [hl]
 
-.data_f442c
-	dw Func_f4598
-	dw Func_f45a3
-	dw Func_f45a3
-	dw Func_f45a3
-	dw Func_f45a3
-	dw Func_f45a3
-	dw Func_f45a3
-	dw Func_f45bb
-	dw Func_f45c3
-	dw Func_f45cb
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f45d4
-	dw Func_f45ef
-	dw Func_f45fd
-	dw Func_f4609
-	dw Func_f461e
-	dw Func_f4638
-	dw Func_f463f
-	dw Func_f4656
-	dw Func_f4667
-	dw Func_f4674
-	dw Func_f4683
-	dw Func_f4690
-	dw Func_f46a0
-	dw Func_f46ad
-	dw Func_f46ba
-	dw Func_f46cc
-	dw Func_f46d9
-	dw Func_f46e6
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
-	dw Func_f46f4
+Music1_CommandTable: ; f442c (3d:442c)
+	dw Music1_Speed
+	dw Music1_musicdx
+	dw Music1_musicdx
+	dw Music1_musicdx
+	dw Music1_musicdx
+	dw Music1_musicdx
+	dw Music1_musicdx
+	dw Music1_musicd7
+	dw Music1_musicd8
+	dw Music1_musicd9
+	dw Music1_End
+	dw Music1_End
+	dw Music1_musicdc
+	dw Music1_MainLoop
+	dw Music1_EndMainLoop
+	dw Music1_Loop
+	dw Music1_EndLoop
+	dw Music1_jp
+	dw Music1_call
+	dw Music1_ret
+	dw Music1_musice4
+	dw Music1_musice5
+	dw Music1_musice6
+	dw Music1_musice7
+	dw Music1_musice8
+	dw Music1_musice9
+	dw Music1_musicea
+	dw Music1_musiceb
+	dw Music1_musicec
+	dw Music1_musiced
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
+	dw Music1_End
 
-.asm_f448c
+Music1_Note: ; f448c (3d:448c)
 	push af
 	ld a, [hl]
 	ld e, a
@@ -838,16 +839,16 @@ Func_f4414: ; f4414 (3d:4414)
 	ld [hl], d
 	ret
 
-Func_f4598: ; f4598 (3d:4598)
+Music1_Speed: ; f4598 (3d:4598)
 	pop hl
 	ld a, [hli]
 	push hl
 	ld hl, $ddcf
 	add hl, bc
 	ld [hl], a
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45a3: ; f45a3 (3d:45a3)
+Music1_musicdx: ; f45a3 (3d:45a3)
 	and $7
 	dec a
 	ld hl, $ddaf
@@ -859,31 +860,31 @@ Func_f45a3: ; f45a3 (3d:45a3)
 	pop af
 	inc a
 	ld [hl], a
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 .asm_f45b6
 	pop af
 	ld [hl], a
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45bb: ; f45bb (3d:45bb)
+Music1_musicd7: ; f45bb (3d:45bb)
 	ld hl, $ddaf
 	add hl, bc
 	inc [hl]
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45c3: ; f45c3 (3d:45c3)
+Music1_musicd8: ; f45c3 (3d:45c3)
 	ld hl, $ddaf
 	add hl, bc
 	dec [hl]
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45cb: ; f45cb (3d:45cb)
+Music1_musicd9: ; f45cb (3d:45cb)
 	ld hl, $dd91
 	add hl, bc
 	ld [hl], $80
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45d4: ; f45d4 (3d:45d4)
+Music1_musicdc: ; f45d4 (3d:45d4)
 	pop hl
 	ld a, [hli]
 	push hl
@@ -904,9 +905,9 @@ Func_f45d4: ; f45d4 (3d:45d4)
 	or d
 	ld [hl], a
 	pop bc
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45ef: ; f45ef (3d:45ef)
+Music1_MainLoop: ; f45ef (3d:45ef)
 	pop de
 	push de
 	dec de
@@ -916,9 +917,9 @@ Func_f45ef: ; f45ef (3d:45ef)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	jp Func_f4710
+	jp Music1_PlayNextNote_pop
 
-Func_f45fd: ; f45fd (3d:45fd)
+Music1_EndMainLoop: ; f45fd (3d:45fd)
 	pop hl
 	ld hl, $dd9d
 	add hl, bc
@@ -926,14 +927,14 @@ Func_f45fd: ; f45fd (3d:45fd)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f4609: ; f4609 (3d:4609)
+Music1_Loop: ; f4609 (3d:4609)
 	pop de
 	ld a, [de]
 	inc de
 	push af
-	call Func_f46fc
+	call Music1_GetReturnAddress
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -942,11 +943,11 @@ Func_f4609: ; f4609 (3d:4609)
 	ld [hl], a
 	inc hl
 	push de
-	call Func_f4705
-	jp Func_f4710
+	call Music1_SetReturnAddress
+	jp Music1_PlayNextNote_pop
 
-Func_f461e: ; f461e (3d:461e)
-	call Func_f46fc
+Music1_EndLoop: ; f461e (3d:461e)
+	call Music1_GetReturnAddress
 	dec hl
 	ld a, [hl]
 	dec a
@@ -958,22 +959,22 @@ Func_f461e: ; f461e (3d:461e)
 	pop hl
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 .asm_f4630
 	dec hl
 	dec hl
-	call Func_f4705
-	jp Func_f4710
+	call Music1_SetReturnAddress
+	jp Music1_PlayNextNote_pop
 
-Func_f4638: ; f4638 (3d:4638)
+Music1_jp: ; f4638 (3d:4638)
 	pop hl
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f463f: ; f463f (3d:463f)
-	call Func_f46fc
+Music1_call: ; f463f (3d:463f)
+	call Music1_GetReturnAddress
 	pop de
 	ld a, e
 	ld [hli], a
@@ -987,12 +988,12 @@ Func_f463f: ; f463f (3d:463f)
 	ld e, b
 	ld b, $0
 	push de
-	call Func_f4705
-	jp Func_f4710
+	call Music1_SetReturnAddress
+	jp Music1_PlayNextNote_pop
 
-Func_f4656: ; f4656 (3d:4656)
+Music1_ret: ; f4656 (3d:4656)
 	pop de
-	call Func_f46fc
+	call Music1_GetReturnAddress
 	dec hl
 	ld a, [hld]
 	ld e, [hl]
@@ -1000,10 +1001,10 @@ Func_f4656: ; f4656 (3d:4656)
 	inc de
 	inc de
 	push de
-	call Func_f4705
-	jp Func_f4710
+	call Music1_SetReturnAddress
+	jp Music1_PlayNextNote_pop
 
-Func_f4667: ; f4667 (3d:4667)
+Music1_musice4: ; f4667 (3d:4667)
 	pop de
 	ld a, [de]
 	inc de
@@ -1012,9 +1013,9 @@ Func_f4667: ; f4667 (3d:4667)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f4674: ; f4674 (3d:4674)
+Music1_musice5: ; f4674 (3d:4674)
 	pop de
 	ld a, [de]
 	and $c0
@@ -1024,9 +1025,9 @@ Func_f4674: ; f4674 (3d:4674)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f4683: ; f4683 (3d:4683)
+Music1_musice6: ; f4683 (3d:4683)
 	pop de
 	ld a, [de]
 	inc de
@@ -1035,9 +1036,9 @@ Func_f4683: ; f4683 (3d:4683)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f4690: ; f4690 (3d:4690)
+Music1_musice7: ; f4690 (3d:4690)
 	pop de
 	ld a, [de]
 	inc de
@@ -1046,9 +1047,9 @@ Func_f4690: ; f4690 (3d:4690)
 	ld [$dd8b], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46a0: ; f46a0 (3d:46a0)
+Music1_musice8: ; f46a0 (3d:46a0)
 	pop de
 	ld a, [de]
 	inc de
@@ -1057,9 +1058,9 @@ Func_f46a0: ; f46a0 (3d:46a0)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46ad: ; f46ad (3d:46ad)
+Music1_musice9: ; f46ad (3d:46ad)
 	pop de
 	ld a, [de]
 	inc de
@@ -1068,9 +1069,9 @@ Func_f46ad: ; f46ad (3d:46ad)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46ba: ; f46ba (3d:46ba)
+Music1_musicea: ; f46ba (3d:46ba)
 	pop de
 	ld a, [de]
 	inc de
@@ -1082,9 +1083,9 @@ Func_f46ba: ; f46ba (3d:46ba)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46cc: ; f46cc (3d:46cc)
+Music1_musiceb: ; f46cc (3d:46cc)
 	pop de
 	ld a, [de]
 	inc de
@@ -1093,9 +1094,9 @@ Func_f46cc: ; f46cc (3d:46cc)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46d9: ; f46d9 (3d:46d9)
+Music1_musicec: ; f46d9 (3d:46d9)
 	pop de
 	ld a, [de]
 	inc de
@@ -1104,9 +1105,9 @@ Func_f46d9: ; f46d9 (3d:46d9)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46e6: ; f46e6 (3d:46e6)
+Music1_musiced: ; f46e6 (3d:46e6)
 	pop de
 	ld a, [de]
 	inc de
@@ -1116,16 +1117,18 @@ Func_f46e6: ; f46e6 (3d:46e6)
 	ld [hl], a
 	ld h, d
 	ld l, e
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
-Func_f46f4: ; f46f4 (3d:46f4)
+Music1_End: ; f46f4 (3d:46f4)
 	ld hl, $dd8d
 	add hl, bc
 	ld [hl], $0
 	pop hl
 	ret
 
-Func_f46fc: ; f46fc (3d:46fc)
+; returns the address where the address to
+; return to is stored for the current channel
+Music1_GetReturnAddress: ; f46fc (3d:46fc)
 	ld hl, $ddf3
 	add hl, bc
 	add hl, bc
@@ -1134,7 +1137,12 @@ Func_f46fc: ; f46fc (3d:46fc)
 	ld l, a
 	ret
 
-Func_f4705: ; f4705 (3d:4705)
+; puts the address in hl where the address to
+; return to is stored for the currentchannel
+; since this function is used for loops and calls, a song
+; should not use a loop inside a called piece of music
+; or call a piece of music inside a loop
+Music1_SetReturnAddress: ; f4705 (3d:4705)
 	ld d, h
 	ld e, l
 	ld hl, $ddf3
@@ -1145,9 +1153,9 @@ Func_f4705: ; f4705 (3d:4705)
 	ld [hl], d
 	ret
 
-Func_f4710: ; f4710 (3d:4710)
+Music1_PlayNextNote_pop ; f4710 (3d:4710)
 	pop hl
-	jp Func_f4414
+	jp Music1_PlayNextNote
 
 Func_f4714: ; f4714 (3d:4714)
 	ld a, [$dd8c]
@@ -1629,7 +1637,7 @@ Func_f49dc: ; f49dc (3d:49dc)
 	ld hl, $dd86
 	ld de, $de58
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, [$dd8a]
 	ld [$de5c], a
 	ld a, [$dd8b]
@@ -1637,19 +1645,19 @@ Func_f49dc: ; f49dc (3d:49dc)
 	ld hl, $dd8d
 	ld de, $de5e
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dd91
 	ld de, $de62
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dd95
 	ld de, $de66
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dd9d
 	ld de, $de6e
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, [$ddab]
 	ld [$de76], a
 	ld a, [$ddac]
@@ -1657,47 +1665,47 @@ Func_f49dc: ; f49dc (3d:49dc)
 	ld hl, $ddaf
 	ld de, $de78
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddb3
 	ld de, $de7c
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddb7
 	ld de, $de80
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddbb
 	ld de, $de84
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddbf
 	ld de, $de88
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddc3
 	ld de, $de8c
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddc7
 	ld de, $de90
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddcb
 	ld de, $de94
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddcf
 	ld de, $de98
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddd7
 	ld de, $de9c
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dddf
 	ld de, $dea0
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, $0
 	ld [$dddb], a
 	ld [$dddc], a
@@ -1706,25 +1714,25 @@ Func_f49dc: ; f49dc (3d:49dc)
 	ld hl, $dde7
 	ld de, $dea4
 	ld a, $3
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddea
 	ld de, $dea7
 	ld a, $3
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dded
 	ld de, $deaa
 	ld a, $2
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, $0
 	ld [$deac], a
 	ld hl, $ddf3
 	ld de, $dead
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $ddfb
 	ld de, $deb5
 	ld a, $30
-	call Func_f4c18
+	call Music1_CopyData
 	ret
 
 Func_f4b01: ; f4b01 (3d:4b01)
@@ -1737,7 +1745,7 @@ Func_f4b01: ; f4b01 (3d:4b01)
 	ld hl, $de58
 	ld de, $dd86
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, [$de5c]
 	ld [$dd8a], a
 	ld a, $1
@@ -1745,19 +1753,19 @@ Func_f4b01: ; f4b01 (3d:4b01)
 	ld hl, $de5e
 	ld de, $dd8d
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de62
 	ld de, $dd91
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de66
 	ld de, $dd95
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de6e
 	ld de, $dd9d
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, [$de76]
 	ld [$ddab], a
 	ld a, [$de77]
@@ -1765,73 +1773,73 @@ Func_f4b01: ; f4b01 (3d:4b01)
 	ld hl, $de78
 	ld de, $ddaf
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de7c
 	ld de, $ddb3
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de80
 	ld de, $ddb7
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de84
 	ld de, $ddbb
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de88
 	ld de, $ddbf
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de8c
 	ld de, $ddc3
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de90
 	ld de, $ddc7
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de94
 	ld de, $ddcb
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de98
 	ld de, $ddcf
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $de9c
 	ld de, $ddd7
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dea0
 	ld de, $dddf
 	ld a, $4
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dea4
 	ld de, $dde7
 	ld a, $3
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $dea7
 	ld de, $ddea
 	ld a, $3
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $deaa
 	ld de, $dded
 	ld a, $2
-	call Func_f4c18
+	call Music1_CopyData
 	ld a, [$deac]
 	ld [$ddef], a
 	ld hl, $dead
 	ld de, $ddf3
 	ld a, $8
-	call Func_f4c18
+	call Music1_CopyData
 	ld hl, $deb5
 	ld de, $ddfb
 	ld a, $30
-	call Func_f4c18
+	call Music1_CopyData
 	ret
 
 ; copies a bytes from hl to de
-Func_f4c18: ; f4c18 (3d:4c18)
+Music1_CopyData: ; f4c18 (3d:4c18)
 	ld c, a
 .asm_f4c19
 	ld a, [hli]

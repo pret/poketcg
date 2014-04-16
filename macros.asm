@@ -43,14 +43,6 @@ musicd9: MACRO
 	db $d9
 ENDM
 
-musicda: MACRO
-	db $da
-ENDM
-
-musicdb: MACRO
-	db $db
-ENDM
-
 musicdc: MACRO
 	db $dc, \1
 ENDM
