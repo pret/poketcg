@@ -3,7 +3,7 @@
 ROMS := tcg.gbc
 OBJS := main.o
 
-all: tcg.gbc compare
+all: clean tcg.gbc compare
 compare: baserom.gbc $(ROMS)
 	cmp $^
 
