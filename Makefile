@@ -11,7 +11,7 @@ compare: baserom.gbc $(ROMS)
 	rgbasm -o $@ $<
 
 tcg.gbc: $(OBJS)
-	rgblink -o $@ $^
+	rgblink -n tcg.sym -m tcg.map -o $@ $^
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
 
 clean:
