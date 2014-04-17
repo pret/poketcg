@@ -716,6 +716,8 @@ Func_0863: ; 0863 (0:0863)
 
 INCBIN "baserom.gbc",$0879,$09ae - $0879
 
+; this function affects the stack so that it returns to the pointer following the rst call
+; similar to rst 28, except this always loads bank 1
 RST18: ; 09ae (0:09ae)
 	push hl
 	push hl
@@ -760,6 +762,7 @@ Func_09ce: ; 09ce (0:09ce)
 
 INCBIN "baserom.gbc",$09dc,$09e9 - $09dc
 
+; this function affects the stack so that it returns to the three byte pointer following the rst call
 RST28: ; 09e9 (0:09e9)
 	push hl
 	push hl

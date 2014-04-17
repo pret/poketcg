@@ -4,7 +4,7 @@ Func_1c056: ; 1c056 (7:4056)
 	push hl
 	push bc
 	push de
-	ld a, [$d32f]
+	ld a, [wCurMap]
 	add a
 	ld c, a
 	ld b, $0
@@ -14,9 +14,9 @@ Func_1c056: ; 1c056 (7:4056)
 	ld h, [hl]
 	ld l, a
 	ld bc, $0005
-	ld a, [$d330]
+	ld a, [wPlayerXCoord]
 	ld d, a
-	ld a, [$d331]
+	ld a, [wPlayerYCoord]
 	ld e, a
 .asm_1c072
 	ld a, [hli]
@@ -303,7 +303,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	push hl
 	push bc
 	push de
-	ld a, [$d32f]
+	ld a, [wCurMap]
 	add a
 	ld c, a
 	add a
