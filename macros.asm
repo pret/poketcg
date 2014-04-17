@@ -2,6 +2,12 @@ RGB: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
+emptybank: MACRO
+	rept $4000
+	db $ff
+	endr
+ENDM
+
 C_		EQU $1
 C#		EQU $2
 D_		EQU $3
