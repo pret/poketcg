@@ -165,7 +165,7 @@ Func_f807d: ; f807d (3e:407d)
 Func_f80e9: ; f80e9 (3e:40e9)
 	call Func_f82a4
 	call Func_f811c
-	ld hl, $4003
+	ld hl, Func_fc003
 	call Bankswitch3dTo3f
 	ld a, [$dd81]
 	ld [$ff80], a
@@ -200,7 +200,7 @@ Func_f811c: ; f811c (3e:411c)
 	rla
 	jr c, .asm_f814a
 	ld a, [$dd82]
-	ld hl, $4000
+	ld hl, Func_fc000
 	call Bankswitch3dTo3f
 	ld a, [$dd82]
 	or $80
@@ -819,7 +819,7 @@ Music2_Note: ; f448c (3d:448c)
 	add e
 	add e
 	ld e, a
-	ld hl, $4c30
+	ld hl, Unknown_f8c30
 	add hl, de
 	ld a, [hli]
 	ld e, a
@@ -1853,7 +1853,10 @@ Unknown_f8c20: ; f8c20 (3e:4c20)
 INCBIN "baserom.gbc",$f8c20,$f8c28 - $f8c20
 
 Unknown_f8c28: ; f8c28 (3e:4c28)
-INCBIN "baserom.gbc",$f8c28,$f8cda - $f8c28
+INCBIN "baserom.gbc",$f8c28,$f8c30 - $f8c28
+
+Unknown_f8c30: ; f8c30 (3e:4c30)
+INCBIN "baserom.gbc",$f8c30,$f8cda - $f8c30
 
 PointerTable_f8cda: ; f8cda (3e:4cda)
 	dw Unknown_f8ce4

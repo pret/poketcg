@@ -5,8 +5,7 @@ INCLUDE "wram.asm"
 INCLUDE "engine/home.asm"
 
 SECTION "bank1",ROMX,BANK[$1]
-Func_4000: ; 4000 (1:4000)
-INCBIN "baserom.gbc",$4000,$4000
+INCLUDE "engine/bank1.asm"
 
 SECTION "bank2",ROMX,BANK[$2]
 INCBIN "baserom.gbc",$8000,$4000
@@ -29,7 +28,11 @@ SECTION "bank5",ROMX,BANK[$5]
 INCBIN "baserom.gbc",$14000,$4000
 
 SECTION "bank6",ROMX,BANK[$6]
-INCBIN "baserom.gbc",$18000,$4000
+INCBIN "baserom.gbc",$18000,$1996e - $18000
+Func_1996e: ; 1996e (6:596e)
+INCBIN "baserom.gbc",$1996e,$1a6cc - $1996e
+Func_1a6cc: ; 1a6cc (6:66cc)
+INCBIN "baserom.gbc",$1a6cc,$1c000 - $1a6cc
 
 SECTION "bank7",ROMX,BANK[$7]
 INCLUDE "engine/bank7.asm"
@@ -213,4 +216,7 @@ SECTION "bank3E",ROMX,BANK[$3E]
 INCLUDE "engine/music2.asm"
 
 SECTION "bank3F",ROMX,BANK[$3F]
-INCBIN "baserom.gbc",$FC000,$4000
+Func_fc000: ; fc000 (3f:4000)
+INCBIN "baserom.gbc",$fc000,$fc003 - $fc000
+Func_fc003: ; fc003 (3f:4003)
+INCBIN "baserom.gbc",$fc003,$100000 - $fc003

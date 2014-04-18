@@ -467,7 +467,10 @@ Func_11184: ; 11184 (4:5184)
 INCBIN "baserom.gbc",$111b3,$1229f - $111b3
 
 Unknown_1229f: ; 1229f (4:629f)
-INCBIN "baserom.gbc",$1229f,$1299f - $1229f
+INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
+
+Func_126d1: ; 126d1 (4:66d1)
+INCBIN "baserom.gbc",$126d1,$1299f - $126d1
 
 Func_1299f: ; 1299f (4:699f)
 	push af
