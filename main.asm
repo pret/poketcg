@@ -12,9 +12,15 @@ SECTION "bank2",ROMX,BANK[$2]
 INCBIN "baserom.gbc",$8000,$4000
 
 SECTION "bank3",ROMX,BANK[$3]
-INCBIN "baserom.gbc",$C000,$CC42 - $C000
+INCBIN "baserom.gbc",$c000,$c5d5 - $c000
+Func_c5d5: ; c5d5 (3:45d5)
+INCBIN "baserom.gbc",$c5d5,$c5e9 - $c5d5
+Func_c5e9: ; c5e9 (3:45e9)
+INCBIN "baserom.gbc",$c5e9,$ca6c - $c5e9
+Func_ca6c: ; ca6c (3:4a6c)
+INCBIN "baserom.gbc",$ca6c,$cc42 - $ca6c
 RST20: ; cc42 (3:4c42)
-INCBIN "baserom.gbc",$CC42,$10000 - $CC42
+INCBIN "baserom.gbc",$cc42,$10000 - $cc42
 
 SECTION "bank4",ROMX,BANK[$4]
 INCLUDE "engine/overworldmap.asm"
@@ -101,7 +107,13 @@ SECTION "bank1F",ROMX,BANK[$1F]
 	emptybank
 
 SECTION "bank20",ROMX,BANK[$20]
-INCBIN "baserom.gbc",$80000,$4000
+INCBIN "baserom.gbc",$80000,$8020f - $80000
+Func_8020f: ; 8020f (20:420f)
+INCBIN "baserom.gbc",$8020f,$80229 - $8020f
+Func_80229: ; 80229 (20:4229)
+INCBIN "baserom.gbc",$80229,$8025b - $80229
+Func_8025b: ; 8025b (20:425b)
+INCBIN "baserom.gbc",$8025b,$84000 - $8025b
 
 SECTION "bank21",ROMX,BANK[$21]
 INCBIN "baserom.gbc",$84000,$4000

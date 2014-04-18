@@ -21,9 +21,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	ld a, [$ff91]
 	and $f0
 	jr z, .asm_10e83
-	rst $28
-	db $03
-	dw $45d5
+	farcall Func_c5d5
 	ld [$d334], a
 	call Func_10e97
 	jr .asm_10e96
@@ -116,9 +114,7 @@ Func_10f4a: ; 10f4a (4:4f4a)
 	jr nz, .asm_10f5f
 	ld c, a
 	ld a, $1e
-	rst $28
-	db $03
-	dw $4a6c
+	farcall Func_ca6c
 	or a
 	ld a, c
 	jr nz, .asm_10f5f
@@ -173,9 +169,7 @@ OverworldMapIndexes: ; 10f88 (4:4f88)
 
 Func_10fbc: ; 10fbc (4:4fbc) XXXX
 	ld a, $25
-	rst $28
-	db BANK(Func_1299f)
-	dw Func_1299f
+	farcall Func_1299f
 	ld c, $2
 	call Func_3dbf
 	ld a, $80
@@ -189,9 +183,7 @@ Func_10fbc: ; 10fbc (4:4fbc) XXXX
 	ld b, $37
 .asm_10fd8
 	ld a, b
-	rst $28
-	db BANK(Func_12ab5)
-	dw Func_12ab5
+	farcall Func_12ab5
 	ret
 
 Func_10fde: ; 10fde (4:4fde) XXXX
@@ -213,9 +205,7 @@ Func_10fde: ; 10fde (4:4fde) XXXX
 	ld [$d33c], a
 	call Func_12ab5
 	ld a, $3e
-	rst $28
-	db $03
-	dw $4a6c
+	farcall Func_ca6c
 	or a
 	jr nz, .asm_11015
 	ld c, $f
@@ -357,9 +347,7 @@ Func_110a6: ; 110a6 (4:50a6)
 	xor a
 	ld [$d347], a
 	ld [$d348], a
-	rst $28
-	db $03
-	dw $45e9
+	farcall Func_c5e9
 	pop hl
 	ret
 
@@ -579,12 +567,8 @@ Func_12ae2: ; 12ae2 (4:6ae2)
 	ld [hli], a
 	push hl
 	ld l, $6
-	rst $28
-	db $20
-	dw $420f
-	rst $28
-	db $20
-	dw $4229
+	farcall Func_8020f
+	farcall Func_80229
 	pop hl
 	ld a, [$d4c6]
 	ld [hli], a
@@ -784,9 +768,7 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	ld a, d
 	ld [$d4ca], a
 	pop af
-	rst $28
-	db $20
-	dw $425b
+	farcall Func_8025b
 	ret
 
 INCBIN "baserom.gbc",$12c5e,$14000 - $12c5e

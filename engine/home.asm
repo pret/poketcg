@@ -1884,48 +1884,34 @@ Func_3212: ; 3212 (0:3212)
 INCBIN "baserom.gbc",$321d,$377f - $321d
 
 Func_377f: ; 377f (0:377f)
-	rst $28
-	db BANK(Func_f4000)
-	dw Func_f4000
+	farcall Func_f4000
 	ret
 
 Func_3784: ; 3784 (0:3784)
 	xor a
-	rst $28
-	db BANK(Func_f4006)
-	dw Func_f4006
+	farcall Func_f4006
 	ret
 
 Func_378a: ; 378a (0:378a)
-	rst $28
-	db BANK(Func_f400f)
-	dw Func_f400f
+	farcall Func_f400f
 	ret
 
 Func_378f: ; 378f (0:378f)
-	rst $28
-	db BANK(Func_f4012)
-	dw Func_f4012
+	farcall Func_f4012
 	ret
 
 Func_3794: ; 3794 (0:3794)
 	ld a, $04
 Func_3796: ; 3796 (0:3796)
-	rst $28
-	db BANK(Func_f4009)
-	dw Func_f4009
+	farcall Func_f4009
 	ret
 
 Func_379b: ; 379b (0:379b)
-	rst $28
-	db BANK(Func_f401b)
-	dw Func_f401b
+	farcall Func_f401b
 	ret
 
 Func_37a0: ; 37a0 (0:37a0)
-	rst $28
-	db BANK(Func_f401e)
-	dw Func_f401e
+	farcall Func_f401e
 	ret
 ; 0x37a5
 

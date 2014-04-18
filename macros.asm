@@ -2,6 +2,17 @@ RGB: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
+bank1call: MACRO
+	rst $18
+	dw \1
+ENDM
+
+farcall: MACRO
+	rst $28
+	db BANK(\1)
+	dw \1
+ENDM
+
 emptybank: MACRO
 	rept $4000
 	db $ff
