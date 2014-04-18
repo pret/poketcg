@@ -1587,7 +1587,7 @@ Func_24ca: ; 24ca (0:24ca)
 	push bc
 	ld a, [$ff80]
 	push af
-	ld a, $1d
+	ld a, BANK(Unknown_76668)
 	call BankswitchHome
 	push de
 	ld a, e
@@ -1620,7 +1620,7 @@ Func_24fa: ; 24fa (0:24fa)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld bc, $6668
+	ld bc, Unknown_76668
 	add hl, bc
 	ld b, $8
 .asm_2508
@@ -1731,7 +1731,7 @@ INCBIN "baserom.gbc",$2589,$2c29 - $2589
 Func_2c29: ; 2c29 (0:2c29)
 	ld a, [$ff80]
 	push af
-	call Func_2ded
+	call ReadTextOffset
 	call Func_21c5
 	pop af
 	call BankswitchHome
@@ -1740,14 +1740,16 @@ Func_2c29: ; 2c29 (0:2c29)
 
 INCBIN "baserom.gbc",$2c37,$2ded - $2c37
 
-Func_2ded: ; 2ded (0:2ded)
+; uses the two byte text id in hl to read the three byte text offset
+; loads the correct bank for the specific text and returns the pointer in hl
+ReadTextOffset: ; 2ded (0:2ded)
 	push de
 	ld e, l
 	ld d, h
 	add hl, hl
 	add hl, de
-	set 6, h
-	ld a, $d
+	set 6, h ; hl = (hl * 3) + $4000
+	ld a, BANK(TextOffsets)
 	call BankswitchHome
 	ld e, [hl]
 	inc hl
@@ -1759,10 +1761,10 @@ Func_2ded: ; 2ded (0:2ded)
 	rla
 	rl h
 	rla
-	add $d
+	add BANK(TextOffsets)
 	call BankswitchHome
 	res 7, d
-	set 6, d
+	set 6, d ; $4000 ≤ de ≤ $7fff
 	ld l, e
 	ld h, d
 	pop de
@@ -1915,7 +1917,10 @@ Func_37a0: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-INCBIN "baserom.gbc",$37a5,$3bf5 - $37a5
+INCBIN "baserom.gbc",$37a5,$397b - $37a5
+
+Unknown_397b: ; 397b (0:397b)
+INCBIN "baserom.gbc",$397b,$3bf5 - $397b
 
 Func_3bf5: ; 3bf5 (0:3bf5)
 	ld a, [$ff80]
@@ -1978,7 +1983,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld a, [$d4ca]
 	cp $ff
 	jr nz, .asm_3d84
-	ld de, $4e5a
+	ld de, Func_80e5a
 	xor a
 	jr .asm_3da1
 .asm_3d84
@@ -2001,7 +2006,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld d, a
 	pop af
 .asm_3da1
-	add $20
+	add BANK(Func_80e5a)
 	pop hl
 	ld bc, $000b
 	add hl, bc

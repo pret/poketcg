@@ -97,7 +97,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	rlca
 	ld e, a
 	ld d, $0
-	ld hl, $397b
+	ld hl, Unknown_397b
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]

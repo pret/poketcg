@@ -50,6 +50,7 @@ SECTION "bankC",ROMX,BANK[$C]
 INCBIN "baserom.gbc",$30000,$4000
 
 SECTION "bankD",ROMX,BANK[$D]
+TextOffsets: ; 34000 (d:4000)
 INCBIN "baserom.gbc",$34000,$4000
 
 SECTION "bankE",ROMX,BANK[$E]
@@ -98,7 +99,9 @@ SECTION "bank1C",ROMX,BANK[$1C]
 INCBIN "baserom.gbc",$70000,$4000
 
 SECTION "bank1D",ROMX,BANK[$1D]
-INCBIN "baserom.gbc",$74000,$4000
+INCBIN "baserom.gbc",$74000,$76668 - $74000
+Unknown_76668: ; 76668 (1d:6668)
+INCBIN "baserom.gbc",$76668,$78000 - $76668
 
 SECTION "bank1E",ROMX,BANK[$1E]
 INCBIN "baserom.gbc",$78000,$4000
@@ -113,7 +116,9 @@ INCBIN "baserom.gbc",$8020f,$80229 - $8020f
 Func_80229: ; 80229 (20:4229)
 INCBIN "baserom.gbc",$80229,$8025b - $80229
 Func_8025b: ; 8025b (20:425b)
-INCBIN "baserom.gbc",$8025b,$84000 - $8025b
+INCBIN "baserom.gbc",$8025b,$80e5a - $8025b
+Func_80e5a: ; 80e5a (20:4e5a)
+INCBIN "baserom.gbc",$80e5a,$84000 - $80e5a
 
 SECTION "bank21",ROMX,BANK[$21]
 INCBIN "baserom.gbc",$84000,$4000
