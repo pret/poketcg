@@ -347,31 +347,31 @@ Music_PCMainMenu_Ch4: ; f922b (3e:522b)
 	MainLoop
 	Loop 7
 	music_call Branch_f9248
-	note noise7, 1
-	note noise1, 1
-	note noise3, 2
-	note noise7, 1
-	note noise9, 1
+	note snare3, 1
+	note bass, 1
+	note snare1, 2
+	note snare3, 1
+	note snare4, 1
 	EndLoop
 	music_call Branch_f9248
-	note noise9, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
-	note noise3, 2
-	note noise3, 1
-	note noise3, 1
+	note snare1, 2
+	note snare1, 1
+	note snare1, 1
 	EndMainLoop
 
 Branch_f9248:
-	note noise1, 2
-	note noise7, 1
-	note noise7, 1
-	note noise3, 2
-	note noise7, 1
-	note noise9, 1
-	note noise1, 1
-	note noise5, 1
+	note bass, 2
+	note snare3, 1
+	note snare3, 1
+	note snare1, 2
+	note snare3, 1
+	note snare4, 1
+	note bass, 1
+	note snare2, 1
 	music_ret
 ; 0xf9251

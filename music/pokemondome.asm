@@ -775,25 +775,25 @@ Branch_f9613:
 Music_PokemonDome_Ch4: ; f9629 (3e:5629)
 	Speed 7
 	musicdx 1
-	note noisec, 8
+	note snare5, 8
 	Speed 1
-	note noise3, 4
-	note noise5, 3
+	note snare1, 4
+	note snare2, 3
 	Loop 7
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	EndLoop
 	MainLoop
 	Loop 2
 	Speed 7
-	note noise3, 2
-	note noise3, 2
+	note snare1, 2
+	note snare1, 2
 	rest 2
 	Speed 1
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 3
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 3
 	EndLoop
 	EndMainLoop
 ; 0xf9646

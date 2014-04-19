@@ -270,30 +270,30 @@ Music_CardPop_Ch4: ; f717d (3d:717d)
 	musicdx 1
 	Loop 11
 	music_call Branch_f7196
-	note noise9, 4
-	note noise3, 2
-	note noise7, 2
-	note noise9, 2
-	note noise3, 2
+	note snare4, 4
+	note snare1, 2
+	note snare3, 2
+	note snare4, 2
+	note snare1, 2
 	EndLoop
 	music_call Branch_f7196
-	note noise9, 2
-	note noise5, 1
-	note noise5, 1
+	note snare4, 2
+	note snare2, 1
+	note snare2, 1
 	Loop 4
-	note noise3, 2
+	note snare1, 2
 	EndLoop
 	EndMainLoop
 
 Branch_f7196:
-	note noise1, 2
-	note noise7, 2
-	note noise9, 4
-	note noise3, 2
-	note noise7, 2
-	note noise9, 2
-	note noise3, 2
-	note noise1, 2
-	note noise3, 2
+	note bass, 2
+	note snare3, 2
+	note snare4, 4
+	note snare1, 2
+	note snare3, 2
+	note snare4, 2
+	note snare1, 2
+	note bass, 2
+	note snare1, 2
 	music_ret
 ; 0xf71a0

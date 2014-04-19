@@ -1068,35 +1068,35 @@ Music_Club3_Ch4: ; fa772 (3e:6772)
 	MainLoop
 	Loop 3
 	music_call Branch_fa796
-	note noise3, 2
-	note noise9, 2
+	note snare1, 2
+	note snare4, 2
 	music_call Branch_fa796
-	note noise3, 2
-	note noise7, 1
-	note noise3, 1
+	note snare1, 2
+	note snare3, 1
+	note snare1, 1
 	EndLoop
 	music_call Branch_fa796
-	note noise3, 2
-	note noise9, 2
+	note snare1, 2
+	note snare4, 2
 	music_call Branch_fa796
-	note noise3, 1
+	note snare1, 1
 	Speed 1
-	note noise7, 5
-	note noise3, 4
+	note snare3, 5
+	note snare1, 4
 	Speed 9
-	note noise3, 1
-	note noise3, 1
+	note snare1, 1
+	note snare1, 1
 	EndMainLoop
 
 Branch_fa796:
-	note noise1, 2
-	note noise7, 2
-	note noise3, 2
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise1, 1
-	note noise9, 1
-	note noise1, 1
+	note bass, 2
+	note snare3, 2
+	note snare1, 2
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note bass, 1
+	note snare4, 1
+	note bass, 1
 	music_ret
 ; 0xfa7a0

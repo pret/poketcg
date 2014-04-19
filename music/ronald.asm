@@ -1130,88 +1130,88 @@ Music_Ronald_Ch4: ; face0 (3e:6ce0)
 	MainLoop
 	Loop 3
 	music_call Branch_fad46
-	note noise7, 13
+	note snare3, 13
 	music_call Branch_fad4f
-	note noise5, 7
-	note noise1, 6
-	note noise5, 7
-	note noise9, 6
-	note noise1, 7
-	note noise3, 13
-	note noise7, 6
-	note noise5, 7
+	note snare2, 7
+	note bass, 6
+	note snare2, 7
+	note snare4, 6
+	note bass, 7
+	note snare1, 13
+	note snare3, 6
+	note snare2, 7
 	EndLoop
 	music_call Branch_fad46
-	note noise7, 13
+	note snare3, 13
 	music_call Branch_fad4f
-	note noise5, 7
-	note noise1, 13
-	note noise9, 6
-	note noise5, 3
-	note noise5, 4
+	note snare2, 7
+	note bass, 13
+	note snare4, 6
+	note snare2, 3
+	note snare2, 4
 	Loop 2
-	note noise3, 6
-	note noise3, 7
+	note snare1, 6
+	note snare1, 7
 	EndLoop
 	Loop 2
 	Loop 7
 	music_call Branch_fad46
-	note noise7, 13
+	note snare3, 13
 	music_call Branch_fad4f
-	note noise5, 7
-	note noise1, 6
-	note noise5, 7
-	note noise9, 6
-	note noise1, 7
-	note noise3, 13
-	note noise7, 6
-	note noise5, 7
+	note snare2, 7
+	note bass, 6
+	note snare2, 7
+	note snare4, 6
+	note bass, 7
+	note snare1, 13
+	note snare3, 6
+	note snare2, 7
 	EndLoop
 	music_call Branch_fad46
-	note noise7, 13
+	note snare3, 13
 	music_call Branch_fad4f
-	note noise5, 3
-	note noise5, 4
+	note snare2, 3
+	note snare2, 4
 	Loop 4
-	note noise3, 6
-	note noise3, 7
+	note snare1, 6
+	note snare1, 7
 	EndLoop
 	EndLoop
 	Loop 6
 	music_call Branch_fad46
-	note noise7, 13
+	note snare3, 13
 	EndLoop
 	music_call Branch_fad46
 	Speed 13
-	note noisec, 4
+	note snare5, 4
 	Speed 1
 	rest 6
-	note noise5, 3
-	note noise5, 4
-	note noise3, 6
-	note noise3, 7
+	note snare2, 3
+	note snare2, 4
+	note snare1, 6
+	note snare1, 7
 	Loop 2
-	note noise5, 6
-	note noise3, 7
+	note snare2, 6
+	note snare1, 7
 	EndLoop
-	note noise3, 6
-	note noise5, 7
+	note snare1, 6
+	note snare2, 7
 	EndMainLoop
 
 Branch_fad46:
 	music_call Branch_fad4f
-	note noise5, 7
-	note noise1, 13
-	note noise9, 6
-	note noise1, 7
-	note noise3, 13
+	note snare2, 7
+	note bass, 13
+	note snare4, 6
+	note bass, 7
+	note snare1, 13
 	music_ret
 
 Branch_fad4f:
-	note noise1, 13
-	note noise9, 6
-	note noise1, 7
-	note noise3, 13
-	note noise1, 6
+	note bass, 13
+	note snare4, 6
+	note bass, 7
+	note snare1, 13
+	note bass, 6
 	music_ret
 ; 0xfad55

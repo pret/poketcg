@@ -550,33 +550,33 @@ Music_PauseMenu_Ch4: ; f6ec8 (3d:6ec8)
 	MainLoop
 	Loop 2
 	Loop 7
-	note noise1, 1
-	note noise7, 1
-	note noise9, 2
-	note noise3, 1
-	note noise7, 1
-	note noise9, 1
-	note noise5, 1
-	note noise1, 1
-	note noise7, 1
-	note noise9, 2
-	note noise3, 1
-	note noise7, 1
-	note noise9, 1
-	note noise3, 1
+	note bass, 1
+	note snare3, 1
+	note snare4, 2
+	note snare1, 1
+	note snare3, 1
+	note snare4, 1
+	note snare2, 1
+	note bass, 1
+	note snare3, 1
+	note snare4, 2
+	note snare1, 1
+	note snare3, 1
+	note snare4, 1
+	note snare1, 1
 	EndLoop
-	note noise1, 1
-	note noise7, 1
-	note noise9, 2
-	note noise3, 1
-	note noise7, 1
-	note noise9, 1
+	note bass, 1
+	note snare3, 1
+	note snare4, 2
+	note snare1, 1
+	note snare3, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
 	Loop 8
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	EndLoop
 	EndMainLoop

@@ -519,30 +519,30 @@ Music_TitleScreen_Ch4: ; f52fa (3d:52fa)
 	Loop 10
 	music_call Branch_f5312
 	EndLoop
-	note noise3, 8
+	note snare1, 8
 	music_end
 
 Branch_f5312:
 	Speed 7
-	note noise3, 2
-	note noise5, 2
-	note noise3, 2
+	note snare1, 2
+	note snare2, 2
+	note snare1, 2
 	Speed 1
-	note noise5, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 3
 	music_ret
 
 Branch_f531e:
 	Speed 7
-	note noise3, 2
-	note noise3, 2
+	note snare1, 2
+	note snare1, 2
 	rest 2
 	Speed 1
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 3
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 3
 	music_ret
 ; 0xf532a

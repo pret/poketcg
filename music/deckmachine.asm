@@ -230,29 +230,29 @@ Music_DeckMachine_Ch4: ; f7018 (3d:7018)
 	MainLoop
 	Loop 9
 	music_call Branch_f7031
-	note noise9, 15
-	note noise3, 7
-	note noise7, 8
-	note noise9, 15
+	note snare4, 15
+	note snare1, 7
+	note snare3, 8
+	note snare4, 15
 	EndLoop
 	music_call Branch_f7031
-	note noise9, 7
-	note noise5, 4
-	note noise5, 4
-	note noise3, 7
-	note noise3, 8
-	note noise3, 7
-	note noise3, 8
+	note snare4, 7
+	note snare2, 4
+	note snare2, 4
+	note snare1, 7
+	note snare1, 8
+	note snare1, 7
+	note snare1, 8
 	EndMainLoop
 
 Branch_f7031:
-	note noise1, 7
-	note noise7, 8
-	note noise9, 15
-	note noise3, 7
-	note noise7, 8
-	note noise9, 15
-	note noise1, 7
-	note noise7, 8
+	note bass, 7
+	note snare3, 8
+	note snare4, 15
+	note snare1, 7
+	note snare3, 8
+	note snare4, 15
+	note bass, 7
+	note snare3, 8
 	music_ret
 ; 0xf703a

@@ -1837,36 +1837,36 @@ Music_BattleTheme1_Ch4: ; f5c9a (3d:5c9a)
 	musicdx 1
 	MainLoop
 	Loop 3
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise7, 1
-	note noise1, 1
-	note noise5, 2
-	note noise7, 1
-	note noise1, 1
-	note noise9, 2
-	note noise3, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare3, 1
+	note bass, 1
+	note snare2, 2
+	note snare3, 1
+	note bass, 1
+	note snare4, 2
+	note snare1, 1
+	note snare4, 1
 	rest 1
-	note noise7, 1
+	note snare3, 1
 	EndLoop
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise7, 1
-	note noise1, 1
-	note noise5, 2
-	note noise7, 1
-	note noise3, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare3, 1
+	note bass, 1
+	note snare2, 2
+	note snare3, 1
+	note snare1, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
-	note noise3, 1
-	note noise3, 1
-	note noise3, 2
+	note snare1, 1
+	note snare1, 1
+	note snare1, 2
 	Loop 3
 	music_call Branch_f5d39
 	EndLoop
@@ -1878,50 +1878,50 @@ Music_BattleTheme1_Ch4: ; f5c9a (3d:5c9a)
 	Loop 15
 	music_call Branch_f5d39
 	EndLoop
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise3, 2
-	note noise9, 2
-	note noise7, 1
-	note noise3, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare1, 2
+	note snare4, 2
+	note snare3, 1
+	note snare1, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
 	Loop 4
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	Loop 5
-	note noise1, 1
-	note noise7, 1
-	note noise9, 1
-	note noise3, 1
-	note noise7, 1
-	note noise1, 1
-	note noise9, 2
-	note noise7, 1
-	note noise1, 1
-	note noise7, 2
-	note noise3, 2
-	note noise9, 2
+	note bass, 1
+	note snare3, 1
+	note snare4, 1
+	note snare1, 1
+	note snare3, 1
+	note bass, 1
+	note snare4, 2
+	note snare3, 1
+	note bass, 1
+	note snare3, 2
+	note snare1, 2
+	note snare4, 2
 	EndLoop
-	note noise1, 2
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise1, 1
-	note noise9, 2
-	note noise7, 1
-	note noise1, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note bass, 1
+	note snare4, 2
+	note snare3, 1
+	note bass, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
 	Loop 4
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	Loop 3
 	music_call Branch_f5d39
@@ -1938,64 +1938,64 @@ Music_BattleTheme1_Ch4: ; f5c9a (3d:5c9a)
 	Loop 2
 	music_call Branch_f5d39
 	EndLoop
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise3, 2
-	note noise9, 2
-	note noise1, 1
-	note noise7, 1
-	note noise9, 2
-	note noise3, 2
-	note noisec, 14
-	note noise3, 4
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare1, 2
+	note snare4, 2
+	note bass, 1
+	note snare3, 1
+	note snare4, 2
+	note snare1, 2
+	note snare5, 14
+	note snare1, 4
 	EndMainLoop
 
 Branch_f5d39:
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise3, 2
-	note noise9, 2
-	note noise1, 1
-	note noise7, 1
-	note noise9, 2
-	note noise3, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare1, 2
+	note snare4, 2
+	note bass, 1
+	note snare3, 1
+	note snare4, 2
+	note snare1, 1
+	note snare4, 1
 	rest 1
-	note noise7, 1
+	note snare3, 1
 	music_ret
 
 Branch_f5d46:
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise3, 2
-	note noise9, 2
-	note noise7, 1
-	note noise3, 1
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare1, 2
+	note snare4, 2
+	note snare3, 1
+	note snare1, 1
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
-	note noise3, 1
-	note noise3, 1
-	note noise3, 2
+	note snare1, 1
+	note snare1, 1
+	note snare1, 2
 	music_ret
 
 Branch_f5d58:
-	note noise1, 2
-	note noise7, 1
-	note noise9, 1
-	note noise3, 2
-	note noise9, 1
+	note bass, 2
+	note snare3, 1
+	note snare4, 1
+	note snare1, 2
+	note snare4, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 3
+	note snare2, 4
+	note snare2, 3
 	Speed 7
 	Loop 8
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	music_ret
 ; 0xf5d68

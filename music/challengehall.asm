@@ -1038,50 +1038,50 @@ Music_ChallengeHall_Ch4: ; f9ba9 (3e:5ba9)
 	EndLoop
 	MainLoop
 	Speed 1
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 4
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 4
 	Loop 7
-	note noise5, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 4
+	note snare2, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 4
 	EndLoop
-	note noise3, 15
-	note noise3, 7
-	note noise3, 8
-	note noise3, 15
-	note noise3, 15
-	note noise3, 15
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 4
-	note noise3, 15
-	note noise3, 15
+	note snare1, 15
+	note snare1, 7
+	note snare1, 8
+	note snare1, 15
+	note snare1, 15
+	note snare1, 15
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 4
+	note snare1, 15
+	note snare1, 15
 	Loop 15
-	note noise1, 15
-	note noise3, 15
-	note noise1, 15
-	note noise3, 15
-	note noise1, 15
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 4
-	note noise1, 15
-	note noise3, 15
+	note bass, 15
+	note snare1, 15
+	note bass, 15
+	note snare1, 15
+	note bass, 15
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 4
+	note bass, 15
+	note snare1, 15
 	EndLoop
-	note noise1, 15
-	note noise3, 4
-	note noise5, 3
-	note noise5, 4
-	note noise5, 4
-	note noise3, 15
-	note noise3, 15
+	note bass, 15
+	note snare1, 4
+	note snare2, 3
+	note snare2, 4
+	note snare2, 4
+	note snare1, 15
+	note snare1, 15
 	Speed 10
-	note noise3, 3
+	note snare1, 3
 	rest 3
 	EndMainLoop
 ; 0xf9be5

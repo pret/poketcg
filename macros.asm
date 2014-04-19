@@ -34,12 +34,12 @@ A#		EQU $B
 B_		EQU $C
 
 ; instruments
-noise1 EQU $1
-noise3 EQU $3
-noise5 EQU $5
-noise7 EQU $7
-noise9 EQU $9
-noisec EQU $c
+bass   EQU $1
+snare1 EQU $3 ; medium length
+snare2 EQU $5 ; medium length
+snare3 EQU $7 ; short
+snare4 EQU $9 ; long
+snare5 EQU $C ; long
 
 note: MACRO
 	db (\1 << 4) | (\2 - 1)

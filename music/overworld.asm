@@ -1393,19 +1393,19 @@ Music_Overworld_Ch4: ; f78af (3d:78af)
 	music_call Branch_f78fb
 	MainLoop
 	music_call Branch_f78ee
-	note noise1, 3
-	note noise7, 2
-	note noise1, 1
-	note noise3, 3
-	note noise7, 2
-	note noise9, 1
-	note noise1, 2
-	note noise7, 1
-	note noise7, 3
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 3
+	note bass, 3
+	note snare3, 2
+	note bass, 1
+	note snare1, 3
+	note snare3, 2
+	note snare4, 1
+	note bass, 2
+	note snare3, 1
+	note snare3, 3
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 3
 	Loop 3
 	music_call Branch_f78ee
 	music_call Branch_f78fb
@@ -1423,51 +1423,51 @@ Music_Overworld_Ch4: ; f78af (3d:78af)
 	EndMainLoop
 
 Branch_f78ee:
-	note noise1, 3
-	note noise7, 2
-	note noise1, 1
-	note noise3, 3
-	note noise7, 2
-	note noise9, 1
-	note noise1, 2
-	note noise7, 1
-	note noise7, 3
-	note noise3, 3
-	note noise7, 2
-	note noise9, 1
+	note bass, 3
+	note snare3, 2
+	note bass, 1
+	note snare1, 3
+	note snare3, 2
+	note snare4, 1
+	note bass, 2
+	note snare3, 1
+	note snare3, 3
+	note snare1, 3
+	note snare3, 2
+	note snare4, 1
 	music_ret
 
 Branch_f78fb:
-	note noise1, 3
-	note noise7, 2
-	note noise1, 1
-	note noise3, 3
-	note noise7, 2
-	note noise9, 1
-	note noise1, 2
-	note noise7, 1
-	note noise7, 3
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise7, 2
-	note noise9, 1
+	note bass, 3
+	note snare3, 2
+	note bass, 1
+	note snare1, 3
+	note snare3, 2
+	note snare4, 1
+	note bass, 2
+	note snare3, 1
+	note snare3, 3
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note snare3, 2
+	note snare4, 1
 	music_ret
 
 Branch_f790a:
-	note noise1, 3
-	note noise7, 2
-	note noise1, 1
-	note noise3, 3
-	note noise7, 2
-	note noise9, 1
-	note noise1, 2
-	note noise7, 1
-	note noise7, 3
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 2
-	note noise3, 1
+	note bass, 3
+	note snare3, 2
+	note bass, 1
+	note snare1, 3
+	note snare3, 2
+	note snare4, 1
+	note bass, 2
+	note snare3, 1
+	note snare3, 3
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 2
+	note snare1, 1
 	music_ret
 ; 0xf7919

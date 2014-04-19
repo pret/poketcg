@@ -1108,19 +1108,19 @@ Music_BattleTheme2_Ch4: ; f62f3 (3d:62f3)
 	rest 12
 	rest 6
 	Loop 6
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	Loop 3
 	music_call Branch_f637c
 	EndLoop
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise9, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare4, 1
 	Loop 6
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	Loop 15
 	music_call Branch_f637c
@@ -1129,48 +1129,48 @@ Music_BattleTheme2_Ch4: ; f62f3 (3d:62f3)
 	Loop 3
 	music_call Branch_f637c
 	Loop 6
-	note noise3, 1
+	note snare1, 1
 	EndLoop
-	note noise3, 2
-	note noisec, 3
-	note noise3, 1
+	note snare1, 2
+	note snare5, 3
+	note snare1, 1
 	EndLoop
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise1, 1
-	note noise7, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note bass, 1
+	note snare3, 1
 	Speed 1
-	note noise7, 4
-	note noise5, 5
+	note snare3, 4
+	note snare2, 5
 	Speed 9
-	note noise3, 3
+	note snare1, 3
 	Loop 12
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	Loop 3
 	music_call Branch_f637c
 	music_call Branch_f6389
 	EndLoop
 	music_call Branch_f637c
-	note noise1, 1
-	note noise3, 1
-	note noise1, 1
-	note noise3, 1
-	note noise3, 1
-	note noise1, 1
-	note noise1, 1
-	note noise3, 1
+	note bass, 1
+	note snare1, 1
+	note bass, 1
+	note snare1, 1
+	note snare1, 1
+	note bass, 1
+	note bass, 1
+	note snare1, 1
 	Speed 1
-	note noise5, 4
-	note noise5, 5
+	note snare2, 4
+	note snare2, 5
 	Speed 9
-	note noise3, 1
-	note noise3, 1
-	note noise3, 1
+	note snare1, 1
+	note snare1, 1
+	note snare1, 1
 	Loop 4
 	music_call Branch_f637c
 	music_call Branch_f6389
@@ -1180,59 +1180,59 @@ Music_BattleTheme2_Ch4: ; f62f3 (3d:62f3)
 	Loop 3
 	music_call Branch_f637c
 	Loop 6
-	note noise3, 1
+	note snare1, 1
 	EndLoop
-	note noise3, 2
-	note noisec, 3
-	note noise3, 1
+	note snare1, 2
+	note snare5, 3
+	note snare1, 1
 	EndLoop
 	music_call Branch_f637c
 	Loop 12
-	note noise3, 1
+	note snare1, 1
 	EndLoop
-	note noisec, 12
+	note snare5, 12
 	rest 12
 	EndMainLoop
 
 Branch_f637c:
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise9, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare4, 1
 	music_ret
 
 Branch_f6389:
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise3, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare1, 1
 	music_ret
 
 Branch_f6396:
-	note noise1, 1
-	note noise7, 1
-	note noise7, 1
-	note noise3, 1
-	note noise7, 1
-	note noise7, 1
+	note bass, 1
+	note snare3, 1
+	note snare3, 1
+	note snare1, 1
+	note snare3, 1
+	note snare3, 1
 	Loop 6
-	note noise3, 1
+	note snare1, 1
 	EndLoop
 	music_ret
 ; 0xf63a1
