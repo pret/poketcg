@@ -1122,7 +1122,96 @@ Branch_facc5:
 	note D#, 6
 	rest 7
 	music_ret
-; 0xface0
+
 
 Music_Ronald_Ch4: ; face0 (3e:6ce0)
-INCBIN "baserom.gbc",$face0,$fad55 - $face0
+	Speed 1
+	musicdx 1
+	MainLoop
+	Loop 3
+	music_call Branch_fad46
+	note noise7, 13
+	music_call Branch_fad4f
+	note noise5, 7
+	note noise1, 6
+	note noise5, 7
+	note noise9, 6
+	note noise1, 7
+	note noise3, 13
+	note noise7, 6
+	note noise5, 7
+	EndLoop
+	music_call Branch_fad46
+	note noise7, 13
+	music_call Branch_fad4f
+	note noise5, 7
+	note noise1, 13
+	note noise9, 6
+	note noise5, 3
+	note noise5, 4
+	Loop 2
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	Loop 2
+	Loop 7
+	music_call Branch_fad46
+	note noise7, 13
+	music_call Branch_fad4f
+	note noise5, 7
+	note noise1, 6
+	note noise5, 7
+	note noise9, 6
+	note noise1, 7
+	note noise3, 13
+	note noise7, 6
+	note noise5, 7
+	EndLoop
+	music_call Branch_fad46
+	note noise7, 13
+	music_call Branch_fad4f
+	note noise5, 3
+	note noise5, 4
+	Loop 4
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	EndLoop
+	Loop 6
+	music_call Branch_fad46
+	note noise7, 13
+	EndLoop
+	music_call Branch_fad46
+	Speed 13
+	note noisec, 4
+	Speed 1
+	rest 6
+	note noise5, 3
+	note noise5, 4
+	note noise3, 6
+	note noise3, 7
+	Loop 2
+	note noise5, 6
+	note noise3, 7
+	EndLoop
+	note noise3, 6
+	note noise5, 7
+	EndMainLoop
+
+Branch_fad46:
+	music_call Branch_fad4f
+	note noise5, 7
+	note noise1, 13
+	note noise9, 6
+	note noise1, 7
+	note noise3, 13
+	music_ret
+
+Branch_fad4f:
+	note noise1, 13
+	note noise9, 6
+	note noise1, 7
+	note noise3, 13
+	note noise1, 6
+	music_ret
+; 0xfad55

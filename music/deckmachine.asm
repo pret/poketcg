@@ -222,7 +222,37 @@ Music_DeckMachine_Ch3: ; f6f7b (3d:6f7b)
 	note B_, 7
 	rest 8
 	EndMainLoop
-; 0xf7018
+
 
 Music_DeckMachine_Ch4: ; f7018 (3d:7018)
-INCBIN "baserom.gbc",$f7018,$f703a - $f7018
+	Speed 1
+	musicdx 1
+	MainLoop
+	Loop 9
+	music_call Branch_f7031
+	note noise9, 15
+	note noise3, 7
+	note noise7, 8
+	note noise9, 15
+	EndLoop
+	music_call Branch_f7031
+	note noise9, 7
+	note noise5, 4
+	note noise5, 4
+	note noise3, 7
+	note noise3, 8
+	note noise3, 7
+	note noise3, 8
+	EndMainLoop
+
+Branch_f7031:
+	note noise1, 7
+	note noise7, 8
+	note noise9, 15
+	note noise3, 7
+	note noise7, 8
+	note noise9, 15
+	note noise1, 7
+	note noise7, 8
+	music_ret
+; 0xf703a

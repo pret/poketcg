@@ -1060,7 +1060,43 @@ Music_Club3_Ch3: ; fa63e (3e:663e)
 	note C_, 1
 	EndLoop
 	EndMainLoop
-; 0xfa772
+
 
 Music_Club3_Ch4: ; fa772 (3e:6772)
-INCBIN "baserom.gbc",$fa772,$fa7a0 - $fa772
+	Speed 9
+	musicdx 1
+	MainLoop
+	Loop 3
+	music_call Branch_fa796
+	note noise3, 2
+	note noise9, 2
+	music_call Branch_fa796
+	note noise3, 2
+	note noise7, 1
+	note noise3, 1
+	EndLoop
+	music_call Branch_fa796
+	note noise3, 2
+	note noise9, 2
+	music_call Branch_fa796
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise3, 4
+	Speed 9
+	note noise3, 1
+	note noise3, 1
+	EndMainLoop
+
+Branch_fa796:
+	note noise1, 2
+	note noise7, 2
+	note noise3, 2
+	note noise7, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 1
+	note noise1, 1
+	music_ret
+; 0xfa7a0

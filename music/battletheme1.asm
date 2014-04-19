@@ -1830,7 +1830,172 @@ Branch_f5c7e:
 	rest 2
 	EndLoop
 	music_ret
-; 0xf5c9a
+
 
 Music_BattleTheme1_Ch4: ; f5c9a (3d:5c9a)
-INCBIN "baserom.gbc",$f5c9a,$f5d68 - $f5c9a
+	Speed 7
+	musicdx 1
+	MainLoop
+	Loop 3
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise7, 1
+	note noise1, 1
+	note noise5, 2
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise3, 1
+	note noise9, 1
+	rest 1
+	note noise7, 1
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise7, 1
+	note noise1, 1
+	note noise5, 2
+	note noise7, 1
+	note noise3, 1
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	note noise3, 1
+	note noise3, 1
+	note noise3, 2
+	Loop 3
+	music_call Branch_f5d39
+	EndLoop
+	music_call Branch_f5d46
+	Loop 15
+	music_call Branch_f5d39
+	EndLoop
+	music_call Branch_f5d46
+	Loop 15
+	music_call Branch_f5d39
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise3, 2
+	note noise9, 2
+	note noise7, 1
+	note noise3, 1
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	Loop 4
+	note noise3, 1
+	EndLoop
+	Loop 5
+	note noise1, 1
+	note noise7, 1
+	note noise9, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise7, 1
+	note noise1, 1
+	note noise7, 2
+	note noise3, 2
+	note noise9, 2
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise7, 1
+	note noise1, 1
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	Loop 4
+	note noise3, 1
+	EndLoop
+	Loop 3
+	music_call Branch_f5d39
+	EndLoop
+	music_call Branch_f5d58
+	Loop 7
+	music_call Branch_f5d39
+	EndLoop
+	music_call Branch_f5d46
+	Loop 7
+	music_call Branch_f5d39
+	EndLoop
+	music_call Branch_f5d58
+	Loop 2
+	music_call Branch_f5d39
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise3, 2
+	note noise9, 2
+	note noise1, 1
+	note noise7, 1
+	note noise9, 2
+	note noise3, 2
+	note noisec, 14
+	note noise3, 4
+	EndMainLoop
+
+Branch_f5d39:
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise3, 2
+	note noise9, 2
+	note noise1, 1
+	note noise7, 1
+	note noise9, 2
+	note noise3, 1
+	note noise9, 1
+	rest 1
+	note noise7, 1
+	music_ret
+
+Branch_f5d46:
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise3, 2
+	note noise9, 2
+	note noise7, 1
+	note noise3, 1
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	note noise3, 1
+	note noise3, 1
+	note noise3, 2
+	music_ret
+
+Branch_f5d58:
+	note noise1, 2
+	note noise7, 1
+	note noise9, 1
+	note noise3, 2
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	Loop 8
+	note noise3, 1
+	EndLoop
+	music_ret
+; 0xf5d68

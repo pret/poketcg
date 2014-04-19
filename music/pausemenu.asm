@@ -542,7 +542,42 @@ Music_PauseMenu_Ch3: ; f6e2d (3d:6e2d)
 	musice6 96
 	note D_, 3
 	EndMainLoop
-; 0xf6ec8
+
 
 Music_PauseMenu_Ch4: ; f6ec8 (3d:6ec8)
-INCBIN "baserom.gbc",$f6ec8,$f6ef1 - $f6ec8
+	Speed 7
+	musicdx 1
+	MainLoop
+	Loop 2
+	Loop 7
+	note noise1, 1
+	note noise7, 1
+	note noise9, 2
+	note noise3, 1
+	note noise7, 1
+	note noise9, 1
+	note noise5, 1
+	note noise1, 1
+	note noise7, 1
+	note noise9, 2
+	note noise3, 1
+	note noise7, 1
+	note noise9, 1
+	note noise3, 1
+	EndLoop
+	note noise1, 1
+	note noise7, 1
+	note noise9, 2
+	note noise3, 1
+	note noise7, 1
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	Loop 8
+	note noise3, 1
+	EndLoop
+	EndLoop
+	EndMainLoop
+; 0xf6ef1

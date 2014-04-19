@@ -1028,7 +1028,60 @@ Branch_f9b92:
 	rest 8
 	musicd8
 	music_ret
-; 0xf9ba9
+
 
 Music_ChallengeHall_Ch4: ; f9ba9 (3e:5ba9)
-INCBIN "baserom.gbc",$f9ba9,$f9be5 - $f9ba9
+	Speed 1
+	Speed 10
+	Loop 2
+	rest 6
+	EndLoop
+	MainLoop
+	Speed 1
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 4
+	Loop 7
+	note noise5, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 4
+	EndLoop
+	note noise3, 15
+	note noise3, 7
+	note noise3, 8
+	note noise3, 15
+	note noise3, 15
+	note noise3, 15
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 4
+	note noise3, 15
+	note noise3, 15
+	Loop 15
+	note noise1, 15
+	note noise3, 15
+	note noise1, 15
+	note noise3, 15
+	note noise1, 15
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 4
+	note noise1, 15
+	note noise3, 15
+	EndLoop
+	note noise1, 15
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 4
+	note noise3, 15
+	note noise3, 15
+	Speed 10
+	note noise3, 3
+	rest 3
+	EndMainLoop
+; 0xf9be5

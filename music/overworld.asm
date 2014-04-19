@@ -1384,7 +1384,90 @@ Branch_f7826:
 	musice8 3
 	note D_, 2
 	music_ret
-; 0xf78af
+
 
 Music_Overworld_Ch4: ; f78af (3d:78af)
-INCBIN "baserom.gbc",$f78af,$f7919 - $f78af
+	Speed 7
+	musicdx 1
+	music_call Branch_f78ee
+	music_call Branch_f78fb
+	MainLoop
+	music_call Branch_f78ee
+	note noise1, 3
+	note noise7, 2
+	note noise1, 1
+	note noise3, 3
+	note noise7, 2
+	note noise9, 1
+	note noise1, 2
+	note noise7, 1
+	note noise7, 3
+	note noise3, 1
+	note noise7, 1
+	note noise7, 1
+	note noise3, 3
+	Loop 3
+	music_call Branch_f78ee
+	music_call Branch_f78fb
+	EndLoop
+	music_call Branch_f78ee
+	music_call Branch_f790a
+	Loop 3
+	music_call Branch_f78ee
+	music_call Branch_f78fb
+	EndLoop
+	music_call Branch_f78ee
+	music_call Branch_f790a
+	music_call Branch_f78ee
+	music_call Branch_f78fb
+	EndMainLoop
+
+Branch_f78ee:
+	note noise1, 3
+	note noise7, 2
+	note noise1, 1
+	note noise3, 3
+	note noise7, 2
+	note noise9, 1
+	note noise1, 2
+	note noise7, 1
+	note noise7, 3
+	note noise3, 3
+	note noise7, 2
+	note noise9, 1
+	music_ret
+
+Branch_f78fb:
+	note noise1, 3
+	note noise7, 2
+	note noise1, 1
+	note noise3, 3
+	note noise7, 2
+	note noise9, 1
+	note noise1, 2
+	note noise7, 1
+	note noise7, 3
+	note noise3, 1
+	note noise7, 1
+	note noise7, 1
+	note noise7, 2
+	note noise9, 1
+	music_ret
+
+Branch_f790a:
+	note noise1, 3
+	note noise7, 2
+	note noise1, 1
+	note noise3, 3
+	note noise7, 2
+	note noise9, 1
+	note noise1, 2
+	note noise7, 1
+	note noise7, 3
+	note noise3, 1
+	note noise7, 1
+	note noise7, 1
+	note noise3, 2
+	note noise3, 1
+	music_ret
+; 0xf7919

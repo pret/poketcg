@@ -1216,7 +1216,313 @@ Branch_f69f0:
 	musice8 6
 	note F#, 1
 	music_ret
-; 0xf6a3f
+
 
 Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
-INCBIN "baserom.gbc",$f6a3f,$f6bb7 - $f6a3f
+	Speed 11
+	MainLoop
+	Loop 2
+	Loop 4
+	note noise9, 1
+	note noise7, 1
+	note noise7, 1
+	EndLoop
+	note noise9, 1
+	note noise7, 1
+	note noise9, 1
+	note noise7, 1
+	EndLoop
+	Loop 4
+	note noise3, 1
+	note noise1, 1
+	note noise1, 1
+	EndLoop
+	note noise3, 1
+	note noise1, 1
+	note noise3, 1
+	note noise1, 1
+	Loop 4
+	note noise3, 1
+	note noise1, 1
+	note noise1, 1
+	EndLoop
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	note noise3, 1
+	Loop 3
+	music_call Branch_f6b40
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise1, 1
+	note noise3, 2
+	note noise7, 1
+	note noise1, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	note noise3, 1
+	Loop 7
+	music_call Branch_f6b40
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise1, 1
+	note noise3, 2
+	note noise7, 1
+	note noise1, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	note noise3, 1
+	music_call Branch_f6b7e
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	note noise1, 1
+	music_call Branch_f6b7e
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 2
+	Loop 7
+	music_call Branch_f6b40
+	EndLoop
+	note noise1, 2
+	note noise7, 1
+	note noise1, 1
+	note noise3, 2
+	note noise7, 1
+	note noise1, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	Speed 11
+	music_call Branch_f6b4d
+	note noise7, 1
+	note noise3, 1
+	note noise1, 1
+	music_call Branch_f6b4d
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	note noise1, 1
+	music_call Branch_f6b4d
+	note noise7, 1
+	note noise3, 1
+	note noise1, 1
+	music_call Branch_f6b4d
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 2
+	note noisec, 8
+	rest 4
+	Speed 1
+	note noise5, 3
+	note noise5, 2
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	Speed 11
+	note noise3, 1
+	Loop 7
+	music_call Branch_f6b65
+	Speed 1
+	note noise1, 6
+	EndLoop
+	music_call Branch_f6b65
+	Speed 1
+	note noise3, 6
+	Loop 15
+	music_call Branch_f6b65
+	Speed 1
+	note noise1, 6
+	EndLoop
+	Speed 11
+	note noise1, 1
+	Speed 1
+	note noise7, 5
+	note noise1, 6
+	Speed 11
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise9, 6
+	note noise7, 5
+	note noise5, 6
+	note noise7, 5
+	note noise1, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	music_call Branch_f6b9a
+	note noise1, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	music_call Branch_f6b9a
+	Speed 1
+	note noise1, 5
+	note noise5, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	note noise3, 5
+	note noise3, 6
+	Speed 11
+	EndMainLoop
+
+Branch_f6b40:
+	note noise1, 2
+	note noise7, 1
+	note noise1, 1
+	note noise3, 2
+	note noise7, 1
+	note noise1, 1
+	note noise7, 1
+	note noise1, 1
+	note noise9, 2
+	note noise3, 2
+	note noise7, 1
+	note noise3, 1
+	music_ret
+
+Branch_f6b4d:
+	note noise1, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise3, 1
+	note noise9, 1
+	note noise1, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise3, 1
+	note noise9, 1
+	note noise1, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise3, 1
+	note noise9, 1
+	note noise1, 1
+	note noise3, 1
+	note noise7, 1
+	note noise1, 1
+	note noise3, 1
+	music_ret
+
+Branch_f6b65:
+	Speed 11
+	note noise1, 1
+	Speed 1
+	note noise7, 5
+	note noise1, 6
+	Speed 11
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	note noise9, 6
+	note noise7, 5
+	note noise5, 6
+	note noise7, 5
+	note noise1, 6
+	Speed 11
+	note noise3, 1
+	Speed 1
+	note noise7, 5
+	music_ret
+
+Branch_f6b7e:
+	note noise1, 2
+	note noise7, 1
+	note noise3, 1
+	note noise7, 1
+	note noise9, 1
+	note noise3, 1
+	note noise1, 1
+	note noise3, 1
+	note noise9, 1
+	note noise1, 1
+	note noise3, 1
+	note noise3, 1
+	note noise1, 1
+	note noise3, 1
+	note noise1, 1
+	note noise1, 2
+	note noise7, 1
+	note noise3, 1
+	note noise7, 1
+	note noise9, 1
+	note noise3, 1
+	note noise1, 1
+	note noise3, 1
+	note noise9, 1
+	note noise1, 1
+	note noise3, 1
+	note noise3, 1
+	music_ret
+
+Branch_f6b9a:
+	Speed 11
+	Loop 3
+	Loop 5
+	note noise1, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	EndLoop
+	note noise1, 1
+	EndLoop
+	Loop 4
+	note noise1, 1
+	Speed 1
+	note noise7, 5
+	note noise5, 6
+	Speed 11
+	note noise3, 1
+	EndLoop
+	music_ret
+; 0xf6bb7

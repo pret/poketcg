@@ -2299,7 +2299,133 @@ Branch_fbe3d:
 	note G_, 13
 	note A_, 13
 	music_ret
-; 0xfbe51
+
 
 Music_Credits_Ch4: ; fbe51 (3e:7e51)
-INCBIN "baserom.gbc",$fbe51,$fbef7 - $fbe51
+	Speed 1
+	musicdx 1
+	Loop 8
+	note noise5, 13
+	EndLoop
+	Loop 4
+	note noise3, 13
+	EndLoop
+	Loop 4
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	music_call Branch_fbe86
+	Loop 7
+	music_call Branch_fbed1
+	EndLoop
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise7, 6
+	note noise5, 4
+	note noise5, 3
+	Loop 4
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	music_call Branch_fbe86
+	Loop 2
+	music_call Branch_fbed1
+	EndLoop
+	music_call Branch_fbeea
+	Speed 13
+	note noisec, 8
+	rest 3
+	music_end
+
+Branch_fbe86:
+	Loop 6
+	music_call Branch_fbed1
+	EndLoop
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise7, 6
+	note noise7, 7
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	Speed 13
+	note noisec, 7
+	note noise3, 2
+	Speed 1
+	Loop 15
+	music_call Branch_fbed1
+	EndLoop
+	music_call Branch_fbedb
+	Loop 7
+	music_call Branch_fbed1
+	EndLoop
+	music_call Branch_fbedb
+	Loop 7
+	music_call Branch_fbed1
+	EndLoop
+	music_call Branch_fbeea
+	Loop 7
+	music_call Branch_fbed1
+	EndLoop
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise7, 6
+	note noise7, 7
+	note noise1, 13
+	note noise7, 6
+	note noise5, 4
+	note noise5, 3
+	note noise3, 6
+	note noise3, 7
+	note noise3, 13
+	Loop 5
+	music_call Branch_fbed1
+	EndLoop
+	music_call Branch_fbeea
+	music_ret
+
+Branch_fbed1:
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise7, 6
+	note noise7, 7
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise9, 13
+	music_ret
+
+Branch_fbedb:
+	note noise1, 13
+	note noise7, 6
+	note noise5, 7
+	note noise3, 6
+	note noise3, 7
+	Loop 2
+	note noise3, 6
+	note noise5, 4
+	note noise5, 3
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	note noise3, 13
+	music_ret
+
+Branch_fbeea:
+	note noise1, 13
+	note noise7, 13
+	note noise3, 13
+	note noise7, 6
+	note noise5, 4
+	note noise5, 3
+	Loop 3
+	note noise3, 6
+	note noise3, 7
+	EndLoop
+	note noise3, 13
+	music_ret
+; 0xfbef7

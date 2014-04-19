@@ -504,7 +504,45 @@ Branch_f52f0:
 	note G_, 4
 	note G_, 4
 	music_ret
-; 0xf52fa
+
 
 Music_TitleScreen_Ch4: ; f52fa (3d:52fa)
-INCBIN "baserom.gbc",$f52fa,$f532a - $f52fa
+	Speed 7
+	musicdx 1
+	rest 4
+	Loop 16
+	music_call Branch_f5312
+	EndLoop
+	Loop 8
+	music_call Branch_f531e
+	EndLoop
+	Loop 10
+	music_call Branch_f5312
+	EndLoop
+	note noise3, 8
+	music_end
+
+Branch_f5312:
+	Speed 7
+	note noise3, 2
+	note noise5, 2
+	note noise3, 2
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 3
+	music_ret
+
+Branch_f531e:
+	Speed 7
+	note noise3, 2
+	note noise3, 2
+	rest 2
+	Speed 1
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 3
+	music_ret
+; 0xf532a

@@ -19,6 +19,7 @@ emptybank: MACRO
 	endr
 ENDM
 
+; notes
 C_		EQU $1
 C#		EQU $2
 D_		EQU $3
@@ -31,6 +32,14 @@ G#		EQU $9
 A_		EQU $A
 A#		EQU $B
 B_		EQU $C
+
+; instruments
+noise1 EQU $1
+noise3 EQU $3
+noise5 EQU $5
+noise7 EQU $7
+noise9 EQU $9
+noisec EQU $c
 
 note: MACRO
 	db (\1 << 4) | (\2 - 1)
@@ -80,6 +89,7 @@ EndLoop: MACRO
 	db $e0
 ENDM
 
+; unused
 music_jp: MACRO
 	db $e1
 	dw \1

@@ -770,7 +770,30 @@ Branch_f9613:
 	musice8 6
 	note G_, 2
 	music_ret
-; 0xf9629
+
 
 Music_PokemonDome_Ch4: ; f9629 (3e:5629)
-INCBIN "baserom.gbc",$f9629,$f9646 - $f9629
+	Speed 7
+	musicdx 1
+	note noisec, 8
+	Speed 1
+	note noise3, 4
+	note noise5, 3
+	Loop 7
+	note noise5, 4
+	note noise5, 3
+	EndLoop
+	MainLoop
+	Loop 2
+	Speed 7
+	note noise3, 2
+	note noise3, 2
+	rest 2
+	Speed 1
+	note noise3, 4
+	note noise5, 3
+	note noise5, 4
+	note noise5, 3
+	EndLoop
+	EndMainLoop
+; 0xf9646

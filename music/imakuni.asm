@@ -470,7 +470,70 @@ Branch_faf7d:
 	rest 5
 	musicd7
 	music_ret
-; 0xfafa4
+
 
 Music_Imakuni_Ch4: ; fafa4 (3e:6fa4)
-INCBIN "baserom.gbc",$fafa4,$fafea - $fafa4
+	Speed 1
+	musicdx 1
+	Loop 10
+	note noise1, 15
+	note noise7, 7
+	note noise1, 8
+	note noise3, 15
+	note noise1, 15
+	note noise7, 7
+	note noise7, 8
+	note noise9, 15
+	note noise7, 7
+	note noise7, 8
+	note noise9, 15
+	note noise7, 15
+	note noise1, 15
+	note noise3, 15
+	note noise9, 15
+	note noise1, 7
+	note noise7, 8
+	note noise3, 15
+	note noise3, 15
+	note noise7, 7
+	note noise3, 8
+	EndLoop
+	Loop 2
+	Speed 11
+	note noisec, 2
+	Speed 1
+	note noise3, 8
+	note noise3, 15
+	note noise3, 15
+	note noise3, 7
+	note noise3, 8
+	note noise3, 7
+	note noise3, 8
+	Speed 3
+	note noisec, 10
+	EndLoop
+	Speed 1
+	note noise3, 15
+	note noise7, 7
+	note noise3, 8
+	note noise9, 15
+	note noise3, 15
+	note noise7, 7
+	note noise3, 8
+	note noise9, 15
+	note noise3, 15
+	note noise7, 7
+	note noise3, 8
+	note noise9, 15
+	note noise3, 15
+	note noise7, 7
+	note noise3, 8
+	note noise9, 15
+	note noise3, 15
+	note noise7, 4
+	note noise7, 4
+	note noise3, 7
+	note noise3, 15
+	note noise3, 15
+	EndMainLoop
+; 0xfafea

@@ -868,7 +868,53 @@ Branch_fa01a:
 	musice8 4
 	note E_, 2
 	music_ret
-; 0xfa044
+
 
 Music_Club1_Ch4: ; fa044 (3e:6044)
-INCBIN "baserom.gbc",$fa044,$fa077 - $fa044
+	Speed 5
+	musicdx 1
+	note noise1, 2
+	rest 2
+	note noise1, 2
+	note noise3, 2
+	note noise7, 2
+	note noise9, 2
+	note noise1, 2
+	rest 2
+	note noise1, 2
+	note noise3, 2
+	note noise7, 2
+	note noise9, 2
+	note noise3, 4
+	note noise5, 1
+	note noise5, 1
+	note noise3, 4
+	note noise3, 2
+	rest 4
+	note noise5, 1
+	note noise5, 1
+	note noise3, 4
+	note noise3, 2
+	MainLoop
+	music_call Branch_fa06f
+	note noise1, 4
+	Loop 4
+	note noise3, 2
+	EndLoop
+	music_call Branch_fa06f
+	note noise1, 4
+	note noise5, 1
+	note noise5, 1
+	note noise3, 4
+	note noise3, 2
+	EndMainLoop
+
+Branch_fa06f:
+	Loop 15
+	note noise1, 4
+	note noise7, 2
+	note noise3, 4
+	note noise7, 2
+	EndLoop
+	music_ret
+; 0xfa077

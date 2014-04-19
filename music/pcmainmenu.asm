@@ -339,7 +339,39 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	note G#, 2
 	Speed 7
 	EndMainLoop
-; 0xf922b
+
 
 Music_PCMainMenu_Ch4: ; f922b (3e:522b)
-INCBIN "baserom.gbc",$f922b,$f9251 - $f922b
+	Speed 7
+	musicdx 1
+	MainLoop
+	Loop 7
+	music_call Branch_f9248
+	note noise7, 1
+	note noise1, 1
+	note noise3, 2
+	note noise7, 1
+	note noise9, 1
+	EndLoop
+	music_call Branch_f9248
+	note noise9, 1
+	Speed 1
+	note noise5, 4
+	note noise5, 3
+	Speed 7
+	note noise3, 2
+	note noise3, 1
+	note noise3, 1
+	EndMainLoop
+
+Branch_f9248:
+	note noise1, 2
+	note noise7, 1
+	note noise7, 1
+	note noise3, 2
+	note noise7, 1
+	note noise9, 1
+	note noise1, 1
+	note noise5, 1
+	music_ret
+; 0xf9251
