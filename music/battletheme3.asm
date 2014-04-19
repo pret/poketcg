@@ -1,506 +1,506 @@
 Music_BattleTheme3_Ch1: ; f63a1 (3d:63a1)
-	Speed 11
+	speed 11
 	musicdc 17
-	musicea 8
-	musiceb 20
+	vibrato_rate 8
+	vibrato_delay 20
 	musice8 8
 	MainLoop
-	musicdx 2
-	musice5 0
+	octave 2
+	duty 0
 	Loop 4
 	Loop 4
-	musice6 146
+	volume 146
 	note F#, 2
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note E_, 2
-	musice6 149
+	volume 149
 	note F_, 2
 	EndLoop
 	Loop 4
 	music_call Branch_f67b2
 	EndLoop
-	musice5 64
-	musice6 160
+	duty 1
+	volume 160
 	Loop 2
-	musicdx 3
+	octave 3
 	note C#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note G#, 5
-	musice6 55
+	volume 55
 	note G#, 6
 	music_call Branch_f65a7
-	musicdx 3
+	octave 3
 	note D_, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
 	music_call Branch_f65a7
 	EndLoop
-	musice5 0
-	musice6 163
-	musicd8
+	duty 0
+	volume 163
+	dec_octave
 	rest 2
-	Speed 1
+	speed 1
 	note E_, 5
-	musice6 39
+	volume 39
 	note E_, 6
 	music_call Branch_f65cf
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	Speed 11
+	speed 11
 	rest 1
-	musicd8
-	musice5 0
-	musice6 163
-	Speed 1
+	dec_octave
+	duty 0
+	volume 163
+	speed 1
 	note E_, 5
-	musice6 39
+	volume 39
 	note E_, 6
 	music_call Branch_f65cf
-	Speed 11
-	musice5 64
-	musice6 160
+	speed 11
+	duty 1
+	volume 160
 	Loop 2
-	musicdx 3
+	octave 3
 	note C#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note G#, 5
-	musice6 55
+	volume 55
 	note G#, 6
 	music_call Branch_f65a7
-	musicdx 3
+	octave 3
 	note D_, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
-	musice6 160
+	volume 160
 	music_call Branch_f65a7
 	EndLoop
-	musiceb 10
-	musice5 0
+	vibrato_delay 10
+	duty 0
 	Loop 2
-	musicdx 2
+	octave 2
 	rest 4
-	musice6 144
+	volume 144
 	note F#, 2
-	musice6 39
+	volume 39
 	note F#, 2
 	rest 2
-	musice6 144
+	volume 144
 	note E_, 2
-	musice6 39
+	volume 39
 	note E_, 4
-	musice6 144
+	volume 144
 	note D#, 2
-	musice6 39
+	volume 39
 	note D#, 4
-	musice6 144
+	volume 144
 	note D_, 2
 	note C#, 2
 	EndLoop
-	musiceb 20
-	musice5 128
+	vibrato_delay 20
+	duty 2
 	musice8 6
 	Loop 4
 	music_call Branch_f661d
 	EndLoop
-	musicdx 4
-	musice6 112
+	octave 4
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 112
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
 	Loop 3
 	music_call Branch_f661d
 	EndLoop
-	musicdx 4
-	musice6 112
+	octave 4
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 112
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musicd7
-	musice6 112
+	inc_octave
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musice6 112
+	dec_octave
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musicd8
-	Speed 11
-	musice5 64
-	musice6 144
+	dec_octave
+	speed 11
+	duty 1
+	volume 144
 	musice8 8
 	note D_, 2
 	note C#, 2
-	musicd8
+	dec_octave
 	note F#, 3
-	musicd7
-	Speed 1
+	inc_octave
+	speed 1
 	note D_, 3
 	note D#, 2
 	note E_, 3
 	note F_, 3
-	Speed 11
+	speed 11
 	note F#, 4
-	musicd8
+	dec_octave
 	note G#, 3
-	musicd7
-	Speed 1
+	inc_octave
+	speed 1
 	note E_, 3
 	note F_, 2
 	note F#, 3
 	note G_, 3
-	Speed 11
+	speed 11
 	note G#, 4
-	musice5 0
-	musicdx 2
+	duty 0
+	octave 2
 	Loop 2
 	Loop 4
-	musice6 144
+	volume 144
 	note F#, 1
-	musice6 55
+	volume 55
 	note F#, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note F#, 1
-	musice6 55
+	volume 55
 	note F#, 1
-	musice6 144
+	volume 144
 	note F#, 1
-	musice6 55
+	volume 55
 	note F#, 1
 	Loop 4
-	musice6 144
+	volume 144
 	note G_, 1
-	musice6 55
+	volume 55
 	note G_, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note A_, 1
-	musice6 55
+	volume 55
 	note A_, 1
-	musice6 144
+	volume 144
 	note G_, 1
-	musice6 55
+	volume 55
 	note G_, 1
 	EndLoop
-	musice5 64
-	musice6 160
-	musicdx 3
+	duty 1
+	volume 160
+	octave 3
 	note C#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note G#, 5
-	musice6 55
+	volume 55
 	note G#, 6
 	music_call Branch_f65a7
-	musicdx 3
+	octave 3
 	note C#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	note G#, 5
-	musice6 55
+	volume 55
 	note G#, 6
-	musicd7
-	musice6 160
-	Speed 11
+	inc_octave
+	volume 160
+	speed 11
 	note C#, 9
-	musice6 55
+	volume 55
 	note C#, 2
-	musicd8
-	musice6 160
+	dec_octave
+	volume 160
 	note B_, 1
-	musicd7
+	inc_octave
 	note C#, 1
 	note F#, 1
 	note C#, 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
-	Speed 11
-	musice6 160
+	speed 11
+	volume 160
 	note F#, 9
-	musice6 55
+	volume 55
 	note F#, 4
-	musice6 160
+	volume 160
 	note G#, 1
 	note A_, 1
-	Speed 1
+	speed 1
 	note G#, 5
-	musice6 55
+	volume 55
 	note G#, 6
-	musice6 160
-	Speed 11
+	volume 160
+	speed 11
 	note B_, 8
-	musice6 55
+	volume 55
 	note B_, 1
-	musice6 160
+	volume 160
 	note A_, 2
 	note B_, 1
-	musicd9
-	Speed 1
+	no_fade
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
-	Speed 11
-	musicd7
-	musice6 160
+	speed 11
+	inc_octave
+	volume 160
 	note C#, 1
 	note D_, 1
-	Speed 1
+	speed 1
 	note C#, 5
-	musice6 55
+	volume 55
 	note C#, 6
-	musice6 160
-	Speed 11
+	volume 160
+	speed 11
 	note E_, 10
-	musice6 55
+	volume 55
 	note E_, 1
-	musice6 160
+	volume 160
 	note D_, 1
-	Speed 1
+	speed 1
 	note C#, 8
-	musice6 55
+	volume 55
 	note C#, 3
-	musicd8
-	musice6 160
-	Speed 11
+	dec_octave
+	volume 160
+	speed 11
 	note B_, 1
-	musicd7
+	inc_octave
 	note C#, 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
-	Speed 11
-	musice6 160
+	speed 11
+	volume 160
 	note E_, 10
-	musice6 55
+	volume 55
 	note E_, 3
-	musice6 31
+	volume 31
 	note A_, 3
-	musice6 96
+	volume 96
 	note A_, 5
-	musicd7
-	musice6 63
+	inc_octave
+	volume 63
 	note E_, 3
-	musice6 127
+	volume 127
 	note E_, 3
-	musice6 160
+	volume 160
 	note E_, 2
-	musice5 64
+	duty 1
 	Loop 4
 	Loop 4
-	musice6 144
+	volume 144
 	note G#, 1
-	musice6 55
+	volume 55
 	note G#, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note G#, 1
-	musice6 55
+	volume 55
 	note G#, 1
-	musice6 144
+	volume 144
 	note G#, 1
-	musice6 55
+	volume 55
 	note G#, 1
 	Loop 4
-	musice6 144
+	volume 144
 	note A_, 1
-	musice6 55
+	volume 55
 	note A_, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note A_, 1
-	musice6 55
+	volume 55
 	note A_, 1
-	musice6 144
+	volume 144
 	note A_, 1
-	musice6 55
+	volume 55
 	note A_, 1
 	EndLoop
 	EndMainLoop
 
 Branch_f65a7:
-	Speed 11
-	musicdx 4
-	musice6 160
+	speed 11
+	octave 4
+	volume 160
 	note C#, 5
-	musicd9
+	no_fade
 	note C#, 4
-	musice6 55
+	volume 55
 	note C#, 2
-	musicd8
-	musice6 160
+	dec_octave
+	volume 160
 	note B_, 1
-	musicd7
+	inc_octave
 	note C#, 1
 	note F#, 1
 	note C#, 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note B_, 5
-	musice6 55
+	volume 55
 	note B_, 6
-	Speed 11
-	musice6 160
-	musicd7
+	speed 11
+	volume 160
+	inc_octave
 	note C#, 5
-	musicd9
+	no_fade
 	note C#, 4
-	musice6 55
+	volume 55
 	note C#, 4
-	musice6 160
+	volume 160
 	music_ret
 
 Branch_f65cf:
-	musicdx 3
+	octave 3
 	Loop 3
-	Speed 11
+	speed 11
 	rest 2
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note E_, 5
-	musice6 39
+	volume 39
 	note E_, 6
 	EndLoop
-	musice5 128
-	musice6 128
+	duty 2
+	volume 128
 	note D_, 5
 	note G_, 6
 	note B_, 5
-	musicd7
+	inc_octave
 	note D_, 6
-	musicd8
+	dec_octave
 	note G_, 5
 	note B_, 6
-	musicd7
+	inc_octave
 	note D_, 5
 	note G_, 6
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice5 0
-	musice6 163
-	Speed 11
+	duty 0
+	volume 163
+	speed 11
 	rest 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note E_, 5
-	musice6 39
+	volume 39
 	note E_, 6
 	Loop 3
-	Speed 11
+	speed 11
 	rest 2
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note E_, 5
-	musice6 39
+	volume 39
 	note E_, 6
 	EndLoop
-	musicd8
-	musice5 128
-	musice6 128
+	dec_octave
+	duty 2
+	volume 128
 	note B_, 5
-	musicd7
+	inc_octave
 	note E_, 6
 	note G_, 5
 	note B_, 6
 	note E_, 5
 	note G_, 6
 	note B_, 5
-	musicd7
+	inc_octave
 	note E_, 6
 	music_ret
 
 Branch_f661d:
-	musicdx 4
-	Speed 1
-	musice6 112
+	octave 4
+	speed 1
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 112
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musicd7
-	musice6 112
+	inc_octave
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musice6 112
+	dec_octave
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musicd7
-	musice6 112
+	inc_octave
+	volume 112
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musice6 112
+	dec_octave
+	volume 112
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
 	music_ret
 
 
 Music_BattleTheme3_Ch2: ; f6649 (3d:6649)
-	Speed 11
+	speed 11
 	musicdc 17
-	musicea 8
-	musiceb 20
+	vibrato_rate 8
+	vibrato_delay 20
 	musice8 8
 	MainLoop
-	musicdx 2
-	musice5 0
+	octave 2
+	duty 0
 	musice4 3
 	Loop 4
 	Loop 4
-	musice6 130
+	volume 130
 	note F#, 2
 	rest 1
 	EndLoop
-	musice6 128
+	volume 128
 	note E_, 2
-	musice6 133
+	volume 133
 	note F_, 2
 	EndLoop
 	musice4 0
-	musicdx 3
+	octave 3
 	Loop 4
 	rest 6
-	musice6 163
+	volume 163
 	note E_, 1
-	musice6 39
+	volume 39
 	note E_, 1
 	rest 8
 	EndLoop
@@ -512,37 +512,37 @@ Music_BattleTheme3_Ch2: ; f6649 (3d:6649)
 	music_call Branch_f680a
 	EndLoop
 	EndLoop
-	musicdx 2
-	musice6 163
-	Speed 11
+	octave 2
+	volume 163
+	speed 11
 	rest 1
-	Speed 1
+	speed 1
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
 	music_call Branch_f6866
-	musicdx 4
+	octave 4
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musicd8
-	musice5 0
-	musice6 163
+	dec_octave
+	dec_octave
+	duty 0
+	volume 163
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
 	music_call Branch_f6866
-	musice5 0
-	musice6 144
+	duty 0
+	volume 144
 	Loop 2
 	Loop 2
 	music_call Branch_f67b2
@@ -551,373 +551,373 @@ Music_BattleTheme3_Ch2: ; f6649 (3d:6649)
 	music_call Branch_f680a
 	EndLoop
 	EndLoop
-	musiceb 10
+	vibrato_delay 10
 	Loop 4
-	musice6 163
+	volume 163
 	musice8 6
 	note F#, 1
 	note F#, 1
 	musice8 8
-	Speed 1
+	speed 1
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
+	volume 163
 	musice8 6
-	Speed 11
+	speed 11
 	note F#, 1
-	musicd7
-	musice6 144
+	inc_octave
+	volume 144
 	musice8 8
 	note C#, 2
-	musicd8
-	musice6 163
+	dec_octave
+	volume 163
 	musice8 6
 	note F#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	musice8 8
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
+	volume 163
 	musice8 6
-	Speed 11
+	speed 11
 	note F#, 1
-	musice6 144
+	volume 144
 	musice8 8
 	note B_, 2
-	musice6 163
+	volume 163
 	musice8 6
 	note F#, 1
 	note F#, 1
 	musice8 8
-	Speed 1
+	speed 1
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
+	volume 163
 	musice8 6
-	Speed 11
+	speed 11
 	note F#, 1
-	musice6 144
+	volume 144
 	musice8 8
 	note B_, 2
-	musice6 163
+	volume 163
 	musice8 6
 	note F#, 1
 	note F#, 1
-	Speed 1
+	speed 1
 	musice8 8
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
+	volume 163
 	musice8 6
-	Speed 11
+	speed 11
 	note F#, 1
 	musice8 8
-	musice6 144
+	volume 144
 	note A_, 2
 	note G#, 2
 	EndLoop
-	musiceb 20
+	vibrato_delay 20
 	note D_, 3
-	Speed 1
+	speed 1
 	note A#, 3
 	note B_, 2
-	musicd7
+	inc_octave
 	note C_, 3
 	note C#, 3
-	Speed 11
+	speed 11
 	note D_, 4
-	musicd8
+	dec_octave
 	note E_, 3
-	musicd7
-	Speed 1
+	inc_octave
+	speed 1
 	note C_, 3
 	note C#, 2
 	note D_, 3
 	note D#, 3
-	Speed 11
+	speed 11
 	note E_, 4
-	musicdx 3
+	octave 3
 	Loop 6
 	Loop 4
-	musice6 144
+	volume 144
 	note C#, 1
-	musice6 55
+	volume 55
 	note C#, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note C#, 1
-	musice6 55
+	volume 55
 	note C#, 1
-	musice6 144
+	volume 144
 	note C#, 1
-	musice6 55
+	volume 55
 	note C#, 1
 	Loop 4
-	musice6 144
+	volume 144
 	note D_, 1
-	musice6 55
+	volume 55
 	note D_, 1
 	rest 1
 	EndLoop
-	musice6 144
+	volume 144
 	note E_, 1
-	musice6 55
+	volume 55
 	note E_, 1
-	musice6 144
+	volume 144
 	note D_, 1
-	musice6 55
+	volume 55
 	note D_, 1
 	EndLoop
-	musice5 64
-	musicd7
+	duty 1
+	inc_octave
 	Loop 4
 	Loop 4
-	musice6 128
+	volume 128
 	note E_, 1
-	musice6 55
+	volume 55
 	note E_, 1
 	rest 1
 	EndLoop
-	musice6 128
+	volume 128
 	note E_, 1
-	musice6 55
+	volume 55
 	note E_, 1
-	musice6 128
+	volume 128
 	note E_, 1
-	musice6 55
+	volume 55
 	note E_, 1
 	Loop 4
-	musice6 128
+	volume 128
 	note D_, 1
-	musice6 55
+	volume 55
 	note D_, 1
 	rest 1
 	EndLoop
-	musice6 128
+	volume 128
 	note D_, 1
-	musice6 55
+	volume 55
 	note D_, 1
-	musice6 128
+	volume 128
 	note D_, 1
-	musice6 55
+	volume 55
 	note D_, 1
 	EndLoop
 	EndMainLoop
 
 Branch_f67b2:
-	musicdx 2
-	musice6 163
-	Speed 11
+	octave 2
+	volume 163
+	speed 11
 	rest 1
-	Speed 1
+	speed 1
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
-	musice6 163
+	volume 163
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	musice6 163
-	Speed 11
+	volume 163
+	speed 11
 	rest 1
-	Speed 1
+	speed 1
 	note F#, 5
-	musice6 55
+	volume 55
 	note F#, 6
-	musicd7
-	musice6 163
-	Speed 11
+	inc_octave
+	volume 163
+	speed 11
 	note C_, 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note B_, 5
-	musice6 39
+	volume 39
 	note B_, 6
-	Speed 11
+	speed 11
 	rest 1
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
-	Speed 11
+	speed 11
 	rest 1
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note B_, 5
-	musice6 39
+	volume 39
 	note B_, 6
-	musice6 163
+	volume 163
 	note A_, 4
 	note B_, 4
 	note A_, 3
 	note F#, 5
-	musice6 39
+	volume 39
 	note F#, 6
-	Speed 11
-	musice6 144
+	speed 11
+	volume 144
 	note E_, 1
-	musice6 163
+	volume 163
 	note F_, 1
 	music_ret
 
 Branch_f680a:
-	musicdx 2
-	musice6 163
-	Speed 11
+	octave 2
+	volume 163
+	speed 11
 	rest 1
-	Speed 1
+	speed 1
 	note G_, 5
-	musice6 39
+	volume 39
 	note G_, 6
-	musice6 163
+	volume 163
 	note B_, 5
-	musice6 39
+	volume 39
 	note B_, 6
-	musice6 163
+	volume 163
 	note G_, 5
-	musice6 39
+	volume 39
 	note G_, 6
-	Speed 11
+	speed 11
 	rest 1
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note G_, 5
-	musice6 39
+	volume 39
 	note G_, 6
-	musicd7
-	musice6 163
-	Speed 11
+	inc_octave
+	volume 163
+	speed 11
 	note C#, 1
-	Speed 1
+	speed 1
 	note C_, 5
-	musice6 39
+	volume 39
 	note C_, 6
-	musice6 163
-	Speed 11
+	volume 163
+	speed 11
 	rest 1
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	note B_, 5
-	musice6 39
+	volume 39
 	note B_, 6
-	Speed 11
+	speed 11
 	rest 1
-	musicd7
-	Speed 1
-	musice6 163
+	inc_octave
+	speed 1
+	volume 163
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musice6 163
+	dec_octave
+	volume 163
 	note B_, 4
-	musicd7
+	inc_octave
 	note C#, 4
-	musicd8
+	dec_octave
 	note B_, 3
 	note G_, 5
-	musice6 39
+	volume 39
 	note G_, 6
-	Speed 11
-	musice6 144
+	speed 11
+	volume 144
 	note B_, 1
-	musice6 163
+	volume 163
 	note G_, 1
 	music_ret
 
 Branch_f6866:
-	musicdx 2
+	octave 2
 	Loop 3
-	Speed 11
+	speed 11
 	rest 1
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
 	EndLoop
-	musice5 128
-	musice6 112
+	duty 2
+	volume 112
 	note B_, 5
-	musicd7
+	inc_octave
 	note D_, 6
 	note G_, 5
 	note B_, 6
 	note D_, 5
 	note G_, 6
 	note B_, 5
-	musicd7
+	inc_octave
 	note D_, 6
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musicd8
-	musicd8
-	musice5 0
-	musice6 163
+	dec_octave
+	dec_octave
+	duty 0
+	volume 163
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
 	Loop 3
-	Speed 11
+	speed 11
 	rest 1
-	Speed 1
-	musice6 163
+	speed 1
+	volume 163
 	note C#, 5
-	musice6 39
+	volume 39
 	note C#, 6
-	musice6 163
+	volume 163
 	note A_, 5
-	musice6 39
+	volume 39
 	note A_, 6
 	EndLoop
-	musice5 128
-	musice6 112
+	duty 2
+	volume 112
 	note G_, 5
 	note B_, 6
-	musicd7
+	inc_octave
 	note E_, 5
 	note G_, 6
-	musicd8
+	dec_octave
 	note B_, 5
-	musicd7
+	inc_octave
 	note E_, 6
 	note G_, 5
 	note B_, 6
-	musicd7
+	inc_octave
 	music_ret
 
 
 Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
-	Speed 11
+	speed 11
 	musicdc 17
-	musice6 32
-	musice7 1
+	volume 32
+	duty3 1
 	musice9 96
-	musicea 8
-	musiceb 0
+	vibrato_rate 8
+	vibrato_delay 0
 	musice8 8
 	MainLoop
-	musicdx 1
+	octave 1
 	Loop 4
 	Loop 4
 	musice8 4
@@ -934,7 +934,7 @@ Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
 	Loop 2
 	music_call Branch_f6992
 	EndLoop
-	musicdx 1
+	octave 1
 	Loop 2
 	Loop 4
 	note F#, 1
@@ -952,44 +952,44 @@ Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
 	Loop 2
 	music_call Branch_f6992
 	EndLoop
-	musiceb 10
-	musicdx 1
+	vibrato_delay 10
+	octave 1
 	Loop 3
 	music_call Branch_f69f0
-	Speed 11
-	musicdx 3
+	speed 11
+	octave 3
 	musice8 8
 	note D_, 2
 	note C#, 2
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	EndLoop
 	music_call Branch_f69f0
-	musicdx 1
+	octave 1
 	musice8 8
 	note F#, 2
 	note E_, 2
-	musiceb 0
+	vibrato_delay 0
 	note D_, 3
-	Speed 1
+	speed 1
 	note A#, 3
 	note B_, 2
-	musicd7
+	inc_octave
 	note C_, 3
 	note C#, 3
-	Speed 11
+	speed 11
 	note D_, 4
-	musicd8
+	dec_octave
 	note E_, 3
-	musicd7
-	Speed 1
+	inc_octave
+	speed 1
 	note C_, 3
 	note C#, 2
 	note D_, 3
 	note D#, 3
-	Speed 11
+	speed 11
 	note E_, 4
-	musicd8
+	dec_octave
 	Loop 6
 	Loop 4
 	note F#, 1
@@ -1006,50 +1006,50 @@ Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
 	EndLoop
 	musice8 7
 	Loop 4
-	musicd7
+	inc_octave
 	Loop 4
 	note F#, 1
-	musicd8
+	dec_octave
 	note F#, 1
 	note F#, 1
-	musicd7
+	inc_octave
 	EndLoop
 	note F#, 1
-	musicd8
+	dec_octave
 	note F#, 1
-	musicd7
+	inc_octave
 	note F#, 1
-	musicd8
+	dec_octave
 	note F#, 1
-	musicd7
+	inc_octave
 	Loop 4
 	note E_, 1
-	musicd8
+	dec_octave
 	note E_, 1
 	note E_, 1
-	musicd7
+	inc_octave
 	EndLoop
 	note E_, 1
-	musicd8
+	dec_octave
 	note E_, 1
-	musicd7
+	inc_octave
 	note E_, 1
-	musicd8
+	dec_octave
 	note E_, 1
 	EndLoop
 	musice8 8
 	EndMainLoop
 
 Branch_f6973:
-	musicdx 1
+	octave 1
 	note F#, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note E_, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note F#, 1
 	rest 2
@@ -1058,28 +1058,28 @@ Branch_f6973:
 	rest 1
 	note F#, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note E_, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note E_, 2
 	note F_, 2
 	music_ret
 
 Branch_f6992:
-	musicdx 1
+	octave 1
 	music_call Branch_f6973
 	note F#, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note E_, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note F#, 1
 	rest 2
@@ -1088,24 +1088,24 @@ Branch_f6992:
 	rest 1
 	note F#, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note E_, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note F#, 1
 	rest 1
 	note F#, 2
 	note G_, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note F#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note G_, 1
 	rest 2
@@ -1114,23 +1114,23 @@ Branch_f6992:
 	rest 1
 	note G_, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note F#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note F_, 2
 	note F#, 2
 	note G_, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note F#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note G_, 1
 	rest 2
@@ -1139,12 +1139,12 @@ Branch_f6992:
 	rest 1
 	note G_, 1
 	rest 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 4
 	note F#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 8
 	note G_, 1
 	rest 1
@@ -1152,74 +1152,74 @@ Branch_f6992:
 	music_ret
 
 Branch_f69f0:
-	musicdx 1
+	octave 1
 	musice8 6
 	note F#, 1
-	musicd7
+	inc_octave
 	note C#, 1
-	musicd7
+	inc_octave
 	musice8 4
 	note C#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 8
 	note F#, 2
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
+	inc_octave
 	note C#, 1
-	musicd7
+	inc_octave
 	musice8 4
 	note C#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 8
 	note E_, 2
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
+	inc_octave
 	note C#, 1
-	musicd7
+	inc_octave
 	musice8 4
 	note C#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
-	musicd7
+	inc_octave
+	inc_octave
 	musice8 8
 	note D#, 2
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
-	musicd7
+	inc_octave
 	note C#, 1
-	musicd7
+	inc_octave
 	musice8 4
 	note C#, 1
-	musicd8
-	musicd8
+	dec_octave
+	dec_octave
 	musice8 6
 	note F#, 1
 	music_ret
 
 
 Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
-	Speed 11
+	speed 11
 	MainLoop
 	Loop 2
 	Loop 4
@@ -1247,10 +1247,10 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note bass, 1
 	EndLoop
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	note snare1, 1
 	Loop 3
@@ -1266,10 +1266,10 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note bass, 1
 	note snare4, 2
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	note snare1, 1
 	Loop 7
@@ -1285,24 +1285,24 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note bass, 1
 	note snare4, 2
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	note snare1, 1
 	music_call Branch_f6b7e
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	note bass, 1
 	music_call Branch_f6b7e
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 2
 	Loop 7
 	music_call Branch_f6b40
@@ -1317,23 +1317,23 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note bass, 1
 	note snare4, 2
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
 	note snare1, 5
 	note snare1, 6
 	note snare1, 5
 	note snare1, 6
-	Speed 11
+	speed 11
 	music_call Branch_f6b4d
 	note snare3, 1
 	note snare1, 1
 	note bass, 1
 	music_call Branch_f6b4d
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	note bass, 1
 	music_call Branch_f6b4d
@@ -1341,14 +1341,14 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note snare1, 1
 	note bass, 1
 	music_call Branch_f6b4d
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 2
 	note snare5, 8
 	rest 4
-	Speed 1
+	speed 1
 	note snare2, 3
 	note snare2, 2
 	note snare1, 6
@@ -1356,29 +1356,29 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note snare1, 6
 	note snare1, 5
 	note snare1, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	Loop 7
 	music_call Branch_f6b65
-	Speed 1
+	speed 1
 	note bass, 6
 	EndLoop
 	music_call Branch_f6b65
-	Speed 1
+	speed 1
 	note snare1, 6
 	Loop 15
 	music_call Branch_f6b65
-	Speed 1
+	speed 1
 	note bass, 6
 	EndLoop
-	Speed 11
+	speed 11
 	note bass, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note bass, 6
-	Speed 11
+	speed 11
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare4, 6
 	note snare3, 5
@@ -1391,7 +1391,7 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note snare1, 6
 	music_call Branch_f6b9a
 	note bass, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
 	note snare1, 5
@@ -1399,7 +1399,7 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note snare1, 5
 	note snare1, 6
 	music_call Branch_f6b9a
-	Speed 1
+	speed 1
 	note bass, 5
 	note snare2, 6
 	note snare1, 5
@@ -1408,7 +1408,7 @@ Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
 	note snare1, 6
 	note snare1, 5
 	note snare1, 6
-	Speed 11
+	speed 11
 	EndMainLoop
 
 Branch_f6b40:
@@ -1453,23 +1453,23 @@ Branch_f6b4d:
 	music_ret
 
 Branch_f6b65:
-	Speed 11
+	speed 11
 	note bass, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note bass, 6
-	Speed 11
+	speed 11
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare4, 6
 	note snare3, 5
 	note snare2, 6
 	note snare3, 5
 	note bass, 6
-	Speed 11
+	speed 11
 	note snare1, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	music_ret
 
@@ -1504,24 +1504,24 @@ Branch_f6b7e:
 	music_ret
 
 Branch_f6b9a:
-	Speed 11
+	speed 11
 	Loop 3
 	Loop 5
 	note bass, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	EndLoop
 	note bass, 1
 	EndLoop
 	Loop 4
 	note bass, 1
-	Speed 1
+	speed 1
 	note snare3, 5
 	note snare2, 6
-	Speed 11
+	speed 11
 	note snare1, 1
 	EndLoop
 	music_ret

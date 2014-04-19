@@ -1,8 +1,8 @@
 Music_HallOfHonor_Ch1: ; fafea (3e:6fea)
-	Speed 7
+	speed 7
 	musicdc 17
 	musice8 8
-	musice5 128
+	duty 2
 	Loop 4
 	music_call Branch_fb016
 	EndLoop
@@ -10,103 +10,103 @@ Music_HallOfHonor_Ch1: ; fafea (3e:6fea)
 	Loop 8
 	music_call Branch_fb016
 	EndLoop
-	musicdx 4
-	musice6 85
+	octave 4
+	volume 85
 	note C_, 1
-	musice6 39
+	volume 39
 	note C_, 1
 	music_call Branch_fb044
 	Loop 23
-	musice6 85
+	volume 85
 	note C_, 1
-	musice6 39
+	volume 39
 	note G_, 1
 	music_call Branch_fb044
 	EndLoop
 	EndMainLoop
 
 Branch_fb016:
-	musicdx 4
-	musice6 101
+	octave 4
+	volume 101
 	note C_, 1
-	musice6 39
+	volume 39
 	note C_, 1
-	musice6 101
+	volume 101
 	note F_, 1
-	musice6 39
+	volume 39
 	note F_, 1
-	musice6 101
+	volume 101
 	note G_, 1
-	musice6 39
+	volume 39
 	note G_, 1
-	musice6 101
+	volume 101
 	note F_, 1
-	musice6 39
+	volume 39
 	note F_, 1
-	musicd7
-	musice6 101
+	inc_octave
+	volume 101
 	note C_, 1
-	musice6 39
+	volume 39
 	note C_, 1
-	musicd8
-	musice6 101
+	dec_octave
+	volume 101
 	note F_, 1
-	musice6 39
+	volume 39
 	note F_, 1
-	musice6 101
+	volume 101
 	note G_, 1
-	musice6 39
+	volume 39
 	note G_, 1
 	music_ret
 
 Branch_fb044:
-	musicdx 4
-	musice6 85
+	octave 4
+	volume 85
 	note F_, 1
-	musice6 39
+	volume 39
 	note C_, 1
-	musice6 85
+	volume 85
 	note G_, 1
-	musice6 39
+	volume 39
 	note F_, 1
-	musice6 85
+	volume 85
 	note F_, 1
-	musice6 39
+	volume 39
 	note G_, 1
-	musicd7
-	musice6 85
+	inc_octave
+	volume 85
 	note C_, 1
-	musicd8
-	musice6 39
+	dec_octave
+	volume 39
 	note F_, 1
-	musice6 85
+	volume 85
 	note F_, 1
-	musicd7
-	musice6 39
+	inc_octave
+	volume 39
 	note C_, 1
-	musicd8
-	musice6 85
+	dec_octave
+	volume 85
 	note G_, 1
-	musice6 39
+	volume 39
 	note F_, 1
 	music_ret
 
 
 Music_HallOfHonor_Ch2: ; fb06e (3e:706e)
-	Speed 7
+	speed 7
 	musicdc 17
 	musice8 8
-	musice5 128
+	duty 2
 	musice4 255
 	rest 2
-	Speed 1
+	speed 1
 	rest 4
-	Speed 7
-	musice6 23
+	speed 7
+	volume 23
 	Loop 3
 	music_call Branch_fb1ec
 	EndLoop
-	musicdx 4
+	octave 4
 	note C_, 1
 	rest 1
 	note F_, 1
@@ -115,79 +115,79 @@ Music_HallOfHonor_Ch2: ; fb06e (3e:706e)
 	rest 1
 	note F_, 1
 	rest 1
-	musicd7
+	inc_octave
 	note C_, 1
 	rest 1
-	musicd8
+	dec_octave
 	note F_, 1
-	Speed 1
+	speed 1
 	rest 3
-	Speed 7
+	speed 7
 	musice4 0
 	MainLoop
-	musicdx 1
-	musice5 64
+	octave 1
+	duty 1
 	Loop 3
 	music_call Branch_fb0bb
-	musicdx 1
-	musice6 109
+	octave 1
+	volume 109
 	note E_, 5
-	musice6 208
+	volume 208
 	note E_, 11
-	musicd9
+	no_fade
 	note E_, 12
 	EndLoop
 	music_call Branch_fb0bb
-	musicdx 1
-	musice6 109
+	octave 1
+	volume 109
 	note G_, 5
-	musice6 208
+	volume 208
 	note G_, 11
-	musicd9
+	no_fade
 	note G_, 12
 	EndMainLoop
 
 Branch_fb0bb:
-	musicdx 1
-	musice6 109
+	octave 1
+	volume 109
 	note F_, 5
-	musice6 208
+	volume 208
 	note F_, 11
-	musicd9
+	no_fade
 	note F_, 12
-	musice6 109
+	volume 109
 	note E_, 5
-	musice6 208
+	volume 208
 	note E_, 11
-	musicd9
+	no_fade
 	note E_, 12
-	musice6 109
+	volume 109
 	note D_, 5
-	musice6 208
+	volume 208
 	note D_, 11
-	musicd9
+	no_fade
 	note D_, 12
 	music_ret
 
 
 Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
-	Speed 7
-	musice6 64
+	speed 7
+	volume 64
 	musicdc 17
-	musice7 2
-	musicea 4
-	musiceb 35
+	duty3 2
+	vibrato_rate 4
+	vibrato_delay 35
 	musice8 6
 	musice9 64
 	rest 3
-	musice6 96
+	volume 96
 	musice8 8
 	musice4 255
 	Loop 4
 	rest 14
 	EndLoop
 	MainLoop
-	musicdx 5
+	octave 5
 	Loop 7
 	music_call Branch_fb1ec
 	EndLoop
@@ -199,25 +199,25 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	rest 1
 	note F_, 1
 	rest 1
-	musicd7
+	inc_octave
 	note C_, 1
 	rest 1
-	musicd8
+	dec_octave
 	note F_, 1
-	musice6 32
+	volume 32
 	musice4 0
-	musicdx 4
-	Speed 1
+	octave 4
+	speed 1
 	musice8 6
 	note B_, 3
-	musicd7
+	inc_octave
 	note C_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note C_, 15
-	musicd9
+	no_fade
 	note C_, 8
-	musicd8
+	dec_octave
 	musice8 8
 	note B_, 2
 	musice8 4
@@ -225,115 +225,115 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	musice8 6
 	note G_, 6
 	note C_, 10
-	musicd9
+	no_fade
 	note C_, 12
-	Speed 1
+	speed 1
 	musice8 8
 	note B_, 3
-	musicd7
+	inc_octave
 	musice8 6
 	note C_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note C_, 15
-	musicd9
+	no_fade
 	note C_, 6
-	musicd8
+	dec_octave
 	musice8 8
 	note B_, 2
-	musicd7
+	inc_octave
 	note C_, 2
 	musice8 4
 	note D_, 2
-	musicd8
-	Speed 1
+	dec_octave
+	speed 1
 	musice8 8
 	note F#, 3
 	musice8 6
 	note G_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note G_, 15
-	musicd9
+	no_fade
 	note G_, 6
 	musice8 8
 	note G_, 2
 	note A_, 2
 	musice8 4
 	note B_, 2
-	Speed 1
+	speed 1
 	musice8 8
 	note B_, 3
-	musicd7
+	inc_octave
 	note C_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note C_, 15
-	musicd9
+	no_fade
 	note C_, 8
-	musicd8
+	dec_octave
 	note B_, 2
 	musice8 4
 	note A_, 2
 	musice8 6
 	note G_, 6
 	musice8 8
-	Speed 1
+	speed 1
 	note B_, 3
-	musicd7
+	inc_octave
 	musice8 6
 	note C_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note C_, 9
-	musicd9
+	no_fade
 	note C_, 6
-	musicd8
+	dec_octave
 	musice8 8
 	note G_, 2
-	musicd7
+	inc_octave
 	note C_, 2
 	musice8 4
 	note E_, 2
-	Speed 1
+	speed 1
 	musice8 8
 	note E_, 3
 	note F_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note F_, 1
 	note E_, 2
 	musice8 4
 	note C_, 2
 	musice8 7
 	note C_, 10
-	musicd9
+	no_fade
 	note C_, 10
 	musice8 4
 	note E_, 2
-	Speed 1
+	speed 1
 	musice8 8
 	note E_, 3
 	note F_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note F_, 1
 	note E_, 2
 	musice8 4
 	note C_, 2
 	musice8 6
 	note C_, 10
-	musicd9
+	no_fade
 	note C_, 12
-	Speed 1
+	speed 1
 	musice8 8
 	note F#, 3
 	musice8 7
 	note G_, 4
-	musicd9
-	Speed 7
+	no_fade
+	speed 7
 	note G_, 15
-	musicd9
+	no_fade
 	note G_, 8
 	musice8 8
 	note F_, 2
@@ -344,40 +344,40 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	musice8 4
 	note E_, 2
 	note C_, 2
-	musicd8
+	dec_octave
 	musice8 7
 	note G_, 10
-	musicd9
+	no_fade
 	note G_, 10
 	musice8 8
 	note E_, 2
 	note F_, 2
-	musicd7
+	inc_octave
 	musice8 4
 	note C_, 2
 	musice8 7
 	note C_, 12
-	musicd9
+	no_fade
 	note C_, 10
-	musicd8
+	dec_octave
 	musice8 8
 	note E_, 2
 	note F_, 2
-	musicd7
+	inc_octave
 	musice8 4
 	note C_, 2
 	musice8 6
 	note C_, 12
-	musicd9
+	no_fade
 	note C_, 12
 	rest 3
-	musice6 96
+	volume 96
 	musice4 255
 	musice8 8
 	EndMainLoop
 
 Branch_fb1ec:
-	musicdx 4
+	octave 4
 	note C_, 1
 	rest 1
 	note F_, 1
@@ -386,10 +386,10 @@ Branch_fb1ec:
 	rest 1
 	note F_, 1
 	rest 1
-	musicd7
+	inc_octave
 	note C_, 1
 	rest 1
-	musicd8
+	dec_octave
 	note F_, 1
 	rest 1
 	note G_, 1

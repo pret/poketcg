@@ -49,23 +49,23 @@ rest: MACRO
 	db \1 - 1
 ENDM
 
-Speed: MACRO
+speed: MACRO
 	db $d0, \1
 ENDM
 
-musicdx: MACRO
+octave: MACRO
 	db ($d << 4) | \1
 ENDM
 
-musicd7: MACRO
+inc_octave: MACRO
 	db $d7
 ENDM
 
-musicd8: MACRO
+dec_octave: MACRO
 	db $d8
 ENDM
 
-musicd9: MACRO
+no_fade: MACRO
 	db $d9
 ENDM
 
@@ -90,10 +90,10 @@ EndLoop: MACRO
 ENDM
 
 ; unused
-music_jp: MACRO
-	db $e1
-	dw \1
-ENDM
+;music_jp: MACRO
+;	db $e1
+;	dw \1
+;ENDM
 
 music_call: MACRO
 	db $e2
@@ -108,15 +108,15 @@ musice4: MACRO
 	db $e4, \1
 ENDM
 
-musice5: MACRO
-	db $e5, \1
+duty: MACRO
+	db $e5, \1 << 6
 ENDM
 
-musice6: MACRO
+volume: MACRO
 	db $e6, \1
 ENDM
 
-musice7: MACRO
+duty3: MACRO
 	db $e7, \1
 ENDM
 
@@ -128,21 +128,23 @@ musice9: MACRO
 	db $e9, \1
 ENDM
 
-musicea: MACRO
+vibrato_rate: MACRO
 	db $ea, \1
 ENDM
 
-musiceb: MACRO
+vibrato_delay: MACRO
 	db $eb, \1
 ENDM
 
-musicec: MACRO
-	db $ec, \1
-ENDM
+; unused
+;musicec: MACRO
+;	db $ec, \1
+;ENDM
 
-musiced: MACRO
-	db $ed, \1
-ENDM
+; unused
+;musiced: MACRO
+;	db $ed, \1
+;ENDM
 
 music_end: MACRO
 	db $ff

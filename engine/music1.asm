@@ -580,7 +580,7 @@ Music1_PlayNextNote: ; f4414 (3d:4414)
 	push hl
 	push af
 	cp $d0
-	jr c, Music1_Note
+	jr c, Music1_note
 	sub $d0
 	add a
 	ld e, a
@@ -596,56 +596,56 @@ Music1_PlayNextNote: ; f4414 (3d:4414)
 	jp [hl]
 
 Music1_CommandTable: ; f442c (3d:442c)
-	dw Music1_Speed
-	dw Music1_musicdx
-	dw Music1_musicdx
-	dw Music1_musicdx
-	dw Music1_musicdx
-	dw Music1_musicdx
-	dw Music1_musicdx
-	dw Music1_musicd7
-	dw Music1_musicd8
-	dw Music1_musicd9
-	dw Music1_End
-	dw Music1_End
+	dw Music1_speed
+	dw Music1_octave
+	dw Music1_octave
+	dw Music1_octave
+	dw Music1_octave
+	dw Music1_octave
+	dw Music1_octave
+	dw Music1_inc_octave
+	dw Music1_dec_octave
+	dw Music1_no_fade
+	dw Music1_end
+	dw Music1_end
 	dw Music1_musicdc
 	dw Music1_MainLoop
-	dw Music1_EndMainLoop
+	dw Music1_endMainLoop
 	dw Music1_Loop
-	dw Music1_EndLoop
+	dw Music1_endLoop
 	dw Music1_jp
 	dw Music1_call
 	dw Music1_ret
 	dw Music1_musice4
-	dw Music1_musice5
-	dw Music1_musice6
-	dw Music1_musice7
+	dw Music1_duty
+	dw Music1_volume
+	dw Music1_duty3
 	dw Music1_musice8
 	dw Music1_musice9
-	dw Music1_musicea
-	dw Music1_musiceb
+	dw Music1_vibrato_rate
+	dw Music1_vibrato_delay
 	dw Music1_musicec
 	dw Music1_musiced
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
-	dw Music1_End
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
+	dw Music1_end
 
-Music1_Note: ; f448c (3d:448c)
+Music1_note: ; f448c (3d:448c)
 	push af
 	ld a, [hl]
 	ld e, a
@@ -839,7 +839,7 @@ Music1_Note: ; f448c (3d:448c)
 	ld [hl], d
 	ret
 
-Music1_Speed: ; f4598 (3d:4598)
+Music1_speed: ; f4598 (3d:4598)
 	pop hl
 	ld a, [hli]
 	push hl
@@ -848,7 +848,7 @@ Music1_Speed: ; f4598 (3d:4598)
 	ld [hl], a
 	jp Music1_PlayNextNote_pop
 
-Music1_musicdx: ; f45a3 (3d:45a3)
+Music1_octave: ; f45a3 (3d:45a3)
 	and $7
 	dec a
 	ld hl, $ddaf
@@ -866,19 +866,19 @@ Music1_musicdx: ; f45a3 (3d:45a3)
 	ld [hl], a
 	jp Music1_PlayNextNote_pop
 
-Music1_musicd7: ; f45bb (3d:45bb)
+Music1_inc_octave: ; f45bb (3d:45bb)
 	ld hl, $ddaf
 	add hl, bc
 	inc [hl]
 	jp Music1_PlayNextNote_pop
 
-Music1_musicd8: ; f45c3 (3d:45c3)
+Music1_dec_octave: ; f45c3 (3d:45c3)
 	ld hl, $ddaf
 	add hl, bc
 	dec [hl]
 	jp Music1_PlayNextNote_pop
 
-Music1_musicd9: ; f45cb (3d:45cb)
+Music1_no_fade: ; f45cb (3d:45cb)
 	ld hl, $dd91
 	add hl, bc
 	ld [hl], $80
@@ -919,7 +919,7 @@ Music1_MainLoop: ; f45ef (3d:45ef)
 	ld [hl], d
 	jp Music1_PlayNextNote_pop
 
-Music1_EndMainLoop: ; f45fd (3d:45fd)
+Music1_endMainLoop: ; f45fd (3d:45fd)
 	pop hl
 	ld hl, $dd9d
 	add hl, bc
@@ -946,7 +946,7 @@ Music1_Loop: ; f4609 (3d:4609)
 	call Music1_SetReturnAddress
 	jp Music1_PlayNextNote_pop
 
-Music1_EndLoop: ; f461e (3d:461e)
+Music1_endLoop: ; f461e (3d:461e)
 	call Music1_GetReturnAddress
 	dec hl
 	ld a, [hl]
@@ -1015,7 +1015,7 @@ Music1_musice4: ; f4667 (3d:4667)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_musice5: ; f4674 (3d:4674)
+Music1_duty: ; f4674 (3d:4674)
 	pop de
 	ld a, [de]
 	and $c0
@@ -1027,7 +1027,7 @@ Music1_musice5: ; f4674 (3d:4674)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_musice6: ; f4683 (3d:4683)
+Music1_volume: ; f4683 (3d:4683)
 	pop de
 	ld a, [de]
 	inc de
@@ -1038,7 +1038,7 @@ Music1_musice6: ; f4683 (3d:4683)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_musice7: ; f4690 (3d:4690)
+Music1_duty3: ; f4690 (3d:4690)
 	pop de
 	ld a, [de]
 	inc de
@@ -1071,7 +1071,7 @@ Music1_musice9: ; f46ad (3d:46ad)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_musicea: ; f46ba (3d:46ba)
+Music1_vibrato_rate: ; f46ba (3d:46ba)
 	pop de
 	ld a, [de]
 	inc de
@@ -1085,7 +1085,7 @@ Music1_musicea: ; f46ba (3d:46ba)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_musiceb: ; f46cc (3d:46cc)
+Music1_vibrato_delay: ; f46cc (3d:46cc)
 	pop de
 	ld a, [de]
 	inc de
@@ -1119,7 +1119,7 @@ Music1_musiced: ; f46e6 (3d:46e6)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_End: ; f46f4 (3d:46f4)
+Music1_end: ; f46f4 (3d:46f4)
 	ld hl, $dd8d
 	add hl, bc
 	ld [hl], $0
