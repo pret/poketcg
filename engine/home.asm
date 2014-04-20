@@ -2908,7 +2908,37 @@ Func_37a0: ; 37a0 (0:37a0)
 INCBIN "baserom.gbc",$37a5,$397b - $37a5
 
 Unknown_397b: ; 397b (0:397b)
-INCBIN "baserom.gbc",$397b,$3bf5 - $397b
+INCBIN "baserom.gbc",$397b,$3aed - $397b
+
+Func_3aed: ; 3aed (0:7aed)
+	ld hl, $d413
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [hli]
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	push bc
+	rlca
+	ld c, a
+	ld b, $0
+	ld hl, Unknown_1217b
+	add hl, bc
+	ld a, [$ff80]
+	push af
+	ld a, BANK(Unknown_1217b)
+	call BankswitchHome
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop af
+	call BankswitchHome
+	pop bc
+	jp [hl]
+; 0x3b11
+
+INCBIN "baserom.gbc",$3b11,$3bf5 - $3b11
 
 Func_3bf5: ; 3bf5 (0:3bf5)
 	ld a, [$ff80]

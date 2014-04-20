@@ -464,7 +464,10 @@ Func_11184: ; 11184 (4:5184)
 	ret
 ; 0x111b3
 
-INCBIN "baserom.gbc",$111b3,$1229f - $111b3
+INCBIN "baserom.gbc",$111b3,$1217b - $111b3
+
+Unknown_1217b: ; 1217b (4:617b)
+INCBIN "baserom.gbc",$1217b,$1229f - $1217b
 
 Unknown_1229f: ; 1229f (4:629f)
 INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
