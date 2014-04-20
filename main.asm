@@ -8,9 +8,7 @@ SECTION "bank1",ROMX,BANK[$1]
 INCLUDE "engine/bank1.asm"
 
 SECTION "bank2",ROMX,BANK[$2]
-INCBIN "baserom.gbc",$8000,$8cf9 - $8000
-Func_8cf9: ; 8cf9 (2:4cf9)
-INCBIN "baserom.gbc",$8cf9,$c000 - $8cf9
+INCLUDE "engine/bank2.asm"
 
 SECTION "bank3",ROMX,BANK[$3]
 INCLUDE "engine/bank3.asm"
