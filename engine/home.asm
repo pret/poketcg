@@ -752,7 +752,44 @@ Func_06c3: ; 06c3 (0:06c3)
 	ret
 ; 0x6ee
 
-INCBIN "baserom.gbc",$06ee,$0732 - $06ee
+INCBIN "baserom.gbc",$06ee,$0709 - $06ee
+
+Func_0709: ; 0709 (0:0709)
+	jp Func_0c19
+
+Func_070c: ; 070c (0:070c)
+	ld a, [$cabb]
+	rla
+	jr nc, .asm_726
+.asm_712
+	push bc
+	push hl
+	push de
+	ld b, c
+	call Func_0709
+	ld b, $0
+	pop hl
+	add hl, bc
+	ld e, l
+	ld d, h
+	pop hl
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .asm_712
+	ret
+.asm_726
+	push bc
+.asm_727
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .asm_727
+	pop bc
+	dec b
+	jr nz, .asm_726
+	ret
 
 CopyData_SaveRegisters: ; 0732 (0:0732)
 	push hl
@@ -876,9 +913,14 @@ Func_07cd: ; 07cd (0:07cd)
 	ld [$ff4f], a
 	pop af
 	ret
-; 0x7d6
 
-INCBIN "baserom.gbc",$07d6,$07e7 - $07d6
+Func_07d6: ; 07d6 (0:07d6)
+	ld [$ff82], a
+	ld [$ff4f], a
+	ret
+; 0x7db
+
+INCBIN "baserom.gbc",$07db,$07e7 - $07db
 
 Func_07e7: ; 07e7 (0:07e7)
 	call Func_025c
@@ -2986,7 +3028,20 @@ Func_37a0: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-INCBIN "baserom.gbc",$37a5,$397b - $37a5
+INCBIN "baserom.gbc",$37a5,$395a - $37a5
+
+Func_395a: ; 395a (0:395a)
+	ld a, [$ff80]
+	push af
+	ld a, [$d4c6]
+	call BankswitchHome
+	call Func_070c
+	pop af
+	call BankswitchHome
+	ret
+; 0x396b
+
+INCBIN "baserom.gbc",$396b,$397b - $396b
 
 Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3aed - $397b
@@ -3082,7 +3137,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld a, [$d4ca]
 	cp $ff
 	jr nz, .asm_3d84
-	ld de, Func_80e5a
+	ld de, Unknown_80e5a
 	xor a
 	jr .asm_3da1
 .asm_3d84
@@ -3105,7 +3160,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld d, a
 	pop af
 .asm_3da1
-	add BANK(Func_80e5a)
+	add BANK(Unknown_80e5a)
 	pop hl
 	ld bc, $000b
 	add hl, bc

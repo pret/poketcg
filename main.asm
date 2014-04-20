@@ -102,15 +102,7 @@ SECTION "bank1F",ROMX,BANK[$1F]
 	emptybank
 
 SECTION "bank20",ROMX,BANK[$20]
-INCBIN "baserom.gbc",$80000,$8020f - $80000
-Func_8020f: ; 8020f (20:420f)
-INCBIN "baserom.gbc",$8020f,$80229 - $8020f
-Func_80229: ; 80229 (20:4229)
-INCBIN "baserom.gbc",$80229,$8025b - $80229
-Func_8025b: ; 8025b (20:425b)
-INCBIN "baserom.gbc",$8025b,$80e5a - $8025b
-Func_80e5a: ; 80e5a (20:4e5a)
-INCBIN "baserom.gbc",$80e5a,$84000 - $80e5a
+INCLUDE "engine/bank20.asm"
 
 SECTION "bank21",ROMX,BANK[$21]
 INCBIN "baserom.gbc",$84000,$4000
