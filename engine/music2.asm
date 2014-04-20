@@ -2243,16 +2243,16 @@ Music_Credits: ; f8fdd (3e:4fdd)
 	dw $0000
 	dw $0000
 
-INCLUDE "music/pcmainmenu.asm"
-INCLUDE "music/pokemondome.asm"
-INCLUDE "music/challengehall.asm"
-INCLUDE "music/club1.asm"
-INCLUDE "music/club2.asm"
-INCLUDE "music/club3.asm"
-INCLUDE "music/ronald.asm"
-INCLUDE "music/imakuni.asm"
-INCLUDE "music/hallofhonor.asm"
-INCLUDE "music/credits.asm"
+INCLUDE "audio/music/pcmainmenu.asm"
+INCLUDE "audio/music/pokemondome.asm"
+INCLUDE "audio/music/challengehall.asm"
+INCLUDE "audio/music/club1.asm"
+INCLUDE "audio/music/club2.asm"
+INCLUDE "audio/music/club3.asm"
+INCLUDE "audio/music/ronald.asm"
+INCLUDE "audio/music/imakuni.asm"
+INCLUDE "audio/music/hallofhonor.asm"
+INCLUDE "audio/music/credits.asm"
 
 rept $109
 db $ff

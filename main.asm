@@ -197,7 +197,4 @@ SECTION "bank3E",ROMX,BANK[$3E]
 INCLUDE "engine/music2.asm"
 
 SECTION "bank3F",ROMX,BANK[$3F]
-Func_fc000: ; fc000 (3f:4000)
-INCBIN "baserom.gbc",$fc000,$fc003 - $fc000
-Func_fc003: ; fc003 (3f:4003)
-INCBIN "baserom.gbc",$fc003,$100000 - $fc003
+INCLUDE "engine/sfx.asm"
