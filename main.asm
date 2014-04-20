@@ -8,7 +8,9 @@ SECTION "bank1",ROMX,BANK[$1]
 INCLUDE "engine/bank1.asm"
 
 SECTION "bank2",ROMX,BANK[$2]
-INCBIN "baserom.gbc",$8000,$4000
+INCBIN "baserom.gbc",$8000,$8cf9 - $8000
+Func_8cf9: ; 8cf9 (2:4cf9)
+INCBIN "baserom.gbc",$8cf9,$c000 - $8cf9
 
 SECTION "bank3",ROMX,BANK[$3]
 INCLUDE "engine/bank3.asm"
@@ -20,11 +22,7 @@ SECTION "bank5",ROMX,BANK[$5]
 INCBIN "baserom.gbc",$14000,$4000
 
 SECTION "bank6",ROMX,BANK[$6]
-INCBIN "baserom.gbc",$18000,$1996e - $18000
-Func_1996e: ; 1996e (6:596e)
-INCBIN "baserom.gbc",$1996e,$1a6cc - $1996e
-Func_1a6cc: ; 1a6cc (6:66cc)
-INCBIN "baserom.gbc",$1a6cc,$1c000 - $1a6cc
+INCLUDE "engine/bank6.asm"
 
 SECTION "bank7",ROMX,BANK[$7]
 INCLUDE "engine/bank7.asm"
@@ -42,6 +40,7 @@ SECTION "bankB",ROMX,BANK[$B]
 INCBIN "baserom.gbc",$2C000,$4000
 
 SECTION "bankC",ROMX,BANK[$C]
+Unknown_30000: ; 30000 (c:4000)
 INCBIN "baserom.gbc",$30000,$4000
 
 SECTION "bankD",ROMX,BANK[$D]

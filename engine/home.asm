@@ -1492,7 +1492,55 @@ Func_0ea6: ; 0ea6 (0:0ea6)
 	ret
 ; 0xebf
 
-INCBIN "baserom.gbc",$0ebf,$1c7d - $0ebf
+INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
+
+Func_1072: ; 1072 (0:1072)
+	ld hl, $c400
+	ld a, [$ff97]
+	cp $c2
+	jr z, .asm_107e
+	ld hl, $c480
+.asm_107e
+	push hl
+	ld bc, $003b
+	add hl, bc
+	ld [hl], $0
+	pop hl
+	push hl
+.asm_1087
+	ld a, [de]
+	inc de
+	ld b, a
+	or a
+	jr z, .asm_1097
+	ld a, [de]
+	inc de
+	ld c, a
+.asm_1090
+	ld [hl], c
+	inc hl
+	dec b
+	jr nz, .asm_1090
+	jr .asm_1087
+.asm_1097
+	ld hl, $cce9
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld a, [de]
+	ld [hl], a
+	pop hl
+	ld bc, $003b
+	add hl, bc
+	ld a, [hl]
+	or a
+	ret nz
+	rst $38
+	scf
+	ret
+; 0x10aa
+
+INCBIN "baserom.gbc",$10aa,$1c7d - $10aa
 
 Func_1c7d: ; 1c7d (0:1c7d)
 	call Func_07b6
@@ -2759,7 +2807,40 @@ Func_2e89: ; 2e89 (0:2e89)
 	jp Func_1c7d
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$3189 - $2ea9
+INCBIN "baserom.gbc",$2ea9,$302c - $2ea9
+
+Func_302c: ; 302c (0:302c)
+	push hl
+	ld l, a
+	ld h, $0
+	ld a, [$ff80]
+	push af
+	ld a, BANK(Unknown_30000)
+	call BankswitchHome
+	add hl, hl
+	ld de, Unknown_30000
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld a, d
+	or e
+	jr z, .asm_304e
+	call Func_1072
+	pop af
+	call BankswitchHome
+	pop hl
+	or a
+	ret
+.asm_304e
+	pop af
+	call BankswitchHome
+	pop hl
+	scf
+	ret
+; 0x3055
+
+INCBIN "baserom.gbc",$3055,$3189 - $3055
 
 Func_3189: ; 3189 (0:3189)
 	ld hl, PointerTable_3190
@@ -2910,7 +2991,7 @@ INCBIN "baserom.gbc",$37a5,$397b - $37a5
 Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3aed - $397b
 
-Func_3aed: ; 3aed (0:7aed)
+Func_3aed: ; 3aed (0:3aed)
 	ld hl, $d413
 	ld a, [hli]
 	ld h, [hl]
