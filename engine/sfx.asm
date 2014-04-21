@@ -110,7 +110,7 @@ Func_fc094: ; fc094 (3f:4094)
 	ld a, [hli]
 	push hl
 	and $f
-	ld hl, PointerTable_fc0ab
+	ld hl, SFX_CommandTable
 	add hl, de
 	ld e, [hl]
 	inc hl
@@ -119,28 +119,28 @@ Func_fc094: ; fc094 (3f:4094)
 	ld l, e
 	jp [hl]
 
-PointerTable_fc0ab: ; fc0ab (3f:40ab)
-	dw Func_fc0ce
-	dw Func_fc10e
-	dw Func_fc127
-	dw Func_fc138
-	dw Func_fc14d
-	dw Func_fc166
-	dw Func_fc172
-	dw Func_fc202
-	dw Func_fc22d
-	dw Func_fc0cb
-	dw Func_fc0cb
-	dw Func_fc0cb
-	dw Func_fc0cb
-	dw Func_fc0cb
-	dw Func_fc0cb
-	dw Func_fc249
+SFX_CommandTable: ; fc0ab (3f:40ab)
+	dw SFX_0
+	dw SFX_1
+	dw SFX_2
+	dw SFX_loop
+	dw SFX_endloop
+	dw SFX_5
+	dw SFX_6
+	dw SFX_7
+	dw SFX_8
+	dw SFX_unused
+	dw SFX_unused
+	dw SFX_unused
+	dw SFX_unused
+	dw SFX_unused
+	dw SFX_unused
+	dw SFX_end
 
-Func_fc0cb: ; fc0cb (3f:40cb)
+SFX_unused: ; fc0cb (3f:40cb)
 	jp Func_fc094
 
-Func_fc0ce: ; fc0ce (3f:40ce)
+SFX_0: ; fc0ce (3f:40ce)
 	ld d, a
 	pop hl
 	ld a, [hli]
@@ -194,7 +194,7 @@ Func_fc105: ; fc105 (3f:4105)
 	ld [hl], d
 	ret
 
-Func_fc10e: ; fc10e (3f:410e)
+SFX_1: ; fc10e (3f:410e)
 	ld hl, $de2b
 	add hl, bc
 	ld a, $80
@@ -214,7 +214,7 @@ Func_fc10e: ; fc10e (3f:410e)
 	pop hl
 	jp Func_fc094
 
-Func_fc127: ; fc127 (3f:4127)
+SFX_2: ; fc127 (3f:4127)
 	swap a
 	ld e, a
 	ld hl, $ff11
@@ -228,7 +228,7 @@ Func_fc127: ; fc127 (3f:4127)
 	pop hl
 	jp Func_fc094
 
-Func_fc138: ; fc138 (3f:4138)
+SFX_loop: ; fc138 (3f:4138)
 	ld hl, $de43
 	add hl, bc
 	add hl, bc
@@ -245,7 +245,7 @@ Func_fc138: ; fc138 (3f:4138)
 	ld h, d
 	jp Func_fc094
 
-Func_fc14d: ; fc14d (3f:414d)
+SFX_endloop: ; fc14d (3f:414d)
 	ld hl, $de3f
 	add hl, bc
 	ld a, [hl]
@@ -264,7 +264,7 @@ Func_fc14d: ; fc14d (3f:414d)
 	pop hl
 	jp Func_fc094
 
-Func_fc166: ; fc166 (3f:4166)
+SFX_5: ; fc166 (3f:4166)
 	ld hl, $de2f
 	add hl, bc
 	ld e, l
@@ -274,7 +274,7 @@ Func_fc166: ; fc166 (3f:4166)
 	ld [de], a
 	jp Func_fc094
 
-Func_fc172: ; fc172 (3f:4172)
+SFX_6: ; fc172 (3f:4172)
 	ld a, c
 	cp $3
 	jr nz, .asm_fc17c
@@ -390,11 +390,11 @@ Func_fc1cd: ; fc1cd (3f:41cd)
 .asm_fc201
 	ret
 
-Func_fc202: ; fc202 (3f:4202)
+SFX_7: ; fc202 (3f:4202)
 	add a
 	ld d, $0
 	ld e, a
-	ld hl, Unknown_fc485
+	ld hl, PointerTable_fc485
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -419,7 +419,7 @@ Func_fc202: ; fc202 (3f:4202)
 	pop hl
 	jp Func_fc094
 
-Func_fc22d: ; fc22d (3f:422d)
+SFX_8: ; fc22d (3f:422d)
 	pop hl
 	ld a, [hli]
 	push hl
@@ -443,7 +443,7 @@ Func_fc22d: ; fc22d (3f:422d)
 	pop hl
 	jp Func_fc094
 
-Func_fc249: ; fc249 (3f:4249)
+SFX_end: ; fc249 (3f:4249)
 	ld e, c
 	inc e
 	ld a, $7f
@@ -988,8 +988,27 @@ SFX_5f: ; fc482 (3f:4482)
 	db %1000
 	dw SFX_5f_Ch1
 
-Unknown_fc485: ; fc485 (3f:4485)
-INCBIN "baserom.gbc",$fc485,$fc4df - $fc485
+PointerTable_fc485: ; fc485 (3f:4485)
+	dw Unknown_fc48f
+	dw Unknown_fc49f
+	dw Unknown_fc4af
+	dw Unknown_fc4bf
+	dw Unknown_fc4cf
+
+Unknown_fc48f: ; fc48f (3f:448f)
+INCBIN "baserom.gbc",$fc48f,$fc49f - $fc48f
+
+Unknown_fc49f: ; fc49f (3f:449f)
+INCBIN "baserom.gbc",$fc49f,$fc4af - $fc49f
+
+Unknown_fc4af: ; fc4af (3f:44af)
+INCBIN "baserom.gbc",$fc4af,$fc4bf - $fc4af
+
+Unknown_fc4bf: ; fc4bf (3f:44bf)
+INCBIN "baserom.gbc",$fc4bf,$fc4cf - $fc4bf
+
+Unknown_fc4cf: ; fc4cf (3f:44cf)
+INCBIN "baserom.gbc",$fc4cf,$fc4df - $fc4cf
 
 INCLUDE "audio/sfx/sfx_01.asm"
 INCLUDE "audio/sfx/sfx_02.asm"
@@ -1086,3 +1105,7 @@ INCLUDE "audio/sfx/sfx_5c.asm"
 INCLUDE "audio/sfx/sfx_5d.asm"
 INCLUDE "audio/sfx/sfx_5e.asm"
 INCLUDE "audio/sfx/sfx_5f.asm"
+
+rept $c1
+db $ff
+endr

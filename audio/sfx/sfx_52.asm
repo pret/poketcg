@@ -1,5 +1,142 @@
 SFX_52_Ch1: ; ff714 (3f:7714)
-INCBIN "baserom.gbc",$ff714,$ff7bf - $ff714
+	sfx_1 255
+	sfx_8 17
+	sfx_2 8
+	sfx_0 7, 57
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 255
+	sfx_1 255
+	sfx_8 17
+	sfx_2 8
+	sfx_0 7, 33
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 255
+	sfx_1 143
+	sfx_8 17
+	sfx_2 8
+	sfx_0 7, 5
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 143
+	sfx_1 79
+	sfx_8 17
+	sfx_2 8
+	sfx_0 7, 123
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 79
+	sfx_1 31
+	sfx_8 17
+	sfx_2 8
+	sfx_0 7, 107
+	sfx_1 0
+	sfx_5 0
+	sfx_6 35
+	sfx_5 255
+	sfx_1 31
+	sfx_1 255
+	sfx_8 17
+	sfx_2 0
+	sfx_0 7, 57
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 255
+	sfx_1 255
+	sfx_8 17
+	sfx_2 0
+	sfx_0 7, 33
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 255
+	sfx_1 143
+	sfx_8 17
+	sfx_2 0
+	sfx_0 7, 5
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 143
+	sfx_1 79
+	sfx_8 17
+	sfx_2 0
+	sfx_0 7, 123
+	sfx_1 0
+	sfx_5 0
+	sfx_6 1
+	sfx_5 255
+	sfx_1 79
+	sfx_1 31
+	sfx_8 17
+	sfx_2 0
+	sfx_0 7, 107
+	sfx_1 0
+	sfx_5 0
+	sfx_6 35
+	sfx_5 255
+	sfx_1 31
+	sfx_end
 
 SFX_52_Ch2: ; ff7bf (3f:77bf)
-INCBIN "baserom.gbc",$ff7bf,$ff81d - $ff7bf
+	sfx_8 17
+	sfx_loop 2
+	sfx_1 0
+	sfx_5 0
+	sfx_6 10
+	sfx_5 255
+	sfx_1 1
+	sfx_1 223
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_0 0, 55
+	sfx_0 0, 48
+	sfx_1 143
+	sfx_0 0, 66
+	sfx_0 0, 67
+	sfx_0 0, 66
+	sfx_0 0, 67
+	sfx_0 0, 66
+	sfx_0 0, 67
+	sfx_0 0, 66
+	sfx_0 0, 67
+	sfx_1 79
+	sfx_0 0, 66
+	sfx_0 0, 67
+	sfx_0 0, 130
+	sfx_0 0, 131
+	sfx_0 0, 130
+	sfx_0 0, 131
+	sfx_1 31
+	sfx_0 0, 130
+	sfx_0 0, 131
+	sfx_0 0, 130
+	sfx_0 0, 131
+	sfx_0 0, 130
+	sfx_0 0, 131
+	sfx_endloop
+	sfx_end

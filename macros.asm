@@ -149,3 +149,39 @@ ENDM
 music_end: MACRO
 	db $ff
 ENDM
+
+sfx_0: MACRO
+	db \1, \2
+ENDM
+
+sfx_1: MACRO
+	db $10, \1
+ENDM
+
+sfx_2: MACRO
+	db $20 | \1
+ENDM
+
+sfx_loop: MACRO
+	db $30, \1
+ENDM
+
+sfx_endloop: MACRO
+	db $40
+ENDM
+
+sfx_5: MACRO
+	db $50, \1
+ENDM
+
+sfx_6: MACRO
+	db $60, \1
+ENDM
+
+sfx_8: MACRO
+	db $80, \1
+ENDM
+
+sfx_end: MACRO
+	db $f0
+ENDM
