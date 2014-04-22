@@ -14,7 +14,7 @@ SECTION "bank3",ROMX,BANK[$3]
 INCLUDE "engine/bank3.asm"
 
 SECTION "bank4",ROMX,BANK[$4]
-INCLUDE "engine/overworldmap.asm"
+INCLUDE "engine/bank4.asm"
 
 SECTION "bank5",ROMX,BANK[$5]
 INCBIN "baserom.gbc",$14000,$4000
@@ -88,7 +88,10 @@ SECTION "bank1B",ROMX,BANK[$1B]
 	emptybank
 
 SECTION "bank1C",ROMX,BANK[$1C]
-INCBIN "baserom.gbc",$70000,$4000
+Func_70000: ; 70000 (1c:4000)
+INCBIN "baserom.gbc",$70000,$70018 - $70000
+Func_70018: ; 70018 (1c:4018)
+INCBIN "baserom.gbc",$70018,$74000 - $70018
 
 SECTION "bank1D",ROMX,BANK[$1D]
 INCBIN "baserom.gbc",$74000,$76668 - $74000
@@ -189,11 +192,9 @@ SECTION "bank3C",ROMX,BANK[$3C]
 	emptybank
 
 SECTION "bank3D",ROMX,BANK[$3D]
-
 INCLUDE "engine/music1.asm"
 
 SECTION "bank3E",ROMX,BANK[$3E]
-
 INCLUDE "engine/music2.asm"
 
 SECTION "bank3F",ROMX,BANK[$3F]

@@ -610,9 +610,9 @@ Music2_CommandTable: ; f842c (3e:442c)
 	dw Music2_end
 	dw Music2_musicdc
 	dw Music2_MainLoop
-	dw Music2_endMainLoop
+	dw Music2_EndMainLoop
 	dw Music2_Loop
-	dw Music2_endLoop
+	dw Music2_EndLoop
 	dw Music2_jp
 	dw Music2_call
 	dw Music2_ret
@@ -919,7 +919,7 @@ Music2_MainLoop: ; f85ef (3e:45ef)
 	ld [hl], d
 	jp Music2_PlayNextNote_pop
 
-Music2_endMainLoop: ; f85fd (3e:45fd)
+Music2_EndMainLoop: ; f85fd (3e:45fd)
 	pop hl
 	ld hl, $dd9d
 	add hl, bc
@@ -946,7 +946,7 @@ Music2_Loop: ; f8609 (3e:4609)
 	call Music2_SetReturnAddress
 	jp Music2_PlayNextNote_pop
 
-Music2_endLoop: ; f861e (3e:461e)
+Music2_EndLoop: ; f861e (3e:461e)
 	call Music2_GetReturnAddress
 	dec hl
 	ld a, [hl]

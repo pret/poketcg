@@ -375,4 +375,10 @@ MapSongs: ; 1c374 (7:4374)
 	db $36,$37,$00,$0A,$17,MUSIC_POKEMONDOME ; POKEMON_DOME
 	db $3A,$3B,$00,$0A,$18,MUSIC_HALLOFHONOR ; HALL_OF_HONOR
 
-INCBIN "baserom.gbc",$1c440,$20000 - $1c440
+INCBIN "baserom.gbc",$1c440,$1d078 - $1c440
+
+Func_1d078: ; 1d078 (7:5078)
+INCBIN "baserom.gbc",$1d078,$1d306 - $1d078
+
+Func_1d306: ; 1d306 (7:5306)
+INCBIN "baserom.gbc",$1d306,$20000 - $1d306

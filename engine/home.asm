@@ -631,7 +631,7 @@ Func_0572: ; 0572 (0:0572)
 
 CopyDMAFunction: ; 0593 (0:0593)
 	ld c, $83
-	ld b, $a
+	ld b, JumpToFunctionInTable - DMA
 	ld hl, DMA
 .asm_59a
 	ld a, [hli]
@@ -1036,7 +1036,22 @@ Func_0879: ; 0879 (0:0879)
 	ret
 ; 0x88f
 
-INCBIN "baserom.gbc",$088f,$09ae - $088f
+INCBIN "baserom.gbc",$088f,$099c - $088f
+
+Func_099c: ; 099c (0:099c)
+	xor a
+	ld [$cab5], a
+	ld hl, $ca00
+	ld c, $28
+	xor a
+.asm_9a6
+	ld [hli], a
+	ld [hli], a
+	inc hl
+	inc hl
+	dec c
+	jr nz, .asm_9a6
+	ret
 
 ; this function affects the stack so that it returns to the pointer following the rst call
 ; similar to rst 28, except this always loads bank 1
@@ -3002,6 +3017,7 @@ Func_377f: ; 377f (0:377f)
 
 Func_3784: ; 3784 (0:3784)
 	xor a
+Func_3785: ; 3785 (0:3785)
 	farcall Func_f4006
 	ret
 
@@ -3028,7 +3044,62 @@ Func_37a0: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-INCBIN "baserom.gbc",$37a5,$395a - $37a5
+INCBIN "baserom.gbc",$37a5,$383d - $37a5
+
+Func_383d: ; 383d (0:383d)
+	ld a, $1
+	ld [$cac4], a
+	ld a, [$ff80]
+	push af
+.asm_3845
+	call Func_3855
+	jr nc, .asm_3850
+	farcall Func_c000
+	jr .asm_3845
+.asm_3850
+	pop af
+	call BankswitchHome
+	ret
+
+Func_3855: ; 3855 (0:3855)
+	ld a, [$d0b5]
+	cp $7
+	jr c, .asm_385e
+	ld a, $6
+.asm_385e
+	ld hl, PointerTable_3864
+	jp JumpToFunctionInTable
+
+PointerTable_3864: ; 3864 (0:3864)
+	dw Func_3874
+	dw Func_38c0
+	dw Func_38a3
+	dw Func_3876
+	dw Func_3911
+	dw Func_38fb
+	dw Func_38db
+	dw Func_3874
+
+Func_3874: ; 3874 (0:3874)
+INCBIN "baserom.gbc",$3874,$3876 - $3874
+
+Func_3876: ; 3876 (0:3876)
+INCBIN "baserom.gbc",$3876,$38a3 - $3876
+
+Func_38a3: ; 38a3 (0:38a3)
+INCBIN "baserom.gbc",$38a3,$38c0 - $38a3
+
+Func_38c0: ; 38c0 (0:38c0)
+INCBIN "baserom.gbc",$38c0,$38db - $38c0
+
+Func_38db: ; 38db (0:38db)
+INCBIN "baserom.gbc",$38db,$38fb - $38db
+
+Func_38fb: ; 38fb (0:38fb)
+INCBIN "baserom.gbc",$38fb,$3911 - $38fb
+
+Func_3911: ; 3911 (0:3911)
+INCBIN "baserom.gbc",$3911,$395a - $3911
 
 Func_395a: ; 395a (0:395a)
 	ld a, [$ff80]
@@ -3044,7 +3115,13 @@ Func_395a: ; 395a (0:395a)
 INCBIN "baserom.gbc",$396b,$397b - $396b
 
 Unknown_397b: ; 397b (0:397b)
-INCBIN "baserom.gbc",$397b,$3aed - $397b
+INCBIN "baserom.gbc",$397b,$39fc - $397b
+
+Func_39fc: ; 39fc (0:39fc)
+INCBIN "baserom.gbc",$39fc,$3a40 - $39fc
+
+Func_3a40: ; 3a40 (0:3a40)
+INCBIN "baserom.gbc",$3a40,$3aed - $3a40
 
 Func_3aed: ; 3aed (0:3aed)
 	ld hl, $d413
@@ -3093,7 +3170,10 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ret
 ; 0x3c10
 
-INCBIN "baserom.gbc",$3c10,$3c5a - $3c10
+INCBIN "baserom.gbc",$3c10,$3c48 - $3c10
+
+Func_3c48: ; 3c48 (0:3c48)
+INCBIN "baserom.gbc",$3c48,$3c5a - $3c48
 
 Func_3c5a: ; 3c5a (0:3c5a)
 	ld hl, $0000

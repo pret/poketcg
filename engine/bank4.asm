@@ -464,7 +464,10 @@ Func_11184: ; 11184 (4:5184)
 	ret
 ; 0x111b3
 
-INCBIN "baserom.gbc",$111b3,$1217b - $111b3
+INCBIN "baserom.gbc",$111b3,$11320 - $111b3
+
+Func_11320: ; 11320 (4:5320)
+INCBIN "baserom.gbc",$11320,$1217b - $11320
 
 Unknown_1217b: ; 1217b (4:617b)
 INCBIN "baserom.gbc",$1217b,$1229f - $1217b
@@ -473,7 +476,108 @@ Unknown_1229f: ; 1229f (4:629f)
 INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
 
 Func_126d1: ; 126d1 (4:66d1)
-INCBIN "baserom.gbc",$126d1,$1299f - $126d1
+	call Func_099c
+	ld hl, $cac0
+	inc [hl]
+	farcall Func_70018
+	ld a, $ff
+	ld [$d627], a
+.asm_126e1
+	ld a, $c2
+	ld [$ff97], a
+	farcall Func_c1f8
+	farcall Func_1d078
+	ld a, [$d628]
+	ld hl, PointerTable_126fc
+	call JumpToFunctionInTable
+	jr c, .asm_126e1
+	jr Func_126d1
+
+	scf
+	ret
+
+PointerTable_126fc
+	dw Func_12768
+	dw Func_12741
+	dw Func_12704
+	dw Func_1277e
+
+Func_12704: ; 12704 (4:6704)
+	farcall Func_c1b1
+	call Func_128a9
+	farcall Func_1996e
+	call Func_07b6
+	ld a, [$a007]
+	ld [$d421], a
+	ld a, [$a006]
+	ld [$ce47], a
+	call Func_07be
+	ld a, $0
+	call Func_3785
+	farcall Func_70000
+	ld a, $9
+	ld [$d111], a
+	call Func_39fc
+	farcall Func_1d306
+	ld a, $0
+	ld [$d0b5], a
+	rst $28
+	db $03
+	dw Func_383d
+	or a
+	ret
+
+Func_12741: ; 12741 (4:6741)
+	ld a, $0
+	call Func_3785
+	call Func_11320
+	jr nc, Func_12704
+	farcall Func_c1ed
+	farcall Func_70000
+	call Func_07b6
+	xor a
+	ld [$ba44], a
+	call Func_07be
+	ld a, $0
+	ld [$d0b5], a
+	rst $28
+	db $03
+	dw Func_383d
+	or a
+	ret
+
+Func_12768: ; 12768 (4:6768)
+	ld a, $8
+	call Func_3785
+	bank1call Func_7571
+	farcall Func_c1a4
+	call Func_3c48
+	ld a, $0
+	call Func_3785
+	scf
+	ret
+
+Func_1277e: ; 1277e (4:677e)
+	ld a, $0
+	call Func_3785
+	farcall Func_c9cb
+	rst $28
+	db $04
+	dw Func_3a40
+	farcall Func_70000
+	ld a, $5
+	ld [$d0b5], a
+	rst $28
+	db $03
+	dw Func_383d
+	or a
+	ret
+; 0x1279a
+
+INCBIN "baserom.gbc",$1279a,$128a9 - $1279a
+
+Func_128a9: ; 128a9 (4:68a9)
+INCBIN "baserom.gbc",$128a9,$1299f - $128a9
 
 Func_1299f: ; 1299f (4:699f)
 	push af

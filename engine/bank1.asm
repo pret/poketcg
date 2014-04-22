@@ -39,4 +39,7 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-INCBIN "baserom.gbc",$405a,$8000 - $405a
+INCBIN "baserom.gbc",$405a,$7571 - $405a
+
+Func_7571: ; 7571 (1:7571)
+INCBIN "baserom.gbc",$7571,$8000 - $7571

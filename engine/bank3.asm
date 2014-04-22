@@ -1,4 +1,17 @@
-INCBIN "baserom.gbc",$c000,$c5d5 - $c000
+Func_c000: ; c000 (3:4000)
+INCBIN "baserom.gbc",$c000,$c1a4 - $c000
+
+Func_c1a4: ; c1a4 (3:41a4)
+INCBIN "baserom.gbc",$c1a4,$c1b1 - $c1a4
+
+Func_c1b1: ; c1b1 (3:41b1)
+INCBIN "baserom.gbc",$c1b1,$c1ed - $c1b1
+
+Func_c1ed: ; c1ed (3:41ed)
+INCBIN "baserom.gbc",$c1ed,$c1f8 - $c1ed
+
+Func_c1f8: ; c1f8 (3:41f8)
+INCBIN "baserom.gbc",$c1f8,$c5d5 - $c1f8
 
 Func_c5d5: ; c5d5 (3:45d5)
 	push hl
@@ -31,7 +44,10 @@ Func_c5e9: ; c5e9 (3:45e9)
 	ret
 ; 0xc5fe
 
-INCBIN "baserom.gbc",$c5fe,$ca6c - $c5fe
+INCBIN "baserom.gbc",$c5fe,$c9cb - $c5fe
+
+Func_c9cb: ; c9cb (3:49cb)
+INCBIN "baserom.gbc",$c9cb,$ca6c - $c9cb
 
 Func_ca6c: ; ca6c (3:4a6c)
 	push hl

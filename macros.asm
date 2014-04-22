@@ -20,18 +20,18 @@ emptybank: MACRO
 ENDM
 
 ; notes
-C_		EQU $1
-C#		EQU $2
-D_		EQU $3
-D#		EQU $4
-E_		EQU $5
-F_		EQU $6
-F#		EQU $7
-G_		EQU $8
-G#		EQU $9
-A_		EQU $A
-A#		EQU $B
-B_		EQU $C
+C_ EQU $1
+C# EQU $2
+D_ EQU $3
+D# EQU $4
+E_ EQU $5
+F_ EQU $6
+F# EQU $7
+G_ EQU $8
+G# EQU $9
+A_ EQU $A
+A# EQU $B
+B_ EQU $C
 
 ; instruments
 bass   EQU $1
