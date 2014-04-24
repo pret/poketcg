@@ -17,7 +17,10 @@ Func_8cf9: ; 8cf9 (2:4cf9)
 	ret
 
 Unknown_8d15: ; 8d15 (2:4d15)
-INCBIN "baserom.gbc",$8d15,$92ad - $8d15
+INCBIN "baserom.gbc",$8d15,$8db0 - $8d15
+
+Func_8db0: ; 8db0 (2:4db0)
+INCBIN "baserom.gbc",$8db0,$92ad - $8db0
 
 Func_92ad: ; 92ad (2:52ad)
 	ld a, [hli]
@@ -28,4 +31,7 @@ Func_92ad: ; 92ad (2:52ad)
 	jr Func_92ad
 ; 0x92b4
 
-INCBIN "baserom.gbc",$92b4,$c000 - $92b4
+INCBIN "baserom.gbc",$92b4,$a288 - $92b4
+
+Func_a288: ; a288 (2:6288)
+INCBIN "baserom.gbc",$a288,$c000 - $a288

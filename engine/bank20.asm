@@ -1,5 +1,8 @@
 Func_80000: ; 80000 (20:4000)
-INCBIN "baserom.gbc",$80000,$8020f - $80000
+INCBIN "baserom.gbc",$80000,$80028 - $80000
+
+Func_80028: ; 80028 (20:4028)
+INCBIN "baserom.gbc",$80028,$8020f - $80028
 
 Func_8020f: ; 8020f (20:420f)
 	push bc
@@ -109,10 +112,16 @@ Func_802bb: ; 802bb (20:42bb)
 	ret
 ; 0x802d4
 
-INCBIN "baserom.gbc",$802d4,$80480 - $802d4
+INCBIN "baserom.gbc",$802d4,$80418 - $802d4
+
+Func_80418: ; 80418 (20:4418)
+INCBIN "baserom.gbc",$80418,$80480 - $80418
 
 Func_80480: ; 80480 (20:4480)
-INCBIN "baserom.gbc",$80480,$80e5a - $80480
+INCBIN "baserom.gbc",$80480,$80b7a - $80480
+
+Func_80b7a: ; 80b7a (20:4b7a)
+INCBIN "baserom.gbc",$80b7a,$80e5a - $80b7a
 
 Unknown_80e5a: ; 80e5a (20:4e5a)
 INCBIN "baserom.gbc",$80e5a,$80e5d - $80e5a

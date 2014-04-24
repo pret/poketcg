@@ -376,7 +376,28 @@ MapSongs: ; 1c374 (7:4374)
 	db $3A,$3B,$00,$0A,$18,MUSIC_HALLOFHONOR ; HALL_OF_HONOR
 
 Func_1c440: ; 1c440 (7:4440)
-INCBIN "baserom.gbc",$1c440,$1d078 - $1c440
+INCBIN "baserom.gbc",$1c440,$1c485 - $1c440
+
+Func_1c485: ; 1c485 (7:4485)
+INCBIN "baserom.gbc",$1c485,$1c58e - $1c485
+
+Func_1c58e: ; 1c58e (7:458e)
+INCBIN "baserom.gbc",$1c58e,$1c5e9 - $1c58e
+
+Func_1c5e9: ; 1c5e9 (7:45e9)
+INCBIN "baserom.gbc",$1c5e9,$1c6f8 - $1c5e9
+
+Func_1c6f8: ; 1c6f8 (7:46f8)
+INCBIN "baserom.gbc",$1c6f8,$1c72e - $1c6f8
+
+Func_1c72e: ; 1c72e (7:472e)
+INCBIN "baserom.gbc",$1c72e,$1c768 - $1c72e
+
+Func_1c768: ; 1c768 (7:4768)
+INCBIN "baserom.gbc",$1c768,$1c82e - $1c768
+
+Func_1c82e: ; 1c82e (7:482e)
+INCBIN "baserom.gbc",$1c82e,$1d078 - $1c82e
 
 Func_1d078: ; 1d078 (7:5078)
 INCBIN "baserom.gbc",$1d078,$1d306 - $1d078

@@ -1,7 +1,22 @@
-INCBIN "baserom.gbc",$10000,$103d3 - $10000
+INCBIN "baserom.gbc",$10000,$10059 - $10000
+
+Func_10059: ; 10059 (4:4059)
+INCBIN "baserom.gbc",$10059,$100a2 - $10059
+
+Func_100a2: ; 100a2 (4:40a2)
+INCBIN "baserom.gbc",$100a2,$103d2 - $100a2
+
+Func_103d2: ; 103d2 (4:43d2)
+INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
 
 Func_103d3: ; 103d3 (4:43d3)
-INCBIN "baserom.gbc",$103d3,$10a9b - $103d3
+INCBIN "baserom.gbc",$103d3,$10548 - $103d3
+
+Func_10548: ; 10548 (4:4548)
+INCBIN "baserom.gbc",$10548,$10756 - $10548
+
+Func_10756: ; 10756 (4:4756)
+INCBIN "baserom.gbc",$10756,$10a9b - $10756
 
 Func_10a9b: ; 10a9b (4:4a9b)
 INCBIN "baserom.gbc",$10a9b,$10ab4 - $10a9b
@@ -179,7 +194,7 @@ OverworldMapIndexes: ; 10f88 (4:4f88)
 	db CHALLENGE_HALL_ENTRANCE,$08,$0E,$00
 	db POKEMON_DOME_ENTRANCE,  $0E,$0E,$00
 
-Func_10fbc: ; 10fbc (4:4fbc) XXXX
+Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
 	ld c, $2
@@ -198,7 +213,7 @@ Func_10fbc: ; 10fbc (4:4fbc) XXXX
 	farcall Func_12ab5
 	ret
 
-Func_10fde: ; 10fde (4:4fde) XXXX
+Func_10fde: ; 10fde (4:4fde)
 	ld a, [$d32e]
 	ld [$d33d], a
 	xor a
@@ -476,10 +491,16 @@ Func_11184: ; 11184 (4:5184)
 	ret
 ; 0x111b3
 
-INCBIN "baserom.gbc",$111b3,$11320 - $111b3
+INCBIN "baserom.gbc",$111b3,$111e9 - $111b3
+
+Func_111e9: ; 111e9 (4:51e9)
+INCBIN "baserom.gbc",$111e9,$11320 - $111e9
 
 Func_11320: ; 11320 (4:5320)
-INCBIN "baserom.gbc",$11320,$1162a - $11320
+INCBIN "baserom.gbc",$11320,$11416 - $11320
+
+Func_11416: ; 11416 (4:5416)
+INCBIN "baserom.gbc",$11416,$1162a - $11416
 
 MapHeaders: ; 1162a (4:562a)
 ; OVERWORLD_MAP
@@ -822,7 +843,10 @@ MapHeaders: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 
-INCBIN "baserom.gbc",$1184a,$1217b - $1184a
+INCBIN "baserom.gbc",$1184a,$11857 - $1184a
+
+Func_11857: ; 11857 (4:5857)
+INCBIN "baserom.gbc",$11857,$1217b - $11857
 
 Unknown_1217b: ; 1217b (4:617b)
 INCBIN "baserom.gbc",$1217b,$1229f - $1217b
@@ -929,7 +953,13 @@ Func_1277e: ; 1277e (4:677e)
 	ret
 ; 0x1279a
 
-INCBIN "baserom.gbc",$1279a,$128a9 - $1279a
+INCBIN "baserom.gbc",$1279a,$12871 - $1279a
+
+Func_12871: ; 12871 (4:6871)
+INCBIN "baserom.gbc",$12871,$1288c - $12871
+
+Func_1288c: ; 1288c (4:688c)
+INCBIN "baserom.gbc",$1288c,$128a9 - $1288c
 
 Func_128a9: ; 128a9 (4:68a9)
 INCBIN "baserom.gbc",$128a9,$1299f - $128a9
@@ -1160,9 +1190,12 @@ Func_12b89: ; 12b89 (4:6b89)
 	pop bc
 	pop hl
 	ret
-; 0x12ba7
 
-INCBIN "baserom.gbc",$12ba7,$12c05 - $12ba7
+Func_12ba7: ; 12ba7 (4:6ba7)
+INCBIN "baserom.gbc",$12ba7,$12bcd - $12ba7
+
+Func_12bcd: ; 12bcd (4:6bcd)
+INCBIN "baserom.gbc",$12bcd,$12c05 - $12bcd
 
 Func_12c05: ; 12c05 (4:6c05)
 	push hl
@@ -1236,4 +1269,8 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	farcall Func_8025b
 	ret
 
-INCBIN "baserom.gbc",$12c5e,$14000 - $12c5e
+Func_12c5e: ; 12c5e (4:6c5e)
+INCBIN "baserom.gbc",$12c5e,$131b3 - $12c5e
+
+Func_131b3: ; 131b3 (4:71b3)
+INCBIN "baserom.gbc",$131b3,$14000 - $131b3
