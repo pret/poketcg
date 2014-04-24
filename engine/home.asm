@@ -247,8 +247,8 @@ Func_028a: ; 028a (0:028a)
 	ld a, [$cab7]
 	ld [$ffff], a
 	ret
-; 0x2b9
 
+Func_02b9: ; 02b9 (0:02b9)
 INCBIN "baserom.gbc",$02b9,$02dd - $02b9
 
 Func_02dd: ; 02dd (0:02dd)
@@ -1821,7 +1821,10 @@ Func_1f0f: ; 1f0f (0:1f0f)
 	ret
 ; 0x1f4f
 
-INCBIN "baserom.gbc",$1f4f,$21c5 - $1f4f
+INCBIN "baserom.gbc",$1f4f,$2119 - $1f4f
+
+Func_2119: ; 2119 (0:2119)
+INCBIN "baserom.gbc",$2119,$21c5 - $2119
 
 Func_21c5: ; 21c5 (0:21c5)
 	push de
@@ -3054,7 +3057,7 @@ Func_383d: ; 383d (0:383d)
 .asm_3845
 	call Func_3855
 	jr nc, .asm_3850
-	farcall Func_c000
+	farcall LoadMap
 	jr .asm_3845
 .asm_3850
 	pop af
@@ -3121,7 +3124,43 @@ Func_39fc: ; 39fc (0:39fc)
 INCBIN "baserom.gbc",$39fc,$3a40 - $39fc
 
 Func_3a40: ; 3a40 (0:3a40)
-INCBIN "baserom.gbc",$3a40,$3aed - $3a40
+INCBIN "baserom.gbc",$3a40,$3abd - $3a40
+
+Func_3abd: ; 3abd (0:3abd)
+	push bc
+	push hl
+	ld a, [wCurMap]
+	ld l, a
+	ld h, $0
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld bc, MapHeaders
+	add hl, bc
+	pop bc
+	ld b, $0
+	add hl, bc
+	ld a, [$ff80]
+	push af
+	ld a, BANK(MapHeaders)
+	call BankswitchHome
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop af
+	call BankswitchHome
+	ld a, l
+	or h
+	jr nz, .asm_3ae5
+	scf
+.asm_3ae5
+	ccf
+	pop bc
+	ret
+; 0x3ae8
+
+INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
 
 Func_3aed: ; 3aed (0:3aed)
 	ld hl, $d413
@@ -3207,7 +3246,10 @@ Func_3c5a: ; 3c5a (0:3c5a)
 	ret
 ; 0x3c83
 
-INCBIN "baserom.gbc",$3c83,$3d72 - $3c83
+INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
+
+Func_3ca0: ; 3ca0 (0:3ca0)
+INCBIN "baserom.gbc",$3ca0,$3d72 - $3ca0
 
 Func_3d72: ; 3d72 (0:3d72)
 	ld a, [$ff80]
