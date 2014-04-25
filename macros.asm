@@ -13,6 +13,14 @@ farcall: MACRO
 	dw \1
 ENDM
 
+; used when the specified bank does not match the bank of the specified function
+; otherwise, farcall is preferred
+farcallx: MACRO
+	rst $28
+	db \1
+	dw \2
+ENDM
+
 emptybank: MACRO
 	rept $4000
 	db $ff

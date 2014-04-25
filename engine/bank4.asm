@@ -906,9 +906,7 @@ Func_12704: ; 12704 (4:6704)
 	farcall Func_1d306
 	ld a, $0
 	ld [$d0b5], a
-	rst $28
-	db $03
-	dw Func_383d
+	farcallx $03, Func_383d
 	or a
 	ret
 
@@ -925,9 +923,7 @@ Func_12741: ; 12741 (4:6741)
 	call Func_07be
 	ld a, $0
 	ld [$d0b5], a
-	rst $28
-	db $03
-	dw Func_383d
+	farcallx $03, Func_383d
 	or a
 	ret
 
@@ -946,15 +942,11 @@ Func_1277e: ; 1277e (4:677e)
 	ld a, $0
 	call Func_3785
 	farcall Func_c9cb
-	rst $28
-	db $04
-	dw Func_3a40
+	farcallx $04, Func_3a40
 	farcall Func_70000
 	ld a, $5
 	ld [$d0b5], a
-	rst $28
-	db $03
-	dw Func_383d
+	farcallx $03, Func_383d
 	or a
 	ret
 ; 0x1279a
