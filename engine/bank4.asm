@@ -494,13 +494,19 @@ Func_11184: ; 11184 (4:5184)
 INCBIN "baserom.gbc",$111b3,$111e9 - $111b3
 
 Func_111e9: ; 111e9 (4:51e9)
-INCBIN "baserom.gbc",$111e9,$11320 - $111e9
+INCBIN "baserom.gbc",$111e9,$1124d - $111e9
+
+Func_1124d: ; 1124d (4:524d)
+INCBIN "baserom.gbc",$1124d,$11320 - $1124d
 
 Func_11320: ; 11320 (4:5320)
 INCBIN "baserom.gbc",$11320,$11416 - $11320
 
 Func_11416: ; 11416 (4:5416)
-INCBIN "baserom.gbc",$11416,$1162a - $11416
+INCBIN "baserom.gbc",$11416,$11430 - $11416
+
+Func_11430: ; 11430 (4:5430)
+INCBIN "baserom.gbc",$11430,$1162a - $11430
 
 MapHeaders: ; 1162a (4:562a)
 ; OVERWORLD_MAP
@@ -962,7 +968,10 @@ Func_1288c: ; 1288c (4:688c)
 INCBIN "baserom.gbc",$1288c,$128a9 - $1288c
 
 Func_128a9: ; 128a9 (4:68a9)
-INCBIN "baserom.gbc",$128a9,$1299f - $128a9
+INCBIN "baserom.gbc",$128a9,$1296e - $128a9
+
+Func_1296e: ; 1296e (4:696e)
+INCBIN "baserom.gbc",$1296e,$1299f - $1296e
 
 Func_1299f: ; 1299f (4:699f)
 	push af
@@ -1031,7 +1040,10 @@ Func_129d9: ; 129d9 (4:69d9)
 	ret
 ; 0x129fa
 
-INCBIN "baserom.gbc",$129fa,$12ab5 - $129fa
+INCBIN "baserom.gbc",$129fa,$12a21 - $129fa
+
+Func_12a21: ; 12a21 (4:6a21)
+INCBIN "baserom.gbc",$12a21,$12ab5 - $12a21
 
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
@@ -1273,4 +1285,7 @@ Func_12c5e: ; 12c5e (4:6c5e)
 INCBIN "baserom.gbc",$12c5e,$131b3 - $12c5e
 
 Func_131b3: ; 131b3 (4:71b3)
-INCBIN "baserom.gbc",$131b3,$14000 - $131b3
+INCBIN "baserom.gbc",$131b3,$131d3 - $131b3
+
+Func_131d3: ; 131d3 (4:71d3)
+INCBIN "baserom.gbc",$131d3,$14000 - $131d3

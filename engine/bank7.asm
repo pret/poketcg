@@ -385,7 +385,10 @@ Func_1c58e: ; 1c58e (7:458e)
 INCBIN "baserom.gbc",$1c58e,$1c5e9 - $1c58e
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
-INCBIN "baserom.gbc",$1c5e9,$1c6f8 - $1c5e9
+INCBIN "baserom.gbc",$1c5e9,$1c610 - $1c5e9
+
+Func_1c610: ; 1c610 (7:4610)
+INCBIN "baserom.gbc",$1c610,$1c6f8 - $1c610
 
 Func_1c6f8: ; 1c6f8 (7:46f8)
 INCBIN "baserom.gbc",$1c6f8,$1c72e - $1c6f8
@@ -403,4 +406,7 @@ Func_1d078: ; 1d078 (7:5078)
 INCBIN "baserom.gbc",$1d078,$1d306 - $1d078
 
 Func_1d306: ; 1d306 (7:5306)
-INCBIN "baserom.gbc",$1d306,$20000 - $1d306
+INCBIN "baserom.gbc",$1d306,$1d6ad - $1d306
+
+Func_1d6ad: ; 1d6ad (7:56ad)
+INCBIN "baserom.gbc",$1d6ad,$20000 - $1d6ad

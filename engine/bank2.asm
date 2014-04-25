@@ -34,4 +34,7 @@ Func_92ad: ; 92ad (2:52ad)
 INCBIN "baserom.gbc",$92b4,$a288 - $92b4
 
 Func_a288: ; a288 (2:6288)
-INCBIN "baserom.gbc",$a288,$c000 - $a288
+INCBIN "baserom.gbc",$a288,$b177 - $a288
+
+Func_b177: ; b177 (2:7177)
+INCBIN "baserom.gbc",$b177,$c000 - $b177

@@ -529,8 +529,8 @@ Func_c469: ; c469 (3:4469)
 	rrca
 	ld [$d234], a
 	ret
-; 0xc484
 
+Func_c484: ; c484 (3:4484)
 INCBIN "baserom.gbc",$c484,$c491 - $c484
 
 Func_c491: ; c491 (3:4491)
@@ -622,7 +622,10 @@ Func_c510: ; c510 (3:4510)
 	ret
 ; 0xc53d
 
-INCBIN "baserom.gbc",$c53d,$c5ac - $c53d
+INCBIN "baserom.gbc",$c53d,$c554 - $c53d
+
+Func_c554: ; c554 (3:4554)
+INCBIN "baserom.gbc",$c554,$c5ac - $c554
 
 Func_c5ac: ; c5ac (3:45ac)
 	ld a, [$ff90]

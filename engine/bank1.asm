@@ -39,10 +39,19 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-INCBIN "baserom.gbc",$405a,$6785 - $405a
+INCBIN "baserom.gbc",$405a,$406f - $405a
+
+Func_406f: ; 406f (1:406f)
+INCBIN "baserom.gbc",$406f,$409f - $406f
+
+Func_409f: ; 409f (1:409f)
+INCBIN "baserom.gbc",$409f,$6785 - $409f
 
 Func_6785: ; 6785 (1:6785)
 INCBIN "baserom.gbc",$6785,$7571 - $6785
 
 Func_7571: ; 7571 (1:7571)
-INCBIN "baserom.gbc",$7571,$8000 - $7571
+INCBIN "baserom.gbc",$7571,$758f - $7571
+
+Func_758f: ; 758f (1:758f)
+INCBIN "baserom.gbc",$758f,$8000 - $758f
