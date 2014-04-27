@@ -3952,14 +3952,14 @@ Func_3abd: ; 3abd (0:3abd)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld bc, MapHeaders
+	ld bc, MapScripts
 	add hl, bc
 	pop bc
 	ld b, $0
 	add hl, bc
 	ld a, [$ff80]
 	push af
-	ld a, BANK(MapHeaders)
+	ld a, BANK(MapScripts)
 	call BankswitchHome
 	ld a, [hli]
 	ld h, [hl]
