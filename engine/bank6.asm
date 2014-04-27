@@ -110,4 +110,7 @@ Func_1a6cc: ; 1a6cc (6:66cc)
 	ret
 ; 0x1a6cd
 
-INCBIN "baserom.gbc",$1a6cd,$1c000 - $1a6cd
+INCBIN "baserom.gbc",$1a6cd,$1ad89 - $1a6cd
+
+Func_1ad89: ; 1ad89 (6:6d89)
+INCBIN "baserom.gbc",$1ad89,$1c000 - $1ad89

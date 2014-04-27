@@ -45,7 +45,10 @@ Func_406f: ; 406f (1:406f)
 INCBIN "baserom.gbc",$406f,$409f - $406f
 
 Func_409f: ; 409f (1:409f)
-INCBIN "baserom.gbc",$409f,$6785 - $409f
+INCBIN "baserom.gbc",$409f,$5aeb - $409f
+
+Func_5aeb: ; 5aeb (1:5aeb)
+INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
 
 Func_6785: ; 6785 (1:6785)
 INCBIN "baserom.gbc",$6785,$7571 - $6785

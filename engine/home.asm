@@ -1989,7 +1989,7 @@ Func_1f0f: ; 1f0f (0:1f0f)
 	push bc
 	push de
 	ld hl, $cae0
-	ld de, $1f4f
+	ld de, Unknown_1f4f
 	ld c, $10
 .asm_1f25
 	ld a, [de]
@@ -2021,14 +2021,120 @@ Func_1f0f: ; 1f0f (0:1f0f)
 	ld hl, $cae0
 	call Func_0b20
 	ret
-; 0x1f4f
 
-INCBIN "baserom.gbc",$1f4f,$2119 - $1f4f
+Unknown_1f4f: ; 1f4f (0:1f4f)
+INCBIN "baserom.gbc",$1f4f,$1f5f - $1f4f
+
+Func_1f5f: ; 1f5f (0:1f5f)
+	push de
+	push af
+	push hl
+	add sp, $e0
+	call Func_1ddb
+.asm_1f67
+	push hl
+	push bc
+	ld hl, [sp+$25]
+	ld d, [hl]
+	ld hl, [sp+$27]
+	ld a, [hl]
+	ld hl, [sp+$4]
+	push hl
+.asm_1f72
+	ld [hli], a
+	add d
+	dec b
+	jr nz, .asm_1f72
+	pop de
+	pop bc
+	pop hl
+	push hl
+	push bc
+	ld c, b
+	ld b, $0
+	call Func_1dca
+	ld hl, [sp+$24]
+	ld a, [hl]
+	ld hl, [sp+$27]
+	add [hl]
+	ld [hl], a
+	pop bc
+	pop de
+	ld hl, $0020
+	add hl, de
+	dec c
+	jr nz, .asm_1f67
+	add sp, $24
+	pop de
+	ret
+; 0x1f96
+
+INCBIN "baserom.gbc",$1f96,$20b0 - $1f96
+
+Func_20b0: ; 20b0 (0:20b0)
+	ld hl, $2fe8
+	ld a, [$cab4]
+	cp $2
+	jr nz, .asm_20bd
+	ld hl, $37f8
+.asm_20bd
+	ld de, $8d00
+	ld b, $30
+	jr asm_2121
+
+Func_20c4: ; 20c4 (0:20c4)
+	ld hl, $3028
+	ld a, [$cab4]
+	cp $2
+	jr nz, .asm_20d1
+	ld hl, $3838
+.asm_20d1
+	ld de, $8d40
+	ld b, $c
+	jr asm_2121
+
+Func_20d8: ; 20d8 (0:20d8)
+	ld b, $10
+	jr asm_20de
+
+Func_20dc: ; 20dc (0:20dc)
+	ld b, $24
+asm_20de
+	ld hl, $32e8
+	ld a, [$cab4]
+	cp $2
+	jr nz, .asm_20eb
+	ld hl, $3af8
+.asm_20eb
+	ld de, $8d00
+	jr asm_2121
+
+Func_20f0: ; 20f0 (0:20f0)
+	ld hl, $4008
+	ld de, $8a00
+	ld b, $d
+	call asm_2121
+	ld hl, $3528
+	ld a, [$cab4]
+	cp $2
+	jr nz, .asm_2108
+	ld hl, $3d38
+.asm_2108
+	ld de, $8d00
+	ld b, $30
+	jr asm_2121
+
+Func_210f: ; 210f (0:210f)
+	ld hl, $40d8
+	ld de, $9300
+	ld b, $8
+	jr asm_2121
 
 Func_2119: ; 2119 (0:2119)
 	ld hl, $2968
 	ld de, $9000
 	ld b, $38
+asm_2121
 	ld a, $1d
 	call Func_0745
 	ld c, $10
@@ -2392,9 +2498,56 @@ Func_23b1: ; 23b1 (0:23b1)
 	sub $20
 	ld e, a
 	ret
-; 0x23c1
 
-INCBIN "baserom.gbc",$23c1,$245d - $23c1
+Func_23c1: ; 23c1 (0:23c1)
+	ld a, [hl]
+	cp $6
+	jr nz, .asm_23cf
+	call Func_23d3
+	inc b
+	srl b
+	xor a
+	sub b
+	ret
+.asm_23cf
+	xor a
+	ld [$cd0a], a
+Func_23d3: ; 23d3 (0:23d3)
+	push hl
+	push de
+	ld bc, $0000
+.asm_23d8
+	ld a, [hli]
+	or a
+	jr z, .asm_23f8
+	inc c
+	cp $5
+	jr c, .asm_23ec
+	cp $10
+	jr nc, .asm_23ec
+	cp $5
+	jr nz, .asm_23d8
+	inc b
+	jr .asm_23f4
+.asm_23ec
+	ld e, a
+	ld d, [hl]
+	inc b
+	call Func_2546
+	jr nc, .asm_23d8
+.asm_23f4
+	inc c
+	inc hl
+	jr .asm_23d8
+.asm_23f8
+	xor a
+	sub b
+	pop de
+	pop hl
+	ret
+; 0x23fd
+
+INCBIN "baserom.gbc",$23fd,$245d - $23fd
 
 Func_245d: ; 245d (0:245d)
 	push de
@@ -2614,7 +2767,22 @@ Func_256d: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-INCBIN "baserom.gbc",$2589,$264b - $2589
+INCBIN "baserom.gbc",$2589,$2636 - $2589
+
+Func_2636: ; 2636 (0:2636)
+	ld [$cd10], a
+	ld [$ffb1], a
+	ld de, $cd11
+	ld b, $8
+.asm_2640
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .asm_2640
+	xor a
+	ld [$cd0f], a
+	ret
 
 Func_264b: ; 264b (0:264b)
 	xor a
@@ -2805,9 +2973,24 @@ Func_2a9e: ; 2a9e (0:2a9e)
 	call Func_1deb
 	call Func_1e7c
 	ret
-; 0x2aab
 
-INCBIN "baserom.gbc",$2aab,$2af0 - $2aab
+Func_2aab: ; 2aab (0:2aab)
+	call Func_2a59
+	xor a
+	ld hl, Unknown_2ac8
+	call Func_2636
+	call Func_0277
+.asm_2ab8
+	call Func_053f
+	call Func_26da
+	ld a, [$ff91]
+	and $3
+	jr z, .asm_2ab8
+	call Func_26e9
+	ret
+
+Unknown_2ac8: ; 2ac8 (0:2ac8)
+INCBIN "baserom.gbc",$2ac8,$2af0 - $2ac8
 
 Func_2af0: ; 2af0 (0:2af0)
 	call Func_2a59
@@ -2876,14 +3059,30 @@ Func_2b66: ; 2b66 (0:2b66)
 	ret
 ; 0x2b70
 
-INCBIN "baserom.gbc",$2b70,$2c1b - $2b70
+INCBIN "baserom.gbc",$2b70,$2c08 - $2b70
+
+Func_2c08: ; 2c08 (0:2c08)
+	ld d, [hl]
+	inc hl
+	bit 7, d
+	ret nz
+	ld e, [hl]
+	inc hl
+	call Func_22ae
+	push hl
+	call Func_2c23
+	pop hl
+	inc hl
+	inc hl
+	jr Func_2c08
 
 Func_2c1b: ; 2c1b (0:2c1b)
 	call Func_22ae
 	jr Func_2c29
 
-Func_2c1f: ; 2c1f (0:2c1f)
+Func_2c20: ; 2c20 (0:2c20)
 	call Func_22ae
+Func_2c23: ; 2c23 (0:2c23)
 	ld a, [hli]
 	or [hl]
 	ret z

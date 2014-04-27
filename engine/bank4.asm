@@ -25,7 +25,10 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 INCBIN "baserom.gbc",$10ab4,$10af9 - $10ab4
 
 Func_10af9: ; 10af9 (4:4af9)
-INCBIN "baserom.gbc",$10af9,$10e55 - $10af9
+INCBIN "baserom.gbc",$10af9,$10e28 - $10af9
+
+Func_10e28: ; 10e28 (4:4e28)
+INCBIN "baserom.gbc",$10e28,$10e55 - $10e28
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [$d336]

@@ -531,7 +531,11 @@ Func_c469: ; c469 (3:4469)
 	ret
 
 Func_c484: ; c484 (3:4484)
-INCBIN "baserom.gbc",$c484,$c491 - $c484
+	ld a, [$d235]
+	ld [$d0b6], a
+	ld a, [$d236]
+	ld [$d0b7], a
+	ret
 
 Func_c491: ; c491 (3:4491)
 	ld a, [$d0b6]
@@ -625,7 +629,59 @@ Func_c510: ; c510 (3:4510)
 INCBIN "baserom.gbc",$c53d,$c554 - $c53d
 
 Func_c554: ; c554 (3:4554)
-INCBIN "baserom.gbc",$c554,$c5ac - $c554
+	ld a, [$d336]
+	ld [$d4cf], a
+	ld a, [wCurMap]
+	cp OVERWORLD_MAP
+	jr nz, .asm_c566
+	farcall Func_10e28
+	ret
+.asm_c566
+	push hl
+	push bc
+	push de
+	call Func_c58b
+	ld a, [$d235]
+	ld d, a
+	ld a, [$d236]
+	ld e, a
+	ld c, $2
+	call Func_3dbf
+	ld a, [$d332]
+	sub d
+	add $8
+	ld [hli], a
+	ld a, [$d333]
+	sub e
+	add $10
+	ld [hli], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_c58b: ; c58b (3:458b)
+	push hl
+	ld a, [wPlayerXCoord]
+	ld b, a
+	ld a, [wPlayerYCoord]
+	ld c, a
+	call Func_3927
+	and $10
+	push af
+	ld c, $f
+	call Func_3dbf
+	pop af
+	ld a, [hl]
+	jr z, .asm_c5a7
+	or $80
+	jr .asm_c5a9
+.asm_c5a7
+	and $7f
+.asm_c5a9
+	ld [hl], a
+	pop hl
+	ret
 
 Func_c5ac: ; c5ac (3:45ac)
 	ld a, [$ff90]
