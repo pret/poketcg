@@ -1115,9 +1115,130 @@ Func_089b: ; 089b (0:089b)
 	pop de
 	pop hl
 	ret
-; 0x8bf
 
-INCBIN "baserom.gbc",$08bf,$099c - $08bf
+Func_08bf: ; 08bf (0:08bf)
+	ld hl, $cad6
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld hl, $cad8
+	ld [hl], $1
+	inc hl
+	xor a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hl], b
+	inc hl
+	ld [hli], a
+	ld [hl], $ef
+	ld h, b
+	ld l, $0
+	xor a
+.asm_8d9
+	ld [hl], a
+	inc l
+	jr nz, .asm_8d9
+	ret
+
+Func_08de: ; 08de (0:08de)
+	push hl
+	push de
+.asm_8e0
+	push bc
+	call Func_08ef
+	ld [de], a
+	inc de
+	pop bc
+	dec bc
+	ld a, c
+	or b
+	jr nz, .asm_8e0
+	pop de
+	pop hl
+	ret
+
+Func_08ef: ; 08ef (0:08ef)
+	ld hl, $cadc
+	ld a, [hl]
+	or a
+	jr z, .asm_902
+	dec [hl]
+	inc hl
+.asm_8f8
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc [hl]
+	inc hl
+	ld a, [bc]
+	ld c, [hl]
+	inc [hl]
+	ld [bc], a
+	ret
+.asm_902
+	ld hl, $cad6
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	dec [hl]
+	inc hl
+	jr nz, .asm_914
+	dec hl
+	ld [hl], $8
+	inc hl
+	ld a, [bc]
+	inc bc
+	ld [hl], a
+.asm_914
+	rl [hl]
+	ld a, [bc]
+	inc bc
+	jr nc, .asm_92a
+	ld hl, $cad6
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	ld hl, $cadd
+	ld b, [hl]
+	inc hl
+	inc hl
+	ld c, [hl]
+	inc [hl]
+	ld [bc], a
+	ret
+.asm_92a
+	ld [$cade], a
+	ld hl, $cada
+	bit 0, [hl]
+	jr nz, .asm_94a
+	set 0, [hl]
+	inc hl
+	ld a, [bc]
+	inc bc
+	ld [hli], a
+	swap a
+.asm_93c
+	and $f
+	inc a
+	ld [hli], a
+	push hl
+	ld hl, $cad6
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	pop hl
+	jr .asm_8f8
+.asm_94a
+	res 0, [hl]
+	inc hl
+	ld a, [hli]
+	jr .asm_93c
+; 0x950
+
+INCBIN "baserom.gbc",$0950,$099c - $0950
 
 Func_099c: ; 099c (0:099c)
 	xor a

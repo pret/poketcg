@@ -88,10 +88,7 @@ SECTION "bank1B",ROMX,BANK[$1B]
 	emptybank
 
 SECTION "bank1C",ROMX,BANK[$1C]
-Func_70000: ; 70000 (1c:4000)
-INCBIN "baserom.gbc",$70000,$70018 - $70000
-Func_70018: ; 70018 (1c:4018)
-INCBIN "baserom.gbc",$70018,$74000 - $70018
+INCLUDE "engine/bank1c.asm"
 
 SECTION "bank1D",ROMX,BANK[$1D]
 INCBIN "baserom.gbc",$74000,$76668 - $74000
