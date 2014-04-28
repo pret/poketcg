@@ -43,43 +43,44 @@ INCBIN "baserom.gbc",$30000,$4000
 
 SECTION "bankD",ROMX,BANK[$D]
 TextOffsets: ; 34000 (d:4000)
-INCBIN "baserom.gbc",$34000,$4000
+INCBIN "baserom.gbc",$34000,$3630a - $34000
+INCLUDE "text/text1.asm"
 
 SECTION "bankE",ROMX,BANK[$E]
-INCBIN "baserom.gbc",$38000,$4000
+INCLUDE "text/text2.asm"
 
 SECTION "bankF",ROMX,BANK[$F]
-INCBIN "baserom.gbc",$3C000,$4000
+INCLUDE "text/text3.asm"
 
 SECTION "bank10",ROMX,BANK[$10]
-INCBIN "baserom.gbc",$40000,$4000
+INCLUDE "text/text4.asm"
 
 SECTION "bank11",ROMX,BANK[$11]
-INCBIN "baserom.gbc",$44000,$4000
+INCLUDE "text/text5.asm"
 
 SECTION "bank12",ROMX,BANK[$12]
-INCBIN "baserom.gbc",$48000,$4000
+INCLUDE "text/text6.asm"
 
 SECTION "bank13",ROMX,BANK[$13]
-INCBIN "baserom.gbc",$4C000,$4000
+INCLUDE "text/text7.asm"
 
 SECTION "bank14",ROMX,BANK[$14]
-INCBIN "baserom.gbc",$50000,$4000
+INCLUDE "text/text8.asm"
 
 SECTION "bank15",ROMX,BANK[$15]
-INCBIN "baserom.gbc",$54000,$4000
+INCLUDE "text/text9.asm"
 
 SECTION "bank16",ROMX,BANK[$16]
-INCBIN "baserom.gbc",$58000,$4000
+INCLUDE "text/texta.asm"
 
 SECTION "bank17",ROMX,BANK[$17]
-INCBIN "baserom.gbc",$5C000,$4000
+INCLUDE "text/textb.asm"
 
 SECTION "bank18",ROMX,BANK[$18]
-INCBIN "baserom.gbc",$60000,$4000
+INCLUDE "text/textc.asm"
 
 SECTION "bank19",ROMX,BANK[$19]
-INCBIN "baserom.gbc",$64000,$4000
+INCLUDE "text/textd.asm"
 
 SECTION "bank1A",ROMX,BANK[$1A]
 	emptybank
