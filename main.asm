@@ -93,8 +93,9 @@ INCLUDE "engine/bank1c.asm"
 
 SECTION "bank1D",ROMX,BANK[$1D]
 INCBIN "baserom.gbc",$74000,$76668 - $74000
-Unknown_76668: ; 76668 (1d:6668)
-INCBIN "baserom.gbc",$76668,$78000 - $76668
+VWF: ; 76668 (1d:6668)
+INCBIN "gfx/vwf.1bpp"
+INCBIN "baserom.gbc",$76968,$78000 - $76968
 
 SECTION "bank1E",ROMX,BANK[$1E]
 INCBIN "baserom.gbc",$78000,$4000

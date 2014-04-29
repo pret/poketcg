@@ -2628,7 +2628,7 @@ Func_24ca: ; 24ca (0:24ca)
 	push bc
 	ld a, [$ff80]
 	push af
-	ld a, BANK(Unknown_76668)
+	ld a, BANK(VWF)
 	call BankswitchHome
 	push de
 	ld a, e
@@ -2661,7 +2661,7 @@ Func_24fa: ; 24fa (0:24fa)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld bc, Unknown_76668
+	ld bc, VWF
 	add hl, bc
 	ld b, $8
 .asm_2508
