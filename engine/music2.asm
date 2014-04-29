@@ -759,7 +759,7 @@ Music2_note: ; f448c (3d:448c)
 	sla a
 	ld e, a
 	pop af
-	ld hl, PointerTable_f8d34
+	ld hl, Music2_NoiseInstruments
 	add a
 	ld d, c
 	ld c, a
@@ -1283,7 +1283,7 @@ Func_f87ea: ; f879c (3e:47ea)
 	add a
 	ld d, $0
 	ld e, a
-	ld hl, PointerTable_f8cda
+	ld hl, Music2_WaveInstruments
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -1858,62 +1858,11 @@ INCBIN "baserom.gbc",$f8c28,$f8c30 - $f8c28
 Unknown_f8c30: ; f8c30 (3e:4c30)
 INCBIN "baserom.gbc",$f8c30,$f8cda - $f8c30
 
-PointerTable_f8cda: ; f8cda (3e:4cda)
-	dw Unknown_f8ce4
-	dw Unknown_f8cf4
-	dw Unknown_f8d04
-	dw Unknown_f8d14
-	dw Unknown_f8d24
+Music2_WaveInstruments: ; f8cda (3e:4cda)
+INCLUDE "data/wave_instruments.asm"
 
-Unknown_f8ce4: ; f8ce4 (3e:4ce4)
-INCBIN "baserom.gbc",$f8ce4,$f8cf4 - $f8ce4
-
-Unknown_f8cf4: ; f8cf4 (3e:4cf4)
-INCBIN "baserom.gbc",$f8cf4,$f8d04 - $f8cf4
-
-Unknown_f8d04: ; f8d04 (3e:4d04)
-INCBIN "baserom.gbc",$f8d04,$f8d14 - $f8d04
-
-Unknown_f8d14: ; f8d14 (3e:4d14)
-INCBIN "baserom.gbc",$f8d14,$f8d24 - $f8d14
-
-Unknown_f8d24: ; f8d24 (3e:4d24)
-INCBIN "baserom.gbc",$f8d24,$f8d34 - $f8d24
-
-PointerTable_f8d34: ; f8d34 (3e:4d34)
-	dw Unknown_f8d53
-	dw Unknown_f8d4c
-	dw Unknown_f8d5a
-	dw Unknown_f8d4c
-	dw Unknown_f8d64
-	dw Unknown_f8d4c
-	dw Unknown_f8d6d
-	dw Unknown_f8d4c
-	dw Unknown_f8d76
-	dw Unknown_f8d4c
-	dw Unknown_f8d4c
-	dw Unknown_f8daa
-
-Unknown_f8d4c: ; f8d4c (3e:4d4c)
-INCBIN "baserom.gbc",$f8d4c,$f8d53 - $f8d4c
-
-Unknown_f8d53: ; f8d53 (3e:4d53)
-INCBIN "baserom.gbc",$f8d53,$f8d5a - $f8d53
-
-Unknown_f8d5a: ; f8d5a (3e:4d5a)
-INCBIN "baserom.gbc",$f8d5a,$f8d64 - $f8d5a
-
-Unknown_f8d64: ; f8d64 (3e:4d64)
-INCBIN "baserom.gbc",$f8d64,$f8d6d - $f8d64
-
-Unknown_f8d6d: ; f8d6d (3e:4d6d)
-INCBIN "baserom.gbc",$f8d6d,$f8d76 - $f8d6d
-
-Unknown_f8d76: ; f8d76 (3e:4d76)
-INCBIN "baserom.gbc",$f8d76,$f8daa - $f8d76
-
-Unknown_f8daa: ; f8daa (3e:4daa)
-INCBIN "baserom.gbc",$f8daa,$f8dde - $f8daa
+Music2_NoiseInstruments: ; f8d34 (3e:4d34)
+INCLUDE "data/noise_instruments.asm"
 
 PointerTable_f8dde: ; f8dde (3e:4dde)
 	dw Unknown_f8df4

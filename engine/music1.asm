@@ -759,7 +759,7 @@ Music1_note: ; f448c (3d:448c)
 	sla a
 	ld e, a
 	pop af
-	ld hl, PointerTable_f4d34
+	ld hl, Music1_NoiseInstruments
 	add a
 	ld d, c
 	ld c, a
@@ -1283,7 +1283,7 @@ Func_f47ea: ; f479c (3d:47ea)
 	add a
 	ld d, $0
 	ld e, a
-	ld hl, PointerTable_f4cda
+	ld hl, Music1_WaveInstruments
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -1858,62 +1858,11 @@ INCBIN "baserom.gbc",$f4c28,$f4c30 - $f4c28
 Unknown_f4c30: ; f4c30 (3d:4c30)
 INCBIN "baserom.gbc",$f4c30,$f4cda - $f4c30
 
-PointerTable_f4cda: ; f4cda (3d:4cda)
-	dw Unknown_f4ce4
-	dw Unknown_f4cf4
-	dw Unknown_f4d04
-	dw Unknown_f4d14
-	dw Unknown_f4d24
+Music1_WaveInstruments: ; f4cda (3d:4cda)
+INCLUDE "data/wave_instruments.asm"
 
-Unknown_f4ce4: ; f4ce4 (3d:4ce4)
-INCBIN "baserom.gbc",$f4ce4,$f4cf4 - $f4ce4
-
-Unknown_f4cf4: ; f4cf4 (3d:4cf4)
-INCBIN "baserom.gbc",$f4cf4,$f4d04 - $f4cf4
-
-Unknown_f4d04: ; f4d04 (3d:4d04)
-INCBIN "baserom.gbc",$f4d04,$f4d14 - $f4d04
-
-Unknown_f4d14: ; f4d14 (3d:4d14)
-INCBIN "baserom.gbc",$f4d14,$f4d24 - $f4d14
-
-Unknown_f4d24: ; f4d24 (3d:4d24)
-INCBIN "baserom.gbc",$f4d24,$f4d34 - $f4d24
-
-PointerTable_f4d34: ; f4d34 (3d:4d34)
-	dw Unknown_f4d53
-	dw Unknown_f4d4c
-	dw Unknown_f4d5a
-	dw Unknown_f4d4c
-	dw Unknown_f4d64
-	dw Unknown_f4d4c
-	dw Unknown_f4d6d
-	dw Unknown_f4d4c
-	dw Unknown_f4d76
-	dw Unknown_f4d4c
-	dw Unknown_f4d4c
-	dw Unknown_f4daa
-
-Unknown_f4d4c: ; f4d4c (3d:4d4c)
-INCBIN "baserom.gbc",$f4d4c,$f4d53 - $f4d4c
-
-Unknown_f4d53: ; f4d53 (3d:4d53)
-INCBIN "baserom.gbc",$f4d53,$f4d5a - $f4d53
-
-Unknown_f4d5a: ; f4d5a (3d:4d5a)
-INCBIN "baserom.gbc",$f4d5a,$f4d64 - $f4d5a
-
-Unknown_f4d64: ; f4d64 (3d:4d64)
-INCBIN "baserom.gbc",$f4d64,$f4d6d - $f4d64
-
-Unknown_f4d6d: ; f4d6d (3d:4d6d)
-INCBIN "baserom.gbc",$f4d6d,$f4d76 - $f4d6d
-
-Unknown_f4d76: ; f4d76 (3d:4d76)
-INCBIN "baserom.gbc",$f4d76,$f4daa - $f4d76
-
-Unknown_f4daa: ; f4daa (3d:4daa)
-INCBIN "baserom.gbc",$f4daa,$f4dde - $f4daa
+Music1_NoiseInstruments: ; f4d34 (3d:4d34)
+INCLUDE "data/noise_instruments.asm"
 
 PointerTable_f4dde: ; f4dde (3d:4dde)
 	dw Unknown_f4df4

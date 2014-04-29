@@ -394,7 +394,7 @@ SFX_7: ; fc202 (3f:4202)
 	add a
 	ld d, $0
 	ld e, a
-	ld hl, PointerTable_fc485
+	ld hl, SFX_WaveInstruments
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -495,27 +495,8 @@ Func_fc279: ; fc279 (3f:4279)
 
 INCLUDE "data/sfx_headers.asm"
 
-PointerTable_fc485: ; fc485 (3f:4485)
-	dw Unknown_fc48f
-	dw Unknown_fc49f
-	dw Unknown_fc4af
-	dw Unknown_fc4bf
-	dw Unknown_fc4cf
-
-Unknown_fc48f: ; fc48f (3f:448f)
-INCBIN "baserom.gbc",$fc48f,$fc49f - $fc48f
-
-Unknown_fc49f: ; fc49f (3f:449f)
-INCBIN "baserom.gbc",$fc49f,$fc4af - $fc49f
-
-Unknown_fc4af: ; fc4af (3f:44af)
-INCBIN "baserom.gbc",$fc4af,$fc4bf - $fc4af
-
-Unknown_fc4bf: ; fc4bf (3f:44bf)
-INCBIN "baserom.gbc",$fc4bf,$fc4cf - $fc4bf
-
-Unknown_fc4cf: ; fc4cf (3f:44cf)
-INCBIN "baserom.gbc",$fc4cf,$fc4df - $fc4cf
+SFX_WaveInstruments: ; fc485 (3f:4485)
+INCLUDE "data/wave_instruments.asm"
 
 INCLUDE "audio/sfx/sfx_01.asm"
 INCLUDE "audio/sfx/sfx_02.asm"
