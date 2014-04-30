@@ -27,6 +27,11 @@ emptybank: MACRO
 	endr
 ENDM
 
+text: MACRO
+	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
+	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
+ENDM
+
 ; notes
 C_ EQU $1
 C# EQU $2
