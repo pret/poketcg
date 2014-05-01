@@ -129,7 +129,7 @@ volume: MACRO
 	db $e6, \1
 ENDM
 
-duty3: MACRO
+wave: MACRO
 	db $e7, \1
 ENDM
 

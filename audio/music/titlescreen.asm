@@ -410,7 +410,7 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 
 Music_TitleScreen_Ch3: ; f5286 (3d:5286)
 	speed 7
-	duty3 4
+	wave 4
 	volume 32
 	musice9 0
 	musicdc 17

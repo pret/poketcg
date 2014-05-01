@@ -87,7 +87,7 @@ Music_DarkDiddly_Ch2: ; f7d17 (3d:7d17)
 Music_DarkDiddly_Ch3: ; f7d47 (3d:7d47)
 	speed 6
 	musicdc 17
-	duty3 1
+	wave 1
 	volume 32
 	musice8 8
 	musice9 0

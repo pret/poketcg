@@ -754,7 +754,7 @@ Music_Overworld_Ch3: ; f75a1 (3d:75a1)
 	speed 7
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 64
 	musice8 7
 	octave 1

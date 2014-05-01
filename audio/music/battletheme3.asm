@@ -911,7 +911,7 @@ Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
 	speed 11
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 96
 	vibrato_rate 8
 	vibrato_delay 0

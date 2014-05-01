@@ -774,7 +774,7 @@ Branch_f9a28:
 Music_ChallengeHall_Ch3: ; f9a92 (3e:5a92)
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 0
 	musice8 8
 	musice8 8

@@ -207,7 +207,7 @@ Music_CardPop_Ch2: ; f70df (3d:70df)
 
 Music_CardPop_Ch3: ; f713a (3d:713a)
 	speed 4
-	duty3 1
+	wave 1
 	musicdc 17
 	volume 32
 	musice9 0

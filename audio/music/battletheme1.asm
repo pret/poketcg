@@ -1323,7 +1323,7 @@ Music_BattleTheme1_Ch3: ; f5a32 (3d:5a32)
 	speed 7
 	musicdc 17
 	volume 32
-	duty3 4
+	wave 4
 	musice9 96
 	musice8 8
 	octave 1

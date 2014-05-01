@@ -622,7 +622,7 @@ Music_PokemonDome_Ch3: ; f9579 (3e:5579)
 	speed 7
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 64
 	musice8 6
 	octave 1

@@ -294,7 +294,7 @@ Branch_faea5:
 Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	vibrato_rate 6
 	vibrato_delay 0
 	musice9 0

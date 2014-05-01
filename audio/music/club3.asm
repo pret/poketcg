@@ -802,7 +802,7 @@ Music_Club3_Ch3: ; fa63e (3e:663e)
 	speed 9
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 0
 	musice8 8
 	Loop 4

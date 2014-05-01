@@ -215,7 +215,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	volume 32
 	musicdc 17
-	duty3 1
+	wave 1
 	musice8 7
 	musice9 0
 	MainLoop

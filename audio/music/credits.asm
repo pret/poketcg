@@ -1794,7 +1794,7 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	speed 1
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 96
 	musice8 8
 	octave 1

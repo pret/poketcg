@@ -100,7 +100,7 @@ Music_DeckMachine_Ch2: ; f6f41 (3d:6f41)
 Music_DeckMachine_Ch3: ; f6f7b (3d:6f7b)
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 96
 	musice8 8
 	MainLoop

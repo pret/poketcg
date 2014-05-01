@@ -434,7 +434,7 @@ Music_PauseMenu_Ch1: ; f6d4e (3d:6d4e)
 
 Music_PauseMenu_Ch3: ; f6e2d (3d:6e2d)
 	speed 1
-	duty3 3
+	wave 3
 	musicdc 17
 	volume 64
 	musice9 96

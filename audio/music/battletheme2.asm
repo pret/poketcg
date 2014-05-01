@@ -845,7 +845,7 @@ Music_BattleTheme2_Ch3: ; f61ac (3d:61ac)
 	speed 9
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 64
 	musice8 7
 	octave 1

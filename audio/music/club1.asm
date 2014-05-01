@@ -575,7 +575,7 @@ Music_Club1_Ch3: ; f9ec4 (3e:5ec4)
 	speed 5
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 96
 	musice8 7
 	octave 1

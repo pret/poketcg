@@ -89,7 +89,7 @@ Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
 
 Music_BoosterPack_Ch3: ; f7ddb (3d:7ddb)
 	musicdc 17
-	duty3 1
+	wave 1
 	volume 32
 	musice8 8
 	musice9 0

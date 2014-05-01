@@ -90,7 +90,7 @@ Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
 
 Music_MatchLoss_Ch3: ; f7ca7 (3d:7ca7)
 	musicdc 17
-	duty3 1
+	wave 1
 	volume 32
 	musice8 8
 	musice9 64

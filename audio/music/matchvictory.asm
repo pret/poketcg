@@ -118,7 +118,7 @@ Music_MatchVictory_Ch2: ; f7bb0 (3d:7bb0)
 
 Music_MatchVictory_Ch3: ; f7c09 (3d:7c09)
 	musicdc 17
-	duty3 1
+	wave 1
 	volume 32
 	musice8 8
 	musice9 0

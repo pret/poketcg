@@ -174,7 +174,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	speed 7
 	volume 64
 	musicdc 17
-	duty3 2
+	wave 2
 	vibrato_rate 4
 	vibrato_delay 35
 	musice8 6

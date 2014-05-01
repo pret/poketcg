@@ -853,7 +853,7 @@ Music_Ronald_Ch3: ; fabc0 (3e:6bc0)
 	speed 1
 	musicdc 17
 	volume 32
-	duty3 1
+	wave 1
 	musice9 0
 	musice8 8
 	MainLoop
