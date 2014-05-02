@@ -12,7 +12,7 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	note C_, 4
 	volume 119
 	note F#, 4
-	no_fade
+	tie
 	note F#, 16
 	volume 117
 	note G_, 4
@@ -20,7 +20,7 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	note B_, 4
 	volume 119
 	note F#, 4
-	no_fade
+	tie
 	note F#, 16
 	EndLoop
 	volume 117
@@ -31,7 +31,7 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	inc_octave
 	volume 119
 	note B_, 4
-	no_fade
+	tie
 	note B_, 16
 	volume 117
 	note G_, 4
@@ -39,7 +39,7 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	note C_, 4
 	volume 119
 	note B_, 4
-	no_fade
+	tie
 	note B_, 16
 	dec_octave
 	volume 117
@@ -77,17 +77,17 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	note F#, 4
 	note A_, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 1
 	note A_, 3
 	inc_octave
 	volume 119
 	rest 4
 	note D_, 5
-	no_fade
+	tie
 	speed 6
 	note D_, 15
-	no_fade
+	tie
 	note D_, 16
 	EndMainLoop
 
@@ -108,7 +108,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	inc_octave
 	volume 119
 	note D_, 4
-	no_fade
+	tie
 	note D_, 16
 	dec_octave
 	dec_octave
@@ -120,7 +120,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	note C_, 4
 	volume 119
 	note D_, 4
-	no_fade
+	tie
 	note D_, 16
 	dec_octave
 	dec_octave
@@ -135,7 +135,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	inc_octave
 	volume 119
 	note G_, 4
-	no_fade
+	tie
 	note G_, 16
 	dec_octave
 	dec_octave
@@ -149,7 +149,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	inc_octave
 	volume 119
 	note C_, 4
-	no_fade
+	tie
 	note C_, 16
 	dec_octave
 	dec_octave
@@ -189,7 +189,7 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	inc_octave
 	note D_, 4
 	note E_, 3
-	no_fade
+	tie
 	speed 1
 	note E_, 3
 	dec_octave
@@ -198,10 +198,10 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	inc_octave
 	volume 119
 	note F#, 7
-	no_fade
+	tie
 	speed 6
 	note F#, 14
-	no_fade
+	tie
 	note F#, 16
 	EndMainLoop
 
@@ -247,7 +247,7 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	music_call Branch_fa1f3
 	octave 3
 	note G_, 16
-	no_fade
+	tie
 	note G_, 12
 	rest 16
 	rest 8
@@ -256,11 +256,11 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	music_call Branch_fa1f3
 	octave 3
 	note G_, 16
-	no_fade
+	tie
 	note G_, 12
-	no_fade
+	tie
 	note G_, 16
-	no_fade
+	tie
 	note G_, 8
 	rest 4
 	musice8 8
@@ -268,19 +268,19 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	note G_, 2
 	musice8 6
 	note F#, 16
-	no_fade
+	tie
 	note F#, 12
 	rest 4
 	note F#, 1
-	no_fade
+	tie
 	note G_, 15
-	no_fade
+	tie
 	note G_, 12
 	rest 4
 	note G#, 1
-	no_fade
+	tie
 	note A_, 15
-	no_fade
+	tie
 	note A_, 16
 	rest 16
 	rest 16
@@ -291,9 +291,9 @@ Branch_fa1cf:
 	musice8 6
 	octave 5
 	note C#, 1
-	no_fade
+	tie
 	note D_, 15
-	no_fade
+	tie
 	note D_, 12
 	musice8 8
 	note C_, 2
@@ -301,7 +301,7 @@ Branch_fa1cf:
 	note B_, 2
 	musice8 6
 	note G_, 16
-	no_fade
+	tie
 	note G_, 8
 	rest 4
 	musice8 8
@@ -313,9 +313,9 @@ Branch_fa1cf:
 	note B_, 4
 	musice8 6
 	note A_, 16
-	no_fade
+	tie
 	note A_, 8
-	no_fade
+	tie
 	note A_, 16
 	rest 4
 	music_ret
@@ -323,9 +323,9 @@ Branch_fa1cf:
 Branch_fa1f3:
 	octave 4
 	note C#, 1
-	no_fade
+	tie
 	note D_, 15
-	no_fade
+	tie
 	note D_, 4
 	note E_, 4
 	dec_octave
@@ -334,7 +334,7 @@ Branch_fa1f3:
 	note C_, 4
 	musice8 6
 	note D_, 16
-	no_fade
+	tie
 	note D_, 8
 	rest 4
 	musice8 8

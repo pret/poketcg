@@ -20,7 +20,7 @@ Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	rest 8
 	speed 9
 	note F_, 10
-	no_fade
+	tie
 	speed 1
 	note F_, 7
 	rest 8
@@ -51,7 +51,7 @@ Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	note F#, 7
 	rest 8
 	note G_, 15
-	no_fade
+	tie
 	note G_, 7
 	note F#, 3
 	note G_, 2
@@ -153,7 +153,7 @@ Branch_fadf9:
 	note E_, 7
 	rest 8
 	note F_, 15
-	no_fade
+	tie
 	note F_, 7
 	note E_, 3
 	note F_, 2
@@ -176,7 +176,7 @@ Branch_fae1d:
 	rest 8
 	speed 9
 	note F_, 10
-	no_fade
+	tie
 	speed 1
 	note F_, 7
 	rest 8
@@ -224,7 +224,7 @@ Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	speed 1
 	octave 2
 	note F_, 15
-	no_fade
+	tie
 	note F_, 7
 	inc_octave
 	note F_, 8
@@ -240,7 +240,7 @@ Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	speed 1
 	dec_octave
 	note D#, 15
-	no_fade
+	tie
 	note D#, 7
 	inc_octave
 	note D#, 8
@@ -266,7 +266,7 @@ Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	rest 15
 	vibrato_delay 5
 	note D_, 15
-	no_fade
+	tie
 	note D_, 7
 	rest 8
 	vibrato_delay 0
@@ -304,7 +304,7 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	vibrato_delay 8
 	speed 1
 	note D_, 15
-	no_fade
+	tie
 	note D_, 7
 	inc_octave
 	vibrato_delay 0
@@ -370,7 +370,7 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	speed 1
 	octave 1
 	note F_, 15
-	no_fade
+	tie
 	note F_, 7
 	inc_octave
 	note F_, 8
@@ -389,7 +389,7 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	speed 1
 	dec_octave
 	note D#, 15
-	no_fade
+	tie
 	note D#, 7
 	inc_octave
 	note D#, 8
@@ -425,7 +425,7 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	octave 3
 	vibrato_delay 5
 	note C_, 15
-	no_fade
+	tie
 	note C_, 7
 	inc_octave
 	vibrato_delay 0

@@ -103,7 +103,7 @@ Music_ChallengeHall_Ch1: ; f9646 (3e:5646)
 	note D_, 8
 	speed 10
 	note C#, 6
-	no_fade
+	tie
 	note C#, 6
 	volume 55
 	speed 1
@@ -136,7 +136,7 @@ Music_ChallengeHall_Ch1: ; f9646 (3e:5646)
 	dec_octave
 	speed 10
 	note A_, 6
-	no_fade
+	tie
 	note A_, 6
 	volume 55
 	speed 1
@@ -175,7 +175,7 @@ Music_ChallengeHall_Ch1: ; f9646 (3e:5646)
 	volume 160
 	speed 10
 	note A_, 3
-	no_fade
+	tie
 	speed 1
 	note A_, 15
 	dec_octave
@@ -224,7 +224,7 @@ Music_ChallengeHall_Ch1: ; f9646 (3e:5646)
 	note A_, 8
 	volume 160
 	note G#, 15
-	no_fade
+	tie
 	note G#, 7
 	volume 55
 	note G#, 8
@@ -416,7 +416,7 @@ Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	musice8 8
 	speed 10
 	note E_, 6
-	no_fade
+	tie
 	note E_, 6
 	speed 1
 	note E_, 7
@@ -445,7 +445,7 @@ Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	note B_, 8
 	speed 10
 	note A_, 6
-	no_fade
+	tie
 	note A_, 6
 	speed 1
 	rest 15
@@ -473,7 +473,7 @@ Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	note G#, 8
 	speed 10
 	note E_, 6
-	no_fade
+	tie
 	note E_, 6
 	speed 1
 	rest 15
@@ -786,7 +786,7 @@ Music_ChallengeHall_Ch3: ; f9a92 (3e:5a92)
 	octave 1
 	musice8 8
 	note E_, 6
-	no_fade
+	tie
 	note E_, 6
 	speed 1
 	inc_octave

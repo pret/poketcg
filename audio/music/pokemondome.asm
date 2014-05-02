@@ -243,9 +243,9 @@ Music_PokemonDome_Ch1: ; f9251 (3e:5251)
 	note E_, 4
 	note F_, 4
 	note G_, 8
-	no_fade
+	tie
 	note G_, 8
-	no_fade
+	tie
 	note G_, 8
 	volume 55
 	note G_, 2
@@ -298,13 +298,13 @@ Music_PokemonDome_Ch1: ; f9251 (3e:5251)
 	note G#, 1
 	inc_octave
 	note C_, 12
-	no_fade
+	tie
 	note C_, 8
 	note D_, 8
 	note C_, 8
-	no_fade
+	tie
 	note C_, 8
-	no_fade
+	tie
 	note C_, 12
 	EndMainLoop
 

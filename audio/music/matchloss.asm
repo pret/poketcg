@@ -9,7 +9,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	speed 1
 	note E_, 3
 	note F_, 2
-	no_fade
+	tie
 	speed 5
 	note F_, 3
 	note C_, 1
@@ -25,7 +25,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	volume 160
 	note D_, 3
 	note D#, 2
-	no_fade
+	tie
 	note D#, 16
 	dec_octave
 	note A#, 6
@@ -39,7 +39,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	volume 160
 	note C_, 3
 	note C#, 8
-	no_fade
+	tie
 	note C#, 12
 	dec_octave
 	speed 6
@@ -56,7 +56,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	note B_, 5
 	inc_octave
 	note C_, 4
-	no_fade
+	tie
 	speed 9
 	note C_, 11
 	volume 55
@@ -81,7 +81,7 @@ Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
 	speed 9
 	rest 6
 	note G_, 6
-	no_fade
+	tie
 	note G_, 6
 	volume 55
 	note G_, 2
@@ -114,7 +114,7 @@ Music_MatchLoss_Ch3: ; f7ca7 (3d:7ca7)
 	musice8 8
 	speed 1
 	note F#, 11
-	no_fade
+	tie
 	note F#, 12
 	inc_octave
 	musice8 4

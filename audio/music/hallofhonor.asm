@@ -134,7 +134,7 @@ Music_HallOfHonor_Ch2: ; fb06e (3e:706e)
 	note E_, 5
 	volume 208
 	note E_, 11
-	no_fade
+	tie
 	note E_, 12
 	EndLoop
 	music_call Branch_fb0bb
@@ -143,7 +143,7 @@ Music_HallOfHonor_Ch2: ; fb06e (3e:706e)
 	note G_, 5
 	volume 208
 	note G_, 11
-	no_fade
+	tie
 	note G_, 12
 	EndMainLoop
 
@@ -153,19 +153,19 @@ Branch_fb0bb:
 	note F_, 5
 	volume 208
 	note F_, 11
-	no_fade
+	tie
 	note F_, 12
 	volume 109
 	note E_, 5
 	volume 208
 	note E_, 11
-	no_fade
+	tie
 	note E_, 12
 	volume 109
 	note D_, 5
 	volume 208
 	note D_, 11
-	no_fade
+	tie
 	note D_, 12
 	music_ret
 
@@ -212,10 +212,10 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note B_, 3
 	inc_octave
 	note C_, 4
-	no_fade
+	tie
 	speed 7
 	note C_, 15
-	no_fade
+	tie
 	note C_, 8
 	dec_octave
 	musice8 8
@@ -225,7 +225,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	musice8 6
 	note G_, 6
 	note C_, 10
-	no_fade
+	tie
 	note C_, 12
 	speed 1
 	musice8 8
@@ -233,10 +233,10 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	inc_octave
 	musice8 6
 	note C_, 4
-	no_fade
+	tie
 	speed 7
 	note C_, 15
-	no_fade
+	tie
 	note C_, 6
 	dec_octave
 	musice8 8
@@ -251,10 +251,10 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note F#, 3
 	musice8 6
 	note G_, 4
-	no_fade
+	tie
 	speed 7
 	note G_, 15
-	no_fade
+	tie
 	note G_, 6
 	musice8 8
 	note G_, 2
@@ -266,10 +266,10 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note B_, 3
 	inc_octave
 	note C_, 4
-	no_fade
+	tie
 	speed 7
 	note C_, 15
-	no_fade
+	tie
 	note C_, 8
 	dec_octave
 	note B_, 2
@@ -283,10 +283,10 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	inc_octave
 	musice8 6
 	note C_, 4
-	no_fade
+	tie
 	speed 7
 	note C_, 9
-	no_fade
+	tie
 	note C_, 6
 	dec_octave
 	musice8 8
@@ -299,7 +299,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	musice8 8
 	note E_, 3
 	note F_, 4
-	no_fade
+	tie
 	speed 7
 	note F_, 1
 	note E_, 2
@@ -307,7 +307,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note C_, 2
 	musice8 7
 	note C_, 10
-	no_fade
+	tie
 	note C_, 10
 	musice8 4
 	note E_, 2
@@ -315,7 +315,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	musice8 8
 	note E_, 3
 	note F_, 4
-	no_fade
+	tie
 	speed 7
 	note F_, 1
 	note E_, 2
@@ -323,17 +323,17 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note C_, 2
 	musice8 6
 	note C_, 10
-	no_fade
+	tie
 	note C_, 12
 	speed 1
 	musice8 8
 	note F#, 3
 	musice8 7
 	note G_, 4
-	no_fade
+	tie
 	speed 7
 	note G_, 15
-	no_fade
+	tie
 	note G_, 8
 	musice8 8
 	note F_, 2
@@ -347,7 +347,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	dec_octave
 	musice8 7
 	note G_, 10
-	no_fade
+	tie
 	note G_, 10
 	musice8 8
 	note E_, 2
@@ -357,7 +357,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note C_, 2
 	musice8 7
 	note C_, 12
-	no_fade
+	tie
 	note C_, 10
 	dec_octave
 	musice8 8
@@ -368,7 +368,7 @@ Music_HallOfHonor_Ch3: ; fb0d5 (3e:70d5)
 	note C_, 2
 	musice8 6
 	note C_, 12
-	no_fade
+	tie
 	note C_, 12
 	rest 3
 	volume 96

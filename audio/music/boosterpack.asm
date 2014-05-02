@@ -34,9 +34,9 @@ Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
 	dec_octave
 	volume 160
 	note B_, 16
-	no_fade
+	tie
 	note B_, 16
-	no_fade
+	tie
 	note B_, 6
 	volume 55
 	note B_, 9
@@ -78,9 +78,9 @@ Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
 	note A_, 2
 	volume 144
 	note G_, 16
-	no_fade
+	tie
 	note G_, 16
-	no_fade
+	tie
 	note G_, 6
 	volume 39
 	note G_, 9
@@ -106,9 +106,9 @@ Music_BoosterPack_Ch3: ; f7ddb (3d:7ddb)
 	note F_, 7
 	dec_octave
 	note G_, 16
-	no_fade
+	tie
 	note G_, 16
-	no_fade
+	tie
 	note G_, 6
 	music_end
 ; 0xf7df8

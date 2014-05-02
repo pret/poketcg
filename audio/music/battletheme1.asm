@@ -18,7 +18,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note F_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 1
 	volume 55
@@ -55,7 +55,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 15
 	volume 55
@@ -64,7 +64,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 3
 	note A_, 3
@@ -78,7 +78,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 15
 	volume 55
@@ -87,7 +87,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 3
 	note G_, 4
@@ -98,7 +98,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 15
 	volume 55
@@ -107,7 +107,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 3
 	note F#, 4
@@ -118,7 +118,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note D#, 4
 	note E_, 3
-	no_fade
+	tie
 	speed 7
 	note E_, 1
 	volume 55
@@ -135,7 +135,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note C#, 4
 	note D_, 3
-	no_fade
+	tie
 	speed 7
 	note D_, 1
 	rest 1
@@ -147,7 +147,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 1
 	volume 55
@@ -186,7 +186,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note C#, 4
 	note D_, 3
-	no_fade
+	tie
 	speed 7
 	note D_, 1
 	rest 1
@@ -198,12 +198,12 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 5
-	no_fade
+	tie
 	note A_, 10
-	no_fade
+	tie
 	note A_, 6
 	volume 55
 	note A_, 2
@@ -212,7 +212,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note C#, 4
 	note D_, 3
-	no_fade
+	tie
 	speed 7
 	note D_, 2
 	note C#, 1
@@ -227,14 +227,14 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 1
 	volume 55
 	note B_, 1
 	volume 160
 	note A_, 13
-	no_fade
+	tie
 	note A_, 6
 	volume 55
 	note A_, 2
@@ -261,11 +261,11 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	music_call Branch_f5580
 	volume 160
 	note A_, 2
-	no_fade
+	tie
 	note A_, 8
-	no_fade
+	tie
 	note A_, 8
-	no_fade
+	tie
 	note A_, 6
 	duty 1
 	volume 160
@@ -287,7 +287,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 5
 	note G_, 2
@@ -302,7 +302,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 5
 	note F#, 2
@@ -315,10 +315,10 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	note D_, 2
 	volume 160
 	note D_, 8
-	no_fade
+	tie
 	note D_, 8
 	note D_, 8
-	no_fade
+	tie
 	note D_, 8
 	volume 55
 	note D_, 2
@@ -328,7 +328,7 @@ Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	note D_, 2
 	volume 160
 	note D_, 6
-	no_fade
+	tie
 	note D_, 8
 	rest 4
 	EndMainLoop
@@ -346,7 +346,7 @@ Branch_f54f9:
 	speed 1
 	note F_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 10
 	volume 55
@@ -359,7 +359,7 @@ Branch_f54f9:
 	speed 1
 	note D#, 4
 	note E_, 3
-	no_fade
+	tie
 	speed 7
 	note E_, 5
 	volume 55
@@ -368,7 +368,7 @@ Branch_f54f9:
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 2
 	note F#, 1
@@ -420,7 +420,7 @@ Branch_f5538:
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 2
 	note A_, 1
@@ -438,7 +438,7 @@ Branch_f5580:
 	volume 160
 	note F_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 9
 	volume 55
@@ -460,7 +460,7 @@ Branch_f5580:
 	speed 1
 	note F_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 7
 	note E_, 1
@@ -484,7 +484,7 @@ Branch_f5580:
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 8
 	volume 55
@@ -808,7 +808,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note C#, 4
 	note D_, 3
-	no_fade
+	tie
 	speed 7
 	note D_, 1
 	rest 1
@@ -883,7 +883,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 15
 	dec_octave
@@ -899,7 +899,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 2
 	rest 1
@@ -920,7 +920,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note E_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 15
 	dec_octave
@@ -936,7 +936,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note E_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 2
 	rest 1
@@ -957,7 +957,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note D#, 4
 	note E_, 3
-	no_fade
+	tie
 	speed 7
 	note E_, 15
 	dec_octave
@@ -972,7 +972,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note A#, 4
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 2
 	rest 1
@@ -983,7 +983,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 1
 	rest 1
@@ -1012,7 +1012,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	volume 112
 	note F_, 4
 	note F#, 3
-	no_fade
+	tie
 	speed 7
 	note F#, 1
 	rest 1
@@ -1042,13 +1042,13 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	volume 128
 	octave 3
 	note D_, 16
-	no_fade
+	tie
 	note D_, 6
 	rest 2
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 2
 	note A_, 1
@@ -1085,7 +1085,7 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 7
 	music_call Branch_f598c
 	note D_, 8
-	no_fade
+	tie
 	note D_, 8
 	note C#, 6
 	dec_octave
@@ -1118,10 +1118,10 @@ Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	note A_, 2
 	rest 2
 	note G_, 8
-	no_fade
+	tie
 	note G_, 8
 	note F#, 8
-	no_fade
+	tie
 	note F#, 8
 	rest 2
 	note G_, 12
@@ -1135,7 +1135,7 @@ Branch_f594d:
 	speed 1
 	note C#, 4
 	note D_, 3
-	no_fade
+	tie
 	speed 7
 	note D_, 9
 	dec_octave
@@ -1163,7 +1163,7 @@ Branch_f594d:
 	speed 1
 	note D#, 4
 	note E_, 3
-	no_fade
+	tie
 	speed 7
 	note E_, 2
 	note D_, 1
@@ -1216,7 +1216,7 @@ Branch_f598c:
 	note D_, 2
 	rest 2
 	note D_, 2
-	no_fade
+	tie
 	music_ret
 
 Branch_f59b4:
@@ -1225,7 +1225,7 @@ Branch_f59b4:
 	speed 1
 	note G#, 4
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 1
 	rest 1
@@ -1266,7 +1266,7 @@ Branch_f59b4:
 	speed 1
 	note F#, 4
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 2
 	note F#, 1

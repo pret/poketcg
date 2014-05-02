@@ -54,9 +54,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	note F_, 2
 	speed 1
 	note E_, 5
-	no_fade
+	tie
 	note F_, 4
-	no_fade
+	tie
 	note E_, 5
 	speed 7
 	note D_, 1
@@ -211,9 +211,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	note C_, 1
 	musice8 8
 	note C_, 8
-	no_fade
+	tie
 	note C_, 8
-	no_fade
+	tie
 	note C_, 8
 	volume 55
 	note C_, 8
@@ -479,14 +479,14 @@ Music_TitleScreen_Ch3: ; f5286 (3d:5286)
 	note C_, 4
 	speed 1
 	note C_, 9
-	no_fade
+	tie
 	note C_, 10
 	dec_octave
 	note G_, 9
-	no_fade
+	tie
 	note G_, 9
 	note G_, 9
-	no_fade
+	tie
 	note G_, 10
 	speed 7
 	musice8 8

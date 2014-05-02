@@ -8,7 +8,7 @@ Music_MatchVictory_Ch1: ; f7b61 (3d:7b61)
 	volume 176
 	speed 1
 	note A_, 15
-	no_fade
+	tie
 	note A_, 9
 	volume 39
 	note A_, 5
@@ -125,7 +125,7 @@ Music_MatchVictory_Ch3: ; f7c09 (3d:7c09)
 	octave 1
 	speed 1
 	note F_, 15
-	no_fade
+	tie
 	note F_, 9
 	rest 5
 	note F_, 7

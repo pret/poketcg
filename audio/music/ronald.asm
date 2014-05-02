@@ -56,7 +56,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	octave 4
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 2
 	vibrato_delay 12
@@ -69,7 +69,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	octave 4
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 2
 	vibrato_delay 12
@@ -406,7 +406,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	rest 7
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 5
 	rest 1

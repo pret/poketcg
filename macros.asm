@@ -78,7 +78,7 @@ dec_octave: MACRO
 	db $d8
 ENDM
 
-no_fade: MACRO
+tie: MACRO
 	db $d9
 ENDM
 

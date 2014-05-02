@@ -34,7 +34,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	speed 9
 	music_call Branch_f5f3d
 	note C_, 6
-	no_fade
+	tie
 	speed 1
 	note C_, 12
 	volume 55
@@ -59,7 +59,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	note D_, 1
 	musice8 8
 	note D_, 9
-	no_fade
+	tie
 	note D_, 9
 	volume 71
 	note D_, 3
@@ -100,7 +100,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	music_call Branch_f5f3d
 	musice8 8
 	note C_, 4
-	no_fade
+	tie
 	speed 1
 	note C_, 4
 	note E_, 5
@@ -130,7 +130,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	inc_octave
 	musice8 8
 	note D_, 9
-	no_fade
+	tie
 	note D_, 10
 	volume 55
 	note D_, 1
@@ -271,7 +271,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	note E_, 3
 	speed 1
 	note C_, 2
-	no_fade
+	tie
 	note C_, 16
 	volume 71
 	note C_, 9
@@ -329,7 +329,7 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	note F_, 1
 	note C_, 1
 	note D_, 12
-	no_fade
+	tie
 	note D_, 12
 	duty 1
 	volume 148
@@ -338,31 +338,31 @@ Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 Branch_f5f3d:
 	musice8 8
 	note D_, 12
-	no_fade
+	tie
 	note D_, 4
-	no_fade
+	tie
 	speed 1
 	note D_, 7
 	volume 71
 	note D_, 2
-	no_fade
+	tie
 	speed 9
 	note D_, 1
 	dec_octave
 	volume 160
 	note A_, 4
-	no_fade
+	tie
 	speed 1
 	note A_, 7
 	volume 71
 	note A_, 2
-	no_fade
+	tie
 	speed 9
 	note A_, 1
 	inc_octave
 	volume 160
 	note C_, 12
-	no_fade
+	tie
 	music_ret
 
 Branch_f5f62:
@@ -780,7 +780,7 @@ Music_BattleTheme2_Ch2: ; f5fad (3d:5fad)
 	musice4 0
 	inc_octave
 	note A_, 12
-	no_fade
+	tie
 	note A_, 12
 	dec_octave
 	duty 1

@@ -10,7 +10,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note F_, 1
 	volume 96
 	note F_, 2
-	no_fade
+	tie
 	speed 1
 	note F_, 6
 	volume 55
@@ -20,7 +20,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note G_, 1
 	volume 112
 	note G_, 2
-	no_fade
+	tie
 	speed 1
 	note G_, 6
 	volume 71
@@ -30,7 +30,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note A_, 1
 	volume 128
 	note A_, 2
-	no_fade
+	tie
 	speed 1
 	note A_, 6
 	volume 71
@@ -56,7 +56,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	speed 1
 	note D#, 3
 	note E_, 10
-	no_fade
+	tie
 	speed 13
 	note E_, 4
 	volume 55
@@ -94,7 +94,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 2
 	volume 55
@@ -112,7 +112,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	speed 1
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 3
 	volume 55
@@ -131,10 +131,10 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note B_, 3
 	inc_octave
 	note C_, 10
-	no_fade
+	tie
 	speed 13
 	note C_, 2
-	no_fade
+	tie
 	speed 1
 	note C_, 6
 	volume 55
@@ -171,10 +171,10 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note B_, 3
 	inc_octave
 	note C_, 10
-	no_fade
+	tie
 	speed 13
 	note C_, 2
-	no_fade
+	tie
 	speed 1
 	note C_, 6
 	volume 55
@@ -183,16 +183,16 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 2
 	volume 55
 	note D_, 1
 	volume 160
 	note C_, 8
-	no_fade
+	tie
 	note C_, 8
-	no_fade
+	tie
 	note C_, 8
 	volume 55
 	note C_, 1
@@ -202,7 +202,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	volume 160
 	note D_, 3
 	note D#, 10
-	no_fade
+	tie
 	speed 13
 	note D#, 4
 	volume 55
@@ -216,7 +216,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	volume 160
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	speed 13
 	note F_, 3
 	volume 55
@@ -230,7 +230,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 4
 	dec_octave
@@ -250,7 +250,7 @@ Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	note D_, 7
 	speed 13
 	note E_, 8
-	no_fade
+	tie
 	note E_, 1
 	volume 55
 	note E_, 2
@@ -295,7 +295,7 @@ Branch_fb36b:
 	dec_octave
 	volume 160
 	note G_, 4
-	no_fade
+	tie
 	note G_, 8
 	volume 55
 	note G_, 1
@@ -309,7 +309,7 @@ Branch_fb36b:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 4
 	volume 55
@@ -322,11 +322,11 @@ Branch_fb36b:
 	speed 1
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	speed 13
 	note F_, 2
 	note E_, 1
-	no_fade
+	tie
 	speed 1
 	note E_, 6
 	note F_, 4
@@ -338,10 +338,10 @@ Branch_fb36b:
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 4
-	no_fade
+	tie
 	note D_, 8
 	volume 55
 	note D_, 2
@@ -354,7 +354,7 @@ Branch_fb36b:
 	dec_octave
 	volume 160
 	note G_, 4
-	no_fade
+	tie
 	note G_, 8
 	volume 55
 	note G_, 1
@@ -368,7 +368,7 @@ Branch_fb36b:
 	volume 160
 	note G_, 3
 	note G#, 10
-	no_fade
+	tie
 	note G#, 13
 	volume 55
 	note G#, 13
@@ -386,7 +386,7 @@ Branch_fb36b:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 2
 	note F_, 1
@@ -401,7 +401,7 @@ Branch_fb36b:
 	speed 1
 	note D#, 3
 	note E_, 10
-	no_fade
+	tie
 	speed 13
 	note E_, 8
 	music_call Branch_fb60c
@@ -452,7 +452,7 @@ Branch_fb36b:
 	volume 160
 	note D#, 3
 	note E_, 10
-	no_fade
+	tie
 	note E_, 13
 	note F_, 6
 	volume 55
@@ -469,7 +469,7 @@ Branch_fb36b:
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	note D_, 13
 	note C#, 6
 	note C_, 7
@@ -525,7 +525,7 @@ Branch_fb36b:
 	volume 160
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	note F_, 13
 	note E_, 13
 	note C_, 6
@@ -548,7 +548,7 @@ Branch_fb36b:
 	volume 160
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	note F_, 13
 	note E_, 13
 	note C_, 6
@@ -569,7 +569,7 @@ Branch_fb36b:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 8
 	volume 55
@@ -602,7 +602,7 @@ Branch_fb36b:
 	volume 160
 	note G#, 3
 	note A_, 10
-	no_fade
+	tie
 	note A_, 13
 	volume 55
 	note A_, 13
@@ -619,7 +619,7 @@ Branch_fb36b:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	note G_, 13
 	volume 55
 	note G_, 13
@@ -636,10 +636,10 @@ Branch_fb36b:
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 4
-	no_fade
+	tie
 	note D_, 8
 	volume 55
 	note D_, 1
@@ -659,7 +659,7 @@ Branch_fb36b:
 	volume 160
 	note G_, 3
 	note G#, 10
-	no_fade
+	tie
 	note G#, 13
 	volume 55
 	note G#, 13
@@ -677,7 +677,7 @@ Branch_fb36b:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	speed 13
 	note G_, 2
 	note F_, 1
@@ -747,7 +747,7 @@ Branch_fb5e4:
 	speed 1
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	speed 13
 	note D_, 4
 	volume 55
@@ -778,7 +778,7 @@ Branch_fb60c:
 	speed 1
 	note G#, 3
 	note A_, 10
-	no_fade
+	tie
 	speed 13
 	note A_, 8
 	volume 55
@@ -800,7 +800,7 @@ Branch_fb60c:
 	volume 160
 	note F#, 3
 	note G_, 10
-	no_fade
+	tie
 	music_ret
 
 Branch_fb651:
@@ -819,7 +819,7 @@ Branch_fb651:
 	volume 160
 	note C#, 3
 	note D_, 10
-	no_fade
+	tie
 	note D_, 13
 	note C_, 6
 	volume 55
@@ -829,9 +829,9 @@ Branch_fb651:
 	speed 13
 	volume 160
 	note G_, 6
-	no_fade
+	tie
 	note G_, 6
-	no_fade
+	tie
 	note G_, 8
 	volume 55
 	note G_, 1
@@ -861,7 +861,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	note A_, 1
 	volume 112
 	note A_, 2
-	no_fade
+	tie
 	speed 1
 	note A_, 6
 	volume 39
@@ -871,7 +871,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	note B_, 1
 	volume 128
 	note B_, 2
-	no_fade
+	tie
 	speed 1
 	note B_, 6
 	volume 55
@@ -882,7 +882,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	note C_, 1
 	volume 144
 	note C_, 2
-	no_fade
+	tie
 	speed 1
 	note C_, 6
 	volume 55
@@ -989,7 +989,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	speed 13
 	volume 128
 	note C_, 1
-	no_fade
+	tie
 	note C_, 2
 	dec_octave
 	dec_octave
@@ -1006,7 +1006,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	inc_octave
 	volume 128
 	note C_, 1
-	no_fade
+	tie
 	note C_, 2
 	dec_octave
 	volume 146
@@ -1022,7 +1022,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	inc_octave
 	volume 128
 	note E_, 1
-	no_fade
+	tie
 	note E_, 4
 	dec_octave
 	dec_octave
@@ -1041,7 +1041,7 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	inc_octave
 	speed 13
 	note C_, 8
-	no_fade
+	tie
 	note C_, 1
 	volume 39
 	note C_, 2
@@ -1084,7 +1084,7 @@ Branch_fb79e:
 	speed 1
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	speed 13
 	note F_, 1
 	note E_, 1
@@ -1150,7 +1150,7 @@ Branch_fb79e:
 	volume 112
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	note F_, 13
 	note E_, 5
 	note F_, 4
@@ -1182,7 +1182,7 @@ Branch_fb79e:
 	note B_, 3
 	inc_octave
 	note C_, 10
-	no_fade
+	tie
 	speed 13
 	note C_, 3
 	rest 1
@@ -1193,7 +1193,7 @@ Branch_fb79e:
 	volume 128
 	note A#, 3
 	note B_, 10
-	no_fade
+	tie
 	speed 13
 	note B_, 4
 	rest 1
@@ -1217,7 +1217,7 @@ Branch_fb79e:
 	volume 128
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	speed 13
 	note F_, 1
 	rest 1
@@ -1232,7 +1232,7 @@ Branch_fb79e:
 	speed 1
 	note D_, 3
 	note D#, 10
-	no_fade
+	tie
 	speed 13
 	note D#, 2
 	dec_octave
@@ -1409,7 +1409,7 @@ Branch_fb79e:
 	note B_, 3
 	inc_octave
 	note C_, 10
-	no_fade
+	tie
 	speed 13
 	note C_, 3
 	rest 1
@@ -1471,7 +1471,7 @@ Branch_fb79e:
 	volume 128
 	note E_, 3
 	note F_, 10
-	no_fade
+	tie
 	speed 13
 	note F_, 1
 	rest 1
@@ -1501,7 +1501,7 @@ Branch_fb79e:
 	volume 112
 	note D#, 3
 	note E_, 10
-	no_fade
+	tie
 	speed 13
 	note E_, 1
 	note F_, 1
@@ -1543,7 +1543,7 @@ Branch_fb79e:
 	volume 128
 	note D_, 3
 	note D#, 10
-	no_fade
+	tie
 	speed 13
 	note D#, 2
 	dec_octave
@@ -1710,7 +1710,7 @@ Branch_fbb10:
 	volume 128
 	note D#, 3
 	note E_, 10
-	no_fade
+	tie
 	speed 13
 	note E_, 2
 	volume 146
@@ -1913,7 +1913,7 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	rest 7
 	speed 13
 	note C_, 8
-	no_fade
+	tie
 	note C_, 1
 	rest 2
 	music_end
@@ -1965,7 +1965,7 @@ Branch_fbc46:
 	dec_octave
 	musice8 8
 	note G_, 13
-	no_fade
+	tie
 	speed 13
 	note G_, 7
 	rest 1

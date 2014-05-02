@@ -228,9 +228,9 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	rest 1
 	speed 1
 	note A#, 4
-	no_fade
+	tie
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 1
 	rest 1
@@ -244,7 +244,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	note D_, 2
 	dec_octave
 	note G_, 1
-	no_fade
+	tie
 	note F#, 1
 	musice8 7
 	note F_, 1
@@ -254,9 +254,9 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	rest 1
 	speed 1
 	note G#, 4
-	no_fade
+	tie
 	note A_, 3
-	no_fade
+	tie
 	speed 7
 	note A_, 1
 	rest 1
@@ -270,7 +270,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	note C_, 2
 	dec_octave
 	note F_, 1
-	no_fade
+	tie
 	note F#, 1
 	musice8 7
 	note G_, 1
@@ -280,9 +280,9 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	rest 1
 	speed 1
 	note A#, 4
-	no_fade
+	tie
 	note B_, 3
-	no_fade
+	tie
 	speed 7
 	note B_, 1
 	rest 1
@@ -296,7 +296,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	note D_, 2
 	dec_octave
 	note G_, 1
-	no_fade
+	tie
 	note F#, 1
 	musice8 7
 	note F_, 1
@@ -306,19 +306,19 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	rest 1
 	speed 1
 	note B_, 4
-	no_fade
+	tie
 	inc_octave
 	note C_, 3
-	no_fade
+	tie
 	speed 7
 	note C_, 1
 	rest 1
 	musice8 8
 	speed 1
 	note F#, 4
-	no_fade
+	tie
 	note G_, 3
-	no_fade
+	tie
 	speed 7
 	note G_, 1
 	musice8 4
@@ -328,14 +328,14 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	note F_, 2
 	speed 1
 	note C_, 3
-	no_fade
+	tie
 	dec_octave
 	note B_, 3
-	no_fade
+	tie
 	note A#, 3
-	no_fade
+	tie
 	note A_, 3
-	no_fade
+	tie
 	note G#, 2
 	speed 7
 	EndMainLoop

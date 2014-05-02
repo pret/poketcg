@@ -125,16 +125,16 @@ Music_Overworld_Ch1: ; f71a0 (3d:71a0)
 	volume 95
 	octave 4
 	note G_, 1
-	no_fade
+	tie
 	note E_, 1
-	no_fade
+	tie
 	note C_, 1
-	no_fade
+	tie
 	dec_octave
 	note G_, 1
-	no_fade
+	tie
 	note E_, 1
-	no_fade
+	tie
 	note C_, 1
 	duty 1
 	volume 160
@@ -176,15 +176,15 @@ Music_Overworld_Ch1: ; f71a0 (3d:71a0)
 	note G_, 1
 	volume 144
 	note F_, 8
-	no_fade
+	tie
 	note F_, 8
-	no_fade
+	tie
 	note F_, 8
-	no_fade
+	tie
 	note F_, 8
-	no_fade
+	tie
 	note F_, 8
-	no_fade
+	tie
 	note F_, 8
 	volume 55
 	note F_, 3
@@ -472,17 +472,17 @@ Music_Overworld_Ch2: ; f7334 (3d:7334)
 	musice8 8
 	octave 4
 	note C_, 1
-	no_fade
+	tie
 	dec_octave
 	note G_, 1
-	no_fade
+	tie
 	note E_, 1
-	no_fade
+	tie
 	note C_, 1
-	no_fade
+	tie
 	dec_octave
 	note G_, 1
-	no_fade
+	tie
 	note E_, 1
 	duty 0
 	volume 146

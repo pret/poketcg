@@ -21,7 +21,7 @@ Music_Club3_Ch1: ; fa210 (3e:6210)
 	dec_octave
 	volume 144
 	note A#, 6
-	no_fade
+	tie
 	note A#, 12
 	volume 55
 	note A#, 4
@@ -34,9 +34,9 @@ Music_Club3_Ch1: ; fa210 (3e:6210)
 	volume 144
 	speed 1
 	note C_, 5
-	no_fade
+	tie
 	note C#, 4
-	no_fade
+	tie
 	speed 9
 	note C_, 1
 	volume 55
@@ -44,7 +44,7 @@ Music_Club3_Ch1: ; fa210 (3e:6210)
 	dec_octave
 	volume 144
 	note A#, 6
-	no_fade
+	tie
 	note A#, 12
 	volume 55
 	note A#, 4
@@ -453,7 +453,7 @@ Music_Club3_Ch2: ; fa423 (3e:6423)
 	note F_, 2
 	volume 112
 	note E_, 6
-	no_fade
+	tie
 	note E_, 12
 	volume 55
 	note E_, 4
@@ -465,7 +465,7 @@ Music_Club3_Ch2: ; fa423 (3e:6423)
 	volume 112
 	speed 1
 	note F_, 5
-	no_fade
+	tie
 	note F#, 4
 	speed 9
 	note F_, 1
@@ -473,7 +473,7 @@ Music_Club3_Ch2: ; fa423 (3e:6423)
 	note F_, 1
 	volume 112
 	note E_, 6
-	no_fade
+	tie
 	note E_, 12
 	volume 55
 	note E_, 4

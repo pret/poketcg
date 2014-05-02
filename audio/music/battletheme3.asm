@@ -260,7 +260,7 @@ Music_BattleTheme3_Ch1: ; f63a1 (3d:63a1)
 	volume 160
 	note A_, 2
 	note B_, 1
-	no_fade
+	tie
 	speed 1
 	note B_, 5
 	volume 55
@@ -352,7 +352,7 @@ Branch_f65a7:
 	octave 4
 	volume 160
 	note C#, 5
-	no_fade
+	tie
 	note C#, 4
 	volume 55
 	note C#, 2
@@ -372,7 +372,7 @@ Branch_f65a7:
 	volume 160
 	inc_octave
 	note C#, 5
-	no_fade
+	tie
 	note C#, 4
 	volume 55
 	note C#, 4

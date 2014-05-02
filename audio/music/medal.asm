@@ -27,7 +27,7 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 	note E_, 5
 	speed 15
 	note A_, 2
-	no_fade
+	tie
 	speed 1
 	note A_, 10
 	volume 55
@@ -52,9 +52,9 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 	volume 160
 	speed 9
 	note A_, 5
-	no_fade
+	tie
 	note A_, 8
-	no_fade
+	tie
 	speed 1
 	note A_, 2
 	volume 55
@@ -90,7 +90,7 @@ Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 	inc_octave
 	speed 15
 	note C_, 2
-	no_fade
+	tie
 	speed 1
 	note C_, 10
 	volume 39
@@ -115,9 +115,9 @@ Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 	volume 144
 	speed 9
 	note C#, 5
-	no_fade
+	tie
 	note C#, 8
-	no_fade
+	tie
 	speed 1
 	note C#, 2
 	volume 39
@@ -136,7 +136,7 @@ Music_Medal_Ch3: ; f7e9d (3d:7e9d)
 	speed 15
 	rest 4
 	note F_, 2
-	no_fade
+	tie
 	speed 1
 	note F_, 10
 	rest 5
@@ -153,7 +153,7 @@ Music_Medal_Ch3: ; f7e9d (3d:7e9d)
 	rest 6
 	speed 9
 	note A_, 13
-	no_fade
+	tie
 	speed 1
 	note A_, 2
 	music_end
