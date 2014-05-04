@@ -1,4 +1,4 @@
-; each map has a mximum of 8 scripts
+; each map has a maximum of 8 scripts
 ; scripts are referenced with ids [0,2,4,6,8,a,c,e]
 ; each script id is used for a specific event
 ; if a script pointer is $0000, that map has no script for that event
