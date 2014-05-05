@@ -1,6 +1,6 @@
 Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 12
 	musice8 8
 	duty 0
@@ -509,7 +509,7 @@ Branch_fa9ec:
 
 Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 12
 	musice8 8
 	duty 0

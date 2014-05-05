@@ -1,7 +1,7 @@
 Music_BattleTheme2_Ch1: ; f5d68 (3d:5d68)
 	speed 9
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	octave 1
@@ -432,7 +432,7 @@ Branch_f5f90:
 Music_BattleTheme2_Ch2: ; f5fad (3d:5fad)
 	speed 9
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 15
 	musice8 8
 	octave 2

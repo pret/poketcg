@@ -2,7 +2,7 @@ Music_Overworld_Ch1: ; f71a0 (3d:71a0)
 	speed 7
 	duty 0
 	musicdc 17
-	vibrato_rate 9
+	vibrato_type 9
 	vibrato_delay 25
 	volume 162
 	musice8 7
@@ -289,7 +289,7 @@ Music_Overworld_Ch2: ; f7334 (3d:7334)
 	speed 7
 	duty 0
 	musicdc 17
-	vibrato_rate 9
+	vibrato_type 9
 	vibrato_delay 30
 	musice8 7
 	octave 3

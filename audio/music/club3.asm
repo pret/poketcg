@@ -1,7 +1,7 @@
 Music_Club3_Ch1: ; fa210 (3e:6210)
 	speed 9
 	musicdc 17
-	vibrato_rate 5
+	vibrato_type 5
 	vibrato_delay 20
 	musice8 8
 	MainLoop
@@ -435,7 +435,7 @@ Branch_fa403:
 Music_Club3_Ch2: ; fa423 (3e:6423)
 	speed 9
 	musicdc 17
-	vibrato_rate 5
+	vibrato_type 5
 	vibrato_delay 20
 	musice8 8
 	MainLoop

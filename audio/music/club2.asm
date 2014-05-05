@@ -211,7 +211,7 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	volume 32
 	musicdc 17
 	wave 0
-	vibrato_rate 4
+	vibrato_type 4
 	vibrato_delay 35
 	musice8 6
 	musice9 64

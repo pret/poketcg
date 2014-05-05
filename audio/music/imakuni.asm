@@ -1,7 +1,7 @@
 Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	speed 3
 	musicdc 17
-	vibrato_rate 5
+	vibrato_type 5
 	vibrato_delay 20
 	musice8 8
 	duty 2
@@ -187,7 +187,7 @@ Branch_fae1d:
 
 Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	musicdc 17
-	vibrato_rate 0
+	vibrato_type 0
 	vibrato_delay 0
 	musice8 8
 	duty 1
@@ -295,7 +295,7 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	musicdc 17
 	volume 32
 	wave 1
-	vibrato_rate 6
+	vibrato_type 6
 	vibrato_delay 0
 	musice9 0
 	musice8 8

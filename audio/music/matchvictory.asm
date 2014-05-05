@@ -1,6 +1,6 @@
 Music_MatchVictory_Ch1: ; f7b61 (3d:7b61)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 3
@@ -55,7 +55,7 @@ Music_MatchVictory_Ch1: ; f7b61 (3d:7b61)
 
 Music_MatchVictory_Ch2: ; f7bb0 (3d:7bb0)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 3

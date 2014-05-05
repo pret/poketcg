@@ -1,6 +1,6 @@
 Music_Medal_Ch1: ; f7df8 (3d:7df8)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 2
@@ -64,7 +64,7 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 
 Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 1

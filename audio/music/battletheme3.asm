@@ -1,7 +1,7 @@
 Music_BattleTheme3_Ch1: ; f63a1 (3d:63a1)
 	speed 11
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	MainLoop
@@ -476,7 +476,7 @@ Branch_f661d:
 Music_BattleTheme3_Ch2: ; f6649 (3d:6649)
 	speed 11
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	MainLoop
@@ -913,7 +913,7 @@ Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
 	volume 32
 	wave 1
 	musice9 96
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 0
 	musice8 8
 	MainLoop

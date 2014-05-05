@@ -1,7 +1,7 @@
 Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	speed 13
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 2
@@ -851,7 +851,7 @@ Branch_fb651:
 
 Music_Credits_Ch2: ; fb68a (3e:768a)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	duty 1

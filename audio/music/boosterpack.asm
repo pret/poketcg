@@ -1,6 +1,6 @@
 Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 4
@@ -45,7 +45,7 @@ Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
 
 Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 3

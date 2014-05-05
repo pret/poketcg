@@ -1,6 +1,6 @@
 Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	musice8 8
 	octave 4
@@ -66,7 +66,7 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 
 Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
 	musicdc 17
-	vibrato_rate 5
+	vibrato_type 5
 	vibrato_delay 20
 	musice8 8
 	octave 3

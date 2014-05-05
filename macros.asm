@@ -141,7 +141,7 @@ musice9: MACRO
 	db $e9, \1
 ENDM
 
-vibrato_rate: MACRO
+vibrato_type: MACRO
 	db $ea, \1
 ENDM
 

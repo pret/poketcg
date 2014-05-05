@@ -1,6 +1,6 @@
 Music_ChallengeHall_Ch1: ; f9646 (3e:5646)
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 15
 	musice8 7
 	octave 3
@@ -402,7 +402,7 @@ Branch_f9848:
 
 Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 15
 	musice8 7
 	octave 3
@@ -569,7 +569,7 @@ Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	note B_, 7
 	inc_octave
 	inc_octave
-	vibrato_rate 1
+	vibrato_type 1
 	duty 2
 	volume 80
 	note B_, 8
@@ -579,7 +579,7 @@ Music_ChallengeHall_Ch2: ; f9883 (3e:5883)
 	volume 39
 	speed 1
 	note C#, 15
-	vibrato_rate 8
+	vibrato_type 8
 	duty 0
 	volume 112
 	octave 2

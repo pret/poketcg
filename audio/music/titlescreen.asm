@@ -2,7 +2,7 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	speed 7
 	duty 0
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	volume 160
 	musice8 8
@@ -224,7 +224,7 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	speed 7
 	duty 0
 	musicdc 17
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 20
 	volume 128
 	musice8 8

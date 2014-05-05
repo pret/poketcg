@@ -1,7 +1,7 @@
 Music_PokemonDome_Ch1: ; f9251 (3e:5251)
 	speed 7
 	musicdc 17
-	vibrato_rate 9
+	vibrato_type 9
 	vibrato_delay 20
 	musice8 8
 	octave 2
@@ -312,7 +312,7 @@ Music_PokemonDome_Ch1: ; f9251 (3e:5251)
 Music_PokemonDome_Ch2: ; f93f8 (3e:53f8)
 	speed 7
 	musicdc 17
-	vibrato_rate 9
+	vibrato_type 9
 	vibrato_delay 20
 	musice8 8
 	octave 1

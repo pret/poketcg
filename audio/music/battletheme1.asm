@@ -1,7 +1,7 @@
 Music_BattleTheme1_Ch1: ; f532a (3d:532a)
 	speed 7
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	duty 2
@@ -512,7 +512,7 @@ Branch_f5580:
 Music_BattleTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 7
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	MainLoop

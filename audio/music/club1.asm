@@ -1,7 +1,7 @@
 Music_Club1_Ch1: ; f9be5 (3e:5be5)
 	speed 5
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 8
 	octave 3
@@ -50,11 +50,11 @@ Music_Club1_Ch1: ; f9be5 (3e:5be5)
 	note B_, 1
 	inc_octave
 	note C_, 1
-	vibrato_rate 1
+	vibrato_type 1
 	vibrato_delay 10
 	note C#, 4
 	dec_octave
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	note A_, 2
 	inc_octave
@@ -116,7 +116,7 @@ Music_Club1_Ch1: ; f9be5 (3e:5be5)
 	rest 2
 	dec_octave
 	note A_, 2
-	vibrato_rate 1
+	vibrato_type 1
 	duty 2
 	volume 80
 	inc_octave
@@ -126,7 +126,7 @@ Music_Club1_Ch1: ; f9be5 (3e:5be5)
 	note C#, 5
 	dec_octave
 	dec_octave
-	vibrato_rate 8
+	vibrato_type 8
 	duty 0
 	volume 160
 	note A_, 4
@@ -292,7 +292,7 @@ Music_Club1_Ch1: ; f9be5 (3e:5be5)
 Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	speed 5
 	musicdc 17
-	vibrato_rate 8
+	vibrato_type 8
 	vibrato_delay 20
 	musice8 7
 	octave 2
@@ -369,7 +369,7 @@ Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	volume 147
 	note E_, 4
 	rest 2
-	vibrato_rate 1
+	vibrato_type 1
 	duty 2
 	volume 80
 	octave 5
@@ -409,7 +409,7 @@ Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	rest 2
 	volume 147
 	note C#, 2
-	vibrato_rate 8
+	vibrato_type 8
 	volume 96
 	note D#, 4
 	note E_, 6
@@ -417,7 +417,7 @@ Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	note E_, 2
 	inc_octave
 	inc_octave
-	vibrato_rate 1
+	vibrato_type 1
 	duty 2
 	volume 80
 	note C#, 1
@@ -502,7 +502,7 @@ Music_Club1_Ch2: ; f9d5f (3e:5d5f)
 	note E_, 2
 	rest 4
 	dec_octave
-	vibrato_rate 8
+	vibrato_type 8
 	duty 0
 	volume 96
 	note A#, 2
