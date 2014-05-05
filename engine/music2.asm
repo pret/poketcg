@@ -48,7 +48,7 @@ Func_f802d: ; f802d (3e:402d)
 	ld c, a
 	or a
 	jr z, .asm_f8043
-	ld hl, $4e85
+	ld hl, Unknown_f8e85
 	add hl, bc
 	ld b, [hl]
 	ld a, [$dd83]
@@ -1417,7 +1417,7 @@ Func_f8898: ; f8898 (3e:4898)
 	add hl, bc
 	ld e, [hl]
 	ld d, $0
-	ld hl, PointerTable_f8dde
+	ld hl, Music2_VibratoTypes
 	add hl, de
 	add hl, de
 	ld a, [hli]
@@ -1861,51 +1861,11 @@ INCLUDE "data/wave_instruments.asm"
 Music2_NoiseInstruments: ; f8d34 (3e:4d34)
 INCLUDE "data/noise_instruments.asm"
 
-PointerTable_f8dde: ; f8dde (3e:4dde)
-	dw Unknown_f8df4
-	dw Unknown_f8df7
-	dw Unknown_f8e01
-	dw Unknown_f8e0f
-	dw Unknown_f8e19
-	dw Unknown_f8e27
-	dw Unknown_f8e35
-	dw Unknown_f8e47
-	dw Unknown_f8e5b
-	dw Unknown_f8e65
-	dw Unknown_f8e73
+Music2_VibratoTypes: ; f8dde (3e:4dde)
+INCLUDE "data/vibrato_types.asm"
 
-Unknown_f8df4: ; f8df4 (3e:4df4)
-INCBIN "baserom.gbc",$f8df4,$f8df7 - $f8df4
-
-Unknown_f8df7: ; f8df7 (3e:4df7)
-INCBIN "baserom.gbc",$f8df7,$f8e01 - $f8df7
-
-Unknown_f8e01: ; f8e01 (3e:4e01)
-INCBIN "baserom.gbc",$f8e01,$f8e0f - $f8e01
-
-Unknown_f8e0f: ; f8e0f (3e:4e0f)
-INCBIN "baserom.gbc",$f8e0f,$f8e19 - $f8e0f
-
-Unknown_f8e19: ; f8e19 (3e:4e19)
-INCBIN "baserom.gbc",$f8e19,$f8e27 - $f8e19
-
-Unknown_f8e27: ; f8e27 (3e:4e27)
-INCBIN "baserom.gbc",$f8e27,$f8e35 - $f8e27
-
-Unknown_f8e35: ; f8e35 (3e:4e35)
-INCBIN "baserom.gbc",$f8e35,$f8e47 - $f8e35
-
-Unknown_f8e47: ; f8e47 (3e:4e47)
-INCBIN "baserom.gbc",$f8e47,$f8e5b - $f8e47
-
-Unknown_f8e5b: ; f8e5b (3e:4e5b)
-INCBIN "baserom.gbc",$f8e5b,$f8e65 - $f8e5b
-
-Unknown_f8e65: ; f8e65 (3e:4e65)
-INCBIN "baserom.gbc",$f8e65,$f8e73 - $f8e65
-
-Unknown_f8e73: ; f8e73 (3e:4e73)
-INCBIN "baserom.gbc",$f8e73,$f8ee5 - $f8e73
+Unknown_f8e85: ; f8e85 (3e:4e85)
+INCBIN "baserom.gbc",$f8e85,$f8ee5 - $f8e85
 
 INCLUDE "data/music2_headers.asm"
 

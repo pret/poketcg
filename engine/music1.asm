@@ -1417,7 +1417,7 @@ Func_f4898: ; f4898 (3d:4898)
 	add hl, bc
 	ld e, [hl]
 	ld d, $0
-	ld hl, PointerTable_f4dde
+	ld hl, Music1_VibratoTypes
 	add hl, de
 	add hl, de
 	ld a, [hli]
@@ -1861,51 +1861,8 @@ INCLUDE "data/wave_instruments.asm"
 Music1_NoiseInstruments: ; f4d34 (3d:4d34)
 INCLUDE "data/noise_instruments.asm"
 
-PointerTable_f4dde: ; f4dde (3d:4dde)
-	dw Unknown_f4df4
-	dw Unknown_f4df7
-	dw Unknown_f4e01
-	dw Unknown_f4e0f
-	dw Unknown_f4e19
-	dw Unknown_f4e27
-	dw Unknown_f4e35
-	dw Unknown_f4e47
-	dw Unknown_f4e5b
-	dw Unknown_f4e65
-	dw Unknown_f4e73
-
-Unknown_f4df4: ; f4df4 (3d:4df4)
-INCBIN "baserom.gbc",$f4df4,$f4df7 - $f4df4
-
-Unknown_f4df7: ; f4df7 (3d:4df7)
-INCBIN "baserom.gbc",$f4df7,$f4e01 - $f4df7
-
-Unknown_f4e01: ; f4e01 (3d:4e01)
-INCBIN "baserom.gbc",$f4e01,$f4e0f - $f4e01
-
-Unknown_f4e0f: ; f4e0f (3d:4e0f)
-INCBIN "baserom.gbc",$f4e0f,$f4e19 - $f4e0f
-
-Unknown_f4e19: ; f4e19 (3d:4e19)
-INCBIN "baserom.gbc",$f4e19,$f4e27 - $f4e19
-
-Unknown_f4e27: ; f4e27 (3d:4e27)
-INCBIN "baserom.gbc",$f4e27,$f4e35 - $f4e27
-
-Unknown_f4e35: ; f4e35 (3d:4e35)
-INCBIN "baserom.gbc",$f4e35,$f4e47 - $f4e35
-
-Unknown_f4e47: ; f4e47 (3d:4e47)
-INCBIN "baserom.gbc",$f4e47,$f4e5b - $f4e47
-
-Unknown_f4e5b: ; f4e5b (3d:4e5b)
-INCBIN "baserom.gbc",$f4e5b,$f4e65 - $f4e5b
-
-Unknown_f4e65: ; f4e65 (3d:4e65)
-INCBIN "baserom.gbc",$f4e65,$f4e73 - $f4e65
-
-Unknown_f4e73: ; f4e73 (3d:4e73)
-INCBIN "baserom.gbc",$f4e73,$f4e85 - $f4e73
+Music1_VibratoTypes: ; f4dde (3d:4dde)
+INCLUDE "data/vibrato_types.asm"
 
 Unknown_f4e85: ; f4e85 (3d:4e85)
 INCBIN "baserom.gbc",$f4e85,$f4ee5 - $f4e85
