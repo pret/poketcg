@@ -605,7 +605,7 @@ Music1_CommandTable: ; f442c (3d:442c)
 	dw Music1_octave
 	dw Music1_inc_octave
 	dw Music1_dec_octave
-	dw Music1_no_fade
+	dw Music1_tie
 	dw Music1_end
 	dw Music1_end
 	dw Music1_musicdc
@@ -619,7 +619,7 @@ Music1_CommandTable: ; f442c (3d:442c)
 	dw Music1_musice4
 	dw Music1_duty
 	dw Music1_volume
-	dw Music1_duty3
+	dw Music1_wave
 	dw Music1_musice8
 	dw Music1_musice9
 	dw Music1_vibrato_rate
@@ -878,7 +878,7 @@ Music1_dec_octave: ; f45c3 (3d:45c3)
 	dec [hl]
 	jp Music1_PlayNextNote_pop
 
-Music1_no_fade: ; f45cb (3d:45cb)
+Music1_tie: ; f45cb (3d:45cb)
 	ld hl, $dd91
 	add hl, bc
 	ld [hl], $80
@@ -1038,7 +1038,7 @@ Music1_volume: ; f4683 (3d:4683)
 	ld l, e
 	jp Music1_PlayNextNote
 
-Music1_duty3: ; f4690 (3d:4690)
+Music1_wave: ; f4690 (3d:4690)
 	pop de
 	ld a, [de]
 	inc de
