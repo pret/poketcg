@@ -92,12 +92,19 @@ INCLUDE "engine/bank1c.asm"
 
 SECTION "bank1D",ROMX,BANK[$1D]
 INCBIN "baserom.gbc",$74000,$76668 - $74000
+
 VWF: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
-INCBIN "baserom.gbc",$76968,$78000 - $76968
+
+DuelGraphics: ; 76968 (1d:6968)
+INCBIN "gfx/duel.2bpp",$0,$1698
 
 SECTION "bank1E",ROMX,BANK[$1E]
-INCBIN "baserom.gbc",$78000,$4000
+INCBIN "gfx/duel.2bpp",$1698,$1498
+
+rept $2b68
+db $ff
+endr
 
 SECTION "bank1F",ROMX,BANK[$1F]
 	emptybank
