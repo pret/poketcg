@@ -121,7 +121,43 @@ Func_1d078: ; 1d078 (7:5078)
 INCBIN "baserom.gbc",$1d078,$1d306 - $1d078
 
 Func_1d306: ; 1d306 (7:5306)
-INCBIN "baserom.gbc",$1d306,$1d6ad - $1d306
+INCBIN "baserom.gbc",$1d306,$1d386 - $1d306
+
+Func_1d386: ; 1d386 (7:5386)
+	call Func_378a
+	or a
+	jr nz, .asm_1d39f
+	call Func_028a
+	ld a, MUSIC_TITLESCREEN
+	call Func_3785
+	ld bc, $0000
+	ld a, $0
+	call Func_3df3
+	call Func_1d59c
+.asm_1d39f
+	call Func_3ca0
+	call Func_1d3a9
+	call Func_0277
+	ret
+
+Func_1d3a9: ; 1d3a9 (7:53a9)
+INCBIN "baserom.gbc",$1d3a9,$1d42e - $1d3a9
+
+Func_1d42e: ; 1d42e (7:542e)
+INCBIN "baserom.gbc",$1d42e,$1d519 - $1d42e
+
+Func_1d519: ; 1d519 (7:5519)
+	ld a, MUSIC_TITLESCREEN
+	call Func_3785
+	call Func_1d42e
+	scf
+	ret
+; 0x1d523
+
+INCBIN "baserom.gbc",$1d523,$1d59c - $1d523
+
+Func_1d59c: ; 1d59c (7:559c)
+INCBIN "baserom.gbc",$1d59c,$1d6ad - $1d59c
 
 Func_1d6ad: ; 1d6ad (7:56ad)
 INCBIN "baserom.gbc",$1d6ad,$20000 - $1d6ad

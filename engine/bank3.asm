@@ -950,7 +950,7 @@ Func_c74d: ; c74d (3:474d)
 
 Func_c75a: ; c75a (3:475a)
 	call Func_379b
-	ld a, $5
+	ld a, MUSIC_PAUSEMENU
 	call Func_3785
 	call Func_c797
 .asm_c765

@@ -3867,7 +3867,7 @@ Func_3a1f: ; 3a1f (0:3a1f)
 	jr z, .asm_3a37
 	cp $c
 	jr z, .asm_3a37
-	ld a, $f
+	ld a, MUSIC_RONALD
 	ret
 .asm_3a37
 	ld a, [$d111]
@@ -4201,7 +4201,28 @@ Func_3dbf: ; 3dbf (0:3dbf)
 	ret
 ; 0x3ddb
 
-INCBIN "baserom.gbc",$3ddb,$3fe0 - $3ddb
+INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
+
+Func_3df3: ; 3df3 (0:3df3)
+	push af
+	ld a, [$ff80]
+	push af
+	push hl
+	ld a, BANK(Func_12c7f)
+	call BankswitchHome
+	ld hl, [sp+$5]
+	ld a, [hl]
+	call Func_12c7f
+	call Func_0404
+	pop hl
+	pop af
+	call BankswitchHome
+	pop af
+	ld a, [$d61b]
+	ret
+; 0x3e10
+
+INCBIN "baserom.gbc",$3e10,$3fe0 - $3e10
 
 ; jumps to 3f:hl
 Bankswitch3dTo3f: ; 3fe0 (0:3fe0)

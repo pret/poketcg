@@ -920,7 +920,10 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	ret
 
 Func_12c5e: ; 12c5e (4:6c5e)
-INCBIN "baserom.gbc",$12c5e,$131b3 - $12c5e
+INCBIN "baserom.gbc",$12c5e,$12c7f - $12c5e
+
+Func_12c7f: ; 12c7f (4:6c7f)
+INCBIN "baserom.gbc",$12c7f,$131b3 - $12c7f
 
 Func_131b3: ; 131b3 (4:71b3)
 INCBIN "baserom.gbc",$131b3,$131d3 - $131b3
