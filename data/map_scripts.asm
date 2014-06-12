@@ -7,7 +7,7 @@
 ; 4: pressed A button
 ; 6: pressed A button
 ; 8: load map
-; a: after battle
+; a: after duel
 ; c: moved player
 ; e: load map/closed text box
 

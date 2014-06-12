@@ -1,4 +1,4 @@
-Music_BattleTheme3_Ch1: ; f63a1 (3d:63a1)
+Music_DuelTheme3_Ch1: ; f63a1 (3d:63a1)
 	speed 11
 	musicdc 17
 	vibrato_type 8
@@ -473,7 +473,7 @@ Branch_f661d:
 	music_ret
 
 
-Music_BattleTheme3_Ch2: ; f6649 (3d:6649)
+Music_DuelTheme3_Ch2: ; f6649 (3d:6649)
 	speed 11
 	musicdc 17
 	vibrato_type 8
@@ -907,7 +907,7 @@ Branch_f6866:
 	music_ret
 
 
-Music_BattleTheme3_Ch3: ; f68c2 (3d:68c2)
+Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	speed 11
 	musicdc 17
 	volume 32
@@ -1218,7 +1218,7 @@ Branch_f69f0:
 	music_ret
 
 
-Music_BattleTheme3_Ch4: ; f6a3f (3d:6a3f)
+Music_DuelTheme3_Ch4: ; f6a3f (3d:6a3f)
 	speed 11
 	MainLoop
 	Loop 2

@@ -1870,9 +1870,9 @@ INCBIN "baserom.gbc",$f4e85,$f4ee5 - $f4e85
 INCLUDE "data/music1_headers.asm"
 
 INCLUDE "audio/music/titlescreen.asm"
-INCLUDE "audio/music/battletheme1.asm"
-INCLUDE "audio/music/battletheme2.asm"
-INCLUDE "audio/music/battletheme3.asm"
+INCLUDE "audio/music/dueltheme1.asm"
+INCLUDE "audio/music/dueltheme2.asm"
+INCLUDE "audio/music/dueltheme3.asm"
 INCLUDE "audio/music/pausemenu.asm"
 INCLUDE "audio/music/deckmachine.asm"
 INCLUDE "audio/music/cardpop.asm"

@@ -4,9 +4,9 @@ NumberOfSongs2: ; f8ee5 (3e:4ee5)
 SongBanks2: ; f8ee6 (3e:4ee6)
 	db BANK(Music_Stop)
 	db BANK(Music_TitleScreen)
-	db BANK(Music_BattleTheme1)
-	db BANK(Music_BattleTheme2)
-	db BANK(Music_BattleTheme3)
+	db BANK(Music_DuelTheme1)
+	db BANK(Music_DuelTheme2)
+	db BANK(Music_DuelTheme3)
 	db BANK(Music_PauseMenu)
 	db BANK(Music_PCMainMenu)
 	db BANK(Music_DeckMachine)
@@ -77,21 +77,21 @@ SongHeaderPointers2: ; f8f05 (3e:4f05)
 	dw $0000
 	dw $0000
 
-;Music_BattleTheme1
+;Music_DuelTheme1
 	db %0000
 	dw $0000
 	dw $0000
 	dw $0000
 	dw $0000
 
-;Music_BattleTheme2
+;Music_DuelTheme2
 	db %0000
 	dw $0000
 	dw $0000
 	dw $0000
 	dw $0000
 
-;Music_BattleTheme3
+;Music_DuelTheme3
 	db %0000
 	dw $0000
 	dw $0000
@@ -107,10 +107,10 @@ SongHeaderPointers2: ; f8f05 (3e:4f05)
 
 Music_PCMainMenu: ; f8f71 (3e:4f71)
 	db %1111
-	dw Music_PCMainMenu_Ch1 ; 5052
-	dw Music_PCMainMenu_Ch2 ; 50ED
-	dw Music_PCMainMenu_Ch3 ; 5189
-	dw Music_PCMainMenu_Ch4 ; 522B
+	dw Music_PCMainMenu_Ch1
+	dw Music_PCMainMenu_Ch2
+	dw Music_PCMainMenu_Ch3
+	dw Music_PCMainMenu_Ch4
 
 ;Music_DeckMachine
 	db %0000
@@ -135,66 +135,66 @@ Music_PCMainMenu: ; f8f71 (3e:4f71)
 
 Music_PokemonDome: ; f8f95 (3e:4f95)
 	db %1111
-	dw Music_PokemonDome_Ch1 ; 5251
-	dw Music_PokemonDome_Ch2 ; 53F8
-	dw Music_PokemonDome_Ch3 ; 5579
-	dw Music_PokemonDome_Ch4 ; 5629
+	dw Music_PokemonDome_Ch1
+	dw Music_PokemonDome_Ch2
+	dw Music_PokemonDome_Ch3
+	dw Music_PokemonDome_Ch4
 
 Music_ChallengeHall: ; f8f9e (3e:4f9e)
 	db %1111
-	dw Music_ChallengeHall_Ch1 ; 5646
-	dw Music_ChallengeHall_Ch2 ; 5883
-	dw Music_ChallengeHall_Ch3 ; 5a92
-	dw Music_ChallengeHall_Ch4 ; 5bA9
+	dw Music_ChallengeHall_Ch1
+	dw Music_ChallengeHall_Ch2
+	dw Music_ChallengeHall_Ch3
+	dw Music_ChallengeHall_Ch4
 
 Music_Club1: ; f8fa7 (3e:4fa7)
 	db %1111
-	dw Music_Club1_Ch1 ; 5bE5
-	dw Music_Club1_Ch2 ; 5d5F
-	dw Music_Club1_Ch3 ; 5eC4
-	dw Music_Club1_Ch4 ; 6044
+	dw Music_Club1_Ch1
+	dw Music_Club1_Ch2
+	dw Music_Club1_Ch3
+	dw Music_Club1_Ch4
 
 Music_Club2: ; f8fb0 (3e:4fb0)
 	db %0111
-	dw Music_Club2_Ch1 ; 6077
-	dw Music_Club2_Ch2 ; 60E3
-	dw Music_Club2_Ch3 ; 6164
+	dw Music_Club2_Ch1
+	dw Music_Club2_Ch2
+	dw Music_Club2_Ch3
 	dw $0000
 
 Music_Club3: ; f8fb9 (3e:4fb9)
 	db %1111
-	dw Music_Club3_Ch1 ; 6210
-	dw Music_Club3_Ch2 ; 6423
-	dw Music_Club3_Ch3 ; 663E
-	dw Music_Club3_Ch4 ; 6772
+	dw Music_Club3_Ch1
+	dw Music_Club3_Ch2
+	dw Music_Club3_Ch3
+	dw Music_Club3_Ch4
 
 Music_Ronald: ; f8fc2 (3e:4fc2)
 	db %1111
-	dw Music_Ronald_Ch1 ; 67A0
-	dw Music_Ronald_Ch2 ; 6a0E
-	dw Music_Ronald_Ch3 ; 6bC0
-	dw Music_Ronald_Ch4 ; 6cE0
+	dw Music_Ronald_Ch1
+	dw Music_Ronald_Ch2
+	dw Music_Ronald_Ch3
+	dw Music_Ronald_Ch4
 
 Music_Imakuni: ; f8fcb (3e:4fcb)
 	db %1111
-	dw Music_Imakuni_Ch1 ; 6d55
-	dw Music_Imakuni_Ch2 ; 6e32
-	dw Music_Imakuni_Ch3 ; 6eBC
-	dw Music_Imakuni_Ch4 ; 6fA4
+	dw Music_Imakuni_Ch1
+	dw Music_Imakuni_Ch2
+	dw Music_Imakuni_Ch3
+	dw Music_Imakuni_Ch4
 
 Music_HallOfHonor: ; f8fd4 (3e:4fd4)
 	db %0111
-	dw Music_HallOfHonor_Ch1 ; 6fEA
-	dw Music_HallOfHonor_Ch2 ; 706E
-	dw Music_HallOfHonor_Ch3 ; 70D5
+	dw Music_HallOfHonor_Ch1
+	dw Music_HallOfHonor_Ch2
+	dw Music_HallOfHonor_Ch3
 	dw $0000
 
 Music_Credits: ; f8fdd (3e:4fdd)
 	db %1111
-	dw Music_Credits_Ch1 ; 71FE
-	dw Music_Credits_Ch2 ; 768A
-	dw Music_Credits_Ch3 ; 7b9D
-	dw Music_Credits_Ch4 ; 7e51
+	dw Music_Credits_Ch1
+	dw Music_Credits_Ch2
+	dw Music_Credits_Ch3
+	dw Music_Credits_Ch4
 
 ;Music_Unused13
 	db %0000

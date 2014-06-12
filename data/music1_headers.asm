@@ -4,9 +4,9 @@ NumberOfSongs1: ; 4fee5 (3d:4ee5)
 SongBanks1: ; f4ee6 (3d:4ee6)
 	db BANK(Music_Stop)
 	db BANK(Music_TitleScreen)
-	db BANK(Music_BattleTheme1)
-	db BANK(Music_BattleTheme2)
-	db BANK(Music_BattleTheme3)
+	db BANK(Music_DuelTheme1)
+	db BANK(Music_DuelTheme2)
+	db BANK(Music_DuelTheme3)
 	db BANK(Music_PauseMenu)
 	db BANK(Music_PCMainMenu)
 	db BANK(Music_DeckMachine)
@@ -37,9 +37,9 @@ SongBanks1: ; f4ee6 (3d:4ee6)
 SongHeaderPointers1: ; f4f05 (3d:4f05)
 	dw Music_Stop
 	dw Music_TitleScreen
-	dw Music_BattleTheme1
-	dw Music_BattleTheme2
-	dw Music_BattleTheme3
+	dw Music_DuelTheme1
+	dw Music_DuelTheme2
+	dw Music_DuelTheme3
 	dw Music_PauseMenu
 	dw $0000
 	dw Music_DeckMachine
@@ -77,26 +77,26 @@ Music_TitleScreen: ; f4f44 (3d:4f44)
 	dw Music_TitleScreen_Ch3
 	dw Music_TitleScreen_Ch4
 
-Music_BattleTheme1: ; f4f4d (3d:4f4d)
+Music_DuelTheme1: ; f4f4d (3d:4f4d)
 	db %1111
-	dw Music_BattleTheme1_Ch1
-	dw Music_BattleTheme1_Ch2
-	dw Music_BattleTheme1_Ch3
-	dw Music_BattleTheme1_Ch4
+	dw Music_DuelTheme1_Ch1
+	dw Music_DuelTheme1_Ch2
+	dw Music_DuelTheme1_Ch3
+	dw Music_DuelTheme1_Ch4
 
-Music_BattleTheme2: ; f4f56 (3d:4f56)
+Music_DuelTheme2: ; f4f56 (3d:4f56)
 	db %1111
-	dw Music_BattleTheme2_Ch1
-	dw Music_BattleTheme2_Ch2
-	dw Music_BattleTheme2_Ch3
-	dw Music_BattleTheme2_Ch4
+	dw Music_DuelTheme2_Ch1
+	dw Music_DuelTheme2_Ch2
+	dw Music_DuelTheme2_Ch3
+	dw Music_DuelTheme2_Ch4
 
-Music_BattleTheme3: ; f4f5f (3d:4f5f)
+Music_DuelTheme3: ; f4f5f (3d:4f5f)
 	db %1111
-	dw Music_BattleTheme3_Ch1
-	dw Music_BattleTheme3_Ch2
-	dw Music_BattleTheme3_Ch3
-	dw Music_BattleTheme3_Ch4
+	dw Music_DuelTheme3_Ch1
+	dw Music_DuelTheme3_Ch2
+	dw Music_DuelTheme3_Ch3
+	dw Music_DuelTheme3_Ch4
 
 Music_PauseMenu: ; f4f68 (3d:4f68)
 	db %1111
