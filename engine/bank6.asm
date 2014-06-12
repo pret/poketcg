@@ -104,7 +104,66 @@ Func_19a12: ; 19a12 (6:5a12)
 	ret
 ; 0x19a1f
 
-INCBIN "baserom.gbc",$19a1f,$1a6cc - $19a1f
+INCBIN "baserom.gbc",$19a1f,$1a61f - $19a1f
+
+Func_1a61f: ; 1a61f (6:661f)
+	push af
+	ld de, $389f
+	call Func_2275
+	pop af
+	or a
+	jr nz, .asm_1a640
+	ld a, $40
+	call $663b
+	ld a, $5f
+	call $663b
+	ld a, $76
+	call $663b
+	ld a, $c1
+	ld hl, $0191
+	jr .asm_1a660
+.asm_1a640
+	ld hl, $018f
+	cp $1e
+	jr z, .asm_1a660
+	cp $43
+	jr z, .asm_1a660
+	ld hl, $0192
+	cp $64
+	jr z, .asm_1a660
+	ld hl, $0193
+	cp $65
+	jr z, .asm_1a660
+	cp $66
+	jr z, .asm_1a660
+	ld hl, $0190
+.asm_1a660
+	push hl
+	ld e, a
+	ld d, $0
+	call $2f10
+	call Func_379b
+	ld a, MUSIC_MEDAL
+	call PlaySong
+	ld hl, $cc27
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	bank1call $2ebb
+	ld a, $c2
+	ld [$ff97], a
+	pop hl
+	bank1call $5e5f
+.asm_1a680
+	call Func_378a
+	or a
+	jr nz, .asm_1a680
+	call Func_37a0
+	bank1call $5773
+	ret
+; 0x1a68d
+
+INCBIN "baserom.gbc",$1a68d,$1a6cc - $1a68d
 
 Func_1a6cc: ; 1a6cc (6:66cc)
 	ret

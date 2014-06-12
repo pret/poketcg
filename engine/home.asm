@@ -3546,7 +3546,7 @@ Func_377f: ; 377f (0:377f)
 
 Func_3784: ; 3784 (0:3784)
 	xor a
-Func_3785: ; 3785 (0:3785)
+PlaySong: ; 3785 (0:3785)
 	farcall Func_f4006
 	ret
 
@@ -3626,7 +3626,7 @@ PointerTable_3864: ; 3864 (0:3864)
 	dw Func_38c0
 	dw Func_38a3
 	dw Func_3876
-	dw Func_3911
+	dw Credits_3911
 	dw Func_38fb
 	dw Func_38db
 	dw Func_3874
@@ -3639,8 +3639,8 @@ Func_3876: ; 3876 (0:3876)
 	ld a, [$ff80]
 	push af
 	call Func_379b
-	ld a, $8
-	call Func_3785
+	ld a, MUSIC_CARDPOP
+	call PlaySong
 	ld a, $3
 	ld [$d0c2], a
 	ld a, [$d10e]
@@ -3665,8 +3665,8 @@ Func_38a3: ; 38a3 (0:38a3)
 	ld [$d0c3], a
 	ld a, $2
 	ld [$cc1a], a
-	ld a, $8
-	call Func_3785
+	ld a, MUSIC_CARDPOP
+	call PlaySong
 	bank1call Func_758f
 	scf
 	ret
@@ -3713,8 +3713,8 @@ Func_38fb: ; 38fb (0:38fb)
 	scf
 	ret
 
-Func_3911: ; 3911 (0:3911)
-	farcall Func_1d6ad
+Credits_3911: ; 3911 (0:3911)
+	farcall Credits_1d6ad
 	or a
 	ret
 ; 0x3917
@@ -3850,7 +3850,7 @@ Func_39fc: ; 39fc (0:39fc)
 	cp $1f
 	jr nc, .asm_3a1c
 	ld [$d112], a
-	call Func_3785
+	call PlaySong
 .asm_3a1c
 	pop bc
 	pop hl

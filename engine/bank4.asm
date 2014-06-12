@@ -4,7 +4,130 @@ Func_10059: ; 10059 (4:4059)
 INCBIN "baserom.gbc",$10059,$100a2 - $10059
 
 Func_100a2: ; 100a2 (4:40a2)
-INCBIN "baserom.gbc",$100a2,$103d2 - $100a2
+INCBIN "baserom.gbc",$100a2,$1029e - $100a2
+
+Medal_1029e: ; 1029e (4:429e)
+	sub $8
+	ld c, a
+	ld [$d115], a
+	ld a, [$d291]
+	push af
+	push bc
+	call Func_379b
+	ld a, MUSIC_STOP
+	call PlaySong
+	farcall Func_70000
+	call Func_028a
+	call $4000
+	ld a, $fa
+	ld [$d114], a
+	call $410c
+	pop bc
+	ld a, c
+	add a
+	ld c, a
+	ld b, $0
+	ld hl, Unknown_1030b
+	add hl, bc
+	ld a, [hli]
+	ld [$ce3f], a
+	ld a, [hl]
+	ld [$ce40], a
+	call $4031
+	ld a, MUSIC_MEDAL
+	call PlaySong
+	ld a, $ff
+	ld [$d116], a
+.asm_102e2
+	call Func_3c48
+	ld a, [$d116]
+	inc a
+	ld [$d116], a
+	and $f
+	jr nz, .asm_102e2
+	call $4197
+	ld a, [$d116]
+	cp $e0
+	jr nz, .asm_102e2
+	ld hl, $038b
+	call $2c73
+	call $3c96
+	call Func_37a0
+	pop af
+	ld [$d291], a
+	ret
+
+Unknown_1030b: ; 1030b (4:430b)
+INCBIN "baserom.gbc",$1030b,$1031b - $1030b
+
+BoosterPack_1031b: ; 1031b (4:431b)
+	ld c, a
+	ld a, [$d291]
+	push af
+	push bc
+	call Func_028a
+	call $4000
+	xor a
+	ld [$ccf3], a
+	pop bc
+	push bc
+	ld b, $0
+	ld hl, $43a5
+	add hl, bc
+	ld a, [hl]
+	ld c, a
+	add a
+	add a
+	ld c, a
+	ld hl, $43c2
+	add hl, bc
+	ld a, [hli]
+	push hl
+	ld bc, $0600
+	call $70ca
+	pop hl
+	ld a, [hli]
+	ld [$ce43], a
+	xor a
+	ld [$ce44], a
+	ld a, [hli]
+	ld [$ce3f], a
+	ld a, [hl]
+	ld [$ce40], a
+	call $4031
+	call Func_379b
+	ld a, MUSIC_BOOSTERPACK
+	call PlaySong
+	pop bc
+	ld a, c
+	farcallx $7, $61c4
+	ld hl, $0387
+	ld a, [$d117]
+	cp $1
+	jr nz, .asm_10373
+	ld hl, $0388
+.asm_10373
+	call $2c73
+	call $3c96
+	call Func_37a0
+	ld hl, $0389
+	call $2c73
+	call Func_028a
+	call Func_1288c
+	call Func_099c
+	ld a, $1
+	ld [$cac0], a
+	ld a, $4
+	ld [$ccf3], a
+	farcallx $1, $7599
+	farcall Func_c1a4
+	call Func_3c48
+	pop af
+	ld [$d291], a
+	ret
+; 0x103a5
+
+INCBIN "baserom.gbc",$103a5,$103d2 - $103a5
 
 Func_103d2: ; 103d2 (4:43d2)
 INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
@@ -528,7 +651,7 @@ Func_126d1: ; 126d1 (4:66d1)
 	ret
 
 PointerTable_126fc
-	dw Func_12768
+	dw CardPop_12768
 	dw Func_12741
 	dw Func_12704
 	dw Func_1277e
@@ -543,8 +666,8 @@ Func_12704: ; 12704 (4:6704)
 	ld a, [$a006]
 	ld [$ce47], a
 	call Func_07be
-	ld a, $0
-	call Func_3785
+	ld a, MUSIC_STOP
+	call PlaySong
 	farcall Func_70000
 	ld a, $9
 	ld [$d111], a
@@ -557,8 +680,8 @@ Func_12704: ; 12704 (4:6704)
 	ret
 
 Func_12741: ; 12741 (4:6741)
-	ld a, $0
-	call Func_3785
+	ld a, MUSIC_STOP
+	call PlaySong
 	call Func_11320
 	jr nc, Func_12704
 	farcall Func_c1ed
@@ -573,20 +696,20 @@ Func_12741: ; 12741 (4:6741)
 	or a
 	ret
 
-Func_12768: ; 12768 (4:6768)
-	ld a, $8
-	call Func_3785
+CardPop_12768: ; 12768 (4:6768)
+	ld a, MUSIC_CARDPOP
+	call PlaySong
 	bank1call Func_7571
 	farcall Func_c1a4
 	call Func_3c48
-	ld a, $0
-	call Func_3785
+	ld a, MUSIC_STOP
+	call PlaySong
 	scf
 	ret
 
 Func_1277e: ; 1277e (4:677e)
-	ld a, $0
-	call Func_3785
+	ld a, MUSIC_STOP
+	call PlaySong
 	farcall Func_c9cb
 	farcallx $04, Func_3a40
 	farcall Func_70000
@@ -929,4 +1052,39 @@ Func_131b3: ; 131b3 (4:71b3)
 INCBIN "baserom.gbc",$131b3,$131d3 - $131b3
 
 Func_131d3: ; 131d3 (4:71d3)
-INCBIN "baserom.gbc",$131d3,$14000 - $131d3
+INCBIN "baserom.gbc",$131d3,$1344d - $131d3
+
+Func_1344d: ; 1344d (4:744d)
+	call Func_379b
+	ld a, MUSIC_MEDAL
+	call PlaySong
+	ld hl, $07e6
+	call $2c73
+	call $3c96
+	call Func_37a0
+	ret
+; 0x13462
+
+INCBIN "baserom.gbc",$13462,$13485 - $13462
+
+Func_13485: ; 13485 (4:7485)
+	call Func_07b6
+	ld a, [$ba68]
+	or a
+	ret z
+	ld a, [$ba56]
+	ld [$ce43], a
+	ld a, [$ba57]
+	ld [$ce44], a
+	call Func_07be
+	call Func_379b
+	ld a, MUSIC_MEDAL
+	call PlaySong
+	ld hl, $07e8
+	call $2c73
+	call $3c96
+	call Func_37a0
+	ret
+; 0x134b1
+
+INCBIN "baserom.gbc",$134b1,$14000 - $134b1

@@ -941,17 +941,17 @@ Func_c74d: ; c74d (3:474d)
 	push hl
 	push bc
 	push de
-	call Func_c75a
+	call MainMenu_c75a
 	call Func_c111
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_c75a: ; c75a (3:475a)
+MainMenu_c75a: ; c75a (3:475a)
 	call Func_379b
 	ld a, MUSIC_PAUSEMENU
-	call Func_3785
+	call PlaySong
 	call Func_c797
 .asm_c765
 	ld a, $1
@@ -1027,9 +1027,50 @@ Func_c7e0: ; c7e0 (3:47e0)
 Func_c7e5: ; c7e5 (3:47e5)
 	farcall Func_103d2
 	ret
-; 0xc7ea
 
-INCBIN "baserom.gbc",$c7ea,$c935 - $c7ea
+PC_c7ea: ; c7ea (3:47ea)
+	ld a, MUSIC_PCMAINMENU
+	call PlaySong
+	call Func_c241
+	call $4915
+	call Func_3c48
+	ld hl, $0352
+	call $2c73
+	call $484e
+.asm_c801
+	ld a, $1
+	call Func_c29b
+.asm_c806
+	call Func_3c48
+	call Func_264b
+	jr nc, .asm_c806
+	ld a, e
+	ld [$d0b9], a
+	ld a, [$ffb1]
+	cp e
+	jr nz, .asm_c82f
+	cp $4
+	jr z, .asm_c82f
+	call Func_c2a3
+	ld a, [$d0b9]
+	ld hl, $4846
+	call JumpToFunctionInTable
+	ld hl, $484e
+	call Func_c32b
+	jr .asm_c801
+.asm_c82f
+	call Func_c135
+	call Func_3c48
+	ld hl, $0353
+	call $4891
+	call Func_c111
+	xor a
+	ld [$d112], a
+	call Func_39fc
+	ret
+; 0xc846
+
+INCBIN "baserom.gbc",$c846,$c935 - $c846
 
 Func_c935: ; c935 (3:4935)
 	push hl
@@ -1344,7 +1385,37 @@ RST20: ; cc42 (3:4c42)
 INCBIN "baserom.gbc",$cc60,$cd98 - $cc60
 
 Unknown_cd98: ; cd98 (3:4d98)
-INCBIN "baserom.gbc",$cd98,$fc2b - $cd98
+INCBIN "baserom.gbc",$cd98,$d336 - $cd98
+
+DeckMachine_d336: ; d336 (3:5336)
+	push bc
+	call Func_c2a3
+	call Func_379b
+	ld a, MUSIC_DECKMACHINE
+	call PlaySong
+	call Func_04a2
+	xor a
+	ld [$ff92], a
+	ld [$ff93], a
+	farcall Func_1288c
+	call Func_0277
+	pop bc
+	ld a, c
+	or a
+	jr z, .asm_d360
+	dec a
+	ld [$d0a9], a
+	farcallx $2, $7a04
+	jr .asm_d364
+.asm_d360
+	farcallx $2, $719d
+.asm_d364
+	call Func_37a0
+	call $42d4
+	jp $4c64
+; 0xd36d
+
+INCBIN "baserom.gbc",$d36d,$fc2b - $d36d
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [$d0c3]
