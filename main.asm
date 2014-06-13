@@ -39,7 +39,8 @@ INCBIN "baserom.gbc",$2C000,$4000
 
 SECTION "bankC",ROMX,BANK[$C]
 Unknown_30000: ; 30000 (c:4000)
-INCBIN "baserom.gbc",$30000,$4000
+INCBIN "baserom.gbc",$30000,$30c5c - $30000
+INCLUDE "data/cards.asm"
 
 SECTION "bankD",ROMX,BANK[$D]
 INCLUDE "text/text_offsets.asm"
