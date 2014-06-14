@@ -160,38 +160,7 @@ SECTION "bank2F",ROMX,BANK[$2F]
 SECTION "bank30",ROMX,BANK[$30]
 	emptybank
 
-SECTION "bank31",ROMX,BANK[$31]
-INCBIN "baserom.gbc",$C4000,$4000
-
-SECTION "bank32",ROMX,BANK[$32]
-INCBIN "baserom.gbc",$C8000,$4000
-
-SECTION "bank33",ROMX,BANK[$33]
-INCBIN "baserom.gbc",$CC000,$4000
-
-SECTION "bank34",ROMX,BANK[$34]
-INCBIN "baserom.gbc",$D0000,$4000
-
-SECTION "bank35",ROMX,BANK[$35]
-INCBIN "baserom.gbc",$D4000,$4000
-
-SECTION "bank36",ROMX,BANK[$36]
-INCBIN "baserom.gbc",$D8000,$4000
-
-SECTION "bank37",ROMX,BANK[$37]
-INCBIN "baserom.gbc",$DC000,$4000
-
-SECTION "bank38",ROMX,BANK[$38]
-INCBIN "baserom.gbc",$E0000,$4000
-
-SECTION "bank39",ROMX,BANK[$39]
-INCBIN "baserom.gbc",$E4000,$4000
-
-SECTION "bank3A",ROMX,BANK[$3A]
-INCBIN "baserom.gbc",$E8000,$4000
-
-SECTION "bank3B",ROMX,BANK[$3B]
-INCBIN "baserom.gbc",$EC000,$4000
+INCLUDE "data/cardgfx.asm"
 
 SECTION "bank3C",ROMX,BANK[$3C]
 	emptybank
