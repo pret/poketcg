@@ -3398,10 +3398,10 @@ Func_302c: ; 302c (0:302c)
 	ld h, $0
 	ld a, [$ff80]
 	push af
-	ld a, BANK(Unknown_30000)
+	ld a, BANK(DeckPointers)
 	call BankswitchHome
 	add hl, hl
-	ld de, Unknown_30000
+	ld de, DeckPointers
 	add hl, de
 	ld e, [hl]
 	inc hl
