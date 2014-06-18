@@ -1,3 +1,6 @@
+# precompiled python
+*.pyc
+
 # compiled object file
 *.o
 
@@ -8,7 +11,11 @@
 *.map
 *.sym
 
-# for any of the poor souls with save game files in their working directory
+# save game files
 *.sgm
 *.sav
 *.sys
+
+# converted image data
+*.1bpp
+*.2bpp
