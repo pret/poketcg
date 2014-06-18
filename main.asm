@@ -132,8 +132,7 @@ INCBIN "baserom.gbc",$98000,$4000
 
 INCLUDE "data/trainergfx.asm"
 
-SECTION "bank29",ROMX,BANK[$29]
-INCBIN "baserom.gbc",$A4000,$4000
+INCLUDE "data/overworld_sprites.asm"
 
 SECTION "bank2A",ROMX,BANK[$2A]
 INCBIN "baserom.gbc",$A8000,$4000

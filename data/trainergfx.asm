@@ -157,5 +157,3 @@ Face37Gfx: ; a1452 (28:5452)
 Face38Gfx: ; a1694 (28:5694)
 	dw $24
 	INCBIN "gfx/trainers/face38.2bpp"
-
-INCBIN "baserom.gbc",$a18d6,$a4000 - $a18d6
