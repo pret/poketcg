@@ -113,7 +113,13 @@ SECTION "bank20",ROMX,BANK[$20]
 INCLUDE "engine/bank20.asm"
 
 SECTION "bank21",ROMX,BANK[$21]
-INCBIN "baserom.gbc",$84000,$4000
+INCBIN "baserom.gbc",$84000,$87d7e - $84000
+
+PlayerGfx: ; 87d7e (21:7d7e)
+	dw $24
+	INCBIN "gfx/trainers/player.2bpp"
+
+INCBIN "baserom.gbc",$87fc0,$88000 - $87fc0
 
 SECTION "bank22",ROMX,BANK[$22]
 INCBIN "baserom.gbc",$88000,$4000
@@ -122,7 +128,13 @@ SECTION "bank23",ROMX,BANK[$23]
 INCBIN "baserom.gbc",$8C000,$4000
 
 SECTION "bank24",ROMX,BANK[$24]
-INCBIN "baserom.gbc",$90000,$4000
+INCBIN "baserom.gbc",$90000,$93aa2 - $90000
+
+RonaldGfx: ; 93aa2 (24:7aa2)
+	dw $24
+	INCBIN "gfx/trainers/ronald.2bpp"
+
+INCBIN "baserom.gbc",$93ce4,$94000 - $93ce4
 
 SECTION "bank25",ROMX,BANK[$25]
 INCBIN "baserom.gbc",$94000,$4000
