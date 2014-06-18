@@ -1,159 +1,159 @@
 SECTION "bank27",ROMX,BANK[$27]
-Face0Gfx: ; 9c000 (27:4000)
+SamGfx: ; 9c000 (27:4000)
 	dw $24
-	INCBIN "gfx/trainers/face0.2bpp"
+	INCBIN "gfx/trainers/sam.2bpp"
 
-Face1Gfx: ; 9c242 (27:4242)
+ImakuniGfx: ; 9c242 (27:4242)
 	dw $24
-	INCBIN "gfx/trainers/face1.2bpp"
+	INCBIN "gfx/trainers/imakuni.2bpp"
 
-Face2Gfx: ; 9c484 (27:4484)
+NikkiGfx: ; 9c484 (27:4484)
 	dw $24
-	INCBIN "gfx/trainers/face2.2bpp"
+	INCBIN "gfx/trainers/nikki.2bpp"
 
-Face3Gfx: ; 9c6c6 (27:46c6)
+RickGfx: ; 9c6c6 (27:46c6)
 	dw $24
-	INCBIN "gfx/trainers/face3.2bpp"
+	INCBIN "gfx/trainers/rick.2bpp"
 
-Face4Gfx: ; 9c908 (27:4908)
+KenGfx: ; 9c908 (27:4908)
 	dw $24
-	INCBIN "gfx/trainers/face4.2bpp"
+	INCBIN "gfx/trainers/ken.2bpp"
 
-Face5Gfx: ; 9cb4a (27:4b4a)
+AmyGfx: ; 9cb4a (27:4b4a)
 	dw $24
-	INCBIN "gfx/trainers/face5.2bpp"
+	INCBIN "gfx/trainers/amy.2bpp"
 
-Face6Gfx: ; 9cd8c (27:4d8c)
+IsaacGfx: ; 9cd8c (27:4d8c)
 	dw $24
-	INCBIN "gfx/trainers/face6.2bpp"
+	INCBIN "gfx/trainers/isaac.2bpp"
 
-Face7Gfx: ; 9cfce (27:4fce)
+MitchGfx: ; 9cfce (27:4fce)
 	dw $24
-	INCBIN "gfx/trainers/face7.2bpp"
+	INCBIN "gfx/trainers/mitch.2bpp"
 
-Face8Gfx: ; 9d210 (27:5210)
+GeneGfx: ; 9d210 (27:5210)
 	dw $24
-	INCBIN "gfx/trainers/face8.2bpp"
+	INCBIN "gfx/trainers/gene.2bpp"
 
-Face9Gfx: ; 9d452 (27:5452)
+MurrayGfx: ; 9d452 (27:5452)
 	dw $24
-	INCBIN "gfx/trainers/face9.2bpp"
+	INCBIN "gfx/trainers/murray.2bpp"
 
-Face10Gfx: ; 9d694 (27:5694)
+CourtneyGfx: ; 9d694 (27:5694)
 	dw $24
-	INCBIN "gfx/trainers/face10.2bpp"
+	INCBIN "gfx/trainers/courtney.2bpp"
 
-Face11Gfx: ; 9d8d6 (27:58d6)
+SteveGfx: ; 9d8d6 (27:58d6)
 	dw $24
-	INCBIN "gfx/trainers/face11.2bpp"
+	INCBIN "gfx/trainers/steve.2bpp"
 
-Face12Gfx: ; 9db18 (27:5b18)
+JackGfx: ; 9db18 (27:5b18)
 	dw $24
-	INCBIN "gfx/trainers/face12.2bpp"
+	INCBIN "gfx/trainers/jack.2bpp"
 
-Face13Gfx: ; 9dd5a (27:5d5a)
+RodGfx: ; 9dd5a (27:5d5a)
 	dw $24
-	INCBIN "gfx/trainers/face13.2bpp"
+	INCBIN "gfx/trainers/rod.2bpp"
 
-Face14Gfx: ; 9df9c (27:5f9c)
+JosephGfx: ; 9df9c (27:5f9c)
 	dw $24
-	INCBIN "gfx/trainers/face14.2bpp"
+	INCBIN "gfx/trainers/joseph.2bpp"
 
-Face15Gfx: ; 9e1de (27:61de)
+DavidGfx: ; 9e1de (27:61de)
 	dw $24
-	INCBIN "gfx/trainers/face15.2bpp"
+	INCBIN "gfx/trainers/david.2bpp"
 
-Face16Gfx: ; 9e420 (27:6420)
+ErikGfx: ; 9e420 (27:6420)
 	dw $24
-	INCBIN "gfx/trainers/face16.2bpp"
+	INCBIN "gfx/trainers/erik.2bpp"
 
-Face17Gfx: ; 9e662 (27:6662)
+JohnGfx: ; 9e662 (27:6662)
 	dw $24
-	INCBIN "gfx/trainers/face17.2bpp"
+	INCBIN "gfx/trainers/john.2bpp"
 
-Face18Gfx: ; 9e8a4 (27:68a4)
+AdamGfx: ; 9e8a4 (27:68a4)
 	dw $24
-	INCBIN "gfx/trainers/face18.2bpp"
+	INCBIN "gfx/trainers/adam.2bpp"
 
-Face19Gfx: ; 9eae6 (27:6ae6)
+JonathanGfx: ; 9eae6 (27:6ae6)
 	dw $24
-	INCBIN "gfx/trainers/face19.2bpp"
+	INCBIN "gfx/trainers/jonathan.2bpp"
 
-Face20Gfx: ; 9ed28 (27:6d28)
+JoshuaGfx: ; 9ed28 (27:6d28)
 	dw $24
-	INCBIN "gfx/trainers/face20.2bpp"
+	INCBIN "gfx/trainers/joshua.2bpp"
 
-Face21Gfx: ; 9ef6a (27:6f6a)
+NicholasGfx: ; 9ef6a (27:6f6a)
 	dw $24
-	INCBIN "gfx/trainers/face21.2bpp"
+	INCBIN "gfx/trainers/nicholas.2bpp"
 
-Face22Gfx: ; 9f1ac (27:71ac)
+BrandonGfx: ; 9f1ac (27:71ac)
 	dw $24
-	INCBIN "gfx/trainers/face22.2bpp"
+	INCBIN "gfx/trainers/brandon.2bpp"
 
-Face23Gfx: ; 9f3ee (27:73ee)
+MatthewGfx: ; 9f3ee (27:73ee)
 	dw $24
-	INCBIN "gfx/trainers/face23.2bpp"
+	INCBIN "gfx/trainers/matthew.2bpp"
 
-Face24Gfx: ; 9f630 (27:7630)
+RyanGfx: ; 9f630 (27:7630)
 	dw $24
-	INCBIN "gfx/trainers/face24.2bpp"
+	INCBIN "gfx/trainers/ryan.2bpp"
 
-Face25Gfx: ; 9f872 (27:7872)
+AndrewGfx: ; 9f872 (27:7872)
 	dw $24
-	INCBIN "gfx/trainers/face25.2bpp"
+	INCBIN "gfx/trainers/andrew.2bpp"
 
-Face26Gfx: ; 9fab4 (27:7ab4)
+ChrisGfx: ; 9fab4 (27:7ab4)
 	dw $24
-	INCBIN "gfx/trainers/face26.2bpp"
+	INCBIN "gfx/trainers/chris.2bpp"
 
-Face27Gfx: ; 9fcf6 (27:7cf6)
+MichaelGfx: ; 9fcf6 (27:7cf6)
 	dw $24
-	INCBIN "gfx/trainers/face27.2bpp"
+	INCBIN "gfx/trainers/michael.2bpp"
 
 INCBIN "baserom.gbc",$9ff38,$a0000 - $9ff38
 
 SECTION "bank28",ROMX,BANK[$28]
-Face28Gfx: ; a0000 (28:4000)
+DanielGfx: ; a0000 (28:4000)
 	dw $24
-	INCBIN "gfx/trainers/face28.2bpp"
+	INCBIN "gfx/trainers/daniel.2bpp"
 
-Face29Gfx: ; a0242 (28:4242)
+RobertGfx: ; a0242 (28:4242)
 	dw $24
-	INCBIN "gfx/trainers/face29.2bpp"
+	INCBIN "gfx/trainers/robert.2bpp"
 
-Face30Gfx: ; a0484 (28:4484)
+BrittanyGfx: ; a0484 (28:4484)
 	dw $24
-	INCBIN "gfx/trainers/face30.2bpp"
+	INCBIN "gfx/trainers/brittany.2bpp"
 
-Face31Gfx: ; a06c6 (28:46c6)
+KristinGfx: ; a06c6 (28:46c6)
 	dw $24
-	INCBIN "gfx/trainers/face31.2bpp"
+	INCBIN "gfx/trainers/kristin.2bpp"
 
-Face32Gfx: ; a0908 (28:4908)
+HeatherGfx: ; a0908 (28:4908)
 	dw $24
-	INCBIN "gfx/trainers/face32.2bpp"
+	INCBIN "gfx/trainers/heather.2bpp"
 
-Face33Gfx: ; a0b4a (28:4b4a)
+SaraGfx: ; a0b4a (28:4b4a)
 	dw $24
-	INCBIN "gfx/trainers/face33.2bpp"
+	INCBIN "gfx/trainers/sara.2bpp"
 
-Face34Gfx: ; a0d8c (28:4d8c)
+AmandaGfx: ; a0d8c (28:4d8c)
 	dw $24
-	INCBIN "gfx/trainers/face34.2bpp"
+	INCBIN "gfx/trainers/amanda.2bpp"
 
-Face35Gfx: ; a0fce (28:4fce)
+JenniferGfx: ; a0fce (28:4fce)
 	dw $24
-	INCBIN "gfx/trainers/face35.2bpp"
+	INCBIN "gfx/trainers/jennifer.2bpp"
 
-Face36Gfx: ; a1210 (28:5210)
+JessicaGfx: ; a1210 (28:5210)
 	dw $24
-	INCBIN "gfx/trainers/face36.2bpp"
+	INCBIN "gfx/trainers/jessica.2bpp"
 
-Face37Gfx: ; a1452 (28:5452)
+StephanieGfx: ; a1452 (28:5452)
 	dw $24
-	INCBIN "gfx/trainers/face37.2bpp"
+	INCBIN "gfx/trainers/stephanie.2bpp"
 
-Face38Gfx: ; a1694 (28:5694)
+AaronGfx: ; a1694 (28:5694)
 	dw $24
-	INCBIN "gfx/trainers/face38.2bpp"
+	INCBIN "gfx/trainers/aaron.2bpp"
