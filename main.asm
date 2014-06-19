@@ -135,7 +135,11 @@ PlayerGfx: ; 87d7e (21:7d7e)
 INCBIN "baserom.gbc",$87fc0,$88000 - $87fc0
 
 SECTION "bank22",ROMX,BANK[$22]
-INCBIN "baserom.gbc",$88000,$4000
+OverworldMapTiles: ; 88000 (22:4000)
+	dw $c1
+	INCBIN "gfx/overworld_map.t15.2bpp"
+
+INCBIN "baserom.gbc",$88c12,$8C000 - $88c12
 
 SECTION "bank23",ROMX,BANK[$23]
 INCBIN "baserom.gbc",$8C000,$4000
