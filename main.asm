@@ -91,7 +91,7 @@ SECTION "bank1C",ROMX,BANK[$1C]
 INCLUDE "engine/bank1c.asm"
 
 SECTION "bank1D",ROMX,BANK[$1D]
-INCBIN "baserom.gbc",$74000,$76668 - $74000
+INCBIN "gfx/fonts.t3.1bpp"
 
 VWF: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
