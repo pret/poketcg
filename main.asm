@@ -120,7 +120,13 @@ Tileset1Gfx: ; 87828 (21:7828)
 	dw $4d
 	INCBIN "gfx/tilesets/tileset1.2bpp"
 
-INCBIN "baserom.gbc",$87cfa,$87d7e - $87cfa
+SolidTiles1: ; 87cfa (21:7cfa)
+	dw $4
+	INCBIN "gfx/solid_tiles.2bpp"
+
+SolidTiles2: ; 87d3c (21:7d3c)
+	dw $4
+	INCBIN "gfx/solid_tiles.2bpp"
 
 PlayerGfx: ; 87d7e (21:7d7e)
 	dw $24
