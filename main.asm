@@ -118,7 +118,7 @@ INCBIN "baserom.gbc",$84000,$87828 - $84000
 
 Tileset1Gfx: ; 87828 (21:7828)
 	dw $4d
-	INCBIN "gfx/tilesets/tileset1.2bpp"
+	INCBIN "gfx/tilesets/tileset1.t3.2bpp"
 
 SolidTiles1: ; 87cfa (21:7cfa)
 	dw $4
@@ -139,7 +139,11 @@ OverworldMapTiles: ; 88000 (22:4000)
 	dw $c1
 	INCBIN "gfx/overworld_map.t15.2bpp"
 
-INCBIN "baserom.gbc",$88c12,$8C000 - $88c12
+Tileset2Gfx: ; 88c12 (22:4c12)
+	dw $97
+	INCBIN "gfx/tilesets/tileset2.t9.2bpp"
+
+INCBIN "baserom.gbc",$89584,$8C000 - $89584
 
 SECTION "bank23",ROMX,BANK[$23]
 INCBIN "baserom.gbc",$8C000,$4000
