@@ -114,7 +114,13 @@ SECTION "bank20",ROMX,BANK[$20]
 INCLUDE "engine/bank20.asm"
 
 SECTION "bank21",ROMX,BANK[$21]
-INCBIN "baserom.gbc",$84000,$87d7e - $84000
+INCBIN "baserom.gbc",$84000,$87828 - $84000
+
+Tileset1Gfx: ; 87828 (21:7828)
+	dw $4d
+	INCBIN "gfx/tilesets/tileset1.2bpp"
+
+INCBIN "baserom.gbc",$87cfa,$87d7e - $87cfa
 
 PlayerGfx: ; 87d7e (21:7d7e)
 	dw $24
