@@ -231,7 +231,11 @@ NintendoGfx: ; 8fe22 (23:7e22)
 	dw $18
 	INCBIN "gfx/nintendo.2bpp"
 
-INCBIN "baserom.gbc",$8ffa4,$90000 - $8ffa4
+PoisonGfx: ; 8ffa4 (23:7fa4)
+	dw $4
+	INCBIN "gfx/poison.2bpp"
+
+INCBIN "baserom.gbc",$8ffe6,$90000 - $8ffe6
 
 SECTION "bank24",ROMX,BANK[$24]
 INCBIN "baserom.gbc",$90000,$93aa2 - $90000
