@@ -206,7 +206,28 @@ HallOfHonorTilesetGfx: ; 8f20e (23:720e)
 	dw $79
 	INCBIN "gfx/tilesets/hallofhonor.t7.2bpp"
 
-INCBIN "baserom.gbc",$8f9a0,$90000 - $8f9a0
+MedalGfx: ; 8f9a0 (23:79a0)
+	dw $48
+	INCBIN "gfx/medals.2bpp",$0,$c0
+	INCBIN "gfx/medals.2bpp",$240,$30
+	INCBIN "gfx/medals.2bpp",$340,$10
+	INCBIN "gfx/medals.2bpp",$c0,$c0
+	INCBIN "gfx/medals.2bpp",$300,$30
+	INCBIN "gfx/medals.2bpp",$350,$10
+	INCBIN "gfx/medals.2bpp",$180,$c0
+	INCBIN "gfx/medals.2bpp",$3c0,$30
+	INCBIN "gfx/medals.2bpp",$410,$10
+	INCBIN "gfx/medals.2bpp",$2d0,$30
+	INCBIN "gfx/medals.2bpp",$2a0,$30
+	INCBIN "gfx/medals.2bpp",$270,$30
+	INCBIN "gfx/medals.2bpp",$390,$30
+	INCBIN "gfx/medals.2bpp",$360,$30
+	INCBIN "gfx/medals.2bpp",$330,$10
+	INCBIN "gfx/medals.2bpp",$450,$30
+	INCBIN "gfx/medals.2bpp",$420,$30
+	INCBIN "gfx/medals.2bpp",$3f0,$20
+
+INCBIN "baserom.gbc",$8fe22,$90000 - $8fe22
 
 SECTION "bank24",ROMX,BANK[$24]
 INCBIN "baserom.gbc",$90000,$93aa2 - $90000
