@@ -147,7 +147,11 @@ Tileset3Gfx: ; 89584 (22:5584)
 	dw $81
 	INCBIN "gfx/tilesets/tileset3.t15.2bpp"
 
-INCBIN "baserom.gbc",$89d96,$8C000 - $89d96
+Tileset4Gfx: ; 89d96 (22:5d96)
+	dw $78
+	INCBIN "gfx/tilesets/tileset4.t8.2bpp"
+
+INCBIN "baserom.gbc",$8a518,$8C000 - $8a518
 
 SECTION "bank23",ROMX,BANK[$23]
 INCBIN "baserom.gbc",$8C000,$4000
