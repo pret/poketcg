@@ -250,7 +250,29 @@ CardPop3Gfx: ; 912a4 (24:52a4)
 	dw $5d
 	INCBIN "gfx/cardpop3.t3.2bpp"
 
-INCBIN "baserom.gbc",$91876,$93aa2 - $91876
+Colosseum1Gfx: ; 91876 (24:5876)
+	dw $60
+	INCBIN "gfx/colosseum1.2bpp"
+
+Colosseum2Gfx: ; 91e78 (24:5e78)
+	dw $56
+	INCBIN "gfx/colosseum2.t10.2bpp"
+
+Evolution1Gfx: ; 923da (24:63da)
+	dw $60
+	INCBIN "gfx/evolution1.2bpp"
+
+Evolution2Gfx: ; 929dc (24:69dc)
+	dw $56
+	INCBIN "gfx/evolution2.t10.2bpp"
+
+Mystery1Gfx: ; 92f3e (24:6f3e)
+	dw $60
+	INCBIN "gfx/mystery1.2bpp"
+
+Mystery2Gfx: ; 93540 (24:7540)
+	dw $56
+	INCBIN "gfx/mystery2.t10.2bpp"
 
 RonaldGfx: ; 93aa2 (24:7aa2)
 	dw $24
@@ -259,7 +281,39 @@ RonaldGfx: ; 93aa2 (24:7aa2)
 INCBIN "baserom.gbc",$93ce4,$94000 - $93ce4
 
 SECTION "bank25",ROMX,BANK[$25]
-INCBIN "baserom.gbc",$94000,$4000
+Laboratory1Gfx: ; 94000 (25:4000)
+	dw $60
+	INCBIN "gfx/laboratory1.2bpp"
+
+Laboratory2Gfx: ; 94602 (25:4602)
+	dw $56
+	INCBIN "gfx/laboratory2.t10.2bpp"
+
+CharizardIntro1Gfx: ; 94b64 (25:4b64)
+	dw $60
+	INCBIN "gfx/charizardintro1.2bpp"
+
+CharizardIntro2Gfx: ; 95166 (25:5166)
+	dw $60
+	INCBIN "gfx/charizardintro2.2bpp"
+
+ScytherIntro1Gfx: ; 95768 (25:5768)
+	dw $60
+	INCBIN "gfx/scytherintro1.2bpp"
+
+ScytherIntro2Gfx: ; 95d6a (25:5d6a)
+	dw $60
+	INCBIN "gfx/scytherintro2.2bpp"
+
+AerodactylIntro1Gfx: ; 9636c (25:636c)
+	dw $60
+	INCBIN "gfx/aerodactylintro1.2bpp"
+
+AerodactylIntro2Gfx: ; 9696e (25:696e)
+	dw $60
+	INCBIN "gfx/aerodactylintro2.2bpp"
+
+INCBIN "baserom.gbc",$96f70,$98000 - $96f70
 
 SECTION "bank26",ROMX,BANK[$26]
 INCBIN "baserom.gbc",$98000,$4000
