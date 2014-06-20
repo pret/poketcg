@@ -238,7 +238,19 @@ PoisonGfx: ; 8ffa4 (23:7fa4)
 INCBIN "baserom.gbc",$8ffe6,$90000 - $8ffe6
 
 SECTION "bank24",ROMX,BANK[$24]
-INCBIN "baserom.gbc",$90000,$93aa2 - $90000
+CardPop1Gfx: ; 90000 (24:4000)
+	dw $bd
+	INCBIN "gfx/cardpop1.t3.2bpp"
+
+CardPop2Gfx: ; 90bd2 (24:4bd2)
+	dw $6d
+	INCBIN "gfx/cardpop2.t3.2bpp"
+
+CardPop3Gfx: ; 912a4 (24:52a4)
+	dw $5d
+	INCBIN "gfx/cardpop3.t3.2bpp"
+
+INCBIN "baserom.gbc",$91876,$93aa2 - $91876
 
 RonaldGfx: ; 93aa2 (24:7aa2)
 	dw $24
