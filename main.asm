@@ -282,7 +282,11 @@ CopyrightGfx: ; 93ce4 (24:7ce4)
 	dw $24
 	INCBIN "gfx/copyright.2bpp"
 
-INCBIN "baserom.gbc",$93f26,$94000 - $93f26
+HelpDeskLadyGfx: ; 93f26 (24:7f26)
+	dw $8
+	INCBIN "gfx/ow/help_desk_lady.2bpp"
+
+INCBIN "baserom.gbc",$93fa8,$94000 - $93fa8
 
 SECTION "bank25",ROMX,BANK[$25]
 Laboratory1Gfx: ; 94000 (25:4000)
