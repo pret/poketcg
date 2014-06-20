@@ -167,7 +167,11 @@ Tileset8Gfx: ; 8b91e (22:791e)
 	dw $57
 	INCBIN "gfx/tilesets/tileset8.t9.2bpp"
 
-INCBIN "baserom.gbc",$8be90,$8C000 - $8be90
+OWSpritePlayer: ; 8be90 (22:7e90)
+	dw $14
+	INCBIN "gfx/ow/player.2bpp"
+
+INCBIN "baserom.gbc",$8bfd2,$8C000 - $8bfd2
 
 SECTION "bank23",ROMX,BANK[$23]
 INCBIN "baserom.gbc",$8C000,$4000
