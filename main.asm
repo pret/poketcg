@@ -174,7 +174,11 @@ OWSpritePlayer: ; 8be90 (22:7e90)
 INCBIN "baserom.gbc",$8bfd2,$8C000 - $8bfd2
 
 SECTION "bank23",ROMX,BANK[$23]
-INCBIN "baserom.gbc",$8C000,$4000
+Tileset9Gfx: ; 8c000 (23:4000)
+	dw $83
+	INCBIN "gfx/tilesets/tileset9.t13.2bpp"
+
+INCBIN "baserom.gbc",$8c832,$90000 - $8c832
 
 SECTION "bank24",ROMX,BANK[$24]
 INCBIN "baserom.gbc",$90000,$93aa2 - $90000
