@@ -116,9 +116,9 @@ INCLUDE "engine/bank20.asm"
 SECTION "bank21",ROMX,BANK[$21]
 INCBIN "baserom.gbc",$84000,$87828 - $84000
 
-Tileset1Gfx: ; 87828 (21:7828)
+IshiharaTilesetGfx: ; 87828 (21:7828)
 	dw $4d
-	INCBIN "gfx/tilesets/tileset1.t3.2bpp"
+	INCBIN "gfx/tilesets/ishihara.t3.2bpp"
 
 SolidTiles1: ; 87cfa (21:7cfa)
 	dw $4
@@ -139,33 +139,33 @@ OverworldMapTiles: ; 88000 (22:4000)
 	dw $c1
 	INCBIN "gfx/overworld_map.t15.2bpp"
 
-Tileset2Gfx: ; 88c12 (22:4c12)
+MasonLaboratoryTilesetGfx: ; 88c12 (22:4c12)
 	dw $97
-	INCBIN "gfx/tilesets/tileset2.t9.2bpp"
+	INCBIN "gfx/tilesets/masonlaboratory.t9.2bpp"
 
-Tileset3Gfx: ; 89584 (22:5584)
+ClubEntranceTilesetGfx: ; 89584 (22:5584)
 	dw $81
-	INCBIN "gfx/tilesets/tileset3.t15.2bpp"
+	INCBIN "gfx/tilesets/clubentrance.t15.2bpp"
 
-Tileset4Gfx: ; 89d96 (22:5d96)
+ClubLobbyTilesetGfx: ; 89d96 (22:5d96)
 	dw $78
-	INCBIN "gfx/tilesets/tileset4.t8.2bpp"
+	INCBIN "gfx/tilesets/clublobby.t8.2bpp"
 
-Tileset5Gfx: ; 8a518 (22:6518)
+FightingClubTilesetGfx: ; 8a518 (22:6518)
 	dw $63
-	INCBIN "gfx/tilesets/tileset5.t13.2bpp"
+	INCBIN "gfx/tilesets/fightingclub.t13.2bpp"
 
-Tileset6Gfx: ; 8ab4a (22:6b4a)
+RockClubTilesetGfx: ; 8ab4a (22:6b4a)
 	dw $3c
-	INCBIN "gfx/tilesets/tileset6.t4.2bpp"
+	INCBIN "gfx/tilesets/rockclub.t4.2bpp"
 
-Tileset7Gfx: ; 8af0c (22:6f0c)
+WaterClubTilesetGfx: ; 8af0c (22:6f0c)
 	dw $a1
-	INCBIN "gfx/tilesets/tileset7.t15.2bpp"
+	INCBIN "gfx/tilesets/waterclub.t15.2bpp"
 
-Tileset8Gfx: ; 8b91e (22:791e)
+GrassClubTilesetGfx: ; 8b91e (22:791e)
 	dw $57
-	INCBIN "gfx/tilesets/tileset8.t9.2bpp"
+	INCBIN "gfx/tilesets/grassclub.t9.2bpp"
 
 OWSpritePlayer: ; 8be90 (22:7e90)
 	dw $14
@@ -174,37 +174,37 @@ OWSpritePlayer: ; 8be90 (22:7e90)
 INCBIN "baserom.gbc",$8bfd2,$8C000 - $8bfd2
 
 SECTION "bank23",ROMX,BANK[$23]
-Tileset9Gfx: ; 8c000 (23:4000)
+LightningClubTilesetGfx: ; 8c000 (23:4000)
 	dw $83
-	INCBIN "gfx/tilesets/tileset9.t13.2bpp"
+	INCBIN "gfx/tilesets/lightningclub.t13.2bpp"
 
-Tileset10Gfx: ; 8c832 (23:4832)
+PsychicClubTilesetGfx: ; 8c832 (23:4832)
 	dw $3a
-	INCBIN "gfx/tilesets/tileset10.t6.2bpp"
+	INCBIN "gfx/tilesets/psychicclub.t6.2bpp"
 
-Tileset11Gfx: ; 8cbd4 (23:4bd4)
+ScienceClubTilesetGfx: ; 8cbd4 (23:4bd4)
 	dw $52
-	INCBIN "gfx/tilesets/tileset11.t14.2bpp"
+	INCBIN "gfx/tilesets/scienceclub.t14.2bpp"
 
-Tileset12Gfx: ; 8d0f6 (23:50f6)
+FireClubTilesetGfx: ; 8d0f6 (23:50f6)
 	dw $57
-	INCBIN "gfx/tilesets/tileset12.t9.2bpp"
+	INCBIN "gfx/tilesets/fireclub.t9.2bpp"
 
-Tileset13Gfx: ; 8d668 (23:5668)
+ChallengeHallTilesetGfx: ; 8d668 (23:5668)
 	dw $9d
-	INCBIN "gfx/tilesets/tileset13.t3.2bpp"
+	INCBIN "gfx/tilesets/challengehall.t3.2bpp"
 
-Tileset14Gfx: ; 8e03a (23:603a)
+PokemonDomeEntranceTilesetGfx: ; 8e03a (23:603a)
 	dw $4e
-	INCBIN "gfx/tilesets/tileset14.t2.2bpp"
+	INCBIN "gfx/tilesets/pokemondomeentrance.t2.2bpp"
 
-Tileset15Gfx: ; 8e51c (23:651c)
+PokemonDomeTilesetGfx: ; 8e51c (23:651c)
 	dw $cf
-	INCBIN "gfx/tilesets/tileset15.t1.2bpp"
+	INCBIN "gfx/tilesets/pokemondome.t1.2bpp"
 
-Tileset16Gfx: ; 8f20e (23:720e)
+HallOfHonorTilesetGfx: ; 8f20e (23:720e)
 	dw $79
-	INCBIN "gfx/tilesets/tileset16.t7.2bpp"
+	INCBIN "gfx/tilesets/hallofhonor.t7.2bpp"
 
 INCBIN "baserom.gbc",$8f9a0,$90000 - $8f9a0
 
