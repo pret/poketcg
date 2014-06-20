@@ -227,7 +227,11 @@ MedalGfx: ; 8f9a0 (23:79a0)
 	INCBIN "gfx/medals.2bpp",$420,$30
 	INCBIN "gfx/medals.2bpp",$3f0,$20
 
-INCBIN "baserom.gbc",$8fe22,$90000 - $8fe22
+NintendoGfx: ; 8fe22 (23:7e22)
+	dw $18
+	INCBIN "gfx/nintendo.2bpp"
+
+INCBIN "baserom.gbc",$8ffa4,$90000 - $8ffa4
 
 SECTION "bank24",ROMX,BANK[$24]
 INCBIN "baserom.gbc",$90000,$93aa2 - $90000
