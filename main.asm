@@ -198,7 +198,11 @@ Tileset14Gfx: ; 8e03a (23:603a)
 	dw $4e
 	INCBIN "gfx/tilesets/tileset14.t2.2bpp"
 
-INCBIN "baserom.gbc",$8e51c,$90000 - $8e51c
+Tileset15Gfx: ; 8e51c (23:651c)
+	dw $cf
+	INCBIN "gfx/tilesets/tileset15.t1.2bpp"
+
+INCBIN "baserom.gbc",$8f20e,$90000 - $8f20e
 
 SECTION "bank24",ROMX,BANK[$24]
 INCBIN "baserom.gbc",$90000,$93aa2 - $90000
