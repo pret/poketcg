@@ -278,7 +278,11 @@ RonaldGfx: ; 93aa2 (24:7aa2)
 	dw $24
 	INCBIN "gfx/trainers/ronald.2bpp"
 
-INCBIN "baserom.gbc",$93ce4,$94000 - $93ce4
+CopyrightGfx: ; 93ce4 (24:7ce4)
+	dw $24
+	INCBIN "gfx/copyright.2bpp"
+
+INCBIN "baserom.gbc",$93f26,$94000 - $93f26
 
 SECTION "bank25",ROMX,BANK[$25]
 Laboratory1Gfx: ; 94000 (25:4000)
