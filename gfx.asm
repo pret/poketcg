@@ -1,3 +1,643 @@
+SECTION "bank1D",ROMX,BANK[$1D]
+INCBIN "gfx/fonts.t3.1bpp"
+
+VWF: ; 76668 (1d:6668)
+INCBIN "gfx/vwf.1bpp"
+
+DuelGraphics: ; 76968 (1d:6968)
+INCBIN "gfx/duel1.t5.2bpp",$0,$1698
+
+SECTION "bank1E",ROMX,BANK[$1E]
+INCBIN "gfx/duel1.t5.2bpp",$1698,$318
+INCBIN "gfx/duel2.2bpp"
+
+rept $2b68
+db $ff
+endr
+
+SECTION "bank1F",ROMX,BANK[$1F]
+	emptybank
+
+SECTION "bank20",ROMX,BANK[$20]
+INCLUDE "engine/bank20.asm"
+
+SECTION "bank21",ROMX,BANK[$21]
+INCBIN "baserom.gbc",$84000,$87828 - $84000
+
+IshiharaTilesetGfx: ; 87828 (21:7828)
+	dw $4d
+	INCBIN "gfx/tilesets/ishihara.t3.2bpp"
+
+SolidTiles1: ; 87cfa (21:7cfa)
+	dw $4
+	INCBIN "gfx/solid_tiles.2bpp"
+
+SolidTiles2: ; 87d3c (21:7d3c)
+	dw $4
+	INCBIN "gfx/solid_tiles.2bpp"
+
+PlayerGfx: ; 87d7e (21:7d7e)
+	dw $24
+	INCBIN "gfx/trainers/player.2bpp"
+
+Unnamed1Gfx: ; 87fc0 (21:7fc0)
+	dw $2
+	INCBIN "gfx/unnamed/1.2bpp"
+
+Unnamed2Gfx: ; 87fe2 (21:7fe2)
+	dw $1
+	INCBIN "gfx/unnamed/2.2bpp"
+
+INCBIN "baserom.gbc",$87ff4,$88000 - $87ff4
+
+SECTION "bank22",ROMX,BANK[$22]
+OverworldMapTiles: ; 88000 (22:4000)
+	dw $c1
+	INCBIN "gfx/overworld_map.t15.2bpp"
+
+MasonLaboratoryTilesetGfx: ; 88c12 (22:4c12)
+	dw $97
+	INCBIN "gfx/tilesets/masonlaboratory.t9.2bpp"
+
+ClubEntranceTilesetGfx: ; 89584 (22:5584)
+	dw $81
+	INCBIN "gfx/tilesets/clubentrance.t15.2bpp"
+
+ClubLobbyTilesetGfx: ; 89d96 (22:5d96)
+	dw $78
+	INCBIN "gfx/tilesets/clublobby.t8.2bpp"
+
+FightingClubTilesetGfx: ; 8a518 (22:6518)
+	dw $63
+	INCBIN "gfx/tilesets/fightingclub.t13.2bpp"
+
+RockClubTilesetGfx: ; 8ab4a (22:6b4a)
+	dw $3c
+	INCBIN "gfx/tilesets/rockclub.t4.2bpp"
+
+WaterClubTilesetGfx: ; 8af0c (22:6f0c)
+	dw $a1
+	INCBIN "gfx/tilesets/waterclub.t15.2bpp"
+
+GrassClubTilesetGfx: ; 8b91e (22:791e)
+	dw $57
+	INCBIN "gfx/tilesets/grassclub.t9.2bpp"
+
+OWSpritePlayer: ; 8be90 (22:7e90)
+	dw $14
+	INCBIN "gfx/ow/player.2bpp"
+
+Unnamed3Gfx: ; 8bfd2 (22:7fd2)
+	dw $1
+	INCBIN "gfx/unnamed/3.2bpp"
+
+INCBIN "baserom.gbc",$8bfe4,$8C000 - $8bfe4
+
+SECTION "bank23",ROMX,BANK[$23]
+LightningClubTilesetGfx: ; 8c000 (23:4000)
+	dw $83
+	INCBIN "gfx/tilesets/lightningclub.t13.2bpp"
+
+PsychicClubTilesetGfx: ; 8c832 (23:4832)
+	dw $3a
+	INCBIN "gfx/tilesets/psychicclub.t6.2bpp"
+
+ScienceClubTilesetGfx: ; 8cbd4 (23:4bd4)
+	dw $52
+	INCBIN "gfx/tilesets/scienceclub.t14.2bpp"
+
+FireClubTilesetGfx: ; 8d0f6 (23:50f6)
+	dw $57
+	INCBIN "gfx/tilesets/fireclub.t9.2bpp"
+
+ChallengeHallTilesetGfx: ; 8d668 (23:5668)
+	dw $9d
+	INCBIN "gfx/tilesets/challengehall.t3.2bpp"
+
+PokemonDomeEntranceTilesetGfx: ; 8e03a (23:603a)
+	dw $4e
+	INCBIN "gfx/tilesets/pokemondomeentrance.t2.2bpp"
+
+PokemonDomeTilesetGfx: ; 8e51c (23:651c)
+	dw $cf
+	INCBIN "gfx/tilesets/pokemondome.t1.2bpp"
+
+HallOfHonorTilesetGfx: ; 8f20e (23:720e)
+	dw $79
+	INCBIN "gfx/tilesets/hallofhonor.t7.2bpp"
+
+MedalGfx: ; 8f9a0 (23:79a0)
+	dw $48
+	INCBIN "gfx/medals.2bpp",$0,$c0
+	INCBIN "gfx/medals.2bpp",$240,$30
+	INCBIN "gfx/medals.2bpp",$340,$10
+	INCBIN "gfx/medals.2bpp",$c0,$c0
+	INCBIN "gfx/medals.2bpp",$300,$30
+	INCBIN "gfx/medals.2bpp",$350,$10
+	INCBIN "gfx/medals.2bpp",$180,$c0
+	INCBIN "gfx/medals.2bpp",$3c0,$30
+	INCBIN "gfx/medals.2bpp",$410,$10
+	INCBIN "gfx/medals.2bpp",$2d0,$30
+	INCBIN "gfx/medals.2bpp",$2a0,$30
+	INCBIN "gfx/medals.2bpp",$270,$30
+	INCBIN "gfx/medals.2bpp",$390,$30
+	INCBIN "gfx/medals.2bpp",$360,$30
+	INCBIN "gfx/medals.2bpp",$330,$10
+	INCBIN "gfx/medals.2bpp",$450,$30
+	INCBIN "gfx/medals.2bpp",$420,$30
+	INCBIN "gfx/medals.2bpp",$3f0,$20
+
+NintendoGfx: ; 8fe22 (23:7e22)
+	dw $18
+	INCBIN "gfx/nintendo.2bpp"
+
+PoisonGfx: ; 8ffa4 (23:7fa4)
+	dw $4
+	INCBIN "gfx/poison.2bpp"
+
+INCBIN "baserom.gbc",$8ffe6,$90000 - $8ffe6
+
+SECTION "bank24",ROMX,BANK[$24]
+CardPop1Gfx: ; 90000 (24:4000)
+	dw $bd
+	INCBIN "gfx/cardpop1.t3.2bpp"
+
+CardPop2Gfx: ; 90bd2 (24:4bd2)
+	dw $6d
+	INCBIN "gfx/cardpop2.t3.2bpp"
+
+CardPop3Gfx: ; 912a4 (24:52a4)
+	dw $5d
+	INCBIN "gfx/cardpop3.t3.2bpp"
+
+Colosseum1Gfx: ; 91876 (24:5876)
+	dw $60
+	INCBIN "gfx/colosseum1.2bpp"
+
+Colosseum2Gfx: ; 91e78 (24:5e78)
+	dw $56
+	INCBIN "gfx/colosseum2.t10.2bpp"
+
+Evolution1Gfx: ; 923da (24:63da)
+	dw $60
+	INCBIN "gfx/evolution1.2bpp"
+
+Evolution2Gfx: ; 929dc (24:69dc)
+	dw $56
+	INCBIN "gfx/evolution2.t10.2bpp"
+
+Mystery1Gfx: ; 92f3e (24:6f3e)
+	dw $60
+	INCBIN "gfx/mystery1.2bpp"
+
+Mystery2Gfx: ; 93540 (24:7540)
+	dw $56
+	INCBIN "gfx/mystery2.t10.2bpp"
+
+RonaldGfx: ; 93aa2 (24:7aa2)
+	dw $24
+	INCBIN "gfx/trainers/ronald.2bpp"
+
+CopyrightGfx: ; 93ce4 (24:7ce4)
+	dw $24
+	INCBIN "gfx/copyright.2bpp"
+
+HelpDeskLadyGfx: ; 93f26 (24:7f26)
+	dw $8
+	INCBIN "gfx/ow/help_desk_lady.2bpp"
+
+Unnamed4Gfx: ; 93fa8 (24:7fa8)
+	dw $3
+	INCBIN "gfx/unnamed/4.2bpp"
+
+Unnamed5Gfx: ; 93fda (24:7fda)
+	dw $2
+	INCBIN "gfx/unnamed/5.2bpp"
+
+rept $4
+db $ff
+endr
+
+SECTION "bank25",ROMX,BANK[$25]
+Laboratory1Gfx: ; 94000 (25:4000)
+	dw $60
+	INCBIN "gfx/laboratory1.2bpp"
+
+Laboratory2Gfx: ; 94602 (25:4602)
+	dw $56
+	INCBIN "gfx/laboratory2.t10.2bpp"
+
+CharizardIntro1Gfx: ; 94b64 (25:4b64)
+	dw $60
+	INCBIN "gfx/charizardintro1.2bpp"
+
+CharizardIntro2Gfx: ; 95166 (25:5166)
+	dw $60
+	INCBIN "gfx/charizardintro2.2bpp"
+
+ScytherIntro1Gfx: ; 95768 (25:5768)
+	dw $60
+	INCBIN "gfx/scytherintro1.2bpp"
+
+ScytherIntro2Gfx: ; 95d6a (25:5d6a)
+	dw $60
+	INCBIN "gfx/scytherintro2.2bpp"
+
+AerodactylIntro1Gfx: ; 9636c (25:636c)
+	dw $60
+	INCBIN "gfx/aerodactylintro1.2bpp"
+
+AerodactylIntro2Gfx: ; 9696e (25:696e)
+	dw $60
+	INCBIN "gfx/aerodactylintro2.2bpp"
+
+Titlescreen1Gfx: ; 96f70 (25:6f70)
+	dw $61
+	INCBIN "gfx/titlescreens/titlescreen1.t15.2bpp"
+
+Titlescreen2Gfx: ; 97582 (25:7582)
+	dw $61
+	INCBIN "gfx/titlescreens/titlescreen2.t15.2bpp"
+
+CompaniesGfx: ; 97b94 (25:7b94)
+	dw $31
+	INCBIN "gfx/companies.2bpp"
+
+RonaldOWGfx: ; 97ea6 (25:7ea6)
+	dw $14
+	INCBIN "gfx/ow/ronald.2bpp"
+
+INCBIN "baserom.gbc",$97fe8,$98000 - $97fe8
+
+SECTION "bank26",ROMX,BANK[$26]
+Titlescreen3Gfx: ; 98000 (26:4000)
+	dw $f4
+	INCBIN "gfx/titlescreens/titlescreen3.t12.2bpp"
+
+Titlescreen4Gfx: ; 98f42 (26:4f42)
+	dw $13b
+	INCBIN "gfx/titlescreens/titlescreen4.t5.2bpp"
+
+Titlescreen5Gfx: ; 9a2f4 (26:62f4)
+	dw $dc
+	INCBIN "gfx/titlescreens/titlescreen5.t4.2bpp"
+
+Titlescreen6Gfx: ; 9b0b6 (26:70b6)
+	dw $d4
+	INCBIN "gfx/titlescreens/titlescreen6.t12.2bpp"
+
+DoctorMasonOWGfx: ; 9bdf8 (26:7df8)
+	dw $14
+	INCBIN "gfx/ow/doctormason.2bpp"
+
+OverworldMapOAMGfx: ; 9bf3a (26:7f3a)
+	dw $8
+	INCBIN "gfx/ow_map_oam.2bpp"
+
+Unnamed6Gfx: ; 9bfbc (26:7fbc)
+	dw $3
+	INCBIN "gfx/unnamed/6.2bpp"
+
+Unnamed7Gfx: ; 9bfee (26:7fee)
+	dw $1
+	INCBIN "gfx/unnamed/7.2bpp"
+
+SECTION "bank27",ROMX,BANK[$27]
+SamGfx: ; 9c000 (27:4000)
+	dw $24
+	INCBIN "gfx/trainers/sam.2bpp"
+
+ImakuniGfx: ; 9c242 (27:4242)
+	dw $24
+	INCBIN "gfx/trainers/imakuni.2bpp"
+
+NikkiGfx: ; 9c484 (27:4484)
+	dw $24
+	INCBIN "gfx/trainers/nikki.2bpp"
+
+RickGfx: ; 9c6c6 (27:46c6)
+	dw $24
+	INCBIN "gfx/trainers/rick.2bpp"
+
+KenGfx: ; 9c908 (27:4908)
+	dw $24
+	INCBIN "gfx/trainers/ken.2bpp"
+
+AmyGfx: ; 9cb4a (27:4b4a)
+	dw $24
+	INCBIN "gfx/trainers/amy.2bpp"
+
+IsaacGfx: ; 9cd8c (27:4d8c)
+	dw $24
+	INCBIN "gfx/trainers/isaac.2bpp"
+
+MitchGfx: ; 9cfce (27:4fce)
+	dw $24
+	INCBIN "gfx/trainers/mitch.2bpp"
+
+GeneGfx: ; 9d210 (27:5210)
+	dw $24
+	INCBIN "gfx/trainers/gene.2bpp"
+
+MurrayGfx: ; 9d452 (27:5452)
+	dw $24
+	INCBIN "gfx/trainers/murray.2bpp"
+
+CourtneyGfx: ; 9d694 (27:5694)
+	dw $24
+	INCBIN "gfx/trainers/courtney.2bpp"
+
+SteveGfx: ; 9d8d6 (27:58d6)
+	dw $24
+	INCBIN "gfx/trainers/steve.2bpp"
+
+JackGfx: ; 9db18 (27:5b18)
+	dw $24
+	INCBIN "gfx/trainers/jack.2bpp"
+
+RodGfx: ; 9dd5a (27:5d5a)
+	dw $24
+	INCBIN "gfx/trainers/rod.2bpp"
+
+JosephGfx: ; 9df9c (27:5f9c)
+	dw $24
+	INCBIN "gfx/trainers/joseph.2bpp"
+
+DavidGfx: ; 9e1de (27:61de)
+	dw $24
+	INCBIN "gfx/trainers/david.2bpp"
+
+ErikGfx: ; 9e420 (27:6420)
+	dw $24
+	INCBIN "gfx/trainers/erik.2bpp"
+
+JohnGfx: ; 9e662 (27:6662)
+	dw $24
+	INCBIN "gfx/trainers/john.2bpp"
+
+AdamGfx: ; 9e8a4 (27:68a4)
+	dw $24
+	INCBIN "gfx/trainers/adam.2bpp"
+
+JonathanGfx: ; 9eae6 (27:6ae6)
+	dw $24
+	INCBIN "gfx/trainers/jonathan.2bpp"
+
+JoshuaGfx: ; 9ed28 (27:6d28)
+	dw $24
+	INCBIN "gfx/trainers/joshua.2bpp"
+
+NicholasGfx: ; 9ef6a (27:6f6a)
+	dw $24
+	INCBIN "gfx/trainers/nicholas.2bpp"
+
+BrandonGfx: ; 9f1ac (27:71ac)
+	dw $24
+	INCBIN "gfx/trainers/brandon.2bpp"
+
+MatthewGfx: ; 9f3ee (27:73ee)
+	dw $24
+	INCBIN "gfx/trainers/matthew.2bpp"
+
+RyanGfx: ; 9f630 (27:7630)
+	dw $24
+	INCBIN "gfx/trainers/ryan.2bpp"
+
+AndrewGfx: ; 9f872 (27:7872)
+	dw $24
+	INCBIN "gfx/trainers/andrew.2bpp"
+
+ChrisGfx: ; 9fab4 (27:7ab4)
+	dw $24
+	INCBIN "gfx/trainers/chris.2bpp"
+
+MichaelGfx: ; 9fcf6 (27:7cf6)
+	dw $24
+	INCBIN "gfx/trainers/michael.2bpp"
+
+Unnamed8Gfx: ; 9ff38 (27:7f38)
+	dw $a
+	INCBIN "gfx/unnamed/8.2bpp"
+
+Unnamed9Gfx: ; 9ffda (27:7fda)
+	dw $2
+	INCBIN "gfx/unnamed/9.2bpp"
+
+rept $4
+db $ff
+endr
+
+SECTION "bank28",ROMX,BANK[$28]
+DanielGfx: ; a0000 (28:4000)
+	dw $24
+	INCBIN "gfx/trainers/daniel.2bpp"
+
+RobertGfx: ; a0242 (28:4242)
+	dw $24
+	INCBIN "gfx/trainers/robert.2bpp"
+
+BrittanyGfx: ; a0484 (28:4484)
+	dw $24
+	INCBIN "gfx/trainers/brittany.2bpp"
+
+KristinGfx: ; a06c6 (28:46c6)
+	dw $24
+	INCBIN "gfx/trainers/kristin.2bpp"
+
+HeatherGfx: ; a0908 (28:4908)
+	dw $24
+	INCBIN "gfx/trainers/heather.2bpp"
+
+SaraGfx: ; a0b4a (28:4b4a)
+	dw $24
+	INCBIN "gfx/trainers/sara.2bpp"
+
+AmandaGfx: ; a0d8c (28:4d8c)
+	dw $24
+	INCBIN "gfx/trainers/amanda.2bpp"
+
+JenniferGfx: ; a0fce (28:4fce)
+	dw $24
+	INCBIN "gfx/trainers/jennifer.2bpp"
+
+JessicaGfx: ; a1210 (28:5210)
+	dw $24
+	INCBIN "gfx/trainers/jessica.2bpp"
+
+StephanieGfx: ; a1452 (28:5452)
+	dw $24
+	INCBIN "gfx/trainers/stephanie.2bpp"
+
+AaronGfx: ; a1694 (28:5694)
+	dw $24
+	INCBIN "gfx/trainers/aaron.2bpp"
+
+OWSprite0: ; a18d6 (28:58d6)
+	dw $14
+	INCBIN "gfx/ow/sprite0.2bpp"
+
+OWSprite1: ; a1a18 (28:5a18)
+	dw $14
+	INCBIN "gfx/ow/sprite1.2bpp"
+
+OWSprite2: ; a1b5a (28:5b5a)
+	dw $14
+	INCBIN "gfx/ow/sprite2.2bpp"
+
+OWSprite3: ; a1c9c (28:5c9c)
+	dw $14
+	INCBIN "gfx/ow/sprite3.2bpp"
+
+OWSprite4: ; a1dde (28:5dde)
+	dw $14
+	INCBIN "gfx/ow/sprite4.2bpp"
+
+OWSprite5: ; a1f20 (28:5f20)
+	dw $1b
+	INCBIN "gfx/ow/sprite5.2bpp"
+
+OWSprite6: ; a20d2 (28:60d2)
+	dw $14
+	INCBIN "gfx/ow/sprite6.2bpp"
+
+OWSprite7: ; a2214 (28:6214)
+	dw $14
+	INCBIN "gfx/ow/sprite7.2bpp"
+
+OWSprite8: ; a2356 (28:6356)
+	dw $14
+	INCBIN "gfx/ow/sprite8.2bpp"
+
+OWSprite9: ; a2498 (28:6498)
+	dw $14
+	INCBIN "gfx/ow/sprite9.2bpp"
+
+OWSprite10: ; a25da (28:65da)
+	dw $14
+	INCBIN "gfx/ow/sprite10.2bpp"
+
+OWSprite11: ; a271c (28:671c)
+	dw $14
+	INCBIN "gfx/ow/sprite11.2bpp"
+
+OWSprite12: ; a285e (28:685e)
+	dw $14
+	INCBIN "gfx/ow/sprite12.2bpp"
+
+OWSprite13: ; a29a0 (28:69a0)
+	dw $14
+	INCBIN "gfx/ow/sprite13.2bpp"
+
+OWSprite14: ; a2ae2 (28:6ae2)
+	dw $14
+	INCBIN "gfx/ow/sprite14.2bpp"
+
+OWSprite15: ; a2c24 (28:6c24)
+	dw $14
+	INCBIN "gfx/ow/sprite15.2bpp"
+
+OWSprite16: ; a2d66 (28:6d66)
+	dw $14
+	INCBIN "gfx/ow/sprite16.2bpp"
+
+OWSprite17: ; a2ea8 (28:6ea8)
+	dw $14
+	INCBIN "gfx/ow/sprite17.2bpp"
+
+OWSprite18: ; a2fea (28:6fea)
+	dw $14
+	INCBIN "gfx/ow/sprite18.2bpp"
+
+OWSprite19: ; a312c (28:712c)
+	dw $14
+	INCBIN "gfx/ow/sprite19.2bpp"
+
+OWSprite20: ; a326e (28:726e)
+	dw $14
+	INCBIN "gfx/ow/sprite20.2bpp"
+
+OWSprite21: ; a33b0 (28:73b0)
+	dw $14
+	INCBIN "gfx/ow/sprite21.2bpp"
+
+OWSprite22: ; a34f2 (28:74f2)
+	dw $14
+	INCBIN "gfx/ow/sprite22.2bpp"
+
+OWSprite23: ; a3634 (28:7634)
+	dw $14
+	INCBIN "gfx/ow/sprite23.2bpp"
+
+OWSprite24: ; a3776 (28:7776)
+	dw $14
+	INCBIN "gfx/ow/sprite24.2bpp"
+
+OWSprite25: ; a38b8 (28:78b8)
+	dw $14
+	INCBIN "gfx/ow/sprite25.2bpp"
+
+OWSprite26: ; a39fa (28:79fa)
+	dw $14
+	INCBIN "gfx/ow/sprite26.2bpp"
+
+OWSprite27: ; a3b3c (28:7b3c)
+	dw $14
+	INCBIN "gfx/ow/sprite27.2bpp"
+
+OWSprite28: ; a3c7e (28:7c7e)
+	dw $14
+	INCBIN "gfx/ow/sprite28.2bpp"
+
+OWSprite29: ; a3dc0 (28:7dc0)
+	dw $14
+	INCBIN "gfx/ow/sprite29.2bpp"
+
+Unnamed10Gfx: ; a3f02 (28:7f02)
+	dw $b
+	INCBIN "gfx/unnamed/10.2bpp"
+
+Unnamed11Gfx: ; a3fb4 (28:7fb4)
+	dw $4
+	INCBIN "gfx/unnamed/11.2bpp"
+
+INCBIN "baserom.gbc",$a3ff6,$a4000 - $a3ff6
+
+SECTION "bank29",ROMX,BANK[$29]
+OWSprite30: ; a4000 (29:4000)
+	dw $14
+	INCBIN "gfx/ow/sprite30.2bpp"
+
+OWSprite31: ; a4142 (29:4142)
+	dw $14
+	INCBIN "gfx/ow/sprite31.2bpp"
+
+OWSprite32: ; a4284 (29:4284)
+	dw $14
+	INCBIN "gfx/ow/sprite32.2bpp"
+
+INCBIN "baserom.gbc",$a43c6,$a8000 - $a43c6
+
+SECTION "bank2A",ROMX,BANK[$2A]
+INCBIN "baserom.gbc",$A8000,$4000
+
+SECTION "bank2B",ROMX,BANK[$2B]
+INCBIN "baserom.gbc",$AC000,$4000
+
+SECTION "bank2C",ROMX,BANK[$2C]
+INCBIN "baserom.gbc",$B0000,$4000
+
+SECTION "bank2D",ROMX,BANK[$2D]
+INCBIN "baserom.gbc",$B4000,$4000
+
+SECTION "bank2E",ROMX,BANK[$2E]
+INCBIN "baserom.gbc",$B8000,$4000
+
+SECTION "bank2F",ROMX,BANK[$2F]
+	emptybank
+
+SECTION "bank30",ROMX,BANK[$30]
+	emptybank
+
 SECTION "bank31",ROMX,BANK[$31]
 GrassEnergyCardGfx: ; c4000 (31:4000)
 	INCBIN "gfx/cards/grassenergy.8x6.2bpp"
@@ -1608,3 +2248,6 @@ RecycleCardGfx: ; ef388 (3b:7388)
 rept $970
 db $ff
 endr
+
+SECTION "bank3C",ROMX,BANK[$3C]
+	emptybank
