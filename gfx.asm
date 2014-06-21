@@ -5,11 +5,11 @@ VWF: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
 
 DuelGraphics: ; 76968 (1d:6968)
-INCBIN "gfx/duel1.t5.2bpp",$0,$1698
+INCBIN "gfx/duel/duel1.t5.2bpp",$0,$1698
 
 SECTION "bank1E",ROMX,BANK[$1E]
-INCBIN "gfx/duel1.t5.2bpp",$1698,$318
-INCBIN "gfx/duel2.2bpp"
+INCBIN "gfx/duel/duel1.t5.2bpp",$1698,$318
+INCBIN "gfx/duel/duel2.2bpp"
 
 rept $2b68
 db $ff
@@ -153,7 +153,7 @@ NintendoGfx: ; 8fe22 (23:7e22)
 
 PoisonGfx: ; 8ffa4 (23:7fa4)
 	dw $4
-	INCBIN "gfx/poison.2bpp"
+	INCBIN "gfx/duel/poison.2bpp"
 
 INCBIN "baserom.gbc",$8ffe6,$90000 - $8ffe6
 
@@ -172,27 +172,27 @@ CardPop3Gfx: ; 912a4 (24:52a4)
 
 Colosseum1Gfx: ; 91876 (24:5876)
 	dw $60
-	INCBIN "gfx/colosseum1.2bpp"
+	INCBIN "gfx/boosterpacks/colosseum1.2bpp"
 
 Colosseum2Gfx: ; 91e78 (24:5e78)
 	dw $56
-	INCBIN "gfx/colosseum2.t10.2bpp"
+	INCBIN "gfx/boosterpacks/colosseum2.t10.2bpp"
 
 Evolution1Gfx: ; 923da (24:63da)
 	dw $60
-	INCBIN "gfx/evolution1.2bpp"
+	INCBIN "gfx/boosterpacks/evolution1.2bpp"
 
 Evolution2Gfx: ; 929dc (24:69dc)
 	dw $56
-	INCBIN "gfx/evolution2.t10.2bpp"
+	INCBIN "gfx/boosterpacks/evolution2.t10.2bpp"
 
 Mystery1Gfx: ; 92f3e (24:6f3e)
 	dw $60
-	INCBIN "gfx/mystery1.2bpp"
+	INCBIN "gfx/boosterpacks/mystery1.2bpp"
 
 Mystery2Gfx: ; 93540 (24:7540)
 	dw $56
-	INCBIN "gfx/mystery2.t10.2bpp"
+	INCBIN "gfx/boosterpacks/mystery2.t10.2bpp"
 
 RonaldGfx: ; 93aa2 (24:7aa2)
 	dw $24
@@ -221,43 +221,43 @@ endr
 SECTION "bank25",ROMX,BANK[$25]
 Laboratory1Gfx: ; 94000 (25:4000)
 	dw $60
-	INCBIN "gfx/laboratory1.2bpp"
+	INCBIN "gfx/boosterpacks/laboratory1.2bpp"
 
 Laboratory2Gfx: ; 94602 (25:4602)
 	dw $56
-	INCBIN "gfx/laboratory2.t10.2bpp"
+	INCBIN "gfx/boosterpacks/laboratory2.t10.2bpp"
 
 CharizardIntro1Gfx: ; 94b64 (25:4b64)
 	dw $60
-	INCBIN "gfx/charizardintro1.2bpp"
+	INCBIN "gfx/boosterpacks/charizardintro1.2bpp"
 
 CharizardIntro2Gfx: ; 95166 (25:5166)
 	dw $60
-	INCBIN "gfx/charizardintro2.2bpp"
+	INCBIN "gfx/boosterpacks/charizardintro2.2bpp"
 
 ScytherIntro1Gfx: ; 95768 (25:5768)
 	dw $60
-	INCBIN "gfx/scytherintro1.2bpp"
+	INCBIN "gfx/boosterpacks/scytherintro1.2bpp"
 
 ScytherIntro2Gfx: ; 95d6a (25:5d6a)
 	dw $60
-	INCBIN "gfx/scytherintro2.2bpp"
+	INCBIN "gfx/boosterpacks/scytherintro2.2bpp"
 
 AerodactylIntro1Gfx: ; 9636c (25:636c)
 	dw $60
-	INCBIN "gfx/aerodactylintro1.2bpp"
+	INCBIN "gfx/boosterpacks/aerodactylintro1.2bpp"
 
 AerodactylIntro2Gfx: ; 9696e (25:696e)
 	dw $60
-	INCBIN "gfx/aerodactylintro2.2bpp"
+	INCBIN "gfx/boosterpacks/aerodactylintro2.2bpp"
 
 Titlescreen1Gfx: ; 96f70 (25:6f70)
 	dw $61
-	INCBIN "gfx/titlescreens/titlescreen1.t15.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen1.t15.2bpp"
 
 Titlescreen2Gfx: ; 97582 (25:7582)
 	dw $61
-	INCBIN "gfx/titlescreens/titlescreen2.t15.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen2.t15.2bpp"
 
 CompaniesGfx: ; 97b94 (25:7b94)
 	dw $31
@@ -272,19 +272,19 @@ INCBIN "baserom.gbc",$97fe8,$98000 - $97fe8
 SECTION "bank26",ROMX,BANK[$26]
 Titlescreen3Gfx: ; 98000 (26:4000)
 	dw $f4
-	INCBIN "gfx/titlescreens/titlescreen3.t12.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen3.t12.2bpp"
 
 Titlescreen4Gfx: ; 98f42 (26:4f42)
 	dw $13b
-	INCBIN "gfx/titlescreens/titlescreen4.t5.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen4.t5.2bpp"
 
 Titlescreen5Gfx: ; 9a2f4 (26:62f4)
 	dw $dc
-	INCBIN "gfx/titlescreens/titlescreen5.t4.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen5.t4.2bpp"
 
 Titlescreen6Gfx: ; 9b0b6 (26:70b6)
 	dw $d4
-	INCBIN "gfx/titlescreens/titlescreen6.t12.2bpp"
+	INCBIN "gfx/titlescreen/titlescreen6.t12.2bpp"
 
 DoctorMasonOWGfx: ; 9bdf8 (26:7df8)
 	dw $14
@@ -615,10 +615,266 @@ OWSprite32: ; a4284 (29:4284)
 	dw $14
 	INCBIN "gfx/ow/sprite32.2bpp"
 
-INCBIN "baserom.gbc",$a43c6,$a8000 - $a43c6
+Duel0Gfx: ; a43c6 (29:43c6)
+	dw $16
+	INCBIN "gfx/duel/0.2bpp"
+
+Duel1Gfx: ; a4528 (29:4528)
+	dw $06
+	INCBIN "gfx/duel/1.2bpp"
+
+Duel2Gfx: ; a458a (29:458a)
+	dw $08
+	INCBIN "gfx/duel/2.2bpp"
+
+Duel3Gfx: ; a460c (29:460c)
+	dw $09
+	INCBIN "gfx/duel/3.2bpp"
+
+Duel4Gfx: ; a469e (29:469e)
+	dw $12
+	INCBIN "gfx/duel/4.2bpp"
+
+Duel5Gfx: ; a47c0 (29:47c0)
+	dw $09
+	INCBIN "gfx/duel/5.2bpp"
+
+Duel6Gfx: ; a4852 (29:4852)
+	dw $11
+	INCBIN "gfx/duel/6.2bpp"
+
+Duel7Gfx: ; a4964 (29:4964)
+	dw $2d
+	INCBIN "gfx/duel/7.2bpp"
+
+Duel8Gfx: ; a4c36 (29:4c36)
+	dw $0d
+	INCBIN "gfx/duel/8.2bpp"
+
+Duel9Gfx: ; a4d08 (29:4d08)
+	dw $1c
+	INCBIN "gfx/duel/9.2bpp"
+
+Duel10Gfx: ; a4eca (29:4eca)
+	dw $4c
+	INCBIN "gfx/duel/10.2bpp"
+
+Duel11Gfx: ; a538c (29:538c)
+	dw $1b
+	INCBIN "gfx/duel/11.2bpp"
+
+Duel12Gfx: ; a553e (29:553e)
+	dw $07
+	INCBIN "gfx/duel/12.2bpp"
+
+Duel13Gfx: ; a55b0 (29:55b0)
+	dw $0c
+	INCBIN "gfx/duel/13.2bpp"
+
+Duel14Gfx: ; a5672 (29:5672)
+	dw $22
+	INCBIN "gfx/duel/14.2bpp"
+
+Duel15Gfx: ; a5894 (29:5894)
+	dw $20
+	INCBIN "gfx/duel/15.2bpp"
+
+Duel16Gfx: ; a5a96 (29:5a96)
+	dw $0a
+	INCBIN "gfx/duel/16.2bpp"
+
+Duel17Gfx: ; a5b38 (29:5b38)
+	dw $25
+	INCBIN "gfx/duel/17.2bpp"
+
+Duel18Gfx: ; a5d8a (29:5d8a)
+	dw $18
+	INCBIN "gfx/duel/18.2bpp"
+
+Duel19Gfx: ; a5f0c (29:5f0c)
+	dw $1b
+	INCBIN "gfx/duel/19.2bpp"
+
+Duel20Gfx: ; a60be (29:60be)
+	dw $08
+	INCBIN "gfx/duel/20.2bpp"
+
+Duel21Gfx: ; a6140 (29:6140)
+	dw $0d
+	INCBIN "gfx/duel/21.2bpp"
+
+Duel22Gfx: ; a6212 (29:6212)
+	dw $22
+	INCBIN "gfx/duel/22.2bpp"
+
+Duel23Gfx: ; a6434 (29:6434)
+	dw $0c
+	INCBIN "gfx/duel/23.2bpp"
+
+Duel24Gfx: ; a64f6 (29:64f6)
+	dw $25
+	INCBIN "gfx/duel/24.2bpp"
+
+Duel25Gfx: ; a6748 (29:6748)
+	dw $22
+	INCBIN "gfx/duel/25.2bpp"
+
+Duel26Gfx: ; a696a (29:696a)
+	dw $0c
+	INCBIN "gfx/duel/26.2bpp"
+
+Duel27Gfx: ; a6a2c (29:6a2c)
+	dw $4c
+	INCBIN "gfx/duel/27.2bpp"
+
+Duel28Gfx: ; a6eee (29:6eee)
+	dw $08
+	INCBIN "gfx/duel/28.2bpp"
+
+Duel29Gfx: ; a6f70 (29:6f70)
+	dw $07
+	INCBIN "gfx/duel/29.2bpp"
+
+Duel30Gfx: ; a6fe2 (29:6fe2)
+	dw $1a
+	INCBIN "gfx/duel/30.2bpp"
+
+Duel31Gfx: ; a7184 (29:7184)
+	dw $0a
+	INCBIN "gfx/duel/31.2bpp"
+
+Duel32Gfx: ; a7226 (29:7226)
+	dw $2e
+	INCBIN "gfx/duel/32.2bpp"
+
+Duel33Gfx: ; a7508 (29:7508)
+	dw $08
+	INCBIN "gfx/duel/33.2bpp"
+
+Duel34Gfx: ; a758a (29:758a)
+	dw $07
+	INCBIN "gfx/duel/34.2bpp"
+
+Duel35Gfx: ; a75fc (29:75fc)
+	dw $1c
+	INCBIN "gfx/duel/35.2bpp"
+
+Duel36Gfx: ; a77be (29:77be)
+	dw $08
+	INCBIN "gfx/duel/36.2bpp"
+
+Duel37Gfx: ; a7840 (29:7840)
+	dw $0b
+	INCBIN "gfx/duel/37.2bpp"
+
+Duel38Gfx: ; a78f2 (29:78f2)
+	dw $1c
+	INCBIN "gfx/duel/38.2bpp"
+
+Duel39Gfx: ; a7ab4 (29:7ab4)
+	dw $16
+	INCBIN "gfx/duel/39.2bpp"
+
+Duel40Gfx: ; a7c16 (29:7c16)
+	dw $10
+	INCBIN "gfx/duel/40.2bpp"
+
+Duel41Gfx: ; a7d18 (29:7d18)
+	dw $0f
+	INCBIN "gfx/duel/41.2bpp"
+
+Duel42Gfx: ; a7e0a (29:7e0a)
+	dw $07
+	INCBIN "gfx/duel/42.2bpp"
+
+Duel43Gfx: ; a7e7c (29:7e7c)
+	dw $0a
+	INCBIN "gfx/duel/43.2bpp"
+
+Duel44Gfx: ; a7f1e (29:7f1e)
+	dw $09
+	INCBIN "gfx/duel/44.2bpp"
+
+Duel45Gfx: ; a7fb0 (29:7fb0)
+	dw $03
+	INCBIN "gfx/duel/45.2bpp"
+
+INCBIN "baserom.gbc",$a7fe2,$a8000 - $a7fe2
 
 SECTION "bank2A",ROMX,BANK[$2A]
-INCBIN "baserom.gbc",$A8000,$4000
+Duel46Gfx: ; a8000 (2a:4000)
+	dw $08
+	INCBIN "gfx/duel/46.2bpp"
+
+Duel47Gfx: ; a8082 (2a:4082)
+	dw $0f
+	INCBIN "gfx/duel/47.2bpp"
+
+Duel48Gfx: ; a8174 (2a:4174)
+	dw $03
+	INCBIN "gfx/duel/48.2bpp"
+
+Duel49Gfx: ; a81a6 (2a:41a6)
+	dw $05
+	INCBIN "gfx/duel/49.2bpp"
+
+Duel50Gfx: ; a81f8 (2a:41f8)
+	dw $17
+	INCBIN "gfx/duel/50.2bpp"
+
+Duel51Gfx: ; a836a (2a:436a)
+	dw $36
+	INCBIN "gfx/duel/51.2bpp"
+
+Duel52Gfx: ; a86cc (2a:46cc)
+	dw $0b
+	INCBIN "gfx/duel/52.2bpp"
+
+Duel53Gfx: ; a877e (2a:477e)
+	dw $06
+	INCBIN "gfx/duel/53.2bpp"
+
+Duel54Gfx: ; a87e0 (2a:47e0)
+	dw $16
+	INCBIN "gfx/duel/54.2bpp"
+
+BoosterPackOAMGfx: ; a8942 (2a:4942)
+	dw $20
+	INCBIN "gfx/boosterpacks/boosterpack_oam.2bpp"
+
+PressStartGfx: ; a8b44 (2a:4b44)
+	dw $14
+	INCBIN "gfx/titlescreen/press_start.2bpp"
+
+GrassGfx: ; a8c86 (2a:4c86)
+	dw $04
+	INCBIN "gfx/titlescreen/grass.2bpp"
+
+FireGfx: ; a8cc8 (2a:4cc8)
+	dw $04
+	INCBIN "gfx/titlescreen/fire.2bpp"
+
+WaterGfx: ; a8d0a (2a:4d0a)
+	dw $04
+	INCBIN "gfx/titlescreen/water.2bpp"
+
+ColorlessGfx: ; a8d4c (2a:4d4c)
+	dw $04
+	INCBIN "gfx/titlescreen/colorless.2bpp"
+
+LightningGfx: ; a8d8e (2a:4d8e)
+	dw $04
+	INCBIN "gfx/titlescreen/lightning.2bpp"
+
+PsychicGfx: ; a8dd0 (2a:4dd0)
+	dw $04
+	INCBIN "gfx/titlescreen/psychic.2bpp"
+
+FightingGfx: ; a8e12 (2a:4e12)
+	dw $04
+	INCBIN "gfx/titlescreen/fighting.2bpp"
+
+INCBIN "baserom.gbc",$a8e54,$ac000 - $a8e54
 
 SECTION "bank2B",ROMX,BANK[$2B]
 INCBIN "baserom.gbc",$AC000,$4000
