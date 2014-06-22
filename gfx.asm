@@ -1,4 +1,5 @@
 SECTION "bank1D",ROMX,BANK[$1D]
+Fonts: ; 74000 (1d:4000)
 INCBIN "gfx/fonts.t3.1bpp"
 
 VWF: ; 76668 (1d:6668)

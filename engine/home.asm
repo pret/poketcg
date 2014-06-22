@@ -801,7 +801,7 @@ INCBIN "baserom.gbc",$06ee,$0709 - $06ee
 Func_0709: ; 0709 (0:0709)
 	jp Func_0c19
 
-Func_070c: ; 070c (0:070c)
+CopyGfxData: ; 070c (0:070c)
 	ld a, [$cabb]
 	rla
 	jr nc, .asm_726
@@ -1255,7 +1255,8 @@ Func_099c: ; 099c (0:099c)
 	jr nz, .asm_9a6
 	ret
 
-; this function affects the stack so that it returns to the pointer following the rst call
+; this function affects the stack so that it returns
+; to the pointer following the rst call
 ; similar to rst 28, except this always loads bank 1
 RST18: ; 09ae (0:09ae)
 	push hl
@@ -1301,7 +1302,8 @@ Func_09ce: ; 09ce (0:09ce)
 
 INCBIN "baserom.gbc",$09dc,$09e9 - $09dc
 
-; this function affects the stack so that it returns to the three byte pointer following the rst call
+; this function affects the stack so that it returns
+; to the three byte pointer following the rst call
 RST28: ; 09e9 (0:09e9)
 	push hl
 	push hl
@@ -1753,35 +1755,37 @@ Func_0ea6: ; 0ea6 (0:0ea6)
 
 INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
 
-Func_1072: ; 1072 (0:1072)
+; copies the deck pointed to by de to $c400 or $c480
+CopyDeckData: ; 1072 (0:1072)
 	ld hl, $c400
 	ld a, [$ff97]
 	cp $c2
 	jr z, .asm_107e
 	ld hl, $c480
 .asm_107e
+	; start by putting a terminator at the end of the deck
 	push hl
-	ld bc, $003b
+	ld bc, 59
 	add hl, bc
 	ld [hl], $0
 	pop hl
 	push hl
-.asm_1087
+.nextCard
 	ld a, [de]
 	inc de
 	ld b, a
 	or a
-	jr z, .asm_1097
+	jr z, .done
 	ld a, [de]
 	inc de
 	ld c, a
-.asm_1090
+.cardQuantityLoop
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .asm_1090
-	jr .asm_1087
-.asm_1097
+	jr nz, .cardQuantityLoop
+	jr .nextCard
+.done
 	ld hl, $cce9
 	ld a, [de]
 	inc de
@@ -1789,7 +1793,7 @@ Func_1072: ; 1072 (0:1072)
 	ld a, [de]
 	ld [hl], a
 	pop hl
-	ld bc, $003b
+	ld bc, 59
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -2131,14 +2135,14 @@ Func_210f: ; 210f (0:210f)
 	jr asm_2121
 
 Func_2119: ; 2119 (0:2119)
-	ld hl, $2968
-	ld de, $9000
-	ld b, $38
+	ld hl, DuelGraphics - Fonts
+	ld de, $9000 ; destination
+	ld b, $38 ; number of tiles
 asm_2121
-	ld a, $1d
+	ld a, BANK(Fonts)
 	call Func_0745
 	ld c, $10
-	call Func_070c
+	call CopyGfxData
 	call Func_078e
 	ret
 ; 0x212f
@@ -3390,9 +3394,43 @@ Func_2e89: ; 2e89 (0:2e89)
 	jp Func_1c7d
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$302c - $2ea9
+INCBIN "baserom.gbc",$2ea9,$2fa0 - $2ea9
 
-Func_302c: ; 302c (0:302c)
+LoadCardGfx: ; 2fa0 (0:2fa0)
+	ld a, [$ff80]
+	push af
+	push hl
+	srl h
+	srl h
+	srl h
+	ld a, BANK(GrassEnergyCardGfx)
+	add h
+	call BankswitchHome
+	pop hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	res 7, h
+	set 6, h
+	call CopyGfxData
+	ld b, $8 ; length of palette
+	ld de, $ce23
+.copyCardPalette
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .copyCardPalette
+	pop af
+	call BankswitchHome
+	ret
+; 0x2fcb
+
+INCBIN "baserom.gbc",$2fcb,$302c - $2fcb
+
+; loads the deck id in a from DeckPointers
+; sets carry flag if an invalid deck id is used
+LoadDeck: ; 302c (0:302c)
 	push hl
 	ld l, a
 	ld h, $0
@@ -3408,14 +3446,14 @@ Func_302c: ; 302c (0:302c)
 	ld d, [hl]
 	ld a, d
 	or e
-	jr z, .asm_304e
-	call Func_1072
+	jr z, .nullPointer
+	call CopyDeckData
 	pop af
 	call BankswitchHome
 	pop hl
 	or a
 	ret
-.asm_304e
+.nullPointer
 	pop af
 	call BankswitchHome
 	pop hl
@@ -3751,7 +3789,7 @@ Func_395a: ; 395a (0:395a)
 	push af
 	ld a, [$d4c6]
 	call BankswitchHome
-	call Func_070c
+	call CopyGfxData
 	pop af
 	call BankswitchHome
 	ret

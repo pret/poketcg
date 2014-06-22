@@ -61,7 +61,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	push de
 	push bc
 	push hl
-	call Func_302c
+	call LoadDeck
 	jr c, .asm_19a0e
 	call Func_19a12
 	pop hl
