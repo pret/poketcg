@@ -825,7 +825,7 @@ Duel50Gfx: ; a81f8 (2a:41f8)
 
 Duel51Gfx: ; a836a (2a:436a)
 	dw $36
-	INCBIN "gfx/duel/51.2bpp"
+	INCBIN "gfx/duel/51.t10.2bpp"
 
 Duel52Gfx: ; a86cc (2a:46cc)
 	dw $0b
