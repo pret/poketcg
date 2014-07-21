@@ -154,7 +154,7 @@ Func_70136: ; 70136 (1c:4136)
 	di
 	ld hl, Unknown_701a0
 	call Func_0b20
-	call Func_028a
+	call DisableLCD
 	ld a, [$cabb]
 	and $41
 	or $1
@@ -177,7 +177,7 @@ Func_70177: ; 70177 (1c:4177)
 	push bc
 	push de
 	push hl
-	call Func_0277
+	call EnableLCD
 	pop hl
 	call Func_0b20
 	ld a, [$d41d]
@@ -188,7 +188,7 @@ Func_70177: ; 70177 (1c:4177)
 	call Func_040c
 	ld a, [$d420]
 	ld [$cabb], a
-	call Func_028a
+	call DisableLCD
 	ei
 	pop de
 	pop bc
@@ -204,7 +204,7 @@ INCBIN "baserom.gbc",$701b0,$701c0 - $701b0
 Func_701c0: ; 701c0 (1c:41c0)
 	push hl
 	push bc
-	call Func_028a
+	call DisableLCD
 	xor a
 	ld c, $10
 	ld hl, $9000

@@ -17,7 +17,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
-	call Func_028a
+	call DisableLCD
 	call $4000
 	ld a, $fa
 	ld [$d114], a
@@ -65,7 +65,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, [$d291]
 	push af
 	push bc
-	call Func_028a
+	call DisableLCD
 	call $4000
 	xor a
 	ld [$ccf3], a
@@ -112,7 +112,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call Func_37a0
 	ld hl, $0389
 	call $2c73
-	call Func_028a
+	call DisableLCD
 	call Func_1288c
 	call Func_099c
 	ld a, $1

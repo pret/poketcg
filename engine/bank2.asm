@@ -663,7 +663,7 @@ Func_9168: ; 9168 (2:5168)
 	ld [$b700], a
 	call Func_07be
 	call Func_9326
-	call Func_0277
+	call EnableLCD
 	ret
 
 Unknown_9242: ; 9242 (2:5242)

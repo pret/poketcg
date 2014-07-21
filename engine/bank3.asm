@@ -1,5 +1,5 @@
 LoadMap: ; c000 (3:4000)
-	call Func_028a
+	call DisableLCD
 	call Func_07b6
 	bank1call Func_6785
 	call Func_07be
@@ -343,9 +343,9 @@ Func_c280: ; c280 (3:4280)
 	call Func_099c
 	ld hl, $cac0
 	inc [hl]
-	call Func_0277
+	call EnableLCD
 	call Func_3c48
-	call Func_028a
+	call DisableLCD
 	farcall Func_12871
 	ret
 
@@ -372,9 +372,9 @@ Func_c2a3: ; c2a3 (3:42a3)
 	call Func_099c
 	ld a, $1
 	ld [$cac0], a
-	call Func_0277
+	call EnableLCD
 	call Func_3c48
-	call Func_028a
+	call DisableLCD
 	pop de
 	pop bc
 	pop hl
@@ -387,7 +387,7 @@ Func_c2db: ; c2db (3:42db)
 	push hl
 	push bc
 	push de
-	call Func_028a
+	call DisableLCD
 	call Func_02b9
 	call Func_3ca0
 	farcall Func_12bcd
@@ -1398,7 +1398,7 @@ DeckMachine_d336: ; d336 (3:5336)
 	ld [$ff92], a
 	ld [$ff93], a
 	farcall Func_1288c
-	call Func_0277
+	call EnableLCD
 	pop bc
 	ld a, c
 	or a

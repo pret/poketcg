@@ -189,7 +189,7 @@ INCBIN "baserom.gbc",$1d0fa,$1d11c - $1d0fa
 Func_1d11c: ; 1d11c (7:511c)
 	ld a, MUSIC_PCMAINMENU
 	call PlaySong
-	call Func_028a
+	call DisableLCD
 	farcallx $4, $4000
 	ld de, $308f
 	call Func_2275
@@ -243,7 +243,7 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 	call Func_378a
 	or a
 	jr nz, .asm_1d39f
-	call Func_028a
+	call DisableLCD
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
 	ld bc, $0000
@@ -253,7 +253,7 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 .asm_1d39f
 	call Func_3ca0
 	call Func_1d3a9
-	call Func_0277
+	call EnableLCD
 	ret
 
 Func_1d3a9: ; 1d3a9 (7:53a9)
@@ -302,9 +302,9 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call $3ca4
 	call $02d4
 	call $5758
-	call Func_0277
+	call EnableLCD
 	call Func_3c48
-	call Func_028a
+	call DisableLCD
 	ld hl, $cabb
 	set 1, [hl]
 	call Func_3bdb

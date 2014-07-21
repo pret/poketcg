@@ -41,13 +41,13 @@ Start: ; 0150 (0:0150)
 	xor a
 	ld [$ff0f], a
 	ld [$ffff], a
-	call Func_03ec
+	call ZeroRAM
 	ld a, $1
 	call BankswitchHome
 	xor a
 	call Func_07a9
 	call Func_07c5
-	call Func_028a
+	call DisableLCD
 	pop af
 	ld [$cab3], a
 	call Func_0349
@@ -211,41 +211,43 @@ Func_0264: ; 0264 (0:0264)
 	pop hl
 	ret
 
-Func_0277: ; 0277 (0:0277)
-	ld a, [$cabb]
-	bit 7, a
-	ret nz
-	or $80
-	ld [$cabb], a
-	ld [$ff40], a
+; turn LCD on
+EnableLCD: ; 0277 (0:0277)
+	ld a, [$cabb]        ;
+	bit 7, a             ;
+	ret nz               ; assert that LCD is off
+	or $80               ;
+	ld [$cabb], a        ;
+	ld [$ff40], a        ; turn LCD on
 	ld a, $c0
 	ld [$cabf], a
 	ret
 
-Func_028a: ; 028a (0:028a)
-	ld a, [$ff40]
-	bit 7, a
-	ret z
-	ld a, [$ffff]
-	ld [$cab7], a
-	res 0, a
-	ld [$ffff], a
+; wait for vblank, then turn LCD off
+DisableLCD: ; 028a (0:028a)
+	ld a, [$ff40]        ;
+	bit 7, a             ;
+	ret z                ; assert that LCD is on
+	ld a, [$ffff]        ;
+	ld [$cab7], a        ; save IE
+	res 0, a             ;
+	ld [$ffff], a        ; disable vblank interrupt
 .asm_298
-	ld a, [$ff44]
-	cp $91
-	jr nz, .asm_298
-	ld a, [$ff40]
-	and $7f
-	ld [$ff40], a
-	ld a, [$cabb]
-	and $7f
-	ld [$cabb], a
+	ld a, [$ff44]        ;
+	cp $91               ;
+	jr nz, .asm_298      ; wait for vblank
+	ld a, [$ff40]        ;
+	and $7f              ;
+	ld [$ff40], a        ;
+	ld a, [$cabb]        ;
+	and $7f              ;
+	ld [$cabb], a        ; turn LCD off
 	xor a
 	ld [$ff47], a
 	ld [$ff48], a
 	ld [$ff49], a
-	ld a, [$cab7]
-	ld [$ffff], a
+	ld a, [$cab7]        ;
+	ld [$ffff], a        ; restore IE
 	ret
 
 Func_02b9: ; 02b9 (0:02b9)
@@ -263,12 +265,14 @@ Func_02c2: ; 02c2 (0:02c2)
 
 INCBIN "baserom.gbc",$02cb,$02dd - $02cb
 
+; enable timer interrupt
 Func_02dd: ; 02dd (0:02dd)
 	ld a, [$ffff]
 	or $4
 	ld [$ffff], a
 	ret
 
+; enable vblank interrupt
 Func_02e4: ; 02e4 (0:02e4)
 	ld a, [$ffff]
 	or $1
@@ -410,7 +414,8 @@ Func_03c0: ; 03c0 (0:03c0)
 	call Func_07c5
 	ret
 
-Func_03ec: ; 03ec (0:03ec)
+; zero work RAM & stack area ($C000-$EFFF, $FF80-$FF7F)
+ZeroRAM: ; 03ec (0:03ec)
 	ld hl, $c000
 	ld bc, $2000
 .asm_3f2
@@ -538,17 +543,17 @@ InitializePalettes: ; 0467 (0:0467)
 INCBIN "baserom.gbc",$0492,$04a2 - $0492
 
 Func_04a2: ; 04a2 (0:04a2)
-	call Func_028a
+	call DisableLCD
 	call Func_03c0
 	xor a
 	ld [$cac2], a
 	ld a, [$cab4]
 	cp $1
 	ret nz
-	call Func_0277
+	call EnableLCD
 	ld hl, Unknown_04bf
 	call Func_0b20
-	call Func_028a
+	call DisableLCD
 	ret
 
 Unknown_04bf: ; 04bf (0:04bf)
@@ -789,7 +794,7 @@ Func_06c3: ; 06c3 (0:06c3)
 	call Func_04cf
 	pop hl
 	ld b, $1
-	call Func_0c19
+	call MemcpyHLDE_hblank
 	pop bc
 	pop de
 	pop hl
@@ -799,7 +804,7 @@ Func_06c3: ; 06c3 (0:06c3)
 INCBIN "baserom.gbc",$06ee,$0709 - $06ee
 
 Func_0709: ; 0709 (0:0709)
-	jp Func_0c19
+	jp MemcpyHLDE_hblank
 
 CopyGfxData: ; 070c (0:070c)
 	ld a, [$cabb]
@@ -856,7 +861,10 @@ CopyData: ; 073c (0:073c)
 	jr nz, CopyData
 	ret
 
-Func_0745: ; 0745 (0:0745)
+; switch to rombank (A + top2 of h shifted down),
+; set top2 of H to 01,
+; return old rombank id on top-of-stack
+BankpushHome: ; 0745 (0:0745)
 	push hl
 	push bc
 	push af
@@ -894,7 +902,8 @@ Func_0745: ; 0745 (0:0745)
 
 INCBIN "baserom.gbc",$076f,$078e - $076f
 
-Func_078e: ; 078e (0:078e)
+; restore rombank from top-of-stack
+BankpopHome: ; 078e (0:078e)
 	push hl
 	push de
 	ld hl, [sp+$7]
@@ -914,6 +923,7 @@ Func_078e: ; 078e (0:078e)
 	pop af
 	ret
 
+; switch ROM bank
 BankswitchHome: ; 07a3 (0:07a3)
 	ld [$ff80], a
 	ld [$2000], a
@@ -1484,7 +1494,7 @@ INCBIN "baserom.gbc",$0bab,$0bbb - $0bab
 Unknown_0bbb: ; 0bbb (0:0bbb)
 INCBIN "baserom.gbc",$0bbb,$0c08 - $0bbb
 
-; loops 1750 * bc times
+; loops 63000 * bc cycles (~15 * bc ms)
 Wait: ; 0c08 (0:0c08)
 	ld de, 1750
 .loop
@@ -1501,28 +1511,30 @@ Wait: ; 0c08 (0:0c08)
 	jr nz, Wait
 	ret
 
-Func_0c19: ; 0c19 (0:0c19)
+; memcpy(DE, HL, B), but only during hblank
+MemcpyHLDE_hblank: ; 0c19 (0:0c19)
 	push bc
-.asm_c1a
+.loop
 	ei
 	di
-	ld a, [$ff41]
-	and $3
-	jr nz, .asm_c1a
+	ld a, [$ff41]        ;
+	and $3               ;
+	jr nz, .loop         ; assert hblank
 	ld a, [hl]
 	ld [de], a
-	ld a, [$ff41]
-	and $3
-	jr nz, .asm_c1a
+	ld a, [$ff41]        ;
+	and $3               ;
+	jr nz, .loop         ; assert still in hblank
 	ei
 	inc hl
 	inc de
 	dec b
-	jr nz, .asm_c1a
+	jr nz, .loop
 	pop bc
 	ret
 
-Func_0c32: ; 0c32 (0:0c32)
+; memcpy(HL, DE, B), but only during hblank
+MemcpyDEHL_hblank: ; 0c32 (0:0c32)
 	push bc
 .asm_c33
 	ei
@@ -1840,10 +1852,11 @@ Func_1c8e: ; 1c8e (0:1c8e)
 
 INCBIN "baserom.gbc",$1caa,$1dca - $1caa
 
-Func_1dca: ; 1dca (0:1dca)
-	ld a, [$cabb]
-	bit 7, a
-	jr nz, .asm_1dd8
+; memcpy(HL, DE, C)
+Memcpy: ; 1dca (0:1dca)
+	ld a, [$cabb]        ;
+	bit 7, a             ;
+	jr nz, .asm_1dd8     ; assert that LCD is on
 .asm_1dd1
 	ld a, [de]
 	inc de
@@ -1852,7 +1865,7 @@ Func_1dca: ; 1dca (0:1dca)
 	jr nz, .asm_1dd1
 	ret
 .asm_1dd8
-	jp Func_0c32
+	jp MemcpyDEHL_hblank
 
 Func_1ddb: ; 1ddb (0:1ddb)
 	ld l, e
@@ -1935,7 +1948,7 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	push bc
 	ld c, b
 	ld b, $0
-	call Func_1dca
+	call Memcpy
 	pop bc
 	pop de
 	ld hl, $0020
@@ -2056,7 +2069,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push bc
 	ld c, b
 	ld b, $0
-	call Func_1dca
+	call Memcpy
 	ld hl, [sp+$24]
 	ld a, [hl]
 	ld hl, [sp+$27]
@@ -2140,10 +2153,10 @@ Func_2119: ; 2119 (0:2119)
 	ld b, $38 ; number of tiles
 asm_2121
 	ld a, BANK(Fonts)
-	call Func_0745
+	call BankpushHome
 	ld c, $10
 	call CopyGfxData
-	call Func_078e
+	call BankpopHome
 	ret
 ; 0x212f
 
@@ -2361,7 +2374,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	ld h, d
 	ld de, $cd05
 	ld c, $1
-	call Func_1dca
+	call Memcpy
 	ld hl, $ffac
 	inc [hl]
 	ret
@@ -2616,7 +2629,7 @@ Func_24ac: ; 24ac (0:24ac)
 	or a
 	jr nz, .asm_24bf
 	call Func_2510
-	call Func_1dca
+	call Memcpy
 .asm_24bb
 	pop bc
 	pop de
@@ -2625,7 +2638,7 @@ Func_24ac: ; 24ac (0:24ac)
 .asm_24bf
 	call Func_24ca
 	call Func_2518
-	call Func_1dca
+	call Memcpy
 	jr .asm_24bb
 
 Func_24ca: ; 24ca (0:24ca)
@@ -2653,7 +2666,7 @@ Func_24ca: ; 24ca (0:24ca)
 	ld [hli], a
 	dec b
 	jr nz, .asm_24e8
-	call Func_078e
+	call BankpopHome
 	pop bc
 	ld de, $ccf4
 	ret
@@ -2701,7 +2714,7 @@ Func_2518: ; 2518 (0:2518)
 
 Func_252e: ; 252e (0:252e)
 	ld a, $1d
-	call Func_0745
+	call BankpushHome
 	ld de, $ccf4
 	push de
 	ld c, $8
@@ -2714,7 +2727,7 @@ Func_252e: ; 252e (0:252e)
 	dec c
 	jr nz, .asm_2539
 	pop de
-	call Func_078e
+	call BankpopHome
 	ret
 
 Func_2546: ; 2546 (0:2546)
@@ -2957,7 +2970,7 @@ Func_2a59: ; 2a59 (0:2a59)
 	ld de, $010e
 	call Func_1deb
 	call Func_22a6
-	call Func_0277
+	call EnableLCD
 	pop hl
 	jp Func_2e41
 
@@ -2983,7 +2996,7 @@ Func_2aab: ; 2aab (0:2aab)
 	xor a
 	ld hl, Unknown_2ac8
 	call Func_2636
-	call Func_0277
+	call EnableLCD
 .asm_2ab8
 	call Func_053f
 	call Func_26da
@@ -3013,7 +3026,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	call Func_2a1a
 	ld a, [$cd9a]
 	ld [$cd10], a
-	call Func_0277
+	call EnableLCD
 	jr .asm_2b39
 .asm_2b1f
 	call Func_053f
