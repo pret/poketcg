@@ -51,7 +51,12 @@ Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$7571 - $6785
+INCBIN "baserom.gbc",$6785,$7354 - $6785
+
+BuildVersion: ; 7354 (1:7354)
+	db "VER 12/20 09:36",TX_END
+
+INCBIN "baserom.gbc",$7364,$7571 - $7364
 
 Func_7571: ; 7571 (1:7571)
 INCBIN "baserom.gbc",$7571,$758f - $7571
