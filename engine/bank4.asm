@@ -660,12 +660,12 @@ Func_12704: ; 12704 (4:6704)
 	farcall Func_c1b1
 	call Func_128a9
 	farcall Func_1996e
-	call Func_07b6
+	call EnableExtRAM
 	ld a, [$a007]
 	ld [$d421], a
 	ld a, [$a006]
 	ld [$ce47], a
-	call Func_07be
+	call DisableExtRAM
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
@@ -686,10 +686,10 @@ Func_12741: ; 12741 (4:6741)
 	jr nc, Func_12704
 	farcall Func_c1ed
 	farcall Func_70000
-	call Func_07b6
+	call EnableExtRAM
 	xor a
 	ld [$ba44], a
-	call Func_07be
+	call DisableExtRAM
 	ld a, $0
 	ld [$d0b5], a
 	farcallx $03, Func_383d
@@ -1068,7 +1068,7 @@ Func_1344d: ; 1344d (4:744d)
 INCBIN "baserom.gbc",$13462,$13485 - $13462
 
 Func_13485: ; 13485 (4:7485)
-	call Func_07b6
+	call EnableExtRAM
 	ld a, [$ba68]
 	or a
 	ret z
@@ -1076,7 +1076,7 @@ Func_13485: ; 13485 (4:7485)
 	ld [$ce43], a
 	ld a, [$ba57]
 	ld [$ce44], a
-	call Func_07be
+	call DisableExtRAM
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong

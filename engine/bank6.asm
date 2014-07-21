@@ -1,7 +1,7 @@
 INCBIN "baserom.gbc",$18000,$1996e - $18000
 
 Func_1996e: ; 1996e (6:596e)
-	call Func_07b6
+	call EnableExtRAM
 	ld a, $c2
 	ld [$ff97], a
 	ld hl, $a100
@@ -22,7 +22,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld a, $9
 	ld hl, $a3f8
 	call Func_199e0
-	call Func_07b6
+	call EnableExtRAM
 	ld hl, $a100
 	ld a, $80
 .asm_199a2
@@ -54,7 +54,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [$a005], a
 	ld [$a00a], a
 	farcall Func_8cf9
-	call Func_07be
+	call DisableExtRAM
 	ret
 
 Func_199e0: ; 199e0 (6:59e0)
@@ -65,7 +65,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	jr c, .asm_19a0e
 	call Func_19a12
 	pop hl
-	call Func_07b6
+	call EnableExtRAM
 	push hl
 	ld de, $c590
 .asm_199f3
@@ -86,7 +86,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	ld [hli], a
 	dec c
 	jr nz, .asm_19a04
-	call Func_07be
+	call DisableExtRAM
 	or a
 .asm_19a0e
 	pop hl

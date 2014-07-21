@@ -45,8 +45,8 @@ Start: ; 0150 (0:0150)
 	ld a, $1
 	call BankswitchHome
 	xor a
-	call Func_07a9
-	call Func_07c5
+	call BankswitchRAM
+	call BankswitchVRAM_0
 	call DisableLCD
 	pop af
 	ld [$cab3], a
@@ -71,7 +71,7 @@ VBlankHandler: ; 019b (0:019b)
 	push bc
 	push de
 	push hl
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld hl, $caba
 	bit 0, [hl]
@@ -127,7 +127,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	bit 1, [hl]
 	jr nz, .asm_217
 	set 1, [hl]
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Func_f4003)
 	call BankswitchHome
@@ -250,12 +250,14 @@ DisableLCD: ; 028a (0:028a)
 	ld [$ffff], a        ; restore IE
 	ret
 
+; set OBJ size: 8x8 (in [$CABB])
 Func_02b9: ; 02b9 (0:02b9)
 	ld a, [$cabb]
 	and $fb
 	ld [$cabb], a
 	ret
 
+; set OBJ size: 8x16 (in [$CABB])
 Func_02c2: ; 02c2 (0:02c2)
 	ld a, [$cabb]
 	or $4
@@ -266,14 +268,14 @@ Func_02c2: ; 02c2 (0:02c2)
 INCBIN "baserom.gbc",$02cb,$02dd - $02cb
 
 ; enable timer interrupt
-Func_02dd: ; 02dd (0:02dd)
+EnableInt_Timer: ; 02dd (0:02dd)
 	ld a, [$ffff]
 	or $4
 	ld [$ffff], a
 	ret
 
 ; enable vblank interrupt
-Func_02e4: ; 02e4 (0:02e4)
+EnableInt_VBlank: ; 02e4 (0:02e4)
 	ld a, [$ffff]
 	or $1
 	ld [$ffff], a
@@ -372,9 +374,9 @@ Func_03a1: ; 03a1 (0:03a1)
 	call Func_03c0
 	call Func_025c
 	jr c, .asm_3b2
-	call Func_07cd
+	call BankswitchVRAM_1
 	call .asm_3b2
-	call Func_07c5
+	call BankswitchVRAM_0
 .asm_3b2
 	ld hl, $8000
 	ld bc, $1800
@@ -388,7 +390,7 @@ Func_03a1: ; 03a1 (0:03a1)
 	ret
 
 Func_03c0: ; 03c0 (0:03c0)
-	call Func_07c5
+	call BankswitchVRAM_0
 	ld hl, $9800
 	ld bc, $0400
 .asm_3c9
@@ -401,7 +403,7 @@ Func_03c0: ; 03c0 (0:03c0)
 	ld a, [$cab4]
 	cp $2
 	ret nz
-	call Func_07cd
+	call BankswitchVRAM_1
 	ld hl, $9800
 	ld bc, $0400
 .asm_3e1
@@ -411,7 +413,7 @@ Func_03c0: ; 03c0 (0:03c0)
 	ld a, c
 	or b
 	jr nz, .asm_3e1
-	call Func_07c5
+	call BankswitchVRAM_0
 	ret
 
 ; zero work RAM & stack area ($C000-$EFFF, $FF80-$FF7F)
@@ -880,7 +882,7 @@ BankpushHome: ; 0745 (0:0745)
 	dec hl
 	ld [hl], c
 	ld hl, [sp+$9]
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	ld [hld], a
 	ld [hl], $0
 	ld a, d
@@ -925,51 +927,58 @@ BankpopHome: ; 078e (0:078e)
 
 ; switch ROM bank
 BankswitchHome: ; 07a3 (0:07a3)
-	ld [$ff80], a
+	ld [CURR_ROM_BANK], a
 	ld [$2000], a
 	ret
 
-Func_07a9: ; 07a9 (0:07a9)
+; switch RAM bank
+BankswitchRAM: ; 07a9 (0:07a9)
 	push af
-	ld [$ff81], a
+	ld [CURR_RAM_BANK], a
 	ld [$4000], a
 	ld a, $a
 	ld [$0000], a
 	pop af
 	ret
 
-Func_07b6: ; 07b6 (0:07b6)
+; enable external RAM
+EnableExtRAM: ; 07b6 (0:07b6)
 	push af
 	ld a, $a
 	ld [$0000], a
 	pop af
 	ret
 
-Func_07be: ; 07be (0:07be)
+; disable external RAM
+DisableExtRAM: ; 07be (0:07be)
 	push af
 	xor a
 	ld [$0000], a
 	pop af
 	ret
 
-Func_07c5: ; 07c5 (0:07c5)
+; set current dest VRAM bank to 0
+BankswitchVRAM_0: ; 07c5 (0:07c5)
 	push af
 	xor a
-	ld [$ff82], a
+	ld [CURR_DEST_VRAM_BANK], a
 	ld [$ff4f], a
 	pop af
 	ret
 
-Func_07cd: ; 07cd (0:07cd)
+; set current dest VRAM bank to 1
+BankswitchVRAM_1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
-	ld [$ff82], a
+	ld [CURR_DEST_VRAM_BANK], a
 	ld [$ff4f], a
 	pop af
 	ret
 
-Func_07d6: ; 07d6 (0:07d6)
-	ld [$ff82], a
+; set current dest VRAM bank
+; a: value to write
+BankswitchVRAM: ; 07d6 (0:07d6)
+	ld [CURR_DEST_VRAM_BANK], a
 	ld [$ff4f], a
 	ret
 ; 0x7db
@@ -1000,7 +1009,7 @@ Func_07e7: ; 07e7 (0:07e7)
 
 Func_080b: ; 080b (0:080b)
 	xor a
-	call Func_07a9
+	call BankswitchRAM
 	ld hl, $a000
 	ld bc, $1000
 .asm_815
@@ -1017,7 +1026,7 @@ Func_080b: ; 080b (0:080b)
 	call Func_084d
 	scf
 	call Func_4050
-	call Func_07be
+	call DisableExtRAM
 	ret
 .asm_82f
 	ld hl, $a000
@@ -1035,7 +1044,7 @@ Func_080b: ; 080b (0:080b)
 	call Func_084d
 	or a
 	call Func_4050
-	call Func_07be
+	call DisableExtRAM
 	ret
 
 Func_084d: ; 084d (0:084d)
@@ -1055,8 +1064,8 @@ Func_084d: ; 084d (0:084d)
 
 Func_0863: ; 0863 (0:0863)
 	push af
-	call Func_07a9
-	call Func_07b6
+	call BankswitchRAM
+	call EnableExtRAM
 	ld hl, $a000
 	ld bc, $2000
 .asm_870
@@ -1282,7 +1291,7 @@ RST18: ; 09ae (0:09ae)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -1328,7 +1337,7 @@ RST28: ; 09e9 (0:09e9)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -1818,7 +1827,7 @@ CopyDeckData: ; 1072 (0:1072)
 INCBIN "baserom.gbc",$10aa,$1c7d - $10aa
 
 Func_1c7d: ; 1c7d (0:1c7d)
-	call Func_07b6
+	call EnableExtRAM
 	ld hl, $a010
 asm_1c83
 	ld a, [hli]
@@ -1827,7 +1836,7 @@ asm_1c83
 	or a
 	jr nz, asm_1c83
 	dec de
-	call Func_07be
+	call DisableExtRAM
 	ret
 
 Func_1c8e: ; 1c8e (0:1c8e)
@@ -1968,13 +1977,13 @@ asm_1ec9
 	push hl
 	call Func_1ea5
 	pop hl
-	call Func_07cd
+	call BankswitchVRAM_1
 	ld a, [$ccf3]
 	ld e, a
 	ld d, a
 	xor a
 	call Func_1ea5
-	call Func_07c5
+	call BankswitchVRAM_0
 	dec c
 	jr nz, .asm_1ed6
 	ld a, $1d
@@ -1986,12 +1995,12 @@ Func_1efb: ; 1efb (0:1efb)
 	push hl
 	call Func_1ea5
 	pop hl
-	call Func_07cd
+	call BankswitchVRAM_1
 	ld a, [$ccf3]
 	ld e, a
 	ld d, a
 	call Func_1ea5
-	call Func_07c5
+	call BankswitchVRAM_0
 	ret
 
 Func_1f0f: ; 1f0f (0:1f0f)
@@ -2643,7 +2652,7 @@ Func_24ac: ; 24ac (0:24ac)
 
 Func_24ca: ; 24ca (0:24ca)
 	push bc
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(VWF)
 	call BankswitchHome
@@ -3107,7 +3116,7 @@ Func_2c23: ; 2c23 (0:2c23)
 	ld l, [hl]
 	ld h, a
 Func_2c29: ; 2c29 (0:2c29)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	call ReadTextOffset
 	call Func_21c5
@@ -3135,7 +3144,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	ld [hli], a
 	ld a, [$cd0a]
 	ld [hli], a
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	ld [hli], a
 	ld [hl], c
 	inc hl
@@ -3340,7 +3349,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ld a, l
 	or h
 	jr z, .asm_2e53
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	call ReadTextOffset
 	call .asm_2e56
@@ -3372,7 +3381,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ret
 
 Func_2e76: ; 2e76 (0:2e76)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	call ReadTextOffset
 	call Func_2cc8
@@ -3387,7 +3396,7 @@ Func_2e89: ; 2e89 (0:2e89)
 	ld a, l
 	or h
 	jr z, .asm_2e9f
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	call ReadTextOffset
 .asm_2e93
@@ -3410,7 +3419,7 @@ Func_2e89: ; 2e89 (0:2e89)
 INCBIN "baserom.gbc",$2ea9,$2fa0 - $2ea9
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	push hl
 	srl h
@@ -3447,7 +3456,7 @@ LoadDeck: ; 302c (0:302c)
 	push hl
 	ld l, a
 	ld h, $0
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(DeckPointers)
 	call BankswitchHome
@@ -3630,7 +3639,7 @@ Func_380e: ; 380e (0:380e)
 	ld a, [$d0c1]
 	bit 7, a
 	ret nz
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Func_c484)
 	call BankswitchHome
@@ -3651,7 +3660,7 @@ Func_380e: ; 380e (0:380e)
 Func_383d: ; 383d (0:383d)
 	ld a, $1
 	ld [$cac4], a
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 .asm_3845
 	call Func_3855
@@ -3687,7 +3696,7 @@ Func_3874: ; 3874 (0:3874)
 	ret
 
 Func_3876: ; 3876 (0:3876)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	call Func_379b
 	ld a, MUSIC_CARDPOP
@@ -3727,10 +3736,10 @@ Func_38c0: ; 38c0 (0:38c0)
 	ld [$d0c2], a
 	xor a
 	ld [$d112], a
-	call Func_07b6
+	call EnableExtRAM
 	xor a
 	ld [$ba44], a
-	call Func_07be
+	call DisableExtRAM
 	call Func_3a3b
 	bank1call Func_409f
 	scf
@@ -3740,10 +3749,10 @@ Func_38db: ; 38db (0:38db)
 	ld a, $6
 	ld [$d111], a
 	call Func_39fc
-	call Func_07b6
+	call EnableExtRAM
 	xor a
 	ld [$ba44], a
-	call Func_07be
+	call DisableExtRAM
 asm_38ed
 	farcall Func_131d3
 	ld a, $9
@@ -3756,9 +3765,9 @@ Func_38fb: ; 38fb (0:38fb)
 	xor a
 	ld [$d112], a
 	bank1call Func_406f
-	call Func_07b6
+	call EnableExtRAM
 	ld a, [$ba44]
-	call Func_07be
+	call DisableExtRAM
 	cp $ff
 	jr z, asm_38ed
 	scf
@@ -3798,7 +3807,7 @@ Func_3946: ; 3946 (0:3946)
 	ret
 
 Func_395a: ; 395a (0:395a)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, [$d4c6]
 	call BankswitchHome
@@ -3817,7 +3826,7 @@ Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3997 - $397b
 
 Func_3997: ; 3997 (0:3997)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Func_1c056)
 	call BankswitchHome
@@ -3936,7 +3945,7 @@ Func_3a40: ; 3a40 (0:3a40)
 INCBIN "baserom.gbc",$3a45,$3a5e - $3a45
 
 Func_3a5e: ; 3a5e (0:3a5e)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld l, $4
 	call Func_3abd
@@ -4008,7 +4017,7 @@ Func_3abd: ; 3abd (0:3abd)
 	pop bc
 	ld b, $0
 	add hl, bc
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(MapScripts)
 	call BankswitchHome
@@ -4044,7 +4053,7 @@ Func_3aed: ; 3aed (0:3aed)
 	ld b, $0
 	ld hl, Unknown_1217b
 	add hl, bc
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Unknown_1217b)
 	call BankswitchHome
@@ -4077,7 +4086,7 @@ Func_3bdb: ; 3bdb (0:3bdb)
 INCBIN "baserom.gbc",$3be4,$3bf5 - $3be4
 
 Func_3bf5: ; 3bf5 (0:3bf5)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	push hl
 	ld a, [$d4c6]
@@ -4154,7 +4163,7 @@ INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [$d5d7], a
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Func_1296e)
 	call BankswitchHome
@@ -4164,7 +4173,7 @@ Func_3ca0: ; 3ca0 (0:3ca0)
 	ret
 
 Func_3cb4: ; 3cb4 (0:3cb4)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	ld a, BANK(Func_12a21)
 	call BankswitchHome
@@ -4177,7 +4186,7 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 INCBIN "baserom.gbc",$3cc4,$3d72 - $3cc4
 
 Func_3d72: ; 3d72 (0:3d72)
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	push hl
 	push hl
@@ -4256,7 +4265,7 @@ INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
-	ld a, [$ff80]
+	ld a, [CURR_ROM_BANK]
 	push af
 	push hl
 	ld a, BANK(Func_12c7f)
@@ -4279,7 +4288,7 @@ INCBIN "baserom.gbc",$3e10,$3fe0 - $3e10
 Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
-	ld [$ff80], a
+	ld [CURR_ROM_BANK], a
 	ld [$2000], a
 	pop af
 	ld bc, Bankswitch3d
@@ -4288,7 +4297,7 @@ Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 
 Bankswitch3d: ; 3fe0 (0:3fe0)
 	ld a, $3d
-	ld [$ff80], a
+	ld [CURR_ROM_BANK], a
 	ld [$2000], a
 	ret
 

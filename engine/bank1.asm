@@ -2,14 +2,14 @@ Func_4000: ; 4000 (1:4000)
 	di
 	ld sp, $e000
 	call Func_0ea6
-	call Func_02e4
-	call Func_02dd
-	call Func_07b6
+	call EnableInt_VBlank
+	call EnableInt_Timer
+	call EnableExtRAM
 	ld a, [$a006]
 	ld [$ce47], a
 	ld a, [$a009]
 	ld [$ccf2], a
-	call Func_07be
+	call DisableExtRAM
 	ld a, $1
 	ld [$cd0d], a
 	ei
@@ -25,10 +25,10 @@ Func_4000: ; 4000 (1:4000)
 	ld hl, $00a2
 	call Func_2af0
 	jr c, .asm_404d
-	call Func_07b6
+	call EnableExtRAM
 	xor a
 	ld [$a000], a
-	call Func_07be
+	call DisableExtRAM
 .asm_404d
 	jp Func_051b
 

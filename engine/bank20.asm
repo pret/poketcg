@@ -77,7 +77,7 @@ asm_8027c
 	inc hl
 	inc hl
 	call Func_395a
-	call Func_07c5
+	call BankswitchVRAM_0
 	pop de
 	pop bc
 	pop hl
@@ -95,7 +95,7 @@ Func_8029f: ; 8029f (20:429f)
 	ld [$d4c3], a
 	ld a, [$d4cb]
 	and $1
-	call Func_07d6
+	call BankswitchVRAM
 	ret
 
 Func_802bb: ; 802bb (20:42bb)

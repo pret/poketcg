@@ -1,8 +1,8 @@
 LoadMap: ; c000 (3:4000)
 	call DisableLCD
-	call Func_07b6
+	call EnableExtRAM
 	bank1call Func_6785
-	call Func_07be
+	call DisableExtRAM
 	ld a, $0
 	ld [$d0b5], a
 	xor a
@@ -265,12 +265,12 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [$d111], a
 	ld [$d112], a
 	ld [$d3b8], a
-	call Func_07b6
+	call EnableExtRAM
 	ld a, [$a007]
 	ld [$d421], a
 	ld a, [$a006]
 	ld [$ce47], a
-	call Func_07be
+	call DisableExtRAM
 	farcall Func_10756
 	ret
 
