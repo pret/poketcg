@@ -1,7 +1,7 @@
 Func_4000: ; 4000 (1:4000)
 	di
 	ld sp, $e000
-	call Func_0ea6
+	call ResetSerial
 	call EnableInt_VBlank
 	call EnableInt_Timer
 	call EnableExtRAM
@@ -30,7 +30,7 @@ Func_4000: ; 4000 (1:4000)
 	ld [$a000], a
 	call DisableExtRAM
 .asm_404d
-	jp Func_051b
+	jp Reset
 
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e

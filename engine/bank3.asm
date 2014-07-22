@@ -220,9 +220,9 @@ Func_c1a4: ; c1a4 (3:41a4)
 	xor a
 	call Func_040c
 	xor a
-	call Func_0423
+	call Set_OBP0
 	xor a
-	call Func_0428
+	call Set_OBP1
 	ret
 
 Func_c1b1: ; c1b1 (3:41b1)

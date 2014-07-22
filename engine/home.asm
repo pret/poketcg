@@ -55,12 +55,12 @@ Start: ; 0150 (0:0150)
 	ld [DATA_TILE_MAP_FILL], a
 	call SetupVRAM
 	call SetupLCD
-	call Func_036a
+	call SetupPalettes
 	call Func_377f
-	call Func_0241
-	call Func_0ea6
+	call SetupTimer
+	call ResetSerial
 	call CopyDMAFunction
-	call Func_080b
+	call SetupExtRAM
 	ld a, BANK(Func_4000)
 	call BankswitchHome
 	ld sp, $e000
@@ -172,7 +172,8 @@ Func_021c: ; 021c (0:021c)
 	inc [hl]
 	ret
 
-Func_0241: ; 0241 (0:0241)
+; setup timer to roughly 60 Hz
+SetupTimer: ; 0241 (0:0241)
 	ld b, $bc
 	call CheckForCGB
 	jr c, .asm_250
@@ -336,8 +337,9 @@ DetectConsole: ; 0349 (0:0349)
 	call Func_07e7
 	ret
 
-Func_036a: ; 036a (0:036a)
-	ld hl, $cabc
+; initialize the palettes (both monochrome and color)
+SetupPalettes: ; 036a (0:036a)
+	ld hl, CURR_BGP
 	ld a, $e4
 	ld [rBGP], a
 	ld [hli], a
@@ -466,11 +468,11 @@ asm_411
 	pop hl
 	ret
 
-Func_0423: ; 0423 (0:0423)
+Set_OBP0: ; 0423 (0:0423)
 	ld [CURR_OBP0], a
 	jr asm_40f
 
-Func_0428: ; 0428 (0:0428)
+Set_OBP1: ; 0428 (0:0428)
 	ld [CURR_OBP1], a
 	jr asm_40f
 
@@ -556,12 +558,12 @@ Func_04a2: ; 04a2 (0:04a2)
 	cp CONSOLE_SGB
 	ret nz
 	call EnableLCD
-	ld hl, Unknown_04bf
+	ld hl, SGR_04bf
 	call SendSGB
 	call DisableLCD
 	ret
 
-Unknown_04bf: ; 04bf (0:04bf)
+SGR_04bf: ; 04bf (0:04bf)
 INCBIN "baserom.gbc",$04bf,$04cf - $04bf
 
 Func_04cf: ; 04cf (0:04cf)
@@ -616,7 +618,7 @@ ReadJoypad: ; 04de (0:04de)
 	and $f
 	cp $f
 	jr nz, asm_522       ; handle reset
-	call Func_0ea6
+	call ResetSerial
 Reset: ; 051b (0:051b)
 	ld a, [DATA_INITIAL_A]
 	di
@@ -644,14 +646,14 @@ Func_053f: ; 053f (0:053f)
 	ld a, [$cad5]
 	or a
 	jr z, .asm_56d
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	and $4
 	jr z, .asm_56d
 .asm_55e
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	and $4
 	jr z, .asm_55e
 .asm_56d
@@ -671,12 +673,12 @@ HandleDPadRepeat: ; 0572 (0:0572)
 	ld a, [BUTTONS_PRESSED]
 	and $f0
 	jr z, .asm_586
-	ld [hl], $18
+	ld [hl], 24
 	ret
 .asm_586
 	dec [hl]
 	jr nz, .asm_58c
-	ld [hl], $6
+	ld [hl], 6
 	ret
 .asm_58c
 	ld a, [BUTTONS_PRESSED]
@@ -696,10 +698,10 @@ CopyDMAFunction: ; 0593 (0:0593)
 	jr nz, .asm_59a
 	ret
 
-; CopyDMAFunction copies this function to $ff83 
+; CopyDMAFunction copies this function to $ff83
 DMA: ; 05a1 (0:05a1)
 	ld a, $ca
-	ld [$ff46], a
+	ld [rDMA], a
 	ld a, $28
 .asm_5a7
 	dec a
@@ -967,7 +969,7 @@ BankswitchVRAM_0: ; 07c5 (0:07c5)
 	push af
 	xor a
 	ld [CURR_DEST_VRAM_BANK], a
-	ld [$ff4f], a
+	ld [rVBK], a
 	pop af
 	ret
 
@@ -976,7 +978,7 @@ BankswitchVRAM_1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
 	ld [CURR_DEST_VRAM_BANK], a
-	ld [$ff4f], a
+	ld [rVBK], a
 	pop af
 	ret
 
@@ -984,7 +986,7 @@ BankswitchVRAM_1: ; 07cd (0:07cd)
 ; a: value to write
 BankswitchVRAM: ; 07d6 (0:07d6)
 	ld [CURR_DEST_VRAM_BANK], a
-	ld [$ff4f], a
+	ld [rVBK], a
 	ret
 ; 0x7db
 
@@ -993,26 +995,26 @@ INCBIN "baserom.gbc",$07db,$07e7 - $07db
 Func_07e7: ; 07e7 (0:07e7)
 	call CheckForCGB
 	ret c
-	ld hl, $ff4d
+	ld hl, rKEY1
 	bit 7, [hl]
 	ret nz
-	ld a, [$ffff]
+	ld a, [rIE]
 	push af
 	xor a
-	ld [$ffff], a
+	ld [rIE], a
 	set 0, [hl]
 	xor a
-	ld [$ff0f], a
-	ld [$ffff], a
+	ld [rIF], a
+	ld [rIE], a
 	ld a, $30
-	ld [$ff00], a
+	ld [rJOYP], a
 	stop
-	call Func_0241
+	call SetupTimer
 	pop af
-	ld [$ffff], a
+	ld [rIE], a
 	ret
 
-Func_080b: ; 080b (0:080b)
+SetupExtRAM: ; 080b (0:080b)
 	xor a
 	call BankswitchRAM
 	ld hl, $a000
@@ -1762,14 +1764,14 @@ Func_0dc8: ; 0dc8 (0:0dc8)
 
 INCBIN "baserom.gbc",$0e0a,$0ea6 - $0e0a
 
-Func_0ea6: ; 0ea6 (0:0ea6)
-	ld a, [$ffff]
+ResetSerial: ; 0ea6 (0:0ea6)
+	ld a, [rIE]
 	and $f7
-	ld [$ffff], a
+	ld [rIE], a
 	xor a
-	ld [$ff01], a
-	ld [$ff02], a
-	ld hl, $cb74
+	ld [rSB], a
+	ld [rSC], a
+	ld hl, BUF_SERIAL
 	ld bc, $0051
 .asm_eb7
 	xor a
@@ -2873,7 +2875,7 @@ Func_264b: ; 264b (0:264b)
 	scf
 	ret
 .asm_26a9
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	and $3
 	jr z, asm_26d1
 	and $1
@@ -3016,7 +3018,7 @@ Func_2aab: ; 2aab (0:2aab)
 .asm_2ab8
 	call Func_053f
 	call Func_26da
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	and $3
 	jr z, .asm_2ab8
 	call Func_26e9
@@ -3047,7 +3049,7 @@ Func_2af0: ; 2af0 (0:2af0)
 .asm_2b1f
 	call Func_053f
 	call Func_26da
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	bit 0, a
 	jr nz, .asm_2b50
 	ld a, [$ff8f]
