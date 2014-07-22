@@ -39,8 +39,8 @@ Start: ; 0150 (0:0150)
 	ld sp, $fffe
 	push af
 	xor a
-	ld [$ff0f], a
-	ld [$ffff], a
+	ld [rIF], a
+	ld [rIE], a
 	call ZeroRAM
 	ld a, $1
 	call BankswitchHome
@@ -49,10 +49,10 @@ Start: ; 0150 (0:0150)
 	call BankswitchVRAM_0
 	call DisableLCD
 	pop af
-	ld [$cab3], a
+	ld [DATA_INITIAL_A], a
 	call Func_0349
 	ld a, $20
-	ld [$cab6], a
+	ld [DATA_TILE_MAP_FILL], a
 	call Func_03a1
 	call Func_030b
 	call Func_036a
@@ -80,20 +80,20 @@ VBlankHandler: ; 019b (0:019b)
 	ld a, [$cac0]
 	or a
 	jr z, .asm_1b8
-	call $ff83
+	call DMA_FUNCTION
 	xor a
 	ld [$cac0], a
 .asm_1b8
-	ld a, [$ff92]
-	ld [$ff43], a
-	ld a, [$ff93]
-	ld [$ff42], a
-	ld a, [$ff94]
-	ld [$ff4b], a
-	ld a, [$ff95]
-	ld [$ff4a], a
-	ld a, [$cabb]
-	ld [$ff40], a
+	ld a, [CURR_SCX]
+	ld [rSCX], a
+	ld a, [CURR_SCY]
+	ld [rSCY], a
+	ld a, [CURR_WX]
+	ld [rWX], a
+	ld a, [CURR_WY]
+	ld [rWY], a
+	ld a, [CURR_LCDC]
+	ld [rLCDC], a
 	ei
 	call $cad0
 	call Func_042d
@@ -176,17 +176,17 @@ Func_0241: ; 0241 (0:0241)
 	ld b, $bc
 	call Func_025c
 	jr c, .asm_250
-	ld a, [$ff4d]
+	ld a, [rKEY1]
 	and $80
 	jr z, .asm_250
 	ld b, $78
 .asm_250
 	ld a, b
-	ld [$ff06], a
-	ld a, $3
-	ld [$ff07], a
+	ld [rTMA], a
+	ld a, rTAC_16384_HZ
+	ld [rTAC], a
 	ld a, $7
-	ld [$ff07], a
+	ld [rTAC], a
 	ret
 
 Func_025c: ; 025c (0:025c)
@@ -213,55 +213,55 @@ Func_0264: ; 0264 (0:0264)
 
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
-	ld a, [$cabb]        ;
+	ld a, [CURR_LCDC]    ;
 	bit 7, a             ;
 	ret nz               ; assert that LCD is off
 	or $80               ;
-	ld [$cabb], a        ;
-	ld [$ff40], a        ; turn LCD on
+	ld [CURR_LCDC], a    ;
+	ld [rLCDC], a        ; turn LCD on
 	ld a, $c0
 	ld [$cabf], a
 	ret
 
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
-	ld a, [$ff40]        ;
+	ld a, [rLCDC]        ;
 	bit 7, a             ;
 	ret z                ; assert that LCD is on
-	ld a, [$ffff]        ;
-	ld [$cab7], a        ; save IE
+	ld a, [rIE]
+	ld [CURR_IE], a
 	res 0, a             ;
-	ld [$ffff], a        ; disable vblank interrupt
+	ld [rIE], a          ; disable vblank interrupt
 .asm_298
-	ld a, [$ff44]        ;
+	ld a, [rLY]          ;
 	cp $91               ;
 	jr nz, .asm_298      ; wait for vblank
-	ld a, [$ff40]        ;
+	ld a, [rLCDC]        ;
 	and $7f              ;
-	ld [$ff40], a        ;
-	ld a, [$cabb]        ;
+	ld [rLCDC], a        ;
+	ld a, [CURR_LCDC]    ;
 	and $7f              ;
-	ld [$cabb], a        ; turn LCD off
+	ld [CURR_LCDC], a    ; turn LCD off
 	xor a
-	ld [$ff47], a
-	ld [$ff48], a
-	ld [$ff49], a
-	ld a, [$cab7]        ;
-	ld [$ffff], a        ; restore IE
+	ld [rBGP], a
+	ld [rOBP0], a
+	ld [rOBP1], a
+	ld a, [CURR_IE]
+	ld [rIE], a
 	ret
 
 ; set OBJ size: 8x8 (in [$CABB])
-Func_02b9: ; 02b9 (0:02b9)
-	ld a, [$cabb]
+Set_OBJ_8x8: ; 02b9 (0:02b9)
+	ld a, [CURR_LCDC]
 	and $fb
-	ld [$cabb], a
+	ld [CURR_LCDC], a
 	ret
 
 ; set OBJ size: 8x16 (in [$CABB])
-Func_02c2: ; 02c2 (0:02c2)
-	ld a, [$cabb]
+Set_OBJ_8x16: ; 02c2 (0:02c2)
+	ld a, [CURR_LCDC]
 	or $4
-	ld [$cabb], a
+	ld [CURR_LCDC], a
 	ret
 ; 0x2cb
 
@@ -269,16 +269,16 @@ INCBIN "baserom.gbc",$02cb,$02dd - $02cb
 
 ; enable timer interrupt
 EnableInt_Timer: ; 02dd (0:02dd)
-	ld a, [$ffff]
+	ld a, [rIE]
 	or $4
-	ld [$ffff], a
+	ld [rIE], a
 	ret
 
 ; enable vblank interrupt
 EnableInt_VBlank: ; 02e4 (0:02e4)
-	ld a, [$ffff]
+	ld a, [rIE]
 	or $1
-	ld [$ffff], a
+	ld [rIE], a
 	ret
 ; 0x2eb
 
@@ -286,33 +286,33 @@ INCBIN "baserom.gbc",$02eb,$030b - $02eb
 
 Func_030b: ; 030b (0:030b)
 	xor a
-	ld [$ff42], a
-	ld [$ff43], a
-	ld [$ff4a], a
-	ld [$ff4b], a
+	ld [rSCY], a
+	ld [rSCX], a
+	ld [rWY], a
+	ld [rWX], a
 	ld [$cab0], a
 	ld [$cab1], a
 	ld [$cab2], a
-	ld [$ff92], a
-	ld [$ff93], a
-	ld [$ff94], a
-	ld [$ff95], a
+	ld [CURR_SCX], a
+	ld [CURR_SCY], a
+	ld [CURR_WX], a
+	ld [CURR_WY], a
 	xor a
 	ld [$caba], a
 	ld a, $c3
 	ld [$cacd], a
 	ld [$cad0], a
 	ld hl, $cad1
-	ld [hl], Func_0348 & $ff 
+	ld [hl], NopF & $ff
 	inc hl
-	ld [hl], Func_0348 >> $8
+	ld [hl], NopF >> $8
 	ld a, $47
-	ld [$cabb], a
+	ld [CURR_LCDC], a
 	ld a, $1
 	ld [$6000], a
 	ld a, $a
 	ld [$0000], a
-Func_0348: ; 0348 (0:0348)
+NopF: ; 0348 (0:0348)
 	ret
 
 Func_0349: ; 0349 (0:0349)
@@ -330,7 +330,7 @@ Func_0349: ; 0349 (0:0349)
 	cp $2
 	ret nz
 	ld a, $1
-	ld [$ff70], a
+	ld [rSVBK], a
 	call Func_07e7
 	ret
 
@@ -614,7 +614,7 @@ Func_04de: ; 04de (0:04de)
 	jr nz, asm_522
 	call Func_0ea6
 Func_051b: ; 051b (0:051b)
-	ld a, [$cab3]
+	ld a, [DATA_INITIAL_A]
 	di
 	jp Start
 asm_522
@@ -770,7 +770,7 @@ INCBIN "baserom.gbc",$0695,$06c3 - $0695
 
 Func_06c3: ; 06c3 (0:06c3)
 	push af
-	ld a, [$cabb]
+	ld a, [CURR_LCDC]
 	rla
 	jr c, .asm_6d8
 	pop af
@@ -809,7 +809,7 @@ Func_0709: ; 0709 (0:0709)
 	jp MemcpyHLDE_hblank
 
 CopyGfxData: ; 070c (0:070c)
-	ld a, [$cabb]
+	ld a, [CURR_LCDC]
 	rla
 	jr nc, .asm_726
 .asm_712

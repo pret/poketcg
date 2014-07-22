@@ -15,7 +15,7 @@ LoadMap: ; c000 (3:4000)
 	xor a
 	ld [$cab6], a
 	call Func_2119
-	call Func_02b9
+	call Set_OBJ_8x8
 	xor a
 	ld [$cd08], a
 	xor a
@@ -388,7 +388,7 @@ Func_c2db: ; c2db (3:42db)
 	push bc
 	push de
 	call DisableLCD
-	call Func_02b9
+	call Set_OBJ_8x8
 	call Func_3ca0
 	farcall Func_12bcd
 	ld a, $c2
@@ -1004,20 +1004,20 @@ Func_c7b8: ; c7b8 (3:47b8)
 	xor a
 	ld [$ff92], a
 	ld [$ff93], a
-	call Func_02c2
+	call Set_OBJ_8x16
 	farcall Func_1288c
 	farcall Func_8db0
-	call Func_02b9
+	call Set_OBJ_8x8
 	ret
 
 Func_c7cc: ; c7cc (3:47cc)
 	xor a
 	ld [$ff92], a
 	ld [$ff93], a
-	call Func_02c2
+	call Set_OBJ_8x16
 	farcall Func_1288c
 	farcall Func_a288
-	call Func_02b9
+	call Set_OBJ_8x8
 	ret
 
 Func_c7e0: ; c7e0 (3:47e0)
