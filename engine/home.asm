@@ -53,8 +53,8 @@ Start: ; 0150 (0:0150)
 	call DetectConsole
 	ld a, $20
 	ld [DATA_TILE_MAP_FILL], a
-	call Func_03a1
-	call Func_030b
+	call SetupVRAM
+	call SetupLCD
 	call Func_036a
 	call Func_377f
 	call Func_0241
@@ -97,7 +97,7 @@ VBlankHandler: ; 019b (0:019b)
 	ei
 	call $cad0
 	call Func_042d
-	ld hl, $cab8
+	ld hl, DATA_VBLANK_COUNTER
 	inc [hl]
 	ld hl, $caba
 	res 0, [hl]
@@ -197,12 +197,13 @@ CheckForCGB: ; 025c (0:025c)
 	scf
 	ret
 
-Func_0264: ; 0264 (0:0264)
+; wait for vblank
+WaitForVBlank: ; 0264 (0:0264)
 	push hl
-	ld a, [$cabb]
+	ld a, [CURR_LCDC]
 	bit 7, a
 	jr z, .asm_275
-	ld hl, $cab8
+	ld hl, DATA_VBLANK_COUNTER
 	ld a, [hl]
 .asm_270
 	halt
@@ -285,7 +286,7 @@ EnableInt_VBlank: ; 02e4 (0:02e4)
 
 INCBIN "baserom.gbc",$02eb,$030b - $02eb
 
-Func_030b: ; 030b (0:030b)
+SetupLCD: ; 030b (0:030b)
 	xor a
 	ld [rSCY], a
 	ld [rSCX], a
@@ -310,9 +311,9 @@ Func_030b: ; 030b (0:030b)
 	ld a, $47
 	ld [CURR_LCDC], a
 	ld a, $1
-	ld [$6000], a
+	ld [MBC3LatchClock], a
 	ld a, $a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 NopF: ; 0348 (0:0348)
 	ret
 
@@ -338,10 +339,10 @@ DetectConsole: ; 0349 (0:0349)
 Func_036a: ; 036a (0:036a)
 	ld hl, $cabc
 	ld a, $e4
-	ld [$ff47], a
+	ld [rBGP], a
 	ld [hli], a
-	ld [$ff48], a
-	ld [$ff49], a
+	ld [rOBP0], a
+	ld [rOBP1], a
 	ld [hli], a
 	ld [hl], a
 	xor a
@@ -349,7 +350,7 @@ Func_036a: ; 036a (0:036a)
 	ld a, [DATA_CONSOLE]
 	cp CONSOLE_CGB
 	ret nz
-	ld de, $caf0
+	ld de, BUF_PALETTE
 	ld c, $10
 .asm_387
 	ld hl, InitialPalette
@@ -371,8 +372,8 @@ InitialPalette: ; 0399 (0:0399)
 	RGB 10,10,08
 	RGB 00,00,00
 
-Func_03a1: ; 03a1 (0:03a1)
-	call Func_03c0
+SetupVRAM: ; 03a1 (0:03a1)
+	call FillTileMap
 	call CheckForCGB
 	jr c, .asm_3b2
 	call BankswitchVRAM_1
@@ -390,12 +391,13 @@ Func_03a1: ; 03a1 (0:03a1)
 	jr nz, .asm_3b8
 	ret
 
-Func_03c0: ; 03c0 (0:03c0)
+; fill VARM tile map banks with [DATA_TILE_MAP_FILL]
+FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
 	ld hl, $9800
 	ld bc, $0400
 .asm_3c9
-	ld a, [$cab6]
+	ld a, [DATA_TILE_MAP_FILL]
 	ld [hli], a
 	dec bc
 	ld a, c
@@ -447,12 +449,12 @@ Func_0408: ; 0408 (0:0408)
 	jr asm_411
 
 Func_040c: ; 040c (0:040c)
-	ld [$cabc], a
+	ld [CURR_BGP], a
 asm_40f
 	ld a, $80
 asm_411
 	ld [$cabf], a
-	ld a, [$cabb]
+	ld a, [CURR_LCDC]
 	rla
 	ret c
 	push hl
@@ -465,18 +467,18 @@ asm_411
 	ret
 
 Func_0423: ; 0423 (0:0423)
-	ld [$cabd], a
+	ld [CURR_OBP0], a
 	jr asm_40f
 
 Func_0428: ; 0428 (0:0428)
-	ld [$cabe], a
+	ld [CURR_OBP1], a
 	jr asm_40f
 
 Func_042d: ; 042d (0:042d)
 	ld a, [$cabf]
 	or a
 	ret z
-	ld hl, $cabc
+	ld hl, CURR_BGP
 	ld a, [hli]
 	ld [$ff47], a
 	ld a, [hli]
@@ -547,7 +549,7 @@ INCBIN "baserom.gbc",$0492,$04a2 - $0492
 
 Func_04a2: ; 04a2 (0:04a2)
 	call DisableLCD
-	call Func_03c0
+	call FillTileMap
 	xor a
 	ld [$cac2], a
 	ld a, [DATA_CONSOLE]
@@ -635,7 +637,7 @@ Func_053f: ; 053f (0:053f)
 	push bc
 	ld hl, $cad3
 	call Func_05b6
-	call Func_0264
+	call WaitForVBlank
 	call Func_04de
 	call Func_0572
 	ld a, [$cad5]
@@ -645,7 +647,7 @@ Func_053f: ; 053f (0:053f)
 	and $4
 	jr z, .asm_56d
 .asm_55e
-	call Func_0264
+	call WaitForVBlank
 	call Func_04de
 	call Func_0572
 	ld a, [$ff91]
@@ -929,16 +931,16 @@ BankpopHome: ; 078e (0:078e)
 ; switch ROM bank
 BankswitchHome: ; 07a3 (0:07a3)
 	ld [CURR_ROM_BANK], a
-	ld [$2000], a
+	ld [MBC3RomBank], a
 	ret
 
 ; switch RAM bank
 BankswitchRAM: ; 07a9 (0:07a9)
 	push af
 	ld [CURR_RAM_BANK], a
-	ld [$4000], a
+	ld [MBC3SRamBank], a
 	ld a, $a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	pop af
 	ret
 
@@ -946,7 +948,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 EnableExtRAM: ; 07b6 (0:07b6)
 	push af
 	ld a, $a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	pop af
 	ret
 
@@ -954,7 +956,7 @@ EnableExtRAM: ; 07b6 (0:07b6)
 DisableExtRAM: ; 07be (0:07be)
 	push af
 	xor a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	pop af
 	ret
 
@@ -4292,7 +4294,7 @@ Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
 	ld [CURR_ROM_BANK], a
-	ld [$2000], a
+	ld [MBC3RomBank], a
 	pop af
 	ld bc, Bankswitch3d
 	push bc
@@ -4301,7 +4303,7 @@ Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 Bankswitch3d: ; 3fe0 (0:3fe0)
 	ld a, $3d
 	ld [CURR_ROM_BANK], a
-	ld [$2000], a
+	ld [MBC3RomBank], a
 	ret
 
 rept $a
