@@ -579,52 +579,53 @@ Func_04cf: ; 04cf (0:04cf)
 	ld d, h
 	ret
 
-Func_04de: ; 04de (0:04de)
+; read joypad
+ReadJoypad: ; 04de (0:04de)
 	ld a, $20
-	ld [$ff00], a
-	ld a, [$ff00]
-	ld a, [$ff00]
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
 	cpl
 	and $f
 	swap a
 	ld b, a
 	ld a, $10
-	ld [$ff00], a
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
 	cpl
 	and $f
 	or b
-	ld c, a
+	ld c, a              ; joypad data
 	cpl
 	ld b, a
-	ld a, [$ff90]
+	ld a, [BUTTONS_HELD]
 	xor c
 	and b
-	ld [$ff8e], a
-	ld a, [$ff90]
+	ld [BUTTONS_RELEASED], a
+	ld a, [BUTTONS_HELD]
 	xor c
 	and c
 	ld b, a
-	ld [$ff91], a
-	ld a, [$ff90]
+	ld [BUTTONS_PRESSED], a
+	ld a, [BUTTONS_HELD]
 	and $f
 	cp $f
-	jr nz, asm_522
+	jr nz, asm_522       ; handle reset
 	call Func_0ea6
-Func_051b: ; 051b (0:051b)
+Reset: ; 051b (0:051b)
 	ld a, [DATA_INITIAL_A]
 	di
 	jp Start
 asm_522
 	ld a, c
-	ld [$ff90], a
+	ld [BUTTONS_HELD], a
 	ld a, $30
-	ld [$ff00], a
+	ld [rJOYP], a
 	ret
 ; 0x52a
 
@@ -638,8 +639,8 @@ Func_053f: ; 053f (0:053f)
 	ld hl, $cad3
 	call Func_05b6
 	call WaitForVBlank
-	call Func_04de
-	call Func_0572
+	call ReadJoypad
+	call HandleDPadRepeat
 	ld a, [$cad5]
 	or a
 	jr z, .asm_56d
@@ -648,8 +649,8 @@ Func_053f: ; 053f (0:053f)
 	jr z, .asm_56d
 .asm_55e
 	call WaitForVBlank
-	call Func_04de
-	call Func_0572
+	call ReadJoypad
+	call HandleDPadRepeat
 	ld a, [$ff91]
 	and $4
 	jr z, .asm_55e
@@ -660,13 +661,14 @@ Func_053f: ; 053f (0:053f)
 	pop af
 	ret
 
-Func_0572: ; 0572 (0:0572)
-	ld a, [$ff90]
-	ld [$ff8f], a
+; handle D-pad repeatcounter
+HandleDPadRepeat: ; 0572 (0:0572)
+	ld a, [BUTTONS_HELD]
+	ld [BUTTONS_PRESSED_2], a
 	and $f0
 	jr z, .asm_58c
-	ld hl, $ff8d
-	ld a, [$ff91]
+	ld hl, DPAD_REPEAT_CTR
+	ld a, [BUTTONS_PRESSED]
 	and $f0
 	jr z, .asm_586
 	ld [hl], $18
@@ -677,9 +679,9 @@ Func_0572: ; 0572 (0:0572)
 	ld [hl], $6
 	ret
 .asm_58c
-	ld a, [$ff91]
+	ld a, [BUTTONS_PRESSED]
 	and $f
-	ld [$ff8f], a
+	ld [BUTTONS_PRESSED_2], a
 	ret
 
 CopyDMAFunction: ; 0593 (0:0593)
