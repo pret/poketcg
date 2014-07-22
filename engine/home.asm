@@ -484,11 +484,11 @@ Func_042d: ; 042d (0:042d)
 	ret z
 	ld hl, CURR_BGP
 	ld a, [hli]
-	ld [$ff47], a
+	ld [rBGP], a
 	ld a, [hli]
-	ld [$ff48], a
+	ld [rOBP0], a
 	ld a, [hl]
-	ld [$ff49], a
+	ld [rOBP1], a
 	ld a, [DATA_CONSOLE]
 	cp CONSOLE_CGB
 	jr z, asm_44a
@@ -533,7 +533,7 @@ InitializePalettes: ; 0467 (0:0467)
 	ld [$ff00+c], a
 	inc c
 .asm_47f
-	ld a, [$ff41]
+	ld a, [rSTAT]
 	and $2
 	jr nz, .asm_47f
 	ld a, [hl]
@@ -1537,12 +1537,12 @@ MemcpyHLDE_hblank: ; 0c19 (0:0c19)
 .loop
 	ei
 	di
-	ld a, [$ff41]        ;
+	ld a, [rSTAT]        ;
 	and $3               ;
 	jr nz, .loop         ; assert hblank
 	ld a, [hl]
 	ld [de], a
-	ld a, [$ff41]        ;
+	ld a, [rSTAT]        ;
 	and $3               ;
 	jr nz, .loop         ; assert still in hblank
 	ei
@@ -1559,12 +1559,12 @@ MemcpyDEHL_hblank: ; 0c32 (0:0c32)
 .asm_c33
 	ei
 	di
-	ld a, [$ff41]
+	ld a, [rSTAT]
 	and $3
 	jr nz, .asm_c33
 	ld a, [de]
 	ld [hl], a
-	ld a, [$ff41]
+	ld a, [rSTAT]
 	and $3
 	jr nz, .asm_c33
 	ei
@@ -1586,13 +1586,13 @@ Func_0c91: ; 0c91 (0:0c91)
 	jr z, .asm_caa
 	ret
 .asm_c9d
-	ld a, [$ff02]
+	ld a, [rSC]
 	add a
 	ret c
 	ld a, $1
-	ld [$ff02], a
+	ld [rSC], a
 	ld a, $81
-	ld [$ff02], a
+	ld [rSC], a
 	ret
 .asm_caa
 	ld a, [$cb76]
@@ -1629,16 +1629,16 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld a, [$cb74]
 	or a
 	jr z, .asm_d55
-	ld a, [$ff01]
+	ld a, [rSB]
 	call Func_0d77
 	call Func_0dc8
 	push af
 .asm_d44
-	ld a, [$ff02]
+	ld a, [rSC]
 	add a
 	jr c, .asm_d44
 	pop af
-	ld [$ff01], a
+	ld [rSB], a
 	ld a, [$cb74]
 	cp $29
 	jr z, .asm_d6e
@@ -1646,16 +1646,16 @@ SerialHandler: ; 0d26 (0:0d26)
 .asm_d55
 	ld a, $1
 	ld [$cba2], a
-	ld a, [$ff01]
+	ld a, [rSB]
 	ld [$cba5], a
 	ld a, $ac
-	ld [$ff01], a
+	ld [rSB], a
 	ld a, [$cba5]
 	cp $12
 	jr z, .asm_d6e
 .asm_d6a
 	ld a, $80
-	ld [$ff02], a
+	ld [rSC], a
 .asm_d6e
 	ld hl, $cb76
 	inc [hl]
@@ -2824,7 +2824,7 @@ Func_2636: ; 2636 (0:2636)
 Func_264b: ; 264b (0:264b)
 	xor a
 	ld [$cd99], a
-	ld a, [$ff8f]
+	ld a, [BUTTONS_PRESSED_2]
 	or a
 	jr z, .asm_2685
 	ld b, a
@@ -3054,7 +3054,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	ld a, [BUTTONS_PRESSED]
 	bit 0, a
 	jr nz, .asm_2b50
-	ld a, [$ff8f]
+	ld a, [BUTTONS_PRESSED_2]
 	and $30
 	jr z, .asm_2b1f
 	ld a, $1
@@ -3569,14 +3569,14 @@ Func_31e5: ; 31e5 (0:31e5)
 	jr Func_31e0
 
 Func_31ea: ; 31ea (0:31ea)
-	ld a, [$ff01]
+	ld a, [rSB]
 	ld [$ce6e], a
 Func_31ef: ; 31ef (0:31ef)
 	xor a
 	jr Func_31e0
 
 Func_31f2: ; 31f2 (0:31f2)
-	ld a, [$ff01]
+	ld a, [rSB]
 	ld [$ce6f], a
 	xor a
 	ld [$ce63], a
@@ -3601,11 +3601,11 @@ Func_31fc: ; 31fc (0:31fc)
 	ld [hl], a
 	ld a, e
 Func_3212: ; 3212 (0:3212)
-	ld [$ff01], a
+	ld [rSB], a
 	ld a, $1
-	ld [$ff02], a
+	ld [rSC], a
 	ld a, $81
-	ld [$ff02], a
+	ld [rSC], a
 	ret
 ; 0x321d
 
@@ -4123,7 +4123,7 @@ INCBIN "baserom.gbc",$3c46,$3c48 - $3c46
 
 Func_3c48: ; 3c48 (0:3c48)
 	push af
-	ld a, [$ff40]
+	ld a, [rLCDC]
 	bit 7, a
 	jr z, .asm_3c58
 	push bc

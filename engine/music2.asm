@@ -106,13 +106,13 @@ Func_f806f: ; f806f (3e:406f)
 
 Func_f807d: ; f807d (3e:407d)
 	xor a
-	ld [$ff26], a
+	ld [rNR52], a
 	ld a, $80
-	ld [$ff26], a
+	ld [rNR52], a
 	ld a, $77
-	ld [$ff24], a
+	ld [rNR50], a
 	ld a, $ff
-	ld [$ff25], a
+	ld [rNR51], a
 	ld a, $3d
 	ld [$dd81], a
 	ld a, $80
@@ -168,8 +168,8 @@ Func_f80e9: ; f80e9 (3e:40e9)
 	ld hl, Func_fc003
 	call Bankswitch3dTo3f
 	ld a, [$dd81]
-	ld [$ff80], a
-	ld [$2000], a
+	ld [CURR_ROM_BANK], a
+	ld [MBC3RomBank], a
 	ld a, [$ddf2]
 	cp $0
 	jr z, .asm_f8109
@@ -216,34 +216,34 @@ Func_f814b: ; f814b (3e:414b)
 	bit 0, d
 	jr nz, .asm_f815f
 	ld a, $8
-	ld [$ff12], a
+	ld [rNR12], a
 	swap a
-	ld [$ff14], a
+	ld [rNR14], a
 .asm_f815f
 	xor a
 	ld [$dd8e], a
 	bit 1, d
 	jr nz, .asm_f816f
 	ld a, $8
-	ld [$ff17], a
+	ld [rNR22], a
 	swap a
-	ld [$ff19], a
+	ld [rNR24], a
 .asm_f816f
 	xor a
 	ld [$dd90], a
 	bit 3, d
 	jr nz, .asm_f817f
 	ld a, $8
-	ld [$ff21], a
+	ld [rNR42], a
 	swap a
-	ld [$ff23], a
+	ld [rNR44], a
 .asm_f817f
 	xor a
 	ld [$dd8f], a
 	bit 2, d
 	jr nz, .asm_f818b
 	ld a, $0
-	ld [$ff1c], a
+	ld [rNR32], a
 .asm_f818b
 	ret
 
@@ -256,8 +256,8 @@ Music2_PlaySong: ; f818c (3e:418c)
 	add hl, bc
 	ld a, [hl]
 	ld [$dd81], a
-	ld [$ff80], a
-	ld [$2000], a
+	ld [CURR_ROM_BANK], a
+	ld [MBC3RomBank], a
 	pop af
 	add a
 	ld c, a
@@ -399,7 +399,7 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	ld a, [$dd8c]
 	bit 0, a
 	jr nz, .asm_f82d4
-	ld hl, $ff12
+	ld hl, rNR12
 	ld a, [wMusicE9]
 	ld [hli], a
 	inc hl
@@ -429,9 +429,9 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	bit 0, a
 	jr nz, .asm_f8309
 	ld a, $8
-	ld [$ff12], a
+	ld [rNR12], a
 	swap a
-	ld [$ff14], a
+	ld [rNR14], a
 .asm_f8309
 	ret
 
@@ -452,7 +452,7 @@ Func_f830a: ; f830a (3e:430a)
 	ld a, [$dd8c]
 	bit 1, a
 	jr nz, .asm_f8339
-	ld hl, $ff17
+	ld hl, rNR22
 	ld a, [$ddc8]
 	ld [hli], a
 	inc hl
@@ -482,9 +482,9 @@ Func_f830a: ; f830a (3e:430a)
 	bit 1, a
 	jr nz, .asm_f836e
 	ld a, $8
-	ld [$ff17], a
+	ld [rNR22], a
 	swap a
-	ld [$ff19], a
+	ld [rNR24], a
 .asm_f836e
 	ret
 
@@ -506,7 +506,7 @@ Func_f836f: ; f836f (3e:436f)
 	cp $1
 	jr z, .asm_f8398
 	ld a, [$ddc9]
-	ld [$ff1c], a
+	ld [rNR32], a
 .asm_f8398
 	ld a, [$ddbd]
 	dec a
@@ -531,9 +531,9 @@ Func_f836f: ; f836f (3e:436f)
 	bit 2, a
 	jr nz, .asm_f83cd
 	ld a, $0
-	ld [$ff1c], a
+	ld [rNR32], a
 	ld a, $80
-	ld [$ff1e], a
+	ld [rNR34], a
 .asm_f83cd
 	ret
 
@@ -569,9 +569,9 @@ Func_f83ce: ; f83ce (3e:43ce)
 	xor a
 	ld [$ddef], a
 	ld a, $8
-	ld [$ff21], a
+	ld [rNR42], a
 	swap a
-	ld [$ff23], a
+	ld [rNR44], a
 .asm_f8413
 	ret
 
@@ -1167,25 +1167,25 @@ Func_f8714: ; f8714 (3e:4714)
 	cp $80
 	jr z, .asm_f8733
 	ld a, [wMusicVolume]
-	ld [$ff12], a
+	ld [rNR12], a
 	ld d, $80
 .asm_f8733
 	ld [hl], $2
 	ld a, $8
-	ld [$ff10], a
+	ld [rNR10], a
 	ld a, [wMusicDuty]
-	ld [$ff11], a
+	ld [rNR11], a
 	ld a, [$dda5]
-	ld [$ff13], a
+	ld [rNR13], a
 	ld a, [$dda6]
 	or d
-	ld [$ff14], a
+	ld [rNR14], a
 .asm_f8749
 	ret
 .asm_f874a
 	ld hl, wMusicTie
 	ld [hl], $0
-	ld hl, $ff12
+	ld hl, rNR12
 	ld a, $8
 	ld [hli], a
 	inc hl
@@ -1206,23 +1206,23 @@ Func_f875a: ; f875a (3e:475a)
 	cp $80
 	jr z, .asm_f8779
 	ld a, [$dde8]
-	ld [$ff17], a
+	ld [rNR22], a
 	ld d, $80
 .asm_f8779
 	ld [hl], $2
 	ld a, [$dd87]
-	ld [$ff16], a
+	ld [rNR21], a
 	ld a, [$dda7]
-	ld [$ff18], a
+	ld [rNR23], a
 	ld a, [$dda8]
 	or d
-	ld [$ff19], a
+	ld [rNR24], a
 .asm_f878b
 	ret
 .asm_f878c
 	ld hl, $dd92
 	ld [hl], $0
-	ld hl, $ff17
+	ld hl, rNR22
 	ld a, $8
 	ld [hli], a
 	inc hl
@@ -1239,7 +1239,7 @@ Func_f879c: ; f879c (3e:479c)
 	or a
 	jr z, .asm_f87b3
 	xor a
-	ld [$ff1a], a
+	ld [rNR30], a
 	call Func_f87ea
 	ld d, $80
 .asm_f87b3
@@ -1251,28 +1251,28 @@ Func_f879c: ; f879c (3e:479c)
 	cp $80
 	jr z, .asm_f87cc
 	ld a, [$dde9]
-	ld [$ff1c], a
+	ld [rNR32], a
 	xor a
-	ld [$ff1a], a
+	ld [rNR30], a
 	ld d, $80
 .asm_f87cc
 	ld [hl], $2
 	xor a
-	ld [$ff1b], a
+	ld [rNR31], a
 	ld a, [$dda9]
-	ld [$ff1d], a
+	ld [rNR33], a
 	ld a, $80
-	ld [$ff1a], a
+	ld [rNR30], a
 	ld a, [$ddaa]
 	or d
-	ld [$ff1e], a
+	ld [rNR34], a
 .asm_f87e0
 	ret
 .asm_f87e1
 	ld hl, wMusicTie
 	ld [hl], $0
 	xor a
-	ld [$ff1a], a
+	ld [rNR30], a
 	ret
 
 Func_f87ea: ; f879c (3e:47ea)
@@ -1306,7 +1306,7 @@ Func_f880a: ; f880a (3e:480a)
 	ld a, [$ddba]
 	cp $0
 	jr z, asm_f882a
-	ld de, $ff20
+	ld de, rNR41
 	ld hl, $ddab
 	ld a, [hli]
 	ld [de], a
@@ -1324,7 +1324,7 @@ Func_f880a: ; f880a (3e:480a)
 asm_f882a
 	xor a
 	ld [$ddef], a
-	ld hl, $ff21
+	ld hl, rNR42
 	ld a, $8
 	ld [hli], a
 	inc hl
@@ -1349,7 +1349,7 @@ Func_f8839: ; f8839 (3e:4839)
 	jr nz, .asm_f8853
 	jr asm_f882a
 .asm_f8853
-	ld [$ff22], a
+	ld [rNR43], a
 	inc de
 	ld a, d
 	ld [hld], a
@@ -1368,7 +1368,7 @@ Func_f885a: ; f885a (3e:485a)
 
 Func_f8866: ; f8866 (3e:4866)
 	ld a, [$ddf1]
-	ld [$ff24], a
+	ld [rNR50], a
 	ld a, [$dd8c]
 	or a
 	ld hl, wMusicDC
@@ -1397,7 +1397,7 @@ Func_f8866: ; f8866 (3e:4866)
 	swap e
 	or e
 	and d
-	ld [$ff25], a
+	ld [rNR51], a
 	ret
 
 Func_f8898: ; f8898 (3e:4898)
@@ -1495,13 +1495,13 @@ Func_f890b: ; f890b (3e:490b)
 	bit 0, a
 	jr nz, .asm_f8966
 	ld a, e
-	ld [$ff13], a
-	ld a, [$ff11]
+	ld [rNR13], a
+	ld a, [rNR11]
 	and $c0
-	ld [$ff11], a
+	ld [rNR11], a
 	ld a, d
 	and $3f
-	ld [$ff14], a
+	ld [rNR14], a
 	ret
 .asm_f892c
 	cp $1
@@ -1513,12 +1513,12 @@ Func_f890b: ; f890b (3e:490b)
 	bit 1, a
 	jr nz, .asm_f8966
 	ld a, e
-	ld [$ff18], a
-	ld a, [$ff16]
+	ld [rNR23], a
+	ld a, [rNR21]
 	and $c0
-	ld [$ff16], a
+	ld [rNR21], a
 	ld a, d
-	ld [$ff19], a
+	ld [rNR24], a
 	ret
 .asm_f894b
 	cp $2
@@ -1530,11 +1530,11 @@ Func_f890b: ; f890b (3e:490b)
 	bit 2, a
 	jr nz, .asm_f8966
 	ld a, e
-	ld [$ff1d], a
+	ld [rNR33], a
 	xor a
-	ld [$ff1b], a
+	ld [rNR31], a
 	ld a, d
-	ld [$ff1e], a
+	ld [rNR34], a
 .asm_f8966
 	ret
 
@@ -1567,28 +1567,28 @@ Func_f8980: ; f8980 (3e:4980)
 	bit 0, d
 	jr nz, .asm_f8990
 	ld a, $8
-	ld [$ff12], a
+	ld [rNR12], a
 	swap a
-	ld [$ff14], a
+	ld [rNR14], a
 .asm_f8990
 	bit 1, d
 	jr nz, .asm_f899c
 	swap a
-	ld [$ff17], a
+	ld [rNR22], a
 	swap a
-	ld [$ff19], a
+	ld [rNR24], a
 .asm_f899c
 	bit 3, d
 	jr nz, .asm_f89a8
 	swap a
-	ld [$ff21], a
+	ld [rNR42], a
 	swap a
-	ld [$ff23], a
+	ld [rNR44], a
 .asm_f89a8
 	bit 2, d
 	jr nz, .asm_f89b0
 	ld a, $0
-	ld [$ff1c], a
+	ld [rNR32], a
 .asm_f89b0
 	ret
 

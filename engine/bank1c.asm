@@ -163,13 +163,13 @@ Func_70136: ; 70136 (1c:4136)
 	or $1
 	ld [$cabb], a
 	ld a, $e4
-	ld [$ff47], a
+	ld [rBGP], a
 	call Func_040c
 	xor a
-	ld [$ff92], a
-	ld [$ff43], a
-	ld [$ff93], a
-	ld [$ff42], a
+	ld [CURR_SCX], a
+	ld [rSCX], a
+	ld [CURR_SCY], a
+	ld [rSCY], a
 	pop de
 	pop bc
 	pop hl

@@ -100,7 +100,7 @@ Unknown_8de2: ; 8de2 (2:4de2)
 INCBIN "baserom.gbc",$8de2,$8dea - $8de2
 
 Func_8dea: ; 8dea (2:4dea)
-	ld a, [$ff8f]
+	ld a, [BUTTONS_PRESSED_2]
 	and $8
 	ret z
 	ld a, [$cd10]
@@ -418,7 +418,7 @@ Func_9065: ; 9065 (2:5065)
 	ld d, a
 	ld a, [$ceb0]
 	ld e, a
-	ld a, [$ff8f]
+	ld a, [BUTTONS_PRESSED_2]
 	or a
 	jr z, .asm_90a6
 	bit 5, a

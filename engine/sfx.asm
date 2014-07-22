@@ -170,7 +170,7 @@ SFX_0: ; fc0ce (3f:40ce)
 	ld [hl], $0
 	or d
 	ld d, a
-	ld hl, $ff11
+	ld hl, rNR11
 	ld a, c
 	add a
 	add a
@@ -203,7 +203,7 @@ SFX_1: ; fc10e (3f:410e)
 	ld a, [hli]
 	ld e, a
 	push hl
-	ld hl, $ff12
+	ld hl, rNR12
 	ld a, c
 	add a
 	add a
@@ -217,7 +217,7 @@ SFX_1: ; fc10e (3f:410e)
 SFX_2: ; fc127 (3f:4127)
 	swap a
 	ld e, a
-	ld hl, $ff11
+	ld hl, rNR11
 	ld a, c
 	add a
 	add a
@@ -331,7 +331,7 @@ Func_fc18d: ; fc18d (3f:418d)
 	ld [hl], $0
 	or d
 	ld d, a
-	ld hl, $ff11
+	ld hl, rNR11
 	ld a, c
 	add a
 	add a
@@ -380,7 +380,7 @@ Func_fc1cd: ; fc1cd (3f:41cd)
 	ld [hl], $0
 	or e
 	ld e, a
-	ld hl, $ff20
+	ld hl, rNR41
 	xor a
 	ld [hli], a
 	inc hl
@@ -400,7 +400,7 @@ SFX_7: ; fc202 (3f:4202)
 	ld h, [hl]
 	ld l, a
 	ld a, $0
-	ld [$ff1a], a
+	ld [rNR30], a
 	ld b, d
 	ld de, $ff30
 .asm_fc215
@@ -414,7 +414,7 @@ SFX_7: ; fc202 (3f:4202)
 	ld a, $1
 	ld [$dd8b], a
 	ld a, $80
-	ld [$ff1a], a
+	ld [rNR30], a
 	ld b, $0
 	pop hl
 	jp Func_fc094
@@ -461,7 +461,7 @@ SFX_end: ; fc249 (3f:4249)
 	add c
 	ld e, a
 	ld d, b
-	ld hl, $ff12
+	ld hl, rNR12
 	add hl, de
 	ld a, $8
 	ld [hli], a
@@ -481,14 +481,14 @@ Func_fc26c: ; fc26c (3f:426c)
 
 Func_fc279: ; fc279 (3f:4279)
 	ld a, $8
-	ld a, [$ff12]
-	ld a, [$ff17]
-	ld a, [$ff1c]
-	ld a, [$ff21]
+	ld a, [rNR12]
+	ld a, [rNR22]
+	ld a, [rNR32]
+	ld a, [rNR42]
 	ld a, $80
-	ld a, [$ff14]
-	ld a, [$ff19]
-	ld a, [$ff23]
+	ld a, [rNR14]
+	ld a, [rNR24]
+	ld a, [rNR44]
 	xor a
 	ld [$dd8c], a
 	ret
