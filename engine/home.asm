@@ -49,10 +49,10 @@ Start: ; 0150 (0:0150)
 	call BankswitchVRAM_0
 	call DisableLCD
 	pop af
-	ld [DATA_INITIAL_A], a
+	ld [wInitialA], a
 	call DetectConsole
 	ld a, $20
-	ld [DATA_TILE_MAP_FILL], a
+	ld [wTileMapFill], a
 	call SetupVRAM
 	call SetupLCD
 	call SetupPalettes
@@ -71,7 +71,7 @@ VBlankHandler: ; 019b (0:019b)
 	push bc
 	push de
 	push hl
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld hl, $caba
 	bit 0, [hl]
@@ -80,24 +80,24 @@ VBlankHandler: ; 019b (0:019b)
 	ld a, [$cac0]
 	or a
 	jr z, .asm_1b8
-	call DMA_FUNCTION
+	call hDMAFunction
 	xor a
 	ld [$cac0], a
 .asm_1b8
-	ld a, [CURR_SCX]
+	ld a, [hSCX]
 	ld [rSCX], a
-	ld a, [CURR_SCY]
+	ld a, [hSCY]
 	ld [rSCY], a
-	ld a, [CURR_WX]
+	ld a, [hWX]
 	ld [rWX], a
-	ld a, [CURR_WY]
+	ld a, [hWY]
 	ld [rWY], a
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	ld [rLCDC], a
 	ei
 	call $cad0
 	call Func_042d
-	ld hl, DATA_VBLANK_COUNTER
+	ld hl, wVBlankCtr
 	inc [hl]
 	ld hl, $caba
 	res 0, [hl]
@@ -127,7 +127,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	bit 1, [hl]
 	jr nz, .asm_217
 	set 1, [hl]
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Func_f4003)
 	call BankswitchHome
@@ -146,10 +146,10 @@ TimerHandler: ; 01e6 (0:01e6)
 ; increment timer counter by a tick
 ; the counter consists of three fields 0..60 and two fields 0..255
 IncrementCounter: ; 021c (0:021c)
-	ld a, [COUNTER_ENABLE]
+	ld a, [wCounterEnable]
 	or a
 	ret z
-	ld hl, COUNTER_FIELD0
+	ld hl, wCounter0
 	inc [hl]
 	ld a, [hl]
 	cp 60
@@ -194,7 +194,7 @@ SetupTimer: ; 0241 (0:0241)
 
 ; carry flag: 0 if CGB
 CheckForCGB: ; 025c (0:025c)
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret z
 	scf
@@ -203,10 +203,10 @@ CheckForCGB: ; 025c (0:025c)
 ; wait for vblank
 WaitForVBlank: ; 0264 (0:0264)
 	push hl
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	bit 7, a
 	jr z, .asm_275
-	ld hl, DATA_VBLANK_COUNTER
+	ld hl, wVBlankCtr
 	ld a, [hl]
 .asm_270
 	halt
@@ -218,11 +218,11 @@ WaitForVBlank: ; 0264 (0:0264)
 
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
-	ld a, [CURR_LCDC]    ;
+	ld a, [wLCDC]    ;
 	bit 7, a             ;
 	ret nz               ; assert that LCD is off
 	or $80               ;
-	ld [CURR_LCDC], a    ;
+	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
 	ld a, $c0
 	ld [$cabf], a
@@ -234,7 +234,7 @@ DisableLCD: ; 028a (0:028a)
 	bit 7, a             ;
 	ret z                ; assert that LCD is on
 	ld a, [rIE]
-	ld [CURR_IE], a
+	ld [wIE], a
 	res 0, a             ;
 	ld [rIE], a          ; disable vblank interrupt
 .asm_298
@@ -244,29 +244,29 @@ DisableLCD: ; 028a (0:028a)
 	ld a, [rLCDC]        ;
 	and $7f              ;
 	ld [rLCDC], a        ;
-	ld a, [CURR_LCDC]    ;
+	ld a, [wLCDC]        ;
 	and $7f              ;
-	ld [CURR_LCDC], a    ; turn LCD off
+	ld [wLCDC], a        ; turn LCD off
 	xor a
 	ld [rBGP], a
 	ld [rOBP0], a
 	ld [rOBP1], a
-	ld a, [CURR_IE]
+	ld a, [wIE]
 	ld [rIE], a
 	ret
 
 ; set OBJ size: 8x8 (in [$CABB])
 Set_OBJ_8x8: ; 02b9 (0:02b9)
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	and $fb
-	ld [CURR_LCDC], a
+	ld [wLCDC], a
 	ret
 
 ; set OBJ size: 8x16 (in [$CABB])
 Set_OBJ_8x16: ; 02c2 (0:02c2)
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	or $4
-	ld [CURR_LCDC], a
+	ld [wLCDC], a
 	ret
 ; 0x2cb
 
@@ -298,10 +298,10 @@ SetupLCD: ; 030b (0:030b)
 	ld [$cab0], a
 	ld [$cab1], a
 	ld [$cab2], a
-	ld [CURR_SCX], a
-	ld [CURR_SCY], a
-	ld [CURR_WX], a
-	ld [CURR_WY], a
+	ld [hSCX], a
+	ld [hSCY], a
+	ld [hWX], a
+	ld [hWY], a
 	xor a
 	ld [$caba], a
 	ld a, $c3
@@ -312,7 +312,7 @@ SetupLCD: ; 030b (0:030b)
 	inc hl
 	ld [hl], NopF >> $8
 	ld a, $47
-	ld [CURR_LCDC], a
+	ld [wLCDC], a
 	ld a, $1
 	ld [MBC3LatchClock], a
 	ld a, $a
@@ -331,7 +331,7 @@ DetectConsole: ; 0349 (0:0349)
 	ld b, CONSOLE_SGB
 .asm_35b
 	ld a, b
-	ld [DATA_CONSOLE], a
+	ld [wConsole], a
 	cp CONSOLE_CGB
 	ret nz
 	ld a, CONSOLE_SGB
@@ -341,7 +341,7 @@ DetectConsole: ; 0349 (0:0349)
 
 ; initialize the palettes (both monochrome and color)
 SetupPalettes: ; 036a (0:036a)
-	ld hl, CURR_BGP
+	ld hl, wBGP
 	ld a, $e4
 	ld [rBGP], a
 	ld [hli], a
@@ -351,10 +351,10 @@ SetupPalettes: ; 036a (0:036a)
 	ld [hl], a
 	xor a
 	ld [$cabf], a
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
-	ld de, BUF_PALETTE
+	ld de, wBufPalette
 	ld c, $10
 .asm_387
 	ld hl, InitialPalette
@@ -395,19 +395,19 @@ SetupVRAM: ; 03a1 (0:03a1)
 	jr nz, .asm_3b8
 	ret
 
-; fill VARM tile map banks with [DATA_TILE_MAP_FILL]
+; fill VARM tile map banks with [wTileMapFill]
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
 	ld hl, $9800
 	ld bc, $0400
 .asm_3c9
-	ld a, [DATA_TILE_MAP_FILL]
+	ld a, [wTileMapFill]
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
 	jr nz, .asm_3c9
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM_1
@@ -453,12 +453,12 @@ Func_0408: ; 0408 (0:0408)
 	jr asm_411
 
 Func_040c: ; 040c (0:040c)
-	ld [CURR_BGP], a
+	ld [wBGP], a
 asm_40f
 	ld a, $80
 asm_411
 	ld [$cabf], a
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	rla
 	ret c
 	push hl
@@ -471,25 +471,25 @@ asm_411
 	ret
 
 Set_OBP0: ; 0423 (0:0423)
-	ld [CURR_OBP0], a
+	ld [wOBP0], a
 	jr asm_40f
 
 Set_OBP1: ; 0428 (0:0428)
-	ld [CURR_OBP1], a
+	ld [wOBP1], a
 	jr asm_40f
 
 Func_042d: ; 042d (0:042d)
 	ld a, [$cabf]
 	or a
 	ret z
-	ld hl, CURR_BGP
+	ld hl, wBGP
 	ld a, [hli]
 	ld [rBGP], a
 	ld a, [hli]
 	ld [rOBP0], a
 	ld a, [hl]
 	ld [rOBP1], a
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr z, asm_44a
 asm_445
@@ -556,7 +556,7 @@ Func_04a2: ; 04a2 (0:04a2)
 	call FillTileMap
 	xor a
 	ld [$cac2], a
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
 	call EnableLCD
@@ -607,27 +607,27 @@ ReadJoypad: ; 04de (0:04de)
 	ld c, a              ; joypad data
 	cpl
 	ld b, a
-	ld a, [BUTTONS_HELD]
+	ld a, [hButtonsHeld]
 	xor c
 	and b
-	ld [BUTTONS_RELEASED], a
-	ld a, [BUTTONS_HELD]
+	ld [hButtonsReleased], a
+	ld a, [hButtonsHeld]
 	xor c
 	and c
 	ld b, a
-	ld [BUTTONS_PRESSED], a
-	ld a, [BUTTONS_HELD]
+	ld [hButtonsPressed], a
+	ld a, [hButtonsHeld]
 	and $f
 	cp $f
 	jr nz, asm_522       ; handle reset
 	call ResetSerial
 Reset: ; 051b (0:051b)
-	ld a, [DATA_INITIAL_A]
+	ld a, [wInitialA]
 	di
 	jp Start
 asm_522
 	ld a, c
-	ld [BUTTONS_HELD], a
+	ld [hButtonsHeld], a
 	ld a, $30
 	ld [rJOYP], a
 	ret
@@ -641,21 +641,21 @@ Func_053f: ; 053f (0:053f)
 	push de
 	push bc
 	ld hl, $cad3
-	call Func_05b6
+	call CallIndirect
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ld a, [$cad5]
 	or a
 	jr z, .asm_56d
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	and $4
 	jr z, .asm_56d
 .asm_55e
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	and $4
 	jr z, .asm_55e
 .asm_56d
@@ -667,12 +667,12 @@ Func_053f: ; 053f (0:053f)
 
 ; handle D-pad repeatcounter
 HandleDPadRepeat: ; 0572 (0:0572)
-	ld a, [BUTTONS_HELD]
-	ld [BUTTONS_PRESSED_2], a
+	ld a, [hButtonsHeld]
+	ld [hButtonsPressed2], a
 	and $f0
 	jr z, .asm_58c
-	ld hl, DPAD_REPEAT_CTR
-	ld a, [BUTTONS_PRESSED]
+	ld hl, hDPadRepeat
+	ld a, [hButtonsPressed]
 	and $f0
 	jr z, .asm_586
 	ld [hl], 24
@@ -683,9 +683,9 @@ HandleDPadRepeat: ; 0572 (0:0572)
 	ld [hl], 6
 	ret
 .asm_58c
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	and $f
-	ld [BUTTONS_PRESSED_2], a
+	ld [hButtonsPressed2], a
 	ret
 
 CopyDMAFunction: ; 0593 (0:0593)
@@ -723,7 +723,8 @@ JumpToFunctionInTable: ; 05ab (0:05ab)
 	ld l, a
 	jp [hl]
 
-Func_05b6: ; 05b6 (0:05b6)
+; call function at [hl] if non-NULL
+CallIndirect: ; 05b6 (0:05b6)
 	push af
 	ld a, [hli]
 	or [hl]
@@ -735,7 +736,8 @@ Func_05b6: ; 05b6 (0:05b6)
 	ld l, [hl]
 	ld h, a
 	pop af
-Func_05c1: ; 05c1 (0:05c1)
+	; fallthrough
+CallF: ; 05c1 (0:05c1)
 	jp [hl]
 ; 0x5c2
 
@@ -779,7 +781,7 @@ INCBIN "baserom.gbc",$0695,$06c3 - $0695
 
 Func_06c3: ; 06c3 (0:06c3)
 	push af
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	rla
 	jr c, .asm_6d8
 	pop af
@@ -818,7 +820,7 @@ Func_0709: ; 0709 (0:0709)
 	jp MemcpyHLDE_hblank
 
 CopyGfxData: ; 070c (0:070c)
-	ld a, [CURR_LCDC]
+	ld a, [wLCDC]
 	rla
 	jr nc, .asm_726
 .asm_712
@@ -891,7 +893,7 @@ BankpushHome: ; 0745 (0:0745)
 	dec hl
 	ld [hl], c
 	ld hl, [sp+$9]
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	ld [hld], a
 	ld [hl], $0
 	ld a, d
@@ -936,14 +938,14 @@ BankpopHome: ; 078e (0:078e)
 
 ; switch ROM bank
 BankswitchHome: ; 07a3 (0:07a3)
-	ld [CURR_ROM_BANK], a
+	ld [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
 
 ; switch RAM bank
 BankswitchRAM: ; 07a9 (0:07a9)
 	push af
-	ld [CURR_RAM_BANK], a
+	ld [hBankRAM], a
 	ld [MBC3SRamBank], a
 	ld a, $a
 	ld [MBC3SRamEnable], a
@@ -970,7 +972,7 @@ DisableExtRAM: ; 07be (0:07be)
 BankswitchVRAM_0: ; 07c5 (0:07c5)
 	push af
 	xor a
-	ld [CURR_DEST_VRAM_BANK], a
+	ld [hBankVRAM], a
 	ld [rVBK], a
 	pop af
 	ret
@@ -979,7 +981,7 @@ BankswitchVRAM_0: ; 07c5 (0:07c5)
 BankswitchVRAM_1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
-	ld [CURR_DEST_VRAM_BANK], a
+	ld [hBankVRAM], a
 	ld [rVBK], a
 	pop af
 	ret
@@ -987,7 +989,7 @@ BankswitchVRAM_1: ; 07cd (0:07cd)
 ; set current dest VRAM bank
 ; a: value to write
 BankswitchVRAM: ; 07d6 (0:07d6)
-	ld [CURR_DEST_VRAM_BANK], a
+	ld [hBankVRAM], a
 	ld [rVBK], a
 	ret
 ; 0x7db
@@ -1300,7 +1302,7 @@ RST18: ; 09ae (0:09ae)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -1346,7 +1348,7 @@ RST28: ; 09e9 (0:09e9)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -1773,7 +1775,7 @@ ResetSerial: ; 0ea6 (0:0ea6)
 	xor a
 	ld [rSB], a
 	ld [rSC], a
-	ld hl, BUF_SERIAL
+	ld hl, wBufSerial
 	ld bc, $0051
 .asm_eb7
 	xor a
@@ -1926,7 +1928,7 @@ Func_1deb: ; 1deb (0:1deb)
 INCBIN "baserom.gbc",$1e00,$1e7c - $1e00
 
 Func_1e7c: ; 1e7c (0:1e7c)
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr z, asm_1ec9
 	cp CONSOLE_SGB
@@ -2110,7 +2112,7 @@ INCBIN "baserom.gbc",$1f96,$20b0 - $1f96
 
 Func_20b0: ; 20b0 (0:20b0)
 	ld hl, $2fe8
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_20bd
 	ld hl, $37f8
@@ -2121,7 +2123,7 @@ Func_20b0: ; 20b0 (0:20b0)
 
 Func_20c4: ; 20c4 (0:20c4)
 	ld hl, $3028
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_20d1
 	ld hl, $3838
@@ -2138,7 +2140,7 @@ Func_20dc: ; 20dc (0:20dc)
 	ld b, $24
 asm_20de
 	ld hl, $32e8
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_20eb
 	ld hl, $3af8
@@ -2152,7 +2154,7 @@ Func_20f0: ; 20f0 (0:20f0)
 	ld b, $d
 	call asm_2121
 	ld hl, $3528
-	ld a, [DATA_CONSOLE]
+	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_2108
 	ld hl, $3d38
@@ -2663,7 +2665,7 @@ Func_24ac: ; 24ac (0:24ac)
 
 Func_24ca: ; 24ca (0:24ca)
 	push bc
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(VWF)
 	call BankswitchHome
@@ -2824,7 +2826,7 @@ Func_2636: ; 2636 (0:2636)
 Func_264b: ; 264b (0:264b)
 	xor a
 	ld [$cd99], a
-	ld a, [BUTTONS_PRESSED_2]
+	ld a, [hButtonsPressed2]
 	or a
 	jr z, .asm_2685
 	ld b, a
@@ -2866,7 +2868,7 @@ Func_264b: ; 264b (0:264b)
 	ld l, [hl]
 	ld h, a
 	ld a, [$ffb1]
-	call Func_05c1
+	call CallF
 	jr nc, asm_26d1
 .asm_269b
 	call Func_270b
@@ -2877,7 +2879,7 @@ Func_264b: ; 264b (0:264b)
 	scf
 	ret
 .asm_26a9
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	and $3
 	jr z, asm_26d1
 	and $1
@@ -3020,7 +3022,7 @@ Func_2aab: ; 2aab (0:2aab)
 .asm_2ab8
 	call Func_053f
 	call Func_26da
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	and $3
 	jr z, .asm_2ab8
 	call Func_26e9
@@ -3051,10 +3053,10 @@ Func_2af0: ; 2af0 (0:2af0)
 .asm_2b1f
 	call Func_053f
 	call Func_26da
-	ld a, [BUTTONS_PRESSED]
+	ld a, [hButtonsPressed]
 	bit 0, a
 	jr nz, .asm_2b50
-	ld a, [BUTTONS_PRESSED_2]
+	ld a, [hButtonsPressed2]
 	and $30
 	jr z, .asm_2b1f
 	ld a, $1
@@ -3127,7 +3129,7 @@ Func_2c23: ; 2c23 (0:2c23)
 	ld l, [hl]
 	ld h, a
 Func_2c29: ; 2c29 (0:2c29)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_21c5
@@ -3155,7 +3157,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	ld [hli], a
 	ld a, [$cd0a]
 	ld [hli], a
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	ld [hli], a
 	ld [hl], c
 	inc hl
@@ -3360,7 +3362,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ld a, l
 	or h
 	jr z, .asm_2e53
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call .asm_2e56
@@ -3392,7 +3394,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ret
 
 Func_2e76: ; 2e76 (0:2e76)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_2cc8
@@ -3407,7 +3409,7 @@ Func_2e89: ; 2e89 (0:2e89)
 	ld a, l
 	or h
 	jr z, .asm_2e9f
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
 .asm_2e93
@@ -3430,7 +3432,7 @@ Func_2e89: ; 2e89 (0:2e89)
 INCBIN "baserom.gbc",$2ea9,$2fa0 - $2ea9
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	push hl
 	srl h
@@ -3467,7 +3469,7 @@ LoadDeck: ; 302c (0:302c)
 	push hl
 	ld l, a
 	ld h, $0
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(DeckPointers)
 	call BankswitchHome
@@ -3650,7 +3652,7 @@ Func_380e: ; 380e (0:380e)
 	ld a, [$d0c1]
 	bit 7, a
 	ret nz
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Func_c484)
 	call BankswitchHome
@@ -3670,8 +3672,8 @@ Func_380e: ; 380e (0:380e)
 
 Func_383d: ; 383d (0:383d)
 	ld a, $1
-	ld [COUNTER_ENABLE], a
-	ld a, [CURR_ROM_BANK]
+	ld [wCounterEnable], a
+	ld a, [hBankROM]
 	push af
 .asm_3845
 	call Func_3855
@@ -3707,7 +3709,7 @@ Func_3874: ; 3874 (0:3874)
 	ret
 
 Func_3876: ; 3876 (0:3876)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	call Func_379b
 	ld a, MUSIC_CARDPOP
@@ -3818,7 +3820,7 @@ Func_3946: ; 3946 (0:3946)
 	ret
 
 Func_395a: ; 395a (0:395a)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, [$d4c6]
 	call BankswitchHome
@@ -3837,7 +3839,7 @@ Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3997 - $397b
 
 Func_3997: ; 3997 (0:3997)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Func_1c056)
 	call BankswitchHome
@@ -3956,7 +3958,7 @@ Func_3a40: ; 3a40 (0:3a40)
 INCBIN "baserom.gbc",$3a45,$3a5e - $3a45
 
 Func_3a5e: ; 3a5e (0:3a5e)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld l, $4
 	call Func_3abd
@@ -4028,7 +4030,7 @@ Func_3abd: ; 3abd (0:3abd)
 	pop bc
 	ld b, $0
 	add hl, bc
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(MapScripts)
 	call BankswitchHome
@@ -4064,7 +4066,7 @@ Func_3aed: ; 3aed (0:3aed)
 	ld b, $0
 	ld hl, Unknown_1217b
 	add hl, bc
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Unknown_1217b)
 	call BankswitchHome
@@ -4097,7 +4099,7 @@ Func_3bdb: ; 3bdb (0:3bdb)
 INCBIN "baserom.gbc",$3be4,$3bf5 - $3be4
 
 Func_3bf5: ; 3bf5 (0:3bf5)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	push hl
 	ld a, [$d4c6]
@@ -4174,7 +4176,7 @@ INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [$d5d7], a
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)
 	call BankswitchHome
@@ -4184,7 +4186,7 @@ Func_3ca0: ; 3ca0 (0:3ca0)
 	ret
 
 Func_3cb4: ; 3cb4 (0:3cb4)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	ld a, BANK(Func_12a21)
 	call BankswitchHome
@@ -4197,7 +4199,7 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 INCBIN "baserom.gbc",$3cc4,$3d72 - $3cc4
 
 Func_3d72: ; 3d72 (0:3d72)
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	push hl
 	push hl
@@ -4276,7 +4278,7 @@ INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
-	ld a, [CURR_ROM_BANK]
+	ld a, [hBankROM]
 	push af
 	push hl
 	ld a, BANK(Func_12c7f)
@@ -4299,7 +4301,7 @@ INCBIN "baserom.gbc",$3e10,$3fe0 - $3e10
 Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
-	ld [CURR_ROM_BANK], a
+	ld [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
 	ld bc, Bankswitch3d
@@ -4308,7 +4310,7 @@ Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
 
 Bankswitch3d: ; 3fe0 (0:3fe0)
 	ld a, $3d
-	ld [CURR_ROM_BANK], a
+	ld [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
 

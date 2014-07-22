@@ -168,7 +168,7 @@ Func_f80e9: ; f80e9 (3e:40e9)
 	ld hl, Func_fc003
 	call Bankswitch3dTo3f
 	ld a, [$dd81]
-	ld [CURR_ROM_BANK], a
+	ld [hBankROM], a
 	ld [MBC3RomBank], a
 	ld a, [$ddf2]
 	cp $0
@@ -256,7 +256,7 @@ Music2_PlaySong: ; f818c (3e:418c)
 	add hl, bc
 	ld a, [hl]
 	ld [$dd81], a
-	ld [CURR_ROM_BANK], a
+	ld [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
 	add a

@@ -1,6 +1,7 @@
 INCLUDE "constants.asm"
 INCLUDE "macros.asm"
 INCLUDE "wram.asm"
+INCLUDE "hram.asm"
 
 INCLUDE "engine/home.asm"
 

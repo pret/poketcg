@@ -1,3 +1,60 @@
+;--- Bank 0: $Cxxx ----------------------------------------
+SECTION "WRAM0", WRAM0
+	ds $ab3
+
+wInitialA: ; cab3
+	ds $1
+
+wConsole: ; cab4
+	ds $2
+
+wTileMapFill: ; cab6
+	ds $1
+
+wIE: ; cab7
+	ds $1
+
+wVBlankCtr: ; cab8
+	ds $3
+
+wLCDC: ; cabb
+	ds $1
+
+wBGP: ; cabc
+	ds $1
+
+wOBP0: ; cabd
+	ds $1
+
+wOBP1: ; cabe
+	ds $6
+
+wCounterEnable: ; cac4
+	ds $1
+
+wCounter0: ; cac5
+	ds $1
+
+wCounter1: ; cac6
+	ds $1
+
+wCounter2: ; cac7
+	ds $1
+
+wCounter3: ; cac8
+	ds $1
+
+wCounter4: ; cac9
+	ds $27
+
+wBufPalette: ; caf0
+	ds $84
+
+wBufSerial: ; cb74
+	ds $1
+
+
+;--- Bank 1: $Dxxx ----------------------------------------
 SECTION "WRAM1", WRAMX, BANK[1]
 	ds $32f
 
