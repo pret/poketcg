@@ -50,7 +50,7 @@ Start: ; 0150 (0:0150)
 	call DisableLCD
 	pop af
 	ld [DATA_INITIAL_A], a
-	call Func_0349
+	call DetectConsole
 	ld a, $20
 	ld [DATA_TILE_MAP_FILL], a
 	call Func_03a1
@@ -174,7 +174,7 @@ Func_021c: ; 021c (0:021c)
 
 Func_0241: ; 0241 (0:0241)
 	ld b, $bc
-	call Func_025c
+	call CheckForCGB
 	jr c, .asm_250
 	ld a, [rKEY1]
 	and $80
@@ -189,9 +189,10 @@ Func_0241: ; 0241 (0:0241)
 	ld [rTAC], a
 	ret
 
-Func_025c: ; 025c (0:025c)
-	ld a, [$cab4]
-	cp $2
+; carry flag: 0 if CGB
+CheckForCGB: ; 025c (0:025c)
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	ret z
 	scf
 	ret
@@ -315,21 +316,21 @@ Func_030b: ; 030b (0:030b)
 NopF: ; 0348 (0:0348)
 	ret
 
-Func_0349: ; 0349 (0:0349)
-	ld b, $2
-	cp $11
+DetectConsole: ; 0349 (0:0349)
+	ld b, CONSOLE_CGB
+	cp GBC
 	jr z, .asm_35b
-	call Func_0b59
-	ld b, $0
+	call DetectSGB
+	ld b, CONSOLE_DMG
 	jr nc, .asm_35b
-	call Func_0a0d
-	ld b, $1
+	call InitSGB
+	ld b, CONSOLE_SGB
 .asm_35b
 	ld a, b
-	ld [$cab4], a
-	cp $2
+	ld [DATA_CONSOLE], a
+	cp CONSOLE_CGB
 	ret nz
-	ld a, $1
+	ld a, CONSOLE_SGB
 	ld [rSVBK], a
 	call Func_07e7
 	ret
@@ -345,8 +346,8 @@ Func_036a: ; 036a (0:036a)
 	ld [hl], a
 	xor a
 	ld [$cabf], a
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	ret nz
 	ld de, $caf0
 	ld c, $10
@@ -372,7 +373,7 @@ InitialPalette: ; 0399 (0:0399)
 
 Func_03a1: ; 03a1 (0:03a1)
 	call Func_03c0
-	call Func_025c
+	call CheckForCGB
 	jr c, .asm_3b2
 	call BankswitchVRAM_1
 	call .asm_3b2
@@ -400,8 +401,8 @@ Func_03c0: ; 03c0 (0:03c0)
 	ld a, c
 	or b
 	jr nz, .asm_3c9
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM_1
 	ld hl, $9800
@@ -482,8 +483,8 @@ Func_042d: ; 042d (0:042d)
 	ld [$ff48], a
 	ld a, [hl]
 	ld [$ff49], a
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr z, asm_44a
 asm_445
 	xor a
@@ -549,12 +550,12 @@ Func_04a2: ; 04a2 (0:04a2)
 	call Func_03c0
 	xor a
 	ld [$cac2], a
-	ld a, [$cab4]
-	cp $1
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_SGB
 	ret nz
 	call EnableLCD
 	ld hl, Unknown_04bf
-	call Func_0b20
+	call SendSGB
 	call DisableLCD
 	ret
 
@@ -986,7 +987,7 @@ BankswitchVRAM: ; 07d6 (0:07d6)
 INCBIN "baserom.gbc",$07db,$07e7 - $07db
 
 Func_07e7: ; 07e7 (0:07e7)
-	call Func_025c
+	call CheckForCGB
 	ret c
 	ld hl, $ff4d
 	bit 7, [hl]
@@ -1355,65 +1356,67 @@ RST28: ; 09e9 (0:09e9)
 	inc de
 	jr Func_09ce
 
-Func_0a0d: ; 0a0d (0:0a0d)
-	ld hl, Unknown_0ad0
-	call Func_0b20
-	ld hl, Unknown_0a50
-	call Func_0b20
-	ld hl, Unknown_0a60
-	call Func_0b20
-	ld hl, Unknown_0a70
-	call Func_0b20
-	ld hl, Unknown_0a80
-	call Func_0b20
-	ld hl, Unknown_0a90
-	call Func_0b20
-	ld hl, Unknown_0aa0
-	call Func_0b20
-	ld hl, Unknown_0ab0
-	call Func_0b20
-	ld hl, Unknown_0ac0
-	call Func_0b20
-	ld hl, Unknown_0af0
-	call Func_0b20
-	ld hl, Unknown_0ae0
-	call Func_0b20
+; setup SGB tileset(?) and palette
+InitSGB: ; 0a0d (0:0a0d)
+	ld hl, SGB_0ad0
+	call SendSGB
+	ld hl, SGB_0a50
+	call SendSGB
+	ld hl, SGB_0a60
+	call SendSGB
+	ld hl, SGB_0a70
+	call SendSGB
+	ld hl, SGB_0a80
+	call SendSGB
+	ld hl, SGB_0a90
+	call SendSGB
+	ld hl, SGB_0aa0
+	call SendSGB
+	ld hl, SGB_0ab0
+	call SendSGB
+	ld hl, SGB_0ac0
+	call SendSGB
+	ld hl, SGB_0af0
+	call SendSGB
+	ld hl, SGB_0ae0
+	call SendSGB
 	ret
 
-Unknown_0a50: ; 0a50 (0:0a50)
+SGB_0a50: ; 0a50 (0:0a50)
 INCBIN "baserom.gbc",$0a50,$0a60 - $0a50
 
-Unknown_0a60: ; 0a60 (0:0a60)
+SGB_0a60: ; 0a60 (0:0a60)
 INCBIN "baserom.gbc",$0a60,$0a70 - $0a60
 
-Unknown_0a70: ; 0a70 (0:0a70)
+SGB_0a70: ; 0a70 (0:0a70)
 INCBIN "baserom.gbc",$0a70,$0a80 - $0a70
 
-Unknown_0a80: ; 0a80 (0:0a80)
+SGB_0a80: ; 0a80 (0:0a80)
 INCBIN "baserom.gbc",$0a80,$0a90 - $0a80
 
-Unknown_0a90: ; 0a90 (0:0a90)
+SGB_0a90: ; 0a90 (0:0a90)
 INCBIN "baserom.gbc",$0a90,$0aa0 - $0a90
 
-Unknown_0aa0: ; 0aa0 (0:0aa0)
+SGB_0aa0: ; 0aa0 (0:0aa0)
 INCBIN "baserom.gbc",$0aa0,$0ab0 - $0aa0
 
-Unknown_0ab0: ; 0ab0 (0:0ab0)
+SGB_0ab0: ; 0ab0 (0:0ab0)
 INCBIN "baserom.gbc",$0ab0,$0ac0 - $0ab0
 
-Unknown_0ac0: ; 0ac0 (0:0ac0)
+SGB_0ac0: ; 0ac0 (0:0ac0)
 INCBIN "baserom.gbc",$0ac0,$0ad0 - $0ac0
 
-Unknown_0ad0: ; 0ad0 (0:0ad0)
+SGB_0ad0: ; 0ad0 (0:0ad0)
 INCBIN "baserom.gbc",$0ad0,$0ae0 - $0ad0
 
-Unknown_0ae0: ; 0ae0 (0:0ae0)
+SGB_0ae0: ; 0ae0 (0:0ae0)
 INCBIN "baserom.gbc",$0ae0,$0af0 - $0ae0
 
-Unknown_0af0: ; 0af0 (0:0af0)
+SGB_0af0: ; 0af0 (0:0af0)
 INCBIN "baserom.gbc",$0af0,$0b20 - $0af0
 
-Func_0b20: ; 0b20 (0:0b20)
+; send SGB command
+SendSGB: ; 0b20 (0:0b20)
 	ld a, [hl]
 	and $7
 	ret z
@@ -1455,52 +1458,52 @@ Func_0b20: ; 0b20 (0:0b20)
 	call Wait
 	ret
 
-Func_0b59: ; 0b59 (0:0b59)
-	ld bc, $003c
+DetectSGB: ; 0b59 (0:0b59)
+	ld bc, 60
 	call Wait
-	ld hl, Unknown_0bbb
-	call Func_0b20
-	ld a, [$ff00]
+	ld hl, SGB_MASK_EN_ON
+	call SendSGB
+	ld a, [rJOYP]
 	and $3
 	cp $3
 	jr nz, .asm_ba3
 	ld a, $20
-	ld [$ff00], a
-	ld a, [$ff00]
-	ld a, [$ff00]
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
 	ld a, $30
-	ld [$ff00], a
+	ld [rJOYP], a
 	ld a, $10
-	ld [$ff00], a
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
 	ld a, $30
-	ld [$ff00], a
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
-	ld a, [$ff00]
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
 	and $3
 	cp $3
 	jr nz, .asm_ba3
-	ld hl, Unknown_0bab
-	call Func_0b20
+	ld hl, SGB_MASK_EN_OFF
+	call SendSGB
 	or a
 	ret
 .asm_ba3
-	ld hl, Unknown_0bab
-	call Func_0b20
+	ld hl, SGB_MASK_EN_OFF
+	call SendSGB
 	scf
 	ret
 
-Unknown_0bab: ; 0bab (0:0bab)
+SGB_MASK_EN_OFF: ; 0bab (0:0bab)
 INCBIN "baserom.gbc",$0bab,$0bbb - $0bab
 
-Unknown_0bbb: ; 0bbb (0:0bbb)
+SGB_MASK_EN_ON: ; 0bbb (0:0bbb)
 INCBIN "baserom.gbc",$0bbb,$0c08 - $0bbb
 
 ; loops 63000 * bc cycles (~15 * bc ms)
@@ -1915,10 +1918,10 @@ Func_1deb: ; 1deb (0:1deb)
 INCBIN "baserom.gbc",$1e00,$1e7c - $1e00
 
 Func_1e7c: ; 1e7c (0:1e7c)
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr z, asm_1ec9
-	cp $1
+	cp CONSOLE_SGB
 	jp z, Func_1f0f
 Func_1e88: ; 1e88 (0:1e88)
 	call Func_1ddb
@@ -2045,7 +2048,7 @@ Func_1f0f: ; 1f0f (0:1f0f)
 	ld [$cae2], a
 .asm_1f48
 	ld hl, $cae0
-	call Func_0b20
+	call SendSGB
 	ret
 
 Unknown_1f4f: ; 1f4f (0:1f4f)
@@ -2099,8 +2102,8 @@ INCBIN "baserom.gbc",$1f96,$20b0 - $1f96
 
 Func_20b0: ; 20b0 (0:20b0)
 	ld hl, $2fe8
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr nz, .asm_20bd
 	ld hl, $37f8
 .asm_20bd
@@ -2110,8 +2113,8 @@ Func_20b0: ; 20b0 (0:20b0)
 
 Func_20c4: ; 20c4 (0:20c4)
 	ld hl, $3028
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr nz, .asm_20d1
 	ld hl, $3838
 .asm_20d1
@@ -2127,8 +2130,8 @@ Func_20dc: ; 20dc (0:20dc)
 	ld b, $24
 asm_20de
 	ld hl, $32e8
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr nz, .asm_20eb
 	ld hl, $3af8
 .asm_20eb
@@ -2141,8 +2144,8 @@ Func_20f0: ; 20f0 (0:20f0)
 	ld b, $d
 	call asm_2121
 	ld hl, $3528
-	ld a, [$cab4]
-	cp $2
+	ld a, [DATA_CONSOLE]
+	cp CONSOLE_CGB
 	jr nz, .asm_2108
 	ld hl, $3d38
 .asm_2108

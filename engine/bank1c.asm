@@ -153,7 +153,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld [$d420], a
 	di
 	ld hl, Unknown_701a0
-	call Func_0b20
+	call SendSGB
 	call DisableLCD
 	ld a, [$cabb]
 	and $41
@@ -179,7 +179,7 @@ Func_70177: ; 70177 (1c:4177)
 	push hl
 	call EnableLCD
 	pop hl
-	call Func_0b20
+	call SendSGB
 	ld a, [$d41d]
 	ld [$ff92], a
 	ld a, [$d41e]
@@ -221,7 +221,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	ld [$cab6], a
 	di
 	ld hl, Unknown_701b0
-	call Func_0b20
+	call SendSGB
 	ei
 	pop bc
 	pop hl
