@@ -13,6 +13,13 @@ CURR_BGP                    EQU $CABC
 CURR_OBP0                   EQU $CABD
 CURR_OBP1                   EQU $CABE
 
+COUNTER_ENABLE              EQU $CAC4
+COUNTER_FIELD0              EQU $CAC5
+COUNTER_FIELD1              EQU $CAC6
+COUNTER_FIELD2              EQU $CAC7
+COUNTER_FIELD3              EQU $CAC8
+COUNTER_FIELD4              EQU $CAC9
+
 BUF_PALETTE                 EQU $CAF0
 BUF_SERIAL                  EQU $CB74
 

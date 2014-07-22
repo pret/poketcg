@@ -242,11 +242,11 @@ Func_c1b1: ; c1b1 (3:41b1)
 	farcall Func_1c82e
 	farcall Func_131b3
 	xor a
-	ld [$cac5], a
-	ld [$cac6], a
-	ld [$cac7], a
-	ld [$cac8], a
-	ld [$cac9], a
+	ld [COUNTER_FIELD0], a
+	ld [COUNTER_FIELD1], a
+	ld [COUNTER_FIELD2], a
+	ld [COUNTER_FIELD3], a
+	ld [COUNTER_FIELD4], a
 	ret
 
 Func_c1ed: ; c1ed (3:41ed)

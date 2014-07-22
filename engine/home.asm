@@ -122,7 +122,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	inc [hl]
 	and $3
 	jr nz, .asm_217
-	call Func_021c
+	call IncrementCounter
 	ld hl, $caba
 	bit 1, [hl]
 	jr nz, .asm_217
@@ -143,26 +143,28 @@ TimerHandler: ; 01e6 (0:01e6)
 	pop af
 	reti
 
-Func_021c: ; 021c (0:021c)
-	ld a, [$cac4]
+; increment timer counter by a tick
+; the counter consists of three fields 0..60 and two fields 0..255
+IncrementCounter: ; 021c (0:021c)
+	ld a, [COUNTER_ENABLE]
 	or a
 	ret z
-	ld hl, $cac5
+	ld hl, COUNTER_FIELD0
 	inc [hl]
 	ld a, [hl]
-	cp $3c
+	cp 60
 	ret c
 	ld [hl], $0
 	inc hl
 	inc [hl]
 	ld a, [hl]
-	cp $3c
+	cp 60
 	ret c
 	ld [hl], $0
 	inc hl
 	inc [hl]
 	ld a, [hl]
-	cp $3c
+	cp 60
 	ret c
 	ld [hl], $0
 	inc hl
@@ -3668,7 +3670,7 @@ Func_380e: ; 380e (0:380e)
 
 Func_383d: ; 383d (0:383d)
 	ld a, $1
-	ld [$cac4], a
+	ld [COUNTER_ENABLE], a
 	ld a, [CURR_ROM_BANK]
 	push af
 .asm_3845
