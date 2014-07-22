@@ -83,7 +83,7 @@ Func_700a3: ; 700a3 (1c:40a3)
 	ld de, $8800
 	call Func_701e9
 	call Func_701fe
-	ld hl, Unknown_700de
+	ld hl, SGB_700de
 	call Func_70177
 	pop hl
 	ld de, $0002
@@ -98,7 +98,7 @@ Func_700a3: ; 700a3 (1c:40a3)
 	dec hl
 	ld de, $8800
 	call Func_701e9
-	ld hl, Unknown_700ee
+	ld hl, SGB_700ee
 	call Func_70177
 .asm_700da
 	pop de
@@ -106,10 +106,12 @@ Func_700a3: ; 700a3 (1c:40a3)
 	pop hl
 	ret
 
-Unknown_700de: ; 700de (1c:40de)
+; CHR_TRN: tiles $00-$7F, BG (border) tiles (from SNES $000-$FFF)
+SGB_700de: ; 700de (1c:40de)
 INCBIN "baserom.gbc",$700de,$700ee - $700de
 
-Unknown_700ee: ; 700ee (1c:40ee)
+; CHR_TRN: tiles $80-$FF, BG (border) tiles (from SNES $000-$FFF)
+SGB_700ee: ; 700ee (1c:40ee)
 INCBIN "baserom.gbc",$700ee,$700fe - $700ee
 
 Func_700fe: ; 700fe (1c:40fe)
@@ -129,14 +131,15 @@ Func_700fe: ; 700fe (1c:40fe)
 	call Func_701fe
 	pop hl
 	call Func_70214
-	ld hl, Unknown_70126
+	ld hl, SGB_70126
 	call Func_70177
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Unknown_70126: ; 70126 (1c:4126)
+; PCT_TRN: read tile map & palette data into VRAM (from SNES $000-$87F)
+SGB_70126: ; 70126 (1c:4126)
 INCBIN "baserom.gbc",$70126,$70136 - $70126
 
 Func_70136: ; 70136 (1c:4136)
@@ -152,7 +155,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld a, [$cabb]
 	ld [$d420], a
 	di
-	ld hl, Unknown_701a0
+	ld hl, SGB_MASK_EN_ON_701a0
 	call SendSGB
 	call DisableLCD
 	ld a, [$cabb]
@@ -181,9 +184,9 @@ Func_70177: ; 70177 (1c:4177)
 	pop hl
 	call SendSGB
 	ld a, [$d41d]
-	ld [$ff92], a
+	ld [CURR_SCX], a
 	ld a, [$d41e]
-	ld [$ff93], a
+	ld [CURR_SCY], a
 	ld a, [$d41f]
 	call Func_040c
 	ld a, [$d420]
@@ -195,10 +198,12 @@ Func_70177: ; 70177 (1c:4177)
 	pop hl
 	ret
 
-Unknown_701a0: ; 701a0 (1c:41a0)
+; MASK_EN on
+SGB_MASK_EN_ON_701a0: ; 701a0 (1c:41a0)
 INCBIN "baserom.gbc",$701a0,$701b0 - $701a0
 
-Unknown_701b0: ; 701b0 (1c:41b0)
+; MASK_EN off
+SGB_MASK_EN_OFF_701b0: ; 701b0 (1c:41b0)
 INCBIN "baserom.gbc",$701b0,$701c0 - $701b0
 
 Func_701c0: ; 701c0 (1c:41c0)
@@ -220,7 +225,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	pop af
 	ld [$cab6], a
 	di
-	ld hl, Unknown_701b0
+	ld hl, SGB_MASK_EN_OFF_701b0
 	call SendSGB
 	ei
 	pop bc

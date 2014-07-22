@@ -560,12 +560,12 @@ Func_04a2: ; 04a2 (0:04a2)
 	cp CONSOLE_SGB
 	ret nz
 	call EnableLCD
-	ld hl, SGR_04bf
+	ld hl, SGB_04bf
 	call SendSGB
 	call DisableLCD
 	ret
 
-SGR_04bf: ; 04bf (0:04bf)
+SGB_04bf: ; 04bf (0:04bf)
 INCBIN "baserom.gbc",$04bf,$04cf - $04bf
 
 Func_04cf: ; 04cf (0:04cf)
@@ -1364,7 +1364,7 @@ RST28: ; 09e9 (0:09e9)
 	inc de
 	jr Func_09ce
 
-; setup SGB tileset(?) and palette
+; setup SNES memory $810-$867 and palette
 InitSGB: ; 0a0d (0:0a0d)
 	ld hl, SGB_0ad0
 	call SendSGB
@@ -1469,7 +1469,7 @@ SendSGB: ; 0b20 (0:0b20)
 DetectSGB: ; 0b59 (0:0b59)
 	ld bc, 60
 	call Wait
-	ld hl, SGB_MASK_EN_ON
+	ld hl, SGB_MASK_EN_ON_0bbb
 	call SendSGB
 	ld a, [rJOYP]
 	and $3
@@ -1498,20 +1498,20 @@ DetectSGB: ; 0b59 (0:0b59)
 	and $3
 	cp $3
 	jr nz, .asm_ba3
-	ld hl, SGB_MASK_EN_OFF
+	ld hl, SGB_MASK_EN_OFF_0bab
 	call SendSGB
 	or a
 	ret
 .asm_ba3
-	ld hl, SGB_MASK_EN_OFF
+	ld hl, SGB_MASK_EN_OFF_0bab
 	call SendSGB
 	scf
 	ret
 
-SGB_MASK_EN_OFF: ; 0bab (0:0bab)
+SGB_MASK_EN_OFF_0bab: ; 0bab (0:0bab)
 INCBIN "baserom.gbc",$0bab,$0bbb - $0bab
 
-SGB_MASK_EN_ON: ; 0bbb (0:0bbb)
+SGB_MASK_EN_ON_0bbb: ; 0bbb (0:0bbb)
 INCBIN "baserom.gbc",$0bbb,$0c08 - $0bbb
 
 ; loops 63000 * bc cycles (~15 * bc ms)
