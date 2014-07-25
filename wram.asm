@@ -51,12 +51,27 @@ wBufPalette: ; caf0
 	ds $84
 
 wBufSerial: ; cb74
+	ds $9a
+
+; this seems to hold the current opponent's deck id - 2,
+; perhaps to account for the two unused pointers at the
+; beginning of DeckPointers
+wOpponentDeck: ; cc0e
+	ds $5
+
+wIsPracticeDuel: ; cc13
+	ds $7
+
+wDuelTheme: ; cc1a
 	ds $1
 
 
 ;--- Bank 1: $Dxxx ----------------------------------------
 SECTION "WRAM1", WRAMX, BANK[1]
-	ds $32f
+	ds $113
+
+wMatchStartTheme: ; d113
+	ds $21c
 
 wCurMap: ; d32f
 	ds $1

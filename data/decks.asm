@@ -64,7 +64,7 @@ UnnamedDeck: ; 30070 (c:4070)
 	db 2, PIDGEOT2
 	db 2, PIDGEOTTO
 	db 4, PIDGEY
-	db 2, IMAKUNI
+	db 2, IMAKUNI_CARD
 	db 2, GAMBLER
 	db 2, PROFESSOR_OAK
 	db 2, ENERGY_REMOVAL
@@ -1823,7 +1823,7 @@ ImakuniDeck: ; 30c3d (c:4c3d)
 	db 4, DROWZEE
 	db 3, HYPNO
 	db 4, FARFETCHD
-	db 4, IMAKUNI
+	db 4, IMAKUNI_CARD
 	db 2, MAINTENANCE
 	db 2, POKEMON_FLUTE
 	db 1, GAMBLER

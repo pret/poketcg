@@ -197,7 +197,7 @@ IMPOSTER_PROFESSOR_OAK  EQU $C4
 BILL                    EQU $C5
 MR_FUJI                 EQU $C6
 LASS                    EQU $C7
-IMAKUNI                 EQU $C8
+IMAKUNI_CARD            EQU $C8
 POKEMON_TRADER          EQU $C9
 POKEMON_BREEDER         EQU $CA
 CLEFAIRY_DOLL           EQU $CB

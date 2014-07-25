@@ -74,7 +74,7 @@ LoadMap: ; c000 (3:4000)
 	or a
 	jr z, .asm_c0ca
 	call Func_c280
-	farcall Func_103d3
+	farcall Duel_Init
 .asm_c0ca
 	call Func_c280
 	ret
