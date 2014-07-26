@@ -261,39 +261,67 @@ DisableLCD: ; 028a (0:028a)
 	ld [rIE], a
 	ret
 
-; set OBJ size: 8x8 (in [$CABB])
+; set OBJ size: 8x8
 Set_OBJ_8x8: ; 02b9 (0:02b9)
 	ld a, [wLCDC]
 	and $fb
 	ld [wLCDC], a
 	ret
 
-; set OBJ size: 8x16 (in [$CABB])
+; set OBJ size: 8x16
 Set_OBJ_8x16: ; 02c2 (0:02c2)
 	ld a, [wLCDC]
 	or $4
 	ld [wLCDC], a
 	ret
-; 0x2cb
 
-INCBIN "baserom.gbc",$02cb,$02dd - $02cb
+; set Window Display on
+Set_WD_on: ; 02cb (0:02cb)
+	ld a, [wLCDC]
+	or $20
+	ld [wLCDC], a
+	ret
 
-; enable timer interrupt
+; set Window Display off
+Set_WD_off: ; 02d4 (0:02d4)
+	ld a, [wLCDC]
+	and $df
+	ld [wLCDC], a
+	ret
+
 EnableInt_Timer: ; 02dd (0:02dd)
 	ld a, [rIE]
 	or $4
 	ld [rIE], a
 	ret
 
-; enable vblank interrupt
 EnableInt_VBlank: ; 02e4 (0:02e4)
 	ld a, [rIE]
 	or $1
 	ld [rIE], a
 	ret
-; 0x2eb
 
-INCBIN "baserom.gbc",$02eb,$030b - $02eb
+EnableInt_HBlank: ; 02eb (0:02eb)
+	ld a, [rSTAT]
+	or $8
+	ld [rSTAT], a
+	xor a
+	ld [rIF], a
+	ld a, [rIE]
+	or $2
+	ld [rIE], a
+	ret
+
+DisableInt_HBlank: ; 02fb (0:02fb)
+	ld a, [rSTAT]
+	and $f7
+	ld [rSTAT], a
+	xor a
+	ld [rIF], a
+	ld a, [rIE]
+	and $fd
+	ld [rIE], a
+	ret
 
 SetupLCD: ; 030b (0:030b)
 	xor a
@@ -563,9 +591,22 @@ CopyPalette: ; 0467 (0:0467)
 	dec b
 	jr nz, .asm_47c
 	ret
-; 0x492
 
-INCBIN "baserom.gbc",$0492,$04a2 - $0492
+Func_0492: ; 0492 (0:0492)
+	ld a, [hli]
+	ld b, a
+	ld a, [hli]
+	ld c, a
+	call Func_04cf
+	jr .asm_49d
+.asm_49b
+	ld [de], a
+	inc de
+.asm_49d
+	ld a, [hli]
+	or a
+	jr nz, .asm_49b
+	ret
 
 Func_04a2: ; 04a2 (0:04a2)
 	call DisableLCD
@@ -647,9 +688,28 @@ asm_522
 	ld a, $30
 	ld [rJOYP], a
 	ret
-; 0x52a
 
-INCBIN "baserom.gbc",$052a,$053f - $052a
+; clear joypad hmem data
+ClearJoypad: ; 052a (0:052a)
+	push hl
+	ld hl, hDPadRepeat
+	xor a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	pop hl
+	ret
+
+Func_0536: ; 0536 (0:0536)
+.loop
+	push af
+	call Func_053f
+	pop af
+	dec a
+	jr nz, .loop
+	ret
 
 Func_053f: ; 053f (0:053f)
 	push af
@@ -1480,7 +1540,7 @@ SendSGB: ; 0b20 (0:0b20)
 	pop bc
 	dec b
 	jr nz, .asm_b27
-	ld bc, $0004
+	ld bc, 4
 	call Wait
 	ret
 
@@ -1800,9 +1860,127 @@ SerialHandleSend: ; 0dc8 (0:0dc8)
 	ld [wSerialSendSave], a
 	ld a, $ca
 	ret
-; 0xe0a
 
-INCBIN "baserom.gbc",$0e0a,$0ea6 - $0e0a
+; store data in sendbuf for sending?
+Func_0e0a: ; 0e0a (0:0e0a)
+	push hl
+	push de
+	push bc
+	push af
+.asm_e0e
+	ld a, [$cb80]
+	ld e, a
+	ld a, [wSerialSendBufIndex]
+	dec a
+	and $1f
+	cp e
+	jr z, .asm_e0e
+	ld d, $0
+	ld a, e
+	inc a
+	and $1f
+	ld [$cb80], a
+	ld hl, wSerialSendBuf
+	add hl, de
+	pop af
+	ld [hl], a
+	ld hl, wSerialSendBufToggle
+	inc [hl]
+	pop bc
+	pop de
+	pop hl
+	ret
+
+; sets carry if [wSerialRecvCounter] nonzero
+Func_0e32: ; 0e32 (0:0e32)
+	ld a, [wSerialRecvCounter]
+	or a
+	ret z
+	scf
+	ret
+
+Func_0e39: ; 0e39 (0:0e39)
+	push hl
+	ld hl, wSerialRecvCounter
+	ld a, [hl]
+	or a
+	jr nz, .asm_e49
+	pop hl
+	ld a, [wSerialFlags]
+	or a
+	ret nz
+	scf
+	ret
+.asm_e49
+	push de
+	dec [hl]
+	ld a, [$cba3]
+	ld e, a
+	ld d, $0
+	ld hl, wSerialRecvBuf
+	add hl, de
+	ld a, [hl]
+	push af
+	ld a, e
+	inc a
+	and $1f
+	ld [$cba3], a
+	pop af
+	pop de
+	pop hl
+	or a
+	ret
+
+Func_0e63: ; 0e63 (0:0e63)
+	ld b, c
+.asm_e64
+	ld a, b
+	sub c
+	jr c, .asm_e6c
+	cp $1f
+	jr nc, .asm_e75
+.asm_e6c
+	inc c
+	dec c
+	jr z, .asm_e75
+	ld a, [hli]
+	call $0e0a
+	dec c
+.asm_e75
+	inc b
+	dec b
+	jr z, .asm_e81
+	call $0e39
+	jr c, .asm_e81
+	ld [de], a
+	inc de
+	dec b
+.asm_e81
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_e8c
+	ld a, c
+	or b
+	jr nz, .asm_e64
+	ret
+.asm_e8c
+	scf
+	ret
+
+; go into slave mode (external clock) for serial transfer?
+Func_0e8e: ; 0e8e (0:0e8e)
+	call ClearSerialData
+	ld a, $12
+	ld [rSB], a          ; send $12
+	ld a, $80
+	ld [rSC], a          ; use external clock, set transfer start flag
+	ld a, [rIF]
+	and $f7
+	ld [rIF], a          ; clear serial interrupt flag
+	ld a, [rIE]
+	or $8                ; enable serial interrupt
+	ld [rIE], a
+	ret
 
 ResetSerial: ; 0ea6 (0:0ea6)
 	ld a, [rIE]
@@ -1811,15 +1989,17 @@ ResetSerial: ; 0ea6 (0:0ea6)
 	xor a
 	ld [rSB], a
 	ld [rSC], a
+	; fallthrough
+ClearSerialData: ; 0eb1 (0:0eb1)
 	ld hl, wSerialOp
 	ld bc, $0051
-.asm_eb7
+.loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_eb7
+	jr nz, .loop
 	ret
 ; 0xebf
 
@@ -3770,37 +3950,37 @@ Func_311d: ; 311d (0:311d)
 	call BankswitchHome
 	ret
 
-Func_312d: ; 312d (0:312d)
+Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	push hl
 	ld hl, $ce64
 	ld a, $88
-	ld [hli], a
+	ld [hli], a          ; [$ce64] ← $88
 	ld a, $33
-	ld [hli], a
-	ld [hl], d
+	ld [hli], a          ; [$ce65] ← $33
+	ld [hl], d           ; [$ce66] ← d
 	inc hl
-	ld [hl], e
+	ld [hl], e           ; [$ce67] ← e
 	inc hl
-	ld [hl], c
+	ld [hl], c           ; [$ce68] ← c
 	inc hl
-	ld [hl], b
+	ld [hl], b           ; [$ce69] ← b
 	inc hl
 	pop de
-	ld [hl], e
+	ld [hl], e           ; [$ce6a] ← l
 	inc hl
-	ld [hl], d
+	ld [hl], d           ; [$ce6b] ← h
 	inc hl
 	ld de, $ff45
-	ld [hl], e
+	ld [hl], e           ; [$ce6c] ← $45
 	inc hl
-	ld [hl], d
+	ld [hl], d           ; [$ce6d] ← $ff
 	ld hl, $ce70
-	ld [hl], $64
+	ld [hl], $64         ; [$ce70] ← $64
 	inc hl
-	ld [hl], $ce
-	call $0e8e
+	ld [hl], $ce         ; [$ce71] ← $ce
+	call Func_0e8e
 	ld a, $1
-	ld [$ce63], a
+	ld [$ce63], a        ; [$ce63] ← 1
 	call Func_31fc
 .asm_315d
 	call Func_053f
@@ -3931,6 +4111,7 @@ Func_31fc: ; 31fc (0:31fc)
 	adc [hl]
 	ld [hl], a
 	ld a, e
+	; fallthrough
 Func_3212: ; 3212 (0:3212)
 	ld [rSB], a
 	ld a, $1
