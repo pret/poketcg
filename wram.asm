@@ -6,7 +6,8 @@ wInitialA: ; cab3
 	ds $1
 
 wConsole: ; cab4
-	ds $2
+	ds $1
+	ds $1
 
 wTileMapFill: ; cab6
 	ds $1
@@ -15,7 +16,13 @@ wIE: ; cab7
 	ds $1
 
 wVBlankCtr: ; cab8
-	ds $3
+	ds $1
+	ds $1
+
+; bit0: is in vblank interrupt?
+; bit1: is in timer interrupt?
+wReentrancyFlag: ; caba
+	ds $1
 
 wLCDC: ; cabb
 	ds $1
@@ -27,28 +34,31 @@ wOBP0: ; cabd
 	ds $1
 
 wOBP1: ; cabe
-	ds $6
+	ds $1
+
+wFlushPaletteFlags: ; cabf
+	ds $1
+
+wVBlankOAMCopyToggle: ; cac0
+	ds $1
+	ds $2
+
+wCounterCtr: ; cac3
+	ds $1
 
 wCounterEnable: ; cac4
 	ds $1
 
-wCounter0: ; cac5
-	ds $1
+wCounter: ; cac5
+	ds $5
+	ds $6
 
-wCounter1: ; cac6
-	ds $1
-
-wCounter2: ; cac7
-	ds $1
-
-wCounter3: ; cac8
-	ds $1
-
-wCounter4: ; cac9
-	ds $27
+wVBlankFunctionTrampoline: ; cad0
+	ds $20 ; unknown length
 
 wBufPalette: ; caf0
-	ds $84
+	ds $80
+	ds $4
 
 wBufSerial: ; cb74
 	ds $1

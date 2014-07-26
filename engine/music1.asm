@@ -1,7 +1,7 @@
-Func_f4000: ; f4000 (3d:4000)
+SetupSound_Ext: ; f4000 (3d:4000)
 	jp Func_f407d
 
-Func_f4003: ; f4003 (3d:4003)
+SoundTimerHandler_Ext: ; f4003 (3d:4003)
 	jp Func_f40e9
 
 Func_f4006: ; f4006 (3d:4006)

@@ -56,7 +56,7 @@ Start: ; 0150 (0:0150)
 	call SetupVRAM
 	call SetupLCD
 	call SetupPalettes
-	call Func_377f
+	call SetupSound_T
 	call SetupTimer
 	call ResetSerial
 	call CopyDMAFunction
@@ -73,17 +73,18 @@ VBlankHandler: ; 019b (0:019b)
 	push hl
 	ld a, [hBankROM]
 	push af
-	ld hl, $caba
+	ld hl, wReentrancyFlag
 	bit 0, [hl]
-	jr nz, .asm_1dd
+	jr nz, .done
 	set 0, [hl]
-	ld a, [$cac0]
+	ld a, [wVBlankOAMCopyToggle]
 	or a
-	jr z, .asm_1b8
-	call hDMAFunction
+	jr z, .no_oam_copy
+	call hDMAFunction    ; DMA-copy $ca00-$ca9f to OAM memory
 	xor a
-	ld [$cac0], a
-.asm_1b8
+	ld [wVBlankOAMCopyToggle], a
+.no_oam_copy
+	; flush scaling/windowing parameters
 	ld a, [hSCX]
 	ld [rSCX], a
 	ld a, [hSCY]
@@ -92,16 +93,17 @@ VBlankHandler: ; 019b (0:019b)
 	ld [rWX], a
 	ld a, [hWY]
 	ld [rWY], a
+	; flush LCDC
 	ld a, [wLCDC]
 	ld [rLCDC], a
 	ei
 	call $cad0
-	call Func_042d
+	call FlushPalettes
 	ld hl, wVBlankCtr
 	inc [hl]
-	ld hl, $caba
+	ld hl, wReentrancyFlag
 	res 0, [hl]
-.asm_1dd
+.done
 	pop af
 	call BankswitchHome
 	pop hl
@@ -116,27 +118,31 @@ TimerHandler: ; 01e6 (0:01e6)
 	push de
 	push bc
 	ei
-	call Func_0c91
-	ld hl, $cac3
+	call SerialTimerHandler
+	; only trigger every fourth interrupt ≈ 60.24 Hz
+	ld hl, wCounterCtr
 	ld a, [hl]
 	inc [hl]
 	and $3
-	jr nz, .asm_217
+	jr nz, .done
+	; increment the 60-60-60-255-255 counter
 	call IncrementCounter
-	ld hl, $caba
+	; check in-timer flag
+	ld hl, wReentrancyFlag
 	bit 1, [hl]
-	jr nz, .asm_217
+	jr nz, .done
 	set 1, [hl]
 	ld a, [hBankROM]
 	push af
-	ld a, BANK(Func_f4003)
+	ld a, BANK(SoundTimerHandler_Ext)
 	call BankswitchHome
-	call Func_f4003
+	call SoundTimerHandler_Ext
 	pop af
 	call BankswitchHome
-	ld hl, $caba
+	; clear in-timer flag
+	ld hl, wReentrancyFlag
 	res 1, [hl]
-.asm_217
+.done
 	pop bc
 	pop de
 	pop hl
@@ -144,12 +150,11 @@ TimerHandler: ; 01e6 (0:01e6)
 	reti
 
 ; increment timer counter by a tick
-; the counter consists of three fields 0..60 and two fields 0..255
 IncrementCounter: ; 021c (0:021c)
 	ld a, [wCounterEnable]
 	or a
 	ret z
-	ld hl, wCounter0
+	ld hl, wCounter
 	inc [hl]
 	ld a, [hl]
 	cp 60
@@ -174,15 +179,16 @@ IncrementCounter: ; 021c (0:021c)
 	inc [hl]
 	ret
 
-; setup timer to roughly 60 Hz
+; setup timer to 16384/68 ≈ 240.94 Hz
 SetupTimer: ; 0241 (0:0241)
-	ld b, $bc
+	ld b, $100 - 68
+	; ld b, $bc
 	call CheckForCGB
 	jr c, .asm_250
 	ld a, [rKEY1]
 	and $80
 	jr z, .asm_250
-	ld b, $78
+	ld b, $100 - 2*68
 .asm_250
 	ld a, b
 	ld [rTMA], a
@@ -225,7 +231,7 @@ EnableLCD: ; 0277 (0:0277)
 	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
 	ld a, $c0
-	ld [$cabf], a
+	ld [wFlushPaletteFlags], a
 	ret
 
 ; wait for vblank, then turn LCD off
@@ -303,14 +309,14 @@ SetupLCD: ; 030b (0:030b)
 	ld [hWX], a
 	ld [hWY], a
 	xor a
-	ld [$caba], a
-	ld a, $c3
+	ld [wReentrancyFlag], a
+	ld a, $c3            ; $c3 = jp nn
 	ld [$cacd], a
-	ld [$cad0], a
-	ld hl, $cad1
-	ld [hl], NopF & $ff
-	inc hl
-	ld [hl], NopF >> $8
+	ld [wVBlankFunctionTrampoline], a
+	ld hl, wVBlankFunctionTrampoline + 1
+	ld [hl], NopF & $ff  ;
+	inc hl               ; load `jp NopF`
+	ld [hl], NopF >> $8  ;
 	ld a, $47
 	ld [wLCDC], a
 	ld a, $1
@@ -350,7 +356,7 @@ SetupPalettes: ; 036a (0:036a)
 	ld [hli], a
 	ld [hl], a
 	xor a
-	ld [$cabf], a
+	ld [wFlushPaletteFlags], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
@@ -367,7 +373,7 @@ SetupPalettes: ; 036a (0:036a)
 	jr nz, .asm_38c
 	dec c
 	jr nz, .asm_387
-	call Func_0458
+	call FlushBothCGBPalettes
 	ret
 
 InitialPalette: ; 0399 (0:0399)
@@ -457,14 +463,14 @@ Func_040c: ; 040c (0:040c)
 asm_40f
 	ld a, $80
 asm_411
-	ld [$cabf], a
+	ld [wFlushPaletteFlags], a
 	ld a, [wLCDC]
 	rla
 	ret c
 	push hl
 	push de
 	push bc
-	call Func_042d
+	call FlushPalettes
 	pop bc
 	pop de
 	pop hl
@@ -478,10 +484,16 @@ Set_OBP1: ; 0428 (0:0428)
 	ld [wOBP1], a
 	jr asm_40f
 
-Func_042d: ; 042d (0:042d)
-	ld a, [$cabf]
+; flushes non-CGB palettes from [wBGP], [wOBP0], [wOBP1] as well as CGB
+; palettes from [wBufPalette..wBufPalette+$1f] (BG palette) and
+; [wBufPalette+$20..wBufPalette+$3f] (sprite palette).
+;   only flushes if [wFlushPaletteFlags] is nonzero, and only flushes sprite
+; palette if bit6 of that location is set.
+FlushPalettes: ; 042d (0:042d)
+	ld a, [wFlushPaletteFlags]
 	or a
 	ret z
+	; flush grayscale (non-CGB) palettes
 	ld hl, wBGP
 	ld a, [hli]
 	ld [rBGP], a
@@ -491,29 +503,33 @@ Func_042d: ; 042d (0:042d)
 	ld [rOBP1], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr z, asm_44a
-asm_445
+	jr z, flushPaletteCGB
+flushPaletteDone
 	xor a
-	ld [$cabf], a
+	ld [wFlushPaletteFlags], a
 	ret
-asm_44a
-	ld a, [$cabf]
+flushPaletteCGB
+	; flush BG palette (BGP)
+	; if bit6 of [wFlushPaletteFlags] is set, flush OBP too
+	ld a, [wFlushPaletteFlags]
 	bit 6, a
-	jr nz, Func_0458
+	jr nz, FlushBothCGBPalettes
 	ld b, $8
-	call InitializePalettes
-	jr asm_445
+	call CopyPalette
+	jr flushPaletteDone
 
-Func_0458: ; 0458 (0:0458)
+FlushBothCGBPalettes: ; 0458 (0:0458)
 	xor a
 	ld b, $40
-	call InitializePalettes
+	; flush BGP $00-$1f
+	call CopyPalette
 	ld a, $8
 	ld b, $40
-	call InitializePalettes
-	jr asm_445
+	; flush OBP $00-$1f
+	call CopyPalette
+	jr flushPaletteDone
 
-InitializePalettes: ; 0467 (0:0467)
+CopyPalette: ; 0467 (0:0467)
 	add a
 	add a
 	add a
@@ -559,10 +575,10 @@ Func_04a2: ; 04a2 (0:04a2)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
-	call EnableLCD
-	ld hl, SGB_04bf
-	call SendSGB
-	call DisableLCD
+	call EnableLCD       ;
+	ld hl, SGB_04bf      ; send SGB data
+	call SendSGB         ;
+	call DisableLCD      ;
 	ret
 
 SGB_04bf: ; 04bf (0:04bf)
@@ -1061,7 +1077,7 @@ SetupExtRAM: ; 080b (0:080b)
 Func_084d: ; 084d (0:084d)
 	ld a, $3
 .asm_84f
-	call Func_0863
+	call ClearExtRAMBank
 	dec a
 	cp $ff
 	jr nz, .asm_84f
@@ -1073,7 +1089,7 @@ Func_084d: ; 084d (0:084d)
 	ld [hl], $5
 	ret
 
-Func_0863: ; 0863 (0:0863)
+ClearExtRAMBank: ; 0863 (0:0863)
 	push af
 	call BankswitchRAM
 	call EnableExtRAM
@@ -1580,7 +1596,7 @@ MemcpyDEHL_hblank: ; 0c32 (0:0c32)
 
 INCBIN "baserom.gbc",$0c4b,$0c91 - $0c4b
 
-Func_0c91: ; 0c91 (0:0c91)
+SerialTimerHandler: ; 0c91 (0:0c91)
 	ld a, [$cb74]
 	cp $29
 	jr z, .asm_c9d
@@ -3613,8 +3629,8 @@ Func_3212: ; 3212 (0:3212)
 
 INCBIN "baserom.gbc",$321d,$377f - $321d
 
-Func_377f: ; 377f (0:377f)
-	farcall Func_f4000
+SetupSound_T: ; 377f (0:377f)
+	farcall SetupSound_Ext
 	ret
 
 Func_3784: ; 3784 (0:3784)

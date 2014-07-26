@@ -242,11 +242,11 @@ Func_c1b1: ; c1b1 (3:41b1)
 	farcall Func_1c82e
 	farcall Func_131b3
 	xor a
-	ld [wCounter0], a
-	ld [wCounter1], a
-	ld [wCounter2], a
-	ld [wCounter3], a
-	ld [wCounter4], a
+	ld [wCounter + 0], a
+	ld [wCounter + 1], a
+	ld [wCounter + 2], a
+	ld [wCounter + 3], a
+	ld [wCounter + 4], a
 	ret
 
 Func_c1ed: ; c1ed (3:41ed)
