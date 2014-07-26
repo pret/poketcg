@@ -289,7 +289,7 @@ Func_c241: ; c241 (3:4241)
 	push hl
 	push bc
 	push de
-	ld de, Unknown_307f
+	ld de, $307f
 	call Func_2275
 	call Func_c258
 	pop de
@@ -365,7 +365,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	farcall Func_10ab4
 	ld a, $80
 	call Func_c29b
-	ld de, Unknown_307f
+	ld de, $307f
 	call Func_2275
 	farcall Func_12ba7
 	call Func_3ca0

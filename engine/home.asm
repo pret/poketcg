@@ -3512,10 +3512,218 @@ LoadDeck: ; 302c (0:302c)
 	ret
 ; 0x3055
 
-INCBIN "baserom.gbc",$3055,$307f - $3055
+Func_3055: ; 3055 (0:3055)
+	push hl
+	ld hl, $ccb9
+	add [hl]
+	ld [hli], a
+	ld a, $0
+	adc [hl]
+	ld [hl], a
+	pop hl
+	ret
 
-Unknown_307f: ; 307f (0:307f)
-INCBIN "baserom.gbc",$307f,$3189 - $307f
+Func_3061: ; 3061 (0:3061)
+	push de
+	push hl
+	ld e, a
+	ld hl, $ccb9
+	ld a, [hl]
+	sub e
+	ld [hli], a
+	ld a, [hl]
+	sbc $0
+	ld [hl], a
+	pop hl
+	pop de
+	ret
+
+Func_3071: ; 3071 (0:3071)
+	push hl
+	ld hl, $ce4e
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	rst $18
+	xor l
+	ld [hl], c
+	pop hl
+	ret
+
+Func_307d: ; 307d (0:307d)
+	push hl
+	ld hl, $ce4e
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld a, $1
+	rst $18
+	xor l
+	ld [hl], c
+	ld hl, $cac2
+	ld [hl], $0
+	pop hl
+	ret
+
+Func_3090: ; 3090 (0:3090)
+	ld a, d
+	cp b
+	ret nz
+	ld a, e
+	cp c
+	ret
+
+Func_3096: ; 3096 (0:3096)
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4000
+	pop af
+	call BankswitchHome
+	ret
+
+Func_30a6: ; 30a6 (0:30a6)
+	ld a, [hBankROM]
+	push af
+	ld a, $6
+	call BankswitchHome
+	ld a, $1
+	ld [$ce60], a
+	call $40d5
+	pop bc
+	ld a, b
+	call BankswitchHome
+	ret
+
+Func_30bc: ; 30bc (0:30bc)
+	ld a, h
+	ld [$ce50], a
+	ld a, l
+	ld [$ce51], a
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4211
+	call Func_2a9e
+	pop af
+	call BankswitchHome
+	ret
+
+Func_30d7: ; 30d7 (0:30d7)
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $433c
+	pop af
+	call BankswitchHome
+	ret
+
+Func_30e7: ; 30e7 (0:30e7)
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4764
+	ld b, a
+	pop af
+	call BankswitchHome
+	ld a, b
+	ret
+
+Func_30f9: ; 30f9 (0:30f9)
+	ld b, a
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4932
+	pop af
+	call BankswitchHome
+	ret
+
+Func_310a: ; 310a (0:310a)
+	ld [$ce59], a
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4aaa
+	pop af
+	call BankswitchHome
+	ret
+
+Func_311d: ; 311d (0:311d)
+	ld a, [hBankROM]
+	push af
+	ld a, $2
+	call BankswitchHome
+	call $4b85
+	pop af
+	call BankswitchHome
+	ret
+
+Func_312d: ; 312d (0:312d)
+	push hl
+	ld hl, $ce64
+	ld a, $88
+	ld [hli], a
+	ld a, $33
+	ld [hli], a
+	ld [hl], d
+	inc hl
+	ld [hl], e
+	inc hl
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	inc hl
+	pop de
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	ld de, $ff45
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld hl, $ce70
+	ld [hl], $64
+	inc hl
+	ld [hl], $ce
+	call $0e8e
+	ld a, $1
+	ld [$ce63], a
+	call Func_31fc
+.asm_315d
+	call Func_053f
+	ld a, [$ce63]
+	or a
+	jr nz, .asm_315d
+	call ResetSerial
+	ld bc, $05dc
+.asm_316c
+	dec bc
+	ld a, b
+	or c
+	jr nz, .asm_316c
+	ld a, [$ce6e]
+	cp $81
+	jr nz, .asm_3182
+	ld a, [$ce6f]
+	ld l, a
+	and $f1
+	ld a, l
+	ret z
+	scf
+	ret
+.asm_3182
+	ld a, $ff
+	ld [$ce6f], a
+	scf
+	ret
 
 Func_3189: ; 3189 (0:3189)
 	ld hl, PointerTable_3190
