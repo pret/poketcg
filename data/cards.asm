@@ -10653,7 +10653,7 @@ ImakuniCard: ; 33e4b (c:7e4b)
 	dw $b72 ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
-	db IMAKUNI
+	db IMAKUNI_CARD
 	dw $4e7c ; function
 	dw $b73 ; description
 	dw 0

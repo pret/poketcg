@@ -132,8 +132,65 @@ INCBIN "baserom.gbc",$103a5,$103d2 - $103a5
 Func_103d2: ; 103d2 (4:43d2)
 INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
 
-Func_103d3: ; 103d3 (4:43d3)
-INCBIN "baserom.gbc",$103d3,$10548 - $103d3
+Duel_Init: ; 103d3 (4:43d3)
+	ld a, [$d291]
+	push af
+	call DisableLCD
+	call $4000
+	ld a, $4
+	ld [$ccf3], a
+	ld de, $000c
+	ld bc, $1406
+	call Func_1e7c ; LoadTextBoxBorder
+	ld a, [$cc19]
+	add a
+	add a
+	ld c, a
+	ld b, $0
+	ld hl, $445b
+	add hl, bc
+	ld a, [hli]
+	ld [$ce3f], a
+	ld a, [hli]
+	ld [$ce40], a
+	push hl
+	ld a, [$cc16]
+	ld [$ce41], a
+	ld a, [$cc17]
+	ld [$ce42], a
+	ld hl, $4451
+	call $51b3 ; LoadDuelistName
+	pop hl
+	ld a, [hli]
+	ld [$ce3f], a
+	ld c, a
+	ld a, [hli]
+	ld [$ce40], a
+	or c
+	jr z, .asm_10425
+	ld hl, $4456
+	call $51b3 ; LoadDeckName
+
+.asm_10425
+	ld bc, $0703
+	ld a, [$cc15]
+	call Func_3e2a ; LoadDuelistPortrait
+	ld a, [wMatchStartTheme]
+	call PlaySong
+	call $4031
+	call Func_3c48
+	ld bc, $2f1d
+	ld de, $1211
+	call Func_2a1a
+	call $2a00 ; wait for the user to press a or b
+	call $3c96
+	call Func_10ab4 ; fade out
+	pop af
+	ld [$d291], a
+	ret
+; 0x10451
+
+INCBIN "baserom.gbc",$10451,$10548 - $10451
 
 Func_10548: ; 10548 (4:4548)
 INCBIN "baserom.gbc",$10548,$10756 - $10548

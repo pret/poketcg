@@ -1873,7 +1873,39 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-INCBIN "baserom.gbc",$10aa,$1c7d - $10aa
+INCBIN "baserom.gbc",$10aa,$160b - $10aa
+
+Func_160b: ; 160b (0:160b)
+	ld l, a
+	ld a, [$ff97]
+	ld h, a
+	ld a, [hl]
+	ret
+
+Func_1611: ; 1611 (0:1611)
+	ld l, a
+	ld a, [$ff97]
+	ld h, $c3
+	cp $c2
+	jr z, .asm_161c
+	ld h, $c2
+
+.asm_161c
+	ld a, [hl]
+	ret
+; 0x161e
+
+INCBIN "baserom.gbc",$161e,$1c72 - $161e
+
+Func_1c72: ; 1c72 (0:1c72)
+	push af
+	push hl
+	call Func_1611
+	ld a, h
+	ld [$ff97], a
+	pop hl
+	pop af
+	ret
 
 Func_1c7d: ; 1c7d (0:1c7d)
 	call EnableExtRAM
@@ -3134,7 +3166,57 @@ Func_2b66: ; 2b66 (0:2b66)
 	ret
 ; 0x2b70
 
-INCBIN "baserom.gbc",$2b70,$2c08 - $2b70
+INCBIN "baserom.gbc",$2b70,$2b78 - $2b70
+
+Duel_LoadDecks: ; 2b78 (0:2b78)
+	xor a
+	ld [wIsPracticeDuel], a
+	ld a, [wOpponentDeck]
+	cp SAMS_NORMAL_DECK - 2
+	jr z, .normalSamDuel
+	or a ; cp SAMS_PRACTICE_DECK - 2
+	jr nz, .notPracticeDuel
+
+; only practice duels will display help messages, but
+; any duel with Sam will force the PRACTICE_PLAYER_DECK
+;.practiceSamDuel
+	inc a
+	ld [wIsPracticeDuel], a
+
+.normalSamDuel
+	xor a
+	ld [wOpponentDeck], a
+	call Func_1c72
+	ld a, PRACTICE_PLAYER_DECK
+	call LoadDeck
+	call Func_1c72
+	ld hl, $caca
+	ld a, $57
+	ld [hli], a
+	ld [hli], a
+	ld [hl], a
+	xor a
+
+.notPracticeDuel
+	inc a
+	inc a
+	call LoadDeck
+	ld a, [wOpponentDeck]
+	cp NUMBER_OF_DECKS
+	jr c, .validDeck
+	ld a, PRACTICE_PLAYER_DECK - 2
+	ld [wOpponentDeck], a
+
+.validDeck
+	ld a, $f1
+	call Func_160b
+	ld a, [wOpponentDeck]
+	or $80
+	ld [hl], a
+	ret
+; 0x2bbf
+
+INCBIN "baserom.gbc",$2bbf,$2c08 - $2bbf
 
 Func_2c08: ; 2c08 (0:2c08)
 	ld d, [hl]
@@ -3998,7 +4080,7 @@ Func_38c0: ; 38c0 (0:38c0)
 	ld [$ba44], a
 	call DisableExtRAM
 	call Func_3a3b
-	bank1call Func_409f
+	bank1call Duel_Start
 	scf
 	ret
 
@@ -4539,7 +4621,26 @@ Func_3df3: ; 3df3 (0:3df3)
 	ret
 ; 0x3e10
 
-INCBIN "baserom.gbc",$3e10,$3fe0 - $3e10
+INCBIN "baserom.gbc",$3e10,$3e17 - $3e10
+
+Func_3e17: ; 3e17 (0:3e17)
+	ld [$d131], a
+	ld a, [hBankROM]
+	push af
+	ld a, $4
+	call BankswitchHome
+	call $6fc6
+	pop af
+	call BankswitchHome
+	ret
+
+Func_3e2a: ; 3e2a (0:3e2a)
+	ld [$d61e], a
+	ld a, $63
+	jr Func_3e17
+; 0x3e31
+
+INCBIN "baserom.gbc",$3e31,$3fe0 - $3e31
 
 ; jumps to 3f:hl
 Bankswitch3dTo3f: ; 3fe0 (0:3fe0)

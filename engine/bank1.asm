@@ -44,8 +44,194 @@ INCBIN "baserom.gbc",$405a,$406f - $405a
 Func_406f: ; 406f (1:406f)
 INCBIN "baserom.gbc",$406f,$409f - $406f
 
-Func_409f: ; 409f (1:409f)
-INCBIN "baserom.gbc",$409f,$5aeb - $409f
+; this function begins the duel after the opponent's
+; graphics, name and deck have been introduced
+Duel_Start: ; 409f (1:409f)
+	ld a, $c2
+	ld [$ff97], a
+	ld a, $0
+	ld [$c2f1], a
+	ld a, [$cc19]
+	ld [wOpponentDeck], a
+	call $6793
+	call Func_1c72
+	call Duel_LoadDecks
+	call Func_1c72
+	jr .asm_40ca
+
+	ld a, MUSIC_DUELTHEME1
+	ld [wDuelTheme], a
+	ld hl, $cc16
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ld [wIsPracticeDuel], a
+
+.asm_40ca
+	ld hl, [sp+$0]
+	ld a, l
+	ld [$cbe5], a
+	ld a, h
+	ld [$cbe6], a
+	xor a
+	ld [$cbc6], a
+	call $420b
+	ld a, [$cc18]
+	ld [$cc08], a
+	call $70aa
+	ld a, [wDuelTheme]
+	call PlaySong
+	call $4b60
+	ret c
+
+; the loop returns here after every turn switch
+.mainDuelLoop
+	xor a
+	ld [$cbc6], a
+	call $35e6
+	call $54c8
+	call $4225
+	call $0f58
+	ld a, [$cc07]
+	or a
+	jr nz, .asm_4136
+	call $35fa
+	call $6baf
+	call $3b31
+	call $0f58
+	ld a, [$cc07]
+	or a
+	jr nz, .asm_4136
+	ld hl, $cc06
+	inc [hl]
+	ld a, [$cc09]
+	cp $80
+	jr z, .asm_4126
+.asm_4121
+	call Func_1c72
+	jr .mainDuelLoop
+
+.asm_4126
+	ld a, [wIsPracticeDuel]
+	or a
+	jr z, .asm_4121
+	ld a, [hl]
+	cp $f
+	jr c, .asm_4121
+	xor a
+	ld [$d0c3], a
+	ret
+
+.asm_4136
+	call $5990
+	call Func_04a2
+	ld a, $3
+	call $2167
+	ld hl, $0076
+	call Func_2aab
+	call Func_04a2
+	ld a, [$ff97]
+	push af
+	ld a, $c2
+	ld [$ff97], a
+	call $4a97
+	call $4ad6
+	pop af
+	ld [$ff97], a
+	call $3b21
+	ld a, [$cc07]
+	cp $1
+	jr z, .asm_4171
+	cp $2
+	jr z, .asm_4184
+	ld a, $5f
+	ld c, $1a
+	ld hl, $0077
+	jr .asm_4196
+
+.asm_4171
+	ld a, [$ff97]
+	cp $c2
+	jr nz, .asm_418a
+.asm_4177
+	xor a
+	ld [$d0c3], a
+	ld a, $5d
+	ld c, $18
+	ld hl, $0078
+	jr .asm_4196
+
+.asm_4184
+	ld a, [$ff97]
+	cp $c2
+	jr nz, .asm_4177
+
+.asm_418a
+	ld a, $1
+	ld [$d0c3], a
+	ld a, $5e
+	ld c, $19
+	ld hl, $0079
+
+.asm_4196
+	call $3b6a
+	ld a, c
+	call PlaySong
+	ld a, $c3
+	ld [$ff97], a
+	call Func_2a59
+	call EnableLCD
+.asm_41a7
+	call Func_053f
+	call Func_378a
+	or a
+	jr nz, .asm_41a7
+	ld a, [$cc07]
+	cp $3
+	jr z, .asm_41c8
+	call Func_39fc
+	call $2aae
+	call $3b31
+	call ResetSerial
+	ld a, $c2
+	ld [$ff97], a
+	ret
+
+.asm_41c8
+	call $2aae
+	call $3b31
+	ld a, [wDuelTheme]
+	call PlaySong
+	ld hl, $007a
+	call Func_2aab
+	ld a, $1
+	ld [$cc08], a
+	call $70aa
+	ld a, [$cc09]
+	cp $1
+	jr z, .asm_41f3
+	ld a, $c2
+	ld [$ff97], a
+	call $4b60
+	jp $40ee
+
+.asm_41f3
+	call $0f58
+	ld h, $c2
+	ld a, [wSerialOp]
+	cp $29
+	jr z, .asm_4201
+	ld h, $c3
+
+.asm_4201
+	ld a, h
+	ld [$ff97], a
+	call $4b60
+	jp nc, $40ee
+	ret
+; 0x420b
+
+INCBIN "baserom.gbc",$420b,$5aeb - $420b
 
 Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb

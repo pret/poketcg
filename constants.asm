@@ -1,6 +1,7 @@
 INCLUDE "constants/map_constants.asm"
 INCLUDE "constants/music_constants.asm"
 INCLUDE "constants/text_constants.asm"
+INCLUDE "constants/duelist_constants.asm"
 INCLUDE "constants/card_constants.asm"
 INCLUDE "constants/deck_constants.asm"
 INCLUDE "constants/type_constants.asm"
