@@ -2531,70 +2531,73 @@ Func_2325: ; 2325 (0:2325)
 	xor a
 	ret
 
+; search linked-list for letters e/d (regisers), if found hoist the result to
+; head of list and return it.  carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [$cd0a]
-	or a
-	jr z, .asm_2376
-	call Func_23b1
+	ld a, [$cd0a]        ;
+	or a                 ;
+	jr z, .asm_2376      ; if [$cd0a] nonzero:
+	call Uppercase       ;   uppercase e
 	ld a, [$cd0b]
 	ld d, a
 	or a
-	jr nz, .asm_2376
-	ld a, e
-	ld [$cd0b], a
-	ld a, $1
-	or a
+	jr nz, .asm_2376     ;   if [$cd0b] is zero:
+	ld a, e              ;
+	ld [$cd0b], a        ;     [$cd0b] ← e
+	ld a, $1             ;
+	or a                 ;     return a = 1
 	ret
 .asm_2376
 	xor a
-	ld [$cd0b], a
+	ld [$cd0b], a        ; [$cd0b] ← 0
 	ld a, [$ffa9]
-	ld l, a
+	ld l, a              ; l ← [$ffa9]; index to to linked-list head
 .asm_237d
-	ld h, $c6
-	ld a, [hl]
-	or a
-	ret z
-	cp e
-	jr nz, .asm_238a
-	inc h
-	ld a, [hl]
-	cp d
-	jr z, .asm_238f
-.asm_238a
-	ld h, $c8
-	ld l, [hl]
+	ld h, $c6                                     ;
+	ld a, [hl]           ; a ← key1[l]            ;
+	or a                                          ;
+	ret z                ; if NULL, return a = 0  ;
+	cp e                                          ; loop for e/d key in
+	jr nz, .asm_238a     ;                        ; linked list
+	inc h                ;                        ;
+	ld a, [hl]           ; if key1[l] == e and    ;
+	cp d                 ;    key2[l] == d:       ;
+	jr z, .asm_238f      ;   break                ;
+.asm_238a                                             ;
+	ld h, $c8            ;                        ;
+	ld l, [hl]           ; l ← next[l]            ;
 	jr .asm_237d
 .asm_238f
 	ld a, [$ffa9]
 	cp l
-	jr z, .asm_23af
+	jr z, .asm_23af      ; assert at least one iteration
 	ld c, a
 	ld b, $c9
 	ld a, l
-	ld [bc], a
-	ld [$ffa9], a
+	ld [bc], a           ; prev[i0] ← i
+	ld [$ffa9], a        ; [$ffa9] ← i  (update linked-list head)
 	ld h, $c9
 	ld b, [hl]
-	ld [hl], $0
+	ld [hl], $0          ; prev[i] ← 0
 	ld h, $c8
 	ld a, c
 	ld c, [hl]
-	ld [hl], a
+	ld [hl], a           ; next[i] ← i0
 	ld l, b
-	ld [hl], c
+	ld [hl], c           ; next[prev[i]] ← next[i]
 	ld h, $c9
 	inc c
 	dec c
-	jr z, .asm_23af
-	ld l, c
-	ld [hl], b
+	jr z, .asm_23af      ; if next[i] != NULL:
+	ld l, c              ;   l ← next[i]
+	ld [hl], b           ;   prev[next[i]] ← prev[i]
 .asm_23af
-	scf
-	ret
+	scf                  ; set carry to indicate success
+	ret                  ; (return new linked-list head in a)
 
-Func_23b1: ; 23b1 (0:23b1)
-	ld a, [$cd0d]
+; uppercases e if [wUppercaseFlag] is nonzero
+Uppercase: ; 23b1 (0:23b1)
+	ld a, [wUppercaseFlag]
 	or a
 	ret z
 	ld a, e

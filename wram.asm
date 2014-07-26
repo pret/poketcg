@@ -116,6 +116,7 @@ wSerialRecvBuf: ; $cba5 - $cbc4
 	ds $20
 	ds $49
 
+;--- Duels --------------------------------------
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
@@ -127,6 +128,11 @@ wIsPracticeDuel: ; cc13
 
 wDuelTheme: ; cc1a
 	ds $1
+	ds $f2
+
+wUppercaseFlag: ; cd0d
+	ds $1
+
 
 ;--- Bank 1: $Dxxx ----------------------------------------
 SECTION "WRAM1", WRAMX, BANK[1]
