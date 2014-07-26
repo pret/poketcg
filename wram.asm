@@ -1,10 +1,17 @@
 ;--- Bank 0: $Cxxx ----------------------------------------
 SECTION "WRAM0", WRAM0
-	ds $ab3
+	ds $a00
 
+wBufOAM: ; ca00
+	ds $a0
+	ds $13
+
+; initial value of the A register--used to tell the console when reset
 wInitialA: ; cab3
 	ds $1
 
+; what console we are playing on, either 0 (DMG), 1 (SGB) or 2 (CGB)
+; use constants CONSOLE_DMG, CONSOLE_SGB and CONSOLE_CGB for checks
 wConsole: ; cab4
 	ds $1
 	ds $1
@@ -49,6 +56,11 @@ wCounterCtr: ; cac3
 wCounterEnable: ; cac4
 	ds $1
 
+; byte0: 1/60ths of a second
+; byte1: seconds
+; byte2: minutes
+; byte3: hours (lower byte)
+; byte4: hours (upper byte)
 wCounter: ; cac5
 	ds $5
 	ds $6
@@ -56,12 +68,52 @@ wCounter: ; cac5
 wVBlankFunctionTrampoline: ; cad0
 	ds $20 ; unknown length
 
-wBufPalette: ; caf0
+wBufPalette: ; caf0 - cab7f
 	ds $80
 	ds $4
 
-wBufSerial: ; cb74
+;--- Serial transfer bytes (cb74-cbc4) ----------
+wSerialOp: ; cb74
 	ds $1
+
+wSerialFlags: ; cb75
+	ds $1
+
+wSerialCounter: ; cb76
+	ds $1
+
+wSerialCounter2: ; cb77
+	ds $1
+
+wSerialTimeoutCounter: ; cb78
+	ds $1
+	ds $4
+
+wSerialSendSave: ; cb7d
+	ds $1
+
+wSerialSendBufToggle: ; cb7e
+	ds $1
+
+wSerialSendBufIndex: ; cb7f
+	ds $1
+	ds $1
+
+wSerialSendBuf: ; cb81
+	ds $20
+
+wSerialLastReadCA: ; cba1
+	ds $1
+
+wSerialRecvCounter: ; cba2
+	ds $1
+	ds $1
+
+wSerialRecvIndex: ; cba4
+	ds $1
+
+wSerialRecvBuf: ; $cba5 - $cbc4
+	ds $20
 
 
 ;--- Bank 1: $Dxxx ----------------------------------------

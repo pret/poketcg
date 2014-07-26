@@ -1596,37 +1596,40 @@ MemcpyDEHL_hblank: ; 0c32 (0:0c32)
 
 INCBIN "baserom.gbc",$0c4b,$0c91 - $0c4b
 
+; called at roughly 240Hz by TimerHandler
 SerialTimerHandler: ; 0c91 (0:0c91)
-	ld a, [$cb74]
+	ld a, [wSerialOp]
 	cp $29
-	jr z, .asm_c9d
+	jr z, .begin_transfer
 	cp $12
-	jr z, .asm_caa
+	jr z, .check_for_timeout
 	ret
-.asm_c9d
-	ld a, [rSC]
-	add a
-	ret c
+.begin_transfer
+	ld a, [rSC]          ;
+	add a                ; make sure that no serial transfer is active
+	ret c                ;
 	ld a, $1
-	ld [rSC], a
+	ld [rSC], a          ; use internal clock
 	ld a, $81
-	ld [rSC], a
+	ld [rSC], a          ; use internal clock, set transfer start flag
 	ret
-.asm_caa
-	ld a, [$cb76]
-	ld hl, $cb77
+.check_for_timeout
+	; sets bit7 of [wSerialFlags] if the serial interrupt hasn't triggered
+	; within four timer interrupts (60Hz)
+	ld a, [wSerialCounter]
+	ld hl, wSerialCounter2
 	cp [hl]
 	ld [hl], a
-	ld hl, $cb78
-	jr nz, .asm_cc2
+	ld hl, wSerialTimeoutCounter
+	jr nz, .clear_counter
 	inc [hl]
 	ld a, [hl]
 	cp $4
 	ret c
-	ld hl, $cb75
+	ld hl, wSerialFlags
 	set 7, [hl]
 	ret
-.asm_cc2
+.clear_counter
 	ld [hl], $0
 	ret
 ; 0xcc5
@@ -1638,44 +1641,46 @@ SerialHandler: ; 0d26 (0:0d26)
 	push hl
 	push de
 	push bc
-	ld a, [$ce63]
-	or a
-	jr z, .asm_d35
-	call Func_3189
-	jr .asm_d6e
+	ld a, [$ce63]        ;
+	or a                 ;
+	jr z, .asm_d35       ; if [$ce63] nonzero:
+	call Func_3189       ;   ?
+	jr .done             ;   return
 .asm_d35
-	ld a, [$cb74]
-	or a
-	jr z, .asm_d55
+	ld a, [wSerialOp]        ;
+	or a                 ;
+	jr z, .asm_d55       ; skip ahead if [$cb74] zero
+	; send/receive a byte
 	ld a, [rSB]
-	call Func_0d77
-	call Func_0dc8
+	call SerialHandleRecv
+	call SerialHandleSend ; returns byte to actually send
 	push af
-.asm_d44
+.wait_for_completion
 	ld a, [rSC]
 	add a
-	jr c, .asm_d44
+	jr c, .wait_for_completion
 	pop af
-	ld [rSB], a
-	ld a, [$cb74]
+	; end send/receive
+	ld [rSB], a          ; prepare sending byte (from Func_0dc8?)
+	ld a, [wSerialOp]
 	cp $29
-	jr z, .asm_d6e
-	jr .asm_d6a
+	jr z, .done          ; if [$cb74] != $29, use external clock
+	jr .asm_d6a          ; and prepare for next byte.  either way, return
 .asm_d55
 	ld a, $1
-	ld [$cba2], a
+	ld [wSerialRecvCounter], a
 	ld a, [rSB]
-	ld [$cba5], a
+	ld [wSerialRecvBuf], a
 	ld a, $ac
 	ld [rSB], a
-	ld a, [$cba5]
-	cp $12
-	jr z, .asm_d6e
+	ld a, [wSerialRecvBuf]
+	cp $12               ; if [$cba5] != $12, use external clock
+	jr z, .done          ; and prepare for next byte.  either way, return
 .asm_d6a
-	ld a, $80
-	ld [rSC], a
-.asm_d6e
-	ld hl, $cb76
+	ld a, $80            ;
+	ld [rSC], a          ; transfer start, use external clock
+.done
+	ld hl, wSerialCounter
 	inc [hl]
 	pop bc
 	pop de
@@ -1683,101 +1688,116 @@ SerialHandler: ; 0d26 (0:0d26)
 	pop af
 	reti
 
-Func_0d77: ; 0d77 (0:0d77)
-	ld hl, $cba1
+; handles a byte read from serial transfer by decoding it and storing it into
+; the receive buffer
+SerialHandleRecv: ; 0d77 (0:0d77)
+	ld hl, wSerialLastReadCA
 	ld e, [hl]
 	dec e
-	jr z, .asm_d94
+	jr z, .last_was_ca
 	cp $ac
-	ret z
+	ret z                ; return if read_data == $ac
 	cp $ca
-	jr z, .asm_d92
+	jr z, .read_ca
 	or a
-	jr z, .asm_d8c
+	jr z, .read_00_or_ff
 	cp $ff
-	jr nz, .asm_d99
-.asm_d8c
-	ld hl, $cb75
+	jr nz, .read_data
+.read_00_or_ff
+	ld hl, wSerialFlags
 	set 6, [hl]
 	ret
-.asm_d92
-	inc [hl]
+.read_ca
+	inc [hl]             ; inc [wSerialLastReadCA]
 	ret
-.asm_d94
+.last_was_ca
+	; if last byte read was $ca, flip all bits of data received
 	ld [hl], $0
 	cpl
-	jr .asm_d9b
-.asm_d99
+	jr .handle_byte
+.read_data
+	; flip top2 bits of data received
 	xor $c0
-.asm_d9b
+.handle_byte
 	push af
-	ld a, [$cba4]
+	ld a, [wSerialRecvIndex]
 	ld e, a
 	ld a, [$cba3]
 	dec a
 	and $1f
 	cp e
-	jr z, .asm_dc1
+	jr z, .set_flag_and_return
 	ld d, $0
-	ld hl, $cba5
+	; store into receive buffer
+	ld hl, wSerialRecvBuf
 	add hl, de
 	pop af
 	ld [hl], a
+	; increment buffer index (mod 32)
 	ld a, e
 	inc a
 	and $1f
 	ld [$cba4], a
-	ld hl, $cba2
+	; increment received bytes counter & clear flags
+	ld hl, wSerialRecvCounter
 	inc [hl]
 	xor a
-	ld [$cb75], a
+	ld [wSerialFlags], a
 	ret
-.asm_dc1
+.set_flag_and_return
 	pop af
-	ld hl, $cb75
+	ld hl, wSerialFlags
 	set 0, [hl]
 	ret
 
-Func_0dc8: ; 0dc8 (0:0dc8)
-	ld hl, $cb7d
+; prepares a byte to send over serial transfer, either from the send-save byte
+; slot or the send buffer
+SerialHandleSend: ; 0dc8 (0:0dc8)
+	ld hl, wSerialSendSave
 	ld a, [hl]
 	or a
-	jr nz, .asm_dd9
-	ld hl, $cb7e
+	jr nz, .send_saved
+	ld hl, wSerialSendBufToggle
 	ld a, [hl]
 	or a
-	jr nz, .asm_ddd
+	jr nz, .send_buf
+	; no more data--send $ac to indicate this
 	ld a, $ac
 	ret
-.asm_dd9
+.send_saved
 	ld a, [hl]
 	ld [hl], $0
 	ret
-.asm_ddd
+.send_buf
+	; grab byte to send from send buffer, increment buffer index
+	; and decrement to-send length
 	dec [hl]
-	ld a, [$cb7f]
+	ld a, [wSerialSendBufIndex]
 	ld e, a
 	ld d, $0
-	ld hl, $cb81
+	ld hl, wSerialSendBuf
 	add hl, de
 	inc a
 	and $1f
-	ld [$cb7f], a
+	ld [wSerialSendBufIndex], a
 	ld a, [hl]
+	; flip top2 bits of sent data
 	xor $c0
 	cp $ac
-	jr z, .asm_e01
+	jr z, .send_escaped
 	cp $ca
-	jr z, .asm_e01
+	jr z, .send_escaped
 	cp $ff
-	jr z, .asm_e01
+	jr z, .send_escaped
 	or a
-	jr z, .asm_e01
+	jr z, .send_escaped
 	ret
-.asm_e01
+.send_escaped
+	; escape tricky data by prefixing it with $ca and flipping all bits
+	; instead of just top2
 	xor $c0
 	cpl
-	ld [$cb7d], a
+	ld [wSerialSendSave], a
 	ld a, $ca
 	ret
 ; 0xe0a
@@ -1791,7 +1811,7 @@ ResetSerial: ; 0ea6 (0:0ea6)
 	xor a
 	ld [rSB], a
 	ld [rSC], a
-	ld hl, wBufSerial
+	ld hl, wSerialOp
 	ld bc, $0051
 .asm_eb7
 	xor a
