@@ -1,4 +1,5 @@
 GLOBAL GrassEnergyCardGfx
+GLOBAL TextOffsets
 
 ; rst vectors
 SECTION "rst00",ROM0[0]

@@ -1,4 +1,4 @@
-TextOffsets: ; 34000 (d:4000)
+TextOffsets:: ; 34000 (d:4000)
 	db $00,$00,$00
 	text Text0001
 	text Text0002
