@@ -5,7 +5,7 @@
 .SECONDEXPANSION:
 
 ROMS := tcg.gbc
-OBJS := main.o gfx.o text.o audio.o
+OBJS := main.o gfx.o text.o audio.o wram.o
 
 $(foreach obj, $(OBJS), \
 	$(eval $(obj:.o=)_dep := $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
