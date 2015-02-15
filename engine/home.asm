@@ -4830,7 +4830,7 @@ Func_3e2a: ; 3e2a (0:3e2a)
 INCBIN "baserom.gbc",$3e31,$3fe0 - $3e31
 
 ; jumps to 3f:hl
-Bankswitch3dTo3f: ; 3fe0 (0:3fe0)
+Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
 	ld [hBankROM], a

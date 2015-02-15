@@ -493,10 +493,10 @@ Func_fc279: ; fc279 (3f:4279)
 	ld [$dd8c], a
 	ret
 
-INCLUDE "data/sfx_headers.asm"
+INCLUDE "audio/sfx_headers.asm"
 
 SFX_WaveInstruments: ; fc485 (3f:4485)
-INCLUDE "data/wave_instruments.asm"
+INCLUDE "audio/wave_instruments.asm"
 
 INCLUDE "audio/sfx/sfx_01.asm"
 INCLUDE "audio/sfx/sfx_02.asm"

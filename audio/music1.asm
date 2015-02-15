@@ -1,34 +1,34 @@
-SetupSound_Ext: ; f4000 (3d:4000)
+SetupSound_Ext:: ; f4000 (3d:4000)
 	jp Func_f407d
 
-SoundTimerHandler_Ext: ; f4003 (3d:4003)
+SoundTimerHandler_Ext:: ; f4003 (3d:4003)
 	jp Func_f40e9
 
-Func_f4006: ; f4006 (3d:4006)
+Func_f4006:: ; f4006 (3d:4006)
 	jp Func_f4021
 
-Func_f4009: ; f4009 (3d:4009)
+Func_f4009:: ; f4009 (3d:4009)
 	jp Func_f402d
 
-Func_f400c: ; f400c (3d:400c)
+Func_f400c:: ; f400c (3d:400c)
 	jp Func_f404e
 
-Func_f400f: ; f400f (3d:400f)
+Func_f400f:: ; f400f (3d:400f)
 	jp Func_f4052
 
-Func_f4012: ; f4012 (3d:4012)
+Func_f4012:: ; f4012 (3d:4012)
 	jp Func_f405c
 
-Func_f4015: ; f4015 (3d:4015)
+Func_f4015:: ; f4015 (3d:4015)
 	jp Func_f4066
 
-Func_f4018: ; f4018 (3d:4018)
+Func_f4018:: ; f4018 (3d:4018)
 	jp Func_f406f
 
-Func_f401b: ; f401b (3d:401b)
+Func_f401b:: ; f401b (3d:401b)
 	jp Func_f49c4
 
-Func_f401e: ; f401e (3d:401e)
+Func_f401e:: ; f401e (3d:401e)
 	jp Func_f49d0
 
 Func_f4021: ; f4021 (3d:4021)
@@ -1856,18 +1856,18 @@ Unknown_f4c30: ; f4c30 (3d:4c30)
 INCBIN "baserom.gbc",$f4c30,$f4cda - $f4c30
 
 Music1_WaveInstruments: ; f4cda (3d:4cda)
-INCLUDE "data/wave_instruments.asm"
+INCLUDE "audio/wave_instruments.asm"
 
 Music1_NoiseInstruments: ; f4d34 (3d:4d34)
-INCLUDE "data/noise_instruments.asm"
+INCLUDE "audio/noise_instruments.asm"
 
 Music1_VibratoTypes: ; f4dde (3d:4dde)
-INCLUDE "data/vibrato_types.asm"
+INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f4e85: ; f4e85 (3d:4e85)
 INCBIN "baserom.gbc",$f4e85,$f4ee5 - $f4e85
 
-INCLUDE "data/music1_headers.asm"
+INCLUDE "audio/music1_headers.asm"
 
 INCLUDE "audio/music/titlescreen.asm"
 INCLUDE "audio/music/dueltheme1.asm"

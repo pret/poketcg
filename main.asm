@@ -47,12 +47,3 @@ INCLUDE "engine/bank1c.asm"
 
 SECTION "bank20",ROMX,BANK[$20]
 INCLUDE "engine/bank20.asm"
-
-SECTION "bank3D",ROMX,BANK[$3D]
-INCLUDE "engine/music1.asm"
-
-SECTION "bank3E",ROMX,BANK[$3E]
-INCLUDE "engine/music2.asm"
-
-SECTION "bank3F",ROMX,BANK[$3F]
-INCLUDE "engine/sfx.asm"

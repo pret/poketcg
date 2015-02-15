@@ -1856,18 +1856,18 @@ Unknown_f8c30: ; f8c30 (3e:4c30)
 INCBIN "baserom.gbc",$f8c30,$f8cda - $f8c30
 
 Music2_WaveInstruments: ; f8cda (3e:4cda)
-INCLUDE "data/wave_instruments.asm"
+INCLUDE "audio/wave_instruments.asm"
 
 Music2_NoiseInstruments: ; f8d34 (3e:4d34)
-INCLUDE "data/noise_instruments.asm"
+INCLUDE "audio/noise_instruments.asm"
 
 Music2_VibratoTypes: ; f8dde (3e:4dde)
-INCLUDE "data/vibrato_types.asm"
+INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f8e85: ; f8e85 (3e:4e85)
 INCBIN "baserom.gbc",$f8e85,$f8ee5 - $f8e85
 
-INCLUDE "data/music2_headers.asm"
+INCLUDE "audio/music2_headers.asm"
 
 INCLUDE "audio/music/pcmainmenu.asm"
 INCLUDE "audio/music/pokemondome.asm"
