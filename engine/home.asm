@@ -1,3 +1,5 @@
+GLOBAL GrassEnergyCardGfx
+
 ; rst vectors
 SECTION "rst00",ROM0[0]
 	ret

@@ -5,9 +5,11 @@
 .SECONDEXPANSION:
 
 ROMS := tcg.gbc
-OBJS := main.o
+OBJS := main.o gfx.o
 
-main_dep := $(shell python extras/scan_includes.py main.asm)
+$(foreach obj, $(OBJS), \
+	$(eval $(obj:.o=)_dep := $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
+)
 
 all: $(ROMS) compare
 compare: baserom.gbc $(ROMS)
