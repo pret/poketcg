@@ -7,39 +7,39 @@ Music_BoosterPack_Ch1: ; f7d60 (3d:7d60)
 	duty 1
 	speed 1
 	volume 160
-	note D#, 5
+	D# 5
 	volume 55
-	note D#, 1
+	D# 1
 	volume 160
-	note G_, 5
+	G_ 5
 	volume 55
-	note G_, 1
+	G_ 1
 	volume 160
-	note A#, 5
+	A# 5
 	volume 55
-	note A#, 2
+	A# 2
 	volume 160
-	note F_, 5
+	F_ 5
 	volume 55
-	note F_, 1
+	F_ 1
 	volume 160
-	note A_, 5
+	A_ 5
 	volume 55
-	note A_, 1
+	A_ 1
 	inc_octave
 	volume 160
-	note C_, 5
+	C_ 5
 	volume 55
-	note C_, 2
+	C_ 2
 	dec_octave
 	volume 160
-	note B_, 16
+	B_ 16
 	tie
-	note B_, 16
+	B_ 16
 	tie
-	note B_, 6
+	B_ 6
 	volume 55
-	note B_, 9
+	B_ 9
 	music_end
 
 
@@ -52,38 +52,38 @@ Music_BoosterPack_Ch2: ; f7d9e (3d:7d9e)
 	duty 1
 	speed 1
 	volume 144
-	note A#, 5
+	A# 5
 	volume 39
-	note A#, 1
+	A# 1
 	inc_octave
 	volume 144
-	note D#, 5
+	D# 5
 	volume 39
-	note D#, 1
+	D# 1
 	volume 144
-	note G_, 5
+	G_ 5
 	volume 39
-	note G_, 2
+	G_ 2
 	volume 144
-	note C_, 5
+	C_ 5
 	volume 39
-	note C_, 1
+	C_ 1
 	volume 144
-	note F_, 5
+	F_ 5
 	volume 39
-	note F_, 1
+	F_ 1
 	volume 144
-	note A_, 5
+	A_ 5
 	volume 39
-	note A_, 2
+	A_ 2
 	volume 144
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 6
+	G_ 6
 	volume 39
-	note G_, 9
+	G_ 9
 	music_end
 
 
@@ -95,20 +95,20 @@ Music_BoosterPack_Ch3: ; f7ddb (3d:7ddb)
 	musice9 0
 	octave 1
 	speed 1
-	note D#, 6
-	note A#, 6
+	D# 6
+	A# 6
 	inc_octave
-	note D#, 7
+	D# 7
 	dec_octave
-	note F_, 6
+	F_ 6
 	inc_octave
-	note C_, 6
-	note F_, 7
+	C_ 6
+	F_ 7
 	dec_octave
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 6
+	G_ 6
 	music_end
 ; 0xf7df8

@@ -32,30 +32,77 @@ text: MACRO
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
 ENDM
 
-; notes
-C_ EQU $1
-C# EQU $2
-D_ EQU $3
-D# EQU $4
-E_ EQU $5
-F_ EQU $6
-F# EQU $7
-G_ EQU $8
-G# EQU $9
-A_ EQU $A
-A# EQU $B
-B_ EQU $C
+; notes/instruments
+C_: MACRO
+	db $10 | (\1 - 1)
+ENDM
 
-; instruments
-bass   EQU $1
-snare1 EQU $3 ; medium length
-snare2 EQU $5 ; medium length
-snare3 EQU $7 ; short
-snare4 EQU $9 ; long
-snare5 EQU $C ; long
+C#: MACRO
+	db $20 | (\1 - 1)
+ENDM
 
-note: MACRO
-	db (\1 << 4) | (\2 - 1)
+D_: MACRO
+	db $30 | (\1 - 1)
+ENDM
+
+D#: MACRO
+	db $40 | (\1 - 1)
+ENDM
+
+E_: MACRO
+	db $50 | (\1 - 1)
+ENDM
+
+F_: MACRO
+	db $60 | (\1 - 1)
+ENDM
+
+F#: MACRO
+	db $70 | (\1 - 1)
+ENDM
+
+G_: MACRO
+	db $80 | (\1 - 1)
+ENDM
+
+G#: MACRO
+	db $90 | (\1 - 1)
+ENDM
+
+A_: MACRO
+	db $A0 | (\1 - 1)
+ENDM
+
+A#: MACRO
+	db $B0 | (\1 - 1)
+ENDM
+
+B_: MACRO
+	db $C0 | (\1 - 1)
+ENDM
+
+bass: MACRO
+	db $10 | (\1 - 1)
+ENDM
+
+snare1: MACRO ; medium length
+	db $30 | (\1 - 1)
+ENDM
+
+snare2: MACRO ; medium length
+	db $50 | (\1 - 1)
+ENDM
+
+snare3: MACRO ; short
+	db $70 | (\1 - 1)
+ENDM
+
+snare4: MACRO ; long
+	db $90 | (\1 - 1)
+ENDM
+
+snare5: MACRO ; long
+	db $C0 | (\1 - 1)
 ENDM
 
 rest: MACRO

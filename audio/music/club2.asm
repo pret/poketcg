@@ -7,88 +7,88 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 	octave 4
 	Loop 8
 	volume 117
-	note G_, 4
-	note E_, 4
-	note C_, 4
+	G_ 4
+	E_ 4
+	C_ 4
 	volume 119
-	note F#, 4
+	F# 4
 	tie
-	note F#, 16
+	F# 16
 	volume 117
-	note G_, 4
-	note A_, 4
-	note B_, 4
+	G_ 4
+	A_ 4
+	B_ 4
 	volume 119
-	note F#, 4
+	F# 4
 	tie
-	note F#, 16
+	F# 16
 	EndLoop
 	volume 117
-	note G_, 4
-	note D_, 4
+	G_ 4
+	D_ 4
 	dec_octave
-	note B_, 4
+	B_ 4
 	inc_octave
 	volume 119
-	note B_, 4
+	B_ 4
 	tie
-	note B_, 16
+	B_ 16
 	volume 117
-	note G_, 4
-	note D_, 4
-	note C_, 4
+	G_ 4
+	D_ 4
+	C_ 4
 	volume 119
-	note B_, 4
+	B_ 4
 	tie
-	note B_, 16
+	B_ 16
 	dec_octave
 	volume 117
-	note F#, 4
+	F# 4
 	dec_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
+	D_ 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
+	D_ 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
+	D_ 4
 	dec_octave
-	note C_, 4
+	C_ 4
 	dec_octave
-	note C_, 4
-	note E_, 4
-	note G_, 4
+	C_ 4
+	E_ 4
+	G_ 4
 	inc_octave
-	note C_, 4
-	note E_, 4
-	note G_, 4
+	C_ 4
+	E_ 4
+	G_ 4
 	inc_octave
-	note C_, 4
+	C_ 4
 	dec_octave
-	note D_, 4
+	D_ 4
 	dec_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
+	D_ 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
-	note A_, 3
+	D_ 4
+	F# 4
+	A_ 4
+	A_ 3
 	tie
 	speed 1
-	note A_, 3
+	A_ 3
 	inc_octave
 	volume 119
 	rest 4
-	note D_, 5
+	D_ 5
 	tie
 	speed 6
-	note D_, 15
+	D_ 15
 	tie
-	note D_, 16
+	D_ 16
 	EndMainLoop
 
 
@@ -101,108 +101,108 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	octave 2
 	Loop 8
 	volume 117
-	note C_, 4
-	note G_, 4
+	C_ 4
+	G_ 4
 	inc_octave
-	note G_, 4
+	G_ 4
 	inc_octave
 	volume 119
-	note D_, 4
+	D_ 4
 	tie
-	note D_, 16
+	D_ 16
 	dec_octave
 	dec_octave
 	volume 117
-	note C_, 4
-	note G_, 4
+	C_ 4
+	G_ 4
 	inc_octave
 	inc_octave
-	note C_, 4
+	C_ 4
 	volume 119
-	note D_, 4
+	D_ 4
 	tie
-	note D_, 16
+	D_ 16
 	dec_octave
 	dec_octave
 	EndLoop
 	dec_octave
 	volume 117
-	note B_, 4
+	B_ 4
 	inc_octave
-	note G_, 4
+	G_ 4
 	inc_octave
-	note G_, 4
+	G_ 4
 	inc_octave
 	volume 119
-	note G_, 4
+	G_ 4
 	tie
-	note G_, 16
+	G_ 16
 	dec_octave
 	dec_octave
 	dec_octave
 	volume 117
-	note A_, 4
+	A_ 4
 	inc_octave
-	note A_, 4
+	A_ 4
 	inc_octave
-	note A_, 4
+	A_ 4
 	inc_octave
 	volume 119
-	note C_, 4
+	C_ 4
 	tie
-	note C_, 16
+	C_ 16
 	dec_octave
 	dec_octave
 	volume 117
-	note D_, 4
+	D_ 4
 	octave 2
-	note F#, 4
-	note A_, 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
+	D_ 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note F#, 4
-	note G_, 4
+	D_ 4
+	F# 4
+	G_ 4
 	dec_octave
 	dec_octave
-	note E_, 4
-	note G_, 4
+	E_ 4
+	G_ 4
 	inc_octave
-	note C_, 4
-	note E_, 4
-	note G_, 4
+	C_ 4
+	E_ 4
+	G_ 4
 	inc_octave
-	note C_, 4
-	note E_, 4
-	note F#, 4
+	C_ 4
+	E_ 4
+	F# 4
 	dec_octave
 	dec_octave
-	note F#, 4
-	note A_, 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note F#, 4
-	note A_, 4
+	D_ 4
+	F# 4
+	A_ 4
 	inc_octave
-	note D_, 4
-	note E_, 3
+	D_ 4
+	E_ 3
 	tie
 	speed 1
-	note E_, 3
+	E_ 3
 	dec_octave
 	volume 116
-	note A_, 8
+	A_ 8
 	inc_octave
 	volume 119
-	note F#, 7
+	F# 7
 	tie
 	speed 6
-	note F#, 14
+	F# 14
 	tie
-	note F#, 16
+	F# 16
 	EndMainLoop
 
 
@@ -220,16 +220,16 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	musice8 8
 	rest 2
 	octave 4
-	note G_, 4
-	note E_, 4
-	note C_, 4
-	note F#, 2
+	G_ 4
+	E_ 4
+	C_ 4
+	F# 2
 	rest 2
 	rest 16
-	note G_, 4
-	note A_, 4
-	note B_, 4
-	note F#, 2
+	G_ 4
+	A_ 4
+	B_ 4
+	F# 2
 	rest 2
 	rest 14
 	volume 64
@@ -237,51 +237,51 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	music_call Branch_fa1cf
 	octave 4
 	musice8 8
-	note G_, 8
+	G_ 8
 	music_call Branch_fa1cf
 	musice9 64
 	volume 32
 	octave 3
 	musice8 8
-	note G_, 8
+	G_ 8
 	music_call Branch_fa1f3
 	octave 3
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 12
+	G_ 12
 	rest 16
 	rest 8
 	musice8 8
-	note E_, 8
+	E_ 8
 	music_call Branch_fa1f3
 	octave 3
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 12
+	G_ 12
 	tie
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 8
+	G_ 8
 	rest 4
 	musice8 8
-	note A_, 2
-	note G_, 2
+	A_ 2
+	G_ 2
 	musice8 6
-	note F#, 16
+	F# 16
 	tie
-	note F#, 12
+	F# 12
 	rest 4
-	note F#, 1
+	F# 1
 	tie
-	note G_, 15
+	G_ 15
 	tie
-	note G_, 12
+	G_ 12
 	rest 4
-	note G#, 1
+	G# 1
 	tie
-	note A_, 15
+	A_ 15
 	tie
-	note A_, 16
+	A_ 16
 	rest 16
 	rest 16
 	musice9 96
@@ -290,61 +290,61 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 Branch_fa1cf:
 	musice8 6
 	octave 5
-	note C#, 1
+	C# 1
 	tie
-	note D_, 15
+	D_ 15
 	tie
-	note D_, 12
+	D_ 12
 	musice8 8
-	note C_, 2
+	C_ 2
 	dec_octave
-	note B_, 2
+	B_ 2
 	musice8 6
-	note G_, 16
+	G_ 16
 	tie
-	note G_, 8
+	G_ 8
 	rest 4
 	musice8 8
-	note E_, 4
-	note B_, 4
+	E_ 4
+	B_ 4
 	inc_octave
-	note C_, 4
+	C_ 4
 	dec_octave
-	note B_, 4
+	B_ 4
 	musice8 6
-	note A_, 16
+	A_ 16
 	tie
-	note A_, 8
+	A_ 8
 	tie
-	note A_, 16
+	A_ 16
 	rest 4
 	music_ret
 
 Branch_fa1f3:
 	octave 4
-	note C#, 1
+	C# 1
 	tie
-	note D_, 15
+	D_ 15
 	tie
-	note D_, 4
-	note E_, 4
+	D_ 4
+	E_ 4
 	dec_octave
-	note B_, 4
+	B_ 4
 	inc_octave
-	note C_, 4
+	C_ 4
 	musice8 6
-	note D_, 16
+	D_ 16
 	tie
-	note D_, 8
+	D_ 8
 	rest 4
 	musice8 8
-	note C_, 2
+	C_ 2
 	dec_octave
-	note B_, 2
+	B_ 2
 	inc_octave
-	note C_, 2
+	C_ 2
 	dec_octave
-	note B_, 2
+	B_ 2
 	musice8 6
 	music_ret
 ; 0xfa210

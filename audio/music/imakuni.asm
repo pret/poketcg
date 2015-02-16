@@ -12,17 +12,17 @@ Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	EndLoop
 	music_call Branch_fadf9
 	octave 4
-	note D_, 15
+	D_ 15
 	dec_octave
-	note B_, 7
+	B_ 7
 	rest 8
-	note G_, 7
+	G_ 7
 	rest 8
 	speed 9
-	note F_, 10
+	F_ 10
 	tie
 	speed 1
-	note F_, 7
+	F_ 7
 	rest 8
 	speed 9
 	rest 10
@@ -30,15 +30,15 @@ Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	music_call Branch_fae1d
 	speed 1
 	octave 4
-	note E_, 7
+	E_ 7
 	rest 15
-	note E_, 3
-	note C_, 2
-	note E_, 3
-	note C_, 15
+	E_ 3
+	C_ 2
+	E_ 3
+	C_ 15
 	dec_octave
-	note G#, 15
-	note A_, 7
+	G# 15
+	A_ 7
 	rest 8
 	speed 3
 	rest 15
@@ -46,139 +46,139 @@ Music_Imakuni_Ch1: ; fad55 (3e:6d55)
 	rest 15
 	rest 15
 	inc_octave
-	note E_, 7
+	E_ 7
 	rest 8
-	note F#, 7
+	F# 7
 	rest 8
-	note G_, 15
+	G_ 15
 	tie
-	note G_, 7
-	note F#, 3
-	note G_, 2
-	note F#, 3
-	note E_, 7
+	G_ 7
+	F# 3
+	G_ 2
+	F# 3
+	E_ 7
 	rest 8
-	note D#, 7
+	D# 7
 	rest 8
-	note E_, 15
-	note C_, 7
+	E_ 15
+	C_ 7
 	rest 8
 	dec_octave
-	note G#, 7
+	G# 7
 	rest 8
 	speed 7
-	note F#, 15
+	F# 15
 	speed 9
 	rest 10
 	music_call Branch_fadf9
 	music_call Branch_fae1d
 	dec_octave
 	speed 1
-	note F_, 7
+	F_ 7
 	rest 8
-	note B_, 7
+	B_ 7
 	inc_octave
-	note C_, 8
+	C_ 8
 	dec_octave
-	note G#, 7
-	note A_, 8
-	note F_, 7
+	G# 7
+	A_ 8
+	F_ 7
 	rest 8
-	note B_, 7
+	B_ 7
 	inc_octave
-	note C_, 8
+	C_ 8
 	dec_octave
-	note G#, 7
-	note A_, 8
+	G# 7
+	A_ 8
 	speed 3
-	note F_, 10
+	F_ 10
 	speed 1
-	note D#, 7
+	D# 7
 	rest 8
-	note A_, 7
-	note A#, 8
-	note F#, 7
-	note G_, 8
-	note D#, 7
+	A_ 7
+	A# 8
+	F# 7
+	G_ 8
+	D# 7
 	rest 8
-	note A_, 7
-	note A#, 8
-	note F#, 7
-	note G_, 8
+	A_ 7
+	A# 8
+	F# 7
+	G_ 8
 	speed 3
-	note D#, 10
+	D# 10
 	speed 1
 	Loop 4
-	note D_, 7
+	D_ 7
 	dec_octave
-	note A_, 8
-	note D_, 7
-	note A_, 8
-	note D_, 7
-	note A_, 8
+	A_ 8
+	D_ 7
+	A_ 8
+	D_ 7
+	A_ 8
 	inc_octave
 	EndLoop
-	note D_, 7
+	D_ 7
 	dec_octave
-	note A_, 8
-	note D_, 7
-	note A_, 8
+	A_ 8
+	D_ 7
+	A_ 8
 	vibrato_delay 5
 	speed 3
-	note D_, 10
+	D_ 10
 	vibrato_delay 20
 	EndMainLoop
 
 Branch_fadf9:
 	speed 1
 	octave 4
-	note C#, 7
+	C# 7
 	rest 15
-	note C#, 3
-	note D_, 2
-	note C#, 3
+	C# 3
+	D_ 2
+	C# 3
 	dec_octave
-	note A#, 15
-	note B_, 15
+	A# 15
+	B_ 15
 	inc_octave
-	note D_, 7
+	D_ 7
 	rest 8
 	speed 5
 	rest 9
 	speed 1
 	rest 15
 	rest 15
-	note D_, 7
+	D_ 7
 	rest 8
-	note E_, 7
+	E_ 7
 	rest 8
-	note F_, 15
+	F_ 15
 	tie
-	note F_, 7
-	note E_, 3
-	note F_, 2
-	note E_, 3
-	note D_, 7
+	F_ 7
+	E_ 3
+	F_ 2
+	E_ 3
+	D_ 7
 	rest 8
-	note C#, 7
+	C# 7
 	rest 8
 	music_ret
 
 Branch_fae1d:
 	octave 4
-	note D_, 7
+	D_ 7
 	rest 8
 	dec_octave
-	note G_, 7
+	G_ 7
 	rest 8
 	inc_octave
-	note G_, 7
+	G_ 7
 	rest 8
 	speed 9
-	note F_, 10
+	F_ 10
 	tie
 	speed 1
-	note F_, 7
+	F_ 7
 	rest 8
 	speed 9
 	rest 10
@@ -200,22 +200,22 @@ Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	speed 3
 	rest 10
 	speed 1
-	note C_, 7
+	C_ 7
 	rest 8
 	EndLoop
 	rest 15
-	note C_, 7
+	C_ 7
 	rest 8
 	speed 3
 	rest 10
 	speed 1
-	note C_, 7
+	C_ 7
 	rest 8
 	rest 15
 	speed 3
 	rest 10
 	vibrato_delay 8
-	note C_, 10
+	C_ 10
 	vibrato_delay 0
 	EndLoop
 	Loop 2
@@ -223,51 +223,51 @@ Music_Imakuni_Ch2: ; fae32 (3e:6e32)
 	EndLoop
 	speed 1
 	octave 2
-	note F_, 15
+	F_ 15
 	tie
-	note F_, 7
+	F_ 7
 	inc_octave
-	note F_, 8
-	note D#, 7
+	F_ 8
+	D# 7
 	rest 8
 	rest 15
-	note G#, 7
-	note A_, 8
-	note F_, 7
-	note D#, 8
+	G# 7
+	A_ 8
+	F_ 7
+	D# 8
 	speed 3
 	rest 10
 	speed 1
 	dec_octave
-	note D#, 15
+	D# 15
 	tie
-	note D#, 7
+	D# 7
 	inc_octave
-	note D#, 8
-	note C#, 7
+	D# 8
+	C# 7
 	rest 8
 	rest 15
-	note F#, 7
-	note G_, 8
-	note D#, 7
-	note C#, 8
+	F# 7
+	G_ 8
+	D# 7
+	C# 8
 	speed 3
 	rest 10
 	speed 1
 	Loop 4
-	note D_, 7
+	D_ 7
 	rest 8
 	Loop 2
 	rest 15
 	EndLoop
 	EndLoop
-	note D_, 7
+	D_ 7
 	rest 8
 	rest 15
 	vibrato_delay 5
-	note D_, 15
+	D_ 15
 	tie
-	note D_, 7
+	D_ 7
 	rest 8
 	vibrato_delay 0
 	EndMainLoop
@@ -279,14 +279,14 @@ Branch_faea5:
 	speed 1
 	Loop 2
 	rest 15
-	note C#, 7
+	C# 7
 	rest 8
 	EndLoop
 	vibrato_delay 8
 	speed 9
 	rest 10
 	speed 3
-	note C#, 10
+	C# 10
 	vibrato_delay 0
 	music_ret
 
@@ -303,170 +303,170 @@ Music_Imakuni_Ch3: ; faebc (3e:6ebc)
 	music_call Branch_faf7d
 	vibrato_delay 8
 	speed 1
-	note D_, 15
+	D_ 15
 	tie
-	note D_, 7
+	D_ 7
 	inc_octave
 	vibrato_delay 0
-	note G_, 3
+	G_ 3
 	dec_octave
-	note G_, 2
+	G_ 2
 	dec_octave
-	note G_, 3
+	G_ 3
 	music_call Branch_faf7d
 	vibrato_delay 8
-	note D_, 10
+	D_ 10
 	vibrato_delay 0
 	Loop 4
 	music_call Branch_faf7d
 	vibrato_delay 8
-	note D_, 10
+	D_ 10
 	vibrato_delay 0
 	EndLoop
 	Loop 2
 	octave 2
 	speed 3
-	note C_, 5
+	C_ 5
 	rest 5
 	inc_octave
 	speed 1
-	note E_, 7
+	E_ 7
 	rest 8
 	dec_octave
 	speed 3
-	note G#, 5
-	note A_, 5
+	G# 5
+	A_ 5
 	inc_octave
 	speed 1
-	note D#, 7
+	D# 7
 	rest 8
 	rest 15
-	note D#, 7
+	D# 7
 	rest 8
 	speed 3
 	rest 5
 	dec_octave
-	note C_, 5
+	C_ 5
 	inc_octave
 	speed 1
-	note E_, 7
+	E_ 7
 	rest 8
 	dec_octave
 	speed 3
-	note G#, 5
-	note A_, 5
+	G# 5
+	A_ 5
 	rest 5
 	inc_octave
 	vibrato_delay 8
-	note D#, 10
+	D# 10
 	vibrato_delay 0
 	EndLoop
 	Loop 2
 	music_call Branch_faf7d
 	vibrato_delay 8
-	note D_, 10
+	D_ 10
 	vibrato_delay 0
 	EndLoop
 	speed 1
 	octave 1
-	note F_, 15
+	F_ 15
 	tie
-	note F_, 7
+	F_ 7
 	inc_octave
-	note F_, 8
-	note D#, 7
+	F_ 8
+	D# 7
 	rest 8
-	note F_, 7
+	F_ 7
 	rest 8
-	note G#, 7
-	note A_, 8
-	note F_, 7
-	note D#, 8
+	G# 7
+	A_ 8
+	F_ 7
+	D# 8
 	vibrato_delay 5
 	speed 3
-	note F_, 10
+	F_ 10
 	vibrato_delay 0
 	speed 1
 	dec_octave
-	note D#, 15
+	D# 15
 	tie
-	note D#, 7
+	D# 7
 	inc_octave
-	note D#, 8
-	note C#, 7
+	D# 8
+	C# 7
 	rest 8
-	note D#, 7
+	D# 7
 	rest 8
-	note F#, 7
-	note G_, 8
-	note D#, 7
-	note C#, 8
+	F# 7
+	G_ 8
+	D# 7
+	C# 8
 	vibrato_delay 5
 	speed 3
-	note D#, 10
+	D# 10
 	vibrato_delay 0
 	speed 1
 	Loop 4
 	octave 3
-	note C_, 7
+	C_ 7
 	rest 8
 	octave 1
-	note D_, 7
+	D_ 7
 	rest 8
-	note D_, 7
+	D_ 7
 	rest 8
 	EndLoop
 	octave 3
-	note C_, 7
+	C_ 7
 	rest 8
 	octave 1
-	note D_, 7
+	D_ 7
 	rest 8
 	octave 3
 	vibrato_delay 5
-	note C_, 15
+	C_ 15
 	tie
-	note C_, 7
+	C_ 7
 	inc_octave
 	vibrato_delay 0
-	note G_, 3
+	G_ 3
 	dec_octave
-	note G_, 2
+	G_ 2
 	dec_octave
-	note G_, 3
+	G_ 3
 	speed 8
 	EndMainLoop
 
 Branch_faf7d:
 	speed 3
 	octave 1
-	note G_, 5
+	G_ 5
 	rest 5
 	inc_octave
 	speed 1
-	note G_, 7
+	G_ 7
 	rest 8
 	speed 3
-	note C#, 5
-	note D_, 5
+	C# 5
+	D_ 5
 	inc_octave
 	speed 1
-	note D_, 7
+	D_ 7
 	rest 8
 	rest 15
-	note D_, 7
+	D_ 7
 	rest 8
 	speed 3
 	rest 5
 	octave 1
-	note G_, 5
+	G_ 5
 	inc_octave
 	speed 1
-	note G_, 7
+	G_ 7
 	rest 8
 	speed 3
-	note C#, 5
-	note D_, 5
+	C# 5
+	D_ 5
 	rest 5
 	inc_octave
 	music_ret
@@ -476,64 +476,64 @@ Music_Imakuni_Ch4: ; fafa4 (3e:6fa4)
 	speed 1
 	octave 1
 	Loop 10
-	note bass, 15
-	note snare3, 7
-	note bass, 8
-	note snare1, 15
-	note bass, 15
-	note snare3, 7
-	note snare3, 8
-	note snare4, 15
-	note snare3, 7
-	note snare3, 8
-	note snare4, 15
-	note snare3, 15
-	note bass, 15
-	note snare1, 15
-	note snare4, 15
-	note bass, 7
-	note snare3, 8
-	note snare1, 15
-	note snare1, 15
-	note snare3, 7
-	note snare1, 8
+	bass 15
+	snare3 7
+	bass 8
+	snare1 15
+	bass 15
+	snare3 7
+	snare3 8
+	snare4 15
+	snare3 7
+	snare3 8
+	snare4 15
+	snare3 15
+	bass 15
+	snare1 15
+	snare4 15
+	bass 7
+	snare3 8
+	snare1 15
+	snare1 15
+	snare3 7
+	snare1 8
 	EndLoop
 	Loop 2
 	speed 11
-	note snare5, 2
+	snare5 2
 	speed 1
-	note snare1, 8
-	note snare1, 15
-	note snare1, 15
-	note snare1, 7
-	note snare1, 8
-	note snare1, 7
-	note snare1, 8
+	snare1 8
+	snare1 15
+	snare1 15
+	snare1 7
+	snare1 8
+	snare1 7
+	snare1 8
 	speed 3
-	note snare5, 10
+	snare5 10
 	EndLoop
 	speed 1
-	note snare1, 15
-	note snare3, 7
-	note snare1, 8
-	note snare4, 15
-	note snare1, 15
-	note snare3, 7
-	note snare1, 8
-	note snare4, 15
-	note snare1, 15
-	note snare3, 7
-	note snare1, 8
-	note snare4, 15
-	note snare1, 15
-	note snare3, 7
-	note snare1, 8
-	note snare4, 15
-	note snare1, 15
-	note snare3, 4
-	note snare3, 4
-	note snare1, 7
-	note snare1, 15
-	note snare1, 15
+	snare1 15
+	snare3 7
+	snare1 8
+	snare4 15
+	snare1 15
+	snare3 7
+	snare1 8
+	snare4 15
+	snare1 15
+	snare3 7
+	snare1 8
+	snare4 15
+	snare1 15
+	snare3 7
+	snare1 8
+	snare4 15
+	snare1 15
+	snare3 4
+	snare3 4
+	snare1 7
+	snare1 15
+	snare1 15
 	EndMainLoop
 ; 0xfafea
