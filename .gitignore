@@ -16,6 +16,7 @@
 *.sav
 *.sys
 
-# converted image data
+# converted image/palette data
 *.1bpp
 *.2bpp
+*.pal

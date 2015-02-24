@@ -31,3 +31,5 @@ clean:
 
 %.1bpp: %.png
 	@rgbgfx -b -o $@ $<
+
+%.pal: ;
