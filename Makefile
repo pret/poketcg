@@ -24,7 +24,7 @@ tcg.gbc: $(OBJS)
 
 clean:
 	rm -f $(ROMS) $(OBJS) $(ROMS:.gbc=.sym)
-	find . \( -iname '*.1bpp' -o -iname '*.2bpp' \) -exec rm {} +
+	find . \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -exec rm {} +
 
 %.2bpp: %.png
 	@rgbgfx -o $@ $<
