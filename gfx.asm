@@ -897,10 +897,7 @@ SECTION "bank30",ROMX,BANK[$30]
 SECTION "bank31",ROMX,BANK[$31]
 GrassEnergyCardGfx:: ; c4000 (31:4000)
 	INCBIN "gfx/cards/grassenergy.2bpp"
-	RGB 21, 31, 12
-	RGB 0, 26, 0
-	RGB 0, 12, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/grassenergy.pal"
 
 FireEnergyCardGfx: ; c4308 (31:4308)
 	INCBIN "gfx/cards/fireenergy.2bpp"
