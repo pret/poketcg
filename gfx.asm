@@ -901,1602 +901,921 @@ GrassEnergyCardGfx:: ; c4000 (31:4000)
 
 FireEnergyCardGfx: ; c4308 (31:4308)
 	INCBIN "gfx/cards/fireenergy.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 8, 12
-	RGB 26, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/fireenergy.pal"
 
 WaterEnergyCardGfx: ; c4610 (31:4610)
 	INCBIN "gfx/cards/waterenergy.2bpp"
-	RGB 26, 31, 31
-	RGB 0, 21, 31
-	RGB 0, 12, 21
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/waterenergy.pal"
 
 LightningEnergyCardGfx: ; c4918 (31:4918)
 	INCBIN "gfx/cards/lightningenergy.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 26, 0
-	RGB 21, 16, 0
-	RGB 4, 4, 0
+	INCBIN "gfx/cards/lightningenergy.pal"
 
 FightingEnergyCardGfx: ; c4c20 (31:4c20)
 	INCBIN "gfx/cards/fightingenergy.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 8, 0
-	RGB 21, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/fightingenergy.pal"
 
 PsychicEnergyCardGfx: ; c4f28 (31:4f28)
 	INCBIN "gfx/cards/psychicenergy.2bpp"
-	RGB 31, 26, 31
-	RGB 26, 12, 26
-	RGB 16, 4, 16
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/psychicenergy.pal"
 
 DoubleColorlessEnergyCardGfx: ; c5230 (31:5230)
 	INCBIN "gfx/cards/doublecolorlessenergy.2bpp"
-	RGB 31, 31, 31
-	RGB 21, 21, 16
-	RGB 12, 12, 8
-	RGB 4, 4, 0
+	INCBIN "gfx/cards/doublecolorlessenergy.pal"
 
 BulbasaurCardGfx: ; c5538 (31:5538)
 	INCBIN "gfx/cards/bulbasaur.2bpp"
-	RGB 26, 31, 26
-	RGB 12, 26, 21
-	RGB 0, 16, 4
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/bulbasaur.pal"
 
 IvysaurCardGfx: ; c5840 (31:5840)
 	INCBIN "gfx/cards/ivysaur.2bpp"
-	RGB 26, 31, 26
-	RGB 16, 26, 16
-	RGB 0, 16, 4
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/ivysaur.pal"
 
 Venusaur1CardGfx: ; c5b48 (31:5b48)
 	INCBIN "gfx/cards/venusaur1.2bpp"
-	RGB 31, 26, 26
-	RGB 26, 4, 8
-	RGB 4, 12, 12
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/venusaur1.pal"
 
 Venusaur2CardGfx: ; c5e50 (31:5e50)
 	INCBIN "gfx/cards/venusaur2.2bpp"
-	RGB 21, 31, 21
-	RGB 8, 21, 12
-	RGB 0, 8, 8
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/venusaur2.pal"
 
 CaterpieCardGfx: ; c6158 (31:6158)
 	INCBIN "gfx/cards/caterpie.2bpp"
-	RGB 31, 31, 16
-	RGB 8, 26, 4
-	RGB 0, 16, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/caterpie.pal"
 
 MetapodCardGfx: ; c6460 (31:6460)
 	INCBIN "gfx/cards/metapod.2bpp"
-	RGB 31, 31, 21
-	RGB 8, 26, 0
-	RGB 4, 16, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/metapod.pal"
 
 ButterfreeCardGfx: ; c6768 (31:6768)
 	INCBIN "gfx/cards/butterfree.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 16, 26
-	RGB 16, 8, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/butterfree.pal"
 
 WeedleCardGfx: ; c6a70 (31:6a70)
 	INCBIN "gfx/cards/weedle.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 26, 0
-	RGB 31, 8, 12
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/weedle.pal"
 
 KakunaCardGfx: ; c6d78 (31:6d78)
 	INCBIN "gfx/cards/kakuna.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 12, 12, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/kakuna.pal"
 
 BeedrillCardGfx: ; c7080 (31:7080)
 	INCBIN "gfx/cards/beedrill.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 26, 4
-	RGB 8, 16, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/beedrill.pal"
 
 EkansCardGfx: ; c7388 (31:7388)
 	INCBIN "gfx/cards/ekans.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 16, 8
-	RGB 16, 0, 21
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/ekans.pal"
 
 ArbokCardGfx: ; c7690 (31:7690)
 	INCBIN "gfx/cards/arbok.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 8, 8
-	RGB 16, 0, 21
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/arbok.pal"
 
 NidoranFCardGfx: ; c7998 (31:7998)
 	INCBIN "gfx/cards/nidoranf.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 26, 16
-	RGB 0, 12, 8
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/nidoranf.pal"
 
 NidorinaCardGfx: ; c7ca0 (31:7ca0)
 	INCBIN "gfx/cards/nidorina.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 26, 16
-	RGB 0, 12, 8
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/nidorina.pal"
 
 SECTION "bank32",ROMX,BANK[$32]
 NidoqueenCardGfx: ; c8000 (32:4000)
 	INCBIN "gfx/cards/nidoqueen.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 21, 16
-	RGB 0, 12, 8
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/nidoqueen.pal"
 
 NidoranMCardGfx: ; c8308 (32:4308)
 	INCBIN "gfx/cards/nidoranm.2bpp"
-	RGB 31, 26, 26
-	RGB 26, 12, 21
-	RGB 16, 4, 12
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/nidoranm.pal"
 
 NidorinoCardGfx: ; c8610 (32:4610)
 	INCBIN "gfx/cards/nidorino.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 21
-	RGB 26, 8, 16
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/nidorino.pal"
 
 NidokingCardGfx: ; c8918 (32:4918)
 	INCBIN "gfx/cards/nidoking.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 12, 26
-	RGB 12, 8, 21
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/nidoking.pal"
 
 ZubatCardGfx: ; c8c20 (32:4c20)
 	INCBIN "gfx/cards/zubat.2bpp"
-	RGB 31, 31, 16
-	RGB 26, 16, 21
-	RGB 21, 4, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/zubat.pal"
 
 GolbatCardGfx: ; c8f28 (32:4f28)
 	INCBIN "gfx/cards/golbat.2bpp"
-	RGB 26, 26, 31
-	RGB 12, 16, 26
-	RGB 0, 8, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/golbat.pal"
 
 OddishCardGfx: ; c9230 (32:5230)
 	INCBIN "gfx/cards/oddish.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 26, 4
-	RGB 4, 8, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/oddish.pal"
 
 GloomCardGfx: ; c9538 (32:5538)
 	INCBIN "gfx/cards/gloom.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 8, 0
-	RGB 16, 8, 26
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/gloom.pal"
 
 VileplumeCardGfx: ; c9840 (32:5840)
 	INCBIN "gfx/cards/vileplume.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 0, 4
-	RGB 4, 12, 26
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/vileplume.pal"
 
 ParasCardGfx: ; c9b48 (32:5b48)
 	INCBIN "gfx/cards/paras.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 12, 4
-	RGB 31, 0, 4
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/paras.pal"
 
 ParasectCardGfx: ; c9e50 (32:5e50)
 	INCBIN "gfx/cards/parasect.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 12, 8
-	RGB 31, 0, 4
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/parasect.pal"
 
 VenonatCardGfx: ; ca158 (32:6158)
 	INCBIN "gfx/cards/venonat.2bpp"
-	RGB 26, 26, 31
-	RGB 31, 0, 4
-	RGB 16, 0, 21
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/venonat.pal"
 
 VenomothCardGfx: ; ca460 (32:6460)
 	INCBIN "gfx/cards/venomoth.2bpp"
-	RGB 31, 26, 31
-	RGB 26, 8, 21
-	RGB 21, 0, 12
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/venomoth.pal"
 
 BellsproutCardGfx: ; ca768 (32:6768)
 	INCBIN "gfx/cards/bellsprout.2bpp"
-	RGB 26, 31, 21
-	RGB 31, 26, 0
-	RGB 8, 21, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/bellsprout.pal"
 
 WeepinbellCardGfx: ; caa70 (32:6a70)
 	INCBIN "gfx/cards/weepinbell.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 21, 0
-	RGB 26, 8, 4
-	RGB 4, 8, 0
+	INCBIN "gfx/cards/weepinbell.pal"
 
 VictreebelCardGfx: ; cad78 (32:6d78)
 	INCBIN "gfx/cards/victreebel.2bpp"
-	RGB 26, 31, 21
-	RGB 31, 4, 0
-	RGB 0, 21, 0
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/victreebel.pal"
 
 GrimerCardGfx: ; cb080 (32:7080)
 	INCBIN "gfx/cards/grimer.2bpp"
-	RGB 31, 21, 31
-	RGB 16, 4, 26
-	RGB 26, 4, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/grimer.pal"
 
 MukCardGfx: ; cb388 (32:7388)
 	INCBIN "gfx/cards/muk.2bpp"
-	RGB 31, 26, 31
-	RGB 16, 12, 26
-	RGB 16, 4, 12
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/muk.pal"
 
 ExeggcuteCardGfx: ; cb690 (32:7690)
 	INCBIN "gfx/cards/exeggcute.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 12, 21
-	RGB 16, 0, 8
-	RGB 8, 0, 8
+	INCBIN "gfx/cards/exeggcute.pal"
 
 ExeggutorCardGfx: ; cb998 (32:7998)
 	INCBIN "gfx/cards/exeggutor.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 16, 0
-	RGB 21, 8, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/exeggutor.pal"
 
 KoffingCardGfx: ; cbca0 (32:7ca0)
 	INCBIN "gfx/cards/koffing.2bpp"
-	RGB 31, 31, 12
-	RGB 26, 12, 21
-	RGB 16, 0, 16
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/koffing.pal"
 
 SECTION "bank33",ROMX,BANK[$33]
 WeezingCardGfx: ; cc000 (33:4000)
 	INCBIN "gfx/cards/weezing.2bpp"
-	RGB 31, 31, 0
-	RGB 12, 26, 12
-	RGB 21, 4, 16
-	RGB 8, 0, 8
+	INCBIN "gfx/cards/weezing.pal"
 
 Tangela1CardGfx: ; cc308 (33:4308)
 	INCBIN "gfx/cards/tangela1.2bpp"
-	RGB 31, 31, 31
-	RGB 8, 26, 12
-	RGB 8, 8, 21
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/tangela1.pal"
 
 Tangela2CardGfx: ; cc610 (33:4610)
 	INCBIN "gfx/cards/tangela2.2bpp"
-	RGB 26, 26, 26
-	RGB 8, 16, 4
-	RGB 0, 8, 21
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/tangela2.pal"
 
 ScytherCardGfx: ; cc918 (33:4918)
 	INCBIN "gfx/cards/scyther.2bpp"
-	RGB 31, 31, 26
-	RGB 4, 31, 8
-	RGB 0, 16, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/scyther.pal"
 
 PinsirCardGfx: ; ccc20 (33:4c20)
 	INCBIN "gfx/cards/pinsir.2bpp"
-	RGB 31, 31, 16
-	RGB 21, 12, 8
-	RGB 8, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pinsir.pal"
 
 CharmanderCardGfx: ; ccf28 (33:4f28)
 	INCBIN "gfx/cards/charmander.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 8
-	RGB 26, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/charmander.pal"
 
 CharmeleonCardGfx: ; cd230 (33:5230)
 	INCBIN "gfx/cards/charmeleon.2bpp"
-	RGB 26, 31, 21
-	RGB 31, 21, 4
-	RGB 31, 0, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/charmeleon.pal"
 
 CharizardCardGfx: ; cd538 (33:5538)
 	INCBIN "gfx/cards/charizard.2bpp"
-	RGB 31, 26, 21
-	RGB 31, 16, 8
-	RGB 26, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/charizard.pal"
 
 VulpixCardGfx: ; cd840 (33:5840)
 	INCBIN "gfx/cards/vulpix.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 12, 4
-	RGB 26, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/vulpix.pal"
 
 Ninetails1CardGfx: ; cdb48 (33:5b48)
 	INCBIN "gfx/cards/ninetails1.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 26, 0
-	RGB 21, 16, 4
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/ninetails1.pal"
 
 Ninetails2CardGfx: ; cde50 (33:5e50)
 	INCBIN "gfx/cards/ninetails2.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 0
-	RGB 26, 0, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/ninetails2.pal"
 
 GrowlitheCardGfx: ; ce158 (33:6158)
 	INCBIN "gfx/cards/growlithe.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 12, 4
-	RGB 21, 8, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/growlithe.pal"
 
 Arcanine1CardGfx: ; ce460 (33:6460)
 	INCBIN "gfx/cards/arcanine1.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 16, 0
-	RGB 26, 0, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/arcanine1.pal"
 
 Arcanine2CardGfx: ; ce768 (33:6768)
 	INCBIN "gfx/cards/arcanine2.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 12, 0
-	RGB 21, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/arcanine2.pal"
 
 PonytaCardGfx: ; cea70 (33:6a70)
 	INCBIN "gfx/cards/ponyta.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 26, 12
-	RGB 31, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/ponyta.pal"
 
 RapidashCardGfx: ; ced78 (33:6d78)
 	INCBIN "gfx/cards/rapidash.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 16, 0
-	RGB 26, 4, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/rapidash.pal"
 
 Magmar1CardGfx: ; cf080 (33:7080)
 	INCBIN "gfx/cards/magmar1.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 0
-	RGB 31, 4, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/magmar1.pal"
 
 Magmar2CardGfx: ; cf388 (33:7388)
 	INCBIN "gfx/cards/magmar2.2bpp"
-	RGB 31, 21, 0
-	RGB 31, 4, 0
-	RGB 8, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/magmar2.pal"
 
 Flareon1CardGfx: ; cf690 (33:7690)
 	INCBIN "gfx/cards/flareon1.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 31, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/flareon1.pal"
 
 Flareon2CardGfx: ; cf998 (33:7998)
 	INCBIN "gfx/cards/flareon2.2bpp"
-	RGB 31, 26, 4
-	RGB 31, 12, 4
-	RGB 26, 0, 4
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/flareon2.pal"
 
 Moltres1CardGfx: ; cfca0 (33:7ca0)
 	INCBIN "gfx/cards/moltres1.2bpp"
-	RGB 31, 21, 8
-	RGB 31, 8, 0
-	RGB 16, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/moltres1.pal"
 
 SECTION "bank34",ROMX,BANK[$34]
 Moltres2CardGfx: ; d0000 (34:4000)
 	INCBIN "gfx/cards/moltres2.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 21, 0
-	RGB 31, 4, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/moltres2.pal"
 
 SquirtleCardGfx: ; d0308 (34:4308)
 	INCBIN "gfx/cards/squirtle.2bpp"
-	RGB 26, 31, 26
-	RGB 12, 26, 16
-	RGB 0, 12, 4
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/squirtle.pal"
 
 WartortleCardGfx: ; d0610 (34:4610)
 	INCBIN "gfx/cards/wartortle.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 16, 26
-	RGB 8, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/wartortle.pal"
 
 BlastoiseCardGfx: ; d0918 (34:4918)
 	INCBIN "gfx/cards/blastoise.2bpp"
-	RGB 26, 31, 31
-	RGB 0, 16, 31
-	RGB 0, 21, 8
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/blastoise.pal"
 
 PsyduckCardGfx: ; d0c20 (34:4c20)
 	INCBIN "gfx/cards/psyduck.2bpp"
-	RGB 31, 31, 8
-	RGB 26, 16, 0
-	RGB 12, 8, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/psyduck.pal"
 
 GolduckCardGfx: ; d0f28 (34:4f28)
 	INCBIN "gfx/cards/golduck.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 21, 26
-	RGB 4, 8, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/golduck.pal"
 
 PoliwagCardGfx: ; d1230 (34:5230)
 	INCBIN "gfx/cards/poliwag.2bpp"
-	RGB 26, 31, 31
-	RGB 8, 31, 21
-	RGB 0, 16, 26
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/poliwag.pal"
 
 PoliwhirlCardGfx: ; d1538 (34:5538)
 	INCBIN "gfx/cards/poliwhirl.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 16, 31
-	RGB 16, 4, 31
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/poliwhirl.pal"
 
 PoliwrathCardGfx: ; d1840 (34:5840)
 	INCBIN "gfx/cards/poliwrath.2bpp"
-	RGB 31, 31, 31
-	RGB 0, 16, 31
-	RGB 0, 8, 26
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/poliwrath.pal"
 
 TentacoolCardGfx: ; d1b48 (34:5b48)
 	INCBIN "gfx/cards/tentacool.2bpp"
-	RGB 31, 31, 21
-	RGB 8, 12, 26
-	RGB 31, 0, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/tentacool.pal"
 
 TentacruelCardGfx: ; d1e50 (34:5e50)
 	INCBIN "gfx/cards/tentacruel.2bpp"
-	RGB 31, 31, 12
-	RGB 8, 12, 26
-	RGB 31, 4, 0
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/tentacruel.pal"
 
 SeelCardGfx: ; d2158 (34:6158)
 	INCBIN "gfx/cards/seel.2bpp"
-	RGB 31, 31, 31
-	RGB 8, 21, 31
-	RGB 0, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/seel.pal"
 
 DewgongCardGfx: ; d2460 (34:6460)
 	INCBIN "gfx/cards/dewgong.2bpp"
-	RGB 26, 31, 31
-	RGB 12, 26, 16
-	RGB 4, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/dewgong.pal"
 
 ShellderCardGfx: ; d2768 (34:6768)
 	INCBIN "gfx/cards/shellder.2bpp"
-	RGB 31, 26, 26
-	RGB 16, 12, 16
-	RGB 26, 0, 0
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/shellder.pal"
 
 CloysterCardGfx: ; d2a70 (34:6a70)
 	INCBIN "gfx/cards/cloyster.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 0
-	RGB 21, 8, 21
-	RGB 8, 0, 4
+	INCBIN "gfx/cards/cloyster.pal"
 
 KrabbyCardGfx: ; d2d78 (34:6d78)
 	INCBIN "gfx/cards/krabby.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 31, 4, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/krabby.pal"
 
 KinglerCardGfx: ; d3080 (34:7080)
 	INCBIN "gfx/cards/kingler.2bpp"
-	RGB 31, 31, 8
-	RGB 31, 16, 0
-	RGB 31, 4, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/kingler.pal"
 
 HorseaCardGfx: ; d3388 (34:7388)
 	INCBIN "gfx/cards/horsea.2bpp"
-	RGB 26, 31, 31
-	RGB 8, 26, 21
-	RGB 0, 16, 4
-	RGB 4, 4, 0
+	INCBIN "gfx/cards/horsea.pal"
 
 SeadraCardGfx: ; d3690 (34:7690)
 	INCBIN "gfx/cards/seadra.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 26, 21
-	RGB 4, 12, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/seadra.pal"
 
 GoldeenCardGfx: ; d3998 (34:7998)
 	INCBIN "gfx/cards/goldeen.2bpp"
-	RGB 31, 31, 16
-	RGB 4, 21, 0
-	RGB 21, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/goldeen.pal"
 
 SeakingCardGfx: ; d3ca0 (34:7ca0)
 	INCBIN "gfx/cards/seaking.2bpp"
-	RGB 31, 31, 31
-	RGB 0, 16, 0
-	RGB 21, 0, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/seaking.pal"
 
 SECTION "bank35",ROMX,BANK[$35]
 StaryuCardGfx: ; d4000 (35:4000)
 	INCBIN "gfx/cards/staryu.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 26, 0
-	RGB 16, 16, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/staryu.pal"
 
 StarmieCardGfx: ; d4308 (35:4308)
 	INCBIN "gfx/cards/starmie.2bpp"
-	RGB 31, 31, 26
-	RGB 21, 8, 21
-	RGB 26, 0, 0
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/starmie.pal"
 
 MagikarpCardGfx: ; d4610 (35:4610)
 	INCBIN "gfx/cards/magikarp.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 26, 8
-	RGB 31, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/magikarp.pal"
 
 GyaradosCardGfx: ; d4918 (35:4918)
 	INCBIN "gfx/cards/gyarados.2bpp"
-	RGB 31, 31, 26
-	RGB 8, 26, 4
-	RGB 0, 12, 16
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/gyarados.pal"
 
 LaprasCardGfx: ; d4c20 (35:4c20)
 	INCBIN "gfx/cards/lapras.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 4, 21, 26
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/lapras.pal"
 
 Vaporeon1CardGfx: ; d4f28 (35:4f28)
 	INCBIN "gfx/cards/vaporeon1.2bpp"
-	RGB 31, 31, 31
-	RGB 4, 16, 31
-	RGB 4, 8, 21
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/vaporeon1.pal"
 
 Vaporeon2CardGfx: ; d5230 (35:5230)
 	INCBIN "gfx/cards/vaporeon2.2bpp"
-	RGB 31, 31, 26
-	RGB 12, 26, 21
-	RGB 0, 16, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/vaporeon2.pal"
 
 OmanyteCardGfx: ; d5538 (35:5538)
 	INCBIN "gfx/cards/omanyte.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 21, 4
-	RGB 4, 21, 12
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/omanyte.pal"
 
 OmastarCardGfx: ; d5840 (35:5840)
 	INCBIN "gfx/cards/omastar.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 21, 8
-	RGB 4, 16, 21
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/omastar.pal"
 
 Articuno1CardGfx: ; d5b48 (35:5b48)
 	INCBIN "gfx/cards/articuno1.2bpp"
-	RGB 26, 31, 31
-	RGB 12, 21, 31
-	RGB 4, 12, 21
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/articuno1.pal"
 
 Articuno2CardGfx: ; d5e50 (35:5e50)
 	INCBIN "gfx/cards/articuno2.2bpp"
-	RGB 31, 31, 31
-	RGB 0, 16, 26
-	RGB 0, 8, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/articuno2.pal"
 
 Pikachu1CardGfx: ; d6158 (35:6158)
 	INCBIN "gfx/cards/pikachu1.2bpp"
-	RGB 31, 21, 0
-	RGB 21, 12, 21
-	RGB 16, 4, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/pikachu1.pal"
 
 Pikachu2CardGfx: ; d6460 (35:6460)
 	INCBIN "gfx/cards/pikachu2.2bpp"
-	RGB 31, 21, 0
-	RGB 21, 12, 0
-	RGB 4, 16, 0
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/pikachu2.pal"
 
 Pikachu3CardGfx: ; d6768 (35:6768)
 	INCBIN "gfx/cards/pikachu3.2bpp"
-	RGB 31, 21, 0
-	RGB 4, 16, 4
-	RGB 16, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pikachu3.pal"
 
 Pikachu4CardGfx: ; d6a70 (35:6a70)
 	INCBIN "gfx/cards/pikachu4.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 21, 0
-	RGB 0, 16, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pikachu4.pal"
 
 FlyingPikachuCardGfx: ; d6d78 (35:6d78)
 	INCBIN "gfx/cards/flyingpikachu.2bpp"
-	RGB 31, 21, 0
-	RGB 0, 16, 12
-	RGB 26, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/flyingpikachu.pal"
 
 SurfingPikachu1CardGfx: ; d7080 (35:7080)
 	INCBIN "gfx/cards/surfingpikachu1.2bpp"
-	RGB 31, 21, 0
-	RGB 4, 12, 12
-	RGB 21, 8, 12
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/surfingpikachu1.pal"
 
 SurfingPikachu2CardGfx: ; d7388 (35:7388)
 	INCBIN "gfx/cards/surfingpikachu2.2bpp"
-	RGB 31, 21, 0
-	RGB 4, 12, 12
-	RGB 21, 8, 12
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/surfingpikachu2.pal"
 
 Raichu1CardGfx: ; d7690 (35:7690)
 	INCBIN "gfx/cards/raichu1.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 26, 0
-	RGB 12, 12, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/raichu1.pal"
 
 Raichu2CardGfx: ; d7998 (35:7998)
 	INCBIN "gfx/cards/raichu2.2bpp"
-	RGB 31, 31, 0
-	RGB 31, 21, 4
-	RGB 16, 12, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/raichu2.pal"
 
 Magnemite1CardGfx: ; d7ca0 (35:7ca0)
 	INCBIN "gfx/cards/magnemite1.2bpp"
-	RGB 31, 31, 26
-	RGB 4, 12, 21
-	RGB 4, 4, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/magnemite1.pal"
 
 SECTION "bank36",ROMX,BANK[$36]
 Magnemite2CardGfx: ; d8000 (36:4000)
 	INCBIN "gfx/cards/magnemite2.2bpp"
-	RGB 31, 26, 31
-	RGB 0, 16, 26
-	RGB 26, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/magnemite2.pal"
 
 Magneton1CardGfx: ; d8308 (36:4308)
 	INCBIN "gfx/cards/magneton1.2bpp"
-	RGB 31, 31, 26
-	RGB 4, 12, 21
-	RGB 4, 4, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/magneton1.pal"
 
 Magneton2CardGfx: ; d8610 (36:4610)
 	INCBIN "gfx/cards/magneton2.2bpp"
-	RGB 26, 31, 31
-	RGB 31, 4, 4
-	RGB 8, 16, 16
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/magneton2.pal"
 
 VoltorbCardGfx: ; d8918 (36:4918)
 	INCBIN "gfx/cards/voltorb.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 0, 0
-	RGB 12, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/voltorb.pal"
 
 Electrode1CardGfx: ; d8c20 (36:4c20)
 	INCBIN "gfx/cards/electrode1.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 0
-	RGB 26, 0, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/electrode1.pal"
 
 Electrode2CardGfx: ; d8f28 (36:4f28)
 	INCBIN "gfx/cards/electrode2.2bpp"
-	RGB 31, 31, 26
-	RGB 26, 21, 12
-	RGB 26, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/electrode2.pal"
 
 Electabuzz1CardGfx: ; d9230 (36:5230)
 	INCBIN "gfx/cards/electabuzz1.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 21, 0
-	RGB 21, 12, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/electabuzz1.pal"
 
 Electabuzz2CardGfx: ; d9538 (36:5538)
 	INCBIN "gfx/cards/electabuzz2.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 26, 0
-	RGB 16, 8, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/electabuzz2.pal"
 
 Jolteon1CardGfx: ; d9840 (36:5840)
 	INCBIN "gfx/cards/jolteon1.2bpp"
-	RGB 26, 31, 31
-	RGB 31, 21, 0
-	RGB 0, 4, 31
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/jolteon1.pal"
 
 Jolteon2CardGfx: ; d9b48 (36:5b48)
 	INCBIN "gfx/cards/jolteon2.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 26, 4
-	RGB 26, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/jolteon2.pal"
 
 Zapdos1CardGfx: ; d9e50 (36:5e50)
 	INCBIN "gfx/cards/zapdos1.2bpp"
-	RGB 31, 26, 8
-	RGB 31, 16, 4
-	RGB 16, 12, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/zapdos1.pal"
 
 Zapdos2CardGfx: ; da158 (36:6158)
 	INCBIN "gfx/cards/zapdos2.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 26, 0
-	RGB 31, 8, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/zapdos2.pal"
 
 Zapdos3CardGfx: ; da460 (36:6460)
 	INCBIN "gfx/cards/zapdos3.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 21, 0
-	RGB 31, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/zapdos3.pal"
 
 SandshrewCardGfx: ; da768 (36:6768)
 	INCBIN "gfx/cards/sandshrew.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 31, 4
-	RGB 16, 12, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/sandshrew.pal"
 
 SandslashCardGfx: ; daa70 (36:6a70)
 	INCBIN "gfx/cards/sandslash.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 26, 0
-	RGB 26, 12, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/sandslash.pal"
 
 DiglettCardGfx: ; dad78 (36:6d78)
 	INCBIN "gfx/cards/diglett.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 21, 4
-	RGB 26, 12, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/diglett.pal"
 
 DugtrioCardGfx: ; db080 (36:7080)
 	INCBIN "gfx/cards/dugtrio.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 12, 4
-	RGB 21, 8, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/dugtrio.pal"
 
 MankeyCardGfx: ; db388 (36:7388)
 	INCBIN "gfx/cards/mankey.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 4
-	RGB 21, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/mankey.pal"
 
 PrimeapeCardGfx: ; db690 (36:7690)
 	INCBIN "gfx/cards/primeape.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 0
-	RGB 21, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/primeape.pal"
 
 MachopCardGfx: ; db998 (36:7998)
 	INCBIN "gfx/cards/machop.2bpp"
-	RGB 26, 31, 26
-	RGB 12, 26, 16
-	RGB 8, 16, 8
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/machop.pal"
 
 MachokeCardGfx: ; dbca0 (36:7ca0)
 	INCBIN "gfx/cards/machoke.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 16, 26
-	RGB 0, 4, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/machoke.pal"
 
 SECTION "bank37",ROMX,BANK[$37]
 MachampCardGfx: ; dc000 (37:4000)
 	INCBIN "gfx/cards/machamp.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 21, 21
-	RGB 4, 12, 21
-	RGB 0, 4, 4
+	INCBIN "gfx/cards/machamp.pal"
 
 GeodudeCardGfx: ; dc308 (37:4308)
 	INCBIN "gfx/cards/geodude.2bpp"
-	RGB 31, 26, 26
-	RGB 26, 8, 4
-	RGB 4, 4, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/geodude.pal"
 
 GravelerCardGfx: ; dc610 (37:4610)
 	INCBIN "gfx/cards/graveler.2bpp"
-	RGB 31, 31, 21
-	RGB 21, 12, 8
-	RGB 12, 4, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/graveler.pal"
 
 GolemCardGfx: ; dc918 (37:4918)
 	INCBIN "gfx/cards/golem.2bpp"
-	RGB 31, 31, 12
-	RGB 21, 12, 8
-	RGB 26, 0, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/golem.pal"
 
 OnixCardGfx: ; dcc20 (37:4c20)
 	INCBIN "gfx/cards/onix.2bpp"
-	RGB 26, 31, 31
-	RGB 12, 16, 21
-	RGB 0, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/onix.pal"
 
 CuboneCardGfx: ; dcf28 (37:4f28)
 	INCBIN "gfx/cards/cubone.2bpp"
-	RGB 26, 31, 31
-	RGB 16, 16, 31
-	RGB 8, 4, 21
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/cubone.pal"
 
 Marowak1CardGfx: ; dd230 (37:5230)
 	INCBIN "gfx/cards/marowak1.2bpp"
-	RGB 31, 26, 21
-	RGB 26, 16, 8
-	RGB 21, 8, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/marowak1.pal"
 
 Marowak2CardGfx: ; dd538 (37:5538)
 	INCBIN "gfx/cards/marowak2.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 12, 8
-	RGB 16, 4, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/marowak2.pal"
 
 HitmonleeCardGfx: ; dd840 (37:5840)
 	INCBIN "gfx/cards/hitmonlee.2bpp"
-	RGB 31, 26, 21
-	RGB 31, 21, 0
-	RGB 21, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/hitmonlee.pal"
 
 HitmonchanCardGfx: ; ddb48 (37:5b48)
 	INCBIN "gfx/cards/hitmonchan.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 16, 4
-	RGB 12, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/hitmonchan.pal"
 
 RhyhornCardGfx: ; dde50 (37:5e50)
 	INCBIN "gfx/cards/rhyhorn.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 16, 21
-	RGB 4, 4, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/rhyhorn.pal"
 
 RhydonCardGfx: ; de158 (37:6158)
 	INCBIN "gfx/cards/rhydon.2bpp"
-	RGB 31, 31, 26
-	RGB 16, 12, 8
-	RGB 8, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/rhydon.pal"
 
 KabutoCardGfx: ; de460 (37:6460)
 	INCBIN "gfx/cards/kabuto.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 16, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/kabuto.pal"
 
 KabutopsCardGfx: ; de768 (37:6768)
 	INCBIN "gfx/cards/kabutops.2bpp"
-	RGB 31, 26, 26
-	RGB 12, 21, 16
-	RGB 16, 12, 8
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/kabutops.pal"
 
 AerodactylCardGfx: ; dea70 (37:6a70)
 	INCBIN "gfx/cards/aerodactyl.2bpp"
-	RGB 26, 21, 26
-	RGB 26, 0, 0
-	RGB 12, 4, 12
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/aerodactyl.pal"
 
 AbraCardGfx: ; ded78 (37:6d78)
 	INCBIN "gfx/cards/abra.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 16, 4
-	RGB 26, 8, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/abra.pal"
 
 KadabraCardGfx: ; df080 (37:7080)
 	INCBIN "gfx/cards/kadabra.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 26, 0
-	RGB 31, 12, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/kadabra.pal"
 
 AlakazamCardGfx: ; df388 (37:7388)
 	INCBIN "gfx/cards/alakazam.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 26, 0
-	RGB 21, 12, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/alakazam.pal"
 
 Slowpoke1CardGfx: ; df690 (37:7690)
 	INCBIN "gfx/cards/slowpoke1.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 0
-	RGB 31, 0, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/slowpoke1.pal"
 
 Slowpoke2CardGfx: ; df998 (37:7998)
 	INCBIN "gfx/cards/slowpoke2.2bpp"
-	RGB 31, 26, 26
-	RGB 26, 21, 0
-	RGB 26, 4, 12
-	RGB 16, 4, 4
+	INCBIN "gfx/cards/slowpoke2.pal"
 
 SlowbroCardGfx: ; dfca0 (37:7ca0)
 	INCBIN "gfx/cards/slowbro.2bpp"
-	RGB 31, 26, 12
-	RGB 31, 12, 0
-	RGB 26, 4, 8
-	RGB 8, 0, 4
+	INCBIN "gfx/cards/slowbro.pal"
 
 SECTION "bank38",ROMX,BANK[$38]
 Gastly1CardGfx: ; e0000 (38:4000)
 	INCBIN "gfx/cards/gastly1.2bpp"
-	RGB 26, 26, 21
-	RGB 26, 0, 0
-	RGB 8, 8, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/gastly1.pal"
 
 Gastly2CardGfx: ; e0308 (38:4308)
 	INCBIN "gfx/cards/gastly2.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 0
-	RGB 16, 4, 12
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/gastly2.pal"
 
 Haunter1CardGfx: ; e0610 (38:4610)
 	INCBIN "gfx/cards/haunter1.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 0, 4
-	RGB 16, 8, 21
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/haunter1.pal"
 
 Haunter2CardGfx: ; e0918 (38:4918)
 	INCBIN "gfx/cards/haunter2.2bpp"
-	RGB 31, 26, 31
-	RGB 21, 8, 21
-	RGB 12, 0, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/haunter2.pal"
 
 GengarCardGfx: ; e0c20 (38:4c20)
 	INCBIN "gfx/cards/gengar.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 0, 8
-	RGB 12, 4, 21
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/gengar.pal"
 
 DrowzeeCardGfx: ; e0f28 (38:4f28)
 	INCBIN "gfx/cards/drowzee.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 26, 0
-	RGB 12, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/drowzee.pal"
 
 HypnoCardGfx: ; e1230 (38:5230)
 	INCBIN "gfx/cards/hypno.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 21, 12, 0
-	RGB 4, 4, 0
+	INCBIN "gfx/cards/hypno.pal"
 
 MrMimeCardGfx: ; e1538 (38:5538)
 	INCBIN "gfx/cards/mrmime.2bpp"
-	RGB 31, 26, 26
-	RGB 12, 21, 8
-	RGB 26, 0, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/mrmime.pal"
 
 JynxCardGfx: ; e1840 (38:5840)
 	INCBIN "gfx/cards/jynx.2bpp"
-	RGB 31, 26, 31
-	RGB 31, 26, 0
-	RGB 31, 0, 0
-	RGB 4, 0, 12
+	INCBIN "gfx/cards/jynx.pal"
 
 Mewtwo1CardGfx: ; e1b48 (38:5b48)
 	INCBIN "gfx/cards/mewtwo1.2bpp"
-	RGB 31, 31, 31
-	RGB 26, 16, 26
-	RGB 21, 4, 26
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/mewtwo1.pal"
 
 Mewtwo2CardGfx: ; e1e50 (38:5e50)
 	INCBIN "gfx/cards/mewtwo2.2bpp"
-	RGB 31, 31, 31
-	RGB 21, 12, 21
-	RGB 4, 12, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/mewtwo2.pal"
 
 Mewtwo3CardGfx: ; e2158 (38:6158)
 	INCBIN "gfx/cards/mewtwo3.2bpp"
-	RGB 31, 26, 16
-	RGB 31, 12, 8
-	RGB 21, 0, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/mewtwo3.pal"
 
 Mew1CardGfx: ; e2460 (38:6460)
 	INCBIN "gfx/cards/mew1.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 12, 26
-	RGB 4, 16, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/mew1.pal"
 
 Mew2CardGfx: ; e2768 (38:6768)
 	INCBIN "gfx/cards/mew2.2bpp"
-	RGB 31, 31, 26
-	RGB 26, 12, 21
-	RGB 31, 4, 8
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/mew2.pal"
 
 Mew3CardGfx: ; e2a70 (38:6a70)
 	INCBIN "gfx/cards/mew3.2bpp"
-	RGB 31, 31, 31
-	RGB 26, 12, 21
-	RGB 4, 16, 16
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/mew3.pal"
 
 PidgeyCardGfx: ; e2d78 (38:6d78)
 	INCBIN "gfx/cards/pidgey.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 26, 0
-	RGB 26, 12, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pidgey.pal"
 
 PidgeottoCardGfx: ; e3080 (38:7080)
 	INCBIN "gfx/cards/pidgeotto.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 0, 4
-	RGB 21, 12, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pidgeotto.pal"
 
 Pidgeot1CardGfx: ; e3388 (38:7388)
 	INCBIN "gfx/cards/pidgeot1.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 4
-	RGB 26, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/pidgeot1.pal"
 
 Pidgeot2CardGfx: ; e3690 (38:7690)
 	INCBIN "gfx/cards/pidgeot2.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 26, 4
-	RGB 21, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pidgeot2.pal"
 
 RattataCardGfx: ; e3998 (38:7998)
 	INCBIN "gfx/cards/rattata.2bpp"
-	RGB 31, 31, 26
-	RGB 8, 16, 0
-	RGB 21, 4, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/rattata.pal"
 
 RaticateCardGfx: ; e3ca0 (38:7ca0)
 	INCBIN "gfx/cards/raticate.2bpp"
-	RGB 31, 31, 26
-	RGB 12, 26, 16
-	RGB 31, 16, 8
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/raticate.pal"
 
 SECTION "bank39",ROMX,BANK[$39]
 SpearowCardGfx: ; e4000 (39:4000)
 	INCBIN "gfx/cards/spearow.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 4
-	RGB 26, 0, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/spearow.pal"
 
 FearowCardGfx: ; e4308 (39:4308)
 	INCBIN "gfx/cards/fearow.2bpp"
-	RGB 31, 31, 31
-	RGB 26, 21, 4
-	RGB 16, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/fearow.pal"
 
 ClefairyCardGfx: ; e4610 (39:4610)
 	INCBIN "gfx/cards/clefairy.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 16
-	RGB 26, 8, 12
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/clefairy.pal"
 
 ClefableCardGfx: ; e4918 (39:4918)
 	INCBIN "gfx/cards/clefable.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 21
-	RGB 31, 4, 4
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/clefable.pal"
 
 Jigglypuff1CardGfx: ; e4c20 (39:4c20)
 	INCBIN "gfx/cards/jigglypuff1.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 12, 26
-	RGB 0, 21, 12
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/jigglypuff1.pal"
 
 Jigglypuff2CardGfx: ; e4f28 (39:4f28)
 	INCBIN "gfx/cards/jigglypuff2.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 12, 16
-	RGB 0, 8, 21
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/jigglypuff2.pal"
 
 Jigglypuff3CardGfx: ; e5230 (39:5230)
 	INCBIN "gfx/cards/jigglypuff3.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 4, 12
-	RGB 4, 26, 8
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/jigglypuff3.pal"
 
 WigglytuffCardGfx: ; e5538 (39:5538)
 	INCBIN "gfx/cards/wigglytuff.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 26
-	RGB 0, 21, 12
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/wigglytuff.pal"
 
 Meowth1CardGfx: ; e5840 (39:5840)
 	INCBIN "gfx/cards/meowth1.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 0
-	RGB 21, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/meowth1.pal"
 
 Meowth2CardGfx: ; e5b48 (39:5b48)
 	INCBIN "gfx/cards/meowth2.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 26, 0
-	RGB 16, 16, 0
-	RGB 4, 4, 0
+	INCBIN "gfx/cards/meowth2.pal"
 
 PersianCardGfx: ; e5e50 (39:5e50)
 	INCBIN "gfx/cards/persian.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 26, 4
-	RGB 26, 12, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/persian.pal"
 
 FarfetchdCardGfx: ; e6158 (39:6158)
 	INCBIN "gfx/cards/farfetchd.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 16, 4
-	RGB 21, 8, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/farfetchd.pal"
 
 DoduoCardGfx: ; e6460 (39:6460)
 	INCBIN "gfx/cards/doduo.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 26, 4
-	RGB 21, 12, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/doduo.pal"
 
 DodrioCardGfx: ; e6768 (39:6768)
 	INCBIN "gfx/cards/dodrio.2bpp"
-	RGB 31, 31, 16
-	RGB 31, 21, 0
-	RGB 26, 8, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/dodrio.pal"
 
 LickitungCardGfx: ; e6a70 (39:6a70)
 	INCBIN "gfx/cards/lickitung.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 16, 8
-	RGB 26, 4, 4
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/lickitung.pal"
 
 ChanseyCardGfx: ; e6d78 (39:6d78)
 	INCBIN "gfx/cards/chansey.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 16
-	RGB 31, 8, 12
-	RGB 4, 4, 4
+	INCBIN "gfx/cards/chansey.pal"
 
 KangaskhanCardGfx: ; e7080 (39:7080)
 	INCBIN "gfx/cards/kangaskhan.2bpp"
-	RGB 31, 31, 26
-	RGB 21, 21, 12
-	RGB 12, 12, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/kangaskhan.pal"
 
 TaurosCardGfx: ; e7388 (39:7388)
 	INCBIN "gfx/cards/tauros.2bpp"
-	RGB 31, 26, 21
-	RGB 21, 12, 4
-	RGB 8, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/tauros.pal"
 
 DittoCardGfx: ; e7690 (39:7690)
 	INCBIN "gfx/cards/ditto.2bpp"
-	RGB 31, 31, 31
-	RGB 16, 12, 21
-	RGB 31, 4, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/ditto.pal"
 
 EeveeCardGfx: ; e7998 (39:7998)
 	INCBIN "gfx/cards/eevee.2bpp"
-	RGB 31, 31, 26
-	RGB 26, 12, 8
-	RGB 12, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/eevee.pal"
 
 PorygonCardGfx: ; e7ca0 (39:7ca0)
 	INCBIN "gfx/cards/porygon.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 16, 26
-	RGB 31, 4, 8
-	RGB 4, 0, 8
+	INCBIN "gfx/cards/porygon.pal"
 
 SECTION "bank3A",ROMX,BANK[$3A]
 SnorlaxCardGfx: ; e8000 (3a:4000)
 	INCBIN "gfx/cards/snorlax.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 0
-	RGB 31, 12, 0
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/snorlax.pal"
 
 DratiniCardGfx: ; e8308 (3a:4308)
 	INCBIN "gfx/cards/dratini.2bpp"
-	RGB 31, 31, 26
-	RGB 12, 21, 31
-	RGB 8, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/dratini.pal"
 
 DragonairCardGfx: ; e8610 (3a:4610)
 	INCBIN "gfx/cards/dragonair.2bpp"
-	RGB 31, 31, 31
-	RGB 8, 21, 31
-	RGB 4, 8, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/dragonair.pal"
 
 Dragonite1CardGfx: ; e8918 (3a:4918)
 	INCBIN "gfx/cards/dragonite1.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 12, 4
-	RGB 4, 16, 8
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/dragonite1.pal"
 
 Dragonite2CardGfx: ; e8c20 (3a:4c20)
 	INCBIN "gfx/cards/dragonite2.2bpp"
-	RGB 31, 26, 12
-	RGB 31, 12, 0
-	RGB 21, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/dragonite2.pal"
 
 ProfessorOakCardGfx: ; e8f28 (3a:4f28)
 	INCBIN "gfx/cards/professoroak.2bpp"
-	RGB 31, 31, 31
-	RGB 31, 21, 12
-	RGB 16, 8, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/professoroak.pal"
 
 ImposterProfessorOakCardGfx: ; e9230 (3a:5230)
 	INCBIN "gfx/cards/imposterprofessoroak.2bpp"
-	RGB 31, 26, 26
-	RGB 26, 16, 12
-	RGB 16, 0, 21
-	RGB 0, 0, 8
+	INCBIN "gfx/cards/imposterprofessoroak.pal"
 
 BillCardGfx: ; e9538 (3a:5538)
 	INCBIN "gfx/cards/bill.2bpp"
-	RGB 31, 31, 21
-	RGB 26, 4, 0
-	RGB 16, 8, 26
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/bill.pal"
 
 MrFujiCardGfx: ; e9840 (3a:5840)
 	INCBIN "gfx/cards/mrfuji.2bpp"
-	RGB 31, 26, 21
-	RGB 31, 16, 8
-	RGB 26, 0, 8
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/mrfuji.pal"
 
 LassCardGfx: ; e9b48 (3a:5b48)
 	INCBIN "gfx/cards/lass.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 4, 0
-	RGB 4, 8, 21
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/lass.pal"
 
 ImakuniCardGfx: ; e9e50 (3a:5e50)
 	INCBIN "gfx/cards/imakuni.2bpp"
-	RGB 31, 26, 21
-	RGB 26, 12, 4
-	RGB 12, 4, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/imakuni.pal"
 
 PokemonTraderCardGfx: ; ea158 (3a:6158)
 	INCBIN "gfx/cards/pokemontrader.2bpp"
-	RGB 26, 31, 16
-	RGB 16, 26, 4
-	RGB 26, 8, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/pokemontrader.pal"
 
 PokemonBreederCardGfx: ; ea460 (3a:6460)
 	INCBIN "gfx/cards/pokemonbreeder.2bpp"
-	RGB 26, 31, 16
-	RGB 12, 21, 26
-	RGB 0, 16, 0
-	RGB 0, 8, 0
+	INCBIN "gfx/cards/pokemonbreeder.pal"
 
 ClefairyDollCardGfx: ; ea768 (3a:6768)
 	INCBIN "gfx/cards/clefairydoll.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 8, 16
-	RGB 21, 4, 8
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/clefairydoll.pal"
 
 MysteriousFossilCardGfx: ; eaa70 (3a:6a70)
 	INCBIN "gfx/cards/mysteriousfossil.2bpp"
-	RGB 31, 26, 21
-	RGB 26, 12, 8
-	RGB 12, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/mysteriousfossil.pal"
 
 EnergyRetrievalCardGfx: ; ead78 (3a:6d78)
 	INCBIN "gfx/cards/energyretrieval.2bpp"
-	RGB 31, 31, 31
-	RGB 12, 21, 16
-	RGB 12, 0, 26
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/energyretrieval.pal"
 
 SuperEnergyRetrievalCardGfx: ; eb080 (3a:7080)
 	INCBIN "gfx/cards/superenergyretrieval.2bpp"
-	RGB 31, 26, 31
-	RGB 12, 16, 26
-	RGB 21, 0, 12
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/superenergyretrieval.pal"
 
 EnergySearchCardGfx: ; eb388 (3a:7388)
 	INCBIN "gfx/cards/energysearch.2bpp"
-	RGB 26, 31, 31
-	RGB 0, 21, 31
-	RGB 4, 12, 12
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/energysearch.pal"
 
 EnergyRemovalCardGfx: ; eb690 (3a:7690)
 	INCBIN "gfx/cards/energyremoval.2bpp"
-	RGB 26, 31, 31
-	RGB 8, 21, 21
-	RGB 4, 8, 8
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/energyremoval.pal"
 
 SuperEnergyRemovalCardGfx: ; eb998 (3a:7998)
 	INCBIN "gfx/cards/superenergyremoval.2bpp"
-	RGB 31, 26, 0
-	RGB 31, 4, 0
-	RGB 12, 4, 16
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/superenergyremoval.pal"
 
 SwitchCardGfx: ; ebca0 (3a:7ca0)
 	INCBIN "gfx/cards/switch.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 16, 4
-	RGB 26, 4, 8
-	RGB 8, 0, 8
+	INCBIN "gfx/cards/switch.pal"
 
 SECTION "bank3B",ROMX,BANK[$3B]
 PokemonCenterCardGfx: ; ec000 (3b:4000)
 	INCBIN "gfx/cards/pokemoncenter.2bpp"
-	RGB 21, 31, 21
-	RGB 31, 0, 0
-	RGB 4, 21, 8
-	RGB 0, 4, 0
+	INCBIN "gfx/cards/pokemoncenter.pal"
 
 PokeBallCardGfx: ; ec308 (3b:4308)
 	INCBIN "gfx/cards/pokeball.2bpp"
-	RGB 31, 31, 26
-	RGB 26, 0, 0
-	RGB 8, 0, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/pokeball.pal"
 
 ScoopUpCardGfx: ; ec610 (3b:4610)
 	INCBIN "gfx/cards/scoopup.2bpp"
-	RGB 31, 26, 26
-	RGB 21, 12, 8
-	RGB 12, 4, 16
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/scoopup.pal"
 
 ComputerSearchCardGfx: ; ec918 (3b:4918)
 	INCBIN "gfx/cards/computersearch.2bpp"
-	RGB 21, 26, 31
-	RGB 8, 26, 16
-	RGB 0, 16, 4
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/computersearch.pal"
 
 PokedexCardGfx: ; ecc20 (3b:4c20)
 	INCBIN "gfx/cards/pokedex.2bpp"
-	RGB 26, 31, 31
-	RGB 31, 0, 0
-	RGB 8, 12, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/pokedex.pal"
 
 PlusPowerCardGfx: ; ecf28 (3b:4f28)
 	INCBIN "gfx/cards/pluspower.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 0, 4
-	RGB 16, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/pluspower.pal"
 
 DefenderCardGfx: ; ed230 (3b:5230)
 	INCBIN "gfx/cards/defender.2bpp"
-	RGB 26, 26, 31
-	RGB 16, 0, 26
-	RGB 8, 0, 16
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/defender.pal"
 
 ItemFinderCardGfx: ; ed538 (3b:5538)
 	INCBIN "gfx/cards/itemfinder.2bpp"
-	RGB 31, 31, 4
-	RGB 21, 16, 8
-	RGB 8, 0, 21
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/itemfinder.pal"
 
 GustofWindCardGfx: ; ed840 (3b:5840)
 	INCBIN "gfx/cards/gustofwind.2bpp"
-	RGB 31, 26, 26
-	RGB 21, 12, 8
-	RGB 12, 4, 16
-	RGB 4, 0, 4
+	INCBIN "gfx/cards/gustofwind.pal"
 
 DevolutionSprayCardGfx: ; edb48 (3b:5b48)
 	INCBIN "gfx/cards/devolutionspray.2bpp"
-	RGB 31, 26, 0
-	RGB 31, 12, 0
-	RGB 31, 0, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/devolutionspray.pal"
 
 PotionCardGfx: ; ede50 (3b:5e50)
 	INCBIN "gfx/cards/potion.2bpp"
-	RGB 31, 31, 31
-	RGB 21, 26, 26
-	RGB 16, 8, 26
-	RGB 0, 0, 4
+	INCBIN "gfx/cards/potion.pal"
 
 SuperPotionCardGfx: ; ee158 (3b:6158)
 	INCBIN "gfx/cards/superpotion.2bpp"
-	RGB 31, 31, 26
-	RGB 31, 21, 4
-	RGB 31, 4, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/superpotion.pal"
 
 FullHealCardGfx: ; ee460 (3b:6460)
 	INCBIN "gfx/cards/fullheal.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 0, 0
-	RGB 0, 16, 0
-	RGB 8, 0, 0
+	INCBIN "gfx/cards/fullheal.pal"
 
 ReviveCardGfx: ; ee768 (3b:6768)
 	INCBIN "gfx/cards/revive.2bpp"
-	RGB 31, 31, 12
-	RGB 31, 4, 12
-	RGB 31, 8, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/revive.pal"
 
 MaintenanceCardGfx: ; eea70 (3b:6a70)
 	INCBIN "gfx/cards/maintenance.2bpp"
-	RGB 26, 31, 26
-	RGB 31, 0, 0
-	RGB 0, 16, 4
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/maintenance.pal"
 
 PokemonFluteCardGfx: ; eed78 (3b:6d78)
 	INCBIN "gfx/cards/pokemonflute.2bpp"
-	RGB 31, 31, 21
-	RGB 31, 21, 0
-	RGB 31, 0, 0
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/pokemonflute.pal"
 
 GamblerCardGfx: ; ef080 (3b:7080)
 	INCBIN "gfx/cards/gambler.2bpp"
-	RGB 31, 26, 16
-	RGB 26, 4, 0
-	RGB 0, 8, 0
-	RGB 0, 0, 0
+	INCBIN "gfx/cards/gambler.pal"
 
 RecycleCardGfx: ; ef388 (3b:7388)
 	INCBIN "gfx/cards/recycle.2bpp"
-	RGB 31, 26, 26
-	RGB 31, 12, 21
-	RGB 4, 16, 4
-	RGB 4, 0, 0
+	INCBIN "gfx/cards/recycle.pal"
 
 rept $970
 db $ff
