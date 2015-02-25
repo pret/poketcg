@@ -1,3 +1,5 @@
+const_value = 1
+
 TextOffsets:: ; 34000 (d:4000)
 	db $00,$00,$00
 	text Text0001

@@ -30,6 +30,9 @@ ENDM
 text: MACRO
 	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
+\1_ EQU const_value
+GLOBAL \1_
+const_value = const_value + 1
 ENDM
 
 ; notes/instruments
