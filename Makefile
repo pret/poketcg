@@ -1,7 +1,7 @@
 .PHONY: all compare clean
 
 .SUFFIXES:
-.SUFFIXES: .asm .o .gbc .png .2bpp .1bpp
+.SUFFIXES: .asm .o .gbc .png .2bpp .1bpp .pal
 .SECONDEXPANSION:
 
 ROMS := tcg.gbc
