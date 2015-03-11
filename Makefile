@@ -4,32 +4,32 @@
 .SUFFIXES: .asm .o .gbc .png .2bpp .1bpp .pal
 .SECONDEXPANSION:
 
-ROMS := tcg.gbc
-OBJS := main.o gfx.o text.o audio.o wram.o
+OBJS = main.o gfx.o text.o audio.o wram.o
 
 $(foreach obj, $(OBJS), \
-	$(eval $(obj:.o=)_dep := $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
+	$(eval $(obj:.o=)_dep = $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
 )
 
-all: $(ROMS) compare
-compare: baserom.gbc $(ROMS)
-	cmp $^
+all: tcg.gbc compare
+
+compare: baserom.gbc tcg.gbc
+	cmp baserom.gbc tcg.gbc
 
 $(OBJS): $$*.asm $$($$*_dep)
 	rgbasm -o $@ $<
 
 tcg.gbc: $(OBJS)
-	rgblink -n $(ROMS:.gbc=.sym) -o $@ $^
+	rgblink -n $*.sym -o $@ $(OBJS)
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
 
 clean:
-	rm -f $(ROMS) $(OBJS) $(ROMS:.gbc=.sym)
+	rm -f tcg.gbc $(OBJS) *.sym
 	find . \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -exec rm {} +
 
-%.2bpp: %.png
+.png.pal: ;	
+
+.png.2bpp:
 	@rgbgfx -o $@ $<
 
-%.1bpp: %.png
+.png.1bpp:
 	@rgbgfx -b -o $@ $<
-
-%.pal: ;
