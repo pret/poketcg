@@ -4,7 +4,7 @@
 .SUFFIXES: .asm .o .gbc .png .2bpp .1bpp .pal
 .SECONDEXPANSION:
 
-OBJS = main.o gfx.o text.o audio.o wram.o
+OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o
 
 $(foreach obj, $(OBJS), \
 	$(eval $(obj:.o=)_dep = $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
@@ -16,7 +16,7 @@ compare: baserom.gbc tcg.gbc
 	cmp baserom.gbc tcg.gbc
 
 $(OBJS): $$*.asm $$($$*_dep)
-	rgbasm -o $@ $<
+	rgbasm -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
 	rgblink -n $*.sym -o $@ $(OBJS)
