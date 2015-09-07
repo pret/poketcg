@@ -16,6 +16,8 @@ compare: baserom.gbc tcg.gbc
 	cmp baserom.gbc tcg.gbc
 
 $(OBJS): $$*.asm $$($$*_dep)
+	@python extras/gfx.py 2bpp $(2bppq)
+	@python extras/gfx.py 1bpp $(1bppq)
 	rgbasm -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
@@ -24,12 +26,12 @@ tcg.gbc: $(OBJS)
 
 clean:
 	rm -f tcg.gbc $(OBJS) *.sym
-	find . \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -exec rm {} +
+	find . \( -iname '*.1bpp' -o -iname '*.2bpp' \) -exec rm {} +
 
-.png.pal: ;	
+%.2bpp: %.png
+	$(eval 2bppq += $<)
+	@rm -f $@
 
-.png.2bpp:
-	@rgbgfx -o $@ $<
-
-.png.1bpp:
-	@rgbgfx -b -o $@ $<
+%.1bpp: %.png
+	$(eval 1bppq += $<)
+	@rm -f $@
