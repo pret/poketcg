@@ -958,46 +958,46 @@ Text07fa: ; 57389 (15:7389)
 Text07fb: ; 57390 (15:7390)
 	db $03,$50,TX_GRASS,$03,$51,TX_END
 
-Text07fc: ; 57397 (15:7397)
+GrassEnergyName: ; 57397 (15:7397)
 	db TX_START,"Grass Energy",TX_END
 
-Text07fd: ; 573a5 (15:73a5)
+GrassEnergyDescription: ; 573a5 (15:73a5)
 	db TX_START,"Provides 1 ",TX_GRASS," Energy.",TX_END
 
-Text07fe: ; 573bc (15:73bc)
+FireEnergyName: ; 573bc (15:73bc)
 	db TX_START,"Fire Energy",TX_END
 
-Text07ff: ; 573c9 (15:73c9)
+FireEnergyDescription: ; 573c9 (15:73c9)
 	db TX_START,"Provides 1 ",TX_FIRE," Energy.",TX_END
 
-Text0800: ; 573e0 (15:73e0)
+WaterEnergyName: ; 573e0 (15:73e0)
 	db TX_START,"Water Energy",TX_END
 
-Text0801: ; 573ee (15:73ee)
+WaterEnergyDescription: ; 573ee (15:73ee)
 	db TX_START,"Provides 1 ",TX_WATER," Energy.",TX_END
 
-Text0802: ; 57405 (15:7405)
+LightningEnergyName: ; 57405 (15:7405)
 	db TX_START,"Lightning Energy",TX_END
 
-Text0803: ; 57417 (15:7417)
+LightningEnergyDescription: ; 57417 (15:7417)
 	db TX_START,"Provides 1 ",TX_LIGHTNING," Energy.",TX_END
 
-Text0804: ; 5742e (15:742e)
+FightingEnergyName: ; 5742e (15:742e)
 	db TX_START,"Fighting Energy",TX_END
 
-Text0805: ; 5743f (15:743f)
+FightingEnergyDescription: ; 5743f (15:743f)
 	db TX_START,"Provides 1 ",TX_FIGHTING," Energy.",TX_END
 
-Text0806: ; 57456 (15:7456)
+PsychicEnergyName: ; 57456 (15:7456)
 	db TX_START,"Psychic Energy",TX_END
 
-Text0807: ; 57466 (15:7466)
+PsychicEnergyDescription: ; 57466 (15:7466)
 	db TX_START,"Provides 1 ",TX_PSYCHIC," Energy.",TX_END
 
-Text0808: ; 5747d (15:747d)
+DoubleColorlessEnergyName: ; 5747d (15:747d)
 	db TX_START,"Double Colorless Energy",TX_END
 
-Text0809: ; 57496 (15:7496)
+DoubleColorlessEnergyDescription: ; 57496 (15:7496)
 	db TX_START,"Provides ",TX_COLORLESS,TX_COLORLESS," Energy. (Doesn't\n"
 	db "count as a basic Energy card.) \n"
 	db "Colorless Energy can't be used to\n"
@@ -1005,51 +1005,51 @@ Text0809: ; 57496 (15:7496)
 	db "of Energy can be used to pay\n"
 	db "Colorless Energy costs.)",TX_END
 
-Text080a: ; 57552 (15:7552)
+BulbasaurName: ; 57552 (15:7552)
 	db TX_START,"Bulbasaur",TX_END
 
-Text080b: ; 5755d (15:755d)
+LeechSeedName: ; 5755d (15:755d)
 	db TX_START,"Leech Seed",TX_END
 
-Text080c: ; 57569 (15:7569)
+BulbasaursLeechSeedDescription: ; 57569 (15:7569)
 	db TX_START,"Unless all damage from this attack\n"
 	db "is prevented, you may remove 1\n"
 	db "damage counter from Bulbasaur.",TX_END
 
-Text080d: ; 575cb (15:75cb)
+BulbasaurKind: ; 575cb (15:75cb)
 	db TX_START,"Seed",TX_END
 
-Text080e: ; 575d1 (15:75d1)
+BulbasaurDescription: ; 575d1 (15:75d1)
 	db TX_START,"A strange seed was planted on its\n"
 	db "back at birth. Thus, a plant\n"
 	db "sprouted and now grows with this\n"
 	db "Pok`mon.",TX_END
 
-Text080f: ; 5763b (15:763b)
+IvysaurName: ; 5763b (15:763b)
 	db TX_START,"Ivysaur",TX_END
 
-Text0810: ; 57644 (15:7644)
+VineWhipName: ; 57644 (15:7644)
 	db TX_START,"Vine Whip",TX_END
 
-Text0811: ; 5764f (15:764f)
+PoisonPowderName: ; 5764f (15:764f)
 	db TX_START,"Poisonpowder",TX_END
 
-Text0812: ; 5765d (15:765d)
+InflictPoisonDescription: ; 5765d (15:765d)
 	db TX_START,"The Defending Pok`mon is now\n"
 	db "Poisoned.",TX_END
 
-Text0813: ; 57685 (15:7685)
+IvysaurDescription: ; 57685 (15:7685)
 	db TX_START,"When the bulb on its back grows\n"
 	db "large, the Pok`mon seems to lose the\n"
 	db "ability to stand on its hind legs.",TX_END
 
-Text0814: ; 576ee (15:76ee)
+VenusaurName: ; 576ee (15:76ee)
 	db TX_START,"Venusaur",TX_END
 
-Text0815: ; 576f8 (15:76f8)
+SolarPowerName: ; 576f8 (15:76f8)
 	db TX_START,"Solar Power",TX_END
 
-Text0816: ; 57705 (15:7705)
+SolarPowerDescription: ; 57705 (15:7705)
 	db TX_START,"Once during your turn (before your\n"
 	db "attack), you may use this power.\n"
 	db "Your Active Pok`mon and the\n"
@@ -1057,15 +1057,15 @@ Text0816: ; 57705 (15:7705)
 	db "Asleep, Confused, Paralyzed, or\n"
 	db "Poisoned.",TX_END
 
-Text0817: ; 577b0 (15:77b0)
+SolarPowerDescriptionCont: ; 577b0 (15:77b0)
 	db TX_START,"This power can't be used if\n"
 	db "Venusaur is Asleep, Confused,\n"
 	db "or Paralyzed.",TX_END
 
-Text0818: ; 577f9 (15:77f9)
+MegaDrainName: ; 577f9 (15:77f9)
 	db TX_START,"Mega Drain",TX_END
 
-Text0819: ; 57805 (15:7805)
+VenusaursMegaDrainDescription: ; 57805 (15:7805)
 	db TX_START,"Remove a number of damage counters\n"
 	db "from Venusaur equal to half the\n"
 	db "damage done to the Defending Pok`mon\n"
@@ -1073,20 +1073,20 @@ Text0819: ; 57805 (15:7805)
 	db "Resistance) (rounded up to the\n"
 	db "nearest 10).",TX_END
 
-Text081a: ; 578b7 (15:78b7)
+VenusaursMegaDrainDescriptionCont: ; 578b7 (15:78b7)
 	db TX_START,"If Venusaur has fewer damage\n"
 	db "counters than that, remove all of\n"
 	db "them.",TX_END
 
-Text081b: ; 578fd (15:78fd)
+Venusaur1Description: ; 578fd (15:78fd)
 	db TX_START,"The flower on its back catches\n"
 	db "the sun's rays. The sunlight is then\n"
 	db "absorbed and used for energy.",TX_END
 
-Text081c: ; 57960 (15:7960)
+EnergyTransName: ; 57960 (15:7960)
 	db TX_START,"Energy Trans",TX_END
 
-Text081d: ; 5796e (15:796e)
+EnergyTransDescription: ; 5796e (15:796e)
 	db TX_START,"As often as you like during your\n"
 	db "turn (before your attack), you may\n"
 	db "take 1 ",TX_GRASS," Energy card attached to 1\n"
@@ -1095,69 +1095,69 @@ Text081d: ; 5796e (15:796e)
 	db "used if Venusaur is Asleep,\n"
 	db "Confused, or Paralyzed.",TX_END
 
-Text081e: ; 57a51 (15:7a51)
+SolarBeamName: ; 57a51 (15:7a51)
 	db TX_START,"Solarbeam",TX_END
 
-Text081f: ; 57a5c (15:7a5c)
+Venusaur2Description: ; 57a5c (15:7a5c)
 	db TX_START,"This plant blooms when it is\n"
 	db "absorbing solar energy. It stays on\n"
 	db "the move to seek sunlight.",TX_END
 
-Text0820: ; 57ab9 (15:7ab9)
+CaterpieName: ; 57ab9 (15:7ab9)
 	db TX_START,"Caterpie",TX_END
 
-Text0821: ; 57ac3 (15:7ac3)
+StringShotName: ; 57ac3 (15:7ac3)
 	db TX_START,"String Shot",TX_END
 
-Text0822: ; 57ad0 (15:7ad0)
+MayInflictParalysisDescription: ; 57ad0 (15:7ad0)
 	db TX_START,"Flip a coin. If heads, the Defending\n"
 	db "Pok`mon is now Paralyzed.",TX_END
 
-Text0823: ; 57b10 (15:7b10)
+CaterpieKind: ; 57b10 (15:7b10)
 	db TX_START,"Worm",TX_END
 
-Text0824: ; 57b16 (15:7b16)
+CaterpieDescription: ; 57b16 (15:7b16)
 	db TX_START,"Its short feet are tipped with\n"
 	db "suction pads that enable it to\n"
 	db "tirelessly climb slopes and walls.",TX_END
 
-Text0825: ; 57b78 (15:7b78)
+MetapodName: ; 57b78 (15:7b78)
 	db TX_START,"Metapod",TX_END
 
-Text0826: ; 57b81 (15:7b81)
+StiffenName: ; 57b81 (15:7b81)
 	db TX_START,"Stiffen",TX_END
 
-Text0827: ; 57b8a (15:7b8a)
+MetapodsStiffenDescription: ; 57b8a (15:7b8a)
 	db TX_START,"Flip a coin. If heads, prevent all\n"
 	db "damage done to Metapod during your\n"
 	db "opponent's next turn. (Any other\n"
 	db "effects of attacks still happen.)",TX_END
 
-Text0828: ; 57c14 (15:7c14)
+StunSporeName: ; 57c14 (15:7c14)
 	db TX_START,"Stun Spore",TX_END
 
-Text0829: ; 57c20 (15:7c20)
+MetapodKind: ; 57c20 (15:7c20)
 	db TX_START,"Cocoon",TX_END
 
-Text082a: ; 57c28 (15:7c28)
+MetapodDescription: ; 57c28 (15:7c28)
 	db TX_START,"It is vulnerable to attack because\n"
 	db "its shell is soft, exposing its weak\n"
 	db "and tender body.",TX_END
 
-Text082b: ; 57c82 (15:7c82)
+ButterfreeName: ; 57c82 (15:7c82)
 	db TX_START,"Butterfree",TX_END
 
-Text082c: ; 57c8e (15:7c8e)
+WhirlwindName: ; 57c8e (15:7c8e)
 	db TX_START,"Whirlwind",TX_END
 
-Text082d: ; 57c99 (15:7c99)
+WhirlwindDescription: ; 57c99 (15:7c99)
 	db TX_START,"If your opponent has any Benched\n"
 	db "Pok`mon, he or she chooses 1 of them\n"
 	db "and switches it with the Defending\n"
 	db "Pok`mon. (Do the damage before\n"
 	db "switching the Pok`mon.)",TX_END
 
-Text082e: ; 57d3a (15:7d3a)
+ButterfreesMegaDrainDescription: ; 57d3a (15:7d3a)
 	db TX_START,"Remove a number of damage counters\n"
 	db "from Butterfree equal to half the\n"
 	db "damage done to the Defending Pok`mon\n"
@@ -1165,41 +1165,41 @@ Text082e: ; 57d3a (15:7d3a)
 	db "Resistance) (rounded up to the\n"
 	db "nearest 10).",TX_END
 
-Text082f: ; 57dee (15:7dee)
+ButterfreesMegaDrainDescriptionCont: ; 57dee (15:7dee)
 	db TX_START,"If Butterfree has fewer damage\n"
 	db "counters than that, remove all of\n"
 	db "them.",TX_END
 
-Text0830: ; 57e36 (15:7e36)
+ButterfreeKind: ; 57e36 (15:7e36)
 	db TX_START,"Butterfly",TX_END
 
-Text0831: ; 57e41 (15:7e41)
+ButterfreeDescription: ; 57e41 (15:7e41)
 	db TX_START,"In battle, it flaps its wings at\n"
 	db "high speed to release highly toxic\n"
 	db "dust into the air.",TX_END
 
-Text0832: ; 57e99 (15:7e99)
+WeedleName: ; 57e99 (15:7e99)
 	db TX_START,"Weedle",TX_END
 
-Text0833: ; 57ea1 (15:7ea1)
+PoisonStingName: ; 57ea1 (15:7ea1)
 	db TX_START,"Poison Sting",TX_END
 
-Text0834: ; 57eaf (15:7eaf)
+MayInflictPoisonDescription: ; 57eaf (15:7eaf)
 	db TX_START,"Flip a coin. If heads, the Defending\n"
 	db "Pok`mon is now Poisoned.",TX_END
 
-Text0835: ; 57eee (15:7eee)
+WeedleKind: ; 57eee (15:7eee)
 	db TX_START,"Hairy Bug",TX_END
 
-Text0836: ; 57ef9 (15:7ef9)
+WeedleDescription: ; 57ef9 (15:7ef9)
 	db TX_START,"Often found in forests, eating\n"
 	db "leaves. It has a sharp, venomous\n"
 	db "stinger on its head.",TX_END
 
-Text0837: ; 57f4f (15:7f4f)
+KakunaName: ; 57f4f (15:7f4f)
 	db TX_START,"Kakuna",TX_END
 
-Text0838: ; 57f57 (15:7f57)
+KakunasStiffenDescription: ; 57f57 (15:7f57)
 	db TX_START,"Flip a coin. If heads, prevent all\n"
 	db "damage done to Kakuna during your\n"
 	db "opponent's next turn. (Any other\n"
