@@ -242,7 +242,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text080b_ ; name
 	dw Text080c_ ; description
 	db 0
@@ -258,7 +258,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db 89
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -297,7 +297,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	dw Text080a_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$20 ; energies
+	energy GRASS, 1, COLORLESS, 2 ; energies
 	dw Text0810_ ; name
 	dw NONE ; description
 	db 0
@@ -313,7 +313,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db 39
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text0811_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -352,7 +352,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	dw Text080f_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0815_ ; name
 	dw Text0816_ ; description
 	db 23
@@ -368,7 +368,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db 101
 
 	; move 2
-	db $04,$00,$00,$00 ; energies
+	energy GRASS, 4 ; energies
 	dw Text0818_ ; name
 	dw Text0819_ ; description
 	db 26
@@ -407,7 +407,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	dw Text080f_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text081c_ ; name
 	dw Text081d_ ; description
 	db 0
@@ -423,7 +423,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db 94
 
 	; move 2
-	db $04,$00,$00,$00 ; energies
+	energy GRASS, 4 ; energies
 	dw Text081e_ ; name
 	dw NONE ; description
 	db 0
@@ -462,7 +462,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0821_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -478,7 +478,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db 67
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -517,7 +517,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	dw Text0820_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0826_ ; name
 	dw Text0827_ ; description
 	db 0
@@ -533,7 +533,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db 0
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0828_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -572,7 +572,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	dw Text0825_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text082c_ ; name
 	dw Text082d_ ; description
 	db 0
@@ -588,7 +588,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db 83
 
 	; move 2
-	db $04,$00,$00,$00 ; energies
+	energy GRASS, 4 ; energies
 	dw Text0818_ ; name
 	dw Text082e_ ; description
 	db 47
@@ -627,7 +627,7 @@ WeedleCard: ; 30fef (c:4fef)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0833_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -643,7 +643,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db 48
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -682,7 +682,7 @@ KakunaCard: ; 31030 (c:5030)
 	dw Text0832_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0826_ ; name
 	dw Text0838_ ; description
 	db 0
@@ -698,7 +698,7 @@ KakunaCard: ; 31030 (c:5030)
 	db 0
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0811_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -737,7 +737,7 @@ BeedrillCard: ; 31071 (c:5071)
 	dw Text0837_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text083b_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -753,7 +753,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db 48
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text0833_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -792,7 +792,7 @@ EkansCard: ; 310b2 (c:50b2)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0840_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -808,7 +808,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db 63
 
 	; move 2
-	db $01,$00,$00,$10 ; energies
+	energy GRASS, 1, COLORLESS, 1 ; energies
 	dw Text0841_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -847,7 +847,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	dw Text083f_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0845_ ; name
 	dw Text0846_ ; description
 	db 0
@@ -863,7 +863,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db 1
 
 	; move 2
-	db $02,$00,$00,$10 ; energies
+	energy GRASS, 2, COLORLESS, 1 ; energies
 	dw Text0847_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -902,7 +902,7 @@ NidoranFCard: ; 31134 (c:5134)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text084b_ ; name
 	dw Text084c_ ; description
 	db 0
@@ -918,7 +918,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db 41
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text084d_ ; name
 	dw Text084e_ ; description
 	db 0
@@ -957,7 +957,7 @@ NidorinaCard: ; 31175 (c:5175)
 	dw Text084a_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0852_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -973,7 +973,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db 76
 
 	; move 2
-	db $01,$00,$00,$20 ; energies
+	energy GRASS, 1, COLORLESS, 2 ; energies
 	dw Text0854_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -1012,7 +1012,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	dw Text0851_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$10 ; energies
+	energy GRASS, 1, COLORLESS, 1 ; energies
 	dw Text0857_ ; name
 	dw Text0858_ ; description
 	db 0
@@ -1028,7 +1028,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db 69
 
 	; move 2
-	db $02,$00,$00,$20 ; energies
+	energy GRASS, 2, COLORLESS, 2 ; energies
 	dw Text0859_ ; name
 	dw NONE ; description
 	db 0
@@ -1067,7 +1067,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text085d_ ; name
 	dw Text085e_ ; description
 	db 0
@@ -1083,7 +1083,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db 0
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -1122,7 +1122,7 @@ NidorinoCard: ; 31238 (c:5238)
 	dw Text085c_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$20 ; energies
+	energy GRASS, 1, COLORLESS, 2 ; energies
 	dw Text0854_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -1138,7 +1138,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db 1
 
 	; move 2
-	db $02,$00,$00,$20 ; energies
+	energy GRASS, 2, COLORLESS, 2 ; energies
 	dw Text0861_ ; name
 	dw NONE ; description
 	db 0
@@ -1177,7 +1177,7 @@ NidokingCard: ; 31279 (c:5279)
 	dw Text0860_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$20 ; energies
+	energy GRASS, 1, COLORLESS, 2 ; energies
 	dw Text0864_ ; name
 	dw Text0865_ ; description
 	db 0
@@ -1193,7 +1193,7 @@ NidokingCard: ; 31279 (c:5279)
 	db 41
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text0866_ ; name
 	dw Text0867_ ; description
 	db 0
@@ -1232,7 +1232,7 @@ ZubatCard: ; 312ba (c:52ba)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0852_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -1248,7 +1248,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db 76
 
 	; move 2
-	db $01,$00,$00,$10 ; energies
+	energy GRASS, 1, COLORLESS, 1 ; energies
 	dw Text086a_ ; name
 	dw Text086b_ ; description
 	db 0
@@ -1287,7 +1287,7 @@ GolbatCard: ; 312fb (c:52fb)
 	dw Text0869_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text086f_ ; name
 	dw NONE ; description
 	db 0
@@ -1303,7 +1303,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db 1
 
 	; move 2
-	db $02,$00,$00,$10 ; energies
+	energy GRASS, 2, COLORLESS, 1 ; energies
 	dw Text086a_ ; name
 	dw Text0870_ ; description
 	db 0
@@ -1342,7 +1342,7 @@ OddishCard: ; 3133c (c:533c)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0828_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -1358,7 +1358,7 @@ OddishCard: ; 3133c (c:533c)
 	db 55
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0873_ ; name
 	dw Text0874_ ; description
 	db 0
@@ -1397,7 +1397,7 @@ GloomCard: ; 3137d (c:537d)
 	dw Text0872_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0811_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -1413,7 +1413,7 @@ GloomCard: ; 3137d (c:537d)
 	db 57
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0878_ ; name
 	dw Text0879_ ; description
 	db 0
@@ -1452,7 +1452,7 @@ VileplumeCard: ; 313be (c:53be)
 	dw Text0877_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text087c_ ; name
 	dw Text087d_ ; description
 	db 0
@@ -1468,7 +1468,7 @@ VileplumeCard: ; 313be (c:53be)
 	db 94
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text087e_ ; name
 	dw Text087f_ ; description
 	db 0
@@ -1507,7 +1507,7 @@ ParasCard: ; 313ff (c:53ff)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0883_ ; name
 	dw NONE ; description
 	db 0
@@ -1523,7 +1523,7 @@ ParasCard: ; 313ff (c:53ff)
 	db 38
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0884_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -1562,7 +1562,7 @@ ParasectCard: ; 31440 (c:5440)
 	dw Text0882_ ; pre-evo name
 
 	; move 1
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0884_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -1578,7 +1578,7 @@ ParasectCard: ; 31440 (c:5440)
 	db 113
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0889_ ; name
 	dw NONE ; description
 	db 0
@@ -1617,7 +1617,7 @@ VenonatCard: ; 31481 (c:5481)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0828_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -1633,7 +1633,7 @@ VenonatCard: ; 31481 (c:5481)
 	db 55
 
 	; move 2
-	db $01,$00,$00,$10 ; energies
+	energy GRASS, 1, COLORLESS, 1 ; energies
 	dw Text086a_ ; name
 	dw Text088c_ ; description
 	db 0
@@ -1672,7 +1672,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	dw Text088b_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0890_ ; name
 	dw Text0891_ ; description
 	db 0
@@ -1688,7 +1688,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db 94
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text0892_ ; name
 	dw Text0893_ ; description
 	db 0
@@ -1727,7 +1727,7 @@ BellsproutCard: ; 31503 (c:5503)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0810_ ; name
 	dw NONE ; description
 	db 0
@@ -1743,7 +1743,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db 39
 
 	; move 2
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text084d_ ; name
 	dw Text0897_ ; description
 	db 0
@@ -1782,7 +1782,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	dw Text0896_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0811_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -1798,7 +1798,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db 55
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text089a_ ; name
 	dw NONE ; description
 	db 0
@@ -1837,7 +1837,7 @@ VictreebelCard: ; 31585 (c:5585)
 	dw Text0899_ ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text089e_ ; name
 	dw Text089f_ ; description
 	db 0
@@ -1853,7 +1853,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db 70
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text08a0_ ; name
 	dw Text08a1_ ; description
 	db 0
@@ -1892,7 +1892,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text08a4_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -1908,7 +1908,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db 61
 
 	; move 2
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text08a5_ ; name
 	dw Text08a6_ ; description
 	db 0
@@ -1947,7 +1947,7 @@ MukCard: ; 31607 (c:5607)
 	dw Text08a3_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text08aa_ ; name
 	dw Text08ab_ ; description
 	db 0
@@ -1963,7 +1963,7 @@ MukCard: ; 31607 (c:5607)
 	db 94
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text08a7_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -2002,7 +2002,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text08ae_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -2018,7 +2018,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db 114
 
 	; move 2
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text080b_ ; name
 	dw Text08af_ ; description
 	db 0
@@ -2057,7 +2057,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	dw Text08ad_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text08b3_ ; name
 	dw Text08b4_ ; description
 	db 0
@@ -2073,7 +2073,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text08b5_ ; name
 	dw Text08b6_ ; description
 	db 0
@@ -2112,7 +2112,7 @@ KoffingCard: ; 316ca (c:56ca)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text08ba_ ; name
 	dw Text08bb_ ; description
 	db 0
@@ -2128,7 +2128,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db 53
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -2167,7 +2167,7 @@ WeezingCard: ; 3170b (c:570b)
 	dw Text08b9_ ; pre-evo name
 
 	; move 1
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text08bf_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -2183,7 +2183,7 @@ WeezingCard: ; 3170b (c:570b)
 	db 50
 
 	; move 2
-	db $02,$00,$00,$10 ; energies
+	energy GRASS, 2, COLORLESS, 1 ; energies
 	dw Text08c0_ ; name
 	dw Text08c1_ ; description
 	db 0
@@ -2222,7 +2222,7 @@ Tangela1Card: ; 3174c (c:574c)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$10 ; energies
+	energy GRASS, 1, COLORLESS, 1 ; energies
 	dw Text08c4_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -2238,7 +2238,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db 1
 
 	; move 2
-	db $03,$00,$00,$00 ; energies
+	energy GRASS, 3 ; energies
 	dw Text0811_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -2277,7 +2277,7 @@ Tangela2Card: ; 3178d (c:578d)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text0828_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -2293,7 +2293,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 55
 
 	; move 2
-	db $02,$00,$00,$10 ; energies
+	energy GRASS, 2, COLORLESS, 1 ; energies
 	dw Text08c7_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -2332,7 +2332,7 @@ ScytherCard: ; 317ce (c:57ce)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $01,$00,$00,$00 ; energies
+	energy GRASS, 1 ; energies
 	dw Text08ca_ ; name
 	dw Text08cb_ ; description
 	db 0
@@ -2348,7 +2348,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0889_ ; name
 	dw NONE ; description
 	db 0
@@ -2387,7 +2387,7 @@ PinsirCard: ; 3180f (c:580f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $02,$00,$00,$00 ; energies
+	energy GRASS, 2 ; energies
 	dw Text08cf_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -2403,7 +2403,7 @@ PinsirCard: ; 3180f (c:580f)
 	db 5
 
 	; move 2
-	db $02,$00,$00,$20 ; energies
+	energy GRASS, 2, COLORLESS, 2 ; energies
 	dw Text08d0_ ; name
 	dw NONE ; description
 	db 0
@@ -2442,7 +2442,7 @@ CharmanderCard: ; 31850 (c:5850)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0883_ ; name
 	dw NONE ; description
 	db 0
@@ -2458,7 +2458,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db 38
 
 	; move 2
-	db $10,$00,$00,$10 ; energies
+	energy FIRE, 1, COLORLESS, 1 ; energies
 	dw Text08d4_ ; name
 	dw Text08d5_ ; description
 	db 0
@@ -2497,7 +2497,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	dw Text08d3_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0889_ ; name
 	dw NONE ; description
 	db 0
@@ -2513,7 +2513,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db 38
 
 	; move 2
-	db $20,$00,$00,$10 ; energies
+	energy FIRE, 2, COLORLESS, 1 ; energies
 	dw Text08d9_ ; name
 	dw Text08da_ ; description
 	db 0
@@ -2552,7 +2552,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	dw Text08d8_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text08de_ ; name
 	dw Text08df_ ; description
 	db 0
@@ -2568,7 +2568,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db 94
 
 	; move 2
-	db $40,$00,$00,$00 ; energies
+	energy FIRE, 4 ; energies
 	dw Text08e0_ ; name
 	dw Text08e1_ ; description
 	db 0
@@ -2607,7 +2607,7 @@ VulpixCard: ; 31913 (c:5913)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text08e4_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -2623,7 +2623,7 @@ VulpixCard: ; 31913 (c:5913)
 	db 72
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -2662,7 +2662,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	dw Text08e3_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text089e_ ; name
 	dw Text08e8_ ; description
 	db 0
@@ -2678,7 +2678,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db 70
 
 	; move 2
-	db $40,$00,$00,$00 ; energies
+	energy FIRE, 4 ; energies
 	dw Text08e9_ ; name
 	dw Text08ea_ ; description
 	db 0
@@ -2717,7 +2717,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	dw Text08e3_ ; pre-evo name
 
 	; move 1
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text08ec_ ; name
 	dw Text08ed_ ; description
 	db 238
@@ -2733,7 +2733,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db 91
 
 	; move 2
-	db $30,$00,$00,$00 ; energies
+	energy FIRE, 3 ; energies
 	dw Text08ef_ ; name
 	dw Text08f0_ ; description
 	db 0
@@ -2772,7 +2772,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $10,$00,$00,$10 ; energies
+	energy FIRE, 1, COLORLESS, 1 ; energies
 	dw Text08f3_ ; name
 	dw NONE ; description
 	db 0
@@ -2788,7 +2788,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db 14
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -2827,7 +2827,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	dw Text08f2_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text08f8_ ; description
 	db 0
@@ -2843,7 +2843,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db 81
 
 	; move 2
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text08f9_ ; name
 	dw Text08fa_ ; description
 	db 0
@@ -2882,7 +2882,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	dw Text08f2_ ; pre-evo name
 
 	; move 1
-	db $20,$00,$00,$10 ; energies
+	energy FIRE, 2, COLORLESS, 1 ; energies
 	dw Text08d9_ ; name
 	dw Text08fd_ ; description
 	db 0
@@ -2898,7 +2898,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db 15
 
 	; move 2
-	db $20,$00,$00,$20 ; energies
+	energy FIRE, 2, COLORLESS, 2 ; energies
 	dw Text08fe_ ; name
 	dw Text08ff_ ; description
 	db 0
@@ -2937,7 +2937,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0902_ ; name
 	dw NONE ; description
 	db 0
@@ -2953,7 +2953,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db 1
 
 	; move 2
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text0903_ ; name
 	dw NONE ; description
 	db 0
@@ -2992,7 +2992,7 @@ RapidashCard: ; 31ada (c:5ada)
 	dw Text0901_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0907_ ; name
 	dw Text0908_ ; description
 	db 0
@@ -3008,7 +3008,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db 1
 
 	; move 2
-	db $20,$00,$00,$10 ; energies
+	energy FIRE, 2, COLORLESS, 1 ; energies
 	dw Text0909_ ; name
 	dw Text090a_ ; description
 	db 0
@@ -3047,7 +3047,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text090d_ ; name
 	dw NONE ; description
 	db 0
@@ -3063,7 +3063,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db 36
 
 	; move 2
-	db $20,$00,$00,$10 ; energies
+	energy FIRE, 2, COLORLESS, 1 ; energies
 	dw Text08d9_ ; name
 	dw Text090e_ ; description
 	db 0
@@ -3102,7 +3102,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $10,$00,$00,$00 ; energies
+	energy FIRE, 1 ; energies
 	dw Text0911_ ; name
 	dw Text0912_ ; description
 	db 0
@@ -3118,7 +3118,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db 90
 
 	; move 2
-	db $20,$00,$00,$00 ; energies
+	energy FIRE, 2 ; energies
 	dw Text08bf_ ; name
 	dw Text0834_ ; description
 	db 0
@@ -3157,7 +3157,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0916_ ; name
 	dw NONE ; description
 	db 0
@@ -3173,7 +3173,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0917_ ; name
 	dw Text0918_ ; description
 	db 0
@@ -3212,7 +3212,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text08f8_ ; description
 	db 0
@@ -3228,7 +3228,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db 81
 
 	; move 2
-	db $20,$00,$00,$20 ; energies
+	energy FIRE, 2, COLORLESS, 2 ; energies
 	dw Text08d9_ ; name
 	dw Text091a_ ; description
 	db 0
@@ -3267,7 +3267,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $10,$00,$00,$00 ; energies
+	energy FIRE, 1 ; energies
 	dw Text091d_ ; name
 	dw Text091e_ ; description
 	db 0
@@ -3283,7 +3283,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db 91
 
 	; move 2
-	db $40,$00,$00,$00 ; energies
+	energy FIRE, 4 ; energies
 	dw Text091f_ ; name
 	dw Text085e_ ; description
 	db 0
@@ -3322,7 +3322,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0921_ ; name
 	dw Text0922_ ; description
 	db 0
@@ -3338,7 +3338,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db 95
 
 	; move 2
-	db $30,$00,$00,$00 ; energies
+	energy FIRE, 3 ; energies
 	dw Text091f_ ; name
 	dw Text085e_ ; description
 	db 0
@@ -3377,7 +3377,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0925_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -3393,7 +3393,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db 65
 
 	; move 2
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text0926_ ; name
 	dw Text0927_ ; description
 	db 0
@@ -3432,7 +3432,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	dw Text0924_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text0926_ ; name
 	dw Text092b_ ; description
 	db 0
@@ -3448,7 +3448,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db 0
 
 	; move 2
-	db $00,$01,$00,$20 ; energies
+	energy WATER, 1, COLORLESS, 2 ; energies
 	dw Text0916_ ; name
 	dw NONE ; description
 	db 0
@@ -3487,7 +3487,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	dw Text092a_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text092f_ ; name
 	dw Text0930_ ; description
 	db 49
@@ -3503,7 +3503,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db 94
 
 	; move 2
-	db $00,$03,$00,$00 ; energies
+	energy WATER, 3 ; energies
 	dw Text0932_ ; name
 	dw Text0933_ ; description
 	db 0
@@ -3542,7 +3542,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0937_ ; name
 	dw Text0938_ ; description
 	db 0
@@ -3558,7 +3558,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db 91
 
 	; move 2
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text084b_ ; name
 	dw Text084c_ ; description
 	db 0
@@ -3597,7 +3597,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	dw Text0936_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text093c_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -3613,7 +3613,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db 25
 
 	; move 2
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text093d_ ; name
 	dw Text093e_ ; description
 	db 0
@@ -3652,7 +3652,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0941_ ; name
 	dw Text0942_ ; description
 	db 0
@@ -3668,7 +3668,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db 19
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -3707,7 +3707,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	dw Text0940_ ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0946_ ; name
 	dw Text0947_ ; description
 	db 0
@@ -3723,7 +3723,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db 85
 
 	; move 2
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text0948_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -3762,7 +3762,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	dw Text0945_ ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text0941_ ; name
 	dw Text094b_ ; description
 	db 0
@@ -3778,7 +3778,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db 19
 
 	; move 2
-	db $00,$02,$00,$20 ; energies
+	energy WATER, 2, COLORLESS, 2 ; energies
 	dw Text094c_ ; name
 	dw Text093e_ ; description
 	db 0
@@ -3817,7 +3817,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text094f_ ; name
 	dw Text0950_ ; description
 	db 0
@@ -3833,7 +3833,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db 94
 
 	; move 2
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text08a0_ ; name
 	dw NONE ; description
 	db 0
@@ -3872,7 +3872,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	dw Text094e_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0852_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -3888,7 +3888,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db 76
 
 	; move 2
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0954_ ; name
 	dw Text0812_ ; description
 	db 0
@@ -3927,7 +3927,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0957_ ; name
 	dw NONE ; description
 	db 0
@@ -3943,7 +3943,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -3982,7 +3982,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	dw Text0956_ ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text095b_ ; name
 	dw NONE ; description
 	db 0
@@ -3998,7 +3998,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db 29
 
 	; move 2
-	db $00,$02,$00,$20 ; energies
+	energy WATER, 2, COLORLESS, 2 ; energies
 	dw Text095c_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -4037,7 +4037,7 @@ ShellderCard: ; 31fad (c:5fad)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0852_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -4053,7 +4053,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db 76
 
 	; move 2
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text095f_ ; name
 	dw Text0960_ ; description
 	db 0
@@ -4092,7 +4092,7 @@ CloysterCard: ; 31fee (c:5fee)
 	dw Text095e_ ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0964_ ; name
 	dw Text0965_ ; description
 	db 0
@@ -4108,7 +4108,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db 0
 
 	; move 2
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0966_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -4147,7 +4147,7 @@ KrabbyCard: ; 3202f (c:602f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text084d_ ; name
 	dw Text0969_ ; description
 	db 0
@@ -4163,7 +4163,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db 91
 
 	; move 2
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text08cf_ ; name
 	dw NONE ; description
 	db 0
@@ -4202,7 +4202,7 @@ KinglerCard: ; 32070 (c:6070)
 	dw Text0968_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text096d_ ; name
 	dw Text096e_ ; description
 	db 0
@@ -4218,7 +4218,7 @@ KinglerCard: ; 32070 (c:6070)
 	db 2
 
 	; move 2
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text096f_ ; name
 	dw NONE ; description
 	db 0
@@ -4257,7 +4257,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0911_ ; name
 	dw Text0973_ ; description
 	db 0
@@ -4273,7 +4273,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db 90
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -4312,7 +4312,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	dw Text0972_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text0941_ ; name
 	dw Text0977_ ; description
 	db 0
@@ -4328,7 +4328,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db 19
 
 	; move 2
-	db $00,$01,$00,$20 ; energies
+	energy WATER, 1, COLORLESS, 2 ; energies
 	dw Text0909_ ; name
 	dw Text0978_ ; description
 	db 0
@@ -4367,7 +4367,7 @@ GoldeenCard: ; 32133 (c:6133)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text097b_ ; name
 	dw NONE ; description
 	db 0
@@ -4383,7 +4383,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -4422,7 +4422,7 @@ SeakingCard: ; 32174 (c:6174)
 	dw Text097a_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text097b_ ; name
 	dw NONE ; description
 	db 0
@@ -4438,7 +4438,7 @@ SeakingCard: ; 32174 (c:6174)
 	db 1
 
 	; move 2
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text097f_ ; name
 	dw NONE ; description
 	db 0
@@ -4477,7 +4477,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0982_ ; name
 	dw NONE ; description
 	db 0
@@ -4493,7 +4493,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -4532,7 +4532,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	dw Text0981_ ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0986_ ; name
 	dw Text0987_ ; description
 	db 0
@@ -4548,7 +4548,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db 88
 
 	; move 2
-	db $00,$01,$00,$20 ; energies
+	energy WATER, 1, COLORLESS, 2 ; energies
 	dw Text0988_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -4587,7 +4587,7 @@ MagikarpCard: ; 32237 (c:6237)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text098c_ ; name
 	dw NONE ; description
 	db 0
@@ -4603,7 +4603,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db 1
 
 	; move 2
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text096d_ ; name
 	dw Text098d_ ; description
 	db 0
@@ -4642,7 +4642,7 @@ GyaradosCard: ; 32278 (c:6278)
 	dw Text098b_ ; pre-evo name
 
 	; move 1
-	db $00,$03,$00,$00 ; energies
+	energy WATER, 3 ; energies
 	dw Text0991_ ; name
 	dw NONE ; description
 	db 0
@@ -4658,7 +4658,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db 21
 
 	; move 2
-	db $00,$04,$00,$00 ; energies
+	energy WATER, 4 ; energies
 	dw Text0992_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -4697,7 +4697,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0941_ ; name
 	dw Text0996_ ; description
 	db 0
@@ -4713,7 +4713,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db 19
 
 	; move 2
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text08e4_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -4752,7 +4752,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text099a_ ; name
 	dw Text099b_ ; description
 	db 0
@@ -4768,7 +4768,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0916_ ; name
 	dw NONE ; description
 	db 0
@@ -4807,7 +4807,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text08f8_ ; description
 	db 0
@@ -4823,7 +4823,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db 81
 
 	; move 2
-	db $00,$02,$00,$10 ; energies
+	energy WATER, 2, COLORLESS, 1 ; energies
 	dw Text0941_ ; name
 	dw Text099e_ ; description
 	db 0
@@ -4862,7 +4862,7 @@ OmanyteCard: ; 3237c (c:637c)
 	dw Text09a1_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text09a2_ ; name
 	dw Text09a3_ ; description
 	db 0
@@ -4878,7 +4878,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db 94
 
 	; move 2
-	db $00,$01,$00,$00 ; energies
+	energy WATER, 1 ; energies
 	dw Text0941_ ; name
 	dw Text09a4_ ; description
 	db 0
@@ -4917,7 +4917,7 @@ OmastarCard: ; 323bd (c:63bd)
 	dw Text09a0_ ; pre-evo name
 
 	; move 1
-	db $00,$01,$00,$10 ; energies
+	energy WATER, 1, COLORLESS, 1 ; energies
 	dw Text0941_ ; name
 	dw Text09a8_ ; description
 	db 0
@@ -4933,7 +4933,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db 19
 
 	; move 2
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text0966_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -4972,7 +4972,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$03,$00,$00 ; energies
+	energy WATER, 3 ; energies
 	dw Text09ab_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -4988,7 +4988,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 29
 
 	; move 2
-	db $00,$04,$00,$00 ; energies
+	energy WATER, 4 ; energies
 	dw Text09ac_ ; name
 	dw Text09ad_ ; description
 	db 0
@@ -5027,7 +5027,7 @@ Articuno2Card: ; 3243f (c:643f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text09b0_ ; name
 	dw Text09b1_ ; description
 	db 0
@@ -5043,7 +5043,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db 96
 
 	; move 2
-	db $00,$03,$00,$00 ; energies
+	energy WATER, 3 ; energies
 	dw Text09b2_ ; name
 	dw Text09b3_ ; description
 	db 0
@@ -5082,7 +5082,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text09b6_ ; name
 	dw NONE ; description
 	db 0
@@ -5098,7 +5098,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db 1
 
 	; move 2
-	db $00,$10,$00,$10 ; energies
+	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	dw Text09b7_ ; name
 	dw Text09b8_ ; description
 	db 0
@@ -5137,7 +5137,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$20,$00,$00 ; energies
+	energy LIGHTNING, 2 ; energies
 	dw Text09bb_ ; name
 	dw Text09bc_ ; description
 	db 0
@@ -5153,7 +5153,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db 10
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -5192,7 +5192,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text09be_ ; name
 	dw Text09bf_ ; description
 	db 0
@@ -5208,7 +5208,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db 76
 
 	; move 2
-	db $00,$20,$00,$00 ; energies
+	energy LIGHTNING, 2 ; energies
 	dw Text09c0_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -5247,7 +5247,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text09be_ ; name
 	dw Text09bf_ ; description
 	db 0
@@ -5263,7 +5263,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db 76
 
 	; move 2
-	db $00,$20,$00,$00 ; energies
+	energy LIGHTNING, 2 ; energies
 	dw Text09c0_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -5302,7 +5302,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$00 ; energies
+	energy LIGHTNING, 1 ; energies
 	dw Text09c0_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -5318,7 +5318,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db 6
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text09c3_ ; name
 	dw Text09c4_ ; description
 	db 0
@@ -5357,7 +5357,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text09c7_ ; name
 	dw NONE ; description
 	db 0
@@ -5373,7 +5373,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db 18
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -5412,7 +5412,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$02,$00,$00 ; energies
+	energy WATER, 2 ; energies
 	dw Text09c7_ ; name
 	dw NONE ; description
 	db 0
@@ -5428,7 +5428,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db 18
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -5467,7 +5467,7 @@ Raichu1Card: ; 32647 (c:6647)
 	dw Text09b5_ ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$20 ; energies
+	energy LIGHTNING, 1, COLORLESS, 2 ; energies
 	dw Text0909_ ; name
 	dw Text09ca_ ; description
 	db 0
@@ -5483,7 +5483,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db 81
 
 	; move 2
-	db $00,$30,$00,$10 ; energies
+	energy LIGHTNING, 3, COLORLESS, 1 ; energies
 	dw Text09cb_ ; name
 	dw Text09cc_ ; description
 	db 0
@@ -5522,7 +5522,7 @@ Raichu2Card: ; 32688 (c:6688)
 	dw Text09b5_ ; pre-evo name
 
 	; move 1
-	db $00,$40,$00,$00 ; energies
+	energy LIGHTNING, 4 ; energies
 	dw Text09ce_ ; name
 	dw Text09cf_ ; description
 	db 0
@@ -5538,7 +5538,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db 10
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -5577,7 +5577,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$00 ; energies
+	energy LIGHTNING, 1 ; energies
 	dw Text09d2_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -5593,7 +5593,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 111
 
 	; move 2
-	db $00,$10,$00,$10 ; energies
+	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	dw Text08c0_ ; name
 	dw Text09d3_ ; description
 	db 0
@@ -5632,7 +5632,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text098c_ ; name
 	dw NONE ; description
 	db 0
@@ -5648,7 +5648,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db 1
 
 	; move 2
-	db $00,$10,$00,$10 ; energies
+	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	dw Text09d6_ ; name
 	dw Text09d7_ ; description
 	db 0
@@ -5687,7 +5687,7 @@ Magneton1Card: ; 3274b (c:674b)
 	dw Text09d1_ ; pre-evo name
 
 	; move 1
-	db $00,$20,$00,$10 ; energies
+	energy LIGHTNING, 2, COLORLESS, 1 ; energies
 	dw Text09d2_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -5703,7 +5703,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db 111
 
 	; move 2
-	db $00,$20,$00,$20 ; energies
+	energy LIGHTNING, 2, COLORLESS, 2 ; energies
 	dw Text08c0_ ; name
 	dw Text09da_ ; description
 	db 0
@@ -5742,7 +5742,7 @@ Magneton2Card: ; 3278c (c:678c)
 	dw Text09d1_ ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$10 ; energies
+	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	dw Text09dc_ ; name
 	dw Text09dd_ ; description
 	db 0
@@ -5758,7 +5758,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db 40
 
 	; move 2
-	db $00,$40,$00,$00 ; energies
+	energy LIGHTNING, 4 ; energies
 	dw Text08c0_ ; name
 	dw Text09de_ ; description
 	db 0
@@ -5797,7 +5797,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text098c_ ; name
 	dw NONE ; description
 	db 0
@@ -5813,7 +5813,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -5852,7 +5852,7 @@ Electrode1Card: ; 3280e (c:680e)
 	dw Text09e0_ ; pre-evo name
 
 	; move 1
-	db $00,$20,$00,$00 ; energies
+	energy LIGHTNING, 2 ; energies
 	dw Text09dc_ ; name
 	dw Text09dd_ ; description
 	db 0
@@ -5868,7 +5868,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db 40
 
 	; move 2
-	db $00,$30,$00,$00 ; energies
+	energy LIGHTNING, 3 ; energies
 	dw Text09e4_ ; name
 	dw Text09e5_ ; description
 	db 0
@@ -5907,7 +5907,7 @@ Electrode2Card: ; 3284f (c:684f)
 	dw Text09e0_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text098c_ ; name
 	dw NONE ; description
 	db 0
@@ -5923,7 +5923,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db 1
 
 	; move 2
-	db $00,$30,$00,$00 ; energies
+	energy LIGHTNING, 3 ; energies
 	dw Text09e7_ ; name
 	dw Text09e8_ ; description
 	db 0
@@ -5962,7 +5962,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$00 ; energies
+	energy LIGHTNING, 1 ; energies
 	dw Text09eb_ ; name
 	dw Text09ec_ ; description
 	db 237
@@ -5978,7 +5978,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db 80
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text09ee_ ; description
 	db 0
@@ -6017,7 +6017,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$10,$00,$00 ; energies
+	energy LIGHTNING, 1 ; energies
 	dw Text09c0_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -6033,7 +6033,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 6
 
 	; move 2
-	db $00,$10,$00,$10 ; energies
+	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	dw Text09f1_ ; name
 	dw Text09f2_ ; description
 	db 0
@@ -6072,7 +6072,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0854_ ; name
 	dw Text09f5_ ; description
 	db 0
@@ -6088,7 +6088,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text09f6_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -6127,7 +6127,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	dw Text0915_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text08f8_ ; description
 	db 0
@@ -6143,7 +6143,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db 81
 
 	; move 2
-	db $00,$20,$00,$10 ; energies
+	energy LIGHTNING, 2, COLORLESS, 1 ; energies
 	dw Text09f9_ ; name
 	dw Text09fa_ ; description
 	db 0
@@ -6182,7 +6182,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$40,$00,$00 ; energies
+	energy LIGHTNING, 4 ; energies
 	dw Text09fd_ ; name
 	dw Text09fe_ ; description
 	db 0
@@ -6198,7 +6198,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 12
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -6237,7 +6237,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$30,$00,$10 ; energies
+	energy LIGHTNING, 3, COLORLESS, 1 ; energies
 	dw Text09cb_ ; name
 	dw Text0a00_ ; description
 	db 0
@@ -6253,7 +6253,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db 7
 
 	; move 2
-	db $00,$40,$00,$00 ; energies
+	energy LIGHTNING, 4 ; energies
 	dw Text0a01_ ; name
 	dw Text0a02_ ; description
 	db 0
@@ -6292,7 +6292,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a04_ ; name
 	dw Text0a05_ ; description
 	db 0
@@ -6308,7 +6308,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db 97
 
 	; move 2
-	db $00,$30,$00,$00 ; energies
+	energy LIGHTNING, 3 ; energies
 	dw Text0a06_ ; name
 	dw Text0a07_ ; description
 	db 0
@@ -6347,7 +6347,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$00 ; energies
+	energy FIGHTING, 1 ; energies
 	dw Text0a0a_ ; name
 	dw Text0973_ ; description
 	db 0
@@ -6363,7 +6363,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db 90
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -6402,7 +6402,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	dw Text0a09_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0889_ ; name
 	dw NONE ; description
 	db 0
@@ -6418,7 +6418,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db 38
 
 	; move 2
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text084b_ ; name
 	dw Text0a0d_ ; description
 	db 0
@@ -6457,7 +6457,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$00 ; energies
+	energy FIGHTING, 1 ; energies
 	dw Text0a10_ ; name
 	dw NONE ; description
 	db 0
@@ -6473,7 +6473,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db 1
 
 	; move 2
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a11_ ; name
 	dw NONE ; description
 	db 0
@@ -6512,7 +6512,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	dw Text0a0f_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0889_ ; name
 	dw NONE ; description
 	db 0
@@ -6528,7 +6528,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db 38
 
 	; move 2
-	db $00,$00,$40,$00 ; energies
+	energy FIGHTING, 4 ; energies
 	dw Text0a15_ ; name
 	dw Text0a16_ ; description
 	db 0
@@ -6567,7 +6567,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a19_ ; name
 	dw Text0a1a_ ; description
 	db 27
@@ -6583,7 +6583,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db 94
 
 	; move 2
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0883_ ; name
 	dw NONE ; description
 	db 0
@@ -6622,7 +6622,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	dw Text0a18_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text084b_ ; name
 	dw Text0a0d_ ; description
 	db 0
@@ -6638,7 +6638,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db 41
 
 	; move 2
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0a1f_ ; name
 	dw Text0a20_ ; description
 	db 0
@@ -6677,7 +6677,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$00 ; energies
+	energy FIGHTING, 1 ; energies
 	dw Text0a23_ ; name
 	dw NONE ; description
 	db 0
@@ -6693,7 +6693,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -6732,7 +6732,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	dw Text0a22_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0a27_ ; name
 	dw Text0a28_ ; description
 	db 0
@@ -6748,7 +6748,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db 1
 
 	; move 2
-	db $00,$00,$20,$20 ; energies
+	energy FIGHTING, 2, COLORLESS, 2 ; energies
 	dw Text0a29_ ; name
 	dw Text0a2a_ ; description
 	db 0
@@ -6787,7 +6787,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	dw Text0a26_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a2d_ ; name
 	dw Text0a2e_ ; description
 	db 47
@@ -6803,7 +6803,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db 91
 
 	; move 2
-	db $00,$00,$30,$10 ; energies
+	energy FIGHTING, 3, COLORLESS, 1 ; energies
 	dw Text0a30_ ; name
 	dw NONE ; description
 	db 0
@@ -6842,7 +6842,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$10 ; energies
+	energy FIGHTING, 1, COLORLESS, 1 ; energies
 	dw Text0a33_ ; name
 	dw Text0a34_ ; description
 	db 0
@@ -6858,7 +6858,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db 33
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -6897,7 +6897,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	dw Text0a32_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a38_ ; name
 	dw Text0a39_ ; description
 	db 0
@@ -6913,7 +6913,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db 79
 
 	; move 2
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0a3a_ ; name
 	dw NONE ; description
 	db 0
@@ -6952,7 +6952,7 @@ GolemCard: ; 32d22 (c:6d22)
 	dw Text0a37_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$30,$10 ; energies
+	energy FIGHTING, 3, COLORLESS, 1 ; energies
 	dw Text0a3d_ ; name
 	dw NONE ; description
 	db 0
@@ -6968,7 +6968,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db 32
 
 	; move 2
-	db $00,$00,$40,$00 ; energies
+	energy FIGHTING, 4 ; energies
 	dw Text08c0_ ; name
 	dw Text0a3e_ ; description
 	db 0
@@ -7007,7 +7007,7 @@ OnixCard: ; 32d63 (c:6d63)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$00 ; energies
+	energy FIGHTING, 1 ; energies
 	dw Text0a3a_ ; name
 	dw NONE ; description
 	db 0
@@ -7023,7 +7023,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db 32
 
 	; move 2
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a38_ ; name
 	dw Text0a42_ ; description
 	db 0
@@ -7062,7 +7062,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0a46_ ; name
 	dw Text0a47_ ; description
 	db 0
@@ -7078,7 +7078,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db 84
 
 	; move 2
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0917_ ; name
 	dw Text0a48_ ; description
 	db 0
@@ -7117,7 +7117,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	dw Text0a45_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a4c_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -7133,7 +7133,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db 46
 
 	; move 2
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0a4d_ ; name
 	dw Text0a4e_ ; description
 	db 0
@@ -7172,7 +7172,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	dw Text0a45_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$10 ; energies
+	energy FIGHTING, 1, COLORLESS, 1 ; energies
 	dw Text0a51_ ; name
 	dw Text0a52_ ; description
 	db 0
@@ -7188,7 +7188,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db 46
 
 	; move 2
-	db $00,$00,$30,$00 ; energies
+	energy FIGHTING, 3 ; energies
 	dw Text0a53_ ; name
 	dw Text0a54_ ; description
 	db 0
@@ -7227,7 +7227,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a57_ ; name
 	dw Text0a58_ ; description
 	db 0
@@ -7243,7 +7243,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db 37
 
 	; move 2
-	db $00,$00,$30,$00 ; energies
+	energy FIGHTING, 3 ; energies
 	dw Text0a59_ ; name
 	dw NONE ; description
 	db 0
@@ -7282,7 +7282,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$00 ; energies
+	energy FIGHTING, 1 ; energies
 	dw Text0a5d_ ; name
 	dw NONE ; description
 	db 0
@@ -7298,7 +7298,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db 34
 
 	; move 2
-	db $00,$00,$20,$10 ; energies
+	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	dw Text0a5e_ ; name
 	dw NONE ; description
 	db 0
@@ -7337,7 +7337,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0a62_ ; name
 	dw Text0a63_ ; description
 	db 0
@@ -7353,7 +7353,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db 0
 
 	; move 2
-	db $00,$00,$10,$20 ; energies
+	energy FIGHTING, 1, COLORLESS, 2 ; energies
 	dw Text097b_ ; name
 	dw NONE ; description
 	db 0
@@ -7392,7 +7392,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	dw Text0a61_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$10,$20 ; energies
+	energy FIGHTING, 1, COLORLESS, 2 ; energies
 	dw Text097b_ ; name
 	dw NONE ; description
 	db 0
@@ -7408,7 +7408,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db 1
 
 	; move 2
-	db $00,$00,$40,$00 ; energies
+	energy FIGHTING, 4 ; energies
 	dw Text0a67_ ; name
 	dw Text0a68_ ; description
 	db 105
@@ -7447,7 +7447,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	dw Text09a1_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a6c_ ; name
 	dw Text0a6d_ ; description
 	db 110
@@ -7463,7 +7463,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db 94
 
 	; move 2
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0883_ ; name
 	dw NONE ; description
 	db 0
@@ -7502,7 +7502,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	dw Text0a6b_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$20,$00 ; energies
+	energy FIGHTING, 2 ; energies
 	dw Text0a71_ ; name
 	dw NONE ; description
 	db 0
@@ -7518,7 +7518,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db 40
 
 	; move 2
-	db $00,$00,$40,$00 ; energies
+	energy FIGHTING, 4 ; energies
 	dw Text0a72_ ; name
 	dw Text0a73_ ; description
 	db 116
@@ -7557,7 +7557,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	dw Text09a1_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a77_ ; name
 	dw Text0a78_ ; description
 	db 0
@@ -7573,7 +7573,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db 94
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text086f_ ; name
 	dw NONE ; description
 	db 0
@@ -7612,7 +7612,7 @@ AbraCard: ; 3302e (c:702e)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text093c_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -7628,7 +7628,7 @@ AbraCard: ; 3302e (c:702e)
 	db 25
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -7667,7 +7667,7 @@ KadabraCard: ; 3306f (c:706f)
 	dw Text0a7b_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0986_ ; name
 	dw Text0a7f_ ; description
 	db 0
@@ -7683,7 +7683,7 @@ KadabraCard: ; 3306f (c:706f)
 	db 88
 
 	; move 2
-	db $00,$00,$02,$10 ; energies
+	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	dw Text0a80_ ; name
 	dw NONE ; description
 	db 0
@@ -7722,7 +7722,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	dw Text0a7e_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a83_ ; name
 	dw Text0a84_ ; description
 	db 0
@@ -7738,7 +7738,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db 94
 
 	; move 2
-	db $00,$00,$03,$00 ; energies
+	energy PSYCHIC, 3 ; energies
 	dw Text08e4_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -7777,7 +7777,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0957_ ; name
 	dw NONE ; description
 	db 0
@@ -7793,7 +7793,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db 1
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0946_ ; name
 	dw Text0a87_ ; description
 	db 0
@@ -7832,7 +7832,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0a8a_ ; name
 	dw Text0a8b_ ; description
 	db 0
@@ -7848,7 +7848,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db 0
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0a8c_ ; name
 	dw Text0a8d_ ; description
 	db 0
@@ -7887,7 +7887,7 @@ SlowbroCard: ; 33173 (c:7173)
 	dw Text0a86_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a8f_ ; name
 	dw Text0a90_ ; description
 	db 0
@@ -7903,7 +7903,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db 94
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text093c_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -7942,7 +7942,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0a94_ ; name
 	dw Text0a95_ ; description
 	db 0
@@ -7958,7 +7958,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db 128
 
 	; move 2
-	db $00,$00,$01,$10 ; energies
+	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	dw Text0a96_ ; name
 	dw Text0a97_ ; description
 	db 0
@@ -7997,7 +7997,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0a9a_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -8013,7 +8013,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db 61
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0a9b_ ; name
 	dw Text0a9c_ ; description
 	db 0
@@ -8052,7 +8052,7 @@ Haunter1Card: ; 33236 (c:7236)
 	dw Text0a93_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0a9f_ ; name
 	dw Text0aa0_ ; description
 	db 0
@@ -8068,7 +8068,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db 94
 
 	; move 2
-	db $00,$00,$01,$10 ; energies
+	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	dw Text0aa1_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -8107,7 +8107,7 @@ Haunter2Card: ; 33277 (c:7277)
 	dw Text0a93_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text08ae_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -8123,7 +8123,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db 114
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0aa3_ ; name
 	dw Text0aa4_ ; description
 	db 0
@@ -8162,7 +8162,7 @@ GengarCard: ; 332b8 (c:72b8)
 	dw Text0a9e_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0aa6_ ; name
 	dw Text0aa7_ ; description
 	db 0
@@ -8178,7 +8178,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db 94
 
 	; move 2
-	db $00,$00,$03,$00 ; energies
+	energy PSYCHIC, 3 ; energies
 	dw Text0aa8_ ; name
 	dw Text0aa9_ ; description
 	db 0
@@ -8217,7 +8217,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0aad_ ; name
 	dw NONE ; description
 	db 0
@@ -8233,7 +8233,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db 1
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text08e4_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -8272,7 +8272,7 @@ HypnoCard: ; 3333a (c:733a)
 	dw Text0aac_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0ab0_ ; name
 	dw Text0ab1_ ; description
 	db 0
@@ -8288,7 +8288,7 @@ HypnoCard: ; 3333a (c:733a)
 	db 91
 
 	; move 2
-	db $00,$00,$03,$00 ; energies
+	energy PSYCHIC, 3 ; energies
 	dw Text0aa8_ ; name
 	dw Text0aa9_ ; description
 	db 0
@@ -8327,7 +8327,7 @@ MrMimeCard: ; 3337b (c:737b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0ab4_ ; name
 	dw Text0ab5_ ; description
 	db 182
@@ -8343,7 +8343,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db 91
 
 	; move 2
-	db $00,$00,$01,$10 ; energies
+	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	dw Text0ab7_ ; name
 	dw Text0ab8_ ; description
 	db 0
@@ -8382,7 +8382,7 @@ JynxCard: ; 333bc (c:73bc)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0948_ ; name
 	dw Text0abc_ ; description
 	db 0
@@ -8398,7 +8398,7 @@ JynxCard: ; 333bc (c:73bc)
 	db 1
 
 	; move 2
-	db $00,$00,$02,$10 ; energies
+	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	dw Text0ab7_ ; name
 	dw Text0abd_ ; description
 	db 0
@@ -8437,7 +8437,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$10 ; energies
+	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	dw Text0ac1_ ; name
 	dw Text0ac2_ ; description
 	db 0
@@ -8453,7 +8453,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db 25
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0ab9_ ; name
 	dw Text0ac3_ ; description
 	db 0
@@ -8492,7 +8492,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0ac6_ ; name
 	dw Text0ac7_ ; description
 	db 0
@@ -8508,7 +8508,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db 91
 
 	; move 2
-	db $00,$00,$02,$10 ; energies
+	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	dw Text0ac8_ ; name
 	dw NONE ; description
 	db 0
@@ -8547,7 +8547,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0ac6_ ; name
 	dw Text0ac7_ ; description
 	db 0
@@ -8563,7 +8563,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db 91
 
 	; move 2
-	db $00,$00,$02,$10 ; energies
+	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	dw Text0ac8_ ; name
 	dw NONE ; description
 	db 0
@@ -8602,7 +8602,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0acb_ ; name
 	dw Text0acc_ ; description
 	db 0
@@ -8618,7 +8618,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db 94
 
 	; move 2
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text093c_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -8657,7 +8657,7 @@ Mew2Card: ; 33501 (c:7501)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$10 ; energies
+	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	dw Text0acf_ ; name
 	dw Text0ad0_ ; description
 	db 0
@@ -8673,7 +8673,7 @@ Mew2Card: ; 33501 (c:7501)
 	db 5
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -8712,7 +8712,7 @@ Mew3Card: ; 33542 (c:7542)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$01,$00 ; energies
+	energy PSYCHIC, 1 ; energies
 	dw Text0ad2_ ; name
 	dw Text0ad3_ ; description
 	db 0
@@ -8728,7 +8728,7 @@ Mew3Card: ; 33542 (c:7542)
 	db 25
 
 	; move 2
-	db $00,$00,$02,$00 ; energies
+	energy PSYCHIC, 2 ; energies
 	dw Text0ad4_ ; name
 	dw Text0ad5_ ; description
 	db 0
@@ -8767,7 +8767,7 @@ PidgeyCard: ; 33583 (c:7583)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text082c_ ; name
 	dw Text082d_ ; description
 	db 0
@@ -8783,7 +8783,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db 83
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -8822,7 +8822,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	dw Text0ad6_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text082c_ ; name
 	dw Text082d_ ; description
 	db 0
@@ -8838,7 +8838,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db 83
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0ada_ ; name
 	dw Text0adb_ ; description
 	db 0
@@ -8877,7 +8877,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	dw Text0ad9_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0adf_ ; name
 	dw Text0ae0_ ; description
 	db 0
@@ -8893,7 +8893,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db 99
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0ae1_ ; name
 	dw Text0ae2_ ; description
 	db 0
@@ -8932,7 +8932,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	dw Text0ad9_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text086f_ ; name
 	dw NONE ; description
 	db 0
@@ -8948,7 +8948,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0ae4_ ; name
 	dw Text0ae5_ ; description
 	db 0
@@ -8987,7 +8987,7 @@ RattataCard: ; 33687 (c:7687)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0916_ ; name
 	dw NONE ; description
 	db 0
@@ -9003,7 +9003,7 @@ RattataCard: ; 33687 (c:7687)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -9042,7 +9042,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	dw Text0ae7_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0916_ ; name
 	dw NONE ; description
 	db 0
@@ -9058,7 +9058,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0aeb_ ; name
 	dw Text0aec_ ; description
 	db 0
@@ -9097,7 +9097,7 @@ SpearowCard: ; 33709 (c:7709)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0aef_ ; name
 	dw NONE ; description
 	db 0
@@ -9113,7 +9113,7 @@ SpearowCard: ; 33709 (c:7709)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0ada_ ; name
 	dw Text0af0_ ; description
 	db 0
@@ -9152,7 +9152,7 @@ FearowCard: ; 3374a (c:774a)
 	dw Text0aee_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0909_ ; name
 	dw Text0af3_ ; description
 	db 0
@@ -9168,7 +9168,7 @@ FearowCard: ; 3374a (c:774a)
 	db 81
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0af4_ ; name
 	dw NONE ; description
 	db 0
@@ -9207,7 +9207,7 @@ ClefairyCard: ; 3378b (c:778b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0af8_ ; name
 	dw Text0a95_ ; description
 	db 0
@@ -9223,7 +9223,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db 74
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0af9_ ; name
 	dw Text0afa_ ; description
 	db 0
@@ -9262,7 +9262,7 @@ ClefableCard: ; 337cc (c:77cc)
 	dw Text0af7_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0af9_ ; name
 	dw Text0afe_ ; description
 	db 0
@@ -9278,7 +9278,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db 0
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08a5_ ; name
 	dw Text0aff_ ; description
 	db 0
@@ -9317,7 +9317,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b02_ ; name
 	dw Text0b03_ ; description
 	db 0
@@ -9333,7 +9333,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db 88
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b04_ ; name
 	dw Text0b05_ ; description
 	db 0
@@ -9372,7 +9372,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b08_ ; name
 	dw Text0b09_ ; description
 	db 0
@@ -9388,7 +9388,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db 0
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0b0a_ ; name
 	dw Text0b0b_ ; description
 	db 0
@@ -9427,7 +9427,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b0d_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -9443,7 +9443,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db 75
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0aad_ ; name
 	dw NONE ; description
 	db 0
@@ -9482,7 +9482,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	dw Text0b01_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b0d_ ; name
 	dw Text0885_ ; description
 	db 0
@@ -9498,7 +9498,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db 75
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b10_ ; name
 	dw Text0b11_ ; description
 	db 0
@@ -9537,7 +9537,7 @@ Meowth1Card: ; 33911 (c:7911)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0b14_ ; name
 	dw Text0b15_ ; description
 	db 0
@@ -9553,7 +9553,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db 108
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -9592,7 +9592,7 @@ Meowth2Card: ; 33952 (c:7952)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0b18_ ; name
 	dw Text0b19_ ; description
 	db 0
@@ -9608,7 +9608,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -9647,7 +9647,7 @@ PersianCard: ; 33993 (c:7993)
 	dw Text0b13_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0883_ ; name
 	dw NONE ; description
 	db 0
@@ -9663,7 +9663,7 @@ PersianCard: ; 33993 (c:7993)
 	db 38
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b1c_ ; name
 	dw Text0b1d_ ; description
 	db 0
@@ -9702,7 +9702,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b21_ ; name
 	dw Text0b22_ ; description
 	db 0
@@ -9718,7 +9718,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db 39
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b23_ ; name
 	dw NONE ; description
 	db 0
@@ -9757,7 +9757,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b27_ ; name
 	dw Text0abc_ ; description
 	db 0
@@ -9773,7 +9773,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db 41
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -9812,7 +9812,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	dw Text0b26_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0b2b_ ; name
 	dw Text0b2c_ ; description
 	db 0
@@ -9828,7 +9828,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db 94
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0917_ ; name
 	dw Text0b2d_ ; description
 	db 0
@@ -9867,7 +9867,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b31_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -9883,7 +9883,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db 61
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0852_ ; name
 	dw Text0853_ ; description
 	db 0
@@ -9922,7 +9922,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0b35_ ; name
 	dw Text0b36_ ; description
 	db 0
@@ -9938,7 +9938,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db 0
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0b04_ ; name
 	dw Text0b37_ ; description
 	db 0
@@ -9977,7 +9977,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b3a_ ; name
 	dw Text0b3b_ ; description
 	db 0
@@ -9993,7 +9993,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0b3c_ ; name
 	dw Text09fa_ ; description
 	db 0
@@ -10032,7 +10032,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0907_ ; name
 	dw Text0908_ ; description
 	db 0
@@ -10048,7 +10048,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b40_ ; name
 	dw Text0b41_ ; description
 	db 0
@@ -10087,7 +10087,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0aad_ ; name
 	dw NONE ; description
 	db 0
@@ -10103,7 +10103,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b45_ ; name
 	dw Text0b46_ ; description
 	db 71
@@ -10142,7 +10142,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b4a_ ; name
 	dw Text0b4b_ ; description
 	db 0
@@ -10158,7 +10158,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db 0
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text08f7_ ; name
 	dw Text08f8_ ; description
 	db 0
@@ -10197,7 +10197,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0b4f_ ; name
 	dw Text0b50_ ; description
 	db 0
@@ -10213,7 +10213,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$20 ; energies
+	energy COLORLESS, 2 ; energies
 	dw Text0b51_ ; name
 	dw Text0b52_ ; description
 	db 0
@@ -10252,7 +10252,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0b56_ ; name
 	dw Text0b57_ ; description
 	db 0
@@ -10268,7 +10268,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0b58_ ; name
 	dw Text0822_ ; description
 	db 0
@@ -10307,7 +10307,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	dw NONE ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$10 ; energies
+	energy COLORLESS, 1 ; energies
 	dw Text0aad_ ; name
 	dw NONE ; description
 	db 0
@@ -10323,7 +10323,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
 	db 0
@@ -10362,7 +10362,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	dw Text0b5b_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b5e_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -10378,7 +10378,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db 1
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text093d_ ; name
 	dw Text093e_ ; description
 	db 0
@@ -10417,7 +10417,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	dw Text0b5d_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0b61_ ; name
 	dw Text0b62_ ; description
 	db 0
@@ -10433,7 +10433,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db 98
 
 	; move 2
-	db $00,$00,$00,$30 ; energies
+	energy COLORLESS, 3 ; energies
 	dw Text0b5e_ ; name
 	dw Text083c_ ; description
 	db 0
@@ -10472,7 +10472,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	dw Text0b5d_ ; pre-evo name
 
 	; move 1
-	db $00,$00,$00,$00 ; energies
+	energy 0 ; energies
 	dw Text0b64_ ; name
 	dw Text0b65_ ; description
 	db 0
@@ -10488,7 +10488,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db 91
 
 	; move 2
-	db $00,$00,$00,$40 ; energies
+	energy COLORLESS, 4 ; energies
 	dw Text0b5e_ ; name
 	dw Text0b66_ ; description
 	db 0
