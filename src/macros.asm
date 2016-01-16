@@ -1,6 +1,4 @@
-RGB: MACRO
-	dw (\3 << 10 | \2 << 5 | \1)
-ENDM
+;;; engine macros
 
 bank1call: MACRO
 	rst $18
@@ -27,6 +25,10 @@ emptybank: MACRO
 	endr
 ENDM
 
+RGB: MACRO
+	dw (\3 << 10 | \2 << 5 | \1)
+ENDM
+
 text: MACRO
 	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
@@ -35,7 +37,8 @@ GLOBAL \1_
 const_value = const_value + 1
 ENDM
 
-; notes/instruments
+;;; notes/instruments macros
+
 C_: MACRO
 	db $10 | (\1 - 1)
 ENDM
@@ -249,6 +252,8 @@ sfx_end: MACRO
 	db $f0
 ENDM
 
+;;; card macros
+
 energy: MACRO
 fg = 0
 lw = 0
@@ -293,3 +298,7 @@ ENDM
 gfx: MACRO
 	dw ($4000 * (BANK(\1) - BANK(GrassEnergyCardGfx)) + (\1 - $4000)) / 8
 ENDM
+
+tx: MACRO
+	dw \1_
+ENDM	
