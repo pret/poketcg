@@ -289,3 +289,7 @@ c_ = c_ + \2 * $10
 	endc	
 	db fg, lw, fp, c_
 ENDM
+
+gfx: MACRO
+	dw ($4000 * (BANK(\1) - BANK(GrassEnergyCardGfx)) + (\1 - $4000)) / 8
+ENDM

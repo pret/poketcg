@@ -232,7 +232,7 @@ CardPointers: ; 30c5c (c:4c5c)
 
 BulbasaurCard: ; 30e28 (c:4e28)
 	db GRASS ; type
-	dw $2a7 ; gfx
+	gfx BulbasaurCardGfx ; gfx
 	dw BulbasaurName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -285,7 +285,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 
 IvysaurCard: ; 30e69 (c:4e69)
 	db GRASS ; type
-	dw $308 ; gfx
+	gfx IvysaurCardGfx ; gfx
 	dw IvysaurName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -338,7 +338,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 
 Venusaur1Card: ; 30eaa (c:4eaa)
 	db GRASS ; type
-	dw $369 ; gfx
+	gfx Venusaur1CardGfx ; gfx
 	dw VenusaurName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -391,7 +391,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 
 Venusaur2Card: ; 30eeb (c:4eeb)
 	db GRASS ; type
-	dw $3ca ; gfx
+	gfx Venusaur2CardGfx ; gfx
 	dw VenusaurName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -444,7 +444,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 
 CaterpieCard: ; 30f2c (c:4f2c)
 	db GRASS ; type
-	dw $42b ; gfx
+	gfx CaterpieCardGfx ; gfx
 	dw CaterpieName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -497,7 +497,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 
 MetapodCard: ; 30f6d (c:4f6d)
 	db GRASS ; type
-	dw $48c ; gfx
+	gfx MetapodCardGfx ; gfx
 	dw MetapodName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -550,7 +550,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 
 ButterfreeCard: ; 30fae (c:4fae)
 	db GRASS ; type
-	dw $4ed ; gfx
+	gfx ButterfreeCardGfx ; gfx
 	dw ButterfreeName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -603,7 +603,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 
 WeedleCard: ; 30fef (c:4fef)
 	db GRASS ; type
-	dw $54e ; gfx
+	gfx WeedleCardGfx ; gfx
 	dw WeedleName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -656,7 +656,7 @@ WeedleCard: ; 30fef (c:4fef)
 
 KakunaCard: ; 31030 (c:5030)
 	db GRASS ; type
-	dw $5af ; gfx
+	gfx KakunaCardGfx ; gfx
 	dw KakunaName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -709,7 +709,7 @@ KakunaCard: ; 31030 (c:5030)
 
 BeedrillCard: ; 31071 (c:5071)
 	db GRASS ; type
-	dw $610 ; gfx
+	gfx BeedrillCardGfx ; gfx
 	dw BeedrillName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -762,7 +762,7 @@ BeedrillCard: ; 31071 (c:5071)
 
 EkansCard: ; 310b2 (c:50b2)
 	db GRASS ; type
-	dw $671 ; gfx
+	gfx EkansCardGfx ; gfx
 	dw EkansName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -815,7 +815,7 @@ EkansCard: ; 310b2 (c:50b2)
 
 ArbokCard: ; 310f3 (c:50f3)
 	db GRASS ; type
-	dw $6d2 ; gfx
+	gfx ArbokCardGfx ; gfx
 	dw ArbokName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -868,7 +868,7 @@ ArbokCard: ; 310f3 (c:50f3)
 
 NidoranFCard: ; 31134 (c:5134)
 	db GRASS ; type
-	dw $733 ; gfx
+	gfx NidoranFCardGfx ; gfx
 	dw NidoranFName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -921,7 +921,7 @@ NidoranFCard: ; 31134 (c:5134)
 
 NidorinaCard: ; 31175 (c:5175)
 	db GRASS ; type
-	dw $794 ; gfx
+	gfx NidorinaCardGfx ; gfx
 	dw NidorinaName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -974,7 +974,7 @@ NidorinaCard: ; 31175 (c:5175)
 
 NidoqueenCard: ; 311b6 (c:51b6)
 	db GRASS ; type
-	dw $800 ; gfx
+	gfx NidoqueenCardGfx ; gfx
 	dw NidoqueenName_ ; name
 	db STAR ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1027,7 +1027,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 
 NidoranMCard: ; 311f7 (c:51f7)
 	db GRASS ; type
-	dw $861 ; gfx
+	gfx NidoranMCardGfx ; gfx
 	dw NidoranMName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -1080,7 +1080,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 
 NidorinoCard: ; 31238 (c:5238)
 	db GRASS ; type
-	dw $8c2 ; gfx
+	gfx NidorinoCardGfx ; gfx
 	dw NidorinoName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -1133,7 +1133,7 @@ NidorinoCard: ; 31238 (c:5238)
 
 NidokingCard: ; 31279 (c:5279)
 	db GRASS ; type
-	dw $923 ; gfx
+	gfx NidokingCardGfx ; gfx
 	dw NidokingName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -1186,7 +1186,7 @@ NidokingCard: ; 31279 (c:5279)
 
 ZubatCard: ; 312ba (c:52ba)
 	db GRASS ; type
-	dw $984 ; gfx
+	gfx ZubatCardGfx ; gfx
 	dw ZubatName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -1239,7 +1239,7 @@ ZubatCard: ; 312ba (c:52ba)
 
 GolbatCard: ; 312fb (c:52fb)
 	db GRASS ; type
-	dw $9e5 ; gfx
+	gfx GolbatCardGfx ; gfx
 	dw GolbatName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -1292,7 +1292,7 @@ GolbatCard: ; 312fb (c:52fb)
 
 OddishCard: ; 3133c (c:533c)
 	db GRASS ; type
-	dw $a46 ; gfx
+	gfx OddishCardGfx ; gfx
 	dw OddishName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1345,7 +1345,7 @@ OddishCard: ; 3133c (c:533c)
 
 GloomCard: ; 3137d (c:537d)
 	db GRASS ; type
-	dw $aa7 ; gfx
+	gfx GloomCardGfx ; gfx
 	dw GloomName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1398,7 +1398,7 @@ GloomCard: ; 3137d (c:537d)
 
 VileplumeCard: ; 313be (c:53be)
 	db GRASS ; type
-	dw $b08 ; gfx
+	gfx VileplumeCardGfx ; gfx
 	dw VileplumeName_ ; name
 	db STAR ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1451,7 +1451,7 @@ VileplumeCard: ; 313be (c:53be)
 
 ParasCard: ; 313ff (c:53ff)
 	db GRASS ; type
-	dw $b69 ; gfx
+	gfx ParasCardGfx ; gfx
 	dw ParasName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1504,7 +1504,7 @@ ParasCard: ; 313ff (c:53ff)
 
 ParasectCard: ; 31440 (c:5440)
 	db GRASS ; type
-	dw $bca ; gfx
+	gfx ParasectCardGfx ; gfx
 	dw ParasectName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1557,7 +1557,7 @@ ParasectCard: ; 31440 (c:5440)
 
 VenonatCard: ; 31481 (c:5481)
 	db GRASS ; type
-	dw $c2b ; gfx
+	gfx VenonatCardGfx ; gfx
 	dw VenonatName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -1610,7 +1610,7 @@ VenonatCard: ; 31481 (c:5481)
 
 VenomothCard: ; 314c2 (c:54c2)
 	db GRASS ; type
-	dw $c8c ; gfx
+	gfx VenomothCardGfx ; gfx
 	dw VenomothName_ ; name
 	db STAR ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -1663,7 +1663,7 @@ VenomothCard: ; 314c2 (c:54c2)
 
 BellsproutCard: ; 31503 (c:5503)
 	db GRASS ; type
-	dw $ced ; gfx
+	gfx BellsproutCardGfx ; gfx
 	dw BellsproutName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -1716,7 +1716,7 @@ BellsproutCard: ; 31503 (c:5503)
 
 WeepinbellCard: ; 31544 (c:5544)
 	db GRASS ; type
-	dw $d4e ; gfx
+	gfx WeepinbellCardGfx ; gfx
 	dw WeepinbellName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -1769,7 +1769,7 @@ WeepinbellCard: ; 31544 (c:5544)
 
 VictreebelCard: ; 31585 (c:5585)
 	db GRASS ; type
-	dw $daf ; gfx
+	gfx VictreebelCardGfx ; gfx
 	dw VictreebelName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -1822,7 +1822,7 @@ VictreebelCard: ; 31585 (c:5585)
 
 GrimerCard: ; 315c6 (c:55c6)
 	db GRASS ; type
-	dw $e10 ; gfx
+	gfx GrimerCardGfx ; gfx
 	dw GrimerName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -1875,7 +1875,7 @@ GrimerCard: ; 315c6 (c:55c6)
 
 MukCard: ; 31607 (c:5607)
 	db GRASS ; type
-	dw $e71 ; gfx
+	gfx MukCardGfx ; gfx
 	dw MukName_ ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -1928,7 +1928,7 @@ MukCard: ; 31607 (c:5607)
 
 ExeggcuteCard: ; 31648 (c:5648)
 	db GRASS ; type
-	dw $ed2 ; gfx
+	gfx ExeggcuteCardGfx ; gfx
 	dw ExeggcuteName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -1981,7 +1981,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 
 ExeggutorCard: ; 31689 (c:5689)
 	db GRASS ; type
-	dw $f33 ; gfx
+	gfx ExeggutorCardGfx ; gfx
 	dw ExeggutorName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -2034,7 +2034,7 @@ ExeggutorCard: ; 31689 (c:5689)
 
 KoffingCard: ; 316ca (c:56ca)
 	db GRASS ; type
-	dw $f94 ; gfx
+	gfx KoffingCardGfx ; gfx
 	dw KoffingName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; set
@@ -2087,7 +2087,7 @@ KoffingCard: ; 316ca (c:56ca)
 
 WeezingCard: ; 3170b (c:570b)
 	db GRASS ; type
-	dw $1000 ; gfx
+	gfx WeezingCardGfx ; gfx
 	dw WeezingName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -2140,7 +2140,7 @@ WeezingCard: ; 3170b (c:570b)
 
 Tangela1Card: ; 3174c (c:574c)
 	db GRASS ; type
-	dw $1061 ; gfx
+	gfx Tangela1CardGfx ; gfx
 	dw TangelaName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; set
@@ -2193,7 +2193,7 @@ Tangela1Card: ; 3174c (c:574c)
 
 Tangela2Card: ; 3178d (c:578d)
 	db GRASS ; type
-	dw $10c2 ; gfx
+	gfx Tangela2CardGfx ; gfx
 	dw TangelaName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | GB ; set
@@ -2246,7 +2246,7 @@ Tangela2Card: ; 3178d (c:578d)
 
 ScytherCard: ; 317ce (c:57ce)
 	db GRASS ; type
-	dw $1123 ; gfx
+	gfx ScytherCardGfx ; gfx
 	dw ScytherName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -2299,7 +2299,7 @@ ScytherCard: ; 317ce (c:57ce)
 
 PinsirCard: ; 3180f (c:580f)
 	db GRASS ; type
-	dw $1184 ; gfx
+	gfx PinsirCardGfx ; gfx
 	dw PinsirName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -2352,7 +2352,7 @@ PinsirCard: ; 3180f (c:580f)
 
 CharmanderCard: ; 31850 (c:5850)
 	db FIRE ; type
-	dw $11e5 ; gfx
+	gfx CharmanderCardGfx ; gfx
 	dw CharmanderName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2405,7 +2405,7 @@ CharmanderCard: ; 31850 (c:5850)
 
 CharmeleonCard: ; 31891 (c:5891)
 	db FIRE ; type
-	dw $1246 ; gfx
+	gfx CharmeleonCardGfx ; gfx
 	dw CharmeleonName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2458,7 +2458,7 @@ CharmeleonCard: ; 31891 (c:5891)
 
 CharizardCard: ; 318d2 (c:58d2)
 	db FIRE ; type
-	dw $12a7 ; gfx
+	gfx CharizardCardGfx ; gfx
 	dw CharizardName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -2511,7 +2511,7 @@ CharizardCard: ; 318d2 (c:58d2)
 
 VulpixCard: ; 31913 (c:5913)
 	db FIRE ; type
-	dw $1308 ; gfx
+	gfx VulpixCardGfx ; gfx
 	dw VulpixName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | NONE ; set
@@ -2564,7 +2564,7 @@ VulpixCard: ; 31913 (c:5913)
 
 Ninetails1Card: ; 31954 (c:5954)
 	db FIRE ; type
-	dw $1369 ; gfx
+	gfx Ninetails1CardGfx ; gfx
 	dw NinetailsName_ ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; set
@@ -2617,7 +2617,7 @@ Ninetails1Card: ; 31954 (c:5954)
 
 Ninetails2Card: ; 31995 (c:5995)
 	db FIRE ; type
-	dw $13ca ; gfx
+	gfx Ninetails2CardGfx ; gfx
 	dw NinetailsName_ ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; set
@@ -2670,7 +2670,7 @@ Ninetails2Card: ; 31995 (c:5995)
 
 GrowlitheCard: ; 319d6 (c:59d6)
 	db FIRE ; type
-	dw $142b ; gfx
+	gfx GrowlitheCardGfx ; gfx
 	dw GrowlitheName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2723,7 +2723,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 
 Arcanine1Card: ; 31a17 (c:5a17)
 	db FIRE ; type
-	dw $148c ; gfx
+	gfx Arcanine1CardGfx ; gfx
 	dw ArcanineName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -2776,7 +2776,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 
 Arcanine2Card: ; 31a58 (c:5a58)
 	db FIRE ; type
-	dw $14ed ; gfx
+	gfx Arcanine2CardGfx ; gfx
 	dw ArcanineName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2829,7 +2829,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 
 PonytaCard: ; 31a99 (c:5a99)
 	db FIRE ; type
-	dw $154e ; gfx
+	gfx PonytaCardGfx ; gfx
 	dw PonytaName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2882,7 +2882,7 @@ PonytaCard: ; 31a99 (c:5a99)
 
 RapidashCard: ; 31ada (c:5ada)
 	db FIRE ; type
-	dw $15af ; gfx
+	gfx RapidashCardGfx ; gfx
 	dw RapidashName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -2935,7 +2935,7 @@ RapidashCard: ; 31ada (c:5ada)
 
 Magmar1Card: ; 31b1b (c:5b1b)
 	db FIRE ; type
-	dw $1610 ; gfx
+	gfx Magmar1CardGfx ; gfx
 	dw MagmarName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -2988,7 +2988,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 
 Magmar2Card: ; 31b5c (c:5b5c)
 	db FIRE ; type
-	dw $1671 ; gfx
+	gfx Magmar2CardGfx ; gfx
 	dw MagmarName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -3041,7 +3041,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 
 Flareon1Card: ; 31b9d (c:5b9d)
 	db FIRE ; type
-	dw $16d2 ; gfx
+	gfx Flareon1CardGfx ; gfx
 	dw FlareonName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; set
@@ -3094,7 +3094,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 
 Flareon2Card: ; 31bde (c:5bde)
 	db FIRE ; type
-	dw $1733 ; gfx
+	gfx Flareon2CardGfx ; gfx
 	dw FlareonName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -3147,7 +3147,7 @@ Flareon2Card: ; 31bde (c:5bde)
 
 Moltres1Card: ; 31c1f (c:5c1f)
 	db FIRE ; type
-	dw $1794 ; gfx
+	gfx Moltres1CardGfx ; gfx
 	dw MoltresName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -3200,7 +3200,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 
 Moltres2Card: ; 31c60 (c:5c60)
 	db FIRE ; type
-	dw $1800 ; gfx
+	gfx Moltres2CardGfx ; gfx
 	dw MoltresName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -3253,7 +3253,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 
 SquirtleCard: ; 31ca1 (c:5ca1)
 	db WATER ; type
-	dw $1861 ; gfx
+	gfx SquirtleCardGfx ; gfx
 	dw SquirtleName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -3306,7 +3306,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 
 WartortleCard: ; 31ce2 (c:5ce2)
 	db WATER ; type
-	dw $18c2 ; gfx
+	gfx WartortleCardGfx ; gfx
 	dw WartortleName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -3359,7 +3359,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 
 BlastoiseCard: ; 31d23 (c:5d23)
 	db WATER ; type
-	dw $1923 ; gfx
+	gfx BlastoiseCardGfx ; gfx
 	dw BlastoiseName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -3412,7 +3412,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 
 PsyduckCard: ; 31d64 (c:5d64)
 	db WATER ; type
-	dw $1984 ; gfx
+	gfx PsyduckCardGfx ; gfx
 	dw PsyduckName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -3465,7 +3465,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 
 GolduckCard: ; 31da5 (c:5da5)
 	db WATER ; type
-	dw $19e5 ; gfx
+	gfx GolduckCardGfx ; gfx
 	dw GolduckName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -3518,7 +3518,7 @@ GolduckCard: ; 31da5 (c:5da5)
 
 PoliwagCard: ; 31de6 (c:5de6)
 	db WATER ; type
-	dw $1a46 ; gfx
+	gfx PoliwagCardGfx ; gfx
 	dw PoliwagName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; set
@@ -3571,7 +3571,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 
 PoliwhirlCard: ; 31e27 (c:5e27)
 	db WATER ; type
-	dw $1aa7 ; gfx
+	gfx PoliwhirlCardGfx ; gfx
 	dw PoliwhirlName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | NONE ; set
@@ -3624,7 +3624,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 
 PoliwrathCard: ; 31e68 (c:5e68)
 	db WATER ; type
-	dw $1b08 ; gfx
+	gfx PoliwrathCardGfx ; gfx
 	dw PoliwrathName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -3677,7 +3677,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 
 TentacoolCard: ; 31ea9 (c:5ea9)
 	db WATER ; type
-	dw $1b69 ; gfx
+	gfx TentacoolCardGfx ; gfx
 	dw TentacoolName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -3730,7 +3730,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 
 TentacruelCard: ; 31eea (c:5eea)
 	db WATER ; type
-	dw $1bca ; gfx
+	gfx TentacruelCardGfx ; gfx
 	dw TentacruelName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -3783,7 +3783,7 @@ TentacruelCard: ; 31eea (c:5eea)
 
 SeelCard: ; 31f2b (c:5f2b)
 	db WATER ; type
-	dw $1c2b ; gfx
+	gfx SeelCardGfx ; gfx
 	dw SeelName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -3836,7 +3836,7 @@ SeelCard: ; 31f2b (c:5f2b)
 
 DewgongCard: ; 31f6c (c:5f6c)
 	db WATER ; type
-	dw $1c8c ; gfx
+	gfx DewgongCardGfx ; gfx
 	dw DewgongName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -3889,7 +3889,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 
 ShellderCard: ; 31fad (c:5fad)
 	db WATER ; type
-	dw $1ced ; gfx
+	gfx ShellderCardGfx ; gfx
 	dw ShellderName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -3942,7 +3942,7 @@ ShellderCard: ; 31fad (c:5fad)
 
 CloysterCard: ; 31fee (c:5fee)
 	db WATER ; type
-	dw $1d4e ; gfx
+	gfx CloysterCardGfx ; gfx
 	dw CloysterName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -3995,7 +3995,7 @@ CloysterCard: ; 31fee (c:5fee)
 
 KrabbyCard: ; 3202f (c:602f)
 	db WATER ; type
-	dw $1daf ; gfx
+	gfx KrabbyCardGfx ; gfx
 	dw KrabbyName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -4048,7 +4048,7 @@ KrabbyCard: ; 3202f (c:602f)
 
 KinglerCard: ; 32070 (c:6070)
 	db WATER ; type
-	dw $1e10 ; gfx
+	gfx KinglerCardGfx ; gfx
 	dw KinglerName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -4101,7 +4101,7 @@ KinglerCard: ; 32070 (c:6070)
 
 HorseaCard: ; 320b1 (c:60b1)
 	db WATER ; type
-	dw $1e71 ; gfx
+	gfx HorseaCardGfx ; gfx
 	dw HorseaName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -4154,7 +4154,7 @@ HorseaCard: ; 320b1 (c:60b1)
 
 SeadraCard: ; 320f2 (c:60f2)
 	db WATER ; type
-	dw $1ed2 ; gfx
+	gfx SeadraCardGfx ; gfx
 	dw SeadraName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -4207,7 +4207,7 @@ SeadraCard: ; 320f2 (c:60f2)
 
 GoldeenCard: ; 32133 (c:6133)
 	db WATER ; type
-	dw $1f33 ; gfx
+	gfx GoldeenCardGfx ; gfx
 	dw GoldeenName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -4260,7 +4260,7 @@ GoldeenCard: ; 32133 (c:6133)
 
 SeakingCard: ; 32174 (c:6174)
 	db WATER ; type
-	dw $1f94 ; gfx
+	gfx SeakingCardGfx ; gfx
 	dw SeakingName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -4313,7 +4313,7 @@ SeakingCard: ; 32174 (c:6174)
 
 StaryuCard: ; 321b5 (c:61b5)
 	db WATER ; type
-	dw $2000 ; gfx
+	gfx StaryuCardGfx ; gfx
 	dw StaryuName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -4366,7 +4366,7 @@ StaryuCard: ; 321b5 (c:61b5)
 
 StarmieCard: ; 321f6 (c:61f6)
 	db WATER ; type
-	dw $2061 ; gfx
+	gfx StarmieCardGfx ; gfx
 	dw StarmieName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -4419,7 +4419,7 @@ StarmieCard: ; 321f6 (c:61f6)
 
 MagikarpCard: ; 32237 (c:6237)
 	db WATER ; type
-	dw $20c2 ; gfx
+	gfx MagikarpCardGfx ; gfx
 	dw MagikarpName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -4472,7 +4472,7 @@ MagikarpCard: ; 32237 (c:6237)
 
 GyaradosCard: ; 32278 (c:6278)
 	db WATER ; type
-	dw $2123 ; gfx
+	gfx GyaradosCardGfx ; gfx
 	dw GyaradosName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -4525,7 +4525,7 @@ GyaradosCard: ; 32278 (c:6278)
 
 LaprasCard: ; 322b9 (c:62b9)
 	db WATER ; type
-	dw $2184 ; gfx
+	gfx LaprasCardGfx ; gfx
 	dw LaprasName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -4578,7 +4578,7 @@ LaprasCard: ; 322b9 (c:62b9)
 
 Vaporeon1Card: ; 322fa (c:62fa)
 	db WATER ; type
-	dw $21e5 ; gfx
+	gfx Vaporeon1CardGfx ; gfx
 	dw VaporeonName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; set
@@ -4631,7 +4631,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 
 Vaporeon2Card: ; 3233b (c:633b)
 	db WATER ; type
-	dw $2246 ; gfx
+	gfx Vaporeon2CardGfx ; gfx
 	dw VaporeonName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -4684,7 +4684,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 
 OmanyteCard: ; 3237c (c:637c)
 	db WATER ; type
-	dw $22a7 ; gfx
+	gfx OmanyteCardGfx ; gfx
 	dw OmanyteName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -4737,7 +4737,7 @@ OmanyteCard: ; 3237c (c:637c)
 
 OmastarCard: ; 323bd (c:63bd)
 	db WATER ; type
-	dw $2308 ; gfx
+	gfx OmastarCardGfx ; gfx
 	dw OmastarName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -4790,7 +4790,7 @@ OmastarCard: ; 323bd (c:63bd)
 
 Articuno1Card: ; 323fe (c:63fe)
 	db WATER ; type
-	dw $2369 ; gfx
+	gfx Articuno1CardGfx ; gfx
 	dw ArticunoName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -4843,7 +4843,7 @@ Articuno1Card: ; 323fe (c:63fe)
 
 Articuno2Card: ; 3243f (c:643f)
 	db WATER ; type
-	dw $23ca ; gfx
+	gfx Articuno2CardGfx ; gfx
 	dw ArticunoName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -4896,7 +4896,7 @@ Articuno2Card: ; 3243f (c:643f)
 
 Pikachu1Card: ; 32480 (c:6480)
 	db LIGHTNING ; type
-	dw $242b ; gfx
+	gfx Pikachu1CardGfx ; gfx
 	dw PikachuName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -4949,7 +4949,7 @@ Pikachu1Card: ; 32480 (c:6480)
 
 Pikachu2Card: ; 324c1 (c:64c1)
 	db LIGHTNING ; type
-	dw $248c ; gfx
+	gfx Pikachu2CardGfx ; gfx
 	dw PikachuName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -5002,7 +5002,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 
 Pikachu3Card: ; 32502 (c:6502)
 	db LIGHTNING ; type
-	dw $24ed ; gfx
+	gfx Pikachu3CardGfx ; gfx
 	dw PikachuName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5055,7 +5055,7 @@ Pikachu3Card: ; 32502 (c:6502)
 
 Pikachu4Card: ; 32543 (c:6543)
 	db LIGHTNING ; type
-	dw $254e ; gfx
+	gfx Pikachu4CardGfx ; gfx
 	dw PikachuName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5108,7 +5108,7 @@ Pikachu4Card: ; 32543 (c:6543)
 
 FlyingPikachuCard: ; 32584 (c:6584)
 	db LIGHTNING ; type
-	dw $25af ; gfx
+	gfx FlyingPikachuCardGfx ; gfx
 	dw FlyingPikachuName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5161,7 +5161,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 
 SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db LIGHTNING ; type
-	dw $2610 ; gfx
+	gfx SurfingPikachu1CardGfx ; gfx
 	dw SurfingPikachuName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5214,7 +5214,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 
 SurfingPikachu2Card: ; 32606 (c:6606)
 	db LIGHTNING ; type
-	dw $2671 ; gfx
+	gfx SurfingPikachu2CardGfx ; gfx
 	dw SurfingPikachuName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5267,7 +5267,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 
 Raichu1Card: ; 32647 (c:6647)
 	db LIGHTNING ; type
-	dw $26d2 ; gfx
+	gfx Raichu1CardGfx ; gfx
 	dw RaichuName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -5320,7 +5320,7 @@ Raichu1Card: ; 32647 (c:6647)
 
 Raichu2Card: ; 32688 (c:6688)
 	db LIGHTNING ; type
-	dw $2733 ; gfx
+	gfx Raichu2CardGfx ; gfx
 	dw RaichuName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -5373,7 +5373,7 @@ Raichu2Card: ; 32688 (c:6688)
 
 Magnemite1Card: ; 326c9 (c:66c9)
 	db LIGHTNING ; type
-	dw $2794 ; gfx
+	gfx Magnemite1CardGfx ; gfx
 	dw MagnemiteName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -5426,7 +5426,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 
 Magnemite2Card: ; 3270a (c:670a)
 	db LIGHTNING ; type
-	dw $2800 ; gfx
+	gfx Magnemite2CardGfx ; gfx
 	dw MagnemiteName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | GB ; set
@@ -5479,7 +5479,7 @@ Magnemite2Card: ; 3270a (c:670a)
 
 Magneton1Card: ; 3274b (c:674b)
 	db LIGHTNING ; type
-	dw $2861 ; gfx
+	gfx Magneton1CardGfx ; gfx
 	dw MagnetonName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -5532,7 +5532,7 @@ Magneton1Card: ; 3274b (c:674b)
 
 Magneton2Card: ; 3278c (c:678c)
 	db LIGHTNING ; type
-	dw $28c2 ; gfx
+	gfx Magneton2CardGfx ; gfx
 	dw MagnetonName_ ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -5585,7 +5585,7 @@ Magneton2Card: ; 3278c (c:678c)
 
 VoltorbCard: ; 327cd (c:67cd)
 	db LIGHTNING ; type
-	dw $2923 ; gfx
+	gfx VoltorbCardGfx ; gfx
 	dw VoltorbName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | NONE ; set
@@ -5638,7 +5638,7 @@ VoltorbCard: ; 327cd (c:67cd)
 
 Electrode1Card: ; 3280e (c:680e)
 	db LIGHTNING ; type
-	dw $2984 ; gfx
+	gfx Electrode1CardGfx ; gfx
 	dw ElectrodeName_ ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; set
@@ -5691,7 +5691,7 @@ Electrode1Card: ; 3280e (c:680e)
 
 Electrode2Card: ; 3284f (c:684f)
 	db LIGHTNING ; type
-	dw $29e5 ; gfx
+	gfx Electrode2CardGfx ; gfx
 	dw ElectrodeName_ ; name
 	db STAR ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -5744,7 +5744,7 @@ Electrode2Card: ; 3284f (c:684f)
 
 Electabuzz1Card: ; 32890 (c:6890)
 	db LIGHTNING ; type
-	dw $2a46 ; gfx
+	gfx Electabuzz1CardGfx ; gfx
 	dw ElectabuzzName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -5797,7 +5797,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 
 Electabuzz2Card: ; 328d1 (c:68d1)
 	db LIGHTNING ; type
-	dw $2aa7 ; gfx
+	gfx Electabuzz2CardGfx ; gfx
 	dw ElectabuzzName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -5850,7 +5850,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 
 Jolteon1Card: ; 32912 (c:6912)
 	db LIGHTNING ; type
-	dw $2b08 ; gfx
+	gfx Jolteon1CardGfx ; gfx
 	dw JolteonName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | GB ; set
@@ -5903,7 +5903,7 @@ Jolteon1Card: ; 32912 (c:6912)
 
 Jolteon2Card: ; 32953 (c:6953)
 	db LIGHTNING ; type
-	dw $2b69 ; gfx
+	gfx Jolteon2CardGfx ; gfx
 	dw JolteonName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -5956,7 +5956,7 @@ Jolteon2Card: ; 32953 (c:6953)
 
 Zapdos1Card: ; 32994 (c:6994)
 	db LIGHTNING ; type
-	dw $2bca ; gfx
+	gfx Zapdos1CardGfx ; gfx
 	dw ZapdosName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -6009,7 +6009,7 @@ Zapdos1Card: ; 32994 (c:6994)
 
 Zapdos2Card: ; 329d5 (c:69d5)
 	db LIGHTNING ; type
-	dw $2c2b ; gfx
+	gfx Zapdos2CardGfx ; gfx
 	dw ZapdosName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -6062,7 +6062,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 
 Zapdos3Card: ; 32a16 (c:6a16)
 	db LIGHTNING ; type
-	dw $2c8c ; gfx
+	gfx Zapdos3CardGfx ; gfx
 	dw ZapdosName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -6115,7 +6115,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 
 SandshrewCard: ; 32a57 (c:6a57)
 	db FIGHTING ; type
-	dw $2ced ; gfx
+	gfx SandshrewCardGfx ; gfx
 	dw SandshrewName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -6168,7 +6168,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 
 SandslashCard: ; 32a98 (c:6a98)
 	db FIGHTING ; type
-	dw $2d4e ; gfx
+	gfx SandslashCardGfx ; gfx
 	dw SandslashName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -6221,7 +6221,7 @@ SandslashCard: ; 32a98 (c:6a98)
 
 DiglettCard: ; 32ad9 (c:6ad9)
 	db FIGHTING ; type
-	dw $2daf ; gfx
+	gfx DiglettCardGfx ; gfx
 	dw DiglettName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -6274,7 +6274,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 
 DugtrioCard: ; 32b1a (c:6b1a)
 	db FIGHTING ; type
-	dw $2e10 ; gfx
+	gfx DugtrioCardGfx ; gfx
 	dw DugtrioName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -6327,7 +6327,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 
 MankeyCard: ; 32b5b (c:6b5b)
 	db FIGHTING ; type
-	dw $2e71 ; gfx
+	gfx MankeyCardGfx ; gfx
 	dw MankeyName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -6380,7 +6380,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 
 PrimeapeCard: ; 32b9c (c:6b9c)
 	db FIGHTING ; type
-	dw $2ed2 ; gfx
+	gfx PrimeapeCardGfx ; gfx
 	dw PrimeapeName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -6433,7 +6433,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 
 MachopCard: ; 32bdd (c:6bdd)
 	db FIGHTING ; type
-	dw $2f33 ; gfx
+	gfx MachopCardGfx ; gfx
 	dw MachopName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -6486,7 +6486,7 @@ MachopCard: ; 32bdd (c:6bdd)
 
 MachokeCard: ; 32c1e (c:6c1e)
 	db FIGHTING ; type
-	dw $2f94 ; gfx
+	gfx MachokeCardGfx ; gfx
 	dw MachokeName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -6539,7 +6539,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 
 MachampCard: ; 32c5f (c:6c5f)
 	db FIGHTING ; type
-	dw $3000 ; gfx
+	gfx MachampCardGfx ; gfx
 	dw MachampName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -6592,7 +6592,7 @@ MachampCard: ; 32c5f (c:6c5f)
 
 GeodudeCard: ; 32ca0 (c:6ca0)
 	db FIGHTING ; type
-	dw $3061 ; gfx
+	gfx GeodudeCardGfx ; gfx
 	dw GeodudeName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -6645,7 +6645,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 
 GravelerCard: ; 32ce1 (c:6ce1)
 	db FIGHTING ; type
-	dw $30c2 ; gfx
+	gfx GravelerCardGfx ; gfx
 	dw GravelerName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -6698,7 +6698,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 
 GolemCard: ; 32d22 (c:6d22)
 	db FIGHTING ; type
-	dw $3123 ; gfx
+	gfx GolemCardGfx ; gfx
 	dw GolemName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -6751,7 +6751,7 @@ GolemCard: ; 32d22 (c:6d22)
 
 OnixCard: ; 32d63 (c:6d63)
 	db FIGHTING ; type
-	dw $3184 ; gfx
+	gfx OnixCardGfx ; gfx
 	dw OnixName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; set
@@ -6804,7 +6804,7 @@ OnixCard: ; 32d63 (c:6d63)
 
 CuboneCard: ; 32da4 (c:6da4)
 	db FIGHTING ; type
-	dw $31e5 ; gfx
+	gfx CuboneCardGfx ; gfx
 	dw CuboneName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -6857,7 +6857,7 @@ CuboneCard: ; 32da4 (c:6da4)
 
 Marowak1Card: ; 32de5 (c:6de5)
 	db FIGHTING ; type
-	dw $3246 ; gfx
+	gfx Marowak1CardGfx ; gfx
 	dw MarowakName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -6910,7 +6910,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 
 Marowak2Card: ; 32e26 (c:6e26)
 	db FIGHTING ; type
-	dw $32a7 ; gfx
+	gfx Marowak2CardGfx ; gfx
 	dw MarowakName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | GB ; set
@@ -6963,7 +6963,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 
 HitmonleeCard: ; 32e67 (c:6e67)
 	db FIGHTING ; type
-	dw $3308 ; gfx
+	gfx HitmonleeCardGfx ; gfx
 	dw HitmonleeName_ ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -7016,7 +7016,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 
 HitmonchanCard: ; 32ea8 (c:6ea8)
 	db FIGHTING ; type
-	dw $3369 ; gfx
+	gfx HitmonchanCardGfx ; gfx
 	dw HitmonchanName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -7069,7 +7069,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 
 RhyhornCard: ; 32ee9 (c:6ee9)
 	db FIGHTING ; type
-	dw $33ca ; gfx
+	gfx RhyhornCardGfx ; gfx
 	dw RhyhornName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -7122,7 +7122,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 
 RhydonCard: ; 32f2a (c:6f2a)
 	db FIGHTING ; type
-	dw $342b ; gfx
+	gfx RhydonCardGfx ; gfx
 	dw RhydonName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -7175,7 +7175,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 
 KabutoCard: ; 32f6b (c:6f6b)
 	db FIGHTING ; type
-	dw $348c ; gfx
+	gfx KabutoCardGfx ; gfx
 	dw KabutoName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -7228,7 +7228,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 
 KabutopsCard: ; 32fac (c:6fac)
 	db FIGHTING ; type
-	dw $34ed ; gfx
+	gfx KabutopsCardGfx ; gfx
 	dw KabutopsName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -7281,7 +7281,7 @@ KabutopsCard: ; 32fac (c:6fac)
 
 AerodactylCard: ; 32fed (c:6fed)
 	db FIGHTING ; type
-	dw $354e ; gfx
+	gfx AerodactylCardGfx ; gfx
 	dw AerodactylName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -7334,7 +7334,7 @@ AerodactylCard: ; 32fed (c:6fed)
 
 AbraCard: ; 3302e (c:702e)
 	db PSYCHIC ; type
-	dw $35af ; gfx
+	gfx AbraCardGfx ; gfx
 	dw AbraName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -7387,7 +7387,7 @@ AbraCard: ; 3302e (c:702e)
 
 KadabraCard: ; 3306f (c:706f)
 	db PSYCHIC ; type
-	dw $3610 ; gfx
+	gfx KadabraCardGfx ; gfx
 	dw KadabraName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -7440,7 +7440,7 @@ KadabraCard: ; 3306f (c:706f)
 
 AlakazamCard: ; 330b0 (c:70b0)
 	db PSYCHIC ; type
-	dw $3671 ; gfx
+	gfx AlakazamCardGfx ; gfx
 	dw AlakazamName_ ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; set
@@ -7493,7 +7493,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 
 Slowpoke1Card: ; 330f1 (c:70f1)
 	db PSYCHIC ; type
-	dw $36d2 ; gfx
+	gfx Slowpoke1CardGfx ; gfx
 	dw SlowpokeName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -7546,7 +7546,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 
 Slowpoke2Card: ; 33132 (c:7132)
 	db PSYCHIC ; type
-	dw $3733 ; gfx
+	gfx Slowpoke2CardGfx ; gfx
 	dw SlowpokeName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -7599,7 +7599,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 
 SlowbroCard: ; 33173 (c:7173)
 	db PSYCHIC ; type
-	dw $3794 ; gfx
+	gfx SlowbroCardGfx ; gfx
 	dw SlowbroName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -7652,7 +7652,7 @@ SlowbroCard: ; 33173 (c:7173)
 
 Gastly1Card: ; 331b4 (c:71b4)
 	db PSYCHIC ; type
-	dw $3800 ; gfx
+	gfx Gastly1CardGfx ; gfx
 	dw GastlyName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -7705,7 +7705,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 
 Gastly2Card: ; 331f5 (c:71f5)
 	db PSYCHIC ; type
-	dw $3861 ; gfx
+	gfx Gastly2CardGfx ; gfx
 	dw GastlyName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -7758,7 +7758,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 
 Haunter1Card: ; 33236 (c:7236)
 	db PSYCHIC ; type
-	dw $38c2 ; gfx
+	gfx Haunter1CardGfx ; gfx
 	dw HaunterName_ ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -7811,7 +7811,7 @@ Haunter1Card: ; 33236 (c:7236)
 
 Haunter2Card: ; 33277 (c:7277)
 	db PSYCHIC ; type
-	dw $3923 ; gfx
+	gfx Haunter2CardGfx ; gfx
 	dw HaunterName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -7864,7 +7864,7 @@ Haunter2Card: ; 33277 (c:7277)
 
 GengarCard: ; 332b8 (c:72b8)
 	db PSYCHIC ; type
-	dw $3984 ; gfx
+	gfx GengarCardGfx ; gfx
 	dw GengarName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -7917,7 +7917,7 @@ GengarCard: ; 332b8 (c:72b8)
 
 DrowzeeCard: ; 332f9 (c:72f9)
 	db PSYCHIC ; type
-	dw $39e5 ; gfx
+	gfx DrowzeeCardGfx ; gfx
 	dw DrowzeeName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | NONE ; set
@@ -7970,7 +7970,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 
 HypnoCard: ; 3333a (c:733a)
 	db PSYCHIC ; type
-	dw $3a46 ; gfx
+	gfx HypnoCardGfx ; gfx
 	dw HypnoName_ ; name
 	db STAR ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -8023,7 +8023,7 @@ HypnoCard: ; 3333a (c:733a)
 
 MrMimeCard: ; 3337b (c:737b)
 	db PSYCHIC ; type
-	dw $3aa7 ; gfx
+	gfx MrMimeCardGfx ; gfx
 	dw MrMimeName_ ; name
 	db STAR ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -8076,7 +8076,7 @@ MrMimeCard: ; 3337b (c:737b)
 
 JynxCard: ; 333bc (c:73bc)
 	db PSYCHIC ; type
-	dw $3b08 ; gfx
+	gfx JynxCardGfx ; gfx
 	dw JynxName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -8129,7 +8129,7 @@ JynxCard: ; 333bc (c:73bc)
 
 Mewtwo1Card: ; 333fd (c:73fd)
 	db PSYCHIC ; type
-	dw $3b69 ; gfx
+	gfx Mewtwo1CardGfx ; gfx
 	dw MewtwoName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -8182,7 +8182,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 
 Mewtwo2Card: ; 3343e (c:743e)
 	db PSYCHIC ; type
-	dw $3bca ; gfx
+	gfx Mewtwo2CardGfx ; gfx
 	dw MewtwoName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -8235,7 +8235,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 
 Mewtwo3Card: ; 3347f (c:747f)
 	db PSYCHIC ; type
-	dw $3c2b ; gfx
+	gfx Mewtwo3CardGfx ; gfx
 	dw MewtwoName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -8288,7 +8288,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 
 Mew1Card: ; 334c0 (c:74c0)
 	db PSYCHIC ; type
-	dw $3c8c ; gfx
+	gfx Mew1CardGfx ; gfx
 	dw MewName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -8341,7 +8341,7 @@ Mew1Card: ; 334c0 (c:74c0)
 
 Mew2Card: ; 33501 (c:7501)
 	db PSYCHIC ; type
-	dw $3ced ; gfx
+	gfx Mew2CardGfx ; gfx
 	dw MewName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -8394,7 +8394,7 @@ Mew2Card: ; 33501 (c:7501)
 
 Mew3Card: ; 33542 (c:7542)
 	db PSYCHIC ; type
-	dw $3d4e ; gfx
+	gfx Mew3CardGfx ; gfx
 	dw MewName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -8447,7 +8447,7 @@ Mew3Card: ; 33542 (c:7542)
 
 PidgeyCard: ; 33583 (c:7583)
 	db COLORLESS ; type
-	dw $3daf ; gfx
+	gfx PidgeyCardGfx ; gfx
 	dw PidgeyName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -8500,7 +8500,7 @@ PidgeyCard: ; 33583 (c:7583)
 
 PidgeottoCard: ; 335c4 (c:75c4)
 	db COLORLESS ; type
-	dw $3e10 ; gfx
+	gfx PidgeottoCardGfx ; gfx
 	dw PidgeottoName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -8553,7 +8553,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 
 Pidgeot1Card: ; 33605 (c:7605)
 	db COLORLESS ; type
-	dw $3e71 ; gfx
+	gfx Pidgeot1CardGfx ; gfx
 	dw PidgeotName_ ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; set
@@ -8606,7 +8606,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 
 Pidgeot2Card: ; 33646 (c:7646)
 	db COLORLESS ; type
-	dw $3ed2 ; gfx
+	gfx Pidgeot2CardGfx ; gfx
 	dw PidgeotName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -8659,7 +8659,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 
 RattataCard: ; 33687 (c:7687)
 	db COLORLESS ; type
-	dw $3f33 ; gfx
+	gfx RattataCardGfx ; gfx
 	dw RattataName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -8712,7 +8712,7 @@ RattataCard: ; 33687 (c:7687)
 
 RaticateCard: ; 336c8 (c:76c8)
 	db COLORLESS ; type
-	dw $3f94 ; gfx
+	gfx RaticateCardGfx ; gfx
 	dw RaticateName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -8765,7 +8765,7 @@ RaticateCard: ; 336c8 (c:76c8)
 
 SpearowCard: ; 33709 (c:7709)
 	db COLORLESS ; type
-	dw $4000 ; gfx
+	gfx SpearowCardGfx ; gfx
 	dw SpearowName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -8818,7 +8818,7 @@ SpearowCard: ; 33709 (c:7709)
 
 FearowCard: ; 3374a (c:774a)
 	db COLORLESS ; type
-	dw $4061 ; gfx
+	gfx FearowCardGfx ; gfx
 	dw FearowName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -8871,7 +8871,7 @@ FearowCard: ; 3374a (c:774a)
 
 ClefairyCard: ; 3378b (c:778b)
 	db COLORLESS ; type
-	dw $40c2 ; gfx
+	gfx ClefairyCardGfx ; gfx
 	dw ClefairyName_ ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; set
@@ -8924,7 +8924,7 @@ ClefairyCard: ; 3378b (c:778b)
 
 ClefableCard: ; 337cc (c:77cc)
 	db COLORLESS ; type
-	dw $4123 ; gfx
+	gfx ClefableCardGfx ; gfx
 	dw ClefableName_ ; name
 	db STAR ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -8977,7 +8977,7 @@ ClefableCard: ; 337cc (c:77cc)
 
 Jigglypuff1Card: ; 3380d (c:780d)
 	db COLORLESS ; type
-	dw $4184 ; gfx
+	gfx Jigglypuff1CardGfx ; gfx
 	dw JigglypuffName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -9030,7 +9030,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 
 Jigglypuff2Card: ; 3384e (c:784e)
 	db COLORLESS ; type
-	dw $41e5 ; gfx
+	gfx Jigglypuff2CardGfx ; gfx
 	dw JigglypuffName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | GB ; set
@@ -9083,7 +9083,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 
 Jigglypuff3Card: ; 3388f (c:788f)
 	db COLORLESS ; type
-	dw $4246 ; gfx
+	gfx Jigglypuff3CardGfx ; gfx
 	dw JigglypuffName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -9136,7 +9136,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 
 WigglytuffCard: ; 338d0 (c:78d0)
 	db COLORLESS ; type
-	dw $42a7 ; gfx
+	gfx WigglytuffCardGfx ; gfx
 	dw WigglytuffName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -9189,7 +9189,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 
 Meowth1Card: ; 33911 (c:7911)
 	db COLORLESS ; type
-	dw $4308 ; gfx
+	gfx Meowth1CardGfx ; gfx
 	dw MeowthName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | GB ; set
@@ -9242,7 +9242,7 @@ Meowth1Card: ; 33911 (c:7911)
 
 Meowth2Card: ; 33952 (c:7952)
 	db COLORLESS ; type
-	dw $4369 ; gfx
+	gfx Meowth2CardGfx ; gfx
 	dw MeowthName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -9295,7 +9295,7 @@ Meowth2Card: ; 33952 (c:7952)
 
 PersianCard: ; 33993 (c:7993)
 	db COLORLESS ; type
-	dw $43ca ; gfx
+	gfx PersianCardGfx ; gfx
 	dw PersianName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -9348,7 +9348,7 @@ PersianCard: ; 33993 (c:7993)
 
 FarfetchdCard: ; 339d4 (c:79d4)
 	db COLORLESS ; type
-	dw $442b ; gfx
+	gfx FarfetchdCardGfx ; gfx
 	dw FarfetchdName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | NONE ; set
@@ -9401,7 +9401,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 
 DoduoCard: ; 33a15 (c:7a15)
 	db COLORLESS ; type
-	dw $448c ; gfx
+	gfx DoduoCardGfx ; gfx
 	dw DoduoName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | NONE ; set
@@ -9454,7 +9454,7 @@ DoduoCard: ; 33a15 (c:7a15)
 
 DodrioCard: ; 33a56 (c:7a56)
 	db COLORLESS ; type
-	dw $44ed ; gfx
+	gfx DodrioCardGfx ; gfx
 	dw DodrioName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | JUNGLE ; set
@@ -9507,7 +9507,7 @@ DodrioCard: ; 33a56 (c:7a56)
 
 LickitungCard: ; 33a97 (c:7a97)
 	db COLORLESS ; type
-	dw $454e ; gfx
+	gfx LickitungCardGfx ; gfx
 	dw LickitungName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -9560,7 +9560,7 @@ LickitungCard: ; 33a97 (c:7a97)
 
 ChanseyCard: ; 33ad8 (c:7ad8)
 	db COLORLESS ; type
-	dw $45af ; gfx
+	gfx ChanseyCardGfx ; gfx
 	dw ChanseyName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -9613,7 +9613,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 
 KangaskhanCard: ; 33b19 (c:7b19)
 	db COLORLESS ; type
-	dw $4610 ; gfx
+	gfx KangaskhanCardGfx ; gfx
 	dw KangaskhanName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -9666,7 +9666,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 
 TaurosCard: ; 33b5a (c:7b5a)
 	db COLORLESS ; type
-	dw $4671 ; gfx
+	gfx TaurosCardGfx ; gfx
 	dw TaurosName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | JUNGLE ; set
@@ -9719,7 +9719,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 
 DittoCard: ; 33b9b (c:7b9b)
 	db COLORLESS ; type
-	dw $46d2 ; gfx
+	gfx DittoCardGfx ; gfx
 	dw DittoName_ ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; set
@@ -9772,7 +9772,7 @@ DittoCard: ; 33b9b (c:7b9b)
 
 EeveeCard: ; 33bdc (c:7bdc)
 	db COLORLESS ; type
-	dw $4733 ; gfx
+	gfx EeveeCardGfx ; gfx
 	dw EeveeName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | JUNGLE ; set
@@ -9825,7 +9825,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 
 PorygonCard: ; 33c1d (c:7c1d)
 	db COLORLESS ; type
-	dw $4794 ; gfx
+	gfx PorygonCardGfx ; gfx
 	dw PorygonName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | NONE ; set
@@ -9878,7 +9878,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 
 SnorlaxCard: ; 33c5e (c:7c5e)
 	db COLORLESS ; type
-	dw $4800 ; gfx
+	gfx SnorlaxCardGfx ; gfx
 	dw SnorlaxName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -9931,7 +9931,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 
 DratiniCard: ; 33c9f (c:7c9f)
 	db COLORLESS ; type
-	dw $4861 ; gfx
+	gfx DratiniCardGfx ; gfx
 	dw DratiniName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | NONE ; set
@@ -9984,7 +9984,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 
 DragonairCard: ; 33ce0 (c:7ce0)
 	db COLORLESS ; type
-	dw $48c2 ; gfx
+	gfx DragonairCardGfx ; gfx
 	dw DragonairName_ ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; set
@@ -10037,7 +10037,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 
 Dragonite1Card: ; 33d21 (c:7d21)
 	db COLORLESS ; type
-	dw $4923 ; gfx
+	gfx Dragonite1CardGfx ; gfx
 	dw DragoniteName_ ; name
 	db STAR ; rarity
 	db PROMOTIONAL | GB ; set
@@ -10090,7 +10090,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 
 Dragonite2Card: ; 33d62 (c:7d62)
 	db COLORLESS ; type
-	dw $4984 ; gfx
+	gfx Dragonite2CardGfx ; gfx
 	dw DragoniteName_ ; name
 	db STAR ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -10143,7 +10143,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 
 GrassEnergyCard: ; 33da3 (c:7da3)
 	db GRASS_ENERGY_CARD ; type
-	dw $00 ; gfx
+	gfx GrassEnergyCardGfx ; gfx
 	dw GrassEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10154,7 +10154,7 @@ GrassEnergyCard: ; 33da3 (c:7da3)
 
 FireEnergyCard: ; 33db1 (c:7db1)
 	db FIRE_ENERGY_CARD ; type
-	dw $61 ; gfx
+	gfx FireEnergyCardGfx ; gfx
 	dw FireEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10165,7 +10165,7 @@ FireEnergyCard: ; 33db1 (c:7db1)
 
 WaterEnergyCard: ; 33dbf (c:7dbf)
 	db WATER_ENERGY_CARD ; type
-	dw $c2 ; gfx
+	gfx WaterEnergyCardGfx ; gfx
 	dw WaterEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10176,7 +10176,7 @@ WaterEnergyCard: ; 33dbf (c:7dbf)
 
 LightningEnergyCard: ; 33dcd (c:7dcd)
 	db LIGHTNING_ENERGY_CARD ; type
-	dw $123 ; gfx
+	gfx LightningEnergyCardGfx ; gfx
 	dw LightningEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10187,7 +10187,7 @@ LightningEnergyCard: ; 33dcd (c:7dcd)
 
 FightingEnergyCard: ; 33ddb (c:7ddb)
 	db FIGHTING_ENERGY_CARD ; type
-	dw $184 ; gfx
+	gfx FightingEnergyCardGfx ; gfx
 	dw FightingEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10198,7 +10198,7 @@ FightingEnergyCard: ; 33ddb (c:7ddb)
 
 PsychicEnergyCard: ; 33de9 (c:7de9)
 	db PSYCHIC_ENERGY_CARD ; type
-	dw $1e5 ; gfx
+	gfx PsychicEnergyCardGfx ; gfx
 	dw PsychicEnergyName_ ; name
 	db CIRCLE ; rarity
 	db ENERGY | NONE ; set
@@ -10209,7 +10209,7 @@ PsychicEnergyCard: ; 33de9 (c:7de9)
 
 DoubleColorlessEnergyCard: ; 33df7 (c:7df7)
 	db DOUBLE_COLORLESS_ENERGY_CARD ; type
-	dw $246 ; gfx
+	gfx DoubleColorlessEnergyCardGfx ; gfx
 	dw DoubleColorlessEnergyName_ ; name
 	db DIAMOND ; rarity
 	db ENERGY | NONE ; set
@@ -10220,7 +10220,7 @@ DoubleColorlessEnergyCard: ; 33df7 (c:7df7)
 
 ProfessorOakCard: ; 33e05 (c:7e05)
 	db TRAINER_CARD ; type
-	dw $49e5 ; gfx
+	gfx ProfessorOakCardGfx ; gfx
 	dw ProfessorOakName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10231,7 +10231,7 @@ ProfessorOakCard: ; 33e05 (c:7e05)
 
 ImposterProfessorOakCard: ; 33e13 (c:7e13)
 	db TRAINER_CARD ; type
-	dw $4a46 ; gfx
+	gfx ImposterProfessorOakCardGfx ; gfx
 	dw ImposterProfessorOakName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -10242,7 +10242,7 @@ ImposterProfessorOakCard: ; 33e13 (c:7e13)
 
 BillCard: ; 33e21 (c:7e21)
 	db TRAINER_CARD ; type
-	dw $4aa7 ; gfx
+	gfx BillCardGfx ; gfx
 	dw BillName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10253,7 +10253,7 @@ BillCard: ; 33e21 (c:7e21)
 
 MrFujiCard: ; 33e2f (c:7e2f)
 	db TRAINER_CARD ; type
-	dw $4b08 ; gfx
+	gfx MrFujiCardGfx ; gfx
 	dw MrFujiName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -10264,7 +10264,7 @@ MrFujiCard: ; 33e2f (c:7e2f)
 
 LassCard: ; 33e3d (c:7e3d)
 	db TRAINER_CARD ; type
-	dw $4b69 ; gfx
+	gfx LassCardGfx ; gfx
 	dw LassName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -10275,7 +10275,7 @@ LassCard: ; 33e3d (c:7e3d)
 
 ImakuniCard: ; 33e4b (c:7e4b)
 	db TRAINER_CARD ; type
-	dw $4bca ; gfx
+	gfx ImakuniCardGfx ; gfx
 	dw ImakuniName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -10286,7 +10286,7 @@ ImakuniCard: ; 33e4b (c:7e4b)
 
 PokemonTraderCard: ; 33e59 (c:7e59)
 	db TRAINER_CARD ; type
-	dw $4c2b ; gfx
+	gfx PokemonTraderCardGfx ; gfx
 	dw PokemonTraderName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -10297,7 +10297,7 @@ PokemonTraderCard: ; 33e59 (c:7e59)
 
 PokemonBreederCard: ; 33e67 (c:7e67)
 	db TRAINER_CARD ; type
-	dw $4c8c ; gfx
+	gfx PokemonBreederCardGfx ; gfx
 	dw PokemonBreederName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -10308,7 +10308,7 @@ PokemonBreederCard: ; 33e67 (c:7e67)
 
 ClefairyDollCard: ; 33e75 (c:7e75)
 	db TRAINER_CARD ; type
-	dw $4ced ; gfx
+	gfx ClefairyDollCardGfx ; gfx
 	dw ClefairyDollName_ ; name
 	db STAR ; rarity
 	db EVOLUTION | NONE ; set
@@ -10319,7 +10319,7 @@ ClefairyDollCard: ; 33e75 (c:7e75)
 
 MysteriousFossilCard: ; 33e83 (c:7e83)
 	db TRAINER_CARD ; type
-	dw $4d4e ; gfx
+	gfx MysteriousFossilCardGfx ; gfx
 	dw MysteriousFossilName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | FOSSIL ; set
@@ -10330,7 +10330,7 @@ MysteriousFossilCard: ; 33e83 (c:7e83)
 
 EnergyRetrievalCard: ; 33e91 (c:7e91)
 	db TRAINER_CARD ; type
-	dw $4daf ; gfx
+	gfx EnergyRetrievalCardGfx ; gfx
 	dw EnergyRetrievalName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -10341,7 +10341,7 @@ EnergyRetrievalCard: ; 33e91 (c:7e91)
 
 SuperEnergyRetrievalCard: ; 33e9f (c:7e9f)
 	db TRAINER_CARD ; type
-	dw $4e10 ; gfx
+	gfx SuperEnergyRetrievalCardGfx ; gfx
 	dw SuperEnergyRetrievalName_ ; name
 	db PROMOSTAR ; rarity
 	db PROMOTIONAL | PRO ; set
@@ -10352,7 +10352,7 @@ SuperEnergyRetrievalCard: ; 33e9f (c:7e9f)
 
 EnergySearchCard: ; 33ead (c:7ead)
 	db TRAINER_CARD ; type
-	dw $4e71 ; gfx
+	gfx EnergySearchCardGfx ; gfx
 	dw EnergySearchName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | FOSSIL ; set
@@ -10363,7 +10363,7 @@ EnergySearchCard: ; 33ead (c:7ead)
 
 EnergyRemovalCard: ; 33ebb (c:7ebb)
 	db TRAINER_CARD ; type
-	dw $4ed2 ; gfx
+	gfx EnergyRemovalCardGfx ; gfx
 	dw EnergyRemovalName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | NONE ; set
@@ -10374,7 +10374,7 @@ EnergyRemovalCard: ; 33ebb (c:7ebb)
 
 SuperEnergyRemovalCard: ; 33ec9 (c:7ec9)
 	db TRAINER_CARD ; type
-	dw $4f33 ; gfx
+	gfx SuperEnergyRemovalCardGfx ; gfx
 	dw SuperEnergyRemovalName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -10385,7 +10385,7 @@ SuperEnergyRemovalCard: ; 33ec9 (c:7ec9)
 
 SwitchCard: ; 33ed7 (c:7ed7)
 	db TRAINER_CARD ; type
-	dw $4f94 ; gfx
+	gfx SwitchCardGfx ; gfx
 	dw SwitchName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10396,7 +10396,7 @@ SwitchCard: ; 33ed7 (c:7ed7)
 
 PokemonCenterCard: ; 33ee5 (c:7ee5)
 	db TRAINER_CARD ; type
-	dw $5000 ; gfx
+	gfx PokemonCenterCardGfx ; gfx
 	dw PokemonCenterName_ ; name
 	db DIAMOND ; rarity
 	db MYSTERY | NONE ; set
@@ -10407,7 +10407,7 @@ PokemonCenterCard: ; 33ee5 (c:7ee5)
 
 PokeBallCard: ; 33ef3 (c:7ef3)
 	db TRAINER_CARD ; type
-	dw $5061 ; gfx
+	gfx PokeBallCardGfx ; gfx
 	dw PokeBallName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | JUNGLE ; set
@@ -10418,7 +10418,7 @@ PokeBallCard: ; 33ef3 (c:7ef3)
 
 ScoopUpCard: ; 33f01 (c:7f01)
 	db TRAINER_CARD ; type
-	dw $50c2 ; gfx
+	gfx ScoopUpCardGfx ; gfx
 	dw ScoopUpName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10429,7 +10429,7 @@ ScoopUpCard: ; 33f01 (c:7f01)
 
 ComputerSearchCard: ; 33f0f (c:7f0f)
 	db TRAINER_CARD ; type
-	dw $5123 ; gfx
+	gfx ComputerSearchCardGfx ; gfx
 	dw ComputerSearchName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10440,7 +10440,7 @@ ComputerSearchCard: ; 33f0f (c:7f0f)
 
 PokedexCard: ; 33f1d (c:7f1d)
 	db TRAINER_CARD ; type
-	dw $5184 ; gfx
+	gfx PokedexCardGfx ; gfx
 	dw PokedexName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | NONE ; set
@@ -10451,7 +10451,7 @@ PokedexCard: ; 33f1d (c:7f1d)
 
 PlusPowerCard: ; 33f2b (c:7f2b)
 	db TRAINER_CARD ; type
-	dw $51e5 ; gfx
+	gfx PlusPowerCardGfx ; gfx
 	dw PlusPowerName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10462,7 +10462,7 @@ PlusPowerCard: ; 33f2b (c:7f2b)
 
 DefenderCard: ; 33f39 (c:7f39)
 	db TRAINER_CARD ; type
-	dw $5246 ; gfx
+	gfx DefenderCardGfx ; gfx
 	dw DefenderName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10473,7 +10473,7 @@ DefenderCard: ; 33f39 (c:7f39)
 
 ItemFinderCard: ; 33f47 (c:7f47)
 	db TRAINER_CARD ; type
-	dw $52a7 ; gfx
+	gfx ItemFinderCardGfx ; gfx
 	dw ItemFinderName_ ; name
 	db STAR ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10484,7 +10484,7 @@ ItemFinderCard: ; 33f47 (c:7f47)
 
 GustofWindCard: ; 33f55 (c:7f55)
 	db TRAINER_CARD ; type
-	dw $5308 ; gfx
+	gfx GustofWindCardGfx ; gfx
 	dw GustofWindName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
@@ -10495,7 +10495,7 @@ GustofWindCard: ; 33f55 (c:7f55)
 
 DevolutionSprayCard: ; 33f63 (c:7f63)
 	db TRAINER_CARD ; type
-	dw $5369 ; gfx
+	gfx DevolutionSprayCardGfx ; gfx
 	dw DevolutionSprayName_ ; name
 	db STAR ; rarity
 	db LABORATORY | NONE ; set
@@ -10506,7 +10506,7 @@ DevolutionSprayCard: ; 33f63 (c:7f63)
 
 PotionCard: ; 33f71 (c:7f71)
 	db TRAINER_CARD ; type
-	dw $53ca ; gfx
+	gfx PotionCardGfx ; gfx
 	dw PotionName_ ; name
 	db CIRCLE ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10517,7 +10517,7 @@ PotionCard: ; 33f71 (c:7f71)
 
 SuperPotionCard: ; 33f7f (c:7f7f)
 	db TRAINER_CARD ; type
-	dw $542b ; gfx
+	gfx SuperPotionCardGfx ; gfx
 	dw SuperPotionName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -10528,7 +10528,7 @@ SuperPotionCard: ; 33f7f (c:7f7f)
 
 FullHealCard: ; 33f8d (c:7f8d)
 	db TRAINER_CARD ; type
-	dw $548c ; gfx
+	gfx FullHealCardGfx ; gfx
 	dw FullHealName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10539,7 +10539,7 @@ FullHealCard: ; 33f8d (c:7f8d)
 
 ReviveCard: ; 33f9b (c:7f9b)
 	db TRAINER_CARD ; type
-	dw $54ed ; gfx
+	gfx ReviveCardGfx ; gfx
 	dw ReviveName_ ; name
 	db DIAMOND ; rarity
 	db COLOSSEUM | NONE ; set
@@ -10550,7 +10550,7 @@ ReviveCard: ; 33f9b (c:7f9b)
 
 MaintenanceCard: ; 33fa9 (c:7fa9)
 	db TRAINER_CARD ; type
-	dw $554e ; gfx
+	gfx MaintenanceCardGfx ; gfx
 	dw MaintenanceName_ ; name
 	db DIAMOND ; rarity
 	db LABORATORY | NONE ; set
@@ -10561,7 +10561,7 @@ MaintenanceCard: ; 33fa9 (c:7fa9)
 
 PokemonFluteCard: ; 33fb7 (c:7fb7)
 	db TRAINER_CARD ; type
-	dw $55af ; gfx
+	gfx PokemonFluteCardGfx ; gfx
 	dw PokemonFluteName_ ; name
 	db DIAMOND ; rarity
 	db EVOLUTION | NONE ; set
@@ -10572,7 +10572,7 @@ PokemonFluteCard: ; 33fb7 (c:7fb7)
 
 GamblerCard: ; 33fc5 (c:7fc5)
 	db TRAINER_CARD ; type
-	dw $5610 ; gfx
+	gfx GamblerCardGfx ; gfx
 	dw GamblerName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set
@@ -10583,7 +10583,7 @@ GamblerCard: ; 33fc5 (c:7fc5)
 
 RecycleCard: ; 33fd3 (c:7fd3)
 	db TRAINER_CARD ; type
-	dw $5671 ; gfx
+	gfx RecycleCardGfx ; gfx
 	dw RecycleName_ ; name
 	db CIRCLE ; rarity
 	db LABORATORY | FOSSIL ; set

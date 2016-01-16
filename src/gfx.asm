@@ -899,921 +899,921 @@ GrassEnergyCardGfx:: ; c4000 (31:4000)
 	INCBIN "gfx/cards/grassenergy.8x6.2bpp"
 	INCBIN "gfx/cards/grassenergy.pal"
 
-FireEnergyCardGfx: ; c4308 (31:4308)
+FireEnergyCardGfx:: ; c4308 (31:4308)
 	INCBIN "gfx/cards/fireenergy.8x6.2bpp"
 	INCBIN "gfx/cards/fireenergy.pal"
 
-WaterEnergyCardGfx: ; c4610 (31:4610)
+WaterEnergyCardGfx:: ; c4610 (31:4610)
 	INCBIN "gfx/cards/waterenergy.8x6.2bpp"
 	INCBIN "gfx/cards/waterenergy.pal"
 
-LightningEnergyCardGfx: ; c4918 (31:4918)
+LightningEnergyCardGfx:: ; c4918 (31:4918)
 	INCBIN "gfx/cards/lightningenergy.8x6.2bpp"
 	INCBIN "gfx/cards/lightningenergy.pal"
 
-FightingEnergyCardGfx: ; c4c20 (31:4c20)
+FightingEnergyCardGfx:: ; c4c20 (31:4c20)
 	INCBIN "gfx/cards/fightingenergy.8x6.2bpp"
 	INCBIN "gfx/cards/fightingenergy.pal"
 
-PsychicEnergyCardGfx: ; c4f28 (31:4f28)
+PsychicEnergyCardGfx:: ; c4f28 (31:4f28)
 	INCBIN "gfx/cards/psychicenergy.8x6.2bpp"
 	INCBIN "gfx/cards/psychicenergy.pal"
 
-DoubleColorlessEnergyCardGfx: ; c5230 (31:5230)
+DoubleColorlessEnergyCardGfx:: ; c5230 (31:5230)
 	INCBIN "gfx/cards/doublecolorlessenergy.8x6.2bpp"
 	INCBIN "gfx/cards/doublecolorlessenergy.pal"
 
-BulbasaurCardGfx: ; c5538 (31:5538)
+BulbasaurCardGfx:: ; c5538 (31:5538)
 	INCBIN "gfx/cards/bulbasaur.8x6.2bpp"
 	INCBIN "gfx/cards/bulbasaur.pal"
 
-IvysaurCardGfx: ; c5840 (31:5840)
+IvysaurCardGfx:: ; c5840 (31:5840)
 	INCBIN "gfx/cards/ivysaur.8x6.2bpp"
 	INCBIN "gfx/cards/ivysaur.pal"
 
-Venusaur1CardGfx: ; c5b48 (31:5b48)
+Venusaur1CardGfx:: ; c5b48 (31:5b48)
 	INCBIN "gfx/cards/venusaur1.8x6.2bpp"
 	INCBIN "gfx/cards/venusaur1.pal"
 
-Venusaur2CardGfx: ; c5e50 (31:5e50)
+Venusaur2CardGfx:: ; c5e50 (31:5e50)
 	INCBIN "gfx/cards/venusaur2.8x6.2bpp"
 	INCBIN "gfx/cards/venusaur2.pal"
 
-CaterpieCardGfx: ; c6158 (31:6158)
+CaterpieCardGfx:: ; c6158 (31:6158)
 	INCBIN "gfx/cards/caterpie.8x6.2bpp"
 	INCBIN "gfx/cards/caterpie.pal"
 
-MetapodCardGfx: ; c6460 (31:6460)
+MetapodCardGfx:: ; c6460 (31:6460)
 	INCBIN "gfx/cards/metapod.8x6.2bpp"
 	INCBIN "gfx/cards/metapod.pal"
 
-ButterfreeCardGfx: ; c6768 (31:6768)
+ButterfreeCardGfx:: ; c6768 (31:6768)
 	INCBIN "gfx/cards/butterfree.8x6.2bpp"
 	INCBIN "gfx/cards/butterfree.pal"
 
-WeedleCardGfx: ; c6a70 (31:6a70)
+WeedleCardGfx:: ; c6a70 (31:6a70)
 	INCBIN "gfx/cards/weedle.8x6.2bpp"
 	INCBIN "gfx/cards/weedle.pal"
 
-KakunaCardGfx: ; c6d78 (31:6d78)
+KakunaCardGfx:: ; c6d78 (31:6d78)
 	INCBIN "gfx/cards/kakuna.8x6.2bpp"
 	INCBIN "gfx/cards/kakuna.pal"
 
-BeedrillCardGfx: ; c7080 (31:7080)
+BeedrillCardGfx:: ; c7080 (31:7080)
 	INCBIN "gfx/cards/beedrill.8x6.2bpp"
 	INCBIN "gfx/cards/beedrill.pal"
 
-EkansCardGfx: ; c7388 (31:7388)
+EkansCardGfx:: ; c7388 (31:7388)
 	INCBIN "gfx/cards/ekans.8x6.2bpp"
 	INCBIN "gfx/cards/ekans.pal"
 
-ArbokCardGfx: ; c7690 (31:7690)
+ArbokCardGfx:: ; c7690 (31:7690)
 	INCBIN "gfx/cards/arbok.8x6.2bpp"
 	INCBIN "gfx/cards/arbok.pal"
 
-NidoranFCardGfx: ; c7998 (31:7998)
+NidoranFCardGfx:: ; c7998 (31:7998)
 	INCBIN "gfx/cards/nidoranf.8x6.2bpp"
 	INCBIN "gfx/cards/nidoranf.pal"
 
-NidorinaCardGfx: ; c7ca0 (31:7ca0)
+NidorinaCardGfx:: ; c7ca0 (31:7ca0)
 	INCBIN "gfx/cards/nidorina.8x6.2bpp"
 	INCBIN "gfx/cards/nidorina.pal"
 
 SECTION "bank32",ROMX,BANK[$32]
-NidoqueenCardGfx: ; c8000 (32:4000)
+NidoqueenCardGfx:: ; c8000 (32:4000)
 	INCBIN "gfx/cards/nidoqueen.8x6.2bpp"
 	INCBIN "gfx/cards/nidoqueen.pal"
 
-NidoranMCardGfx: ; c8308 (32:4308)
+NidoranMCardGfx:: ; c8308 (32:4308)
 	INCBIN "gfx/cards/nidoranm.8x6.2bpp"
 	INCBIN "gfx/cards/nidoranm.pal"
 
-NidorinoCardGfx: ; c8610 (32:4610)
+NidorinoCardGfx:: ; c8610 (32:4610)
 	INCBIN "gfx/cards/nidorino.8x6.2bpp"
 	INCBIN "gfx/cards/nidorino.pal"
 
-NidokingCardGfx: ; c8918 (32:4918)
+NidokingCardGfx:: ; c8918 (32:4918)
 	INCBIN "gfx/cards/nidoking.8x6.2bpp"
 	INCBIN "gfx/cards/nidoking.pal"
 
-ZubatCardGfx: ; c8c20 (32:4c20)
+ZubatCardGfx:: ; c8c20 (32:4c20)
 	INCBIN "gfx/cards/zubat.8x6.2bpp"
 	INCBIN "gfx/cards/zubat.pal"
 
-GolbatCardGfx: ; c8f28 (32:4f28)
+GolbatCardGfx:: ; c8f28 (32:4f28)
 	INCBIN "gfx/cards/golbat.8x6.2bpp"
 	INCBIN "gfx/cards/golbat.pal"
 
-OddishCardGfx: ; c9230 (32:5230)
+OddishCardGfx:: ; c9230 (32:5230)
 	INCBIN "gfx/cards/oddish.8x6.2bpp"
 	INCBIN "gfx/cards/oddish.pal"
 
-GloomCardGfx: ; c9538 (32:5538)
+GloomCardGfx:: ; c9538 (32:5538)
 	INCBIN "gfx/cards/gloom.8x6.2bpp"
 	INCBIN "gfx/cards/gloom.pal"
 
-VileplumeCardGfx: ; c9840 (32:5840)
+VileplumeCardGfx:: ; c9840 (32:5840)
 	INCBIN "gfx/cards/vileplume.8x6.2bpp"
 	INCBIN "gfx/cards/vileplume.pal"
 
-ParasCardGfx: ; c9b48 (32:5b48)
+ParasCardGfx:: ; c9b48 (32:5b48)
 	INCBIN "gfx/cards/paras.8x6.2bpp"
 	INCBIN "gfx/cards/paras.pal"
 
-ParasectCardGfx: ; c9e50 (32:5e50)
+ParasectCardGfx:: ; c9e50 (32:5e50)
 	INCBIN "gfx/cards/parasect.8x6.2bpp"
 	INCBIN "gfx/cards/parasect.pal"
 
-VenonatCardGfx: ; ca158 (32:6158)
+VenonatCardGfx:: ; ca158 (32:6158)
 	INCBIN "gfx/cards/venonat.8x6.2bpp"
 	INCBIN "gfx/cards/venonat.pal"
 
-VenomothCardGfx: ; ca460 (32:6460)
+VenomothCardGfx:: ; ca460 (32:6460)
 	INCBIN "gfx/cards/venomoth.8x6.2bpp"
 	INCBIN "gfx/cards/venomoth.pal"
 
-BellsproutCardGfx: ; ca768 (32:6768)
+BellsproutCardGfx:: ; ca768 (32:6768)
 	INCBIN "gfx/cards/bellsprout.8x6.2bpp"
 	INCBIN "gfx/cards/bellsprout.pal"
 
-WeepinbellCardGfx: ; caa70 (32:6a70)
+WeepinbellCardGfx:: ; caa70 (32:6a70)
 	INCBIN "gfx/cards/weepinbell.8x6.2bpp"
 	INCBIN "gfx/cards/weepinbell.pal"
 
-VictreebelCardGfx: ; cad78 (32:6d78)
+VictreebelCardGfx:: ; cad78 (32:6d78)
 	INCBIN "gfx/cards/victreebel.8x6.2bpp"
 	INCBIN "gfx/cards/victreebel.pal"
 
-GrimerCardGfx: ; cb080 (32:7080)
+GrimerCardGfx:: ; cb080 (32:7080)
 	INCBIN "gfx/cards/grimer.8x6.2bpp"
 	INCBIN "gfx/cards/grimer.pal"
 
-MukCardGfx: ; cb388 (32:7388)
+MukCardGfx:: ; cb388 (32:7388)
 	INCBIN "gfx/cards/muk.8x6.2bpp"
 	INCBIN "gfx/cards/muk.pal"
 
-ExeggcuteCardGfx: ; cb690 (32:7690)
+ExeggcuteCardGfx:: ; cb690 (32:7690)
 	INCBIN "gfx/cards/exeggcute.8x6.2bpp"
 	INCBIN "gfx/cards/exeggcute.pal"
 
-ExeggutorCardGfx: ; cb998 (32:7998)
+ExeggutorCardGfx:: ; cb998 (32:7998)
 	INCBIN "gfx/cards/exeggutor.8x6.2bpp"
 	INCBIN "gfx/cards/exeggutor.pal"
 
-KoffingCardGfx: ; cbca0 (32:7ca0)
+KoffingCardGfx:: ; cbca0 (32:7ca0)
 	INCBIN "gfx/cards/koffing.8x6.2bpp"
 	INCBIN "gfx/cards/koffing.pal"
 
 SECTION "bank33",ROMX,BANK[$33]
-WeezingCardGfx: ; cc000 (33:4000)
+WeezingCardGfx:: ; cc000 (33:4000)
 	INCBIN "gfx/cards/weezing.8x6.2bpp"
 	INCBIN "gfx/cards/weezing.pal"
 
-Tangela1CardGfx: ; cc308 (33:4308)
+Tangela1CardGfx:: ; cc308 (33:4308)
 	INCBIN "gfx/cards/tangela1.8x6.2bpp"
 	INCBIN "gfx/cards/tangela1.pal"
 
-Tangela2CardGfx: ; cc610 (33:4610)
+Tangela2CardGfx:: ; cc610 (33:4610)
 	INCBIN "gfx/cards/tangela2.8x6.2bpp"
 	INCBIN "gfx/cards/tangela2.pal"
 
-ScytherCardGfx: ; cc918 (33:4918)
+ScytherCardGfx:: ; cc918 (33:4918)
 	INCBIN "gfx/cards/scyther.8x6.2bpp"
 	INCBIN "gfx/cards/scyther.pal"
 
-PinsirCardGfx: ; ccc20 (33:4c20)
+PinsirCardGfx:: ; ccc20 (33:4c20)
 	INCBIN "gfx/cards/pinsir.8x6.2bpp"
 	INCBIN "gfx/cards/pinsir.pal"
 
-CharmanderCardGfx: ; ccf28 (33:4f28)
+CharmanderCardGfx:: ; ccf28 (33:4f28)
 	INCBIN "gfx/cards/charmander.8x6.2bpp"
 	INCBIN "gfx/cards/charmander.pal"
 
-CharmeleonCardGfx: ; cd230 (33:5230)
+CharmeleonCardGfx:: ; cd230 (33:5230)
 	INCBIN "gfx/cards/charmeleon.8x6.2bpp"
 	INCBIN "gfx/cards/charmeleon.pal"
 
-CharizardCardGfx: ; cd538 (33:5538)
+CharizardCardGfx:: ; cd538 (33:5538)
 	INCBIN "gfx/cards/charizard.8x6.2bpp"
 	INCBIN "gfx/cards/charizard.pal"
 
-VulpixCardGfx: ; cd840 (33:5840)
+VulpixCardGfx:: ; cd840 (33:5840)
 	INCBIN "gfx/cards/vulpix.8x6.2bpp"
 	INCBIN "gfx/cards/vulpix.pal"
 
-Ninetails1CardGfx: ; cdb48 (33:5b48)
+Ninetails1CardGfx:: ; cdb48 (33:5b48)
 	INCBIN "gfx/cards/ninetails1.8x6.2bpp"
 	INCBIN "gfx/cards/ninetails1.pal"
 
-Ninetails2CardGfx: ; cde50 (33:5e50)
+Ninetails2CardGfx:: ; cde50 (33:5e50)
 	INCBIN "gfx/cards/ninetails2.8x6.2bpp"
 	INCBIN "gfx/cards/ninetails2.pal"
 
-GrowlitheCardGfx: ; ce158 (33:6158)
+GrowlitheCardGfx:: ; ce158 (33:6158)
 	INCBIN "gfx/cards/growlithe.8x6.2bpp"
 	INCBIN "gfx/cards/growlithe.pal"
 
-Arcanine1CardGfx: ; ce460 (33:6460)
+Arcanine1CardGfx:: ; ce460 (33:6460)
 	INCBIN "gfx/cards/arcanine1.8x6.2bpp"
 	INCBIN "gfx/cards/arcanine1.pal"
 
-Arcanine2CardGfx: ; ce768 (33:6768)
+Arcanine2CardGfx:: ; ce768 (33:6768)
 	INCBIN "gfx/cards/arcanine2.8x6.2bpp"
 	INCBIN "gfx/cards/arcanine2.pal"
 
-PonytaCardGfx: ; cea70 (33:6a70)
+PonytaCardGfx:: ; cea70 (33:6a70)
 	INCBIN "gfx/cards/ponyta.8x6.2bpp"
 	INCBIN "gfx/cards/ponyta.pal"
 
-RapidashCardGfx: ; ced78 (33:6d78)
+RapidashCardGfx:: ; ced78 (33:6d78)
 	INCBIN "gfx/cards/rapidash.8x6.2bpp"
 	INCBIN "gfx/cards/rapidash.pal"
 
-Magmar1CardGfx: ; cf080 (33:7080)
+Magmar1CardGfx:: ; cf080 (33:7080)
 	INCBIN "gfx/cards/magmar1.8x6.2bpp"
 	INCBIN "gfx/cards/magmar1.pal"
 
-Magmar2CardGfx: ; cf388 (33:7388)
+Magmar2CardGfx:: ; cf388 (33:7388)
 	INCBIN "gfx/cards/magmar2.8x6.2bpp"
 	INCBIN "gfx/cards/magmar2.pal"
 
-Flareon1CardGfx: ; cf690 (33:7690)
+Flareon1CardGfx:: ; cf690 (33:7690)
 	INCBIN "gfx/cards/flareon1.8x6.2bpp"
 	INCBIN "gfx/cards/flareon1.pal"
 
-Flareon2CardGfx: ; cf998 (33:7998)
+Flareon2CardGfx:: ; cf998 (33:7998)
 	INCBIN "gfx/cards/flareon2.8x6.2bpp"
 	INCBIN "gfx/cards/flareon2.pal"
 
-Moltres1CardGfx: ; cfca0 (33:7ca0)
+Moltres1CardGfx:: ; cfca0 (33:7ca0)
 	INCBIN "gfx/cards/moltres1.8x6.2bpp"
 	INCBIN "gfx/cards/moltres1.pal"
 
 SECTION "bank34",ROMX,BANK[$34]
-Moltres2CardGfx: ; d0000 (34:4000)
+Moltres2CardGfx:: ; d0000 (34:4000)
 	INCBIN "gfx/cards/moltres2.8x6.2bpp"
 	INCBIN "gfx/cards/moltres2.pal"
 
-SquirtleCardGfx: ; d0308 (34:4308)
+SquirtleCardGfx:: ; d0308 (34:4308)
 	INCBIN "gfx/cards/squirtle.8x6.2bpp"
 	INCBIN "gfx/cards/squirtle.pal"
 
-WartortleCardGfx: ; d0610 (34:4610)
+WartortleCardGfx:: ; d0610 (34:4610)
 	INCBIN "gfx/cards/wartortle.8x6.2bpp"
 	INCBIN "gfx/cards/wartortle.pal"
 
-BlastoiseCardGfx: ; d0918 (34:4918)
+BlastoiseCardGfx:: ; d0918 (34:4918)
 	INCBIN "gfx/cards/blastoise.8x6.2bpp"
 	INCBIN "gfx/cards/blastoise.pal"
 
-PsyduckCardGfx: ; d0c20 (34:4c20)
+PsyduckCardGfx:: ; d0c20 (34:4c20)
 	INCBIN "gfx/cards/psyduck.8x6.2bpp"
 	INCBIN "gfx/cards/psyduck.pal"
 
-GolduckCardGfx: ; d0f28 (34:4f28)
+GolduckCardGfx:: ; d0f28 (34:4f28)
 	INCBIN "gfx/cards/golduck.8x6.2bpp"
 	INCBIN "gfx/cards/golduck.pal"
 
-PoliwagCardGfx: ; d1230 (34:5230)
+PoliwagCardGfx:: ; d1230 (34:5230)
 	INCBIN "gfx/cards/poliwag.8x6.2bpp"
 	INCBIN "gfx/cards/poliwag.pal"
 
-PoliwhirlCardGfx: ; d1538 (34:5538)
+PoliwhirlCardGfx:: ; d1538 (34:5538)
 	INCBIN "gfx/cards/poliwhirl.8x6.2bpp"
 	INCBIN "gfx/cards/poliwhirl.pal"
 
-PoliwrathCardGfx: ; d1840 (34:5840)
+PoliwrathCardGfx:: ; d1840 (34:5840)
 	INCBIN "gfx/cards/poliwrath.8x6.2bpp"
 	INCBIN "gfx/cards/poliwrath.pal"
 
-TentacoolCardGfx: ; d1b48 (34:5b48)
+TentacoolCardGfx:: ; d1b48 (34:5b48)
 	INCBIN "gfx/cards/tentacool.8x6.2bpp"
 	INCBIN "gfx/cards/tentacool.pal"
 
-TentacruelCardGfx: ; d1e50 (34:5e50)
+TentacruelCardGfx:: ; d1e50 (34:5e50)
 	INCBIN "gfx/cards/tentacruel.8x6.2bpp"
 	INCBIN "gfx/cards/tentacruel.pal"
 
-SeelCardGfx: ; d2158 (34:6158)
+SeelCardGfx:: ; d2158 (34:6158)
 	INCBIN "gfx/cards/seel.8x6.2bpp"
 	INCBIN "gfx/cards/seel.pal"
 
-DewgongCardGfx: ; d2460 (34:6460)
+DewgongCardGfx:: ; d2460 (34:6460)
 	INCBIN "gfx/cards/dewgong.8x6.2bpp"
 	INCBIN "gfx/cards/dewgong.pal"
 
-ShellderCardGfx: ; d2768 (34:6768)
+ShellderCardGfx:: ; d2768 (34:6768)
 	INCBIN "gfx/cards/shellder.8x6.2bpp"
 	INCBIN "gfx/cards/shellder.pal"
 
-CloysterCardGfx: ; d2a70 (34:6a70)
+CloysterCardGfx:: ; d2a70 (34:6a70)
 	INCBIN "gfx/cards/cloyster.8x6.2bpp"
 	INCBIN "gfx/cards/cloyster.pal"
 
-KrabbyCardGfx: ; d2d78 (34:6d78)
+KrabbyCardGfx:: ; d2d78 (34:6d78)
 	INCBIN "gfx/cards/krabby.8x6.2bpp"
 	INCBIN "gfx/cards/krabby.pal"
 
-KinglerCardGfx: ; d3080 (34:7080)
+KinglerCardGfx:: ; d3080 (34:7080)
 	INCBIN "gfx/cards/kingler.8x6.2bpp"
 	INCBIN "gfx/cards/kingler.pal"
 
-HorseaCardGfx: ; d3388 (34:7388)
+HorseaCardGfx:: ; d3388 (34:7388)
 	INCBIN "gfx/cards/horsea.8x6.2bpp"
 	INCBIN "gfx/cards/horsea.pal"
 
-SeadraCardGfx: ; d3690 (34:7690)
+SeadraCardGfx:: ; d3690 (34:7690)
 	INCBIN "gfx/cards/seadra.8x6.2bpp"
 	INCBIN "gfx/cards/seadra.pal"
 
-GoldeenCardGfx: ; d3998 (34:7998)
+GoldeenCardGfx:: ; d3998 (34:7998)
 	INCBIN "gfx/cards/goldeen.8x6.2bpp"
 	INCBIN "gfx/cards/goldeen.pal"
 
-SeakingCardGfx: ; d3ca0 (34:7ca0)
+SeakingCardGfx:: ; d3ca0 (34:7ca0)
 	INCBIN "gfx/cards/seaking.8x6.2bpp"
 	INCBIN "gfx/cards/seaking.pal"
 
 SECTION "bank35",ROMX,BANK[$35]
-StaryuCardGfx: ; d4000 (35:4000)
+StaryuCardGfx:: ; d4000 (35:4000)
 	INCBIN "gfx/cards/staryu.8x6.2bpp"
 	INCBIN "gfx/cards/staryu.pal"
 
-StarmieCardGfx: ; d4308 (35:4308)
+StarmieCardGfx:: ; d4308 (35:4308)
 	INCBIN "gfx/cards/starmie.8x6.2bpp"
 	INCBIN "gfx/cards/starmie.pal"
 
-MagikarpCardGfx: ; d4610 (35:4610)
+MagikarpCardGfx:: ; d4610 (35:4610)
 	INCBIN "gfx/cards/magikarp.8x6.2bpp"
 	INCBIN "gfx/cards/magikarp.pal"
 
-GyaradosCardGfx: ; d4918 (35:4918)
+GyaradosCardGfx:: ; d4918 (35:4918)
 	INCBIN "gfx/cards/gyarados.8x6.2bpp"
 	INCBIN "gfx/cards/gyarados.pal"
 
-LaprasCardGfx: ; d4c20 (35:4c20)
+LaprasCardGfx:: ; d4c20 (35:4c20)
 	INCBIN "gfx/cards/lapras.8x6.2bpp"
 	INCBIN "gfx/cards/lapras.pal"
 
-Vaporeon1CardGfx: ; d4f28 (35:4f28)
+Vaporeon1CardGfx:: ; d4f28 (35:4f28)
 	INCBIN "gfx/cards/vaporeon1.8x6.2bpp"
 	INCBIN "gfx/cards/vaporeon1.pal"
 
-Vaporeon2CardGfx: ; d5230 (35:5230)
+Vaporeon2CardGfx:: ; d5230 (35:5230)
 	INCBIN "gfx/cards/vaporeon2.8x6.2bpp"
 	INCBIN "gfx/cards/vaporeon2.pal"
 
-OmanyteCardGfx: ; d5538 (35:5538)
+OmanyteCardGfx:: ; d5538 (35:5538)
 	INCBIN "gfx/cards/omanyte.8x6.2bpp"
 	INCBIN "gfx/cards/omanyte.pal"
 
-OmastarCardGfx: ; d5840 (35:5840)
+OmastarCardGfx:: ; d5840 (35:5840)
 	INCBIN "gfx/cards/omastar.8x6.2bpp"
 	INCBIN "gfx/cards/omastar.pal"
 
-Articuno1CardGfx: ; d5b48 (35:5b48)
+Articuno1CardGfx:: ; d5b48 (35:5b48)
 	INCBIN "gfx/cards/articuno1.8x6.2bpp"
 	INCBIN "gfx/cards/articuno1.pal"
 
-Articuno2CardGfx: ; d5e50 (35:5e50)
+Articuno2CardGfx:: ; d5e50 (35:5e50)
 	INCBIN "gfx/cards/articuno2.8x6.2bpp"
 	INCBIN "gfx/cards/articuno2.pal"
 
-Pikachu1CardGfx: ; d6158 (35:6158)
+Pikachu1CardGfx:: ; d6158 (35:6158)
 	INCBIN "gfx/cards/pikachu1.8x6.2bpp"
 	INCBIN "gfx/cards/pikachu1.pal"
 
-Pikachu2CardGfx: ; d6460 (35:6460)
+Pikachu2CardGfx:: ; d6460 (35:6460)
 	INCBIN "gfx/cards/pikachu2.8x6.2bpp"
 	INCBIN "gfx/cards/pikachu2.pal"
 
-Pikachu3CardGfx: ; d6768 (35:6768)
+Pikachu3CardGfx:: ; d6768 (35:6768)
 	INCBIN "gfx/cards/pikachu3.8x6.2bpp"
 	INCBIN "gfx/cards/pikachu3.pal"
 
-Pikachu4CardGfx: ; d6a70 (35:6a70)
+Pikachu4CardGfx:: ; d6a70 (35:6a70)
 	INCBIN "gfx/cards/pikachu4.8x6.2bpp"
 	INCBIN "gfx/cards/pikachu4.pal"
 
-FlyingPikachuCardGfx: ; d6d78 (35:6d78)
+FlyingPikachuCardGfx:: ; d6d78 (35:6d78)
 	INCBIN "gfx/cards/flyingpikachu.8x6.2bpp"
 	INCBIN "gfx/cards/flyingpikachu.pal"
 
-SurfingPikachu1CardGfx: ; d7080 (35:7080)
+SurfingPikachu1CardGfx:: ; d7080 (35:7080)
 	INCBIN "gfx/cards/surfingpikachu1.8x6.2bpp"
 	INCBIN "gfx/cards/surfingpikachu1.pal"
 
-SurfingPikachu2CardGfx: ; d7388 (35:7388)
+SurfingPikachu2CardGfx:: ; d7388 (35:7388)
 	INCBIN "gfx/cards/surfingpikachu2.8x6.2bpp"
 	INCBIN "gfx/cards/surfingpikachu2.pal"
 
-Raichu1CardGfx: ; d7690 (35:7690)
+Raichu1CardGfx:: ; d7690 (35:7690)
 	INCBIN "gfx/cards/raichu1.8x6.2bpp"
 	INCBIN "gfx/cards/raichu1.pal"
 
-Raichu2CardGfx: ; d7998 (35:7998)
+Raichu2CardGfx:: ; d7998 (35:7998)
 	INCBIN "gfx/cards/raichu2.8x6.2bpp"
 	INCBIN "gfx/cards/raichu2.pal"
 
-Magnemite1CardGfx: ; d7ca0 (35:7ca0)
+Magnemite1CardGfx:: ; d7ca0 (35:7ca0)
 	INCBIN "gfx/cards/magnemite1.8x6.2bpp"
 	INCBIN "gfx/cards/magnemite1.pal"
 
 SECTION "bank36",ROMX,BANK[$36]
-Magnemite2CardGfx: ; d8000 (36:4000)
+Magnemite2CardGfx:: ; d8000 (36:4000)
 	INCBIN "gfx/cards/magnemite2.8x6.2bpp"
 	INCBIN "gfx/cards/magnemite2.pal"
 
-Magneton1CardGfx: ; d8308 (36:4308)
+Magneton1CardGfx:: ; d8308 (36:4308)
 	INCBIN "gfx/cards/magneton1.8x6.2bpp"
 	INCBIN "gfx/cards/magneton1.pal"
 
-Magneton2CardGfx: ; d8610 (36:4610)
+Magneton2CardGfx:: ; d8610 (36:4610)
 	INCBIN "gfx/cards/magneton2.8x6.2bpp"
 	INCBIN "gfx/cards/magneton2.pal"
 
-VoltorbCardGfx: ; d8918 (36:4918)
+VoltorbCardGfx:: ; d8918 (36:4918)
 	INCBIN "gfx/cards/voltorb.8x6.2bpp"
 	INCBIN "gfx/cards/voltorb.pal"
 
-Electrode1CardGfx: ; d8c20 (36:4c20)
+Electrode1CardGfx:: ; d8c20 (36:4c20)
 	INCBIN "gfx/cards/electrode1.8x6.2bpp"
 	INCBIN "gfx/cards/electrode1.pal"
 
-Electrode2CardGfx: ; d8f28 (36:4f28)
+Electrode2CardGfx:: ; d8f28 (36:4f28)
 	INCBIN "gfx/cards/electrode2.8x6.2bpp"
 	INCBIN "gfx/cards/electrode2.pal"
 
-Electabuzz1CardGfx: ; d9230 (36:5230)
+Electabuzz1CardGfx:: ; d9230 (36:5230)
 	INCBIN "gfx/cards/electabuzz1.8x6.2bpp"
 	INCBIN "gfx/cards/electabuzz1.pal"
 
-Electabuzz2CardGfx: ; d9538 (36:5538)
+Electabuzz2CardGfx:: ; d9538 (36:5538)
 	INCBIN "gfx/cards/electabuzz2.8x6.2bpp"
 	INCBIN "gfx/cards/electabuzz2.pal"
 
-Jolteon1CardGfx: ; d9840 (36:5840)
+Jolteon1CardGfx:: ; d9840 (36:5840)
 	INCBIN "gfx/cards/jolteon1.8x6.2bpp"
 	INCBIN "gfx/cards/jolteon1.pal"
 
-Jolteon2CardGfx: ; d9b48 (36:5b48)
+Jolteon2CardGfx:: ; d9b48 (36:5b48)
 	INCBIN "gfx/cards/jolteon2.8x6.2bpp"
 	INCBIN "gfx/cards/jolteon2.pal"
 
-Zapdos1CardGfx: ; d9e50 (36:5e50)
+Zapdos1CardGfx:: ; d9e50 (36:5e50)
 	INCBIN "gfx/cards/zapdos1.8x6.2bpp"
 	INCBIN "gfx/cards/zapdos1.pal"
 
-Zapdos2CardGfx: ; da158 (36:6158)
+Zapdos2CardGfx:: ; da158 (36:6158)
 	INCBIN "gfx/cards/zapdos2.8x6.2bpp"
 	INCBIN "gfx/cards/zapdos2.pal"
 
-Zapdos3CardGfx: ; da460 (36:6460)
+Zapdos3CardGfx:: ; da460 (36:6460)
 	INCBIN "gfx/cards/zapdos3.8x6.2bpp"
 	INCBIN "gfx/cards/zapdos3.pal"
 
-SandshrewCardGfx: ; da768 (36:6768)
+SandshrewCardGfx:: ; da768 (36:6768)
 	INCBIN "gfx/cards/sandshrew.8x6.2bpp"
 	INCBIN "gfx/cards/sandshrew.pal"
 
-SandslashCardGfx: ; daa70 (36:6a70)
+SandslashCardGfx:: ; daa70 (36:6a70)
 	INCBIN "gfx/cards/sandslash.8x6.2bpp"
 	INCBIN "gfx/cards/sandslash.pal"
 
-DiglettCardGfx: ; dad78 (36:6d78)
+DiglettCardGfx:: ; dad78 (36:6d78)
 	INCBIN "gfx/cards/diglett.8x6.2bpp"
 	INCBIN "gfx/cards/diglett.pal"
 
-DugtrioCardGfx: ; db080 (36:7080)
+DugtrioCardGfx:: ; db080 (36:7080)
 	INCBIN "gfx/cards/dugtrio.8x6.2bpp"
 	INCBIN "gfx/cards/dugtrio.pal"
 
-MankeyCardGfx: ; db388 (36:7388)
+MankeyCardGfx:: ; db388 (36:7388)
 	INCBIN "gfx/cards/mankey.8x6.2bpp"
 	INCBIN "gfx/cards/mankey.pal"
 
-PrimeapeCardGfx: ; db690 (36:7690)
+PrimeapeCardGfx:: ; db690 (36:7690)
 	INCBIN "gfx/cards/primeape.8x6.2bpp"
 	INCBIN "gfx/cards/primeape.pal"
 
-MachopCardGfx: ; db998 (36:7998)
+MachopCardGfx:: ; db998 (36:7998)
 	INCBIN "gfx/cards/machop.8x6.2bpp"
 	INCBIN "gfx/cards/machop.pal"
 
-MachokeCardGfx: ; dbca0 (36:7ca0)
+MachokeCardGfx:: ; dbca0 (36:7ca0)
 	INCBIN "gfx/cards/machoke.8x6.2bpp"
 	INCBIN "gfx/cards/machoke.pal"
 
 SECTION "bank37",ROMX,BANK[$37]
-MachampCardGfx: ; dc000 (37:4000)
+MachampCardGfx:: ; dc000 (37:4000)
 	INCBIN "gfx/cards/machamp.8x6.2bpp"
 	INCBIN "gfx/cards/machamp.pal"
 
-GeodudeCardGfx: ; dc308 (37:4308)
+GeodudeCardGfx:: ; dc308 (37:4308)
 	INCBIN "gfx/cards/geodude.8x6.2bpp"
 	INCBIN "gfx/cards/geodude.pal"
 
-GravelerCardGfx: ; dc610 (37:4610)
+GravelerCardGfx:: ; dc610 (37:4610)
 	INCBIN "gfx/cards/graveler.8x6.2bpp"
 	INCBIN "gfx/cards/graveler.pal"
 
-GolemCardGfx: ; dc918 (37:4918)
+GolemCardGfx:: ; dc918 (37:4918)
 	INCBIN "gfx/cards/golem.8x6.2bpp"
 	INCBIN "gfx/cards/golem.pal"
 
-OnixCardGfx: ; dcc20 (37:4c20)
+OnixCardGfx:: ; dcc20 (37:4c20)
 	INCBIN "gfx/cards/onix.8x6.2bpp"
 	INCBIN "gfx/cards/onix.pal"
 
-CuboneCardGfx: ; dcf28 (37:4f28)
+CuboneCardGfx:: ; dcf28 (37:4f28)
 	INCBIN "gfx/cards/cubone.8x6.2bpp"
 	INCBIN "gfx/cards/cubone.pal"
 
-Marowak1CardGfx: ; dd230 (37:5230)
+Marowak1CardGfx:: ; dd230 (37:5230)
 	INCBIN "gfx/cards/marowak1.8x6.2bpp"
 	INCBIN "gfx/cards/marowak1.pal"
 
-Marowak2CardGfx: ; dd538 (37:5538)
+Marowak2CardGfx:: ; dd538 (37:5538)
 	INCBIN "gfx/cards/marowak2.8x6.2bpp"
 	INCBIN "gfx/cards/marowak2.pal"
 
-HitmonleeCardGfx: ; dd840 (37:5840)
+HitmonleeCardGfx:: ; dd840 (37:5840)
 	INCBIN "gfx/cards/hitmonlee.8x6.2bpp"
 	INCBIN "gfx/cards/hitmonlee.pal"
 
-HitmonchanCardGfx: ; ddb48 (37:5b48)
+HitmonchanCardGfx:: ; ddb48 (37:5b48)
 	INCBIN "gfx/cards/hitmonchan.8x6.2bpp"
 	INCBIN "gfx/cards/hitmonchan.pal"
 
-RhyhornCardGfx: ; dde50 (37:5e50)
+RhyhornCardGfx:: ; dde50 (37:5e50)
 	INCBIN "gfx/cards/rhyhorn.8x6.2bpp"
 	INCBIN "gfx/cards/rhyhorn.pal"
 
-RhydonCardGfx: ; de158 (37:6158)
+RhydonCardGfx:: ; de158 (37:6158)
 	INCBIN "gfx/cards/rhydon.8x6.2bpp"
 	INCBIN "gfx/cards/rhydon.pal"
 
-KabutoCardGfx: ; de460 (37:6460)
+KabutoCardGfx:: ; de460 (37:6460)
 	INCBIN "gfx/cards/kabuto.8x6.2bpp"
 	INCBIN "gfx/cards/kabuto.pal"
 
-KabutopsCardGfx: ; de768 (37:6768)
+KabutopsCardGfx:: ; de768 (37:6768)
 	INCBIN "gfx/cards/kabutops.8x6.2bpp"
 	INCBIN "gfx/cards/kabutops.pal"
 
-AerodactylCardGfx: ; dea70 (37:6a70)
+AerodactylCardGfx:: ; dea70 (37:6a70)
 	INCBIN "gfx/cards/aerodactyl.8x6.2bpp"
 	INCBIN "gfx/cards/aerodactyl.pal"
 
-AbraCardGfx: ; ded78 (37:6d78)
+AbraCardGfx:: ; ded78 (37:6d78)
 	INCBIN "gfx/cards/abra.8x6.2bpp"
 	INCBIN "gfx/cards/abra.pal"
 
-KadabraCardGfx: ; df080 (37:7080)
+KadabraCardGfx:: ; df080 (37:7080)
 	INCBIN "gfx/cards/kadabra.8x6.2bpp"
 	INCBIN "gfx/cards/kadabra.pal"
 
-AlakazamCardGfx: ; df388 (37:7388)
+AlakazamCardGfx:: ; df388 (37:7388)
 	INCBIN "gfx/cards/alakazam.8x6.2bpp"
 	INCBIN "gfx/cards/alakazam.pal"
 
-Slowpoke1CardGfx: ; df690 (37:7690)
+Slowpoke1CardGfx:: ; df690 (37:7690)
 	INCBIN "gfx/cards/slowpoke1.8x6.2bpp"
 	INCBIN "gfx/cards/slowpoke1.pal"
 
-Slowpoke2CardGfx: ; df998 (37:7998)
+Slowpoke2CardGfx:: ; df998 (37:7998)
 	INCBIN "gfx/cards/slowpoke2.8x6.2bpp"
 	INCBIN "gfx/cards/slowpoke2.pal"
 
-SlowbroCardGfx: ; dfca0 (37:7ca0)
+SlowbroCardGfx:: ; dfca0 (37:7ca0)
 	INCBIN "gfx/cards/slowbro.8x6.2bpp"
 	INCBIN "gfx/cards/slowbro.pal"
 
 SECTION "bank38",ROMX,BANK[$38]
-Gastly1CardGfx: ; e0000 (38:4000)
+Gastly1CardGfx:: ; e0000 (38:4000)
 	INCBIN "gfx/cards/gastly1.8x6.2bpp"
 	INCBIN "gfx/cards/gastly1.pal"
 
-Gastly2CardGfx: ; e0308 (38:4308)
+Gastly2CardGfx:: ; e0308 (38:4308)
 	INCBIN "gfx/cards/gastly2.8x6.2bpp"
 	INCBIN "gfx/cards/gastly2.pal"
 
-Haunter1CardGfx: ; e0610 (38:4610)
+Haunter1CardGfx:: ; e0610 (38:4610)
 	INCBIN "gfx/cards/haunter1.8x6.2bpp"
 	INCBIN "gfx/cards/haunter1.pal"
 
-Haunter2CardGfx: ; e0918 (38:4918)
+Haunter2CardGfx:: ; e0918 (38:4918)
 	INCBIN "gfx/cards/haunter2.8x6.2bpp"
 	INCBIN "gfx/cards/haunter2.pal"
 
-GengarCardGfx: ; e0c20 (38:4c20)
+GengarCardGfx:: ; e0c20 (38:4c20)
 	INCBIN "gfx/cards/gengar.8x6.2bpp"
 	INCBIN "gfx/cards/gengar.pal"
 
-DrowzeeCardGfx: ; e0f28 (38:4f28)
+DrowzeeCardGfx:: ; e0f28 (38:4f28)
 	INCBIN "gfx/cards/drowzee.8x6.2bpp"
 	INCBIN "gfx/cards/drowzee.pal"
 
-HypnoCardGfx: ; e1230 (38:5230)
+HypnoCardGfx:: ; e1230 (38:5230)
 	INCBIN "gfx/cards/hypno.8x6.2bpp"
 	INCBIN "gfx/cards/hypno.pal"
 
-MrMimeCardGfx: ; e1538 (38:5538)
+MrMimeCardGfx:: ; e1538 (38:5538)
 	INCBIN "gfx/cards/mrmime.8x6.2bpp"
 	INCBIN "gfx/cards/mrmime.pal"
 
-JynxCardGfx: ; e1840 (38:5840)
+JynxCardGfx:: ; e1840 (38:5840)
 	INCBIN "gfx/cards/jynx.8x6.2bpp"
 	INCBIN "gfx/cards/jynx.pal"
 
-Mewtwo1CardGfx: ; e1b48 (38:5b48)
+Mewtwo1CardGfx:: ; e1b48 (38:5b48)
 	INCBIN "gfx/cards/mewtwo1.8x6.2bpp"
 	INCBIN "gfx/cards/mewtwo1.pal"
 
-Mewtwo2CardGfx: ; e1e50 (38:5e50)
+Mewtwo2CardGfx:: ; e1e50 (38:5e50)
 	INCBIN "gfx/cards/mewtwo2.8x6.2bpp"
 	INCBIN "gfx/cards/mewtwo2.pal"
 
-Mewtwo3CardGfx: ; e2158 (38:6158)
+Mewtwo3CardGfx:: ; e2158 (38:6158)
 	INCBIN "gfx/cards/mewtwo3.8x6.2bpp"
 	INCBIN "gfx/cards/mewtwo3.pal"
 
-Mew1CardGfx: ; e2460 (38:6460)
+Mew1CardGfx:: ; e2460 (38:6460)
 	INCBIN "gfx/cards/mew1.8x6.2bpp"
 	INCBIN "gfx/cards/mew1.pal"
 
-Mew2CardGfx: ; e2768 (38:6768)
+Mew2CardGfx:: ; e2768 (38:6768)
 	INCBIN "gfx/cards/mew2.8x6.2bpp"
 	INCBIN "gfx/cards/mew2.pal"
 
-Mew3CardGfx: ; e2a70 (38:6a70)
+Mew3CardGfx:: ; e2a70 (38:6a70)
 	INCBIN "gfx/cards/mew3.8x6.2bpp"
 	INCBIN "gfx/cards/mew3.pal"
 
-PidgeyCardGfx: ; e2d78 (38:6d78)
+PidgeyCardGfx:: ; e2d78 (38:6d78)
 	INCBIN "gfx/cards/pidgey.8x6.2bpp"
 	INCBIN "gfx/cards/pidgey.pal"
 
-PidgeottoCardGfx: ; e3080 (38:7080)
+PidgeottoCardGfx:: ; e3080 (38:7080)
 	INCBIN "gfx/cards/pidgeotto.8x6.2bpp"
 	INCBIN "gfx/cards/pidgeotto.pal"
 
-Pidgeot1CardGfx: ; e3388 (38:7388)
+Pidgeot1CardGfx:: ; e3388 (38:7388)
 	INCBIN "gfx/cards/pidgeot1.8x6.2bpp"
 	INCBIN "gfx/cards/pidgeot1.pal"
 
-Pidgeot2CardGfx: ; e3690 (38:7690)
+Pidgeot2CardGfx:: ; e3690 (38:7690)
 	INCBIN "gfx/cards/pidgeot2.8x6.2bpp"
 	INCBIN "gfx/cards/pidgeot2.pal"
 
-RattataCardGfx: ; e3998 (38:7998)
+RattataCardGfx:: ; e3998 (38:7998)
 	INCBIN "gfx/cards/rattata.8x6.2bpp"
 	INCBIN "gfx/cards/rattata.pal"
 
-RaticateCardGfx: ; e3ca0 (38:7ca0)
+RaticateCardGfx:: ; e3ca0 (38:7ca0)
 	INCBIN "gfx/cards/raticate.8x6.2bpp"
 	INCBIN "gfx/cards/raticate.pal"
 
 SECTION "bank39",ROMX,BANK[$39]
-SpearowCardGfx: ; e4000 (39:4000)
+SpearowCardGfx:: ; e4000 (39:4000)
 	INCBIN "gfx/cards/spearow.8x6.2bpp"
 	INCBIN "gfx/cards/spearow.pal"
 
-FearowCardGfx: ; e4308 (39:4308)
+FearowCardGfx:: ; e4308 (39:4308)
 	INCBIN "gfx/cards/fearow.8x6.2bpp"
 	INCBIN "gfx/cards/fearow.pal"
 
-ClefairyCardGfx: ; e4610 (39:4610)
+ClefairyCardGfx:: ; e4610 (39:4610)
 	INCBIN "gfx/cards/clefairy.8x6.2bpp"
 	INCBIN "gfx/cards/clefairy.pal"
 
-ClefableCardGfx: ; e4918 (39:4918)
+ClefableCardGfx:: ; e4918 (39:4918)
 	INCBIN "gfx/cards/clefable.8x6.2bpp"
 	INCBIN "gfx/cards/clefable.pal"
 
-Jigglypuff1CardGfx: ; e4c20 (39:4c20)
+Jigglypuff1CardGfx:: ; e4c20 (39:4c20)
 	INCBIN "gfx/cards/jigglypuff1.8x6.2bpp"
 	INCBIN "gfx/cards/jigglypuff1.pal"
 
-Jigglypuff2CardGfx: ; e4f28 (39:4f28)
+Jigglypuff2CardGfx:: ; e4f28 (39:4f28)
 	INCBIN "gfx/cards/jigglypuff2.8x6.2bpp"
 	INCBIN "gfx/cards/jigglypuff2.pal"
 
-Jigglypuff3CardGfx: ; e5230 (39:5230)
+Jigglypuff3CardGfx:: ; e5230 (39:5230)
 	INCBIN "gfx/cards/jigglypuff3.8x6.2bpp"
 	INCBIN "gfx/cards/jigglypuff3.pal"
 
-WigglytuffCardGfx: ; e5538 (39:5538)
+WigglytuffCardGfx:: ; e5538 (39:5538)
 	INCBIN "gfx/cards/wigglytuff.8x6.2bpp"
 	INCBIN "gfx/cards/wigglytuff.pal"
 
-Meowth1CardGfx: ; e5840 (39:5840)
+Meowth1CardGfx:: ; e5840 (39:5840)
 	INCBIN "gfx/cards/meowth1.8x6.2bpp"
 	INCBIN "gfx/cards/meowth1.pal"
 
-Meowth2CardGfx: ; e5b48 (39:5b48)
+Meowth2CardGfx:: ; e5b48 (39:5b48)
 	INCBIN "gfx/cards/meowth2.8x6.2bpp"
 	INCBIN "gfx/cards/meowth2.pal"
 
-PersianCardGfx: ; e5e50 (39:5e50)
+PersianCardGfx:: ; e5e50 (39:5e50)
 	INCBIN "gfx/cards/persian.8x6.2bpp"
 	INCBIN "gfx/cards/persian.pal"
 
-FarfetchdCardGfx: ; e6158 (39:6158)
+FarfetchdCardGfx:: ; e6158 (39:6158)
 	INCBIN "gfx/cards/farfetchd.8x6.2bpp"
 	INCBIN "gfx/cards/farfetchd.pal"
 
-DoduoCardGfx: ; e6460 (39:6460)
+DoduoCardGfx:: ; e6460 (39:6460)
 	INCBIN "gfx/cards/doduo.8x6.2bpp"
 	INCBIN "gfx/cards/doduo.pal"
 
-DodrioCardGfx: ; e6768 (39:6768)
+DodrioCardGfx:: ; e6768 (39:6768)
 	INCBIN "gfx/cards/dodrio.8x6.2bpp"
 	INCBIN "gfx/cards/dodrio.pal"
 
-LickitungCardGfx: ; e6a70 (39:6a70)
+LickitungCardGfx:: ; e6a70 (39:6a70)
 	INCBIN "gfx/cards/lickitung.8x6.2bpp"
 	INCBIN "gfx/cards/lickitung.pal"
 
-ChanseyCardGfx: ; e6d78 (39:6d78)
+ChanseyCardGfx:: ; e6d78 (39:6d78)
 	INCBIN "gfx/cards/chansey.8x6.2bpp"
 	INCBIN "gfx/cards/chansey.pal"
 
-KangaskhanCardGfx: ; e7080 (39:7080)
+KangaskhanCardGfx:: ; e7080 (39:7080)
 	INCBIN "gfx/cards/kangaskhan.8x6.2bpp"
 	INCBIN "gfx/cards/kangaskhan.pal"
 
-TaurosCardGfx: ; e7388 (39:7388)
+TaurosCardGfx:: ; e7388 (39:7388)
 	INCBIN "gfx/cards/tauros.8x6.2bpp"
 	INCBIN "gfx/cards/tauros.pal"
 
-DittoCardGfx: ; e7690 (39:7690)
+DittoCardGfx:: ; e7690 (39:7690)
 	INCBIN "gfx/cards/ditto.8x6.2bpp"
 	INCBIN "gfx/cards/ditto.pal"
 
-EeveeCardGfx: ; e7998 (39:7998)
+EeveeCardGfx:: ; e7998 (39:7998)
 	INCBIN "gfx/cards/eevee.8x6.2bpp"
 	INCBIN "gfx/cards/eevee.pal"
 
-PorygonCardGfx: ; e7ca0 (39:7ca0)
+PorygonCardGfx:: ; e7ca0 (39:7ca0)
 	INCBIN "gfx/cards/porygon.8x6.2bpp"
 	INCBIN "gfx/cards/porygon.pal"
 
 SECTION "bank3A",ROMX,BANK[$3A]
-SnorlaxCardGfx: ; e8000 (3a:4000)
+SnorlaxCardGfx:: ; e8000 (3a:4000)
 	INCBIN "gfx/cards/snorlax.8x6.2bpp"
 	INCBIN "gfx/cards/snorlax.pal"
 
-DratiniCardGfx: ; e8308 (3a:4308)
+DratiniCardGfx:: ; e8308 (3a:4308)
 	INCBIN "gfx/cards/dratini.8x6.2bpp"
 	INCBIN "gfx/cards/dratini.pal"
 
-DragonairCardGfx: ; e8610 (3a:4610)
+DragonairCardGfx:: ; e8610 (3a:4610)
 	INCBIN "gfx/cards/dragonair.8x6.2bpp"
 	INCBIN "gfx/cards/dragonair.pal"
 
-Dragonite1CardGfx: ; e8918 (3a:4918)
+Dragonite1CardGfx:: ; e8918 (3a:4918)
 	INCBIN "gfx/cards/dragonite1.8x6.2bpp"
 	INCBIN "gfx/cards/dragonite1.pal"
 
-Dragonite2CardGfx: ; e8c20 (3a:4c20)
+Dragonite2CardGfx:: ; e8c20 (3a:4c20)
 	INCBIN "gfx/cards/dragonite2.8x6.2bpp"
 	INCBIN "gfx/cards/dragonite2.pal"
 
-ProfessorOakCardGfx: ; e8f28 (3a:4f28)
+ProfessorOakCardGfx:: ; e8f28 (3a:4f28)
 	INCBIN "gfx/cards/professoroak.8x6.2bpp"
 	INCBIN "gfx/cards/professoroak.pal"
 
-ImposterProfessorOakCardGfx: ; e9230 (3a:5230)
+ImposterProfessorOakCardGfx:: ; e9230 (3a:5230)
 	INCBIN "gfx/cards/imposterprofessoroak.8x6.2bpp"
 	INCBIN "gfx/cards/imposterprofessoroak.pal"
 
-BillCardGfx: ; e9538 (3a:5538)
+BillCardGfx:: ; e9538 (3a:5538)
 	INCBIN "gfx/cards/bill.8x6.2bpp"
 	INCBIN "gfx/cards/bill.pal"
 
-MrFujiCardGfx: ; e9840 (3a:5840)
+MrFujiCardGfx:: ; e9840 (3a:5840)
 	INCBIN "gfx/cards/mrfuji.8x6.2bpp"
 	INCBIN "gfx/cards/mrfuji.pal"
 
-LassCardGfx: ; e9b48 (3a:5b48)
+LassCardGfx:: ; e9b48 (3a:5b48)
 	INCBIN "gfx/cards/lass.8x6.2bpp"
 	INCBIN "gfx/cards/lass.pal"
 
-ImakuniCardGfx: ; e9e50 (3a:5e50)
+ImakuniCardGfx:: ; e9e50 (3a:5e50)
 	INCBIN "gfx/cards/imakuni.8x6.2bpp"
 	INCBIN "gfx/cards/imakuni.pal"
 
-PokemonTraderCardGfx: ; ea158 (3a:6158)
+PokemonTraderCardGfx:: ; ea158 (3a:6158)
 	INCBIN "gfx/cards/pokemontrader.8x6.2bpp"
 	INCBIN "gfx/cards/pokemontrader.pal"
 
-PokemonBreederCardGfx: ; ea460 (3a:6460)
+PokemonBreederCardGfx:: ; ea460 (3a:6460)
 	INCBIN "gfx/cards/pokemonbreeder.8x6.2bpp"
 	INCBIN "gfx/cards/pokemonbreeder.pal"
 
-ClefairyDollCardGfx: ; ea768 (3a:6768)
+ClefairyDollCardGfx:: ; ea768 (3a:6768)
 	INCBIN "gfx/cards/clefairydoll.8x6.2bpp"
 	INCBIN "gfx/cards/clefairydoll.pal"
 
-MysteriousFossilCardGfx: ; eaa70 (3a:6a70)
+MysteriousFossilCardGfx:: ; eaa70 (3a:6a70)
 	INCBIN "gfx/cards/mysteriousfossil.8x6.2bpp"
 	INCBIN "gfx/cards/mysteriousfossil.pal"
 
-EnergyRetrievalCardGfx: ; ead78 (3a:6d78)
+EnergyRetrievalCardGfx:: ; ead78 (3a:6d78)
 	INCBIN "gfx/cards/energyretrieval.8x6.2bpp"
 	INCBIN "gfx/cards/energyretrieval.pal"
 
-SuperEnergyRetrievalCardGfx: ; eb080 (3a:7080)
+SuperEnergyRetrievalCardGfx:: ; eb080 (3a:7080)
 	INCBIN "gfx/cards/superenergyretrieval.8x6.2bpp"
 	INCBIN "gfx/cards/superenergyretrieval.pal"
 
-EnergySearchCardGfx: ; eb388 (3a:7388)
+EnergySearchCardGfx:: ; eb388 (3a:7388)
 	INCBIN "gfx/cards/energysearch.8x6.2bpp"
 	INCBIN "gfx/cards/energysearch.pal"
 
-EnergyRemovalCardGfx: ; eb690 (3a:7690)
+EnergyRemovalCardGfx:: ; eb690 (3a:7690)
 	INCBIN "gfx/cards/energyremoval.8x6.2bpp"
 	INCBIN "gfx/cards/energyremoval.pal"
 
-SuperEnergyRemovalCardGfx: ; eb998 (3a:7998)
+SuperEnergyRemovalCardGfx:: ; eb998 (3a:7998)
 	INCBIN "gfx/cards/superenergyremoval.8x6.2bpp"
 	INCBIN "gfx/cards/superenergyremoval.pal"
 
-SwitchCardGfx: ; ebca0 (3a:7ca0)
+SwitchCardGfx:: ; ebca0 (3a:7ca0)
 	INCBIN "gfx/cards/switch.8x6.2bpp"
 	INCBIN "gfx/cards/switch.pal"
 
 SECTION "bank3B",ROMX,BANK[$3B]
-PokemonCenterCardGfx: ; ec000 (3b:4000)
+PokemonCenterCardGfx:: ; ec000 (3b:4000)
 	INCBIN "gfx/cards/pokemoncenter.8x6.2bpp"
 	INCBIN "gfx/cards/pokemoncenter.pal"
 
-PokeBallCardGfx: ; ec308 (3b:4308)
+PokeBallCardGfx:: ; ec308 (3b:4308)
 	INCBIN "gfx/cards/pokeball.8x6.2bpp"
 	INCBIN "gfx/cards/pokeball.pal"
 
-ScoopUpCardGfx: ; ec610 (3b:4610)
+ScoopUpCardGfx:: ; ec610 (3b:4610)
 	INCBIN "gfx/cards/scoopup.8x6.2bpp"
 	INCBIN "gfx/cards/scoopup.pal"
 
-ComputerSearchCardGfx: ; ec918 (3b:4918)
+ComputerSearchCardGfx:: ; ec918 (3b:4918)
 	INCBIN "gfx/cards/computersearch.8x6.2bpp"
 	INCBIN "gfx/cards/computersearch.pal"
 
-PokedexCardGfx: ; ecc20 (3b:4c20)
+PokedexCardGfx:: ; ecc20 (3b:4c20)
 	INCBIN "gfx/cards/pokedex.8x6.2bpp"
 	INCBIN "gfx/cards/pokedex.pal"
 
-PlusPowerCardGfx: ; ecf28 (3b:4f28)
+PlusPowerCardGfx:: ; ecf28 (3b:4f28)
 	INCBIN "gfx/cards/pluspower.8x6.2bpp"
 	INCBIN "gfx/cards/pluspower.pal"
 
-DefenderCardGfx: ; ed230 (3b:5230)
+DefenderCardGfx:: ; ed230 (3b:5230)
 	INCBIN "gfx/cards/defender.8x6.2bpp"
 	INCBIN "gfx/cards/defender.pal"
 
-ItemFinderCardGfx: ; ed538 (3b:5538)
+ItemFinderCardGfx:: ; ed538 (3b:5538)
 	INCBIN "gfx/cards/itemfinder.8x6.2bpp"
 	INCBIN "gfx/cards/itemfinder.pal"
 
-GustofWindCardGfx: ; ed840 (3b:5840)
+GustofWindCardGfx:: ; ed840 (3b:5840)
 	INCBIN "gfx/cards/gustofwind.8x6.2bpp"
 	INCBIN "gfx/cards/gustofwind.pal"
 
-DevolutionSprayCardGfx: ; edb48 (3b:5b48)
+DevolutionSprayCardGfx:: ; edb48 (3b:5b48)
 	INCBIN "gfx/cards/devolutionspray.8x6.2bpp"
 	INCBIN "gfx/cards/devolutionspray.pal"
 
-PotionCardGfx: ; ede50 (3b:5e50)
+PotionCardGfx:: ; ede50 (3b:5e50)
 	INCBIN "gfx/cards/potion.8x6.2bpp"
 	INCBIN "gfx/cards/potion.pal"
 
-SuperPotionCardGfx: ; ee158 (3b:6158)
+SuperPotionCardGfx:: ; ee158 (3b:6158)
 	INCBIN "gfx/cards/superpotion.8x6.2bpp"
 	INCBIN "gfx/cards/superpotion.pal"
 
-FullHealCardGfx: ; ee460 (3b:6460)
+FullHealCardGfx:: ; ee460 (3b:6460)
 	INCBIN "gfx/cards/fullheal.8x6.2bpp"
 	INCBIN "gfx/cards/fullheal.pal"
 
-ReviveCardGfx: ; ee768 (3b:6768)
+ReviveCardGfx:: ; ee768 (3b:6768)
 	INCBIN "gfx/cards/revive.8x6.2bpp"
 	INCBIN "gfx/cards/revive.pal"
 
-MaintenanceCardGfx: ; eea70 (3b:6a70)
+MaintenanceCardGfx:: ; eea70 (3b:6a70)
 	INCBIN "gfx/cards/maintenance.8x6.2bpp"
 	INCBIN "gfx/cards/maintenance.pal"
 
-PokemonFluteCardGfx: ; eed78 (3b:6d78)
+PokemonFluteCardGfx:: ; eed78 (3b:6d78)
 	INCBIN "gfx/cards/pokemonflute.8x6.2bpp"
 	INCBIN "gfx/cards/pokemonflute.pal"
 
-GamblerCardGfx: ; ef080 (3b:7080)
+GamblerCardGfx:: ; ef080 (3b:7080)
 	INCBIN "gfx/cards/gambler.8x6.2bpp"
 	INCBIN "gfx/cards/gambler.pal"
 
-RecycleCardGfx: ; ef388 (3b:7388)
+RecycleCardGfx:: ; ef388 (3b:7388)
 	INCBIN "gfx/cards/recycle.8x6.2bpp"
 	INCBIN "gfx/cards/recycle.pal"
 
