@@ -1,5 +1,10 @@
 ;;; engine macros
 
+dbw: MACRO
+	db \1
+	dw \2
+ENDM	
+
 bank1call: MACRO
 	rst $18
 	dw \1

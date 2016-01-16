@@ -778,8 +778,7 @@ EkansCard: ; 310b2 (c:50b2)
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
-	db 247
-	db 70
+	dw EkansSpitPoisonEffectCommands ; effect commands
 	db INFLICT_POISON ; status
 	db 0
 	db 0
@@ -793,8 +792,7 @@ EkansCard: ; 310b2 (c:50b2)
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
-	db 254
-	db 70
+	dw EkansWrapEffectCommands ; effect commands
 	db INFLICT_PARALYSIS ; status
 	db 0
 	db 0
@@ -831,8 +829,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
-	db 2
-	db 71
+	dw ArbokTerrorStrikeEffectCommands ; effect commands
 	db NONE ; status
 	db 1
 	db 0
@@ -846,8 +843,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
-	db 12
-	db 71
+	dw ArbokPoisonFangEffectCommands ; effect commands
 	db INFLICT_POISON ; status
 	db 0
 	db 0
