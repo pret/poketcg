@@ -126,19 +126,23 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
 wOpponentDeck:: ; cc0e
-	ds $5
+	ds $1
+	ds $4
 
 wIsPracticeDuel:: ; cc13
-	ds $7
+	ds $1
+	ds $6
 
 wDuelTheme:: ; cc1a
 	ds $1
 	ds $9
 
-wPlayerCard::
+; data of the player's card currently in play	
+wPlayerCard:: ; c224
 	ds CARD_DATA_LENGTH
-	
-wOpponentCard::
+
+; data of the opponent's card currently in play		
+wOpponentCard:: ; cc65
 	ds CARD_DATA_LENGTH
 	
 	ds $67
@@ -153,7 +157,8 @@ SECTION "WRAM1", WRAMX, BANK[1]
 	ds $113
 
 wMatchStartTheme:: ; d113
-	ds $21c
+	ds $1
+	ds $21b
 
 wCurMap:: ; d32f
 	ds $1
@@ -162,7 +167,8 @@ wPlayerXCoord:: ; d330
 	ds $1
 
 wPlayerYCoord:: ; d331
-	ds $a53
+	ds $1
+	ds $a52
 
 wMusicDC:: ; dd84
 	ds $2
