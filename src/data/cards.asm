@@ -247,7 +247,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	tx BulbasaursLeechSeedDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 17
 	db 72
 	db 0
@@ -262,7 +262,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -300,7 +300,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -315,7 +315,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 10
 	db 72
 	db 1
@@ -353,7 +353,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	tx SolarPowerDescription ; description
 	tx SolarPowerDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 130
 	db 72
 	db 0
@@ -368,7 +368,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	tx VenusaursMegaDrainDescription ; description
 	tx VenusaursMegaDrainDescriptionCont ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 137
 	db 72
 	db 0
@@ -406,7 +406,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	tx EnergyTransDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 21
 	db 72
 	db 0
@@ -421,7 +421,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -459,7 +459,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 47
 	db 71
 	db 4
@@ -474,7 +474,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -512,7 +512,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	tx MetapodsStiffenDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 126
 	db 71
 	db 0
@@ -527,7 +527,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 130
 	db 71
 	db 4
@@ -565,7 +565,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	tx WhirlwindDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 237
 	db 71
 	db 0
@@ -580,7 +580,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	tx ButterfreesMegaDrainDescription ; description
 	tx ButterfreesMegaDrainDescriptionCont ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 247
 	db 71
 	db 0
@@ -618,7 +618,7 @@ WeedleCard: ; 30fef (c:4fef)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 3
 	db 72
 	db 1
@@ -633,7 +633,7 @@ WeedleCard: ; 30fef (c:4fef)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -671,7 +671,7 @@ KakunaCard: ; 31030 (c:5030)
 	tx KakunasStiffenDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 62
 	db 71
 	db 0
@@ -686,7 +686,7 @@ KakunaCard: ; 31030 (c:5030)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 66
 	db 71
 	db 1
@@ -724,7 +724,7 @@ BeedrillCard: ; 31071 (c:5071)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 97
 	db 71
 	db 0
@@ -739,7 +739,7 @@ BeedrillCard: ; 31071 (c:5071)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 104
 	db 71
 	db 1
@@ -777,7 +777,7 @@ EkansCard: ; 310b2 (c:50b2)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 247
 	db 70
 	db 1
@@ -792,7 +792,7 @@ EkansCard: ; 310b2 (c:50b2)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 254
 	db 70
 	db 4
@@ -830,7 +830,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	tx TerrorStrikeDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 2
 	db 71
 	db 0
@@ -845,7 +845,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 12
 	db 71
 	db 1
@@ -883,7 +883,7 @@ NidoranFCard: ; 31134 (c:5134)
 	tx TripleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 192
 	db 71
 	db 0
@@ -898,7 +898,7 @@ NidoranFCard: ; 31134 (c:5134)
 	tx NidoranFsCallforFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 199
 	db 71
 	db 0
@@ -936,7 +936,7 @@ NidorinaCard: ; 31175 (c:5175)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 219
 	db 71
 	db 8
@@ -951,7 +951,7 @@ NidorinaCard: ; 31175 (c:5175)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 223
 	db 71
 	db 0
@@ -989,7 +989,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	tx BoyfriendsDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 188
 	db 71
 	db 0
@@ -1004,7 +1004,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1042,7 +1042,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	tx MayDoNothingDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 212
 	db 71
 	db 0
@@ -1057,7 +1057,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1095,7 +1095,7 @@ NidorinoCard: ; 31238 (c:5238)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 230
 	db 71
 	db 0
@@ -1110,7 +1110,7 @@ NidorinoCard: ; 31238 (c:5238)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1148,7 +1148,7 @@ NidokingCard: ; 31279 (c:5279)
 	tx ThrashDescriptipn ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 171
 	db 71
 	db 16
@@ -1163,7 +1163,7 @@ NidokingCard: ; 31279 (c:5279)
 	tx ToxicDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 181
 	db 71
 	db 1
@@ -1201,7 +1201,7 @@ ZubatCard: ; 312ba (c:52ba)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 89
 	db 71
 	db 8
@@ -1216,7 +1216,7 @@ ZubatCard: ; 312ba (c:52ba)
 	tx ZubatsLeechLifeDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 93
 	db 71
 	db 0
@@ -1254,7 +1254,7 @@ GolbatCard: ; 312fb (c:52fb)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1269,7 +1269,7 @@ GolbatCard: ; 312fb (c:52fb)
 	tx GolbatsLeechLifeDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 73
 	db 71
 	db 0
@@ -1307,7 +1307,7 @@ OddishCard: ; 3133c (c:533c)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 134
 	db 71
 	db 4
@@ -1322,7 +1322,7 @@ OddishCard: ; 3133c (c:533c)
 	tx SproutDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 138
 	db 71
 	db 0
@@ -1360,7 +1360,7 @@ GloomCard: ; 3137d (c:537d)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 51
 	db 71
 	db 1
@@ -1375,7 +1375,7 @@ GloomCard: ; 3137d (c:537d)
 	tx FoulOdorDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 58
 	db 71
 	db 8
@@ -1413,7 +1413,7 @@ VileplumeCard: ; 313be (c:53be)
 	tx HealDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 105
 	db 72
 	db 0
@@ -1428,7 +1428,7 @@ VileplumeCard: ; 313be (c:53be)
 	tx PetalDanceDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 112
 	db 72
 	db 0
@@ -1466,7 +1466,7 @@ ParasCard: ; 313ff (c:53ff)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1481,7 +1481,7 @@ ParasCard: ; 313ff (c:53ff)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 251
 	db 71
 	db 2
@@ -1519,7 +1519,7 @@ ParasectCard: ; 31440 (c:5440)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 255
 	db 71
 	db 2
@@ -1534,7 +1534,7 @@ ParasectCard: ; 31440 (c:5440)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1572,7 +1572,7 @@ VenonatCard: ; 31481 (c:5481)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 77
 	db 71
 	db 4
@@ -1587,7 +1587,7 @@ VenonatCard: ; 31481 (c:5481)
 	tx VenonatLeechLifeDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 81
 	db 71
 	db 0
@@ -1625,7 +1625,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	tx ShiftDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 77
 	db 72
 	db 0
@@ -1640,7 +1640,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	tx VenomPowderDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 87
 	db 72
 	db 9
@@ -1678,7 +1678,7 @@ BellsproutCard: ; 31503 (c:5503)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1693,7 +1693,7 @@ BellsproutCard: ; 31503 (c:5503)
 	tx BellsproutsCallforFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 53
 	db 72
 	db 0
@@ -1731,7 +1731,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 19
 	db 71
 	db 1
@@ -1746,7 +1746,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -1784,7 +1784,7 @@ VictreebelCard: ; 31585 (c:5585)
 	tx VictreebelsLureDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 26
 	db 71
 	db 0
@@ -1799,7 +1799,7 @@ VictreebelCard: ; 31585 (c:5585)
 	tx VictreebelsAcidDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 39
 	db 71
 	db 0
@@ -1837,7 +1837,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 34
 	db 72
 	db 4
@@ -1852,7 +1852,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	tx GrimersMinimizeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 38
 	db 72
 	db 0
@@ -1890,7 +1890,7 @@ MukCard: ; 31607 (c:5607)
 	tx ToxicGasDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 42
 	db 72
 	db 0
@@ -1905,7 +1905,7 @@ MukCard: ; 31607 (c:5607)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 46
 	db 72
 	db 1
@@ -1943,7 +1943,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 111
 	db 71
 	db 2
@@ -1958,7 +1958,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	tx ExeggcutesLeechSeedDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 115
 	db 71
 	db 0
@@ -1996,7 +1996,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	tx TeleportDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 151
 	db 71
 	db 0
@@ -2011,7 +2011,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	tx BigEggsplosionDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 164
 	db 71
 	db 0
@@ -2049,7 +2049,7 @@ KoffingCard: ; 316ca (c:56ca)
 	tx FoulGasDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 119
 	db 71
 	db 9
@@ -2064,7 +2064,7 @@ KoffingCard: ; 316ca (c:56ca)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2102,7 +2102,7 @@ WeezingCard: ; 3170b (c:570b)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 66
 	db 72
 	db 1
@@ -2117,7 +2117,7 @@ WeezingCard: ; 3170b (c:570b)
 	tx WeezingsSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 73
 	db 72
 	db 64
@@ -2155,7 +2155,7 @@ Tangela1Card: ; 3174c (c:574c)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 94
 	db 72
 	db 4
@@ -2170,7 +2170,7 @@ Tangela1Card: ; 3174c (c:574c)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 98
 	db 72
 	db 1
@@ -2208,7 +2208,7 @@ Tangela2Card: ; 3178d (c:578d)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 119
 	db 72
 	db 4
@@ -2223,7 +2223,7 @@ Tangela2Card: ; 3178d (c:578d)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 123
 	db 72
 	db 1
@@ -2261,7 +2261,7 @@ ScytherCard: ; 317ce (c:57ce)
 	tx SwordsDanceDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 85
 	db 71
 	db 0
@@ -2276,7 +2276,7 @@ ScytherCard: ; 317ce (c:57ce)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2314,7 +2314,7 @@ PinsirCard: ; 3180f (c:580f)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 43
 	db 71
 	db 4
@@ -2329,7 +2329,7 @@ PinsirCard: ; 3180f (c:580f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2367,7 +2367,7 @@ CharmanderCard: ; 31850 (c:5850)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2382,7 +2382,7 @@ CharmanderCard: ; 31850 (c:5850)
 	tx EmberDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 246
 	db 73
 	db 0
@@ -2420,7 +2420,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2435,7 +2435,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	tx CharmeleonsFlamethrowerDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 70
 	db 74
 	db 0
@@ -2473,7 +2473,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	tx EnergyBurnDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 83
 	db 74
 	db 0
@@ -2488,7 +2488,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	tx FireSpinDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 87
 	db 74
 	db 0
@@ -2526,7 +2526,7 @@ VulpixCard: ; 31913 (c:5913)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 100
 	db 74
 	db 8
@@ -2541,7 +2541,7 @@ VulpixCard: ; 31913 (c:5913)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2579,7 +2579,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	tx NinetailsLureDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 220
 	db 73
 	db 0
@@ -2594,7 +2594,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	tx FireBlastDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 233
 	db 73
 	db 0
@@ -2632,7 +2632,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	tx MixUpDescription ; description
 	tx MixUpDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 111
 	db 74
 	db 0
@@ -2647,7 +2647,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	tx DancingEmbersDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 115
 	db 74
 	db 0
@@ -2685,7 +2685,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2700,7 +2700,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2738,7 +2738,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	tx QuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 183
 	db 73
 	db 0
@@ -2753,7 +2753,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	tx FlamesofRageDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 190
 	db 73
 	db 0
@@ -2791,7 +2791,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	tx ArcaninesFlamethrowerDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 166
 	db 73
 	db 0
@@ -2806,7 +2806,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	tx TakeDownDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 179
 	db 73
 	db 16
@@ -2844,7 +2844,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2859,7 +2859,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2897,7 +2897,7 @@ RapidashCard: ; 31ada (c:5ada)
 	tx StompDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 209
 	db 73
 	db 0
@@ -2912,7 +2912,7 @@ RapidashCard: ; 31ada (c:5ada)
 	tx RapidashsAgilityDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 216
 	db 73
 	db 0
@@ -2950,7 +2950,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -2965,7 +2965,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	tx FirePunchDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 46
 	db 74
 	db 0
@@ -3003,7 +3003,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	tx MagmarsSmokescreenDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 59
 	db 74
 	db 0
@@ -3018,7 +3018,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 63
 	db 74
 	db 1
@@ -3056,7 +3056,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3071,7 +3071,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	tx FlareonsRageDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 104
 	db 74
 	db 0
@@ -3109,7 +3109,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	tx QuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 26
 	db 74
 	db 0
@@ -3124,7 +3124,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	tx FlareonsFlamethrowerDescription ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 33
 	db 74
 	db 0
@@ -3162,7 +3162,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	tx WildfireDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 3
 	db 74
 	db 0
@@ -3177,7 +3177,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	tx MayDoNothingDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 19
 	db 74
 	db 0
@@ -3215,7 +3215,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	tx FiregiverDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 122
 	db 74
 	db 0
@@ -3230,7 +3230,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	tx MayDoNothingDescription ; description
 	dw NONE ; description (cont)
 	db 70 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 129
 	db 74
 	db 0
@@ -3268,7 +3268,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 38
 	db 73
 	db 4
@@ -3283,7 +3283,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	tx SquirtlesWithdrawDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 42
 	db 73
 	db 0
@@ -3321,7 +3321,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	tx WartortlesWithdrawDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 166
 	db 72
 	db 0
@@ -3336,7 +3336,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3374,7 +3374,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	tx RainDanceDescription ; description
 	tx RainDanceDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 170
 	db 72
 	db 0
@@ -3389,7 +3389,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	tx HydroPumpDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 174
 	db 72
 	db 0
@@ -3427,7 +3427,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	tx HeadacheDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 212
 	db 72
 	db 0
@@ -3442,7 +3442,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	tx TripleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 216
 	db 72
 	db 0
@@ -3480,7 +3480,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 223
 	db 72
 	db 4
@@ -3495,7 +3495,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	tx Discard1EnergyFromTargetDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 227
 	db 72
 	db 0
@@ -3533,7 +3533,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	tx PoliwagsWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 98
 	db 73
 	db 0
@@ -3548,7 +3548,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3586,7 +3586,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	tx PoliwhirlsAmnesiaDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 61
 	db 73
 	db 0
@@ -3601,7 +3601,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 74
 	db 73
 	db 0
@@ -3639,7 +3639,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	tx PoliwrathsWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 81
 	db 73
 	db 0
@@ -3654,7 +3654,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	tx Discard1EnergyFromTargetDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 88
 	db 73
 	db 0
@@ -3692,7 +3692,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	tx CowardiceDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 127
 	db 73
 	db 0
@@ -3707,7 +3707,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3745,7 +3745,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 50
 	db 73
 	db 8
@@ -3760,7 +3760,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	tx InflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 54
 	db 73
 	db 1
@@ -3798,7 +3798,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3813,7 +3813,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3851,7 +3851,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -3866,7 +3866,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 14
 	db 73
 	db 4
@@ -3904,7 +3904,7 @@ ShellderCard: ; 31fad (c:5fad)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 248
 	db 72
 	db 8
@@ -3919,7 +3919,7 @@ ShellderCard: ; 31fad (c:5fad)
 	tx HideinShellDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 252
 	db 72
 	db 0
@@ -3957,7 +3957,7 @@ CloysterCard: ; 31fee (c:5fee)
 	tx ClampDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 105
 	db 73
 	db 4
@@ -3972,7 +3972,7 @@ CloysterCard: ; 31fee (c:5fee)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 109
 	db 73
 	db 0
@@ -4010,7 +4010,7 @@ KrabbyCard: ; 3202f (c:602f)
 	tx KrabbysCallforFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 192
 	db 72
 	db 0
@@ -4025,7 +4025,7 @@ KrabbyCard: ; 3202f (c:602f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4063,7 +4063,7 @@ KinglerCard: ; 32070 (c:6070)
 	tx KinglersFlailDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 185
 	db 72
 	db 0
@@ -4078,7 +4078,7 @@ KinglerCard: ; 32070 (c:6070)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4116,7 +4116,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	tx HorseasSmokescreenDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 46
 	db 73
 	db 0
@@ -4131,7 +4131,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4169,7 +4169,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	tx SeadrasWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 237
 	db 72
 	db 0
@@ -4184,7 +4184,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	tx SeadrasAgilityDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 244
 	db 72
 	db 0
@@ -4222,7 +4222,7 @@ GoldeenCard: ; 32133 (c:6133)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4237,7 +4237,7 @@ GoldeenCard: ; 32133 (c:6133)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4275,7 +4275,7 @@ SeakingCard: ; 32174 (c:6174)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4290,7 +4290,7 @@ SeakingCard: ; 32174 (c:6174)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4328,7 +4328,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4343,7 +4343,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4381,7 +4381,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	tx StarmiesRecoverDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 18
 	db 73
 	db 0
@@ -4396,7 +4396,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 34
 	db 73
 	db 4
@@ -4434,7 +4434,7 @@ MagikarpCard: ; 32237 (c:6237)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4449,7 +4449,7 @@ MagikarpCard: ; 32237 (c:6237)
 	tx MagikarpsFlailDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 205
 	db 72
 	db 0
@@ -4487,7 +4487,7 @@ GyaradosCard: ; 32278 (c:6278)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4502,7 +4502,7 @@ GyaradosCard: ; 32278 (c:6278)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 181
 	db 72
 	db 4
@@ -4540,7 +4540,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	tx LaprasWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 137
 	db 73
 	db 0
@@ -4555,7 +4555,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 144
 	db 73
 	db 8
@@ -4593,7 +4593,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	tx FocusEnergyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 162
 	db 73
 	db 0
@@ -4608,7 +4608,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4646,7 +4646,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	tx QuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 0
 	db 73
 	db 0
@@ -4661,7 +4661,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	tx VaporeonsWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 7
 	db 73
 	db 0
@@ -4699,7 +4699,7 @@ OmanyteCard: ; 3237c (c:637c)
 	tx ClairvoyanceDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 155
 	db 72
 	db 0
@@ -4714,7 +4714,7 @@ OmanyteCard: ; 3237c (c:637c)
 	tx OmanytesWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 159
 	db 72
 	db 0
@@ -4752,7 +4752,7 @@ OmastarCard: ; 323bd (c:63bd)
 	tx OmastarsWaterGunDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 141
 	db 72
 	db 0
@@ -4767,7 +4767,7 @@ OmastarCard: ; 323bd (c:63bd)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 148
 	db 72
 	db 0
@@ -4805,7 +4805,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 116
 	db 73
 	db 4
@@ -4820,7 +4820,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	tx BlizzardDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 120
 	db 73
 	db 32
@@ -4858,7 +4858,7 @@ Articuno2Card: ; 3243f (c:643f)
 	tx QuickfreezeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 148
 	db 73
 	db 0
@@ -4873,7 +4873,7 @@ Articuno2Card: ; 3243f (c:643f)
 	tx IceBreathDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 155
 	db 73
 	db 32
@@ -4911,7 +4911,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -4926,7 +4926,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	tx ThunderJoltDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 147
 	db 76
 	db 16
@@ -4964,7 +4964,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	tx SparkDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 154
 	db 76
 	db 32
@@ -4979,7 +4979,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5017,7 +5017,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	tx GrowlDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 164
 	db 76
 	db 0
@@ -5032,7 +5032,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 168
 	db 76
 	db 4
@@ -5070,7 +5070,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	tx GrowlDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 172
 	db 76
 	db 0
@@ -5085,7 +5085,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 176
 	db 76
 	db 4
@@ -5123,7 +5123,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 136
 	db 76
 	db 4
@@ -5138,7 +5138,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	tx FlyDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 140
 	db 76
 	db 0
@@ -5176,7 +5176,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5191,7 +5191,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5229,7 +5229,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5244,7 +5244,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5282,7 +5282,7 @@ Raichu1Card: ; 32647 (c:6647)
 	tx RaichusAgilityDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 184
 	db 76
 	db 0
@@ -5297,7 +5297,7 @@ Raichu1Card: ; 32647 (c:6647)
 	tx RaichusThunderDescription ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 188
 	db 76
 	db 0
@@ -5335,7 +5335,7 @@ Raichu2Card: ; 32688 (c:6688)
 	tx GigashockDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 195
 	db 76
 	db 32
@@ -5350,7 +5350,7 @@ Raichu2Card: ; 32688 (c:6688)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5388,7 +5388,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 99
 	db 76
 	db 4
@@ -5403,7 +5403,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	tx MagnemitesSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 103
 	db 76
 	db 64
@@ -5441,7 +5441,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5456,7 +5456,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	tx MagneticStormDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 238
 	db 76
 	db 0
@@ -5494,7 +5494,7 @@ Magneton1Card: ; 3274b (c:674b)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 205
 	db 76
 	db 4
@@ -5509,7 +5509,7 @@ Magneton1Card: ; 3274b (c:674b)
 	tx Magneton1sSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 209
 	db 76
 	db 64
@@ -5547,7 +5547,7 @@ Magneton2Card: ; 3278c (c:678c)
 	tx SonicboomDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 213
 	db 76
 	db 0
@@ -5562,7 +5562,7 @@ Magneton2Card: ; 3278c (c:678c)
 	tx Magneton2sSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 223
 	db 76
 	db 64
@@ -5600,7 +5600,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5615,7 +5615,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5653,7 +5653,7 @@ Electrode1Card: ; 3280e (c:680e)
 	tx SonicboomDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 242
 	db 76
 	db 0
@@ -5668,7 +5668,7 @@ Electrode1Card: ; 3280e (c:680e)
 	tx EnergySpikeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 252
 	db 76
 	db 0
@@ -5706,7 +5706,7 @@ Electrode2Card: ; 3284f (c:684f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -5721,7 +5721,7 @@ Electrode2Card: ; 3284f (c:684f)
 	tx ChainLightningDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 180
 	db 76
 	db 0
@@ -5759,7 +5759,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	tx LightScreenDescription ; description
 	tx LightScreenDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 88
 	db 76
 	db 0
@@ -5774,7 +5774,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	tx ElectabuzzsQuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 92
 	db 76
 	db 0
@@ -5812,7 +5812,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 74
 	db 76
 	db 4
@@ -5827,7 +5827,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	tx ThunderpunchDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 78
 	db 76
 	db 16
@@ -5865,7 +5865,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	tx DoubleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 9
 	db 77
 	db 0
@@ -5880,7 +5880,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 16
 	db 77
 	db 4
@@ -5918,7 +5918,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	tx QuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 122
 	db 76
 	db 0
@@ -5933,7 +5933,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	tx QuadrupleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 129
 	db 76
 	db 0
@@ -5971,7 +5971,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	tx ThunderstormDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 118
 	db 76
 	db 48
@@ -5986,7 +5986,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6024,7 +6024,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	tx ZapdosThunderDescription ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 107
 	db 76
 	db 16
@@ -6039,7 +6039,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	tx ThunderboltDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 114
 	db 76
 	db 0
@@ -6077,7 +6077,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	tx PealofThunderDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 227
 	db 76
 	db 32
@@ -6092,7 +6092,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	tx BigThunderDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 234
 	db 76
 	db 0
@@ -6130,7 +6130,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	tx HorseasSmokescreenDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 37
 	db 76
 	db 0
@@ -6145,7 +6145,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6183,7 +6183,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6198,7 +6198,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	tx TripleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 41
 	db 76
 	db 0
@@ -6236,7 +6236,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6251,7 +6251,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6289,7 +6289,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6304,7 +6304,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	tx EarthquakeDescription ; description
 	dw NONE ; description (cont)
 	db 70 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 48
 	db 76
 	db 0
@@ -6342,7 +6342,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	tx PeekDescription ; description
 	tx PeekDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 56
 	db 76
 	db 0
@@ -6357,7 +6357,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6395,7 +6395,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	tx TripleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 193
 	db 75
 	db 0
@@ -6410,7 +6410,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	tx TantrumDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 200
 	db 75
 	db 0
@@ -6448,7 +6448,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6463,7 +6463,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6501,7 +6501,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	tx KarateChopDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 2
+	db DAMAGE_MINUS ; effect category
 	db 247
 	db 75
 	db 0
@@ -6516,7 +6516,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	tx SubmissionDescription ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 254
 	db 75
 	db 16
@@ -6554,7 +6554,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	tx StrikesBackDescription ; description
 	tx StrikesBackDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 204
 	db 75
 	db 0
@@ -6569,7 +6569,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6607,7 +6607,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	tx StoneBarrageDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 182
 	db 75
 	db 0
@@ -6622,7 +6622,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6660,7 +6660,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	tx GravelersHardenDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 6
 	db 76
 	db 0
@@ -6675,7 +6675,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6713,7 +6713,7 @@ GolemCard: ; 32d22 (c:6d22)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 60 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6728,7 +6728,7 @@ GolemCard: ; 32d22 (c:6d22)
 	tx AvalancheDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 2
 	db 76
 	db 64
@@ -6766,7 +6766,7 @@ OnixCard: ; 32d63 (c:6d63)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -6781,7 +6781,7 @@ OnixCard: ; 32d63 (c:6d63)
 	tx OnixsHardenDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 189
 	db 75
 	db 0
@@ -6819,7 +6819,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	tx SnivelDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 216
 	db 75
 	db 0
@@ -6834,7 +6834,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	tx CubonesRageDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 220
 	db 75
 	db 0
@@ -6872,7 +6872,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 227
 	db 75
 	db 0
@@ -6887,7 +6887,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	tx CallforFriendDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 234
 	db 75
 	db 0
@@ -6925,7 +6925,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	tx BoneAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 63
 	db 76
 	db 0
@@ -6940,7 +6940,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	tx WailDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 67
 	db 76
 	db 0
@@ -6978,7 +6978,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	tx StretchKickDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 24
 	db 76
 	db 32
@@ -6993,7 +6993,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7031,7 +7031,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7046,7 +7046,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7084,7 +7084,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	tx LeerDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 20
 	db 76
 	db 0
@@ -7099,7 +7099,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7137,7 +7137,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7152,7 +7152,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	tx RamDescription ; description
 	tx RamDescriptionCont ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 10
 	db 76
 	db 16
@@ -7190,7 +7190,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	tx KabutoArmorDescription ; description
 	tx KabutoArmorDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 208
 	db 75
 	db 0
@@ -7205,7 +7205,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7243,7 +7243,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7258,7 +7258,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	tx AbsorbDescription ; description
 	tx AbsorbDescriptionCont ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 212
 	db 75
 	db 0
@@ -7296,7 +7296,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	tx PrehistoricPowerDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 52
 	db 76
 	db 0
@@ -7311,7 +7311,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7349,7 +7349,7 @@ AbraCard: ; 3302e (c:702e)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 136
 	db 74
 	db 4
@@ -7364,7 +7364,7 @@ AbraCard: ; 3302e (c:702e)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7402,7 +7402,7 @@ KadabraCard: ; 3306f (c:706f)
 	tx KadabrasRecoverDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 142
 	db 75
 	db 0
@@ -7417,7 +7417,7 @@ KadabraCard: ; 3306f (c:706f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7455,7 +7455,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	tx DamageSwapDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 251
 	db 74
 	db 0
@@ -7470,7 +7470,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 5
 	db 75
 	db 8
@@ -7508,7 +7508,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7523,7 +7523,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	tx SlowpokesAmnesiaDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 129
 	db 75
 	db 0
@@ -7561,7 +7561,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	tx SpacingOutDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 100
 	db 75
 	db 0
@@ -7576,7 +7576,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	tx ScavengeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 110
 	db 75
 	db 0
@@ -7614,7 +7614,7 @@ SlowbroCard: ; 33173 (c:7173)
 	tx StrangeBehaviorDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 86
 	db 75
 	db 0
@@ -7629,7 +7629,7 @@ SlowbroCard: ; 33173 (c:7173)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 96
 	db 75
 	db 4
@@ -7667,7 +7667,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	tx MayInflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 160
 	db 74
 	db 2
@@ -7682,7 +7682,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	tx DestinyBondDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 164
 	db 74
 	db 0
@@ -7720,7 +7720,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 180
 	db 74
 	db 4
@@ -7735,7 +7735,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	tx EnergyConversionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 184
 	db 74
 	db 0
@@ -7773,7 +7773,7 @@ Haunter1Card: ; 33236 (c:7236)
 	tx TransparencyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 205
 	db 74
 	db 0
@@ -7788,7 +7788,7 @@ Haunter1Card: ; 33236 (c:7236)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 209
 	db 74
 	db 2
@@ -7826,7 +7826,7 @@ Haunter2Card: ; 33277 (c:7277)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 197
 	db 74
 	db 2
@@ -7841,7 +7841,7 @@ Haunter2Card: ; 33277 (c:7277)
 	tx DreamEaterDescription ; description
 	dw NONE ; description (cont)
 	db 50 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 201
 	db 74
 	db 0
@@ -7879,7 +7879,7 @@ GengarCard: ; 332b8 (c:72b8)
 	tx CurseDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 140
 	db 74
 	db 0
@@ -7894,7 +7894,7 @@ GengarCard: ; 332b8 (c:72b8)
 	tx DarkMindDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 150
 	db 74
 	db 32
@@ -7932,7 +7932,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -7947,7 +7947,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 236
 	db 74
 	db 8
@@ -7985,7 +7985,7 @@ HypnoCard: ; 3333a (c:733a)
 	tx ProphecyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 213
 	db 74
 	db 0
@@ -8000,7 +8000,7 @@ HypnoCard: ; 3333a (c:733a)
 	tx DarkMindDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 226
 	db 74
 	db 32
@@ -8038,7 +8038,7 @@ MrMimeCard: ; 3337b (c:737b)
 	tx InvisibleWallDescription ; description
 	tx InvisibleWallDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 240
 	db 74
 	db 0
@@ -8053,7 +8053,7 @@ MrMimeCard: ; 3337b (c:737b)
 	tx MrMimesMeditateDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 244
 	db 74
 	db 0
@@ -8091,7 +8091,7 @@ JynxCard: ; 333bc (c:73bc)
 	tx DoubleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 158
 	db 75
 	db 0
@@ -8106,7 +8106,7 @@ JynxCard: ; 333bc (c:73bc)
 	tx JynxsMeditateDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 165
 	db 75
 	db 0
@@ -8144,7 +8144,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	tx PsychicDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 37
 	db 75
 	db 0
@@ -8159,7 +8159,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	tx BarrierDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 44
 	db 75
 	db 0
@@ -8197,7 +8197,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	tx EnergyAbsorptionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 73
 	db 75
 	db 0
@@ -8212,7 +8212,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8250,7 +8250,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	tx EnergyAbsorptionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 60
 	db 75
 	db 0
@@ -8265,7 +8265,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8303,7 +8303,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	tx NeutralizingShieldDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 29
 	db 75
 	db 0
@@ -8318,7 +8318,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 33
 	db 75
 	db 4
@@ -8356,7 +8356,7 @@ Mew2Card: ; 33501 (c:7501)
 	tx MysteryAttackDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 172
 	db 75
 	db 0
@@ -8371,7 +8371,7 @@ Mew2Card: ; 33501 (c:7501)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8409,7 +8409,7 @@ Mew3Card: ; 33542 (c:7542)
 	tx PsywaveDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 9
 	db 75
 	db 0
@@ -8424,7 +8424,7 @@ Mew3Card: ; 33542 (c:7542)
 	tx DevolutionBeamDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 13
 	db 75
 	db 0
@@ -8462,7 +8462,7 @@ PidgeyCard: ; 33583 (c:7583)
 	tx WhirlwindDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 2
 	db 78
 	db 0
@@ -8477,7 +8477,7 @@ PidgeyCard: ; 33583 (c:7583)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8515,7 +8515,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	tx WhirlwindDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 174
 	db 77
 	db 0
@@ -8530,7 +8530,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	tx PidgeottosMirrorMoveDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 184
 	db 77
 	db 0
@@ -8568,7 +8568,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	tx SlicingWildDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 85
 	db 78
 	db 32
@@ -8583,7 +8583,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	tx GaleDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 89
 	db 78
 	db 0
@@ -8621,7 +8621,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8636,7 +8636,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	tx HurricaneDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 170
 	db 77
 	db 0
@@ -8674,7 +8674,7 @@ RattataCard: ; 33687 (c:7687)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8689,7 +8689,7 @@ RattataCard: ; 33687 (c:7687)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8727,7 +8727,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8742,7 +8742,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	tx SuperFangDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 46
 	db 78
 	db 0
@@ -8780,7 +8780,7 @@ SpearowCard: ; 33709 (c:7709)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8795,7 +8795,7 @@ SpearowCard: ; 33709 (c:7709)
 	tx SpearowsMirrorMoveDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 31
 	db 77
 	db 0
@@ -8833,7 +8833,7 @@ FearowCard: ; 3374a (c:774a)
 	tx FearowsAgilityDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 53
 	db 77
 	db 0
@@ -8848,7 +8848,7 @@ FearowCard: ; 3374a (c:774a)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -8886,7 +8886,7 @@ ClefairyCard: ; 3378b (c:778b)
 	tx MayInflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 206
 	db 77
 	db 2
@@ -8901,7 +8901,7 @@ ClefairyCard: ; 3378b (c:778b)
 	tx ClefairysMetronomeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 210
 	db 77
 	db 0
@@ -8939,7 +8939,7 @@ ClefableCard: ; 337cc (c:77cc)
 	tx ClefablesMetronomeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 156
 	db 77
 	db 0
@@ -8954,7 +8954,7 @@ ClefableCard: ; 337cc (c:77cc)
 	tx ClefablesMinimizeDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 166
 	db 77
 	db 0
@@ -8992,7 +8992,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	tx FirstAidDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 235
 	db 77
 	db 0
@@ -9007,7 +9007,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	tx JigglypuffsDoubleEdgeDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 242
 	db 77
 	db 16
@@ -9045,7 +9045,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	tx FriendshipSongDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 96
 	db 78
 	db 0
@@ -9060,7 +9060,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	tx ExpandDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 103
 	db 78
 	db 0
@@ -9098,7 +9098,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 231
 	db 77
 	db 2
@@ -9113,7 +9113,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9151,7 +9151,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 220
 	db 77
 	db 2
@@ -9166,7 +9166,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	tx DotheWaveDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 224
 	db 77
 	db 0
@@ -9204,7 +9204,7 @@ Meowth1Card: ; 33911 (c:7911)
 	tx CatPunchDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 77
 	db 78
 	db 32
@@ -9219,7 +9219,7 @@ Meowth1Card: ; 33911 (c:7911)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9257,7 +9257,7 @@ Meowth2Card: ; 33952 (c:7952)
 	tx PayDayDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 135
 	db 77
 	db 128
@@ -9272,7 +9272,7 @@ Meowth2Card: ; 33952 (c:7952)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9310,7 +9310,7 @@ PersianCard: ; 33993 (c:7993)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9325,7 +9325,7 @@ PersianCard: ; 33993 (c:7993)
 	tx PounceDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 246
 	db 77
 	db 0
@@ -9363,7 +9363,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	tx LeekSlapDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 79
 	db 77
 	db 0
@@ -9378,7 +9378,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9416,7 +9416,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	tx DoubleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 117
 	db 77
 	db 0
@@ -9431,7 +9431,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9469,7 +9469,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	tx RetreatAidDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 124
 	db 77
 	db 0
@@ -9484,7 +9484,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	tx DodriosRageDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 128
 	db 77
 	db 0
@@ -9522,7 +9522,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 250
 	db 77
 	db 4
@@ -9537,7 +9537,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	tx MayInflictConfusionDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 254
 	db 77
 	db 8
@@ -9575,7 +9575,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	tx ScrunchDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 38
 	db 78
 	db 0
@@ -9590,7 +9590,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	tx ChanseysDoubleEdgeDescription ; description
 	dw NONE ; description (cont)
 	db 80 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 42
 	db 78
 	db 64
@@ -9628,7 +9628,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	tx FetchDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 92
 	db 77
 	db 128
@@ -9643,7 +9643,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	tx QuadrupleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 96
 	db 77
 	db 0
@@ -9681,7 +9681,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	tx StompDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 103
 	db 77
 	db 0
@@ -9696,7 +9696,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	tx RampageDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 110
 	db 77
 	db 0
@@ -9734,7 +9734,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9749,7 +9749,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	tx MorphDescription ; description
 	tx MorphDescriptionCont ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 81
 	db 78
 	db 0
@@ -9787,7 +9787,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	tx TailWagDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 20
 	db 77
 	db 0
@@ -9802,7 +9802,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	tx QuickAttackDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 1
+	db DAMAGE_PLUS ; effect category
 	db 24
 	db 77
 	db 0
@@ -9840,7 +9840,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	tx Conversion1Description ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 12
 	db 78
 	db 0
@@ -9855,7 +9855,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	tx Conversion2Description ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 128
+	db RESIDUAL ; effect category
 	db 25
 	db 78
 	db 0
@@ -9893,7 +9893,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	tx ThickSkinnedDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 71
 	db 77
 	db 0
@@ -9908,7 +9908,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	tx MayInflictParalysisDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 75
 	db 77
 	db 4
@@ -9946,7 +9946,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9961,7 +9961,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	dw NONE ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 0
 	db 0
 	db 0
@@ -9999,7 +9999,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 139
 	db 77
 	db 0
@@ -10014,7 +10014,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	tx Discard1EnergyFromTargetDescription ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
-	db 0
+	db DAMAGE_NORMAL ; effect category
 	db 146
 	db 77
 	db 0
@@ -10052,7 +10052,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	tx HealingWindDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 63
 	db 78
 	db 0
@@ -10067,7 +10067,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	tx DoubleAttackX30Description ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 70
 	db 78
 	db 0
@@ -10105,7 +10105,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	tx StepInDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
-	db 4
+	db POKEMON_POWER ; effect category
 	db 57
 	db 77
 	db 0
@@ -10120,7 +10120,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	tx DoubleAttackX40Description ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
-	db 3
+	db DAMAGE_X ; effect category
 	db 64
 	db 77
 	db 0
