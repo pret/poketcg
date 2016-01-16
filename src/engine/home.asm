@@ -3765,7 +3765,99 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	ret
 ; 0x2fcb
 
-INCBIN "baserom.gbc",$2fcb,$302c - $2fcb
+Func_2fcb: ; 2fcb (0:2fcb)
+	ld a, $1d
+	call BankpushHome
+	ld c, $10
+	call CopyGfxData
+	call BankpopHome
+	ret
+; 0x2fd9	
+	
+TryExecuteCommandFunction: ; 2fd9 (0:2fd9)
+; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
+; and executes its associated function if so.
+; input: a = move effect / card function command ID
+	push af
+; grab pointer to command list from wCurrentMoveEffectOrCardFunction	
+	ld hl, wCurrentMoveEffectOrCardFunction
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop af
+	call CheckMatchingCommand
+	jr nc, .executeFunction
+; return if input command ID wasn't found	
+	or a
+	ret
+
+.executeFunction
+; executes the function at [wce22]:hl
+	ld a, [hBankROM]
+	push af
+	ld a, [wce22]
+	call BankswitchHome
+	or a
+	call CallF
+	push af
+; restore original bank and return	
+	pop bc
+	pop af
+	call BankswitchHome
+	push bc
+	pop af
+	ret
+; 0x2ffe	
+
+CheckMatchingCommand: ; 2ffe (0:2ffe)
+; input: 
+; a = command ID to check
+; hl = pointer to current move effect or trainer card command list
+; return nc if command ID matching a is found, c otherwise
+	ld c, a
+	ld a, l
+	or h
+	jr nz, .notNullPointer
+; return c if pointer is $0000
+	scf
+	ret
+	
+.notNullPointer
+	ld a, [hBankROM]
+	push af
+	ld a, BANK(MoveEffectAndTrainerCardCommands)
+	call BankswitchHome
+; store the bank number of command functions ($b) in wce22
+	ld a, $b
+	ld [wce22],a
+.checkCommandLoop
+	ld a, [hli]
+	or a
+	jr z, .noMoreCommands
+	cp c
+	jr z, .matchingCommandFound
+; skip function pointer for this command and move to the next one	
+	inc hl
+	inc hl
+	jr .checkCommandLoop
+	
+.matchingCommandFound
+; load function pointer for this command
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; restore bank and return nc
+	pop af
+	call BankswitchHome
+	or a
+	ret
+; restore bank and return c	
+.noMoreCommands	
+	pop af
+	call BankswitchHome
+	scf
+	ret	
+; 0x302c
 
 ; loads the deck id in a from DeckPointers
 ; sets carry flag if an invalid deck id is used
