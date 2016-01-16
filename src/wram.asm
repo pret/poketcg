@@ -1,4 +1,7 @@
+INCLUDE "constants.asm"
+
 ;--- Bank 0: $Cxxx ----------------------------------------
+
 SECTION "WRAM0", WRAM0
 	ds $a00
 
@@ -72,7 +75,8 @@ wBufPalette:: ; caf0 - cab7f
 	ds $80
 	ds $4
 
-;--- Serial transfer bytes (cb74-cbc4) ----------
+;--- Serial transfer bytes (cb74-cbc4) --------------------
+
 wSerialOp:: ; cb74
 	ds $1
 
@@ -116,7 +120,8 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 	ds $20
 	ds $49
 
-;--- Duels --------------------------------------
+;--- Duels ------------------------------------------------
+
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
@@ -128,13 +133,22 @@ wIsPracticeDuel:: ; cc13
 
 wDuelTheme:: ; cc1a
 	ds $1
-	ds $f2
+	ds $9
+
+wPlayerCard::
+	ds CARD_DATA_LENGTH
+	
+wOpponentCard::
+	ds CARD_DATA_LENGTH
+	
+	ds $67
 
 wUppercaseFlag:: ; cd0d
 	ds $1
 
 
 ;--- Bank 1: $Dxxx ----------------------------------------
+
 SECTION "WRAM1", WRAMX, BANK[1]
 	ds $113
 
