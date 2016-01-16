@@ -1,4 +1,8 @@
-INCBIN "baserom.gbc",$18000,$1996e - $18000
+INCBIN "baserom.gbc",$18000,$186f7 - $18000
+
+INCLUDE "data/move_effects.asm"
+
+INCBIN "baserom.gbc",$18f9c,$1996e - $18f9c
 
 Func_1996e: ; 1996e (6:596e)
 	call EnableExtRAM
