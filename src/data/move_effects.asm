@@ -1,9 +1,9 @@
 MoveEffectCommands: ; 186f7 (6:46f7)
 ; Each move has a two-byte effect pointer (move's 7th param) that points to one of these structures:
-; 	db  CommandId ($01 - $09)
+; 	db CommandId ($01 - $09)
 ; 	dw Function
 ; 	...
-; 	db	db  $00
+; 	db $00
 
 ; Apparently every command has a "time", and a function is called multiple times during a turn
 ; with an argument identifying the command Id. If said command Id is found in the
