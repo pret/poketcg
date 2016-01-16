@@ -55,10 +55,10 @@ ItemFinderDescription: ; 6434f (19:434f)
 	db "card from your discard pile into\n"
 	db "your hand.",TX_END
 
-GustOfWindName: ; 643c2 (19:43c2)
+GustofWindName: ; 643c2 (19:43c2)
 	db TX_START,"Gust of Wind",TX_END
 
-GustOfWindDescription: ; 643d0 (19:43d0)
+GustofWindDescription: ; 643d0 (19:43d0)
 	db TX_START,"Choose 1 of your opponent's Benched\n"
 	db "Pok`mon and switch it with his or\n"
 	db "her Active Pok`mon.",TX_END

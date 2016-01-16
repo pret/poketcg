@@ -605,10 +605,10 @@ Jigglypuff3Description: ; 62145 (18:6145)
 WigglytuffName: ; 621ac (18:61ac)
 	db TX_START,"Wigglytuff",TX_END
 
-DoTheWaveName: ; 621b8 (18:61b8)
+DotheWaveName: ; 621b8 (18:61b8)
 	db TX_START,"Do the Wave",TX_END
 
-DoTheWaveDescription: ; 621c5 (18:61c5)
+DotheWaveDescription: ; 621c5 (18:61c5)
 	db TX_START,"Does 10 damage plus 10 more damage\n"
 	db "for each of your Benched Pok`mon.",TX_END
 

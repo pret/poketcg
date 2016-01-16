@@ -841,7 +841,7 @@ ArbokCard: ; 310f3 (c:50f3)
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
-	dw PoisonFangText_ ; name
+	dw PoisonFangName_ ; name
 	dw InflictPoisonDescription_ ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
@@ -869,7 +869,7 @@ ArbokCard: ; 310f3 (c:50f3)
 NidoranFCard: ; 31134 (c:5134)
 	db GRASS ; type
 	dw $733 ; gfx
-	dw NidoranFText_ ; name
+	dw NidoranFName_ ; name
 	db CIRCLE ; rarity
 	db MYSTERY | JUNGLE ; set
 	db NIDORANF
@@ -879,7 +879,7 @@ NidoranFCard: ; 31134 (c:5134)
 
 	; move 1
 	energy GRASS, 1 ; energies
-	dw FurySweepesText_ ; name
+	dw FurySweepesName_ ; name
 	dw TripleAttackX10Description_ ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
@@ -894,8 +894,8 @@ NidoranFCard: ; 31134 (c:5134)
 
 	; move 2
 	energy GRASS, 2 ; energies
-	dw CallForFamilyText_ ; name
-	dw NidoranFsCallForFamilyDescription_ ; description
+	dw CallforFamilyName_ ; name
+	dw NidoranFsCallforFamilyDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 128
@@ -928,7 +928,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db NIDORINA
 	db 70 ; hp
 	db STAGE1 ; stage
-	dw NidoranFText_ ; pre-evo name
+	dw NidoranFName_ ; pre-evo name
 
 	; move 1
 	energy GRASS, 1 ; energies
@@ -1689,8 +1689,8 @@ BellsproutCard: ; 31503 (c:5503)
 
 	; move 2
 	energy GRASS, 1 ; energies
-	dw CallForFamilyText_ ; name
-	dw BellsproutsCallForFamilyDescription_ ; description
+	dw CallforFamilyName_ ; name
+	dw BellsproutsCallforFamilyDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 128
@@ -2749,8 +2749,8 @@ Arcanine1Card: ; 31a17 (c:5a17)
 
 	; move 2
 	energy FIRE, 2 ; energies
-	dw FlamesOfRageName_ ; name
-	dw FlamesOfRageDescription_ ; description
+	dw FlamesofRageName_ ; name
+	dw FlamesofRageDescription_ ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
 	db 1
@@ -3438,7 +3438,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 
 	; move 2
 	energy WATER, 1 ; energies
-	dw FurySweepesText_ ; name
+	dw FurySweepesName_ ; name
 	dw TripleAttackX10Description_ ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
@@ -3915,8 +3915,8 @@ ShellderCard: ; 31fad (c:5fad)
 
 	; move 2
 	energy WATER, 1 ; energies
-	dw HideInShellName_ ; name
-	dw HideInShellDescription_ ; description
+	dw HideinShellName_ ; name
+	dw HideinShellDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 128
@@ -4006,8 +4006,8 @@ KrabbyCard: ; 3202f (c:602f)
 
 	; move 1
 	energy WATER, 1 ; energies
-	dw CallForFamilyText_ ; name
-	dw KrabbysCallForFamilyDescription_ ; description
+	dw CallforFamilyName_ ; name
+	dw KrabbysCallforFamilyDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 128
@@ -6073,8 +6073,8 @@ Zapdos3Card: ; 32a16 (c:6a16)
 
 	; move 1
 	energy 0 ; energies
-	dw PealOfThunderName_ ; name
-	dw PealOfThunderDescription_ ; description
+	dw PealofThunderName_ ; name
+	dw PealofThunderDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 4
@@ -6194,7 +6194,7 @@ SandslashCard: ; 32a98 (c:6a98)
 
 	; move 2
 	energy FIGHTING, 2 ; energies
-	dw FurySweepesText_ ; name
+	dw FurySweepesName_ ; name
 	dw TripleAttackX20Description_ ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
@@ -6391,7 +6391,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 
 	; move 1
 	energy FIGHTING, 2 ; energies
-	dw FurySweepesText_ ; name
+	dw FurySweepesName_ ; name
 	dw TripleAttackX20Description_ ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
@@ -6883,8 +6883,8 @@ Marowak1Card: ; 32de5 (c:6de5)
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
-	dw CallForFriendName_ ; name
-	dw CallForFriendDescription_ ; description
+	dw CallforFriendName_ ; name
+	dw CallforFriendDescription_ ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db 128
@@ -9162,8 +9162,8 @@ WigglytuffCard: ; 338d0 (c:78d0)
 
 	; move 2
 	energy COLORLESS, 3 ; energies
-	dw DoTheWaveName_ ; name
-	dw DoTheWaveDescription_ ; description
+	dw DotheWaveName_ ; name
+	dw DotheWaveDescription_ ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db 1
@@ -10485,12 +10485,12 @@ ItemFinderCard: ; 33f47 (c:7f47)
 GustofWindCard: ; 33f55 (c:7f55)
 	db TRAINER_CARD ; type
 	dw $5308 ; gfx
-	dw GustOfWindName_ ; name
+	dw GustofWindName_ ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; set
 	db GUST_OF_WIND
 	dw $4f92 ; function
-	dw GustOfWindDescription_ ; description
+	dw GustofWindDescription_ ; description
 	dw NONE ; description (cont)
 
 DevolutionSprayCard: ; 33f63 (c:7f63)

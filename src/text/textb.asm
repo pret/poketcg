@@ -621,10 +621,10 @@ Zapdos2Description: ; 5e2e7 (17:62e7)
 	db "appear from clouds while wielding\n"
 	db "enormous lightning bolts.",TX_END
 
-PealOfThunderName: ; 5e345 (17:6345)
+PealofThunderName: ; 5e345 (17:6345)
 	db TX_START,"Peal of Thunder",TX_END
 
-PealOfThunderDescription: ; 5e356 (17:6356)
+PealofThunderDescription: ; 5e356 (17:6356)
 	db TX_START,"When you put Zapdos into play during\n"
 	db "your turn (not during set-up), do\n"
 	db "30 damage to a Pok`mon other than\n"
@@ -924,10 +924,10 @@ MarowakName: ; 5f329 (17:7329)
 BonemerangName: ; 5f332 (17:7332)
 	db TX_START,"Bonemerang",TX_END
 
-CallForFriendName: ; 5f33e (17:733e)
+CallforFriendName: ; 5f33e (17:733e)
 	db TX_START,"Call for Friend",TX_END
 
-CallForFriendDescription: ; 5f34f (17:734f)
+CallforFriendDescription: ; 5f34f (17:734f)
 	db TX_START,"Search your deck for a ",TX_FIGHTING," Basic\n"
 	db "Pok`mon card and put it onto your\n"
 	db "Bench. Shuffle your deck afterward.\n"

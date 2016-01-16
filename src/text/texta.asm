@@ -53,7 +53,7 @@ TerrorStrikeDescription: ; 581bc (16:41bc)
 	db "(Do the damage before switching\n"
 	db "the Pok`mon.)",TX_END
 
-PoisonFangText: ; 58277 (16:4277)
+PoisonFangName: ; 58277 (16:4277)
 	db TX_START,"Poison Fang",TX_END
 
 ArbokKind: ; 58284 (16:4284)
@@ -64,20 +64,20 @@ ArbokDescription: ; 5828b (16:428b)
 	db "warning markings on its belly differ\n"
 	db "from area to area.",TX_END
 
-NidoranFText: ; 582e5 (16:42e5)
+NidoranFName: ; 582e5 (16:42e5)
 	db TX_START,"Nidoran%",TX_END
 
-FurySweepesText: ; 582ef (16:42ef)
+FurySweepesName: ; 582ef (16:42ef)
 	db TX_START,"Fury Swipes",TX_END
 
 TripleAttackX10Description: ; 582fc (16:42fc)
 	db TX_START,"Flip 3 coins. This attack does 10\n"
 	db "damage times the number of heads.",TX_END
 
-CallForFamilyText: ; 58341 (16:4341)
+CallforFamilyName: ; 58341 (16:4341)
 	db TX_START,"Call for Family",TX_END
 
-NidoranFsCallForFamilyDescription: ; 58352 (16:4352)
+NidoranFsCallforFamilyDescription: ; 58352 (16:4352)
 	db TX_START,"Search your deck for a Basic Pok`mon\n"
 	db "named Nidoran% or Nidoran$ and put\n"
 	db "it onto your Bench. Shuffle your\n"
@@ -378,7 +378,7 @@ VenomothDescription: ; 59284 (16:5284)
 BellsproutName: ; 592e5 (16:52e5)
 	db TX_START,"Bellsprout",TX_END
 
-BellsproutsCallForFamilyDescription: ; 592f1 (16:52f1)
+BellsproutsCallforFamilyDescription: ; 592f1 (16:52f1)
 	db TX_START,"Search your deck for a Basic Pok`mon\n"
 	db "named Bellsprout and put it onto\n"
 	db "your Bench. Shuffle your deck\n"
@@ -771,10 +771,10 @@ QuickAttackDescription: ; 5a56a (16:656a)
 	db "if tails, this attack does 10\n"
 	db "damage.",TX_END
 
-FlamesOfRageName: ; 5a5d8 (16:65d8)
+FlamesofRageName: ; 5a5d8 (16:65d8)
 	db TX_START,"Flames of Rage",TX_END
 
-FlamesOfRageDescription: ; 5a5e8 (16:65e8)
+FlamesofRageDescription: ; 5a5e8 (16:65e8)
 	db TX_START,"Discard 2 ",TX_FIRE," Energy cards attached\n"
 	db "to Arcanine in order to use this\n"
 	db "attack. This attack does 40 damage\n"
@@ -1187,10 +1187,10 @@ DewgongDescription: ; 5bb11 (16:7b11)
 ShellderName: ; 5bb6e (16:7b6e)
 	db TX_START,"Shellder",TX_END
 
-HideInShellName: ; 5bb78 (16:7b78)
+HideinShellName: ; 5bb78 (16:7b78)
 	db TX_START,"Hide in Shell",TX_END
 
-HideInShellDescription: ; 5bb87 (16:7b87)
+HideinShellDescription: ; 5bb87 (16:7b87)
 	db TX_START,"Flip a coin. If heads, prevent all\n"
 	db "damage done to Shellder during your\n"
 	db "opponent's next turn. (Any other\n"
@@ -1227,7 +1227,7 @@ CloysterDescription: ; 5bd09 (16:7d09)
 KrabbyName: ; 5bd63 (16:7d63)
 	db TX_START,"Krabby",TX_END
 
-KrabbysCallForFamilyDescription: ; 5bd6b (16:7d6b)
+KrabbysCallforFamilyDescription: ; 5bd6b (16:7d6b)
 	db TX_START,"Search your deck for a Basic Pok`mon\n"
 	db "named Krabby and put it onto your\n"
 	db "Bench. Shuffle your deck afterward.\n"

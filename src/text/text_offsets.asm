@@ -2121,14 +2121,14 @@ TextOffsets:: ; 34000 (d:4000)
 	text ArbokName
 	text TerrorStrikeName
 	text TerrorStrikeDescription
-	text PoisonFangText
+	text PoisonFangName
 	text ArbokKind
 	text ArbokDescription
-	text NidoranFText
-	text FurySweepesText
+	text NidoranFName
+	text FurySweepesName
 	text TripleAttackX10Description
-	text CallForFamilyText
-	text NidoranFsCallForFamilyDescription
+	text CallforFamilyName
+	text NidoranFsCallforFamilyDescription
 	text NidoranFKind
 	text NidoranFDescription
 	text NidorinaName
@@ -2201,7 +2201,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text VenomothKind
 	text VenomothDescription
 	text BellsproutName
-	text BellsproutsCallForFamilyDescription
+	text BellsproutsCallforFamilyDescription
 	text BellsproutDescription
 	text WeepinbellName
 	text RazorLeafName
@@ -2299,8 +2299,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text ArcanineName
 	text QuickAttackName
 	text QuickAttackDescription
-	text FlamesOfRageName
-	text FlamesOfRageDescription
+	text FlamesofRageName
+	text FlamesofRageDescription
 	text ArcanineKind
 	text Arcanine1Description
 	text ArcaninesFlamethrowerDescription
@@ -2401,8 +2401,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text IceBeamName
 	text DewgongDescription
 	text ShellderName
-	text HideInShellName
-	text HideInShellDescription
+	text HideinShellName
+	text HideinShellDescription
 	text ShellderKind
 	text ShellderDescription
 	text CloysterName
@@ -2411,7 +2411,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text SpikeCannonName
 	text CloysterDescription
 	text KrabbyName
-	text KrabbysCallForFamilyDescription
+	text KrabbysCallforFamilyDescription
 	text KrabbyKind
 	text KrabbyDescription
 	text KinglerName
@@ -2566,8 +2566,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text ThunderboltName
 	text ThunderboltDescription
 	text Zapdos2Description
-	text PealOfThunderName
-	text PealOfThunderDescription
+	text PealofThunderName
+	text PealofThunderDescription
 	text BigThunderName
 	text BigThunderDescription
 	text Zapdos3Description
@@ -2639,8 +2639,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text CuboneDescription
 	text MarowakName
 	text BonemerangName
-	text CallForFriendName
-	text CallForFriendDescription
+	text CallforFriendName
+	text CallforFriendDescription
 	text MarowakKind
 	text Marowak1Description
 	text BoneAttackName
@@ -2834,8 +2834,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text LullabyName
 	text Jigglypuff3Description
 	text WigglytuffName
-	text DoTheWaveName
-	text DoTheWaveDescription
+	text DotheWaveName
+	text DotheWaveDescription
 	text WigglytuffDescription
 	text MeowthName
 	text CatPunchName
@@ -2971,8 +2971,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text DefenderDescription
 	text ItemFinderName
 	text ItemFinderDescription
-	text GustOfWindName
-	text GustOfWindDescription
+	text GustofWindName
+	text GustofWindDescription
 	text DevolutionSprayName
 	text DevolutionSprayDescription
 	text DevolutionSprayDescriptionCont
