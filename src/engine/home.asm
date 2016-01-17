@@ -817,7 +817,7 @@ CallIndirect: ; 05b6 (0:05b6)
 	ld h, a
 	pop af
 	; fallthrough
-CallF: ; 05c1 (0:05c1)
+CallHL: ; 05c1 (0:05c1)
 	jp [hl]
 ; 0x5c2
 
@@ -2193,7 +2193,9 @@ Memcpy: ; 1dca (0:1dca)
 .asm_1dd8
 	jp MemcpyDEHL_hblank
 
-Func_1ddb: ; 1ddb (0:1ddb)
+; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de 
+; to the corresponding BG Map 0 address in VRAM.
+CalculateBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
 	ld h, $0
 	add hl, hl
@@ -2209,7 +2211,8 @@ Func_1ddb: ; 1ddb (0:1ddb)
 	ld h, a
 	ret
 
-Func_1deb: ; 1deb (0:1deb)
+; Apply window correction to xy coordinates at de	
+AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	push af
 	ld a, [hSCX]
 	rra
@@ -2231,14 +2234,16 @@ Func_1deb: ; 1deb (0:1deb)
 
 INCBIN "baserom.gbc",$1e00,$1e7c - $1e00
 
-Func_1e7c: ; 1e7c (0:1e7c)
+; Draws a bxc text box at de to print menu data
+DrawMenuBox: ; 1e7c (0:1e7c)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr z, asm_1ec9
+	jr z, DrawMenuBoxCGB
 	cp CONSOLE_SGB
-	jp z, Func_1f0f
-Func_1e88: ; 1e88 (0:1e88)
-	call Func_1ddb
+	jp z, DrawMenuBoxSGB
+;	fallthrough
+DrawMenuBoxDMG: ; 1e88 (0:1e88)
+	call CalculateBGMap0Address
 	ld a, $1c
 	ld de, $1819
 	call Func_1ea5
@@ -2281,8 +2286,9 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	add hl, de
 	add sp, $20
 	ret
-asm_1ec9
-	call Func_1ddb
+	
+DrawMenuBoxCGB:
+	call CalculateBGMap0Address
 	ld a, $1c
 	ld de, $1819
 	call Func_1efb
@@ -2320,10 +2326,10 @@ Func_1efb: ; 1efb (0:1efb)
 	call BankswitchVRAM_0
 	ret
 
-Func_1f0f: ; 1f0f (0:1f0f)
+DrawMenuBoxSGB: ; 1f0f (0:1f0f)
 	push bc
 	push de
-	call Func_1e88
+	call DrawMenuBoxDMG
 	pop de
 	pop bc
 	ld a, [$ccf3]
@@ -2373,7 +2379,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push af
 	push hl
 	add sp, $e0
-	call Func_1ddb
+	call CalculateBGMap0Address
 .asm_1f67
 	push hl
 	push bc
@@ -2647,7 +2653,7 @@ Func_22ae: ; 22ae (0:22ae)
 	xor a
 	ld [$ffae], a
 	ld [$cd09], a
-	call Func_1ddb
+	call CalculateBGMap0Address
 	ld a, l
 	ld [$ffaa], a
 	ld a, h
@@ -3175,7 +3181,7 @@ Func_264b: ; 264b (0:264b)
 	ld l, [hl]
 	ld h, a
 	ld a, [$ffb1]
-	call CallF
+	call CallHL
 	jr nc, HandleMenuInput
 .asm_269b
 	call Func_270b
@@ -3244,7 +3250,7 @@ asm_26ec
 	inc hl
 	add [hl]
 	ld e, a
-	call Func_1deb
+	call AdjustCoordinatesForWindow
 	ld a, c
 	ld c, e
 	ld b, d
@@ -3285,7 +3291,7 @@ Func_2a3e: ; 2a3e (0:2a3e)
 	call Func_2a6f
 	ld a, $b
 	ld de, $010e
-	call Func_1deb
+	call AdjustCoordinatesForWindow
 	call Func_22a6
 	pop hl
 	ld a, l
@@ -3299,7 +3305,7 @@ Func_2a59: ; 2a59 (0:2a59)
 	call Func_2a9e
 	ld a, $13
 	ld de, $010e
-	call Func_1deb
+	call AdjustCoordinatesForWindow
 	call Func_22a6
 	call EnableLCD
 	pop hl
@@ -3308,8 +3314,8 @@ Func_2a59: ; 2a59 (0:2a59)
 Func_2a6f: ; 2a6f (0:2a6f)
 	ld de, $000c
 	ld bc, $0c06
-	call Func_1deb
-	call Func_1e7c
+	call AdjustCoordinatesForWindow
+	call DrawMenuBox
 	ret
 ; 0x2a7c
 
@@ -3318,8 +3324,8 @@ INCBIN "baserom.gbc",$2a7c,$2a9e - $2a7c
 Func_2a9e: ; 2a9e (0:2a9e)
 	ld de, $000c
 	ld bc, $1406
-	call Func_1deb
-	call Func_1e7c
+	call AdjustCoordinatesForWindow
+	call DrawMenuBox
 	ret
 
 Func_2aab: ; 2aab (0:2aab)
@@ -3401,7 +3407,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	ret
 
 Func_2b66: ; 2b66 (0:2b66)
-	call Func_1deb
+	call AdjustCoordinatesForWindow
 	ld hl, $002f
 	call Func_2c1b
 	ret
@@ -3915,7 +3921,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ld a, [wce22]
 	call BankswitchHome
 	or a
-	call CallF
+	call CallHL
 	push af
 ; restore original bank and return	
 	pop bc

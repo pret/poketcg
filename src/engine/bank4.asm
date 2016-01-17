@@ -141,7 +141,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [$ccf3], a
 	ld de, $000c
 	ld bc, $1406
-	call Func_1e7c ; LoadTextBoxBorder
+	call DrawMenuBox
 	ld a, [$cc19]
 	add a
 	add a

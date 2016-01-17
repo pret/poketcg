@@ -568,16 +568,16 @@ Func_9168: ; 9168 (2:5168)
 	call Func_8d56
 	ld de, $0000
 	ld bc, $1404
-	call Func_1e7c
+	call DrawMenuBox
 	ld de, $0003
 	ld bc, $1404
-	call Func_1e7c
+	call DrawMenuBox
 	ld de, $0006
 	ld bc, $1404
-	call Func_1e7c
+	call DrawMenuBox
 	ld de, $0009
 	ld bc, $1404
-	call Func_1e7c
+	call DrawMenuBox
 	ld hl, Unknown_9242
 	call Func_2c08
 	ld a, $4
