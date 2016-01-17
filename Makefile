@@ -21,11 +21,11 @@ $(OBJS): $$*.asm $$($$*_dep)
 	rgbasm -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
-	rgblink -n $*.sym -o $@ $(OBJS)
+	rgblink -n $*.sym -m $*.map -o $@ $(OBJS)
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
 
 clean:
-	rm -f tcg.gbc $(OBJS) *.sym
+	rm -f tcg.gbc $(OBJS) *.sym *.map
 	find . \( -iname '*.1bpp' -o -iname '*.2bpp' \) -exec rm {} +
 
 %.2bpp: %.png
