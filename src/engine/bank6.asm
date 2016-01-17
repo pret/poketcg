@@ -104,7 +104,7 @@ Func_19a12: ; 19a12 (6:5a12)
 	ld h, [hl]
 	ld l, a
 	ld de, $c590
-	call Func_2e89
+	call PrintTextBoxBorderLabel
 	ret
 ; 0x19a1f
 

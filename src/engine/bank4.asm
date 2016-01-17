@@ -68,7 +68,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call DisableLCD
 	call $4000
 	xor a
-	ld [$ccf3], a
+	ld [wFrameType], a
 	pop bc
 	push bc
 	ld b, $0
@@ -118,7 +118,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, $1
 	ld [$cac0], a
 	ld a, $4
-	ld [$ccf3], a
+	ld [wFrameType], a
 	farcallx $1, $7599
 	farcall Func_c1a4
 	call Func_3c48
@@ -138,7 +138,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call DisableLCD
 	call $4000
 	ld a, $4
-	ld [$ccf3], a
+	ld [wFrameType], a
 	ld de, $000c
 	ld bc, $1406
 	call DrawMenuBox

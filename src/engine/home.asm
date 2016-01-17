@@ -2164,7 +2164,7 @@ Func_1c8e: ; 1c8e (0:1c8e)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	jp Func_2e89
+	jp PrintTextBoxBorderLabel
 .asm_1c9b
 	ld hl, $c500
 	ld a, [hl]
@@ -2173,7 +2173,7 @@ Func_1c8e: ; 1c8e (0:1c8e)
 	jr asm_1c83
 .asm_1ca4
 	ld hl, $0092
-	jp Func_2e89
+	jp PrintTextBoxBorderLabel
 ; 0x1caa
 
 INCBIN "baserom.gbc",$1caa,$1dca - $1caa
@@ -2232,9 +2232,98 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	ret
 ; 0x1e00
 
-INCBIN "baserom.gbc",$1e00,$1e7c - $1e00
+; Draws a bxc text box at de printing a name in the left side of the top border. 
+; Name's text offset must be at hl when this function is called.
+; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
+DrawTextBox: ; 1e00 (0:1e00)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	jr nz, .drawTextBox
+	ld a, [wFrameType]
+	or a
+	jr z, .drawTextBox
+; Console is SGB and frame type is != 0
+; wFrameType is handled differently in SGB and CGB
+	push de
+	push bc
+	call .drawTextBox
+	pop bc
+	pop de
+	jp asm_1f1b
 
-; Draws a bxc text box at de to print menu data
+.drawTextBox
+	push de
+	push bc
+	push hl
+; top left tile of the box and white tile before the text
+	ld hl, $c000
+	ld a, $5
+	ld [hli], a
+	ld a, $18
+	ld [hli], a
+	ld a, $70
+	ld [hli], a
+	ld e, l
+	ld d, h
+	pop hl
+	call PrintTextBoxBorderLabel
+	ld hl, $c003
+	call Func_23c1
+	ld l, e
+	ld h, d
+; white tile after the text
+	ld a, $7
+	ld [hli], a
+	ld a, $70
+	ld [hli], a
+	pop de
+	push de
+	ld a, d
+	sub b
+	sub $4
+	jr z, .printTopRightTile
+	ld b, a
+.printTopBorderLoop
+	ld a, $5
+	ld [hli], a
+	ld a, $1c
+	ld [hli], a
+	dec b
+	jr nz, .printTopBorderLoop
+
+.printTopRightTile
+	ld a, $5
+	ld [hli], a
+	ld a, $19
+	ld [hli], a
+	ld [hl], $0
+	pop bc
+	pop de
+	push de
+	push bc
+	call Func_22ae
+	ld hl, $c000
+	call Func_21c5
+	pop bc
+	pop de
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr z, .cgb
+; DMG or SGB
+	inc e
+	call CalculateBGMap0Address
+	jr asm_1e93
+
+.cgb
+	call CalculateBGMap0Address
+	push de
+	call asm_1f00
+	pop de
+	inc e
+	jp asm_1ed4
+
+; Draws a bxc text box at de to print menu data in the overworld. 
+; Also used to print a text box during a duel.
 DrawMenuBox: ; 1e7c (0:1e7c)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -2247,6 +2336,7 @@ DrawMenuBoxDMG: ; 1e88 (0:1e88)
 	ld a, $1c
 	ld de, $1819
 	call Func_1ea5
+asm_1e93
 	dec c
 	dec c
 .asm_1e95
@@ -2292,6 +2382,7 @@ DrawMenuBoxCGB:
 	ld a, $1c
 	ld de, $1819
 	call Func_1efb
+asm_1ed4	
 	dec c
 	dec c
 .asm_1ed6
@@ -2301,7 +2392,7 @@ DrawMenuBoxCGB:
 	call Func_1ea5
 	pop hl
 	call BankswitchVRAM_1
-	ld a, [$ccf3]
+	ld a, [wFrameType]
 	ld e, a
 	ld d, a
 	xor a
@@ -2318,8 +2409,9 @@ Func_1efb: ; 1efb (0:1efb)
 	push hl
 	call Func_1ea5
 	pop hl
+asm_1f00	
 	call BankswitchVRAM_1
-	ld a, [$ccf3]
+	ld a, [wFrameType]
 	ld e, a
 	ld d, a
 	call Func_1ea5
@@ -2332,9 +2424,10 @@ DrawMenuBoxSGB: ; 1f0f (0:1f0f)
 	call DrawMenuBoxDMG
 	pop de
 	pop bc
-	ld a, [$ccf3]
+	ld a, [wFrameType]
 	or a
 	ret z
+asm_1f1b
 	push bc
 	push de
 	ld hl, $cae0
@@ -2361,7 +2454,7 @@ DrawMenuBoxSGB: ; 1f0f (0:1f0f)
 	add c
 	dec a
 	ld [hli], a
-	ld a, [$ccf3]
+	ld a, [wFrameType]
 	and $80
 	jr z, .asm_1f48
 	ld a, $2
@@ -3770,24 +3863,28 @@ Func_2e76: ; 2e76 (0:2e76)
 	call BankswitchHome
 	ret
 
-Func_2e89: ; 2e89 (0:2e89)
+; Prints a name in the left side of the top border of a text box, usually to identify the talked-to NPC.
+; input:
+	; hl: text offset
+	; de: where to print the name
+PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ld a, l
 	or h
-	jr z, .asm_2e9f
+	jr z, .done
 	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
-.asm_2e93
+.nextTileLoop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, .asm_2e93
+	jr nz, .nextTileLoop
 	pop af
 	call BankswitchHome
 	dec de
 	ret
-.asm_2e9f
+.done
 	ld a, [$ff97]
 	cp $c3
 	jp z, Func_1c8e

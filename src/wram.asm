@@ -150,7 +150,13 @@ wCardBuffer2:: ; cc65
 	
 wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
-	ds $5a
+	ds $40
+
+; color/pattern of the text box border, values between 0 and 7.
+; interpreted differently depending on console type
+wFrameType:: ; ccf3
+	ds $1
+	ds $19
 	
 ;--- Overworld --------------------------------------------
 
