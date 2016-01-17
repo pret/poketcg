@@ -228,7 +228,7 @@ Func_10e55: ; 10e55 (4:4e55)
 	ret
 
 Func_10e71: ; 10e71 (4:4e71)
-	ld a, [$ff91]
+	ld a, [hButtonsPressed]
 	and $f0
 	jr z, .asm_10e83
 	farcall Func_c5d5
@@ -236,7 +236,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	call Func_10e97
 	jr .asm_10e96
 .asm_10e83
-	ld a, [$ff91]
+	ld a, [hButtonsPressed]
 	and $1
 	jr z, .asm_10e96
 	ld a, $2

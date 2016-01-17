@@ -150,7 +150,7 @@ Func_1d078: ; 1d078 (7:5078)
 	dec [hl]
 	jr .asm_1d095
 .asm_1d0b8
-	ld a, [$ff91]
+	ld a, [hButtonsPressed]
 	and $9
 	jr z, .asm_1d095
 	ld a, $2

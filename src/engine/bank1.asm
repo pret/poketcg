@@ -11,10 +11,10 @@ Func_4000: ; 4000 (1:4000)
 	ld [$ccf2], a
 	call DisableExtRAM
 	ld a, $1
-	ld [$cd0d], a
+	ld [wUppercaseFlag], a
 	ei
 	farcall Func_1a6cc
-	ld a, [$ff90]
+	ld a, [hButtonsHeld]
 	cp $3
 	jr z, .asm_4035
 	farcall Func_126d1
@@ -35,7 +35,7 @@ Func_4000: ; 4000 (1:4000)
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
 	ld a, $1
-	ld [$cd0d], a
+	ld [wUppercaseFlag], a
 	ret
 
 Func_405a: ; 405a (1:405a)

@@ -146,9 +146,9 @@ Func_70136: ; 70136 (1c:4136)
 	push hl
 	push bc
 	push de
-	ld a, [$ff92]
+	ld a, [hSCX]
 	ld [$d41d], a
-	ld a, [$ff93]
+	ld a, [hSCY]
 	ld [$d41e], a
 	ld a, [$cabc]
 	ld [$d41f], a

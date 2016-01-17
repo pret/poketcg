@@ -140,7 +140,7 @@ wDuelTheme:: ; cc1a
 ; wCardBuffer1 and wCardBuffer2 hold the data of a player's or opponent's card.
 ; Can be data from a card on either side of the field or hand, or from a card in the bench, depending on the duel state.
 ; Sometimes the two buffers even hold the same card's data.
-wCardBuffer1:: ; c224
+wCardBuffer1:: ; cc24
 	ds CARD_DATA_LENGTH
 
 wCardBuffer2:: ; cc65
@@ -151,10 +151,38 @@ wCardBuffer2:: ; cc65
 wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
 	ds $5a
+	
+;--- Overworld --------------------------------------------
 
 wUppercaseFlag:: ; cd0d
 	ds $1
-	ds $114
+	ds $1
+
+; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
+wCursorBlinkCounter:: ; cd0f
+	ds $1
+	
+wCurMenuItem:: ; cd10
+	ds $1
+
+wCursorXPosition:: ; cd11
+	ds $1
+
+wCursorYPosition:: ; cd12
+	ds $1
+	
+wYDisplacementBetweenMenuItems:: ; cd13
+	ds $1
+	
+wNumMenuItems:: ; cd14
+	ds $1
+	
+wCursorTileNumber:: ; cd15
+	ds $1
+	
+wTileBehindCursor:: ; cd16
+	ds $1
+	ds $10b
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.

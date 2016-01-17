@@ -1197,7 +1197,8 @@ ClearExtRAMBank: ; 0863 (0:0863)
 	pop af
 	ret
 
-Func_0879: ; 0879 (0:0879)
+; returns h * l in hl	
+HtimesL:: ; 0879 (0:0879)
 	push de
 	ld a, h
 	ld e, l
@@ -2210,14 +2211,14 @@ Func_1ddb: ; 1ddb (0:1ddb)
 
 Func_1deb: ; 1deb (0:1deb)
 	push af
-	ld a, [$ff92]
+	ld a, [hSCX]
 	rra
 	rra
 	rra
 	and $1f
 	add d
 	ld d, a
-	ld a, [$ff93]
+	ld a, [hSCY]
 	rra
 	rra
 	rra
@@ -3115,9 +3116,9 @@ Func_256d: ; 256d (0:256d)
 INCBIN "baserom.gbc",$2589,$2636 - $2589
 
 Func_2636: ; 2636 (0:2636)
-	ld [$cd10], a
+	ld [wCurMenuItem], a
 	ld [$ffb1], a
-	ld de, $cd11
+	ld de, wCursorXPosition
 	ld b, $8
 .asm_2640
 	ld a, [hli]
@@ -3126,7 +3127,7 @@ Func_2636: ; 2636 (0:2636)
 	dec b
 	jr nz, .asm_2640
 	xor a
-	ld [$cd0f], a
+	ld [wCursorBlinkCounter], a
 	ret
 
 Func_264b: ; 264b (0:264b)
@@ -3136,15 +3137,15 @@ Func_264b: ; 264b (0:264b)
 	or a
 	jr z, .asm_2685
 	ld b, a
-	ld a, [$cd14]
+	ld a, [wNumMenuItems]
 	ld c, a
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	bit 6, b
 	jr z, .asm_266b
 	dec a
 	bit 7, a
 	jr z, .asm_2674
-	ld a, [$cd14]
+	ld a, [wNumMenuItems]
 	dec a
 	jr .asm_2674
 .asm_266b
@@ -3160,11 +3161,11 @@ Func_264b: ; 264b (0:264b)
 	ld [$cd99], a
 	call Func_26e9
 	pop af
-	ld [$cd10], a
+	ld [wCurMenuItem], a
 	xor a
-	ld [$cd0f], a
+	ld [wCursorBlinkCounter], a
 .asm_2685
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld [$ffb1], a
 	ld hl, $cd17
 	ld a, [hli]
@@ -3175,11 +3176,11 @@ Func_264b: ; 264b (0:264b)
 	ld h, a
 	ld a, [$ffb1]
 	call CallF
-	jr nc, asm_26d1
+	jr nc, HandleMenuInput
 .asm_269b
 	call Func_270b
 	call Func_26c0
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, [$ffb1]
 	scf
@@ -3187,10 +3188,10 @@ Func_264b: ; 264b (0:264b)
 .asm_26a9
 	ld a, [hButtonsPressed]
 	and $3
-	jr z, asm_26d1
+	jr z, HandleMenuInput
 	and $1
 	jr nz, .asm_269b
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
 	ld [$ffb1], a
@@ -3211,32 +3212,34 @@ Func_26c0: ; 26c0 (0:26c0)
 	call Func_3796
 	pop af
 	ret
-asm_26d1
+	
+HandleMenuInput: ; 2d61 (0:2d61)
 	ld a, [$cd99]
 	or a
-	jr z, Func_26da
+	jr z, HandleTextBoxInput
 	call Func_3796
-
-Func_26da: ; 26da (0:26da)
-	ld hl, $cd0f
+;	fallthrough	
+HandleTextBoxInput: ; 26da (0:26da)
+	ld hl, wCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
+; blink the cursor every 16 frames
 	and $f
 	ret nz
-	ld a, [$cd15]
+	ld a, [wCursorTileNumber]
 	bit 4, [hl]
 	jr z, asm_26ec
 Func_26e9: ; 26e9 (0:26e9)
-	ld a, [$cd16]
+	ld a, [wTileBehindCursor]
 asm_26ec
 	ld c, a
-	ld a, [$cd13]
+	ld a, [wYDisplacementBetweenMenuItems]
 	ld l, a
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld h, a
-	call Func_0879
+	call HtimesL
 	ld a, l
-	ld hl, $cd11
+	ld hl, wCursorXPosition
 	ld d, [hl]
 	inc hl
 	add [hl]
@@ -3250,7 +3253,7 @@ asm_26ec
 	ret
 
 Func_270b: ; 270b (0:270b)
-	ld a, [$cd15]
+	ld a, [wCursorTileNumber]
 	jr asm_26ec
 ; 0x2710
 
@@ -3258,7 +3261,7 @@ INCBIN "baserom.gbc",$2710,$2a1a - $2710
 
 Func_2a1a: ; 2a1a (0:2a1a)
 	xor a
-	ld hl, $cd10
+	ld hl, wCurMenuItem
 	ld [hli], a
 	ld [hl], d
 	inc hl
@@ -3271,7 +3274,7 @@ Func_2a1a: ; 2a1a (0:2a1a)
 	ld [hl], b
 	inc hl
 	ld [hl], c
-	ld [$cd0f], a
+	ld [wCursorBlinkCounter], a
 	ret
 ; 0x2a30
 
@@ -3327,7 +3330,7 @@ Func_2aab: ; 2aab (0:2aab)
 	call EnableLCD
 .asm_2ab8
 	call Func_053f
-	call Func_26da
+	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	and $3
 	jr z, .asm_2ab8
@@ -3353,12 +3356,12 @@ Func_2af0: ; 2af0 (0:2af0)
 	ld bc, $0f00
 	call Func_2a1a
 	ld a, [$cd9a]
-	ld [$cd10], a
+	ld [wCurMenuItem], a
 	call EnableLCD
 	jr .asm_2b39
 .asm_2b1f
 	call Func_053f
-	call Func_26da
+	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	bit 0, a
 	jr nz, .asm_2b50
@@ -3371,19 +3374,19 @@ Func_2af0: ; 2af0 (0:2af0)
 .asm_2b39
 	ld a, [$cd98]
 	ld c, a
-	ld hl, $cd10
+	ld hl, wCurMenuItem
 	ld a, [hl]
 	xor $1
 	ld [hl], a
 	add a
 	add a
 	add c
-	ld [$cd11], a
+	ld [wCursorXPosition], a
 	xor a
-	ld [$cd0f], a
+	ld [wCursorBlinkCounter], a
 	jr .asm_2b1f
 .asm_2b50
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld [$ffb1], a
 	or a
 	jr nz, .asm_2b5c
@@ -3730,7 +3733,7 @@ Func_2e41: ; 2e41 (0:2e41)
 .asm_2e56
 	call Func_2cc8
 .asm_2e59
-	ld a, [$ff90]
+	ld a, [hButtonsHeld]
 	ld b, a
 	ld a, [$ce47]
 	inc a
@@ -3797,7 +3800,7 @@ LoadCardDataToRAM: ; 2f10 (0:2f10)
 	call GetCardPointer
 	pop de
 	jr c, .done
-	ld a, $c
+	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld b, CARD_DATA_LENGTH
 .copyCardDataLoop
@@ -3836,7 +3839,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 .nz
 	ccf
 	jr c, .outOfBounds
-	ld a, $c
+	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld a, [hli]
 	ld h, [hl]
@@ -4456,7 +4459,7 @@ Func_38a3: ; 38a3 (0:38a3)
 	ld a, $ff
 	ld [$d0c3], a
 	ld a, $2
-	ld [$cc1a], a
+	ld [wDuelTheme], a
 	ld a, MUSIC_CARDPOP
 	call PlaySong
 	bank1call Func_758f

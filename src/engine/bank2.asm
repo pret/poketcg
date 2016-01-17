@@ -103,7 +103,7 @@ Func_8dea: ; 8dea (2:4dea)
 	ld a, [hButtonsPressed2]
 	and $8
 	ret z
-	ld a, [$cd10]
+	ld a, [wCurMenuItem]
 	ld [$ceb1], a
 	call Func_8ff2
 	jp nc, Func_8e05
@@ -328,7 +328,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call DisableExtRAM
 	ld h, $3
 	ld l, a
-	call Func_0879
+	call HtimesL
 	ld e, l
 	inc e
 	ld d, $2
@@ -384,7 +384,7 @@ Func_9038: ; 9038 (2:5038)
 	ld a, [$ceb1]
 	ld h, a
 	ld l, $54
-	call Func_0879
+	call HtimesL
 	push de
 	ld de, $a200
 	add hl, de
@@ -396,7 +396,7 @@ Func_9048: ; 9048 (2:5048)
 	ld a, [$ceb1]
 	ld h, a
 	ld l, $54
-	call Func_0879
+	call HtimesL
 	push de
 	ld de, $a218
 	add hl, de
@@ -452,7 +452,7 @@ Func_9065: ; 9065 (2:5065)
 	xor a
 	ld [$cea3], a
 .asm_90a6
-	ld a, [$ff91]
+	ld a, [hButtonsPressed]
 	and $3
 	jr z, .asm_90c1
 	and $1
@@ -489,7 +489,7 @@ asm_90da
 	ld l, a
 	ld a, [$ceaf]
 	ld h, a
-	call Func_0879
+	call HtimesL
 	ld a, l
 	add $1
 	ld b, a
@@ -753,7 +753,7 @@ Func_9326: ; 9326 (2:5326)
 	call DisableExtRAM
 	ld h, $3
 	ld l, a
-	call Func_0879
+	call HtimesL
 	ld e, l
 	inc e
 	ld d, $2
