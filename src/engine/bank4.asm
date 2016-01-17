@@ -141,7 +141,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wFrameType], a
 	ld de, $000c
 	ld bc, $1406
-	call DrawMenuBox
+	call DrawRegularTextBox
 	ld a, [$cc19]
 	add a
 	add a

@@ -2233,25 +2233,25 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 ; 0x1e00
 
 ; Draws a bxc text box at de printing a name in the left side of the top border. 
-; Name's text offset must be at hl when this function is called.
+; The name's text offset must be at hl when this function is called.
 ; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
-DrawTextBox: ; 1e00 (0:1e00)
+DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
-	jr nz, .drawTextBox
+	jr nz, .drawLabeledTextBox
 	ld a, [wFrameType]
 	or a
-	jr z, .drawTextBox
+	jr z, .drawLabeledTextBox
 ; Console is SGB and frame type is != 0
 ; wFrameType is handled differently in SGB and CGB
 	push de
 	push bc
-	call .drawTextBox
+	call .drawLabeledTextBox
 	pop bc
 	pop de
 	jp asm_1f1b
 
-.drawTextBox
+.drawLabeledTextBox
 	push de
 	push bc
 	push hl
@@ -2312,7 +2312,7 @@ DrawTextBox: ; 1e00 (0:1e00)
 ; DMG or SGB
 	inc e
 	call CalculateBGMap0Address
-	jr asm_1e93
+	jr ContinueDrawingTextBoxDMGorSGB
 
 .cgb
 	call CalculateBGMap0Address
@@ -2320,23 +2320,24 @@ DrawTextBox: ; 1e00 (0:1e00)
 	call asm_1f00
 	pop de
 	inc e
-	jp asm_1ed4
+	jp ContinueDrawingTextBoxCGB
 
 ; Draws a bxc text box at de to print menu data in the overworld. 
 ; Also used to print a text box during a duel.
-DrawMenuBox: ; 1e7c (0:1e7c)
+; When talking to NPCs, DrawLabeledTextBox is used instead.
+DrawRegularTextBox: ; 1e7c (0:1e7c)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr z, DrawMenuBoxCGB
+	jr z, DrawRegularTextBoxCGB
 	cp CONSOLE_SGB
-	jp z, DrawMenuBoxSGB
+	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
-DrawMenuBoxDMG: ; 1e88 (0:1e88)
+DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call CalculateBGMap0Address
 	ld a, $1c
 	ld de, $1819
 	call Func_1ea5
-asm_1e93
+ContinueDrawingTextBoxDMGorSGB
 	dec c
 	dec c
 .asm_1e95
@@ -2377,12 +2378,12 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	add sp, $20
 	ret
 	
-DrawMenuBoxCGB:
+DrawRegularTextBoxCGB:
 	call CalculateBGMap0Address
 	ld a, $1c
 	ld de, $1819
 	call Func_1efb
-asm_1ed4	
+ContinueDrawingTextBoxCGB	
 	dec c
 	dec c
 .asm_1ed6
@@ -2418,10 +2419,10 @@ asm_1f00
 	call BankswitchVRAM_0
 	ret
 
-DrawMenuBoxSGB: ; 1f0f (0:1f0f)
+DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	push bc
 	push de
-	call DrawMenuBoxDMG
+	call DrawRegularTextBoxDMG
 	pop de
 	pop bc
 	ld a, [wFrameType]
@@ -3408,7 +3409,7 @@ Func_2a6f: ; 2a6f (0:2a6f)
 	ld de, $000c
 	ld bc, $0c06
 	call AdjustCoordinatesForWindow
-	call DrawMenuBox
+	call DrawRegularTextBox
 	ret
 ; 0x2a7c
 
@@ -3418,7 +3419,7 @@ Func_2a9e: ; 2a9e (0:2a9e)
 	ld de, $000c
 	ld bc, $1406
 	call AdjustCoordinatesForWindow
-	call DrawMenuBox
+	call DrawRegularTextBox
 	ret
 
 Func_2aab: ; 2aab (0:2aab)
