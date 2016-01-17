@@ -138,8 +138,8 @@ wDuelTheme:: ; cc1a
 	ds $9
 
 ; wCardBuffer1 and wCardBuffer2 hold the data of a player's or opponent's card.
-; can be data from a card on either side of the field, or from a card in the bench, depending on the duel state.
-; sometimes the two buffers even hold the same card's data.
+; Can be data from a card on either side of the field or hand, or from a card in the bench, depending on the duel state.
+; Sometimes the two buffers even hold the same card's data.
 wCardBuffer1:: ; c224
 	ds CARD_DATA_LENGTH
 

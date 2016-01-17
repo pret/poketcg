@@ -11,6 +11,10 @@ MoveEffectAndTrainerCardCommands: ; 186f7 (6:46f7)
 ; with an argument identifying the command Id. If said command Id is found in the
 ; current move effect's array, its assigned function is immediately executed.
 
+; Similar move effects of different Pokemon cards all point to a different command list, 
+; even though in some cases their commands and function pointers match.
+; xxx use <TrainerCardName>FunctionCommands or <EnergyCardName>FunctionCommands for these types of cards.
+
 EkansSpitPoisonEffectCommands:
 	dbw $03, $46F8
  	dbw $09, $46F0

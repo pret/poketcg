@@ -992,6 +992,7 @@ BankpushHome: ; 0745 (0:0745)
 	ret
 ; 0x76f
 
+Unknown_076f: ; 076f (0:076f)
 INCBIN "baserom.gbc",$076f,$078e - $076f
 
 ; restore rombank from top-of-stack
@@ -3733,7 +3734,37 @@ Func_2e89: ; 2e89 (0:2e89)
 	jp Func_1c7d
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$2fa0 - $2ea9
+INCBIN "baserom.gbc",$2ea9,$2f7c - $2ea9
+
+GetCardPointer: ; 2f7c (0:2f7c)
+; return at hl the pointer to the data of the card with id at e
+	push de
+	push bc
+	ld l, e
+	ld h, $0
+	add hl, hl
+	ld bc, CardPointers
+	add hl, bc
+	ld a, h
+	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) / $100
+	jr nz, .nz
+	ld a, l
+	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) % $100
+.nz
+	ccf
+	jr c, .outOfBounds
+	ld a, $c
+	call Unknown_076f
+	ld a, [hli]
+	ld h, [hl]
+	ld l,a
+	call BankpopHome
+	or a
+.outOfBounds
+	pop bc
+	pop de
+	ret
+; 0x2fa0	
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ld a, [hBankROM]
