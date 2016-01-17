@@ -1,8 +1,8 @@
-MoveEffectAndTrainerCardCommands: ; 186f7 (6:46f7)
+EffectCommands: ; 186f7 (6:46f7)
 ; Each move has a two-byte effect pointer (move's 7th param) that points to one of these structures.
 ; Similarly, trainer cards have a two-byte pointer (7th param) to one of these structures, which determines the card's function.
 ; Energy cards also point to one of these, but their data is just $00.
-; 	db CommandId ($01 - $09)
+; 	db CommandId ($01 - $0a)
 ; 	dw Function
 ; 	...
 ; 	db $00
@@ -13,7 +13,7 @@ MoveEffectAndTrainerCardCommands: ; 186f7 (6:46f7)
 
 ; Similar move effects of different Pokemon cards all point to a different command list, 
 ; even though in some cases their commands and function pointers match.
-; xxx use <TrainerCardName>FunctionCommands or <EnergyCardName>FunctionCommands for these types of cards.
+; xxx use <TrainerCardName>EffectCommands or <EnergyCardName>EffectCommands for these types of cards.
 
 EkansSpitPoisonEffectCommands:
 	dbw $03, $46F8

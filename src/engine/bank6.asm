@@ -1,6 +1,6 @@
 INCBIN "baserom.gbc",$18000,$186f7 - $18000
 
-INCLUDE "data/move_card_effects.asm"
+INCLUDE "data/effect_commands.asm"
 
 INCBIN "baserom.gbc",$18f9c,$1996e - $18f9c
 

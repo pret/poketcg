@@ -227,4 +227,4 @@ POKEMON_FLUTE           EQU $E2
 GAMBLER                 EQU $E3
 RECYCLE                 EQU $E4
 
-NUM_CARDS               EQUS "RECYCLE"
+NUM_CARDS               EQU RECYCLE

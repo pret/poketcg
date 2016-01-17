@@ -3805,13 +3805,13 @@ Func_2fcb: ; 2fcb (0:2fcb)
 	ret
 ; 0x2fd9	
 	
-TryExecuteCommandFunction: ; 2fd9 (0:2fd9)
+TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 ; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
 ; and executes its associated function if so.
-; input: a = move effect / card function command ID
+; input: a = move or trainer card effect command ID
 	push af
-; grab pointer to command list from wCurrentMoveEffectOrCardFunction	
-	ld hl, wCurrentMoveEffectOrCardFunction
+; grab pointer to command list from wCurrentMoveOrCardEffect	
+	ld hl, wCurrentMoveOrCardEffect
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -3843,7 +3843,7 @@ TryExecuteCommandFunction: ; 2fd9 (0:2fd9)
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 ; input: 
 ; a = command ID to check
-; hl = pointer to current move effect or trainer card command list
+; hl = pointer to current move effect or trainer card effect command list
 ; return nc if command ID matching a is found, c otherwise
 	ld c, a
 	ld a, l
@@ -3856,7 +3856,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 .notNullPointer
 	ld a, [hBankROM]
 	push af
-	ld a, BANK(MoveEffectAndTrainerCardCommands)
+	ld a, BANK(EffectCommands)
 	call BankswitchHome
 ; store the bank number of command functions ($b) in wce22
 	ld a, $b

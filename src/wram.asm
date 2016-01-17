@@ -148,7 +148,7 @@ wCardBuffer2:: ; cc65
 	
 	ds $c
 	
-wCurrentMoveEffectOrCardFunction:: ; ccb2
+wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
 	ds $5a
 
@@ -158,7 +158,7 @@ wUppercaseFlag:: ; cd0d
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
-; Its only purpose seems to be store this value to be read by TryExecuteCommandFunction.
+; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
 wce22:: ; ce22
 
 ;--- Bank 1: $Dxxx ----------------------------------------
