@@ -42,6 +42,10 @@ GLOBAL \1_
 const_value = const_value + 1
 ENDM
 
+SGB: MACRO
+	db \1 * 8 + \2 ; sgb_command * 8 + length
+ENDM	
+
 ;;; notes/instruments macros
 
 C_: MACRO

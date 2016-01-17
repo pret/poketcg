@@ -227,7 +227,7 @@ WaitForVBlank: ; 0264 (0:0264)
 
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
-	ld a, [wLCDC]    ;
+	ld a, [wLCDC]        ;
 	bit 7, a             ;
 	ret nz               ; assert that LCD is off
 	or $80               ;
@@ -619,14 +619,15 @@ Func_04a2: ; 04a2 (0:04a2)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
-	call EnableLCD       ;
-	ld hl, SGB_04bf      ; send SGB data
-	call SendSGB         ;
-	call DisableLCD      ;
+	call EnableLCD                ;
+	ld hl, SGB_ATTR_BLK_04bf      ; send SGB data
+	call SendSGB                  ;
+	call DisableLCD               ;
 	ret
 
-SGB_04bf: ; 04bf (0:04bf)
-INCBIN "baserom.gbc",$04bf,$04cf - $04bf
+SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
+	SGB ATTR_BLK, 1 ; sgb_command, length
+	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
 Func_04cf: ; 04cf (0:04cf)
 	ld l, c
@@ -953,7 +954,7 @@ CopyData: ; 073c (0:073c)
 	jr nz, CopyData
 	ret
 
-; switch to rombank (A + top2 of h shifted down),
+; switch to rombank (A + top2 of H shifted down),
 ; set top2 of H to 01,
 ; return old rombank id on top-of-stack
 BankpushHome: ; 0745 (0:0745)
@@ -992,8 +993,35 @@ BankpushHome: ; 0745 (0:0745)
 	ret
 ; 0x76f
 
-Unknown_076f: ; 076f (0:076f)
-INCBIN "baserom.gbc",$076f,$078e - $076f
+; switch to rombank A,
+; return old rombank id on top-of-stack
+BankpushHome2: ; 076f (0:076f)
+	push hl
+	push bc
+	push af
+	push de
+	ld e, l
+	ld d, h
+	ld hl, [sp+$9]
+	ld b, [hl]
+	dec hl
+	ld c, [hl]
+	dec hl
+	ld [hl], b
+	dec hl
+	ld [hl], c
+	ld hl, [sp+$9]
+	ld a, [hBankROM]
+	ld [hld], a
+	ld [hl], $0
+	ld l, e
+	ld h, d
+	pop de
+	pop af
+	call BankswitchHome
+	pop bc
+	ret
+; 0x78e
 
 ; restore rombank from top-of-stack
 BankpopHome: ; 078e (0:078e)
@@ -1448,62 +1476,81 @@ RST28: ; 09e9 (0:09e9)
 
 ; setup SNES memory $810-$867 and palette
 InitSGB: ; 0a0d (0:0a0d)
-	ld hl, SGB_0ad0
+	ld hl, SGB_MASK_EN_ON
 	call SendSGB
-	ld hl, SGB_0a50
+	ld hl, SGB_DATA_SND_0a50
 	call SendSGB
-	ld hl, SGB_0a60
+	ld hl, SGB_DATA_SND_0a60
 	call SendSGB
-	ld hl, SGB_0a70
+	ld hl, SGB_DATA_SND_0a70
 	call SendSGB
-	ld hl, SGB_0a80
+	ld hl, SGB_DATA_SND_0a80
 	call SendSGB
-	ld hl, SGB_0a90
+	ld hl, SGB_DATA_SND_0a90
 	call SendSGB
-	ld hl, SGB_0aa0
+	ld hl, SGB_DATA_SND_0aa0
 	call SendSGB
-	ld hl, SGB_0ab0
+	ld hl, SGB_DATA_SND_0ab0
 	call SendSGB
-	ld hl, SGB_0ac0
+	ld hl, SGB_DATA_SND_0ac0
 	call SendSGB
-	ld hl, SGB_0af0
+	ld hl, SGB_PAL01
 	call SendSGB
-	ld hl, SGB_0ae0
+	ld hl, SGB_MASK_EN_OFF
 	call SendSGB
 	ret
 
-SGB_0a50: ; 0a50 (0:0a50)
-INCBIN "baserom.gbc",$0a50,$0a60 - $0a50
+SGB_DATA_SND_0a50: ; 0a50 (0:0a50)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $5d,$08,$00,$0b,$8c,$d0,$f4,$60,$00,$00,$00,$00,$00,$00,$00
 
-SGB_0a60: ; 0a60 (0:0a60)
-INCBIN "baserom.gbc",$0a60,$0a70 - $0a60
+SGB_DATA_SND_0a60: ; 0a60 (0:0a60)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $52,$08,$00,$0b,$a9,$e7,$9f,$01,$c0,$7e,$e8,$e8,$e8,$e8,$e0
 
-SGB_0a70: ; 0a70 (0:0a70)
-INCBIN "baserom.gbc",$0a70,$0a80 - $0a70
+SGB_DATA_SND_0a70: ; 0a70 (0:0a70)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $47,$08,$00,$0b,$c4,$d0,$16,$a5,$cb,$c9,$05,$d0,$10,$a2,$28
 
-SGB_0a80: ; 0a80 (0:0a80)
-INCBIN "baserom.gbc",$0a80,$0a90 - $0a80
+SGB_DATA_SND_0a80: ; 0a80 (0:0a80)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $3c,$08,$00,$0b,$f0,$12,$a5,$c9,$c9,$c8,$d0,$1c,$a5,$ca,$c9
 
-SGB_0a90: ; 0a90 (0:0a90)
-INCBIN "baserom.gbc",$0a90,$0aa0 - $0a90
+SGB_DATA_SND_0a90: ; 0a90 (0:0a90)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $31,$08,$00,$0b,$0c,$a5,$ca,$c9,$7e,$d0,$06,$a5,$cb,$c9,$7e
 
-SGB_0aa0: ; 0aa0 (0:0aa0)
-INCBIN "baserom.gbc",$0aa0,$0ab0 - $0aa0
+SGB_DATA_SND_0aa0: ; 0aa0 (0:0aa0)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $26,$08,$00,$0b,$39,$cd,$48,$0c,$d0,$34,$a5,$c9,$c9,$80,$d0
 
-SGB_0ab0: ; 0ab0 (0:0ab0)
-INCBIN "baserom.gbc",$0ab0,$0ac0 - $0ab0
+SGB_DATA_SND_0ab0: ; 0ab0 (0:0ab0)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $1b,$08,$00,$0b,$ea,$ea,$ea,$ea,$ea,$a9,$01,$cd,$4f,$0c,$d0
 
-SGB_0ac0: ; 0ac0 (0:0ac0)
-INCBIN "baserom.gbc",$0ac0,$0ad0 - $0ac0
+SGB_DATA_SND_0ac0: ; 0ac0 (0:0ac0)
+	SGB DATA_SND, 1 ; sgb_command, length
+	db $10,$08,$00,$0b,$4c,$20,$08,$ea,$ea,$ea,$ea,$ea,$60,$ea,$ea
 
-SGB_0ad0: ; 0ad0 (0:0ad0)
-INCBIN "baserom.gbc",$0ad0,$0ae0 - $0ad0
+SGB_MASK_EN_ON: ; 0ad0 (0:0ad0)
+	SGB MASK_EN, 1 ; sgb_command, length
+	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-SGB_0ae0: ; 0ae0 (0:0ae0)
-INCBIN "baserom.gbc",$0ae0,$0af0 - $0ae0
+SGB_MASK_EN_OFF: ; 0ae0 (0:0ae0)
+	SGB MASK_EN, 1 ; sgb_command, length
+	db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-SGB_0af0: ; 0af0 (0:0af0)
-INCBIN "baserom.gbc",$0af0,$0b20 - $0af0
+SGB_PAL01: ; 0af0 (0:0af0)
+	SGB PAL01, 1 ; sgb_command, length
+	db $9c,$63,$94,$42,$08,$21,$00,$00,$1f,$00,$0f,$00,$07,$00,$00
+
+SGB_PAL23: ; 0b00 (0:0b00)
+	SGB PAL23, 1 ; sgb_command, length
+	db $e0,$03,$e0,$01,$e0,$00,$00,$00,$00,$7c,$00,$3c,$00,$1c,$00
+
+SGB_ATTR_BLK_0b10: ; 0b10 (0:0b10)
+	SGB ATTR_BLK, 1 ; sgb_command, length
+	db $01,$03,$09,$05,$05,$0a,$0a,$00,$00,$00,$00,$00,$00,$00,$00
 
 ; send SGB command
 SendSGB: ; 0b20 (0:0b20)
@@ -1551,7 +1598,7 @@ SendSGB: ; 0b20 (0:0b20)
 DetectSGB: ; 0b59 (0:0b59)
 	ld bc, 60
 	call Wait
-	ld hl, SGB_MASK_EN_ON_0bbb
+	ld hl, SGB_MLT_REQ_2
 	call SendSGB
 	ld a, [rJOYP]
 	and $3
@@ -1580,21 +1627,25 @@ DetectSGB: ; 0b59 (0:0b59)
 	and $3
 	cp $3
 	jr nz, .asm_ba3
-	ld hl, SGB_MASK_EN_OFF_0bab
+	ld hl, SGB_MLT_REQ_1
 	call SendSGB
 	or a
 	ret
 .asm_ba3
-	ld hl, SGB_MASK_EN_OFF_0bab
+	ld hl, SGB_MLT_REQ_1
 	call SendSGB
 	scf
 	ret
 
-SGB_MASK_EN_OFF_0bab: ; 0bab (0:0bab)
-INCBIN "baserom.gbc",$0bab,$0bbb - $0bab
+SGB_MLT_REQ_1: ; 0bab (0:0bab)
+	SGB MLT_REQ, 1 ; sgb_command, length
+	db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-SGB_MASK_EN_ON_0bbb: ; 0bbb (0:0bbb)
-INCBIN "baserom.gbc",$0bbb,$0c08 - $0bbb
+SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
+	SGB MLT_REQ, 1 ; sgb_command, length
+	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+	
+INCBIN "baserom.gbc",$0bcb,$0c08 - $0bcb
 
 ; loops 63000 * bc cycles (~15 * bc ms)
 Wait: ; 0c08 (0:0c08)
@@ -1708,10 +1759,10 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld a, [$ce63]        ;
 	or a                 ;
 	jr z, .asm_d35       ; if [$ce63] nonzero:
-	call Func_3189       ;   ?
-	jr .done             ;   return
+	call Func_3189       ; ?
+	jr .done             ; return
 .asm_d35
-	ld a, [wSerialOp]        ;
+	ld a, [wSerialOp]    ;
 	or a                 ;
 	jr z, .asm_d55       ; skip ahead if [$cb74] zero
 	; send/receive a byte
@@ -3734,10 +3785,42 @@ Func_2e89: ; 2e89 (0:2e89)
 	jp Func_1c7d
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$2f7c - $2ea9
+INCBIN "baserom.gbc",$2ea9,$2f10 - $2ea9
 
-GetCardPointer: ; 2f7c (0:2f7c)
+; load data of card with id at e to wCardBuffer1
+LoadCardDataToRAM: ; 2f10 (0:2f10)
+	push hl
+	ld hl, wCardBuffer1
+	push de
+	push bc
+	push hl
+	call GetCardPointer
+	pop de
+	jr c, .done
+	ld a, $c
+	call BankpushHome2
+	ld b, CARD_DATA_LENGTH
+.copyCardDataLoop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .copyCardDataLoop
+	call BankpopHome
+	or a
+
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x2f32
+
+INCBIN "baserom.gbc",$2f32,$2f7c - $2f32
+
 ; return at hl the pointer to the data of the card with id at e
+; return carry if e was out of bounds, so no pointer was returned
+GetCardPointer: ; 2f7c (0:2f7c)
 	push de
 	push bc
 	ld l, e
@@ -3754,7 +3837,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ccf
 	jr c, .outOfBounds
 	ld a, $c
-	call Unknown_076f
+	call BankpushHome2
 	ld a, [hli]
 	ld h, [hl]
 	ld l,a
@@ -3805,10 +3888,10 @@ Func_2fcb: ; 2fcb (0:2fcb)
 	ret
 ; 0x2fd9	
 	
-TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 ; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
 ; and executes its associated function if so.
 ; input: a = move or trainer card effect command ID
+TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
 ; grab pointer to command list from wCurrentMoveOrCardEffect	
 	ld hl, wCurrentMoveOrCardEffect
@@ -3840,11 +3923,11 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ret
 ; 0x2ffe	
 
-CheckMatchingCommand: ; 2ffe (0:2ffe)
-; input: 
-; a = command ID to check
-; hl = pointer to current move effect or trainer card effect command list
+; input:
+  ; a = command ID to check
+  ; hl = pointer to current move effect or trainer card effect command list
 ; return nc if command ID matching a is found, c otherwise
+CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
 	or h
