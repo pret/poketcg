@@ -460,7 +460,7 @@ FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
 	ret
 
-; zero work RAM & stack area ($C000-$EFFF, $FF80-$FF7F)
+; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
 ZeroRAM: ; 03ec (0:03ec)
 	ld hl, $c000
 	ld bc, $2000
@@ -2255,12 +2255,13 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push de
 	push bc
 	push hl
-; top left tile of the box and white tile before the text
+	; top left tile of the box
 	ld hl, $c000
 	ld a, $5
 	ld [hli], a
 	ld a, $18
 	ld [hli], a
+	; white tile before the text
 	ld a, $70
 	ld [hli], a
 	ld e, l
@@ -2271,7 +2272,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	call Func_23c1
 	ld l, e
 	ld h, d
-; white tile after the text
+	; white tile after the text
 	ld a, $7
 	ld [hli], a
 	ld a, $70
@@ -2432,14 +2433,14 @@ asm_1f1b
 	push bc
 	push de
 	ld hl, $cae0
-	ld de, Unknown_1f4f
+	ld de, SGB_ATTR_BLK_1f4f
 	ld c, $10
-.asm_1f25
+.copySGBCommandLoop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .asm_1f25
+	jr nz, .copySGBCommandLoop
 	pop de
 	pop bc
 	ld hl, $cae4
@@ -2465,8 +2466,9 @@ asm_1f1b
 	call SendSGB
 	ret
 
-Unknown_1f4f: ; 1f4f (0:1f4f)
-INCBIN "baserom.gbc",$1f4f,$1f5f - $1f4f
+SGB_ATTR_BLK_1f4f: ; 1f4f (0:1f4f)
+	SGB ATTR_BLK, 1 ; sgb_command, length
+	db $01,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00	
 
 Func_1f5f: ; 1f5f (0:1f5f)
 	push de

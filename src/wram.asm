@@ -152,8 +152,9 @@ wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
 	ds $40
 
-; color/pattern of the text box border, values between 0 and 7.
-; interpreted differently depending on console type
+; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
+; Note that this doesn't appear to be a selectable option, just changes with the situation.
+; For example the value 4 seems to be used a lot during duels.
 wFrameType:: ; ccf3
 	ds $1
 	ds $19
