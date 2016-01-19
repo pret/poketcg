@@ -2238,20 +2238,20 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
-	jr nz, .drawLabeledTextBox
+	jr nz, .drawTopBorder
 	ld a, [wFrameType]
 	or a
-	jr z, .drawLabeledTextBox
-; Console is SGB and frame type is != 0
-; wFrameType is handled differently in SGB and CGB
+	jr z, .drawTopBorder
+; Console is SGB and frame type is != 0.
+; The text box will be colorized so a SGB command needs to be transferred
 	push de
 	push bc
-	call .drawLabeledTextBox
+	call .drawTopBorder ; this falls through to drawing the whole box
 	pop bc
 	pop de
-	jp asm_1f1b
+	jp ColorizeTextBoxSGB
 
-.drawLabeledTextBox
+.drawTopBorder
 	push de
 	push bc
 	push hl
@@ -2282,17 +2282,17 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, d
 	sub b
 	sub $4
-	jr z, .printTopRightTile
+	jr z, .drawTopBorderRightTile
 	ld b, a
-.printTopBorderLoop
+.drawTopBorderLineLoop
 	ld a, $5
 	ld [hli], a
 	ld a, $1c
 	ld [hli], a
 	dec b
-	jr nz, .printTopBorderLoop
+	jr nz, .drawTopBorderLineLoop
 
-.printTopRightTile
+.drawTopBorderRightTile
 	ld a, $5
 	ld [hli], a
 	ld a, $19
@@ -2313,14 +2313,16 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 ; DMG or SGB
 	inc e
 	call CalculateBGMap0Address
+	; top border done, draw the rest of the text box
 	jr ContinueDrawingTextBoxDMGorSGB
 
 .cgb
 	call CalculateBGMap0Address
 	push de
-	call asm_1f00
+	call CopyCurrentLineAttrCGB ; BG Map attributes for current line, which is the top border
 	pop de
 	inc e
+	; top border done, draw the rest of the text box
 	jp ContinueDrawingTextBoxCGB
 
 ; Draws a bxc text box at de to print menu data in the overworld. 
@@ -2335,22 +2337,31 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 ;	fallthrough
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call CalculateBGMap0Address
+	; top line (border) of the text box	
 	ld a, $1c
 	ld de, $1819
-	call Func_1ea5
+	call CopyLine
 ContinueDrawingTextBoxDMGorSGB
 	dec c
 	dec c
-.asm_1e95
+.drawTextBoxBodyLoop
 	ld a, $0
 	ld de, $1e1f
-	call Func_1ea5
+	call CopyLine
 	dec c
-	jr nz, .asm_1e95
+	jr nz, .drawTextBoxBodyLoop
+	; bottom line (border) of the text box
 	ld a, $1d
 	ld de, $1a1b
-Func_1ea5: ; 1ea5 (0:1ea5)
-	add sp, $e0
+;	fallthrough
+
+; copies b bytes of data to sp+$1c and to hl, and returns hl += SCREEN_WIDTH
+; d = value of byte 0
+; e = value of byte b
+; a = value of bytes [1, b-1]
+; b is supposed to be SCREEN_WIDTH or smaller, else the stack would get corrupted
+CopyLine: ; 1ea5 (0:1ea5)
+	add sp, -$20
 	push hl
 	push bc
 	ld hl, [sp+$4]
@@ -2359,10 +2370,10 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	push hl
 	ld [hl], d
 	inc hl
-.asm_1eb0
+.loop
 	ld [hli], a
 	dec b
-	jr nz, .asm_1eb0
+	jr nz, .loop
 	ld [hl], e
 	pop de
 	pop bc
@@ -2374,6 +2385,7 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	call Memcpy
 	pop bc
 	pop de
+	; advance pointer SCREEN_WIDTH positions and restore stack pointer
 	ld hl, $0020
 	add hl, de
 	add sp, $20
@@ -2381,42 +2393,48 @@ Func_1ea5: ; 1ea5 (0:1ea5)
 	
 DrawRegularTextBoxCGB:
 	call CalculateBGMap0Address
+	; top line (border) of the text box
 	ld a, $1c
 	ld de, $1819
-	call Func_1efb
+	call CopyCurrentLineTilesAndAttrCGB
 ContinueDrawingTextBoxCGB	
 	dec c
 	dec c
-.asm_1ed6
+.drawTextBoxBodyLoop
 	ld a, $0
 	ld de, $1e1f
 	push hl
-	call Func_1ea5
+	call CopyLine
 	pop hl
 	call BankswitchVRAM_1
 	ld a, [wFrameType]
 	ld e, a
 	ld d, a
 	xor a
-	call Func_1ea5
+	call CopyLine
 	call BankswitchVRAM_0
 	dec c
-	jr nz, .asm_1ed6
+	jr nz, .drawTextBoxBodyLoop
+	; bottom line (border) of the text box
 	ld a, $1d
 	ld de, $1a1b
-	call Func_1efb
+	call CopyCurrentLineTilesAndAttrCGB
 	ret
 
-Func_1efb: ; 1efb (0:1efb)
+; d = id of top left tile
+; e = id of top right tile
+; a = id of rest of tiles
+; Assumes b = SCREEN_WIDTH and that VRAM bank 0 is loaded
+CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 	push hl
-	call Func_1ea5
+	call CopyLine
 	pop hl
-asm_1f00	
+CopyCurrentLineAttrCGB
 	call BankswitchVRAM_1
-	ld a, [wFrameType]
+	ld a, [wFrameType] ; on CGB, wFrameType determines the palette and the other attributes
 	ld e, a
 	ld d, a
-	call Func_1ea5
+	call CopyLine
 	call BankswitchVRAM_0
 	ret
 
@@ -2429,7 +2447,7 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	ld a, [wFrameType]
 	or a
 	ret z
-asm_1f1b
+ColorizeTextBoxSGB
 	push bc
 	push de
 	ld hl, $cae0
