@@ -444,7 +444,7 @@ GrimersMinimizeDescription: ; 595dc (16:55dc)
 	db "reduced by 20 (after applying\n"
 	db "Weakness and Resistance).",TX_END
 
-GrimerKind: ; 5965e (16:565e)
+GrimerKindOrSludgeName: ; 5965e (16:565e)
 	db TX_START,"Sludge",TX_END
 
 GrimerDescription: ; 59666 (16:5666)

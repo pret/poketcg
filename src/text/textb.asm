@@ -1144,7 +1144,7 @@ KadabrasRecoverDescription: ; 5fedc (17:7edc)
 	db "Remove all damage counters from\n"
 	db "Kadabra.",TX_END
 
-KadabraKind: ; 5ff50 (17:7f50)
+SuperPsiName: ; 5ff50 (17:7f50)
 	db TX_START,"Super Psy",TX_END
 
 KadabraDescription: ; 5ff5b (17:7f5b)

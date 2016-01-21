@@ -2217,7 +2217,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text NastyGooName
 	text MinimizeName
 	text GrimersMinimizeDescription
-	text GrimerKind
+	text GrimerKindOrSludgeName
 	text GrimerDescription
 	text MukName
 	text ToxicGasName
@@ -2690,7 +2690,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text AbraDescription
 	text KadabraName
 	text KadabrasRecoverDescription
-	text KadabraKind
+	text SuperPsiName
 	text KadabraDescription
 	text AlakazamName
 	text DamageSwapName
