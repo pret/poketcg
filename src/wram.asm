@@ -1,9 +1,107 @@
 INCLUDE "constants.asm"
 
+;----------------------------------------------------------
 ;--- Bank 0: $Cxxx ----------------------------------------
+;----------------------------------------------------------
 
 SECTION "WRAM0", WRAM0
-	ds $400
+	ds $200
+	
+;--- Duels 1 ----------------------------------------------
+
+wPlayerDuelVariables:: ; c200
+
+; 60-byte array that indicates where each of the 60 cards is.
+;	$00 - deck
+;	$01 - hand
+;	$02 - discard pile
+;	$08 - prize
+;	$10 - hand
+;	$1X - bench (where X is bench position from 1 to 5)
+wPlayerCardLocations:: ; c200
+	ds DECK_SIZE
+	ds $6
+
+; Which cards are in player's hand, as numbers 0 to 59
+wPlayerHand:: ; c242	
+	ds DECK_SIZE
+
+; 60-byte array that indicates in which order the cards are in the deck.
+; initially numbers 0 to 59 in order, until deck is shuffled.
+; the earlier a card appears in the array, the closer to the top of the deck it is.
+wPlayerDeckCards:: ; c27e
+	ds $3c
+
+; stores x = (60 - deck remaining cards)
+; the first x cards in the wPlayerDeckCards array are ignored (e.g. when drawing a card)
+wPlayerNumberOfCardsNotInDeck:: ; c2ba
+	ds $1
+	ds $d
+	
+wPlayerArenaCardHP:: ; c2c8
+	ds $1
+wPlayerBench1CardHP:: ; c2c9
+	ds $1
+wPlayerBench2CardHP:: ; c2ca
+	ds $1
+wPlayerBench3CardHP:: ; c2cb
+	ds $1
+wPlayerBench4CardHP:: ; c2cc
+	ds $1
+wPlayerBench5CardHP:: ; c2cd
+	ds $1
+	ds $20
+	
+wPlayerNumberOfCardsInHand:: ; c2ee
+	ds $1
+
+; Pokemon cards in arena + bench
+wPlayerNumberOfPokemonInPlay:: ; c2ef
+	ds $1
+
+wPlayerArenaCardStatus:: ; c2f0
+	ds $1
+	ds $f
+
+wOpponentDuelVariables:: ; c300
+
+wOpponentCardLocations:: ; c300
+	ds DECK_SIZE
+	ds $6
+	
+wOpponentHand:: ; c342
+	ds DECK_SIZE
+	
+wOpponentDeckCards:: ; c37e
+	ds $3c
+	
+wOpponentNumberOfCardsNotInDeck:: ; c3ba	
+	ds $1
+	ds $d
+	
+wOpponentArenaCardHP:: ; c3c8
+	ds $1
+wOpponentBench1CardHP:: ; c3c9
+	ds $1
+wOpponentBench2CardHP:: ; c3ca
+	ds $1
+wOpponentBench3CardHP:: ; c3cb
+	ds $1
+wOpponentBench4CardHP:: ; c3cc
+	ds $1
+wOpponentBench5CardHP:: ; c3cd
+	ds $1
+	ds $20
+	
+wOpponentNumberOfCardsInHand:: ; c3ee
+	ds $1
+		
+wOpponentNumberOfPokemonInPlay:: ; c3ef
+	ds $1
+
+wOpponentArenaCardStatus:: ; c3f0
+	ds $1
+	ds $f
 	
 wPlayerDeck:: ; c400
 	ds $80
@@ -11,6 +109,8 @@ wPlayerDeck:: ; c400
 wOpponentDeck:: ; c480
 	ds $80
 	ds $500
+	
+;--- Engine	-----------------------------------------------
 
 wBufOAM:: ; ca00
 	ds $a0
@@ -127,7 +227,7 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 	ds $20
 	ds $49
 
-;--- Duels ------------------------------------------------
+;--- Duels 2 ----------------------------------------------
 
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
@@ -159,14 +259,14 @@ wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
 	ds $40
 
+;--- Overworld --------------------------------------------	
+	
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
 wFrameType:: ; ccf3
 	ds $1
 	ds $19
-	
-;--- Overworld --------------------------------------------
 
 wUppercaseFlag:: ; cd0d
 	ds $1
@@ -203,10 +303,14 @@ wTileBehindCursor:: ; cd16
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
 wce22:: ; ce22
 
+;----------------------------------------------------------
 ;--- Bank 1: $Dxxx ----------------------------------------
+;----------------------------------------------------------
 
 SECTION "WRAM1", WRAMX, BANK[1]
 	ds $113
+	
+;--- Music ------------------------------------------------		
 
 wMatchStartTheme:: ; d113
 	ds $1
