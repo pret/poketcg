@@ -1219,7 +1219,17 @@ HtimesL: ; 0879 (0:0879)
 	ret
 ; 0x88f
 
-INCBIN "baserom.gbc",$088f,$089b - $088f
+; return a random number between 0 and a in a
+Random: ; 088f (0:088f)
+	push hl
+	ld h, a
+	call UpdateRNGSources
+	ld l, a
+	call HtimesL
+	ld a, h
+	pop hl
+	ret
+; 0x89b
 
 UpdateRNGSources: ; 089b (0:089b)
 	push hl
@@ -2149,35 +2159,35 @@ GetOpposingTurnDuelistVariable_SwapTurn: ; 1c72 (0:1c72)
 	pop af
 	ret
 
-Func_1c7d: ; 1c7d (0:1c7d)
+PrintPlayerName: ; 1c7d (0:1c7d)
 	call EnableExtRAM
 	ld hl, $a010
-asm_1c83
+printNameLoop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, asm_1c83
+	jr nz, printNameLoop
 	dec de
 	call DisableExtRAM
 	ret
 
-Func_1c8e: ; 1c8e (0:1c8e)
+PrintOpponentName: ; 1c8e (0:1c8e)
 	ld hl, $cc16
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_1c9b
+	jr z, .specialName
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	jp PrintTextBoxBorderLabel
-.asm_1c9b
+.specialName
 	ld hl, $c500
 	ld a, [hl]
 	or a
-	jr z, .asm_1ca4
-	jr asm_1c83
-.asm_1ca4
+	jr z, .printPlayer2
+	jr printNameLoop
+.printPlayer2
 	ld hl, $0092
 	jp PrintTextBoxBorderLabel
 ; 0x1caa
@@ -3408,7 +3418,7 @@ INCBIN "baserom.gbc",$2a30,$2a3e - $2a30
 
 Func_2a3e: ; 2a3e (0:2a3e)
 	push hl
-	call Func_2a6f
+	call DrawNarrowTextBox
 	ld a, $b
 	ld de, $010e
 	call AdjustCoordinatesForWindow
@@ -3422,7 +3432,7 @@ Func_2a3e: ; 2a3e (0:2a3e)
 
 Func_2a59: ; 2a59 (0:2a59)
 	push hl
-	call Func_2a9e
+	call DrawWideTextBox
 	ld a, $13
 	ld de, $010e
 	call AdjustCoordinatesForWindow
@@ -3431,7 +3441,8 @@ Func_2a59: ; 2a59 (0:2a59)
 	pop hl
 	jp Func_2e41
 
-Func_2a6f: ; 2a6f (0:2a6f)
+; draws a 12x6 text box aligned to the bottom left of the screen
+DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	ld de, $000c
 	ld bc, $0c06
 	call AdjustCoordinatesForWindow
@@ -3441,7 +3452,8 @@ Func_2a6f: ; 2a6f (0:2a6f)
 
 INCBIN "baserom.gbc",$2a7c,$2a9e - $2a7c
 
-Func_2a9e: ; 2a9e (0:2a9e)
+; draws a 20x6 text box aligned to the bottom of the screen
+DrawWideTextBox: ; 2a9e (0:2a9e)
 	ld de, $000c
 	ld bc, $1406
 	call AdjustCoordinatesForWindow
@@ -3834,12 +3846,12 @@ Func_2e2c: ; 2e2c (0:2e2c)
 	push de
 	ld a, [hWhoseTurn]
 	cp $c3
-	jp z, .asm_2e3c
-	call Func_1c7d
+	jp z, .opponentTurn
+	call PrintPlayerName
 	pop hl
 	ret
-.asm_2e3c
-	call Func_1c8e
+.opponentTurn
+	call PrintOpponentName
 	pop hl
 	ret
 
@@ -3897,7 +3909,7 @@ Func_2e76: ; 2e76 (0:2e76)
 PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ld a, l
 	or h
-	jr z, .done
+	jr z, .special
 	ld a, [hBankROM]
 	push af
 	call ReadTextOffset
@@ -3911,11 +3923,11 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	call BankswitchHome
 	dec de
 	ret
-.done
+.special
 	ld a, [hWhoseTurn]
 	cp $c3
-	jp z, Func_1c8e
-	jp Func_1c7d
+	jp z, PrintOpponentName
+	jp PrintPlayerName
 ; 0x2ea9
 
 INCBIN "baserom.gbc",$2ea9,$2f10 - $2ea9
@@ -4233,7 +4245,7 @@ Func_30bc: ; 30bc (0:30bc)
 	ld a, $2
 	call BankswitchHome
 	call $4211
-	call Func_2a9e
+	call DrawWideTextBox
 	pop af
 	call BankswitchHome
 	ret

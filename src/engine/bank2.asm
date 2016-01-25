@@ -145,7 +145,7 @@ Func_8e1f: ; 8e1f (2:4e1f)
 	ret
 
 Func_8e42: ; 8e42 (2:4e42)
-	call Func_2a9e
+	call DrawWideTextBox
 	ld hl, Unknown_9027
 	call Func_2c08
 	call Func_905a
