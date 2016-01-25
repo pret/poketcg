@@ -14,3 +14,6 @@ hSCX                        EQU $FF92
 hSCY                        EQU $FF93
 hWX                         EQU $FF94
 hWY                         EQU $FF95
+
+; $c2 = player ; $c3 = opponent
+hWhoseTurn                  EQU $FF97

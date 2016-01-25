@@ -1198,7 +1198,7 @@ ClearExtRAMBank: ; 0863 (0:0863)
 	ret
 
 ; returns h * l in hl	
-HtimesL:: ; 0879 (0:0879)
+HtimesL: ; 0879 (0:0879)
 	push de
 	ld a, h
 	ld e, l
@@ -2061,17 +2061,17 @@ ClearSerialData: ; 0eb1 (0:0eb1)
 
 INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
 
-; copies the deck pointed to by de to $c400 or $c480
+; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck
 CopyDeckData: ; 1072 (0:1072)
-	ld hl, $c400
-	ld a, [$ff97]
+	ld hl, wPlayerDeck
+	ld a, [hWhoseTurn]
 	cp $c2
-	jr z, .asm_107e
-	ld hl, $c480
-.asm_107e
+	jr z, .copyDeckData
+	ld hl, wOpponentDeck
+.copyDeckData
 	; start by putting a terminator at the end of the deck
 	push hl
-	ld bc, 59
+	ld bc, DECK_SIZE - 1
 	add hl, bc
 	ld [hl], $0
 	pop hl
@@ -2099,7 +2099,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [de]
 	ld [hl], a
 	pop hl
-	ld bc, 59
+	ld bc, DECK_SIZE - 1
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -2111,21 +2111,24 @@ CopyDeckData: ; 1072 (0:1072)
 
 INCBIN "baserom.gbc",$10aa,$160b - $10aa
 
-Func_160b: ; 160b (0:160b)
+; returns [[hWhoseTurn] * $100 + a] in a
+; i.e. variable a of the player whose turn it is
+GetTurnDuelistVariable: ; 160b (0:160b)
 	ld l, a
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	ld h, a
 	ld a, [hl]
 	ret
 
-Func_1611: ; 1611 (0:1611)
+; returns [([hWhoseTurn] ^ $1) * $100 + a] in a
+; i.e. variable a of the player whose turn it is not
+GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	ld h, $c3
 	cp $c2
 	jr z, .asm_161c
 	ld h, $c2
-
 .asm_161c
 	ld a, [hl]
 	ret
@@ -2133,12 +2136,15 @@ Func_1611: ; 1611 (0:1611)
 
 INCBIN "baserom.gbc",$161e,$1c72 - $161e
 
-Func_1c72: ; 1c72 (0:1c72)
+; returns [([hWhoseTurn] ^ $1) * $100 + a] in a
+; i.e. variable a of the player whose turn it is not
+; Also: [hWhoseTurn] <-- [hWhoseTurn ^ $1]
+GetOpposingTurnDuelistVariable_SwapTurn: ; 1c72 (0:1c72)
 	push af
 	push hl
-	call Func_1611
+	call GetOpposingTurnDuelistVariable
 	ld a, h
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	pop hl
 	pop af
 	ret
@@ -3532,7 +3538,7 @@ INCBIN "baserom.gbc",$2b70,$2b78 - $2b70
 Duel_LoadDecks: ; 2b78 (0:2b78)
 	xor a
 	ld [wIsPracticeDuel], a
-	ld a, [wOpponentDeck]
+	ld a, [wOpponentDeckId]
 	cp SAMS_NORMAL_DECK - 2
 	jr z, .normalSamDuel
 	or a ; cp SAMS_PRACTICE_DECK - 2
@@ -3546,11 +3552,11 @@ Duel_LoadDecks: ; 2b78 (0:2b78)
 
 .normalSamDuel
 	xor a
-	ld [wOpponentDeck], a
-	call Func_1c72
+	ld [wOpponentDeckId], a
+	call GetOpposingTurnDuelistVariable_SwapTurn
 	ld a, PRACTICE_PLAYER_DECK
 	call LoadDeck
-	call Func_1c72
+	call GetOpposingTurnDuelistVariable_SwapTurn
 	ld hl, $caca
 	ld a, $57
 	ld [hli], a
@@ -3562,16 +3568,16 @@ Duel_LoadDecks: ; 2b78 (0:2b78)
 	inc a
 	inc a
 	call LoadDeck
-	ld a, [wOpponentDeck]
+	ld a, [wOpponentDeckId]
 	cp NUMBER_OF_DECKS
 	jr c, .validDeck
 	ld a, PRACTICE_PLAYER_DECK - 2
-	ld [wOpponentDeck], a
+	ld [wOpponentDeckId], a
 
 .validDeck
 	ld a, $f1
-	call Func_160b
-	ld a, [wOpponentDeck]
+	call GetTurnDuelistVariable
+	ld a, [wOpponentDeckId]
 	or $80
 	ld [hl], a
 	ret
@@ -3826,7 +3832,7 @@ Func_2e12: ; 2e12 (0:2e12)
 Func_2e2c: ; 2e2c (0:2e2c)
 	ld de, $caa0
 	push de
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	cp $c3
 	jp z, .asm_2e3c
 	call Func_1c7d
@@ -3906,7 +3912,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	dec de
 	ret
 .done
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	cp $c3
 	jp z, Func_1c8e
 	jp Func_1c7d

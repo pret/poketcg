@@ -3,7 +3,14 @@ INCLUDE "constants.asm"
 ;--- Bank 0: $Cxxx ----------------------------------------
 
 SECTION "WRAM0", WRAM0
-	ds $a00
+	ds $400
+	
+wPlayerDeck:: ; c400
+	ds $80
+
+wOpponentDeck:: ; c480
+	ds $80
+	ds $500
 
 wBufOAM:: ; ca00
 	ds $a0
@@ -125,7 +132,7 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
-wOpponentDeck:: ; cc0e
+wOpponentDeckId:: ; cc0e
 	ds $1
 	ds $4
 

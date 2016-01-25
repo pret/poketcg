@@ -48,15 +48,15 @@ INCBIN "baserom.gbc",$406f,$409f - $406f
 ; graphics, name and deck have been introduced
 Duel_Start: ; 409f (1:409f)
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	ld a, $0
 	ld [$c2f1], a
 	ld a, [$cc19]
-	ld [wOpponentDeck], a
+	ld [wOpponentDeckId], a
 	call $6793
-	call Func_1c72
+	call GetOpposingTurnDuelistVariable_SwapTurn
 	call Duel_LoadDecks
-	call Func_1c72
+	call GetOpposingTurnDuelistVariable_SwapTurn
 	jr .asm_40ca
 
 	ld a, MUSIC_DUELTHEME1
@@ -108,7 +108,7 @@ Duel_Start: ; 409f (1:409f)
 	cp $80
 	jr z, .asm_4126
 .asm_4121
-	call Func_1c72
+	call GetOpposingTurnDuelistVariable_SwapTurn
 	jr .mainDuelLoop
 
 .asm_4126
@@ -130,14 +130,14 @@ Duel_Start: ; 409f (1:409f)
 	ld hl, $0076
 	call Func_2aab
 	call Func_04a2
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	push af
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call $4a97
 	call $4ad6
 	pop af
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call $3b21
 	ld a, [$cc07]
 	cp $1
@@ -150,7 +150,7 @@ Duel_Start: ; 409f (1:409f)
 	jr .asm_4196
 
 .asm_4171
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	cp $c2
 	jr nz, .asm_418a
 .asm_4177
@@ -162,7 +162,7 @@ Duel_Start: ; 409f (1:409f)
 	jr .asm_4196
 
 .asm_4184
-	ld a, [$ff97]
+	ld a, [hWhoseTurn]
 	cp $c2
 	jr nz, .asm_4177
 
@@ -178,7 +178,7 @@ Duel_Start: ; 409f (1:409f)
 	ld a, c
 	call PlaySong
 	ld a, $c3
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call Func_2a59
 	call EnableLCD
 .asm_41a7
@@ -194,7 +194,7 @@ Duel_Start: ; 409f (1:409f)
 	call $3b31
 	call ResetSerial
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	ret
 
 .asm_41c8
@@ -211,7 +211,7 @@ Duel_Start: ; 409f (1:409f)
 	cp $1
 	jr z, .asm_41f3
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call $4b60
 	jp $40ee
 
@@ -225,7 +225,7 @@ Duel_Start: ; 409f (1:409f)
 
 .asm_4201
 	ld a, h
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call $4b60
 	jp nc, $40ee
 	ret

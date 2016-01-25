@@ -27,7 +27,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_04a2
 	call Func_3ca0
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	farcall Func_1c440
 	ld a, [$d0bb]
 	ld [wCurMap], a
@@ -392,7 +392,7 @@ Func_c2db: ; c2db (3:42db)
 	call Func_3ca0
 	farcall Func_12bcd
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	call Func_c241
 	call Func_04a2
 	ld a, [$d111]

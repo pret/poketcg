@@ -15,6 +15,7 @@
 *.sgm
 *.sav
 *.sys
+*.sn*
 
 # converted image/palette data
 *.1bpp

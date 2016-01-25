@@ -1,4 +1,5 @@
 CARD_DATA_LENGTH EQU $41
+DECK_SIZE        EQU 60
 
 ;;; card types (byte 1 of every card data)
 FIRE      EQU $0

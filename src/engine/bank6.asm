@@ -7,7 +7,7 @@ INCBIN "baserom.gbc",$18f9c,$1996e - $18f9c
 Func_1996e: ; 1996e (6:596e)
 	call EnableExtRAM
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	ld hl, $a100
 	ld bc, $1607
 .asm_1997b
@@ -82,7 +82,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	push hl
 	ld de, $0018
 	add hl, de
-	ld de, $c400
+	ld de, wPlayerDeck
 	ld c, $3c
 .asm_19a04
 	ld a, [de]
@@ -155,7 +155,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld l, a
 	bank1call $2ebb
 	ld a, $c2
-	ld [$ff97], a
+	ld [hWhoseTurn], a
 	pop hl
 	bank1call $5e5f
 .asm_1a680
