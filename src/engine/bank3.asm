@@ -242,11 +242,11 @@ Func_c1b1: ; c1b1 (3:41b1)
 	farcall Func_1c82e
 	farcall Func_131b3
 	xor a
-	ld [wCounter + 0], a
-	ld [wCounter + 1], a
-	ld [wCounter + 2], a
-	ld [wCounter + 3], a
-	ld [wCounter + 4], a
+	ld [wPlayTimeCounter + 0], a
+	ld [wPlayTimeCounter + 1], a
+	ld [wPlayTimeCounter + 2], a
+	ld [wPlayTimeCounter + 3], a
+	ld [wPlayTimeCounter + 4], a
 	ret
 
 Func_c1ed: ; c1ed (3:41ed)
@@ -1199,7 +1199,7 @@ Func_c9e8: ; c9e8 (3:49e8)
 	cp $2
 	jr c, .asm_ca04
 .asm_c9f2
-	call Func_089b
+	call UpdateRNGSources
 	and $3
 	ld c, a
 	ld b, $0
@@ -1251,7 +1251,7 @@ Func_ca0e: ; ca0e (3:4a0e)
 	db $3f
 	jr .asm_ca68
 .asm_ca4a
-	call Func_089b
+	call UpdateRNGSources
 	ld c, $1
 	and $3
 	or a

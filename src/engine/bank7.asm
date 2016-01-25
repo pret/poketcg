@@ -133,7 +133,7 @@ Func_1d078: ; 1d078 (7:5078)
 	ld [$d626], a
 .asm_1d095
 	call Func_3c48
-	call Func_089b
+	call UpdateRNGSources
 	call $5614
 	ld hl, $d635
 	inc [hl]
@@ -213,7 +213,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	farcallx $4, $4031
 .asm_1d15a
 	call Func_3c48
-	call Func_089b
+	call UpdateRNGSources
 	call Func_264b
 	push af
 	call $51e9

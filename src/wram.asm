@@ -36,7 +36,15 @@ wPlayerDeckCards:: ; c27e
 ; the first x cards in the wPlayerDeckCards array are ignored (e.g. when drawing a card)
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
-	ds $d
+
+; Which card is in player's side of the field, as number 0 to 59
+wPlayerArenaCard:: ; c2bb
+	ds $1
+
+; Which cards are in player's bench, as numbers 0 to 59
+wPlayerBench:: ; c2bc	
+	ds BENCH_SIZE
+	ds $7
 	
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
@@ -77,7 +85,13 @@ wOpponentDeckCards:: ; c37e
 	
 wOpponentNumberOfCardsNotInDeck:: ; c3ba	
 	ds $1
-	ds $d
+	
+wOpponentArenaCard:: ; c3bb
+	ds $1
+
+wOpponentBench:: ; c3bc	
+	ds BENCH_SIZE
+	ds $7
 	
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
@@ -163,7 +177,7 @@ wVBlankOAMCopyToggle:: ; cac0
 wCounterCtr:: ; cac3
 	ds $1
 
-wCounterEnable:: ; cac4
+wPlayTimeCounterEnable:: ; cac4
 	ds $1
 
 ; byte0: 1/60ths of a second
@@ -171,9 +185,18 @@ wCounterEnable:: ; cac4
 ; byte2: minutes
 ; byte3: hours (lower byte)
 ; byte4: hours (upper byte)
-wCounter:: ; cac5
+wPlayTimeCounter:: ; cac5
 	ds $5
-	ds $6
+	
+wRNG1:: ; caca
+	ds $1
+
+wRNG2:: ; cacb
+	ds $1
+	
+wCounter:: ; cacc
+	ds $1
+	ds $3
 
 wVBlankFunctionTrampoline:: ; cad0
 	ds $20 ; unknown length

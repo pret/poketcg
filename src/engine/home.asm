@@ -129,7 +129,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	and $3
 	jr nz, .done
 	; increment the 60-60-60-255-255 counter
-	call IncrementCounter
+	call IncrementPlayTimeCounter
 	; check in-timer flag
 	ld hl, wReentrancyFlag
 	bit 1, [hl]
@@ -153,11 +153,11 @@ TimerHandler: ; 01e6 (0:01e6)
 	reti
 
 ; increment timer counter by a tick
-IncrementCounter: ; 021c (0:021c)
-	ld a, [wCounterEnable]
+IncrementPlayTimeCounter: ; 021c (0:021c)
+	ld a, [wPlayTimeCounterEnable]
 	or a
 	ret z
-	ld hl, wCounter
+	ld hl, wPlayTimeCounter
 	inc [hl]
 	ld a, [hl]
 	cp 60
@@ -1221,10 +1221,10 @@ HtimesL: ; 0879 (0:0879)
 
 INCBIN "baserom.gbc",$088f,$089b - $088f
 
-Func_089b: ; 089b (0:089b)
+UpdateRNGSources: ; 089b (0:089b)
 	push hl
 	push de
-	ld hl, $caca
+	ld hl, wRNG1
 	ld a, [hli]
 	ld d, [hl]
 	inc hl
@@ -3557,7 +3557,7 @@ Duel_LoadDecks: ; 2b78 (0:2b78)
 	ld a, PRACTICE_PLAYER_DECK
 	call LoadDeck
 	call GetOpposingTurnDuelistVariable_SwapTurn
-	ld hl, $caca
+	ld hl, wRNG1
 	ld a, $57
 	ld [hli], a
 	ld [hli], a
@@ -4517,14 +4517,14 @@ Func_380e: ; 380e (0:380e)
 	ld a, BANK(Func_804d8)
 	call BankswitchHome
 	call Func_804d8
-	call Func_089b
+	call UpdateRNGSources
 	pop af
 	call BankswitchHome
 	ret
 
 Func_383d: ; 383d (0:383d)
 	ld a, $1
-	ld [wCounterEnable], a
+	ld [wPlayTimeCounterEnable], a
 	ld a, [hBankROM]
 	push af
 .asm_3845
