@@ -1005,160 +1005,160 @@ Text01dc: ; 3b40a (e:740a)
 Text01dd: ; 3b425 (e:7425)
 	db TX_START,"Dummy",TX_END
 
-Text01de: ; 3b42c (e:742c)
+PracticePlayerDeckName: ; 3b42c (e:742c)
 	db TX_START,"Practice Player",TX_END
 
-Text01df: ; 3b43d (e:743d)
+SamsPracticeDeckName: ; 3b43d (e:743d)
 	db TX_START,"Sam's Practice",TX_END
 
-Text01e0: ; 3b44d (e:744d)
+CharmanderAndFriendsDeckName: ; 3b44d (e:744d)
 	db TX_START,"Charmander & Friends",TX_END
 
-Text01e1: ; 3b463 (e:7463)
+CharmanderExtraDeckName: ; 3b463 (e:7463)
 	db TX_START,"Charmander extra",TX_END
 
-Text01e2: ; 3b475 (e:7475)
+SquirtleAndFriendsDeckName: ; 3b475 (e:7475)
 	db TX_START,"Squirtle & Friends",TX_END
 
-Text01e3: ; 3b489 (e:7489)
+SquirtleExtraDeckName: ; 3b489 (e:7489)
 	db TX_START,"Squirtle extra",TX_END
 
-Text01e4: ; 3b499 (e:7499)
+BulbasaurAndFriendsDeckName: ; 3b499 (e:7499)
 	db TX_START,"Bulbasaur & Friends",TX_END
 
-Text01e5: ; 3b4ae (e:74ae)
+BulbasaurExtraDeckName: ; 3b4ae (e:74ae)
 	db TX_START,"Bulbasaur extra",TX_END
 
-Text01e6: ; 3b4bf (e:74bf)
+FirstStrikeDeckName: ; 3b4bf (e:74bf)
 	db TX_START,"First-Strike",TX_END
 
-Text01e7: ; 3b4cd (e:74cd)
+RockCrusherDeckName: ; 3b4cd (e:74cd)
 	db TX_START,"Rock Crusher",TX_END
 
-Text01e8: ; 3b4db (e:74db)
+GoGoRainDanceDeckName: ; 3b4db (e:74db)
 	db TX_START,"Go Go Rain Dance",TX_END
 
-Text01e9: ; 3b4ed (e:74ed)
+ZappingSelfdestructDeckName: ; 3b4ed (e:74ed)
 	db TX_START,"Zapping Selfdestruct",TX_END
 
-Text01ea: ; 3b503 (e:7503)
+FlowerPowerDeckName: ; 3b503 (e:7503)
 	db TX_START,"Flower Power",TX_END
 
-Text01eb: ; 3b511 (e:7511)
+StrangePsyshockDeckName: ; 3b511 (e:7511)
 	db TX_START,"Strange Psyshock",TX_END
 
-Text01ec: ; 3b523 (e:7523)
+WondersofScienceDeckName: ; 3b523 (e:7523)
 	db TX_START,"Wonders of Science",TX_END
 
-Text01ed: ; 3b537 (e:7537)
+FireChargeDeckName: ; 3b537 (e:7537)
 	db TX_START,"Fire Charge",TX_END
 
-Text01ee: ; 3b544 (e:7544)
+LegendaryMoltresDeckName: ; 3b544 (e:7544)
 	db TX_START,"Legendary Moltres",TX_END
 
-Text01ef: ; 3b557 (e:7557)
+LegendaryZapdosDeckName: ; 3b557 (e:7557)
 	db TX_START,"Legendary Zapdos",TX_END
 
-Text01f0: ; 3b569 (e:7569)
+LegendaryArticunoDeckName: ; 3b569 (e:7569)
 	db TX_START,"Legendary Articuno",TX_END
 
-Text01f1: ; 3b57d (e:757d)
+LegendaryDragoniteDeckName: ; 3b57d (e:757d)
 	db TX_START,"Legendary Dragonite",TX_END
 
-Text01f2: ; 3b592 (e:7592)
+ImRonaldDeckName: ; 3b592 (e:7592)
 	db TX_START,"I'm Ronald!",TX_END
 
-Text01f3: ; 3b59f (e:759f)
+PowerfulRonaldDeckName: ; 3b59f (e:759f)
 	db TX_START,"Powerful Ronald",TX_END
 
-Text01f4: ; 3b5b0 (e:75b0)
+InvincibleRonaldDeckName: ; 3b5b0 (e:75b0)
 	db TX_START,"Invincible Ronald",TX_END
 
-Text01f5: ; 3b5c3 (e:75c3)
+LegendaryRonaldDeckName: ; 3b5c3 (e:75c3)
 	db TX_START,"Legendary Ronald",TX_END
 
-Text01f6: ; 3b5d5 (e:75d5)
+WaterfrontPokemonDeckName: ; 3b5d5 (e:75d5)
 	db TX_START,"Waterfront Pok`mon",TX_END
 
-Text01f7: ; 3b5e9 (e:75e9)
+LonelyFriendsDeckName: ; 3b5e9 (e:75e9)
 	db TX_START,"Lonely Friends",TX_END
 
-Text01f8: ; 3b5f9 (e:75f9)
+SoundoftheWavesDeckName: ; 3b5f9 (e:75f9)
 	db TX_START,"Sound of the Waves",TX_END
 
-Text01f9: ; 3b60d (e:760d)
+AngerDeckName: ; 3b60d (e:760d)
 	db TX_START,"Anger",TX_END
 
-Text01fa: ; 3b614 (e:7614)
+FlamethrowerDeckName: ; 3b614 (e:7614)
 	db TX_START,"Flamethrower",TX_END
 
-Text01fb: ; 3b622 (e:7622)
+ReshuffleDeckName: ; 3b622 (e:7622)
 	db TX_START,"Reshuffle",TX_END
 
-Text01fc: ; 3b62d (e:762d)
+ExcavationDeckName: ; 3b62d (e:762d)
 	db TX_START,"Excavation",TX_END
 
-Text01fd: ; 3b639 (e:7639)
+BlisteringPokemonDeckName: ; 3b639 (e:7639)
 	db TX_START,"Blistering Pok`mon",TX_END
 
-Text01fe: ; 3b64d (e:764d)
+HardPokemonDeckName: ; 3b64d (e:764d)
 	db TX_START,"Hard Pok`mon",TX_END
 
-Text01ff: ; 3b65b (e:765b)
+EtceteraDeckName: ; 3b65b (e:765b)
 	db TX_START,"Etcetera",TX_END
 
-Text0200: ; 3b665 (e:7665)
+FlowerGardenDeckName: ; 3b665 (e:7665)
 	db TX_START,"Flower Garden",TX_END
 
-Text0201: ; 3b674 (e:7674)
+KaleidoscopeDeckName: ; 3b674 (e:7674)
 	db TX_START,"Kaleidoscope",TX_END
 
-Text0202: ; 3b682 (e:7682)
+MusclesforBrainsDeckName: ; 3b682 (e:7682)
 	db TX_START,"Muscles for Brains",TX_END
 
-Text0203: ; 3b696 (e:7696)
+HeatedBattleDeckName: ; 3b696 (e:7696)
 	db TX_START,"Heated Battle",TX_END
 
-Text0204: ; 3b6a5 (e:76a5)
+LovetoBattleDeckName: ; 3b6a5 (e:76a5)
 	db TX_START,"Love to Battle",TX_END
 
-Text0205: ; 3b6b5 (e:76b5)
+PikachuDeckName: ; 3b6b5 (e:76b5)
 	db TX_START,"Pikachu",TX_END
 
-Text0206: ; 3b6be (e:76be)
+BoomBoomSelfdestructDeckName: ; 3b6be (e:76be)
 	db TX_START,"Boom Boom Selfdestruct",TX_END
 
-Text0207: ; 3b6d6 (e:76d6)
+PowerGeneratorDeckName: ; 3b6d6 (e:76d6)
 	db TX_START,"Power Generator",TX_END
 
-Text0208: ; 3b6e7 (e:76e7)
+GhostDeckName: ; 3b6e7 (e:76e7)
 	db TX_START,"Ghost",TX_END
 
-Text0209: ; 3b6ee (e:76ee)
+NapTimeDeckName: ; 3b6ee (e:76ee)
 	db TX_START,"Nap Time",TX_END
 
-Text020a: ; 3b6f8 (e:76f8)
+StrangePowerDeckName: ; 3b6f8 (e:76f8)
 	db TX_START,"Strange Power",TX_END
 
-Text020b: ; 3b707 (e:7707)
+FlyinPokemonDeckName: ; 3b707 (e:7707)
 	db TX_START,"Flyin' Pok`mon",TX_END
 
-Text020c: ; 3b717 (e:7717)
+LovelyNidoranDeckName: ; 3b717 (e:7717)
 	db TX_START,"Lovely Nidoran",TX_END
 
-Text020d: ; 3b727 (e:7727)
+PoisonDeckName: ; 3b727 (e:7727)
 	db TX_START,"Poison",TX_END
 
-Text020e: ; 3b72f (e:772f)
+ImakuniDeckName: ; 3b72f (e:772f)
 	db TX_START,"Imakuni?",TX_END
 
-Text020f: ; 3b739 (e:7739)
+LightningAndFireDeckName: ; 3b739 (e:7739)
 	db TX_START,"Lightning & Fire",TX_END
 
-Text0210: ; 3b74b (e:774b)
+WaterAndFightingDeckName: ; 3b74b (e:774b)
 	db TX_START,"Water & Fighting",TX_END
 
-Text0211: ; 3b75d (e:775d)
+GrassAndPsychicDeckName: ; 3b75d (e:775d)
 	db TX_START,"Grass & Psychic",TX_END
 
 Text0212: ; 3b76e (e:776e)

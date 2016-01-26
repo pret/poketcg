@@ -543,7 +543,7 @@ PracticePlayerDeck: ; 30344 (c:4344)
 	db 1, ALAKAZAM
 	db 0
 
-	dw $1de
+	tx PracticePlayerDeckName
 
 SamsPracticeDeck: ; 303b5 (c:43b5)
 	db 2, LIGHTNING_ENERGY
@@ -604,7 +604,7 @@ SamsPracticeDeck: ; 303b5 (c:43b5)
 	db 1, EEVEE
 	db 0
 
-	dw $1df
+	tx SamsPracticeDeckName
 
 CharmanderAndFriendsDeck: ; 30428 (c:4428)
 	db 10, FIRE_ENERGY
@@ -638,7 +638,7 @@ CharmanderAndFriendsDeck: ; 30428 (c:4428)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $1e0
+	tx CharmanderAndFriendsDeckName
 
 CharmanderExtraDeck: ; 30465 (c:4465)
 	db 4, GRASS_ENERGY
@@ -661,7 +661,7 @@ CharmanderExtraDeck: ; 30465 (c:4465)
 	db 30, GRASS_ENERGY
 	db 0
 
-	dw $1e1
+	tx CharmanderExtraDeckName
 
 SquirtleAndFriendsDeck: ; 3048c (c:448c)
 	db 11, WATER_ENERGY
@@ -698,7 +698,7 @@ SquirtleAndFriendsDeck: ; 3048c (c:448c)
 	db 1, FULL_HEAL
 	db 0
 
-	dw $1e2
+	tx SquirtleAndFriendsDeckName
 
 SquirtleExtraDeck: ; 304cf (c:44cf)
 	db 3, GRASS_ENERGY
@@ -723,7 +723,7 @@ SquirtleExtraDeck: ; 304cf (c:44cf)
 	db 30, GRASS_ENERGY
 	db 0
 
-	dw $1e3
+	tx SquirtleExtraDeckName
 
 BulbasaurAndFriendsDeck: ; 304fa (c:44fa)
 	db 11, GRASS_ENERGY
@@ -759,7 +759,7 @@ BulbasaurAndFriendsDeck: ; 304fa (c:44fa)
 	db 1, REVIVE
 	db 0
 
-	dw $1e4
+	tx BulbasaurAndFriendsDeckName
 
 BulbasaurExtraDeck: ; 3053b (c:453b)
 	db 4, LIGHTNING_ENERGY
@@ -783,7 +783,7 @@ BulbasaurExtraDeck: ; 3053b (c:453b)
 	db 30, GRASS_ENERGY
 	db 0
 
-	dw $1e5
+	tx BulbasaurExtraDeckName
 
 LightningAndFireDeck: ; 30564 (c:4564)
 	db 10, FIRE_ENERGY
@@ -817,7 +817,7 @@ LightningAndFireDeck: ; 30564 (c:4564)
 	db 1, POTION
 	db 0
 
-	dw $20f
+	tx LightningAndFireDeckName
 
 WaterAndFightingDeck: ; 305a1 (c:45a1)
 	db 12, WATER_ENERGY
@@ -847,7 +847,7 @@ WaterAndFightingDeck: ; 305a1 (c:45a1)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $210
+	tx WaterAndFightingDeckName
 
 GrassAndPsychicDeck: ; 305d6 (c:45d6)
 	db 12, GRASS_ENERGY
@@ -876,7 +876,7 @@ GrassAndPsychicDeck: ; 305d6 (c:45d6)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $211
+	tx GrassAndPsychicDeckName
 
 LegendaryMoltresDeck: ; 30609 (c:4609)
 	db 25, FIRE_ENERGY
@@ -899,7 +899,7 @@ LegendaryMoltresDeck: ; 30609 (c:4609)
 	db 1, SUPER_POTION
 	db 0
 
-	dw $1ee
+	tx LegendaryMoltresDeckName
 
 LegendaryZapdosDeck: ; 30630 (c:4630)
 	db 25, LIGHTNING_ENERGY
@@ -919,7 +919,7 @@ LegendaryZapdosDeck: ; 30630 (c:4630)
 	db 1, GAMBLER
 	db 0
 
-	dw $1ef
+	tx LegendaryZapdosDeckName
 
 LegendaryArticunoDeck: ; 30651 (c:4651)
 	db 25, WATER_ENERGY
@@ -938,7 +938,7 @@ LegendaryArticunoDeck: ; 30651 (c:4651)
 	db 1, GAMBLER
 	db 0
 
-	dw $1f0
+	tx LegendaryArticunoDeckName
 
 LegendaryDragoniteDeck: ; 30670 (c:4670)
 	db 20, WATER_ENERGY
@@ -962,7 +962,7 @@ LegendaryDragoniteDeck: ; 30670 (c:4670)
 	db 1, GAMBLER
 	db 0
 
-	dw $1f1
+	tx LegendaryDragoniteDeckName
 
 FirstStrikeDeck: ; 30699 (c:4699)
 	db 25, FIGHTING_ENERGY
@@ -981,7 +981,7 @@ FirstStrikeDeck: ; 30699 (c:4699)
 	db 4, BILL
 	db 0
 
-	dw $1e6
+	tx FirstStrikeDeckName
 
 RockCrusherDeck: ; 306b8 (c:46b8)
 	db 24, FIGHTING_ENERGY
@@ -1003,7 +1003,7 @@ RockCrusherDeck: ; 306b8 (c:46b8)
 	db 2, POTION
 	db 0
 
-	dw $1e7
+	tx RockCrusherDeckName
 
 GoGoRainDanceDeck: ; 306dd (c:46dd)
 	db 24, WATER_ENERGY
@@ -1026,7 +1026,7 @@ GoGoRainDanceDeck: ; 306dd (c:46dd)
 	db 1, GAMBLER
 	db 0
 
-	dw $1e8
+	tx GoGoRainDanceDeckName
 
 ZappingSelfdestructDeck: ; 30704 (c:4704)
 	db 24, LIGHTNING_ENERGY
@@ -1046,7 +1046,7 @@ ZappingSelfdestructDeck: ; 30704 (c:4704)
 	db 4, POTION
 	db 0
 
-	dw $1e9
+	tx ZappingSelfdestructDeckName
 
 FlowerPowerDeck: ; 30725 (c:4725)
 	db 18, GRASS_ENERGY
@@ -1067,7 +1067,7 @@ FlowerPowerDeck: ; 30725 (c:4725)
 	db 2, POTION
 	db 0
 
-	dw $1ea
+	tx FlowerPowerDeckName
 
 StrangePsyshockDeck: ; 30748 (c:4748)
 	db 22, PSYCHIC_ENERGY
@@ -1087,7 +1087,7 @@ StrangePsyshockDeck: ; 30748 (c:4748)
 	db 1, GAMBLER
 	db 0
 
-	dw $1eb
+	tx StrangePsyshockDeckName
 
 WondersofScienceDeck: ; 30769 (c:4769)
 	db 15, GRASS_ENERGY
@@ -1111,7 +1111,7 @@ WondersofScienceDeck: ; 30769 (c:4769)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $1ec
+	tx WondersofScienceDeckName
 
 FireChargeDeck: ; 30792 (c:4792)
 	db 21, FIRE_ENERGY
@@ -1136,7 +1136,7 @@ FireChargeDeck: ; 30792 (c:4792)
 	db 1, GAMBLER
 	db 0
 
-	dw $1ed
+	tx FireChargeDeckName
 
 ImRonaldDeck: ; 307bd (c:47bd)
 	db 9, FIRE_ENERGY
@@ -1162,7 +1162,7 @@ ImRonaldDeck: ; 307bd (c:47bd)
 	db 2, GUST_OF_WIND
 	db 0
 
-	dw $1f2
+	tx ImRonaldDeckName
 
 PowerfulRonaldDeck: ; 307ea (c:47ea)
 	db 7, LIGHTNING_ENERGY
@@ -1191,7 +1191,7 @@ PowerfulRonaldDeck: ; 307ea (c:47ea)
 	db 1, GAMBLER
 	db 0
 
-	dw $1f3
+	tx PowerfulRonaldDeckName
 
 InvincibleRonaldDeck: ; 3081d (c:481d)
 	db 7, GRASS_ENERGY
@@ -1216,7 +1216,7 @@ InvincibleRonaldDeck: ; 3081d (c:481d)
 	db 1, GAMBLER
 	db 0
 
-	dw $1f4
+	tx InvincibleRonaldDeckName
 
 LegendaryRonaldDeck: ; 30848 (c:4848)
 	db 20, FIRE_ENERGY
@@ -1241,7 +1241,7 @@ LegendaryRonaldDeck: ; 30848 (c:4848)
 	db 1, GAMBLER
 	db 0
 
-	dw $1f5
+	tx LegendaryRonaldDeckName
 
 MusclesforBrainsDeck: ; 30873 (c:4873)
 	db 26, FIGHTING_ENERGY
@@ -1268,7 +1268,7 @@ MusclesforBrainsDeck: ; 30873 (c:4873)
 	db 1, REVIVE
 	db 0
 
-	dw $202
+	tx MusclesforBrainsDeckName
 
 HeatedBattleDeck: ; 308a2 (c:48a2)
 	db 8, FIRE_ENERGY
@@ -1289,7 +1289,7 @@ HeatedBattleDeck: ; 308a2 (c:48a2)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $203
+	tx HeatedBattleDeckName
 
 LovetoBattleDeck: ; 308c5 (c:48c5)
 	db 26, FIGHTING_ENERGY
@@ -1309,7 +1309,7 @@ LovetoBattleDeck: ; 308c5 (c:48c5)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $204
+	tx LovetoBattleDeckName
 
 ExcavationDeck: ; 308e6 (c:48e6)
 	db 15, FIGHTING_ENERGY
@@ -1332,7 +1332,7 @@ ExcavationDeck: ; 308e6 (c:48e6)
 	db 4, MYSTERIOUS_FOSSIL
 	db 0
 
-	dw $1fc
+	tx ExcavationDeckName
 
 BlisteringPokemonDeck: ; 3090d (c:490d)
 	db 4, FIRE_ENERGY
@@ -1357,7 +1357,7 @@ BlisteringPokemonDeck: ; 3090d (c:490d)
 	db 2, GUST_OF_WIND
 	db 0
 
-	dw $1fd
+	tx BlisteringPokemonDeckName
 
 HardPokemonDeck: ; 30938 (c:4938)
 	db 25, FIGHTING_ENERGY
@@ -1377,7 +1377,7 @@ HardPokemonDeck: ; 30938 (c:4938)
 	db 2, POTION
 	db 0
 
-	dw $1fe
+	tx HardPokemonDeckName
 
 WaterfrontPokemonDeck: ; 30959 (c:4959)
 	db 18, WATER_ENERGY
@@ -1408,7 +1408,7 @@ WaterfrontPokemonDeck: ; 30959 (c:4959)
 	db 1, SUPER_POTION
 	db 0
 
-	dw $1f6
+	tx WaterfrontPokemonDeckName
 
 LonelyFriendsDeck: ; 30990 (c:4990)
 	db 8, GRASS_ENERGY
@@ -1431,7 +1431,7 @@ LonelyFriendsDeck: ; 30990 (c:4990)
 	db 1, SUPER_POTION
 	db 0
 
-	dw $1f7
+	tx LonelyFriendsDeckName
 
 SoundoftheWavesDeck: ; 309b7 (c:49b7)
 	db 24, WATER_ENERGY
@@ -1453,7 +1453,7 @@ SoundoftheWavesDeck: ; 309b7 (c:49b7)
 	db 2, FULL_HEAL
 	db 0
 
-	dw $1f8
+	tx SoundoftheWavesDeckName
 
 PikachuDeck: ; 309dc (c:49dc)
 	db 6, WATER_ENERGY
@@ -1475,7 +1475,7 @@ PikachuDeck: ; 309dc (c:49dc)
 	db 4, FULL_HEAL
 	db 0
 
-	dw $205
+	tx PikachuDeckName
 
 BoomBoomSelfdestructDeck: ; 30a01 (c:4a01)
 	db 8, GRASS_ENERGY
@@ -1494,7 +1494,7 @@ BoomBoomSelfdestructDeck: ; 30a01 (c:4a01)
 	db 2, DEFENDER
 	db 0
 
-	dw $206
+	tx BoomBoomSelfdestructDeckName
 
 PowerGeneratorDeck: ; 30a20 (c:4a20)
 	db 26, LIGHTNING_ENERGY
@@ -1519,7 +1519,7 @@ PowerGeneratorDeck: ; 30a20 (c:4a20)
 	db 4, DEFENDER
 	db 0
 
-	dw $207
+	tx PowerGeneratorDeckName
 
 EtceteraDeck: ; 30a4b (c:4a4b)
 	db 8, GRASS_ENERGY
@@ -1548,7 +1548,7 @@ EtceteraDeck: ; 30a4b (c:4a4b)
 	db 2, DEFENDER
 	db 0
 
-	dw $1ff
+	tx EtceteraDeckName
 
 FlowerGardenDeck: ; 30a7e (c:4a7e)
 	db 24, GRASS_ENERGY
@@ -1573,7 +1573,7 @@ FlowerGardenDeck: ; 30a7e (c:4a7e)
 	db 1, FULL_HEAL
 	db 0
 
-	dw $200
+	tx FlowerGardenDeckName
 
 KaleidoscopeDeck: ; 30aa9 (c:4aa9)
 	db 10, GRASS_ENERGY
@@ -1599,7 +1599,7 @@ KaleidoscopeDeck: ; 30aa9 (c:4aa9)
 	db 2, GUST_OF_WIND
 	db 0
 
-	dw $201
+	tx KaleidoscopeDeckName
 
 GhostDeck: ; 30ad6 (c:4ad6)
 	db 15, PSYCHIC_ENERGY
@@ -1623,7 +1623,7 @@ GhostDeck: ; 30ad6 (c:4ad6)
 	db 2, RECYCLE
 	db 0
 
-	dw $208
+	tx GhostDeckName
 
 NapTimeDeck: ; 30aff (c:4aff)
 	db 8, GRASS_ENERGY
@@ -1642,7 +1642,7 @@ NapTimeDeck: ; 30aff (c:4aff)
 	db 2, POTION
 	db 0
 
-	dw $209
+	tx NapTimeDeckName
 
 StrangePowerDeck: ; 30b1e (c:4b1e)
 	db 25, PSYCHIC_ENERGY
@@ -1667,7 +1667,7 @@ StrangePowerDeck: ; 30b1e (c:4b1e)
 	db 1, FULL_HEAL
 	db 0
 
-	dw $20a
+	tx StrangePowerDeckName
 
 FlyinPokemonDeck: ; 30b49 (c:4b49)
 	db 13, GRASS_ENERGY
@@ -1688,7 +1688,7 @@ FlyinPokemonDeck: ; 30b49 (c:4b49)
 	db 4, POTION
 	db 0
 
-	dw $20b
+	tx FlyinPokemonDeckName
 
 LovelyNidoranDeck: ; 30b6c (c:4b6c)
 	db 24, GRASS_ENERGY
@@ -1714,7 +1714,7 @@ LovelyNidoranDeck: ; 30b6c (c:4b6c)
 	db 1, GAMBLER
 	db 0
 
-	dw $20c
+	tx LovelyNidoranDeckName
 
 PoisonDeck: ; 30b99 (c:4b99)
 	db 24, GRASS_ENERGY
@@ -1736,7 +1736,7 @@ PoisonDeck: ; 30b99 (c:4b99)
 	db 1, GAMBLER
 	db 0
 
-	dw $20d
+	tx PoisonDeckName
 
 AngerDeck: ; 30bbe (c:4bbe)
 	db 10, FIRE_ENERGY
@@ -1759,7 +1759,7 @@ AngerDeck: ; 30bbe (c:4bbe)
 	db 2, GUST_OF_WIND
 	db 0
 
-	dw $1f9
+	tx AngerDeckName
 
 FlamethrowerDeck: ; 30be5 (c:4be5)
 	db 22, FIRE_ENERGY
@@ -1783,7 +1783,7 @@ FlamethrowerDeck: ; 30be5 (c:4be5)
 	db 3, GUST_OF_WIND
 	db 0
 
-	dw $1fa
+	tx FlamethrowerDeckName
 
 ReshuffleDeck: ; 30c0e (c:4c0e)
 	db 23, FIRE_ENERGY
@@ -1810,7 +1810,7 @@ ReshuffleDeck: ; 30c0e (c:4c0e)
 	db 2, POTION
 	db 0
 
-	dw $1fb
+	tx ReshuffleDeckName
 
 ImakuniDeck: ; 30c3d (c:4c3d)
 	db 10, WATER_ENERGY
@@ -1829,4 +1829,4 @@ ImakuniDeck: ; 30c3d (c:4c3d)
 	db 1, GAMBLER
 	db 0
 
-	dw $20e
+	tx ImakuniDeckName
