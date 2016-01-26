@@ -182,7 +182,7 @@ StartDuel: ; 409f (1:409f)
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 .asm_41a7
-	call Func_053f
+	call DoFrame
 	call Func_378a
 	or a
 	jr nz, .asm_41a7

@@ -39,7 +39,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, $ff
 	ld [$d116], a
 .asm_102e2
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld a, [$d116]
 	inc a
 	ld [$d116], a
@@ -121,7 +121,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wFrameType], a
 	farcallx $1, $7599
 	farcall Func_c1a4
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	pop af
 	ld [$d291], a
 	ret
@@ -178,7 +178,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld a, [wMatchStartTheme]
 	call PlaySong
 	call $4031
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld bc, $2f1d
 	ld de, $1211
 	call Func_2a1a
@@ -758,7 +758,7 @@ CardPop_12768: ; 12768 (4:6768)
 	call PlaySong
 	bank1call Func_7571
 	farcall Func_c1a4
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld a, MUSIC_STOP
 	call PlaySong
 	scf

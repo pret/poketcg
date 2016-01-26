@@ -84,7 +84,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, $0224
 	call DrawWideTextBox_PrintText
 .asm_8dc8
-	call Func_053f
+	call DoFrame
 	jr c, Func_8dbc
 	call Func_8dea
 	jr c, Func_8dbc
@@ -150,7 +150,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call Func_2c08
 	call Func_905a
 .asm_8e4e
-	call Func_053f
+	call DoFrame
 	call Func_9065
 	jp nc, .asm_8e4e
 	cp $ff

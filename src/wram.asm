@@ -209,10 +209,14 @@ wRNG2:: ; cacb
 	
 wCounter:: ; cacc
 	ds $1
+
+; the LCDC status interrupt is always disabled and this always reads as jp $0000
+wLCDCFunctiontrampoline:: ; cacd
 	ds $3
 
 wVBlankFunctionTrampoline:: ; cad0
-	ds $20 ; unknown length
+	ds $3
+	ds $1d
 
 wBufPalette:: ; caf0 - cab7f
 	ds $80

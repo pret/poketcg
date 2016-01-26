@@ -23,7 +23,7 @@ SECTION "rst38",ROM0[$38]
 SECTION "vblank",ROM0[$40]
 	jp VBlankHandler
 SECTION "lcdc",ROM0[$48]
-	call $cacd
+	call wLCDCFunctiontrampoline
 	reti
 SECTION "timer",ROM0[$50]
 	jp TimerHandler
@@ -100,7 +100,7 @@ VBlankHandler: ; 019b (0:019b)
 	ld a, [wLCDC]
 	ld [rLCDC], a
 	ei
-	call $cad0
+	call wVBlankFunctionTrampoline
 	call FlushPalettes
 	ld hl, wVBlankCtr
 	inc [hl]
@@ -342,7 +342,7 @@ SetupLCD: ; 030b (0:030b)
 	xor a
 	ld [wReentrancyFlag], a
 	ld a, $c3            ; $c3 = jp nn
-	ld [$cacd], a
+	ld [wLCDCFunctiontrampoline], a
 	ld [wVBlankFunctionTrampoline], a
 	ld hl, wVBlankFunctionTrampoline + 1
 	ld [hl], NopF & $ff  ;
@@ -706,16 +706,19 @@ ClearJoypad: ; 052a (0:052a)
 	pop hl
 	ret
 
-Func_0536: ; 0536 (0:0536)
+; calls DoFrame a times
+DoAFrames: ; 0536 (0:0536)
 .loop
 	push af
-	call Func_053f
+	call DoFrame
 	pop af
 	dec a
 	jr nz, .loop
 	ret
 
-Func_053f: ; 053f (0:053f)
+; updates background, sprites and other game variables, halts until vblank, and reads user input
+; if $cad5 is not 0, the game can be paused (and resumed) by pressing the select button
+DoFrame: ; 053f (0:053f)
 	push af
 	push hl
 	push de
@@ -727,18 +730,18 @@ Func_053f: ; 053f (0:053f)
 	call HandleDPadRepeat
 	ld a, [$cad5]
 	or a
-	jr z, .asm_56d
+	jr z, .done
 	ld a, [hButtonsPressed]
 	and $4
-	jr z, .asm_56d
-.asm_55e
+	jr z, .done
+.gamePausedLoop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ld a, [hButtonsPressed]
 	and $4
-	jr z, .asm_55e
-.asm_56d
+	jr z, .gamePausedLoop
+.done
 	pop bc
 	pop de
 	pop hl
@@ -2010,13 +2013,13 @@ Func_0e63: ; 0e63 (0:0e63)
 	dec c
 	jr z, .asm_e75
 	ld a, [hli]
-	call $0e0a
+	call Func_0e0a
 	dec c
 .asm_e75
 	inc b
 	dec b
 	jr z, .asm_e81
-	call $0e39
+	call Func_0e39
 	jr c, .asm_e81
 	ld [de], a
 	inc de
@@ -3577,7 +3580,7 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call InitializeCursorParameters
 	call EnableLCD
 .waitAorBLoop
-	call Func_053f
+	call DoFrame
 	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	and $3
@@ -3605,7 +3608,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	call InitializeCursorParameters
 	call EnableLCD
 .waitAorBLoop
-	call Func_053f
+	call DoFrame
 	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	and $3
@@ -3638,7 +3641,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	call EnableLCD
 	jr .asm_2b39
 .asm_2b1f
-	call Func_053f
+	call DoFrame
 	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	bit 0, a
@@ -4023,7 +4026,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	jr nz, .asm_2e70
 	jr .asm_2e6d
 .asm_2e6a
-	call Func_053f
+	call DoFrame
 .asm_2e6d
 	dec a
 	jr nz, .asm_2e6a
@@ -4479,7 +4482,7 @@ Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	ld [$ce63], a        ; [$ce63] ← 1
 	call Func_31fc
 .asm_315d
-	call Func_053f
+	call DoFrame
 	ld a, [$ce63]
 	or a
 	jr nz, .asm_315d
@@ -5129,19 +5132,19 @@ Func_3c45: ; 3c45 (0:3c45)
 
 INCBIN "baserom.gbc",$3c46,$3c48 - $3c46
 
-Func_3c48: ; 3c48 (0:3c48)
+DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
 	ld a, [rLCDC]
 	bit 7, a
-	jr z, .asm_3c58
+	jr z, .done
 	push bc
 	push de
 	push hl
-	call Func_053f
+	call DoFrame
 	pop hl
 	pop de
 	pop bc
-.asm_3c58
+.done
 	pop af
 	ret
 

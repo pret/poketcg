@@ -132,7 +132,7 @@ Func_1d078: ; 1d078 (7:5078)
 	ld a, $3c
 	ld [$d626], a
 .asm_1d095
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call $5614
 	ld hl, $d635
@@ -212,7 +212,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	farcall Func_111e9
 	farcallx $4, $4031
 .asm_1d15a
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call Func_264b
 	push af
@@ -287,7 +287,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	farcallx $4, $4031
 	call $57fc
 .asm_1d6c8
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call $5765
 	call $580b
 	ld a, [$d633]
@@ -300,10 +300,10 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call PlaySong
 	farcall Func_10ab4
 	call $3ca4
-	call $02d4
+	call Set_WD_off
 	call $5758
 	call EnableLCD
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call DisableLCD
 	ld hl, $cabb
 	set 1, [hl]

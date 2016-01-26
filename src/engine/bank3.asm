@@ -52,14 +52,14 @@ LoadMap: ; c000 (3:4000)
 	call Func_c141
 	call Func_c17a
 .asm_c092
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call Func_c491
 	call Func_c0ce
 	ld hl, $d0b4
 	ld a, [hl]
 	and $d0
 	jr z, .asm_c092
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld hl, $d0b4
 	ld a, [hl]
 	bit 4, [hl]
@@ -344,7 +344,7 @@ Func_c280: ; c280 (3:4280)
 	ld hl, $cac0
 	inc [hl]
 	call EnableLCD
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call DisableLCD
 	farcall Func_12871
 	ret
@@ -373,7 +373,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	ld a, $1
 	ld [$cac0], a
 	call EnableLCD
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call DisableLCD
 	pop de
 	pop bc
@@ -957,7 +957,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	ld a, $1
 	call Func_c29b
 .asm_c76a
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call Func_264b
 	jr nc, .asm_c76a
 	ld a, e
@@ -1033,7 +1033,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call PlaySong
 	call Func_c241
 	call $4915
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld hl, $0352
 	call $2c73
 	call $484e
@@ -1041,7 +1041,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	ld a, $1
 	call Func_c29b
 .asm_c806
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	call Func_264b
 	jr nc, .asm_c806
 	ld a, e
@@ -1060,7 +1060,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr .asm_c801
 .asm_c82f
 	call Func_c135
-	call Func_3c48
+	call DoFrameIfLCDEnabled
 	ld hl, $0353
 	call $4891
 	call Func_c111
