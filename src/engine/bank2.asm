@@ -80,9 +80,9 @@ Func_8db0: ; 8db0 (2:4db0)
 
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
-	call Func_2636
+	call InitializeCursorParameters
 	ld hl, $0224
-	call Func_2a59
+	call DrawWideTextBox_PrintText
 .asm_8dc8
 	call Func_053f
 	jr c, Func_8dbc
@@ -349,13 +349,13 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	ld [$ce3f], a
 	ld [$ce40], a
 	ld hl, $022a
-	call Func_2aab
+	call DrawWideTextBox_WaitForInput
 	ld a, [$ceb1]
 	jp Func_8dbc
 
 Func_8fe8: ; 8fe8 (2:4fe8)
 	ld hl, $022f
-	call Func_2aab
+	call DrawWideTextBox_WaitForInput
 	ld a, [$ceb1]
 	ret
 

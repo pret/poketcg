@@ -69,7 +69,13 @@ wPlayerNumberOfPokemonInPlay:: ; c2ef
 
 wPlayerArenaCardStatus:: ; c2f0
 	ds $1
-	ds $f
+
+; $00   - player
+; $01   - link
+; other - AI controlled
+wPlayerDuelistType:: ; c2f1
+	ds $1
+	ds $e
 
 wOpponentDuelVariables:: ; c300
 
@@ -115,7 +121,13 @@ wOpponentNumberOfPokemonInPlay:: ; c3ef
 
 wOpponentArenaCardStatus:: ; c3f0
 	ds $1
-	ds $f
+
+; $00   - player
+; $01   - link
+; other - AI controlled
+wOpponentDuelistType:: ; c3f1
+	ds $1
+	ds $e
 	
 wPlayerDeck:: ; c400
 	ds $80

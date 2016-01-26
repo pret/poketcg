@@ -128,7 +128,7 @@ Duel_Start: ; 409f (1:409f)
 	ld a, $3
 	call $2167
 	ld hl, $0076
-	call Func_2aab
+	call DrawWideTextBox_WaitForInput
 	call Func_04a2
 	ld a, [hWhoseTurn]
 	push af
@@ -179,7 +179,7 @@ Duel_Start: ; 409f (1:409f)
 	call PlaySong
 	ld a, $c3
 	ld [hWhoseTurn], a
-	call Func_2a59
+	call DrawWideTextBox_PrintText
 	call EnableLCD
 .asm_41a7
 	call Func_053f
@@ -190,7 +190,7 @@ Duel_Start: ; 409f (1:409f)
 	cp $3
 	jr z, .asm_41c8
 	call Func_39fc
-	call $2aae
+	call WaitForWideTextBoxInput
 	call $3b31
 	call ResetSerial
 	ld a, $c2
@@ -198,12 +198,12 @@ Duel_Start: ; 409f (1:409f)
 	ret
 
 .asm_41c8
-	call $2aae
+	call WaitForWideTextBoxInput
 	call $3b31
 	ld a, [wDuelTheme]
 	call PlaySong
 	ld hl, $007a
-	call Func_2aab
+	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	ld [$cc08], a
 	call $70aa
@@ -237,7 +237,49 @@ Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$7354 - $6785
+INCBIN "baserom.gbc",$6785,$7107 - $6785
+
+InitializeDuelVariables: ; 7107 (1:7107)
+	ld a, [hWhoseTurn]
+	ld h, a
+	ld l, wPlayerDuelistType & $ff
+	ld a, [hl]
+	push hl
+	push af
+	xor a
+	ld l, a
+.zeroDuelVariablesLoop
+	ld [hl], a
+	inc l
+	jr nz, .zeroDuelVariablesLoop
+	pop af
+	pop hl
+	ld [hl], a
+	ld bc, DECK_SIZE ; lb bc, wPlayerCardLocations & $ff, DECK_SIZE
+	ld l, wPlayerDeckCards & $ff
+.initDuelVariablesLoop
+; zero card locations and cards in hand, and init order of cards in deck
+	push hl
+	ld [hl], b
+	ld l, b
+	ld [hl], $0
+	pop hl
+	inc l
+	inc b
+	dec c
+	jr nz, .initDuelVariablesLoop
+	ld l, wPlayerArenaCard & $ff
+	ld c, 1 + BENCH_SIZE + 1
+.initPlayArea
+; initialize to $ff card in arena as well as cards in bench (plus a terminator?)
+	ld [hl], $ff
+	inc l
+	dec c
+	jr nz, .initPlayArea
+	ret
+; 0x7133
+
+INCBIN "baserom.gbc",$7133,$7354 - $7133
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36",TX_END

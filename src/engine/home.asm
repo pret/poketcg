@@ -3251,7 +3251,8 @@ Func_256d: ; 256d (0:256d)
 
 INCBIN "baserom.gbc",$2589,$2636 - $2589
 
-Func_2636: ; 2636 (0:2636)
+; initializes cursor parameters from the 8 bytes starting at hl
+InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
 	ld [$ffb1], a
 	ld de, wCursorXPosition
@@ -3295,7 +3296,7 @@ Func_264b: ; 264b (0:264b)
 	push af
 	ld a, $1
 	ld [$cd99], a
-	call Func_26e9
+	call EraseCursor
 	pop af
 	ld [wCurMenuItem], a
 	xor a
@@ -3364,10 +3365,10 @@ HandleTextBoxInput: ; 26da (0:26da)
 	ret nz
 	ld a, [wCursorTileNumber]
 	bit 4, [hl]
-	jr z, asm_26ec
-Func_26e9: ; 26e9 (0:26e9)
+	jr z, drawCursor
+EraseCursor: ; 26e9 (0:26e9)
 	ld a, [wTileBehindCursor]
-asm_26ec
+drawCursor
 	ld c, a
 	ld a, [wYDisplacementBetweenMenuItems]
 	ld l, a
@@ -3390,7 +3391,7 @@ asm_26ec
 
 Func_270b: ; 270b (0:270b)
 	ld a, [wCursorTileNumber]
-	jr asm_26ec
+	jr drawCursor
 ; 0x2710
 
 INCBIN "baserom.gbc",$2710,$2a1a - $2710
@@ -3416,7 +3417,7 @@ Func_2a1a: ; 2a1a (0:2a1a)
 
 INCBIN "baserom.gbc",$2a30,$2a3e - $2a30
 
-Func_2a3e: ; 2a3e (0:2a3e)
+DrawNarrowTextBox_PrintText: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
 	ld a, $b
@@ -3430,7 +3431,7 @@ Func_2a3e: ; 2a3e (0:2a3e)
 	ld hl, $c590
 	jp Func_21c5
 
-Func_2a59: ; 2a59 (0:2a59)
+DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
 	ld a, $13
@@ -3450,7 +3451,23 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	ret
 ; 0x2a7c
 
-INCBIN "baserom.gbc",$2a7c,$2a9e - $2a7c
+DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
+	call DrawNarrowTextBox_PrintText
+	xor a
+	ld hl, NarrowTextBoxPromptCursorData
+	call InitializeCursorParameters
+	call EnableLCD
+.waitAorBLoop
+	call Func_053f
+	call HandleTextBoxInput
+	ld a, [hButtonsPressed]
+	and $3
+	jr z, .waitAorBLoop
+	ret
+; 0x2a96
+
+NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
+	db $a, $11, $1, $1, $2f, $1d, $0, $0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
@@ -3460,31 +3477,35 @@ DrawWideTextBox: ; 2a9e (0:2a9e)
 	call DrawRegularTextBox
 	ret
 
-Func_2aab: ; 2aab (0:2aab)
-	call Func_2a59
+DrawWideTextBox_WaitForInput: ; 2aab (0:2aab)
+	call DrawWideTextBox_PrintText
+	
+WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	xor a
-	ld hl, Unknown_2ac8
-	call Func_2636
+	ld hl, WideTextBoxPromptCursorData
+	call InitializeCursorParameters
 	call EnableLCD
-.asm_2ab8
+.waitAorBLoop
 	call Func_053f
 	call HandleTextBoxInput
 	ld a, [hButtonsPressed]
 	and $3
-	jr z, .asm_2ab8
-	call Func_26e9
+	jr z, .waitAorBLoop
+	call EraseCursor
 	ret
 
-Unknown_2ac8: ; 2ac8 (0:2ac8)
-INCBIN "baserom.gbc",$2ac8,$2af0 - $2ac8
+WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
+	db $12, $11, $1, $1, $2f, $1d, $0, $0
+	
+INCBIN "baserom.gbc",$2ad0,$2af0 - $2ad0
 
 Func_2af0: ; 2af0 (0:2af0)
-	call Func_2a59
+	call DrawWideTextBox_PrintText
 	ld de, $0710
 	call Func_2b66
 	ld de, $0610
 	jr .asm_2b0a
-	call Func_2a3e
+	call DrawNarrowTextBox_PrintText
 	ld de, $0310
 	call Func_2b66
 	ld de, $0210
@@ -3508,7 +3529,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	jr z, .asm_2b1f
 	ld a, $1
 	call Func_3796
-	call Func_26e9
+	call EraseCursor
 .asm_2b39
 	ld a, [$cd98]
 	ld c, a
