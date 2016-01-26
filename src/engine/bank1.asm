@@ -46,16 +46,16 @@ INCBIN "baserom.gbc",$406f,$409f - $406f
 
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
-Duel_Start: ; 409f (1:409f)
+StartDuel: ; 409f (1:409f)
 	ld a, $c2
 	ld [hWhoseTurn], a
 	ld a, $0
 	ld [$c2f1], a
 	ld a, [$cc19]
 	ld [wOpponentDeckId], a
-	call $6793
+	call LoadPlayerDeck
 	call GetOpposingTurnDuelistVariable_SwapTurn
-	call Duel_LoadDecks
+	call LoadOpponentDeck
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	jr .asm_40ca
 
@@ -237,7 +237,30 @@ Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$7107 - $6785
+INCBIN "baserom.gbc",$6785,$6793 - $6785
+
+; loads player deck from SRAM to wPlayerDeck
+LoadPlayerDeck: ; 6793 (1:6793)
+	call EnableExtRAM
+	ld a, [$b700]
+	ld l, a
+	ld h, $54
+	call HtimesL
+	ld de, $a218
+	add hl, de
+	ld de, wPlayerDeck
+	ld c, DECK_SIZE
+.nextCardLoop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .nextCardLoop
+	call DisableExtRAM
+	ret
+; 0x67b2
+
+INCBIN "baserom.gbc",$67b2,$7107 - $67b2
 
 InitializeDuelVariables: ; 7107 (1:7107)
 	ld a, [hWhoseTurn]

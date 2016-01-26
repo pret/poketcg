@@ -2119,7 +2119,69 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-INCBIN "baserom.gbc",$10aa,$160b - $10aa
+INCBIN "baserom.gbc",$10aa,$10bc - $10aa
+
+; shuffles the deck specified by hWhoseTurn
+; if less than 60 cards remain in the deck, make sure the rest are ignored
+ShuffleDeck: ; 10bc (0:10bc)
+	ld a, [hWhoseTurn]
+	ld h, a
+	ld d, a
+	ld a, DECK_SIZE
+	ld l, wPlayerNumberOfCardsNotInDeck & $ff
+	sub [hl]
+	ld b, a
+	ld a, wPlayerDeckCards & $ff
+	add [hl]
+	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array of the first (top) card in the deck
+	ld a, b ; a = number of cards in the deck
+	call ShuffleCards
+	ret
+; 0x10cf
+
+INCBIN "baserom.gbc",$10cf,$127f - $10cf
+
+; shuffles the deck by swapping the position of each card with the position of another random card
+; input:
+; - a  = how many cards to shuffle
+; - hl = position of the first card within the wPlayerDeckCards or wOpponentDeckCards array
+ShuffleCards: ; 127f (0:127f)
+	or a
+	ret z ; return if deck is empty
+	push hl
+	push de
+	push bc
+	ld c, a
+	ld b, a
+	ld e, l
+	ld d, h
+.shuffleNextCardLoop
+	push bc
+	push de
+	ld a, c
+	call Random
+	add e
+	ld e, a
+	ld a, $0
+	adc d
+	ld d, a
+	ld a, [de]
+	ld b, [hl]
+	ld [hl], a
+	ld a, b
+	ld [de], a
+	pop de
+	pop bc
+	inc hl
+	dec b
+	jr nz, .shuffleNextCardLoop
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x12a3
+
+INCBIN "baserom.gbc",$12a3,$160b - $12a3
 
 ; returns [[hWhoseTurn] * $100 + a] in a
 ; i.e. variable a of the player whose turn it is
@@ -3568,7 +3630,8 @@ Func_2b66: ; 2b66 (0:2b66)
 
 INCBIN "baserom.gbc",$2b70,$2b78 - $2b70
 
-Duel_LoadDecks: ; 2b78 (0:2b78)
+; loads opponent deck to wOpponentDeck
+LoadOpponentDeck: ; 2b78 (0:2b78)
 	xor a
 	ld [wIsPracticeDuel], a
 	ld a, [wOpponentDeckId]
@@ -3608,7 +3671,8 @@ Duel_LoadDecks: ; 2b78 (0:2b78)
 	ld [wOpponentDeckId], a
 
 .validDeck
-	ld a, $f1
+; set opponent as controlled by AI
+	ld a, wOpponentDuelistType & $ff
 	call GetTurnDuelistVariable
 	ld a, [wOpponentDeckId]
 	or $80
@@ -4639,7 +4703,7 @@ Func_38c0: ; 38c0 (0:38c0)
 	ld [$ba44], a
 	call DisableExtRAM
 	call Func_3a3b
-	bank1call Duel_Start
+	bank1call StartDuel
 	scf
 	ret
 
