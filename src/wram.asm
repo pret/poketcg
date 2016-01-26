@@ -26,11 +26,12 @@ wPlayerCardLocations:: ; c200
 wPlayerHand:: ; c242	
 	ds DECK_SIZE
 
-; 60-byte array that indicates in which order the cards are in the deck.
-; initially numbers 0 to 59 in order, until deck is shuffled.
-; the earlier a card appears in the array, the closer to the top of the deck it is.
+; 60-byte array that maps each card to its position in the deck.
+; During a duel, each card of the deck is assigned a number between 0 and 59, following the index number order.
+; This array is initialized to 00, 01, 02, ..., 59, until deck is shuffled.
+; The earlier a card appears in the array, the closer to the top of the deck it is.
 wPlayerDeckCards:: ; c27e
-	ds $3c
+	ds DECK_SIZE
 
 ; stores x = (60 - deck remaining cards)
 ; the first x cards in the wPlayerDeckCards array are ignored (e.g. when drawing a card)
@@ -87,7 +88,7 @@ wOpponentHand:: ; c342
 	ds DECK_SIZE
 	
 wOpponentDeckCards:: ; c37e
-	ds $3c
+	ds DECK_SIZE
 	
 wOpponentNumberOfCardsNotInDeck:: ; c3ba	
 	ds $1

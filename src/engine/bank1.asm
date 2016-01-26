@@ -262,6 +262,9 @@ LoadPlayerDeck: ; 6793 (1:6793)
 
 INCBIN "baserom.gbc",$67b2,$7107 - $67b2
 
+; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
+; player turn: [c200, c2ff]
+; opponent turn: [c300, c3ff]
 InitializeDuelVariables: ; 7107 (1:7107)
 	ld a, [hWhoseTurn]
 	ld h, a

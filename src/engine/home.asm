@@ -2139,7 +2139,64 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ret
 ; 0x10cf
 
-INCBIN "baserom.gbc",$10cf,$127f - $10cf
+; draw a card from the deck, saving its location as $40
+; returns c if deck is empty, nc if a card was succesfully drawn
+DrawCardFromDeck: ; 10cf (0:10cf)
+	push hl
+	ld a, wPlayerNumberOfCardsNotInDeck & $ff
+	call GetTurnDuelistVariable
+	cp DECK_SIZE
+	jr nc, .emptyDeck
+	; increment number of cards not in deck
+	inc a
+	ld [hl], a
+	; point to top card in the deck
+	add (wPlayerDeckCards - 1) & $ff
+	ld l, a
+	; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
+	ld a, [hl]
+	ld l, a
+	; temporarily write $40 to corresponding card location variable
+	ld [hl], $40
+	pop hl
+	or a
+	ret
+
+.emptyDeck
+	pop hl
+	scf
+	ret
+; 0x10e8
+
+INCBIN "baserom.gbc",$10e8,$1123 - $10e8
+
+; adds a card to the hand and increments the number of cards in the hand
+; the card is identified by register a, which contains the card number within the deck (0-59)
+AddCardToHand: ; 1123 (0:1123)
+	push af
+	push hl
+	push de
+	ld e, a
+	ld l, a
+	ld a, [hWhoseTurn]
+	ld h, a
+	; write $1 (hand) into the location of this card
+	ld [hl], $1
+	; increment number of cards in hand
+	ld l, wPlayerNumberOfCardsInHand & $ff
+	inc [hl]
+	; add card to hand
+	ld a, (wPlayerHand - 1) & $ff
+	add [hl]
+	ld l, a
+	ld [hl], e
+	pop de
+	pop hl
+	pop af
+	ret
+; 0x1139
+
+INCBIN "baserom.gbc",$1139,$127f - $1139
 
 ; shuffles the deck by swapping the position of each card with the position of another random card
 ; input:
@@ -2183,7 +2240,7 @@ ShuffleCards: ; 127f (0:127f)
 
 INCBIN "baserom.gbc",$12a3,$160b - $12a3
 
-; returns [[hWhoseTurn] * $100 + a] in a
+; returns [[hWhoseTurn] << 8 + a] in a
 ; i.e. variable a of the player whose turn it is
 GetTurnDuelistVariable: ; 160b (0:160b)
 	ld l, a
@@ -2192,7 +2249,7 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 	ld a, [hl]
 	ret
 
-; returns [([hWhoseTurn] ^ $1) * $100 + a] in a
+; returns [([hWhoseTurn] ^ $1) << 8 + a] in a
 ; i.e. variable a of the player whose turn it is not
 GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
@@ -2208,9 +2265,9 @@ GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 
 INCBIN "baserom.gbc",$161e,$1c72 - $161e
 
-; returns [([hWhoseTurn] ^ $1) * $100 + a] in a
+; returns [([hWhoseTurn] ^ $1) << 8 + a] in a
 ; i.e. variable a of the player whose turn it is not
-; Also: [hWhoseTurn] <-- [hWhoseTurn ^ $1]
+; Also: [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
 GetOpposingTurnDuelistVariable_SwapTurn: ; 1c72 (0:1c72)
 	push af
 	push hl
@@ -3541,7 +3598,7 @@ DrawWideTextBox: ; 2a9e (0:2a9e)
 
 DrawWideTextBox_WaitForInput: ; 2aab (0:2aab)
 	call DrawWideTextBox_PrintText
-	
+;	fallthrough
 WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	xor a
 	ld hl, WideTextBoxPromptCursorData
