@@ -179,7 +179,7 @@ Func_1d078: ; 1d078 (7:5078)
 	call $52dd
 	jr c, Func_1d078
 .asm_1d0f3
-	call Func_3bdb
+	call ResetDoFrameFunction
 	call Func_3ca0
 	ret
 ; 0x1d0fa
@@ -307,7 +307,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call DisableLCD
 	ld hl, $cabb
 	set 1, [hl]
-	call Func_3bdb
+	call ResetDoFrameFunction
 	ret
 ; 0x1d705
 

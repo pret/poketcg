@@ -209,11 +209,11 @@ Func_c184: ; c184 (3:4184)
 
 Func_c199: ; c199 (3:4199)
 	ld hl, Func_380e
-	call Func_3bd2
+	call SetDoFrameFunction
 	ret
 
 Func_c1a0: ; c1a0 (3:41a0)
-	call Func_3bdb
+	call ResetDoFrameFunction
 	ret
 
 Func_c1a4: ; c1a4 (3:41a4)

@@ -723,7 +723,7 @@ DoFrame: ; 053f (0:053f)
 	push hl
 	push de
 	push bc
-	ld hl, $cad3
+	ld hl, wDoFrameFunction ; context-specific function
 	call CallIndirect
 	call WaitForVBlank
 	call ReadJoypad
@@ -5090,17 +5090,18 @@ Func_3aed: ; 3aed (0:3aed)
 
 INCBIN "baserom.gbc",$3b11,$3bd2 - $3b11
 
-Func_3bd2: ; 3bd2 (0:3bd2)
+; writes from hl the pointer to the function to be called by DoFrame
+SetDoFrameFunction: ; 3bd2 (0:3bd2)
 	ld a, l
-	ld [$cad3], a
+	ld [wDoFrameFunction], a
 	ld a, h
-	ld [$cad4], a
+	ld [wDoFrameFunction + 1], a
 	ret
 
-Func_3bdb: ; 3bdb (0:3bdb)
+ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	push hl
 	ld hl, $0000
-	call Func_3bd2
+	call SetDoFrameFunction
 	pop hl
 	ret
 ; 0x3be4

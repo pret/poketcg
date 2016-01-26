@@ -216,7 +216,10 @@ wLCDCFunctiontrampoline:: ; cacd
 
 wVBlankFunctionTrampoline:: ; cad0
 	ds $3
-	ds $1d
+	
+wDoFrameFunction:: ; cad3
+	ds $3
+	ds $1a
 
 wBufPalette:: ; caf0 - cab7f
 	ds $80
