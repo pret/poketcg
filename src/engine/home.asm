@@ -1200,7 +1200,7 @@ ClearExtRAMBank: ; 0863 (0:0863)
 	pop af
 	ret
 
-; returns h * l in hl	
+; returns h * l in hl
 HtimesL: ; 0879 (0:0879)
 	push de
 	ld a, h
@@ -1658,7 +1658,7 @@ SGB_MLT_REQ_1: ; 0bab (0:0bab)
 SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
 	SGB MLT_REQ, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	
+
 INCBIN "baserom.gbc",$0bcb,$0c08 - $0bcb
 
 ; loops 63000 * bc cycles (~15 * bc ms)
@@ -2331,7 +2331,7 @@ Memcpy: ; 1dca (0:1dca)
 .asm_1dd8
 	jp MemcpyDEHL_hblank
 
-; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de 
+; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de
 ; to the corresponding BG Map 0 address in VRAM.
 CalculateBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
@@ -2349,7 +2349,7 @@ CalculateBGMap0Address: ; 1ddb (0:1ddb)
 	ld h, a
 	ret
 
-; Apply window correction to xy coordinates at de	
+; Apply window correction to xy coordinates at de
 AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	push af
 	ld a, [hSCX]
@@ -2370,7 +2370,7 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	ret
 ; 0x1e00
 
-; Draws a bxc text box at de printing a name in the left side of the top border. 
+; Draws a bxc text box at de printing a name in the left side of the top border.
 ; The name's text offset must be at hl when this function is called.
 ; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
 DrawLabeledTextBox: ; 1e00 (0:1e00)
@@ -2463,7 +2463,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	; top border done, draw the rest of the text box
 	jp ContinueDrawingTextBoxCGB
 
-; Draws a bxc text box at de to print menu data in the overworld. 
+; Draws a bxc text box at de to print menu data in the overworld.
 ; Also used to print a text box during a duel.
 ; When talking to NPCs, DrawLabeledTextBox is used instead.
 DrawRegularTextBox: ; 1e7c (0:1e7c)
@@ -2475,7 +2475,7 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 ;	fallthrough
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call CalculateBGMap0Address
-	; top line (border) of the text box	
+	; top line (border) of the text box
 	ld a, $1c
 	ld de, $1819
 	call CopyLine
@@ -2528,14 +2528,14 @@ CopyLine: ; 1ea5 (0:1ea5)
 	add hl, de
 	add sp, $20
 	ret
-	
+
 DrawRegularTextBoxCGB:
 	call CalculateBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
 	ld de, $1819
 	call CopyCurrentLineTilesAndAttrCGB
-ContinueDrawingTextBoxCGB	
+ContinueDrawingTextBoxCGB
 	dec c
 	dec c
 .drawTextBoxBodyLoop
@@ -2624,7 +2624,7 @@ ColorizeTextBoxSGB
 
 SGB_ATTR_BLK_1f4f: ; 1f4f (0:1f4f)
 	SGB ATTR_BLK, 1 ; sgb_command, length
-	db $01,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00	
+	db $01,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 Func_1f5f: ; 1f5f (0:1f5f)
 	push de
@@ -3471,13 +3471,13 @@ Func_26c0: ; 26c0 (0:26c0)
 	call Func_3796
 	pop af
 	ret
-	
+
 HandleMenuInput: ; 2d61 (0:2d61)
 	ld a, [$cd99]
 	or a
 	jr z, HandleTextBoxInput
 	call Func_3796
-;	fallthrough	
+;	fallthrough
 HandleTextBoxInput: ; 26da (0:26da)
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
@@ -3618,7 +3618,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 
 WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 	db $12, $11, $1, $1, $2f, $1d, $0, $0
-	
+
 INCBIN "baserom.gbc",$2ad0,$2af0 - $2ad0
 
 Func_2af0: ; 2af0 (0:2af0)
@@ -4137,7 +4137,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop bc
 	pop de
 	ret
-; 0x2fa0	
+; 0x2fa0
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ld a, [hBankROM]
@@ -4176,14 +4176,14 @@ Func_2fcb: ; 2fcb (0:2fcb)
 	call CopyGfxData
 	call BankpopHome
 	ret
-; 0x2fd9	
-	
+; 0x2fd9
+
 ; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
 ; and executes its associated function if so.
 ; input: a = move or trainer card effect command ID
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
-; grab pointer to command list from wCurrentMoveOrCardEffect	
+; grab pointer to command list from wCurrentMoveOrCardEffect
 	ld hl, wCurrentMoveOrCardEffect
 	ld a, [hli]
 	ld h, [hl]
@@ -4191,7 +4191,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	pop af
 	call CheckMatchingCommand
 	jr nc, .executeFunction
-; return if input command ID wasn't found	
+; return if input command ID wasn't found
 	or a
 	ret
 
@@ -4204,14 +4204,14 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	or a
 	call CallHL
 	push af
-; restore original bank and return	
+; restore original bank and return
 	pop bc
 	pop af
 	call BankswitchHome
 	push bc
 	pop af
 	ret
-; 0x2ffe	
+; 0x2ffe
 
 ; input:
   ; a = command ID to check
@@ -4225,7 +4225,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 ; return c if pointer is $0000
 	scf
 	ret
-	
+
 .notNullPointer
 	ld a, [hBankROM]
 	push af
@@ -4240,11 +4240,11 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	jr z, .noMoreCommands
 	cp c
 	jr z, .matchingCommandFound
-; skip function pointer for this command and move to the next one	
+; skip function pointer for this command and move to the next one
 	inc hl
 	inc hl
 	jr .checkCommandLoop
-	
+
 .matchingCommandFound
 ; load function pointer for this command
 	ld a, [hli]
@@ -4255,12 +4255,12 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	call BankswitchHome
 	or a
 	ret
-; restore bank and return c	
-.noMoreCommands	
+; restore bank and return c
+.noMoreCommands
 	pop af
 	call BankswitchHome
 	scf
-	ret	
+	ret
 ; 0x302c
 
 ; loads the deck id in a from DeckPointers

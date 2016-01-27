@@ -3,7 +3,7 @@
 dbw: MACRO
 	db \1
 	dw \2
-ENDM	
+ENDM
 
 bank1call: MACRO
 	rst $18
@@ -44,7 +44,7 @@ ENDM
 
 SGB: MACRO
 	db \1 * 8 + \2 ; sgb_command * 8 + length
-ENDM	
+ENDM
 
 ;;; notes/instruments macros
 
@@ -272,7 +272,7 @@ c_ = 0
 	if _NARG > 1
 
 	rept _NARG / 2
-	
+
 	if \1 == FIRE
 fg = fg + \2 * $10
 	endc
@@ -297,10 +297,10 @@ c_ = c_ + \2 * $10
 
 	shift
 	shift
-	
+
 	endr
 
-	endc	
+	endc
 	db fg, lw, fp, c_
 ENDM
 
@@ -310,4 +310,4 @@ ENDM
 
 tx: MACRO
 	dw \1_
-ENDM	
+ENDM

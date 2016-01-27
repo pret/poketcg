@@ -10220,4 +10220,4 @@ RecycleCard: ; 33fd3 (c:7fd3)
 
 rept $1f
 db $ff
-endr	
+endr

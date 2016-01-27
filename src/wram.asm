@@ -6,7 +6,7 @@ INCLUDE "constants.asm"
 
 SECTION "WRAM0", WRAM0
 	ds $200
-	
+
 ;--- Duels 1 ----------------------------------------------
 
 wPlayerDuelVariables:: ; c200
@@ -23,7 +23,7 @@ wPlayerCardLocations:: ; c200
 	ds $6
 
 ; Which cards are in player's hand, as numbers 0 to 59
-wPlayerHand:: ; c242	
+wPlayerHand:: ; c242
 	ds DECK_SIZE
 
 ; 60-byte array that maps each card to its position in the deck.
@@ -43,10 +43,10 @@ wPlayerArenaCard:: ; c2bb
 	ds $1
 
 ; Which cards are in player's bench, as numbers 0 to 59
-wPlayerBench:: ; c2bc	
+wPlayerBench:: ; c2bc
 	ds BENCH_SIZE
 	ds $7
-	
+
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
 wPlayerBench1CardHP:: ; c2c9
@@ -60,7 +60,7 @@ wPlayerBench4CardHP:: ; c2cc
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
 	ds $20
-	
+
 wPlayerNumberOfCardsInHand:: ; c2ee
 	ds $1
 
@@ -83,23 +83,23 @@ wOpponentDuelVariables:: ; c300
 wOpponentCardLocations:: ; c300
 	ds DECK_SIZE
 	ds $6
-	
+
 wOpponentHand:: ; c342
 	ds DECK_SIZE
-	
+
 wOpponentDeckCards:: ; c37e
 	ds DECK_SIZE
-	
-wOpponentNumberOfCardsNotInDeck:: ; c3ba	
+
+wOpponentNumberOfCardsNotInDeck:: ; c3ba
 	ds $1
-	
+
 wOpponentArenaCard:: ; c3bb
 	ds $1
 
-wOpponentBench:: ; c3bc	
+wOpponentBench:: ; c3bc
 	ds BENCH_SIZE
 	ds $7
-	
+
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
 wOpponentBench1CardHP:: ; c3c9
@@ -113,10 +113,10 @@ wOpponentBench4CardHP:: ; c3cc
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
 	ds $20
-	
+
 wOpponentNumberOfCardsInHand:: ; c3ee
 	ds $1
-		
+
 wOpponentNumberOfPokemonInPlay:: ; c3ef
 	ds $1
 
@@ -129,15 +129,15 @@ wOpponentArenaCardStatus:: ; c3f0
 wOpponentDuelistType:: ; c3f1
 	ds $1
 	ds $e
-	
+
 wPlayerDeck:: ; c400
 	ds $80
 
 wOpponentDeck:: ; c480
 	ds $80
 	ds $500
-	
-;--- Engine	-----------------------------------------------
+
+;--- Engine -----------------------------------------------
 
 wBufOAM:: ; ca00
 	ds $a0
@@ -200,13 +200,13 @@ wPlayTimeCounterEnable:: ; cac4
 ; byte4: hours (upper byte)
 wPlayTimeCounter:: ; cac5
 	ds $5
-	
+
 wRNG1:: ; caca
 	ds $1
 
 wRNG2:: ; cacb
 	ds $1
-	
+
 wCounter:: ; cacc
 	ds $1
 
@@ -216,7 +216,7 @@ wLCDCFunctiontrampoline:: ; cacd
 
 wVBlankFunctionTrampoline:: ; cad0
 	ds $3
-	
+
 wDoFrameFunction:: ; cad3
 	ds $3
 	ds $1a
@@ -295,15 +295,15 @@ wCardBuffer1:: ; cc24
 
 wCardBuffer2:: ; cc65
 	ds CARD_DATA_LENGTH
-	
+
 	ds $c
-	
+
 wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
 	ds $40
 
-;--- Overworld --------------------------------------------	
-	
+;--- Overworld --------------------------------------------
+
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
@@ -318,7 +318,7 @@ wUppercaseFlag:: ; cd0d
 ; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
 wCursorBlinkCounter:: ; cd0f
 	ds $1
-	
+
 wCurMenuItem:: ; cd10
 	ds $1
 
@@ -327,16 +327,16 @@ wCursorXPosition:: ; cd11
 
 wCursorYPosition:: ; cd12
 	ds $1
-	
+
 wYDisplacementBetweenMenuItems:: ; cd13
 	ds $1
-	
+
 wNumMenuItems:: ; cd14
 	ds $1
-	
+
 wCursorTileNumber:: ; cd15
 	ds $1
-	
+
 wTileBehindCursor:: ; cd16
 	ds $1
 	ds $10b
@@ -352,8 +352,8 @@ wce22:: ; ce22
 
 SECTION "WRAM1", WRAMX, BANK[1]
 	ds $113
-	
-;--- Music ------------------------------------------------		
+
+;--- Music ------------------------------------------------
 
 wMatchStartTheme:: ; d113
 	ds $1
