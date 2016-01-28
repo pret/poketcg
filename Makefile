@@ -4,7 +4,7 @@
 .SUFFIXES: .asm .o .gbc .png .2bpp .1bpp .pal
 .SECONDEXPANSION:
 
-OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o
+OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o src/hram.o
 
 $(foreach obj, $(OBJS), \
 	$(eval $(obj:.o=)_dep = $(shell python extras/scan_includes.py $(obj:.o=.asm))) \

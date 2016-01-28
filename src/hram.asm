@@ -1,19 +1,46 @@
-hBankROM                    EQU $FF80
-hBankRAM                    EQU $FF81
-hBankVRAM                   EQU $FF82
+SECTION "HRAM", HRAM
 
-hDMAFunction                EQU $FF83
+hBankROM:: ; ff80
+	ds 1
 
-hDPadRepeat                 EQU $FF8D
-hButtonsReleased            EQU $FF8E
-hButtonsPressed2            EQU $FF8F
-hButtonsHeld                EQU $FF90
-hButtonsPressed             EQU $FF91
+hBankRAM:: ; ff81
+	ds 1
 
-hSCX                        EQU $FF92
-hSCY                        EQU $FF93
-hWX                         EQU $FF94
-hWY                         EQU $FF95
+hBankVRAM:: ; ff82
+	ds 1
+
+hDMAFunction:: ; ff83
+	ds 10
+
+hDPadRepeat:: ; ff8d
+	ds 1
+
+hButtonsReleased:: ; ff8e
+	ds 1
+
+hButtonsPressed2:: ; ff8f
+	ds 1
+
+hButtonsHeld:: ; ff90
+	ds 1
+
+hButtonsPressed:: ; ff91
+	ds 1
+
+hSCX:: ; ff92
+	ds 1
+
+hSCY:: ; ff93
+	ds 1
+
+hWX:: ; ff94
+	ds 1
+
+hWY:: ; ff95
+	ds 1
+
+	ds 1
 
 ; $c2 = player ; $c3 = opponent
-hWhoseTurn                  EQU $FF97
+hWhoseTurn:: ; ff97
+	ds 1

@@ -1,6 +1,5 @@
 INCLUDE "constants.asm"
 INCLUDE "macros.asm"
-INCLUDE "hram.asm"
 
 SECTION "bank3D",ROMX,BANK[$3D]
 INCLUDE "audio/music1.asm"
