@@ -2803,10 +2803,10 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ld [$cd0a], a
 	ld a, $f
-	ldh [$ffaf], a
+	ldh [hffaf], a
 	ret
 .asm_2221
-	ldh [$ffaf], a
+	ldh [hffaf], a
 	xor a
 	ret
 .asm_2225
@@ -2888,7 +2888,7 @@ Func_2298: ; 2298 (0:2298)
 	ldh [$ffac], a
 	ld [$cd0b], a
 	ld a, $f
-	ldh [$ffaf], a
+	ldh [hffaf], a
 	ret
 
 Func_22a6: ; 22a6 (0:22a6)
@@ -3326,7 +3326,7 @@ Func_2546: ; 2546 (0:2546)
 	jr c, .asm_2561
 	cp $60
 	jr nc, .asm_2565
-	ldh a, [$ffaf]
+	ldh a, [hffaf]
 	cp $f
 	jr nz, .asm_2565
 	ld d, $f
@@ -3788,14 +3788,12 @@ Func_2cc8: ; 2cc8 (0:2cc8)
 	ld [$ce49], a
 	ld [$ce4a], a
 	ld a, $f
-	;ld [$ffaf], a
-	db $ea, $af, $ff
+	ld [hffaf], a
 Func_2cd7: ; 2cd7 (0:2cd7)
 	push hl
 	call Func_2d06
 	pop bc
-	;ld a, [$ffaf]
-	db $fa, $af, $ff
+	ld a, [hffaf]
 	ld [hli], a
 	ld a, [$cd0a]
 	ld [hli], a
@@ -3815,8 +3813,7 @@ Func_2ceb: ; 2ceb (0:2ceb)
 Func_2cf3: ; 2cf3 (0:2cf3)
 	call Func_2d06
 	ld a, [hli]
-	;ld [$ffaf], a
-	db $ea, $af, $ff
+	ld [hffaf], a
 	ld a, [hli]
 	ld [$cd0a], a
 	ld a, [hli]
@@ -3887,8 +3884,7 @@ Func_2d43: ; 2d43 (0:2d43)
 .asm_2d8a
 	call Func_2ceb
 	ld a, $f
-	;ld [$ffaf], a
-	db $ea, $af, $ff
+	ld [hffaf], a
 	xor a
 	ld [$cd0a], a
 	ld de, $ce3f

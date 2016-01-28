@@ -563,8 +563,7 @@ Func_9152: ; 9152 (2:5152)
 	ret
 
 Func_9168: ; 9168 (2:5168)
-	;ld [$ffb5], a
-	db $ea, $b5, $ff
+	ld [hffb5], a
 	call Func_8d56
 	ld de, $0000
 	ld bc, $1404
@@ -583,8 +582,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $4
 	ld hl, $ceb2
 	call Func_9843
-	;ld a, [$ffb5]
-	db $fa, $b5, $ff
+	ld a, [hffb5]
 	bit 0, a
 	jr z, .asm_91b0
 	ld hl, $a200
@@ -597,8 +595,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [$ceb2], a
 .asm_91bd
-	;ld a, [$ffb5]
-	db $fa, $b5, $ff
+	ld a, [hffb5]
 	bit 1, a
 	jr z, .asm_91cd
 	ld hl, $a254
@@ -611,8 +608,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [$ceb3], a
 .asm_91da
-	;ld a, [$ffb5]
-	db $fa, $b5, $ff
+	ld a, [hffb5]
 	bit 2, a
 	jr z, .asm_91ea
 	ld hl, $a2a8
@@ -625,8 +621,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [$ceb4], a
 .asm_91f7
-	;ld a, [$ffb5]
-	db $fa, $b5, $ff
+	ld a, [hffb5]
 	bit 3, a
 	jr z, .asm_9207
 	ld hl, $a2fc

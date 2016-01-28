@@ -44,3 +44,13 @@ hWY:: ; ff95
 ; $c2 = player ; $c3 = opponent
 hWhoseTurn:: ; ff97
 	ds 1
+
+	ds 23
+
+hffaf:: ; ffaf
+	ds 1
+
+	ds 5
+
+hffb5:: ; ffb5
+	ds 1
