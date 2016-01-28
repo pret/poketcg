@@ -90,7 +90,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call Func_264b
 	jr nc, .asm_8dc8
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	cp $ff
 	ret z
 	ld [$ceb1], a
@@ -100,7 +100,7 @@ Unknown_8de2: ; 8de2 (2:4de2)
 INCBIN "baserom.gbc",$8de2,$8dea - $8de2
 
 Func_8dea: ; 8dea (2:4dea)
-	ld a, [hButtonsPressed2]
+	ldh a, [hButtonsPressed2]
 	and $8
 	ret z
 	ld a, [wCurMenuItem]
@@ -418,7 +418,7 @@ Func_9065: ; 9065 (2:5065)
 	ld d, a
 	ld a, [$ceb0]
 	ld e, a
-	ld a, [hButtonsPressed2]
+	ldh a, [hButtonsPressed2]
 	or a
 	jr z, .asm_90a6
 	bit 5, a
@@ -452,7 +452,7 @@ Func_9065: ; 9065 (2:5065)
 	xor a
 	ld [$cea3], a
 .asm_90a6
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $3
 	jr z, .asm_90c1
 	and $1

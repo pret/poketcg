@@ -27,7 +27,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_04a2
 	call Func_3ca0
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	farcall Func_1c440
 	ld a, [$d0bb]
 	ld [wCurMap], a
@@ -298,22 +298,22 @@ Func_c241: ; c241 (3:4241)
 	ret
 
 Func_c251: ; c251 (3:4251)
-	ld a, [$ffb0]
+	ldh a, [$ffb0]
 	push af
 	ld a, $1
 	jr asm_c25d
 
 Func_c258: ; c258 (3:4258)
-	ld a, [$ffb0]
+	ldh a, [$ffb0]
 	push af
 	ld a, $2
 asm_c25d
-	ld [$ffb0], a
+	ldh [$ffb0], a
 	push hl
 	call Func_c268
 	pop hl
 	pop af
-	ld [$ffb0], a
+	ldh [$ffb0], a
 	ret
 
 Func_c268: ; c268 (3:4268)
@@ -392,7 +392,7 @@ Func_c2db: ; c2db (3:42db)
 	call Func_3ca0
 	farcall Func_12bcd
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call Func_c241
 	call Func_04a2
 	ld a, [$d111]
@@ -539,9 +539,9 @@ Func_c484: ; c484 (3:4484)
 
 Func_c491: ; c491 (3:4491)
 	ld a, [$d0b6]
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld a, [$d0b7]
-	ld [hSCY], a
+	ldh [hSCY], a
 	ret
 
 Func_c49c: ; c49c (3:449c)
@@ -620,7 +620,7 @@ Func_c510: ; c510 (3:4510)
 	call nz, Func_c6dc
 	ret
 .asm_c535
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $8
 	call nz, Func_c74d
 	ret
@@ -684,7 +684,7 @@ Func_c58b: ; c58b (3:458b)
 	ret
 
 Func_c5ac: ; c5ac (3:45ac)
-	ld a, [hButtonsHeld]
+	ldh a, [hButtonsHeld]
 	and $f0
 	jr z, .asm_c5bf
 	call Func_c5cb
@@ -693,7 +693,7 @@ Func_c5ac: ; c5ac (3:45ac)
 	and $1
 	jr nz, .asm_c5ca
 .asm_c5bf
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $1
 	jr z, .asm_c5ca
 	call Func_c71e
@@ -802,7 +802,7 @@ Func_c66c: ; c66c (3:466c)
 	push hl
 	push bc
 	ld c, $1
-	ld a, [hButtonsHeld]
+	ldh a, [hButtonsHeld]
 	bit 1, a
 	jr z, .asm_c67e
 	ld a, [$d338]
@@ -962,7 +962,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	jr nc, .asm_c76a
 	ld a, e
 	ld [$d0b8], a
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	cp e
 	jr nz, .asm_c793
 	cp $5
@@ -1002,8 +1002,8 @@ Func_c7b3: ; c7b3 (3:47b3)
 
 Func_c7b8: ; c7b8 (3:47b8)
 	xor a
-	ld [hSCX], a
-	ld [hSCY], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
 	farcall Func_8db0
@@ -1012,8 +1012,8 @@ Func_c7b8: ; c7b8 (3:47b8)
 
 Func_c7cc: ; c7cc (3:47cc)
 	xor a
-	ld [hSCX], a
-	ld [hSCY], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
 	farcall Func_a288
@@ -1046,7 +1046,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr nc, .asm_c806
 	ld a, e
 	ld [$d0b9], a
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	cp e
 	jr nz, .asm_c82f
 	cp $4
@@ -1395,8 +1395,8 @@ DeckMachine_d336: ; d336 (3:5336)
 	call PlaySong
 	call Func_04a2
 	xor a
-	ld [hSCX], a
-	ld [hSCY], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	farcall Func_1288c
 	call EnableLCD
 	pop bc

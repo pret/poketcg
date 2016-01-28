@@ -74,7 +74,7 @@ VBlankHandler: ; 019b (0:019b)
 	push bc
 	push de
 	push hl
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld hl, wReentrancyFlag
 	bit 0, [hl]
@@ -88,13 +88,13 @@ VBlankHandler: ; 019b (0:019b)
 	ld [wVBlankOAMCopyToggle], a
 .no_oam_copy
 	; flush scaling/windowing parameters
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	ld [rSCX], a
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	ld [rSCY], a
-	ld a, [hWX]
+	ldh a, [hWX]
 	ld [rWX], a
-	ld a, [hWY]
+	ldh a, [hWY]
 	ld [rWY], a
 	; flush LCDC
 	ld a, [wLCDC]
@@ -135,7 +135,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	bit 1, [hl]
 	jr nz, .done
 	set 1, [hl]
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(SoundTimerHandler_Ext)
 	call BankswitchHome
@@ -335,10 +335,10 @@ SetupLCD: ; 030b (0:030b)
 	ld [$cab0], a
 	ld [$cab1], a
 	ld [$cab2], a
-	ld [hSCX], a
-	ld [hSCY], a
-	ld [hWX], a
-	ld [hWY], a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	ldh [hWX], a
+	ldh [hWY], a
 	xor a
 	ld [wReentrancyFlag], a
 	ld a, $c3            ; $c3 = jp nn
@@ -668,16 +668,16 @@ ReadJoypad: ; 04de (0:04de)
 	ld c, a              ; joypad data
 	cpl
 	ld b, a
-	ld a, [hButtonsHeld]
+	ldh a, [hButtonsHeld]
 	xor c
 	and b
-	ld [hButtonsReleased], a
-	ld a, [hButtonsHeld]
+	ldh [hButtonsReleased], a
+	ldh a, [hButtonsHeld]
 	xor c
 	and c
 	ld b, a
-	ld [hButtonsPressed], a
-	ld a, [hButtonsHeld]
+	ldh [hButtonsPressed], a
+	ldh a, [hButtonsHeld]
 	and $f
 	cp $f
 	jr nz, asm_522       ; handle reset
@@ -688,7 +688,7 @@ Reset: ; 051b (0:051b)
 	jp Start
 asm_522
 	ld a, c
-	ld [hButtonsHeld], a
+	ldh [hButtonsHeld], a
 	ld a, $30
 	ld [rJOYP], a
 	ret
@@ -731,14 +731,14 @@ DoFrame: ; 053f (0:053f)
 	ld a, [$cad5]
 	or a
 	jr z, .done
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $4
 	jr z, .done
 .gamePausedLoop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $4
 	jr z, .gamePausedLoop
 .done
@@ -750,12 +750,12 @@ DoFrame: ; 053f (0:053f)
 
 ; handle D-pad repeatcounter
 HandleDPadRepeat: ; 0572 (0:0572)
-	ld a, [hButtonsHeld]
-	ld [hButtonsPressed2], a
+	ldh a, [hButtonsHeld]
+	ldh [hButtonsPressed2], a
 	and $f0
 	jr z, .asm_58c
 	ld hl, hDPadRepeat
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $f0
 	jr z, .asm_586
 	ld [hl], 24
@@ -766,9 +766,9 @@ HandleDPadRepeat: ; 0572 (0:0572)
 	ld [hl], 6
 	ret
 .asm_58c
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $f
-	ld [hButtonsPressed2], a
+	ldh [hButtonsPressed2], a
 	ret
 
 CopyDMAFunction: ; 0593 (0:0593)
@@ -976,7 +976,7 @@ BankpushHome: ; 0745 (0:0745)
 	dec hl
 	ld [hl], c
 	ld hl, [sp+$9]
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $0
 	ld a, d
@@ -1014,7 +1014,7 @@ BankpushHome2: ; 076f (0:076f)
 	dec hl
 	ld [hl], c
 	ld hl, [sp+$9]
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $0
 	ld l, e
@@ -1049,14 +1049,14 @@ BankpopHome: ; 078e (0:078e)
 
 ; switch ROM bank
 BankswitchHome: ; 07a3 (0:07a3)
-	ld [hBankROM], a
+	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
 
 ; switch RAM bank
 BankswitchRAM: ; 07a9 (0:07a9)
 	push af
-	ld [hBankRAM], a
+	ldh [hBankRAM], a
 	ld [MBC3SRamBank], a
 	ld a, $a
 	ld [MBC3SRamEnable], a
@@ -1083,7 +1083,7 @@ DisableExtRAM: ; 07be (0:07be)
 BankswitchVRAM_0: ; 07c5 (0:07c5)
 	push af
 	xor a
-	ld [hBankVRAM], a
+	ldh [hBankVRAM], a
 	ld [rVBK], a
 	pop af
 	ret
@@ -1092,7 +1092,7 @@ BankswitchVRAM_0: ; 07c5 (0:07c5)
 BankswitchVRAM_1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
-	ld [hBankVRAM], a
+	ldh [hBankVRAM], a
 	ld [rVBK], a
 	pop af
 	ret
@@ -1100,7 +1100,7 @@ BankswitchVRAM_1: ; 07cd (0:07cd)
 ; set current dest VRAM bank
 ; a: value to write
 BankswitchVRAM: ; 07d6 (0:07d6)
-	ld [hBankVRAM], a
+	ldh [hBankVRAM], a
 	ld [rVBK], a
 	ret
 ; 0x7db
@@ -1424,7 +1424,7 @@ RST18: ; 09ae (0:09ae)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -1470,7 +1470,7 @@ RST28: ; 09e9 (0:09e9)
 	dec hl
 	ld [hl], $0
 	dec hl
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $9
 	dec hl
@@ -2077,7 +2077,7 @@ INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
 ; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck
 CopyDeckData: ; 1072 (0:1072)
 	ld hl, wPlayerDeck
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	cp $c2
 	jr z, .copyDeckData
 	ld hl, wOpponentDeck
@@ -2127,7 +2127,7 @@ INCBIN "baserom.gbc",$10aa,$10bc - $10aa
 ; shuffles the deck specified by hWhoseTurn
 ; if less than 60 cards remain in the deck, make sure the rest are ignored
 ShuffleDeck: ; 10bc (0:10bc)
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	ld h, a
 	ld d, a
 	ld a, DECK_SIZE
@@ -2181,7 +2181,7 @@ AddCardToHand: ; 1123 (0:1123)
 	push de
 	ld e, a
 	ld l, a
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	ld h, a
 	; write $1 (hand) into the location of this card
 	ld [hl], $1
@@ -2247,7 +2247,7 @@ INCBIN "baserom.gbc",$12a3,$160b - $12a3
 ; i.e. variable a of the player whose turn it is
 GetTurnDuelistVariable: ; 160b (0:160b)
 	ld l, a
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	ld h, a
 	ld a, [hl]
 	ret
@@ -2256,7 +2256,7 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 ; i.e. variable a of the player whose turn it is not
 GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	ld h, $c3
 	cp $c2
 	jr z, .asm_161c
@@ -2276,7 +2276,7 @@ GetOpposingTurnDuelistVariable_SwapTurn: ; 1c72 (0:1c72)
 	push hl
 	call GetOpposingTurnDuelistVariable
 	ld a, h
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	pop hl
 	pop af
 	ret
@@ -2352,14 +2352,14 @@ CalculateBGMap0Address: ; 1ddb (0:1ddb)
 ; Apply window correction to xy coordinates at de
 AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	push af
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	rra
 	rra
 	rra
 	and $1f
 	add d
 	ld d, a
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	rra
 	rra
 	rra
@@ -2803,10 +2803,10 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ld [$cd0a], a
 	ld a, $f
-	ld [$ffaf], a
+	ldh [$ffaf], a
 	ret
 .asm_2221
-	ld [$ffaf], a
+	ldh [$ffaf], a
 	xor a
 	ret
 .asm_2225
@@ -2817,7 +2817,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	call Func_230f
 	pop af
 	ld [$cd0a], a
-	ld a, [$ffb0]
+	ldh a, [$ffb0]
 	or a
 	jr nz, .asm_2240
 	ld a, [hl]
@@ -2827,11 +2827,11 @@ Func_21f2: ; 21f2 (0:21f2)
 .asm_2240
 	inc hl
 .asm_2241
-	ld a, [$ffae]
+	ldh a, [$ffae]
 	or a
 	ret z
 	ld b, a
-	ld a, [$ffac]
+	ldh a, [$ffac]
 	cp b
 	jr z, .asm_224d
 	xor a
@@ -2843,17 +2843,17 @@ Func_21f2: ; 21f2 (0:21f2)
 	call z, .asm_2257
 .asm_2257
 	xor a
-	ld [$ffac], a
-	ld a, [$ffad]
+	ldh [$ffac], a
+	ldh a, [$ffad]
 	add $20
 	ld b, a
-	ld a, [$ffaa]
+	ldh a, [$ffaa]
 	and $e0
 	add b
-	ld [$ffaa], a
-	ld a, [$ffab]
+	ldh [$ffaa], a
+	ldh a, [$ffab]
 	adc $0
-	ld [$ffab], a
+	ldh [$ffab], a
 	ld a, [$cd09]
 	inc a
 	ld [$cd09], a
@@ -2865,11 +2865,11 @@ Func_2275: ; 2275 (0:2275)
 	dec a
 	ld [$cd04], a
 	ld a, e
-	ld [$ffa8], a
+	ldh [$ffa8], a
 	call Func_2298
 	xor a
-	ld [$ffb0], a
-	ld [$ffa9], a
+	ldh [$ffb0], a
+	ldh [$ffa9], a
 	ld a, $88
 	ld [$cd06], a
 	ld a, $80
@@ -2885,31 +2885,31 @@ Func_2275: ; 2275 (0:2275)
 Func_2298: ; 2298 (0:2298)
 	xor a
 	ld [$cd0a], a
-	ld [$ffac], a
+	ldh [$ffac], a
 	ld [$cd0b], a
 	ld a, $f
-	ld [$ffaf], a
+	ldh [$ffaf], a
 	ret
 
 Func_22a6: ; 22a6 (0:22a6)
 	push af
 	call Func_22ae
 	pop af
-	ld [$ffae], a
+	ldh [$ffae], a
 	ret
 
 Func_22ae: ; 22ae (0:22ae)
 	push hl
 	ld a, d
-	ld [$ffad], a
+	ldh [$ffad], a
 	xor a
-	ld [$ffae], a
+	ldh [$ffae], a
 	ld [$cd09], a
 	call CalculateBGMap0Address
 	ld a, l
-	ld [$ffaa], a
+	ldh [$ffaa], a
 	ld a, h
-	ld [$ffab], a
+	ldh [$ffab], a
 	call Func_2298
 	xor a
 	ld [$cd0b], a
@@ -2920,7 +2920,7 @@ Func_22ca: ; 22ca (0:22ca)
 	push hl
 	push de
 	push bc
-	ld a, [$ffb0]
+	ldh a, [$ffb0]
 	and $1
 	jr nz, .asm_22ed
 	call Func_2325
@@ -2929,10 +2929,10 @@ Func_22ca: ; 22ca (0:22ca)
 	jr nz, .asm_22e9
 	call Func_24ac
 .asm_22de
-	ld a, [$ffb0]
+	ldh a, [$ffb0]
 	and $2
 	jr nz, .asm_22e9
-	ld a, [$ffa9]
+	ldh a, [$ffa9]
 	call Func_22f2
 .asm_22e9
 	pop bc
@@ -2985,11 +2985,11 @@ Func_2325: ; 2325 (0:2325)
 	ret c
 	or a
 	ret nz
-	ld a, [$ffa8]
+	ldh a, [$ffa8]
 	ld hl, $cd04
 	cp [hl]
 	jr nz, .asm_2345
-	ld a, [$ffa9]
+	ldh a, [$ffa9]
 	ld h, $c8
 .asm_2337
 	ld l, a
@@ -3009,11 +3009,11 @@ Func_2325: ; 2325 (0:2325)
 .asm_2349
 	ld l, [hl]
 .asm_234a
-	ld a, [$ffa9]
+	ldh a, [$ffa9]
 	ld c, a
 	ld b, $c9
 	ld a, l
-	ld [$ffa9], a
+	ldh [$ffa9], a
 	ld [bc], a
 	ld h, $c8
 	ld [hl], c
@@ -3044,7 +3044,7 @@ Func_235e: ; 235e (0:235e)
 .asm_2376
 	xor a
 	ld [$cd0b], a        ; [$cd0b] ← 0
-	ld a, [$ffa9]
+	ldh a, [$ffa9]
 	ld l, a              ; l ← [$ffa9]; index to to linked-list head
 .asm_237d
 	ld h, $c6                                     ;
@@ -3062,14 +3062,14 @@ Func_235e: ; 235e (0:235e)
 	ld l, [hl]           ; l ← next[l]            ;
 	jr .asm_237d
 .asm_238f
-	ld a, [$ffa9]
+	ldh a, [$ffa9]
 	cp l
 	jr z, .asm_23af      ; assert at least one iteration
 	ld c, a
 	ld b, $c9
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
-	ld [$ffa9], a        ; [$ffa9] ← i  (update linked-list head)
+	ldh [$ffa9], a        ; [$ffa9] ← i  (update linked-list head)
 	ld h, $c9
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
@@ -3230,7 +3230,7 @@ Func_24ac: ; 24ac (0:24ac)
 
 Func_24ca: ; 24ca (0:24ca)
 	push bc
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(VWF)
 	call BankswitchHome
@@ -3326,7 +3326,7 @@ Func_2546: ; 2546 (0:2546)
 	jr c, .asm_2561
 	cp $60
 	jr nc, .asm_2565
-	ld a, [$ffaf]
+	ldh a, [$ffaf]
 	cp $f
 	jr nz, .asm_2565
 	ld d, $f
@@ -3376,7 +3376,7 @@ INCBIN "baserom.gbc",$2589,$2636 - $2589
 ; initializes cursor parameters from the 8 bytes starting at hl
 InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
-	ld [$ffb1], a
+	ldh [$ffb1], a
 	ld de, wCursorXPosition
 	ld b, $8
 .asm_2640
@@ -3392,7 +3392,7 @@ InitializeCursorParameters: ; 2636 (0:2636)
 Func_264b: ; 264b (0:264b)
 	xor a
 	ld [$cd99], a
-	ld a, [hButtonsPressed2]
+	ldh a, [hButtonsPressed2]
 	or a
 	jr z, .asm_2685
 	ld b, a
@@ -3425,7 +3425,7 @@ Func_264b: ; 264b (0:264b)
 	ld [wCursorBlinkCounter], a
 .asm_2685
 	ld a, [wCurMenuItem]
-	ld [$ffb1], a
+	ldh [$ffb1], a
 	ld hl, $cd17
 	ld a, [hli]
 	or [hl]
@@ -3433,7 +3433,7 @@ Func_264b: ; 264b (0:264b)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	call CallHL
 	jr nc, HandleMenuInput
 .asm_269b
@@ -3441,11 +3441,11 @@ Func_264b: ; 264b (0:264b)
 	call Func_26c0
 	ld a, [wCurMenuItem]
 	ld e, a
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	scf
 	ret
 .asm_26a9
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $3
 	jr z, HandleMenuInput
 	and $1
@@ -3453,14 +3453,14 @@ Func_264b: ; 264b (0:264b)
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
-	ld [$ffb1], a
+	ldh [$ffb1], a
 	call Func_26c0
 	scf
 	ret
 
 Func_26c0: ; 26c0 (0:26c0)
 	push af
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	inc a
 	jr z, .asm_26ca
 	ld a, $2
@@ -3582,7 +3582,7 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 .waitAorBLoop
 	call DoFrame
 	call HandleTextBoxInput
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $3
 	jr z, .waitAorBLoop
 	ret
@@ -3610,7 +3610,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 .waitAorBLoop
 	call DoFrame
 	call HandleTextBoxInput
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $3
 	jr z, .waitAorBLoop
 	call EraseCursor
@@ -3643,10 +3643,10 @@ Func_2af0: ; 2af0 (0:2af0)
 .asm_2b1f
 	call DoFrame
 	call HandleTextBoxInput
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	bit 0, a
 	jr nz, .asm_2b50
-	ld a, [hButtonsPressed2]
+	ldh a, [hButtonsPressed2]
 	and $30
 	jr z, .asm_2b1f
 	ld a, $1
@@ -3668,7 +3668,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	jr .asm_2b1f
 .asm_2b50
 	ld a, [wCurMenuItem]
-	ld [$ffb1], a
+	ldh [$ffb1], a
 	or a
 	jr nz, .asm_2b5c
 	ld [$cd9a], a
@@ -3677,7 +3677,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	xor a
 	ld [$cd9a], a
 	ld a, $1
-	ld [$ffb1], a
+	ldh [$ffb1], a
 	scf
 	ret
 
@@ -3771,7 +3771,7 @@ Func_2c23: ; 2c23 (0:2c23)
 	ld l, [hl]
 	ld h, a
 Func_2c29: ; 2c29 (0:2c29)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_21c5
@@ -3799,7 +3799,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	ld [hli], a
 	ld a, [$cd0a]
 	ld [hli], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	ld [hli], a
 	ld [hl], c
 	inc hl
@@ -3989,7 +3989,7 @@ Func_2e12: ; 2e12 (0:2e12)
 Func_2e2c: ; 2e2c (0:2e2c)
 	ld de, $caa0
 	push de
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	cp $c3
 	jp z, .opponentTurn
 	call PrintPlayerName
@@ -4004,7 +4004,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ld a, l
 	or h
 	jr z, .asm_2e53
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call .asm_2e56
@@ -4016,7 +4016,7 @@ Func_2e41: ; 2e41 (0:2e41)
 .asm_2e56
 	call Func_2cc8
 .asm_2e59
-	ld a, [hButtonsHeld]
+	ldh a, [hButtonsHeld]
 	ld b, a
 	ld a, [$ce47]
 	inc a
@@ -4036,7 +4036,7 @@ Func_2e41: ; 2e41 (0:2e41)
 	ret
 
 Func_2e76: ; 2e76 (0:2e76)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_2cc8
@@ -4055,7 +4055,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ld a, l
 	or h
 	jr z, .special
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 .nextTileLoop
@@ -4069,7 +4069,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	dec de
 	ret
 .special
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	cp $c3
 	jp z, PrintOpponentName
 	jp PrintPlayerName
@@ -4140,7 +4140,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 ; 0x2fa0
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	push hl
 	srl h
@@ -4197,7 +4197,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 
 .executeFunction
 ; executes the function at [wce22]:hl
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, [wce22]
 	call BankswitchHome
@@ -4227,7 +4227,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ret
 
 .notNullPointer
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(EffectCommands)
 	call BankswitchHome
@@ -4269,7 +4269,7 @@ LoadDeck: ; 302c (0:302c)
 	push hl
 	ld l, a
 	ld h, $0
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(DeckPointers)
 	call BankswitchHome
@@ -4358,7 +4358,7 @@ Func_3090: ; 3090 (0:3090)
 	ret
 
 Func_3096: ; 3096 (0:3096)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4368,7 +4368,7 @@ Func_3096: ; 3096 (0:3096)
 	ret
 
 Func_30a6: ; 30a6 (0:30a6)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $6
 	call BankswitchHome
@@ -4385,7 +4385,7 @@ Func_30bc: ; 30bc (0:30bc)
 	ld [$ce50], a
 	ld a, l
 	ld [$ce51], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4396,7 +4396,7 @@ Func_30bc: ; 30bc (0:30bc)
 	ret
 
 Func_30d7: ; 30d7 (0:30d7)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4406,7 +4406,7 @@ Func_30d7: ; 30d7 (0:30d7)
 	ret
 
 Func_30e7: ; 30e7 (0:30e7)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4419,7 +4419,7 @@ Func_30e7: ; 30e7 (0:30e7)
 
 Func_30f9: ; 30f9 (0:30f9)
 	ld b, a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4430,7 +4430,7 @@ Func_30f9: ; 30f9 (0:30f9)
 
 Func_310a: ; 310a (0:310a)
 	ld [$ce59], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4440,7 +4440,7 @@ Func_310a: ; 310a (0:310a)
 	ret
 
 Func_311d: ; 311d (0:311d)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $2
 	call BankswitchHome
@@ -4661,7 +4661,7 @@ Func_380e: ; 380e (0:380e)
 	ld a, [$d0c1]
 	bit 7, a
 	ret nz
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_c484)
 	call BankswitchHome
@@ -4682,7 +4682,7 @@ Func_380e: ; 380e (0:380e)
 Func_383d: ; 383d (0:383d)
 	ld a, $1
 	ld [wPlayTimeCounterEnable], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 .asm_3845
 	call Func_3855
@@ -4718,7 +4718,7 @@ Func_3874: ; 3874 (0:3874)
 	ret
 
 Func_3876: ; 3876 (0:3876)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	call Func_379b
 	ld a, MUSIC_CARDPOP
@@ -4829,7 +4829,7 @@ Func_3946: ; 3946 (0:3946)
 	ret
 
 Func_395a: ; 395a (0:395a)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, [$d4c6]
 	call BankswitchHome
@@ -4848,7 +4848,7 @@ Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3997 - $397b
 
 Func_3997: ; 3997 (0:3997)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1c056)
 	call BankswitchHome
@@ -4967,7 +4967,7 @@ Func_3a40: ; 3a40 (0:3a40)
 INCBIN "baserom.gbc",$3a45,$3a5e - $3a45
 
 Func_3a5e: ; 3a5e (0:3a5e)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld l, $4
 	call Func_3abd
@@ -5039,7 +5039,7 @@ Func_3abd: ; 3abd (0:3abd)
 	pop bc
 	ld b, $0
 	add hl, bc
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(MapScripts)
 	call BankswitchHome
@@ -5075,7 +5075,7 @@ Func_3aed: ; 3aed (0:3aed)
 	ld b, $0
 	ld hl, Unknown_1217b
 	add hl, bc
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Unknown_1217b)
 	call BankswitchHome
@@ -5109,7 +5109,7 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 INCBIN "baserom.gbc",$3be4,$3bf5 - $3be4
 
 Func_3bf5: ; 3bf5 (0:3bf5)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	push hl
 	ld a, [$d4c6]
@@ -5155,7 +5155,7 @@ Func_3c5a: ; 3c5a (0:3c5a)
 	rl b
 	ld a, $10
 .asm_3c63
-	ld [$ffb6], a
+	ldh [$ffb6], a
 	rl l
 	rl h
 	push hl
@@ -5175,7 +5175,7 @@ Func_3c5a: ; 3c5a (0:3c5a)
 .asm_3c79
 	rl c
 	rl b
-	ld a, [$ffb6]
+	ldh a, [$ffb6]
 	dec a
 	jr nz, .asm_3c63
 	ret
@@ -5186,7 +5186,7 @@ INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [$d5d7], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)
 	call BankswitchHome
@@ -5196,7 +5196,7 @@ Func_3ca0: ; 3ca0 (0:3ca0)
 	ret
 
 Func_3cb4: ; 3cb4 (0:3cb4)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_12a21)
 	call BankswitchHome
@@ -5209,7 +5209,7 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 INCBIN "baserom.gbc",$3cc4,$3d72 - $3cc4
 
 Func_3d72: ; 3d72 (0:3d72)
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	push hl
 	push hl
@@ -5288,7 +5288,7 @@ INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	push hl
 	ld a, BANK(Func_12c7f)
@@ -5309,7 +5309,7 @@ INCBIN "baserom.gbc",$3e10,$3e17 - $3e10
 
 Func_3e17: ; 3e17 (0:3e17)
 	ld [$d131], a
-	ld a, [hBankROM]
+	ldh a, [hBankROM]
 	push af
 	ld a, $4
 	call BankswitchHome
@@ -5330,7 +5330,7 @@ INCBIN "baserom.gbc",$3e31,$3fe0 - $3e31
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
-	ld [hBankROM], a
+	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
 	ld bc, Bankswitch3d
@@ -5339,7 +5339,7 @@ Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 
 Bankswitch3d: ; 3fe0 (0:3fe0)
 	ld a, $3d
-	ld [hBankROM], a
+	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
 

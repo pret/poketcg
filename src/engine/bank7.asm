@@ -150,7 +150,7 @@ Func_1d078: ; 1d078 (7:5078)
 	dec [hl]
 	jr .asm_1d095
 .asm_1d0b8
-	ld a, [hButtonsPressed]
+	ldh a, [hButtonsPressed]
 	and $9
 	jr z, .asm_1d095
 	ld a, $2
@@ -219,7 +219,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	call $51e9
 	pop af
 	jr nc, .asm_1d15a
-	ld a, [$ffb1]
+	ldh a, [$ffb1]
 	cp e
 	jr nz, .asm_1d15a
 	ld [$d627], a

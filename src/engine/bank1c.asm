@@ -146,9 +146,9 @@ Func_70136: ; 70136 (1c:4136)
 	push hl
 	push bc
 	push de
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	ld [$d41d], a
-	ld a, [hSCY]
+	ldh a, [hSCY]
 	ld [$d41e], a
 	ld a, [$cabc]
 	ld [$d41f], a
@@ -166,9 +166,9 @@ Func_70136: ; 70136 (1c:4136)
 	ld [rBGP], a
 	call Func_040c
 	xor a
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld [rSCX], a
-	ld [hSCY], a
+	ldh [hSCY], a
 	ld [rSCY], a
 	pop de
 	pop bc
@@ -184,9 +184,9 @@ Func_70177: ; 70177 (1c:4177)
 	pop hl
 	call SendSGB
 	ld a, [$d41d]
-	ld [hSCX], a
+	ldh [hSCX], a
 	ld a, [$d41e]
-	ld [hSCY], a
+	ldh [hSCY], a
 	ld a, [$d41f]
 	call Func_040c
 	ld a, [$d420]

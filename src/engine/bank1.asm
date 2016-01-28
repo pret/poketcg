@@ -14,7 +14,7 @@ Func_4000: ; 4000 (1:4000)
 	ld [wUppercaseFlag], a
 	ei
 	farcall Func_1a6cc
-	ld a, [hButtonsHeld]
+	ldh a, [hButtonsHeld]
 	cp $3
 	jr z, .asm_4035
 	farcall Func_126d1
@@ -48,7 +48,7 @@ INCBIN "baserom.gbc",$406f,$409f - $406f
 ; graphics, name and deck have been introduced
 StartDuel: ; 409f (1:409f)
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	ld a, $0
 	ld [$c2f1], a
 	ld a, [$cc19]
@@ -130,14 +130,14 @@ StartDuel: ; 409f (1:409f)
 	ld hl, $0076
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	push af
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call $4a97
 	call $4ad6
 	pop af
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call $3b21
 	ld a, [$cc07]
 	cp $1
@@ -150,7 +150,7 @@ StartDuel: ; 409f (1:409f)
 	jr .asm_4196
 
 .asm_4171
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	cp $c2
 	jr nz, .asm_418a
 .asm_4177
@@ -162,7 +162,7 @@ StartDuel: ; 409f (1:409f)
 	jr .asm_4196
 
 .asm_4184
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	cp $c2
 	jr nz, .asm_4177
 
@@ -178,7 +178,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, c
 	call PlaySong
 	ld a, $c3
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 .asm_41a7
@@ -194,7 +194,7 @@ StartDuel: ; 409f (1:409f)
 	call $3b31
 	call ResetSerial
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	ret
 
 .asm_41c8
@@ -211,7 +211,7 @@ StartDuel: ; 409f (1:409f)
 	cp $1
 	jr z, .asm_41f3
 	ld a, $c2
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call $4b60
 	jp $40ee
 
@@ -225,7 +225,7 @@ StartDuel: ; 409f (1:409f)
 
 .asm_4201
 	ld a, h
-	ld [hWhoseTurn], a
+	ldh [hWhoseTurn], a
 	call $4b60
 	jp nc, $40ee
 	ret
@@ -266,7 +266,7 @@ INCBIN "baserom.gbc",$67b2,$7107 - $67b2
 ; player turn: [c200, c2ff]
 ; opponent turn: [c300, c3ff]
 InitializeDuelVariables: ; 7107 (1:7107)
-	ld a, [hWhoseTurn]
+	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, wPlayerDuelistType & $ff
 	ld a, [hl]
