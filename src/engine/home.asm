@@ -3852,11 +3852,11 @@ Func_2d43: ; 2d43 (0:2d43)
 	jr nc, .asm_2d65
 	call Func_21f2
 	jr nc, .asm_2d74
-	cp $9
+	cp TX_RAM1
 	jr z, .asm_2dc8
-	cp $b
+	cp TX_RAM2
 	jr z, .asm_2d8a
-	cp $c
+	cp TX_RAM3
 	jr z, .asm_2db3
 	jr .asm_2d74
 .asm_2d65
