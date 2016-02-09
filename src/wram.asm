@@ -268,10 +268,23 @@ wSerialRecvIndex:: ; cba4
 
 wSerialRecvBuf:: ; $cba5 - $cbc4
 	ds $20
-	ds $49
+	ds $1
+
+
 
 ;--- Duels 2 ----------------------------------------------
 
+wBattleMenuSelection:: ; $cbc6
+	ds $1
+	ds $40
+
+; 0 = no one has won battle yet
+; 1 = player whose turn it is has won the battle
+; 2 = player whose turn it is has lost the battle
+wBattleFinished:: ; $cc07
+	ds $1
+	ds $6
+	
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers

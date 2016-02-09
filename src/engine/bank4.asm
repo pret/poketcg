@@ -694,7 +694,7 @@ Func_126d1: ; 126d1 (4:66d1)
 	ld a, $ff
 	ld [$d627], a
 .asm_126e1
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
 	farcall Func_1d078

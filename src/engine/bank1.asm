@@ -47,7 +47,7 @@ INCBIN "baserom.gbc",$406f,$409f - $406f
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
 StartDuel: ; 409f (1:409f)
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld a, $0
 	ld [$c2f1], a
@@ -74,7 +74,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, h
 	ld [$cbe6], a
 	xor a
-	ld [$cbc6], a
+	ld [wBattleMenuSelection], a
 	call $420b
 	ld a, [$cc18]
 	ld [$cc08], a
@@ -87,19 +87,19 @@ StartDuel: ; 409f (1:409f)
 ; the loop returns here after every turn switch
 .mainDuelLoop
 	xor a
-	ld [$cbc6], a
+	ld [wBattleMenuSelection], a
 	call $35e6
 	call $54c8
 	call $4225
 	call $0f58
-	ld a, [$cc07]
+	ld a, [wBattleFinished]
 	or a
 	jr nz, .asm_4136
 	call $35fa
 	call $6baf
 	call $3b31
 	call $0f58
-	ld a, [$cc07]
+	ld a, [wBattleFinished]
 	or a
 	jr nz, .asm_4136
 	ld hl, $cc06
@@ -107,6 +107,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, [$cc09]
 	cp $80
 	jr z, .asm_4126
+	
 .asm_4121
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	jr .mainDuelLoop
@@ -132,28 +133,28 @@ StartDuel: ; 409f (1:409f)
 	call Func_04a2
 	ldh a, [hWhoseTurn]
 	push af
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call $4a97
 	call $4ad6
 	pop af
 	ldh [hWhoseTurn], a
 	call $3b21
-	ld a, [$cc07]
+	ld a, [wBattleFinished]
 	cp $1
-	jr z, .asm_4171
+	jr z, .activeDuelistWonBattle
 	cp $2
-	jr z, .asm_4184
+	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, $1a
 	ld hl, $0077
 	jr .asm_4196
 
-.asm_4171
+.activeDuelistWonBattle
 	ldh a, [hWhoseTurn]
-	cp $c2
-	jr nz, .asm_418a
-.asm_4177
+	cp PLAYER_TURN
+	jr nz, .opponentWonBattle
+.playerWonBattle
 	xor a
 	ld [$d0c3], a
 	ld a, $5d
@@ -161,12 +162,12 @@ StartDuel: ; 409f (1:409f)
 	ld hl, $0078
 	jr .asm_4196
 
-.asm_4184
+.activeDuelistLostBattle
 	ldh a, [hWhoseTurn]
-	cp $c2
-	jr nz, .asm_4177
+	cp PLAYER_TURN
+	jr nz, .playerWonBattle
 
-.asm_418a
+.opponentWonBattle
 	ld a, $1
 	ld [$d0c3], a
 	ld a, $5e
@@ -177,7 +178,7 @@ StartDuel: ; 409f (1:409f)
 	call $3b6a
 	ld a, c
 	call PlaySong
-	ld a, $c3
+	ld a, OPPONENT_TURN
 	ldh [hWhoseTurn], a
 	call DrawWideTextBox_PrintText
 	call EnableLCD
@@ -186,14 +187,14 @@ StartDuel: ; 409f (1:409f)
 	call Func_378a
 	or a
 	jr nz, .asm_41a7
-	ld a, [$cc07]
+	ld a, [wBattleFinished]
 	cp $3
 	jr z, .asm_41c8
 	call Func_39fc
 	call WaitForWideTextBoxInput
 	call $3b31
 	call ResetSerial
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ret
 
@@ -210,18 +211,18 @@ StartDuel: ; 409f (1:409f)
 	ld a, [$cc09]
 	cp $1
 	jr z, .asm_41f3
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call $4b60
 	jp $40ee
 
 .asm_41f3
 	call $0f58
-	ld h, $c2
+	ld h, PLAYER_TURN
 	ld a, [wSerialOp]
 	cp $29
 	jr z, .asm_4201
-	ld h, $c3
+	ld h, OPPONENT_TURN
 
 .asm_4201
 	ld a, h

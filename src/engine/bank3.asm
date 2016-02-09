@@ -26,7 +26,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c241
 	call Func_04a2
 	call Func_3ca0
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_1c440
 	ld a, [$d0bb]
@@ -391,7 +391,7 @@ Func_c2db: ; c2db (3:42db)
 	call Set_OBJ_8x8
 	call Func_3ca0
 	farcall Func_12bcd
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_c241
 	call Func_04a2

@@ -6,7 +6,7 @@ INCBIN "baserom.gbc",$18f9c,$1996e - $18f9c
 
 Func_1996e: ; 1996e (6:596e)
 	call EnableExtRAM
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld hl, $a100
 	ld bc, $1607
@@ -154,7 +154,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld h, [hl]
 	ld l, a
 	bank1call $2ebb
-	ld a, $c2
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	pop hl
 	bank1call $5e5f

@@ -2078,7 +2078,7 @@ INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
 CopyDeckData: ; 1072 (0:1072)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
-	cp $c2
+	cp PLAYER_TURN
 	jr z, .copyDeckData
 	ld hl, wOpponentDeck
 .copyDeckData
@@ -2257,10 +2257,10 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
 	ldh a, [hWhoseTurn]
-	ld h, $c3
-	cp $c2
+	ld h, OPPONENT_TURN
+	cp PLAYER_TURN
 	jr z, .asm_161c
-	ld h, $c2
+	ld h, PLAYER_TURN
 .asm_161c
 	ld a, [hl]
 	ret
@@ -3986,7 +3986,7 @@ Func_2e2c: ; 2e2c (0:2e2c)
 	ld de, $caa0
 	push de
 	ldh a, [hWhoseTurn]
-	cp $c3
+	cp OPPONENT_TURN
 	jp z, .opponentTurn
 	call PrintPlayerName
 	pop hl
@@ -4066,7 +4066,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ret
 .special
 	ldh a, [hWhoseTurn]
-	cp $c3
+	cp OPPONENT_TURN
 	jp z, PrintOpponentName
 	jp PrintPlayerName
 ; 0x2ea9
