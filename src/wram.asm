@@ -11,6 +11,10 @@ SECTION "WRAM0", WRAM0
 
 wPlayerDuelVariables:: ; c200
 
+; In order to be identified during a duel, the 60 cards of each duelist are given an id between 0 and 59.
+; The id's are assigned following the index number order of the cards that make up the deck.
+; This temporary id identifies the card during the current duel and within the duelist's deck.
+
 ; 60-byte array that indicates where each of the 60 cards is.
 ;	$00 - deck
 ;	$01 - hand
@@ -27,14 +31,13 @@ wPlayerHand:: ; c242
 	ds DECK_SIZE
 
 ; 60-byte array that maps each card to its position in the deck.
-; During a duel, each card of the deck is assigned a number between 0 and 59, following the index number order.
 ; This array is initialized to 00, 01, 02, ..., 59, until deck is shuffled.
-; The earlier a card appears in the array, the closer to the top of the deck it is.
 wPlayerDeckCards:: ; c27e
 	ds DECK_SIZE
 
-; stores x = (60 - deck remaining cards)
-; the first x cards in the wPlayerDeckCards array are ignored (e.g. when drawing a card)
+; Stores x = (60 - deck remaining cards)
+; The first x cards in the wPlayerDeckCards array are not actually in the deck
+; For example, the top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
@@ -59,7 +62,14 @@ wPlayerBench4CardHP:: ; c2cc
 	ds $1
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
-	ds $20
+	ds $1e
+
+; Each of the lower four bits represent a prize
+wPlayerPrizes:: ; c2ec
+	ds $1
+
+wPlayerNumberOfCardsInDiscardPile:: ; c2ed
+	ds $1
 
 wPlayerNumberOfCardsInHand:: ; c2ee
 	ds $1
@@ -112,7 +122,13 @@ wOpponentBench4CardHP:: ; c3cc
 	ds $1
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
-	ds $20
+	ds $1e
+
+wOpponentPrizes:: ; c3ec
+	ds $1
+
+wOpponentNumberOfCardsInDiscardPile:: ; c3ed
+	ds $1
 
 wOpponentNumberOfCardsInHand:: ; c3ee
 	ds $1
