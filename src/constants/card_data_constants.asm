@@ -2,7 +2,7 @@ CARD_DATA_LENGTH EQU $41
 DECK_SIZE        EQU  60
 BENCH_SIZE       EQU   5
 
-;;; card types (byte 1 of every card data)
+;;; card types
 FIRE      EQU $0
 GRASS     EQU $1
 LIGHTNING EQU $2
@@ -21,7 +21,32 @@ DOUBLE_COLORLESS_ENERGY_CARD EQU $E
 
 TRAINER_CARD EQU $10
 
-;;; weakness/resistance (bytes 2 and 3 of Pokemon cards post-move data)
+;;; rarity
+CIRCLE    EQU $0
+DIAMOND   EQU $1
+STAR      EQU $2
+PROMOSTAR EQU $FF
+
+;;; set
+COLOSSEUM   EQU $00
+EVOLUTION   EQU $10
+MYSTERY     EQU $20
+LABORATORY  EQU $30
+PROMOTIONAL EQU $40
+ENERGY      EQU $50
+
+NONE   EQU $0
+JUNGLE EQU $1
+FOSSIL EQU $2
+GB     EQU $7
+PRO    EQU $8
+
+;;; evolution stage
+BASIC  EQU $0
+STAGE1 EQU $1
+STAGE2 EQU $2
+
+;;; weakness/resistance
 WR_FIRE      EQU $80
 WR_GRASS     EQU $40
 WR_LIGHTNING EQU $20
@@ -58,7 +83,7 @@ FLAG_2_BIT_5             EQU %00100000
 FLAG_2_BIT_6             EQU %01000000
 FLAG_2_BIT_7             EQU %10000000
 
-;;; flags 2 (10th param of Pokemon cards move data)
+;;; flags 3 (10th param of Pokemon cards move data)
 ; bit 1 covers a wide variety of effects
 ; bits 2-7 are unused
 BOOST_IF_TAKEN_DAMAGE    EQU %00000001
