@@ -235,7 +235,7 @@ StartDuel: ; 409f (1:409f)
 INCBIN "baserom.gbc",$420b,$4225 - $420b
 
 Func_4225: ; 4225 (1:4225)
-	ld a, wPlayerDuelistType & $ff
+	ld a, DUELVAR_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [$cc0d], a
 	ld a, [$cc06]
@@ -404,7 +404,7 @@ PlayerEndTurn: ; 439a (1:439a)
 	ret
 
 PlayerRetreat: ; 43ab (1:43ab)
-	ld a, wPlayerArenaCardStatus & $ff
+	ld a, DUELVAR_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and a,$0f
 	cp a, $01
@@ -462,7 +462,7 @@ Func_441f: ; 441f (1:441f)
 	jp Func_4295
 
 OpenHandMenu: ; 4425 (1:4425)
-	ld a, wPlayerNumberOfCardsInHand & $ff
+	ld a, DUELVAR_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
@@ -512,7 +512,7 @@ Func_471f: ; 471f (1:471f)
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, wPlayerArenaCard & $ff
+	ld l, DUELVAR_ARENA_CARD
 	ld a, [hl]
 	call $1376
 .asm_4736
@@ -599,7 +599,7 @@ INCBIN "baserom.gbc",$67b2,$7107 - $67b2
 InitializeDuelVariables: ; 7107 (1:7107)
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, wPlayerDuelistType & $ff
+	ld l, DUELVAR_DUELIST_TYPE
 	ld a, [hl]
 	push hl
 	push af
@@ -612,8 +612,8 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	pop af
 	pop hl
 	ld [hl], a
-	ld bc, DECK_SIZE ; lb bc, wPlayerCardLocations & $ff, DECK_SIZE
-	ld l, wPlayerDeckCards & $ff
+	ld bc, DECK_SIZE ; lb bc, DUELVAR_CARD_LOCATIONS, DECK_SIZE
+	ld l, DUELVAR_DECK_CARDS
 .initDuelVariablesLoop
 ; zero card locations and cards in hand, and init order of cards in deck
 	push hl
@@ -625,7 +625,7 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	inc b
 	dec c
 	jr nz, .initDuelVariablesLoop
-	ld l, wPlayerArenaCard & $ff
+	ld l, DUELVAR_ARENA_CARD
 	ld c, 1 + BENCH_SIZE + 1
 .initPlayArea
 ; initialize to $ff card in arena as well as cards in bench (plus a terminator?)

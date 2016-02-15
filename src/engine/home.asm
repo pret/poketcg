@@ -2131,10 +2131,10 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld h, a
 	ld d, a
 	ld a, DECK_SIZE
-	ld l, wPlayerNumberOfCardsNotInDeck & $ff
+	ld l, DUELVAR_NUMBER_OF_CARDS_NOT_IN_DECK
 	sub [hl]
 	ld b, a
-	ld a, wPlayerDeckCards & $ff
+	ld a, DUELVAR_DECK_CARDS
 	add [hl]
 	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array of the first (top) card in the deck
 	ld a, b ; a = number of cards in the deck
@@ -2146,7 +2146,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 ; returns c if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
-	ld a, wPlayerNumberOfCardsNotInDeck & $ff
+	ld a, DUELVAR_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
 	jr nc, .emptyDeck
@@ -2154,7 +2154,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	inc a
 	ld [hl], a
 	; point to top card in the deck
-	add (wPlayerDeckCards - 1) & $ff
+	add DUELVAR_DECK_CARDS - 1
 	ld l, a
 	; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld a, [hl]
@@ -2186,10 +2186,10 @@ AddCardToHand: ; 1123 (0:1123)
 	; write $1 (hand) into the location of this card
 	ld [hl], $1
 	; increment number of cards in hand
-	ld l, wPlayerNumberOfCardsInHand & $ff
+	ld l, DUELVAR_NUMBER_OF_CARDS_IN_HAND
 	inc [hl]
 	; add card to hand
-	ld a, (wPlayerHand - 1) & $ff
+	ld a, DUELVAR_HAND - 1
 	add [hl]
 	ld l, a
 	ld [hl], e
@@ -3732,7 +3732,7 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 
 .validDeck
 ; set opponent as controlled by AI
-	ld a, wOpponentDuelistType & $ff
+	ld a, DUELVAR_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld a, [wOpponentDeckId]
 	or $80
