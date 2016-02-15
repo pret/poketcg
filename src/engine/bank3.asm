@@ -962,7 +962,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	jr nc, .asm_c76a
 	ld a, e
 	ld [$d0b8], a
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	cp e
 	jr nz, .asm_c793
 	cp $5
@@ -1046,7 +1046,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr nc, .asm_c806
 	ld a, e
 	ld [$d0b9], a
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	cp e
 	jr nz, .asm_c82f
 	cp $4

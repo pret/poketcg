@@ -3376,7 +3376,7 @@ INCBIN "baserom.gbc",$2589,$2636 - $2589
 ; initializes cursor parameters from the 8 bytes starting at hl
 InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
-	ldh [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	ld de, wCursorXPosition
 	ld b, $8
 .asm_2640
@@ -3425,7 +3425,7 @@ Func_264b: ; 264b (0:264b)
 	ld [wCursorBlinkCounter], a
 .asm_2685
 	ld a, [wCurMenuItem]
-	ldh [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	ld hl, $cd17
 	ld a, [hli]
 	or [hl]
@@ -3433,7 +3433,7 @@ Func_264b: ; 264b (0:264b)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	call CallHL
 	jr nc, HandleMenuInput
 .asm_269b
@@ -3441,7 +3441,7 @@ Func_264b: ; 264b (0:264b)
 	call Func_26c0
 	ld a, [wCurMenuItem]
 	ld e, a
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	scf
 	ret
 .asm_26a9
@@ -3453,14 +3453,14 @@ Func_264b: ; 264b (0:264b)
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
-	ldh [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	call Func_26c0
 	scf
 	ret
 
 Func_26c0: ; 26c0 (0:26c0)
 	push af
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	inc a
 	jr z, .asm_26ca
 	ld a, $2
@@ -3668,7 +3668,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	jr .asm_2b1f
 .asm_2b50
 	ld a, [wCurMenuItem]
-	ldh [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	or a
 	jr nz, .asm_2b5c
 	ld [$cd9a], a
@@ -3677,7 +3677,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	xor a
 	ld [$cd9a], a
 	ld a, $1
-	ldh [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	scf
 	ret
 

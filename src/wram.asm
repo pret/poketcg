@@ -276,7 +276,17 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 
 wBattleMenuSelection:: ; $cbc6
 	ds $1
-	ds $40
+	ds $4
+
+wBenchSelectedPokemon:: ; $cbcb	
+	ds $1
+	ds $3
+	
+;When you're in a battle menu like your hand
+;and you press a, this keeps track of where the cursor was
+wBattleSubMenuSelected:: ; $cbcf
+	ds $1
+	ds $37
 
 ; 0 = no one has won battle yet
 ; 1 = player whose turn it is has won the battle

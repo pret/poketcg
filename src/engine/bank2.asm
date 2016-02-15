@@ -90,7 +90,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call Func_264b
 	jr nc, .asm_8dc8
-	ldh a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	cp $ff
 	ret z
 	ld [$ceb1], a
