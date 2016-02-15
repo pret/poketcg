@@ -237,7 +237,7 @@ INCBIN "baserom.gbc",$420b,$4225 - $420b
 Func_4225: ; 4225 (1:4225)
 	ld a, wPlayerDuelistType & $ff
 	call GetTurnDuelistVariable
-	ld [$CC0D], a
+	ld [$cc0d], a
 	ld a, [$cc06]
 	cp a, $02
 	jr c, .asm_4237
@@ -259,7 +259,7 @@ Func_4225: ; 4225 (1:4225)
 	cp $00
 	jr z, Func_4262
 	call GetOpposingTurnDuelistVariable_SwapTurn
-	call $34E2
+	call $34e2
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	call c, $4b2c
 	jr Func_426d
@@ -285,7 +285,7 @@ Func_426d:
 	ld hl, $0088
 	call $2a36
 	call $2bbf
-	ld a, $FF
+	ld a, $ff
 	ld [$cc11], a
 	ld [$cc10], a
 	ret
@@ -294,7 +294,7 @@ Func_4295:
 	call DrawWideTextBox
 	ld hl, $54e9
 	call Func_2c08
-	call $669D
+	call $669d
 	ld a, [wDuelFinished]
 	or a
 	ret nz
@@ -410,7 +410,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	cp a, $01
 	ldh [$ffa0], a
 	jr nz, Func_43f1
-	ld a, [$CC0C]
+	ld a, [$cc0c]
 	or a
 	jr nz, Func_43e8
 	call $45bb
