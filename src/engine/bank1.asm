@@ -107,7 +107,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, [$cc09]
 	cp $80
 	jr z, .asm_4126
-	
+
 .asm_4121
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	jr .mainDuelLoop
@@ -235,14 +235,14 @@ StartDuel: ; 409f (1:409f)
 INCBIN "baserom.gbc",$420b,$4225 - $420b
 
 Func_4225: ; 4225 (1:4225)
-	ld a, $f1
+	ld a, wPlayerDuelistType & $ff
 	call GetTurnDuelistVariable
 	ld [$CC0D], a
 	ld a, [$cc06]
 	cp a, $02
 	jr c, .asm_4237
 	call $70f6
-	
+
 .asm_4237
 	call $70e6
 	call $4933
@@ -263,15 +263,15 @@ Func_4225: ; 4225 (1:4225)
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	call c, $4b2c
 	jr Func_426d
-	
+
 Func_4262:
 	call $4b2c
 	call $100b
-	
+
 Func_4268:
 	ld a, $06
 	call $51e7
-	
+
 Func_426d:
 	call $4f9d
 	ld a, [$cc0d]
@@ -300,7 +300,7 @@ Func_4295:
 	ret nz
 	ld a, [wBattleMenuSelection]
 	call $2710
-	
+
 Func_42ac:
 	call DoFrame
 	ldh a, [hButtonsHeld]
@@ -317,7 +317,7 @@ Func_42ac:
 	jr nz, Func_4317
 	bit 3, a
 	jp nz, $4364
-	
+
 .asm_42cc
 	ldh a, [hButtonsPressed]
 	and a, $08
@@ -334,7 +334,7 @@ Func_42ac:
 	jr nc, Func_42ac
 	ldh a, [hCurrentMenuItem]
 	ld hl, BattleMenuFunctionTable
-	jp JumpToFunctionInTable	
+	jp JumpToFunctionInTable
 
 BattleMenuFunctionTable: ; 42f1 (1:42f1)
 	dw OpenHandMenu
@@ -343,26 +343,26 @@ BattleMenuFunctionTable: ; 42f1 (1:42f1)
 	dw OpenPokemonPowerMenu
 	dw PlayerRetreat
 	dw PlayerEndTurn
-	
+
 INCBIN "baserom.gbc",$42fd, $430b - $42fd
-	
+
 Func_430b: ; 430b (1:430b)
 	call Func_4329
-	jp $426d
-	
+	jp Func_426d
+
 Func_4311: ; 4311 (1:4311)
 	call Func_4333
-	jp $426d
+	jp Func_426d
 
 Func_4317: ; 4317 (1:4317)
 	call Func_4339
-	jp c, $4295
-	jp $426d
+	jp c, Func_4295
+	jp Func_426d
 
 Func_4320: ; 4320 (1:4320)
 	call Func_4342
-	jp c, $4295
-	jp $426d
+	jp c, Func_4295
+	jp Func_426d
 
 Func_4329: ; 4329 (1:4329)
 	call GetOpposingTurnDuelistVariable_SwapTurn
@@ -378,7 +378,7 @@ Func_4339: ; 4339 (1:4339)
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	call $5550
 	jp GetOpposingTurnDuelistVariable_SwapTurn
-	
+
 Func_4342: ; 4342 (1:4342)
 	jp $5550
 
@@ -401,10 +401,10 @@ PlayerEndTurn: ; 439a (1:439a)
 	ld a, $05
 	call $0f7f
 	call $717a
-	ret	
-	
+	ret
+
 PlayerRetreat: ; 43ab (1:43ab)
-	ld a, $f0
+	ld a, wPlayerArenaCardStatus & $ff
 	call GetTurnDuelistVariable
 	and a,$0f
 	cp a, $01
@@ -433,7 +433,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 Func_43e8: ; 43e8
 	ld hl, $003d
 	call DrawWideTextBox_WaitForInput
-	jp $4295
+	jp Func_4295
 
 Func_43f1: ; 43f1 (1:43f1)
 	call $45bb
@@ -459,23 +459,23 @@ Func_441c: ; 441c (1:441c)
 
 Func_441f: ; 441f (1:441f)
 	call DrawWideTextBox_WaitForInput
-	jp $4295
-	
+	jp Func_4295
+
 OpenHandMenu: ; 4425 (1:4425)
-	ld a, $ee
+	ld a, wPlayerNumberOfCardsInHand & $ff
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
 	ld hl, $00a4
 	call DrawWideTextBox_WaitForInput
-	jp $4295
-	
+	jp Func_4295
+
 Func_4436: ; 4436 (1:4436)
 INCBIN "baserom.gbc",$4436, $4585 - $4436
 
 OpenBattleCheckMenu: ; 4585 (1:4585)
 	call $3b31
-	call $3096
+	call Func_3096
 	jp Func_426d
 
 INCBIN "baserom.gbc",$458e, $46fc - $458e
@@ -486,10 +486,10 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	jr c, .asm_4706
 	call $4918
 	jr nc, .asm_470c
-	
+
 .asm_4706
 	call DrawWideTextBox_WaitForInput
-	jp $4295
+	jp Func_4295
 
 .asm_470c
 	xor a
@@ -501,7 +501,7 @@ Func_4710: ; 4710 (1:4710)
 	jr nz, Func_471f
 	ld hl, $003c
 	call DrawWideTextBox_WaitForInput
-	jp $4295
+	jp Func_4295
 
 Func_471f: ; 471f (1:471f)
 	push af
@@ -512,7 +512,7 @@ Func_471f: ; 471f (1:471f)
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, $bb
+	ld l, wPlayerArenaCard & $ff
 	ld a, [hl]
 	call $1376
 .asm_4736
@@ -523,7 +523,7 @@ Func_471f: ; 471f (1:471f)
 	call Func_264b
 	jr nc, .asm_4736
 	cp a, $ff
-	jp z, $4295
+	jp z, Func_4295
 	ld [wBattleSubMenuSelected], a
 	call $488f
 	jr nc, Func_4759
@@ -554,12 +554,12 @@ Func_4759: ; 4759 (1:4759)
 Func_477d: ; 477d (1:477d)
 	call DrawWideTextBox_WaitForInput
 	jr Func_4710
-	
+
 Func_4782: ; 4782 (1:4782)
 	call $478b
 	call $4f9d
 	jp Func_4710
-	
+
 
 INCBIN "baserom.gbc",$478b, $5aeb - $478b
 

@@ -278,10 +278,10 @@ wBattleMenuSelection:: ; $cbc6
 	ds $1
 	ds $4
 
-wBenchSelectedPokemon:: ; $cbcb	
+wBenchSelectedPokemon:: ; $cbcb
 	ds $1
 	ds $3
-	
+
 ;When you're in a battle menu like your hand
 ;and you press a, this keeps track of where the cursor was
 wBattleSubMenuSelected:: ; $cbcf
@@ -294,7 +294,7 @@ wBattleSubMenuSelected:: ; $cbcf
 wBattleFinished:: ; $cc07
 	ds $1
 	ds $6
-	
+
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers

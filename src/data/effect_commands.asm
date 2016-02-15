@@ -19,42 +19,42 @@ EkansSpitPoisonEffectCommands:
 	dbw $03, $46F8
 	dbw $09, $46F0
 	db  $00
-	
+
 EkansWrapEffectCommands:
 	dbw $03, $4011
 	db  $00
-	
+
 ArbokTerrorStrikeEffectCommands:
 	dbw $04, $4726
 	dbw $05, $470A
 	dbw $0A, $470A
 	db  $00
-	
+
 ArbokPoisonFangEffectCommands:
 	dbw $03, $4007
 	dbw $09, $4730
 	db  $00
-	
+
 WeepinbellPoisonPowderEffectCommands:
 	dbw $03, $4000
 	dbw $09, $4738
 	db  $00
-	
+
 VictreebelLureEffectCommands:
 	dbw $01, $4740
 	dbw $04, $476A
 	dbw $05, $474B
 	dbw $08, $4764
 	db  $00
-	
+
 VictreebelAcidEffectCommands:
 	dbw $03, $477E
 	db  $00
-	
+
 PinsirIronGripEffectCommands:
 	dbw $03, $4011
 	db  $00
-	
+
 CaterpieStringShotEffectCommands:
 	dbw $03, $4011
 	db  $00

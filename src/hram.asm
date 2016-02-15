@@ -49,14 +49,14 @@ hWhoseTurn:: ; ff97
 
 hffaf:: ; ffaf
 	ds 1
-	
+
 	ds 1
 
 hCurrentMenuItem::
 	ds 1
-	
+
 	ds 3
-	
+
 
 hffb5:: ; ffb5
 	ds 1
