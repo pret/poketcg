@@ -74,7 +74,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, h
 	ld [$cbe6], a
 	xor a
-	ld [wBattleMenuSelection], a
+	ld [wCurrentDuelMenuItem], a
 	call $420b
 	ld a, [$cc18]
 	ld [$cc08], a
@@ -87,19 +87,19 @@ StartDuel: ; 409f (1:409f)
 ; the loop returns here after every turn switch
 .mainDuelLoop
 	xor a
-	ld [wBattleMenuSelection], a
+	ld [wCurrentDuelMenuItem], a
 	call $35e6
 	call $54c8
 	call Func_4225
 	call $0f58
-	ld a, [wBattleFinished]
+	ld a, [wDuelFinished]
 	or a
 	jr nz, .asm_4136
 	call $35fa
 	call $6baf
 	call $3b31
 	call $0f58
-	ld a, [wBattleFinished]
+	ld a, [wDuelFinished]
 	or a
 	jr nz, .asm_4136
 	ld hl, $cc06
@@ -140,7 +140,7 @@ StartDuel: ; 409f (1:409f)
 	pop af
 	ldh [hWhoseTurn], a
 	call $3b21
-	ld a, [wBattleFinished]
+	ld a, [wDuelFinished]
 	cp $1
 	jr z, .activeDuelistWonBattle
 	cp $2
@@ -187,7 +187,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_378a
 	or a
 	jr nz, .asm_41a7
-	ld a, [wBattleFinished]
+	ld a, [wDuelFinished]
 	cp $3
 	jr z, .tiedBattle
 	call Func_39fc
@@ -249,7 +249,7 @@ Func_4225: ; 4225 (1:4225)
 	call $10cf
 	jr nc, .asm_4248
 	ld a, $02
-	ld [wBattleFinished], a
+	ld [wDuelFinished], a
 	ret
 
 .asm_4248
@@ -295,10 +295,10 @@ Func_4295:
 	ld hl, $54e9
 	call Func_2c08
 	call $669D
-	ld a, [wBattleFinished]
+	ld a, [wDuelFinished]
 	or a
 	ret nz
-	ld a, [wBattleMenuSelection]
+	ld a, [wCurrentDuelMenuItem]
 	call $2710
 
 Func_42ac:
@@ -330,7 +330,7 @@ Func_42ac:
 	jr nz, Func_42ac
 	call $271a
 	ld a, e
-	ld [wBattleMenuSelection], a
+	ld [wCurrentDuelMenuItem], a
 	jr nc, Func_42ac
 	ldh a, [hCurrentMenuItem]
 	ld hl, BattleMenuFunctionTable
@@ -493,7 +493,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 
 .asm_470c
 	xor a
-	ld [wBattleSubMenuSelected], a
+	ld [wSelectedDuelSubMenuItem], a
 
 Func_4710: ; 4710 (1:4710)
 	call $4823
@@ -505,7 +505,7 @@ Func_4710: ; 4710 (1:4710)
 
 Func_471f: ; 471f (1:471f)
 	push af
-	ld a, [wBattleSubMenuSelected]
+	ld a, [wSelectedDuelSubMenuItem]
 	ld hl, $47e4
 	call InitializeCursorParameters
 	pop af
@@ -524,7 +524,7 @@ Func_471f: ; 471f (1:471f)
 	jr nc, .asm_4736
 	cp a, $ff
 	jp z, Func_4295
-	ld [wBattleSubMenuSelected], a
+	ld [wSelectedDuelSubMenuItem], a
 	call $488f
 	jr nc, Func_4759
 	ld hl, $00c0
