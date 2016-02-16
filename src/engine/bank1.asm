@@ -94,14 +94,14 @@ StartDuel: ; 409f (1:409f)
 	call $0f58
 	ld a, [wDuelFinished]
 	or a
-	jr nz, .asm_4136
+	jr nz, .duelIsOver
 	call $35fa
 	call $6baf
 	call $3b31
 	call $0f58
 	ld a, [wDuelFinished]
 	or a
-	jr nz, .asm_4136
+	jr nz, .duelIsOver
 	ld hl, $cc06
 	inc [hl]
 	ld a, [$cc09]
@@ -123,7 +123,7 @@ StartDuel: ; 409f (1:409f)
 	ld [$d0c3], a
 	ret
 
-.asm_4136
+.duelIsOver
 	call $5990
 	call Func_04a2
 	ld a, $3
@@ -141,9 +141,9 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	call $3b21
 	ld a, [wDuelFinished]
-	cp $1
+	cp DUEL_WON
 	jr z, .activeDuelistWonBattle
-	cp $2
+	cp DUEL_LOST
 	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, $1a
@@ -188,7 +188,7 @@ StartDuel: ; 409f (1:409f)
 	or a
 	jr nz, .asm_41a7
 	ld a, [wDuelFinished]
-	cp $3
+	cp DUEL_DRAW
 	jr z, .tiedBattle
 	call Func_39fc
 	call WaitForWideTextBoxInput
@@ -235,7 +235,7 @@ StartDuel: ; 409f (1:409f)
 INCBIN "baserom.gbc",$420b,$4225 - $420b
 
 Func_4225: ; 4225 (1:4225)
-	ld a, DUELVAR_DUELIST_TYPE
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [$cc0d], a
 	ld a, [$cc06]
@@ -248,7 +248,7 @@ Func_4225: ; 4225 (1:4225)
 	call $4933
 	call $10cf
 	jr nc, .asm_4248
-	ld a, $02
+	ld a, DUEL_LOST
 	ld [wDuelFinished], a
 	ret
 
@@ -382,11 +382,7 @@ Func_4339: ; 4339 (1:4339)
 Func_4342: ; 4342 (1:4342)
 	jp $5550
 
-
 INCBIN "baserom.gbc",$4345, $438e - $4345
-
-
-
 
 OpenPokemonPowerMenu: ; 438e (1:438e)
 	call $6431
@@ -404,7 +400,7 @@ PlayerEndTurn: ; 439a (1:439a)
 	ret
 
 PlayerRetreat: ; 43ab (1:43ab)
-	ld a, DUELVAR_ARENA_CARD_STATUS
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and a,$0f
 	cp a, $01
@@ -462,7 +458,7 @@ Func_441f: ; 441f (1:441f)
 	jp Func_4295
 
 OpenHandMenu: ; 4425 (1:4425)
-	ld a, DUELVAR_NUMBER_OF_CARDS_IN_HAND
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
@@ -512,7 +508,7 @@ Func_471f: ; 471f (1:471f)
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, DUELVAR_ARENA_CARD
+	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
 	call $1376
 .asm_4736
@@ -599,7 +595,7 @@ INCBIN "baserom.gbc",$67b2,$7107 - $67b2
 InitializeDuelVariables: ; 7107 (1:7107)
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, DUELVAR_DUELIST_TYPE
+	ld l, DUELVARS_DUELIST_TYPE
 	ld a, [hl]
 	push hl
 	push af
@@ -612,8 +608,8 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	pop af
 	pop hl
 	ld [hl], a
-	ld bc, DECK_SIZE ; lb bc, DUELVAR_CARD_LOCATIONS, DECK_SIZE
-	ld l, DUELVAR_DECK_CARDS
+	ld bc, DECK_SIZE ; lb bc, DUELVARS_CARD_LOCATIONS, DECK_SIZE
+	ld l, DUELVARS_DECK_CARDS
 .initDuelVariablesLoop
 ; zero card locations and cards in hand, and init order of cards in deck
 	push hl
@@ -625,7 +621,7 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	inc b
 	dec c
 	jr nz, .initDuelVariablesLoop
-	ld l, DUELVAR_ARENA_CARD
+	ld l, DUELVARS_ARENA_CARD
 	ld c, 1 + BENCH_SIZE + 1
 .initPlayArea
 ; initialize to $ff card in arena as well as cards in bench (plus a terminator?)

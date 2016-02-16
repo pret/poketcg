@@ -64,7 +64,7 @@ wPlayerBench5CardHP:: ; c2cd
 	ds $1
 	ds $1e
 
-; Each of the lower four bits represent a prize
+; Each bit represents a prize (1 = not taken ; 0 = taken)
 wPlayerPrizes:: ; c2ec
 	ds $1
 
@@ -319,6 +319,7 @@ wSelectedDuelSubMenuScrollOffset:: ; $cbd0
 ; 0 = no one has won duel yet
 ; 1 = player whose turn it is has won the duel
 ; 2 = player whose turn it is has lost the duel
+; 3 = duel ended in a draw
 wDuelFinished:: ; $cc07
 	ds $1
 	ds $6
