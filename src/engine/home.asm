@@ -4451,7 +4451,23 @@ Func_29f5: ; 29f5 (0:29f5)
 	ret
 ; 0x29fa
 
-INCBIN "baserom.gbc",$29fa,$2a1a - $29fa
+INCBIN "baserom.gbc",$29fa,$2a00 - $29fa
+
+Func_2a00: ; 2a00 (0:2a00)
+	call DoFrame
+	call HandleTextBoxInput
+	ld a, [$ff91]
+	bit 0, a
+	jr nz, .asm_2a15
+	bit 1, a
+	jr z, Func_2a00
+	call EraseCursor
+	scf
+	ret
+.asm_2a15
+	call EraseCursor
+	or a
+	ret
 
 Func_2a1a: ; 2a1a (0:2a1a)
 	xor a
@@ -4772,7 +4788,58 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-INCBIN "baserom.gbc",$2c37,$2cc8 - $2c37
+INCBIN "baserom.gbc",$2c37,$2c73 - $2c37
+
+Func_2c73: ; 2c73 (0:2c73)
+	xor a
+	call Func_2c84
+
+Func_2c77: ; 2c77 (0:2c77)
+	ld bc, $2f1d
+	ld de, $1211
+	call Func_2a1a
+	call Func_2a00
+	ret
+
+Func_2c84: ; 2c84 (0:2c84)
+	ld [$ce4b], a
+	ld a, [$ff80]
+	push af
+	call ReadTextOffset
+	call Func_2d15
+	call Func_2cc8
+.asm_2c93
+	ld a, [$ce47]
+	ld c, a
+	inc c
+	jr .asm_2cac
+.asm_2c9a
+	ld a, [$ce47]
+	cp $2
+	jr nc, .asm_2ca7
+	ld a, [$ff90]
+	and $2
+	jr nz, .asm_2caf
+.asm_2ca7
+	push bc
+	call DoFrame
+	pop bc
+.asm_2cac
+	dec c
+	jr nz, .asm_2c9a
+.asm_2caf
+	call Func_2d43
+	jr c, .asm_2cc3
+	ld a, [$cd09]
+	cp $3
+	jr c, .asm_2c93
+	call Func_2c77
+	call Func_2d15
+	jr .asm_2c93
+.asm_2cc3
+	pop af
+	call BankswitchHome
+	ret
 
 Func_2cc8: ; 2cc8 (0:2cc8)
 	xor a
@@ -4826,9 +4893,31 @@ Func_2d06: ; 2d06 (0:2d06)
 	ld hl, $ce2b
 	add hl, de
 	ret
-; 0x2d15
 
-INCBIN "baserom.gbc",$2d15,$2d43 - $2d15
+Func_2d15: ; 2d15 (0:2d15)
+	push hl
+	ld de, $000c
+	ld bc, $1406
+	call AdjustCoordinatesForWindow
+	ld a, [$ce4b]
+	or a
+	jr nz, .asm_2d2d
+	call DrawRegularTextBox
+	call EnableLCD
+	jr .asm_2d36
+.asm_2d2d
+	ld hl, $ce4c
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call DrawLabeledTextBox
+.asm_2d36
+	ld de, $010e
+	call AdjustCoordinatesForWindow
+	ld a, $13
+	call Func_22a6
+	pop hl
+	ret
 
 Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cf3
@@ -6824,11 +6913,20 @@ Func_3c5a: ; 3c5a (0:3c5a)
 	ret
 ; 0x3c83
 
-INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
+INCBIN "baserom.gbc",$3c83,$3c96 - $3c83
+
+Func_3c96: ; 3c96 (0:3c96)
+	call DoFrameIfLCDEnabled
+	call Func_378a
+	or a
+	jr nz, Func_3c96
+	ret
 
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [$d5d7], a
+
+Func_3ca4: ; 3ca4 (0:3ca4)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)

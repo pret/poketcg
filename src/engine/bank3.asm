@@ -1035,7 +1035,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call $4915
 	call DoFrameIfLCDEnabled
 	ld hl, $0352
-	call $2c73
+	call Func_2c73
 	call $484e
 .asm_c801
 	ld a, $1
