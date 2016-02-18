@@ -157,7 +157,18 @@ wOpponentDeck:: ; c480
 
 wBufOAM:: ; ca00
 	ds $a0
-	ds $13
+
+wcaa0:: ; caa0
+	ds $10
+
+wcab0:: ; cab0
+	ds $1
+
+wcab1:: ; cab1
+	ds $1
+
+wcab2:: ; cab2
+	ds $1
 
 ; initial value of the A register--used to tell the console when reset
 wInitialA:: ; cab3
@@ -167,6 +178,8 @@ wInitialA:: ; cab3
 ; use constants CONSOLE_DMG, CONSOLE_SGB and CONSOLE_CGB for checks
 wConsole:: ; cab4
 	ds $1
+
+wcab5:: ; cab5
 	ds $1
 
 wTileMapFill:: ; cab6
@@ -201,7 +214,10 @@ wFlushPaletteFlags:: ; cabf
 
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
-	ds $2
+	ds $1
+
+wcac2:: ; cac2
+	ds $1
 
 wCounterCtr:: ; cac3
 	ds $1
@@ -234,8 +250,20 @@ wVBlankFunctionTrampoline:: ; cad0
 	ds $3
 
 wDoFrameFunction:: ; cad3
-	ds $3
-	ds $1a
+	ds $1
+
+wcad4:: ; cad4
+	ds $1
+
+wcad5:: ; cad5
+	ds $1
+	ds $8
+
+wcade:: ; cade
+	ds $4
+
+wcae2:: ; cae2
+	ds $e
 
 wBufPalette:: ; caf0 - cab7f
 	ds $80
@@ -267,6 +295,8 @@ wSerialSendBufToggle:: ; cb7e
 
 wSerialSendBufIndex:: ; cb7f
 	ds $1
+
+wcb80:: ; cb80
 	ds $1
 
 wSerialSendBuf:: ; cb81
@@ -277,6 +307,8 @@ wSerialLastReadCA:: ; cba1
 
 wSerialRecvCounter:: ; cba2
 	ds $1
+
+wcba3:: ; cba3
 	ds $1
 
 wSerialRecvIndex:: ; cba4
@@ -314,7 +346,10 @@ wSelectedDuelSubMenuItem:: ; $cbcf
 
 wSelectedDuelSubMenuScrollOffset:: ; $cbd0
 	ds $1
-	ds $36
+	ds $35
+
+wcc06:: ; cc06
+	ds $1
 
 ; 0 = no one has won duel yet
 ; 1 = player whose turn it is has won the duel
@@ -322,14 +357,29 @@ wSelectedDuelSubMenuScrollOffset:: ; $cbd0
 ; 3 = duel ended in a draw
 wDuelFinished:: ; $cc07
 	ds $1
-	ds $6
+	ds $1
+
+wcc09:: ; cc09
+	ds $1
+
+wcc0a:: ; cc0a
+	ds $4
 
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
 wOpponentDeckId:: ; cc0e
 	ds $1
-	ds $4
+	ds $1
+
+wcc10:: ; cc10
+	ds $1
+
+wcc11:: ; cc11
+	ds $1
+
+wcc12:: ; cc12
+	ds $1
 
 wIsPracticeDuel:: ; cc13
 	ds $1
@@ -348,11 +398,74 @@ wCardBuffer1:: ; cc24
 wCardBuffer2:: ; cc65
 	ds CARD_DATA_LENGTH
 
-	ds $c
+	ds $4
+
+wccaa:: ; ccaa
+	ds $1
+
+wccab:: ; ccab
+	ds $5
+
+wccb0:: ; ccb0
+	ds $1
+
+wccb1:: ; ccb1
+	ds $1
 
 wCurrentMoveOrCardEffect:: ; ccb2
 	ds $1
-	ds $40
+	ds $5
+
+wccb8:: ; ccb8
+	ds $7
+
+wccbf:: ; ccbf
+	ds $2
+
+wccc1:: ; ccc1
+	ds $1
+
+wccc2:: ; ccc2
+	ds $1
+
+wccc3:: ; ccc3
+	ds $1
+
+wccc4:: ; ccc4
+	ds $2
+
+wccc6:: ; ccc6
+	ds $1
+
+wccc7:: ; ccc7
+	ds $2
+
+wccc9:: ; ccc9
+	ds $4
+
+wcccd:: ; cccd
+	ds $19
+
+wcce6:: ; cce6
+	ds $5
+
+wcceb:: ; cceb
+	ds $1
+
+wccec:: ; ccec
+	ds $1
+
+wcced:: ; cced
+	ds $2
+
+wccef:: ; ccef
+	ds $1
+
+wccf0:: ; ccf0
+	ds $1
+
+wccf1:: ; ccf1
+	ds $2
 
 ;--- Overworld --------------------------------------------
 
@@ -361,7 +474,31 @@ wCurrentMoveOrCardEffect:: ; ccb2
 ; For example the value 4 seems to be used a lot during duels.
 wFrameType:: ; ccf3
 	ds $1
-	ds $19
+	ds $10
+
+wcd04:: ; cd04
+	ds $1
+
+wcd05:: ; cd05
+	ds $1
+
+wcd06:: ; cd06
+	ds $1
+
+wcd07:: ; cd07
+	ds $1
+
+wcd08:: ; cd08
+	ds $1
+
+wcd09:: ; cd09
+	ds $1
+
+wcd0a:: ; cd0a
+	ds $1
+
+wcd0b:: ; cd0b
+	ds $2
 
 wUppercaseFlag:: ; cd0d
 	ds $1
@@ -391,25 +528,136 @@ wCursorTileNumber:: ; cd15
 
 wTileBehindCursor:: ; cd16
 	ds $1
-	ds $10b
+	ds $81
+
+wcd98:: ; cd98
+	ds $1
+
+wcd99:: ; cd99
+	ds $1
+
+wcd9a:: ; cd9a
+	ds $88
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
 wce22:: ; ce22
+	ds $1d
+
+wce3f:: ; cd3f
+	ds $1
+
+wce40:: ; ce40
+	ds $3
+
+wce43:: ; ce43
+	ds $1
+
+wce44:: ; ce44
+	ds $3
+
+wce47:: ; ce47
+	ds $1
+
+wce48:: ; ce48
+	ds $1
+
+wce49:: ; ce49
+	ds $1
+
+wce4a:: ; ce4a
+	ds $1
+
+wce4b:: ; ce4b
+	ds $5
+
+wce50:: ; ce50
+	ds $1
+
+wce51:: ; ce51
+	ds $8
+
+wce59:: ; ce59
+	ds $7
+
+wce60:: ; ce60
+	ds $3
+
+wce63:: ; ce63
+	ds $9
+
+wce6c:: ; ce6c
+	ds $1
+
+wce6d:: ; ce6d
+	ds $1
+
+wce6e:: ; ce6e
+	ds $1
+
+wce6f:: ; ce6f
+	ds $d
+
+wce7c:: ; ce7c
 
 ;----------------------------------------------------------
 ;--- Bank 1: $Dxxx ----------------------------------------
 ;----------------------------------------------------------
 
 SECTION "WRAM1", WRAMX, BANK[1]
-	ds $113
+	ds $b5
+
+wd0b5:: ; d0b5
+	ds $c
+
+wd0c1:: ; d0c1
+	ds $1
+
+wd0c2:: ; d0c2
+	ds $1
+
+wd0c3:: ; d0c3
+	ds $3
+
+wd0c6:: ; d0c6
+	ds $1
+
+wd0c7:: ; d0c7
+	ds $1
+
+wd0c8:: ; d0c8
+	ds $1
+
+wd0c9:: ; d0c9
+	ds $1
+
+wd0ca:: ; d0ca
+	ds $1
+
+wd0cb:: ; d0cb
+	ds $43
+
+wd10e:: ; d10e
+	ds $3
+
+wd111:: ; d111
+	ds $1
+
+wd112:: ; d112
+	ds $1
 
 ;--- Music ------------------------------------------------
 
 wMatchStartTheme:: ; d113
 	ds $1
-	ds $21b
+	ds $1d
+
+wd131:: ; d131
+	ds $1fd
+
+wd32e:: ; d32e
+	ds $1
 
 wCurMap:: ; d32f
 	ds $1
@@ -419,7 +667,55 @@ wPlayerXCoord:: ; d330
 
 wPlayerYCoord:: ; d331
 	ds $1
-	ds $a52
+	ds $2
+
+wd334:: ; d334
+	ds $76
+
+wd3aa:: ; d3aa
+	ds $1
+
+wd3ab:: ; d3ab
+	ds $d
+
+wd3b8:: ; d3b8
+	ds $6a
+
+wd422:: ; d422
+	ds $8
+
+wd42a:: ; d42a
+	ds $82
+
+wd4ac:: ; d4ac
+	ds $12
+
+wd4be:: ; d4be
+	ds $6
+
+wd4c4:: ; d4c4
+	ds $1
+
+wd4c5:: ; d4c5
+	ds $1
+
+wd4c6:: ; d4c6
+	ds $4
+
+wd4ca:: ; d4ca
+	ds $5
+
+wd4cf:: ; d4cf
+	ds $108
+
+wd5d7:: ; d5d7
+	ds $44
+
+wd61b:: ; d61b
+	ds $3
+
+wd61e:: ; d61e
+	ds $766
 
 wMusicDC:: ; dd84
 	ds $2
