@@ -508,7 +508,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, $bb
+	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
 	call $1376
 
@@ -544,7 +544,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld a, $07
 	call $51e7
 	jp c, Func_4268
-	call $1730
+	call Func_1730
 	jp c, Func_426d
 	ret
 
@@ -562,7 +562,7 @@ INCBIN "baserom.gbc",$478b, $4823 - $478b
 
 Func_4823: ; 4823 (1:4823)
 	call DrawWideTextBox
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [$ff98], a
 	call $1376
