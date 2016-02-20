@@ -332,9 +332,9 @@ SetupLCD: ; 030b (0:030b)
 	ld [rSCX], a
 	ld [rWY], a
 	ld [rWX], a
-	ld [$cab0], a
-	ld [$cab1], a
-	ld [$cab2], a
+	ld [wcab0], a
+	ld [wcab1], a
+	ld [wcab2], a
 	ldh [hSCX], a
 	ldh [hSCY], a
 	ldh [hWX], a
@@ -615,7 +615,7 @@ Func_04a2: ; 04a2 (0:04a2)
 	call DisableLCD
 	call FillTileMap
 	xor a
-	ld [$cac2], a
+	ld [wcac2], a
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -717,7 +717,7 @@ DoAFrames: ; 0536 (0:0536)
 	ret
 
 ; updates background, sprites and other game variables, halts until vblank, and reads user input
-; if $cad5 is not 0, the game can be paused (and resumed) by pressing the select button
+; if wcad5 is not 0, the game can be paused (and resumed) by pressing the select button
 DoFrame: ; 053f (0:053f)
 	push af
 	push hl
@@ -728,7 +728,7 @@ DoFrame: ; 053f (0:053f)
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ld a, [$cad5]
+	ld a, [wcad5]
 	or a
 	jr z, .done
 	ldh a, [hButtonsPressed]
@@ -1362,7 +1362,7 @@ Func_08ef: ; 08ef (0:08ef)
 	ld [bc], a
 	ret
 .asm_92a
-	ld [$cade], a
+	ld [wcade], a
 	ld hl, $cada
 	bit 0, [hl]
 	jr nz, .asm_94a
@@ -1394,7 +1394,7 @@ INCBIN "baserom.gbc",$0950,$099c - $0950
 
 Func_099c: ; 099c (0:099c)
 	xor a
-	ld [$cab5], a
+	ld [wcab5], a
 	ld hl, $ca00
 	ld c, $28
 	xor a
@@ -1770,15 +1770,15 @@ SerialHandler: ; 0d26 (0:0d26)
 	push hl
 	push de
 	push bc
-	ld a, [$ce63]        ;
+	ld a, [wce63]        ;
 	or a                 ;
-	jr z, .asm_d35       ; if [$ce63] nonzero:
+	jr z, .asm_d35       ; if [wce63] nonzero:
 	call Func_3189       ; ?
 	jr .done             ; return
 .asm_d35
 	ld a, [wSerialOp]    ;
 	or a                 ;
-	jr z, .asm_d55       ; skip ahead if [$cb74] zero
+	jr z, .asm_d55       ; skip ahead if [wcb74] zero
 	; send/receive a byte
 	ld a, [rSB]
 	call SerialHandleRecv
@@ -1793,7 +1793,7 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld [rSB], a          ; prepare sending byte (from Func_0dc8?)
 	ld a, [wSerialOp]
 	cp $29
-	jr z, .done          ; if [$cb74] != $29, use external clock
+	jr z, .done          ; if [wcb74] != $29, use external clock
 	jr .asm_d6a          ; and prepare for next byte.  either way, return
 .asm_d55
 	ld a, $1
@@ -1803,7 +1803,7 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld a, $ac
 	ld [rSB], a
 	ld a, [wSerialRecvBuf]
-	cp $12               ; if [$cba5] != $12, use external clock
+	cp $12               ; if [wSerialRecvBuf] != $12, use external clock
 	jr z, .done          ; and prepare for next byte.  either way, return
 .asm_d6a
 	ld a, $80            ;
@@ -1851,7 +1851,7 @@ SerialHandleRecv: ; 0d77 (0:0d77)
 	push af
 	ld a, [wSerialRecvIndex]
 	ld e, a
-	ld a, [$cba3]
+	ld a, [wcba3]
 	dec a
 	and $1f
 	cp e
@@ -1866,7 +1866,7 @@ SerialHandleRecv: ; 0d77 (0:0d77)
 	ld a, e
 	inc a
 	and $1f
-	ld [$cba4], a
+	ld [wSerialRecvIndex], a
 	; increment received bytes counter & clear flags
 	ld hl, wSerialRecvCounter
 	inc [hl]
@@ -1937,7 +1937,7 @@ Func_0e0a: ; 0e0a (0:0e0a)
 	push bc
 	push af
 .asm_e0e
-	ld a, [$cb80]
+	ld a, [wcb80]
 	ld e, a
 	ld a, [wSerialSendBufIndex]
 	dec a
@@ -1948,7 +1948,7 @@ Func_0e0a: ; 0e0a (0:0e0a)
 	ld a, e
 	inc a
 	and $1f
-	ld [$cb80], a
+	ld [wcb80], a
 	ld hl, wSerialSendBuf
 	add hl, de
 	pop af
@@ -1983,7 +1983,7 @@ Func_0e39: ; 0e39 (0:0e39)
 .asm_e49
 	push de
 	dec [hl]
-	ld a, [$cba3]
+	ld a, [wcba3]
 	ld e, a
 	ld d, $0
 	ld hl, wSerialRecvBuf
@@ -1993,7 +1993,7 @@ Func_0e39: ; 0e39 (0:0e39)
 	ld a, e
 	inc a
 	and $1f
-	ld [$cba3], a
+	ld [wcba3], a
 	pop af
 	pop de
 	pop hl
@@ -2070,9 +2070,142 @@ ClearSerialData: ; 0eb1 (0:0eb1)
 	or b
 	jr nz, .loop
 	ret
-; 0xebf
 
-INCBIN "baserom.gbc",$0ebf,$1072 - $0ebf
+Func_0ebf: ; 0ebf (0:0ebf)
+	push bc
+.asm_ec0
+	ld a, [hli]
+	call Func_0e0a
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_ed2
+	dec bc
+	ld a, c
+	or b
+	jr nz, .asm_ec0
+	pop bc
+	or a
+	ret
+.asm_ed2
+	pop bc
+	scf
+	ret
+; 0xed5
+
+INCBIN "baserom.gbc",$0ed5,$0f35 - $0ed5
+
+Func_0f35: ; 0f35 (0:0f35)
+	ld a, [wSerialFlags]
+	ld l, a
+	ld h, $0
+	call Func_2ec4
+	ld hl, $0055
+	call DrawWideTextBox_WaitForInput
+	ld a, $ff
+	ld [wd0c3], a
+	ld hl, $cbe5
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld sp, hl
+	xor a
+	call PlaySong
+	call ResetSerial
+	ret
+
+Func_0f58: ; 0f58 (0:0f58)
+	ld a, [wcc09]
+	cp $1
+	jr z, .asm_f60
+	ret
+.asm_f60
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_f70
+	ld hl, $cbe2
+	ld de, wRNG1
+	jr .asm_f76
+.asm_f70
+	ld hl, wRNG1
+	ld de, $cbe2
+.asm_f76
+	ld c, $3
+	call Func_0e63
+	jp c, Func_0f35
+	ret
+
+Func_0f7f: ; 0f7f (0:0f7f)
+	push hl
+	push bc
+	ld [$ff9e], a
+	ld a, $f1
+	call GetOpposingTurnDuelistVariable
+	cp $1
+	jr nz, .asm_f98
+	ld hl, $ff9e
+	ld bc, $000a
+	call Func_0ebf
+	call Func_0f58
+.asm_f98
+	pop bc
+	pop hl
+	ret
+; 0xf9b
+
+INCBIN "baserom.gbc",$0f9b,$100b - $0f9b
+
+Func_100b: ; 100b (0:100b)
+	ld a, $2
+	call BankswitchRAM
+	call $669d
+	xor a
+	call BankswitchRAM
+	call EnableExtRAM
+	ld hl, $a008
+	ld a, [hl]
+	inc [hl]
+	call DisableExtRAM
+	and $3
+	add $28
+	ld l, $0
+	ld h, a
+	add hl, hl
+	add hl, hl
+	ld a, $3
+	call BankswitchRAM
+	push hl
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call Func_1324
+	ld a, e
+	ld [wccc3], a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call Func_1324
+	ld a, e
+	ld [wccc4], a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	pop hl
+	push hl
+	call EnableExtRAM
+	ld a, [wcc06]
+	ld [hli], a
+	ld a, [wccc4]
+	ld [hli], a
+	ld a, [wccc3]
+	ld [hli], a
+	pop hl
+	ld de, $0010
+	add hl, de
+	ld e, l
+	ld d, h
+	call DisableExtRAM
+	bank1call $66a4
+	xor a
+	call BankswitchRAM
+	ret
 
 ; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck
 CopyDeckData: ; 1072 (0:1072)
@@ -2131,22 +2264,21 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld h, a
 	ld d, a
 	ld a, DECK_SIZE
-	ld l, wPlayerNumberOfCardsNotInDeck & $ff
+	ld l, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	sub [hl]
 	ld b, a
-	ld a, wPlayerDeckCards & $ff
+	ld a, DUELVARS_DECK_CARDS
 	add [hl]
 	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array of the first (top) card in the deck
 	ld a, b ; a = number of cards in the deck
 	call ShuffleCards
 	ret
-; 0x10cf
 
 ; draw a card from the deck, saving its location as $40
 ; returns c if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
-	ld a, wPlayerNumberOfCardsNotInDeck & $ff
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
 	jr nc, .emptyDeck
@@ -2154,7 +2286,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	inc a
 	ld [hl], a
 	; point to top card in the deck
-	add (wPlayerDeckCards - 1) & $ff
+	add DUELVARS_DECK_CARDS - 1
 	ld l, a
 	; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld a, [hl]
@@ -2186,10 +2318,10 @@ AddCardToHand: ; 1123 (0:1123)
 	; write $1 (hand) into the location of this card
 	ld [hl], $1
 	; increment number of cards in hand
-	ld l, wPlayerNumberOfCardsInHand & $ff
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	inc [hl]
 	; add card to hand
-	ld a, (wPlayerHand - 1) & $ff
+	ld a, DUELVARS_HAND - 1
 	add [hl]
 	ld l, a
 	ld [hl], e
@@ -2241,7 +2373,94 @@ ShuffleCards: ; 127f (0:127f)
 	ret
 ; 0x12a3
 
-INCBIN "baserom.gbc",$12a3,$160b - $12a3
+INCBIN "baserom.gbc",$12a3,$1324 - $12a3
+
+Func_1324: ; 1324 (0:1324)
+	push af
+	push hl
+	call Func_1362
+	ld e, a
+	ld d, $0
+	pop hl
+	pop af
+	ret
+; 0x132f
+
+INCBIN "baserom.gbc",$132f,$1362 - $132f
+
+Func_1362: ; 1362 (0:1362)
+	push de
+	ld e, a
+	ld d, $0
+	ld hl, wPlayerDeck
+	ld a, [$ff97]
+	cp $c2
+	jr z, .asm_1372
+	ld hl, wOpponentDeck
+.asm_1372
+	add hl, de
+	ld a, [hl]
+	pop de
+	ret
+
+Func_1376: ; 1376 (0:1376)
+	push hl
+	push de
+	push bc
+	push af
+	call Func_1324
+	call LoadCardDataToRAM
+	pop af
+	ld hl, wCardBuffer1
+	bank1call $6d84
+	ld a, e
+	pop bc
+	pop de
+	pop hl
+	ret
+
+Func_138c: ; 138c (0:138c)
+	push hl
+	push de
+	push bc
+	push af
+	call Func_1324
+	call Func_2f0a
+	pop af
+	ld hl, wCardBuffer2
+	bank1call $6d84
+	ld a, e
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x13a2
+
+INCBIN "baserom.gbc",$13a2,$15ef - $13a2
+
+Func_15ef: ; 15ef (0:15ef)
+	push bc
+	ld l, $0
+	ld c, $0
+.asm_15f4
+	ld a, [hl]
+	cp b
+	jr nz, .asm_1602
+	ld a, l
+	push hl
+	call Func_1362
+	cp e
+	pop hl
+	jr nz, .asm_1602
+	inc c
+.asm_1602
+	inc l
+	ld a, l
+	cp $3c
+	jr c, .asm_15f4
+	ld a, c
+	pop bc
+	ret
 
 ; returns [[hWhoseTurn] << 8 + a] in a
 ; i.e. variable a of the player whose turn it is
@@ -2266,7 +2485,616 @@ GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ret
 ; 0x161e
 
-INCBIN "baserom.gbc",$161e,$1c72 - $161e
+INCBIN "baserom.gbc",$161e,$16c0 - $161e
+
+Func_16c0: ; 16c0 (0:16c0)
+	ld a, e
+	ld [wccc6], a
+	ld a, d
+	ld [$ff9f], a
+	call Func_1376
+	ld a, [$cc2b]
+	ld [wccc2], a
+	ld hl, $cc30
+	dec e
+	jr nz, .asm_16d9
+	ld hl, $cc43
+.asm_16d9
+	ld de, $cca6
+	ld c, $13
+.asm_16de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .asm_16de
+	ld a, [wccb0]
+	ld hl, $ccb9
+	ld [hli], a
+	xor a
+	ld [hl], a
+	ld [wccc7], a
+	ld hl, $ccbf
+	ld [hli], a
+	ld [hl], a
+	ret
+
+Func_16f6: ; 16f6 (0:16f6)
+	ld a, $bb
+	call GetTurnDuelistVariable
+	ld [$ff9f], a
+	call Func_1324
+	ld a, e
+	ld [wccc3], a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call Func_1324
+	ld a, e
+	ld [wccc4], a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	xor a
+	ld [wccec], a
+	ld [wcccd], a
+	ld [wcced], a
+	ld [wcce6], a
+	ld [wccef], a
+	ld [wccf0], a
+	ld [wccf1], a
+	bank1call $7189
+	ret
+
+Func_1730: ; 1730 (0:1730)
+	ld a, [wccc6]
+	ld [wcc10], a
+	ld a, [$ff9f]
+	ld [wcc11], a
+	ld a, [wccc2]
+	ld [wcc12], a
+	ld a, [wccb1]
+	cp $4
+	jp z, Func_184b
+	call Func_16f6
+	ld a, $1
+	call TryExecuteEffectCommandFunction
+	jp c, Func_181e
+	call Func_3414
+	jr c, .asm_1766
+	ld a, $2
+	call TryExecuteEffectCommandFunction
+	jp c, Func_1821
+	call Func_1874
+	jr .asm_1777
+.asm_1766
+	call Func_1874
+	call Func_3400
+	jp c, Func_1823
+	ld a, $2
+	call TryExecuteEffectCommandFunction
+	jp c, Func_1821
+.asm_1777
+	ld a, $9
+	call Func_0f7f
+	ld a, $6
+	call TryExecuteEffectCommandFunction
+	call Func_18d7
+	jp c, Func_1828
+	call Func_1b8d
+	call WaitForWideTextBoxInput
+	call Func_0f58
+	ld a, $5
+	call TryExecuteEffectCommandFunction
+	ld a, $a
+	call Func_0f7f
+	call $7415
+	ld a, [wccb1]
+	and $80
+	jr nz, .asm_17ad
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	call Func_3432
+	call GetOpposingTurnDuelistVariable_SwapTurn
+.asm_17ad
+	xor a
+	ld [$ff9d], a
+	ld a, $3
+	call TryExecuteEffectCommandFunction
+	call Func_1994
+	call Func_189d
+	ld hl, $ccbf
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld b, $0
+	ld a, [wccc1]
+	ld c, a
+	ld a, $c8
+	call GetOpposingTurnDuelistVariable
+	push de
+	push hl
+	call $7494
+	call $741a
+	call $7484
+	pop hl
+	pop de
+	call Func_1a96
+	ld a, [wcac2]
+	cp $1
+	jr nz, .asm_17e8
+	push hl
+	bank1call $503a
+	pop hl
+.asm_17e8
+	call Func_1ad0
+	jr Func_17fb
+
+Func_17ed: ; 17ed (0:17ed)
+	call DrawWideTextBox_WaitForInput
+	xor a
+	ld hl, $ccb9
+	ld [hli], a
+	ld [hl], a
+	ld a, $1
+	ld [wccc7], a
+Func_17fb: ; 17fb (0:17fb)
+	ld a, [wccc4]
+	push af
+	ld a, $4
+	call TryExecuteEffectCommandFunction
+	pop af
+	ld [wccc4], a
+	call Func_367b
+	bank1call $6df1
+	call Func_1bb4
+	bank1call $7195
+	call $6e49
+	or a
+	ret
+
+Func_1819: ; 1819 (0:1819)
+	push hl
+	call $6510
+	pop hl
+
+Func_181e: ; 181e (0:181e)
+	call DrawWideTextBox_WaitForInput
+
+Func_1821: ; 1821 (0:1821)
+	scf
+	ret
+
+Func_1823: ; 1823 (0:1823)
+	bank1call $717a
+	or a
+	ret
+
+Func_1828: ; 1828 (0:1828)
+	bank1call $4f9d
+	ld a, $1
+	ld [wcce6], a
+	ld hl, $004f
+	call DrawWideTextBox_PrintText
+	ld a, $75
+	ld [wccb8], a
+	ld a, $14
+	call Func_195c
+	call Func_1bb4
+	call $6e49
+	bank1call $717a
+	or a
+	ret
+
+Func_184b: ; 184b (0:184b)
+	call $7415
+	ld a, $2
+	call TryExecuteEffectCommandFunction
+	jr c, Func_1819
+	ld a, $5
+	call TryExecuteEffectCommandFunction
+	jr c, Func_1821
+	ld a, $c
+	call Func_0f7f
+	call Func_0f58
+	ld a, $d
+	call Func_0f7f
+	ld a, $3
+	call TryExecuteEffectCommandFunction
+	ld a, $16
+	call Func_0f7f
+	ret
+
+Func_1874: ; 1874 (0:1874)
+	ld a, [wccec]
+	or a
+	ret nz
+	ld a, [$ffa0]
+	push af
+	ld a, [$ff9f]
+	push af
+	ld a, $1
+	ld [wccec], a
+	ld a, [wcc11]
+	ld [$ff9f], a
+	ld a, [wcc10]
+	ld [$ffa0], a
+	ld a, $8
+	call Func_0f7f
+	call Func_0f58
+	pop af
+	ld [$ff9f], a
+	pop af
+	ld [$ffa0], a
+	ret
+
+Func_189d: ; 189d (0:189d)
+	ld a, [wccb1]
+	bit 7, a
+	ret nz
+	ld a, [wccc7]
+	or a
+	ret nz
+	ld a, e
+	or d
+	jr nz, .asm_18b9
+	ld a, $e8
+	call GetOpposingTurnDuelistVariable
+	or a
+	jr nz, .asm_18b9
+	ld a, [wcccd]
+	or a
+	ret z
+.asm_18b9
+	push de
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	xor a
+	ld [wcceb], a
+	call Func_348a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	pop de
+	ret nc
+	bank1call $4f9d
+	ld a, $e8
+	call GetOpposingTurnDuelistVariable
+	ld [hl], $0
+	ld de, $0000
+	ret
+
+Func_18d7: ; 18d7 (0:18d7)
+	xor a
+	ld [wccc9], a
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $f
+	cp $1
+	jr z, .asm_18e8
+	or a
+	ret
+.asm_18e8
+	ld de, $00f7
+	call Func_307d
+	jr c, .asm_18f7
+	ld a, $1
+	ld [wccc9], a
+	scf
+	ret
+.asm_18f7
+	or a
+	ret
+; 0x18f9
+
+INCBIN "baserom.gbc",$18f9,$195c - $18f9
+
+Func_195c: ; 195c (0:195c)
+	ld hl, $ccb9
+	ld [hli], a
+	ld [hl], $0
+	ld a, [wccc7]
+	push af
+	xor a
+	ld [wccc7], a
+	bank1call $7415
+	ld a, [wccc4]
+	push af
+	ld a, [wccc3]
+	ld [wccc4], a
+	bank1call Func_1a22 ; switch to bank 1, but call a home func
+	ld a, [wccc1]
+	ld c, a
+	ld b, $0
+	ld a, $c8
+	call GetTurnDuelistVariable
+	bank1call $7469
+	call Func_1ad0
+	pop af
+	ld [wccc4], a
+	pop af
+	ld [wccc7], a
+	ret
+
+Func_1994: ; 1994 (0:1994)
+	xor a
+	ld [wccc1], a
+	ld hl, $ccb9
+	ld a, [hli]
+	or [hl]
+	jr nz, .asm_19a3
+	ld de, $0000
+	ret
+.asm_19a3
+	xor a
+	ld [$ff9d], a
+	ld d, [hl]
+	dec hl
+	ld e, [hl]
+	bit 7, d
+	jr z, .asm_19b8
+	res 7, d
+	xor a
+	ld [wccc1], a
+	call Func_321d
+	jr .asm_19f3
+.asm_19b8
+	call Func_321d
+	ld a, e
+	or d
+	ret z
+	ld a, [$ff9d]
+	call Func_36f7
+	call Func_1a0e
+	ld b, a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	call Func_3730
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	and b
+	jr z, .asm_19dc
+	sla e
+	rl d
+	ld hl, $ccc1
+	set 1, [hl]
+.asm_19dc
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	call Func_374a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	and b
+	jr z, .asm_19f3
+	ld hl, $ffe2
+	add hl, de
+	ld e, l
+	ld d, h
+	ld hl, $ccc1
+	set 2, [hl]
+.asm_19f3
+	ld b, $10
+	call Func_1a69
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ld b, $10
+	call Func_1a7e
+	call Func_3244
+	bit 7, d
+	jr z, .asm_1a0a
+	ld de, $0000
+.asm_1a0a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ret
+
+Func_1a0e: ; 1a0e (0:1a0e)
+	push hl
+	add $1a
+	ld l, a
+	ld a, $1a
+	adc $0
+	ld h, a
+	ld a, [hl]
+	pop hl
+	ret
+; 0x1a1a
+
+INCBIN "baserom.gbc",$1a1a,$1a22 - $1a1a
+
+Func_1a22: ; 1a22 (0:1a22)
+	xor a
+	ld [wccc1], a
+	ld hl, $ccb9
+	ld a, [hli]
+	or [hl]
+	or a
+	jr z, .asm_1a65
+	ld d, [hl]
+	dec hl
+	ld e, [hl]
+	call Func_36f6
+	call Func_1a0e
+	ld b, a
+	call Func_3730
+	and b
+	jr z, .asm_1a47
+	sla e
+	rl d
+	ld hl, $ccc1
+	set 1, [hl]
+.asm_1a47
+	call Func_374a
+	and b
+	jr z, .asm_1a58
+	ld hl, $ffe2
+	add hl, de
+	ld e, l
+	ld d, h
+	ld hl, $ccc1
+	set 2, [hl]
+.asm_1a58
+	ld b, $10
+	call Func_1a69
+	ld b, $10
+	call Func_1a7e
+	bit 7, d
+	ret z
+.asm_1a65
+	ld de, $0000
+	ret
+
+Func_1a69: ; 1a69 (0:1a69)
+	push de
+	call GetTurnDuelistVariable
+	ld de, $00d8
+	call Func_15ef
+	ld l, a
+	ld h, $a
+	call HtimesL
+	pop de
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+
+Func_1a7e: ; 1a7e (0:1a7e)
+	push de
+	call GetTurnDuelistVariable
+	ld de, $00d9
+	call Func_15ef
+	ld l, a
+	ld h, $14
+	call HtimesL
+	pop de
+	ld a, e
+	sub l
+	ld e, a
+	ld a, d
+	sbc h
+	ld d, a
+	ret
+
+Func_1a96: ; 1a96 (0:1a96)
+	push hl
+	push de
+	ld a, [hl]
+	sub e
+	ld [hl], a
+	ld a, $0
+	sbc d
+	and $80
+	jr z, .asm_1aa4
+	ld [hl], $0
+.asm_1aa4
+	ld a, [hl]
+	or a
+	jr z, .asm_1aa9
+	scf
+.asm_1aa9
+	pop de
+	pop hl
+	ret
+
+Func_1aac: ; 1aac (0:1aac)
+	ld e, a
+	add $c8
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	ld a, [wccc4]
+	push af
+	ld a, e
+	add $bb
+	call GetTurnDuelistVariable
+	call Func_1376
+	ld a, [wCardBuffer1 + $7]
+	ld [wccc4], a
+	call Func_1ad3
+	pop af
+	ld [wccc4], a
+	scf
+	ret
+
+Func_1ad0: ; 1ad0 (0:1ad0)
+	ld a, [hl]
+	or a
+	ret nz
+Func_1ad3: ; 1ad3 (0:1ad3)
+	ld a, [wccc4]
+	ld e, a
+	call LoadCardDataToRAM
+	ld hl, $cc27
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_2ebb
+	ld hl, $0081
+	call DrawWideTextBox_PrintText
+	ld a, $28
+.asm_1aeb
+	call DoFrame
+	dec a
+	jr nz, .asm_1aeb
+	scf
+	ret
+; 0x1af3
+
+INCBIN "baserom.gbc",$1af3,$1b8d - $1af3
+
+Func_1b8d: ; 1b8d (0:1b8d)
+	bank1call $4f9d
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call Func_1376
+	ld a, $12
+	call Func_29f5
+	ld [hl], $0
+	ld hl, $ce3f
+	xor a
+	ld [hli], a
+	ld [hli], a
+	ld a, [wccaa]
+	ld [hli], a
+	ld a, [wccab]
+	ld [hli], a
+	ld hl, $0035
+	call DrawWideTextBox_PrintText
+	ret
+
+Func_1bb4: ; 1bb4 (0:1bb4)
+	call Func_3b31
+	bank1call $4f9d
+	call $503a
+	xor a
+	ld [$ff9d], a
+	call Func_1bca
+	call WaitForWideTextBoxInput
+	call Func_0f58
+	ret
+
+Func_1bca: ; 1bca (0:1bca)
+	ld a, [wcced]
+	or a
+	ret z
+	cp $1
+	jr z, .asm_1bfd
+	ld a, [$ff9d]
+	add $bb
+	call GetTurnDuelistVariable
+	call Func_1376
+	ld a, $12
+	call Func_29f5
+	ld [hl], $0
+	ld hl, $0000
+	call Func_2ebb
+	ld hl, $ccaa
+	ld de, $ce41
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	ld hl, $014a
+	call DrawWideTextBox_PrintText
+	scf
+	ret
+.asm_1bfd
+	call $700a
+	call DrawWideTextBox_PrintText
+	scf
+	ret
+; 0x1c05
+
+INCBIN "baserom.gbc",$1c05,$1c72 - $1c05
 
 ; returns [([hWhoseTurn] ^ $1) << 8 + a] in a
 ; i.e. variable a of the player whose turn it is not
@@ -2318,7 +3146,7 @@ INCBIN "baserom.gbc",$1caa,$1dca - $1caa
 
 ; memcpy(HL, DE, C)
 Memcpy: ; 1dca (0:1dca)
-	ld a, [$cabb]        ;
+	ld a, [wLCDC]        ;
 	bit 7, a             ;
 	jr nz, .asm_1dd8     ; assert that LCD is on
 .asm_1dd1
@@ -2368,7 +3196,6 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	ld e, a
 	pop af
 	ret
-; 0x1e00
 
 ; Draws a bxc text box at de printing a name in the left side of the top border.
 ; The name's text offset must be at hl when this function is called.
@@ -2616,7 +3443,7 @@ ColorizeTextBoxSGB
 	and $80
 	jr z, .asm_1f48
 	ld a, $2
-	ld [$cae2], a
+	ld [wcae2], a
 .asm_1f48
 	ld hl, $cae0
 	call SendSGB
@@ -2744,7 +3571,27 @@ asm_2121
 	ret
 ; 0x212f
 
-INCBIN "baserom.gbc",$212f,$21c5 - $212f
+INCBIN "baserom.gbc",$212f,$2167 - $212f
+
+Func_2167: ; 2167 (0:2167)
+	ld l, a
+	ld h, $a0
+	call HtimesL
+	add hl, hl
+	add hl, hl
+	ld de, $4318
+	add hl, de
+	ld de, $8a00
+	ld b, $28
+	call asm_2121
+	ld a, $a0
+	ld hl, $010a
+	ld bc, $0a04
+	ld de, $0504
+	jp Func_1f5f
+; 0x2189
+
+INCBIN "baserom.gbc",$2189,$21c5 - $2189
 
 Func_21c5: ; 21c5 (0:21c5)
 	push de
@@ -2796,12 +3643,12 @@ Func_21f2: ; 21f2 (0:21f2)
 	ret
 .asm_220f
 	ld a, $1
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ret
 .asm_2215
 	call Func_230f
 	xor a
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
@@ -2810,13 +3657,13 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ret
 .asm_2225
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	push af
 	ld a, $1
-	ld [$cd0a], a
+	ld [wcd0a], a
 	call Func_230f
 	pop af
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ldh a, [$ffb0]
 	or a
 	jr nz, .asm_2240
@@ -2838,7 +3685,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	ret
 .asm_224d
 	call Func_230f
-	ld a, [$cd08]
+	ld a, [wcd08]
 	or a
 	call z, .asm_2257
 .asm_2257
@@ -2854,16 +3701,16 @@ Func_21f2: ; 21f2 (0:21f2)
 	ldh a, [$ffab]
 	adc $0
 	ldh [$ffab], a
-	ld a, [$cd09]
+	ld a, [wcd09]
 	inc a
-	ld [$cd09], a
+	ld [wcd09], a
 	xor a
 	ret
 
 Func_2275: ; 2275 (0:2275)
 	ld a, d
 	dec a
-	ld [$cd04], a
+	ld [wcd04], a
 	ld a, e
 	ldh [$ffa8], a
 	call Func_2298
@@ -2871,9 +3718,9 @@ Func_2275: ; 2275 (0:2275)
 	ldh [$ffb0], a
 	ldh [$ffa9], a
 	ld a, $88
-	ld [$cd06], a
+	ld [wcd06], a
 	ld a, $80
-	ld [$cd07], a
+	ld [wcd07], a
 	ld hl, $c600
 .asm_2292
 	xor a
@@ -2884,9 +3731,9 @@ Func_2275: ; 2275 (0:2275)
 
 Func_2298: ; 2298 (0:2298)
 	xor a
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ldh [$ffac], a
-	ld [$cd0b], a
+	ld [wcd0b], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
@@ -2904,7 +3751,7 @@ Func_22ae: ; 22ae (0:22ae)
 	ldh [$ffad], a
 	xor a
 	ldh [$ffae], a
-	ld [$cd09], a
+	ld [wcd09], a
 	call CalculateBGMap0Address
 	ld a, l
 	ldh [$ffaa], a
@@ -2912,7 +3759,7 @@ Func_22ae: ; 22ae (0:22ae)
 	ldh [$ffab], a
 	call Func_2298
 	xor a
-	ld [$cd0b], a
+	ld [wcd0b], a
 	pop hl
 	ret
 
@@ -2944,7 +3791,7 @@ Func_22ca: ; 22ca (0:22ca)
 	jr .asm_22e9
 
 Func_22f2: ; 22f2 (0:22f2)
-	ld [$cd05], a
+	ld [wcd05], a
 	ld hl, $ffaa
 	ld e, [hl]
 	inc hl
@@ -2964,10 +3811,10 @@ Func_22f2: ; 22f2 (0:22f2)
 	ret
 
 Func_230f: ; 230f (0:230f)
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	or a
 	ret z
-	ld a, [$cd0b]
+	ld a, [wcd0b]
 	or a
 	ret z
 	push hl
@@ -3028,22 +3875,22 @@ Func_2325: ; 2325 (0:2325)
 ; search linked-list for letters e/d (regisers), if found hoist the result to
 ; head of list and return it.  carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [$cd0a]        ;
+	ld a, [wcd0a]        ;
 	or a                 ;
-	jr z, .asm_2376      ; if [$cd0a] nonzero:
+	jr z, .asm_2376      ; if [wcd0a] nonzero:
 	call Uppercase       ;   uppercase e
-	ld a, [$cd0b]
+	ld a, [wcd0b]
 	ld d, a
 	or a
-	jr nz, .asm_2376     ;   if [$cd0b] is zero:
+	jr nz, .asm_2376     ;   if [wcd0b] is zero:
 	ld a, e              ;
-	ld [$cd0b], a        ;     [$cd0b] ← e
+	ld [wcd0b], a        ;     [wcd0b] ← e
 	ld a, $1             ;
 	or a                 ;     return a = 1
 	ret
 .asm_2376
 	xor a
-	ld [$cd0b], a        ; [$cd0b] ← 0
+	ld [wcd0b], a        ; [wcd0b] ← 0
 	ldh a, [$ffa9]
 	ld l, a              ; l ← [$ffa9]; index to to linked-list head
 .asm_237d
@@ -3115,7 +3962,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	ret
 .asm_23cf
 	xor a
-	ld [$cd0a], a
+	ld [wcd0a], a
 Func_23d3: ; 23d3 (0:23d3)
 	push hl
 	push de
@@ -3212,7 +4059,7 @@ Func_24ac: ; 24ac (0:24ac)
 	push hl
 	push de
 	push bc
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	or a
 	jr nz, .asm_24bf
 	call Func_2510
@@ -3292,7 +4139,7 @@ Func_2518: ; 2518 (0:2518)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld a, [$cd06]
+	ld a, [wcd06]
 	ld b, a
 	ld c, $0
 	add hl, bc
@@ -3318,7 +4165,7 @@ Func_252e: ; 252e (0:252e)
 	ret
 
 Func_2546: ; 2546 (0:2546)
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	or a
 	jr nz, .asm_255f
 	ld a, e
@@ -3391,7 +4238,7 @@ InitializeCursorParameters: ; 2636 (0:2636)
 
 Func_264b: ; 264b (0:264b)
 	xor a
-	ld [$cd99], a
+	ld [wcd99], a
 	ldh a, [hButtonsPressed2]
 	or a
 	jr z, .asm_2685
@@ -3417,7 +4264,7 @@ Func_264b: ; 264b (0:264b)
 .asm_2674
 	push af
 	ld a, $1
-	ld [$cd99], a
+	ld [wcd99], a
 	call EraseCursor
 	pop af
 	ld [wCurMenuItem], a
@@ -3429,27 +4276,29 @@ Func_264b: ; 264b (0:264b)
 	ld hl, $cd17
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_26a9
+	jr z, asm_26a9
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	ldh a, [hCurrentMenuItem]
 	call CallHL
 	jr nc, HandleMenuInput
-.asm_269b
+asm_269b:
 	call Func_270b
+
+Func_269e: ; 269e (0:269e)
 	call Func_26c0
 	ld a, [wCurMenuItem]
 	ld e, a
 	ldh a, [hCurrentMenuItem]
 	scf
 	ret
-.asm_26a9
+asm_26a9:
 	ldh a, [hButtonsPressed]
 	and $3
 	jr z, HandleMenuInput
 	and $1
-	jr nz, .asm_269b
+	jr nz, asm_269b
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
@@ -3472,8 +4321,8 @@ Func_26c0: ; 26c0 (0:26c0)
 	pop af
 	ret
 
-HandleMenuInput: ; 2d61 (0:2d61)
-	ld a, [$cd99]
+HandleMenuInput: ; 26d1 (0:26d1)
+	ld a, [wcd99]
 	or a
 	jr z, HandleTextBoxInput
 	call Func_3796
@@ -3487,10 +4336,10 @@ HandleTextBoxInput: ; 26da (0:26da)
 	ret nz
 	ld a, [wCursorTileNumber]
 	bit 4, [hl]
-	jr z, drawCursor
+	jr z, DrawCursor
 EraseCursor: ; 26e9 (0:26e9)
 	ld a, [wTileBehindCursor]
-drawCursor
+DrawCursor:
 	ld c, a
 	ld a, [wYDisplacementBetweenMenuItems]
 	ld l, a
@@ -3513,10 +4362,112 @@ drawCursor
 
 Func_270b: ; 270b (0:270b)
 	ld a, [wCursorTileNumber]
-	jr drawCursor
-; 0x2710
+	jr DrawCursor
 
-INCBIN "baserom.gbc",$2710,$2a1a - $2710
+Func_2710: ; 2710 (0:2710)
+	ld [wCurMenuItem], a
+	ld [$ffb1], a
+	xor a
+	ld [wCursorBlinkCounter], a
+	ret
+
+Func_271a: ; 271a (0:271a)
+	ld a, [$ff8f]
+	or a
+	jr z, .asm_2764
+	ld b, a
+	ld hl, wCurMenuItem
+	and $c0
+	jr z, .asm_272c
+	ld a, [hl]
+	xor $1
+	jr .asm_2748
+.asm_272c
+	bit 5, b
+	jr z, .asm_273b
+	ld a, [hl]
+	sub $2
+	jr nc, .asm_2748
+	and $1
+	add $4
+	jr .asm_2748
+.asm_273b
+	bit 4, b
+	jr z, .asm_275d
+	ld a, [hl]
+	add $2
+	cp $6
+	jr c, .asm_2748
+	and $1
+.asm_2748
+	push af
+	ld a, $1
+	call Func_3796
+	call .asm_2772
+	pop af
+	ld [wCurMenuItem], a
+	ld [$ffb1], a
+	xor a
+	ld [wCursorBlinkCounter], a
+	jr .asm_2764
+.asm_275d
+	ld a, [$ff8f]
+	and $1
+	jp nz, Func_269e
+.asm_2764
+	ld hl, wCursorBlinkCounter
+	ld a, [hl]
+	inc [hl]
+	and $f
+	ret nz
+	ld a, $f
+	bit 4, [hl]
+	jr z, .asm_2774
+.asm_2772
+	ld a, $0
+.asm_2774
+	ld e, a
+	ld a, [wCurMenuItem]
+	add a
+	ld c, a
+	ld b, $0
+	ld hl, $278d
+	add hl, bc
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	ld a, e
+	call Func_06c3
+	ld a, [wCurMenuItem]
+	ld e, a
+	or a
+	ret
+; 0x278d
+
+INCBIN "baserom.gbc",$278d,$29f5 - $278d
+
+Func_29f5: ; 29f5 (0:29f5)
+	farcallx $6, $4000
+	ret
+; 0x29fa
+
+INCBIN "baserom.gbc",$29fa,$2a00 - $29fa
+
+Func_2a00: ; 2a00 (0:2a00)
+	call DoFrame
+	call HandleTextBoxInput
+	ld a, [$ff91]
+	bit 0, a
+	jr nz, .asm_2a15
+	bit 1, a
+	jr z, Func_2a00
+	call EraseCursor
+	scf
+	ret
+.asm_2a15
+	call EraseCursor
+	or a
+	ret
 
 Func_2a1a: ; 2a1a (0:2a1a)
 	xor a
@@ -3537,12 +4488,19 @@ Func_2a1a: ; 2a1a (0:2a1a)
 	ret
 ; 0x2a30
 
-INCBIN "baserom.gbc",$2a30,$2a3e - $2a30
+INCBIN "baserom.gbc",$2a30,$2a36 - $2a30
+
+Func_2a36: ; 2a36 (0:2a36)
+	push hl
+	call DrawWideTextBox
+	ld a, $13
+	jr Func_2a44
 
 DrawNarrowTextBox_PrintText: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
 	ld a, $b
+Func_2a44: ; 2a44 (0:2a44)
 	ld de, $010e
 	call AdjustCoordinatesForWindow
 	call Func_22a6
@@ -3571,7 +4529,6 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	call AdjustCoordinatesForWindow
 	call DrawRegularTextBox
 	ret
-; 0x2a7c
 
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call DrawNarrowTextBox_PrintText
@@ -3586,7 +4543,6 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	and $3
 	jr z, .waitAorBLoop
 	ret
-; 0x2a96
 
 NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
 	db $a, $11, $1, $1, $2f, $1d, $0, $0
@@ -3633,10 +4589,10 @@ Func_2af0: ; 2af0 (0:2af0)
 	ld de, $0210
 .asm_2b0a
 	ld a, d
-	ld [$cd98], a
+	ld [wcd98], a
 	ld bc, $0f00
 	call Func_2a1a
-	ld a, [$cd9a]
+	ld a, [wcd9a]
 	ld [wCurMenuItem], a
 	call EnableLCD
 	jr .asm_2b39
@@ -3653,7 +4609,7 @@ Func_2af0: ; 2af0 (0:2af0)
 	call Func_3796
 	call EraseCursor
 .asm_2b39
-	ld a, [$cd98]
+	ld a, [wcd98]
 	ld c, a
 	ld hl, wCurMenuItem
 	ld a, [hl]
@@ -3671,11 +4627,11 @@ Func_2af0: ; 2af0 (0:2af0)
 	ldh [hCurrentMenuItem], a
 	or a
 	jr nz, .asm_2b5c
-	ld [$cd9a], a
+	ld [wcd9a], a
 	ret
 .asm_2b5c
 	xor a
-	ld [$cd9a], a
+	ld [wcd9a], a
 	ld a, $1
 	ldh [hCurrentMenuItem], a
 	scf
@@ -3732,15 +4688,67 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 
 .validDeck
 ; set opponent as controlled by AI
-	ld a, wOpponentDuelistType & $ff
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld a, [wOpponentDeckId]
 	or $80
 	ld [hl], a
 	ret
-; 0x2bbf
 
-INCBIN "baserom.gbc",$2bbf,$2c08 - $2bbf
+Func_2bbf: ; 2bbf (0:2bbf)
+	ld a, $1
+	jr Func_2bdb
+
+Func_2bc3: ; 2bc3 (0:2bc3)
+	ld a, $2
+	jr Func_2bdb
+
+Func_2bc7: ; 2bc7 (0:2bc7)
+	ld a, $3
+	call Func_2bdb
+	ld [$ff9d], a
+	ret
+
+Func_2bcf: ; 2bcf (0:2bcf)
+	ld a, $4
+	call Func_2bdb
+	ld [$ffa0], a
+	ret
+
+Func_2bd7: ; 2bd7 (0:2bd7)
+	ld a, $5
+	jr Func_2bdb
+Func_2bdb: ; 2bdb (0:2bdb)
+	ld c, a
+	ld a, [$ff80]
+	push af
+	ld a, $5
+	call BankswitchHome
+	ld a, [wOpponentDeckId]
+	ld l, a
+	ld h, $0
+	add hl, hl
+	ld de, $4000
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, c
+	or a
+	jr nz, .asm_2bfe
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	call CopyDeckData
+	jr .asm_2c01
+.asm_2bfe
+	call JumpToFunctionInTable
+.asm_2c01
+	ld c, a
+	pop af
+	call BankswitchHome
+	ld a, c
+	ret
 
 Func_2c08: ; 2c08 (0:2c08)
 	ld d, [hl]
@@ -3780,13 +4788,64 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-INCBIN "baserom.gbc",$2c37,$2cc8 - $2c37
+INCBIN "baserom.gbc",$2c37,$2c73 - $2c37
+
+Func_2c73: ; 2c73 (0:2c73)
+	xor a
+	call Func_2c84
+
+Func_2c77: ; 2c77 (0:2c77)
+	ld bc, $2f1d
+	ld de, $1211
+	call Func_2a1a
+	call Func_2a00
+	ret
+
+Func_2c84: ; 2c84 (0:2c84)
+	ld [wce4b], a
+	ld a, [$ff80]
+	push af
+	call ReadTextOffset
+	call Func_2d15
+	call Func_2cc8
+.asm_2c93
+	ld a, [wce47]
+	ld c, a
+	inc c
+	jr .asm_2cac
+.asm_2c9a
+	ld a, [wce47]
+	cp $2
+	jr nc, .asm_2ca7
+	ld a, [$ff90]
+	and $2
+	jr nz, .asm_2caf
+.asm_2ca7
+	push bc
+	call DoFrame
+	pop bc
+.asm_2cac
+	dec c
+	jr nz, .asm_2c9a
+.asm_2caf
+	call Func_2d43
+	jr c, .asm_2cc3
+	ld a, [wcd09]
+	cp $3
+	jr c, .asm_2c93
+	call Func_2c77
+	call Func_2d15
+	jr .asm_2c93
+.asm_2cc3
+	pop af
+	call BankswitchHome
+	ret
 
 Func_2cc8: ; 2cc8 (0:2cc8)
 	xor a
-	ld [$ce48], a
-	ld [$ce49], a
-	ld [$ce4a], a
+	ld [wce48], a
+	ld [wce49], a
+	ld [wce4a], a
 	ld a, $f
 	ld [hffaf], a
 Func_2cd7: ; 2cd7 (0:2cd7)
@@ -3795,7 +4854,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	pop bc
 	ld a, [hffaf]
 	ld [hli], a
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	ld [hli], a
 	ldh a, [hBankROM]
 	ld [hli], a
@@ -3815,7 +4874,7 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld a, [hli]
 	ld [hffaf], a
 	ld a, [hli]
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ld a, [hli]
 	call BankswitchHome
 	ld a, [hli]
@@ -3824,7 +4883,7 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ret
 
 Func_2d06: ; 2d06 (0:2d06)
-	ld a, [$ce48]
+	ld a, [wce48]
 	ld e, a
 	add a
 	add a
@@ -3834,9 +4893,31 @@ Func_2d06: ; 2d06 (0:2d06)
 	ld hl, $ce2b
 	add hl, de
 	ret
-; 0x2d15
 
-INCBIN "baserom.gbc",$2d15,$2d43 - $2d15
+Func_2d15: ; 2d15 (0:2d15)
+	push hl
+	ld de, $000c
+	ld bc, $1406
+	call AdjustCoordinatesForWindow
+	ld a, [wce4b]
+	or a
+	jr nz, .asm_2d2d
+	call DrawRegularTextBox
+	call EnableLCD
+	jr .asm_2d36
+.asm_2d2d
+	ld hl, $ce4c
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call DrawLabeledTextBox
+.asm_2d36
+	ld de, $010e
+	call AdjustCoordinatesForWindow
+	ld a, $13
+	call Func_22a6
+	pop hl
+	ret
 
 Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cf3
@@ -3871,11 +4952,11 @@ Func_2d43: ; 2d43 (0:2d43)
 	or a
 	ret
 .asm_2d79
-	ld a, [$ce48]
+	ld a, [wce48]
 	or a
 	jr z, .asm_2d85
 	dec a
-	ld [$ce48], a
+	ld [wce48], a
 	jr Func_2d43
 .asm_2d85
 	call Func_230f
@@ -3886,7 +4967,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, $f
 	ld [hffaf], a
 	xor a
-	ld [$cd0a], a
+	ld [wcd0a], a
 	ld de, $ce3f
 	ld hl, $ce49
 	call Func_2de0
@@ -3911,7 +4992,7 @@ Func_2d43: ; 2d43 (0:2d43)
 .asm_2dc8
 	call Func_2ceb
 	call Func_2e2c
-	ld a, [$caa0]
+	ld a, [wcaa0]
 	cp $6
 	jr z, .asm_2dda
 	ld a, $7
@@ -3965,7 +5046,7 @@ ReadTextOffset: ; 2ded (0:2ded)
 	ret
 
 Func_2e12: ; 2e12 (0:2e12)
-	ld a, [$cd0a]
+	ld a, [wcd0a]
 	or a
 	jp z, Func_245d
 	ld de, $caa0
@@ -4014,7 +5095,7 @@ Func_2e41: ; 2e41 (0:2e41)
 .asm_2e59
 	ldh a, [hButtonsHeld]
 	ld b, a
-	ld a, [$ce47]
+	ld a, [wce47]
 	inc a
 	cp $3
 	jr nc, .asm_2e6d
@@ -4071,12 +5152,35 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	jp PrintPlayerName
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$2f10 - $2ea9
+INCBIN "baserom.gbc",$2ea9,$2ebb - $2ea9
+
+Func_2ebb: ; 2ebb (0:2ebb)
+	ld a, l
+	ld [wce3f], a
+	ld a, h
+	ld [wce40], a
+	ret
+
+Func_2ec4: ; 2ec4 (0:2ec4)
+	ld a, l
+	ld [wce43], a
+	ld a, h
+	ld [wce44], a
+	ret
+; 0x2ecd
+
+INCBIN "baserom.gbc",$2ecd,$2f0a - $2ecd
+
+Func_2f0a: ; 2f0a (0:2f0a)
+	push hl
+	ld hl, wCardBuffer2
+	jr Func_2f14
 
 ; load data of card with id at e to wCardBuffer1
 LoadCardDataToRAM: ; 2f10 (0:2f10)
 	push hl
 	ld hl, wCardBuffer1
+Func_2f14: ; 2f14 (0:2f14)
 	push de
 	push bc
 	push hl
@@ -4100,9 +5204,23 @@ LoadCardDataToRAM: ; 2f10 (0:2f10)
 	pop de
 	pop hl
 	ret
-; 0x2f32
 
-INCBIN "baserom.gbc",$2f32,$2f7c - $2f32
+Func_2f32: ; 2f32 (0:2f32)
+	push hl
+	call GetCardPointer
+	jr c, .asm_2f43
+	ld a, $c
+	call BankpushHome2
+	ld l, [hl]
+	call BankpopHome
+	ld a, l
+	or a
+.asm_2f43
+	pop hl
+	ret
+; 0x2f45
+
+INCBIN "baserom.gbc",$2f45,$2f7c - $2f45
 
 ; return at hl the pointer to the data of the card with id at e
 ; return carry if e was out of bounds, so no pointer was returned
@@ -4133,7 +5251,6 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop bc
 	pop de
 	ret
-; 0x2fa0
 
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ldh a, [hBankROM]
@@ -4163,7 +5280,6 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	pop af
 	call BankswitchHome
 	ret
-; 0x2fcb
 
 Func_2fcb: ; 2fcb (0:2fcb)
 	ld a, $1d
@@ -4172,7 +5288,6 @@ Func_2fcb: ; 2fcb (0:2fcb)
 	call CopyGfxData
 	call BankpopHome
 	ret
-; 0x2fd9
 
 ; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
 ; and executes its associated function if so.
@@ -4207,7 +5322,6 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push bc
 	pop af
 	ret
-; 0x2ffe
 
 ; input:
   ; a = command ID to check
@@ -4257,7 +5371,6 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	call BankswitchHome
 	scf
 	ret
-; 0x302c
 
 ; loads the deck id in a from DeckPointers
 ; sets carry flag if an invalid deck id is used
@@ -4290,7 +5403,6 @@ LoadDeck: ; 302c (0:302c)
 	pop hl
 	scf
 	ret
-; 0x3055
 
 Func_3055: ; 3055 (0:3055)
 	push hl
@@ -4369,7 +5481,7 @@ Func_30a6: ; 30a6 (0:30a6)
 	ld a, $6
 	call BankswitchHome
 	ld a, $1
-	ld [$ce60], a
+	ld [wce60], a
 	call $40d5
 	pop bc
 	ld a, b
@@ -4378,9 +5490,9 @@ Func_30a6: ; 30a6 (0:30a6)
 
 Func_30bc: ; 30bc (0:30bc)
 	ld a, h
-	ld [$ce50], a
+	ld [wce50], a
 	ld a, l
-	ld [$ce51], a
+	ld [wce51], a
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
@@ -4425,7 +5537,7 @@ Func_30f9: ; 30f9 (0:30f9)
 	ret
 
 Func_310a: ; 310a (0:310a)
-	ld [$ce59], a
+	ld [wce59], a
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
@@ -4449,37 +5561,37 @@ Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	push hl
 	ld hl, $ce64
 	ld a, $88
-	ld [hli], a          ; [$ce64] ← $88
+	ld [hli], a          ; [wce64] ← $88
 	ld a, $33
-	ld [hli], a          ; [$ce65] ← $33
-	ld [hl], d           ; [$ce66] ← d
+	ld [hli], a          ; [wce65] ← $33
+	ld [hl], d           ; [wce66] ← d
 	inc hl
-	ld [hl], e           ; [$ce67] ← e
+	ld [hl], e           ; [wce67] ← e
 	inc hl
-	ld [hl], c           ; [$ce68] ← c
+	ld [hl], c           ; [wce68] ← c
 	inc hl
-	ld [hl], b           ; [$ce69] ← b
+	ld [hl], b           ; [wce69] ← b
 	inc hl
 	pop de
-	ld [hl], e           ; [$ce6a] ← l
+	ld [hl], e           ; [wce6a] ← l
 	inc hl
-	ld [hl], d           ; [$ce6b] ← h
+	ld [hl], d           ; [wce6b] ← h
 	inc hl
 	ld de, $ff45
-	ld [hl], e           ; [$ce6c] ← $45
+	ld [hl], e           ; [wce6c] ← $45
 	inc hl
-	ld [hl], d           ; [$ce6d] ← $ff
+	ld [hl], d           ; [wce6d] ← $ff
 	ld hl, $ce70
-	ld [hl], $64         ; [$ce70] ← $64
+	ld [hl], $64         ; [wce70] ← $64
 	inc hl
-	ld [hl], $ce         ; [$ce71] ← $ce
+	ld [hl], $ce         ; [wce71] ← $ce
 	call Func_0e8e
 	ld a, $1
-	ld [$ce63], a        ; [$ce63] ← 1
+	ld [wce63], a        ; [wce63] ← 1
 	call Func_31fc
 .asm_315d
 	call DoFrame
-	ld a, [$ce63]
+	ld a, [wce63]
 	or a
 	jr nz, .asm_315d
 	call ResetSerial
@@ -4489,10 +5601,10 @@ Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	ld a, b
 	or c
 	jr nz, .asm_316c
-	ld a, [$ce6e]
+	ld a, [wce6e]
 	cp $81
 	jr nz, .asm_3182
-	ld a, [$ce6f]
+	ld a, [wce6f]
 	ld l, a
 	and $f1
 	ld a, l
@@ -4501,7 +5613,7 @@ Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	ret
 .asm_3182
 	ld a, $ff
-	ld [$ce6f], a
+	ld [wce6f], a
 	scf
 	ret
 
@@ -4565,27 +5677,27 @@ Func_31ca: ; 31ca (0:31ca)
 	ret
 
 Func_31dd: ; 31dd (0:31dd)
-	ld a, [$ce6c]
+	ld a, [wce6c]
 Func_31e0: ; 31e0 (0:31e0)
 	call Func_3212
 	jr Func_31ab
 
 Func_31e5: ; 31e5 (0:31e5)
-	ld a, [$ce6d]
+	ld a, [wce6d]
 	jr Func_31e0
 
 Func_31ea: ; 31ea (0:31ea)
 	ld a, [rSB]
-	ld [$ce6e], a
+	ld [wce6e], a
 Func_31ef: ; 31ef (0:31ef)
 	xor a
 	jr Func_31e0
 
 Func_31f2: ; 31f2 (0:31f2)
 	ld a, [rSB]
-	ld [$ce6f], a
+	ld [wce6f], a
 	xor a
-	ld [$ce63], a
+	ld [wce63], a
 	ret
 
 Func_31fc: ; 31fc (0:31fc)
@@ -4614,9 +5726,551 @@ Func_3212: ; 3212 (0:3212)
 	ld a, $81
 	ld [rSC], a
 	ret
-; 0x321d
 
-INCBIN "baserom.gbc",$321d,$377f - $321d
+Func_321d: ; 321d (0:321d)
+	ld a, $eb
+	call GetTurnDuelistVariable
+	bit 0, [hl]
+	call nz, Func_323b
+	ld a, $e7
+	call GetTurnDuelistVariable
+	or a
+	call nz, Func_323a
+	ld a, $e8
+	call GetTurnDuelistVariable
+	or a
+	call nz, Func_3243
+	ret
+
+Func_323a: ; 323a (0:323a)
+	ret
+
+Func_323b: ; 323b (0:323b)
+	ld a, e
+	or d
+	ret z
+	sla e
+	rl d
+	ret
+
+Func_3243: ; 3243 (0:3243)
+	ret
+
+Func_3244: ; 3244 (0:3244)
+	call Func_3269
+	ld a, $e8
+	call GetOpposingTurnDuelistVariable
+	or a
+	ret z
+	cp $3
+	jr z, .asm_325b
+	cp $7
+	jr z, .asm_3262
+	cp $12
+	jr z, .asm_3262
+	ret
+.asm_325b
+	ld hl, $ffec
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+.asm_3262
+	ld hl, $fff6
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+
+Func_3269: ; 3269 (0:3269)
+	ld a, [wccc7]
+	or a
+	jr nz, .asm_32ad
+	ld a, $e7
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_3297
+	cp $f
+	jr z, .asm_32ad
+	cp $10
+	jr z, .asm_32ad
+	cp $11
+	jr z, .asm_32ad
+	cp $17
+	jr z, .asm_32ad
+	cp $1e
+	jr z, .asm_32b1
+	cp $13
+	jr z, .asm_32b8
+	cp $e
+	jr z, .asm_32bf
+	cp $15
+	jr z, .asm_32ca
+.asm_3297
+	call Func_34ef
+	ret c
+	ld a, [wccb1]
+	cp $4
+	ret z
+	ld a, [wccc4]
+	cp $9b
+	jr z, .asm_32d8
+	cp $8b
+	jr z, .asm_32e9
+	ret
+.asm_32ad
+	ld de, $0000
+	ret
+.asm_32b1
+	ld hl, $fff6
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+.asm_32b8
+	ld hl, $ffec
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+.asm_32bf
+	ld bc, $0028
+	call Func_3090
+	ret nc
+	ld de, $0000
+	ret
+.asm_32ca
+	sla d
+	rr e
+	bit 0, e
+	ret z
+	ld hl, $fffb
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+.asm_32d8
+	ld a, [wccb1]
+	cp $4
+	ret z
+	ld bc, $001e
+	call Func_3090
+	ret c
+	ld de, $0000
+	ret
+.asm_32e9
+	sla d
+	rr e
+	bit 0, e
+	ret z
+	ld hl, $fffb
+	add hl, de
+	ld e, l
+	ld d, h
+	ret
+; 0x32f7
+
+INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
+
+Func_33c1: ; 33c1 (0:33c1)
+	ld a, $e8
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	ld hl, $0100
+	cp $5
+	jr z, .asm_33df
+	ld hl, $0101
+	cp $6
+	jr z, .asm_33df
+	ld hl, $0102
+	cp $b
+	jr z, .asm_33df
+	or a
+	ret
+.asm_33df
+	scf
+	ret
+
+Func_33e1: ; 33e1 (0:33e1)
+	ld a, $e8
+	call GetTurnDuelistVariable
+	or a
+	jr nz, .asm_33ea
+	ret
+.asm_33ea
+	cp $4
+	jr z, .asm_33f0
+.asm_33ee
+	or a
+	ret
+.asm_33f0
+	ld a, $f2
+	call GetTurnDuelistVariable
+	ld a, [wccc6]
+	cp [hl]
+	jr nz, .asm_33ee
+	ld hl, $0103
+	scf
+	ret
+
+Func_3400: ; 3400 (0:3400)
+	call Func_3414
+	ret nc
+	call Func_307d
+	ld [wcc0a], a
+	ccf
+	ret nc
+	ld hl, $00fd
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+
+Func_3414: ; 3414 (0:3414)
+	ld a, $e8
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	ld de, $00de
+	cp $2
+	jr z, .asm_342b
+	ld de, $00df
+	cp $1
+	jr z, .asm_342b
+	or a
+	ret
+.asm_342b
+	ld a, [wcc0a]
+	or a
+	ret nz
+	scf
+	ret
+
+Func_3432: ; 3432 (0:3432)
+	xor a
+	ld [wccc7], a
+	ld a, [wccb1]
+	cp $4
+	ret z
+	ld a, $e7
+	call GetTurnDuelistVariable
+	ld e, $3
+	ld hl, $0107
+	cp $d
+	jr z, .asm_346a
+	ld e, $2
+	ld hl, $0108
+	cp $14
+	jr z, .asm_346a
+	ld e, $1
+	ld hl, $0109
+	cp $c
+	jr z, .asm_346a
+	call Func_34ef
+	ccf
+	ret nc
+	ld a, [wccc4]
+	cp $a0
+	jr z, .asm_3470
+	or a
+	ret
+.asm_346a
+	ld a, e
+	ld [wccc7], a
+	scf
+	ret
+.asm_3470
+	ld a, [wcce6]
+	or a
+	ret nz
+	ld a, [wccc3]
+	ld e, a
+	ld d, $0
+	call Func_2f0a
+	ld a, [wCardBuffer2 + $9]
+	or a
+	ret z
+	ld e, $5
+	ld hl, $010b
+	jr .asm_346a
+
+Func_348a: ; 348a (0:348a)
+	ld a, [wccc4]
+	cp $96
+	jr z, .asm_3493
+.asm_3491
+	or a
+	ret
+.asm_3493
+	ld a, [wccb1]
+	cp $4
+	jr z, .asm_3491
+	ld a, [wcceb]
+	call Func_34f0
+	jr c, .asm_3491
+	xor a
+	ld [wcac2], a
+	ld de, $00f6
+	call Func_307d
+	ret nc
+	ld a, $4
+	ld [wccc7], a
+	ld hl, $010c
+	scf
+	ret
+; 0x34b7
+
+INCBIN "baserom.gbc",$34b7,$34e2 - $34b7
+
+Func_34e2: ; 34e2 (0:34e2)
+	ld a, $27
+	call Func_3509
+	ccf
+	ret nc
+	ld a, $5c
+	call Func_3525
+	ret
+
+Func_34ef: ; 34ef (0:34ef)
+	xor a
+
+Func_34f0: ; 34f0 (0:34f0)
+	or a
+	jr nz, .asm_3500
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $f
+	ld hl, $00cb
+	scf
+	jr nz, .asm_3508
+.asm_3500
+	ld a, $27
+	call Func_3509
+	ld hl, $00d4
+.asm_3508
+	ret
+
+Func_3509: ; 3509 (0:3509)
+	push bc
+	ld [wce7c], a
+	call Func_3525
+	ld c, a
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ld a, [wce7c]
+	call Func_3525
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	add c
+	or a
+	scf
+	jr nz, .asm_3523
+	or a
+.asm_3523
+	pop bc
+	ret
+
+Func_3525: ; 3525 (0:3525)
+	push hl
+	push de
+	push bc
+	ld [wce7c], a
+	ld c, $0
+	ld a, $bb
+	call GetTurnDuelistVariable
+	cp $ff
+	jr z, .asm_3549
+	call Func_1324
+	ld a, [wce7c]
+	cp e
+	jr nz, .asm_3549
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $f
+	jr nz, .asm_3549
+	inc c
+.asm_3549
+	ld a, $bc
+	call GetTurnDuelistVariable
+.asm_354e
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_3560
+	call Func_1324
+	ld a, [wce7c]
+	cp e
+	jr nz, .asm_355d
+	inc c
+.asm_355d
+	inc b
+	jr .asm_354e
+.asm_3560
+	ld a, c
+	or a
+	scf
+	jr nz, .asm_3566
+	or a
+.asm_3566
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x356a
+
+INCBIN "baserom.gbc",$356a,$35e6 - $356a
+
+Func_35e6: ; 35e6 (0:35e6)
+	ld a, $e7
+	call GetTurnDuelistVariable
+	ld [hl], $0
+	or a
+	ret z
+	cp $19
+	ret nz
+	ld a, $eb
+	call GetTurnDuelistVariable
+	set 0, [hl]
+	ret
+
+Func_35fa: ; 35fa (0:35fa)
+	ld a, $eb
+	call GetTurnDuelistVariable
+	res 1, [hl]
+	push hl
+	ld a, $e8
+	call GetTurnDuelistVariable
+	xor a
+	ld [hl], a
+	ld a, $e7
+	call GetTurnDuelistVariable
+	pop hl
+	cp $19
+	ret z
+	res 0, [hl]
+	ret
+; 0x3615
+
+INCBIN "baserom.gbc",$3615,$367b - $3615
+
+Func_367b: ; 367b (0:367b)
+	ld a, [wccc4]
+	cp $7f
+	jr z, .asm_3683
+	ret
+.asm_3683
+	ld a, [wccb1]
+	and $80
+	ret nz
+	ld a, [wccbf]
+	or a
+	ret z
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	call Func_34ef
+	call GetOpposingTurnDuelistVariable_SwapTurn
+	ret c
+	ld hl, $000a
+	call Func_36a2
+	call nc, WaitForWideTextBoxInput
+	ret
+
+Func_36a2: ; 36a2 (0:36a2)
+	push hl
+	call Func_2ec4
+	ld a, [wccc3]
+	ld e, a
+	ld d, $0
+	call Func_2f0a
+	ld hl, $cc68
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_2ebb
+	ld a, $c8
+	call GetTurnDuelistVariable
+	pop de
+	push af
+	push hl
+	call Func_1a96
+	ld hl, $0105
+	call DrawWideTextBox_PrintText
+	pop hl
+	pop af
+	or a
+	ret z
+	call WaitForWideTextBoxInput
+	xor a
+	call Func_1aac
+	call $503a
+	scf
+	ret
+; 0x36d9
+
+INCBIN "baserom.gbc",$36d9,$36f6 - $36d9
+
+Func_36f6: ; 36f6 (0:36f6)
+	xor a
+
+Func_36f7: ; 36f7 (0:36f7)
+	push hl
+	push de
+	ld e, a
+	add $d4
+	call GetTurnDuelistVariable
+	bit 7, a
+	jr nz, .asm_3718
+.asm_3703
+	ld a, e
+	add $bb
+	call GetTurnDuelistVariable
+	call Func_1324
+	call Func_2f32
+	cp $10
+	jr nz, .asm_3715
+	ld a, $6
+.asm_3715
+	pop de
+	pop hl
+	ret
+.asm_3718
+	ld a, e
+	call Func_34f0
+	jr c, .asm_3703
+	ld a, e
+	add $d4
+	call GetTurnDuelistVariable
+	pop de
+	pop hl
+	and $f
+	ret
+; 0x3729
+
+INCBIN "baserom.gbc",$3729,$3730 - $3729
+
+Func_3730: ; 3730 (0:3730)
+	ld a, $e9
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call Func_138c
+	ld a, [wCardBuffer2 + $33]
+	ret
+; 0x3743
+
+INCBIN "baserom.gbc",$3743,$374a - $3743
+
+Func_374a: ; 374a (0:374a)
+	ld a, $ea
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call Func_138c
+	ld a, [wCardBuffer2 + $34]
+	ret
+; 0x375d
+
+INCBIN "baserom.gbc",$375d,$377f - $375d
 
 SetupSound_T: ; 377f (0:377f)
 	farcall SetupSound_Ext
@@ -4654,7 +6308,7 @@ Func_37a0: ; 37a0 (0:37a0)
 INCBIN "baserom.gbc",$37a5,$380e - $37a5
 
 Func_380e: ; 380e (0:380e)
-	ld a, [$d0c1]
+	ld a, [wd0c1]
 	bit 7, a
 	ret nz
 	ldh a, [hBankROM]
@@ -4691,7 +6345,7 @@ Func_383d: ; 383d (0:383d)
 	ret
 
 Func_3855: ; 3855 (0:3855)
-	ld a, [$d0b5]
+	ld a, [wd0b5]
 	cp $7
 	jr c, .asm_385e
 	ld a, $6
@@ -4720,14 +6374,14 @@ Func_3876: ; 3876 (0:3876)
 	ld a, MUSIC_CARDPOP
 	call PlaySong
 	ld a, $3
-	ld [$d0c2], a
-	ld a, [$d10e]
+	ld [wd0c2], a
+	ld a, [wd10e]
 	or $10
-	ld [$d10e], a
+	ld [wd10e], a
 	farcall Func_b177
-	ld a, [$d10e]
+	ld a, [wd10e]
 	and $ef
-	ld [$d10e], a
+	ld [wd10e], a
 	call Func_37a0
 	pop af
 	call BankswitchHome
@@ -4736,11 +6390,11 @@ Func_3876: ; 3876 (0:3876)
 
 Func_38a3: ; 38a3 (0:38a3)
 	ld a, $2
-	ld [$d0c2], a
+	ld [wd0c2], a
 	xor a
-	ld [$d112], a
+	ld [wd112], a
 	ld a, $ff
-	ld [$d0c3], a
+	ld [wd0c3], a
 	ld a, $2
 	ld [wDuelTheme], a
 	ld a, MUSIC_CARDPOP
@@ -4751,9 +6405,9 @@ Func_38a3: ; 38a3 (0:38a3)
 
 Func_38c0: ; 38c0 (0:38c0)
 	ld a, $1
-	ld [$d0c2], a
+	ld [wd0c2], a
 	xor a
-	ld [$d112], a
+	ld [wd112], a
 	call EnableExtRAM
 	xor a
 	ld [$ba44], a
@@ -4765,7 +6419,7 @@ Func_38c0: ; 38c0 (0:38c0)
 
 Func_38db: ; 38db (0:38db)
 	ld a, $6
-	ld [$d111], a
+	ld [wd111], a
 	call Func_39fc
 	call EnableExtRAM
 	xor a
@@ -4774,14 +6428,14 @@ Func_38db: ; 38db (0:38db)
 asm_38ed
 	farcall Func_131d3
 	ld a, $9
-	ld [$d111], a
+	ld [wd111], a
 	call Func_39fc
 	scf
 	ret
 
 Func_38fb: ; 38fb (0:38fb)
 	xor a
-	ld [$d112], a
+	ld [wd112], a
 	bank1call Func_406f
 	call EnableExtRAM
 	ld a, [$ba44]
@@ -4827,7 +6481,7 @@ Func_3946: ; 3946 (0:3946)
 Func_395a: ; 395a (0:395a)
 	ldh a, [hBankROM]
 	push af
-	ld a, [$d4c6]
+	ld a, [wd4c6]
 	call BankswitchHome
 	call CopyGfxData
 	pop af
@@ -4881,12 +6535,12 @@ Func_39c3: ; 39c3 (0:39c3)
 	push bc
 	push de
 	xor a
-	ld [$d3aa], a
+	ld [wd3aa], a
 	ld b, a
 	ld c, $8
 	ld de, $000c
 	ld hl, $d34a
-	ld a, [$d3ab]
+	ld a, [wd3ab]
 .asm_39d6
 	cp [hl]
 	jr z, .asm_39e1
@@ -4898,7 +6552,7 @@ Func_39c3: ; 39c3 (0:39c3)
 	jr z, .asm_39e6
 .asm_39e1
 	ld a, b
-	ld [$d3aa], a
+	ld [wd3aa], a
 	or a
 .asm_39e6
 	pop de
@@ -4927,7 +6581,7 @@ Func_39fc: ; 39fc (0:39fc)
 	ld a, c
 	cp $1f
 	jr nc, .asm_3a1c
-	ld [$d112], a
+	ld [wd112], a
 	call PlaySong
 .asm_3a1c
 	pop bc
@@ -4935,10 +6589,10 @@ Func_39fc: ; 39fc (0:39fc)
 	ret
 
 Func_3a1f: ; 3a1f (0:3a1f)
-	ld a, [$d3b8]
+	ld a, [wd3b8]
 	or a
 	jr z, .asm_3a37
-	ld a, [$d32e]
+	ld a, [wd32e]
 	cp $2
 	jr z, .asm_3a37
 	cp $b
@@ -4948,7 +6602,7 @@ Func_3a1f: ; 3a1f (0:3a1f)
 	ld a, MUSIC_RONALD
 	ret
 .asm_3a37
-	ld a, [$d111]
+	ld a, [wd111]
 	ret
 
 Func_3a3b: ; 3a3b (0:3a3b)
@@ -4973,7 +6627,7 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	call Func_c653
 	ld a, $4
 	call BankswitchHome
-	ld a, [$d334]
+	ld a, [wd334]
 	ld d, a
 .asm_3a79
 	ld a, [hli]
@@ -4990,17 +6644,17 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	cp c
 	jr nz, .asm_3aab
 	ld a, [hli]
-	ld [$d0c6], a
+	ld [wd0c6], a
 	ld a, [hli]
-	ld [$d0c7], a
+	ld [wd0c7], a
 	ld a, [hli]
-	ld [$d0ca], a
+	ld [wd0ca], a
 	ld a, [hli]
-	ld [$d0cb], a
+	ld [wd0cb], a
 	ld a, [hli]
-	ld [$d0c8], a
+	ld [wd0c8], a
 	ld a, [hli]
-	ld [$d0c9], a
+	ld [wd0c9], a
 	pop hl
 	pop bc
 	pop af
@@ -5084,7 +6738,89 @@ Func_3aed: ; 3aed (0:3aed)
 	jp [hl]
 ; 0x3b11
 
-INCBIN "baserom.gbc",$3b11,$3bd2 - $3b11
+INCBIN "baserom.gbc",$3b11,$3b21 - $3b11
+
+Func_3b21: ; 3b21 (0:3b21)
+	ld a, [$ff80]
+	push af
+	ld a, $7
+	call BankswitchHome
+	call $48bc
+	pop af
+	call BankswitchHome
+	ret
+
+Func_3b31: ; 3b31 (0:3b31)
+	ld a, [$ff80]
+	push af
+	ld a, $7
+	call BankswitchHome
+	call $4b18
+	jr c, .asm_3b45
+	xor a
+	ld [wDoFrameFunction], a
+	ld [wcad4], a
+.asm_3b45
+	call Func_099c
+	ld a, $1
+	ld [wVBlankOAMCopyToggle], a
+	pop af
+	call BankswitchHome
+	ret
+
+Func_3b52: ; 3b52 (0:3b52)
+	push hl
+	push bc
+	ld a, [wd42a]
+	ld hl, $d4c0
+	and [hl]
+	ld hl, $d423
+	ld c, $7
+.asm_3b60
+	and [hl]
+	inc hl
+	dec c
+	jr nz, .asm_3b60
+	cp $ff
+	pop bc
+	pop hl
+	ret
+
+Func_3b6a: ; 3b6a (0:3b6a)
+	ld [wd422], a
+	ld a, [$ff80]
+	push af
+	ld [wd4be], a
+	push hl
+	push bc
+	push de
+	ld a, $7
+	call BankswitchHome
+	ld a, [wd422]
+	cp $61
+	jr nc, .asm_3b90
+	ld hl, $d4ad
+	ld a, [wd4ac]
+	cp [hl]
+	jr nz, .asm_3b90
+	call Func_3b52
+	jr nc, .asm_3b95
+.asm_3b90
+	call $4a31
+	jr .asm_3b9a
+.asm_3b95
+	call $48ef
+	jr .asm_3b9a
+.asm_3b9a
+	pop de
+	pop bc
+	pop hl
+	pop af
+	call BankswitchHome
+	ret
+; 0x3ba2
+
+INCBIN "baserom.gbc",$3ba2,$3bd2 - $3ba2
 
 ; writes from hl the pointer to the function to be called by DoFrame
 SetDoFrameFunction: ; 3bd2 (0:3bd2)
@@ -5108,11 +6844,11 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]
 	push af
 	push hl
-	ld a, [$d4c6]
+	ld a, [wd4c6]
 	call BankswitchHome
-	ld a, [$d4c4]
+	ld a, [wd4c4]
 	ld l, a
-	ld a, [$d4c5]
+	ld a, [wd4c5]
 	ld h, a
 	call CopyData_SaveRegisters
 	pop hl
@@ -5177,11 +6913,20 @@ Func_3c5a: ; 3c5a (0:3c5a)
 	ret
 ; 0x3c83
 
-INCBIN "baserom.gbc",$3c83,$3ca0 - $3c83
+INCBIN "baserom.gbc",$3c83,$3c96 - $3c83
+
+Func_3c96: ; 3c96 (0:3c96)
+	call DoFrameIfLCDEnabled
+	call Func_378a
+	or a
+	jr nz, Func_3c96
+	ret
 
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
-	ld [$d5d7], a
+	ld [wd5d7], a
+
+Func_3ca4: ; 3ca4 (0:3ca4)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)
@@ -5209,22 +6954,22 @@ Func_3d72: ; 3d72 (0:3d72)
 	push af
 	push hl
 	push hl
-	ld a, [$d4ca]
+	ld a, [wd4ca]
 	cp $ff
 	jr nz, .asm_3d84
 	ld de, Unknown_80e5a
 	xor a
 	jr .asm_3da1
 .asm_3d84
-	ld a, [$d4c4]
+	ld a, [wd4c4]
 	ld l, a
-	ld a, [$d4c5]
+	ld a, [wd4c5]
 	ld h, a
-	ld a, [$d4c6]
+	ld a, [wd4c6]
 	call BankswitchHome
 	ld a, [hli]
 	push af
-	ld a, [$d4ca]
+	ld a, [wd4ca]
 	rlca
 	ld e, [hl]
 	add e
@@ -5259,7 +7004,7 @@ Func_3db7: ; 3db7 (0:3db7)
 	ret
 
 Func_3dbf: ; 3dbf (0:3dbf)
-	ld a, [$d4cf]
+	ld a, [wd4cf]
 	cp $10
 	jr c, .asm_3dc9
 	rst $38
@@ -5297,14 +7042,14 @@ Func_3df3: ; 3df3 (0:3df3)
 	pop af
 	call BankswitchHome
 	pop af
-	ld a, [$d61b]
+	ld a, [wd61b]
 	ret
 ; 0x3e10
 
 INCBIN "baserom.gbc",$3e10,$3e17 - $3e10
 
 Func_3e17: ; 3e17 (0:3e17)
-	ld [$d131], a
+	ld [wd131], a
 	ldh a, [hBankROM]
 	push af
 	ld a, $4
@@ -5315,7 +7060,7 @@ Func_3e17: ; 3e17 (0:3e17)
 	ret
 
 Func_3e2a: ; 3e2a (0:3e2a)
-	ld [$d61e], a
+	ld [wd61e], a
 	ld a, $63
 	jr Func_3e17
 ; 0x3e31

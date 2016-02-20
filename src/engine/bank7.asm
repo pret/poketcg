@@ -293,13 +293,13 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, [$d633]
 	cp $ff
 	jr nz, .asm_1d6c8
-	call $3c96
+	call Func_3c96
 	ld a, $8
 	farcallx $4, $6863
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_10ab4
-	call $3ca4
+	call Func_3ca4
 	call Set_WD_off
 	call $5758
 	call EnableLCD

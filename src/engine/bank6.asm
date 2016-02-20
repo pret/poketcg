@@ -153,7 +153,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	bank1call $2ebb
+	bank1call Func_2ebb ; switch to bank 1, but call a home func
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	pop hl
