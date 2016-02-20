@@ -5872,23 +5872,23 @@ Func_3269: ; 3269 (0:3269)
 
 INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
 
-Func_33c1: ; 33c1 (0:33c1)
+CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
 	ld a, $e8
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	ld hl, $0100
-	cp $5
-	jr z, .asm_33df
-	ld hl, $0101
-	cp $6
-	jr z, .asm_33df
-	ld hl, $0102
-	cp $b
-	jr z, .asm_33df
+	ld hl, $0100 ;tail wag
+	cp $05
+	jr z, .returnWithCantAttack
+	ld hl, $0101 ;leer
+	cp $06
+	jr z, .returnWithCantAttack
+	ld hl, $0102 ;bone attack
+	cp $0b
+	jr z, .returnWithCantAttack
 	or a
 	ret
-.asm_33df
+.returnWithCantAttack
 	scf
 	ret
 

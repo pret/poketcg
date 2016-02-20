@@ -478,28 +478,28 @@ INCBIN "baserom.gbc",$458e, $46fc - $458e
 
 
 OpenBattleAttackMenu: ; 46fc (1:46fc)
-	call Func_33c1
-	jr c, .asm_4706
-	call $4918
-	jr nc, .asm_470c
-
-.asm_4706
+	call CheckIfCantAttackDueToAttackEffect
+	jr c, .alertCantAttackAndCancelMenu
+	call CheckIfActiveCardParalyzedOrAsleep
+	jr nc, .clearSubMenuSelection
+	
+.alertCantAttackAndCancelMenu
 	call DrawWideTextBox_WaitForInput
-	jp Func_4295
-
-.asm_470c
+	jp $4295
+	
+.clearSubMenuSelection
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
-
-Func_4710: ; 4710 (1:4710)
-	call $4823
+	
+.tryOpenAttackMenu
+	call $4823 
 	or a
-	jr nz, Func_471f
-	ld hl, $003c
+	jr nz, .asm_471f
+	ld hl, $003c 
 	call DrawWideTextBox_WaitForInput
-	jp Func_4295
+	jp $4295
 
-Func_471f: ; 471f (1:471f)
+.asm_471f
 	push af
 	ld a, [wSelectedDuelSubMenuItem]
 	ld hl, $47e4
@@ -508,26 +508,27 @@ Func_471f: ; 471f (1:471f)
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, DUELVARS_ARENA_CARD
+	ld l, $bb
 	ld a, [hl]
-	call Func_1376
+	call $1376
+
 .asm_4736
 	call DoFrame
 	ldh a, [hButtonsPressed]
 	and a, $08
-	jr nz, Func_4782
+	jr nz, .asm_4782
 	call Func_264b
 	jr nc, .asm_4736
 	cp a, $ff
-	jp z, Func_4295
+	jp z, $4295
 	ld [wSelectedDuelSubMenuItem], a
 	call $488f
-	jr nc, Func_4759
+	jr nc, .asm_4759
 	ld hl, $00c0
 	call DrawWideTextBox_WaitForInput
-	jr Func_4710
+	jr .tryOpenAttackMenu
 
-Func_4759: ; 4759 (1:4759)
+.asm_4759
 	ldh a, [hCurrentMenuItem]
 	add a
 	ld e, a
@@ -537,27 +538,109 @@ Func_4759: ; 4759 (1:4759)
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
-	call Func_16c0
-	call Func_33e1
-	jr c, Func_477d
+	call $16c0
+	call $33e1
+	jr c, .asm_477d
 	ld a, $07
 	call $51e7
 	jp c, Func_4268
-	call Func_1730
+	call $1730
 	jp c, Func_426d
 	ret
 
-Func_477d: ; 477d (1:477d)
+.asm_477d ; 477d (1:477d)
 	call DrawWideTextBox_WaitForInput
-	jr Func_4710
-
-Func_4782: ; 4782 (1:4782)
+	jr .tryOpenAttackMenu
+	
+.asm_4782 ; 4782 (1:4782)
 	call $478b
 	call $4f9d
-	jp Func_4710
+	jp .tryOpenAttackMenu
+	
+
+INCBIN "baserom.gbc",$478b, $4823 - $478b
+
+Func_4823: ; 4823 (1:4823)
+	call DrawWideTextBox
+	ld a, $bb
+	call GetTurnDuelistVariable
+	ldh [$ff98], a
+	call $1376
+	ld c, $00
+	ld b, $0d
+	ld hl, $c510
+	xor a
+	ld [$cbc7], a
+	ld de, $cc34
+	call $4872
+	jr c, .asm_4856
+	ldh a, [$ff98]
+	ld [hli], a
+	xor a
+	ld [hli], a
+	inc c
+	push hl
+	push bc
+	ld e, b
+	ld hl, $cc34
+	call $5c33
+	pop bc
+	pop hl
+	inc b
+	inc b
+	
+.asm_4856
+	ld de, $cc47
+	call $4872
+	jr c, .asm_4870
+	ldh a, [$ff98]
+	ld [hli], a
+	ld a, $01
+	ld [hli], a
+	inc c
+	push hl
+	push bc
+	ld e, b
+	ld hl, $cc47
+	call $5c33
+	pop bc
+	pop hl
+	
+.asm_4870
+	ld a, c
+	ret
+
+INCBIN "baserom.gbc",$4872, $4918 - $4872
 
 
-INCBIN "baserom.gbc",$478b, $5aeb - $478b
+
+
+CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $0f
+	cp CARD_PARALYZED
+	jr z, .paralyzed
+	cp CARD_ASLEEP
+	jr z, .asleep
+	or a
+	ret
+
+.paralyzed:
+	ld hl, $0025
+	jr .returnWithStatusCondition
+	
+.asleep:
+	ld hl, $0024
+	
+.returnWithStatusCondition:
+	scf
+	ret
+
+
+
+
+INCBIN "baserom.gbc",$4933, $5aeb - $4933
 
 
 Func_5aeb: ; 5aeb (1:5aeb)

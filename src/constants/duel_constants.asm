@@ -23,3 +23,11 @@ DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "wPlayerNumberOfCardsInHand & $ff"
 DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "wPlayerNumberOfPokemonInPlay & $ff"      ; ef
 DUELVARS_ARENA_CARD_STATUS               EQUS "wPlayerArenaCardStatus & $ff"            ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"                ; f1
+
+
+; status condition constants
+CARD_NOSTATUS  EQU $00
+;TODO - ???      EQU $01
+CARD_ASLEEP    EQU $02
+CARD_PARALYZED EQU $03
+;TODO - beyond

@@ -62,7 +62,15 @@ wPlayerBench4CardHP:: ; c2cc
 	ds $1
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
-	ds $1e
+	ds $1a
+	
+;The only known use of this is to store
+;when an attack causes a pokemon
+;to not be able to attack the following turn
+;for example: tail wag, leer
+wPlayerCantAttackStatus:: ; c2e8
+	ds $1
+	ds $3
 
 ; Each bit represents a prize (1 = not taken ; 0 = taken)
 wPlayerPrizes:: ; c2ec
@@ -122,7 +130,15 @@ wOpponentBench4CardHP:: ; c3cc
 	ds $1
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
-	ds $1e
+	ds $1a
+	
+;The only known use of this is to store
+;when an attack causes a pokemon
+;to not be able to attack the following turn
+;for example: tail wag, leer
+wOpponentCantAttackStatus:: ; c3e8
+	ds $1
+	ds $3
 
 wOpponentPrizes:: ; c3ec
 	ds $1
