@@ -57,6 +57,5 @@ hCurrentMenuItem::
 
 	ds 3
 
-
 hffb5:: ; ffb5
 	ds 1

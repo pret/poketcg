@@ -17,13 +17,13 @@ DUELVARS_BENCH2_CARD_HP                  EQUS "wPlayerBench2CardHP & $ff"       
 DUELVARS_BENCH3_CARD_HP                  EQUS "wPlayerBench3CardHP & $ff"               ; cb
 DUELVARS_BENCH4_CARD_HP                  EQUS "wPlayerBench4CardHP & $ff"               ; cc
 DUELVARS_BENCH5_CARD_HP                  EQUS "wPlayerBench5CardHP & $ff"               ; cd
+DUELVARS_CANT_ATTACK_STATUS              EQUS "wPlayerCantAttackStatus & $ff"           ; e8
 DUELVARS_PRIZES                          EQUS "wPlayerPrizes & $ff"                     ; ec
 DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "wPlayerNumberOfCardsInDiscardPile & $ff" ; ed
 DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "wPlayerNumberOfCardsInHand & $ff"        ; ee
 DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "wPlayerNumberOfPokemonInPlay & $ff"      ; ef
 DUELVARS_ARENA_CARD_STATUS               EQUS "wPlayerArenaCardStatus & $ff"            ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"                ; f1
-
 
 ; status condition constants
 CARD_NOSTATUS  EQU $00
