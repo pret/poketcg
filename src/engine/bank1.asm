@@ -485,7 +485,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	
 .alertCantAttackAndCancelMenu
 	call DrawWideTextBox_WaitForInput
-	jp $4295
+	jp Func_4295
 	
 .clearSubMenuSelection
 	xor a
@@ -497,7 +497,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	jr nz, .asm_471f
 	ld hl, $003c 
 	call DrawWideTextBox_WaitForInput
-	jp $4295
+	jp Func_4295
 
 .asm_471f
 	push af
@@ -510,7 +510,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld h, a
 	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
-	call $1376
+	call Func_1376
 
 .asm_4736
 	call DoFrame
@@ -520,7 +520,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call Func_264b
 	jr nc, .asm_4736
 	cp a, $ff
-	jp z, $4295
+	jp z, Func_4295
 	ld [wSelectedDuelSubMenuItem], a
 	call $488f
 	jr nc, .asm_4759
@@ -538,8 +538,8 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
-	call $16c0
-	call $33e1
+	call Func_16c0
+	call Func_33e1
 	jr c, .asm_477d
 	ld a, $07
 	call $51e7
