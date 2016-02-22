@@ -124,23 +124,23 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld a, $76
 	call $663b
 	ld a, $c1
-	ld hl, $0191
+	text_hl Text0191
 	jr .asm_1a660
 .asm_1a640
-	ld hl, $018f
+	text_hl Text018f
 	cp $1e
 	jr z, .asm_1a660
 	cp $43
 	jr z, .asm_1a660
-	ld hl, $0192
+	text_hl Text0192
 	cp $64
 	jr z, .asm_1a660
-	ld hl, $0193
+	text_hl Text0193
 	cp $65
 	jr z, .asm_1a660
 	cp $66
 	jr z, .asm_1a660
-	ld hl, $0190
+	text_hl Text0190
 .asm_1a660
 	push hl
 	ld e, a

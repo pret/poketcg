@@ -49,7 +49,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, [$d116]
 	cp $e0
 	jr nz, .asm_102e2
-	ld hl, $038b
+	text_hl Text038b
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
@@ -101,16 +101,16 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	pop bc
 	ld a, c
 	farcallx $7, $61c4
-	ld hl, $0387
+	text_hl Text0387
 	ld a, [$d117]
 	cp $1
 	jr nz, .asm_10373
-	ld hl, $0388
+	text_hl Text0388
 .asm_10373
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
-	ld hl, $0389
+	text_hl Text0389
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
@@ -1115,7 +1115,7 @@ Func_1344d: ; 1344d (4:744d)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	ld hl, $07e6
+	text_hl Text07e6
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
@@ -1137,7 +1137,7 @@ Func_13485: ; 13485 (4:7485)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	ld hl, $07e8
+	text_hl Text07e8
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0

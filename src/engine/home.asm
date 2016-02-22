@@ -2099,7 +2099,7 @@ Func_0f35: ; 0f35 (0:0f35)
 	ld l, a
 	ld h, $0
 	call Func_2ec4
-	ld hl, $0055
+	text_hl Text0055 ; transmission error
 	call DrawWideTextBox_WaitForInput
 	ld a, $ff
 	ld [wd0c3], a
@@ -2671,7 +2671,7 @@ Func_1828: ; 1828 (0:1828)
 	bank1call $4f9d
 	ld a, $1
 	ld [wcce6], a
-	ld hl, $004f
+	text_hl Text004f ; 20 self-confusion damage
 	call DrawWideTextBox_PrintText
 	ld a, $75
 	ld [wccb8], a
@@ -3017,7 +3017,7 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	ld hl, $0081
+	text_hl Text0081 ; was knocked out
 	call DrawWideTextBox_PrintText
 	ld a, $28
 .asm_1aeb
@@ -3046,7 +3046,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	ld [hli], a
 	ld a, [wccab]
 	ld [hli], a
-	ld hl, $0035
+	text_hl Text0035 ; text when using an attack (?)
 	call DrawWideTextBox_PrintText
 	ret
 
@@ -3083,7 +3083,7 @@ Func_1bca: ; 1bca (0:1bca)
 	inc de
 	ld a, [hli]
 	ld [de], a
-	ld hl, $014a
+	text_hl Text014a ; was unsuccessful
 	call DrawWideTextBox_PrintText
 	scf
 	ret
@@ -3138,7 +3138,7 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	jr z, .printPlayer2
 	jr printNameLoop
 .printPlayer2
-	ld hl, $0092
+	text_hl Text0092 ; player 2
 	jp PrintTextBoxBorderLabel
 ; 0x1caa
 
@@ -4639,7 +4639,7 @@ Func_2af0: ; 2af0 (0:2af0)
 
 Func_2b66: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForWindow
-	ld hl, $002f
+	text_hl Text002f ; yes no
 	call Func_2c1b
 	ret
 ; 0x2b70
@@ -5877,13 +5877,13 @@ CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	text_hl Text0100 ;tail wag
+	text_hl Text0100 ; tail wag
 	cp $05
 	jr z, .returnWithCantAttack
-	text_hl Text0101 ;leer
+	text_hl Text0101 ; leer
 	cp $06
 	jr z, .returnWithCantAttack
-	text_hl Text0102 ;bone attack
+	text_hl Text0102 ; bone attack
 	cp $0b
 	jr z, .returnWithCantAttack
 	or a
@@ -5910,7 +5910,7 @@ Func_33e1: ; 33e1 (0:33e1)
 	ld a, [wccc6]
 	cp [hl]
 	jr nz, .asm_33ee
-	ld hl, $0103
+	text_hl Text0103 ; amnesia
 	scf
 	ret
 
@@ -5921,7 +5921,7 @@ Func_3400: ; 3400 (0:3400)
 	ld [wcc0a], a
 	ccf
 	ret nc
-	ld hl, $00fd
+	text_hl Text00fd ; attack unsuccessful
 	call DrawWideTextBox_WaitForInput
 	scf
 	ret
@@ -5955,15 +5955,15 @@ Func_3432: ; 3432 (0:3432)
 	ld a, $e7
 	call GetTurnDuelistVariable
 	ld e, $3
-	ld hl, $0107
+	text_hl Text0107 ; fly
 	cp $d
 	jr z, .asm_346a
 	ld e, $2
-	ld hl, $0108
+	text_hl Text0108 ; barrier
 	cp $14
 	jr z, .asm_346a
 	ld e, $1
-	ld hl, $0109
+	text_hl Text0109 ; agility
 	cp $c
 	jr z, .asm_346a
 	call Func_34ef
@@ -5991,7 +5991,7 @@ Func_3432: ; 3432 (0:3432)
 	or a
 	ret z
 	ld e, $5
-	ld hl, $010b
+	text_hl Text010b ; n shield
 	jr .asm_346a
 
 Func_348a: ; 348a (0:348a)
@@ -6015,7 +6015,7 @@ Func_348a: ; 348a (0:348a)
 	ret nc
 	ld a, $4
 	ld [wccc7], a
-	ld hl, $010c
+	text_hl Text010c ; transparency
 	scf
 	ret
 ; 0x34b7
@@ -6040,13 +6040,13 @@ Func_34f0: ; 34f0 (0:34f0)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $f
-	ld hl, $00cb
+	text_hl Text00cb ; sleep, paralysis or confusion
 	scf
 	jr nz, .asm_3508
 .asm_3500
 	ld a, $27
 	call Func_3509
-	ld hl, $00d4
+	text_hl Text00d4 ; toxic gas
 .asm_3508
 	ret
 
@@ -6189,7 +6189,7 @@ Func_36a2: ; 36a2 (0:36a2)
 	push af
 	push hl
 	call Func_1a96
-	ld hl, $0105
+	text_hl Text0105 ; strikes back
 	call DrawWideTextBox_PrintText
 	pop hl
 	pop af

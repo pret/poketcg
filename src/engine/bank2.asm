@@ -81,7 +81,7 @@ Func_8db0: ; 8db0 (2:4db0)
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
 	call InitializeCursorParameters
-	ld hl, $0224
+	text_hl Text0224
 	call DrawWideTextBox_PrintText
 .asm_8dc8
 	call DoFrame
@@ -348,13 +348,13 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	xor a
 	ld [$ce3f], a
 	ld [$ce40], a
-	ld hl, $022a
+	text_hl Text022a
 	call DrawWideTextBox_WaitForInput
 	ld a, [$ceb1]
 	jp Func_8dbc
 
 Func_8fe8: ; 8fe8 (2:4fe8)
-	ld hl, $022f
+	text_hl Text022f
 	call DrawWideTextBox_WaitForInput
 	ld a, [$ceb1]
 	ret
@@ -703,7 +703,7 @@ Func_926e: ; 926e (2:526e)
 	ret
 .asm_929c
 	call Func_22ae
-	ld hl, $0223
+	text_hl Text0223
 	call Func_2c29
 	scf
 	ret
