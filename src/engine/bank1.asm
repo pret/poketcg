@@ -622,11 +622,11 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ret
 
 .paralyzed:
-	ld hl, $0025
+	text_hl Text0025 ; paralyzed
 	jr .returnWithStatusCondition
 
 .asleep:
-	ld hl, $0024
+	text_hl Text0024 ; asleep
 
 .returnWithStatusCondition:
 	scf

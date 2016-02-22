@@ -42,6 +42,10 @@ GLOBAL \1_
 const_value = const_value + 1
 ENDM
 
+text_hl: MACRO
+	ld hl, \1_
+ENDM
+
 SGB: MACRO
 	db \1 * 8 + \2 ; sgb_command * 8 + length
 ENDM

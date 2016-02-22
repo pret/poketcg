@@ -5877,13 +5877,13 @@ CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	ld hl, $0100 ;tail wag
+	text_hl Text0100 ;tail wag
 	cp $05
 	jr z, .returnWithCantAttack
-	ld hl, $0101 ;leer
+	text_hl Text0101 ;leer
 	cp $06
 	jr z, .returnWithCantAttack
-	ld hl, $0102 ;bone attack
+	text_hl Text0102 ;bone attack
 	cp $0b
 	jr z, .returnWithCantAttack
 	or a
