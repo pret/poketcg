@@ -30,7 +30,7 @@ emptybank: MACRO
 	endr
 ENDM
 
-RGB: MACRO
+rgb: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
@@ -46,7 +46,7 @@ text_hl: MACRO
 	ld hl, \1_
 ENDM
 
-SGB: MACRO
+sgb: MACRO
 	db \1 * 8 + \2 ; sgb_command * 8 + length
 ENDM
 

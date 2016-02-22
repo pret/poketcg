@@ -408,10 +408,10 @@ SetupPalettes: ; 036a (0:036a)
 	ret
 
 InitialPalette: ; 0399 (0:0399)
-	RGB 28,28,24
-	RGB 21,21,16
-	RGB 10,10,08
-	RGB 00,00,00
+	rgb 28,28,24
+	rgb 21,21,16
+	rgb 10,10,08
+	rgb 00,00,00
 
 SetupVRAM: ; 03a1 (0:03a1)
 	call FillTileMap
@@ -626,7 +626,7 @@ Func_04a2: ; 04a2 (0:04a2)
 	ret
 
 SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
-	SGB ATTR_BLK, 1 ; sgb_command, length
+	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
 Func_04cf: ; 04cf (0:04cf)
@@ -1515,55 +1515,55 @@ InitSGB: ; 0a0d (0:0a0d)
 	ret
 
 SGB_DATA_SND_0a50: ; 0a50 (0:0a50)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $5d,$08,$00,$0b,$8c,$d0,$f4,$60,$00,$00,$00,$00,$00,$00,$00
 
 SGB_DATA_SND_0a60: ; 0a60 (0:0a60)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $52,$08,$00,$0b,$a9,$e7,$9f,$01,$c0,$7e,$e8,$e8,$e8,$e8,$e0
 
 SGB_DATA_SND_0a70: ; 0a70 (0:0a70)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $47,$08,$00,$0b,$c4,$d0,$16,$a5,$cb,$c9,$05,$d0,$10,$a2,$28
 
 SGB_DATA_SND_0a80: ; 0a80 (0:0a80)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $3c,$08,$00,$0b,$f0,$12,$a5,$c9,$c9,$c8,$d0,$1c,$a5,$ca,$c9
 
 SGB_DATA_SND_0a90: ; 0a90 (0:0a90)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $31,$08,$00,$0b,$0c,$a5,$ca,$c9,$7e,$d0,$06,$a5,$cb,$c9,$7e
 
 SGB_DATA_SND_0aa0: ; 0aa0 (0:0aa0)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $26,$08,$00,$0b,$39,$cd,$48,$0c,$d0,$34,$a5,$c9,$c9,$80,$d0
 
 SGB_DATA_SND_0ab0: ; 0ab0 (0:0ab0)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $1b,$08,$00,$0b,$ea,$ea,$ea,$ea,$ea,$a9,$01,$cd,$4f,$0c,$d0
 
 SGB_DATA_SND_0ac0: ; 0ac0 (0:0ac0)
-	SGB DATA_SND, 1 ; sgb_command, length
+	sgb DATA_SND, 1 ; sgb_command, length
 	db $10,$08,$00,$0b,$4c,$20,$08,$ea,$ea,$ea,$ea,$ea,$60,$ea,$ea
 
 SGB_MASK_EN_ON: ; 0ad0 (0:0ad0)
-	SGB MASK_EN, 1 ; sgb_command, length
+	sgb MASK_EN, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 SGB_MASK_EN_OFF: ; 0ae0 (0:0ae0)
-	SGB MASK_EN, 1 ; sgb_command, length
+	sgb MASK_EN, 1 ; sgb_command, length
 	db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 SGB_PAL01: ; 0af0 (0:0af0)
-	SGB PAL01, 1 ; sgb_command, length
+	sgb PAL01, 1 ; sgb_command, length
 	db $9c,$63,$94,$42,$08,$21,$00,$00,$1f,$00,$0f,$00,$07,$00,$00
 
 SGB_PAL23: ; 0b00 (0:0b00)
-	SGB PAL23, 1 ; sgb_command, length
+	sgb PAL23, 1 ; sgb_command, length
 	db $e0,$03,$e0,$01,$e0,$00,$00,$00,$00,$7c,$00,$3c,$00,$1c,$00
 
 SGB_ATTR_BLK_0b10: ; 0b10 (0:0b10)
-	SGB ATTR_BLK, 1 ; sgb_command, length
+	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$09,$05,$05,$0a,$0a,$00,$00,$00,$00,$00,$00,$00,$00
 
 ; send SGB command
@@ -1652,11 +1652,11 @@ DetectSGB: ; 0b59 (0:0b59)
 	ret
 
 SGB_MLT_REQ_1: ; 0bab (0:0bab)
-	SGB MLT_REQ, 1 ; sgb_command, length
+	sgb MLT_REQ, 1 ; sgb_command, length
 	db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
-	SGB MLT_REQ, 1 ; sgb_command, length
+	sgb MLT_REQ, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 INCBIN "baserom.gbc",$0bcb,$0c08 - $0bcb
@@ -3450,7 +3450,7 @@ ColorizeTextBoxSGB
 	ret
 
 SGB_ATTR_BLK_1f4f: ; 1f4f (0:1f4f)
-	SGB ATTR_BLK, 1 ; sgb_command, length
+	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 Func_1f5f: ; 1f5f (0:1f5f)
