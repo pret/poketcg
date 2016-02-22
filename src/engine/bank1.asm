@@ -476,26 +476,25 @@ OpenBattleCheckMenu: ; 4585 (1:4585)
 
 INCBIN "baserom.gbc",$458e, $46fc - $458e
 
-
 OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call CheckIfCantAttackDueToAttackEffect
 	jr c, .alertCantAttackAndCancelMenu
 	call CheckIfActiveCardParalyzedOrAsleep
 	jr nc, .clearSubMenuSelection
-	
+
 .alertCantAttackAndCancelMenu
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
-	
+
 .clearSubMenuSelection
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
-	
+
 .tryOpenAttackMenu
-	call $4823 
+	call $4823
 	or a
 	jr nz, .asm_471f
-	ld hl, $003c 
+	ld hl, $003c
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -551,12 +550,11 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 .asm_477d ; 477d (1:477d)
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
-	
+
 .asm_4782 ; 4782 (1:4782)
 	call $478b
 	call $4f9d
 	jp .tryOpenAttackMenu
-	
 
 INCBIN "baserom.gbc",$478b, $4823 - $478b
 
@@ -588,7 +586,7 @@ Func_4823: ; 4823 (1:4823)
 	pop hl
 	inc b
 	inc b
-	
+
 .asm_4856
 	ld de, $cc47
 	call $4872
@@ -605,18 +603,15 @@ Func_4823: ; 4823 (1:4823)
 	call $5c33
 	pop bc
 	pop hl
-	
+
 .asm_4870
 	ld a, c
 	ret
 
 INCBIN "baserom.gbc",$4872, $4918 - $4872
 
-
-
-
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $0f
 	cp CARD_PARALYZED
@@ -629,19 +624,15 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 .paralyzed:
 	ld hl, $0025
 	jr .returnWithStatusCondition
-	
+
 .asleep:
 	ld hl, $0024
-	
+
 .returnWithStatusCondition:
 	scf
 	ret
 
-
-
-
 INCBIN "baserom.gbc",$4933, $5aeb - $4933
-
 
 Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb

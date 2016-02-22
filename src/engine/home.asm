@@ -2520,14 +2520,14 @@ Func_16c0: ; 16c0 (0:16c0)
 	ret
 
 Func_16f6: ; 16f6 (0:16f6)
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld [$ff9f], a
 	call Func_1324
 	ld a, e
 	ld [wccc3], a
 	call GetOpposingTurnDuelistVariable_SwapTurn
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1324
 	ld a, e
@@ -2761,7 +2761,7 @@ Func_189d: ; 189d (0:189d)
 Func_18d7: ; 18d7 (0:18d7)
 	xor a
 	ld [wccc9], a
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $f
 	cp $1
@@ -2800,7 +2800,7 @@ Func_195c: ; 195c (0:195c)
 	ld a, [wccc1]
 	ld c, a
 	ld b, $0
-	ld a, $c8
+	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	bank1call $7469
 	call Func_1ad0
@@ -2986,14 +2986,14 @@ Func_1a96: ; 1a96 (0:1a96)
 
 Func_1aac: ; 1aac (0:1aac)
 	ld e, a
-	add $c8
+	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
 	ret nz
 	ld a, [wccc4]
 	push af
 	ld a, e
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1376
 	ld a, [wCardBuffer1 + $7]
@@ -3032,7 +3032,7 @@ INCBIN "baserom.gbc",$1af3,$1b8d - $1af3
 
 Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1376
 	ld a, $12
@@ -3068,7 +3068,7 @@ Func_1bca: ; 1bca (0:1bca)
 	cp $1
 	jr z, .asm_1bfd
 	ld a, [$ff9d]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1376
 	ld a, $12
@@ -5736,7 +5736,7 @@ Func_321d: ; 321d (0:321d)
 	call GetTurnDuelistVariable
 	or a
 	call nz, Func_323a
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetTurnDuelistVariable
 	or a
 	call nz, Func_3243
@@ -5873,7 +5873,7 @@ Func_3269: ; 3269 (0:3269)
 INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
 
 CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetTurnDuelistVariable
 	or a
 	ret z
@@ -5893,7 +5893,7 @@ CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
 	ret
 
 Func_33e1: ; 33e1 (0:33e1)
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetTurnDuelistVariable
 	or a
 	jr nz, .asm_33ea
@@ -5927,7 +5927,7 @@ Func_3400: ; 3400 (0:3400)
 	ret
 
 Func_3414: ; 3414 (0:3414)
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetTurnDuelistVariable
 	or a
 	ret z
@@ -6037,7 +6037,7 @@ Func_34ef: ; 34ef (0:34ef)
 Func_34f0: ; 34f0 (0:34f0)
 	or a
 	jr nz, .asm_3500
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $f
 	ld hl, $00cb
@@ -6074,7 +6074,7 @@ Func_3525: ; 3525 (0:3525)
 	push bc
 	ld [wce7c], a
 	ld c, $0
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .asm_3549
@@ -6082,13 +6082,13 @@ Func_3525: ; 3525 (0:3525)
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_3549
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $f
 	jr nz, .asm_3549
 	inc c
 .asm_3549
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 .asm_354e
 	ld a, [hli]
@@ -6135,7 +6135,7 @@ Func_35fa: ; 35fa (0:35fa)
 	call GetTurnDuelistVariable
 	res 1, [hl]
 	push hl
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetTurnDuelistVariable
 	xor a
 	ld [hl], a
@@ -6183,7 +6183,7 @@ Func_36a2: ; 36a2 (0:36a2)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	ld a, $c8
+	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	pop de
 	push af
@@ -6218,7 +6218,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	jr nz, .asm_3718
 .asm_3703
 	ld a, e
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1324
 	call Func_2f32
@@ -6249,7 +6249,7 @@ Func_3730: ; 3730 (0:3730)
 	call GetTurnDuelistVariable
 	or a
 	ret nz
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_138c
 	ld a, [wCardBuffer2 + $33]
@@ -6263,7 +6263,7 @@ Func_374a: ; 374a (0:374a)
 	call GetTurnDuelistVariable
 	or a
 	ret nz
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_138c
 	ld a, [wCardBuffer2 + $34]

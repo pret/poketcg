@@ -63,7 +63,7 @@ wPlayerBench4CardHP:: ; c2cc
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
 	ds $1a
-	
+
 ;The only known use of this is to store
 ;when an attack causes a pokemon
 ;to not be able to attack the following turn
@@ -131,7 +131,7 @@ wOpponentBench4CardHP:: ; c3cc
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
 	ds $1a
-	
+
 ;The only known use of this is to store
 ;when an attack causes a pokemon
 ;to not be able to attack the following turn
@@ -333,8 +333,6 @@ wSerialRecvIndex:: ; cba4
 wSerialRecvBuf:: ; $cba5 - $cbc4
 	ds $20
 	ds $1
-
-
 
 ;--- Duels 2 ----------------------------------------------
 
