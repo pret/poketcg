@@ -50,7 +50,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld a, $0
-	ld [$c2f1], a
+	ld [wPlayerDuelistType], a
 	ld a, [$cc19]
 	ld [wOpponentDeckId], a
 	call LoadPlayerDeck
@@ -491,7 +491,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 
 .tryOpenAttackMenu
-	call $4823
+	call LoadPokemonAttacksToDuelPointerTable
 	or a
 	jr nz, .asm_471f
 	ld hl, $003c
@@ -532,7 +532,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, $c510
+	ld hl, DuelAttackPointerTable
 	add hl, de
 	ld d, [hl]
 	inc hl
@@ -558,20 +558,20 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 
 INCBIN "baserom.gbc",$478b, $4823 - $478b
 
-Func_4823: ; 4823 (1:4823)
+LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [$ff98], a
-	call $1376
+	call Func_1376
 	ld c, $00
 	ld b, $0d
-	ld hl, $c510
+	ld hl, DuelAttackPointerTable
 	xor a
 	ld [$cbc7], a
-	ld de, $cc34
-	call $4872
-	jr c, .asm_4856
+	ld de, wCardBuffer1 + $10
+	call CheckIfMoveExists
+	jr c, .checkForSecondAttackSlot
 	ldh a, [$ff98]
 	ld [hli], a
 	xor a
@@ -580,17 +580,17 @@ Func_4823: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, $cc34
+	ld hl, wCardBuffer1 + $10
 	call $5c33
 	pop bc
 	pop hl
 	inc b
 	inc b
 
-.asm_4856
-	ld de, $cc47
-	call $4872
-	jr c, .asm_4870
+.checkForSecondAttackSlot
+	ld de, wCardBuffer1 + $23
+	call CheckIfMoveExists
+	jr c, .finishLoadingAttacks
 	ldh a, [$ff98]
 	ld [hli], a
 	ld a, $01
@@ -604,11 +604,39 @@ Func_4823: ; 4823 (1:4823)
 	pop bc
 	pop hl
 
-.asm_4870
+.finishLoadingAttacks
 	ld a, c
 	ret
 
-INCBIN "baserom.gbc",$4872, $4918 - $4872
+CheckIfMoveExists:
+	push hl
+	push de
+	push bc
+	ld a, [de]
+	ld c, a
+	inc de
+	ld a, [de]
+	or c
+	jr z, .returnNoMoveFound
+	ld hl, $0006
+	add hl, de
+	ld a, [hl]
+	and $FF - RESIDUAL
+	cp POKEMON_POWER
+	jr z, .returnNoMoveFound
+	or a
+
+.return
+	pop bc
+	pop de
+	pop hl
+	ret
+
+.returnNoMoveFound
+	scf
+	jr .return
+
+INCBIN "baserom.gbc",$488f, $4918 - $488f
 
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ld a, DUELVARS_ARENA_CARD_STATUS

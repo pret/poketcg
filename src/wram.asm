@@ -167,7 +167,13 @@ wPlayerDeck:: ; c400
 
 wOpponentDeck:: ; c480
 	ds $80
-	ds $500
+	ds $10
+
+; when the attack menu opens, it stores 
+; each move in the order of 
+; cardNumber, moveNumber, ...
+DuelAttackPointerTable:: ; c510
+	ds $4f0
 
 ;--- Engine -----------------------------------------------
 
