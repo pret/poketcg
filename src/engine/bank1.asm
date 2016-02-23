@@ -493,15 +493,15 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 .tryOpenAttackMenu
 	call LoadPokemonAttacksToDuelPointerTable
 	or a
-	jr nz, .asm_471f
+	jr nz, .openAttackMenu
 	ld hl, $003c
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
-.asm_471f
+.openAttackMenu
 	push af
 	ld a, [wSelectedDuelSubMenuItem]
-	ld hl, $47e4
+	ld hl, AttackMenuCursorProperties
 	call InitializeCursorParameters
 	pop af
 	ld [wNumMenuItems], a
@@ -514,11 +514,11 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 .asm_4736
 	call DoFrame
 	ldh a, [hButtonsPressed]
-	and a, $08
-	jr nz, .asm_4782
+	and $08
+	jr nz, .displaySelectedMoveInfo
 	call Func_264b
 	jr nc, .asm_4736
-	cp a, $ff
+	cp $ff
 	jp z, Func_4295
 	ld [wSelectedDuelSubMenuItem], a
 	call $488f
@@ -551,12 +551,110 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
-.asm_4782 ; 4782 (1:4782)
-	call $478b
+.displaySelectedMoveInfo ; 4782 (1:4782)
+	call Func_478b
 	call $4f9d
 	jp .tryOpenAttackMenu
 
-INCBIN "baserom.gbc",$478b, $4823 - $478b
+Func_478b: ; 478b (1:478b)
+	ld a, $01
+	ld [wCardPageNumber], a
+	xor a
+	ld [$cbc9], a
+	call Func_04a2
+	call Func_3b31
+	ld de, $8a00
+	call $59ca
+	call $5a0e
+	call $59f5
+	call $5a34
+	ld de, $3830
+	call $5999
+	ld de, $0604
+	call $5a56
+	ldh a, [hCurrentMenuItem]
+	ld [wSelectedDuelSubMenuItem], a
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, $c511
+	add hl, de
+	ld a, [hl]
+	or a
+	jr nz, .asm_47c9
+	xor a
+	jr .asm_47cb
+
+.asm_47c9
+	ld a, $02
+
+.asm_47cb
+	ld [$cc04], a
+
+.asm_47ce
+	call Func_47ec
+	call EnableLCD
+
+.asm_47d4
+	call DoFrame
+	ldh a, [hButtonsPressed2]
+	and a, $30
+	jr nz, .asm_47ce
+	ldh a, [hButtonsPressed]
+	and a, $03
+	jr z, .asm_47d4
+	ret
+
+AttackMenuCursorProperties:
+	db $01
+	db $0d
+	db $02
+	db $02
+	db $0f
+	db $00
+	db $00
+	db $00
+
+Func_47ec: ; $47ec (1:47ec)
+	ld a, [$cc04]
+	ld hl, $47f5
+	jp JumpToFunctionInTable
+
+PtrTable_47f5: ; $47f5 (1:47f5)
+	dw Func_47fd
+	dw Func_4802
+	dw Func_480d
+	dw Func_4812
+
+Func_47fd: ; $47fd (1:47fd)
+	call $5d1f
+	jr Func_481b
+
+Func_4802: ; $4802 (1:4802)
+	ld hl, $cc38
+	ld a, [hli]
+	or [hl]
+	ret z
+	call $5d27
+	jr Func_481b
+
+Func_480d: ; $480d (1:480d)
+	call $5d2f
+	jr Func_481b
+
+Func_4812: ; $4812 (1:4812)
+	ld hl, $cc4b
+	ld a, [hli]
+	or [hl]
+	ret z
+	call $5d37
+
+Func_481b: ; $481b (1:481b)
+	ld hl, $cc04
+	ld a, $01
+	xor [hl]
+	ld [hl], a
+	ret
 
 LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	call DrawWideTextBox
@@ -608,7 +706,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	ld a, c
 	ret
 
-CheckIfMoveExists:
+CheckIfMoveExists: ; 4872 (1:4872)
 	push hl
 	push de
 	push bc
