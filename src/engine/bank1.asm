@@ -667,7 +667,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	ld hl, DuelAttackPointerTable
 	xor a
 	ld [$cbc7], a
-	ld de, wCardBuffer1 + $10
+	ld de, wCardBuffer1Move1Name
 	call CheckIfMoveExists
 	jr c, .checkForSecondAttackSlot
 	ldh a, [$ff98]
@@ -678,7 +678,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, wCardBuffer1 + $10
+	ld hl, wCardBuffer1Move1Name
 	call $5c33
 	pop bc
 	pop hl
@@ -686,7 +686,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	inc b
 
 .checkForSecondAttackSlot
-	ld de, wCardBuffer1 + $23
+	ld de, wCardBuffer1Move2Name
 	call CheckIfMoveExists
 	jr c, .finishLoadingAttacks
 	ldh a, [$ff98]
@@ -716,10 +716,10 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	ld a, [de]
 	or c
 	jr z, .returnNoMoveFound
-	ld hl, $0006
+	ld hl, wCardBuffer1Move1Category - (wCardBuffer1Move1Name + 1)
 	add hl, de
 	ld a, [hl]
-	and $FF - RESIDUAL
+	and $ff - RESIDUAL
 	cp POKEMON_POWER
 	jr z, .returnNoMoveFound
 	or a

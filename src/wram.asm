@@ -1,4 +1,5 @@
 INCLUDE "constants.asm"
+INCLUDE "macros.asm"
 
 ;----------------------------------------------------------
 ;--- Bank 0: $Cxxx ----------------------------------------
@@ -413,10 +414,10 @@ wDuelTheme:: ; cc1a
 ; Can be data from a card on either side of the field or hand, or from a card in the bench, depending on the duel state.
 ; Sometimes the two buffers even hold the same card's data.
 wCardBuffer1:: ; cc24
-	ds CARD_DATA_LENGTH
+	card_data_struct wCardBuffer1
 
 wCardBuffer2:: ; cc65
-	ds CARD_DATA_LENGTH
+	card_data_struct wCardBuffer2
 
 	ds $4
 
