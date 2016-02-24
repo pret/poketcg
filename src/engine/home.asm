@@ -2996,7 +2996,7 @@ Func_1aac: ; 1aac (0:1aac)
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_1376
-	ld a, [wCardBuffer1 + $7]
+	ld a, [wCardBuffer1ID]
 	ld [wccc4], a
 	call Func_1ad3
 	pop af
@@ -5987,7 +5987,7 @@ Func_3432: ; 3432 (0:3432)
 	ld e, a
 	ld d, $0
 	call Func_2f0a
-	ld a, [wCardBuffer2 + $9]
+	ld a, [wCardBuffer2Stage]
 	or a
 	ret z
 	ld e, $5
@@ -6252,7 +6252,7 @@ Func_3730: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_138c
-	ld a, [wCardBuffer2 + $33]
+	ld a, [wCardBuffer2Weakness]
 	ret
 ; 0x3743
 
@@ -6266,7 +6266,7 @@ Func_374a: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call Func_138c
-	ld a, [wCardBuffer2 + $34]
+	ld a, [wCardBuffer2Resistance]
 	ret
 ; 0x375d
 

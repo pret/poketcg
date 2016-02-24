@@ -27,7 +27,6 @@ DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"        
 
 ; status condition constants
 CARD_NOSTATUS  EQU $00
-;TODO - ???      EQU $01
+CARD_CONFUSED  EQU $01
 CARD_ASLEEP    EQU $02
 CARD_PARALYZED EQU $03
-;TODO - beyond
