@@ -5,9 +5,10 @@
 .SECONDEXPANSION:
 
 OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o src/hram.o
+EXTRAS = extras/pokemontools
 
 $(foreach obj, $(OBJS), \
-	$(eval $(obj:.o=)_dep = $(shell python extras/scan_includes.py $(obj:.o=.asm))) \
+	$(eval $(obj:.o=)_dep = $(shell python $(EXTRAS)/scan_includes.py $(obj:.o=.asm)) src/) \
 )
 
 all: tcg.gbc compare
@@ -16,8 +17,8 @@ compare: baserom.gbc tcg.gbc
 	cmp baserom.gbc tcg.gbc
 
 $(OBJS): $$*.asm $$($$*_dep)
-	@python extras/gfx.py 2bpp $(2bppq)
-	@python extras/gfx.py 1bpp $(1bppq)
+	@python $(EXTRAS)/gfx.py 2bpp $(2bppq)
+	@python $(EXTRAS)/gfx.py 1bpp $(1bppq)
 	rgbasm -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
