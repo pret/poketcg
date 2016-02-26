@@ -2177,13 +2177,13 @@ Func_100b: ; 100b (0:100b)
 	push hl
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc3], a
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc4], a
 	call GetOpposingTurnDuelistVariable_SwapTurn
@@ -2375,10 +2375,10 @@ ShuffleCards: ; 127f (0:127f)
 
 INCBIN "baserom.gbc",$12a3,$1324 - $12a3
 
-Func_1324: ; 1324 (0:1324)
+LoadDeckCardToDE: ; 1324 (0:1324)
 	push af
 	push hl
-	call Func_1362
+	call GetDeckCard
 	ld e, a
 	ld d, $0
 	pop hl
@@ -2388,47 +2388,48 @@ Func_1324: ; 1324 (0:1324)
 
 INCBIN "baserom.gbc",$132f,$1362 - $132f
 
-Func_1362: ; 1362 (0:1362)
+; gets card a from the deck stored in $ff97
+GetDeckCard: ; 1362 (0:1362)
 	push de
 	ld e, a
 	ld d, $0
 	ld hl, wPlayerDeck
 	ld a, [$ff97]
 	cp $c2
-	jr z, .asm_1372
+	jr z, .loadCardFromDeck
 	ld hl, wOpponentDeck
-.asm_1372
+.loadCardFromDeck
 	add hl, de
 	ld a, [hl]
 	pop de
 	ret
 
-Func_1376: ; 1376 (0:1376)
+LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push hl
 	push de
 	push bc
 	push af
-	call Func_1324
-	call LoadCardDataToRAM
+	call LoadDeckCardToDE
+	call LoadCardDataToBuffer1
 	pop af
 	ld hl, wCardBuffer1
-	bank1call $6d84
+	bank1call ConvertItemToPokemon
 	ld a, e
 	pop bc
 	pop de
 	pop hl
 	ret
 
-Func_138c: ; 138c (0:138c)
+LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push hl
 	push de
 	push bc
 	push af
-	call Func_1324
-	call Func_2f0a
+	call LoadDeckCardToDE
+	call LoadCardDataToBuffer2
 	pop af
 	ld hl, wCardBuffer2
-	bank1call $6d84
+	bank1call ConvertItemToPokemon
 	ld a, e
 	pop bc
 	pop de
@@ -2448,7 +2449,7 @@ Func_15ef: ; 15ef (0:15ef)
 	jr nz, .asm_1602
 	ld a, l
 	push hl
-	call Func_1362
+	call GetDeckCard
 	cp e
 	pop hl
 	jr nz, .asm_1602
@@ -2492,7 +2493,7 @@ Func_16c0: ; 16c0 (0:16c0)
 	ld [wccc6], a
 	ld a, d
 	ld [$ff9f], a
-	call Func_1376
+	call LoadDeckCardToBuffer1
 	ld a, [$cc2b]
 	ld [wccc2], a
 	ld hl, $cc30
@@ -2523,13 +2524,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld [$ff9f], a
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc3], a
 	call GetOpposingTurnDuelistVariable_SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc4], a
 	call GetOpposingTurnDuelistVariable_SwapTurn
@@ -2995,7 +2996,7 @@ Func_1aac: ; 1aac (0:1aac)
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1376
+	call LoadDeckCardToBuffer1
 	ld a, [wCardBuffer1ID]
 	ld [wccc4], a
 	call Func_1ad3
@@ -3011,7 +3012,7 @@ Func_1ad0: ; 1ad0 (0:1ad0)
 Func_1ad3: ; 1ad3 (0:1ad3)
 	ld a, [wccc4]
 	ld e, a
-	call LoadCardDataToRAM
+	call LoadCardDataToBuffer1
 	ld hl, $cc27
 	ld a, [hli]
 	ld h, [hl]
@@ -3034,7 +3035,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1376
+	call LoadDeckCardToBuffer1
 	ld a, $12
 	call Func_29f5
 	ld [hl], $0
@@ -3070,7 +3071,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ld a, [$ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1376
+	call LoadDeckCardToBuffer1
 	ld a, $12
 	call Func_29f5
 	ld [hl], $0
@@ -5171,16 +5172,17 @@ Func_2ec4: ; 2ec4 (0:2ec4)
 
 INCBIN "baserom.gbc",$2ecd,$2f0a - $2ecd
 
-Func_2f0a: ; 2f0a (0:2f0a)
+; load data of card with id at e to wCardBuffer1 or wCardBuffer2
+LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
 	push hl
 	ld hl, wCardBuffer2
-	jr Func_2f14
+	jr LoadCardDataToRAM
 
-; load data of card with id at e to wCardBuffer1
-LoadCardDataToRAM: ; 2f10 (0:2f10)
+LoadCardDataToBuffer1: ; 2f10 (0:2f10)
 	push hl
 	ld hl, wCardBuffer1
-Func_2f14: ; 2f14 (0:2f14)
+
+LoadCardDataToRAM: ; 2f14 (0:2f14)
 	push de
 	push bc
 	push hl
@@ -5986,7 +5988,7 @@ Func_3432: ; 3432 (0:3432)
 	ld a, [wccc3]
 	ld e, a
 	ld d, $0
-	call Func_2f0a
+	call LoadCardDataToBuffer2
 	ld a, [wCardBuffer2Stage]
 	or a
 	ret z
@@ -6078,7 +6080,7 @@ Func_3525: ; 3525 (0:3525)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .asm_3549
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_3549
@@ -6094,7 +6096,7 @@ Func_3525: ; 3525 (0:3525)
 	ld a, [hli]
 	cp $ff
 	jr z, .asm_3560
-	call Func_1324
+	call LoadDeckCardToDE
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_355d
@@ -6177,7 +6179,7 @@ Func_36a2: ; 36a2 (0:36a2)
 	ld a, [wccc3]
 	ld e, a
 	ld d, $0
-	call Func_2f0a
+	call LoadCardDataToBuffer2
 	ld hl, $cc68
 	ld a, [hli]
 	ld h, [hl]
@@ -6220,7 +6222,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_1324
+	call LoadDeckCardToDE
 	call Func_2f32
 	cp $10
 	jr nz, .asm_3715
@@ -6251,7 +6253,7 @@ Func_3730: ; 3730 (0:3730)
 	ret nz
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_138c
+	call LoadDeckCardToBuffer2
 	ld a, [wCardBuffer2Weakness]
 	ret
 ; 0x3743
@@ -6265,7 +6267,7 @@ Func_374a: ; 374a (0:374a)
 	ret nz
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call Func_138c
+	call LoadDeckCardToBuffer2
 	ld a, [wCardBuffer2Resistance]
 	ret
 ; 0x375d

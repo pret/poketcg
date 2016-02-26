@@ -88,3 +88,6 @@ FLAG_2_BIT_7             EQU %10000000
 ; bits 2-7 are unused
 BOOST_IF_TAKEN_DAMAGE    EQU %00000001
 FLAG_3_BIT_1             EQU %00000010
+
+;;; special retreat values
+UNABLE_RETREAT EQU $64

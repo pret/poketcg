@@ -21,7 +21,7 @@ wPlayerDuelVariables:: ; c200
 ;	$01 - hand
 ;	$02 - discard pile
 ;	$08 - prize
-;	$10 - hand
+;	$10 - active pokemon
 ;	$1X - bench (where X is bench position from 1 to 5)
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE

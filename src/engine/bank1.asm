@@ -509,7 +509,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld h, a
 	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
-	call Func_1376
+	call LoadDeckCardToBuffer1
 
 .asm_4736
 	call DoFrame
@@ -661,7 +661,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [$ff98], a
-	call Func_1376
+	call LoadDeckCardToBuffer1
 	ld c, $00
 	ld b, $0d
 	ld hl, DuelAttackPointerTable
@@ -787,7 +787,63 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-INCBIN "baserom.gbc",$67b2,$7107 - $67b2
+INCBIN "baserom.gbc",$67b2,$6d84 - $67b2
+
+ConvertItemToPokemon:
+	ld c, a
+	ld a, [hl]
+	cp TRAINER_CARD
+	ret nz
+	push hl
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld l, c
+	ld a, [hl]
+	and $10
+	pop hl
+	ret z
+	ld a, e
+	cp $cc
+	jr nz, .checkForClefairyDoll
+	ld a, d
+	cp $00
+	jr z, .startRamDataOverwrite
+	ret
+.checkForClefairyDoll
+	cp $cb
+	ret nz
+	ld a, d
+	cp $00
+	ret nz
+.startRamDataOverwrite
+	push de
+	ld [hl], $06
+	ld bc, wCardBuffer1HP - wCardBuffer1
+	add hl, bc
+	ld de, $6db9
+	ld c, wCardBuffer1Unknown2 - wCardBuffer1HP
+.loop
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec c
+	jr nz, .loop
+	pop de
+	ret
+
+.dataToOverwrite
+	db $0a            ; hp
+	ds $07 
+	dw $0030          ; move1 name
+	dw $0041          ; move1 description
+	ds $03
+	db $04            ; move1 category
+	dw $4e35          ; move1 effect commands
+	ds $18
+	db UNABLE_RETREAT ; retreat cost
+	ds $0d
+
+INCBIN "baserom.gbc",$6df1,$7107 - $6df1
 
 ; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
 ; player turn: [c200, c2ff]
