@@ -958,7 +958,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	call Func_c29b
 .asm_c76a
 	call DoFrameIfLCDEnabled
-	call Func_264b
+	call MenuCursorAcceptInput
 	jr nc, .asm_c76a
 	ld a, e
 	ld [$d0b8], a
@@ -1042,7 +1042,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c29b
 .asm_c806
 	call DoFrameIfLCDEnabled
-	call Func_264b
+	call MenuCursorAcceptInput
 	jr nc, .asm_c806
 	ld a, e
 	ld [$d0b9], a

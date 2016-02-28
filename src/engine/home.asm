@@ -2413,7 +2413,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	call LoadCardDataToBuffer1
 	pop af
 	ld hl, wCardBuffer1
-	bank1call ConvertItemToPokemon
+	bank1call ConvertTrainerCardToPokemon
 	ld a, e
 	pop bc
 	pop de
@@ -2429,7 +2429,7 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	call LoadCardDataToBuffer2
 	pop af
 	ld hl, wCardBuffer2
-	bank1call ConvertItemToPokemon
+	bank1call ConvertTrainerCardToPokemon
 	ld a, e
 	pop bc
 	pop de
@@ -4237,7 +4237,8 @@ InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCursorBlinkCounter], a
 	ret
 
-Func_264b: ; 264b (0:264b)
+; returns with the carry flag set if a or b were pressed
+MenuCursorAcceptInput: ; 264b (0:264b)
 	xor a
 	ld [wcd99], a
 	ldh a, [hButtonsPressed2]

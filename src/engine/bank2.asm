@@ -88,7 +88,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call Func_8dea
 	jr c, Func_8dbc
-	call Func_264b
+	call MenuCursorAcceptInput
 	jr nc, .asm_8dc8
 	ldh a, [hCurrentMenuItem]
 	cp $ff

@@ -516,7 +516,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ldh a, [hButtonsPressed]
 	and $08
 	jr nz, .displaySelectedMoveInfo
-	call Func_264b
+	call MenuCursorAcceptInput
 	jr nc, .asm_4736
 	cp $ff
 	jp z, Func_4295
@@ -789,7 +789,8 @@ LoadPlayerDeck: ; 6793 (1:6793)
 
 INCBIN "baserom.gbc",$67b2,$6d84 - $67b2
 
-ConvertItemToPokemon:
+;converts clefairy doll/mysterious fossil at specified wCardBuffer to pokemon card
+ConvertTrainerCardToPokemon:
 	ld c, a
 	ld a, [hl]
 	cp TRAINER_CARD
@@ -799,28 +800,28 @@ ConvertItemToPokemon:
 	ld h, a
 	ld l, c
 	ld a, [hl]
-	and $10
+	and TRAINER_CARD
 	pop hl
 	ret z
 	ld a, e
-	cp $cc
+	cp MYSTERIOUS_FOSSIL
 	jr nz, .checkForClefairyDoll
 	ld a, d
 	cp $00
 	jr z, .startRamDataOverwrite
 	ret
 .checkForClefairyDoll
-	cp $cb
+	cp CLEFAIRY_DOLL
 	ret nz
 	ld a, d
 	cp $00
 	ret nz
 .startRamDataOverwrite
 	push de
-	ld [hl], $06
+	ld [hl], COLORLESS
 	ld bc, wCardBuffer1HP - wCardBuffer1
 	add hl, bc
-	ld de, $6db9
+	ld de, .dataToOverwrite
 	ld c, wCardBuffer1Unknown2 - wCardBuffer1HP
 .loop
 	ld a, [de]
@@ -833,12 +834,12 @@ ConvertItemToPokemon:
 
 .dataToOverwrite
 	db $0a            ; hp
-	ds $07 
+	ds $07
 	dw $0030          ; move1 name
 	dw $0041          ; move1 description
 	ds $03
 	db $04            ; move1 category
-	dw $4e35          ; move1 effect commands
+	dw TrainerCardAsPokemonEffectCommands         ; move1 effect commands
 	ds $18
 	db UNABLE_RETREAT ; retreat cost
 	ds $0d
