@@ -566,7 +566,7 @@ CopyPalette: ; 0467 (0:0467)
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, $caf0
+	ld hl, wBufPalette
 	add hl, de
 	ld c, $68
 	bit 6, a
@@ -2139,7 +2139,7 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	push hl
 	push bc
 	ld [$ff9e], a
-	ld a, $f1
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetOpposingTurnDuelistVariable
 	cp $1
 	jr nz, .asm_f98
@@ -2388,14 +2388,14 @@ LoadDeckCardToDE: ; 1324 (0:1324)
 
 INCBIN "baserom.gbc",$132f,$1362 - $132f
 
-; gets card a from the deck stored in $ff97
+; gets card a from the deck of the player whose turn it is
 GetDeckCard: ; 1362 (0:1362)
 	push de
 	ld e, a
 	ld d, $0
 	ld hl, wPlayerDeck
-	ld a, [$ff97]
-	cp $c2
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
 	jr z, .loadCardFromDeck
 	ld hl, wOpponentDeck
 .loadCardFromDeck
@@ -2439,26 +2439,30 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 
 INCBIN "baserom.gbc",$13a2,$15ef - $13a2
 
-Func_15ef: ; 15ef (0:15ef)
+; returns in a how many times card e can be found in location b
+; e = card id to search
+; b = location to consider (deck, hand, arena...)
+; h = PLAYER_TURN or OPPONENT_TURN
+CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
 	ld l, $0
 	ld c, $0
-.asm_15f4
+.nextCard
 	ld a, [hl]
 	cp b
-	jr nz, .asm_1602
+	jr nz, .unmatchingCardLocationOrID
 	ld a, l
 	push hl
 	call GetDeckCard
 	cp e
 	pop hl
-	jr nz, .asm_1602
+	jr nz, .unmatchingCardLocationOrID
 	inc c
-.asm_1602
+.unmatchingCardLocationOrID
 	inc l
 	ld a, l
-	cp $3c
-	jr c, .asm_15f4
+	cp DECK_SIZE
+	jr c, .nextCard
 	ld a, c
 	pop bc
 	ret
@@ -2608,7 +2612,7 @@ Func_1730: ; 1730 (0:1730)
 	ld b, $0
 	ld a, [wccc1]
 	ld c, a
-	ld a, $c8
+	ld a, DUELVARS_ARENA_CARD_HP
 	call GetOpposingTurnDuelistVariable
 	push de
 	push hl
@@ -2736,7 +2740,7 @@ Func_189d: ; 189d (0:189d)
 	ld a, e
 	or d
 	jr nz, .asm_18b9
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetOpposingTurnDuelistVariable
 	or a
 	jr nz, .asm_18b9
@@ -2753,7 +2757,7 @@ Func_189d: ; 189d (0:189d)
 	pop de
 	ret nc
 	bank1call $4f9d
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetOpposingTurnDuelistVariable
 	ld [hl], $0
 	ld de, $0000
@@ -2765,11 +2769,11 @@ Func_18d7: ; 18d7 (0:18d7)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and $f
-	cp $1
-	jr z, .asm_18e8
+	cp CARD_CONFUSED
+	jr z, .confused
 	or a
 	ret
-.asm_18e8
+.confused
 	ld de, $00f7
 	call Func_307d
 	jr c, .asm_18f7
@@ -2864,11 +2868,11 @@ Func_1994: ; 1994 (0:1994)
 	ld hl, $ccc1
 	set 2, [hl]
 .asm_19f3
-	ld b, $10
-	call Func_1a69
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedPluspower
 	call GetOpposingTurnDuelistVariable_SwapTurn
-	ld b, $10
-	call Func_1a7e
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedDefender
 	call Func_3244
 	bit 7, d
 	jr z, .asm_1a0a
@@ -2923,23 +2927,24 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld hl, $ccc1
 	set 2, [hl]
 .asm_1a58
-	ld b, $10
-	call Func_1a69
-	ld b, $10
-	call Func_1a7e
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedPluspower
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedDefender
 	bit 7, d
 	ret z
 .asm_1a65
 	ld de, $0000
 	ret
 
-Func_1a69: ; 1a69 (0:1a69)
+; increases de by 10 points for each Pluspower found in location b
+ApplyAttachedPluspower: ; 1a69 (0:1a69)
 	push de
 	call GetTurnDuelistVariable
-	ld de, $00d8
-	call Func_15ef
+	ld de, PLUSPOWER
+	call CountCardIDInLocation
 	ld l, a
-	ld h, $a
+	ld h, 10
 	call HtimesL
 	pop de
 	add hl, de
@@ -2947,13 +2952,14 @@ Func_1a69: ; 1a69 (0:1a69)
 	ld d, h
 	ret
 
-Func_1a7e: ; 1a7e (0:1a7e)
+; reduces de by 20 points for each Defender found in location b
+ApplyAttachedDefender: ; 1a7e (0:1a7e)
 	push de
 	call GetTurnDuelistVariable
-	ld de, $00d9
-	call Func_15ef
+	ld de, DEFENDER
+	call CountCardIDInLocation
 	ld l, a
-	ld h, $14
+	ld h, 20
 	call HtimesL
 	pop de
 	ld a, e
@@ -5192,7 +5198,7 @@ LoadCardDataToRAM: ; 2f14 (0:2f14)
 	jr c, .done
 	ld a, BANK(CardPointers)
 	call BankpushHome2
-	ld b, CARD_DATA_LENGTH
+	ld b, PKMN_CARD_DATA_LENGTH
 .copyCardDataLoop
 	ld a, [hli]
 	ld [de], a
@@ -5761,7 +5767,7 @@ Func_3243: ; 3243 (0:3243)
 
 Func_3244: ; 3244 (0:3244)
 	call Func_3269
-	ld a, $e8
+	ld a, DUELVARS_CANT_ATTACK_STATUS
 	call GetOpposingTurnDuelistVariable
 	or a
 	ret z

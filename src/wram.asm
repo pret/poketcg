@@ -21,7 +21,7 @@ wPlayerDuelVariables:: ; c200
 ;	$01 - hand
 ;	$02 - discard pile
 ;	$08 - prize
-;	$10 - active pokemon
+;	$10 - arena (active pokemon or a card attached to it)
 ;	$1X - bench (where X is bench position from 1 to 5)
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE
@@ -288,7 +288,7 @@ wcade:: ; cade
 wcae2:: ; cae2
 	ds $e
 
-wBufPalette:: ; caf0 - cab7f
+wBufPalette:: ; caf0
 	ds $80
 	ds $4
 

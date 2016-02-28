@@ -833,16 +833,16 @@ ConvertTrainerCardToPokemon:
 	ret
 
 .dataToOverwrite
-	db $0a            ; hp
-	ds $07
-	dw $0030          ; move1 name
-	dw $0041          ; move1 description
-	ds $03
-	db $04            ; move1 category
-	dw TrainerCardAsPokemonEffectCommands         ; move1 effect commands
-	ds $18
-	db UNABLE_RETREAT ; retreat cost
-	ds $0d
+    db 10             ; hp
+    ds $07            ; wCardBuffer1Move1Name - (wCardBuffer1HP + 1)
+    tx Text0030       ; move1 name
+    tx Text0041       ; move1 description
+    ds $03            ; wCardBuffer1Move1Category - (wCardBuffer1Move1Description + 2)
+    db POKEMON_POWER  ; move1 category
+    dw TrainerCardAsPokemonEffectCommands ; move1 effect commands
+    ds $18            ; wCardBuffer1RetreatCost - (wCardBuffer1Move1EffectCommands + 2)
+    db UNABLE_RETREAT ; retreat cost
+    ds $0d            ; PKMN_CARD_DATA_LENGTH - (wCardBuffer1RetreatCost + 1 - wCardBuffer1)
 
 INCBIN "baserom.gbc",$6df1,$7107 - $6df1
 

@@ -25,6 +25,18 @@ DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "wPlayerNumberOfPokemonInPlay & $f
 DUELVARS_ARENA_CARD_STATUS               EQUS "wPlayerArenaCardStatus & $ff"            ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"                ; f1
 
+; card locations
+CARD_LOCATION_DECK         EQU $00
+CARD_LOCATION_HAND         EQU $01
+CARD_LOCATION_DISCARD_PILE EQU $02
+CARD_LOCATION_PRIZE        EQU $08
+CARD_LOCATION_ARENA        EQU $10
+CARD_LOCATION_BENCH_1      EQU $11
+CARD_LOCATION_BENCH_2      EQU $12
+CARD_LOCATION_BENCH_3      EQU $13
+CARD_LOCATION_BENCH_4      EQU $14
+CARD_LOCATION_BENCH_5      EQU $15
+
 ; status condition constants
 CARD_NOSTATUS  EQU $00
 CARD_CONFUSED  EQU $01
