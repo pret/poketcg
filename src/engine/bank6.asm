@@ -145,7 +145,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	push hl
 	ld e, a
 	ld d, $0
-	call LoadCardDataToRAM
+	call LoadCardDataToBuffer1
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong

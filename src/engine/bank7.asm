@@ -214,7 +214,7 @@ Func_1d11c: ; 1d11c (7:511c)
 .asm_1d15a
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
-	call Func_264b
+	call MenuCursorAcceptInput
 	push af
 	call $51e9
 	pop af

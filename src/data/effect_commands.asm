@@ -1345,7 +1345,7 @@ RaticateSuperFangEffectCommands:
 	dbw $09, $6f01
 	db  $00
 
-; Unreferenced?
+TrainerCardAsPokemonEffectCommands:
 	dbw $02, $6f18
 	dbw $03, $6f3c
 	dbw $05, $6f27
