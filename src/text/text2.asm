@@ -29,66 +29,66 @@ Text00fc: ; 3816a (e:416a)
 	db TX_START,"If Heads, opponent cannot Attack\n"
 	db "next turn!",TX_END
 
-Text00fd: ; 38197 (e:4197)
+AttackUnsuccessful: ; 38197 (e:4197)
 	db TX_START,"Attack unsuccessful.",TX_END
 
-Text00fe: ; 381ad (e:41ad)
+UnableToRetreatDueToAcid: ; 381ad (e:41ad)
 	db TX_START,"Unable to Retreat due to\n"
 	db "the effects of Acid.",TX_END
 
-Text00ff: ; 381dc (e:41dc)
+UnableToUseTrainerDueToHeadache: ; 381dc (e:41dc)
 	db TX_START,"Unable to use a Trainer card\n"
 	db "due to the effects of Headache.",TX_END
 
-Text0100: ; 3821a (e:421a)
+UnableToAttackDueToTailWag: ; 3821a (e:421a)
 	db TX_START,"Unable to Attack due to\n"
 	db "the effects of Tail wag.",TX_END
 
-Text0101: ; 3824c (e:424c)
+UnableToAttackDueToLeer: ; 3824c (e:424c)
 	db TX_START,"Unable to Attack due to\n"
 	db "the effects of Leer.",TX_END
 
-Text0102: ; 3827a (e:427a)
+UnableToAttackDueToBoneAttack: ; 3827a (e:427a)
 	db TX_START,"Unable to Attack due to\n"
 	db "the effects of Bone attack.",TX_END
 
-Text0103: ; 382af (e:42af)
+UnableToUseAttackDueToAmnesia: ; 382af (e:42af)
 	db TX_START,"Unable to use this Attack\n"
 	db "due to the effects of Amnesia.",TX_END
 
-Text0104: ; 382e9 (e:42e9)
+KnockedOutDueToDestinyBond: ; 382e9 (e:42e9)
 	db TX_START,TX_RAM2," was Knocked Out\n"
 	db "due to the effects of Destiny Bond.",TX_END
 
-Text0105: ; 38320 (e:4320)
+ReceivesDamageDueToStrikesBack: ; 38320 (e:4320)
 	db TX_START,TX_RAM2," receives ",TX_RAM3," damage\n"
 	db "due to the effects of Strikes Back.",TX_END
 
-Text0106: ; 38359 (e:4359)
+UnableToEvolveDueToPrehistoricPower: ; 38359 (e:4359)
 	db TX_START,"Unable to evolve due to the\n"
 	db "effects of Prehistoric Power.",TX_END
 
-Text0107: ; 38394 (e:4394)
+NoDamageOrEffectDueToFly: ; 38394 (e:4394)
 	db TX_START,"No damage or effect on next Attack\n"
 	db "due to the effects of Fly.",TX_END
 
-Text0108: ; 383d3 (e:43d3)
+NoDamageOrEffectDueToBarrier: ; 383d3 (e:43d3)
 	db TX_START,"No damage or effect on next Attack\n"
 	db "due to the effects of Barrier.",TX_END
 
-Text0109: ; 38416 (e:4416)
+NoDamageOrEffectDueToAgility: ; 38416 (e:4416)
 	db TX_START,"No damage or effect on next Attack\n"
 	db "due to the effects of Agility.",TX_END
 
-Text010a: ; 38459 (e:4459)
+UnableToUseAttackDueToNShield: ; 38459 (e:4459)
 	db TX_START,"Unable to use this Attack due to\n"
 	db "the effects of N Shield.",TX_END
 
-Text010b: ; 38494 (e:4494)
+NoDamageOrEffectDueToNShield: ; 38494 (e:4494)
 	db TX_START,"No damage or effect on next Attack\n"
 	db "due to the effects of N Shield.",TX_END
 
-Text010c: ; 384d8 (e:44d8)
+NoDamageOrEffectDueToTransparency: ; 384d8 (e:44d8)
 	db TX_START,"No damage or effect on next Attack\n"
 	db "due to the effects of Transparency",TX_END
 
@@ -96,7 +96,7 @@ Text010d: ; 3851f (e:451f)
 	db TX_START,TX_RAM2,"\n"
 	db "metamorphs to ",TX_RAM2,".",TX_END
 
-Text010e: ; 38533 (e:4533)
+SelectMonOnBenchToSwitchWithActive: ; 38533 (e:4533)
 	db TX_START,"Select a Pok`mon on the Bench\n"
 	db "to switch with the Active Pok`mon.",TX_END
 
@@ -362,7 +362,7 @@ Text0149: ; 393bb (e:53bb)
 	db TX_START,"A Basic Pok`mon was placed\n"
 	db "on each Bench.",TX_END
 
-Text014a: ; 393e6 (e:53e6)
+WasUnsuccessful: ; 393e6 (e:53e6)
 	db TX_START,TX_RAM2,"'s\n"
 	db TX_RAM2," was unsuccessful.",TX_END
 
@@ -629,23 +629,23 @@ Text018e: ; 39e02 (e:5e02)
 	db TX_START,"Received ",TX_RAM2,"\n"
 	db "through Card Pop!",TX_END
 
-Text018f: ; 39e20 (e:5e20)
+ReceivedCard: ; 39e20 (e:5e20)
 	db TX_START,TX_RAM1," received\n"
 	db "a ",TX_RAM2,"!",TX_END
 
-Text0190: ; 39e31 (e:5e31)
+ReceivedPromotionalCard: ; 39e31 (e:5e31)
 	db TX_START,TX_RAM1," received a Promotional\n"
 	db "card ",TX_RAM2,"!",TX_END
 
-Text0191: ; 39e53 (e:5e53)
+ReceivedLegendaryCard: ; 39e53 (e:5e53)
 	db TX_START,TX_RAM1," received the Legendary\n"
 	db "card ",TX_RAM2,"!",TX_END
 
-Text0192: ; 39e75 (e:5e75)
+ReceivedPromotionalFlyingPikachu: ; 39e75 (e:5e75)
 	db TX_START,TX_RAM1," received a Promotinal\n"
 	db "card Flyin' Pikachu!",TX_END
 
-Text0193: ; 39ea3 (e:5ea3)
+ReceivedPromotionalSurfingPikachu: ; 39ea3 (e:5ea3)
 	db TX_START,TX_RAM1," received a Promotional\n"
 	db "card Surfin' Pikachu!",TX_END
 
@@ -1232,10 +1232,10 @@ Text0222: ; 3b97b (e:797b)
 	db $64,$70,$65,$70,$66,$70,$67,$70,$68,$70,$69,$70,$70,$70,$70,$70,$70,"\n"
 	db $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,TX_END
 
-Text0223: ; 3ba03 (e:7a03)
+NewDeck: ; 3ba03 (e:7a03)
 	db TX_START,"New deck",TX_END
 
-Text0224: ; 3ba0d (e:7a0d)
+PleaseSelectDeck: ; 3ba0d (e:7a0d)
 	db TX_START,"Please select deck.",TX_END
 
 Text0225: ; 3ba22 (e:7a22)
@@ -1253,7 +1253,7 @@ Text0228: ; 3ba49 (e:7a49)
 Text0229: ; 3ba51 (e:7a51)
 	db TX_START,"as",TX_END
 
-Text022a: ; 3ba55 (e:7a55)
+ChosenAsDuelingDeck: ; 3ba55 (e:7a55)
 	db TX_START,TX_RAM2," was\n"
 	db "chosen as the dueling deck!",TX_END
 
@@ -1269,7 +1269,7 @@ Text022d: ; 3ba7e (e:7a7e)
 Text022e: ; 3ba81 (e:7a81)
 	db $64,$77,TX_END
 
-Text022f: ; 3ba84 (e:7a84)
+ThereIsNoDeckHere: ; 3ba84 (e:7a84)
 	db TX_START,"There is no Deck here!",TX_END
 
 Text0230: ; 3ba9c (e:7a9c)

@@ -124,23 +124,23 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld a, $76
 	call $663b
 	ld a, $c1
-	text_hl Text0191
+	text_hl ReceivedLegendaryCard
 	jr .asm_1a660
 .asm_1a640
-	text_hl Text018f
+	text_hl ReceivedCard
 	cp $1e
 	jr z, .asm_1a660
 	cp $43
 	jr z, .asm_1a660
-	text_hl Text0192
+	text_hl ReceivedPromotionalFlyingPikachu
 	cp $64
 	jr z, .asm_1a660
-	text_hl Text0193
+	text_hl ReceivedPromotionalSurfingPikachu
 	cp $65
 	jr z, .asm_1a660
 	cp $66
 	jr z, .asm_1a660
-	text_hl Text0190
+	text_hl ReceivedPromotionalCard
 .asm_1a660
 	push hl
 	ld e, a

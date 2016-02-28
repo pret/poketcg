@@ -889,7 +889,7 @@ Text07e5: ; 5725f (15:725f)
 	db TX_START,"Congratulations!\n"
 	db "You won against ",TX_RAM3," opponents!",TX_END
 
-Text07e6: ; 5728e (15:728e)
+DefeatedFiveOpponents: ; 5728e (15:728e)
 	db TX_START,"Congratulations!\n"
 	db "You defeated 5 opponents!",TX_END
 
@@ -897,7 +897,7 @@ Text07e7: ; 572ba (15:72ba)
 	db TX_START,TX_RAM1," successfully defeated \n"
 	db "5 opponents ",TX_START,TX_RAM3," time(s)!!!",TX_END
 
-Text07e8: ; 572ee (15:72ee)
+ConsecutiveWinRecordIncreased: ; 572ee (15:72ee)
 	db TX_START,TX_RAM1,"'s consecutive win\n"
 	db "record increased to ",TX_RAM3,"!",TX_END
 

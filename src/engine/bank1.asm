@@ -22,7 +22,7 @@ Func_4000: ; 4000 (1:4000)
 .asm_4035
 	call Func_405a
 	call Func_04a2
-	text_hl Text00a2 ; reset back up ram?
+	text_hl ResetBackUpRam
 	call Func_2af0
 	jr c, .asm_404d
 	call EnableExtRAM
@@ -128,7 +128,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_04a2
 	ld a, $3
 	call Func_2167
-	text_hl Text0076 ; decision...
+	text_hl Decision
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
 	ldh a, [hWhoseTurn]
@@ -147,7 +147,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, $1a
-	text_hl Text0077 ; duel was a draw
+	text_hl DuelWasDraw
 	jr .asm_4196
 
 .activeDuelistWonBattle
@@ -159,7 +159,7 @@ StartDuel: ; 409f (1:409f)
 	ld [$d0c3], a
 	ld a, $5d
 	ld c, $18
-	text_hl Text0078 ; won duel
+	text_hl WonDuel
 	jr .asm_4196
 
 .activeDuelistLostBattle
@@ -172,7 +172,7 @@ StartDuel: ; 409f (1:409f)
 	ld [$d0c3], a
 	ld a, $5e
 	ld c, $19
-	text_hl Text0079 ; lost duel
+	text_hl LostDuel
 
 .asm_4196
 	call Func_3b6a
@@ -203,7 +203,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_3b31
 	ld a, [wDuelTheme]
 	call PlaySong
-	text_hl Text007a ; sudden-death match
+	text_hl StartSuddenDeathMatch
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	ld [$cc08], a
@@ -282,7 +282,7 @@ Func_426d:
 	xor a
 	ld [wVBlankCtr], a
 	ld [$cbf9], a
-	text_hl Text0088 ; is thinking
+	text_hl DuelistIsThinking
 	call Func_2a36
 	call Func_2bbf
 	ld a, $ff
@@ -413,7 +413,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	jr c, Func_441f
 	call $4611
 	jr c, Func_441c
-	text_hl Text010e ; select pokemon on bench to switch
+	text_hl SelectMonOnBenchToSwitchWithActive
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	jr c, Func_441c
@@ -427,7 +427,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	call $4f9d
 
 Func_43e8: ; 43e8
-	text_hl Text003d ; unable to retreat
+	text_hl UnableToRetreat
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -437,7 +437,7 @@ Func_43f1: ; 43f1 (1:43f1)
 	call $4611
 	jr c, Func_441c
 	call $6558
-	text_hl Text010e ; select pokemon on bench to switch
+	text_hl SelectMonOnBenchToSwitchWithActive
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
@@ -462,7 +462,7 @@ OpenHandMenu: ; 4425 (1:4425)
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
-	text_hl Text00a4 ; no cards in hand
+	text_hl NoCardsInHand
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -494,7 +494,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call LoadPokemonAttacksToDuelPointerTable
 	or a
 	jr nz, .openAttackMenu
-	text_hl Text003c ; no selectable attack
+	text_hl NoSelectableAttack
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -523,7 +523,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 	call $488f
 	jr nc, .asm_4759
-	text_hl Text00c0 ; not enough energy cards
+	text_hl NotEnoughEnergyCards
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
@@ -747,12 +747,12 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	or a
 	ret
 
-.paralyzed:
-	text_hl Text0025 ; paralyzed
+.paralyzed
+	text_hl UnableDueToParalysis
 	jr .returnWithStatusCondition
 
-.asleep:
-	text_hl Text0024 ; asleep
+.asleep
+	text_hl UnableDueToSleep
 
 .returnWithStatusCondition:
 	scf
@@ -833,16 +833,16 @@ ConvertTrainerCardToPokemon:
 	ret
 
 .dataToOverwrite
-    db 10             ; hp
-    ds $07            ; wCardBuffer1Move1Name - (wCardBuffer1HP + 1)
-    tx Text0030       ; move1 name
-    tx Text0041       ; move1 description
-    ds $03            ; wCardBuffer1Move1Category - (wCardBuffer1Move1Description + 2)
-    db POKEMON_POWER  ; move1 category
+    db 10                 ; hp
+    ds $07                ; wCardBuffer1Move1Name - (wCardBuffer1HP + 1)
+    tx DiscardName        ; move1 name
+    tx DiscardDescription ; move1 description
+    ds $03                ; wCardBuffer1Move1Category - (wCardBuffer1Move1Description + 2)
+    db POKEMON_POWER      ; move1 category
     dw TrainerCardAsPokemonEffectCommands ; move1 effect commands
-    ds $18            ; wCardBuffer1RetreatCost - (wCardBuffer1Move1EffectCommands + 2)
-    db UNABLE_RETREAT ; retreat cost
-    ds $0d            ; PKMN_CARD_DATA_LENGTH - (wCardBuffer1RetreatCost + 1 - wCardBuffer1)
+    ds $18                ; wCardBuffer1RetreatCost - (wCardBuffer1Move1EffectCommands + 2)
+    db UNABLE_RETREAT     ; retreat cost
+    ds $0d                ; PKMN_CARD_DATA_LENGTH - (wCardBuffer1RetreatCost + 1 - wCardBuffer1)
 
 INCBIN "baserom.gbc",$6df1,$7107 - $6df1
 
