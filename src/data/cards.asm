@@ -1875,7 +1875,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 
 	; move 1
 	energy PSYCHIC, 1 ; energies
-	tx HypnosisName ; name
+	tx DrowzeeKindOrHypnosisName ; name
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
@@ -6239,7 +6239,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SuperpowerName ; kind
+	tx MachopKindOrSuperpowerName ; kind
 	db 66 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -6290,7 +6290,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SuperpowerName ; kind
+	tx MachopKindOrSuperpowerName ; kind
 	db 67 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -6341,7 +6341,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SuperpowerName ; kind
+	tx MachopKindOrSuperpowerName ; kind
 	db 68 ; Pokedex number
 	db 0
 	db 67 ; level
@@ -7536,7 +7536,7 @@ Haunter2Card: ; 33277 (c:7277)
 
 	; move 1
 	energy PSYCHIC, 1 ; energies
-	tx HypnosisName ; name
+	tx DrowzeeKindOrHypnosisName ; name
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
@@ -7667,7 +7667,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx HypnosisName ; kind
+	tx DrowzeeKindOrHypnosisName ; kind
 	db 96 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -7718,7 +7718,7 @@ HypnoCard: ; 3333a (c:733a)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx HypnosisName ; kind
+	tx DrowzeeKindOrHypnosisName ; kind
 	db 97 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -7769,7 +7769,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MrMimeKindAndBarrierName ; kind
+	tx MrMimeKindOrBarrierName ; kind
 	db 122 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -7856,7 +7856,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
-	tx MrMimeKindAndBarrierName ; name
+	tx MrMimeKindOrBarrierName ; name
 	tx BarrierDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage

@@ -753,7 +753,7 @@ MachopName: ; 5ea27 (17:6a27)
 LowKickName: ; 5ea2f (17:6a2f)
 	db TX_START,"Low Kick",TX_END
 
-SuperpowerName: ; 5ea39 (17:6a39)
+MachopKindOrSuperpowerName: ; 5ea39 (17:6a39)
 	db TX_START,"Superpower",TX_END
 
 MachopDescription: ; 5ea45 (17:6a45)

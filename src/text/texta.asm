@@ -472,7 +472,7 @@ MukDescription: ; 59750 (16:5750)
 ExeggcuteName: ; 597b1 (16:57b1)
 	db TX_START,"Exeggcute",TX_END
 
-HypnosisName: ; 597bc (16:57bc)
+DrowzeeKindOrHypnosisName: ; 597bc (16:57bc)
 	db TX_START,"Hypnosis",TX_END
 
 ExeggcutesLeechSeedDescription: ; 597c6 (16:57c6)

@@ -2224,7 +2224,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text ToxicGasDescription
 	text MukDescription
 	text ExeggcuteName
-	text HypnosisName
+	text DrowzeeKindOrHypnosisName
 	text ExeggcutesLeechSeedDescription
 	text ExeggcuteKind
 	text ExeggcuteDescription
@@ -2598,7 +2598,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text PrimeapeDescription
 	text MachopName
 	text LowKickName
-	text SuperpowerName
+	text MachopKindOrSuperpowerName
 	text MachopDescription
 	text MachokeName
 	text KarateChopName
@@ -2747,7 +2747,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text InvisibleWallDescriptionCont
 	text MeditateName
 	text MrMimesMeditateDescription
-	text MrMimeKindAndBarrierName
+	text MrMimeKindOrBarrierName
 	text MrMimeDescription
 	text JynxName
 	text DoubleAttackX10Description

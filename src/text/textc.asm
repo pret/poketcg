@@ -231,7 +231,7 @@ MrMimesMeditateDescription: ; 60d2b (18:4d2b)
 	db "for each damage counter on the\n"
 	db "Defending Pok`mon.",TX_END
 
-MrMimeKindAndBarrierName: ; 60d81 (18:4d81)
+MrMimeKindOrBarrierName: ; 60d81 (18:4d81)
 	db TX_START,"Barrier",TX_END
 
 MrMimeDescription: ; 60d8a (18:4d8a)
