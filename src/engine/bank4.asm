@@ -49,7 +49,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, [$d116]
 	cp $e0
 	jr nz, .asm_102e2
-	text_hl WonTheMedal
+	text_hl WonTheMedalText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
@@ -101,16 +101,16 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	pop bc
 	ld a, c
 	farcallx $7, $61c4
-	text_hl ReceivedBoosterPack
+	text_hl ReceivedBoosterPackText
 	ld a, [$d117]
 	cp $1
 	jr nz, .asm_10373
-	text_hl AndAnotherBoosterPack
+	text_hl AndAnotherBoosterPackText
 .asm_10373
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
-	text_hl CheckedCardsInBoosterPack
+	text_hl CheckedCardsInBoosterPackText
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
@@ -1115,7 +1115,7 @@ Func_1344d: ; 1344d (4:744d)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	text_hl DefeatedFiveOpponents
+	text_hl DefeatedFiveOpponentsText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
@@ -1137,7 +1137,7 @@ Func_13485: ; 13485 (4:7485)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	text_hl ConsecutiveWinRecordIncreased
+	text_hl ConsecutiveWinRecordIncreasedText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0

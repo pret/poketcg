@@ -3,22 +3,22 @@ const_value = 1
 
 TextOffsets:: ; 34000 (d:4000)
 	db $00,$00,$00
-	text DuelMenuText_Hand
-	text DuelMenuText_Check
-	text DuelMenuText_Attack
-	text DuelMenuText_PKMNPower
-	text DuelMenuText_Done
-	text DuelMenuText_Type
-	text CardInfoPageText_Retreat
-	text CardInfoPageText_Weakness
-	text CardInfoPageText_Resistance
-	text CardInfoPageText_PKMNPWR
+	text HandText
+	text CheckText
+	text AttackText
+	text PKMNPowerText
+	text DoneText
+	text TypeText
+	text RetreatText
+	text WeaknessText
+	text ResistanceText
+	text PKMNPWRText
 	text Text000b
-	text CardInfoPageText_Length
-	text CardInfoPageText_Weight
-	text CardInfoPageText_Pokemon
+	text LengthText
+	text WeightText
+	text PokemonText
 	text Text000f
-	text CardInfoPageText_lbs
+	text lbsText
 	text Text0011
 	text Text0012
 	text Text0013
@@ -37,33 +37,33 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text0020
 	text Text0021
 	text Text0022
-	text NoPokemonOnTheBench
-	text UnableDueToSleep
-	text UnableDueToParalysis
-	text Received10DamageDueToPoison
-	text Received20DamageDueToPoison
-	text IsStillAsleep
-	text IsCuredOfSleep
-	text IsCuredOfParalysis
+	text NoPokemonOnTheBenchText
+	text UnableDueToSleepText
+	text UnableDueToParalysisText
+	text Received10DamageDueToPoisonText
+	text Received20DamageDueToPoisonText
+	text IsStillAsleepText
+	text IsCuredOfSleepText
+	text IsCuredOfParalysisText
 	text Text002b
 	text Text002c
 	text Text002d
 	text Text002e
-	text YesOrNo
+	text YesOrNoText
 	text DiscardName
 	text Text0031
 	text Text0032
 	text Text0033
 	text Text0034
-	text PokemonsAttack
+	text PokemonsAttackText
 	text Text0036
 	text Text0037
 	text Text0038
 	text Text0039
 	text Text003a
 	text Text003b
-	text NoSelectableAttack
-	text UnableToRetreat
+	text NoSelectableAttackText
+	text UnableToRetreatText
 	text Text003e
 	text Text003f
 	text Text0040
@@ -81,13 +81,13 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text004c
 	text Text004d
 	text Text004e
-	text DamageToSelfDueToConfusion
+	text DamageToSelfDueToConfusionText
 	text Text0050
 	text Text0051
 	text Text0052
 	text Text0053
 	text Text0054
-	text TransmissionError
+	text TransmissionErrorText
 	text Text0056
 	text Text0057
 	text Text0058
@@ -120,25 +120,25 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text0073
 	text Text0074
 	text Text0075
-	text Decision
-	text DuelWasDraw
-	text WonDuel
-	text LostDuel
-	text StartSuddenDeathMatch
+	text DecisionText
+	text DuelWasDrawText
+	text WonDuelText
+	text LostDuelText
+	text StartSuddenDeathMatchText
 	text Text007b
 	text Text007c
 	text Text007d
 	text Text007e
 	text Text007f
 	text Text0080
-	text WasKnockedOut
+	text WasKnockedOutText
 	text Text0082
 	text Text0083
 	text Text0084
 	text Text0085
 	text Text0086
 	text Text0087
-	text DuelistIsThinking
+	text DuelistIsThinkingText
 	text Text0089
 	text Text008a
 	text Text008b
@@ -164,9 +164,9 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text009f
 	text Text00a0
 	text Text00a1
-	text ResetBackUpRam
+	text ResetBackUpRamText
 	text Text00a3
-	text NoCardsInHand
+	text NoCardsInHandText
 	text Text00a5
 	text Text00a6
 	text Text00a7
@@ -194,7 +194,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text00bd
 	text Text00be
 	text Text00bf
-	text NotEnoughEnergyCards
+	text NotEnoughEnergyCardsText
 	text Text00c1
 	text Text00c2
 	text Text00c3
@@ -205,7 +205,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text00c8
 	text Text00c9
 	text Text00ca
-	text CannotUseDueToStatus
+	text CannotUseDueToStatusText
 	text Text00cc
 	text Text00cd
 	text Text00ce
@@ -214,7 +214,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text00d1
 	text Text00d2
 	text Text00d3
-	text UnableDueToToxicGas
+	text UnableDueToToxicGasText
 	text Text00d5
 	text Text00d6
 	text Text00d7
@@ -255,24 +255,24 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text00fa
 	text Text00fb
 	text Text00fc
-	text AttackUnsuccessful
-	text UnableToRetreatDueToAcid
-	text UnableToUseTrainerDueToHeadache
-	text UnableToAttackDueToTailWag
-	text UnableToAttackDueToLeer
-	text UnableToAttackDueToBoneAttack
-	text UnableToUseAttackDueToAmnesia
-	text KnockedOutDueToDestinyBond
-	text ReceivesDamageDueToStrikesBack
-	text UnableToEvolveDueToPrehistoricPower
-	text NoDamageOrEffectDueToFly
-	text NoDamageOrEffectDueToBarrier
-	text NoDamageOrEffectDueToAgility
-	text UnableToUseAttackDueToNShield
-	text NoDamageOrEffectDueToNShield
-	text NoDamageOrEffectDueToTransparency
+	text AttackUnsuccessfulText
+	text UnableToRetreatDueToAcidText
+	text UnableToUseTrainerDueToHeadacheText
+	text UnableToAttackDueToTailWagText
+	text UnableToAttackDueToLeerText
+	text UnableToAttackDueToBoneAttackText
+	text UnableToUseAttackDueToAmnesiaText
+	text KnockedOutDueToDestinyBondText
+	text ReceivesDamageDueToStrikesBackText
+	text UnableToEvolveDueToPrehistoricPowerText
+	text NoDamageOrEffectDueToFlyText
+	text NoDamageOrEffectDueToBarrierText
+	text NoDamageOrEffectDueToAgilityText
+	text UnableToUseAttackDueToNShieldText
+	text NoDamageOrEffectDueToNShieldText
+	text NoDamageOrEffectDueToTransparencyText
 	text Text010d
-	text SelectMonOnBenchToSwitchWithActive
+	text SelectMonOnBenchToSwitchWithActiveText
 	text Text010f
 	text Text0110
 	text Text0111
@@ -332,7 +332,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text0147
 	text Text0148
 	text Text0149
-	text WasUnsuccessful
+	text WasUnsuccessfulText
 	text Text014b
 	text Text014c
 	text Text014d
@@ -401,11 +401,11 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text018c
 	text Text018d
 	text Text018e
-	text ReceivedCard
-	text ReceivedPromotionalCard
-	text ReceivedLegendaryCard
-	text ReceivedPromotionalFlyingPikachu
-	text ReceivedPromotionalSurfingPikachu
+	text ReceivedCardText
+	text ReceivedPromotionalCardText
+	text ReceivedLegendaryCardText
+	text ReceivedPromotionalFlyingPikachuText
+	text ReceivedPromotionalSurfingPikachuText
 	text Text0194
 	text Text0195
 	text Text0196
@@ -549,19 +549,19 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text0220
 	text Text0221
 	text Text0222
-	text NewDeck
-	text PleaseSelectDeck
+	text NewDeckText
+	text PleaseSelectDeckText
 	text Text0225
 	text Text0226
 	text Text0227
 	text Text0228
 	text Text0229
-	text ChosenAsDuelingDeck
+	text ChosenAsDuelingDeckText
 	text Text022b
 	text Text022c
 	text Text022d
 	text Text022e
-	text ThereIsNoDeckHere
+	text ThereIsNoDeckHereText
 	text Text0230
 	text Text0231
 	text Text0232
@@ -852,8 +852,8 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text034f
 	text Text0350
 	text Text0351
-	text TurnedPCOn
-	text TurnedPCOff
+	text TurnedPCOnText
+	text TurnedPCOffText
 	text Text0354
 	text Text0355
 	text Text0356
@@ -905,11 +905,11 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text0384
 	text Text0385
 	text Text0386
-	text ReceivedBoosterPack
-	text AndAnotherBoosterPack
-	text CheckedCardsInBoosterPack
+	text ReceivedBoosterPackText
+	text AndAnotherBoosterPackText
+	text CheckedCardsInBoosterPackText
 	text Text038a
-	text WonTheMedal
+	text WonTheMedalText
 	text Text038c
 	text Text038d
 	text Text038e
@@ -2024,9 +2024,9 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text07e3
 	text Text07e4
 	text Text07e5
-	text DefeatedFiveOpponents
+	text DefeatedFiveOpponentsText
 	text Text07e7
-	text ConsecutiveWinRecordIncreased
+	text ConsecutiveWinRecordIncreasedText
 	text Text07e9
 	text Text07ea
 	text Text07eb

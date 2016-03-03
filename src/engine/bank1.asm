@@ -22,7 +22,7 @@ Func_4000: ; 4000 (1:4000)
 .asm_4035
 	call Func_405a
 	call Func_04a2
-	text_hl ResetBackUpRam
+	text_hl ResetBackUpRamText
 	call Func_2af0
 	jr c, .asm_404d
 	call EnableExtRAM
@@ -128,7 +128,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_04a2
 	ld a, $3
 	call Func_2167
-	text_hl Decision
+	text_hl DecisionText
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
 	ldh a, [hWhoseTurn]
@@ -147,7 +147,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, $1a
-	text_hl DuelWasDraw
+	text_hl DuelWasDrawText
 	jr .asm_4196
 
 .activeDuelistWonBattle
@@ -159,7 +159,7 @@ StartDuel: ; 409f (1:409f)
 	ld [$d0c3], a
 	ld a, $5d
 	ld c, $18
-	text_hl WonDuel
+	text_hl WonDuelText
 	jr .asm_4196
 
 .activeDuelistLostBattle
@@ -172,7 +172,7 @@ StartDuel: ; 409f (1:409f)
 	ld [$d0c3], a
 	ld a, $5e
 	ld c, $19
-	text_hl LostDuel
+	text_hl LostDuelText
 
 .asm_4196
 	call Func_3b6a
@@ -203,7 +203,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_3b31
 	ld a, [wDuelTheme]
 	call PlaySong
-	text_hl StartSuddenDeathMatch
+	text_hl StartSuddenDeathMatchText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	ld [$cc08], a
@@ -282,7 +282,7 @@ Func_426d:
 	xor a
 	ld [wVBlankCtr], a
 	ld [$cbf9], a
-	text_hl DuelistIsThinking
+	text_hl DuelistIsThinkingText
 	call Func_2a36
 	call Func_2bbf
 	ld a, $ff
@@ -413,7 +413,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	jr c, Func_441f
 	call $4611
 	jr c, Func_441c
-	text_hl SelectMonOnBenchToSwitchWithActive
+	text_hl SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	jr c, Func_441c
@@ -427,7 +427,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	call $4f9d
 
 Func_43e8: ; 43e8
-	text_hl UnableToRetreat
+	text_hl UnableToRetreatText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -437,7 +437,7 @@ Func_43f1: ; 43f1 (1:43f1)
 	call $4611
 	jr c, Func_441c
 	call $6558
-	text_hl SelectMonOnBenchToSwitchWithActive
+	text_hl SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
@@ -462,7 +462,7 @@ OpenHandMenu: ; 4425 (1:4425)
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
-	text_hl NoCardsInHand
+	text_hl NoCardsInHandText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -494,7 +494,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call LoadPokemonAttacksToDuelPointerTable
 	or a
 	jr nz, .openAttackMenu
-	text_hl NoSelectableAttack
+	text_hl NoSelectableAttackText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4295
 
@@ -523,7 +523,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 	call $488f
 	jr nc, .asm_4759
-	text_hl NotEnoughEnergyCards
+	text_hl NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
@@ -748,11 +748,11 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ret
 
 .paralyzed
-	text_hl UnableDueToParalysis
+	text_hl UnableDueToParalysisText
 	jr .returnWithStatusCondition
 
 .asleep
-	text_hl UnableDueToSleep
+	text_hl UnableDueToSleepText
 
 .returnWithStatusCondition:
 	scf

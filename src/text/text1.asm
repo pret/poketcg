@@ -1,49 +1,49 @@
-DuelMenuText_Hand: ; 3630a (d:630a)
+HandText: ; 3630a (d:630a)
 	db TX_START,"Hand",TX_END
 
-DuelMenuText_Check: ; 36310 (d:6310)
+CheckText: ; 36310 (d:6310)
 	db TX_START,"Check",TX_END
 
-DuelMenuText_Attack: ; 36317 (d:6317)
+AttackText: ; 36317 (d:6317)
 	db TX_START,"Attack",TX_END
 
-DuelMenuText_PKMNPower: ; 3631f (d:631f)
+PKMNPowerText: ; 3631f (d:631f)
 	db TX_START,"PKMN Power",TX_END
 
-DuelMenuText_Done: ; 3632b (d:632b)
+DoneText: ; 3632b (d:632b)
 	db TX_START,"Done",TX_END
 
-DuelMenuText_Type: ; 36331 (d:6331)
+TypeText: ; 36331 (d:6331)
 	db TX_START,"Type",TX_END
 
-CardInfoPageText_Retreat: ; 36337 (d:6337)
+RetreatText: ; 36337 (d:6337)
 	db TX_START,"Retreat",TX_END
 
-CardInfoPageText_Weakness: ; 36340 (d:6340)
+WeaknessText: ; 36340 (d:6340)
 	db TX_START,"Weakness",TX_END
 
-CardInfoPageText_Resistance: ; 3634a (d:634a)
+ResistanceText: ; 3634a (d:634a)
 	db TX_START,"Resistance",TX_END
 
-CardInfoPageText_PKMNPWR: ; 36356 (d:6356)
+PKMNPWRText: ; 36356 (d:6356)
 	db TX_START,"PKMN PWR",TX_END
 
 Text000b: ; 36360 (d:6360)
 	db $56,$19,$33,$3d,$16,$78,$4c,TX_END
 
-CardInfoPageText_Length: ; 36368 (d:6368)
+LengthText: ; 36368 (d:6368)
 	db TX_START,"Length",TX_END
 
-CardInfoPageText_Weight: ; 36370 (d:6370)
+WeightText: ; 36370 (d:6370)
 	db TX_START,"Weight",TX_END
 
-CardInfoPageText_Pokemon: ; 36378 (d:6378)
+PokemonText: ; 36378 (d:6378)
 	db TX_START," Pok`mon",TX_END
 
 Text000f: ; 36382 (d:6382)
 	db $03,$4c,TX_END
 
-CardInfoPageText_lbs: ; 36385 (d:6385)
+lbsText: ; 36385 (d:6385)
 	db TX_START,"lbs.",TX_END
 
 Text0011: ; 3638b (d:638b)
@@ -100,32 +100,32 @@ Text0021: ; 36460 (d:6460)
 Text0022: ; 36466 (d:6466)
 	db TX_START,"Attack",TX_END
 
-NoPokemonOnTheBench: ; 3646e (d:646e)
+NoPokemonOnTheBenchText: ; 3646e (d:646e)
 	db TX_START,"No Pok`mon on the Bench.",TX_END
 
-UnableDueToSleep: ; 36488 (d:6488)
+UnableDueToSleepText: ; 36488 (d:6488)
 	db TX_START,"Unable to due to Sleep.",TX_END
 
-UnableDueToParalysis: ; 364a1 (d:64a1)
+UnableDueToParalysisText: ; 364a1 (d:64a1)
 	db TX_START,"Unable to due to Paralysis.",TX_END
 
-Received10DamageDueToPoison: ; 364be (d:64be)
+Received10DamageDueToPoisonText: ; 364be (d:64be)
 	db TX_START,TX_RAM2," received\n"
 	db "10 damage due to Poison.",TX_END
 
-Received20DamageDueToPoison: ; 364e3 (d:64e3)
+Received20DamageDueToPoisonText: ; 364e3 (d:64e3)
 	db TX_START,TX_RAM2," received\n"
 	db "20 damage due to Double Poison.",TX_END
 
-IsStillAsleep: ; 3650f (d:650f)
+IsStillAsleepText: ; 3650f (d:650f)
 	db TX_START,TX_RAM2," is\n"
 	db "still Asleep.",TX_END
 
-IsCuredOfSleep: ; 36523 (d:6523)
+IsCuredOfSleepText: ; 36523 (d:6523)
 	db TX_START,TX_RAM2," is\n"
 	db "cured of Sleep.",TX_END
 
-IsCuredOfParalysis: ; 36539 (d:6539)
+IsCuredOfParalysisText: ; 36539 (d:6539)
 	db TX_START,TX_RAM2," is\n"
 	db "cured of Paralysis.",TX_END
 
@@ -141,7 +141,7 @@ Text002d: ; 36576 (d:6576)
 Text002e: ; 36588 (d:6588)
 	db TX_START,"Is this OK?",TX_END
 
-YesOrNo: ; 36595 (d:6595)
+YesOrNoText: ; 36595 (d:6595)
 	db TX_START,"Yes     No",TX_END
 
 DiscardName: ; 365a1 (d:65a1)
@@ -159,7 +159,7 @@ Text0033: ; 365be (d:65be)
 Text0034: ; 365c7 (d:65c7)
 	db TX_START,"Received damage",TX_END
 
-PokemonsAttack: ; 365d8 (d:65d8)
+PokemonsAttackText: ; 365d8 (d:65d8)
 	db TX_START,TX_RAM2,"'s\n"
 	db TX_START,TX_RAM2,"!",TX_END
 
@@ -187,10 +187,10 @@ Text003b: ; 36694 (d:6694)
 	db TX_START,TX_RAM2," did not\n"
 	db "receive damage!",TX_END
 
-NoSelectableAttack: ; 366af (d:66af)
+NoSelectableAttackText: ; 366af (d:66af)
 	db TX_START,"No selectable Attack",TX_END
 
-UnableToRetreat: ; 366c5 (d:66c5)
+UnableToRetreatText: ; 366c5 (d:66c5)
 	db TX_START,"Unable to Retreat.",TX_END
 
 Text003e: ; 366d9 (d:66d9)
@@ -256,7 +256,7 @@ Text004d: ; 3685a (d:685a)
 Text004e: ; 36861 (d:6861)
 	db TX_START,"Knock Out",TX_END
 
-DamageToSelfDueToConfusion: ; 3686c (d:686c)
+DamageToSelfDueToConfusionText: ; 3686c (d:686c)
 	db TX_START,"20 damage to Self due to Confusion.",TX_END
 
 Text0050: ; 36891 (d:6891)
@@ -277,7 +277,7 @@ Text0053: ; 36924 (d:6924)
 Text0054: ; 36935 (d:6935)
 	db TX_START,"You play second.",TX_END
 
-TransmissionError: ; 36947 (d:6947)
+TransmissionErrorText: ; 36947 (d:6947)
 	db TX_START,"Transmission Error.\n"
 	db "Start again from the beginning.",TX_END
 
@@ -401,21 +401,21 @@ Text0075: ; 36d72 (d:6d72)
 	db TX_START,"A coin will be tossed\n"
 	db "to decide who plays first.",TX_END
 
-Decision: ; 36da4 (d:6da4)
+DecisionText: ; 36da4 (d:6da4)
 	db TX_START,"Decision...",TX_END
 
-DuelWasDraw: ; 36db1 (d:6db1)
+DuelWasDrawText: ; 36db1 (d:6db1)
 	db TX_START,"The Duel with ",TX_RAM1,"\n"
 	db "was a Draw!",TX_END
 
-WonDuel: ; 36dce (d:6dce)
+WonDuelText: ; 36dce (d:6dce)
 	db TX_START,"You won the Duel with ",TX_RAM1,"!",TX_END
 
-LostDuel: ; 36de8 (d:6de8)
+LostDuelText: ; 36de8 (d:6de8)
 	db TX_START,"You lost the Duel\n"
 	db "with ",TX_RAM1,"...",TX_END
 
-StartSuddenDeathMatch: ; 36e05 (d:6e05)
+StartSuddenDeathMatchText: ; 36e05 (d:6e05)
 	db TX_START,"Start a Sudden-Death\n"
 	db "Match for 1 Prize!",TX_END
 
@@ -441,7 +441,7 @@ Text0080: ; 36e82 (d:6e82)
 	db TX_START,"There are no Pok`mon\n"
 	db "in ",TX_RAM1,"'s Play Area!",TX_END
 
-WasKnockedOut: ; 36eaa (d:6eaa)
+WasKnockedOutText: ; 36eaa (d:6eaa)
 	db TX_START,TX_RAM2," was\n"
 	db "Knocked Out!",TX_END
 
@@ -468,7 +468,7 @@ Text0086: ; 36f31 (d:6f31)
 Text0087: ; 36f43 (d:6f43)
 	db $03,$31,$0c,$03,$42,$0c,TX_END
 
-DuelistIsThinking: ; 36f4a (d:6f4a)
+DuelistIsThinkingText: ; 36f4a (d:6f4a)
 	db TX_START,TX_RAM1," is thinking.",TX_END
 
 Text0089: ; 36f5a (d:6f5a)
@@ -584,7 +584,7 @@ Text00a0: ; 37284 (d:7284)
 Text00a1: ; 37294 (d:7294)
 	db TX_START,"End without Prizes?",TX_END
 
-ResetBackUpRam: ; 372a9 (d:72a9)
+ResetBackUpRamText: ; 372a9 (d:72a9)
 	db TX_START,"Reset Back Up RAM?",TX_END
 
 Text00a3: ; 372bd (d:72bd)
@@ -595,7 +595,7 @@ Text00a3: ; 372bd (d:72bd)
 	db "Please restart the game after\n"
 	db "the Data is reset.",TX_END
 
-NoCardsInHand: ; 37348 (d:7348)
+NoCardsInHandText: ; 37348 (d:7348)
 	db TX_START,"No cards in hand.",TX_END
 
 Text00a5: ; 3735b (d:735b)
@@ -696,7 +696,7 @@ Text00bf: ; 37758 (d:7758)
 	db TX_START,TX_RAM3," Energy cards\n"
 	db "are required to Retreat.",TX_END
 
-NotEnoughEnergyCards: ; 37781 (d:7781)
+NotEnoughEnergyCardsText: ; 37781 (d:7781)
 	db TX_START,"Not enough Energy cards.",TX_END
 
 Text00c1: ; 3779b (d:779b)
@@ -732,7 +732,7 @@ Text00c9: ; 37897 (d:7897)
 Text00ca: ; 378a7 (d:78a7)
 	db TX_START,"Only once per turn.",TX_END
 
-CannotUseDueToStatus: ; 378bc (d:78bc)
+CannotUseDueToStatusText: ; 378bc (d:78bc)
 	db TX_START,"Cannot use due to Sleep, Paralysis,\n"
 	db "or Confusion.",TX_END
 
@@ -763,7 +763,7 @@ Text00d2: ; 379ce (d:79ce)
 Text00d3: ; 379f2 (d:79f2)
 	db TX_START,"Opponent is not Asleep",TX_END
 
-UnableDueToToxicGas: ; 37a0a (d:7a0a)
+UnableDueToToxicGasText: ; 37a0a (d:7a0a)
 	db TX_START,"Unable to use due to the\n"
 	db "effects of Toxic Gas.",TX_END
 

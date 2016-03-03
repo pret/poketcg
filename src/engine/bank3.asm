@@ -1034,7 +1034,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c241
 	call $4915
 	call DoFrameIfLCDEnabled
-	text_hl TurnedPCOn
+	text_hl TurnedPCOnText
 	call Func_2c73
 	call $484e
 .asm_c801
@@ -1061,7 +1061,7 @@ PC_c7ea: ; c7ea (3:47ea)
 .asm_c82f
 	call Func_c135
 	call DoFrameIfLCDEnabled
-	text_hl TurnedPCOff
+	text_hl TurnedPCOffText
 	call $4891
 	call Func_c111
 	xor a

@@ -922,11 +922,11 @@ Text0351: ; 3ea3a (f:6a3a)
 	db "Print\n"
 	db "Shut Down",TX_END
 
-TurnedPCOn: ; 3ea69 (f:6a69)
+TurnedPCOnText: ; 3ea69 (f:6a69)
 	db TX_START,TX_RAM1,"\n"
 	db "turned the PC on!",TX_END
 
-TurnedPCOff: ; 3ea7e (f:6a7e)
+TurnedPCOffText: ; 3ea7e (f:6a7e)
 	db TX_START,TX_RAM1,"\n"
 	db "turned the PC off!",TX_END
 
@@ -1163,15 +1163,15 @@ Text0385: ; 3f2c6 (f:72c6)
 Text0386: ; 3f2f1 (f:72f1)
 	db TX_START,"         Use ",TX_RAM3,"'s Deck",TX_END
 
-ReceivedBoosterPack: ; 3f308 (f:7308)
+ReceivedBoosterPackText: ; 3f308 (f:7308)
 	db TX_START,TX_RAM1," received a Booster\n"
 	db "Pack: ",TX_RAM2,".",TX_END
 
-AndAnotherBoosterPack: ; 3f327 (f:7327)
+AndAnotherBoosterPackText: ; 3f327 (f:7327)
 	db TX_START,"...And another Booster Pack:\n"
 	db TX_RAM2,".",TX_END
 
-CheckedCardsInBoosterPack: ; 3f348 (f:7348)
+CheckedCardsInBoosterPackText: ; 3f348 (f:7348)
 	db TX_START,TX_RAM1," checked the cards\n"
 	db "in the Booster Pack!!",TX_END
 
@@ -1179,7 +1179,7 @@ Text038a: ; 3f373 (f:7373)
 	db TX_START,"Substitute screen for\n"
 	db "receiving cards.",TX_END
 
-WonTheMedal: ; 3f39b (f:739b)
+WonTheMedalText: ; 3f39b (f:739b)
 	db TX_START,TX_RAM1,"\n"
 	db "Won the ",TX_RAM2," Medal!",TX_END
 
