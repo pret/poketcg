@@ -65,10 +65,9 @@ wPlayerBench5CardHP:: ; c2cd
 	ds $1
 	ds $1a
 
-;The only known use of this is to store
-;when an attack causes a pokemon
-;to not be able to attack the following turn
-;for example: tail wag, leer
+; The only known use of this is to store when an attack 
+; causes a pokemon to not be able to attack the following turn.
+; for example: tail wag, leer
 wPlayerCantAttackStatus:: ; c2e8
 	ds $1
 	ds $3
@@ -578,7 +577,8 @@ wce43:: ; ce43
 wce44:: ; ce44
 	ds $3
 
-wce47:: ; ce47
+; when printing text, number of frames to wait between each text tile
+wTextSpeed:: ; ce47
 	ds $1
 
 wce48:: ; ce48
@@ -591,7 +591,10 @@ wce4a:: ; ce4a
 	ds $1
 
 wce4b:: ; ce4b
-	ds $5
+	ds $3
+	
+wCoinTossScreenTextId:: ; ce4e
+	ds $2
 
 wce50:: ; ce50
 	ds $1

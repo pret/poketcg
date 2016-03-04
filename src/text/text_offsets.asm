@@ -224,13 +224,13 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text00db
 	text Text00dc
 	text Text00dd
-	text Text00de
-	text Text00df
-	text Text00e0
-	text Text00e1
-	text Text00e2
-	text Text00e3
-	text Text00e4
+	text SandAttackCheckText
+	text SmokescreenCheckText
+	text ParalysisCheckText
+	text SleepCheckText
+	text PoisonCheckText
+	text ConfusionCheckText
+	text VenomPowderCheckText
 	text Text00e5
 	text Text00e6
 	text Text00e7

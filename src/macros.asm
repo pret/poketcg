@@ -5,6 +5,10 @@ dbw: MACRO
 	dw \2
 ENDM
 
+lb: MACRO ; r, hi, lo
+	ld \1, (\2) << 8 + ((\3) & $ff)
+ENDM
+
 bank1call: MACRO
 	rst $18
 	dw \1
@@ -44,6 +48,10 @@ ENDM
 
 text_hl: MACRO
 	ld hl, \1_
+ENDM
+
+text_de: MACRO
+	ld de, \1_
 ENDM
 
 sgb: MACRO

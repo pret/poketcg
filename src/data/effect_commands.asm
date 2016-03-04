@@ -13,7 +13,6 @@ EffectCommands: ; 186f7 (6:46f7)
 
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
-; xxx use <TrainerCardName>EffectCommands or <EnergyCardName>EffectCommands for these types of cards.
 
 EkansSpitPoisonEffectCommands:
 	dbw $03, $46f8
@@ -21,7 +20,7 @@ EkansSpitPoisonEffectCommands:
 	db  $00
 
 EkansWrapEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 ArbokTerrorStrikeEffectCommands:
@@ -31,12 +30,12 @@ ArbokTerrorStrikeEffectCommands:
 	db  $00
 
 ArbokPoisonFangEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $4730
 	db  $00
 
 WeepinbellPoisonPowderEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $4738
 	db  $00
 
@@ -52,15 +51,15 @@ VictreebelAcidEffectCommands:
 	db  $00
 
 PinsirIronGripEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 CaterpieStringShotEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 GloomPoisonPowderEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $478b
 	db  $00
 
@@ -73,7 +72,7 @@ KakunaStiffenEffectCommands:
 	db  $00
 
 KakunaPoisonPowderEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $47b4
 	db  $00
 
@@ -82,7 +81,7 @@ GolbatLeechLifeEffectCommands:
 	db  $00
 
 VenonatStunSporeEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 VenonatLeechLifeEffectCommands:
@@ -107,12 +106,12 @@ BeedrillTwineedleEffectCommands:
 	db  $00
 
 BeedrillPoisonStingEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $480d
 	db  $00
 
 ExeggcuteHypnosisEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 ExeggcuteLeechSeedEffectCommands:
@@ -129,11 +128,11 @@ MetapodStiffenEffectCommands:
 	db  $00
 
 MetapodStunSporeEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 OddishStunSporeEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 OddishSproutEffectCommands:
@@ -212,20 +211,20 @@ ButterfreeMegaDrainEffectCommands:
 	db  $00
 
 ParasSporeEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 ParasectSporeEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 WeedlePoisonStingEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $4b27
 	db  $00
 
 IvysaurPoisonPowderEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $4b2f
 	db  $00
 
@@ -241,7 +240,7 @@ VenusaurEnergyTransEffectCommands:
 	db  $00
 
 GrimerNastyGooEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 GrimerMinimizeEffectCommands:
@@ -253,7 +252,7 @@ MukToxicGasEffectCommands:
 	db  $00
 
 MukSludgeEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $4c38
 	db  $00
 
@@ -265,7 +264,7 @@ BellsproutCallforFamilyEffectCommands:
 	db  $00
 
 WeezingSmogEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $4ce2
 	db  $00
 
@@ -285,11 +284,11 @@ VenomothVenomPowderEffectCommands:
 	db  $00
 
 TangelaBindEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 TangelaPoisonPowderEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $4da0
 	db  $00
 
@@ -304,11 +303,11 @@ VileplumePetalDanceEffectCommands:
 	db  $00
 
 TangelaStunSporeEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 TangelaPoisonWhipEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $4e4b
 	db  $00
 
@@ -354,7 +353,7 @@ BlastoiseHydroPumpEffectCommands:
 	db  $00
 
 GyaradosBubblebeamEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 KinglerFlailEffectCommands:
@@ -384,7 +383,7 @@ PsyduckFurySweepesEffectCommands:
 	db  $00
 
 GolduckPsyshockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 GolduckHyperBeamEffectCommands:
@@ -421,7 +420,7 @@ VaporeonWaterGunEffectCommands:
 	db  $00
 
 DewgongIceBeamEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 StarmieRecoverEffectCommands:
@@ -433,11 +432,11 @@ StarmieRecoverEffectCommands:
 	db  $00
 
 StarmieStarFreezeEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 SquirtleBubbleEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 SquirtleWithdrawEffectCommands:
@@ -453,7 +452,7 @@ TentacruelSupersonicEffectCommands:
 	db  $00
 
 TentacruelJellyfishStingEffectCommands:
-	dbw $03, $4007
+	dbw $03, PoisonEffect
 	dbw $09, $5141
 	db  $00
 
@@ -495,7 +494,7 @@ CloysterSpikeCannonEffectCommands:
 	db  $00
 
 ArticunoFreezeDryEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 ArticunoBlizzardEffectCommands:
@@ -515,7 +514,7 @@ LaprasWaterGunEffectCommands:
 	db  $00
 
 LaprasConfuseRayEffectCommands:
-	dbw $03, $401d
+	dbw $03, Confusion50PercentEffect
 	db  $00
 
 ArticunoQuickfreezeEffectCommands:
@@ -624,7 +623,7 @@ MagmarSmokescreenEffectCommands:
 	db  $00
 
 MagmarSmogEffectCommands:
-	dbw $03, $4000
+	dbw $03, Poison50PercentEffect
 	dbw $09, $559a
 	db  $00
 
@@ -647,7 +646,7 @@ CharizardFireSpinEffectCommands:
 	db  $00
 
 VulpixConfuseRayEffectCommands:
-	dbw $03, $401d
+	dbw $03, Confusion50PercentEffect
 	db  $00
 
 FlareonRageEffectCommands:
@@ -675,7 +674,7 @@ Moltres2DiveBombEffectCommands:
 	db  $00
 
 AbraPsyshockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 GengarCurseEffectCommands:
@@ -703,7 +702,7 @@ GastlyDestinyBondEffectCommands:
 	db  $00
 
 GastlyLickEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 GastlyEnergyConversionEffectCommands:
@@ -714,7 +713,7 @@ GastlyEnergyConversionEffectCommands:
 	db  $00
 
 HaunterHypnosisEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 HaunterDreamEaterEffectCommands:
@@ -726,7 +725,7 @@ HaunterTransparencyEffectCommands:
 	db  $00
 
 HaunterNightmareEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 HypnoProphecyEffectCommands:
@@ -743,7 +742,7 @@ HypnoDarkMindEffectCommands:
 	db  $00
 
 DrowzeeConfuseRayEffectCommands:
-	dbw $03, $401d
+	dbw $03, Confusion50PercentEffect
 	db  $00
 
 MrMimeInvisibleWallEffectCommands:
@@ -762,7 +761,7 @@ AlakazamDamageSwapEffectCommands:
 	db  $00
 
 AlakazamConfuseRayEffectCommands:
-	dbw $03, $401d
+	dbw $03, Confusion50PercentEffect
 	db  $00
 
 MewPsywaveEffectCommands:
@@ -782,7 +781,7 @@ MewNeutralizingShieldEffectCommands:
 	db  $00
 
 MewPsyshockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 MewtwoPsychicEffectCommands:
@@ -819,7 +818,7 @@ SlowbroStrangeBehaviorEffectCommands:
 	db  $00
 
 SlowbroPsyshockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 SlowpokeSpacingOutEffectCommands:
@@ -985,7 +984,7 @@ MarowakWailEffectCommands:
 	db  $00
 
 ElectabuzzThundershockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 ElectabuzzThunderpunchEffectCommands:
@@ -1004,7 +1003,7 @@ ElectabuzzQuickAttackEffectCommands:
 	db  $00
 
 MagnemiteThunderWaveEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 MagnemiteSelfdestructEffectCommands:
@@ -1035,7 +1034,7 @@ JolteonPinMissileEffectCommands:
 	db  $00
 
 FlyingPikachuThundershockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 FlyingPikachuFlyEffectCommands:
@@ -1059,7 +1058,7 @@ Pikachu3GrowlEffectCommands:
 	db  $00
 
 Pikachu3ThundershockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 Pikachu4GrowlEffectCommands:
@@ -1067,7 +1066,7 @@ Pikachu4GrowlEffectCommands:
 	db  $00
 
 Pikachu4ThundershockEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 ElectrodeChainLightningEffectCommands:
@@ -1090,7 +1089,7 @@ RaichuGigashockEffectCommands:
 	db  $00
 
 MagnetonThunderWaveEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 Magneton1SelfdestructEffectCommands:
@@ -1139,7 +1138,7 @@ JolteonDoubleKickEffectCommands:
 	db  $00
 
 JolteonStunNeedleEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 EeveeTailWagEffectCommands:
@@ -1180,7 +1179,7 @@ SnorlaxThickSkinnedEffectCommands:
 	db  $00
 
 SnorlaxBodySlamEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 FarfetchdLeekSlapEffectCommands:
@@ -1279,7 +1278,7 @@ ClefairyMetronomeEffectCommands:
 	db  $00
 
 WigglytuffLullabyEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 WigglytuffDotheWaveEffectCommands:
@@ -1288,7 +1287,7 @@ WigglytuffDotheWaveEffectCommands:
 	db  $00
 
 JigglypuffLullabyEffectCommands:
-	dbw $03, $4030
+	dbw $03, SleepEffect
 	db  $00
 
 JigglypuffFirstAidEffectCommands:
@@ -1305,7 +1304,7 @@ PersianPounceEffectCommands:
 	db  $00
 
 LickitungTongueWrapEffectCommands:
-	dbw $03, $4011
+	dbw $03, Paralysis50PercentEffect
 	db  $00
 
 LickitungSupersonicEffectCommands:

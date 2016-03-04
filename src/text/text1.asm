@@ -802,31 +802,31 @@ Text00dd: ; 37b5d (d:7b5d)
 	db "Please use a\n"
 	db "Game Boy Color.",TX_END
 
-Text00de: ; 37ba9 (d:7ba9)
+SandAttackCheckText: ; 37ba9 (d:7ba9)
 	db TX_START,"Sand-attack check!\n"
 	db "If Tails, Attack is unsuccessful.",TX_END
 
-Text00df: ; 37bdf (d:7bdf)
+SmokescreenCheckText: ; 37bdf (d:7bdf)
 	db TX_START,"Smokescreen check!\n"
 	db "If Tails, Attack is unsuccessful.",TX_END
 
-Text00e0: ; 37c15 (d:7c15)
+ParalysisCheckText: ; 37c15 (d:7c15)
 	db TX_START,"Paralysis check!\n"
 	db "If Heads, opponent is Paralyzed.",TX_END
 
-Text00e1: ; 37c48 (d:7c48)
+SleepCheckText: ; 37c48 (d:7c48)
 	db TX_START,"Sleep check!\n"
 	db "If Heads, opponent becomes Asleep.",TX_END
 
-Text00e2: ; 37c79 (d:7c79)
+PoisonCheckText: ; 37c79 (d:7c79)
 	db TX_START,"Poison check!\n"
 	db "If Heads, opponent is Poisoned.",TX_END
 
-Text00e3: ; 37ca8 (d:7ca8)
+ConfusionCheckText: ; 37ca8 (d:7ca8)
 	db TX_START,"Confusion check! If Heads,\n"
 	db "opponent becomes Confused.",TX_END
 
-Text00e4: ; 37cdf (d:7cdf)
+VenomPowderCheckText: ; 37cdf (d:7cdf)
 	db TX_START,"Venom Powder check! If Heads,\n"
 	db "opponent is Poisoned & Confused.",TX_END
 

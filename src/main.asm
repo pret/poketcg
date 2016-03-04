@@ -34,7 +34,7 @@ SECTION "bankA",ROMX,BANK[$A]
 	emptybank
 
 SECTION "bankB",ROMX,BANK[$B]
-INCBIN "baserom.gbc",$2C000,$4000
+INCLUDE "engine/effect_functions.asm"
 
 SECTION "bankC",ROMX,BANK[$C]
 INCLUDE "data/decks.asm"

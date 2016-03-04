@@ -38,7 +38,10 @@ CARD_LOCATION_BENCH_4      EQU $14
 CARD_LOCATION_BENCH_5      EQU $15
 
 ; status condition constants
-CARD_NOSTATUS  EQU $00
-CARD_CONFUSED  EQU $01
-CARD_ASLEEP    EQU $02
-CARD_PARALYZED EQU $03
+; two statuses can be combined if they are identified by a different nybble
+CARD_NOSTATUS        EQU $00
+CARD_CONFUSED        EQU $01
+CARD_ASLEEP          EQU $02
+CARD_PARALYZED       EQU $03
+CARD_POISONED        EQU $80
+CARD_DOUBLE_POISONED EQU $c0

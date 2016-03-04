@@ -2180,13 +2180,13 @@ Func_100b: ; 100b (0:100b)
 	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc3], a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc4], a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	pop hl
 	push hl
 	call EnableExtRAM
@@ -2531,13 +2531,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc3], a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToDE
 	ld a, e
 	ld [wccc4], a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	xor a
 	ld [wccec], a
 	ld [wcccd], a
@@ -2595,9 +2595,9 @@ Func_1730: ; 1730 (0:1730)
 	ld a, [wccb1]
 	and $80
 	jr nz, .asm_17ad
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	call Func_3432
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 .asm_17ad
 	xor a
 	ld [$ff9d], a
@@ -2749,11 +2749,11 @@ Func_189d: ; 189d (0:189d)
 	ret z
 .asm_18b9
 	push de
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	xor a
 	ld [wcceb], a
 	call Func_348a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	pop de
 	ret nc
 	bank1call $4f9d
@@ -2775,7 +2775,7 @@ Func_18d7: ; 18d7 (0:18d7)
 	ret
 .confused
 	ld de, $00f7
-	call Func_307d
+	call DisplayCoinTossScreen2
 	jr c, .asm_18f7
 	ld a, $1
 	ld [wccc9], a
@@ -2846,9 +2846,9 @@ Func_1994: ; 1994 (0:1994)
 	call Func_36f7
 	call Func_1a0e
 	ld b, a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	call Func_3730
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	and b
 	jr z, .asm_19dc
 	sla e
@@ -2856,9 +2856,9 @@ Func_1994: ; 1994 (0:1994)
 	ld hl, $ccc1
 	set 1, [hl]
 .asm_19dc
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	call Func_374a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	and b
 	jr z, .asm_19f3
 	ld hl, $ffe2
@@ -2870,7 +2870,7 @@ Func_1994: ; 1994 (0:1994)
 .asm_19f3
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedDefender
 	call Func_3244
@@ -2878,7 +2878,7 @@ Func_1994: ; 1994 (0:1994)
 	jr z, .asm_1a0a
 	ld de, $0000
 .asm_1a0a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ret
 
 Func_1a0e: ; 1a0e (0:1a0e)
@@ -3103,10 +3103,11 @@ Func_1bca: ; 1bca (0:1bca)
 
 INCBIN "baserom.gbc",$1c05,$1c72 - $1c05
 
-; returns [([hWhoseTurn] ^ $1) << 8 + a] in a
-; i.e. variable a of the player whose turn it is not
-; Also: [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
-GetOpposingTurnDuelistVariable_SwapTurn: ; 1c72 (0:1c72)
+; returns [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
+;   As a side effect, this also returns a duelist variable in a similar manner to
+;   GetOpposingTurnDuelistVariable, but this function appears to be
+;   only called to swap the turn value.
+SwapTurn: ; 1c72 (0:1c72)
 	push af
 	push hl
 	call GetOpposingTurnDuelistVariable
@@ -3205,7 +3206,7 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 	ret
 
 ; Draws a bxc text box at de printing a name in the left side of the top border.
-; The name's text offset must be at hl when this function is called.
+; The name's text id must be at hl when this function is called.
 ; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
 DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
@@ -4515,7 +4516,7 @@ Func_2a44: ; 2a44 (0:2a44)
 	pop hl
 	ld a, l
 	or h
-	jp nz, Func_2e76
+	jp nz, PrintTextNoDelay
 	ld hl, $c590
 	jp Func_21c5
 
@@ -4528,7 +4529,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	call Func_22a6
 	call EnableLCD
 	pop hl
-	jp Func_2e41
+	jp PrintText
 
 ; draws a 12x6 text box aligned to the bottom left of the screen
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
@@ -4673,10 +4674,10 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 .normalSamDuel
 	xor a
 	ld [wOpponentDeckId], a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld a, PRACTICE_PLAYER_DECK
 	call LoadDeck
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld hl, wRNG1
 	ld a, $57
 	ld [hli], a
@@ -4817,12 +4818,12 @@ Func_2c84: ; 2c84 (0:2c84)
 	call Func_2d15
 	call Func_2cc8
 .asm_2c93
-	ld a, [wce47]
+	ld a, [wTextSpeed]
 	ld c, a
 	inc c
 	jr .asm_2cac
 .asm_2c9a
-	ld a, [wce47]
+	ld a, [wTextSpeed]
 	cp $2
 	jr nc, .asm_2ca7
 	ld a, [$ff90]
@@ -5085,56 +5086,60 @@ Func_2e2c: ; 2e2c (0:2e2c)
 	pop hl
 	ret
 
-Func_2e41: ; 2e41 (0:2e41)
+; prints text with id at hl with letter delay in a textbox area
+PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
-	jr z, .asm_2e53
+	jr z, .fromRAM
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
-	call .asm_2e56
+	call .printText
 	pop af
 	call BankswitchHome
 	ret
-.asm_2e53
+.fromRAM
 	ld hl, $c590
-.asm_2e56
+.printText
 	call Func_2cc8
-.asm_2e59
+.nextTileLoop
 	ldh a, [hButtonsHeld]
 	ld b, a
-	ld a, [wce47]
+	ld a, [wTextSpeed]
 	inc a
 	cp $3
-	jr nc, .asm_2e6d
+	jr nc, .applyDelay
+	; if text speed is 1, pressing b ignores it
 	bit 1, b
-	jr nz, .asm_2e70
-	jr .asm_2e6d
-.asm_2e6a
+	jr nz, .skipDelay
+	jr .applyDelay
+.textDelayLoop
+	; wait a number of frames equal to wTextSpeed between printing each text tile
 	call DoFrame
-.asm_2e6d
+.applyDelay
 	dec a
-	jr nz, .asm_2e6a
-.asm_2e70
+	jr nz, .textDelayLoop
+.skipDelay
 	call Func_2d43
-	jr nc, .asm_2e59
+	jr nc, .nextTileLoop
 	ret
 
-Func_2e76: ; 2e76 (0:2e76)
+; prints text with id at hl without letter delay in a textbox area
+PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_2cc8
-.asm_2e7f
+.nextTileLoop
 	call Func_2d43
-	jr nc, .asm_2e7f
+	jr nc, .nextTileLoop
 	pop af
 	call BankswitchHome
 	ret
 
 ; Prints a name in the left side of the top border of a text box, usually to identify the talked-to NPC.
 ; input:
-	; hl: text offset
+	; hl: text id
 	; de: where to print the name
 PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ld a, l
@@ -5439,28 +5444,33 @@ Func_3061: ; 3061 (0:3061)
 	pop de
 	ret
 
-Func_3071: ; 3071 (0:3071)
+; function that executes a coin toss during a duel,
+; displaying the result ([O] or [X]) in the top left corner of the screen.
+; text at de is printed in a text box during the coin toss.
+; returns c if heads, nc if tails.
+DisplayCoinTossScreen1: ; 3071 (0:3071)
 	push hl
-	ld hl, $ce4e
+	ld hl, wCoinTossScreenTextId
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	rst $18
-	xor l
-	ld [hl], c
+	dw TossCoin
 	pop hl
 	ret
 
-Func_307d: ; 307d (0:307d)
+; function that executes a coin toss during a duel, without displaying the result.
+; text at de is printed in a text box during the coin toss.
+; returns c if heads, nc if tails.
+DisplayCoinTossScreen2: ; 307d (0:307d)
 	push hl
-	ld hl, $ce4e
+	ld hl, wCoinTossScreenTextId
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	ld a, $1
 	rst $18
-	xor l
-	ld [hl], c
+	dw TossCoin
 	ld hl, $cac2
 	ld [hl], $0
 	pop hl
@@ -5926,7 +5936,7 @@ Func_33e1: ; 33e1 (0:33e1)
 Func_3400: ; 3400 (0:3400)
 	call Func_3414
 	ret nc
-	call Func_307d
+	call DisplayCoinTossScreen2
 	ld [wcc0a], a
 	ccf
 	ret nc
@@ -5940,10 +5950,10 @@ Func_3414: ; 3414 (0:3414)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	ld de, $00de
+	text_de SandAttackCheckText
 	cp $2
 	jr z, .asm_342b
-	ld de, $00df
+	text_de SmokescreenCheckText
 	cp $1
 	jr z, .asm_342b
 	or a
@@ -6020,7 +6030,7 @@ Func_348a: ; 348a (0:348a)
 	xor a
 	ld [wcac2], a
 	ld de, $00f6
-	call Func_307d
+	call DisplayCoinTossScreen2
 	ret nc
 	ld a, $4
 	ld [wccc7], a
@@ -6064,10 +6074,10 @@ Func_3509: ; 3509 (0:3509)
 	ld [wce7c], a
 	call Func_3525
 	ld c, a
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ld a, [wce7c]
 	call Func_3525
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	add c
 	or a
 	scf
@@ -6171,9 +6181,9 @@ Func_367b: ; 367b (0:367b)
 	ld a, [wccbf]
 	or a
 	ret z
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	call Func_34ef
-	call GetOpposingTurnDuelistVariable_SwapTurn
+	call SwapTurn
 	ret c
 	ld hl, $000a
 	call Func_36a2
