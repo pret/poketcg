@@ -4,24 +4,24 @@ Poison50PercentEffect: ; 2c000 (b:4000)
         ret nc
 
 PoisonEffect: ; 2c007 (b:4007)
-        lb bc, $0f, CARD_POISONED
+        lb bc, $0f, POISONED
         jr applyEffect
 
-        lb bc, $0f, CARD_DOUBLE_POISONED
+        lb bc, $0f, DOUBLE_POISONED
         jr applyEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
         text_de ParalysisCheckText
         call DisplayCoinTossScreen2_BankB
         ret nc
-        lb bc, $f0, CARD_PARALYZED
+        lb bc, $f0, PARALYZED
         jr applyEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
         text_de ConfusionCheckText
         call DisplayCoinTossScreen2_BankB
         ret nc
-        lb bc, $f0, CARD_CONFUSED
+        lb bc, $f0, CONFUSED
         jr applyEffect
 
         text_de SleepCheckText
@@ -29,7 +29,7 @@ Confusion50PercentEffect: ; 2c01d (b:401d)
         ret nc
 
 SleepEffect: ; 2c030 (b:4030)
-        lb bc, $f0, CARD_ASLEEP
+        lb bc, $f0, ASLEEP
         jr applyEffect
 
 applyEffect

@@ -2768,8 +2768,8 @@ Func_18d7: ; 18d7 (0:18d7)
 	ld [wccc9], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $f
-	cp CARD_CONFUSED
+	and PASSIVE_STATUS_MASK
+	cp CONFUSED
 	jr z, .confused
 	or a
 	ret
@@ -6058,7 +6058,7 @@ Func_34f0: ; 34f0 (0:34f0)
 	jr nz, .asm_3500
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $f
+	and PASSIVE_STATUS_MASK
 	text_hl CannotUseDueToStatusText
 	scf
 	jr nz, .asm_3508
@@ -6103,7 +6103,7 @@ Func_3525: ; 3525 (0:3525)
 	jr nz, .asm_3549
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $f
+	and PASSIVE_STATUS_MASK
 	jr nz, .asm_3549
 	inc c
 .asm_3549

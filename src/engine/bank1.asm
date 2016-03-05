@@ -402,7 +402,7 @@ PlayerEndTurn: ; 439a (1:439a)
 PlayerRetreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and a,$0f
+	and a,PASSIVE_STATUS_MASK
 	cp a, $01
 	ldh [$ffa0], a
 	jr nz, Func_43f1
@@ -739,10 +739,10 @@ INCBIN "baserom.gbc",$488f, $4918 - $488f
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $0f
-	cp CARD_PARALYZED
+	and PASSIVE_STATUS_MASK
+	cp PARALYZED
 	jr z, .paralyzed
-	cp CARD_ASLEEP
+	cp ASLEEP
 	jr z, .asleep
 	or a
 	ret
