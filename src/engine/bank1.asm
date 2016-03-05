@@ -15,7 +15,7 @@ Func_4000: ; 4000 (1:4000)
 	ei
 	farcall Func_1a6cc
 	ldh a, [hButtonsHeld]
-	cp $3
+	cp A_BUTTON | B_BUTTON
 	jr z, .asm_4035
 	farcall Func_126d1
 	jr Func_4000
@@ -307,23 +307,23 @@ Func_42ac:
 	and a, $02
 	jr z, .asm_42cc
 	ldh a, [hButtonsPressed]
-	bit 6, a
+	bit D_UP_F, a
 	jr nz, Func_430b
-	bit 7, a
+	bit D_DOWN_F, a
 	jr nz, Func_4311
-	bit 5, a
+	bit D_LEFT_F, a
 	jr nz, Func_4320
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr nz, Func_4317
-	bit 3, a
+	bit START_F, a
 	jp nz, $4364
 
 .asm_42cc
 	ldh a, [hButtonsPressed]
-	and a, $08
+	and a, START
 	jp nz, $4370
 	ldh a, [hButtonsPressed]
-	bit 2, a
+	bit SELECT_F, a
 	jp nz, $458e
 	ld a, [$cbe7]
 	or a
@@ -514,7 +514,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 .asm_4736
 	call DoFrame
 	ldh a, [hButtonsPressed]
-	and $08
+	and START
 	jr nz, .displaySelectedMoveInfo
 	call MenuCursorAcceptInput
 	jr nc, .asm_4736
@@ -598,10 +598,10 @@ Func_478b: ; 478b (1:478b)
 .asm_47d4
 	call DoFrame
 	ldh a, [hButtonsPressed2]
-	and a, $30
+	and a, D_RIGHT | D_LEFT
 	jr nz, .asm_47ce
 	ldh a, [hButtonsPressed]
-	and a, $03
+	and a, A_BUTTON | B_BUTTON
 	jr z, .asm_47d4
 	ret
 

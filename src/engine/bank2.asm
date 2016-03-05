@@ -101,7 +101,7 @@ INCBIN "baserom.gbc",$8de2,$8dea - $8de2
 
 Func_8dea: ; 8dea (2:4dea)
 	ldh a, [hButtonsPressed2]
-	and $8
+	and START
 	ret z
 	ld a, [wCurMenuItem]
 	ld [$ceb1], a
@@ -421,9 +421,9 @@ Func_9065: ; 9065 (2:5065)
 	ldh a, [hButtonsPressed2]
 	or a
 	jr z, .asm_90a6
-	bit 5, a
+	bit D_LEFT_F, a
 	jr nz, .asm_907e
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr z, .asm_9084
 .asm_907e
 	ld a, d
@@ -431,9 +431,9 @@ Func_9065: ; 9065 (2:5065)
 	ld d, a
 	jr .asm_9090
 .asm_9084
-	bit 6, a
+	bit D_UP_F, a
 	jr nz, .asm_908c
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_90a6
 .asm_908c
 	ld a, e
@@ -453,9 +453,9 @@ Func_9065: ; 9065 (2:5065)
 	ld [$cea3], a
 .asm_90a6
 	ldh a, [hButtonsPressed]
-	and $3
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_90c1
-	and $1
+	and A_BUTTON
 	jr nz, .asm_90b7
 	ld a, $ff
 	call Func_90fb

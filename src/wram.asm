@@ -8,7 +8,7 @@ INCLUDE "macros.asm"
 SECTION "WRAM0", WRAM0
 	ds $200
 
-;--- Duels 1 ----------------------------------------------
+;--- Duel variables ----------------------------------------------
 
 wPlayerDuelVariables:: ; c200
 
@@ -340,7 +340,7 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 	ds $20
 	ds $1
 
-;--- Duels 2 ----------------------------------------------
+;--- Engine ----------------------------------------------
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
@@ -486,8 +486,6 @@ wccf0:: ; ccf0
 
 wccf1:: ; ccf1
 	ds $2
-
-;--- Overworld --------------------------------------------
 
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.

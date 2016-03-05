@@ -678,8 +678,8 @@ ReadJoypad: ; 04de (0:04de)
 	ld b, a
 	ldh [hButtonsPressed], a
 	ldh a, [hButtonsHeld]
-	and $f
-	cp $f
+	and BUTTONS
+	cp BUTTONS
 	jr nz, asm_522       ; handle reset
 	call ResetSerial
 Reset: ; 051b (0:051b)
@@ -732,14 +732,14 @@ DoFrame: ; 053f (0:053f)
 	or a
 	jr z, .done
 	ldh a, [hButtonsPressed]
-	and $4
+	and SELECT
 	jr z, .done
 .gamePausedLoop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ldh a, [hButtonsPressed]
-	and $4
+	and SELECT
 	jr z, .gamePausedLoop
 .done
 	pop bc
@@ -752,11 +752,11 @@ DoFrame: ; 053f (0:053f)
 HandleDPadRepeat: ; 0572 (0:0572)
 	ldh a, [hButtonsHeld]
 	ldh [hButtonsPressed2], a
-	and $f0
+	and D_PAD
 	jr z, .asm_58c
 	ld hl, hDPadRepeat
 	ldh a, [hButtonsPressed]
-	and $f0
+	and D_PAD
 	jr z, .asm_586
 	ld [hl], 24
 	ret
@@ -767,7 +767,7 @@ HandleDPadRepeat: ; 0572 (0:0572)
 	ret
 .asm_58c
 	ldh a, [hButtonsPressed]
-	and $f
+	and BUTTONS
 	ldh [hButtonsPressed2], a
 	ret
 
@@ -4255,7 +4255,7 @@ MenuCursorAcceptInput: ; 264b (0:264b)
 	ld a, [wNumMenuItems]
 	ld c, a
 	ld a, [wCurMenuItem]
-	bit 6, b
+	bit D_UP_F, b
 	jr z, .asm_266b
 	dec a
 	bit 7, a
@@ -4264,7 +4264,7 @@ MenuCursorAcceptInput: ; 264b (0:264b)
 	dec a
 	jr .asm_2674
 .asm_266b
-	bit 7, b
+	bit D_DOWN_F, b
 	jr z, .asm_2685
 	inc a
 	cp c
@@ -4304,9 +4304,9 @@ Func_269e: ; 269e (0:269e)
 	ret
 asm_26a9:
 	ldh a, [hButtonsPressed]
-	and $3
+	and A_BUTTON | B_BUTTON
 	jr z, HandleMenuInput
-	and $1
+	and A_BUTTON
 	jr nz, asm_269b
 	ld a, [wCurMenuItem]
 	ld e, a
@@ -4549,7 +4549,7 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
-	and $3
+	and A_BUTTON | B_BUTTON
 	jr z, .waitAorBLoop
 	ret
 
@@ -4576,7 +4576,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
-	and $3
+	and A_BUTTON | B_BUTTON
 	jr z, .waitAorBLoop
 	call EraseCursor
 	ret
@@ -4609,10 +4609,10 @@ Func_2af0: ; 2af0 (0:2af0)
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
-	bit 0, a
+	bit A_BUTTON_F, a
 	jr nz, .asm_2b50
 	ldh a, [hButtonsPressed2]
-	and $30
+	and D_RIGHT | D_LEFT
 	jr z, .asm_2b1f
 	ld a, $1
 	call Func_3796
@@ -5110,7 +5110,7 @@ PrintText: ; 2e41 (0:2e41)
 	cp $3
 	jr nc, .applyDelay
 	; if text speed is 1, pressing b ignores it
-	bit 1, b
+	bit B_BUTTON_F, b
 	jr nz, .skipDelay
 	jr .applyDelay
 .textDelayLoop

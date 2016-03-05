@@ -621,7 +621,7 @@ Func_c510: ; c510 (3:4510)
 	ret
 .asm_c535
 	ldh a, [hButtonsPressed]
-	and $8
+	and START
 	call nz, Func_c74d
 	ret
 ; 0xc53d
@@ -685,7 +685,7 @@ Func_c58b: ; c58b (3:458b)
 
 Func_c5ac: ; c5ac (3:45ac)
 	ldh a, [hButtonsHeld]
-	and $f0
+	and D_PAD
 	jr z, .asm_c5bf
 	call Func_c5cb
 	call Func_c5fe
@@ -694,7 +694,7 @@ Func_c5ac: ; c5ac (3:45ac)
 	jr nz, .asm_c5ca
 .asm_c5bf
 	ldh a, [hButtonsPressed]
-	and $1
+	and A_BUTTON
 	jr z, .asm_c5ca
 	call Func_c71e
 	jr .asm_c5ca
@@ -803,7 +803,7 @@ Func_c66c: ; c66c (3:466c)
 	push bc
 	ld c, $1
 	ldh a, [hButtonsHeld]
-	bit 1, a
+	bit B_BUTTON_F, a
 	jr z, .asm_c67e
 	ld a, [$d338]
 	cp $2

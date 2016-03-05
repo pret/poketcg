@@ -229,7 +229,7 @@ Func_10e55: ; 10e55 (4:4e55)
 
 Func_10e71: ; 10e71 (4:4e71)
 	ldh a, [hButtonsPressed]
-	and $f0
+	and D_PAD
 	jr z, .asm_10e83
 	farcall Func_c5d5
 	ld [$d334], a
@@ -237,7 +237,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	jr .asm_10e96
 .asm_10e83
 	ldh a, [hButtonsPressed]
-	and $1
+	and A_BUTTON
 	jr z, .asm_10e96
 	ld a, $2
 	call Func_3796

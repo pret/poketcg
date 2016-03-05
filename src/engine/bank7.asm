@@ -151,7 +151,7 @@ Func_1d078: ; 1d078 (7:5078)
 	jr .asm_1d095
 .asm_1d0b8
 	ldh a, [hButtonsPressed]
-	and $9
+	and A_BUTTON | START
 	jr z, .asm_1d095
 	ld a, $2
 	call Func_3796
