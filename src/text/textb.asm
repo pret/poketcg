@@ -857,7 +857,7 @@ GolemName: ; 5ef4c (17:6f4c)
 AvalancheName: ; 5ef53 (17:6f53)
 	db TX_START,"Avalanche",TX_END
 
-AvalancheDescription: ; 5ef5e (17:6f5e)
+GolemsSelfdestructDescription: ; 5ef5e (17:6f5e)
 	db TX_START,"Does 20 damage to each Pok`mon on\n"
 	db "each player's Bench. (Don't apply\n"
 	db "Weakness and Resistance for Benched\n"

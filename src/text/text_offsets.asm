@@ -2421,7 +2421,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text KinglerKind
 	text KinglerDescription
 	text HorseaName
-	text HorseasSmokescreenDescription
+	text OpponentAttackMayDoNothingDescription
 	text HorseaKind
 	text HorseaDescription
 	text SeadraName
@@ -2624,7 +2624,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text GravelerDescription
 	text GolemName
 	text AvalancheName
-	text AvalancheDescription
+	text GolemsSelfdestructDescription
 	text GolemKind
 	text GolemDescription
 	text OnixName

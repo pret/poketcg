@@ -1267,7 +1267,7 @@ KinglerDescription: ; 5bed7 (16:7ed7)
 HorseaName: ; 5bf43 (16:7f43)
 	db TX_START,"Horsea",TX_END
 
-HorseasSmokescreenDescription: ; 5bf4b (16:7f4b)
+OpponentAttackMayDoNothingDescription: ; 5bf4b (16:7f4b)
 	db TX_START,"If the Defending Pok`mon tries to\n"
 	db "attack during your opponent's next\n"
 	db "turn, your opponent flips a coin.\n"

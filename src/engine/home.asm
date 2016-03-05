@@ -2467,7 +2467,7 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	pop bc
 	ret
 
-; returns [[hWhoseTurn] << 8 + a] in a
+; returns [[hWhoseTurn] << 8 + a] in a and in [hl]
 ; i.e. variable a of the player whose turn it is
 GetTurnDuelistVariable: ; 160b (0:160b)
 	ld l, a
@@ -2476,7 +2476,7 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 	ld a, [hl]
 	ret
 
-; returns [([hWhoseTurn] ^ $1) << 8 + a] in a
+; returns [([hWhoseTurn] ^ $1) << 8 + a] in a and in [hl]
 ; i.e. variable a of the player whose turn it is not
 GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
@@ -2494,7 +2494,7 @@ INCBIN "baserom.gbc",$161e,$16c0 - $161e
 
 Func_16c0: ; 16c0 (0:16c0)
 	ld a, e
-	ld [wccc6], a
+	ld [wSelectedMoveIndex], a
 	ld a, d
 	ld [$ff9f], a
 	call LoadDeckCardToBuffer1
@@ -2518,7 +2518,7 @@ Func_16c0: ; 16c0 (0:16c0)
 	ld [hli], a
 	xor a
 	ld [hl], a
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	ld hl, $ccbf
 	ld [hli], a
 	ld [hl], a
@@ -2550,7 +2550,7 @@ Func_16f6: ; 16f6 (0:16f6)
 	ret
 
 Func_1730: ; 1730 (0:1730)
-	ld a, [wccc6]
+	ld a, [wSelectedMoveIndex]
 	ld [wcc10], a
 	ld a, [$ff9f]
 	ld [wcc11], a
@@ -2563,7 +2563,7 @@ Func_1730: ; 1730 (0:1730)
 	ld a, $1
 	call TryExecuteEffectCommandFunction
 	jp c, Func_181e
-	call Func_3414
+	call CheckSandAttackOrSmokescreenSubstatus
 	jr c, .asm_1766
 	ld a, $2
 	call TryExecuteEffectCommandFunction
@@ -2572,7 +2572,7 @@ Func_1730: ; 1730 (0:1730)
 	jr .asm_1777
 .asm_1766
 	call Func_1874
-	call Func_3400
+	call HandleSandAttackOrSmokescreenSubstatus
 	jp c, Func_1823
 	ld a, $2
 	call TryExecuteEffectCommandFunction
@@ -2596,7 +2596,7 @@ Func_1730: ; 1730 (0:1730)
 	and $80
 	jr nz, .asm_17ad
 	call SwapTurn
-	call Func_3432
+	call HandleNoDamageOrEffectSubstatus
 	call SwapTurn
 .asm_17ad
 	xor a
@@ -2639,7 +2639,7 @@ Func_17ed: ; 17ed (0:17ed)
 	ld [hli], a
 	ld [hl], a
 	ld a, $1
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 Func_17fb: ; 17fb (0:17fb)
 	ld a, [wccc4]
 	push af
@@ -2734,13 +2734,13 @@ Func_189d: ; 189d (0:189d)
 	ld a, [wccb1]
 	bit 7, a
 	ret nz
-	ld a, [wccc7]
+	ld a, [wNoDamageOrEffect]
 	or a
 	ret nz
 	ld a, e
 	or d
 	jr nz, .asm_18b9
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetOpposingTurnDuelistVariable
 	or a
 	jr nz, .asm_18b9
@@ -2757,7 +2757,7 @@ Func_189d: ; 189d (0:189d)
 	pop de
 	ret nc
 	bank1call $4f9d
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetOpposingTurnDuelistVariable
 	ld [hl], $0
 	ld de, $0000
@@ -2792,10 +2792,10 @@ Func_195c: ; 195c (0:195c)
 	ld hl, $ccb9
 	ld [hli], a
 	ld [hl], $0
-	ld a, [wccc7]
+	ld a, [wNoDamageOrEffect]
 	push af
 	xor a
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	bank1call $7415
 	ld a, [wccc4]
 	push af
@@ -2812,7 +2812,7 @@ Func_195c: ; 195c (0:195c)
 	pop af
 	ld [wccc4], a
 	pop af
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	ret
 
 Func_1994: ; 1994 (0:1994)
@@ -2835,10 +2835,10 @@ Func_1994: ; 1994 (0:1994)
 	res 7, d
 	xor a
 	ld [wccc1], a
-	call Func_321d
+	call HandleDoubleDamageSubstatus
 	jr .asm_19f3
 .asm_19b8
-	call Func_321d
+	call HandleDoubleDamageSubstatus
 	ld a, e
 	or d
 	ret z
@@ -2873,7 +2873,7 @@ Func_1994: ; 1994 (0:1994)
 	call SwapTurn
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedDefender
-	call Func_3244
+	call HandleDamageReduction
 	bit 7, d
 	jr z, .asm_1a0a
 	ld de, $0000
@@ -5444,10 +5444,10 @@ Func_3061: ; 3061 (0:3061)
 	pop de
 	ret
 
-; function that executes a coin toss during a duel,
-; displaying the result ([O] or [X]) in the top left corner of the screen.
+; function that executes one or more consecutive coin tosses during a duel (a = number of coin tosses),
+; displaying each result ([O] or [X]) starting from the top left corner of the screen.
 ; text at de is printed in a text box during the coin toss.
-; returns c if heads, nc if tails.
+;   returns: the number of heads in a and in $cd9d, and carry if at least one heads
 DisplayCoinTossScreen1: ; 3071 (0:3071)
 	push hl
 	ld hl, wCoinTossScreenTextId
@@ -5459,9 +5459,10 @@ DisplayCoinTossScreen1: ; 3071 (0:3071)
 	pop hl
 	ret
 
-; function that executes a coin toss during a duel, without displaying the result.
+; function that executes a single coin toss during a duel.
 ; text at de is printed in a text box during the coin toss.
-; returns c if heads, nc if tails.
+;   returns: - carry, and 1 in a and in $cd9d if heads
+;            - nc, and 0 in a and in $cd9d if tails
 DisplayCoinTossScreen2: ; 307d (0:307d)
 	push hl
 	ld hl, wCoinTossScreenTextId
@@ -5476,7 +5477,7 @@ DisplayCoinTossScreen2: ; 307d (0:307d)
 	pop hl
 	ret
 
-Func_3090: ; 3090 (0:3090)
+CompareDEtoBC: ; 3090 (0:3090)
 	ld a, d
 	cp b
 	ret nz
@@ -5746,25 +5747,26 @@ Func_3212: ; 3212 (0:3212)
 	ld [rSC], a
 	ret
 
-Func_321d: ; 321d (0:321d)
-	ld a, $eb
+; doubles the damage at de if swords dance or focus energy was used in the last turn
+HandleDoubleDamageSubstatus: ; 321d (0:321d)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
 	call GetTurnDuelistVariable
-	bit 0, [hl]
-	call nz, Func_323b
-	ld a, $e7
-	call GetTurnDuelistVariable
-	or a
-	call nz, Func_323a
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+	bit SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	call nz, DoubleDamageAtDE
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	or a
-	call nz, Func_3243
+	call nz, CommentedOut_323a
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
+	call GetTurnDuelistVariable
+	or a
+	call nz, CommentedOut_3243
 	ret
 
-Func_323a: ; 323a (0:323a)
+CommentedOut_323a: ; 323a (0:323a)
 	ret
 
-Func_323b: ; 323b (0:323b)
+DoubleDamageAtDE: ; 323b (0:323b)
 	ld a, e
 	or d
 	ret z
@@ -5772,60 +5774,61 @@ Func_323b: ; 323b (0:323b)
 	rl d
 	ret
 
-Func_3243: ; 3243 (0:3243)
+CommentedOut_3243: ; 3243 (0:3243)
 	ret
 
-Func_3244: ; 3244 (0:3244)
-	call Func_3269
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+; check if the attacked card has any substatus that reduces the damage this turn
+HandleDamageReduction: ; 3244 (0:3244)
+	call HandleSubstatus2DamageReduction
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetOpposingTurnDuelistVariable
 	or a
 	ret z
-	cp $3
-	jr z, .asm_325b
-	cp $7
-	jr z, .asm_3262
-	cp $12
-	jr z, .asm_3262
+	cp SUBSTATUS2_REDUCE_BY_20
+	jr z, .reduceDamageBy20
+	cp SUBSTATUS2_POUNCE
+	jr z, .reduceDamageBy10
+	cp SUBSTATUS2_GROWL
+	jr z, .reduceDamageBy10
 	ret
-.asm_325b
-	ld hl, $ffec
+.reduceDamageBy20
+	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.asm_3262
-	ld hl, $fff6
+.reduceDamageBy10
+	ld hl, -10
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
 
-Func_3269: ; 3269 (0:3269)
-	ld a, [wccc7]
+HandleSubstatus2DamageReduction: ; 3269 (0:3269)
+	ld a, [wNoDamageOrEffect]
 	or a
-	jr nz, .asm_32ad
-	ld a, $e7
+	jr nz, .noDamage
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_3297
-	cp $f
-	jr z, .asm_32ad
-	cp $10
-	jr z, .asm_32ad
-	cp $11
-	jr z, .asm_32ad
-	cp $17
-	jr z, .asm_32ad
-	cp $1e
-	jr z, .asm_32b1
-	cp $13
-	jr z, .asm_32b8
-	cp $e
-	jr z, .asm_32bf
-	cp $15
-	jr z, .asm_32ca
-.asm_3297
+	jr z, .notAffectedBySubstatus1
+	cp SUBSTATUS1_NO_DAMAGE_F
+	jr z, .noDamage
+	cp SUBSTATUS1_NO_DAMAGE_10
+	jr z, .noDamage
+	cp SUBSTATUS1_NO_DAMAGE_11
+	jr z, .noDamage
+	cp SUBSTATUS1_NO_DAMAGE_17
+	jr z, .noDamage
+	cp SUBSTATUS1_REDUCE_BY_10
+	jr z, .reduceDamageBy10
+	cp SUBSTATUS1_REDUCE_BY_20
+	jr z, .reduceDamageBy20
+	cp SUBSTATUS1_HARDEN
+	jr z, .preventLessThan30Damage
+	cp SUBSTATUS1_KABUTO_ARMOR
+	jr z, .halveDamage
+.notAffectedBySubstatus1
 	call Func_34ef
 	ret c
 	ld a, [wccb1]
@@ -5837,33 +5840,33 @@ Func_3269: ; 3269 (0:3269)
 	cp $8b
 	jr z, .asm_32e9
 	ret
-.asm_32ad
-	ld de, $0000
+.noDamage
+	ld de, 0
 	ret
-.asm_32b1
-	ld hl, $fff6
+.reduceDamageBy10
+	ld hl, -10
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.asm_32b8
-	ld hl, $ffec
+.reduceDamageBy20
+	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.asm_32bf
-	ld bc, $0028
-	call Func_3090
+.preventLessThan30Damage
+	ld bc, 40
+	call CompareDEtoBC
 	ret nc
-	ld de, $0000
+	ld de, 0
 	ret
-.asm_32ca
+.halveDamage
 	sla d
 	rr e
 	bit 0, e
 	ret z
-	ld hl, $fffb
+	ld hl, -5
 	add hl, de
 	ld e, l
 	ld d, h
@@ -5873,7 +5876,7 @@ Func_3269: ; 3269 (0:3269)
 	cp $4
 	ret z
 	ld bc, $001e
-	call Func_3090
+	call CompareDEtoBC
 	ret c
 	ld de, $0000
 	ret
@@ -5891,19 +5894,21 @@ Func_3269: ; 3269 (0:3269)
 
 INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
 
-CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+; return carry if card is under a condition that makes it unable to attack
+; also return in hl the text id to be displayed
+HandleCantAttackSubstatus: ; 33c1 (0:33c1)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
 	ret z
 	text_hl UnableToAttackDueToTailWagText
-	cp $05
+	cp SUBSTATUS2_TAIL_WAG
 	jr z, .returnWithCantAttack
 	text_hl UnableToAttackDueToLeerText
-	cp $06
+	cp SUBSTATUS2_LEER
 	jr z, .returnWithCantAttack
 	text_hl UnableToAttackDueToBoneAttackText
-	cp $0b
+	cp SUBSTATUS2_BONE_ATTACK
 	jr z, .returnWithCantAttack
 	or a
 	ret
@@ -5911,30 +5916,32 @@ CheckIfCantAttackDueToAttackEffect:: ; 33c1 (0:33c1)
 	scf
 	ret
 
-Func_33e1: ; 33e1 (0:33e1)
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+; return carry if card cannot use selected move due to amnesia
+HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
-	jr nz, .asm_33ea
+	jr nz, .checkAmnesia
 	ret
-.asm_33ea
-	cp $4
-	jr z, .asm_33f0
-.asm_33ee
+.checkAmnesia
+	cp SUBSTATUS2_AMNESIA
+	jr z, .affectedByAmnesia
+.notTheMoveDisabledByAmnesia
 	or a
 	ret
-.asm_33f0
-	ld a, $f2
+.affectedByAmnesia
+	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
 	call GetTurnDuelistVariable
-	ld a, [wccc6]
+	ld a, [wSelectedMoveIndex]
 	cp [hl]
-	jr nz, .asm_33ee
+	jr nz, .notTheMoveDisabledByAmnesia
 	text_hl UnableToUseAttackDueToAmnesiaText
 	scf
 	ret
 
-Func_3400: ; 3400 (0:3400)
-	call Func_3414
+; return carry if the attack was unsuccessful due to sand attack or smokescreen effect
+HandleSandAttackOrSmokescreenSubstatus: ; 3400 (0:3400)
+	call CheckSandAttackOrSmokescreenSubstatus
 	ret nc
 	call DisplayCoinTossScreen2
 	ld [wcc0a], a
@@ -5945,46 +5952,50 @@ Func_3400: ; 3400 (0:3400)
 	scf
 	ret
 
-Func_3414: ; 3414 (0:3414)
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+; return carry if card is under the effects of sand attack or smokescreen
+CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
 	ret z
 	text_de SandAttackCheckText
-	cp $2
-	jr z, .asm_342b
+	cp SUBSTATUS2_SAND_ATTACK
+	jr z, .cardIsAffected
 	text_de SmokescreenCheckText
-	cp $1
-	jr z, .asm_342b
+	cp SUBSTATUS2_SMOKESCREEN
+	jr z, .cardIsAffected
 	or a
 	ret
-.asm_342b
+.cardIsAffected
 	ld a, [wcc0a]
 	or a
 	ret nz
 	scf
 	ret
 
-Func_3432: ; 3432 (0:3432)
+; return carry if card being attacked is under a substatus that prevents
+; any damage or effect dealt to it for a turn.
+; also return the cause of the substatus at wNoDamageOrEffect
+HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	xor a
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	ld a, [wccb1]
 	cp $4
 	ret z
-	ld a, $e7
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	ld e, $3
 	text_hl NoDamageOrEffectDueToFlyText
-	cp $d
-	jr z, .asm_346a
+	cp SUBSTATUS1_FLY
+	jr z, .noDamageOrEffect
 	ld e, $2
 	text_hl NoDamageOrEffectDueToBarrierText
-	cp $14
-	jr z, .asm_346a
+	cp SUBSTATUS1_BARRIER
+	jr z, .noDamageOrEffect
 	ld e, $1
 	text_hl NoDamageOrEffectDueToAgilityText
-	cp $c
-	jr z, .asm_346a
+	cp SUBSTATUS1_AGILITY
+	jr z, .noDamageOrEffect
 	call Func_34ef
 	ccf
 	ret nc
@@ -5993,9 +6004,9 @@ Func_3432: ; 3432 (0:3432)
 	jr z, .asm_3470
 	or a
 	ret
-.asm_346a
+.noDamageOrEffect
 	ld a, e
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	scf
 	ret
 .asm_3470
@@ -6011,7 +6022,7 @@ Func_3432: ; 3432 (0:3432)
 	ret z
 	ld e, $5
 	text_hl NoDamageOrEffectDueToNShieldText
-	jr .asm_346a
+	jr .noDamageOrEffect
 
 Func_348a: ; 348a (0:348a)
 	ld a, [wccc4]
@@ -6033,7 +6044,7 @@ Func_348a: ; 348a (0:348a)
 	call DisplayCoinTossScreen2
 	ret nc
 	ld a, $4
-	ld [wccc7], a
+	ld [wNoDamageOrEffect], a
 	text_hl NoDamageOrEffectDueToTransparencyText
 	scf
 	ret
@@ -6136,38 +6147,81 @@ Func_3525: ; 3525 (0:3525)
 
 INCBIN "baserom.gbc",$356a,$35e6 - $356a
 
-Func_35e6: ; 35e6 (0:35e6)
-	ld a, $e7
+; if swords dance or focus energy was used this turn,
+; mark that the base power of the next turn's attack has to be doubled
+HandleSwordsDanceOrFocusEnergySubstatus: ; 35e6 (0:35e6)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	ld [hl], $0
 	or a
 	ret z
-	cp $19
+	cp SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	ret nz
-	ld a, $eb
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
 	call GetTurnDuelistVariable
-	set 0, [hl]
+	set SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
 	ret
 
-Func_35fa: ; 35fa (0:35fa)
-	ld a, $eb
+; clears the substatus 2 and updates the double damage condition of the turn holder
+UpdateSubstatusConditions: ; 35fa (0:35fa)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
 	call GetTurnDuelistVariable
 	res 1, [hl]
 	push hl
-	ld a, DUELVARS_CANT_ATTACK_STATUS
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	xor a
 	ld [hl], a
-	ld a, $e7
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	pop hl
-	cp $19
+	cp SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	ret z
-	res 0, [hl]
+	res SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
 	ret
 ; 0x3615
 
-INCBIN "baserom.gbc",$3615,$367b - $3615
+INCBIN "baserom.gbc",$3615,$363b - $3615
+
+; if the target card's HP is 0 and the attacking card's HP is not,
+; the attacking card faints if it was affected by destiny bond
+HandleDestinyBondSubstatus: ; 363b (0:363b)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
+	call GetOpposingTurnDuelistVariable
+	cp SUBSTATUS1_DESTINY_BOND
+	jr z, .checkHP
+	ret
+
+.checkHP
+	ld a, DUELVARS_ARENA_CARD
+	call GetOpposingTurnDuelistVariable
+	cp $ff
+	ret z
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetOpposingTurnDuelistVariable
+	or a
+	ret nz
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	ld [hl], $0
+	push hl
+	call $4f9d
+	call $503a
+	pop hl
+	ld l, DUELVARS_ARENA_CARD
+	ld a, [hl]
+	call LoadDeckCardToBuffer2
+	ld hl, wCardBuffer2Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_2ebb
+	text_hl KnockedOutDueToDestinyBondText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x367b
 
 Func_367b: ; 367b (0:367b)
 	ld a, [wccc4]
@@ -6264,7 +6318,7 @@ Func_36f7: ; 36f7 (0:36f7)
 INCBIN "baserom.gbc",$3729,$3730 - $3729
 
 Func_3730: ; 3730 (0:3730)
-	ld a, $e9
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
 	or a
 	ret nz
@@ -6278,7 +6332,7 @@ Func_3730: ; 3730 (0:3730)
 INCBIN "baserom.gbc",$3743,$374a - $3743
 
 Func_374a: ; 374a (0:374a)
-	ld a, $ea
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS4
 	call GetTurnDuelistVariable
 	or a
 	ret nz

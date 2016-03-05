@@ -88,14 +88,14 @@ StartDuel: ; 409f (1:409f)
 .mainDuelLoop
 	xor a
 	ld [wCurrentDuelMenuItem], a
-	call Func_35e6
+	call HandleSwordsDanceOrFocusEnergySubstatus
 	call $54c8
 	call Func_4225
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duelIsOver
-	call Func_35fa
+	call UpdateSubstatusConditions
 	call $6baf
 	call Func_3b31
 	call Func_0f58
@@ -477,7 +477,7 @@ OpenBattleCheckMenu: ; 4585 (1:4585)
 INCBIN "baserom.gbc",$458e, $46fc - $458e
 
 OpenBattleAttackMenu: ; 46fc (1:46fc)
-	call CheckIfCantAttackDueToAttackEffect
+	call HandleCantAttackSubstatus
 	jr c, .alertCantAttackAndCancelMenu
 	call CheckIfActiveCardParalyzedOrAsleep
 	jr nc, .clearSubMenuSelection
@@ -538,7 +538,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	inc hl
 	ld e, [hl]
 	call Func_16c0
-	call Func_33e1
+	call HandleAmnesiaSubstatus
 	jr c, .asm_477d
 	ld a, $07
 	call $51e7
@@ -892,195 +892,197 @@ InitializeDuelVariables: ; 7107 (1:7107)
 INCBIN "baserom.gbc",$7133,$71ad - $7133
 
 TossCoin: ; 71ad (1:71ad)
-        ld [$cd9c], a
-        ld a, [wcac2]
-        cp $6
-        jr z, .asm_71c1
-        xor a
-        ld [$cd9f], a
-        call Func_04a2
-        call $210f
+	ld [$cd9c], a
+	ld a, [wcac2]
+	cp $6
+	jr z, .asm_71c1
+	xor a
+	ld [$cd9f], a
+	call Func_04a2
+	call $210f
 
 .asm_71c1
-        ld a, [$cd9f]
-        or a
-        jr nz, .asm_71ec
-        ld a, $6
-        ld [wcac2], a
-        ld de, $000c
-        ld bc, $1406
-        ld hl, $0000
-        call DrawLabeledTextBox
-        call EnableLCD
-        ld de, $010e
-        ld a, $13
-        call Func_22a6
-        ld hl, wCoinTossScreenTextId
-        ld a, [hli]
-        ld h, [hl]
-        ld l, a
-        call PrintText
+	ld a, [$cd9f]
+	or a
+	jr nz, .asm_71ec
+	ld a, $6
+	ld [wcac2], a
+	ld de, $000c
+	ld bc, $1406
+	ld hl, $0000
+	call DrawLabeledTextBox
+	call EnableLCD
+	ld de, $010e
+	ld a, $13
+	call Func_22a6
+	ld hl, wCoinTossScreenTextId
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call PrintText
 
 .asm_71ec
-        ld hl, wCoinTossScreenTextId
-        xor a
-        ld [hli], a
-        ld [hl], a
-        call EnableLCD
-        ld a, $f1
-        call GetTurnDuelistVariable
-        ld [$cd9e], a
-        call Func_0f58
-        xor a
-        ld [$cd9d], a
-        ld a, [$cd9c]
-        cp $2
-        jr c, .asm_7223
-        ld bc, $0f0b
-        ld a, [$cd9f]
-        inc a
-        call $65b7
-        ld b, $11
-        ld a, $2e
-        call Func_06c3
-        inc b
-        ld a, [$cd9c]
-        call $65b7
+	ld hl, wCoinTossScreenTextId
+	xor a
+	ld [hli], a
+	ld [hl], a
+	call EnableLCD
+	ld a, $f1
+	call GetTurnDuelistVariable
+	ld [$cd9e], a
+	call Func_0f58
+	xor a
+	ld [$cd9d], a
+
+.asm_7204
+	ld a, [$cd9c]
+	cp $2
+	jr c, .asm_7223
+	ld bc, $0f0b
+	ld a, [$cd9f]
+	inc a
+	call $65b7
+	ld b, $11
+	ld a, $2e
+	call Func_06c3
+	inc b
+	ld a, [$cd9c]
+	call $65b7
 
 .asm_7223
-        call Func_3b21
-        ld a, $58
-        call Func_3b6a
-        ld a, [$cd9e]
-        or a
-        jr z, .asm_7236
-        call $7324
-        jr .asm_723c
+	call Func_3b21
+	ld a, $58
+	call Func_3b6a
+	ld a, [$cd9e]
+	or a
+	jr z, .asm_7236
+	call $7324
+	jr .asm_723c
 
 .asm_7236
-        call WaitForWideTextBoxInput
-        call $72ff
+	call WaitForWideTextBoxInput
+	call $72ff
 
 .asm_723c
-        call Func_3b21
-        ld d, $5a
-        ld e, $0
-        call UpdateRNGSources
-        rra
-        jr c, .asm_724d
-        ld d, $59
-        ld e, $1
+	call Func_3b21
+	ld d, $5a
+	ld e, $0
+	call UpdateRNGSources
+	rra
+	jr c, .asm_724d
+	ld d, $59
+	ld e, $1
 
 .asm_724d
-        ld a, d
-        call Func_3b6a
-        ld a, [$cd9e]
-        or a
-        jr z, .asm_725e
-        ld a, e
-        call $7310
-        ld e, a
-        jr .asm_726c
+	ld a, d
+	call Func_3b6a
+	ld a, [$cd9e]
+	or a
+	jr z, .asm_725e
+	ld a, e
+	call $7310
+	ld e, a
+	jr .asm_726c
 
 .asm_725e
-        push de
-        call DoFrame
-        call Func_3b52
-        pop de
-        jr c, .asm_725e
-        ld a, e
-        call $72ff
+	push de
+	call DoFrame
+	call Func_3b52
+	pop de
+	jr c, .asm_725e
+	ld a, e
+	call $72ff
 
 .asm_726c
-        ld b, $5c
-        ld c, $34
-        ld a, e
-        or a
-        jr z, .asm_727c
-        ld b, $5b
-        ld c, $30
-        ld hl, $cd9d
-        inc [hl]
+	ld b, $5c
+	ld c, $34
+	ld a, e
+	or a
+	jr z, .asm_727c
+	ld b, $5b
+	ld c, $30
+	ld hl, $cd9d
+	inc [hl]
 
 .asm_727c
-        ld a, b
-        call Func_3b6a
-        ld a, [$cd9e]
-        or a
-        jr z, .asm_728a
-        ld a, $1
-        xor e
-        ld e, a
+	ld a, b
+	call Func_3b6a
+	ld a, [$cd9e]
+	or a
+	jr z, .asm_728a
+	ld a, $1
+	xor e
+	ld e, a
 
 .asm_728a
-        ld d, $54
-        ld a, e
-        or a
-        jr nz, .asm_7292
-        ld d, $55
+	ld d, $54
+	ld a, e
+	or a
+	jr nz, .asm_7292
+	ld d, $55
 
 .asm_7292
-        ld a, d
-        call Func_3796
-        ld a, [$cd9c]
-        dec a
-        jr z, .asm_72b9
-        ld a, c
-        push af
-        ld e, $0
-        ld a, [$cd9f]
+	ld a, d
+	call Func_3796
+	ld a, [$cd9c]
+	dec a
+	jr z, .asm_72b9
+	ld a, c
+	push af
+	ld e, $0
+	ld a, [$cd9f]
 .asm_72a3
-        cp $a
-        jr c, .asm_72ad
-        inc e
-        inc e
-        sub $a
-        jr .asm_72a3
+	cp $a
+	jr c, .asm_72ad
+	inc e
+	inc e
+	sub $a
+	jr .asm_72a3
 
 .asm_72ad
-        add a
-        ld d, a
-        ld bc, $0202
-        ld hl, $0102
-        pop af
-        call Func_1f5f
+	add a
+	ld d, a
+	ld bc, $0202
+	ld hl, $0102
+	pop af
+	call Func_1f5f
 
 .asm_72b9
-        ld hl, $cd9f
-        inc [hl]
-        ld a, [$cd9e]
-        or a
-        jr z, .asm_72dc
-        ld a, [hl]
-        ld hl, $cd9c
-        cp [hl]
-        call z, WaitForWideTextBoxInput
-        call $7324
-        ld a, [$cd9c]
-        ld hl, $cd9d
-        or [hl]
-        jr nz, .asm_72e2
-        call z, WaitForWideTextBoxInput
-        jr .asm_72e2
+	ld hl, $cd9f
+	inc [hl]
+	ld a, [$cd9e]
+	or a
+	jr z, .asm_72dc
+	ld a, [hl]
+	ld hl, $cd9c
+	cp [hl]
+	call z, WaitForWideTextBoxInput
+	call $7324
+	ld a, [$cd9c]
+	ld hl, $cd9d
+	or [hl]
+	jr nz, .asm_72e2
+	call z, WaitForWideTextBoxInput
+	jr .asm_72e2
 
 .asm_72dc
-        call WaitForWideTextBoxInput
-        call $72ff
+	call WaitForWideTextBoxInput
+	call $72ff
 
 .asm_72e2
-        call Func_3b31
-        ld a, [$cd9f]
-        ld hl, $cd9c
-        cp [hl]
-        jp c, $7204
-        call Func_0f58
-        call Func_3b31
-        call Func_3b21
-        ld a, [$cd9d]
-        or a
-        ret z
-        scf
-        ret
+	call Func_3b31
+	ld a, [$cd9f]
+	ld hl, $cd9c
+	cp [hl]
+	jp c, .asm_7204
+	call Func_0f58
+	call Func_3b31
+	call Func_3b21
+	ld a, [$cd9d]
+	or a
+	ret z
+	scf
+	ret
 ; 0x72ff
 
 INCBIN "baserom.gbc",$72ff,$7354 - $72ff

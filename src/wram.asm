@@ -63,14 +63,22 @@ wPlayerBench4CardHP:: ; c2cc
 	ds $1
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
-	ds $1a
+	ds $19
 
-; The only known use of this is to store when an attack 
-; causes a pokemon to not be able to attack the following turn.
-; for example: tail wag, leer
-wPlayerCantAttackStatus:: ; c2e8
+wPlayerArenaCardSubstatus1:: ; c2e7
 	ds $1
-	ds $3
+
+wPlayerArenaCardSubstatus2:: ; c2e8
+	ds $1
+
+wPlayerArenaCardSubstatus3:: ; c2e9
+	ds $1
+
+wPlayerArenaCardSubstatus4:: ; c2ea
+	ds $1
+
+wPlayerArenaCardSubstatus5:: ; c2eb
+	ds $1
 
 ; Each bit represents a prize (1 = not taken ; 0 = taken)
 wPlayerPrizes:: ; c2ec
@@ -94,7 +102,11 @@ wPlayerArenaCardStatus:: ; c2f0
 ; other - AI controlled
 wPlayerDuelistType:: ; c2f1
 	ds $1
-	ds $e
+
+; if under the effects of amnesia, which move (0 or 1) can't be used
+wPlayerArenaCardDisabledMoveIndex:: ; c2f2
+	ds $1
+	ds $d
 
 wOpponentDuelVariables:: ; c300
 
@@ -130,15 +142,22 @@ wOpponentBench4CardHP:: ; c3cc
 	ds $1
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
-	ds $1a
+	ds $19
 
-;The only known use of this is to store
-;when an attack causes a pokemon
-;to not be able to attack the following turn
-;for example: tail wag, leer
-wOpponentCantAttackStatus:: ; c3e8
+wOpponentArenaCardSubstatus1:: ; c3e7
 	ds $1
-	ds $3
+
+wOpponentArenaCardSubstatus2:: ; c3e8
+	ds $1
+
+wOpponentArenaCardSubstatus3:: ; c3e9
+	ds $1
+
+wOpponentArenaCardSubstatus4:: ; c3ea
+	ds $1
+
+wOpponentArenaCardSubstatus5:: ; c3eb
+	ds $1
 
 wOpponentPrizes:: ; c3ec
 	ds $1
@@ -160,7 +179,10 @@ wOpponentArenaCardStatus:: ; c3f0
 ; other - AI controlled
 wOpponentDuelistType:: ; c3f1
 	ds $1
-	ds $e
+
+wOpponentArenaCardDisabledMoveIndex:: ; c3f2
+	ds $1
+	ds $d
 
 wPlayerDeck:: ; c400
 	ds $80
@@ -169,8 +191,8 @@ wOpponentDeck:: ; c480
 	ds $80
 	ds $10
 
-; when the attack menu opens, it stores 
-; each move in the order of 
+; when the attack menu opens, it stores
+; each move in the order of
 ; cardNumber, moveNumber, ...
 DuelAttackPointerTable:: ; c510
 	ds $4f0
@@ -454,10 +476,12 @@ wccc3:: ; ccc3
 wccc4:: ; ccc4
 	ds $2
 
-wccc6:: ; ccc6
+; may contain 0 or 1 depending on which move was selected
+wSelectedMoveIndex:: ; ccc6
 	ds $1
 
-wccc7:: ; ccc7
+; if affected by a no damage or effect substatus, this flag indicates what the cause was
+wNoDamageOrEffect:: ; ccc7
 	ds $2
 
 wccc9:: ; ccc9
@@ -590,7 +614,7 @@ wce4a:: ; ce4a
 
 wce4b:: ; ce4b
 	ds $3
-	
+
 wCoinTossScreenTextId:: ; ce4e
 	ds $2
 

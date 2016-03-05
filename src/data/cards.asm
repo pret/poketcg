@@ -3967,7 +3967,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	; move 1
 	energy WATER, 1 ; energies
 	tx SmokescreenName ; name
-	tx HorseasSmokescreenDescription ; description
+	tx OpponentAttackMayDoNothingDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
@@ -5905,7 +5905,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	; move 1
 	energy FIGHTING, 1 ; energies
 	tx SandAttackName ; name
-	tx HorseasSmokescreenDescription ; description
+	tx OpponentAttackMayDoNothingDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
@@ -6480,7 +6480,7 @@ GolemCard: ; 32d22 (c:6d22)
 	; move 2
 	energy FIGHTING, 4 ; energies
 	tx SelfdestructName ; name
-	tx AvalancheDescription ; description
+	tx GolemsSelfdestructDescription ; description
 	dw NONE ; description (cont)
 	db 100 ; damage
 	db DAMAGE_NORMAL ; category
