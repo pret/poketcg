@@ -2269,7 +2269,8 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld b, a
 	ld a, DUELVARS_DECK_CARDS
 	add [hl]
-	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array of the first (top) card in the deck
+	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array
+            ; of the first (top) card in the deck
 	ld a, b ; a = number of cards in the deck
 	call ShuffleCards
 	ret
@@ -2282,17 +2283,13 @@ _DrawCardFromDeck: ; 10cf (0:10cf)
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
 	jr nc, .emptyDeck
-	; increment number of cards not in deck
 	inc a
-	ld [hl], a
-	; point to top card in the deck
-	add DUELVARS_DECK_CARDS - 1
+	ld [hl], a ; increment number of cards not in deck
+	add DUELVARS_DECK_CARDS - 1	; point to top card in the deck
 	ld l, a
-	; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
-	ld a, [hl]
+	ld a, [hl] ; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld l, a
-	; temporarily write $40 to corresponding card location variable
-	ld [hl], $40
+	ld [hl], $40 ; temporarily write $40 to corresponding card location variable
 	pop hl
 	or a
 	ret
@@ -2373,7 +2370,21 @@ ShuffleCards: ; 127f (0:127f)
 	ret
 ; 0x12a3
 
-INCBIN "baserom.gbc",$12a3,$1324 - $12a3
+INCBIN "baserom.gbc",$12a3,$1312 - $12a3
+
+Func_1312: ; 1312 (0:1312)
+	push hl
+	ld e, a
+	ld d, $0
+	ld hl, wDuelCardOrAttackList
+	add hl, de
+	ld a, [hl]
+	ldh [hTempCardNumber], a
+	call LoadDeckCardToDE
+	pop hl
+	ldh a, [hTempCardNumber]
+	ret
+; 0x1324
 
 LoadDeckCardToDE: ; 1324 (0:1324)
 	push af

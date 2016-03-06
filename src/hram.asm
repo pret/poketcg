@@ -45,7 +45,10 @@ hWY:: ; ff95
 hWhoseTurn:: ; ff97
 	ds 1
 
-	ds 23
+hTempCardNumber:: ; ff98
+	ds 1
+
+	ds 22
 
 hffaf:: ; ffaf
 	ds 1

@@ -252,7 +252,7 @@ DrawCardFromDeck: ; 4225 (1:4225)
 	ret
 
 .deckNotEmpty
-	ldh [$ff98], a
+	ldh [hTempCardNumber], a
 	call AddCardToHand
 	ld a, [$cc0d]
 	cp $00
@@ -490,7 +490,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 
 .tryOpenAttackMenu
-	call LoadPokemonAttacksToDuelPointerTable
+	call LoadPokemonMovesToDuelCardOrAttackList
 	or a
 	jr nz, .openAttackMenu
 	text_hl NoSelectableAttackText
@@ -533,7 +533,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld d, $00
 	ld hl, wDuelCardOrAttackList
 	add hl, de
-	ld d, [hl] ; card id
+	ld d, [hl] ; card number within the deck (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
 	call CopyMoveDataAndDamageToBuffer
@@ -655,11 +655,14 @@ Func_481b: ; $481b (1:481b)
 	ld [hl], a
 	ret
 
-LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
+; copies the following to the c510 buffer:
+;   if pokemon's second moveslot is empty: <card_no>, 0
+;   else: <card_no>, 0, <card_no>, 1
+LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [$ff98], a
+	ldh [hTempCardNumber], a
 	call LoadDeckCardToBuffer1
 	ld c, $00
 	ld b, $0d
@@ -669,7 +672,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	ld de, wCardBuffer1Move1Name
 	call CheckIfMoveExists
 	jr c, .checkForSecondAttackSlot
-	ldh a, [$ff98]
+	ldh a, [hTempCardNumber]
 	ld [hli], a
 	xor a
 	ld [hli], a
@@ -688,7 +691,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	ld de, wCardBuffer1Move2Name
 	call CheckIfMoveExists
 	jr c, .finishLoadingAttacks
-	ldh a, [$ff98]
+	ldh a, [hTempCardNumber]
 	ld [hli], a
 	ld a, $01
 	ld [hli], a
