@@ -461,7 +461,7 @@ wMoveBuffer:: ; cca6
 ; big-endian
 wDamage:: ; ccb9
 	ds $2
-	
+
 	ds $4
 
 wccbf:: ; ccbf
@@ -470,14 +470,16 @@ wccbf:: ; ccbf
 wccc1:: ; ccc1
 	ds $1
 
-wccc2:: ; ccc2
+wTempCardId:: ; ccc2
 	ds $1
 
-wccc3:: ; ccc3
+wTempTurnDuelistCardId:: ; ccc3
 	ds $1
 
-wccc4:: ; ccc4
-	ds $2
+wTempNonTurnDuelistCardId:: ; ccc4
+	ds $1
+
+	ds $1
 
 ; may contain 0 or 1 depending on which move was selected
 wSelectedMoveIndex:: ; ccc6

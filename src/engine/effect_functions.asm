@@ -36,28 +36,30 @@ applyEffect
 	ld a, [$ff97]
 	ld hl, $cc05
 	cp [hl]
-	jr nz, .asm_2c061
-	ld a, [wccc4]
-	cp $cb
-	jr z, .asm_2c058
-	cp $cc
-	jr z, .asm_2c058
-	cp $be
-	jr nz, .asm_2c061
+	jr nz, .canInduceStatus
+	ld a, [wTempNonTurnDuelistCardId]
+	cp CLEFAIRY_DOLL
+	jr z, .cantInduceStatus
+	cp MYSTERIOUS_FOSSIL
+	jr z, .cantInduceStatus
+    ; snorlax's thick skinned prevents it from being statused...
+	cp SNORLAX
+	jr nz, .canInduceStatus
 	call SwapTurn
 	xor a
-	call Func_34f0
+    ; ...unless already so, or if affected by muk's toxic gas
+	call CheckIfUnderAnyCannotUseStatus2
 	call SwapTurn
-	jr c, .asm_2c061
+	jr c, .canInduceStatus
 
-.asm_2c058
+.cantInduceStatus
 	ld a, c
 	ld [wccf1], a
 	call Func_2c09c
 	or a
 	ret
 
-.asm_2c061
+.canInduceStatus
 	ld hl, wcccd
 	push hl
 	ld e, [hl]

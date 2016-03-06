@@ -2140,7 +2140,7 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	push bc
 	ld [$ff9e], a
 	ld a, DUELVARS_DUELIST_TYPE
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	cp $1
 	jr nz, .asm_f98
 	ld hl, $ff9e
@@ -2179,22 +2179,22 @@ Func_100b: ; 100b (0:100b)
 	call GetTurnDuelistVariable
 	call LoadDeckCardToDE
 	ld a, e
-	ld [wccc3], a
+	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToDE
 	ld a, e
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
 	pop hl
 	push hl
 	call EnableExtRAM
 	ld a, [wcc06]
 	ld [hli], a
-	ld a, [wccc4]
+	ld a, [wTempNonTurnDuelistCardId]
 	ld [hli], a
-	ld a, [wccc3]
+	ld a, [wTempTurnDuelistCardId]
 	ld [hli], a
 	pop hl
 	ld de, $0010
@@ -2478,7 +2478,7 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 
 ; returns [([hWhoseTurn] ^ $1) << 8 + a] in a and in [hl]
 ; i.e. variable a of the player whose turn it is not
-GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
+GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, OPPONENT_TURN
@@ -2499,7 +2499,7 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld [$ff9f], a
 	call LoadDeckCardToBuffer1
 	ld a, [$cc2b]
-	ld [wccc2], a
+	ld [wTempCardId], a
 	ld hl, wCardBuffer1Move1
 	dec e
 	jr nz, .gotMove
@@ -2530,13 +2530,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld [$ff9f], a
 	call LoadDeckCardToDE
 	ld a, e
-	ld [wccc3], a
+	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToDE
 	ld a, e
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
 	xor a
 	ld [wccec], a
@@ -2554,7 +2554,7 @@ Func_1730: ; 1730 (0:1730)
 	ld [wcc10], a
 	ld a, [$ff9f]
 	ld [wcc11], a
-	ld a, [wccc2]
+	ld a, [wTempCardId]
 	ld [wcc12], a
 	ld a, [wMoveBufferCategory]
 	cp POKEMON_POWER
@@ -2613,7 +2613,7 @@ Func_1730: ; 1730 (0:1730)
 	ld a, [wccc1]
 	ld c, a
 	ld a, DUELVARS_ARENA_CARD_HP
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	push de
 	push hl
 	call $7494
@@ -2641,12 +2641,12 @@ Func_17ed: ; 17ed (0:17ed)
 	ld a, $1
 	ld [wNoDamageOrEffect], a
 Func_17fb: ; 17fb (0:17fb)
-	ld a, [wccc4]
+	ld a, [wTempNonTurnDuelistCardId]
 	push af
 	ld a, $4
 	call TryExecuteEffectCommandFunction
 	pop af
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	call Func_367b
 	bank1call $6df1
 	call Func_1bb4
@@ -2741,7 +2741,7 @@ Func_189d: ; 189d (0:189d)
 	or d
 	jr nz, .asm_18b9
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	or a
 	jr nz, .asm_18b9
 	ld a, [wcccd]
@@ -2758,7 +2758,7 @@ Func_189d: ; 189d (0:189d)
 	ret nc
 	bank1call $4f9d
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	ld [hl], $0
 	ld de, $0000
 	ret
@@ -2788,6 +2788,7 @@ Func_18d7: ; 18d7 (0:18d7)
 
 INCBIN "baserom.gbc",$18f9,$195c - $18f9
 
+; this function appears to apply several damage modifiers
 Func_195c: ; 195c (0:195c)
 	ld hl, wDamage
 	ld [hli], a
@@ -2797,10 +2798,10 @@ Func_195c: ; 195c (0:195c)
 	xor a
 	ld [wNoDamageOrEffect], a
 	bank1call $7415
-	ld a, [wccc4]
+	ld a, [wTempNonTurnDuelistCardId]
 	push af
-	ld a, [wccc3]
-	ld [wccc4], a
+	ld a, [wTempTurnDuelistCardId]
+	ld [wTempNonTurnDuelistCardId], a
 	bank1call Func_1a22 ; switch to bank 1, but call a home func
 	ld a, [wccc1]
 	ld c, a
@@ -2810,7 +2811,7 @@ Func_195c: ; 195c (0:195c)
 	bank1call $7469
 	call Func_1ad0
 	pop af
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	pop af
 	ld [wNoDamageOrEffect], a
 	ret
@@ -2821,23 +2822,23 @@ Func_1994: ; 1994 (0:1994)
 	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
-	jr nz, .asm_19a3
+	jr nz, .nonZeroDamage
 	ld de, $0000
 	ret
-.asm_19a3
+.nonZeroDamage
 	xor a
 	ld [$ff9d], a
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
 	bit 7, d
-	jr z, .asm_19b8
-	res 7, d
+	jr z, .safe
+	res 7, d ; cap at 2^15
 	xor a
 	ld [wccc1], a
 	call HandleDoubleDamageSubstatus
-	jr .asm_19f3
-.asm_19b8
+	jr .checkPluspowerAndDefender
+.safe
 	call HandleDoubleDamageSubstatus
 	ld a, e
 	or d
@@ -2860,14 +2861,14 @@ Func_1994: ; 1994 (0:1994)
 	call Func_374a
 	call SwapTurn
 	and b
-	jr z, .asm_19f3
+	jr z, .checkPluspowerAndDefender
 	ld hl, $ffe2
 	add hl, de
 	ld e, l
 	ld d, h
 	ld hl, $ccc1
 	set 2, [hl]
-.asm_19f3
+.checkPluspowerAndDefender
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
 	call SwapTurn
@@ -2875,9 +2876,9 @@ Func_1994: ; 1994 (0:1994)
 	call ApplyAttachedDefender
 	call HandleDamageReduction
 	bit 7, d
-	jr z, .asm_1a0a
+	jr z, .noUnderflow
 	ld de, $0000
-.asm_1a0a
+.noUnderflow
 	call SwapTurn
 	ret
 
@@ -2902,7 +2903,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld a, [hli]
 	or [hl]
 	or a
-	jr z, .asm_1a65
+	jr z, .noDamage
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -2931,9 +2932,9 @@ Func_1a22: ; 1a22 (0:1a22)
 	call ApplyAttachedPluspower
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedDefender
-	bit 7, d
+	bit 7, d ; test for underflow
 	ret z
-.asm_1a65
+.noDamage
 	ld de, $0000
 	ret
 
@@ -2997,17 +2998,17 @@ Func_1aac: ; 1aac (0:1aac)
 	call GetTurnDuelistVariable
 	or a
 	ret nz
-	ld a, [wccc4]
+	ld a, [wTempNonTurnDuelistCardId]
 	push af
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer1
 	ld a, [wCardBuffer1ID]
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	call Func_1ad3
 	pop af
-	ld [wccc4], a
+	ld [wTempNonTurnDuelistCardId], a
 	scf
 	ret
 
@@ -3016,7 +3017,7 @@ Func_1ad0: ; 1ad0 (0:1ad0)
 	or a
 	ret nz
 Func_1ad3: ; 1ad3 (0:1ad3)
-	ld a, [wccc4]
+	ld a, [wTempNonTurnDuelistCardId]
 	ld e, a
 	call LoadCardDataToBuffer1
 	ld hl, $cc27
@@ -3051,7 +3052,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	ld [hli], a
 	ld a, [wMoveBufferName]
 	ld [hli], a
-	ld a, [$ccab]
+	ld a, [wMoveBufferName + 1]
 	ld [hli], a
 	text_hl PokemonsAttackText ; text when using an attack
 	call DrawWideTextBox_PrintText
@@ -3105,12 +3106,12 @@ INCBIN "baserom.gbc",$1c05,$1c72 - $1c05
 
 ; returns [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
 ;   As a side effect, this also returns a duelist variable in a similar manner to
-;   GetOpposingTurnDuelistVariable, but this function appears to be
+;   GetNonTurnDuelistVariable, but this function appears to be
 ;   only called to swap the turn value.
 SwapTurn: ; 1c72 (0:1c72)
 	push af
 	push hl
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	ld a, h
 	ldh [hWhoseTurn], a
 	pop hl
@@ -4228,7 +4229,10 @@ Func_256d: ; 256d (0:256d)
 
 INCBIN "baserom.gbc",$2589,$2636 - $2589
 
-; initializes cursor parameters from the 8 bytes starting at hl
+; initializes cursor parameters given the 8 bytes starting at hl,
+; which represent the following:
+;   x position, y position, y displacement between items, number of items,
+;   cursor tile number, tile behind cursor, ??, ??
 InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
@@ -5780,9 +5784,9 @@ CommentedOut_3243: ; 3243 (0:3243)
 
 ; check if the attacked card has any substatus that reduces the damage this turn
 HandleDamageReduction: ; 3244 (0:3244)
-	call HandleSubstatus2DamageReduction
+	call HandleDamageReductionExceptSubstatus2
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	or a
 	ret z
 	cp SUBSTATUS2_REDUCE_BY_20
@@ -5805,7 +5809,7 @@ HandleDamageReduction: ; 3244 (0:3244)
 	ld d, h
 	ret
 
-HandleSubstatus2DamageReduction: ; 3269 (0:3269)
+HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld a, [wNoDamageOrEffect]
 	or a
 	jr nz, .noDamage
@@ -5826,20 +5830,20 @@ HandleSubstatus2DamageReduction: ; 3269 (0:3269)
 	cp SUBSTATUS1_REDUCE_BY_20
 	jr z, .reduceDamageBy20
 	cp SUBSTATUS1_HARDEN
-	jr z, .preventLessThan30Damage
-	cp SUBSTATUS1_KABUTO_ARMOR
+	jr z, .preventLessThan40Damage
+	cp SUBSTATUS1_HALVE_DAMAGE
 	jr z, .halveDamage
 .notAffectedBySubstatus1
-	call Func_34ef
+	call CheckIfUnderAnyCannotUseStatus
 	ret c
 	ld a, [wMoveBufferCategory]
 	cp POKEMON_POWER
 	ret z
-	ld a, [wccc4]
-	cp $9b
-	jr z, .asm_32d8
-	cp $8b
-	jr z, .asm_32e9
+	ld a, [wTempNonTurnDuelistCardId]
+	cp MR_MIME
+	jr z, .preventLessThan30Damage ; invisible wall
+	cp KABUTO
+	jr z, .halveDamage2 ; kabuto armor
 	ret
 .noDamage
 	ld de, 0
@@ -5856,7 +5860,7 @@ HandleSubstatus2DamageReduction: ; 3269 (0:3269)
 	ld e, l
 	ld d, h
 	ret
-.preventLessThan30Damage
+.preventLessThan40Damage
 	ld bc, 40
 	call CompareDEtoBC
 	ret nc
@@ -5872,21 +5876,21 @@ HandleSubstatus2DamageReduction: ; 3269 (0:3269)
 	ld e, l
 	ld d, h
 	ret
-.asm_32d8
+.preventLessThan30Damage
 	ld a, [wMoveBufferCategory]
 	cp POKEMON_POWER
 	ret z
-	ld bc, $001e
+	ld bc, 30
 	call CompareDEtoBC
 	ret c
-	ld de, $0000
+	ld de, 0
 	ret
-.asm_32e9
+.halveDamage2
 	sla d
 	rr e
 	bit 0, e
 	ret z
-	ld hl, $fffb
+	ld hl, -5
 	add hl, de
 	ld e, l
 	ld d, h
@@ -5997,12 +6001,12 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	text_hl NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
 	jr z, .noDamageOrEffect
-	call Func_34ef
+	call CheckIfUnderAnyCannotUseStatus
 	ccf
 	ret nc
-	ld a, [wccc4]
-	cp $a0
-	jr z, .asm_3470
+	ld a, [wTempNonTurnDuelistCardId]
+	cp MEW1
+	jr z, .neutralizingShield
 	or a
 	ret
 .noDamageOrEffect
@@ -6010,11 +6014,11 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld [wNoDamageOrEffect], a
 	scf
 	ret
-.asm_3470
+.neutralizingShield
 	ld a, [wcce6]
 	or a
 	ret nz
-	ld a, [wccc3]
+	ld a, [wTempTurnDuelistCardId]
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
@@ -6026,18 +6030,18 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	jr .noDamageOrEffect
 
 Func_348a: ; 348a (0:348a)
-	ld a, [wccc4]
-	cp $96
-	jr z, .asm_3493
+	ld a, [wTempNonTurnDuelistCardId]
+	cp HAUNTER1
+	jr z, .transparency
 .asm_3491
 	or a
 	ret
-.asm_3493
+.transparency
 	ld a, [wMoveBufferCategory]
 	cp POKEMON_POWER
 	jr z, .asm_3491
 	ld a, [wcceb]
-	call Func_34f0
+	call CheckIfUnderAnyCannotUseStatus2
 	jr c, .asm_3491
 	xor a
 	ld [wcac2], a
@@ -6062,23 +6066,26 @@ Func_34e2: ; 34e2 (0:34e2)
 	call Func_3525
 	ret
 
-Func_34ef: ; 34ef (0:34ef)
+; returns carry if paralyzed, asleep, confused, and/or toxic gas in play,
+; meaning that move and/or pkmn power cannot be used
+CheckIfUnderAnyCannotUseStatus: ; 34ef (0:34ef)
 	xor a
 
-Func_34f0: ; 34f0 (0:34f0)
+; same as above, but if a is non-0, only toxic gas is checked
+CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 	or a
-	jr nz, .asm_3500
+	jr nz, .checkToxicGas
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
 	text_hl CannotUseDueToStatusText
 	scf
-	jr nz, .asm_3508
-.asm_3500
-	ld a, $27
+	jr nz, .done ; return carry
+.checkToxicGas
+	ld a, MUK
 	call Func_3509
 	text_hl UnableDueToToxicGasText
-.asm_3508
+.done
 	ret
 
 Func_3509: ; 3509 (0:3509)
@@ -6188,18 +6195,18 @@ INCBIN "baserom.gbc",$3615,$363b - $3615
 ; the attacking card faints if it was affected by destiny bond
 HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	cp SUBSTATUS1_DESTINY_BOND
 	jr z, .checkHP
 	ret
 
 .checkHP
 	ld a, DUELVARS_ARENA_CARD
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	cp $ff
 	ret z
 	ld a, DUELVARS_ARENA_CARD_HP
-	call GetOpposingTurnDuelistVariable
+	call GetNonTurnDuelistVariable
 	or a
 	ret nz
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -6225,11 +6232,11 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 ; 0x367b
 
 Func_367b: ; 367b (0:367b)
-	ld a, [wccc4]
-	cp $7f
-	jr z, .asm_3683
+	ld a, [wTempNonTurnDuelistCardId]
+	cp MACHAMP
+	jr z, .strikesBack
 	ret
-.asm_3683
+.strikesBack
 	ld a, [wMoveBufferCategory]
 	and RESIDUAL
 	ret nz
@@ -6237,7 +6244,7 @@ Func_367b: ; 367b (0:367b)
 	or a
 	ret z
 	call SwapTurn
-	call Func_34ef
+	call CheckIfUnderAnyCannotUseStatus
 	call SwapTurn
 	ret c
 	ld hl, $000a
@@ -6248,11 +6255,11 @@ Func_367b: ; 367b (0:367b)
 Func_36a2: ; 36a2 (0:36a2)
 	push hl
 	call Func_2ec4
-	ld a, [wccc3]
+	ld a, [wTempTurnDuelistCardId]
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
-	ld hl, $cc68
+	ld hl, wCardBuffer2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -6305,7 +6312,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ret
 .asm_3718
 	ld a, e
-	call Func_34f0
+	call CheckIfUnderAnyCannotUseStatus2
 	jr c, .asm_3703
 	ld a, e
 	add $d4

@@ -500,7 +500,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 .openAttackMenu
 	push af
 	ld a, [wSelectedDuelSubMenuItem]
-	ld hl, AttackMenuCursorProperties
+	ld hl, AttackMenuCursorData
 	call InitializeCursorParameters
 	pop af
 	ld [wNumMenuItems], a
@@ -604,7 +604,7 @@ Func_478b: ; 478b (1:478b)
 	jr z, .asm_47d4
 	ret
 
-AttackMenuCursorProperties:
+AttackMenuCursorData:
 	db $01
 	db $0d
 	db $02
