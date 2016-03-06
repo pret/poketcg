@@ -2276,7 +2276,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 
 ; draw a card from the deck, saving its location as $40
 ; returns c if deck is empty, nc if a card was succesfully drawn
-DrawCardFromDeck: ; 10cf (0:10cf)
+_DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -2500,19 +2500,19 @@ Func_16c0: ; 16c0 (0:16c0)
 	call LoadDeckCardToBuffer1
 	ld a, [$cc2b]
 	ld [wccc2], a
-	ld hl, $cc30
+	ld hl, wCardBuffer1Move1
 	dec e
-	jr nz, .asm_16d9
-	ld hl, $cc43
-.asm_16d9
-	ld de, $cca6
-	ld c, $13
-.asm_16de
+	jr nz, .gotMove
+	ld hl, wCardBuffer1Move2
+.gotMove
+	ld de, wcca6
+	ld c, wCardBuffer1Move2 - wCardBuffer1Move1
+.copyLoop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_16de
+	jr nz, .copyLoop
 	ld a, [wccb0]
 	ld hl, $ccb9
 	ld [hli], a
@@ -2775,7 +2775,7 @@ Func_18d7: ; 18d7 (0:18d7)
 	ret
 .confused
 	ld de, $00f7
-	call DisplayCoinTossScreen2
+	call TossCoin
 	jr c, .asm_18f7
 	ld a, $1
 	ld [wccc9], a
@@ -4244,7 +4244,8 @@ InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCursorBlinkCounter], a
 	ret
 
-; returns with the carry flag set if a or b were pressed
+; returns with the carry flag set if A or B were pressed
+; returns a = 0 if A was pressed, a = -1 if B was pressed
 MenuCursorAcceptInput: ; 264b (0:264b)
 	xor a
 	ld [wcd99], a
@@ -5448,14 +5449,14 @@ Func_3061: ; 3061 (0:3061)
 ; displaying each result ([O] or [X]) starting from the top left corner of the screen.
 ; text at de is printed in a text box during the coin toss.
 ;   returns: the number of heads in a and in $cd9d, and carry if at least one heads
-DisplayCoinTossScreen1: ; 3071 (0:3071)
+TossCoinATimes: ; 3071 (0:3071)
 	push hl
 	ld hl, wCoinTossScreenTextId
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	rst $18
-	dw TossCoin
+	dw _TossCoin
 	pop hl
 	ret
 
@@ -5463,7 +5464,7 @@ DisplayCoinTossScreen1: ; 3071 (0:3071)
 ; text at de is printed in a text box during the coin toss.
 ;   returns: - carry, and 1 in a and in $cd9d if heads
 ;            - nc, and 0 in a and in $cd9d if tails
-DisplayCoinTossScreen2: ; 307d (0:307d)
+TossCoin: ; 307d (0:307d)
 	push hl
 	ld hl, wCoinTossScreenTextId
 	ld [hl], e
@@ -5471,7 +5472,7 @@ DisplayCoinTossScreen2: ; 307d (0:307d)
 	ld [hl], d
 	ld a, $1
 	rst $18
-	dw TossCoin
+	dw _TossCoin
 	ld hl, $cac2
 	ld [hl], $0
 	pop hl
@@ -5943,7 +5944,7 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 HandleSandAttackOrSmokescreenSubstatus: ; 3400 (0:3400)
 	call CheckSandAttackOrSmokescreenSubstatus
 	ret nc
-	call DisplayCoinTossScreen2
+	call TossCoin
 	ld [wcc0a], a
 	ccf
 	ret nc
@@ -6041,7 +6042,7 @@ Func_348a: ; 348a (0:348a)
 	xor a
 	ld [wcac2], a
 	ld de, $00f6
-	call DisplayCoinTossScreen2
+	call TossCoin
 	ret nc
 	ld a, $4
 	ld [wNoDamageOrEffect], a

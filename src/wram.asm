@@ -455,6 +455,7 @@ wCardBuffer1:: ; cc24
 wCardBuffer2:: ; cc65
 	card_data_struct wCardBuffer2
 
+wcca6:: ; cca6
 	ds $4
 
 wccaa:: ; ccaa

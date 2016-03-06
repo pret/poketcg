@@ -1,6 +1,6 @@
 Poison50PercentEffect: ; 2c000 (b:4000)
 	text_de PoisonCheckText
-	call DisplayCoinTossScreen2_BankB
+	call TossCoin_BankB
 	ret nc
 
 PoisonEffect: ; 2c007 (b:4007)
@@ -12,20 +12,20 @@ PoisonEffect: ; 2c007 (b:4007)
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
 	text_de ParalysisCheckText
-	call DisplayCoinTossScreen2_BankB
+	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, PARALYZED
 	jr applyEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
 	text_de ConfusionCheckText
-	call DisplayCoinTossScreen2_BankB
+	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, CONFUSED
 	jr applyEffect
 
 	text_de SleepCheckText
-	call DisplayCoinTossScreen2_BankB
+	call TossCoin_BankB
 	ret nc
 
 SleepEffect: ; 2c030 (b:4030)
@@ -79,8 +79,8 @@ applyEffect
 	ret
 ; 0x2c07e
 
-DisplayCoinTossScreen2_BankB: ; 2c07e (b:407e)
-	call DisplayCoinTossScreen2
+TossCoin_BankB: ; 2c07e (b:407e)
+	call TossCoin
 	ret
 ; 0x2c082
 
