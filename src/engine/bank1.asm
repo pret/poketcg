@@ -536,9 +536,9 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ld d, [hl] ; card id
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call Func_16c0
+	call CopyMoveDataAndDamageToBuffer
 	call HandleAmnesiaSubstatus
-	jr c, .asm_477d
+	jr c, .cannotUseDueToAmnesia
 	ld a, $07
 	call $51e7
 	jp c, Func_4268
@@ -546,7 +546,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	jp c, Func_426d
 	ret
 
-.asm_477d ; 477d (1:477d)
+.cannotUseDueToAmnesia ; 477d (1:477d)
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 

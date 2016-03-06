@@ -2492,7 +2492,7 @@ GetOpposingTurnDuelistVariable: ; 1611 (0:1611)
 
 INCBIN "baserom.gbc",$161e,$16c0 - $161e
 
-Func_16c0: ; 16c0 (0:16c0)
+CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
 	ld a, d
@@ -2505,7 +2505,7 @@ Func_16c0: ; 16c0 (0:16c0)
 	jr nz, .gotMove
 	ld hl, wCardBuffer1Move2
 .gotMove
-	ld de, wcca6
+	ld de, wMoveBuffer
 	ld c, wCardBuffer1Move2 - wCardBuffer1Move1
 .copyLoop
 	ld a, [hli]
@@ -2513,8 +2513,8 @@ Func_16c0: ; 16c0 (0:16c0)
 	inc de
 	dec c
 	jr nz, .copyLoop
-	ld a, [wccb0]
-	ld hl, $ccb9
+	ld a, [wMoveBufferDamage]
+	ld hl, wDamage
 	ld [hli], a
 	xor a
 	ld [hl], a
@@ -2556,8 +2556,8 @@ Func_1730: ; 1730 (0:1730)
 	ld [wcc11], a
 	ld a, [wccc2]
 	ld [wcc12], a
-	ld a, [wccb1]
-	cp $4
+	ld a, [wMoveBufferCategory]
+	cp POKEMON_POWER
 	jp z, Func_184b
 	call Func_16f6
 	ld a, $1
@@ -2592,8 +2592,8 @@ Func_1730: ; 1730 (0:1730)
 	ld a, $a
 	call Func_0f7f
 	call $7415
-	ld a, [wccb1]
-	and $80
+	ld a, [wMoveBufferCategory]
+	and RESIDUAL
 	jr nz, .asm_17ad
 	call SwapTurn
 	call HandleNoDamageOrEffectSubstatus
@@ -2635,7 +2635,7 @@ Func_1730: ; 1730 (0:1730)
 Func_17ed: ; 17ed (0:17ed)
 	call DrawWideTextBox_WaitForInput
 	xor a
-	ld hl, $ccb9
+	ld hl, wDamage
 	ld [hli], a
 	ld [hl], a
 	ld a, $1
@@ -2679,7 +2679,7 @@ Func_1828: ; 1828 (0:1828)
 	text_hl DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
-	ld [wccb8], a
+	ld [wMoveBufferUnknown2], a
 	ld a, $14
 	call Func_195c
 	call Func_1bb4
@@ -2731,8 +2731,8 @@ Func_1874: ; 1874 (0:1874)
 	ret
 
 Func_189d: ; 189d (0:189d)
-	ld a, [wccb1]
-	bit 7, a
+	ld a, [wMoveBufferCategory]
+	bit RESIDUAL_F, a
 	ret nz
 	ld a, [wNoDamageOrEffect]
 	or a
@@ -2789,7 +2789,7 @@ Func_18d7: ; 18d7 (0:18d7)
 INCBIN "baserom.gbc",$18f9,$195c - $18f9
 
 Func_195c: ; 195c (0:195c)
-	ld hl, $ccb9
+	ld hl, wDamage
 	ld [hli], a
 	ld [hl], $0
 	ld a, [wNoDamageOrEffect]
@@ -2818,7 +2818,7 @@ Func_195c: ; 195c (0:195c)
 Func_1994: ; 1994 (0:1994)
 	xor a
 	ld [wccc1], a
-	ld hl, $ccb9
+	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
 	jr nz, .asm_19a3
@@ -2898,7 +2898,7 @@ INCBIN "baserom.gbc",$1a1a,$1a22 - $1a1a
 Func_1a22: ; 1a22 (0:1a22)
 	xor a
 	ld [wccc1], a
-	ld hl, $ccb9
+	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
 	or a
@@ -3049,9 +3049,9 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	xor a
 	ld [hli], a
 	ld [hli], a
-	ld a, [wccaa]
+	ld a, [wMoveBufferName]
 	ld [hli], a
-	ld a, [wccab]
+	ld a, [$ccab]
 	ld [hli], a
 	text_hl PokemonsAttackText ; text when using an attack
 	call DrawWideTextBox_PrintText
@@ -5309,8 +5309,8 @@ Func_2fcb: ; 2fcb (0:2fcb)
 ; input: a = move or trainer card effect command ID
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
-; grab pointer to command list from wCurrentMoveOrCardEffect
-	ld hl, wCurrentMoveOrCardEffect
+; grab pointer to command list from wMoveBufferEffectCommands
+	ld hl, wMoveBufferEffectCommands
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -5421,7 +5421,7 @@ LoadDeck: ; 302c (0:302c)
 
 Func_3055: ; 3055 (0:3055)
 	push hl
-	ld hl, $ccb9
+	ld hl, wDamage
 	add [hl]
 	ld [hli], a
 	ld a, $0
@@ -5434,7 +5434,7 @@ Func_3061: ; 3061 (0:3061)
 	push de
 	push hl
 	ld e, a
-	ld hl, $ccb9
+	ld hl, wDamage
 	ld a, [hl]
 	sub e
 	ld [hli], a
@@ -5832,8 +5832,8 @@ HandleSubstatus2DamageReduction: ; 3269 (0:3269)
 .notAffectedBySubstatus1
 	call Func_34ef
 	ret c
-	ld a, [wccb1]
-	cp $4
+	ld a, [wMoveBufferCategory]
+	cp POKEMON_POWER
 	ret z
 	ld a, [wccc4]
 	cp $9b
@@ -5873,8 +5873,8 @@ HandleSubstatus2DamageReduction: ; 3269 (0:3269)
 	ld d, h
 	ret
 .asm_32d8
-	ld a, [wccb1]
-	cp $4
+	ld a, [wMoveBufferCategory]
+	cp POKEMON_POWER
 	ret z
 	ld bc, $001e
 	call CompareDEtoBC
@@ -5980,8 +5980,8 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	xor a
 	ld [wNoDamageOrEffect], a
-	ld a, [wccb1]
-	cp $4
+	ld a, [wMoveBufferCategory]
+	cp POKEMON_POWER
 	ret z
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
@@ -6033,8 +6033,8 @@ Func_348a: ; 348a (0:348a)
 	or a
 	ret
 .asm_3493
-	ld a, [wccb1]
-	cp $4
+	ld a, [wMoveBufferCategory]
+	cp POKEMON_POWER
 	jr z, .asm_3491
 	ld a, [wcceb]
 	call Func_34f0
@@ -6230,8 +6230,8 @@ Func_367b: ; 367b (0:367b)
 	jr z, .asm_3683
 	ret
 .asm_3683
-	ld a, [wccb1]
-	and $80
+	ld a, [wMoveBufferCategory]
+	and RESIDUAL
 	ret nz
 	ld a, [wccbf]
 	or a

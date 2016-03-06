@@ -455,27 +455,14 @@ wCardBuffer1:: ; cc24
 wCardBuffer2:: ; cc65
 	card_data_struct wCardBuffer2
 
-wcca6:: ; cca6
+wMoveBuffer:: ; cca6
+	move_data_struct wMoveBuffer
+
+; big-endian
+wDamage:: ; ccb9
+	ds $2
+	
 	ds $4
-
-wccaa:: ; ccaa
-	ds $1
-
-wccab:: ; ccab
-	ds $5
-
-wccb0:: ; ccb0
-	ds $1
-
-wccb1:: ; ccb1
-	ds $1
-
-wCurrentMoveOrCardEffect:: ; ccb2
-	ds $1
-	ds $5
-
-wccb8:: ; ccb8
-	ds $7
 
 wccbf:: ; ccbf
 	ds $2

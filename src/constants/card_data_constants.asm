@@ -58,12 +58,13 @@ WR_FIGHTING  EQU $08
 WR_PSYCHIC   EQU $04
 
 ;;; move category (6th param of Pokemon cards move data)
-DAMAGE_NORMAL EQU  $0
-DAMAGE_PLUS   EQU  $1
-DAMAGE_MINUS  EQU  $2
-DAMAGE_X      EQU  $3
-POKEMON_POWER EQU  $4
-RESIDUAL      EQU $80
+DAMAGE_NORMAL EQU $0
+DAMAGE_PLUS   EQU $1
+DAMAGE_MINUS  EQU $2
+DAMAGE_X      EQU $3
+POKEMON_POWER EQU $4
+RESIDUAL_F    EQU  7
+RESIDUAL      EQU  1 << RESIDUAL_F
 
 ;;; flags 1 (8th param of Pokemon cards move data)
 INFLICT_POISON           EQU %00000001
