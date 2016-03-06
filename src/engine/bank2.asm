@@ -267,7 +267,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld h, [hl]
 	call DisableExtRAM
 	ld l, a
-	ld de, $c590
+	ld de, wc590
 	call Func_0663
 	ld hl, $cfb9
 	ld [hl], $6
@@ -665,12 +665,12 @@ Unknown_9242: ; 9242 (2:5242)
 INCBIN "baserom.gbc",$9242,$9253 - $9242
 
 Func_9253: ; 9253 (2:5253)
-	ld de, $c590
+	ld de, wc590
 	call Func_92ad
-	ld hl, $c590
+	ld hl, wc590
 	call Func_23c1
 	ld b, $0
-	ld hl, $c590
+	ld hl, wc590
 	add hl, bc
 	ld d, h
 	ld e, l
@@ -684,19 +684,19 @@ Func_926e: ; 926e (2:526e)
 	pop hl
 	jr c, .asm_929c
 	push de
-	ld de, $c590
+	ld de, wc590
 	call Func_92b4
-	ld hl, $c590
+	ld hl, wc590
 	call Func_23c1
 	ld b, $0
-	ld hl, $c590
+	ld hl, wc590
 	add hl, bc
 	ld d, h
 	ld e, l
 	ld hl, Unknown_92a7
 	call Func_92ad
 	pop de
-	ld hl, $c590
+	ld hl, wc590
 	call Func_22ae
 	call Func_21c5
 	or a

@@ -71,7 +71,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	pop hl
 	call EnableExtRAM
 	push hl
-	ld de, $c590
+	ld de, wc590
 .asm_199f3
 	ld a, [de]
 	inc de
@@ -103,7 +103,7 @@ Func_19a12: ; 19a12 (6:5a12)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, $c590
+	ld de, wc590
 	call PrintTextBoxBorderLabel
 	ret
 ; 0x19a1f

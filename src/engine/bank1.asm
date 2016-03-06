@@ -532,7 +532,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, DuelAttackPointerTable
+	ld hl, wDuelCardOrAttackList
 	add hl, de
 	ld d, [hl]
 	inc hl
@@ -664,7 +664,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	call LoadDeckCardToBuffer1
 	ld c, $00
 	ld b, $0d
-	ld hl, DuelAttackPointerTable
+	ld hl, wDuelCardOrAttackList
 	xor a
 	ld [$cbc7], a
 	ld de, wCardBuffer1Move1Name
@@ -697,7 +697,7 @@ LoadPokemonAttacksToDuelPointerTable: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, $cc47
+	ld hl, wCardBuffer1Move2Name
 	call $5c33
 	pop bc
 	pop hl

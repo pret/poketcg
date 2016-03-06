@@ -3729,7 +3729,7 @@ Func_2275: ; 2275 (0:2275)
 	ld [wcd06], a
 	ld a, $80
 	ld [wcd07], a
-	ld hl, $c600
+	ld hl, wc600
 .asm_2292
 	xor a
 	ld [hl], a
@@ -4517,7 +4517,7 @@ Func_2a44: ; 2a44 (0:2a44)
 	ld a, l
 	or h
 	jp nz, PrintTextNoDelay
-	ld hl, $c590
+	ld hl, wc590
 	jp Func_21c5
 
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
@@ -4987,7 +4987,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cd7
 	jr Func_2d43
 .asm_2dab
-	ld hl, $c590
+	ld hl, wc590
 	call Func_2cd7
 	jr Func_2d43
 .asm_2db3
@@ -5099,7 +5099,7 @@ PrintText: ; 2e41 (0:2e41)
 	call BankswitchHome
 	ret
 .fromRAM
-	ld hl, $c590
+	ld hl, wc590
 .printText
 	call Func_2cc8
 .nextTileLoop

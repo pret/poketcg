@@ -191,11 +191,28 @@ wOpponentDeck:: ; c480
 	ds $80
 	ds $10
 
-; when the attack menu opens, it stores
-; each move in the order of
-; cardNumber, moveNumber, ...
-DuelAttackPointerTable:: ; c510
-	ds $4f0
+; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
+wDuelCardOrAttackList:: ; c510
+	ds $80
+
+; this appears to be kept updated with some default text that is used
+; when the text printing functions are called with text id $0000
+wc590:: ; c590
+	ds $70
+
+;--- Text engine ------------------------------------------
+
+wc600:: ; c600
+	ds $100
+
+wc700:: ; c700
+	ds $100
+
+wc800:: ; c800
+	ds $100
+
+wc900:: ; c900
+	ds $100
 
 ;--- Engine -----------------------------------------------
 
@@ -431,9 +448,7 @@ wDuelTheme:: ; cc1a
 	ds $1
 	ds $9
 
-; wCardBuffer1 and wCardBuffer2 hold the data of a player's or opponent's card.
-; Can be data from a card on either side of the field or hand, or from a card in the bench, depending on the duel state.
-; Sometimes the two buffers even hold the same card's data.
+; Used as temporary storage for a loaded card's data
 wCardBuffer1:: ; cc24
 	card_data_struct wCardBuffer1
 
