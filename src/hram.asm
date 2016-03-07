@@ -55,7 +55,7 @@ hffaf:: ; ffaf
 
 	ds 1
 
-hCurrentMenuItem::
+hCurrentMenuItem:: ; ffb1
 	ds 1
 
 	ds 3

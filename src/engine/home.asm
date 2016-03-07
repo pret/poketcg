@@ -783,7 +783,7 @@ CopyDMAFunction: ; 0593 (0:0593)
 	jr nz, .asm_59a
 	ret
 
-; CopyDMAFunction copies this function to $ff83
+; CopyDMAFunction copies this function to hDMAFunction ($ff83)
 DMA: ; 05a1 (0:05a1)
 	ld a, $ca
 	ld [rDMA], a
@@ -4467,13 +4467,13 @@ Func_270b: ; 270b (0:270b)
 
 Func_2710: ; 2710 (0:2710)
 	ld [wCurMenuItem], a
-	ld [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	ret
 
 Func_271a: ; 271a (0:271a)
-	ld a, [$ff8f]
+	ldh a, [hButtonsPressed2]
 	or a
 	jr z, .asm_2764
 	ld b, a
@@ -4507,13 +4507,13 @@ Func_271a: ; 271a (0:271a)
 	call .asm_2772
 	pop af
 	ld [wCurMenuItem], a
-	ld [$ffb1], a
+	ldh [hCurrentMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	jr .asm_2764
 .asm_275d
-	ld a, [$ff8f]
-	and $1
+	ldh a, [hButtonsPressed2]
+	and A_BUTTON
 	jp nz, Func_269e
 .asm_2764
 	ld hl, wCursorBlinkCounter
@@ -4557,10 +4557,10 @@ INCBIN "baserom.gbc",$29fa,$2a00 - $29fa
 Func_2a00: ; 2a00 (0:2a00)
 	call DoFrame
 	call HandleTextBoxInput
-	ld a, [$ff91]
-	bit 0, a
+	ldh a, [hButtonsPressed]
+	bit A_BUTTON_F, a
 	jr nz, .asm_2a15
-	bit 1, a
+	bit B_BUTTON_F, a
 	jr z, Func_2a00
 	call EraseCursor
 	scf
@@ -4821,7 +4821,7 @@ Func_2bd7: ; 2bd7 (0:2bd7)
 	jr Func_2bdb
 Func_2bdb: ; 2bdb (0:2bdb)
 	ld c, a
-	ld a, [$ff80]
+	ldh a, [hBankROM]
 	push af
 	ld a, $5
 	call BankswitchHome
@@ -4904,7 +4904,7 @@ Func_2c77: ; 2c77 (0:2c77)
 
 Func_2c84: ; 2c84 (0:2c84)
 	ld [wce4b], a
-	ld a, [$ff80]
+	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
 	call Func_2d15
@@ -4918,8 +4918,8 @@ Func_2c84: ; 2c84 (0:2c84)
 	ld a, [wTextSpeed]
 	cp $2
 	jr nc, .asm_2ca7
-	ld a, [$ff90]
-	and $2
+	ldh a, [hButtonsHeld]
+	and B_BUTTON
 	jr nz, .asm_2caf
 .asm_2ca7
 	push bc
@@ -6931,7 +6931,7 @@ Func_3aed: ; 3aed (0:3aed)
 INCBIN "baserom.gbc",$3b11,$3b21 - $3b11
 
 Func_3b21: ; 3b21 (0:3b21)
-	ld a, [$ff80]
+	ldh a, [hBankROM]
 	push af
 	ld a, $7
 	call BankswitchHome
@@ -6941,7 +6941,7 @@ Func_3b21: ; 3b21 (0:3b21)
 	ret
 
 Func_3b31: ; 3b31 (0:3b31)
-	ld a, [$ff80]
+	ldh a, [hBankROM]
 	push af
 	ld a, $7
 	call BankswitchHome
@@ -6978,7 +6978,7 @@ Func_3b52: ; 3b52 (0:3b52)
 
 Func_3b6a: ; 3b6a (0:3b6a)
 	ld [wd422], a
-	ld a, [$ff80]
+	ldh a, [hBankROM]
 	push af
 	ld [wd4be], a
 	push hl
