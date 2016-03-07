@@ -398,7 +398,7 @@ wBenchSelectedPokemon:: ; $cbcb
 	ds $1
 	ds $3
 
-; When you're in a duel menu like your hand and you press a,
+; When you're in a duel submenu like the cards in your hand and you press A,
 ; the following two addresses keep track of which item was selected by the cursor
 wSelectedDuelSubMenuItem:: ; $cbcf
 	ds $1
@@ -446,7 +446,15 @@ wIsPracticeDuel:: ; cc13
 
 wDuelTheme:: ; cc1a
 	ds $1
-	ds $9
+
+; holds the energies attached to a given pokemon card. 1 byte for each of the
+; 8 energy types (including the unused one that shares byte with the colorless energy)
+wAttachedEnergies:: ; cc1b
+	ds NUM_TYPES
+
+; holds the total amount of energies attached to a given pokemon card
+wTotalAttachedEnergies:: ; cc23
+	ds $1
 
 ; Used as temporary storage for a loaded card's data
 wCardBuffer1:: ; cc24

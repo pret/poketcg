@@ -33,7 +33,7 @@ SleepEffect: ; 2c030 (b:4030)
 	jr applyEffect
 
 applyEffect
-	ld a, [$ff97]
+	ldh a, [hWhoseTurn]
 	ld hl, $cc05
 	cp [hl]
 	jr nz, .canInduceStatus
@@ -67,7 +67,7 @@ applyEffect
 	ld hl, $ccce
 	add hl, de
 	call SwapTurn
-	ld a, [$ff97]
+	ldh a, [hWhoseTurn]
 	ld [hli], a
 	call SwapTurn
 	ld [hl], b

@@ -2454,7 +2454,77 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-INCBIN "baserom.gbc",$13a2,$15ef - $13a2
+INCBIN "baserom.gbc",$13a2,$159f - $13a2
+
+; this function iterates through the card locations array to find out which and how many
+; energy cards are in arena (i.e. attached to the active pokemon).
+; one or more location constants (so long as they don't clash with the arena location constant)
+; can be specified in register e; if so, energies found in that location will be counted too.
+GetAttachedEnergies: ; 159f (0:159f)
+	push hl
+	push de
+	push bc
+	xor a
+	ld c, NUM_TYPES
+	ld hl, wAttachedEnergies
+.zeroEnergiesLoop
+	ld [hli], a
+	dec c
+	jr nz, .zeroEnergiesLoop
+	ld a, CARD_LOCATION_ARENA
+	or e ; if e is non-0, arena is not the only location that counts
+	ld e, a
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld l, DUELVARS_CARD_LOCATIONS
+	ld c, DECK_SIZE
+.nextCard
+	ld a, [hl]
+	cp e
+	jr nz, .notInRequestedLocation
+
+	push hl
+	push de
+	push bc
+	ld a, l
+	call LoadDeckCardToBuffer2
+	ld a, [wCardBuffer2Type]
+	bit ENERGY_CARD_F, a
+	jr z, .notAnEnergyCard
+	and $7 ; zero bit 3 to extract the type
+	ld e, a
+	ld d, $0
+	ld hl, wAttachedEnergies
+	add hl, de
+	inc [hl] ; increment the number of energy cards of this type
+	cp COLORLESS
+	jr nz, .notColorless
+	inc [hl] ; each colorless energy counts as two
+.notAnEnergyCard
+.notColorless
+	pop bc
+	pop de
+	pop hl
+
+.notInRequestedLocation
+	inc l
+	dec c
+	jr nz, .nextCard
+	; all 60 cards checked
+	ld hl, wAttachedEnergies
+	ld c, NUM_TYPES
+	xor a
+.sumAttachedEnergiesLoop
+	add [hl]
+	inc hl
+	dec c
+	jr nz, .sumAttachedEnergiesLoop
+	ld [hl], a ; save to wTotalAttachedEnergies
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x15ef
 
 ; returns in a how many times card e can be found in location b
 ; e = card id to search
@@ -6368,7 +6438,29 @@ Func_374a: ; 374a (0:374a)
 	ret
 ; 0x375d
 
-INCBIN "baserom.gbc",$375d,$377f - $375d
+; this function checks if charizard's energy burn is active, and if so
+; turns all energies except double colorless energies into fire energies
+HandleEnergyBurn: ; 375d (0:375d)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardInDeckPosition
+	ld a, e
+	cp CHARIZARD
+	ret nz
+	xor a
+	call CheckIfUnderAnyCannotUseStatus2
+	ret c
+	ld hl, wAttachedEnergies
+	ld c, COLORLESS - FIRE
+	xor a
+.zeroNextEnergy
+	ld [hli], a
+	dec c
+	jr nz, .zeroNextEnergy
+	ld a, [wTotalAttachedEnergies]
+	ld [wAttachedEnergies], a
+	ret
+; 0x377f
 
 SetupSound_T: ; 377f (0:377f)
 	farcall SetupSound_Ext
