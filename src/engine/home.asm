@@ -2177,13 +2177,13 @@ Func_100b: ; 100b (0:100b)
 	push hl
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, e
 	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, e
 	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
@@ -2372,7 +2372,11 @@ ShuffleCards: ; 127f (0:127f)
 
 INCBIN "baserom.gbc",$12a3,$1312 - $12a3
 
-Func_1312: ; 1312 (0:1312)
+
+; given a position in wDuelCardOrAttackList (c510), return:
+;   the id of the card in that position in register de
+;   its index within the deck (0 - 59) in hTempCardNumber and in register a
+GetCardInC510: ; 1312 (0:1312)
 	push hl
 	ld e, a
 	ld d, $0
@@ -2380,16 +2384,18 @@ Func_1312: ; 1312 (0:1312)
 	add hl, de
 	ld a, [hl]
 	ldh [hTempCardNumber], a
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	pop hl
 	ldh a, [hTempCardNumber]
 	ret
 ; 0x1324
 
-LoadDeckCardToDE: ; 1324 (0:1324)
+; returns, in register de, the id of the card in the deck position specified in register a,
+; preserving af and hl
+GetCardInDeckPosition: ; 1324 (0:1324)
 	push af
 	push hl
-	call GetDeckCard
+	call _GetCardInDeckPosition
 	ld e, a
 	ld d, $0
 	pop hl
@@ -2399,8 +2405,8 @@ LoadDeckCardToDE: ; 1324 (0:1324)
 
 INCBIN "baserom.gbc",$132f,$1362 - $132f
 
-; gets card a from the deck of the player whose turn it is
-GetDeckCard: ; 1362 (0:1362)
+; returns, in register a, the id of the card in the deck position specified in register a
+_GetCardInDeckPosition: ; 1362 (0:1362)
 	push de
 	ld e, a
 	ld d, $0
@@ -2420,7 +2426,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push de
 	push bc
 	push af
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	call LoadCardDataToBuffer1
 	pop af
 	ld hl, wCardBuffer1
@@ -2436,7 +2442,7 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push de
 	push bc
 	push af
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	call LoadCardDataToBuffer2
 	pop af
 	ld hl, wCardBuffer2
@@ -2464,7 +2470,7 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	jr nz, .unmatchingCardLocationOrID
 	ld a, l
 	push hl
-	call GetDeckCard
+	call _GetCardInDeckPosition
 	cp e
 	pop hl
 	jr nz, .unmatchingCardLocationOrID
@@ -2539,13 +2545,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld [$ff9f], a
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, e
 	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, e
 	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
@@ -6127,7 +6133,7 @@ Func_3525: ; 3525 (0:3525)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .asm_3549
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_3549
@@ -6143,7 +6149,7 @@ Func_3525: ; 3525 (0:3525)
 	ld a, [hli]
 	cp $ff
 	jr z, .asm_3560
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_355d
@@ -6312,7 +6318,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToDE
+	call GetCardInDeckPosition
 	call Func_2f32
 	cp $10
 	jr nz, .asm_3715

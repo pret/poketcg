@@ -12,9 +12,9 @@ SECTION "WRAM0", WRAM0
 
 wPlayerDuelVariables:: ; c200
 
-; In order to be identified during a duel, the 60 cards of each duelist are given an id between 0 and 59.
-; The id's are assigned following the index number order of the cards that make up the deck.
-; This temporary id identifies the card during the current duel and within the duelist's deck.
+; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
+; These indexes are assigned following the internal order of the cards that make up the deck.
+; This temporary index identifies the card during the current duel and within the duelist's deck.
 
 ; 60-byte array that indicates where each of the 60 cards is.
 ;	$00 - deck
