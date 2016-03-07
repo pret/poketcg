@@ -520,13 +520,13 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	cp $ff ; was B pressed?
 	jp z, PrintDuelMenu
 	ld [wSelectedDuelSubMenuItem], a
-	call $488f
-	jr nc, .asm_4759
+	call CheckIfEnoughEnergies
+	jr nc, .enoughEnergy
 	text_hl NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
-.asm_4759
+.enoughEnergy
 	ldh a, [hCurrentMenuItem]
 	add a
 	ld e, a
@@ -736,7 +736,121 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	scf
 	jr .return
 
-INCBIN "baserom.gbc",$488f, $4918 - $488f
+; check if the arena pokemon card has enough energy attached to it
+; in order to use the selected move.
+; returns: carry if not enough energy, nc if enough energy.
+CheckIfEnoughEnergies: ; 488f (1:488f)
+	push hl
+	push bc
+	ld e, $0
+	call GetAttachedEnergies
+	call HandleEnergyBurn
+	ldh a, [hCurrentMenuItem]
+	add a
+	ld e, a
+	ld d, $0
+	ld hl, wDuelCardOrAttackList
+	add hl, de
+	ld d, [hl] ; card number within the deck (0 to 59)
+	inc hl
+	ld e, [hl] ; attack index (0 or 1)
+	call _CheckIfEnoughEnergies
+	pop bc
+	pop hl
+	ret
+; 0x48ac
+
+; check if a pokemon card has enough energy attached to it in order to use a move
+; input:
+;   d = card number within the deck (0 to 59)
+;   e = attack index (0 or 1)
+;   wAttachedEnergies and wTotalAttachedEnergies
+; returns: carry if not enough energy, nc if enough energy.
+_CheckIfEnoughEnergies: ; 48ac (1:48ac)
+	push de
+	ld a, d
+	call LoadDeckCardToBuffer1
+	pop bc
+	push bc
+	ld de, wCardBuffer1Move1Energy
+	ld a, c
+	or a
+	jr z, .gotMove
+	ld de, wCardBuffer1Move2Energy
+
+.gotMove
+	ld hl, wCardBuffer1Move1Name - wCardBuffer1Move1Energy
+	add hl, de
+	ld a, [hli]
+	or [hl]
+	jr z, .notUsable
+	ld hl, wCardBuffer1Move1Category - wCardBuffer1Move1Energy
+	add hl, de
+	ld a, [hl]
+	cp POKEMON_POWER
+	jr z, .notUsable
+	xor a
+	ld [wAttachedEnergiesAccum], a
+	ld hl, wAttachedEnergies
+	ld c, (COLORLESS - FIRE) / 2
+.nextEnergyTypePair
+	ld a, [de]
+	swap a
+	call _CheckIfEnoughEnergiesOfType
+	jr c, .notEnoughEnergies
+	ld a, [de]
+	call _CheckIfEnoughEnergiesOfType
+	jr c, .notEnoughEnergies
+	inc de
+	dec c
+	jr nz, .nextEnergyTypePair
+	ld a, [de] ; colorless energy
+	swap a
+	and $f
+	ld b, a
+	ld a, [wAttachedEnergiesAccum]
+	ld c, a
+	ld a, [wTotalAttachedEnergies]
+	sub c
+	cp b
+	jr c, .notEnoughEnergies
+	or a
+.asm_48fb
+	pop de
+	ret
+
+.notUsable
+.notEnoughEnergies
+	scf
+	jr .asm_48fb
+; 0x4900
+
+; given the amount of energies of a specific type required for an attack in the
+; lower nybble of register a, test if the pokemon card has enough energies of that type
+; to use the move. Return carry if not enough energy, nc if enough energy.
+_CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
+	and $f
+	push af
+	push hl
+	ld hl, wAttachedEnergiesAccum
+	add [hl]
+	ld [hl], a ; accumulate the amount of energies required
+	pop hl
+	pop af
+	jr z, .enoughEnergies ; jump if no energies of this type are required
+	cp [hl]
+	; jump if the energies required of this type are not more than the amount attached
+	jr z, .enoughEnergies
+	jr c, .enoughEnergies
+	inc hl
+	scf
+	ret
+
+.enoughEnergies
+	inc hl
+	or a
+	ret
+; 0x4918
 
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ld a, DUELVARS_ARENA_CARD_STATUS

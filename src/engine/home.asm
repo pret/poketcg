@@ -2456,10 +2456,11 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 
 INCBIN "baserom.gbc",$13a2,$159f - $13a2
 
-; this function iterates through the card locations array to find out which and how many
+; This function iterates through the card locations array to find out which and how many
 ; energy cards are in arena (i.e. attached to the active pokemon).
-; one or more location constants (so long as they don't clash with the arena location constant)
+; One or more location constants (so long as they don't clash with the arena location constant)
 ; can be specified in register e; if so, energies found in that location will be counted too.
+; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
 GetAttachedEnergies: ; 159f (0:159f)
 	push hl
 	push de

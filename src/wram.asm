@@ -375,7 +375,7 @@ wcba3:: ; cba3
 wSerialRecvIndex:: ; cba4
 	ds $1
 
-wSerialRecvBuf:: ; $cba5 - $cbc4
+wSerialRecvBuf:: ; cba5 - cbc4
 	ds $20
 	ds $1
 
@@ -383,27 +383,30 @@ wSerialRecvBuf:: ; $cba5 - $cbc4
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
-wCurrentDuelMenuItem:: ; $cbc6
+wCurrentDuelMenuItem:: ; cbc6
 	ds $1
 
 ; When we're viewing a card's information, the page we are currently at
 ; For Pokemon cards, values from $1 to $6 (two pages for move descriptions)
 ; For Energy cards, it's always $9
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
-wCardPageNumber:: ; $cbc7
+wCardPageNumber:: ; cbc7
 	ds $1
 	ds $3
 
-wBenchSelectedPokemon:: ; $cbcb
+wBenchSelectedPokemon:: ; cbcb
 	ds $1
-	ds $3
+	ds $2
+
+wAttachedEnergiesAccum:: ; cbce
+	ds $1
 
 ; When you're in a duel submenu like the cards in your hand and you press A,
 ; the following two addresses keep track of which item was selected by the cursor
-wSelectedDuelSubMenuItem:: ; $cbcf
+wSelectedDuelSubMenuItem:: ; cbcf
 	ds $1
 
-wSelectedDuelSubMenuScrollOffset:: ; $cbd0
+wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 	ds $35
 
@@ -414,7 +417,7 @@ wcc06:: ; cc06
 ; 1 = player whose turn it is has won the duel
 ; 2 = player whose turn it is has lost the duel
 ; 3 = duel ended in a draw
-wDuelFinished:: ; $cc07
+wDuelFinished:: ; cc07
 	ds $1
 	ds $1
 
