@@ -100,7 +100,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call PlaySong
 	pop bc
 	ld a, c
-	farcallx $7, GenerateBoosterPack
+	farcall GenerateBoosterPack
 	text_hl ReceivedBoosterPackText
 	ld a, [$d117]
 	cp $1
