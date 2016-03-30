@@ -1,10 +1,10 @@
-INCBIN "baserom.gbc",$10000,$10059 - $10000
+	drom $10000, $10059
 
 Func_10059: ; 10059 (4:4059)
-INCBIN "baserom.gbc",$10059,$100a2 - $10059
+	drom $10059, $100a2
 
 Func_100a2: ; 100a2 (4:40a2)
-INCBIN "baserom.gbc",$100a2,$1029e - $100a2
+	drom $100a2, $1029e
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -58,7 +58,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ret
 
 Unknown_1030b: ; 1030b (4:430b)
-INCBIN "baserom.gbc",$1030b,$1031b - $1030b
+	drom $1030b, $1031b
 
 BoosterPack_1031b: ; 1031b (4:431b)
 	ld c, a
@@ -127,10 +127,10 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ret
 ; 0x103a5
 
-INCBIN "baserom.gbc",$103a5,$103d2 - $103a5
+	drom $103a5, $103d2
 
 Func_103d2: ; 103d2 (4:43d2)
-INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
+	drom $103d2, $103d3
 
 Duel_Init: ; 103d3 (4:43d3)
 	ld a, [$d291]
@@ -190,25 +190,25 @@ Duel_Init: ; 103d3 (4:43d3)
 	ret
 ; 0x10451
 
-INCBIN "baserom.gbc",$10451,$10548 - $10451
+	drom $10451, $10548
 
 Func_10548: ; 10548 (4:4548)
-INCBIN "baserom.gbc",$10548,$10756 - $10548
+	drom $10548, $10756
 
 Func_10756: ; 10756 (4:4756)
-INCBIN "baserom.gbc",$10756,$10a9b - $10756
+	drom $10756, $10a9b
 
 Func_10a9b: ; 10a9b (4:4a9b)
-INCBIN "baserom.gbc",$10a9b,$10ab4 - $10a9b
+	drom $10a9b, $10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
-INCBIN "baserom.gbc",$10ab4,$10af9 - $10ab4
+	drom $10ab4, $10af9
 
 Func_10af9: ; 10af9 (4:4af9)
-INCBIN "baserom.gbc",$10af9,$10e28 - $10af9
+	drom $10af9, $10e28
 
 Func_10e28: ; 10e28 (4:4e28)
-INCBIN "baserom.gbc",$10e28,$10e55 - $10e28
+	drom $10e28, $10e55
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [$d336]
@@ -273,7 +273,7 @@ Func_10e97: ; 10e97 (4:4e97)
 	ret
 
 Unknown_10ebc: ; 10ebc (4:4ebc)
-INCBIN "baserom.gbc",$10ebc,$10efd - $10ebc
+	drom $10ebc, $10efd
 
 Func_10efd: ; 10efd (4:4efd)
 	push hl
@@ -296,7 +296,7 @@ Func_10efd: ; 10efd (4:4efd)
 	ret
 
 Unknown_10f14: ; 10f14 (4:4f14)
-INCBIN "baserom.gbc",$10f14,$10f2e - $10f14
+	drom $10f14, $10f2e
 
 Func_10f2e: ; 10f2e (4:4f2e)
 	push hl
@@ -656,35 +656,35 @@ Func_11184: ; 11184 (4:5184)
 	ret
 ; 0x111b3
 
-INCBIN "baserom.gbc",$111b3,$111e9 - $111b3
+	drom $111b3, $111e9
 
 Func_111e9: ; 111e9 (4:51e9)
-INCBIN "baserom.gbc",$111e9,$1124d - $111e9
+	drom $111e9, $1124d
 
 Func_1124d: ; 1124d (4:524d)
-INCBIN "baserom.gbc",$1124d,$11320 - $1124d
+	drom $1124d, $11320
 
 Func_11320: ; 11320 (4:5320)
-INCBIN "baserom.gbc",$11320,$11416 - $11320
+	drom $11320, $11416
 
 Func_11416: ; 11416 (4:5416)
-INCBIN "baserom.gbc",$11416,$11430 - $11416
+	drom $11416, $11430
 
 Func_11430: ; 11430 (4:5430)
-INCBIN "baserom.gbc",$11430,$1162a - $11430
+	drom $11430, $1162a
 
 INCLUDE "data/map_scripts.asm"
 
-INCBIN "baserom.gbc",$1184a,$11857 - $1184a
+	drom $1184a, $11857
 
 Func_11857: ; 11857 (4:5857)
-INCBIN "baserom.gbc",$11857,$1217b - $11857
+	drom $11857, $1217b
 
 Unknown_1217b: ; 1217b (4:617b)
-INCBIN "baserom.gbc",$1217b,$1229f - $1217b
+	drom $1217b, $1229f
 
 Unknown_1229f: ; 1229f (4:629f)
-INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
+	drom $1229f, $126d1
 
 Func_126d1: ; 126d1 (4:66d1)
 	call Func_099c
@@ -777,19 +777,19 @@ Func_1277e: ; 1277e (4:677e)
 	ret
 ; 0x1279a
 
-INCBIN "baserom.gbc",$1279a,$12871 - $1279a
+	drom $1279a, $12871
 
 Func_12871: ; 12871 (4:6871)
-INCBIN "baserom.gbc",$12871,$1288c - $12871
+	drom $12871, $1288c
 
 Func_1288c: ; 1288c (4:688c)
-INCBIN "baserom.gbc",$1288c,$128a9 - $1288c
+	drom $1288c, $128a9
 
 Func_128a9: ; 128a9 (4:68a9)
-INCBIN "baserom.gbc",$128a9,$1296e - $128a9
+	drom $128a9, $1296e
 
 Func_1296e: ; 1296e (4:696e)
-INCBIN "baserom.gbc",$1296e,$1299f - $1296e
+	drom $1296e, $1299f
 
 Func_1299f: ; 1299f (4:699f)
 	push af
@@ -858,10 +858,10 @@ Func_129d9: ; 129d9 (4:69d9)
 	ret
 ; 0x129fa
 
-INCBIN "baserom.gbc",$129fa,$12a21 - $129fa
+	drom $129fa, $12a21
 
 Func_12a21: ; 12a21 (4:6a21)
-INCBIN "baserom.gbc",$12a21,$12ab5 - $12a21
+	drom $12a21, $12ab5
 
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
@@ -879,7 +879,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 	ret
 ; 0x12ac9
 
-INCBIN "baserom.gbc",$12ac9,$12ae2 - $12ac9
+	drom $12ac9, $12ae2
 
 Func_12ae2: ; 12ae2 (4:6ae2)
 	push bc
@@ -1022,10 +1022,10 @@ Func_12b89: ; 12b89 (4:6b89)
 	ret
 
 Func_12ba7: ; 12ba7 (4:6ba7)
-INCBIN "baserom.gbc",$12ba7,$12bcd - $12ba7
+	drom $12ba7, $12bcd
 
 Func_12bcd: ; 12bcd (4:6bcd)
-INCBIN "baserom.gbc",$12bcd,$12c05 - $12bcd
+	drom $12bcd, $12c05
 
 Func_12c05: ; 12c05 (4:6c05)
 	push hl
@@ -1100,16 +1100,16 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	ret
 
 Func_12c5e: ; 12c5e (4:6c5e)
-INCBIN "baserom.gbc",$12c5e,$12c7f - $12c5e
+	drom $12c5e, $12c7f
 
 Func_12c7f: ; 12c7f (4:6c7f)
-INCBIN "baserom.gbc",$12c7f,$131b3 - $12c7f
+	drom $12c7f, $131b3
 
 Func_131b3: ; 131b3 (4:71b3)
-INCBIN "baserom.gbc",$131b3,$131d3 - $131b3
+	drom $131b3, $131d3
 
 Func_131d3: ; 131d3 (4:71d3)
-INCBIN "baserom.gbc",$131d3,$1344d - $131d3
+	drom $131d3, $1344d
 
 Func_1344d: ; 1344d (4:744d)
 	call Func_379b
@@ -1122,7 +1122,7 @@ Func_1344d: ; 1344d (4:744d)
 	ret
 ; 0x13462
 
-INCBIN "baserom.gbc",$13462,$13485 - $13462
+	drom $13462, $13485
 
 Func_13485: ; 13485 (4:7485)
 	call EnableExtRAM
@@ -1144,4 +1144,4 @@ Func_13485: ; 13485 (4:7485)
 	ret
 ; 0x134b1
 
-INCBIN "baserom.gbc",$134b1,$14000 - $134b1
+	drom $134b1, $14000

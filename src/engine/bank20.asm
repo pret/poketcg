@@ -1,8 +1,8 @@
 Func_80000: ; 80000 (20:4000)
-INCBIN "baserom.gbc",$80000,$80028 - $80000
+	drom $80000, $80028
 
 Func_80028: ; 80028 (20:4028)
-INCBIN "baserom.gbc",$80028,$8020f - $80028
+	drom $80028, $8020f
 
 Func_8020f: ; 8020f (20:420f)
 	push bc
@@ -35,7 +35,7 @@ Func_80229: ; 80229 (20:4229)
 	ret
 ; 0x80238
 
-INCBIN "baserom.gbc",$80238,$8025b - $80238
+	drom $80238, $8025b
 
 Func_8025b: ; 8025b (20:425b)
 	push hl
@@ -112,22 +112,22 @@ Func_802bb: ; 802bb (20:42bb)
 	ret
 ; 0x802d4
 
-INCBIN "baserom.gbc",$802d4,$80418 - $802d4
+	drom $802d4, $80418
 
 Func_80418: ; 80418 (20:4418)
-INCBIN "baserom.gbc",$80418,$80480 - $80418
+	drom $80418, $80480
 
 Func_80480: ; 80480 (20:4480)
-INCBIN "baserom.gbc",$80480,$804d8 - $80480
+	drom $80480, $804d8
 
 Func_804d8: ; 804d8 (20:44d8)
-INCBIN "baserom.gbc",$804d8,$80b7a - $804d8
+	drom $804d8, $80b7a
 
 Func_80b7a: ; 80b7a (20:4b7a)
-INCBIN "baserom.gbc",$80b7a,$80e5a - $80b7a
+	drom $80b7a, $80e5a
 
 Unknown_80e5a: ; 80e5a (20:4e5a)
-INCBIN "baserom.gbc",$80e5a,$80e5d - $80e5a
+	drom $80e5a, $80e5d
 
 MapDataPointers: ; 80e5d (20:4e5d)
-INCBIN "baserom.gbc",$80e5d,$84000 - $80e5d
+	drom $80e5d, $84000

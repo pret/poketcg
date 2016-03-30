@@ -335,7 +335,7 @@ Func_c268: ; c268 (3:4268)
 	ret
 
 Unknown_c27c: ; c27c (3:427c)
-INCBIN "baserom.gbc",$c27c,$c280 - $c27c
+	drom $c27c, $c280
 
 Func_c280: ; c280 (3:4280)
 	call Func_c228
@@ -381,7 +381,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	ret
 ; 0xc2d4
 
-INCBIN "baserom.gbc",$c2d4,$c2db - $c2d4
+	drom $c2d4, $c2db
 
 Func_c2db: ; c2db (3:42db)
 	push hl
@@ -464,7 +464,7 @@ Func_c36a: ; c36a (3:436a)
 	ret
 ; 0xc37a
 
-INCBIN "baserom.gbc",$c37a,$c41c - $c37a
+	drom $c37a, $c41c
 
 Func_c41c: ; c41c (3:441c)
 	ld a, [$d332]
@@ -626,7 +626,7 @@ Func_c510: ; c510 (3:4510)
 	ret
 ; 0xc53d
 
-INCBIN "baserom.gbc",$c53d,$c554 - $c53d
+	drom $c53d, $c554
 
 Func_c554: ; c554 (3:4554)
 	ld a, [$d336]
@@ -745,7 +745,7 @@ Func_c5fe: ; c5fe (3:45fe)
 	ret
 ; 0xc607
 
-INCBIN "baserom.gbc",$c607,$c619 - $c607
+	drom $c607, $c619
 
 Func_c619: ; c619 (3:4619)
 	push hl
@@ -817,7 +817,7 @@ Func_c66c: ; c66c (3:466c)
 	ret
 ; 0xc687
 
-INCBIN "baserom.gbc",$c687,$c694 - $c687
+	drom $c687, $c694
 
 Func_c694: ; c694 (3:4694)
 	push hl
@@ -1070,7 +1070,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	ret
 ; 0xc846
 
-INCBIN "baserom.gbc",$c846,$c935 - $c846
+	drom $c846, $c935
 
 Func_c935: ; c935 (3:4935)
 	push hl
@@ -1215,7 +1215,7 @@ Func_c9e8: ; c9e8 (3:49e8)
 	ret
 
 Unknown_ca0a: ; ca0a (3:4a04)
-INCBIN "baserom.gbc",$ca0a,$ca0e - $ca0a
+	drom $ca0a, $ca0e
 
 Func_ca0e: ; ca0e (3:4a0e)
 	ld a, [$d32e]
@@ -1294,7 +1294,7 @@ Func_ca6c: ; ca6c (3:4a6c)
 	ret
 ; 0xca84
 
-INCBIN "baserom.gbc",$ca84,$ca8f - $ca84
+	drom $ca84, $ca8f
 
 Func_ca8f: ; ca8f (3:4a8f)
 	call Func_cab3
@@ -1338,7 +1338,7 @@ Func_cab3: ; cab3 (3:4ab3)
 	ret
 ; 0xcac2
 
-INCBIN "baserom.gbc",$cac2,$cb1d - $cac2
+	drom $cac2, $cb1d
 
 Func_cb1d: ; cb1d (3:4b1d)
 	push bc
@@ -1359,7 +1359,7 @@ Func_cb1d: ; cb1d (3:4b1d)
 	ret
 
 Unknown_cb37: ; cb37 (3:4b37)
-INCBIN "baserom.gbc",$cb37,$cc42 - $cb37
+	drom $cb37, $cc42
 
 RST20: ; cc42 (3:4c42)
 	pop hl
@@ -1382,10 +1382,10 @@ RST20: ; cc42 (3:4c42)
 	ret
 ; 0xcc60
 
-INCBIN "baserom.gbc",$cc60,$cd98 - $cc60
+	drom $cc60, $cd98
 
 Unknown_cd98: ; cd98 (3:4d98)
-INCBIN "baserom.gbc",$cd98,$d336 - $cd98
+	drom $cd98, $d336
 
 DeckMachine_d336: ; d336 (3:5336)
 	push bc
@@ -1415,7 +1415,7 @@ DeckMachine_d336: ; d336 (3:5336)
 	jp $4c64
 ; 0xd36d
 
-INCBIN "baserom.gbc",$d36d,$fc2b - $d36d
+	drom $d36d, $fc2b
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [$d0c3]
@@ -1442,16 +1442,16 @@ PointerTable_fc4c: ; fc4c (3:7c4c)
 	dw Unknown_fc68
 	dw Unknown_fc60
 
-INCBIN "baserom.gbc",$fc52,$fc60 - $fc52
+	drom $fc52, $fc60
 
 Unknown_fc60: ; fc60 (3:7c60)
-INCBIN "baserom.gbc",$fc60,$fc64 - $fc60
+	drom $fc60, $fc64
 
 Unknown_fc64: ; fc64 (3:7c64)
-INCBIN "baserom.gbc",$fc64,$fc68 - $fc64
+	drom $fc64, $fc68
 
 Unknown_fc68: ; fc68 (3:7c68)
-INCBIN "baserom.gbc",$fc68,$fcad - $fc68
+	drom $fc68, $fcad
 
 Func_fcad: ; fcad (3:7cad)
-INCBIN "baserom.gbc",$fcad,$10000 - $fcad
+	drom $fcad, $10000

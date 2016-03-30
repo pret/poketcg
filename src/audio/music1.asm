@@ -1847,13 +1847,13 @@ Music1_CopyData: ; f4c18 (3d:4c18)
 	ret
 
 Unknown_f4c20: ; f4c20 (3d:4c20)
-INCBIN "baserom.gbc",$f4c20,$f4c28 - $f4c20
+	drom $f4c20, $f4c28
 
 Unknown_f4c28: ; f4c28 (3d:4c28)
-INCBIN "baserom.gbc",$f4c28,$f4c30 - $f4c28
+	drom $f4c28, $f4c30
 
 Unknown_f4c30: ; f4c30 (3d:4c30)
-INCBIN "baserom.gbc",$f4c30,$f4cda - $f4c30
+	drom $f4c30, $f4cda
 
 Music1_WaveInstruments: ; f4cda (3d:4cda)
 INCLUDE "audio/wave_instruments.asm"
@@ -1865,7 +1865,7 @@ Music1_VibratoTypes: ; f4dde (3d:4dde)
 INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f4e85: ; f4e85 (3d:4e85)
-INCBIN "baserom.gbc",$f4e85,$f4ee5 - $f4e85
+	drom $f4e85, $f4ee5
 
 INCLUDE "audio/music1_headers.asm"
 
