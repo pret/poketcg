@@ -23,6 +23,7 @@ INCLUDE "engine/bank6.asm"
 
 SECTION "bank7",ROMX,BANK[$7]
 INCLUDE "engine/bank7.asm"
+INCLUDE "engine/boosters.asm"
 
 SECTION "bank8",ROMX,BANK[$8]
 INCBIN "baserom.gbc",$20000,$4000

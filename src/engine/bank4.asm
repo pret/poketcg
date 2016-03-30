@@ -100,7 +100,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call PlaySong
 	pop bc
 	ld a, c
-	farcallx $7, $61c4
+	farcallx $7, GenerateBoosterPack
 	text_hl ReceivedBoosterPackText
 	ld a, [$d117]
 	cp $1
@@ -561,7 +561,7 @@ Func_11102: ; 11102 (4:5102)
 	ld [hl], a
 	ld b, c
 	ld c, $0
-	call Func_3c5a
+	call DivideBCbyDE
 	ld a, [$d346]
 	bit 7, a
 	jr z, .asm_11127
@@ -597,7 +597,7 @@ Func_1113e: ; 1113e (4:513e)
 .asm_11152
 	ld [hl], a
 	ld c, $0
-	call Func_3c5a
+	call DivideBCbyDE
 	ld a, [$d344]
 	bit 7, a
 	jr z, .asm_11162

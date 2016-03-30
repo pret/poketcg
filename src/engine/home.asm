@@ -462,7 +462,7 @@ FillTileMap: ; 03c0 (0:03c0)
 
 ; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
 ZeroRAM: ; 03ec (0:03ec)
-	ld hl, $c000
+	ld hl, wTempCardCollection
 	ld bc, $2000
 .asm_3f2
 	xor a
@@ -3239,7 +3239,73 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	jp PrintTextBoxBorderLabel
 ; 0x1caa
 
-INCBIN "baserom.gbc",$1caa,$1dca - $1caa
+INCBIN "baserom.gbc",$1caa,$1d2e - $1caa
+
+;creates a list at $c000 of every card the player owns and how many
+CreateTempCardCollection: ; 1d2e (0:1d2e)
+	call EnableExtRAM
+	ld hl, sCardCollection
+	ld de, wTempCardCollection
+	ld bc, CARD_COLLECTION_SIZE
+	call CopyData
+	ld de, sDeck1Name
+	call AddDeckCardsToTempCardCollection
+	ld de, sDeck2Name
+	call AddDeckCardsToTempCardCollection
+	ld de, sDeck3Name
+	call AddDeckCardsToTempCardCollection
+	ld de, sDeck4Name
+	call AddDeckCardsToTempCardCollection
+	call DisableExtRAM
+	ret
+
+AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
+	ld a, [de]
+	or a
+	ret z
+	ld hl, sDeck1Cards - sDeck1Name
+	add hl, de
+	ld e, l
+	ld d, h
+	ld h, wTempCardCollection >> 8
+	ld c, DECK_SIZE
+.asm_1d66
+	ld a, [de]
+	inc de
+	ld l, a
+	inc [hl]
+	dec c
+	jr nz, .asm_1d66
+	ret
+
+;adds card a to collection, provided the player has less than 99 of them
+AddCardToCollection: ; 1d6e (0:1d6e)
+	push hl
+	push de
+	push bc
+	ld l, a
+	push hl
+	call CreateTempCardCollection
+	pop hl
+	call EnableExtRAM
+	ld h, wTempCardCollection >> 8
+	ld a, [hl]
+	and $7f
+	cp 99
+	jr nc, .asm_1d8a
+	ld h, sCardCollection >> 8
+	ld a, [hl]
+	and $7f
+	inc a
+	ld [hl], a
+.asm_1d8a
+	call DisableExtRAM
+	pop bc
+	pop de
+	pop hl
+	ret
+
+INCBIN "baserom.gbc",$1d91,$1dca - $1d91
 
 ; memcpy(HL, DE, C)
 Memcpy: ; 1dca (0:1dca)
@@ -3318,7 +3384,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push bc
 	push hl
 	; top left tile of the box
-	ld hl, $c000
+	ld hl, wTempCardCollection
 	ld a, $5
 	ld [hli], a
 	ld a, $18
@@ -3365,7 +3431,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push de
 	push bc
 	call Func_22ae
-	ld hl, $c000
+	ld hl, wTempCardCollection
 	call Func_21c5
 	pop bc
 	pop de
@@ -5327,7 +5393,31 @@ Func_2f32: ; 2f32 (0:2f32)
 	ret
 ; 0x2f45
 
-INCBIN "baserom.gbc",$2f45,$2f7c - $2f45
+INCBIN "baserom.gbc",$2f45,$2f5d - $2f45
+
+; from the card id in a, loads type into a, rarity into b, and set into c
+GetCardHeader: ; 2f5d (0:2f5d)
+	push hl
+	push de
+	ld d, $00
+	ld e, a
+	call GetCardPointer
+	jr c, .cardNotFound
+	ld a, $0c
+	call BankpushHome2
+	ld e, [hl]
+	ld bc, $5
+	add hl, bc
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	call BankpopHome
+	ld a, e
+	or a
+.cardNotFound
+	pop de
+	pop hl
+	ret
 
 ; return at hl the pointer to the data of the card with id at e
 ; return carry if e was out of bounds, so no pointer was returned
@@ -7072,7 +7162,8 @@ DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	pop af
 	ret
 
-Func_3c5a: ; 3c5a (0:3c5a)
+; divides BC by DE. Stores result in BC and stores remainder in HL
+DivideBCbyDE: ; 3c5a (0:3c5a)
 	ld hl, $0000
 	rl c
 	rl b
