@@ -8,13 +8,13 @@ OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o src/hram.o
 EXTRAS = extras/pokemontools
 
 $(foreach obj, $(OBJS), \
-	$(eval $(obj:.o=)_dep = $(shell python $(EXTRAS)/scan_includes.py $(obj:.o=.asm)) src/) \
+	$(eval $(obj:.o=)_dep = $(shell python $(EXTRAS)/scan_includes.py $(obj:.o=.asm))) \
 )
 
 all: tcg.gbc compare
 
 compare: baserom.gbc tcg.gbc
-	cmp baserom.gbc tcg.gbc
+	cmp $^
 
 $(OBJS): $$*.asm $$($$*_dep)
 	@python $(EXTRAS)/gfx.py 2bpp $(2bppq)
@@ -22,7 +22,7 @@ $(OBJS): $$*.asm $$($$*_dep)
 	rgbasm -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
-	rgblink -n $*.sym -m $*.map -o $@ $(OBJS)
+	rgblink -n $*.sym -m $*.map -o $@ $^
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
 
 clean:
