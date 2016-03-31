@@ -1204,7 +1204,8 @@ _TossCoin: ; 71ad (1:71ad)
 	drom $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
-	db "VER 12/20 09:36",TX_END
+	db   "VER 12/20 09:36"
+	done
 
 	drom $7364, $7571
 

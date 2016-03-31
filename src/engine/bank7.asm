@@ -311,4 +311,4 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ret
 ; 0x1d705
 
-	drom $1d705, $20000
+	drom $1d705, $1e1c4

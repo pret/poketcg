@@ -6,7 +6,10 @@ INCLUDE "macros.asm"
 ;----------------------------------------------------------
 
 SECTION "WRAM0", WRAM0
-	ds $200
+
+wTempCardCollection::
+	ds $100
+	ds $100
 
 ;--- Duel variables ----------------------------------------------
 
@@ -713,10 +716,25 @@ wd112:: ; d112
 
 wMatchStartTheme:: ; d113
 	ds $1
-	ds $1d
+	ds $9
+
+wPCPackSelection:: ; d11d
+	ds $1
+
+; 7th bit of each pack corresponds to whether or not it's been read
+wPCPacks:: ; d11e
+	ds $c
+	ds $3
+
+wPCLastDirectionPressed:: ; d12d
+	ds $1
+	ds $3
 
 wd131:: ; d131
-	ds $1fd
+	ds $2
+
+wBoosterViableCardList:: ; d133
+	ds $1fb
 
 wd32e:: ; d32e
 	ds $1
@@ -777,7 +795,56 @@ wd61b:: ; d61b
 	ds $3
 
 wd61e:: ; d61e
-	ds $766
+	ds $4b
+
+wBoosterDataIndex:: ; d669
+	ds $1
+
+wBoosterTempData:: ; d66a
+	ds $1
+
+wBoosterSelectedCardType:: ; d66b
+	ds $1
+
+wBoosterCurrRarity:: ; d66c
+	ds $1
+
+wBoosterDataAveragedChance:: ; d66d
+	ds $1
+
+wBoosterDataCommonAmount:: ; d66e
+	ds $1
+
+wBoosterDataUncommonAmount:: ; d66f
+	ds $1
+
+wBoosterDataRareAmount:: ; d670
+	ds $1
+
+wBoosterAmountOfCardTypeTable:: ; d671
+	ds $09
+
+wBoosterTempTypeChanceTable:: ; d67a
+	ds $09
+
+wBoosterCurrentCardType:: ; d683
+	ds $1
+
+wBoosterCurrentCardRarity:: ; d684
+	ds $1
+
+wBoosterCurrentCardSet:: ; d685
+	ds $1
+
+wBoosterDataRarityIndex:: ; d686
+	ds $1
+
+wBoosterDataEnergyFunctionPointer:: ; d687
+	ds $2
+
+wBoosterDataTypeChanceData:: ; d689
+	ds $9
+	ds $6f2
 
 wMusicDC:: ; dd84
 	ds $2
@@ -832,3 +899,5 @@ wMusicE4:: ; ddea
 
 wMusicReturnAddress:: ; ddf3
 	ds $8
+
+INCLUDE "sram.asm"
