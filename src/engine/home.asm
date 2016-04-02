@@ -5394,7 +5394,7 @@ Func_2f32: ; 2f32 (0:2f32)
 	ret
 ; 0x2f45
 
-	drom $2f45, $2f45
+	drom $2f45, $2f5d
 
 ; from the card id in a, loads type into a, rarity into b, and set into c
 GetCardHeader: ; 2f5d (0:2f5d)

@@ -5,7 +5,7 @@ TX_RAM1 EQU $09
 TX_RAM2 EQU $0B
 TX_RAM3 EQU $0C
 
-text EQUS "text "
+text EQUS "db TX_START,"
 done EQUS "db TX_END"
 
 TX_FIRE      EQUS "$05,$01"
