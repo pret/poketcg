@@ -1,4 +1,4 @@
-INCBIN "baserom.gbc",$1c000,$1c056 - $1c000
+	drom $1c000, $1c056
 
 Func_1c056: ; 1c056 (7:4056)
 	push hl
@@ -91,31 +91,31 @@ Func_1c33b: ; 1c33b (7:433b)
 INCLUDE "data/map_songs.asm"
 
 Func_1c440: ; 1c440 (7:4440)
-INCBIN "baserom.gbc",$1c440,$1c485 - $1c440
+	drom $1c440, $1c485
 
 Func_1c485: ; 1c485 (7:4485)
-INCBIN "baserom.gbc",$1c485,$1c58e - $1c485
+	drom $1c485, $1c58e
 
 Func_1c58e: ; 1c58e (7:458e)
-INCBIN "baserom.gbc",$1c58e,$1c5e9 - $1c58e
+	drom $1c58e, $1c5e9
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
-INCBIN "baserom.gbc",$1c5e9,$1c610 - $1c5e9
+	drom $1c5e9, $1c610
 
 Func_1c610: ; 1c610 (7:4610)
-INCBIN "baserom.gbc",$1c610,$1c6f8 - $1c610
+	drom $1c610, $1c6f8
 
 Func_1c6f8: ; 1c6f8 (7:46f8)
-INCBIN "baserom.gbc",$1c6f8,$1c72e - $1c6f8
+	drom $1c6f8, $1c72e
 
 Func_1c72e: ; 1c72e (7:472e)
-INCBIN "baserom.gbc",$1c72e,$1c768 - $1c72e
+	drom $1c72e, $1c768
 
 Func_1c768: ; 1c768 (7:4768)
-INCBIN "baserom.gbc",$1c768,$1c82e - $1c768
+	drom $1c768, $1c82e
 
 Func_1c82e: ; 1c82e (7:482e)
-INCBIN "baserom.gbc",$1c82e,$1d078 - $1c82e
+	drom $1c82e, $1d078
 
 Func_1d078: ; 1d078 (7:5078)
 	ld a, [$d627]
@@ -184,7 +184,7 @@ Func_1d078: ; 1d078 (7:5078)
 	ret
 ; 0x1d0fa
 
-INCBIN "baserom.gbc",$1d0fa,$1d11c - $1d0fa
+	drom $1d0fa, $1d11c
 
 Func_1d11c: ; 1d11c (7:511c)
 	ld a, MUSIC_PCMAINMENU
@@ -234,10 +234,10 @@ Func_1d11c: ; 1d11c (7:511c)
 	ret
 ; 0x1d17f
 
-INCBIN "baserom.gbc",$1d17f,$1d306 - $1d17f
+	drom $1d17f, $1d306
 
 Func_1d306: ; 1d306 (7:5306)
-INCBIN "baserom.gbc",$1d306,$1d386 - $1d306
+	drom $1d306, $1d386
 
 Titlescreen_1d386: ; 1d386 (7:5386)
 	call Func_378a
@@ -257,10 +257,10 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 	ret
 
 Func_1d3a9: ; 1d3a9 (7:53a9)
-INCBIN "baserom.gbc",$1d3a9,$1d42e - $1d3a9
+	drom $1d3a9, $1d42e
 
 Func_1d42e: ; 1d42e (7:542e)
-INCBIN "baserom.gbc",$1d42e,$1d519 - $1d42e
+	drom $1d42e, $1d519
 
 Titlescreen_1d519: ; 1d519 (7:5519)
 	ld a, MUSIC_TITLESCREEN
@@ -270,10 +270,10 @@ Titlescreen_1d519: ; 1d519 (7:5519)
 	ret
 ; 0x1d523
 
-INCBIN "baserom.gbc",$1d523,$1d59c - $1d523
+	drom $1d523, $1d59c
 
 Func_1d59c: ; 1d59c (7:559c)
-INCBIN "baserom.gbc",$1d59c,$1d6ad - $1d59c
+	drom $1d59c, $1d6ad
 
 Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_STOP
@@ -311,4 +311,4 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ret
 ; 0x1d705
 
-INCBIN "baserom.gbc",$1d705,$1e1c4 - $1d705
+	drom $1d705, $1e1c4

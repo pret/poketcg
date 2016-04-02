@@ -86,7 +86,7 @@ TossCoin_BankB: ; 2c07e (b:407e)
 	ret
 ; 0x2c082
 
-INCBIN "baserom.gbc",$2c082,$2c09c - $2c082
+	drom $2c082, $2c09c
 
 Func_2c09c: ; 2c09c (b:409c)
 	ld a, $1
@@ -94,4 +94,4 @@ Func_2c09c: ; 2c09c (b:409c)
 	ret
 ; 0x2c0a2
 
-INCBIN "baserom.gbc",$2c0a2,$30000 - $2c0a2
+	drom $2c0a2, $30000

@@ -22,7 +22,7 @@ SECTION "bank1F",ROMX,BANK[$1F]
 	emptybank
 
 SECTION "bank21",ROMX,BANK[$21]
-INCBIN "baserom.gbc",$84000,$87828 - $84000
+	drom $84000, $87828
 
 IshiharaTilesetGfx: ; 87828 (21:7828)
 	dw $4d
@@ -48,7 +48,7 @@ Unnamed2Gfx: ; 87fe2 (21:7fe2)
 	dw $1
 	INCBIN "gfx/unnamed/2.2bpp"
 
-INCBIN "baserom.gbc",$87ff4,$88000 - $87ff4
+	drom $87ff4, $88000
 
 SECTION "bank22",ROMX,BANK[$22]
 OverworldMapTiles: ; 88000 (22:4000)
@@ -91,7 +91,7 @@ Unnamed3Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
 	INCBIN "gfx/unnamed/3.2bpp"
 
-INCBIN "baserom.gbc",$8bfe4,$8C000 - $8bfe4
+	drom $8bfe4, $8C000
 
 SECTION "bank23",ROMX,BANK[$23]
 LightningClubTilesetGfx: ; 8c000 (23:4000)
@@ -155,7 +155,7 @@ PoisonGfx: ; 8ffa4 (23:7fa4)
 	dw $4
 	INCBIN "gfx/duel/poison.2bpp"
 
-INCBIN "baserom.gbc",$8ffe6,$90000 - $8ffe6
+	drom $8ffe6, $90000
 
 SECTION "bank24",ROMX,BANK[$24]
 CardPop1Gfx: ; 90000 (24:4000)
@@ -267,7 +267,7 @@ RonaldOWGfx: ; 97ea6 (25:7ea6)
 	dw $14
 	INCBIN "gfx/ow/ronald.2bpp"
 
-INCBIN "baserom.gbc",$97fe8,$98000 - $97fe8
+	drom $97fe8, $98000
 
 SECTION "bank26",ROMX,BANK[$26]
 Titlescreen3Gfx: ; 98000 (26:4000)
@@ -600,7 +600,7 @@ Unnamed11Gfx: ; a3fb4 (28:7fb4)
 	dw $4
 	INCBIN "gfx/unnamed/11.2bpp"
 
-INCBIN "baserom.gbc",$a3ff6,$a4000 - $a3ff6
+	drom $a3ff6, $a4000
 
 SECTION "bank29",ROMX,BANK[$29]
 OWSprite30: ; a4000 (29:4000)
@@ -799,7 +799,7 @@ Duel45Gfx: ; a7fb0 (29:7fb0)
 	dw $03
 	INCBIN "gfx/duel/45.2bpp"
 
-INCBIN "baserom.gbc",$a7fe2,$a8000 - $a7fe2
+	drom $a7fe2, $a8000
 
 SECTION "bank2A",ROMX,BANK[$2A]
 Duel46Gfx: ; a8000 (2a:4000)
@@ -874,7 +874,7 @@ FightingGfx: ; a8e12 (2a:4e12)
 	dw $04
 	INCBIN "gfx/titlescreen/fighting.2bpp"
 
-INCBIN "baserom.gbc",$a8e54,$ac000 - $a8e54
+	drom $a8e54, $ac000
 
 SECTION "bank2B",ROMX,BANK[$2B]
 INCBIN "baserom.gbc",$AC000,$4000

@@ -39,10 +39,10 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-INCBIN "baserom.gbc",$405a,$406f - $405a
+	drom $405a, $406f
 
 Func_406f: ; 406f (1:406f)
-INCBIN "baserom.gbc",$406f,$409f - $406f
+	drom $406f, $409f
 
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
@@ -231,7 +231,7 @@ StartDuel: ; 409f (1:409f)
 	ret
 ; 0x420b
 
-INCBIN "baserom.gbc",$420b,$4225 - $420b
+	drom $420b, $4225
 
 DrawCardFromDeck: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
@@ -343,7 +343,7 @@ BattleMenuFunctionTable: ; 42f1 (1:42f1)
 	dw PlayerRetreat
 	dw PlayerEndTurn
 
-INCBIN "baserom.gbc",$42fd, $430b - $42fd
+	drom $42fd, $430b
 
 Func_430b: ; 430b (1:430b)
 	call Func_4329
@@ -381,7 +381,7 @@ Func_4339: ; 4339 (1:4339)
 Func_4342: ; 4342 (1:4342)
 	jp $5550
 
-INCBIN "baserom.gbc",$4345, $438e - $4345
+	drom $4345, $438e
 
 OpenPokemonPowerMenu: ; 438e (1:438e)
 	call $6431
@@ -466,14 +466,14 @@ OpenHandMenu: ; 4425 (1:4425)
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
-INCBIN "baserom.gbc",$4436, $4585 - $4436
+	drom $4436, $4585
 
 OpenBattleCheckMenu: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
 	jp Func_426d
 
-INCBIN "baserom.gbc",$458e, $46fc - $458e
+	drom $458e, $46fc
 
 OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
@@ -874,13 +874,13 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	scf
 	ret
 
-INCBIN "baserom.gbc",$4933, $5aeb - $4933
+	drom $4933, $5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
-INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
+	drom $5aeb, $6785
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$6793 - $6785
+	drom $6785, $6793
 
 ; loads player deck from SRAM to wPlayerDeck
 LoadPlayerDeck: ; 6793 (1:6793)
@@ -903,7 +903,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-INCBIN "baserom.gbc",$67b2,$6d84 - $67b2
+	drom $67b2, $6d84
 
 ;converts clefairy doll/mysterious fossil at specified wCardBuffer to pokemon card
 ConvertTrainerCardToPokemon:
@@ -960,7 +960,7 @@ ConvertTrainerCardToPokemon:
     db UNABLE_RETREAT     ; retreat cost
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (wCardBuffer1RetreatCost + 1 - wCardBuffer1)
 
-INCBIN "baserom.gbc",$6df1,$7107 - $6df1
+	drom $6df1, $7107
 
 ; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
 ; player turn: [c200, c2ff]
@@ -1005,7 +1005,7 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	ret
 ; 0x7133
 
-INCBIN "baserom.gbc",$7133,$71ad - $7133
+	drom $7133, $71ad
 
 _TossCoin: ; 71ad (1:71ad)
 	ld [$cd9c], a
@@ -1201,15 +1201,16 @@ _TossCoin: ; 71ad (1:71ad)
 	ret
 ; 0x72ff
 
-INCBIN "baserom.gbc",$72ff,$7354 - $72ff
+	drom $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
-	db "VER 12/20 09:36",TX_END
+	db   "VER 12/20 09:36"
+	done
 
-INCBIN "baserom.gbc",$7364,$7571 - $7364
+	drom $7364, $7571
 
 Func_7571: ; 7571 (1:7571)
-INCBIN "baserom.gbc",$7571,$758f - $7571
+	drom $7571, $758f
 
 Func_758f: ; 758f (1:758f)
-INCBIN "baserom.gbc",$758f,$8000 - $758f
+	drom $758f, $8000

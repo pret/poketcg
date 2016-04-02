@@ -22,7 +22,7 @@ Func_70018: ; 70018 (1c:4018)
 	ret
 ; 0x70024
 
-INCBIN "baserom.gbc",$70024,$70044 - $70024
+	drom $70024, $70044
 
 Func_70044: ; 70044 (1c:4044)
 	push hl
@@ -41,7 +41,7 @@ Func_70044: ; 70044 (1c:4044)
 	ret
 
 Unknown_70057: ; 70057 (1c:4057)
-INCBIN "baserom.gbc",$70057,$70082 - $70057
+	drom $70057, $70082
 
 Func_70082: ; 70082 (1c:4082)
 	ld a, [$cab4]
@@ -108,11 +108,11 @@ Func_700a3: ; 700a3 (1c:40a3)
 
 ; CHR_TRN: tiles $00-$7F, BG (border) tiles (from SNES $000-$FFF)
 SGB_700de: ; 700de (1c:40de)
-INCBIN "baserom.gbc",$700de,$700ee - $700de
+	drom $700de, $700ee
 
 ; CHR_TRN: tiles $80-$FF, BG (border) tiles (from SNES $000-$FFF)
 SGB_700ee: ; 700ee (1c:40ee)
-INCBIN "baserom.gbc",$700ee,$700fe - $700ee
+	drom $700ee, $700fe
 
 Func_700fe: ; 700fe (1c:40fe)
 	push hl
@@ -140,7 +140,7 @@ Func_700fe: ; 700fe (1c:40fe)
 
 ; PCT_TRN: read tile map & palette data into VRAM (from SNES $000-$87F)
 SGB_70126: ; 70126 (1c:4126)
-INCBIN "baserom.gbc",$70126,$70136 - $70126
+	drom $70126, $70136
 
 Func_70136: ; 70136 (1c:4136)
 	push hl
@@ -200,11 +200,11 @@ Func_70177: ; 70177 (1c:4177)
 
 ; MASK_EN on
 SGB_MASK_EN_ON_701a0: ; 701a0 (1c:41a0)
-INCBIN "baserom.gbc",$701a0,$701b0 - $701a0
+	drom $701a0, $701b0
 
 ; MASK_EN off
 SGB_MASK_EN_OFF_701b0: ; 701b0 (1c:41b0)
-INCBIN "baserom.gbc",$701b0,$701c0 - $701b0
+	drom $701b0, $701c0
 
 Func_701c0: ; 701c0 (1c:41c0)
 	push hl
@@ -311,4 +311,4 @@ Func_70214: ; 70214 (1c:4214)
 	ret
 
 Unknown_7024a: ; 7024a (1c:424a)
-INCBIN "baserom.gbc",$7024a,$74000 - $7024a
+	drom $7024a, $74000
