@@ -193,7 +193,7 @@ NoSelectableAttackText: ; 366af (d:66af)
 UnableToRetreatText: ; 366c5 (d:66c5)
 	db TX_START,"Unable to Retreat.",TX_END
 
-Text003e: ; 366d9 (d:66d9)
+OnlyOneEnergyCardText: ; 366d9 (d:66d9)
 	db TX_START,"You may only attach 1 Energy card\n"
 	db "per turn.",TX_END
 

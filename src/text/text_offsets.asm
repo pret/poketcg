@@ -64,7 +64,7 @@ TextOffsets:: ; 34000 (d:4000)
 	text Text003b
 	text NoSelectableAttackText
 	text UnableToRetreatText
-	text Text003e
+	text OnlyOneEnergyCardText
 	text Text003f
 	text Text0040
 	text DiscardDescription

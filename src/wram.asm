@@ -428,7 +428,10 @@ wcc09:: ; cc09
 	ds $1
 
 wcc0a:: ; cc0a
-	ds $4
+	ds $1
+
+wDuelHasPlayedEnergy:: ; cc0b
+	ds $3
 
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the

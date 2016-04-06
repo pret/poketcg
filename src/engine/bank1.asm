@@ -466,7 +466,61 @@ OpenHandMenu: ; 4425 (1:4425)
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
-INCBIN "baserom.gbc",$4436, $4585 - $4436
+INCBIN "baserom.gbc",$4436, $4477 - $4436
+
+; c contains the energy card being played
+PlayerUseEnergyCard: ; 4477 (1:4477)
+	ld a, c
+	cp WATER_ENERGY_CARD ; XXX why treat water energy card differently?
+	jr nz, .notWaterEnergy
+	call $3615
+	jr c, .waterEnergy
+
+.notWaterEnergy
+	ld a, [wDuelHasPlayedEnergy]
+	or a
+	jr nz, .alreadyPlayedEnergy
+	call $5fdd
+	call $600c ; choose card to play energy card on
+	jp c, Func_426d ; exit if no card was chosen
+.asm_4490
+	ld a, $1
+	ld [wDuelHasPlayedEnergy], a
+.asm_4495
+	ld a, [$ff9d]
+	ld [$ffa1], a
+	ld e, a
+	ld a, [$ff98]
+	ld [$ffa0], a
+	call $14d2
+	call $61b8
+	ld a, $3
+	call Func_0f7f
+	call $68e4
+	jp Func_426d
+
+.waterEnergy
+	call $5fdd
+	call $600c ; choose card to play energy card on
+	jp c, Func_426d ; exit if no card was chosen
+	call $3622
+	jr c, .asm_4495
+	ld a, [wDuelHasPlayedEnergy]
+	or a
+	jr z, .asm_4490
+	text_hl OnlyOneEnergyCardText
+	call DrawWideTextBox_WaitForInput
+	jp Func_4436
+
+.alreadyPlayedEnergy
+	text_hl OnlyOneEnergyCardText
+	call DrawWideTextBox_WaitForInput
+	call $123b
+	call $55be
+	jp $4447
+; 0x44db
+
+INCBIN "baserom.gbc",$44db, $4585 - $44db
 
 OpenBattleCheckMenu: ; 4585 (1:4585)
 	call Func_3b31
@@ -903,7 +957,94 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-INCBIN "baserom.gbc",$67b2,$6d84 - $67b2
+INCBIN "baserom.gbc",$67b2,$67be - $67b2
+
+; related to ai taking their turn in a duel
+; called multiple times during one ai turn
+AIMakeDecision: ; 67be (1:67be)
+	ld [$ff9e], a
+	ld hl, $cbf9
+	ld a, [hl]
+	ld [hl], $0
+	or a
+	jr nz, .skipDelay
+.delayLoop
+	call DoFrame
+	ld a, [wVBlankCtr]
+	cp $3c
+	jr c, .delayLoop
+
+.skipDelay
+	ld a, [$ff9e]
+	ld hl, $cbe1
+	ld [hl], $0
+	ld hl, AIMoveTable
+	call JumpToFunctionInTable
+	ld a, [wDuelFinished]
+	ld hl, $cbe1
+	or [hl]
+	jr nz, .turnEnded
+	ld a, [$cbf9]
+	or a
+	ret nz
+	ld [wVBlankCtr], a
+	ld hl, $0088
+	call Func_2a36
+	or a
+	ret
+
+.turnEnded
+	scf
+	ret
+; 0x67fb
+
+INCBIN "baserom.gbc",$67fb,$695e - $67fb
+
+AIMoveTable: ; 695e (1:695e)
+	dw Func_0f35
+	dw $69e0
+	dw $69c5
+	dw AIUseEnergyCard
+	dw $69ff
+	dw $6993
+	dw $6a23
+	dw $6a35
+	dw $6a4e
+	dw $6a8c
+	dw $6ab1
+	dw $698c
+	dw $6ad9
+	dw $6b07
+	dw $6aba
+	dw $6b7d
+	dw $6b7d
+	dw $6b24
+	dw $6b30
+	dw $6b7d
+	dw $6b3e
+	dw $6b15
+	dw $6b20
+
+INCBIN "baserom.gbc",$698c,$69a5 - $698c
+
+AIUseEnergyCard: ; 69a5 (1:69a5)
+	ld a, [$ffa1]
+	ld [$ff9d], a
+	ld e, a
+	ld a, [$ffa0]
+	ld [$ff98], a
+	call $14d2
+	ld a, [$ffa0]
+	call LoadDeckCardToBuffer1
+	call $5e75
+	call $68e4
+	ld a, $1
+	ld [wDuelHasPlayedEnergy], a
+	call $4f9d
+	ret
+; 0x69c5
+
+INCBIN "baserom.gbc",$69c5,$6d84 - $69c5
 
 ;converts clefairy doll/mysterious fossil at specified wCardBuffer to pokemon card
 ConvertTrainerCardToPokemon:
