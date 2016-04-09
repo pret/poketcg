@@ -4,22 +4,22 @@ LoadMap: ; c000 (3:4000)
 	bank1call Func_6785
 	call DisableExtRAM
 	ld a, $0
-	ld [$d0b5], a
+	ld [wd0b5], a
 	xor a
-	ld [$d10f], a
-	ld [$d110], a
-	ld [$d113], a
+	ld [wd10f], a
+	ld [wd110], a
+	ld [wMatchStartTheme], a
 	farcall Func_10a9b
 	call Func_c1a4
 	call Func_099c
 	xor a
-	ld [$cab6], a
+	ld [wTileMapFill], a
 	call Func_2119
 	call Set_OBJ_8x8
 	xor a
-	ld [$cd08], a
+	ld [wcd08], a
 	xor a
-	ld [$d291], a
+	ld [wd291], a
 .asm_c037
 	farcall Func_10ab4
 	call Func_c1a4
@@ -29,11 +29,11 @@ LoadMap: ; c000 (3:4000)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_1c440
-	ld a, [$d0bb]
+	ld a, [wd0bb]
 	ld [wCurMap], a
-	ld a, [$d0bc]
+	ld a, [wd0bc]
 	ld [wPlayerXCoord], a
-	ld a, [$d0bd]
+	ld a, [wd0bd]
 	ld [wPlayerYCoord], a
 	call Func_c36a
 	call Func_c184
@@ -45,8 +45,8 @@ LoadMap: ; c000 (3:4000)
 	farcall Func_80480
 	call Func_c199
 	xor a
-	ld [$d0b4], a
-	ld [$d0c1], a
+	ld [wd0b4], a
+	ld [wd0c1], a
 	call Func_39fc
 	farcall Func_10af9
 	call Func_c141
@@ -70,7 +70,7 @@ LoadMap: ; c000 (3:4000)
 .asm_c0b6
 	farcall Func_10ab4
 	call Func_c1a0
-	ld a, [$d113]
+	ld a, [wMatchStartTheme]
 	or a
 	jr z, .asm_c0ca
 	call Func_c280
@@ -80,7 +80,7 @@ LoadMap: ; c000 (3:4000)
 	ret
 
 Func_c0ce: ; c0ce (3:40ce)
-	ld a, [$d0bf]
+	ld a, [wd0bf]
 	res 7, a
 	rlca
 	add PointerTable_c0e0 & $ff
@@ -108,15 +108,15 @@ Func_c0ed: ; c0ed (3:40ed)
 	ret
 
 Func_c0f1: ; c0f1 (3:40f1)
-	ld a, [$d3b6]
-	ld [$d3aa], a
+	ld a, [wd3b6]
+	ld [wd3aa], a
 	farcall Func_1c768
 	ld a, c
-	ld [$d0c6], a
+	ld [wd0c6], a
 	ld a, b
-	ld [$d0c7], a
+	ld [wd0c7], a
 	ld a, $3
-	ld [$d0bf], a
+	ld [wd0bf], a
 	jr Func_c10a
 
 Func_c10a: ; c10a (3:410a)
@@ -127,20 +127,20 @@ Func_c10a: ; c10a (3:410a)
 	jp [hl]
 
 Func_c111: ; c111 (3:4111)
-	ld a, [$d0c1]
+	ld a, [wd0c1]
 	bit 0, a
 	call nz, Func_c135
-	ld a, [$d0c1]
+	ld a, [wd0c1]
 	bit 1, a
 	jr z, .asm_c12a
-	ld a, [$d3b6]
-	ld [$d3aa], a
+	ld a, [wd3b6]
+	ld [wd3aa], a
 	farcall Func_1c5e9
 .asm_c12a
 	xor a
-	ld [$d0c1], a
-	ld a, [$d0c0]
-	ld [$d0bf], a
+	ld [wd0c1], a
+	ld a, [wd0c0]
+	ld [wd0bf], a
 	ret
 
 Func_c135: ; c135 (3:4135)
@@ -170,24 +170,24 @@ PointerTable_c152: ; c152 (3:4152)
 	dw Func_fcad
 
 Func_c158: ; c158 (3:4158)
-	ld a, [$d0c2]
+	ld a, [wd0c2]
 	cp $1
 	ret nz
-	ld a, [$d0c4]
-	ld [$d3ab], a
+	ld a, [wd0c4]
+	ld [wd3ab], a
 	call Func_39c3
 	jr c, .asm_c179
-	ld a, [$d3aa]
+	ld a, [wd3aa]
 	ld l, $4
 	call Func_39ad
-	ld a, [$d0c5]
+	ld a, [wd0c5]
 	ld [hl], a
 	farcall Func_1c58e
 .asm_c179
 	ret
 
 Func_c17a: ; c17a (3:417a)
-	ld a, [$d0bf]
+	ld a, [wd0bf]
 	cp $3
 	ret z
 	call Func_c9b8
@@ -202,8 +202,8 @@ Func_c184: ; c184 (3:4184)
 	ld c, $0
 .asm_c190
 	ld a, c
-	ld [$d0bf], a
-	ld [$d0c0], a
+	ld [wd0bf], a
+	ld [wd0c0], a
 	pop bc
 	ret
 
@@ -227,15 +227,15 @@ Func_c1a4: ; c1a4 (3:41a4)
 
 Func_c1b1: ; c1b1 (3:41b1)
 	ld a, $c
-	ld [$d32e], a
+	ld [wd32e], a
 	ld a, $0
-	ld [$d0bb], a
+	ld [wd0bb], a
 	ld a, $c
-	ld [$d0bc], a
+	ld [wd0bc], a
 	ld a, $c
-	ld [$d0bd], a
+	ld [wd0bd], a
 	ld a, $2
-	ld [$d0be], a
+	ld [wd0be], a
 	call Func_c9cb
 	call Func_c9dd
 	farcall Func_80b7a
@@ -257,32 +257,32 @@ Func_c1ed: ; c1ed (3:41ed)
 
 Func_c1f8: ; c1f8 (3:41f8)
 	xor a
-	ld [$d0b8], a
-	ld [$d0b9], a
-	ld [$d0ba], a
-	ld [$d11b], a
-	ld [$d0c2], a
-	ld [$d111], a
-	ld [$d112], a
-	ld [$d3b8], a
+	ld [wd0b8], a
+	ld [wd0b9], a
+	ld [wd0ba], a
+	ld [wd11b], a
+	ld [wd0c2], a
+	ld [wd111], a
+	ld [wd112], a
+	ld [wd3b8], a
 	call EnableExtRAM
 	ld a, [$a007]
-	ld [$d421], a
+	ld [wd421], a
 	ld a, [$a006]
-	ld [$ce47], a
+	ld [wTextSpeed], a
 	call DisableExtRAM
 	farcall Func_10756
 	ret
 
 Func_c228: ; c228 (3:4228)
 	ld a, [wCurMap]
-	ld [$d0bb], a
+	ld [wd0bb], a
 	ld a, [wPlayerXCoord]
-	ld [$d0bc], a
+	ld [wd0bc], a
 	ld a, [wPlayerYCoord]
-	ld [$d0bd], a
-	ld a, [$d334]
-	ld [$d0be], a
+	ld [wd0bd], a
+	ld a, [wd334]
+	ld [wd0be], a
 	ret
 
 Func_c241: ; c241 (3:4241)
@@ -341,7 +341,7 @@ Func_c280: ; c280 (3:4280)
 	call Func_c228
 	call Func_3ca0
 	call Func_099c
-	ld hl, $cac0
+	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	call EnableLCD
 	call DoFrameIfLCDEnabled
@@ -371,7 +371,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	call Func_3ca0
 	call Func_099c
 	ld a, $1
-	ld [$cac0], a
+	ld [wVBlankOAMCopyToggle], a
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD
@@ -395,11 +395,11 @@ Func_c2db: ; c2db (3:42db)
 	ldh [hWhoseTurn], a
 	call Func_c241
 	call Func_04a2
-	ld a, [$d111]
+	ld a, [wd111]
 	push af
 	farcall Func_80000
 	pop af
-	ld [$d111], a
+	ld [wd111], a
 	ld hl, $d0c1
 	res 0, [hl]
 	call Func_c34e
@@ -424,16 +424,16 @@ Func_c2db: ; c2db (3:42db)
 
 Func_c32b: ; c32b (3:432b)
 	ld a, l
-	ld [$d10f], a
+	ld [wd10f], a
 	ld a, h
-	ld [$d110], a
+	ld [wd110], a
 	jr Func_c2db
 
 Func_c335: ; c335 (3:4335)
-	ld a, [$cabd]
-	ld [$d10c], a
-	ld a, [$cabe]
-	ld [$d10d], a
+	ld a, [wOBP0]
+	ld [wd10c], a
+	ld a, [wOBP1]
+	ld [wd10d], a
 	ld hl, $cb30
 	ld de, $d0cc
 	ld bc, $0040
@@ -441,10 +441,10 @@ Func_c335: ; c335 (3:4335)
 	ret
 
 Func_c34e: ; c34e (3:434e)
-	ld a, [$d10c]
-	ld [$cabd], a
-	ld a, [$d10d]
-	ld [$cabe], a
+	ld a, [wd10c]
+	ld [wOBP0], a
+	ld a, [wd10d]
+	ld [wOBP1], a
 	ld hl, $d0cc
 	ld de, $cb30
 	ld bc, $0040
@@ -454,12 +454,12 @@ Func_c34e: ; c34e (3:434e)
 
 Func_c36a: ; c36a (3:436a)
 	xor a
-	ld [$d323], a
+	ld [wd323], a
 	ld a, [wCurMap]
 	cp POKEMON_DOME_ENTRANCE
 	jr nz, .asm_c379
 	xor a
-	ld [$d324], a
+	ld [wd324], a
 .asm_c379
 	ret
 ; 0xc37a
@@ -467,23 +467,23 @@ Func_c36a: ; c36a (3:436a)
 INCBIN "baserom.gbc",$c37a,$c41c - $c37a
 
 Func_c41c: ; c41c (3:441c)
-	ld a, [$d332]
+	ld a, [wd332]
 	sub $40
-	ld [$d235], a
-	ld a, [$d333]
+	ld [wd235], a
+	ld a, [wd333]
 	sub $40
-	ld [$d236], a
+	ld [wd236], a
 	call Func_c430
 	ret
 
 Func_c430: ; c430 (3:4430)
 	push bc
-	ld a, [$d237]
+	ld a, [wd237]
 	sla a
 	sla a
 	sla a
 	ld b, a
-	ld a, [$d235]
+	ld a, [wd235]
 	cp $b1
 	jr c, .asm_c445
 	xor a
@@ -493,13 +493,13 @@ Func_c430: ; c430 (3:4430)
 	jr c, .asm_c449
 	ld a, b
 .asm_c449
-	ld [$d235], a
-	ld a, [$d238]
+	ld [wd235], a
+	ld a, [wd238]
 	sla a
 	sla a
 	sla a
 	ld b, a
-	ld a, [$d236]
+	ld a, [wd236]
 	cp $b9
 	jr c, .asm_c460
 	xor a
@@ -509,38 +509,38 @@ Func_c430: ; c430 (3:4430)
 	jr c, .asm_c464
 	ld a, b
 .asm_c464
-	ld [$d236], a
+	ld [wd236], a
 	pop bc
 	ret
 
 Func_c469: ; c469 (3:4469)
-	ld a, [$d235]
+	ld a, [wd235]
 	add $4
 	and $f8
 	rrca
 	rrca
 	rrca
-	ld [$d233], a
-	ld a, [$d236]
+	ld [wd233], a
+	ld a, [wd236]
 	add $4
 	and $f8
 	rrca
 	rrca
 	rrca
-	ld [$d234], a
+	ld [wd234], a
 	ret
 
 Func_c484: ; c484 (3:4484)
-	ld a, [$d235]
-	ld [$d0b6], a
-	ld a, [$d236]
-	ld [$d0b7], a
+	ld a, [wd235]
+	ld [wd0b6], a
+	ld a, [wd236]
+	ld [wd0b7], a
 	ret
 
 Func_c491: ; c491 (3:4491)
-	ld a, [$d0b6]
+	ld a, [wd0b6]
 	ldh [hSCX], a
-	ld a, [$d0b7]
+	ld a, [wd0b7]
 	ldh [hSCY], a
 	ret
 
@@ -551,50 +551,50 @@ Func_c49c: ; c49c (3:449c)
 	rlca
 	rlca
 	rlca
-	ld [$d332], a
+	ld [wd332], a
 	ld a, [wPlayerYCoord]
 	and $1f
 	ld [wPlayerYCoord], a
 	rlca
 	rlca
 	rlca
-	ld [$d333], a
+	ld [wd333], a
 	ret
 
 Func_c4b9: ; c4b9 (3:44b9)
 	xor a
-	ld [$d4ca], a
-	ld [$d4cb], a
+	ld [wd4ca], a
+	ld [wd4cb], a
 	ld a, $1d
 	farcall Func_80418
 	ld b, $0
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_c4d1
 	ld b, $1e
 .asm_c4d1
 	ld a, b
-	ld [$d337], a
+	ld [wd337], a
 	ld a, $0
 	farcall Func_1299f
-	ld a, [$d4cf]
-	ld [$d336], a
+	ld a, [wd4cf]
+	ld [wd336], a
 	ld b, $2
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr z, .asm_c4ee
-	ld a, [$d0be]
+	ld a, [wd0be]
 	ld b, a
 .asm_c4ee
 	ld a, b
-	ld [$d334], a
+	ld [wd334], a
 	call Func_c5e9
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	call nz, Func_c6f7
 	xor a
-	ld [$d335], a
-	ld [$d338], a
+	ld [wd335], a
+	ld [wd338], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .asm_c50f
@@ -603,19 +603,19 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ret
 
 Func_c510: ; c510 (3:4510)
-	ld a, [$d336]
-	ld [$d4cf], a
-	ld a, [$d335]
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [wd335]
 	bit 4, a
 	ret nz
 	bit 0, a
 	call z, Func_c5ac
-	ld a, [$d335]
+	ld a, [wd335]
 	or a
 	jr z, .asm_c535
 	bit 0, a
 	call nz, Func_c66c
-	ld a, [$d335]
+	ld a, [wd335]
 	bit 1, a
 	call nz, Func_c6dc
 	ret
@@ -629,8 +629,8 @@ Func_c510: ; c510 (3:4510)
 INCBIN "baserom.gbc",$c53d,$c554 - $c53d
 
 Func_c554: ; c554 (3:4554)
-	ld a, [$d336]
-	ld [$d4cf], a
+	ld a, [wd336]
+	ld [wd4cf], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .asm_c566
@@ -641,17 +641,17 @@ Func_c554: ; c554 (3:4554)
 	push bc
 	push de
 	call Func_c58b
-	ld a, [$d235]
+	ld a, [wd235]
 	ld d, a
-	ld a, [$d236]
+	ld a, [wd236]
 	ld e, a
 	ld c, $2
 	call Func_3dbf
-	ld a, [$d332]
+	ld a, [wd332]
 	sub d
 	add $8
 	ld [hli], a
-	ld a, [$d333]
+	ld a, [wd333]
 	sub e
 	add $10
 	ld [hli], a
@@ -689,7 +689,7 @@ Func_c5ac: ; c5ac (3:45ac)
 	jr z, .asm_c5bf
 	call Func_c5cb
 	call Func_c5fe
-	ld a, [$d335]
+	ld a, [wd335]
 	and $1
 	jr nz, .asm_c5ca
 .asm_c5bf
@@ -703,7 +703,7 @@ Func_c5ac: ; c5ac (3:45ac)
 
 Func_c5cb: ; c5cb (3:45cb)
 	call Func_c5d5
-	ld [$d334], a
+	ld [wd334], a
 	call Func_c5e9
 	ret
 
@@ -727,11 +727,11 @@ Unknown_c5e5: ; c5e5 (3:45e5)
 
 Func_c5e9: ; c5e9 (3:45e9)
 	push bc
-	ld a, [$d336]
-	ld [$d4cf], a
-	ld a, [$d337]
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [wd337]
 	ld b, a
-	ld a, [$d334]
+	ld a, [wd334]
 	add b
 	farcall Func_12ab5
 	pop bc
@@ -763,11 +763,11 @@ Func_c619: ; c619 (3:4619)
 	ld [wPlayerXCoord], a
 	ld a, c
 	ld [wPlayerYCoord], a
-	ld a, [$d335]
+	ld a, [wd335]
 	or $1
-	ld [$d335], a
+	ld [wd335], a
 	ld a, $10
-	ld [$d338], a
+	ld [wd338], a
 	ld c, $f
 	call Func_3dbf
 	set 2, [hl]
@@ -781,7 +781,7 @@ Func_c619: ; c619 (3:4619)
 	ret
 
 Func_c653: ; c653 (3:4653)
-	ld a, [$d334]
+	ld a, [wd334]
 	rlca
 	ld c, a
 	ld b, $0
@@ -805,12 +805,12 @@ Func_c66c: ; c66c (3:466c)
 	ldh a, [hButtonsHeld]
 	bit B_BUTTON_F, a
 	jr z, .asm_c67e
-	ld a, [$d338]
+	ld a, [wd338]
 	cp $2
 	jr c, .asm_c67e
 	inc c
 .asm_c67e
-	ld a, [$d334]
+	ld a, [wd334]
 	call Func_c694
 	pop bc
 	pop hl
@@ -838,14 +838,14 @@ Func_c694: ; c694 (3:4694)
 	or a
 	call nz, Func_c6d4
 	pop hl
-	ld a, [$d338]
+	ld a, [wd338]
 	dec a
-	ld [$d338], a
+	ld [wd338], a
 	jr z, .asm_c6b8
 	dec c
 	jr nz, .asm_c6a0
 .asm_c6b8
-	ld a, [$d338]
+	ld a, [wd338]
 	or a
 	jr nz, .asm_c6c3
 	ld hl, $d335
@@ -881,15 +881,15 @@ Func_c6dc: ; c6dc (3:46dc)
 	call Func_c6f7
 	call Func_3997
 	call Func_c70d
-	ld a, [$d0bf]
+	ld a, [wd0bf]
 	cp $1
 	call z, Func_c9c0
 	pop hl
 	ret
 
 Func_c6f7: ; c6f7 (3:46f7)
-	ld a, [$d336]
-	ld [$d4cf], a
+	ld a, [wd336]
+	ld [wd4cf], a
 	ld c, $f
 	call Func_3dbf
 	res 2, [hl]
@@ -913,15 +913,15 @@ Func_c70d: ; c70d (3:470d)
 
 Func_c71e: ; c71e (3:471e)
 	ld a, $ff
-	ld [$d3b6], a
+	ld [wd3b6], a
 	call Func_c653
 	call Func_3927
 	and $40
 	jr z, .asm_c73d
 	farcall Func_1c72e
 	jr c, .asm_c73d
-	ld a, [$d3aa]
-	ld [$d3b6], a
+	ld a, [wd3aa]
+	ld [wd3b6], a
 	ld a, $2
 	jr .asm_c748
 .asm_c73d
@@ -933,7 +933,7 @@ Func_c71e: ; c71e (3:471e)
 	or a
 	ret
 .asm_c748
-	ld [$d0bf], a
+	ld [wd0bf], a
 	scf
 	ret
 
@@ -961,14 +961,14 @@ MainMenu_c75a: ; c75a (3:475a)
 	call MenuCursorAcceptInput
 	jr nc, .asm_c76a
 	ld a, e
-	ld [$d0b8], a
+	ld [wd0b8], a
 	ldh a, [hCurrentMenuItem]
 	cp e
 	jr nz, .asm_c793
 	cp $5
 	jr z, .asm_c793
 	call Func_c2a3
-	ld a, [$d0b8]
+	ld a, [wd0b8]
 	ld hl, PointerTable_c7a2
 	call JumpToFunctionInTable
 	ld hl, Func_c797
@@ -979,7 +979,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	ret
 
 Func_c797: ; c797 (3:4797)
-	ld a, [$d0b8]
+	ld a, [wd0b8]
 	ld hl, Unknown_cd98
 	farcall Func_111e9
 	ret
@@ -1045,14 +1045,14 @@ PC_c7ea: ; c7ea (3:47ea)
 	call MenuCursorAcceptInput
 	jr nc, .asm_c806
 	ld a, e
-	ld [$d0b9], a
+	ld [wd0b9], a
 	ldh a, [hCurrentMenuItem]
 	cp e
 	jr nz, .asm_c82f
 	cp $4
 	jr z, .asm_c82f
 	call Func_c2a3
-	ld a, [$d0b9]
+	ld a, [wd0b9]
 	ld hl, $4846
 	call JumpToFunctionInTable
 	ld hl, $484e
@@ -1065,7 +1065,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call $4891
 	call Func_c111
 	xor a
-	ld [$d112], a
+	ld [wd112], a
 	call Func_39fc
 	ret
 ; 0xc846
@@ -1079,7 +1079,7 @@ Func_c935: ; c935 (3:4935)
 	inc hl
 	ld [hl], b
 	ld a, $3
-	ld [$d0bf], a
+	ld [wd0bf], a
 	pop hl
 	ret
 
@@ -1092,28 +1092,28 @@ Func_c943: ; c943 (3:4943)
 	jr nc, .asm_c98f
 .asm_c94d
 	ld a, l
-	ld [$d4c4], a
+	ld [wd4c4], a
 	ld a, h
-	ld [$d4c5], a
+	ld [wd4c5], a
 	ld a, $4
-	ld [$d4c6], a
+	ld [wd4c6], a
 	ld de, $d3ab
 	ld bc, $0006
 	call Func_3bf5
-	ld a, [$d3ab]
+	ld a, [wd3ab]
 	or a
 	jr z, .asm_c98f
 	push hl
-	ld a, [$d3af]
+	ld a, [wd3af]
 	ld l, a
-	ld a, [$d3b0]
+	ld a, [wd3b0]
 	ld h, a
 	or l
 	jr z, .asm_c97a
 	call Func_3c45
 	jr nc, .asm_c988
 .asm_c97a
-	ld a, [$d3ab]
+	ld a, [wd3ab]
 	farcall Func_11857
 	call Func_c998
 	farcall Func_1c485
@@ -1131,22 +1131,22 @@ Func_c943: ; c943 (3:4943)
 	ret
 
 Func_c998: ; c998 (3:4998)
-	ld a, [$d3ab]
+	ld a, [wd3ab]
 	cp $22
 	ret nz
-	ld a, [$d3d0]
+	ld a, [wd3d0]
 	or a
 	ret z
 	ld b, $4
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_c9ae
 	ld b, $e
 .asm_c9ae
 	ld a, b
-	ld [$d3b1], a
+	ld [wd3b1], a
 	ld a, $0
-	ld [$d3b2], a
+	ld [wd3b2], a
 	ret
 
 Func_c9b8: ; c9b8 (3:49b8)
@@ -1187,7 +1187,7 @@ Func_c9cb: ; c9cb (3:49cb)
 
 Func_c9dd: ; c9dd (3:49dd)
 	xor a
-	ld [$d411], a
+	ld [wd411], a
 	call Func_c9e8
 	call Func_ca0e
 	ret
@@ -1205,7 +1205,7 @@ Func_c9e8: ; c9e8 (3:49e8)
 	ld b, $0
 	ld hl, Unknown_ca0a
 	add hl, bc
-	ld a, [$d0bb]
+	ld a, [wd0bb]
 	cp [hl]
 	jr z, .asm_c9f2
 .asm_ca04
@@ -1218,7 +1218,7 @@ Unknown_ca0a: ; ca0a (3:4a04)
 INCBIN "baserom.gbc",$ca0a,$ca0e - $ca0a
 
 Func_ca0e: ; ca0e (3:4a0e)
-	ld a, [$d32e]
+	ld a, [wd32e]
 	cp $b
 	jr z, .asm_ca68
 	call Func_ca69
@@ -1279,7 +1279,7 @@ Func_ca6c: ; ca6c (3:4a6c)
 	push bc
 	call Func_cb1d
 	ld c, [hl]
-	ld a, [$d3d1]
+	ld a, [wd3d1]
 .asm_ca75
 	bit 0, a
 	jr nz, .asm_ca7f
@@ -1301,7 +1301,7 @@ Func_ca8f: ; ca8f (3:4a8f)
 	push hl
 	push bc
 	call Func_cb1d
-	ld a, [$d3d1]
+	ld a, [wd3d1]
 .asm_ca9a
 	bit 0, a
 	jr nz, .asm_caa4
@@ -1309,10 +1309,10 @@ Func_ca8f: ; ca8f (3:4a8f)
 	sla c
 	jr .asm_ca9a
 .asm_caa4
-	ld a, [$d3d1]
+	ld a, [wd3d1]
 	and c
 	ld c, a
-	ld a, [$d3d1]
+	ld a, [wd3d1]
 	cpl
 	and [hl]
 	or c
@@ -1351,7 +1351,7 @@ Func_cb1d: ; cb1d (3:4b1d)
 	ld a, [hli]
 	ld c, a
 	ld a, [hl]
-	ld [$d3d1], a
+	ld [wd3d1], a
 	ld b, $0
 	ld hl, $d3d2
 	add hl, bc
@@ -1364,14 +1364,14 @@ INCBIN "baserom.gbc",$cb37,$cc42 - $cb37
 RST20: ; cc42 (3:4c42)
 	pop hl
 	ld a, l
-	ld [$d413], a
+	ld [wd413], a
 	ld a, h
-	ld [$d414], a
+	ld [wd414], a
 	xor a
-	ld [$d412], a
+	ld [wd412], a
 .asm_cc4f
 	call Func_3aed
-	ld a, [$d412]
+	ld a, [wd412]
 	or a
 	jr z, .asm_cc4f
 	ld hl, $d413
@@ -1404,7 +1404,7 @@ DeckMachine_d336: ; d336 (3:5336)
 	or a
 	jr z, .asm_d360
 	dec a
-	ld [$d0a9], a
+	ld [wd0a9], a
 	farcallx $2, $7a04
 	jr .asm_d364
 .asm_d360
@@ -1418,7 +1418,7 @@ DeckMachine_d336: ; d336 (3:5336)
 INCBIN "baserom.gbc",$d36d,$fc2b - $d36d
 
 Func_fc2b: ; fc2b (3:7c2b)
-	ld a, [$d0c3]
+	ld a, [wd0c3]
 	cp $2
 	jr c, .asm_fc34
 	ld a, $2
@@ -1432,9 +1432,9 @@ Func_fc2b: ; fc2b (3:7c2b)
 	inc hl
 	ld b, [hl]
 	ld a, $b0
-	ld [$d0c8], a
+	ld [wd0c8], a
 	ld a, $3
-	ld [$d0c9], a
+	ld [wd0c9], a
 	jp Func_c935
 
 PointerTable_fc4c: ; fc4c (3:7c4c)

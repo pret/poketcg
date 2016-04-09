@@ -395,7 +395,10 @@ wCurrentDuelMenuItem:: ; cbc6
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
 wCardPageNumber:: ; cbc7
 	ds $1
-	ds $3
+	ds $1
+
+wcbc9:: ; cbc9
+	ds $2
 
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
@@ -411,7 +414,26 @@ wSelectedDuelSubMenuItem:: ; cbcf
 
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
-	ds $35
+
+	ds $14
+
+wcbe5:: ; cbe5
+	ds $1
+
+wcbe6:: ; cbe6
+	ds $1
+
+wcbe7:: ; cbe7
+	ds $12
+
+wcbf9:: ; cbf9
+	ds $b
+
+wcc04:: ; cc04
+	ds $1
+
+wcc05:: ; cc05
+	ds $1
 
 wcc06:: ; cc06
 	ds $1
@@ -422,6 +444,8 @@ wcc06:: ; cc06
 ; 3 = duel ended in a draw
 wDuelFinished:: ; cc07
 	ds $1
+
+wcc08:: ; cc08
 	ds $1
 
 wcc09:: ; cc09
@@ -431,7 +455,13 @@ wcc0a:: ; cc0a
 	ds $1
 
 wDuelHasPlayedEnergy:: ; cc0b
-	ds $3
+	ds $1
+
+wcc0c:: ; cc0c
+	ds $1
+
+wcc0d:: ; cc0d
+	ds $1
 
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
@@ -451,7 +481,22 @@ wcc12:: ; cc12
 
 wIsPracticeDuel:: ; cc13
 	ds $1
-	ds $6
+	ds $1
+
+wcc15:: ; cc15
+	ds $1
+
+wcc16:: ; cc16
+	ds $1
+
+wcc17:: ; cc17
+	ds $1
+
+wcc18:: ; cc18
+	ds $1
+
+wcc19:: ; cc19
+	ds $1
 
 wDuelTheme:: ; cc1a
 	ds $1
@@ -510,7 +555,10 @@ wccc9:: ; ccc9
 	ds $4
 
 wcccd:: ; cccd
-	ds $19
+	ds $1
+
+wccce:: ; ccce
+	ds $18
 
 wcce6:: ; cce6
 	ds $5
@@ -531,7 +579,10 @@ wccf0:: ; ccf0
 	ds $1
 
 wccf1:: ; ccf1
-	ds $2
+	ds $1
+
+wccf2:: ; ccf2
+	ds $1
 
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
@@ -601,7 +652,19 @@ wcd99:: ; cd99
 	ds $1
 
 wcd9a:: ; cd9a
-	ds $88
+	ds $2
+
+wcd9c:: ; cd9c
+	ds $1
+
+wcd9d:: ; cd9d
+	ds $1
+
+wcd9e:: ; cd9e
+	ds $1
+
+wcd9f:: ; cd9f
+	ds $83
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
@@ -613,7 +676,13 @@ wce3f:: ; cd3f
 	ds $1
 
 wce40:: ; ce40
-	ds $3
+	ds $1
+
+wce41:: ; ce41
+	ds $1
+
+wce42:: ; ce42
+	ds $1
 
 wce43:: ; ce43
 	ds $1
@@ -668,16 +737,88 @@ wce6f:: ; ce6f
 	ds $d
 
 wce7c:: ; ce7c
+	ds $27
+
+wcea3:: ; cea3
+	ds $c
+
+wceaf:: ; ceaf
+	ds $1
+
+wceb0:: ; ceb0
+	ds $1
+
+wceb1:: ; ceb1
+	ds $1
+
+wceb2:: ; ceb2
+	ds $1
+
+wceb3:: ; ceb3
+	ds $1
+
+wceb4:: ; ceb4
+	ds $1
+
+wceb5:: ; ceb5
+	ds $17
+
+wcecc:: ; cecc
+	ds $ed
+
+wcfb9:: ; cfb9
+	ds $2a
+
+wcfe3:: ; cfe3
 
 ;----------------------------------------------------------
 ;--- Bank 1: $Dxxx ----------------------------------------
 ;----------------------------------------------------------
 
 SECTION "WRAM1", WRAMX, BANK[1]
-	ds $b5
+	ds $a9
+
+wd0a9:: ; d0a9
+	ds $b
+
+wd0b4:: ; d0b4
+	ds $1
 
 wd0b5:: ; d0b5
-	ds $c
+	ds $1
+
+wd0b6:: ; d0b6
+	ds $1
+
+wd0b7:: ; d0b7
+	ds $1
+
+wd0b8:: ; d0b8
+	ds $1
+
+wd0b9:: ; d0b9
+	ds $1
+
+wd0ba:: ; d0ba
+	ds $1
+
+wd0bb:: ; d0bb
+	ds $1
+
+wd0bc:: ; d0bc
+	ds $1
+
+wd0bd:: ; d0bd
+	ds $1
+
+wd0be:: ; d0be
+	ds $1
+
+wd0bf:: ; d0bf
+	ds $1
+
+wd0c0:: ; d0c0
+	ds $1
 
 wd0c1:: ; d0c1
 	ds $1
@@ -686,7 +827,13 @@ wd0c2:: ; d0c2
 	ds $1
 
 wd0c3:: ; d0c3
-	ds $3
+	ds $1
+
+wd0c4:: ; d0c4
+	ds $1
+
+wd0c5:: ; d0c5
+	ds $1
 
 wd0c6:: ; d0c6
 	ds $1
@@ -704,10 +851,22 @@ wd0ca:: ; d0ca
 	ds $1
 
 wd0cb:: ; d0cb
-	ds $43
+	ds $41
+
+wd10c:: ; d10c
+	ds $1
+
+wd10d:: ; d10d
+	ds $1
 
 wd10e:: ; d10e
-	ds $3
+	ds $1
+
+wd10f:: ; d10f
+	ds $1
+
+wd110:: ; d110
+	ds $1
 
 wd111:: ; d111
 	ds $1
@@ -719,7 +878,21 @@ wd112:: ; d112
 
 wMatchStartTheme:: ; d113
 	ds $1
-	ds $9
+
+wd114:: ; d114
+	ds $1
+
+wd115:: ; d115
+	ds $1
+
+wd116:: ; d116
+	ds $1
+
+wd117:: ; d117
+	ds $4
+
+wd11b:: ; d11b
+	ds $2
 
 wPCPackSelection:: ; d11d
 	ds $1
@@ -734,10 +907,46 @@ wPCLastDirectionPressed:: ; d12d
 	ds $3
 
 wd131:: ; d131
-	ds $2
+	ds $1
+
+wd132:: ; d132
+	ds $1
 
 wBoosterViableCardList:: ; d133
-	ds $1fb
+	ds $100
+
+wd233:: ; d233
+	ds $1
+
+wd234:: ; d234
+	ds $1
+
+wd235:: ; d235
+	ds $1
+
+wd236:: ; d236
+	ds $1
+
+wd237:: ; d237
+	ds $1
+
+wd238:: ; d238
+	ds $57
+
+wd28f:: ; d28f
+	ds $1
+
+wd290:: ; d290
+	ds $1
+
+wd291:: ; d291
+	ds $92
+
+wd323:: ; d323
+	ds $1
+
+wd324:: ; d324
+	ds $a
 
 wd32e:: ; d32e
 	ds $1
@@ -750,19 +959,123 @@ wPlayerXCoord:: ; d330
 
 wPlayerYCoord:: ; d331
 	ds $1
-	ds $2
+
+wd332:: ; d332
+	ds $1
+
+wd333:: ; d333
+	ds $1
 
 wd334:: ; d334
-	ds $76
+	ds $1
+
+wd335:: ; d335
+	ds $1
+
+wd336:: ; d336
+	ds $1
+
+wd337:: ; d337
+	ds $1
+
+wd338:: ; d338
+	ds $3
+
+wd33b:: ; d33b
+	ds $1
+
+wd33c:: ; d33c
+	ds $1
+
+wd33d:: ; d33d
+	ds $1
+
+wd33e:: ; d33e
+	ds $1
+
+wd33f:: ; d33f
+	ds $1
+
+wd340:: ; d340
+	ds $1
+
+wd341:: ; d341
+	ds $2
+
+wd343:: ; d343
+	ds $1
+
+wd344:: ; d344
+	ds $1
+
+wd345:: ; d345
+	ds $1
+
+wd346:: ; d346
+	ds $1
+
+wd347:: ; d347
+	ds $1
+
+wd348:: ; d348
+	ds $62
 
 wd3aa:: ; d3aa
 	ds $1
 
 wd3ab:: ; d3ab
-	ds $d
+	ds $4
+
+wd3af:: ; d3af
+	ds $1
+
+wd3b0:: ; d3b0
+	ds $1
+
+wd3b1:: ; d3b1
+	ds $1
+
+wd3b2:: ; d3b2
+	ds $4
+
+wd3b6:: ; d3b6
+	ds $2
 
 wd3b8:: ; d3b8
-	ds $6a
+	ds $18
+
+wd3d0:: ; d3d0
+	ds $1
+
+wd3d1:: ; d3d1
+	ds $40
+
+wd411:: ; d411
+	ds $1
+
+wd412:: ; d412
+	ds $1
+
+wd413:: ; d413
+	ds $1
+
+wd414:: ; d414
+	ds $9
+
+wd41d:: ; d41d
+	ds $1
+
+wd41e:: ; d41e
+	ds $1
+
+wd41f:: ; d41f
+	ds $1
+
+wd420:: ; d420
+	ds $1
+
+wd421:: ; d421
+	ds $1
 
 wd422:: ; d422
 	ds $8
@@ -774,7 +1087,13 @@ wd4ac:: ; d4ac
 	ds $12
 
 wd4be:: ; d4be
-	ds $6
+	ds $4
+
+wd4c2:: ; d4c2
+	ds $1
+
+wd4c3:: ; d4c3
+	ds $1
 
 wd4c4:: ; d4c4
 	ds $1
@@ -783,22 +1102,55 @@ wd4c5:: ; d4c5
 	ds $1
 
 wd4c6:: ; d4c6
-	ds $4
+	ds $1
+
+wd4c7:: ; d4c7
+	ds $1
+
+wd4c8:: ; d4c8
+	ds $2
 
 wd4ca:: ; d4ca
-	ds $5
+	ds $1
+
+wd4cb:: ; d4cb
+	ds $4
 
 wd4cf:: ; d4cf
-	ds $108
+	ds $104
+
+wd5d3:: ; d5d3
+	ds $4
 
 wd5d7:: ; d5d7
-	ds $44
+	ds $41
+
+wd618:: ; d618
+	ds $3
 
 wd61b:: ; d61b
 	ds $3
 
 wd61e:: ; d61e
-	ds $4b
+	ds $6
+
+wd624:: ; d624
+	ds $2
+
+wd626:: ; d626
+	ds $1
+
+wd627:: ; d627
+	ds $1
+
+wd628:: ; d628
+	ds $b
+
+wd633:: ; d633
+	ds $2
+
+wd635:: ; d635
+	ds $34
 
 wBoosterDataIndex:: ; d669
 	ds $1
@@ -847,34 +1199,99 @@ wBoosterDataEnergyFunctionPointer:: ; d687
 
 wBoosterDataTypeChanceData:: ; d689
 	ds $9
-	ds $6f2
+	ds $6ee
+
+wdd80:: ; dd80
+	ds $1
+
+wdd81:: ; dd81
+	ds $1
+
+wdd82:: ; dd82
+	ds $1
+
+wdd83:: ; dd83
+	ds $1
 
 wMusicDC:: ; dd84
 	ds $2
 
-wMusicDuty:: ; dd86
-	ds $4
+wMusicDuty1:: ; dd86
+	ds $1
+
+wMusicDuty2:: ; dd87
+	ds $3
 
 wMusicWave:: ; dd8a
 	ds $1
 
 wMusicWaveChange:: ; dd8b
-	ds $2
+	ds $1
+
+wdd8c:: ; dd8c
+	ds $1
 
 wMusicIsPlaying:: ; dd8d
 	ds $4
 
 wMusicTie:: ; dd91
-	ds $c
+	ds $4
 
-wMusicMainLoop:: ; dd9d
-	ds $12
+; 4 pointers to the current music commands being executed
+wMusicChannelPointers:: ; dd95
+	ds $8
+
+; 4 pointers to the addresses of the beginning of the main loop for each channel
+wMusicMainLoopStart:: ; dd9d
+	ds $8
+
+wMusicCh1CurPitch:: ; dda5
+	ds $1
+
+wMusicCh1CurOctave:: ; dda6
+	ds $1
+
+wMusicCh2CurPitch:: ; dda7
+	ds $1
+
+wMusicCh2CurOctave:: ; dda8
+	ds $1
+
+wMusicCh3CurPitch:: ; dda9
+	ds $1
+
+wMusicCh3CurOctave:: ; ddaa
+	ds $1
+
+wddab:: ; ddab
+	ds $1
+
+wddac:: ; ddac
+	ds $3
 
 wMusicOctave:: ; ddaf
-	ds $10
+	ds $8
+
+wddb7:: ; ddb7
+	ds $1
+
+wddb8:: ; ddb8
+	ds $1
+
+wddb9:: ; ddb9
+	ds $1
+
+wddba:: ; ddba
+	ds $1
+
+wddbb:: ; ddbb
+	ds $4
 
 wMusicE8:: ; ddbf
-	ds $8
+	ds $4
+
+wddc3:: ; ddc3
+	ds $4
 
 wMusicE9:: ; ddc7
 	ds $4
@@ -889,18 +1306,68 @@ wMusicVibratoType:: ; ddd3
 	ds $4
 
 wMusicVibratoType2:: ; ddd7
-	ds $8
+	ds $4
+
+wdddb:: ; dddb
+	ds $4
 
 wMusicVibratoDelay:: ; dddf
-	ds $8
+	ds $4
+
+wdde3:: ; dde3
+	ds $4
 
 wMusicVolume:: ; dde7
 	ds $3
 
 wMusicE4:: ; ddea
-	ds $9
+	ds $5
 
+wddef:: ; ddef
+	ds $1
+
+wddf0:: ; ddf0
+	ds $1
+
+wMusicPanning:: ; ddf1
+	ds $1
+
+wddf2:: ; ddf2
+	ds $1
+
+; 4 pointers to the addresses of the return point of the sub branch
 wMusicReturnAddress:: ; ddf3
 	ds $8
+
+	ds $58
+
+wde53:: ; de53
+	ds $1
+
+wde54:: ; de54
+	ds $1
+
+wde55:: ; de55
+	ds $1
+
+wde56:: ; de56
+	ds $1
+
+wde57:: ; de57
+	ds $5
+
+wde5c:: ; de5c
+	ds $1
+
+wde5d:: ; de5d
+	ds $19
+
+wde76:: ; de76
+	ds $1
+
+wde77:: ; de77
+	ds $35
+
+wdeac:: ; deac
 
 INCLUDE "sram.asm"

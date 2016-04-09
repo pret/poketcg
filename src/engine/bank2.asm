@@ -41,11 +41,11 @@ INCBIN "baserom.gbc",$8d15,$8d56 - $8d15
 
 Func_8d56: ; 8d56 (2:4d56)
 	xor a
-	ld [$cab6], a
+	ld [wTileMapFill], a
 	call Func_04a2
 	call Func_099c
 	ld a, $1
-	ld [$cac0], a
+	ld [wVBlankOAMCopyToggle], a
 	call Func_2119
 	call Func_20b0
 	call Func_8d0b
@@ -93,7 +93,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	ldh a, [hCurrentMenuItem]
 	cp $ff
 	ret z
-	ld [$ceb1], a
+	ld [wceb1], a
 	jp Func_8e42
 
 Unknown_8de2: ; 8de2 (2:4de2)
@@ -104,7 +104,7 @@ Func_8dea: ; 8dea (2:4dea)
 	and START
 	ret z
 	ld a, [wCurMenuItem]
-	ld [$ceb1], a
+	ld [wceb1], a
 	call Func_8ff2
 	jp nc, Func_8e05
 	ld a, $ff
@@ -123,7 +123,7 @@ Func_8e05: ; 8e05 (2:4e05)
 	call Func_8e1f
 	ld a, $ff
 	call Func_9168
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	scf
 	ret
 
@@ -138,7 +138,7 @@ Func_8e1f: ; 8e1f (2:4e1f)
 	ld hl, $cebb
 	call Func_9843
 	ld a, $3c
-	ld [$cecc], a
+	ld [wcecc], a
 	ld hl, $cebb
 	ld [hl], a
 	call Func_9e41
@@ -156,13 +156,13 @@ Func_8e42: ; 8e42 (2:4e42)
 	cp $ff
 	jr nz, .asm_8e64
 	call Func_90d8
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8e64
-	ld a, [$ceaf]
+	ld a, [wceaf]
 	or a
 	jp nz, Func_8f8a
-	ld a, [$ceb0]
+	ld a, [wceb0]
 	or a
 	jp nz, .asm_8ecf
 	call Func_9048
@@ -206,7 +206,7 @@ Func_8e42: ; 8e42 (2:4e42)
 .asm_8ec4
 	ld a, $ff
 	call Func_9168
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8ecf
 	call Func_8ff2
@@ -228,11 +228,11 @@ Func_8e42: ; 8e42 (2:4e42)
 	call Func_92b4
 	ld a, $ff
 	call Func_9168
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	jp Func_8dbc
 
 Func_8f05: ; 8f05 (2:4f05)
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	or a
 	jr nz, .asm_8f10
 	ld hl, Unknown_a763
@@ -254,7 +254,7 @@ Func_8f05: ; 8f05 (2:4f05)
 	ld bc, $0401
 	ld de, $cfb9
 	farcall Func_1ad89
-	ld a, [$cfb9]
+	ld a, [wcfb9]
 	or a
 	ret nz
 	call Func_8f38
@@ -314,7 +314,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ret
 
 Func_8f8a: ; 8f8a (2:4f8a)
-	ld a, [$ceb0]
+	ld a, [wceb0]
 	or a
 	jp nz, Func_9026
 	call Func_8ff2
@@ -336,7 +336,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	ld hl, $0000
 	ld bc, $0202
 	call Func_1f5f
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	call EnableExtRAM
 	ld [$b700], a
 	call DisableExtRAM
@@ -346,21 +346,21 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call Func_9253
 	call DisableExtRAM
 	xor a
-	ld [$ce3f], a
-	ld [$ce40], a
+	ld [wce3f], a
+	ld [wce40], a
 	text_hl ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	jp Func_8dbc
 
 Func_8fe8: ; 8fe8 (2:4fe8)
 	text_hl ThereIsNoDeckHereText
 	call DrawWideTextBox_WaitForInput
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	ret
 
 Func_8ff2: ; 8ff2 (2:4ff2)
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	ld hl, $ceb2
 	ld b, $0
 	ld c, a
@@ -381,7 +381,7 @@ Unknown_9027: ; 9027 (2:5027)
 INCBIN "baserom.gbc",$9027,$9038 - $9027
 
 Func_9038: ; 9038 (2:5038)
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	ld h, a
 	ld l, $54
 	call HtimesL
@@ -393,7 +393,7 @@ Func_9038: ; 9038 (2:5038)
 
 Func_9048: ; 9048 (2:5048)
 	push af
-	ld a, [$ceb1]
+	ld a, [wceb1]
 	ld h, a
 	ld l, $54
 	call HtimesL
@@ -406,17 +406,17 @@ Func_9048: ; 9048 (2:5048)
 
 Func_905a: ; 905a (2:505a)
 	xor a
-	ld [$ceaf], a
-	ld [$ceb0], a
-	ld [$cea3], a
+	ld [wceaf], a
+	ld [wceb0], a
+	ld [wcea3], a
 	ret
 
 Func_9065: ; 9065 (2:5065)
 	xor a
-	ld [$cfe3], a
-	ld a, [$ceaf]
+	ld [wcfe3], a
+	ld a, [wceaf]
 	ld d, a
-	ld a, [$ceb0]
+	ld a, [wceb0]
 	ld e, a
 	ldh a, [hButtonsPressed2]
 	or a
@@ -441,16 +441,16 @@ Func_9065: ; 9065 (2:5065)
 	ld e, a
 .asm_9090
 	ld a, $1
-	ld [$cfe3], a
+	ld [wcfe3], a
 	push de
 	call Func_90d8
 	pop de
 	ld a, d
-	ld [$ceaf], a
+	ld [wceaf], a
 	ld a, e
-	ld [$ceb0], a
+	ld [wceb0], a
 	xor a
-	ld [$cea3], a
+	ld [wcea3], a
 .asm_90a6
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
@@ -468,7 +468,7 @@ Func_9065: ; 9065 (2:5065)
 	scf
 	ret
 .asm_90c1
-	ld a, [$cfe3]
+	ld a, [wcfe3]
 	or a
 	jr z, .asm_90ca
 	call Func_3796
@@ -487,13 +487,13 @@ asm_90da
 	ld e, a
 	ld a, $a
 	ld l, a
-	ld a, [$ceaf]
+	ld a, [wceaf]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $1
 	ld b, a
-	ld a, [$ceb0]
+	ld a, [wceb0]
 	sla a
 	add $e
 	ld c, a
@@ -593,7 +593,7 @@ Func_9168: ; 9168 (2:5168)
 	call Func_9314
 	jr c, .asm_91bd
 	ld a, $1
-	ld [$ceb2], a
+	ld [wceb2], a
 .asm_91bd
 	ld a, [hffb5]
 	bit 1, a
@@ -606,7 +606,7 @@ Func_9168: ; 9168 (2:5168)
 	call Func_9314
 	jr c, .asm_91da
 	ld a, $1
-	ld [$ceb3], a
+	ld [wceb3], a
 .asm_91da
 	ld a, [hffb5]
 	bit 2, a
@@ -619,7 +619,7 @@ Func_9168: ; 9168 (2:5168)
 	call Func_9314
 	jr c, .asm_91f7
 	ld a, $1
-	ld [$ceb4], a
+	ld [wceb4], a
 .asm_91f7
 	ld a, [hffb5]
 	bit 3, a
@@ -632,7 +632,7 @@ Func_9168: ; 9168 (2:5168)
 	call Func_9314
 	jr c, .asm_9214
 	ld a, $1
-	ld [$ceb5], a
+	ld [wceb5], a
 .asm_9214
 	call EnableExtRAM
 	ld a, [$b700]

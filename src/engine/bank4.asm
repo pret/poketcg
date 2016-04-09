@@ -9,8 +9,8 @@ INCBIN "baserom.gbc",$100a2,$1029e - $100a2
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
 	ld c, a
-	ld [$d115], a
-	ld a, [$d291]
+	ld [wd115], a
+	ld a, [wd291]
 	push af
 	push bc
 	call Func_379b
@@ -20,7 +20,7 @@ Medal_1029e: ; 1029e (4:429e)
 	call DisableLCD
 	call $4000
 	ld a, $fa
-	ld [$d114], a
+	ld [wd114], a
 	call $410c
 	pop bc
 	ld a, c
@@ -30,23 +30,23 @@ Medal_1029e: ; 1029e (4:429e)
 	ld hl, Unknown_1030b
 	add hl, bc
 	ld a, [hli]
-	ld [$ce3f], a
+	ld [wce3f], a
 	ld a, [hl]
-	ld [$ce40], a
+	ld [wce40], a
 	call $4031
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld a, $ff
-	ld [$d116], a
+	ld [wd116], a
 .asm_102e2
 	call DoFrameIfLCDEnabled
-	ld a, [$d116]
+	ld a, [wd116]
 	inc a
-	ld [$d116], a
+	ld [wd116], a
 	and $f
 	jr nz, .asm_102e2
 	call $4197
-	ld a, [$d116]
+	ld a, [wd116]
 	cp $e0
 	jr nz, .asm_102e2
 	text_hl WonTheMedalText
@@ -54,7 +54,7 @@ Medal_1029e: ; 1029e (4:429e)
 	call Func_3c96
 	call Func_37a0
 	pop af
-	ld [$d291], a
+	ld [wd291], a
 	ret
 
 Unknown_1030b: ; 1030b (4:430b)
@@ -62,7 +62,7 @@ INCBIN "baserom.gbc",$1030b,$1031b - $1030b
 
 BoosterPack_1031b: ; 1031b (4:431b)
 	ld c, a
-	ld a, [$d291]
+	ld a, [wd291]
 	push af
 	push bc
 	call DisableLCD
@@ -87,13 +87,13 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call $70ca
 	pop hl
 	ld a, [hli]
-	ld [$ce43], a
+	ld [wce43], a
 	xor a
-	ld [$ce44], a
+	ld [wce44], a
 	ld a, [hli]
-	ld [$ce3f], a
+	ld [wce3f], a
 	ld a, [hl]
-	ld [$ce40], a
+	ld [wce40], a
 	call $4031
 	call Func_379b
 	ld a, MUSIC_BOOSTERPACK
@@ -102,7 +102,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, c
 	farcall GenerateBoosterPack
 	text_hl ReceivedBoosterPackText
-	ld a, [$d117]
+	ld a, [wd117]
 	cp $1
 	jr nz, .asm_10373
 	text_hl AndAnotherBoosterPackText
@@ -116,14 +116,14 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call Func_1288c
 	call Func_099c
 	ld a, $1
-	ld [$cac0], a
+	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wFrameType], a
 	farcallx $1, $7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	pop af
-	ld [$d291], a
+	ld [wd291], a
 	ret
 ; 0x103a5
 
@@ -133,7 +133,7 @@ Func_103d2: ; 103d2 (4:43d2)
 INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
 
 Duel_Init: ; 103d3 (4:43d3)
-	ld a, [$d291]
+	ld a, [wd291]
 	push af
 	call DisableLCD
 	call $4000
@@ -142,7 +142,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld de, $000c
 	ld bc, $1406
 	call DrawRegularTextBox
-	ld a, [$cc19]
+	ld a, [wcc19]
 	add a
 	add a
 	ld c, a
@@ -150,22 +150,22 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld hl, $445b
 	add hl, bc
 	ld a, [hli]
-	ld [$ce3f], a
+	ld [wce3f], a
 	ld a, [hli]
-	ld [$ce40], a
+	ld [wce40], a
 	push hl
-	ld a, [$cc16]
-	ld [$ce41], a
-	ld a, [$cc17]
-	ld [$ce42], a
+	ld a, [wcc16]
+	ld [wce41], a
+	ld a, [wcc17]
+	ld [wce42], a
 	ld hl, $4451
 	call $51b3 ; LoadDuelistName
 	pop hl
 	ld a, [hli]
-	ld [$ce3f], a
+	ld [wce3f], a
 	ld c, a
 	ld a, [hli]
-	ld [$ce40], a
+	ld [wce40], a
 	or c
 	jr z, .asm_10425
 	ld hl, $4456
@@ -173,7 +173,7 @@ Duel_Init: ; 103d3 (4:43d3)
 
 .asm_10425
 	ld bc, $0703
-	ld a, [$cc15]
+	ld a, [wcc15]
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
@@ -186,7 +186,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_3c96
 	call Func_10ab4 ; fade out
 	pop af
-	ld [$d291], a
+	ld [wd291], a
 	ret
 ; 0x10451
 
@@ -211,9 +211,9 @@ Func_10e28: ; 10e28 (4:4e28)
 INCBIN "baserom.gbc",$10e28,$10e55 - $10e28
 
 Func_10e55: ; 10e55 (4:4e55)
-	ld a, [$d336]
-	ld [$d4cf], a
-	ld a, [$d33e]
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [wd33e]
 	or a
 	jr nz, .asm_10e65
 	call Func_10e71
@@ -232,7 +232,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	and D_PAD
 	jr z, .asm_10e83
 	farcall Func_c5d5
-	ld [$d334], a
+	ld [wd334], a
 	call Func_10e97
 	jr .asm_10e96
 .asm_10e83
@@ -250,11 +250,11 @@ Func_10e71: ; 10e71 (4:4e71)
 Func_10e97: ; 10e97 (4:4e97)
 	push hl
 	pop hl
-	ld a, [$d32e]
+	ld a, [wd32e]
 	rlca
 	rlca
 	ld c, a
-	ld a, [$d334]
+	ld a, [wd334]
 	add c
 	ld c, a
 	ld b, $0
@@ -263,7 +263,7 @@ Func_10e97: ; 10e97 (4:4e97)
 	ld a, [hl]
 	or a
 	jr z, .asm_10eb9
-	ld [$d32e], a
+	ld [wd32e], a
 	call Func_10f2e
 	ld a, $1
 	call Func_3796
@@ -319,7 +319,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 
 Func_10f4a: ; 10f4a (4:4f4a)
 	push bc
-	ld a, [$d32e]
+	ld a, [wd32e]
 	cp $2
 	jr nz, .asm_10f5f
 	ld c, a
@@ -336,7 +336,7 @@ Func_10f4a: ; 10f4a (4:4f4a)
 LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	push hl
 	push bc
-	ld a, [$d32e]
+	ld a, [wd32e]
 	rlca
 	rlca
 	ld c, a
@@ -344,13 +344,13 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	ld hl, OverworldMapIndexes
 	add hl, bc
 	ld a, [hli]
-	ld [$d0bb], a
+	ld [wd0bb], a
 	ld a, [hli]
-	ld [$d0bc], a
+	ld [wd0bc], a
 	ld a, [hli]
-	ld [$d0bd], a
+	ld [wd0bd], a
 	ld a, $0
-	ld [$d0be], a
+	ld [wd0be], a
 	ld hl, $d0b4
 	set 4, [hl]
 	pop bc
@@ -369,7 +369,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $10
 	ld [hl], a
 	ld b, $34
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_10fd8
 	ld b, $37
@@ -379,22 +379,22 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ret
 
 Func_10fde: ; 10fde (4:4fde)
-	ld a, [$d32e]
-	ld [$d33d], a
+	ld a, [wd32e]
+	ld [wd33d], a
 	xor a
-	ld [$d33e], a
+	ld [wd33e], a
 	ld a, $25
 	call Func_1299f
-	ld a, [$d4cf]
-	ld [$d33b], a
+	ld a, [wd4cf]
+	ld [wd33b], a
 	ld b, $35
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_10ffe
 	ld b, $38
 .asm_10ffe
 	ld a, b
-	ld [$d33c], a
+	ld [wd33c], a
 	call Func_12ab5
 	ld a, $3e
 	farcall Func_ca6c
@@ -407,9 +407,9 @@ Func_10fde: ; 10fde (4:4fde)
 	ret
 
 Func_11016: ; 11016 (4:5016)
-	ld a, [$d33b]
-	ld [$d4cf], a
-	ld a, [$d33c]
+	ld a, [wd33b]
+	ld [wd4cf], a
+	ld a, [wd33c]
 	inc a
 	call Func_12ab5
 	ret
@@ -417,13 +417,13 @@ Func_11016: ; 11016 (4:5016)
 Func_11024: ; 11024 (4:5024)
 	ld a, $57
 	call Func_3796
-	ld a, [$d336]
-	ld [$d4cf], a
+	ld a, [wd336]
+	ld [wd4cf], a
 	ld c, $f
 	call Func_3dbf
 	set 2, [hl]
 	ld hl, Unknown_1229f
-	ld a, [$d33d]
+	ld a, [wd33d]
 	dec a
 	add a
 	ld c, a
@@ -432,31 +432,31 @@ Func_11024: ; 11024 (4:5024)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [$d32e]
+	ld a, [wd32e]
 	dec a
 	add a
 	ld c, a
 	ld b, $0
 	add hl, bc
 	ld a, [hli]
-	ld [$d33f], a
+	ld [wd33f], a
 	ld a, [hl]
-	ld [$d340], a
+	ld [wd340], a
 	ld a, $1
-	ld [$d33e], a
+	ld [wd33e], a
 	xor a
-	ld [$d341], a
+	ld [wd341], a
 	ret
 
 Func_11060: ; 11060 (4:5060)
-	ld a, [$d336]
-	ld [$d4cf], a
-	ld a, [$d341]
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [wd341]
 	or a
 	jp nz, Func_11184
-	ld a, [$d33f]
+	ld a, [wd33f]
 	ld l, a
-	ld a, [$d340]
+	ld a, [wd340]
 	ld h, a
 	ld a, [hli]
 	ld b, a
@@ -468,9 +468,9 @@ Func_11060: ; 11060 (4:5060)
 	ld a, c
 	or b
 	jr nz, .asm_11094
-	ld a, [$d33d]
+	ld a, [wd33d]
 	ld e, a
-	ld a, [$d32e]
+	ld a, [wd32e]
 	cp e
 	jr z, .asm_110a0
 	ld de, $0000
@@ -479,14 +479,14 @@ Func_11060: ; 11060 (4:5060)
 	ld c, e
 .asm_11094
 	ld a, l
-	ld [$d33f], a
+	ld [wd33f], a
 	ld a, h
-	ld [$d340], a
+	ld [wd340], a
 	call Func_110a6
 	ret
 .asm_110a0
 	ld a, $2
-	ld [$d33e], a
+	ld [wd33e], a
 	ret
 
 Func_110a6: ; 110a6 (4:50a6)
@@ -497,33 +497,33 @@ Func_110a6: ; 110a6 (4:50a6)
 	pop bc
 	ld a, b
 	sub [hl]
-	ld [$d343], a
+	ld [wd343], a
 	ld a, $0
 	sbc $0
-	ld [$d344], a
+	ld [wd344], a
 	inc hl
 	ld a, c
 	sub [hl]
-	ld [$d345], a
+	ld [wd345], a
 	ld a, $0
 	sbc $0
-	ld [$d346], a
-	ld a, [$d343]
+	ld [wd346], a
+	ld a, [wd343]
 	ld b, a
-	ld a, [$d344]
+	ld a, [wd344]
 	bit 7, a
 	jr z, .asm_110d8
-	ld a, [$d343]
+	ld a, [wd343]
 	cpl
 	inc a
 	ld b, a
 .asm_110d8
-	ld a, [$d345]
+	ld a, [wd345]
 	ld c, a
-	ld a, [$d346]
+	ld a, [wd346]
 	bit 7, a
 	jr z, .asm_110e9
-	ld a, [$d345]
+	ld a, [wd345]
 	cpl
 	inc a
 	ld c, a
@@ -537,15 +537,15 @@ Func_110a6: ; 110a6 (4:50a6)
 	call Func_1113e
 .asm_110f5
 	xor a
-	ld [$d347], a
-	ld [$d348], a
+	ld [wd347], a
+	ld [wd348], a
 	farcall Func_c5e9
 	pop hl
 	ret
 
 Func_11102: ; 11102 (4:5102)
 	ld a, b
-	ld [$d341], a
+	ld [wd341], a
 	ld e, a
 	ld d, $0
 	ld hl, $d343
@@ -562,27 +562,27 @@ Func_11102: ; 11102 (4:5102)
 	ld b, c
 	ld c, $0
 	call DivideBCbyDE
-	ld a, [$d346]
+	ld a, [wd346]
 	bit 7, a
 	jr z, .asm_11127
 	call Func_11179
 .asm_11127
 	ld a, c
-	ld [$d345], a
+	ld [wd345], a
 	ld a, b
-	ld [$d346], a
+	ld [wd346], a
 	ld hl, $d344
 	ld a, $1
 	bit 7, [hl]
 	jr z, .asm_1113a
 	ld a, $3
 .asm_1113a
-	ld [$d334], a
+	ld [wd334], a
 	ret
 
 Func_1113e: ; 1113e (4:513e)
 	ld a, c
-	ld [$d341], a
+	ld [wd341], a
 	ld e, a
 	ld d, $0
 	ld hl, $d345
@@ -598,22 +598,22 @@ Func_1113e: ; 1113e (4:513e)
 	ld [hl], a
 	ld c, $0
 	call DivideBCbyDE
-	ld a, [$d344]
+	ld a, [wd344]
 	bit 7, a
 	jr z, .asm_11162
 	call Func_11179
 .asm_11162
 	ld a, c
-	ld [$d343], a
+	ld [wd343], a
 	ld a, b
-	ld [$d344], a
+	ld [wd344], a
 	ld hl, $d346
 	ld a, $2
 	bit 7, [hl]
 	jr z, .asm_11175
 	ld a, $0
 .asm_11175
-	ld [$d334], a
+	ld [wd334], a
 	ret
 
 Func_11179: ; 11179 (4:5179)
@@ -628,29 +628,29 @@ Func_11179: ; 11179 (4:5179)
 	ret
 
 Func_11184: ; 11184 (4:5184)
-	ld a, [$d347]
+	ld a, [wd347]
 	ld d, a
-	ld a, [$d348]
+	ld a, [wd348]
 	ld e, a
 	ld c, $2
 	call Func_3dbf
-	ld a, [$d343]
+	ld a, [wd343]
 	add d
 	ld d, a
-	ld a, [$d344]
+	ld a, [wd344]
 	adc [hl]
 	ld [hl], a
 	inc hl
-	ld a, [$d345]
+	ld a, [wd345]
 	add e
 	ld e, a
-	ld a, [$d346]
+	ld a, [wd346]
 	adc [hl]
 	ld [hl], a
 	ld a, d
-	ld [$d347], a
+	ld [wd347], a
 	ld a, e
-	ld [$d348], a
+	ld [wd348], a
 	ld hl, $d341
 	dec [hl]
 	ret
@@ -688,17 +688,17 @@ INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
 
 Func_126d1: ; 126d1 (4:66d1)
 	call Func_099c
-	ld hl, $cac0
+	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018
 	ld a, $ff
-	ld [$d627], a
+	ld [wd627], a
 .asm_126e1
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
 	farcall Func_1d078
-	ld a, [$d628]
+	ld a, [wd628]
 	ld hl, PointerTable_126fc
 	call JumpToFunctionInTable
 	jr c, .asm_126e1
@@ -719,19 +719,19 @@ Func_12704: ; 12704 (4:6704)
 	farcall Func_1996e
 	call EnableExtRAM
 	ld a, [$a007]
-	ld [$d421], a
+	ld [wd421], a
 	ld a, [$a006]
-	ld [$ce47], a
+	ld [wTextSpeed], a
 	call DisableExtRAM
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
 	ld a, $9
-	ld [$d111], a
+	ld [wd111], a
 	call Func_39fc
 	farcall Func_1d306
 	ld a, $0
-	ld [$d0b5], a
+	ld [wd0b5], a
 	farcallx $03, Func_383d
 	or a
 	ret
@@ -748,7 +748,7 @@ Func_12741: ; 12741 (4:6741)
 	ld [$ba44], a
 	call DisableExtRAM
 	ld a, $0
-	ld [$d0b5], a
+	ld [wd0b5], a
 	farcallx $03, Func_383d
 	or a
 	ret
@@ -771,7 +771,7 @@ Func_1277e: ; 1277e (4:677e)
 	farcallx $04, Func_3a40
 	farcall Func_70000
 	ld a, $5
-	ld [$d0b5], a
+	ld [wd0b5], a
 	farcallx $03, Func_383d
 	or a
 	ret
@@ -793,7 +793,7 @@ INCBIN "baserom.gbc",$1296e,$1299f - $1296e
 
 Func_1299f: ; 1299f (4:699f)
 	push af
-	ld a, [$d5d7]
+	ld a, [wd5d7]
 	or a
 	jr z, .asm_129a8
 	pop af
@@ -803,9 +803,9 @@ Func_1299f: ; 1299f (4:699f)
 	push bc
 	push hl
 	call Func_12c05
-	ld [$d5d3], a
+	ld [wd5d3], a
 	xor a
-	ld [$d4cf], a
+	ld [wd4cf], a
 	call Func_3db7
 	ld bc, $0010
 .asm_129bb
@@ -813,9 +813,9 @@ Func_1299f: ; 1299f (4:699f)
 	or a
 	jr z, .asm_129cf
 	add hl, bc
-	ld a, [$d4cf]
+	ld a, [wd4cf]
 	inc a
-	ld [$d4cf], a
+	ld [wd4cf], a
 	cp $10
 	jr nz, .asm_129bb
 	rst $38
@@ -845,7 +845,7 @@ Func_129d9: ; 129d9 (4:69d9)
 	pop hl
 	ld bc, $0004
 	add hl, bc
-	ld a, [$d5d3]
+	ld a, [wd5d3]
 	ld [hli], a
 	ld a, $ff
 	ld [hl], a
@@ -895,12 +895,12 @@ Func_12ae2: ; 12ae2 (4:6ae2)
 	farcall Func_8020f
 	farcall Func_80229
 	pop hl
-	ld a, [$d4c6]
+	ld a, [wd4c6]
 	ld [hli], a
-	ld a, [$d4c4]
+	ld a, [wd4c4]
 	ld [hli], a
 	ld c, a
-	ld a, [$d4c5]
+	ld a, [wd4c5]
 	ld [hli], a
 	ld b, a
 	ld a, $3
@@ -922,15 +922,15 @@ Func_12b13: ; 12b13 (4:6b13)
 	ld bc, $0006
 	add hl, bc
 	ld a, [hli]
-	ld [$d4c6], a
+	ld [wd4c6], a
 	inc hl
 	inc hl
 	ld a, [hl]
-	ld [$d4c4], a
+	ld [wd4c4], a
 	add $4
 	ld [hli], a
 	ld a, [hl]
-	ld [$d4c5], a
+	ld [wd4c5], a
 	adc $0
 	ld [hl], a
 	ld de, $d23e
@@ -975,7 +975,7 @@ Func_12b13: ; 12b13 (4:6b13)
 	ret
 
 Func_12b6a: ; 12b6a (4:6b6a)
-	ld [$d4ca], a
+	ld [wd4ca], a
 	push hl
 	push bc
 	push de
@@ -983,11 +983,11 @@ Func_12b6a: ; 12b6a (4:6b6a)
 	ld bc, $0006
 	add hl, bc
 	ld a, [hli]
-	ld [$d4c6], a
+	ld [wd4c6], a
 	ld a, [hli]
-	ld [$d4c4], a
+	ld [wd4c4], a
 	ld a, [hli]
-	ld [$d4c5], a
+	ld [wd4c5], a
 	pop hl
 	call Func_3d72
 	pop de
@@ -1033,7 +1033,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	push de
 	ld b, a
 	ld d, $0
-	ld a, [$d618]
+	ld a, [wd618]
 	ld c, a
 	ld hl, $d5d8
 	or a
@@ -1051,11 +1051,11 @@ Func_12c05: ; 12c05 (4:6c05)
 	dec c
 	jr nz, .asm_12c15
 .asm_12c22
-	ld a, [$d618]
+	ld a, [wd618]
 	cp $10
 	jr nc, .asm_12c48
 	inc a
-	ld [$d618], a
+	ld [wd618], a
 	inc hl
 	push hl
 	ld a, b
@@ -1092,9 +1092,9 @@ Func_12c05: ; 12c05 (4:6c05)
 Func_12c4f: ; 12c4f (4:6c4f)
 	push af
 	xor a
-	ld [$d4cb], a
+	ld [wd4cb], a
 	ld a, d
-	ld [$d4ca], a
+	ld [wd4ca], a
 	pop af
 	farcall Func_8025b
 	ret
@@ -1130,9 +1130,9 @@ Func_13485: ; 13485 (4:7485)
 	or a
 	ret z
 	ld a, [$ba56]
-	ld [$ce43], a
+	ld [wce43], a
 	ld a, [$ba57]
-	ld [$ce44], a
+	ld [wce44], a
 	call DisableExtRAM
 	call Func_379b
 	ld a, MUSIC_MEDAL

@@ -6,9 +6,9 @@ Func_4000: ; 4000 (1:4000)
 	call EnableInt_Timer
 	call EnableExtRAM
 	ld a, [$a006]
-	ld [$ce47], a
+	ld [wTextSpeed], a
 	ld a, [$a009]
-	ld [$ccf2], a
+	ld [wccf2], a
 	call DisableExtRAM
 	ld a, $1
 	ld [wUppercaseFlag], a
@@ -51,7 +51,7 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	ld a, $0
 	ld [wPlayerDuelistType], a
-	ld a, [$cc19]
+	ld a, [wcc19]
 	ld [wOpponentDeckId], a
 	call LoadPlayerDeck
 	call SwapTurn
@@ -70,14 +70,14 @@ StartDuel: ; 409f (1:409f)
 .asm_40ca
 	ld hl, [sp+$0]
 	ld a, l
-	ld [$cbe5], a
+	ld [wcbe5], a
 	ld a, h
-	ld [$cbe6], a
+	ld [wcbe6], a
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call $420b
-	ld a, [$cc18]
-	ld [$cc08], a
+	ld a, [wcc18]
+	ld [wcc08], a
 	call $70aa
 	ld a, [wDuelTheme]
 	call PlaySong
@@ -104,7 +104,7 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .duelFinished
 	ld hl, $cc06
 	inc [hl]
-	ld a, [$cc09]
+	ld a, [wcc09]
 	cp $80
 	jr z, .asm_4126
 
@@ -120,7 +120,7 @@ StartDuel: ; 409f (1:409f)
 	cp $f
 	jr c, .nextTurn
 	xor a
-	ld [$d0c3], a
+	ld [wd0c3], a
 	ret
 
 .duelFinished
@@ -156,7 +156,7 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .opponentWonBattle
 .playerWonBattle
 	xor a
-	ld [$d0c3], a
+	ld [wd0c3], a
 	ld a, $5d
 	ld c, MUSIC_MATCHVICTORY
 	text_hl WonDuelText
@@ -168,7 +168,7 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .playerWonBattle
 .opponentWonBattle
 	ld a, $1
-	ld [$d0c3], a
+	ld [wd0c3], a
 	ld a, $5e
 	ld c, MUSIC_MATCHLOSS
 	text_hl LostDuelText
@@ -205,9 +205,9 @@ StartDuel: ; 409f (1:409f)
 	text_hl StartSuddenDeathMatchText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
-	ld [$cc08], a
+	ld [wcc08], a
 	call $70aa
-	ld a, [$cc09]
+	ld a, [wcc09]
 	cp $1
 	jr z, .asm_41f3
 	ld a, PLAYER_TURN
@@ -236,8 +236,8 @@ INCBIN "baserom.gbc",$420b,$4225 - $420b
 DrawCardFromDeck: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	ld [$cc0d], a
-	ld a, [$cc06]
+	ld [wcc0d], a
+	ld a, [wcc06]
 	cp a, $02
 	jr c, .asm_4237
 	call $70f6
@@ -254,7 +254,7 @@ DrawCardFromDeck: ; 4225 (1:4225)
 .deckNotEmpty
 	ldh [hTempCardNumber], a
 	call AddCardToHand
-	ld a, [$cc0d]
+	ld a, [wcc0d]
 	cp $00
 	jr z, Func_4262
 	call SwapTurn
@@ -273,20 +273,20 @@ Func_4268:
 
 Func_426d:
 	call $4f9d
-	ld a, [$cc0d]
+	ld a, [wcc0d]
 	cp a, $00
 	jr z, PrintDuelMenu
 	cp a, $01
 	jp z, $6911
 	xor a
 	ld [wVBlankCtr], a
-	ld [$cbf9], a
+	ld [wcbf9], a
 	text_hl DuelistIsThinkingText
 	call Func_2a36
 	call Func_2bbf
 	ld a, $ff
-	ld [$cc11], a
-	ld [$cc10], a
+	ld [wcc11], a
+	ld [wcc10], a
 	ret
 
 PrintDuelMenu:
@@ -324,7 +324,7 @@ Func_42ac:
 	ldh a, [hButtonsPressed]
 	bit SELECT_F, a
 	jp nz, $458e
-	ld a, [$cbe7]
+	ld a, [wcbe7]
 	or a
 	jr nz, Func_42ac
 	call Func_271a
@@ -405,7 +405,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	cp a, $01
 	ldh [$ffa0], a
 	jr nz, Func_43f1
-	ld a, [$cc0c]
+	ld a, [wcc0c]
 	or a
 	jr nz, Func_43e8
 	call $45bb
@@ -613,7 +613,7 @@ Func_478b: ; 478b (1:478b)
 	ld a, $01
 	ld [wCardPageNumber], a
 	xor a
-	ld [$cbc9], a
+	ld [wcbc9], a
 	call Func_04a2
 	call Func_3b31
 	ld de, $8a00
@@ -642,7 +642,7 @@ Func_478b: ; 478b (1:478b)
 	ld a, $02
 
 .asm_47cb
-	ld [$cc04], a
+	ld [wcc04], a
 
 .asm_47ce
 	call Func_47ec
@@ -669,7 +669,7 @@ AttackMenuCursorData:
 	db $00
 
 Func_47ec: ; $47ec (1:47ec)
-	ld a, [$cc04]
+	ld a, [wcc04]
 	ld hl, $47f5
 	jp JumpToFunctionInTable
 
@@ -722,7 +722,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld b, $0d
 	ld hl, wDuelCardOrAttackList
 	xor a
-	ld [$cbc7], a
+	ld [wCardPageNumber], a
 	ld de, wCardBuffer1Move1Name
 	call CheckIfMoveExists
 	jr c, .checkForSecondAttackSlot
@@ -984,7 +984,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ld hl, $cbe1
 	or [hl]
 	jr nz, .turnEnded
-	ld a, [$cbf9]
+	ld a, [wcbf9]
 	or a
 	ret nz
 	ld [wVBlankCtr], a
@@ -1149,17 +1149,17 @@ InitializeDuelVariables: ; 7107 (1:7107)
 INCBIN "baserom.gbc",$7133,$71ad - $7133
 
 _TossCoin: ; 71ad (1:71ad)
-	ld [$cd9c], a
+	ld [wcd9c], a
 	ld a, [wcac2]
 	cp $6
 	jr z, .asm_71c1
 	xor a
-	ld [$cd9f], a
+	ld [wcd9f], a
 	call Func_04a2
 	call $210f
 
 .asm_71c1
-	ld a, [$cd9f]
+	ld a, [wcd9f]
 	or a
 	jr nz, .asm_71ec
 	ld a, $6
@@ -1186,31 +1186,31 @@ _TossCoin: ; 71ad (1:71ad)
 	call EnableLCD
 	ld a, $f1
 	call GetTurnDuelistVariable
-	ld [$cd9e], a
+	ld [wcd9e], a
 	call Func_0f58
 	xor a
-	ld [$cd9d], a
+	ld [wcd9d], a
 
 .asm_7204
-	ld a, [$cd9c]
+	ld a, [wcd9c]
 	cp $2
 	jr c, .asm_7223
 	ld bc, $0f0b
-	ld a, [$cd9f]
+	ld a, [wcd9f]
 	inc a
 	call $65b7
 	ld b, $11
 	ld a, $2e
 	call Func_06c3
 	inc b
-	ld a, [$cd9c]
+	ld a, [wcd9c]
 	call $65b7
 
 .asm_7223
 	call Func_3b21
 	ld a, $58
 	call Func_3b6a
-	ld a, [$cd9e]
+	ld a, [wcd9e]
 	or a
 	jr z, .asm_7236
 	call $7324
@@ -1233,7 +1233,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_724d
 	ld a, d
 	call Func_3b6a
-	ld a, [$cd9e]
+	ld a, [wcd9e]
 	or a
 	jr z, .asm_725e
 	ld a, e
@@ -1264,7 +1264,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_727c
 	ld a, b
 	call Func_3b6a
-	ld a, [$cd9e]
+	ld a, [wcd9e]
 	or a
 	jr z, .asm_728a
 	ld a, $1
@@ -1281,13 +1281,13 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_7292
 	ld a, d
 	call Func_3796
-	ld a, [$cd9c]
+	ld a, [wcd9c]
 	dec a
 	jr z, .asm_72b9
 	ld a, c
 	push af
 	ld e, $0
-	ld a, [$cd9f]
+	ld a, [wcd9f]
 .asm_72a3
 	cp $a
 	jr c, .asm_72ad
@@ -1307,7 +1307,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_72b9
 	ld hl, $cd9f
 	inc [hl]
-	ld a, [$cd9e]
+	ld a, [wcd9e]
 	or a
 	jr z, .asm_72dc
 	ld a, [hl]
@@ -1315,7 +1315,7 @@ _TossCoin: ; 71ad (1:71ad)
 	cp [hl]
 	call z, WaitForWideTextBoxInput
 	call $7324
-	ld a, [$cd9c]
+	ld a, [wcd9c]
 	ld hl, $cd9d
 	or [hl]
 	jr nz, .asm_72e2
@@ -1328,14 +1328,14 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_72e2
 	call Func_3b31
-	ld a, [$cd9f]
+	ld a, [wcd9f]
 	ld hl, $cd9c
 	cp [hl]
 	jp c, .asm_7204
 	call Func_0f58
 	call Func_3b31
 	call Func_3b21
-	ld a, [$cd9d]
+	ld a, [wcd9d]
 	or a
 	ret z
 	scf

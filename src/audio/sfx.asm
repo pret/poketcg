@@ -11,27 +11,27 @@ Func_fc006: ; fc006 (3f:4006)
 	add a
 	ld c, a
 	ld b, $0
-	ld a, [$de53]
+	ld a, [wde53]
 	or a
 	jr z, .asm_fc019
 	call Func_fc279
 .asm_fc019
 	ld a, $1
-	ld [$de53], a
+	ld [wde53], a
 	ld hl, SFXHeaderPointers
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld a, [hli]
-	ld [$dd8c], a
-	ld [$de54], a
+	ld [wdd8c], a
+	ld [wde54], a
 	ld de, $de4b
 	ld c, $0
 .asm_fc031
-	ld a, [$de54]
+	ld a, [wde54]
 	rrca
-	ld [$de54], a
+	ld [wde54], a
 	jr nc, .asm_fc050
 	ld a, [hli]
 	ld [de], a
@@ -60,7 +60,7 @@ Func_fc006: ; fc006 (3f:4006)
 	ret
 
 Func_fc059: ; fc059 (3f:4059)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	or a
 	jr nz, .asm_fc063
 	call Func_fc26c
@@ -69,8 +69,8 @@ Func_fc059: ; fc059 (3f:4059)
 	xor a
 	ld b, a
 	ld c, a
-	ld a, [$dd8c]
-	ld [$de54], a
+	ld a, [wdd8c]
+	ld [wde54], a
 .asm_fc06c
 	ld hl, $de54
 	ld a, [hl]
@@ -412,7 +412,7 @@ SFX_7: ; fc202 (3f:4202)
 	cp $10
 	jr nz, .asm_fc215
 	ld a, $1
-	ld [$dd8b], a
+	ld [wMusicWaveChange], a
 	ld a, $80
 	ld [rNR30], a
 	ld b, $0
@@ -452,9 +452,9 @@ SFX_end: ; fc249 (3f:4249)
 	dec e
 	jr nz, .asm_fc24d
 	ld e, a
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	and e
-	ld [$dd8c], a
+	ld [wdd8c], a
 	ld a, c
 	rlca
 	rlca
@@ -473,10 +473,10 @@ SFX_end: ; fc249 (3f:4249)
 
 Func_fc26c: ; fc26c (3f:426c)
 	xor a
-	ld [$de53], a
-	ld [$dd83], a
+	ld [wde53], a
+	ld [wdd83], a
 	ld a, $80
-	ld [$dd82], a
+	ld [wdd82], a
 	ret
 
 Func_fc279: ; fc279 (3f:4279)
@@ -490,7 +490,7 @@ Func_fc279: ; fc279 (3f:4279)
 	ld a, [rNR24]
 	ld a, [rNR44]
 	xor a
-	ld [$dd8c], a
+	ld [wdd8c], a
 	ret
 
 INCLUDE "audio/sfx_headers.asm"

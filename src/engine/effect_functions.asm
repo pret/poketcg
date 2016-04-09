@@ -34,7 +34,7 @@ SleepEffect: ; 2c030 (b:4030)
 
 applyEffect
 	ldh a, [hWhoseTurn]
-	ld hl, $cc05
+	ld hl, wcc05
 	cp [hl]
 	jr nz, .canInduceStatus
 	ld a, [wTempNonTurnDuelistCardId]
@@ -64,7 +64,7 @@ applyEffect
 	push hl
 	ld e, [hl]
 	ld d, $0
-	ld hl, $ccce
+	ld hl, wccce
 	add hl, de
 	call SwapTurn
 	ldh a, [hWhoseTurn]

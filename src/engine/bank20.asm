@@ -26,12 +26,12 @@ Func_8020f: ; 8020f (20:420f)
 
 Func_80229: ; 80229 (20:4229)
 	ld a, [hli]
-	ld [$d4c4], a
+	ld [wd4c4], a
 	ld a, [hli]
-	ld [$d4c5], a
+	ld [wd4c5], a
 	ld a, [hli]
 	add $20
-	ld [$d4c6], a
+	ld [wd4c6], a
 	ret
 ; 0x80238
 
@@ -44,9 +44,9 @@ Func_8025b: ; 8025b (20:425b)
 	call Func_80229
 	ld a, [hl]
 	push af
-	ld [$d4c8], a
+	ld [wd4c8], a
 	ld a, $10
-	ld [$d4c7], a
+	ld [wd4c7], a
 	call Func_80274
 	pop af
 	pop hl
@@ -62,9 +62,9 @@ asm_8027c
 	push hl
 	push bc
 	push de
-	ld a, [$d4c8]
+	ld a, [wd4c8]
 	ld b, a
-	ld a, [$d4c7]
+	ld a, [wd4c7]
 	ld c, a
 	ld hl, $d4c2
 	ld e, [hl]
@@ -84,31 +84,31 @@ asm_8027c
 	ret
 
 Func_8029f: ; 8029f (20:429f)
-	ld a, [$d4ca]
+	ld a, [wd4ca]
 	swap a
 	push af
 	and $f0
-	ld [$d4c2], a
+	ld [wd4c2], a
 	pop af
 	and $f
 	add $80
-	ld [$d4c3], a
-	ld a, [$d4cb]
+	ld [wd4c3], a
+	ld a, [wd4cb]
 	and $1
 	call BankswitchVRAM
 	ret
 
 Func_802bb: ; 802bb (20:42bb)
-	ld a, [$d4ca]
+	ld a, [wd4ca]
 	push af
 	xor $80
-	ld [$d4ca], a
+	ld [wd4ca], a
 	call Func_8029f
-	ld a, [$d4c3]
+	ld a, [wd4c3]
 	add $8
-	ld [$d4c3], a
+	ld [wd4c3], a
 	pop af
-	ld [$d4ca], a
+	ld [wd4ca], a
 	ret
 ; 0x802d4
 

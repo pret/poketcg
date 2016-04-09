@@ -2586,7 +2586,7 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld a, d
 	ld [$ff9f], a
 	call LoadDeckCardToBuffer1
-	ld a, [$cc2b]
+	ld a, [wCardBuffer1ID]
 	ld [wTempCardId], a
 	ld hl, wCardBuffer1Move1
 	dec e

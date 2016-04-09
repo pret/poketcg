@@ -36,7 +36,7 @@ Func_f8021: ; f8021 (3e:4021)
 	ld hl, NumberOfSongs2
 	cp [hl]
 	jr nc, .asm_f802b
-	ld [$dd80], a
+	ld [wdd80], a
 .asm_f802b
 	pop hl
 	ret
@@ -51,27 +51,27 @@ Func_f802d: ; f802d (3e:402d)
 	ld hl, Unknown_f8e85
 	add hl, bc
 	ld b, [hl]
-	ld a, [$dd83]
+	ld a, [wdd83]
 	or a
 	jr z, .asm_f8043
 	cp b
 	jr c, .asm_f804b
 .asm_f8043
 	ld a, b
-	ld [$dd83], a
+	ld [wdd83], a
 	ld a, c
-	ld [$dd82], a
+	ld [wdd82], a
 .asm_f804b
 	pop hl
 	pop bc
 	ret
 
 Func_f804e: ; f804e (3e:404e)
-	ld [$ddf0], a
+	ld [wddf0], a
 	ret
 
 Func_f8052: ; f8052 (3e:4052)
-	ld a, [$dd80]
+	ld a, [wdd80]
 	cp $80
 	ld a, $1
 	ret nz
@@ -79,7 +79,7 @@ Func_f8052: ; f8052 (3e:4052)
 	ret
 
 Func_f805c: ; f805c (3e:405c)
-	ld a, [$dd82]
+	ld a, [wdd82]
 	cp $80
 	ld a, $1
 	ret nz
@@ -87,9 +87,9 @@ Func_f805c: ; f805c (3e:405c)
 	ret
 
 Func_f8066: ; f8066 (3e:4066)
-	ld a, [$ddf2]
+	ld a, [wddf2]
 	xor $1
-	ld [$ddf2], a
+	ld [wddf2], a
 	ret
 
 Func_f806f: ; f806f (3e:406f)
@@ -99,7 +99,7 @@ Func_f806f: ; f806f (3e:406f)
 	ld b, a
 	swap b
 	or b
-	ld [$ddf1], a
+	ld [wMusicPanning], a
 	pop af
 	pop bc
 	ret
@@ -114,19 +114,19 @@ Func_f807d: ; f807d (3e:407d)
 	ld a, $ff
 	ld [rNR51], a
 	ld a, $3d
-	ld [$dd81], a
+	ld [wdd81], a
 	ld a, $80
-	ld [$dd80], a
-	ld [$dd82], a
-	ld a, $77
-	ld [$ddf1], a
+	ld [wdd80], a
+	ld [wdd82], a
+	ld a, $77 ; set both speakers to max volume
+	ld [wMusicPanning], a
 	xor a
-	ld [$dd8c], a
-	ld [$de53], a
+	ld [wdd8c], a
+	ld [wde53], a
 	ld [wMusicWaveChange], a
-	ld [$ddef], a
-	ld [$ddf0], a
-	ld [$ddf2], a
+	ld [wddef], a
+	ld [wddf0], a
+	ld [wddf2], a
 	dec a
 	ld [wMusicDC], a
 	ld de, $0001
@@ -167,10 +167,10 @@ Func_f80e9: ; f80e9 (3e:40e9)
 	call Func_f811c
 	ld hl, Func_fc003
 	call Bankswitch3dTo3f
-	ld a, [$dd81]
+	ld a, [wdd81]
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
-	ld a, [$ddf2]
+	ld a, [wddf2]
 	cp $0
 	jr z, .asm_f8109
 	call Func_f8980
@@ -186,65 +186,65 @@ Func_f80e9: ; f80e9 (3e:40e9)
 	ret
 
 Func_f811c: ; f811c (3e:411c)
-	ld a, [$dd80]
+	ld a, [wdd80]
 	rla
 	jr c, .asm_f8133
 	call Func_f814b
-	ld a, [$dd80]
+	ld a, [wdd80]
 	call Music2_PlaySong
-	ld a, [$dd80]
+	ld a, [wdd80]
 	or $80
-	ld [$dd80], a
+	ld [wdd80], a
 .asm_f8133
-	ld a, [$dd82]
+	ld a, [wdd82]
 	rla
 	jr c, .asm_f814a
-	ld a, [$dd82]
+	ld a, [wdd82]
 	ld hl, Func_fc000
 	call Bankswitch3dTo3f
-	ld a, [$dd82]
+	ld a, [wdd82]
 	or $80
-	ld [$dd82], a
+	ld [wdd82], a
 .asm_f814a
 	ret
 
 Func_f814b: ; f814b (3e:414b)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	ld d, a
 	xor a
 	ld [wMusicIsPlaying], a
 	bit 0, d
-	jr nz, .asm_f815f
+	jr nz, .stopChannel2
 	ld a, $8
 	ld [rNR12], a
 	swap a
 	ld [rNR14], a
-.asm_f815f
+.stopChannel2
 	xor a
-	ld [$dd8e], a
+	ld [wMusicIsPlaying + 1], a
 	bit 1, d
-	jr nz, .asm_f816f
+	jr nz, .stopChannel4
 	ld a, $8
 	ld [rNR22], a
 	swap a
 	ld [rNR24], a
-.asm_f816f
+.stopChannel4
 	xor a
-	ld [$dd90], a
+	ld [wMusicIsPlaying + 3], a
 	bit 3, d
-	jr nz, .asm_f817f
+	jr nz, .stopChannel3
 	ld a, $8
 	ld [rNR42], a
 	swap a
 	ld [rNR44], a
-.asm_f817f
+.stopChannel3
 	xor a
-	ld [$dd8f], a
+	ld [wMusicIsPlaying + 2], a
 	bit 2, d
-	jr nz, .asm_f818b
+	jr nz, .done
 	ld a, $0
 	ld [rNR32], a
-.asm_f818b
+.done
 	ret
 
 ; plays the song given by the id in a
@@ -255,7 +255,7 @@ Music2_PlaySong: ; f818c (3e:418c)
 	ld hl, SongBanks2
 	add hl, bc
 	ld a, [hl]
-	ld [$dd81], a
+	ld [wdd81], a
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
@@ -273,17 +273,17 @@ Music2_PlaySong: ; f818c (3e:418c)
 	ld b, h
 	ld c, l
 	rr e
-	jr nc, .asm_f81eb
+	jr nc, .noChannel1
 	ld a, [bc]
 	inc bc
-	ld [$dd95], a
-	ld [wMusicMainLoop], a
+	ld [wMusicChannelPointers], a
+	ld [wMusicMainLoopStart], a
 	ld a, [bc]
 	inc bc
-	ld [$dd96], a
-	ld [$dd9e], a
+	ld [wMusicChannelPointers + 1], a
+	ld [wMusicMainLoopStart + 1], a
 	ld a, $1
-	ld [$ddbb], a
+	ld [wddbb], a
 	ld [wMusicIsPlaying], a
 	xor a
 	ld [wMusicTie], a
@@ -291,92 +291,92 @@ Music2_PlaySong: ; f818c (3e:418c)
 	ld [wMusicE8], a
 	ld [wMusicVibratoDelay], a
 	ld [wMusicEC], a
-	ld a, [Unknown_f8c20]
+	ld a, [Unknown_f4c20]
 	ld [wMusicReturnAddress], a
-	ld a, [Unknown_f8c20 + 1]
-	ld [$ddf4], a
+	ld a, [Unknown_f4c20 + 1]
+	ld [wMusicReturnAddress + 1], a
 	ld a, $8
 	ld [wMusicE9], a
-.asm_f81eb
+.noChannel1
 	rr e
-	jr nc, .asm_f8228
+	jr nc, .noChannel2
 	ld a, [bc]
 	inc bc
-	ld [$dd97], a
-	ld [$dd9f], a
+	ld [wMusicChannelPointers + 2], a
+	ld [wMusicMainLoopStart + 2], a
 	ld a, [bc]
 	inc bc
-	ld [$dd98], a
-	ld [$dda0], a
+	ld [wMusicChannelPointers + 3], a
+	ld [wMusicMainLoopStart + 3], a
 	ld a, $1
-	ld [$ddbc], a
-	ld [$dd8e], a
+	ld [wddbb + 1], a
+	ld [wMusicIsPlaying + 1], a
 	xor a
-	ld [$dd92], a
-	ld [$ddeb], a
-	ld [$ddc0], a
-	ld [$dde0], a
-	ld [$ddcc], a
-	ld a, [Unknown_f8c20 + 2]
-	ld [$ddf5], a
-	ld a, [Unknown_f8c20 + 3]
-	ld [$ddf6], a
+	ld [wMusicTie + 1], a
+	ld [wMusicE4 + 1], a
+	ld [wMusicE8 + 1], a
+	ld [wMusicVibratoDelay + 1], a
+	ld [wMusicEC + 1], a
+	ld a, [Unknown_f4c20 + 2]
+	ld [wMusicReturnAddress + 2], a
+	ld a, [Unknown_f4c20 + 3]
+	ld [wMusicReturnAddress + 3], a
 	ld a, $8
-	ld [$ddc8], a
-.asm_f8228
+	ld [wMusicE9 + 1], a
+.noChannel2
 	rr e
-	jr nc, .asm_f8265
+	jr nc, .noChannel3
 	ld a, [bc]
 	inc bc
-	ld [$dd99], a
-	ld [$dda1], a
+	ld [wMusicChannelPointers + 4], a
+	ld [wMusicMainLoopStart + 4], a
 	ld a, [bc]
 	inc bc
-	ld [$dd9a], a
-	ld [$dda2], a
+	ld [wMusicChannelPointers + 5], a
+	ld [wMusicMainLoopStart + 5], a
 	ld a, $1
-	ld [$ddbd], a
-	ld [$dd8f], a
+	ld [wddbb + 2], a
+	ld [wMusicIsPlaying + 2], a
 	xor a
-	ld [$dd93], a
-	ld [$ddec], a
-	ld [$ddc1], a
-	ld [$dde1], a
-	ld [$ddcd], a
-	ld a, [Unknown_f8c20 + 4]
-	ld [$ddf7], a
-	ld a, [Unknown_f8c20 + 5]
-	ld [$ddf8], a
+	ld [wMusicTie + 2], a
+	ld [wMusicE4 + 2], a
+	ld [wMusicE8 + 2], a
+	ld [wMusicVibratoDelay + 2], a
+	ld [wMusicEC + 2], a
+	ld a, [Unknown_f4c20 + 4]
+	ld [wMusicReturnAddress + 4], a
+	ld a, [Unknown_f4c20 + 5]
+	ld [wMusicReturnAddress + 5], a
 	ld a, $40
-	ld [$ddc9], a
-.asm_f8265
+	ld [wMusicE9 + 2], a
+.noChannel3
 	rr e
-	jr nc, .asm_f829f
+	jr nc, .noChannel4
 	ld a, [bc]
 	inc bc
-	ld [$dd9b], a
-	ld [$dda3], a
+	ld [wMusicChannelPointers + 6], a
+	ld [wMusicMainLoopStart + 6], a
 	ld a, [bc]
 	inc bc
-	ld [$dd9c], a
-	ld [$dda4], a
+	ld [wMusicChannelPointers + 7], a
+	ld [wMusicMainLoopStart + 7], a
 	ld a, $1
-	ld [$ddbe], a
-	ld [$dd90], a
+	ld [wddbb + 3], a
+	ld [wMusicIsPlaying + 3], a
 	xor a
-	ld [$dd94], a
-	ld [$ddc2], a
-	ld [$dde2], a
-	ld [$ddce], a
-	ld a, [Unknown_f8c20 + 6]
-	ld [$ddf9], a
-	ld a, [Unknown_f8c20 + 7]
-	ld [$ddfa], a
+	ld [wMusicTie + 3], a
+	ld [wMusicE8 + 3], a
+	ld [wMusicVibratoDelay + 3], a
+	ld [wMusicEC + 3], a
+	ld a, [Unknown_f4c20 + 6]
+	ld [wMusicReturnAddress + 6], a
+	ld a, [Unknown_f4c20 + 7]
+	ld [wMusicReturnAddress + 7], a
 	ld a, $40
-	ld [$ddca], a
-.asm_f829f
+	ld [wMusicE9 + 3], a
+.noChannel4
 	xor a
-	ld [$ddf2], a
+	ld [wddf2], a
 	ret
 
 Func_f82a4: ; f82a4 (3e:42a4)
@@ -386,17 +386,17 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	ld a, [wMusicIsPlaying]
 	or a
 	jr z, .asm_f82fa
-	ld a, [$ddb7]
+	ld a, [wddb7]
 	cp $0
 	jr z, .asm_f82d4
-	ld a, [$ddc3]
+	ld a, [wddc3]
 	dec a
-	ld [$ddc3], a
+	ld [wddc3], a
 	jr nz, .asm_f82d4
-	ld a, [$ddbb]
+	ld a, [wddbb]
 	cp $1
 	jr z, .asm_f82d4
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f82d4
 	ld hl, rNR12
@@ -406,13 +406,13 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	ld a, $80
 	ld [hl], a
 .asm_f82d4
-	ld a, [$ddbb]
+	ld a, [wddbb]
 	dec a
-	ld [$ddbb], a
+	ld [wddbb], a
 	jr nz, .asm_f82f4
-	ld a, [$dd96]
+	ld a, [wMusicChannelPointers + 1]
 	ld h, a
-	ld a, [$dd95]
+	ld a, [wMusicChannelPointers]
 	ld l, a
 	ld bc, $0000
 	call Music2_PlayNextNote
@@ -425,7 +425,7 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	call Func_f885a
 	ret
 .asm_f82fa
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f8309
 	ld a, $8
@@ -436,40 +436,40 @@ Func_f82a5: ; f82a5 (3e:42a5)
 	ret
 
 Func_f830a: ; f830a (3e:430a)
-	ld a, [$dd8e]
+	ld a, [wMusicIsPlaying + 1]
 	or a
 	jr z, .asm_f835f
-	ld a, [$ddb8]
+	ld a, [wddb8]
 	cp $0
 	jr z, .asm_f8339
-	ld a, [$ddc4]
+	ld a, [wddc3 + 1]
 	dec a
-	ld [$ddc4], a
+	ld [wddc3 + 1], a
 	jr nz, .asm_f8339
-	ld a, [$ddbc]
+	ld a, [wddbb + 1]
 	cp $1
 	jr z, .asm_f8339
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f8339
 	ld hl, rNR22
-	ld a, [$ddc8]
+	ld a, [wMusicE9 + 1]
 	ld [hli], a
 	inc hl
 	ld a, $80
 	ld [hl], a
 .asm_f8339
-	ld a, [$ddbc]
+	ld a, [wddbb + 1]
 	dec a
-	ld [$ddbc], a
+	ld [wddbb + 1], a
 	jr nz, .asm_f8359
-	ld a, [$dd98]
+	ld a, [wMusicChannelPointers + 3]
 	ld h, a
-	ld a, [$dd97]
+	ld a, [wMusicChannelPointers + 2]
 	ld l, a
 	ld bc, $0001
 	call Music2_PlayNextNote
-	ld a, [$dd8e]
+	ld a, [wMusicIsPlaying + 1]
 	or a
 	jr z, .asm_f835f
 	call Func_f875a
@@ -478,7 +478,7 @@ Func_f830a: ; f830a (3e:430a)
 	call Func_f885a
 	ret
 .asm_f835f
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f836e
 	ld a, $8
@@ -489,36 +489,36 @@ Func_f830a: ; f830a (3e:430a)
 	ret
 
 Func_f836f: ; f836f (3e:436f)
-	ld a, [$dd8f]
+	ld a, [wMusicIsPlaying + 2]
 	or a
 	jr z, .asm_f83be
-	ld a, [$ddb9]
+	ld a, [wddb9]
 	cp $0
 	jr z, .asm_f8398
-	ld a, [$ddc5]
+	ld a, [wddc3 + 2]
 	dec a
-	ld [$ddc5], a
+	ld [wddc3 + 2], a
 	jr nz, .asm_f8398
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 2, a
 	jr nz, .asm_f8398
-	ld a, [$ddbd]
+	ld a, [wddbb + 2]
 	cp $1
 	jr z, .asm_f8398
-	ld a, [$ddc9]
+	ld a, [wMusicE9 + 2]
 	ld [rNR32], a
 .asm_f8398
-	ld a, [$ddbd]
+	ld a, [wddbb + 2]
 	dec a
-	ld [$ddbd], a
+	ld [wddbb + 2], a
 	jr nz, .asm_f83b8
-	ld a, [$dd9a]
+	ld a, [wMusicChannelPointers + 5]
 	ld h, a
-	ld a, [$dd99]
+	ld a, [wMusicChannelPointers + 4]
 	ld l, a
 	ld bc, $0002
 	call Music2_PlayNextNote
-	ld a, [$dd8f]
+	ld a, [wMusicIsPlaying + 2]
 	or a
 	jr z, .asm_f83be
 	call Func_f879c
@@ -527,7 +527,7 @@ Func_f836f: ; f836f (3e:436f)
 	call Func_f885a
 	ret
 .asm_f83be
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 2, a
 	jr nz, .asm_f83cd
 	ld a, $0
@@ -538,36 +538,36 @@ Func_f836f: ; f836f (3e:436f)
 	ret
 
 Func_f83ce: ; f83ce (3e:43ce)
-	ld a, [$dd90]
+	ld a, [wMusicIsPlaying + 3]
 	or a
 	jr z, .asm_f8400
-	ld a, [$ddbe]
+	ld a, [wddbb + 3]
 	dec a
-	ld [$ddbe], a
+	ld [wddbb + 3], a
 	jr nz, .asm_f83f6
-	ld a, [$dd9c]
+	ld a, [wMusicChannelPointers + 7]
 	ld h, a
-	ld a, [$dd9b]
+	ld a, [wMusicChannelPointers + 6]
 	ld l, a
 	ld bc, $0003
 	call Music2_PlayNextNote
-	ld a, [$dd90]
+	ld a, [wMusicIsPlaying + 3]
 	or a
 	jr z, .asm_f8400
 	call Func_f880a
 	jr .asm_f8413
 .asm_f83f6
-	ld a, [$ddef]
+	ld a, [wddef]
 	or a
 	jr z, .asm_f8413
 	call Func_f8839
 	ret
 .asm_f8400
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 3, a
 	jr nz, .asm_f8413
 	xor a
-	ld [$ddef], a
+	ld [wddef], a
 	ld a, $8
 	ld [rNR42], a
 	swap a
@@ -797,7 +797,7 @@ Music2_note: ; f448c (3d:448c)
 	ld [hli], a
 	ld [hl], d
 	ld a, $1
-	ld [$ddef], a
+	ld [wddef], a
 	jr .asm_f858e
 .asm_f8564
 	ld hl, $dda5
@@ -911,7 +911,7 @@ Music2_MainLoop: ; f85ef (3e:45ef)
 	pop de
 	push de
 	dec de
-	ld hl, wMusicMainLoop
+	ld hl, wMusicMainLoopStart
 	add hl, bc
 	add hl, bc
 	ld [hl], e
@@ -921,7 +921,7 @@ Music2_MainLoop: ; f85ef (3e:45ef)
 
 Music2_EndMainLoop: ; f85fd (3e:45fd)
 	pop hl
-	ld hl, wMusicMainLoop
+	ld hl, wMusicMainLoopStart
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
@@ -1020,7 +1020,7 @@ Music2_duty: ; f8674 (3e:4674)
 	ld a, [de]
 	and $c0
 	inc de
-	ld hl, wMusicDuty
+	ld hl, wMusicDuty1
 	add hl, bc
 	ld [hl], a
 	ld h, d
@@ -1155,10 +1155,10 @@ Music2_PlayNextNote_pop: ; f8710 (3e:4710)
 	jp Music2_PlayNextNote
 
 Func_f8714: ; f8714 (3e:4714)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f8749
-	ld a, [$ddb7]
+	ld a, [wddb7]
 	cp $0
 	jr z, .asm_f874a
 	ld d, $0
@@ -1173,11 +1173,11 @@ Func_f8714: ; f8714 (3e:4714)
 	ld [hl], $2
 	ld a, $8
 	ld [rNR10], a
-	ld a, [wMusicDuty]
+	ld a, [wMusicDuty1]
 	ld [rNR11], a
-	ld a, [$dda5]
+	ld a, [wMusicCh1CurPitch]
 	ld [rNR13], a
-	ld a, [$dda6]
+	ld a, [wMusicCh1CurOctave]
 	or d
 	ld [rNR14], a
 .asm_f8749
@@ -1194,10 +1194,10 @@ Func_f8714: ; f8714 (3e:4714)
 	ret
 
 Func_f875a: ; f875a (3e:475a)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f878b
-	ld a, [$ddb8]
+	ld a, [wddb8]
 	cp $0
 	jr z, .asm_f878c
 	ld d, $0
@@ -1205,16 +1205,16 @@ Func_f875a: ; f875a (3e:475a)
 	ld a, [hl]
 	cp $80
 	jr z, .asm_f8779
-	ld a, [$dde8]
+	ld a, [wMusicVolume + 1]
 	ld [rNR22], a
 	ld d, $80
 .asm_f8779
 	ld [hl], $2
-	ld a, [$dd87]
+	ld a, [wMusicDuty2]
 	ld [rNR21], a
-	ld a, [$dda7]
+	ld a, [wMusicCh2CurPitch]
 	ld [rNR23], a
-	ld a, [$dda8]
+	ld a, [wMusicCh2CurOctave]
 	or d
 	ld [rNR24], a
 .asm_f878b
@@ -1231,7 +1231,7 @@ Func_f875a: ; f875a (3e:475a)
 	ret
 
 Func_f879c: ; f879c (3e:479c)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 2, a
 	jr nz, .asm_f87e0
 	ld d, $0
@@ -1243,14 +1243,14 @@ Func_f879c: ; f879c (3e:479c)
 	call Func_f87ea
 	ld d, $80
 .asm_f87b3
-	ld a, [$ddb9]
+	ld a, [wddb9]
 	cp $0
 	jr z, .asm_f87e1
 	ld hl, $dd93
 	ld a, [hl]
 	cp $80
 	jr z, .asm_f87cc
-	ld a, [$dde9]
+	ld a, [wMusicVolume + 2]
 	ld [rNR32], a
 	xor a
 	ld [rNR30], a
@@ -1259,11 +1259,11 @@ Func_f879c: ; f879c (3e:479c)
 	ld [hl], $2
 	xor a
 	ld [rNR31], a
-	ld a, [$dda9]
+	ld a, [wMusicCh3CurPitch]
 	ld [rNR33], a
 	ld a, $80
 	ld [rNR30], a
-	ld a, [$ddaa]
+	ld a, [wMusicCh3CurOctave]
 	or d
 	ld [rNR34], a
 .asm_f87e0
@@ -1300,10 +1300,10 @@ Func_f87ea: ; f879c (3e:47ea)
 	ret
 
 Func_f880a: ; f880a (3e:480a)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 3, a
 	jr nz, .asm_f8829
-	ld a, [$ddba]
+	ld a, [wddba]
 	cp $0
 	jr z, asm_f882a
 	ld de, rNR41
@@ -1323,7 +1323,7 @@ Func_f880a: ; f880a (3e:480a)
 	ret
 asm_f882a
 	xor a
-	ld [$ddef], a
+	ld [wddef], a
 	ld hl, rNR42
 	ld a, $8
 	ld [hli], a
@@ -1333,11 +1333,11 @@ asm_f882a
 	ret
 
 Func_f8839: ; f8839 (3e:4839)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 3, a
 	jr z, .asm_f8846
 	xor a
-	ld [$ddef], a
+	ld [wddef], a
 	jr .asm_f8859
 .asm_f8846
 	ld hl, $dded
@@ -1367,14 +1367,14 @@ Func_f885a: ; f885a (3e:485a)
 	ret
 
 Func_f8866: ; f8866 (3e:4866)
-	ld a, [$ddf1]
+	ld a, [wMusicPanning]
 	ld [rNR50], a
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	or a
 	ld hl, wMusicDC
 	ld a, [hli]
 	jr z, .asm_f8888
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	and $f
 	ld d, a
 	swap d
@@ -1390,7 +1390,7 @@ Func_f8866: ; f8866 (3e:4866)
 	or d
 .asm_f8888
 	ld d, a
-	ld a, [$ddf0]
+	ld a, [wddf0]
 	xor $ff
 	and $f
 	ld e, a
@@ -1491,7 +1491,7 @@ Func_f890b: ; f890b (3e:490b)
 	ld a, [wMusicVibratoDelay]
 	cp $0
 	jr z, .asm_f8966
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 0, a
 	jr nz, .asm_f8966
 	ld a, e
@@ -1506,10 +1506,10 @@ Func_f890b: ; f890b (3e:490b)
 .asm_f892c
 	cp $1
 	jr nz, .asm_f894b
-	ld a, [$dde0]
+	ld a, [wMusicVibratoDelay + 1]
 	cp $0
 	jr z, .asm_f8966
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 1, a
 	jr nz, .asm_f8966
 	ld a, e
@@ -1523,10 +1523,10 @@ Func_f890b: ; f890b (3e:490b)
 .asm_f894b
 	cp $2
 	jr nz, .asm_f8966
-	ld a, [$dde1]
+	ld a, [wMusicVibratoDelay + 2]
 	cp $0
 	jr z, .asm_f8966
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	bit 2, a
 	jr nz, .asm_f8966
 	ld a, e
@@ -1562,7 +1562,7 @@ Func_f8967: ; f8967 (3e:4967)
 	ret
 
 Func_f8980: ; f8980 (3e:4980)
-	ld a, [$dd8c]
+	ld a, [wdd8c]
 	ld d, a
 	bit 0, d
 	jr nz, .asm_f8990
@@ -1605,7 +1605,7 @@ Func_f89b1: ; f89b1 (3e:49b1)
 	or a
 	ret nz
 	ld a, $80
-	ld [$dd80], a
+	ld [wdd80], a
 	ret
 
 Func_f89c4: ; f89c4 (3e:49c4)
@@ -1625,20 +1625,20 @@ Func_f89d0: ; f89d0 (3e:49d0)
 	ret
 
 Func_f89dc: ; f89dc (3e:49dc)
-	ld a, [$dd80]
-	ld [$de55], a
-	ld a, [$dd81]
-	ld [$de56], a
+	ld a, [wdd80]
+	ld [wde55], a
+	ld a, [wdd81]
+	ld [wde56], a
 	ld a, [wMusicDC]
-	ld [$de57], a
-	ld hl, wMusicDuty
+	ld [wde57], a
+	ld hl, wMusicDuty1
 	ld de, $de58
 	ld a, $4
 	call Music2_CopyData
 	ld a, [wMusicWave]
-	ld [$de5c], a
+	ld [wde5c], a
 	ld a, [wMusicWaveChange]
-	ld [$de5d], a
+	ld [wde5d], a
 	ld hl, wMusicIsPlaying
 	ld de, $de5e
 	ld a, $4
@@ -1651,14 +1651,14 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ld de, $de66
 	ld a, $8
 	call Music2_CopyData
-	ld hl, wMusicMainLoop
+	ld hl, wMusicMainLoopStart
 	ld de, $de6e
 	ld a, $8
 	call Music2_CopyData
-	ld a, [$ddab]
-	ld [$de76], a
-	ld a, [$ddac]
-	ld [$de77], a
+	ld a, [wddab]
+	ld [wde76], a
+	ld a, [wddac]
+	ld [wde77], a
 	ld hl, wMusicOctave
 	ld de, $de78
 	ld a, $4
@@ -1704,10 +1704,10 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ld a, $4
 	call Music2_CopyData
 	ld a, $0
-	ld [$dddb], a
-	ld [$dddc], a
-	ld [$dddd], a
-	ld [$ddde], a
+	ld [wdddb], a
+	ld [wdddb + 1], a
+	ld [wdddb + 2], a
+	ld [wdddb + 3], a
 	ld hl, wMusicVolume
 	ld de, $dea4
 	ld a, $3
@@ -1721,7 +1721,7 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ld a, $2
 	call Music2_CopyData
 	ld a, $0
-	ld [$deac], a
+	ld [wdeac], a
 	ld hl, wMusicReturnAddress
 	ld de, $dead
 	ld a, $8
@@ -1733,17 +1733,17 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ret
 
 Func_f8b01: ; f8b01 (3e:4b01)
-	ld a, [$de55]
-	ld [$dd80], a
-	ld a, [$de56]
-	ld [$dd81], a
-	ld a, [$de57]
+	ld a, [wde55]
+	ld [wdd80], a
+	ld a, [wde56]
+	ld [wdd81], a
+	ld a, [wde57]
 	ld [wMusicDC], a
 	ld hl, $de58
-	ld de, wMusicDuty
+	ld de, wMusicDuty1
 	ld a, $4
 	call Music2_CopyData
-	ld a, [$de5c]
+	ld a, [wde5c]
 	ld [wMusicWave], a
 	ld a, $1
 	ld [wMusicWaveChange], a
@@ -1760,13 +1760,13 @@ Func_f8b01: ; f8b01 (3e:4b01)
 	ld a, $8
 	call Music2_CopyData
 	ld hl, $de6e
-	ld de, wMusicMainLoop
+	ld de, wMusicMainLoopStart
 	ld a, $8
 	call Music2_CopyData
-	ld a, [$de76]
-	ld [$ddab], a
-	ld a, [$de77]
-	ld [$ddac], a
+	ld a, [wde76]
+	ld [wddab], a
+	ld a, [wde77]
+	ld [wddac], a
 	ld hl, $de78
 	ld de, wMusicOctave
 	ld a, $4
@@ -1823,8 +1823,8 @@ Func_f8b01: ; f8b01 (3e:4b01)
 	ld de, $dded
 	ld a, $2
 	call Music2_CopyData
-	ld a, [$deac]
-	ld [$ddef], a
+	ld a, [wdeac]
+	ld [wddef], a
 	ld hl, $dead
 	ld de, wMusicReturnAddress
 	ld a, $8

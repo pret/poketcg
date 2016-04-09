@@ -1,5 +1,5 @@
 Func_70000: ; 70000 (1c:4000)
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $1
 	ret nz
 	ld b, $1
@@ -14,7 +14,7 @@ Func_70000: ; 70000 (1c:4000)
 	ret
 
 Func_70018: ; 70018 (1c:4018)
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $1
 	ret nz
 	ld a, $0
@@ -44,7 +44,7 @@ Unknown_70057: ; 70057 (1c:4057)
 INCBIN "baserom.gbc",$70057,$70082 - $70057
 
 Func_70082: ; 70082 (1c:4082)
-	ld a, [$cab4]
+	ld a, [wConsole]
 	cp $1
 	ret nz
 	push hl
@@ -147,21 +147,21 @@ Func_70136: ; 70136 (1c:4136)
 	push bc
 	push de
 	ldh a, [hSCX]
-	ld [$d41d], a
+	ld [wd41d], a
 	ldh a, [hSCY]
-	ld [$d41e], a
-	ld a, [$cabc]
-	ld [$d41f], a
-	ld a, [$cabb]
-	ld [$d420], a
+	ld [wd41e], a
+	ld a, [wBGP]
+	ld [wd41f], a
+	ld a, [wLCDC]
+	ld [wd420], a
 	di
 	ld hl, SGB_MASK_EN_ON_701a0
 	call SendSGB
 	call DisableLCD
-	ld a, [$cabb]
+	ld a, [wLCDC]
 	and $41
 	or $1
-	ld [$cabb], a
+	ld [wLCDC], a
 	ld a, $e4
 	ld [rBGP], a
 	call Func_040c
@@ -183,14 +183,14 @@ Func_70177: ; 70177 (1c:4177)
 	call EnableLCD
 	pop hl
 	call SendSGB
-	ld a, [$d41d]
+	ld a, [wd41d]
 	ldh [hSCX], a
-	ld a, [$d41e]
+	ld a, [wd41e]
 	ldh [hSCY], a
-	ld a, [$d41f]
+	ld a, [wd41f]
 	call Func_040c
-	ld a, [$d420]
-	ld [$cabb], a
+	ld a, [wd420]
+	ld [wLCDC], a
 	call DisableLCD
 	ei
 	pop de
@@ -217,13 +217,13 @@ Func_701c0: ; 701c0 (1c:41c0)
 	ld [hli], a
 	dec c
 	jr nz, .asm_701cb
-	ld a, [$cab6]
+	ld a, [wTileMapFill]
 	push af
 	xor a
-	ld [$cab6], a
+	ld [wTileMapFill], a
 	call Func_04a2
 	pop af
-	ld [$cab6], a
+	ld [wTileMapFill], a
 	di
 	ld hl, SGB_MASK_EN_OFF_701b0
 	call SendSGB

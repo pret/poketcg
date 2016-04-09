@@ -50,7 +50,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [$a003], a
 	ld a, $2
 	ld [$a006], a
-	ld [$ce47], a
+	ld [wTextSpeed], a
 	xor a
 	ld [$a007], a
 	ld [$a009], a

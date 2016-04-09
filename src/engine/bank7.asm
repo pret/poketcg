@@ -35,13 +35,13 @@ Func_1c056: ; 1c056 (7:4056)
 	inc hl
 	inc hl
 	ld a, [hli]
-	ld [$d0bb], a
+	ld [wd0bb], a
 	ld a, [hli]
-	ld [$d0bc], a
+	ld [wd0bc], a
 	ld a, [hli]
-	ld [$d0bd], a
-	ld a, [$d334]
-	ld [$d0be], a
+	ld [wd0bd], a
+	ld a, [wd334]
+	ld [wd0be], a
 .asm_1c095
 	pop de
 	pop bc
@@ -64,24 +64,24 @@ Func_1c33b: ; 1c33b (7:433b)
 	ld hl, MapSongs
 	add hl, bc
 	ld a, [hli]
-	ld [$d131], a
+	ld [wd131], a
 	ld a, [hli]
 	ld c, a
 	ld a, [hli]
-	ld [$d28f], a
+	ld [wd28f], a
 	ld a, [hli]
-	ld [$d132], a
+	ld [wd132], a
 	ld a, [hli]
-	ld [$d290], a
+	ld [wd290], a
 	ld a, [hli]
-	ld [$d111], a
-	ld a, [$cab4]
+	ld [wd111], a
+	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_1c370
 	ld a, c
 	or a
 	jr z, .asm_1c370
-	ld [$d131], a
+	ld [wd131], a
 .asm_1c370
 	pop de
 	pop bc
@@ -118,7 +118,7 @@ Func_1c82e: ; 1c82e (7:482e)
 INCBIN "baserom.gbc",$1c82e,$1d078 - $1c82e
 
 Func_1d078: ; 1d078 (7:5078)
-	ld a, [$d627]
+	ld a, [wd627]
 	or a
 	jr z, .asm_1d0c7
 .asm_1d07e
@@ -128,9 +128,9 @@ Func_1d078: ; 1d078 (7:5078)
 	call $5335
 	call $53ce
 	xor a
-	ld [$d635], a
+	ld [wd635], a
 	ld a, $3c
-	ld [$d626], a
+	ld [wd626], a
 .asm_1d095
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
@@ -160,20 +160,20 @@ Func_1d078: ; 1d078 (7:5078)
 .asm_1d0c7
 	call $50fa
 	call $511c
-	ld a, [$d628]
+	ld a, [wd628]
 	cp $2
 	jr nz, .asm_1d0db
 	call $5289
 	jr c, Func_1d078
 	jr .asm_1d0e7
 .asm_1d0db
-	ld a, [$d628]
+	ld a, [wd628]
 	cp $1
 	jr nz, .asm_1d0e7
 	call $52b8
 	jr c, Func_1d078
 .asm_1d0e7
-	ld a, [$d628]
+	ld a, [wd628]
 	cp $0
 	jr nz, .asm_1d0f3
 	call $52dd
@@ -195,15 +195,15 @@ Func_1d11c: ; 1d11c (7:511c)
 	call Func_2275
 	call Func_3ca0
 	xor a
-	ld [$cd08], a
+	ld [wcd08], a
 	call $51e1
 	call $517f
 	ld a, $ff
-	ld [$d626], a
-	ld a, [$d627]
+	ld [wd626], a
+	ld a, [wd627]
 	cp $4
 	jr c, .asm_1d14f
-	ld a, [$d624]
+	ld a, [wd624]
 	or a
 	jr z, .asm_1d14f
 	ld a, $1
@@ -222,15 +222,15 @@ Func_1d11c: ; 1d11c (7:511c)
 	ldh a, [hCurrentMenuItem]
 	cp e
 	jr nz, .asm_1d15a
-	ld [$d627], a
-	ld a, [$d624]
+	ld [wd627], a
+	ld a, [wd624]
 	or a
 	jr nz, .asm_1d17a
 	inc e
 	inc e
 .asm_1d17a
 	ld a, e
-	ld [$d628], a
+	ld [wd628], a
 	ret
 ; 0x1d17f
 
@@ -281,7 +281,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call $5705
 	call $4858
 	xor a
-	ld [$d324], a
+	ld [wd324], a
 	ld a, MUSIC_CREDITS
 	call PlaySong
 	farcallx $4, $4031
@@ -290,7 +290,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call DoFrameIfLCDEnabled
 	call $5765
 	call $580b
-	ld a, [$d633]
+	ld a, [wd633]
 	cp $ff
 	jr nz, .asm_1d6c8
 	call Func_3c96
@@ -305,7 +305,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD
-	ld hl, $cabb
+	ld hl, wLCDC
 	set 1, [hl]
 	call ResetDoFrameFunction
 	ret
