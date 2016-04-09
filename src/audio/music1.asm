@@ -151,8 +151,8 @@ Func_f407d: ; f407d (3d:407d)
 	ld a, c
 	cp $4
 	jr nz, .asm_f40bb
-	ld hl, Unknown_f4c20
-	ld bc, wMusicReturnAddress
+	ld hl, Music1_ChannelLoopStacks
+	ld bc, wMusicChannelStackPointers
 	ld d, $8
 .asm_f40e2
 	ld a, [hli]
@@ -291,10 +291,10 @@ Music1_PlaySong: ; f418c (3d:418c)
 	ld [wMusicE8], a
 	ld [wMusicVibratoDelay], a
 	ld [wMusicEC], a
-	ld a, [Unknown_f4c20]
-	ld [wMusicReturnAddress], a
-	ld a, [Unknown_f4c20 + 1]
-	ld [wMusicReturnAddress + 1], a
+	ld a, [Music1_ChannelLoopStacks]
+	ld [wMusicChannelStackPointers], a
+	ld a, [Music1_ChannelLoopStacks + 1]
+	ld [wMusicChannelStackPointers + 1], a
 	ld a, $8
 	ld [wMusicE9], a
 .noChannel1
@@ -317,10 +317,10 @@ Music1_PlaySong: ; f418c (3d:418c)
 	ld [wMusicE8 + 1], a
 	ld [wMusicVibratoDelay + 1], a
 	ld [wMusicEC + 1], a
-	ld a, [Unknown_f4c20 + 2]
-	ld [wMusicReturnAddress + 2], a
-	ld a, [Unknown_f4c20 + 3]
-	ld [wMusicReturnAddress + 3], a
+	ld a, [Music1_ChannelLoopStacks + 2]
+	ld [wMusicChannelStackPointers + 2], a
+	ld a, [Music1_ChannelLoopStacks + 3]
+	ld [wMusicChannelStackPointers + 3], a
 	ld a, $8
 	ld [wMusicE9 + 1], a
 .noChannel2
@@ -343,10 +343,10 @@ Music1_PlaySong: ; f418c (3d:418c)
 	ld [wMusicE8 + 2], a
 	ld [wMusicVibratoDelay + 2], a
 	ld [wMusicEC + 2], a
-	ld a, [Unknown_f4c20 + 4]
-	ld [wMusicReturnAddress + 4], a
-	ld a, [Unknown_f4c20 + 5]
-	ld [wMusicReturnAddress + 5], a
+	ld a, [Music1_ChannelLoopStacks + 4]
+	ld [wMusicChannelStackPointers + 4], a
+	ld a, [Music1_ChannelLoopStacks + 5]
+	ld [wMusicChannelStackPointers + 5], a
 	ld a, $40
 	ld [wMusicE9 + 2], a
 .noChannel3
@@ -368,10 +368,10 @@ Music1_PlaySong: ; f418c (3d:418c)
 	ld [wMusicE8 + 3], a
 	ld [wMusicVibratoDelay + 3], a
 	ld [wMusicEC + 3], a
-	ld a, [Unknown_f4c20 + 6]
-	ld [wMusicReturnAddress + 6], a
-	ld a, [Unknown_f4c20 + 7]
-	ld [wMusicReturnAddress + 7], a
+	ld a, [Music1_ChannelLoopStacks + 6]
+	ld [wMusicChannelStackPointers + 6], a
+	ld a, [Music1_ChannelLoopStacks + 7]
+	ld [wMusicChannelStackPointers + 7], a
 	ld a, $40
 	ld [wMusicE9 + 3], a
 .noChannel4
@@ -931,39 +931,39 @@ Music1_EndMainLoop: ; f45fd (3d:45fd)
 
 Music1_Loop: ; f4609 (3d:4609)
 	pop de
-	ld a, [de]
+	ld a, [de] ; get loop count
 	inc de
 	push af
-	call Music1_GetReturnAddress
-	ld [hl], e
-	inc hl
-	ld [hl], d
+	call Music1_GetChannelStackPointer
+	ld [hl], e ; 
+	inc hl     ; store address of command at beginning of loop
+	ld [hl], d ; 
 	inc hl
 	pop af
-	ld [hl], a
+	ld [hl], a ; store loop count
 	inc hl
 	push de
-	call Music1_SetReturnAddress
+	call Music1_SetChannelStackPointer
 	jp Music1_PlayNextNote_pop
 
 Music1_EndLoop: ; f461e (3d:461e)
-	call Music1_GetReturnAddress
+	call Music1_GetChannelStackPointer
 	dec hl
-	ld a, [hl]
+	ld a, [hl] ; get remaining loop count
 	dec a
-	jr z, .asm_f4630
+	jr z, .loopDone
 	ld [hld], a
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
 	pop hl
-	ld h, d
-	ld l, e
+	ld h, d ; 
+	ld l, e ; go to address of beginning of loop
 	jp Music1_PlayNextNote
-.asm_f4630
+.loopDone
 	dec hl
 	dec hl
-	call Music1_SetReturnAddress
+	call Music1_SetChannelStackPointer
 	jp Music1_PlayNextNote_pop
 
 Music1_jp: ; f4638 (3d:4638)
@@ -974,12 +974,12 @@ Music1_jp: ; f4638 (3d:4638)
 	jp Music1_PlayNextNote
 
 Music1_call: ; f463f (3d:463f)
-	call Music1_GetReturnAddress
+	call Music1_GetChannelStackPointer
 	pop de
 	ld a, e
-	ld [hli], a
-	ld a, d
-	ld [hli], a
+	ld [hli], a ; 
+	ld a, d     ; store address of command after call
+	ld [hli], a ; 
 	ld a, [de]
 	ld b, a
 	inc de
@@ -988,20 +988,20 @@ Music1_call: ; f463f (3d:463f)
 	ld e, b
 	ld b, $0
 	push de
-	call Music1_SetReturnAddress
+	call Music1_SetChannelStackPointer
 	jp Music1_PlayNextNote_pop
 
 Music1_ret: ; f4656 (3d:4656)
 	pop de
-	call Music1_GetReturnAddress
+	call Music1_GetChannelStackPointer
 	dec hl
-	ld a, [hld]
-	ld e, [hl]
+	ld a, [hld] ; 
+	ld e, [hl]  ; retrieve address of caller of this sub branch
 	ld d, a
 	inc de
 	inc de
 	push de
-	call Music1_SetReturnAddress
+	call Music1_SetChannelStackPointer
 	jp Music1_PlayNextNote_pop
 
 Music1_musice4: ; f4667 (3d:4667)
@@ -1126,10 +1126,11 @@ Music1_end: ; f46f4 (3d:46f4)
 	pop hl
 	ret
 
-; returns the address where the address to
-; return to is stored for the current channel
-Music1_GetReturnAddress: ; f46fc (3d:46fc)
-	ld hl, wMusicReturnAddress
+; returns the address of the top of the stack
+; for the current channel
+; used for loops and calls
+Music1_GetChannelStackPointer: ; f46fc (3d:46fc)
+	ld hl, wMusicChannelStackPointers
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
@@ -1137,12 +1138,11 @@ Music1_GetReturnAddress: ; f46fc (3d:46fc)
 	ld l, a
 	ret
 
-; puts the address in hl where the address to
-; return to is stored for the currentchannel
-Music1_SetReturnAddress: ; f4705 (3d:4705)
+; sets the current channel's stack pointer to hl
+Music1_SetChannelStackPointer: ; f4705 (3d:4705)
 	ld d, h
 	ld e, l
-	ld hl, wMusicReturnAddress
+	ld hl, wMusicChannelStackPointers
 	add hl, bc
 	add hl, bc
 	ld [hl], e
@@ -1722,7 +1722,7 @@ Func_f49dc: ; f49dc (3d:49dc)
 	call Music1_CopyData
 	ld a, $0
 	ld [wdeac], a
-	ld hl, wMusicReturnAddress
+	ld hl, wMusicChannelStackPointers
 	ld de, $dead
 	ld a, $8
 	call Music1_CopyData
@@ -1826,12 +1826,12 @@ Func_f4b01: ; f4b01 (3d:4b01)
 	ld a, [wdeac]
 	ld [wddef], a
 	ld hl, $dead
-	ld de, wMusicReturnAddress
+	ld de, wMusicChannelStackPointers
 	ld a, $8
 	call Music1_CopyData
 	ld hl, $deb5
-	ld de, $ddfb
-	ld a, $30
+	ld de, wMusicCh1Stack
+	ld a, $c * 4
 	call Music1_CopyData
 	ret
 
@@ -1846,8 +1846,11 @@ Music1_CopyData: ; f4c18 (3d:4c18)
 	jr nz, .asm_f4c19
 	ret
 
-Unknown_f4c20: ; f4c20 (3d:4c20)
-INCBIN "baserom.gbc",$f4c20,$f4c28 - $f4c20
+Music1_ChannelLoopStacks: ; f4c20 (3d:4c20)
+	dw wMusicCh1Stack
+	dw wMusicCh2Stack
+	dw wMusicCh3Stack
+	dw wMusicCh4Stack
 
 Unknown_f4c28: ; f4c28 (3d:4c28)
 INCBIN "baserom.gbc",$f4c28,$f4c30 - $f4c28

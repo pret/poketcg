@@ -1335,11 +1335,26 @@ wMusicPanning:: ; ddf1
 wddf2:: ; ddf2
 	ds $1
 
-; 4 pointers to the addresses of the return point of the sub branch
-wMusicReturnAddress:: ; ddf3
+; 4 pointers to the positions on the stack for each channel
+wMusicChannelStackPointers:: ; ddf3
 	ds $8
 
-	ds $58
+; these stacks contain the address of the command to return to at the end of a sub branch (2 bytes)
+; and also contain the address of the command to return to at the end of a loop (2 bytes for address and
+; 1 byte for loop count)
+wMusicCh1Stack:: ; ddfb
+	ds $c
+	
+wMusicCh2Stack:: ; de07
+	ds $c
+
+wMusicCh3Stack:: ; de13
+	ds $c
+
+wMusicCh4Stack:: ; de1f
+	ds $c
+
+	ds $28
 
 wde53:: ; de53
 	ds $1
