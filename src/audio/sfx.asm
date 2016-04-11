@@ -1,13 +1,13 @@
 Func_fc000: ; fc000 (3f:4000)
-	jp Func_fc006
+	jp SFX_PlaySfx
 
 Func_fc003: ; fc003 (3f:4003)
 	jp Func_fc059
 
-Func_fc006: ; fc006 (3f:4006)
+SFX_PlaySfx: ; fc006 (3f:4006)
 	ld hl, NumberOfSFX
 	cp [hl]
-	jr nc, .asm_fc058
+	jr nc, .invalidID
 	add a
 	ld c, a
 	ld b, $0
@@ -26,7 +26,7 @@ Func_fc006: ; fc006 (3f:4006)
 	ld a, [hli]
 	ld [wdd8c], a
 	ld [wde54], a
-	ld de, $de4b
+	ld de, wde4b
 	ld c, $0
 .asm_fc031
 	ld a, [wde54]
@@ -40,10 +40,10 @@ Func_fc006: ; fc006 (3f:4006)
 	ld [de], a
 	inc de
 	push hl
-	ld hl, $de2f
+	ld hl, wde2f
 	add hl, bc
 	ld [hl], $0
-	ld hl, $de33
+	ld hl, wde33
 	add hl, bc
 	ld [hl], $1
 	pop hl
@@ -56,7 +56,7 @@ Func_fc006: ; fc006 (3f:4006)
 	ld a, $4
 	cp c
 	jr nz, .asm_fc031
-.asm_fc058
+.invalidID
 	ret
 
 Func_fc059: ; fc059 (3f:4059)
@@ -72,12 +72,12 @@ Func_fc059: ; fc059 (3f:4059)
 	ld a, [wdd8c]
 	ld [wde54], a
 .asm_fc06c
-	ld hl, $de54
+	ld hl, wde54
 	ld a, [hl]
 	rrca
 	ld [hl], a
 	jr nc, .asm_fc08d
-	ld hl, $de33
+	ld hl, wde33
 	add hl, bc
 	ld a, [hl]
 	dec a
@@ -86,7 +86,7 @@ Func_fc059: ; fc059 (3f:4059)
 	call Func_fc18d
 	jr .asm_fc08d
 .asm_fc082
-	ld hl, $de4b
+	ld hl, wde4b
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
@@ -146,7 +146,7 @@ SFX_0: ; fc0ce (3f:40ce)
 	ld a, [hli]
 	ld e, a
 	push hl
-	ld hl, $de37
+	ld hl, wde37
 	add hl, bc
 	add hl, bc
 	push bc
@@ -164,7 +164,7 @@ SFX_0: ; fc0ce (3f:40ce)
 	ld d, a
 .asm_fc0e9
 	pop bc
-	ld hl, $de2b
+	ld hl, wde2b
 	add hl, bc
 	ld a, [hl]
 	ld [hl], $0
@@ -186,7 +186,7 @@ SFX_0: ; fc0ce (3f:40ce)
 	ld [hl], d
 	pop de
 Func_fc105: ; fc105 (3f:4105)
-	ld hl, $de4b
+	ld hl, wde4b
 	add hl, bc
 	add hl, bc
 	ld [hl], e
@@ -195,7 +195,7 @@ Func_fc105: ; fc105 (3f:4105)
 	ret
 
 SFX_1: ; fc10e (3f:410e)
-	ld hl, $de2b
+	ld hl, wde2b
 	add hl, bc
 	ld a, $80
 	ld [hl], a
@@ -229,7 +229,7 @@ SFX_2: ; fc127 (3f:4127)
 	jp Func_fc094
 
 SFX_loop: ; fc138 (3f:4138)
-	ld hl, $de43
+	ld hl, wde43
 	add hl, bc
 	add hl, bc
 	pop de
@@ -238,7 +238,7 @@ SFX_loop: ; fc138 (3f:4138)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld hl, $de3f
+	ld hl, wde3f
 	add hl, bc
 	ld [hl], a
 	ld l, e
@@ -246,13 +246,13 @@ SFX_loop: ; fc138 (3f:4138)
 	jp Func_fc094
 
 SFX_endloop: ; fc14d (3f:414d)
-	ld hl, $de3f
+	ld hl, wde3f
 	add hl, bc
 	ld a, [hl]
 	dec a
 	jr z, .asm_fc162
 	ld [hl], a
-	ld hl, $de43
+	ld hl, wde43
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
@@ -265,7 +265,7 @@ SFX_endloop: ; fc14d (3f:414d)
 	jp Func_fc094
 
 SFX_5: ; fc166 (3f:4166)
-	ld hl, $de2f
+	ld hl, wde2f
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -283,7 +283,7 @@ SFX_6: ; fc172 (3f:4172)
 .asm_fc17c
 	call Func_fc18d
 .asm_fc17f
-	ld hl, $de33
+	ld hl, wde33
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -295,12 +295,12 @@ SFX_6: ; fc172 (3f:4172)
 	jp Func_fc105
 
 Func_fc18d: ; fc18d (3f:418d)
-	ld hl, $de2f
+	ld hl, wde2f
 	add hl, bc
 	ld a, [hl]
 	or a
 	jr z, .asm_fc1cc
-	ld hl, $de37
+	ld hl, wde37
 	add hl, bc
 	add hl, bc
 	bit 7, a
@@ -325,7 +325,7 @@ Func_fc18d: ; fc18d (3f:418d)
 	adc b
 .asm_fc1b1
 	ld [hl], a
-	ld hl, $de2b
+	ld hl, wde2b
 	add hl, bc
 	ld d, [hl]
 	ld [hl], $0
@@ -349,11 +349,11 @@ Func_fc18d: ; fc18d (3f:418d)
 	ret
 
 Func_fc1cd: ; fc1cd (3f:41cd)
-	ld hl, $de32
+	ld hl, wde32
 	ld a, [hl]
 	or a
 	jr z, .asm_fc201
-	ld hl, $de3d
+	ld hl, wde3d
 	bit 7, a
 	jr z, .asm_fc1e5
 	xor $ff
@@ -375,7 +375,7 @@ Func_fc1cd: ; fc1cd (3f:41cd)
 	xor e
 	and $8
 	swap a
-	ld hl, $de2e
+	ld hl, wde2e
 	ld e, [hl]
 	ld [hl], $0
 	or e
@@ -434,7 +434,7 @@ SFX_8: ; fc22d (3f:422d)
 	jr .asm_fc234
 .asm_fc23c
 	ld d, a
-	ld hl, $dd85
+	ld hl, wdd85
 	ld a, [hl]
 	and e
 	or d
@@ -476,7 +476,7 @@ Func_fc26c: ; fc26c (3f:426c)
 	ld [wde53], a
 	ld [wdd83], a
 	ld a, $80
-	ld [wdd82], a
+	ld [wCurSfxID], a
 	ret
 
 Func_fc279: ; fc279 (3f:4279)

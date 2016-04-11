@@ -874,8 +874,6 @@ wd111:: ; d111
 wd112:: ; d112
 	ds $1
 
-;--- Music ------------------------------------------------
-
 wMatchStartTheme:: ; d113
 	ds $1
 
@@ -1201,20 +1199,27 @@ wBoosterDataTypeChanceData:: ; d689
 	ds $9
 	ds $6ee
 
-wdd80:: ; dd80
+;--- Music ------------------------------------------------
+
+; bit 7 is set once the song has been started
+wCurSongID:: ; dd80
 	ds $1
 
-wdd81:: ; dd81
+wCurSongBank:: ; dd81
 	ds $1
 
-wdd82:: ; dd82
+; bit 7 is set once the sfx has been started
+wCurSfxID:: ; dd82
 	ds $1
 
 wdd83:: ; dd83
 	ds $1
 
 wMusicDC:: ; dd84
-	ds $2
+	ds $1
+
+wdd85:: ; dd85
+	ds $1
 
 wMusicDuty1:: ; dd86
 	ds $1
@@ -1270,7 +1275,10 @@ wddac:: ; ddac
 	ds $3
 
 wMusicOctave:: ; ddaf
-	ds $8
+	ds $4
+
+wddb3:: ; ddb3
+	ds $4
 
 wddb7:: ; ddb7
 	ds $1
@@ -1321,7 +1329,10 @@ wMusicVolume:: ; dde7
 	ds $3
 
 wMusicE4:: ; ddea
-	ds $5
+	ds $3
+
+wdded:: ; dded
+	ds $2
 
 wddef:: ; ddef
 	ds $1
@@ -1354,7 +1365,37 @@ wMusicCh3Stack:: ; de13
 wMusicCh4Stack:: ; de1f
 	ds $c
 
-	ds $28
+;--- SFX --------------------------------------------------
+
+wde2b:: ; de2b
+	ds $3
+
+wde2e:: ; de2e
+	ds $1
+
+wde2f:: ; de2f
+	ds $3
+
+wde32:: ; de32
+	ds $1
+
+wde33:: ; de33
+	ds $4
+
+wde37:: ; de37
+	ds $6
+
+wde3d:: ; de3d
+	ds $2
+
+wde3f:: ; de3f
+	ds $4
+
+wde43:: ; de43
+	ds $8
+
+wde4b:: ; de4b
+	ds $8
 
 wde53:: ; de53
 	ds $1
@@ -1362,27 +1403,91 @@ wde53:: ; de53
 wde54:: ; de54
 	ds $1
 
-wde55:: ; de55
+wCurSongIDBackup:: ; de55
 	ds $1
 
-wde56:: ; de56
+wCurSongBankBackup:: ; de56
 	ds $1
 
-wde57:: ; de57
-	ds $5
-
-wde5c:: ; de5c
+wMusicDCBackup:: ; de57
 	ds $1
 
-wde5d:: ; de5d
-	ds $19
+wMusicDuty1Backup:: ; de58
+	ds $4
+
+wMusicWaveBackup:: ; de5c
+	ds $1
+
+wMusicWaveChangeBackup:: ; de5d
+	ds $1
+
+wMusicIsPlayingBackup:: ; de5e
+	ds $4
+
+wMusicTieBackup:: ; de62
+	ds $4
+
+wMusicChannelPointersBackup:: ; de66
+	ds $8
+
+wMusicMainLoopStartBackup:: ; de6e
+	ds $8
 
 wde76:: ; de76
 	ds $1
 
 wde77:: ; de77
-	ds $35
+	ds $1
+
+wMusicOctaveBackup:: ; de78
+	ds $4
+
+wde7c:: ; de7c
+	ds $4
+
+wde80:: ; de80
+	ds $4
+
+wde84:: ; de84
+	ds $4
+
+wMusicE8Backup:: ; de88
+	ds $4
+
+wde8c:: ; de8c
+	ds $4
+
+wMusicE9Backup:: ; de90
+	ds $4
+
+wMusicECBackup:: ; de94
+	ds $4
+
+wMusicSpeedBackup:: ; de98
+	ds $4
+
+wMusicVibratoType2Backup:: ; de9c
+	ds $4
+
+wMusicVibratoDelayBackup:: ; dea0
+	ds $4
+
+wMusicVolumeBackup:: ; dea4
+	ds $3
+
+wMusicE4Backup:: ; dea7
+	ds $3
+
+wdeaa:: ; deaa
+	ds $2
 
 wdeac:: ; deac
+	ds $1
+
+wMusicChannelStackPointersBackup:: ; dead
+	ds $8
+
+wMusicCh1StackBackup:: ; deb5
+	ds $c * 4
 
 INCLUDE "sram.asm"

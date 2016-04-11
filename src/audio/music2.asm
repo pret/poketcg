@@ -1,11 +1,11 @@
 Func_f8000: ; f8000 (3e:4000)
-	jp Func_f807d
+	jp Music2_Init
 
 Func_f8003: ; f8003 (3e:4003)
-	jp Func_f80e9
+	jp Music2_Update
 
 Func_f8006: ; f8006 (3e:4006)
-	jp Func_f8021
+	jp Music2_PlaySong
 
 Func_f8009: ; f8009 (3e:4009)
 	jp Func_f802d
@@ -26,18 +26,18 @@ Func_f8018: ; f8018 (3e:4018)
 	jp Func_f806f
 
 Func_f801b: ; f801b (3e:401b)
-	jp Func_f89c4
+	jp Music2_PauseSong
 
 Func_f801e: ; f801e (3e:401e)
-	jp Func_f89d0
+	jp Music2_ResumeSong
 
-Func_f8021: ; f8021 (3e:4021)
+Music2_PlaySong: ; f8021 (3e:4021)
 	push hl
 	ld hl, NumberOfSongs2
 	cp [hl]
-	jr nc, .asm_f802b
-	ld [wdd80], a
-.asm_f802b
+	jr nc, .invalidID
+	ld [wCurSongID], a
+.invalidID
 	pop hl
 	ret
 
@@ -60,7 +60,7 @@ Func_f802d: ; f802d (3e:402d)
 	ld a, b
 	ld [wdd83], a
 	ld a, c
-	ld [wdd82], a
+	ld [wCurSfxID], a
 .asm_f804b
 	pop hl
 	pop bc
@@ -71,7 +71,7 @@ Func_f804e: ; f804e (3e:404e)
 	ret
 
 Func_f8052: ; f8052 (3e:4052)
-	ld a, [wdd80]
+	ld a, [wCurSongID]
 	cp $80
 	ld a, $1
 	ret nz
@@ -79,7 +79,7 @@ Func_f8052: ; f8052 (3e:4052)
 	ret
 
 Func_f805c: ; f805c (3e:405c)
-	ld a, [wdd82]
+	ld a, [wCurSfxID]
 	cp $80
 	ld a, $1
 	ret nz
@@ -104,7 +104,7 @@ Func_f806f: ; f806f (3e:406f)
 	pop bc
 	ret
 
-Func_f807d: ; f807d (3e:407d)
+Music2_Init: ; f807d (3e:407d)
 	xor a
 	ld [rNR52], a
 	ld a, $80
@@ -114,10 +114,10 @@ Func_f807d: ; f807d (3e:407d)
 	ld a, $ff
 	ld [rNR51], a
 	ld a, $3d
-	ld [wdd81], a
+	ld [wCurSongBank], a
 	ld a, $80
-	ld [wdd80], a
-	ld [wdd82], a
+	ld [wCurSongID], a
+	ld [wCurSfxID], a
 	ld a, $77 ; set both speakers to max volume
 	ld [wMusicPanning], a
 	xor a
@@ -131,14 +131,14 @@ Func_f807d: ; f807d (3e:407d)
 	ld [wMusicDC], a
 	ld de, $0001
 	ld bc, $0000
-.asm_f80bb
+.zeroLoop1
 	ld hl, wMusicIsPlaying
 	add hl, bc
 	ld [hl], d
 	ld hl, wMusicTie
 	add hl, bc
 	ld [hl], d
-	ld hl, $ddb3
+	ld hl, wddb3
 	add hl, bc
 	ld [hl], d
 	ld hl, wMusicEC
@@ -150,65 +150,65 @@ Func_f807d: ; f807d (3e:407d)
 	inc c
 	ld a, c
 	cp $4
-	jr nz, .asm_f80bb
+	jr nz, .zeroLoop1
 	ld hl, Music2_ChannelLoopStacks
 	ld bc, wMusicChannelStackPointers
 	ld d, $8
-.asm_f80e2
+.zeroLoop2
 	ld a, [hli]
 	ld [bc], a
 	inc bc
 	dec d
-	jr nz, .asm_f80e2
+	jr nz, .zeroLoop2
 	ret
 
-Func_f80e9: ; f80e9 (3e:40e9)
-	call Func_f82a4
-	call Func_f811c
+Music2_Update: ; f80e9 (3e:40e9)
+	call Music2_EmptyFunc
+	call Music2_CheckForNewSound
 	ld hl, Func_fc003
 	call Bankswitch3dTo3f
-	ld a, [wdd81]
+	ld a, [wCurSongBank]
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ld a, [wddf2]
 	cp $0
-	jr z, .asm_f8109
+	jr z, .updateChannels
 	call Func_f8980
-	jr .asm_f8115
-.asm_f8109
-	call Func_f82a5
-	call Func_f830a
-	call Func_f836f
-	call Func_f83ce
-.asm_f8115
+	jr .skipChannelUpdates
+.updateChannels
+	call Music2_UpdateChannel1
+	call Music2_UpdateChannel2
+	call Music2_UpdateChannel3
+	call Music2_UpdateChannel4
+.skipChannelUpdates
 	call Func_f8866
-	call Func_f89b1
+	call Music2_CheckForEndOfSong
 	ret
 
-Func_f811c: ; f811c (3e:411c)
-	ld a, [wdd80]
+Music2_CheckForNewSound: ; f811c (3e:411c)
+	ld a, [wCurSongID]
 	rla
-	jr c, .asm_f8133
-	call Func_f814b
-	ld a, [wdd80]
-	call Music2_PlaySong
-	ld a, [wdd80]
+	jr c, .checkForNewSfx
+	call Music2_StopAllChannels
+	ld a, [wCurSongID]
+	call Music2_BeginSong
+	ld a, [wCurSongID]
 	or $80
-	ld [wdd80], a
-.asm_f8133
-	ld a, [wdd82]
+	ld [wCurSongID], a
+.checkForNewSfx
+	ld a, [wCurSfxID]
 	rla
-	jr c, .asm_f814a
-	ld a, [wdd82]
+	jr c, .noNewSound
+	ld a, [wCurSfxID]
 	ld hl, Func_fc000
 	call Bankswitch3dTo3f
-	ld a, [wdd82]
+	ld a, [wCurSfxID]
 	or $80
-	ld [wdd82], a
-.asm_f814a
+	ld [wCurSfxID], a
+.noNewSound
 	ret
 
-Func_f814b: ; f814b (3e:414b)
+Music2_StopAllChannels: ; f814b (3e:414b)
 	ld a, [wdd8c]
 	ld d, a
 	xor a
@@ -248,14 +248,14 @@ Func_f814b: ; f814b (3e:414b)
 	ret
 
 ; plays the song given by the id in a
-Music2_PlaySong: ; f818c (3e:418c)
+Music2_BeginSong: ; f818c (3e:418c)
 	push af
 	ld c, a
 	ld b, $0
 	ld hl, SongBanks2
 	add hl, bc
 	ld a, [hl]
-	ld [wdd81], a
+	ld [wCurSongBank], a
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
@@ -379,10 +379,10 @@ Music2_PlaySong: ; f818c (3e:418c)
 	ld [wddf2], a
 	ret
 
-Func_f82a4: ; f82a4 (3e:42a4)
+Music2_EmptyFunc: ; f82a4 (3e:42a4)
 	ret
 
-Func_f82a5: ; f82a5 (3e:42a5)
+Music2_UpdateChannel1: ; f82a5 (3e:42a5)
 	ld a, [wMusicIsPlaying]
 	or a
 	jr z, .asm_f82fa
@@ -435,7 +435,7 @@ Func_f82a5: ; f82a5 (3e:42a5)
 .asm_f8309
 	ret
 
-Func_f830a: ; f830a (3e:430a)
+Music2_UpdateChannel2: ; f830a (3e:430a)
 	ld a, [wMusicIsPlaying + 1]
 	or a
 	jr z, .asm_f835f
@@ -488,7 +488,7 @@ Func_f830a: ; f830a (3e:430a)
 .asm_f836e
 	ret
 
-Func_f836f: ; f836f (3e:436f)
+Music2_UpdateChannel3: ; f836f (3e:436f)
 	ld a, [wMusicIsPlaying + 2]
 	or a
 	jr z, .asm_f83be
@@ -537,7 +537,7 @@ Func_f836f: ; f836f (3e:436f)
 .asm_f83cd
 	ret
 
-Func_f83ce: ; f83ce (3e:43ce)
+Music2_UpdateChannel4: ; f83ce (3e:43ce)
 	ld a, [wMusicIsPlaying + 3]
 	or a
 	jr z, .asm_f8400
@@ -656,10 +656,10 @@ Music2_note: ; f448c (3d:448c)
 	jr z, .asm_f84b0
 	ld [hl], $1
 	xor a
-	ld hl, $dddb
+	ld hl, wdddb
 	add hl, bc
 	ld [hl], a
-	ld hl, $dde3
+	ld hl, wdde3
 	add hl, bc
 	ld [hl], a
 	inc [hl]
@@ -726,12 +726,12 @@ Music2_note: ; f448c (3d:448c)
 	pop bc
 	pop hl
 .asm_f84fb
-	ld hl, $ddc3
+	ld hl, wddc3
 	add hl, bc
 	ld [hl], a
 	pop af
 	and $f0
-	ld hl, $ddb7
+	ld hl, wddb7
 	add hl, bc
 	ld [hl], a
 	or a
@@ -776,7 +776,7 @@ Music2_note: ; f448c (3d:448c)
 	and $77
 	or d
 	ld [wMusicDC], a
-	ld de, $ddab
+	ld de, wddab
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -793,14 +793,14 @@ Music2_note: ; f448c (3d:448c)
 	ld b, $0
 	ld a, l
 	ld d, h
-	ld hl, $dded
+	ld hl, wdded
 	ld [hli], a
 	ld [hl], d
 	ld a, $1
 	ld [wddef], a
 	jr .asm_f858e
 .asm_f8564
-	ld hl, $dda5
+	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
 	push hl
@@ -831,7 +831,7 @@ Music2_note: ; f448c (3d:448c)
 	ld [hl], d
 .asm_f858e
 	pop de
-	ld hl, $dd95
+	ld hl, wMusicChannelPointers
 	add hl, bc
 	add hl, bc
 	ld [hl], e
@@ -1201,7 +1201,7 @@ Func_f875a: ; f875a (3e:475a)
 	cp $0
 	jr z, .asm_f878c
 	ld d, $0
-	ld hl, $dd92
+	ld hl, wMusicTie + 1
 	ld a, [hl]
 	cp $80
 	jr z, .asm_f8779
@@ -1220,7 +1220,7 @@ Func_f875a: ; f875a (3e:475a)
 .asm_f878b
 	ret
 .asm_f878c
-	ld hl, $dd92
+	ld hl, wMusicTie + 1
 	ld [hl], $0
 	ld hl, rNR22
 	ld a, $8
@@ -1237,16 +1237,16 @@ Func_f879c: ; f879c (3e:479c)
 	ld d, $0
 	ld a, [wMusicWaveChange]
 	or a
-	jr z, .asm_f87b3
+	jr z, .noWaveChange
 	xor a
 	ld [rNR30], a
-	call Func_f87ea
+	call Music2_LoadWaveInstrument
 	ld d, $80
-.asm_f87b3
+.noWaveChange
 	ld a, [wddb9]
 	cp $0
 	jr z, .asm_f87e1
-	ld hl, $dd93
+	ld hl, wMusicTie + 2
 	ld a, [hl]
 	cp $80
 	jr z, .asm_f87cc
@@ -1275,7 +1275,7 @@ Func_f879c: ; f879c (3e:479c)
 	ld [rNR30], a
 	ret
 
-Func_f87ea: ; f879c (3e:47ea)
+Music2_LoadWaveInstrument: ; f879c (3e:47ea)
 	ld a, [wMusicWave]
 	add a
 	ld d, $0
@@ -1287,14 +1287,14 @@ Func_f87ea: ; f879c (3e:47ea)
 	ld l, a
 	ld b, d
 	ld de, $ff30
-.asm_f87fc
+.copyWaveLoop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	inc b
 	ld a, b
 	cp $10
-	jr nz, .asm_f87fc
+	jr nz, .copyWaveLoop
 	xor a
 	ld [wMusicWaveChange], a
 	ret
@@ -1307,7 +1307,7 @@ Func_f880a: ; f880a (3e:480a)
 	cp $0
 	jr z, asm_f882a
 	ld de, rNR41
-	ld hl, $ddab
+	ld hl, wddab
 	ld a, [hli]
 	ld [de], a
 	inc e
@@ -1340,7 +1340,7 @@ Func_f8839: ; f8839 (3e:4839)
 	ld [wddef], a
 	jr .asm_f8859
 .asm_f8846
-	ld hl, $dded
+	ld hl, wdded
 	ld a, [hli]
 	ld d, [hl]
 	ld e, a
@@ -1406,7 +1406,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld a, [hl]
 	cp $0
 	jr z, .asm_f8902
-	ld hl, $dde3
+	ld hl, wdde3
 	add hl, bc
 	cp [hl]
 	jr z, .asm_f88ab
@@ -1424,7 +1424,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld h, [hl]
 	ld l, a
 	push hl
-	ld hl, $dddb
+	ld hl, wdddb
 	add hl, bc
 	ld d, $0
 	ld e, [hl]
@@ -1434,7 +1434,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld a, [hli]
 	cp $80
 	jr z, .asm_f88ee
-	ld hl, $dda5
+	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
 	ld e, [hl]
@@ -1465,7 +1465,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ret
 .asm_f88ee
 	push hl
-	ld hl, $dddb
+	ld hl, wdddb
 	add hl, bc
 	ld [hl], $0
 	pop hl
@@ -1477,7 +1477,7 @@ Func_f8898: ; f8898 (3e:4898)
 	ld [hl], a
 	jr .asm_f88ab
 .asm_f8902
-	ld hl, $dda5
+	ld hl, wMusicCh1CurPitch
 	add hl, bc
 	add hl, bc
 	ld e, [hl]
@@ -1487,13 +1487,13 @@ Func_f8898: ; f8898 (3e:4898)
 
 Func_f890b: ; f890b (3e:490b)
 	cp $0
-	jr nz, .asm_f892c
+	jr nz, .notChannel1
 	ld a, [wMusicVibratoDelay]
 	cp $0
-	jr z, .asm_f8966
+	jr z, .done
 	ld a, [wdd8c]
 	bit 0, a
-	jr nz, .asm_f8966
+	jr nz, .done
 	ld a, e
 	ld [rNR13], a
 	ld a, [rNR11]
@@ -1503,15 +1503,15 @@ Func_f890b: ; f890b (3e:490b)
 	and $3f
 	ld [rNR14], a
 	ret
-.asm_f892c
+.notChannel1
 	cp $1
-	jr nz, .asm_f894b
+	jr nz, .notChannel2
 	ld a, [wMusicVibratoDelay + 1]
 	cp $0
-	jr z, .asm_f8966
+	jr z, .done
 	ld a, [wdd8c]
 	bit 1, a
-	jr nz, .asm_f8966
+	jr nz, .done
 	ld a, e
 	ld [rNR23], a
 	ld a, [rNR21]
@@ -1520,22 +1520,22 @@ Func_f890b: ; f890b (3e:490b)
 	ld a, d
 	ld [rNR24], a
 	ret
-.asm_f894b
+.notChannel2
 	cp $2
-	jr nz, .asm_f8966
+	jr nz, .done
 	ld a, [wMusicVibratoDelay + 2]
 	cp $0
-	jr z, .asm_f8966
+	jr z, .done
 	ld a, [wdd8c]
 	bit 2, a
-	jr nz, .asm_f8966
+	jr nz, .done
 	ld a, e
 	ld [rNR33], a
 	xor a
 	ld [rNR31], a
 	ld a, d
 	ld [rNR34], a
-.asm_f8966
+.done
 	ret
 
 Func_f8967: ; f8967 (3e:4967)
@@ -1592,7 +1592,7 @@ Func_f8980: ; f8980 (3e:4980)
 .asm_f89b0
 	ret
 
-Func_f89b1: ; f89b1 (3e:49b1)
+Music2_CheckForEndOfSong: ; f89b1 (3e:49b1)
 	ld hl, wMusicIsPlaying
 	xor a
 	add [hl]
@@ -1605,54 +1605,54 @@ Func_f89b1: ; f89b1 (3e:49b1)
 	or a
 	ret nz
 	ld a, $80
-	ld [wdd80], a
+	ld [wCurSongID], a
 	ret
 
-Func_f89c4: ; f89c4 (3e:49c4)
+Music2_PauseSong: ; f89c4 (3e:49c4)
 	di
 	call Func_f8980
-	call Func_f89dc
-	call Func_f814b
+	call Music2_BackupSong
+	call Music2_StopAllChannels
 	ei
 	ret
 
-Func_f89d0: ; f89d0 (3e:49d0)
+Music2_ResumeSong: ; f89d0 (3e:49d0)
 	di
 	call Func_f8980
-	call Func_f814b
-	call Func_f8b01
+	call Music2_StopAllChannels
+	call Music2_LoadBackup
 	ei
 	ret
 
-Func_f89dc: ; f89dc (3e:49dc)
-	ld a, [wdd80]
-	ld [wde55], a
-	ld a, [wdd81]
-	ld [wde56], a
+Music2_BackupSong: ; f89dc (3e:49dc)
+	ld a, [wCurSongID]
+	ld [wCurSongIDBackup], a
+	ld a, [wCurSongBank]
+	ld [wCurSongBankBackup], a
 	ld a, [wMusicDC]
-	ld [wde57], a
+	ld [wMusicDCBackup], a
 	ld hl, wMusicDuty1
-	ld de, $de58
+	ld de, wMusicDuty1Backup
 	ld a, $4
 	call Music2_CopyData
 	ld a, [wMusicWave]
-	ld [wde5c], a
+	ld [wMusicWaveBackup], a
 	ld a, [wMusicWaveChange]
-	ld [wde5d], a
+	ld [wMusicWaveChangeBackup], a
 	ld hl, wMusicIsPlaying
-	ld de, $de5e
+	ld de, wMusicIsPlayingBackup
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicTie
-	ld de, $de62
+	ld de, wMusicTieBackup
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $dd95
-	ld de, $de66
+	ld hl, wMusicChannelPointers
+	ld de, wMusicChannelPointersBackup
 	ld a, $8
 	call Music2_CopyData
 	ld hl, wMusicMainLoopStart
-	ld de, $de6e
+	ld de, wMusicMainLoopStartBackup
 	ld a, $8
 	call Music2_CopyData
 	ld a, [wddab]
@@ -1660,47 +1660,47 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ld a, [wddac]
 	ld [wde77], a
 	ld hl, wMusicOctave
-	ld de, $de78
+	ld de, wMusicOctaveBackup
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $ddb3
-	ld de, $de7c
+	ld hl, wddb3
+	ld de, wde7c
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $ddb7
-	ld de, $de80
+	ld hl, wddb7
+	ld de, wde80
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $ddbb
-	ld de, $de84
+	ld hl, wddbb
+	ld de, wde84
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicE8
-	ld de, $de88
+	ld de, wMusicE8Backup
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $ddc3
-	ld de, $de8c
+	ld hl, wddc3
+	ld de, wde8c
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicE9
-	ld de, $de90
+	ld de, wMusicE9Backup
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicEC
-	ld de, $de94
+	ld de, wMusicECBackup
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicSpeed
-	ld de, $de98
+	ld de, wMusicSpeedBackup
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicVibratoType2
-	ld de, $de9c
+	ld de, wMusicVibratoType2Backup
 	ld a, $4
 	call Music2_CopyData
 	ld hl, wMusicVibratoDelay
-	ld de, $dea0
+	ld de, wMusicVibratoDelayBackup
 	ld a, $4
 	call Music2_CopyData
 	ld a, $0
@@ -1709,57 +1709,57 @@ Func_f89dc: ; f89dc (3e:49dc)
 	ld [wdddb + 2], a
 	ld [wdddb + 3], a
 	ld hl, wMusicVolume
-	ld de, $dea4
+	ld de, wMusicVolumeBackup
 	ld a, $3
 	call Music2_CopyData
 	ld hl, wMusicE4
-	ld de, $dea7
+	ld de, wMusicE4Backup
 	ld a, $3
 	call Music2_CopyData
-	ld hl, $dded
-	ld de, $deaa
+	ld hl, wdded
+	ld de, wdeaa
 	ld a, $2
 	call Music2_CopyData
 	ld a, $0
 	ld [wdeac], a
 	ld hl, wMusicChannelStackPointers
-	ld de, $dead
+	ld de, wMusicChannelStackPointersBackup
 	ld a, $8
 	call Music2_CopyData
-	ld hl, $ddfb
-	ld de, $deb5
-	ld a, $30
+	ld hl, wMusicCh1Stack
+	ld de, wMusicCh1StackBackup
+	ld a, $c * 4
 	call Music2_CopyData
 	ret
 
-Func_f8b01: ; f8b01 (3e:4b01)
-	ld a, [wde55]
-	ld [wdd80], a
-	ld a, [wde56]
-	ld [wdd81], a
-	ld a, [wde57]
+Music2_LoadBackup: ; f8b01 (3e:4b01)
+	ld a, [wCurSongIDBackup]
+	ld [wCurSongID], a
+	ld a, [wCurSongBankBackup]
+	ld [wCurSongBank], a
+	ld a, [wMusicDCBackup]
 	ld [wMusicDC], a
-	ld hl, $de58
+	ld hl, wMusicDuty1Backup
 	ld de, wMusicDuty1
 	ld a, $4
 	call Music2_CopyData
-	ld a, [wde5c]
+	ld a, [wMusicWaveBackup]
 	ld [wMusicWave], a
 	ld a, $1
 	ld [wMusicWaveChange], a
-	ld hl, $de5e
+	ld hl, wMusicIsPlayingBackup
 	ld de, wMusicIsPlaying
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de62
+	ld hl, wMusicTieBackup
 	ld de, wMusicTie
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de66
-	ld de, $dd95
+	ld hl, wMusicChannelPointersBackup
+	ld de, wMusicChannelPointers
 	ld a, $8
 	call Music2_CopyData
-	ld hl, $de6e
+	ld hl, wMusicMainLoopStartBackup
 	ld de, wMusicMainLoopStart
 	ld a, $8
 	call Music2_CopyData
@@ -1767,69 +1767,69 @@ Func_f8b01: ; f8b01 (3e:4b01)
 	ld [wddab], a
 	ld a, [wde77]
 	ld [wddac], a
-	ld hl, $de78
+	ld hl, wMusicOctaveBackup
 	ld de, wMusicOctave
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de7c
-	ld de, $ddb3
+	ld hl, wde7c
+	ld de, wddb3
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de80
-	ld de, $ddb7
+	ld hl, wde80
+	ld de, wddb7
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de84
-	ld de, $ddbb
+	ld hl, wde84
+	ld de, wddbb
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de88
+	ld hl, wMusicE8Backup
 	ld de, wMusicE8
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de8c
-	ld de, $ddc3
+	ld hl, wde8c
+	ld de, wddc3
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de90
+	ld hl, wMusicE9Backup
 	ld de, wMusicE9
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de94
+	ld hl, wMusicECBackup
 	ld de, wMusicEC
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de98
+	ld hl, wMusicSpeedBackup
 	ld de, wMusicSpeed
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $de9c
+	ld hl, wMusicVibratoType2Backup
 	ld de, wMusicVibratoType2
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $dea0
+	ld hl, wMusicVibratoDelayBackup
 	ld de, wMusicVibratoDelay
 	ld a, $4
 	call Music2_CopyData
-	ld hl, $dea4
+	ld hl, wMusicVolumeBackup
 	ld de, wMusicVolume
 	ld a, $3
 	call Music2_CopyData
-	ld hl, $dea7
+	ld hl, wMusicE4Backup
 	ld de, wMusicE4
 	ld a, $3
 	call Music2_CopyData
-	ld hl, $deaa
-	ld de, $dded
+	ld hl, wdeaa
+	ld de, wdded
 	ld a, $2
 	call Music2_CopyData
 	ld a, [wdeac]
 	ld [wddef], a
-	ld hl, $dead
+	ld hl, wMusicChannelStackPointersBackup
 	ld de, wMusicChannelStackPointers
 	ld a, $8
 	call Music2_CopyData
-	ld hl, $deb5
+	ld hl, wMusicCh1StackBackup
 	ld de, wMusicCh1Stack
 	ld a, $c * 4
 	call Music2_CopyData
@@ -1838,12 +1838,12 @@ Func_f8b01: ; f8b01 (3e:4b01)
 ; copies a bytes from hl to de
 Music2_CopyData: ; f8c18 (3e:4c18)
 	ld c, a
-.asm_f8c19
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_f8c19
+	jr nz, .loop
 	ret
 
 Music2_ChannelLoopStacks: ; f8c20 (3e:4c20)
