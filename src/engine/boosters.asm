@@ -572,7 +572,7 @@ BoosterData_1e4e4:: ; 1e4e4 (7:64e4)
 
 BoosterData_1e4f0:: ; 1e4f0 (7:64f0)
 	db $00 ;booster rarity table index
-	dw $0001 ; energy or energy generation function
+	dw GRASS_ENERGY  ; energy or energy generation function
 
 ; Card Type Chances
 	db $30 ; Grass Type Chance
@@ -587,7 +587,7 @@ BoosterData_1e4f0:: ; 1e4f0 (7:64f0)
 
 BoosterData_1e4fc:: ; 1e4fc (7:64fc)
 	db $00 ;booster rarity table index
-	dw $0002 ; energy or energy generation function
+	dw FIRE_ENERGY  ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -602,7 +602,7 @@ BoosterData_1e4fc:: ; 1e4fc (7:64fc)
 
 BoosterData_1e508:: ; 1e508 (7:6508)
 	db $00 ;booster rarity table index
-	dw $0003 ; energy or energy generation function
+	dw WATER_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -617,7 +617,7 @@ BoosterData_1e508:: ; 1e508 (7:6508)
 
 BoosterData_1e514:: ; 1e514 (7:6514)
 	db $00 ;booster rarity table index
-	dw $0004 ; energy or energy generation function
+	dw LIGHTNING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -632,7 +632,7 @@ BoosterData_1e514:: ; 1e514 (7:6514)
 
 BoosterData_1e520:: ; 1e520 (7:6520)
 	db $00 ;booster rarity table index
-	dw $0005 ; energy or energy generation function
+	dw FIGHTING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -677,7 +677,7 @@ BoosterData_1e538:: ; 1e538 (7:6538)
 
 BoosterData_1e544:: ; 1e544 (7:6544)
 	db $01 ;booster rarity table index
-	dw $0001 ; energy or energy generation function
+	dw GRASS_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $30 ; Grass Type Chance
@@ -692,7 +692,7 @@ BoosterData_1e544:: ; 1e544 (7:6544)
 
 BoosterData_1e550:: ; 1e550 (7:6550)
 	db $01 ;booster rarity table index
-	dw $0002 ; energy or energy generation function
+	dw FIRE_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $14 ; Grass Type Chance
@@ -707,7 +707,7 @@ BoosterData_1e550:: ; 1e550 (7:6550)
 
 BoosterData_1e55c:: ; 1e55c (7:655c)
 	db $01 ;booster rarity table index
-	dw $0003 ; energy or energy generation function
+	dw WATER_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -722,7 +722,7 @@ BoosterData_1e55c:: ; 1e55c (7:655c)
 
 BoosterData_1e568:: ; 1e568 (7:6568)
 	db $01 ;booster rarity table index
-	dw $0005 ; energy or energy generation function
+	dw FIGHTING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
@@ -737,7 +737,7 @@ BoosterData_1e568:: ; 1e568 (7:6568)
 
 BoosterData_1e574:: ; 1e574 (7:6574)
 	db $01 ;booster rarity table index
-	dw $0006 ; energy or energy generation function
+	dw PSYCHIC_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db $10 ; Grass Type Chance
