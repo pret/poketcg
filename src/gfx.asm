@@ -895,6 +895,8 @@ SECTION "bank30",ROMX,BANK[$30]
 	emptybank
 
 SECTION "bank31",ROMX,BANK[$31]
+CardGraphics:: ; c4000 (31:4000)
+
 GrassEnergyCardGfx:: ; c4000 (31:4000)
 	INCBIN "gfx/cards/grassenergy.8x6.2bpp"
 	INCBIN "gfx/cards/grassenergy.pal"

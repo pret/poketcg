@@ -1,9 +1,47 @@
 ;;; engine macros
 
+const_def: MACRO
+IF _NARG > 0
+const_value = \1
+ELSE
+const_value = 0
+ENDC
+ENDM
+
+const: MACRO
+\1 EQU const_value
+const_value = const_value + 1
+ENDM
+
 dbw: MACRO
 	db \1
 	dw \2
 ENDM
+
+dwb: MACRO
+	dw \1
+	db \2
+ENDM
+
+dx: MACRO
+x = 8 * ((\1) - 1)
+	rept \1
+	db ((\2) >> x) & $ff
+x = x + -8
+	endr
+	ENDM
+
+dt: MACRO ; three-byte (big-endian)
+	dx 3, \1
+	ENDM
+
+dd: MACRO ; four-byte (big-endian)
+	dx 4, \1
+	ENDM
+
+bigdw: MACRO ; big-endian word
+	dx 2, \1
+	ENDM
 
 lb: MACRO ; r, hi, lo
 	ld \1, (\2) << 8 + ((\3) & $ff)
@@ -38,12 +76,11 @@ rgb: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
-text: MACRO
+textpointer: MACRO
 	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
-\1_ EQU const_value
+	const \1_
 GLOBAL \1_
-const_value = const_value + 1
 ENDM
 
 text_hl: MACRO
@@ -317,7 +354,7 @@ c_ = c_ + \2 * $10
 ENDM
 
 gfx: MACRO
-	dw ($4000 * (BANK(\1) - BANK(GrassEnergyCardGfx)) + (\1 - $4000)) / 8
+	dw ($4000 * (BANK(\1) - BANK(CardGraphics)) + (\1 - $4000)) / 8
 ENDM
 
 tx: MACRO

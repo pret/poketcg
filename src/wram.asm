@@ -454,7 +454,7 @@ wcc09:: ; cc09
 wcc0a:: ; cc0a
 	ds $1
 
-wDuelHasPlayedEnergy:: ; cc0b
+wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
 wcc0c:: ; cc0c

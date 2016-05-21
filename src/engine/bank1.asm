@@ -477,7 +477,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	jr c, .waterEnergy
 
 .notWaterEnergy
-	ld a, [wDuelHasPlayedEnergy]
+	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr nz, .alreadyPlayedEnergy
 	call $5fdd
@@ -485,7 +485,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	jp c, Func_426d ; exit if no card was chosen
 .asm_4490
 	ld a, $1
-	ld [wDuelHasPlayedEnergy], a
+	ld [wAlreadyPlayedEnergy], a
 .asm_4495
 	ld a, [$ff9d]
 	ld [$ffa1], a
@@ -505,7 +505,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	jp c, Func_426d ; exit if no card was chosen
 	call $3622
 	jr c, .asm_4495
-	ld a, [wDuelHasPlayedEnergy]
+	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr z, .asm_4490
 	text_hl OnlyOneEnergyCardText
@@ -1039,7 +1039,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	call $5e75
 	call $68e4
 	ld a, $1
-	ld [wDuelHasPlayedEnergy], a
+	ld [wAlreadyPlayedEnergy], a
 	call $4f9d
 	ret
 ; 0x69c5

@@ -1,1607 +1,2012 @@
 Text026d: ; 3c000 (f:4000)
-	db TX_START,"You do not own all cards needed\n"
-	db "to build this Deck.",TX_END
+	text "You do not own all cards needed"
+	line "to build this Deck."
+	done
 
 Text026e: ; 3c035 (f:4035)
-	db TX_START,"Built\n"
-	db TX_RAM2,TX_END
+	text "Built"
+	line TX_RAM2
+	done
 
 Text026f: ; 3c03e (f:403e)
-	db TX_START,"These cards are needed\n"
-	db "to build this Deck:",TX_END
+	text "These cards are needed"
+	line "to build this Deck:"
+	done
 
 Text0270: ; 3c06a (f:406a)
-	db TX_START,"Dismantle these Decks?",TX_END
+	text "Dismantle these Decks?"
+	done
 
 Text0271: ; 3c082 (f:4082)
-	db TX_START,"Dismantled the Deck.",TX_END
+	text "Dismantled the Deck."
+	done
 
 Text0272: ; 3c098 (f:4098)
-	db TX_START,"OK if this file is deleted?",TX_END
+	text "OK if this file is deleted?"
+	done
 
 Text0273: ; 3c0b5 (f:40b5)
-	db TX_START,"Read the Instructions",TX_END
+	text "Read the Instructions"
+	done
 
 Text0274: ; 3c0cc (f:40cc)
-	db TX_START,"Print this card?\n"
-	db "      Yes     No",TX_END
+	text "Print this card?"
+	line "      Yes     No"
+	done
 
 Text0275: ; 3c0ef (f:40ef)
-	db TX_START,"Please choose a Deck configuration\n"
-	db "to print.",TX_END
+	text "Please choose a Deck configuration"
+	line "to print."
+	done
 
 Text0276: ; 3c11d (f:411d)
-	db TX_START,"Print this Deck?",TX_END
+	text "Print this Deck?"
+	done
 
 Text0277: ; 3c12f (f:412f)
-	db TX_START,"Print the card list?\n"
-	db "      Yes     No",TX_END
+	text "Print the card list?"
+	line "      Yes     No"
+	done
 
 Text0278: ; 3c156 (f:4156)
-	db TX_START,"Pok`mon Cards\n"
-	db "Deck Configuration\n"
-	db "Card List\n"
-	db "Print Quality\n"
-	db "Quit Print",TX_END
+	text "Pok`mon Cards"
+	line "Deck Configuration"
+	line "Card List"
+	line "Print Quality"
+	line "Quit Print"
+	done
 
 Text0279: ; 3c19b (f:419b)
-	db TX_START,"What would you like to print?",TX_END
+	text "What would you like to print?"
+	done
 
 Text027a: ; 3c1ba (f:41ba)
-	db TX_START,"Please set the contrast:\n"
-	db "  Light   1   2   3   4   5   Dark",TX_END
+	text "Please set the contrast:"
+	line "  Light   1   2   3   4   5   Dark"
+	done
 
 Text027b: ; 3c1f7 (f:41f7)
-	db TX_START,"Please make sure to turn\n"
-	db "the Game Boy Printer OFF.",TX_END
+	text "Please make sure to turn"
+	line "the Game Boy Printer OFF."
+	done
 
 Text027c: ; 3c22b (f:422b)
-	db TX_START,"Procedures for sending cards:",TX_END
+	text "Procedures for sending cards:"
+	done
 
 Text027d: ; 3c24a (f:424a)
-	db TX_START,"1. Choose the card you wish to send.\n"
-	db "   Press left/right to choose more.\n\n"
-	db "2. Choose all the cards. Then press\n"
-	db "   the B Button to open the menu.\n\n"
-	db "3. Choose Send to finish\n"
-	db "   the process.",TX_END
+	text "1. Choose the card you wish to send."
+	line "   Press left/right to choose more.\n"
+	line "2. Choose all the cards. Then press"
+	line "   the B Button to open the menu.\n"
+	line "3. Choose Send to finish"
+	line "   the process."
+	done
 
 Text027e: ; 3c305 (f:4305)
-	db TX_START,"Please read the procedures\n"
-	db "for sending cards.",TX_END
+	text "Please read the procedures"
+	line "for sending cards."
+	done
 
 Text027f: ; 3c334 (f:4334)
-	db TX_START,"Send",TX_END
+	text "Send"
+	done
 
 Text0280: ; 3c33a (f:433a)
-	db TX_START,"Card received",TX_END
+	text "Card received"
+	done
 
 Text0281: ; 3c349 (f:4349)
-	db TX_START,"Card to send",TX_END
+	text "Card to send"
+	done
 
 Text0282: ; 3c357 (f:4357)
-	db TX_START,"Send these cards?",TX_END
+	text "Send these cards?"
+	done
 
 Text0283: ; 3c36a (f:436a)
-	db TX_START,"Received these cards\n"
-	db "from  ",TX_RAM2,"!",TX_END
+	text "Received these cards"
+	line "from  ",TX_RAM2,"!"
+	done
 
 Text0284: ; 3c389 (f:4389)
-	db TX_START,"Please choose a Deck \n"
-	db "configuration to send.",TX_END
+	text "Please choose a Deck "
+	line "configuration to send."
+	done
 
 Text0285: ; 3c3b7 (f:43b7)
-	db TX_START,"Please choose a Save Slot.",TX_END
+	text "Please choose a Save Slot."
+	done
 
 Text0286: ; 3c3d3 (f:43d3)
-	db TX_START,"Receive configuration.",TX_END
+	text "Receive configuration."
+	done
 
 Text0287: ; 3c3eb (f:43eb)
-	db TX_START,"Received a deck configuration\n"
-	db "from  ",TX_RAM2,"!",TX_END
+	text "Received a deck configuration"
+	line "from  ",TX_RAM2,"!"
+	done
 
 Text0288: ; 3c413 (f:4413)
-	db TX_START,"  Fighting Machine  ",TX_END
+	text "  Fighting Machine  "
+	done
 
 Text0289: ; 3c429 (f:4429)
-	db TX_START,"  Rock Machine  ",TX_END
+	text "  Rock Machine  "
+	done
 
 Text028a: ; 3c43b (f:443b)
-	db TX_START,"  Water Machine   ",TX_END
+	text "  Water Machine   "
+	done
 
 Text028b: ; 3c44f (f:444f)
-	db TX_START,"  Lightning Machine   ",TX_END
+	text "  Lightning Machine   "
+	done
 
 Text028c: ; 3c467 (f:4467)
-	db TX_START,"  Grass Machine   ",TX_END
+	text "  Grass Machine   "
+	done
 
 Text028d: ; 3c47b (f:447b)
-	db TX_START,"  Psychic Machine   ",TX_END
+	text "  Psychic Machine   "
+	done
 
 Text028e: ; 3c491 (f:4491)
-	db TX_START,"  Science Machine   ",TX_END
+	text "  Science Machine   "
+	done
 
 Text028f: ; 3c4a7 (f:44a7)
-	db TX_START,"  Fire Machine  ",TX_END
+	text "  Fire Machine  "
+	done
 
 Text0290: ; 3c4b9 (f:44b9)
-	db TX_START,"  Auto Machine  ",TX_END
+	text "  Auto Machine  "
+	done
 
 Text0291: ; 3c4cb (f:44cb)
-	db TX_START,"  Legendary Machine   ",TX_END
+	text "  Legendary Machine   "
+	done
 
 Text0292: ; 3c4e3 (f:44e3)
-	db TX_START,"All Fighting Pok`mon",TX_END
+	text "All Fighting Pok`mon"
+	done
 
 Text0293: ; 3c4f9 (f:44f9)
-	db TX_START,"Bench Attack",TX_END
+	text "Bench Attack"
+	done
 
 Text0294: ; 3c507 (f:4507)
-	db TX_START,"Battle Contest",TX_END
+	text "Battle Contest"
+	done
 
 Text0295: ; 3c517 (f:4517)
-	db TX_START,"Heated Battle",TX_END
+	text "Heated Battle"
+	done
 
 Text0296: ; 3c526 (f:4526)
-	db TX_START,"First-Strike",TX_END
+	text "First-Strike"
+	done
 
 Text0297: ; 3c534 (f:4534)
-	db TX_START,"Squeaking Mouse",TX_END
+	text "Squeaking Mouse"
+	done
 
 Text0298: ; 3c545 (f:4545)
-	db TX_START,"Great Quake",TX_END
+	text "Great Quake"
+	done
 
 Text0299: ; 3c552 (f:4552)
-	db TX_START,"Bone Attack",TX_END
+	text "Bone Attack"
+	done
 
 Text029a: ; 3c55f (f:455f)
-	db TX_START,"Excavation",TX_END
+	text "Excavation"
+	done
 
 Text029b: ; 3c56b (f:456b)
-	db TX_START,"Rock Crusher",TX_END
+	text "Rock Crusher"
+	done
 
 Text029c: ; 3c579 (f:4579)
-	db TX_START,"Blue Water",TX_END
+	text "Blue Water"
+	done
 
 Text029d: ; 3c585 (f:4585)
-	db TX_START,"On the Beach",TX_END
+	text "On the Beach"
+	done
 
 Text029e: ; 3c593 (f:4593)
-	db TX_START,"Paralyze!",TX_END
+	text "Paralyze!"
+	done
 
 Text029f: ; 3c59e (f:459e)
-	db TX_START,"Energy Removal",TX_END
+	text "Energy Removal"
+	done
 
 Text02a0: ; 3c5ae (f:45ae)
-	db TX_START,"Rain Dancer",TX_END
+	text "Rain Dancer"
+	done
 
 Text02a1: ; 3c5bb (f:45bb)
-	db TX_START,"Cute Pok`mon",TX_END
+	text "Cute Pok`mon"
+	done
 
 Text02a2: ; 3c5c9 (f:45c9)
-	db TX_START,"Pok`mon Flute",TX_END
+	text "Pok`mon Flute"
+	done
 
 Text02a3: ; 3c5d8 (f:45d8)
-	db TX_START,"Yellow Flash",TX_END
+	text "Yellow Flash"
+	done
 
 Text02a4: ; 3c5e6 (f:45e6)
-	db TX_START,"Electric Shock",TX_END
+	text "Electric Shock"
+	done
 
 Text02a5: ; 3c5f6 (f:45f6)
-	db TX_START,"Zapping Selfdestruct",TX_END
+	text "Zapping Selfdestruct"
+	done
 
 Text02a6: ; 3c60c (f:460c)
-	db TX_START,"Insect Collection",TX_END
+	text "Insect Collection"
+	done
 
 Text02a7: ; 3c61f (f:461f)
-	db TX_START,"Jungle",TX_END
+	text "Jungle"
+	done
 
 Text02a8: ; 3c627 (f:4627)
-	db TX_START,"Flower Garden",TX_END
+	text "Flower Garden"
+	done
 
 Text02a9: ; 3c636 (f:4636)
-	db TX_START,"Kaleidoscope",TX_END
+	text "Kaleidoscope"
+	done
 
 Text02aa: ; 3c644 (f:4644)
-	db TX_START,"Flower Power",TX_END
+	text "Flower Power"
+	done
 
 Text02ab: ; 3c652 (f:4652)
-	db TX_START,"Psychic Power",TX_END
+	text "Psychic Power"
+	done
 
 Text02ac: ; 3c661 (f:4661)
-	db TX_START,"Dream Eater Haunter",TX_END
+	text "Dream Eater Haunter"
+	done
 
 Text02ad: ; 3c676 (f:4676)
-	db TX_START,"Scavenging Slowbro",TX_END
+	text "Scavenging Slowbro"
+	done
 
 Text02ae: ; 3c68a (f:468a)
-	db TX_START,"Strange Power",TX_END
+	text "Strange Power"
+	done
 
 Text02af: ; 3c699 (f:4699)
-	db TX_START,"Strange Psyshock",TX_END
+	text "Strange Psyshock"
+	done
 
 Text02b0: ; 3c6ab (f:46ab)
-	db TX_START,"Lovely Nidoran",TX_END
+	text "Lovely Nidoran"
+	done
 
 Text02b1: ; 3c6bb (f:46bb)
-	db TX_START,"Science Corps",TX_END
+	text "Science Corps"
+	done
 
 Text02b2: ; 3c6ca (f:46ca)
-	db TX_START,"Flyin' Pok`mon",TX_END
+	text "Flyin' Pok`mon"
+	done
 
 Text02b3: ; 3c6da (f:46da)
-	db TX_START,"Poison",TX_END
+	text "Poison"
+	done
 
 Text02b4: ; 3c6e2 (f:46e2)
-	db TX_START,"Wonders of Science",TX_END
+	text "Wonders of Science"
+	done
 
 Text02b5: ; 3c6f6 (f:46f6)
-	db TX_START,"Replace 'Em All",TX_END
+	text "Replace 'Em All"
+	done
 
 Text02b6: ; 3c707 (f:4707)
-	db TX_START,"Chari-Saur",TX_END
+	text "Chari-Saur"
+	done
 
 Text02b7: ; 3c713 (f:4713)
-	db TX_START,"Traffic Light",TX_END
+	text "Traffic Light"
+	done
 
 Text02b8: ; 3c722 (f:4722)
-	db TX_START,"Fire Pok`mon",TX_END
+	text "Fire Pok`mon"
+	done
 
 Text02b9: ; 3c730 (f:4730)
-	db TX_START,"Fire Charge",TX_END
+	text "Fire Charge"
+	done
 
 Text02ba: ; 3c73d (f:473d)
-	db TX_START,"Charmander & Friends",TX_END
+	text "Charmander & Friends"
+	done
 
 Text02bb: ; 3c753 (f:4753)
-	db TX_START,"Squirtle & Friends",TX_END
+	text "Squirtle & Friends"
+	done
 
 Text02bc: ; 3c767 (f:4767)
-	db TX_START,"Bulbasaur & Friends",TX_END
+	text "Bulbasaur & Friends"
+	done
 
 Text02bd: ; 3c77c (f:477c)
-	db TX_START,"Psychic Machamp",TX_END
+	text "Psychic Machamp"
+	done
 
 Text02be: ; 3c78d (f:478d)
-	db TX_START,"Water Beetle",TX_END
+	text "Water Beetle"
+	done
 
 Text02bf: ; 3c79b (f:479b)
-	db TX_START,"Legendary Moltres",TX_END
+	text "Legendary Moltres"
+	done
 
 Text02c0: ; 3c7ae (f:47ae)
-	db TX_START,"Legendary Zapdos",TX_END
+	text "Legendary Zapdos"
+	done
 
 Text02c1: ; 3c7c0 (f:47c0)
-	db TX_START,"Legendary Articuno",TX_END
+	text "Legendary Articuno"
+	done
 
 Text02c2: ; 3c7d4 (f:47d4)
-	db TX_START,"Legendary Dragonite",TX_END
+	text "Legendary Dragonite"
+	done
 
 Text02c3: ; 3c7e9 (f:47e9)
-	db TX_START,"Mysterious Pok`mon",TX_END
+	text "Mysterious Pok`mon"
+	done
 
 Text02c4: ; 3c7fd (f:47fd)
-	db TX_START,"A Deck of Fighting Pok`mon:\n"
-	db "Feel their Fighting power!",TX_END
+	text "A Deck of Fighting Pok`mon:"
+	line "Feel their Fighting power!"
+	done
 
 Text02c5: ; 3c835 (f:4835)
-	db TX_START,"A Deck of Pok`mon that can\n"
-	db "attack the Bench.",TX_END
+	text "A Deck of Pok`mon that can"
+	line "attack the Bench."
+	done
 
 Text02c6: ; 3c863 (f:4863)
-	db TX_START,"A Deck which uses Fighting Attacks\n"
-	db "such as Slash and Punch.",TX_END
+	text "A Deck which uses Fighting Attacks"
+	line "such as Slash and Punch."
+	done
 
 Text02c7: ; 3c8a0 (f:48a0)
-	db TX_START,"A powerful Deck with both Fire\n"
-	db "and Fighting Pok`mon.",TX_END
+	text "A powerful Deck with both Fire"
+	line "and Fighting Pok`mon."
+	done
 
 Text02c8: ; 3c8d6 (f:48d6)
-	db TX_START,"A Deck for fast and furious \n"
-	db "attacks.",TX_END
+	text "A Deck for fast and furious "
+	line "attacks."
+	done
 
 Text02c9: ; 3c8fd (f:48fd)
-	db TX_START,"A Deck made of Mouse Pok`mon.\n"
-	db "Uses PlusPower to Power up!",TX_END
+	text "A Deck made of Mouse Pok`mon."
+	line "Uses PlusPower to Power up!"
+	done
 
 Text02ca: ; 3c938 (f:4938)
-	db TX_START,"Use Dugtrio's Earthquake\n"
-	db "to cause great damage.",TX_END
+	text "Use Dugtrio's Earthquake"
+	line "to cause great damage."
+	done
 
 Text02cb: ; 3c969 (f:4969)
-	db TX_START,"A Deck of Cubone and Marowak - \n"
-	db "A call for help.",TX_END
+	text "A Deck of Cubone and Marowak - "
+	line "A call for help."
+	done
 
 Text02cc: ; 3c99b (f:499b)
-	db TX_START,"A Deck which creates Pok`mon by\n"
-	db "evolving Mysterious Fossils.",TX_END
+	text "A Deck which creates Pok`mon by"
+	line "evolving Mysterious Fossils."
+	done
 
 Text02cd: ; 3c9d9 (f:49d9)
-	db TX_START,"A Deck of Rock Pok`mon. It's\n"
-	db "Strong against Lightning Pok`mon.",TX_END
+	text "A Deck of Rock Pok`mon. It's"
+	line "Strong against Lightning Pok`mon."
+	done
 
 Text02ce: ; 3ca19 (f:4a19)
-	db TX_START,"A Deck of Water Pok`mon: Their\n"
-	db "Blue Horror washes over enemies.",TX_END
+	text "A Deck of Water Pok`mon: Their"
+	line "Blue Horror washes over enemies."
+	done
 
 Text02cf: ; 3ca5a (f:4a5a)
-	db TX_START,"A well balanced Deck\n"
-	db "of Sandshrew and Water Pok`mon!",TX_END
+	text "A well balanced Deck"
+	line "of Sandshrew and Water Pok`mon!"
+	done
 
 Text02d0: ; 3ca90 (f:4a90)
-	db TX_START,"Paralyze the opponent's Pok`mon:\n"
-	db "Stop 'em and drop 'em!",TX_END
+	text "Paralyze the opponent's Pok`mon:"
+	line "Stop 'em and drop 'em!"
+	done
 
 Text02d1: ; 3cac9 (f:4ac9)
-	db TX_START,"Uses Whirlpool and Hyper Beam to\n"
-	db "remove opponents' Energy cards.",TX_END
+	text "Uses Whirlpool and Hyper Beam to"
+	line "remove opponents' Energy cards."
+	done
 
 Text02d2: ; 3cb0b (f:4b0b)
-	db TX_START,"Use Rain Dance to attach Water\n"
-	db "Energy for powerful Attacks!",TX_END
+	text "Use Rain Dance to attach Water"
+	line "Energy for powerful Attacks!"
+	done
 
 Text02d3: ; 3cb48 (f:4b48)
-	db TX_START,"A Deck of cute Pok`mon such as\n"
-	db "Pikachu and Eevee.",TX_END
+	text "A Deck of cute Pok`mon such as"
+	line "Pikachu and Eevee."
+	done
 
 Text02d4: ; 3cb7b (f:4b7b)
-	db TX_START,"Use the Pok`mon Flute to revive\n"
-	db "opponents' Pok`mon and Attack!",TX_END
+	text "Use the Pok`mon Flute to revive"
+	line "opponents' Pok`mon and Attack!"
+	done
 
 Text02d5: ; 3cbbb (f:4bbb)
-	db TX_START,"A deck of Pok`mon that use Lightning\n"
-	db "Energy to zap opponents.",TX_END
+	text "A deck of Pok`mon that use Lightning"
+	line "Energy to zap opponents."
+	done
 
 Text02d6: ; 3cbfa (f:4bfa)
-	db TX_START,"A Deck which Shocks and Paralyzes\n"
-	db "opponents with its Attacks.",TX_END
+	text "A Deck which Shocks and Paralyzes"
+	line "opponents with its Attacks."
+	done
 
 Text02d7: ; 3cc39 (f:4c39)
-	db TX_START,"Selfdestruct causes great damage \n"
-	db "- even to the opponent's Bench.",TX_END
+	text "Selfdestruct causes great damage "
+	line "- even to the opponent's Bench."
+	done
 
 Text02d8: ; 3cc7c (f:4c7c)
-	db TX_START,"A Deck made of Insect Pok`mon\n"
-	db "Go Bug Power!",TX_END
+	text "A Deck made of Insect Pok`mon"
+	line "Go Bug Power!"
+	done
 
 Text02d9: ; 3cca9 (f:4ca9)
-	db TX_START,"A Deck of Grass Pok`mon: There \n"
-	db "are many dangers in the Jungle.",TX_END
+	text "A Deck of Grass Pok`mon: There "
+	line "are many dangers in the Jungle."
+	done
 
 Text02da: ; 3ccea (f:4cea)
-	db TX_START,"A Deck of Flower Pok`mon:\n"
-	db "Beautiful but Dangerous",TX_END
+	text "A Deck of Flower Pok`mon:"
+	line "Beautiful but Dangerous"
+	done
 
 Text02db: ; 3cd1d (f:4d1d)
-	db TX_START,"Uses Venomoth's Pok`mon Power to\n"
-	db "change the opponent's Weakness.",TX_END
+	text "Uses Venomoth's Pok`mon Power to"
+	line "change the opponent's Weakness."
+	done
 
 Text02dc: ; 3cd5f (f:4d5f)
-	db TX_START,"A powerful Big Eggsplosion \n"
-	db "and Energy Transfer combo!",TX_END
+	text "A powerful Big Eggsplosion "
+	line "and Energy Transfer combo!"
+	done
 
 Text02dd: ; 3cd97 (f:4d97)
-	db TX_START,"Use the Psychic power of the\n"
-	db "Psychic Pok`mon to Attack!",TX_END
+	text "Use the Psychic power of the"
+	line "Psychic Pok`mon to Attack!"
+	done
 
 Text02de: ; 3cdd0 (f:4dd0)
-	db TX_START,"Uses Haunter's Dream Eater\n"
-	db "to cause great damage!",TX_END
+	text "Uses Haunter's Dream Eater"
+	line "to cause great damage!"
+	done
 
 Text02df: ; 3ce03 (f:4e03)
-	db TX_START,"Continually draw Trainer \n"
-	db "Cards from the Discard Pile!",TX_END
+	text "Continually draw Trainer "
+	line "Cards from the Discard Pile!"
+	done
 
 Text02e0: ; 3ce3b (f:4e3b)
-	db TX_START,"Confuse opponents with\n"
-	db "mysterious power!",TX_END
+	text "Confuse opponents with"
+	line "mysterious power!"
+	done
 
 Text02e1: ; 3ce65 (f:4e65)
-	db TX_START,"Use Alakazam's Damage Swap\n"
-	db "to move damage counters!",TX_END
+	text "Use Alakazam's Damage Swap"
+	line "to move damage counters!"
+	done
 
 Text02e2: ; 3ce9a (f:4e9a)
-	db TX_START,"Uses Nidoqueen's Boyfriends to cause\n"
-	db "great damage to the opponent.",TX_END
+	text "Uses Nidoqueen's Boyfriends to cause"
+	line "great damage to the opponent."
+	done
 
 Text02e3: ; 3cede (f:4ede)
-	db TX_START,"The march of the Science Corps!\n"
-	db "Attack with the power of science!",TX_END
+	text "The march of the Science Corps!"
+	line "Attack with the power of science!"
+	done
 
 Text02e4: ; 3cf21 (f:4f21)
-	db TX_START,"Pok`mon with feathers flock \n"
-	db "together! Retreating is easy!",TX_END
+	text "Pok`mon with feathers flock "
+	line "together! Retreating is easy!"
+	done
 
 Text02e5: ; 3cf5d (f:4f5d)
-	db TX_START,"A Deck that uses Poison to \n"
-	db "slowly Knock Out the opponent.",TX_END
+	text "A Deck that uses Poison to "
+	line "slowly Knock Out the opponent."
+	done
 
 Text02e6: ; 3cf99 (f:4f99)
-	db TX_START,"Block Pok`mon Powers with \n"
-	db "Muk and attack with Mewtwo!",TX_END
+	text "Block Pok`mon Powers with "
+	line "Muk and attack with Mewtwo!"
+	done
 
 Text02e7: ; 3cfd1 (f:4fd1)
-	db TX_START,"A Deck that shuffles\n"
-	db "the opponent's cards",TX_END
+	text "A Deck that shuffles"
+	line "the opponent's cards"
+	done
 
 Text02e8: ; 3cffc (f:4ffc)
-	db TX_START,"Attack with Charizard - with \n"
-	db "just a few Fire Energy cards!",TX_END
+	text "Attack with Charizard - with "
+	line "just a few Fire Energy cards!"
+	done
 
 Text02e9: ; 3d039 (f:5039)
-	db TX_START,"Pok`mon that can Attack with\n"
-	db "Fire, Water or Lightning Energy!",TX_END
+	text "Pok`mon that can Attack with"
+	line "Fire, Water or Lightning Energy!"
+	done
 
 Text02ea: ; 3d078 (f:5078)
-	db TX_START,"With Fire Pok`mon like Charizard, \n"
-	db "Rapidash and Magmar, it's hot!",TX_END
+	text "With Fire Pok`mon like Charizard, "
+	line "Rapidash and Magmar, it's hot!"
+	done
 
 Text02eb: ; 3d0bb (f:50bb)
-	db TX_START,"Desperate attacks Damage your \n"
-	db "opponent and you!",TX_END
+	text "Desperate attacks Damage your "
+	line "opponent and you!"
+	done
 
 Text02ec: ; 3d0ed (f:50ed)
-	db TX_START,"A Fire, Grass and Water Deck:\n"
-	db "Charmander, Pinsir and Seel",TX_END
+	text "A Fire, Grass and Water Deck:"
+	line "Charmander, Pinsir and Seel"
+	done
 
 Text02ed: ; 3d128 (f:5128)
-	db TX_START,"A Water, Fire, and Lightning Deck:\n"
-	db "Squirtle, Charmander and Pikachu",TX_END
+	text "A Water, Fire, and Lightning Deck:"
+	line "Squirtle, Charmander and Pikachu"
+	done
 
 Text02ee: ; 3d16d (f:516d)
-	db TX_START,"A Grass, Lightning and Psychic Deck:\n"
-	db "Bulbasaur, Pikachu and Abra",TX_END
+	text "A Grass, Lightning and Psychic Deck:"
+	line "Bulbasaur, Pikachu and Abra"
+	done
 
 Text02ef: ; 3d1af (f:51af)
-	db TX_START,"Machamp, Hitmonlee, Hitmonchan\n"
-	db "Gengar and Alakazam are furious!",TX_END
+	text "Machamp, Hitmonlee, Hitmonchan"
+	line "Gengar and Alakazam are furious!"
+	done
 
 Text02f0: ; 3d1f0 (f:51f0)
-	db TX_START,"An Evolution Deck with Weedle, \n"
-	db "Nidoran$ and Bellsprout.",TX_END
+	text "An Evolution Deck with Weedle, "
+	line "Nidoran$ and Bellsprout."
+	done
 
 Text02f1: ; 3d22a (f:522a)
-	db TX_START,"Gather Fire Energy with the\n"
-	db "Legendary Moltres!",TX_END
+	text "Gather Fire Energy with the"
+	line "Legendary Moltres!"
+	done
 
 Text02f2: ; 3d25a (f:525a)
-	db TX_START,"Zap opponents with the\n"
-	db "Legandary Zapdos!",TX_END
+	text "Zap opponents with the"
+	line "Legandary Zapdos!"
+	done
 
 Text02f3: ; 3d284 (f:5284)
-	db TX_START,"Paralyze opponents with the\n"
-	db "Legendary Articuno!",TX_END
+	text "Paralyze opponents with the"
+	line "Legendary Articuno!"
+	done
 
 Text02f4: ; 3d2b5 (f:52b5)
-	db TX_START,"Heal your Pok`mon with the\n"
-	db "Legendary Dragonite!",TX_END
+	text "Heal your Pok`mon with the"
+	line "Legendary Dragonite!"
+	done
 
 Text02f5: ; 3d2e6 (f:52e6)
-	db TX_START,"A very special Deck made of\n"
-	db "very rare Pok`mon cards!",TX_END
+	text "A very special Deck made of"
+	line "very rare Pok`mon cards!"
+	done
 
 Text02f6: ; 3d31c (f:531c)
-	db TX_START,"Pok`mon Card Glossary",TX_END
+	text "Pok`mon Card Glossary"
+	done
 
 Text02f7: ; 3d333 (f:5333)
-	db TX_START,"Deck                Active Pok`mon\n"
-	db "Discard Pile        Bench Pok`mon\n"
-	db "Hand                Prizes    \n"
-	db "Arena               Damage Counter\n"
-	db "Bench               To next page    ",TX_END
+	text "Deck                Active Pok`mon"
+	line "Discard Pile        Bench Pok`mon"
+	line "Hand                Prizes    "
+	line "Arena               Damage Counter"
+	line "Bench               To next page    "
+	done
 
 Text02f8: ; 3d3e0 (f:53e0)
-	db TX_START,"Energy Card         Pok`mon Power \n"
-	db "Trainer Card        Weakness       \n"
-	db "Basic Pok`mon       Resistance\n"
-	db "Evolution Card      Retreat       \n"
-	db "Attack              To previous page",TX_END
+	text "Energy Card         Pok`mon Power "
+	line "Trainer Card        Weakness       "
+	line "Basic Pok`mon       Resistance"
+	line "Evolution Card      Retreat       "
+	line "Attack              To previous page"
+	done
 
 Text02f9: ; 3d48f (f:548f)
-	db TX_START,"Choose a word and press the\n"
-	db "A button.",TX_END
+	text "Choose a word and press the"
+	line "A button."
+	done
 
 Text02fa: ; 3d4b6 (f:54b6)
-	db TX_START,"About the Deck",TX_END
+	text "About the Deck"
+	done
 
 Text02fb: ; 3d4c6 (f:54c6)
-	db TX_START,"About the Discard Pile",TX_END
+	text "About the Discard Pile"
+	done
 
 Text02fc: ; 3d4de (f:54de)
-	db TX_START,"About the Hand",TX_END
+	text "About the Hand"
+	done
 
 Text02fd: ; 3d4ee (f:54ee)
-	db TX_START,"About the Arena",TX_END
+	text "About the Arena"
+	done
 
 Text02fe: ; 3d4ff (f:54ff)
-	db TX_START,"About the Bench",TX_END
+	text "About the Bench"
+	done
 
 Text02ff: ; 3d510 (f:5510)
-	db TX_START,"About the Active Pok`mon",TX_END
+	text "About the Active Pok`mon"
+	done
 
 Text0300: ; 3d52a (f:552a)
-	db TX_START,"About Bench Pok`mon",TX_END
+	text "About Bench Pok`mon"
+	done
 
 Text0301: ; 3d53f (f:553f)
-	db TX_START,"About Prizes",TX_END
+	text "About Prizes"
+	done
 
 Text0302: ; 3d54d (f:554d)
-	db TX_START,"About Damage Counters",TX_END
+	text "About Damage Counters"
+	done
 
 Text0303: ; 3d564 (f:5564)
-	db TX_START,"About Energy Cards",TX_END
+	text "About Energy Cards"
+	done
 
 Text0304: ; 3d578 (f:5578)
-	db TX_START,"About Trainer Cards",TX_END
+	text "About Trainer Cards"
+	done
 
 Text0305: ; 3d58d (f:558d)
-	db TX_START,"About Basic Pok`mon",TX_END
+	text "About Basic Pok`mon"
+	done
 
 Text0306: ; 3d5a2 (f:55a2)
-	db TX_START,"About Evolution Cards",TX_END
+	text "About Evolution Cards"
+	done
 
 Text0307: ; 3d5b9 (f:55b9)
-	db TX_START,"About Attacking",TX_END
+	text "About Attacking"
+	done
 
 Text0308: ; 3d5ca (f:55ca)
-	db TX_START,"About Pok`mon Power",TX_END
+	text "About Pok`mon Power"
+	done
 
 Text0309: ; 3d5df (f:55df)
-	db TX_START,"About Weakness",TX_END
+	text "About Weakness"
+	done
 
 Text030a: ; 3d5ef (f:55ef)
-	db TX_START,"About Resistance",TX_END
+	text "About Resistance"
+	done
 
 Text030b: ; 3d601 (f:5601)
-	db TX_START,"About Retreating",TX_END
+	text "About Retreating"
+	done
 
 Text030c: ; 3d613 (f:5613)
-	db TX_START,"The Deck is the pile of cards\n"
-	db "you will be drawing from.\n"
-	db "At the beginning of your turn, you\n"
-	db "will draw 1 card from your Deck.\n"
-	db "If there are no cards to draw\n"
-	db "from the Deck, you lose the game.",TX_END
+	text "The Deck is the pile of cards"
+	line "you will be drawing from."
+	line "At the beginning of your turn, you"
+	line "will draw 1 card from your Deck."
+	line "If there are no cards to draw"
+	line "from the Deck, you lose the game."
+	done
 
 Text030d: ; 3d6d0 (f:56d0)
-	db TX_START,"The pile in which you place used\n"
-	db "cards is called the Discard Pile.\n"
-	db "You can look at both yours and your\n"
-	db "opponent's Discard Pile \n"
-	db "with the Check command.",TX_END
+	text "The pile in which you place used"
+	line "cards is called the Discard Pile."
+	line "You can look at both yours and your"
+	line "opponent's Discard Pile "
+	line "with the Check command."
+	done
 
 Text030e: ; 3d769 (f:5769)
-	db TX_START,"The cards held by each player\n"
-	db "are called a Hand.\n"
-	db "There is no restriction to the\n"
-	db "number of cards in the Hand.\n"
-	db "You may even have 10 or 20 \n"
-	db "cards in your Hand.",TX_END
+	text "The cards held by each player"
+	line "are called a Hand."
+	line "There is no restriction to the"
+	line "number of cards in the Hand."
+	line "You may even have 10 or 20 "
+	line "cards in your Hand."
+	done
 
 Text030f: ; 3d807 (f:5807)
-	db TX_START,"The place where the Pok`mon\n"
-	db "that is actively fighting\n"
-	db "is placed is called the Arena.\n"
-	db "The game proceeds by using the\n"
-	db "Active Pok`mon in the Arena.",TX_END
+	text "The place where the Pok`mon"
+	line "that is actively fighting"
+	line "is placed is called the Arena."
+	line "The game proceeds by using the"
+	line "Active Pok`mon in the Arena."
+	done
 
 Text0310: ; 3d899 (f:5899)
-	db TX_START,"The Bench is where your Pok`mon\n"
-	db "that are in play but aren't actively\n"
-	db "fighting sit.\n"
-	db "They're ready to come out and fight\n"
-	db "if the Active Pok`mon retreats or\n"
-	db "is Knocked Out.\n"
-	db "You can have up to 5 Pok`mon on\n"
-	db "the Bench.",TX_END
+	text "The Bench is where your Pok`mon"
+	line "that are in play but aren't actively"
+	line "fighting sit."
+	line "They're ready to come out and fight"
+	line "if the Active Pok`mon retreats or"
+	line "is Knocked Out."
+	line "You can have up to 5 Pok`mon on"
+	line "the Bench."
+	done
 
 Text0311: ; 3d96e (f:596e)
-	db TX_START,"The Active Pok`mon is the \n"
-	db "Pok`mon that is in the Arena.\n"
-	db "Only Active Pok`mon can \n"
-	db "attack.",TX_END
+	text "The Active Pok`mon is the "
+	line "Pok`mon that is in the Arena."
+	line "Only Active Pok`mon can "
+	line "attack."
+	done
 
 Text0312: ; 3d9c9 (f:59c9)
-	db TX_START,"The Pok`mon that are in play\n"
-	db "but aren't actively fighting\n"
-	db "are called Bench Pok`mon.\n"
-	db "They're ready to come out and fight\n"
-	db "if the Active Pok`mon retreats or\n"
-	db "is Knocked Out.\n"
-	db "If the Active Pok`mon is Knocked\n"
-	db "Out and you don't have a Bench \n"
-	db "Pok`mon, you lose the game.",TX_END
+	text "The Pok`mon that are in play"
+	line "but aren't actively fighting"
+	line "are called Bench Pok`mon."
+	line "They're ready to come out and fight"
+	line "if the Active Pok`mon retreats or"
+	line "is Knocked Out."
+	line "If the Active Pok`mon is Knocked"
+	line "Out and you don't have a Bench "
+	line "Pok`mon, you lose the game."
+	done
 
 Text0313: ; 3dad1 (f:5ad1)
-	db TX_START,"Prizes are the cards placed to\n"
-	db "count the number of the opponent's\n"
-	db "Pok`mon you Knocked Out.\n"
-	db "Every time one of your opponent's\n"
-	db "Pok`mon is Knocked Out, you take 1\n"
-	db "of your Prizes into your Hand.\n"
-	db "When you take all of your Prizes,\n"
-	db "you win the game.",TX_END
+	text "Prizes are the cards placed to"
+	line "count the number of the opponent's"
+	line "Pok`mon you Knocked Out."
+	line "Every time one of your opponent's"
+	line "Pok`mon is Knocked Out, you take 1"
+	line "of your Prizes into your Hand."
+	line "When you take all of your Prizes,"
+	line "you win the game."
+	done
 
 Text0314: ; 3dbc5 (f:5bc5)
-	db TX_START,"A Damage Counter represents the\n"
-	db "amount of damage a certain Pok`mon\n"
-	db "has taken.\n"
-	db "1 Damage Counter represents\n"
-	db "10 HP of damage.\n"
-	db "If a Pok`mon with an HP of 30 has\n"
-	db "3 Damage Counters, it has received\n"
-	db "30 HP of damage, and its remaining\n"
-	db "HP is 0.",TX_END
+	text "A Damage Counter represents the"
+	line "amount of damage a certain Pok`mon"
+	line "has taken."
+	line "1 Damage Counter represents"
+	line "10 HP of damage."
+	line "If a Pok`mon with an HP of 30 has"
+	line "3 Damage Counters, it has received"
+	line "30 HP of damage, and its remaining"
+	line "HP is 0."
+	done
 
 Text0315: ; 3dcb2 (f:5cb2)
-	db TX_START,"Energy Cards are cards that power\n"
-	db "your Pok`mon, making them able\n"
-	db "to Attack.\n"
-	db "There are 7 types of Energy Cards\n"
-	db "[",TX_GRASS," Grass] [",TX_FIRE," Fire]\n"
-	db "[",TX_WATER," Water] [",TX_LIGHTNING," Lightning]\n"
-	db "[",TX_PSYCHIC," Psychic] [",TX_FIGHTING," Fighting]\n"
-	db "and [",TX_COLORLESS," Double Colorless]\n"
-	db "You may only play 1 Energy Card\n"
-	db "from your Hand per turn.",TX_END
+	text "Energy Cards are cards that power"
+	line "your Pok`mon, making them able"
+	line "to Attack."
+	line "There are 7 types of Energy Cards"
+	line "[",TX_GRASS," Grass] [",TX_FIRE," Fire]"
+	line "[",TX_WATER," Water] [",TX_LIGHTNING," Lightning]"
+	line "[",TX_PSYCHIC," Psychic] [",TX_FIGHTING," Fighting]"
+	line "and [",TX_COLORLESS," Double Colorless]"
+	line "You may only play 1 Energy Card"
+	line "from your Hand per turn."
+	done
 
 Text0316: ; 3ddbe (f:5dbe)
-	db TX_START,"Trainer Cards are support cards.\n"
-	db "There are many Trainer Cards\n"
-	db "with different effects.\n"
-	db "Trainer Cards are played during\n"
-	db "your turn by following the\n"
-	db "instructions on the card and then\n"
-	db "discarding it.\n"
-	db "You may use as many Trainer Cards\n"
-	db "as you like.",TX_END
+	text "Trainer Cards are support cards."
+	line "There are many Trainer Cards"
+	line "with different effects."
+	line "Trainer Cards are played during"
+	line "your turn by following the"
+	line "instructions on the card and then"
+	line "discarding it."
+	line "You may use as many Trainer Cards"
+	line "as you like."
+	done
 
 Text0317: ; 3deb0 (f:5eb0)
-	db TX_START,"Basic Pok`mon are cards that \n"
-	db "can be played directly from your \n"
-	db "hand into the play area. Basic \n"
-	db "Pok`mon act as the base for \n"
-	db "Evolution Cards. Charmander, \n"
-	db "Squirtle and Bulbasaur are\n"
-	db "examples of Basic Pok`mon.",TX_END
+	text "Basic Pok`mon are cards that "
+	line "can be played directly from your "
+	line "hand into the play area. Basic "
+	line "Pok`mon act as the base for "
+	line "Evolution Cards. Charmander, "
+	line "Squirtle and Bulbasaur are"
+	line "examples of Basic Pok`mon."
+	done
 
 Text0318: ; 3df82 (f:5f82)
-	db TX_START,"Evolution Cards are cards you\n"
-	db "play on top of a Basic Pok`mon card\n"
-	db "(or sometimes on top of another\n"
-	db "Evolution Card) to make it stronger.\n"
-	db "There are Stage 1 and Stage 2\n"
-	db "Evolution Cards.\n"
-	db "If you do not have a Basic Pok`mon\n"
-	db "in the Play Area, you cannot place\n"
-	db "the Stage 1 Evolution Card, and if\n"
-	db "you do not have a Stage 1 Evolution\n"
-	db "Card in the Play Area, you cannot\n"
-	db "place the Stage 2 Evolution Card.",TX_END
+	text "Evolution Cards are cards you"
+	line "play on top of a Basic Pok`mon card"
+	line "(or sometimes on top of another"
+	line "Evolution Card) to make it stronger."
+	line "There are Stage 1 and Stage 2"
+	line "Evolution Cards."
+	line "If you do not have a Basic Pok`mon"
+	line "in the Play Area, you cannot place"
+	line "the Stage 1 Evolution Card, and if"
+	line "you do not have a Stage 1 Evolution"
+	line "Card in the Play Area, you cannot"
+	line "place the Stage 2 Evolution Card."
+	done
 
 Text0319: ; 3e10a (f:610a)
-	db TX_START,"By choosing Attack, your Pok`mon\n"
-	db "will fight your opponent's Pok`mon.\n"
-	db "Your Pok`mon require Energy\n"
-	db "in order to Attack.\n"
-	db "The amount of Energy required\n"
-	db "differs according to the Attack.\n"
-	db "The Active Pok`mon is the only\n"
-	db "Pok`mon that can Attack.",TX_END
+	text "By choosing Attack, your Pok`mon"
+	line "will fight your opponent's Pok`mon."
+	line "Your Pok`mon require Energy"
+	line "in order to Attack."
+	line "The amount of Energy required"
+	line "differs according to the Attack."
+	line "The Active Pok`mon is the only"
+	line "Pok`mon that can Attack."
+	done
 
 Text031a: ; 3e1f7 (f:61f7)
-	db TX_START,"Unlike Attacks, Pok`mon Power\n"
-	db "can be used by Active or Benched\n"
-	db "Pok`mon. Some Pok`mon Power are\n"
-	db "effective by just placing the\n"
-	db "Pok`mon in the Play Area, but for\n"
-	db "some you must choose the\n"
-	db "command, PKMN Power.",TX_END
+	text "Unlike Attacks, Pok`mon Power"
+	line "can be used by Active or Benched"
+	line "Pok`mon. Some Pok`mon Power are"
+	line "effective by just placing the"
+	line "Pok`mon in the Play Area, but for"
+	line "some you must choose the"
+	line "command, PKMN Power."
+	done
 
 Text031b: ; 3e2c5 (f:62c5)
-	db TX_START,"Some Pok`mon have a Weakness.\n"
-	db "If a Pok`mon has a Weakness, it\n"
-	db "takes double damage when attacked by\n"
-	db "Pok`mon of a certain type.",TX_END
+	text "Some Pok`mon have a Weakness."
+	line "If a Pok`mon has a Weakness, it"
+	line "takes double damage when attacked by"
+	line "Pok`mon of a certain type."
+	done
 
 Text031c: ; 3e344 (f:6344)
-	db TX_START,"Some Pok`mon have Resistance.\n"
-	db "If a Pok`mon has Resistance, it\n"
-	db "takes 30 less damage whenever\n"
-	db "attacked by Pok`mon of\n"
-	db "a certain type.",TX_END
+	text "Some Pok`mon have Resistance."
+	line "If a Pok`mon has Resistance, it"
+	line "takes 30 less damage whenever"
+	line "attacked by Pok`mon of"
+	line "a certain type."
+	done
 
 Text031d: ; 3e3c8 (f:63c8)
-	db TX_START,"By choosing Retreat, you can\n"
-	db "switch the Active Pok`mon with\n"
-	db "a Pok`mon on your Bench.\n"
-	db "Energy is required to Retreat\n"
-	db "your Active Pok`mon.\n"
-	db "The amount of Energy required to\n"
-	db "Retreat differs for each Pok`mon.\n"
-	db "To Retreat, you must discard\n"
-	db "Energy equal to the Retreat Cost\n"
-	db "of the retreating Pok`mon.",TX_END
+	text "By choosing Retreat, you can"
+	line "switch the Active Pok`mon with"
+	line "a Pok`mon on your Bench."
+	line "Energy is required to Retreat"
+	line "your Active Pok`mon."
+	line "The amount of Energy required to"
+	line "Retreat differs for each Pok`mon."
+	line "To Retreat, you must discard"
+	line "Energy equal to the Retreat Cost"
+	line "of the retreating Pok`mon."
+	done
 
 Text031e: ; 3e4ed (f:64ed)
-	db TX_START,"Modify Deck\n"
-	db "Card List\n"
-	db "Album List\n"
-	db "Deck Save Machine\n"
-	db "Printing Menu\n"
-	db "Auto Deck Machine\n"
-	db "Gift Center\n"
-	db "Name Input",TX_END
+	text "Modify Deck"
+	line "Card List"
+	line "Album List"
+	line "Deck Save Machine"
+	line "Printing Menu"
+	line "Auto Deck Machine"
+	line "Gift Center"
+	line "Name Input"
+	done
 
 Text031f: ; 3e558 (f:6558)
-	db TX_START,"Fighting Machine\n"
-	db "Rock Machine\n"
-	db "Water Machine\n"
-	db "Lightning Machine\n"
-	db "Grass Machine\n"
-	db "Psychic Machine\n"
-	db "Science Machine\n"
-	db "Fire Machine\n"
-	db "Auto Machine\n"
-	db "Legendary Machine",TX_END
+	text "Fighting Machine"
+	line "Rock Machine"
+	line "Water Machine"
+	line "Lightning Machine"
+	line "Grass Machine"
+	line "Psychic Machine"
+	line "Science Machine"
+	line "Fire Machine"
+	line "Auto Machine"
+	line "Legendary Machine"
+	done
 
 Text0320: ; 3e5f1 (f:65f1)
-	db TX_START,"Send a Card\n"
-	db "Receive a Card\n"
-	db "Give Deck Instructions\n"
-	db "Receive Deck Instructions",TX_END
+	text "Send a Card"
+	line "Receive a Card"
+	line "Give Deck Instructions"
+	line "Receive Deck Instructions"
+	done
 
 Text0321: ; 3e63e (f:663e)
-	db TX_START,"Lecture Duel",TX_END
+	text "Lecture Duel"
+	done
 
 Text0322: ; 3e64c (f:664c)
-	db TX_START,"First Strike Deck\n"
-	db TX_END
+	text "First Strike Deck"
+	line TX_END
 
 Text0323: ; 3e660 (f:6660)
-	db TX_START,"  Mason Laboratory  ",TX_END
+	text "  Mason Laboratory  "
+	done
 
 Text0324: ; 3e676 (f:6676)
-	db TX_START,"  ISHIHARA's House  ",TX_END
+	text "  ISHIHARA's House  "
+	done
 
 Text0325: ; 3e68c (f:668c)
-	db TX_START,"   Fighting Club    ",TX_END
+	text "   Fighting Club    "
+	done
 
 Text0326: ; 3e6a2 (f:66a2)
-	db TX_START,"     Rock Club      ",TX_END
+	text "     Rock Club      "
+	done
 
 Text0327: ; 3e6b8 (f:66b8)
-	db TX_START,"     Water Club     ",TX_END
+	text "     Water Club     "
+	done
 
 Text0328: ; 3e6ce (f:66ce)
-	db TX_START,"   Lightning Club   ",TX_END
+	text "   Lightning Club   "
+	done
 
 Text0329: ; 3e6e4 (f:66e4)
-	db TX_START,"     Grass Club     ",TX_END
+	text "     Grass Club     "
+	done
 
 Text032a: ; 3e6fa (f:66fa)
-	db TX_START,"    Psychic Club    ",TX_END
+	text "    Psychic Club    "
+	done
 
 Text032b: ; 3e710 (f:6710)
-	db TX_START,"    Science Club    ",TX_END
+	text "    Science Club    "
+	done
 
 Text032c: ; 3e726 (f:6726)
-	db TX_START,"     Fire Club      ",TX_END
+	text "     Fire Club      "
+	done
 
 Text032d: ; 3e73c (f:673c)
-	db TX_START,"   Challenge Hall   ",TX_END
+	text "   Challenge Hall   "
+	done
 
 Text032e: ; 3e752 (f:6752)
-	db TX_START,"    Pok`mon Dome    ",TX_END
+	text "    Pok`mon Dome    "
+	done
 
 Text032f: ; 3e768 (f:6768)
-	db TX_START,"     ??'s House     ",TX_END
+	text "     ??'s House     "
+	done
 
 Text0330: ; 3e77e (f:677e)
-	db TX_START,"Mason Laboratory",TX_END
+	text "Mason Laboratory"
+	done
 
 Text0331: ; 3e790 (f:6790)
-	db TX_START,"Mr Ishihara's House",TX_END
+	text "Mr Ishihara's House"
+	done
 
 Text0332: ; 3e7a5 (f:67a5)
-	db TX_START,"Fighting",TX_END
+	text "Fighting"
+	done
 
 Text0333: ; 3e7af (f:67af)
-	db TX_START,"Rock",TX_END
+	text "Rock"
+	done
 
 Text0334: ; 3e7b5 (f:67b5)
-	db TX_START,"Water",TX_END
+	text "Water"
+	done
 
 Text0335: ; 3e7bc (f:67bc)
-	db TX_START,"Lightning",TX_END
+	text "Lightning"
+	done
 
 Text0336: ; 3e7c7 (f:67c7)
-	db TX_START,"Grass",TX_END
+	text "Grass"
+	done
 
 Text0337: ; 3e7ce (f:67ce)
-	db TX_START,"Psychic",TX_END
+	text "Psychic"
+	done
 
 Text0338: ; 3e7d7 (f:67d7)
-	db TX_START,"Science",TX_END
+	text "Science"
+	done
 
 Text0339: ; 3e7e0 (f:67e0)
-	db TX_START,"Fire",TX_END
+	text "Fire"
+	done
 
 Text033a: ; 3e7e6 (f:67e6)
-	db TX_START,"Challenge Hall",TX_END
+	text "Challenge Hall"
+	done
 
 Text033b: ; 3e7f6 (f:67f6)
-	db TX_START,"Pok`mon Dome",TX_END
+	text "Pok`mon Dome"
+	done
 
 Text033c: ; 3e804 (f:6804)
-	db TX_START,"??'s House",TX_END
+	text "??'s House"
+	done
 
 Text033d: ; 3e810 (f:6810)
-	db TX_START,"Status\n"
-	db "Diary\n"
-	db "Deck\n"
-	db "Card\n"
-	db "Config\n"
-	db "Exit",TX_END
+	text "Status"
+	line "Diary"
+	line "Deck"
+	line "Card"
+	line "Config"
+	line "Exit"
+	done
 
 Text033e: ; 3e834 (f:6834)
-	db TX_START,"Status\n"
-	db "Diary\n"
-	db "Deck\n"
-	db "Card\n"
-	db "Config\n"
-	db "Debug\n"
-	db "Close",TX_END
+	text "Status"
+	line "Diary"
+	line "Deck"
+	line "Card"
+	line "Config"
+	line "Debug"
+	line "Close"
+	done
 
 Text033f: ; 3e85f (f:685f)
-	db TX_START,"Name ",TX_RAM1,TX_END
+	text "Name ",TX_RAM1
+	done
 
 Text0340: ; 3e867 (f:6867)
-	db TX_START,"Album           ",$07,$6d,TX_END
+	text "Album           ",$07,$6d
+	done
 
 Text0341: ; 3e87b (f:687b)
-	db TX_START,"Play time         ",$07,$03,$5e,TX_END
+	text "Play time         ",$07,$03,$5e
+	done
 
 Text0342: ; 3e892 (f:6892)
-	db TX_START,TX_RAM1,"'s diary",TX_END
+	text TX_RAM1,"'s diary"
+	done
 
 Text0343: ; 3e89d (f:689d)
-	db TX_START,"Master Medals Won ",TX_END
+	text "Master Medals Won "
+	done
 
 Text0344: ; 3e8b1 (f:68b1)
-	db TX_START,"Would you like to keep a diary?",TX_END
+	text "Would you like to keep a diary?"
+	done
 
 Text0345: ; 3e8d2 (f:68d2)
-	db TX_START,TX_RAM1,"\n"
-	db "wrote in the diary.",TX_END
+	text TX_RAM1,""
+	line "wrote in the diary."
+	done
 
 Text0346: ; 3e8e9 (f:68e9)
-	db TX_START,"Nothing was recorded \n"
-	db "in the diary.",TX_END
+	text "Nothing was recorded "
+	line "in the diary."
+	done
 
 Text0347: ; 3e90e (f:690e)
-	db TX_START,"Master Medals",TX_END
+	text "Master Medals"
+	done
 
 Text0348: ; 3e91d (f:691d)
-	db TX_START,"           Change Settings",TX_END
+	text "           Change Settings"
+	done
 
 Text0349: ; 3e939 (f:6939)
-	db TX_START,"Message Speed\n\n"
-	db "   Slow   1   2   3   4   5   Fast",TX_END
+	text "Message Speed\n"
+	line "   Slow   1   2   3   4   5   Fast"
+	done
 
 Text034a: ; 3e96c (f:696c)
-	db TX_START,"Duel Animation\n\n"
-	db "  Show All    Skip Some       None",TX_END
+	text "Duel Animation\n"
+	line "  Show All    Skip Some       None"
+	done
 
 Text034b: ; 3e9a0 (f:69a0)
-	db TX_START,"   Exit Settings",TX_END
+	text "   Exit Settings"
+	done
 
 Text034c: ; 3e9b2 (f:69b2)
-	db TX_START,"Duel           [",TX_RAM2,"]\n"
-	db "SELECT         [",TX_RAM2,"]\n"
-	db "Receive many cards\n"
-	db "To Pok`mon Dome 1\n"
-	db "To Pok`mon Dome 2",TX_END
+	text "Duel           [",TX_RAM2,"]"
+	line "SELECT         [",TX_RAM2,"]"
+	line "Receive many cards"
+	line "To Pok`mon Dome 1"
+	line "To Pok`mon Dome 2"
+	done
 
 Text034d: ; 3ea10 (f:6a10)
-	db TX_START,"Normal Duel",TX_END
+	text "Normal Duel"
+	done
 
 Text034e: ; 3ea1d (f:6a1d)
-	db TX_START,"Skip",TX_END
+	text "Skip"
+	done
 
 Text034f: ; 3ea23 (f:6a23)
-	db TX_START,"Normal",TX_END
+	text "Normal"
+	done
 
 Text0350: ; 3ea2b (f:6a2b)
-	db TX_START,"Freeze Screen",TX_END
+	text "Freeze Screen"
+	done
 
 Text0351: ; 3ea3a (f:6a3a)
-	db TX_START,"Card Album\n"
-	db "Read Mail\n"
-	db "Glossary\n"
-	db "Print\n"
-	db "Shut Down",TX_END
+	text "Card Album"
+	line "Read Mail"
+	line "Glossary"
+	line "Print"
+	line "Shut Down"
+	done
 
 TurnedPCOnText: ; 3ea69 (f:6a69)
-	db TX_START,TX_RAM1,"\n"
-	db "turned the PC on!",TX_END
+	text TX_RAM1,""
+	line "turned the PC on!"
+	done
 
 TurnedPCOffText: ; 3ea7e (f:6a7e)
-	db TX_START,TX_RAM1,"\n"
-	db "turned the PC off!",TX_END
+	text TX_RAM1,""
+	line "turned the PC off!"
+	done
 
 Text0354: ; 3ea94 (f:6a94)
-	db TX_START,"Send Card\n"
-	db "Receive Card\n"
-	db "Send Deck Configuration\n"
-	db "Receive Deck Configuration\n"
-	db "Exit",TX_END
+	text "Send Card"
+	line "Receive Card"
+	line "Send Deck Configuration"
+	line "Receive Deck Configuration"
+	line "Exit"
+	done
 
 Text0355: ; 3eae4 (f:6ae4)
-	db TX_START,"Send Card",TX_END
+	text "Send Card"
+	done
 
 Text0356: ; 3eaef (f:6aef)
-	db TX_START,"Receive Card",TX_END
+	text "Receive Card"
+	done
 
 Text0357: ; 3eafd (f:6afd)
-	db TX_START,"Send Deck Configuration",TX_END
+	text "Send Deck Configuration"
+	done
 
 Text0358: ; 3eb16 (f:6b16)
-	db TX_START,"Receive Deck Configuration",TX_END
+	text "Receive Deck Configuration"
+	done
 
 Text0359: ; 3eb32 (f:6b32)
-	db TX_START,"   Mail ",TX_RAM1," ",TX_END
+	text "   Mail ",TX_RAM1," "
+	done
 
 Text035a: ; 3eb3e (f:6b3e)
-	db TX_START,"Which mail would you like to read?",TX_END
+	text "Which mail would you like to read?"
+	done
 
 Text035b: ; 3eb62 (f:6b62)
-	db TX_START,"Mail 0 1 2 3 4 5 6 7 8 9101112131415",TX_END
+	text "Mail 0 1 2 3 4 5 6 7 8 9101112131415"
+	done
 
 Text035c: ; 3eb88 (f:6b88)
-	db "ppppp",TX_END
+	db "ppppp"
+	done
 
 Text035d: ; 3eb8e (f:6b8e)
-	db TX_START,"Mail 1",TX_END
+	text "Mail 1"
+	done
 
 Text035e: ; 3eb96 (f:6b96)
-	db TX_START,"Mail 2",TX_END
+	text "Mail 2"
+	done
 
 Text035f: ; 3eb9e (f:6b9e)
-	db TX_START,"Mail 3",TX_END
+	text "Mail 3"
+	done
 
 Text0360: ; 3eba6 (f:6ba6)
-	db TX_START,"Mail 4",TX_END
+	text "Mail 4"
+	done
 
 Text0361: ; 3ebae (f:6bae)
-	db TX_START,"Mail 5",TX_END
+	text "Mail 5"
+	done
 
 Text0362: ; 3ebb6 (f:6bb6)
-	db TX_START,"Mail 6",TX_END
+	text "Mail 6"
+	done
 
 Text0363: ; 3ebbe (f:6bbe)
-	db TX_START,"Mail 7",TX_END
+	text "Mail 7"
+	done
 
 Text0364: ; 3ebc6 (f:6bc6)
-	db TX_START,"Mail 8",TX_END
+	text "Mail 8"
+	done
 
 Text0365: ; 3ebce (f:6bce)
-	db TX_START,"Mail 9",TX_END
+	text "Mail 9"
+	done
 
 Text0366: ; 3ebd6 (f:6bd6)
-	db TX_START,"Mail 10",TX_END
+	text "Mail 10"
+	done
 
 Text0367: ; 3ebdf (f:6bdf)
-	db TX_START,"Mail 11",TX_END
+	text "Mail 11"
+	done
 
 Text0368: ; 3ebe8 (f:6be8)
-	db TX_START,"Mail 12",TX_END
+	text "Mail 12"
+	done
 
 Text0369: ; 3ebf1 (f:6bf1)
-	db TX_START,"Mail 13",TX_END
+	text "Mail 13"
+	done
 
 Text036a: ; 3ebfa (f:6bfa)
-	db TX_START,"Mail 14",TX_END
+	text "Mail 14"
+	done
 
 Text036b: ; 3ec03 (f:6c03)
-	db TX_START,"Mail 15",TX_END
+	text "Mail 15"
+	done
 
 Text036c: ; 3ec0c (f:6c0c)
-	db TX_START,"NEW GAME",TX_END
+	text "NEW GAME"
+	done
 
 Text036d: ; 3ec16 (f:6c16)
-	db TX_START,"CARD POP!\n"
-	db "CONTINUE FROM DIARY\n"
-	db "NEW GAME",TX_END
+	text "CARD POP!"
+	line "CONTINUE FROM DIARY"
+	line "NEW GAME"
+	done
 
 Text036e: ; 3ec3e (f:6c3e)
-	db TX_START,"CARD POP!\n"
-	db "CONTINUE FROM DIARY\n"
-	db "New Game\n"
-	db "CONTINUE DUEL",TX_END
+	text "CARD POP!"
+	line "CONTINUE FROM DIARY"
+	line "New Game"
+	line "CONTINUE DUEL"
+	done
 
 Text036f: ; 3ec74 (f:6c74)
-	db TX_START,"When you CARD POP! with a friend,\n"
-	db "you will each receive a new card!",TX_END
+	text "When you CARD POP! with a friend,"
+	line "you will each receive a new card!"
+	done
 
 Text0370: ; 3ecb9 (f:6cb9)
-	db TX_START,"  ",TX_RAM1,"  ",TX_RAM2,"\n"
-	db "      Master Medals Won ",$07,$0c,$06,"\n"
-	db "      Album           ",$07,$6d,$06,"\n"
-	db "      Play time         ",$07,$03,$5e,$06,TX_END
+	text "  ",TX_RAM1,"  ",TX_RAM2,""
+	line "      Master Medals Won ",$07,$0c,$06,""
+	line "      Album           ",$07,$6d,$06,""
+	line "      Play time         ",$07,$03,$5e,$06
+	done
 
 Text0371: ; 3ed14 (f:6d14)
-	db TX_START,"Start a New Game.\n"
-	db TX_END
+	text "Start a New Game."
+	line TX_END
 
 Text0372: ; 3ed28 (f:6d28)
-	db TX_START,"The Game will continue from \n"
-	db "the point in the duel at\n"
-	db "which the power was turned OFF.",TX_END
+	text "The Game will continue from "
+	line "the point in the duel at"
+	line "which the power was turned OFF."
+	done
 
 Text0373: ; 3ed7f (f:6d7f)
-	db TX_START,"Saved data already exists.\n"
-	db "If you continue, you will lose\n"
-	db "all the cards you have collected.",TX_END
+	text "Saved data already exists."
+	line "If you continue, you will lose"
+	line "all the cards you have collected."
+	done
 
 Text0374: ; 3eddc (f:6ddc)
-	db TX_START,"OK to delete the data?",TX_END
+	text "OK to delete the data?"
+	done
 
 Text0375: ; 3edf4 (f:6df4)
-	db TX_START,"All data was deleted.",TX_END
+	text "All data was deleted."
+	done
 
 Text0376: ; 3ee0b (f:6e0b)
-	db TX_START,"Data exists from when the power \n"
-	db "was turned OFF during a duel.\n"
-	db "Choose CONTINUE DUEL on the\n"
-	db "Main Menu to continue the duel.\n"
-	db "If you continue now, the heading,\n"
-	db "CONTINUE DUEL, will be\n"
-	db "deleted, and the game will start\n"
-	db "from the point when you last \n"
-	db "wrote in the Diary.\n\n"
-	db "Would you like to continue the Game\n"
-	db "from the point saved in",TX_END
+	text "Data exists from when the power "
+	line "was turned OFF during a duel."
+	line "Choose CONTINUE DUEL on the"
+	line "Main Menu to continue the duel."
+	line "If you continue now, the heading,"
+	line "CONTINUE DUEL, will be"
+	line "deleted, and the game will start"
+	line "from the point when you last "
+	line "wrote in the Diary.\n"
+	line "Would you like to continue the Game"
+	line "from the point saved in"
+	done
 
 Text0377: ; 3ef50 (f:6f50)
-	db TX_START,"CONTINUE FROM DIARY?",TX_END
+	text "CONTINUE FROM DIARY?"
+	done
 
 Text0378: ; 3ef66 (f:6f66)
-	db TX_START,"You can access Card Pop! only\n"
-	db "with two Game Boy Colors.\n"
-	db "Please play using a Game Boy Color.",TX_END
+	text "You can access Card Pop! only"
+	line "with two Game Boy Colors."
+	line "Please play using a Game Boy Color."
+	done
 
 Text0379: ; 3efc3 (f:6fc3)
-	db TX_START,TX_RAM1," is crazy about Pok`mon\n"
-	db "and Pok`mon card collecting!\n"
-	db "One day,\n"
-	db TX_RAM1," heard a rumor:\n"
-	db " \"The Legendary Pok`mon Cards...\n"
-	db "  the extremely rare and powerful \n"
-	db "  cards held by Pok`mon Trading \n"
-	db "  Card Game's greatest players... \n"
-	db "  The Grand Masters are searching\n"
-	db "  for one to inherit the legend!\"\n"
-	db "Dreaming of inheriting the\n"
-	db "Legendary Pok`mon Cards,\n"
-	db TX_RAM1," visits the Pok`mon\n"
-	db "card researcher, Dr. Mason...",TX_END
+	text TX_RAM1," is crazy about Pok`mon"
+	line "and Pok`mon card collecting!"
+	line "One day,"
+	line TX_RAM1," heard a rumor:"
+	line " \"The Legendary Pok`mon Cards..."
+	line "  the extremely rare and powerful "
+	line "  cards held by Pok`mon Trading "
+	line "  Card Game's greatest players... "
+	line "  The Grand Masters are searching"
+	line "  for one to inherit the legend!\""
+	line "Dreaming of inheriting the"
+	line "Legendary Pok`mon Cards,"
+	line TX_RAM1," visits the Pok`mon"
+	line "card researcher, Dr. Mason..."
+	done
 
 Text037a: ; 3f147 (f:7147)
-	db TX_START,"POWER ON\n"
-	db "DUEL MODE\n"
-	db "CONTINUE FROM DIARY\n"
-	db "CGB TEST\n"
-	db "SGB FRAME\n"
-	db "STANDARD BG CHARACTER\n"
-	db "LOOK AT SPR\n"
-	db "V EFFECT\n"
-	db "CREATE BOOSTER PACK\n"
-	db "CREDITS\n"
-	db "QUIT",TX_END
+	text "POWER ON"
+	line "DUEL MODE"
+	line "CONTINUE FROM DIARY"
+	line "CGB TEST"
+	line "SGB FRAME"
+	line "STANDARD BG CHARACTER"
+	line "LOOK AT SPR"
+	line "V EFFECT"
+	line "CREATE BOOSTER PACK"
+	line "CREDITS"
+	line "QUIT"
+	done
 
 Text037b: ; 3f1ce (f:71ce)
-	db TX_START,"NORMAL DUEL\n"
-	db "SKIP",TX_END
+	text "NORMAL DUEL"
+	line "SKIP"
+	done
 
 Text037c: ; 3f1e0 (f:71e0)
-	db TX_START,"COLOSSEUM\n"
-	db "EVOLUTION\n"
-	db "MYSTERY\n"
-	db "LABORATORY\n"
-	db "Energy",TX_END
+	text "COLOSSEUM"
+	line "EVOLUTION"
+	line "MYSTERY"
+	line "LABORATORY"
+	line "Energy"
+	done
 
 Text037d: ; 3f20f (f:720f)
-	db TX_START,"1\n"
-	db "2\n"
-	db "3\n"
-	db "4\n"
-	db "5\n"
-	db "6\n"
-	db "7",TX_END
+	text "1"
+	line "2"
+	line "3"
+	line "4"
+	line "5"
+	line "6"
+	line "7"
+	done
 
 Text037e: ; 3f21e (f:721e)
-	db TX_START,"1\n"
-	db "2\n"
-	db "3\n"
-	db "4\n"
-	db "5\n"
-	db "6",TX_END
+	text "1"
+	line "2"
+	line "3"
+	line "4"
+	line "5"
+	line "6"
+	done
 
 Text037f: ; 3f22b (f:722b)
-	db TX_START,"1\n"
-	db "2\n"
-	db "3\n"
-	db "4\n"
-	db "5",TX_END
+	text "1"
+	line "2"
+	line "3"
+	line "4"
+	line "5"
+	done
 
 Text0380: ; 3f236 (f:7236)
-	db TX_START,"1\n"
-	db "2\n"
-	db "3\n"
-	db "4",TX_END
+	text "1"
+	line "2"
+	line "3"
+	line "4"
+	done
 
 Text0381: ; 3f23f (f:723f)
-	db TX_START,"A                   TIME\n"
-	db "     TO      (Change with Start)\n"
-	db "            A+B: Stop Animation\n"
-	db "            Select: Exit",TX_END
+	text "A                   TIME"
+	line "     TO      (Change with Start)"
+	line "            A+B: Stop Animation"
+	line "            Select: Exit"
+	done
 
 Text0382: ; 3f2b3 (f:72b3)
-	db TX_START,"Left",TX_END
+	text "Left"
+	done
 
 Text0383: ; 3f2b9 (f:72b9)
-	db TX_START,"Right",TX_END
+	text "Right"
+	done
 
 Text0384: ; 3f2c0 (f:72c0)
-	db TX_START,"SPR_",TX_END
+	text "SPR_"
+	done
 
 Text0385: ; 3f2c6 (f:72c6)
-	db TX_START,"WIN      ",TX_RAM3," Prizes Duel\n"
-	db "LOSE     with ",TX_RAM2,"(",TX_RAM3,")",TX_END
+	text "WIN      ",TX_RAM3," Prizes Duel"
+	line "LOSE     with ",TX_RAM2,"(",TX_RAM3,")"
+	done
 
 Text0386: ; 3f2f1 (f:72f1)
-	db TX_START,"         Use ",TX_RAM3,"'s Deck",TX_END
+	text "         Use ",TX_RAM3,"'s Deck"
+	done
 
 ReceivedBoosterPackText: ; 3f308 (f:7308)
-	db TX_START,TX_RAM1," received a Booster\n"
-	db "Pack: ",TX_RAM2,".",TX_END
+	text TX_RAM1," received a Booster"
+	line "Pack: ",TX_RAM2,"."
+	done
 
 AndAnotherBoosterPackText: ; 3f327 (f:7327)
-	db TX_START,"...And another Booster Pack:\n"
-	db TX_RAM2,".",TX_END
+	text "...And another Booster Pack:"
+	line TX_RAM2,"."
+	done
 
 CheckedCardsInBoosterPackText: ; 3f348 (f:7348)
-	db TX_START,TX_RAM1," checked the cards\n"
-	db "in the Booster Pack!!",TX_END
+	text TX_RAM1," checked the cards"
+	line "in the Booster Pack!!"
+	done
 
 Text038a: ; 3f373 (f:7373)
-	db TX_START,"Substitute screen for\n"
-	db "receiving cards.",TX_END
+	text "Substitute screen for"
+	line "receiving cards."
+	done
 
 WonTheMedalText: ; 3f39b (f:739b)
-	db TX_START,TX_RAM1,"\n"
-	db "Won the ",TX_RAM2," Medal!",TX_END
+	text TX_RAM1,""
+	line "Won the ",TX_RAM2," Medal!"
+	done
 
 Text038c: ; 3f3af (f:73af)
-	db TX_START,"Substitute screen for sending\n"
-	db "cards by Link cable.",TX_END
+	text "Substitute screen for sending"
+	line "cards by Link cable."
+	done
 
 Text038d: ; 3f3e3 (f:73e3)
-	db TX_START,"Substitute screen for receiving\n"
-	db "cards by Link cable.",TX_END
+	text "Substitute screen for receiving"
+	line "cards by Link cable."
+	done
 
 Text038e: ; 3f419 (f:7419)
-	db TX_START,"Substitute screen for sending\n"
-	db "a Deck design.",TX_END
+	text "Substitute screen for sending"
+	line "a Deck design."
+	done
 
 Text038f: ; 3f447 (f:7447)
-	db TX_START,"Substitute screen for receiving\n"
-	db "a Deck design.",TX_END
+	text "Substitute screen for receiving"
+	line "a Deck design."
+	done
 
 Text0390: ; 3f477 (f:7477)
-	db TX_START,"????",TX_END
+	text "????"
+	done
 
 Text0391: ; 3f47d (f:747d)
-	db TX_START,"Ending Screen\n"
-	db "THE END",TX_END
+	text "Ending Screen"
+	line "THE END"
+	done
 
 Text0392: ; 3f494 (f:7494)
-	db TX_START,"Was the data transfer successful?",TX_END
+	text "Was the data transfer successful?"
+	done
 
 Text0393: ; 3f4b7 (f:74b7)
-	db TX_START,"(Person transferring data to)",TX_END
+	text "(Person transferring data to)"
+	done
 
 Text0394: ; 3f4d6 (f:74d6)
-	db TX_START,"(Name of Deck transferring)",TX_END
+	text "(Name of Deck transferring)"
+	done
 
 Text0395: ; 3f4f3 (f:74f3)
-	db TX_START,TX_RAM2,"  ",TX_RAM2,TX_END
+	text TX_RAM2,"  ",TX_RAM2
+	done
 
 Text0396: ; 3f4f9 (f:74f9)
-	db TX_START,TX_RAM2," Deck",TX_END
+	text TX_RAM2," Deck"
+	done
 
 Text0397: ; 3f501 (f:7501)
-	db TX_START,"Fighting Club Member",TX_END
+	text "Fighting Club Member"
+	done
 
 Text0398: ; 3f517 (f:7517)
-	db TX_START,"Rock Club Member",TX_END
+	text "Rock Club Member"
+	done
 
 Text0399: ; 3f529 (f:7529)
-	db TX_START,"Water Club Member",TX_END
+	text "Water Club Member"
+	done
 
 Text039a: ; 3f53c (f:753c)
-	db TX_START,"Lightning Club Member",TX_END
+	text "Lightning Club Member"
+	done
 
 Text039b: ; 3f553 (f:7553)
-	db TX_START,"Grass Club Member",TX_END
+	text "Grass Club Member"
+	done
 
 Text039c: ; 3f566 (f:7566)
-	db TX_START,"Psychic Club Member",TX_END
+	text "Psychic Club Member"
+	done
 
 Text039d: ; 3f57b (f:757b)
-	db TX_START,"Science Club Member",TX_END
+	text "Science Club Member"
+	done
 
 Text039e: ; 3f590 (f:7590)
-	db TX_START,"Fire Club Member",TX_END
+	text "Fire Club Member"
+	done
 
 Text039f: ; 3f5a2 (f:75a2)
-	db TX_START,"Fighting Club Master",TX_END
+	text "Fighting Club Master"
+	done
 
 Text03a0: ; 3f5b8 (f:75b8)
-	db TX_START,"Rock Club Master",TX_END
+	text "Rock Club Master"
+	done
 
 Text03a1: ; 3f5ca (f:75ca)
-	db TX_START,"Water Club Master",TX_END
+	text "Water Club Master"
+	done
 
 Text03a2: ; 3f5dd (f:75dd)
-	db TX_START,"Lightning Club Master",TX_END
+	text "Lightning Club Master"
+	done
 
 Text03a3: ; 3f5f4 (f:75f4)
-	db TX_START,"Grass Club Master",TX_END
+	text "Grass Club Master"
+	done
 
 Text03a4: ; 3f607 (f:7607)
-	db TX_START,"Psychic Club Master",TX_END
+	text "Psychic Club Master"
+	done
 
 Text03a5: ; 3f61c (f:761c)
-	db TX_START,"Science Club Master",TX_END
+	text "Science Club Master"
+	done
 
 Text03a6: ; 3f631 (f:7631)
-	db TX_START,"Fire Club Master",TX_END
+	text "Fire Club Master"
+	done
 
 Text03a7: ; 3f643 (f:7643)
 	db TX_END
 
 Text03a8: ; 3f644 (f:7644)
-	db TX_START,"COLOSSEUM",TX_END
+	text "COLOSSEUM"
+	done
 
 Text03a9: ; 3f64f (f:764f)
-	db TX_START,"EVOLUTION",TX_END
+	text "EVOLUTION"
+	done
 
 Text03aa: ; 3f65a (f:765a)
-	db TX_START,"MYSTERY",TX_END
+	text "MYSTERY"
+	done
 
 Text03ab: ; 3f663 (f:7663)
-	db TX_START,"LABORATORY",TX_END
+	text "LABORATORY"
+	done
 
 Text03ac: ; 3f66f (f:766f)
-	db TX_START,"Dr. Mason",TX_END
+	text "Dr. Mason"
+	done
 
 Text03ad: ; 3f67a (f:767a)
-	db TX_START,"Ronald",TX_END
+	text "Ronald"
+	done
 
 Text03ae: ; 3f682 (f:7682)
-	db TX_START,"ISHIHARA",TX_END
+	text "ISHIHARA"
+	done
 
 Text03af: ; 3f68c (f:768c)
-	db TX_START,"Imakuni?",TX_END
+	text "Imakuni?"
+	done
 
 Text03b0: ; 3f696 (f:7696)
-	db TX_START,"CLERK",TX_END
+	text "CLERK"
+	done
 
 Text03b1: ; 3f69d (f:769d)
-	db TX_START,"Sam",TX_END
+	text "Sam"
+	done
 
 Text03b2: ; 3f6a2 (f:76a2)
-	db TX_START,"TECH",TX_END
+	text "TECH"
+	done
 
 Text03b3: ; 3f6a8 (f:76a8)
-	db TX_START,"CLERK",TX_END
+	text "CLERK"
+	done
 
 Text03b4: ; 3f6af (f:76af)
-	db TX_START,"Chris",TX_END
+	text "Chris"
+	done
 
 Text03b5: ; 3f6b6 (f:76b6)
-	db TX_START,"Michael",TX_END
+	text "Michael"
+	done
 
 Text03b6: ; 3f6bf (f:76bf)
-	db TX_START,"Jessica",TX_END
+	text "Jessica"
+	done
 
 Text03b7: ; 3f6c8 (f:76c8)
-	db TX_START,"Mitch",TX_END
+	text "Mitch"
+	done
 
 Text03b8: ; 3f6cf (f:76cf)
-	db TX_START,"Matthew",TX_END
+	text "Matthew"
+	done
 
 Text03b9: ; 3f6d8 (f:76d8)
-	db TX_START,"Ryan",TX_END
+	text "Ryan"
+	done
 
 Text03ba: ; 3f6de (f:76de)
-	db TX_START,"Andrew",TX_END
+	text "Andrew"
+	done
 
 Text03bb: ; 3f6e6 (f:76e6)
-	db TX_START,"Gene",TX_END
+	text "Gene"
+	done
 
 Text03bc: ; 3f6ec (f:76ec)
-	db TX_START,"Sara",TX_END
+	text "Sara"
+	done
 
 Text03bd: ; 3f6f2 (f:76f2)
-	db TX_START,"Amanda",TX_END
+	text "Amanda"
+	done
 
 Text03be: ; 3f6fa (f:76fa)
-	db TX_START,"Joshua",TX_END
+	text "Joshua"
+	done
 
 Text03bf: ; 3f702 (f:7702)
-	db TX_START,"Amy",TX_END
+	text "Amy"
+	done
 
 Text03c0: ; 3f707 (f:7707)
-	db TX_START,"Jennifer",TX_END
+	text "Jennifer"
+	done
 
 Text03c1: ; 3f711 (f:7711)
-	db TX_START,"Nicholas",TX_END
+	text "Nicholas"
+	done
 
 Text03c2: ; 3f71b (f:771b)
-	db TX_START,"Brandon",TX_END
+	text "Brandon"
+	done
 
 Text03c3: ; 3f724 (f:7724)
-	db TX_START,"Isaac",TX_END
+	text "Isaac"
+	done
 
 Text03c4: ; 3f72b (f:772b)
-	db TX_START,"Brittany",TX_END
+	text "Brittany"
+	done
 
 Text03c5: ; 3f735 (f:7735)
-	db TX_START,"Kristin",TX_END
+	text "Kristin"
+	done
 
 Text03c6: ; 3f73e (f:773e)
-	db TX_START,"Heather",TX_END
+	text "Heather"
+	done
 
 Text03c7: ; 3f747 (f:7747)
-	db TX_START,"Nikki",TX_END
+	text "Nikki"
+	done
 
 Text03c8: ; 3f74e (f:774e)
-	db TX_START,"Robert",TX_END
+	text "Robert"
+	done
 
 Text03c9: ; 3f756 (f:7756)
-	db TX_START,"Daniel",TX_END
+	text "Daniel"
+	done
 
 Text03ca: ; 3f75e (f:775e)
-	db TX_START,"Stephanie",TX_END
+	text "Stephanie"
+	done
 
 Text03cb: ; 3f769 (f:7769)
-	db TX_START,"Murray",TX_END
+	text "Murray"
+	done
 
 Text03cc: ; 3f771 (f:7771)
-	db TX_START,"Joseph",TX_END
+	text "Joseph"
+	done
 
 Text03cd: ; 3f779 (f:7779)
-	db TX_START,"David",TX_END
+	text "David"
+	done
 
 Text03ce: ; 3f780 (f:7780)
-	db TX_START,"Erik",TX_END
+	text "Erik"
+	done
 
 Text03cf: ; 3f786 (f:7786)
-	db TX_START,"Rick",TX_END
+	text "Rick"
+	done
 
 Text03d0: ; 3f78c (f:778c)
-	db TX_START,"John",TX_END
+	text "John"
+	done
 
 Text03d1: ; 3f792 (f:7792)
-	db TX_START,"Adam",TX_END
+	text "Adam"
+	done
 
 Text03d2: ; 3f798 (f:7798)
-	db TX_START,"Jonathan",TX_END
+	text "Jonathan"
+	done
 
 Text03d3: ; 3f7a2 (f:77a2)
-	db TX_START,"Ken",TX_END
+	text "Ken"
+	done
 
 Text03d4: ; 3f7a7 (f:77a7)
-	db TX_START,"COURTNEY",TX_END
+	text "COURTNEY"
+	done
 
 Text03d5: ; 3f7b1 (f:77b1)
-	db TX_START,"Steve",TX_END
+	text "Steve"
+	done
 
 Text03d6: ; 3f7b8 (f:77b8)
-	db TX_START,"Jack",TX_END
+	text "Jack"
+	done
 
 Text03d7: ; 3f7be (f:77be)
-	db TX_START,"Rod",TX_END
+	text "Rod"
+	done
 
 Text03d8: ; 3f7c3 (f:77c3)
-	db TX_START,"Man",TX_END
+	text "Man"
+	done
 
 Text03d9: ; 3f7c8 (f:77c8)
-	db TX_START,"Woman",TX_END
+	text "Woman"
+	done
 
 Text03da: ; 3f7cf (f:77cf)
-	db TX_START,"CHAP",TX_END
+	text "CHAP"
+	done
 
 Text03db: ; 3f7d5 (f:77d5)
-	db TX_START,"GAL",TX_END
+	text "GAL"
+	done
 
 Text03dc: ; 3f7da (f:77da)
-	db TX_START,"Lass",TX_END
+	text "Lass"
+	done
 
 Text03dd: ; 3f7e0 (f:77e0)
-	db TX_START,"Pappy",TX_END
+	text "Pappy"
+	done
 
 Text03de: ; 3f7e7 (f:77e7)
-	db TX_START,"Lad",TX_END
+	text "Lad"
+	done
 
 Text03df: ; 3f7ec (f:77ec)
-	db TX_START,"HOST",TX_END
+	text "HOST"
+	done
 
 Text03e0: ; 3f7f2 (f:77f2)
-	db TX_START,"Specs",TX_END
+	text "Specs"
+	done
 
 Text03e1: ; 3f7f9 (f:77f9)
-	db TX_START,"Butch",TX_END
+	text "Butch"
+	done
 
 Text03e2: ; 3f800 (f:7800)
-	db TX_START,"Hood",TX_END
+	text "Hood"
+	done
 
 Text03e3: ; 3f806 (f:7806)
-	db TX_START,"Champ",TX_END
+	text "Champ"
+	done
 
 Text03e4: ; 3f80d (f:780d)
-	db TX_START,"Mania",TX_END
+	text "Mania"
+	done
 
 Text03e5: ; 3f814 (f:7814)
-	db TX_START,"Granny",TX_END
+	text "Granny"
+	done
 
 Text03e6: ; 3f81c (f:781c)
-	db TX_START,"Guide",TX_END
+	text "Guide"
+	done
 
 Text03e7: ; 3f823 (f:7823)
-	db TX_START,"Aaron",TX_END
+	text "Aaron"
+	done
 
 Text03e8: ; 3f82a (f:782a)
-	db TX_START,TX_LVL,"60 MEWTWO ",TX_END
+	text TX_LVL,"60 MEWTWO "
+	done
 
 Text03e9: ; 3f838 (f:7838)
-	db TX_START,TX_LVL,"8 MEW ",TX_END
+	text TX_LVL,"8 MEW "
+	done
 
 Text03ea: ; 3f842 (f:7842)
-	db TX_START,TX_LVL,"34 ARCANINE",TX_END
+	text TX_LVL,"34 ARCANINE"
+	done
 
 Text03eb: ; 3f851 (f:7851)
-	db TX_START,TX_LVL,"16 PIKACHU",TX_END
+	text TX_LVL,"16 PIKACHU"
+	done
 
 Text03ec: ; 3f85f (f:785f)
-	db TX_START,TX_LVL,"13 SURFING PIKACHU",TX_END
+	text TX_LVL,"13 SURFING PIKACHU"
+	done
 
 Text03ed: ; 3f875 (f:7875)
-	db TX_START,TX_LVL,"20 ELECTABUZZ",TX_END
+	text TX_LVL,"20 ELECTABUZZ"
+	done
 
 Text03ee: ; 3f886 (f:7886)
-	db TX_START,TX_LVL,"9 SLOWPOKE",TX_END
+	text TX_LVL,"9 SLOWPOKE"
+	done
 
 Text03ef: ; 3f894 (f:7894)
-	db TX_START,TX_LVL,"12 JIGGLYPUFF",TX_END
+	text TX_LVL,"12 JIGGLYPUFF"
+	done
 
 Text03f0: ; 3f8a5 (f:78a5)
-	db TX_START,TX_LVL,"68 ZAPDOS",TX_END
+	text TX_LVL,"68 ZAPDOS"
+	done
 
 Text03f1: ; 3f8b2 (f:78b2)
-	db TX_START,TX_LVL,"37 MOLTRES",TX_END
+	text TX_LVL,"37 MOLTRES"
+	done
 
 Text03f2: ; 3f8c0 (f:78c0)
-	db TX_START,TX_LVL,"37 ARTICUNO",TX_END
+	text TX_LVL,"37 ARTICUNO"
+	done
 
 Text03f3: ; 3f8cf (f:78cf)
-	db TX_START,TX_LVL,"41 DRAGONITE",TX_END
+	text TX_LVL,"41 DRAGONITE"
+	done
 
 Text03f4: ; 3f8df (f:78df)
-	db TX_START,"Super Energy Retrieval",TX_END
+	text "Super Energy Retrieval"
+	done
 
 Text03f5: ; 3f8f7 (f:78f7)
-	db TX_START,TX_LVL,"12 FLYING PIKACHU",TX_END
+	text TX_LVL,"12 FLYING PIKACHU"
+	done
 
 Text03f6: ; 3f90c (f:790c)
-	db TX_START,"Lightning & Fire Deck",TX_END
+	text "Lightning & Fire Deck"
+	done
 
 Text03f7: ; 3f923 (f:7923)
-	db TX_START,"Water & Fighting Deck",TX_END
+	text "Water & Fighting Deck"
+	done
 
 Text03f8: ; 3f93a (f:793a)
-	db TX_START,"Grass & Psychic Deck",TX_END
+	text "Grass & Psychic Deck"
+	done
 
 Text03f9: ; 3f950 (f:7950)
-	db TX_START,"Please select the Deck\n"
-	db "you wish to Duel against.",TX_END
+	text "Please select the Deck"
+	line "you wish to Duel against."
+	done
 
 Text03fa: ; 3f982 (f:7982)
-	db TX_START,"CHARMANDER & Friends Deck",TX_END
+	text "CHARMANDER & Friends Deck"
+	done
 
 Text03fb: ; 3f99d (f:799d)
-	db TX_START,"SQUIRTLE & Friends Deck",TX_END
+	text "SQUIRTLE & Friends Deck"
+	done
 
 Text03fc: ; 3f9b6 (f:79b6)
-	db TX_START,"BULBASAUR & Friends Deck",TX_END
+	text "BULBASAUR & Friends Deck"
+	done
 
 Text03fd: ; 3f9d0 (f:79d0)
-	db TX_START,"Please select the Deck you want.",TX_END
+	text "Please select the Deck you want."
+	done
 
 Text03fe: ; 3f9f2 (f:79f2)
-	db TX_START,"Hi, ",TX_RAM1,".\n"
-	db "How can I help you?",TX_END
+	text "Hi, ",TX_RAM1,"."
+	line "How can I help you?"
+	done
 
 Text03ff: ; 3fa0e (f:7a0e)
-	db TX_START,"Normal Duel\n"
-	db "Practice\n"
-	db "Rules\n"
-	db "Nothing",TX_END
+	text "Normal Duel"
+	line "Practice"
+	line "Rules"
+	line "Nothing"
+	done
 
 Text0400: ; 3fa32 (f:7a32)
-	db TX_START,"Energy\n"
-	db "Attacking\n"
-	db "Retreating\n"
-	db "Evolving Pok`mon\n"
-	db "Using Pok`mon Power\n"
-	db "Ending Your Turn\n"
-	db "Win or Loss of a Duel\n"
-	db "Nothing to Ask",TX_END
+	text "Energy"
+	line "Attacking"
+	line "Retreating"
+	line "Evolving Pok`mon"
+	line "Using Pok`mon Power"
+	line "Ending Your Turn"
+	line "Win or Loss of a Duel"
+	line "Nothing to Ask"
+	done
 
 Text0401: ; 3faaa (f:7aaa)
-	db TX_START,TX_RAM1,",\n"
-	db "It's me, Doctor Mason.\n"
-	db "Are you getting the hang of\n"
-	db "the Pok`mon Trading Card Game?\n"
-	db "I have some information for you\n"
-	db "about Booster Packs. \n"
-	db "If you want to collect the same\n"
-	db "cards, duel the same person many\n"
-	db "times to get a particular Booster\n"
-	db "Pack! By doing so, you will be able \n"
-	db "to collect the same cards, making it\n"
-	db "easier for you to build your Deck.\n"
-	db "Another method for collecting \n"
-	db "cards is to use CARD POP!\n"
-	db "When you and a friend use CARD POP!,\n"
-	db "you will each receive a new card!\n"
-	db "Once you POP! with a certain\n"
-	db "friend, you won't be able to POP!\n"
-	db "with that friend again, so find \n"
-	db "many friends who own the Pok`mon \n"
-	db "Trading Card Game for Game Boy,\n"
-	db "and CARD POP! with them to\n"
-	db "get new cards!\n"
-	db "Oh, here's something for you...",TX_END
+	text TX_RAM1,","
+	line "It's me, Doctor Mason."
+	line "Are you getting the hang of"
+	line "the Pok`mon Trading Card Game?"
+	line "I have some information for you"
+	line "about Booster Packs. "
+	line "If you want to collect the same"
+	line "cards, duel the same person many"
+	line "times to get a particular Booster"
+	line "Pack! By doing so, you will be able "
+	line "to collect the same cards, making it"
+	line "easier for you to build your Deck."
+	line "Another method for collecting "
+	line "cards is to use CARD POP!"
+	line "When you and a friend use CARD POP!,"
+	line "you will each receive a new card!"
+	line "Once you POP! with a certain"
+	line "friend, you won't be able to POP!"
+	line "with that friend again, so find "
+	line "many friends who own the Pok`mon "
+	line "Trading Card Game for Game Boy,"
+	line "and CARD POP! with them to"
+	line "get new cards!"
+	line "Oh, here's something for you..."
+	done
 
 Text0402: ; 3fd72 (f:7d72)
-	db TX_START,"I'll be sending you useful\n"
-	db "information by e-mail.\n"
-	db "I'll also attach a Booster Pack\n"
-	db "for you, so check your mail\n"
-	db "often.\n"
-	db "Mason Laboratory\n"
-	db "      Doctor Mason  ;)",TX_END
+	text "I'll be sending you useful"
+	line "information by e-mail."
+	line "I'll also attach a Booster Pack"
+	line "for you, so check your mail"
+	line "often."
+	line "Mason Laboratory"
+	line "      Doctor Mason  ;)"
+	done
 
 Text0403: ; 3fe10 (f:7e10)
-	db TX_START,TX_RAM1,",\n"
-	db "It's me, Doctor Mason.\n"
-	db "I have some information for you\n"
-	db "about Mitch's deck - he's \n"
-	db "the Master of the Fighting Club.\n"
-	db "His First-Strike Deck is built\n"
-	db "for a quick attack, but it's\n"
-	db "weak against Psychic Pok`mon!\n"
-	db "I suggest you duel him using\n"
-	db "the Deck from the Psychic Medal\n"
-	db "Deck Machine.\n"
-	db "Here's a Booster Pack for you...",TX_END
+	text TX_RAM1,","
+	line "It's me, Doctor Mason."
+	line "I have some information for you"
+	line "about Mitch's deck - he's "
+	line "the Master of the Fighting Club."
+	line "His First-Strike Deck is built"
+	line "for a quick attack, but it's"
+	line "weak against Psychic Pok`mon!"
+	line "I suggest you duel him using"
+	line "the Deck from the Psychic Medal"
+	line "Deck Machine."
+	line "Here's a Booster Pack for you..."
+	done
 
 Text0404: ; 3ff4d (f:7f4d)
-	db TX_START,TX_RAM1,", I know you can do it!\n"
-	db "Go win the Fighting Medal!\n"
-	db "Mason Laboratory\n"
-	db "      Doctor Mason ;)",TX_END
+	text TX_RAM1,", I know you can do it!"
+	line "Go win the Fighting Medal!"
+	line "Mason Laboratory"
+	line "      Doctor Mason ;)"
+	done

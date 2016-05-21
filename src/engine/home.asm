@@ -1,4 +1,4 @@
-GLOBAL GrassEnergyCardGfx
+GLOBAL CardGraphics
 GLOBAL TextOffsets
 
 ; rst vectors
@@ -5456,7 +5456,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	srl h
 	srl h
 	srl h
-	ld a, BANK(GrassEnergyCardGfx)
+	ld a, BANK(CardGraphics)
 	add h
 	call BankswitchHome
 	pop hl

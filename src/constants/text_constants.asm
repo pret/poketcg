@@ -1,9 +1,14 @@
 TX_START EQU $06
+TX_LINE  EQU "\n"
 TX_END   EQU $00
 
 TX_RAM1 EQU $09
 TX_RAM2 EQU $0B
 TX_RAM3 EQU $0C
+
+text EQUS "db TX_START,"
+line EQUS "db TX_LINE,"
+done EQUS "db TX_END"
 
 TX_FIRE      EQUS "$05,$01"
 TX_GRASS     EQUS "$05,$02"

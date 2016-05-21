@@ -1,867 +1,1022 @@
 Text048c: ; 44000 (11:4000)
-	db TX_START,"You're just going to turn \n"
-	db "and run!?! You chicken!",TX_END
+	text "You're just going to turn "
+	line "and run!?! You chicken!"
+	done
 
 Text048d: ; 44034 (11:4034)
-	db TX_START,"A 1-match duel with 4 prizes!\n"
-	db "Let's do it!",TX_END
+	text "A 1-match duel with 4 prizes!"
+	line "Let's do it!"
+	done
 
 Text048e: ; 44060 (11:4060)
-	db TX_START,"No! I lost again!\n"
-	db "I can't start training, yet!",TX_END
+	text "No! I lost again!"
+	line "I can't start training, yet!"
+	done
 
 Text048f: ; 44090 (11:4090)
-	db TX_START,"Shoot! I'm going to \n"
-	db "become a better player!",TX_END
+	text "Shoot! I'm going to "
+	line "become a better player!"
+	done
 
 Text0490: ; 440be (11:40be)
-	db TX_START,"Yeah! I won!\n"
-	db "I've gotten pretty good, haven't I?\n"
-	db "I think I'll start training again.",TX_END
+	text "Yeah! I won!"
+	line "I've gotten pretty good, haven't I?"
+	line "I think I'll start training again."
+	done
 
 Text0491: ; 44113 (11:4113)
-	db TX_START,"I've been training since I lost\n"
-	db "to you at the Grass Club.\n"
-	db "How about a rematch?",TX_END
+	text "I've been training since I lost"
+	line "to you at the Grass Club."
+	line "How about a rematch?"
+	done
 
 Text0492: ; 44163 (11:4163)
-	db TX_START,"Would you like to duel Michael?",TX_END
+	text "Would you like to duel Michael?"
+	done
 
 Text0493: ; 44184 (11:4184)
-	db TX_START,"OK. But do duel me \n"
-	db "again sometime.",TX_END
+	text "OK. But do duel me "
+	line "again sometime."
+	done
 
 Text0494: ; 441a9 (11:41a9)
-	db TX_START,"OK, a 1-match duel with 4 prizes!\n"
-	db "Let's do it!",TX_END
+	text "OK, a 1-match duel with 4 prizes!"
+	line "Let's do it!"
+	done
 
 Text0495: ; 441d9 (11:41d9)
-	db TX_START,"I guess I need to train more...",TX_END
+	text "I guess I need to train more..."
+	done
 
 Text0496: ; 441fa (11:41fa)
-	db TX_START,"Duel me again another time.\n"
-	db "See ya!",TX_END
+	text "Duel me again another time."
+	line "See ya!"
+	done
 
 Text0497: ; 4421f (11:421f)
-	db TX_START,"I guess my training has paid off!\n"
-	db "Duel me again sometime. See ya!",TX_END
+	text "I guess my training has paid off!"
+	line "Duel me again sometime. See ya!"
+	done
 
 Text0498: ; 44262 (11:4262)
-	db TX_START,"Training is so boring...\n"
-	db "Why anyone would want to?\n"
-	db "Hey, it's you!\n"
-	db "Do you want to duel me again?",TX_END
+	text "Training is so boring..."
+	line "Why anyone would want to?"
+	line "Hey, it's you!"
+	line "Do you want to duel me again?"
+	done
 
 Text0499: ; 442c3 (11:42c3)
-	db TX_START,"Would you like to duel Jessica?",TX_END
+	text "Would you like to duel Jessica?"
+	done
 
 Text049a: ; 442e4 (11:42e4)
-	db TX_START,"Well, OK.\n"
-	db "I'm busy anyway!",TX_END
+	text "Well, OK."
+	line "I'm busy anyway!"
+	done
 
 Text049b: ; 44300 (11:4300)
-	db TX_START,"OK! A 1-match duel with 4 prizes!\n"
-	db "Let's go to it!",TX_END
+	text "OK! A 1-match duel with 4 prizes!"
+	line "Let's go to it!"
+	done
 
 Text049c: ; 44333 (11:4333)
-	db TX_START,"Oops! I lost...\n"
-	db "Here! You can have this!",TX_END
+	text "Oops! I lost..."
+	line "Here! You can have this!"
+	done
 
 Text049d: ; 4435d (11:435d)
-	db TX_START,"Don't talk to me, I'm busy!",TX_END
+	text "Don't talk to me, I'm busy!"
+	done
 
 Text049e: ; 4437a (11:437a)
-	db TX_START,"Hey, I won!\n"
-	db "Could this also be due to my \n"
-	db "natural ability? \n"
-	db "Well, I hope I see you around!",TX_END
+	text "Hey, I won!"
+	line "Could this also be due to my "
+	line "natural ability? "
+	line "Well, I hope I see you around!"
+	done
 
 Text049f: ; 443d6 (11:43d6)
-	db TX_START,"What is a deck?",TX_END
+	text "What is a deck?"
+	done
 
 Text04a0: ; 443e7 (11:43e7)
-	db TX_START,"A deck is the set of Pok`mon cards\n"
-	db "used in duels.\n"
-	db "A deck consists of 60 cards.\n"
-	db "Only 4 of the same card are\n"
-	db "allowed in a deck. Create your \n"
-	db "own deck to play the game.\n"
-	db "These are the basic rules of the\n"
-	db "Pok`mon Trading Card Game.",TX_END
+	text "A deck is the set of Pok`mon cards"
+	line "used in duels."
+	line "A deck consists of 60 cards."
+	line "Only 4 of the same card are"
+	line "allowed in a deck. Create your "
+	line "own deck to play the game."
+	line "These are the basic rules of the"
+	line "Pok`mon Trading Card Game."
+	done
 
 Text04a1: ; 444ca (11:44ca)
-	db TX_START,"Cards, Vol. 1: Pok`mon Cards",TX_END
+	text "Cards, Vol. 1: Pok`mon Cards"
+	done
 
 Text04a2: ; 444e8 (11:44e8)
-	db TX_START,"There are 2 types of Pok`mon cards \n"
-	db "in the Pok`mon Trading Card Game:\n"
-	db "Basic Pok`mon and Evolution \n"
-	db "Pok`mon. Only Basic Pok`mon may be \n"
-	db "placed directly on the Bench.\n"
-	db "There are 2 types of Evolution\n"
-	db "Pok`mon cards: Stage 1 and \n"
-	db "Stage 2. Play Stage 1 Pok`mon on \n"
-	db "top of Basic Pok`mon, and Stage 2\n"
-	db "Pok`mon on top of Stage 1 Pok`mon.",TX_END
+	text "There are 2 types of Pok`mon cards "
+	line "in the Pok`mon Trading Card Game:"
+	line "Basic Pok`mon and Evolution "
+	line "Pok`mon. Only Basic Pok`mon may be "
+	line "placed directly on the Bench."
+	line "There are 2 types of Evolution"
+	line "Pok`mon cards: Stage 1 and "
+	line "Stage 2. Play Stage 1 Pok`mon on "
+	line "top of Basic Pok`mon, and Stage 2"
+	line "Pok`mon on top of Stage 1 Pok`mon."
+	done
 
 Text04a3: ; 44630 (11:4630)
-	db TX_START,"Cards, Vol. 2: Energy Cards",TX_END
+	text "Cards, Vol. 2: Energy Cards"
+	done
 
 Text04a4: ; 4464d (11:464d)
-	db TX_START,"Attach Energy cards to your Pok`mon\n"
-	db "to give them the energy they need to\n"
-	db "attack. Choose an Energy card from \n"
-	db "your hand and attach it to a\n"
-	db "Pok`mon. You may attach only \n"
-	db "one Energy card per turn.",TX_END
+	text "Attach Energy cards to your Pok`mon"
+	line "to give them the energy they need to"
+	line "attack. Choose an Energy card from "
+	line "your hand and attach it to a"
+	line "Pok`mon. You may attach only "
+	line "one Energy card per turn."
+	done
 
 Text04a5: ; 44710 (11:4710)
-	db TX_START,"Cards, Vol. 3: Trainer Cards",TX_END
+	text "Cards, Vol. 3: Trainer Cards"
+	done
 
 Text04a6: ; 4472e (11:472e)
-	db TX_START,"Trainer cards are one-shot cards\n"
-	db "that can be used once and are \n"
-	db "then discarded. You can play as \n"
-	db "many Trainer cards as you like \n"
-	db "during your turn.",TX_END
+	text "Trainer cards are one-shot cards"
+	line "that can be used once and are "
+	line "then discarded. You can play as "
+	line "many Trainer cards as you like "
+	line "during your turn."
+	done
 
 Text04a7: ; 447c2 (11:47c2)
-	db TX_START,"Win or Loss of a Match, Vol. 1",TX_END
+	text "Win or Loss of a Match, Vol. 1"
+	done
 
 Text04a8: ; 447e2 (11:47e2)
-	db TX_START,"When a Pok`mon loses all of \n"
-	db "its HP, the Pok`mon is knocked out. \n"
-	db "Place it and all attached Energy \n"
-	db "cards in the discard pile.\n"
-	db "Each time you knock out 1 \n"
-	db "of your opponent's Pok`mon, \n"
-	db "you draw 1 of your prize cards \n"
-	db "and place it in your hand. \n"
-	db "When you've taken all \n"
-	db "of your prizes, you win the game.",TX_END
+	text "When a Pok`mon loses all of "
+	line "its HP, the Pok`mon is knocked out. "
+	line "Place it and all attached Energy "
+	line "cards in the discard pile."
+	line "Each time you knock out 1 "
+	line "of your opponent's Pok`mon, "
+	line "you draw 1 of your prize cards "
+	line "and place it in your hand. "
+	line "When you've taken all "
+	line "of your prizes, you win the game."
+	done
 
 Text04a9: ; 4490f (11:490f)
-	db TX_START,"Win or Loss of a Match, Vol. 2",TX_END
+	text "Win or Loss of a Match, Vol. 2"
+	done
 
 Text04aa: ; 4492f (11:492f)
-	db TX_START,"You also win if your opponent's\n"
-	db "deck is out of cards at the start\n"
-	db "of your opponent's turn. Be \n"
-	db "careful not to run out of cards!",TX_END
+	text "You also win if your opponent's"
+	line "deck is out of cards at the start"
+	line "of your opponent's turn. Be "
+	line "careful not to run out of cards!"
+	done
 
 Text04ab: ; 449b0 (11:49b0)
-	db TX_START,"Win or Loss of a Match, Vol. 3",TX_END
+	text "Win or Loss of a Match, Vol. 3"
+	done
 
 Text04ac: ; 449d0 (11:49d0)
-	db TX_START,"You also win if your opponent has\n"
-	db "no Pok`mon left on the bench\n"
-	db "after you have knocked out his or\n"
-	db "her active Pok`mon. Be sure to \n"
-	db "keep enough Pok`mon on your bench.",TX_END
+	text "You also win if your opponent has"
+	line "no Pok`mon left on the bench"
+	line "after you have knocked out his or"
+	line "her active Pok`mon. Be sure to "
+	line "keep enough Pok`mon on your bench."
+	done
 
 Text04ad: ; 44a75 (11:4a75)
-	db TX_START,"Combos",TX_END
+	text "Combos"
+	done
 
 Text04ae: ; 44a7d (11:4a7d)
-	db TX_START,"You can create powerful combos by\n"
-	db "combining the abilities of 2 cards.\n"
-	db "Pok`mon Powers and Trainer Cards \n"
-	db "are useful in creating combos! \n"
-	db "Find card combinations that will\n"
-	db "create your own powerful combos.",TX_END
+	text "You can create powerful combos by"
+	line "combining the abilities of 2 cards."
+	line "Pok`mon Powers and Trainer Cards "
+	line "are useful in creating combos! "
+	line "Find card combinations that will"
+	line "create your own powerful combos."
+	done
 
 Text04af: ; 44b48 (11:4b48)
-	db TX_START,"Energy Trans",TX_END
+	text "Energy Trans"
+	done
 
 Text04b0: ; 44b56 (11:4b56)
-	db TX_START,"What if you place Exeggutor in the\n"
-	db "arena, but you don't have any Energy\n"
-	db "cards? In this case, use Venusaur's\n"
-	db "Energy Trans to transfer Grass\n"
-	db "Energy and use Big Eggsplosion! If\n"
-	db "you attach 8 Energy cards, you can\n"
-	db "give your opponent up to 160 damage.",TX_END
+	text "What if you place Exeggutor in the"
+	line "arena, but you don't have any Energy"
+	line "cards? In this case, use Venusaur's"
+	line "Energy Trans to transfer Grass"
+	line "Energy and use Big Eggsplosion! If"
+	line "you attach 8 Energy cards, you can"
+	line "give your opponent up to 160 damage."
+	done
 
 Text04b1: ; 44c4d (11:4c4d)
-	db TX_START,"Toxic Gas",TX_END
+	text "Toxic Gas"
+	done
 
 Text04b2: ; 44c58 (11:4c58)
-	db TX_START,"Muk's Toxic Gas is very powerful!\n"
-	db "It can block all Pok`mon Powers!\n"
-	db "But be careful because it also\n"
-	db "blocks your own Pok`mon's Powers!",TX_END
+	text "Muk's Toxic Gas is very powerful!"
+	line "It can block all Pok`mon Powers!"
+	line "But be careful because it also"
+	line "blocks your own Pok`mon's Powers!"
+	done
 
 Text04b3: ; 44cdd (11:4cdd)
-	db TX_START,"Rain Dance",TX_END
+	text "Rain Dance"
+	done
 
 Text04b4: ; 44ce9 (11:4ce9)
-	db TX_START,"Blastoise's Pok`mon Power, Rain \n"
-	db "Dance, is a great boon for your\n"
-	db "Water Pok`mon! You can attach \n"
-	db "as many Water Energy cards as \n"
-	db "you have to your Water Pok`mon.\n"
-	db "Power up your Pok`mon and attack!",TX_END
+	text "Blastoise's Pok`mon Power, Rain "
+	line "Dance, is a great boon for your"
+	line "Water Pok`mon! You can attach "
+	line "as many Water Energy cards as "
+	line "you have to your Water Pok`mon."
+	line "Power up your Pok`mon and attack!"
+	done
 
 Text04b5: ; 44dab (11:4dab)
-	db TX_START,"Selfdestruct",TX_END
+	text "Selfdestruct"
+	done
 
 Text04b6: ; 44db9 (11:4db9)
-	db TX_START,"It's a good idea to use Defender\n"
-	db "when attacking with Selfdestruct.\n"
-	db "That way, you'll be able to give\n"
-	db "major damage to your opponent's \n"
-	db "Active and Benched Pok`mon without \n"
-	db "your Pok`mon getting knocked out.",TX_END
+	text "It's a good idea to use Defender"
+	line "when attacking with Selfdestruct."
+	line "That way, you'll be able to give"
+	line "major damage to your opponent's "
+	line "Active and Benched Pok`mon without "
+	line "your Pok`mon getting knocked out."
+	done
 
 Text04b7: ; 44e85 (11:4e85)
-	db TX_START,"Damage Swap",TX_END
+	text "Damage Swap"
+	done
 
 Text04b8: ; 44e92 (11:4e92)
-	db TX_START,"You can use Alakazam's Damage Swap\n"
-	db "to move damage counters off of a\n"
-	db "Pok`mon that is almost knocked out,\n"
-	db "or you can create a combo by\n"
-	db "combining it with Chansey and\n"
-	db "Scoop Up. Keep moving damage \n"
-	db "counters to Chansey and use Scoop \n"
-	db "Up to return Chansey to your hand.\n"
-	db "Then put Chansey back in play. You\n"
-	db "will have lost all damage counters!",TX_END
+	text "You can use Alakazam's Damage Swap"
+	line "to move damage counters off of a"
+	line "Pok`mon that is almost knocked out,"
+	line "or you can create a combo by"
+	line "combining it with Chansey and"
+	line "Scoop Up. Keep moving damage "
+	line "counters to Chansey and use Scoop "
+	line "Up to return Chansey to your hand."
+	line "Then put Chansey back in play. You"
+	line "will have lost all damage counters!"
+	done
 
 Text04b9: ; 44fe1 (11:4fe1)
-	db TX_START,"Hyper Beam",TX_END
+	text "Hyper Beam"
+	done
 
 Text04ba: ; 44fed (11:4fed)
-	db TX_START,"Hyper Beam is extremely powerful!\n"
-	db "You can remove the Energy cards \n"
-	db "attached to your opponent's\n"
-	db "Pok`mon! Without Energy, they won't\n"
-	db "be able to Attack or Retreat!",TX_END
+	text "Hyper Beam is extremely powerful!"
+	line "You can remove the Energy cards "
+	line "attached to your opponent's"
+	line "Pok`mon! Without Energy, they won't"
+	line "be able to Attack or Retreat!"
+	done
 
 Text04bb: ; 4508f (11:508f)
-	db TX_START,"Prehistoric Power",TX_END
+	text "Prehistoric Power"
+	done
 
 Text04bc: ; 450a2 (11:50a2)
-	db TX_START,"Use Aerodactyl's Prehistoric Power\n"
-	db "to block your opponent's Pok`mon\n"
-	db "from evolving. Your own Pok`mon \n"
-	db "can't evolve? In that case, use\n"
-	db "Devolution Spray on Aerodactyl \n"
-	db "and turn it back into a \n"
-	db "Mysterious Fossil. Then you'll \n"
-	db "be able to evolve your Pok`mon!",TX_END
+	text "Use Aerodactyl's Prehistoric Power"
+	line "to block your opponent's Pok`mon"
+	line "from evolving. Your own Pok`mon "
+	line "can't evolve? In that case, use"
+	line "Devolution Spray on Aerodactyl "
+	line "and turn it back into a "
+	line "Mysterious Fossil. Then you'll "
+	line "be able to evolve your Pok`mon!"
+	done
 
 Text04bd: ; 451a1 (11:51a1)
-	db TX_START,"Phantom Cards",TX_END
+	text "Phantom Cards"
+	done
 
 Text04be: ; 451b0 (11:51b0)
-	db TX_START,"It is rumored that there is a\n"
-	db "Phantom Card that can only be \n"
-	db "gotten by using Card Pop!\n"
-	db "It is believed there are 2 such\n"
-	db "cards, but no one knows what\n"
-	db "kind of cards they are.\n"
-	db "I'm off to search for someone \n"
-	db "who will give me these cards!\n"
-	db "                        ISHIHARA",TX_END
+	text "It is rumored that there is a"
+	line "Phantom Card that can only be "
+	line "gotten by using Card Pop!"
+	line "It is believed there are 2 such"
+	line "cards, but no one knows what"
+	line "kind of cards they are."
+	line "I'm off to search for someone "
+	line "who will give me these cards!"
+	line "                        ISHIHARA"
+	done
 
 Text04bf: ; 452bb (11:52bb)
-	db TX_START,"Weakness and Resistance",TX_END
+	text "Weakness and Resistance"
+	done
 
 Text04c0: ; 452d4 (11:52d4)
-	db TX_START,"If a Pok`mon has a Weakness,\n"
-	db "it takes double damage when attacked\n"
-	db "by Pok`mon of a certain type!\n"
-	db "If a Water Pok`mon attacks\n"
-	db "a Fire Pok`mon, the Fire Pok`mon\n"
-	db "will receive double damage!\n"
-	db "If a Pok`mon has a Resistance,\n"
-	db "it takes 30 less damage when\n"
-	db "attacked by Pok`mon of a certain\n"
-	db "type. If an Attack gives a damage \n"
-	db "of 30, the Pok`mon will not receive \n"
-	db "damage! Beware of the Weaknesses\n"
-	db "and Resistances of your Pok`mon!",TX_END
+	text "If a Pok`mon has a Weakness,"
+	line "it takes double damage when attacked"
+	line "by Pok`mon of a certain type!"
+	line "If a Water Pok`mon attacks"
+	line "a Fire Pok`mon, the Fire Pok`mon"
+	line "will receive double damage!"
+	line "If a Pok`mon has a Resistance,"
+	line "it takes 30 less damage when"
+	line "attacked by Pok`mon of a certain"
+	line "type. If an Attack gives a damage "
+	line "of 30, the Pok`mon will not receive "
+	line "damage! Beware of the Weaknesses"
+	line "and Resistances of your Pok`mon!"
+	done
 
 Text04c1: ; 45474 (11:5474)
-	db TX_START,"Drawing Desired Cards",TX_END
+	text "Drawing Desired Cards"
+	done
 
 Text04c2: ; 4548b (11:548b)
-	db TX_START,"The Trainer card, Computer Search,\n"
-	db "is useful when you want to draw a\n"
-	db "certain card! Item Finder and\n"
-	db "Pok` Ball will also help!",TX_END
+	text "The Trainer card, Computer Search,"
+	line "is useful when you want to draw a"
+	line "certain card! Item Finder and"
+	line "Pok` Ball will also help!"
+	done
 
 Text04c3: ; 45509 (11:5509)
-	db TX_START,"Retreating",TX_END
+	text "Retreating"
+	done
 
 Text04c4: ; 45515 (11:5515)
-	db TX_START,"Retreating your Active Pok`mon to\n"
-	db "the Bench is a good strategy in\n"
-	db "certain situations! Retreating a \n"
-	db "Pok`mon requires Energy cards.\n"
-	db "Dodrio's Retreat Aid decreases the \n"
-	db "number of Energy cards required to\n"
-	db "retreat. If you retreat right away,\n"
-	db "your Pok`mon won't get knocked out!",TX_END
+	text "Retreating your Active Pok`mon to"
+	line "the Bench is a good strategy in"
+	line "certain situations! Retreating a "
+	line "Pok`mon requires Energy cards."
+	line "Dodrio's Retreat Aid decreases the "
+	line "number of Energy cards required to"
+	line "retreat. If you retreat right away,"
+	line "your Pok`mon won't get knocked out!"
+	done
 
 Text04c5: ; 45628 (11:5628)
-	db TX_START,"Fighting Pok`mon",TX_END
+	text "Fighting Pok`mon"
+	done
 
 Text04c6: ; 4563a (11:563a)
-	db TX_START,"Fighting Pok`mon Characteristics:\n"
-	db "Strong against Lightning Pok`mon.\n"
-	db "Weak against Psychic Pok`mon.\n"
-	db "Require Fighting Energy cards \n"
-	db "to Attack.",TX_END
+	text "Fighting Pok`mon Characteristics:"
+	line "Strong against Lightning Pok`mon."
+	line "Weak against Psychic Pok`mon."
+	line "Require Fighting Energy cards "
+	line "to Attack."
+	done
 
 Text04c7: ; 456c7 (11:56c7)
-	db TX_START,"Fighting Pok`mon and Combos",TX_END
+	text "Fighting Pok`mon and Combos"
+	done
 
 Text04c8: ; 456e4 (11:56e4)
-	db TX_START,"It is difficult to create combos\n"
-	db "with a Fighting Pok`mon, since\n"
-	db "not many Fighting Pok`mon have \n"
-	db "Pok`mon Power. However, their \n"
-	db "strong attacks make up for this.",TX_END
+	text "It is difficult to create combos"
+	line "with a Fighting Pok`mon, since"
+	line "not many Fighting Pok`mon have "
+	line "Pok`mon Power. However, their "
+	line "strong attacks make up for this."
+	done
 
 Text04c9: ; 45785 (11:5785)
-	db TX_START,"Double Colorless Energy",TX_END
+	text "Double Colorless Energy"
+	done
 
 Text04ca: ; 4579e (11:579e)
-	db TX_START,"Double Colorless Energy is a\n"
-	db "very useful card. By using this \n"
-	db "single card, you are able to\n"
-	db "attach 2 Energies at once.\n"
-	db "But be careful because the \n"
-	db "energy is colorless.",TX_END
+	text "Double Colorless Energy is a"
+	line "very useful card. By using this "
+	line "single card, you are able to"
+	line "attach 2 Energies at once."
+	line "But be careful because the "
+	line "energy is colorless."
+	done
 
 Text04cb: ; 45846 (11:5846)
-	db TX_START,"Rock Pok`mon",TX_END
+	text "Rock Pok`mon"
+	done
 
 Text04cc: ; 45854 (11:5854)
-	db TX_START,"Rock Pok`mon Characteristics:\n"
-	db "Strong against Lightning Pok`mon.\n"
-	db "Weak against Grass Pok`mon.\n"
-	db "Require Fighting Energy cards\n"
-	db "to Attack.",TX_END
+	text "Rock Pok`mon Characteristics:"
+	line "Strong against Lightning Pok`mon."
+	line "Weak against Grass Pok`mon."
+	line "Require Fighting Energy cards"
+	line "to Attack."
+	done
 
 Text04cd: ; 458da (11:58da)
-	db TX_START,"Winning with Fighting Pok`mon",TX_END
+	text "Winning with Fighting Pok`mon"
+	done
 
 Text04ce: ; 458f9 (11:58f9)
-	db TX_START,"Fighting Pok`mon will have a hard\n"
-	db "time against Stage 2 Pok`mon,\n"
-	db "as many Stage 2 Pok`mon are\n"
-	db "resistant to Fighting Pok`mon.\n"
-	db "Try to knock out your opponent's\n"
-	db "Pok`mon before they evolve.",TX_END
+	text "Fighting Pok`mon will have a hard"
+	line "time against Stage 2 Pok`mon,"
+	line "as many Stage 2 Pok`mon are"
+	line "resistant to Fighting Pok`mon."
+	line "Try to knock out your opponent's"
+	line "Pok`mon before they evolve."
+	done
 
 Text04cf: ; 459b2 (11:59b2)
-	db TX_START,"Basic Pok`mon",TX_END
+	text "Basic Pok`mon"
+	done
 
 Text04d0: ; 459c1 (11:59c1)
-	db TX_START,"Basic Pok`mon are a must in the\n"
-	db "Pok`mon Trading Card Game!\n"
-	db "Basic Pok`mon are the only Pok`mon\n"
-	db "you can put directly from your\n"
-	db "hand into the play area. Stage 1\n"
-	db "and Stage 2 Evolution cards can\n"
-	db "only be used on Basic Pok`mon.\n"
-	db "Make sure you have enough\n"
-	db "Basic Pok`mon in your deck!",TX_END
+	text "Basic Pok`mon are a must in the"
+	line "Pok`mon Trading Card Game!"
+	line "Basic Pok`mon are the only Pok`mon"
+	line "you can put directly from your"
+	line "hand into the play area. Stage 1"
+	line "and Stage 2 Evolution cards can"
+	line "only be used on Basic Pok`mon."
+	line "Make sure you have enough"
+	line "Basic Pok`mon in your deck!"
+	done
 
 Text04d1: ; 45ad5 (11:5ad5)
-	db TX_START,"Water Pok`mon",TX_END
+	text "Water Pok`mon"
+	done
 
 Text04d2: ; 45ae4 (11:5ae4)
-	db TX_START,"Water Pok`mon Characteristics:\n"
-	db "Strong against Fire Pok`mon.\n"
-	db "Weak against Lightning Pok`mon.\n"
-	db "Some cards are weak against \n"
-	db "Grass Pok`mon. Require Water \n"
-	db "Energy cards to attack.",TX_END
+	text "Water Pok`mon Characteristics:"
+	line "Strong against Fire Pok`mon."
+	line "Weak against Lightning Pok`mon."
+	line "Some cards are weak against "
+	line "Grass Pok`mon. Require Water "
+	line "Energy cards to attack."
+	done
 
 Text04d3: ; 45b94 (11:5b94)
-	db TX_START,"Water Pok`mon Attacks",TX_END
+	text "Water Pok`mon Attacks"
+	done
 
 Text04d4: ; 45bab (11:5bab)
-	db TX_START,"Water Gun and Hydro Pump are\n"
-	db "attacks which have variable damage.\n"
-	db "The more Water Energy you attach,\n"
-	db "the more powerful the attack is!\n"
-	db "The attack can do up to 20 more \n"
-	db "damage in this way.",TX_END
+	text "Water Gun and Hydro Pump are"
+	line "attacks which have variable damage."
+	line "The more Water Energy you attach,"
+	line "the more powerful the attack is!"
+	line "The attack can do up to 20 more "
+	line "damage in this way."
+	done
 
 Text04d5: ; 45c65 (11:5c65)
-	db TX_START,"Paralyze",TX_END
+	text "Paralyze"
+	done
 
 Text04d6: ; 45c6f (11:5c6f)
-	db TX_START,"When a Pok`mon is paralyzed, it\n"
-	db "is unable to do anything.\n"
-	db "It cannot retreat, attack or use\n"
-	db "Pok`mon Power, but the player may\n"
-	db "use any cards in his or her hand.\n"
-	db "Paralysis lasts until the end of \n"
-	db "the paralyzed player's turn. \n"
-	db "Paralysis can be healed with\n"
-	db "Full Heal and Evolution cards.",TX_END
+	text "When a Pok`mon is paralyzed, it"
+	line "is unable to do anything."
+	line "It cannot retreat, attack or use"
+	line "Pok`mon Power, but the player may"
+	line "use any cards in his or her hand."
+	line "Paralysis lasts until the end of "
+	line "the paralyzed player's turn. "
+	line "Paralysis can be healed with"
+	line "Full Heal and Evolution cards."
+	done
 
 Text04d7: ; 45d8b (11:5d8b)
-	db TX_START,"Lightning Pok`mon",TX_END
+	text "Lightning Pok`mon"
+	done
 
 Text04d8: ; 45d9e (11:5d9e)
-	db TX_START,"Lightning Pok`mon Characteristics:\n"
-	db "Strong against Water Pok`mon.\n"
-	db "Weak against Fighting Pok`mon.\n"
-	db "Require Lightning Energy cards\n"
-	db "to attack.",TX_END
+	text "Lightning Pok`mon Characteristics:"
+	line "Strong against Water Pok`mon."
+	line "Weak against Fighting Pok`mon."
+	line "Require Lightning Energy cards"
+	line "to attack."
+	done
 
 Text04d9: ; 45e29 (11:5e29)
-	db TX_START,"Energy Cards",TX_END
+	text "Energy Cards"
+	done
 
 Text04da: ; 45e37 (11:5e37)
-	db TX_START,"There are 6 Basic Energy cards:\n"
-	db "Grass, Fire, Water, Lightning,\n"
-	db "Fighting and Psychic!\n"
-	db "There is also the Double Colorless\n"
-	db "Energy card.\n"
-	db "You may include as many Energy \n"
-	db "cards as you like in your deck,\n"
-	db "but you may only include 4\n"
-	db "Double Colorless Energy cards.",TX_END
+	text "There are 6 Basic Energy cards:"
+	line "Grass, Fire, Water, Lightning,"
+	line "Fighting and Psychic!"
+	line "There is also the Double Colorless"
+	line "Energy card."
+	line "You may include as many Energy "
+	line "cards as you like in your deck,"
+	line "but you may only include 4"
+	line "Double Colorless Energy cards."
+	done
 
 Text04db: ; 45f37 (11:5f37)
-	db TX_START,"Card Pop!",TX_END
+	text "Card Pop!"
+	done
 
 Text04dc: ; 45f42 (11:5f42)
-	db TX_START,"When you and a friend Card Pop!,\n"
-	db "you will each receive a new card.\n"
-	db "After you Pop! with a friend, you \n"
-	db "won't be able to Pop! with the same\n"
-	db "friend for a while. You always get\n"
-	db "the same card when you Pop! with\n"
-	db "the same friend, so Pop! with many\n"
-	db "friends to get different cards!",TX_END
+	text "When you and a friend Card Pop!,"
+	line "you will each receive a new card."
+	line "After you Pop! with a friend, you "
+	line "won't be able to Pop! with the same"
+	line "friend for a while. You always get"
+	line "the same card when you Pop! with"
+	line "the same friend, so Pop! with many"
+	line "friends to get different cards!"
+	done
 
 Text04dd: ; 46054 (11:6054)
-	db TX_START,"Grass Pok`mon",TX_END
+	text "Grass Pok`mon"
+	done
 
 Text04de: ; 46063 (11:6063)
-	db TX_START,"Grass Pok`mon Characteristics:\n"
-	db "Strong against Rock Pok`mon.\n"
-	db "Weak against Fire Pok`mon.\n"
-	db "Some Water Pok`mon are weak\n"
-	db "against Grass Pok`mon. Require \n"
-	db "Grass Energy cards to attack.",TX_END
+	text "Grass Pok`mon Characteristics:"
+	line "Strong against Rock Pok`mon."
+	line "Weak against Fire Pok`mon."
+	line "Some Water Pok`mon are weak"
+	line "against Grass Pok`mon. Require "
+	line "Grass Energy cards to attack."
+	done
 
 Text04df: ; 46115 (11:6115)
-	db TX_START,"Poison",TX_END
+	text "Poison"
+	done
 
 Text04e0: ; 4611d (11:611d)
-	db TX_START,"When your Pok`mon is poisoned, it\n"
-	db "will continue to lose HP.\n"
-	db "The poisoned Pok`mon will lose\n"
-	db "10 HP at the end of each player's \n"
-	db "turn. To heal a Poisoned Pok`mon,\n"
-	db "you may retreat it to the Bench\n"
-	db "or use the Trainer Card, Full Heal.\n"
-	db "Evolving or Devolving the Pok`mon \n"
-	db "are other ways of healing it.",TX_END
+	text "When your Pok`mon is poisoned, it"
+	line "will continue to lose HP."
+	line "The poisoned Pok`mon will lose"
+	line "10 HP at the end of each player's "
+	line "turn. To heal a Poisoned Pok`mon,"
+	line "you may retreat it to the Bench"
+	line "or use the Trainer Card, Full Heal."
+	line "Evolving or Devolving the Pok`mon "
+	line "are other ways of healing it."
+	done
 
 Text04e1: ; 46243 (11:6243)
-	db TX_START,"Grass Pok`mon & Pok`mon Breeder",TX_END
+	text "Grass Pok`mon & Pok`mon Breeder"
+	done
 
 Text04e2: ; 46264 (11:6264)
-	db TX_START,"Many Grass Pok`mon are capable of\n"
-	db "evolving to Stage 2 Pok`mon.\n"
-	db "Use the Trainer Card, Pok`mon\n"
-	db "Breeder, to evolve Pok`mon quickly.\n"
-	db "You'll be able to use powerful\n"
-	db "attacks early in the game.",TX_END
+	text "Many Grass Pok`mon are capable of"
+	line "evolving to Stage 2 Pok`mon."
+	line "Use the Trainer Card, Pok`mon"
+	line "Breeder, to evolve Pok`mon quickly."
+	line "You'll be able to use powerful"
+	line "attacks early in the game."
+	done
 
 Text04e3: ; 46320 (11:6320)
-	db TX_START,"Psychic Pok`mon",TX_END
+	text "Psychic Pok`mon"
+	done
 
 Text04e4: ; 46331 (11:6331)
-	db TX_START,"Psychic Pok`mon Characteristics:\n"
-	db "Weak against Psychic Pok`mon.\n"
-	db "Some Colorless Pok`mon are strong \n"
-	db "against Psychic Pok`mon. Require\n"
-	db "Psychic Energy cards to attack.",TX_END
+	text "Psychic Pok`mon Characteristics:"
+	line "Weak against Psychic Pok`mon."
+	line "Some Colorless Pok`mon are strong "
+	line "against Psychic Pok`mon. Require"
+	line "Psychic Energy cards to attack."
+	done
 
 Text04e5: ; 463d5 (11:63d5)
-	db TX_START,"Sleep",TX_END
+	text "Sleep"
+	done
 
 Text04e6: ; 463dc (11:63dc)
-	db TX_START,"When a Pok`mon is asleep,\n"
-	db "it is unable to do anything.\n"
-	db "It cannot attack, retreat or use\n"
-	db "Pok`mon Power. A coin will be \n"
-	db "flipped at the end of each player's \n"
-	db "turn. If the coin comes up heads, \n"
-	db "the Pok`mon will wake up. If it's\n"
-	db "tails, the Pok`mon remains asleep.\n"
-	db "Use Full Heal to wake it up!",TX_END
+	text "When a Pok`mon is asleep,"
+	line "it is unable to do anything."
+	line "It cannot attack, retreat or use"
+	line "Pok`mon Power. A coin will be "
+	line "flipped at the end of each player's "
+	line "turn. If the coin comes up heads, "
+	line "the Pok`mon will wake up. If it's"
+	line "tails, the Pok`mon remains asleep."
+	line "Use Full Heal to wake it up!"
+	done
 
 Text04e7: ; 464fe (11:64fe)
-	db TX_START,"Pok`mon Power",TX_END
+	text "Pok`mon Power"
+	done
 
 Text04e8: ; 4650d (11:650d)
-	db TX_START,"Some Pok`mon have special \n"
-	db "abilities called Pok`mon Power.\n"
-	db "They are very powerful abilities!\n"
-	db "They can be used before attacking, \n"
-	db "even if the Pok`mon with the \n"
-	db "Pok`mon Power is still on the Bench.\n"
-	db "There are many different Pok`mon \n"
-	db "Powers, so check your cards!",TX_END
+	text "Some Pok`mon have special "
+	line "abilities called Pok`mon Power."
+	line "They are very powerful abilities!"
+	line "They can be used before attacking, "
+	line "even if the Pok`mon with the "
+	line "Pok`mon Power is still on the Bench."
+	line "There are many different Pok`mon "
+	line "Powers, so check your cards!"
+	done
 
 Text04e9: ; 46611 (11:6611)
-	db TX_START,"Science Club Pok`mon",TX_END
+	text "Science Club Pok`mon"
+	done
 
 Text04ea: ; 46627 (11:6627)
-	db TX_START,"Characteristics of Pok`mon used\n"
-	db "in the Science Club:\n"
-	db "Strong against Rock Pok`mon.\n"
-	db "Weak against Psychic Pok`mon.\n"
-	db "Many cards have attacks with \n"
-	db "poison and sleep effects.\n"
-	db "Require Grass Energy cards\n"
-	db "to attack.",TX_END
+	text "Characteristics of Pok`mon used"
+	line "in the Science Club:"
+	line "Strong against Rock Pok`mon."
+	line "Weak against Psychic Pok`mon."
+	line "Many cards have attacks with "
+	line "poison and sleep effects."
+	line "Require Grass Energy cards"
+	line "to attack."
+	done
 
 Text04eb: ; 466f6 (11:66f6)
-	db TX_START,"Confusion",TX_END
+	text "Confusion"
+	done
 
 Text04ec: ; 46701 (11:6701)
-	db TX_START,"It's big trouble if your Pok`mon\n"
-	db "gets Confused!\n"
-	db "When a Confused Pok`mon tries to\n"
-	db "attack, you must flip a coin!\n"
-	db "If it's heads, the attack is \n"
-	db "successful, but if it's tails,\n"
-	db "the Pok`mon will attack itself\n"
-	db "for 20 damage!",TX_END
+	text "It's big trouble if your Pok`mon"
+	line "gets Confused!"
+	line "When a Confused Pok`mon tries to"
+	line "attack, you must flip a coin!"
+	line "If it's heads, the attack is "
+	line "successful, but if it's tails,"
+	line "the Pok`mon will attack itself"
+	line "for 20 damage!"
+	done
 
 Text04ed: ; 467dc (11:67dc)
-	db TX_START,"Useful Buttons",TX_END
+	text "Useful Buttons"
+	done
 
 Text04ee: ; 467ec (11:67ec)
-	db TX_START,"While pressing the B Button,\n"
-	db "use the + Control Pad to view\n"
-	db "your own or your opponent's \n"
-	db "Play Area or Discard Pile!\n"
-	db "B + Down = Your Play Area\n"
-	db "B + Left = Your Discard Pile\n"
-	db "B + Up = Opponent's Play Area\n"
-	db "B + Right = Opponent's Discard Pile\n"
-	db "Remember these handy functions!",TX_END
+	text "While pressing the B Button,"
+	line "use the + Control Pad to view"
+	line "your own or your opponent's "
+	line "Play Area or Discard Pile!"
+	line "B + Down = Your Play Area"
+	line "B + Left = Your Discard Pile"
+	line "B + Up = Opponent's Play Area"
+	line "B + Right = Opponent's Discard Pile"
+	line "Remember these handy functions!"
+	done
 
 Text04ef: ; 468f9 (11:68f9)
-	db TX_START,"Fire Pok`mon",TX_END
+	text "Fire Pok`mon"
+	done
 
 Text04f0: ; 46907 (11:6907)
-	db TX_START,"Fire Pok`mon Characteristics:\n"
-	db "Strong against Grass Pok`mon.\n"
-	db "Weak against Water Pok`mon.\n"
-	db "Some Grass Pok`mon are not weak\n"
-	db "against Fire Pok`mon.\n"
-	db "Require Fire Energy cards\n"
-	db "to attack.",TX_END
+	text "Fire Pok`mon Characteristics:"
+	line "Strong against Grass Pok`mon."
+	line "Weak against Water Pok`mon."
+	line "Some Grass Pok`mon are not weak"
+	line "against Fire Pok`mon."
+	line "Require Fire Energy cards"
+	line "to attack."
+	done
 
 Text04f1: ; 469bb (11:69bb)
-	db TX_START,"Fire Pok`mon Attacks",TX_END
+	text "Fire Pok`mon Attacks"
+	done
 
 Text04f2: ; 469d1 (11:69d1)
-	db TX_START,"Many Fire Pok`mon attacks require\n"
-	db "that an Energy card be removed.\n"
-	db "Be sure to include many Energy\n"
-	db "cards in decks with Fire Pok`mon.\n"
-	db "It might be wise to also include\n"
-	db "Energy Retrieval in your deck.",TX_END
+	text "Many Fire Pok`mon attacks require"
+	line "that an Energy card be removed."
+	line "Be sure to include many Energy"
+	line "cards in decks with Fire Pok`mon."
+	line "It might be wise to also include"
+	line "Energy Retrieval in your deck."
+	done
 
 Text04f3: ; 46a95 (11:6a95)
-	db TX_START,"Original Game Boy Cards",TX_END
+	text "Original Game Boy Cards"
+	done
 
 Text04f4: ; 46aae (11:6aae)
-	db TX_START,"The Pok`mon Trading Card Game\n"
-	db "for Game Boy includes many \n"
-	db "original cards, like the \n"
-	db TX_START,TX_LVL,"14 Meowth with the Cat Punch \n"
-	db "attack. There are many new cards,\n"
-	db "so go search them out!",TX_END
+	text "The Pok`mon Trading Card Game"
+	line "for Game Boy includes many "
+	line "original cards, like the "
+	line ""
+	text TX_LVL,"14 Meowth with the Cat Punch "
+	line "attack. There are many new cards,"
+	line "so go search them out!"
+	done
 
 Text04f5: ; 46b5d (11:6b5d)
-	db TX_START,"Colorless Pok`mon",TX_END
+	text "Colorless Pok`mon"
+	done
 
 Text04f6: ; 46b70 (11:6b70)
-	db TX_START,"Colorless Pok`mon are very easy\n"
-	db "to use. They can attack with \n"
-	db "any type of Energy card, so\n"
-	db "you can include them in any type\n"
-	db "of deck. There are many Colorless \n"
-	db "Pok`mon, so check them all out!",TX_END
+	text "Colorless Pok`mon are very easy"
+	line "to use. They can attack with "
+	line "any type of Energy card, so"
+	line "you can include them in any type"
+	line "of deck. There are many Colorless "
+	line "Pok`mon, so check them all out!"
+	done
 
 Text04f7: ; 46c2f (11:6c2f)
-	db TX_START,"Dragon Pok`mon",TX_END
+	text "Dragon Pok`mon"
+	done
 
 Text04f8: ; 46c3f (11:6c3f)
-	db TX_START,"Colorless Dragon Pok`mon cards\n"
-	db "have resistance to Psychic\n"
-	db "Pok`mon and have no weaknesses.\n"
-	db "They can attack with any type\n"
-	db "of Energy card - they are truly\n"
-	db "worthy of the name \"dragon!\"",TX_END
+	text "Colorless Dragon Pok`mon cards"
+	line "have resistance to Psychic"
+	line "Pok`mon and have no weaknesses."
+	line "They can attack with any type"
+	line "of Energy card - they are truly"
+	line "worthy of the name \"dragon!\""
+	done
 
 Text04f9: ; 46cf5 (11:6cf5)
-	db TX_START,"Bird Pok`mon",TX_END
+	text "Bird Pok`mon"
+	done
 
 Text04fa: ; 46d03 (11:6d03)
-	db TX_START,"Colorless Bird Pok`mon cards\n"
-	db "have resistance to Fighting\n"
-	db "Pok`mon but are weak against\n"
-	db "Lightning Pok`mon. They can attack\n"
-	db "with any type of Energy card.\n"
-	db "They can retreat easily, since\n"
-	db "they are flying.",TX_END
+	text "Colorless Bird Pok`mon cards"
+	line "have resistance to Fighting"
+	line "Pok`mon but are weak against"
+	line "Lightning Pok`mon. They can attack"
+	line "with any type of Energy card."
+	line "They can retreat easily, since"
+	line "they are flying."
+	done
 
 Text04fb: ; 46dcb (11:6dcb)
-	db TX_START,"Legendary Pok`mon Cards, Vol. 1",TX_END
+	text "Legendary Pok`mon Cards, Vol. 1"
+	done
 
 Text04fc: ; 46dec (11:6dec)
-	db TX_START,"The first of the Legendary Pok`mon\n"
-	db "Cards is ",TX_LVL,"37 Moltres. With\n"
-	db "Firegiver, you can place Fire\n"
-	db "Energy cards in your hand! Also,\n"
-	db "Dive Bomb is a powerful attack!\n"
-	db "Grand Master Courtney, the Fire\n"
-	db "Queen, owns this card!",TX_END
+	text "The first of the Legendary Pok`mon"
+	line "Cards is ",TX_LVL,"37 Moltres. With"
+	line "Firegiver, you can place Fire"
+	line "Energy cards in your hand! Also,"
+	line "Dive Bomb is a powerful attack!"
+	line "Grand Master Courtney, the Fire"
+	line "Queen, owns this card!"
+	done
 
 Text04fd: ; 46ec2 (11:6ec2)
-	db TX_START,"Legendary Pok`mon Cards, Vol. 2",TX_END
+	text "Legendary Pok`mon Cards, Vol. 2"
+	done
 
 Text04fe: ; 46ee3 (11:6ee3)
-	db TX_START,"The second Legendary Pok`mon Card\n"
-	db "is ",TX_LVL,"68 Zapdos. With Peal of\n"
-	db "Thunder, just putting this card on\n"
-	db "the bench causes damage!\n"
-	db "Also, Big Thunder is a powerful\n"
-	db "attack! The Thunder Grand Master,\n"
-	db "Steve, owns this card!",TX_END
+	text "The second Legendary Pok`mon Card"
+	line "is ",TX_LVL,"68 Zapdos. With Peal of"
+	line "Thunder, just putting this card on"
+	line "the bench causes damage!"
+	line "Also, Big Thunder is a powerful"
+	line "attack! The Thunder Grand Master,"
+	line "Steve, owns this card!"
+	done
 
 Text04ff: ; 46fb8 (11:6fb8)
-	db TX_START,"Legendary Pok`mon Cards, Vol. 3",TX_END
+	text "Legendary Pok`mon Cards, Vol. 3"
+	done
 
 Text0500: ; 46fd9 (11:6fd9)
-	db TX_START,"The third Legendary Pok`mon Card\n"
-	db "is ",TX_LVL,"37 Articuno. Its Quickfreeze\n"
-	db "will paralyze opponents' Pok`mon\n"
-	db "when the card is put in play!\n"
-	db "Also, Ice Breath is a powerful\n"
-	db "Attack! Grand Master Jack,\n"
-	db "the Ice-man, owns this card!",TX_END
+	text "The third Legendary Pok`mon Card"
+	line "is ",TX_LVL,"37 Articuno. Its Quickfreeze"
+	line "will paralyze opponents' Pok`mon"
+	line "when the card is put in play!"
+	line "Also, Ice Breath is a powerful"
+	line "Attack! Grand Master Jack,"
+	line "the Ice-man, owns this card!"
+	done
 
 Text0501: ; 470b3 (11:70b3)
-	db TX_START,"Legendary Pok`mon Cards, Vol. 4",TX_END
+	text "Legendary Pok`mon Cards, Vol. 4"
+	done
 
 Text0502: ; 470d4 (11:70d4)
-	db TX_START,"The fourth Legendary Pok`mon Card\n"
-	db "is ",TX_LVL,"41 Dragonite. Its Healing\n"
-	db "Wind will heal damage done to \n"
-	db "Pok`mon when this card is played!\n"
-	db "Also, Slam is a powerful attack!\n"
-	db "Rod, Leader of the Grand Masters,\n"
-	db "owns this card!",TX_END
+	text "The fourth Legendary Pok`mon Card"
+	line "is ",TX_LVL,"41 Dragonite. Its Healing"
+	line "Wind will heal damage done to "
+	line "Pok`mon when this card is played!"
+	line "Also, Slam is a powerful attack!"
+	line "Rod, Leader of the Grand Masters,"
+	line "owns this card!"
+	done
 
 Text0503: ; 471aa (11:71aa)
-	db TX_START,"The Grand Masters",TX_END
+	text "The Grand Masters"
+	done
 
 Text0504: ; 471bd (11:71bd)
-	db TX_START,"Courtney, Steve, Jack and Rod -\n"
-	db "the 4 Grand Masters who defend\n"
-	db "the Legendary Pok`mon Cards - \n"
-	db "are all master players of the \n"
-	db "Pok`mon Trading Card Game!",TX_END
+	text "Courtney, Steve, Jack and Rod -"
+	line "the 4 Grand Masters who defend"
+	line "the Legendary Pok`mon Cards - "
+	line "are all master players of the "
+	line "Pok`mon Trading Card Game!"
+	done
 
 Text0505: ; 47256 (11:7256)
-	db TX_START,"Master Medals",TX_END
+	text "Master Medals"
+	done
 
 Text0506: ; 47265 (11:7265)
-	db TX_START,"There are a total of 8 Master Medals\n"
-	db "owned by the Club Masters. It is \n"
-	db "said that the secret of their Club's\n"
-	db "deck is encrypted in the Master \n"
-	db "Medals. Some say the medals were \n"
-	db "a gift from the Grand Masters.",TX_END
+	text "There are a total of 8 Master Medals"
+	line "owned by the Club Masters. It is "
+	line "said that the secret of their Club's"
+	line "deck is encrypted in the Master "
+	line "Medals. Some say the medals were "
+	line "a gift from the Grand Masters."
+	done
 
 Text0507: ; 47334 (11:7334)
-	db TX_START,"Plate of Legends",TX_END
+	text "Plate of Legends"
+	done
 
 Text0508: ; 47346 (11:7346)
-	db TX_START,"\"Those in search of the Legendary\n"
-	db " Pok`mon Cards...\n"
-	db " Defeat the Masters of the 8 Clubs\n"
-	db " and attain the 8 Medals.\n"
-	db " Once attained, defeat the Grand\n"
-	db " Master here at Pok`mon Dome...\n"
-	db " Then you shall inherit\n"
-	db " the Legendary Pok`mon Cards.\"",TX_END
+	text "\"Those in search of the Legendary"
+	line " Pok`mon Cards..."
+	line " Defeat the Masters of the 8 Clubs"
+	line " and attain the 8 Medals."
+	line " Once attained, defeat the Grand"
+	line " Master here at Pok`mon Dome..."
+	line " Then you shall inherit"
+	line " the Legendary Pok`mon Cards.\""
+	done
 
 Text0509: ; 47430 (11:7430)
-	db TX_START,"Mysterious Voice",TX_END
+	text "Mysterious Voice"
+	done
 
 Text050a: ; 47442 (11:7442)
-	db TX_START,"Greetings! Welcome to the \n"
-	db "Challenge Hall! The Challenge Cup \n"
-	db "will begin soon. If you win the \n"
-	db "Challenge Cup, you will receive \n"
-	db "a Promotional Card! Please join \n"
-	db "us for this competition.",TX_END
+	text "Greetings! Welcome to the "
+	line "Challenge Hall! The Challenge Cup "
+	line "will begin soon. If you win the "
+	line "Challenge Cup, you will receive "
+	line "a Promotional Card! Please join "
+	line "us for this competition."
+	done
 
 Text050b: ; 474fd (11:74fd)
-	db TX_START,"Greetings! Welcome to the \n"
-	db "Challenge Hall! This is where the\n"
-	db "the Challenge Cup is held. The \n"
-	db "Challenge Cup may start at any\n"
-	db "time, so please visit the \n"
-	db "Challenge Hall often.",TX_END
+	text "Greetings! Welcome to the "
+	line "Challenge Hall! This is where the"
+	line "the Challenge Cup is held. The "
+	line "Challenge Cup may start at any"
+	line "time, so please visit the "
+	line "Challenge Hall often."
+	done
 
 Text050c: ; 475ab (11:75ab)
-	db TX_START,"Greetings! Welcome to the \n"
-	db "Challenge Hall! Defeat 3 \n"
-	db "opponents here, and you shall be \n"
-	db "presented with a wonderful gift!\n"
-	db "Please join in the competition!",TX_END
+	text "Greetings! Welcome to the "
+	line "Challenge Hall! Defeat 3 "
+	line "opponents here, and you shall be "
+	line "presented with a wonderful gift!"
+	line "Please join in the competition!"
+	done
 
 Text050d: ; 47644 (11:7644)
-	db TX_START,"Most unfortunate, ",TX_RAM1,".\n"
-	db "Once you enter, you won't be able\n"
-	db "to re-enter for some time. \n"
-	db "Please try again another day.",TX_END
+	text "Most unfortunate, ",TX_RAM1,"."
+	line "Once you enter, you won't be able"
+	line "to re-enter for some time. "
+	line "Please try again another day."
+	done
 
 Text050e: ; 476b6 (11:76b6)
-	db TX_START,"Congratulations, ",TX_RAM1,"!\n"
-	db "You received a card!\n"
-	db "Please join us for the next \n"
-	db "Challenge Cup, too.",TX_END
+	text "Congratulations, ",TX_RAM1,"!"
+	line "You received a card!"
+	line "Please join us for the next "
+	line "Challenge Cup, too."
+	done
 
 Text050f: ; 47711 (11:7711)
-	db TX_START,"I won't lose to any\n"
-	db "whipper-snapper!\n"
-	db "I'm going to win this \n"
-	db "Challenge Cup!",TX_END
+	text "I won't lose to any"
+	line "whipper-snapper!"
+	line "I'm going to win this "
+	line "Challenge Cup!"
+	done
 
 Text0510: ; 4775d (11:775d)
-	db TX_START,"I work at the Challenge Cup\n"
-	db "as the HOST.\n"
-	db "I can't wait to get up on stage!",TX_END
+	text "I work at the Challenge Cup"
+	line "as the HOST."
+	line "I can't wait to get up on stage!"
+	done
 
 Text0511: ; 477a8 (11:77a8)
-	db TX_START,"The time has come to see if all\n"
-	db "my training has paid off!\n"
-	db "I'm going to win the Challenge Cup\n"
-	db "and become a Grand Master!",TX_END
+	text "The time has come to see if all"
+	line "my training has paid off!"
+	line "I'm going to win the Challenge Cup"
+	line "and become a Grand Master!"
+	done
 
 Text0512: ; 47821 (11:7821)
-	db TX_START,"Hey now! It's the Challenge Cup!\n"
-	db "Hey now! Gonna give it a try!\n"
-	db "Hey now! Gonna beat 3 people!\n"
-	db "Hey now! Watch me win the prize!",TX_END
+	text "Hey now! It's the Challenge Cup!"
+	line "Hey now! Gonna give it a try!"
+	line "Hey now! Gonna beat 3 people!"
+	line "Hey now! Watch me win the prize!"
+	done
 
 Text0513: ; 478a0 (11:78a0)
-	db TX_START,"I'm good enough to compete in\n"
-	db "the Challenge Cup! Girls are just\n"
-	db "as good at the Pok`mon Trading\n"
-	db "Card Game as boys!",TX_END
+	text "I'm good enough to compete in"
+	line "the Challenge Cup! Girls are just"
+	line "as good at the Pok`mon Trading"
+	line "Card Game as boys!"
+	done
 
 Text0514: ; 47913 (11:7913)
-	db TX_START,"What's that? Oh! The Challenge \n"
-	db "Cup isn't being held right now.\n"
-	db "Me? I'm waiting for the Challenge\n"
-	db "Cup to begin.",TX_END
+	text "What's that? Oh! The Challenge "
+	line "Cup isn't being held right now."
+	line "Me? I'm waiting for the Challenge"
+	line "Cup to begin."
+	done
 
 Text0515: ; 47984 (11:7984)
-	db TX_START,"Hi, ",TX_RAM1,".\n"
-	db "Are you competing, too?",TX_END
+	text "Hi, ",TX_RAM1,"."
+	line "Are you competing, too?"
+	done
 
 Text0516: ; 479a4 (11:79a4)
-	db TX_START,"I'm the one who's going to\n"
-	db "defeat 3 opponents! The prize, \n"
-	db TX_START,TX_LVL,"60 Mewtwo, belongs to me!\n"
-	db "You just sit tight and watch me win!\n"
-	db "See Ya! Ha ha ha ha ha ha!",TX_END
+	text "I'm the one who's going to"
+	line "defeat 3 opponents! The prize, "
+	line ""
+	text TX_LVL,"60 Mewtwo, belongs to me!"
+	line "You just sit tight and watch me win!"
+	line "See Ya! Ha ha ha ha ha ha!"
+	done
 
 Text0517: ; 47a3d (11:7a3d)
-	db TX_START,"Hey, it's ",TX_RAM1," - the loser\n"
-	db "of the Challenge Cup!",TX_END
+	text "Hey, it's ",TX_RAM1," - the loser"
+	line "of the Challenge Cup!"
+	done
 
 Text0518: ; 47a6c (11:7a6c)
-	db TX_START,"What? You're asking if I won?\n"
-	db "I lost to the third opponent!\n"
-	db "I just lost my concentration.\n"
-	db "But I'll win the next Challenge \n"
-	db "Cup! Of course I'll puverize you!\n"
-	db "See ya! Ha ha ha ha ha ha!",TX_END
+	text "What? You're asking if I won?"
+	line "I lost to the third opponent!"
+	line "I just lost my concentration."
+	line "But I'll win the next Challenge "
+	line "Cup! Of course I'll puverize you!"
+	line "See ya! Ha ha ha ha ha ha!"
+	done
 
 Text0519: ; 47b25 (11:7b25)
-	db TX_START,"Hey ",TX_RAM1,", too bad \n"
-	db "you're too late!",TX_END
+	text "Hey ",TX_RAM1,", too bad "
+	line "you're too late!"
+	done
 
 Text051a: ; 47b47 (11:7b47)
-	db TX_START,"The Challenge Cup is over! I\n"
-	db "defeated 3 opponents and won\n"
-	db "the prize - ",TX_LVL,"60 Mewtwo!\n"
-	db "See ya! Ha ha ha ha ha ha!",TX_END
+	text "The Challenge Cup is over! I"
+	line "defeated 3 opponents and won"
+	line "the prize - ",TX_LVL,"60 Mewtwo!"
+	line "See ya! Ha ha ha ha ha ha!"
+	done
 
 Text051b: ; 47bb6 (11:7bb6)
-	db TX_START,"Hi, ",TX_RAM1,".\n"
-	db "What are you doing here?",TX_END
+	text "Hi, ",TX_RAM1,"."
+	line "What are you doing here?"
+	done
 
 Text051c: ; 47bd7 (11:7bd7)
-	db TX_START,"The Challenge Cup is over! I\n"
-	db "defeated 3 opponents and won\n"
-	db "the prize - ",TX_LVL,"60 Mewtwo!\n"
-	db "I guess you could try entering\n"
-	db "the next Challenge Cup, but \n"
-	db "you won't have a chance since \n"
-	db "I'll win that one, too!\n"
-	db "See ya! Ha ha ha ha ha ha!",TX_END
+	text "The Challenge Cup is over! I"
+	line "defeated 3 opponents and won"
+	line "the prize - ",TX_LVL,"60 Mewtwo!"
+	line "I guess you could try entering"
+	line "the next Challenge Cup, but "
+	line "you won't have a chance since "
+	line "I'll win that one, too!"
+	line "See ya! Ha ha ha ha ha ha!"
+	done
 
 Text051d: ; 47cb9 (11:7cb9)
-	db TX_START,"Hey, ",TX_RAM1,".\n"
-	db "We meet again.",TX_END
+	text "Hey, ",TX_RAM1,"."
+	line "We meet again."
+	done
 
 Text051e: ; 47cd1 (11:7cd1)
-	db TX_START,"No matter who enters the Challenge\n"
-	db "Cup, I'll be the winner! \n"
-	db TX_START,TX_LVL,"8 Mew, this Cup's prize, will \n"
-	db "belong to me! Why don't you just\n"
-	db "give up and go home!\n"
-	db "See ya! Ha ha ha ha ha ha!",TX_END
+	text "No matter who enters the Challenge"
+	line "Cup, I'll be the winner! "
+	line ""
+	text TX_LVL,"8 Mew, this Cup's prize, will "
+	line "belong to me! Why don't you just"
+	line "give up and go home!"
+	line "See ya! Ha ha ha ha ha ha!"
+	done
 
 Text051f: ; 47d82 (11:7d82)
-	db TX_START,"Hey, it's ",TX_RAM1," - the\n"
-	db "loser of the Challenge Cup!",TX_END
+	text "Hey, it's ",TX_RAM1," - the"
+	line "loser of the Challenge Cup!"
+	done
 
 Text0520: ; 47db1 (11:7db1)
-	db TX_START,"That was a close one for me!\n"
-	db "I lost to the third opponent!\n"
-	db "But I'll win the next Challenge \n"
-	db "Cup! And of course, I'll pulverize \n"
-	db "you! See ya! Ha ha ha ha ha!",TX_END
+	text "That was a close one for me!"
+	line "I lost to the third opponent!"
+	line "But I'll win the next Challenge "
+	line "Cup! And of course, I'll pulverize "
+	line "you! See ya! Ha ha ha ha ha!"
+	done
 
 Text0521: ; 47e4f (11:7e4f)
-	db TX_START,"Hey, isn't that ",TX_RAM1,"?\n"
-	db "Late as always!",TX_END
+	text "Hey, isn't that ",TX_RAM1,"?"
+	line "Late as always!"
+	done
 
 Text0522: ; 47e73 (11:7e73)
-	db TX_START,"The Challenge Cup is already\n"
-	db "over! What? Who won?\n"
-	db "Who do you expect!?! Me, of \n"
-	db "course! The prize belongs to\n"
-	db "me! ",TX_LVL,"8 Mew! See ya!\n"
-	db "Ha ha ha ha ha ha!",TX_END
+	text "The Challenge Cup is already"
+	line "over! What? Who won?"
+	line "Who do you expect!?! Me, of "
+	line "course! The prize belongs to"
+	line "me! ",TX_LVL,"8 Mew! See ya!"
+	line "Ha ha ha ha ha ha!"
+	done
 
 Text0523: ; 47f08 (11:7f08)
-	db TX_START,"Hey, ",TX_RAM1,"!\n"
-	db "What are you doing here?",TX_END
+	text "Hey, ",TX_RAM1,"!"
+	line "What are you doing here?"
+	done
