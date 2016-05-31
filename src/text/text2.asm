@@ -276,12 +276,16 @@ Text012c: ; 38a83 (e:4a83)
 	done
 
 Text012d: ; 38aa4 (e:4aa4)
-	text "Procedure for Energy Transfer:\n"
+	text "Procedure for Energy Transfer:"
+	line ""
 	line "1. Choose the Pok`mon to move Grass"
-	line "   Energy from.  Press the A Button.\n"
+	line "   Energy from.  Press the A Button."
+	line ""
 	line "2. Choose the Pok`mon to move the"
-	line "   energy to and press the A Button.\n"
-	line "3. Repeat steps 1 and 2.\n"
+	line "   energy to and press the A Button."
+	line ""
+	line "3. Repeat steps 1 and 2."
+	line ""
 	line "4. Press the B Button to end."
 	done
 
@@ -300,13 +304,16 @@ Text0130: ; 38bc9 (e:4bc9)
 	done
 
 Text0131: ; 38bfe (e:4bfe)
-	text "Procedure for Curse:\n"
+	text "Procedure for Curse:"
+	line ""
 	line "1. Choose a Pok`mon to move the"
 	line "   Damage counter from and press"
-	line "   the A Button.\n"
+	line "   the A Button."
+	line ""
 	line "2. Choose a Pok`mon to move the"
 	line "   Damage counter to and press"
-	line "   the A Button.\n"
+	line "   the A Button."
+	line ""
 	line "3. Press the B Button to cancel."
 	done
 
@@ -326,14 +333,18 @@ Text0134: ; 38d5a (e:4d5a)
 	done
 
 Text0135: ; 38d72 (e:4d72)
-	text "Procedure for Prophecy:\n"
+	text "Procedure for Prophecy:"
+	line ""
 	line "1. Choose either your Deck"
-	line "   or your opponent's Deck\n"
+	line "   or your opponent's Deck"
+	line ""
 	line "2. Choose the cards you wish to"
 	line "   place on top and press the"
-	line "   A Button.\n"
+	line "   A Button."
+	line ""
 	line "3. Select Yes after you choose"
-	line "   the 3 cards and their order.\n"
+	line "   the 3 cards and their order."
+	line ""
 	line "4. Press the B Button to cancel."
 	done
 
@@ -343,37 +354,49 @@ Text0136: ; 38e70 (e:4e70)
 	done
 
 Text0137: ; 38e90 (e:4e90)
-	text "Procedure for Damage Swap:\n"
+	text "Procedure for Damage Swap:"
+	line ""
 	line "1. Choose a Pok`mon to move a"
 	line "   Damage counter from and press"
-	line "   the A Button.\n"
+	line "   the A Button."
+	line ""
 	line "2. Choose a Pok`mon to move the"
 	line "   Damage counter to and press"
-	line "   the A Button.\n"
-	line "3. Repeat steps 1 and 2.\n"
-	line "4. Press the B Button to end.\n"
+	line "   the A Button."
+	line ""
+	line "3. Repeat steps 1 and 2."
+	line ""
+	line "4. Press the B Button to end."
+	line ""
 	line "5. You cannot move the counter if"
 	line "   it will Knock Out the Pok`mon."
 	done
 
 Text0138: ; 38fcc (e:4fcc)
-	text "Procedure for Devolution Beam.\n"
+	text "Procedure for Devolution Beam."
+	line ""
 	line "1. Choose either a Pok`mon in your"
 	line "   Play Area or your opponent's"
-	line "   Play Area and press the A Button.\n"
+	line "   Play Area and press the A Button."
+	line ""
 	line "2. Choose the Pok`mon to Devolve"
-	line "   and press the A Button.\n"
+	line "   and press the A Button."
+	line ""
 	line "3. Press the B Button to cancel."
 	done
 
 Text0139: ; 390b4 (e:50b4)
-	text "Procedure for Strange Behavior:\n"
+	text "Procedure for Strange Behavior:"
+	line ""
 	line "1. Choose the Pok`mon with the"
 	line "   Damage counters to move to"
-	line "   Slowbro and press the A Button.\n"
+	line "   Slowbro and press the A Button."
+	line ""
 	line "2. Repeat step 1 as many times as"
-	line "   you wish to move the counters.\n"
-	line "3. Press the B Button to end.\n"
+	line "   you wish to move the counters."
+	line ""
+	line "3. Press the B Button to end."
+	line ""
 	line "4. You cannot move the damage if"
 	line "   Slowbro will be Knocked Out."
 	done
@@ -884,7 +907,8 @@ Text01a3: ; 3a122 (e:6122)
 	done
 
 Text01a4: ; 3a12d (e:612d)
-	text "Draw 7 cards,\n"
+	text "Draw 7 cards,"
+	line ""
 	line "and get ready for the battle!"
 	line "Choose your Active Pok`mon."
 	line "You can only choose Basic Pok`mon"
@@ -1043,7 +1067,8 @@ Text01bf: ; 3a8bb (e:68bb)
 Text01c0: ; 3a8f1 (e:68f1)
 	text "To use the attack command, you need"
 	line "to attach Energy cards to your"
-	line "Pok`mon.\n"
+	line "Pok`mon."
+	line ""
 	line "Choose Cards from the Menu, and"
 	line "select a Water Energy card."
 	done
@@ -1092,7 +1117,8 @@ Text01c6: ; 3ac15 (e:6c15)
 	line "you don't need to attach any more."
 	line "Attach Energy cards to your Benched"
 	line "Pok`mon to get them ready for"
-	line "battle.\n"
+	line "battle."
+	line ""
 	line "Attach a Water Energy card to your"
 	line "Benched Staryu."
 	done
@@ -1117,7 +1143,8 @@ Text01c8: ; 3ad6d (e:6d6d)
 Text01c9: ; 3addd (e:6ddd)
 	text "When all your Pok`mon are Knocked"
 	line "Out and there are no Pok`mon on your"
-	line "Bench, you lose the game.\n"
+	line "Bench, you lose the game."
+	line ""
 	line "Put Drowzee, the Basic Pok`mon"
 	line "you just drew, on your Bench."
 	done
@@ -1135,10 +1162,12 @@ Text01cb: ; 3aebf (e:6ebf)
 	done
 
 Text01cc: ; 3af04 (e:6f04)
-	text "Staryu evolves into Starmie!\n"
+	text "Staryu evolves into Starmie!"
+	line ""
 	line "Let's get Staryu ready to use"
 	line "Starmie's attack command when it"
-	line "evolves to Starmie.\n"
+	line "evolves to Starmie."
+	line ""
 	line "Choose the Water Energy card from"
 	line "your hand and attach it to Staryu."
 	done
@@ -1187,7 +1216,8 @@ Text01d3: ; 3b196 (e:7196)
 	line TX_END
 
 Text01d4: ; 3b1f4 (e:71f4)
-	text "You've Knocked Out your opponent!\n"
+	text "You've Knocked Out your opponent!"
+	line ""
 	line "Pick up the last Prize."
 	line ""
 	text TX_RAM1," is the winner!"

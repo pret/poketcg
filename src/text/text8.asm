@@ -524,7 +524,8 @@ Text06d6: ; 518fa (14:58fa)
 	line "Infrared Link."
 	line "Unfortunately, our service is"
 	line "only available for the"
-	line "Game Boy Color.\n"
+	line "Game Boy Color."
+	line ""
 	line "Please enjoy our service with"
 	line "a Game Boy Color."
 	done

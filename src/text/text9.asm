@@ -727,7 +727,8 @@ Text07b1: ; 564db (15:64db)
 
 Text07b2: ; 56518 (15:6518)
 	text ""
-	line "                Producers\n"
+	line "                Producers"
+	line ""
 	line ""
 	line "           Tsunekazu Ishihara"
 	line "            Shinichi Nakamoto"
@@ -736,14 +737,16 @@ Text07b2: ; 56518 (15:6518)
 
 Text07b3: ; 5658f (15:658f)
 	text ""
-	line "                Director\n"
+	line "                Director"
+	line ""
 	line ""
 	line "                Koji Arai"
 	done
 
 Text07b4: ; 565c6 (15:65c6)
 	text ""
-	line "               Programmers\n"
+	line "               Programmers"
+	line ""
 	line ""
 	line "             Masahiro Tobita"
 	line "             Satoshi Mikami"
@@ -752,7 +755,8 @@ Text07b4: ; 565c6 (15:65c6)
 
 Text07b5: ; 5663a (15:663a)
 	text ""
-	line "           GB Graphic Designers\n"
+	line "           GB Graphic Designers"
+	line ""
 	line ""
 	line "             Kazuhiko Nonaka"
 	line "             Yasuhiro Fujii"
@@ -773,28 +777,32 @@ Text07b7: ; 5670b (15:670b)
 
 Text07b8: ; 56764 (15:6764)
 	text ""
-	line "                  Music\n"
+	line "                  Music"
+	line ""
 	line ""
 	line "            Ichiro Shimakura"
 	done
 
 Text07b9: ; 5679d (15:679d)
 	text ""
-	line "              Sound Effects\n"
+	line "              Sound Effects"
+	line ""
 	line ""
 	line "              Masato Aihara"
 	done
 
 Text07ba: ; 567d9 (15:67d9)
 	text ""
-	line "             Sound Director\n"
+	line "             Sound Director"
+	line ""
 	line ""
 	line "            Toshiaki Takimoto"
 	done
 
 Text07bb: ; 56817 (15:6817)
 	text ""
-	line "          Sound System Support\n"
+	line "          Sound System Support"
+	line ""
 	line ""
 	line "           Katsunori Takahashi"
 	line "               Hideki Oka"
@@ -802,28 +810,32 @@ Text07bb: ; 56817 (15:6817)
 
 Text07bc: ; 56873 (15:6873)
 	text ""
-	line "            Card Game Creator\n"
+	line "            Card Game Creator"
+	line ""
 	line ""
 	line "             Takumi Akabane"
 	done
 
 Text07bd: ; 568b1 (15:68b1)
 	text ""
-	line "            Card Game Creator\n"
+	line "            Card Game Creator"
+	line ""
 	line ""
 	line "             Kouichi Oyama"
 	done
 
 Text07be: ; 568ee (15:68ee)
 	text ""
-	line "            Card Game Creator\n"
+	line "            Card Game Creator"
+	line ""
 	line ""
 	line "              Akihiko Miura"
 	done
 
 Text07bf: ; 5692c (15:692c)
 	text ""
-	line "            Card Illustrators\n"
+	line "            Card Illustrators"
+	line ""
 	line ""
 	line "              Ken Sugimori"
 	line "             Mitsuhiro Arita"
@@ -840,7 +852,8 @@ Text07c0: ; 569c0 (15:69c0)
 
 Text07c1: ; 56a30 (15:6a30)
 	text ""
-	line "         Special Appearances by\n"
+	line "         Special Appearances by"
+	line ""
 	line ""
 	line "             Hiroko Ohashi"
 	line "             Masako Uchiyama"
@@ -854,7 +867,8 @@ Text07c2: ; 56a8c (15:6a8c)
 Text07c3: ; 56ac3 (15:6ac3)
 	text ""
 	line "             US COORDINATION"
-	line "           NINTENDO OF AMERICA\n"
+	line "           NINTENDO OF AMERICA"
+	line ""
 	line ""
 	line "               GAIL TILDEN"
 	line "              HIRO NAKAMURA"
@@ -869,7 +883,8 @@ Text07c5: ; 56b71 (15:6b71)
 	text ""
 	line "             US COORDINATION"
 	line "           Wizards of the Coast"
-	line "          Pok`mon Templating Team\n"
+	line "          Pok`mon Templating Team"
+	line ""
 	line ""
 	line "            Robert Gutschera"
 	line "             Jessica Beaven"
@@ -883,42 +898,48 @@ Text07c6: ; 56c0d (15:6c0d)
 
 Text07c7: ; 56c5e (15:6c5e)
 	text ""
-	line "            TRANSLATION/DRAFT\n"
+	line "            TRANSLATION/DRAFT"
+	line ""
 	line ""
 	line "               BILL RITCH"
 	done
 
 Text07c8: ; 56c9a (15:6c9a)
 	text ""
-	line "                Mastering\n"
+	line "                Mastering"
+	line ""
 	line ""
 	line "             Tetsuya Komatsu"
 	done
 
 Text07c9: ; 56cd5 (15:6cd5)
 	text ""
-	line "             Manual Creation\n"
+	line "             Manual Creation"
+	line ""
 	line ""
 	line "              Haruki Mitani"
 	done
 
 Text07ca: ; 56d12 (15:6d12)
 	text ""
-	line "           Manual Illustrations\n"
+	line "           Manual Illustrations"
+	line ""
 	line ""
 	line "             Kagemaru Himeno"
 	done
 
 Text07cb: ; 56d53 (15:6d53)
 	text ""
-	line "          Pok`mon Original Story\n"
+	line "          Pok`mon Original Story"
+	line ""
 	line ""
 	line "             Satoshi Tajiri"
 	line TX_END
 
 Text07cc: ; 56d95 (15:6d95)
 	text ""
-	line "       Created In Cooperation With\n"
+	line "       Created In Cooperation With"
+	line ""
 	line ""
 	line "              Shinji Hatano"
 	line "             Satoshi Yamato"
@@ -927,7 +948,8 @@ Text07cc: ; 56d95 (15:6d95)
 
 Text07cd: ; 56e11 (15:6e11)
 	text ""
-	line "          With Cooperation from\n"
+	line "          With Cooperation from"
+	line ""
 	line ""
 	line "             Yoshio Motosako"
 	line "             Hiroyuki Mikami"
@@ -950,29 +972,36 @@ Text07cf: ; 56eff (15:6eff)
 
 Text07d0: ; 56f6e (15:6f6e)
 	text ""
-	line "             Project Manager\n"
+	line "             Project Manager"
+	line ""
 	line ""
 	line "            Yasutaka Kakiseko"
 	done
 
 Text07d1: ; 56fad (15:6fad)
 	text ""
-	line "               Supervisor\n"
-	line "\n"
+	line "               Supervisor"
+	line ""
+	line ""
+	line ""
 	line "              Hiroshi Kudo"
 	done
 
 Text07d2: ; 56fe7 (15:6fe7)
 	text ""
-	line "           Executive Producer\n"
-	line "\n"
+	line "           Executive Producer"
+	line ""
+	line ""
+	line ""
 	line "            Hiroshi Yamauchi"
 	done
 
 Text07d3: ; 57027 (15:7027)
 	text ""
-	line "               Created by\n"
-	line "\n"
+	line "               Created by"
+	line ""
+	line ""
+	line ""
 	line "                 Hudson"
 	done
 

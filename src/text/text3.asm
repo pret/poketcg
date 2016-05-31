@@ -76,9 +76,11 @@ Text027c: ; 3c22b (f:422b)
 
 Text027d: ; 3c24a (f:424a)
 	text "1. Choose the card you wish to send."
-	line "   Press left/right to choose more.\n"
+	line "   Press left/right to choose more."
+	line ""
 	line "2. Choose all the cards. Then press"
-	line "   the B Button to open the menu.\n"
+	line "   the B Button to open the menu."
+	line ""
 	line "3. Choose Send to finish"
 	line "   the process."
 	done
@@ -1105,12 +1107,14 @@ Text0348: ; 3e91d (f:691d)
 	done
 
 Text0349: ; 3e939 (f:6939)
-	text "Message Speed\n"
+	text "Message Speed"
+	line ""
 	line "   Slow   1   2   3   4   5   Fast"
 	done
 
 Text034a: ; 3e96c (f:696c)
-	text "Duel Animation\n"
+	text "Duel Animation"
+	line ""
 	line "  Show All    Skip Some       None"
 	done
 
@@ -1322,7 +1326,8 @@ Text0376: ; 3ee0b (f:6e0b)
 	line "CONTINUE DUEL, will be"
 	line "deleted, and the game will start"
 	line "from the point when you last "
-	line "wrote in the Diary.\n"
+	line "wrote in the Diary."
+	line ""
 	line "Would you like to continue the Game"
 	line "from the point saved in"
 	done
