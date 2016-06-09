@@ -783,4 +783,292 @@ Unknown_a77e: ; a77e (2:677e)
 INCBIN "baserom.gbc",$a77e,$b177 - $a77e
 
 Func_b177: ; b177 (2:7177)
-INCBIN "baserom.gbc",$b177,$c000 - $b177
+INCBIN "baserom.gbc",$b177,$b19d - $b177
+
+Func_b19d: ; b19d (2:719d)
+	xor a
+	ld [$cea1], a
+	ld de, CheckForCGB
+	ld hl, $d0a2
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call $7379
+	ld a, $3c
+	ld [$d0a5], a
+	xor a
+.asm_b1b3
+	ld hl, $76fb
+	call $5a6d
+	call $7704
+	call $7545
+	ld hl, $0224
+	call DrawWideTextBox_PrintText
+	ld de, $0224
+	call $7285
+	call $729f
+	jr c, .asm_b1b3
+	cp $ff
+	ret z
+	ld b, a
+	ld a, [$cea1]
+	add b
+	ld [$d088], a
+	call Func_905a
+	call DrawWideTextBox
+	ld hl, $7274
+	call Func_2c08
+	call DoFrame
+	call Func_9065
+	jp nc, $71e7
+	cp $ff
+	jr nz, .asm_b1fa
+	ld a, [$d086]
+	jp $71b3
+
+.asm_b1fa
+	ld a, [wceb0]
+	sla a
+	ld hl, wceaf
+	add [hl]
+	or a
+	jr nz, .asm_b22c
+	call $735b
+	jr nc, .asm_b216
+	call $7592
+	ld a, [$d086]
+	jp c, $71b3
+	jr .asm_b25e
+
+.asm_b216
+	ld hl, $0272
+	call Func_2af0
+	ld a, [$d086]
+	jr c, .asm_b1b3
+	call $7592
+	ld a, [$d086]
+	jp c, $71b3
+	jr .asm_b25e
+
+.asm_b22c
+	cp $1
+	jr nz, .asm_b24c
+	call $735b
+	jr c, .asm_b240
+	call $76ca
+	ld a, [$d086]
+	jp c, $71b3
+	jr .asm_b25e
+
+.asm_b240
+	ld hl, WaitForVBlank
+	call DrawWideTextBox_WaitForInput
+	ld a, [$d086]
+	jp $71b3
+
+.asm_b24c
+	cp $2
+	jr nz, .asm_b273
+	call $735b
+	jr c, .asm_b240
+	call $77c6
+	ld a, [$d086]
+	jp nc, $71b3
+
+.asm_b25e
+	ld a, [$d087]
+	ld [$cea1], a
+	call $7379
+	call $7704
+	call $7545
+	ld a, [$d086]
+	jp $71b3
+
+.asm_b273
+	ret
+; 0xb274
+
+INCBIN "baserom.gbc",$b274,$ba04 - $b274
+
+Func_ba04: ; ba04 (2:7a04)
+	ld a, [wd0a9]
+	ld hl, $7b83
+	sla a
+	ld c, a
+	ld b, $0
+	add hl, bc
+	ld de, $d0a2
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	xor a
+	ld [$cea1], a
+	call $7b97
+	ld a, $5
+	ld [$d0a5], a
+	xor a
+	ld hl, $7b6e
+	call InitializeCursorParameters
+	ld hl, $0224
+	call DrawWideTextBox_PrintText
+	ld a, $5
+	ld [$cea9], a
+	ld hl, $73fe
+	ld d, h
+	ld a, l
+	ld hl, $cece
+	ld [hli], a
+	ld [hl], d
+.asm_ba40
+	call DoFrame
+	call MenuCursorAcceptInput
+	jr c, .asm_baa3
+	ld a, [$ff8f]
+	and $c0
+	jr z, .asm_ba4e
+
+.asm_ba4e
+	ld a, [$ff8f]
+	and $8
+	jr z, .asm_ba40
+	ld a, [$cea1]
+	ld [$d087], a
+	ld b, a
+	ld a, [wCurMenuItem]
+	ld [$d086], a
+	add b
+	ld c, a
+	inc a
+	or $80
+	ld [wceb1], a
+	sla c
+	ld b, $0
+	ld hl, $d00d
+	add hl, bc
+	call $7653
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push hl
+	ld bc, $0018
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld a, [hl]
+	pop hl
+	call $7644
+	or a
+	jr z, .asm_ba40
+	ld a, $1
+	call Func_90fb
+	call $7653
+	call Func_8e1f
+	call $7644
+	ld a, [$d087]
+	ld [$cea1], a
+	call $7b97
+	ld a, [$d086]
+	jp $7a25
+
+.asm_baa3
+	call Func_270b
+	ld a, [$cea1]
+	ld [$d087], a
+	ld a, [wCurMenuItem]
+	ld [$d086], a
+	ld a, [$ffb1]
+	cp $ff
+	jp z, $7b0d
+	ld [$d088], a
+	call Func_905a
+	xor a
+	ld [$ce5e], a
+	call DrawWideTextBox
+	ld hl, $7b76
+	call Func_2c08
+	call DoFrame
+	call $46ac
+	jp nc, $7acc
+	cp $ff
+	jr nz, .asm_badf
+	ld a, [$d086]
+	jp $7a25
+
+.asm_badf
+	ld a, [wceb0]
+	sla a
+	ld hl, wceaf
+	add [hl]
+	or a
+	jr nz, .asm_bb09
+	call $7653
+	call $77c6
+	call $7644
+	ld a, [$d086]
+	jp nc, $7a25
+	ld a, [$d087]
+	ld [$cea1], a
+	call $7b97
+	ld a, [$d086]
+	jp $7a25
+
+.asm_bb09
+	cp $1
+	jr nz, .asm_bb12
+	xor a
+	ld [$d0a4], a
+	ret
+
+.asm_bb12
+	ld a, [$cea1]
+	ld [$d087], a
+	ld b, a
+	ld a, [wCurMenuItem]
+	ld [$d086], a
+	add b
+	ld c, a
+	ld [wceb1], a
+	sla c
+	ld b, $0
+	ld hl, $d00d
+	add hl, bc
+	push hl
+	ld hl, $d0aa
+	add hl, bc
+	ld bc, $cfda
+	ld a, [hli]
+	ld [bc], a
+	inc bc
+	ld a, [hl]
+	ld [bc], a
+	pop hl
+	call $7653
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push hl
+	ld bc, $0018
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld a, [hl]
+	pop hl
+	call $7644
+	or a
+	jp z, $7a40
+	ld a, $1
+	call Func_90fb
+	call $7653
+	xor a
+	call $6dfe
+	call $7644
+	ld a, [$d087]
+	ld [$cea1], a
+	call $7b97
+	ld a, [$d086]
+	jp $7a25
+; 0xbb6e
+
+INCBIN "baserom.gbc",$bb6e,$c000 - $bb6e

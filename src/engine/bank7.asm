@@ -91,10 +91,137 @@ Func_1c33b: ; 1c33b (7:433b)
 INCLUDE "data/map_songs.asm"
 
 Func_1c440: ; 1c440 (7:4440)
-INCBIN "baserom.gbc",$1c440,$1c485 - $1c440
+INCBIN "baserom.gbc",$1c440,$1c455 - $1c440
+
+Func_1c455: ; 1c455 (7:4455)
+	push hl
+	ld a, [wd3aa]
+	ld l, $4
+	call Func_39ad
+	ld a, [hl]
+	pop hl
+	ret
+
+Func_1c461: ; 1c461 (7:4461)
+	push hl
+	push bc
+	call Func_1c719
+	ld a, [wd3aa]
+	ld l, $2
+	call Func_39ad
+	ld a, b
+	ld [hli], a
+	ld [hl], c
+	call $46e3
+	pop bc
+	pop hl
+	ret
+
+Func_1c477: ; 1c477 (7:4477)
+	push hl
+	ld a, [wd3aa]
+	ld l, $2
+	call Func_39ad
+	ld a, [hli]
+	ld b, a
+	ld c, [hl]
+	pop hl
+	ret
 
 Func_1c485: ; 1c485 (7:4485)
-INCBIN "baserom.gbc",$1c485,$1c58e - $1c485
+INCBIN "baserom.gbc",$1c485,$1c50a - $1c485
+
+Func_1c50a: ; 1c50a (7:450a)
+	push hl
+	call Func_1c719
+	ld a, [wd3aa]
+	call $39a7
+	ld a, [hl]
+	or a
+	jr z, .asm_1c52c
+	call $44fa
+	jr nc, .asm_1c521
+	xor a
+	ld [wd3b8], a
+
+.asm_1c521
+	xor a
+	ld [hli], a
+	ld a, [hl]
+	farcallx $4, $69fd
+	ld hl, $d349
+	dec [hl]
+
+.asm_1c52c
+	pop hl
+	ret
+
+Func_1c52e: ; 1c52e (7:452e)
+	push hl
+	push af
+	ld a, [wd3aa]
+	ld l, $7
+	call Func_39ad
+	pop af
+	ld [hl], a
+	call Func_1c5e9
+	pop hl
+	ret
+
+Func_1c53f: ; 1c53f (7:453f)
+	push hl
+	push bc
+	ld a, [wd3aa]
+	ld l, $4
+	call Func_39ad
+	ld a, [hl]
+	ld bc, $0003
+	add hl, bc
+	ld [hl], a
+	push af
+	call Func_1c5e9
+	pop af
+	pop bc
+	pop hl
+	ret
+
+Func_1c557: ; 1c557 (7:4557)
+	push bc
+	ld c, a
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, c
+	ld [wd3ab], a
+	ld c, $0
+	call Func_39c3
+	jr c, .asm_1c570
+	call Func_1c53f
+	ld c, a
+
+.asm_1c570
+	pop af
+	ld [wd3ab], a
+	pop af
+	ld [wd3aa], a
+	ld a, c
+	pop bc
+	ret
+
+Func_1c57b: ; 1c57b (7:457b)
+	push hl
+	push bc
+	push af
+	ld a, [wd3aa]
+	ld l, $6
+	call Func_39ad
+	pop af
+	ld [hl], a
+	call Func_1c58e
+	pop bc
+	pop hl
+	ret
 
 Func_1c58e: ; 1c58e (7:458e)
 INCBIN "baserom.gbc",$1c58e,$1c5e9 - $1c58e
@@ -106,16 +233,142 @@ Func_1c610: ; 1c610 (7:4610)
 INCBIN "baserom.gbc",$1c610,$1c6f8 - $1c610
 
 Func_1c6f8: ; 1c6f8 (7:46f8)
-INCBIN "baserom.gbc",$1c6f8,$1c72e - $1c6f8
+INCBIN "baserom.gbc",$1c6f8,$1c719 - $1c6f8
+
+Func_1c719: ; 1c719 (7:4719)
+	push hl
+	push bc
+	ld a, [wd3aa]
+	ld l, $2
+	call Func_39ad
+	ld a, [hli]
+	ld b, a
+	ld c, [hl]
+	ld a, $40
+	call $3937
+	pop bc
+	pop hl
+	ret
+
 
 Func_1c72e: ; 1c72e (7:472e)
 INCBIN "baserom.gbc",$1c72e,$1c768 - $1c72e
 
 Func_1c768: ; 1c768 (7:4768)
-INCBIN "baserom.gbc",$1c768,$1c82e - $1c768
+	push hl
+	ld a, [wd3aa]
+	ld l, $04
+	call Func_39ad
+	ld a, [wd334]
+	xor $02
+	ld [hl], a
+	call Func_1c58e
+	ld a, $02
+	farcall Func_c29b
+	ld a, [wd3aa]
+	call $39a7
+	ld a, [hl]
+	farcall Func_1187d
+	pop hl
+	ret
+
+Func_1c78d: ; 1c78d (7:478d)
+	push hl
+	ld a, [wd3aa]
+	ld l, $5
+	call Func_39ad
+	set 5, [hl]
+	ld a, [wd3aa]
+	ld l, $8
+	call Func_39ad
+	xor a
+	ld [hli], a
+.asm_1c7a2
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	dec hl
+	call $39ea
+	cp $f0
+	jr nc, .asm_1c7bb
+	push af
+	and $7f
+	call $45ff
+	pop af
+	bit 7, a
+	jr z, .asm_1c7dc
+	inc bc
+	jr .asm_1c7a2
+
+.asm_1c7bb
+	cp $ff
+	jr z, .asm_1c7d2
+	inc bc
+	call $39ea
+	push hl
+	ld l, a
+	ld h, $0
+	bit 7, l
+	jr z, .asm_1c7cc
+	dec h
+
+.asm_1c7cc
+	add hl, bc
+	ld c, l
+	ld b, h
+	pop hl
+	jr .asm_1c7a2
+
+.asm_1c7d2
+	ld a, [wd3aa]
+	ld l, $5
+	call Func_39ad
+	res 5, [hl]
+
+.asm_1c7dc
+	pop hl
+	ret
+
+Func_1c7de: ; 1c7de (7:47de)
+	ld a, [$d3b7]
+	and $20
+    ret
+; 0x1c7e4
+
+INCBIN "baserom.gbc",$1c7e4,$1c82e - $1c7e4
 
 Func_1c82e: ; 1c82e (7:482e)
-INCBIN "baserom.gbc",$1c82e,$1d078 - $1c82e
+INCBIN "baserom.gbc",$1c82e,$1c83d - $1c82e
+
+Func_1c83d: ; 1c83d (7:483d)
+	push hl
+	push bc
+	ld b, a
+	ld c, $a
+	ld hl, $d3bb
+.asm_1c845
+	ld a, [hl]
+	or a
+	jr z, .asm_1c853
+	cp b
+	jr z, .asm_1c855
+	inc hl
+	dec c
+	jr nz, .asm_1c845
+	rst $38
+	jr .asm_1c855
+
+.asm_1c853
+	ld a, b
+	ld [hl], a
+
+.asm_1c855
+	pop bc
+	pop hl
+	ret
+; 0x1c858
+
+INCBIN "baserom.gbc",$1c858,$1d078 - $1c858
 
 Func_1d078: ; 1d078 (7:5078)
 	ld a, [wd627]

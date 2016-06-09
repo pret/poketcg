@@ -1,4 +1,45 @@
-INCBIN "baserom.gbc",$10000,$10059 - $10000
+Func_10000: ; 10000 (4:4000)
+	ld a, $0
+	ld [wTileMapFill], a
+	call Func_04a2
+	call Func_2119
+	ld de, $307f
+	call Func_2275
+	call Set_OBJ_8x8
+	xor a
+	ld [$ff92], a
+	ld [$ff93], a
+	ld a, [wLCDC]
+	bit 7, a
+	jr nz, .asm_10025
+	xor a
+	ld [rSCX], a
+	ld [rSCY], a
+
+.asm_10025
+	call Func_1288c
+	call Func_099c
+	ld a, $1
+	ld [wVBlankOAMCopyToggle], a
+	ret
+
+Func_10031: ; 10031 (4:4031)
+	ld a, [$ff81]
+	push af
+	ld a, $1
+	call BankswitchRAM
+	call $4cbb
+	call DisableExtRAM
+	call $4b28
+	call Func_0404
+	call EnableLCD
+	call DoFrameIfLCDEnabled
+	call $4cea
+	call Func_0404
+	pop af
+	call BankswitchRAM
+	call DisableExtRAM
+	ret
 
 Func_10059: ; 10059 (4:4059)
 INCBIN "baserom.gbc",$10059,$100a2 - $10059
@@ -196,7 +237,44 @@ Func_10548: ; 10548 (4:4548)
 INCBIN "baserom.gbc",$10548,$10756 - $10548
 
 Func_10756: ; 10756 (4:4756)
-INCBIN "baserom.gbc",$10756,$10a9b - $10756
+INCBIN "baserom.gbc",$10756,$10a70 - $10756
+
+Func_10a70: ; 10a70 (4:4a70)
+	push hl
+	push bc
+	push de
+	ld b, a
+	ld c, $f
+	ld hl, wPCPacks
+.asm_10a79
+	ld a, [hli]
+	and $7f
+	cp b
+	jr z, .asm_10a97
+	dec c
+	jr nz, .asm_10a79
+	ld c, $f
+	ld hl, wPCPacks
+.asm_10a87
+	ld a, [hl]
+	and $7f
+	jr z, .asm_10a93
+	inc hl
+	dec c
+	jr nz, .asm_10a87
+	rst $38
+	jr .asm_10a97
+
+.asm_10a93
+	ld a, b
+	or $80
+	ld [hl], a
+
+.asm_10a97
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_10a9b: ; 10a9b (4:4a9b)
 INCBIN "baserom.gbc",$10a9b,$10ab4 - $10a9b
@@ -205,7 +283,62 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 INCBIN "baserom.gbc",$10ab4,$10af9 - $10ab4
 
 Func_10af9: ; 10af9 (4:4af9)
-INCBIN "baserom.gbc",$10af9,$10e28 - $10af9
+INCBIN "baserom.gbc",$10af9,$10c96 - $10af9
+
+Func_10c96: ; 10c96 (4:4c96)
+	ld a, [$ff81]
+	push af
+	push bc
+	ld a, $1
+	call BankswitchRAM
+	call $4cbb
+	call Func_10ab4
+	pop bc
+	ld a, c
+	or a
+	jr nz, .asm_10cb0
+	call $4cea
+	call Func_10af9
+
+.asm_10cb0
+	call EnableLCD
+	pop af
+	call BankswitchRAM
+	call DisableExtRAM
+	ret
+; 0x10cbb
+
+INCBIN "baserom.gbc",$10cbb,$10dba - $10cbb
+
+Func_10dba: ; 10dba (4:4dba)
+	ld a, $1
+	farcall Func_c29b
+	ld a, [wd0ba]
+	ld hl, $4e17
+	farcall Func_111e9
+.asm_10dca
+	call DoFrameIfLCDEnabled
+	call MenuCursorAcceptInput
+	jr nc, .asm_10dca
+	ld a, e
+	ld [wd0ba], a
+	ld a, [$ffb1]
+	cp e
+	jr z, .asm_10ddd
+	ld a, $4
+
+.asm_10ddd
+	ld [wd10e], a
+	push af
+	ld hl, $4df0
+	call JumpToFunctionInTable
+	farcall Func_c135
+	call DoFrameIfLCDEnabled
+	pop af
+	ret
+; 0x10df0
+
+INCBIN "baserom.gbc",$10df0,$10e28 - $10df0
 
 Func_10e28: ; 10e28 (4:4e28)
 INCBIN "baserom.gbc",$10e28,$10e55 - $10e28
@@ -671,17 +804,272 @@ Func_11416: ; 11416 (4:5416)
 INCBIN "baserom.gbc",$11416,$11430 - $11416
 
 Func_11430: ; 11430 (4:5430)
-INCBIN "baserom.gbc",$11430,$1162a - $11430
+INCBIN "baserom.gbc",$11430,$1157c - $11430
+
+Func_1157c: ; 1157c (4:557c)
+	ld a, c
+	or a
+	jr nz, .asm_11586
+	farcall Func_c228
+	jr .asm_1159f
+
+.asm_11586
+	ld a, $2
+	ld [wd0bc], a
+	ld a, $4
+	ld [wd0bd], a
+	ld a, $2
+	ld [wd0be], a
+	ld a, $1
+	ld [wd0bb], a
+	ld a, $1
+	ld [wd32e], a
+
+.asm_1159f
+	call $5238
+	ret
+; 0x115a3
+
+
+INCBIN "baserom.gbc",$115a3,$1162a - $115a3
 
 INCLUDE "data/map_scripts.asm"
 
-INCBIN "baserom.gbc",$1184a,$11857 - $1184a
+; loads a pointer into hl found on PointerTable_118f5
+Func_1184a: ; 1184a (4:584a)
+	; this may have been a macro
+	rlca
+	add (PointerTable_118f5 & $ff)
+	ld l, a
+	ld a, PointerTable_118f5 >> 8
+	adc $00
+	ld h, a
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ret
 
 Func_11857: ; 11857 (4:5857)
-INCBIN "baserom.gbc",$11857,$1217b - $11857
+	push hl
+	push bc
+	call Func_1184a
+	ld a, [hli]
+	ld [wd3ab], a
+	ld a, [hli]
+	ld [$d3b3], a
+	ld a, [hli]
+	ld [wd3b1], a
+	ld a, [hli]
+	push af
+	ld a, [hli]
+	ld [wd3b2], a
+	pop bc
+	ld a, [wConsole]
+	cp $2
+	jr nz, .asm_1187a
+	ld a, b
+	ld [wd3b1], a
+.asm_1187a
+	pop bc
+	pop hl
+	ret
 
-Unknown_1217b: ; 1217b (4:617b)
-INCBIN "baserom.gbc",$1217b,$1229f - $1217b
+; this appears to find data about the NPC we're talking to
+Func_1187d: ; 1187d (4:587d)
+	push hl
+	call Func_1184a
+	ld bc, $5
+	add hl, bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld a, [hli]
+	ld [wd0c8], a
+	ld a, [hli]
+	ld [wd0c9], a
+	pop hl
+	ret
+
+Func_11893: ; 11893 (4:5893)
+	push hl
+	push bc
+	call Func_1184a
+	ld bc, $0007
+	add hl, bc
+	ld a, [hli]
+	ld [wd0c8], a
+	ld a, [hli]
+	ld [wd0c9], a
+	pop bc
+	pop hl
+	ret
+
+Func_118a7: ; 118a7 (4:58a7)
+	push hl
+	push bc
+	call Func_1184a
+	ld bc, $0007
+	add hl, bc
+	ld a, [hli]
+	ld [wcc16], a
+	ld a, [hli]
+	ld [wcc17], a
+	ld a, [hli]
+	ld [wcc15], a
+	pop bc
+	pop hl
+	ret
+
+Func_118bf: ; 118bf (4:58bf)
+	push hl
+	push bc
+	call Func_1184a
+	ld bc, $000a
+	add hl, bc
+	ld a, [hli]
+	ld [wcc19], a
+	ld a, [hli]
+	ld [wDuelTheme], a
+	pop bc
+	pop hl
+	ret
+
+Func_118d3: ; 118d3 (4:58d3)
+	push hl
+	push bc
+	push af
+	call Func_1184a
+	ld bc, $000c
+	add hl, bc
+	ld a, [hli]
+	ld [wMatchStartTheme], a
+	pop af
+	cp $2
+	jr nz, .asm_118f2
+	ld a, [wCurMap]
+	cp $20
+	jr nz, .asm_118f2
+	ld a, $17
+	ld [wMatchStartTheme], a
+
+.asm_118f2
+	pop bc
+	pop hl
+	ret
+
+INCLUDE "data/unknownNPCData.asm"
+
+INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
+
+
+PointerTable_1217b: ; 1217b (4:617b)
+	dw Func_ccbe
+	dw Func_ccc6
+	dw Func_ccd4 ; Seems to begin dialogue with NPCs
+	dw Func_ccdc
+	dw Func_cce9 ; opens the "start battle?" box
+	dw Func_cd01 ; seems to start a battle. 
+	dw Func_cd83
+	dw Func_cda8
+	dw Func_cdb9
+	dw Func_cdcb
+	dw Func_ce26
+	dw Func_ce84
+	dw Func_ce8a ; Called after player wins a battle. Handles Booster Packs.
+	dw Func_cf0c
+	dw Func_cf12
+	dw Func_cf3f
+	dw Func_cf4c
+	dw Func_cf53
+	dw Func_cf7b
+	dw Func_cf2d
+	dw Func_cf96
+	dw Func_cfc6
+	dw Func_cfd4
+	dw Func_d00b
+	dw Func_d025
+	dw Func_d032
+	dw Func_d03f
+	dw Func_d049
+	dw Func_d04f
+	dw Func_d055
+	dw Func_d05c
+	dw Func_cee2
+	dw Func_d080
+	dw Func_d088
+	dw Func_d095
+	dw Func_d0be
+	dw Func_d0ce
+	dw Func_d0d9
+	dw Func_d0f2
+	dw Func_ce4a
+	dw Func_ceba
+	dw Func_d103
+	dw Func_d125
+	dw Func_d135
+	dw Func_d16b
+	dw Func_cd4f
+	dw Func_cd94
+	dw Func_ce52
+	dw Func_cdd8
+	dw Func_cdf5
+	dw Func_d195
+	dw Func_d1ad
+	dw Func_d1b3
+	dw Func_cccc ; Ends dialoge. Seems to do it after player answers the "start fight?" question.
+	dw Func_d244
+	dw Func_d24c
+	dw DeckMachine_d336
+	dw Func_d271
+	dw Func_d36d
+	dw Func_ce6f
+	dw Func_d209
+	dw Func_d38f
+	dw Func_d396
+	dw Func_cd76
+	dw Func_d39d
+	dw Func_d3b9
+	dw Func_d3c9
+	dw Func_d3d1
+	dw Func_d3d4
+	dw Func_d3e0
+	dw Func_d3fe
+	dw Func_d408
+	dw Func_d40f
+	dw Func_d416
+	dw Func_d423
+	dw Func_d429
+	dw Func_d41d
+	dw Func_d42f
+	dw Func_d435
+	dw Func_cce4
+	dw Func_d2f6
+	dw Func_d317
+	dw Func_d43d
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_d44a
+	dw Func_d460
+	dw Func_d47b
+	dw Func_d484
+	dw Func_d49e
+	dw Func_d4a6
+	dw Func_d4ae
+	dw Func_d4bc
+	dw Func_d4c3
+	dw Func_d4ca
+	dw Func_d4df ; Used by 2 lightning club members and npcs in mason's lab. Not sure why.
+	dw Func_d452
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_ccbe
+	dw Func_ccbe
+
+INCBIN "baserom.gbc",$1224b,$1229f - $1224b
 
 Unknown_1229f: ; 1229f (4:629f)
 INCBIN "baserom.gbc",$1229f,$126d1 - $1229f

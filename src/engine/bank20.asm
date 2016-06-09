@@ -124,7 +124,88 @@ Func_804d8: ; 804d8 (20:44d8)
 INCBIN "baserom.gbc",$804d8,$80b7a - $804d8
 
 Func_80b7a: ; 80b7a (20:4b7a)
-INCBIN "baserom.gbc",$80b7a,$80e5a - $80b7a
+INCBIN "baserom.gbc",$80b7a,$80ba4 - $80b7a
+
+Func_80ba4: ; 80ba4 (20:4ba4)
+	push af
+	xor a
+	ld [$d292], a
+	pop af
+	push hl
+	push bc
+	push de
+	ld c, a
+	ld a, [wd131]
+	push af
+	ld a, [$d23d]
+	push af
+	ld a, [$d12f]
+	push af
+	ld a, [$d130]
+	push af
+	ld a, [$d23a]
+	push af
+	ld a, [$d23b]
+	push af
+	ld b, $0
+	ld hl, wd323
+	add hl, bc
+	ld a, $1
+	ld [hl], a
+	ld a, c
+	add a
+	ld c, a
+	ld b, $0
+	ld hl, $4c21
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld a, [wConsole]
+	cp $2
+	jr nz, .asm_80be7
+	inc hl
+
+.asm_80be7
+	ld a, [hl]
+	ld [wd131], a
+	push bc
+	farcallx $20, $4082
+	pop bc
+	srl b
+	ld a, c
+	rrca
+	and $f
+	swap a
+	add b
+	ld c, a
+	ld b, $0
+	ld hl, wBoosterViableCardList
+	add hl, bc
+	farcallx $3, $438f
+	pop af
+	ld [$d23b], a
+	pop af
+	ld [$d23a], a
+	pop af
+	ld [$d130], a
+	pop af
+	ld [$d12f], a
+	pop af
+	ld [$d23d], a
+	pop af
+	ld [wd131], a
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x80c21
+
+INCBIN "baserom.gbc",$80c21,$80e5a - $80c21
 
 Unknown_80e5a: ; 80e5a (20:4e5a)
 INCBIN "baserom.gbc",$80e5a,$80e5d - $80e5a

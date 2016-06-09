@@ -1350,7 +1350,21 @@ BuildVersion: ; 7354 (1:7354)
 INCBIN "baserom.gbc",$7364,$7571 - $7364
 
 Func_7571: ; 7571 (1:7571)
-INCBIN "baserom.gbc",$7571,$758f - $7571
+INCBIN "baserom.gbc",$7571,$7576 - $7571
+
+Func_7576: ; 7576 (1:7576)
+        farcallx $6, $591f
+        ret
+; 0x757b
+
+INCBIN "baserom.gbc",$757b,$758f - $757b
 
 Func_758f: ; 758f (1:758f)
-INCBIN "baserom.gbc",$758f,$8000 - $758f
+INCBIN "baserom.gbc",$758f,$7594 - $758f
+
+Func_7594: ; 7594 (1:7594)
+	farcallx $6, $661f
+	ret
+; 0x7599
+
+INCBIN "baserom.gbc",$7599,$8000 - $7599

@@ -219,6 +219,7 @@ WaitForVBlank: ; 0264 (0:0264)
 	ld a, [hl]
 .asm_270
 	halt
+	nop
 	cp [hl]
 	jr z, .asm_270
 .asm_275
@@ -3237,9 +3238,112 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 .printPlayer2
 	text_hl Player2
 	jp PrintTextBoxBorderLabel
-; 0x1caa
 
-INCBIN "baserom.gbc",$1caa,$1d2e - $1caa
+Func_1caa: ; 1caa (0:1caa)
+	push de
+	push bc
+	call EnableExtRAM
+	ld hl, $0000
+	ld de, sDeck1Cards
+	ld c, $4
+.asm_1cb7
+	ld a, [de]
+	or a
+	jr z, .asm_1cc1
+	ld a, c
+	ld bc, $003c
+	add hl, bc
+	ld c, a
+
+.asm_1cc1
+	ld a, $54
+	add e
+	ld e, a
+	ld a, $0
+	adc d
+	ld d, a
+	dec c
+	jr nz, .asm_1cb7
+	ld de, sCardCollection
+.asm_1ccf
+	ld a, [de]
+	bit 7, a
+	jr nz, .asm_1cd8
+	ld c, a
+	ld b, $0
+	add hl, bc
+
+.asm_1cd8
+	inc e
+	jr nz, .asm_1ccf
+	call DisableExtRAM
+	pop bc
+	pop de
+	ret
+
+Func_1ce1: ; 1ce1 (0:1ce1)
+	push hl
+	push de
+	push bc
+	call EnableExtRAM
+	ld c, a
+	ld b, $0
+	ld hl, sDeck1Cards
+	ld d, $4
+.asm_1cef
+	ld a, [hl]
+	or a
+	jr z, .asm_1cff
+	push hl
+	ld e, $3c
+.asm_1cf6
+	ld a, [hli]
+	cp c
+	jr nz, .asm_1cfb
+	inc b
+
+.asm_1cfb
+	dec e
+	jr nz, .asm_1cf6
+	pop hl
+
+.asm_1cff
+	push de
+	ld de, $0054
+	add hl, de
+	pop de
+	dec d
+	jr nz, .asm_1cef
+	ld h, $a1
+	ld l, c
+	ld a, [hl]
+	bit 7, a
+	jr nz, .asm_1d11
+	add b
+
+.asm_1d11
+	and $7f
+	call DisableExtRAM
+	pop bc
+	pop de
+	pop hl
+	or a
+	ret nz
+	scf
+	ret
+
+Func_1d1d: ; 1d1d (0:1d1d)
+	push hl
+	call EnableExtRAM
+	ld h, $a1
+	ld l, a
+	ld a, [hl]
+	call DisableExtRAM
+	pop hl
+	and $7f
+	ret nz
+	scf
+	ret
 
 ;creates a list at $c000 of every card the player owns and how many
 CreateTempCardCollection: ; 1d2e (0:1d2e)
@@ -3305,7 +3409,24 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 	pop hl
 	ret
 
-INCBIN "baserom.gbc",$1d91,$1dca - $1d91
+Func_1d91: ; 1d91 (0:1d91)
+	push hl
+	call EnableExtRAM
+	ld h, $a1
+	ld l, a
+	ld a, [hl]
+	and $7f
+	jr z, .asm_1d9f
+	dec a
+	ld [hl], a
+
+.asm_1d9f
+	call DisableExtRAM
+	pop hl
+	ret
+; 0x1da4
+
+INCBIN "baserom.gbc",$1da4,$1dca - $1da4
 
 ; memcpy(HL, DE, C)
 Memcpy: ; 1dca (0:1dca)
@@ -5391,9 +5512,24 @@ Func_2f32: ; 2f32 (0:2f32)
 .asm_2f43
 	pop hl
 	ret
-; 0x2f45
 
-INCBIN "baserom.gbc",$2f45,$2f5d - $2f45
+Func_2f45: ; 2f45 (0:2f45)
+	push hl
+	call GetCardPointer
+	jr c, .asm_2f5b
+	ld a, $c
+	call BankpushHome2
+	ld de, $0003
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	call BankpopHome
+	or a
+
+.asm_2f5b
+	pop hl
+	ret
 
 ; from the card id in a, loads type into a, rarity into b, and set into c
 GetCardHeader: ; 2f5d (0:2f5d)
@@ -6730,9 +6866,14 @@ Credits_3911: ; 3911 (0:3911)
 	farcall Credits_1d6ad
 	or a
 	ret
-; 0x3917
 
-INCBIN "baserom.gbc",$3917,$3927 - $3917
+Func_3917: ; 3917 (0:3917)
+	ld a, $22
+	farcall Func_ca6c
+	call EnableExtRAM
+	ld [$a00a], a
+	call DisableExtRAM
+	ret
 
 Func_3927: ; 3927 (0:3927)
 	push hl
@@ -6787,9 +6928,11 @@ Func_3997: ; 3997 (0:3997)
 	pop af
 	call BankswitchHome
 	ret
-; 0x39a7
 
-INCBIN "baserom.gbc",$39a7,$39ad - $39a7
+Func_39a7: ; 39a7 (0:39a7)
+	ld l, $0
+	call Func_39ad
+	ret
 
 Func_39ad: ; 39ad (0:39ad)
 	push bc
@@ -6991,6 +7134,7 @@ Func_3abd: ; 3abd (0:3abd)
 
 INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
 
+; finds a pointer on a table (in bank 4) using the data after rst20 is called and jumps to it (in bank 3)
 Func_3aed: ; 3aed (0:3aed)
 	ld hl, $d413
 	ld a, [hli]
@@ -7004,11 +7148,11 @@ Func_3aed: ; 3aed (0:3aed)
 	rlca
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_1217b
+	ld hl, PointerTable_1217b 
 	add hl, bc
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Unknown_1217b)
+	ld a, BANK(PointerTable_1217b)
 	call BankswitchHome
 	ld a, [hli]
 	ld h, [hl]
@@ -7193,9 +7337,13 @@ DivideBCbyDE: ; 3c5a (0:3c5a)
 	dec a
 	jr nz, .asm_3c63
 	ret
-; 0x3c83
 
-INCBIN "baserom.gbc",$3c83,$3c96 - $3c83
+Func_3c83: ; 3c83 (0:3c83)
+	call PlaySong
+	ret
+; 0x3c87
+
+INCBIN "baserom.gbc",$3c87,$3c96 - $3c87
 
 Func_3c96: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled

@@ -19,7 +19,7 @@ compare: baserom.gbc tcg.gbc
 $(OBJS): $$*.asm $$($$*_dep)
 	@python $(EXTRAS)/gfx.py 2bpp $(2bppq)
 	@python $(EXTRAS)/gfx.py 1bpp $(1bppq)
-	rgbasm -i src/ -o $@ $<
+	rgbasm -h -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
 	rgblink -n $*.sym -m $*.map -o $@ $^

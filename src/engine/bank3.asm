@@ -379,9 +379,11 @@ Func_c2a3: ; c2a3 (3:42a3)
 	pop bc
 	pop hl
 	ret
-; 0xc2d4
 
-INCBIN "baserom.gbc",$c2d4,$c2db - $c2d4
+Func_c2d4: ; c2d4 (3:42d4)
+	xor a
+	ld [wd10f], a
+	ld [wd110], a
 
 Func_c2db: ; c2db (3:42db)
 	push hl
@@ -624,9 +626,17 @@ Func_c510: ; c510 (3:4510)
 	and START
 	call nz, Func_c74d
 	ret
-; 0xc53d
 
-INCBIN "baserom.gbc",$c53d,$c554 - $c53d
+Func_c53d: ; c53d (3:453d)
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [wd335]
+	bit 0, a
+	call nz, $4687
+	ld a, [wd335]
+	bit 1, a
+	call nz, Func_c6dc
+	ret
 
 Func_c554: ; c554 (3:4554)
 	ld a, [wd336]
@@ -703,6 +713,7 @@ Func_c5ac: ; c5ac (3:45ac)
 
 Func_c5cb: ; c5cb (3:45cb)
 	call Func_c5d5
+Func_c5ce: ; c5ce (3:45ce)
 	ld [wd334], a
 	call Func_c5e9
 	ret
@@ -743,9 +754,16 @@ Func_c5fe: ; c5fe (3:45fe)
 	call Func_c619
 	pop bc
 	ret
-; 0xc607
 
-INCBIN "baserom.gbc",$c607,$c619 - $c607
+Func_c607: ; c607 (3:4607)
+	push bc
+	ld a, [wd336]
+	ld [wd4cf], a
+	ld a, [$d339]
+	call $4656
+	call Func_c619
+	pop bc
+	ret
 
 Func_c619: ; c619 (3:4619)
 	push hl
@@ -1062,7 +1080,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c135
 	call DoFrameIfLCDEnabled
 	text_hl TurnedPCOffText
-	call $4891
+	call Func_c891
 	call Func_c111
 	xor a
 	ld [wd112], a
@@ -1070,7 +1088,115 @@ PC_c7ea: ; c7ea (3:47ea)
 	ret
 ; 0xc846
 
-INCBIN "baserom.gbc",$c846,$c935 - $c846
+INCBIN "baserom.gbc",$c846,$c891 - $c846
+
+Func_c891: ; c891 (3:4891)
+	push hl
+	ld a, [wd0c1]
+	bit 0, a
+	jr z, .asm_c8a1
+	ld hl, $d3b9
+	ld a, [hli]
+	or [hl]
+	call nz, Func_c135
+
+.asm_c8a1
+	xor a
+	ld hl, $d3b9
+	ld [hli], a
+	ld [hl], a
+	pop hl
+	ld a, $1
+	call Func_c29b
+	call Func_c241
+	call $4915
+	call DoFrameIfLCDEnabled
+	call Func_2c73
+	ret
+
+Func_c8ba: ; c8ba (3:48ba)
+	ld a, e
+	or d
+	jr z, Func_c891
+	push hl
+	ld a, [wd0c1]
+	bit 0, a
+	jr z, .asm_c8d4
+	ld hl, $d3b9
+	ld a, [hli]
+	cp e
+	jr nz, .asm_c8d1
+	ld a, [hl]
+	cp d
+	jr z, .asm_c8d4
+
+.asm_c8d1
+	call Func_c135
+
+.asm_c8d4
+	ld hl, $d3b9
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	pop hl
+	ld a, $1
+	call Func_c29b
+	call Func_c241
+	call $4915
+	call DoFrameIfLCDEnabled
+	call $2c62
+	ret
+; 0xc8ed
+
+Func_c8ed: ; c8ed (3:c8ed)
+	push hl
+	push bc
+	push de
+	push hl
+	ld a, $1
+	call Func_c29b
+	call $4915
+	call DoFrameIfLCDEnabled
+	pop hl
+	ld a, l
+	or h
+	jr z, .asm_c90e
+	push hl
+	xor a
+	ld hl, $d3b9
+	ld [hli], a
+	ld [hl], a
+	pop hl
+	call Func_2af0
+	jr .asm_c911
+
+.asm_c90e
+	call $2af3
+
+.asm_c911
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_c915: ; c915 (3:4915)
+	push bc
+	push de
+	ld de, $000c
+	ld bc, $1406
+	call AdjustCoordinatesForWindow
+	call $43ca
+	pop de
+	pop bc
+	ret
+
+Func_c926: ; c926 (3:4926)
+	push bc
+	call Func_39c3
+	ld a, [wd3aa]
+	ld [wd3b6], a
+	farcall Func_1c768
+	pop bc
 
 Func_c935: ; c935 (3:4935)
 	push hl
@@ -1298,6 +1424,7 @@ INCBIN "baserom.gbc",$ca84,$ca8f - $ca84
 
 Func_ca8f: ; ca8f (3:4a8f)
 	call Func_cab3
+Func_ca92: ; ca92 (3:4a92)
 	push hl
 	push bc
 	call Func_cb1d
@@ -1338,7 +1465,71 @@ Func_cab3: ; cab3 (3:4ab3)
 	ret
 ; 0xcac2
 
-INCBIN "baserom.gbc",$cac2,$cb1d - $cac2
+INCBIN "baserom.gbc",$cac2,$cac5 - $cac2
+
+Func_cac5: ; cac5 (3:4ac5)
+	push bc
+	ld c, $ff
+	call $4a92
+	pop bc
+	ret
+; 0xcacd
+
+INCBIN "baserom.gbc",$cacd,$cad0 - $cacd
+
+Func_cad0: ; cad0 (3:4ad0)
+	push bc
+	ld c, $0
+	call Func_ca92
+	pop bc
+	ret
+
+Func_cad8: ; cad8 (3:4ad8)
+	push hl
+	push bc
+	ld hl, $4b15
+	ld bc, $0008
+.asm_cae0
+	ld a, [hli]
+	call Func_ca6c
+	jr z, .asm_cae7
+	inc b
+
+.asm_cae7
+	dec c
+	jr nz, .asm_cae0
+	ld c, b
+	call Func_ca8f
+	ld l, $79
+	push af
+	cp $8
+	jr nc, .asm_caff
+	cp $7
+	jr nc, .asm_cb05
+	cp $3
+	jr nc, .asm_cb0b
+	jr .asm_cb11
+
+.asm_caff
+	ld a, $c
+	farcallx $4, $4a70
+
+.asm_cb05
+	ld a, $b
+	farcallx $4, $4a70
+
+.asm_cb0b
+	ld a, $a
+	farcallx $4, $4a70
+
+.asm_cb11
+	pop af
+	pop bc
+	pop hl
+	ret
+; 0xcb15
+
+INCBIN "baserom.gbc",$cb15,$cb1d - $cb15
 
 Func_cb1d: ; cb1d (3:4b1d)
 	push bc
@@ -1359,8 +1550,23 @@ Func_cb1d: ; cb1d (3:4b1d)
 	ret
 
 Unknown_cb37: ; cb37 (3:4b37)
-INCBIN "baserom.gbc",$cb37,$cc42 - $cb37
+INCBIN "baserom.gbc",$cb37,$cc32 - $cb37
 
+Func_cc32: ; cc32 (3:4c32)
+	push hl
+	ld hl, wd0c8
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	pop hl
+	call $48ba
+	ret
+; 0xcc3e
+
+INCBIN "baserom.gbc",$cc3e,$cc42 - $cc3e
+
+; called when pressing a in front of an object. creates a pointer to the data right after an RST20
+; was called, then runs Func_3aed to handle that data
 RST20: ; cc42 (3:4c42)
 	pop hl
 	ld a, l
@@ -1380,12 +1586,1034 @@ RST20: ; cc42 (3:4c42)
 	ld b, [hl]
 	push bc
 	ret
-; 0xcc60
 
-INCBIN "baserom.gbc",$cc60,$cd98 - $cc60
+Func_cc60: ; cc60 (3:4c60)
+	ld a, 1
+	jr Func_cc7a
+Func_cc64: ; cc64 (3:4c64)
+	ld a, 2
+	jr Func_cc7a
+Func_cc68: ; cc68 (3:4c68)
+	ld a, 4
+	jr Func_cc7a
+Func_cc6c: ; cc6c (3:4c6c)
+	ld a, 5
+	jr Func_cc7a
+Func_cc70: ; cc70 (3:4c70)
+	ld a, 6
+	jr Func_cc7a
+Func_cc74: ; cc74 (3:4c74)
+	ld a, 7
+	jr Func_cc7a
+Func_cc78: ; cc78 (3:4c78)
+	ld a, 3
 
-Unknown_cd98: ; cd98 (3:4d98)
-INCBIN "baserom.gbc",$cd98,$d336 - $cd98
+Func_cc7a: ; cc7a (3:4c7a)
+	ld c, a
+	ld a, [wd413]
+	add c
+	ld [wd413], a
+	ld a, [wd414]
+	adc a, 00
+	ld [wd414], a
+	ret
+
+Func_cc8b: ; cc8b (3:4c8b)
+	ld hl, wd413
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	ret
+; 0xcc92
+
+INCBIN "baserom.gbc",$cc92,$cc96 - $cc92
+
+Func_cc96: ; cc96 (3:4c96)
+	ld a, $1
+	jr Func_cca0
+
+Func_cc9a: ; cc9a (3:4c9a)
+	ld a, $2
+	jr Func_cca0
+Func_cc9e: ; cc9e (3:4c9e)
+	ld a, $3
+
+Func_cca0: ; cca0 (3:4ca0)
+	push hl
+	ld l, a
+	ld a, [wd413]
+	add l
+	ld l, a
+	ld a, [wd414]
+	adc $0
+	ld h, a
+	ld a, [hli]
+	ld c, a
+	ld b, [hl]
+	pop hl
+	or b
+	ret
+
+Func_ccb3: ; ccb3 (3:4cb3)
+	ld a, $ff
+	ld [$d415], a
+	ret
+
+Func_ccb9: ; ccb9 (3:4cb9)
+	xor a
+	ld [$d415], a
+	ret
+
+Func_ccbe: ; ccbe (3:4cbe)
+	ld a, $01
+	ld [wd412], a
+	jp Func_cc60
+
+Func_ccc6: ; ccc6 (3:4cc6)
+	call Func_c111
+	jp Func_cc60
+
+Func_cccc: ; cccc (3:4ccc)
+	call Func_ccc6
+	call Func_ccbe
+	pop hl
+	ret
+
+Func_ccd4: ; ccd4 (3:4cd4)
+	ld l, c
+	ld h, b
+	call Func_cc32
+	jp Func_cc78
+
+Func_ccdc: ; ccdc (3:4cdc)
+	ld l, c
+	ld h, b
+	call Func_c891
+	jp Func_cc78
+
+Func_cce4: ; cce4 (3:4ce4)
+	ld a, $1
+	ld [wcd9a], a
+Func_cce9: ; cce9 (3:4ce9)
+	ld l, c
+	ld h, b
+	call Func_c8ed
+	ld a, [hCurrentMenuItem]
+	ld [$d415], a
+	jr c, .asm_ccfe
+	call Func_cc9e
+	jr z, .asm_ccfe
+	jp Func_cc8b
+
+.asm_ccfe
+	jp Func_cc6c
+
+; this seems to be called when battles officially start. Might be a good way to find trainer data.
+Func_cd01: ; cd01 (3:4d01)
+	call Func_cd66
+	ld a, [wd3b6]
+	ld l, $0
+	call Func_39ad
+	ld a, [hl]
+	farcall Func_118d3
+	ld a, [wcc19]
+	cp $ff
+	jr nz, .asm_cd26
+	ld a, [$d695]
+	ld c, a
+	ld b, $0
+	ld hl, $4d63
+	add hl, bc
+	ld a, [hl]
+	ld [wcc19], a
+.asm_cd26
+	ld a, [wd3b6]
+	ld l, $0
+	call Func_39ad
+	ld a, [hl]
+asm_cd2f
+	ld [wd0c4], a
+	ld [$cc14], a
+	push af
+	farcall Func_1c557
+	ld [wd0c5], a
+	pop af
+	farcall Func_118a7
+	ld a, $1
+	ld [wd0b5], a
+	ld hl, wd0b4
+	set 6, [hl]
+	jp Func_cc68
+
+Func_cd4f: ; cd4f (3:4d4f)
+	call Func_cd66
+	ld a, [$d696]
+	farcall Func_118bf
+	ld a, $16
+	ld [wMatchStartTheme], a
+	ld a, [$d696]
+	jr asm_cd2f
+
+Unknown_dd63: ; cd4f (3:4d4f)
+INCBIN "baserom.gbc",$cd63,$cd66 - $cd63
+
+Func_cd66: ; cd66 (3:4d66)
+	ld a, c
+	ld [wcc18], a
+	ld a, b
+	ld [wcc19], a
+	call Func_cc9e
+	ld a, c
+	ld [wDuelTheme], a
+	ret
+
+Func_cd76: ; cd76 (3:4d76)
+	ld a, $2
+	ld [wd0b5], a
+	ld hl, wd0b4
+	set 6, [hl]
+	jp Func_cc60
+
+Func_cd83: ; cd83 (3:4d83)
+	ld a, [$d415]
+	or a
+	jr nz, .asm_cd8c
+	call Func_cc9e
+.asm_cd8c
+	ld l, c
+	ld h, b
+	call Func_cc32
+	jp Func_cc6c
+
+Func_cd94: ; cd94 (3:4d94)
+	call Func_ca69
+	ld b, h
+Unknown_cd98:
+	dec a
+	and $3
+	add a
+	inc a
+	call Func_cca0
+	ld l, c
+	ld h, b
+	call Func_cc32
+	jp Func_cc74
+
+Func_cda8: ; cda8 (3:4da8)
+	ld a, [$d415]
+	or a
+	jr nz, .asm_cdb1
+	call Func_cc9e
+.asm_cdb1
+	ld l, c
+	ld h, b
+	call Func_c891
+	jp Func_cc6c
+
+Func_cdb9: ; cdb9 (3:4db9)
+	ld l, c
+	ld h, b
+	call Func_cc32
+	call Func_c111
+	ld a, $1
+	ld [wd412], a
+	call Func_cc78
+	pop hl
+	ret
+
+Func_cdcb: ; cdcb (3:4dcb)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+Func_4dd1: ; cdd1 (3:4dd1)
+	farcall Func_1c50a
+	jp Func_cc60
+
+Func_cdd8: ; cdd8 (3:4dd8)
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, [$d696]
+	ld [wd3ab], a
+	call Func_39c3
+	call Func_4dd1
+	pop af
+	ld [wd3ab], a
+	pop af
+	ld [wd3aa], a
+	ret
+
+Func_cdf5: ; cdf5 (3:4df5)
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, [$d696]
+	ld [wd3ab], a
+	ld a, c
+	ld [$d3ac], a
+	ld a, b
+	ld [$d3ad], a
+	ld a, $2
+	ld [$d3ae], a
+	ld a, [wd3ab]
+	farcall Func_11857
+	farcall Func_1c485
+	pop af
+	ld [wd3ab], a
+	pop af
+	ld [wd3aa], a
+	jp Func_cc78
+
+Func_ce26: ; ce26 (3:4e26)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	farcall Func_1c455
+	rlca
+	add c
+	ld l, a
+	ld a, b
+	adc $0
+	ld h, a
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+
+Func_ce3a: ; ce3a (3:4e3a)
+	farcall Func_1c78d
+.asm_ce3e
+	call DoFrameIfLCDEnabled
+	farcall Func_1c7de
+	jr nz, .asm_ce3e
+	jp Func_cc78
+
+Func_ce4a: ; ce4a (3:4e4a)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	jr Func_ce3a
+
+Func_ce52: ; ce52 (3:4e52)
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, [$d696]
+asm_ce5d
+	ld [wd3ab], a
+	call Func_39c3
+	call Func_ce3a
+	pop af
+	ld [wd3ab], a
+	pop af
+	ld [wd3aa], a
+	ret
+
+Func_ce6f: ; ce6f (3:4e6f)
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, c
+	push af
+	call Func_cc9a
+	push bc
+	call Func_cc60
+	pop bc
+	pop af
+	jr asm_ce5d
+
+Func_ce84: ; ce84 (3:4e84)
+	call Func_c135
+	jp Func_cc60
+
+Func_ce8a: ; ce8a (3:4e8a)
+	xor a
+	ld [wd117], a
+	push bc
+	call Func_c2a3
+	pop bc
+	push bc
+	ld a, c
+	farcall BoosterPack_1031b
+	ld a, 1
+	ld [wd117], a
+	pop bc
+	ld a, b
+	cp $ff
+	jr z, .asm_ceb4
+	farcall BoosterPack_1031b
+	call Func_cc9e
+	ld a, c
+	cp $ff
+	jr z, .asm_ceb4
+	farcall BoosterPack_1031b
+.asm_ceb4
+	call Func_c2d4
+	jp Func_cc68
+
+Func_ceba: ; ceba (3:4eba)
+	xor a
+	ld [wd117], a
+	call Func_c2a3
+	ld hl, $4edd
+.asm_cec4
+	ld a, [hl]
+	cp $ff
+	jr z, .asm_ced7
+	push hl
+	farcall BoosterPack_1031b
+	ld a, $1
+	ld [wd117], a
+	pop hl
+	inc hl
+	jr .asm_cec4
+.asm_ced7
+	call Func_c2d4
+	jp Func_cc60
+; 0xcedd
+
+INCBIN "baserom.gbc",$cedd,$cee2 - $cedd
+
+Func_cee2: ; cee2 (3:4ee2)
+	call Func_c2a3
+	ld a, c
+	cp $ff
+	jr z, .asm_cf09
+	or a
+	jr nz, .asm_cef0
+	ld a, [$d697]
+
+.asm_cef0
+	push af
+	farcall Func_10000
+	farcall Func_10031
+	pop af
+	bank1call Func_7594
+	call Func_c1a4
+	call DoFrameIfLCDEnabled
+	call Func_c2d4
+	jp Func_cc64
+
+.asm_cf09
+	xor a
+	jr .asm_cef0
+
+Func_cf0c: ; cf0c (3:4f0c)
+	ld a, c
+	call Func_1ce1
+	jr asm_cf16
+
+Func_cf12: ; cf12 (3:4f12)
+	ld a, c
+	call $1d1d
+
+asm_cf16
+	or a
+	jr nz, asm_cf1f
+
+asm_cf19
+	call Func_ccb9
+	jp Func_cc68
+
+asm_cf1f
+	call Func_ccb3
+	call Func_cc9a
+	jr z, asm_cf2a
+	jp Func_cc8b
+
+asm_cf2a
+	jp Func_cc68
+
+Func_cf2d: ; cf2d (3:4f2d)
+	push bc
+	call Func_cc60
+	pop bc
+	call Func_1caa
+	ld a, h
+	cp b
+	jr nz, .asm_cf3b
+	ld a, l
+	cp c
+
+.asm_cf3b
+	jr nc, asm_cf1f
+	jr asm_cf19
+
+Func_cf3f: ; cf3f (3:4f3f)
+	ld a, c
+	or a
+	jr nz, .asm_cf46
+	ld a, [$d697]
+
+.asm_cf46
+	call AddCardToCollection
+	jp Func_cc64
+
+Func_cf4c: ; cf4c (3:4f4c)
+	ld a, c
+	call Func_1d91
+	jp Func_cc64
+
+Func_cf53: ; cf53 (3:4f53)
+	ld c, $1
+	ld b, $0
+.asm_cf57
+	ld a, c
+	call Func_1d1d
+	add b
+	ld b, a
+	inc c
+	ld a, c
+	cp $8
+	jr c, .asm_cf57
+	ld a, b
+	or a
+	jr nz, Func_cf6d
+Func_cf67: ; cf67 (3:4f67)
+	call Func_ccb9
+	jp Func_cc78
+
+Func_cf6d: ; cf6d (3:4f6d)
+	call Func_ccb3
+	call Func_cc96
+	jr z, .asm_cf78
+	jp Func_cc8b
+
+.asm_cf78
+	jp Func_cc78
+
+Func_cf7b: ; cf7b (3:4f7b)
+	ld c, $1
+.asm_cf7d
+	push bc
+	ld a, c
+	call Func_1d1d
+	jr c, .asm_cf8c
+	ld b, a
+.asm_cf85
+	ld a, c
+	call Func_1d91
+	dec b
+	jr nz, .asm_cf85
+
+.asm_cf8c
+	pop bc
+	inc c
+	ld a, c
+	cp $8
+	jr c, .asm_cf7d
+	jp Func_cc60
+
+; This function doesn't look like a valid function, but it's pointed to in the table.
+Func_cf96: ; cf96 (3:4f96)
+	ld c, $0
+	call Func_ca69
+	ld de, $28b7
+	ld hl, $08fe
+	jr c, .asm_cfa4
+	inc c
+
+.asm_cfa4
+	call Func_ca69
+	rla
+	cp $8
+	jr c, .asm_cfad
+	inc c
+
+.asm_cfad
+	call Func_ca69
+.asm_cfb0
+	jr nz, .asm_cfb0
+	ld [$0138], sp
+	inc c
+	ld a, c
+	rlca
+	add $3
+	call Func_cca0
+	jp Func_cc8b
+
+Func_cfc0: ; cfc0 (3:4fc0)
+	call Func_cc96
+	jp Func_cc8b
+
+Func_cfc6: ; cfc6 (3:4fc6)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	ld a, c
+	farcall Func_1c52e
+	jp Func_cc64
+
+Func_cfd4: ; cfd4 (3:4fd4)
+	call Func_ca69
+	dec l
+	ld b, a
+.asm_cfd9
+	ld a, $5
+	call Random
+	ld e, $1
+	ld c, a
+	push bc
+	or a
+	jr z, .asm_cfea
+.asm_cfe5
+	sla e
+	dec c
+	jr nz, .asm_cfe5
+
+.asm_cfea
+	ld a, e
+	and b
+	pop bc
+	jr nz, .asm_cfd9
+	ld a, e
+	or b
+	push bc
+	ld c, a
+	call Func_ca8f
+	dec l
+	pop bc
+	ld b, $0
+	ld hl, $5006
+	add hl, bc
+	ld c, [hl]
+	call Func_ca8f
+	dec hl
+	jp Func_cc60
+
+INCBIN "baserom.gbc",$d006,$d00b - $d006
+
+Func_d00b: ; d00b (3:500b)
+	sla c
+	ld b, $0
+	ld hl, wce3f
+	add hl, bc
+	push hl
+	call Func_ca69
+	dec hl
+	ld e, a
+	ld d, $0
+	call Func_2f45
+	pop hl
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	jp Func_cc64
+
+Func_d025: ; d025 (3:5025)
+	call Func_ca69
+	dec hl
+	call Func_1ce1
+	jp c, Func_cf67
+	jp Func_cf6d
+
+Func_d032: ; d032 (3:5032)
+	call Func_ca69
+	dec hl
+	call $1d1d
+	jp c, Func_cf67
+	jp Func_cf6d
+
+Func_d03f: ; d03f (3:503f)
+	call Func_ca69
+	dec hl
+	call Func_1d91
+	jp Func_cc60
+
+Func_d049: ; d049 (3:5049)
+	call Func_cc96
+	jp Func_cc8b
+
+Func_d04f: ; d04f (3:504f)
+	call Func_cad8
+	jp Func_cc60
+
+Func_d055: ; d055 (3:5055)
+	ld a, c
+	call Func_c5ce
+	jp Func_cc64
+
+; this is called when the player is moving forward in the intro sequence
+Func_d05c: ; 505c (3:505c)
+	ld a, c
+	ld [$d339], a
+	ld a, b
+	ld [$d33a], a
+	call Func_c607
+.asm_d067
+	call DoFrameIfLCDEnabled
+	call Func_c491
+	call Func_c53d
+	ld a, [wd335]
+	and $03
+	jr nz, .asm_d067
+	call DoFrameIfLCDEnabled
+	call Func_c491
+	jp Func_cc78
+
+Func_d080: ; d080 (3:5080)
+	ld a, c
+	farcall Func_11893
+	jp Func_cc64
+
+Func_d088: ; d088 (3:5088)
+	ld a, c
+	ld [wd3ab], a
+	call Func_cc9a
+	call Func_c926
+	jp Func_cc68
+
+Func_d095: ; d095 (3:5095)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	push bc
+	call Func_cc9e
+	ld a, [wd3b6]
+	ld l, $5
+	call Func_39ad
+	res 4, [hl]
+	ld a, [hl]
+	or c
+	ld [hl], a
+	pop bc
+	ld e, c
+	ld a, [wConsole]
+	cp $2
+	jr nz, .asm_d0b6
+	ld e, b
+
+.asm_d0b6
+	ld a, e
+	farcall Func_1c57b
+	jp Func_cc68
+
+Func_d0be: ; d0be (3:50be)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	ld a, c
+	ld c, b
+	ld b, a
+	farcall Func_1c461
+	jp Func_cc78
+
+Func_d0ce: ; d0ce (3:50ce)
+	push bc
+	call DoFrameIfLCDEnabled
+	pop bc
+	dec c
+	jr nz, Func_d0ce
+	jp Func_cc64
+
+Func_d0d9: ; d0d9 (3:50d9)
+	ld a, [wd3b6]
+	ld [wd3aa], a
+	ld d, c
+	ld e, b
+	farcall Func_1c477
+	ld a, e
+	cp c
+	jp nz, Func_d48a
+	ld a, d
+	cp b
+	jp nz, Func_d48a
+	jp Func_d490
+
+Func_d0f2: ; d0f2 (3:50f2)
+	ld a, [wPlayerXCoord]
+	cp c
+	jp nz, Func_d48a
+	ld a, [wPlayerYCoord]
+	cp b
+	jp nz, Func_d48a
+	jp Func_d490
+
+Func_d103: ; d103 (3:5103)
+	ld a, [wd3aa]
+	push af
+	ld a, [wd3ab]
+	push af
+	ld a, c
+	ld [wd3ab], a
+	call Func_39c3
+	jr c, .asm_d119
+	call $54d1
+	jr .asm_d11c
+
+.asm_d119
+	call $54e6
+
+.asm_d11c
+	pop af
+	ld [wd3ab], a
+	pop af
+	ld [wd3aa], a
+	ret
+
+Func_d125: ; d125 (3:5125)
+	ld a, c
+	push af
+	call Func_c2a3
+	pop af
+	farcall Medal_1029e
+	call Func_c2d4
+	jp Func_cc64
+
+Func_d135: ; d135 (3:5135)
+	sla c
+	ld b, $0
+	ld hl, wce3f
+	add hl, bc
+	push hl
+	ld a, [wd32e]
+	rlca
+	ld c, a
+	ld b, $0
+	ld hl, $5151
+	add hl, bc
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	pop hl
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	jp Func_cc64
+
+INCBIN "baserom.gbc",$d153,$d16b - $d153
+
+Func_d16b: ; d16b (3:516b)
+	ld hl, wd0c8
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	push de
+	sla c
+	ld b, $0
+	ld hl, wce3f
+	add hl, bc
+	push hl
+	ld a, [$d696]
+	farcall Func_11893
+	pop hl
+	ld a, [wd0c8]
+	ld [hli], a
+	ld a, [wd0c9]
+	ld [hl], a
+	pop de
+	ld hl, wd0c8
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	jp Func_cc64
+
+Func_d195: ; d195 (3:5195)
+	ld a, [wd3ab]
+	push af
+	call Func_ca69
+	ld b, l
+	inc a
+	ld c, a
+	call Func_ca8f
+	ld b, l
+	call Func_f580
+	pop af
+	ld [wd3ab], a
+	jp Func_cc60
+
+Func_d1ad: ; d1ad (3:51ad)
+	call MainMenu_c75a
+	jp Func_cc60
+
+Func_d1b3: ; d1b3 (3:51b3)
+	call Func_ca69
+	ld b, h
+	dec a
+	cp $2
+	jr c, .asm_d1c3
+	ld a, $d
+	call Random
+	add $2
+
+.asm_d1c3
+	ld hl, $51dc
+asm_d1c6
+	ld e, a
+	add a
+	add e
+	ld e, a
+	ld d, $0
+	add hl, de
+	ld a, [hli]
+	ld [$d697], a
+	ld a, [hli]
+	ld [wce3f], a
+	ld a, [hl]
+	ld [wce40], a
+	jp Func_cc60
+
+INCBIN "baserom.gbc",$d1dc,$d209 - $d1dc
+
+Func_d209: ; d209 (3:5209)
+	call Func_ca69
+	ld [hl], c
+	ld e, a
+.asm_d20e
+	call UpdateRNGSources
+	ld d, $8
+	and $3
+	ld c, a
+	ld b, a
+.asm_d217
+	jr z, .asm_d21e
+	srl d
+	dec b
+	jr .asm_d217
+
+.asm_d21e
+	ld a, d
+	and e
+	jr nz, .asm_d20e
+	push bc
+	ld b, $0
+	ld hl, $5240
+	add hl, bc
+	ld a, [hl]
+	call Func_cac5
+	pop bc
+	ld hl, $5234
+	ld a, c
+	jr asm_d1c6
+
+INCBIN "baserom.gbc",$d234,$d244 - $d234
+
+Func_d244: ; d244 (3:5244)
+	ld a, c
+	farcall Func_80ba4
+	jp Func_cc64
+
+Func_d24c: ; d24c (3:524c)
+	ld hl, $525e
+	xor a
+	call Func_d28c
+	ld a, [$d695]
+	ld c, a
+	call Func_ca8f
+	halt
+	jp Func_cc60
+
+INCBIN "baserom.gbc",$d25e,$d271 - $d25e
+
+Func_d271: ; d271 (3:5271)
+	ld hl, $527b
+	xor a
+	call Func_d28c
+	jp Func_cc60
+; 0xd27b
+
+INCBIN "baserom.gbc",$d27b,$d28c - $d27b
+
+Func_d28c: ; d28c (3:528c)
+	ld [$d416], a
+	push hl
+	call Func_c241
+	call Func_c915
+	call DoFrameIfLCDEnabled
+	pop hl
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .asm_d2a8
+	call Func_c8ba
+
+.asm_d2a8
+	ld a, $1
+	call Func_c29b
+	pop hl
+	inc hl
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	ld a, [$d416]
+	farcall Func_111e9
+	pop hl
+	inc hl
+	ld a, [hli]
+	ld [$d417], a
+	push hl
+
+.asm_d2c1
+	call DoFrameIfLCDEnabled
+	call MenuCursorAcceptInput
+	jr nc, .asm_d2c1
+	ld a, [hCurrentMenuItem]
+	cp e
+	jr z, .asm_d2d9
+	ld a, [$d417]
+	or a
+	jr z, .asm_d2c1
+	ld e, a
+	ld [hCurrentMenuItem], a
+
+.asm_d2d9
+	pop hl
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	ld a, e
+	ld [hl], a
+	add a
+	ld c, a
+	ld b, $0
+	pop hl
+	inc hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .asm_d2f5
+	add hl, bc
+	ld a, [hli]
+	ld [wce3f], a
+	ld a, [hl]
+	ld [wce40], a
+
+.asm_d2f5
+	ret
+
+Func_d2f6: ; d2f6 (3:52f6)
+	ld hl, $530c
+	xor a
+	call Func_d28c
+	ld a, [$d694]
+	ld c, a
+	call Func_ca8f
+	ld [hl], l
+	xor a
+	ld [$d694], a
+	jp Func_cc60
+; 0xd30c
+
+INCBIN "baserom.gbc",$d30c,$d317 - $d30c
+
+Func_d317: ; d317 (3:5317)
+	ld hl, $532b
+	ld a, [$d694]
+	call Func_d28c
+	ld a, [$d694]
+	ld c, a
+	call Func_ca8f
+	ld [hl], l
+	jp Func_cc60
+
+
+INCBIN "baserom.gbc",$d32b,$d336 - $d32b
 
 DeckMachine_d336: ; d336 (3:5336)
 	push bc
@@ -1405,17 +2633,299 @@ DeckMachine_d336: ; d336 (3:5336)
 	jr z, .asm_d360
 	dec a
 	ld [wd0a9], a
-	farcallx $2, $7a04
+	farcall Func_ba04
 	jr .asm_d364
 .asm_d360
-	farcallx $2, $719d
+	farcall Func_b19d
 .asm_d364
 	call Func_37a0
-	call $42d4
-	jp $4c64
-; 0xd36d
+	call Func_c2d4
+	jp Func_cc64
 
-INCBIN "baserom.gbc",$d36d,$fc2b - $d36d
+Func_d36d: ; d36d (3:536d)
+	ld a, [wd413]
+	ld l, a
+	ld a, [wd414]
+	ld h, a
+	inc hl
+	ld a, [hli]
+	ld a, [hli]
+	ld [wd0bb], a
+	ld a, [hli]
+	ld [wd0bc], a
+	ld a, [hli]
+	ld [wd0bd], a
+	ld a, [hli]
+	ld [wd0be], a
+	ld hl, wd0b4
+	set 4, [hl]
+	jp Func_cc70
+
+Func_d38f: ; d38f (3:538f)
+	farcall Func_10c96
+	jp Func_cc64
+
+Func_d396: ; d396 (3:5396)
+	farcall Func_1157c
+	jp Func_cc64
+
+Func_d39d: ; d39d (3:539d)
+	ld a, c
+	or a
+	jr nz, .asm_d3ac
+	farcall Func_10dba
+	ld c, a
+	call Func_ca8f
+	ld [hl], d
+	jr .asm_d3b6
+
+.asm_d3ac
+	ld a, $3
+	ld [wd0b5], a
+	ld hl, wd0b4
+	set 6, [hl]
+
+.asm_d3b6
+	jp Func_cc64
+
+Func_d3b9: ; d3b9 (3:53b9)
+	call Func_3917
+	ld a, $4
+	ld [wd0b5], a
+	ld hl, wd0b4
+	set 6, [hl]
+	jp Func_cc60
+
+Func_d3c9: ; d3c9 (3:53c9)
+	ld a, c
+	farcall Func_10a70
+	jp Func_cc64
+
+Func_d3d1: ; d3d1 (3:53d1)
+    jp Func_cc60
+
+Func_d3d4: ; d3d4 (3:53d4)
+	ld a, [$d693]
+	bank1call Func_7576
+	jp Func_cc60
+
+INCBIN "baserom.gbc",$d3dd,$d3e0 - $d3dd
+
+Func_d3e0: ; d3e0 (3:53e0)
+	ld a, $1
+	ld [wd32e], a
+	farcall Func_11024
+.asm_d3e9
+	call DoFrameIfLCDEnabled
+	farcall Func_11060
+	ld a, [wd33e]
+	cp $2
+	jr nz, .asm_d3e9
+	farcall Func_10f2e
+	jp Func_cc60
+
+Func_d3fe: ; d3fe (3:53fe)
+	ld a, c
+	ld [wd112], a
+	call PlaySong
+	jp Func_cc64
+
+Func_d408: ; d408 (3:5408)
+	ld a, c
+	ld [wd111], a
+	jp Func_cc64
+
+Func_d40f: ; d40f (3:540f)
+	ld a, c
+	call Func_3c83
+	jp Func_cc64
+
+Func_d416: ; d416 (3:5416)
+	ld a, c
+	call Func_3796
+	jp Func_cc64
+
+Func_d41d: ; d41d (3:541d)
+	call Func_39fc
+	jp Func_cc60
+
+Func_d423: ; d423 (3:5423)
+	call Func_379b
+	jp Func_cc60
+
+Func_d429: ; d429 (3:5429)
+	call Func_37a0
+	jp Func_cc60
+
+Func_d42f: ; d42f (3:542f)
+	call Func_3c96
+	jp Func_cc60
+
+Func_d435: ; d435 (3:5435)
+	ld a, c
+	farcall Func_1c83d
+	jp Func_cc64
+
+Func_d43d: ; d43d (3:543d)
+	ld a, $6
+	ld [wd0b5], a
+	ld hl, wd0b4
+	set 6, [hl]
+	jp Func_cc60
+
+Func_d44a: ; d44a (3:544a)
+	ld a, c
+	ld c, b
+	call Func_ca92
+	jp Func_cc78
+
+Func_d452: ; d452 (3:5452)
+	ld a, c
+	push af
+	call Func_ca6c
+	inc a
+	ld c, a
+	pop af
+	call Func_ca92
+	jp Func_cc64
+
+Func_d460: ; d460 (3:5460)
+	ld a, c
+	call Func_ca6c
+	or a
+	jr z, asm_d46d
+asm_d467
+	call Func_ccb9
+	jp Func_cc68
+
+asm_d46d
+	call Func_ccb3
+	call Func_cc9a
+	jr z, .asm_d478
+	jp Func_cc8b
+
+.asm_d478
+	jp Func_cc68
+
+Func_d47b: ; d47b (3:547b)
+	ld a, c
+	call Func_ca6c
+	or a
+	jr nz, asm_d46d
+	jr asm_d467
+
+Func_d484: ; d484 (3:5484)
+	call Func_d4b6
+	cp c
+	jr z, Func_d490
+
+Func_d48a: ; d48a (3:548a)
+	call Func_ccb9
+	jp Func_cc6c
+
+Func_d490: ; d490 (3:5490)
+	call Func_ccb3
+	call Func_cc9e
+	jr z, .asm_d49b
+	jp Func_cc8b
+
+.asm_d49b
+	jp Func_cc6c
+
+Func_d49e: ; d49e (3:549e)
+	call Func_d4b6
+	cp c
+	jr nz, Func_d490
+	jr Func_d48a
+
+Func_d4a6: ; d4a6 (3:54a6)
+	call Func_d4b6
+	cp c
+	jr nc, Func_d490
+	jr Func_d48a
+
+Func_d4ae: ; d4ae (3:54ae)
+	call Func_d4b6
+	cp c
+	jr c, Func_d490 ; 0xd4b2 $dc
+	jr Func_d48a ; 0xd4b4 $d4
+	
+Func_d4b6: ; d4b6 (3:54b6)
+	ld a, c
+	ld c, b
+	call Func_ca6c
+	ret
+
+Func_d4bc: ; d4bc (3:54bc)
+	ld a, c
+	call Func_cac5
+	jp Func_cc64
+
+Func_d4c3: ; d4c3 (3:54c3)
+	ld a, c
+	call Func_cad0
+	jp Func_cc64
+
+Func_d4ca: ; d4ca (3:54ca)
+	ld a, c
+	call Func_ca6c
+	or a
+	jr z, asm_d4e6
+Func_d4d1:
+	call Func_ccb3
+	call Func_cc9a
+	jr z, .asm_d4dc
+	jp Func_cc8b
+.asm_d4dc
+	jp Func_cc68
+
+Func_d4df:
+	ld a, c
+	call Func_ca6c
+	or a
+	jr z, Func_d4d1
+asm_d4e6
+	call Func_ccb9
+	jp Func_cc68
+; 0xd4ec
+
+INCBIN "baserom.gbc",$d4ec,$f580 - $d4ec
+
+Func_f580: ; f580 (3:7580)
+	call Func_ca69
+	ld b, h
+	cp $3
+	jr z, .asm_f596
+	call Func_ca69
+	ld b, l
+	cp $3
+	ld d, $18
+	jr nz, .asm_f598
+	ld a, $2
+	jr .asm_f5ac
+
+.asm_f596
+	ld d, $19
+
+.asm_f598
+	ld a, d
+	call Random
+	ld c, a
+	call $75cc
+	jr c, .asm_f598
+	call $75d4
+	ld b, $0
+	ld hl, $75b3
+	add hl, bc
+	ld a, [hl]
+
+.asm_f5ac
+	ld [wd3ab], a
+	ld [$d696], a
+	ret
+; 0xf5b3
+
+INCBIN "baserom.gbc",$f5b3,$fc2b - $f5b3
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [wd0c3]
