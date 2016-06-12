@@ -6730,9 +6730,9 @@ Func_380e: ; 380e (0:380e)
 	ret nz
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_c484)
+	ld a, BANK(SetScreenScrollWram)
 	call BankswitchHome
-	call Func_c484
+	call SetScreenScrollWram
 	call Func_c554
 	ld a, BANK(Func_1c610)
 	call BankswitchHome
@@ -6875,9 +6875,9 @@ Func_3917: ; 3917 (0:3917)
 	call DisableExtRAM
 	ret
 
-Func_3927: ; 3927 (0:3927)
+GetFloorObjectFromPos: ; 3927 (0:3927)
 	push hl
-	call Func_3946
+	call FindFloorTileFromPos
 	ld a, [hl]
 	pop hl
 	ret
@@ -6885,7 +6885,8 @@ Func_3927: ; 3927 (0:3927)
 
 INCBIN "baserom.gbc",$392e,$3946 - $392e
 
-Func_3946: ; 3946 (0:3946)
+; puts a floor tile in hc given coords in bc (x,y. measured in tiles)
+FindFloorTileFromPos: ; 3946 (0:3946)
 	push bc
 	srl b
 	srl c
@@ -6895,7 +6896,7 @@ Func_3946: ; 3946 (0:3946)
 	or b
 	ld c, a
 	ld b, $0
-	ld hl, $d133
+	ld hl, wFloorObjectMap
 	add hl, bc
 	pop bc
 	ret
@@ -6913,8 +6914,12 @@ Func_395a: ; 395a (0:395a)
 Unknown_396b: ; 396b (0:396b)
 INCBIN "baserom.gbc",$396b,$3973 - $396b
 
-Unknown_3973: ; 3973 (0:3973)
-INCBIN "baserom.gbc",$3973,$397b - $3973
+; Movement offsets for scripted movements
+ScriptedMovementOffsetTable: ; 3973 (0:3973)
+	db $00, -$02 ; move 2 tiles up
+	db $02, $00 ; move 2 tiles right
+	db $00, $02 ; move 2 tiles down
+	db -$02, $00 ; move 2 tiles left
 
 Unknown_397b: ; 397b (0:397b)
 INCBIN "baserom.gbc",$397b,$3997 - $397b
@@ -7134,9 +7139,9 @@ Func_3abd: ; 3abd (0:3abd)
 
 INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
 
-; finds a pointer on a table (in bank 4) using the data after rst20 is called and jumps to it (in bank 3)
-Func_3aed: ; 3aed (0:3aed)
-	ld hl, $d413
+; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into bc
+RunOverworldScript: ; 3aed (0:3aed)
+	ld hl, wOWScriptPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -7148,11 +7153,11 @@ Func_3aed: ; 3aed (0:3aed)
 	rlca
 	ld c, a
 	ld b, $0
-	ld hl, PointerTable_1217b 
+	ld hl, OverworldScriptTable 
 	add hl, bc
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(PointerTable_1217b)
+	ld a, BANK(OverworldScriptTable)
 	call BankswitchHome
 	ld a, [hli]
 	ld h, [hl]
@@ -7429,11 +7434,12 @@ Func_3d72: ; 3d72 (0:3d72)
 Func_3db7: ; 3db7 (0:3db7)
 	push bc
 	ld c, $0
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	pop bc
 	ret
 
-Func_3dbf: ; 3dbf (0:3dbf)
+; this needs to be determined after we learn more about the buffer.
+ModifyUnknownOAMBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wd4cf]
 	cp $10
 	jr c, .asm_3dc9
@@ -7449,7 +7455,7 @@ Func_3dbf: ; 3dbf (0:3dbf)
 	and $f0
 	or c
 	ld c, a
-	ld hl, $d4d0
+	ld hl, wOAMBuffer
 	add hl, bc
 	pop bc
 	ret

@@ -53,7 +53,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c17a
 .asm_c092
 	call DoFrameIfLCDEnabled
-	call Func_c491
+	call SetScreenScroll
 	call Func_c0ce
 	ld hl, $d0b4
 	ld a, [hl]
@@ -471,10 +471,10 @@ INCBIN "baserom.gbc",$c37a,$c41c - $c37a
 Func_c41c: ; c41c (3:441c)
 	ld a, [wd332]
 	sub $40
-	ld [wd235], a
+	ld [wSCXBuffer], a
 	ld a, [wd333]
 	sub $40
-	ld [wd236], a
+	ld [wSCYBuffer], a
 	call Func_c430
 	ret
 
@@ -485,7 +485,7 @@ Func_c430: ; c430 (3:4430)
 	sla a
 	sla a
 	ld b, a
-	ld a, [wd235]
+	ld a, [wSCXBuffer]
 	cp $b1
 	jr c, .asm_c445
 	xor a
@@ -495,13 +495,13 @@ Func_c430: ; c430 (3:4430)
 	jr c, .asm_c449
 	ld a, b
 .asm_c449
-	ld [wd235], a
+	ld [wSCXBuffer], a
 	ld a, [wd238]
 	sla a
 	sla a
 	sla a
 	ld b, a
-	ld a, [wd236]
+	ld a, [wSCYBuffer]
 	cp $b9
 	jr c, .asm_c460
 	xor a
@@ -511,19 +511,19 @@ Func_c430: ; c430 (3:4430)
 	jr c, .asm_c464
 	ld a, b
 .asm_c464
-	ld [wd236], a
+	ld [wSCYBuffer], a
 	pop bc
 	ret
 
 Func_c469: ; c469 (3:4469)
-	ld a, [wd235]
+	ld a, [wSCXBuffer]
 	add $4
 	and $f8
 	rrca
 	rrca
 	rrca
 	ld [wd233], a
-	ld a, [wd236]
+	ld a, [wSCYBuffer]
 	add $4
 	and $f8
 	rrca
@@ -532,17 +532,17 @@ Func_c469: ; c469 (3:4469)
 	ld [wd234], a
 	ret
 
-Func_c484: ; c484 (3:4484)
-	ld a, [wd235]
-	ld [wd0b6], a
-	ld a, [wd236]
-	ld [wd0b7], a
+SetScreenScrollWram: ; c484 (3:4484)
+	ld a, [wSCXBuffer]
+	ld [wSCX], a
+	ld a, [wSCYBuffer]
+	ld [wSCY], a
 	ret
 
-Func_c491: ; c491 (3:4491)
-	ld a, [wd0b6]
+SetScreenScroll: ; c491 (3:4491)
+	ld a, [wSCX]
 	ldh [hSCX], a
-	ld a, [wd0b7]
+	ld a, [wSCY]
 	ldh [hSCY], a
 	ret
 
@@ -632,7 +632,7 @@ Func_c53d: ; c53d (3:453d)
 	ld [wd4cf], a
 	ld a, [wd335]
 	bit 0, a
-	call nz, $4687
+	call nz, Func_c687
 	ld a, [wd335]
 	bit 1, a
 	call nz, Func_c6dc
@@ -651,12 +651,12 @@ Func_c554: ; c554 (3:4554)
 	push bc
 	push de
 	call Func_c58b
-	ld a, [wd235]
+	ld a, [wSCXBuffer]
 	ld d, a
-	ld a, [wd236]
+	ld a, [wSCYBuffer]
 	ld e, a
 	ld c, $2
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	ld a, [wd332]
 	sub d
 	add $8
@@ -676,11 +676,11 @@ Func_c58b: ; c58b (3:458b)
 	ld b, a
 	ld a, [wPlayerYCoord]
 	ld c, a
-	call Func_3927
+	call GetFloorObjectFromPos
 	and $10
 	push af
 	ld c, $f
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	pop af
 	ld a, [hl]
 	jr z, .asm_c5a7
@@ -751,60 +751,63 @@ Func_c5e9: ; c5e9 (3:45e9)
 Func_c5fe: ; c5fe (3:45fe)
 	push bc
 	call Func_c653
-	call Func_c619
+	call AttemptScriptedMovement
 	pop bc
 	ret
 
-Func_c607: ; c607 (3:4607)
+StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wd336]
 	ld [wd4cf], a
 	ld a, [$d339]
-	call $4656
-	call Func_c619
+	call FindScriptedMovementWithOffset
+	call AttemptScriptedMovement
 	pop bc
 	ret
 
-Func_c619: ; c619 (3:4619)
+; bc is the location the player is being scripted to move towards.
+AttemptScriptedMovement: ; c619 (3:4619)
 	push hl
 	push bc
 	ld a, b
 	cp $1f
-	jr nc, .asm_c650
+	jr nc, .quitMovement
 	ld a, c
 	cp $1f
-	jr nc, .asm_c650
-	call Func_3927
-	and $c0
-	jr nz, .asm_c650
+	jr nc, .quitMovement
+	call GetFloorObjectFromPos
+	and $40 | $80 ; the two impassable objects found in the floor map
+	jr nz, .quitMovement
 	ld a, b
 	ld [wPlayerXCoord], a
 	ld a, c
 	ld [wPlayerYCoord], a
-	ld a, [wd335]
+	ld a, [wd335] ; I believe everything starting here is animation related.
 	or $1
 	ld [wd335], a
 	ld a, $10
 	ld [wd338], a
 	ld c, $f
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	set 2, [hl]
 	ld c, $e
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	ld a, $4
 	ld [hl], a
-.asm_c650
+.quitMovement
 	pop bc
 	pop hl
 	ret
 
 Func_c653: ; c653 (3:4653)
 	ld a, [wd334]
+
+FindScriptedMovementWithOffset: ; c656 (3:4656)
 	rlca
 	ld c, a
 	ld b, $0
 	push hl
-	ld hl, Unknown_3973
+	ld hl, ScriptedMovementOffsetTable
 	add hl, bc
 	ld a, [wPlayerXCoord]
 	add [hl]
@@ -833,9 +836,15 @@ Func_c66c: ; c66c (3:466c)
 	pop bc
 	pop hl
 	ret
-; 0xc687
 
-INCBIN "baserom.gbc",$c687,$c694 - $c687
+Func_c687: ; c687 (3:4687)
+	push bc
+	ld a, [$d33a]
+	ld c, a
+	ld a, [$d339]
+	call Func_c694
+	pop bc
+    ret
 
 Func_c694: ; c694 (3:4694)
 	push hl
@@ -866,7 +875,7 @@ Func_c694: ; c694 (3:4694)
 	ld a, [wd338]
 	or a
 	jr nz, .asm_c6c3
-	ld hl, $d335
+	ld hl, wd335
 	set 1, [hl]
 .asm_c6c3
 	call Func_c41c
@@ -893,7 +902,7 @@ Func_c6d4: ; c6d4 (3:46d4)
 
 Func_c6dc: ; c6dc (3:46dc)
 	push hl
-	ld hl, $d335
+	ld hl, wd335
 	res 0, [hl]
 	res 1, [hl]
 	call Func_c6f7
@@ -909,10 +918,10 @@ Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
 	ld [wd4cf], a
 	ld c, $f
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	res 2, [hl]
 	ld c, $e
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	ld a, $ff
 	ld [hl], a
 	ret
@@ -933,7 +942,7 @@ Func_c71e: ; c71e (3:471e)
 	ld a, $ff
 	ld [wd3b6], a
 	call Func_c653
-	call Func_3927
+	call GetFloorObjectFromPos
 	and $40
 	jr z, .asm_c73d
 	farcall Func_1c72e
@@ -1566,60 +1575,61 @@ Func_cc32: ; cc32 (3:4c32)
 INCBIN "baserom.gbc",$cc3e,$cc42 - $cc3e
 
 ; called when pressing a in front of an object. creates a pointer to the data right after an RST20
-; was called, then runs Func_3aed to handle that data
+; was called, then runs RunOverworldScript to handle that data
 RST20: ; cc42 (3:4c42)
 	pop hl
 	ld a, l
-	ld [wd413], a
+	ld [wOWScriptPointer], a
 	ld a, h
-	ld [wd414], a
+	ld [wOWScriptPointer+1], a
 	xor a
 	ld [wd412], a
 .asm_cc4f
-	call Func_3aed
+	call RunOverworldScript
 	ld a, [wd412]
 	or a
 	jr z, .asm_cc4f
-	ld hl, $d413
+	ld hl, wOWScriptPointer
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
 	push bc
 	ret
 
-Func_cc60: ; cc60 (3:4c60)
+IncreaseOWScriptPointerBy1: ; cc60 (3:4c60)
 	ld a, 1
-	jr Func_cc7a
-Func_cc64: ; cc64 (3:4c64)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy2: ; cc64 (3:4c64)
 	ld a, 2
-	jr Func_cc7a
-Func_cc68: ; cc68 (3:4c68)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy4: ; cc68 (3:4c68)
 	ld a, 4
-	jr Func_cc7a
-Func_cc6c: ; cc6c (3:4c6c)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy5: ; cc6c (3:4c6c)
 	ld a, 5
-	jr Func_cc7a
-Func_cc70: ; cc70 (3:4c70)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy6: ; cc70 (3:4c70)
 	ld a, 6
-	jr Func_cc7a
-Func_cc74: ; cc74 (3:4c74)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy7: ; cc74 (3:4c74)
 	ld a, 7
-	jr Func_cc7a
-Func_cc78: ; cc78 (3:4c78)
+	jr IncreaseOWScriptPointer
+IncreaseOWScriptPointerBy3: ; cc78 (3:4c78)
 	ld a, 3
 
-Func_cc7a: ; cc7a (3:4c7a)
+; AH! increases the RST20 pointer by a, given from the above ^ or supplied
+IncreaseOWScriptPointer: ; cc7a (3:4c7a)
 	ld c, a
-	ld a, [wd413]
+	ld a, [wOWScriptPointer]
 	add c
-	ld [wd413], a
-	ld a, [wd414]
+	ld [wOWScriptPointer], a
+	ld a, [wOWScriptPointer+1]
 	adc a, 00
-	ld [wd414], a
+	ld [wOWScriptPointer+1], a
 	ret
 
 Func_cc8b: ; cc8b (3:4c8b)
-	ld hl, wd413
+	ld hl, wOWScriptPointer
 	ld [hl], c
 	inc hl
 	ld [hl], b
@@ -1641,10 +1651,10 @@ Func_cc9e: ; cc9e (3:4c9e)
 Func_cca0: ; cca0 (3:4ca0)
 	push hl
 	ld l, a
-	ld a, [wd413]
+	ld a, [wOWScriptPointer]
 	add l
 	ld l, a
-	ld a, [wd414]
+	ld a, [wOWScriptPointer+1]
 	adc $0
 	ld h, a
 	ld a, [hli]
@@ -1667,11 +1677,11 @@ Func_ccb9: ; ccb9 (3:4cb9)
 Func_ccbe: ; ccbe (3:4cbe)
 	ld a, $01
 	ld [wd412], a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_ccc6: ; ccc6 (3:4cc6)
 	call Func_c111
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_cccc: ; cccc (3:4ccc)
 	call Func_ccc6
@@ -1683,13 +1693,13 @@ Func_ccd4: ; ccd4 (3:4cd4)
 	ld l, c
 	ld h, b
 	call Func_cc32
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_ccdc: ; ccdc (3:4cdc)
 	ld l, c
 	ld h, b
 	call Func_c891
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_cce4: ; cce4 (3:4ce4)
 	ld a, $1
@@ -1706,7 +1716,7 @@ Func_cce9: ; cce9 (3:4ce9)
 	jp Func_cc8b
 
 .asm_ccfe
-	jp Func_cc6c
+	jp IncreaseOWScriptPointerBy5
 
 ; this seems to be called when battles officially start. Might be a good way to find trainer data.
 Func_cd01: ; cd01 (3:4d01)
@@ -1743,7 +1753,7 @@ asm_cd2f
 	ld [wd0b5], a
 	ld hl, wd0b4
 	set 6, [hl]
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_cd4f: ; cd4f (3:4d4f)
 	call Func_cd66
@@ -1772,7 +1782,7 @@ Func_cd76: ; cd76 (3:4d76)
 	ld [wd0b5], a
 	ld hl, wd0b4
 	set 6, [hl]
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_cd83: ; cd83 (3:4d83)
 	ld a, [$d415]
@@ -1783,7 +1793,7 @@ Func_cd83: ; cd83 (3:4d83)
 	ld l, c
 	ld h, b
 	call Func_cc32
-	jp Func_cc6c
+	jp IncreaseOWScriptPointerBy5
 
 Func_cd94: ; cd94 (3:4d94)
 	call Func_ca69
@@ -1797,7 +1807,7 @@ Unknown_cd98:
 	ld l, c
 	ld h, b
 	call Func_cc32
-	jp Func_cc74
+	jp IncreaseOWScriptPointerBy7
 
 Func_cda8: ; cda8 (3:4da8)
 	ld a, [$d415]
@@ -1808,7 +1818,7 @@ Func_cda8: ; cda8 (3:4da8)
 	ld l, c
 	ld h, b
 	call Func_c891
-	jp Func_cc6c
+	jp IncreaseOWScriptPointerBy5
 
 Func_cdb9: ; cdb9 (3:4db9)
 	ld l, c
@@ -1817,7 +1827,7 @@ Func_cdb9: ; cdb9 (3:4db9)
 	call Func_c111
 	ld a, $1
 	ld [wd412], a
-	call Func_cc78
+	call IncreaseOWScriptPointerBy3
 	pop hl
 	ret
 
@@ -1826,7 +1836,7 @@ Func_cdcb: ; cdcb (3:4dcb)
 	ld [wd3aa], a
 Func_4dd1: ; cdd1 (3:4dd1)
 	farcall Func_1c50a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_cdd8: ; cdd8 (3:4dd8)
 	ld a, [wd3aa]
@@ -1863,7 +1873,7 @@ Func_cdf5: ; cdf5 (3:4df5)
 	ld [wd3ab], a
 	pop af
 	ld [wd3aa], a
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_ce26: ; ce26 (3:4e26)
 	ld a, [wd3b6]
@@ -1885,7 +1895,7 @@ Func_ce3a: ; ce3a (3:4e3a)
 	call DoFrameIfLCDEnabled
 	farcall Func_1c7de
 	jr nz, .asm_ce3e
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_ce4a: ; ce4a (3:4e4a)
 	ld a, [wd3b6]
@@ -1917,14 +1927,14 @@ Func_ce6f: ; ce6f (3:4e6f)
 	push af
 	call Func_cc9a
 	push bc
-	call Func_cc60
+	call IncreaseOWScriptPointerBy1
 	pop bc
 	pop af
 	jr asm_ce5d
 
 Func_ce84: ; ce84 (3:4e84)
 	call Func_c135
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_ce8a: ; ce8a (3:4e8a)
 	xor a
@@ -1949,7 +1959,7 @@ Func_ce8a: ; ce8a (3:4e8a)
 	farcall BoosterPack_1031b
 .asm_ceb4
 	call Func_c2d4
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_ceba: ; ceba (3:4eba)
 	xor a
@@ -1969,7 +1979,7 @@ Func_ceba: ; ceba (3:4eba)
 	jr .asm_cec4
 .asm_ced7
 	call Func_c2d4
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 ; 0xcedd
 
 INCBIN "baserom.gbc",$cedd,$cee2 - $cedd
@@ -1992,7 +2002,7 @@ Func_cee2: ; cee2 (3:4ee2)
 	call Func_c1a4
 	call DoFrameIfLCDEnabled
 	call Func_c2d4
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 .asm_cf09
 	xor a
@@ -2013,7 +2023,7 @@ asm_cf16
 
 asm_cf19
 	call Func_ccb9
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 asm_cf1f
 	call Func_ccb3
@@ -2022,11 +2032,11 @@ asm_cf1f
 	jp Func_cc8b
 
 asm_cf2a
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_cf2d: ; cf2d (3:4f2d)
 	push bc
-	call Func_cc60
+	call IncreaseOWScriptPointerBy1
 	pop bc
 	call Func_1caa
 	ld a, h
@@ -2047,12 +2057,12 @@ Func_cf3f: ; cf3f (3:4f3f)
 
 .asm_cf46
 	call AddCardToCollection
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_cf4c: ; cf4c (3:4f4c)
 	ld a, c
 	call Func_1d91
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_cf53: ; cf53 (3:4f53)
 	ld c, $1
@@ -2071,7 +2081,7 @@ Func_cf53: ; cf53 (3:4f53)
 	jr nz, Func_cf6d
 Func_cf67: ; cf67 (3:4f67)
 	call Func_ccb9
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_cf6d: ; cf6d (3:4f6d)
 	call Func_ccb3
@@ -2080,7 +2090,7 @@ Func_cf6d: ; cf6d (3:4f6d)
 	jp Func_cc8b
 
 .asm_cf78
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_cf7b: ; cf7b (3:4f7b)
 	ld c, $1
@@ -2102,7 +2112,7 @@ Func_cf7b: ; cf7b (3:4f7b)
 	ld a, c
 	cp $8
 	jr c, .asm_cf7d
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 ; This function doesn't look like a valid function, but it's pointed to in the table.
 Func_cf96: ; cf96 (3:4f96)
@@ -2141,7 +2151,7 @@ Func_cfc6: ; cfc6 (3:4fc6)
 	ld [wd3aa], a
 	ld a, c
 	farcall Func_1c52e
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_cfd4: ; cfd4 (3:4fd4)
 	call Func_ca69
@@ -2178,7 +2188,7 @@ Func_cfd4: ; cfd4 (3:4fd4)
 	ld c, [hl]
 	call Func_ca8f
 	dec hl
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 INCBIN "baserom.gbc",$d006,$d00b - $d006
 
@@ -2197,7 +2207,7 @@ Func_d00b: ; d00b (3:500b)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d025: ; d025 (3:5025)
 	call Func_ca69
@@ -2217,7 +2227,7 @@ Func_d03f: ; d03f (3:503f)
 	call Func_ca69
 	dec hl
 	call Func_1d91
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d049: ; d049 (3:5049)
 	call Func_cc96
@@ -2225,42 +2235,42 @@ Func_d049: ; d049 (3:5049)
 
 Func_d04f: ; d04f (3:504f)
 	call Func_cad8
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d055: ; d055 (3:5055)
 	ld a, c
 	call Func_c5ce
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
-; this is called when the player is moving forward in the intro sequence
-Func_d05c: ; 505c (3:505c)
+
+OWScript_MovePlayer: ; 505c (3:505c)
 	ld a, c
 	ld [$d339], a
 	ld a, b
 	ld [$d33a], a
-	call Func_c607
+	call StartScriptedMovement
 .asm_d067
 	call DoFrameIfLCDEnabled
-	call Func_c491
+	call SetScreenScroll
 	call Func_c53d
 	ld a, [wd335]
 	and $03
 	jr nz, .asm_d067
 	call DoFrameIfLCDEnabled
-	call Func_c491
-	jp Func_cc78
+	call SetScreenScroll
+	jp IncreaseOWScriptPointerBy3
 
 Func_d080: ; d080 (3:5080)
 	ld a, c
 	farcall Func_11893
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d088: ; d088 (3:5088)
 	ld a, c
 	ld [wd3ab], a
 	call Func_cc9a
 	call Func_c926
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_d095: ; d095 (3:5095)
 	ld a, [wd3b6]
@@ -2284,7 +2294,7 @@ Func_d095: ; d095 (3:5095)
 .asm_d0b6
 	ld a, e
 	farcall Func_1c57b
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_d0be: ; d0be (3:50be)
 	ld a, [wd3b6]
@@ -2293,7 +2303,7 @@ Func_d0be: ; d0be (3:50be)
 	ld c, b
 	ld b, a
 	farcall Func_1c461
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_d0ce: ; d0ce (3:50ce)
 	push bc
@@ -2301,7 +2311,7 @@ Func_d0ce: ; d0ce (3:50ce)
 	pop bc
 	dec c
 	jr nz, Func_d0ce
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d0d9: ; d0d9 (3:50d9)
 	ld a, [wd3b6]
@@ -2355,7 +2365,7 @@ Func_d125: ; d125 (3:5125)
 	pop af
 	farcall Medal_1029e
 	call Func_c2d4
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d135: ; d135 (3:5135)
 	sla c
@@ -2376,7 +2386,7 @@ Func_d135: ; d135 (3:5135)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 INCBIN "baserom.gbc",$d153,$d16b - $d153
 
@@ -2403,7 +2413,7 @@ Func_d16b: ; d16b (3:516b)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d195: ; d195 (3:5195)
 	ld a, [wd3ab]
@@ -2417,11 +2427,11 @@ Func_d195: ; d195 (3:5195)
 	call Func_f580
 	pop af
 	ld [wd3ab], a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d1ad: ; d1ad (3:51ad)
 	call MainMenu_c75a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d1b3: ; d1b3 (3:51b3)
 	call Func_ca69
@@ -2448,7 +2458,7 @@ asm_d1c6
 	ld [wce3f], a
 	ld a, [hl]
 	ld [wce40], a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 INCBIN "baserom.gbc",$d1dc,$d209 - $d1dc
 
@@ -2488,7 +2498,7 @@ INCBIN "baserom.gbc",$d234,$d244 - $d234
 Func_d244: ; d244 (3:5244)
 	ld a, c
 	farcall Func_80ba4
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d24c: ; d24c (3:524c)
 	ld hl, $525e
@@ -2498,7 +2508,7 @@ Func_d24c: ; d24c (3:524c)
 	ld c, a
 	call Func_ca8f
 	halt
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 INCBIN "baserom.gbc",$d25e,$d271 - $d25e
 
@@ -2506,7 +2516,7 @@ Func_d271: ; d271 (3:5271)
 	ld hl, $527b
 	xor a
 	call Func_d28c
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 ; 0xd27b
 
 INCBIN "baserom.gbc",$d27b,$d28c - $d27b
@@ -2597,7 +2607,7 @@ Func_d2f6: ; d2f6 (3:52f6)
 	ld [hl], l
 	xor a
 	ld [$d694], a
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 ; 0xd30c
 
 INCBIN "baserom.gbc",$d30c,$d317 - $d30c
@@ -2610,7 +2620,7 @@ Func_d317: ; d317 (3:5317)
 	ld c, a
 	call Func_ca8f
 	ld [hl], l
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 
 INCBIN "baserom.gbc",$d32b,$d336 - $d32b
@@ -2640,12 +2650,12 @@ DeckMachine_d336: ; d336 (3:5336)
 .asm_d364
 	call Func_37a0
 	call Func_c2d4
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d36d: ; d36d (3:536d)
-	ld a, [wd413]
+	ld a, [wOWScriptPointer]
 	ld l, a
-	ld a, [wd414]
+	ld a, [wOWScriptPointer+1]
 	ld h, a
 	inc hl
 	ld a, [hli]
@@ -2659,15 +2669,15 @@ Func_d36d: ; d36d (3:536d)
 	ld [wd0be], a
 	ld hl, wd0b4
 	set 4, [hl]
-	jp Func_cc70
+	jp IncreaseOWScriptPointerBy6
 
 Func_d38f: ; d38f (3:538f)
 	farcall Func_10c96
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d396: ; d396 (3:5396)
 	farcall Func_1157c
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d39d: ; d39d (3:539d)
 	ld a, c
@@ -2686,7 +2696,7 @@ Func_d39d: ; d39d (3:539d)
 	set 6, [hl]
 
 .asm_d3b6
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d3b9: ; d3b9 (3:53b9)
 	call Func_3917
@@ -2694,20 +2704,20 @@ Func_d3b9: ; d3b9 (3:53b9)
 	ld [wd0b5], a
 	ld hl, wd0b4
 	set 6, [hl]
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d3c9: ; d3c9 (3:53c9)
 	ld a, c
 	farcall Func_10a70
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d3d1: ; d3d1 (3:53d1)
-    jp Func_cc60
+    jp IncreaseOWScriptPointerBy1
 
 Func_d3d4: ; d3d4 (3:53d4)
 	ld a, [$d693]
 	bank1call Func_7576
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 INCBIN "baserom.gbc",$d3dd,$d3e0 - $d3dd
 
@@ -2722,62 +2732,62 @@ Func_d3e0: ; d3e0 (3:53e0)
 	cp $2
 	jr nz, .asm_d3e9
 	farcall Func_10f2e
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d3fe: ; d3fe (3:53fe)
 	ld a, c
 	ld [wd112], a
 	call PlaySong
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d408: ; d408 (3:5408)
 	ld a, c
 	ld [wd111], a
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d40f: ; d40f (3:540f)
 	ld a, c
 	call Func_3c83
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d416: ; d416 (3:5416)
 	ld a, c
 	call Func_3796
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d41d: ; d41d (3:541d)
 	call Func_39fc
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d423: ; d423 (3:5423)
 	call Func_379b
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d429: ; d429 (3:5429)
 	call Func_37a0
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d42f: ; d42f (3:542f)
 	call Func_3c96
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d435: ; d435 (3:5435)
 	ld a, c
 	farcall Func_1c83d
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d43d: ; d43d (3:543d)
 	ld a, $6
 	ld [wd0b5], a
 	ld hl, wd0b4
 	set 6, [hl]
-	jp Func_cc60
+	jp IncreaseOWScriptPointerBy1
 
 Func_d44a: ; d44a (3:544a)
 	ld a, c
 	ld c, b
 	call Func_ca92
-	jp Func_cc78
+	jp IncreaseOWScriptPointerBy3
 
 Func_d452: ; d452 (3:5452)
 	ld a, c
@@ -2787,7 +2797,7 @@ Func_d452: ; d452 (3:5452)
 	ld c, a
 	pop af
 	call Func_ca92
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d460: ; d460 (3:5460)
 	ld a, c
@@ -2796,7 +2806,7 @@ Func_d460: ; d460 (3:5460)
 	jr z, asm_d46d
 asm_d467
 	call Func_ccb9
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 asm_d46d
 	call Func_ccb3
@@ -2805,7 +2815,7 @@ asm_d46d
 	jp Func_cc8b
 
 .asm_d478
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_d47b: ; d47b (3:547b)
 	ld a, c
@@ -2821,7 +2831,7 @@ Func_d484: ; d484 (3:5484)
 
 Func_d48a: ; d48a (3:548a)
 	call Func_ccb9
-	jp Func_cc6c
+	jp IncreaseOWScriptPointerBy5
 
 Func_d490: ; d490 (3:5490)
 	call Func_ccb3
@@ -2830,7 +2840,7 @@ Func_d490: ; d490 (3:5490)
 	jp Func_cc8b
 
 .asm_d49b
-	jp Func_cc6c
+	jp IncreaseOWScriptPointerBy5
 
 Func_d49e: ; d49e (3:549e)
 	call Func_d4b6
@@ -2859,12 +2869,12 @@ Func_d4b6: ; d4b6 (3:54b6)
 Func_d4bc: ; d4bc (3:54bc)
 	ld a, c
 	call Func_cac5
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d4c3: ; d4c3 (3:54c3)
 	ld a, c
 	call Func_cad0
-	jp Func_cc64
+	jp IncreaseOWScriptPointerBy2
 
 Func_d4ca: ; d4ca (3:54ca)
 	ld a, c
@@ -2877,7 +2887,7 @@ Func_d4d1:
 	jr z, .asm_d4dc
 	jp Func_cc8b
 .asm_d4dc
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 
 Func_d4df:
 	ld a, c
@@ -2886,7 +2896,7 @@ Func_d4df:
 	jr z, Func_d4d1
 asm_d4e6
 	call Func_ccb9
-	jp Func_cc68
+	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
 INCBIN "baserom.gbc",$d4ec,$f580 - $d4ec

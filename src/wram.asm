@@ -787,10 +787,10 @@ wd0b4:: ; d0b4
 wd0b5:: ; d0b5
 	ds $1
 
-wd0b6:: ; d0b6
+wSCX:: ; d0b6
 	ds $1
 
-wd0b7:: ; d0b7
+wSCY:: ; d0b7
 	ds $1
 
 wd0b8:: ; d0b8
@@ -911,6 +911,7 @@ wd132:: ; d132
 	ds $1
 
 wBoosterViableCardList:: ; d133
+wFloorObjectMap:: ; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
 	ds $100
 
 wd233:: ; d233
@@ -919,10 +920,10 @@ wd233:: ; d233
 wd234:: ; d234
 	ds $1
 
-wd235:: ; d235
+wSCXBuffer:: ; d235
 	ds $1
 
-wd236:: ; d236
+wSCYBuffer:: ; d236
 	ds $1
 
 wd237:: ; d237
@@ -1054,11 +1055,10 @@ wd411:: ; d411
 wd412:: ; d412
 	ds $1
 
-wd413:: ; d413
-	ds $1
+wOWScriptPointer:: ; d413
+	ds $2
 
-wd414:: ; d414
-	ds $9
+	ds $8
 
 wd41d:: ; d41d
 	ds $1
@@ -1114,8 +1114,13 @@ wd4ca:: ; d4ca
 wd4cb:: ; d4cb
 	ds $4
 
+; some sort of control bit for the OAMBuffer
 wd4cf:: ; d4cf
-	ds $104
+	ds $1
+
+; this might be more of an animation buffer as I can't find any properties like which tile sprites take up are.
+wOAMBuffer:: ; d4d0
+	ds $103
 
 wd5d3:: ; d5d3
 	ds $4

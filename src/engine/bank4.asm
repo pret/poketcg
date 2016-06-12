@@ -496,7 +496,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
 	ld c, $2
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	ld a, $80
 	ld [hli], a
 	ld a, $10
@@ -534,7 +534,7 @@ Func_10fde: ; 10fde (4:4fde)
 	or a
 	jr nz, .asm_11015
 	ld c, $f
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	set 7, [hl]
 .asm_11015
 	ret
@@ -553,7 +553,7 @@ Func_11024: ; 11024 (4:5024)
 	ld a, [wd336]
 	ld [wd4cf], a
 	ld c, $f
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
 	ld a, [wd33d]
@@ -626,7 +626,7 @@ Func_110a6: ; 110a6 (4:50a6)
 	push hl
 	push bc
 	ld c, $2
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	pop bc
 	ld a, b
 	sub [hl]
@@ -766,7 +766,7 @@ Func_11184: ; 11184 (4:5184)
 	ld a, [wd348]
 	ld e, a
 	ld c, $2
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	ld a, [wd343]
 	add d
 	ld d, a
@@ -963,9 +963,9 @@ INCLUDE "data/unknownNPCData.asm"
 INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
 
 
-PointerTable_1217b: ; 1217b (4:617b)
+OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_ccbe
-	dw Func_ccc6
+	dw Func_ccc6 ; seems to end conversation with mason and starts bringing aid over
 	dw Func_ccd4 ; Seems to begin dialogue with NPCs
 	dw Func_ccdc
 	dw Func_cce9 ; opens the "start battle?" box
@@ -994,7 +994,7 @@ PointerTable_1217b: ; 1217b (4:617b)
 	dw Func_d049
 	dw Func_d04f
 	dw Func_d055
-	dw Func_d05c
+	dw OWScript_MovePlayer
 	dw Func_cee2
 	dw Func_d080
 	dw Func_d088
@@ -1255,7 +1255,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
 	ld c, $5
-	call Func_3dbf
+	call ModifyUnknownOAMBufferProperty
 	pop af
 	cp [hl]
 	pop hl
