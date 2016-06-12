@@ -1118,7 +1118,7 @@ wd4cb:: ; d4cb
 wd4cf:: ; d4cf
 	ds $1
 
-; this might be more of an animation buffer as I can't find any properties like which tile sprites take up are.
+; this might be more of an animation buffer as I can't find any properties like which tile sprites go where.
 wOAMBuffer:: ; d4d0
 	ds $103
 
