@@ -2899,7 +2899,22 @@ asm_d4e6
 	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
-INCBIN "baserom.gbc",$d4ec,$f580 - $d4ec
+INCBIN "baserom.gbc",$d4ec,$d753 - $d4ec
+
+; move to it's own file after we know where scripts start and end
+	start_script
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	run_script OWScript_MovePlayer, $0, $2
+	; there are more but the scripts haven't been disassembled
+
+INCBIN "baserom.gbc",$d76f,$f580 - $d76f
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69

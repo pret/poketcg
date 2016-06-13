@@ -962,7 +962,7 @@ INCLUDE "data/unknownNPCData.asm"
 
 INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
 
-
+owsCons = 0
 OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_ccbe
 	dw Func_ccc6 ; seems to end conversation with mason and starts bringing aid over
@@ -1017,7 +1017,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d195
 	dw Func_d1ad
 	dw Func_d1b3
-	dw Func_cccc ; Ends dialoge. Seems to do it after player answers the "start fight?" question.
+	dw Func_cccc ; Ends dialogue but seems to be more of a loading thing. it's used to load mason's lab, i bet it's used to load battles + in general
 	dw Func_d244
 	dw Func_d24c
 	dw DeckMachine_d336
