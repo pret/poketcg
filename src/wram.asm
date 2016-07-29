@@ -764,7 +764,10 @@ wceb5:: ; ceb5
 	ds $17
 
 wcecc:: ; cecc
-	ds $ed
+	ds $9c
+	
+wHandCardBuffer:: ; cf68
+	ds $51
 
 wcfb9:: ; cfb9
 	ds $2a
@@ -1047,12 +1050,16 @@ wd3d0:: ; d3d0
 	ds $1
 
 wd3d1:: ; d3d1
-	ds $40
+	ds $1
+
+wEventFlags::
+	ds $3f
 
 wd411:: ; d411
 	ds $1
 
-wd412:: ; d412
+; 0 keeps looping, other values break the loop in RST20
+wBreakOWScriptLoop:: ; d412
 	ds $1
 
 wOWScriptPointer:: ; d413
@@ -1194,7 +1201,7 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
-wBoosterDataRarityIndex:: ; d686
+wBoosterDataCurrSet:: ; d686
 	ds $1
 
 wBoosterDataEnergyFunctionPointer:: ; d687

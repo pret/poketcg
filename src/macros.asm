@@ -406,25 +406,13 @@ ENDM
 
 run_script: MACRO
 	db \1_index
-	if(_NARG > 1)
-
-	rept (_NARG + -1)
-	shift
-	db \1
-	endr
-
-	endc
 ENDM
 
 ; for the repeated functions on the table, need to specify which one, unfortunately
 run_scriptx: MACRO
 	db \1
-	if(_NARG > 1)
+ENDM
 
-	rept (_NARG + -1)
-	shift
-	db \1
-	endr
-
-	endc
+argt: MACRO
+	dw \1_
 ENDM

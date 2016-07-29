@@ -42,6 +42,9 @@ CARD_LOCATION_BENCH_3      EQU $13
 CARD_LOCATION_BENCH_4      EQU $14
 CARD_LOCATION_BENCH_5      EQU $15
 
+;;; constant values
+DUEL_MAX_POKEMON_IN_PLAY	EQU $06
+
 ;;; status conditions
 ; two statuses can be combined if they are identified by a different nybble
 NO_STATUS       EQU $00

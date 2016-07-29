@@ -124,7 +124,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	swap a
 	and $0f
 	ld c, a
-	ld a, [wBoosterDataRarityIndex]
+	ld a, [wBoosterDataCurrSet]
 	cp c
 	jr nz, .invalidCard
 .returnValidCard
@@ -464,7 +464,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	dec c
 	jr nz, .clearTempCardCollectionLoop
 	call FindBoosterDataPointer
-	ld de, wBoosterDataRarityIndex
+	ld de, wBoosterDataCurrSet
 	ld bc, $c
 	call CopyData
 	call LoadRarityAmountsToWram
@@ -502,43 +502,43 @@ FindBoosterDataPointer: ; 1e46f (7:646f)
 	ret
 
 BoosterData_PtrTbl: ; 1e480 (7:6480)
-	dw BoosterData_1e4e4
-	dw BoosterData_1e4f0
-	dw BoosterData_1e4fc
-	dw BoosterData_1e508
-	dw BoosterData_1e514
-	dw BoosterData_1e520
-	dw BoosterData_1e52c
-	dw BoosterData_1e538
-	dw BoosterData_1e544
-	dw BoosterData_1e550
-	dw BoosterData_1e55c
-	dw BoosterData_1e568
-	dw BoosterData_1e574
-	dw BoosterData_1e580
-	dw BoosterData_1e58c
-	dw BoosterData_1e598
-	dw BoosterData_1e5a4
-	dw BoosterData_1e5b0
-	dw BoosterData_1e5bc
-	dw BoosterData_1e5c8
-	dw BoosterData_1e5d4
-	dw BoosterData_1e5e0
-	dw BoosterData_1e5ec
-	dw BoosterData_1e5f8
-	dw BoosterData_1e604
-	dw BoosterData_1e610
-	dw BoosterData_1e61c
-	dw BoosterData_1e628
-	dw BoosterData_1e634
+	dw PackColoNeutral
+	dw PackColoGrass
+	dw PackColoFire
+	dw PackColoWater
+	dw PackColoLightning
+	dw PackColoFighting
+	dw PackColoTrainer
+	dw PackEvoNeutral
+	dw PackEvoGrass
+	dw PackEvoNeutralFireEnergy
+	dw PackEvoWater
+	dw PackEvoFighting
+	dw PackEvoPsychic
+	dw PackEvoTrainer
+	dw PackMysteryNeutral
+	dw PackMysteryGrassColorless
+	dw PackMysteryWaterColorless
+	dw PackLightningColorless
+	dw PackMysteryFightingColorless
+	dw PackMysteryTrainerColorless
+	dw PackLabTrainerLessFighting
+	dw PackLabGrass
+	dw PackLabWater
+	dw PackLabPsychic
+	dw PackLabTrainer
+	dw PackEnergyLightningFire
+	dw PackEnergyWaterFighting
+	dw PackEnergyGrassPsychic
+	dw PackRandomEnergies
 
 LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
-	ld a, [wBoosterDataRarityIndex]
+	ld a, [wBoosterDataCurrSet]
 	add a
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, BoosterRarityAmountTable
+	ld hl, BoosterSetRarityAmountTable
 	add hl, bc
 	inc hl
 	ld a, [hli]
@@ -549,14 +549,14 @@ LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
 	ld [wBoosterDataRareAmount], a
 	ret
 
-BoosterRarityAmountTable: ; 1e4d4 (7::64d4)
+BoosterSetRarityAmountTable: ; 1e4d4 (7::64d4)
 	db $01, $05, $03, $01 ; other, commons, uncommons, rares
 	db $01, $05, $03, $01 ; other, commons, uncommons, rares
 	db $00, $06, $03, $01 ; other, commons, uncommons, rares
 	db $00, $06, $03, $01 ; other, commons, uncommons, rares
 
-BoosterData_1e4e4:: ; 1e4e4 (7:64e4)
-	db $00 ;booster rarity table index
+PackColoNeutral:: ; 1e4e4 (7:64e4)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
 ; Card Type Chances
@@ -570,8 +570,8 @@ BoosterData_1e4e4:: ; 1e4e4 (7:64e4)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e4f0:: ; 1e4f0 (7:64f0)
-	db $00 ;booster rarity table index
+PackColoGrass:: ; 1e4f0 (7:64f0)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GRASS_ENERGY  ; energy or energy generation function
 
 ; Card Type Chances
@@ -585,8 +585,8 @@ BoosterData_1e4f0:: ; 1e4f0 (7:64f0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e4fc:: ; 1e4fc (7:64fc)
-	db $00 ;booster rarity table index
+PackColoFire:: ; 1e4fc (7:64fc)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw FIRE_ENERGY  ; energy or energy generation function
 
 ; Card Type Chances
@@ -600,8 +600,8 @@ BoosterData_1e4fc:: ; 1e4fc (7:64fc)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e508:: ; 1e508 (7:6508)
-	db $00 ;booster rarity table index
+PackColoWater:: ; 1e508 (7:6508)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -615,8 +615,8 @@ BoosterData_1e508:: ; 1e508 (7:6508)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e514:: ; 1e514 (7:6514)
-	db $00 ;booster rarity table index
+PackColoLightning:: ; 1e514 (7:6514)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw LIGHTNING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -630,8 +630,8 @@ BoosterData_1e514:: ; 1e514 (7:6514)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e520:: ; 1e520 (7:6520)
-	db $00 ;booster rarity table index
+PackColoFighting:: ; 1e520 (7:6520)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -645,8 +645,8 @@ BoosterData_1e520:: ; 1e520 (7:6520)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e52c:: ; 1e52c (7:652c)
-	db $00 ;booster rarity table index
+PackColoTrainer:: ; 1e52c (7:652c)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
 ; Card Type Chances
@@ -660,8 +660,8 @@ BoosterData_1e52c:: ; 1e52c (7:652c)
 	db $30 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e538:: ; 1e538 (7:6538)
-	db $01 ;booster rarity table index
+PackEvoNeutral:: ; 1e538 (7:6538)
+	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
 ; Card Type Chances
@@ -675,8 +675,8 @@ BoosterData_1e538:: ; 1e538 (7:6538)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e544:: ; 1e544 (7:6544)
-	db $01 ;booster rarity table index
+PackEvoGrass:: ; 1e544 (7:6544)
+	db EVOLUTION >> 4 ; booster pack set
 	dw GRASS_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -690,8 +690,8 @@ BoosterData_1e544:: ; 1e544 (7:6544)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e550:: ; 1e550 (7:6550)
-	db $01 ;booster rarity table index
+PackEvoNeutralFireEnergy:: ; 1e550 (7:6550)
+	db EVOLUTION >> 4 ; booster pack set
 	dw FIRE_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -705,8 +705,8 @@ BoosterData_1e550:: ; 1e550 (7:6550)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e55c:: ; 1e55c (7:655c)
-	db $01 ;booster rarity table index
+PackEvoWater:: ; 1e55c (7:655c)
+	db EVOLUTION >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -720,8 +720,8 @@ BoosterData_1e55c:: ; 1e55c (7:655c)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e568:: ; 1e568 (7:6568)
-	db $01 ;booster rarity table index
+PackEvoFighting:: ; 1e568 (7:6568)
+	db EVOLUTION >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -735,8 +735,8 @@ BoosterData_1e568:: ; 1e568 (7:6568)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e574:: ; 1e574 (7:6574)
-	db $01 ;booster rarity table index
+PackEvoPsychic:: ; 1e574 (7:6574)
+	db EVOLUTION >> 4 ; booster pack set
 	dw PSYCHIC_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
@@ -750,8 +750,8 @@ BoosterData_1e574:: ; 1e574 (7:6574)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e580:: ; 1e580 (7:6580)
-	db $01 ;booster rarity table index
+PackEvoTrainer:: ; 1e580 (7:6580)
+	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
 ; Card Type Chances
@@ -765,8 +765,8 @@ BoosterData_1e580:: ; 1e580 (7:6580)
 	db $30 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e58c:: ; 1e58c (7:658c)
-	db $02 ;booster rarity table index
+PackMysteryNeutral:: ; 1e58c (7:658c)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -780,8 +780,8 @@ BoosterData_1e58c:: ; 1e58c (7:658c)
 	db $11 ; Trainer Card Chance
 	db $11 ; Energy Card Chance
 
-BoosterData_1e598:: ; 1e598 (7:6598)
-	db $02 ;booster rarity table index
+PackMysteryGrassColorless:: ; 1e598 (7:6598)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -795,8 +795,8 @@ BoosterData_1e598:: ; 1e598 (7:6598)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-BoosterData_1e5a4:: ; 1e5a4 (7:65a4)
-	db $02 ;booster rarity table index
+PackMysteryWaterColorless:: ; 1e5a4 (7:65a4)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -810,8 +810,8 @@ BoosterData_1e5a4:: ; 1e5a4 (7:65a4)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-BoosterData_1e5b0:: ; 1e5b0 (7:65b0)
-	db $02 ;booster rarity table index
+PackLightningColorless:: ; 1e5b0 (7:65b0)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -825,8 +825,8 @@ BoosterData_1e5b0:: ; 1e5b0 (7:65b0)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-BoosterData_1e5bc:: ; 1e5bc (7:65bc)
-	db $02 ;booster rarity table index
+PackMysteryFightingColorless:: ; 1e5bc (7:65bc)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -840,8 +840,8 @@ BoosterData_1e5bc:: ; 1e5bc (7:65bc)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-BoosterData_1e5c8:: ; 1e5c8 (7:65c8)
-	db $02 ;booster rarity table index
+PackMysteryTrainerColorless:: ; 1e5c8 (7:65c8)
+	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -855,8 +855,8 @@ BoosterData_1e5c8:: ; 1e5c8 (7:65c8)
 	db $30 ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-BoosterData_1e5d4:: ; 1e5d4 (7:65d4)
-	db $03 ;booster rarity table index
+PackLabTrainerLessFighting:: ; 1e5d4 (7:65d4)
+	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -870,8 +870,8 @@ BoosterData_1e5d4:: ; 1e5d4 (7:65d4)
 	db $18 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e5e0:: ; 1e5e0 (7:65e0)
-	db $03 ;booster rarity table index
+PackLabGrass:: ; 1e5e0 (7:65e0)
+	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -885,8 +885,8 @@ BoosterData_1e5e0:: ; 1e5e0 (7:65e0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e5ec:: ; 1e5ec (7:65ec)
-	db $03 ;booster rarity table index
+PackLabWater:: ; 1e5ec (7:65ec)
+	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -900,8 +900,8 @@ BoosterData_1e5ec:: ; 1e5ec (7:65ec)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e5f8:: ; 1e5f8 (7:65f8)
-	db $03 ;booster rarity table index
+PackLabPsychic:: ; 1e5f8 (7:65f8)
+	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -915,8 +915,8 @@ BoosterData_1e5f8:: ; 1e5f8 (7:65f8)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e604:: ; 1e604 (7:6604)
-	db $03 ;booster rarity table index
+PackLabTrainer:: ; 1e604 (7:6604)
+	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
 ; Card Type Chances
@@ -930,8 +930,8 @@ BoosterData_1e604:: ; 1e604 (7:6604)
 	db $30 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e610:: ; 1e610 (7:6610)
-	db $00 ;booster rarity table index
+PackEnergyLightningFire:: ; 1e610 (7:6610)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEnergyBoosterLightningFire ; energy or energy generation function
 
 ; Card Type Chances
@@ -945,8 +945,8 @@ BoosterData_1e610:: ; 1e610 (7:6610)
 	db $00 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e61c:: ; 1e61c (7:661c)
-	db $00 ;booster rarity table index
+PackEnergyWaterFighting:: ; 1e61c (7:661c)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEnergyBoosterWaterFighting ; energy or energy generation function
 
 ; Card Type Chances
@@ -960,8 +960,8 @@ BoosterData_1e61c:: ; 1e61c (7:661c)
 	db $00 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e628:: ; 1e628 (7:6628)
-	db $00 ;booster rarity table index
+PackEnergyGrassPsychic:: ; 1e628 (7:6628)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEnergyBoosterGrassPsychic ; energy or energy generation function
 
 ; Card Type Chances
@@ -975,8 +975,8 @@ BoosterData_1e628:: ; 1e628 (7:6628)
 	db $00 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-BoosterData_1e634:: ; 1e634 (7:6634)
-	db $00 ;booster rarity table index
+PackRandomEnergies:: ; 1e634 (7:6634)
+	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateRandomEnergyBoosterPack ; energy or energy generation function
 
 ; Card Type Chances

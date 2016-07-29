@@ -2,7 +2,129 @@ Func_80000: ; 80000 (20:4000)
 INCBIN "baserom.gbc",$80000,$80028 - $80000
 
 Func_80028: ; 80028 (20:4028)
-INCBIN "baserom.gbc",$80028,$8020f - $80028
+	call Func_801f1
+	ld bc, $0000
+	call Func_80077
+	farcallx $3, $49c7
+	call $41a1
+	farcallx $3, $43ee
+	ret
+; 0x8003d
+
+INCBIN "baserom.gbc",$8003d,$80077 - $8003d
+
+Func_80077: ; 80077 (20:4077)
+	ld a, $1
+	ld [$d292], a
+	jr .asm_80082
+
+	xor a
+	ld [$d292], a
+
+.asm_80082
+	push hl
+	push bc
+	push de
+	call Func_04cf
+	ld hl, wd4c2
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call $43b9
+	ld a, [wd4c6]
+	ld [$d23d], a
+	ld de, $d23e
+	ld bc, $0006
+	call Func_3bf5
+	ld l, e
+	ld h, d
+	ld a, [hli]
+	ld [$d12f], a
+	ld a, [hli]
+	ld [$d130], a
+	ld a, [hli]
+	ld [$d23a], a
+	ld a, [hli]
+	ld [$d23b], a
+	ld a, [hli]
+	ld [$d23c], a
+	call $40bd
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x800bd
+
+INCBIN "baserom.gbc",$800bd,$801a1 - $800bd
+
+Func_801a1: ; 801a1 (20:41a1)
+	push hl
+	push bc
+	push de
+	ld a, [$ff81]
+	push af
+	ld a, $1
+	call BankswitchRAM
+	ld hl, $a000
+	ld de, $9800
+	ld c, $20
+.asm_801b4
+	push bc
+	push hl
+	push de
+	ld b, $20
+	call $06fc
+	ld a, [wConsole]
+	cp $2
+	jr nz, .asm_801d6
+	pop de
+	pop hl
+	push hl
+	push de
+	ld bc, $0400
+	add hl, bc
+	call BankswitchVRAM_1
+	ld b, $20
+	call $06fc
+	call BankswitchVRAM_0
+
+.asm_801d6
+	pop hl
+	ld de, $0020
+	add hl, de
+	ld e, l
+	ld d, h
+	pop hl
+	ld bc, $0020
+	add hl, bc
+	pop bc
+	dec c
+	jr nz, .asm_801b4
+	pop af
+	call BankswitchRAM
+	call DisableExtRAM
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_801f1: ; 801f1 (20:41f1)
+	push hl
+	push bc
+	ld a, [$ff81]
+	push af
+	ld a, $1
+	call BankswitchRAM
+	ld hl, $a000
+	ld bc, $0800
+	xor a
+	call $3c10
+	pop af
+	call BankswitchRAM
+	call DisableExtRAM
+	pop bc
+	pop hl
+	ret
 
 Func_8020f: ; 8020f (20:420f)
 	push bc

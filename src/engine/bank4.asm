@@ -457,7 +457,7 @@ Func_10f4a: ; 10f4a (4:4f4a)
 	jr nz, .asm_10f5f
 	ld c, a
 	ld a, $1e
-	farcall Func_ca6c
+	farcall CheckIfEventFlagSet
 	or a
 	ld a, c
 	jr nz, .asm_10f5f
@@ -530,7 +530,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33c], a
 	call Func_12ab5
 	ld a, $3e
-	farcall Func_ca6c
+	farcall CheckIfEventFlagSet
 	or a
 	jr nz, .asm_11015
 	ld c, $f
@@ -962,21 +962,20 @@ INCLUDE "data/unknownNPCData.asm"
 
 INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
 
-owsCons = 0
 OverworldScriptTable: ; 1217b (4:617b)
-	dw Func_ccbe
-	dw Func_ccc6 ; seems to end conversation with mason and starts bringing aid over
-	dw Func_ccd4 ; Seems to begin dialogue with NPCs
+	dw OWScript_EndScriptLoop
+	dw OWScript_CloseTextBox
+	dw OWScript_PrintTextString
 	dw Func_ccdc
-	dw Func_cce9 ; opens the "start battle?" box
-	dw Func_cd01 ; seems to start a battle. 
+	dw OWScript_AskQuestionJump
+	dw OWScript_StartBattle
 	dw Func_cd83
 	dw Func_cda8
-	dw Func_cdb9
+	dw OWScript_PrintTextCloseBox
 	dw Func_cdcb
 	dw Func_ce26
 	dw Func_ce84
-	dw Func_ce8a ; Called after player wins a battle. Handles Booster Packs.
+	dw OWScript_GiveBoosterPacks
 	dw Func_cf0c
 	dw Func_cf12
 	dw Func_cf3f
@@ -991,7 +990,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d025
 	dw Func_d032
 	dw Func_d03f
-	dw Func_d049
+	dw OWScript_ScriptJump
 	dw Func_d04f
 	dw Func_d055
 	dw OWScript_MovePlayer
@@ -1017,7 +1016,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d195
 	dw Func_d1ad
 	dw Func_d1b3
-	dw Func_cccc ; Ends dialogue but seems to be more of a loading thing. it's used to load mason's lab, i bet it's used to load battles + in general
+	dw OWScript_EndScriptCloseText
 	dw Func_d244
 	dw Func_d24c
 	dw DeckMachine_d336
@@ -1047,27 +1046,27 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d2f6
 	dw Func_d317
 	dw Func_d43d
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_d44a
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_CustomModifyEventFlags
 	dw Func_d460
-	dw Func_d47b
+	dw OWScript_JumpIfFlagSet
 	dw Func_d484
 	dw Func_d49e
 	dw Func_d4a6
 	dw Func_d4ae
-	dw Func_d4bc
+	dw OWScript_SetEventFlags
 	dw Func_d4c3
 	dw Func_d4ca
-	dw Func_d4df ; Used by 2 lightning club members and npcs in mason's lab. Not sure why.
+	dw OWScript_JumpIfFlagNotSet
 	dw Func_d452
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_ccbe
-	dw Func_ccbe
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop
 
 INCBIN "baserom.gbc",$1224b,$1229f - $1224b
 

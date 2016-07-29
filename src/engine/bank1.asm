@@ -81,7 +81,7 @@ StartDuel: ; 409f (1:409f)
 	call $70aa
 	ld a, [wDuelTheme]
 	call PlaySong
-	call $4b60
+	call Func_4b60
 	ret c
 
 ; the loop returns here after every turn switch
@@ -90,7 +90,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wCurrentDuelMenuItem], a
 	call HandleSwordsDanceOrFocusEnergySubstatus
 	call $54c8
-	call DrawCardFromDeck
+	call HandleTurn
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
@@ -212,7 +212,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .asm_41f3
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call $4b60
+	call Func_4b60
 	jp $40ee
 
 .asm_41f3
@@ -226,14 +226,14 @@ StartDuel: ; 409f (1:409f)
 .asm_4201
 	ld a, h
 	ldh [hWhoseTurn], a
-	call $4b60
+	call Func_4b60
 	jp nc, $40ee
 	ret
 ; 0x420b
 
 INCBIN "baserom.gbc",$420b,$4225 - $420b
 
-DrawCardFromDeck: ; 4225 (1:4225)
+HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [wcc0d], a
@@ -928,7 +928,241 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	scf
 	ret
 
-INCBIN "baserom.gbc",$4933, $5aeb - $4933
+INCBIN "baserom.gbc",$4933, $4b60 - $4933
+
+Func_4b60: ; 4b60 (1:4b60)
+	call $7107
+	call SwapTurn
+	call $7107
+	call SwapTurn
+	call $4e84
+	call $4d97
+	ld [$ffa0], a
+	call SwapTurn
+	call $4d97
+	call SwapTurn
+	ld c, a
+	ld a, [$ffa0]
+	ld b, a
+	and c
+	jr nz, .asm_4bd0
+	ld a, b
+	or c
+	jr z, .asm_4bb2
+	ld a, b
+	or a
+	jr nz, .asm_4b9c
+.asm_4b8c
+	call $4df3
+	call $7107
+	call $4e6e
+	call $4d97
+	jr c, .asm_4b8c
+	jr .asm_4bd0
+
+.asm_4b9c
+	call SwapTurn
+.asm_4b9f
+	call $4df3
+	call $7107
+	call $4e6e
+	call $4d97
+	jr c, .asm_4b9f
+	call SwapTurn
+	jr .asm_4bd0
+
+.asm_4bb2
+	ld hl, $006b
+	call DrawWideTextBox_WaitForInput
+	call $4e06
+	call $7107
+	call SwapTurn
+	call $4e06
+	call $7107
+	call SwapTurn
+	call $4dfc
+	jp Func_4b60
+
+.asm_4bd0
+	ld a, [$ff97]
+	push af
+	ld a, $c2
+	ld [$ff97], a
+	call Func_4cd5
+	call SwapTurn
+	call Func_4cd5
+	call SwapTurn
+	jp c, $4c77
+	call $311d
+	ld hl, $0072
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	ld a, [wcc08]
+	ld l, a
+	ld h, $0
+	call Func_2ec4
+	ld hl, $0073
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	call $4c7c
+	call WaitForWideTextBoxInput
+	pop af
+	ld [$ff97], a
+	call $7133
+	call SwapTurn
+	call $7133
+	call SwapTurn
+	call Func_04a2
+	ld a, $6
+	call Func_2167
+	ld hl, $0075
+	call DrawWideTextBox_WaitForInput
+	ld a, [$ff97]
+	cp $c2
+	jr nz, .asm_4c52
+	ld de, wc590
+	call PrintPlayerName
+	ld hl, $0000
+	call Func_2ebb
+	ld hl, $0053
+	ld de, $0074
+	call TossCoin
+	jr c, .asm_4c4a
+	call SwapTurn
+	ld hl, $0054
+
+.asm_4c4a
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	or a
+	ret
+
+.asm_4c52
+	ld de, wc590
+	call PrintOpponentName
+	ld hl, $0000
+	call Func_2ebb
+	ld hl, $0054
+	ld de, $0074
+	call TossCoin
+	jr c, .asm_4c6f
+	call SwapTurn
+	ld hl, $0053
+
+.asm_4c6f
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	or a
+	ret
+; 0x4c77
+
+
+INCBIN "baserom.gbc",$4c77, $4cd5 - $4c77
+
+; Select Basic Pokemon From Hand
+Func_4cd5: ; 4cd5 (1:4cd5)
+	ld a, $f1
+	call GetTurnDuelistVariable
+	cp $0
+	jr z, .asm_4d15
+	cp $1
+	jr z, .asm_4cec
+	push af
+	push hl
+	call Func_2bc3
+	pop hl
+	pop af
+	ld [hl], a
+	or a
+	ret
+
+.asm_4cec
+	ld hl, $0057
+	call DrawWideTextBox_PrintText
+	call Func_0f58
+	ld hl, wPlayerCardLocations
+	ld de, wOpponentCardLocations
+	ld c, $80
+	call Func_0e63
+	jr c, .asm_4d12
+	ld c, $80
+	call Func_0e63
+	jr c, .asm_4d12
+	ld a, $f1
+	call GetTurnDuelistVariable
+	ld [hl], $1
+	or a
+	ret
+
+.asm_4d12
+	jp Func_0f35
+
+.asm_4d15
+	call Func_04a2
+	ld a, $5
+	call Func_2167
+	ld hl, $0069
+	call DrawWideTextBox_WaitForInput
+	ld a, $1
+	call $51e7
+.asm_4d28
+	xor a
+	ld hl, $006e
+	call $5502
+	jr c, .asm_4d28
+	ld a, [$ff98]
+	call LoadDeckCardToBuffer1
+	ld a, $2
+	call $51e7
+	jr c, .asm_4d28
+	ld a, [$ff98]
+	call $1485
+	ld a, [$ff98]
+	ld hl, $0062
+	call $4b31
+	jr .asm_4d4c
+
+.asm_4d4c
+	call Func_04a2
+	ld a, $4
+	call Func_2167
+	ld hl, $006d
+	call Func_2c73
+	ld a, $3
+	call $51e7
+.asm_4d5f
+	ld a, $1
+	ld hl, $006f
+	call $5502
+	jr c, .asm_4d8e
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $6
+	jr nc, .asm_4d86
+	ld a, [$ff98]
+	call $1485
+	ld a, [$ff98]
+	ld hl, $0061
+	call $4b31
+	ld a, $5
+	call $51e7
+	jr .asm_4d5f
+
+.asm_4d86
+	ld hl, $00b2
+	call DrawWideTextBox_WaitForInput
+	jr .asm_4d5f
+
+.asm_4d8e
+	ld a, $4
+	call $51e7
+	jr c, .asm_4d5f
+	or a
+	ret
+; 0x4d97
+
+
+INCBIN "baserom.gbc",$4d97, $5aeb - $4d97
 
 Func_5aeb: ; 5aeb (1:5aeb)
 INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb

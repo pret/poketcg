@@ -138,8 +138,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6157
-	dw $613f
+	dw WaterClubAfterDuel
+	dw WaterClubMovePlayer
 	dw $0000
 
 ; LIGHTNING_CLUB_ENTRANCE

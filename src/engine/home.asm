@@ -2329,7 +2329,49 @@ AddCardToHand: ; 1123 (0:1123)
 	ret
 ; 0x1139
 
-INCBIN "baserom.gbc",$1139,$127f - $1139
+INCBIN "baserom.gbc",$1139,$123b - $1139
+
+CreateHandCardBuffer: ; 123b (0:123b)
+	call FindLastCardInHand
+	inc b
+	jr .skipCard
+
+.checkNextCardLoop
+	ld a, [hld]
+	push hl
+	ld l, a 
+	bit 6, [hl]
+	pop hl
+	jr nz, .skipCard
+	ld [de], a
+	inc de
+
+.skipCard
+	dec b
+	jr nz, .checkNextCardLoop
+	ld a, $ff
+	ld [de], a
+	ld l, (wPlayerNumberOfCardsInHand & $ff)
+	ld a, [hl]
+	or a
+	ret nz
+	scf
+	ret
+; 0x1258
+
+INCBIN "baserom.gbc",$1258,$1271 - $1258
+
+; puts an index to the last (newest) card in current player's hand into hl.
+FindLastCardInHand: ; 1271 (0:1271)
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld l, (wPlayerNumberOfCardsInHand & $ff)
+	ld b, [hl]
+	ld a, (wPlayerHand & $ff) - 1
+	add [hl]
+	ld l, a
+	ld de, wDuelCardOrAttackList
+	ret
 
 ; shuffles the deck by swapping the position of each card with the position of another random card
 ; input:
@@ -2455,7 +2497,65 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-INCBIN "baserom.gbc",$13a2,$159f - $13a2
+INCBIN "baserom.gbc",$13a2,$1485 - $13a2
+
+Func_1485: ; 1485 (0:1485)
+	push af
+	ld a, $ff & wPlayerNumberOfPokemonInPlay
+	call GetTurnDuelistVariable
+	cp DUEL_MAX_POKEMON_IN_PLAY
+	jr nc, .tooManyPokemonInPlay
+	inc [hl]
+	ld e, a
+	pop af
+	push af
+	call $14d2
+	ld a, e
+	add $bb
+	ld l, a
+	pop af
+	ld [hl], a
+	call LoadDeckCardToBuffer2
+	ld a, $c8
+	add e
+	ld l, a
+	ld a, [wCardBuffer2HP]
+	ld [hl], a
+	ld a, $c2
+	add e
+	ld l, a
+	ld [hl], $0
+	ld a, $d4
+	add e
+	ld l, a
+	ld [hl], $0
+	ld a, $e0
+	add e
+	ld l, a
+	ld [hl], $0
+	ld a, $da
+	add e
+	ld l, a
+	ld [hl], $0
+	ld a, $ce
+	add e
+	ld l, a
+	ld a, [wCardBuffer2Stage]
+	ld [hl], a
+	ld a, e
+	or a
+	call z, $1461
+	ld a, e
+	or a
+	ret
+
+.tooManyPokemonInPlay
+	pop af
+	scf
+	ret
+; 0x14d2
+
+INCBIN "baserom.gbc",$14d2,$159f - $14d2
 
 ; This function iterates through the card locations array to find out which and how many
 ; energy cards are in arena (i.e. attached to the active pokemon).
@@ -5007,6 +5107,7 @@ Func_2bcf: ; 2bcf (0:2bcf)
 Func_2bd7: ; 2bd7 (0:2bd7)
 	ld a, $5
 	jr Func_2bdb
+
 Func_2bdb: ; 2bdb (0:2bdb)
 	ld c, a
 	ldh a, [hBankROM]
@@ -6869,7 +6970,7 @@ Credits_3911: ; 3911 (0:3911)
 
 Func_3917: ; 3917 (0:3917)
 	ld a, $22
-	farcall Func_ca6c
+	farcall CheckIfEventFlagSet
 	call EnableExtRAM
 	ld [$a00a], a
 	call DisableExtRAM
@@ -7139,7 +7240,7 @@ Func_3abd: ; 3abd (0:3abd)
 
 INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
 
-; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into bc
+; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into cb
 RunOverworldScript: ; 3aed (0:3aed)
 	ld hl, wOWScriptPointer
 	ld a, [hli]

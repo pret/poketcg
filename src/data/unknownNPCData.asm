@@ -32,8 +32,8 @@ PointerTable_118f5:
 	dw Data_11b3c
 	dw Data_11b49
 	dw Data_11b56
-	dw Data_11b63
-	dw Data_11b70
+	dw SaraData
+	dw AmandaData
 	dw Data_11b7d
 	dw Data_11b8a
 	dw Data_11b97
@@ -507,29 +507,29 @@ Data_11b56:
 	db $11
 	db $03
 	db $16
-Data_11b63:
-	db $1f
+SaraData:
+	db SARA ; trainer id
 	db $20
 	db $00
 	db $0e
 	db $00
-	dw $6177 ; Pointer to NPC Data
+	dw OWSequence_Sara ; Pointer to NPC Data
 	db $bc
 	db $03
-	db $24
+	db SARA_PIC ; battle profile picture
 	db $22
 	db $03
 	db $15
-Data_11b70:
-	db $20
+AmandaData:
+	db AMANDA
 	db $20
 	db $00
 	db $16
 	db $00
-	dw $619e ; Pointer to NPC Data
+	dw OWSequence_Amanda ; Pointer to NPC Data
 	db $bd
 	db $03
-	db $25
+	db AMANDA_PIC
 	db $23
 	db $03
 	db $15
@@ -539,7 +539,7 @@ Data_11b7d:
 	db $00
 	db $26
 	db $00
-	dw $621c ; Pointer to NPC Data
+	dw OWSequence_Joshua ; Pointer to NPC Data
 	db $be
 	db $03
 	db $17

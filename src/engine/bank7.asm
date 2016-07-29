@@ -250,7 +250,6 @@ Func_1c719: ; 1c719 (7:4719)
 	pop hl
 	ret
 
-
 Func_1c72e: ; 1c72e (7:472e)
 INCBIN "baserom.gbc",$1c72e,$1c768 - $1c72e
 

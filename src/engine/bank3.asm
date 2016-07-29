@@ -126,7 +126,8 @@ Func_c10a: ; c10a (3:410a)
 	ld l, a
 	jp [hl]
 
-Func_c111: ; c111 (3:4111)
+; closes dialogue window. seems to be for other things as well.
+CloseDialogueBox: ; c111 (3:4111)
 	ld a, [wd0c1]
 	bit 0, a
 	call nz, Func_c135
@@ -969,7 +970,7 @@ Func_c74d: ; c74d (3:474d)
 	push bc
 	push de
 	call MainMenu_c75a
-	call Func_c111
+	call CloseDialogueBox
 	pop de
 	pop bc
 	pop hl
@@ -1090,7 +1091,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call DoFrameIfLCDEnabled
 	text_hl TurnedPCOffText
 	call Func_c891
-	call Func_c111
+	call CloseDialogueBox
 	xor a
 	ld [wd112], a
 	call Func_39fc
@@ -1307,7 +1308,7 @@ Func_c9c7: ; c9c7 (3:49c7)
 Func_c9cb: ; c9cb (3:49cb)
 	push hl
 	push bc
-	ld hl, $d3d2
+	ld hl, wEventFlags
 	ld bc, $0040
 .asm_c9d3
 	xor a
@@ -1409,10 +1410,10 @@ Func_ca0e: ; ca0e (3:4a0e)
 
 Func_ca69: ; ca69 (3:4a69)
 	call Func_cab3
-Func_ca6c: ; ca6c (3:4a6c)
+CheckIfEventFlagSet: ; ca6c (3:4a6c)
 	push hl
 	push bc
-	call Func_cb1d
+	call GetEventFlagMod
 	ld c, [hl]
 	ld a, [wd3d1]
 .asm_ca75
@@ -1433,10 +1434,12 @@ INCBIN "baserom.gbc",$ca84,$ca8f - $ca84
 
 Func_ca8f: ; ca8f (3:4a8f)
 	call Func_cab3
-Func_ca92: ; ca92 (3:4a92)
+
+; a - pointer on table for cb1d, c - set or reset control bit
+ModifyEventFlags: ; ca92 (3:4a92)
 	push hl
 	push bc
-	call Func_cb1d
+	call GetEventFlagMod
 	ld a, [wd3d1]
 .asm_ca9a
 	bit 0, a
@@ -1476,10 +1479,10 @@ Func_cab3: ; cab3 (3:4ab3)
 
 INCBIN "baserom.gbc",$cac2,$cac5 - $cac2
 
-Func_cac5: ; cac5 (3:4ac5)
+SetEventFlags: ; cac5 (3:4ac5)
 	push bc
 	ld c, $ff
-	call $4a92
+	call ModifyEventFlags
 	pop bc
 	ret
 ; 0xcacd
@@ -1489,7 +1492,7 @@ INCBIN "baserom.gbc",$cacd,$cad0 - $cacd
 Func_cad0: ; cad0 (3:4ad0)
 	push bc
 	ld c, $0
-	call Func_ca92
+	call ModifyEventFlags
 	pop bc
 	ret
 
@@ -1500,7 +1503,7 @@ Func_cad8: ; cad8 (3:4ad8)
 	ld bc, $0008
 .asm_cae0
 	ld a, [hli]
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	jr z, .asm_cae7
 	inc b
 
@@ -1540,25 +1543,26 @@ Func_cad8: ; cad8 (3:4ad8)
 
 INCBIN "baserom.gbc",$cb15,$cb1d - $cb15
 
-Func_cb1d: ; cb1d (3:4b1d)
+GetEventFlagMod: ; cb1d (3:4b1d)
 	push bc
 	ld c, a
 	ld b, $0
 	sla c
 	rl b
-	ld hl, Unknown_cb37
+	ld hl, EventFlagMods
 	add hl, bc
 	ld a, [hli]
 	ld c, a
 	ld a, [hl]
 	ld [wd3d1], a
 	ld b, $0
-	ld hl, $d3d2
+	ld hl, wEventFlags
 	add hl, bc
 	pop bc
 	ret
 
-Unknown_cb37: ; cb37 (3:4b37)
+; offset - bytes to set or reset
+EventFlagMods: ; cb37 (3:4b37)
 INCBIN "baserom.gbc",$cb37,$cc32 - $cb37
 
 Func_cc32: ; cc32 (3:4c32)
@@ -1568,7 +1572,7 @@ Func_cc32: ; cc32 (3:4c32)
 	inc hl
 	ld d, [hl]
 	pop hl
-	call $48ba
+	call Func_c8ba
 	ret
 ; 0xcc3e
 
@@ -1583,10 +1587,10 @@ RST20: ; cc42 (3:4c42)
 	ld a, h
 	ld [wOWScriptPointer+1], a
 	xor a
-	ld [wd412], a
+	ld [wBreakOWScriptLoop], a
 .asm_cc4f
 	call RunOverworldScript
-	ld a, [wd412]
+	ld a, [wBreakOWScriptLoop] ; if you break out, it jumps 
 	or a
 	jr z, .asm_cc4f
 	ld hl, wOWScriptPointer
@@ -1617,7 +1621,6 @@ IncreaseOWScriptPointerBy7: ; cc74 (3:4c74)
 IncreaseOWScriptPointerBy3: ; cc78 (3:4c78)
 	ld a, 3
 
-; AH! increases the RST20 pointer by a, given from the above ^ or supplied
 IncreaseOWScriptPointer: ; cc7a (3:4c7a)
 	ld c, a
 	ld a, [wOWScriptPointer]
@@ -1628,7 +1631,7 @@ IncreaseOWScriptPointer: ; cc7a (3:4c7a)
 	ld [wOWScriptPointer+1], a
 	ret
 
-Func_cc8b: ; cc8b (3:4c8b)
+SetOWScriptPointer: ; cc8b (3:4c8b)
 	ld hl, wOWScriptPointer
 	ld [hl], c
 	inc hl
@@ -1638,17 +1641,17 @@ Func_cc8b: ; cc8b (3:4c8b)
 
 INCBIN "baserom.gbc",$cc92,$cc96 - $cc92
 
-Func_cc96: ; cc96 (3:4c96)
+GetOWSArgs1AfterPointer: ; cc96 (3:4c96)
 	ld a, $1
-	jr Func_cca0
+	jr GetOWSArgsAfterPointer
 
-Func_cc9a: ; cc9a (3:4c9a)
+GetOWSArgs2AfterPointer: ; cc9a (3:4c9a)
 	ld a, $2
-	jr Func_cca0
-Func_cc9e: ; cc9e (3:4c9e)
+	jr GetOWSArgsAfterPointer
+GetOWSArgs3AfterPointer: ; cc9e (3:4c9e)
 	ld a, $3
 
-Func_cca0: ; cca0 (3:4ca0)
+GetOWSArgsAfterPointer: ; cca0 (3:4ca0)
 	push hl
 	ld l, a
 	ld a, [wOWScriptPointer]
@@ -1674,22 +1677,23 @@ Func_ccb9: ; ccb9 (3:4cb9)
 	ld [$d415], a
 	ret
 
-Func_ccbe: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop: ; ccbe (3:4cbe)
 	ld a, $01
-	ld [wd412], a
+	ld [wBreakOWScriptLoop], a
 	jp IncreaseOWScriptPointerBy1
 
-Func_ccc6: ; ccc6 (3:4cc6)
-	call Func_c111
+OWScript_CloseTextBox: ; ccc6 (3:4cc6)
+	call CloseDialogueBox
 	jp IncreaseOWScriptPointerBy1
 
-Func_cccc: ; cccc (3:4ccc)
-	call Func_ccc6
-	call Func_ccbe
+OWScript_EndScriptCloseText: ; cccc (3:4ccc)
+	call OWScript_CloseTextBox
+	call OWScript_EndScriptLoop
 	pop hl
 	ret
 
-Func_ccd4: ; ccd4 (3:4cd4)
+;args: 2-Text String Index
+OWScript_PrintTextString: ; ccd4 (3:4cd4)
 	ld l, c
 	ld h, b
 	call Func_cc32
@@ -1704,22 +1708,25 @@ Func_ccdc: ; ccdc (3:4cdc)
 Func_cce4: ; cce4 (3:4ce4)
 	ld a, $1
 	ld [wcd9a], a
-Func_cce9: ; cce9 (3:4ce9)
+
+; Asks the player a question then jumps if they answer yes
+OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld l, c
 	ld h, b
 	call Func_c8ed
 	ld a, [hCurrentMenuItem]
 	ld [$d415], a
 	jr c, .asm_ccfe
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 	jr z, .asm_ccfe
-	jp Func_cc8b
+	jp SetOWScriptPointer
 
 .asm_ccfe
 	jp IncreaseOWScriptPointerBy5
 
-; this seems to be called when battles officially start. Might be a good way to find trainer data.
-Func_cd01: ; cd01 (3:4d01)
+; args - prize cards, deck index - 2, duel theme index
+; sets a battle up, doesn't start until we break out of the script system.
+OWScript_StartBattle: ; cd01 (3:4d01)
 	call Func_cd66
 	ld a, [wd3b6]
 	ld l, $0
@@ -1772,7 +1779,7 @@ Func_cd66: ; cd66 (3:4d66)
 	ld [wcc18], a
 	ld a, b
 	ld [wcc19], a
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 	ld a, c
 	ld [wDuelTheme], a
 	ret
@@ -1788,7 +1795,7 @@ Func_cd83: ; cd83 (3:4d83)
 	ld a, [$d415]
 	or a
 	jr nz, .asm_cd8c
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 .asm_cd8c
 	ld l, c
 	ld h, b
@@ -1803,7 +1810,7 @@ Unknown_cd98:
 	and $3
 	add a
 	inc a
-	call Func_cca0
+	call GetOWSArgsAfterPointer
 	ld l, c
 	ld h, b
 	call Func_cc32
@@ -1813,20 +1820,20 @@ Func_cda8: ; cda8 (3:4da8)
 	ld a, [$d415]
 	or a
 	jr nz, .asm_cdb1
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 .asm_cdb1
 	ld l, c
 	ld h, b
 	call Func_c891
 	jp IncreaseOWScriptPointerBy5
 
-Func_cdb9: ; cdb9 (3:4db9)
+OWScript_PrintTextCloseBox: ; cdb9 (3:4db9)
 	ld l, c
 	ld h, b
 	call Func_cc32
-	call Func_c111
+	call CloseDialogueBox
 	ld a, $1
-	ld [wd412], a
+	ld [wBreakOWScriptLoop], a
 	call IncreaseOWScriptPointerBy3
 	pop hl
 	ret
@@ -1925,7 +1932,7 @@ Func_ce6f: ; ce6f (3:4e6f)
 	push af
 	ld a, c
 	push af
-	call Func_cc9a
+	call GetOWSArgs2AfterPointer
 	push bc
 	call IncreaseOWScriptPointerBy1
 	pop bc
@@ -1936,7 +1943,8 @@ Func_ce84: ; ce84 (3:4e84)
 	call Func_c135
 	jp IncreaseOWScriptPointerBy1
 
-Func_ce8a: ; ce8a (3:4e8a)
+; args: booster pack index, booster pack index, boosterpack index
+OWScript_GiveBoosterPacks: ; ce8a (3:4e8a)
 	xor a
 	ld [wd117], a
 	push bc
@@ -1952,7 +1960,7 @@ Func_ce8a: ; ce8a (3:4e8a)
 	cp $ff
 	jr z, .asm_ceb4
 	farcall BoosterPack_1031b
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 	ld a, c
 	cp $ff
 	jr z, .asm_ceb4
@@ -2027,9 +2035,9 @@ asm_cf19
 
 asm_cf1f
 	call Func_ccb3
-	call Func_cc9a
+	call GetOWSArgs2AfterPointer
 	jr z, asm_cf2a
-	jp Func_cc8b
+	jp SetOWScriptPointer
 
 asm_cf2a
 	jp IncreaseOWScriptPointerBy4
@@ -2085,9 +2093,9 @@ Func_cf67: ; cf67 (3:4f67)
 
 Func_cf6d: ; cf6d (3:4f6d)
 	call Func_ccb3
-	call Func_cc96
+	call GetOWSArgs1AfterPointer
 	jr z, .asm_cf78
-	jp Func_cc8b
+	jp SetOWScriptPointer
 
 .asm_cf78
 	jp IncreaseOWScriptPointerBy3
@@ -2139,12 +2147,12 @@ Func_cf96: ; cf96 (3:4f96)
 	ld a, c
 	rlca
 	add $3
-	call Func_cca0
-	jp Func_cc8b
+	call GetOWSArgsAfterPointer
+	jp SetOWScriptPointer
 
 Func_cfc0: ; cfc0 (3:4fc0)
-	call Func_cc96
-	jp Func_cc8b
+	call GetOWSArgs1AfterPointer
+	jp SetOWScriptPointer
 
 Func_cfc6: ; cfc6 (3:4fc6)
 	ld a, [wd3b6]
@@ -2229,9 +2237,9 @@ Func_d03f: ; d03f (3:503f)
 	call Func_1d91
 	jp IncreaseOWScriptPointerBy1
 
-Func_d049: ; d049 (3:5049)
-	call Func_cc96
-	jp Func_cc8b
+OWScript_ScriptJump: ; d049 (3:5049)
+	call GetOWSArgs1AfterPointer
+	jp SetOWScriptPointer
 
 Func_d04f: ; d04f (3:504f)
 	call Func_cad8
@@ -2268,7 +2276,7 @@ Func_d080: ; d080 (3:5080)
 Func_d088: ; d088 (3:5088)
 	ld a, c
 	ld [wd3ab], a
-	call Func_cc9a
+	call GetOWSArgs2AfterPointer
 	call Func_c926
 	jp IncreaseOWScriptPointerBy4
 
@@ -2276,7 +2284,7 @@ Func_d095: ; d095 (3:5095)
 	ld a, [wd3b6]
 	ld [wd3aa], a
 	push bc
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 	ld a, [wd3b6]
 	ld l, $5
 	call Func_39ad
@@ -2487,7 +2495,7 @@ Func_d209: ; d209 (3:5209)
 	ld hl, $5240
 	add hl, bc
 	ld a, [hl]
-	call Func_cac5
+	call SetEventFlags
 	pop bc
 	ld hl, $5234
 	ld a, c
@@ -2783,25 +2791,25 @@ Func_d43d: ; d43d (3:543d)
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
 
-Func_d44a: ; d44a (3:544a)
+OWScript_CustomModifyEventFlags: ; d44a (3:544a)
 	ld a, c
 	ld c, b
-	call Func_ca92
+	call ModifyEventFlags
 	jp IncreaseOWScriptPointerBy3
 
 Func_d452: ; d452 (3:5452)
 	ld a, c
 	push af
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	inc a
 	ld c, a
 	pop af
-	call Func_ca92
+	call ModifyEventFlags
 	jp IncreaseOWScriptPointerBy2
 
 Func_d460: ; d460 (3:5460)
 	ld a, c
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	or a
 	jr z, asm_d46d
 asm_d467
@@ -2810,16 +2818,16 @@ asm_d467
 
 asm_d46d
 	call Func_ccb3
-	call Func_cc9a
+	call GetOWSArgs2AfterPointer
 	jr z, .asm_d478
-	jp Func_cc8b
+	jp SetOWScriptPointer
 
 .asm_d478
 	jp IncreaseOWScriptPointerBy4
 
-Func_d47b: ; d47b (3:547b)
+OWScript_JumpIfFlagSet: ; d47b (3:547b)
 	ld a, c
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	or a
 	jr nz, asm_d46d
 	jr asm_d467
@@ -2835,9 +2843,9 @@ Func_d48a: ; d48a (3:548a)
 
 Func_d490: ; d490 (3:5490)
 	call Func_ccb3
-	call Func_cc9e
+	call GetOWSArgs3AfterPointer
 	jr z, .asm_d49b
-	jp Func_cc8b
+	jp SetOWScriptPointer
 
 .asm_d49b
 	jp IncreaseOWScriptPointerBy5
@@ -2863,12 +2871,12 @@ Func_d4ae: ; d4ae (3:54ae)
 Func_d4b6: ; d4b6 (3:54b6)
 	ld a, c
 	ld c, b
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	ret
 
-Func_d4bc: ; d4bc (3:54bc)
+OWScript_SetEventFlags: ; d4bc (3:54bc)
 	ld a, c
-	call Func_cac5
+	call SetEventFlags
 	jp IncreaseOWScriptPointerBy2
 
 Func_d4c3: ; d4c3 (3:54c3)
@@ -2878,20 +2886,20 @@ Func_d4c3: ; d4c3 (3:54c3)
 
 Func_d4ca: ; d4ca (3:54ca)
 	ld a, c
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	or a
 	jr z, asm_d4e6
 Func_d4d1:
 	call Func_ccb3
-	call Func_cc9a
+	call GetOWSArgs2AfterPointer
 	jr z, .asm_d4dc
-	jp Func_cc8b
+	jp SetOWScriptPointer
 .asm_d4dc
 	jp IncreaseOWScriptPointerBy4
 
-Func_d4df:
+OWScript_JumpIfFlagNotSet:
 	ld a, c
-	call Func_ca6c
+	call CheckIfEventFlagSet
 	or a
 	jr z, Func_d4d1
 asm_d4e6
@@ -2901,20 +2909,236 @@ asm_d4e6
 
 INCBIN "baserom.gbc",$d4ec,$d753 - $d4ec
 
-; move to it's own file after we know where scripts start and end
+OWSequence_d753: ; d753 (3:5753)
 	start_script
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	run_script OWScript_MovePlayer, $0, $2
-	; there are more but the scripts haven't been disassembled
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_MovePlayer
+	db $00
+	db $02
+	run_script OWScript_PrintTextString
+	argt Text05e3
+	run_script OWScript_CloseTextBox
+	run_script Func_d088
+	db $07
+	db $79
+	db $57
+	run_scriptx OWScript_EndScriptLoop_0
+	ret
 
-INCBIN "baserom.gbc",$d76f,$f580 - $d76f
+	start_script
+	run_script Func_ce4a
+	db $80
+	db $58
+	db $02
+	
+	; there's more to this script but it hasn't been disassembled yet
+
+INCBIN "baserom.gbc",$d77e,$e13f - $d77e
+
+WaterClubMovePlayer: ; e13f (3:613f)
+	ld a, [wPlayerYCoord]
+	cp $8
+	ret nz
+	call Func_ca69
+	inc sp
+	cp $2
+	ret nc
+	ld a, $21
+	ld [wd3ab], a
+	ld bc, OWSequence_NotReadyToSeeAmy
+	jp Func_c926
+
+WaterClubAfterDuel: ;e157 (3:6157)
+	ld hl, .afterDuelTable
+	call FindEndOfBattleScript
+	ret
+
+.afterDuelTable
+	dw $1f1f
+	dw OWSequence_BeatSara
+	dw OWSequence_LostToSara
+
+	dw $2020
+	dw OWSequence_BeatAmanda
+	dw OWSequence_LostToAmanda
+
+	dw $2121
+	dw $626c
+	dw $6260
+
+	dw $2222
+	dw $6322
+	dw $6344
+	db $00
+
+OWSequence_Sara: ; e177 (3:6177)
+	start_script
+	run_script OWScript_PrintTextString
+	argt Text042c
+	run_script OWScript_AskQuestionJump
+	argt Text042d
+	dw .yesDuel
+	run_script OWScript_PrintTextString
+	argt Text042e
+	run_script OWScript_EndScriptCloseText
+.yesDuel
+	run_script OWScript_PrintTextString
+	argt Text042f
+	run_script OWScript_StartBattle
+	db 2
+	db WATERFRONT_POKEMON_DECK - 2 ; 6189
+	db MUSIC_DUELTHEME1
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatSara: ; e18c (3:618c)
+	start_script
+	run_script OWScript_SetEventFlags
+	db FLAG_BEAT_SARA
+	run_script OWScript_PrintTextString
+	argt Text0430
+	run_script OWScript_GiveBoosterPacks
+	db BOOSTER_ColoWater
+	db BOOSTER_ColoWater
+	db NO_BOOSTER
+	run_script OWScript_PrintTextString
+	argt Text0431
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_LostToSara: ; e19a (03:619a)
+	start_script
+	run_script OWScript_PrintTextCloseBox
+	argt Text0432
+
+OWSequence_Amanda: ; e19e (03:619e)
+	start_script
+	run_script OWScript_PrintTextString
+	argt Text0433
+	run_script OWScript_AskQuestionJump
+	argt Text0434
+	dw .yesDuel
+	run_script OWScript_PrintTextString
+	argt Text0435
+	run_script OWScript_EndScriptCloseText
+.yesDuel
+	run_script OWScript_PrintTextString
+	argt Text0436
+	run_script OWScript_StartBattle
+	db 03
+	db LONELY_FRIENDS_DECK - 2
+	db MUSIC_DUELTHEME1
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatAmanda: ; e1b3 (03:61b3)
+	start_script
+	run_script OWScript_SetEventFlags
+	db FLAG_BEAT_AMANDA
+	run_script OWScript_PrintTextString
+	argt Text0437
+	run_script OWScript_GiveBoosterPacks
+	db BOOSTER_LightningColorless
+	db BOOSTER_LightningColorless
+	db NO_BOOSTER
+	run_script OWScript_PrintTextString
+	argt Text0438
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_LostToAmanda: ; e1c1 (03:61c1)
+	start_script
+	run_script OWScript_PrintTextCloseBox
+	argt Text0439
+
+OWSequence_NotReadyToSeeAmy:
+INCBIN "baserom.gbc",$e1c5,$e21c - $e1c5
+
+OWSequence_Joshua:
+	start_script
+	run_script OWScript_JumpIfFlagNotSet
+	db FLAG_BEAT_AMANDA
+	dw .saraAndAmandaNotBeaten
+	run_script OWScript_JumpIfFlagNotSet
+	db FLAG_BEAT_SARA
+	dw .saraAndAmandaNotBeaten
+	run_script OWScript_ScriptJump
+	dw .beatSaraAndAmanda
+.saraAndAmandaNotBeaten
+	run_script OWScript_CustomModifyEventFlags
+	db $33 ; offset on flagmod table
+	db $01 ; the control bit
+	run_script OWScript_PrintTextString
+	argt Text043b
+	run_script OWScript_EndScriptCloseText
+.beatSaraAndAmanda
+	run_script OWScript_JumpIfFlagSet
+	db $33
+	dw $623c
+	run_script OWScript_CustomModifyEventFlags
+	db $33
+	db $01
+	run_script OWScript_PrintTextString
+	argt Text043b
+	run_script OWScript_PrintTextString
+	argt Text043c
+	run_script Func_d484
+	db $33
+	db $01
+	
+INCBIN "baserom.gbc",$e23f,$e52c - $e23f
+
+FindEndOfBattleScript: ; e52c (3:652c)
+	ld c, $0
+	ld a, [wd0c3]
+	or a
+	jr z, .playerWon
+	ld c, $2
+
+.playerWon
+	ld a, [wd0c4]
+	ld b, a
+	ld de, $0005
+.checkEnemyByteLoop
+	ld a, [hli]
+	or a
+	ret z
+	cp b
+	jr z, .foundEnemy
+	add hl, de
+	jr .checkEnemyByteLoop
+
+.foundEnemy
+	ld a, [hli]
+	ld [wd3ab], a
+	ld b, $0
+	add hl, bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	jp Func_c926
+; 0xe553
+
+INCBIN "baserom.gbc",$e553,$f580 - $e553
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69
