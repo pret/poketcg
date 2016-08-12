@@ -1677,7 +1677,16 @@ Func_ccb9: ; ccb9 (3:4cb9)
 	ld [$d415], a
 	ret
 
-OWScript_EndScriptLoop: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop1: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop2: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop3: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop4: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop5: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop6: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop7: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop8: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop9: ; ccbe (3:4cbe)
+OWScript_EndScriptLoop10: ; ccbe (3:4cbe)
 	ld a, $01
 	ld [wBreakOWScriptLoop], a
 	jp IncreaseOWScriptPointerBy1
@@ -1688,7 +1697,7 @@ OWScript_CloseTextBox: ; ccc6 (3:4cc6)
 
 OWScript_EndScriptCloseText: ; cccc (3:4ccc)
 	call OWScript_CloseTextBox
-	call OWScript_EndScriptLoop
+	call OWScript_EndScriptLoop1
 	pop hl
 	ret
 
@@ -2945,7 +2954,7 @@ OWSequence_d753: ; d753 (3:5753)
 	db $07
 	db $79
 	db $57
-	run_scriptx OWScript_EndScriptLoop_0
+	run_script OWScript_EndScriptLoop1
 	ret
 
 	start_script

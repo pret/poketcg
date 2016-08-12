@@ -408,11 +408,6 @@ run_script: MACRO
 	db \1_index
 ENDM
 
-; for the repeated functions on the table, need to specify which one, unfortunately
-run_scriptx: MACRO
-	db \1
-ENDM
-
 argt: MACRO
 	dw \1_
 ENDM

@@ -963,7 +963,7 @@ INCLUDE "data/unknownNPCData.asm"
 INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
 
 OverworldScriptTable: ; 1217b (4:617b)
-	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop1
 	dw OWScript_CloseTextBox
 	dw OWScript_PrintTextString
 	dw Func_ccdc
@@ -1046,11 +1046,11 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d2f6
 	dw Func_d317
 	dw Func_d43d
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop2
+	dw OWScript_EndScriptLoop3
+	dw OWScript_EndScriptLoop4
+	dw OWScript_EndScriptLoop5
+	dw OWScript_EndScriptLoop6
 	dw OWScript_CustomModifyEventFlags
 	dw Func_d460
 	dw OWScript_JumpIfFlagSet
@@ -1063,10 +1063,10 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d4ca
 	dw OWScript_JumpIfFlagNotSet
 	dw Func_d452
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
-	dw OWScript_EndScriptLoop
+	dw OWScript_EndScriptLoop7
+	dw OWScript_EndScriptLoop8
+	dw OWScript_EndScriptLoop9
+	dw OWScript_EndScriptLoop10
 
 INCBIN "baserom.gbc",$1224b,$1229f - $1224b
 

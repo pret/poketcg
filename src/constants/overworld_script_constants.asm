@@ -1,6 +1,6 @@
 start_script EQUS "rst $20"
 
-OWScript_EndScriptLoop_0              EQU $00
+OWScript_EndScriptLoop1_index         EQU $00
 OWScript_CloseTextBox_index           EQU $01
 OWScript_PrintTextString_index        EQU $02
 Func_ccdc_index                       EQU $03
@@ -83,11 +83,11 @@ Func_cce4_index                       EQU $4f
 Func_d2f6_index                       EQU $50
 Func_d317_index                       EQU $51
 Func_d43d_index                       EQU $52
-OWScript_EndScriptLoop_53             EQU $53
-OWScript_EndScriptLoop_54             EQU $54
-OWScript_EndScriptLoop_55             EQU $55
-OWScript_EndScriptLoop_56             EQU $56
-OWScript_EndScriptLoop_57             EQU $57
+OWScript_EndScriptLoop2_index         EQU $53
+OWScript_EndScriptLoop3_index         EQU $54
+OWScript_EndScriptLoop4_index         EQU $55
+OWScript_EndScriptLoop5_index         EQU $56
+OWScript_EndScriptLoop6_index         EQU $57
 OWScript_CustomModifyEventFlags_index EQU $58
 Func_d460_index                       EQU $59
 OWScript_JumpIfFlagSet_index          EQU $5a
@@ -100,10 +100,10 @@ Func_d4c3_index                       EQU $60
 Func_d4ca_index                       EQU $61
 OWScript_JumpIfFlagNotSet_index       EQU $62
 Func_d452_index                       EQU $63
-OWScript_EndScriptLoop_64             EQU $64
-OWScript_EndScriptLoop_65             EQU $65
-OWScript_EndScriptLoop_66             EQU $66
-OWScript_EndScriptLoop_67             EQU $67
+OWScript_EndScriptLoop7_index         EQU $64
+OWScript_EndScriptLoop8_index         EQU $65
+OWScript_EndScriptLoop9_index         EQU $66
+OWScript_EndScriptLoop10_index        EQU $67
 
 ; Script Flags
 FLAG_BEAT_SARA      EQU $15
