@@ -2286,7 +2286,7 @@ _DrawCardFromDeck: ; 10cf (0:10cf)
 	jr nc, .emptyDeck
 	inc a
 	ld [hl], a ; increment number of cards not in deck
-	add DUELVARS_DECK_CARDS - 1	; point to top card in the deck
+	add DUELVARS_DECK_CARDS - 1 ; point to top card in the deck
 	ld l, a
 	ld a, [hl] ; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld l, a
