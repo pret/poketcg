@@ -2708,7 +2708,7 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	xor a
 	ld [hl], a
 	ld [wNoDamageOrEffect], a
-	ld hl, $ccbf
+	ld hl, wccbf
 	ld [hli], a
 	ld [hl], a
 	ret
@@ -2794,7 +2794,7 @@ Func_1730: ; 1730 (0:1730)
 	call TryExecuteEffectCommandFunction
 	call Func_1994
 	call Func_189d
-	ld hl, $ccbf
+	ld hl, wccbf
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -2810,7 +2810,7 @@ Func_1730: ; 1730 (0:1730)
 	call $7484
 	pop hl
 	pop de
-	call Func_1a96
+	call SubstractHP
 	ld a, [wcac2]
 	cp $1
 	jr nz, .asm_17e8
@@ -2836,7 +2836,7 @@ Func_17fb: ; 17fb (0:17fb)
 	call TryExecuteEffectCommandFunction
 	pop af
 	ld [wTempNonTurnDuelistCardId], a
-	call Func_367b
+	call HandleStrikesBack
 	bank1call $6df1
 	call Func_1bb4
 	bank1call $7195
@@ -2941,7 +2941,7 @@ Func_189d: ; 189d (0:189d)
 	call SwapTurn
 	xor a
 	ld [wcceb], a
-	call Func_348a
+	call HandleTransparency
 	call SwapTurn
 	pop de
 	ret nc
@@ -3160,7 +3160,10 @@ ApplyAttachedDefender: ; 1a7e (0:1a7e)
 	ld d, a
 	ret
 
-Func_1a96: ; 1a96 (0:1a96)
+SubstractHP: ; 1a96 (0:1a96)
+; hl: address to substract HP from
+; de: how much HP to substract (damage to deal)
+; returns carry if the HP does not become 0 as a result
 	push hl
 	push de
 	ld a, [hl]
@@ -3169,14 +3172,14 @@ Func_1a96: ; 1a96 (0:1a96)
 	ld a, $0
 	sbc d
 	and $80
-	jr z, .asm_1aa4
+	jr z, .noUnderflow
 	ld [hl], $0
-.asm_1aa4
+.noUnderflow
 	ld a, [hl]
 	or a
-	jr z, .asm_1aa9
+	jr z, .zero
 	scf
-.asm_1aa9
+.zero
 	pop de
 	pop hl
 	ret
@@ -6444,7 +6447,9 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	text_hl NoDamageOrEffectDueToNShieldText
 	jr .noDamageOrEffect
 
-Func_348a: ; 348a (0:348a)
+; if the Pokemon being attacked is Haunter1, and its Transparency is active,
+; there is a 50% chance that any damage or effect is prevented 
+HandleTransparency: ; 348a (0:348a)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp HAUNTER1
 	jr z, .transparency
@@ -6646,7 +6651,9 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ret
 ; 0x367b
 
-Func_367b: ; 367b (0:367b)
+; when Machamp is damaged, if its Strikes Back is active,
+; the attacking Pokemon takes 10 damage
+HandleStrikesBack: ; 367b (0:367b)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MACHAMP
 	jr z, .strikesBack
@@ -6662,12 +6669,12 @@ Func_367b: ; 367b (0:367b)
 	call CheckIfUnderAnyCannotUseStatus
 	call SwapTurn
 	ret c
-	ld hl, $000a
-	call Func_36a2
+	ld hl, 10 ; damage to be dealt to attacker
+	call ApplyStrikesBack
 	call nc, WaitForWideTextBoxInput
 	ret
 
-Func_36a2: ; 36a2 (0:36a2)
+ApplyStrikesBack: ; 36a2 (0:36a2)
 	push hl
 	call Func_2ec4
 	ld a, [wTempTurnDuelistCardId]
@@ -6684,7 +6691,7 @@ Func_36a2: ; 36a2 (0:36a2)
 	pop de
 	push af
 	push hl
-	call Func_1a96
+	call SubstractHP
 	text_hl ReceivesDamageDueToStrikesBackText
 	call DrawWideTextBox_PrintText
 	pop hl
