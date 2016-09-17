@@ -2868,7 +2868,7 @@ Func_1828: ; 1828 (0:1828)
 	text_hl DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
-	ld [wLoadedMoveUnknown2], a
+	ld [wLoadedMoveAnimation], a
 	ld a, $14
 	call Func_195c
 	call Func_1bb4

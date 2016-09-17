@@ -253,7 +253,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 89
+	db 89 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -267,7 +267,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -304,7 +304,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 39
+	db 39 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -318,7 +318,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 56
+	db 56 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -355,7 +355,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 101
+	db 101 ; animation
 
 	; move 2
 	energy GRASS, 4 ; energies
@@ -369,7 +369,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 89
+	db 89 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -406,7 +406,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy GRASS, 4 ; energies
@@ -420,7 +420,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 29
+	db 29 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -457,7 +457,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 67
+	db 67 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -471,7 +471,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -508,7 +508,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -522,7 +522,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -559,7 +559,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 83
+	db 83 ; animation
 
 	; move 2
 	energy GRASS, 4 ; energies
@@ -573,7 +573,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 89
+	db 89 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
@@ -610,7 +610,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -624,7 +624,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -661,7 +661,7 @@ KakunaCard: ; 31030 (c:5030)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -675,7 +675,7 @@ KakunaCard: ; 31030 (c:5030)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -712,7 +712,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -726,7 +726,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
@@ -763,7 +763,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 63
+	db 63 ; animation
 
 	; move 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
@@ -777,7 +777,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -814,7 +814,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
@@ -828,7 +828,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 102
+	db 102 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -865,7 +865,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -879,7 +879,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -916,7 +916,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy GRASS, 1, COLORLESS, 2 ; energies
@@ -930,7 +930,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -967,7 +967,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 69
+	db 69 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
@@ -981,7 +981,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1018,7 +1018,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -1032,7 +1032,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1069,7 +1069,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
@@ -1083,7 +1083,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 44
+	db 44 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1120,7 +1120,7 @@ NidokingCard: ; 31279 (c:5279)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -1134,7 +1134,7 @@ NidokingCard: ; 31279 (c:5279)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 71
+	db 71 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1171,7 +1171,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
@@ -1185,7 +1185,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 89
+	db 89 ; animation
 
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1222,7 +1222,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
@@ -1236,7 +1236,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 89
+	db 89 ; animation
 
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1273,7 +1273,7 @@ OddishCard: ; 3133c (c:533c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1287,7 +1287,7 @@ OddishCard: ; 3133c (c:533c)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1324,7 +1324,7 @@ GloomCard: ; 3137d (c:537d)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 57
+	db 57 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1338,7 +1338,7 @@ GloomCard: ; 3137d (c:537d)
 	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 54
+	db 54 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1375,7 +1375,7 @@ VileplumeCard: ; 313be (c:53be)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -1389,7 +1389,7 @@ VileplumeCard: ; 313be (c:53be)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 78
+	db 78 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1426,7 +1426,7 @@ ParasCard: ; 313ff (c:53ff)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1440,7 +1440,7 @@ ParasCard: ; 313ff (c:53ff)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 113
+	db 113 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1477,7 +1477,7 @@ ParasectCard: ; 31440 (c:5440)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 113
+	db 113 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -1491,7 +1491,7 @@ ParasectCard: ; 31440 (c:5440)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1528,7 +1528,7 @@ VenonatCard: ; 31481 (c:5481)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	; move 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
@@ -1542,7 +1542,7 @@ VenonatCard: ; 31481 (c:5481)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 89
+	db 89 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1579,7 +1579,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1593,7 +1593,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1630,7 +1630,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 39
+	db 39 ; animation
 
 	; move 2
 	energy GRASS, 1 ; energies
@@ -1644,7 +1644,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1681,7 +1681,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1695,7 +1695,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 39
+	db 39 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1732,7 +1732,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 70
+	db 70 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1746,7 +1746,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 61
+	db 61 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1783,7 +1783,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 61
+	db 61 ; animation
 
 	; move 2
 	energy GRASS, 1 ; energies
@@ -1797,7 +1797,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 79
+	db 79 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1834,7 +1834,7 @@ MukCard: ; 31607 (c:5607)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -1848,7 +1848,7 @@ MukCard: ; 31607 (c:5607)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 61
+	db 61 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -1885,7 +1885,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 114
+	db 114 ; animation
 
 	; move 2
 	energy GRASS, 2 ; energies
@@ -1899,7 +1899,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 89
+	db 89 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1936,7 +1936,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 1 ; energies
@@ -1950,7 +1950,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 2
+	db 2 ; animation
 
 	db 3 ; retreat cost
 	db WR_FIRE ; weakness
@@ -1987,7 +1987,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 53
+	db 53 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -2001,7 +2001,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -2038,7 +2038,7 @@ WeezingCard: ; 3170b (c:570b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 50
+	db 50 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
@@ -2052,7 +2052,7 @@ WeezingCard: ; 3170b (c:570b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 60
-	db 86
+	db 86 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -2089,7 +2089,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy GRASS, 3 ; energies
@@ -2103,7 +2103,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 56
+	db 56 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -2140,7 +2140,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 55
+	db 55 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
@@ -2154,7 +2154,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 110
+	db 110 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
@@ -2191,7 +2191,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -2205,7 +2205,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
@@ -2242,7 +2242,7 @@ PinsirCard: ; 3180f (c:580f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 5
+	db 5 ; animation
 
 	; move 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
@@ -2256,7 +2256,7 @@ PinsirCard: ; 3180f (c:580f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 40
+	db 40 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
@@ -2293,7 +2293,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy FIRE, 1, COLORLESS, 1 ; energies
@@ -2307,7 +2307,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 14
+	db 14 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2344,7 +2344,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
@@ -2358,7 +2358,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 15
+	db 15 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2395,7 +2395,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy FIRE, 4 ; energies
@@ -2409,7 +2409,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 6
-	db 16
+	db 16 ; animation
 
 	db 3 ; retreat cost
 	db WR_WATER ; weakness
@@ -2446,7 +2446,7 @@ VulpixCard: ; 31913 (c:5913)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 72
+	db 72 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -2460,7 +2460,7 @@ VulpixCard: ; 31913 (c:5913)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2497,7 +2497,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 70
+	db 70 ; animation
 
 	; move 2
 	energy FIRE, 4 ; energies
@@ -2511,7 +2511,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 16
+	db 16 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2548,7 +2548,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy FIRE, 3 ; energies
@@ -2562,7 +2562,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 16
+	db 16 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2599,7 +2599,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 14
+	db 14 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -2613,7 +2613,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2650,7 +2650,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy FIRE, 2 ; energies
@@ -2664,7 +2664,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db DISCARD_ENERGY ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 6
-	db 16
+	db 16 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2701,7 +2701,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 15
+	db 15 ; animation
 
 	; move 2
 	energy FIRE, 2, COLORLESS, 2 ; energies
@@ -2715,7 +2715,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 30
-	db 4
+	db 4 ; animation
 
 	db 3 ; retreat cost
 	db WR_WATER ; weakness
@@ -2752,7 +2752,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy FIRE, 2 ; energies
@@ -2766,7 +2766,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 15
+	db 15 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2803,7 +2803,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
@@ -2817,7 +2817,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db NULLIFY_OR_WEAKEN_ATTACK + $40 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	db 0 ; retreat cost
 	db WR_WATER ; weakness
@@ -2854,7 +2854,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 36
+	db 36 ; animation
 
 	; move 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
@@ -2868,7 +2868,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 15
+	db 15 ; animation
 
 	db 2 ; retreat cost
 	db WR_WATER ; weakness
@@ -2905,7 +2905,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 90
+	db 90 ; animation
 
 	; move 2
 	energy FIRE, 2 ; energies
@@ -2919,7 +2919,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 50
+	db 50 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -2956,7 +2956,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -2970,7 +2970,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -3007,7 +3007,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy FIRE, 2, COLORLESS, 2 ; energies
@@ -3021,7 +3021,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 15
+	db 15 ; animation
 
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
@@ -3058,7 +3058,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy FIRE, 4 ; energies
@@ -3072,7 +3072,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -3109,7 +3109,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 95
+	db 95 ; animation
 
 	; move 2
 	energy FIRE, 3 ; energies
@@ -3123,7 +3123,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -3160,7 +3160,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 65
+	db 65 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 1 ; energies
@@ -3174,7 +3174,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3211,7 +3211,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 2 ; energies
@@ -3225,7 +3225,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3262,7 +3262,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy WATER, 3 ; energies
@@ -3276,7 +3276,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 22
+	db 22 ; animation
 
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3313,7 +3313,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy WATER, 1 ; energies
@@ -3327,7 +3327,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3364,7 +3364,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 1 ; energies
@@ -3378,7 +3378,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 30
+	db 30 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3415,7 +3415,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -3429,7 +3429,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -3466,7 +3466,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 85
+	db 85 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 1 ; energies
@@ -3480,7 +3480,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -3517,7 +3517,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 2 ; energies
@@ -3531,7 +3531,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 20
+	db 20 ; animation
 
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
@@ -3568,7 +3568,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy WATER, 1 ; energies
@@ -3582,7 +3582,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 61
+	db 61 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3619,7 +3619,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy WATER, 2 ; energies
@@ -3633,7 +3633,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3670,7 +3670,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -3684,7 +3684,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3721,7 +3721,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 29
+	db 29 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 2 ; energies
@@ -3735,7 +3735,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 29
+	db 29 ; animation
 
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3772,7 +3772,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy WATER, 1 ; energies
@@ -3786,7 +3786,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3823,7 +3823,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy WATER, 2 ; energies
@@ -3837,7 +3837,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3874,7 +3874,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 1 ; energies
@@ -3888,7 +3888,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3925,7 +3925,7 @@ KinglerCard: ; 32070 (c:6070)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 2
+	db 2 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 1 ; energies
@@ -3939,7 +3939,7 @@ KinglerCard: ; 32070 (c:6070)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -3976,7 +3976,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 90
+	db 90 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -3990,7 +3990,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4027,7 +4027,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 2 ; energies
@@ -4041,7 +4041,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4078,7 +4078,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -4092,7 +4092,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4129,7 +4129,7 @@ SeakingCard: ; 32174 (c:6174)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 1 ; energies
@@ -4143,7 +4143,7 @@ SeakingCard: ; 32174 (c:6174)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 18
+	db 18 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4180,7 +4180,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -4194,7 +4194,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4231,7 +4231,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 88
+	db 88 ; animation
 
 	; move 2
 	energy WATER, 1, COLORLESS, 2 ; energies
@@ -4245,7 +4245,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 29
+	db 29 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4282,7 +4282,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy WATER, 1 ; energies
@@ -4296,7 +4296,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 2
+	db 2 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4333,7 +4333,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 21
+	db 21 ; animation
 
 	; move 2
 	energy WATER, 4 ; energies
@@ -4347,7 +4347,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 65
+	db 65 ; animation
 
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
@@ -4384,7 +4384,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	; move 2
 	energy WATER, 2 ; energies
@@ -4398,7 +4398,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 72
+	db 72 ; animation
 
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4435,7 +4435,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -4449,7 +4449,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4486,7 +4486,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy WATER, 2, COLORLESS, 1 ; energies
@@ -4500,7 +4500,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -4537,7 +4537,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy WATER, 1 ; energies
@@ -4551,7 +4551,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -4588,7 +4588,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 19
+	db 19 ; animation
 
 	; move 2
 	energy WATER, 2 ; energies
@@ -4602,7 +4602,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -4639,7 +4639,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 29
+	db 29 ; animation
 
 	; move 2
 	energy WATER, 4 ; energies
@@ -4653,7 +4653,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 24
+	db 24 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -4690,7 +4690,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 96
+	db 96 ; animation
 
 	; move 2
 	energy WATER, 3 ; energies
@@ -4704,7 +4704,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 99
+	db 99 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -4741,7 +4741,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
@@ -4755,7 +4755,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 6
+	db 6 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -4792,7 +4792,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 10
+	db 10 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -4806,7 +4806,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -4843,7 +4843,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy LIGHTNING, 2 ; energies
@@ -4857,7 +4857,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 6
+	db 6 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -4894,7 +4894,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 76
+	db 76 ; animation
 
 	; move 2
 	energy LIGHTNING, 2 ; energies
@@ -4908,7 +4908,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 6
+	db 6 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -4945,7 +4945,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 6
+	db 6 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -4959,7 +4959,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	db 1 ; retreat cost
 	db NONE ; weakness
@@ -4996,7 +4996,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 18
+	db 18 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5010,7 +5010,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5047,7 +5047,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 18
+	db 18 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5061,7 +5061,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5098,7 +5098,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy LIGHTNING, 3, COLORLESS, 1 ; energies
@@ -5112,7 +5112,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 7
+	db 7 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5149,7 +5149,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 10
+	db 10 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5163,7 +5163,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5200,7 +5200,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 111
+	db 111 ; animation
 
 	; move 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
@@ -5214,7 +5214,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 40
-	db 86
+	db 86 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5251,7 +5251,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
@@ -5265,7 +5265,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 109
+	db 109 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5302,7 +5302,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 111
+	db 111 ; animation
 
 	; move 2
 	energy LIGHTNING, 2, COLORLESS, 2 ; energies
@@ -5316,7 +5316,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 80
-	db 87
+	db 87 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5353,7 +5353,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 40
+	db 40 ; animation
 
 	; move 2
 	energy LIGHTNING, 4 ; energies
@@ -5367,7 +5367,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 100
-	db 87
+	db 87 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5404,7 +5404,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5418,7 +5418,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5455,7 +5455,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 40
+	db 40 ; animation
 
 	; move 2
 	energy LIGHTNING, 3 ; energies
@@ -5469,7 +5469,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5506,7 +5506,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy LIGHTNING, 3 ; energies
@@ -5520,7 +5520,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 13
+	db 13 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5557,7 +5557,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 80
+	db 80 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -5571,7 +5571,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5608,7 +5608,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 6
+	db 6 ; animation
 
 	; move 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
@@ -5622,7 +5622,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 35
+	db 35 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5659,7 +5659,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -5673,7 +5673,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5710,7 +5710,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy LIGHTNING, 2, COLORLESS, 1 ; energies
@@ -5724,7 +5724,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 48
+	db 48 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -5761,7 +5761,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 12
+	db 12 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5775,7 +5775,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -5812,7 +5812,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 7
+	db 7 ; animation
 
 	; move 2
 	energy LIGHTNING, 4 ; energies
@@ -5826,7 +5826,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 9
-	db 8
+	db 8 ; animation
 
 	db 3 ; retreat cost
 	db NONE ; weakness
@@ -5863,7 +5863,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 97
+	db 97 ; animation
 
 	; move 2
 	energy LIGHTNING, 3 ; energies
@@ -5877,7 +5877,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 100
+	db 100 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -5914,7 +5914,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 90
+	db 90 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -5928,7 +5928,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -5965,7 +5965,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy FIGHTING, 2 ; energies
@@ -5979,7 +5979,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6016,7 +6016,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy FIGHTING, 2 ; energies
@@ -6030,7 +6030,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 0 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6067,7 +6067,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy FIGHTING, 4 ; energies
@@ -6081,7 +6081,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6118,7 +6118,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy COLORLESS, 1 ; energies
@@ -6132,7 +6132,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6169,7 +6169,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
@@ -6183,7 +6183,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 43
+	db 43 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6220,7 +6220,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -6234,7 +6234,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6271,7 +6271,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 2 ; energies
@@ -6285,7 +6285,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 20
-	db 4
+	db 4 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6322,7 +6322,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy FIGHTING, 3, COLORLESS, 1 ; energies
@@ -6336,7 +6336,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 47
+	db 47 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6373,7 +6373,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 33
+	db 33 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -6387,7 +6387,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6424,7 +6424,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 79
+	db 79 ; animation
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
@@ -6438,7 +6438,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 32
+	db 32 ; animation
 
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6475,7 +6475,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 32
+	db 32 ; animation
 
 	; move 2
 	energy FIGHTING, 4 ; energies
@@ -6489,7 +6489,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 100
-	db 87
+	db 87 ; animation
 
 	db 4 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6526,7 +6526,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 32
+	db 32 ; animation
 
 	; move 2
 	energy FIGHTING, 2 ; energies
@@ -6540,7 +6540,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 79
+	db 79 ; animation
 
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6577,7 +6577,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 84
+	db 84 ; animation
 
 	; move 2
 	energy FIGHTING, 2 ; energies
@@ -6591,7 +6591,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6628,7 +6628,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 46
+	db 46 ; animation
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
@@ -6642,7 +6642,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6679,7 +6679,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 46
+	db 46 ; animation
 
 	; move 2
 	energy FIGHTING, 3 ; energies
@@ -6693,7 +6693,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 84
+	db 84 ; animation
 
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6730,7 +6730,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 37
+	db 37 ; animation
 
 	; move 2
 	energy FIGHTING, 3 ; energies
@@ -6744,7 +6744,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 34
+	db 34 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6781,7 +6781,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 34
+	db 34 ; animation
 
 	; move 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
@@ -6795,7 +6795,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 34
+	db 34 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -6832,7 +6832,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy FIGHTING, 1, COLORLESS, 2 ; energies
@@ -6846,7 +6846,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6883,7 +6883,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy FIGHTING, 4 ; energies
@@ -6897,7 +6897,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 20
-	db 4
+	db 4 ; animation
 
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6934,7 +6934,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy COLORLESS, 1 ; energies
@@ -6948,7 +6948,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -6985,7 +6985,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 40
+	db 40 ; animation
 
 	; move 2
 	energy FIGHTING, 4 ; energies
@@ -6999,7 +6999,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 89
+	db 89 ; animation
 
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
@@ -7036,7 +7036,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -7050,7 +7050,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
@@ -7087,7 +7087,7 @@ AbraCard: ; 3302e (c:702e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -7101,7 +7101,7 @@ AbraCard: ; 3302e (c:702e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7138,7 +7138,7 @@ KadabraCard: ; 3306f (c:706f)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 88
+	db 88 ; animation
 
 	; move 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
@@ -7152,7 +7152,7 @@ KadabraCard: ; 3306f (c:706f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7189,7 +7189,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy PSYCHIC, 3 ; energies
@@ -7203,7 +7203,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 72
+	db 72 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7240,7 +7240,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7254,7 +7254,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 85
+	db 85 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7291,7 +7291,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7305,7 +7305,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7342,7 +7342,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7356,7 +7356,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7393,7 +7393,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 128
+	db 128 ; animation
 
 	; move 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
@@ -7407,7 +7407,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 3
-	db 91
+	db 91 ; animation
 
 	db 0 ; retreat cost
 	db NONE ; weakness
@@ -7444,7 +7444,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 61
+	db 61 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7458,7 +7458,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 10
-	db 115
+	db 115 ; animation
 
 	db 0 ; retreat cost
 	db NONE ; weakness
@@ -7495,7 +7495,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
@@ -7509,7 +7509,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 26
+	db 26 ; animation
 
 	db 0 ; retreat cost
 	db NONE ; weakness
@@ -7546,7 +7546,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 114
+	db 114 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7560,7 +7560,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 1 ; retreat cost
 	db NONE ; weakness
@@ -7597,7 +7597,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy PSYCHIC, 3 ; energies
@@ -7611,7 +7611,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 28
+	db 28 ; animation
 
 	db 1 ; retreat cost
 	db NONE ; weakness
@@ -7648,7 +7648,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7662,7 +7662,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 72
+	db 72 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7699,7 +7699,7 @@ HypnoCard: ; 3333a (c:733a)
 	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy PSYCHIC, 3 ; energies
@@ -7713,7 +7713,7 @@ HypnoCard: ; 3333a (c:733a)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 28
+	db 28 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7750,7 +7750,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
@@ -7764,7 +7764,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7801,7 +7801,7 @@ JynxCard: ; 333bc (c:73bc)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
@@ -7815,7 +7815,7 @@ JynxCard: ; 333bc (c:73bc)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7852,7 +7852,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -7866,7 +7866,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db NULLIFY_OR_WEAKEN_ATTACK + DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 80
+	db 80 ; animation
 
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7903,7 +7903,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
@@ -7917,7 +7917,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -7954,7 +7954,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
@@ -7968,7 +7968,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -8005,7 +8005,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy PSYCHIC, 1 ; energies
@@ -8019,7 +8019,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -8056,7 +8056,7 @@ Mew2Card: ; 33501 (c:7501)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 5
+	db 5 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -8070,7 +8070,7 @@ Mew2Card: ; 33501 (c:7501)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -8107,7 +8107,7 @@ Mew3Card: ; 33542 (c:7542)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 25
+	db 25 ; animation
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
@@ -8121,7 +8121,7 @@ Mew3Card: ; 33542 (c:7542)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
@@ -8158,7 +8158,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 83
+	db 83 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -8172,7 +8172,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8209,7 +8209,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 83
+	db 83 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8223,7 +8223,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 92
+	db 92 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8260,7 +8260,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 99
+	db 99 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -8274,7 +8274,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db SWITCH_OPPONENT_POKEMON | FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8311,7 +8311,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8325,7 +8325,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 83
+	db 83 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8362,7 +8362,7 @@ RattataCard: ; 33687 (c:7687)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -8376,7 +8376,7 @@ RattataCard: ; 33687 (c:7687)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8413,7 +8413,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8427,7 +8427,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8464,7 +8464,7 @@ SpearowCard: ; 33709 (c:7709)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8478,7 +8478,7 @@ SpearowCard: ; 33709 (c:7709)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 92
+	db 92 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8515,7 +8515,7 @@ FearowCard: ; 3374a (c:774a)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -8529,7 +8529,7 @@ FearowCard: ; 3374a (c:774a)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 44
+	db 44 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -8566,7 +8566,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 74
+	db 74 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8580,7 +8580,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8617,7 +8617,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -8631,7 +8631,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 20
-	db 79
+	db 79 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8668,7 +8668,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 88
+	db 88 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8682,7 +8682,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 20
-	db 4
+	db 4 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8719,7 +8719,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -8733,7 +8733,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 136
+	db 136 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8770,7 +8770,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 75
+	db 75 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -8784,7 +8784,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8821,7 +8821,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 75
+	db 75 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8835,7 +8835,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8872,7 +8872,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
-	db 108
+	db 108 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -8886,7 +8886,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8923,7 +8923,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -8937,7 +8937,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -8974,7 +8974,7 @@ PersianCard: ; 33993 (c:7993)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 38
+	db 38 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -8988,7 +8988,7 @@ PersianCard: ; 33993 (c:7993)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
-	db 1
+	db 1 ; animation
 
 	db 0 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9025,7 +9025,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 39
+	db 39 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -9039,7 +9039,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 45
+	db 45 ; animation
 
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -9076,7 +9076,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 41
+	db 41 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -9090,7 +9090,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -9127,7 +9127,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 94
+	db 94 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -9141,7 +9141,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 2
+	db 2 ; animation
 
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
@@ -9178,7 +9178,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 61
+	db 61 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -9192,7 +9192,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 76
+	db 76 ; animation
 
 	db 3 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9229,7 +9229,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -9243,7 +9243,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 80
-	db 4
+	db 4 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9280,7 +9280,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -9294,7 +9294,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 34
+	db 34 ; animation
 
 	db 3 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9331,7 +9331,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 1
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -9345,7 +9345,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db NONE ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
-	db 43
+	db 43 ; animation
 
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9382,7 +9382,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -9396,7 +9396,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9433,7 +9433,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -9447,7 +9447,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 81
+	db 81 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9484,7 +9484,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 2 ; energies
@@ -9498,7 +9498,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9535,7 +9535,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -9549,7 +9549,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 2
+	db 2 ; animation
 
 	db 4 ; retreat cost
 	db WR_FIGHTING ; weakness
@@ -9586,7 +9586,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy 0 ; energies
@@ -9600,7 +9600,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 0
+	db 0 ; animation
 
 	db 1 ; retreat cost
 	db NONE ; weakness
@@ -9637,7 +9637,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -9651,7 +9651,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
 	db 0
-	db 30
+	db 30 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -9688,7 +9688,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 98
+	db 98 ; animation
 
 	; move 2
 	energy COLORLESS, 3 ; energies
@@ -9702,7 +9702,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 2 ; retreat cost
 	db NONE ; weakness
@@ -9739,7 +9739,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 91
+	db 91 ; animation
 
 	; move 2
 	energy COLORLESS, 4 ; energies
@@ -9753,7 +9753,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
-	db 1
+	db 1 ; animation
 
 	db 1 ; retreat cost
 	db NONE ; weakness

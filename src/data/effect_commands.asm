@@ -15,7 +15,7 @@ EffectCommands: ; 186f7 (6:46f7)
 ; even though in some cases their commands and function pointers match.
 
 EkansSpitPoisonEffectCommands:
-	dbw $03, $46f8
+	dbw $03, SpitPoison_Poison50PercentEffect
 	dbw $09, $46f0
 	db  $00
 

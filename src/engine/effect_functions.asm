@@ -94,4 +94,16 @@ Func_2c09c: ; 2c09c (b:409c)
 	ret
 ; 0x2c0a2
 
-INCBIN "baserom.gbc",$2c0a2,$30000 - $2c0a2
+INCBIN "baserom.gbc",$2c0a2,$2c6f8 - $2c0a2
+
+SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
+	text_de PoisonCheckText
+	call TossCoin_BankB
+	jp c, PoisonEffect
+	ld a, $8c
+	ld [wLoadedMoveAnimation], a
+	call Func_2c09c
+	ret
+; 0x2c70a
+
+INCBIN "baserom.gbc",$2c70a,$30000 - $2c70a

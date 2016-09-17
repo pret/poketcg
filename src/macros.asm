@@ -401,7 +401,7 @@ move_data_struct: MACRO
 \1Flag2::          db
 \1Flag3::          db
 \1Unknown1::       db
-\1Unknown2::       db
+\1Animation::      db
 ENDM
 
 run_script: MACRO
