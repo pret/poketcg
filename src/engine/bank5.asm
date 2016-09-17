@@ -65,10 +65,10 @@ Func_14226: ; 14226 (5:4226)
 	cp $ff
 	ret z
 	call LoadDeckCardToBuffer1
-	ld a, [wCardBuffer1Type]
+	ld a, [wLoadedCard1Type]
 	cp FIRE_ENERGY_CARD
 	jr nc, .checkForNextPokemon
-	ld a, [wCardBuffer1Stage]
+	ld a, [wLoadedCard1Stage]
 	or a
 	jr nz, .checkForNextPokemon
 	push hl

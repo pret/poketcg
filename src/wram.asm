@@ -511,14 +511,14 @@ wTotalAttachedEnergies:: ; cc23
 	ds $1
 
 ; Used as temporary storage for a loaded card's data
-wCardBuffer1:: ; cc24
-	card_data_struct wCardBuffer1
+wLoadedCard1:: ; cc24
+	card_data_struct wLoadedCard1
 
-wCardBuffer2:: ; cc65
-	card_data_struct wCardBuffer2
+wLoadedCard2:: ; cc65
+	card_data_struct wLoadedCard2
 
-wMoveBuffer:: ; cca6
-	move_data_struct wMoveBuffer
+wLoadedMove:: ; cca6
+	move_data_struct wLoadedMove
 
 ; big-endian
 wDamage:: ; ccb9

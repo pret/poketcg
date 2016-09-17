@@ -723,7 +723,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld hl, wDuelCardOrAttackList
 	xor a
 	ld [wCardPageNumber], a
-	ld de, wCardBuffer1Move1Name
+	ld de, wLoadedCard1Move1Name
 	call CheckIfMoveExists
 	jr c, .checkForSecondAttackSlot
 	ldh a, [hTempCardNumber]
@@ -734,7 +734,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, wCardBuffer1Move1Name
+	ld hl, wLoadedCard1Move1Name
 	call $5c33
 	pop bc
 	pop hl
@@ -742,7 +742,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	inc b
 
 .checkForSecondAttackSlot
-	ld de, wCardBuffer1Move2Name
+	ld de, wLoadedCard1Move2Name
 	call CheckIfMoveExists
 	jr c, .finishLoadingAttacks
 	ldh a, [hTempCardNumber]
@@ -753,7 +753,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, wCardBuffer1Move2Name
+	ld hl, wLoadedCard1Move2Name
 	call $5c33
 	pop bc
 	pop hl
@@ -772,7 +772,7 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	ld a, [de]
 	or c
 	jr z, .returnNoMoveFound
-	ld hl, wCardBuffer1Move1Category - (wCardBuffer1Move1Name + 1)
+	ld hl, wLoadedCard1Move1Category - (wLoadedCard1Move1Name + 1)
 	add hl, de
 	ld a, [hl]
 	and $ff - RESIDUAL
@@ -826,19 +826,19 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	call LoadDeckCardToBuffer1
 	pop bc
 	push bc
-	ld de, wCardBuffer1Move1Energy
+	ld de, wLoadedCard1Move1Energy
 	ld a, c
 	or a
 	jr z, .gotMove
-	ld de, wCardBuffer1Move2Energy
+	ld de, wLoadedCard1Move2Energy
 
 .gotMove
-	ld hl, wCardBuffer1Move1Name - wCardBuffer1Move1Energy
+	ld hl, wLoadedCard1Move1Name - wLoadedCard1Move1Energy
 	add hl, de
 	ld a, [hli]
 	or [hl]
 	jr z, .notUsable
-	ld hl, wCardBuffer1Move1Category - wCardBuffer1Move1Energy
+	ld hl, wLoadedCard1Move1Category - wLoadedCard1Move1Energy
 	add hl, de
 	ld a, [hl]
 	cp POKEMON_POWER
@@ -1280,7 +1280,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 
 INCBIN "baserom.gbc",$69c5,$6d84 - $69c5
 
-;converts clefairy doll/mysterious fossil at specified wCardBuffer to pokemon card
+; converts clefairy doll/mysterious fossil at specified wLoadedCard to pokemon card
 ConvertTrainerCardToPokemon:
 	ld c, a
 	ld a, [hl]
@@ -1310,10 +1310,10 @@ ConvertTrainerCardToPokemon:
 .startRamDataOverwrite
 	push de
 	ld [hl], COLORLESS
-	ld bc, wCardBuffer1HP - wCardBuffer1
+	ld bc, wLoadedCard1HP - wLoadedCard1
 	add hl, bc
 	ld de, .dataToOverwrite
-	ld c, wCardBuffer1Unknown2 - wCardBuffer1HP
+	ld c, wLoadedCard1Unknown2 - wLoadedCard1HP
 .loop
 	ld a, [de]
 	inc de
@@ -1325,15 +1325,15 @@ ConvertTrainerCardToPokemon:
 
 .dataToOverwrite
     db 10                 ; hp
-    ds $07                ; wCardBuffer1Move1Name - (wCardBuffer1HP + 1)
+    ds $07                ; wLoadedCard1Move1Name - (wLoadedCard1HP + 1)
     tx DiscardName        ; move1 name
     tx DiscardDescription ; move1 description
-    ds $03                ; wCardBuffer1Move1Category - (wCardBuffer1Move1Description + 2)
+    ds $03                ; wLoadedCard1Move1Category - (wLoadedCard1Move1Description + 2)
     db POKEMON_POWER      ; move1 category
     dw TrainerCardAsPokemonEffectCommands ; move1 effect commands
-    ds $18                ; wCardBuffer1RetreatCost - (wCardBuffer1Move1EffectCommands + 2)
+    ds $18                ; wLoadedCard1RetreatCost - (wLoadedCard1Move1EffectCommands + 2)
     db UNABLE_RETREAT     ; retreat cost
-    ds $0d                ; PKMN_CARD_DATA_LENGTH - (wCardBuffer1RetreatCost + 1 - wCardBuffer1)
+    ds $0d                ; PKMN_CARD_DATA_LENGTH - (wLoadedCard1RetreatCost + 1 - wLoadedCard1)
 
 INCBIN "baserom.gbc",$6df1,$7107 - $6df1
 

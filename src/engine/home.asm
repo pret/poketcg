@@ -2472,7 +2472,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	call GetCardInDeckPosition
 	call LoadCardDataToBuffer1
 	pop af
-	ld hl, wCardBuffer1
+	ld hl, wLoadedCard1
 	bank1call ConvertTrainerCardToPokemon
 	ld a, e
 	pop bc
@@ -2488,7 +2488,7 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	call GetCardInDeckPosition
 	call LoadCardDataToBuffer2
 	pop af
-	ld hl, wCardBuffer2
+	ld hl, wLoadedCard2
 	bank1call ConvertTrainerCardToPokemon
 	ld a, e
 	pop bc
@@ -2519,7 +2519,7 @@ Func_1485: ; 1485 (0:1485)
 	ld a, $c8
 	add e
 	ld l, a
-	ld a, [wCardBuffer2HP]
+	ld a, [wLoadedCard2HP]
 	ld [hl], a
 	ld a, $c2
 	add e
@@ -2540,7 +2540,7 @@ Func_1485: ; 1485 (0:1485)
 	ld a, $ce
 	add e
 	ld l, a
-	ld a, [wCardBuffer2Stage]
+	ld a, [wLoadedCard2Stage]
 	ld [hl], a
 	ld a, e
 	or a
@@ -2590,7 +2590,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 	push bc
 	ld a, l
 	call LoadDeckCardToBuffer2
-	ld a, [wCardBuffer2Type]
+	ld a, [wLoadedCard2Type]
 	bit ENERGY_CARD_F, a
 	jr z, .notAnEnergyCard
 	and $7 ; zero bit 3 to extract the type
@@ -2687,22 +2687,22 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld a, d
 	ld [$ff9f], a
 	call LoadDeckCardToBuffer1
-	ld a, [wCardBuffer1ID]
+	ld a, [wLoadedCard1ID]
 	ld [wTempCardId], a
-	ld hl, wCardBuffer1Move1
+	ld hl, wLoadedCard1Move1
 	dec e
 	jr nz, .gotMove
-	ld hl, wCardBuffer1Move2
+	ld hl, wLoadedCard1Move2
 .gotMove
-	ld de, wMoveBuffer
-	ld c, wCardBuffer1Move2 - wCardBuffer1Move1
+	ld de, wLoadedMove
+	ld c, wLoadedCard1Move2 - wLoadedCard1Move1
 .copyLoop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
 	jr nz, .copyLoop
-	ld a, [wMoveBufferDamage]
+	ld a, [wLoadedMoveDamage]
 	ld hl, wDamage
 	ld [hli], a
 	xor a
@@ -2745,7 +2745,7 @@ Func_1730: ; 1730 (0:1730)
 	ld [wcc11], a
 	ld a, [wTempCardId]
 	ld [wcc12], a
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	jp z, Func_184b
 	call Func_16f6
@@ -2781,7 +2781,7 @@ Func_1730: ; 1730 (0:1730)
 	ld a, $a
 	call Func_0f7f
 	call $7415
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	jr nz, .asm_17ad
 	call SwapTurn
@@ -2868,7 +2868,7 @@ Func_1828: ; 1828 (0:1828)
 	text_hl DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
-	ld [wMoveBufferUnknown2], a
+	ld [wLoadedMoveUnknown2], a
 	ld a, $14
 	call Func_195c
 	call Func_1bb4
@@ -2920,7 +2920,7 @@ Func_1874: ; 1874 (0:1874)
 	ret
 
 Func_189d: ; 189d (0:189d)
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	bit RESIDUAL_F, a
 	ret nz
 	ld a, [wNoDamageOrEffect]
@@ -3193,7 +3193,7 @@ Func_1aac: ; 1aac (0:1aac)
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer1
-	ld a, [wCardBuffer1ID]
+	ld a, [wLoadedCard1ID]
 	ld [wTempNonTurnDuelistCardId], a
 	call Func_1ad3
 	pop af
@@ -3239,9 +3239,9 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	xor a
 	ld [hli], a
 	ld [hli], a
-	ld a, [wMoveBufferName]
+	ld a, [wLoadedMoveName]
 	ld [hli], a
-	ld a, [wMoveBufferName + 1]
+	ld a, [wLoadedMoveName + 1]
 	ld [hli], a
 	text_hl PokemonsAttackText ; text when using an attack
 	call DrawWideTextBox_PrintText
@@ -5565,15 +5565,15 @@ Func_2ec4: ; 2ec4 (0:2ec4)
 
 INCBIN "baserom.gbc",$2ecd,$2f0a - $2ecd
 
-; load data of card with id at e to wCardBuffer1 or wCardBuffer2
+; load data of card with id at e to wLoadedCard1 or wLoadedCard2
 LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
 	push hl
-	ld hl, wCardBuffer2
+	ld hl, wLoadedCard2
 	jr LoadCardDataToRAM
 
 LoadCardDataToBuffer1: ; 2f10 (0:2f10)
 	push hl
-	ld hl, wCardBuffer1
+	ld hl, wLoadedCard1
 
 LoadCardDataToRAM: ; 2f14 (0:2f14)
 	push de
@@ -5728,8 +5728,8 @@ Func_2fcb: ; 2fcb (0:2fcb)
 ; input: a = move or trainer card effect command ID
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
-; grab pointer to command list from wMoveBufferEffectCommands
-	ld hl, wMoveBufferEffectCommands
+; grab pointer to command list from wLoadedMoveEffectCommands
+	ld hl, wLoadedMoveEffectCommands
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -6251,7 +6251,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 .notAffectedBySubstatus1
 	call CheckIfUnderAnyCannotUseStatus
 	ret c
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
 	ld a, [wTempNonTurnDuelistCardId]
@@ -6292,7 +6292,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld d, h
 	ret
 .preventLessThan30Damage
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
 	ld bc, 30
@@ -6399,7 +6399,7 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	xor a
 	ld [wNoDamageOrEffect], a
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
@@ -6437,7 +6437,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
-	ld a, [wCardBuffer2Stage]
+	ld a, [wLoadedCard2Stage]
 	or a
 	ret z
 	ld e, $5
@@ -6452,7 +6452,7 @@ Func_348a: ; 348a (0:348a)
 	or a
 	ret
 .transparency
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	jr z, .asm_3491
 	ld a, [wcceb]
@@ -6636,7 +6636,7 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
 	call LoadDeckCardToBuffer2
-	ld hl, wCardBuffer2Name
+	ld hl, wLoadedCard2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -6652,7 +6652,7 @@ Func_367b: ; 367b (0:367b)
 	jr z, .strikesBack
 	ret
 .strikesBack
-	ld a, [wMoveBufferCategory]
+	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	ret nz
 	ld a, [wccbf]
@@ -6674,7 +6674,7 @@ Func_36a2: ; 36a2 (0:36a2)
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
-	ld hl, wCardBuffer2Name
+	ld hl, wLoadedCard2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -6748,7 +6748,7 @@ Func_3730: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer2
-	ld a, [wCardBuffer2Weakness]
+	ld a, [wLoadedCard2Weakness]
 	ret
 ; 0x3743
 
@@ -6762,7 +6762,7 @@ Func_374a: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer2
-	ld a, [wCardBuffer2Resistance]
+	ld a, [wLoadedCard2Resistance]
 	ret
 ; 0x375d
 
