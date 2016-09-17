@@ -2827,7 +2827,7 @@ Func_17ed: ; 17ed (0:17ed)
 	ld hl, wDamage
 	ld [hli], a
 	ld [hl], a
-	ld a, $1
+	ld a, NO_DAMAGE_OR_EFFECT_AGILITY
 	ld [wNoDamageOrEffect], a
 Func_17fb: ; 17fb (0:17fb)
 	ld a, [wTempNonTurnDuelistCardId]
@@ -6407,15 +6407,15 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ret z
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
-	ld e, $3
+	ld e, NO_DAMAGE_OR_EFFECT_FLY
 	text_hl NoDamageOrEffectDueToFlyText
 	cp SUBSTATUS1_FLY
 	jr z, .noDamageOrEffect
-	ld e, $2
+	ld e, NO_DAMAGE_OR_EFFECT_BARRIER
 	text_hl NoDamageOrEffectDueToBarrierText
 	cp SUBSTATUS1_BARRIER
 	jr z, .noDamageOrEffect
-	ld e, $1
+	ld e, NO_DAMAGE_OR_EFFECT_AGILITY
 	text_hl NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
 	jr z, .noDamageOrEffect
@@ -6443,7 +6443,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld a, [wLoadedCard2Stage]
 	or a
 	ret z
-	ld e, $5
+	ld e, NO_DAMAGE_OR_EFFECT_NSHIELD
 	text_hl NoDamageOrEffectDueToNShieldText
 	jr .noDamageOrEffect
 
@@ -6468,7 +6468,7 @@ HandleTransparency: ; 348a (0:348a)
 	ld de, $00f6
 	call TossCoin
 	ret nc
-	ld a, $4
+	ld a, NO_DAMAGE_OR_EFFECT_TRANSPARENCY
 	ld [wNoDamageOrEffect], a
 	text_hl NoDamageOrEffectDueToTransparencyText
 	scf
