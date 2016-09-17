@@ -247,7 +247,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00f2
 	textpointer Text00f3
 	textpointer Text00f4
-	textpointer Text00f5
+	textpointer AcidCheckText
 	textpointer Text00f6
 	textpointer Text00f7
 	textpointer Text00f8

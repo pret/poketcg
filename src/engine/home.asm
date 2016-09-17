@@ -3160,10 +3160,10 @@ ApplyAttachedDefender: ; 1a7e (0:1a7e)
 	ld d, a
 	ret
 
-SubstractHP: ; 1a96 (0:1a96)
 ; hl: address to substract HP from
 ; de: how much HP to substract (damage to deal)
-; returns carry if the HP does not become 0 as a result
+; returns carry if the HP does not become 0 as a result	
+SubstractHP: ; 1a96 (0:1a96)
 	push hl
 	push de
 	ld a, [hl]
@@ -6475,7 +6475,41 @@ HandleTransparency: ; 348a (0:348a)
 	ret
 ; 0x34b7
 
-INCBIN "baserom.gbc",$34b7,$34e2 - $34b7
+; return carry and return the appropriate text pointer in hl if the target has an
+; special status or power that prevents any damage or effect done to it this turn
+CheckNoDamageOrEffect: ; 34b7 (0:34b7)
+	ld a, [wNoDamageOrEffect]
+	or a
+	ret z
+	bit 7, a
+	jr nz, .dontPrintText ; already been here so don't repeat the text
+	ld hl, wNoDamageOrEffect
+	set 7, [hl]
+	dec a
+	add a
+	ld e, a
+	ld d, $0
+	ld hl, NoDamageOrEffectTextPointerTable
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	scf
+	ret
+
+.dontPrintText
+	ld hl, $0000
+	scf
+	ret
+; 0x34d8
+
+NoDamageOrEffectTextPointerTable: ; 34d8 (0:34d8)
+	tx NoDamageOrEffectDueToAgilityText      ; NO_DAMAGE_OR_EFFECT_AGILITY
+	tx NoDamageOrEffectDueToBarrierText      ; NO_DAMAGE_OR_EFFECT_BARRIER
+	tx NoDamageOrEffectDueToFlyText          ; NO_DAMAGE_OR_EFFECT_FLY
+	tx NoDamageOrEffectDueToTransparencyText ; NO_DAMAGE_OR_EFFECT_TRANSPARENCY
+	tx NoDamageOrEffectDueToNShieldText      ; NO_DAMAGE_OR_EFFECT_NSHIELD
+; 0x34e2
 
 Func_34e2: ; 34e2 (0:34e2)
 	ld a, $27

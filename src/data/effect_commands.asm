@@ -47,7 +47,7 @@ VictreebelLureEffectCommands:
 	db  $00
 
 VictreebelAcidEffectCommands:
-	dbw $03, $477e
+	dbw $03, AcidEffect
 	db  $00
 
 PinsirIronGripEffectCommands:
