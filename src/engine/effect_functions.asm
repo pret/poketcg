@@ -88,7 +88,33 @@ TossCoin_BankB: ; 2c07e (b:407e)
 	ret
 ; 0x2c082
 
-INCBIN "baserom.gbc",$2c082,$2c09c - $2c082
+TossCoinATimes_BankB: ; 2c082 (b:4082)
+	call TossCoinATimes
+	ret
+; 0x2c086
+
+CommentedOut_2c086: ; 2c086 (b:4086)
+	ret
+; 0x2c087
+
+Func_2c087: ; 2c087 (b:4087)
+	xor a
+	jr asm_2c08c
+
+Func_2c08a: ; 2c08a (b:408a)		
+	ld a, $1
+
+asm_2c08c
+	push de
+	push af
+	ld a, $11
+	call Func_0f7f
+	pop af
+	pop de
+	call Func_0fac
+	call TossCoinATimes
+	ret
+; 0x2c09c
 
 Func_2c09c: ; 2c09c (b:409c)
 	ld a, $1
@@ -102,7 +128,60 @@ Func_2c0a2: ; 2c0a2 (b:40a2)
 	ret
 ; 0x2c0a8
 
-INCBIN "baserom.gbc",$2c0a8,$2c140 - $2c0a8
+INCBIN "baserom.gbc",$2c0a8,$2c0d4 - $2c0a8
+
+; Sets some flags for AI use
+; if target double poisoned
+; 	[wccbb]   <- [wDamage]
+; 	[wccbc]   <- [wDamage]
+; else
+; 	[wccbb]   <- [wDamage] + d
+; 	[wccbc]   <- [wDamage] + e
+; 	[wDamage] <- [wDamage] + a
+Func_2c0d4: ; 2c0d4 (b:40d4)
+	push af
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	and DOUBLE_POISONED
+	jr z, .notDoublePoisoned
+	pop af
+	ld a, [wDamage]
+	ld [wccbb], a
+	ld [wccbc], a
+	ret
+
+	push af
+
+.notDoublePoisoned
+	ld hl, wDamage
+	ld a, [hl]
+	add d
+	ld [wccbb], a
+	ld a, [hl]
+	add e
+	ld [wccbc], a
+	pop af
+	add [hl]
+	ld [hl], a
+	ret
+; 0x2c0fb
+
+; Sets some flags for AI use
+; [wDamage] <- a
+; [wccbb]   <- d
+; [wccbc]   <- e
+Func_2c0fb: ; 2c0fb (b:40fb)
+	ld [wDamage], a
+	xor a
+	ld [wDamage + 1], a
+	ld a, d
+	ld [wccbb], a
+	ld a, e
+	ld [wccbc], a
+	ret
+; 0x2c10b
+
+INCBIN "baserom.gbc",$2c10b,$2c140 - $2c10b
 
 ; apply a status condition of type 1 identified by register a to the target
 ApplySubstatus1ToDefendingCard: ; 2c140 (b:4140)
@@ -139,7 +218,13 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	ret
 ; 0x2c166
 
-INCBIN "baserom.gbc",$2c166,$2c6f8 - $2c166
+INCBIN "baserom.gbc",$2c166,$2c6f0 - $2c166
+
+SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
+	ld a, $5
+	lb de, $0, $a
+	jp Func_2c0fb
+; 0x2c6f8
 
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	text_de PoisonCheckText
@@ -151,7 +236,21 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	ret
 ; 0x2c70a
 
-INCBIN "baserom.gbc",$2c70a,$2c77e - $2c70a
+INCBIN "baserom.gbc",$2c70a,$2c730 - $2c70a
+
+PoisonFang_AIEffect: ; 2c730 (b:4730)
+	ld a, $a
+	lb de, $a, $a
+	jp Func_2c0d4
+; 0x2c738
+
+WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
+	ld a, $5
+	lb de, $0, $a
+	jp Func_2c0d4
+; 0x2c740
+
+INCBIN "baserom.gbc",$2c740,$2c77e - $2c740
 
 AcidEffect: ; 2c77e (b:477e)
 	text_de AcidCheckText
@@ -162,7 +261,11 @@ AcidEffect: ; 2c77e (b:477e)
 	ret
 ; 0x2c78b
 
-INCBIN "baserom.gbc",$2c78b,$2c793 - $2c78b
+GloomPoisonPowder_AIEffect: ; 2c78b (b:478b)
+	ld a, $a
+	lb de, $a, $a
+	jp Func_2c0d4
+; 0x2c793
 
 ; confuses both the target and the user
 FoulOdorEffect: ; 2c793 (b:4793)
@@ -184,7 +287,13 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 	ret
 ; 0x2c7b4
 
-INCBIN "baserom.gbc",$2c7b4,$2c7d0 - $2c7b4
+KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
+	ld a, $5
+	lb de, $0, $a
+	jp Func_2c0d4
+; 0x2c7bc
+
+INCBIN "baserom.gbc",$2c7bc,$2c7d0 - $2c7bc
 
 SwordsDanceEffect: ; 2c7d0 (b:47d0)
 	ld a, [wTempTurnDuelistCardId]

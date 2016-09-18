@@ -2143,18 +2143,71 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
-	jr nz, .asm_f98
+	jr nz, .notLink
 	ld hl, $ff9e
 	ld bc, $000a
 	call Func_0ebf
 	call Func_0f58
-.asm_f98
+.notLink
 	pop bc
 	pop hl
 	ret
 ; 0xf9b
 
-INCBIN "baserom.gbc",$0f9b,$100b - $0f9b
+INCBIN "baserom.gbc",$0f9b,$0fac - $0f9b
+
+Func_0fac: ; 0fac (0:0fac)
+	push hl
+	push af
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetNonTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link
+	pop af
+	pop hl
+	ret
+
+.link
+	pop af
+	pop hl
+	push af
+	push hl
+	push de
+	push bc
+	push de
+	push hl
+	push af
+	ld hl, $cbed
+	pop de
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	pop de
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	pop de
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	ld [hl], c
+	inc hl
+	ld [hl], b
+	ld hl, $cbed
+	ld bc, $0008
+	call Func_0ebf
+	jp c, Func_0f35
+	pop bc
+	pop de
+	pop hl
+	pop af
+	ret
+; 0xfe9
+
+INCBIN "baserom.gbc",$0fe9,$100b - $0fe9
 
 Func_100b: ; 100b (0:100b)
 	ld a, $2
@@ -5879,8 +5932,7 @@ TossCoinATimes: ; 3071 (0:3071)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	rst $18
-	dw _TossCoin
+	bank1call _TossCoin
 	pop hl
 	ret
 
@@ -5895,8 +5947,7 @@ TossCoin: ; 307d (0:307d)
 	inc hl
 	ld [hl], d
 	ld a, $1
-	rst $18
-	dw _TossCoin
+	bank1call _TossCoin
 	ld hl, $cac2
 	ld [hl], $0
 	pop hl

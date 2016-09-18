@@ -524,7 +524,14 @@ wLoadedMove:: ; cca6
 wDamage:: ; ccb9
 	ds $2
 
-	ds $4
+; wccbb and wccbc appear to be used for AI scoring
+wccbb::
+	ds $1
+	
+wccbc::
+	ds $1
+	
+	ds $2
 
 wccbf:: ; ccbf
 	ds $2

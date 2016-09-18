@@ -8,19 +8,23 @@ EffectCommands: ; 186f7 (6:46f7)
 ;	db $00
 
 ; Commands are associated to a time or a scope (CommandType) that determines when their function is executed during the turn.
-; For example type $03 is executed right before dealing damage while type $09 appears to be AI related and is executed later.
+; For example type $03 is executed right before dealing damage while type $09 is AI related and executed during enemy turn only.
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
 
 ; Function name examples
-;   Poison50PercentEffect            ; generic effect shared by multiple moves.
-;   KakunaStiffenEffect              ; unique effect from a move known by multiple cards.
-;   AcidEffect                       ; unique effect from a move known by a single card
-;   SpitPoison_Poison50PercentEffect ; unique effect from a move known by a single card. This effect is made of more than one command.
+;	PoisonEffect                     ; generic effect shared by multiple moves.
+;	Paralysis50PercentEffect         ;
+;	KakunaStiffenEffect              ; unique effect from a move known by multiple cards.
+;	MetapodStiffenEffect             ;
+;	AcidEffect                       ; unique effect from a move known by a single card
+;	FoulOdorEffect                   ;
+;	SpitPoison_Poison50PercentEffect ; unique effect made of more than one command.
+;	SpitPoison_AIEffect              ;
 
 EkansSpitPoisonEffectCommands:
 	dbw $03, SpitPoison_Poison50PercentEffect
-	dbw $09, $46f0
+	dbw $09, SpitPoison_AIEffect
 	db  $00
 
 EkansWrapEffectCommands:
@@ -35,12 +39,12 @@ ArbokTerrorStrikeEffectCommands:
 
 ArbokPoisonFangEffectCommands:
 	dbw $03, PoisonEffect
-	dbw $09, $4730
+	dbw $09, PoisonFang_AIEffect
 	db  $00
 
 WeepinbellPoisonPowderEffectCommands:
 	dbw $03, Poison50PercentEffect
-	dbw $09, $4738
+	dbw $09, WeepinbellPoisonPowder_AIEffect
 	db  $00
 
 VictreebelLureEffectCommands:
@@ -64,7 +68,7 @@ CaterpieStringShotEffectCommands:
 
 GloomPoisonPowderEffectCommands:
 	dbw $03, PoisonEffect
-	dbw $09, $478b
+	dbw $09, GloomPoisonPowder_AIEffect
 	db  $00
 
 GloomFoulOdorEffectCommands:
@@ -77,7 +81,7 @@ KakunaStiffenEffectCommands:
 
 KakunaPoisonPowderEffectCommands:
 	dbw $03, Poison50PercentEffect
-	dbw $09, $47b4
+	dbw $09, KakunaPoisonPowder_AIEffect
 	db  $00
 
 GolbatLeechLifeEffectCommands:
