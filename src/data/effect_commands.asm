@@ -8,8 +8,15 @@ EffectCommands: ; 186f7 (6:46f7)
 ;	db $00
 
 ; Commands are associated to a time or a scope (CommandType) that determines when their function is executed during the turn.
+; For example type $03 is executed right before dealing damage while type $09 appears to be AI related and is executed later.
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
+
+; Function name examples
+;   Poison50PercentEffect            ; generic effect shared by multiple moves.
+;   KakunaStiffenEffect              ; unique effect from a move known by multiple cards.
+;   AcidEffect                       ; unique effect from a move known by a single card
+;   SpitPoison_Poison50PercentEffect ; unique effect from a move known by a single card. This effect is made of more than one command.
 
 EkansSpitPoisonEffectCommands:
 	dbw $03, SpitPoison_Poison50PercentEffect
@@ -86,11 +93,11 @@ VenonatLeechLifeEffectCommands:
 	db  $00
 
 ScytherSwordsDanceEffectCommands:
-	dbw $03, $47d0
+	dbw $03, SwordsDanceEffect
 	db  $00
 
 ZubatSupersonicEffectCommands:
-	dbw $03, $47dc
+	dbw $03, ZubatSupersonicEffect
 	db  $00
 
 ZubatLeechLifeEffectCommands:

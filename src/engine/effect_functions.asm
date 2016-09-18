@@ -184,7 +184,24 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 	ret
 ; 0x2c7b4
 
-INCBIN "baserom.gbc",$2c7b4,$2c836 - $2c7b4
+INCBIN "baserom.gbc",$2c7b4,$2c7d0 - $2c7b4
+
+SwordsDanceEffect: ; 2c7d0 (b:47d0)
+	ld a, [wTempTurnDuelistCardId]
+	cp SCYTHER
+	ret nz
+	ld a, SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2c7dc
+
+ZubatSupersonicEffect: ; 2c7dc (b:47dc)
+	call Confusion50PercentEffect
+	call nc, Func_2c09c
+	ret
+; 0x2c7e3
+
+INCBIN "baserom.gbc",$2c7e3,$2c836 - $2c7e3
 
 ; an exact copy of KakunaStiffenEffect
 MetapodStiffenEffect: ; 2c836 (b:4836)
