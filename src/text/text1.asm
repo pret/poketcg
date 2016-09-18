@@ -1127,7 +1127,7 @@ Text00f0: ; 37f24 (d:7f24)
 	line "If Heads, 8 cards! If Tails, 1 card!"
 	done
 
-Text00f1: ; 37f56 (d:7f56)
+IfHeadsNoDamageNextTurnText: ; 37f56 (d:7f56)
 	text "If Heads, you will not receive"
 	line "damage during opponent's next turn!"
 	done

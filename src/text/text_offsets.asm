@@ -243,7 +243,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00ee
 	textpointer Text00ef
 	textpointer Text00f0
-	textpointer Text00f1
+	textpointer IfHeadsNoDamageNextTurnText
 	textpointer Text00f2
 	textpointer Text00f3
 	textpointer Text00f4

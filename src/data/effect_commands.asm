@@ -2,15 +2,12 @@ EffectCommands: ; 186f7 (6:46f7)
 ; Each move has a two-byte effect pointer (move's 7th param) that points to one of these structures.
 ; Similarly, trainer cards have a two-byte pointer (7th param) to one of these structures, which determines the card's function.
 ; Energy cards also point to one of these, but their data is just $00.
-;	db CommandId ($01 - $0a)
+;	db CommandType ($01 - $0a)
 ;	dw Function
 ;	...
 ;	db $00
 
-; Apparently every command has a "time", and a function is called multiple times during a turn
-; with an argument identifying the command Id. If said command Id is found in the
-; current move effect's array, its assigned function is immediately executed.
-
+; Commands are associated to a time or a scope (CommandType) that determines when their function is executed during the turn.
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
 
@@ -64,11 +61,11 @@ GloomPoisonPowderEffectCommands:
 	db  $00
 
 GloomFoulOdorEffectCommands:
-	dbw $03, $4793
+	dbw $03, FoulOdorEffect
 	db  $00
 
 KakunaStiffenEffectCommands:
-	dbw $03, $47a0
+	dbw $03, KakunaStiffenEffect
 	db  $00
 
 KakunaPoisonPowderEffectCommands:
@@ -124,7 +121,7 @@ KoffingFoulGasEffectCommands:
 	db  $00
 
 MetapodStiffenEffectCommands:
-	dbw $03, $4836
+	dbw $03, MetapodStiffenEffect
 	db  $00
 
 MetapodStunSporeEffectCommands:

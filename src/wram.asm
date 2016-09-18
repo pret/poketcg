@@ -765,7 +765,7 @@ wceb5:: ; ceb5
 
 wcecc:: ; cecc
 	ds $9c
-	
+
 wHandCardBuffer:: ; cf68
 	ds $51
 
@@ -1367,7 +1367,7 @@ wMusicChannelStackPointers:: ; ddf3
 ; 1 byte for loop count)
 wMusicCh1Stack:: ; ddfb
 	ds $c
-	
+
 wMusicCh2Stack:: ; de07
 	ds $c
 

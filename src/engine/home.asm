@@ -2339,7 +2339,7 @@ CreateHandCardBuffer: ; 123b (0:123b)
 .checkNextCardLoop
 	ld a, [hld]
 	push hl
-	ld l, a 
+	ld l, a
 	bit 6, [hl]
 	pop hl
 	jr nz, .skipCard
@@ -3162,7 +3162,7 @@ ApplyAttachedDefender: ; 1a7e (0:1a7e)
 
 ; hl: address to substract HP from
 ; de: how much HP to substract (damage to deal)
-; returns carry if the HP does not become 0 as a result	
+; returns carry if the HP does not become 0 as a result
 SubstractHP: ; 1a96 (0:1a96)
 	push hl
 	push de
@@ -5726,9 +5726,11 @@ Func_2fcb: ; 2fcb (0:2fcb)
 	call BankpopHome
 	ret
 
-; Checks if the command ID at a is one of the commands of the move or card effect currently in use,
+; Checks if the command type at a is one of the commands of the move or card effect currently in use,
 ; and executes its associated function if so.
-; input: a = move or trainer card effect command ID
+; input:
+; a = command type to check
+; [wLoadedMoveEffectCommands] = pointer to list of commands of current move or trainer card
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
 ; grab pointer to command list from wLoadedMoveEffectCommands
@@ -5739,7 +5741,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	pop af
 	call CheckMatchingCommand
 	jr nc, .executeFunction
-; return if input command ID wasn't found
+; return if no matching command was found
 	or a
 	ret
 
@@ -5761,9 +5763,9 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ret
 
 ; input:
-  ; a = command ID to check
-  ; hl = pointer to current move effect or trainer card effect command list
-; return nc if command ID matching a is found, c otherwise
+  ; a = command type to check
+  ; hl = list of commands of current move or trainer card
+; return nc if command type matching a is found, c otherwise
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
@@ -6235,7 +6237,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	call GetTurnDuelistVariable
 	or a
 	jr z, .notAffectedBySubstatus1
-	cp SUBSTATUS1_NO_DAMAGE_F
+	cp SUBSTATUS1_NO_DAMAGE_STIFFEN
 	jr z, .noDamage
 	cp SUBSTATUS1_NO_DAMAGE_10
 	jr z, .noDamage
@@ -6448,7 +6450,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	jr .noDamageOrEffect
 
 ; if the Pokemon being attacked is Haunter1, and its Transparency is active,
-; there is a 50% chance that any damage or effect is prevented 
+; there is a 50% chance that any damage or effect is prevented
 HandleTransparency: ; 348a (0:348a)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp HAUNTER1
@@ -7295,7 +7297,7 @@ RunOverworldScript: ; 3aed (0:3aed)
 	rlca
 	ld c, a
 	ld b, $0
-	ld hl, OverworldScriptTable 
+	ld hl, OverworldScriptTable
 	add hl, bc
 	ldh a, [hBankROM]
 	push af

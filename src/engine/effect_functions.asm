@@ -21,6 +21,8 @@ Confusion50PercentEffect: ; 2c01d (b:401d)
 	text_de ConfusionCheckText
 	call TossCoin_BankB
 	ret nc
+
+ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, $f0, CONFUSED
 	jr applyEffect
 
@@ -94,9 +96,26 @@ Func_2c09c: ; 2c09c (b:409c)
 	ret
 ; 0x2c0a2
 
-INCBIN "baserom.gbc",$2c0a2,$2c149 - $2c0a2
+Func_2c0a2: ; 2c0a2 (b:40a2)
+	ld a, $2
+	ld [wcced], a
+	ret
+; 0x2c0a8
 
-; apply a status condition identified by register a to the target if able
+INCBIN "baserom.gbc",$2c0a8,$2c140 - $2c0a8
+
+; apply a status condition of type 1 identified by register a to the target
+ApplySubstatus1ToDefendingCard: ; 2c140 (b:4140)
+	push af
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
+	call GetTurnDuelistVariable
+	pop af
+	ld [hli], a
+	ret
+; 0x2c149
+
+; apply a status condition of type 2 identified by register a to the target,
+; unless prevented by wNoDamageOrEffect
 ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	push af
 	call CheckNoDamageOrEffect
@@ -143,4 +162,40 @@ AcidEffect: ; 2c77e (b:477e)
 	ret
 ; 0x2c78b
 
-INCBIN "baserom.gbc",$2c78b,$30000 - $2c78b
+INCBIN "baserom.gbc",$2c78b,$2c793 - $2c78b
+
+; confuses both the target and the user
+FoulOdorEffect: ; 2c793 (b:4793)
+	call ConfusionEffect
+	call SwapTurn
+	call ConfusionEffect
+	call SwapTurn
+	ret
+; 0x2c7a0
+
+KakunaStiffenEffect: ; 2c7a0 (b:47a0)
+	text_de IfHeadsNoDamageNextTurnText
+	call TossCoin_BankB
+	jp nc, Func_2c0a2
+	ld a, $4f
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2c7b4
+
+INCBIN "baserom.gbc",$2c7b4,$2c836 - $2c7b4
+
+; an exact copy of KakunaStiffenEffect
+MetapodStiffenEffect: ; 2c836 (b:4836)
+	text_de IfHeadsNoDamageNextTurnText
+	call TossCoin_BankB
+	jp nc, Func_2c0a2
+	ld a, $4f
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2c84a
+
+INCBIN "baserom.gbc",$2c84a,$30000 - $2c84a
