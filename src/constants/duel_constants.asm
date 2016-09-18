@@ -42,8 +42,13 @@ CARD_LOCATION_BENCH_3      EQU $13
 CARD_LOCATION_BENCH_4      EQU $14
 CARD_LOCATION_BENCH_5      EQU $15
 
+;;; duelist types
+DUELIST_TYPE_PLAYER   EQU $00
+DUELIST_TYPE_LINK_OPP EQU $01
+DUELIST_TYPE_AI_OPP   EQU $80
+
 ;;; constant values
-DUEL_MAX_POKEMON_IN_PLAY EQU $06
+MAX_POKEMON_IN_PLAY EQU $06
 
 ;;; status conditions
 ; two statuses can be combined if they are identified by a different nybble

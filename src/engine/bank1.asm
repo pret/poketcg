@@ -255,7 +255,7 @@ HandleTurn: ; 4225 (1:4225)
 	ldh [hTempCardNumber], a
 	call AddCardToHand
 	ld a, [wcc0d]
-	cp $00
+	cp DUELIST_TYPE_PLAYER
 	jr z, Func_4262
 	call SwapTurn
 	call Func_34e2
@@ -274,10 +274,11 @@ Func_4268:
 Func_426d:
 	call $4f9d
 	ld a, [wcc0d]
-	cp a, $00
+	cp a, DUELIST_TYPE_PLAYER
 	jr z, PrintDuelMenu
-	cp a, $01
+	cp a, DUELIST_TYPE_LINK_OPP
 	jp z, $6911
+	; DUELIST_TYPE_AI_OPP
 	xor a
 	ld [wVBlankCtr], a
 	ld [wcbf9], a

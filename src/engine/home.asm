@@ -2122,7 +2122,7 @@ Func_0f58: ; 0f58 (0:0f58)
 .asm_f60
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	or a
+	or a ; cp DUELIST_TYPE_PLAYER
 	jr z, .asm_f70
 	ld hl, $cbe2
 	ld de, wRNG1
@@ -2142,7 +2142,7 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ld [$ff9e], a
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
-	cp $1
+	cp DUELIST_TYPE_LINK_OPP
 	jr nz, .asm_f98
 	ld hl, $ff9e
 	ld bc, $000a
@@ -2501,9 +2501,9 @@ INCBIN "baserom.gbc",$13a2,$1485 - $13a2
 
 Func_1485: ; 1485 (0:1485)
 	push af
-	ld a, $ff & wPlayerNumberOfPokemonInPlay
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
-	cp DUEL_MAX_POKEMON_IN_PLAY
+	cp MAX_POKEMON_IN_PLAY
 	jr nc, .tooManyPokemonInPlay
 	inc [hl]
 	ld e, a
@@ -5083,7 +5083,7 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld a, [wOpponentDeckId]
-	or $80
+	or DUELIST_TYPE_AI_OPP
 	ld [hl], a
 	ret
 
