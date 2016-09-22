@@ -95,6 +95,10 @@ sgb: MACRO
 	db \1 * 8 + \2 ; sgb_command * 8 + length
 ENDM
 
+run_script: MACRO
+	db \1_index
+ENDM
+
 ;;; notes/instruments macros
 
 C_: MACRO
@@ -402,12 +406,4 @@ move_data_struct: MACRO
 \1Flag3::          db
 \1Unknown1::       db
 \1Animation::      db
-ENDM
-
-run_script: MACRO
-	db \1_index
-ENDM
-
-argt: MACRO
-	dw \1_
 ENDM

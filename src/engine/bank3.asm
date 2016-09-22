@@ -2948,7 +2948,7 @@ OWSequence_d753: ; d753 (3:5753)
 	db $00
 	db $02
 	run_script OWScript_PrintTextString
-	argt Text05e3
+	tx Text05e3
 	run_script OWScript_CloseTextBox
 	run_script Func_d088
 	db $07
@@ -3006,16 +3006,16 @@ WaterClubAfterDuel: ;e157 (3:6157)
 OWSequence_Sara: ; e177 (3:6177)
 	start_script
 	run_script OWScript_PrintTextString
-	argt Text042c
+	tx Text042c
 	run_script OWScript_AskQuestionJump
-	argt Text042d
+	tx Text042d
 	dw .yesDuel
 	run_script OWScript_PrintTextString
-	argt Text042e
+	tx Text042e
 	run_script OWScript_EndScriptCloseText
 .yesDuel
 	run_script OWScript_PrintTextString
-	argt Text042f
+	tx Text042f
 	run_script OWScript_StartBattle
 	db 2
 	db WATERFRONT_POKEMON_DECK - 2 ; 6189
@@ -3027,33 +3027,33 @@ OWSequence_BeatSara: ; e18c (3:618c)
 	run_script OWScript_SetEventFlags
 	db FLAG_BEAT_SARA
 	run_script OWScript_PrintTextString
-	argt Text0430
+	tx Text0430
 	run_script OWScript_GiveBoosterPacks
 	db BOOSTER_ColoWater
 	db BOOSTER_ColoWater
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
-	argt Text0431
+	tx Text0431
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_LostToSara: ; e19a (03:619a)
 	start_script
 	run_script OWScript_PrintTextCloseBox
-	argt Text0432
+	tx Text0432
 
 OWSequence_Amanda: ; e19e (03:619e)
 	start_script
 	run_script OWScript_PrintTextString
-	argt Text0433
+	tx Text0433
 	run_script OWScript_AskQuestionJump
-	argt Text0434
+	tx Text0434
 	dw .yesDuel
 	run_script OWScript_PrintTextString
-	argt Text0435
+	tx Text0435
 	run_script OWScript_EndScriptCloseText
 .yesDuel
 	run_script OWScript_PrintTextString
-	argt Text0436
+	tx Text0436
 	run_script OWScript_StartBattle
 	db 03
 	db LONELY_FRIENDS_DECK - 2
@@ -3065,19 +3065,19 @@ OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	run_script OWScript_SetEventFlags
 	db FLAG_BEAT_AMANDA
 	run_script OWScript_PrintTextString
-	argt Text0437
+	tx Text0437
 	run_script OWScript_GiveBoosterPacks
 	db BOOSTER_LightningColorless
 	db BOOSTER_LightningColorless
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
-	argt Text0438
+	tx Text0438
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_LostToAmanda: ; e1c1 (03:61c1)
 	start_script
 	run_script OWScript_PrintTextCloseBox
-	argt Text0439
+	tx Text0439
 
 OWSequence_NotReadyToSeeAmy:
 INCBIN "baserom.gbc",$e1c5,$e21c - $e1c5
@@ -3097,7 +3097,7 @@ OWSequence_Joshua:
 	db $33 ; offset on flagmod table
 	db $01 ; the control bit
 	run_script OWScript_PrintTextString
-	argt Text043b
+	tx Text043b
 	run_script OWScript_EndScriptCloseText
 .beatSaraAndAmanda
 	run_script OWScript_JumpIfFlagSet
@@ -3107,9 +3107,9 @@ OWSequence_Joshua:
 	db $33
 	db $01
 	run_script OWScript_PrintTextString
-	argt Text043b
+	tx Text043b
 	run_script OWScript_PrintTextString
-	argt Text043c
+	tx Text043c
 	run_script Func_d484
 	db $33
 	db $01
