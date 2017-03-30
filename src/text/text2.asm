@@ -3,12 +3,12 @@ AcidCheckText: ; 38000 (e:4000)
 	line "unable to Retreat during next turn."
 	done
 
-Text00f6: ; 3803b (e:403b)
+TransparencyCheckText: ; 3803b (e:403b)
 	text "Transparency check! If Heads,"
 	line "do not receive opponent's Attack!"
 	done
 
-Text00f7: ; 3807c (e:407c)
+ConfusionCheckDamageText: ; 3807c (e:407c)
 	text "Confusion check,"
 	line "If Tails, damage to yourself!"
 	done

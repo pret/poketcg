@@ -2824,8 +2824,8 @@ Func_1730: ; 1730 (0:1730)
 	call Func_0f7f
 	ld a, $6
 	call TryExecuteEffectCommandFunction
-	call Func_18d7
-	jp c, Func_1828
+	call CheckSelfConfusionDamage
+	jp c, DealConfusionDamageToSelf
 	call Func_1b8d
 	call WaitForWideTextBoxInput
 	call Func_0f58
@@ -2914,7 +2914,7 @@ Func_1823: ; 1823 (0:1823)
 	or a
 	ret
 
-Func_1828: ; 1828 (0:1828)
+DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call $4f9d
 	ld a, $1
 	ld [wcce6], a
@@ -2922,7 +2922,7 @@ Func_1828: ; 1828 (0:1828)
 	call DrawWideTextBox_PrintText
 	ld a, $75
 	ld [wLoadedMoveAnimation], a
-	ld a, $14
+	ld a, 20 ; damage
 	call Func_195c
 	call Func_1bb4
 	call $6e49
@@ -3005,7 +3005,8 @@ Func_189d: ; 189d (0:189d)
 	ld de, $0000
 	ret
 
-Func_18d7: ; 18d7 (0:18d7)
+; return carry and 1 into wccc9 if damage is dealt to oneself due to confusion
+CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	xor a
 	ld [wccc9], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -3016,14 +3017,14 @@ Func_18d7: ; 18d7 (0:18d7)
 	or a
 	ret
 .confused
-	ld de, $00f7
+	text_de ConfusionCheckDamageText
 	call TossCoin
-	jr c, .asm_18f7
+	jr c, .noConfusionDamage
 	ld a, $1
 	ld [wccc9], a
 	scf
 	ret
-.asm_18f7
+.noConfusionDamage
 	or a
 	ret
 ; 0x18f9
@@ -6518,7 +6519,7 @@ HandleTransparency: ; 348a (0:348a)
 	jr c, .asm_3491
 	xor a
 	ld [wcac2], a
-	ld de, $00f6
+	text_de TransparencyCheckText
 	call TossCoin
 	ret nc
 	ld a, NO_DAMAGE_OR_EFFECT_TRANSPARENCY

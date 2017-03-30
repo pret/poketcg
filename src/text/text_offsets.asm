@@ -248,8 +248,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00f3
 	textpointer Text00f4
 	textpointer AcidCheckText
-	textpointer Text00f6
-	textpointer Text00f7
+	textpointer TransparencyCheckText
+	textpointer ConfusionCheckDamageText
 	textpointer Text00f8
 	textpointer Text00f9
 	textpointer Text00fa
