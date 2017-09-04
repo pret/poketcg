@@ -11,3 +11,20 @@ Copy the above ROM to this directory as "baserom.gbc".
 Run `make` in your shell.
 
 This will output a file named "tcg.gbc".
+
+
+# See Also
+
+* Disassembly of [**Pokémon Red/Blue**][pokered]
+* Disassembly of [**Pokémon Yellow**][pokeyellow]
+* Disassembly of [**Pokémon Crystal**][pokecrystal]
+* Disassembly of [**Pokémon Pinball**][pokepinball]
+* Discord: [**pret**][Discord]
+* irc: **irc.freenode.net** [**#pret**][irc]
+
+[pokered]: https://github.com/pret/pokered
+[pokeyellow]: https://github.com/pret/pokeyellow
+[pokecrystal]: https://github.com/pret/pokecrystal
+[pokepinball]: https://github.com/pret/pokepinball
+[Discord]: https://discord.gg/cJxDDVP
+[irc]: https://kiwiirc.com/client/irc.freenode.net/?#pret
