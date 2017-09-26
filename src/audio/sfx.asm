@@ -117,7 +117,7 @@ Func_fc094: ; fc094 (3f:4094)
 	ld d, [hl]
 	ld h, d
 	ld l, e
-	jp [hl]
+	jp hl
 
 SFX_CommandTable: ; fc0ab (3f:40ab)
 	dw SFX_0
