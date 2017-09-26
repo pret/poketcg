@@ -68,7 +68,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wIsPracticeDuel], a
 
 .asm_40ca
-	ld hl, [sp+$0]
+	ld hl, sp+$0
 	ld a, l
 	ld [wcbe5], a
 	ld a, h

@@ -593,7 +593,7 @@ Music1_PlayNextNote: ; f4414 (3d:4414)
 	ld h, d
 	ld l, e
 	pop af
-	jp [hl]
+	jp hl
 
 Music1_CommandTable: ; f442c (3d:442c)
 	dw Music1_speed

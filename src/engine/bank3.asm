@@ -91,7 +91,7 @@ Func_c0ce: ; c0ce (3:40ce)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp [hl]
+	jp hl
 
 PointerTable_c0e0: ; c0e0 (3:40e0)
 	dw Func_c0e8
@@ -124,7 +124,7 @@ Func_c10a: ; c10a (3:410a)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp [hl]
+	jp hl
 
 ; closes dialogue window. seems to be for other things as well.
 CloseDialogueBox: ; c111 (3:4111)
@@ -1299,7 +1299,7 @@ Func_c9c0: ; c9c0 (3:49c0)
 Func_c9c2: ; c9c2 (3:49c2)
 	call Func_3abd
 	ret nc
-	jp [hl]
+	jp hl
 
 Func_c9c7: ; c9c7 (3:49c7)
 	ld l, $e
@@ -1462,7 +1462,7 @@ ModifyEventFlags: ; ca92 (3:4a92)
 
 Func_cab3: ; cab3 (3:4ab3)
 	push hl
-	ld hl, [sp+$4]
+	ld hl, sp+$4
 	push bc
 	ld c, [hl]
 	inc hl

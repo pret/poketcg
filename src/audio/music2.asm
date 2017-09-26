@@ -593,7 +593,7 @@ Music2_PlayNextNote: ; f8414 (3e:4414)
 	ld h, d
 	ld l, e
 	pop af
-	jp [hl]
+	jp hl
 
 Music2_CommandTable: ; f842c (3e:442c)
 	dw Music2_speed

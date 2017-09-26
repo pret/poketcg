@@ -805,7 +805,7 @@ JumpToFunctionInTable: ; 05ab (0:05ab)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	jp [hl]
+	jp hl
 
 ; call function at [hl] if non-NULL
 CallIndirect: ; 05b6 (0:05b6)
@@ -822,7 +822,7 @@ CallIndirect: ; 05b6 (0:05b6)
 	pop af
 	; fallthrough
 CallHL: ; 05c1 (0:05c1)
-	jp [hl]
+	jp hl
 ; 0x5c2
 
 INCBIN "baserom.gbc",$05c2,$0663 - $05c2
@@ -968,7 +968,7 @@ BankpushHome: ; 0745 (0:0745)
 	push de
 	ld e, l
 	ld d, h
-	ld hl, [sp+$9]
+	ld hl, sp+$9
 	ld b, [hl]
 	dec hl
 	ld c, [hl]
@@ -976,7 +976,7 @@ BankpushHome: ; 0745 (0:0745)
 	ld [hl], b
 	dec hl
 	ld [hl], c
-	ld hl, [sp+$9]
+	ld hl, sp+$9
 	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $0
@@ -1006,7 +1006,7 @@ BankpushHome2: ; 076f (0:076f)
 	push de
 	ld e, l
 	ld d, h
-	ld hl, [sp+$9]
+	ld hl, sp+$9
 	ld b, [hl]
 	dec hl
 	ld c, [hl]
@@ -1014,7 +1014,7 @@ BankpushHome2: ; 076f (0:076f)
 	ld [hl], b
 	dec hl
 	ld [hl], c
-	ld hl, [sp+$9]
+	ld hl, sp+$9
 	ldh a, [hBankROM]
 	ld [hld], a
 	ld [hl], $0
@@ -1031,7 +1031,7 @@ BankpushHome2: ; 076f (0:076f)
 BankpopHome: ; 078e (0:078e)
 	push hl
 	push de
-	ld hl, [sp+$7]
+	ld hl, sp+$7
 	ld a, [hld]
 	call BankswitchHome
 	dec hl
@@ -1418,7 +1418,7 @@ RST18: ; 09ae (0:09ae)
 	push hl
 	push de
 	push af
-	ld hl, [sp+$d]
+	ld hl, sp+$d
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -1441,7 +1441,7 @@ RST18: ; 09ae (0:09ae)
 	; fallthrough
 Func_09ce: ; 09ce (0:09ce)
 	call BankswitchHome
-	ld hl, [sp+$d]
+	ld hl, sp+$d
 	inc de
 	inc de
 	ld [hl], d
@@ -1464,7 +1464,7 @@ RST28: ; 09e9 (0:09e9)
 	push hl
 	push de
 	push af
-	ld hl, [sp+$d]
+	ld hl, sp+$d
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -3770,7 +3770,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	add sp, -$20
 	push hl
 	push bc
-	ld hl, [sp+$4]
+	ld hl, sp+$4
 	dec b
 	dec b
 	push hl
@@ -3903,11 +3903,11 @@ Func_1f5f: ; 1f5f (0:1f5f)
 .asm_1f67
 	push hl
 	push bc
-	ld hl, [sp+$25]
+	ld hl, sp+$25
 	ld d, [hl]
-	ld hl, [sp+$27]
+	ld hl, sp+$27
 	ld a, [hl]
-	ld hl, [sp+$4]
+	ld hl, sp+$4
 	push hl
 .asm_1f72
 	ld [hli], a
@@ -3922,9 +3922,9 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	ld c, b
 	ld b, $0
 	call Memcpy
-	ld hl, [sp+$24]
+	ld hl, sp+$24
 	ld a, [hl]
-	ld hl, [sp+$27]
+	ld hl, sp+$27
 	add [hl]
 	ld [hl], a
 	pop bc
@@ -7361,7 +7361,7 @@ RunOverworldScript: ; 3aed (0:3aed)
 	pop af
 	call BankswitchHome
 	pop bc
-	jp [hl]
+	jp hl
 ; 0x3b11
 
 INCBIN "baserom.gbc",$3b11,$3b21 - $3b11
@@ -7486,7 +7486,7 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 INCBIN "baserom.gbc",$3c10,$3c45 - $3c10
 
 Func_3c45: ; 3c45 (0:3c45)
-	jp [hl]
+	jp hl
 ; 0x3c46
 
 INCBIN "baserom.gbc",$3c46,$3c48 - $3c46
@@ -7666,7 +7666,7 @@ Func_3df3: ; 3df3 (0:3df3)
 	push hl
 	ld a, BANK(Func_12c7f)
 	call BankswitchHome
-	ld hl, [sp+$5]
+	ld hl, sp+$5
 	ld a, [hl]
 	call Func_12c7f
 	call Func_0404
@@ -7708,7 +7708,7 @@ Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	pop af
 	ld bc, Bankswitch3d
 	push bc
-	jp [hl]
+	jp hl
 
 Bankswitch3d: ; 3fe0 (0:3fe0)
 	ld a, $3d
