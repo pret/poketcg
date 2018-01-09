@@ -245,7 +245,7 @@ HandleTurn: ; 4225 (1:4225)
 .asm_4237
 	call $70e6
 	call $4933
-	call _DrawCardFromDeck
+	call DrawCardFromDeck
 	jr nc, .deckNotEmpty
 	ld a, DUEL_LOST
 	ld [wDuelFinished], a

@@ -2323,15 +2323,14 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld b, a
 	ld a, DUELVARS_DECK_CARDS
 	add [hl]
-	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array
-            ; of the first (top) card in the deck
+	ld l, a ; hl = position of the first (top) deck card in the wPlayerDeckCards or wOpponentDeckCards array
 	ld a, b ; a = number of cards in the deck
 	call ShuffleCards
 	ret
 
 ; draw a card from the deck, saving its location as $40
 ; returns c if deck is empty, nc if a card was succesfully drawn
-_DrawCardFromDeck: ; 10cf (0:10cf)
+DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -2343,7 +2342,7 @@ _DrawCardFromDeck: ; 10cf (0:10cf)
 	ld l, a
 	ld a, [hl] ; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld l, a
-	ld [hl], $40 ; temporarily write $40 to corresponding card location variable
+	ld [hl], CARD_LOCATION_JUST_DRAWN ; temporarily write $40 to corresponding card location variable
 	pop hl
 	or a
 	ret
@@ -2366,8 +2365,8 @@ AddCardToHand: ; 1123 (0:1123)
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	; write $1 (hand) into the location of this card
-	ld [hl], $1
+	; write $1 (CARD_LOCATION_HAND) into the location of this card
+	ld [hl], CARD_LOCATION_HAND
 	; increment number of cards in hand
 	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	inc [hl]
