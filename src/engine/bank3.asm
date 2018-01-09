@@ -3029,8 +3029,8 @@ OWSequence_BeatSara: ; e18c (3:618c)
 	run_script OWScript_PrintTextString
 	tx Text0430
 	run_script OWScript_GiveBoosterPacks
-	db BOOSTER_ColoWater
-	db BOOSTER_ColoWater
+	db BOOSTER_COLOSSEUM_WATER
+	db BOOSTER_COLOSSEUM_WATER
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
 	tx Text0431
@@ -3067,8 +3067,8 @@ OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	run_script OWScript_PrintTextString
 	tx Text0437
 	run_script OWScript_GiveBoosterPacks
-	db BOOSTER_LightningColorless
-	db BOOSTER_LightningColorless
+	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
+	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
 	tx Text0438
