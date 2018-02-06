@@ -80,7 +80,7 @@ Func_700a3: ; 700a3 (1c:40a3)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, $8800
+	ld de, vTiles1
 	call Func_701e9
 	call Func_701fe
 	ld hl, SGB_700de
@@ -96,7 +96,7 @@ Func_700a3: ; 700a3 (1c:40a3)
 	jr z, .asm_700da
 	call Func_70136
 	dec hl
-	ld de, $8800
+	ld de, vTiles1
 	call Func_701e9
 	ld hl, SGB_700ee
 	call Func_70177
@@ -123,10 +123,10 @@ Func_700fe: ; 700fe (1c:40fe)
 	push hl
 	call Func_70136
 	pop hl
-	ld de, $8800
+	ld de, vTiles1
 	call Func_701e9
 	pop hl
-	ld de, $9000
+	ld de, vTiles2
 	call Func_701e9
 	call Func_701fe
 	pop hl
@@ -212,7 +212,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	call DisableLCD
 	xor a
 	ld c, $10
-	ld hl, $9000
+	ld hl, vTiles2
 .asm_701cb
 	ld [hli], a
 	dec c
@@ -251,7 +251,7 @@ Func_701e9: ; 701e9 (1c:41e9)
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
-	ld hl, $9800
+	ld hl, vBGMapTiles
 	ld de, $000c
 	ld a, $80
 	ld c, $d

@@ -1,13 +1,15 @@
 INCLUDE "constants.asm"
 INCLUDE "macros.asm"
 
+INCLUDE "vram.asm"
+
 ;----------------------------------------------------------
 ;--- Bank 0: $Cxxx ----------------------------------------
 ;----------------------------------------------------------
 
 SECTION "WRAM0", WRAM0
 
-wTempCardCollection::
+wTempCardCollection:: ; c000
 	ds $100
 	ds $100
 
@@ -527,10 +529,10 @@ wDamage:: ; ccb9
 ; wccbb and wccbc appear to be used for AI scoring
 wccbb::
 	ds $1
-	
+
 wccbc::
 	ds $1
-	
+
 	ds $2
 
 wccbf:: ; ccbf

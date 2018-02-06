@@ -1,6 +1,6 @@
 SECTION "Working Cards", SRAM, BANK[0]
 
-ds $100
+	ds $100
 
 sCardCollection:: ds $100 ; a100
 

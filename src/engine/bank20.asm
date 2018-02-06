@@ -65,8 +65,8 @@ Func_801a1: ; 801a1 (20:41a1)
 	push af
 	ld a, $1
 	call BankswitchRAM
-	ld hl, $a000
-	ld de, $9800
+	ld hl, vEnd
+	ld de, vBGMapTiles
 	ld c, $20
 .asm_801b4
 	push bc
@@ -75,7 +75,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	ld b, $20
 	call SafeCopyDataHLtoDE
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_801d6
 	pop de
 	pop hl
@@ -288,7 +288,7 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld c, [hl]
 	inc hl
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_80be7
 	inc hl
 

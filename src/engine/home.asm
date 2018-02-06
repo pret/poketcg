@@ -422,8 +422,8 @@ SetupVRAM: ; 03a1 (0:03a1)
 	call .asm_3b2
 	call BankswitchVRAM_0
 .asm_3b2
-	ld hl, $8000
-	ld bc, $1800
+	ld hl, vTiles0
+	ld bc, vBGMapTiles - vTiles0
 .asm_3b8
 	xor a
 	ld [hli], a
@@ -436,8 +436,8 @@ SetupVRAM: ; 03a1 (0:03a1)
 ; fill VARM tile map banks with [wTileMapFill]
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
-	ld hl, $9800
-	ld bc, $0400
+	ld hl, vBGMapTiles
+	ld bc, vBGMapAttrs - vBGMapTiles
 .asm_3c9
 	ld a, [wTileMapFill]
 	ld [hli], a
@@ -449,8 +449,8 @@ FillTileMap: ; 03c0 (0:03c0)
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM_1
-	ld hl, $9800
-	ld bc, $0400
+	ld hl, vBGMapTiles
+	ld bc, vBGMapAttrs - vBGMapTiles
 .asm_3e1
 	xor a
 	ld [hli], a
@@ -630,7 +630,7 @@ SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
-; returns $9800 + 32 * c + b in de.
+; returns vBGMapTiles + 32 * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
@@ -3727,7 +3727,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; returns $9800 + 32 * e + d in hl.
+; returns vBGMapTiles + 32 * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
 DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
