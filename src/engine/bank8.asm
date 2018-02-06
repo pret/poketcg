@@ -1,4 +1,4 @@
-INCBIN "baserom.gbc",$20000,$200e5 - $20000
+	INCROM $20000, $200e5
 
 ; 0 - e4 is a big set of data, seems to be one entry for each card
 
@@ -117,7 +117,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	jp .asm_4106
 ; 0x201b1
 
-INCBIN "baserom.gbc",$201b1,$2297b - $201b1
+	INCROM $201b1, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)
@@ -129,4 +129,4 @@ CopyBuffer: ; 2297b (8:697b)
 	jr CopyBuffer
 ; 0x22983
 
-INCBIN "baserom.gbc",$22983,$24000 - $22983
+	INCROM $22983, $24000

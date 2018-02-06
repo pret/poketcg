@@ -844,7 +844,7 @@ Func_5c2: ; 5c2 (0:5c2)
 	ret
 ; 0x5db
 
-INCBIN "baserom.gbc",$05db,$0614 - $05db
+	INCROM $05db, $0614
 
 Func_0614: ; 614 (0:614)
 	push af
@@ -862,7 +862,7 @@ Func_061b:
 	ret
 ; 0x627
 
-INCBIN "baserom.gbc",$0627,$0663 - $0627
+	INCROM $0627, $0663
 
 Func_0663: ; 0663 (0:0663)
 	push bc
@@ -898,7 +898,7 @@ Func_0686: ; 0686 (0:0686)
 	ret
 ; 0x695
 
-INCBIN "baserom.gbc",$0695,$06c3 - $0695
+	INCROM $0695, $06c3
 
 Func_06c3: ; 06c3 (0:06c3)
 	push af
@@ -935,7 +935,7 @@ Func_06c3: ; 06c3 (0:06c3)
 	ret
 ; 0x6ee
 
-INCBIN "baserom.gbc",$06ee,$06fc - $06ee
+	INCROM $06ee, $06fc
 
 ; memcpy(DE, HL, B)
 ; if LCD on, copy during h-blank only
@@ -943,12 +943,12 @@ SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	ld a, [wLCDC]
 	rla
 	jr c, JumpToHblankCopyDataHLtoDE
-.lcd_off_copy_loop
+.lcd_off_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .lcd_off_copy_loop
+	jr nz, .lcd_off_loop
 	ret
 JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
 	jp HblankCopyDataHLtoDE
@@ -1157,7 +1157,7 @@ BankswitchVRAM: ; 07d6 (0:07d6)
 	ret
 ; 0x7db
 
-INCBIN "baserom.gbc",$07db,$07e7 - $07db
+	INCROM $07db, $07e7
 
 Func_07e7: ; 07e7 (0:07e7)
 	call CheckForCGB
@@ -1442,7 +1442,7 @@ Func_08ef: ; 08ef (0:08ef)
 	jr .asm_93c
 ; 0x950
 
-INCBIN "baserom.gbc",$0950,$099c - $0950
+	INCROM $0950, $099c
 
 Func_099c: ; 099c (0:099c)
 	xor a
@@ -1504,7 +1504,7 @@ Func_09ce: ; 09ce (0:09ce)
 	ret
 ; 0x9dc
 
-INCBIN "baserom.gbc",$09dc,$09e9 - $09dc
+	INCROM $09dc, $09e9
 
 ; this function affects the stack so that it returns
 ; to the three byte pointer following the rst call
@@ -1711,7 +1711,7 @@ SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
 	sgb MLT_REQ, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-INCBIN "baserom.gbc",$0bcb,$0c08 - $0bcb
+	INCROM $0bcb, $0c08
 
 ; loops 63000 * bc cycles (~15 * bc ms)
 Wait: ; 0c08 (0:0c08)
@@ -1755,27 +1755,27 @@ HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 ; memcpy(HL, DE, C), but only during hblank
 HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 	push bc
-.asm_c33
+.loop
 	ei
 	di
 	ld a, [rSTAT]
 	and $3
-	jr nz, .asm_c33
+	jr nz, .loop
 	ld a, [de]
 	ld [hl], a
 	ld a, [rSTAT]
 	and $3
-	jr nz, .asm_c33
+	jr nz, .loop
 	ei
 	inc hl
 	inc de
 	dec c
-	jr nz, .asm_c33
+	jr nz, .loop
 	pop bc
 	ret
 ; 0xc4b
 
-INCBIN "baserom.gbc",$0c4b,$0c91 - $0c4b
+	INCROM $0c4b, $0c91
 
 ; called at roughly 240Hz by TimerHandler
 SerialTimerHandler: ; 0c91 (0:0c91)
@@ -1815,7 +1815,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ret
 ; 0xcc5
 
-INCBIN "baserom.gbc",$0cc5,$0d26 - $0cc5
+	INCROM $0cc5, $0d26
 
 SerialHandler: ; 0d26 (0:0d26)
 	push af
@@ -2144,7 +2144,7 @@ Func_0ebf: ; 0ebf (0:0ebf)
 	ret
 ; 0xed5
 
-INCBIN "baserom.gbc",$0ed5,$0f35 - $0ed5
+	INCROM $0ed5, $0f35
 
 Func_0f35: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
@@ -2205,7 +2205,7 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ret
 ; 0xf9b
 
-INCBIN "baserom.gbc",$0f9b,$0fac - $0f9b
+	INCROM $0f9b, $0fac
 
 Func_0fac: ; 0fac (0:0fac)
 	push hl
@@ -2258,7 +2258,7 @@ Func_0fac: ; 0fac (0:0fac)
 	ret
 ; 0xfe9
 
-INCBIN "baserom.gbc",$0fe9,$100b - $0fe9
+	INCROM $0fe9, $100b
 
 Func_100b: ; 100b (0:100b)
 	ld a, $2
@@ -2418,7 +2418,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	ret
 ; 0x10e8
 
-INCBIN "baserom.gbc",$10e8,$1123 - $10e8
+	INCROM $10e8, $1123
 
 ; adds a card to the hand and increments the number of cards in the hand
 ; the card is identified by register a, which contains the card number within the deck (0-59)
@@ -2446,7 +2446,7 @@ AddCardToHand: ; 1123 (0:1123)
 	ret
 ; 0x1139
 
-INCBIN "baserom.gbc",$1139,$123b - $1139
+	INCROM $1139, $123b
 
 CreateHandCardBuffer: ; 123b (0:123b)
 	call FindLastCardInHand
@@ -2476,7 +2476,7 @@ CreateHandCardBuffer: ; 123b (0:123b)
 	ret
 ; 0x1258
 
-INCBIN "baserom.gbc",$1258,$1271 - $1258
+	INCROM $1258, $1271
 
 ; puts an index to the last (newest) card in current player's hand into hl.
 FindLastCardInHand: ; 1271 (0:1271)
@@ -2530,7 +2530,7 @@ ShuffleCards: ; 127f (0:127f)
 	ret
 ; 0x12a3
 
-INCBIN "baserom.gbc",$12a3,$1312 - $12a3
+	INCROM $12a3, $1312
 
 
 ; given a position in wDuelCardOrAttackList (c510), return:
@@ -2563,7 +2563,7 @@ GetCardInDeckPosition: ; 1324 (0:1324)
 	ret
 ; 0x132f
 
-INCBIN "baserom.gbc",$132f,$1362 - $132f
+	INCROM $132f, $1362
 
 ; returns, in register a, the id of the card in the deck position specified in register a
 _GetCardInDeckPosition: ; 1362 (0:1362)
@@ -2614,7 +2614,7 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-INCBIN "baserom.gbc",$13a2,$1485 - $13a2
+	INCROM $13a2, $1485
 
 Func_1485: ; 1485 (0:1485)
 	push af
@@ -2672,7 +2672,7 @@ Func_1485: ; 1485 (0:1485)
 	ret
 ; 0x14d2
 
-INCBIN "baserom.gbc",$14d2,$159f - $14d2
+	INCROM $14d2, $159f
 
 ; This function iterates through the card locations array to find out which and how many
 ; energy cards are in arena (i.e. attached to the active pokemon).
@@ -2796,7 +2796,7 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ret
 ; 0x161e
 
-INCBIN "baserom.gbc",$161e,$16c0 - $161e
+	INCROM $161e, $16c0
 
 CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld a, e
@@ -3093,7 +3093,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 ; 0x18f9
 
-INCBIN "baserom.gbc",$18f9,$195c - $18f9
+	INCROM $18f9, $195c
 
 ; this function appears to apply several damage modifiers
 Func_195c: ; 195c (0:195c)
@@ -3201,7 +3201,7 @@ Func_1a0e: ; 1a0e (0:1a0e)
 	ret
 ; 0x1a1a
 
-INCBIN "baserom.gbc",$1a1a,$1a22 - $1a1a
+	INCROM $1a1a, $1a22
 
 Func_1a22: ; 1a22 (0:1a22)
 	xor a
@@ -3346,7 +3346,7 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	ret
 ; 0x1af3
 
-INCBIN "baserom.gbc",$1af3,$1b8d - $1af3
+	INCROM $1af3, $1b8d
 
 Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
@@ -3412,7 +3412,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ret
 ; 0x1c05
 
-INCBIN "baserom.gbc",$1c05,$1c72 - $1c05
+	INCROM $1c05, $1c72
 
 ; returns [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
 ;   As a side effect, this also returns a duelist variable in a similar manner to
@@ -3647,22 +3647,22 @@ Func_1d91: ; 1d91 (0:1d91)
 	ret
 ; 0x1da4
 
-INCBIN "baserom.gbc",$1da4,$1dca - $1da4
+	INCROM $1da4, $1dca
 
 ; memcpy(HL, DE, C)
 ; if LCD on, copy during h-blank only
 SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
 	bit 7, a             ;
-	jr nz, .asm_1dd8     ; assert that LCD is on
-.asm_1dd1
+	jr nz, .lcd_on     ; assert that LCD is on
+.lcd_off_loop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .asm_1dd1
+	jr nz, .lcd_off_loop
 	ret
-.asm_1dd8
+.lcd_on
 	jp HblankCopyDataDEtoHL
 
 ; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de
@@ -4003,7 +4003,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	ret
 ; 0x1f96
 
-INCBIN "baserom.gbc",$1f96,$20b0 - $1f96
+	INCROM $1f96, $20b0
 
 Func_20b0: ; 20b0 (0:20b0)
 	ld hl, $2fe8
@@ -4077,7 +4077,7 @@ asm_2121
 	ret
 ; 0x212f
 
-INCBIN "baserom.gbc",$212f,$2167 - $212f
+	INCROM $212f, $2167
 
 Func_2167: ; 2167 (0:2167)
 	ld l, a
@@ -4097,7 +4097,7 @@ Func_2167: ; 2167 (0:2167)
 	jp Func_1f5f
 ; 0x2189
 
-INCBIN "baserom.gbc",$2189,$21c5 - $2189
+	INCROM $2189, $21c5
 
 Func_21c5: ; 21c5 (0:21c5)
 	push de
@@ -4504,7 +4504,7 @@ Func_23d3: ; 23d3 (0:23d3)
 	ret
 ; 0x23fd
 
-INCBIN "baserom.gbc",$23fd,$245d - $23fd
+	INCROM $23fd, $245d
 
 Func_245d: ; 245d (0:245d)
 	push de
@@ -4724,7 +4724,7 @@ Func_256d: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-INCBIN "baserom.gbc",$2589,$2636 - $2589
+	INCROM $2589, $2636
 
 ; initializes cursor parameters given the 8 bytes starting at hl,
 ; which represent the following:
@@ -4955,14 +4955,14 @@ Func_271a: ; 271a (0:271a)
 	ret
 ; 0x278d
 
-INCBIN "baserom.gbc",$278d,$29f5 - $278d
+	INCROM $278d, $29f5
 
 Func_29f5: ; 29f5 (0:29f5)
 	farcallx $6, $4000
 	ret
 ; 0x29fa
 
-INCBIN "baserom.gbc",$29fa,$2a00 - $29fa
+	INCROM $29fa, $2a00
 
 Func_2a00: ; 2a00 (0:2a00)
 	call DoFrame
@@ -4999,7 +4999,7 @@ Func_2a1a: ; 2a1a (0:2a1a)
 	ret
 ; 0x2a30
 
-INCBIN "baserom.gbc",$2a30,$2a36 - $2a30
+	INCROM $2a30, $2a36
 
 Func_2a36: ; 2a36 (0:2a36)
 	push hl
@@ -5086,7 +5086,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 	db $12, $11, $1, $1, $2f, $1d, $0, $0
 
-INCBIN "baserom.gbc",$2ad0,$2af0 - $2ad0
+	INCROM $2ad0, $2af0
 
 Func_2af0: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
@@ -5155,7 +5155,7 @@ Func_2b66: ; 2b66 (0:2b66)
 	ret
 ; 0x2b70
 
-INCBIN "baserom.gbc",$2b70,$2b78 - $2b70
+	INCROM $2b70, $2b78
 
 ; loads opponent deck to wOpponentDeck
 LoadOpponentDeck: ; 2b78 (0:2b78)
@@ -5300,7 +5300,7 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-INCBIN "baserom.gbc",$2c37,$2c73 - $2c37
+	INCROM $2c37, $2c73
 
 Func_2c73: ; 2c73 (0:2c73)
 	xor a
@@ -5668,7 +5668,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	jp PrintPlayerName
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$2ebb - $2ea9
+	INCROM $2ea9, $2ebb
 
 Func_2ebb: ; 2ebb (0:2ebb)
 	ld a, l
@@ -5685,7 +5685,7 @@ Func_2ec4: ; 2ec4 (0:2ec4)
 	ret
 ; 0x2ecd
 
-INCBIN "baserom.gbc",$2ecd,$2f0a - $2ecd
+	INCROM $2ecd, $2f0a
 
 ; load data of card with id at e to wLoadedCard1 or wLoadedCard2
 LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
@@ -6434,7 +6434,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret
 ; 0x32f7
 
-INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
+	INCROM $32f7, $33c1
 
 ; return carry if card is under a condition that makes it unable to attack
 ; also return in hl the text id to be displayed
@@ -6726,7 +6726,7 @@ Func_3525: ; 3525 (0:3525)
 	ret
 ; 0x356a
 
-INCBIN "baserom.gbc",$356a,$35e6 - $356a
+	INCROM $356a, $35e6
 
 ; if swords dance or focus energy was used this turn,
 ; mark that the base power of the next turn's attack has to be doubled
@@ -6762,7 +6762,7 @@ UpdateSubstatusConditions: ; 35fa (0:35fa)
 	ret
 ; 0x3615
 
-INCBIN "baserom.gbc",$3615,$363b - $3615
+	INCROM $3615, $363b
 
 ; if the target card's HP is 0 and the attacking card's HP is not,
 ; the attacking card faints if it was affected by destiny bond
@@ -6859,7 +6859,7 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	ret
 ; 0x36d9
 
-INCBIN "baserom.gbc",$36d9,$36f6 - $36d9
+	INCROM $36d9, $36f6
 
 Func_36f6: ; 36f6 (0:36f6)
 	xor a
@@ -6898,7 +6898,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ret
 ; 0x3729
 
-INCBIN "baserom.gbc",$3729,$3730 - $3729
+	INCROM $3729, $3730
 
 Func_3730: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
@@ -6912,7 +6912,7 @@ Func_3730: ; 3730 (0:3730)
 	ret
 ; 0x3743
 
-INCBIN "baserom.gbc",$3743,$374a - $3743
+	INCROM $3743, $374a
 
 Func_374a: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS4
@@ -6983,7 +6983,7 @@ Func_37a0: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-INCBIN "baserom.gbc",$37a5,$380e - $37a5
+	INCROM $37a5, $380e
 
 Func_380e: ; 380e (0:380e)
 	ld a, [wd0c1]
@@ -7144,7 +7144,7 @@ GetFloorObjectFromPos: ; 3927 (0:3927)
 	ret
 ; 0x392e
 
-INCBIN "baserom.gbc",$392e,$3946 - $392e
+	INCROM $392e, $3946
 
 ; puts a floor tile in hc given coords in bc (x,y. measured in tiles)
 FindFloorTileFromPos: ; 3946 (0:3946)
@@ -7173,7 +7173,7 @@ Func_395a: ; 395a (0:395a)
 	ret
 
 Unknown_396b: ; 396b (0:396b)
-INCBIN "baserom.gbc",$396b,$3973 - $396b
+	INCROM $396b, $3973
 
 ; Movement offsets for scripted movements
 ScriptedMovementOffsetTable: ; 3973 (0:3973)
@@ -7183,7 +7183,7 @@ ScriptedMovementOffsetTable: ; 3973 (0:3973)
 	db -$02, $00 ; move 2 tiles left
 
 Unknown_397b: ; 397b (0:397b)
-INCBIN "baserom.gbc",$397b,$3997 - $397b
+	INCROM $397b, $3997
 
 Func_3997: ; 3997 (0:3997)
 	ldh a, [hBankROM]
@@ -7251,7 +7251,7 @@ Func_39c3: ; 39c3 (0:39c3)
 	ret
 ; 0x39ea
 
-INCBIN "baserom.gbc",$39ea,$39fc - $39ea
+	INCROM $39ea, $39fc
 
 Func_39fc: ; 39fc (0:39fc)
 	push hl
@@ -7304,7 +7304,7 @@ Func_3a40: ; 3a40 (0:3a40)
 	ret
 ; 0x3a45
 
-INCBIN "baserom.gbc",$3a45,$3a5e - $3a45
+	INCROM $3a45, $3a5e
 
 Func_3a5e: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
@@ -7398,7 +7398,7 @@ Func_3abd: ; 3abd (0:3abd)
 	ret
 ; 0x3ae8
 
-INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
+	INCROM $3ae8, $3aed
 
 ; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into cb
 RunOverworldScript: ; 3aed (0:3aed)
@@ -7429,7 +7429,7 @@ RunOverworldScript: ; 3aed (0:3aed)
 	jp hl
 ; 0x3b11
 
-INCBIN "baserom.gbc",$3b11,$3b21 - $3b11
+	INCROM $3b11, $3b21
 
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
@@ -7511,7 +7511,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ret
 ; 0x3ba2
 
-INCBIN "baserom.gbc",$3ba2,$3bd2 - $3ba2
+	INCROM $3ba2, $3bd2
 
 ; writes from hl the pointer to the function to be called by DoFrame
 SetDoFrameFunction: ; 3bd2 (0:3bd2)
@@ -7529,7 +7529,7 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	ret
 ; 0x3be4
 
-INCBIN "baserom.gbc",$3be4,$3bf5 - $3be4
+	INCROM $3be4, $3bf5
 
 Func_3bf5: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]
@@ -7548,13 +7548,13 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ret
 ; 0x3c10
 
-INCBIN "baserom.gbc",$3c10,$3c45 - $3c10
+	INCROM $3c10, $3c45
 
 Func_3c45: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-INCBIN "baserom.gbc",$3c46,$3c48 - $3c46
+	INCROM $3c46, $3c48
 
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
@@ -7609,7 +7609,7 @@ Func_3c83: ; 3c83 (0:3c83)
 	ret
 ; 0x3c87
 
-INCBIN "baserom.gbc",$3c87,$3c96 - $3c87
+	INCROM $3c87, $3c96
 
 Func_3c96: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled
@@ -7643,7 +7643,7 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 	ret
 ; 0x3cc4
 
-INCBIN "baserom.gbc",$3cc4,$3d72 - $3cc4
+	INCROM $3cc4, $3d72
 
 Func_3d72: ; 3d72 (0:3d72)
 	ldh a, [hBankROM]
@@ -7722,7 +7722,7 @@ ModifyUnknownOAMBufferProperty: ; 3dbf (0:3dbf)
 	ret
 ; 0x3ddb
 
-INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
+	INCROM $3ddb, $3df3
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
@@ -7743,7 +7743,7 @@ Func_3df3: ; 3df3 (0:3df3)
 	ret
 ; 0x3e10
 
-INCBIN "baserom.gbc",$3e10,$3e17 - $3e10
+	INCROM $3e10, $3e17
 
 Func_3e17: ; 3e17 (0:3e17)
 	ld [wd131], a
@@ -7762,7 +7762,7 @@ Func_3e2a: ; 3e2a (0:3e2a)
 	jr Func_3e17
 ; 0x3e31
 
-INCBIN "baserom.gbc",$3e31,$3fe0 - $3e31
+	INCROM $3e31, $3fe0
 
 ; jumps to 3f:hl
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)

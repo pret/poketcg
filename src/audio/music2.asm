@@ -1853,10 +1853,10 @@ Music2_ChannelLoopStacks: ; f8c20 (3e:4c20)
 	dw wMusicCh4Stack
 
 Unknown_f8c28: ; f8c28 (3e:4c28)
-INCBIN "baserom.gbc",$f8c28,$f8c30 - $f8c28
+	INCROM $f8c28, $f8c30
 
 Unknown_f8c30: ; f8c30 (3e:4c30)
-INCBIN "baserom.gbc",$f8c30,$f8cda - $f8c30
+	INCROM $f8c30, $f8cda
 
 Music2_WaveInstruments: ; f8cda (3e:4cda)
 INCLUDE "audio/wave_instruments.asm"
@@ -1868,7 +1868,7 @@ Music2_VibratoTypes: ; f8dde (3e:4dde)
 INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f8e85: ; f8e85 (3e:4e85)
-INCBIN "baserom.gbc",$f8e85,$f8ee5 - $f8e85
+	INCROM $f8e85, $f8ee5
 
 INCLUDE "audio/music2_headers.asm"
 

@@ -1,3 +1,7 @@
+INCROM: MACRO
+INCBIN "baserom.gbc", \1, \2 - \1
+ENDM
+
 const_def: MACRO
 IF _NARG > 0
 const_value = \1

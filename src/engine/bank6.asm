@@ -1,8 +1,8 @@
-INCBIN "baserom.gbc",$18000,$186f7 - $18000
+	INCROM $18000, $186f7
 
 INCLUDE "data/effect_commands.asm"
 
-INCBIN "baserom.gbc",$18f9c,$1996e - $18f9c
+	INCROM $18f9c, $1996e
 
 Func_1996e: ; 1996e (6:596e)
 	call EnableExtRAM
@@ -108,7 +108,7 @@ Func_19a12: ; 19a12 (6:5a12)
 	ret
 ; 0x19a1f
 
-INCBIN "baserom.gbc",$19a1f,$1a61f - $19a1f
+	INCROM $19a1f, $1a61f
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
@@ -167,13 +167,13 @@ Func_1a61f: ; 1a61f (6:661f)
 	ret
 ; 0x1a68d
 
-INCBIN "baserom.gbc",$1a68d,$1a6cc - $1a68d
+	INCROM $1a68d, $1a6cc
 
 Func_1a6cc: ; 1a6cc (6:66cc)
 	ret
 ; 0x1a6cd
 
-INCBIN "baserom.gbc",$1a6cd,$1ad89 - $1a6cd
+	INCROM $1a6cd, $1ad89
 
 Func_1ad89: ; 1ad89 (6:6d89)
-INCBIN "baserom.gbc",$1ad89,$1c000 - $1ad89
+	INCROM $1ad89, $1c000

@@ -39,10 +39,10 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-INCBIN "baserom.gbc",$405a,$406f - $405a
+	INCROM $405a, $406f
 
 Func_406f: ; 406f (1:406f)
-INCBIN "baserom.gbc",$406f,$409f - $406f
+	INCROM $406f, $409f
 
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
@@ -231,7 +231,7 @@ StartDuel: ; 409f (1:409f)
 	ret
 ; 0x420b
 
-INCBIN "baserom.gbc",$420b,$4225 - $420b
+	INCROM $420b, $4225
 
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
@@ -344,7 +344,7 @@ BattleMenuFunctionTable: ; 42f1 (1:42f1)
 	dw PlayerRetreat
 	dw PlayerEndTurn
 
-INCBIN "baserom.gbc",$42fd, $430b - $42fd
+	INCROM $42fd,  $430b
 
 Func_430b: ; 430b (1:430b)
 	call Func_4329
@@ -382,7 +382,7 @@ Func_4339: ; 4339 (1:4339)
 Func_4342: ; 4342 (1:4342)
 	jp $5550
 
-INCBIN "baserom.gbc",$4345, $438e - $4345
+	INCROM $4345,  $438e
 
 OpenPokemonPowerMenu: ; 438e (1:438e)
 	call $6431
@@ -467,7 +467,7 @@ OpenHandMenu: ; 4425 (1:4425)
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
-INCBIN "baserom.gbc",$4436, $4477 - $4436
+	INCROM $4436,  $4477
 
 ; c contains the energy card being played
 PlayerUseEnergyCard: ; 4477 (1:4477)
@@ -521,14 +521,14 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	jp $4447
 ; 0x44db
 
-INCBIN "baserom.gbc",$44db, $4585 - $44db
+	INCROM $44db,  $4585
 
 OpenBattleCheckMenu: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
 	jp Func_426d
 
-INCBIN "baserom.gbc",$458e, $46fc - $458e
+	INCROM $458e,  $46fc
 
 OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
@@ -929,7 +929,7 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	scf
 	ret
 
-INCBIN "baserom.gbc",$4933, $4b60 - $4933
+	INCROM $4933,  $4b60
 
 Func_4b60: ; 4b60 (1:4b60)
 	call $7107
@@ -1058,7 +1058,7 @@ Func_4b60: ; 4b60 (1:4b60)
 ; 0x4c77
 
 
-INCBIN "baserom.gbc",$4c77, $4cd5 - $4c77
+	INCROM $4c77,  $4cd5
 
 ; Select Basic Pokemon From Hand
 Func_4cd5: ; 4cd5 (1:4cd5)
@@ -1163,13 +1163,13 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 ; 0x4d97
 
 
-INCBIN "baserom.gbc",$4d97, $5aeb - $4d97
+	INCROM $4d97,  $5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
-INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
+	INCROM $5aeb, $6785
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$6793 - $6785
+	INCROM $6785, $6793
 
 ; loads player deck from SRAM to wPlayerDeck
 LoadPlayerDeck: ; 6793 (1:6793)
@@ -1192,7 +1192,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-INCBIN "baserom.gbc",$67b2,$67be - $67b2
+	INCROM $67b2, $67be
 
 ; related to ai taking their turn in a duel
 ; called multiple times during one ai turn
@@ -1233,7 +1233,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ret
 ; 0x67fb
 
-INCBIN "baserom.gbc",$67fb,$695e - $67fb
+	INCROM $67fb, $695e
 
 AIMoveTable: ; 695e (1:695e)
 	dw Func_0f35
@@ -1260,7 +1260,7 @@ AIMoveTable: ; 695e (1:695e)
 	dw $6b15
 	dw $6b20
 
-INCBIN "baserom.gbc",$698c,$69a5 - $698c
+	INCROM $698c, $69a5
 
 AIUseEnergyCard: ; 69a5 (1:69a5)
 	ld a, [$ffa1]
@@ -1279,7 +1279,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ret
 ; 0x69c5
 
-INCBIN "baserom.gbc",$69c5,$6d84 - $69c5
+	INCROM $69c5, $6d84
 
 ; converts clefairy doll/mysterious fossil at specified wLoadedCard to pokemon card
 ConvertTrainerCardToPokemon:
@@ -1336,7 +1336,7 @@ ConvertTrainerCardToPokemon:
     db UNABLE_RETREAT     ; retreat cost
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (wLoadedCard1RetreatCost + 1 - wLoadedCard1)
 
-INCBIN "baserom.gbc",$6df1,$7107 - $6df1
+	INCROM $6df1, $7107
 
 ; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
 ; player turn: [c200, c2ff]
@@ -1381,7 +1381,7 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	ret
 ; 0x7133
 
-INCBIN "baserom.gbc",$7133,$71ad - $7133
+	INCROM $7133, $71ad
 
 _TossCoin: ; 71ad (1:71ad)
 	ld [wcd9c], a
@@ -1577,29 +1577,29 @@ _TossCoin: ; 71ad (1:71ad)
 	ret
 ; 0x72ff
 
-INCBIN "baserom.gbc",$72ff,$7354 - $72ff
+	INCROM $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36",TX_END
 
-INCBIN "baserom.gbc",$7364,$7571 - $7364
+	INCROM $7364, $7571
 
 Func_7571: ; 7571 (1:7571)
-INCBIN "baserom.gbc",$7571,$7576 - $7571
+	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
         farcallx $6, $591f
         ret
 ; 0x757b
 
-INCBIN "baserom.gbc",$757b,$758f - $757b
+	INCROM $757b, $758f
 
 Func_758f: ; 758f (1:758f)
-INCBIN "baserom.gbc",$758f,$7594 - $758f
+	INCROM $758f, $7594
 
 Func_7594: ; 7594 (1:7594)
 	farcallx $6, $661f
 	ret
 ; 0x7599
 
-INCBIN "baserom.gbc",$7599,$8000 - $7599
+	INCROM $7599, $8000

@@ -990,4 +990,4 @@ PackRandomEnergies:: ; 1e634 (7:6634)
 	db $00 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-INCBIN "baserom.gbc",$1e640,$20000 - $1e640
+	INCROM $1e640, $20000
