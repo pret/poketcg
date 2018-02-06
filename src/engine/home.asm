@@ -4074,7 +4074,7 @@ Func_20b0: ; 20b0 (0:20b0)
 	jr nz, .asm_20bd
 	ld hl, $37f8
 .asm_20bd
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	ld b, $30
 	jr asm_2121
 
@@ -4085,7 +4085,7 @@ Func_20c4: ; 20c4 (0:20c4)
 	jr nz, .asm_20d1
 	ld hl, $3838
 .asm_20d1
-	ld de, $8d40
+	ld de, vTiles1 + $540
 	ld b, $c
 	jr asm_2121
 
@@ -4102,12 +4102,12 @@ asm_20de
 	jr nz, .asm_20eb
 	ld hl, $3af8
 .asm_20eb
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	jr asm_2121
 
 Func_20f0: ; 20f0 (0:20f0)
 	ld hl, $4008
-	ld de, $8a00
+	ld de, vTiles1 + $200
 	ld b, $d
 	call asm_2121
 	ld hl, $3528
@@ -4116,19 +4116,19 @@ Func_20f0: ; 20f0 (0:20f0)
 	jr nz, .asm_2108
 	ld hl, $3d38
 .asm_2108
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	ld b, $30
 	jr asm_2121
 
 Func_210f: ; 210f (0:210f)
 	ld hl, $40d8
-	ld de, $9300
+	ld de, vTiles2 + $300
 	ld b, $8
 	jr asm_2121
 
 Func_2119: ; 2119 (0:2119)
 	ld hl, DuelGraphics - Fonts
-	ld de, $9000 ; destination
+	ld de, vTiles2 ; destination
 	ld b, $38 ; number of tiles
 asm_2121
 	ld a, BANK(Fonts)
