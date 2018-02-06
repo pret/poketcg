@@ -374,7 +374,7 @@ DetectConsole: ; 0349 (0:0349)
 	ret nz
 	ld a, CONSOLE_SGB
 	ld [rSVBK], a
-	call Func_07e7
+	call SwitchToCGBDoubleSpeed
 	ret
 
 ; initialize the palettes (both monochrome and color)
@@ -827,7 +827,7 @@ CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
 
-Func_5c2: ; 5c2 (0:5c2)
+Func_05c2: ; 5c2 (0:5c2)
 	push hl
 	push bc
 	push de
@@ -846,7 +846,7 @@ Func_5c2: ; 5c2 (0:5c2)
 	ret
 ; 0x5db
 
-Func_5db: ; 5db (0:5db)
+Func_05db: ; 5db (0:5db)
 	push hl
 	push bc
 	push de
@@ -865,7 +865,29 @@ Func_5db: ; 5db (0:5db)
 	ret
 ; 0x5f4
 
-	INCROM $05f4, $0614
+Func_05f4: ; 5f4 (0:5f4)
+	push hl
+	push bc
+	push de
+	ld e, l
+	ld d, h
+	ld hl, wcaa0
+	push hl
+	push bc
+	ld a, d
+	call Func_0614
+	ld a, e
+	call Func_0614
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, $04
+	call JumpToHblankCopyDataHLtoDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x614
 
 Func_0614: ; 614 (0:614)
 	push af
@@ -1178,14 +1200,22 @@ BankswitchVRAM: ; 07d6 (0:07d6)
 	ret
 ; 0x7db
 
-	INCROM $07db, $07e7
+SwitchToCGBNormalSpeed: ; 7db (0:7db)
+	call CheckForCGB
+	ret c
+	ld hl, rKEY1
+	bit 7, [hl]
+	ret z
+	jr CGBSpeedSwitch
 
-Func_07e7: ; 07e7 (0:07e7)
+SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 	call CheckForCGB
 	ret c
 	ld hl, rKEY1
 	bit 7, [hl]
 	ret nz
+;	fallthrough
+CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ld a, [rIE]
 	push af
 	xor a
@@ -1525,7 +1555,18 @@ Func_09ce: ; 09ce (0:09ce)
 	ret
 ; 0x9dc
 
-	INCROM $09dc, $09e9
+SwitchToBankAtSP: ; 9dc (0:9dc)
+	push af
+	push hl
+	ld hl, sp+$04
+	ld a, [hl]
+	call BankswitchHome
+	pop hl
+	pop af
+	inc sp
+	inc sp
+	ret
+; 0x9e9
 
 ; this function affects the stack so that it returns
 ; to the three byte pointer following the rst call
