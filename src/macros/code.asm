@@ -96,7 +96,3 @@ ENDM
 sgb: MACRO
 	db \1 * 8 + \2 ; sgb_command * 8 + length
 ENDM
-
-run_script: MACRO
-	db \1_index
-ENDM

@@ -1,5 +1,3 @@
-start_script EQUS "rst $20"
-
 OWScript_EndScriptLoop1_index         EQU $00
 OWScript_CloseTextBox_index           EQU $01
 OWScript_PrintTextString_index        EQU $02
