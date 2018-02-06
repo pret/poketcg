@@ -825,7 +825,44 @@ CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
 
-INCBIN "baserom.gbc",$05c2,$0663 - $05c2
+Func_5c2: ; 5c2 (0:5c2)
+	push hl
+	push bc
+	push de
+	ld hl, wcaa0
+	push hl
+	push bc
+	call Func_0614
+	pop bc
+	call Func_04cf
+	pop hl
+	ld b, $02
+	call JumpToHblankCopyData
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x5db
+
+INCBIN "baserom.gbc",$05db,$0614 - $05db
+
+Func_0614: ; 614 (0:614)
+	push af
+	swap a
+	call Func_061b
+	pop af
+Func_061b:
+	and $0f
+	add $30
+	cp $3a
+	jr c, .asm_625
+	add $07
+.asm_625
+	ld [hli], a
+	ret
+; 0x627
+
+INCBIN "baserom.gbc",$0627,$0663 - $0627
 
 Func_0663: ; 0663 (0:0663)
 	push bc
@@ -891,17 +928,31 @@ Func_06c3: ; 06c3 (0:06c3)
 	call Func_04cf
 	pop hl
 	ld b, $1
-	call MemcpyHLDE_hblank
+	call HblankCopyData
 	pop bc
 	pop de
 	pop hl
 	ret
 ; 0x6ee
 
-INCBIN "baserom.gbc",$06ee,$0709 - $06ee
+INCBIN "baserom.gbc",$06ee,$06fc - $06ee
 
-Func_0709: ; 0709 (0:0709)
-	jp MemcpyHLDE_hblank
+; copies b bytes from hl to de
+; if LCD on, copy during h-blank only
+SafeCopyData: ; 6fc (0:6fc)
+	ld a, [wLCDC]
+	rla
+	jr c, JumpToHblankCopyData
+.lcd_off_copy_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .lcd_off_copy_loop
+	ret
+JumpToHblankCopyData: ; 0709 (0:0709)
+	jp HblankCopyData
+; 0x70c	
 
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
@@ -912,7 +963,7 @@ CopyGfxData: ; 070c (0:070c)
 	push hl
 	push de
 	ld b, c
-	call Func_0709
+	call JumpToHblankCopyData
 	ld b, $0
 	pop hl
 	add hl, bc
@@ -1680,7 +1731,7 @@ Wait: ; 0c08 (0:0c08)
 	ret
 
 ; memcpy(DE, HL, B), but only during hblank
-MemcpyHLDE_hblank: ; 0c19 (0:0c19)
+HblankCopyData: ; 0c19 (0:0c19)
 	push bc
 .loop
 	ei
@@ -2309,7 +2360,21 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-INCBIN "baserom.gbc",$10aa,$10bc - $10aa
+Func_10aa: ; 10aa (0:10aa)
+	push hl
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld l, a
+	xor a
+.asm_10b2
+	rr l
+	adc $00
+	inc l
+	dec l
+	jr nz, .asm_10b2
+	pop hl
+	ret
+; 0x10bc
 
 ; shuffles the deck specified by hWhoseTurn
 ; if less than 60 cards remain in the deck, make sure the rest are ignored
