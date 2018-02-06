@@ -25,7 +25,7 @@ Func_80077: ; 80077 (20:4077)
 	push hl
 	push bc
 	push de
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	ld hl, wd4c2
 	ld [hl], e
 	inc hl

@@ -601,7 +601,7 @@ Func_0492: ; 0492 (0:0492)
 	ld b, a
 	ld a, [hli]
 	ld c, a
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	jr .asm_49d
 .asm_49b
 	ld [de], a
@@ -630,7 +630,9 @@ SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
-Func_04cf: ; 04cf (0:04cf)
+; returns $9800 + 32 * c + b in de.
+; used to map coordinates at bc to a BGMap0 address.
+BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
 	ld h, $0
 	add hl, hl
@@ -834,7 +836,7 @@ Func_5c2: ; 5c2 (0:5c2)
 	push bc
 	call Func_0614
 	pop bc
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $02
 	call JumpToHblankCopyDataHLtoDE
@@ -844,7 +846,26 @@ Func_5c2: ; 5c2 (0:5c2)
 	ret
 ; 0x5db
 
-	INCROM $05db, $0614
+Func_5db: ; 5db (0:5db)
+	push hl
+	push bc
+	push de
+	ld hl, wcaa0
+	push hl
+	push bc
+	call Func_061b
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, $01
+	call JumpToHblankCopyDataHLtoDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x5f4
+
+	INCROM $05f4, $0614
 
 Func_0614: ; 614 (0:614)
 	push af
@@ -910,7 +931,7 @@ Func_06c3: ; 06c3 (0:06c3)
 	push de
 	push bc
 	push af
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	pop af
 	ld [de], a
 	pop bc
@@ -925,7 +946,7 @@ Func_06c3: ; 06c3 (0:06c3)
 	ld hl, $cac1
 	push hl
 	ld [hl], a
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $1
 	call HblankCopyDataHLtoDE
@@ -3665,9 +3686,9 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de
-; to the corresponding BG Map 0 address in VRAM.
-CalculateBGMap0Address: ; 1ddb (0:1ddb)
+; returns $9800 + 32 * e + d in hl.
+; used to map coordinates at de to a BGMap0 address.
+DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
 	ld h, $0
 	add hl, hl
@@ -3783,12 +3804,12 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	jr z, .cgb
 ; DMG or SGB
 	inc e
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top border done, draw the rest of the text box
 	jr ContinueDrawingTextBoxDMGorSGB
 
 .cgb
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	push de
 	call CopyCurrentLineAttrCGB ; BG Map attributes for current line, which is the top border
 	pop de
@@ -3807,7 +3828,7 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
 	ld de, $1819
@@ -3863,7 +3884,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	ret
 
 DrawRegularTextBoxCGB:
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
 	ld de, $1819
@@ -3964,7 +3985,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push af
 	push hl
 	add sp, $e0
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 .asm_1f67
 	push hl
 	push bc
@@ -4258,7 +4279,7 @@ Func_22ae: ; 22ae (0:22ae)
 	xor a
 	ldh [$ffae], a
 	ld [wcd09], a
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	ld a, l
 	ldh [$ffaa], a
 	ld a, h
