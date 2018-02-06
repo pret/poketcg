@@ -466,7 +466,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	call FindBoosterDataPointer
 	ld de, wBoosterDataCurrSet
 	ld bc, $c
-	call CopyData
+	call CopyDataHLtoDE
 	call LoadRarityAmountsToWram
 	ld bc, $0
 	ld d, BOOSTER_CARD_TYPE_AMOUNT

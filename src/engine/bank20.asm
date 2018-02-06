@@ -73,7 +73,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	push hl
 	push de
 	ld b, $20
-	call SafeCopyData
+	call SafeCopyDataHLtoDE
 	ld a, [wConsole]
 	cp $2
 	jr nz, .asm_801d6
@@ -85,7 +85,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	add hl, bc
 	call BankswitchVRAM_1
 	ld b, $20
-	call SafeCopyData
+	call SafeCopyDataHLtoDE
 	call BankswitchVRAM_0
 
 .asm_801d6

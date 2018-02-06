@@ -440,7 +440,7 @@ Func_c335: ; c335 (3:4335)
 	ld hl, $cb30
 	ld de, $d0cc
 	ld bc, $0040
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	ret
 
 Func_c34e: ; c34e (3:434e)
@@ -451,7 +451,7 @@ Func_c34e: ; c34e (3:434e)
 	ld hl, $d0cc
 	ld de, $cb30
 	ld bc, $0040
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	call Func_0404
 	ret
 

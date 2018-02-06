@@ -837,7 +837,7 @@ Func_5c2: ; 5c2 (0:5c2)
 	call Func_04cf
 	pop hl
 	ld b, $02
-	call JumpToHblankCopyData
+	call JumpToHblankCopyDataHLtoDE
 	pop de
 	pop bc
 	pop hl
@@ -928,7 +928,7 @@ Func_06c3: ; 06c3 (0:06c3)
 	call Func_04cf
 	pop hl
 	ld b, $1
-	call HblankCopyData
+	call HblankCopyDataHLtoDE
 	pop bc
 	pop de
 	pop hl
@@ -937,12 +937,12 @@ Func_06c3: ; 06c3 (0:06c3)
 
 INCBIN "baserom.gbc",$06ee,$06fc - $06ee
 
-; copies b bytes from hl to de
+; memcpy(DE, HL, B)
 ; if LCD on, copy during h-blank only
-SafeCopyData: ; 6fc (0:6fc)
+SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	ld a, [wLCDC]
 	rla
-	jr c, JumpToHblankCopyData
+	jr c, JumpToHblankCopyDataHLtoDE
 .lcd_off_copy_loop
 	ld a, [hli]
 	ld [de], a
@@ -950,9 +950,9 @@ SafeCopyData: ; 6fc (0:6fc)
 	dec b
 	jr nz, .lcd_off_copy_loop
 	ret
-JumpToHblankCopyData: ; 0709 (0:0709)
-	jp HblankCopyData
-; 0x70c	
+JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
+	jp HblankCopyDataHLtoDE
+; 0x70c
 
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
@@ -963,7 +963,7 @@ CopyGfxData: ; 070c (0:070c)
 	push hl
 	push de
 	ld b, c
-	call JumpToHblankCopyData
+	call JumpToHblankCopyDataHLtoDE
 	ld b, $0
 	pop hl
 	add hl, bc
@@ -988,25 +988,25 @@ CopyGfxData: ; 070c (0:070c)
 	jr nz, .asm_726
 	ret
 
-CopyData_SaveRegisters: ; 0732 (0:0732)
+CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
 	push hl
 	push de
 	push bc
-	call CopyData
+	call CopyDataHLtoDE
 	pop bc
 	pop de
 	pop hl
 	ret
 
 ; copies bc bytes from hl to de
-CopyData: ; 073c (0:073c)
+CopyDataHLtoDE: ; 073c (0:073c)
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec bc
 	ld a, c
 	or b
-	jr nz, CopyData
+	jr nz, CopyDataHLtoDE
 	ret
 
 ; switch to rombank (A + top2 of H shifted down),
@@ -1731,7 +1731,7 @@ Wait: ; 0c08 (0:0c08)
 	ret
 
 ; memcpy(DE, HL, B), but only during hblank
-HblankCopyData: ; 0c19 (0:0c19)
+HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	push bc
 .loop
 	ei
@@ -1752,8 +1752,8 @@ HblankCopyData: ; 0c19 (0:0c19)
 	pop bc
 	ret
 
-; memcpy(HL, DE, B), but only during hblank
-MemcpyDEHL_hblank: ; 0c32 (0:0c32)
+; memcpy(HL, DE, C), but only during hblank
+HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 	push bc
 .asm_c33
 	ei
@@ -3572,7 +3572,7 @@ CreateTempCardCollection: ; 1d2e (0:1d2e)
 	ld hl, sCardCollection
 	ld de, wTempCardCollection
 	ld bc, CARD_COLLECTION_SIZE
-	call CopyData
+	call CopyDataHLtoDE
 	ld de, sDeck1Name
 	call AddDeckCardsToTempCardCollection
 	ld de, sDeck2Name
@@ -3650,7 +3650,8 @@ Func_1d91: ; 1d91 (0:1d91)
 INCBIN "baserom.gbc",$1da4,$1dca - $1da4
 
 ; memcpy(HL, DE, C)
-Memcpy: ; 1dca (0:1dca)
+; if LCD on, copy during h-blank only
+SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
 	bit 7, a             ;
 	jr nz, .asm_1dd8     ; assert that LCD is on
@@ -3662,7 +3663,7 @@ Memcpy: ; 1dca (0:1dca)
 	jr nz, .asm_1dd1
 	ret
 .asm_1dd8
-	jp MemcpyDEHL_hblank
+	jp HblankCopyDataDEtoHL
 
 ; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de
 ; to the corresponding BG Map 0 address in VRAM.
@@ -3852,7 +3853,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	push bc
 	ld c, b
 	ld b, $0
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	pop bc
 	pop de
 	; advance pointer SCREEN_WIDTH positions and restore stack pointer
@@ -3985,7 +3986,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push bc
 	ld c, b
 	ld b, $0
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	ld hl, sp+$24
 	ld a, [hl]
 	ld hl, sp+$27
@@ -4310,7 +4311,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	ld h, d
 	ld de, $cd05
 	ld c, $1
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	ld hl, $ffac
 	inc [hl]
 	ret
@@ -4568,7 +4569,7 @@ Func_24ac: ; 24ac (0:24ac)
 	or a
 	jr nz, .asm_24bf
 	call Func_2510
-	call Memcpy
+	call SafeCopyDataDEtoHL
 .asm_24bb
 	pop bc
 	pop de
@@ -4577,7 +4578,7 @@ Func_24ac: ; 24ac (0:24ac)
 .asm_24bf
 	call Func_24ca
 	call Func_2518
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	jr .asm_24bb
 
 Func_24ca: ; 24ca (0:24ca)
@@ -7540,7 +7541,7 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ld l, a
 	ld a, [wd4c5]
 	ld h, a
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	pop hl
 	pop af
 	call BankswitchHome
