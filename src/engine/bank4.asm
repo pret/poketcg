@@ -958,7 +958,7 @@ Func_118d3: ; 118d3 (4:58d3)
 	pop hl
 	ret
 
-INCLUDE "data/unknownNPCData.asm"
+INCLUDE "data/npcs.asm"
 
 INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
 

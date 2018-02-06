@@ -48,7 +48,7 @@ Func_1c056: ; 1c056 (7:4056)
 	pop hl
 	ret
 
-INCLUDE "data/warp_data.asm"
+INCLUDE "data/warps.asm"
 
 Func_1c33b: ; 1c33b (7:433b)
 	push hl
