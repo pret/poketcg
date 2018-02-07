@@ -210,7 +210,7 @@ CheckForCGB: ; 025c (0:025c)
 WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
-	bit 7, a
+	bit rLCDC_ENABLE, a
 	jr z, .asm_275
 	ld hl, wVBlankCtr
 	ld a, [hl]
@@ -226,9 +226,9 @@ WaitForVBlank: ; 0264 (0:0264)
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
 	ld a, [wLCDC]        ;
-	bit 7, a             ;
+	bit rLCDC_ENABLE, a  ;
 	ret nz               ; assert that LCD is off
-	or $80               ;
+	or rLCDC_ENABLE_MASK ;
 	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
 	ld a, $c0
@@ -238,7 +238,7 @@ EnableLCD: ; 0277 (0:0277)
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
 	ld a, [rLCDC]        ;
-	bit 7, a             ;
+	bit rLCDC_ENABLE, a  ;
 	ret z                ; assert that LCD is on
 	ld a, [rIE]
 	ld [wIE], a
@@ -2297,7 +2297,33 @@ Func_0ebf: ; 0ebf (0:0ebf)
 	ret
 ; 0xed5
 
-	INCROM $0ed5, $0f35
+Func_0ed5: ; 0ed5 (0:0ed5)
+	push bc
+.asm_ed6
+	call Func_0e39
+	jr nc, .asm_edf
+	halt
+	nop
+	jr .asm_ed6
+.asm_edf
+	ld [hli], a
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_eee
+	dec bc
+	ld a, c
+	or b
+	jr nz, .asm_ed6
+	pop bc
+	or a
+	ret
+.asm_eee
+	pop bc
+	scf
+	ret
+; 0xef1
+
+	INCROM $0ef1, $0f35
 
 Func_0f35: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
@@ -2358,7 +2384,17 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ret
 ; 0xf9b
 
-	INCROM $0f9b, $0fac
+Func_0f9b: ; 0f9b (0:0f9b)
+	push hl
+	push bc
+	ld hl, $ff9e
+	ld bc, $000a
+	call Func_0ed5
+	call Func_0f58
+	pop bc
+	pop hl
+	ret
+; 0xfac
 
 Func_0fac: ; 0fac (0:0fac)
 	push hl
@@ -2381,7 +2417,7 @@ Func_0fac: ; 0fac (0:0fac)
 	push de
 	push hl
 	push af
-	ld hl, $cbed
+	ld hl, wcbed
 	pop de
 	ld [hl], e
 	inc hl
@@ -2400,7 +2436,7 @@ Func_0fac: ; 0fac (0:0fac)
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, $cbed
+	ld hl, wcbed
 	ld bc, $0008
 	call Func_0ebf
 	jp c, Func_0f35
@@ -2411,7 +2447,34 @@ Func_0fac: ; 0fac (0:0fac)
 	ret
 ; 0xfe9
 
-	INCROM $0fe9, $100b
+Func_0fe9: ; 0fe9 (0:0fe9)
+	ld hl, wcbed
+	ld bc, $0008
+	push hl
+	call Func_0ed5
+	jp c, Func_0f35
+	pop hl
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	pop hl
+	pop af
+	ret
+; 0x100b
 
 Func_100b: ; 100b (0:100b)
 	ld a, $2
@@ -3806,8 +3869,8 @@ Func_1d91: ; 1d91 (0:1d91)
 ; if LCD on, copy during h-blank only
 SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
-	bit 7, a             ;
-	jr nz, .lcd_on     ; assert that LCD is on
+	bit rLCDC_ENABLE, a  ;
+	jr nz, .lcd_on       ; assert that LCD is on
 .lcd_off_loop
 	ld a, [de]
 	inc de
@@ -7712,7 +7775,7 @@ Func_3c45: ; 3c45 (0:3c45)
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
 	ld a, [rLCDC]
-	bit 7, a
+	bit rLCDC_ENABLE, a
 	jr z, .done
 	push bc
 	push de

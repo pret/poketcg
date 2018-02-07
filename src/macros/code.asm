@@ -15,6 +15,10 @@ const: MACRO
 const_value = const_value + 1
 ENDM
 
+dn: MACRO
+	db \1 << 4 | \2
+ENDM
+
 dbw: MACRO
 	db \1
 	dw \2

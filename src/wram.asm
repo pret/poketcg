@@ -424,7 +424,10 @@ wcbe6:: ; cbe6
 	ds $1
 
 wcbe7:: ; cbe7
-	ds $12
+	ds $6
+
+wcbed:: ; cbed
+	ds $c
 
 wcbf9:: ; cbf9
 	ds $b
