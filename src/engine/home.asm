@@ -734,13 +734,13 @@ DoFrame: ; 053f (0:053f)
 	ldh a, [hButtonsPressed]
 	and SELECT
 	jr z, .done
-.gamePausedLoop
+.game_paused_loop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ldh a, [hButtonsPressed]
 	and SELECT
-	jr z, .gamePausedLoop
+	jr z, .game_paused_loop
 .done
 	pop bc
 	pop de
@@ -2373,12 +2373,12 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
-	jr nz, .notLink
+	jr nz, .not_link
 	ld hl, $ff9e
 	ld bc, $000a
 	call Func_0ebf
 	call Func_0f58
-.notLink
+.not_link
 	pop bc
 	pop hl
 	ret
@@ -2533,9 +2533,9 @@ CopyDeckData: ; 1072 (0:1072)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .copyDeckData
+	jr z, .copy_deck_data
 	ld hl, wOpponentDeck
-.copyDeckData
+.copy_deck_data
 	; start by putting a terminator at the end of the deck
 	push hl
 	ld bc, DECK_SIZE - 1
@@ -2543,7 +2543,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld [hl], $0
 	pop hl
 	push hl
-.nextCard
+.next_card
 	ld a, [de]
 	inc de
 	ld b, a
@@ -2552,12 +2552,12 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [de]
 	inc de
 	ld c, a
-.cardQuantityLoop
+.card_quantity_loop
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .cardQuantityLoop
-	jr .nextCard
+	jr nz, .card_quantity_loop
+	jr .next_card
 .done
 	ld hl, $cce9
 	ld a, [de]
@@ -2616,7 +2616,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
-	jr nc, .emptyDeck
+	jr nc, .empty_deck
 	inc a
 	ld [hl], a ; increment number of cards not in deck
 	add DUELVARS_DECK_CARDS - 1 ; point to top card in the deck
@@ -2628,7 +2628,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	or a
 	ret
 
-.emptyDeck
+.empty_deck
 	pop hl
 	scf
 	ret
@@ -2667,21 +2667,21 @@ AddCardToHand: ; 1123 (0:1123)
 CreateHandCardBuffer: ; 123b (0:123b)
 	call FindLastCardInHand
 	inc b
-	jr .skipCard
+	jr .skip_card
 
-.checkNextCardLoop
+.check_next_card_loop
 	ld a, [hld]
 	push hl
 	ld l, a
 	bit 6, [hl]
 	pop hl
-	jr nz, .skipCard
+	jr nz, .skip_card
 	ld [de], a
 	inc de
 
-.skipCard
+.skip_card
 	dec b
-	jr nz, .checkNextCardLoop
+	jr nz, .check_next_card_loop
 	ld a, $ff
 	ld [de], a
 	ld l, (wPlayerNumberOfCardsInHand & $ff)
@@ -2720,7 +2720,7 @@ ShuffleCards: ; 127f (0:127f)
 	ld b, a
 	ld e, l
 	ld d, h
-.shuffleNextCardLoop
+.shuffle_next_card_loop
 	push bc
 	push de
 	ld a, c
@@ -2739,7 +2739,7 @@ ShuffleCards: ; 127f (0:127f)
 	pop bc
 	inc hl
 	dec b
-	jr nz, .shuffleNextCardLoop
+	jr nz, .shuffle_next_card_loop
 	pop bc
 	pop de
 	pop hl
@@ -2789,9 +2789,9 @@ _GetCardInDeckPosition: ; 1362 (0:1362)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .loadCardFromDeck
+	jr z, .load_card_from_deck
 	ld hl, wOpponentDeck
-.loadCardFromDeck
+.load_card_from_deck
 	add hl, de
 	ld a, [hl]
 	pop de
@@ -2837,7 +2837,7 @@ Func_1485: ; 1485 (0:1485)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
 	cp MAX_POKEMON_IN_PLAY
-	jr nc, .tooManyPokemonInPlay
+	jr nc, .too_many_pokemon_in_play
 	inc [hl]
 	ld e, a
 	pop af
@@ -2882,7 +2882,7 @@ Func_1485: ; 1485 (0:1485)
 	or a
 	ret
 
-.tooManyPokemonInPlay
+.too_many_pokemon_in_play
 	pop af
 	scf
 	ret
@@ -2902,10 +2902,10 @@ GetAttachedEnergies: ; 159f (0:159f)
 	xor a
 	ld c, NUM_TYPES
 	ld hl, wAttachedEnergies
-.zeroEnergiesLoop
+.zero_energies_loop
 	ld [hli], a
 	dec c
-	jr nz, .zeroEnergiesLoop
+	jr nz, .zero_energies_loop
 	ld a, CARD_LOCATION_ARENA
 	or e ; if e is non-0, arena is not the only location that counts
 	ld e, a
@@ -2913,10 +2913,10 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld h, a
 	ld l, DUELVARS_CARD_LOCATIONS
 	ld c, DECK_SIZE
-.nextCard
+.next_card
 	ld a, [hl]
 	cp e
-	jr nz, .notInRequestedLocation
+	jr nz, .not_in_requested_location
 
 	push hl
 	push de
@@ -2925,7 +2925,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 	call LoadDeckCardToBuffer2
 	ld a, [wLoadedCard2Type]
 	bit ENERGY_CARD_F, a
-	jr z, .notAnEnergyCard
+	jr z, .not_an_energy_card
 	and $7 ; zero bit 3 to extract the type
 	ld e, a
 	ld d, $0
@@ -2933,18 +2933,18 @@ GetAttachedEnergies: ; 159f (0:159f)
 	add hl, de
 	inc [hl] ; increment the number of energy cards of this type
 	cp COLORLESS
-	jr nz, .notColorless
+	jr nz, .not_colorless
 	inc [hl] ; each colorless energy counts as two
-.notAnEnergyCard
-.notColorless
+.not_an_energy_card
+.not_colorless
 	pop bc
 	pop de
 	pop hl
 
-.notInRequestedLocation
+.not_in_requested_location
 	inc l
 	dec c
-	jr nz, .nextCard
+	jr nz, .next_card
 	; all 60 cards checked
 	ld hl, wAttachedEnergies
 	ld c, NUM_TYPES
@@ -2969,22 +2969,22 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
 	ld l, $0
 	ld c, $0
-.nextCard
+.next_card
 	ld a, [hl]
 	cp b
-	jr nz, .unmatchingCardLocationOrID
+	jr nz, .unmatching_card_location_orID
 	ld a, l
 	push hl
 	call _GetCardInDeckPosition
 	cp e
 	pop hl
-	jr nz, .unmatchingCardLocationOrID
+	jr nz, .unmatching_card_location_orID
 	inc c
-.unmatchingCardLocationOrID
+.unmatching_card_location_orID
 	inc l
 	ld a, l
 	cp DECK_SIZE
-	jr c, .nextCard
+	jr c, .next_card
 	ld a, c
 	pop bc
 	ret
@@ -3024,17 +3024,17 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld [wTempCardId], a
 	ld hl, wLoadedCard1Move1
 	dec e
-	jr nz, .gotMove
+	jr nz, .got_move
 	ld hl, wLoadedCard1Move2
-.gotMove
+.got_move
 	ld de, wLoadedMove
 	ld c, wLoadedCard1Move2 - wLoadedCard1Move1
-.copyLoop
+.copy_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .copyLoop
+	jr nz, .copy_loop
 	ld a, [wLoadedMoveDamage]
 	ld hl, wDamage
 	ld [hli], a
@@ -3299,12 +3299,12 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 .confused
 	text_de ConfusionCheckDamageText
 	call TossCoin
-	jr c, .noConfusionDamage
+	jr c, .no_confusion_damage
 	ld a, $1
 	ld [wccc9], a
 	scf
 	ret
-.noConfusionDamage
+.no_confusion_damage
 	or a
 	ret
 ; 0x18f9
@@ -3345,10 +3345,10 @@ Func_1994: ; 1994 (0:1994)
 	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
-	jr nz, .nonZeroDamage
+	jr nz, .non_zero_damage
 	ld de, $0000
 	ret
-.nonZeroDamage
+.non_zero_damage
 	xor a
 	ld [$ff9d], a
 	ld d, [hl]
@@ -3360,7 +3360,7 @@ Func_1994: ; 1994 (0:1994)
 	xor a
 	ld [wccc1], a
 	call HandleDoubleDamageSubstatus
-	jr .checkPluspowerAndDefender
+	jr .check_pluspower_and_defender
 .safe
 	call HandleDoubleDamageSubstatus
 	ld a, e
@@ -3384,14 +3384,14 @@ Func_1994: ; 1994 (0:1994)
 	call Func_374a
 	call SwapTurn
 	and b
-	jr z, .checkPluspowerAndDefender
+	jr z, .check_pluspower_and_defender
 	ld hl, $ffe2
 	add hl, de
 	ld e, l
 	ld d, h
 	ld hl, $ccc1
 	set 2, [hl]
-.checkPluspowerAndDefender
+.check_pluspower_and_defender
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
 	call SwapTurn
@@ -3399,9 +3399,9 @@ Func_1994: ; 1994 (0:1994)
 	call ApplyAttachedDefender
 	call HandleDamageReduction
 	bit 7, d
-	jr z, .noUnderflow
+	jr z, .no_underflow
 	ld de, $0000
-.noUnderflow
+.no_underflow
 	call SwapTurn
 	ret
 
@@ -3426,7 +3426,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld a, [hli]
 	or [hl]
 	or a
-	jr z, .noDamage
+	jr z, .no_damage
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -3457,7 +3457,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	call ApplyAttachedDefender
 	bit 7, d ; test for underflow
 	ret z
-.noDamage
+.no_damage
 	ld de, $0000
 	ret
 
@@ -3506,9 +3506,9 @@ SubstractHP: ; 1a96 (0:1a96)
 	ld a, $0
 	sbc d
 	and $80
-	jr z, .noUnderflow
+	jr z, .no_underflow
 	ld [hl], $0
-.noUnderflow
+.no_underflow
 	ld a, [hl]
 	or a
 	jr z, .zero
@@ -3661,18 +3661,18 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	ld hl, $cc16
 	ld a, [hli]
 	or [hl]
-	jr z, .specialName
+	jr z, .special_name
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	jp PrintTextBoxBorderLabel
-.specialName
+.special_name
 	ld hl, $c500
 	ld a, [hl]
 	or a
-	jr z, .printPlayer2
+	jr z, .print_player2
 	jr printNameLoop
-.printPlayer2
+.print_player2
 	text_hl Player2
 	jp PrintTextBoxBorderLabel
 
@@ -3925,20 +3925,20 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
-	jr nz, .drawTopBorder
+	jr nz, .draw_top_border
 	ld a, [wFrameType]
 	or a
-	jr z, .drawTopBorder
+	jr z, .draw_top_border
 ; Console is SGB and frame type is != 0.
 ; The text box will be colorized so a SGB command needs to be transferred
 	push de
 	push bc
-	call .drawTopBorder ; this falls through to drawing the whole box
+	call .draw_top_border ; this falls through to drawing the whole box
 	pop bc
 	pop de
 	jp ColorizeTextBoxSGB
 
-.drawTopBorder
+.draw_top_border
 	push de
 	push bc
 	push hl
@@ -3969,17 +3969,17 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, d
 	sub b
 	sub $4
-	jr z, .drawTopBorderRightTile
+	jr z, .draw_top_border_right_tile
 	ld b, a
-.drawTopBorderLineLoop
+.draw_top_border_line_loop
 	ld a, $5
 	ld [hli], a
 	ld a, $1c
 	ld [hli], a
 	dec b
-	jr nz, .drawTopBorderLineLoop
+	jr nz, .draw_top_border_line_loop
 
-.drawTopBorderRightTile
+.draw_top_border_right_tile
 	ld a, $5
 	ld [hli], a
 	ld a, $19
@@ -4031,12 +4031,12 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 ContinueDrawingTextBoxDMGorSGB
 	dec c
 	dec c
-.drawTextBoxBodyLoop
+.draw_text_box_body_loop
 	ld a, $0
 	ld de, $1e1f
 	call CopyLine
 	dec c
-	jr nz, .drawTextBoxBodyLoop
+	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
 	ld de, $1a1b
@@ -4087,7 +4087,7 @@ DrawRegularTextBoxCGB:
 ContinueDrawingTextBoxCGB
 	dec c
 	dec c
-.drawTextBoxBodyLoop
+.draw_text_box_body_loop
 	ld a, $0
 	ld de, $1e1f
 	push hl
@@ -4101,7 +4101,7 @@ ContinueDrawingTextBoxCGB
 	call CopyLine
 	call BankswitchVRAM_0
 	dec c
-	jr nz, .drawTextBoxBodyLoop
+	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
 	ld de, $1a1b
@@ -4140,12 +4140,12 @@ ColorizeTextBoxSGB
 	ld hl, $cae0
 	ld de, SGB_ATTR_BLK_1f4f
 	ld c, $10
-.copySGBCommandLoop
+.copy_sgb_command_loop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .copySGBCommandLoop
+	jr nz, .copy_sgb_command_loop
 	pop de
 	pop bc
 	ld hl, $cae4
@@ -5263,12 +5263,12 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	ld hl, NarrowTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.waitAorBLoop
+.wait_aorBLoop
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .waitAorBLoop
+	jr z, .wait_aorBLoop
 	ret
 
 NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
@@ -5290,12 +5290,12 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	ld hl, WideTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.waitAorBLoop
+.wait_aorBLoop
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .waitAorBLoop
+	jr z, .wait_aorBLoop
 	call EraseCursor
 	ret
 
@@ -5379,17 +5379,17 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [wIsPracticeDuel], a
 	ld a, [wOpponentDeckId]
 	cp SAMS_NORMAL_DECK - 2
-	jr z, .normalSamDuel
+	jr z, .normal_sam_duel
 	or a ; cp SAMS_PRACTICE_DECK - 2
-	jr nz, .notPracticeDuel
+	jr nz, .not_practice_duel
 
 ; only practice duels will display help messages, but
 ; any duel with Sam will force the PRACTICE_PLAYER_DECK
-;.practiceSamDuel
+;.practice_sam_duel
 	inc a
 	ld [wIsPracticeDuel], a
 
-.normalSamDuel
+.normal_sam_duel
 	xor a
 	ld [wOpponentDeckId], a
 	call SwapTurn
@@ -5403,17 +5403,17 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [hl], a
 	xor a
 
-.notPracticeDuel
+.not_practice_duel
 	inc a
 	inc a
 	call LoadDeck
 	ld a, [wOpponentDeckId]
 	cp NUMBER_OF_DECKS
-	jr c, .validDeck
+	jr c, .valid_deck
 	ld a, PRACTICE_PLAYER_DECK - 2
 	ld [wOpponentDeckId], a
 
-.validDeck
+.valid_deck
 ; set opponent as controlled by AI
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -5796,11 +5796,11 @@ Func_2e2c: ; 2e2c (0:2e2c)
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
-	jp z, .opponentTurn
+	jp z, .opponent_turn
 	call PrintPlayerName
 	pop hl
 	ret
-.opponentTurn
+.opponent_turn
 	call PrintOpponentName
 	pop hl
 	ret
@@ -5809,38 +5809,38 @@ Func_2e2c: ; 2e2c (0:2e2c)
 PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
-	jr z, .fromRAM
+	jr z, .from_ram
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
-	call .printText
+	call .print_text
 	pop af
 	call BankswitchHome
 	ret
-.fromRAM
+.from_ram
 	ld hl, wc590
-.printText
+.print_text
 	call Func_2cc8
-.nextTileLoop
+.next_tile_loop
 	ldh a, [hButtonsHeld]
 	ld b, a
 	ld a, [wTextSpeed]
 	inc a
 	cp $3
-	jr nc, .applyDelay
+	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
 	bit B_BUTTON_F, b
-	jr nz, .skipDelay
-	jr .applyDelay
-.textDelayLoop
+	jr nz, .skip_delay
+	jr .apply_delay
+.text_delay_loop
 	; wait a number of frames equal to wTextSpeed between printing each text tile
 	call DoFrame
-.applyDelay
+.apply_delay
 	dec a
-	jr nz, .textDelayLoop
-.skipDelay
+	jr nz, .text_delay_loop
+.skip_delay
 	call Func_2d43
-	jr nc, .nextTileLoop
+	jr nc, .next_tile_loop
 	ret
 
 ; prints text with id at hl without letter delay in a textbox area
@@ -5849,9 +5849,9 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	push af
 	call ReadTextOffset
 	call Func_2cc8
-.nextTileLoop
+.next_tile_loop
 	call Func_2d43
-	jr nc, .nextTileLoop
+	jr nc, .next_tile_loop
 	pop af
 	call BankswitchHome
 	ret
@@ -5867,12 +5867,12 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
-.nextTileLoop
+.next_tile_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, .nextTileLoop
+	jr nz, .next_tile_loop
 	pop af
 	call BankswitchHome
 	dec de
@@ -5923,12 +5923,12 @@ LoadCardDataToRAM: ; 2f14 (0:2f14)
 	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld b, PKMN_CARD_DATA_LENGTH
-.copyCardDataLoop
+.copy_card_data_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .copyCardDataLoop
+	jr nz, .copy_card_data_loop
 	call BankpopHome
 	or a
 
@@ -5977,7 +5977,7 @@ GetCardHeader: ; 2f5d (0:2f5d)
 	ld d, $00
 	ld e, a
 	call GetCardPointer
-	jr c, .cardNotFound
+	jr c, .card_not_found
 	ld a, $0c
 	call BankpushHome2
 	ld e, [hl]
@@ -5989,7 +5989,7 @@ GetCardHeader: ; 2f5d (0:2f5d)
 	call BankpopHome
 	ld a, e
 	or a
-.cardNotFound
+.card_not_found
 	pop de
 	pop hl
 	ret
@@ -6011,7 +6011,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) % $100
 .nz
 	ccf
-	jr c, .outOfBounds
+	jr c, .out_of_bounds
 	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld a, [hli]
@@ -6019,7 +6019,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ld l,a
 	call BankpopHome
 	or a
-.outOfBounds
+.out_of_bounds
 	pop bc
 	pop de
 	ret
@@ -6043,12 +6043,12 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	call CopyGfxData
 	ld b, $8 ; length of palette
 	ld de, $ce23
-.copyCardPalette
+.copy_card_palette
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .copyCardPalette
+	jr nz, .copy_card_palette
 	pop af
 	call BankswitchHome
 	ret
@@ -6075,12 +6075,12 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ld l, a
 	pop af
 	call CheckMatchingCommand
-	jr nc, .executeFunction
+	jr nc, .execute_function
 ; return if no matching command was found
 	or a
 	ret
 
-.executeFunction
+.execute_function
 ; executes the function at [wce22]:hl
 	ldh a, [hBankROM]
 	push af
@@ -6105,12 +6105,12 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
 	or h
-	jr nz, .notNullPointer
+	jr nz, .not_null_pointer
 ; return c if pointer is $0000
 	scf
 	ret
 
-.notNullPointer
+.not_null_pointer
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(EffectCommands)
@@ -6118,18 +6118,18 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 ; store the bank number of command functions ($b) in wce22
 	ld a, $b
 	ld [wce22],a
-.checkCommandLoop
+.check_command_loop
 	ld a, [hli]
 	or a
-	jr z, .noMoreCommands
+	jr z, .no_more_commands
 	cp c
-	jr z, .matchingCommandFound
+	jr z, .matching_command_found
 ; skip function pointer for this command and move to the next one
 	inc hl
 	inc hl
-	jr .checkCommandLoop
+	jr .check_command_loop
 
-.matchingCommandFound
+.matching_command_found
 ; load function pointer for this command
 	ld a, [hli]
 	ld h, [hl]
@@ -6140,7 +6140,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	or a
 	ret
 ; restore bank and return c
-.noMoreCommands
+.no_more_commands
 	pop af
 	call BankswitchHome
 	scf
@@ -6164,14 +6164,14 @@ LoadDeck: ; 302c (0:302c)
 	ld d, [hl]
 	ld a, d
 	or e
-	jr z, .nullPointer
+	jr z, .null_pointer
 	call CopyDeckData
 	pop af
 	call BankswitchHome
 	pop hl
 	or a
 	ret
-.nullPointer
+.null_pointer
 	pop af
 	call BankswitchHome
 	pop hl
@@ -6543,19 +6543,19 @@ HandleDamageReduction: ; 3244 (0:3244)
 	or a
 	ret z
 	cp SUBSTATUS2_REDUCE_BY_20
-	jr z, .reduceDamageBy20
+	jr z, .reduce_damage_by_20
 	cp SUBSTATUS2_POUNCE
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	cp SUBSTATUS2_GROWL
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	ret
-.reduceDamageBy20
+.reduce_damage_by_20
 	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.reduceDamageBy10
+.reduce_damage_by_10
 	ld hl, -10
 	add hl, de
 	ld e, l
@@ -6565,28 +6565,28 @@ HandleDamageReduction: ; 3244 (0:3244)
 HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld a, [wNoDamageOrEffect]
 	or a
-	jr nz, .noDamage
+	jr nz, .no_damage
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	or a
-	jr z, .notAffectedBySubstatus1
+	jr z, .not_affected_by_substatus1
 	cp SUBSTATUS1_NO_DAMAGE_STIFFEN
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_10
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_11
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_17
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_REDUCE_BY_10
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	cp SUBSTATUS1_REDUCE_BY_20
-	jr z, .reduceDamageBy20
+	jr z, .reduce_damage_by_20
 	cp SUBSTATUS1_HARDEN
-	jr z, .preventLessThan40Damage
+	jr z, .prevent_less_than_40_damage
 	cp SUBSTATUS1_HALVE_DAMAGE
-	jr z, .halveDamage
-.notAffectedBySubstatus1
+	jr z, .halve_damage
+.not_affected_by_substatus1
 	call CheckIfUnderAnyCannotUseStatus
 	ret c
 	ld a, [wLoadedMoveCategory]
@@ -6594,32 +6594,32 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret z
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MR_MIME
-	jr z, .preventLessThan30Damage ; invisible wall
+	jr z, .prevent_less_than_30_damage ; invisible wall
 	cp KABUTO
-	jr z, .halveDamage2 ; kabuto armor
+	jr z, .halve_damage2 ; kabuto armor
 	ret
-.noDamage
+.no_damage
 	ld de, 0
 	ret
-.reduceDamageBy10
+.reduce_damage_by_10
 	ld hl, -10
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.reduceDamageBy20
+.reduce_damage_by_20
 	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.preventLessThan40Damage
+.prevent_less_than_40_damage
 	ld bc, 40
 	call CompareDEtoBC
 	ret nc
 	ld de, 0
 	ret
-.halveDamage
+.halve_damage
 	sla d
 	rr e
 	bit 0, e
@@ -6629,7 +6629,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld e, l
 	ld d, h
 	ret
-.preventLessThan30Damage
+.prevent_less_than_30_damage
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
@@ -6638,7 +6638,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret c
 	ld de, 0
 	ret
-.halveDamage2
+.halve_damage2
 	sla d
 	rr e
 	bit 0, e
@@ -6661,16 +6661,16 @@ HandleCantAttackSubstatus: ; 33c1 (0:33c1)
 	ret z
 	text_hl UnableToAttackDueToTailWagText
 	cp SUBSTATUS2_TAIL_WAG
-	jr z, .returnWithCantAttack
+	jr z, .return_with_cant_attack
 	text_hl UnableToAttackDueToLeerText
 	cp SUBSTATUS2_LEER
-	jr z, .returnWithCantAttack
+	jr z, .return_with_cant_attack
 	text_hl UnableToAttackDueToBoneAttackText
 	cp SUBSTATUS2_BONE_ATTACK
-	jr z, .returnWithCantAttack
+	jr z, .return_with_cant_attack
 	or a
 	ret
-.returnWithCantAttack
+.return_with_cant_attack
 	scf
 	ret
 
@@ -6679,12 +6679,12 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
-	jr nz, .checkAmnesia
+	jr nz, .check_amnesia
 	ret
-.checkAmnesia
+.check_amnesia
 	cp SUBSTATUS2_AMNESIA
 	jr z, .affectedByAmnesia
-.notTheMoveDisabledByAmnesia
+.not_the_disabled_move
 	or a
 	ret
 .affectedByAmnesia
@@ -6692,7 +6692,7 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	call GetTurnDuelistVariable
 	ld a, [wSelectedMoveIndex]
 	cp [hl]
-	jr nz, .notTheMoveDisabledByAmnesia
+	jr nz, .not_the_disabled_move
 	text_hl UnableToUseAttackDueToAmnesiaText
 	scf
 	ret
@@ -6718,13 +6718,13 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 	ret z
 	text_de SandAttackCheckText
 	cp SUBSTATUS2_SAND_ATTACK
-	jr z, .cardIsAffected
+	jr z, .card_is_affected
 	text_de SmokescreenCheckText
 	cp SUBSTATUS2_SMOKESCREEN
-	jr z, .cardIsAffected
+	jr z, .card_is_affected
 	or a
 	ret
-.cardIsAffected
+.card_is_affected
 	ld a, [wcc0a]
 	or a
 	ret nz
@@ -6745,29 +6745,29 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld e, NO_DAMAGE_OR_EFFECT_FLY
 	text_hl NoDamageOrEffectDueToFlyText
 	cp SUBSTATUS1_FLY
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_BARRIER
 	text_hl NoDamageOrEffectDueToBarrierText
 	cp SUBSTATUS1_BARRIER
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_AGILITY
 	text_hl NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	call CheckIfUnderAnyCannotUseStatus
 	ccf
 	ret nc
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MEW1
-	jr z, .neutralizingShield
+	jr z, .neutralizing_shield
 	or a
 	ret
-.noDamageOrEffect
+.no_damage_or_effect
 	ld a, e
 	ld [wNoDamageOrEffect], a
 	scf
 	ret
-.neutralizingShield
+.neutralizing_shield
 	ld a, [wcce6]
 	or a
 	ret nz
@@ -6780,7 +6780,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ret z
 	ld e, NO_DAMAGE_OR_EFFECT_NSHIELD
 	text_hl NoDamageOrEffectDueToNShieldText
-	jr .noDamageOrEffect
+	jr .no_damage_or_effect
 
 ; if the Pokemon being attacked is Haunter1, and its Transparency is active,
 ; there is a 50% chance that any damage or effect is prevented
@@ -6817,7 +6817,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	or a
 	ret z
 	bit 7, a
-	jr nz, .dontPrintText ; already been here so don't repeat the text
+	jr nz, .dont_print_text ; already been here so don't repeat the text
 	ld hl, wNoDamageOrEffect
 	set 7, [hl]
 	dec a
@@ -6832,7 +6832,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	scf
 	ret
 
-.dontPrintText
+.dont_print_text
 	ld hl, $0000
 	scf
 	ret
@@ -6863,14 +6863,14 @@ CheckIfUnderAnyCannotUseStatus: ; 34ef (0:34ef)
 ; same as above, but if a is non-0, only toxic gas is checked
 CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 	or a
-	jr nz, .checkToxicGas
+	jr nz, .check_toxic_gas
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
 	text_hl CannotUseDueToStatusText
 	scf
 	jr nz, .done ; return carry
-.checkToxicGas
+.check_toxic_gas
 	ld a, MUK
 	call Func_3509
 	text_hl UnableDueToToxicGasText
@@ -6986,10 +6986,10 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetNonTurnDuelistVariable
 	cp SUBSTATUS1_DESTINY_BOND
-	jr z, .checkHP
+	jr z, .check_hp
 	ret
 
-.checkHP
+.check_hp
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	cp $ff
@@ -7025,9 +7025,9 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 HandleStrikesBack: ; 367b (0:367b)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MACHAMP
-	jr z, .strikesBack
+	jr z, .strikes_back
 	ret
-.strikesBack
+.strikes_back
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	ret nz
@@ -7157,10 +7157,10 @@ HandleEnergyBurn: ; 375d (0:375d)
 	ld hl, wAttachedEnergies
 	ld c, COLORLESS - FIRE
 	xor a
-.zeroNextEnergy
+.zero_next_energy
 	ld [hli], a
 	dec c
-	jr nz, .zeroNextEnergy
+	jr nz, .zero_next_energy
 	ld a, [wTotalAttachedEnergies]
 	ld [wAttachedEnergies], a
 	ret
