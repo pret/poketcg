@@ -1,4 +1,4 @@
-SECTION "VRAM", VRAM, BANK[0]
+SECTION "VRAM", VRAM
 
 vTiles0:: ds $800 ; 8000
 vTiles1:: ds $800 ; 8800

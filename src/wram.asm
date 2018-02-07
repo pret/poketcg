@@ -3,17 +3,13 @@ INCLUDE "macros.asm"
 
 INCLUDE "vram.asm"
 
-;----------------------------------------------------------
-;--- Bank 0: $Cxxx ----------------------------------------
-;----------------------------------------------------------
-
-SECTION "WRAM0", WRAM0
+SECTION "WRAM Temp Card Collection", WRAM0
 
 wTempCardCollection:: ; c000
 	ds $100
 	ds $100
 
-;--- Duel variables ----------------------------------------------
+SECTION "WRAM Duel Variables", WRAM0
 
 wPlayerDuelVariables:: ; c200
 
@@ -205,7 +201,7 @@ wDuelCardOrAttackList:: ; c510
 wc590:: ; c590
 	ds $70
 
-;--- Text engine ------------------------------------------
+SECTION "WRAM Text Engine", WRAM0
 
 wc600:: ; c600
 	ds $100
@@ -219,7 +215,7 @@ wc800:: ; c800
 wc900:: ; c900
 	ds $100
 
-;--- Engine -----------------------------------------------
+SECTION "WRAM Engine 1", WRAM0
 
 wBufOAM:: ; ca00
 	ds $a0
@@ -280,8 +276,8 @@ wFlushPaletteFlags:: ; cabf
 
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
-	
-wcac1:: ; cac1	
+
+wcac1:: ; cac1
 	ds $1
 
 wcac2:: ; cac2
@@ -337,7 +333,7 @@ wBufPalette:: ; caf0
 	ds $80
 	ds $4
 
-;--- Serial transfer bytes (cb74-cbc4) --------------------
+SECTION "WRAM Serial transfer bytes", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -386,7 +382,7 @@ wSerialRecvBuf:: ; cba5 - cbc4
 	ds $20
 	ds $1
 
-;--- Engine ----------------------------------------------
+SECTION "WRAM Duels", WRAM0
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
@@ -595,6 +591,8 @@ wccf1:: ; ccf1
 wccf2:: ; ccf2
 	ds $1
 
+SECTION "WRAM Engine 2", WRAM0
+
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
@@ -785,11 +783,7 @@ wcfb9:: ; cfb9
 
 wcfe3:: ; cfe3
 
-;----------------------------------------------------------
-;--- Bank 1: $Dxxx ----------------------------------------
-;----------------------------------------------------------
-
-SECTION "WRAM1", WRAMX, BANK[1]
+SECTION "WRAM1", WRAMX
 	ds $a9
 
 wd0a9:: ; d0a9

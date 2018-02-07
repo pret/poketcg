@@ -1,4 +1,4 @@
-SECTION "Working Cards", SRAM, BANK[0]
+SECTION "Working Cards", SRAM
 
 	ds $100
 

@@ -3,46 +3,46 @@ INCLUDE "macros.asm"
 
 INCLUDE "engine/home.asm"
 
-SECTION "bank1",ROMX,BANK[$1]
+SECTION "bank1", ROMX
 INCLUDE "engine/bank1.asm"
 
-SECTION "bank2",ROMX,BANK[$2]
+SECTION "bank2", ROMX
 INCLUDE "engine/bank2.asm"
 
-SECTION "bank3",ROMX,BANK[$3]
+SECTION "bank3", ROMX
 INCLUDE "engine/bank3.asm"
 
-SECTION "bank4",ROMX,BANK[$4]
+SECTION "bank4", ROMX
 INCLUDE "engine/bank4.asm"
 
-SECTION "bank5",ROMX,BANK[$5]
+SECTION "bank5", ROMX
 INCLUDE "engine/bank5.asm"
 
-SECTION "bank6",ROMX,BANK[$6]
+SECTION "bank6", ROMX
 INCLUDE "engine/bank6.asm"
 
-SECTION "bank7",ROMX,BANK[$7]
+SECTION "bank7", ROMX
 INCLUDE "engine/bank7.asm"
 INCLUDE "engine/boosters.asm"
 
-SECTION "bank8",ROMX,BANK[$8]
+SECTION "bank8", ROMX
 INCLUDE "engine/bank8.asm"
 
-SECTION "bank9",ROMX,BANK[$9]
+SECTION "bank9", ROMX
 	emptybank
 
-SECTION "bankA",ROMX,BANK[$A]
+SECTION "bankA", ROMX
 	emptybank
 
-SECTION "bankB",ROMX,BANK[$B]
+SECTION "bankB", ROMX
 INCLUDE "engine/effect_functions.asm"
 
-SECTION "bankC",ROMX,BANK[$C]
+SECTION "bankC", ROMX
 INCLUDE "data/decks.asm"
 INCLUDE "data/cards.asm"
 
-SECTION "bank1C",ROMX,BANK[$1C]
+SECTION "bank1C", ROMX
 INCLUDE "engine/bank1c.asm"
 
-SECTION "bank20",ROMX,BANK[$20]
+SECTION "bank20", ROMX
 INCLUDE "engine/bank20.asm"

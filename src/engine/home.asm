@@ -1,39 +1,39 @@
 ; rst vectors
-SECTION "rst00",ROM0[0]
+SECTION "rst00", ROM0
 	ret
-SECTION "rst08",ROM0[8]
+SECTION "rst08", ROM0
 	ret
-SECTION "rst10",ROM0[$10]
+SECTION "rst10", ROM0
 	ret
-SECTION "rst18",ROM0[$18]
+SECTION "rst18", ROM0
 	jp RST18
-SECTION "rst20",ROM0[$20]
+SECTION "rst20", ROM0
 	jp RST20
-SECTION "rst28",ROM0[$28]
+SECTION "rst28", ROM0
 	jp RST28
-SECTION "rst30",ROM0[$30]
+SECTION "rst30", ROM0
 	ret
-SECTION "rst38",ROM0[$38]
+SECTION "rst38", ROM0
 	ret
 
 ; interrupts
-SECTION "vblank",ROM0[$40]
+SECTION "vblank", ROM0
 	jp VBlankHandler
-SECTION "lcdc",ROM0[$48]
+SECTION "lcdc", ROM0
 	call wLCDCFunctiontrampoline
 	reti
-SECTION "timer",ROM0[$50]
+SECTION "timer", ROM0
 	jp TimerHandler
-SECTION "serial",ROM0[$58]
+SECTION "serial", ROM0
 	jp SerialHandler
-SECTION "joypad",ROM0[$60]
+SECTION "joypad", ROM0
 	reti
 
-SECTION "romheader",ROM0[$100]
+SECTION "romheader", ROM0
 	nop
 	jp Start
 
-SECTION "start",ROM0[$150]
+SECTION "start", ROM0
 Start: ; 0150 (0:0150)
 	di
 	ld sp, $fffe

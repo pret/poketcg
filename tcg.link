@@ -1,0 +1,163 @@
+ROM0
+	org $0000
+	"rst00"
+	org $0008
+	"rst08"
+	org $0010
+	"rst10"
+	org $0018
+	"rst18"
+	org $0020
+	"rst20"
+	org $0028
+	"rst28"
+	org $0030
+	"rst30"
+	org $0038
+	"rst38"
+	org $0040
+	"vblank"
+	org $0048
+	"lcdc"
+	org $0050
+	"timer"
+	org $0058
+	"serial"
+	org $0060
+	"joypad"
+	org $0100
+	"romheader"
+	org $0150
+	"start"
+ROMX $01
+	"bank1"
+ROMX $02
+	"bank2"
+ROMX $03
+	"bank3"
+ROMX $04
+	"bank4"
+ROMX $06
+	"bank6"
+ROMX $07
+	"bank7"
+ROMX $08
+	"bank8"
+ROMX $09
+	"bank9"
+ROMX $0a
+	"bankA"
+ROMX $0b
+	"bankB"
+ROMX $0c
+	"bankC"
+ROMX $0d
+	"bankD"
+ROMX $0e
+	"bankE"
+ROMX $0f
+	"bankF"
+ROMX $10
+	"bank10"
+ROMX $11
+	"bank11"
+ROMX $12
+	"bank12"
+ROMX $13
+	"bank13"
+ROMX $14
+	"bank14"
+ROMX $15
+	"bank15"
+ROMX $16
+	"bank16"
+ROMX $17
+	"bank17"
+ROMX $18
+	"bank18"
+ROMX $19
+	"bank19"
+ROMX $1a
+	"bank1A"
+ROMX $1b
+	"bank1B"
+ROMX $1c
+	"bank1C"
+ROMX $1d
+	"bank1D"
+ROMX $1e
+	"bank1E"
+ROMX $1f
+	"bank1F"
+ROMX $20
+	"bank20"
+ROMX $21
+	"bank21"
+ROMX $22
+	"bank22"
+ROMX $23
+	"bank23"
+ROMX $24
+	"bank24"
+ROMX $25
+	"bank25"
+ROMX $26
+	"bank26"
+ROMX $27
+	"bank27"
+ROMX $28
+	"bank28"
+ROMX $29
+	"bank29"
+ROMX $2a
+	"bank2A"
+ROMX $2b
+	"bank2B"
+ROMX $2c
+	"bank2C"
+ROMX $2d
+	"bank2D"
+ROMX $2e
+	"bank2E"
+ROMX $2f
+	"bank2F"
+ROMX $30
+	"bank30"
+ROMX $31
+	"bank31"
+ROMX $32
+	"bank32"
+ROMX $33
+	"bank33"
+ROMX $34
+	"bank34"
+ROMX $35
+	"bank35"
+ROMX $36
+	"bank36"
+ROMX $37
+	"bank37"
+ROMX $38
+	"bank38"
+ROMX $39
+	"bank39"
+ROMX $3a
+	"bank3A"
+ROMX $3b
+	"bank3B"
+ROMX $3c
+	"bank3C"
+WRAM0
+	"WRAM Temp Card Collection"
+	"WRAM Duel Variables"
+	"WRAM Text Engine"
+	"WRAM Engine 1"
+	"WRAM Serial transfer bytes"
+	"WRAM Duels"
+	"WRAM Engine 2"
+WRAMX 1
+	"WRAM1"
+VRAM $00
+	"VRAM"
+SRAM $00
+	"Working Cards"

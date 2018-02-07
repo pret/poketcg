@@ -22,7 +22,7 @@ $(OBJS): $$*.asm $$($$*_dep)
 	rgbasm -h -i src/ -o $@ $<
 
 tcg.gbc: $(OBJS)
-	rgblink -n $*.sym -m $*.map -o $@ $^
+	rgblink -n $*.sym -m $*.map -l $*.link -o $@ $^
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
 
 clean:
