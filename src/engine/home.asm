@@ -2797,6 +2797,7 @@ _GetCardInDeckPosition: ; 1362 (0:1362)
 	pop de
 	ret
 
+; load data of card in position a to wLoadedCard1
 LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push hl
 	push de
@@ -2813,6 +2814,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	pop hl
 	ret
 
+; load data of card in position a to wLoadedCard2
 LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push hl
 	push de
@@ -3309,8 +3311,27 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 ; 0x18f9
 
-	INCROM $18f9, $195c
+	INCROM $18f9, $1944
 
+; this loads HP and Stage (1 byte each) of card with id at $ff9f into wLoadedMoveEffectCommands
+Func_1944: ; 1944 (0:1944)
+	ld a, [$ff9f]
+	call LoadDeckCardToBuffer1
+	ld hl, wLoadedCard1HP
+	ld de, wLoadedMoveEffectCommands
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	ret
+; 0x1955
+
+Func_1955: ; 1955 (0:1955)
+	push af
+	ld a, $7a
+	ld [wLoadedMoveAnimation], a
+	pop af
 ; this function appears to apply several damage modifiers
 Func_195c: ; 195c (0:195c)
 	ld hl, wDamage
@@ -5178,8 +5199,9 @@ Func_29f5: ; 29f5 (0:29f5)
 	ret
 ; 0x29fa
 
-	INCROM $29fa, $2a00
-
+Func_29fa: ; 29fa (0:29fa)
+	ld bc, $0f00
+	call Func_2a1a
 Func_2a00: ; 2a00 (0:2a00)
 	call DoFrame
 	call HandleTextBoxInput
@@ -5200,17 +5222,17 @@ Func_2a1a: ; 2a1a (0:2a1a)
 	xor a
 	ld hl, wCurMenuItem
 	ld [hli], a
-	ld [hl], d
+	ld [hl], d ; wCursorXPosition
 	inc hl
-	ld [hl], e
+	ld [hl], e ; wCursorYPosition
 	inc hl
-	ld [hl], $0
+	ld [hl], $0 ; wYDisplacementBetweenMenuItems
 	inc hl
-	ld [hl], $1
+	ld [hl], $1 ; wNumMenuItems
 	inc hl
-	ld [hl], b
+	ld [hl], b ; wCursorTileNumber
 	inc hl
-	ld [hl], c
+	ld [hl], c ; wTileBehindCursor
 	ld [wCursorBlinkCounter], a
 	ret
 ; 0x2a30
@@ -8000,5 +8022,5 @@ Bankswitch3d: ; 3fe0 (0:3fe0)
 	ret
 
 rept $a
-db $ff
+	db $ff
 endr

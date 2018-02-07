@@ -10222,5 +10222,5 @@ RecycleCard: ; 33fd3 (c:7fd3)
 	dw NONE ; description (cont)
 
 rept $1f
-db $ff
+	db $ff
 endr

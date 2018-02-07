@@ -7,6 +7,7 @@ SECTION "WRAM Temp Card Collection", WRAM0
 
 wTempCardCollection:: ; c000
 	ds $100
+
 	ds $100
 
 SECTION "WRAM Duel Variables", WRAM0
@@ -26,6 +27,7 @@ wPlayerDuelVariables:: ; c200
 ;	$1X - bench (where X is bench position from 1 to 5)
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE
+
 	ds $6
 
 ; Which cards are in player's hand, as numbers 0 to 59
@@ -50,6 +52,7 @@ wPlayerArenaCard:: ; c2bb
 ; Which cards are in player's bench, as numbers 0 to 59
 wPlayerBench:: ; c2bc
 	ds BENCH_SIZE
+
 	ds $7
 
 wPlayerArenaCardHP:: ; c2c8
@@ -64,6 +67,7 @@ wPlayerBench4CardHP:: ; c2cc
 	ds $1
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
+
 	ds $19
 
 wPlayerArenaCardSubstatus1:: ; c2e7
@@ -107,12 +111,14 @@ wPlayerDuelistType:: ; c2f1
 ; if under the effects of amnesia, which move (0 or 1) can't be used
 wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 	ds $1
+
 	ds $d
 
 wOpponentDuelVariables:: ; c300
 
 wOpponentCardLocations:: ; c300
 	ds DECK_SIZE
+
 	ds $6
 
 wOpponentHand:: ; c342
@@ -129,6 +135,7 @@ wOpponentArenaCard:: ; c3bb
 
 wOpponentBench:: ; c3bc
 	ds BENCH_SIZE
+
 	ds $7
 
 wOpponentArenaCardHP:: ; c3c8
@@ -143,6 +150,7 @@ wOpponentBench4CardHP:: ; c3cc
 	ds $1
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
+
 	ds $19
 
 wOpponentArenaCardSubstatus1:: ; c3e7
@@ -183,6 +191,7 @@ wOpponentDuelistType:: ; c3f1
 
 wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
+
 	ds $d
 
 wPlayerDeck:: ; c400
@@ -190,6 +199,7 @@ wPlayerDeck:: ; c400
 
 wOpponentDeck:: ; c480
 	ds $80
+
 	ds $10
 
 ; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
@@ -252,6 +262,7 @@ wIE:: ; cab7
 
 wVBlankCtr:: ; cab8
 	ds $1
+
 	ds $1
 
 ; bit0: is in vblank interrupt?
@@ -321,6 +332,7 @@ wcad4:: ; cad4
 
 wcad5:: ; cad5
 	ds $1
+
 	ds $8
 
 wcade:: ; cade
@@ -331,6 +343,7 @@ wcae2:: ; cae2
 
 wBufPalette:: ; caf0
 	ds $80
+
 	ds $4
 
 SECTION "WRAM Serial transfer bytes", WRAM0
@@ -349,6 +362,7 @@ wSerialCounter2:: ; cb77
 
 wSerialTimeoutCounter:: ; cb78
 	ds $1
+
 	ds $4
 
 wSerialSendSave:: ; cb7d
@@ -380,6 +394,7 @@ wSerialRecvIndex:: ; cba4
 
 wSerialRecvBuf:: ; cba5 - cbc4
 	ds $20
+
 	ds $1
 
 SECTION "WRAM Duels", WRAM0
@@ -395,6 +410,7 @@ wCurrentDuelMenuItem:: ; cbc6
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
 wCardPageNumber:: ; cbc7
 	ds $1
+
 	ds $1
 
 wcbc9:: ; cbc9
@@ -402,6 +418,7 @@ wcbc9:: ; cbc9
 
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
+
 	ds $2
 
 wAttachedEnergiesAccum:: ; cbce
@@ -471,6 +488,7 @@ wcc0d:: ; cc0d
 ; beginning of DeckPointers
 wOpponentDeckId:: ; cc0e
 	ds $1
+
 	ds $1
 
 wcc10:: ; cc10
@@ -484,6 +502,7 @@ wcc12:: ; cc12
 
 wIsPracticeDuel:: ; cc13
 	ds $1
+
 	ds $1
 
 wcc15:: ; cc15
@@ -601,6 +620,7 @@ SECTION "WRAM Engine 2", WRAM0
 ; For example the value 4 seems to be used a lot during duels.
 wFrameType:: ; ccf3
 	ds $1
+
 	ds $10
 
 wcd04:: ; cd04
@@ -629,6 +649,7 @@ wcd0b:: ; cd0b
 
 wUppercaseFlag:: ; cd0d
 	ds $1
+
 	ds $1
 
 ; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
@@ -655,6 +676,7 @@ wCursorTileNumber:: ; cd15
 
 wTileBehindCursor:: ; cd16
 	ds $1
+
 	ds $81
 
 wcd98:: ; cd98
@@ -909,10 +931,12 @@ wPCPackSelection:: ; d11d
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
 	ds $c
+
 	ds $3
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
+
 	ds $3
 
 wd131:: ; d131
@@ -1217,6 +1241,7 @@ wBoosterDataEnergyFunctionPointer:: ; d687
 
 wBoosterDataTypeChanceData:: ; d689
 	ds $9
+
 	ds $6ee
 
 SECTION "WRAM Music", WRAMX

@@ -595,5 +595,5 @@ INCLUDE "audio/sfx/sfx_5e.asm"
 INCLUDE "audio/sfx/sfx_5f.asm"
 
 rept $c1
-db $ff
+	db $ff
 endr

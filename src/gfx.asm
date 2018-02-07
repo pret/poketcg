@@ -15,7 +15,7 @@ INCBIN "gfx/duel/duel1.t5.2bpp",$1698,$318
 INCBIN "gfx/duel/duel2.2bpp"
 
 rept $2b68
-db $ff
+	db $ff
 endr
 
 SECTION "Empty Bank 1F", ROMX
@@ -215,7 +215,7 @@ Unnamed5Gfx: ; 93fda (24:7fda)
 	INCBIN "gfx/unnamed/5.2bpp"
 
 rept $4
-db $ff
+	db $ff
 endr
 
 SECTION "Gfx 7", ROMX
@@ -424,7 +424,7 @@ Unnamed9Gfx: ; 9ffda (27:7fda)
 	INCBIN "gfx/unnamed/9.2bpp"
 
 rept $4
-db $ff
+	db $ff
 endr
 
 SECTION "Gfx 10", ROMX
@@ -1820,7 +1820,7 @@ RecycleCardGfx:: ; ef388 (3b:7388)
 	INCBIN "gfx/cards/recycle.pal"
 
 rept $970
-db $ff
+	db $ff
 endr
 
 SECTION "Empty Bank 3C", ROMX

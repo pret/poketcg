@@ -1884,5 +1884,5 @@ INCLUDE "audio/music/hallofhonor.asm"
 INCLUDE "audio/music/credits.asm"
 
 rept $109
-db $ff
+	db $ff
 endr

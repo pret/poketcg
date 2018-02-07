@@ -185,5 +185,5 @@ RecycleDescription: ; 6495e (19:495e)
 	done
 
 rept $3655
-db $ff
+	db $ff
 endr

@@ -1890,5 +1890,5 @@ INCLUDE "audio/music/boosterpack.asm"
 INCLUDE "audio/music/medal.asm"
 
 rept $138
-db $ff
+	db $ff
 endr
