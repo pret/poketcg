@@ -52,101 +52,107 @@ ROMX $0b
 ROMX $0c
 	"bankC"
 ROMX $0d
-	"bankD"
+	"Text 1"
 ROMX $0e
-	"bankE"
+	"Text 2"
 ROMX $0f
-	"bankF"
+	"Text 3"
 ROMX $10
-	"bank10"
+	"Text 4"
 ROMX $11
-	"bank11"
+	"Text 5"
 ROMX $12
-	"bank12"
+	"Text 6"
 ROMX $13
-	"bank13"
+	"Text 7"
 ROMX $14
-	"bank14"
+	"Text 8"
 ROMX $15
-	"bank15"
+	"Text 9"
 ROMX $16
-	"bank16"
+	"Text A"
 ROMX $17
-	"bank17"
+	"Text B"
 ROMX $18
-	"bank18"
+	"Text C"
 ROMX $19
-	"bank19"
+	"Text D"
 ROMX $1a
-	"bank1A"
+	"Empty Bank 1A"
 ROMX $1b
-	"bank1B"
+	"Empty Bank 1B"
 ROMX $1c
 	"bank1C"
 ROMX $1d
-	"bank1D"
+	"Gfx 1"
 ROMX $1e
-	"bank1E"
+	"Gfx 2"
 ROMX $1f
-	"bank1F"
+	"Empty Bank 1F"
 ROMX $20
 	"bank20"
 ROMX $21
-	"bank21"
+	"Gfx 3"
 ROMX $22
-	"bank22"
+	"Gfx 4"
 ROMX $23
-	"bank23"
+	"Gfx 5"
 ROMX $24
-	"bank24"
+	"Gfx 6"
 ROMX $25
-	"bank25"
+	"Gfx 7"
 ROMX $26
-	"bank26"
+	"Gfx 8"
 ROMX $27
-	"bank27"
+	"Gfx 9"
 ROMX $28
-	"bank28"
+	"Gfx 10"
 ROMX $29
-	"bank29"
+	"Gfx 11"
 ROMX $2a
-	"bank2A"
+	"Gfx 12"
 ROMX $2b
-	"bank2B"
+	"Gfx 13"
 ROMX $2c
-	"bank2C"
+	"Gfx 14"
 ROMX $2d
-	"bank2D"
+	"Gfx 15"
 ROMX $2e
-	"bank2E"
+	"Gfx 16"
 ROMX $2f
-	"bank2F"
+	"Empty Bank 2F"
 ROMX $30
-	"bank30"
+	"Empty Bank 30"
 ROMX $31
-	"bank31"
+	"Card Gfx 1"
 ROMX $32
-	"bank32"
+	"Card Gfx 2"
 ROMX $33
-	"bank33"
+	"Card Gfx 3"
 ROMX $34
-	"bank34"
+	"Card Gfx 4"
 ROMX $35
-	"bank35"
+	"Card Gfx 5"
 ROMX $36
-	"bank36"
+	"Card Gfx 6"
 ROMX $37
-	"bank37"
+	"Card Gfx 7"
 ROMX $38
-	"bank38"
+	"Card Gfx 8"
 ROMX $39
-	"bank39"
+	"Card Gfx 9"
 ROMX $3a
-	"bank3A"
+	"Card Gfx 10"
 ROMX $3b
-	"bank3B"
+	"Card Gfx 11"
 ROMX $3c
-	"bank3C"
+	"Empty Bank 3C"
+ROMX $3d
+	"Audio 1"
+ROMX $3e
+	"Audio 2"
+ROMX $3f
+	"Audio 3"
 WRAM0
 	"WRAM Temp Card Collection"
 	"WRAM Duel Variables"
@@ -157,6 +163,8 @@ WRAM0
 	"WRAM Engine 2"
 WRAMX 1
 	"WRAM1"
+	"WRAM Music"
+	"WRAM Sfx"
 VRAM $00
 	"VRAM"
 SRAM $00

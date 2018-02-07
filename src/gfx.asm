@@ -1,6 +1,6 @@
 INCLUDE "macros.asm"
 
-SECTION "bank1D", ROMX
+SECTION "Gfx 1", ROMX
 Fonts:: ; 74000 (1d:4000)
 INCBIN "gfx/fonts.t3.1bpp"
 
@@ -10,7 +10,7 @@ INCBIN "gfx/vwf.1bpp"
 DuelGraphics:: ; 76968 (1d:6968)
 INCBIN "gfx/duel/duel1.t5.2bpp",$0,$1698
 
-SECTION "bank1E", ROMX
+SECTION "Gfx 2", ROMX
 INCBIN "gfx/duel/duel1.t5.2bpp",$1698,$318
 INCBIN "gfx/duel/duel2.2bpp"
 
@@ -18,10 +18,10 @@ rept $2b68
 db $ff
 endr
 
-SECTION "bank1F", ROMX
+SECTION "Empty Bank 1F", ROMX
 	emptybank
 
-SECTION "bank21", ROMX
+SECTION "Gfx 3", ROMX
 	INCROM $84000, $87828
 
 IshiharaTilesetGfx: ; 87828 (21:7828)
@@ -50,7 +50,7 @@ Unnamed2Gfx: ; 87fe2 (21:7fe2)
 
 	INCROM $87ff4, $88000
 
-SECTION "bank22", ROMX
+SECTION "Gfx 4", ROMX
 OverworldMapTiles: ; 88000 (22:4000)
 	dw $c1
 	INCBIN "gfx/overworld_map.t15.2bpp"
@@ -93,7 +93,7 @@ Unnamed3Gfx: ; 8bfd2 (22:7fd2)
 
 	INCROM $8bfe4, $8C000
 
-SECTION "bank23", ROMX
+SECTION "Gfx 5", ROMX
 LightningClubTilesetGfx: ; 8c000 (23:4000)
 	dw $83
 	INCBIN "gfx/tilesets/lightningclub.t13.2bpp"
@@ -157,7 +157,7 @@ PoisonGfx: ; 8ffa4 (23:7fa4)
 
 	INCROM $8ffe6, $90000
 
-SECTION "bank24", ROMX
+SECTION "Gfx 6", ROMX
 CardPop1Gfx: ; 90000 (24:4000)
 	dw $bd
 	INCBIN "gfx/cardpop1.t3.2bpp"
@@ -218,7 +218,7 @@ rept $4
 db $ff
 endr
 
-SECTION "bank25", ROMX
+SECTION "Gfx 7", ROMX
 Laboratory1Gfx: ; 94000 (25:4000)
 	dw $60
 	INCBIN "gfx/boosterpacks/laboratory1.2bpp"
@@ -269,7 +269,7 @@ RonaldOWGfx: ; 97ea6 (25:7ea6)
 
 	INCROM $97fe8, $98000
 
-SECTION "bank26", ROMX
+SECTION "Gfx 8", ROMX
 Titlescreen3Gfx: ; 98000 (26:4000)
 	dw $f4
 	INCBIN "gfx/titlescreen/titlescreen3.t12.2bpp"
@@ -302,7 +302,7 @@ Unnamed7Gfx: ; 9bfee (26:7fee)
 	dw $1
 	INCBIN "gfx/unnamed/7.2bpp"
 
-SECTION "bank27", ROMX
+SECTION "Gfx 9", ROMX
 SamGfx: ; 9c000 (27:4000)
 	dw $24
 	INCBIN "gfx/duelists/sam.2bpp"
@@ -427,7 +427,7 @@ rept $4
 db $ff
 endr
 
-SECTION "bank28", ROMX
+SECTION "Gfx 10", ROMX
 DanielGfx: ; a0000 (28:4000)
 	dw $24
 	INCBIN "gfx/duelists/daniel.2bpp"
@@ -602,7 +602,7 @@ Unnamed11Gfx: ; a3fb4 (28:7fb4)
 
 	INCROM $a3ff6, $a4000
 
-SECTION "bank29", ROMX
+SECTION "Gfx 11", ROMX
 OWSprite30: ; a4000 (29:4000)
 	dw $14
 	INCBIN "gfx/ow/sprite30.2bpp"
@@ -801,7 +801,7 @@ Duel45Gfx: ; a7fb0 (29:7fb0)
 
 	INCROM $a7fe2, $a8000
 
-SECTION "bank2A", ROMX
+SECTION "Gfx 12", ROMX
 Duel46Gfx: ; a8000 (2a:4000)
 	dw $08
 	INCBIN "gfx/duel/46.2bpp"
@@ -876,25 +876,25 @@ FightingGfx: ; a8e12 (2a:4e12)
 
 	INCROM $a8e54, $ac000
 
-SECTION "bank2B", ROMX
+SECTION "Gfx 13", ROMX
 INCBIN "baserom.gbc",$AC000,$4000
 
-SECTION "bank2C", ROMX
+SECTION "Gfx 14", ROMX
 INCBIN "baserom.gbc",$B0000,$4000
 
-SECTION "bank2D", ROMX
+SECTION "Gfx 15", ROMX
 INCBIN "baserom.gbc",$B4000,$4000
 
-SECTION "bank2E", ROMX
+SECTION "Gfx 16", ROMX
 INCBIN "baserom.gbc",$B8000,$4000
 
-SECTION "bank2F", ROMX
+SECTION "Empty Bank 2F", ROMX
 	emptybank
 
-SECTION "bank30", ROMX
+SECTION "Empty Bank 30", ROMX
 	emptybank
 
-SECTION "bank31", ROMX
+SECTION "Card Gfx 1", ROMX
 CardGraphics:: ; c4000 (31:4000)
 
 GrassEnergyCardGfx:: ; c4000 (31:4000)
@@ -981,7 +981,7 @@ NidorinaCardGfx:: ; c7ca0 (31:7ca0)
 	INCBIN "gfx/cards/nidorina.8x6.2bpp"
 	INCBIN "gfx/cards/nidorina.pal"
 
-SECTION "bank32", ROMX
+SECTION "Card Gfx 2", ROMX
 NidoqueenCardGfx:: ; c8000 (32:4000)
 	INCBIN "gfx/cards/nidoqueen.8x6.2bpp"
 	INCBIN "gfx/cards/nidoqueen.pal"
@@ -1066,7 +1066,7 @@ KoffingCardGfx:: ; cbca0 (32:7ca0)
 	INCBIN "gfx/cards/koffing.8x6.2bpp"
 	INCBIN "gfx/cards/koffing.pal"
 
-SECTION "bank33", ROMX
+SECTION "Card Gfx 3", ROMX
 WeezingCardGfx:: ; cc000 (33:4000)
 	INCBIN "gfx/cards/weezing.8x6.2bpp"
 	INCBIN "gfx/cards/weezing.pal"
@@ -1151,7 +1151,7 @@ Moltres1CardGfx:: ; cfca0 (33:7ca0)
 	INCBIN "gfx/cards/moltres1.8x6.2bpp"
 	INCBIN "gfx/cards/moltres1.pal"
 
-SECTION "bank34", ROMX
+SECTION "Card Gfx 4", ROMX
 Moltres2CardGfx:: ; d0000 (34:4000)
 	INCBIN "gfx/cards/moltres2.8x6.2bpp"
 	INCBIN "gfx/cards/moltres2.pal"
@@ -1236,7 +1236,7 @@ SeakingCardGfx:: ; d3ca0 (34:7ca0)
 	INCBIN "gfx/cards/seaking.8x6.2bpp"
 	INCBIN "gfx/cards/seaking.pal"
 
-SECTION "bank35", ROMX
+SECTION "Card Gfx 5", ROMX
 StaryuCardGfx:: ; d4000 (35:4000)
 	INCBIN "gfx/cards/staryu.8x6.2bpp"
 	INCBIN "gfx/cards/staryu.pal"
@@ -1321,7 +1321,7 @@ Magnemite1CardGfx:: ; d7ca0 (35:7ca0)
 	INCBIN "gfx/cards/magnemite1.8x6.2bpp"
 	INCBIN "gfx/cards/magnemite1.pal"
 
-SECTION "bank36", ROMX
+SECTION "Card Gfx 6", ROMX
 Magnemite2CardGfx:: ; d8000 (36:4000)
 	INCBIN "gfx/cards/magnemite2.8x6.2bpp"
 	INCBIN "gfx/cards/magnemite2.pal"
@@ -1406,7 +1406,7 @@ MachokeCardGfx:: ; dbca0 (36:7ca0)
 	INCBIN "gfx/cards/machoke.8x6.2bpp"
 	INCBIN "gfx/cards/machoke.pal"
 
-SECTION "bank37", ROMX
+SECTION "Card Gfx 7", ROMX
 MachampCardGfx:: ; dc000 (37:4000)
 	INCBIN "gfx/cards/machamp.8x6.2bpp"
 	INCBIN "gfx/cards/machamp.pal"
@@ -1491,7 +1491,7 @@ SlowbroCardGfx:: ; dfca0 (37:7ca0)
 	INCBIN "gfx/cards/slowbro.8x6.2bpp"
 	INCBIN "gfx/cards/slowbro.pal"
 
-SECTION "bank38", ROMX
+SECTION "Card Gfx 8", ROMX
 Gastly1CardGfx:: ; e0000 (38:4000)
 	INCBIN "gfx/cards/gastly1.8x6.2bpp"
 	INCBIN "gfx/cards/gastly1.pal"
@@ -1576,7 +1576,7 @@ RaticateCardGfx:: ; e3ca0 (38:7ca0)
 	INCBIN "gfx/cards/raticate.8x6.2bpp"
 	INCBIN "gfx/cards/raticate.pal"
 
-SECTION "bank39", ROMX
+SECTION "Card Gfx 9", ROMX
 SpearowCardGfx:: ; e4000 (39:4000)
 	INCBIN "gfx/cards/spearow.8x6.2bpp"
 	INCBIN "gfx/cards/spearow.pal"
@@ -1661,7 +1661,7 @@ PorygonCardGfx:: ; e7ca0 (39:7ca0)
 	INCBIN "gfx/cards/porygon.8x6.2bpp"
 	INCBIN "gfx/cards/porygon.pal"
 
-SECTION "bank3A", ROMX
+SECTION "Card Gfx 10", ROMX
 SnorlaxCardGfx:: ; e8000 (3a:4000)
 	INCBIN "gfx/cards/snorlax.8x6.2bpp"
 	INCBIN "gfx/cards/snorlax.pal"
@@ -1746,7 +1746,7 @@ SwitchCardGfx:: ; ebca0 (3a:7ca0)
 	INCBIN "gfx/cards/switch.8x6.2bpp"
 	INCBIN "gfx/cards/switch.pal"
 
-SECTION "bank3B", ROMX
+SECTION "Card Gfx 11", ROMX
 PokemonCenterCardGfx:: ; ec000 (3b:4000)
 	INCBIN "gfx/cards/pokemoncenter.8x6.2bpp"
 	INCBIN "gfx/cards/pokemoncenter.pal"
@@ -1823,5 +1823,5 @@ rept $970
 db $ff
 endr
 
-SECTION "bank3C", ROMX
+SECTION "Empty Bank 3C", ROMX
 	emptybank

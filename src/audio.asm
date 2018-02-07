@@ -1,11 +1,11 @@
 INCLUDE "constants.asm"
 INCLUDE "macros.asm"
 
-SECTION "bank3D", ROMX
+SECTION "Audio 1", ROMX
 INCLUDE "audio/music1.asm"
 
-SECTION "bank3E", ROMX
+SECTION "Audio 2", ROMX
 INCLUDE "audio/music2.asm"
 
-SECTION "bank3F", ROMX
+SECTION "Audio 3", ROMX
 INCLUDE "audio/sfx.asm"

@@ -1,48 +1,48 @@
 INCLUDE "constants.asm"
 INCLUDE "macros.asm"
 
-SECTION "bankD", ROMX
+SECTION "Text 1", ROMX
 INCLUDE "text/text_offsets.asm"
 INCLUDE "text/text1.asm"
 
-SECTION "bankE", ROMX
+SECTION "Text 2", ROMX
 INCLUDE "text/text2.asm"
 
-SECTION "bankF", ROMX
+SECTION "Text 3", ROMX
 INCLUDE "text/text3.asm"
 
-SECTION "bank10", ROMX
+SECTION "Text 4", ROMX
 INCLUDE "text/text4.asm"
 
-SECTION "bank11", ROMX
+SECTION "Text 5", ROMX
 INCLUDE "text/text5.asm"
 
-SECTION "bank12", ROMX
+SECTION "Text 6", ROMX
 INCLUDE "text/text6.asm"
 
-SECTION "bank13", ROMX
+SECTION "Text 7", ROMX
 INCLUDE "text/text7.asm"
 
-SECTION "bank14", ROMX
+SECTION "Text 8", ROMX
 INCLUDE "text/text8.asm"
 
-SECTION "bank15", ROMX
+SECTION "Text 9", ROMX
 INCLUDE "text/text9.asm"
 
-SECTION "bank16", ROMX
+SECTION "Text A", ROMX
 INCLUDE "text/texta.asm"
 
-SECTION "bank17", ROMX
+SECTION "Text B", ROMX
 INCLUDE "text/textb.asm"
 
-SECTION "bank18", ROMX
+SECTION "Text C", ROMX
 INCLUDE "text/textc.asm"
 
-SECTION "bank19", ROMX
+SECTION "Text D", ROMX
 INCLUDE "text/textd.asm"
 
-SECTION "bank1A", ROMX
+SECTION "Empty Bank 1A", ROMX
 	emptybank
 
-SECTION "bank1B", ROMX
+SECTION "Empty Bank 1B", ROMX
 	emptybank

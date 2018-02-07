@@ -1216,7 +1216,7 @@ wBoosterDataTypeChanceData:: ; d689
 	ds $9
 	ds $6ee
 
-;--- Music ------------------------------------------------
+SECTION "WRAM Music", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80
@@ -1382,7 +1382,7 @@ wMusicCh3Stack:: ; de13
 wMusicCh4Stack:: ; de1f
 	ds $c
 
-;--- SFX --------------------------------------------------
+SECTION "WRAM Sfx", WRAMX
 
 wde2b:: ; de2b
 	ds $3
