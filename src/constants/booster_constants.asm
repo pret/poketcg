@@ -1,3 +1,5 @@
+NUM_CARDS_IN_BOOSTER EQU 10
+
 	const_def
 	const BOOSTER_CARD_TYPE_GRASS     ; $00
 	const BOOSTER_CARD_TYPE_FIRE      ; $01

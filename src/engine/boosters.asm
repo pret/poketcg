@@ -2,20 +2,21 @@ GenerateBoosterPack: ; 1e1c4 (7:61c4)
 	push hl
 	push bc
 	push de
-	ld [wBoosterDataIndex], a
+	ld [wBoosterIndex], a
 .noCardsFoundLoop
 	call InitBoosterData
-	call GenerateBoosterEnergy
-	call GenerateBoosterCard
+	call GenerateBoosterEnergies
+	call GenerateBoosterNonEnergies
 	jr c, .noCardsFoundLoop
-	call CopyBoosterEnergiesToBooster
+	call PutEnergiesAndNonEnergiesTogether
 	call AddBoosterCardsToCollection
 	pop de
 	pop bc
 	pop hl
 	ret
 
-GenerateBoosterCard: ; 1e1df (7:61df)
+; generate all Pokemon or Trainer cards (if any) for the current booster pack
+GenerateBoosterNonEnergies: ; 1e1df (7:61df)
 	ld a, STAR
 	ld [wBoosterCurRarity], a
 .generateCardLoop
@@ -31,7 +32,7 @@ GenerateBoosterCard: ; 1e1df (7:61df)
 	call DetermineBoosterCardType
 	call FindBoosterCard
 	call UpdateBoosterCardTypesChanceByte
-	call AddCardToBoosterList
+	call AddBoosterCardToDrawnNonEnergies
 	call FindCurRarityChance
 	dec [hl]
 	jr .generateCardLoop
@@ -48,6 +49,7 @@ GenerateBoosterCard: ; 1e1df (7:61df)
 	scf
 	ret
 
+; return hl pointing to wBoosterData<Rarity>Amount[wBoosterCurRarity]
 FindCurRarityChance: ; 1e219 (7:6219)
 	push bc
 	ld hl, wBoosterDataCommonAmount
@@ -73,8 +75,8 @@ FindCardsInSetAndRarity: ; 1e226 (7:6226)
 .checkCardViableLoop
 	push de
 	ld a, e
-	ld [wBoosterTempData], a
-	call CheckByteInWramZeroed
+	ld [wBoosterTempCard], a
+	call IsByteInTempCardCollectionZero
 	jr c, .finishedWithCurrentCard
 	call CheckCardViable
 	jr c, .finishedWithCurrentCard
@@ -88,7 +90,7 @@ FindCardsInSetAndRarity: ; 1e226 (7:6226)
 	add hl, bc
 	inc [hl]
 	pop hl
-	ld a, [wBoosterTempData]
+	ld a, [wBoosterTempCard]
 	ld [hli], a
 	pop af
 	ld [hli], a
@@ -124,7 +126,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	swap a
 	and $0f
 	ld c, a
-	ld a, [wBoosterDataCurSet]
+	ld a, [wBoosterDataSet]
 	cp c
 	jr nz, .invalidCard
 .returnValidCard
@@ -188,7 +190,7 @@ FindTotalTypeChances: ; 1e2c2 (7:62c2)
 	ld a, [hl]
 	or a
 	jr z, .amountOfTypeOrChanceZero
-	ld hl, wBoosterDataTypeChanceData
+	ld hl, wBoosterDataTypeChances
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -203,7 +205,7 @@ FindTotalTypeChances: ; 1e2c2 (7:62c2)
 	pop bc
 	inc c
 	ld a, c
-	cp $09
+	cp NUM_BOOSTER_CARD_TYPES
 	jr c, .checkIfTypeIsValid
 	ld a, [wd4ca]
 	ret
@@ -226,7 +228,7 @@ DetermineBoosterCardType: ; 1e2fa (7:62fa)
 	ld a, c
 	cp a, NUM_BOOSTER_CARD_TYPES
 	jr c, .loopThroughCardTypes
-	ld a, $08
+	ld a, BOOSTER_CARD_TYPE_ENERGY
 .foundCardType
 	ld a, c
 	ld [wBoosterSelectedCardType], a
@@ -246,7 +248,7 @@ FindBoosterCard: ; 1e31d (7:631d)
 	ld a, [hli]
 	or a
 	jr z, .noValidCardFound
-	ld [wBoosterTempData], a
+	ld [wBoosterTempCard], a
 	ld a, [wBoosterSelectedCardType]
 	cp [hl]
 	jr nz, .cardIncorrectType
@@ -266,16 +268,18 @@ FindBoosterCard: ; 1e31d (7:631d)
 	scf
 	ret
 
-; lowers the chance of getting the same type multiple times
+; lowers the chance of getting the same type multiple times.
+; more specifically, when a card of type T is drawn, T's new chances become
+; min (1, wBoosterDataTypeChances[T] - wBoosterAveragedTypeChances).
 UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
 	push hl
 	push bc
 	ld a, [wBoosterSelectedCardType]
 	ld c, a
 	ld b, $00
-	ld hl, wBoosterDataTypeChanceData
+	ld hl, wBoosterDataTypeChances
 	add hl, bc
-	ld a,[wBoosterDataAveragedChance]
+	ld a,[wBoosterAveragedTypeChances]
 	ld c, a
 	ld a, [hl]
 	sub c
@@ -290,7 +294,9 @@ UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
 	pop hl
 	ret
 
-GenerateBoosterEnergy: ; 1e3db (7:63db)
+; generates between 0 and 10 energy cards for the current booster.
+; the amount of energies and their probabilities vary with each booster.
+GenerateBoosterEnergies: ; 1e3db (7:63db)
 	ld hl, wBoosterDataEnergyFunctionPointer + 1
 	ld a, [hld]
 	or a
@@ -301,25 +307,27 @@ GenerateBoosterEnergy: ; 1e3db (7:63db)
 .noFunctionPointer
 	ld a, [hl]
 	or a
-	ret z
+	ret z ; return if no hardcoded energy either
 	push af
-	call AddBoosterEnergyToWram
+	call AddBoosterEnergyToDrawnEnergies
 	pop af
 	ret
 
-AddBoosterEnergyToWram: ; 1e380 (7:6380)
-	ld [wBoosterTempData], a
-	call AddCardToBoosterEnergies
+AddBoosterEnergyToDrawnEnergies: ; 1e380 (7:6380)
+	ld [wBoosterTempCard], a
+	call AddBoosterCardToDrawnEnergies
 	ret
 
+; generates a random energy card
 GenerateEndingEnergy: ; 1e387 (7:6387)
-	ld a, $06
+	ld a, COLORLESS - FIRE
 	call Random
 	add a, $01
-	jr AddBoosterEnergyToWram
+	jr AddBoosterEnergyToDrawnEnergies
 
-GenerateRandomEnergyBoosterPack:  ; 1e390 (7:6390)
-	ld a, $0a
+; generates a booster with 10 random energies
+GenerateRandomEnergyBooster:  ; 1e390 (7:6390)
+	ld a, NUM_CARDS_IN_BOOSTER
 .generateEnergyLoop
 	push af
 	call GenerateEndingEnergy
@@ -330,25 +338,26 @@ GenerateRandomEnergyBoosterPack:  ; 1e390 (7:6390)
 
 GenerateEnergyBoosterLightningFire:  ; 1e39c (7:639c)
 	ld hl, EnergyBoosterLightningFireData
-	jr CreateEnergyBooster
+	jr GenerateTwoTypesEnergyBooster
 
 GenerateEnergyBoosterWaterFighting:  ; 1e3a1 (7:63a1)
 	ld hl, EnergyBoosterWaterFightingData
-	jr CreateEnergyBooster
+	jr GenerateTwoTypesEnergyBooster
 
 GenerateEnergyBoosterGrassPsychic:  ; 1e3a6 (7:63a6)
 	ld hl, EnergyBoosterGrassPsychicData
-	jr CreateEnergyBooster
+	jr GenerateTwoTypesEnergyBooster
 
-CreateEnergyBooster:  ; 1e3ab (7:63ab)
+; generates a booster with 5 energies of 2 different types each
+GenerateTwoTypesEnergyBooster:  ; 1e3ab (7:63ab)
 	ld b, $02
 .addTwoEnergiesToBoosterLoop
-	ld c, $05
+	ld c, NUM_CARDS_IN_BOOSTER / 2
 .addEnergyToBoosterLoop
 	push hl
 	push bc
 	ld a, [hl]
-	call AddBoosterEnergyToWram
+	call AddBoosterEnergyToDrawnEnergies
 	pop bc
 	pop hl
 	dec c
@@ -370,17 +379,17 @@ EnergyBoosterWaterFightingData:
 EnergyBoosterGrassPsychicData:
 	db GRASS_ENERGY, PSYCHIC_ENERGY
 
-AddCardToBoosterEnergies: ; 1e3cf (7:63cf)
+AddBoosterCardToDrawnEnergies: ; 1e3cf (7:63cf)
 	push hl
-	ld hl, wPlayerDeck + $b
+	ld hl, wBoosterTempEnergiesDrawn
 	call CopyToFirstEmptyByte
 	call AddBoosterCardToTempCardCollection
 	pop hl
 	ret
 
-AddCardToBoosterList: ; 1e3db (7:63db)
+AddBoosterCardToDrawnNonEnergies: ; 1e3db (7:63db)
 	push hl
-	ld hl, wPlayerDeck
+	ld hl, wBoosterTempNonEnergiesDrawn
 	call CopyToFirstEmptyByte
 	call AddBoosterCardToTempCardCollection
 	pop hl
@@ -391,22 +400,23 @@ CopyToFirstEmptyByte: ; 1e3e7 (7:63e7)
 	or a
 	jr nz, CopyToFirstEmptyByte
 	dec hl
-	ld a, [wBoosterTempData]
+	ld a, [wBoosterTempCard]
 	ld [hli], a
 	xor a
 	ld [hl], a
 	ret
 
-CopyBoosterEnergiesToBooster: ; 1e3f3 (7:63f3)
+; trim empty slots in wBoosterCardsDrawn between regular cards and energies
+PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
 	push hl
-	ld hl, wPlayerDeck + $b
+	ld hl, wBoosterTempEnergiesDrawn
 .loopThroughExtraCards
 	ld a, [hli]
 	or a
 	jr z, .endOfCards
-	ld [wBoosterTempData], a
+	ld [wBoosterTempCard], a
 	push hl
-	ld hl, wPlayerDeck
+	ld hl, wBoosterTempNonEnergiesDrawn
 	call CopyToFirstEmptyByte
 	pop hl
 	jr .loopThroughExtraCards
@@ -416,7 +426,7 @@ CopyBoosterEnergiesToBooster: ; 1e3f3 (7:63f3)
 
 AddBoosterCardsToCollection:; 1e40a (7:640a)
 	push hl
-	ld hl, wPlayerDeck
+	ld hl, wBoosterCardsDrawn
 .addCardsLoop
 	ld a, [hli]
 	or a
@@ -430,16 +440,16 @@ AddBoosterCardsToCollection:; 1e40a (7:640a)
 AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
 	push hl
 	ld h, wTempCardCollection >> 8
-	ld a, [wBoosterTempData]
+	ld a, [wBoosterTempCard]
 	ld l, a
 	inc [hl]
 	pop hl
 	ret
 
-CheckByteInWramZeroed: ; 1e423 (7:6423)
+IsByteInTempCardCollectionZero: ; 1e423 (7:6423)
 	push hl
 	ld h, wTempCardCollection >> 8
-	ld a, [wBoosterTempData]
+	ld a, [wBoosterTempCard]
 	ld l, a
 	ld a, [hl]
 	pop hl
@@ -447,17 +457,18 @@ CheckByteInWramZeroed: ; 1e423 (7:6423)
 	ccf
 	ret
 
-; clears wPlayerDeck and wTempCardCollection
-; copies rarity amounts to ram and averages them into wBoosterDataAveragedChance
+; clears wBoosterCardsDrawn and wTempCardCollection
+; copies booster data to wBoosterData* *CurSet, *EnergyFunctionPointer, and *TypeChances
+; copies rarity amounts to wBoosterData*Amount and averages them into wBoosterAveragedTypeChances
 InitBoosterData: ; 1e430 (7:6430)
-	ld c, $16
-	ld hl, wPlayerDeck
+	ld c, wBoosterCardsDrawnEnd - wBoosterCardsDrawn
+	ld hl, wBoosterCardsDrawn
 	xor a
 .clearPlayerDeckLoop
 	ld [hli], a
 	dec c
 	jr nz, .clearPlayerDeckLoop
-	ld c, $00
+	ld c, $00 ; $100
 	ld hl, wTempCardCollection
 	xor a
 .clearTempCardCollectionLoop
@@ -465,14 +476,14 @@ InitBoosterData: ; 1e430 (7:6430)
 	dec c
 	jr nz, .clearTempCardCollectionLoop
 	call FindBoosterDataPointer
-	ld de, wBoosterDataCurSet
-	ld bc, $c
-	call CopyDataHLtoDE
+	ld de, wBoosterDataSet
+	ld bc, wBoosterDataTypeChances - wBoosterDataSet + NUM_BOOSTER_CARD_TYPES ; Pack2 - Pack1
+	call CopyDataHLtoDE	; load booster pack data to wram
 	call LoadRarityAmountsToWram
 	ld bc, $0
 	ld d, NUM_BOOSTER_CARD_TYPES
 	ld e, $0
-	ld hl, wBoosterDataTypeChanceData
+	ld hl, wBoosterDataTypeChances
 .addChanceBytesLoop
 	ld a, [hli]
 	or a
@@ -485,12 +496,12 @@ InitBoosterData: ; 1e430 (7:6430)
 	jr nz, .addChanceBytesLoop
 	call DivideBCbyDE
 	ld a, c
-	ld [wBoosterDataAveragedChance], a
+	ld [wBoosterAveragedTypeChances], a
 	ret
 
 FindBoosterDataPointer: ; 1e46f (7:646f)
 	push bc
-	ld a, [wBoosterDataIndex]
+	ld a, [wBoosterIndex]
 	add a
 	ld c, a
 	ld b, $0
@@ -534,7 +545,7 @@ BoosterDataJumptable: ; 1e480 (7:6480)
 	dw PackRandomEnergies
 
 LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
-	ld a, [wBoosterDataCurSet]
+	ld a, [wBoosterDataSet]
 	add a
 	add a
 	ld c, a
@@ -551,10 +562,18 @@ LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
 	ret
 
 BoosterSetRarityAmountTable: ; 1e4d4 (7::64d4)
-	db $01, $05, $03, $01 ; other, commons, uncommons, rares
-	db $01, $05, $03, $01 ; other, commons, uncommons, rares
-	db $00, $06, $03, $01 ; other, commons, uncommons, rares
-	db $00, $06, $03, $01 ; other, commons, uncommons, rares
+; energies, commons, uncommons, rares
+; commons + uncommons + rares needs to be equal to 10 minus the number of energy cards
+; defined in the pack's data below; otherwise, the number of cards in the pack won't be 10.
+	db $01, $05, $03, $01 ; COLOSSEUM >> 4
+	db $01, $05, $03, $01 ; EVOLUTION >> 4
+	db $00, $06, $03, $01 ; MYSTERY >> 4
+	db $00, $06, $03, $01 ; LABORATORY >> 4
+
+; For the energy or energy generation function, there are three options:
+; - Ponter to a function that generates energies (some generate one, some generate a full pack)
+; - A single energy of a specific type
+; - $0000 if no card in the pack is an energy
 
 PackColosseumNeutral:: ; 1e4e4 (7:64e4)
 	db COLOSSEUM >> 4 ; booster pack set
@@ -978,7 +997,7 @@ PackEnergyGrassPsychic:: ; 1e628 (7:6628)
 
 PackRandomEnergies:: ; 1e634 (7:6634)
 	db COLOSSEUM >> 4 ; booster pack set
-	dw GenerateRandomEnergyBoosterPack ; energy or energy generation function
+	dw GenerateRandomEnergyBooster ; energy or energy generation function
 
 ; Card Type Chances
 	db $00 ; Grass Type Chance

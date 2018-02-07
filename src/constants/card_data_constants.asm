@@ -2,7 +2,7 @@ PKMN_CARD_DATA_LENGTH   EQU $41
 TRN_CARD_DATA_LENGTH    EQU $0e
 ENERGY_CARD_DATA_LENGTH EQU $0e
 
-;;; generic types
+;;; generic type constants
 ; double up as Pokemon card types
 	const_def
 	const FIRE        ; $0

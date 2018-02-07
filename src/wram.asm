@@ -194,8 +194,21 @@ wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 
 	ds $d
 
+UNION
+
 wPlayerDeck:: ; c400
 	ds $80
+
+NEXTU
+
+wBoosterCardsDrawn:: ; c400
+wBoosterTempNonEnergiesDrawn:: ; c400
+	ds $b
+wBoosterTempEnergiesDrawn:: ; c40b
+	ds $b
+wBoosterCardsDrawnEnd::
+
+ENDU
 
 wOpponentDeck:: ; c480
 	ds $80
@@ -1194,10 +1207,10 @@ wd633:: ; d633
 wd635:: ; d635
 	ds $34
 
-wBoosterDataIndex:: ; d669
+wBoosterIndex:: ; d669
 	ds $1
 
-wBoosterTempData:: ; d66a
+wBoosterTempCard:: ; d66a
 	ds $1
 
 wBoosterSelectedCardType:: ; d66b
@@ -1206,7 +1219,7 @@ wBoosterSelectedCardType:: ; d66b
 wBoosterCurRarity:: ; d66c
 	ds $1
 
-wBoosterDataAveragedChance:: ; d66d
+wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
 wBoosterDataCommonAmount:: ; d66e
@@ -1233,13 +1246,13 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
-wBoosterDataCurSet:: ; d686
+wBoosterDataSet:: ; d686
 	ds $1
 
 wBoosterDataEnergyFunctionPointer:: ; d687
 	ds $2
 
-wBoosterDataTypeChanceData:: ; d689
+wBoosterDataTypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
 	ds $6ee

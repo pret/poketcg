@@ -1375,7 +1375,7 @@ HtimesL: ; 0879 (0:0879)
 	ret
 ; 0x88f
 
-; return a random number between 0 and a in a
+; return a random number between 0 and a (exclusive) in a
 Random: ; 088f (0:088f)
 	push hl
 	ld h, a
