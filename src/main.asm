@@ -23,7 +23,9 @@ INCLUDE "engine/bank6.asm"
 
 SECTION "bank7", ROMX
 INCLUDE "engine/bank7.asm"
-INCLUDE "engine/boosters.asm"
+
+SECTION "Booster Packs", ROMX
+INCLUDE "engine/booster_packs.asm"
 
 SECTION "bank8", ROMX
 INCLUDE "engine/bank8.asm"

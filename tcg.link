@@ -41,6 +41,7 @@ ROMX $06
 	"bank6"
 ROMX $07
 	"bank7"
+	"Booster Packs"
 ROMX $08
 	"bank8"
 ROMX $09
@@ -155,12 +156,12 @@ ROMX $3e
 ROMX $3f
 	"Audio 3"
 WRAM0
-	"WRAM Temp Card Collection"
-	"WRAM Duel Variables"
+	"WRAM 0"
+	"WRAM Duels 1"
 	"WRAM Text Engine"
 	"WRAM Engine 1"
 	"WRAM Serial transfer bytes"
-	"WRAM Duels"
+	"WRAM Duels 2"
 	"WRAM Engine 2"
 WRAMX 1
 	"WRAM1"

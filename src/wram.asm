@@ -3,14 +3,14 @@ INCLUDE "constants.asm"
 
 INCLUDE "vram.asm"
 
-SECTION "WRAM Temp Card Collection", WRAM0
+SECTION "WRAM 0", WRAM0
 
 wTempCardCollection:: ; c000
 	ds $100
 
 	ds $100
 
-SECTION "WRAM Duel Variables", WRAM0
+SECTION "WRAM Duels 1", WRAM0
 
 wPlayerDuelVariables:: ; c200
 
@@ -410,7 +410,7 @@ wSerialRecvBuf:: ; cba5 - cbc4
 
 	ds $1
 
-SECTION "WRAM Duels", WRAM0
+SECTION "WRAM Duels 2", WRAM0
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
