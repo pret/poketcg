@@ -5328,6 +5328,7 @@ WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 
 Func_2af0: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
+Func_2af3: ; 2af3 (0:2af3)
 	ld de, $0710
 	call Func_2b66
 	ld de, $0610

@@ -48,7 +48,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ld [$ff9f], a
 	bank1call $35a9
 	jp c, $41a8
-	call $1944
+	call Func_1944
 	ld a, $1
 	call TryExecuteEffectCommandFunction
 	jp c, $41a8
@@ -85,7 +85,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	pop hl
 	and $8
 	jp z, $40f7
-	call $123b
+	call CreateHandCardBuffer
 	ld hl, wDuelCardOrAttackList
 	ld de, $cf68
 	call $697b

@@ -73,7 +73,7 @@ Func_14226: ; 14226 (5:4226)
 	jr nz, .checkForNextPokemon
 	push hl
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	pop hl
 	jr .checkForNextPokemon
 ; 0x1424b

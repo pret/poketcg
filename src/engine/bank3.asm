@@ -1181,7 +1181,7 @@ Func_c8ed: ; c8ed (3:c8ed)
 	jr .asm_c911
 
 .asm_c90e
-	call $2af3
+	call Func_2af3
 
 .asm_c911
 	pop de
@@ -1590,7 +1590,7 @@ RST20: ; cc42 (3:4c42)
 	ld [wBreakOWScriptLoop], a
 .asm_cc4f
 	call RunOverworldScript
-	ld a, [wBreakOWScriptLoop] ; if you break out, it jumps 
+	ld a, [wBreakOWScriptLoop] ; if you break out, it jumps
 	or a
 	jr z, .asm_cc4f
 	ld hl, wOWScriptPointer
@@ -2032,7 +2032,7 @@ Func_cf0c: ; cf0c (3:4f0c)
 
 Func_cf12: ; cf12 (3:4f12)
 	ld a, c
-	call $1d1d
+	call Func_1d1d
 
 asm_cf16
 	or a
@@ -2236,7 +2236,7 @@ Func_d025: ; d025 (3:5025)
 Func_d032: ; d032 (3:5032)
 	call Func_ca69
 	dec hl
-	call $1d1d
+	call Func_1d1d
 	jp c, Func_cf67
 	jp Func_cf6d
 
@@ -2876,7 +2876,7 @@ Func_d4ae: ; d4ae (3:54ae)
 	cp c
 	jr c, Func_d490 ; 0xd4b2 $dc
 	jr Func_d48a ; 0xd4b4 $d4
-	
+
 Func_d4b6: ; d4b6 (3:54b6)
 	ld a, c
 	ld c, b
@@ -2962,7 +2962,7 @@ OWSequence_d753: ; d753 (3:5753)
 	db $80
 	db $58
 	db $02
-	
+
 	; there's more to this script but it hasn't been disassembled yet
 
 	INCROM $d77e, $e13f
@@ -3113,7 +3113,7 @@ OWSequence_Joshua:
 	run_script Func_d484
 	db $33
 	db $01
-	
+
 	INCROM $e23f, $e52c
 
 FindEndOfBattleScript: ; e52c (3:652c)

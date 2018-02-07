@@ -516,7 +516,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 .alreadyPlayedEnergy
 	text_hl OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
-	call $123b
+	call CreateHandCardBuffer
 	call $55be
 	jp $4447
 ; 0x44db
@@ -994,7 +994,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call Func_4cd5
 	call SwapTurn
 	jp c, $4c77
-	call $311d
+	call Func_311d
 	ld hl, $0072
 	call DrawWideTextBox_WaitForInput
 	call Func_0f58
@@ -1117,7 +1117,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call $51e7
 	jr c, .asm_4d28
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	ld a, [$ff98]
 	ld hl, $0062
 	call $4b31
@@ -1141,7 +1141,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	cp $6
 	jr nc, .asm_4d86
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	ld a, [$ff98]
 	ld hl, $0061
 	call $4b31
@@ -1391,7 +1391,7 @@ _TossCoin: ; 71ad (1:71ad)
 	xor a
 	ld [wcd9f], a
 	call Func_04a2
-	call $210f
+	call Func_210f
 
 .asm_71c1
 	ld a, [wcd9f]

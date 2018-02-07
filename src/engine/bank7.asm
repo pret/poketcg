@@ -135,7 +135,7 @@ Func_1c50a: ; 1c50a (7:450a)
 	push hl
 	call Func_1c719
 	ld a, [wd3aa]
-	call $39a7
+	call Func_39a7
 	ld a, [hl]
 	or a
 	jr z, .asm_1c52c
@@ -265,7 +265,7 @@ Func_1c768: ; 1c768 (7:4768)
 	ld a, $02
 	farcall Func_c29b
 	ld a, [wd3aa]
-	call $39a7
+	call Func_39a7
 	ld a, [hl]
 	farcall Func_1187d
 	pop hl
