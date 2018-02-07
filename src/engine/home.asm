@@ -938,13 +938,54 @@ Func_0686: ; 0686 (0:0686)
 	ret
 ; 0x695
 
-	INCROM $0695, $06c3
+Func_0695: ; 0695 (0:0695)
+	call Func_069d
+	bit 7, [hl]
+	jr z, Func_0695
+	ret
+; 0x69d
+
+Func_069d: ; 069d (0:069d)
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	push hl
+	push bc
+	ld b, $ff
+.asm_6a5
+	inc b
+	ld a, [hli]
+	or a
+	jr nz, .asm_6a5
+	ld a, b
+	pop bc
+	push af
+	call BCCoordToBGMap0Address
+	pop af
+	ld b, a
+	pop hl
+	or a
+	jr z, .asm_6bd
+	push bc
+	push hl
+	call SafeCopyDataHLtoDE
+	pop hl
+	pop bc
+
+.asm_6bd
+	inc b
+	ld c, b
+	ld b, $0
+	add hl, bc
+	ret
+; 0x6c3
 
 Func_06c3: ; 06c3 (0:06c3)
 	push af
 	ld a, [wLCDC]
 	rla
-	jr c, .asm_6d8
+	jr c, .lcd_on
 	pop af
 	push hl
 	push de
@@ -957,12 +998,12 @@ Func_06c3: ; 06c3 (0:06c3)
 	pop de
 	pop hl
 	ret
-.asm_6d8
+.lcd_on
 	pop af
 	push hl
 	push de
 	push bc
-	ld hl, $cac1
+	ld hl, wcac1
 	push hl
 	ld [hl], a
 	call BCCoordToBGMap0Address
@@ -975,7 +1016,19 @@ Func_06c3: ; 06c3 (0:06c3)
 	ret
 ; 0x6ee
 
-	INCROM $06ee, $06fc
+; copy a bytes of data from hl to vBGMap0 address pointed to by coord at bc
+Func_06ee: ; 06ee (0:06ee)
+	push bc
+	push hl
+	push af
+	call BCCoordToBGMap0Address
+	pop af
+	ld b, a
+	pop hl
+	call SafeCopyDataHLtoDE
+	pop bc
+	ret
+; 0x6fc
 
 ; memcpy(DE, HL, B)
 ; if LCD on, copy during h-blank only
@@ -1770,7 +1823,48 @@ SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
 	sgb MLT_REQ, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-	INCROM $0bcb, $0c08
+Func_0bcb: ; 0bcb (0:0bcb)
+	di
+	push de
+.wait_vbalnk
+	ld a, [rLY]
+	cp LY_VBLANK + 3
+	jr nz, .wait_vbalnk
+	ld a, $43
+	ld [rLCDC], a
+	ld a, $e4
+	ld [rBGP], a
+	ld de, vTiles1
+	ld bc, vBGMapTiles - vTiles1
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	ld hl, vBGMapTiles
+	ld de, $000c
+	ld a, $80
+	ld c, $d
+.asm_bf3
+	ld b, $14
+.asm_bf5
+	ld [hli], a
+	inc a
+	dec b
+	jr nz, .asm_bf5
+	add hl, de
+	dec c
+	jr nz, .asm_bf3
+	ld a, $c3
+	ld [rLCDC], a
+	pop hl
+	call SendSGB
+	ei
+	ret
+; 0xc08
 
 ; loops 63000 * bc cycles (~15 * bc ms)
 Wait: ; 0c08 (0:0c08)

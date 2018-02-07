@@ -280,6 +280,8 @@ wFlushPaletteFlags:: ; cabf
 
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
+	
+wcac1:: ; cac1	
 	ds $1
 
 wcac2:: ; cac2
