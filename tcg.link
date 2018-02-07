@@ -70,13 +70,13 @@ ROMX $14
 ROMX $15
 	"Text 9"
 ROMX $16
-	"Text A"
+	"Text 10"
 ROMX $17
-	"Text B"
+	"Text 11"
 ROMX $18
-	"Text C"
+	"Text 12"
 ROMX $19
-	"Text D"
+	"Text 13"
 ROMX $1a
 	"Empty Bank 1A"
 ROMX $1b

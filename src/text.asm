@@ -29,17 +29,17 @@ INCLUDE "text/text8.asm"
 SECTION "Text 9", ROMX
 INCLUDE "text/text9.asm"
 
-SECTION "Text A", ROMX
-INCLUDE "text/texta.asm"
+SECTION "Text 10", ROMX
+INCLUDE "text/text10.asm"
 
-SECTION "Text B", ROMX
-INCLUDE "text/textb.asm"
+SECTION "Text 11", ROMX
+INCLUDE "text/text11.asm"
 
-SECTION "Text C", ROMX
-INCLUDE "text/textc.asm"
+SECTION "Text 12", ROMX
+INCLUDE "text/text12.asm"
 
-SECTION "Text D", ROMX
-INCLUDE "text/textd.asm"
+SECTION "Text 13", ROMX
+INCLUDE "text/text13.asm"
 
 SECTION "Empty Bank 1A", ROMX
 	emptybank
