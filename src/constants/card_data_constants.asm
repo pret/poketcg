@@ -2,22 +2,18 @@ PKMN_CARD_DATA_LENGTH   EQU $41
 TRN_CARD_DATA_LENGTH    EQU $0e
 ENERGY_CARD_DATA_LENGTH EQU $0e
 
-DECK_NAME_SIZE   EQU  24
-DECK_SIZE        EQU  60
-BENCH_SIZE       EQU   5
-
 ;;; generic types
 ; double up as Pokemon card types
-FIRE        EQU $0
-GRASS       EQU $1
-LIGHTNING   EQU $2
-WATER       EQU $3
-FIGHTING    EQU $4
-PSYCHIC     EQU $5
-COLORLESS   EQU $6
-UNUSED_TYPE EQU $7
-
-NUM_TYPES EQU UNUSED_TYPE + 1 - FIRE
+	const_def
+	const FIRE        ; $0
+	const GRASS       ; $1
+	const LIGHTNING   ; $2
+	const WATER       ; $3
+	const FIGHTING    ; $4
+	const PSYCHIC     ; $5
+	const COLORLESS   ; $6
+	const UNUSED_TYPE ; $7
+NUM_TYPES EQU const_value
 
 ;;; card types
 TYPE_PKMN_FIRE               EQUS "FIRE"
@@ -28,16 +24,18 @@ TYPE_PKMN_FIGHTING           EQUS "FIGHTING"
 TYPE_PKMN_PSYCHIC            EQUS "PSYCHIC"
 TYPE_PKMN_COLORLESS          EQUS "COLORLESS"
 TYPE_PKMN_UNUSED             EQUS "UNUSED_TYPE"
-TYPE_ENERGY_FIRE             EQU $8
-TYPE_ENERGY_GRASS            EQU $9
-TYPE_ENERGY_LIGHTNING        EQU $A
-TYPE_ENERGY_WATER            EQU $B
-TYPE_ENERGY_FIGHTING         EQU $C
-TYPE_ENERGY_PSYCHIC          EQU $D
-TYPE_ENERGY_DOUBLE_COLORLESS EQU $E
-TYPE_ENERGY_UNUSED           EQU $F
-TYPE_TRAINER                 EQU $10
-TYPE_TRAINER_UNUSED          EQU $11
+const_value set TYPE_PKMN_UNUSED + 1 - TYPE_PKMN_FIRE
+	const TYPE_ENERGY_FIRE              ; $8
+	const TYPE_ENERGY_GRASS             ; $9
+	const TYPE_ENERGY_LIGHTNING         ; $A
+	const TYPE_ENERGY_WATER             ; $B
+	const TYPE_ENERGY_FIGHTING          ; $C
+	const TYPE_ENERGY_PSYCHIC           ; $D
+	const TYPE_ENERGY_DOUBLE_COLORLESS  ; $E
+	const TYPE_ENERGY_UNUSED            ; $F
+	const TYPE_TRAINER                  ; $10
+	const TYPE_TRAINER_UNUSED           ; $11
+NUM_CARD_TYPES EQU const_value + -1
 
 TYPE_ENERGY_F EQU 3
 

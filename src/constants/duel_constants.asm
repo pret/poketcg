@@ -1,3 +1,7 @@
+DECK_NAME_SIZE   EQU  24
+DECK_SIZE        EQU  60
+BENCH_SIZE       EQU   5
+
 PLAYER_TURN   EQUS "wPlayerDuelVariables >> $8"
 OPPONENT_TURN EQUS "wOpponentDuelVariables >> $8"
 
