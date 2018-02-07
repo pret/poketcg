@@ -1203,7 +1203,7 @@ wBoosterTempData:: ; d66a
 wBoosterSelectedCardType:: ; d66b
 	ds $1
 
-wBoosterCurrRarity:: ; d66c
+wBoosterCurRarity:: ; d66c
 	ds $1
 
 wBoosterDataAveragedChance:: ; d66d
@@ -1219,10 +1219,10 @@ wBoosterDataRareAmount:: ; d670
 	ds $1
 
 wBoosterAmountOfCardTypeTable:: ; d671
-	ds $09
+	ds NUM_BOOSTER_CARD_TYPES
 
 wBoosterTempTypeChanceTable:: ; d67a
-	ds $09
+	ds NUM_BOOSTER_CARD_TYPES
 
 wBoosterCurrentCardType:: ; d683
 	ds $1
@@ -1233,14 +1233,14 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
-wBoosterDataCurrSet:: ; d686
+wBoosterDataCurSet:: ; d686
 	ds $1
 
 wBoosterDataEnergyFunctionPointer:: ; d687
 	ds $2
 
 wBoosterDataTypeChanceData:: ; d689
-	ds $9
+	ds NUM_BOOSTER_CARD_TYPES
 
 	ds $6ee
 

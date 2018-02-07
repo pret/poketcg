@@ -2926,7 +2926,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld a, l
 	call LoadDeckCardToBuffer2
 	ld a, [wLoadedCard2Type]
-	bit ENERGY_CARD_F, a
+	bit TYPE_ENERGY_F, a
 	jr z, .not_an_energy_card
 	and $7 ; zero bit 3 to extract the type
 	ld e, a

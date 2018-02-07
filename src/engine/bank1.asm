@@ -472,7 +472,7 @@ Func_4436: ; 4436 (1:4436)
 ; c contains the energy card being played
 PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, c
-	cp WATER_ENERGY_CARD ; XXX why treat water energy card differently?
+	cp TYPE_ENERGY_WATER ; XXX why treat water energy card differently?
 	jr nz, .notWaterEnergy
 	call $3615
 	jr c, .waterEnergy
@@ -1285,14 +1285,14 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 ConvertTrainerCardToPokemon:
 	ld c, a
 	ld a, [hl]
-	cp TRAINER_CARD
+	cp TYPE_TRAINER
 	ret nz
 	push hl
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, c
 	ld a, [hl]
-	and TRAINER_CARD
+	and TYPE_TRAINER
 	pop hl
 	ret z
 	ld a, e

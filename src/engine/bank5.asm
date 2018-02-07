@@ -66,7 +66,7 @@ Func_14226: ; 14226 (5:4226)
 	ret z
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1Type]
-	cp FIRE_ENERGY_CARD
+	cp TYPE_ENERGY_FIRE
 	jr nc, .checkForNextPokemon
 	ld a, [wLoadedCard1Stage]
 	or a

@@ -17,9 +17,9 @@ GenerateBoosterPack: ; 1e1c4 (7:61c4)
 
 GenerateBoosterCard: ; 1e1df (7:61df)
 	ld a, STAR
-	ld [wBoosterCurrRarity], a
+	ld [wBoosterCurRarity], a
 .generateCardLoop
-	call FindCurrRarityChance
+	call FindCurRarityChance
 	ld a, [hl]
 	or a
 	jr z, .noMoreOfCurrentRarity
@@ -32,14 +32,14 @@ GenerateBoosterCard: ; 1e1df (7:61df)
 	call FindBoosterCard
 	call UpdateBoosterCardTypesChanceByte
 	call AddCardToBoosterList
-	call FindCurrRarityChance
+	call FindCurRarityChance
 	dec [hl]
 	jr .generateCardLoop
 .noMoreOfCurrentRarity
-	ld a, [wBoosterCurrRarity]
+	ld a, [wBoosterCurRarity]
 	dec a
-	ld [wBoosterCurrRarity], a
-	bit 7, a
+	ld [wBoosterCurRarity], a
+	bit 7, a ; any rarity left to check?
 	jr z, .generateCardLoop
 	or a
 	ret
@@ -48,10 +48,10 @@ GenerateBoosterCard: ; 1e1df (7:61df)
 	scf
 	ret
 
-FindCurrRarityChance: ; 1e219 (7:6219)
+FindCurRarityChance: ; 1e219 (7:6219)
 	push bc
 	ld hl, wBoosterDataCommonAmount
-	ld a, [wBoosterCurrRarity]
+	ld a, [wBoosterCurRarity]
 	ld c, a
 	ld b, $0
 	add hl, bc
@@ -113,7 +113,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	ld [wBoosterCurrentCardSet], a
 	ld a, [wBoosterCurrentCardRarity]
 	ld c, a
-	ld a, [wBoosterCurrRarity]
+	ld a, [wBoosterCurRarity]
 	cp c
 	jr nz, .invalidCard
 	ld a, [wBoosterCurrentCardType]
@@ -124,7 +124,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	swap a
 	and $0f
 	ld c, a
-	ld a, [wBoosterDataCurrSet]
+	ld a, [wBoosterDataCurSet]
 	cp c
 	jr nz, .invalidCard
 .returnValidCard
@@ -136,16 +136,17 @@ CheckCardViable: ; 1e268 (7:6268)
 	pop bc
 	ret
 
+; Map a card's TYPE_* constant given in a to its BOOSTER_CARD_TYPE_* constant
 GetCardType: ; 1e2a0 (7:62a0)
 	push hl
 	push bc
 	ld hl, CardTypeTable
 	cp $11
-	jr nc, .skipToTypeLoad
+	jr nc, .loadType
 	ld c, a
 	ld b, $00
 	add hl, bc
-.skipToTypeLoad
+.loadType
 	ld a, [hl]
 	pop bc
 	pop hl
@@ -464,7 +465,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	dec c
 	jr nz, .clearTempCardCollectionLoop
 	call FindBoosterDataPointer
-	ld de, wBoosterDataCurrSet
+	ld de, wBoosterDataCurSet
 	ld bc, $c
 	call CopyDataHLtoDE
 	call LoadRarityAmountsToWram
@@ -533,7 +534,7 @@ BoosterDataJumptable: ; 1e480 (7:6480)
 	dw PackRandomEnergies
 
 LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
-	ld a, [wBoosterDataCurrSet]
+	ld a, [wBoosterDataCurSet]
 	add a
 	add a
 	ld c, a
