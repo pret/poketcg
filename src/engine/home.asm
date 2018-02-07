@@ -5431,7 +5431,7 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	inc a
 	call LoadDeck
 	ld a, [wOpponentDeckId]
-	cp NUMBER_OF_DECKS
+	cp DECKS_END
 	jr c, .valid_deck
 	ld a, PRACTICE_PLAYER_DECK - 2
 	ld [wOpponentDeckId], a

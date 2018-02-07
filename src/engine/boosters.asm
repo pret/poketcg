@@ -59,7 +59,7 @@ FindCurrRarityChance: ; 1e219 (7:6219)
 	ret
 
 FindCardsInSetAndRarity: ; 1e226 (7:6226)
-	ld c, BOOSTER_CARD_TYPE_AMOUNT
+	ld c, NUM_BOOSTER_CARD_TYPES
 	ld hl, wBoosterAmountOfCardTypeTable
 	xor a
 .deleteTypeTableLoop
@@ -171,7 +171,7 @@ CardTypeTable:  ; 1e2b1 (7:62b1)
 	db BOOSTER_CARD_TYPE_TRAINER
 
 FindTotalTypeChances: ; 1e2c2 (7:62c2)
-	ld c, BOOSTER_CARD_TYPE_AMOUNT
+	ld c, NUM_BOOSTER_CARD_TYPES
 	xor a
 	ld hl, wBoosterTempTypeChanceTable
 .deleteTempTypeChanceTableLoop
@@ -223,7 +223,7 @@ DetermineBoosterCardType: ; 1e2fa (7:62fa)
 	inc hl
 	inc c
 	ld a, c
-	cp a, BOOSTER_CARD_TYPE_AMOUNT
+	cp a, NUM_BOOSTER_CARD_TYPES
 	jr c, .loopThroughCardTypes
 	ld a, $08
 .foundCardType
@@ -469,7 +469,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	call CopyDataHLtoDE
 	call LoadRarityAmountsToWram
 	ld bc, $0
-	ld d, BOOSTER_CARD_TYPE_AMOUNT
+	ld d, NUM_BOOSTER_CARD_TYPES
 	ld e, $0
 	ld hl, wBoosterDataTypeChanceData
 .addChanceBytesLoop

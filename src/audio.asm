@@ -1,5 +1,5 @@
-INCLUDE "constants.asm"
 INCLUDE "macros.asm"
+INCLUDE "constants.asm"
 
 SECTION "Audio 1", ROMX
 INCLUDE "audio/music1.asm"

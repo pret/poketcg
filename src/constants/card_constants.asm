@@ -1,230 +1,230 @@
-GRASS_ENERGY            EQU $01
-FIRE_ENERGY             EQU $02
-WATER_ENERGY            EQU $03
-LIGHTNING_ENERGY        EQU $04
-FIGHTING_ENERGY         EQU $05
-PSYCHIC_ENERGY          EQU $06
-DOUBLE_COLORLESS_ENERGY EQU $07
-BULBASAUR               EQU $08
-IVYSAUR                 EQU $09
-VENUSAUR1               EQU $0A
-VENUSAUR2               EQU $0B
-CATERPIE                EQU $0C
-METAPOD                 EQU $0D
-BUTTERFREE              EQU $0E
-WEEDLE                  EQU $0F
-KAKUNA                  EQU $10
-BEEDRILL                EQU $11
-EKANS                   EQU $12
-ARBOK                   EQU $13
-NIDORANF                EQU $14
-NIDORINA                EQU $15
-NIDOQUEEN               EQU $16
-NIDORANM                EQU $17
-NIDORINO                EQU $18
-NIDOKING                EQU $19
-ZUBAT                   EQU $1A
-GOLBAT                  EQU $1B
-ODDISH                  EQU $1C
-GLOOM                   EQU $1D
-VILEPLUME               EQU $1E
-PARAS                   EQU $1F
-PARASECT                EQU $20
-VENONAT                 EQU $21
-VENOMOTH                EQU $22
-BELLSPROUT              EQU $23
-WEEPINBELL              EQU $24
-VICTREEBEL              EQU $25
-GRIMER                  EQU $26
-MUK                     EQU $27
-EXEGGCUTE               EQU $28
-EXEGGUTOR               EQU $29
-KOFFING                 EQU $2A
-WEEZING                 EQU $2B
-TANGELA1                EQU $2C
-TANGELA2                EQU $2D
-SCYTHER                 EQU $2E
-PINSIR                  EQU $2F
-CHARMANDER              EQU $30
-CHARMELEON              EQU $31
-CHARIZARD               EQU $32
-VULPIX                  EQU $33
-NINETAILS1              EQU $34
-NINETAILS2              EQU $35
-GROWLITHE               EQU $36
-ARCANINE1               EQU $37
-ARCANINE2               EQU $38
-PONYTA                  EQU $39
-RAPIDASH                EQU $3A
-MAGMAR1                 EQU $3B
-MAGMAR2                 EQU $3C
-FLAREON1                EQU $3D
-FLAREON2                EQU $3E
-MOLTRES1                EQU $3F
-MOLTRES2                EQU $40
-SQUIRTLE                EQU $41
-WARTORTLE               EQU $42
-BLASTOISE               EQU $43
-PSYDUCK                 EQU $44
-GOLDUCK                 EQU $45
-POLIWAG                 EQU $46
-POLIWHIRL               EQU $47
-POLIWRATH               EQU $48
-TENTACOOL               EQU $49
-TENTACRUEL              EQU $4A
-SEEL                    EQU $4B
-DEWGONG                 EQU $4C
-SHELLDER                EQU $4D
-CLOYSTER                EQU $4E
-KRABBY                  EQU $4F
-KINGLER                 EQU $50
-HORSEA                  EQU $51
-SEADRA                  EQU $52
-GOLDEEN                 EQU $53
-SEAKING                 EQU $54
-STARYU                  EQU $55
-STARMIE                 EQU $56
-MAGIKARP                EQU $57
-GYARADOS                EQU $58
-LAPRAS                  EQU $59
-VAPOREON1               EQU $5A
-VAPOREON2               EQU $5B
-OMANYTE                 EQU $5C
-OMASTAR                 EQU $5D
-ARTICUNO1               EQU $5E
-ARTICUNO2               EQU $5F
-PIKACHU1                EQU $60
-PIKACHU2                EQU $61
-PIKACHU3                EQU $62
-PIKACHU4                EQU $63
-FLYING_PIKACHU          EQU $64
-SURFING_PIKACHU1        EQU $65
-SURFING_PIKACHU2        EQU $66
-RAICHU1                 EQU $67
-RAICHU2                 EQU $68
-MAGNEMITE1              EQU $69
-MAGNEMITE2              EQU $6A
-MAGNETON1               EQU $6B
-MAGNETON2               EQU $6C
-VOLTORB                 EQU $6D
-ELECTRODE1              EQU $6E
-ELECTRODE2              EQU $6F
-ELECTABUZZ1             EQU $70
-ELECTABUZZ2             EQU $71
-JOLTEON1                EQU $72
-JOLTEON2                EQU $73
-ZAPDOS1                 EQU $74
-ZAPDOS2                 EQU $75
-ZAPDOS3                 EQU $76
-SANDSHREW               EQU $77
-SANDSLASH               EQU $78
-DIGLETT                 EQU $79
-DUGTRIO                 EQU $7A
-MANKEY                  EQU $7B
-PRIMEAPE                EQU $7C
-MACHOP                  EQU $7D
-MACHOKE                 EQU $7E
-MACHAMP                 EQU $7F
-GEODUDE                 EQU $80
-GRAVELER                EQU $81
-GOLEM                   EQU $82
-ONIX                    EQU $83
-CUBONE                  EQU $84
-MAROWAK1                EQU $85
-MAROWAK2                EQU $86
-HITMONLEE               EQU $87
-HITMONCHAN              EQU $88
-RHYHORN                 EQU $89
-RHYDON                  EQU $8A
-KABUTO                  EQU $8B
-KABUTOPS                EQU $8C
-AERODACTYL              EQU $8D
-ABRA                    EQU $8E
-KADABRA                 EQU $8F
-ALAKAZAM                EQU $90
-SLOWPOKE1               EQU $91
-SLOWPOKE2               EQU $92
-SLOWBRO                 EQU $93
-GASTLY1                 EQU $94
-GASTLY2                 EQU $95
-HAUNTER1                EQU $96
-HAUNTER2                EQU $97
-GENGAR                  EQU $98
-DROWZEE                 EQU $99
-HYPNO                   EQU $9A
-MR_MIME                 EQU $9B
-JYNX                    EQU $9C
-MEWTWO1                 EQU $9D
-MEWTWO2                 EQU $9E
-MEWTWO3                 EQU $9F
-MEW1                    EQU $A0
-MEW2                    EQU $A1
-MEW3                    EQU $A2
-PIDGEY                  EQU $A3
-PIDGEOTTO               EQU $A4
-PIDGEOT1                EQU $A5
-PIDGEOT2                EQU $A6
-RATTATA                 EQU $A7
-RATICATE                EQU $A8
-SPEAROW                 EQU $A9
-FEAROW                  EQU $AA
-CLEFAIRY                EQU $AB
-CLEFABLE                EQU $AC
-JIGGLYPUFF1             EQU $AD
-JIGGLYPUFF2             EQU $AE
-JIGGLYPUFF3             EQU $AF
-WIGGLYTUFF              EQU $B0
-MEOWTH1                 EQU $B1
-MEOWTH2                 EQU $B2
-PERSIAN                 EQU $B3
-FARFETCHD               EQU $B4
-DODUO                   EQU $B5
-DODRIO                  EQU $B6
-LICKITUNG               EQU $B7
-CHANSEY                 EQU $B8
-KANGASKHAN              EQU $B9
-TAUROS                  EQU $BA
-DITTO                   EQU $BB
-EEVEE                   EQU $BC
-PORYGON                 EQU $BD
-SNORLAX                 EQU $BE
-DRATINI                 EQU $BF
-DRAGONAIR               EQU $C0
-DRAGONITE1              EQU $C1
-DRAGONITE2              EQU $C2
-PROFESSOR_OAK           EQU $C3
-IMPOSTER_PROFESSOR_OAK  EQU $C4
-BILL                    EQU $C5
-MR_FUJI                 EQU $C6
-LASS                    EQU $C7
-IMAKUNI_CARD            EQU $C8
-POKEMON_TRADER          EQU $C9
-POKEMON_BREEDER         EQU $CA
-CLEFAIRY_DOLL           EQU $CB
-MYSTERIOUS_FOSSIL       EQU $CC
-ENERGY_RETRIEVAL        EQU $CD
-SUPER_ENERGY_RETRIEVAL  EQU $CE
-ENERGY_SEARCH           EQU $CF
-ENERGY_REMOVAL          EQU $D0
-SUPER_ENERGY_REMOVAL    EQU $D1
-SWITCH                  EQU $D2
-POKEMON_CENTER          EQU $D3
-POKE_BALL               EQU $D4
-SCOOP_UP                EQU $D5
-COMPUTER_SEARCH         EQU $D6
-POKEDEX                 EQU $D7
-PLUSPOWER               EQU $D8
-DEFENDER                EQU $D9
-ITEM_FINDER             EQU $DA
-GUST_OF_WIND            EQU $DB
-DEVOLUTION_SPRAY        EQU $DC
-POTION                  EQU $DD
-SUPER_POTION            EQU $DE
-FULL_HEAL               EQU $DF
-REVIVE                  EQU $E0
-MAINTENANCE             EQU $E1
-POKEMON_FLUTE           EQU $E2
-GAMBLER                 EQU $E3
-RECYCLE                 EQU $E4
-
-NUM_CARDS               EQU RECYCLE
+const_value set 1
+	const GRASS_ENERGY            ; $01
+	const FIRE_ENERGY             ; $02
+	const WATER_ENERGY            ; $03
+	const LIGHTNING_ENERGY        ; $04
+	const FIGHTING_ENERGY         ; $05
+	const PSYCHIC_ENERGY          ; $06
+	const DOUBLE_COLORLESS_ENERGY ; $07
+	const BULBASAUR               ; $08
+	const IVYSAUR                 ; $09
+	const VENUSAUR1               ; $0A
+	const VENUSAUR2               ; $0B
+	const CATERPIE                ; $0C
+	const METAPOD                 ; $0D
+	const BUTTERFREE              ; $0E
+	const WEEDLE                  ; $0F
+	const KAKUNA                  ; $10
+	const BEEDRILL                ; $11
+	const EKANS                   ; $12
+	const ARBOK                   ; $13
+	const NIDORANF                ; $14
+	const NIDORINA                ; $15
+	const NIDOQUEEN               ; $16
+	const NIDORANM                ; $17
+	const NIDORINO                ; $18
+	const NIDOKING                ; $19
+	const ZUBAT                   ; $1A
+	const GOLBAT                  ; $1B
+	const ODDISH                  ; $1C
+	const GLOOM                   ; $1D
+	const VILEPLUME               ; $1E
+	const PARAS                   ; $1F
+	const PARASECT                ; $20
+	const VENONAT                 ; $21
+	const VENOMOTH                ; $22
+	const BELLSPROUT              ; $23
+	const WEEPINBELL              ; $24
+	const VICTREEBEL              ; $25
+	const GRIMER                  ; $26
+	const MUK                     ; $27
+	const EXEGGCUTE               ; $28
+	const EXEGGUTOR               ; $29
+	const KOFFING                 ; $2A
+	const WEEZING                 ; $2B
+	const TANGELA1                ; $2C
+	const TANGELA2                ; $2D
+	const SCYTHER                 ; $2E
+	const PINSIR                  ; $2F
+	const CHARMANDER              ; $30
+	const CHARMELEON              ; $31
+	const CHARIZARD               ; $32
+	const VULPIX                  ; $33
+	const NINETAILS1              ; $34
+	const NINETAILS2              ; $35
+	const GROWLITHE               ; $36
+	const ARCANINE1               ; $37
+	const ARCANINE2               ; $38
+	const PONYTA                  ; $39
+	const RAPIDASH                ; $3A
+	const MAGMAR1                 ; $3B
+	const MAGMAR2                 ; $3C
+	const FLAREON1                ; $3D
+	const FLAREON2                ; $3E
+	const MOLTRES1                ; $3F
+	const MOLTRES2                ; $40
+	const SQUIRTLE                ; $41
+	const WARTORTLE               ; $42
+	const BLASTOISE               ; $43
+	const PSYDUCK                 ; $44
+	const GOLDUCK                 ; $45
+	const POLIWAG                 ; $46
+	const POLIWHIRL               ; $47
+	const POLIWRATH               ; $48
+	const TENTACOOL               ; $49
+	const TENTACRUEL              ; $4A
+	const SEEL                    ; $4B
+	const DEWGONG                 ; $4C
+	const SHELLDER                ; $4D
+	const CLOYSTER                ; $4E
+	const KRABBY                  ; $4F
+	const KINGLER                 ; $50
+	const HORSEA                  ; $51
+	const SEADRA                  ; $52
+	const GOLDEEN                 ; $53
+	const SEAKING                 ; $54
+	const STARYU                  ; $55
+	const STARMIE                 ; $56
+	const MAGIKARP                ; $57
+	const GYARADOS                ; $58
+	const LAPRAS                  ; $59
+	const VAPOREON1               ; $5A
+	const VAPOREON2               ; $5B
+	const OMANYTE                 ; $5C
+	const OMASTAR                 ; $5D
+	const ARTICUNO1               ; $5E
+	const ARTICUNO2               ; $5F
+	const PIKACHU1                ; $60
+	const PIKACHU2                ; $61
+	const PIKACHU3                ; $62
+	const PIKACHU4                ; $63
+	const FLYING_PIKACHU          ; $64
+	const SURFING_PIKACHU1        ; $65
+	const SURFING_PIKACHU2        ; $66
+	const RAICHU1                 ; $67
+	const RAICHU2                 ; $68
+	const MAGNEMITE1              ; $69
+	const MAGNEMITE2              ; $6A
+	const MAGNETON1               ; $6B
+	const MAGNETON2               ; $6C
+	const VOLTORB                 ; $6D
+	const ELECTRODE1              ; $6E
+	const ELECTRODE2              ; $6F
+	const ELECTABUZZ1             ; $70
+	const ELECTABUZZ2             ; $71
+	const JOLTEON1                ; $72
+	const JOLTEON2                ; $73
+	const ZAPDOS1                 ; $74
+	const ZAPDOS2                 ; $75
+	const ZAPDOS3                 ; $76
+	const SANDSHREW               ; $77
+	const SANDSLASH               ; $78
+	const DIGLETT                 ; $79
+	const DUGTRIO                 ; $7A
+	const MANKEY                  ; $7B
+	const PRIMEAPE                ; $7C
+	const MACHOP                  ; $7D
+	const MACHOKE                 ; $7E
+	const MACHAMP                 ; $7F
+	const GEODUDE                 ; $80
+	const GRAVELER                ; $81
+	const GOLEM                   ; $82
+	const ONIX                    ; $83
+	const CUBONE                  ; $84
+	const MAROWAK1                ; $85
+	const MAROWAK2                ; $86
+	const HITMONLEE               ; $87
+	const HITMONCHAN              ; $88
+	const RHYHORN                 ; $89
+	const RHYDON                  ; $8A
+	const KABUTO                  ; $8B
+	const KABUTOPS                ; $8C
+	const AERODACTYL              ; $8D
+	const ABRA                    ; $8E
+	const KADABRA                 ; $8F
+	const ALAKAZAM                ; $90
+	const SLOWPOKE1               ; $91
+	const SLOWPOKE2               ; $92
+	const SLOWBRO                 ; $93
+	const GASTLY1                 ; $94
+	const GASTLY2                 ; $95
+	const HAUNTER1                ; $96
+	const HAUNTER2                ; $97
+	const GENGAR                  ; $98
+	const DROWZEE                 ; $99
+	const HYPNO                   ; $9A
+	const MR_MIME                 ; $9B
+	const JYNX                    ; $9C
+	const MEWTWO1                 ; $9D
+	const MEWTWO2                 ; $9E
+	const MEWTWO3                 ; $9F
+	const MEW1                    ; $A0
+	const MEW2                    ; $A1
+	const MEW3                    ; $A2
+	const PIDGEY                  ; $A3
+	const PIDGEOTTO               ; $A4
+	const PIDGEOT1                ; $A5
+	const PIDGEOT2                ; $A6
+	const RATTATA                 ; $A7
+	const RATICATE                ; $A8
+	const SPEAROW                 ; $A9
+	const FEAROW                  ; $AA
+	const CLEFAIRY                ; $AB
+	const CLEFABLE                ; $AC
+	const JIGGLYPUFF1             ; $AD
+	const JIGGLYPUFF2             ; $AE
+	const JIGGLYPUFF3             ; $AF
+	const WIGGLYTUFF              ; $B0
+	const MEOWTH1                 ; $B1
+	const MEOWTH2                 ; $B2
+	const PERSIAN                 ; $B3
+	const FARFETCHD               ; $B4
+	const DODUO                   ; $B5
+	const DODRIO                  ; $B6
+	const LICKITUNG               ; $B7
+	const CHANSEY                 ; $B8
+	const KANGASKHAN              ; $B9
+	const TAUROS                  ; $BA
+	const DITTO                   ; $BB
+	const EEVEE                   ; $BC
+	const PORYGON                 ; $BD
+	const SNORLAX                 ; $BE
+	const DRATINI                 ; $BF
+	const DRAGONAIR               ; $C0
+	const DRAGONITE1              ; $C1
+	const DRAGONITE2              ; $C2
+	const PROFESSOR_OAK           ; $C3
+	const IMPOSTER_PROFESSOR_OAK  ; $C4
+	const BILL                    ; $C5
+	const MR_FUJI                 ; $C6
+	const LASS                    ; $C7
+	const IMAKUNI_CARD            ; $C8
+	const POKEMON_TRADER          ; $C9
+	const POKEMON_BREEDER         ; $CA
+	const CLEFAIRY_DOLL           ; $CB
+	const MYSTERIOUS_FOSSIL       ; $CC
+	const ENERGY_RETRIEVAL        ; $CD
+	const SUPER_ENERGY_RETRIEVAL  ; $CE
+	const ENERGY_SEARCH           ; $CF
+	const ENERGY_REMOVAL          ; $D0
+	const SUPER_ENERGY_REMOVAL    ; $D1
+	const SWITCH                  ; $D2
+	const POKEMON_CENTER          ; $D3
+	const POKE_BALL               ; $D4
+	const SCOOP_UP                ; $D5
+	const COMPUTER_SEARCH         ; $D6
+	const POKEDEX                 ; $D7
+	const PLUSPOWER               ; $D8
+	const DEFENDER                ; $D9
+	const ITEM_FINDER             ; $DA
+	const GUST_OF_WIND            ; $DB
+	const DEVOLUTION_SPRAY        ; $DC
+	const POTION                  ; $DD
+	const SUPER_POTION            ; $DE
+	const FULL_HEAL               ; $DF
+	const REVIVE                  ; $E0
+	const MAINTENANCE             ; $E1
+	const POKEMON_FLUTE           ; $E2
+	const GAMBLER                 ; $E3
+	const RECYCLE                 ; $E4
+NUM_CARDS EQU const_value + -1

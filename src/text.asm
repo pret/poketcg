@@ -1,5 +1,5 @@
-INCLUDE "constants.asm"
 INCLUDE "macros.asm"
+INCLUDE "constants.asm"
 
 SECTION "Text 1", ROMX
 INCLUDE "text/text_offsets.asm"
