@@ -1701,7 +1701,7 @@ OWScript_EndScriptCloseText: ; cccc (3:4ccc)
 	pop hl
 	ret
 
-;args: 2-Text String Index
+; args: 2-Text String Index
 OWScript_PrintTextString: ; ccd4 (3:4cd4)
 	ld l, c
 	ld h, b

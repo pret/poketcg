@@ -265,7 +265,7 @@ FindBoosterCard: ; 1e31d (7:631d)
 	scf
 	ret
 
-;lowers the chance of getting the same type multiple times
+; lowers the chance of getting the same type multiple times
 UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
 	push hl
 	push bc
@@ -446,8 +446,8 @@ CheckByteInWramZeroed: ; 1e423 (7:6423)
 	ccf
 	ret
 
-;clears wPlayerDeck and wTempCardCollection
-;copies rarity amounts to ram and averages them into wBoosterDataAveragedChance
+; clears wPlayerDeck and wTempCardCollection
+; copies rarity amounts to ram and averages them into wBoosterDataAveragedChance
 InitBoosterData: ; 1e430 (7:6430)
 	ld c, $16
 	ld hl, wPlayerDeck
@@ -493,7 +493,7 @@ FindBoosterDataPointer: ; 1e46f (7:646f)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, BoosterData_PtrTbl
+	ld hl, BoosterDataJumptable
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
@@ -501,32 +501,32 @@ FindBoosterDataPointer: ; 1e46f (7:646f)
 	pop bc
 	ret
 
-BoosterData_PtrTbl: ; 1e480 (7:6480)
-	dw PackColoNeutral
-	dw PackColoGrass
-	dw PackColoFire
-	dw PackColoWater
-	dw PackColoLightning
-	dw PackColoFighting
-	dw PackColoTrainer
-	dw PackEvoNeutral
-	dw PackEvoGrass
-	dw PackEvoNeutralFireEnergy
-	dw PackEvoWater
-	dw PackEvoFighting
-	dw PackEvoPsychic
-	dw PackEvoTrainer
+BoosterDataJumptable: ; 1e480 (7:6480)
+	dw PackColosseumNeutral
+	dw PackColosseumGrass
+	dw PackColosseumFire
+	dw PackColosseumWater
+	dw PackColosseumLightning
+	dw PackColosseumFighting
+	dw PackColosseumTrainer
+	dw PackEvolutionNeutral
+	dw PackEvolutionGrass
+	dw PackEvolutionNeutralFireEnergy
+	dw PackEvolutionWater
+	dw PackEvolutionFighting
+	dw PackEvolutionPsychic
+	dw PackEvolutionTrainer
 	dw PackMysteryNeutral
 	dw PackMysteryGrassColorless
 	dw PackMysteryWaterColorless
-	dw PackLightningColorless
+	dw PackMysteryLightningColorless
 	dw PackMysteryFightingColorless
 	dw PackMysteryTrainerColorless
-	dw PackLabTrainerLessFighting
-	dw PackLabGrass
-	dw PackLabWater
-	dw PackLabPsychic
-	dw PackLabTrainer
+	dw PackLaboratoryMostlyNeutral
+	dw PackLaboratoryGrass
+	dw PackLaboratoryWater
+	dw PackLaboratoryPsychic
+	dw PackLaboratoryTrainer
 	dw PackEnergyLightningFire
 	dw PackEnergyWaterFighting
 	dw PackEnergyGrassPsychic
@@ -555,7 +555,7 @@ BoosterSetRarityAmountTable: ; 1e4d4 (7::64d4)
 	db $00, $06, $03, $01 ; other, commons, uncommons, rares
 	db $00, $06, $03, $01 ; other, commons, uncommons, rares
 
-PackColoNeutral:: ; 1e4e4 (7:64e4)
+PackColosseumNeutral:: ; 1e4e4 (7:64e4)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -570,7 +570,7 @@ PackColoNeutral:: ; 1e4e4 (7:64e4)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoGrass:: ; 1e4f0 (7:64f0)
+PackColosseumGrass:: ; 1e4f0 (7:64f0)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GRASS_ENERGY  ; energy or energy generation function
 
@@ -585,7 +585,7 @@ PackColoGrass:: ; 1e4f0 (7:64f0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoFire:: ; 1e4fc (7:64fc)
+PackColosseumFire:: ; 1e4fc (7:64fc)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw FIRE_ENERGY  ; energy or energy generation function
 
@@ -600,7 +600,7 @@ PackColoFire:: ; 1e4fc (7:64fc)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoWater:: ; 1e508 (7:6508)
+PackColosseumWater:: ; 1e508 (7:6508)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -615,7 +615,7 @@ PackColoWater:: ; 1e508 (7:6508)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoLightning:: ; 1e514 (7:6514)
+PackColosseumLightning:: ; 1e514 (7:6514)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw LIGHTNING_ENERGY ; energy or energy generation function
 
@@ -630,7 +630,7 @@ PackColoLightning:: ; 1e514 (7:6514)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoFighting:: ; 1e520 (7:6520)
+PackColosseumFighting:: ; 1e520 (7:6520)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -645,7 +645,7 @@ PackColoFighting:: ; 1e520 (7:6520)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoTrainer:: ; 1e52c (7:652c)
+PackColosseumTrainer:: ; 1e52c (7:652c)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -660,7 +660,7 @@ PackColoTrainer:: ; 1e52c (7:652c)
 	db $30 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoNeutral:: ; 1e538 (7:6538)
+PackEvolutionNeutral:: ; 1e538 (7:6538)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -675,7 +675,7 @@ PackEvoNeutral:: ; 1e538 (7:6538)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoGrass:: ; 1e544 (7:6544)
+PackEvolutionGrass:: ; 1e544 (7:6544)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GRASS_ENERGY ; energy or energy generation function
 
@@ -690,7 +690,7 @@ PackEvoGrass:: ; 1e544 (7:6544)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoNeutralFireEnergy:: ; 1e550 (7:6550)
+PackEvolutionNeutralFireEnergy:: ; 1e550 (7:6550)
 	db EVOLUTION >> 4 ; booster pack set
 	dw FIRE_ENERGY ; energy or energy generation function
 
@@ -705,7 +705,7 @@ PackEvoNeutralFireEnergy:: ; 1e550 (7:6550)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoWater:: ; 1e55c (7:655c)
+PackEvolutionWater:: ; 1e55c (7:655c)
 	db EVOLUTION >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -720,7 +720,7 @@ PackEvoWater:: ; 1e55c (7:655c)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoFighting:: ; 1e568 (7:6568)
+PackEvolutionFighting:: ; 1e568 (7:6568)
 	db EVOLUTION >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -735,7 +735,7 @@ PackEvoFighting:: ; 1e568 (7:6568)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoPsychic:: ; 1e574 (7:6574)
+PackEvolutionPsychic:: ; 1e574 (7:6574)
 	db EVOLUTION >> 4 ; booster pack set
 	dw PSYCHIC_ENERGY ; energy or energy generation function
 
@@ -750,7 +750,7 @@ PackEvoPsychic:: ; 1e574 (7:6574)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoTrainer:: ; 1e580 (7:6580)
+PackEvolutionTrainer:: ; 1e580 (7:6580)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -810,7 +810,7 @@ PackMysteryWaterColorless:: ; 1e5a4 (7:65a4)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-PackLightningColorless:: ; 1e5b0 (7:65b0)
+PackMysteryLightningColorless:: ; 1e5b0 (7:65b0)
 	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -855,7 +855,7 @@ PackMysteryTrainerColorless:: ; 1e5c8 (7:65c8)
 	db $30 ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-PackLabTrainerLessFighting:: ; 1e5d4 (7:65d4)
+PackLaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -870,7 +870,7 @@ PackLabTrainerLessFighting:: ; 1e5d4 (7:65d4)
 	db $18 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabGrass:: ; 1e5e0 (7:65e0)
+PackLaboratoryGrass:: ; 1e5e0 (7:65e0)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -885,7 +885,7 @@ PackLabGrass:: ; 1e5e0 (7:65e0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabWater:: ; 1e5ec (7:65ec)
+PackLaboratoryWater:: ; 1e5ec (7:65ec)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -900,7 +900,7 @@ PackLabWater:: ; 1e5ec (7:65ec)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabPsychic:: ; 1e5f8 (7:65f8)
+PackLaboratoryPsychic:: ; 1e5f8 (7:65f8)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -915,7 +915,7 @@ PackLabPsychic:: ; 1e5f8 (7:65f8)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabTrainer:: ; 1e604 (7:6604)
+PackLaboratoryTrainer:: ; 1e604 (7:6604)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 

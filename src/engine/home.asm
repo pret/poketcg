@@ -3803,7 +3803,7 @@ Func_1d1d: ; 1d1d (0:1d1d)
 	scf
 	ret
 
-;creates a list at $c000 of every card the player owns and how many
+; creates a list at $c000 of every card the player owns and how many
 CreateTempCardCollection: ; 1d2e (0:1d2e)
 	call EnableExtRAM
 	ld hl, sCardCollection
@@ -3840,7 +3840,7 @@ AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 	jr nz, .asm_1d66
 	ret
 
-;adds card a to collection, provided the player has less than 99 of them
+; adds card a to collection, provided the player has less than 99 of them
 AddCardToCollection: ; 1d6e (0:1d6e)
 	push hl
 	push de
