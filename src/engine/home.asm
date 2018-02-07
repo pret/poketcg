@@ -7959,8 +7959,10 @@ Func_3df3: ; 3df3 (0:3df3)
 	ret
 ; 0x3e10
 
-	INCROM $3e10, $3e17
-
+Func_3e10: ; 3e10 (0:3e10)
+	ld a, $1
+	ld [wd61e], a
+	ld a, $62
 Func_3e17: ; 3e17 (0:3e17)
 	ld [wd131], a
 	ldh a, [hBankROM]
