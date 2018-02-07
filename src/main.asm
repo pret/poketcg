@@ -34,11 +34,13 @@ SECTION "bank9", ROMX
 SECTION "bankA", ROMX
 	emptybank
 
-SECTION "bankB", ROMX
+SECTION "Effect Functions", ROMX
 INCLUDE "engine/effect_functions.asm"
 
-SECTION "bankC", ROMX
+SECTION "Decks", ROMX
 INCLUDE "data/decks.asm"
+
+SECTION "Cards", ROMX
 INCLUDE "data/cards.asm"
 
 SECTION "bank1C", ROMX

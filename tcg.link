@@ -48,9 +48,10 @@ ROMX $09
 ROMX $0a
 	"bankA"
 ROMX $0b
-	"bankB"
+	"Effect Functions"
 ROMX $0c
-	"bankC"
+	"Decks"
+	"Cards"
 ROMX $0d
 	"Text 1"
 ROMX $0e
