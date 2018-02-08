@@ -842,7 +842,7 @@ Func_b19d: ; b19d (2:719d)
 
 .asm_b216
 	ld hl, $0272
-	call Func_2af0
+	call YesOrNoMenuWithText
 	ld a, [$d086]
 	jr c, .asm_b1b3
 	call $7592

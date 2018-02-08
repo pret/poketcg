@@ -220,10 +220,10 @@ Duel_Init: ; 103d3 (4:43d3)
 	call PlaySong
 	call $4031
 	call DoFrameIfLCDEnabled
-	ld bc, $2f1d
-	ld de, $1211
-	call Func_2a1a
-	call Func_2a00 ; wait for the user to press a or b
+	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb de, 18, 17 ; x, y
+	call SetCursorParametersForTextBox
+	call WaitForButtonAorB ; wait for the user to press a or b
 	call Func_3c96
 	call Func_10ab4 ; fade out
 	pop af

@@ -1177,11 +1177,11 @@ Func_c8ed: ; c8ed (3:c8ed)
 	ld [hli], a
 	ld [hl], a
 	pop hl
-	call Func_2af0
+	call YesOrNoMenuWithText
 	jr .asm_c911
 
 .asm_c90e
-	call Func_2af3
+	call YesOrNoMenu
 
 .asm_c911
 	pop de

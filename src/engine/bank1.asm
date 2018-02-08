@@ -23,7 +23,7 @@ Func_4000: ; 4000 (1:4000)
 	call Func_405a
 	call Func_04a2
 	text_hl ResetBackUpRamText
-	call Func_2af0
+	call YesOrNoMenuWithText
 	jr c, .reset_game
 ; erase sram
 	call EnableExtRAM

@@ -4746,7 +4746,7 @@ Func_23d3: ; 23d3 (0:23d3)
 Func_245d: ; 245d (0:245d)
 	push de
 	push bc
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	ld bc, $d8f0
 	call Func_2499
@@ -5200,25 +5200,25 @@ Func_29f5: ; 29f5 (0:29f5)
 ; 0x29fa
 
 Func_29fa: ; 29fa (0:29fa)
-	ld bc, $0f00
-	call Func_2a1a
-Func_2a00: ; 2a00 (0:2a00)
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
+WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
-	jr nz, .asm_2a15
+	jr nz, .a_pressed
 	bit B_BUTTON_F, a
-	jr z, Func_2a00
+	jr z, WaitForButtonAorB
 	call EraseCursor
 	scf
 	ret
-.asm_2a15
+.a_pressed
 	call EraseCursor
 	or a
 	ret
 
-Func_2a1a: ; 2a1a (0:2a1a)
+SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	xor a
 	ld hl, wCurMenuItem
 	ld [hli], a
@@ -5226,9 +5226,9 @@ Func_2a1a: ; 2a1a (0:2a1a)
 	inc hl
 	ld [hl], e ; wCursorYPosition
 	inc hl
-	ld [hl], $0 ; wYDisplacementBetweenMenuItems
+	ld [hl], 0 ; wYDisplacementBetweenMenuItems
 	inc hl
-	ld [hl], $1 ; wNumMenuItems
+	ld [hl], 1 ; wNumMenuItems
 	inc hl
 	ld [hl], b ; wCursorTileNumber
 	inc hl
@@ -5250,7 +5250,7 @@ DrawNarrowTextBox_PrintText: ; 2a3e (0:2a3e)
 	call DrawNarrowTextBox
 	ld a, $b
 Func_2a44: ; 2a44 (0:2a44)
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	call Func_22a6
 	pop hl
@@ -5264,7 +5264,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
 	ld a, $13
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	call Func_22a6
 	call EnableLCD
@@ -5273,8 +5273,8 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 
 ; draws a 12x6 text box aligned to the bottom left of the screen
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
-	ld de, $000c
-	ld bc, $0c06
+	lb de, 0, 12
+	lb bc, 12, 6
 	call AdjustCoordinatesForWindow
 	call DrawRegularTextBox
 	ret
@@ -5303,8 +5303,8 @@ NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
-	ld de, $000c
-	ld bc, $1406
+	lb de, 0, 12
+	lb bc, 20, 6
 	call AdjustCoordinatesForWindow
 	call DrawRegularTextBox
 	ret
@@ -5336,39 +5336,45 @@ WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 
 	INCROM $2ad0, $2af0
 
-Func_2af0: ; 2af0 (0:2af0)
+; handle a yes / no menu with custom text provided in hl
+; returns carry if "no" selected
+YesOrNoMenuWithText: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
-Func_2af3: ; 2af3 (0:2af3)
-	ld de, $0710
-	call Func_2b66
-	ld de, $0610
-	jr .asm_2b0a
+
+YesOrNoMenu: ; 2af3 (0:2af3)
+	lb de, 7, 16 ; x, y
+	call PrintYesOrNoItems
+	lb de, 6, 16 ; x, y
+	jr handleYesOrNoMenu
+
+YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 	call DrawNarrowTextBox_PrintText
-	ld de, $0310
-	call Func_2b66
-	ld de, $0210
-.asm_2b0a
+	lb de, 3, 16 ; x, y
+	call PrintYesOrNoItems
+	lb de, 2, 16 ; x, y
+
+handleYesOrNoMenu
 	ld a, d
 	ld [wcd98], a
-	ld bc, $0f00
-	call Func_2a1a
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
 	ld a, [wcd9a]
 	ld [wCurMenuItem], a
 	call EnableLCD
-	jr .asm_2b39
-.asm_2b1f
+	jr .init_menu
+.wait_button_loop
 	call DoFrame
 	call HandleTextBoxInput
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
-	jr nz, .asm_2b50
+	jr nz, .a_pressed
 	ldh a, [hButtonsPressed2]
 	and D_RIGHT | D_LEFT
-	jr z, .asm_2b1f
+	jr z, .wait_button_loop
 	ld a, $1
 	call Func_3796
 	call EraseCursor
-.asm_2b39
+.init_menu
 	ld a, [wcd98]
 	ld c, a
 	ld hl, wCurMenuItem
@@ -5381,15 +5387,16 @@ Func_2af3: ; 2af3 (0:2af3)
 	ld [wCursorXPosition], a
 	xor a
 	ld [wCursorBlinkCounter], a
-	jr .asm_2b1f
-.asm_2b50
+	jr .wait_button_loop
+.a_pressed
 	ld a, [wCurMenuItem]
 	ldh [hCurrentMenuItem], a
 	or a
-	jr nz, .asm_2b5c
+	jr nz, .no
+;.yes
 	ld [wcd9a], a
 	ret
-.asm_2b5c
+.no
 	xor a
 	ld [wcd9a], a
 	ld a, $1
@@ -5397,7 +5404,8 @@ Func_2af3: ; 2af3 (0:2af3)
 	scf
 	ret
 
-Func_2b66: ; 2b66 (0:2b66)
+; prints YES NO at de
+PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForWindow
 	text_hl YesOrNoText
 	call Func_2c1b
@@ -5556,10 +5564,10 @@ Func_2c73: ; 2c73 (0:2c73)
 	call Func_2c84
 
 Func_2c77: ; 2c77 (0:2c77)
-	ld bc, $2f1d
-	ld de, $1211
-	call Func_2a1a
-	call Func_2a00
+	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb de, 18, 17 ; x, y
+	call SetCursorParametersForTextBox
+	call WaitForButtonAorB
 	ret
 
 Func_2c84: ; 2c84 (0:2c84)
@@ -5657,8 +5665,8 @@ Func_2d06: ; 2d06 (0:2d06)
 
 Func_2d15: ; 2d15 (0:2d15)
 	push hl
-	ld de, $000c
-	ld bc, $1406
+	lb de, 0, 12
+	lb bc, 20, 6
 	call AdjustCoordinatesForWindow
 	ld a, [wce4b]
 	or a
@@ -5673,7 +5681,7 @@ Func_2d15: ; 2d15 (0:2d15)
 	ld l, a
 	call DrawLabeledTextBox
 .asm_2d36
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	ld a, $13
 	call Func_22a6
@@ -5810,7 +5818,7 @@ Func_2e12: ; 2e12 (0:2e12)
 	ld a, [wcd0a]
 	or a
 	jp z, Func_245d
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	call Func_0663
 	pop hl
@@ -5825,7 +5833,7 @@ Func_2e12: ; 2e12 (0:2e12)
 	ret
 
 Func_2e2c: ; 2e2c (0:2e2c)
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
