@@ -1,5 +1,5 @@
 ; When you press the a button in front of something it will find a data entry somewhere on this list
-; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation. 
+; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
 PointerTable_118f5:
 	dw Data_119dd
 	dw Data_119dd
@@ -529,7 +529,7 @@ AmandaData:
 	dw OWSequence_Amanda ; Pointer to NPC Data
 	db $bd
 	db $03
-	db AMANDA_PIC
+	db AMANDA_PIC ; battle profile picture
 	db $23
 	db $03
 	db $15

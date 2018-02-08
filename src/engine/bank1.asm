@@ -16,20 +16,21 @@ Func_4000: ; 4000 (1:4000)
 	farcall Func_1a6cc
 	ldh a, [hButtonsHeld]
 	cp A_BUTTON | B_BUTTON
-	jr z, .asm_4035
+	jr z, .ask_erase_backup_ram
 	farcall Func_126d1
 	jr Func_4000
-.asm_4035
+.ask_erase_backup_ram
 	call Func_405a
 	call Func_04a2
 	text_hl ResetBackUpRamText
 	call Func_2af0
-	jr c, .asm_404d
+	jr c, .reset_game
+; erase sram
 	call EnableExtRAM
 	xor a
 	ld [$a000], a
 	call DisableExtRAM
-.asm_404d
+.reset_game
 	jp Reset
 
 Func_4050: ; 4050 (1:4050)
@@ -333,16 +334,16 @@ Func_42ac:
 	ld [wCurrentDuelMenuItem], a
 	jr nc, Func_42ac
 	ldh a, [hCurrentMenuItem]
-	ld hl, BattleMenuFunctionTable
+	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
 
-BattleMenuFunctionTable: ; 42f1 (1:42f1)
-	dw OpenHandMenu
-	dw OpenBattleAttackMenu
-	dw OpenBattleCheckMenu
-	dw OpenPokemonPowerMenu
-	dw PlayerRetreat
-	dw PlayerEndTurn
+DuelMenuFunctionTable: ; 42f1 (1:42f1)
+	dw DuelMenu_Hand
+	dw DuelMenu_Attack
+	dw DuelMenu_Check
+	dw DuelMenu_PkmnPower
+	dw DuelMenu_Retreat
+	dw DuelMenu_Done
 
 	INCROM $42fd,  $430b
 
@@ -384,13 +385,13 @@ Func_4342: ; 4342 (1:4342)
 
 	INCROM $4345,  $438e
 
-OpenPokemonPowerMenu: ; 438e (1:438e)
+DuelMenu_PkmnPower: ; 438e (1:438e)
 	call $6431
 	jp c, Func_426d
 	call Func_1730
 	jp Func_426d
 
-PlayerEndTurn: ; 439a (1:439a)
+DuelMenu_Done: ; 439a (1:439a)
 	ld a, $08
 	call $51e7
 	jp c, Func_4268
@@ -399,7 +400,7 @@ PlayerEndTurn: ; 439a (1:439a)
 	call $717a
 	ret
 
-PlayerRetreat: ; 43ab (1:43ab)
+DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and a,PASSIVE_STATUS_MASK
@@ -457,7 +458,7 @@ Func_441f: ; 441f (1:441f)
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-OpenHandMenu: ; 4425 (1:4425)
+DuelMenu_Hand: ; 4425 (1:4425)
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	or a
@@ -523,14 +524,14 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 
 	INCROM $44db,  $4585
 
-OpenBattleCheckMenu: ; 4585 (1:4585)
+DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
 	jp Func_426d
 
 	INCROM $458e,  $46fc
 
-OpenBattleAttackMenu: ; 46fc (1:46fc)
+DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
 	jr c, .alertCantAttackAndCancelMenu
 	call CheckIfActiveCardParalyzedOrAsleep
@@ -660,14 +661,13 @@ Func_478b: ; 478b (1:478b)
 	ret
 
 AttackMenuCursorData:
-	db $01
-	db $0d
-	db $02
-	db $02
-	db $0f
-	db $00
-	db $00
-	db $00
+	db 1, 13 ; x, y
+	db 2 ; y displacement between items
+	db 2 ; number of items
+	db $0f ; cursor tile number
+	db $00 ; tile behind cursor
+	db $00 ; ???
+	db $00 ; ???
 
 Func_47ec: ; $47ec (1:47ec)
 	ld a, [wcc04]

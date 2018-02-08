@@ -231,7 +231,7 @@ EnableLCD: ; 0277 (0:0277)
 	or rLCDC_ENABLE_MASK ;
 	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
-	ld a, $c0
+	ld a, %11000000
 	ld [wFlushPaletteFlags], a
 	ret
 
@@ -246,7 +246,7 @@ DisableLCD: ; 028a (0:028a)
 	ld [rIE], a          ; disable vblank interrupt
 .asm_298
 	ld a, [rLY]          ;
-	cp $91               ;
+	cp LY_VBLANK         ;
 	jr nz, .asm_298      ; wait for vblank
 	ld a, [rLCDC]        ;
 	and $7f              ;
@@ -350,7 +350,7 @@ SetupLCD: ; 030b (0:030b)
 	ld [wLCDC], a
 	ld a, $1
 	ld [MBC3LatchClock], a
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 NopF: ; 0348 (0:0348)
 	ret
@@ -377,7 +377,7 @@ DetectConsole: ; 0349 (0:0349)
 ; initialize the palettes (both monochrome and color)
 SetupPalettes: ; 036a (0:036a)
 	ld hl, wBGP
-	ld a, $e4
+	ld a, %11100100
 	ld [rBGP], a
 	ld [hli], a
 	ld [rOBP0], a
@@ -460,23 +460,23 @@ FillTileMap: ; 03c0 (0:03c0)
 
 ; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
 ZeroRAM: ; 03ec (0:03ec)
-	ld hl, wTempCardCollection
-	ld bc, $2000
-.asm_3f2
+	ld hl, $c000
+	ld bc, $e000 - $c000
+.zero_wram_loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_3f2
-	ld c, $80
-	ld b, $70
+	jr nz, .zero_wram_loop
+	ld c, LOW($ff80)
+	ld b, $fff0 - $ff80
 	xor a
-.asm_3fe
+.zero_hram_loop
 	ld [$ff00+c], a
 	inc c
 	dec b
-	jr nz, .asm_3fe
+	jr nz, .zero_hram_loop
 	ret
 
 Func_0404: ; 0404 (0:0404)
@@ -627,7 +627,7 @@ SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
-; returns vBGMapTiles + 32 * c + b in de.
+; returns vBGMapTiles + BG_MAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
@@ -638,7 +638,7 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	add hl, hl
 	add hl, hl
 	ld c, b
-	ld b, $98
+	ld b, HIGH(vBGMapTiles)
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -1203,7 +1203,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 	push af
 	ldh [hBankRAM], a
 	ld [MBC3SRamBank], a
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1211,7 +1211,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 ; enable external RAM
 EnableExtRAM: ; 07b6 (0:07b6)
 	push af
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1219,7 +1219,7 @@ EnableExtRAM: ; 07b6 (0:07b6)
 ; disable external RAM
 DisableExtRAM: ; 07be (0:07be)
 	push af
-	xor a
+	xor a ; SRAM_DISABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1832,7 +1832,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	jr nz, .wait_vbalnk
 	ld a, $43
 	ld [rLCDC], a
-	ld a, $e4
+	ld a, %11100100
 	ld [rBGP], a
 	ld de, vTiles1
 	ld bc, vBGMapTiles - vTiles1
@@ -3902,7 +3902,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; returns vBGMapTiles + 32 * e + d in hl.
+; returns vBGMapTiles + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
 DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
@@ -3916,7 +3916,7 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	add d
 	ld l, a
 	ld a, h
-	adc $98
+	adc HIGH(vBGMapTiles)
 	ld h, a
 	ret
 
@@ -4047,29 +4047,29 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
-	ld de, $1819
+	lb de, $18, $19
 	call CopyLine
 ContinueDrawingTextBoxDMGorSGB
 	dec c
 	dec c
 .draw_text_box_body_loop
 	ld a, $0
-	ld de, $1e1f
+	lb de, $1e, $1f
 	call CopyLine
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
-	ld de, $1a1b
+	lb de, $1a, $1b
 ;	fallthrough
 
-; copies b bytes of data to sp+$1c and to hl, and returns hl += SCREEN_WIDTH
+; copies b bytes of data to sp+$1c and to hl, and returns hl += BG_MAP_WIDTH
 ; d = value of byte 0
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
-; b is supposed to be SCREEN_WIDTH or smaller, else the stack would get corrupted
+; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
 CopyLine: ; 1ea5 (0:1ea5)
-	add sp, -$20
+	add sp, -BG_MAP_WIDTH
 	push hl
 	push bc
 	ld hl, sp+$4
@@ -4093,24 +4093,24 @@ CopyLine: ; 1ea5 (0:1ea5)
 	call SafeCopyDataDEtoHL
 	pop bc
 	pop de
-	; advance pointer SCREEN_WIDTH positions and restore stack pointer
-	ld hl, $0020
+	; advance pointer BG_MAP_WIDTH positions and restore stack pointer
+	ld hl, BG_MAP_WIDTH
 	add hl, de
-	add sp, $20
+	add sp, BG_MAP_WIDTH
 	ret
 
 DrawRegularTextBoxCGB:
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
-	ld de, $1819
+	lb de, $18, $19
 	call CopyCurrentLineTilesAndAttrCGB
 ContinueDrawingTextBoxCGB
 	dec c
 	dec c
 .draw_text_box_body_loop
 	ld a, $0
-	ld de, $1e1f
+	lb de, $1e, $1f
 	push hl
 	call CopyLine
 	pop hl
@@ -4125,7 +4125,7 @@ ContinueDrawingTextBoxCGB
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
-	ld de, $1a1b
+	lb de, $1a, $1b
 	call CopyCurrentLineTilesAndAttrCGB
 	ret
 
@@ -4972,12 +4972,12 @@ InitializeCursorParameters: ; 2636 (0:2636)
 	ldh [hCurrentMenuItem], a
 	ld de, wCursorXPosition
 	ld b, $8
-.asm_2640
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_2640
+	jr nz, .loop
 	xor a
 	ld [wCursorBlinkCounter], a
 	ret
@@ -5294,7 +5294,12 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	ret
 
 NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
-	db $a, $11, $1, $1, $2f, $1d, $0, $0
+	db 10, 17 ; x, y
+	db 1 ; y displacement between items
+	db 1 ; number of items
+	db $2f ; cursor tile number
+	db $1d ; tile behind cursor
+	db $0, $0 ; ???, ???
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
@@ -5322,7 +5327,12 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	ret
 
 WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
-	db $12, $11, $1, $1, $2f, $1d, $0, $0
+	db 18, 17 ; x, y
+	db 1 ; y displacement between items
+	db 1 ; number of items
+	db $2f ; cursor tile number
+	db $1d ; tile behind cursor
+	db $0, $0 ; ???, ???
 
 	INCROM $2ad0, $2af0
 
