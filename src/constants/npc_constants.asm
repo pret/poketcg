@@ -1,4 +1,4 @@
-const_value set 1
+	const_def 1
 	const PLAYER_PIC    ; $01
 	const RONALD_PIC    ; $02
 	const SAM_PIC       ; $03

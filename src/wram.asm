@@ -196,17 +196,18 @@ wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 
 UNION
 
-wPlayerDeck:: ; c400
-	ds $80
-
-NEXTU
-
 wBoosterCardsDrawn:: ; c400
 wBoosterTempNonEnergiesDrawn:: ; c400
 	ds $b
 wBoosterTempEnergiesDrawn:: ; c40b
 	ds $b
 wBoosterCardsDrawnEnd::
+	ds $6a
+
+NEXTU
+
+wPlayerDeck:: ; c400
+	ds $80
 
 ENDU
 

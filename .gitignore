@@ -20,3 +20,6 @@
 # converted image/palette data
 *.1bpp
 *.2bpp
+
+# disasm output
+*disasm_output.asm

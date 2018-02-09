@@ -1,4 +1,4 @@
-const_value set 1
+	const_def 1
 	const GRASS_ENERGY            ; $01
 	const FIRE_ENERGY             ; $02
 	const WATER_ENERGY            ; $03
