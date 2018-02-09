@@ -1,10 +1,10 @@
-Func_fc000: ; fc000 (3f:4000)
-	jp SFX_PlaySfx
+SFX_PlaySFX: ; fc000 (3f:4000)
+	jp SFX_Play
 
-Func_fc003: ; fc003 (3f:4003)
-	jp Func_fc059
+SFX_UpdateSFX: ; fc003 (3f:4003)
+	jp SFX_Update
 
-SFX_PlaySfx: ; fc006 (3f:4006)
+SFX_Play: ; fc006 (3f:4006)
 	ld hl, NumberOfSFX
 	cp [hl]
 	jr nc, .invalidID
@@ -59,7 +59,7 @@ SFX_PlaySfx: ; fc006 (3f:4006)
 .invalidID
 	ret
 
-Func_fc059: ; fc059 (3f:4059)
+SFX_Update: ; fc059 (3f:4059)
 	ld a, [wdd8c]
 	or a
 	jr nz, .asm_fc063

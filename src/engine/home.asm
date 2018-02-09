@@ -56,7 +56,7 @@ Start: ; 0150 (0:0150)
 	call SetupVRAM
 	call SetupLCD
 	call SetupPalettes
-	call SetupSound_T
+	call SetupSound
 	call SetupTimer
 	call ResetSerial
 	call CopyDMAFunction
@@ -134,9 +134,9 @@ TimerHandler: ; 01e6 (0:01e6)
 	set 1, [hl]
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(SoundTimerHandler_Ext)
+	ld a, BANK(SoundTimerHandler)
 	call BankswitchHome
-	call SoundTimerHandler_Ext
+	call SoundTimerHandler
 	pop af
 	call BankswitchHome
 	; clear in-timer flag
@@ -5065,7 +5065,7 @@ Func_26c0: ; 26c0 (0:26c0)
 .asm_26ca
 	ld a, $3
 .asm_26cc
-	call Func_3796
+	call PlaySFX
 	pop af
 	ret
 
@@ -5073,7 +5073,7 @@ HandleMenuInput: ; 26d1 (0:26d1)
 	ld a, [wcd99]
 	or a
 	jr z, HandleTextBoxInput
-	call Func_3796
+	call PlaySFX
 ;	fallthrough
 HandleTextBoxInput: ; 26da (0:26da)
 	ld hl, wCursorBlinkCounter
@@ -5150,7 +5150,7 @@ Func_271a: ; 271a (0:271a)
 .asm_2748
 	push af
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 	call .asm_2772
 	pop af
 	ld [wCurMenuItem], a
@@ -5334,26 +5334,42 @@ WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 	db $1d ; tile behind cursor
 	db $0, $0 ; ???, ???
 
-	INCROM $2ad0, $2af0
+Func_2ad0: ; 2ad0 (0:2ad0)
+	call DrawWideTextBox_PrintText
+	lb de, 6, 16 ; x, y
+	ld a, d
+	ld [wcd98], a
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
+	ld a, 1
+	ld [wCurMenuItem], a
+	call EnableLCD
+	jp HandleYesOrNoMenu.init_menu
+; 0x2aeb
+
+Func_2aeb: ; 2aeb (0:2aeb)
+	ld a, $01
+	ld [wcd9a], a
+;	fallthrough
 
 ; handle a yes / no menu with custom text provided in hl
 ; returns carry if "no" selected
 YesOrNoMenuWithText: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
-
+;	fallthrough
 YesOrNoMenu: ; 2af3 (0:2af3)
 	lb de, 7, 16 ; x, y
 	call PrintYesOrNoItems
 	lb de, 6, 16 ; x, y
-	jr handleYesOrNoMenu
+	jr HandleYesOrNoMenu
 
 YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 	call DrawNarrowTextBox_PrintText
 	lb de, 3, 16 ; x, y
 	call PrintYesOrNoItems
 	lb de, 2, 16 ; x, y
-
-handleYesOrNoMenu
+;	fallthrough
+HandleYesOrNoMenu:
 	ld a, d
 	ld [wcd98], a
 	lb bc, $0f, $00 ; cursor tile, tile behind cursor
@@ -5372,7 +5388,7 @@ handleYesOrNoMenu
 	and D_RIGHT | D_LEFT
 	jr z, .wait_button_loop
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 	call EraseCursor
 .init_menu
 	ld a, [wcd98]
@@ -7207,14 +7223,14 @@ HandleEnergyBurn: ; 375d (0:375d)
 	ret
 ; 0x377f
 
-SetupSound_T: ; 377f (0:377f)
-	farcall SetupSound_Ext
+SetupSound: ; 377f (0:377f)
+	farcall _SetupSound
 	ret
 
 Func_3784: ; 3784 (0:3784)
 	xor a
 PlaySong: ; 3785 (0:3785)
-	farcall Func_f4006
+	farcall _PlaySong
 	ret
 
 Func_378a: ; 378a (0:378a)
@@ -7227,8 +7243,8 @@ Func_378f: ; 378f (0:378f)
 
 Func_3794: ; 3794 (0:3794)
 	ld a, $04
-Func_3796: ; 3796 (0:3796)
-	farcall Func_f4009
+PlaySFX: ; 3796 (0:3796)
+	farcall _PlaySFX
 	ret
 
 Func_379b: ; 379b (0:379b)

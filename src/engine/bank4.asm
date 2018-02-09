@@ -373,7 +373,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	and A_BUTTON
 	jr z, .asm_10e96
 	ld a, $2
-	call Func_3796
+	call PlaySFX
 	call Func_11016
 	call Func_11024
 	jr .asm_10e96
@@ -399,7 +399,7 @@ Func_10e97: ; 10e97 (4:4e97)
 	ld [wd32e], a
 	call Func_10f2e
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 .asm_10eb9
 	pop bc
 	pop hl
@@ -549,7 +549,7 @@ Func_11016: ; 11016 (4:5016)
 
 Func_11024: ; 11024 (4:5024)
 	ld a, $57
-	call Func_3796
+	call PlaySFX
 	ld a, [wd336]
 	ld [wd4cf], a
 	ld c, $f

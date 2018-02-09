@@ -1,14 +1,14 @@
-SetupSound_Ext:: ; f4000 (3d:4000)
+_SetupSound:: ; f4000 (3d:4000)
 	jp Music1_Init
 
-SoundTimerHandler_Ext:: ; f4003 (3d:4003)
+SoundTimerHandler:: ; f4003 (3d:4003)
 	jp Music1_Update
 
-Func_f4006:: ; f4006 (3d:4006)
+_PlaySong:: ; f4006 (3d:4006)
 	jp Music1_PlaySong
 
-Func_f4009:: ; f4009 (3d:4009)
-	jp Func_f402d
+_PlaySFX:: ; f4009 (3d:4009)
+	jp Music1_PlaySFX
 
 Func_f400c:: ; f400c (3d:400c)
 	jp Func_f404e
@@ -41,7 +41,7 @@ Music1_PlaySong: ; f4021 (3d:4021)
 	pop hl
 	ret
 
-Func_f402d: ; f402d (3d:402d)
+Music1_PlaySFX: ; f402d (3d:402d)
 	push bc
 	push hl
 	ld b, $0
@@ -165,7 +165,7 @@ Music1_Init: ; f407d (3d:407d)
 Music1_Update: ; f40e9 (3d:40e9)
 	call Music1_EmptyFunc
 	call Music1_CheckForNewSound
-	ld hl, Func_fc003
+	ld hl, SFX_UpdateSFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSongBank]
 	ldh [hBankROM], a
@@ -200,7 +200,7 @@ Music1_CheckForNewSound: ; f411c (3d:411c)
 	rla
 	jr c, .noNewSound
 	ld a, [wCurSfxID]
-	ld hl, Func_fc000
+	ld hl, SFX_PlaySFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSfxID]
 	or $80

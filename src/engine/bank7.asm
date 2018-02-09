@@ -406,7 +406,7 @@ Func_1d078: ; 1d078 (7:5078)
 	and A_BUTTON | START
 	jr z, .asm_1d095
 	ld a, $2
-	call Func_3796
+	call PlaySFX
 	farcall Func_10ab4
 
 .asm_1d0c7

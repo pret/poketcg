@@ -65,7 +65,7 @@ LoadMap: ; c000 (3:4000)
 	bit 4, [hl]
 	jr z, .asm_c0b6
 	ld a, $c
-	call Func_3796
+	call PlaySFX
 	jp .asm_c037
 .asm_c0b6
 	farcall Func_10ab4
@@ -2769,7 +2769,7 @@ Func_d40f: ; d40f (3:540f)
 
 Func_d416: ; d416 (3:5416)
 	ld a, c
-	call Func_3796
+	call PlaySFX
 	jp IncreaseOWScriptPointerBy2
 
 Func_d41d: ; d41d (3:541d)

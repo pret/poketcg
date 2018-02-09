@@ -1515,7 +1515,7 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_7292
 	ld a, d
-	call Func_3796
+	call PlaySFX
 	ld a, [wcd9c]
 	dec a
 	jr z, .asm_72b9

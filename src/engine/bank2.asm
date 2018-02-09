@@ -471,7 +471,7 @@ Func_9065: ; 9065 (2:5065)
 	ld a, [wcfe3]
 	or a
 	jr z, .asm_90ca
-	call Func_3796
+	call PlaySFX
 .asm_90ca
 	ld hl, $cea3
 	ld a, [hl]
@@ -515,7 +515,7 @@ Func_90fb: ; 90fb (2:50fb)
 .asm_9103
 	ld a, $3
 .asm_9105
-	call Func_3796
+	call PlaySFX
 	pop af
 	ret
 
