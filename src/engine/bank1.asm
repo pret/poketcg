@@ -300,7 +300,7 @@ PrintDuelMenu:
 	or a
 	ret nz
 	ld a, [wCurrentDuelMenuItem]
-	call Func_2710
+	call SetMenuItem
 
 Func_42ac:
 	call DoFrame
@@ -571,7 +571,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ldh a, [hButtonsPressed]
 	and START
 	jr nz, .displaySelectedMoveInfo
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .waitForInput
 	cp $ff ; was B pressed?
 	jp z, PrintDuelMenu
@@ -666,8 +666,7 @@ AttackMenuCursorData:
 	db 2 ; number of items
 	db $0f ; cursor tile number
 	db $00 ; tile behind cursor
-	db $00 ; ???
-	db $00 ; ???
+	dw $0000 ; unknown function pointer if non-0
 
 Func_47ec: ; $47ec (1:47ec)
 	ld a, [wcc04]

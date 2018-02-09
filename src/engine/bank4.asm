@@ -318,7 +318,7 @@ Func_10dba: ; 10dba (4:4dba)
 	farcall Func_111e9
 .asm_10dca
 	call DoFrameIfLCDEnabled
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_10dca
 	ld a, e
 	ld [wd0ba], a

@@ -88,7 +88,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call Func_8dea
 	jr c, Func_8dbc
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_8dc8
 	ldh a, [hCurrentMenuItem]
 	cp $ff
@@ -923,7 +923,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [hl], d
 .asm_ba40
 	call DoFrame
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr c, .asm_baa3
 	ld a, [$ff8f]
 	and $c0
@@ -973,7 +973,7 @@ Func_ba04: ; ba04 (2:7a04)
 	jp $7a25
 
 .asm_baa3
-	call Func_270b
+	call DrawCursor2
 	ld a, [$cea1]
 	ld [$d087], a
 	ld a, [wCurMenuItem]

@@ -4966,7 +4966,8 @@ Func_256d: ; 256d (0:256d)
 ; initializes cursor parameters given the 8 bytes starting at hl,
 ; which represent the following:
 ;   x position, y position, y displacement between items, number of items,
-;   cursor tile number, tile behind cursor, ??, ??
+;   cursor tile number, tile behind cursor, ???? (unknown function pointer if non-0)
+; also sets the current menu item to the one specified in register a
 InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
@@ -4984,98 +4985,100 @@ InitializeCursorParameters: ; 2636 (0:2636)
 
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
-MenuCursorAcceptInput: ; 264b (0:264b)
+HandleMenuInput: ; 264b (0:264b)
 	xor a
-	ld [wcd99], a
+	ld [wRefreshMenuCursorSFX], a
 	ldh a, [hButtonsPressed2]
 	or a
-	jr z, .asm_2685
+	jr z, .up_down_done
 	ld b, a
 	ld a, [wNumMenuItems]
 	ld c, a
 	ld a, [wCurMenuItem]
 	bit D_UP_F, b
-	jr z, .asm_266b
+	jr z, .not_up
 	dec a
 	bit 7, a
-	jr z, .asm_2674
+	jr z, .handle_up_or_down
 	ld a, [wNumMenuItems]
-	dec a
-	jr .asm_2674
-.asm_266b
+	dec a ; wrapping around, so load the bottommost item
+	jr .handle_up_or_down
+.not_up
 	bit D_DOWN_F, b
-	jr z, .asm_2685
+	jr z, .up_down_done
 	inc a
 	cp c
-	jr c, .asm_2674
-	xor a
-.asm_2674
+	jr c, .handle_up_or_down
+	xor a ; wrapping around, so load the topmost item
+.handle_up_or_down
 	push af
 	ld a, $1
-	ld [wcd99], a
+	ld [wRefreshMenuCursorSFX], a ; buffer sound for up/down
 	call EraseCursor
 	pop af
 	ld [wCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
-.asm_2685
+.up_down_done
 	ld a, [wCurMenuItem]
 	ldh [hCurrentMenuItem], a
-	ld hl, $cd17
+	ld hl, wcd17
 	ld a, [hli]
 	or [hl]
-	jr z, asm_26a9
+	jr z, .check_A_or_B
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	ldh a, [hCurrentMenuItem]
 	call CallHL
-	jr nc, HandleMenuInput
-asm_269b:
-	call Func_270b
-
-Func_269e: ; 269e (0:269e)
-	call Func_26c0
+	jr nc, RefreshMenuCursor_CheckPlaySFX
+.A_pressed_draw_cursor
+	call DrawCursor2
+.A_pressed
+	call PlayOpenOrExitScreenSFX
 	ld a, [wCurMenuItem]
 	ld e, a
 	ldh a, [hCurrentMenuItem]
 	scf
 	ret
-asm_26a9:
+.check_A_or_B
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, HandleMenuInput
+	jr z, RefreshMenuCursor_CheckPlaySFX
 	and A_BUTTON
-	jr nz, asm_269b
+	jr nz, HandleMenuInput.A_pressed_draw_cursor
+	; b button pressed
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
 	ldh [hCurrentMenuItem], a
-	call Func_26c0
+	call PlayOpenOrExitScreenSFX
 	scf
 	ret
 
-Func_26c0: ; 26c0 (0:26c0)
+; plays an "open screen" sound if [hCurrentMenuItem] != 0xff
+; plays a "exit screen" sound if [hCurrentMenuItem] == 0xff
+PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
 	ldh a, [hCurrentMenuItem]
 	inc a
-	jr z, .asm_26ca
+	jr z, .play_exit_sfx
 	ld a, $2
-	jr .asm_26cc
-.asm_26ca
+	jr .play_sfx
+.play_exit_sfx
 	ld a, $3
-.asm_26cc
+.play_sfx
 	call PlaySFX
 	pop af
 	ret
 
-HandleMenuInput: ; 26d1 (0:26d1)
-	ld a, [wcd99]
+RefreshMenuCursor_CheckPlaySFX: ; 26d1 (0:26d1)
+	ld a, [wRefreshMenuCursorSFX]
 	or a
-	jr z, HandleTextBoxInput
+	jr z, RefreshMenuCursor
 	call PlaySFX
 ;	fallthrough
-HandleTextBoxInput: ; 26da (0:26da)
+RefreshMenuCursor: ; 26da (0:26da)
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -5108,11 +5111,12 @@ DrawCursor:
 	or a
 	ret
 
-Func_270b: ; 270b (0:270b)
+; unlike DrawCursor, read cursor tile from wCursorTileNumber instead of register a
+DrawCursor2: ; 270b (0:270b)
 	ld a, [wCursorTileNumber]
 	jr DrawCursor
 
-Func_2710: ; 2710 (0:2710)
+SetMenuItem: ; 2710 (0:2710)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
 	xor a
@@ -5131,7 +5135,7 @@ Func_271a: ; 271a (0:271a)
 	xor $1
 	jr .asm_2748
 .asm_272c
-	bit 5, b
+	bit D_LEFT_F, b
 	jr z, .asm_273b
 	ld a, [hl]
 	sub $2
@@ -5140,7 +5144,7 @@ Func_271a: ; 271a (0:271a)
 	add $4
 	jr .asm_2748
 .asm_273b
-	bit 4, b
+	bit D_RIGHT_F, b
 	jr z, .asm_275d
 	ld a, [hl]
 	add $2
@@ -5161,7 +5165,7 @@ Func_271a: ; 271a (0:271a)
 .asm_275d
 	ldh a, [hButtonsPressed2]
 	and A_BUTTON
-	jp nz, Func_269e
+	jp nz, HandleMenuInput.A_pressed
 .asm_2764
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
@@ -5204,7 +5208,7 @@ Func_29fa: ; 29fa (0:29fa)
 	call SetCursorParametersForTextBox
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
 	jr nz, .a_pressed
@@ -5285,12 +5289,12 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	ld hl, NarrowTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.wait_aorBLoop
+.wait_A_or_B_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .wait_aorBLoop
+	jr z, .wait_A_or_B_loop
 	ret
 
 NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
@@ -5299,7 +5303,7 @@ NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
 	db 1 ; number of items
 	db $2f ; cursor tile number
 	db $1d ; tile behind cursor
-	db $0, $0 ; ???, ???
+	dw $0000 ; unknown function pointer if non-0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
@@ -5317,12 +5321,12 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	ld hl, WideTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.wait_aorBLoop
+.wait_A_or_B_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .wait_aorBLoop
+	jr z, .wait_A_or_B_loop
 	call EraseCursor
 	ret
 
@@ -5332,19 +5336,19 @@ WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 	db 1 ; number of items
 	db $2f ; cursor tile number
 	db $1d ; tile behind cursor
-	db $0, $0 ; ???, ???
+	dw $0000 ; unknown function pointer if non-0
 
-Func_2ad0: ; 2ad0 (0:2ad0)
+TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	call DrawWideTextBox_PrintText
 	lb de, 6, 16 ; x, y
 	ld a, d
-	ld [wcd98], a
+	ld [wLeftmostItemCursorX], a
 	lb bc, $0f, $00 ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, 1
 	ld [wCurMenuItem], a
 	call EnableLCD
-	jp HandleYesOrNoMenu.init_menu
+	jp HandleYesOrNoMenu.refresh_menu
 ; 0x2aeb
 
 Func_2aeb: ; 2aeb (0:2aeb)
@@ -5371,32 +5375,35 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 ;	fallthrough
 HandleYesOrNoMenu:
 	ld a, d
-	ld [wcd98], a
+	ld [wLeftmostItemCursorX], a
 	lb bc, $0f, $00 ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, [wcd9a]
 	ld [wCurMenuItem], a
 	call EnableLCD
-	jr .init_menu
+	jr .refresh_menu
 .wait_button_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
 	jr nz, .a_pressed
 	ldh a, [hButtonsPressed2]
 	and D_RIGHT | D_LEFT
 	jr z, .wait_button_loop
+	; left or right pressed, so switch to the other menu item
 	ld a, $1
 	call PlaySFX
 	call EraseCursor
-.init_menu
-	ld a, [wcd98]
+.refresh_menu
+	ld a, [wLeftmostItemCursorX]
 	ld c, a
+	; default to the second option (NO)
 	ld hl, wCurMenuItem
 	ld a, [hl]
 	xor $1
 	ld [hl], a
+	; x separation between left and right items is 4 tiles
 	add a
 	add a
 	add c
@@ -5410,11 +5417,11 @@ HandleYesOrNoMenu:
 	or a
 	jr nz, .no
 ;.yes
-	ld [wcd9a], a
+	ld [wcd9a], a ; 0
 	ret
 .no
 	xor a
-	ld [wcd9a], a
+	ld [wcd9a], a ; 0
 	ld a, $1
 	ldh [hCurrentMenuItem], a
 	scf

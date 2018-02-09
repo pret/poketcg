@@ -691,12 +691,15 @@ wCursorTileNumber:: ; cd15
 wTileBehindCursor:: ; cd16
 	ds $1
 
-	ds $81
+wcd17:: ; cd17
+	ds 2
 
-wcd98:: ; cd98
+	ds $7f
+
+wLeftmostItemCursorX:: ; cd98
 	ds $1
 
-wcd99:: ; cd99
+wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
 wcd9a:: ; cd9a
