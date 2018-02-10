@@ -1,14 +1,14 @@
-SetupSound_Ext:: ; f4000 (3d:4000)
+_SetupSound:: ; f4000 (3d:4000)
 	jp Music1_Init
 
-SoundTimerHandler_Ext:: ; f4003 (3d:4003)
+SoundTimerHandler:: ; f4003 (3d:4003)
 	jp Music1_Update
 
-Func_f4006:: ; f4006 (3d:4006)
+_PlaySong:: ; f4006 (3d:4006)
 	jp Music1_PlaySong
 
-Func_f4009:: ; f4009 (3d:4009)
-	jp Func_f402d
+_PlaySFX:: ; f4009 (3d:4009)
+	jp Music1_PlaySFX
 
 Func_f400c:: ; f400c (3d:400c)
 	jp Func_f404e
@@ -41,7 +41,7 @@ Music1_PlaySong: ; f4021 (3d:4021)
 	pop hl
 	ret
 
-Func_f402d: ; f402d (3d:402d)
+Music1_PlaySFX: ; f402d (3d:402d)
 	push bc
 	push hl
 	ld b, $0
@@ -165,7 +165,7 @@ Music1_Init: ; f407d (3d:407d)
 Music1_Update: ; f40e9 (3d:40e9)
 	call Music1_EmptyFunc
 	call Music1_CheckForNewSound
-	ld hl, Func_fc003
+	ld hl, SFX_UpdateSFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSongBank]
 	ldh [hBankROM], a
@@ -200,7 +200,7 @@ Music1_CheckForNewSound: ; f411c (3d:411c)
 	rla
 	jr c, .noNewSound
 	ld a, [wCurSfxID]
-	ld hl, Func_fc000
+	ld hl, SFX_PlaySFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSfxID]
 	or $80
@@ -1853,10 +1853,10 @@ Music1_ChannelLoopStacks: ; f4c20 (3d:4c20)
 	dw wMusicCh4Stack
 
 Unknown_f4c28: ; f4c28 (3d:4c28)
-INCBIN "baserom.gbc",$f4c28,$f4c30 - $f4c28
+	INCROM $f4c28, $f4c30
 
 Unknown_f4c30: ; f4c30 (3d:4c30)
-INCBIN "baserom.gbc",$f4c30,$f4cda - $f4c30
+	INCROM $f4c30, $f4cda
 
 Music1_WaveInstruments: ; f4cda (3d:4cda)
 INCLUDE "audio/wave_instruments.asm"
@@ -1868,7 +1868,7 @@ Music1_VibratoTypes: ; f4dde (3d:4dde)
 INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f4e85: ; f4e85 (3d:4e85)
-INCBIN "baserom.gbc",$f4e85,$f4ee5 - $f4e85
+	INCROM $f4e85, $f4ee5
 
 INCLUDE "audio/music1_headers.asm"
 
@@ -1890,5 +1890,5 @@ INCLUDE "audio/music/boosterpack.asm"
 INCLUDE "audio/music/medal.asm"
 
 rept $138
-db $ff
+	db $ff
 endr

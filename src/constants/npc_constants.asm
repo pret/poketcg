@@ -1,44 +1,45 @@
-PLAYER_PIC    EQU $01
-RONALD_PIC    EQU $02
-SAM_PIC       EQU $03
-IMAKUNI_PIC   EQU $04
-NIKKI_PIC     EQU $05
-RICK_PIC      EQU $06
-KEN_PIC       EQU $07
-AMY_PIC       EQU $08
-ISAAC_PIC     EQU $09
-MITCH_PIC     EQU $0A
-GENE_PIC      EQU $0B
-MURRAY_PIC    EQU $0C
-COURTNEY_PIC  EQU $0D
-STEVE_PIC     EQU $0E
-JACK_PIC      EQU $0F
-ROD_PIC       EQU $10
-JOSEPH_PIC    EQU $11
-DAVID_PIC     EQU $12
-ERIK_PIC      EQU $13
-JOHN_PIC      EQU $14
-ADAM_PIC      EQU $15
-JONATHAN_PIC  EQU $16
-JOSHUA_PIC    EQU $17
-NICHOLAS_PIC  EQU $18
-BRANDON_PIC   EQU $19
-MATTHEW_PIC   EQU $1A
-RYAN_PIC      EQU $1B
-ANDREW_PIC    EQU $1C
-CHRIS_PIC     EQU $1D
-MICHAEL_PIC   EQU $1E
-DANIEL_PIC    EQU $1F
-ROBERT_PIC    EQU $20
-BRITTANY_PIC  EQU $21
-KRISTIN_PIC   EQU $22
-HEATHER_PIC   EQU $23
-SARA_PIC      EQU $24
-AMANDA_PIC    EQU $25
-JENNIFER_PIC  EQU $26
-JESSICA_PIC   EQU $27
-STEPHANIE_PIC EQU $28
-AARON_PIC     EQU $29
+	const_def 1
+	const PLAYER_PIC    ; $01
+	const RONALD_PIC    ; $02
+	const SAM_PIC       ; $03
+	const IMAKUNI_PIC   ; $04
+	const NIKKI_PIC     ; $05
+	const RICK_PIC      ; $06
+	const KEN_PIC       ; $07
+	const AMY_PIC       ; $08
+	const ISAAC_PIC     ; $09
+	const MITCH_PIC     ; $0A
+	const GENE_PIC      ; $0B
+	const MURRAY_PIC    ; $0C
+	const COURTNEY_PIC  ; $0D
+	const STEVE_PIC     ; $0E
+	const JACK_PIC      ; $0F
+	const ROD_PIC       ; $10
+	const JOSEPH_PIC    ; $11
+	const DAVID_PIC     ; $12
+	const ERIK_PIC      ; $13
+	const JOHN_PIC      ; $14
+	const ADAM_PIC      ; $15
+	const JONATHAN_PIC  ; $16
+	const JOSHUA_PIC    ; $17
+	const NICHOLAS_PIC  ; $18
+	const BRANDON_PIC   ; $19
+	const MATTHEW_PIC   ; $1A
+	const RYAN_PIC      ; $1B
+	const ANDREW_PIC    ; $1C
+	const CHRIS_PIC     ; $1D
+	const MICHAEL_PIC   ; $1E
+	const DANIEL_PIC    ; $1F
+	const ROBERT_PIC    ; $20
+	const BRITTANY_PIC  ; $21
+	const KRISTIN_PIC   ; $22
+	const HEATHER_PIC   ; $23
+	const SARA_PIC      ; $24
+	const AMANDA_PIC    ; $25
+	const JENNIFER_PIC  ; $26
+	const JESSICA_PIC   ; $27
+	const STEPHANIE_PIC ; $28
+	const AARON_PIC     ; $29
 
-SARA          EQU $1f
-AMANDA        EQU $20
+SARA   EQU $1F
+AMANDA EQU $20

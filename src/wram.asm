@@ -1,17 +1,16 @@
-INCLUDE "constants.asm"
 INCLUDE "macros.asm"
+INCLUDE "constants.asm"
 
-;----------------------------------------------------------
-;--- Bank 0: $Cxxx ----------------------------------------
-;----------------------------------------------------------
+INCLUDE "vram.asm"
 
-SECTION "WRAM0", WRAM0
+SECTION "WRAM 0", WRAM0
 
-wTempCardCollection::
-	ds $100
+wTempCardCollection:: ; c000
 	ds $100
 
-;--- Duel variables ----------------------------------------------
+	ds $100
+
+SECTION "WRAM Duels 1", WRAM0
 
 wPlayerDuelVariables:: ; c200
 
@@ -28,6 +27,7 @@ wPlayerDuelVariables:: ; c200
 ;	$1X - bench (where X is bench position from 1 to 5)
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE
+
 	ds $6
 
 ; Which cards are in player's hand, as numbers 0 to 59
@@ -40,8 +40,8 @@ wPlayerDeckCards:: ; c27e
 	ds DECK_SIZE
 
 ; Stores x = (60 - deck remaining cards)
-; The first x cards in the wPlayerDeckCards array are not actually in the deck
-; For example, the top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
+; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel
+; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
@@ -52,6 +52,7 @@ wPlayerArenaCard:: ; c2bb
 ; Which cards are in player's bench, as numbers 0 to 59
 wPlayerBench:: ; c2bc
 	ds BENCH_SIZE
+
 	ds $7
 
 wPlayerArenaCardHP:: ; c2c8
@@ -66,6 +67,7 @@ wPlayerBench4CardHP:: ; c2cc
 	ds $1
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
+
 	ds $19
 
 wPlayerArenaCardSubstatus1:: ; c2e7
@@ -109,12 +111,14 @@ wPlayerDuelistType:: ; c2f1
 ; if under the effects of amnesia, which move (0 or 1) can't be used
 wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 	ds $1
+
 	ds $d
 
 wOpponentDuelVariables:: ; c300
 
 wOpponentCardLocations:: ; c300
 	ds DECK_SIZE
+
 	ds $6
 
 wOpponentHand:: ; c342
@@ -131,6 +135,7 @@ wOpponentArenaCard:: ; c3bb
 
 wOpponentBench:: ; c3bc
 	ds BENCH_SIZE
+
 	ds $7
 
 wOpponentArenaCardHP:: ; c3c8
@@ -145,6 +150,7 @@ wOpponentBench4CardHP:: ; c3cc
 	ds $1
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
+
 	ds $19
 
 wOpponentArenaCardSubstatus1:: ; c3e7
@@ -185,13 +191,29 @@ wOpponentDuelistType:: ; c3f1
 
 wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
+
 	ds $d
+
+UNION
+
+wBoosterCardsDrawn:: ; c400
+wBoosterTempNonEnergiesDrawn:: ; c400
+	ds $b
+wBoosterTempEnergiesDrawn:: ; c40b
+	ds $b
+wBoosterCardsDrawnEnd::
+	ds $6a
+
+NEXTU
 
 wPlayerDeck:: ; c400
 	ds $80
 
+ENDU
+
 wOpponentDeck:: ; c480
 	ds $80
+
 	ds $10
 
 ; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
@@ -203,7 +225,7 @@ wDuelCardOrAttackList:: ; c510
 wc590:: ; c590
 	ds $70
 
-;--- Text engine ------------------------------------------
+SECTION "WRAM Text Engine", WRAM0
 
 wc600:: ; c600
 	ds $100
@@ -217,7 +239,7 @@ wc800:: ; c800
 wc900:: ; c900
 	ds $100
 
-;--- Engine -----------------------------------------------
+SECTION "WRAM Engine 1", WRAM0
 
 wBufOAM:: ; ca00
 	ds $a0
@@ -254,6 +276,7 @@ wIE:: ; cab7
 
 wVBlankCtr:: ; cab8
 	ds $1
+
 	ds $1
 
 ; bit0: is in vblank interrupt?
@@ -278,6 +301,8 @@ wFlushPaletteFlags:: ; cabf
 
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
+
+wcac1:: ; cac1
 	ds $1
 
 wcac2:: ; cac2
@@ -321,6 +346,7 @@ wcad4:: ; cad4
 
 wcad5:: ; cad5
 	ds $1
+
 	ds $8
 
 wcade:: ; cade
@@ -331,9 +357,10 @@ wcae2:: ; cae2
 
 wBufPalette:: ; caf0
 	ds $80
+
 	ds $4
 
-;--- Serial transfer bytes (cb74-cbc4) --------------------
+SECTION "WRAM Serial transfer bytes", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -349,6 +376,7 @@ wSerialCounter2:: ; cb77
 
 wSerialTimeoutCounter:: ; cb78
 	ds $1
+
 	ds $4
 
 wSerialSendSave:: ; cb7d
@@ -380,9 +408,10 @@ wSerialRecvIndex:: ; cba4
 
 wSerialRecvBuf:: ; cba5 - cbc4
 	ds $20
+
 	ds $1
 
-;--- Engine ----------------------------------------------
+SECTION "WRAM Duels 2", WRAM0
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
@@ -395,6 +424,7 @@ wCurrentDuelMenuItem:: ; cbc6
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
 wCardPageNumber:: ; cbc7
 	ds $1
+
 	ds $1
 
 wcbc9:: ; cbc9
@@ -402,6 +432,7 @@ wcbc9:: ; cbc9
 
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
+
 	ds $2
 
 wAttachedEnergiesAccum:: ; cbce
@@ -424,7 +455,10 @@ wcbe6:: ; cbe6
 	ds $1
 
 wcbe7:: ; cbe7
-	ds $12
+	ds $6
+
+wcbed:: ; cbed
+	ds $c
 
 wcbf9:: ; cbf9
 	ds $b
@@ -468,6 +502,7 @@ wcc0d:: ; cc0d
 ; beginning of DeckPointers
 wOpponentDeckId:: ; cc0e
 	ds $1
+
 	ds $1
 
 wcc10:: ; cc10
@@ -481,6 +516,7 @@ wcc12:: ; cc12
 
 wIsPracticeDuel:: ; cc13
 	ds $1
+
 	ds $1
 
 wcc15:: ; cc15
@@ -527,10 +563,10 @@ wDamage:: ; ccb9
 ; wccbb and wccbc appear to be used for AI scoring
 wccbb::
 	ds $1
-	
+
 wccbc::
 	ds $1
-	
+
 	ds $2
 
 wccbf:: ; ccbf
@@ -591,11 +627,14 @@ wccf1:: ; ccf1
 wccf2:: ; ccf2
 	ds $1
 
+SECTION "WRAM Engine 2", WRAM0
+
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
 wFrameType:: ; ccf3
 	ds $1
+
 	ds $10
 
 wcd04:: ; cd04
@@ -624,6 +663,7 @@ wcd0b:: ; cd0b
 
 wUppercaseFlag:: ; cd0d
 	ds $1
+
 	ds $1
 
 ; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
@@ -650,12 +690,16 @@ wCursorTileNumber:: ; cd15
 
 wTileBehindCursor:: ; cd16
 	ds $1
-	ds $81
 
-wcd98:: ; cd98
+wcd17:: ; cd17
+	ds 2
+
+	ds $7f
+
+wLeftmostItemCursorX:: ; cd98
 	ds $1
 
-wcd99:: ; cd99
+wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
 wcd9a:: ; cd9a
@@ -781,11 +825,7 @@ wcfb9:: ; cfb9
 
 wcfe3:: ; cfe3
 
-;----------------------------------------------------------
-;--- Bank 1: $Dxxx ----------------------------------------
-;----------------------------------------------------------
-
-SECTION "WRAM1", WRAMX, BANK[1]
+SECTION "WRAM1", WRAMX
 	ds $a9
 
 wd0a9:: ; d0a9
@@ -908,10 +948,12 @@ wPCPackSelection:: ; d11d
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
 	ds $c
+
 	ds $3
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
+
 	ds $3
 
 wd131:: ; d131
@@ -1169,19 +1211,19 @@ wd633:: ; d633
 wd635:: ; d635
 	ds $34
 
-wBoosterDataIndex:: ; d669
+wBoosterIndex:: ; d669
 	ds $1
 
-wBoosterTempData:: ; d66a
+wBoosterTempCard:: ; d66a
 	ds $1
 
 wBoosterSelectedCardType:: ; d66b
 	ds $1
 
-wBoosterCurrRarity:: ; d66c
+wBoosterCurRarity:: ; d66c
 	ds $1
 
-wBoosterDataAveragedChance:: ; d66d
+wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
 wBoosterDataCommonAmount:: ; d66e
@@ -1194,10 +1236,10 @@ wBoosterDataRareAmount:: ; d670
 	ds $1
 
 wBoosterAmountOfCardTypeTable:: ; d671
-	ds $09
+	ds NUM_BOOSTER_CARD_TYPES
 
 wBoosterTempTypeChanceTable:: ; d67a
-	ds $09
+	ds NUM_BOOSTER_CARD_TYPES
 
 wBoosterCurrentCardType:: ; d683
 	ds $1
@@ -1208,17 +1250,18 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
-wBoosterDataCurrSet:: ; d686
+wBoosterDataSet:: ; d686
 	ds $1
 
 wBoosterDataEnergyFunctionPointer:: ; d687
 	ds $2
 
-wBoosterDataTypeChanceData:: ; d689
-	ds $9
+wBoosterDataTypeChances:: ; d689
+	ds NUM_BOOSTER_CARD_TYPES
+
 	ds $6ee
 
-;--- Music ------------------------------------------------
+SECTION "WRAM Music", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80
@@ -1384,7 +1427,7 @@ wMusicCh3Stack:: ; de13
 wMusicCh4Stack:: ; de1f
 	ds $c
 
-;--- SFX --------------------------------------------------
+SECTION "WRAM Sfx", WRAMX
 
 wde2b:: ; de2b
 	ds $3

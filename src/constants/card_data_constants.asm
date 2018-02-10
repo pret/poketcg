@@ -1,33 +1,45 @@
+NONE EQU $0
+
 PKMN_CARD_DATA_LENGTH   EQU $41
 TRN_CARD_DATA_LENGTH    EQU $0e
 ENERGY_CARD_DATA_LENGTH EQU $0e
 
-DECK_NAME_SIZE   EQU  24
-DECK_SIZE        EQU  60
-BENCH_SIZE       EQU   5
+;;; generic type constants
+; double up as Pokemon card types
+	const_def
+	const FIRE        ; $0
+	const GRASS       ; $1
+	const LIGHTNING   ; $2
+	const WATER       ; $3
+	const FIGHTING    ; $4
+	const PSYCHIC     ; $5
+	const COLORLESS   ; $6
+	const UNUSED_TYPE ; $7
+NUM_TYPES EQU const_value
 
 ;;; card types
-FIRE      EQU $0
-GRASS     EQU $1
-LIGHTNING EQU $2
-WATER     EQU $3
-FIGHTING  EQU $4
-PSYCHIC   EQU $5
-COLORLESS EQU $6
+TYPE_PKMN_FIRE               EQUS "FIRE"
+TYPE_PKMN_GRASS              EQUS "GRASS"
+TYPE_PKMN_LIGHTNING          EQUS "LIGHTNING"
+TYPE_PKMN_WATER              EQUS "WATER"
+TYPE_PKMN_FIGHTING           EQUS "FIGHTING"
+TYPE_PKMN_PSYCHIC            EQUS "PSYCHIC"
+TYPE_PKMN_COLORLESS          EQUS "COLORLESS"
+TYPE_PKMN_UNUSED             EQUS "UNUSED_TYPE"
+	const_def TYPE_PKMN_UNUSED + 1 - TYPE_PKMN_FIRE
+	const TYPE_ENERGY_FIRE              ; $8
+	const TYPE_ENERGY_GRASS             ; $9
+	const TYPE_ENERGY_LIGHTNING         ; $A
+	const TYPE_ENERGY_WATER             ; $B
+	const TYPE_ENERGY_FIGHTING          ; $C
+	const TYPE_ENERGY_PSYCHIC           ; $D
+	const TYPE_ENERGY_DOUBLE_COLORLESS  ; $E
+	const TYPE_ENERGY_UNUSED            ; $F
+	const TYPE_TRAINER                  ; $10
+	const TYPE_TRAINER_UNUSED           ; $11
+NUM_CARD_TYPES EQU const_value + -1
 
-FIRE_ENERGY_CARD             EQU $8
-GRASS_ENERGY_CARD            EQU $9
-LIGHTNING_ENERGY_CARD        EQU $A
-WATER_ENERGY_CARD            EQU $B
-FIGHTING_ENERGY_CARD         EQU $C
-PSYCHIC_ENERGY_CARD          EQU $D
-DOUBLE_COLORLESS_ENERGY_CARD EQU $E
-
-TRAINER_CARD EQU $10
-
-NUM_TYPES EQU FIRE_ENERGY_CARD - FIRE
-
-ENERGY_CARD_F EQU 3
+TYPE_ENERGY_F EQU 3
 
 ;;; rarity
 CIRCLE    EQU $0
@@ -35,7 +47,7 @@ DIAMOND   EQU $1
 STAR      EQU $2
 PROMOSTAR EQU $FF
 
-;;; set
+;;; set 1
 COLOSSEUM   EQU $00
 EVOLUTION   EQU $10
 MYSTERY     EQU $20
@@ -43,7 +55,7 @@ LABORATORY  EQU $30
 PROMOTIONAL EQU $40
 ENERGY      EQU $50
 
-NONE   EQU $0
+;;; set 2
 JUNGLE EQU $1
 FOSSIL EQU $2
 GB     EQU $7

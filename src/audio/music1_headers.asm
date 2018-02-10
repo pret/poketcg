@@ -1,4 +1,4 @@
-NumberOfSongs1: ; 4fee5 (3d:4ee5)
+NumberOfSongs1: ; f4ee5 (3d:4ee5)
 	db $1f
 
 SongBanks1: ; f4ee6 (3d:4ee6)

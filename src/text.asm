@@ -1,48 +1,48 @@
-INCLUDE "constants.asm"
 INCLUDE "macros.asm"
+INCLUDE "constants.asm"
 
-SECTION "bankD",ROMX,BANK[$D]
+SECTION "Text 1", ROMX
 INCLUDE "text/text_offsets.asm"
 INCLUDE "text/text1.asm"
 
-SECTION "bankE",ROMX,BANK[$E]
+SECTION "Text 2", ROMX
 INCLUDE "text/text2.asm"
 
-SECTION "bankF",ROMX,BANK[$F]
+SECTION "Text 3", ROMX
 INCLUDE "text/text3.asm"
 
-SECTION "bank10",ROMX,BANK[$10]
+SECTION "Text 4", ROMX
 INCLUDE "text/text4.asm"
 
-SECTION "bank11",ROMX,BANK[$11]
+SECTION "Text 5", ROMX
 INCLUDE "text/text5.asm"
 
-SECTION "bank12",ROMX,BANK[$12]
+SECTION "Text 6", ROMX
 INCLUDE "text/text6.asm"
 
-SECTION "bank13",ROMX,BANK[$13]
+SECTION "Text 7", ROMX
 INCLUDE "text/text7.asm"
 
-SECTION "bank14",ROMX,BANK[$14]
+SECTION "Text 8", ROMX
 INCLUDE "text/text8.asm"
 
-SECTION "bank15",ROMX,BANK[$15]
+SECTION "Text 9", ROMX
 INCLUDE "text/text9.asm"
 
-SECTION "bank16",ROMX,BANK[$16]
-INCLUDE "text/texta.asm"
+SECTION "Text 10", ROMX
+INCLUDE "text/text10.asm"
 
-SECTION "bank17",ROMX,BANK[$17]
-INCLUDE "text/textb.asm"
+SECTION "Text 11", ROMX
+INCLUDE "text/text11.asm"
 
-SECTION "bank18",ROMX,BANK[$18]
-INCLUDE "text/textc.asm"
+SECTION "Text 12", ROMX
+INCLUDE "text/text12.asm"
 
-SECTION "bank19",ROMX,BANK[$19]
-INCLUDE "text/textd.asm"
+SECTION "Text 13", ROMX
+INCLUDE "text/text13.asm"
 
-SECTION "bank1A",ROMX,BANK[$1A]
+SECTION "Empty Bank 1A", ROMX
 	emptybank
 
-SECTION "bank1B",ROMX,BANK[$1B]
+SECTION "Empty Bank 1B", ROMX
 	emptybank

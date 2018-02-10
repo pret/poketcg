@@ -1,561 +1,18 @@
-GenerateBoosterPack: ; 1e1c4 (7:61c4)
-	push hl
-	push bc
-	push de
-	ld [wBoosterDataIndex], a
-.noCardsFoundLoop
-	call InitBoosterData
-	call GenerateBoosterEnergy
-	call GenerateBoosterCard
-	jr c, .noCardsFoundLoop
-	call CopyBoosterEnergiesToBooster
-	call AddBoosterCardsToCollection
-	pop de
-	pop bc
-	pop hl
-	ret
-
-GenerateBoosterCard: ; 1e1df (7:61df)
-	ld a, STAR
-	ld [wBoosterCurrRarity], a
-.generateCardLoop
-	call FindCurrRarityChance
-	ld a, [hl]
-	or a
-	jr z, .noMoreOfCurrentRarity
-	call FindCardsInSetAndRarity
-	call FindTotalTypeChances
-	or a
-	jr z, .noValidCards
-	call Random
-	call DetermineBoosterCardType
-	call FindBoosterCard
-	call UpdateBoosterCardTypesChanceByte
-	call AddCardToBoosterList
-	call FindCurrRarityChance
-	dec [hl]
-	jr .generateCardLoop
-.noMoreOfCurrentRarity
-	ld a, [wBoosterCurrRarity]
-	dec a
-	ld [wBoosterCurrRarity], a
-	bit 7, a
-	jr z, .generateCardLoop
-	or a
-	ret
-.noValidCards
-	rst $38
-	scf
-	ret
-
-FindCurrRarityChance: ; 1e219 (7:6219)
-	push bc
-	ld hl, wBoosterDataCommonAmount
-	ld a, [wBoosterCurrRarity]
-	ld c, a
-	ld b, $0
-	add hl, bc
-	pop bc
-	ret
-
-FindCardsInSetAndRarity: ; 1e226 (7:6226)
-	ld c, BOOSTER_CARD_TYPE_AMOUNT
-	ld hl, wBoosterAmountOfCardTypeTable
-	xor a
-.deleteTypeTableLoop
-	ld [hli], a
-	dec c
-	jr nz, .deleteTypeTableLoop
-	xor a
-	ld hl, wBoosterViableCardList
-	ld [hl], a
-	ld de, $1
-.checkCardViableLoop
-	push de
-	ld a, e
-	ld [wBoosterTempData], a
-	call CheckByteInWramZeroed
-	jr c, .finishedWithCurrentCard
-	call CheckCardViable
-	jr c, .finishedWithCurrentCard
-	ld a, [wBoosterCurrentCardType]
-	call GetCardType
-	push af
-	push hl
-	ld c, a
-	ld b, $00
-	ld hl, wBoosterAmountOfCardTypeTable
-	add hl, bc
-	inc [hl]
-	pop hl
-	ld a, [wBoosterTempData]
-	ld [hli], a
-	pop af
-	ld [hli], a
-	xor a
-	ld [hl], a
-.finishedWithCurrentCard
-	pop de
-	inc e
-	ld a, e
-	cp NUM_CARDS + 1
-	jr c, .checkCardViableLoop
-	ret
-
-CheckCardViable: ; 1e268 (7:6268)
-	push bc
-	ld a, e
-	call GetCardHeader
-	ld [wBoosterCurrentCardType], a
-	ld a, b
-	ld [wBoosterCurrentCardRarity], a
-	ld a, c
-	ld [wBoosterCurrentCardSet], a
-	ld a, [wBoosterCurrentCardRarity]
-	ld c, a
-	ld a, [wBoosterCurrRarity]
-	cp c
-	jr nz, .invalidCard
-	ld a, [wBoosterCurrentCardType]
-	call GetCardType
-	cp BOOSTER_CARD_TYPE_ENERGY
-	jr z, .returnValidCard
-	ld a, [wBoosterCurrentCardSet]
-	swap a
-	and $0f
-	ld c, a
-	ld a, [wBoosterDataCurrSet]
-	cp c
-	jr nz, .invalidCard
-.returnValidCard
-	or a
-	jr .return
-.invalidCard
-	scf
-.return
-	pop bc
-	ret
-
-GetCardType: ; 1e2a0 (7:62a0)
-	push hl
-	push bc
-	ld hl, CardTypeTable
-	cp $11
-	jr nc, .skipToTypeLoad
-	ld c, a
-	ld b, $00
-	add hl, bc
-.skipToTypeLoad
-	ld a, [hl]
-	pop bc
-	pop hl
-	ret
-
-CardTypeTable:  ; 1e2b1 (7:62b1)
-	db BOOSTER_CARD_TYPE_FIRE
-	db BOOSTER_CARD_TYPE_GRASS
-	db BOOSTER_CARD_TYPE_LIGHTNING
-	db BOOSTER_CARD_TYPE_WATER
-	db BOOSTER_CARD_TYPE_FIGHTING
-	db BOOSTER_CARD_TYPE_PSYCHIC
-	db BOOSTER_CARD_TYPE_COLORLESS
-	db BOOSTER_CARD_TYPE_TRAINER
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_ENERGY
-	db BOOSTER_CARD_TYPE_TRAINER
-	db BOOSTER_CARD_TYPE_TRAINER
-
-FindTotalTypeChances: ; 1e2c2 (7:62c2)
-	ld c, BOOSTER_CARD_TYPE_AMOUNT
-	xor a
-	ld hl, wBoosterTempTypeChanceTable
-.deleteTempTypeChanceTableLoop
-	ld [hli], a
-	dec c
-	jr nz, .deleteTempTypeChanceTableLoop
-	ld [wd4ca], a
-	ld bc, $00
-.checkIfTypeIsValid
-	push bc
-	ld hl, wBoosterAmountOfCardTypeTable
-	add hl, bc
-	ld a, [hl]
-	or a
-	jr z, .amountOfTypeOrChanceZero
-	ld hl, wBoosterDataTypeChanceData
-	add hl, bc
-	ld a, [hl]
-	or a
-	jr z, .amountOfTypeOrChanceZero
-	ld hl, wBoosterTempTypeChanceTable
-	add hl, bc
-	ld [hl], a
-	ld a, [wd4ca]
-	add [hl]
-	ld [wd4ca], a
-.amountOfTypeOrChanceZero
-	pop bc
-	inc c
-	ld a, c
-	cp $09
-	jr c, .checkIfTypeIsValid
-	ld a, [wd4ca]
-	ret
-
-DetermineBoosterCardType: ; 1e2fa (7:62fa)
-	ld [wd4ca], a
-	ld c, $00
-	ld hl, wBoosterTempTypeChanceTable
-.loopThroughCardTypes
-	ld a, [hl]
-	or a
-	jr z, .skipNoChanceType
-	ld a, [wd4ca]
-	sub [hl]
-	ld [wd4ca], a
-	jr c, .foundCardType
-.skipNoChanceType
-	inc hl
-	inc c
-	ld a, c
-	cp a, BOOSTER_CARD_TYPE_AMOUNT
-	jr c, .loopThroughCardTypes
-	ld a, $08
-.foundCardType
-	ld a, c
-	ld [wBoosterSelectedCardType], a
-	ret
-
-FindBoosterCard: ; 1e31d (7:631d)
-	ld a, [wBoosterSelectedCardType]
-	ld c, a
-	ld b, $00
-	ld hl, wBoosterAmountOfCardTypeTable
-	add hl, bc
-	ld a, [hl]
-	call Random
-	ld [wd4ca], a
-	ld hl, wBoosterViableCardList
-.findMatchingCardLoop
-	ld a, [hli]
-	or a
-	jr z, .noValidCardFound
-	ld [wBoosterTempData], a
-	ld a, [wBoosterSelectedCardType]
-	cp [hl]
-	jr nz, .cardIncorrectType
-	ld a, [wd4ca]
-	or a
-	jr z, .returnWithCurrentCard
-	dec a
-	ld [wd4ca], a
-.cardIncorrectType
-	inc hl
-	jr .findMatchingCardLoop
-.returnWithCurrentCard
-	or a
-	ret
-.noValidCardFound
-	rst $38
-	scf
-	ret
-
-;lowers the chance of getting the same type multiple times
-UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
-	push hl
-	push bc
-	ld a, [wBoosterSelectedCardType]
-	ld c, a
-	ld b, $00
-	ld hl, wBoosterDataTypeChanceData
-	add hl, bc
-	ld a,[wBoosterDataAveragedChance]
-	ld c, a
-	ld a, [hl]
-	sub c
-	ld [hl], a
-	jr z, .chanceLessThanOne
-	jr nc, .stillSomeChanceLeft
-.chanceLessThanOne
-	ld a, $01
-	ld [hl], a
-.stillSomeChanceLeft
-	pop bc
-	pop hl
-	ret
-
-GenerateBoosterEnergy: ; 1e3db (7:63db)
-	ld hl, wBoosterDataEnergyFunctionPointer + 1
-	ld a, [hld]
-	or a
-	jr z, .noFunctionPointer
-	ld l, [hl]
-	ld h, a
-	jp hl
-.noFunctionPointer
-	ld a, [hl]
-	or a
-	ret z
-	push af
-	call AddBoosterEnergyToWram
-	pop af
-	ret
-
-AddBoosterEnergyToWram: ; 1e380 (7:6380)
-	ld [wBoosterTempData], a
-	call AddCardToBoosterEnergies
-	ret
-
-GenerateEndingEnergy: ; 1e387 (7:6387)
-	ld a, $06
-	call Random
-	add a, $01
-	jr AddBoosterEnergyToWram
-
-GenerateRandomEnergyBoosterPack:  ; 1e390 (7:6390)
-	ld a, $0a
-.generateEnergyLoop
-	push af
-	call GenerateEndingEnergy
-	pop af
-	dec a
-	jr nz, .generateEnergyLoop
-	jr ZeroBoosterRarityData
-
-GenerateEnergyBoosterLightningFire:  ; 1e39c (7:639c)
-	ld hl, EnergyBoosterLightningFireData
-	jr CreateEnergyBooster
-
-GenerateEnergyBoosterWaterFighting:  ; 1e3a1 (7:63a1)
-	ld hl, EnergyBoosterWaterFightingData
-	jr CreateEnergyBooster
-
-GenerateEnergyBoosterGrassPsychic:  ; 1e3a6 (7:63a6)
-	ld hl, EnergyBoosterGrassPsychicData
-	jr CreateEnergyBooster
-
-CreateEnergyBooster:  ; 1e3ab (7:63ab)
-	ld b, $02
-.addTwoEnergiesToBoosterLoop
-	ld c, $05
-.addEnergyToBoosterLoop
-	push hl
-	push bc
-	ld a, [hl]
-	call AddBoosterEnergyToWram
-	pop bc
-	pop hl
-	dec c
-	jr nz, .addEnergyToBoosterLoop
-	inc hl
-	dec b
-	jr nz, .addTwoEnergiesToBoosterLoop
-ZeroBoosterRarityData:
-	xor a
-	ld [wBoosterDataCommonAmount], a
-	ld [wBoosterDataUncommonAmount], a
-	ld [wBoosterDataRareAmount], a
-	ret
-
-EnergyBoosterLightningFireData:
-	db LIGHTNING_ENERGY, FIRE_ENERGY
-EnergyBoosterWaterFightingData:
-	db WATER_ENERGY, FIGHTING_ENERGY
-EnergyBoosterGrassPsychicData:
-	db GRASS_ENERGY, PSYCHIC_ENERGY
-
-AddCardToBoosterEnergies: ; 1e3cf (7:63cf)
-	push hl
-	ld hl, wPlayerDeck + $b
-	call CopyToFirstEmptyByte
-	call AddBoosterCardToTempCardCollection
-	pop hl
-	ret
-
-AddCardToBoosterList: ; 1e3db (7:63db)
-	push hl
-	ld hl, wPlayerDeck
-	call CopyToFirstEmptyByte
-	call AddBoosterCardToTempCardCollection
-	pop hl
-	ret
-
-CopyToFirstEmptyByte: ; 1e3e7 (7:63e7)
-	ld a, [hli]
-	or a
-	jr nz, CopyToFirstEmptyByte
-	dec hl
-	ld a, [wBoosterTempData]
-	ld [hli], a
-	xor a
-	ld [hl], a
-	ret
-
-CopyBoosterEnergiesToBooster: ; 1e3f3 (7:63f3)
-	push hl
-	ld hl, wPlayerDeck + $b
-.loopThroughExtraCards
-	ld a, [hli]
-	or a
-	jr z, .endOfCards
-	ld [wBoosterTempData], a
-	push hl
-	ld hl, wPlayerDeck
-	call CopyToFirstEmptyByte
-	pop hl
-	jr .loopThroughExtraCards
-.endOfCards
-	pop hl
-	ret
-
-AddBoosterCardsToCollection:; 1e40a (7:640a)
-	push hl
-	ld hl, wPlayerDeck
-.addCardsLoop
-	ld a, [hli]
-	or a
-	jr z, .noCardsLeft
-	call AddCardToCollection
-	jr .addCardsLoop
-.noCardsLeft
-	pop hl
-	ret
-
-AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
-	push hl
-	ld h, wTempCardCollection >> 8
-	ld a, [wBoosterTempData]
-	ld l, a
-	inc [hl]
-	pop hl
-	ret
-
-CheckByteInWramZeroed: ; 1e423 (7:6423)
-	push hl
-	ld h, wTempCardCollection >> 8
-	ld a, [wBoosterTempData]
-	ld l, a
-	ld a, [hl]
-	pop hl
-	cp $01
-	ccf
-	ret
-
-;clears wPlayerDeck and wTempCardCollection
-;copies rarity amounts to ram and averages them into wBoosterDataAveragedChance
-InitBoosterData: ; 1e430 (7:6430)
-	ld c, $16
-	ld hl, wPlayerDeck
-	xor a
-.clearPlayerDeckLoop
-	ld [hli], a
-	dec c
-	jr nz, .clearPlayerDeckLoop
-	ld c, $00
-	ld hl, wTempCardCollection
-	xor a
-.clearTempCardCollectionLoop
-	ld [hli], a
-	dec c
-	jr nz, .clearTempCardCollectionLoop
-	call FindBoosterDataPointer
-	ld de, wBoosterDataCurrSet
-	ld bc, $c
-	call CopyData
-	call LoadRarityAmountsToWram
-	ld bc, $0
-	ld d, BOOSTER_CARD_TYPE_AMOUNT
-	ld e, $0
-	ld hl, wBoosterDataTypeChanceData
-.addChanceBytesLoop
-	ld a, [hli]
-	or a
-	jr z, .skipChanceByte
-	add c
-	ld c, a
-	inc e
-.skipChanceByte
-	dec d
-	jr nz, .addChanceBytesLoop
-	call DivideBCbyDE
-	ld a, c
-	ld [wBoosterDataAveragedChance], a
-	ret
-
-FindBoosterDataPointer: ; 1e46f (7:646f)
-	push bc
-	ld a, [wBoosterDataIndex]
-	add a
-	ld c, a
-	ld b, $0
-	ld hl, BoosterData_PtrTbl
-	add hl, bc
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	pop bc
-	ret
-
-BoosterData_PtrTbl: ; 1e480 (7:6480)
-	dw PackColoNeutral
-	dw PackColoGrass
-	dw PackColoFire
-	dw PackColoWater
-	dw PackColoLightning
-	dw PackColoFighting
-	dw PackColoTrainer
-	dw PackEvoNeutral
-	dw PackEvoGrass
-	dw PackEvoNeutralFireEnergy
-	dw PackEvoWater
-	dw PackEvoFighting
-	dw PackEvoPsychic
-	dw PackEvoTrainer
-	dw PackMysteryNeutral
-	dw PackMysteryGrassColorless
-	dw PackMysteryWaterColorless
-	dw PackLightningColorless
-	dw PackMysteryFightingColorless
-	dw PackMysteryTrainerColorless
-	dw PackLabTrainerLessFighting
-	dw PackLabGrass
-	dw PackLabWater
-	dw PackLabPsychic
-	dw PackLabTrainer
-	dw PackEnergyLightningFire
-	dw PackEnergyWaterFighting
-	dw PackEnergyGrassPsychic
-	dw PackRandomEnergies
-
-LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
-	ld a, [wBoosterDataCurrSet]
-	add a
-	add a
-	ld c, a
-	ld b, $00
-	ld hl, BoosterSetRarityAmountTable
-	add hl, bc
-	inc hl
-	ld a, [hli]
-	ld [wBoosterDataCommonAmount], a
-	ld a, [hli]
-	ld [wBoosterDataUncommonAmount], a
-	ld a, [hli]
-	ld [wBoosterDataRareAmount], a
-	ret
-
 BoosterSetRarityAmountTable: ; 1e4d4 (7::64d4)
-	db $01, $05, $03, $01 ; other, commons, uncommons, rares
-	db $01, $05, $03, $01 ; other, commons, uncommons, rares
-	db $00, $06, $03, $01 ; other, commons, uncommons, rares
-	db $00, $06, $03, $01 ; other, commons, uncommons, rares
+; energies, commons, uncommons, rares
+; commons + uncommons + rares needs to be equal to 10 minus the number of energy cards
+; defined in the pack's data below; otherwise, the number of cards in the pack won't be 10.
+	db $01, $05, $03, $01 ; COLOSSEUM >> 4
+	db $01, $05, $03, $01 ; EVOLUTION >> 4
+	db $00, $06, $03, $01 ; MYSTERY >> 4
+	db $00, $06, $03, $01 ; LABORATORY >> 4
 
-PackColoNeutral:: ; 1e4e4 (7:64e4)
+; For the energy or energy generation function, there are three options:
+; - Ponter to a function that generates energies (some generate one, some generate a full pack)
+; - A single energy of a specific type
+; - $0000 if no card in the pack is an energy
+
+PackColosseumNeutral:: ; 1e4e4 (7:64e4)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -570,7 +27,7 @@ PackColoNeutral:: ; 1e4e4 (7:64e4)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoGrass:: ; 1e4f0 (7:64f0)
+PackColosseumGrass:: ; 1e4f0 (7:64f0)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GRASS_ENERGY  ; energy or energy generation function
 
@@ -585,7 +42,7 @@ PackColoGrass:: ; 1e4f0 (7:64f0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoFire:: ; 1e4fc (7:64fc)
+PackColosseumFire:: ; 1e4fc (7:64fc)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw FIRE_ENERGY  ; energy or energy generation function
 
@@ -600,7 +57,7 @@ PackColoFire:: ; 1e4fc (7:64fc)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoWater:: ; 1e508 (7:6508)
+PackColosseumWater:: ; 1e508 (7:6508)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -615,7 +72,7 @@ PackColoWater:: ; 1e508 (7:6508)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoLightning:: ; 1e514 (7:6514)
+PackColosseumLightning:: ; 1e514 (7:6514)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw LIGHTNING_ENERGY ; energy or energy generation function
 
@@ -630,7 +87,7 @@ PackColoLightning:: ; 1e514 (7:6514)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoFighting:: ; 1e520 (7:6520)
+PackColosseumFighting:: ; 1e520 (7:6520)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -645,7 +102,7 @@ PackColoFighting:: ; 1e520 (7:6520)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackColoTrainer:: ; 1e52c (7:652c)
+PackColosseumTrainer:: ; 1e52c (7:652c)
 	db COLOSSEUM >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -660,7 +117,7 @@ PackColoTrainer:: ; 1e52c (7:652c)
 	db $30 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoNeutral:: ; 1e538 (7:6538)
+PackEvolutionNeutral:: ; 1e538 (7:6538)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -675,7 +132,7 @@ PackEvoNeutral:: ; 1e538 (7:6538)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoGrass:: ; 1e544 (7:6544)
+PackEvolutionGrass:: ; 1e544 (7:6544)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GRASS_ENERGY ; energy or energy generation function
 
@@ -690,7 +147,7 @@ PackEvoGrass:: ; 1e544 (7:6544)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoNeutralFireEnergy:: ; 1e550 (7:6550)
+PackEvolutionNeutralFireEnergy:: ; 1e550 (7:6550)
 	db EVOLUTION >> 4 ; booster pack set
 	dw FIRE_ENERGY ; energy or energy generation function
 
@@ -705,7 +162,7 @@ PackEvoNeutralFireEnergy:: ; 1e550 (7:6550)
 	db $14 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoWater:: ; 1e55c (7:655c)
+PackEvolutionWater:: ; 1e55c (7:655c)
 	db EVOLUTION >> 4 ; booster pack set
 	dw WATER_ENERGY ; energy or energy generation function
 
@@ -720,7 +177,7 @@ PackEvoWater:: ; 1e55c (7:655c)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoFighting:: ; 1e568 (7:6568)
+PackEvolutionFighting:: ; 1e568 (7:6568)
 	db EVOLUTION >> 4 ; booster pack set
 	dw FIGHTING_ENERGY ; energy or energy generation function
 
@@ -735,7 +192,7 @@ PackEvoFighting:: ; 1e568 (7:6568)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoPsychic:: ; 1e574 (7:6574)
+PackEvolutionPsychic:: ; 1e574 (7:6574)
 	db EVOLUTION >> 4 ; booster pack set
 	dw PSYCHIC_ENERGY ; energy or energy generation function
 
@@ -750,7 +207,7 @@ PackEvoPsychic:: ; 1e574 (7:6574)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackEvoTrainer:: ; 1e580 (7:6580)
+PackEvolutionTrainer:: ; 1e580 (7:6580)
 	db EVOLUTION >> 4 ; booster pack set
 	dw GenerateEndingEnergy ; energy or energy generation function
 
@@ -810,7 +267,7 @@ PackMysteryWaterColorless:: ; 1e5a4 (7:65a4)
 	db $0C ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-PackLightningColorless:: ; 1e5b0 (7:65b0)
+PackMysteryLightningColorless:: ; 1e5b0 (7:65b0)
 	db MYSTERY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -855,7 +312,7 @@ PackMysteryTrainerColorless:: ; 1e5c8 (7:65c8)
 	db $30 ; Trainer Card Chance
 	db $0C ; Energy Card Chance
 
-PackLabTrainerLessFighting:: ; 1e5d4 (7:65d4)
+PackLaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -870,7 +327,7 @@ PackLabTrainerLessFighting:: ; 1e5d4 (7:65d4)
 	db $18 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabGrass:: ; 1e5e0 (7:65e0)
+PackLaboratoryGrass:: ; 1e5e0 (7:65e0)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -885,7 +342,7 @@ PackLabGrass:: ; 1e5e0 (7:65e0)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabWater:: ; 1e5ec (7:65ec)
+PackLaboratoryWater:: ; 1e5ec (7:65ec)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -900,7 +357,7 @@ PackLabWater:: ; 1e5ec (7:65ec)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabPsychic:: ; 1e5f8 (7:65f8)
+PackLaboratoryPsychic:: ; 1e5f8 (7:65f8)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -915,7 +372,7 @@ PackLabPsychic:: ; 1e5f8 (7:65f8)
 	db $10 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
 
-PackLabTrainer:: ; 1e604 (7:6604)
+PackLaboratoryTrainer:: ; 1e604 (7:6604)
 	db LABORATORY >> 4 ; booster pack set
 	dw $0000 ; energy or energy generation function
 
@@ -977,7 +434,7 @@ PackEnergyGrassPsychic:: ; 1e628 (7:6628)
 
 PackRandomEnergies:: ; 1e634 (7:6634)
 	db COLOSSEUM >> 4 ; booster pack set
-	dw GenerateRandomEnergyBoosterPack ; energy or energy generation function
+	dw GenerateRandomEnergyBooster ; energy or energy generation function
 
 ; Card Type Chances
 	db $00 ; Grass Type Chance
@@ -989,5 +446,3 @@ PackRandomEnergies:: ; 1e634 (7:6634)
 	db $00 ; Colorless Type Chance
 	db $00 ; Trainer Card Chance
 	db $00 ; Energy Card Chance
-
-INCBIN "baserom.gbc",$1e640,$20000 - $1e640

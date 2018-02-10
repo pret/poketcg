@@ -65,7 +65,7 @@ LoadMap: ; c000 (3:4000)
 	bit 4, [hl]
 	jr z, .asm_c0b6
 	ld a, $c
-	call Func_3796
+	call PlaySFX
 	jp .asm_c037
 .asm_c0b6
 	farcall Func_10ab4
@@ -336,7 +336,7 @@ Func_c268: ; c268 (3:4268)
 	ret
 
 Unknown_c27c: ; c27c (3:427c)
-INCBIN "baserom.gbc",$c27c,$c280 - $c27c
+	INCROM $c27c, $c280
 
 Func_c280: ; c280 (3:4280)
 	call Func_c228
@@ -440,7 +440,7 @@ Func_c335: ; c335 (3:4335)
 	ld hl, $cb30
 	ld de, $d0cc
 	ld bc, $0040
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	ret
 
 Func_c34e: ; c34e (3:434e)
@@ -451,7 +451,7 @@ Func_c34e: ; c34e (3:434e)
 	ld hl, $d0cc
 	ld de, $cb30
 	ld bc, $0040
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	call Func_0404
 	ret
 
@@ -467,7 +467,7 @@ Func_c36a: ; c36a (3:436a)
 	ret
 ; 0xc37a
 
-INCBIN "baserom.gbc",$c37a,$c41c - $c37a
+	INCROM $c37a, $c41c
 
 Func_c41c: ; c41c (3:441c)
 	ld a, [wd332]
@@ -986,7 +986,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	call Func_c29b
 .asm_c76a
 	call DoFrameIfLCDEnabled
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_c76a
 	ld a, e
 	ld [wd0b8], a
@@ -1062,7 +1062,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c241
 	call $4915
 	call DoFrameIfLCDEnabled
-	text_hl TurnedPCOnText
+	ldtx hl, TurnedPCOnText
 	call Func_2c73
 	call $484e
 .asm_c801
@@ -1070,7 +1070,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c29b
 .asm_c806
 	call DoFrameIfLCDEnabled
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_c806
 	ld a, e
 	ld [wd0b9], a
@@ -1089,7 +1089,7 @@ PC_c7ea: ; c7ea (3:47ea)
 .asm_c82f
 	call Func_c135
 	call DoFrameIfLCDEnabled
-	text_hl TurnedPCOffText
+	ldtx hl, TurnedPCOffText
 	call Func_c891
 	call CloseDialogueBox
 	xor a
@@ -1098,7 +1098,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	ret
 ; 0xc846
 
-INCBIN "baserom.gbc",$c846,$c891 - $c846
+	INCROM $c846, $c891
 
 Func_c891: ; c891 (3:4891)
 	push hl
@@ -1177,11 +1177,11 @@ Func_c8ed: ; c8ed (3:c8ed)
 	ld [hli], a
 	ld [hl], a
 	pop hl
-	call Func_2af0
+	call YesOrNoMenuWithText
 	jr .asm_c911
 
 .asm_c90e
-	call $2af3
+	call YesOrNoMenu
 
 .asm_c911
 	pop de
@@ -1351,7 +1351,7 @@ Func_c9e8: ; c9e8 (3:49e8)
 	ret
 
 Unknown_ca0a: ; ca0a (3:4a04)
-INCBIN "baserom.gbc",$ca0a,$ca0e - $ca0a
+	INCROM $ca0a, $ca0e
 
 Func_ca0e: ; ca0e (3:4a0e)
 	ld a, [wd32e]
@@ -1430,7 +1430,7 @@ CheckIfEventFlagSet: ; ca6c (3:4a6c)
 	ret
 ; 0xca84
 
-INCBIN "baserom.gbc",$ca84,$ca8f - $ca84
+	INCROM $ca84, $ca8f
 
 Func_ca8f: ; ca8f (3:4a8f)
 	call Func_cab3
@@ -1477,7 +1477,7 @@ Func_cab3: ; cab3 (3:4ab3)
 	ret
 ; 0xcac2
 
-INCBIN "baserom.gbc",$cac2,$cac5 - $cac2
+	INCROM $cac2, $cac5
 
 SetEventFlags: ; cac5 (3:4ac5)
 	push bc
@@ -1487,7 +1487,7 @@ SetEventFlags: ; cac5 (3:4ac5)
 	ret
 ; 0xcacd
 
-INCBIN "baserom.gbc",$cacd,$cad0 - $cacd
+	INCROM $cacd, $cad0
 
 Func_cad0: ; cad0 (3:4ad0)
 	push bc
@@ -1541,7 +1541,7 @@ Func_cad8: ; cad8 (3:4ad8)
 	ret
 ; 0xcb15
 
-INCBIN "baserom.gbc",$cb15,$cb1d - $cb15
+	INCROM $cb15, $cb1d
 
 GetEventFlagMod: ; cb1d (3:4b1d)
 	push bc
@@ -1563,7 +1563,7 @@ GetEventFlagMod: ; cb1d (3:4b1d)
 
 ; offset - bytes to set or reset
 EventFlagMods: ; cb37 (3:4b37)
-INCBIN "baserom.gbc",$cb37,$cc32 - $cb37
+	INCROM $cb37, $cc32
 
 Func_cc32: ; cc32 (3:4c32)
 	push hl
@@ -1576,7 +1576,7 @@ Func_cc32: ; cc32 (3:4c32)
 	ret
 ; 0xcc3e
 
-INCBIN "baserom.gbc",$cc3e,$cc42 - $cc3e
+	INCROM $cc3e, $cc42
 
 ; called when pressing a in front of an object. creates a pointer to the data right after an RST20
 ; was called, then runs RunOverworldScript to handle that data
@@ -1590,7 +1590,7 @@ RST20: ; cc42 (3:4c42)
 	ld [wBreakOWScriptLoop], a
 .asm_cc4f
 	call RunOverworldScript
-	ld a, [wBreakOWScriptLoop] ; if you break out, it jumps 
+	ld a, [wBreakOWScriptLoop] ; if you break out, it jumps
 	or a
 	jr z, .asm_cc4f
 	ld hl, wOWScriptPointer
@@ -1639,7 +1639,7 @@ SetOWScriptPointer: ; cc8b (3:4c8b)
 	ret
 ; 0xcc92
 
-INCBIN "baserom.gbc",$cc92,$cc96 - $cc92
+	INCROM $cc92, $cc96
 
 GetOWSArgs1AfterPointer: ; cc96 (3:4c96)
 	ld a, $1
@@ -1701,7 +1701,7 @@ OWScript_EndScriptCloseText: ; cccc (3:4ccc)
 	pop hl
 	ret
 
-;args: 2-Text String Index
+; args: 2-Text String Index
 OWScript_PrintTextString: ; ccd4 (3:4cd4)
 	ld l, c
 	ld h, b
@@ -1781,7 +1781,7 @@ Func_cd4f: ; cd4f (3:4d4f)
 	jr asm_cd2f
 
 Unknown_dd63: ; cd4f (3:4d4f)
-INCBIN "baserom.gbc",$cd63,$cd66 - $cd63
+	INCROM $cd63, $cd66
 
 Func_cd66: ; cd66 (3:4d66)
 	ld a, c
@@ -1999,7 +1999,7 @@ Func_ceba: ; ceba (3:4eba)
 	jp IncreaseOWScriptPointerBy1
 ; 0xcedd
 
-INCBIN "baserom.gbc",$cedd,$cee2 - $cedd
+	INCROM $cedd, $cee2
 
 Func_cee2: ; cee2 (3:4ee2)
 	call Func_c2a3
@@ -2032,7 +2032,7 @@ Func_cf0c: ; cf0c (3:4f0c)
 
 Func_cf12: ; cf12 (3:4f12)
 	ld a, c
-	call $1d1d
+	call Func_1d1d
 
 asm_cf16
 	or a
@@ -2207,7 +2207,7 @@ Func_cfd4: ; cfd4 (3:4fd4)
 	dec hl
 	jp IncreaseOWScriptPointerBy1
 
-INCBIN "baserom.gbc",$d006,$d00b - $d006
+	INCROM $d006, $d00b
 
 Func_d00b: ; d00b (3:500b)
 	sla c
@@ -2236,7 +2236,7 @@ Func_d025: ; d025 (3:5025)
 Func_d032: ; d032 (3:5032)
 	call Func_ca69
 	dec hl
-	call $1d1d
+	call Func_1d1d
 	jp c, Func_cf67
 	jp Func_cf6d
 
@@ -2405,7 +2405,7 @@ Func_d135: ; d135 (3:5135)
 	ld [hl], d
 	jp IncreaseOWScriptPointerBy2
 
-INCBIN "baserom.gbc",$d153,$d16b - $d153
+	INCROM $d153, $d16b
 
 Func_d16b: ; d16b (3:516b)
 	ld hl, wd0c8
@@ -2477,7 +2477,7 @@ asm_d1c6
 	ld [wce40], a
 	jp IncreaseOWScriptPointerBy1
 
-INCBIN "baserom.gbc",$d1dc,$d209 - $d1dc
+	INCROM $d1dc, $d209
 
 Func_d209: ; d209 (3:5209)
 	call Func_ca69
@@ -2510,7 +2510,7 @@ Func_d209: ; d209 (3:5209)
 	ld a, c
 	jr asm_d1c6
 
-INCBIN "baserom.gbc",$d234,$d244 - $d234
+	INCROM $d234, $d244
 
 Func_d244: ; d244 (3:5244)
 	ld a, c
@@ -2527,7 +2527,7 @@ Func_d24c: ; d24c (3:524c)
 	halt
 	jp IncreaseOWScriptPointerBy1
 
-INCBIN "baserom.gbc",$d25e,$d271 - $d25e
+	INCROM $d25e, $d271
 
 Func_d271: ; d271 (3:5271)
 	ld hl, $527b
@@ -2536,7 +2536,7 @@ Func_d271: ; d271 (3:5271)
 	jp IncreaseOWScriptPointerBy1
 ; 0xd27b
 
-INCBIN "baserom.gbc",$d27b,$d28c - $d27b
+	INCROM $d27b, $d28c
 
 Func_d28c: ; d28c (3:528c)
 	ld [$d416], a
@@ -2576,7 +2576,7 @@ Func_d28c: ; d28c (3:528c)
 
 .asm_d2c1
 	call DoFrameIfLCDEnabled
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_d2c1
 	ld a, [hCurrentMenuItem]
 	cp e
@@ -2627,7 +2627,7 @@ Func_d2f6: ; d2f6 (3:52f6)
 	jp IncreaseOWScriptPointerBy1
 ; 0xd30c
 
-INCBIN "baserom.gbc",$d30c,$d317 - $d30c
+	INCROM $d30c, $d317
 
 Func_d317: ; d317 (3:5317)
 	ld hl, $532b
@@ -2640,7 +2640,7 @@ Func_d317: ; d317 (3:5317)
 	jp IncreaseOWScriptPointerBy1
 
 
-INCBIN "baserom.gbc",$d32b,$d336 - $d32b
+	INCROM $d32b, $d336
 
 DeckMachine_d336: ; d336 (3:5336)
 	push bc
@@ -2736,7 +2736,7 @@ Func_d3d4: ; d3d4 (3:53d4)
 	bank1call Func_7576
 	jp IncreaseOWScriptPointerBy1
 
-INCBIN "baserom.gbc",$d3dd,$d3e0 - $d3dd
+	INCROM $d3dd, $d3e0
 
 Func_d3e0: ; d3e0 (3:53e0)
 	ld a, $1
@@ -2769,7 +2769,7 @@ Func_d40f: ; d40f (3:540f)
 
 Func_d416: ; d416 (3:5416)
 	ld a, c
-	call Func_3796
+	call PlaySFX
 	jp IncreaseOWScriptPointerBy2
 
 Func_d41d: ; d41d (3:541d)
@@ -2876,7 +2876,7 @@ Func_d4ae: ; d4ae (3:54ae)
 	cp c
 	jr c, Func_d490 ; 0xd4b2 $dc
 	jr Func_d48a ; 0xd4b4 $d4
-	
+
 Func_d4b6: ; d4b6 (3:54b6)
 	ld a, c
 	ld c, b
@@ -2916,7 +2916,7 @@ asm_d4e6
 	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
-INCBIN "baserom.gbc",$d4ec,$d753 - $d4ec
+	INCROM $d4ec, $d753
 
 OWSequence_d753: ; d753 (3:5753)
 	start_script
@@ -2962,10 +2962,10 @@ OWSequence_d753: ; d753 (3:5753)
 	db $80
 	db $58
 	db $02
-	
+
 	; there's more to this script but it hasn't been disassembled yet
 
-INCBIN "baserom.gbc",$d77e,$e13f - $d77e
+	INCROM $d77e, $e13f
 
 WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
@@ -3029,8 +3029,8 @@ OWSequence_BeatSara: ; e18c (3:618c)
 	run_script OWScript_PrintTextString
 	tx Text0430
 	run_script OWScript_GiveBoosterPacks
-	db BOOSTER_ColoWater
-	db BOOSTER_ColoWater
+	db BOOSTER_COLOSSEUM_WATER
+	db BOOSTER_COLOSSEUM_WATER
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
 	tx Text0431
@@ -3067,8 +3067,8 @@ OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	run_script OWScript_PrintTextString
 	tx Text0437
 	run_script OWScript_GiveBoosterPacks
-	db BOOSTER_LightningColorless
-	db BOOSTER_LightningColorless
+	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
+	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
 	db NO_BOOSTER
 	run_script OWScript_PrintTextString
 	tx Text0438
@@ -3080,7 +3080,7 @@ OWSequence_LostToAmanda: ; e1c1 (03:61c1)
 	tx Text0439
 
 OWSequence_NotReadyToSeeAmy:
-INCBIN "baserom.gbc",$e1c5,$e21c - $e1c5
+	INCROM $e1c5, $e21c
 
 OWSequence_Joshua:
 	start_script
@@ -3113,8 +3113,8 @@ OWSequence_Joshua:
 	run_script Func_d484
 	db $33
 	db $01
-	
-INCBIN "baserom.gbc",$e23f,$e52c - $e23f
+
+	INCROM $e23f, $e52c
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
@@ -3147,7 +3147,7 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	jp Func_c926
 ; 0xe553
 
-INCBIN "baserom.gbc",$e553,$f580 - $e553
+	INCROM $e553, $f580
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69
@@ -3183,7 +3183,7 @@ Func_f580: ; f580 (3:7580)
 	ret
 ; 0xf5b3
 
-INCBIN "baserom.gbc",$f5b3,$fc2b - $f5b3
+	INCROM $f5b3, $fc2b
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [wd0c3]
@@ -3210,16 +3210,16 @@ PointerTable_fc4c: ; fc4c (3:7c4c)
 	dw Unknown_fc68
 	dw Unknown_fc60
 
-INCBIN "baserom.gbc",$fc52,$fc60 - $fc52
+	INCROM $fc52, $fc60
 
 Unknown_fc60: ; fc60 (3:7c60)
-INCBIN "baserom.gbc",$fc60,$fc64 - $fc60
+	INCROM $fc60, $fc64
 
 Unknown_fc64: ; fc64 (3:7c64)
-INCBIN "baserom.gbc",$fc64,$fc68 - $fc64
+	INCROM $fc64, $fc68
 
 Unknown_fc68: ; fc68 (3:7c68)
-INCBIN "baserom.gbc",$fc68,$fcad - $fc68
+	INCROM $fc68, $fcad
 
 Func_fcad: ; fcad (3:7cad)
-INCBIN "baserom.gbc",$fcad,$10000 - $fcad
+	INCROM $fcad, $10000

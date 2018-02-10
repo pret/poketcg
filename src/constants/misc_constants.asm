@@ -1,3 +1,11 @@
+; screen size
+SCREEN_WIDTH  EQU 20 ; tiles
+SCREEN_HEIGHT EQU 18 ; tiles
+
+; background map size
+BG_MAP_WIDTH  EQU 32 ; tiles
+BG_MAP_HEIGHT EQU 32 ; tiles
+
 ; console types (for wConsole)
 CONSOLE_DMG EQU $00
 CONSOLE_SGB EQU $01

@@ -8,7 +8,7 @@ Func_f8006: ; f8006 (3e:4006)
 	jp Music2_PlaySong
 
 Func_f8009: ; f8009 (3e:4009)
-	jp Func_f802d
+	jp Music2_PlaySFX
 
 Func_f800c: ; f800c (3e:400c)
 	jp Func_f804e
@@ -41,7 +41,7 @@ Music2_PlaySong: ; f8021 (3e:4021)
 	pop hl
 	ret
 
-Func_f802d: ; f802d (3e:402d)
+Music2_PlaySFX: ; f802d (3e:402d)
 	push bc
 	push hl
 	ld b, $0
@@ -165,7 +165,7 @@ Music2_Init: ; f807d (3e:407d)
 Music2_Update: ; f80e9 (3e:40e9)
 	call Music2_EmptyFunc
 	call Music2_CheckForNewSound
-	ld hl, Func_fc003
+	ld hl, SFX_UpdateSFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSongBank]
 	ldh [hBankROM], a
@@ -200,7 +200,7 @@ Music2_CheckForNewSound: ; f811c (3e:411c)
 	rla
 	jr c, .noNewSound
 	ld a, [wCurSfxID]
-	ld hl, Func_fc000
+	ld hl, SFX_PlaySFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSfxID]
 	or $80
@@ -1853,10 +1853,10 @@ Music2_ChannelLoopStacks: ; f8c20 (3e:4c20)
 	dw wMusicCh4Stack
 
 Unknown_f8c28: ; f8c28 (3e:4c28)
-INCBIN "baserom.gbc",$f8c28,$f8c30 - $f8c28
+	INCROM $f8c28, $f8c30
 
 Unknown_f8c30: ; f8c30 (3e:4c30)
-INCBIN "baserom.gbc",$f8c30,$f8cda - $f8c30
+	INCROM $f8c30, $f8cda
 
 Music2_WaveInstruments: ; f8cda (3e:4cda)
 INCLUDE "audio/wave_instruments.asm"
@@ -1868,7 +1868,7 @@ Music2_VibratoTypes: ; f8dde (3e:4dde)
 INCLUDE "audio/vibrato_types.asm"
 
 Unknown_f8e85: ; f8e85 (3e:4e85)
-INCBIN "baserom.gbc",$f8e85,$f8ee5 - $f8e85
+	INCROM $f8e85, $f8ee5
 
 INCLUDE "audio/music2_headers.asm"
 
@@ -1884,5 +1884,5 @@ INCLUDE "audio/music/hallofhonor.asm"
 INCLUDE "audio/music/credits.asm"
 
 rept $109
-db $ff
+	db $ff
 endr

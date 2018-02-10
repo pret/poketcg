@@ -16,20 +16,21 @@ Func_4000: ; 4000 (1:4000)
 	farcall Func_1a6cc
 	ldh a, [hButtonsHeld]
 	cp A_BUTTON | B_BUTTON
-	jr z, .asm_4035
+	jr z, .ask_erase_backup_ram
 	farcall Func_126d1
 	jr Func_4000
-.asm_4035
+.ask_erase_backup_ram
 	call Func_405a
 	call Func_04a2
-	text_hl ResetBackUpRamText
-	call Func_2af0
-	jr c, .asm_404d
+	ldtx hl, ResetBackUpRamText
+	call YesOrNoMenuWithText
+	jr c, .reset_game
+; erase sram
 	call EnableExtRAM
 	xor a
 	ld [$a000], a
 	call DisableExtRAM
-.asm_404d
+.reset_game
 	jp Reset
 
 Func_4050: ; 4050 (1:4050)
@@ -39,10 +40,10 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-INCBIN "baserom.gbc",$405a,$406f - $405a
+	INCROM $405a, $406f
 
 Func_406f: ; 406f (1:406f)
-INCBIN "baserom.gbc",$406f,$409f - $406f
+	INCROM $406f, $409f
 
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
@@ -128,7 +129,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_04a2
 	ld a, $3
 	call Func_2167
-	text_hl DecisionText
+	ldtx hl, DecisionText
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
 	ldh a, [hWhoseTurn]
@@ -147,7 +148,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, MUSIC_DARKDIDDLY
-	text_hl DuelWasDrawText
+	ldtx hl, DuelWasDrawText
 	jr .handleDuelFinished
 
 .activeDuelistWonBattle
@@ -159,7 +160,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wd0c3], a
 	ld a, $5d
 	ld c, MUSIC_MATCHVICTORY
-	text_hl WonDuelText
+	ldtx hl, WonDuelText
 	jr .handleDuelFinished
 
 .activeDuelistLostBattle
@@ -171,7 +172,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wd0c3], a
 	ld a, $5e
 	ld c, MUSIC_MATCHLOSS
-	text_hl LostDuelText
+	ldtx hl, LostDuelText
 
 .handleDuelFinished
 	call Func_3b6a
@@ -202,7 +203,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_3b31
 	ld a, [wDuelTheme]
 	call PlaySong
-	text_hl StartSuddenDeathMatchText
+	ldtx hl, StartSuddenDeathMatchText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	ld [wcc08], a
@@ -231,7 +232,7 @@ StartDuel: ; 409f (1:409f)
 	ret
 ; 0x420b
 
-INCBIN "baserom.gbc",$420b,$4225 - $420b
+	INCROM $420b, $4225
 
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
@@ -245,7 +246,7 @@ HandleTurn: ; 4225 (1:4225)
 .asm_4237
 	call $70e6
 	call $4933
-	call _DrawCardFromDeck
+	call DrawCardFromDeck
 	jr nc, .deckNotEmpty
 	ld a, DUEL_LOST
 	ld [wDuelFinished], a
@@ -282,8 +283,8 @@ Func_426d:
 	xor a
 	ld [wVBlankCtr], a
 	ld [wcbf9], a
-	text_hl DuelistIsThinkingText
-	call Func_2a36
+	ldtx hl, DuelistIsThinkingText
+	call DrawWideTextBox_PrintTextNoDelay
 	call Func_2bbf
 	ld a, $ff
 	ld [wcc11], a
@@ -299,7 +300,7 @@ PrintDuelMenu:
 	or a
 	ret nz
 	ld a, [wCurrentDuelMenuItem]
-	call Func_2710
+	call SetMenuItem
 
 Func_42ac:
 	call DoFrame
@@ -333,18 +334,18 @@ Func_42ac:
 	ld [wCurrentDuelMenuItem], a
 	jr nc, Func_42ac
 	ldh a, [hCurrentMenuItem]
-	ld hl, BattleMenuFunctionTable
+	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
 
-BattleMenuFunctionTable: ; 42f1 (1:42f1)
-	dw OpenHandMenu
-	dw OpenBattleAttackMenu
-	dw OpenBattleCheckMenu
-	dw OpenPokemonPowerMenu
-	dw PlayerRetreat
-	dw PlayerEndTurn
+DuelMenuFunctionTable: ; 42f1 (1:42f1)
+	dw DuelMenu_Hand
+	dw DuelMenu_Attack
+	dw DuelMenu_Check
+	dw DuelMenu_PkmnPower
+	dw DuelMenu_Retreat
+	dw DuelMenu_Done
 
-INCBIN "baserom.gbc",$42fd, $430b - $42fd
+	INCROM $42fd,  $430b
 
 Func_430b: ; 430b (1:430b)
 	call Func_4329
@@ -382,15 +383,15 @@ Func_4339: ; 4339 (1:4339)
 Func_4342: ; 4342 (1:4342)
 	jp $5550
 
-INCBIN "baserom.gbc",$4345, $438e - $4345
+	INCROM $4345,  $438e
 
-OpenPokemonPowerMenu: ; 438e (1:438e)
+DuelMenu_PkmnPower: ; 438e (1:438e)
 	call $6431
 	jp c, Func_426d
 	call Func_1730
 	jp Func_426d
 
-PlayerEndTurn: ; 439a (1:439a)
+DuelMenu_Done: ; 439a (1:439a)
 	ld a, $08
 	call $51e7
 	jp c, Func_4268
@@ -399,7 +400,7 @@ PlayerEndTurn: ; 439a (1:439a)
 	call $717a
 	ret
 
-PlayerRetreat: ; 43ab (1:43ab)
+DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and a,PASSIVE_STATUS_MASK
@@ -413,7 +414,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	jr c, Func_441f
 	call $4611
 	jr c, Func_441c
-	text_hl SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	jr c, Func_441c
@@ -427,7 +428,7 @@ PlayerRetreat: ; 43ab (1:43ab)
 	call $4f9d
 
 Func_43e8: ; 43e8
-	text_hl UnableToRetreatText
+	ldtx hl, UnableToRetreatText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
@@ -437,7 +438,7 @@ Func_43f1: ; 43f1 (1:43f1)
 	call $4611
 	jr c, Func_441c
 	call $6558
-	text_hl SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
@@ -457,22 +458,22 @@ Func_441f: ; 441f (1:441f)
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-OpenHandMenu: ; 4425 (1:4425)
+DuelMenu_Hand: ; 4425 (1:4425)
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
-	text_hl NoCardsInHandText
+	ldtx hl, NoCardsInHandText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
-INCBIN "baserom.gbc",$4436, $4477 - $4436
+	INCROM $4436,  $4477
 
-; c contains the energy card being played
+; c contains the type of energy card being played
 PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, c
-	cp WATER_ENERGY_CARD ; XXX why treat water energy card differently?
+	cp TYPE_ENERGY_WATER ; XXX why treat water energy card differently?
 	jr nz, .notWaterEnergy
 	call $3615
 	jr c, .waterEnergy
@@ -509,28 +510,28 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr z, .asm_4490
-	text_hl OnlyOneEnergyCardText
+	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4436
 
 .alreadyPlayedEnergy
-	text_hl OnlyOneEnergyCardText
+	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
-	call $123b
+	call CreateHandCardBuffer
 	call $55be
 	jp $4447
 ; 0x44db
 
-INCBIN "baserom.gbc",$44db, $4585 - $44db
+	INCROM $44db,  $4585
 
-OpenBattleCheckMenu: ; 4585 (1:4585)
+DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
 	jp Func_426d
 
-INCBIN "baserom.gbc",$458e, $46fc - $458e
+	INCROM $458e,  $46fc
 
-OpenBattleAttackMenu: ; 46fc (1:46fc)
+DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
 	jr c, .alertCantAttackAndCancelMenu
 	call CheckIfActiveCardParalyzedOrAsleep
@@ -548,7 +549,7 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	call LoadPokemonMovesToDuelCardOrAttackList
 	or a
 	jr nz, .openAttackMenu
-	text_hl NoSelectableAttackText
+	ldtx hl, NoSelectableAttackText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
@@ -570,14 +571,14 @@ OpenBattleAttackMenu: ; 46fc (1:46fc)
 	ldh a, [hButtonsPressed]
 	and START
 	jr nz, .displaySelectedMoveInfo
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .waitForInput
 	cp $ff ; was B pressed?
 	jp z, PrintDuelMenu
 	ld [wSelectedDuelSubMenuItem], a
 	call CheckIfEnoughEnergies
 	jr nc, .enoughEnergy
-	text_hl NotEnoughEnergyCardsText
+	ldtx hl, NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
@@ -660,14 +661,12 @@ Func_478b: ; 478b (1:478b)
 	ret
 
 AttackMenuCursorData:
-	db $01
-	db $0d
-	db $02
-	db $02
-	db $0f
-	db $00
-	db $00
-	db $00
+	db 1, 13 ; x, y
+	db 2 ; y displacement between items
+	db 2 ; number of items
+	db $0f ; cursor tile number
+	db $00 ; tile behind cursor
+	dw $0000 ; unknown function pointer if non-0
 
 Func_47ec: ; $47ec (1:47ec)
 	ld a, [wcc04]
@@ -919,17 +918,17 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ret
 
 .paralyzed
-	text_hl UnableDueToParalysisText
+	ldtx hl, UnableDueToParalysisText
 	jr .returnWithStatusCondition
 
 .asleep
-	text_hl UnableDueToSleepText
+	ldtx hl, UnableDueToSleepText
 
 .returnWithStatusCondition:
 	scf
 	ret
 
-INCBIN "baserom.gbc",$4933, $4b60 - $4933
+	INCROM $4933,  $4b60
 
 Func_4b60: ; 4b60 (1:4b60)
 	call $7107
@@ -994,7 +993,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call Func_4cd5
 	call SwapTurn
 	jp c, $4c77
-	call $311d
+	call Func_311d
 	ld hl, $0072
 	call DrawWideTextBox_WaitForInput
 	call Func_0f58
@@ -1058,7 +1057,7 @@ Func_4b60: ; 4b60 (1:4b60)
 ; 0x4c77
 
 
-INCBIN "baserom.gbc",$4c77, $4cd5 - $4c77
+	INCROM $4c77,  $4cd5
 
 ; Select Basic Pokemon From Hand
 Func_4cd5: ; 4cd5 (1:4cd5)
@@ -1117,7 +1116,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call $51e7
 	jr c, .asm_4d28
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	ld a, [$ff98]
 	ld hl, $0062
 	call $4b31
@@ -1141,7 +1140,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	cp $6
 	jr nc, .asm_4d86
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	ld a, [$ff98]
 	ld hl, $0061
 	call $4b31
@@ -1163,13 +1162,13 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 ; 0x4d97
 
 
-INCBIN "baserom.gbc",$4d97, $5aeb - $4d97
+	INCROM $4d97,  $5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
-INCBIN "baserom.gbc",$5aeb,$6785 - $5aeb
+	INCROM $5aeb, $6785
 
 Func_6785: ; 6785 (1:6785)
-INCBIN "baserom.gbc",$6785,$6793 - $6785
+	INCROM $6785, $6793
 
 ; loads player deck from SRAM to wPlayerDeck
 LoadPlayerDeck: ; 6793 (1:6793)
@@ -1192,7 +1191,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-INCBIN "baserom.gbc",$67b2,$67be - $67b2
+	INCROM $67b2, $67be
 
 ; related to ai taking their turn in a duel
 ; called multiple times during one ai turn
@@ -1224,7 +1223,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ret nz
 	ld [wVBlankCtr], a
 	ld hl, $0088
-	call Func_2a36
+	call DrawWideTextBox_PrintTextNoDelay
 	or a
 	ret
 
@@ -1233,7 +1232,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ret
 ; 0x67fb
 
-INCBIN "baserom.gbc",$67fb,$695e - $67fb
+	INCROM $67fb, $695e
 
 AIMoveTable: ; 695e (1:695e)
 	dw Func_0f35
@@ -1260,7 +1259,7 @@ AIMoveTable: ; 695e (1:695e)
 	dw $6b15
 	dw $6b20
 
-INCBIN "baserom.gbc",$698c,$69a5 - $698c
+	INCROM $698c, $69a5
 
 AIUseEnergyCard: ; 69a5 (1:69a5)
 	ld a, [$ffa1]
@@ -1279,20 +1278,20 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ret
 ; 0x69c5
 
-INCBIN "baserom.gbc",$69c5,$6d84 - $69c5
+	INCROM $69c5, $6d84
 
 ; converts clefairy doll/mysterious fossil at specified wLoadedCard to pokemon card
 ConvertTrainerCardToPokemon:
 	ld c, a
 	ld a, [hl]
-	cp TRAINER_CARD
+	cp TYPE_TRAINER
 	ret nz
 	push hl
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, c
 	ld a, [hl]
-	and TRAINER_CARD
+	and TYPE_TRAINER
 	pop hl
 	ret z
 	ld a, e
@@ -1336,7 +1335,7 @@ ConvertTrainerCardToPokemon:
     db UNABLE_RETREAT     ; retreat cost
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (wLoadedCard1RetreatCost + 1 - wLoadedCard1)
 
-INCBIN "baserom.gbc",$6df1,$7107 - $6df1
+	INCROM $6df1, $7107
 
 ; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
 ; player turn: [c200, c2ff]
@@ -1381,7 +1380,7 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	ret
 ; 0x7133
 
-INCBIN "baserom.gbc",$7133,$71ad - $7133
+	INCROM $7133, $71ad
 
 _TossCoin: ; 71ad (1:71ad)
 	ld [wcd9c], a
@@ -1391,7 +1390,7 @@ _TossCoin: ; 71ad (1:71ad)
 	xor a
 	ld [wcd9f], a
 	call Func_04a2
-	call $210f
+	call Func_210f
 
 .asm_71c1
 	ld a, [wcd9f]
@@ -1515,7 +1514,7 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_7292
 	ld a, d
-	call Func_3796
+	call PlaySFX
 	ld a, [wcd9c]
 	dec a
 	jr z, .asm_72b9
@@ -1577,29 +1576,29 @@ _TossCoin: ; 71ad (1:71ad)
 	ret
 ; 0x72ff
 
-INCBIN "baserom.gbc",$72ff,$7354 - $72ff
+	INCROM $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36",TX_END
 
-INCBIN "baserom.gbc",$7364,$7571 - $7364
+	INCROM $7364, $7571
 
 Func_7571: ; 7571 (1:7571)
-INCBIN "baserom.gbc",$7571,$7576 - $7571
+	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
         farcallx $6, $591f
         ret
 ; 0x757b
 
-INCBIN "baserom.gbc",$757b,$758f - $757b
+	INCROM $757b, $758f
 
 Func_758f: ; 758f (1:758f)
-INCBIN "baserom.gbc",$758f,$7594 - $758f
+	INCROM $758f, $7594
 
 Func_7594: ; 7594 (1:7594)
 	farcallx $6, $661f
 	ret
 ; 0x7599
 
-INCBIN "baserom.gbc",$7599,$8000 - $7599
+	INCROM $7599, $8000

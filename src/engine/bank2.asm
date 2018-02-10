@@ -1,4 +1,4 @@
-INCBIN "baserom.gbc",$8000,$8cd4 - $8000
+	INCROM $8000, $8cd4
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
@@ -17,7 +17,7 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	ret
 ; 0x8ce7
 
-INCBIN "baserom.gbc",$8ce7,$8cf9 - $8ce7
+	INCROM $8ce7, $8cf9
 
 Func_8cf9: ; 8cf9 (2:4cf9)
 	call EnableExtRAM
@@ -37,7 +37,7 @@ Func_8d0b: ; 8d0b (2:4d0b)
 	ret
 
 Unknown_8d15: ; 8d15 (2:4d15)
-INCBIN "baserom.gbc",$8d15,$8d56 - $8d15
+	INCROM $8d15, $8d56
 
 Func_8d56: ; 8d56 (2:4d56)
 	xor a
@@ -55,7 +55,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	ret
 ; 0x8d78
 
-INCBIN "baserom.gbc",$8d78,$8d9d - $8d78
+	INCROM $8d78, $8d9d
 
 Func_8d9d: ; 8d9d (2:4d9d)
 	ld de, $cfd1
@@ -69,7 +69,7 @@ Func_8d9d: ; 8d9d (2:4d9d)
 	ret
 
 Unknown_8da9: ; 8da9 (2:4da9)
-INCBIN "baserom.gbc",$8da9,$8db0 - $8da9
+	INCROM $8da9, $8db0
 
 Func_8db0: ; 8db0 (2:4db0)
 	ld hl, Unknown_8da9
@@ -81,14 +81,14 @@ Func_8db0: ; 8db0 (2:4db0)
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
 	call InitializeCursorParameters
-	text_hl PleaseSelectDeckText
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 .asm_8dc8
 	call DoFrame
 	jr c, Func_8dbc
 	call Func_8dea
 	jr c, Func_8dbc
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_8dc8
 	ldh a, [hCurrentMenuItem]
 	cp $ff
@@ -97,7 +97,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jp Func_8e42
 
 Unknown_8de2: ; 8de2 (2:4de2)
-INCBIN "baserom.gbc",$8de2,$8dea - $8de2
+	INCROM $8de2, $8dea
 
 Func_8dea: ; 8dea (2:4dea)
 	ldh a, [hButtonsPressed2]
@@ -348,13 +348,13 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	xor a
 	ld [wce3f], a
 	ld [wce40], a
-	text_hl ChosenAsDuelingDeckText
+	ldtx hl, ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
 	jp Func_8dbc
 
 Func_8fe8: ; 8fe8 (2:4fe8)
-	text_hl ThereIsNoDeckHereText
+	ldtx hl, ThereIsNoDeckHereText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
 	ret
@@ -372,13 +372,13 @@ Func_8ff2: ; 8ff2 (2:4ff2)
 	ret
 ; 0x9001
 
-INCBIN "baserom.gbc",$9001,$9026 - $9001
+	INCROM $9001, $9026
 
 Func_9026: ; 9026 (2:5026)
 	ret
 
 Unknown_9027: ; 9027 (2:5027)
-INCBIN "baserom.gbc",$9027,$9038 - $9027
+	INCROM $9027, $9038
 
 Func_9038: ; 9038 (2:5038)
 	ld a, [wceb1]
@@ -471,7 +471,7 @@ Func_9065: ; 9065 (2:5065)
 	ld a, [wcfe3]
 	or a
 	jr z, .asm_90ca
-	call Func_3796
+	call PlaySFX
 .asm_90ca
 	ld hl, $cea3
 	ld a, [hl]
@@ -515,7 +515,7 @@ Func_90fb: ; 90fb (2:50fb)
 .asm_9103
 	ld a, $3
 .asm_9105
-	call Func_3796
+	call PlaySFX
 	pop af
 	ret
 
@@ -540,7 +540,7 @@ Func_910a: ; 910a (2:510a)
 	ret
 ; 0x9120
 
-INCBIN "baserom.gbc",$9120,$9152 - $9120
+	INCROM $9120, $9152
 
 Func_9152: ; 9152 (2:5152)
 	push hl
@@ -662,7 +662,7 @@ Func_9168: ; 9168 (2:5168)
 	ret
 
 Unknown_9242: ; 9242 (2:5242)
-INCBIN "baserom.gbc",$9242,$9253 - $9242
+	INCROM $9242, $9253
 
 Func_9253: ; 9253 (2:5253)
 	ld de, wc590
@@ -703,13 +703,13 @@ Func_926e: ; 926e (2:526e)
 	ret
 .asm_929c
 	call Func_22ae
-	text_hl NewDeckText
+	ldtx hl, NewDeckText
 	call Func_2c29
 	scf
 	ret
 
 Unknown_92a7: ; 92a7 (2:52a7)
-INCBIN "baserom.gbc",$92a7,$92ad - $92a7
+	INCROM $92a7, $92ad
 
 Func_92ad: ; 92ad (2:52ad)
 	ld a, [hli]
@@ -726,7 +726,7 @@ Func_92b4: ; 92b4 (2:52b4)
 	ret
 ; 0x92be
 
-INCBIN "baserom.gbc",$92be,$9314 - $92be
+	INCROM $92be, $9314
 
 Func_9314: ; 9314 (2:5314)
 	ld bc, $0018
@@ -759,31 +759,31 @@ Func_9326: ; 9326 (2:5326)
 	ret
 
 Func_9345: ; 9345 (2:5345)
-INCBIN "baserom.gbc",$9345,$9843 - $9345
+	INCROM $9345, $9843
 
 Func_9843: ; 9843 (2:5843)
-INCBIN "baserom.gbc",$9843,$9e41 - $9843
+	INCROM $9843, $9e41
 
 Func_9e41: ; 9e41 (2:5e41)
-INCBIN "baserom.gbc",$9e41,$a288 - $9e41
+	INCROM $9e41, $a288
 
 Func_a288: ; a288 (2:6288)
-INCBIN "baserom.gbc",$a288,$a763 - $a288
+	INCROM $a288, $a763
 
 Unknown_a763: ; a763 (2:6763)
-INCBIN "baserom.gbc",$a763,$a76c - $a763
+	INCROM $a763, $a76c
 
 Unknown_a76c: ; a76c (2:676c)
-INCBIN "baserom.gbc",$a76c,$a775 - $a76c
+	INCROM $a76c, $a775
 
 Unknown_a775: ; a775 (2:6775)
-INCBIN "baserom.gbc",$a775,$a77e - $a775
+	INCROM $a775, $a77e
 
 Unknown_a77e: ; a77e (2:677e)
-INCBIN "baserom.gbc",$a77e,$b177 - $a77e
+	INCROM $a77e, $b177
 
 Func_b177: ; b177 (2:7177)
-INCBIN "baserom.gbc",$b177,$b19d - $b177
+	INCROM $b177, $b19d
 
 Func_b19d: ; b19d (2:719d)
 	xor a
@@ -842,7 +842,7 @@ Func_b19d: ; b19d (2:719d)
 
 .asm_b216
 	ld hl, $0272
-	call Func_2af0
+	call YesOrNoMenuWithText
 	ld a, [$d086]
 	jr c, .asm_b1b3
 	call $7592
@@ -888,7 +888,7 @@ Func_b19d: ; b19d (2:719d)
 	ret
 ; 0xb274
 
-INCBIN "baserom.gbc",$b274,$ba04 - $b274
+	INCROM $b274, $ba04
 
 Func_ba04: ; ba04 (2:7a04)
 	ld a, [wd0a9]
@@ -923,7 +923,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [hl], d
 .asm_ba40
 	call DoFrame
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr c, .asm_baa3
 	ld a, [$ff8f]
 	and $c0
@@ -973,7 +973,7 @@ Func_ba04: ; ba04 (2:7a04)
 	jp $7a25
 
 .asm_baa3
-	call Func_270b
+	call DrawCursor2
 	ld a, [$cea1]
 	ld [$d087], a
 	ld a, [wCurMenuItem]
@@ -1071,4 +1071,4 @@ Func_ba04: ; ba04 (2:7a04)
 	jp $7a25
 ; 0xbb6e
 
-INCBIN "baserom.gbc",$bb6e,$c000 - $bb6e
+	INCROM $bb6e, $c000

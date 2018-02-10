@@ -18,7 +18,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WeightText
 	textpointer PokemonText
 	textpointer Text000f
-	textpointer lbsText
+	textpointer LbsText
 	textpointer Text0011
 	textpointer Text0012
 	textpointer Text0013
@@ -148,7 +148,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text008f
 	textpointer Text0090
 	textpointer Text0091
-	textpointer Player2
+	textpointer Player2Text
 	textpointer Text0093
 	textpointer Text0094
 	textpointer Text0095

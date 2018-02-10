@@ -42,10 +42,10 @@ Func_10031: ; 10031 (4:4031)
 	ret
 
 Func_10059: ; 10059 (4:4059)
-INCBIN "baserom.gbc",$10059,$100a2 - $10059
+	INCROM $10059, $100a2
 
 Func_100a2: ; 100a2 (4:40a2)
-INCBIN "baserom.gbc",$100a2,$1029e - $100a2
+	INCROM $100a2, $1029e
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -90,7 +90,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, [wd116]
 	cp $e0
 	jr nz, .asm_102e2
-	text_hl WonTheMedalText
+	ldtx hl, WonTheMedalText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
@@ -99,7 +99,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ret
 
 Unknown_1030b: ; 1030b (4:430b)
-INCBIN "baserom.gbc",$1030b,$1031b - $1030b
+	INCROM $1030b, $1031b
 
 BoosterPack_1031b: ; 1031b (4:431b)
 	ld c, a
@@ -142,16 +142,16 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	pop bc
 	ld a, c
 	farcall GenerateBoosterPack
-	text_hl ReceivedBoosterPackText
+	ldtx hl, ReceivedBoosterPackText
 	ld a, [wd117]
 	cp $1
 	jr nz, .asm_10373
-	text_hl AndAnotherBoosterPackText
+	ldtx hl, AndAnotherBoosterPackText
 .asm_10373
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
-	text_hl CheckedCardsInBoosterPackText
+	ldtx hl, CheckedCardsInBoosterPackText
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
@@ -168,10 +168,10 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ret
 ; 0x103a5
 
-INCBIN "baserom.gbc",$103a5,$103d2 - $103a5
+	INCROM $103a5, $103d2
 
 Func_103d2: ; 103d2 (4:43d2)
-INCBIN "baserom.gbc",$103d2,$103d3 - $103d2
+	INCROM $103d2, $103d3
 
 Duel_Init: ; 103d3 (4:43d3)
 	ld a, [wd291]
@@ -220,10 +220,10 @@ Duel_Init: ; 103d3 (4:43d3)
 	call PlaySong
 	call $4031
 	call DoFrameIfLCDEnabled
-	ld bc, $2f1d
-	ld de, $1211
-	call Func_2a1a
-	call Func_2a00 ; wait for the user to press a or b
+	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb de, 18, 17 ; x, y
+	call SetCursorParametersForTextBox
+	call WaitForButtonAorB ; wait for the user to press a or b
 	call Func_3c96
 	call Func_10ab4 ; fade out
 	pop af
@@ -231,13 +231,13 @@ Duel_Init: ; 103d3 (4:43d3)
 	ret
 ; 0x10451
 
-INCBIN "baserom.gbc",$10451,$10548 - $10451
+	INCROM $10451, $10548
 
 Func_10548: ; 10548 (4:4548)
-INCBIN "baserom.gbc",$10548,$10756 - $10548
+	INCROM $10548, $10756
 
 Func_10756: ; 10756 (4:4756)
-INCBIN "baserom.gbc",$10756,$10a70 - $10756
+	INCROM $10756, $10a70
 
 Func_10a70: ; 10a70 (4:4a70)
 	push hl
@@ -277,13 +277,13 @@ Func_10a70: ; 10a70 (4:4a70)
 	ret
 
 Func_10a9b: ; 10a9b (4:4a9b)
-INCBIN "baserom.gbc",$10a9b,$10ab4 - $10a9b
+	INCROM $10a9b, $10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
-INCBIN "baserom.gbc",$10ab4,$10af9 - $10ab4
+	INCROM $10ab4, $10af9
 
 Func_10af9: ; 10af9 (4:4af9)
-INCBIN "baserom.gbc",$10af9,$10c96 - $10af9
+	INCROM $10af9, $10c96
 
 Func_10c96: ; 10c96 (4:4c96)
 	ld a, [$ff81]
@@ -308,7 +308,7 @@ Func_10c96: ; 10c96 (4:4c96)
 	ret
 ; 0x10cbb
 
-INCBIN "baserom.gbc",$10cbb,$10dba - $10cbb
+	INCROM $10cbb, $10dba
 
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1
@@ -318,7 +318,7 @@ Func_10dba: ; 10dba (4:4dba)
 	farcall Func_111e9
 .asm_10dca
 	call DoFrameIfLCDEnabled
-	call MenuCursorAcceptInput
+	call HandleMenuInput
 	jr nc, .asm_10dca
 	ld a, e
 	ld [wd0ba], a
@@ -338,10 +338,10 @@ Func_10dba: ; 10dba (4:4dba)
 	ret
 ; 0x10df0
 
-INCBIN "baserom.gbc",$10df0,$10e28 - $10df0
+	INCROM $10df0, $10e28
 
 Func_10e28: ; 10e28 (4:4e28)
-INCBIN "baserom.gbc",$10e28,$10e55 - $10e28
+	INCROM $10e28, $10e55
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wd336]
@@ -373,7 +373,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	and A_BUTTON
 	jr z, .asm_10e96
 	ld a, $2
-	call Func_3796
+	call PlaySFX
 	call Func_11016
 	call Func_11024
 	jr .asm_10e96
@@ -399,14 +399,14 @@ Func_10e97: ; 10e97 (4:4e97)
 	ld [wd32e], a
 	call Func_10f2e
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 .asm_10eb9
 	pop bc
 	pop hl
 	ret
 
 Unknown_10ebc: ; 10ebc (4:4ebc)
-INCBIN "baserom.gbc",$10ebc,$10efd - $10ebc
+	INCROM $10ebc, $10efd
 
 Func_10efd: ; 10efd (4:4efd)
 	push hl
@@ -429,7 +429,7 @@ Func_10efd: ; 10efd (4:4efd)
 	ret
 
 Unknown_10f14: ; 10f14 (4:4f14)
-INCBIN "baserom.gbc",$10f14,$10f2e - $10f14
+	INCROM $10f14, $10f2e
 
 Func_10f2e: ; 10f2e (4:4f2e)
 	push hl
@@ -549,7 +549,7 @@ Func_11016: ; 11016 (4:5016)
 
 Func_11024: ; 11024 (4:5024)
 	ld a, $57
-	call Func_3796
+	call PlaySFX
 	ld a, [wd336]
 	ld [wd4cf], a
 	ld c, $f
@@ -789,22 +789,22 @@ Func_11184: ; 11184 (4:5184)
 	ret
 ; 0x111b3
 
-INCBIN "baserom.gbc",$111b3,$111e9 - $111b3
+	INCROM $111b3, $111e9
 
 Func_111e9: ; 111e9 (4:51e9)
-INCBIN "baserom.gbc",$111e9,$1124d - $111e9
+	INCROM $111e9, $1124d
 
 Func_1124d: ; 1124d (4:524d)
-INCBIN "baserom.gbc",$1124d,$11320 - $1124d
+	INCROM $1124d, $11320
 
 Func_11320: ; 11320 (4:5320)
-INCBIN "baserom.gbc",$11320,$11416 - $11320
+	INCROM $11320, $11416
 
 Func_11416: ; 11416 (4:5416)
-INCBIN "baserom.gbc",$11416,$11430 - $11416
+	INCROM $11416, $11430
 
 Func_11430: ; 11430 (4:5430)
-INCBIN "baserom.gbc",$11430,$1157c - $11430
+	INCROM $11430, $1157c
 
 Func_1157c: ; 1157c (4:557c)
 	ld a, c
@@ -831,7 +831,7 @@ Func_1157c: ; 1157c (4:557c)
 ; 0x115a3
 
 
-INCBIN "baserom.gbc",$115a3,$1162a - $115a3
+	INCROM $115a3, $1162a
 
 INCLUDE "data/map_scripts.asm"
 
@@ -958,9 +958,9 @@ Func_118d3: ; 118d3 (4:58d3)
 	pop hl
 	ret
 
-INCLUDE "data/unknownNPCData.asm"
+INCLUDE "data/npcs.asm"
 
-INCBIN "baserom.gbc",$11f4e,$1217b - $11f4e
+	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_EndScriptLoop1
@@ -1068,10 +1068,10 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_EndScriptLoop9
 	dw OWScript_EndScriptLoop10
 
-INCBIN "baserom.gbc",$1224b,$1229f - $1224b
+	INCROM $1224b, $1229f
 
 Unknown_1229f: ; 1229f (4:629f)
-INCBIN "baserom.gbc",$1229f,$126d1 - $1229f
+	INCROM $1229f, $126d1
 
 Func_126d1: ; 126d1 (4:66d1)
 	call Func_099c
@@ -1164,19 +1164,19 @@ Func_1277e: ; 1277e (4:677e)
 	ret
 ; 0x1279a
 
-INCBIN "baserom.gbc",$1279a,$12871 - $1279a
+	INCROM $1279a, $12871
 
 Func_12871: ; 12871 (4:6871)
-INCBIN "baserom.gbc",$12871,$1288c - $12871
+	INCROM $12871, $1288c
 
 Func_1288c: ; 1288c (4:688c)
-INCBIN "baserom.gbc",$1288c,$128a9 - $1288c
+	INCROM $1288c, $128a9
 
 Func_128a9: ; 128a9 (4:68a9)
-INCBIN "baserom.gbc",$128a9,$1296e - $128a9
+	INCROM $128a9, $1296e
 
 Func_1296e: ; 1296e (4:696e)
-INCBIN "baserom.gbc",$1296e,$1299f - $1296e
+	INCROM $1296e, $1299f
 
 Func_1299f: ; 1299f (4:699f)
 	push af
@@ -1245,10 +1245,10 @@ Func_129d9: ; 129d9 (4:69d9)
 	ret
 ; 0x129fa
 
-INCBIN "baserom.gbc",$129fa,$12a21 - $129fa
+	INCROM $129fa, $12a21
 
 Func_12a21: ; 12a21 (4:6a21)
-INCBIN "baserom.gbc",$12a21,$12ab5 - $12a21
+	INCROM $12a21, $12ab5
 
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
@@ -1266,7 +1266,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 	ret
 ; 0x12ac9
 
-INCBIN "baserom.gbc",$12ac9,$12ae2 - $12ac9
+	INCROM $12ac9, $12ae2
 
 Func_12ae2: ; 12ae2 (4:6ae2)
 	push bc
@@ -1409,10 +1409,10 @@ Func_12b89: ; 12b89 (4:6b89)
 	ret
 
 Func_12ba7: ; 12ba7 (4:6ba7)
-INCBIN "baserom.gbc",$12ba7,$12bcd - $12ba7
+	INCROM $12ba7, $12bcd
 
 Func_12bcd: ; 12bcd (4:6bcd)
-INCBIN "baserom.gbc",$12bcd,$12c05 - $12bcd
+	INCROM $12bcd, $12c05
 
 Func_12c05: ; 12c05 (4:6c05)
 	push hl
@@ -1487,29 +1487,29 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	ret
 
 Func_12c5e: ; 12c5e (4:6c5e)
-INCBIN "baserom.gbc",$12c5e,$12c7f - $12c5e
+	INCROM $12c5e, $12c7f
 
 Func_12c7f: ; 12c7f (4:6c7f)
-INCBIN "baserom.gbc",$12c7f,$131b3 - $12c7f
+	INCROM $12c7f, $131b3
 
 Func_131b3: ; 131b3 (4:71b3)
-INCBIN "baserom.gbc",$131b3,$131d3 - $131b3
+	INCROM $131b3, $131d3
 
 Func_131d3: ; 131d3 (4:71d3)
-INCBIN "baserom.gbc",$131d3,$1344d - $131d3
+	INCROM $131d3, $1344d
 
 Func_1344d: ; 1344d (4:744d)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	text_hl DefeatedFiveOpponentsText
+	ldtx hl, DefeatedFiveOpponentsText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
 	ret
 ; 0x13462
 
-INCBIN "baserom.gbc",$13462,$13485 - $13462
+	INCROM $13462, $13485
 
 Func_13485: ; 13485 (4:7485)
 	call EnableExtRAM
@@ -1524,11 +1524,11 @@ Func_13485: ; 13485 (4:7485)
 	call Func_379b
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	text_hl ConsecutiveWinRecordIncreasedText
+	ldtx hl, ConsecutiveWinRecordIncreasedText
 	call Func_2c73
 	call Func_3c96
 	call Func_37a0
 	ret
 ; 0x134b1
 
-INCBIN "baserom.gbc",$134b1,$14000 - $134b1
+	INCROM $134b1, $14000

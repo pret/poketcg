@@ -1,5 +1,5 @@
 Poison50PercentEffect: ; 2c000 (b:4000)
-	text_de PoisonCheckText
+	ldtx de, PoisonCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -11,14 +11,14 @@ PoisonEffect: ; 2c007 (b:4007)
 	jr applyEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
-	text_de ParalysisCheckText
+	ldtx de, ParalysisCheckText
 	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, PARALYZED
 	jr applyEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
-	text_de ConfusionCheckText
+	ldtx de, ConfusionCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -26,7 +26,7 @@ ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, $f0, CONFUSED
 	jr applyEffect
 
-	text_de SleepCheckText
+	ldtx de, SleepCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -128,7 +128,7 @@ Func_2c0a2: ; 2c0a2 (b:40a2)
 	ret
 ; 0x2c0a8
 
-INCBIN "baserom.gbc",$2c0a8,$2c0d4 - $2c0a8
+	INCROM $2c0a8, $2c0d4
 
 ; Sets some flags for AI use
 ; if target double poisoned
@@ -181,7 +181,7 @@ Func_2c0fb: ; 2c0fb (b:40fb)
 	ret
 ; 0x2c10b
 
-INCBIN "baserom.gbc",$2c10b,$2c140 - $2c10b
+	INCROM $2c10b, $2c140
 
 ; apply a status condition of type 1 identified by register a to the target
 ApplySubstatus1ToDefendingCard: ; 2c140 (b:4140)
@@ -218,7 +218,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	ret
 ; 0x2c166
 
-INCBIN "baserom.gbc",$2c166,$2c6f0 - $2c166
+	INCROM $2c166, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, $5
@@ -227,7 +227,7 @@ SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 ; 0x2c6f8
 
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
-	text_de PoisonCheckText
+	ldtx de, PoisonCheckText
 	call TossCoin_BankB
 	jp c, PoisonEffect
 	ld a, $8c
@@ -236,7 +236,7 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	ret
 ; 0x2c70a
 
-INCBIN "baserom.gbc",$2c70a,$2c730 - $2c70a
+	INCROM $2c70a, $2c730
 
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, $a
@@ -250,10 +250,10 @@ WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	jp Func_2c0d4
 ; 0x2c740
 
-INCBIN "baserom.gbc",$2c740,$2c77e - $2c740
+	INCROM $2c740, $2c77e
 
 AcidEffect: ; 2c77e (b:477e)
-	text_de AcidCheckText
+	ldtx de, AcidCheckText
 	call TossCoin_BankB
 	ret nc
 	ld a, SUBSTATUS2_UNABLE_RETREAT
@@ -277,7 +277,7 @@ FoulOdorEffect: ; 2c793 (b:4793)
 ; 0x2c7a0
 
 KakunaStiffenEffect: ; 2c7a0 (b:47a0)
-	text_de IfHeadsNoDamageNextTurnText
+	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
 	jp nc, Func_2c0a2
 	ld a, $4f
@@ -293,7 +293,7 @@ KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	jp Func_2c0d4
 ; 0x2c7bc
 
-INCBIN "baserom.gbc",$2c7bc,$2c7d0 - $2c7bc
+	INCROM $2c7bc, $2c7d0
 
 SwordsDanceEffect: ; 2c7d0 (b:47d0)
 	ld a, [wTempTurnDuelistCardId]
@@ -310,11 +310,11 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 	ret
 ; 0x2c7e3
 
-INCBIN "baserom.gbc",$2c7e3,$2c836 - $2c7e3
+	INCROM $2c7e3, $2c836
 
 ; an exact copy of KakunaStiffenEffect
 MetapodStiffenEffect: ; 2c836 (b:4836)
-	text_de IfHeadsNoDamageNextTurnText
+	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
 	jp nc, Func_2c0a2
 	ld a, $4f
@@ -324,4 +324,4 @@ MetapodStiffenEffect: ; 2c836 (b:4836)
 	ret
 ; 0x2c84a
 
-INCBIN "baserom.gbc",$2c84a,$30000 - $2c84a
+	INCROM $2c84a, $30000

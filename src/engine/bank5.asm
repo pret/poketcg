@@ -54,7 +54,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw $48dc ; IMAKUNI_DECK
 ; 1406a
 
-INCBIN "baserom.gbc",$1406a,$14226 - $1406a
+	INCROM $1406a, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardBuffer
@@ -66,19 +66,19 @@ Func_14226: ; 14226 (5:4226)
 	ret z
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1Type]
-	cp FIRE_ENERGY_CARD
+	cp TYPE_ENERGY_FIRE
 	jr nc, .checkForNextPokemon
 	ld a, [wLoadedCard1Stage]
 	or a
 	jr nz, .checkForNextPokemon
 	push hl
 	ld a, [$ff98]
-	call $1485
+	call Func_1485
 	pop hl
 	jr .checkForNextPokemon
 ; 0x1424b
 
-INCBIN "baserom.gbc",$1424b,$14663 - $1424b
+	INCROM $1424b, $14663
 
 Func_14663: ; 14663 (5:4663)
 	farcall Func_200e5
@@ -223,7 +223,7 @@ Func_1468b: ; 1468b (5:468b)
 ; 0x14786
 
 
-INCBIN "baserom.gbc",$14786,$15636 - $14786
+	INCROM $14786, $15636
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
 	ld hl, $cda5
@@ -301,7 +301,7 @@ Func_15649: ; 15649 (5:5649)
 	ret
 ; 0x156c3
 
-INCBIN "baserom.gbc",$156c3,$1575e - $156c3
+	INCROM $156c3, $1575e
 
 ; zeroes a bytes starting at hl
 ZeroData: ; 1575e (5:575e)
@@ -320,4 +320,4 @@ ZeroData: ; 1575e (5:575e)
 	ret
 ; 0x1576b
 
-INCBIN "baserom.gbc",$1576b,$18000 - $1576b
+	INCROM $1576b, $18000

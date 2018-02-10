@@ -8,12 +8,12 @@ ATTR_DIV EQU $06 ; "Divide" Area Designation Mode
 ATTR_CHR EQU $07 ; "1CHR" Area Designation Mode
 SOUND    EQU $08 ; Sound On/Off
 SOU_TRN  EQU $09 ; Transfer Sound PRG/DATA
-PAL_SET  EQU $0A ; Set SGB Palette Indirect
-PAL_TRN  EQU $0B ; Set System Color Palette Data
-ATRC_EN  EQU $0C ; Enable/disable Attraction Mode
-TEST_EN  EQU $0D ; Speed Function
-ICON_EN  EQU $0E ; SGB Function
-DATA_SND EQU $0F ; SUPER NES WRAM Transfer 1
+PAL_SET  EQU $0a ; Set SGB Palette Indirect
+PAL_TRN  EQU $0b ; Set System Color Palette Data
+ATRC_EN  EQU $0c ; Enable/disable Attraction Mode
+TEST_EN  EQU $0d ; Speed Function
+ICON_EN  EQU $0e ; SGB Function
+DATA_SND EQU $0f ; SUPER NES WRAM Transfer 1
 DATA_TRN EQU $10 ; SUPER NES WRAM Transfer 2
 MLT_REQ  EQU $11 ; Controller 2 Request
 JUMP     EQU $12 ; Set SNES Program Counter

@@ -1,5 +1,5 @@
 Func_80000: ; 80000 (20:4000)
-INCBIN "baserom.gbc",$80000,$80028 - $80000
+	INCROM $80000, $80028
 
 Func_80028: ; 80028 (20:4028)
 	call Func_801f1
@@ -11,7 +11,7 @@ Func_80028: ; 80028 (20:4028)
 	ret
 ; 0x8003d
 
-INCBIN "baserom.gbc",$8003d,$80077 - $8003d
+	INCROM $8003d, $80077
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
@@ -25,7 +25,7 @@ Func_80077: ; 80077 (20:4077)
 	push hl
 	push bc
 	push de
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	ld hl, wd4c2
 	ld [hl], e
 	inc hl
@@ -55,7 +55,7 @@ Func_80077: ; 80077 (20:4077)
 	ret
 ; 0x800bd
 
-INCBIN "baserom.gbc",$800bd,$801a1 - $800bd
+	INCROM $800bd, $801a1
 
 Func_801a1: ; 801a1 (20:41a1)
 	push hl
@@ -65,17 +65,17 @@ Func_801a1: ; 801a1 (20:41a1)
 	push af
 	ld a, $1
 	call BankswitchRAM
-	ld hl, $a000
-	ld de, $9800
+	ld hl, vEnd
+	ld de, vBGMapTiles
 	ld c, $20
 .asm_801b4
 	push bc
 	push hl
 	push de
 	ld b, $20
-	call $06fc
+	call SafeCopyDataHLtoDE
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_801d6
 	pop de
 	pop hl
@@ -85,7 +85,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	add hl, bc
 	call BankswitchVRAM_1
 	ld b, $20
-	call $06fc
+	call SafeCopyDataHLtoDE
 	call BankswitchVRAM_0
 
 .asm_801d6
@@ -157,7 +157,7 @@ Func_80229: ; 80229 (20:4229)
 	ret
 ; 0x80238
 
-INCBIN "baserom.gbc",$80238,$8025b - $80238
+	INCROM $80238, $8025b
 
 Func_8025b: ; 8025b (20:425b)
 	push hl
@@ -234,19 +234,19 @@ Func_802bb: ; 802bb (20:42bb)
 	ret
 ; 0x802d4
 
-INCBIN "baserom.gbc",$802d4,$80418 - $802d4
+	INCROM $802d4, $80418
 
 Func_80418: ; 80418 (20:4418)
-INCBIN "baserom.gbc",$80418,$80480 - $80418
+	INCROM $80418, $80480
 
 Func_80480: ; 80480 (20:4480)
-INCBIN "baserom.gbc",$80480,$804d8 - $80480
+	INCROM $80480, $804d8
 
 Func_804d8: ; 804d8 (20:44d8)
-INCBIN "baserom.gbc",$804d8,$80b7a - $804d8
+	INCROM $804d8, $80b7a
 
 Func_80b7a: ; 80b7a (20:4b7a)
-INCBIN "baserom.gbc",$80b7a,$80ba4 - $80b7a
+	INCROM $80b7a, $80ba4
 
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
@@ -288,7 +288,7 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld c, [hl]
 	inc hl
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_80be7
 	inc hl
 
@@ -327,10 +327,10 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ret
 ; 0x80c21
 
-INCBIN "baserom.gbc",$80c21,$80e5a - $80c21
+	INCROM $80c21, $80e5a
 
 Unknown_80e5a: ; 80e5a (20:4e5a)
-INCBIN "baserom.gbc",$80e5a,$80e5d - $80e5a
+	INCROM $80e5a, $80e5d
 
 MapDataPointers: ; 80e5d (20:4e5d)
-INCBIN "baserom.gbc",$80e5d,$84000 - $80e5d
+	INCROM $80e5d, $84000

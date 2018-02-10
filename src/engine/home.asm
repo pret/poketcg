@@ -1,42 +1,39 @@
-GLOBAL CardGraphics
-GLOBAL TextOffsets
-
 ; rst vectors
-SECTION "rst00",ROM0[0]
+SECTION "rst00", ROM0
 	ret
-SECTION "rst08",ROM0[8]
+SECTION "rst08", ROM0
 	ret
-SECTION "rst10",ROM0[$10]
+SECTION "rst10", ROM0
 	ret
-SECTION "rst18",ROM0[$18]
+SECTION "rst18", ROM0
 	jp RST18
-SECTION "rst20",ROM0[$20]
+SECTION "rst20", ROM0
 	jp RST20
-SECTION "rst28",ROM0[$28]
+SECTION "rst28", ROM0
 	jp RST28
-SECTION "rst30",ROM0[$30]
+SECTION "rst30", ROM0
 	ret
-SECTION "rst38",ROM0[$38]
+SECTION "rst38", ROM0
 	ret
 
 ; interrupts
-SECTION "vblank",ROM0[$40]
+SECTION "vblank", ROM0
 	jp VBlankHandler
-SECTION "lcdc",ROM0[$48]
+SECTION "lcdc", ROM0
 	call wLCDCFunctiontrampoline
 	reti
-SECTION "timer",ROM0[$50]
+SECTION "timer", ROM0
 	jp TimerHandler
-SECTION "serial",ROM0[$58]
+SECTION "serial", ROM0
 	jp SerialHandler
-SECTION "joypad",ROM0[$60]
+SECTION "joypad", ROM0
 	reti
 
-SECTION "romheader",ROM0[$100]
+SECTION "romheader", ROM0
 	nop
 	jp Start
 
-SECTION "start",ROM0[$150]
+SECTION "start", ROM0
 Start: ; 0150 (0:0150)
 	di
 	ld sp, $fffe
@@ -59,7 +56,7 @@ Start: ; 0150 (0:0150)
 	call SetupVRAM
 	call SetupLCD
 	call SetupPalettes
-	call SetupSound_T
+	call SetupSound
 	call SetupTimer
 	call ResetSerial
 	call CopyDMAFunction
@@ -137,9 +134,9 @@ TimerHandler: ; 01e6 (0:01e6)
 	set 1, [hl]
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(SoundTimerHandler_Ext)
+	ld a, BANK(SoundTimerHandler)
 	call BankswitchHome
-	call SoundTimerHandler_Ext
+	call SoundTimerHandler
 	pop af
 	call BankswitchHome
 	; clear in-timer flag
@@ -213,7 +210,7 @@ CheckForCGB: ; 025c (0:025c)
 WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
-	bit 7, a
+	bit rLCDC_ENABLE, a
 	jr z, .asm_275
 	ld hl, wVBlankCtr
 	ld a, [hl]
@@ -229,19 +226,19 @@ WaitForVBlank: ; 0264 (0:0264)
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
 	ld a, [wLCDC]        ;
-	bit 7, a             ;
+	bit rLCDC_ENABLE, a  ;
 	ret nz               ; assert that LCD is off
-	or $80               ;
+	or rLCDC_ENABLE_MASK ;
 	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
-	ld a, $c0
+	ld a, %11000000
 	ld [wFlushPaletteFlags], a
 	ret
 
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
 	ld a, [rLCDC]        ;
-	bit 7, a             ;
+	bit rLCDC_ENABLE, a  ;
 	ret z                ; assert that LCD is on
 	ld a, [rIE]
 	ld [wIE], a
@@ -249,7 +246,7 @@ DisableLCD: ; 028a (0:028a)
 	ld [rIE], a          ; disable vblank interrupt
 .asm_298
 	ld a, [rLY]          ;
-	cp $91               ;
+	cp LY_VBLANK         ;
 	jr nz, .asm_298      ; wait for vblank
 	ld a, [rLCDC]        ;
 	and $7f              ;
@@ -353,7 +350,7 @@ SetupLCD: ; 030b (0:030b)
 	ld [wLCDC], a
 	ld a, $1
 	ld [MBC3LatchClock], a
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 NopF: ; 0348 (0:0348)
 	ret
@@ -374,13 +371,13 @@ DetectConsole: ; 0349 (0:0349)
 	ret nz
 	ld a, CONSOLE_SGB
 	ld [rSVBK], a
-	call Func_07e7
+	call SwitchToCGBDoubleSpeed
 	ret
 
 ; initialize the palettes (both monochrome and color)
 SetupPalettes: ; 036a (0:036a)
 	ld hl, wBGP
-	ld a, $e4
+	ld a, %11100100
 	ld [rBGP], a
 	ld [hli], a
 	ld [rOBP0], a
@@ -422,8 +419,8 @@ SetupVRAM: ; 03a1 (0:03a1)
 	call .asm_3b2
 	call BankswitchVRAM_0
 .asm_3b2
-	ld hl, $8000
-	ld bc, $1800
+	ld hl, vTiles0
+	ld bc, vBGMapTiles - vTiles0
 .asm_3b8
 	xor a
 	ld [hli], a
@@ -436,8 +433,8 @@ SetupVRAM: ; 03a1 (0:03a1)
 ; fill VARM tile map banks with [wTileMapFill]
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
-	ld hl, $9800
-	ld bc, $0400
+	ld hl, vBGMapTiles
+	ld bc, vBGMapAttrs - vBGMapTiles
 .asm_3c9
 	ld a, [wTileMapFill]
 	ld [hli], a
@@ -449,8 +446,8 @@ FillTileMap: ; 03c0 (0:03c0)
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM_1
-	ld hl, $9800
-	ld bc, $0400
+	ld hl, vBGMapTiles
+	ld bc, vBGMapAttrs - vBGMapTiles
 .asm_3e1
 	xor a
 	ld [hli], a
@@ -463,23 +460,23 @@ FillTileMap: ; 03c0 (0:03c0)
 
 ; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
 ZeroRAM: ; 03ec (0:03ec)
-	ld hl, wTempCardCollection
-	ld bc, $2000
-.asm_3f2
+	ld hl, $c000
+	ld bc, $e000 - $c000
+.zero_wram_loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_3f2
-	ld c, $80
-	ld b, $70
+	jr nz, .zero_wram_loop
+	ld c, LOW($ff80)
+	ld b, $fff0 - $ff80
 	xor a
-.asm_3fe
+.zero_hram_loop
 	ld [$ff00+c], a
 	inc c
 	dec b
-	jr nz, .asm_3fe
+	jr nz, .zero_hram_loop
 	ret
 
 Func_0404: ; 0404 (0:0404)
@@ -601,7 +598,7 @@ Func_0492: ; 0492 (0:0492)
 	ld b, a
 	ld a, [hli]
 	ld c, a
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	jr .asm_49d
 .asm_49b
 	ld [de], a
@@ -630,7 +627,9 @@ SGB_ATTR_BLK_04bf: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db $01,$03,$00,$00,$00,$13,$11,$00,$00,$00,$00,$00,$00,$00,$00
 
-Func_04cf: ; 04cf (0:04cf)
+; returns vBGMapTiles + BG_MAP_WIDTH * c + b in de.
+; used to map coordinates at bc to a BGMap0 address.
+BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
 	ld h, $0
 	add hl, hl
@@ -639,7 +638,7 @@ Func_04cf: ; 04cf (0:04cf)
 	add hl, hl
 	add hl, hl
 	ld c, b
-	ld b, $98
+	ld b, HIGH(vBGMapTiles)
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -735,13 +734,13 @@ DoFrame: ; 053f (0:053f)
 	ldh a, [hButtonsPressed]
 	and SELECT
 	jr z, .done
-.gamePausedLoop
+.game_paused_loop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
 	ldh a, [hButtonsPressed]
 	and SELECT
-	jr z, .gamePausedLoop
+	jr z, .game_paused_loop
 .done
 	pop bc
 	pop de
@@ -825,7 +824,85 @@ CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
 
-INCBIN "baserom.gbc",$05c2,$0663 - $05c2
+Func_05c2: ; 5c2 (0:5c2)
+	push hl
+	push bc
+	push de
+	ld hl, wcaa0
+	push hl
+	push bc
+	call Func_0614
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, $02
+	call JumpToHblankCopyDataHLtoDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x5db
+
+Func_05db: ; 5db (0:5db)
+	push hl
+	push bc
+	push de
+	ld hl, wcaa0
+	push hl
+	push bc
+	call Func_061b
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, $01
+	call JumpToHblankCopyDataHLtoDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x5f4
+
+Func_05f4: ; 5f4 (0:5f4)
+	push hl
+	push bc
+	push de
+	ld e, l
+	ld d, h
+	ld hl, wcaa0
+	push hl
+	push bc
+	ld a, d
+	call Func_0614
+	ld a, e
+	call Func_0614
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, $04
+	call JumpToHblankCopyDataHLtoDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x614
+
+Func_0614: ; 614 (0:614)
+	push af
+	swap a
+	call Func_061b
+	pop af
+Func_061b:
+	and $0f
+	add $30
+	cp $3a
+	jr c, .asm_625
+	add $07
+.asm_625
+	ld [hli], a
+	ret
+; 0x627
+
+	INCROM $0627, $0663
 
 Func_0663: ; 0663 (0:0663)
 	push bc
@@ -861,47 +938,114 @@ Func_0686: ; 0686 (0:0686)
 	ret
 ; 0x695
 
-INCBIN "baserom.gbc",$0695,$06c3 - $0695
+Func_0695: ; 0695 (0:0695)
+	call Func_069d
+	bit 7, [hl]
+	jr z, Func_0695
+	ret
+; 0x69d
+
+Func_069d: ; 069d (0:069d)
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	push hl
+	push bc
+	ld b, $ff
+.asm_6a5
+	inc b
+	ld a, [hli]
+	or a
+	jr nz, .asm_6a5
+	ld a, b
+	pop bc
+	push af
+	call BCCoordToBGMap0Address
+	pop af
+	ld b, a
+	pop hl
+	or a
+	jr z, .asm_6bd
+	push bc
+	push hl
+	call SafeCopyDataHLtoDE
+	pop hl
+	pop bc
+
+.asm_6bd
+	inc b
+	ld c, b
+	ld b, $0
+	add hl, bc
+	ret
+; 0x6c3
 
 Func_06c3: ; 06c3 (0:06c3)
 	push af
 	ld a, [wLCDC]
 	rla
-	jr c, .asm_6d8
+	jr c, .lcd_on
 	pop af
 	push hl
 	push de
 	push bc
 	push af
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	pop af
 	ld [de], a
 	pop bc
 	pop de
 	pop hl
 	ret
-.asm_6d8
+.lcd_on
 	pop af
 	push hl
 	push de
 	push bc
-	ld hl, $cac1
+	ld hl, wcac1
 	push hl
 	ld [hl], a
-	call Func_04cf
+	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $1
-	call MemcpyHLDE_hblank
+	call HblankCopyDataHLtoDE
 	pop bc
 	pop de
 	pop hl
 	ret
 ; 0x6ee
 
-INCBIN "baserom.gbc",$06ee,$0709 - $06ee
+; copy a bytes of data from hl to vBGMap0 address pointed to by coord at bc
+Func_06ee: ; 06ee (0:06ee)
+	push bc
+	push hl
+	push af
+	call BCCoordToBGMap0Address
+	pop af
+	ld b, a
+	pop hl
+	call SafeCopyDataHLtoDE
+	pop bc
+	ret
+; 0x6fc
 
-Func_0709: ; 0709 (0:0709)
-	jp MemcpyHLDE_hblank
+; memcpy(DE, HL, B)
+; if LCD on, copy during h-blank only
+SafeCopyDataHLtoDE: ; 6fc (0:6fc)
+	ld a, [wLCDC]
+	rla
+	jr c, JumpToHblankCopyDataHLtoDE
+.lcd_off_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .lcd_off_loop
+	ret
+JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
+	jp HblankCopyDataHLtoDE
+; 0x70c
 
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
@@ -912,7 +1056,7 @@ CopyGfxData: ; 070c (0:070c)
 	push hl
 	push de
 	ld b, c
-	call Func_0709
+	call JumpToHblankCopyDataHLtoDE
 	ld b, $0
 	pop hl
 	add hl, bc
@@ -937,25 +1081,25 @@ CopyGfxData: ; 070c (0:070c)
 	jr nz, .asm_726
 	ret
 
-CopyData_SaveRegisters: ; 0732 (0:0732)
+CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
 	push hl
 	push de
 	push bc
-	call CopyData
+	call CopyDataHLtoDE
 	pop bc
 	pop de
 	pop hl
 	ret
 
 ; copies bc bytes from hl to de
-CopyData: ; 073c (0:073c)
+CopyDataHLtoDE: ; 073c (0:073c)
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec bc
 	ld a, c
 	or b
-	jr nz, CopyData
+	jr nz, CopyDataHLtoDE
 	ret
 
 ; switch to rombank (A + top2 of H shifted down),
@@ -1059,7 +1203,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 	push af
 	ldh [hBankRAM], a
 	ld [MBC3SRamBank], a
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1067,7 +1211,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 ; enable external RAM
 EnableExtRAM: ; 07b6 (0:07b6)
 	push af
-	ld a, $a
+	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1075,7 +1219,7 @@ EnableExtRAM: ; 07b6 (0:07b6)
 ; disable external RAM
 DisableExtRAM: ; 07be (0:07be)
 	push af
-	xor a
+	xor a ; SRAM_DISABLE
 	ld [MBC3SRamEnable], a
 	pop af
 	ret
@@ -1106,14 +1250,22 @@ BankswitchVRAM: ; 07d6 (0:07d6)
 	ret
 ; 0x7db
 
-INCBIN "baserom.gbc",$07db,$07e7 - $07db
+SwitchToCGBNormalSpeed: ; 7db (0:7db)
+	call CheckForCGB
+	ret c
+	ld hl, rKEY1
+	bit 7, [hl]
+	ret z
+	jr CGBSpeedSwitch
 
-Func_07e7: ; 07e7 (0:07e7)
+SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 	call CheckForCGB
 	ret c
 	ld hl, rKEY1
 	bit 7, [hl]
 	ret nz
+;	fallthrough
+CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ld a, [rIE]
 	push af
 	xor a
@@ -1223,7 +1375,7 @@ HtimesL: ; 0879 (0:0879)
 	ret
 ; 0x88f
 
-; return a random number between 0 and a in a
+; return a random number between 0 and a (exclusive) in a
 Random: ; 088f (0:088f)
 	push hl
 	ld h, a
@@ -1391,7 +1543,7 @@ Func_08ef: ; 08ef (0:08ef)
 	jr .asm_93c
 ; 0x950
 
-INCBIN "baserom.gbc",$0950,$099c - $0950
+	INCROM $0950, $099c
 
 Func_099c: ; 099c (0:099c)
 	xor a
@@ -1453,7 +1605,18 @@ Func_09ce: ; 09ce (0:09ce)
 	ret
 ; 0x9dc
 
-INCBIN "baserom.gbc",$09dc,$09e9 - $09dc
+SwitchToBankAtSP: ; 9dc (0:9dc)
+	push af
+	push hl
+	ld hl, sp+$04
+	ld a, [hl]
+	call BankswitchHome
+	pop hl
+	pop af
+	inc sp
+	inc sp
+	ret
+; 0x9e9
 
 ; this function affects the stack so that it returns
 ; to the three byte pointer following the rst call
@@ -1660,7 +1823,48 @@ SGB_MLT_REQ_2: ; 0bbb (0:0bbb)
 	sgb MLT_REQ, 1 ; sgb_command, length
 	db $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-INCBIN "baserom.gbc",$0bcb,$0c08 - $0bcb
+Func_0bcb: ; 0bcb (0:0bcb)
+	di
+	push de
+.wait_vbalnk
+	ld a, [rLY]
+	cp LY_VBLANK + 3
+	jr nz, .wait_vbalnk
+	ld a, $43
+	ld [rLCDC], a
+	ld a, %11100100
+	ld [rBGP], a
+	ld de, vTiles1
+	ld bc, vBGMapTiles - vTiles1
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	ld hl, vBGMapTiles
+	ld de, $000c
+	ld a, $80
+	ld c, $d
+.asm_bf3
+	ld b, $14
+.asm_bf5
+	ld [hli], a
+	inc a
+	dec b
+	jr nz, .asm_bf5
+	add hl, de
+	dec c
+	jr nz, .asm_bf3
+	ld a, $c3
+	ld [rLCDC], a
+	pop hl
+	call SendSGB
+	ei
+	ret
+; 0xc08
 
 ; loops 63000 * bc cycles (~15 * bc ms)
 Wait: ; 0c08 (0:0c08)
@@ -1680,7 +1884,7 @@ Wait: ; 0c08 (0:0c08)
 	ret
 
 ; memcpy(DE, HL, B), but only during hblank
-MemcpyHLDE_hblank: ; 0c19 (0:0c19)
+HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	push bc
 .loop
 	ei
@@ -1701,30 +1905,30 @@ MemcpyHLDE_hblank: ; 0c19 (0:0c19)
 	pop bc
 	ret
 
-; memcpy(HL, DE, B), but only during hblank
-MemcpyDEHL_hblank: ; 0c32 (0:0c32)
+; memcpy(HL, DE, C), but only during hblank
+HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 	push bc
-.asm_c33
+.loop
 	ei
 	di
 	ld a, [rSTAT]
 	and $3
-	jr nz, .asm_c33
+	jr nz, .loop
 	ld a, [de]
 	ld [hl], a
 	ld a, [rSTAT]
 	and $3
-	jr nz, .asm_c33
+	jr nz, .loop
 	ei
 	inc hl
 	inc de
 	dec c
-	jr nz, .asm_c33
+	jr nz, .loop
 	pop bc
 	ret
 ; 0xc4b
 
-INCBIN "baserom.gbc",$0c4b,$0c91 - $0c4b
+	INCROM $0c4b, $0c91
 
 ; called at roughly 240Hz by TimerHandler
 SerialTimerHandler: ; 0c91 (0:0c91)
@@ -1764,7 +1968,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ret
 ; 0xcc5
 
-INCBIN "baserom.gbc",$0cc5,$0d26 - $0cc5
+	INCROM $0cc5, $0d26
 
 SerialHandler: ; 0d26 (0:0d26)
 	push af
@@ -2093,14 +2297,40 @@ Func_0ebf: ; 0ebf (0:0ebf)
 	ret
 ; 0xed5
 
-INCBIN "baserom.gbc",$0ed5,$0f35 - $0ed5
+Func_0ed5: ; 0ed5 (0:0ed5)
+	push bc
+.asm_ed6
+	call Func_0e39
+	jr nc, .asm_edf
+	halt
+	nop
+	jr .asm_ed6
+.asm_edf
+	ld [hli], a
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_eee
+	dec bc
+	ld a, c
+	or b
+	jr nz, .asm_ed6
+	pop bc
+	or a
+	ret
+.asm_eee
+	pop bc
+	scf
+	ret
+; 0xef1
+
+	INCROM $0ef1, $0f35
 
 Func_0f35: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
 	ld l, a
 	ld h, $0
 	call Func_2ec4
-	text_hl TransmissionErrorText
+	ldtx hl, TransmissionErrorText
 	call DrawWideTextBox_WaitForInput
 	ld a, $ff
 	ld [wd0c3], a
@@ -2143,18 +2373,28 @@ Func_0f7f: ; 0f7f (0:0f7f)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
-	jr nz, .notLink
+	jr nz, .not_link
 	ld hl, $ff9e
 	ld bc, $000a
 	call Func_0ebf
 	call Func_0f58
-.notLink
+.not_link
 	pop bc
 	pop hl
 	ret
 ; 0xf9b
 
-INCBIN "baserom.gbc",$0f9b,$0fac - $0f9b
+Func_0f9b: ; 0f9b (0:0f9b)
+	push hl
+	push bc
+	ld hl, $ff9e
+	ld bc, $000a
+	call Func_0ed5
+	call Func_0f58
+	pop bc
+	pop hl
+	ret
+; 0xfac
 
 Func_0fac: ; 0fac (0:0fac)
 	push hl
@@ -2177,7 +2417,7 @@ Func_0fac: ; 0fac (0:0fac)
 	push de
 	push hl
 	push af
-	ld hl, $cbed
+	ld hl, wcbed
 	pop de
 	ld [hl], e
 	inc hl
@@ -2196,7 +2436,7 @@ Func_0fac: ; 0fac (0:0fac)
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, $cbed
+	ld hl, wcbed
 	ld bc, $0008
 	call Func_0ebf
 	jp c, Func_0f35
@@ -2207,7 +2447,34 @@ Func_0fac: ; 0fac (0:0fac)
 	ret
 ; 0xfe9
 
-INCBIN "baserom.gbc",$0fe9,$100b - $0fe9
+Func_0fe9: ; 0fe9 (0:0fe9)
+	ld hl, wcbed
+	ld bc, $0008
+	push hl
+	call Func_0ed5
+	jp c, Func_0f35
+	pop hl
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	pop hl
+	pop af
+	ret
+; 0x100b
 
 Func_100b: ; 100b (0:100b)
 	ld a, $2
@@ -2266,9 +2533,9 @@ CopyDeckData: ; 1072 (0:1072)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .copyDeckData
+	jr z, .copy_deck_data
 	ld hl, wOpponentDeck
-.copyDeckData
+.copy_deck_data
 	; start by putting a terminator at the end of the deck
 	push hl
 	ld bc, DECK_SIZE - 1
@@ -2276,7 +2543,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld [hl], $0
 	pop hl
 	push hl
-.nextCard
+.next_card
 	ld a, [de]
 	inc de
 	ld b, a
@@ -2285,12 +2552,12 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [de]
 	inc de
 	ld c, a
-.cardQuantityLoop
+.card_quantity_loop
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .cardQuantityLoop
-	jr .nextCard
+	jr nz, .card_quantity_loop
+	jr .next_card
 .done
 	ld hl, $cce9
 	ld a, [de]
@@ -2309,7 +2576,21 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-INCBIN "baserom.gbc",$10aa,$10bc - $10aa
+Func_10aa: ; 10aa (0:10aa)
+	push hl
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld l, a
+	xor a
+.asm_10b2
+	rr l
+	adc $00
+	inc l
+	dec l
+	jr nz, .asm_10b2
+	pop hl
+	ret
+; 0x10bc
 
 ; shuffles the deck specified by hWhoseTurn
 ; if less than 60 cards remain in the deck, make sure the rest are ignored
@@ -2323,38 +2604,37 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld b, a
 	ld a, DUELVARS_DECK_CARDS
 	add [hl]
-	ld l, a ; hl = position in the wPlayerDeckCards or wOpponentDeckCards array
-            ; of the first (top) card in the deck
+	ld l, a ; hl = position of the first (top) deck card in the wPlayerDeckCards or wOpponentDeckCards array
 	ld a, b ; a = number of cards in the deck
 	call ShuffleCards
 	ret
 
-; draw a card from the deck, saving its location as $40
+; draw a card from the deck, saving its location as CARD_LOCATION_JUST_DRAWN
 ; returns c if deck is empty, nc if a card was succesfully drawn
-_DrawCardFromDeck: ; 10cf (0:10cf)
+DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE
-	jr nc, .emptyDeck
+	jr nc, .empty_deck
 	inc a
 	ld [hl], a ; increment number of cards not in deck
 	add DUELVARS_DECK_CARDS - 1 ; point to top card in the deck
 	ld l, a
 	ld a, [hl] ; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld l, a
-	ld [hl], $40 ; temporarily write $40 to corresponding card location variable
+	ld [hl], CARD_LOCATION_JUST_DRAWN ; temporarily write to corresponding card location variable
 	pop hl
 	or a
 	ret
 
-.emptyDeck
+.empty_deck
 	pop hl
 	scf
 	ret
 ; 0x10e8
 
-INCBIN "baserom.gbc",$10e8,$1123 - $10e8
+	INCROM $10e8, $1123
 
 ; adds a card to the hand and increments the number of cards in the hand
 ; the card is identified by register a, which contains the card number within the deck (0-59)
@@ -2366,8 +2646,8 @@ AddCardToHand: ; 1123 (0:1123)
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	; write $1 (hand) into the location of this card
-	ld [hl], $1
+	; write $1 (CARD_LOCATION_HAND) into the location of this card
+	ld [hl], CARD_LOCATION_HAND
 	; increment number of cards in hand
 	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	inc [hl]
@@ -2382,26 +2662,26 @@ AddCardToHand: ; 1123 (0:1123)
 	ret
 ; 0x1139
 
-INCBIN "baserom.gbc",$1139,$123b - $1139
+	INCROM $1139, $123b
 
 CreateHandCardBuffer: ; 123b (0:123b)
 	call FindLastCardInHand
 	inc b
-	jr .skipCard
+	jr .skip_card
 
-.checkNextCardLoop
+.check_next_card_loop
 	ld a, [hld]
 	push hl
 	ld l, a
 	bit 6, [hl]
 	pop hl
-	jr nz, .skipCard
+	jr nz, .skip_card
 	ld [de], a
 	inc de
 
-.skipCard
+.skip_card
 	dec b
-	jr nz, .checkNextCardLoop
+	jr nz, .check_next_card_loop
 	ld a, $ff
 	ld [de], a
 	ld l, (wPlayerNumberOfCardsInHand & $ff)
@@ -2412,7 +2692,7 @@ CreateHandCardBuffer: ; 123b (0:123b)
 	ret
 ; 0x1258
 
-INCBIN "baserom.gbc",$1258,$1271 - $1258
+	INCROM $1258, $1271
 
 ; puts an index to the last (newest) card in current player's hand into hl.
 FindLastCardInHand: ; 1271 (0:1271)
@@ -2440,7 +2720,7 @@ ShuffleCards: ; 127f (0:127f)
 	ld b, a
 	ld e, l
 	ld d, h
-.shuffleNextCardLoop
+.shuffle_next_card_loop
 	push bc
 	push de
 	ld a, c
@@ -2459,14 +2739,14 @@ ShuffleCards: ; 127f (0:127f)
 	pop bc
 	inc hl
 	dec b
-	jr nz, .shuffleNextCardLoop
+	jr nz, .shuffle_next_card_loop
 	pop bc
 	pop de
 	pop hl
 	ret
 ; 0x12a3
 
-INCBIN "baserom.gbc",$12a3,$1312 - $12a3
+	INCROM $12a3, $1312
 
 
 ; given a position in wDuelCardOrAttackList (c510), return:
@@ -2499,7 +2779,7 @@ GetCardInDeckPosition: ; 1324 (0:1324)
 	ret
 ; 0x132f
 
-INCBIN "baserom.gbc",$132f,$1362 - $132f
+	INCROM $132f, $1362
 
 ; returns, in register a, the id of the card in the deck position specified in register a
 _GetCardInDeckPosition: ; 1362 (0:1362)
@@ -2509,14 +2789,15 @@ _GetCardInDeckPosition: ; 1362 (0:1362)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .loadCardFromDeck
+	jr z, .load_card_from_deck
 	ld hl, wOpponentDeck
-.loadCardFromDeck
+.load_card_from_deck
 	add hl, de
 	ld a, [hl]
 	pop de
 	ret
 
+; load data of card in position a to wLoadedCard1
 LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push hl
 	push de
@@ -2533,6 +2814,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	pop hl
 	ret
 
+; load data of card in position a to wLoadedCard2
 LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push hl
 	push de
@@ -2550,14 +2832,14 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-INCBIN "baserom.gbc",$13a2,$1485 - $13a2
+	INCROM $13a2, $1485
 
 Func_1485: ; 1485 (0:1485)
 	push af
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
 	cp MAX_POKEMON_IN_PLAY
-	jr nc, .tooManyPokemonInPlay
+	jr nc, .too_many_pokemon_in_play
 	inc [hl]
 	ld e, a
 	pop af
@@ -2602,13 +2884,13 @@ Func_1485: ; 1485 (0:1485)
 	or a
 	ret
 
-.tooManyPokemonInPlay
+.too_many_pokemon_in_play
 	pop af
 	scf
 	ret
 ; 0x14d2
 
-INCBIN "baserom.gbc",$14d2,$159f - $14d2
+	INCROM $14d2, $159f
 
 ; This function iterates through the card locations array to find out which and how many
 ; energy cards are in arena (i.e. attached to the active pokemon).
@@ -2622,10 +2904,10 @@ GetAttachedEnergies: ; 159f (0:159f)
 	xor a
 	ld c, NUM_TYPES
 	ld hl, wAttachedEnergies
-.zeroEnergiesLoop
+.zero_energies_loop
 	ld [hli], a
 	dec c
-	jr nz, .zeroEnergiesLoop
+	jr nz, .zero_energies_loop
 	ld a, CARD_LOCATION_ARENA
 	or e ; if e is non-0, arena is not the only location that counts
 	ld e, a
@@ -2633,10 +2915,10 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld h, a
 	ld l, DUELVARS_CARD_LOCATIONS
 	ld c, DECK_SIZE
-.nextCard
+.next_card
 	ld a, [hl]
 	cp e
-	jr nz, .notInRequestedLocation
+	jr nz, .not_in_requested_location
 
 	push hl
 	push de
@@ -2644,8 +2926,8 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld a, l
 	call LoadDeckCardToBuffer2
 	ld a, [wLoadedCard2Type]
-	bit ENERGY_CARD_F, a
-	jr z, .notAnEnergyCard
+	bit TYPE_ENERGY_F, a
+	jr z, .not_an_energy_card
 	and $7 ; zero bit 3 to extract the type
 	ld e, a
 	ld d, $0
@@ -2653,18 +2935,18 @@ GetAttachedEnergies: ; 159f (0:159f)
 	add hl, de
 	inc [hl] ; increment the number of energy cards of this type
 	cp COLORLESS
-	jr nz, .notColorless
+	jr nz, .not_colorless
 	inc [hl] ; each colorless energy counts as two
-.notAnEnergyCard
-.notColorless
+.not_an_energy_card
+.not_colorless
 	pop bc
 	pop de
 	pop hl
 
-.notInRequestedLocation
+.not_in_requested_location
 	inc l
 	dec c
-	jr nz, .nextCard
+	jr nz, .next_card
 	; all 60 cards checked
 	ld hl, wAttachedEnergies
 	ld c, NUM_TYPES
@@ -2689,22 +2971,22 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
 	ld l, $0
 	ld c, $0
-.nextCard
+.next_card
 	ld a, [hl]
 	cp b
-	jr nz, .unmatchingCardLocationOrID
+	jr nz, .unmatching_card_location_orID
 	ld a, l
 	push hl
 	call _GetCardInDeckPosition
 	cp e
 	pop hl
-	jr nz, .unmatchingCardLocationOrID
+	jr nz, .unmatching_card_location_orID
 	inc c
-.unmatchingCardLocationOrID
+.unmatching_card_location_orID
 	inc l
 	ld a, l
 	cp DECK_SIZE
-	jr c, .nextCard
+	jr c, .next_card
 	ld a, c
 	pop bc
 	ret
@@ -2732,7 +3014,7 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ret
 ; 0x161e
 
-INCBIN "baserom.gbc",$161e,$16c0 - $161e
+	INCROM $161e, $16c0
 
 CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld a, e
@@ -2744,17 +3026,17 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 	ld [wTempCardId], a
 	ld hl, wLoadedCard1Move1
 	dec e
-	jr nz, .gotMove
+	jr nz, .got_move
 	ld hl, wLoadedCard1Move2
-.gotMove
+.got_move
 	ld de, wLoadedMove
 	ld c, wLoadedCard1Move2 - wLoadedCard1Move1
-.copyLoop
+.copy_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .copyLoop
+	jr nz, .copy_loop
 	ld a, [wLoadedMoveDamage]
 	ld hl, wDamage
 	ld [hli], a
@@ -2918,7 +3200,7 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call $4f9d
 	ld a, $1
 	ld [wcce6], a
-	text_hl DamageToSelfDueToConfusionText
+	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
 	ld [wLoadedMoveAnimation], a
@@ -3017,20 +3299,39 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	or a
 	ret
 .confused
-	text_de ConfusionCheckDamageText
+	ldtx de, ConfusionCheckDamageText
 	call TossCoin
-	jr c, .noConfusionDamage
+	jr c, .no_confusion_damage
 	ld a, $1
 	ld [wccc9], a
 	scf
 	ret
-.noConfusionDamage
+.no_confusion_damage
 	or a
 	ret
 ; 0x18f9
 
-INCBIN "baserom.gbc",$18f9,$195c - $18f9
+	INCROM $18f9, $1944
 
+; this loads HP and Stage (1 byte each) of card with id at $ff9f into wLoadedMoveEffectCommands
+Func_1944: ; 1944 (0:1944)
+	ld a, [$ff9f]
+	call LoadDeckCardToBuffer1
+	ld hl, wLoadedCard1HP
+	ld de, wLoadedMoveEffectCommands
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	ret
+; 0x1955
+
+Func_1955: ; 1955 (0:1955)
+	push af
+	ld a, $7a
+	ld [wLoadedMoveAnimation], a
+	pop af
 ; this function appears to apply several damage modifiers
 Func_195c: ; 195c (0:195c)
 	ld hl, wDamage
@@ -3065,10 +3366,10 @@ Func_1994: ; 1994 (0:1994)
 	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
-	jr nz, .nonZeroDamage
+	jr nz, .non_zero_damage
 	ld de, $0000
 	ret
-.nonZeroDamage
+.non_zero_damage
 	xor a
 	ld [$ff9d], a
 	ld d, [hl]
@@ -3080,7 +3381,7 @@ Func_1994: ; 1994 (0:1994)
 	xor a
 	ld [wccc1], a
 	call HandleDoubleDamageSubstatus
-	jr .checkPluspowerAndDefender
+	jr .check_pluspower_and_defender
 .safe
 	call HandleDoubleDamageSubstatus
 	ld a, e
@@ -3104,14 +3405,14 @@ Func_1994: ; 1994 (0:1994)
 	call Func_374a
 	call SwapTurn
 	and b
-	jr z, .checkPluspowerAndDefender
+	jr z, .check_pluspower_and_defender
 	ld hl, $ffe2
 	add hl, de
 	ld e, l
 	ld d, h
 	ld hl, $ccc1
 	set 2, [hl]
-.checkPluspowerAndDefender
+.check_pluspower_and_defender
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
 	call SwapTurn
@@ -3119,9 +3420,9 @@ Func_1994: ; 1994 (0:1994)
 	call ApplyAttachedDefender
 	call HandleDamageReduction
 	bit 7, d
-	jr z, .noUnderflow
+	jr z, .no_underflow
 	ld de, $0000
-.noUnderflow
+.no_underflow
 	call SwapTurn
 	ret
 
@@ -3137,7 +3438,7 @@ Func_1a0e: ; 1a0e (0:1a0e)
 	ret
 ; 0x1a1a
 
-INCBIN "baserom.gbc",$1a1a,$1a22 - $1a1a
+	INCROM $1a1a, $1a22
 
 Func_1a22: ; 1a22 (0:1a22)
 	xor a
@@ -3146,7 +3447,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld a, [hli]
 	or [hl]
 	or a
-	jr z, .noDamage
+	jr z, .no_damage
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -3177,7 +3478,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	call ApplyAttachedDefender
 	bit 7, d ; test for underflow
 	ret z
-.noDamage
+.no_damage
 	ld de, $0000
 	ret
 
@@ -3226,9 +3527,9 @@ SubstractHP: ; 1a96 (0:1a96)
 	ld a, $0
 	sbc d
 	and $80
-	jr z, .noUnderflow
+	jr z, .no_underflow
 	ld [hl], $0
-.noUnderflow
+.no_underflow
 	ld a, [hl]
 	or a
 	jr z, .zero
@@ -3271,7 +3572,7 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	text_hl WasKnockedOutText
+	ldtx hl, WasKnockedOutText
 	call DrawWideTextBox_PrintText
 	ld a, $28
 .asm_1aeb
@@ -3282,7 +3583,7 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	ret
 ; 0x1af3
 
-INCBIN "baserom.gbc",$1af3,$1b8d - $1af3
+	INCROM $1af3, $1b8d
 
 Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
@@ -3300,7 +3601,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	ld [hli], a
 	ld a, [wLoadedMoveName + 1]
 	ld [hli], a
-	text_hl PokemonsAttackText ; text when using an attack
+	ldtx hl, PokemonsAttackText ; text when using an attack
 	call DrawWideTextBox_PrintText
 	ret
 
@@ -3337,7 +3638,7 @@ Func_1bca: ; 1bca (0:1bca)
 	inc de
 	ld a, [hli]
 	ld [de], a
-	text_hl WasUnsuccessfulText
+	ldtx hl, WasUnsuccessfulText
 	call DrawWideTextBox_PrintText
 	scf
 	ret
@@ -3348,7 +3649,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ret
 ; 0x1c05
 
-INCBIN "baserom.gbc",$1c05,$1c72 - $1c05
+	INCROM $1c05, $1c72
 
 ; returns [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
 ;   As a side effect, this also returns a duelist variable in a similar manner to
@@ -3381,19 +3682,19 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	ld hl, $cc16
 	ld a, [hli]
 	or [hl]
-	jr z, .specialName
+	jr z, .special_name
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	jp PrintTextBoxBorderLabel
-.specialName
+.special_name
 	ld hl, $c500
 	ld a, [hl]
 	or a
-	jr z, .printPlayer2
+	jr z, .print_player2
 	jr printNameLoop
-.printPlayer2
-	text_hl Player2
+.print_player2
+	ldtx hl, Player2Text
 	jp PrintTextBoxBorderLabel
 
 Func_1caa: ; 1caa (0:1caa)
@@ -3502,13 +3803,13 @@ Func_1d1d: ; 1d1d (0:1d1d)
 	scf
 	ret
 
-;creates a list at $c000 of every card the player owns and how many
+; creates a list at $c000 of every card the player owns and how many
 CreateTempCardCollection: ; 1d2e (0:1d2e)
 	call EnableExtRAM
 	ld hl, sCardCollection
 	ld de, wTempCardCollection
 	ld bc, CARD_COLLECTION_SIZE
-	call CopyData
+	call CopyDataHLtoDE
 	ld de, sDeck1Name
 	call AddDeckCardsToTempCardCollection
 	ld de, sDeck2Name
@@ -3539,7 +3840,7 @@ AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 	jr nz, .asm_1d66
 	ret
 
-;adds card a to collection, provided the player has less than 99 of them
+; adds card a to collection, provided the player has less than 99 of them
 AddCardToCollection: ; 1d6e (0:1d6e)
 	push hl
 	push de
@@ -3583,26 +3884,27 @@ Func_1d91: ; 1d91 (0:1d91)
 	ret
 ; 0x1da4
 
-INCBIN "baserom.gbc",$1da4,$1dca - $1da4
+	INCROM $1da4, $1dca
 
 ; memcpy(HL, DE, C)
-Memcpy: ; 1dca (0:1dca)
+; if LCD on, copy during h-blank only
+SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
-	bit 7, a             ;
-	jr nz, .asm_1dd8     ; assert that LCD is on
-.asm_1dd1
+	bit rLCDC_ENABLE, a  ;
+	jr nz, .lcd_on       ; assert that LCD is on
+.lcd_off_loop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .asm_1dd1
+	jr nz, .lcd_off_loop
 	ret
-.asm_1dd8
-	jp MemcpyDEHL_hblank
+.lcd_on
+	jp HblankCopyDataDEtoHL
 
-; calculates $9800 + SCREEN_WIDTH * e + d to map the screen coordinates at de
-; to the corresponding BG Map 0 address in VRAM.
-CalculateBGMap0Address: ; 1ddb (0:1ddb)
+; returns vBGMapTiles + BG_MAP_WIDTH * e + d in hl.
+; used to map coordinates at de to a BGMap0 address.
+DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
 	ld h, $0
 	add hl, hl
@@ -3614,7 +3916,7 @@ CalculateBGMap0Address: ; 1ddb (0:1ddb)
 	add d
 	ld l, a
 	ld a, h
-	adc $98
+	adc HIGH(vBGMapTiles)
 	ld h, a
 	ret
 
@@ -3644,20 +3946,20 @@ AdjustCoordinatesForWindow: ; 1deb (0:1deb)
 DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
-	jr nz, .drawTopBorder
+	jr nz, .draw_top_border
 	ld a, [wFrameType]
 	or a
-	jr z, .drawTopBorder
+	jr z, .draw_top_border
 ; Console is SGB and frame type is != 0.
 ; The text box will be colorized so a SGB command needs to be transferred
 	push de
 	push bc
-	call .drawTopBorder ; this falls through to drawing the whole box
+	call .draw_top_border ; this falls through to drawing the whole box
 	pop bc
 	pop de
 	jp ColorizeTextBoxSGB
 
-.drawTopBorder
+.draw_top_border
 	push de
 	push bc
 	push hl
@@ -3688,17 +3990,17 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, d
 	sub b
 	sub $4
-	jr z, .drawTopBorderRightTile
+	jr z, .draw_top_border_right_tile
 	ld b, a
-.drawTopBorderLineLoop
+.draw_top_border_line_loop
 	ld a, $5
 	ld [hli], a
 	ld a, $1c
 	ld [hli], a
 	dec b
-	jr nz, .drawTopBorderLineLoop
+	jr nz, .draw_top_border_line_loop
 
-.drawTopBorderRightTile
+.draw_top_border_right_tile
 	ld a, $5
 	ld [hli], a
 	ld a, $19
@@ -3718,12 +4020,12 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	jr z, .cgb
 ; DMG or SGB
 	inc e
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top border done, draw the rest of the text box
 	jr ContinueDrawingTextBoxDMGorSGB
 
 .cgb
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	push de
 	call CopyCurrentLineAttrCGB ; BG Map attributes for current line, which is the top border
 	pop de
@@ -3742,32 +4044,32 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
-	ld de, $1819
+	lb de, $18, $19
 	call CopyLine
 ContinueDrawingTextBoxDMGorSGB
 	dec c
 	dec c
-.drawTextBoxBodyLoop
+.draw_text_box_body_loop
 	ld a, $0
-	ld de, $1e1f
+	lb de, $1e, $1f
 	call CopyLine
 	dec c
-	jr nz, .drawTextBoxBodyLoop
+	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
-	ld de, $1a1b
+	lb de, $1a, $1b
 ;	fallthrough
 
-; copies b bytes of data to sp+$1c and to hl, and returns hl += SCREEN_WIDTH
+; copies b bytes of data to sp+$1c and to hl, and returns hl += BG_MAP_WIDTH
 ; d = value of byte 0
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
-; b is supposed to be SCREEN_WIDTH or smaller, else the stack would get corrupted
+; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
 CopyLine: ; 1ea5 (0:1ea5)
-	add sp, -$20
+	add sp, -BG_MAP_WIDTH
 	push hl
 	push bc
 	ld hl, sp+$4
@@ -3788,27 +4090,27 @@ CopyLine: ; 1ea5 (0:1ea5)
 	push bc
 	ld c, b
 	ld b, $0
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	pop bc
 	pop de
-	; advance pointer SCREEN_WIDTH positions and restore stack pointer
-	ld hl, $0020
+	; advance pointer BG_MAP_WIDTH positions and restore stack pointer
+	ld hl, BG_MAP_WIDTH
 	add hl, de
-	add sp, $20
+	add sp, BG_MAP_WIDTH
 	ret
 
 DrawRegularTextBoxCGB:
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, $1c
-	ld de, $1819
+	lb de, $18, $19
 	call CopyCurrentLineTilesAndAttrCGB
 ContinueDrawingTextBoxCGB
 	dec c
 	dec c
-.drawTextBoxBodyLoop
+.draw_text_box_body_loop
 	ld a, $0
-	ld de, $1e1f
+	lb de, $1e, $1f
 	push hl
 	call CopyLine
 	pop hl
@@ -3820,10 +4122,10 @@ ContinueDrawingTextBoxCGB
 	call CopyLine
 	call BankswitchVRAM_0
 	dec c
-	jr nz, .drawTextBoxBodyLoop
+	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
 	ld a, $1d
-	ld de, $1a1b
+	lb de, $1a, $1b
 	call CopyCurrentLineTilesAndAttrCGB
 	ret
 
@@ -3859,12 +4161,12 @@ ColorizeTextBoxSGB
 	ld hl, $cae0
 	ld de, SGB_ATTR_BLK_1f4f
 	ld c, $10
-.copySGBCommandLoop
+.copy_sgb_command_loop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec c
-	jr nz, .copySGBCommandLoop
+	jr nz, .copy_sgb_command_loop
 	pop de
 	pop bc
 	ld hl, $cae4
@@ -3899,7 +4201,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push af
 	push hl
 	add sp, $e0
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 .asm_1f67
 	push hl
 	push bc
@@ -3921,7 +4223,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	push bc
 	ld c, b
 	ld b, $0
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	ld hl, sp+$24
 	ld a, [hl]
 	ld hl, sp+$27
@@ -3938,7 +4240,7 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	ret
 ; 0x1f96
 
-INCBIN "baserom.gbc",$1f96,$20b0 - $1f96
+	INCROM $1f96, $20b0
 
 Func_20b0: ; 20b0 (0:20b0)
 	ld hl, $2fe8
@@ -3947,7 +4249,7 @@ Func_20b0: ; 20b0 (0:20b0)
 	jr nz, .asm_20bd
 	ld hl, $37f8
 .asm_20bd
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	ld b, $30
 	jr asm_2121
 
@@ -3958,7 +4260,7 @@ Func_20c4: ; 20c4 (0:20c4)
 	jr nz, .asm_20d1
 	ld hl, $3838
 .asm_20d1
-	ld de, $8d40
+	ld de, vTiles1 + $540
 	ld b, $c
 	jr asm_2121
 
@@ -3975,12 +4277,12 @@ asm_20de
 	jr nz, .asm_20eb
 	ld hl, $3af8
 .asm_20eb
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	jr asm_2121
 
 Func_20f0: ; 20f0 (0:20f0)
 	ld hl, $4008
-	ld de, $8a00
+	ld de, vTiles1 + $200
 	ld b, $d
 	call asm_2121
 	ld hl, $3528
@@ -3989,19 +4291,19 @@ Func_20f0: ; 20f0 (0:20f0)
 	jr nz, .asm_2108
 	ld hl, $3d38
 .asm_2108
-	ld de, $8d00
+	ld de, vTiles1 + $500
 	ld b, $30
 	jr asm_2121
 
 Func_210f: ; 210f (0:210f)
 	ld hl, $40d8
-	ld de, $9300
+	ld de, vTiles2 + $300
 	ld b, $8
 	jr asm_2121
 
 Func_2119: ; 2119 (0:2119)
 	ld hl, DuelGraphics - Fonts
-	ld de, $9000 ; destination
+	ld de, vTiles2 ; destination
 	ld b, $38 ; number of tiles
 asm_2121
 	ld a, BANK(Fonts)
@@ -4012,7 +4314,7 @@ asm_2121
 	ret
 ; 0x212f
 
-INCBIN "baserom.gbc",$212f,$2167 - $212f
+	INCROM $212f, $2167
 
 Func_2167: ; 2167 (0:2167)
 	ld l, a
@@ -4032,7 +4334,7 @@ Func_2167: ; 2167 (0:2167)
 	jp Func_1f5f
 ; 0x2189
 
-INCBIN "baserom.gbc",$2189,$21c5 - $2189
+	INCROM $2189, $21c5
 
 Func_21c5: ; 21c5 (0:21c5)
 	push de
@@ -4193,7 +4495,7 @@ Func_22ae: ; 22ae (0:22ae)
 	xor a
 	ldh [$ffae], a
 	ld [wcd09], a
-	call CalculateBGMap0Address
+	call DECoordToBGMap0Address
 	ld a, l
 	ldh [$ffaa], a
 	ld a, h
@@ -4246,7 +4548,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	ld h, d
 	ld de, $cd05
 	ld c, $1
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	ld hl, $ffac
 	inc [hl]
 	ret
@@ -4439,12 +4741,12 @@ Func_23d3: ; 23d3 (0:23d3)
 	ret
 ; 0x23fd
 
-INCBIN "baserom.gbc",$23fd,$245d - $23fd
+	INCROM $23fd, $245d
 
 Func_245d: ; 245d (0:245d)
 	push de
 	push bc
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	ld bc, $d8f0
 	call Func_2499
@@ -4504,7 +4806,7 @@ Func_24ac: ; 24ac (0:24ac)
 	or a
 	jr nz, .asm_24bf
 	call Func_2510
-	call Memcpy
+	call SafeCopyDataDEtoHL
 .asm_24bb
 	pop bc
 	pop de
@@ -4513,7 +4815,7 @@ Func_24ac: ; 24ac (0:24ac)
 .asm_24bf
 	call Func_24ca
 	call Func_2518
-	call Memcpy
+	call SafeCopyDataDEtoHL
 	jr .asm_24bb
 
 Func_24ca: ; 24ca (0:24ca)
@@ -4659,121 +4961,124 @@ Func_256d: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-INCBIN "baserom.gbc",$2589,$2636 - $2589
+	INCROM $2589, $2636
 
 ; initializes cursor parameters given the 8 bytes starting at hl,
 ; which represent the following:
 ;   x position, y position, y displacement between items, number of items,
-;   cursor tile number, tile behind cursor, ??, ??
+;   cursor tile number, tile behind cursor, ???? (unknown function pointer if non-0)
+; also sets the current menu item to the one specified in register a
 InitializeCursorParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
 	ld de, wCursorXPosition
 	ld b, $8
-.asm_2640
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_2640
+	jr nz, .loop
 	xor a
 	ld [wCursorBlinkCounter], a
 	ret
 
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
-MenuCursorAcceptInput: ; 264b (0:264b)
+HandleMenuInput: ; 264b (0:264b)
 	xor a
-	ld [wcd99], a
+	ld [wRefreshMenuCursorSFX], a
 	ldh a, [hButtonsPressed2]
 	or a
-	jr z, .asm_2685
+	jr z, .up_down_done
 	ld b, a
 	ld a, [wNumMenuItems]
 	ld c, a
 	ld a, [wCurMenuItem]
 	bit D_UP_F, b
-	jr z, .asm_266b
+	jr z, .not_up
 	dec a
 	bit 7, a
-	jr z, .asm_2674
+	jr z, .handle_up_or_down
 	ld a, [wNumMenuItems]
-	dec a
-	jr .asm_2674
-.asm_266b
+	dec a ; wrapping around, so load the bottommost item
+	jr .handle_up_or_down
+.not_up
 	bit D_DOWN_F, b
-	jr z, .asm_2685
+	jr z, .up_down_done
 	inc a
 	cp c
-	jr c, .asm_2674
-	xor a
-.asm_2674
+	jr c, .handle_up_or_down
+	xor a ; wrapping around, so load the topmost item
+.handle_up_or_down
 	push af
 	ld a, $1
-	ld [wcd99], a
+	ld [wRefreshMenuCursorSFX], a ; buffer sound for up/down
 	call EraseCursor
 	pop af
 	ld [wCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
-.asm_2685
+.up_down_done
 	ld a, [wCurMenuItem]
 	ldh [hCurrentMenuItem], a
-	ld hl, $cd17
+	ld hl, wcd17
 	ld a, [hli]
 	or [hl]
-	jr z, asm_26a9
+	jr z, .check_A_or_B
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	ldh a, [hCurrentMenuItem]
 	call CallHL
-	jr nc, HandleMenuInput
-asm_269b:
-	call Func_270b
-
-Func_269e: ; 269e (0:269e)
-	call Func_26c0
+	jr nc, RefreshMenuCursor_CheckPlaySFX
+.A_pressed_draw_cursor
+	call DrawCursor2
+.A_pressed
+	call PlayOpenOrExitScreenSFX
 	ld a, [wCurMenuItem]
 	ld e, a
 	ldh a, [hCurrentMenuItem]
 	scf
 	ret
-asm_26a9:
+.check_A_or_B
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, HandleMenuInput
+	jr z, RefreshMenuCursor_CheckPlaySFX
 	and A_BUTTON
-	jr nz, asm_269b
+	jr nz, HandleMenuInput.A_pressed_draw_cursor
+	; b button pressed
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
 	ldh [hCurrentMenuItem], a
-	call Func_26c0
+	call PlayOpenOrExitScreenSFX
 	scf
 	ret
 
-Func_26c0: ; 26c0 (0:26c0)
+; plays an "open screen" sound if [hCurrentMenuItem] != 0xff
+; plays a "exit screen" sound if [hCurrentMenuItem] == 0xff
+PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
 	ldh a, [hCurrentMenuItem]
 	inc a
-	jr z, .asm_26ca
+	jr z, .play_exit_sfx
 	ld a, $2
-	jr .asm_26cc
-.asm_26ca
+	jr .play_sfx
+.play_exit_sfx
 	ld a, $3
-.asm_26cc
-	call Func_3796
+.play_sfx
+	call PlaySFX
 	pop af
 	ret
 
-HandleMenuInput: ; 26d1 (0:26d1)
-	ld a, [wcd99]
+RefreshMenuCursor_CheckPlaySFX: ; 26d1 (0:26d1)
+	ld a, [wRefreshMenuCursorSFX]
 	or a
-	jr z, HandleTextBoxInput
-	call Func_3796
+	jr z, RefreshMenuCursor
+	call PlaySFX
 ;	fallthrough
-HandleTextBoxInput: ; 26da (0:26da)
+RefreshMenuCursor: ; 26da (0:26da)
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -4806,11 +5111,12 @@ DrawCursor:
 	or a
 	ret
 
-Func_270b: ; 270b (0:270b)
+; unlike DrawCursor, read cursor tile from wCursorTileNumber instead of register a
+DrawCursor2: ; 270b (0:270b)
 	ld a, [wCursorTileNumber]
 	jr DrawCursor
 
-Func_2710: ; 2710 (0:2710)
+SetMenuItem: ; 2710 (0:2710)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
 	xor a
@@ -4829,7 +5135,7 @@ Func_271a: ; 271a (0:271a)
 	xor $1
 	jr .asm_2748
 .asm_272c
-	bit 5, b
+	bit D_LEFT_F, b
 	jr z, .asm_273b
 	ld a, [hl]
 	sub $2
@@ -4838,7 +5144,7 @@ Func_271a: ; 271a (0:271a)
 	add $4
 	jr .asm_2748
 .asm_273b
-	bit 4, b
+	bit D_RIGHT_F, b
 	jr z, .asm_275d
 	ld a, [hl]
 	add $2
@@ -4848,7 +5154,7 @@ Func_271a: ; 271a (0:271a)
 .asm_2748
 	push af
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 	call .asm_2772
 	pop af
 	ld [wCurMenuItem], a
@@ -4859,7 +5165,7 @@ Func_271a: ; 271a (0:271a)
 .asm_275d
 	ldh a, [hButtonsPressed2]
 	and A_BUTTON
-	jp nz, Func_269e
+	jp nz, HandleMenuInput.A_pressed
 .asm_2764
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
@@ -4890,64 +5196,70 @@ Func_271a: ; 271a (0:271a)
 	ret
 ; 0x278d
 
-INCBIN "baserom.gbc",$278d,$29f5 - $278d
+	INCROM $278d, $29f5
 
 Func_29f5: ; 29f5 (0:29f5)
 	farcallx $6, $4000
 	ret
 ; 0x29fa
 
-INCBIN "baserom.gbc",$29fa,$2a00 - $29fa
-
-Func_2a00: ; 2a00 (0:2a00)
+Func_29fa: ; 29fa (0:29fa)
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
+WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
-	jr nz, .asm_2a15
+	jr nz, .a_pressed
 	bit B_BUTTON_F, a
-	jr z, Func_2a00
+	jr z, WaitForButtonAorB
 	call EraseCursor
 	scf
 	ret
-.asm_2a15
+.a_pressed
 	call EraseCursor
 	or a
 	ret
 
-Func_2a1a: ; 2a1a (0:2a1a)
+SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	xor a
 	ld hl, wCurMenuItem
 	ld [hli], a
-	ld [hl], d
+	ld [hl], d ; wCursorXPosition
 	inc hl
-	ld [hl], e
+	ld [hl], e ; wCursorYPosition
 	inc hl
-	ld [hl], $0
+	ld [hl], 0 ; wYDisplacementBetweenMenuItems
 	inc hl
-	ld [hl], $1
+	ld [hl], 1 ; wNumMenuItems
 	inc hl
-	ld [hl], b
+	ld [hl], b ; wCursorTileNumber
 	inc hl
-	ld [hl], c
+	ld [hl], c ; wTileBehindCursor
 	ld [wCursorBlinkCounter], a
 	ret
 ; 0x2a30
 
-INCBIN "baserom.gbc",$2a30,$2a36 - $2a30
+Func_2a30: ; 2a30 (0:2a30)
+	call DrawWideTextBox_PrintTextNoDelay
+	jp WaitForWideTextBoxInput
+; 0x2a36
 
-Func_2a36: ; 2a36 (0:2a36)
+DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 	push hl
 	call DrawWideTextBox
 	ld a, $13
 	jr Func_2a44
 
-DrawNarrowTextBox_PrintText: ; 2a3e (0:2a3e)
+DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
 	ld a, $b
+;	fallthrough
+
 Func_2a44: ; 2a44 (0:2a44)
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	call Func_22a6
 	pop hl
@@ -4961,7 +5273,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
 	ld a, $13
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	call Func_22a6
 	call EnableLCD
@@ -4970,33 +5282,38 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 
 ; draws a 12x6 text box aligned to the bottom left of the screen
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
-	ld de, $000c
-	ld bc, $0c06
+	lb de, 0, 12
+	lb bc, 12, 6
 	call AdjustCoordinatesForWindow
 	call DrawRegularTextBox
 	ret
 
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
-	call DrawNarrowTextBox_PrintText
+	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
 	ld hl, NarrowTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.waitAorBLoop
+.wait_A_or_B_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .waitAorBLoop
+	jr z, .wait_A_or_B_loop
 	ret
 
 NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
-	db $a, $11, $1, $1, $2f, $1d, $0, $0
+	db 10, 17 ; x, y
+	db 1 ; y displacement between items
+	db 1 ; number of items
+	db $2f ; cursor tile number
+	db $1d ; tile behind cursor
+	dw $0000 ; unknown function pointer if non-0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
-	ld de, $000c
-	ld bc, $1406
+	lb de, 0, 12
+	lb bc, 20, 6
 	call AdjustCoordinatesForWindow
 	call DrawRegularTextBox
 	ret
@@ -5009,88 +5326,121 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	ld hl, WideTextBoxPromptCursorData
 	call InitializeCursorParameters
 	call EnableLCD
-.waitAorBLoop
+.wait_A_or_B_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .waitAorBLoop
+	jr z, .wait_A_or_B_loop
 	call EraseCursor
 	ret
 
 WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
-	db $12, $11, $1, $1, $2f, $1d, $0, $0
+	db 18, 17 ; x, y
+	db 1 ; y displacement between items
+	db 1 ; number of items
+	db $2f ; cursor tile number
+	db $1d ; tile behind cursor
+	dw $0000 ; unknown function pointer if non-0
 
-INCBIN "baserom.gbc",$2ad0,$2af0 - $2ad0
-
-Func_2af0: ; 2af0 (0:2af0)
+TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	call DrawWideTextBox_PrintText
-	ld de, $0710
-	call Func_2b66
-	ld de, $0610
-	jr .asm_2b0a
-	call DrawNarrowTextBox_PrintText
-	ld de, $0310
-	call Func_2b66
-	ld de, $0210
-.asm_2b0a
+	lb de, 6, 16 ; x, y
 	ld a, d
-	ld [wcd98], a
-	ld bc, $0f00
-	call Func_2a1a
+	ld [wLeftmostItemCursorX], a
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
+	ld a, 1
+	ld [wCurMenuItem], a
+	call EnableLCD
+	jp HandleYesOrNoMenu.refresh_menu
+; 0x2aeb
+
+Func_2aeb: ; 2aeb (0:2aeb)
+	ld a, $01
+	ld [wcd9a], a
+;	fallthrough
+
+; handle a yes / no menu with custom text provided in hl
+; returns carry if "no" selected
+YesOrNoMenuWithText: ; 2af0 (0:2af0)
+	call DrawWideTextBox_PrintText
+;	fallthrough
+YesOrNoMenu: ; 2af3 (0:2af3)
+	lb de, 7, 16 ; x, y
+	call PrintYesOrNoItems
+	lb de, 6, 16 ; x, y
+	jr HandleYesOrNoMenu
+
+YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
+	call DrawNarrowTextBox_PrintTextNoDelay
+	lb de, 3, 16 ; x, y
+	call PrintYesOrNoItems
+	lb de, 2, 16 ; x, y
+;	fallthrough
+HandleYesOrNoMenu:
+	ld a, d
+	ld [wLeftmostItemCursorX], a
+	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	call SetCursorParametersForTextBox
 	ld a, [wcd9a]
 	ld [wCurMenuItem], a
 	call EnableLCD
-	jr .asm_2b39
-.asm_2b1f
+	jr .refresh_menu
+.wait_button_loop
 	call DoFrame
-	call HandleTextBoxInput
+	call RefreshMenuCursor
 	ldh a, [hButtonsPressed]
 	bit A_BUTTON_F, a
-	jr nz, .asm_2b50
+	jr nz, .a_pressed
 	ldh a, [hButtonsPressed2]
 	and D_RIGHT | D_LEFT
-	jr z, .asm_2b1f
+	jr z, .wait_button_loop
+	; left or right pressed, so switch to the other menu item
 	ld a, $1
-	call Func_3796
+	call PlaySFX
 	call EraseCursor
-.asm_2b39
-	ld a, [wcd98]
+.refresh_menu
+	ld a, [wLeftmostItemCursorX]
 	ld c, a
+	; default to the second option (NO)
 	ld hl, wCurMenuItem
 	ld a, [hl]
 	xor $1
 	ld [hl], a
+	; x separation between left and right items is 4 tiles
 	add a
 	add a
 	add c
 	ld [wCursorXPosition], a
 	xor a
 	ld [wCursorBlinkCounter], a
-	jr .asm_2b1f
-.asm_2b50
+	jr .wait_button_loop
+.a_pressed
 	ld a, [wCurMenuItem]
 	ldh [hCurrentMenuItem], a
 	or a
-	jr nz, .asm_2b5c
-	ld [wcd9a], a
+	jr nz, .no
+;.yes
+	ld [wcd9a], a ; 0
 	ret
-.asm_2b5c
+.no
 	xor a
-	ld [wcd9a], a
+	ld [wcd9a], a ; 0
 	ld a, $1
 	ldh [hCurrentMenuItem], a
 	scf
 	ret
 
-Func_2b66: ; 2b66 (0:2b66)
+; prints YES NO at de
+PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForWindow
-	text_hl YesOrNoText
+	ldtx hl, YesOrNoText
 	call Func_2c1b
 	ret
 ; 0x2b70
 
-INCBIN "baserom.gbc",$2b70,$2b78 - $2b70
+	INCROM $2b70, $2b78
 
 ; loads opponent deck to wOpponentDeck
 LoadOpponentDeck: ; 2b78 (0:2b78)
@@ -5098,17 +5448,17 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [wIsPracticeDuel], a
 	ld a, [wOpponentDeckId]
 	cp SAMS_NORMAL_DECK - 2
-	jr z, .normalSamDuel
+	jr z, .normal_sam_duel
 	or a ; cp SAMS_PRACTICE_DECK - 2
-	jr nz, .notPracticeDuel
+	jr nz, .not_practice_duel
 
 ; only practice duels will display help messages, but
 ; any duel with Sam will force the PRACTICE_PLAYER_DECK
-;.practiceSamDuel
+;.practice_sam_duel
 	inc a
 	ld [wIsPracticeDuel], a
 
-.normalSamDuel
+.normal_sam_duel
 	xor a
 	ld [wOpponentDeckId], a
 	call SwapTurn
@@ -5122,17 +5472,17 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [hl], a
 	xor a
 
-.notPracticeDuel
+.not_practice_duel
 	inc a
 	inc a
 	call LoadDeck
 	ld a, [wOpponentDeckId]
-	cp NUMBER_OF_DECKS
-	jr c, .validDeck
+	cp DECKS_END
+	jr c, .valid_deck
 	ld a, PRACTICE_PLAYER_DECK - 2
 	ld [wOpponentDeckId], a
 
-.validDeck
+.valid_deck
 ; set opponent as controlled by AI
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -5235,17 +5585,17 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-INCBIN "baserom.gbc",$2c37,$2c73 - $2c37
+	INCROM $2c37, $2c73
 
 Func_2c73: ; 2c73 (0:2c73)
 	xor a
 	call Func_2c84
 
 Func_2c77: ; 2c77 (0:2c77)
-	ld bc, $2f1d
-	ld de, $1211
-	call Func_2a1a
-	call Func_2a00
+	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb de, 18, 17 ; x, y
+	call SetCursorParametersForTextBox
+	call WaitForButtonAorB
 	ret
 
 Func_2c84: ; 2c84 (0:2c84)
@@ -5343,8 +5693,8 @@ Func_2d06: ; 2d06 (0:2d06)
 
 Func_2d15: ; 2d15 (0:2d15)
 	push hl
-	ld de, $000c
-	ld bc, $1406
+	lb de, 0, 12
+	lb bc, 20, 6
 	call AdjustCoordinatesForWindow
 	ld a, [wce4b]
 	or a
@@ -5359,7 +5709,7 @@ Func_2d15: ; 2d15 (0:2d15)
 	ld l, a
 	call DrawLabeledTextBox
 .asm_2d36
-	ld de, $010e
+	lb de, 1, 14
 	call AdjustCoordinatesForWindow
 	ld a, $13
 	call Func_22a6
@@ -5496,7 +5846,7 @@ Func_2e12: ; 2e12 (0:2e12)
 	ld a, [wcd0a]
 	or a
 	jp z, Func_245d
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	call Func_0663
 	pop hl
@@ -5511,15 +5861,15 @@ Func_2e12: ; 2e12 (0:2e12)
 	ret
 
 Func_2e2c: ; 2e2c (0:2e2c)
-	ld de, $caa0
+	ld de, wcaa0
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
-	jp z, .opponentTurn
+	jp z, .opponent_turn
 	call PrintPlayerName
 	pop hl
 	ret
-.opponentTurn
+.opponent_turn
 	call PrintOpponentName
 	pop hl
 	ret
@@ -5528,38 +5878,38 @@ Func_2e2c: ; 2e2c (0:2e2c)
 PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
-	jr z, .fromRAM
+	jr z, .from_ram
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
-	call .printText
+	call .print_text
 	pop af
 	call BankswitchHome
 	ret
-.fromRAM
+.from_ram
 	ld hl, wc590
-.printText
+.print_text
 	call Func_2cc8
-.nextTileLoop
+.next_tile_loop
 	ldh a, [hButtonsHeld]
 	ld b, a
 	ld a, [wTextSpeed]
 	inc a
 	cp $3
-	jr nc, .applyDelay
+	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
 	bit B_BUTTON_F, b
-	jr nz, .skipDelay
-	jr .applyDelay
-.textDelayLoop
+	jr nz, .skip_delay
+	jr .apply_delay
+.text_delay_loop
 	; wait a number of frames equal to wTextSpeed between printing each text tile
 	call DoFrame
-.applyDelay
+.apply_delay
 	dec a
-	jr nz, .textDelayLoop
-.skipDelay
+	jr nz, .text_delay_loop
+.skip_delay
 	call Func_2d43
-	jr nc, .nextTileLoop
+	jr nc, .next_tile_loop
 	ret
 
 ; prints text with id at hl without letter delay in a textbox area
@@ -5568,9 +5918,9 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	push af
 	call ReadTextOffset
 	call Func_2cc8
-.nextTileLoop
+.next_tile_loop
 	call Func_2d43
-	jr nc, .nextTileLoop
+	jr nc, .next_tile_loop
 	pop af
 	call BankswitchHome
 	ret
@@ -5586,12 +5936,12 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
-.nextTileLoop
+.next_tile_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, .nextTileLoop
+	jr nz, .next_tile_loop
 	pop af
 	call BankswitchHome
 	dec de
@@ -5603,7 +5953,7 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 	jp PrintPlayerName
 ; 0x2ea9
 
-INCBIN "baserom.gbc",$2ea9,$2ebb - $2ea9
+	INCROM $2ea9, $2ebb
 
 Func_2ebb: ; 2ebb (0:2ebb)
 	ld a, l
@@ -5620,7 +5970,7 @@ Func_2ec4: ; 2ec4 (0:2ec4)
 	ret
 ; 0x2ecd
 
-INCBIN "baserom.gbc",$2ecd,$2f0a - $2ecd
+	INCROM $2ecd, $2f0a
 
 ; load data of card with id at e to wLoadedCard1 or wLoadedCard2
 LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
@@ -5642,12 +5992,12 @@ LoadCardDataToRAM: ; 2f14 (0:2f14)
 	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld b, PKMN_CARD_DATA_LENGTH
-.copyCardDataLoop
+.copy_card_data_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .copyCardDataLoop
+	jr nz, .copy_card_data_loop
 	call BankpopHome
 	or a
 
@@ -5696,7 +6046,7 @@ GetCardHeader: ; 2f5d (0:2f5d)
 	ld d, $00
 	ld e, a
 	call GetCardPointer
-	jr c, .cardNotFound
+	jr c, .card_not_found
 	ld a, $0c
 	call BankpushHome2
 	ld e, [hl]
@@ -5708,7 +6058,7 @@ GetCardHeader: ; 2f5d (0:2f5d)
 	call BankpopHome
 	ld a, e
 	or a
-.cardNotFound
+.card_not_found
 	pop de
 	pop hl
 	ret
@@ -5730,7 +6080,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) % $100
 .nz
 	ccf
-	jr c, .outOfBounds
+	jr c, .out_of_bounds
 	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld a, [hli]
@@ -5738,7 +6088,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ld l,a
 	call BankpopHome
 	or a
-.outOfBounds
+.out_of_bounds
 	pop bc
 	pop de
 	ret
@@ -5762,12 +6112,12 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	call CopyGfxData
 	ld b, $8 ; length of palette
 	ld de, $ce23
-.copyCardPalette
+.copy_card_palette
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .copyCardPalette
+	jr nz, .copy_card_palette
 	pop af
 	call BankswitchHome
 	ret
@@ -5794,12 +6144,12 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ld l, a
 	pop af
 	call CheckMatchingCommand
-	jr nc, .executeFunction
+	jr nc, .execute_function
 ; return if no matching command was found
 	or a
 	ret
 
-.executeFunction
+.execute_function
 ; executes the function at [wce22]:hl
 	ldh a, [hBankROM]
 	push af
@@ -5824,12 +6174,12 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
 	or h
-	jr nz, .notNullPointer
+	jr nz, .not_null_pointer
 ; return c if pointer is $0000
 	scf
 	ret
 
-.notNullPointer
+.not_null_pointer
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(EffectCommands)
@@ -5837,18 +6187,18 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 ; store the bank number of command functions ($b) in wce22
 	ld a, $b
 	ld [wce22],a
-.checkCommandLoop
+.check_command_loop
 	ld a, [hli]
 	or a
-	jr z, .noMoreCommands
+	jr z, .no_more_commands
 	cp c
-	jr z, .matchingCommandFound
+	jr z, .matching_command_found
 ; skip function pointer for this command and move to the next one
 	inc hl
 	inc hl
-	jr .checkCommandLoop
+	jr .check_command_loop
 
-.matchingCommandFound
+.matching_command_found
 ; load function pointer for this command
 	ld a, [hli]
 	ld h, [hl]
@@ -5859,7 +6209,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	or a
 	ret
 ; restore bank and return c
-.noMoreCommands
+.no_more_commands
 	pop af
 	call BankswitchHome
 	scf
@@ -5883,14 +6233,14 @@ LoadDeck: ; 302c (0:302c)
 	ld d, [hl]
 	ld a, d
 	or e
-	jr z, .nullPointer
+	jr z, .null_pointer
 	call CopyDeckData
 	pop af
 	call BankswitchHome
 	pop hl
 	or a
 	ret
-.nullPointer
+.null_pointer
 	pop af
 	call BankswitchHome
 	pop hl
@@ -6262,19 +6612,19 @@ HandleDamageReduction: ; 3244 (0:3244)
 	or a
 	ret z
 	cp SUBSTATUS2_REDUCE_BY_20
-	jr z, .reduceDamageBy20
+	jr z, .reduce_damage_by_20
 	cp SUBSTATUS2_POUNCE
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	cp SUBSTATUS2_GROWL
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	ret
-.reduceDamageBy20
+.reduce_damage_by_20
 	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.reduceDamageBy10
+.reduce_damage_by_10
 	ld hl, -10
 	add hl, de
 	ld e, l
@@ -6284,28 +6634,28 @@ HandleDamageReduction: ; 3244 (0:3244)
 HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld a, [wNoDamageOrEffect]
 	or a
-	jr nz, .noDamage
+	jr nz, .no_damage
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	or a
-	jr z, .notAffectedBySubstatus1
+	jr z, .not_affected_by_substatus1
 	cp SUBSTATUS1_NO_DAMAGE_STIFFEN
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_10
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_11
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_NO_DAMAGE_17
-	jr z, .noDamage
+	jr z, .no_damage
 	cp SUBSTATUS1_REDUCE_BY_10
-	jr z, .reduceDamageBy10
+	jr z, .reduce_damage_by_10
 	cp SUBSTATUS1_REDUCE_BY_20
-	jr z, .reduceDamageBy20
+	jr z, .reduce_damage_by_20
 	cp SUBSTATUS1_HARDEN
-	jr z, .preventLessThan40Damage
+	jr z, .prevent_less_than_40_damage
 	cp SUBSTATUS1_HALVE_DAMAGE
-	jr z, .halveDamage
-.notAffectedBySubstatus1
+	jr z, .halve_damage
+.not_affected_by_substatus1
 	call CheckIfUnderAnyCannotUseStatus
 	ret c
 	ld a, [wLoadedMoveCategory]
@@ -6313,32 +6663,32 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret z
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MR_MIME
-	jr z, .preventLessThan30Damage ; invisible wall
+	jr z, .prevent_less_than_30_damage ; invisible wall
 	cp KABUTO
-	jr z, .halveDamage2 ; kabuto armor
+	jr z, .halve_damage2 ; kabuto armor
 	ret
-.noDamage
+.no_damage
 	ld de, 0
 	ret
-.reduceDamageBy10
+.reduce_damage_by_10
 	ld hl, -10
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.reduceDamageBy20
+.reduce_damage_by_20
 	ld hl, -20
 	add hl, de
 	ld e, l
 	ld d, h
 	ret
-.preventLessThan40Damage
+.prevent_less_than_40_damage
 	ld bc, 40
 	call CompareDEtoBC
 	ret nc
 	ld de, 0
 	ret
-.halveDamage
+.halve_damage
 	sla d
 	rr e
 	bit 0, e
@@ -6348,7 +6698,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld e, l
 	ld d, h
 	ret
-.preventLessThan30Damage
+.prevent_less_than_30_damage
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
@@ -6357,7 +6707,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret c
 	ld de, 0
 	ret
-.halveDamage2
+.halve_damage2
 	sla d
 	rr e
 	bit 0, e
@@ -6369,7 +6719,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret
 ; 0x32f7
 
-INCBIN "baserom.gbc",$32f7,$33c1 - $32f7
+	INCROM $32f7, $33c1
 
 ; return carry if card is under a condition that makes it unable to attack
 ; also return in hl the text id to be displayed
@@ -6378,18 +6728,18 @@ HandleCantAttackSubstatus: ; 33c1 (0:33c1)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	text_hl UnableToAttackDueToTailWagText
+	ldtx hl, UnableToAttackDueToTailWagText
 	cp SUBSTATUS2_TAIL_WAG
-	jr z, .returnWithCantAttack
-	text_hl UnableToAttackDueToLeerText
+	jr z, .return_with_cant_attack
+	ldtx hl, UnableToAttackDueToLeerText
 	cp SUBSTATUS2_LEER
-	jr z, .returnWithCantAttack
-	text_hl UnableToAttackDueToBoneAttackText
+	jr z, .return_with_cant_attack
+	ldtx hl, UnableToAttackDueToBoneAttackText
 	cp SUBSTATUS2_BONE_ATTACK
-	jr z, .returnWithCantAttack
+	jr z, .return_with_cant_attack
 	or a
 	ret
-.returnWithCantAttack
+.return_with_cant_attack
 	scf
 	ret
 
@@ -6398,12 +6748,12 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
-	jr nz, .checkAmnesia
+	jr nz, .check_amnesia
 	ret
-.checkAmnesia
+.check_amnesia
 	cp SUBSTATUS2_AMNESIA
 	jr z, .affectedByAmnesia
-.notTheMoveDisabledByAmnesia
+.not_the_disabled_move
 	or a
 	ret
 .affectedByAmnesia
@@ -6411,8 +6761,8 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	call GetTurnDuelistVariable
 	ld a, [wSelectedMoveIndex]
 	cp [hl]
-	jr nz, .notTheMoveDisabledByAmnesia
-	text_hl UnableToUseAttackDueToAmnesiaText
+	jr nz, .not_the_disabled_move
+	ldtx hl, UnableToUseAttackDueToAmnesiaText
 	scf
 	ret
 
@@ -6424,7 +6774,7 @@ HandleSandAttackOrSmokescreenSubstatus: ; 3400 (0:3400)
 	ld [wcc0a], a
 	ccf
 	ret nc
-	text_hl AttackUnsuccessfulText
+	ldtx hl, AttackUnsuccessfulText
 	call DrawWideTextBox_WaitForInput
 	scf
 	ret
@@ -6435,15 +6785,15 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	text_de SandAttackCheckText
+	ldtx de, SandAttackCheckText
 	cp SUBSTATUS2_SAND_ATTACK
-	jr z, .cardIsAffected
-	text_de SmokescreenCheckText
+	jr z, .card_is_affected
+	ldtx de, SmokescreenCheckText
 	cp SUBSTATUS2_SMOKESCREEN
-	jr z, .cardIsAffected
+	jr z, .card_is_affected
 	or a
 	ret
-.cardIsAffected
+.card_is_affected
 	ld a, [wcc0a]
 	or a
 	ret nz
@@ -6462,31 +6812,31 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	ld e, NO_DAMAGE_OR_EFFECT_FLY
-	text_hl NoDamageOrEffectDueToFlyText
+	ldtx hl, NoDamageOrEffectDueToFlyText
 	cp SUBSTATUS1_FLY
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_BARRIER
-	text_hl NoDamageOrEffectDueToBarrierText
+	ldtx hl, NoDamageOrEffectDueToBarrierText
 	cp SUBSTATUS1_BARRIER
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_AGILITY
-	text_hl NoDamageOrEffectDueToAgilityText
+	ldtx hl, NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
-	jr z, .noDamageOrEffect
+	jr z, .no_damage_or_effect
 	call CheckIfUnderAnyCannotUseStatus
 	ccf
 	ret nc
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MEW1
-	jr z, .neutralizingShield
+	jr z, .neutralizing_shield
 	or a
 	ret
-.noDamageOrEffect
+.no_damage_or_effect
 	ld a, e
 	ld [wNoDamageOrEffect], a
 	scf
 	ret
-.neutralizingShield
+.neutralizing_shield
 	ld a, [wcce6]
 	or a
 	ret nz
@@ -6498,8 +6848,8 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	or a
 	ret z
 	ld e, NO_DAMAGE_OR_EFFECT_NSHIELD
-	text_hl NoDamageOrEffectDueToNShieldText
-	jr .noDamageOrEffect
+	ldtx hl, NoDamageOrEffectDueToNShieldText
+	jr .no_damage_or_effect
 
 ; if the Pokemon being attacked is Haunter1, and its Transparency is active,
 ; there is a 50% chance that any damage or effect is prevented
@@ -6519,12 +6869,12 @@ HandleTransparency: ; 348a (0:348a)
 	jr c, .asm_3491
 	xor a
 	ld [wcac2], a
-	text_de TransparencyCheckText
+	ldtx de, TransparencyCheckText
 	call TossCoin
 	ret nc
 	ld a, NO_DAMAGE_OR_EFFECT_TRANSPARENCY
 	ld [wNoDamageOrEffect], a
-	text_hl NoDamageOrEffectDueToTransparencyText
+	ldtx hl, NoDamageOrEffectDueToTransparencyText
 	scf
 	ret
 ; 0x34b7
@@ -6536,7 +6886,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	or a
 	ret z
 	bit 7, a
-	jr nz, .dontPrintText ; already been here so don't repeat the text
+	jr nz, .dont_print_text ; already been here so don't repeat the text
 	ld hl, wNoDamageOrEffect
 	set 7, [hl]
 	dec a
@@ -6551,7 +6901,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	scf
 	ret
 
-.dontPrintText
+.dont_print_text
 	ld hl, $0000
 	scf
 	ret
@@ -6582,17 +6932,17 @@ CheckIfUnderAnyCannotUseStatus: ; 34ef (0:34ef)
 ; same as above, but if a is non-0, only toxic gas is checked
 CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 	or a
-	jr nz, .checkToxicGas
+	jr nz, .check_toxic_gas
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
-	text_hl CannotUseDueToStatusText
+	ldtx hl, CannotUseDueToStatusText
 	scf
 	jr nz, .done ; return carry
-.checkToxicGas
+.check_toxic_gas
 	ld a, MUK
 	call Func_3509
-	text_hl UnableDueToToxicGasText
+	ldtx hl, UnableDueToToxicGasText
 .done
 	ret
 
@@ -6661,7 +7011,7 @@ Func_3525: ; 3525 (0:3525)
 	ret
 ; 0x356a
 
-INCBIN "baserom.gbc",$356a,$35e6 - $356a
+	INCROM $356a, $35e6
 
 ; if swords dance or focus energy was used this turn,
 ; mark that the base power of the next turn's attack has to be doubled
@@ -6697,7 +7047,7 @@ UpdateSubstatusConditions: ; 35fa (0:35fa)
 	ret
 ; 0x3615
 
-INCBIN "baserom.gbc",$3615,$363b - $3615
+	INCROM $3615, $363b
 
 ; if the target card's HP is 0 and the attacking card's HP is not,
 ; the attacking card faints if it was affected by destiny bond
@@ -6705,10 +7055,10 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetNonTurnDuelistVariable
 	cp SUBSTATUS1_DESTINY_BOND
-	jr z, .checkHP
+	jr z, .check_hp
 	ret
 
-.checkHP
+.check_hp
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	cp $ff
@@ -6734,7 +7084,7 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	text_hl KnockedOutDueToDestinyBondText
+	ldtx hl, KnockedOutDueToDestinyBondText
 	call DrawWideTextBox_WaitForInput
 	ret
 ; 0x367b
@@ -6744,9 +7094,9 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 HandleStrikesBack: ; 367b (0:367b)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MACHAMP
-	jr z, .strikesBack
+	jr z, .strikes_back
 	ret
-.strikesBack
+.strikes_back
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	ret nz
@@ -6780,7 +7130,7 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	push af
 	push hl
 	call SubstractHP
-	text_hl ReceivesDamageDueToStrikesBackText
+	ldtx hl, ReceivesDamageDueToStrikesBackText
 	call DrawWideTextBox_PrintText
 	pop hl
 	pop af
@@ -6794,7 +7144,7 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	ret
 ; 0x36d9
 
-INCBIN "baserom.gbc",$36d9,$36f6 - $36d9
+	INCROM $36d9, $36f6
 
 Func_36f6: ; 36f6 (0:36f6)
 	xor a
@@ -6833,7 +7183,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ret
 ; 0x3729
 
-INCBIN "baserom.gbc",$3729,$3730 - $3729
+	INCROM $3729, $3730
 
 Func_3730: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
@@ -6847,7 +7197,7 @@ Func_3730: ; 3730 (0:3730)
 	ret
 ; 0x3743
 
-INCBIN "baserom.gbc",$3743,$374a - $3743
+	INCROM $3743, $374a
 
 Func_374a: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS4
@@ -6876,23 +7226,23 @@ HandleEnergyBurn: ; 375d (0:375d)
 	ld hl, wAttachedEnergies
 	ld c, COLORLESS - FIRE
 	xor a
-.zeroNextEnergy
+.zero_next_energy
 	ld [hli], a
 	dec c
-	jr nz, .zeroNextEnergy
+	jr nz, .zero_next_energy
 	ld a, [wTotalAttachedEnergies]
 	ld [wAttachedEnergies], a
 	ret
 ; 0x377f
 
-SetupSound_T: ; 377f (0:377f)
-	farcall SetupSound_Ext
+SetupSound: ; 377f (0:377f)
+	farcall _SetupSound
 	ret
 
 Func_3784: ; 3784 (0:3784)
 	xor a
 PlaySong: ; 3785 (0:3785)
-	farcall Func_f4006
+	farcall _PlaySong
 	ret
 
 Func_378a: ; 378a (0:378a)
@@ -6905,8 +7255,8 @@ Func_378f: ; 378f (0:378f)
 
 Func_3794: ; 3794 (0:3794)
 	ld a, $04
-Func_3796: ; 3796 (0:3796)
-	farcall Func_f4009
+PlaySFX: ; 3796 (0:3796)
+	farcall _PlaySFX
 	ret
 
 Func_379b: ; 379b (0:379b)
@@ -6918,7 +7268,7 @@ Func_37a0: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-INCBIN "baserom.gbc",$37a5,$380e - $37a5
+	INCROM $37a5, $380e
 
 Func_380e: ; 380e (0:380e)
 	ld a, [wd0c1]
@@ -7079,7 +7429,7 @@ GetFloorObjectFromPos: ; 3927 (0:3927)
 	ret
 ; 0x392e
 
-INCBIN "baserom.gbc",$392e,$3946 - $392e
+	INCROM $392e, $3946
 
 ; puts a floor tile in hc given coords in bc (x,y. measured in tiles)
 FindFloorTileFromPos: ; 3946 (0:3946)
@@ -7108,7 +7458,7 @@ Func_395a: ; 395a (0:395a)
 	ret
 
 Unknown_396b: ; 396b (0:396b)
-INCBIN "baserom.gbc",$396b,$3973 - $396b
+	INCROM $396b, $3973
 
 ; Movement offsets for scripted movements
 ScriptedMovementOffsetTable: ; 3973 (0:3973)
@@ -7118,7 +7468,7 @@ ScriptedMovementOffsetTable: ; 3973 (0:3973)
 	db -$02, $00 ; move 2 tiles left
 
 Unknown_397b: ; 397b (0:397b)
-INCBIN "baserom.gbc",$397b,$3997 - $397b
+	INCROM $397b, $3997
 
 Func_3997: ; 3997 (0:3997)
 	ldh a, [hBankROM]
@@ -7186,7 +7536,7 @@ Func_39c3: ; 39c3 (0:39c3)
 	ret
 ; 0x39ea
 
-INCBIN "baserom.gbc",$39ea,$39fc - $39ea
+	INCROM $39ea, $39fc
 
 Func_39fc: ; 39fc (0:39fc)
 	push hl
@@ -7239,7 +7589,7 @@ Func_3a40: ; 3a40 (0:3a40)
 	ret
 ; 0x3a45
 
-INCBIN "baserom.gbc",$3a45,$3a5e - $3a45
+	INCROM $3a45, $3a5e
 
 Func_3a5e: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
@@ -7333,7 +7683,7 @@ Func_3abd: ; 3abd (0:3abd)
 	ret
 ; 0x3ae8
 
-INCBIN "baserom.gbc",$3ae8,$3aed - $3ae8
+	INCROM $3ae8, $3aed
 
 ; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into cb
 RunOverworldScript: ; 3aed (0:3aed)
@@ -7364,7 +7714,7 @@ RunOverworldScript: ; 3aed (0:3aed)
 	jp hl
 ; 0x3b11
 
-INCBIN "baserom.gbc",$3b11,$3b21 - $3b11
+	INCROM $3b11, $3b21
 
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
@@ -7446,7 +7796,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ret
 ; 0x3ba2
 
-INCBIN "baserom.gbc",$3ba2,$3bd2 - $3ba2
+	INCROM $3ba2, $3bd2
 
 ; writes from hl the pointer to the function to be called by DoFrame
 SetDoFrameFunction: ; 3bd2 (0:3bd2)
@@ -7464,7 +7814,7 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	ret
 ; 0x3be4
 
-INCBIN "baserom.gbc",$3be4,$3bf5 - $3be4
+	INCROM $3be4, $3bf5
 
 Func_3bf5: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]
@@ -7476,25 +7826,25 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ld l, a
 	ld a, [wd4c5]
 	ld h, a
-	call CopyData_SaveRegisters
+	call CopyDataHLtoDE_SaveRegisters
 	pop hl
 	pop af
 	call BankswitchHome
 	ret
 ; 0x3c10
 
-INCBIN "baserom.gbc",$3c10,$3c45 - $3c10
+	INCROM $3c10, $3c45
 
 Func_3c45: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-INCBIN "baserom.gbc",$3c46,$3c48 - $3c46
+	INCROM $3c46, $3c48
 
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
 	ld a, [rLCDC]
-	bit 7, a
+	bit rLCDC_ENABLE, a
 	jr z, .done
 	push bc
 	push de
@@ -7544,7 +7894,7 @@ Func_3c83: ; 3c83 (0:3c83)
 	ret
 ; 0x3c87
 
-INCBIN "baserom.gbc",$3c87,$3c96 - $3c87
+	INCROM $3c87, $3c96
 
 Func_3c96: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled
@@ -7578,7 +7928,7 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 	ret
 ; 0x3cc4
 
-INCBIN "baserom.gbc",$3cc4,$3d72 - $3cc4
+	INCROM $3cc4, $3d72
 
 Func_3d72: ; 3d72 (0:3d72)
 	ldh a, [hBankROM]
@@ -7657,7 +8007,7 @@ ModifyUnknownOAMBufferProperty: ; 3dbf (0:3dbf)
 	ret
 ; 0x3ddb
 
-INCBIN "baserom.gbc",$3ddb,$3df3 - $3ddb
+	INCROM $3ddb, $3df3
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
@@ -7678,8 +8028,10 @@ Func_3df3: ; 3df3 (0:3df3)
 	ret
 ; 0x3e10
 
-INCBIN "baserom.gbc",$3e10,$3e17 - $3e10
-
+Func_3e10: ; 3e10 (0:3e10)
+	ld a, $1
+	ld [wd61e], a
+	ld a, $62
 Func_3e17: ; 3e17 (0:3e17)
 	ld [wd131], a
 	ldh a, [hBankROM]
@@ -7697,7 +8049,7 @@ Func_3e2a: ; 3e2a (0:3e2a)
 	jr Func_3e17
 ; 0x3e31
 
-INCBIN "baserom.gbc",$3e31,$3fe0 - $3e31
+	INCROM $3e31, $3fe0
 
 ; jumps to 3f:hl
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
@@ -7717,5 +8069,5 @@ Bankswitch3d: ; 3fe0 (0:3fe0)
 	ret
 
 rept $a
-db $ff
+	db $ff
 endr
