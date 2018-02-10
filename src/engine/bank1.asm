@@ -22,7 +22,7 @@ Func_4000: ; 4000 (1:4000)
 .ask_erase_backup_ram
 	call Func_405a
 	call Func_04a2
-	text_hl ResetBackUpRamText
+	ldtx hl, ResetBackUpRamText
 	call YesOrNoMenuWithText
 	jr c, .reset_game
 ; erase sram
@@ -129,7 +129,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_04a2
 	ld a, $3
 	call Func_2167
-	text_hl DecisionText
+	ldtx hl, DecisionText
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
 	ldh a, [hWhoseTurn]
@@ -148,7 +148,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .activeDuelistLostBattle
 	ld a, $5f
 	ld c, MUSIC_DARKDIDDLY
-	text_hl DuelWasDrawText
+	ldtx hl, DuelWasDrawText
 	jr .handleDuelFinished
 
 .activeDuelistWonBattle
@@ -160,7 +160,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wd0c3], a
 	ld a, $5d
 	ld c, MUSIC_MATCHVICTORY
-	text_hl WonDuelText
+	ldtx hl, WonDuelText
 	jr .handleDuelFinished
 
 .activeDuelistLostBattle
@@ -172,7 +172,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wd0c3], a
 	ld a, $5e
 	ld c, MUSIC_MATCHLOSS
-	text_hl LostDuelText
+	ldtx hl, LostDuelText
 
 .handleDuelFinished
 	call Func_3b6a
@@ -203,7 +203,7 @@ StartDuel: ; 409f (1:409f)
 	call Func_3b31
 	ld a, [wDuelTheme]
 	call PlaySong
-	text_hl StartSuddenDeathMatchText
+	ldtx hl, StartSuddenDeathMatchText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	ld [wcc08], a
@@ -283,7 +283,7 @@ Func_426d:
 	xor a
 	ld [wVBlankCtr], a
 	ld [wcbf9], a
-	text_hl DuelistIsThinkingText
+	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
 	call Func_2bbf
 	ld a, $ff
@@ -414,7 +414,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	jr c, Func_441f
 	call $4611
 	jr c, Func_441c
-	text_hl SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	jr c, Func_441c
@@ -428,7 +428,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	call $4f9d
 
 Func_43e8: ; 43e8
-	text_hl UnableToRetreatText
+	ldtx hl, UnableToRetreatText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
@@ -438,7 +438,7 @@ Func_43f1: ; 43f1 (1:43f1)
 	call $4611
 	jr c, Func_441c
 	call $6558
-	text_hl SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
@@ -463,14 +463,14 @@ DuelMenu_Hand: ; 4425 (1:4425)
 	call GetTurnDuelistVariable
 	or a
 	jr nz, Func_4436
-	text_hl NoCardsInHandText
+	ldtx hl, NoCardsInHandText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
 	INCROM $4436,  $4477
 
-; c contains the energy card being played
+; c contains the type of energy card being played
 PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, c
 	cp TYPE_ENERGY_WATER ; XXX why treat water energy card differently?
@@ -510,12 +510,12 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr z, .asm_4490
-	text_hl OnlyOneEnergyCardText
+	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4436
 
 .alreadyPlayedEnergy
-	text_hl OnlyOneEnergyCardText
+	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	call CreateHandCardBuffer
 	call $55be
@@ -549,7 +549,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call LoadPokemonMovesToDuelCardOrAttackList
 	or a
 	jr nz, .openAttackMenu
-	text_hl NoSelectableAttackText
+	ldtx hl, NoSelectableAttackText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
@@ -578,7 +578,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 	call CheckIfEnoughEnergies
 	jr nc, .enoughEnergy
-	text_hl NotEnoughEnergyCardsText
+	ldtx hl, NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
 	jr .tryOpenAttackMenu
 
@@ -918,11 +918,11 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ret
 
 .paralyzed
-	text_hl UnableDueToParalysisText
+	ldtx hl, UnableDueToParalysisText
 	jr .returnWithStatusCondition
 
 .asleep
-	text_hl UnableDueToSleepText
+	ldtx hl, UnableDueToSleepText
 
 .returnWithStatusCondition:
 	scf

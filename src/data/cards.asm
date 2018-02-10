@@ -238,7 +238,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	gfx BulbasaurCardGfx ; gfx
 	tx BulbasaurName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db BULBASAUR
 	db 40 ; hp
 	db BASIC ; stage
@@ -289,7 +289,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	gfx IvysaurCardGfx ; gfx
 	tx IvysaurName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db IVYSAUR
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -340,7 +340,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	gfx Venusaur1CardGfx ; gfx
 	tx VenusaurName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db VENUSAUR1
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -391,7 +391,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	gfx Venusaur2CardGfx ; gfx
 	tx VenusaurName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db VENUSAUR2
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -442,7 +442,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	gfx CaterpieCardGfx ; gfx
 	tx CaterpieName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db CATERPIE
 	db 40 ; hp
 	db BASIC ; stage
@@ -493,7 +493,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	gfx MetapodCardGfx ; gfx
 	tx MetapodName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db METAPOD
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -544,7 +544,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	gfx ButterfreeCardGfx ; gfx
 	tx ButterfreeName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db BUTTERFREE
 	db 70 ; hp
 	db STAGE2 ; stage
@@ -595,7 +595,7 @@ WeedleCard: ; 30fef (c:4fef)
 	gfx WeedleCardGfx ; gfx
 	tx WeedleName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db WEEDLE
 	db 40 ; hp
 	db BASIC ; stage
@@ -646,7 +646,7 @@ KakunaCard: ; 31030 (c:5030)
 	gfx KakunaCardGfx ; gfx
 	tx KakunaName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db KAKUNA
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -697,7 +697,7 @@ BeedrillCard: ; 31071 (c:5071)
 	gfx BeedrillCardGfx ; gfx
 	tx BeedrillName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db BEEDRILL
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -748,7 +748,7 @@ EkansCard: ; 310b2 (c:50b2)
 	gfx EkansCardGfx ; gfx
 	tx EkansName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db EKANS
 	db 40 ; hp
 	db BASIC ; stage
@@ -799,7 +799,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	gfx ArbokCardGfx ; gfx
 	tx ArbokName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db ARBOK
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -850,7 +850,7 @@ NidoranFCard: ; 31134 (c:5134)
 	gfx NidoranFCardGfx ; gfx
 	tx NidoranFName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db NIDORANF
 	db 60 ; hp
 	db BASIC ; stage
@@ -901,7 +901,7 @@ NidorinaCard: ; 31175 (c:5175)
 	gfx NidorinaCardGfx ; gfx
 	tx NidorinaName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db NIDORINA
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -952,7 +952,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	gfx NidoqueenCardGfx ; gfx
 	tx NidoqueenName ; name
 	db STAR ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db NIDOQUEEN
 	db 90 ; hp
 	db STAGE2 ; stage
@@ -1003,7 +1003,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	gfx NidoranMCardGfx ; gfx
 	tx NidoranMName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db NIDORANM
 	db 40 ; hp
 	db BASIC ; stage
@@ -1054,7 +1054,7 @@ NidorinoCard: ; 31238 (c:5238)
 	gfx NidorinoCardGfx ; gfx
 	tx NidorinoName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db NIDORINO
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -1105,7 +1105,7 @@ NidokingCard: ; 31279 (c:5279)
 	gfx NidokingCardGfx ; gfx
 	tx NidokingName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db NIDOKING
 	db 90 ; hp
 	db STAGE2 ; stage
@@ -1156,7 +1156,7 @@ ZubatCard: ; 312ba (c:52ba)
 	gfx ZubatCardGfx ; gfx
 	tx ZubatName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db ZUBAT
 	db 40 ; hp
 	db BASIC ; stage
@@ -1207,7 +1207,7 @@ GolbatCard: ; 312fb (c:52fb)
 	gfx GolbatCardGfx ; gfx
 	tx GolbatName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db GOLBAT
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -1258,7 +1258,7 @@ OddishCard: ; 3133c (c:533c)
 	gfx OddishCardGfx ; gfx
 	tx OddishName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db ODDISH
 	db 50 ; hp
 	db BASIC ; stage
@@ -1309,7 +1309,7 @@ GloomCard: ; 3137d (c:537d)
 	gfx GloomCardGfx ; gfx
 	tx GloomName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db GLOOM
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -1360,7 +1360,7 @@ VileplumeCard: ; 313be (c:53be)
 	gfx VileplumeCardGfx ; gfx
 	tx VileplumeName ; name
 	db STAR ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db VILEPLUME
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -1411,7 +1411,7 @@ ParasCard: ; 313ff (c:53ff)
 	gfx ParasCardGfx ; gfx
 	tx ParasName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db PARAS
 	db 40 ; hp
 	db BASIC ; stage
@@ -1462,7 +1462,7 @@ ParasectCard: ; 31440 (c:5440)
 	gfx ParasectCardGfx ; gfx
 	tx ParasectName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db PARASECT
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -1513,7 +1513,7 @@ VenonatCard: ; 31481 (c:5481)
 	gfx VenonatCardGfx ; gfx
 	tx VenonatName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db VENONAT
 	db 40 ; hp
 	db BASIC ; stage
@@ -1564,7 +1564,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	gfx VenomothCardGfx ; gfx
 	tx VenomothName ; name
 	db STAR ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db VENOMOTH
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -1615,7 +1615,7 @@ BellsproutCard: ; 31503 (c:5503)
 	gfx BellsproutCardGfx ; gfx
 	tx BellsproutName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db BELLSPROUT
 	db 40 ; hp
 	db BASIC ; stage
@@ -1666,7 +1666,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	gfx WeepinbellCardGfx ; gfx
 	tx WeepinbellName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db WEEPINBELL
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -1717,7 +1717,7 @@ VictreebelCard: ; 31585 (c:5585)
 	gfx VictreebelCardGfx ; gfx
 	tx VictreebelName ; name
 	db STAR ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db VICTREEBEL
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -1768,7 +1768,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	gfx GrimerCardGfx ; gfx
 	tx GrimerName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db GRIMER
 	db 50 ; hp
 	db BASIC ; stage
@@ -1819,7 +1819,7 @@ MukCard: ; 31607 (c:5607)
 	gfx MukCardGfx ; gfx
 	tx MukName ; name
 	db STAR ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db MUK
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -1870,7 +1870,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	gfx ExeggcuteCardGfx ; gfx
 	tx ExeggcuteName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db EXEGGCUTE
 	db 50 ; hp
 	db BASIC ; stage
@@ -1921,7 +1921,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	gfx ExeggutorCardGfx ; gfx
 	tx ExeggutorName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db EXEGGUTOR
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -1972,7 +1972,7 @@ KoffingCard: ; 316ca (c:56ca)
 	gfx KoffingCardGfx ; gfx
 	tx KoffingName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db KOFFING
 	db 50 ; hp
 	db BASIC ; stage
@@ -2023,7 +2023,7 @@ WeezingCard: ; 3170b (c:570b)
 	gfx WeezingCardGfx ; gfx
 	tx WeezingName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db WEEZING
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -2074,7 +2074,7 @@ Tangela1Card: ; 3174c (c:574c)
 	gfx Tangela1CardGfx ; gfx
 	tx TangelaName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db TANGELA1
 	db 50 ; hp
 	db BASIC ; stage
@@ -2125,7 +2125,7 @@ Tangela2Card: ; 3178d (c:578d)
 	gfx Tangela2CardGfx ; gfx
 	tx TangelaName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | GB ; set
+	db COLOSSEUM | GB ; sets
 	db TANGELA2
 	db 50 ; hp
 	db BASIC ; stage
@@ -2176,7 +2176,7 @@ ScytherCard: ; 317ce (c:57ce)
 	gfx ScytherCardGfx ; gfx
 	tx ScytherName ; name
 	db STAR ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db SCYTHER
 	db 70 ; hp
 	db BASIC ; stage
@@ -2227,7 +2227,7 @@ PinsirCard: ; 3180f (c:580f)
 	gfx PinsirCardGfx ; gfx
 	tx PinsirName ; name
 	db STAR ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db PINSIR
 	db 60 ; hp
 	db BASIC ; stage
@@ -2278,7 +2278,7 @@ CharmanderCard: ; 31850 (c:5850)
 	gfx CharmanderCardGfx ; gfx
 	tx CharmanderName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db CHARMANDER
 	db 50 ; hp
 	db BASIC ; stage
@@ -2329,7 +2329,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	gfx CharmeleonCardGfx ; gfx
 	tx CharmeleonName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db CHARMELEON
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -2380,7 +2380,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	gfx CharizardCardGfx ; gfx
 	tx CharizardName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db CHARIZARD
 	db 120 ; hp
 	db STAGE2 ; stage
@@ -2431,7 +2431,7 @@ VulpixCard: ; 31913 (c:5913)
 	gfx VulpixCardGfx ; gfx
 	tx VulpixName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db VULPIX
 	db 50 ; hp
 	db BASIC ; stage
@@ -2482,7 +2482,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	gfx Ninetails1CardGfx ; gfx
 	tx NinetailsName ; name
 	db STAR ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db NINETAILS1
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -2533,7 +2533,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	gfx Ninetails2CardGfx ; gfx
 	tx NinetailsName ; name
 	db STAR ; rarity
-	db LABORATORY | GB ; set
+	db LABORATORY | GB ; sets
 	db NINETAILS2
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -2584,7 +2584,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	gfx GrowlitheCardGfx ; gfx
 	tx GrowlitheName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db GROWLITHE
 	db 60 ; hp
 	db BASIC ; stage
@@ -2635,7 +2635,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	gfx Arcanine1CardGfx ; gfx
 	tx ArcanineName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db ARCANINE1
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -2686,7 +2686,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	gfx Arcanine2CardGfx ; gfx
 	tx ArcanineName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db ARCANINE2
 	db 100 ; hp
 	db STAGE1 ; stage
@@ -2737,7 +2737,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	gfx PonytaCardGfx ; gfx
 	tx PonytaName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db PONYTA
 	db 40 ; hp
 	db BASIC ; stage
@@ -2788,7 +2788,7 @@ RapidashCard: ; 31ada (c:5ada)
 	gfx RapidashCardGfx ; gfx
 	tx RapidashName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db RAPIDASH
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -2839,7 +2839,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	gfx Magmar1CardGfx ; gfx
 	tx MagmarName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db MAGMAR1
 	db 50 ; hp
 	db BASIC ; stage
@@ -2890,7 +2890,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	gfx Magmar2CardGfx ; gfx
 	tx MagmarName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db MAGMAR2
 	db 70 ; hp
 	db BASIC ; stage
@@ -2941,7 +2941,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	gfx Flareon1CardGfx ; gfx
 	tx FlareonName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | GB ; set
+	db MYSTERY | GB ; sets
 	db FLAREON1
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -2992,7 +2992,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	gfx Flareon2CardGfx ; gfx
 	tx FlareonName ; name
 	db STAR ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db FLAREON2
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -3043,7 +3043,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	gfx Moltres1CardGfx ; gfx
 	tx MoltresName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db MOLTRES1
 	db 70 ; hp
 	db BASIC ; stage
@@ -3094,7 +3094,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	gfx Moltres2CardGfx ; gfx
 	tx MoltresName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db MOLTRES2
 	db 100 ; hp
 	db BASIC ; stage
@@ -3145,7 +3145,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	gfx SquirtleCardGfx ; gfx
 	tx SquirtleName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db SQUIRTLE
 	db 40 ; hp
 	db BASIC ; stage
@@ -3196,7 +3196,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	gfx WartortleCardGfx ; gfx
 	tx WartortleName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db WARTORTLE
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -3247,7 +3247,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	gfx BlastoiseCardGfx ; gfx
 	tx BlastoiseName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db BLASTOISE
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -3298,7 +3298,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	gfx PsyduckCardGfx ; gfx
 	tx PsyduckName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db PSYDUCK
 	db 50 ; hp
 	db BASIC ; stage
@@ -3349,7 +3349,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	gfx GolduckCardGfx ; gfx
 	tx GolduckName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db GOLDUCK
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -3400,7 +3400,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	gfx PoliwagCardGfx ; gfx
 	tx PoliwagName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db POLIWAG
 	db 40 ; hp
 	db BASIC ; stage
@@ -3451,7 +3451,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	gfx PoliwhirlCardGfx ; gfx
 	tx PoliwhirlName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db POLIWHIRL
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -3502,7 +3502,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	gfx PoliwrathCardGfx ; gfx
 	tx PoliwrathName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db POLIWRATH
 	db 90 ; hp
 	db STAGE2 ; stage
@@ -3553,7 +3553,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	gfx TentacoolCardGfx ; gfx
 	tx TentacoolName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db TENTACOOL
 	db 30 ; hp
 	db BASIC ; stage
@@ -3604,7 +3604,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	gfx TentacruelCardGfx ; gfx
 	tx TentacruelName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db TENTACRUEL
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -3655,7 +3655,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	gfx SeelCardGfx ; gfx
 	tx SeelName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db SEEL
 	db 60 ; hp
 	db BASIC ; stage
@@ -3706,7 +3706,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	gfx DewgongCardGfx ; gfx
 	tx DewgongName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db DEWGONG
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -3757,7 +3757,7 @@ ShellderCard: ; 31fad (c:5fad)
 	gfx ShellderCardGfx ; gfx
 	tx ShellderName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db SHELLDER
 	db 30 ; hp
 	db BASIC ; stage
@@ -3808,7 +3808,7 @@ CloysterCard: ; 31fee (c:5fee)
 	gfx CloysterCardGfx ; gfx
 	tx CloysterName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db CLOYSTER
 	db 50 ; hp
 	db STAGE1 ; stage
@@ -3859,7 +3859,7 @@ KrabbyCard: ; 3202f (c:602f)
 	gfx KrabbyCardGfx ; gfx
 	tx KrabbyName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db KRABBY
 	db 50 ; hp
 	db BASIC ; stage
@@ -3910,7 +3910,7 @@ KinglerCard: ; 32070 (c:6070)
 	gfx KinglerCardGfx ; gfx
 	tx KinglerName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db KINGLER
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -3961,7 +3961,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	gfx HorseaCardGfx ; gfx
 	tx HorseaName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db HORSEA
 	db 40 ; hp
 	db BASIC ; stage
@@ -4012,7 +4012,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	gfx SeadraCardGfx ; gfx
 	tx SeadraName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db SEADRA
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -4063,7 +4063,7 @@ GoldeenCard: ; 32133 (c:6133)
 	gfx GoldeenCardGfx ; gfx
 	tx GoldeenName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db GOLDEEN
 	db 40 ; hp
 	db BASIC ; stage
@@ -4114,7 +4114,7 @@ SeakingCard: ; 32174 (c:6174)
 	gfx SeakingCardGfx ; gfx
 	tx SeakingName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db SEAKING
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -4165,7 +4165,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	gfx StaryuCardGfx ; gfx
 	tx StaryuName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db STARYU
 	db 40 ; hp
 	db BASIC ; stage
@@ -4216,7 +4216,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	gfx StarmieCardGfx ; gfx
 	tx StarmieName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db STARMIE
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -4267,7 +4267,7 @@ MagikarpCard: ; 32237 (c:6237)
 	gfx MagikarpCardGfx ; gfx
 	tx MagikarpName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db MAGIKARP
 	db 30 ; hp
 	db BASIC ; stage
@@ -4318,7 +4318,7 @@ GyaradosCard: ; 32278 (c:6278)
 	gfx GyaradosCardGfx ; gfx
 	tx GyaradosName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db GYARADOS
 	db 100 ; hp
 	db STAGE1 ; stage
@@ -4369,7 +4369,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	gfx LaprasCardGfx ; gfx
 	tx LaprasName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db LAPRAS
 	db 80 ; hp
 	db BASIC ; stage
@@ -4420,7 +4420,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	gfx Vaporeon1CardGfx ; gfx
 	tx VaporeonName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | GB ; set
+	db MYSTERY | GB ; sets
 	db VAPOREON1
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -4471,7 +4471,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	gfx Vaporeon2CardGfx ; gfx
 	tx VaporeonName ; name
 	db STAR ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db VAPOREON2
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -4522,7 +4522,7 @@ OmanyteCard: ; 3237c (c:637c)
 	gfx OmanyteCardGfx ; gfx
 	tx OmanyteName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db OMANYTE
 	db 40 ; hp
 	db STAGE1 ; stage
@@ -4573,7 +4573,7 @@ OmastarCard: ; 323bd (c:63bd)
 	gfx OmastarCardGfx ; gfx
 	tx OmastarName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db OMASTAR
 	db 70 ; hp
 	db STAGE2 ; stage
@@ -4624,7 +4624,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	gfx Articuno1CardGfx ; gfx
 	tx ArticunoName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db ARTICUNO1
 	db 70 ; hp
 	db BASIC ; stage
@@ -4675,7 +4675,7 @@ Articuno2Card: ; 3243f (c:643f)
 	gfx Articuno2CardGfx ; gfx
 	tx ArticunoName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db ARTICUNO2
 	db 100 ; hp
 	db BASIC ; stage
@@ -4726,7 +4726,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	gfx Pikachu1CardGfx ; gfx
 	tx PikachuName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db PIKACHU1
 	db 40 ; hp
 	db BASIC ; stage
@@ -4777,7 +4777,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	gfx Pikachu2CardGfx ; gfx
 	tx PikachuName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db PIKACHU2
 	db 50 ; hp
 	db BASIC ; stage
@@ -4828,7 +4828,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	gfx Pikachu3CardGfx ; gfx
 	tx PikachuName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db PIKACHU3
 	db 60 ; hp
 	db BASIC ; stage
@@ -4879,7 +4879,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	gfx Pikachu4CardGfx ; gfx
 	tx PikachuName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db PIKACHU4
 	db 60 ; hp
 	db BASIC ; stage
@@ -4930,7 +4930,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	gfx FlyingPikachuCardGfx ; gfx
 	tx FlyingPikachuName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db FLYING_PIKACHU
 	db 40 ; hp
 	db BASIC ; stage
@@ -4981,7 +4981,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	gfx SurfingPikachu1CardGfx ; gfx
 	tx SurfingPikachuName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db SURFING_PIKACHU1
 	db 50 ; hp
 	db BASIC ; stage
@@ -5032,7 +5032,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	gfx SurfingPikachu2CardGfx ; gfx
 	tx SurfingPikachuName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db SURFING_PIKACHU2
 	db 50 ; hp
 	db BASIC ; stage
@@ -5083,7 +5083,7 @@ Raichu1Card: ; 32647 (c:6647)
 	gfx Raichu1CardGfx ; gfx
 	tx RaichuName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db RAICHU1
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -5134,7 +5134,7 @@ Raichu2Card: ; 32688 (c:6688)
 	gfx Raichu2CardGfx ; gfx
 	tx RaichuName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db RAICHU2
 	db 90 ; hp
 	db STAGE1 ; stage
@@ -5185,7 +5185,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	gfx Magnemite1CardGfx ; gfx
 	tx MagnemiteName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db MAGNEMITE1
 	db 40 ; hp
 	db BASIC ; stage
@@ -5236,7 +5236,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	gfx Magnemite2CardGfx ; gfx
 	tx MagnemiteName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | GB ; set
+	db LABORATORY | GB ; sets
 	db MAGNEMITE2
 	db 40 ; hp
 	db BASIC ; stage
@@ -5287,7 +5287,7 @@ Magneton1Card: ; 3274b (c:674b)
 	gfx Magneton1CardGfx ; gfx
 	tx MagnetonName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db MAGNETON1
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -5338,7 +5338,7 @@ Magneton2Card: ; 3278c (c:678c)
 	gfx Magneton2CardGfx ; gfx
 	tx MagnetonName ; name
 	db STAR ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db MAGNETON2
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -5389,7 +5389,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	gfx VoltorbCardGfx ; gfx
 	tx VoltorbName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db VOLTORB
 	db 40 ; hp
 	db BASIC ; stage
@@ -5440,7 +5440,7 @@ Electrode1Card: ; 3280e (c:680e)
 	gfx Electrode1CardGfx ; gfx
 	tx ElectrodeName ; name
 	db STAR ; rarity
-	db LABORATORY | GB ; set
+	db LABORATORY | GB ; sets
 	db ELECTRODE1
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -5491,7 +5491,7 @@ Electrode2Card: ; 3284f (c:684f)
 	gfx Electrode2CardGfx ; gfx
 	tx ElectrodeName ; name
 	db STAR ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db ELECTRODE2
 	db 90 ; hp
 	db STAGE1 ; stage
@@ -5542,7 +5542,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	gfx Electabuzz1CardGfx ; gfx
 	tx ElectabuzzName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db ELECTABUZZ1
 	db 60 ; hp
 	db BASIC ; stage
@@ -5593,7 +5593,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	gfx Electabuzz2CardGfx ; gfx
 	tx ElectabuzzName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db ELECTABUZZ2
 	db 70 ; hp
 	db BASIC ; stage
@@ -5644,7 +5644,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	gfx Jolteon1CardGfx ; gfx
 	tx JolteonName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | GB ; set
+	db MYSTERY | GB ; sets
 	db JOLTEON1
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -5695,7 +5695,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	gfx Jolteon2CardGfx ; gfx
 	tx JolteonName ; name
 	db STAR ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db JOLTEON2
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -5746,7 +5746,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	gfx Zapdos1CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db ZAPDOS1
 	db 80 ; hp
 	db BASIC ; stage
@@ -5797,7 +5797,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	gfx Zapdos2CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db ZAPDOS2
 	db 90 ; hp
 	db BASIC ; stage
@@ -5848,7 +5848,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	gfx Zapdos3CardGfx ; gfx
 	tx ZapdosName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db ZAPDOS3
 	db 100 ; hp
 	db BASIC ; stage
@@ -5899,7 +5899,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	gfx SandshrewCardGfx ; gfx
 	tx SandshrewName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db SANDSHREW
 	db 40 ; hp
 	db BASIC ; stage
@@ -5950,7 +5950,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	gfx SandslashCardGfx ; gfx
 	tx SandslashName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db SANDSLASH
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -6001,7 +6001,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	gfx DiglettCardGfx ; gfx
 	tx DiglettName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db DIGLETT
 	db 30 ; hp
 	db BASIC ; stage
@@ -6052,7 +6052,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	gfx DugtrioCardGfx ; gfx
 	tx DugtrioName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db DUGTRIO
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -6103,7 +6103,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	gfx MankeyCardGfx ; gfx
 	tx MankeyName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db MANKEY
 	db 30 ; hp
 	db BASIC ; stage
@@ -6154,7 +6154,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	gfx PrimeapeCardGfx ; gfx
 	tx PrimeapeName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db PRIMEAPE
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -6205,7 +6205,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	gfx MachopCardGfx ; gfx
 	tx MachopName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db MACHOP
 	db 50 ; hp
 	db BASIC ; stage
@@ -6256,7 +6256,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	gfx MachokeCardGfx ; gfx
 	tx MachokeName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db MACHOKE
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -6307,7 +6307,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	gfx MachampCardGfx ; gfx
 	tx MachampName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db MACHAMP
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -6358,7 +6358,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	gfx GeodudeCardGfx ; gfx
 	tx GeodudeName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db GEODUDE
 	db 50 ; hp
 	db BASIC ; stage
@@ -6409,7 +6409,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	gfx GravelerCardGfx ; gfx
 	tx GravelerName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db GRAVELER
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -6460,7 +6460,7 @@ GolemCard: ; 32d22 (c:6d22)
 	gfx GolemCardGfx ; gfx
 	tx GolemName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db GOLEM
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -6511,7 +6511,7 @@ OnixCard: ; 32d63 (c:6d63)
 	gfx OnixCardGfx ; gfx
 	tx OnixName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db ONIX
 	db 90 ; hp
 	db BASIC ; stage
@@ -6562,7 +6562,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	gfx CuboneCardGfx ; gfx
 	tx CuboneName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db CUBONE
 	db 40 ; hp
 	db BASIC ; stage
@@ -6613,7 +6613,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	gfx Marowak1CardGfx ; gfx
 	tx MarowakName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db MAROWAK1
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -6664,7 +6664,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	gfx Marowak2CardGfx ; gfx
 	tx MarowakName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | GB ; set
+	db EVOLUTION | GB ; sets
 	db MAROWAK2
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -6715,7 +6715,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	gfx HitmonleeCardGfx ; gfx
 	tx HitmonleeName ; name
 	db STAR ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db HITMONLEE
 	db 60 ; hp
 	db BASIC ; stage
@@ -6766,7 +6766,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	gfx HitmonchanCardGfx ; gfx
 	tx HitmonchanName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db HITMONCHAN
 	db 70 ; hp
 	db BASIC ; stage
@@ -6817,7 +6817,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	gfx RhyhornCardGfx ; gfx
 	tx RhyhornName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db RHYHORN
 	db 70 ; hp
 	db BASIC ; stage
@@ -6868,7 +6868,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	gfx RhydonCardGfx ; gfx
 	tx RhydonName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db RHYDON
 	db 100 ; hp
 	db STAGE1 ; stage
@@ -6919,7 +6919,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	gfx KabutoCardGfx ; gfx
 	tx KabutoName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db KABUTO
 	db 30 ; hp
 	db STAGE1 ; stage
@@ -6970,7 +6970,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	gfx KabutopsCardGfx ; gfx
 	tx KabutopsName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db KABUTOPS
 	db 60 ; hp
 	db STAGE2 ; stage
@@ -7021,7 +7021,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	gfx AerodactylCardGfx ; gfx
 	tx AerodactylName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db AERODACTYL
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -7072,7 +7072,7 @@ AbraCard: ; 3302e (c:702e)
 	gfx AbraCardGfx ; gfx
 	tx AbraName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db ABRA
 	db 30 ; hp
 	db BASIC ; stage
@@ -7123,7 +7123,7 @@ KadabraCard: ; 3306f (c:706f)
 	gfx KadabraCardGfx ; gfx
 	tx KadabraName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db KADABRA
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -7174,7 +7174,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	gfx AlakazamCardGfx ; gfx
 	tx AlakazamName ; name
 	db STAR ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db ALAKAZAM
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -7225,7 +7225,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	gfx Slowpoke1CardGfx ; gfx
 	tx SlowpokeName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db SLOWPOKE1
 	db 40 ; hp
 	db BASIC ; stage
@@ -7276,7 +7276,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	gfx Slowpoke2CardGfx ; gfx
 	tx SlowpokeName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db SLOWPOKE2
 	db 50 ; hp
 	db BASIC ; stage
@@ -7327,7 +7327,7 @@ SlowbroCard: ; 33173 (c:7173)
 	gfx SlowbroCardGfx ; gfx
 	tx SlowbroName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db SLOWBRO
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -7378,7 +7378,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	gfx Gastly1CardGfx ; gfx
 	tx GastlyName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db GASTLY1
 	db 30 ; hp
 	db BASIC ; stage
@@ -7429,7 +7429,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	gfx Gastly2CardGfx ; gfx
 	tx GastlyName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db GASTLY2
 	db 50 ; hp
 	db BASIC ; stage
@@ -7480,7 +7480,7 @@ Haunter1Card: ; 33236 (c:7236)
 	gfx Haunter1CardGfx ; gfx
 	tx HaunterName ; name
 	db STAR ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db HAUNTER1
 	db 50 ; hp
 	db STAGE1 ; stage
@@ -7531,7 +7531,7 @@ Haunter2Card: ; 33277 (c:7277)
 	gfx Haunter2CardGfx ; gfx
 	tx HaunterName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db HAUNTER2
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -7582,7 +7582,7 @@ GengarCard: ; 332b8 (c:72b8)
 	gfx GengarCardGfx ; gfx
 	tx GengarName ; name
 	db STAR ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db GENGAR
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -7633,7 +7633,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	gfx DrowzeeCardGfx ; gfx
 	tx DrowzeeName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db DROWZEE
 	db 50 ; hp
 	db BASIC ; stage
@@ -7684,7 +7684,7 @@ HypnoCard: ; 3333a (c:733a)
 	gfx HypnoCardGfx ; gfx
 	tx HypnoName ; name
 	db STAR ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db HYPNO
 	db 90 ; hp
 	db STAGE1 ; stage
@@ -7735,7 +7735,7 @@ MrMimeCard: ; 3337b (c:737b)
 	gfx MrMimeCardGfx ; gfx
 	tx MrMimeName ; name
 	db STAR ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db MR_MIME
 	db 40 ; hp
 	db BASIC ; stage
@@ -7786,7 +7786,7 @@ JynxCard: ; 333bc (c:73bc)
 	gfx JynxCardGfx ; gfx
 	tx JynxName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db JYNX
 	db 70 ; hp
 	db BASIC ; stage
@@ -7837,7 +7837,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	gfx Mewtwo1CardGfx ; gfx
 	tx MewtwoName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db MEWTWO1
 	db 60 ; hp
 	db BASIC ; stage
@@ -7888,7 +7888,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	gfx Mewtwo2CardGfx ; gfx
 	tx MewtwoName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db MEWTWO2
 	db 70 ; hp
 	db BASIC ; stage
@@ -7939,7 +7939,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	gfx Mewtwo3CardGfx ; gfx
 	tx MewtwoName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db MEWTWO3
 	db 70 ; hp
 	db BASIC ; stage
@@ -7990,7 +7990,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	gfx Mew1CardGfx ; gfx
 	tx MewName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db MEW1
 	db 40 ; hp
 	db BASIC ; stage
@@ -8041,7 +8041,7 @@ Mew2Card: ; 33501 (c:7501)
 	gfx Mew2CardGfx ; gfx
 	tx MewName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db MEW2
 	db 50 ; hp
 	db BASIC ; stage
@@ -8092,7 +8092,7 @@ Mew3Card: ; 33542 (c:7542)
 	gfx Mew3CardGfx ; gfx
 	tx MewName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db MEW3
 	db 50 ; hp
 	db BASIC ; stage
@@ -8143,7 +8143,7 @@ PidgeyCard: ; 33583 (c:7583)
 	gfx PidgeyCardGfx ; gfx
 	tx PidgeyName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db PIDGEY
 	db 40 ; hp
 	db BASIC ; stage
@@ -8194,7 +8194,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	gfx PidgeottoCardGfx ; gfx
 	tx PidgeottoName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db PIDGEOTTO
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -8245,7 +8245,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	gfx Pidgeot1CardGfx ; gfx
 	tx PidgeotName ; name
 	db STAR ; rarity
-	db LABORATORY | GB ; set
+	db LABORATORY | GB ; sets
 	db PIDGEOT1
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -8296,7 +8296,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	gfx Pidgeot2CardGfx ; gfx
 	tx PidgeotName ; name
 	db STAR ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db PIDGEOT2
 	db 80 ; hp
 	db STAGE2 ; stage
@@ -8347,7 +8347,7 @@ RattataCard: ; 33687 (c:7687)
 	gfx RattataCardGfx ; gfx
 	tx RattataName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db RATTATA
 	db 30 ; hp
 	db BASIC ; stage
@@ -8398,7 +8398,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	gfx RaticateCardGfx ; gfx
 	tx RaticateName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db RATICATE
 	db 60 ; hp
 	db STAGE1 ; stage
@@ -8449,7 +8449,7 @@ SpearowCard: ; 33709 (c:7709)
 	gfx SpearowCardGfx ; gfx
 	tx SpearowName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db SPEAROW
 	db 50 ; hp
 	db BASIC ; stage
@@ -8500,7 +8500,7 @@ FearowCard: ; 3374a (c:774a)
 	gfx FearowCardGfx ; gfx
 	tx FearowName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db FEAROW
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -8551,7 +8551,7 @@ ClefairyCard: ; 3378b (c:778b)
 	gfx ClefairyCardGfx ; gfx
 	tx ClefairyName ; name
 	db STAR ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db CLEFAIRY
 	db 40 ; hp
 	db BASIC ; stage
@@ -8602,7 +8602,7 @@ ClefableCard: ; 337cc (c:77cc)
 	gfx ClefableCardGfx ; gfx
 	tx ClefableName ; name
 	db STAR ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db CLEFABLE
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -8653,7 +8653,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	gfx Jigglypuff1CardGfx ; gfx
 	tx JigglypuffName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db JIGGLYPUFF1
 	db 50 ; hp
 	db BASIC ; stage
@@ -8704,7 +8704,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	gfx Jigglypuff2CardGfx ; gfx
 	tx JigglypuffName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | GB ; set
+	db EVOLUTION | GB ; sets
 	db JIGGLYPUFF2
 	db 50 ; hp
 	db BASIC ; stage
@@ -8755,7 +8755,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	gfx Jigglypuff3CardGfx ; gfx
 	tx JigglypuffName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db JIGGLYPUFF3
 	db 60 ; hp
 	db BASIC ; stage
@@ -8806,7 +8806,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	gfx WigglytuffCardGfx ; gfx
 	tx WigglytuffName ; name
 	db STAR ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db WIGGLYTUFF
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -8857,7 +8857,7 @@ Meowth1Card: ; 33911 (c:7911)
 	gfx Meowth1CardGfx ; gfx
 	tx MeowthName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | GB ; set
+	db COLOSSEUM | GB ; sets
 	db MEOWTH1
 	db 50 ; hp
 	db BASIC ; stage
@@ -8908,7 +8908,7 @@ Meowth2Card: ; 33952 (c:7952)
 	gfx Meowth2CardGfx ; gfx
 	tx MeowthName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db MEOWTH2
 	db 50 ; hp
 	db BASIC ; stage
@@ -8959,7 +8959,7 @@ PersianCard: ; 33993 (c:7993)
 	gfx PersianCardGfx ; gfx
 	tx PersianName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db PERSIAN
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -9010,7 +9010,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	gfx FarfetchdCardGfx ; gfx
 	tx FarfetchdName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db FARFETCHD
 	db 50 ; hp
 	db BASIC ; stage
@@ -9061,7 +9061,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	gfx DoduoCardGfx ; gfx
 	tx DoduoName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db DODUO
 	db 50 ; hp
 	db BASIC ; stage
@@ -9112,7 +9112,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	gfx DodrioCardGfx ; gfx
 	tx DodrioName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | JUNGLE ; set
+	db LABORATORY | JUNGLE ; sets
 	db DODRIO
 	db 70 ; hp
 	db STAGE1 ; stage
@@ -9163,7 +9163,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	gfx LickitungCardGfx ; gfx
 	tx LickitungName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db LICKITUNG
 	db 90 ; hp
 	db BASIC ; stage
@@ -9214,7 +9214,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	gfx ChanseyCardGfx ; gfx
 	tx ChanseyName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db CHANSEY
 	db 120 ; hp
 	db BASIC ; stage
@@ -9265,7 +9265,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	gfx KangaskhanCardGfx ; gfx
 	tx KangaskhanName ; name
 	db STAR ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db KANGASKHAN
 	db 90 ; hp
 	db BASIC ; stage
@@ -9316,7 +9316,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	gfx TaurosCardGfx ; gfx
 	tx TaurosName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | JUNGLE ; set
+	db MYSTERY | JUNGLE ; sets
 	db TAUROS
 	db 60 ; hp
 	db BASIC ; stage
@@ -9367,7 +9367,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	gfx DittoCardGfx ; gfx
 	tx DittoName ; name
 	db STAR ; rarity
-	db LABORATORY | GB ; set
+	db LABORATORY | GB ; sets
 	db DITTO
 	db 50 ; hp
 	db BASIC ; stage
@@ -9418,7 +9418,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	gfx EeveeCardGfx ; gfx
 	tx EeveeName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | JUNGLE ; set
+	db EVOLUTION | JUNGLE ; sets
 	db EEVEE
 	db 50 ; hp
 	db BASIC ; stage
@@ -9469,7 +9469,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	gfx PorygonCardGfx ; gfx
 	tx PorygonName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db PORYGON
 	db 30 ; hp
 	db BASIC ; stage
@@ -9520,7 +9520,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	gfx SnorlaxCardGfx ; gfx
 	tx SnorlaxName ; name
 	db STAR ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db SNORLAX
 	db 90 ; hp
 	db BASIC ; stage
@@ -9571,7 +9571,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	gfx DratiniCardGfx ; gfx
 	tx DratiniName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db DRATINI
 	db 40 ; hp
 	db BASIC ; stage
@@ -9622,7 +9622,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	gfx DragonairCardGfx ; gfx
 	tx DragonairName ; name
 	db STAR ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db DRAGONAIR
 	db 80 ; hp
 	db STAGE1 ; stage
@@ -9673,7 +9673,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	gfx Dragonite1CardGfx ; gfx
 	tx DragoniteName ; name
 	db STAR ; rarity
-	db PROMOTIONAL | GB ; set
+	db PROMOTIONAL | GB ; sets
 	db DRAGONITE1
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -9724,7 +9724,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	gfx Dragonite2CardGfx ; gfx
 	tx DragoniteName ; name
 	db STAR ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db DRAGONITE2
 	db 100 ; hp
 	db STAGE2 ; stage
@@ -9775,7 +9775,7 @@ GrassEnergyCard: ; 33da3 (c:7da3)
 	gfx GrassEnergyCardGfx ; gfx
 	tx GrassEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db GRASS_ENERGY
 	dw GrassEnergyEffectCommands ; effect commands
 	tx GrassEnergyDescription ; description
@@ -9786,7 +9786,7 @@ FireEnergyCard: ; 33db1 (c:7db1)
 	gfx FireEnergyCardGfx ; gfx
 	tx FireEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db FIRE_ENERGY
 	dw FireEnergyEffectCommands ; effect commands
 	tx FireEnergyDescription ; description
@@ -9797,7 +9797,7 @@ WaterEnergyCard: ; 33dbf (c:7dbf)
 	gfx WaterEnergyCardGfx ; gfx
 	tx WaterEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db WATER_ENERGY
 	dw WaterEnergyEffectCommands ; effect commands
 	tx WaterEnergyDescription ; description
@@ -9808,7 +9808,7 @@ LightningEnergyCard: ; 33dcd (c:7dcd)
 	gfx LightningEnergyCardGfx ; gfx
 	tx LightningEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db LIGHTNING_ENERGY
 	dw LightningEnergyEffectCommands ; effect commands
 	tx LightningEnergyDescription ; description
@@ -9819,7 +9819,7 @@ FightingEnergyCard: ; 33ddb (c:7ddb)
 	gfx FightingEnergyCardGfx ; gfx
 	tx FightingEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db FIGHTING_ENERGY
 	dw FightingEnergyEffectCommands ; effect commands
 	tx FightingEnergyDescription ; description
@@ -9830,7 +9830,7 @@ PsychicEnergyCard: ; 33de9 (c:7de9)
 	gfx PsychicEnergyCardGfx ; gfx
 	tx PsychicEnergyName ; name
 	db CIRCLE ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db PSYCHIC_ENERGY
 	dw PsychicEnergyEffectCommands ; effect commands
 	tx PsychicEnergyDescription ; description
@@ -9841,7 +9841,7 @@ DoubleColorlessEnergyCard: ; 33df7 (c:7df7)
 	gfx DoubleColorlessEnergyCardGfx ; gfx
 	tx DoubleColorlessEnergyName ; name
 	db DIAMOND ; rarity
-	db ENERGY | NONE ; set
+	db ENERGY | NONE ; sets
 	db DOUBLE_COLORLESS_ENERGY
 	dw DoubleColorlessEnergyEffectCommands ; effect commands
 	tx DoubleColorlessEnergyDescription ; description
@@ -9852,7 +9852,7 @@ ProfessorOakCard: ; 33e05 (c:7e05)
 	gfx ProfessorOakCardGfx ; gfx
 	tx ProfessorOakName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db PROFESSOR_OAK
 	dw ProfessorOakEffectCommands ; effect commands
 	tx ProfessorOakDescription ; description
@@ -9863,7 +9863,7 @@ ImposterProfessorOakCard: ; 33e13 (c:7e13)
 	gfx ImposterProfessorOakCardGfx ; gfx
 	tx ImposterProfessorOakName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db IMPOSTER_PROFESSOR_OAK
 	dw ImposterProfessorOakEffectCommands ; effect commands
 	tx ImposterProfessorOakDescription ; description
@@ -9874,7 +9874,7 @@ BillCard: ; 33e21 (c:7e21)
 	gfx BillCardGfx ; gfx
 	tx BillName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db BILL
 	dw BillEffectCommands ; effect commands
 	tx BillDescription ; description
@@ -9885,7 +9885,7 @@ MrFujiCard: ; 33e2f (c:7e2f)
 	gfx MrFujiCardGfx ; gfx
 	tx MrFujiName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db MR_FUJI
 	dw MrFujiEffectCommands ; effect commands
 	tx MrFujiDescription ; description
@@ -9896,7 +9896,7 @@ LassCard: ; 33e3d (c:7e3d)
 	gfx LassCardGfx ; gfx
 	tx LassName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db LASS
 	dw LassEffectCommands ; effect commands
 	tx LassDescription ; description
@@ -9907,7 +9907,7 @@ ImakuniCard: ; 33e4b (c:7e4b)
 	gfx ImakuniCardGfx ; gfx
 	tx ImakuniName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db IMAKUNI_CARD
 	dw ImakuniEffectCommands ; effect commands
 	tx ImakuniDescription ; description
@@ -9918,7 +9918,7 @@ PokemonTraderCard: ; 33e59 (c:7e59)
 	gfx PokemonTraderCardGfx ; gfx
 	tx PokemonTraderName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db POKEMON_TRADER
 	dw PokemonTraderEffectCommands ; effect commands
 	tx PokemonTraderDescription ; description
@@ -9929,7 +9929,7 @@ PokemonBreederCard: ; 33e67 (c:7e67)
 	gfx PokemonBreederCardGfx ; gfx
 	tx PokemonBreederName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db POKEMON_BREEDER
 	dw PokemonBreederEffectCommands ; effect commands
 	tx PokemonBreederDescription ; description
@@ -9940,7 +9940,7 @@ ClefairyDollCard: ; 33e75 (c:7e75)
 	gfx ClefairyDollCardGfx ; gfx
 	tx ClefairyDollName ; name
 	db STAR ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db CLEFAIRY_DOLL
 	dw ClefairyDollEffectCommands ; effect commands
 	tx ClefairyDollDescription ; description
@@ -9951,7 +9951,7 @@ MysteriousFossilCard: ; 33e83 (c:7e83)
 	gfx MysteriousFossilCardGfx ; gfx
 	tx MysteriousFossilName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | FOSSIL ; set
+	db MYSTERY | FOSSIL ; sets
 	db MYSTERIOUS_FOSSIL
 	dw MysteriousFossilEffectCommands ; effect commands
 	tx MysteriousFossilDescription ; description
@@ -9962,7 +9962,7 @@ EnergyRetrievalCard: ; 33e91 (c:7e91)
 	gfx EnergyRetrievalCardGfx ; gfx
 	tx EnergyRetrievalName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db ENERGY_RETRIEVAL
 	dw EnergyRetrievalEffectCommands ; effect commands
 	tx EnergyRetrievalDescription ; description
@@ -9973,7 +9973,7 @@ SuperEnergyRetrievalCard: ; 33e9f (c:7e9f)
 	gfx SuperEnergyRetrievalCardGfx ; gfx
 	tx SuperEnergyRetrievalName ; name
 	db PROMOSTAR ; rarity
-	db PROMOTIONAL | PRO ; set
+	db PROMOTIONAL | PRO ; sets
 	db SUPER_ENERGY_RETRIEVAL
 	dw SuperEnergyRetrievalEffectCommands ; effect commands
 	tx SuperEnergyRetrievalDescription ; description
@@ -9984,7 +9984,7 @@ EnergySearchCard: ; 33ead (c:7ead)
 	gfx EnergySearchCardGfx ; gfx
 	tx EnergySearchName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | FOSSIL ; set
+	db EVOLUTION | FOSSIL ; sets
 	db ENERGY_SEARCH
 	dw EnergySearchEffectCommands ; effect commands
 	tx EnergySearchDescription ; description
@@ -9995,7 +9995,7 @@ EnergyRemovalCard: ; 33ebb (c:7ebb)
 	gfx EnergyRemovalCardGfx ; gfx
 	tx EnergyRemovalName ; name
 	db CIRCLE ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db ENERGY_REMOVAL
 	dw EnergyRemovalEffectCommands ; effect commands
 	tx EnergyRemovalDescription ; description
@@ -10006,7 +10006,7 @@ SuperEnergyRemovalCard: ; 33ec9 (c:7ec9)
 	gfx SuperEnergyRemovalCardGfx ; gfx
 	tx SuperEnergyRemovalName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db SUPER_ENERGY_REMOVAL
 	dw SuperEnergyRemovalEffectCommands ; effect commands
 	tx SuperEnergyRemovalDescription ; description
@@ -10017,7 +10017,7 @@ SwitchCard: ; 33ed7 (c:7ed7)
 	gfx SwitchCardGfx ; gfx
 	tx SwitchName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db SWITCH
 	dw SwitchEffectCommands ; effect commands
 	tx SwitchDescription ; description
@@ -10028,7 +10028,7 @@ PokemonCenterCard: ; 33ee5 (c:7ee5)
 	gfx PokemonCenterCardGfx ; gfx
 	tx PokemonCenterName ; name
 	db DIAMOND ; rarity
-	db MYSTERY | NONE ; set
+	db MYSTERY | NONE ; sets
 	db POKEMON_CENTER
 	dw PokemonCenterEffectCommands ; effect commands
 	tx PokemonCenterDescription ; description
@@ -10039,7 +10039,7 @@ PokeBallCard: ; 33ef3 (c:7ef3)
 	gfx PokeBallCardGfx ; gfx
 	tx PokeBallName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | JUNGLE ; set
+	db COLOSSEUM | JUNGLE ; sets
 	db POKE_BALL
 	dw PokeBallEffectCommands ; effect commands
 	tx PokeBallDescription ; description
@@ -10050,7 +10050,7 @@ ScoopUpCard: ; 33f01 (c:7f01)
 	gfx ScoopUpCardGfx ; gfx
 	tx ScoopUpName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db SCOOP_UP
 	dw ScoopUpEffectCommands ; effect commands
 	tx ScoopUpDescription ; description
@@ -10061,7 +10061,7 @@ ComputerSearchCard: ; 33f0f (c:7f0f)
 	gfx ComputerSearchCardGfx ; gfx
 	tx ComputerSearchName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db COMPUTER_SEARCH
 	dw ComputerSearchEffectCommands ; effect commands
 	tx ComputerSearchDescription ; description
@@ -10072,7 +10072,7 @@ PokedexCard: ; 33f1d (c:7f1d)
 	gfx PokedexCardGfx ; gfx
 	tx PokedexName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db POKEDEX
 	dw PokedexEffectCommands ; effect commands
 	tx PokedexDescription ; description
@@ -10083,7 +10083,7 @@ PlusPowerCard: ; 33f2b (c:7f2b)
 	gfx PlusPowerCardGfx ; gfx
 	tx PlusPowerName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db PLUSPOWER
 	dw PlusPowerEffectCommands ; effect commands
 	tx PlusPowerDescription ; description
@@ -10094,7 +10094,7 @@ DefenderCard: ; 33f39 (c:7f39)
 	gfx DefenderCardGfx ; gfx
 	tx DefenderName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db DEFENDER
 	dw DefenderEffectCommands ; effect commands
 	tx DefenderDescription ; description
@@ -10105,7 +10105,7 @@ ItemFinderCard: ; 33f47 (c:7f47)
 	gfx ItemFinderCardGfx ; gfx
 	tx ItemFinderName ; name
 	db STAR ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db ITEM_FINDER
 	dw ItemFinderEffectCommands ; effect commands
 	tx ItemFinderDescription ; description
@@ -10116,7 +10116,7 @@ GustofWindCard: ; 33f55 (c:7f55)
 	gfx GustofWindCardGfx ; gfx
 	tx GustofWindName ; name
 	db CIRCLE ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db GUST_OF_WIND
 	dw GustofWindEffectCommands ; effect commands
 	tx GustofWindDescription ; description
@@ -10127,7 +10127,7 @@ DevolutionSprayCard: ; 33f63 (c:7f63)
 	gfx DevolutionSprayCardGfx ; gfx
 	tx DevolutionSprayName ; name
 	db STAR ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db DEVOLUTION_SPRAY
 	dw DevolutionSprayEffectCommands ; effect commands
 	tx DevolutionSprayDescription ; description
@@ -10138,7 +10138,7 @@ PotionCard: ; 33f71 (c:7f71)
 	gfx PotionCardGfx ; gfx
 	tx PotionName ; name
 	db CIRCLE ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db POTION
 	dw PotionEffectCommands ; effect commands
 	tx PotionDescription ; description
@@ -10149,7 +10149,7 @@ SuperPotionCard: ; 33f7f (c:7f7f)
 	gfx SuperPotionCardGfx ; gfx
 	tx SuperPotionName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db SUPER_POTION
 	dw SuperPotionEffectCommands ; effect commands
 	tx SuperPotionDescription ; description
@@ -10160,7 +10160,7 @@ FullHealCard: ; 33f8d (c:7f8d)
 	gfx FullHealCardGfx ; gfx
 	tx FullHealName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db FULL_HEAL
 	dw FullHealEffectCommands ; effect commands
 	tx FullHealDescription ; description
@@ -10171,7 +10171,7 @@ ReviveCard: ; 33f9b (c:7f9b)
 	gfx ReviveCardGfx ; gfx
 	tx ReviveName ; name
 	db DIAMOND ; rarity
-	db COLOSSEUM | NONE ; set
+	db COLOSSEUM | NONE ; sets
 	db REVIVE
 	dw ReviveEffectCommands ; effect commands
 	tx ReviveDescription ; description
@@ -10182,7 +10182,7 @@ MaintenanceCard: ; 33fa9 (c:7fa9)
 	gfx MaintenanceCardGfx ; gfx
 	tx MaintenanceName ; name
 	db DIAMOND ; rarity
-	db LABORATORY | NONE ; set
+	db LABORATORY | NONE ; sets
 	db MAINTENANCE
 	dw MaintenanceEffectCommands ; effect commands
 	tx MaintenanceDescription ; description
@@ -10193,7 +10193,7 @@ PokemonFluteCard: ; 33fb7 (c:7fb7)
 	gfx PokemonFluteCardGfx ; gfx
 	tx PokemonFluteName ; name
 	db DIAMOND ; rarity
-	db EVOLUTION | NONE ; set
+	db EVOLUTION | NONE ; sets
 	db POKEMON_FLUTE
 	dw PokemonFluteEffectCommands ; effect commands
 	tx PokemonFluteDescription ; description
@@ -10204,7 +10204,7 @@ GamblerCard: ; 33fc5 (c:7fc5)
 	gfx GamblerCardGfx ; gfx
 	tx GamblerName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db GAMBLER
 	dw GamblerEffectCommands ; effect commands
 	tx GamblerDescription ; description
@@ -10215,7 +10215,7 @@ RecycleCard: ; 33fd3 (c:7fd3)
 	gfx RecycleCardGfx ; gfx
 	tx RecycleName ; name
 	db CIRCLE ; rarity
-	db LABORATORY | FOSSIL ; set
+	db LABORATORY | FOSSIL ; sets
 	db RECYCLE
 	dw RecycleEffectCommands ; effect commands
 	tx RecycleDescription ; description

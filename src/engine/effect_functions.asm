@@ -1,5 +1,5 @@
 Poison50PercentEffect: ; 2c000 (b:4000)
-	text_de PoisonCheckText
+	ldtx de, PoisonCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -11,14 +11,14 @@ PoisonEffect: ; 2c007 (b:4007)
 	jr applyEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
-	text_de ParalysisCheckText
+	ldtx de, ParalysisCheckText
 	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, PARALYZED
 	jr applyEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
-	text_de ConfusionCheckText
+	ldtx de, ConfusionCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -26,7 +26,7 @@ ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, $f0, CONFUSED
 	jr applyEffect
 
-	text_de SleepCheckText
+	ldtx de, SleepCheckText
 	call TossCoin_BankB
 	ret nc
 
@@ -227,7 +227,7 @@ SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 ; 0x2c6f8
 
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
-	text_de PoisonCheckText
+	ldtx de, PoisonCheckText
 	call TossCoin_BankB
 	jp c, PoisonEffect
 	ld a, $8c
@@ -253,7 +253,7 @@ WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	INCROM $2c740, $2c77e
 
 AcidEffect: ; 2c77e (b:477e)
-	text_de AcidCheckText
+	ldtx de, AcidCheckText
 	call TossCoin_BankB
 	ret nc
 	ld a, SUBSTATUS2_UNABLE_RETREAT
@@ -277,7 +277,7 @@ FoulOdorEffect: ; 2c793 (b:4793)
 ; 0x2c7a0
 
 KakunaStiffenEffect: ; 2c7a0 (b:47a0)
-	text_de IfHeadsNoDamageNextTurnText
+	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
 	jp nc, Func_2c0a2
 	ld a, $4f
@@ -314,7 +314,7 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 
 ; an exact copy of KakunaStiffenEffect
 MetapodStiffenEffect: ; 2c836 (b:4836)
-	text_de IfHeadsNoDamageNextTurnText
+	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
 	jp nc, Func_2c0a2
 	ld a, $4f

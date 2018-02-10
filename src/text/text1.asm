@@ -58,7 +58,7 @@ Text000f: ; 36382 (d:6382)
 	db $03,$4c
 	done
 
-lbsText: ; 36385 (d:6385)
+LbsText: ; 36385 (d:6385)
 	text "lbs."
 	done
 
@@ -645,7 +645,7 @@ Text0091: ; 36fca (d:6fca)
 	text "Player 1"
 	done
 
-Player2: ; 36fd4 (d:6fd4)
+Player2Text: ; 36fd4 (d:6fd4)
 	text "Player 2"
 	done
 

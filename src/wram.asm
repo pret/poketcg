@@ -40,8 +40,8 @@ wPlayerDeckCards:: ; c27e
 	ds DECK_SIZE
 
 ; Stores x = (60 - deck remaining cards)
-; The first x cards in the wPlayerDeckCards array are not actually in the deck
-; For example, the top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
+; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel
+; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 

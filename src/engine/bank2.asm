@@ -81,7 +81,7 @@ Func_8db0: ; 8db0 (2:4db0)
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
 	call InitializeCursorParameters
-	text_hl PleaseSelectDeckText
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 .asm_8dc8
 	call DoFrame
@@ -348,13 +348,13 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	xor a
 	ld [wce3f], a
 	ld [wce40], a
-	text_hl ChosenAsDuelingDeckText
+	ldtx hl, ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
 	jp Func_8dbc
 
 Func_8fe8: ; 8fe8 (2:4fe8)
-	text_hl ThereIsNoDeckHereText
+	ldtx hl, ThereIsNoDeckHereText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
 	ret
@@ -703,7 +703,7 @@ Func_926e: ; 926e (2:526e)
 	ret
 .asm_929c
 	call Func_22ae
-	text_hl NewDeckText
+	ldtx hl, NewDeckText
 	call Func_2c29
 	scf
 	ret

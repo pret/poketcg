@@ -2330,7 +2330,7 @@ Func_0f35: ; 0f35 (0:0f35)
 	ld l, a
 	ld h, $0
 	call Func_2ec4
-	text_hl TransmissionErrorText
+	ldtx hl, TransmissionErrorText
 	call DrawWideTextBox_WaitForInput
 	ld a, $ff
 	ld [wd0c3], a
@@ -2609,7 +2609,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	call ShuffleCards
 	ret
 
-; draw a card from the deck, saving its location as $40
+; draw a card from the deck, saving its location as CARD_LOCATION_JUST_DRAWN
 ; returns c if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
@@ -2623,7 +2623,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	ld l, a
 	ld a, [hl] ; grab card number (0-59) from wPlayerDeckCards or wOpponentDeckCards array
 	ld l, a
-	ld [hl], CARD_LOCATION_JUST_DRAWN ; temporarily write $40 to corresponding card location variable
+	ld [hl], CARD_LOCATION_JUST_DRAWN ; temporarily write to corresponding card location variable
 	pop hl
 	or a
 	ret
@@ -3200,7 +3200,7 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call $4f9d
 	ld a, $1
 	ld [wcce6], a
-	text_hl DamageToSelfDueToConfusionText
+	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
 	ld [wLoadedMoveAnimation], a
@@ -3299,7 +3299,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	or a
 	ret
 .confused
-	text_de ConfusionCheckDamageText
+	ldtx de, ConfusionCheckDamageText
 	call TossCoin
 	jr c, .no_confusion_damage
 	ld a, $1
@@ -3572,7 +3572,7 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	text_hl WasKnockedOutText
+	ldtx hl, WasKnockedOutText
 	call DrawWideTextBox_PrintText
 	ld a, $28
 .asm_1aeb
@@ -3601,7 +3601,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	ld [hli], a
 	ld a, [wLoadedMoveName + 1]
 	ld [hli], a
-	text_hl PokemonsAttackText ; text when using an attack
+	ldtx hl, PokemonsAttackText ; text when using an attack
 	call DrawWideTextBox_PrintText
 	ret
 
@@ -3638,7 +3638,7 @@ Func_1bca: ; 1bca (0:1bca)
 	inc de
 	ld a, [hli]
 	ld [de], a
-	text_hl WasUnsuccessfulText
+	ldtx hl, WasUnsuccessfulText
 	call DrawWideTextBox_PrintText
 	scf
 	ret
@@ -3694,7 +3694,7 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	jr z, .print_player2
 	jr printNameLoop
 .print_player2
-	text_hl Player2
+	ldtx hl, Player2Text
 	jp PrintTextBoxBorderLabel
 
 Func_1caa: ; 1caa (0:1caa)
@@ -5435,7 +5435,7 @@ HandleYesOrNoMenu:
 ; prints YES NO at de
 PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForWindow
-	text_hl YesOrNoText
+	ldtx hl, YesOrNoText
 	call Func_2c1b
 	ret
 ; 0x2b70
@@ -6728,13 +6728,13 @@ HandleCantAttackSubstatus: ; 33c1 (0:33c1)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	text_hl UnableToAttackDueToTailWagText
+	ldtx hl, UnableToAttackDueToTailWagText
 	cp SUBSTATUS2_TAIL_WAG
 	jr z, .return_with_cant_attack
-	text_hl UnableToAttackDueToLeerText
+	ldtx hl, UnableToAttackDueToLeerText
 	cp SUBSTATUS2_LEER
 	jr z, .return_with_cant_attack
-	text_hl UnableToAttackDueToBoneAttackText
+	ldtx hl, UnableToAttackDueToBoneAttackText
 	cp SUBSTATUS2_BONE_ATTACK
 	jr z, .return_with_cant_attack
 	or a
@@ -6762,7 +6762,7 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ld a, [wSelectedMoveIndex]
 	cp [hl]
 	jr nz, .not_the_disabled_move
-	text_hl UnableToUseAttackDueToAmnesiaText
+	ldtx hl, UnableToUseAttackDueToAmnesiaText
 	scf
 	ret
 
@@ -6774,7 +6774,7 @@ HandleSandAttackOrSmokescreenSubstatus: ; 3400 (0:3400)
 	ld [wcc0a], a
 	ccf
 	ret nc
-	text_hl AttackUnsuccessfulText
+	ldtx hl, AttackUnsuccessfulText
 	call DrawWideTextBox_WaitForInput
 	scf
 	ret
@@ -6785,10 +6785,10 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	text_de SandAttackCheckText
+	ldtx de, SandAttackCheckText
 	cp SUBSTATUS2_SAND_ATTACK
 	jr z, .card_is_affected
-	text_de SmokescreenCheckText
+	ldtx de, SmokescreenCheckText
 	cp SUBSTATUS2_SMOKESCREEN
 	jr z, .card_is_affected
 	or a
@@ -6812,15 +6812,15 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	ld e, NO_DAMAGE_OR_EFFECT_FLY
-	text_hl NoDamageOrEffectDueToFlyText
+	ldtx hl, NoDamageOrEffectDueToFlyText
 	cp SUBSTATUS1_FLY
 	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_BARRIER
-	text_hl NoDamageOrEffectDueToBarrierText
+	ldtx hl, NoDamageOrEffectDueToBarrierText
 	cp SUBSTATUS1_BARRIER
 	jr z, .no_damage_or_effect
 	ld e, NO_DAMAGE_OR_EFFECT_AGILITY
-	text_hl NoDamageOrEffectDueToAgilityText
+	ldtx hl, NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
 	jr z, .no_damage_or_effect
 	call CheckIfUnderAnyCannotUseStatus
@@ -6848,7 +6848,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	or a
 	ret z
 	ld e, NO_DAMAGE_OR_EFFECT_NSHIELD
-	text_hl NoDamageOrEffectDueToNShieldText
+	ldtx hl, NoDamageOrEffectDueToNShieldText
 	jr .no_damage_or_effect
 
 ; if the Pokemon being attacked is Haunter1, and its Transparency is active,
@@ -6869,12 +6869,12 @@ HandleTransparency: ; 348a (0:348a)
 	jr c, .asm_3491
 	xor a
 	ld [wcac2], a
-	text_de TransparencyCheckText
+	ldtx de, TransparencyCheckText
 	call TossCoin
 	ret nc
 	ld a, NO_DAMAGE_OR_EFFECT_TRANSPARENCY
 	ld [wNoDamageOrEffect], a
-	text_hl NoDamageOrEffectDueToTransparencyText
+	ldtx hl, NoDamageOrEffectDueToTransparencyText
 	scf
 	ret
 ; 0x34b7
@@ -6936,13 +6936,13 @@ CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
-	text_hl CannotUseDueToStatusText
+	ldtx hl, CannotUseDueToStatusText
 	scf
 	jr nz, .done ; return carry
 .check_toxic_gas
 	ld a, MUK
 	call Func_3509
-	text_hl UnableDueToToxicGasText
+	ldtx hl, UnableDueToToxicGasText
 .done
 	ret
 
@@ -7084,7 +7084,7 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	ld h, [hl]
 	ld l, a
 	call Func_2ebb
-	text_hl KnockedOutDueToDestinyBondText
+	ldtx hl, KnockedOutDueToDestinyBondText
 	call DrawWideTextBox_WaitForInput
 	ret
 ; 0x367b
@@ -7130,7 +7130,7 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	push af
 	push hl
 	call SubstractHP
-	text_hl ReceivesDamageDueToStrikesBackText
+	ldtx hl, ReceivesDamageDueToStrikesBackText
 	call DrawWideTextBox_PrintText
 	pop hl
 	pop af
