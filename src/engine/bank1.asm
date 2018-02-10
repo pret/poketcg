@@ -284,7 +284,7 @@ Func_426d:
 	ld [wVBlankCtr], a
 	ld [wcbf9], a
 	text_hl DuelistIsThinkingText
-	call Func_2a36
+	call DrawWideTextBox_PrintTextNoDelay
 	call Func_2bbf
 	ld a, $ff
 	ld [wcc11], a
@@ -1223,7 +1223,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ret nz
 	ld [wVBlankCtr], a
 	ld hl, $0088
-	call Func_2a36
+	call DrawWideTextBox_PrintTextNoDelay
 	or a
 	ret
 

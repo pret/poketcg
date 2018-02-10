@@ -5241,18 +5241,23 @@ SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	ret
 ; 0x2a30
 
-	INCROM $2a30, $2a36
+Func_2a30: ; 2a30 (0:2a30)
+	call DrawWideTextBox_PrintTextNoDelay
+	jp WaitForWideTextBoxInput
+; 0x2a36
 
-Func_2a36: ; 2a36 (0:2a36)
+DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 	push hl
 	call DrawWideTextBox
 	ld a, $13
 	jr Func_2a44
 
-DrawNarrowTextBox_PrintText: ; 2a3e (0:2a3e)
+DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
 	ld a, $b
+;	fallthrough
+
 Func_2a44: ; 2a44 (0:2a44)
 	lb de, 1, 14
 	call AdjustCoordinatesForWindow
@@ -5284,7 +5289,7 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	ret
 
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
-	call DrawNarrowTextBox_PrintText
+	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
 	ld hl, NarrowTextBoxPromptCursorData
 	call InitializeCursorParameters
@@ -5368,7 +5373,7 @@ YesOrNoMenu: ; 2af3 (0:2af3)
 	jr HandleYesOrNoMenu
 
 YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
-	call DrawNarrowTextBox_PrintText
+	call DrawNarrowTextBox_PrintTextNoDelay
 	lb de, 3, 16 ; x, y
 	call PrintYesOrNoItems
 	lb de, 2, 16 ; x, y
