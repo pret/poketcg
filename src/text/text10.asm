@@ -94,11 +94,11 @@ TripleAttackX10Description: ; 582fc (16:42fc)
 	line "damage times the number of heads."
 	done
 
-CallforFamilyName: ; 58341 (16:4341)
+CallForFamilyName: ; 58341 (16:4341)
 	text "Call for Family"
 	done
 
-NidoranFsCallforFamilyDescription: ; 58352 (16:4352)
+NidoranFsCallForFamilyDescription: ; 58352 (16:4352)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Nidoran% or Nidoran$ and put"
 	line "it onto your Bench. Shuffle your"
@@ -472,7 +472,7 @@ BellsproutName: ; 592e5 (16:52e5)
 	text "Bellsprout"
 	done
 
-BellsproutsCallforFamilyDescription: ; 592f1 (16:52f1)
+BellsproutsCallForFamilyDescription: ; 592f1 (16:52f1)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Bellsprout and put it onto"
 	line "your Bench. Shuffle your deck"
@@ -963,11 +963,11 @@ QuickAttackDescription: ; 5a56a (16:656a)
 	line "damage."
 	done
 
-FlamesofRageName: ; 5a5d8 (16:65d8)
+FlamesOfRageName: ; 5a5d8 (16:65d8)
 	text "Flames of Rage"
 	done
 
-FlamesofRageDescription: ; 5a5e8 (16:65e8)
+FlamesOfRageDescription: ; 5a5e8 (16:65e8)
 	text "Discard 2 ",TX_FIRE," Energy cards attached"
 	line "to Arcanine in order to use this"
 	line "attack. This attack does 40 damage"
@@ -1481,11 +1481,11 @@ ShellderName: ; 5bb6e (16:7b6e)
 	text "Shellder"
 	done
 
-HideinShellName: ; 5bb78 (16:7b78)
+HideInShellName: ; 5bb78 (16:7b78)
 	text "Hide in Shell"
 	done
 
-HideinShellDescription: ; 5bb87 (16:7b87)
+HideInShellDescription: ; 5bb87 (16:7b87)
 	text "Flip a coin. If heads, prevent all"
 	line "damage done to Shellder during your"
 	line "opponent's next turn. (Any other"
@@ -1531,7 +1531,7 @@ KrabbyName: ; 5bd63 (16:7d63)
 	text "Krabby"
 	done
 
-KrabbysCallforFamilyDescription: ; 5bd6b (16:7d6b)
+KrabbysCallForFamilyDescription: ; 5bd6b (16:7d6b)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Krabby and put it onto your"
 	line "Bench. Shuffle your deck afterward."

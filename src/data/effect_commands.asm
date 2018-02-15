@@ -182,7 +182,7 @@ NidoranFFurySweepesEffectCommands:
 	dbw $09, $49be
 	db  $00
 
-NidoranFCallforFamilyEffectCommands:
+NidoranFCallForFamilyEffectCommands:
 	dbw $01, $49db
 	dbw $04, $4a6e
 	dbw $05, $49eb
@@ -264,7 +264,7 @@ MukSludgeEffectCommands:
 	dbw $09, $4c38
 	db  $00
 
-BellsproutCallforFamilyEffectCommands:
+BellsproutCallForFamilyEffectCommands:
 	dbw $01, $4c40
 	dbw $04, $4cc2
 	dbw $05, $4c50
@@ -369,7 +369,7 @@ KinglerFlailEffectCommands:
 	dbw $09, $4f4e
 	db  $00
 
-KrabbyCallforFamilyEffectCommands:
+KrabbyCallForFamilyEffectCommands:
 	dbw $01, $4f5d
 	dbw $04, $4fdf
 	dbw $05, $4f6d
@@ -413,7 +413,7 @@ ShellderSupersonicEffectCommands:
 	dbw $03, $509d
 	db  $00
 
-ShellderHideinShellEffectCommands:
+ShellderHideInShellEffectCommands:
 	dbw $03, $50a4
 	db  $00
 
@@ -555,7 +555,7 @@ ArcanineQuickAttackEffectCommands:
 	dbw $09, $5385
 	db  $00
 
-ArcanineFlamesofRageEffectCommands:
+ArcanineFlamesOfRageEffectCommands:
 	dbw $01, $53a0
 	dbw $02, $53ae
 	dbw $03, $53ef
@@ -1114,7 +1114,7 @@ Magneton2SelfdestructEffectCommands:
 	dbw $04, $675f
 	db  $00
 
-ZapdosPealofThunderEffectCommands:
+ZapdosPealOfThunderEffectCommands:
 	dbw $01, $677e
 	dbw $07, $6780
 	db  $00
@@ -1289,7 +1289,7 @@ WigglytuffLullabyEffectCommands:
 	dbw $03, SleepEffect
 	db  $00
 
-WigglytuffDotheWaveEffectCommands:
+WigglytuffDoTheWaveEffectCommands:
 	dbw $03, $6d87
 	dbw $09, $6d87
 	db  $00
@@ -1599,7 +1599,7 @@ SuperEnergyRetrievalEffectCommands:
 	dbw $05, $7dba
 	db  $00
 
-GustofWindEffectCommands:
+GustOfWindEffectCommands:
 	dbw $01, $7e6e
 	dbw $02, $7e79
 	dbw $03, $7e90

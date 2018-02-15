@@ -1779,7 +1779,7 @@ ItemFinderCardGfx:: ; ed538 (3b:5538)
 	INCBIN "gfx/cards/itemfinder.8x6.2bpp"
 	INCBIN "gfx/cards/itemfinder.pal"
 
-GustofWindCardGfx:: ; ed840 (3b:5840)
+GustOfWindCardGfx:: ; ed840 (3b:5840)
 	INCBIN "gfx/cards/gustofwind.8x6.2bpp"
 	INCBIN "gfx/cards/gustofwind.pal"
 

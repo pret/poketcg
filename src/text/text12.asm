@@ -745,11 +745,11 @@ WigglytuffName: ; 621ac (18:61ac)
 	text "Wigglytuff"
 	done
 
-DotheWaveName: ; 621b8 (18:61b8)
+DoTheWaveName: ; 621b8 (18:61b8)
 	text "Do the Wave"
 	done
 
-DotheWaveDescription: ; 621c5 (18:61c5)
+DoTheWaveDescription: ; 621c5 (18:61c5)
 	text "Does 10 damage plus 10 more damage"
 	line "for each of your Benched Pok`mon."
 	done

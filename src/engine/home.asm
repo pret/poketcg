@@ -1781,7 +1781,7 @@ DetectSGB: ; 0b59 (0:0b59)
 	ld a, [rJOYP]
 	and $3
 	cp $3
-	jr nz, .asm_ba3
+	jr nz, .sgb
 	ld a, $20
 	ld [rJOYP], a
 	ld a, [rJOYP]
@@ -1804,12 +1804,12 @@ DetectSGB: ; 0b59 (0:0b59)
 	ld a, [rJOYP]
 	and $3
 	cp $3
-	jr nz, .asm_ba3
+	jr nz, .sgb
 	ld hl, SGB_MLT_REQ_1
 	call SendSGB
 	or a
 	ret
-.asm_ba3
+.sgb
 	ld hl, SGB_MLT_REQ_1
 	call SendSGB
 	scf
@@ -2951,11 +2951,11 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld hl, wAttachedEnergies
 	ld c, NUM_TYPES
 	xor a
-.sumAttachedEnergiesLoop
+.sum_attached_energies_loop
 	add [hl]
 	inc hl
 	dec c
-	jr nz, .sumAttachedEnergiesLoop
+	jr nz, .sum_attached_energies_loop
 	ld [hl], a ; save to wTotalAttachedEnergies
 	pop bc
 	pop de
@@ -6752,11 +6752,11 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ret
 .check_amnesia
 	cp SUBSTATUS2_AMNESIA
-	jr z, .affectedByAmnesia
+	jr z, .affected_by_amnesia
 .not_the_disabled_move
 	or a
 	ret
-.affectedByAmnesia
+.affected_by_amnesia
 	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
 	call GetTurnDuelistVariable
 	ld a, [wSelectedMoveIndex]

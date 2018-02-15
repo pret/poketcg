@@ -221,7 +221,7 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw PlusPowerCard
 	dw DefenderCard
 	dw ItemFinderCard
-	dw GustofWindCard
+	dw GustOfWindCard
 	dw DevolutionSprayCard
 	dw PotionCard
 	dw SuperPotionCard
@@ -872,12 +872,12 @@ NidoranFCard: ; 31134 (c:5134)
 
 	; move 2
 	energy GRASS, 2 ; energies
-	tx CallforFamilyName ; name
-	tx NidoranFsCallforFamilyDescription ; description
+	tx CallForFamilyName ; name
+	tx NidoranFsCallForFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw NidoranFCallforFamilyEffectCommands ; effect commands
+	dw NidoranFCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
@@ -1637,12 +1637,12 @@ BellsproutCard: ; 31503 (c:5503)
 
 	; move 2
 	energy GRASS, 1 ; energies
-	tx CallforFamilyName ; name
-	tx BellsproutsCallforFamilyDescription ; description
+	tx CallForFamilyName ; name
+	tx BellsproutsCallForFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw BellsproutCallforFamilyEffectCommands ; effect commands
+	dw BellsproutCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
@@ -2657,12 +2657,12 @@ Arcanine1Card: ; 31a17 (c:5a17)
 
 	; move 2
 	energy FIRE, 2 ; energies
-	tx FlamesofRageName ; name
-	tx FlamesofRageDescription ; description
+	tx FlamesOfRageName ; name
+	tx FlamesOfRageDescription ; description
 	dw NONE ; description (cont)
 	db 40 ; damage
 	db DAMAGE_PLUS ; category
-	dw ArcanineFlamesofRageEffectCommands ; effect commands
+	dw ArcanineFlamesOfRageEffectCommands ; effect commands
 	db NONE ; flags 1
 	db DISCARD_ENERGY ; flags 2
 	db BOOST_IF_TAKEN_DAMAGE ; flags 3
@@ -3779,12 +3779,12 @@ ShellderCard: ; 31fad (c:5fad)
 
 	; move 2
 	energy WATER, 1 ; energies
-	tx HideinShellName ; name
-	tx HideinShellDescription ; description
+	tx HideInShellName ; name
+	tx HideInShellDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw ShellderHideinShellEffectCommands ; effect commands
+	dw ShellderHideInShellEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
@@ -3867,12 +3867,12 @@ KrabbyCard: ; 3202f (c:602f)
 
 	; move 1
 	energy WATER, 1 ; energies
-	tx CallforFamilyName ; name
-	tx KrabbysCallforFamilyDescription ; description
+	tx CallForFamilyName ; name
+	tx KrabbysCallForFamilyDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw KrabbyCallforFamilyEffectCommands ; effect commands
+	dw KrabbyCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db FLAG_3_BIT_1 ; flags 3
@@ -5856,12 +5856,12 @@ Zapdos3Card: ; 32a16 (c:6a16)
 
 	; move 1
 	energy 0 ; energies
-	tx PealofThunderName ; name
-	tx PealofThunderDescription ; description
+	tx PealOfThunderName ; name
+	tx PealOfThunderDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db POKEMON_POWER ; category
-	dw ZapdosPealofThunderEffectCommands ; effect commands
+	dw ZapdosPealOfThunderEffectCommands ; effect commands
 	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -8828,12 +8828,12 @@ WigglytuffCard: ; 338d0 (c:78d0)
 
 	; move 2
 	energy COLORLESS, 3 ; energies
-	tx DotheWaveName ; name
-	tx DotheWaveDescription ; description
+	tx DoTheWaveName ; name
+	tx DoTheWaveDescription ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_PLUS ; category
-	dw WigglytuffDotheWaveEffectCommands ; effect commands
+	dw WigglytuffDoTheWaveEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -10111,15 +10111,15 @@ ItemFinderCard: ; 33f47 (c:7f47)
 	tx ItemFinderDescription ; description
 	dw NONE ; description (cont)
 
-GustofWindCard: ; 33f55 (c:7f55)
+GustOfWindCard: ; 33f55 (c:7f55)
 	db TYPE_TRAINER ; type
-	gfx GustofWindCardGfx ; gfx
-	tx GustofWindName ; name
+	gfx GustOfWindCardGfx ; gfx
+	tx GustOfWindName ; name
 	db CIRCLE ; rarity
 	db EVOLUTION | NONE ; sets
 	db GUST_OF_WIND
-	dw GustofWindEffectCommands ; effect commands
-	tx GustofWindDescription ; description
+	dw GustOfWindEffectCommands ; effect commands
+	tx GustOfWindDescription ; description
 	dw NONE ; description (cont)
 
 DevolutionSprayCard: ; 33f63 (c:7f63)

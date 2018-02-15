@@ -772,13 +772,13 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	push bc
 	ld a, b
 	cp $1f
-	jr nc, .quitMovement
+	jr nc, .quit_movement
 	ld a, c
 	cp $1f
-	jr nc, .quitMovement
+	jr nc, .quit_movement
 	call GetFloorObjectFromPos
 	and $40 | $80 ; the two impassable objects found in the floor map
-	jr nz, .quitMovement
+	jr nz, .quit_movement
 	ld a, b
 	ld [wPlayerXCoord], a
 	ld a, c
@@ -795,7 +795,7 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	call ModifyUnknownOAMBufferProperty
 	ld a, $4
 	ld [hl], a
-.quitMovement
+.quit_movement
 	pop bc
 	pop hl
 	ret
@@ -2981,11 +2981,11 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	jp Func_c926
 
 WaterClubAfterDuel: ;e157 (3:6157)
-	ld hl, .afterDuelTable
+	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
 
-.afterDuelTable
+.after_duel_table
 	dw $1f1f
 	dw OWSequence_BeatSara
 	dw OWSequence_LostToSara
@@ -3009,11 +3009,11 @@ OWSequence_Sara: ; e177 (3:6177)
 	tx Text042c
 	run_script OWScript_AskQuestionJump
 	tx Text042d
-	dw .yesDuel
+	dw .yes_duel
 	run_script OWScript_PrintTextString
 	tx Text042e
 	run_script OWScript_EndScriptCloseText
-.yesDuel
+.yes_duel
 	run_script OWScript_PrintTextString
 	tx Text042f
 	run_script OWScript_StartBattle
@@ -3047,11 +3047,11 @@ OWSequence_Amanda: ; e19e (03:619e)
 	tx Text0433
 	run_script OWScript_AskQuestionJump
 	tx Text0434
-	dw .yesDuel
+	dw .yes_duel
 	run_script OWScript_PrintTextString
 	tx Text0435
 	run_script OWScript_EndScriptCloseText
-.yesDuel
+.yes_duel
 	run_script OWScript_PrintTextString
 	tx Text0436
 	run_script OWScript_StartBattle
@@ -3086,20 +3086,20 @@ OWSequence_Joshua:
 	start_script
 	run_script OWScript_JumpIfFlagNotSet
 	db FLAG_BEAT_AMANDA
-	dw .saraAndAmandaNotBeaten
+	dw .sara_and_amanda_not_beaten
 	run_script OWScript_JumpIfFlagNotSet
 	db FLAG_BEAT_SARA
-	dw .saraAndAmandaNotBeaten
+	dw .sara_and_amanda_not_beaten
 	run_script OWScript_ScriptJump
-	dw .beatSaraAndAmanda
-.saraAndAmandaNotBeaten
+	dw .beat_sara_and_amanda
+.sara_and_amanda_not_beaten
 	run_script OWScript_CustomModifyEventFlags
 	db $33 ; offset on flagmod table
 	db $01 ; the control bit
 	run_script OWScript_PrintTextString
 	tx Text043b
 	run_script OWScript_EndScriptCloseText
-.beatSaraAndAmanda
+.beat_sara_and_amanda
 	run_script OWScript_JumpIfFlagSet
 	db $33
 	dw $623c
@@ -3120,23 +3120,23 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
 	ld a, [wd0c3]
 	or a
-	jr z, .playerWon
+	jr z, .player_won
 	ld c, $2
 
-.playerWon
+.player_won
 	ld a, [wd0c4]
 	ld b, a
 	ld de, $0005
-.checkEnemyByteLoop
+.check_enemy_byte_loop
 	ld a, [hli]
 	or a
 	ret z
 	cp b
-	jr z, .foundEnemy
+	jr z, .found_enemy
 	add hl, de
-	jr .checkEnemyByteLoop
+	jr .check_enemy_byte_loop
 
-.foundEnemy
+.found_enemy
 	ld a, [hli]
 	ld [wd3ab], a
 	ld b, $0

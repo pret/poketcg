@@ -131,7 +131,7 @@ Music1_Init: ; f407d (3d:407d)
 	ld [wMusicDC], a
 	ld de, $0001
 	ld bc, $0000
-.zeroLoop1
+.zero_loop1
 	ld hl, wMusicIsPlaying
 	add hl, bc
 	ld [hl], d
@@ -150,16 +150,16 @@ Music1_Init: ; f407d (3d:407d)
 	inc c
 	ld a, c
 	cp $4
-	jr nz, .zeroLoop1
+	jr nz, .zero_loop1
 	ld hl, Music1_ChannelLoopStacks
 	ld bc, wMusicChannelStackPointers
 	ld d, $8
-.zeroLoop2
+.zero_loop2
 	ld a, [hli]
 	ld [bc], a
 	inc bc
 	dec d
-	jr nz, .zeroLoop2
+	jr nz, .zero_loop2
 	ret
 
 Music1_Update: ; f40e9 (3d:40e9)
@@ -172,15 +172,15 @@ Music1_Update: ; f40e9 (3d:40e9)
 	ld [MBC3RomBank], a
 	ld a, [wddf2]
 	cp $0
-	jr z, .updateChannels
+	jr z, .update_channels
 	call Func_f4980
-	jr .skipChannelUpdates
-.updateChannels
+	jr .skip_channel_Updates
+.update_channels
 	call Music1_UpdateChannel1
 	call Music1_UpdateChannel2
 	call Music1_UpdateChannel3
 	call Music1_UpdateChannel4
-.skipChannelUpdates
+.skip_channel_Updates
 	call Func_f4866
 	call Music1_CheckForEndOfSong
 	ret
@@ -188,24 +188,24 @@ Music1_Update: ; f40e9 (3d:40e9)
 Music1_CheckForNewSound: ; f411c (3d:411c)
 	ld a, [wCurSongID]
 	rla
-	jr c, .checkForNewSfx
+	jr c, .check_for_new_sfx
 	call Music1_StopAllChannels
 	ld a, [wCurSongID]
 	call Music1_BeginSong
 	ld a, [wCurSongID]
 	or $80
 	ld [wCurSongID], a
-.checkForNewSfx
+.check_for_new_sfx
 	ld a, [wCurSfxID]
 	rla
-	jr c, .noNewSound
+	jr c, .no_new_sound
 	ld a, [wCurSfxID]
 	ld hl, SFX_PlaySFX
 	call Bankswitch3dTo3f
 	ld a, [wCurSfxID]
 	or $80
 	ld [wCurSfxID], a
-.noNewSound
+.no_new_sound
 	ret
 
 Music1_StopAllChannels: ; f414b (3d:414b)
@@ -214,30 +214,30 @@ Music1_StopAllChannels: ; f414b (3d:414b)
 	xor a
 	ld [wMusicIsPlaying], a
 	bit 0, d
-	jr nz, .stopChannel2
+	jr nz, .stop_channel_2
 	ld a, $8
 	ld [rNR12], a
 	swap a
 	ld [rNR14], a
-.stopChannel2
+.stop_channel_2
 	xor a
 	ld [wMusicIsPlaying + 1], a
 	bit 1, d
-	jr nz, .stopChannel4
+	jr nz, .stop_channel_4
 	ld a, $8
 	ld [rNR22], a
 	swap a
 	ld [rNR24], a
-.stopChannel4
+.stop_channel_4
 	xor a
 	ld [wMusicIsPlaying + 3], a
 	bit 3, d
-	jr nz, .stopChannel3
+	jr nz, .stop_channel_3
 	ld a, $8
 	ld [rNR42], a
 	swap a
 	ld [rNR44], a
-.stopChannel3
+.stop_channel_3
 	xor a
 	ld [wMusicIsPlaying + 2], a
 	bit 2, d
@@ -273,7 +273,7 @@ Music1_BeginSong: ; f418c (3d:418c)
 	ld b, h
 	ld c, l
 	rr e
-	jr nc, .noChannel1
+	jr nc, .no_channel_1
 	ld a, [bc]
 	inc bc
 	ld [wMusicChannelPointers], a
@@ -297,9 +297,9 @@ Music1_BeginSong: ; f418c (3d:418c)
 	ld [wMusicChannelStackPointers + 1], a
 	ld a, $8
 	ld [wMusicE9], a
-.noChannel1
+.no_channel_1
 	rr e
-	jr nc, .noChannel2
+	jr nc, .no_channel_2
 	ld a, [bc]
 	inc bc
 	ld [wMusicChannelPointers + 2], a
@@ -323,9 +323,9 @@ Music1_BeginSong: ; f418c (3d:418c)
 	ld [wMusicChannelStackPointers + 3], a
 	ld a, $8
 	ld [wMusicE9 + 1], a
-.noChannel2
+.no_channel_2
 	rr e
-	jr nc, .noChannel3
+	jr nc, .no_channel_3
 	ld a, [bc]
 	inc bc
 	ld [wMusicChannelPointers + 4], a
@@ -349,9 +349,9 @@ Music1_BeginSong: ; f418c (3d:418c)
 	ld [wMusicChannelStackPointers + 5], a
 	ld a, $40
 	ld [wMusicE9 + 2], a
-.noChannel3
+.no_channel_3
 	rr e
-	jr nc, .noChannel4
+	jr nc, .no_channel_4
 	ld a, [bc]
 	inc bc
 	ld [wMusicChannelPointers + 6], a
@@ -374,7 +374,7 @@ Music1_BeginSong: ; f418c (3d:418c)
 	ld [wMusicChannelStackPointers + 7], a
 	ld a, $40
 	ld [wMusicE9 + 3], a
-.noChannel4
+.no_channel_4
 	xor a
 	ld [wddf2], a
 	ret
@@ -935,9 +935,9 @@ Music1_Loop: ; f4609 (3d:4609)
 	inc de
 	push af
 	call Music1_GetChannelStackPointer
-	ld [hl], e ; 
+	ld [hl], e ;
 	inc hl     ; store address of command at beginning of loop
-	ld [hl], d ; 
+	ld [hl], d ;
 	inc hl
 	pop af
 	ld [hl], a ; store loop count
@@ -951,16 +951,16 @@ Music1_EndLoop: ; f461e (3d:461e)
 	dec hl
 	ld a, [hl] ; get remaining loop count
 	dec a
-	jr z, .loopDone
+	jr z, .loop_done
 	ld [hld], a
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
 	pop hl
-	ld h, d ; 
+	ld h, d ;
 	ld l, e ; go to address of beginning of loop
 	jp Music1_PlayNextNote
-.loopDone
+.loop_done
 	dec hl
 	dec hl
 	call Music1_SetChannelStackPointer
@@ -977,9 +977,9 @@ Music1_call: ; f463f (3d:463f)
 	call Music1_GetChannelStackPointer
 	pop de
 	ld a, e
-	ld [hli], a ; 
+	ld [hli], a ;
 	ld a, d     ; store address of command after call
-	ld [hli], a ; 
+	ld [hli], a ;
 	ld a, [de]
 	ld b, a
 	inc de
@@ -995,7 +995,7 @@ Music1_ret: ; f4656 (3d:4656)
 	pop de
 	call Music1_GetChannelStackPointer
 	dec hl
-	ld a, [hld] ; 
+	ld a, [hld] ;
 	ld e, [hl]  ; retrieve address of caller of this sub branch
 	ld d, a
 	inc de
@@ -1237,12 +1237,12 @@ Func_f479c: ; f479c (3d:479c)
 	ld d, $0
 	ld a, [wMusicWaveChange]
 	or a
-	jr z, .noWaveChange
+	jr z, .no_wave_change
 	xor a
 	ld [rNR30], a
 	call Music1_LoadWaveInstrument
 	ld d, $80
-.noWaveChange
+.no_wave_change
 	ld a, [wddb9]
 	cp $0
 	jr z, .asm_f47e1
@@ -1287,14 +1287,14 @@ Music1_LoadWaveInstrument: ; f479c (3d:47ea)
 	ld l, a
 	ld b, d
 	ld de, $ff30
-.copyWaveLoop
+.copy_wave_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	inc b
 	ld a, b
 	cp $10
-	jr nz, .copyWaveLoop
+	jr nz, .copy_wave_loop
 	xor a
 	ld [wMusicWaveChange], a
 	ret
@@ -1487,7 +1487,7 @@ Music1_UpdateVibrato: ; f4898 (3d:4898)
 
 Func_f490b: ; f490b (3d:490b)
 	cp $0
-	jr nz, .notChannel1
+	jr nz, .not_channel_1
 	ld a, [wMusicVibratoDelay]
 	cp $0
 	jr z, .done
@@ -1503,9 +1503,9 @@ Func_f490b: ; f490b (3d:490b)
 	and $3f
 	ld [rNR14], a
 	ret
-.notChannel1
+.not_channel_1
 	cp $1
-	jr nz, .notChannel2
+	jr nz, .not_channel_2
 	ld a, [wMusicVibratoDelay + 1]
 	cp $0
 	jr z, .done
@@ -1520,7 +1520,7 @@ Func_f490b: ; f490b (3d:490b)
 	ld a, d
 	ld [rNR24], a
 	ret
-.notChannel2
+.not_channel_2
 	cp $2
 	jr nz, .done
 	ld a, [wMusicVibratoDelay + 2]

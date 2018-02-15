@@ -1,8 +1,7 @@
-
-const_value = 1
+	const_def 1
 
 TextOffsets:: ; 34000 (d:4000)
-	db $00,$00,$00
+	dwb $0000, $00
 	textpointer HandText
 	textpointer CheckText
 	textpointer AttackText
@@ -2127,8 +2126,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NidoranFName
 	textpointer FurySweepesName
 	textpointer TripleAttackX10Description
-	textpointer CallforFamilyName
-	textpointer NidoranFsCallforFamilyDescription
+	textpointer CallForFamilyName
+	textpointer NidoranFsCallForFamilyDescription
 	textpointer NidoranFKind
 	textpointer NidoranFDescription
 	textpointer NidorinaName
@@ -2201,7 +2200,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer VenomothKind
 	textpointer VenomothDescription
 	textpointer BellsproutName
-	textpointer BellsproutsCallforFamilyDescription
+	textpointer BellsproutsCallForFamilyDescription
 	textpointer BellsproutDescription
 	textpointer WeepinbellName
 	textpointer RazorLeafName
@@ -2299,8 +2298,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ArcanineName
 	textpointer QuickAttackName
 	textpointer QuickAttackDescription
-	textpointer FlamesofRageName
-	textpointer FlamesofRageDescription
+	textpointer FlamesOfRageName
+	textpointer FlamesOfRageDescription
 	textpointer ArcanineKind
 	textpointer Arcanine1Description
 	textpointer ArcaninesFlamethrowerDescription
@@ -2401,8 +2400,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IceBeamName
 	textpointer DewgongDescription
 	textpointer ShellderName
-	textpointer HideinShellName
-	textpointer HideinShellDescription
+	textpointer HideInShellName
+	textpointer HideInShellDescription
 	textpointer ShellderKind
 	textpointer ShellderDescription
 	textpointer CloysterName
@@ -2411,7 +2410,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer SpikeCannonName
 	textpointer CloysterDescription
 	textpointer KrabbyName
-	textpointer KrabbysCallforFamilyDescription
+	textpointer KrabbysCallForFamilyDescription
 	textpointer KrabbyKind
 	textpointer KrabbyDescription
 	textpointer KinglerName
@@ -2566,8 +2565,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ThunderboltName
 	textpointer ThunderboltDescription
 	textpointer Zapdos2Description
-	textpointer PealofThunderName
-	textpointer PealofThunderDescription
+	textpointer PealOfThunderName
+	textpointer PealOfThunderDescription
 	textpointer BigThunderName
 	textpointer BigThunderDescription
 	textpointer Zapdos3Description
@@ -2834,8 +2833,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer LullabyName
 	textpointer Jigglypuff3Description
 	textpointer WigglytuffName
-	textpointer DotheWaveName
-	textpointer DotheWaveDescription
+	textpointer DoTheWaveName
+	textpointer DoTheWaveDescription
 	textpointer WigglytuffDescription
 	textpointer MeowthName
 	textpointer CatPunchName
@@ -2971,8 +2970,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DefenderDescription
 	textpointer ItemFinderName
 	textpointer ItemFinderDescription
-	textpointer GustofWindName
-	textpointer GustofWindDescription
+	textpointer GustOfWindName
+	textpointer GustOfWindDescription
 	textpointer DevolutionSprayName
 	textpointer DevolutionSprayDescription
 	textpointer DevolutionSprayDescriptionCont

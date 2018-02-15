@@ -764,11 +764,11 @@ Zapdos2Description: ; 5e2e7 (17:62e7)
 	line "enormous lightning bolts."
 	done
 
-PealofThunderName: ; 5e345 (17:6345)
+PealOfThunderName: ; 5e345 (17:6345)
 	text "Peal of Thunder"
 	done
 
-PealofThunderDescription: ; 5e356 (17:6356)
+PealOfThunderDescription: ; 5e356 (17:6356)
 	text "When you put Zapdos into play during"
 	line "your turn (not during set-up), do"
 	line "30 damage to a Pok`mon other than"

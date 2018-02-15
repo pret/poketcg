@@ -86,7 +86,7 @@ StartDuel: ; 409f (1:409f)
 	ret c
 
 ; the loop returns here after every turn switch
-.mainDuelLoop ; 40ee (1:40ee)
+.main_duel_loop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call HandleSwordsDanceOrFocusEnergySubstatus
@@ -95,36 +95,36 @@ StartDuel: ; 409f (1:409f)
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
-	jr nz, .duelFinished
+	jr nz, .duel_finished
 	call UpdateSubstatusConditions
 	call $6baf
 	call Func_3b31
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
-	jr nz, .duelFinished
+	jr nz, .duel_finished
 	ld hl, $cc06
 	inc [hl]
 	ld a, [wcc09]
 	cp $80
 	jr z, .asm_4126
 
-.nextTurn
+.next_turn
 	call SwapTurn
-	jr .mainDuelLoop
+	jr .main_duel_loop
 
 .asm_4126
 	ld a, [wIsPracticeDuel]
 	or a
-	jr z, .nextTurn
+	jr z, .next_turn
 	ld a, [hl]
 	cp $f
-	jr c, .nextTurn
+	jr c, .next_turn
 	xor a
 	ld [wd0c3], a
 	ret
 
-.duelFinished
+.duel_finished
 	call $5990
 	call Func_04a2
 	ld a, $3
@@ -143,38 +143,38 @@ StartDuel: ; 409f (1:409f)
 	call Func_3b21
 	ld a, [wDuelFinished]
 	cp DUEL_WON
-	jr z, .activeDuelistWonBattle
+	jr z, .active_duelist_won_battle
 	cp DUEL_LOST
-	jr z, .activeDuelistLostBattle
+	jr z, .active_duelist_lost_batte
 	ld a, $5f
 	ld c, MUSIC_DARKDIDDLY
 	ldtx hl, DuelWasDrawText
-	jr .handleDuelFinished
+	jr .handle_duel_finished
 
-.activeDuelistWonBattle
+.active_duelist_won_battle
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr nz, .opponentWonBattle
-.playerWonBattle
+	jr nz, .opponent_won_battle
+.player_won_battle
 	xor a
 	ld [wd0c3], a
 	ld a, $5d
 	ld c, MUSIC_MATCHVICTORY
 	ldtx hl, WonDuelText
-	jr .handleDuelFinished
+	jr .handle_duel_finished
 
-.activeDuelistLostBattle
+.active_duelist_lost_batte
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr nz, .playerWonBattle
-.opponentWonBattle
+	jr nz, .player_won_battle
+.opponent_won_battle
 	ld a, $1
 	ld [wd0c3], a
 	ld a, $5e
 	ld c, MUSIC_MATCHLOSS
 	ldtx hl, LostDuelText
 
-.handleDuelFinished
+.handle_duel_finished
 	call Func_3b6a
 	ld a, c
 	call PlaySong
@@ -189,7 +189,7 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .asm_41a7
 	ld a, [wDuelFinished]
 	cp DUEL_DRAW
-	jr z, .tiedBattle
+	jr z, .tied_battle
 	call Func_39fc
 	call WaitForWideTextBoxInput
 	call Func_3b31
@@ -198,7 +198,7 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	ret
 
-.tiedBattle
+.tied_battle
 	call WaitForWideTextBoxInput
 	call Func_3b31
 	ld a, [wDuelTheme]
@@ -247,12 +247,12 @@ HandleTurn: ; 4225 (1:4225)
 	call $70e6
 	call $4933
 	call DrawCardFromDeck
-	jr nc, .deckNotEmpty
+	jr nc, .deck_not_empty
 	ld a, DUEL_LOST
 	ld [wDuelFinished], a
 	ret
 
-.deckNotEmpty
+.deck_not_empty
 	ldh [hTempCardNumber], a
 	call AddCardToHand
 	ld a, [wcc0d]
@@ -474,14 +474,14 @@ Func_4436: ; 4436 (1:4436)
 PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, c
 	cp TYPE_ENERGY_WATER ; XXX why treat water energy card differently?
-	jr nz, .notWaterEnergy
+	jr nz, .not_water_energy
 	call $3615
-	jr c, .waterEnergy
+	jr c, .water_energy
 
-.notWaterEnergy
+.not_water_energy
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .alreadyPlayedEnergy
+	jr nz, .already_played_energy
 	call $5fdd
 	call $600c ; choose card to play energy card on
 	jp c, Func_426d ; exit if no card was chosen
@@ -501,7 +501,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	call $68e4
 	jp Func_426d
 
-.waterEnergy
+.water_energy
 	call $5fdd
 	call $600c ; choose card to play energy card on
 	jp c, Func_426d ; exit if no card was chosen
@@ -514,7 +514,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	call DrawWideTextBox_WaitForInput
 	jp Func_4436
 
-.alreadyPlayedEnergy
+.already_played_energy
 	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	call CreateHandCardBuffer
@@ -533,27 +533,27 @@ DuelMenu_Check: ; 4585 (1:4585)
 
 DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
-	jr c, .alertCantAttackAndCancelMenu
+	jr c, .alert_cant_attack_and_cancel_menu
 	call CheckIfActiveCardParalyzedOrAsleep
-	jr nc, .clearSubMenuSelection
+	jr nc, .clear_sub_menu_selection
 
-.alertCantAttackAndCancelMenu
+.alert_cant_attack_and_cancel_menu
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-.clearSubMenuSelection
+.clear_sub_menu_selection
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
 
-.tryOpenAttackMenu
+.try_open_attack_menu
 	call LoadPokemonMovesToDuelCardOrAttackList
 	or a
-	jr nz, .openAttackMenu
+	jr nz, .open_attack_menu
 	ldtx hl, NoSelectableAttackText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-.openAttackMenu
+.open_attack_menu
 	push af
 	ld a, [wSelectedDuelSubMenuItem]
 	ld hl, AttackMenuCursorData
@@ -566,23 +566,23 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld a, [hl]
 	call LoadDeckCardToBuffer1
 
-.waitForInput
+.wait_for_input
 	call DoFrame
 	ldh a, [hButtonsPressed]
 	and START
-	jr nz, .displaySelectedMoveInfo
+	jr nz, .display_selected_move_info
 	call HandleMenuInput
-	jr nc, .waitForInput
+	jr nc, .wait_for_input
 	cp $ff ; was B pressed?
 	jp z, PrintDuelMenu
 	ld [wSelectedDuelSubMenuItem], a
 	call CheckIfEnoughEnergies
-	jr nc, .enoughEnergy
+	jr nc, .enough_energy
 	ldtx hl, NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
-	jr .tryOpenAttackMenu
+	jr .try_open_attack_menu
 
-.enoughEnergy
+.enough_energy
 	ldh a, [hCurrentMenuItem]
 	add a
 	ld e, a
@@ -594,7 +594,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld e, [hl] ; attack index (0 or 1)
 	call CopyMoveDataAndDamageToBuffer
 	call HandleAmnesiaSubstatus
-	jr c, .cannotUseDueToAmnesia
+	jr c, .cannot_use_due_to_amnesia
 	ld a, $07
 	call $51e7
 	jp c, Func_4268
@@ -602,14 +602,14 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	jp c, Func_426d
 	ret
 
-.cannotUseDueToAmnesia ; 477d (1:477d)
+.cannot_use_due_to_amnesia ; 477d (1:477d)
 	call DrawWideTextBox_WaitForInput
-	jr .tryOpenAttackMenu
+	jr .try_open_attack_menu
 
-.displaySelectedMoveInfo ; 4782 (1:4782)
+.display_selected_move_info ; 4782 (1:4782)
 	call Func_478b
 	call $4f9d
-	jp .tryOpenAttackMenu
+	jp .try_open_attack_menu
 
 Func_478b: ; 478b (1:478b)
 	ld a, $01
@@ -725,7 +725,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld [wCardPageNumber], a
 	ld de, wLoadedCard1Move1Name
 	call CheckIfMoveExists
-	jr c, .checkForSecondAttackSlot
+	jr c, .check_for_second_attack_slot
 	ldh a, [hTempCardNumber]
 	ld [hli], a
 	xor a
@@ -741,10 +741,10 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	inc b
 	inc b
 
-.checkForSecondAttackSlot
+.check_for_second_attack_slot
 	ld de, wLoadedCard1Move2Name
 	call CheckIfMoveExists
-	jr c, .finishLoadingAttacks
+	jr c, .finish_loading_attacks
 	ldh a, [hTempCardNumber]
 	ld [hli], a
 	ld a, $01
@@ -758,7 +758,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	pop bc
 	pop hl
 
-.finishLoadingAttacks
+.finish_loading_attacks
 	ld a, c
 	ret
 
@@ -771,13 +771,13 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	inc de
 	ld a, [de]
 	or c
-	jr z, .returnNoMoveFound
+	jr z, .return_no_move_found
 	ld hl, wLoadedCard1Move1Category - (wLoadedCard1Move1Name + 1)
 	add hl, de
 	ld a, [hl]
 	and $ff - RESIDUAL
 	cp POKEMON_POWER
-	jr z, .returnNoMoveFound
+	jr z, .return_no_move_found
 	or a
 
 .return
@@ -786,7 +786,7 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	pop hl
 	ret
 
-.returnNoMoveFound
+.return_no_move_found
 	scf
 	jr .return
 
@@ -829,35 +829,35 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	ld de, wLoadedCard1Move1Energy
 	ld a, c
 	or a
-	jr z, .gotMove
+	jr z, .got_move
 	ld de, wLoadedCard1Move2Energy
 
-.gotMove
+.got_move
 	ld hl, wLoadedCard1Move1Name - wLoadedCard1Move1Energy
 	add hl, de
 	ld a, [hli]
 	or [hl]
-	jr z, .notUsable
+	jr z, .not_usable
 	ld hl, wLoadedCard1Move1Category - wLoadedCard1Move1Energy
 	add hl, de
 	ld a, [hl]
 	cp POKEMON_POWER
-	jr z, .notUsable
+	jr z, .not_usable
 	xor a
 	ld [wAttachedEnergiesAccum], a
 	ld hl, wAttachedEnergies
 	ld c, (COLORLESS - FIRE) / 2
-.nextEnergyTypePair
+.next_energy_type_pair
 	ld a, [de]
 	swap a
 	call _CheckIfEnoughEnergiesOfType
-	jr c, .notEnoughEnergies
+	jr c, .not_enough_energies
 	ld a, [de]
 	call _CheckIfEnoughEnergiesOfType
-	jr c, .notEnoughEnergies
+	jr c, .not_enough_energies
 	inc de
 	dec c
-	jr nz, .nextEnergyTypePair
+	jr nz, .next_energy_type_pair
 	ld a, [de] ; colorless energy
 	swap a
 	and $f
@@ -867,14 +867,14 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	ld a, [wTotalAttachedEnergies]
 	sub c
 	cp b
-	jr c, .notEnoughEnergies
+	jr c, .not_enough_energies
 	or a
 .asm_48fb
 	pop de
 	ret
 
-.notUsable
-.notEnoughEnergies
+.not_usable
+.not_enough_energies
 	scf
 	jr .asm_48fb
 ; 0x4900
@@ -891,16 +891,16 @@ _CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
 	ld [hl], a ; accumulate the amount of energies required
 	pop hl
 	pop af
-	jr z, .enoughEnergies ; jump if no energies of this type are required
+	jr z, .enough_energies ; jump if no energies of this type are required
 	cp [hl]
 	; jump if the energies required of this type are not more than the amount attached
-	jr z, .enoughEnergies
-	jr c, .enoughEnergies
+	jr z, .enough_energies
+	jr c, .enough_energies
 	inc hl
 	scf
 	ret
 
-.enoughEnergies
+.enough_energies
 	inc hl
 	or a
 	ret
@@ -919,12 +919,12 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 
 .paralyzed
 	ldtx hl, UnableDueToParalysisText
-	jr .returnWithStatusCondition
+	jr .return_with_status_condition
 
 .asleep
 	ldtx hl, UnableDueToSleepText
 
-.returnWithStatusCondition:
+.return_with_status_condition
 	scf
 	ret
 
@@ -1181,12 +1181,12 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	add hl, de
 	ld de, wPlayerDeck
 	ld c, DECK_SIZE
-.nextCardLoop
+.next_card_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .nextCardLoop
+	jr nz, .next_card_loop
 	call DisableExtRAM
 	ret
 ; 0x67b2
@@ -1201,14 +1201,14 @@ AIMakeDecision: ; 67be (1:67be)
 	ld a, [hl]
 	ld [hl], $0
 	or a
-	jr nz, .skipDelay
-.delayLoop
+	jr nz, .skip_delay
+.delay_loop
 	call DoFrame
 	ld a, [wVBlankCtr]
 	cp $3c
-	jr c, .delayLoop
+	jr c, .delay_loop
 
-.skipDelay
+.skip_delay
 	ld a, [$ff9e]
 	ld hl, $cbe1
 	ld [hl], $0
@@ -1217,7 +1217,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ld a, [wDuelFinished]
 	ld hl, $cbe1
 	or [hl]
-	jr nz, .turnEnded
+	jr nz, .turn_ended
 	ld a, [wcbf9]
 	or a
 	ret nz
@@ -1227,7 +1227,7 @@ AIMakeDecision: ; 67be (1:67be)
 	or a
 	ret
 
-.turnEnded
+.turn_ended
 	scf
 	ret
 ; 0x67fb
@@ -1296,23 +1296,23 @@ ConvertTrainerCardToPokemon:
 	ret z
 	ld a, e
 	cp MYSTERIOUS_FOSSIL
-	jr nz, .checkForClefairyDoll
+	jr nz, .check_for_clefairy_doll
 	ld a, d
 	cp $00
-	jr z, .startRamDataOverwrite
+	jr z, .start_ram_data_overwrite
 	ret
-.checkForClefairyDoll
+.check_for_clefairy_doll
 	cp CLEFAIRY_DOLL
 	ret nz
 	ld a, d
 	cp $00
 	ret nz
-.startRamDataOverwrite
+.start_ram_data_overwrite
 	push de
 	ld [hl], COLORLESS
 	ld bc, wLoadedCard1HP - wLoadedCard1
 	add hl, bc
-	ld de, .dataToOverwrite
+	ld de, .data_to_overwrite
 	ld c, wLoadedCard1Unknown2 - wLoadedCard1HP
 .loop
 	ld a, [de]
@@ -1323,7 +1323,7 @@ ConvertTrainerCardToPokemon:
 	pop de
 	ret
 
-.dataToOverwrite
+.data_to_overwrite
     db 10                 ; hp
     ds $07                ; wLoadedCard1Move1Name - (wLoadedCard1HP + 1)
     tx DiscardName        ; move1 name
@@ -1349,16 +1349,16 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	push af
 	xor a
 	ld l, a
-.zeroDuelVariablesLoop
+.zero_duel_variables_loop
 	ld [hl], a
 	inc l
-	jr nz, .zeroDuelVariablesLoop
+	jr nz, .zero_duel_variables_loop
 	pop af
 	pop hl
 	ld [hl], a
 	lb bc, DUELVARS_CARD_LOCATIONS, DECK_SIZE
 	ld l, DUELVARS_DECK_CARDS
-.initDuelVariablesLoop
+.init_duel_variables_loop
 ; zero card locations and cards in hand, and init order of cards in deck
 	push hl
 	ld [hl], b
@@ -1368,15 +1368,15 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	inc l
 	inc b
 	dec c
-	jr nz, .initDuelVariablesLoop
+	jr nz, .init_duel_variables_loop
 	ld l, DUELVARS_ARENA_CARD
 	ld c, 1 + BENCH_SIZE + 1
-.initPlayArea
+.init_play_area
 ; initialize to $ff card in arena as well as cards in bench (plus a terminator?)
 	ld [hl], $ff
 	inc l
 	dec c
-	jr nz, .initPlayArea
+	jr nz, .init_play_area
 	ret
 ; 0x7133
 

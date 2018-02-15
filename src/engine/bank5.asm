@@ -59,7 +59,7 @@ PointerTable_14000: ; 14000 (05:4000)
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardBuffer
 	ld hl, wDuelCardOrAttackList
-.checkForNextPokemon
+.check_for_next_pokemon
 	ld a, [hli]
 	ld [$ff98], a
 	cp $ff
@@ -67,15 +67,15 @@ Func_14226: ; 14226 (5:4226)
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY_FIRE
-	jr nc, .checkForNextPokemon
+	jr nc, .check_for_next_pokemon
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .checkForNextPokemon
+	jr nz, .check_for_next_pokemon
 	push hl
 	ld a, [$ff98]
 	call Func_1485
 	pop hl
-	jr .checkForNextPokemon
+	jr .check_for_next_pokemon
 ; 0x1424b
 
 	INCROM $1424b, $14663
@@ -310,10 +310,10 @@ ZeroData: ; 1575e (5:575e)
 	push hl
 	ld b, a
 	xor a
-.clearLoop
+.clear_loop
 	ld [hli], a
 	dec b
-	jr nz, .clearLoop
+	jr nz, .clear_loop
 	pop hl
 	pop bc
 	pop af
