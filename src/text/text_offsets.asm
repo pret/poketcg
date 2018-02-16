@@ -215,7 +215,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00d3
 	textpointer UnableDueToToxicGasText
 	textpointer Text00d5
-	textpointer Text00d6
+	textpointer BackUpIsBrokenText
 	textpointer Text00d7
 	textpointer Text00d8
 	textpointer Text00d9

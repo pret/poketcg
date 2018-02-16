@@ -61,10 +61,10 @@ Start: ; 0150 (0:0150)
 	call ResetSerial
 	call CopyDMAFunction
 	call SetupExtRAM
-	ld a, BANK(Func_4000)
+	ld a, BANK(Start_Cont)
 	call BankswitchHome
 	ld sp, $e000
-	jp Func_4000
+	jp Start_Cont
 
 VBlankHandler: ; 019b (0:019b)
 	push af
@@ -627,10 +627,10 @@ Func_04a2: ; 04a2 (0:04a2)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
-	call EnableLCD                ;
-	ld hl, AttrBlkPacket_04bf      ; send SGB data
-	call SendSGB                  ;
-	call DisableLCD               ;
+	call EnableLCD
+	ld hl, AttrBlkPacket_04bf
+	call SendSGB
+	call DisableLCD
 	ret
 
 AttrBlkPacket_04bf: ; 04bf (0:04bf)
@@ -2069,7 +2069,7 @@ SerialHandleRecv: ; 0d77 (0:0d77)
 	dec e
 	jr z, .last_was_ca
 	cp $ac
-	ret z                ; return if read_data == $ac
+	ret z ; return if read_data == $ac
 	cp $ca
 	jr z, .read_ca
 	or a
@@ -2081,7 +2081,7 @@ SerialHandleRecv: ; 0d77 (0:0d77)
 	set 6, [hl]
 	ret
 .read_ca
-	inc [hl]             ; inc [wSerialLastReadCA]
+	inc [hl] ; inc [wSerialLastReadCA]
 	ret
 .last_was_ca
 	; if last byte read was $ca, flip all bits of data received
@@ -4350,13 +4350,13 @@ Func_210f: ; 210f (0:210f)
 	jr asm_2121
 
 Func_2119: ; 2119 (0:2119)
-	ld hl, DuelGraphics - Fonts
+	ld hl, DuelGraphics - $4000
 	ld de, vTiles2 ; destination
 	ld b, $38 ; number of tiles
 asm_2121
-	ld a, BANK(Fonts)
+	ld a, BANK(DuelGraphics)
 	call BankpushHome
-	ld c, $10
+	ld c, TILE_SIZE
 	call CopyGfxData
 	call BankpopHome
 	ret
@@ -4707,7 +4707,7 @@ Func_235e: ; 235e (0:235e)
 	ld b, $c9
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
-	ldh [$ffa9], a        ; [$ffa9] ← i  (update linked-list head)
+	ldh [$ffa9], a       ; [$ffa9] ← i  (update linked-list head)
 	ld h, $c9
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
@@ -6173,7 +6173,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 Func_2fcb: ; 2fcb (0:2fcb)
 	ld a, $1d
 	call BankpushHome
-	ld c, $10
+	ld c, TILE_SIZE
 	call CopyGfxData
 	call BankpopHome
 	ret

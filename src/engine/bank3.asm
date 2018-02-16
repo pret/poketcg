@@ -83,9 +83,9 @@ Func_c0ce: ; c0ce (3:40ce)
 	ld a, [wd0bf]
 	res 7, a
 	rlca
-	add PointerTable_c0e0 & $ff
+	add LOW(PointerTable_c0e0)
 	ld l, a
-	ld a, PointerTable_c0e0 >> $8
+	ld a, HIGH(PointerTable_c0e0)
 	adc $0
 	ld h, a
 	ld a, [hli]

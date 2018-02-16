@@ -992,7 +992,7 @@ Text00d5: ; 37a3a (d:7a3a)
 	text "A Transmission Error occured."
 	done
 
-Text00d6: ; 37a59 (d:7a59)
+BackUpIsBrokenText: ; 37a59 (d:7a59)
 	text "Back Up is broken."
 	done
 

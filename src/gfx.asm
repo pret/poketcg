@@ -85,7 +85,7 @@ GrassClubTilesetGfx: ; 8b91e (22:791e)
 
 OWSpritePlayer: ; 8be90 (22:7e90)
 	dw $14
-	INCBIN "gfx/ow/player.2bpp"
+	INCBIN "gfx/overworld_sprites/player.2bpp"
 
 Unnamed3Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
@@ -160,39 +160,39 @@ PoisonGfx: ; 8ffa4 (23:7fa4)
 SECTION "Gfx 6", ROMX
 CardPop1Gfx: ; 90000 (24:4000)
 	dw $bd
-	INCBIN "gfx/cardpop1.t3.2bpp"
+	INCBIN "gfx/cardpop/cardpop1.t3.2bpp"
 
 CardPop2Gfx: ; 90bd2 (24:4bd2)
 	dw $6d
-	INCBIN "gfx/cardpop2.t3.2bpp"
+	INCBIN "gfx/cardpop/cardpop2.t3.2bpp"
 
 CardPop3Gfx: ; 912a4 (24:52a4)
 	dw $5d
-	INCBIN "gfx/cardpop3.t3.2bpp"
+	INCBIN "gfx/cardpop/cardpop3.t3.2bpp"
 
 Colosseum1Gfx: ; 91876 (24:5876)
 	dw $60
-	INCBIN "gfx/boosterpacks/colosseum1.2bpp"
+	INCBIN "gfx/booster_packs/colosseum1.2bpp"
 
 Colosseum2Gfx: ; 91e78 (24:5e78)
 	dw $56
-	INCBIN "gfx/boosterpacks/colosseum2.t10.2bpp"
+	INCBIN "gfx/booster_packs/colosseum2.t10.2bpp"
 
 Evolution1Gfx: ; 923da (24:63da)
 	dw $60
-	INCBIN "gfx/boosterpacks/evolution1.2bpp"
+	INCBIN "gfx/booster_packs/evolution1.2bpp"
 
 Evolution2Gfx: ; 929dc (24:69dc)
 	dw $56
-	INCBIN "gfx/boosterpacks/evolution2.t10.2bpp"
+	INCBIN "gfx/booster_packs/evolution2.t10.2bpp"
 
 Mystery1Gfx: ; 92f3e (24:6f3e)
 	dw $60
-	INCBIN "gfx/boosterpacks/mystery1.2bpp"
+	INCBIN "gfx/booster_packs/mystery1.2bpp"
 
 Mystery2Gfx: ; 93540 (24:7540)
 	dw $56
-	INCBIN "gfx/boosterpacks/mystery2.t10.2bpp"
+	INCBIN "gfx/booster_packs/mystery2.t10.2bpp"
 
 RonaldGfx: ; 93aa2 (24:7aa2)
 	dw $24
@@ -204,7 +204,7 @@ CopyrightGfx: ; 93ce4 (24:7ce4)
 
 HelpDeskLadyGfx: ; 93f26 (24:7f26)
 	dw $8
-	INCBIN "gfx/ow/help_desk_lady.2bpp"
+	INCBIN "gfx/overworld_sprites/help_desk_lady.2bpp"
 
 Unnamed4Gfx: ; 93fa8 (24:7fa8)
 	dw $3
@@ -221,35 +221,35 @@ endr
 SECTION "Gfx 7", ROMX
 Laboratory1Gfx: ; 94000 (25:4000)
 	dw $60
-	INCBIN "gfx/boosterpacks/laboratory1.2bpp"
+	INCBIN "gfx/booster_packs/laboratory1.2bpp"
 
 Laboratory2Gfx: ; 94602 (25:4602)
 	dw $56
-	INCBIN "gfx/boosterpacks/laboratory2.t10.2bpp"
+	INCBIN "gfx/booster_packs/laboratory2.t10.2bpp"
 
 CharizardIntro1Gfx: ; 94b64 (25:4b64)
 	dw $60
-	INCBIN "gfx/boosterpacks/charizardintro1.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/charizardintro1.2bpp"
 
 CharizardIntro2Gfx: ; 95166 (25:5166)
 	dw $60
-	INCBIN "gfx/boosterpacks/charizardintro2.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/charizardintro2.2bpp"
 
 ScytherIntro1Gfx: ; 95768 (25:5768)
 	dw $60
-	INCBIN "gfx/boosterpacks/scytherintro1.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/scytherintro1.2bpp"
 
 ScytherIntro2Gfx: ; 95d6a (25:5d6a)
 	dw $60
-	INCBIN "gfx/boosterpacks/scytherintro2.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/scytherintro2.2bpp"
 
 AerodactylIntro1Gfx: ; 9636c (25:636c)
 	dw $60
-	INCBIN "gfx/boosterpacks/aerodactylintro1.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro1.2bpp"
 
 AerodactylIntro2Gfx: ; 9696e (25:696e)
 	dw $60
-	INCBIN "gfx/boosterpacks/aerodactylintro2.2bpp"
+	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro2.2bpp"
 
 Titlescreen1Gfx: ; 96f70 (25:6f70)
 	dw $61
@@ -265,7 +265,7 @@ CompaniesGfx: ; 97b94 (25:7b94)
 
 RonaldOWGfx: ; 97ea6 (25:7ea6)
 	dw $14
-	INCBIN "gfx/ow/ronald.2bpp"
+	INCBIN "gfx/overworld_sprites/ronald.2bpp"
 
 	INCROM $97fe8, $98000
 
@@ -288,11 +288,11 @@ Titlescreen6Gfx: ; 9b0b6 (26:70b6)
 
 DoctorMasonOWGfx: ; 9bdf8 (26:7df8)
 	dw $14
-	INCBIN "gfx/ow/doctormason.2bpp"
+	INCBIN "gfx/overworld_sprites/doctormason.2bpp"
 
 OverworldMapOAMGfx: ; 9bf3a (26:7f3a)
 	dw $8
-	INCBIN "gfx/ow_map_oam.2bpp"
+	INCBIN "gfx/overworld_map_oam.2bpp"
 
 Unnamed6Gfx: ; 9bfbc (26:7fbc)
 	dw $3
@@ -474,123 +474,123 @@ AaronGfx: ; a1694 (28:5694)
 
 OWSprite0: ; a18d6 (28:58d6)
 	dw $14
-	INCBIN "gfx/ow/sprite0.2bpp"
+	INCBIN "gfx/overworld_sprites/0.2bpp"
 
 OWSprite1: ; a1a18 (28:5a18)
 	dw $14
-	INCBIN "gfx/ow/sprite1.2bpp"
+	INCBIN "gfx/overworld_sprites/1.2bpp"
 
 OWSprite2: ; a1b5a (28:5b5a)
 	dw $14
-	INCBIN "gfx/ow/sprite2.2bpp"
+	INCBIN "gfx/overworld_sprites/2.2bpp"
 
 OWSprite3: ; a1c9c (28:5c9c)
 	dw $14
-	INCBIN "gfx/ow/sprite3.2bpp"
+	INCBIN "gfx/overworld_sprites/3.2bpp"
 
 OWSprite4: ; a1dde (28:5dde)
 	dw $14
-	INCBIN "gfx/ow/sprite4.2bpp"
+	INCBIN "gfx/overworld_sprites/4.2bpp"
 
 OWSprite5: ; a1f20 (28:5f20)
 	dw $1b
-	INCBIN "gfx/ow/sprite5.2bpp"
+	INCBIN "gfx/overworld_sprites/5.2bpp"
 
 OWSprite6: ; a20d2 (28:60d2)
 	dw $14
-	INCBIN "gfx/ow/sprite6.2bpp"
+	INCBIN "gfx/overworld_sprites/6.2bpp"
 
 OWSprite7: ; a2214 (28:6214)
 	dw $14
-	INCBIN "gfx/ow/sprite7.2bpp"
+	INCBIN "gfx/overworld_sprites/7.2bpp"
 
 OWSprite8: ; a2356 (28:6356)
 	dw $14
-	INCBIN "gfx/ow/sprite8.2bpp"
+	INCBIN "gfx/overworld_sprites/8.2bpp"
 
 OWSprite9: ; a2498 (28:6498)
 	dw $14
-	INCBIN "gfx/ow/sprite9.2bpp"
+	INCBIN "gfx/overworld_sprites/9.2bpp"
 
 OWSprite10: ; a25da (28:65da)
 	dw $14
-	INCBIN "gfx/ow/sprite10.2bpp"
+	INCBIN "gfx/overworld_sprites/10.2bpp"
 
 OWSprite11: ; a271c (28:671c)
 	dw $14
-	INCBIN "gfx/ow/sprite11.2bpp"
+	INCBIN "gfx/overworld_sprites/11.2bpp"
 
 OWSprite12: ; a285e (28:685e)
 	dw $14
-	INCBIN "gfx/ow/sprite12.2bpp"
+	INCBIN "gfx/overworld_sprites/12.2bpp"
 
 OWSprite13: ; a29a0 (28:69a0)
 	dw $14
-	INCBIN "gfx/ow/sprite13.2bpp"
+	INCBIN "gfx/overworld_sprites/13.2bpp"
 
 OWSprite14: ; a2ae2 (28:6ae2)
 	dw $14
-	INCBIN "gfx/ow/sprite14.2bpp"
+	INCBIN "gfx/overworld_sprites/14.2bpp"
 
 OWSprite15: ; a2c24 (28:6c24)
 	dw $14
-	INCBIN "gfx/ow/sprite15.2bpp"
+	INCBIN "gfx/overworld_sprites/15.2bpp"
 
 OWSprite16: ; a2d66 (28:6d66)
 	dw $14
-	INCBIN "gfx/ow/sprite16.2bpp"
+	INCBIN "gfx/overworld_sprites/16.2bpp"
 
 OWSprite17: ; a2ea8 (28:6ea8)
 	dw $14
-	INCBIN "gfx/ow/sprite17.2bpp"
+	INCBIN "gfx/overworld_sprites/17.2bpp"
 
 OWSprite18: ; a2fea (28:6fea)
 	dw $14
-	INCBIN "gfx/ow/sprite18.2bpp"
+	INCBIN "gfx/overworld_sprites/18.2bpp"
 
 OWSprite19: ; a312c (28:712c)
 	dw $14
-	INCBIN "gfx/ow/sprite19.2bpp"
+	INCBIN "gfx/overworld_sprites/19.2bpp"
 
 OWSprite20: ; a326e (28:726e)
 	dw $14
-	INCBIN "gfx/ow/sprite20.2bpp"
+	INCBIN "gfx/overworld_sprites/20.2bpp"
 
 OWSprite21: ; a33b0 (28:73b0)
 	dw $14
-	INCBIN "gfx/ow/sprite21.2bpp"
+	INCBIN "gfx/overworld_sprites/21.2bpp"
 
 OWSprite22: ; a34f2 (28:74f2)
 	dw $14
-	INCBIN "gfx/ow/sprite22.2bpp"
+	INCBIN "gfx/overworld_sprites/22.2bpp"
 
 OWSprite23: ; a3634 (28:7634)
 	dw $14
-	INCBIN "gfx/ow/sprite23.2bpp"
+	INCBIN "gfx/overworld_sprites/23.2bpp"
 
 OWSprite24: ; a3776 (28:7776)
 	dw $14
-	INCBIN "gfx/ow/sprite24.2bpp"
+	INCBIN "gfx/overworld_sprites/24.2bpp"
 
 OWSprite25: ; a38b8 (28:78b8)
 	dw $14
-	INCBIN "gfx/ow/sprite25.2bpp"
+	INCBIN "gfx/overworld_sprites/25.2bpp"
 
 OWSprite26: ; a39fa (28:79fa)
 	dw $14
-	INCBIN "gfx/ow/sprite26.2bpp"
+	INCBIN "gfx/overworld_sprites/26.2bpp"
 
 OWSprite27: ; a3b3c (28:7b3c)
 	dw $14
-	INCBIN "gfx/ow/sprite27.2bpp"
+	INCBIN "gfx/overworld_sprites/27.2bpp"
 
 OWSprite28: ; a3c7e (28:7c7e)
 	dw $14
-	INCBIN "gfx/ow/sprite28.2bpp"
+	INCBIN "gfx/overworld_sprites/28.2bpp"
 
 OWSprite29: ; a3dc0 (28:7dc0)
 	dw $14
-	INCBIN "gfx/ow/sprite29.2bpp"
+	INCBIN "gfx/overworld_sprites/29.2bpp"
 
 Unnamed10Gfx: ; a3f02 (28:7f02)
 	dw $b
@@ -605,15 +605,15 @@ Unnamed11Gfx: ; a3fb4 (28:7fb4)
 SECTION "Gfx 11", ROMX
 OWSprite30: ; a4000 (29:4000)
 	dw $14
-	INCBIN "gfx/ow/sprite30.2bpp"
+	INCBIN "gfx/overworld_sprites/30.2bpp"
 
 OWSprite31: ; a4142 (29:4142)
 	dw $14
-	INCBIN "gfx/ow/sprite31.2bpp"
+	INCBIN "gfx/overworld_sprites/31.2bpp"
 
 OWSprite32: ; a4284 (29:4284)
 	dw $14
-	INCBIN "gfx/ow/sprite32.2bpp"
+	INCBIN "gfx/overworld_sprites/32.2bpp"
 
 Duel0Gfx: ; a43c6 (29:43c6)
 	dw $16
@@ -840,7 +840,7 @@ Duel54Gfx: ; a87e0 (2a:47e0)
 
 BoosterPackOAMGfx: ; a8942 (2a:4942)
 	dw $20
-	INCBIN "gfx/boosterpacks/boosterpack_oam.2bpp"
+	INCBIN "gfx/booster_packs/oam.2bpp"
 
 PressStartGfx: ; a8b44 (2a:4b44)
 	dw $14
@@ -848,31 +848,31 @@ PressStartGfx: ; a8b44 (2a:4b44)
 
 GrassGfx: ; a8c86 (2a:4c86)
 	dw $04
-	INCBIN "gfx/titlescreen/grass.2bpp"
+	INCBIN "gfx/titlescreen/energies/grass.2bpp"
 
 FireGfx: ; a8cc8 (2a:4cc8)
 	dw $04
-	INCBIN "gfx/titlescreen/fire.2bpp"
+	INCBIN "gfx/titlescreen/energies/fire.2bpp"
 
 WaterGfx: ; a8d0a (2a:4d0a)
 	dw $04
-	INCBIN "gfx/titlescreen/water.2bpp"
+	INCBIN "gfx/titlescreen/energies/water.2bpp"
 
 ColorlessGfx: ; a8d4c (2a:4d4c)
 	dw $04
-	INCBIN "gfx/titlescreen/colorless.2bpp"
+	INCBIN "gfx/titlescreen/energies/colorless.2bpp"
 
 LightningGfx: ; a8d8e (2a:4d8e)
 	dw $04
-	INCBIN "gfx/titlescreen/lightning.2bpp"
+	INCBIN "gfx/titlescreen/energies/lightning.2bpp"
 
 PsychicGfx: ; a8dd0 (2a:4dd0)
 	dw $04
-	INCBIN "gfx/titlescreen/psychic.2bpp"
+	INCBIN "gfx/titlescreen/energies/psychic.2bpp"
 
 FightingGfx: ; a8e12 (2a:4e12)
 	dw $04
-	INCBIN "gfx/titlescreen/fighting.2bpp"
+	INCBIN "gfx/titlescreen/energies/fighting.2bpp"
 
 	INCROM $a8e54, $ac000
 

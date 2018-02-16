@@ -1,4 +1,5 @@
-Func_4000: ; 4000 (1:4000)
+; continuation of Bank0 Start
+Start_Cont: ; 4000 (1:4000)
 	di
 	ld sp, $e000
 	call ResetSerial
@@ -18,7 +19,7 @@ Func_4000: ; 4000 (1:4000)
 	cp A_BUTTON | B_BUTTON
 	jr z, .ask_erase_backup_ram
 	farcall Func_126d1
-	jr Func_4000
+	jr Start_Cont
 .ask_erase_backup_ram
 	call Func_405a
 	call Func_04a2
@@ -40,10 +41,43 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-	INCROM $405a, $406f
+	xor a
+	ld [wTileMapFill], a
+	call DisableLCD
+	call Func_2119
+	call Func_5aeb
+	ld de, $387f
+	call Func_2275
+	ret
+; 0x406e
+
+CommentedOut_406e: ; 406e (1:406e)
+	ret
+; 0x406f
 
 Func_406f: ; 406f (1:406f)
-	INCROM $406f, $409f
+	call $420b
+	call $66e9
+	ldtx hl, BackUpIsBrokenText
+	jr c, .asm_4097
+	ld hl, sp+$00
+	ld a, l
+	ld [wcbe5], a
+	ld a, h
+	ld [wcbe6], a
+	call ClearJoypad
+	ld a, [wDuelTheme]
+	call PlaySong
+	xor a
+	ld [wDuelFinished], a
+	call Func_426d
+	jp StartDuel.asm_40fb
+.asm_4097
+	call DrawWideTextBox_WaitForInput
+	call ResetSerial
+	scf
+	ret
+; 0x409f
 
 ; this function begins the duel after the opponent's
 ; graphics, name and deck have been introduced
@@ -92,6 +126,8 @@ StartDuel: ; 409f (1:409f)
 	call HandleSwordsDanceOrFocusEnergySubstatus
 	call $54c8
 	call HandleTurn
+
+.asm_40fb
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
@@ -232,7 +268,18 @@ StartDuel: ; 409f (1:409f)
 	ret
 ; 0x420b
 
-	INCROM $420b, $4225
+Func_420b: ; 420b (1:420b)
+	xor a
+	ld [wTileMapFill], a
+	call $5990
+	call Func_04a2
+	call Func_2119
+	call Func_5aeb
+	ld de, $389f
+	call Func_2275
+	call EnableLCD
+	ret
+; 0x4225
 
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
