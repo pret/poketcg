@@ -355,8 +355,12 @@ wcade:: ; cade
 wcae2:: ; cae2
 	ds $e
 
-wBufPalette:: ; caf0
-	ds $80
+; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
+wBackgroundPalettesCGB:: ; caf0
+	ds 8 * CGB_PAL_SIZE
+
+wObjectPalettesCGB:: ; cb30
+	ds 8 * CGB_PAL_SIZE
 
 	ds $4
 

@@ -31,11 +31,11 @@ Func_10031: ; 10031 (4:4031)
 	call $4cbb
 	call DisableExtRAM
 	call $4b28
-	call Func_0404
+	call SetFlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call $4cea
-	call Func_0404
+	call SetFlushAllPalettes
 	pop af
 	call BankswitchRAM
 	call DisableExtRAM
@@ -1094,7 +1094,7 @@ Func_126d1: ; 126d1 (4:66d1)
 	scf
 	ret
 
-PointerTable_126fc
+PointerTable_126fc:
 	dw CardPop_12768
 	dw Func_12741
 	dw Func_12704

@@ -6,6 +6,9 @@ SCREEN_HEIGHT EQU 18 ; tiles
 BG_MAP_WIDTH  EQU 32 ; tiles
 BG_MAP_HEIGHT EQU 32 ; tiles
 
+; palettes
+CGB_PAL_SIZE EQU 8
+
 ; console types (for wConsole)
 CONSOLE_DMG EQU $00
 CONSOLE_SGB EQU $01

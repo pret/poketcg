@@ -5,17 +5,17 @@ Poison50PercentEffect: ; 2c000 (b:4000)
 
 PoisonEffect: ; 2c007 (b:4007)
 	lb bc, $0f, POISONED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 	lb bc, $0f, DOUBLE_POISONED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
 	ldtx de, ParalysisCheckText
 	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, PARALYZED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
 	ldtx de, ConfusionCheckText
@@ -24,7 +24,7 @@ Confusion50PercentEffect: ; 2c01d (b:401d)
 
 ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, $f0, CONFUSED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 	ldtx de, SleepCheckText
 	call TossCoin_BankB
@@ -32,9 +32,9 @@ ConfusionEffect: ; 2c024 (b:4024)
 
 SleepEffect: ; 2c030 (b:4030)
 	lb bc, $f0, ASLEEP
-	jr applyEffect
+	jr ApplyStatusEffect
 
-applyEffect
+ApplyStatusEffect:
 	ldh a, [hWhoseTurn]
 	ld hl, wcc05
 	cp [hl]

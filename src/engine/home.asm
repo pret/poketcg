@@ -379,30 +379,30 @@ SetupPalettes: ; 036a (0:036a)
 	ld hl, wBGP
 	ld a, %11100100
 	ld [rBGP], a
-	ld [hli], a
+	ld [hli], a ; wBGP
 	ld [rOBP0], a
 	ld [rOBP1], a
-	ld [hli], a
-	ld [hl], a
+	ld [hli], a ; wOBP0
+	ld [hl], a ; wOBP1
 	xor a
 	ld [wFlushPaletteFlags], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
-	ld de, wBufPalette
-	ld c, $10
-.asm_387
+	ld de, wBackgroundPalettesCGB
+	ld c, 16
+.copy_pals_loop
 	ld hl, InitialPalette
-	ld b, $8
-.asm_38c
+	ld b, CGB_PAL_SIZE
+.copy_bytes_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_38c
+	jr nz, .copy_bytes_loop
 	dec c
-	jr nz, .asm_387
-	call FlushBothCGBPalettes
+	jr nz, .copy_pals_loop
+	call FlushAllCGBPalettes
 	ret
 
 InitialPalette: ; 0399 (0:0399)
@@ -479,19 +479,25 @@ ZeroRAM: ; 03ec (0:03ec)
 	jr nz, .zero_hram_loop
 	ret
 
-Func_0404: ; 0404 (0:0404)
+; Flush all non-CGB and CGB palettes
+SetFlushAllPalettes: ; 0404 (0:0404)
 	ld a, $c0
-	jr asm_411
+	jr SetFlushPalettes
 
-Func_0408: ; 0408 (0:0408)
+; Flush non-CGB palettes and a single CGB palette,
+; provided in a as an index between 0-7 (BGP) or 8-15 (OBP)
+SetFlushPalette: ; 0408 (0:0408)
 	or $80
-	jr asm_411
+	jr SetFlushPalettes
 
-Func_040c: ; 040c (0:040c)
+; Set wBGP to the specified value, flush non-CGB palettes, and the first CGB palette.
+SetBGP: ; 040c (0:040c)
 	ld [wBGP], a
-asm_40f
+
+SetFlushPalette0:
 	ld a, $80
-asm_411
+
+SetFlushPalettes:
 	ld [wFlushPaletteFlags], a
 	ld a, [wLCDC]
 	rla
@@ -505,19 +511,21 @@ asm_411
 	pop hl
 	ret
 
-Set_OBP0: ; 0423 (0:0423)
+; Set wOBP0 to the specified value, flush non-CGB palettes, and the first CGB palette.
+SetOBP0: ; 0423 (0:0423)
 	ld [wOBP0], a
-	jr asm_40f
+	jr SetFlushPalette0
 
-Set_OBP1: ; 0428 (0:0428)
+; Set wOBP1 to the specified value, flush non-CGB palettes, and the first CGB palette.
+SetOBP1: ; 0428 (0:0428)
 	ld [wOBP1], a
-	jr asm_40f
+	jr SetFlushPalette0
 
-; flushes non-CGB palettes from [wBGP], [wOBP0], [wOBP1] as well as CGB
-; palettes from [wBufPalette..wBufPalette+$1f] (BG palette) and
-; [wBufPalette+$20..wBufPalette+$3f] (sprite palette).
-;   only flushes if [wFlushPaletteFlags] is nonzero, and only flushes sprite
-; palette if bit6 of that location is set.
+; Flushes non-CGB palettes from [wBGP], [wOBP0], [wOBP1] as well as CGB
+; palettes from [wBackgroundPalettesCGB..wBackgroundPalettesCGB+$3f] (BG palette)
+; and [wObjectPalettesCGB+$00..wObjectPalettesCGB+$3f] (sprite palette).
+; Only flushes if [wFlushPaletteFlags] is nonzero, and only flushes
+; a single CGB palette if bit6 of that location is reset.
 FlushPalettes: ; 042d (0:042d)
 	ld a, [wFlushPaletteFlags]
 	or a
@@ -532,65 +540,67 @@ FlushPalettes: ; 042d (0:042d)
 	ld [rOBP1], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr z, flushPaletteCGB
-flushPaletteDone
+	jr z, .CGB
+.done
 	xor a
 	ld [wFlushPaletteFlags], a
 	ret
-flushPaletteCGB
-	; flush BG palette (BGP)
-	; if bit6 of [wFlushPaletteFlags] is set, flush OBP too
+.CGB
+	; flush a single CGB BG or OB palette
+	; if bit6 of [wFlushPaletteFlags] is set, flush all 16 of them
 	ld a, [wFlushPaletteFlags]
 	bit 6, a
-	jr nz, FlushBothCGBPalettes
-	ld b, $8
-	call CopyPalette
-	jr flushPaletteDone
+	jr nz, FlushAllCGBPalettes
+	ld b, CGB_PAL_SIZE
+	call CopyCGBPalettes
+	jr .done
 
-FlushBothCGBPalettes: ; 0458 (0:0458)
+FlushAllCGBPalettes: ; 0458 (0:0458)
+	; flush 8 BGP palettes
 	xor a
-	ld b, $40
-	; flush BGP $00-$1f
-	call CopyPalette
-	ld a, $8
-	ld b, $40
-	; flush OBP $00-$1f
-	call CopyPalette
-	jr flushPaletteDone
+	ld b, 8 * CGB_PAL_SIZE
+	call CopyCGBPalettes
+	; flush 8 OBP palettes
+	ld a, CGB_PAL_SIZE
+	ld b, 8 * CGB_PAL_SIZE
+	call CopyCGBPalettes
+	jr FlushPalettes.done
 
-CopyPalette: ; 0467 (0:0467)
+; copy b bytes of CGB palette data starting at
+; wBackgroundPalettesCGB + a * CGB_PAL_SIZE into rBGPD or rOGPD.
+CopyCGBPalettes: ; 0467 (0:0467)
 	add a
 	add a
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, wBufPalette
+	ld hl, wBackgroundPalettesCGB
 	add hl, de
-	ld c, $68
-	bit 6, a
-	jr z, .asm_479
-	ld c, $6a
-.asm_479
-	and $bf
+	ld c, LOW(rBGPI)
+	bit 6, a ; was a between 0-7 (BGP), or between 8-15 (OBP)?
+	jr z, .copy
+	ld c, LOW(rOBPI)
+.copy
+	and %10111111
 	ld e, a
-.asm_47c
+.next_byte
 	ld a, e
 	ld [$ff00+c], a
 	inc c
-.asm_47f
+.wait
 	ld a, [rSTAT]
 	and $2
-	jr nz, .asm_47f
+	jr nz, .wait
 	ld a, [hl]
 	ld [$ff00+c], a
 	ld a, [$ff00+c]
 	cp [hl]
-	jr nz, .asm_47f
+	jr nz, .wait
 	inc hl
 	dec c
 	inc e
 	dec b
-	jr nz, .asm_47c
+	jr nz, .next_byte
 	ret
 
 Func_0492: ; 0492 (0:0492)
@@ -644,7 +654,6 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld d, h
 	ret
 
-; read joypad
 ReadJoypad: ; 04de (0:04de)
 	ld a, $20
 	ld [rJOYP], a
@@ -665,7 +674,7 @@ ReadJoypad: ; 04de (0:04de)
 	cpl
 	and $f
 	or b
-	ld c, a              ; joypad data
+	ld c, a ; joypad data
 	cpl
 	ld b, a
 	ldh a, [hButtonsHeld]
@@ -680,13 +689,17 @@ ReadJoypad: ; 04de (0:04de)
 	ldh a, [hButtonsHeld]
 	and BUTTONS
 	cp BUTTONS
-	jr nz, asm_522       ; handle reset
+	jr nz, ReadJoypad_SaveButtonsHeld
+	; A + B + Start + Select: reset game
 	call ResetSerial
+;	fallthrough
+
 Reset: ; 051b (0:051b)
 	ld a, [wInitialA]
 	di
 	jp Start
-asm_522
+
+ReadJoypad_SaveButtonsHeld:
 	ld a, c
 	ldh [hButtonsHeld], a
 	ld a, $30
@@ -819,7 +832,7 @@ CallIndirect: ; 05b6 (0:05b6)
 	ld l, [hl]
 	ld h, a
 	pop af
-	; fallthrough
+;	fallthrough
 CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
@@ -1590,7 +1603,7 @@ RST18: ; 09ae (0:09ae)
 	ld a, [de]
 	ld [hl], a
 	ld a, $1
-	; fallthrough
+;	fallthrough
 Func_09ce: ; 09ce (0:09ce)
 	call BankswitchHome
 	ld hl, sp+$d
@@ -2263,7 +2276,7 @@ ResetSerial: ; 0ea6 (0:0ea6)
 	xor a
 	ld [rSB], a
 	ld [rSC], a
-	; fallthrough
+;	fallthrough
 ClearSerialData: ; 0eb1 (0:0eb1)
 	ld hl, wSerialOp
 	ld bc, $0051
@@ -3668,12 +3681,12 @@ SwapTurn: ; 1c72 (0:1c72)
 PrintPlayerName: ; 1c7d (0:1c7d)
 	call EnableExtRAM
 	ld hl, $a010
-printNameLoop
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, printNameLoop
+	jr nz, .loop
 	dec de
 	call DisableExtRAM
 	ret
@@ -3692,7 +3705,7 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	ld a, [hl]
 	or a
 	jr z, .print_player2
-	jr printNameLoop
+	jr PrintPlayerName.loop
 .print_player2
 	ldtx hl, Player2Text
 	jp PrintTextBoxBorderLabel
@@ -4049,7 +4062,9 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	ld a, $1c
 	lb de, $18, $19
 	call CopyLine
-ContinueDrawingTextBoxDMGorSGB
+;	fallthrough
+
+ContinueDrawingTextBoxDMGorSGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -4105,7 +4120,9 @@ DrawRegularTextBoxCGB:
 	ld a, $1c
 	lb de, $18, $19
 	call CopyCurrentLineTilesAndAttrCGB
-ContinueDrawingTextBoxCGB
+;	fallthrough
+
+ContinueDrawingTextBoxCGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -4137,7 +4154,8 @@ CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 	push hl
 	call CopyLine
 	pop hl
-CopyCurrentLineAttrCGB
+;	fallthrough
+CopyCurrentLineAttrCGB:
 	call BankswitchVRAM_1
 	ld a, [wFrameType] ; on CGB, wFrameType determines the palette and the other attributes
 	ld e, a
@@ -6110,7 +6128,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	res 7, h
 	set 6, h
 	call CopyGfxData
-	ld b, $8 ; length of palette
+	ld b, CGB_PAL_SIZE
 	ld de, $ce23
 .copy_card_palette
 	ld a, [hli]
@@ -6565,7 +6583,7 @@ Func_31fc: ; 31fc (0:31fc)
 	adc [hl]
 	ld [hl], a
 	ld a, e
-	; fallthrough
+;	fallthrough
 Func_3212: ; 3212 (0:3212)
 	ld [rSB], a
 	ld a, $1
@@ -8019,7 +8037,7 @@ Func_3df3: ; 3df3 (0:3df3)
 	ld hl, sp+$5
 	ld a, [hl]
 	call Func_12c7f
-	call Func_0404
+	call SetFlushAllPalettes
 	pop hl
 	pop af
 	call BankswitchHome

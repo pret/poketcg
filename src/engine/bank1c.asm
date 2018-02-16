@@ -164,7 +164,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld [wLCDC], a
 	ld a, $e4
 	ld [rBGP], a
-	call Func_040c
+	call SetBGP
 	xor a
 	ldh [hSCX], a
 	ld [rSCX], a
@@ -188,7 +188,7 @@ Func_70177: ; 70177 (1c:4177)
 	ld a, [wd41e]
 	ldh [hSCY], a
 	ld a, [wd41f]
-	call Func_040c
+	call SetBGP
 	ld a, [wd420]
 	ld [wLCDC], a
 	call DisableLCD

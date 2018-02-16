@@ -219,11 +219,11 @@ Func_c1a0: ; c1a0 (3:41a0)
 
 Func_c1a4: ; c1a4 (3:41a4)
 	xor a
-	call Func_040c
+	call SetBGP
 	xor a
-	call Set_OBP0
+	call SetOBP0
 	xor a
-	call Set_OBP1
+	call SetOBP1
 	ret
 
 Func_c1b1: ; c1b1 (3:41b1)
@@ -452,7 +452,7 @@ Func_c34e: ; c34e (3:434e)
 	ld de, $cb30
 	ld bc, $0040
 	call CopyDataHLtoDE_SaveRegisters
-	call Func_0404
+	call SetFlushAllPalettes
 	ret
 
 Func_c36a: ; c36a (3:436a)
