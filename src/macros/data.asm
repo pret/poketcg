@@ -33,7 +33,7 @@ bigdw: MACRO ; big-endian word
 	ENDM
 
 sgb: MACRO
-	db \1 * 8 + \2 ; sgb_command * 8 + length
+	db \1 << 3 + \2 ; sgb_command * 8 + length
 ENDM
 
 rgb: MACRO
