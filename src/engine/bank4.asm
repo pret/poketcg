@@ -345,7 +345,7 @@ Func_10e28: ; 10e28 (4:4e28)
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd33e]
 	or a
 	jr nz, .asm_10e65
@@ -496,7 +496,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
 	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	ld a, $80
 	ld [hli], a
 	ld a, $10
@@ -518,7 +518,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33e], a
 	ld a, $25
 	call Func_1299f
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	ld [wd33b], a
 	ld b, $35
 	ld a, [wConsole]
@@ -534,14 +534,14 @@ Func_10fde: ; 10fde (4:4fde)
 	or a
 	jr nz, .asm_11015
 	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	set 7, [hl]
 .asm_11015
 	ret
 
 Func_11016: ; 11016 (4:5016)
 	ld a, [wd33b]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd33c]
 	inc a
 	call Func_12ab5
@@ -551,9 +551,9 @@ Func_11024: ; 11024 (4:5024)
 	ld a, $57
 	call PlaySFX
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
 	ld a, [wd33d]
@@ -583,7 +583,7 @@ Func_11024: ; 11024 (4:5024)
 
 Func_11060: ; 11060 (4:5060)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd341]
 	or a
 	jp nz, Func_11184
@@ -626,7 +626,7 @@ Func_110a6: ; 110a6 (4:50a6)
 	push hl
 	push bc
 	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	pop bc
 	ld a, b
 	sub [hl]
@@ -766,7 +766,7 @@ Func_11184: ; 11184 (4:5184)
 	ld a, [wd348]
 	ld e, a
 	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	ld a, [wd343]
 	add d
 	ld d, a
@@ -1192,7 +1192,7 @@ Func_1299f: ; 1299f (4:699f)
 	call Func_12c05
 	ld [wd5d3], a
 	xor a
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	call Func_3db7
 	ld bc, $0010
 .asm_129bb
@@ -1200,9 +1200,9 @@ Func_1299f: ; 1299f (4:699f)
 	or a
 	jr z, .asm_129cf
 	add hl, bc
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	inc a
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	cp $10
 	jr nz, .asm_129bb
 	rst $38
@@ -1254,7 +1254,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
 	ld c, $5
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	pop af
 	cp [hl]
 	pop hl

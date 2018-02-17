@@ -580,7 +580,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld [wd337], a
 	ld a, $0
 	farcall Func_1299f
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	ld [wd336], a
 	ld b, $2
 	ld a, [wCurMap]
@@ -607,7 +607,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 
 Func_c510: ; c510 (3:4510)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd335]
 	bit 4, a
 	ret nz
@@ -630,7 +630,7 @@ Func_c510: ; c510 (3:4510)
 
 Func_c53d: ; c53d (3:453d)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd335]
 	bit 0, a
 	call nz, Func_c687
@@ -641,7 +641,7 @@ Func_c53d: ; c53d (3:453d)
 
 Func_c554: ; c554 (3:4554)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .asm_c566
@@ -657,7 +657,7 @@ Func_c554: ; c554 (3:4554)
 	ld a, [wSCYBuffer]
 	ld e, a
 	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	ld a, [wd332]
 	sub d
 	add $8
@@ -681,7 +681,7 @@ Func_c58b: ; c58b (3:458b)
 	and $10
 	push af
 	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	pop af
 	ld a, [hl]
 	jr z, .asm_c5a7
@@ -740,7 +740,7 @@ Unknown_c5e5: ; c5e5 (3:45e5)
 Func_c5e9: ; c5e9 (3:45e9)
 	push bc
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd337]
 	ld b, a
 	ld a, [wd334]
@@ -759,7 +759,7 @@ Func_c5fe: ; c5fe (3:45fe)
 StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [$d339]
 	call FindScriptedMovementWithOffset
 	call AttemptScriptedMovement
@@ -789,10 +789,10 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld a, $10
 	ld [wd338], a
 	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	set 2, [hl]
 	ld c, $e
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	ld a, $4
 	ld [hl], a
 .quit_movement
@@ -917,12 +917,12 @@ Func_c6dc: ; c6dc (3:46dc)
 
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	res 2, [hl]
 	ld c, $e
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	ld a, $ff
 	ld [hl], a
 	ret

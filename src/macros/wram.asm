@@ -40,3 +40,22 @@ move_data_struct: MACRO
 \1Unknown1::       db
 \1Animation::      db
 ENDM
+
+sprite_buffer_struct: MACRO
+\1Property1::  ds 1
+\1Property2::  ds 1
+\1Property3::  ds 1
+\1Property4::  ds 1
+\1Property5::  ds 1
+\1Property6::  ds 1
+\1Property7::  ds 1
+\1Property8::  ds 1
+\1Property9::  ds 1
+\1Property10::  ds 1
+\1Property11::  ds 1
+\1Property12::  ds 1
+\1Property13::  ds 1
+\1Property14::  ds 1
+\1Property15::  ds 1
+\1Property16::  ds 1
+ENDM

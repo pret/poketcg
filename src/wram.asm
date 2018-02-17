@@ -1174,13 +1174,31 @@ wd4ca:: ; d4ca
 wd4cb:: ; d4cb
 	ds $4
 
-; some sort of control bit for the OAMBuffer
-wd4cf:: ; d4cf
+
+; used as an index to manipulate a sprite from wSpriteBuffer
+wWhichSprite:: ; d4cf
 	ds $1
 
-; this might be more of an animation buffer as I can't find any properties like which tile sprites go where.
-wOAMBuffer:: ; d4d0
-	ds $103
+; 16-byte data for up to 16 sprites
+wSpriteBuffer:: ; d4d0
+	sprite_buffer_struct wSprite1
+	sprite_buffer_struct wSprite2
+	sprite_buffer_struct wSprite3
+	sprite_buffer_struct wSprite4
+	sprite_buffer_struct wSprite5
+	sprite_buffer_struct wSprite6
+	sprite_buffer_struct wSprite7
+	sprite_buffer_struct wSprite8
+	sprite_buffer_struct wSprite9
+	sprite_buffer_struct wSprite10
+	sprite_buffer_struct wSprite11
+	sprite_buffer_struct wSprite12
+	sprite_buffer_struct wSprite13
+	sprite_buffer_struct wSprite14
+	sprite_buffer_struct wSprite15
+	sprite_buffer_struct wSprite16
+
+	ds $3
 
 wd5d3:: ; d5d3
 	ds $4

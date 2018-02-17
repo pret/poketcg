@@ -8038,18 +8038,18 @@ Func_3d72: ; 3d72 (0:3d72)
 Func_3db7: ; 3db7 (0:3db7)
 	push bc
 	ld c, $0
-	call ModifyUnknownOAMBufferProperty
+	call GetSpriteBufferProperty
 	pop bc
 	ret
 
-; this needs to be determined after we learn more about the buffer.
-ModifyUnknownOAMBufferProperty: ; 3dbf (0:3dbf)
-	ld a, [wd4cf]
-	cp $10
-	jr c, .asm_3dc9
+; read property (byte) c from a sprite in wSpriteBuffer identified by wWhichSprite
+GetSpriteBufferProperty: ; 3dbf (0:3dbf)
+	ld a, [wWhichSprite]
+	cp SPRITE_BUFFER_CAPACITY
+	jr c, .got_sprite
 	rst $38
-	ld a, $f
-.asm_3dc9
+	ld a, SPRITE_BUFFER_CAPACITY - 1 ; default to last sprite
+.got_sprite
 	push bc
 	swap a
 	push af
@@ -8059,7 +8059,7 @@ ModifyUnknownOAMBufferProperty: ; 3dbf (0:3dbf)
 	and $f0
 	or c
 	ld c, a
-	ld hl, wOAMBuffer
+	ld hl, wSpriteBuffer
 	add hl, bc
 	pop bc
 	ret
