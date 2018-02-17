@@ -42,6 +42,10 @@ farcallx: MACRO
 	dw \2
 ENDM
 
+; the rst $38 handler is a single ret
+; probably used for testing purposes during development
+debug_ret EQUS "rst $38"
+
 emptybank: MACRO
 	rept $4000
 	db $ff

@@ -2612,7 +2612,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [hl]
 	or a
 	ret nz
-	rst $38
+	debug_ret
 	scf
 	ret
 ; 0x10aa
@@ -7547,7 +7547,7 @@ Func_39ad: ; 39ad (0:39ad)
 	push bc
 	cp $8
 	jr c, .asm_39b4
-	rst $38
+	debug_ret
 	xor a
 .asm_39b4
 	add a
@@ -8047,7 +8047,7 @@ GetSpriteBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
-	rst $38
+	debug_ret
 	ld a, SPRITE_ANIM_BUFFER_CAPACITY - 1 ; default to last sprite
 .got_sprite
 	push bc

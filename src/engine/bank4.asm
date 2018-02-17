@@ -262,7 +262,7 @@ Func_10a70: ; 10a70 (4:4a70)
 	inc hl
 	dec c
 	jr nz, .asm_10a87
-	rst $38
+	debug_ret
 	jr .asm_10a97
 
 .asm_10a93
@@ -1205,7 +1205,7 @@ Func_1299f: ; 1299f (4:699f)
 	ld [wWhichSprite], a
 	cp $10
 	jr nz, .asm_129bb
-	rst $38
+	debug_ret
 	scf
 	jr .asm_129d6
 .asm_129cf
@@ -1467,7 +1467,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	or a
 	jr .asm_12c4b
 .asm_12c48
-	rst $38
+	debug_ret
 	xor a
 	scf
 .asm_12c4b

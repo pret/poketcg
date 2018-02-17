@@ -354,7 +354,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	inc hl
 	dec c
 	jr nz, .asm_1c845
-	rst $38
+	debug_ret
 	jr .asm_1c855
 
 .asm_1c853
