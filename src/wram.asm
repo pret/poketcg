@@ -1175,28 +1175,28 @@ wd4cb:: ; d4cb
 	ds $4
 
 
-; used as an index to manipulate a sprite from wSpriteBuffer
+; used as an index to manipulate a sprite from wSpriteAnimBuffer
 wWhichSprite:: ; d4cf
 	ds $1
 
 ; 16-byte data for up to 16 sprites
-wSpriteBuffer:: ; d4d0
-	sprite_buffer_struct wSprite1
-	sprite_buffer_struct wSprite2
-	sprite_buffer_struct wSprite3
-	sprite_buffer_struct wSprite4
-	sprite_buffer_struct wSprite5
-	sprite_buffer_struct wSprite6
-	sprite_buffer_struct wSprite7
-	sprite_buffer_struct wSprite8
-	sprite_buffer_struct wSprite9
-	sprite_buffer_struct wSprite10
-	sprite_buffer_struct wSprite11
-	sprite_buffer_struct wSprite12
-	sprite_buffer_struct wSprite13
-	sprite_buffer_struct wSprite14
-	sprite_buffer_struct wSprite15
-	sprite_buffer_struct wSprite16
+wSpriteAnimBuffer:: ; d4d0
+	sprite_anim_struct wSprite1
+	sprite_anim_struct wSprite2
+	sprite_anim_struct wSprite3
+	sprite_anim_struct wSprite4
+	sprite_anim_struct wSprite5
+	sprite_anim_struct wSprite6
+	sprite_anim_struct wSprite7
+	sprite_anim_struct wSprite8
+	sprite_anim_struct wSprite9
+	sprite_anim_struct wSprite10
+	sprite_anim_struct wSprite11
+	sprite_anim_struct wSprite12
+	sprite_anim_struct wSprite13
+	sprite_anim_struct wSprite14
+	sprite_anim_struct wSprite15
+	sprite_anim_struct wSprite16
 
 	ds $3
 

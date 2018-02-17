@@ -656,7 +656,7 @@ Func_c554: ; c554 (3:4554)
 	ld d, a
 	ld a, [wSCYBuffer]
 	ld e, a
-	ld c, $2
+	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteBufferProperty
 	ld a, [wd332]
 	sub d
@@ -680,7 +680,7 @@ Func_c58b: ; c58b (3:458b)
 	call GetFloorObjectFromPos
 	and $10
 	push af
-	ld c, $f
+	ld c, SPRITE_ANIM_PROPERTY_16
 	call GetSpriteBufferProperty
 	pop af
 	ld a, [hl]
@@ -788,10 +788,10 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld [wd335], a
 	ld a, $10
 	ld [wd338], a
-	ld c, $f
+	ld c, SPRITE_ANIM_PROPERTY_16
 	call GetSpriteBufferProperty
 	set 2, [hl]
-	ld c, $e
+	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
 	call GetSpriteBufferProperty
 	ld a, $4
 	ld [hl], a
@@ -918,10 +918,10 @@ Func_c6dc: ; c6dc (3:46dc)
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
 	ld [wWhichSprite], a
-	ld c, $f
+	ld c, SPRITE_ANIM_PROPERTY_16
 	call GetSpriteBufferProperty
 	res 2, [hl]
-	ld c, $e
+	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
 	call GetSpriteBufferProperty
 	ld a, $ff
 	ld [hl], a

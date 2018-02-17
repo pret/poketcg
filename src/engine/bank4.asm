@@ -495,7 +495,7 @@ INCLUDE "data/overworld_indexes.asm"
 Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
-	ld c, $2
+	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteBufferProperty
 	ld a, $80
 	ld [hli], a
@@ -503,7 +503,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld [hl], a
 	ld b, $34
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_10fd8
 	ld b, $37
 .asm_10fd8
@@ -533,7 +533,7 @@ Func_10fde: ; 10fde (4:4fde)
 	farcall CheckIfEventFlagSet
 	or a
 	jr nz, .asm_11015
-	ld c, $f
+	ld c, SPRITE_ANIM_PROPERTY_16
 	call GetSpriteBufferProperty
 	set 7, [hl]
 .asm_11015
@@ -552,7 +552,7 @@ Func_11024: ; 11024 (4:5024)
 	call PlaySFX
 	ld a, [wd336]
 	ld [wWhichSprite], a
-	ld c, $f
+	ld c, SPRITE_ANIM_PROPERTY_16
 	call GetSpriteBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
@@ -625,7 +625,7 @@ Func_11060: ; 11060 (4:5060)
 Func_110a6: ; 110a6 (4:50a6)
 	push hl
 	push bc
-	ld c, $2
+	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteBufferProperty
 	pop bc
 	ld a, b
@@ -765,7 +765,7 @@ Func_11184: ; 11184 (4:5184)
 	ld d, a
 	ld a, [wd348]
 	ld e, a
-	ld c, $2
+	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteBufferProperty
 	ld a, [wd343]
 	add d
@@ -1253,7 +1253,7 @@ Func_12a21: ; 12a21 (4:6a21)
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
-	ld c, $5
+	ld c, SPRITE_ANIM_PROPERTY_6
 	call GetSpriteBufferProperty
 	pop af
 	cp [hl]

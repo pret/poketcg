@@ -8037,18 +8037,18 @@ Func_3d72: ; 3d72 (0:3d72)
 
 Func_3db7: ; 3db7 (0:3db7)
 	push bc
-	ld c, $0
+	ld c, SPRITE_ANIM_PROPERTY_1
 	call GetSpriteBufferProperty
 	pop bc
 	ret
 
-; read property (byte) c from a sprite in wSpriteBuffer identified by wWhichSprite
+; read property (byte) c from a sprite in wSpriteAnimBuffer identified by wWhichSprite
 GetSpriteBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
-	cp SPRITE_BUFFER_CAPACITY
+	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	rst $38
-	ld a, SPRITE_BUFFER_CAPACITY - 1 ; default to last sprite
+	ld a, SPRITE_ANIM_BUFFER_CAPACITY - 1 ; default to last sprite
 .got_sprite
 	push bc
 	swap a
@@ -8059,7 +8059,7 @@ GetSpriteBufferProperty: ; 3dbf (0:3dbf)
 	and $f0
 	or c
 	ld c, a
-	ld hl, wSpriteBuffer
+	ld hl, wSpriteAnimBuffer
 	add hl, bc
 	pop bc
 	ret
