@@ -8038,12 +8038,12 @@ Func_3d72: ; 3d72 (0:3d72)
 Func_3db7: ; 3db7 (0:3db7)
 	push bc
 	ld c, SPRITE_ANIM_PROPERTY_1
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	pop bc
 	ret
 
 ; read property (byte) c from a sprite in wSpriteAnimBuffer identified by wWhichSprite
-GetSpriteBufferProperty: ; 3dbf (0:3dbf)
+GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite

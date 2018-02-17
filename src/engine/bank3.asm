@@ -657,7 +657,7 @@ Func_c554: ; c554 (3:4554)
 	ld a, [wSCYBuffer]
 	ld e, a
 	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	ld a, [wd332]
 	sub d
 	add $8
@@ -681,7 +681,7 @@ Func_c58b: ; c58b (3:458b)
 	and $10
 	push af
 	ld c, SPRITE_ANIM_PROPERTY_16
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	pop af
 	ld a, [hl]
 	jr z, .asm_c5a7
@@ -789,10 +789,10 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld a, $10
 	ld [wd338], a
 	ld c, SPRITE_ANIM_PROPERTY_16
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	ld a, $4
 	ld [hl], a
 .quit_movement
@@ -919,10 +919,10 @@ Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
 	ld [wWhichSprite], a
 	ld c, SPRITE_ANIM_PROPERTY_16
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	res 2, [hl]
 	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	ld a, $ff
 	ld [hl], a
 	ret

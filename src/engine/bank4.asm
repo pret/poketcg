@@ -496,7 +496,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
 	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	ld a, $80
 	ld [hli], a
 	ld a, $10
@@ -534,7 +534,7 @@ Func_10fde: ; 10fde (4:4fde)
 	or a
 	jr nz, .asm_11015
 	ld c, SPRITE_ANIM_PROPERTY_16
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	set 7, [hl]
 .asm_11015
 	ret
@@ -553,7 +553,7 @@ Func_11024: ; 11024 (4:5024)
 	ld a, [wd336]
 	ld [wWhichSprite], a
 	ld c, SPRITE_ANIM_PROPERTY_16
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
 	ld a, [wd33d]
@@ -626,7 +626,7 @@ Func_110a6: ; 110a6 (4:50a6)
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	pop bc
 	ld a, b
 	sub [hl]
@@ -766,7 +766,7 @@ Func_11184: ; 11184 (4:5184)
 	ld a, [wd348]
 	ld e, a
 	ld c, SPRITE_ANIM_COORD_X
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	ld a, [wd343]
 	add d
 	ld d, a
@@ -1254,7 +1254,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
 	ld c, SPRITE_ANIM_PROPERTY_6
-	call GetSpriteBufferProperty
+	call GetSpriteAnimBufferProperty
 	pop af
 	cp [hl]
 	pop hl
