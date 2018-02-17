@@ -1064,6 +1064,8 @@ JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
 	jp HblankCopyDataHLtoDE
 ; 0x70c
 
+; copy c bytes of data from hl to de, b times.
+; used to copy gfx data.
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
 	rla
@@ -1147,7 +1149,7 @@ BankpushHome: ; 0745 (0:0745)
 	and $3
 	ld b, a
 	res 7, d
-	set 6, d
+	set 6, d ; $4000 ≤ de ≤ $7fff
 	ld l, e
 	ld h, d
 	pop de
@@ -4299,7 +4301,7 @@ Func_20b0: ; 20b0 (0:20b0)
 .asm_20bd
 	ld de, vTiles1 + $500
 	ld b, $30
-	jr asm_2121
+	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20c4: ; 20c4 (0:20c4)
 	ld hl, $3028
@@ -4310,7 +4312,7 @@ Func_20c4: ; 20c4 (0:20c4)
 .asm_20d1
 	ld de, vTiles1 + $540
 	ld b, $c
-	jr asm_2121
+	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20d8: ; 20d8 (0:20d8)
 	ld b, $10
@@ -4326,13 +4328,13 @@ asm_20de
 	ld hl, $3af8
 .asm_20eb
 	ld de, vTiles1 + $500
-	jr asm_2121
+	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20f0: ; 20f0 (0:20f0)
 	ld hl, $4008
 	ld de, vTiles1 + $200
 	ld b, $d
-	call asm_2121
+	call CopyFontsOrDuelGraphicsTiles
 	ld hl, $3528
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -4341,20 +4343,23 @@ Func_20f0: ; 20f0 (0:20f0)
 .asm_2108
 	ld de, vTiles1 + $500
 	ld b, $30
-	jr asm_2121
+	jr CopyFontsOrDuelGraphicsTiles
 
 Func_210f: ; 210f (0:210f)
 	ld hl, $40d8
 	ld de, vTiles2 + $300
 	ld b, $8
-	jr asm_2121
+	jr CopyFontsOrDuelGraphicsTiles
 
 Func_2119: ; 2119 (0:2119)
 	ld hl, DuelGraphics - $4000
 	ld de, vTiles2 ; destination
 	ld b, $38 ; number of tiles
-asm_2121
-	ld a, BANK(DuelGraphics)
+;	fallthrough
+
+; copy b tiles from BANK(Fonts):hl to de
+CopyFontsOrDuelGraphicsTiles:
+	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -4374,7 +4379,7 @@ Func_2167: ; 2167 (0:2167)
 	add hl, de
 	ld de, $8a00
 	ld b, $28
-	call asm_2121
+	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
 	ld hl, $010a
 	ld bc, $0a04
@@ -6141,10 +6146,13 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop de
 	ret
 
+; input: hl = card_gfx_index
+; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ldh a, [hBankROM]
 	push af
 	push hl
+	; first, get the bank with the card gfx is at
 	srl h
 	srl h
 	srl h
@@ -6152,11 +6160,12 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	add h
 	call BankswitchHome
 	pop hl
+	; once we have the bank, get the pointer: multiply by 8 and discard the bank offset
 	add hl, hl
 	add hl, hl
 	add hl, hl
 	res 7, h
-	set 6, h
+	set 6, h ; $4000 ≤ de ≤ $7fff
 	call CopyGfxData
 	ld b, CGB_PAL_SIZE
 	ld de, $ce23
@@ -6170,8 +6179,9 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	call BankswitchHome
 	ret
 
-Func_2fcb: ; 2fcb (0:2fcb)
-	ld a, $1d
+; identical to CopyFontsOrDuelGraphicsTiles
+CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
+	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
