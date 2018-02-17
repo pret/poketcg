@@ -692,7 +692,7 @@ Text04f4: ; 46aae (11:6aae)
 	line "for Game Boy includes many "
 	line "original cards, like the "
 	line ""
-	text TX_LVL,"14 Meowth with the Cat Punch "
+	text TX_LVL, "14 Meowth with the Cat Punch "
 	line "attack. There are many new cards,"
 	line "so go search them out!"
 	done
@@ -743,7 +743,7 @@ Text04fb: ; 46dcb (11:6dcb)
 
 Text04fc: ; 46dec (11:6dec)
 	text "The first of the Legendary Pok`mon"
-	line "Cards is ",TX_LVL,"37 Moltres. With"
+	line "Cards is ", TX_LVL, "37 Moltres. With"
 	line "Firegiver, you can place Fire"
 	line "Energy cards in your hand! Also,"
 	line "Dive Bomb is a powerful attack!"
@@ -757,7 +757,7 @@ Text04fd: ; 46ec2 (11:6ec2)
 
 Text04fe: ; 46ee3 (11:6ee3)
 	text "The second Legendary Pok`mon Card"
-	line "is ",TX_LVL,"68 Zapdos. With Peal of"
+	line "is ", TX_LVL, "68 Zapdos. With Peal of"
 	line "Thunder, just putting this card on"
 	line "the bench causes damage!"
 	line "Also, Big Thunder is a powerful"
@@ -771,7 +771,7 @@ Text04ff: ; 46fb8 (11:6fb8)
 
 Text0500: ; 46fd9 (11:6fd9)
 	text "The third Legendary Pok`mon Card"
-	line "is ",TX_LVL,"37 Articuno. Its Quickfreeze"
+	line "is ", TX_LVL, "37 Articuno. Its Quickfreeze"
 	line "will paralyze opponents' Pok`mon"
 	line "when the card is put in play!"
 	line "Also, Ice Breath is a powerful"
@@ -785,7 +785,7 @@ Text0501: ; 470b3 (11:70b3)
 
 Text0502: ; 470d4 (11:70d4)
 	text "The fourth Legendary Pok`mon Card"
-	line "is ",TX_LVL,"41 Dragonite. Its Healing"
+	line "is ", TX_LVL, "41 Dragonite. Its Healing"
 	line "Wind will heal damage done to "
 	line "Pok`mon when this card is played!"
 	line "Also, Slam is a powerful attack!"
@@ -864,14 +864,14 @@ Text050c: ; 475ab (11:75ab)
 	done
 
 Text050d: ; 47644 (11:7644)
-	text "Most unfortunate, ",TX_RAM1,"."
+	text "Most unfortunate, ", TX_RAM1, "."
 	line "Once you enter, you won't be able"
 	line "to re-enter for some time. "
 	line "Please try again another day."
 	done
 
 Text050e: ; 476b6 (11:76b6)
-	text "Congratulations, ",TX_RAM1,"!"
+	text "Congratulations, ", TX_RAM1, "!"
 	line "You received a card!"
 	line "Please join us for the next "
 	line "Challenge Cup, too."
@@ -919,7 +919,7 @@ Text0514: ; 47913 (11:7913)
 	done
 
 Text0515: ; 47984 (11:7984)
-	text "Hi, ",TX_RAM1,"."
+	text "Hi, ", TX_RAM1, "."
 	line "Are you competing, too?"
 	done
 
@@ -927,13 +927,13 @@ Text0516: ; 479a4 (11:79a4)
 	text "I'm the one who's going to"
 	line "defeat 3 opponents! The prize, "
 	line ""
-	text TX_LVL,"60 Mewtwo, belongs to me!"
+	text TX_LVL, "60 Mewtwo, belongs to me!"
 	line "You just sit tight and watch me win!"
 	line "See Ya! Ha ha ha ha ha ha!"
 	done
 
 Text0517: ; 47a3d (11:7a3d)
-	text "Hey, it's ",TX_RAM1," - the loser"
+	text "Hey, it's ", TX_RAM1, " - the loser"
 	line "of the Challenge Cup!"
 	done
 
@@ -947,26 +947,26 @@ Text0518: ; 47a6c (11:7a6c)
 	done
 
 Text0519: ; 47b25 (11:7b25)
-	text "Hey ",TX_RAM1,", too bad "
+	text "Hey ", TX_RAM1, ", too bad "
 	line "you're too late!"
 	done
 
 Text051a: ; 47b47 (11:7b47)
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
-	line "the prize - ",TX_LVL,"60 Mewtwo!"
+	line "the prize - ", TX_LVL, "60 Mewtwo!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
 Text051b: ; 47bb6 (11:7bb6)
-	text "Hi, ",TX_RAM1,"."
+	text "Hi, ", TX_RAM1, "."
 	line "What are you doing here?"
 	done
 
 Text051c: ; 47bd7 (11:7bd7)
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
-	line "the prize - ",TX_LVL,"60 Mewtwo!"
+	line "the prize - ", TX_LVL, "60 Mewtwo!"
 	line "I guess you could try entering"
 	line "the next Challenge Cup, but "
 	line "you won't have a chance since "
@@ -975,7 +975,7 @@ Text051c: ; 47bd7 (11:7bd7)
 	done
 
 Text051d: ; 47cb9 (11:7cb9)
-	text "Hey, ",TX_RAM1,"."
+	text "Hey, ", TX_RAM1, "."
 	line "We meet again."
 	done
 
@@ -983,14 +983,14 @@ Text051e: ; 47cd1 (11:7cd1)
 	text "No matter who enters the Challenge"
 	line "Cup, I'll be the winner! "
 	line ""
-	text TX_LVL,"8 Mew, this Cup's prize, will "
+	text TX_LVL, "8 Mew, this Cup's prize, will "
 	line "belong to me! Why don't you just"
 	line "give up and go home!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
 Text051f: ; 47d82 (11:7d82)
-	text "Hey, it's ",TX_RAM1," - the"
+	text "Hey, it's ", TX_RAM1, " - the"
 	line "loser of the Challenge Cup!"
 	done
 
@@ -1003,7 +1003,7 @@ Text0520: ; 47db1 (11:7db1)
 	done
 
 Text0521: ; 47e4f (11:7e4f)
-	text "Hey, isn't that ",TX_RAM1,"?"
+	text "Hey, isn't that ", TX_RAM1, "?"
 	line "Late as always!"
 	done
 
@@ -1012,11 +1012,11 @@ Text0522: ; 47e73 (11:7e73)
 	line "over! What? Who won?"
 	line "Who do you expect!?! Me, of "
 	line "course! The prize belongs to"
-	line "me! ",TX_LVL,"8 Mew! See ya!"
+	line "me! ", TX_LVL, "8 Mew! See ya!"
 	line "Ha ha ha ha ha ha!"
 	done
 
 Text0523: ; 47f08 (11:7f08)
-	text "Hey, ",TX_RAM1,"!"
+	text "Hey, ", TX_RAM1, "!"
 	line "What are you doing here?"
 	done

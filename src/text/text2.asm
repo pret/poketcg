@@ -19,7 +19,7 @@ Text00f8: ; 380ac (e:40ac)
 	done
 
 Text00f9: ; 380db (e:40db)
-	text TX_RAM2,"'s Sleep check."
+	text TX_RAM2, "'s Sleep check."
 	done
 
 Text00fa: ; 380ed (e:40ed)
@@ -72,12 +72,12 @@ UnableToUseAttackDueToAmnesiaText: ; 382af (e:42af)
 	done
 
 KnockedOutDueToDestinyBondText: ; 382e9 (e:42e9)
-	text TX_RAM2," was Knocked Out"
+	text TX_RAM2, " was Knocked Out"
 	line "due to the effects of Destiny Bond."
 	done
 
 ReceivesDamageDueToStrikesBackText: ; 38320 (e:4320)
-	text TX_RAM2," receives ",TX_RAM3," damage"
+	text TX_RAM2, " receives ", TX_RAM3, " damage"
 	line "due to the effects of Strikes Back."
 	done
 
@@ -117,8 +117,8 @@ NoDamageOrEffectDueToTransparencyText: ; 384d8 (e:44d8)
 	done
 
 Text010d: ; 3851f (e:451f)
-	text TX_RAM2,""
-	line "metamorphs to ",TX_RAM2,"."
+	text TX_RAM2, ""
+	line "metamorphs to ", TX_RAM2, "."
 	done
 
 SelectMonOnBenchToSwitchWithActiveText: ; 38533 (e:4533)
@@ -132,7 +132,7 @@ Text010f: ; 38575 (e:4575)
 	done
 
 Text0110: ; 3859e (e:459e)
-	text TX_RAM1," is selecting a Pok`mon"
+	text TX_RAM1, " is selecting a Pok`mon"
 	line "to place in the Arena."
 	done
 
@@ -154,19 +154,19 @@ Text0113: ; 38647 (e:4647)
 Text0114: ; 3868d (e:468d)
 	text "Changed the Weakness of"
 	line ""
-	text TX_RAM2," to ",TX_RAM2,"."
+	text TX_RAM2, " to ", TX_RAM2, "."
 	done
 
 Text0115: ; 386af (e:46af)
 	text "Changed the Resistance of"
 	line ""
-	text TX_RAM2," to ",TX_RAM2,"."
+	text TX_RAM2, " to ", TX_RAM2, "."
 	done
 
 Text0116: ; 386d3 (e:46d3)
 	text "Changed the color of"
 	line ""
-	text TX_RAM2," to ",TX_RAM2,"."
+	text TX_RAM2, " to ", TX_RAM2, "."
 	done
 
 Text0117: ; 386f2 (e:46f2)
@@ -174,7 +174,7 @@ Text0117: ; 386f2 (e:46f2)
 	done
 
 Text0118: ; 3870e (e:470e)
-	text "Draw ",TX_RAM3," card(s) from the Deck."
+	text "Draw ", TX_RAM3, " card(s) from the Deck."
 	done
 
 Text0119: ; 3872d (e:472d)
@@ -407,7 +407,7 @@ Text013a: ; 391dc (e:51dc)
 	done
 
 Text013b: ; 39215 (e:5215)
-	text "There is no ",TX_RAM2,""
+	text "There is no ", TX_RAM2, ""
 	line "in the Deck."
 	done
 
@@ -451,7 +451,7 @@ Text0144: ; 3930a (e:530a)
 
 Text0145: ; 39318 (e:5318)
 	text "Peek was used to look at the"
-	line TX_RAM2," in your Hand."
+	line TX_RAM2, " in your Hand."
 	done
 
 Text0146: ; 39346 (e:5346)
@@ -459,12 +459,12 @@ Text0146: ; 39346 (e:5346)
 	done
 
 Text0147: ; 3935d (e:535d)
-	text TX_RAM2," and all attached"
+	text TX_RAM2, " and all attached"
 	line "cards were returned to the Hand."
 	done
 
 Text0148: ; 39392 (e:5392)
-	text TX_RAM2," was chosen"
+	text TX_RAM2, " was chosen"
 	line "for the effect of Amnesia."
 	done
 
@@ -474,27 +474,27 @@ Text0149: ; 393bb (e:53bb)
 	done
 
 WasUnsuccessfulText: ; 393e6 (e:53e6)
-	text TX_RAM2,"'s"
-	line TX_RAM2," was unsuccessful."
+	text TX_RAM2, "'s"
+	line TX_RAM2, " was unsuccessful."
 	done
 
 Text014b: ; 393ff (e:53ff)
 	text "There was no effect"
-	line "from ",TX_RAM2,"."
+	line "from ", TX_RAM2, "."
 	done
 
 Text014c: ; 3941c (e:541c)
-	text "The Energy card from ",TX_RAM1,"'s"
+	text "The Energy card from ", TX_RAM1, "'s"
 	line "Play Area was moved."
 	done
 
 Text014d: ; 3944b (e:544b)
-	text TX_RAM1," drew"
-	line TX_RAM3," Fire Energy from the Hand."
+	text TX_RAM1, " drew"
+	line TX_RAM3, " Fire Energy from the Hand."
 	done
 
 Text014e: ; 39470 (e:5470)
-	text "The Pok`mon cards in ",TX_RAM1,"'s"
+	text "The Pok`mon cards in ", TX_RAM1, "'s"
 	line "Hand and Deck were shuffled"
 	done
 
@@ -549,7 +549,7 @@ Text0158: ; 3968b (e:568b)
 	done
 
 Text0159: ; 396b4 (e:56b4)
-	text "You can draw up to ",TX_RAM3," cards."
+	text "You can draw up to ", TX_RAM3, " cards."
 	line "A to Draw, B to End."
 	done
 
@@ -608,7 +608,7 @@ Text0164: ; 3985b (e:585b)
 	done
 
 Text0165: ; 3986b (e:586b)
-	text TX_RAM2," was chosen."
+	text TX_RAM2, " was chosen."
 	done
 
 Text0166: ; 3987a (e:587a)
@@ -637,27 +637,27 @@ Text016a: ; 39952 (e:5952)
 	done
 
 Text016b: ; 39987 (e:5987)
-	text TX_RAM2," and all attached"
+	text TX_RAM2, " and all attached"
 	line "cards were returned to the Deck."
 	done
 
 Text016c: ; 399bc (e:59bc)
-	text TX_RAM2," was returned"
+	text TX_RAM2, " was returned"
 	line "from the Arena to the Hand."
 	done
 
 Text016d: ; 399e8 (e:59e8)
-	text TX_RAM2," was returned"
+	text TX_RAM2, " was returned"
 	line "from the Bench to the Hand."
 	done
 
 Text016e: ; 39a14 (e:5a14)
-	text TX_RAM2," was returned"
+	text TX_RAM2, " was returned"
 	line "to the Deck."
 	done
 
 Text016f: ; 39a31 (e:5a31)
-	text TX_RAM2," was placed"
+	text TX_RAM2, " was placed"
 	line "in the Hand."
 	done
 
@@ -680,12 +680,12 @@ Text0173: ; 39a9c (e:5a9c)
 	done
 
 Text0174: ; 39ab9 (e:5ab9)
-	text "Discarded ",TX_RAM3," cards"
-	line "from ",TX_RAM1,"'s Deck."
+	text "Discarded ", TX_RAM3, " cards"
+	line "from ", TX_RAM1, "'s Deck."
 	done
 
 Text0175: ; 39adb (e:5adb)
-	text "Discarded ",TX_RAM2,""
+	text "Discarded ", TX_RAM2, ""
 	line "from the Hand."
 	done
 
@@ -694,23 +694,23 @@ Text0176: ; 39af7 (e:5af7)
 	done
 
 Text0177: ; 39b03 (e:5b03)
-	text TX_RAM2,""
+	text TX_RAM2, ""
 	line "came to the Bench!"
 	done
 
 Text0178: ; 39b19 (e:5b19)
-	text TX_RAM1," has"
+	text TX_RAM1, " has"
 	line "no cards in Hand!"
 	done
 
 Text0179: ; 39b32 (e:5b32)
-	text TX_RAM2," healed"
-	line TX_RAM3," damage!"
+	text TX_RAM2, " healed"
+	line TX_RAM3, " damage!"
 	done
 
 Text017a: ; 39b46 (e:5b46)
-	text TX_RAM2," devolved"
-	line "to ",TX_RAM2,"!"
+	text TX_RAM2, " devolved"
+	line "to ", TX_RAM2, "!"
 	done
 
 Text017b: ; 39b58 (e:5b58)
@@ -718,7 +718,7 @@ Text017b: ; 39b58 (e:5b58)
 	done
 
 Text017c: ; 39b73 (e:5b73)
-	text "You can select ",TX_RAM3," more cards. Quit?"
+	text "You can select ", TX_RAM3, " more cards. Quit?"
 	done
 
 Text017d: ; 39b97 (e:5b97)
@@ -757,7 +757,7 @@ Text0183: ; 39c5a (e:5c5a)
 
 Text0184: ; 39c86 (e:5c86)
 	text "Exchanged the cards"
-	line "in ",TX_RAM1,"'s Hand."
+	line "in ", TX_RAM1, "'s Hand."
 	done
 
 Text0185: ; 39ca8 (e:5ca8)
@@ -780,8 +780,8 @@ Text0188: ; 39cea (e:5cea)
 	done
 
 Text0189: ; 39d1b (e:5d1b)
-	text "Begin a ",TX_RAM3,"-Prize Duel"
-	line "with ",TX_RAM1,"."
+	text "Begin a ", TX_RAM3, "-Prize Duel"
+	line "with ", TX_RAM1, "."
 	done
 
 Text018a: ; 39d39 (e:5d39)
@@ -805,32 +805,32 @@ Text018d: ; 39dcc (e:5dcc)
 	done
 
 Text018e: ; 39e02 (e:5e02)
-	text "Received ",TX_RAM2,""
+	text "Received ", TX_RAM2, ""
 	line "through Card Pop!"
 	done
 
 ReceivedCardText: ; 39e20 (e:5e20)
-	text TX_RAM1," received"
-	line "a ",TX_RAM2,"!"
+	text TX_RAM1, " received"
+	line "a ", TX_RAM2, "!"
 	done
 
 ReceivedPromotionalCardText: ; 39e31 (e:5e31)
-	text TX_RAM1," received a Promotional"
-	line "card ",TX_RAM2,"!"
+	text TX_RAM1, " received a Promotional"
+	line "card ", TX_RAM2, "!"
 	done
 
 ReceivedLegendaryCardText: ; 39e53 (e:5e53)
-	text TX_RAM1," received the Legendary"
-	line "card ",TX_RAM2,"!"
+	text TX_RAM1, " received the Legendary"
+	line "card ", TX_RAM2, "!"
 	done
 
 ReceivedPromotionalFlyingPikachuText: ; 39e75 (e:5e75)
-	text TX_RAM1," received a Promotinal"
+	text TX_RAM1, " received a Promotinal"
 	line "card Flyin' Pikachu!"
 	done
 
 ReceivedPromotionalSurfingPikachuText: ; 39ea3 (e:5ea3)
-	text TX_RAM1," received a Promotional"
+	text TX_RAM1, " received a Promotional"
 	line "card Surfin' Pikachu!"
 	done
 
@@ -853,11 +853,11 @@ Text0197: ; 39f2f (e:5f2f)
 	done
 
 Text0198: ; 39f4d (e:5f4d)
-	text "Sent to ",TX_RAM1,"."
+	text "Sent to ", TX_RAM1, "."
 	done
 
 Text0199: ; 39f59 (e:5f59)
-	text "Received from ",TX_RAM1,"."
+	text "Received from ", TX_RAM1, "."
 	done
 
 Text019a: ; 39f6b (e:5f6b)
@@ -1101,7 +1101,7 @@ Text01c4: ; 3ab08 (e:6b08)
 	line "Energy to use Waterfall."
 	line "You need to attach a Psychic Energy"
 	line "card to Seaking."
-	line TX_COLORLESS," means any Energy card."
+	line TX_COLORLESS, " means any Energy card."
 	line "Now you can use Waterfall."
 	line "Keep the Water Energy card for"
 	line "other Pok`mon."
@@ -1220,7 +1220,7 @@ Text01d4: ; 3b1f4 (e:71f4)
 	line ""
 	line "Pick up the last Prize."
 	line ""
-	text TX_RAM1," is the winner!"
+	text TX_RAM1, " is the winner!"
 	done
 
 Text01d5: ; 3b242 (e:7242)
@@ -1259,7 +1259,7 @@ Text01da: ; 3b3bb (e:73bb)
 	done
 
 Text01db: ; 3b3fe (e:73fe)
-	text TX_RAM1,"'s turn ",TX_RAM3
+	text TX_RAM1, "'s turn ", TX_RAM3
 	done
 
 Text01dc: ; 3b40a (e:740a)
@@ -1553,7 +1553,7 @@ Text0221: ; 3b8f2 (e:78f2)
 	line $03,$39,$70,$03,$3a,$70,$03,$3b,$70,$03,$3c,$70,$03,$3d,$70,$03,$3e,$70,$03,$3f,$70,$03,$40,$70,$03,$41,""
 	line $03,$42,$70,$03,$43,$70,$03,$44,$70,$03,$45,$70,$03,$46,$70,$03,$47,$70,$03,$48,$70,$03,$49,$70,$6e,""
 	line $6f,$70,$03,$5d,$70,$6a,$70,$6b,$70,$77,$70,$60,$70,$61,$70,$62,$70,$63,""
-	line $64,$70,$65,$70,$66,$70,$67,$70,$68,$70,$69,$70,$05,$13,$70,TX_LVL,$70,$70,""
+	line $64,$70,$65,$70,$66,$70,$67,$70,$68,$70,$69,$70,$05,$13,$70, TX_LVL, $70,$70,""
 	line $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70
 	done
 
@@ -1595,7 +1595,7 @@ Text0229: ; 3ba51 (e:7a51)
 	done
 
 ChosenAsDuelingDeckText: ; 3ba55 (e:7a55)
-	text TX_RAM2," was"
+	text TX_RAM2, " was"
 	line "chosen as the dueling deck!"
 	done
 
@@ -1715,7 +1715,7 @@ Text0246: ; 3bc85 (e:7c85)
 	done
 
 Text0247: ; 3bc9e (e:7c9e)
-	text TX_RAM1,"'s Play Area"
+	text TX_RAM1, "'s Play Area"
 	done
 
 Text0248: ; 3bcad (e:7cad)
@@ -1747,11 +1747,11 @@ Text024e: ; 3bd20 (e:7d20)
 	done
 
 Text024f: ; 3bd26 (e:7d26)
-	text TX_RAM1,"'s Hand"
+	text TX_RAM1, "'s Hand"
 	done
 
 Text0250: ; 3bd30 (e:7d30)
-	text TX_RAM1,"'s Discard Pile"
+	text TX_RAM1, "'s Discard Pile"
 	done
 
 Text0251: ; 3bd42 (e:7d42)
@@ -1830,7 +1830,7 @@ Text0262: ; 3be7d (e:7e7d)
 Text0263: ; 3be82 (e:7e82)
 	text "Saved the configuration for"
 	line ""
-	text TX_RAM2,"! "
+	text TX_RAM2, "! "
 	done
 
 Text0264: ; 3bea4 (e:7ea4)
@@ -1849,7 +1849,7 @@ Text0266: ; 3bee7 (e:7ee7)
 Text0267: ; 3bf06 (e:7f06)
 	text "Deleted the configuration for"
 	line ""
-	text TX_RAM2,"."
+	text TX_RAM2, "."
 	done
 
 Text0268: ; 3bf29 (e:7f29)
@@ -1863,7 +1863,7 @@ Text0269: ; 3bf46 (e:7f46)
 Text026a: ; 3bf63 (e:7f63)
 	text "Dismantled"
 	line ""
-	text TX_RAM2,"."
+	text TX_RAM2, "."
 	done
 
 Text026b: ; 3bf73 (e:7f73)

@@ -6127,10 +6127,10 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ld bc, CardPointers
 	add hl, bc
 	ld a, h
-	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) / $100
+	cp HIGH(CardPointers + 2 + (2 * NUM_CARDS))
 	jr nz, .nz
 	ld a, l
-	cp a, (CardPointers + 2 + (2 * NUM_CARDS)) % $100
+	cp LOW(CardPointers + 2 + (2 * NUM_CARDS))
 .nz
 	ccf
 	jr c, .out_of_bounds
@@ -6138,7 +6138,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	call BankpushHome2
 	ld a, [hli]
 	ld h, [hl]
-	ld l,a
+	ld l, a
 	call BankpopHome
 	or a
 .out_of_bounds
@@ -6244,7 +6244,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	call BankswitchHome
 ; store the bank number of command functions ($b) in wce22
 	ld a, $b
-	ld [wce22],a
+	ld [wce22], a
 .check_command_loop
 	ld a, [hli]
 	or a
@@ -8042,7 +8042,8 @@ Func_3db7: ; 3db7 (0:3db7)
 	pop bc
 	ret
 
-; read property (byte) c from a sprite in wSpriteAnimBuffer identified by wWhichSprite
+; return hl pointing to the property (byte) c of a sprite in wSpriteAnimBuffer.
+; the sprite is identified by its index in wWhichSprite.
 GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
 	cp SPRITE_ANIM_BUFFER_CAPACITY
@@ -8051,13 +8052,13 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, SPRITE_ANIM_BUFFER_CAPACITY - 1 ; default to last sprite
 .got_sprite
 	push bc
-	swap a
+	swap a ; a *= SPRITE_ANIM_LENGTH
 	push af
 	and $f
 	ld b, a
 	pop af
 	and $f0
-	or c
+	or c ; add the property offset
 	ld c, a
 	ld hl, wSpriteAnimBuffer
 	add hl, bc

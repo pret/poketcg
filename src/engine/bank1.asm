@@ -286,7 +286,7 @@ HandleTurn: ; 4225 (1:4225)
 	call GetTurnDuelistVariable
 	ld [wcc0d], a
 	ld a, [wcc06]
-	cp a, $02
+	cp $02
 	jr c, .asm_4237
 	call $70f6
 
@@ -322,9 +322,9 @@ Func_4268:
 Func_426d:
 	call $4f9d
 	ld a, [wcc0d]
-	cp a, DUELIST_TYPE_PLAYER
+	cp DUELIST_TYPE_PLAYER
 	jr z, PrintDuelMenu
-	cp a, DUELIST_TYPE_LINK_OPP
+	cp DUELIST_TYPE_LINK_OPP
 	jp z, $6911
 	; DUELIST_TYPE_AI_OPP
 	xor a
@@ -352,7 +352,7 @@ PrintDuelMenu:
 Func_42ac:
 	call DoFrame
 	ldh a, [hButtonsHeld]
-	and a, $02
+	and $02
 	jr z, .asm_42cc
 	ldh a, [hButtonsPressed]
 	bit D_UP_F, a
@@ -368,7 +368,7 @@ Func_42ac:
 
 .asm_42cc
 	ldh a, [hButtonsPressed]
-	and a, START
+	and START
 	jp nz, $4370
 	ldh a, [hButtonsPressed]
 	bit SELECT_F, a
@@ -450,8 +450,8 @@ DuelMenu_Done: ; 439a (1:439a)
 DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and a,PASSIVE_STATUS_MASK
-	cp a, $01
+	and PASSIVE_STATUS_MASK
+	cp $01
 	ldh [$ffa0], a
 	jr nz, Func_43f1
 	ld a, [wcc0c]
@@ -700,10 +700,10 @@ Func_478b: ; 478b (1:478b)
 .asm_47d4
 	call DoFrame
 	ldh a, [hButtonsPressed2]
-	and a, D_RIGHT | D_LEFT
+	and D_RIGHT | D_LEFT
 	jr nz, .asm_47ce
 	ldh a, [hButtonsPressed]
-	and a, A_BUTTON | B_BUTTON
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_47d4
 	ret
 

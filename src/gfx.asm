@@ -1,6 +1,7 @@
 INCLUDE "macros.asm"
 
 SECTION "Gfx 1", ROMX
+
 Fonts:: ; 74000 (1d:4000)
 INCBIN "gfx/fonts.t3.1bpp"
 
@@ -8,10 +9,11 @@ VWF:: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
 
 DuelGraphics:: ; 76968 (1d:6968)
-INCBIN "gfx/duel/duel1.t5.2bpp",$0,$1698
+INCBIN "gfx/duel/duel1.t5.2bpp", $0, $1698
 
 SECTION "Gfx 2", ROMX
-INCBIN "gfx/duel/duel1.t5.2bpp",$1698,$318
+
+INCBIN "gfx/duel/duel1.t5.2bpp", $1698, $318
 INCBIN "gfx/duel/duel2.2bpp"
 
 rept $2b68
@@ -22,6 +24,7 @@ SECTION "Empty Bank 1F", ROMX
 	emptybank
 
 SECTION "Gfx 3", ROMX
+
 	INCROM $84000, $87828
 
 IshiharaTilesetGfx: ; 87828 (21:7828)
@@ -51,6 +54,7 @@ Unnamed2Gfx: ; 87fe2 (21:7fe2)
 	INCROM $87ff4, $88000
 
 SECTION "Gfx 4", ROMX
+
 OverworldMapTiles: ; 88000 (22:4000)
 	dw $c1
 	INCBIN "gfx/overworld_map.t15.2bpp"
@@ -94,6 +98,7 @@ Unnamed3Gfx: ; 8bfd2 (22:7fd2)
 	INCROM $8bfe4, $8C000
 
 SECTION "Gfx 5", ROMX
+
 LightningClubTilesetGfx: ; 8c000 (23:4000)
 	dw $83
 	INCBIN "gfx/tilesets/lightningclub.t13.2bpp"
@@ -128,24 +133,24 @@ HallOfHonorTilesetGfx: ; 8f20e (23:720e)
 
 MedalGfx: ; 8f9a0 (23:79a0)
 	dw $48
-	INCBIN "gfx/medals.2bpp",$0,$c0
-	INCBIN "gfx/medals.2bpp",$240,$30
-	INCBIN "gfx/medals.2bpp",$340,$10
-	INCBIN "gfx/medals.2bpp",$c0,$c0
-	INCBIN "gfx/medals.2bpp",$300,$30
-	INCBIN "gfx/medals.2bpp",$350,$10
-	INCBIN "gfx/medals.2bpp",$180,$c0
-	INCBIN "gfx/medals.2bpp",$3c0,$30
-	INCBIN "gfx/medals.2bpp",$410,$10
-	INCBIN "gfx/medals.2bpp",$2d0,$30
-	INCBIN "gfx/medals.2bpp",$2a0,$30
-	INCBIN "gfx/medals.2bpp",$270,$30
-	INCBIN "gfx/medals.2bpp",$390,$30
-	INCBIN "gfx/medals.2bpp",$360,$30
-	INCBIN "gfx/medals.2bpp",$330,$10
-	INCBIN "gfx/medals.2bpp",$450,$30
-	INCBIN "gfx/medals.2bpp",$420,$30
-	INCBIN "gfx/medals.2bpp",$3f0,$20
+	INCBIN "gfx/medals.2bpp", $0, $c0
+	INCBIN "gfx/medals.2bpp", $240, $30
+	INCBIN "gfx/medals.2bpp", $340, $10
+	INCBIN "gfx/medals.2bpp", $c0, $c0
+	INCBIN "gfx/medals.2bpp", $300, $30
+	INCBIN "gfx/medals.2bpp", $350, $10
+	INCBIN "gfx/medals.2bpp", $180, $c0
+	INCBIN "gfx/medals.2bpp", $3c0, $30
+	INCBIN "gfx/medals.2bpp", $410, $10
+	INCBIN "gfx/medals.2bpp", $2d0, $30
+	INCBIN "gfx/medals.2bpp", $2a0, $30
+	INCBIN "gfx/medals.2bpp", $270, $30
+	INCBIN "gfx/medals.2bpp", $390, $30
+	INCBIN "gfx/medals.2bpp", $360, $30
+	INCBIN "gfx/medals.2bpp", $330, $10
+	INCBIN "gfx/medals.2bpp", $450, $30
+	INCBIN "gfx/medals.2bpp", $420, $30
+	INCBIN "gfx/medals.2bpp", $3f0, $20
 
 NintendoGfx: ; 8fe22 (23:7e22)
 	dw $18
@@ -158,6 +163,7 @@ PoisonGfx: ; 8ffa4 (23:7fa4)
 	INCROM $8ffe6, $90000
 
 SECTION "Gfx 6", ROMX
+
 CardPop1Gfx: ; 90000 (24:4000)
 	dw $bd
 	INCBIN "gfx/cardpop/cardpop1.t3.2bpp"
@@ -219,6 +225,7 @@ rept $4
 endr
 
 SECTION "Gfx 7", ROMX
+
 Laboratory1Gfx: ; 94000 (25:4000)
 	dw $60
 	INCBIN "gfx/booster_packs/laboratory1.2bpp"
@@ -270,6 +277,7 @@ RonaldOWGfx: ; 97ea6 (25:7ea6)
 	INCROM $97fe8, $98000
 
 SECTION "Gfx 8", ROMX
+
 Titlescreen3Gfx: ; 98000 (26:4000)
 	dw $f4
 	INCBIN "gfx/titlescreen/titlescreen3.t12.2bpp"
@@ -303,6 +311,7 @@ Unnamed7Gfx: ; 9bfee (26:7fee)
 	INCBIN "gfx/unnamed/7.2bpp"
 
 SECTION "Gfx 9", ROMX
+
 SamGfx: ; 9c000 (27:4000)
 	dw $24
 	INCBIN "gfx/duelists/sam.2bpp"
@@ -428,6 +437,7 @@ rept $4
 endr
 
 SECTION "Gfx 10", ROMX
+
 DanielGfx: ; a0000 (28:4000)
 	dw $24
 	INCBIN "gfx/duelists/daniel.2bpp"
@@ -603,6 +613,7 @@ Unnamed11Gfx: ; a3fb4 (28:7fb4)
 	INCROM $a3ff6, $a4000
 
 SECTION "Gfx 11", ROMX
+
 OWSprite30: ; a4000 (29:4000)
 	dw $14
 	INCBIN "gfx/overworld_sprites/30.2bpp"
@@ -802,6 +813,7 @@ Duel45Gfx: ; a7fb0 (29:7fb0)
 	INCROM $a7fe2, $a8000
 
 SECTION "Gfx 12", ROMX
+
 Duel46Gfx: ; a8000 (2a:4000)
 	dw $08
 	INCBIN "gfx/duel/46.2bpp"
@@ -877,16 +889,16 @@ FightingGfx: ; a8e12 (2a:4e12)
 	INCROM $a8e54, $ac000
 
 SECTION "Gfx 13", ROMX
-INCBIN "baserom.gbc",$AC000,$4000
+INCBIN "baserom.gbc", $ac000, $4000
 
 SECTION "Gfx 14", ROMX
-INCBIN "baserom.gbc",$B0000,$4000
+INCBIN "baserom.gbc", $b0000, $4000
 
 SECTION "Gfx 15", ROMX
-INCBIN "baserom.gbc",$B4000,$4000
+INCBIN "baserom.gbc", $b4000, $4000
 
 SECTION "Gfx 16", ROMX
-INCBIN "baserom.gbc",$B8000,$4000
+INCBIN "baserom.gbc", $b8000, $4000
 
 SECTION "Empty Bank 2F", ROMX
 	emptybank
@@ -895,6 +907,7 @@ SECTION "Empty Bank 30", ROMX
 	emptybank
 
 SECTION "Card Gfx 1", ROMX
+
 CardGraphics:: ; c4000 (31:4000)
 
 GrassEnergyCardGfx:: ; c4000 (31:4000)
@@ -982,6 +995,7 @@ NidorinaCardGfx:: ; c7ca0 (31:7ca0)
 	INCBIN "gfx/cards/nidorina.pal"
 
 SECTION "Card Gfx 2", ROMX
+
 NidoqueenCardGfx:: ; c8000 (32:4000)
 	INCBIN "gfx/cards/nidoqueen.8x6.2bpp"
 	INCBIN "gfx/cards/nidoqueen.pal"
@@ -1067,6 +1081,7 @@ KoffingCardGfx:: ; cbca0 (32:7ca0)
 	INCBIN "gfx/cards/koffing.pal"
 
 SECTION "Card Gfx 3", ROMX
+
 WeezingCardGfx:: ; cc000 (33:4000)
 	INCBIN "gfx/cards/weezing.8x6.2bpp"
 	INCBIN "gfx/cards/weezing.pal"
@@ -1152,6 +1167,7 @@ Moltres1CardGfx:: ; cfca0 (33:7ca0)
 	INCBIN "gfx/cards/moltres1.pal"
 
 SECTION "Card Gfx 4", ROMX
+
 Moltres2CardGfx:: ; d0000 (34:4000)
 	INCBIN "gfx/cards/moltres2.8x6.2bpp"
 	INCBIN "gfx/cards/moltres2.pal"
@@ -1237,6 +1253,7 @@ SeakingCardGfx:: ; d3ca0 (34:7ca0)
 	INCBIN "gfx/cards/seaking.pal"
 
 SECTION "Card Gfx 5", ROMX
+
 StaryuCardGfx:: ; d4000 (35:4000)
 	INCBIN "gfx/cards/staryu.8x6.2bpp"
 	INCBIN "gfx/cards/staryu.pal"
@@ -1322,6 +1339,7 @@ Magnemite1CardGfx:: ; d7ca0 (35:7ca0)
 	INCBIN "gfx/cards/magnemite1.pal"
 
 SECTION "Card Gfx 6", ROMX
+
 Magnemite2CardGfx:: ; d8000 (36:4000)
 	INCBIN "gfx/cards/magnemite2.8x6.2bpp"
 	INCBIN "gfx/cards/magnemite2.pal"
@@ -1407,6 +1425,7 @@ MachokeCardGfx:: ; dbca0 (36:7ca0)
 	INCBIN "gfx/cards/machoke.pal"
 
 SECTION "Card Gfx 7", ROMX
+
 MachampCardGfx:: ; dc000 (37:4000)
 	INCBIN "gfx/cards/machamp.8x6.2bpp"
 	INCBIN "gfx/cards/machamp.pal"
@@ -1492,6 +1511,7 @@ SlowbroCardGfx:: ; dfca0 (37:7ca0)
 	INCBIN "gfx/cards/slowbro.pal"
 
 SECTION "Card Gfx 8", ROMX
+
 Gastly1CardGfx:: ; e0000 (38:4000)
 	INCBIN "gfx/cards/gastly1.8x6.2bpp"
 	INCBIN "gfx/cards/gastly1.pal"
@@ -1577,6 +1597,7 @@ RaticateCardGfx:: ; e3ca0 (38:7ca0)
 	INCBIN "gfx/cards/raticate.pal"
 
 SECTION "Card Gfx 9", ROMX
+
 SpearowCardGfx:: ; e4000 (39:4000)
 	INCBIN "gfx/cards/spearow.8x6.2bpp"
 	INCBIN "gfx/cards/spearow.pal"
@@ -1662,6 +1683,7 @@ PorygonCardGfx:: ; e7ca0 (39:7ca0)
 	INCBIN "gfx/cards/porygon.pal"
 
 SECTION "Card Gfx 10", ROMX
+
 SnorlaxCardGfx:: ; e8000 (3a:4000)
 	INCBIN "gfx/cards/snorlax.8x6.2bpp"
 	INCBIN "gfx/cards/snorlax.pal"
@@ -1747,6 +1769,7 @@ SwitchCardGfx:: ; ebca0 (3a:7ca0)
 	INCBIN "gfx/cards/switch.pal"
 
 SECTION "Card Gfx 11", ROMX
+
 PokemonCenterCardGfx:: ; ec000 (3b:4000)
 	INCBIN "gfx/cards/pokemoncenter.8x6.2bpp"
 	INCBIN "gfx/cards/pokemoncenter.pal"

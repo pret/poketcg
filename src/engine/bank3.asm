@@ -1627,7 +1627,7 @@ IncreaseOWScriptPointer: ; cc7a (3:4c7a)
 	add c
 	ld [wOWScriptPointer], a
 	ld a, [wOWScriptPointer+1]
-	adc a, 00
+	adc 0
 	ld [wOWScriptPointer+1], a
 	ret
 

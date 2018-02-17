@@ -226,7 +226,7 @@ DetermineBoosterCardType: ; 1e2fa (7:62fa)
 	inc hl
 	inc c
 	ld a, c
-	cp a, NUM_BOOSTER_CARD_TYPES
+	cp NUM_BOOSTER_CARD_TYPES
 	jr c, .loop_through_card_types
 	ld a, BOOSTER_CARD_TYPE_ENERGY
 .found_card_type
@@ -279,7 +279,7 @@ UpdateBoosterCardTypesChanceByte: ; 1e350 (7:6350)
 	ld b, $00
 	ld hl, wBoosterDataTypeChances
 	add hl, bc
-	ld a,[wBoosterAveragedTypeChances]
+	ld a, [wBoosterAveragedTypeChances]
 	ld c, a
 	ld a, [hl]
 	sub c
@@ -322,7 +322,7 @@ AddBoosterEnergyToDrawnEnergies: ; 1e380 (7:6380)
 GenerateEndingEnergy: ; 1e387 (7:6387)
 	ld a, COLORLESS - FIRE
 	call Random
-	add a, $01
+	add $01
 	jr AddBoosterEnergyToDrawnEnergies
 
 ; generates a booster with 10 random energies
