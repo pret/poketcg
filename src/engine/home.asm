@@ -4387,7 +4387,7 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld a, $a0
 	ld hl, $010a
 	ld bc, $0a04
-	ld de, $0504
+	lb de, 5, 4
 	jp Func_1f5f
 ; 0x2189
 

@@ -9,14 +9,14 @@ VWF:: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
 
 DuelGraphics:: ; 76968 (1d:6968)
-INCBIN "gfx/duel/duel1.t5.2bpp", $0, $1698
+INCBIN "gfx/duel/duel_graphics.t5.2bpp", $0, $1698
 
 SECTION "Gfx 2", ROMX
 
-INCBIN "gfx/duel/duel1.t5.2bpp", $1698, $318
+INCBIN "gfx/duel/duel_graphics.t5.2bpp", $1698, $318
 
 DuelBoxMessages:: ; 78318 (1e:4318)
-INCBIN "gfx/duel/duel2.2bpp"
+INCBIN "gfx/duel/box_messages.2bpp"
 
 rept $2b68
 	db $ff
@@ -45,13 +45,13 @@ PlayerGfx: ; 87d7e (21:7d7e)
 	dw $24
 	INCBIN "gfx/duelists/player.2bpp"
 
-Unnamed1Gfx: ; 87fc0 (21:7fc0)
+Duel55Gfx: ; 87fc0 (21:7fc0)
 	dw $2
-	INCBIN "gfx/unnamed/1.2bpp"
+	INCBIN "gfx/duel/55.2bpp"
 
-Unnamed2Gfx: ; 87fe2 (21:7fe2)
+Duel56Gfx: ; 87fe2 (21:7fe2)
 	dw $1
-	INCBIN "gfx/unnamed/2.2bpp"
+	INCBIN "gfx/duel/56.2bpp"
 
 	INCROM $87ff4, $88000
 
@@ -93,9 +93,9 @@ OWSpritePlayer: ; 8be90 (22:7e90)
 	dw $14
 	INCBIN "gfx/overworld_sprites/player.2bpp"
 
-Unnamed3Gfx: ; 8bfd2 (22:7fd2)
+Duel57Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
-	INCBIN "gfx/unnamed/3.2bpp"
+	INCBIN "gfx/duel/57.2bpp"
 
 	INCROM $8bfe4, $8c000
 
@@ -158,9 +158,9 @@ NintendoGfx: ; 8fe22 (23:7e22)
 	dw $18
 	INCBIN "gfx/nintendo.2bpp"
 
-PoisonGfx: ; 8ffa4 (23:7fa4)
+Duel58Gfx: ; 8ffa4 (23:7fa4)
 	dw $4
-	INCBIN "gfx/duel/poison.2bpp"
+	INCBIN "gfx/duel/58.2bpp"
 
 	INCROM $8ffe6, $90000
 
@@ -214,13 +214,13 @@ HelpDeskLadyGfx: ; 93f26 (24:7f26)
 	dw $8
 	INCBIN "gfx/overworld_sprites/help_desk_lady.2bpp"
 
-Unnamed4Gfx: ; 93fa8 (24:7fa8)
+Duel59Gfx: ; 93fa8 (24:7fa8)
 	dw $3
-	INCBIN "gfx/unnamed/4.2bpp"
+	INCBIN "gfx/duel/59.2bpp"
 
-Unnamed5Gfx: ; 93fda (24:7fda)
+Duel60Gfx: ; 93fda (24:7fda)
 	dw $2
-	INCBIN "gfx/unnamed/5.2bpp"
+	INCBIN "gfx/duel/60.2bpp"
 
 rept $4
 	db $ff
@@ -304,13 +304,13 @@ OverworldMapOAMGfx: ; 9bf3a (26:7f3a)
 	dw $8
 	INCBIN "gfx/overworld_map_oam.2bpp"
 
-Unnamed6Gfx: ; 9bfbc (26:7fbc)
+Duel61Gfx: ; 9bfbc (26:7fbc)
 	dw $3
-	INCBIN "gfx/unnamed/6.2bpp"
+	INCBIN "gfx/duel/61.2bpp"
 
-Unnamed7Gfx: ; 9bfee (26:7fee)
+Duel62Gfx: ; 9bfee (26:7fee)
 	dw $1
-	INCBIN "gfx/unnamed/7.2bpp"
+	INCBIN "gfx/duel/62.2bpp"
 
 SECTION "Gfx 9", ROMX
 
@@ -426,13 +426,13 @@ MichaelGfx: ; 9fcf6 (27:7cf6)
 	dw $24
 	INCBIN "gfx/duelists/michael.2bpp"
 
-Unnamed8Gfx: ; 9ff38 (27:7f38)
+Duel63Gfx: ; 9ff38 (27:7f38)
 	dw $a
-	INCBIN "gfx/unnamed/8.2bpp"
+	INCBIN "gfx/duel/63.2bpp"
 
-Unnamed9Gfx: ; 9ffda (27:7fda)
+Duel64Gfx: ; 9ffda (27:7fda)
 	dw $2
-	INCBIN "gfx/unnamed/9.2bpp"
+	INCBIN "gfx/duel/64.2bpp"
 
 rept $4
 	db $ff
@@ -604,13 +604,13 @@ OWSprite29: ; a3dc0 (28:7dc0)
 	dw $14
 	INCBIN "gfx/overworld_sprites/29.2bpp"
 
-Unnamed10Gfx: ; a3f02 (28:7f02)
+Duel65Gfx: ; a3f02 (28:7f02)
 	dw $b
-	INCBIN "gfx/unnamed/10.2bpp"
+	INCBIN "gfx/duel/65.2bpp"
 
-Unnamed11Gfx: ; a3fb4 (28:7fb4)
+Duel66Gfx: ; a3fb4 (28:7fb4)
 	dw $4
-	INCBIN "gfx/unnamed/11.2bpp"
+	INCBIN "gfx/duel/66.2bpp"
 
 	INCROM $a3ff6, $a4000
 
