@@ -1122,7 +1122,7 @@ CopyDataHLtoDE: ; 073c (0:073c)
 	ret
 
 ; switch to rombank (A + top2 of H shifted down),
-; set top2 of H to 01,
+; set top2 of H to 01 (switchable ROM bank area),
 ; return old rombank id on top-of-stack
 BankpushHome: ; 0745 (0:0745)
 	push hl
@@ -4293,23 +4293,23 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	INCROM $1f96, $20b0
 
 Func_20b0: ; 20b0 (0:20b0)
-	ld hl, $2fe8
+	ld hl, DuelGraphics + $680 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_20bd
-	ld hl, $37f8
+	ld hl, DuelGraphics + $e90 - $4000
 .asm_20bd
 	ld de, vTiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20c4: ; 20c4 (0:20c4)
-	ld hl, $3028
+	ld hl, DuelGraphics + $6c0 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_20d1
-	ld hl, $3838
-.asm_20d1
+	jr nz, .copy
+	ld hl, DuelGraphics + $ed0 - $4000
+.copy
 	ld de, vTiles1 + $540
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
@@ -4321,32 +4321,32 @@ Func_20d8: ; 20d8 (0:20d8)
 Func_20dc: ; 20dc (0:20dc)
 	ld b, $24
 asm_20de
-	ld hl, $32e8
+	ld hl, DuelGraphics + $980 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_20eb
-	ld hl, $3af8
-.asm_20eb
+	jr nz, .copy
+	ld hl, DuelGraphics + $1190 - $4000
+.copy
 	ld de, vTiles1 + $500
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20f0: ; 20f0 (0:20f0)
-	ld hl, $4008
+	ld hl, Fonts + $8
 	ld de, vTiles1 + $200
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, $3528
+	ld hl, DuelGraphics + $bc0 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_2108
-	ld hl, $3d38
-.asm_2108
+	jr nz, .copy
+	ld hl, DuelGraphics + $13d0 - $4000
+.copy
 	ld de, vTiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_210f: ; 210f (0:210f)
-	ld hl, $40d8
+	ld hl, DuelGraphics + $1770 - $4000
 	ld de, vTiles2 + $300
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
@@ -4357,7 +4357,10 @@ Func_2119: ; 2119 (0:2119)
 	ld b, $38 ; number of tiles
 ;	fallthrough
 
-; copy b tiles from BANK(Fonts):hl to de
+; if hl ≤ $3fff
+;   copy b tiles from Gfx1:hl to de
+; if $4000 ≤ hl ≤ $7fff
+;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles:
 	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
@@ -4369,15 +4372,16 @@ CopyFontsOrDuelGraphicsTiles:
 
 	INCROM $212f, $2167
 
-Func_2167: ; 2167 (0:2167)
+DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
-	ld h, $a0
+	ld h, (40 * TILE_SIZE) / 4 ; boxes are 10x4 tiles
 	call HtimesL
 	add hl, hl
 	add hl, hl
-	ld de, $4318
+	; hl = a * $280
+	ld de, DuelBoxMessages
 	add hl, de
-	ld de, $8a00
+	ld de, vTiles1 + $200
 	ld b, $28
 	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
@@ -4943,7 +4947,7 @@ Func_2518: ; 2518 (0:2518)
 	ret
 
 Func_252e: ; 252e (0:252e)
-	ld a, $1d
+	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
 	ld de, $ccf4
 	push de
@@ -6064,7 +6068,7 @@ Func_2f32: ; 2f32 (0:2f32)
 	push hl
 	call GetCardPointer
 	jr c, .asm_2f43
-	ld a, $c
+	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld l, [hl]
 	call BankpopHome
@@ -6078,7 +6082,7 @@ Func_2f45: ; 2f45 (0:2f45)
 	push hl
 	call GetCardPointer
 	jr c, .asm_2f5b
-	ld a, $c
+	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld de, $0003
 	add hl, de
@@ -6100,7 +6104,7 @@ GetCardHeader: ; 2f5d (0:2f5d)
 	ld e, a
 	call GetCardPointer
 	jr c, .card_not_found
-	ld a, $0c
+	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld e, [hl]
 	ld bc, $5
@@ -8037,7 +8041,7 @@ Func_3d72: ; 3d72 (0:3d72)
 
 Func_3db7: ; 3db7 (0:3db7)
 	push bc
-	ld c, SPRITE_ANIM_PROPERTY_1
+	ld c, SPRITE_ANIM_FIELD_00
 	call GetSpriteAnimBufferProperty
 	pop bc
 	ret

@@ -14,6 +14,8 @@ INCBIN "gfx/duel/duel1.t5.2bpp", $0, $1698
 SECTION "Gfx 2", ROMX
 
 INCBIN "gfx/duel/duel1.t5.2bpp", $1698, $318
+
+DuelBoxMessages:: ; 78318 (1e:4318)
 INCBIN "gfx/duel/duel2.2bpp"
 
 rept $2b68
@@ -95,7 +97,7 @@ Unnamed3Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
 	INCBIN "gfx/unnamed/3.2bpp"
 
-	INCROM $8bfe4, $8C000
+	INCROM $8bfe4, $8c000
 
 SECTION "Gfx 5", ROMX
 

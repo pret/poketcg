@@ -43,20 +43,20 @@ ENDM
 
 ; TODO: Figure out what the rest are for
 sprite_anim_struct: MACRO
-\1Property1::  ds 1
-\1Property2::  ds 1 ; movement handling / palette
+\1Field0x00::  ds 1
+\1Field0x01::  ds 1 ; movement handling / palette
 \1CoordX::     db
 \1CoordY::     db
 \1TileID::     db
-\1Property6::  ds 1
-\1Property7::  ds 1
-\1Property8::  ds 1
-\1Property9::  ds 1
-\1Property10::  ds 1
-\1Property11::  ds 1
-\1Property12::  ds 1
-\1Property13::  ds 1
-\1Property14::  ds 1
+\1Field0x05::  ds 1
+\1Field0x06::  ds 1
+\1Field0x07::  ds 1
+\1Field0x08::  ds 1
+\1Field0x09::  ds 1
+\1Field0x0a::  ds 1
+\1Field0x0b::  ds 1
+\1Field0x0c::  ds 1
+\1Field0x0d::  ds 1
 \1MovementCounter::  ds 1
-\1Property16::  ds 1
+\1Field0x0f::  ds 1
 ENDM

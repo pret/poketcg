@@ -163,8 +163,8 @@ StartDuel: ; 409f (1:409f)
 .duel_finished
 	call $5990
 	call Func_04a2
-	ld a, $3
-	call Func_2167
+	ld a, BOXMSG_DECISION
+	call DrawDuelBoxMessage
 	ldtx hl, DecisionText
 	call DrawWideTextBox_WaitForInput
 	call Func_04a2
@@ -1060,8 +1060,8 @@ Func_4b60: ; 4b60 (1:4b60)
 	call $7133
 	call SwapTurn
 	call Func_04a2
-	ld a, $6
-	call Func_2167
+	ld a, BOXMSG_COIN_TOSS
+	call DrawDuelBoxMessage
 	ld hl, $0075
 	call DrawWideTextBox_WaitForInput
 	ld a, [$ff97]
@@ -1146,8 +1146,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 
 .asm_4d15
 	call Func_04a2
-	ld a, $5
-	call Func_2167
+	ld a, BOXMSG_ARENA_POKEMON
+	call DrawDuelBoxMessage
 	ld hl, $0069
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
@@ -1171,8 +1171,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 
 .asm_4d4c
 	call Func_04a2
-	ld a, $4
-	call Func_2167
+	ld a, BOXMSG_BENCH_POKEMON
+	call DrawDuelBoxMessage
 	ld hl, $006d
 	call Func_2c73
 	ld a, $3

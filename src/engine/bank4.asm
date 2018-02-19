@@ -533,7 +533,7 @@ Func_10fde: ; 10fde (4:4fde)
 	farcall CheckIfEventFlagSet
 	or a
 	jr nz, .asm_11015
-	ld c, SPRITE_ANIM_PROPERTY_16
+	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
 	set 7, [hl]
 .asm_11015
@@ -552,7 +552,7 @@ Func_11024: ; 11024 (4:5024)
 	call PlaySFX
 	ld a, [wd336]
 	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_PROPERTY_16
+	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
@@ -1253,7 +1253,7 @@ Func_12a21: ; 12a21 (4:6a21)
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
-	ld c, SPRITE_ANIM_PROPERTY_6
+	ld c, SPRITE_ANIM_FIELD_05
 	call GetSpriteAnimBufferProperty
 	pop af
 	cp [hl]

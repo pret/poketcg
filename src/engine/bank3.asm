@@ -680,7 +680,7 @@ Func_c58b: ; c58b (3:458b)
 	call GetFloorObjectFromPos
 	and $10
 	push af
-	ld c, SPRITE_ANIM_PROPERTY_16
+	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
 	pop af
 	ld a, [hl]
@@ -788,7 +788,7 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld [wd335], a
 	ld a, $10
 	ld [wd338], a
-	ld c, SPRITE_ANIM_PROPERTY_16
+	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
@@ -918,7 +918,7 @@ Func_c6dc: ; c6dc (3:46dc)
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
 	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_PROPERTY_16
+	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
 	res 2, [hl]
 	ld c, SPRITE_ANIM_MOVEMENT_COUNTER

@@ -1,14 +1,28 @@
-DECK_NAME_SIZE   EQU  24
-DECK_SIZE        EQU  60
-BENCH_SIZE       EQU   5
+DECK_NAME_SIZE      EQU 24
+DECK_SIZE           EQU 60
+BENCH_SIZE          EQU 5
+MAX_POKEMON_IN_PLAY EQU 6 ; arena + bench
 
-PLAYER_TURN   EQUS "wPlayerDuelVariables >> $8"
-OPPONENT_TURN EQUS "wOpponentDuelVariables >> $8"
+; hWhoseTurn constants
+PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
+OPPONENT_TURN EQUS "HIGH(wOpponentDuelVariables)"
 
+; wDuelFinished constants
 DUEL_WON  EQU $1
 DUEL_LOST EQU $2
 DUEL_DRAW EQU $3
 
+; Box message id's
+	const_def
+	const BOXMSG_PLAYERS_TURN
+	const BOXMSG_OPPONENTS_TURN
+	const BOXMSG_BETWEEN_TURNS
+	const BOXMSG_DECISION
+	const BOXMSG_BENCH_POKEMON
+	const BOXMSG_ARENA_POKEMON
+	const BOXMSG_COIN_TOSS
+
+; wPlayerDuelVariables or wOpponentDuelVariables constants
 DUELVARS_CARD_LOCATIONS                  EQUS "wPlayerCardLocations & $ff"              ; 00
 DUELVARS_HAND                            EQUS "wPlayerHand & $ff"                       ; 42
 DUELVARS_DECK_CARDS                      EQUS "wPlayerDeckCards & $ff"                  ; 7e
@@ -34,7 +48,7 @@ DUELVARS_ARENA_CARD_STATUS               EQUS "wPlayerArenaCardStatus & $ff"    
 DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"                ; f1
 DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "wPlayerArenaCardDisabledMoveIndex & $ff" ; f2
 
-;;; card locations
+; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00
 CARD_LOCATION_HAND         EQU $01
 CARD_LOCATION_DISCARD_PILE EQU $02
@@ -47,15 +61,12 @@ CARD_LOCATION_BENCH_4      EQU $14
 CARD_LOCATION_BENCH_5      EQU $15
 CARD_LOCATION_JUST_DRAWN   EQU $40
 
-;;; duelist types
+; duelist types (DUELVARS_DUELIST_TYPE)
 DUELIST_TYPE_PLAYER   EQU $00
 DUELIST_TYPE_LINK_OPP EQU $01
 DUELIST_TYPE_AI_OPP   EQU $80
 
-;;; constant values
-MAX_POKEMON_IN_PLAY EQU $06
-
-;;; status conditions
+; status conditions (DUELVARS_ARENA_CARD_STATUS)
 ; two statuses can be combined if they are identified by a different nybble
 NO_STATUS       EQU $00
 CONFUSED        EQU $01
@@ -66,7 +77,7 @@ DOUBLE_POISONED EQU $c0
 
 PASSIVE_STATUS_MASK  EQU $f ; confused, asleep or paralyzed
 
-;;; substatus conditions
+; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
 SUBSTATUS1_AGILITY      EQU $0c
 SUBSTATUS1_FLY          EQU $0d
 SUBSTATUS1_HARDEN       EQU $0e
@@ -94,7 +105,7 @@ SUBSTATUS2_GROWL          EQU $12
 
 SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE EQU 0
 
-;;; wNoDamageOrEffect constants
+; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01
 NO_DAMAGE_OR_EFFECT_BARRIER      EQU $02
 NO_DAMAGE_OR_EFFECT_FLY          EQU $03
