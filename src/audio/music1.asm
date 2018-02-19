@@ -25,10 +25,10 @@ Func_f4015:: ; f4015 (3d:4015)
 Func_f4018:: ; f4018 (3d:4018)
 	jp Func_f406f
 
-Func_f401b:: ; f401b (3d:401b)
+_PauseSong:: ; f401b (3d:401b)
 	jp Music1_PauseSong
 
-Func_f401e:: ; f401e (3d:401e)
+_ResumeSong:: ; f401e (3d:401e)
 	jp Music1_ResumeSong
 
 Music1_PlaySong: ; f4021 (3d:4021)

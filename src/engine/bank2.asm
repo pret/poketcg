@@ -2,7 +2,7 @@
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld b, $3c
 .asm_8cda
 	ld a, [de]
@@ -12,7 +12,7 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	jr nz, .asm_8cda
 	xor a
 	ld [hl], a
-	call DisableExtRAM
+	call DisableSRAM
 	pop bc
 	ret
 ; 0x8ce7
@@ -20,7 +20,7 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	INCROM $8ce7, $8cf9
 
 Func_8cf9: ; 8cf9 (2:4cf9)
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld hl, $b703
 	ld [hli], a
@@ -29,7 +29,7 @@ Func_8cf9: ; 8cf9 (2:4cf9)
 	ld [hli], a
 	ld [hl], a
 	ld [$b701], a
-	call DisableExtRAM
+	call DisableSRAM
 Func_8d0b: ; 8d0b (2:4d0b)
 	ld hl, Unknown_8d15
 	ld de, $9380
@@ -178,7 +178,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call Func_92b4
 	call Func_9345
 	jr nc, .asm_8ec4
-	call EnableExtRAM
+	call EnableSRAM
 	ld hl, $cf17
 	call Func_910a
 	call Func_9048
@@ -200,7 +200,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call Func_92ad
 	call Func_9038
 	ld a, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 	jr z, .asm_8edb
 .asm_8ec4
@@ -262,10 +262,10 @@ Func_8f05: ; 8f05 (2:4f05)
 
 Func_8f38: ; 8f38 (2:4f38)
 	ld hl, $b701
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [hli]
 	ld h, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	ld l, a
 	ld de, wc590
 	call Func_0663
@@ -294,7 +294,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	xor a
 	ld [hl], a
 	ld hl, $b701
-	call EnableExtRAM
+	call EnableSRAM
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -310,7 +310,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld [hl], d
 	dec hl
 	ld [hl], e
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 Func_8f8a: ; 8f8a (2:4f8a)
@@ -323,28 +323,28 @@ Func_8f8a: ; 8f8a (2:4f8a)
 	jp Func_8dbc
 
 Func_8f9d: ; 8f9d (2:4f9d)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
-	call DisableExtRAM
+	call DisableSRAM
 	ld h, $3
 	ld l, a
 	call HtimesL
 	ld e, l
 	inc e
-	ld d, $2
+	ld d, 2
 	xor a
-	ld hl, $0000
-	ld bc, $0202
-	call Func_1f5f
+	lb hl, 0, 0
+	lb bc, 2, 2
+	call FillRectangle
 	ld a, [wceb1]
-	call EnableExtRAM
+	call EnableSRAM
 	ld [$b700], a
-	call DisableExtRAM
+	call DisableSRAM
 	call Func_9326
 	call Func_9038
-	call EnableExtRAM
+	call EnableSRAM
 	call Func_9253
-	call DisableExtRAM
+	call DisableSRAM
 	xor a
 	ld [wce3f], a
 	ld [wce40], a
@@ -634,7 +634,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [wceb5], a
 .asm_9214
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
 	ld c, a
 	ld b, $0
@@ -656,7 +656,7 @@ Func_9168: ; 9168 (2:5168)
 .asm_9234
 	ld a, c
 	ld [$b700], a
-	call DisableExtRAM
+	call DisableSRAM
 	call Func_9326
 	call EnableLCD
 	ret
@@ -720,9 +720,9 @@ Func_92ad: ; 92ad (2:52ad)
 	jr Func_92ad
 
 Func_92b4: ; 92b4 (2:52b4)
-	call EnableExtRAM
+	call EnableSRAM
 	call Func_92ad
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 ; 0x92be
 
@@ -731,9 +731,9 @@ Func_92b4: ; 92b4 (2:52b4)
 Func_9314: ; 9314 (2:5314)
 	ld bc, $0018
 	add hl, bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 	jr nz, .asm_9324
 	scf
@@ -743,19 +743,19 @@ Func_9314: ; 9314 (2:5314)
 	ret
 
 Func_9326: ; 9326 (2:5326)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
-	call DisableExtRAM
-	ld h, $3
+	call DisableSRAM
+	ld h, 3
 	ld l, a
 	call HtimesL
 	ld e, l
 	inc e
-	ld d, $2
+	ld d, 2
 	ld a, $38
-	ld hl, $0102
-	ld bc, $0202
-	call Func_1f5f
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
 	ret
 
 Func_9345: ; 9345 (2:5345)

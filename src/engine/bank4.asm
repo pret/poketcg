@@ -27,9 +27,9 @@ Func_10031: ; 10031 (4:4031)
 	ld a, [$ff81]
 	push af
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	call $4cbb
-	call DisableExtRAM
+	call DisableSRAM
 	call $4b28
 	call SetFlushAllPalettes
 	call EnableLCD
@@ -37,8 +37,8 @@ Func_10031: ; 10031 (4:4031)
 	call $4cea
 	call SetFlushAllPalettes
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	ret
 
 Func_10059: ; 10059 (4:4059)
@@ -54,7 +54,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, [wd291]
 	push af
 	push bc
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
@@ -93,7 +93,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ldtx hl, WonTheMedalText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	pop af
 	ld [wd291], a
 	ret
@@ -136,7 +136,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, [hl]
 	ld [wce40], a
 	call $4031
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_BOOSTERPACK
 	call PlaySong
 	pop bc
@@ -150,7 +150,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 .asm_10373
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ldtx hl, CheckedCardsInBoosterPackText
 	call Func_2c73
 	call DisableLCD
@@ -290,7 +290,7 @@ Func_10c96: ; 10c96 (4:4c96)
 	push af
 	push bc
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	call $4cbb
 	call Func_10ab4
 	pop bc
@@ -303,8 +303,8 @@ Func_10c96: ; 10c96 (4:4c96)
 .asm_10cb0
 	call EnableLCD
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	ret
 ; 0x10cbb
 
@@ -1104,12 +1104,12 @@ Func_12704: ; 12704 (4:6704)
 	farcall Func_c1b1
 	call Func_128a9
 	farcall Func_1996e
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$a007]
 	ld [wd421], a
 	ld a, [$a006]
 	ld [wTextSpeed], a
-	call DisableExtRAM
+	call DisableSRAM
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
@@ -1130,10 +1130,10 @@ Func_12741: ; 12741 (4:6741)
 	jr nc, Func_12704
 	farcall Func_c1ed
 	farcall Func_70000
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld [$ba44], a
-	call DisableExtRAM
+	call DisableSRAM
 	ld a, $0
 	ld [wd0b5], a
 	farcallx $03, Func_383d
@@ -1499,20 +1499,20 @@ Func_131d3: ; 131d3 (4:71d3)
 	INCROM $131d3, $1344d
 
 Func_1344d: ; 1344d (4:744d)
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, DefeatedFiveOpponentsText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ret
 ; 0x13462
 
 	INCROM $13462, $13485
 
 Func_13485: ; 13485 (4:7485)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$ba68]
 	or a
 	ret z
@@ -1520,14 +1520,14 @@ Func_13485: ; 13485 (4:7485)
 	ld [wce43], a
 	ld a, [$ba57]
 	ld [wce44], a
-	call DisableExtRAM
-	call Func_379b
+	call DisableSRAM
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, ConsecutiveWinRecordIncreasedText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ret
 ; 0x134b1
 

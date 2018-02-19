@@ -1,4 +1,4 @@
-SECTION "Working Cards", SRAM
+SECTION "SRAM", SRAM
 
 	ds $100
 

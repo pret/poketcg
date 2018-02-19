@@ -64,9 +64,9 @@ Func_801a1: ; 801a1 (20:41a1)
 	ld a, [$ff81]
 	push af
 	ld a, $1
-	call BankswitchRAM
-	ld hl, vEnd
-	ld de, vBGMapTiles
+	call BankswitchSRAM
+	ld hl, v0End
+	ld de, v0BGMapTiles1
 	ld c, $20
 .asm_801b4
 	push bc
@@ -101,8 +101,8 @@ Func_801a1: ; 801a1 (20:41a1)
 	dec c
 	jr nz, .asm_801b4
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	pop de
 	pop bc
 	pop hl
@@ -114,14 +114,14 @@ Func_801f1: ; 801f1 (20:41f1)
 	ld a, [$ff81]
 	push af
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	ld hl, $a000
 	ld bc, $0800
 	xor a
 	call $3c10
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	pop bc
 	pop hl
 	ret

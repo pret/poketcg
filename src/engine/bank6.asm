@@ -5,7 +5,7 @@ INCLUDE "data/effect_commands.asm"
 	INCROM $18f9c, $1996e
 
 Func_1996e: ; 1996e (6:596e)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld hl, $a100
@@ -26,7 +26,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld a, $9
 	ld hl, $a3f8
 	call Func_199e0
-	call EnableExtRAM
+	call EnableSRAM
 	ld hl, $a100
 	ld a, $80
 .asm_199a2
@@ -58,7 +58,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [$a005], a
 	ld [$a00a], a
 	farcall Func_8cf9
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 Func_199e0: ; 199e0 (6:59e0)
@@ -69,7 +69,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	jr c, .asm_19a0e
 	call Func_19a12
 	pop hl
-	call EnableExtRAM
+	call EnableSRAM
 	push hl
 	ld de, wc590
 .asm_199f3
@@ -90,7 +90,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	ld [hli], a
 	dec c
 	jr nz, .asm_19a04
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 .asm_19a0e
 	pop hl
@@ -146,7 +146,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer1
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld hl, $cc27
@@ -162,7 +162,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	call Func_378a
 	or a
 	jr nz, .asm_1a680
-	call Func_37a0
+	call ResumeSong
 	bank1call $5773
 	ret
 ; 0x1a68d

@@ -1,8 +1,8 @@
 LoadMap: ; c000 (3:4000)
 	call DisableLCD
-	call EnableExtRAM
+	call EnableSRAM
 	bank1call Func_6785
-	call DisableExtRAM
+	call DisableSRAM
 	ld a, $0
 	ld [wd0b5], a
 	xor a
@@ -266,12 +266,12 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd111], a
 	ld [wd112], a
 	ld [wd3b8], a
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$a007]
 	ld [wd421], a
 	ld a, [$a006]
 	ld [wTextSpeed], a
-	call DisableExtRAM
+	call DisableSRAM
 	farcall Func_10756
 	ret
 
@@ -977,7 +977,7 @@ Func_c74d: ; c74d (3:474d)
 	ret
 
 MainMenu_c75a: ; c75a (3:475a)
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_PAUSEMENU
 	call PlaySong
 	call Func_c797
@@ -1003,7 +1003,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	call Func_c32b
 	jr .asm_c765
 .asm_c793
-	call Func_37a0
+	call ResumeSong
 	ret
 
 Func_c797: ; c797 (3:4797)
@@ -2645,7 +2645,7 @@ Func_d317: ; d317 (3:5317)
 DeckMachine_d336: ; d336 (3:5336)
 	push bc
 	call Func_c2a3
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_DECKMACHINE
 	call PlaySong
 	call Func_04a2
@@ -2665,7 +2665,7 @@ DeckMachine_d336: ; d336 (3:5336)
 .asm_d360
 	farcall Func_b19d
 .asm_d364
-	call Func_37a0
+	call ResumeSong
 	call Func_c2d4
 	jp IncreaseOWScriptPointerBy2
 
@@ -2777,11 +2777,11 @@ Func_d41d: ; d41d (3:541d)
 	jp IncreaseOWScriptPointerBy1
 
 Func_d423: ; d423 (3:5423)
-	call Func_379b
+	call PauseSong
 	jp IncreaseOWScriptPointerBy1
 
 Func_d429: ; d429 (3:5429)
-	call Func_37a0
+	call ResumeSong
 	jp IncreaseOWScriptPointerBy1
 
 Func_d42f: ; d42f (3:542f)

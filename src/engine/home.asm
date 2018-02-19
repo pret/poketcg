@@ -45,7 +45,7 @@ Start: ; 0150 (0:0150)
 	ld a, $1
 	call BankswitchHome
 	xor a
-	call BankswitchRAM
+	call BankswitchSRAM
 	call BankswitchVRAM_0
 	call DisableLCD
 	pop af
@@ -198,7 +198,7 @@ SetupTimer: ; 0241 (0:0241)
 	ld [rTAC], a
 	ret
 
-; carry flag: 0 if CGB
+; return carry if not CGB
 CheckForCGB: ; 025c (0:025c)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -411,50 +411,51 @@ InitialPalette: ; 0399 (0:0399)
 	rgb 10,10,08
 	rgb 00,00,00
 
+; clear VRAM tile data
 SetupVRAM: ; 03a1 (0:03a1)
 	call FillTileMap
 	call CheckForCGB
-	jr c, .asm_3b2
+	jr c, .vram0
 	call BankswitchVRAM_1
-	call .asm_3b2
+	call .vram0
 	call BankswitchVRAM_0
-.asm_3b2
-	ld hl, vTiles0
-	ld bc, vBGMapTiles - vTiles0
-.asm_3b8
+.vram0
+	ld hl, v0Tiles0
+	ld bc, v0BGMapTiles1 - v0Tiles0
+.loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, b
 	or c
-	jr nz, .asm_3b8
+	jr nz, .loop
 	ret
 
-; fill VARM tile map banks with [wTileMapFill]
+; fill VRAM0 BG maps with [wTileMapFill] and VRAM1 BG Maps with 0
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM_0
-	ld hl, vBGMapTiles
-	ld bc, vBGMapAttrs - vBGMapTiles
-.asm_3c9
+	ld hl, v0BGMapTiles1
+	ld bc, v0BGMapTiles2 - v0BGMapTiles1
+.vram0_loop
 	ld a, [wTileMapFill]
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_3c9
+	jr nz, .vram0_loop
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM_1
-	ld hl, vBGMapTiles
-	ld bc, vBGMapAttrs - vBGMapTiles
-.asm_3e1
+	ld hl, v1BGMapTiles1
+	ld bc, v1BGMapTiles2 - v1BGMapTiles1
+.vram1_loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_3e1
+	jr nz, .vram1_loop
 	call BankswitchVRAM_0
 	ret
 
@@ -641,7 +642,7 @@ AttrBlkPacket_04bf: ; 04bf (0:04bf)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-; returns vBGMapTiles + BG_MAP_WIDTH * c + b in de.
+; returns v0BGMapTiles1 + BG_MAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
@@ -652,7 +653,7 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	add hl, hl
 	add hl, hl
 	ld c, b
-	ld b, HIGH(vBGMapTiles)
+	ld b, HIGH(v0BGMapTiles1)
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -1217,8 +1218,8 @@ BankswitchHome: ; 07a3 (0:07a3)
 	ld [MBC3RomBank], a
 	ret
 
-; switch RAM bank
-BankswitchRAM: ; 07a9 (0:07a9)
+; switch SRAM bank
+BankswitchSRAM: ; 07a9 (0:07a9)
 	push af
 	ldh [hBankRAM], a
 	ld [MBC3SRamBank], a
@@ -1228,7 +1229,7 @@ BankswitchRAM: ; 07a9 (0:07a9)
 	ret
 
 ; enable external RAM
-EnableExtRAM: ; 07b6 (0:07b6)
+EnableSRAM: ; 07b6 (0:07b6)
 	push af
 	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
@@ -1236,7 +1237,7 @@ EnableExtRAM: ; 07b6 (0:07b6)
 	ret
 
 ; disable external RAM
-DisableExtRAM: ; 07be (0:07be)
+DisableSRAM: ; 07be (0:07be)
 	push af
 	xor a ; SRAM_DISABLE
 	ld [MBC3SRamEnable], a
@@ -1303,7 +1304,7 @@ CGBSpeedSwitch: ; 07f1 (0:07f1)
 
 SetupExtRAM: ; 080b (0:080b)
 	xor a
-	call BankswitchRAM
+	call BankswitchSRAM
 	ld hl, $a000
 	ld bc, $1000
 .asm_815
@@ -1320,7 +1321,7 @@ SetupExtRAM: ; 080b (0:080b)
 	call Func_084d
 	scf
 	call Func_4050
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 .asm_82f
 	ld hl, $a000
@@ -1338,7 +1339,7 @@ SetupExtRAM: ; 080b (0:080b)
 	call Func_084d
 	or a
 	call Func_4050
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 Func_084d: ; 084d (0:084d)
@@ -1358,8 +1359,8 @@ Func_084d: ; 084d (0:084d)
 
 ClearExtRAMBank: ; 0863 (0:0863)
 	push af
-	call BankswitchRAM
-	call EnableExtRAM
+	call BankswitchSRAM
+	call EnableSRAM
 	ld hl, $a000
 	ld bc, $2000
 .asm_870
@@ -1875,8 +1876,8 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld [rLCDC], a
 	ld a, %11100100
 	ld [rBGP], a
-	ld de, vTiles1
-	ld bc, vBGMapTiles - vTiles1
+	ld de, v0Tiles1
+	ld bc, v0BGMapTiles1 - v0Tiles1
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -1885,7 +1886,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld a, b
 	or c
 	jr nz, .loop
-	ld hl, vBGMapTiles
+	ld hl, v0BGMapTiles1
 	ld de, $000c
 	ld a, $80
 	ld c, $d
@@ -2519,15 +2520,15 @@ Func_0fe9: ; 0fe9 (0:0fe9)
 
 Func_100b: ; 100b (0:100b)
 	ld a, $2
-	call BankswitchRAM
+	call BankswitchSRAM
 	call $669d
 	xor a
-	call BankswitchRAM
-	call EnableExtRAM
+	call BankswitchSRAM
+	call EnableSRAM
 	ld hl, $a008
 	ld a, [hl]
 	inc [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	and $3
 	add $28
 	ld l, $0
@@ -2535,7 +2536,7 @@ Func_100b: ; 100b (0:100b)
 	add hl, hl
 	add hl, hl
 	ld a, $3
-	call BankswitchRAM
+	call BankswitchSRAM
 	push hl
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2551,7 +2552,7 @@ Func_100b: ; 100b (0:100b)
 	call SwapTurn
 	pop hl
 	push hl
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [wcc06]
 	ld [hli], a
 	ld a, [wTempNonTurnDuelistCardId]
@@ -2563,10 +2564,10 @@ Func_100b: ; 100b (0:100b)
 	add hl, de
 	ld e, l
 	ld d, h
-	call DisableExtRAM
+	call DisableSRAM
 	bank1call $66a4
 	xor a
-	call BankswitchRAM
+	call BankswitchSRAM
 	ret
 
 ; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck
@@ -3707,7 +3708,7 @@ SwapTurn: ; 1c72 (0:1c72)
 	ret
 
 PrintPlayerName: ; 1c7d (0:1c7d)
-	call EnableExtRAM
+	call EnableSRAM
 	ld hl, $a010
 .loop
 	ld a, [hli]
@@ -3716,7 +3717,7 @@ PrintPlayerName: ; 1c7d (0:1c7d)
 	or a
 	jr nz, .loop
 	dec de
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 PrintOpponentName: ; 1c8e (0:1c8e)
@@ -3741,7 +3742,7 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 Func_1caa: ; 1caa (0:1caa)
 	push de
 	push bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld hl, $0000
 	ld de, sDeck1Cards
 	ld c, $4
@@ -3775,7 +3776,7 @@ Func_1caa: ; 1caa (0:1caa)
 .asm_1cd8
 	inc e
 	jr nz, .asm_1ccf
-	call DisableExtRAM
+	call DisableSRAM
 	pop bc
 	pop de
 	ret
@@ -3784,7 +3785,7 @@ Func_1ce1: ; 1ce1 (0:1ce1)
 	push hl
 	push de
 	push bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld c, a
 	ld b, $0
 	ld hl, sDeck1Cards
@@ -3822,7 +3823,7 @@ Func_1ce1: ; 1ce1 (0:1ce1)
 
 .asm_1d11
 	and $7f
-	call DisableExtRAM
+	call DisableSRAM
 	pop bc
 	pop de
 	pop hl
@@ -3833,11 +3834,11 @@ Func_1ce1: ; 1ce1 (0:1ce1)
 
 Func_1d1d: ; 1d1d (0:1d1d)
 	push hl
-	call EnableExtRAM
+	call EnableSRAM
 	ld h, $a1
 	ld l, a
 	ld a, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	pop hl
 	and $7f
 	ret nz
@@ -3846,7 +3847,7 @@ Func_1d1d: ; 1d1d (0:1d1d)
 
 ; creates a list at $c000 of every card the player owns and how many
 CreateTempCardCollection: ; 1d2e (0:1d2e)
-	call EnableExtRAM
+	call EnableSRAM
 	ld hl, sCardCollection
 	ld de, wTempCardCollection
 	ld bc, CARD_COLLECTION_SIZE
@@ -3859,7 +3860,7 @@ CreateTempCardCollection: ; 1d2e (0:1d2e)
 	call AddDeckCardsToTempCardCollection
 	ld de, sDeck4Name
 	call AddDeckCardsToTempCardCollection
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
@@ -3890,7 +3891,7 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 	push hl
 	call CreateTempCardCollection
 	pop hl
-	call EnableExtRAM
+	call EnableSRAM
 	ld h, wTempCardCollection >> 8
 	ld a, [hl]
 	and $7f
@@ -3902,7 +3903,7 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 	inc a
 	ld [hl], a
 .asm_1d8a
-	call DisableExtRAM
+	call DisableSRAM
 	pop bc
 	pop de
 	pop hl
@@ -3910,7 +3911,7 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 
 Func_1d91: ; 1d91 (0:1d91)
 	push hl
-	call EnableExtRAM
+	call EnableSRAM
 	ld h, $a1
 	ld l, a
 	ld a, [hl]
@@ -3920,7 +3921,7 @@ Func_1d91: ; 1d91 (0:1d91)
 	ld [hl], a
 
 .asm_1d9f
-	call DisableExtRAM
+	call DisableSRAM
 	pop hl
 	ret
 ; 0x1da4
@@ -3943,7 +3944,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; returns vBGMapTiles + BG_MAP_WIDTH * e + d in hl.
+; returns v0BGMapTiles1 + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
 DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
@@ -3957,7 +3958,7 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	add d
 	ld l, a
 	ld a, h
-	adc HIGH(vBGMapTiles)
+	adc HIGH(v0BGMapTiles1)
 	ld h, a
 	ret
 
@@ -4106,7 +4107,7 @@ ContinueDrawingTextBoxDMGorSGB:
 	lb de, $1a, $1b
 ;	fallthrough
 
-; copies b bytes of data to sp+$1c and to hl, and returns hl += BG_MAP_WIDTH
+; copies b bytes of data to sp-$1f and to hl, and returns hl += BG_MAP_WIDTH
 ; d = value of byte 0
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
@@ -4246,13 +4247,18 @@ AttrBlkPacket_1f4f: ; 1f4f (0:1f4f)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-Func_1f5f: ; 1f5f (0:1f5f)
+; Fill a bxc rectangle at de and at sp-$26,
+; using tile a and the subsequent ones in the following pattern:
+; | a+0*l+0*h | a+0*l+1*h | a+0*l+2*h |
+; | a+1*l+0*h | a+1*l+1*h | a+1*l+2*h |
+; | a+2*l+0*h | a+2*l+1*h | a+2*l+2*h |
+FillRectangle: ; 1f5f (0:1f5f)
 	push de
 	push af
 	push hl
-	add sp, $e0
+	add sp, -BG_MAP_WIDTH
 	call DECoordToBGMap0Address
-.asm_1f67
+.next_row
 	push hl
 	push bc
 	ld hl, sp+$25
@@ -4261,18 +4267,18 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	ld a, [hl]
 	ld hl, sp+$4
 	push hl
-.asm_1f72
+.next_tile
 	ld [hli], a
 	add d
 	dec b
-	jr nz, .asm_1f72
+	jr nz, .next_tile
 	pop de
 	pop bc
 	pop hl
 	push hl
 	push bc
 	ld c, b
-	ld b, $0
+	ld b, 0
 	call SafeCopyDataDEtoHL
 	ld hl, sp+$24
 	ld a, [hl]
@@ -4281,10 +4287,10 @@ Func_1f5f: ; 1f5f (0:1f5f)
 	ld [hl], a
 	pop bc
 	pop de
-	ld hl, $0020
+	ld hl, BG_MAP_WIDTH
 	add hl, de
 	dec c
-	jr nz, .asm_1f67
+	jr nz, .next_row
 	add sp, $24
 	pop de
 	ret
@@ -4299,7 +4305,7 @@ Func_20b0: ; 20b0 (0:20b0)
 	jr nz, .asm_20bd
 	ld hl, DuelGraphics + $e90 - $4000
 .asm_20bd
-	ld de, vTiles1 + $500
+	ld de, v0Tiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
@@ -4310,7 +4316,7 @@ Func_20c4: ; 20c4 (0:20c4)
 	jr nz, .copy
 	ld hl, DuelGraphics + $ed0 - $4000
 .copy
-	ld de, vTiles1 + $540
+	ld de, v0Tiles1 + $540
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
 
@@ -4327,12 +4333,12 @@ asm_20de
 	jr nz, .copy
 	ld hl, DuelGraphics + $1190 - $4000
 .copy
-	ld de, vTiles1 + $500
+	ld de, v0Tiles1 + $500
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_20f0: ; 20f0 (0:20f0)
 	ld hl, Fonts + $8
-	ld de, vTiles1 + $200
+	ld de, v0Tiles1 + $200
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
 	ld hl, DuelGraphics + $bc0 - $4000
@@ -4341,24 +4347,24 @@ Func_20f0: ; 20f0 (0:20f0)
 	jr nz, .copy
 	ld hl, DuelGraphics + $13d0 - $4000
 .copy
-	ld de, vTiles1 + $500
+	ld de, v0Tiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_210f: ; 210f (0:210f)
 	ld hl, DuelGraphics + $1770 - $4000
-	ld de, vTiles2 + $300
+	ld de, v0Tiles2 + $300
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
 
 Func_2119: ; 2119 (0:2119)
 	ld hl, DuelGraphics - $4000
-	ld de, vTiles2 ; destination
+	ld de, v0Tiles2 ; destination
 	ld b, $38 ; number of tiles
 ;	fallthrough
 
 ; if hl ≤ $3fff
-;   copy b tiles from Gfx1:hl to de
+;   copy b tiles from Gfx1:(hl+$4000) to de
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles:
@@ -4370,7 +4376,34 @@ CopyFontsOrDuelGraphicsTiles:
 	ret
 ; 0x212f
 
-	INCROM $212f, $2167
+; this function appears to copy duel gfx data into sram
+Func_212f: ; 212f (0:212f)
+	ld hl, DuelGraphics - $4000
+	ld de, $a400
+	ld b, $30
+	call CopyFontsOrDuelGraphicsTiles
+	ld hl, DuelGraphics + $17f0 - $4000
+	ld de, $a700
+	ld b, $08
+	call CopyFontsOrDuelGraphicsTiles
+	call GetCardSymbolData
+	sub $d0
+	ld l, a
+	ld h, $00
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld de, DuelGraphics + $680 - $4000
+	add hl, de
+	ld de, $a780
+	ld b, $04
+	call CopyFontsOrDuelGraphicsTiles
+	ld hl, DuelGraphics + $680 - $4000
+	ld de, $b100
+	ld b, $30
+	jr CopyFontsOrDuelGraphicsTiles
+; 0x2167
 
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
@@ -4381,14 +4414,14 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	; hl = a * $280
 	ld de, DuelBoxMessages
 	add hl, de
-	ld de, vTiles1 + $200
+	ld de, v0Tiles1 + $200
 	ld b, $28
 	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
-	ld hl, $010a
-	ld bc, $0a04
+	lb hl, 1, 10
+	lb bc, 10, 4
 	lb de, 5, 4
-	jp Func_1f5f
+	jp FillRectangle
 ; 0x2189
 
 	INCROM $2189, $21c5
@@ -4604,7 +4637,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	ld l, e
 	ld h, d
 	ld de, $cd05
-	ld c, $1
+	ld c, 1
 	call SafeCopyDataDEtoHL
 	ld hl, $ffac
 	inc [hl]
@@ -5253,7 +5286,83 @@ Func_271a: ; 271a (0:271a)
 	ret
 ; 0x278d
 
-	INCROM $278d, $29f5
+	INCROM $278d, $2988
+
+CardTypeToSymbolID: ; 2988 (0:2988)
+	ld a, [wLoadedCard1Type]
+	cp TYPE_TRAINER
+	jr nc, .trainer_card
+	cp TYPE_ENERGY_FIRE
+	jr c, .pokemon_card
+	; energy card
+	and 7 ; convert energy constant to type constant
+	ret
+.trainer_card
+	ld a, 11
+	ret
+.pokemon_card
+	ld a, [wLoadedCard1Stage]
+	add 8
+	ret
+; 0x299f
+
+GetCardSymbolData: ; 299f (0:299f)
+	call CardTypeToSymbolID
+	add a
+	ld c, a
+	ld b, 0
+	ld hl, CardSymbolTable
+	add hl, bc
+	ld a, [hl]
+	ret
+; 0x29ac
+
+DrawCardSymbol: ; 29ac (0:29ac)
+	push hl
+	push de
+	push bc
+	call GetCardSymbolData
+	dec d
+	dec d
+	dec e
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .tiles
+	; CGB-only attrs (palette)
+	push hl
+	inc hl
+	ld a, [hl]
+	lb bc, 2, 2
+	lb hl, 0, 0
+	call BankswitchVRAM_1
+	call FillRectangle
+	call BankswitchVRAM_0
+	pop hl
+.tiles
+	ld a, [hl]
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x29dd
+
+CardSymbolTable:
+; starting tile, cgb palette (grey, red, blue, pink)
+	db $e0, $01 ; TYPE_ENERGY_FIRE
+	db $e4, $02 ; TYPE_ENERGY_GRASS
+	db $e8, $01 ; TYPE_ENERGY_LIGHTNING
+	db $ec, $02 ; TYPE_ENERGY_WATER
+	db $f0, $03 ; TYPE_ENERGY_PSYCHIC
+	db $f4, $03 ; TYPE_ENERGY_FIGHTING
+	db $f8, $00 ; TYPE_ENERGY_DOUBLE_COLORLESS
+	db $fc, $02 ; TYPE_ENERGY_UNUSED
+	db $d0, $02 ; TYPE_PKMN_*, Stage 0
+	db $d4, $02 ; TYPE_PKMN_*, Stage 1
+	db $d8, $01 ; TYPE_PKMN_*, Stage 2
+	db $dc, $02 ; TYPE_TRAINER
 
 Func_29f5: ; 29f5 (0:29f5)
 	farcallx $6, $4000
@@ -7321,12 +7430,12 @@ PlaySFX: ; 3796 (0:3796)
 	farcall _PlaySFX
 	ret
 
-Func_379b: ; 379b (0:379b)
-	farcall Func_f401b
+PauseSong: ; 379b (0:379b)
+	farcall _PauseSong
 	ret
 
-Func_37a0: ; 37a0 (0:37a0)
-	farcall Func_f401e
+ResumeSong: ; 37a0 (0:37a0)
+	farcall _ResumeSong
 	ret
 ; 0x37a5
 
@@ -7395,7 +7504,7 @@ Func_3874: ; 3874 (0:3874)
 Func_3876: ; 3876 (0:3876)
 	ldh a, [hBankROM]
 	push af
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_CARDPOP
 	call PlaySong
 	ld a, $3
@@ -7407,7 +7516,7 @@ Func_3876: ; 3876 (0:3876)
 	ld a, [wd10e]
 	and $ef
 	ld [wd10e], a
-	call Func_37a0
+	call ResumeSong
 	pop af
 	call BankswitchHome
 	scf
@@ -7433,10 +7542,10 @@ Func_38c0: ; 38c0 (0:38c0)
 	ld [wd0c2], a
 	xor a
 	ld [wd112], a
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld [$ba44], a
-	call DisableExtRAM
+	call DisableSRAM
 	call Func_3a3b
 	bank1call StartDuel
 	scf
@@ -7446,10 +7555,10 @@ Func_38db: ; 38db (0:38db)
 	ld a, $6
 	ld [wd111], a
 	call Func_39fc
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld [$ba44], a
-	call DisableExtRAM
+	call DisableSRAM
 asm_38ed
 	farcall Func_131d3
 	ld a, $9
@@ -7462,9 +7571,9 @@ Func_38fb: ; 38fb (0:38fb)
 	xor a
 	ld [wd112], a
 	bank1call Func_406f
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$ba44]
-	call DisableExtRAM
+	call DisableSRAM
 	cp $ff
 	jr z, asm_38ed
 	scf
@@ -7478,9 +7587,9 @@ Credits_3911: ; 3911 (0:3911)
 Func_3917: ; 3917 (0:3917)
 	ld a, $22
 	farcall CheckIfEventFlagSet
-	call EnableExtRAM
+	call EnableSRAM
 	ld [$a00a], a
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 GetFloorObjectFromPos: ; 3927 (0:3927)

@@ -168,6 +168,8 @@ WRAMX 1
 	"WRAM Music"
 	"WRAM Sfx"
 VRAM $00
-	"VRAM"
+	"VRAM0"
+VRAM $01
+	"VRAM1"
 SRAM $00
-	"Working Cards"
+	"SRAM"

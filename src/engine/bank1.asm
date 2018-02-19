@@ -5,12 +5,12 @@ Start_Cont: ; 4000 (1:4000)
 	call ResetSerial
 	call EnableInt_VBlank
 	call EnableInt_Timer
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$a006]
 	ld [wTextSpeed], a
 	ld a, [$a009]
 	ld [wccf2], a
-	call DisableExtRAM
+	call DisableSRAM
 	ld a, $1
 	ld [wUppercaseFlag], a
 	ei
@@ -27,10 +27,10 @@ Start_Cont: ; 4000 (1:4000)
 	call YesOrNoMenuWithText
 	jr c, .reset_game
 ; erase sram
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld [$a000], a
-	call DisableExtRAM
+	call DisableSRAM
 .reset_game
 	jp Reset
 
@@ -1215,11 +1215,19 @@ Func_5aeb: ; 5aeb (1:5aeb)
 	INCROM $5aeb, $6785
 
 Func_6785: ; 6785 (1:6785)
-	INCROM $6785, $6793
+	call EnableSRAM
+	ld hl, $bc00
+	xor a
+	ld [hli], a
+	ld [hli], a
+	ld [hl], a
+	call DisableSRAM
+	ret
+; 0x6793
 
 ; loads player deck from SRAM to wPlayerDeck
 LoadPlayerDeck: ; 6793 (1:6793)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
 	ld l, a
 	ld h, $54
@@ -1234,7 +1242,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	inc de
 	dec c
 	jr nz, .next_card_loop
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 ; 0x67b2
 
@@ -1580,10 +1588,10 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_72ad
 	add a
 	ld d, a
-	ld bc, $0202
-	ld hl, $0102
+	lb bc, 2, 2
+	lb hl, 1, 2
 	pop af
-	call Func_1f5f
+	call FillRectangle
 
 .asm_72b9
 	ld hl, $cd9f
