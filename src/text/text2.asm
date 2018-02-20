@@ -121,7 +121,7 @@ Text010d: ; 3851f (e:451f)
 	line "metamorphs to ", TX_RAM2, "."
 	done
 
-SelectMonOnBenchToSwitchWithActiveText: ; 38533 (e:4533)
+SelectPkmnOnBenchToSwitchWithActiveText: ; 38533 (e:4533)
 	text "Select a Pok`mon on the Bench"
 	line "to switch with the Active Pok`mon."
 	done

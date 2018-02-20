@@ -354,11 +354,11 @@ Text0052: ; 36903 (d:6903)
 	line "When you are ready."
 	done
 
-Text0053: ; 36924 (d:6924)
+YouPlayFirstText: ; 36924 (d:6924)
 	text "You play first."
 	done
 
-Text0054: ; 36935 (d:6935)
+YouPlaySecondText: ; 36935 (d:6935)
 	text "You play second."
 	done
 
@@ -372,7 +372,7 @@ Text0056: ; 3697c (d:697c)
 	line "you wish to examine."
 	done
 
-Text0057: ; 369a2 (d:69a2)
+TransmitingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 
@@ -457,7 +457,7 @@ Text0068: ; 36bab (d:6bab)
 	text TX_RAM1, "'s deck has ", TX_RAM3, " cards."
 	done
 
-Text0069: ; 36bc2 (d:6bc2)
+ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
 	text "Choose a Basic Pok`mon"
 	line "to place in the Arena."
 	done
@@ -467,7 +467,7 @@ Text006a: ; 36bf1 (d:6bf1)
 	line "in ", TX_RAM1, "'s hand."
 	done
 
-Text006b: ; 36c1a (d:6c1a)
+NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
 	text "Neither player has any Basic"
 	line "Pok`mon in his or her hand."
 	done
@@ -500,22 +500,22 @@ Text0071: ; 36d0a (d:6d0a)
 	text "You cannot select this card."
 	done
 
-Text0072: ; 36d28 (d:6d28)
+PlacingThePrizesText: ; 36d28 (d:6d28)
 	text "Placing the Prizes..."
 	done
 
-Text0073: ; 36d3f (d:6d3f)
+PleasePlacePrizesText: ; 36d3f (d:6d3f)
 	text "Please place"
 	line TX_RAM3, " Prizes."
 	done
 
-Text0074: ; 36d57 (d:6d57)
+IfHeadPlayerPlaysFirstText: ; 36d57 (d:6d57)
 	text "If heads,"
 	line ""
 	text TX_RAM2, " plays first."
 	done
 
-Text0075: ; 36d72 (d:6d72)
+CoinTossToDetermineWhoFirstText: ; 36d72 (d:6d72)
 	text "A coin will be tossed"
 	line "to decide who plays first."
 	done
@@ -829,7 +829,7 @@ Text00b1: ; 374d4 (d:74d4)
 	text "There are no cards left in the Deck."
 	done
 
-Text00b2: ; 374fa (d:74fa)
+NoSpaceOnTheBenchText: ; 374fa (d:74fa)
 	text "There is no space on the Bench."
 	done
 

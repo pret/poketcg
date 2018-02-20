@@ -802,9 +802,9 @@ Func_b19d: ; b19d (2:719d)
 	call $5a6d
 	call $7704
 	call $7545
-	ld hl, $0224
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
-	ld de, $0224
+	ld de, $0224 ; PleaseSelectDeckText?
 	call $7285
 	call $729f
 	jr c, .asm_b1b3
@@ -911,7 +911,7 @@ Func_ba04: ; ba04 (2:7a04)
 	xor a
 	ld hl, $7b6e
 	call InitializeCursorParameters
-	ld hl, $0224
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
 	ld [$cea9], a

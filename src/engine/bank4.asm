@@ -137,7 +137,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wce40], a
 	call $4031
 	call PauseSong
-	ld a, MUSIC_BOOSTERPACK
+	ld a, MUSIC_BOOSTER_PACK
 	call PlaySong
 	pop bc
 	ld a, c
@@ -1141,7 +1141,7 @@ Func_12741: ; 12741 (4:6741)
 	ret
 
 CardPop_12768: ; 12768 (4:6768)
-	ld a, MUSIC_CARDPOP
+	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call Func_7571
 	farcall Func_c1a4

@@ -978,7 +978,7 @@ Func_c74d: ; c74d (3:474d)
 
 MainMenu_c75a: ; c75a (3:475a)
 	call PauseSong
-	ld a, MUSIC_PAUSEMENU
+	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
 	call Func_c797
 .asm_c765
@@ -1057,7 +1057,7 @@ Func_c7e5: ; c7e5 (3:47e5)
 	ret
 
 PC_c7ea: ; c7ea (3:47ea)
-	ld a, MUSIC_PCMAINMENU
+	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call Func_c241
 	call $4915
@@ -2646,7 +2646,7 @@ DeckMachine_d336: ; d336 (3:5336)
 	push bc
 	call Func_c2a3
 	call PauseSong
-	ld a, MUSIC_DECKMACHINE
+	ld a, MUSIC_DECK_MACHINE
 	call PlaySong
 	call EmptyScreen
 	xor a
@@ -3019,7 +3019,7 @@ OWSequence_Sara: ; e177 (3:6177)
 	run_script OWScript_StartBattle
 	db 2
 	db WATERFRONT_POKEMON_DECK - 2 ; 6189
-	db MUSIC_DUELTHEME1
+	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatSara: ; e18c (3:618c)
@@ -3057,7 +3057,7 @@ OWSequence_Amanda: ; e19e (03:619e)
 	run_script OWScript_StartBattle
 	db 03
 	db LONELY_FRIENDS_DECK - 2
-	db MUSIC_DUELTHEME1
+	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatAmanda: ; e1b3 (03:61b3)

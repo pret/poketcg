@@ -3296,7 +3296,7 @@ Func_1485: ; 1485 (0:1485)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
 	cp MAX_POKEMON_IN_PLAY
-	jr nc, .too_many_pokemon_in_play
+	jr nc, .already_max_pkmn_in_play
 	inc [hl]
 	ld e, a
 	pop af
@@ -3341,7 +3341,7 @@ Func_1485: ; 1485 (0:1485)
 	or a
 	ret
 
-.too_many_pokemon_in_play
+.already_max_pkmn_in_play
 	pop af
 	scf
 	ret
@@ -7919,7 +7919,7 @@ Func_3876: ; 3876 (0:3876)
 	ldh a, [hBankROM]
 	push af
 	call PauseSong
-	ld a, MUSIC_CARDPOP
+	ld a, MUSIC_CARD_POP
 	call PlaySong
 	ld a, $3
 	ld [wd0c2], a
@@ -7945,7 +7945,7 @@ Func_38a3: ; 38a3 (0:38a3)
 	ld [wd0c3], a
 	ld a, $2
 	ld [wDuelTheme], a
-	ld a, MUSIC_CARDPOP
+	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call Func_758f
 	scf

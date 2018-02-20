@@ -56,7 +56,7 @@ CommentedOut_406e: ; 406e (1:406e)
 ; 0x406f
 
 Func_406f: ; 406f (1:406f)
-	call $420b
+	call Func_420b
 	call $66e9
 	ldtx hl, BackUpIsBrokenText
 	jr c, .asm_4097
@@ -84,7 +84,7 @@ Func_406f: ; 406f (1:406f)
 StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	ld a, $0
+	ld a, DUELIST_TYPE_PLAYER
 	ld [wPlayerDuelistType], a
 	ld a, [wcc19]
 	ld [wOpponentDeckId], a
@@ -94,7 +94,7 @@ StartDuel: ; 409f (1:409f)
 	call SwapTurn
 	jr .asm_40ca
 
-	ld a, MUSIC_DUELTHEME1
+	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
 	ld hl, $cc16
 	xor a
@@ -110,7 +110,7 @@ StartDuel: ; 409f (1:409f)
 	ld [wcbe6], a
 	xor a
 	ld [wCurrentDuelMenuItem], a
-	call $420b
+	call Func_420b
 	ld a, [wcc18]
 	ld [wcc08], a
 	call $70aa
@@ -183,7 +183,7 @@ StartDuel: ; 409f (1:409f)
 	cp DUEL_LOST
 	jr z, .active_duelist_lost_batte
 	ld a, $5f
-	ld c, MUSIC_DARKDIDDLY
+	ld c, MUSIC_DARK_DIDDLY
 	ldtx hl, DuelWasDrawText
 	jr .handle_duel_finished
 
@@ -195,7 +195,7 @@ StartDuel: ; 409f (1:409f)
 	xor a
 	ld [wd0c3], a
 	ld a, $5d
-	ld c, MUSIC_MATCHVICTORY
+	ld c, MUSIC_MATCH_VICTORY
 	ldtx hl, WonDuelText
 	jr .handle_duel_finished
 
@@ -207,7 +207,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, $1
 	ld [wd0c3], a
 	ld a, $5e
-	ld c, MUSIC_MATCHLOSS
+	ld c, MUSIC_MATCH_LOSS
 	ldtx hl, LostDuelText
 
 .handle_duel_finished
@@ -461,7 +461,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	jr c, Func_441f
 	call $4611
 	jr c, Func_441c
-	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	jr c, Func_441c
@@ -485,7 +485,7 @@ Func_43f1: ; 43f1 (1:43f1)
 	call $4611
 	jr c, Func_441c
 	call $6558
-	ldtx hl, SelectMonOnBenchToSwitchWithActiveText
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
@@ -756,7 +756,7 @@ Func_481b: ; $481b (1:481b)
 	ld [hl], a
 	ret
 
-; copies the following to the c510 buffer:
+; copies the following to the wDuelCardOrAttackList buffer:
 ;   if pokemon's second moveslot is empty: <card_no>, 0
 ;   else: <card_no>, 0, <card_no>, 1
 LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
@@ -822,7 +822,7 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	ld hl, wLoadedCard1Move1Category - (wLoadedCard1Move1Name + 1)
 	add hl, de
 	ld a, [hl]
-	and $ff - RESIDUAL
+	and $ff ^ RESIDUAL
 	cp POKEMON_POWER
 	jr z, .return_no_move_found
 	or a
@@ -894,6 +894,7 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	ld [wAttachedEnergiesAccum], a
 	ld hl, wAttachedEnergies
 	ld c, (NUM_COLORED_TYPES) / 2
+
 .next_energy_type_pair
 	ld a, [de]
 	swap a
@@ -916,14 +917,14 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	cp b
 	jr c, .not_enough_energies
 	or a
-.asm_48fb
+.done
 	pop de
 	ret
 
 .not_usable
 .not_enough_energies
 	scf
-	jr .asm_48fb
+	jr .done
 ; 0x4900
 
 ; given the amount of energies of a specific type required for an attack in the
@@ -1019,7 +1020,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	jr .asm_4bd0
 
 .asm_4bb2
-	ld hl, $006b
+	ldtx hl, NeitherPlayerHasBasicPkmnText
 	call DrawWideTextBox_WaitForInput
 	call $4e06
 	call $7107
@@ -1041,14 +1042,14 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	jp c, $4c77
 	call Func_311d
-	ld hl, $0072
+	ldtx hl, PlacingThePrizesText
 	call DrawWideTextBox_WaitForInput
 	call Func_0f58
 	ld a, [wcc08]
 	ld l, a
 	ld h, $0
 	call Func_2ec4
-	ld hl, $0073
+	ldtx hl, PleasePlacePrizesText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 	call $4c7c
@@ -1062,7 +1063,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call EmptyScreen
 	ld a, BOXMSG_COIN_TOSS
 	call DrawDuelBoxMessage
-	ld hl, $0075
+	ldtx hl, CoinTossToDetermineWhoFirstText
 	call DrawWideTextBox_WaitForInput
 	ld a, [$ff97]
 	cp $c2
@@ -1071,12 +1072,12 @@ Func_4b60: ; 4b60 (1:4b60)
 	call PrintPlayerName
 	ld hl, $0000
 	call Func_2ebb
-	ld hl, $0053
-	ld de, $0074
+	ldtx hl, YouPlayFirstText
+	ldtx de, IfHeadPlayerPlaysFirstText
 	call TossCoin
 	jr c, .asm_4c4a
 	call SwapTurn
-	ld hl, $0054
+	ldtx hl, YouPlaySecondText
 
 .asm_4c4a
 	call DrawWideTextBox_WaitForInput
@@ -1089,12 +1090,12 @@ Func_4b60: ; 4b60 (1:4b60)
 	call PrintOpponentName
 	ld hl, $0000
 	call Func_2ebb
-	ld hl, $0054
-	ld de, $0074
+	ldtx hl, YouPlaySecondText
+	ldtx de, IfHeadPlayerPlaysFirstText
 	call TossCoin
 	jr c, .asm_4c6f
 	call SwapTurn
-	ld hl, $0053
+	ldtx hl, YouPlayFirstText
 
 .asm_4c6f
 	call DrawWideTextBox_WaitForInput
@@ -1124,7 +1125,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ret
 
 .asm_4cec
-	ld hl, $0057
+	ldtx hl, TransmitingDataText
 	call DrawWideTextBox_PrintText
 	call Func_0f58
 	ld hl, wPlayerCardLocations
@@ -1148,7 +1149,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call EmptyScreen
 	ld a, BOXMSG_ARENA_POKEMON
 	call DrawDuelBoxMessage
-	ld hl, $0069
+	ldtx hl, ChooseBasicPkmnToPlaceInArenaText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	call $51e7
@@ -1196,7 +1197,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	jr .asm_4d5f
 
 .asm_4d86
-	ld hl, $00b2
+	ldtx hl, NoSpaceOnTheBenchText
 	call DrawWideTextBox_WaitForInput
 	jr .asm_4d5f
 
@@ -1277,7 +1278,7 @@ AIMakeDecision: ; 67be (1:67be)
 	or a
 	ret nz
 	ld [wVBlankCtr], a
-	ld hl, $0088
+	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
 	or a
 	ret

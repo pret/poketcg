@@ -439,7 +439,7 @@ Func_1d078: ; 1d078 (7:5078)
 	INCROM $1d0fa, $1d11c
 
 Func_1d11c: ; 1d11c (7:511c)
-	ld a, MUSIC_PCMAINMENU
+	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call DisableLCD
 	farcallx $4, $4000
