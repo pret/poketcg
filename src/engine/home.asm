@@ -46,7 +46,7 @@ Start: ; 0150 (0:0150)
 	call BankswitchHome
 	xor a
 	call BankswitchSRAM
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	call DisableLCD
 	pop af
 	ld [wInitialA], a
@@ -80,7 +80,7 @@ VBlankHandler: ; 019b (0:019b)
 	ld a, [wVBlankOAMCopyToggle]
 	or a
 	jr z, .no_oam_copy
-	call hDMAFunction    ; DMA-copy $ca00-$ca9f to OAM memory
+	call hDMAFunction ; DMA-copy $ca00-$ca9f to OAM memory
 	xor a
 	ld [wVBlankOAMCopyToggle], a
 .no_oam_copy
@@ -181,15 +181,14 @@ IncrementPlayTimeCounter: ; 021c (0:021c)
 
 ; setup timer to 16384/68 ≈ 240.94 Hz
 SetupTimer: ; 0241 (0:0241)
-	ld b, $100 - 68
-	; ld b, $bc
+	ld b, -68 ; Value for Normal Speed
 	call CheckForCGB
-	jr c, .asm_250
+	jr c, .set_timer
 	ld a, [rKEY1]
 	and $80
-	jr z, .asm_250
-	ld b, $100 - 2*68
-.asm_250
+	jr z, .set_timer
+	ld b, $100 - 2 * 68 ; Value for CGB Double Speed
+.set_timer
 	ld a, b
 	ld [rTMA], a
 	ld a, rTAC_16384_HZ
@@ -343,9 +342,9 @@ SetupLCD: ; 030b (0:030b)
 	ld [wLCDCFunctiontrampoline], a
 	ld [wVBlankFunctionTrampoline], a
 	ld hl, wVBlankFunctionTrampoline + 1
-	ld [hl], NopF & $ff  ;
+	ld [hl], LOW(NopF)   ;
 	inc hl               ; load `jp NopF`
-	ld [hl], NopF >> $8  ;
+	ld [hl], HIGH(NopF)  ;
 	ld a, $47
 	ld [wLCDC], a
 	ld a, $1
@@ -416,9 +415,9 @@ SetupVRAM: ; 03a1 (0:03a1)
 	call FillTileMap
 	call CheckForCGB
 	jr c, .vram0
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	call .vram0
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 .vram0
 	ld hl, v0Tiles0
 	ld bc, v0BGMapTiles1 - v0Tiles0
@@ -433,7 +432,7 @@ SetupVRAM: ; 03a1 (0:03a1)
 
 ; fill VRAM0 BG maps with [wTileMapFill] and VRAM1 BG Maps with 0
 FillTileMap: ; 03c0 (0:03c0)
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	ld hl, v0BGMapTiles1
 	ld bc, v0BGMapTiles2 - v0BGMapTiles1
 .vram0_loop
@@ -446,7 +445,7 @@ FillTileMap: ; 03c0 (0:03c0)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	ld hl, v1BGMapTiles1
 	ld bc, v1BGMapTiles2 - v1BGMapTiles1
 .vram1_loop
@@ -456,7 +455,7 @@ FillTileMap: ; 03c0 (0:03c0)
 	ld a, c
 	or b
 	jr nz, .vram1_loop
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	ret
 
 ; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
@@ -620,7 +619,7 @@ Func_0492: ; 0492 (0:0492)
 	jr nz, .asm_49b
 	ret
 
-Func_04a2: ; 04a2 (0:04a2)
+EmptyScreen: ; 04a2 (0:04a2)
 	call DisableLCD
 	call FillTileMap
 	xor a
@@ -642,7 +641,7 @@ AttrBlkPacket_04bf: ; 04bf (0:04bf)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-; returns v0BGMapTiles1 + BG_MAP_WIDTH * c + b in de.
+; returns v*BGMapTiles1 + BG_MAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
@@ -790,25 +789,25 @@ HandleDPadRepeat: ; 0572 (0:0572)
 	ret
 
 CopyDMAFunction: ; 0593 (0:0593)
-	ld c, $83
+	ld c, LOW(hDMAFunction)
 	ld b, JumpToFunctionInTable - DMA
 	ld hl, DMA
-.asm_59a
+.loop
 	ld a, [hli]
 	ld [$ff00+c], a
 	inc c
 	dec b
-	jr nz, .asm_59a
+	jr nz, .loop
 	ret
 
 ; CopyDMAFunction copies this function to hDMAFunction ($ff83)
 DMA: ; 05a1 (0:05a1)
-	ld a, $ca
+	ld a, HIGH(wBufOAM)
 	ld [rDMA], a
 	ld a, $28
-.asm_5a7
+.wait
 	dec a
-	jr nz, .asm_5a7
+	jr nz, .wait
 	ret
 
 ; jumps to index a in pointer table hl
@@ -829,10 +828,10 @@ CallIndirect: ; 05b6 (0:05b6)
 	push af
 	ld a, [hli]
 	or [hl]
-	jr nz, .asm_5bd
+	jr nz, .call_hl
 	pop af
 	ret
-.asm_5bd
+.call_hl
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
@@ -1048,7 +1047,7 @@ Func_06ee: ; 06ee (0:06ee)
 	ret
 ; 0x6fc
 
-; memcpy(DE, HL, B)
+; copy b bytes of data from hl to de
 ; if LCD on, copy during h-blank only
 SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	ld a, [wLCDC]
@@ -1070,8 +1069,8 @@ JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
 	rla
-	jr nc, .asm_726
-.asm_712
+	jr nc, .next_tile
+.hblank_copy
 	push bc
 	push hl
 	push de
@@ -1086,19 +1085,19 @@ CopyGfxData: ; 070c (0:070c)
 	add hl, bc
 	pop bc
 	dec b
-	jr nz, .asm_712
+	jr nz, .hblank_copy
 	ret
-.asm_726
+.next_tile
 	push bc
-.asm_727
+.copy_tile
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_727
+	jr nz, .copy_tile
 	pop bc
 	dec b
-	jr nz, .asm_726
+	jr nz, .next_tile
 	ret
 
 CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
@@ -1245,7 +1244,7 @@ DisableSRAM: ; 07be (0:07be)
 	ret
 
 ; set current dest VRAM bank to 0
-BankswitchVRAM_0: ; 07c5 (0:07c5)
+BankswitchVRAM0: ; 07c5 (0:07c5)
 	push af
 	xor a
 	ldh [hBankVRAM], a
@@ -1254,7 +1253,7 @@ BankswitchVRAM_0: ; 07c5 (0:07c5)
 	ret
 
 ; set current dest VRAM bank to 1
-BankswitchVRAM_1: ; 07cd (0:07cd)
+BankswitchVRAM1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
 	ldh [hBankVRAM], a
@@ -1925,7 +1924,7 @@ Wait: ; 0c08 (0:0c08)
 	jr nz, Wait
 	ret
 
-; memcpy(DE, HL, B), but only during hblank
+; copy b bytes of data from hl to de, but only during hblank
 HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	push bc
 .loop
@@ -1947,7 +1946,7 @@ HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	pop bc
 	ret
 
-; memcpy(HL, DE, C), but only during hblank
+; copy c bytes of data from de to hl, but only during hblank
 HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 	push bc
 .loop
@@ -1970,7 +1969,34 @@ HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 	ret
 ; 0xc4b
 
-	INCROM $0c4b, $0c91
+; returns a *= 10
+Func_0c4b: ; 0c4b (0:0c4b)
+	push de
+	ld e, a
+	add a
+	add a
+	add e
+	add a
+	pop de
+	ret
+; 0xc53
+
+; returns hl *= 10
+Func_0c53: ; 0c53 (0:0c53)
+	push de
+	ld l, a
+	ld e, a
+	ld h, $00
+	ld d, h
+	add hl, hl
+	add hl, hl
+	add hl, de
+	add hl, hl
+	pop de
+	ret
+; 0xc5f
+
+	INCROM $0c5f, $0c91
 
 ; called at roughly 240Hz by TimerHandler
 SerialTimerHandler: ; 0c91 (0:0c91)
@@ -2010,7 +2036,65 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ret
 ; 0xcc5
 
-	INCROM $0cc5, $0d26
+Func_0cc5: ; 0cc5 (0:0cc5)
+	ld hl, wSerialRecvCounter
+	or a
+	jr nz, .asm_cdc
+	ld a, [hl]
+	or a
+	ret z
+	ld [hl], $00
+	ld a, [wSerialRecvBuf]
+	ld e, $12
+	cp $29
+	jr z, .asm_cfa
+	xor a
+	scf
+	ret
+.asm_cdc
+	ld a, $29
+	ld [rSB], a
+	ld a, $01
+	ld [rSC], a
+	ld a, $81
+	ld [rSC], a
+.asm_ce8
+	ld a, [hl]
+	or a
+	jr z, .asm_ce8
+	ld [hl], $00
+	ld a, [wSerialRecvBuf]
+	ld e, $29
+	cp $12
+	jr z, .asm_cfa
+	xor a
+	scf
+	ret
+.asm_cfa
+	xor a
+	ld [wSerialSendBufIndex], a
+	ld [wcb80], a
+	ld [wSerialSendBufToggle], a
+	ld [wSerialSendSave], a
+	ld [wcba3], a
+	ld [wSerialRecvIndex], a
+	ld [wSerialRecvCounter], a
+	ld [wSerialLastReadCA], a
+	ld a, e
+	cp $29
+	jr nz, .asm_d21
+	ld bc, $800
+.asm_d1b
+	dec bc
+	ld a, c
+	or b
+	jr nz, .asm_d1b
+	ld a, e
+.asm_d21
+	ld [wSerialOp], a
+	scf
+	ret
+; 0xd26
 
 SerialHandler: ; 0d26 (0:0d26)
 	push af
@@ -2618,23 +2702,24 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-Func_10aa: ; 10aa (0:10aa)
+; return, in register a, the amount of unclaimed prizes that the turn holder has left
+CountPrizes: ; 10aa (0:10aa)
 	push hl
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	ld l, a
 	xor a
-.asm_10b2
+.count_loop
 	rr l
 	adc $00
 	inc l
 	dec l
-	jr nz, .asm_10b2
+	jr nz, .count_loop
 	pop hl
 	ret
 ; 0x10bc
 
-; shuffles the deck specified by hWhoseTurn
+; shuffles the turn holder's deck
 ; if less than 60 cards remain in the deck, make sure the rest are ignored
 ShuffleDeck: ; 10bc (0:10bc)
 	ldh a, [hWhoseTurn]
@@ -2651,7 +2736,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	call ShuffleCards
 	ret
 
-; draw a card from the deck, saving its location as CARD_LOCATION_JUST_DRAWN
+; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN
 ; returns c if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
@@ -2676,9 +2761,64 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	ret
 ; 0x10e8
 
-	INCROM $10e8, $1123
+; add a card to the top of the turn holder's deck
+; the card is identified by register a, which contains the card number within the deck (0-59)
+ReturnCardToDeck: ; 10e8 (0:10e8)
+	push hl
+	push af
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	dec a
+	ld [hl], a ; decrement number of cards not in deck
+	add DUELVARS_DECK_CARDS
+	ld l, a ; point to top deck card
+	pop af
+	ld [hl], a ; set top deck card
+	ld l, a
+	ld [hl], CARD_LOCATION_DECK
+	ld a, l
+	pop hl
+	ret
+; 0x10fc
 
-; adds a card to the hand and increments the number of cards in the hand
+; search a card in the turn holder's deck, extract it, and add it to the hand
+; the card is identified by register a, which contains the card number within the deck (0-59)
+SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
+	push af
+	push hl
+	push de
+	push bc
+	ld c, a
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld a, DECK_SIZE
+	sub [hl]
+	inc [hl] ; increment number of cards not in deck
+	ld b, a ; DECK_SIZE - [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK] (number of cards in deck)
+	ld l, c
+	set CARD_LOCATION_JUST_DRAWN_F, [hl]
+	ld l, DUELVARS_DECK_CARDS + DECK_SIZE - 1
+	ld e, l
+	ld d, h ; hl = de = DUELVARS_DECK_CARDS + DECK_SIZE - 1 (last card)
+	inc b
+	jr .match
+.loop
+	ld a, [hld]
+	cp c
+	jr z, .match
+	ld [de], a
+	dec de
+.match
+	dec b
+	jr nz, .loop
+	pop bc
+	pop de
+	pop hl
+	pop af
+	ret
+; 0x1123
+
+; adds a card to the turn holder's hand and increments the number of cards in the hand
 ; the card is identified by register a, which contains the card number within the deck (0-59)
 AddCardToHand: ; 1123 (0:1123)
 	push af
@@ -2688,7 +2828,7 @@ AddCardToHand: ; 1123 (0:1123)
 	ld l, a
 	ldh a, [hWhoseTurn]
 	ld h, a
-	; write $1 (CARD_LOCATION_HAND) into the location of this card
+	; write CARD_LOCATION_HAND into the location of this card
 	ld [hl], CARD_LOCATION_HAND
 	; increment number of cards in hand
 	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
@@ -2704,9 +2844,237 @@ AddCardToHand: ; 1123 (0:1123)
 	ret
 ; 0x1139
 
-	INCROM $1139, $123b
+; removes a card to the turn holder's hand and decrements the number of cards in the hand
+; the card is identified by register a, which contains the card number within the deck (0-59)
+RemoveCardFromHand: ; 1139 (0:1139)
+	push af
+	push hl
+	push bc
+	push de
+	ld c, a
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	or a
+	jr z, .done ; done if no cards in hand
+	ld b, a ; number of cards in hand
+	ld l, DUELVARS_HAND
+	ld e, l
+	ld d, h
+.next_card
+	ld a, [hli]
+	cp c
+	jr nz, .no_match
+	push hl
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	dec [hl]
+	pop hl
+	jr .done_card
+.no_match
+	ld [de], a ; keep card in hand
+	inc de
+.done_card
+	dec b
+	jr nz, .next_card
+.done
+	pop de
+	pop bc
+	pop hl
+	pop af
+	ret
+; 0x1160
 
-CreateHandCardBuffer: ; 123b (0:123b)
+; moves a card to the turn holder's discard pile, as long as it is in the hand
+; the card is identified by register a, which contains the card number within the deck (0-59)
+MoveHandCardToDiscardPile: ; 1160 (0:1160)
+	call GetTurnDuelistVariable
+	ld a, [hl]
+	and $ff ^ CARD_LOCATION_JUST_DRAWN
+	cp CARD_LOCATION_HAND
+	ret nz ; return if card not in hand
+	ld a, l
+	call RemoveCardFromHand
+	push af
+	push hl
+	push de
+	call GetTurnDuelistVariable
+	ld [hl], CARD_LOCATION_DISCARD_PILE
+	ld e, l
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	inc [hl]
+	ld a, DUELVARS_DECK_CARDS - 1
+	add [hl]
+	ld l, a
+	ld [hl], e ; save card to DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE]
+	pop de
+	pop hl
+	pop af
+	ret
+; 0x1182
+
+; search a card in the turn holder's discard pile, extract it, and add it to the hand
+; the card is identified by register a, which contains the card number within the deck (0-59)
+SearchCardInDiscardPileAndAddToHand: ; 1182 (0:1182)
+	push hl
+	push de
+	push bc
+	call GetTurnDuelistVariable
+	set CARD_LOCATION_JUST_DRAWN_F, [hl]
+	ld b, l
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	ld a, [hl]
+	or a
+	jr z, .done ; done if no cards in discard pile
+	ld c, a
+	dec [hl] ; decrement number of cards in discard pile
+	ld l, DUELVARS_DECK_CARDS
+	ld e, l
+	ld d, h ; de = hl = DUELVARS_DECK_CARDS
+.next_card
+	ld a, [hli]
+	cp b
+	jr z, .match
+	ld [de], a
+	inc de
+.match
+	dec c
+	jr nz, .next_card
+	ld a, b
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x11a5
+
+; return in the z flag whether turn holder's prize a (0-7) has been taken or not
+; z: taken, nz: not taken
+CheckPrizeTaken: ; 11a5 (0:11a5)
+	ld e, a
+	ld d, 0
+	ld hl, .prize_bits
+	add hl, de
+	ld a, [hl]
+	ld e, a
+	cpl
+	ld d, a
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	and e
+	ret
+
+.prize_bits
+	db $01, $02, $04, $08, $10, $20, $40, $80
+; 0x11bf
+
+; fill wDuelCardOrAttackList with the turn holder's discard pile cards
+; return carry if the turn holder has no cards in the discard pile
+CreateDiscardPileCardList: ; 11bf (0:11bf)
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	ld b, [hl]
+	ld a, DUELVARS_DECK_CARDS - 1
+	add [hl] ; point to last card in discard pile
+	ld l, a
+	ld de, wDuelCardOrAttackList
+	inc b
+	jr .begin_loop
+.next_card_loop
+	ld a, [hld]
+	ld [de], a
+	inc de
+.begin_loop
+	dec b
+	jr nz, .next_card_loop
+	ld a, $ff ; $ff-terminated
+	ld [de], a
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	ld a, [hl]
+	or a
+	ret nz
+	scf
+	ret
+; 0x11df
+
+; fill wDuelCardOrAttackList with the turn holder's remaining deck cards
+; return carry if the turn holder has no cards left in the deck
+CreateDeckCardList: ; 11df (0:11df)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE
+	jr nc, .no_cards_left_in_deck
+	ld a, DECK_SIZE
+	sub [hl]
+	ld c, a
+	ld b, a ; c = b = DECK_SIZE - [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
+	ld a, [hl]
+	add DUELVARS_DECK_CARDS
+	ld l, a ; l = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
+	inc b
+	ld de, wDuelCardOrAttackList
+	jr .begin_loop
+.next_card
+	ld a, [hli]
+	ld [de], a
+	inc de
+.begin_loop
+	dec b
+	jr nz, .next_card
+	ld a, $ff ; $ff-terminated
+	ld [de], a
+	ld a, c
+	or a
+	ret
+.no_cards_left_in_deck
+	ld a, $ff
+	ld [wDuelCardOrAttackList], a
+	scf
+	ret
+; 0x120a
+
+; fill wDuelCardOrAttackList with the turn holder's energy cards in the arena or in a bench slot
+; if a == 0: search in CARD_LOCATION_ARENA
+; if a != 0: search in CARD_LOCATION_BENCH_[A]
+; return carry if no energy cards were found
+CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
+	or CARD_LOCATION_PLAY_AREA
+	ld c, a
+	ld de, wDuelCardOrAttackList
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.next_card_loop
+	ld a, [hl]
+	cp c
+	jr nz, .skip_card ; jump if not in specified play area location
+	ld a, l
+	call LoadDeckCardToBuffer2
+	ld a, [wLoadedCard2Type]
+	and 1 << TYPE_ENERGY_F
+	jr z, .skip_card ; jump if Pokemon or trainer card
+	ld a, l
+	ld [de], a ; add to wDuelCardOrAttackList
+	inc de
+.skip_card
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .next_card_loop
+	; all cards checked
+	ld a, $ff
+	ld [de], a
+	ld a, [wDuelCardOrAttackList]
+	cp $ff
+	jr z, .no_energies_found
+	or a
+	ret
+.no_energies_found
+	scf
+	ret
+; 0x123b
+
+; fill wDuelCardOrAttackList with the turn holder's hand cards
+; return carry if the turn holder has no cards in hand
+CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
 	inc b
 	jr .skip_card
@@ -2715,7 +3083,7 @@ CreateHandCardBuffer: ; 123b (0:123b)
 	ld a, [hld]
 	push hl
 	ld l, a
-	bit 6, [hl]
+	bit CARD_LOCATION_JUST_DRAWN_F, [hl]
 	pop hl
 	jr nz, .skip_card
 	ld [de], a
@@ -2724,9 +3092,9 @@ CreateHandCardBuffer: ; 123b (0:123b)
 .skip_card
 	dec b
 	jr nz, .check_next_card_loop
-	ld a, $ff
+	ld a, $ff ; $ff-terminated
 	ld [de], a
-	ld l, (wPlayerNumberOfCardsInHand & $ff)
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	ld a, [hl]
 	or a
 	ret nz
@@ -2734,15 +3102,37 @@ CreateHandCardBuffer: ; 123b (0:123b)
 	ret
 ; 0x1258
 
-	INCROM $1258, $1271
+Func_1258: ; 1258 (0:1258)
+	call FindLastCardInHand
+.loop
+	ld a, [hld]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+	ld a, $ff
+	ld [de], a
+	call $12a3
+	call FindLastCardInHand
+.loop2
+	ld a, [de]
+	inc de
+	ld [hld], a
+	dec b
+	jr nz, .loop2
+	ret
+; 0x1271
 
-; puts an index to the last (newest) card in current player's hand into hl.
+; returns:
+; b = turn holder's number of cards in hand (DUELVARS_NUMBER_OF_CARDS_IN_HAND)
+; hl = pointer to turn holder's last (newest) card in DUELVARS_HAND
+; de = wDuelCardOrAttackList
 FindLastCardInHand: ; 1271 (0:1271)
 	ldh a, [hWhoseTurn]
 	ld h, a
-	ld l, (wPlayerNumberOfCardsInHand & $ff)
+	ld l, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	ld b, [hl]
-	ld a, (wPlayerHand & $ff) - 1
+	ld a, DUELVARS_HAND - 1
 	add [hl]
 	ld l, a
 	ld de, wDuelCardOrAttackList
@@ -2790,11 +3180,10 @@ ShuffleCards: ; 127f (0:127f)
 
 	INCROM $12a3, $1312
 
-
 ; given a position in wDuelCardOrAttackList (c510), return:
 ;   the id of the card in that position in register de
 ;   its index within the deck (0 - 59) in hTempCardNumber and in register a
-GetCardInC510: ; 1312 (0:1312)
+GetCardInList: ; 1312 (0:1312)
 	push hl
 	ld e, a
 	ld d, $0
@@ -2934,10 +3323,9 @@ Func_1485: ; 1485 (0:1485)
 
 	INCROM $14d2, $159f
 
-; This function iterates through the card locations array to find out which and how many
-; energy cards are in arena (i.e. attached to the active pokemon).
-; One or more location constants (so long as they don't clash with the arena location constant)
-; can be specified in register e; if so, energies found in that location will be counted too.
+; Find which and how many energy cards are attached to the Pokemon card in the arena,
+; or to a Pokemon card in the bench, depending on the value of register e.
+; input: e (location to check) = CARD_LOCATION_* - CARD_LOCATION_PLAY_AREA
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
 GetAttachedEnergies: ; 159f (0:159f)
 	push hl
@@ -2950,8 +3338,8 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld [hli], a
 	dec c
 	jr nz, .zero_energies_loop
-	ld a, CARD_LOCATION_ARENA
-	or e ; if e is non-0, arena is not the only location that counts
+	ld a, CARD_LOCATION_PLAY_AREA
+	or e ; if e is non-0, a bench location is checked instead
 	ld e, a
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -2970,7 +3358,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 	ld a, [wLoadedCard2Type]
 	bit TYPE_ENERGY_F, a
 	jr z, .not_an_energy_card
-	and $7 ; zero bit 3 to extract the type
+	and TYPE_PKMN ; zero bit 3 to extract the type
 	ld e, a
 	ld d, $0
 	ld hl, wAttachedEnergies
@@ -3928,7 +4316,7 @@ Func_1d91: ; 1d91 (0:1d91)
 
 	INCROM $1da4, $1dca
 
-; memcpy(HL, DE, C)
+; copy c bytes of data from de to hl
 ; if LCD on, copy during h-blank only
 SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
@@ -3944,7 +4332,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; returns v0BGMapTiles1 + BG_MAP_WIDTH * e + d in hl.
+; returns v*BGMapTiles1 + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
 DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
@@ -4160,13 +4548,13 @@ ContinueDrawingTextBoxCGB:
 	push hl
 	call CopyLine
 	pop hl
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	ld a, [wFrameType]
 	ld e, a
 	ld d, a
 	xor a
 	call CopyLine
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
@@ -4185,12 +4573,12 @@ CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 	pop hl
 ;	fallthrough
 CopyCurrentLineAttrCGB:
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	ld a, [wFrameType] ; on CGB, wFrameType determines the palette and the other attributes
 	ld e, a
 	ld d, a
 	call CopyLine
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	ret
 
 DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
@@ -4948,13 +5336,13 @@ Func_24fa: ; 24fa (0:24fa)
 	ld bc, VWF
 	add hl, bc
 	ld b, $8
-.asm_2508
+.set_timer8
 	ld a, [hli]
 	ld [de], a
 	inc de
 	inc de
 	dec b
-	jr nz, .asm_2508
+	jr nz, .set_timer8
 	ret
 
 Func_2510: ; 2510 (0:2510)
@@ -5334,9 +5722,9 @@ DrawCardSymbol: ; 29ac (0:29ac)
 	ld a, [hl]
 	lb bc, 2, 2
 	lb hl, 0, 0
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	call FillRectangle
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	pop hl
 .tiles
 	ld a, [hl]

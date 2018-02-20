@@ -57,7 +57,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	INCROM $1406a, $14226
 
 Func_14226: ; 14226 (5:4226)
-	call CreateHandCardBuffer
+	call CreateHandCardList
 	ld hl, wDuelCardOrAttackList
 .check_for_next_pokemon
 	ld a, [hli]

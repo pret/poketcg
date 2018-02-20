@@ -22,7 +22,7 @@ Start_Cont: ; 4000 (1:4000)
 	jr Start_Cont
 .ask_erase_backup_ram
 	call Func_405a
-	call Func_04a2
+	call EmptyScreen
 	ldtx hl, ResetBackUpRamText
 	call YesOrNoMenuWithText
 	jr c, .reset_game
@@ -162,12 +162,12 @@ StartDuel: ; 409f (1:409f)
 
 .duel_finished
 	call $5990
-	call Func_04a2
+	call EmptyScreen
 	ld a, BOXMSG_DECISION
 	call DrawDuelBoxMessage
 	ldtx hl, DecisionText
 	call DrawWideTextBox_WaitForInput
-	call Func_04a2
+	call EmptyScreen
 	ldh a, [hWhoseTurn]
 	push af
 	ld a, PLAYER_TURN
@@ -272,7 +272,7 @@ Func_420b: ; 420b (1:420b)
 	xor a
 	ld [wTileMapFill], a
 	call $5990
-	call Func_04a2
+	call EmptyScreen
 	call Func_2119
 	call Func_5aeb
 	ld de, $389f
@@ -564,7 +564,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 .already_played_energy
 	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
-	call CreateHandCardBuffer
+	call CreateHandCardList
 	call $55be
 	jp $4447
 ; 0x44db
@@ -663,7 +663,7 @@ Func_478b: ; 478b (1:478b)
 	ld [wCardPageNumber], a
 	xor a
 	ld [wcbc9], a
-	call Func_04a2
+	call EmptyScreen
 	call Func_3b31
 	ld de, $8a00
 	call $59ca
@@ -1059,7 +1059,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	call $7133
 	call SwapTurn
-	call Func_04a2
+	call EmptyScreen
 	ld a, BOXMSG_COIN_TOSS
 	call DrawDuelBoxMessage
 	ld hl, $0075
@@ -1145,7 +1145,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	jp Func_0f35
 
 .asm_4d15
-	call Func_04a2
+	call EmptyScreen
 	ld a, BOXMSG_ARENA_POKEMON
 	call DrawDuelBoxMessage
 	ld hl, $0069
@@ -1170,7 +1170,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	jr .asm_4d4c
 
 .asm_4d4c
-	call Func_04a2
+	call EmptyScreen
 	ld a, BOXMSG_BENCH_POKEMON
 	call DrawDuelBoxMessage
 	ld hl, $006d
@@ -1444,7 +1444,7 @@ _TossCoin: ; 71ad (1:71ad)
 	jr z, .asm_71c1
 	xor a
 	ld [wcd9f], a
-	call Func_04a2
+	call EmptyScreen
 	call Func_210f
 
 .asm_71c1

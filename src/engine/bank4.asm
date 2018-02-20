@@ -1,7 +1,7 @@
 Func_10000: ; 10000 (4:4000)
 	ld a, $0
 	ld [wTileMapFill], a
-	call Func_04a2
+	call EmptyScreen
 	call Func_2119
 	ld de, $307f
 	call Func_2275

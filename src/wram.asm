@@ -3,7 +3,7 @@ INCLUDE "constants.asm"
 
 INCLUDE "vram.asm"
 
-SECTION "WRAM 0", WRAM0
+SECTION "WRAM0", WRAM0
 
 wTempCardCollection:: ; c000
 	ds $100
@@ -12,11 +12,10 @@ wTempCardCollection:: ; c000
 
 SECTION "WRAM Duels 1", WRAM0
 
-wPlayerDuelVariables:: ; c200
-
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
 ; These indexes are assigned following the internal order of the cards that make up the deck.
 ; This temporary index identifies the card during the current duel and within the duelist's deck.
+wPlayerDuelVariables:: ; c200
 
 ; 60-byte array that indicates where each of the 60 cards is.
 ;	$00 - deck
@@ -34,14 +33,15 @@ wPlayerCardLocations:: ; c200
 wPlayerHand:: ; c242
 	ds DECK_SIZE
 
-; 60-byte array that maps each card to its position in the deck.
+; 60-byte array that maps each card to its position in the deck or anywhere else
 ; This array is initialized to 00, 01, 02, ..., 59, until deck is shuffled.
+; Cards in the discard pile go first, cards still in the deck go last, and others go in-between.
 wPlayerDeckCards:: ; c27e
 	ds DECK_SIZE
 
-; Stores x = (60 - deck remaining cards)
-; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel
-; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
+; Stores x = (60 - deck remaining cards).
+; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel.
+; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck].
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
@@ -364,7 +364,7 @@ wObjectPalettesCGB:: ; cb30
 
 	ds $4
 
-SECTION "WRAM Serial transfer bytes", WRAM0
+SECTION "WRAM Serial Transfer", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1

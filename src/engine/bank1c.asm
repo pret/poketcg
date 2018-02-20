@@ -239,7 +239,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	push af
 	xor a
 	ld [wTileMapFill], a
-	call Func_04a2
+	call EmptyScreen
 	pop af
 	ld [wTileMapFill], a
 	di

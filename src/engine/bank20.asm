@@ -83,10 +83,10 @@ Func_801a1: ; 801a1 (20:41a1)
 	push de
 	ld bc, $0400
 	add hl, bc
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	ld b, $20
 	call SafeCopyDataHLtoDE
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 
 .asm_801d6
 	pop hl
@@ -199,7 +199,7 @@ asm_8027c
 	inc hl
 	inc hl
 	call Func_395a
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	pop de
 	pop bc
 	pop hl

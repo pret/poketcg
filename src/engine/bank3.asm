@@ -24,7 +24,7 @@ LoadMap: ; c000 (3:4000)
 	farcall Func_10ab4
 	call Func_c1a4
 	call Func_c241
-	call Func_04a2
+	call EmptyScreen
 	call Func_3ca0
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
@@ -397,7 +397,7 @@ Func_c2db: ; c2db (3:42db)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_c241
-	call Func_04a2
+	call EmptyScreen
 	ld a, [wd111]
 	push af
 	farcall Func_80000
@@ -2648,7 +2648,7 @@ DeckMachine_d336: ; d336 (3:5336)
 	call PauseSong
 	ld a, MUSIC_DECKMACHINE
 	call PlaySong
-	call Func_04a2
+	call EmptyScreen
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a

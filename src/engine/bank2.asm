@@ -42,7 +42,7 @@ Unknown_8d15: ; 8d15 (2:4d15)
 Func_8d56: ; 8d56 (2:4d56)
 	xor a
 	ld [wTileMapFill], a
-	call Func_04a2
+	call EmptyScreen
 	call Func_099c
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
