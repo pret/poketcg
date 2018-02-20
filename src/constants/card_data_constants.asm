@@ -13,6 +13,7 @@ ENERGY_CARD_DATA_LENGTH EQU $0e
 	const WATER       ; $3
 	const FIGHTING    ; $4
 	const PSYCHIC     ; $5
+NUM_COLORED_TYPES EQU const_value
 	const COLORLESS   ; $6
 	const UNUSED_TYPE ; $7
 NUM_TYPES EQU const_value

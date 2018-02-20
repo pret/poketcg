@@ -320,7 +320,7 @@ AddBoosterEnergyToDrawnEnergies: ; 1e380 (7:6380)
 
 ; generates a random energy card
 GenerateEndingEnergy: ; 1e387 (7:6387)
-	ld a, COLORLESS - FIRE
+	ld a, NUM_COLORED_TYPES
 	call Random
 	add $01
 	jr AddBoosterEnergyToDrawnEnergies

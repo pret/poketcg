@@ -2844,7 +2844,7 @@ AddCardToHand: ; 1123 (0:1123)
 	ret
 ; 0x1139
 
-; removes a card to the turn holder's hand and decrements the number of cards in the hand
+; removes a card from the turn holder's hand and decrements the number of cards in the hand
 ; the card is identified by register a, which contains the card number within the deck (0-59)
 RemoveCardFromHand: ; 1139 (0:1139)
 	push af
@@ -3178,11 +3178,37 @@ ShuffleCards: ; 127f (0:127f)
 	ret
 ; 0x12a3
 
-	INCROM $12a3, $1312
+	INCROM $12a3, $12fa
 
-; given a position in wDuelCardOrAttackList (c510), return:
-;   the id of the card in that position in register de
-;   its index within the deck (0 - 59) in hTempCardNumber and in register a
+; returns, in register bc, the id of the card in the deck position specified in register a
+; preserves hl
+GetCardInDeckPosition_bc: ; 12fa (0:12fa)
+	push hl
+	call _GetCardInDeckPosition
+	ld c, a
+	ld b, $0
+	pop hl
+	ret
+; 0x1303
+
+; return [wDuelCardOrAttackList + a] in a and in hTempCardNumber
+Func_1303: ; 1303 (0:1303)
+	push hl
+	push de
+	ld e, a
+	ld d, $0
+	ld hl, wDuelCardOrAttackList
+	add hl, de
+	ld a, [hl]
+	ldh [hTempCardNumber], a
+	pop de
+	pop hl
+	ret
+; 0x1312
+
+; given the deck position (0-59) of a card in [wDuelCardOrAttackList + a], return:
+;  - the id of the card located in that deck position in register de
+;  - [wDuelCardOrAttackList + a] in hTempCardNumber and in register a
 GetCardInList: ; 1312 (0:1312)
 	push hl
 	ld e, a
@@ -3197,8 +3223,8 @@ GetCardInList: ; 1312 (0:1312)
 	ret
 ; 0x1324
 
-; returns, in register de, the id of the card in the deck position specified in register a,
-; preserving af and hl
+; returns, in register de, the id of the card in the deck position specified by register a
+; preserves af and hl
 GetCardInDeckPosition: ; 1324 (0:1324)
 	push af
 	push hl
@@ -7783,7 +7809,7 @@ HandleEnergyBurn: ; 375d (0:375d)
 	call CheckIfUnderAnyCannotUseStatus2
 	ret c
 	ld hl, wAttachedEnergies
-	ld c, COLORLESS - FIRE
+	ld c, NUM_COLORED_TYPES
 	xor a
 .zero_next_energy
 	ld [hli], a

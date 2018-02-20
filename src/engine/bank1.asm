@@ -893,7 +893,7 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	xor a
 	ld [wAttachedEnergiesAccum], a
 	ld hl, wAttachedEnergies
-	ld c, (COLORLESS - FIRE) / 2
+	ld c, (NUM_COLORED_TYPES) / 2
 .next_energy_type_pair
 	ld a, [de]
 	swap a
