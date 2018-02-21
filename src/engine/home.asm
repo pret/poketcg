@@ -1220,7 +1220,7 @@ BankswitchHome: ; 07a3 (0:07a3)
 ; switch SRAM bank
 BankswitchSRAM: ; 07a9 (0:07a9)
 	push af
-	ldh [hBankRAM], a
+	ldh [hBankSRAM], a
 	ld [MBC3SRamBank], a
 	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
@@ -2492,15 +2492,17 @@ Func_0f58: ; 0f58 (0:0f58)
 	jp c, Func_0f35
 	ret
 
-Func_0f7f: ; 0f7f (0:0f7f)
+; sets hAIActionTableIndex to an AI action specified in register a
+; also appears to handle sending data in a link duel
+SetDuelAIAction: ; 0f7f (0:0f7f)
 	push hl
 	push bc
-	ld [$ff9e], a
+	ldh [hAIActionTableIndex], a
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
 	jr nz, .not_link
-	ld hl, $ff9e
+	ld hl, hAIActionTableIndex
 	ld bc, $000a
 	call Func_0ebf
 	call Func_0f58
@@ -2513,7 +2515,7 @@ Func_0f7f: ; 0f7f (0:0f7f)
 Func_0f9b: ; 0f9b (0:0f9b)
 	push hl
 	push bc
-	ld hl, $ff9e
+	ld hl, hAIActionTableIndex
 	ld bc, $000a
 	call Func_0ed5
 	call Func_0f58
@@ -3191,7 +3193,7 @@ GetCardInDeckPosition_bc: ; 12fa (0:12fa)
 	ret
 ; 0x1303
 
-; return [wDuelCardOrAttackList + a] in a and in hTempCardNumber
+; return [wDuelCardOrAttackList + a] in a and in hTempCardNumber_ff98
 Func_1303: ; 1303 (0:1303)
 	push hl
 	push de
@@ -3200,7 +3202,7 @@ Func_1303: ; 1303 (0:1303)
 	ld hl, wDuelCardOrAttackList
 	add hl, de
 	ld a, [hl]
-	ldh [hTempCardNumber], a
+	ldh [hTempCardNumber_ff98], a
 	pop de
 	pop hl
 	ret
@@ -3208,7 +3210,7 @@ Func_1303: ; 1303 (0:1303)
 
 ; given the deck position (0-59) of a card in [wDuelCardOrAttackList + a], return:
 ;  - the id of the card located in that deck position in register de
-;  - [wDuelCardOrAttackList + a] in hTempCardNumber and in register a
+;  - [wDuelCardOrAttackList + a] in hTempCardNumber_ff98 and in register a
 GetCardInList: ; 1312 (0:1312)
 	push hl
 	ld e, a
@@ -3216,14 +3218,14 @@ GetCardInList: ; 1312 (0:1312)
 	ld hl, wDuelCardOrAttackList
 	add hl, de
 	ld a, [hl]
-	ldh [hTempCardNumber], a
+	ldh [hTempCardNumber_ff98], a
 	call GetCardInDeckPosition
 	pop hl
-	ldh a, [hTempCardNumber]
+	ldh a, [hTempCardNumber_ff98]
 	ret
 ; 0x1324
 
-; returns, in register de, the id of the card in the deck position specified by register a
+; returns, in register de, the id of the card in the deck position (0-59) specified by register a
 ; preserves af and hl
 GetCardInDeckPosition: ; 1324 (0:1324)
 	push af
@@ -3238,7 +3240,7 @@ GetCardInDeckPosition: ; 1324 (0:1324)
 
 	INCROM $132f, $1362
 
-; returns, in register a, the id of the card in the deck position specified in register a
+; returns, in register a, the id of the card in the deck position (0-59) specified in register a
 _GetCardInDeckPosition: ; 1362 (0:1362)
 	push de
 	ld e, a
@@ -3254,7 +3256,7 @@ _GetCardInDeckPosition: ; 1362 (0:1362)
 	pop de
 	ret
 
-; load data of card in position a to wLoadedCard1
+; load data of card in deck position a (0-59) to wLoadedCard1
 LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push hl
 	push de
@@ -3271,7 +3273,7 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	pop hl
 	ret
 
-; load data of card in position a to wLoadedCard2
+; load data of card in deck position a (0-59) to wLoadedCard2
 LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push hl
 	push de
@@ -3472,11 +3474,14 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 
 	INCROM $161e, $16c0
 
-CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
+; copies from card identified by register d (0-59):
+; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
+; - Also from that move, its Damage field into wDamage
+CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
 	ld a, d
-	ld [$ff9f], a
+	ldh [hTempCardNumber_ff9f], a
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardId], a
@@ -3507,7 +3512,7 @@ CopyMoveDataAndDamageToBuffer: ; 16c0 (0:16c0)
 Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ld [$ff9f], a
+	ldh [hTempCardNumber_ff9f], a
 	call GetCardInDeckPosition
 	ld a, e
 	ld [wTempTurnDuelistCardId], a
@@ -3532,7 +3537,7 @@ Func_16f6: ; 16f6 (0:16f6)
 Func_1730: ; 1730 (0:1730)
 	ld a, [wSelectedMoveIndex]
 	ld [wcc10], a
-	ld a, [$ff9f]
+	ldh a, [hTempCardNumber_ff9f]
 	ld [wcc11], a
 	ld a, [wTempCardId]
 	ld [wcc12], a
@@ -3559,7 +3564,7 @@ Func_1730: ; 1730 (0:1730)
 	jp c, Func_1821
 .asm_1777
 	ld a, $9
-	call Func_0f7f
+	call SetDuelAIAction
 	ld a, $6
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
@@ -3570,7 +3575,7 @@ Func_1730: ; 1730 (0:1730)
 	ld a, $5
 	call TryExecuteEffectCommandFunction
 	ld a, $a
-	call Func_0f7f
+	call SetDuelAIAction
 	call $7415
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
@@ -3580,7 +3585,7 @@ Func_1730: ; 1730 (0:1730)
 	call SwapTurn
 .asm_17ad
 	xor a
-	ld [$ff9d], a
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld a, $3
 	call TryExecuteEffectCommandFunction
 	call Func_1994
@@ -3677,14 +3682,14 @@ Func_184b: ; 184b (0:184b)
 	call TryExecuteEffectCommandFunction
 	jr c, Func_1821
 	ld a, $c
-	call Func_0f7f
+	call SetDuelAIAction
 	call Func_0f58
 	ld a, $d
-	call Func_0f7f
+	call SetDuelAIAction
 	ld a, $3
 	call TryExecuteEffectCommandFunction
 	ld a, $16
-	call Func_0f7f
+	call SetDuelAIAction
 	ret
 
 Func_1874: ; 1874 (0:1874)
@@ -3693,19 +3698,19 @@ Func_1874: ; 1874 (0:1874)
 	ret nz
 	ld a, [$ffa0]
 	push af
-	ld a, [$ff9f]
+	ldh a, [hTempCardNumber_ff9f]
 	push af
 	ld a, $1
 	ld [wccec], a
 	ld a, [wcc11]
-	ld [$ff9f], a
+	ldh [hTempCardNumber_ff9f], a
 	ld a, [wcc10]
 	ld [$ffa0], a
 	ld a, $8
-	call Func_0f7f
+	call SetDuelAIAction
 	call Func_0f58
 	pop af
-	ld [$ff9f], a
+	ldh [hTempCardNumber_ff9f], a
 	pop af
 	ld [$ffa0], a
 	ret
@@ -3769,9 +3774,10 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 
 	INCROM $18f9, $1944
 
-; this loads HP and Stage (1 byte each) of card with id at $ff9f into wLoadedMoveEffectCommands
+; this loads HP and Stage (1 byte each) of the card with deck index (0-59) at hTempCardNumber_ff9f
+; into wLoadedMoveEffectCommands
 Func_1944: ; 1944 (0:1944)
-	ld a, [$ff9f]
+	ldh a, [hTempCardNumber_ff9f]
 	call LoadDeckCardToBuffer1
 	ld hl, wLoadedCard1HP
 	ld de, wLoadedMoveEffectCommands
@@ -3827,7 +3833,7 @@ Func_1994: ; 1994 (0:1994)
 	ret
 .non_zero_damage
 	xor a
-	ld [$ff9d], a
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
@@ -3843,7 +3849,7 @@ Func_1994: ; 1994 (0:1994)
 	ld a, e
 	or d
 	ret z
-	ld a, [$ff9d]
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	call Func_36f7
 	call Func_1a0e
 	ld b, a
@@ -4066,7 +4072,7 @@ Func_1bb4: ; 1bb4 (0:1bb4)
 	bank1call $4f9d
 	call $503a
 	xor a
-	ld [$ff9d], a
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	call Func_1bca
 	call WaitForWideTextBoxInput
 	call Func_0f58
@@ -4078,7 +4084,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ret z
 	cp $1
 	jr z, .asm_1bfd
-	ld a, [$ff9d]
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer1
@@ -5469,7 +5475,7 @@ Func_256d: ; 256d (0:256d)
 
 ; initializes cursor parameters given the 8 bytes starting at hl,
 ; which represent the following:
-;   x position, y position, y displacement between items, number of items,
+;   x coord, y coord, y displacement between items, number of items,
 ;   cursor tile number, tile behind cursor, ???? (unknown function pointer if non-0)
 ; also sets the current menu item to the one specified in register a
 InitializeCursorParameters: ; 2636 (0:2636)
@@ -6082,7 +6088,7 @@ Func_2bc3: ; 2bc3 (0:2bc3)
 Func_2bc7: ; 2bc7 (0:2bc7)
 	ld a, $3
 	call Func_2bdb
-	ld [$ff9d], a
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ret
 
 Func_2bcf: ; 2bcf (0:2bcf)
@@ -6242,7 +6248,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 
 Func_2ceb: ; 2ceb (0:2ceb)
 	call Func_2cd7
-	ld hl, $ce48
+	ld hl, wce48
 	inc [hl]
 	ret
 

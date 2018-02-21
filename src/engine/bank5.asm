@@ -61,7 +61,7 @@ Func_14226: ; 14226 (5:4226)
 	ld hl, wDuelCardOrAttackList
 .check_for_next_pokemon
 	ld a, [hli]
-	ld [$ff98], a
+	ldh [hTempCardNumber_ff98], a
 	cp $ff
 	ret z
 	call LoadDeckCardToBuffer1
@@ -72,7 +72,7 @@ Func_14226: ; 14226 (5:4226)
 	or a
 	jr nz, .check_for_next_pokemon
 	push hl
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	call Func_1485
 	pop hl
 	jr .check_for_next_pokemon

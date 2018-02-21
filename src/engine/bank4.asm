@@ -7,8 +7,8 @@ Func_10000: ; 10000 (4:4000)
 	call Func_2275
 	call Set_OBJ_8x8
 	xor a
-	ld [$ff92], a
-	ld [$ff93], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	ld a, [wLCDC]
 	bit 7, a
 	jr nz, .asm_10025
@@ -24,7 +24,7 @@ Func_10000: ; 10000 (4:4000)
 	ret
 
 Func_10031: ; 10031 (4:4031)
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
 	call BankswitchSRAM
@@ -286,7 +286,7 @@ Func_10af9: ; 10af9 (4:4af9)
 	INCROM $10af9, $10c96
 
 Func_10c96: ; 10c96 (4:4c96)
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	push bc
 	ld a, $1
@@ -839,9 +839,9 @@ INCLUDE "data/map_scripts.asm"
 Func_1184a: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
-	add (PointerTable_118f5 & $ff)
+	add LOW(PointerTable_118f5)
 	ld l, a
-	ld a, PointerTable_118f5 >> 8
+	ld a, HIGH(PointerTable_118f5)
 	adc $00
 	ld h, a
 	ld a, [hli]

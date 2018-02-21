@@ -61,7 +61,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	push hl
 	push bc
 	push de
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
 	call BankswitchSRAM
@@ -111,7 +111,7 @@ Func_801a1: ; 801a1 (20:41a1)
 Func_801f1: ; 801f1 (20:41f1)
 	push hl
 	push bc
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
 	call BankswitchSRAM

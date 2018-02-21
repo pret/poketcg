@@ -925,13 +925,13 @@ Func_ba04: ; ba04 (2:7a04)
 	call DoFrame
 	call HandleMenuInput
 	jr c, .asm_baa3
-	ld a, [$ff8f]
-	and $c0
+	ldh a, [hButtonsPressed2]
+	and D_UP | D_DOWN
 	jr z, .asm_ba4e
 
 .asm_ba4e
-	ld a, [$ff8f]
-	and $8
+	ldh a, [hButtonsPressed2]
+	and START
 	jr z, .asm_ba40
 	ld a, [$cea1]
 	ld [$d087], a

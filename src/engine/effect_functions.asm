@@ -108,7 +108,7 @@ asm_2c08c
 	push de
 	push af
 	ld a, $11
-	call Func_0f7f
+	call SetDuelAIAction
 	pop af
 	pop de
 	call Func_0fac

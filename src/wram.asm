@@ -13,7 +13,7 @@ wTempCardCollection:: ; c000
 SECTION "WRAM Duels 1", WRAM0
 
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
-; These indexes are assigned following the internal order of the cards that make up the deck.
+; These indexes are assigned following the internal order (id) of the cards that make up the deck.
 ; This temporary index identifies the card during the current duel and within the duelist's deck.
 wPlayerDuelVariables:: ; c200
 
@@ -434,6 +434,7 @@ wCardPageNumber:: ; cbc7
 wcbc9:: ; cbc9
 	ds $2
 
+; selected bench slot (1-5)
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 

@@ -300,7 +300,7 @@ HandleTurn: ; 4225 (1:4225)
 	ret
 
 .deck_not_empty
-	ldh [hTempCardNumber], a
+	ldh [hTempCardNumber_ff98], a
 	call AddCardToHand
 	ld a, [wcc0d]
 	cp DUELIST_TYPE_PLAYER
@@ -443,7 +443,7 @@ DuelMenu_Done: ; 439a (1:439a)
 	call $51e7
 	jp c, Func_4268
 	ld a, $05
-	call Func_0f7f
+	call SetDuelAIAction
 	call $717a
 	ret
 
@@ -467,9 +467,9 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	jr c, Func_441c
 	ld [wBenchSelectedPokemon], a
 	ld a, [wBenchSelectedPokemon]
-	ldh [$ffa1], a
+	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld a, $04
-	call Func_0f7f
+	call SetDuelAIAction
 	call $657a
 	jr nc, Func_441c
 	call $4f9d
@@ -489,13 +489,13 @@ Func_43f1: ; 43f1 (1:43f1)
 	call DrawWideTextBox_WaitForInput
 	call $600c
 	ld [wBenchSelectedPokemon], a
-	ldh [$ffa1], a
+	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	push af
 	call $6564
 	pop af
 	jp c, Func_426d
 	ld a, $04
-	call Func_0f7f
+	call SetDuelAIAction
 	call $657a
 
 Func_441c: ; 441c (1:441c)
@@ -536,15 +536,15 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, $1
 	ld [wAlreadyPlayedEnergy], a
 .asm_4495
-	ld a, [$ff9d]
-	ld [$ffa1], a
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld e, a
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	ld [$ffa0], a
 	call $14d2
 	call $61b8
 	ld a, $3
-	call Func_0f7f
+	call SetDuelAIAction
 	call $68e4
 	jp Func_426d
 
@@ -639,7 +639,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld d, [hl] ; card number within the deck (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call CopyMoveDataAndDamageToBuffer
+	call CopyMoveDataAndDamage
 	call HandleAmnesiaSubstatus
 	jr c, .cannot_use_due_to_amnesia
 	ld a, $07
@@ -763,7 +763,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardNumber], a
+	ldh [hTempCardNumber_ff98], a
 	call LoadDeckCardToBuffer1
 	ld c, $00
 	ld b, $0d
@@ -773,7 +773,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld de, wLoadedCard1Move1Name
 	call CheckIfMoveExists
 	jr c, .check_for_second_attack_slot
-	ldh a, [hTempCardNumber]
+	ldh a, [hTempCardNumber_ff98]
 	ld [hli], a
 	xor a
 	ld [hli], a
@@ -792,7 +792,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld de, wLoadedCard1Move2Name
 	call CheckIfMoveExists
 	jr c, .finish_loading_attacks
-	ldh a, [hTempCardNumber]
+	ldh a, [hTempCardNumber_ff98]
 	ld [hli], a
 	ld a, $01
 	ld [hli], a
@@ -1032,10 +1032,10 @@ Func_4b60: ; 4b60 (1:4b60)
 	jp Func_4b60
 
 .asm_4bd0
-	ld a, [$ff97]
+	ldh a, [hWhoseTurn]
 	push af
-	ld a, $c2
-	ld [$ff97], a
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
 	call Func_4cd5
 	call SwapTurn
 	call Func_4cd5
@@ -1055,7 +1055,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call $4c7c
 	call WaitForWideTextBoxInput
 	pop af
-	ld [$ff97], a
+	ldh [hWhoseTurn], a
 	call $7133
 	call SwapTurn
 	call $7133
@@ -1065,8 +1065,8 @@ Func_4b60: ; 4b60 (1:4b60)
 	call DrawDuelBoxMessage
 	ldtx hl, CoinTossToDetermineWhoFirstText
 	call DrawWideTextBox_WaitForInput
-	ld a, [$ff97]
-	cp $c2
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
 	jr nz, .asm_4c52
 	ld de, wc590
 	call PrintPlayerName
@@ -1158,14 +1158,14 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld hl, $006e
 	call $5502
 	jr c, .asm_4d28
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	call LoadDeckCardToBuffer1
 	ld a, $2
 	call $51e7
 	jr c, .asm_4d28
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	call Func_1485
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	ld hl, $0062
 	call $4b31
 	jr .asm_4d4c
@@ -1174,7 +1174,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call EmptyScreen
 	ld a, BOXMSG_BENCH_POKEMON
 	call DrawDuelBoxMessage
-	ld hl, $006d
+	ldtx hl, ChooseUpTo5BasicPkmnToPlaceOnBenchText
 	call Func_2c73
 	ld a, $3
 	call $51e7
@@ -1183,13 +1183,13 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld hl, $006f
 	call $5502
 	jr c, .asm_4d8e
-	ld a, $ef
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
-	cp $6
+	cp MAX_POKEMON_IN_PLAY
 	jr nc, .asm_4d86
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	call Func_1485
-	ld a, [$ff98]
+	ldh a, [hTempCardNumber_ff98]
 	ld hl, $0061
 	call $4b31
 	ld a, $5
@@ -1252,7 +1252,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 ; related to ai taking their turn in a duel
 ; called multiple times during one ai turn
 AIMakeDecision: ; 67be (1:67be)
-	ld [$ff9e], a
+	ldh [hAIActionTableIndex], a
 	ld hl, $cbf9
 	ld a, [hl]
 	ld [hl], $0
@@ -1265,10 +1265,10 @@ AIMakeDecision: ; 67be (1:67be)
 	jr c, .delay_loop
 
 .skip_delay
-	ld a, [$ff9e]
+	ldh a, [hAIActionTableIndex]
 	ld hl, $cbe1
 	ld [hl], $0
-	ld hl, AIMoveTable
+	ld hl, AIActionTable
 	call JumpToFunctionInTable
 	ld a, [wDuelFinished]
 	ld hl, $cbe1
@@ -1290,7 +1290,7 @@ AIMakeDecision: ; 67be (1:67be)
 
 	INCROM $67fb, $695e
 
-AIMoveTable: ; 695e (1:695e)
+AIActionTable: ; 695e (1:695e)
 	dw Func_0f35
 	dw $69e0
 	dw $69c5
@@ -1318,11 +1318,11 @@ AIMoveTable: ; 695e (1:695e)
 	INCROM $698c, $69a5
 
 AIUseEnergyCard: ; 69a5 (1:69a5)
-	ld a, [$ffa1]
-	ld [$ff9d], a
+	ldh a, [hTempPlayAreaLocationOffset_ffa1]
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld e, a
 	ld a, [$ffa0]
-	ld [$ff98], a
+	ldh [hTempCardNumber_ff98], a
 	call $14d2
 	ld a, [$ffa0]
 	call LoadDeckCardToBuffer1

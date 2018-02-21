@@ -477,7 +477,7 @@ Text006c: ; 36c54 (d:6c54)
 	line "and draw again."
 	done
 
-Text006d: ; 36c82 (d:6c82)
+ChooseUpTo5BasicPkmnToPlaceOnBenchText: ; 36c82 (d:6c82)
 	text "You may choose up to 5 Basic Pok`mon"
 	line "to place on the Bench."
 	done

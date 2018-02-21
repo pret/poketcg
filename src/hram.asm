@@ -3,7 +3,7 @@ SECTION "HRAM", HRAM
 hBankROM:: ; ff80
 	ds 1
 
-hBankRAM:: ; ff81
+hBankSRAM:: ; ff81
 	ds 1
 
 hBankVRAM:: ; ff82
@@ -45,10 +45,28 @@ hWY:: ; ff95
 hWhoseTurn:: ; ff97
 	ds 1
 
-hTempCardNumber:: ; ff98
+; deck position (index) of a card (0-59)
+hTempCardNumber_ff98:: ; ff98
 	ds 1
 
-	ds 22
+	ds 4
+
+; 0: arena card ; 1-5: bench card
+hTempPlayAreaLocationOffset_ff9d:: ; ff9d
+	ds 1
+
+hAIActionTableIndex:: ; ff9e
+	ds 1
+
+hTempCardNumber_ff9f:: ; ff9f
+	ds 1
+
+	ds 1
+
+hTempPlayAreaLocationOffset_ffa1:: ; ffa1
+	ds 1
+
+	ds 13
 
 hffaf:: ; ffaf
 	ds 1

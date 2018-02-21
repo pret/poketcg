@@ -88,7 +88,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YouPlaySecondText                       ; 0x0054
 	textpointer TransmissionErrorText                   ; 0x0055
 	textpointer Text0056                                ; 0x0056
-	textpointer TransmitingDataText                                ; 0x0057
+	textpointer TransmitingDataText                     ; 0x0057
 	textpointer Text0058                                ; 0x0058
 	textpointer Text0059                                ; 0x0059
 	textpointer Text005a                                ; 0x005a
@@ -106,11 +106,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0066                                ; 0x0066
 	textpointer Text0067                                ; 0x0067
 	textpointer Text0068                                ; 0x0068
-	textpointer ChooseBasicPkmnToPlaceInArenaText                                ; 0x0069
+	textpointer ChooseBasicPkmnToPlaceInArenaText       ; 0x0069
 	textpointer Text006a                                ; 0x006a
 	textpointer NeitherPlayerHasBasicPkmnText           ; 0x006b
 	textpointer Text006c                                ; 0x006c
-	textpointer Text006d                                ; 0x006d
+	textpointer ChooseUpTo5BasicPkmnToPlaceOnBenchText  ; 0x006d
 	textpointer Text006e                                ; 0x006e
 	textpointer Text006f                                ; 0x006f
 	textpointer Text0070                                ; 0x0070
@@ -179,7 +179,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00af                                ; 0x00af
 	textpointer Text00b0                                ; 0x00b0
 	textpointer Text00b1                                ; 0x00b1
-	textpointer NoSpaceOnTheBenchText                                ; 0x00b2
+	textpointer NoSpaceOnTheBenchText                   ; 0x00b2
 	textpointer Text00b3                                ; 0x00b3
 	textpointer Text00b4                                ; 0x00b4
 	textpointer Text00b5                                ; 0x00b5
