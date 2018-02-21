@@ -39,6 +39,7 @@ hWX:: ; ff94
 hWY:: ; ff95
 	ds 1
 
+hff96:: ; ff96
 	ds 1
 
 ; $c2 = player ; $c3 = opponent
@@ -61,16 +62,40 @@ hAIActionTableIndex:: ; ff9e
 hTempCardIndex_ff9f:: ; ff9f
 	ds 1
 
+; multipurpose temp storage
+hffa0:: ; ffa0
 	ds 1
 
 hTempPlayAreaLocationOffset_ffa1:: ; ffa1
 	ds 1
 
-	ds 13
+	ds 6
+
+hffa8:: ; ffa8
+	ds 1
+
+hffa9:: ; ffa9
+	ds 1
+
+hffaa:: ; ffaa
+	ds 1
+
+hffab:: ; ffab
+	ds 1
+
+hffac:: ; ffac
+	ds 1
+
+hffad:: ; ffad
+	ds 1
+
+hffae:: ; ffae
+	ds 1
 
 hffaf:: ; ffaf
 	ds 1
 
+hffb0:: ; ffb0
 	ds 1
 
 hCurrentMenuItem:: ; ffb1
@@ -79,4 +104,8 @@ hCurrentMenuItem:: ; ffb1
 	ds 3
 
 hffb5:: ; ffb5
+	ds 1
+
+; used in DivideBCbyDE
+hffb6:: ; ffb6
 	ds 1

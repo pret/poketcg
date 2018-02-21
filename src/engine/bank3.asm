@@ -299,22 +299,22 @@ Func_c241: ; c241 (3:4241)
 	ret
 
 Func_c251: ; c251 (3:4251)
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	push af
 	ld a, $1
 	jr asm_c25d
 
 Func_c258: ; c258 (3:4258)
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	push af
 	ld a, $2
 asm_c25d
-	ldh [$ffb0], a
+	ldh [hffb0], a
 	push hl
 	call Func_c268
 	pop hl
 	pop af
-	ldh [$ffb0], a
+	ldh [hffb0], a
 	ret
 
 Func_c268: ; c268 (3:4268)

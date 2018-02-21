@@ -3696,7 +3696,7 @@ Func_1874: ; 1874 (0:1874)
 	ld a, [wccec]
 	or a
 	ret nz
-	ld a, [$ffa0]
+	ldh a, [hffa0]
 	push af
 	ldh a, [hTempCardIndex_ff9f]
 	push af
@@ -3705,14 +3705,14 @@ Func_1874: ; 1874 (0:1874)
 	ld a, [wcc11]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wcc10]
-	ld [$ffa0], a
+	ldh [hffa0], a
 	ld a, $8
 	call SetDuelAIAction
 	call Func_0f58
 	pop af
 	ldh [hTempCardIndex_ff9f], a
 	pop af
-	ld [$ffa0], a
+	ldh [hffa0], a
 	ret
 
 Func_189d: ; 189d (0:189d)
@@ -4917,7 +4917,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	call Func_230f
 	pop af
 	ld [wcd0a], a
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	or a
 	jr nz, .asm_2240
 	ld a, [hl]
@@ -4927,11 +4927,11 @@ Func_21f2: ; 21f2 (0:21f2)
 .asm_2240
 	inc hl
 .asm_2241
-	ldh a, [$ffae]
+	ldh a, [hffae]
 	or a
 	ret z
 	ld b, a
-	ldh a, [$ffac]
+	ldh a, [hffac]
 	cp b
 	jr z, .asm_224d
 	xor a
@@ -4943,17 +4943,17 @@ Func_21f2: ; 21f2 (0:21f2)
 	call z, .asm_2257
 .asm_2257
 	xor a
-	ldh [$ffac], a
-	ldh a, [$ffad]
+	ldh [hffac], a
+	ldh a, [hffad]
 	add $20
 	ld b, a
-	ldh a, [$ffaa]
+	ldh a, [hffaa]
 	and $e0
 	add b
-	ldh [$ffaa], a
-	ldh a, [$ffab]
+	ldh [hffaa], a
+	ldh a, [hffab]
 	adc $0
-	ldh [$ffab], a
+	ldh [hffab], a
 	ld a, [wcd09]
 	inc a
 	ld [wcd09], a
@@ -4965,11 +4965,11 @@ Func_2275: ; 2275 (0:2275)
 	dec a
 	ld [wcd04], a
 	ld a, e
-	ldh [$ffa8], a
+	ldh [hffa8], a
 	call Func_2298
 	xor a
-	ldh [$ffb0], a
-	ldh [$ffa9], a
+	ldh [hffb0], a
+	ldh [hffa9], a
 	ld a, $88
 	ld [wcd06], a
 	ld a, $80
@@ -4985,7 +4985,7 @@ Func_2275: ; 2275 (0:2275)
 Func_2298: ; 2298 (0:2298)
 	xor a
 	ld [wcd0a], a
-	ldh [$ffac], a
+	ldh [hffac], a
 	ld [wcd0b], a
 	ld a, $f
 	ldh [hffaf], a
@@ -4995,21 +4995,21 @@ Func_22a6: ; 22a6 (0:22a6)
 	push af
 	call Func_22ae
 	pop af
-	ldh [$ffae], a
+	ldh [hffae], a
 	ret
 
 Func_22ae: ; 22ae (0:22ae)
 	push hl
 	ld a, d
-	ldh [$ffad], a
+	ldh [hffad], a
 	xor a
-	ldh [$ffae], a
+	ldh [hffae], a
 	ld [wcd09], a
 	call DECoordToBGMap0Address
 	ld a, l
-	ldh [$ffaa], a
+	ldh [hffaa], a
 	ld a, h
-	ldh [$ffab], a
+	ldh [hffab], a
 	call Func_2298
 	xor a
 	ld [wcd0b], a
@@ -5020,7 +5020,7 @@ Func_22ca: ; 22ca (0:22ca)
 	push hl
 	push de
 	push bc
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	and $1
 	jr nz, .asm_22ed
 	call Func_2325
@@ -5029,10 +5029,10 @@ Func_22ca: ; 22ca (0:22ca)
 	jr nz, .asm_22e9
 	call Func_24ac
 .asm_22de
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	and $2
 	jr nz, .asm_22e9
-	ldh a, [$ffa9]
+	ldh a, [hffa9]
 	call Func_22f2
 .asm_22e9
 	pop bc
@@ -5045,7 +5045,7 @@ Func_22ca: ; 22ca (0:22ca)
 
 Func_22f2: ; 22f2 (0:22f2)
 	ld [wcd05], a
-	ld hl, $ffaa
+	ld hl, hffaa
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -5059,7 +5059,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	ld de, $cd05
 	ld c, 1
 	call SafeCopyDataDEtoHL
-	ld hl, $ffac
+	ld hl, hffac
 	inc [hl]
 	ret
 
@@ -5085,11 +5085,11 @@ Func_2325: ; 2325 (0:2325)
 	ret c
 	or a
 	ret nz
-	ldh a, [$ffa8]
+	ldh a, [hffa8]
 	ld hl, $cd04
 	cp [hl]
 	jr nz, .asm_2345
-	ldh a, [$ffa9]
+	ldh a, [hffa9]
 	ld h, $c8
 .asm_2337
 	ld l, a
@@ -5109,11 +5109,11 @@ Func_2325: ; 2325 (0:2325)
 .asm_2349
 	ld l, [hl]
 .asm_234a
-	ldh a, [$ffa9]
+	ldh a, [hffa9]
 	ld c, a
 	ld b, $c9
 	ld a, l
-	ldh [$ffa9], a
+	ldh [hffa9], a
 	ld [bc], a
 	ld h, $c8
 	ld [hl], c
@@ -5144,8 +5144,8 @@ Func_235e: ; 235e (0:235e)
 .asm_2376
 	xor a
 	ld [wcd0b], a        ; [wcd0b] ← 0
-	ldh a, [$ffa9]
-	ld l, a              ; l ← [$ffa9]; index to to linked-list head
+	ldh a, [hffa9]
+	ld l, a              ; l ← [hffa9]; index to to linked-list head
 .asm_237d
 	ld h, $c6                                     ;
 	ld a, [hl]           ; a ← key1[l]            ;
@@ -5162,14 +5162,14 @@ Func_235e: ; 235e (0:235e)
 	ld l, [hl]           ; l ← next[l]            ;
 	jr .asm_237d
 .asm_238f
-	ldh a, [$ffa9]
+	ldh a, [hffa9]
 	cp l
 	jr z, .asm_23af      ; assert at least one iteration
 	ld c, a
 	ld b, $c9
 	ld a, l
 	ld [bc], a           ; prev[i0] ← i
-	ldh [$ffa9], a       ; [$ffa9] ← i  (update linked-list head)
+	ldh [hffa9], a       ; [hffa9] ← i  (update linked-list head)
 	ld h, $c9
 	ld b, [hl]
 	ld [hl], $0          ; prev[i] ← 0
@@ -6094,7 +6094,7 @@ Func_2bc7: ; 2bc7 (0:2bc7)
 Func_2bcf: ; 2bcf (0:2bcf)
 	ld a, $4
 	call Func_2bdb
-	ld [$ffa0], a
+	ldh [hffa0], a
 	ret
 
 Func_2bd7: ; 2bd7 (0:2bd7)
@@ -8455,7 +8455,7 @@ DivideBCbyDE: ; 3c5a (0:3c5a)
 	rl b
 	ld a, $10
 .asm_3c63
-	ldh [$ffb6], a
+	ldh [hffb6], a
 	rl l
 	rl h
 	push hl
@@ -8475,7 +8475,7 @@ DivideBCbyDE: ; 3c5a (0:3c5a)
 .asm_3c79
 	rl c
 	rl b
-	ldh a, [$ffb6]
+	ldh a, [hffb6]
 	dec a
 	jr nz, .asm_3c63
 	ret

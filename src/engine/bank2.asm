@@ -978,7 +978,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [$d087], a
 	ld a, [wCurMenuItem]
 	ld [$d086], a
-	ld a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	cp $ff
 	jp z, $7b0d
 	ld [$d088], a

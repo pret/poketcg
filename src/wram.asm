@@ -19,7 +19,7 @@ SECTION "WRAM Duels 1", WRAM0
 
 ; Terminology used in labels and comments:
 ; - The deck index, or the index within the deck of a card refers to the identifier mentioned just above,
-;   that is, its temporary position in the wPlayerDeck or wOpponentDeck during the current duel.
+;   that is, its temporary position in the wPlayerDeck or wOpponentDeck card list during the current duel.
 ; - The card ID is its actual internal identifier, that is, its number from card_constants.asm.
 
 wPlayerDuelVariables:: ; c200

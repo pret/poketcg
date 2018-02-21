@@ -452,7 +452,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
 	cp $01
-	ldh [$ffa0], a
+	ldh [hffa0], a
 	jr nz, Func_43f1
 	ld a, [wcc0c]
 	or a
@@ -540,7 +540,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld e, a
 	ldh a, [hTempCardIndex_ff98]
-	ld [$ffa0], a
+	ldh [hffa0], a
 	call $14d2
 	call $61b8
 	ld a, $3
@@ -985,12 +985,12 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	call $4e84
 	call $4d97
-	ld [$ffa0], a
+	ldh [hffa0], a
 	call SwapTurn
 	call $4d97
 	call SwapTurn
 	ld c, a
-	ld a, [$ffa0]
+	ldh a, [hffa0]
 	ld b, a
 	and c
 	jr nz, .asm_4bd0
@@ -1109,7 +1109,7 @@ Func_4b60: ; 4b60 (1:4b60)
 
 ; Select Basic Pokemon From Hand
 Func_4cd5: ; 4cd5 (1:4cd5)
-	ld a, $f1
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp $0
 	jr z, .asm_4d15
@@ -1136,7 +1136,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld c, $80
 	call Func_0e63
 	jr c, .asm_4d12
-	ld a, $f1
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [hl], $1
 	or a
@@ -1321,10 +1321,10 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ldh a, [hTempPlayAreaLocationOffset_ffa1]
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld e, a
-	ld a, [$ffa0]
+	ldh a, [hffa0]
 	ldh [hTempCardIndex_ff98], a
 	call $14d2
-	ld a, [$ffa0]
+	ldh a, [hffa0]
 	call LoadDeckCardToBuffer1
 	call $5e75
 	call $68e4
@@ -1474,7 +1474,7 @@ _TossCoin: ; 71ad (1:71ad)
 	ld [hli], a
 	ld [hl], a
 	call EnableLCD
-	ld a, $f1
+	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [wcd9e], a
 	call Func_0f58
