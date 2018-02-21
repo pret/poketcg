@@ -300,7 +300,7 @@ HandleTurn: ; 4225 (1:4225)
 	ret
 
 .deck_not_empty
-	ldh [hTempCardNumber_ff98], a
+	ldh [hTempCardIndex_ff98], a
 	call AddCardToHand
 	ld a, [wcc0d]
 	cp DUELIST_TYPE_PLAYER
@@ -539,7 +539,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld e, a
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ld [$ffa0], a
 	call $14d2
 	call $61b8
@@ -763,7 +763,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardNumber_ff98], a
+	ldh [hTempCardIndex_ff98], a
 	call LoadDeckCardToBuffer1
 	ld c, $00
 	ld b, $0d
@@ -773,7 +773,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld de, wLoadedCard1Move1Name
 	call CheckIfMoveExists
 	jr c, .check_for_second_attack_slot
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
 	xor a
 	ld [hli], a
@@ -792,7 +792,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld de, wLoadedCard1Move2Name
 	call CheckIfMoveExists
 	jr c, .finish_loading_attacks
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
 	ld a, $01
 	ld [hli], a
@@ -1158,14 +1158,14 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld hl, $006e
 	call $5502
 	jr c, .asm_4d28
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	call LoadDeckCardToBuffer1
 	ld a, $2
 	call $51e7
 	jr c, .asm_4d28
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	call Func_1485
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ld hl, $0062
 	call $4b31
 	jr .asm_4d4c
@@ -1187,9 +1187,9 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call GetTurnDuelistVariable
 	cp MAX_POKEMON_IN_PLAY
 	jr nc, .asm_4d86
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	call Func_1485
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ld hl, $0061
 	call $4b31
 	ld a, $5
@@ -1322,7 +1322,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld e, a
 	ld a, [$ffa0]
-	ldh [hTempCardNumber_ff98], a
+	ldh [hTempCardIndex_ff98], a
 	call $14d2
 	ld a, [$ffa0]
 	call LoadDeckCardToBuffer1

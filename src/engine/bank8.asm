@@ -45,7 +45,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	push hl
 	push de
 	ld a, [$ce16]
-	ldh [hTempCardNumber_ff9f], a
+	ldh [hTempCardIndex_ff9f], a
 	bank1call $35a9
 	jp c, $41a8
 	call Func_1944
@@ -66,7 +66,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	push de
 	push hl
 	ld a, [$ce16]
-	ldh [hTempCardNumber_ff9f], a
+	ldh [hTempCardIndex_ff9f], a
 	ld a, $6
 	bank1call $67be
 	pop hl

@@ -61,7 +61,7 @@ Func_14226: ; 14226 (5:4226)
 	ld hl, wDuelCardOrAttackList
 .check_for_next_pokemon
 	ld a, [hli]
-	ldh [hTempCardNumber_ff98], a
+	ldh [hTempCardIndex_ff98], a
 	cp $ff
 	ret z
 	call LoadDeckCardToBuffer1
@@ -72,7 +72,7 @@ Func_14226: ; 14226 (5:4226)
 	or a
 	jr nz, .check_for_next_pokemon
 	push hl
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	call Func_1485
 	pop hl
 	jr .check_for_next_pokemon
@@ -252,7 +252,7 @@ Func_15649: ; 15649 (5:5649)
 	cp $ff
 	jr z, .asm_156b1
 	call SwapTurn
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1 ; I believe this is a check for Mewtwo1's Barrier move
@@ -267,7 +267,7 @@ Func_15649: ; 15649 (5:5649)
 	ld a, (wPlayerArenaCard & $FF)
 	call GetNonTurnDuelistVariable
 	call SwapTurn
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1

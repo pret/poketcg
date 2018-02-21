@@ -13,8 +13,15 @@ wTempCardCollection:: ; c000
 SECTION "WRAM Duels 1", WRAM0
 
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
-; These indexes are assigned following the internal order (id) of the cards that make up the deck.
-; This temporary index identifies the card during the current duel and within the duelist's deck.
+; These indexes are assigned following the order of the card list in wPlayerDeck or wOpponentDeck,
+; which, in turn, follows the internal order of the cards.
+; This temporary index of a card identifies the card within the duelist's deck during an ongoing duel.
+
+; Terminology used in labels and comments:
+; - The deck index, or the index within the deck of a card refers to the identifier mentioned just above,
+;   that is, its temporary position in the wPlayerDeck or wOpponentDeck during the current duel.
+; - The card ID is its actual internal identifier, that is, its number from card_constants.asm.
+
 wPlayerDuelVariables:: ; c200
 
 ; 60-byte array that indicates where each of the 60 cards is.

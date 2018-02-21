@@ -2626,13 +2626,13 @@ Func_100b: ; 100b (0:100b)
 	push hl
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
@@ -2733,7 +2733,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ld b, a
 	ld a, DUELVARS_DECK_CARDS
 	add [hl]
-	ld l, a ; hl = position of the first (top) deck card in the wPlayerDeckCards or wOpponentDeckCards array
+	ld l, a ; hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
 	ld a, b ; a = number of cards in the deck
 	call ShuffleCards
 	ret
@@ -3143,7 +3143,7 @@ FindLastCardInHand: ; 1271 (0:1271)
 ; shuffles the deck by swapping the position of each card with the position of another random card
 ; input:
 ; - a  = how many cards to shuffle
-; - hl = position of the first card within the wPlayerDeckCards or wOpponentDeckCards array
+; - hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
 ShuffleCards: ; 127f (0:127f)
 	or a
 	ret z ; return if deck is empty
@@ -3182,18 +3182,18 @@ ShuffleCards: ; 127f (0:127f)
 
 	INCROM $12a3, $12fa
 
-; returns, in register bc, the id of the card in the deck position specified in register a
+; returns, in register bc, the id of the card with the deck index specified in register a
 ; preserves hl
-GetCardInDeckPosition_bc: ; 12fa (0:12fa)
+GetCardIDFromDeckIndex_bc: ; 12fa (0:12fa)
 	push hl
-	call _GetCardInDeckPosition
+	call _GetCardIDFromDeckIndex
 	ld c, a
 	ld b, $0
 	pop hl
 	ret
 ; 0x1303
 
-; return [wDuelCardOrAttackList + a] in a and in hTempCardNumber_ff98
+; return [wDuelCardOrAttackList + a] in a and in hTempCardIndex_ff98
 Func_1303: ; 1303 (0:1303)
 	push hl
 	push de
@@ -3202,15 +3202,15 @@ Func_1303: ; 1303 (0:1303)
 	ld hl, wDuelCardOrAttackList
 	add hl, de
 	ld a, [hl]
-	ldh [hTempCardNumber_ff98], a
+	ldh [hTempCardIndex_ff98], a
 	pop de
 	pop hl
 	ret
 ; 0x1312
 
-; given the deck position (0-59) of a card in [wDuelCardOrAttackList + a], return:
-;  - the id of the card located in that deck position in register de
-;  - [wDuelCardOrAttackList + a] in hTempCardNumber_ff98 and in register a
+; given the deck index (0-59) of a card in [wDuelCardOrAttackList + a], return:
+;  - the id of the card with that deck index in register de
+;  - [wDuelCardOrAttackList + a] in hTempCardIndex_ff98 and in register a
 GetCardInList: ; 1312 (0:1312)
 	push hl
 	ld e, a
@@ -3218,19 +3218,19 @@ GetCardInList: ; 1312 (0:1312)
 	ld hl, wDuelCardOrAttackList
 	add hl, de
 	ld a, [hl]
-	ldh [hTempCardNumber_ff98], a
-	call GetCardInDeckPosition
+	ldh [hTempCardIndex_ff98], a
+	call GetCardIDFromDeckIndex
 	pop hl
-	ldh a, [hTempCardNumber_ff98]
+	ldh a, [hTempCardIndex_ff98]
 	ret
 ; 0x1324
 
-; returns, in register de, the id of the card in the deck position (0-59) specified by register a
+; returns, in register de, the id of the card with the deck index (0-59) specified by register a
 ; preserves af and hl
-GetCardInDeckPosition: ; 1324 (0:1324)
+GetCardIDFromDeckIndex: ; 1324 (0:1324)
 	push af
 	push hl
-	call _GetCardInDeckPosition
+	call _GetCardIDFromDeckIndex
 	ld e, a
 	ld d, $0
 	pop hl
@@ -3240,8 +3240,8 @@ GetCardInDeckPosition: ; 1324 (0:1324)
 
 	INCROM $132f, $1362
 
-; returns, in register a, the id of the card in the deck position (0-59) specified in register a
-_GetCardInDeckPosition: ; 1362 (0:1362)
+; returns, in register a, the id of the card with the deck index (0-59) specified in register a
+_GetCardIDFromDeckIndex: ; 1362 (0:1362)
 	push de
 	ld e, a
 	ld d, $0
@@ -3256,13 +3256,13 @@ _GetCardInDeckPosition: ; 1362 (0:1362)
 	pop de
 	ret
 
-; load data of card in deck position a (0-59) to wLoadedCard1
+; load data of card with deck index a (0-59) to wLoadedCard1
 LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	push hl
 	push de
 	push bc
 	push af
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1
 	pop af
 	ld hl, wLoadedCard1
@@ -3273,13 +3273,13 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	pop hl
 	ret
 
-; load data of card in deck position a (0-59) to wLoadedCard2
+; load data of card with deck index a (0-59) to wLoadedCard2
 LoadDeckCardToBuffer2: ; 138c (0:138c)
 	push hl
 	push de
 	push bc
 	push af
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer2
 	pop af
 	ld hl, wLoadedCard2
@@ -3435,7 +3435,7 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	jr nz, .unmatching_card_location_orID
 	ld a, l
 	push hl
-	call _GetCardInDeckPosition
+	call _GetCardIDFromDeckIndex
 	cp e
 	pop hl
 	jr nz, .unmatching_card_location_orID
@@ -3481,7 +3481,7 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
 	ld a, d
-	ldh [hTempCardNumber_ff9f], a
+	ldh [hTempCardIndex_ff9f], a
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardId], a
@@ -3512,14 +3512,14 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ldh [hTempCardNumber_ff9f], a
-	call GetCardInDeckPosition
+	ldh [hTempCardIndex_ff9f], a
+	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempTurnDuelistCardId], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempNonTurnDuelistCardId], a
 	call SwapTurn
@@ -3537,7 +3537,7 @@ Func_16f6: ; 16f6 (0:16f6)
 Func_1730: ; 1730 (0:1730)
 	ld a, [wSelectedMoveIndex]
 	ld [wcc10], a
-	ldh a, [hTempCardNumber_ff9f]
+	ldh a, [hTempCardIndex_ff9f]
 	ld [wcc11], a
 	ld a, [wTempCardId]
 	ld [wcc12], a
@@ -3698,19 +3698,19 @@ Func_1874: ; 1874 (0:1874)
 	ret nz
 	ld a, [$ffa0]
 	push af
-	ldh a, [hTempCardNumber_ff9f]
+	ldh a, [hTempCardIndex_ff9f]
 	push af
 	ld a, $1
 	ld [wccec], a
 	ld a, [wcc11]
-	ldh [hTempCardNumber_ff9f], a
+	ldh [hTempCardIndex_ff9f], a
 	ld a, [wcc10]
 	ld [$ffa0], a
 	ld a, $8
 	call SetDuelAIAction
 	call Func_0f58
 	pop af
-	ldh [hTempCardNumber_ff9f], a
+	ldh [hTempCardIndex_ff9f], a
 	pop af
 	ld [$ffa0], a
 	ret
@@ -3774,10 +3774,10 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 
 	INCROM $18f9, $1944
 
-; this loads HP and Stage (1 byte each) of the card with deck index (0-59) at hTempCardNumber_ff9f
+; this loads HP and Stage (1 byte each) of the card with deck index (0-59) at hTempCardIndex_ff9f
 ; into wLoadedMoveEffectCommands
 Func_1944: ; 1944 (0:1944)
-	ldh a, [hTempCardNumber_ff9f]
+	ldh a, [hTempCardIndex_ff9f]
 	call LoadDeckCardToBuffer1
 	ld hl, wLoadedCard1HP
 	ld de, wLoadedMoveEffectCommands
@@ -7565,7 +7565,7 @@ Func_3525: ; 3525 (0:3525)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .asm_3549
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_3549
@@ -7581,7 +7581,7 @@ Func_3525: ; 3525 (0:3525)
 	ld a, [hli]
 	cp $ff
 	jr z, .asm_3560
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, [wce7c]
 	cp e
 	jr nz, .asm_355d
@@ -7752,7 +7752,7 @@ Func_36f7: ; 36f7 (0:36f7)
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call Func_2f32
 	cp $10
 	jr nz, .asm_3715
@@ -7807,7 +7807,7 @@ Func_374a: ; 374a (0:374a)
 HandleEnergyBurn: ; 375d (0:375d)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	ld a, e
 	cp CHARIZARD
 	ret nz

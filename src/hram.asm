@@ -45,8 +45,8 @@ hWY:: ; ff95
 hWhoseTurn:: ; ff97
 	ds 1
 
-; deck position (index) of a card (0-59)
-hTempCardNumber_ff98:: ; ff98
+; deck index of a card (0-59)
+hTempCardIndex_ff98:: ; ff98
 	ds 1
 
 	ds 4
@@ -58,7 +58,7 @@ hTempPlayAreaLocationOffset_ff9d:: ; ff9d
 hAIActionTableIndex:: ; ff9e
 	ds 1
 
-hTempCardNumber_ff9f:: ; ff9f
+hTempCardIndex_ff9f:: ; ff9f
 	ds 1
 
 	ds 1
