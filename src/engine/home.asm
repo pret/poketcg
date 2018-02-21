@@ -2639,7 +2639,7 @@ Func_100b: ; 100b (0:100b)
 	pop hl
 	push hl
 	call EnableSRAM
-	ld a, [wcc06]
+	ld a, [wDuelTurns]
 	ld [hli], a
 	ld a, [wTempNonTurnDuelistCardId]
 	ld [hli], a
@@ -4141,7 +4141,7 @@ PrintPlayerName: ; 1c7d (0:1c7d)
 	ret
 
 PrintOpponentName: ; 1c8e (0:1c8e)
-	ld hl, $cc16
+	ld hl, wOpponentName
 	ld a, [hli]
 	or [hl]
 	jr z, .special_name

@@ -70,7 +70,7 @@ Func_406f: ; 406f (1:406f)
 	call PlaySong
 	xor a
 	ld [wDuelFinished], a
-	call Func_426d
+	call DuelMainScene
 	jp StartDuel.asm_40fb
 .asm_4097
 	call DrawWideTextBox_WaitForInput
@@ -96,7 +96,7 @@ StartDuel: ; 409f (1:409f)
 
 	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
-	ld hl, $cc16
+	ld hl, wOpponentName
 	xor a
 	ld [hli], a
 	ld [hl], a
@@ -139,7 +139,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duel_finished
-	ld hl, $cc06
+	ld hl, wDuelTurns
 	inc [hl]
 	ld a, [wcc09]
 	cp $80
@@ -250,7 +250,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp $40ee
+	jp .main_duel_loop
 
 .asm_41f3
 	call Func_0f58
@@ -264,7 +264,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, h
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp nc, $40ee
+	jp nc, .main_duel_loop
 	ret
 ; 0x420b
 
@@ -284,10 +284,10 @@ Func_420b: ; 420b (1:420b)
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	ld [wcc0d], a
-	ld a, [wcc06]
-	cp $02
-	jr c, .asm_4237
+	ld [wDuelistType], a
+	ld a, [wDuelTurns]
+	cp 2
+	jr c, .asm_4237 ; jump if it's the turn holder's first turn
 	call $70f6
 
 .asm_4237
@@ -302,14 +302,14 @@ HandleTurn: ; 4225 (1:4225)
 .deck_not_empty
 	ldh [hTempCardIndex_ff98], a
 	call AddCardToHand
-	ld a, [wcc0d]
+	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
 	jr z, Func_4262
 	call SwapTurn
 	call Func_34e2
 	call SwapTurn
 	call c, $4b2c
-	jr Func_426d
+	jr DuelMainScene
 
 Func_4262:
 	call $4b2c
@@ -319,9 +319,9 @@ Func_4268:
 	ld a, $06
 	call $51e7
 
-Func_426d:
+DuelMainScene:
 	call $4f9d
-	ld a, [wcc0d]
+	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
 	jr z, PrintDuelMenu
 	cp DUELIST_TYPE_LINK_OPP
@@ -342,6 +342,7 @@ PrintDuelMenu:
 	call DrawWideTextBox
 	ld hl, $54e9
 	call Func_2c08
+.asm_429e
 	call $669d
 	ld a, [wDuelFinished]
 	or a
@@ -349,37 +350,37 @@ PrintDuelMenu:
 	ld a, [wCurrentDuelMenuItem]
 	call SetMenuItem
 
-Func_42ac:
+HandleDuelMenuInput:
 	call DoFrame
 	ldh a, [hButtonsHeld]
-	and $02
-	jr z, .asm_42cc
+	and B_BUTTON
+	jr z, .b_not_held
 	ldh a, [hButtonsPressed]
 	bit D_UP_F, a
-	jr nz, Func_430b
+	jr nz, OpponentPlayAreaScreen
 	bit D_DOWN_F, a
-	jr nz, Func_4311
+	jr nz, PlayerPlayAreaScreen
 	bit D_LEFT_F, a
-	jr nz, Func_4320
+	jr nz, PlayerDiscardPileScreen
 	bit D_RIGHT_F, a
-	jr nz, Func_4317
+	jr nz, OpponentDiscardPileScreen
 	bit START_F, a
-	jp nz, $4364
+	jp nz, OpponentActivePokemonScreen
 
-.asm_42cc
+.b_not_held
 	ldh a, [hButtonsPressed]
 	and START
-	jp nz, $4370
+	jp nz, PlayerActivePokemonScreen
 	ldh a, [hButtonsPressed]
 	bit SELECT_F, a
 	jp nz, $458e
 	ld a, [wcbe7]
 	or a
-	jr nz, Func_42ac
+	jr nz, HandleDuelMenuInput
 	call Func_271a
 	ld a, e
 	ld [wCurrentDuelMenuItem], a
-	jr nc, Func_42ac
+	jr nc, HandleDuelMenuInput
 	ldh a, [hCurrentMenuItem]
 	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
@@ -392,51 +393,100 @@ DuelMenuFunctionTable: ; 42f1 (1:42f1)
 	dw DuelMenu_Retreat
 	dw DuelMenu_Done
 
-	INCROM $42fd,  $430b
+Func_42fd: ; 42fd (1:42fd)
+	call DrawCardFromDeck
+	call nc, AddCardToHand
+	ld a, $0b
+	call SetDuelAIAction
+	jp PrintDuelMenu.asm_429e
+; 0x430b
 
-Func_430b: ; 430b (1:430b)
-	call Func_4329
-	jp Func_426d
+OpponentPlayAreaScreen: ; 430b (1:430b)
+	call DrawOpponentPlayAreaScreen
+	jp DuelMainScene
 
-Func_4311: ; 4311 (1:4311)
-	call Func_4333
-	jp Func_426d
+PlayerPlayAreaScreen: ; 4311 (1:4311)
+	call DrawPlayerPlayAreaScreen
+	jp DuelMainScene
 
-Func_4317: ; 4317 (1:4317)
-	call Func_4339
+OpponentDiscardPileScreen: ; 4317 (1:4317)
+	call DrawOpponentDiscardPileScreen
 	jp c, PrintDuelMenu
-	jp Func_426d
+	jp DuelMainScene
 
-Func_4320: ; 4320 (1:4320)
-	call Func_4342
+PlayerDiscardPileScreen: ; 4320 (1:4320)
+	call DrawPlayerDiscardPileScreen
 	jp c, PrintDuelMenu
-	jp Func_426d
+	jp DuelMainScene
 
-Func_4329: ; 4329 (1:4329)
+DrawOpponentPlayAreaScreen: ; 4329 (1:4329)
 	call SwapTurn
-	call Func_4333
+	call DrawPlayerPlayAreaScreen
 	call SwapTurn
 	ret
 
-Func_4333: ; 4333 (1:4333)
+DrawPlayerPlayAreaScreen: ; 4333 (1:4333)
 	call $5fdd
 	jp $6008
 
-Func_4339: ; 4339 (1:4339)
+DrawOpponentDiscardPileScreen: ; 4339 (1:4339)
 	call SwapTurn
 	call $5550
 	jp SwapTurn
 
-Func_4342: ; 4342 (1:4342)
+DrawPlayerDiscardPileScreen: ; 4342 (1:4342)
 	jp $5550
 
-	INCROM $4345,  $438e
+Func_4345: ; 4345 (1:4345)
+	call SwapTurn
+	call Func_434e
+	jp SwapTurn
+; 0x434e
+
+Func_434e: ; 434e (1:434e)
+	call CreateHandCardList
+	jr c, .no_cards_in_hand
+	call $559a
+	ld a, $09
+	ld [$cbd6], a
+	jp $55f0
+.no_cards_in_hand
+	ldtx hl, NoCardsInHandText
+	jp DrawWideTextBox_WaitForInput
+; 0x4364
+
+OpponentActivePokemonScreen: ; 4364 (1:4364)
+	call SwapTurn
+	call Func_4376
+	call SwapTurn
+	jp DuelMainScene
+; 0x4370
+
+PlayerActivePokemonScreen: ; 4370 (1:4370)
+	call Func_4376
+	jp DuelMainScene
+; 0x4376
+
+Func_4376: ; 4376 (1:4376)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	cp $ff
+	ret z
+	call GetCardIDFromDeckIndex
+	call LoadCardDataToBuffer1
+	ld hl, wcbc9
+	xor a
+	ld [hli], a
+	ld [hl], a
+	call $576a
+	ret
+; 0x438e
 
 DuelMenu_PkmnPower: ; 438e (1:438e)
 	call $6431
-	jp c, Func_426d
+	jp c, DuelMainScene
 	call Func_1730
-	jp Func_426d
+	jp DuelMainScene
 
 DuelMenu_Done: ; 439a (1:439a)
 	ld a, $08
@@ -493,13 +543,13 @@ Func_43f1: ; 43f1 (1:43f1)
 	push af
 	call $6564
 	pop af
-	jp c, Func_426d
+	jp c, DuelMainScene
 	ld a, $04
 	call SetDuelAIAction
 	call $657a
 
 Func_441c: ; 441c (1:441c)
-	jp Func_426d
+	jp DuelMainScene
 
 Func_441f: ; 441f (1:441f)
 	call DrawWideTextBox_WaitForInput
@@ -531,7 +581,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	jr nz, .already_played_energy
 	call $5fdd
 	call $600c ; choose card to play energy card on
-	jp c, Func_426d ; exit if no card was chosen
+	jp c, DuelMainScene ; exit if no card was chosen
 .asm_4490
 	ld a, $1
 	ld [wAlreadyPlayedEnergy], a
@@ -546,12 +596,12 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, $3
 	call SetDuelAIAction
 	call $68e4
-	jp Func_426d
+	jp DuelMainScene
 
 .water_energy
 	call $5fdd
 	call $600c ; choose card to play energy card on
-	jp c, Func_426d ; exit if no card was chosen
+	jp c, DuelMainScene ; exit if no card was chosen
 	call $3622
 	jr c, .asm_4495
 	ld a, [wAlreadyPlayedEnergy]
@@ -574,7 +624,7 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
-	jp Func_426d
+	jp DuelMainScene
 
 	INCROM $458e,  $46fc
 
@@ -646,7 +696,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call $51e7
 	jp c, Func_4268
 	call Func_1730
-	jp c, Func_426d
+	jp c, DuelMainScene
 	ret
 
 .cannot_use_due_to_amnesia ; 477d (1:477d)

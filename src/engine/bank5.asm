@@ -264,7 +264,7 @@ Func_15649: ; 15649 (5:5649)
 	ld [$cda7], a
 	cp $3
 	jr c, .asm_156c2
-	ld a, (wPlayerArenaCard & $FF)
+	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
 	call GetCardIDFromDeckIndex

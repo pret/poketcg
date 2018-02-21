@@ -71,6 +71,7 @@ hTempPlayAreaLocationOffset_ffa1:: ; ffa1
 
 	ds 6
 
+; hffa8 through hffb0 appear to be related to text processing
 hffa8:: ; ffa8
 	ds 1
 

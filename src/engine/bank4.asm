@@ -180,8 +180,8 @@ Duel_Init: ; 103d3 (4:43d3)
 	call $4000
 	ld a, $4
 	ld [wFrameType], a
-	ld de, $000c
-	ld bc, $1406
+	lb de, 0, 12
+	lb bc, 20, 6
 	call DrawRegularTextBox
 	ld a, [wcc19]
 	add a
@@ -195,9 +195,9 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld a, [hli]
 	ld [wce40], a
 	push hl
-	ld a, [wcc16]
+	ld a, [wOpponentName]
 	ld [wce41], a
-	ld a, [wcc17]
+	ld a, [wOpponentName + 1]
 	ld [wce42], a
 	ld hl, $4451
 	call $51b3 ; LoadDuelistName
@@ -214,7 +214,7 @@ Duel_Init: ; 103d3 (4:43d3)
 
 .asm_10425
 	ld bc, $0703
-	ld a, [wcc15]
+	ld a, [wOpponentPortrait]
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
@@ -912,11 +912,11 @@ Func_118a7: ; 118a7 (4:58a7)
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
-	ld [wcc16], a
+	ld [wOpponentName], a
 	ld a, [hli]
-	ld [wcc17], a
+	ld [wOpponentName + 1], a
 	ld a, [hli]
-	ld [wcc15], a
+	ld [wOpponentPortrait], a
 	pop bc
 	pop hl
 	ret

@@ -481,7 +481,8 @@ wcc04:: ; cc04
 wcc05:: ; cc05
 	ds $1
 
-wcc06:: ; cc06
+; number of turns taken by both players
+wDuelTurns:: ; cc06
 	ds $1
 
 ; 0 = no one has won duel yet
@@ -506,7 +507,8 @@ wAlreadyPlayedEnergy:: ; cc0b
 wcc0c:: ; cc0c
 	ds $1
 
-wcc0d:: ; cc0d
+; DUELIST_TYPE_* of the turn holder
+wDuelistType:: ; cc0d
 	ds $1
 
 ; this seems to hold the current opponent's deck id - 2,
@@ -531,14 +533,11 @@ wIsPracticeDuel:: ; cc13
 
 	ds $1
 
-wcc15:: ; cc15
+wOpponentPortrait:: ; cc15
 	ds $1
 
-wcc16:: ; cc16
-	ds $1
-
-wcc17:: ; cc17
-	ds $1
+wOpponentName:: ; cc16
+	ds $2
 
 wcc18:: ; cc18
 	ds $1
