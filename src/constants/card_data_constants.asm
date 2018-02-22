@@ -64,7 +64,7 @@ CARD_DATA_UNKNOWN2              EQU $40
 
 PKMN_CARD_DATA_LENGTH EQU $41
 
-; generic type constants
+; generic type (color) constants
 	const_def
 	const FIRE        ; $0
 	const GRASS       ; $1
@@ -78,25 +78,25 @@ NUM_COLORED_TYPES EQU const_value
 NUM_TYPES EQU const_value
 
 ; CARD_DATA_TYPE constants
-TYPE_PKMN_FIRE               EQUS "FIRE"
-TYPE_PKMN_GRASS              EQUS "GRASS"
-TYPE_PKMN_LIGHTNING          EQUS "LIGHTNING"
-TYPE_PKMN_WATER              EQUS "WATER"
-TYPE_PKMN_FIGHTING           EQUS "FIGHTING"
-TYPE_PKMN_PSYCHIC            EQUS "PSYCHIC"
-TYPE_PKMN_COLORLESS          EQUS "COLORLESS"
-TYPE_PKMN_UNUSED             EQUS "UNUSED_TYPE"
+TYPE_PKMN_FIRE      EQU FIRE
+TYPE_PKMN_GRASS     EQU GRASS
+TYPE_PKMN_LIGHTNING EQU LIGHTNING
+TYPE_PKMN_WATER     EQU WATER
+TYPE_PKMN_FIGHTING  EQU FIGHTING
+TYPE_PKMN_PSYCHIC   EQU PSYCHIC
+TYPE_PKMN_COLORLESS EQU COLORLESS
+TYPE_PKMN_UNUSED    EQU UNUSED_TYPE
 	const_def TYPE_PKMN_UNUSED + 1 - TYPE_PKMN_FIRE
-	const TYPE_ENERGY_FIRE              ; $8
-	const TYPE_ENERGY_GRASS             ; $9
-	const TYPE_ENERGY_LIGHTNING         ; $A
-	const TYPE_ENERGY_WATER             ; $B
-	const TYPE_ENERGY_FIGHTING          ; $C
-	const TYPE_ENERGY_PSYCHIC           ; $D
-	const TYPE_ENERGY_DOUBLE_COLORLESS  ; $E
-	const TYPE_ENERGY_UNUSED            ; $F
-	const TYPE_TRAINER                  ; $10
-	const TYPE_TRAINER_UNUSED           ; $11
+	const TYPE_ENERGY_FIRE             ; $08
+	const TYPE_ENERGY_GRASS            ; $09
+	const TYPE_ENERGY_LIGHTNING        ; $0a
+	const TYPE_ENERGY_WATER            ; $0b
+	const TYPE_ENERGY_FIGHTING         ; $0c
+	const TYPE_ENERGY_PSYCHIC          ; $0d
+	const TYPE_ENERGY_DOUBLE_COLORLESS ; $0e
+	const TYPE_ENERGY_UNUSED           ; $0f
+	const TYPE_TRAINER                 ; $10
+	const TYPE_TRAINER_UNUSED          ; $11
 NUM_CARD_TYPES EQU const_value + -1
 
 TYPE_PKMN      EQU %111
@@ -107,7 +107,7 @@ TYPE_TRAINER_F EQU 4
 CIRCLE    EQU $0
 DIAMOND   EQU $1
 STAR      EQU $2
-PROMOSTAR EQU $FF
+PROMOSTAR EQU $ff
 
 ; CARD_DATA_SET constants (set 1)
 COLOSSEUM   EQU $00

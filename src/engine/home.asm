@@ -2452,7 +2452,7 @@ Func_0ed5: ; 0ed5 (0:0ed5)
 
 	INCROM $0ef1, $0f35
 
-Func_0f35: ; 0f35 (0:0f35)
+DuelTransmissionError: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
 	ld l, a
 	ld h, $0
@@ -2490,7 +2490,7 @@ Func_0f58: ; 0f58 (0:0f58)
 .asm_f76
 	ld c, $3
 	call Func_0e63
-	jp c, Func_0f35
+	jp c, DuelTransmissionError
 	ret
 
 ; sets hAIActionTableIndex to an AI action specified in register a
@@ -2568,7 +2568,7 @@ Func_0fac: ; 0fac (0:0fac)
 	ld hl, wcbed
 	ld bc, $0008
 	call Func_0ebf
-	jp c, Func_0f35
+	jp c, DuelTransmissionError
 	pop bc
 	pop de
 	pop hl
@@ -2581,7 +2581,7 @@ Func_0fe9: ; 0fe9 (0:0fe9)
 	ld bc, $0008
 	push hl
 	call Func_0ed5
-	jp c, Func_0f35
+	jp c, DuelTransmissionError
 	pop hl
 	ld e, [hl]
 	inc hl
@@ -3298,7 +3298,7 @@ Func_1485: ; 1485 (0:1485)
 	push af
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
-	cp MAX_POKEMON_IN_PLAY
+	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .already_max_pkmn_in_play
 	inc [hl]
 	ld e, a
@@ -3424,7 +3424,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 
 ; returns in a how many times card e can be found in location b
 ; e = card id to search
-; b = location to consider (deck, hand, arena...)
+; b = location to consider (CARD_LOCATION_*)
 ; h = PLAYER_TURN or OPPONENT_TURN
 CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
@@ -3433,15 +3433,15 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 .next_card
 	ld a, [hl]
 	cp b
-	jr nz, .unmatching_card_location_orID
+	jr nz, .unmatching_card_location_or_ID
 	ld a, l
 	push hl
 	call _GetCardIDFromDeckIndex
 	cp e
 	pop hl
-	jr nz, .unmatching_card_location_orID
+	jr nz, .unmatching_card_location_or_ID
 	inc c
-.unmatching_card_location_orID
+.unmatching_card_location_or_ID
 	inc l
 	ld a, l
 	cp DECK_SIZE
@@ -3475,7 +3475,7 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 
 	INCROM $161e, $16c0
 
-; copies from card identified by register d (0-59):
+; copies from card identified by register d (0-59 deck index):
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
 CopyMoveDataAndDamage: ; 16c0 (0:16c0)
@@ -3775,12 +3775,12 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 
 	INCROM $18f9, $1944
 
-; this loads HP and Stage (1 byte each) of the card with deck index (0-59) at hTempCardIndex_ff9f
+; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
 ; into wLoadedMoveEffectCommands
-Func_1944: ; 1944 (0:1944)
+LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadDeckCardToBuffer1
-	ld hl, wLoadedCard1HP
+	ld hl, wLoadedCard1EffectCommands
 	ld de, wLoadedMoveEffectCommands
 	ld a, [hli]
 	ld [de], a
@@ -3851,7 +3851,7 @@ Func_1994: ; 1994 (0:1994)
 	or d
 	ret z
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	call Func_36f7
+	call GetPlayAreaCardColor
 	call Func_1a0e
 	ld b, a
 	call SwapTurn
@@ -3914,7 +3914,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld d, [hl]
 	dec hl
 	ld e, [hl]
-	call Func_36f6
+	call GetArenaCardColor
 	call Func_1a0e
 	ld b, a
 	call GetArenaPokemonWeakness
@@ -5723,7 +5723,7 @@ CardTypeToSymbolID: ; 2988 (0:2988)
 	ld a, 11
 	ret
 .pokemon_card
-	ld a, [wLoadedCard1Stage]
+	ld a, [wLoadedCard1Stage] ; different symbol for each evolution stage
 	add 8
 	ret
 ; 0x299f
@@ -7172,9 +7172,9 @@ Func_3212: ; 3212 (0:3212)
 
 ; doubles the damage at de if swords dance or focus energy was used in the last turn
 HandleDoubleDamageSubstatus: ; 321d (0:321d)
-	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	bit SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	bit SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
 	call nz, DoubleDamageAtDE
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
@@ -7511,13 +7511,14 @@ NoDamageOrEffectTextPointerTable: ; 34d8 (0:34d8)
 	tx NoDamageOrEffectDueToNShieldText      ; NO_DAMAGE_OR_EFFECT_NSHIELD
 ; 0x34e2
 
-Func_34e2: ; 34e2 (0:34e2)
-	ld a, $27
-	call Func_3509
+; return carry if turn holder has Omanyte and its Clairvoyance Pkmn Power is active
+IsClairvoyanceActive: ; 34e2 (0:34e2)
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
 	ccf
 	ret nc
-	ld a, $5c
-	call Func_3525
+	ld a, OMANYTE
+	call CountPokemonIDInPlayArea
 	ret
 
 ; returns carry if paralyzed, asleep, confused, and/or toxic gas in play,
@@ -7537,81 +7538,183 @@ CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 	jr nz, .done ; return carry
 .check_toxic_gas
 	ld a, MUK
-	call Func_3509
+	call CountPokemonIDInBothPlayAreas
 	ldtx hl, UnableDueToToxicGasText
 .done
 	ret
 
-Func_3509: ; 3509 (0:3509)
+; return, in a, the amount of times that the Pokemon card with a given ID is found in the
+; play area of both duelists. Also return carry if the Pokemon card is at least found once.
+; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
+; input: a = Pokemon card ID to search
+CountPokemonIDInBothPlayAreas: ; 3509 (0:3509)
 	push bc
-	ld [wce7c], a
-	call Func_3525
+	ld [wTempPokemonID], a
+	call CountPokemonIDInPlayArea
 	ld c, a
 	call SwapTurn
-	ld a, [wce7c]
-	call Func_3525
+	ld a, [wTempPokemonID]
+	call CountPokemonIDInPlayArea
 	call SwapTurn
 	add c
 	or a
 	scf
-	jr nz, .asm_3523
+	jr nz, .found
 	or a
-.asm_3523
+.found
 	pop bc
 	ret
 
-Func_3525: ; 3525 (0:3525)
+; return, in a, the amount of times that the Pokemon card with a given ID is found in the
+; turn holder's play area. Also return carry if the Pokemon card is at least found once.
+; if the arena Pokemon is asleep, confused, or paralyzed (Pkmn Power-incapable), it doesn't count.
+; input: a = Pokemon card ID to search
+CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	push hl
 	push de
 	push bc
-	ld [wce7c], a
+	ld [wTempPokemonID], a
 	ld c, $0
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
-	jr z, .asm_3549
+	cp -1
+	jr z, .check_bench
 	call GetCardIDFromDeckIndex
-	ld a, [wce7c]
+	ld a, [wTempPokemonID]
 	cp e
-	jr nz, .asm_3549
+	jr nz, .check_bench
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and PASSIVE_STATUS_MASK
-	jr nz, .asm_3549
+	jr nz, .check_bench
 	inc c
-.asm_3549
+.check_bench
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-.asm_354e
+.next_bench_slot
 	ld a, [hli]
-	cp $ff
-	jr z, .asm_3560
+	cp -1
+	jr z, .done
 	call GetCardIDFromDeckIndex
-	ld a, [wce7c]
+	ld a, [wTempPokemonID]
 	cp e
-	jr nz, .asm_355d
+	jr nz, .skip
 	inc c
-.asm_355d
+.skip
 	inc b
-	jr .asm_354e
-.asm_3560
+	jr .next_bench_slot
+.done
 	ld a, c
 	or a
 	scf
-	jr nz, .asm_3566
+	jr nz, .found
 	or a
-.asm_3566
+.found
 	pop bc
 	pop de
 	pop hl
 	ret
 ; 0x356a
 
-	INCROM $356a, $35e6
+; return, in a, the retreat cost of the card in wLoadedCard1,
+; adjusting for any Dodrio's Retreat Aid Pkmn Power that is active.
+GetLoadedCard1RetreatCost: ; 356a (0:356a)
+	ld c, 0
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+.check_bench_loop
+	ld a, [hli]
+	cp -1
+	jr z, .no_more_bench
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp DODRIO
+	jr nz, .not_dodrio
+	inc c
+.not_dodrio
+	jr .check_bench_loop
+.no_more_bench
+	ld a, c
+	or a
+	jr nz, .dodrio_found
+.muk_found
+	ld a, [wLoadedCard1RetreatCost] ; return regular retreat cost
+	ret
+.dodrio_found
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .muk_found
+	ld a, [wLoadedCard1RetreatCost]
+	sub c ; apply Retreat Aid for each Pkmn Power-capable Dodrio
+	ret nc
+	xor a
+	ret
+; 0x3597
 
-; if swords dance or focus energy was used this turn,
-; mark that the base power of the next turn's attack has to be doubled
-HandleSwordsDanceOrFocusEnergySubstatus: ; 35e6 (0:35e6)
+; return carry if the turn holder's active Pokemon is affected by Acid and can't retreat
+CheckCantRetreatDueToAcid: ; 3597 (0:3597)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	cp SUBSTATUS2_UNABLE_RETREAT
+	jr z, .cant_retreat
+	or a
+	ret
+.cant_retreat
+	ldtx hl, UnableToRetreatDueToAcidText
+	scf
+	ret
+; 0x35a9
+
+; return carry if the turn holder's active Pokemon is affected by Headache and trainer cards can't be used
+CheckCantUseTrainerDueToHeadache: ; 35a9 (0:35a9)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
+	call GetTurnDuelistVariable
+	or a
+	bit SUBSTATUS3_HEADACHE, [hl]
+	ret z
+	ldtx hl, UnableToUseTrainerDueToHeadacheText
+	scf
+	ret
+; 0x35b7
+
+; return carry if turn holder has Aerodactyl and its Prehistoric Power Pkmn Power is active
+IsPrehistoricPowerActive: ; 35b7 (0:35b7)
+	ld a, AERODACTYL
+	call CountPokemonIDInBothPlayAreas
+	ret nc
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ldtx hl, UnableToEvolveDueToPrehistoricPowerText
+	ccf
+	ret
+; 0x35c7
+
+; clears some substatus 2 conditions from the turn holder's active Pokemon
+Func_35c7: ; 35c7 (0:35c7)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	cp SUBSTATUS2_REDUCE_BY_20
+	jr z, .zero
+	cp SUBSTATUS2_POUNCE
+	jr z, .zero
+	cp SUBSTATUS2_GROWL
+	jr z, .zero
+	cp SUBSTATUS2_TAIL_WAG
+	jr z, .zero
+	cp SUBSTATUS2_LEER
+	jr z, .zero
+	ret
+.zero
+	ld [hl], 0
+	ret
+; 0x35e6
+
+; clears the substatus 1 and updates the double damage condition of the player about to start his turn
+UpdateSubstatusConditions_StartOfTurn: ; 35e6 (0:35e6)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	ld [hl], $0
@@ -7619,16 +7722,16 @@ HandleSwordsDanceOrFocusEnergySubstatus: ; 35e6 (0:35e6)
 	ret z
 	cp SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	ret nz
-	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	set SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	set SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
 	ret
 
-; clears the substatus 2 and updates the double damage condition of the turn holder
-UpdateSubstatusConditions: ; 35fa (0:35fa)
-	ld a, DUELVARS_ARENA_CARD_SUBSTATUS5
+; clears the substatus 2, Headache, and updates the double damage condition of the player ending his turn
+UpdateSubstatusConditions_EndOfTurn: ; 35fa (0:35fa)
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
-	res 1, [hl]
+	res SUBSTATUS3_HEADACHE, [hl]
 	push hl
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
@@ -7639,11 +7742,39 @@ UpdateSubstatusConditions: ; 35fa (0:35fa)
 	pop hl
 	cp SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
 	ret z
-	res SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
 	ret
 ; 0x3615
 
-	INCROM $3615, $363b
+; return carry if turn holder has Blastoise and its Rain Dance Pkmn Power is active
+IsRainDanceActive: ; 3615 (0:3615)
+	ld a, BLASTOISE
+	call CountPokemonIDInPlayArea
+	ret nc ; return if no Pkmn Power-capable Blastoise found in turn holder's play area
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ccf
+	ret
+; 0x3622
+
+; return carry if card at [hTempCardIndex_ff98] is a water energy card AND
+; if card at [hTempPlayAreaLocationOffset_ff9d] is a water Pokemon card.
+Func_3622: ; 3622 (0:3622)
+	ldh a, [hTempCardIndex_ff98]
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	cp TYPE_ENERGY_WATER
+	jr nz, .done
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	call GetPlayAreaCardColor
+	cp TYPE_PKMN_WATER
+	jr nz, .done
+	scf
+	ret
+.done
+	or a
+	ret
+; 0x363b
 
 ; if the target card's HP is 0 and the attacking card's HP is not,
 ; the attacking card faints if it was affected by destiny bond
@@ -7657,7 +7788,7 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 .check_hp
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -7740,38 +7871,62 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	ret
 ; 0x36d9
 
-	INCROM $36d9, $36f6
-
-Func_36f6: ; 36f6 (0:36f6)
+; if the id of the card provided in register a as a deck index is Muk,
+; clear the changed type of all arena and bench Pokemon
+ClearChangedTypesIfMuk: ; 36d9 (0:36d9)
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp MUK
+	ret nz
+	call SwapTurn
+	call .zero_changed_types
+	call SwapTurn
+.zero_changed_types
+	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	call GetTurnDuelistVariable
+	ld c, MAX_PLAY_AREA_POKEMON
+.zero_changed_types_loop
 	xor a
+	ld [hli], a
+	dec c
+	jr nz, .zero_changed_types_loop
+	ret
+; 0x36f6
 
-Func_36f7: ; 36f7 (0:36f7)
+; return the arena card's color in a, accounting for Venomoth's Shift Pokemon Power if active
+GetArenaCardColor: ; 36f6 (0:36f6)
+	xor a
+;	fallthrough
+
+; input: a = play area location offset of the desired card
+; return the card's color in a, accounting for Venomoth's Shift Pokemon Power if active
+GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	push hl
 	push de
 	ld e, a
-	add $d4
+	add DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call GetTurnDuelistVariable
 	bit 7, a
-	jr nz, .asm_3718
-.has_status
+	jr nz, .has_changed_color
+.regular_color
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	call GetCardType
 	cp TYPE_TRAINER
-	jr nz, .asm_3715
-	ld a, $6
-.asm_3715
+	jr nz, .got_type
+	ld a, COLORLESS
+.got_type
 	pop de
 	pop hl
 	ret
-.asm_3718
+.has_changed_color
 	ld a, e
 	call CheckIfUnderAnyCannotUseStatus2
-	jr c, .has_status
+	jr c, .regular_color ; jump if can't use Shift
 	ld a, e
-	add $d4
+	add DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call GetTurnDuelistVariable
 	pop de
 	pop hl
@@ -7780,17 +7935,18 @@ Func_36f7: ; 36f7 (0:36f7)
 ; 0x3729
 
 ; return in a the weakness of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
-; if a == 0 and [DUELVARS_ARENA_CARD_SUBSTATUS3] != 0, return [DUELVARS_ARENA_CARD_SUBSTATUS3] instead
+; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0,
+; return [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] instead
 GetPlayAreaPokemonWeakness: ; 3729 (0:3729)
 	or a
 	jr z, GetArenaPokemonWeakness
 	add DUELVARS_ARENA_CARD
 	jr GetPokemonWeakness
 
-; return [DUELVARS_ARENA_CARD_SUBSTATUS3] in a
-; if [DUELVARS_ARENA_CARD_SUBSTATUS3] == 0, return the Pokemon's weakness value instead
+; return in a the weakness of the arena Pokemon
+; if [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0, return it instead
 GetArenaPokemonWeakness: ; 3730 (0:3730)
-	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
+	ld a, DUELVARS_ARENA_CARD_CHANGED_WEAKNESS
 	call GetTurnDuelistVariable
 	or a
 	ret nz
@@ -7805,17 +7961,18 @@ GetPokemonWeakness:
 ; 0x3743
 
 ; return in a the resistance of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
-; if a == 0 and [DUELVARS_ARENA_CARD_SUBSTATUS4] != 0, return [DUELVARS_ARENA_CARD_SUBSTATUS4] instead
+; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0,
+; return [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] instead
 GetPlayAreaPokemonResistance: ; 3743 (0:3743)
 	or a
 	jr z, GetArenaPokemonResistance
 	add DUELVARS_ARENA_CARD
 	jr GetPokemonResistance
 
-; return [DUELVARS_ARENA_CARD_SUBSTATUS4] in a
-; if [DUELVARS_ARENA_CARD_SUBSTATUS4] == 0, return the Pokemon's resistance value instead
+; return in a the resistance of the arena Pokemon
+; if [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0, return it instead
 GetArenaPokemonResistance: ; 374a (0:374a)
-	ld a, DUELVARS_ARENA_CARD_SUBSTATUS4
+	ld a, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
 	call GetTurnDuelistVariable
 	or a
 	ret nz

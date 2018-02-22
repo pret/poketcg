@@ -53,14 +53,16 @@ wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
 ; Which card is in player's side of the field, as number 0 to 59
+; -1 indicates no pokemon
 wPlayerArenaCard:: ; c2bb
 	ds $1
 
-; Which cards are in player's bench, as numbers 0 to 59
+; Which cards are in player's bench, as numbers 0 to 59, plus an $ff (-1) terminator
+; -1 indicates no pokemon
 wPlayerBench:: ; c2bc
-	ds BENCH_SIZE
+	ds MAX_BENCH_POKEMON + 1
 
-	ds $7
+	ds $6
 
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
@@ -75,7 +77,24 @@ wPlayerBench4CardHP:: ; c2cc
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
 
-	ds $19
+	ds $6
+
+; changed type from Venomoth's Shift Pokemon Power
+; if bit 7 == 1, then bits 0-3 override the Pokemon's actual type
+wPlayerArenaCardChangedType:: ; c2d4
+	ds $1
+wPlayerBench1CardChangedType:: ; c2d5
+	ds $1
+wPlayerBench2CardChangedType:: ; c2d6
+	ds $1
+wPlayerBench3CardChangedType:: ; c2d7
+	ds $1
+wPlayerBench4CardChangedType:: ; c2d8
+	ds $1
+wPlayerBench5CardChangedType:: ; c2d9
+	ds $1
+
+	ds $d
 
 wPlayerArenaCardSubstatus1:: ; c2e7
 	ds $1
@@ -83,13 +102,15 @@ wPlayerArenaCardSubstatus1:: ; c2e7
 wPlayerArenaCardSubstatus2:: ; c2e8
 	ds $1
 
-wPlayerArenaCardSubstatus3:: ; c2e9
+; changed weakness from Conversion 1
+wPlayerArenaCardChangedWeakness:: ; c2e9
 	ds $1
 
-wPlayerArenaCardSubstatus4:: ; c2ea
+; changed resistance from Conversion 2
+wPlayerArenaCardChangedResistance:: ; c2ea
 	ds $1
 
-wPlayerArenaCardSubstatus5:: ; c2eb
+wPlayerArenaCardSubstatus3:: ; c2eb
 	ds $1
 
 ; Each bit represents a prize (1 = not taken ; 0 = taken)
@@ -141,9 +162,9 @@ wOpponentArenaCard:: ; c3bb
 	ds $1
 
 wOpponentBench:: ; c3bc
-	ds BENCH_SIZE
+	ds MAX_BENCH_POKEMON + 1
 
-	ds $7
+	ds $6
 
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
@@ -158,7 +179,22 @@ wOpponentBench4CardHP:: ; c3cc
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
 
-	ds $19
+	ds $6
+
+wOpponentArenaCardChangedType:: ; c2d4
+	ds $1
+wOpponentBench1CardChangedType:: ; c2d5
+	ds $1
+wOpponentBench2CardChangedType:: ; c2d6
+	ds $1
+wOpponentBench3CardChangedType:: ; c2d7
+	ds $1
+wOpponentBench4CardChangedType:: ; c2d8
+	ds $1
+wOpponentBench5CardChangedType:: ; c2d9
+	ds $1
+
+	ds $d
 
 wOpponentArenaCardSubstatus1:: ; c3e7
 	ds $1
@@ -166,13 +202,13 @@ wOpponentArenaCardSubstatus1:: ; c3e7
 wOpponentArenaCardSubstatus2:: ; c3e8
 	ds $1
 
-wOpponentArenaCardSubstatus3:: ; c3e9
+wOpponentArenaCardChangedWeakness:: ; c3e9
 	ds $1
 
-wOpponentArenaCardSubstatus4:: ; c3ea
+wOpponentArenaCardChangedResistance:: ; c3ea
 	ds $1
 
-wOpponentArenaCardSubstatus5:: ; c3eb
+wOpponentArenaCardSubstatus3:: ; c3eb
 	ds $1
 
 wOpponentPrizes:: ; c3ec
@@ -703,7 +739,7 @@ wTileBehindCursor:: ; cd16
 	ds $1
 
 wcd17:: ; cd17
-	ds 2
+	ds $2
 
 	ds $7f
 
@@ -798,8 +834,10 @@ wce6e:: ; ce6e
 wce6f:: ; ce6f
 	ds $d
 
-wce7c:: ; ce7c
-	ds $27
+wTempPokemonID:: ; ce7c
+	ds $1
+
+	ds $26
 
 wcea3:: ; cea3
 	ds $c

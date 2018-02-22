@@ -5,12 +5,10 @@ card_data_struct: MACRO
 \1Rarity::        db
 \1Set::           db
 \1ID::            db
-\1EnergyCardEffectCommands::  ; dw
-\1TrainerCardEffectCommands:: ; dw
+\1EffectCommands:: ; dw
 \1HP::            db
 \1Stage::         db
-\1EnergyCardDescription::     ; dw
-\1TrainerCardDescription::    ; dw
+\1NonPokemonDescription:: ; dw
 \1PreEvoName::    dw
 \1Move1::         move_data_struct \1Move1
 \1Move2::         move_data_struct \1Move2

@@ -48,7 +48,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ldh [hTempCardIndex_ff9f], a
 	bank1call $35a9
 	jp c, $41a8
-	call Func_1944
+	call LoadNonPokemonCardEffectCommands
 	ld a, $1
 	call TryExecuteEffectCommandFunction
 	jp c, $41a8

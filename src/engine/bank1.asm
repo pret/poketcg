@@ -123,7 +123,7 @@ StartDuel: ; 409f (1:409f)
 .main_duel_loop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
-	call HandleSwordsDanceOrFocusEnergySubstatus
+	call UpdateSubstatusConditions_StartOfTurn
 	call $54c8
 	call HandleTurn
 
@@ -132,7 +132,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duel_finished
-	call UpdateSubstatusConditions
+	call UpdateSubstatusConditions_EndOfTurn
 	call $6baf
 	call Func_3b31
 	call Func_0f58
@@ -306,7 +306,7 @@ HandleTurn: ; 4225 (1:4225)
 	cp DUELIST_TYPE_PLAYER
 	jr z, Func_4262
 	call SwapTurn
-	call Func_34e2
+	call IsClairvoyanceActive
 	call SwapTurn
 	call c, $4b2c
 	jr DuelMainScene
@@ -470,7 +470,7 @@ PlayerActivePokemonScreen: ; 4370 (1:4370)
 Func_4376: ; 4376 (1:4376)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1
@@ -1193,7 +1193,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ret
 
 .asm_4d12
-	jp Func_0f35
+	jp DuelTransmissionError
 
 .asm_4d15
 	call EmptyScreen
@@ -1235,7 +1235,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	jr c, .asm_4d8e
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
-	cp MAX_POKEMON_IN_PLAY
+	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .asm_4d86
 	ldh a, [hTempCardIndex_ff98]
 	call Func_1485
@@ -1341,7 +1341,7 @@ AIMakeDecision: ; 67be (1:67be)
 	INCROM $67fb, $695e
 
 AIActionTable: ; 695e (1:695e)
-	dw Func_0f35
+	dw DuelTransmissionError
 	dw $69e0
 	dw $69c5
 	dw AIUseEnergyCard
@@ -1476,9 +1476,9 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	dec c
 	jr nz, .init_duel_variables_loop
 	ld l, DUELVARS_ARENA_CARD
-	ld c, 1 + BENCH_SIZE + 1
+	ld c, 1 + MAX_BENCH_POKEMON + 1
 .init_play_area
-; initialize to $ff card in arena as well as cards in bench (plus a terminator?)
+; initialize to $ff card in arena as well as cards in bench (plus a terminator)
 	ld [hl], $ff
 	inc l
 	dec c

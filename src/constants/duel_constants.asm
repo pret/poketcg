@@ -1,7 +1,7 @@
-DECK_NAME_SIZE      EQU 24
-DECK_SIZE           EQU 60
-BENCH_SIZE          EQU 5
-MAX_POKEMON_IN_PLAY EQU 6 ; arena + bench
+DECK_NAME_SIZE        EQU 24
+DECK_SIZE             EQU 60
+MAX_BENCH_POKEMON     EQU 5
+MAX_PLAY_AREA_POKEMON EQU 6 ; arena + bench
 
 ; hWhoseTurn constants
 PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
@@ -35,11 +35,17 @@ DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"        
 DUELVARS_BENCH3_CARD_HP                  EQUS "LOW(wPlayerBench3CardHP)"               ; cb
 DUELVARS_BENCH4_CARD_HP                  EQUS "LOW(wPlayerBench4CardHP)"               ; cc
 DUELVARS_BENCH5_CARD_HP                  EQUS "LOW(wPlayerBench5CardHP)"               ; cd
+DUELVARS_ARENA_CARD_CHANGED_TYPE         EQUS "LOW(wPlayerArenaCardChangedType)"       ; d4
+DUELVARS_BENCH1_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench1CardChangedType)"      ; d5
+DUELVARS_BENCH2_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench2CardChangedType)"      ; d6
+DUELVARS_BENCH3_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench3CardChangedType)"      ; d7
+DUELVARS_BENCH4_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench4CardChangedType)"      ; d8
+DUELVARS_BENCH5_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench5CardChangedType)"      ; d9
 DUELVARS_ARENA_CARD_SUBSTATUS1           EQUS "LOW(wPlayerArenaCardSubstatus1)"        ; e7
 DUELVARS_ARENA_CARD_SUBSTATUS2           EQUS "LOW(wPlayerArenaCardSubstatus2)"        ; e8
-DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)"        ; e9
-DUELVARS_ARENA_CARD_SUBSTATUS4           EQUS "LOW(wPlayerArenaCardSubstatus4)"        ; ea
-DUELVARS_ARENA_CARD_SUBSTATUS5           EQUS "LOW(wPlayerArenaCardSubstatus5)"        ; eb
+DUELVARS_ARENA_CARD_CHANGED_WEAKNESS     EQUS "LOW(wPlayerArenaCardChangedWeakness)"   ; e9
+DUELVARS_ARENA_CARD_CHANGED_RESISTANCE   EQUS "LOW(wPlayerArenaCardChangedResistance)" ; ea
+DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)"        ; eb
 DUELVARS_PRIZES                          EQUS "LOW(wPlayerPrizes)"                     ; ec
 DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "LOW(wPlayerNumberOfCardsInDiscardPile)" ; ed
 DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "LOW(wPlayerNumberOfCardsInHand)"        ; ee
@@ -108,7 +114,8 @@ SUBSTATUS2_UNABLE_RETREAT EQU $09
 SUBSTATUS2_BONE_ATTACK    EQU $0b
 SUBSTATUS2_GROWL          EQU $12
 
-SUBSTATUS5_THIS_TURN_DOUBLE_DAMAGE EQU 0
+SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE EQU 0
+SUBSTATUS3_HEADACHE                EQU 1
 
 ; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01

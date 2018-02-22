@@ -44,12 +44,12 @@ ApplyStatusEffect:
 	jr z, .cant_induce_status
 	cp MYSTERIOUS_FOSSIL
 	jr z, .cant_induce_status
-	; snorlax's thick skinned prevents it from being statused...
+	; Snorlax's Thick Skinned prevents it from being statused...
 	cp SNORLAX
 	jr nz, .can_induce_status
 	call SwapTurn
 	xor a
-	; ...unless already so, or if affected by muk's toxic gas
+	; ...unless already so, or if affected by Muk's Toxic Gas
 	call CheckIfUnderAnyCannotUseStatus2
 	call SwapTurn
 	jr c, .can_induce_status
