@@ -23,30 +23,30 @@ DUEL_DRAW EQU $3
 	const BOXMSG_COIN_TOSS
 
 ; wPlayerDuelVariables or wOpponentDuelVariables constants
-DUELVARS_CARD_LOCATIONS                  EQUS "wPlayerCardLocations & $ff"              ; 00
-DUELVARS_HAND                            EQUS "wPlayerHand & $ff"                       ; 42
-DUELVARS_DECK_CARDS                      EQUS "wPlayerDeckCards & $ff"                  ; 7e
-DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "wPlayerNumberOfCardsNotInDeck & $ff"     ; ba
-DUELVARS_ARENA_CARD                      EQUS "wPlayerArenaCard & $ff"                  ; bb
-DUELVARS_BENCH                           EQUS "wPlayerBench & $ff"                      ; bc
-DUELVARS_ARENA_CARD_HP                   EQUS "wPlayerArenaCardHP & $ff"                ; c8
-DUELVARS_BENCH1_CARD_HP                  EQUS "wPlayerBench1CardHP & $ff"               ; c9
-DUELVARS_BENCH2_CARD_HP                  EQUS "wPlayerBench2CardHP & $ff"               ; ca
-DUELVARS_BENCH3_CARD_HP                  EQUS "wPlayerBench3CardHP & $ff"               ; cb
-DUELVARS_BENCH4_CARD_HP                  EQUS "wPlayerBench4CardHP & $ff"               ; cc
-DUELVARS_BENCH5_CARD_HP                  EQUS "wPlayerBench5CardHP & $ff"               ; cd
-DUELVARS_ARENA_CARD_SUBSTATUS1           EQUS "wPlayerArenaCardSubstatus1 & $ff"        ; e7
-DUELVARS_ARENA_CARD_SUBSTATUS2           EQUS "wPlayerArenaCardSubstatus2 & $ff"        ; e8
-DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "wPlayerArenaCardSubstatus3 & $ff"        ; e9
-DUELVARS_ARENA_CARD_SUBSTATUS4           EQUS "wPlayerArenaCardSubstatus4 & $ff"        ; ea
-DUELVARS_ARENA_CARD_SUBSTATUS5           EQUS "wPlayerArenaCardSubstatus5 & $ff"        ; eb
-DUELVARS_PRIZES                          EQUS "wPlayerPrizes & $ff"                     ; ec
-DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "wPlayerNumberOfCardsInDiscardPile & $ff" ; ed
-DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "wPlayerNumberOfCardsInHand & $ff"        ; ee
-DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "wPlayerNumberOfPokemonInPlay & $ff"      ; ef
-DUELVARS_ARENA_CARD_STATUS               EQUS "wPlayerArenaCardStatus & $ff"            ; f0
-DUELVARS_DUELIST_TYPE                    EQUS "wPlayerDuelistType & $ff"                ; f1
-DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "wPlayerArenaCardDisabledMoveIndex & $ff" ; f2
+DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"              ; 00
+DUELVARS_HAND                            EQUS "LOW(wPlayerHand)"                       ; 42
+DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"                  ; 7e
+DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"     ; ba
+DUELVARS_ARENA_CARD                      EQUS "LOW(wPlayerArenaCard)"                  ; bb
+DUELVARS_BENCH                           EQUS "LOW(wPlayerBench)"                      ; bc
+DUELVARS_ARENA_CARD_HP                   EQUS "LOW(wPlayerArenaCardHP)"                ; c8
+DUELVARS_BENCH1_CARD_HP                  EQUS "LOW(wPlayerBench1CardHP)"               ; c9
+DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"               ; ca
+DUELVARS_BENCH3_CARD_HP                  EQUS "LOW(wPlayerBench3CardHP)"               ; cb
+DUELVARS_BENCH4_CARD_HP                  EQUS "LOW(wPlayerBench4CardHP)"               ; cc
+DUELVARS_BENCH5_CARD_HP                  EQUS "LOW(wPlayerBench5CardHP)"               ; cd
+DUELVARS_ARENA_CARD_SUBSTATUS1           EQUS "LOW(wPlayerArenaCardSubstatus1)"        ; e7
+DUELVARS_ARENA_CARD_SUBSTATUS2           EQUS "LOW(wPlayerArenaCardSubstatus2)"        ; e8
+DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)"        ; e9
+DUELVARS_ARENA_CARD_SUBSTATUS4           EQUS "LOW(wPlayerArenaCardSubstatus4)"        ; ea
+DUELVARS_ARENA_CARD_SUBSTATUS5           EQUS "LOW(wPlayerArenaCardSubstatus5)"        ; eb
+DUELVARS_PRIZES                          EQUS "LOW(wPlayerPrizes)"                     ; ec
+DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "LOW(wPlayerNumberOfCardsInDiscardPile)" ; ed
+DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "LOW(wPlayerNumberOfCardsInHand)"        ; ee
+DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "LOW(wPlayerNumberOfPokemonInPlay)"      ; ef
+DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"            ; f0
+DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                ; f1
+DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)" ; f2
 
 ; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00

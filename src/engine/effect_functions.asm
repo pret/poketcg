@@ -99,12 +99,12 @@ CommentedOut_2c086: ; 2c086 (b:4086)
 
 Func_2c087: ; 2c087 (b:4087)
 	xor a
-	jr asm_2c08c
+	jr Func_2c08c
 
 Func_2c08a: ; 2c08a (b:408a)
 	ld a, $1
 
-asm_2c08c
+Func_2c08c:
 	push de
 	push af
 	ld a, $11

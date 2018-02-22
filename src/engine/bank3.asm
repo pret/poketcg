@@ -2219,7 +2219,7 @@ Func_d00b: ; d00b (3:500b)
 	dec hl
 	ld e, a
 	ld d, $0
-	call Func_2f45
+	call GetCardName
 	pop hl
 	ld [hl], e
 	inc hl

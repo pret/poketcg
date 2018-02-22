@@ -869,7 +869,7 @@ CheckIfMoveExists: ; 4872 (1:4872)
 	ld a, [de]
 	or c
 	jr z, .return_no_move_found
-	ld hl, wLoadedCard1Move1Category - (wLoadedCard1Move1Name + 1)
+	ld hl, CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_NAME + 1)
 	add hl, de
 	ld a, [hl]
 	and $ff ^ RESIDUAL
@@ -930,12 +930,12 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	ld de, wLoadedCard1Move2Energy
 
 .got_move
-	ld hl, wLoadedCard1Move1Name - wLoadedCard1Move1Energy
+	ld hl, CARD_DATA_MOVE1_NAME - CARD_DATA_MOVE1_ENERGY
 	add hl, de
 	ld a, [hli]
 	or [hl]
 	jr z, .not_usable
-	ld hl, wLoadedCard1Move1Category - wLoadedCard1Move1Energy
+	ld hl, CARD_DATA_MOVE1_CATEGORY - CARD_DATA_MOVE1_ENERGY
 	add hl, de
 	ld a, [hl]
 	cp POKEMON_POWER
@@ -1161,9 +1161,9 @@ Func_4b60: ; 4b60 (1:4b60)
 Func_4cd5: ; 4cd5 (1:4cd5)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	cp $0
+	cp DUELIST_TYPE_PLAYER
 	jr z, .asm_4d15
-	cp $1
+	cp DUELIST_TYPE_LINK_OPP
 	jr z, .asm_4cec
 	push af
 	push hl
@@ -1188,7 +1188,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	jr c, .asm_4d12
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	ld [hl], $1
+	ld [hl], DUELIST_TYPE_LINK_OPP
 	or a
 	ret
 
@@ -1416,10 +1416,10 @@ ConvertTrainerCardToPokemon:
 .start_ram_data_overwrite
 	push de
 	ld [hl], COLORLESS
-	ld bc, wLoadedCard1HP - wLoadedCard1
+	ld bc, CARD_DATA_HP
 	add hl, bc
 	ld de, .data_to_overwrite
-	ld c, wLoadedCard1Unknown2 - wLoadedCard1HP
+	ld c, CARD_DATA_UNKNOWN2 - CARD_DATA_HP
 .loop
 	ld a, [de]
 	inc de
@@ -1430,16 +1430,16 @@ ConvertTrainerCardToPokemon:
 	ret
 
 .data_to_overwrite
-    db 10                 ; hp
-    ds $07                ; wLoadedCard1Move1Name - (wLoadedCard1HP + 1)
-    tx DiscardName        ; move1 name
-    tx DiscardDescription ; move1 description
-    ds $03                ; wLoadedCard1Move1Category - (wLoadedCard1Move1Description + 2)
-    db POKEMON_POWER      ; move1 category
-    dw TrainerCardAsPokemonEffectCommands ; move1 effect commands
-    ds $18                ; wLoadedCard1RetreatCost - (wLoadedCard1Move1EffectCommands + 2)
-    db UNABLE_RETREAT     ; retreat cost
-    ds $0d                ; PKMN_CARD_DATA_LENGTH - (wLoadedCard1RetreatCost + 1 - wLoadedCard1)
+    db 10                 ; CARD_DATA_HP
+    ds $07                ; CARD_DATA_MOVE1_NAME - (CARD_DATA_HP + 1)
+    tx DiscardName        ; CARD_DATA_MOVE1_NAME
+    tx DiscardDescription ; CARD_DATA_MOVE1_DESCRIPTION
+    ds $03                ; CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_DESCRIPTION + 2)
+    db POKEMON_POWER      ; CARD_DATA_MOVE1_CATEGORY
+    dw TrainerCardAsPokemonEffectCommands ; CARD_DATA_MOVE1_EFFECT_COMMANDS
+    ds $18                ; CARD_DATA_RETREAT_COST - (CARD_DATA_MOVE1_EFFECT_COMMANDS + 2)
+    db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
+    ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
 	INCROM $6df1, $7107
 

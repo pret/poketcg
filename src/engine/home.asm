@@ -1284,6 +1284,7 @@ SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 	bit 7, [hl]
 	ret nz
 ;	fallthrough
+
 CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ld a, [rIE]
 	push af
@@ -3491,7 +3492,7 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld hl, wLoadedCard1Move2
 .got_move
 	ld de, wLoadedMove
-	ld c, wLoadedCard1Move2 - wLoadedCard1Move1
+	ld c, CARD_DATA_MOVE2 - CARD_DATA_MOVE1
 .copy_loop
 	ld a, [hli]
 	ld [de], a
@@ -3854,7 +3855,7 @@ Func_1994: ; 1994 (0:1994)
 	call Func_1a0e
 	ld b, a
 	call SwapTurn
-	call Func_3730
+	call GetArenaPokemonWeakness
 	call SwapTurn
 	and b
 	jr z, .asm_19dc
@@ -3864,7 +3865,7 @@ Func_1994: ; 1994 (0:1994)
 	set 1, [hl]
 .asm_19dc
 	call SwapTurn
-	call Func_374a
+	call GetArenaPokemonResistance
 	call SwapTurn
 	and b
 	jr z, .check_pluspower_and_defender
@@ -3916,7 +3917,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	call Func_36f6
 	call Func_1a0e
 	ld b, a
-	call Func_3730
+	call GetArenaPokemonWeakness
 	and b
 	jr z, .asm_1a47
 	sla e
@@ -3924,7 +3925,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld hl, $ccc1
 	set 1, [hl]
 .asm_1a47
-	call Func_374a
+	call GetArenaPokemonResistance
 	and b
 	jr z, .asm_1a58
 	ld hl, $ffe2
@@ -4505,6 +4506,7 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 	cp CONSOLE_SGB
 	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
+
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
@@ -4622,7 +4624,7 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	ld a, [wFrameType]
 	or a
 	ret z
-ColorizeTextBoxSGB
+ColorizeTextBoxSGB:
 	push bc
 	push de
 	ld hl, $cae0
@@ -4742,11 +4744,11 @@ Func_20c4: ; 20c4 (0:20c4)
 
 Func_20d8: ; 20d8 (0:20d8)
 	ld b, $10
-	jr asm_20de
+	jr Func_20dc.asm_20de
 
 Func_20dc: ; 20dc (0:20dc)
 	ld b, $24
-asm_20de
+.asm_20de
 	ld hl, DuelGraphics + $980 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -6558,15 +6560,17 @@ Func_2ec4: ; 2ec4 (0:2ec4)
 
 	INCROM $2ecd, $2f0a
 
-; load data of card with id at e to wLoadedCard1 or wLoadedCard2
+; load data of card with id at e to wLoadedCard2
 LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
 	push hl
 	ld hl, wLoadedCard2
 	jr LoadCardDataToRAM
 
+; load data of card with id at e to wLoadedCard1
 LoadCardDataToBuffer1: ; 2f10 (0:2f10)
 	push hl
 	ld hl, wLoadedCard1
+;	fallthrough
 
 LoadCardDataToRAM: ; 2f14 (0:2f14)
 	push de
@@ -6586,65 +6590,65 @@ LoadCardDataToRAM: ; 2f14 (0:2f14)
 	jr nz, .copy_card_data_loop
 	call BankpopHome
 	or a
-
 .done
 	pop bc
 	pop de
 	pop hl
 	ret
 
-Func_2f32: ; 2f32 (0:2f32)
+; return in a the type (TYPE_* constant) of the card with id at e
+GetCardType: ; 2f32 (0:2f32)
 	push hl
 	call GetCardPointer
-	jr c, .asm_2f43
+	jr c, .done
 	ld a, BANK(CardPointers)
 	call BankpushHome2
 	ld l, [hl]
 	call BankpopHome
 	ld a, l
 	or a
-.asm_2f43
+.done
 	pop hl
 	ret
 
-Func_2f45: ; 2f45 (0:2f45)
+; return in a the 2-byte text id of the name of the card with id at e
+GetCardName: ; 2f45 (0:2f45)
 	push hl
 	call GetCardPointer
-	jr c, .asm_2f5b
+	jr c, .done
 	ld a, BANK(CardPointers)
 	call BankpushHome2
-	ld de, $0003
+	ld de, CARD_DATA_NAME
 	add hl, de
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	call BankpopHome
 	or a
-
-.asm_2f5b
+.done
 	pop hl
 	ret
 
-; from the card id in a, loads type into a, rarity into b, and set into c
-GetCardHeader: ; 2f5d (0:2f5d)
+; from the card id in a, returns type into a, rarity into b, and set into c
+GetCardTypeRarityAndSet: ; 2f5d (0:2f5d)
 	push hl
 	push de
-	ld d, $00
+	ld d, 0
 	ld e, a
 	call GetCardPointer
-	jr c, .card_not_found
+	jr c, .done
 	ld a, BANK(CardPointers)
 	call BankpushHome2
-	ld e, [hl]
-	ld bc, $5
+	ld e, [hl] ; CARD_DATA_TYPE
+	ld bc, CARD_DATA_RARITY
 	add hl, bc
-	ld b, [hl]
+	ld b, [hl] ; CARD_DATA_RARITY
 	inc hl
-	ld c, [hl]
+	ld c, [hl] ; CARD_DATA_SET
 	call BankpopHome
 	ld a, e
 	or a
-.card_not_found
+.done
 	pop de
 	pop hl
 	ret
@@ -7157,6 +7161,7 @@ Func_31fc: ; 31fc (0:31fc)
 	ld [hl], a
 	ld a, e
 ;	fallthrough
+
 Func_3212: ; 3212 (0:3212)
 	ld [rSB], a
 	ld a, $1
@@ -7748,13 +7753,13 @@ Func_36f7: ; 36f7 (0:36f7)
 	call GetTurnDuelistVariable
 	bit 7, a
 	jr nz, .asm_3718
-.asm_3703
+.has_status
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
-	call Func_2f32
-	cp $10
+	call GetCardType
+	cp TYPE_TRAINER
 	jr nz, .asm_3715
 	ld a, $6
 .asm_3715
@@ -7764,7 +7769,7 @@ Func_36f7: ; 36f7 (0:36f7)
 .asm_3718
 	ld a, e
 	call CheckIfUnderAnyCannotUseStatus2
-	jr c, .asm_3703
+	jr c, .has_status
 	ld a, e
 	add $d4
 	call GetTurnDuelistVariable
@@ -7774,28 +7779,50 @@ Func_36f7: ; 36f7 (0:36f7)
 	ret
 ; 0x3729
 
-	INCROM $3729, $3730
+; return in a the weakness of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
+; if a == 0 and [DUELVARS_ARENA_CARD_SUBSTATUS3] != 0, return [DUELVARS_ARENA_CARD_SUBSTATUS3] instead
+GetPlayAreaPokemonWeakness: ; 3729 (0:3729)
+	or a
+	jr z, GetArenaPokemonWeakness
+	add DUELVARS_ARENA_CARD
+	jr GetPokemonWeakness
 
-Func_3730: ; 3730 (0:3730)
+; return [DUELVARS_ARENA_CARD_SUBSTATUS3] in a
+; if [DUELVARS_ARENA_CARD_SUBSTATUS3] == 0, return the Pokemon's weakness value instead
+GetArenaPokemonWeakness: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS3
 	call GetTurnDuelistVariable
 	or a
 	ret nz
 	ld a, DUELVARS_ARENA_CARD
+;	fallthrough
+
+GetPokemonWeakness:
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer2
 	ld a, [wLoadedCard2Weakness]
 	ret
 ; 0x3743
 
-	INCROM $3743, $374a
+; return in a the resistance of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
+; if a == 0 and [DUELVARS_ARENA_CARD_SUBSTATUS4] != 0, return [DUELVARS_ARENA_CARD_SUBSTATUS4] instead
+GetPlayAreaPokemonResistance: ; 3743 (0:3743)
+	or a
+	jr z, GetArenaPokemonResistance
+	add DUELVARS_ARENA_CARD
+	jr GetPokemonResistance
 
-Func_374a: ; 374a (0:374a)
+; return [DUELVARS_ARENA_CARD_SUBSTATUS4] in a
+; if [DUELVARS_ARENA_CARD_SUBSTATUS4] == 0, return the Pokemon's resistance value instead
+GetArenaPokemonResistance: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS4
 	call GetTurnDuelistVariable
 	or a
 	ret nz
 	ld a, DUELVARS_ARENA_CARD
+;	fallthrough
+
+GetPokemonResistance:
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer2
 	ld a, [wLoadedCard2Resistance]
@@ -7979,7 +8006,7 @@ Func_38db: ; 38db (0:38db)
 	xor a
 	ld [$ba44], a
 	call DisableSRAM
-asm_38ed
+.asm_38ed
 	farcall Func_131d3
 	ld a, $9
 	ld [wd111], a
@@ -7995,7 +8022,7 @@ Func_38fb: ; 38fb (0:38fb)
 	ld a, [$ba44]
 	call DisableSRAM
 	cp $ff
-	jr z, asm_38ed
+	jr z, Func_38db.asm_38ed
 	scf
 	ret
 
@@ -8022,7 +8049,7 @@ GetFloorObjectFromPos: ; 3927 (0:3927)
 
 	INCROM $392e, $3946
 
-; puts a floor tile in hc given coords in bc (x,y. measured in tiles)
+; puts a floor tile in hl given coords in bc (x,y. measured in tiles)
 FindFloorTileFromPos: ; 3946 (0:3946)
 	push bc
 	srl b

@@ -81,7 +81,7 @@ FindCardsInSetAndRarity: ; 1e226 (7:6226)
 	call CheckCardViable
 	jr c, .finished_with_current_card
 	ld a, [wBoosterCurrentCardType]
-	call GetCardType
+	call GetBoosterCardType
 	push af
 	push hl
 	ld c, a
@@ -107,7 +107,7 @@ FindCardsInSetAndRarity: ; 1e226 (7:6226)
 CheckCardViable: ; 1e268 (7:6268)
 	push bc
 	ld a, e
-	call GetCardHeader
+	call GetCardTypeRarityAndSet
 	ld [wBoosterCurrentCardType], a
 	ld a, b
 	ld [wBoosterCurrentCardRarity], a
@@ -119,7 +119,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	cp c
 	jr nz, .invalid_card
 	ld a, [wBoosterCurrentCardType]
-	call GetCardType
+	call GetBoosterCardType
 	cp BOOSTER_CARD_TYPE_ENERGY
 	jr z, .return_valid_card
 	ld a, [wBoosterCurrentCardSet]
@@ -139,7 +139,7 @@ CheckCardViable: ; 1e268 (7:6268)
 	ret
 
 ; Map a card's TYPE_* constant given in a to its BOOSTER_CARD_TYPE_* constant
-GetCardType: ; 1e2a0 (7:62a0)
+GetBoosterCardType: ; 1e2a0 (7:62a0)
 	push hl
 	push bc
 	ld hl, CardTypeTable
@@ -439,7 +439,7 @@ AddBoosterCardsToCollection:; 1e40a (7:640a)
 
 AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
 	push hl
-	ld h, wTempCardCollection >> 8
+	ld h, HIGH(wTempCardCollection)
 	ld a, [wBoosterTempCard]
 	ld l, a
 	inc [hl]
@@ -448,7 +448,7 @@ AddBoosterCardToTempCardCollection: ; 1e419 (7:6419)
 
 IsByteInTempCardCollectionZero: ; 1e423 (7:6423)
 	push hl
-	ld h, wTempCardCollection >> 8
+	ld h, HIGH(wTempCardCollection)
 	ld a, [wBoosterTempCard]
 	ld l, a
 	ld a, [hl]
