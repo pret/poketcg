@@ -3830,7 +3830,7 @@ Func_1994: ; 1994 (0:1994)
 	ld a, [hli]
 	or [hl]
 	jr nz, .non_zero_damage
-	ld de, $0000
+	ld de, 0
 	ret
 .non_zero_damage
 	xor a
@@ -3869,7 +3869,7 @@ Func_1994: ; 1994 (0:1994)
 	call SwapTurn
 	and b
 	jr z, .check_pluspower_and_defender
-	ld hl, $ffe2
+	ld hl, -30
 	add hl, de
 	ld e, l
 	ld d, h
@@ -3884,7 +3884,7 @@ Func_1994: ; 1994 (0:1994)
 	call HandleDamageReduction
 	bit 7, d
 	jr z, .no_underflow
-	ld de, $0000
+	ld de, 0
 .no_underflow
 	call SwapTurn
 	ret
@@ -3928,7 +3928,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	call GetArenaPokemonResistance
 	and b
 	jr z, .asm_1a58
-	ld hl, $ffe2
+	ld hl, -30
 	add hl, de
 	ld e, l
 	ld d, h
@@ -3942,7 +3942,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	bit 7, d ; test for underflow
 	ret z
 .no_damage
-	ld de, $0000
+	ld de, 0
 	ret
 
 ; increases de by 10 points for each Pluspower found in location b
@@ -4266,7 +4266,7 @@ Func_1d1d: ; 1d1d (0:1d1d)
 	scf
 	ret
 
-; creates a list at $c000 of every card the player owns and how many
+; creates a list at wTempCardCollection of every card the player owns and how many
 CreateTempCardCollection: ; 1d2e (0:1d2e)
 	call EnableSRAM
 	ld hl, sCardCollection
@@ -7201,6 +7201,7 @@ CommentedOut_3243: ; 3243 (0:3243)
 	ret
 
 ; check if the attacked card has any substatus that reduces the damage this turn
+; damage is given in de as input and the possibly updated damage is also returned in de
 HandleDamageReduction: ; 3244 (0:3244)
 	call HandleDamageReductionExceptSubstatus2
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
@@ -7227,6 +7228,9 @@ HandleDamageReduction: ; 3244 (0:3244)
 	ld d, h
 	ret
 
+; check if the attacked card has any substatus that reduces the damage this turn
+; substatus 2 is not checked
+; damage is given in de as input and the possibly updated damage is also returned in de
 HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld a, [wNoDamageOrEffect]
 	or a
@@ -7254,6 +7258,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 .not_affected_by_substatus1
 	call CheckIfUnderAnyCannotUseStatus
 	ret c
+.pkmn_power
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
@@ -7315,7 +7320,127 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ret
 ; 0x32f7
 
-	INCROM $32f7, $33c1
+; check for Invisible Wall, Kabuto Armor, NShield, or Transparency, in order to
+; possibly reduce or make zero the damage at de.
+HandleDamageReductionOrNoDamageFromPkmnPowerEffects: ; 32f7 (0:32f7)
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	ret z
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c
+	ld a, [wcceb]
+	or a
+	call nz, HandleDamageReductionExceptSubstatus2.pkmn_power
+	push de ; push damage from call above, which handles Invisible Wall and Kabuto Armor
+	call HandleNoDamageOrEffectSubstatus.pkmn_power
+	call nc, HandleTransparency
+	pop de ; restore damage
+	ret nc
+	; if carry was set due to NShield or Transparency, damage is 0
+	ld de, 0
+	ret
+; 0x3317
+
+; very similar to HandleStrikesBack
+Func_3317: ; 3317 (0:3317)
+	ld a, e
+	or d
+	ret z
+	ld a, [wcce6]
+	or a
+	ret nz
+	ld a, [wTempNonTurnDuelistCardId]
+	cp MACHAMP
+	ret nz
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	ret z
+	ld a, [wcceb]
+	or a
+	jr nz, .asm_333b
+	call CheckIfUnderAnyCannotUseStatus
+	ret c
+.asm_333b
+	push hl
+	push de
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadDeckCardToBuffer2
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	push af
+	push hl
+	ld de, 10
+	call SubstractHP
+	ld a, [wLoadedCard2ID]
+	ld [wTempNonTurnDuelistCardId], a
+	ld hl, $a
+	call Func_2ec4
+	ld hl, wLoadedCard2Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_2ebb
+	ldtx hl, ReceivesDamageDueToStrikesBackText
+	call DrawWideTextBox_WaitForInput
+	pop hl
+	pop af
+	or a
+	jr z, .asm_3379
+	xor a
+	call Func_1aac
+.asm_3379
+	call SwapTurn
+	pop de
+	pop hl
+	ret
+; 0x337f
+
+; return carry if NShield or Transparency activate, and print their corresponding text if so
+HandleNShieldAndTransparency: ; 337f (0:337f)
+	push de
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp MEW1
+	jr z, .nshield
+	cp HAUNTER1
+	jr z, .transparency
+.done
+	pop de
+	or a
+	ret
+.nshield
+	ld a, $ce
+	call GetNonTurnDuelistVariable
+	or a
+	jr z, .done
+	ld a, NO_DAMAGE_OR_EFFECT_NSHIELD
+	ld [wNoDamageOrEffect], a
+	ldtx hl, NoDamageOrEffectDueToNShieldText
+.print_text
+	call DrawWideTextBox_WaitForInput
+	pop de
+	scf
+	ret
+.transparency
+	xor a
+	ld [wcac2], a
+	ldtx de, TransparencyCheckText
+	call TossCoin
+	jr nc, .done
+	ld a, NO_DAMAGE_OR_EFFECT_TRANSPARENCY
+	ld [wNoDamageOrEffect], a
+	ldtx hl, NoDamageOrEffectDueToTransparencyText
+	jr .print_text
+; 0x33c1
 
 ; return carry if card is under a condition that makes it unable to attack
 ; also return in hl the text id to be displayed
@@ -7422,6 +7547,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	call CheckIfUnderAnyCannotUseStatus
 	ccf
 	ret nc
+.pkmn_power
 	ld a, [wTempNonTurnDuelistCardId]
 	cp MEW1
 	jr z, .neutralizing_shield
@@ -7436,6 +7562,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld a, [wcce6]
 	or a
 	ret nz
+	; prevent damage if attacked by a non-basic Pokemon
 	ld a, [wTempTurnDuelistCardId]
 	ld e, a
 	ld d, $0
@@ -7449,20 +7576,21 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 
 ; if the Pokemon being attacked is Haunter1, and its Transparency is active,
 ; there is a 50% chance that any damage or effect is prevented
+; return carry if damage is prevented
 HandleTransparency: ; 348a (0:348a)
 	ld a, [wTempNonTurnDuelistCardId]
 	cp HAUNTER1
 	jr z, .transparency
-.asm_3491
+.done
 	or a
 	ret
 .transparency
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jr z, .asm_3491
+	jr z, .done ; Transparency has no effect against Pkmn Powers
 	ld a, [wcceb]
 	call CheckIfUnderAnyCannotUseStatus2
-	jr c, .asm_3491
+	jr c, .done
 	xor a
 	ld [wcac2], a
 	ldtx de, TransparencyCheckText
