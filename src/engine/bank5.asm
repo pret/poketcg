@@ -73,7 +73,7 @@ Func_14226: ; 14226 (5:4226)
 	jr nz, .check_for_next_pokemon
 	push hl
 	ldh a, [hTempCardIndex_ff98]
-	call Func_1485
+	call PutHandPokemonCardInPlayArea
 	pop hl
 	jr .check_for_next_pokemon
 ; 0x1424b

@@ -46,7 +46,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	push de
 	ld a, [$ce16]
 	ldh [hTempCardIndex_ff9f], a
-	bank1call $35a9
+	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, $41a8
 	call LoadNonPokemonCardEffectCommands
 	ld a, $1

@@ -570,10 +570,10 @@ Func_4436: ; 4436 (1:4436)
 ; c contains the type of energy card being played
 PlayerUseEnergyCard: ; 4477 (1:4477)
 	ld a, c
-	cp TYPE_ENERGY_WATER ; XXX why treat water energy card differently?
+	cp TYPE_ENERGY_WATER
 	jr nz, .not_water_energy
-	call $3615
-	jr c, .water_energy
+	call IsRainDanceActive
+	jr c, .rain_dance_active
 
 .not_water_energy
 	ld a, [wAlreadyPlayedEnergy]
@@ -582,31 +582,31 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 	call $5fdd
 	call $600c ; choose card to play energy card on
 	jp c, DuelMainScene ; exit if no card was chosen
-.asm_4490
+.play_energy_set_played
 	ld a, $1
 	ld [wAlreadyPlayedEnergy], a
-.asm_4495
+.play_energy
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld e, a
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hffa0], a
-	call $14d2
+	call PutHandCardInPlayArea
 	call $61b8
 	ld a, $3
 	call SetDuelAIAction
 	call $68e4
 	jp DuelMainScene
 
-.water_energy
+.rain_dance_active
 	call $5fdd
 	call $600c ; choose card to play energy card on
 	jp c, DuelMainScene ; exit if no card was chosen
-	call $3622
-	jr c, .asm_4495
+	call CheckRainDanceScenario
+	jr c, .play_energy
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr z, .asm_4490
+	jr z, .play_energy_set_played
 	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4436
@@ -1214,7 +1214,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call $51e7
 	jr c, .asm_4d28
 	ldh a, [hTempCardIndex_ff98]
-	call Func_1485
+	call PutHandPokemonCardInPlayArea
 	ldh a, [hTempCardIndex_ff98]
 	ld hl, $0062
 	call $4b31
@@ -1238,7 +1238,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .asm_4d86
 	ldh a, [hTempCardIndex_ff98]
-	call Func_1485
+	call PutHandPokemonCardInPlayArea
 	ldh a, [hTempCardIndex_ff98]
 	ld hl, $0061
 	call $4b31
@@ -1373,7 +1373,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ld e, a
 	ldh a, [hffa0]
 	ldh [hTempCardIndex_ff98], a
-	call $14d2
+	call PutHandCardInPlayArea
 	ldh a, [hffa0]
 	call LoadDeckCardToBuffer1
 	call $5e75

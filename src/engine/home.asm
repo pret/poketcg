@@ -3292,35 +3292,73 @@ LoadDeckCardToBuffer2: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-	INCROM $13a2, $1485
+	INCROM $13a2, $1461
 
-Func_1485: ; 1485 (0:1485)
+; init the status and all substatuses of the turn holder's arena Pokemon.
+; called when sending a new Pokemon into the arena.
+; does not reset Headache, since it targets a player rather than a Pokemon.
+ResetStatusConditions: ; 1461 (0:1461)
+	push hl
+	ldh a, [hWhoseTurn]
+	ld h, a
+	xor a
+	ld l, DUELVARS_ARENA_CARD_STATUS
+	ld [hl], a
+	ld l, DUELVARS_ARENA_CARD_SUBSTATUS1
+	ld [hl], a
+	ld l, DUELVARS_ARENA_CARD_SUBSTATUS2
+	ld [hl], a
+	ld l, DUELVARS_ARENA_CARD_CHANGED_WEAKNESS
+	ld [hl], a
+	ld l, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
+	ld [hl], a
+	ld l, DUELVARS_ARENA_CARD_SUBSTATUS3
+	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
+	ld l, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hl], a
+	pop hl
+	ret
+; 0x1485
+
+; Removes a Pokemon card from the hand and places it in the arena or first available bench slot.
+; If the Pokemon is placed in the arena, the status conditions of the player's arena card are zeroed.
+; input:
+; - a = deck index of the card
+; return carry if there is no room for more Pokemon
+PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	push af
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .already_max_pkmn_in_play
 	inc [hl]
-	ld e, a
+	ld e, a ; play area offset to place card
 	pop af
 	push af
-	call $14d2
+	call PutHandCardInPlayArea
 	ld a, e
-	add $bb
+	add DUELVARS_ARENA_CARD
 	ld l, a
 	pop af
-	ld [hl], a
+	ld [hl], a ; set card in arena or benchx
 	call LoadDeckCardToBuffer2
-	ld a, $c8
+	ld a, DUELVARS_ARENA_CARD_HP
 	add e
 	ld l, a
 	ld a, [wLoadedCard2HP]
-	ld [hl], a
+	ld [hl], a ; set card's HP
 	ld a, $c2
 	add e
 	ld l, a
 	ld [hl], $0
-	ld a, $d4
+	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
 	add e
 	ld l, a
 	ld [hl], $0
@@ -3339,7 +3377,7 @@ Func_1485: ; 1485 (0:1485)
 	ld [hl], a
 	ld a, e
 	or a
-	call z, $1461
+	call z, ResetStatusConditions ; only call if Pokemon is being place in the arena
 	ld a, e
 	or a
 	ret
@@ -3350,7 +3388,23 @@ Func_1485: ; 1485 (0:1485)
 	ret
 ; 0x14d2
 
-	INCROM $14d2, $159f
+; Removes a card from the hand and changes its location to arena or bench. Given that
+; DUELVARS_ARENA_CARD or DUELVARS_BENCH aren't affected, this function is meant for energy and trainer cards.
+; input:
+; - a = deck index of the card
+; - e = play area location offset
+; returns
+; - a = CARD_LOCATION_PLAY_AREA + e
+PutHandCardInPlayArea: ; 14d2 (0:14d2)
+	call RemoveCardFromHand
+	call GetTurnDuelistVariable
+	ld a, e
+	or CARD_LOCATION_PLAY_AREA
+	ld [hl], a
+	ret
+; 0x14dd
+
+	INCROM $14dd, $159f
 
 ; Find which and how many energy cards are attached to the Pokemon card in the arena,
 ; or to a Pokemon card in the bench, depending on the value of register e.
@@ -4037,11 +4091,11 @@ Func_1ad3: ; 1ad3 (0:1ad3)
 	call Func_2ebb
 	ldtx hl, WasKnockedOutText
 	call DrawWideTextBox_PrintText
-	ld a, $28
-.asm_1aeb
+	ld a, 40
+.wait_frames
 	call DoFrame
 	dec a
-	jr nz, .asm_1aeb
+	jr nz, .wait_frames
 	scf
 	ret
 ; 0x1af3
@@ -7677,11 +7731,11 @@ CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
 ; input: a = Pokemon card ID to search
 CountPokemonIDInBothPlayAreas: ; 3509 (0:3509)
 	push bc
-	ld [wTempPokemonID], a
+	ld [wTempPokemonID_ce7e], a
 	call CountPokemonIDInPlayArea
 	ld c, a
 	call SwapTurn
-	ld a, [wTempPokemonID]
+	ld a, [wTempPokemonID_ce7e]
 	call CountPokemonIDInPlayArea
 	call SwapTurn
 	add c
@@ -7701,14 +7755,14 @@ CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	push hl
 	push de
 	push bc
-	ld [wTempPokemonID], a
+	ld [wTempPokemonID_ce7e], a
 	ld c, $0
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
 	jr z, .check_bench
 	call GetCardIDFromDeckIndex
-	ld a, [wTempPokemonID]
+	ld a, [wTempPokemonID_ce7e]
 	cp e
 	jr nz, .check_bench
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -7724,7 +7778,7 @@ CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	cp -1
 	jr z, .done
 	call GetCardIDFromDeckIndex
-	ld a, [wTempPokemonID]
+	ld a, [wTempPokemonID_ce7e]
 	cp e
 	jr nz, .skip
 	inc c
@@ -7887,7 +7941,7 @@ IsRainDanceActive: ; 3615 (0:3615)
 
 ; return carry if card at [hTempCardIndex_ff98] is a water energy card AND
 ; if card at [hTempPlayAreaLocationOffset_ff9d] is a water Pokemon card.
-Func_3622: ; 3622 (0:3622)
+CheckRainDanceScenario: ; 3622 (0:3622)
 	ldh a, [hTempCardIndex_ff98]
 	call GetCardIDFromDeckIndex
 	call GetCardType

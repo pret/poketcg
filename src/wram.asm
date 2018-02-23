@@ -834,7 +834,8 @@ wce6e:: ; ce6e
 wce6f:: ; ce6f
 	ds $d
 
-wTempPokemonID:: ; ce7c
+; used in CountPokemonIDInPlayArea
+wTempPokemonID_ce7e:: ; ce7c
 	ds $1
 
 	ds $26
