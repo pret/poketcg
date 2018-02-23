@@ -1,51 +1,51 @@
 card_data_struct: MACRO
-\1Type::          db
-\1Gfx::           dw
-\1Name::          dw
-\1Rarity::        db
-\1Set::           db
-\1ID::            db
-\1EffectCommands:: ; dw
-\1HP::            db
-\1Stage::         db
-\1NonPokemonDescription:: ; dw
-\1PreEvoName::    dw
+\1Type::          ds 1
+\1Gfx::           ds 2
+\1Name::          ds 2
+\1Rarity::        ds 1
+\1Set::           ds 1
+\1ID::            ds 1
+\1EffectCommands:: ; ds 2
+\1HP::            ds 1
+\1Stage::         ds 1
+\1NonPokemonDescription:: ; ds 2
+\1PreEvoName::    ds 2
 \1Move1::         move_data_struct \1Move1
 \1Move2::         move_data_struct \1Move2
-\1RetreatCost::   db
-\1Weakness::      db
-\1Resistance::    db
-\1Kind::          dw
-\1PokedexNumber:: db
-\1Unknown1::      db
-\1Level::         db
-\1Length::        dw
-\1Weight::        dw
-\1Description::   dw
-\1Unknown2::      db
+\1RetreatCost::   ds 1
+\1Weakness::      ds 1
+\1Resistance::    ds 1
+\1Kind::          ds 2
+\1PokedexNumber:: ds 1
+\1Unknown1::      ds 1
+\1Level::         ds 1
+\1Length::        ds 2
+\1Weight::        ds 2
+\1Description::   ds 2
+\1Unknown2::      ds 1
 ENDM
 
 move_data_struct: MACRO
 \1Energy::         ds NUM_TYPES / 2
-\1Name::           dw
+\1Name::           ds 2
 \1Description::    ds 4
-\1Damage::         db
-\1Category::       db
-\1EffectCommands:: dw
-\1Flag1::          db
-\1Flag2::          db
-\1Flag3::          db
-\1Unknown1::       db
-\1Animation::      db
+\1Damage::         ds 1
+\1Category::       ds 1
+\1EffectCommands:: ds 2
+\1Flag1::          ds 1
+\1Flag2::          ds 1
+\1Flag3::          ds 1
+\1Unknown1::       ds 1
+\1Animation::      ds 1
 ENDM
 
 ; TODO: Figure out what the rest are for
 sprite_anim_struct: MACRO
 \1Field0x00::  ds 1
 \1Field0x01::  ds 1 ; movement handling / palette
-\1CoordX::     db
-\1CoordY::     db
-\1TileID::     db
+\1CoordX::     ds 1
+\1CoordY::     ds 1
+\1TileID::     ds 1
 \1Field0x05::  ds 1
 \1Field0x06::  ds 1
 \1Field0x07::  ds 1

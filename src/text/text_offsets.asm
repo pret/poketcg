@@ -93,7 +93,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0059                                ; 0x0059
 	textpointer Text005a                                ; 0x005a
 	textpointer Text005b                                ; 0x005b
-	textpointer Text005c                                ; 0x005c
+	textpointer WillUseThePokemonPowerText              ; 0x005c
 	textpointer Text005d                                ; 0x005d
 	textpointer Text005e                                ; 0x005e
 	textpointer Text005f                                ; 0x005f
@@ -131,8 +131,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text007f                                ; 0x007f
 	textpointer Text0080                                ; 0x0080
 	textpointer WasKnockedOutText                       ; 0x0081
-	textpointer Text0082                                ; 0x0082
-	textpointer Text0083                                ; 0x0083
+	textpointer HavePokemonPowerText                    ; 0x0082
+	textpointer UnableToUsePkmnPowerDueToToxicGasText   ; 0x0083
 	textpointer Text0084                                ; 0x0084
 	textpointer Text0085                                ; 0x0085
 	textpointer Text0086                                ; 0x0086

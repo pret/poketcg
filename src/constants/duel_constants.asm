@@ -35,6 +35,12 @@ DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"        
 DUELVARS_BENCH3_CARD_HP                  EQUS "LOW(wPlayerBench3CardHP)"               ; cb
 DUELVARS_BENCH4_CARD_HP                  EQUS "LOW(wPlayerBench4CardHP)"               ; cc
 DUELVARS_BENCH5_CARD_HP                  EQUS "LOW(wPlayerBench5CardHP)"               ; cd
+DUELVARS_ARENA_CARD_STAGE                EQUS "LOW(wPlayerArenaCardStage)"             ; ce
+DUELVARS_BENCH1_CARD_STAGE               EQUS "LOW(wPlayerBench1CardStage)"            ; cf
+DUELVARS_BENCH2_CARD_STAGE               EQUS "LOW(wPlayerBench2CardStage)"            ; d0
+DUELVARS_BENCH3_CARD_STAGE               EQUS "LOW(wPlayerBench3CardStage)"            ; d1
+DUELVARS_BENCH4_CARD_STAGE               EQUS "LOW(wPlayerBench4CardStage)"            ; d2
+DUELVARS_BENCH5_CARD_STAGE               EQUS "LOW(wPlayerBench5CardStage)"            ; d3
 DUELVARS_ARENA_CARD_CHANGED_TYPE         EQUS "LOW(wPlayerArenaCardChangedType)"       ; d4
 DUELVARS_BENCH1_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench1CardChangedType)"      ; d5
 DUELVARS_BENCH2_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench2CardChangedType)"      ; d6
@@ -71,6 +77,14 @@ CARD_LOCATION_PLAY_AREA_F  EQU 4 ; includes arena and bench
 CARD_LOCATION_PLAY_AREA    EQU 1 << CARD_LOCATION_PLAY_AREA_F
 CARD_LOCATION_JUST_DRAWN_F EQU 6
 CARD_LOCATION_JUST_DRAWN   EQU 1 << CARD_LOCATION_JUST_DRAWN_F
+
+; play area location offsets (CARD_LOCATION_* - CARD_LOCATION_PLAY_AREA)
+PLAY_AREA_ARENA   EQU $0
+PLAY_AREA_BENCH_1 EQU $1
+PLAY_AREA_BENCH_2 EQU $2
+PLAY_AREA_BENCH_3 EQU $3
+PLAY_AREA_BENCH_4 EQU $4
+PLAY_AREA_BENCH_5 EQU $5
 
 ; duelist types (DUELVARS_DUELIST_TYPE)
 DUELIST_TYPE_PLAYER   EQU $00

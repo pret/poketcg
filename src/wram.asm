@@ -77,7 +77,18 @@ wPlayerBench4CardHP:: ; c2cc
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
 
-	ds $6
+wPlayerArenaCardStage:: ; c2ce
+	ds $1
+wPlayerBench1CardStage:: ; c2cf
+	ds $1
+wPlayerBench2CardStage:: ; c2d0
+	ds $1
+wPlayerBench3CardStage:: ; c2d1
+	ds $1
+wPlayerBench4CardStage:: ; c2d2
+	ds $1
+wPlayerBench5CardStage:: ; c2d3
+	ds $1
 
 ; changed type from Venomoth's Shift Pokemon Power
 ; if bit 7 == 1, then bits 0-3 override the Pokemon's actual type
@@ -179,7 +190,18 @@ wOpponentBench4CardHP:: ; c3cc
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
 
-	ds $6
+wOpponentArenaCardStage:: ; c3ce
+	ds $1
+wOpponentBench1CardStage:: ; c3cf
+	ds $1
+wOpponentBench2CardStage:: ; c3d0
+	ds $1
+wOpponentBench3CardStage:: ; c3d1
+	ds $1
+wOpponentBench4CardStage:: ; c3d2
+	ds $1
+wOpponentBench5CardStage:: ; c3d3
+	ds $1
 
 wOpponentArenaCardChangedType:: ; c2d4
 	ds $1
@@ -477,7 +499,7 @@ wCardPageNumber:: ; cbc7
 wcbc9:: ; cbc9
 	ds $2
 
-; selected bench slot (1-5)
+; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
@@ -550,7 +572,7 @@ wDuelistType:: ; cc0d
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
-wOpponentDeckId:: ; cc0e
+wOpponentDeckID:: ; cc0e
 	ds $1
 
 	ds $1
@@ -622,13 +644,14 @@ wccbf:: ; ccbf
 wccc1:: ; ccc1
 	ds $1
 
-wTempCardId:: ; ccc2
+; used in damage related functions
+wTempCardID_ccc2:: ; ccc2
 	ds $1
 
-wTempTurnDuelistCardId:: ; ccc3
+wTempTurnDuelistCardID:: ; ccc3
 	ds $1
 
-wTempNonTurnDuelistCardId:: ; ccc4
+wTempNonTurnDuelistCardID:: ; ccc4
 	ds $1
 
 	ds $1
@@ -804,7 +827,7 @@ wce4a:: ; ce4a
 wce4b:: ; ce4b
 	ds $3
 
-wCoinTossScreenTextId:: ; ce4e
+wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
 wce50:: ; ce50

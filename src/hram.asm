@@ -52,7 +52,7 @@ hTempCardIndex_ff98:: ; ff98
 
 	ds 4
 
-; 0: arena card ; 1-5: bench card
+; a PLAY_AREA_ARENA constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocationOffset_ff9d:: ; ff9d
 	ds 1
 

@@ -396,7 +396,7 @@ Text005b: ; 36a34 (d:6a34)
 	line "Retreat was unsuccessful."
 	done
 
-Text005c: ; 36a53 (d:6a53)
+WillUseThePokemonPowerText: ; 36a53 (d:6a53)
 	text TX_RAM2, " will use the"
 	line "Pok`mon Power ", TX_RAM2, "."
 	done
@@ -576,12 +576,12 @@ WasKnockedOutText: ; 36eaa (d:6eaa)
 	line "Knocked Out!"
 	done
 
-Text0082: ; 36ebe (d:6ebe)
+HavePokemonPowerText: ; 36ebe (d:6ebe)
 	text TX_RAM2, " have"
 	line "Pok`mon Power."
 	done
 
-Text0083: ; 36ed5 (d:6ed5)
+UnableToUsePkmnPowerDueToToxicGasText: ; 36ed5 (d:6ed5)
 	text "Unable to us Pok`mon Power due to"
 	line "the effect of Toxic Gas."
 	done

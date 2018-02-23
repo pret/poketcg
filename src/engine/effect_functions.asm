@@ -39,7 +39,7 @@ ApplyStatusEffect:
 	ld hl, wcc05
 	cp [hl]
 	jr nz, .can_induce_status
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp CLEFAIRY_DOLL
 	jr z, .cant_induce_status
 	cp MYSTERIOUS_FOSSIL
@@ -296,7 +296,7 @@ KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	INCROM $2c7bc, $2c7d0
 
 SwordsDanceEffect: ; 2c7d0 (b:47d0)
-	ld a, [wTempTurnDuelistCardId]
+	ld a, [wTempTurnDuelistCardID]
 	cp SCYTHER
 	ret nz
 	ld a, SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE

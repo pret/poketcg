@@ -2629,22 +2629,22 @@ Func_100b: ; 100b (0:100b)
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [wTempTurnDuelistCardId], a
+	ld [wTempTurnDuelistCardID], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	call SwapTurn
 	pop hl
 	push hl
 	call EnableSRAM
 	ld a, [wDuelTurns]
 	ld [hli], a
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	ld [hli], a
-	ld a, [wTempTurnDuelistCardId]
+	ld a, [wTempTurnDuelistCardID]
 	ld [hli], a
 	pop hl
 	ld de, $0010
@@ -2896,6 +2896,10 @@ MoveHandCardToDiscardPile: ; 1160 (0:1160)
 	ret nz ; return if card not in hand
 	ld a, l
 	call RemoveCardFromHand
+;	fallthrough
+
+; puts the card with the deck index (0-59) given in a into the discard pile
+PutCardInDiscardPile: ; 116a (0:116a)
 	push af
 	push hl
 	push de
@@ -3370,11 +3374,11 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	add e
 	ld l, a
 	ld [hl], $0
-	ld a, $ce
+	ld a, DUELVARS_ARENA_CARD_STAGE
 	add e
 	ld l, a
 	ld a, [wLoadedCard2Stage]
-	ld [hl], a
+	ld [hl], a ; set card's evolution stage
 	ld a, e
 	or a
 	call z, ResetStatusConditions ; only call if Pokemon is being place in the arena
@@ -3392,7 +3396,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 ; DUELVARS_ARENA_CARD or DUELVARS_BENCH aren't affected, this function is meant for energy and trainer cards.
 ; input:
 ; - a = deck index of the card
-; - e = play area location offset
+; - e = play area location offset (PLAY_AREA_*)
 ; returns
 ; - a = CARD_LOCATION_PLAY_AREA + e
 PutHandCardInPlayArea: ; 14d2 (0:14d2)
@@ -3404,7 +3408,161 @@ PutHandCardInPlayArea: ; 14d2 (0:14d2)
 	ret
 ; 0x14dd
 
-	INCROM $14dd, $159f
+; move the play area Pokemon card of the turn holder at CARD_LOCATION_PLAY_AREA + a
+; to the discard pile
+MovePlayAreaCardToDiscardPile: ; 14dd (0:14dd)
+	call EmptyPlayAreaSlot
+	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
+	dec [hl]
+	ld l, LOW(DUELVARS_CARD_LOCATIONS)
+.next_card
+	ld a, e
+	or CARD_LOCATION_PLAY_AREA
+	cp [hl]
+	jr nz, .not_in_location
+	push de
+	ld a, l
+	call PutCardInDiscardPile
+	pop de
+.not_in_location
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .next_card
+	ret
+; 0x14f8
+
+; init a turn holder's play area slot to empty
+; which slot (arena or benchx) is determined by the play area location offset (PLAY_AREA_*) in e
+EmptyPlayAreaSlot: ; 14f8 (0:14f8)
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld d, -1
+	ld a, DUELVARS_ARENA_CARD
+	call .init_duelvar
+	ld d, 0
+	ld a, DUELVARS_ARENA_CARD_HP
+	call .init_duelvar
+	ld a, DUELVARS_ARENA_CARD_STAGE
+	call .init_duelvar
+	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	call .init_duelvar
+	ld a, $da
+	call .init_duelvar
+	ld a, $e0
+.init_duelvar
+	add e
+	ld l, a
+	ld [hl], d
+	ret
+; 0x151e
+
+; shift play area Pokemon of both players to the first available play area (arena + benchx) slots
+ShiftAllPokemonToFirstPlayAreaSlots: ; 151e (0:151e)
+	call ShiftTurnPokemonToFirstPlayAreaSlots
+	call SwapTurn
+	call ShiftTurnPokemonToFirstPlayAreaSlots
+	call SwapTurn
+	ret
+; 0x152b
+
+; shift play area Pokemon of the turn holder to the first available play area (arena + benchx) slots
+ShiftTurnPokemonToFirstPlayAreaSlots: ; 152b (0:152b)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	lb de, PLAY_AREA_ARENA, PLAY_AREA_ARENA
+.next_play_area_slot
+	bit 7, [hl]
+	jr nz, .empty_slot
+	call SwapPlayAreaPokemon
+	inc e
+.empty_slot
+	inc hl
+	inc d
+	ld a, d
+	cp MAX_PLAY_AREA_POKEMON
+	jr nz, .next_play_area_slot
+	ret
+; 0x1543
+
+; swap the data of the turn holder's arena Pokemon card with the
+; data of the turn holder's Pokemon card in play area e.
+; reset the status and all substatuses of the arena Pokemon before swapping.
+; e is the play area location offset of the bench Pokemon (PLAY_AREA_*).
+SwapArenaWithBenchPokemon: ; 1543 (0:1543)
+	call ResetStatusConditions
+	ld d, PLAY_AREA_ARENA
+;	fallthrough
+
+; swap the data of the turn holder's Pokemon card in play area d with the
+; data of the turn holder's Pokemon card in play area e.
+; d and e are play area location offsets (PLAY_AREA_*).
+SwapPlayAreaPokemon: ; 1548 (0:1548)
+	push bc
+	push de
+	push hl
+	ld a, e
+	cp d
+	jr z, .done
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call .swap_duelvar
+	ld a, DUELVARS_ARENA_CARD_HP
+	call .swap_duelvar
+	ld a, $c2
+	call .swap_duelvar
+	ld a, DUELVARS_ARENA_CARD_STAGE
+	call .swap_duelvar
+	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	call .swap_duelvar
+	ld a, $e0
+	call .swap_duelvar
+	ld a, $da
+	call .swap_duelvar
+	set CARD_LOCATION_PLAY_AREA_F, d
+	set CARD_LOCATION_PLAY_AREA_F, e
+	ld l, DUELVARS_CARD_LOCATIONS
+.update_card_locations_loop
+	; update card locations of the two swapped cards
+	ld a, [hl]
+	cp e
+	jr nz, .next1
+	ld a, d
+	jr .update_location
+.next1
+	cp d
+	jr nz, .next2
+	ld a, e
+.update_location
+	ld [hl], a
+.next2
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .update_card_locations_loop
+.done
+	pop hl
+	pop de
+	pop bc
+	ret
+
+.swap_duelvar
+	ld c, a
+	add e ; play area location offset of card 1
+	ld l, a
+	ld a, c
+	add d ; play area location offset of card 2
+	ld c, a
+	ld a, [bc]
+	push af
+	ld a, [hl]
+	ld [bc], a
+	pop af
+	ld [hl], a
+	ret
+; 0x159f
 
 ; Find which and how many energy cards are attached to the Pokemon card in the arena,
 ; or to a Pokemon card in the bench, depending on the value of register e.
@@ -3482,7 +3640,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 ; h = PLAYER_TURN or OPPONENT_TURN
 CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
-	ld l, $0
+	ld l, LOW(DUELVARS_CARD_LOCATIONS)
 	ld c, $0
 .next_card
 	ld a, [hl]
@@ -3527,7 +3685,91 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ret
 ; 0x161e
 
-	INCROM $161e, $16c0
+Func_161e: ; 161e (0:161e)
+	ldh a, [hTempCardIndex_ff98]
+	call ClearChangedTypesIfMuk
+	ldh a, [hTempCardIndex_ff98]
+	ld d, a
+	ld e, $00
+	call CopyMoveDataAndDamage
+	call Func_16f6
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTempCardIndex_ff9f], a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempTurnDuelistCardID], a
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	ret nz
+	call $6510
+	ldh a, [hTempCardIndex_ff98]
+	call LoadDeckCardToBuffer1
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_2ebb
+	ldtx hl, HavePokemonPowerText
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	ld a, [wLoadedCard1ID]
+	cp MUK
+	jr z, .use_pokemon_power
+	ld a, $01 ; check only Muk
+	call CheckIfUnderAnyCannotUseStatus2
+	jr nc, .use_pokemon_power
+	call $6510
+	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	ret
+
+.use_pokemon_power
+	ld hl, wLoadedMoveEffectCommands
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, $07
+	call CheckMatchingCommand
+	ret c ; return if command not found
+	bank1call $4f9d
+	ldh a, [hTempCardIndex_ff9f]
+	call LoadDeckCardToBuffer1
+	ld de, wLoadedCard1Name
+	ld hl, wce3f
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld a, [de]
+	ld [hli], a
+	ld de, wLoadedMoveName
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld a, [de]
+	ld [hl], a
+	ldtx hl, WillUseThePokemonPowerText
+	call DrawWideTextBox_WaitForInput
+	call Func_0f58
+	call $7415
+	ld a, $07
+	call TryExecuteEffectCommandFunction
+	ret
+; 0x16ad
+
+Func_16ad: ; 16ad (0:16ad)
+	push de
+	push af
+	ld a, e
+	ld [wSelectedMoveIndex], a
+	ld a, d
+	ldh [hTempCardIndex_ff9f], a
+	pop af
+	ld e, a
+	ld d, $00
+	call LoadCardDataToBuffer1
+	pop de
+	jr CopyMoveDataAndDamage.card_loaded
 
 ; copies from card identified by register d (0-59 deck index):
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
@@ -3538,8 +3780,9 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
 	call LoadDeckCardToBuffer1
+.card_loaded
 	ld a, [wLoadedCard1ID]
-	ld [wTempCardId], a
+	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Move1
 	dec e
 	jr nz, .got_move
@@ -3570,13 +3813,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	ldh [hTempCardIndex_ff9f], a
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [wTempTurnDuelistCardId], a
+	ld [wTempTurnDuelistCardID], a
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	call SwapTurn
 	xor a
 	ld [wccec], a
@@ -3594,7 +3837,7 @@ Func_1730: ; 1730 (0:1730)
 	ld [wcc10], a
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wcc11], a
-	ld a, [wTempCardId]
+	ld a, [wTempCardID_ccc2]
 	ld [wcc12], a
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
@@ -3681,12 +3924,12 @@ Func_17ed: ; 17ed (0:17ed)
 	ld a, NO_DAMAGE_OR_EFFECT_AGILITY
 	ld [wNoDamageOrEffect], a
 Func_17fb: ; 17fb (0:17fb)
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, $4
 	call TryExecuteEffectCommandFunction
 	pop af
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	call HandleStrikesBack
 	bank1call $6df1
 	call Func_1bb4
@@ -3859,10 +4102,10 @@ Func_195c: ; 195c (0:195c)
 	xor a
 	ld [wNoDamageOrEffect], a
 	bank1call $7415
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	push af
-	ld a, [wTempTurnDuelistCardId]
-	ld [wTempNonTurnDuelistCardId], a
+	ld a, [wTempTurnDuelistCardID]
+	ld [wTempNonTurnDuelistCardID], a
 	bank1call Func_1a22 ; switch to bank 1, but call a home func
 	ld a, [wccc1]
 	ld c, a
@@ -3872,7 +4115,7 @@ Func_195c: ; 195c (0:195c)
 	bank1call $7469
 	call Func_1ad0
 	pop af
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	pop af
 	ld [wNoDamageOrEffect], a
 	ret
@@ -4062,17 +4305,17 @@ Func_1aac: ; 1aac (0:1aac)
 	call GetTurnDuelistVariable
 	or a
 	ret nz
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadDeckCardToBuffer1
 	ld a, [wLoadedCard1ID]
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	call Func_1ad3
 	pop af
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	scf
 	ret
 
@@ -4081,7 +4324,7 @@ Func_1ad0: ; 1ad0 (0:1ad0)
 	or a
 	ret nz
 Func_1ad3: ; 1ad3 (0:1ad3)
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
 	call LoadCardDataToBuffer1
 	ld hl, $cc27
@@ -4346,7 +4589,7 @@ AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 	add hl, de
 	ld e, l
 	ld d, h
-	ld h, wTempCardCollection >> 8
+	ld h, HIGH(wTempCardCollection)
 	ld c, DECK_SIZE
 .asm_1d66
 	ld a, [de]
@@ -6088,7 +6331,7 @@ PrintYesOrNoItems: ; 2b66 (0:2b66)
 LoadOpponentDeck: ; 2b78 (0:2b78)
 	xor a
 	ld [wIsPracticeDuel], a
-	ld a, [wOpponentDeckId]
+	ld a, [wOpponentDeckID]
 	cp SAMS_NORMAL_DECK - 2
 	jr z, .normal_sam_duel
 	or a ; cp SAMS_PRACTICE_DECK - 2
@@ -6102,7 +6345,7 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 
 .normal_sam_duel
 	xor a
-	ld [wOpponentDeckId], a
+	ld [wOpponentDeckID], a
 	call SwapTurn
 	ld a, PRACTICE_PLAYER_DECK
 	call LoadDeck
@@ -6118,17 +6361,17 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	inc a
 	inc a
 	call LoadDeck
-	ld a, [wOpponentDeckId]
+	ld a, [wOpponentDeckID]
 	cp DECKS_END
 	jr c, .valid_deck
 	ld a, PRACTICE_PLAYER_DECK - 2
-	ld [wOpponentDeckId], a
+	ld [wOpponentDeckID], a
 
 .valid_deck
 ; set opponent as controlled by AI
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	ld a, [wOpponentDeckId]
+	ld a, [wOpponentDeckID]
 	or DUELIST_TYPE_AI_OPP
 	ld [hl], a
 	ret
@@ -6163,7 +6406,7 @@ Func_2bdb: ; 2bdb (0:2bdb)
 	push af
 	ld a, $5
 	call BankswitchHome
-	ld a, [wOpponentDeckId]
+	ld a, [wOpponentDeckID]
 	ld l, a
 	ld h, $0
 	add hl, hl
@@ -6928,7 +7171,7 @@ Func_3061: ; 3061 (0:3061)
 ;   returns: the number of heads in a and in $cd9d, and carry if at least one heads
 TossCoinATimes: ; 3071 (0:3071)
 	push hl
-	ld hl, wCoinTossScreenTextId
+	ld hl, wCoinTossScreenTextID
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -6942,7 +7185,7 @@ TossCoinATimes: ; 3071 (0:3071)
 ;            - nc, and 0 in a and in $cd9d if tails
 TossCoin: ; 307d (0:307d)
 	push hl
-	ld hl, wCoinTossScreenTextId
+	ld hl, wCoinTossScreenTextID
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -7316,7 +7559,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp MR_MIME
 	jr z, .prevent_less_than_30_damage ; invisible wall
 	cp KABUTO
@@ -7404,7 +7647,7 @@ Func_3317: ; 3317 (0:3317)
 	ld a, [wcce6]
 	or a
 	ret nz
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp MACHAMP
 	ret nz
 	ld a, MUK
@@ -7432,7 +7675,7 @@ Func_3317: ; 3317 (0:3317)
 	ld de, 10
 	call SubstractHP
 	ld a, [wLoadedCard2ID]
-	ld [wTempNonTurnDuelistCardId], a
+	ld [wTempNonTurnDuelistCardID], a
 	ld hl, $a
 	call Func_2ec4
 	ld hl, wLoadedCard2Name
@@ -7602,7 +7845,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ccf
 	ret nc
 .pkmn_power
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp MEW1
 	jr z, .neutralizing_shield
 	or a
@@ -7617,7 +7860,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	or a
 	ret nz
 	; prevent damage if attacked by a non-basic Pokemon
-	ld a, [wTempTurnDuelistCardId]
+	ld a, [wTempTurnDuelistCardID]
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
@@ -7632,7 +7875,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 ; there is a 50% chance that any damage or effect is prevented
 ; return carry if damage is prevented
 HandleTransparency: ; 348a (0:348a)
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp HAUNTER1
 	jr z, .transparency
 .done
@@ -8001,7 +8244,7 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 ; when Machamp is damaged, if its Strikes Back is active,
 ; the attacking Pokemon takes 10 damage
 HandleStrikesBack: ; 367b (0:367b)
-	ld a, [wTempNonTurnDuelistCardId]
+	ld a, [wTempNonTurnDuelistCardID]
 	cp MACHAMP
 	jr z, .strikes_back
 	ret
@@ -8024,7 +8267,7 @@ HandleStrikesBack: ; 367b (0:367b)
 ApplyStrikesBack: ; 36a2 (0:36a2)
 	push hl
 	call Func_2ec4
-	ld a, [wTempTurnDuelistCardId]
+	ld a, [wTempTurnDuelistCardID]
 	ld e, a
 	ld d, $0
 	call LoadCardDataToBuffer2
@@ -8080,7 +8323,7 @@ GetArenaCardColor: ; 36f6 (0:36f6)
 	xor a
 ;	fallthrough
 
-; input: a = play area location offset of the desired card
+; input: a = play area location offset (PLAY_AREA_*) of the desired card
 ; return the card's color in a, accounting for Venomoth's Shift Pokemon Power if active
 GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	push hl

@@ -87,7 +87,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, DUELIST_TYPE_PLAYER
 	ld [wPlayerDuelistType], a
 	ld a, [wcc19]
-	ld [wOpponentDeckId], a
+	ld [wOpponentDeckID], a
 	call LoadPlayerDeck
 	call SwapTurn
 	call LoadOpponentDeck
@@ -1512,14 +1512,14 @@ _TossCoin: ; 71ad (1:71ad)
 	ld de, $010e
 	ld a, $13
 	call Func_22a6
-	ld hl, wCoinTossScreenTextId
+	ld hl, wCoinTossScreenTextID
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call PrintText
 
 .asm_71ec
-	ld hl, wCoinTossScreenTextId
+	ld hl, wCoinTossScreenTextID
 	xor a
 	ld [hli], a
 	ld [hl], a
