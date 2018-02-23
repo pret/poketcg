@@ -64,7 +64,7 @@ Func_14226: ; 14226 (5:4226)
 	ldh [hTempCardIndex_ff98], a
 	cp $ff
 	ret z
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY_FIRE
 	jr nc, .check_for_next_pokemon
@@ -121,13 +121,13 @@ Func_1468b: ; 1468b (5:468b)
 	call Func_15649
 	ld a, $1
 	call Func_14663
-	farcallx $8, $67d3
+	farcall $8, $67d3
 	jp nc, $4776
-	farcallx $8, $6790
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $6790
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $662d
+	farcall $8, $662d
 	ld a, $2
 	call Func_14663
 	ld a, $3
@@ -158,12 +158,12 @@ Func_1468b: ; 1468b (5:468b)
 
 .asm_146ed
 	call $5eae
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $6790
+	farcall $8, $6790
 	ld a, $d
-	farcallx $8, $619b
+	farcall $8, $619b
 	ld a, $d
 	call Func_14663
 	ld a, $f
@@ -203,18 +203,18 @@ Func_1468b: ; 1468b (5:468b)
 
 .asm_1475b
 	call $5eae
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $6790
+	farcall $8, $6790
 	ld a, $d
-	farcallx $8, $619b
+	farcall $8, $619b
 	ld a, $d
 	call Func_14663
 
 .asm_14776
 	ld a, $e
-	farcallx $8, $619b
+	farcall $8, $619b
 	call $69f8
 	ret c
 	ld a, $5
@@ -272,7 +272,7 @@ Func_15649: ; 15649 (5:5649)
 	ld a, e
 	cp MEWTWO1
 	jr nz, .asm_156a4
-	farcallx $8, $67a9
+	farcall $8, $67a9
 	jr nc, .asm_156aa
 
 .asm_156a4

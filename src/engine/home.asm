@@ -2455,8 +2455,8 @@ Func_0ed5: ; 0ed5 (0:0ed5)
 DuelTransmissionError: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
 	ld l, a
-	ld h, $0
-	call Func_2ec4
+	ld h, 0
+	call LoadTxRam3
 	ldtx hl, TransmissionErrorText
 	call DrawWideTextBox_WaitForInput
 	ld a, $ff
@@ -3054,7 +3054,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	cp c
 	jr nz, .skip_card ; jump if not in specified play area location
 	ld a, l
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Type]
 	and 1 << TYPE_ENERGY_F
 	jr z, .skip_card ; jump if Pokemon or trainer card
@@ -3262,13 +3262,13 @@ _GetCardIDFromDeckIndex: ; 1362 (0:1362)
 	ret
 
 ; load data of card with deck index a (0-59) to wLoadedCard1
-LoadDeckCardToBuffer1: ; 1376 (0:1376)
+LoadCardDataToBuffer1_FromDeckIndex: ; 1376 (0:1376)
 	push hl
 	push de
 	push bc
 	push af
 	call GetCardIDFromDeckIndex
-	call LoadCardDataToBuffer1
+	call LoadCardDataToBuffer1_FromCardID
 	pop af
 	ld hl, wLoadedCard1
 	bank1call ConvertTrainerCardToPokemon
@@ -3279,13 +3279,13 @@ LoadDeckCardToBuffer1: ; 1376 (0:1376)
 	ret
 
 ; load data of card with deck index a (0-59) to wLoadedCard2
-LoadDeckCardToBuffer2: ; 138c (0:138c)
+LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	push hl
 	push de
 	push bc
 	push af
 	call GetCardIDFromDeckIndex
-	call LoadCardDataToBuffer2
+	call LoadCardDataToBuffer2_FromCardID
 	pop af
 	ld hl, wLoadedCard2
 	bank1call ConvertTrainerCardToPokemon
@@ -3352,7 +3352,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld l, a
 	pop af
 	ld [hl], a ; set card in arena or benchx
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, DUELVARS_ARENA_CARD_HP
 	add e
 	ld l, a
@@ -3595,7 +3595,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 	push de
 	push bc
 	ld a, l
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Type]
 	bit TYPE_ENERGY_F, a
 	jr z, .not_an_energy_card
@@ -3703,12 +3703,12 @@ Func_161e: ; 161e (0:161e)
 	ret nz
 	call $6510
 	ldh a, [hTempCardIndex_ff98]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, HavePokemonPowerText
 	call DrawWideTextBox_WaitForInput
 	call Func_0f58
@@ -3734,9 +3734,9 @@ Func_161e: ; 161e (0:161e)
 	ret c ; return if command not found
 	bank1call $4f9d
 	ldh a, [hTempCardIndex_ff9f]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld de, wLoadedCard1Name
-	ld hl, wce3f
+	ld hl, wTxRam2
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -3767,7 +3767,7 @@ Func_16ad: ; 16ad (0:16ad)
 	pop af
 	ld e, a
 	ld d, $00
-	call LoadCardDataToBuffer1
+	call LoadCardDataToBuffer1_FromCardID
 	pop de
 	jr CopyMoveDataAndDamage.card_loaded
 
@@ -3779,7 +3779,7 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld [wSelectedMoveIndex], a
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 .card_loaded
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
@@ -3912,7 +3912,7 @@ Func_1730: ; 1730 (0:1730)
 	bank1call $503a
 	pop hl
 .asm_17e8
-	call Func_1ad0
+	call PrintKnockedOutIfHLZero
 	jr Func_17fb
 
 Func_17ed: ; 17ed (0:17ed)
@@ -4070,13 +4070,52 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 ; 0x18f9
 
-	INCROM $18f9, $1944
+; use the trainer card with deck index at hTempCardIndex_ff98
+; a trainer card is like a move effect, with its own effect commands
+UseTrainerCard: ; 18f9 (0:18f9)
+	call CheckCantUseTrainerDueToHeadache
+	jr c, .cant_use
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTempCardIndex_ff9f], a
+	call LoadNonPokemonCardEffectCommands
+	ld a, $01
+	call TryExecuteEffectCommandFunction
+	jr nc, .can_use
+.cant_use
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+.can_use
+	ld a, $02
+	call TryExecuteEffectCommandFunction
+	jr c, .done
+	ld a, $06
+	call SetDuelAIAction
+	call $666a
+	call Func_0f58
+	ld a, $06
+	call TryExecuteEffectCommandFunction
+	ld a, $05
+	call TryExecuteEffectCommandFunction
+	ld a, $07
+	call SetDuelAIAction
+	ld a, $03
+	call TryExecuteEffectCommandFunction
+	ldh a, [hTempCardIndex_ff9f]
+	call MoveHandCardToDiscardPile
+	call Func_0f58
+.done
+	or a
+	ret
+; 0x1944
 
 ; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
 ; into wLoadedMoveEffectCommands
 LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ldh a, [hTempCardIndex_ff9f]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1EffectCommands
 	ld de, wLoadedMoveEffectCommands
 	ld a, [hli]
@@ -4113,7 +4152,7 @@ Func_195c: ; 195c (0:195c)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	bank1call $7469
-	call Func_1ad0
+	call PrintKnockedOutIfHLZero
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
 	pop af
@@ -4188,17 +4227,17 @@ Func_1994: ; 1994 (0:1994)
 
 Func_1a0e: ; 1a0e (0:1a0e)
 	push hl
-	add $1a
+	add LOW(.asm_1a1a)
 	ld l, a
-	ld a, $1a
+	ld a, HIGH(.asm_1a1a)
 	adc $0
 	ld h, a
 	ld a, [hl]
 	pop hl
 	ret
-; 0x1a1a
 
-	INCROM $1a1a, $1a22
+.asm_1a1a
+	db $80, $40, $20, $10, $08, $04, $02, $01
 
 Func_1a22: ; 1a22 (0:1a22)
 	xor a
@@ -4299,39 +4338,44 @@ SubstractHP: ; 1a96 (0:1a96)
 	pop hl
 	ret
 
-Func_1aac: ; 1aac (0:1aac)
+; given a play area location offset in a, check if the turn holder's Pokemon card in
+; that location has no HP left, and, if so, print that it was knocked out.
+PrintPlayAreaCardKnockedOutIfNoHP: ; 1aac (0:1aac)
 	ld e, a
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
-	ret nz
+	ret nz ; return if arena card has non-0 HP
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1ID]
 	ld [wTempNonTurnDuelistCardID], a
-	call Func_1ad3
+	call PrintKnockedOut
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
 	scf
 	ret
 
-Func_1ad0: ; 1ad0 (0:1ad0)
-	ld a, [hl]
+PrintKnockedOutIfHLZero: ; 1ad0 (0:1ad0)
+	ld a, [hl] ; this is supposed to point to a remaining HP value after some form of damage calculation
 	or a
 	ret nz
-Func_1ad3: ; 1ad3 (0:1ad3)
+;	fallthrough
+
+; print in a text box that the Pokemon card at wTempNonTurnDuelistCardID was knocked out and wait 40 frames
+PrintKnockedOut: ; 1ad3 (0:1ad3)
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
-	call LoadCardDataToBuffer1
-	ld hl, $cc27
+	call LoadCardDataToBuffer1_FromCardID
+	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, WasKnockedOutText
 	call DrawWideTextBox_PrintText
 	ld a, 40
@@ -4349,16 +4393,16 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, $12
 	call Func_29f5
 	ld [hl], $0
-	ld hl, $ce3f
+	ld hl, wTxRam2
 	xor a
 	ld [hli], a
 	ld [hli], a
 	ld a, [wLoadedMoveName]
-	ld [hli], a
+	ld [hli], a ; wTxRam2_b
 	ld a, [wLoadedMoveName + 1]
 	ld [hli], a
 	ldtx hl, PokemonsAttackText ; text when using an attack
@@ -4385,14 +4429,14 @@ Func_1bca: ; 1bca (0:1bca)
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, $12
 	call Func_29f5
 	ld [hl], $0
 	ld hl, $0000
-	call Func_2ebb
+	call LoadTxRam2
 	ld hl, $ccaa
-	ld de, $ce41
+	ld de, wTxRam2_b
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -4425,7 +4469,7 @@ SwapTurn: ; 1c72 (0:1c72)
 	pop af
 	ret
 
-PrintPlayerName: ; 1c7d (0:1c7d)
+LoadPlayerName: ; 1c7d (0:1c7d)
 	call EnableSRAM
 	ld hl, $a010
 .loop
@@ -4438,7 +4482,7 @@ PrintPlayerName: ; 1c7d (0:1c7d)
 	call DisableSRAM
 	ret
 
-PrintOpponentName: ; 1c8e (0:1c8e)
+LoadOpponentName: ; 1c8e (0:1c8e)
 	ld hl, wOpponentName
 	ld a, [hli]
 	or [hl]
@@ -4452,7 +4496,7 @@ PrintOpponentName: ; 1c8e (0:1c8e)
 	ld a, [hl]
 	or a
 	jr z, .print_player2
-	jr PrintPlayerName.loop
+	jr LoadPlayerName.loop
 .print_player2
 	ldtx hl, Player2Text
 	jp PrintTextBoxBorderLabel
@@ -6084,7 +6128,7 @@ CardSymbolTable:
 	db $dc, $02 ; TYPE_TRAINER
 
 Func_29f5: ; 29f5 (0:29f5)
-	farcallx $6, $4000
+	farcall $6, $4000
 	ret
 ; 0x29fa
 
@@ -6151,7 +6195,7 @@ Func_2a44: ; 2a44 (0:2a44)
 	ld a, l
 	or h
 	jp nz, PrintTextNoDelay
-	ld hl, wc590
+	ld hl, wDefaultText
 	jp Func_21c5
 
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
@@ -6325,7 +6369,11 @@ PrintYesOrNoItems: ; 2b66 (0:2b66)
 	ret
 ; 0x2b70
 
-	INCROM $2b70, $2b78
+Func_2b70: ; 2b70 (0:2b70)
+	ld a, BANK(Func_407a)
+	call BankswitchHome
+	jp Func_407a
+; 0x2b78
 
 ; loads opponent deck to wOpponentDeck
 LoadOpponentDeck: ; 2b78 (0:2b78)
@@ -6572,7 +6620,7 @@ Func_2d06: ; 2d06 (0:2d06)
 	add e
 	ld e, a
 	ld d, $0
-	ld hl, $ce2b
+	ld hl, wce2b
 	add hl, de
 	ret
 
@@ -6613,11 +6661,11 @@ Func_2d43: ; 2d43 (0:2d43)
 	call Func_21f2
 	jr nc, .asm_2d74
 	cp TX_RAM1
-	jr z, .asm_2dc8
+	jr z, .tx_ram1
 	cp TX_RAM2
-	jr z, .asm_2d8a
+	jr z, .tx_ram2
 	cp TX_RAM3
-	jr z, .asm_2db3
+	jr z, .tx_ram3
 	jr .asm_2d74
 .asm_2d65
 	ld e, a
@@ -6644,13 +6692,13 @@ Func_2d43: ; 2d43 (0:2d43)
 	call Func_230f
 	scf
 	ret
-.asm_2d8a
+.tx_ram2
 	call Func_2ceb
 	ld a, $f
 	ld [hffaf], a
 	xor a
 	ld [wcd0a], a
-	ld de, $ce3f
+	ld de, wTxRam2
 	ld hl, $ce49
 	call Func_2de0
 	ld a, l
@@ -6660,20 +6708,20 @@ Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cd7
 	jr Func_2d43
 .asm_2dab
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_2cd7
 	jr Func_2d43
-.asm_2db3
+.tx_ram3
 	call Func_2ceb
-	ld de, $ce43
+	ld de, wTxRam3
 	ld hl, $ce4a
 	call Func_2de0
 	call Func_2e12
 	call Func_2cd7
 	jp Func_2d43
-.asm_2dc8
+.tx_ram1
 	call Func_2ceb
-	call Func_2e2c
+	call LoadTurnDuelistName
 	ld a, [wcaa0]
 	cp $6
 	jr z, .asm_2dda
@@ -6683,6 +6731,8 @@ Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cd7
 	jp Func_2d43
 
+; inc [hl]
+; hl = [de + 2*[hl]]
 Func_2de0: ; 2de0 (0:2de0)
 	push de
 	ld a, [hl]
@@ -6745,17 +6795,17 @@ Func_2e12: ; 2e12 (0:2e12)
 	jr nz, .asm_2e23
 	ret
 
-Func_2e2c: ; 2e2c (0:2e2c)
+LoadTurnDuelistName: ; 2e2c (0:2e2c)
 	ld de, wcaa0
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
 	jp z, .opponent_turn
-	call PrintPlayerName
+	call LoadPlayerName
 	pop hl
 	ret
 .opponent_turn
-	call PrintOpponentName
+	call LoadOpponentName
 	pop hl
 	ret
 
@@ -6772,7 +6822,7 @@ PrintText: ; 2e41 (0:2e41)
 	call BankswitchHome
 	ret
 .from_ram
-	ld hl, wc590
+	ld hl, wDefaultText
 .print_text
 	call Func_2cc8
 .next_tile_loop
@@ -6780,14 +6830,14 @@ PrintText: ; 2e41 (0:2e41)
 	ld b, a
 	ld a, [wTextSpeed]
 	inc a
-	cp $3
+	cp 3
 	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
 	bit B_BUTTON_F, b
 	jr nz, .skip_delay
 	jr .apply_delay
 .text_delay_loop
-	; wait a number of frames equal to wTextSpeed between printing each text tile
+	; wait a number of frames equal to [wTextSpeed] between printing each text tile
 	call DoFrame
 .apply_delay
 	dec a
@@ -6834,37 +6884,49 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 .special
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
-	jp z, PrintOpponentName
-	jp PrintPlayerName
+	jp z, LoadOpponentName
+	jp LoadPlayerName
 ; 0x2ea9
 
-	INCROM $2ea9, $2ebb
+Func_2ea9: ; 2ea9 (0:2ea9)
+	ldh [hff96], a
+	ldh a, [hBankROM]
+	push af
+	call ReadTextOffset
+	ldh a, [hff96]
+	call $23fd
+	pop af
+	call BankswitchHome
+	ret
+; 0x2ebb
 
-Func_2ebb: ; 2ebb (0:2ebb)
+; text pointer (usually of a card name) for TX_RAM2
+LoadTxRam2: ; 2ebb (0:2ebb)
 	ld a, l
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, h
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	ret
 
-Func_2ec4: ; 2ec4 (0:2ec4)
+; a number between 0 and 65535 for TX_RAM3
+LoadTxRam3: ; 2ec4 (0:2ec4)
 	ld a, l
-	ld [wce43], a
+	ld [wTxRam3], a
 	ld a, h
-	ld [wce44], a
+	ld [wTxRam3 + 1], a
 	ret
 ; 0x2ecd
 
 	INCROM $2ecd, $2f0a
 
 ; load data of card with id at e to wLoadedCard2
-LoadCardDataToBuffer2: ; 2f0a (0:2f0a)
+LoadCardDataToBuffer2_FromCardID: ; 2f0a (0:2f0a)
 	push hl
 	ld hl, wLoadedCard2
 	jr LoadCardDataToRAM
 
 ; load data of card with id at e to wLoadedCard1
-LoadCardDataToBuffer1: ; 2f10 (0:2f10)
+LoadCardDataToBuffer1_FromCardID: ; 2f10 (0:2f10)
 	push hl
 	ld hl, wLoadedCard1
 ;	fallthrough
@@ -7667,7 +7729,7 @@ Func_3317: ; 3317 (0:3317)
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	push af
@@ -7676,13 +7738,13 @@ Func_3317: ; 3317 (0:3317)
 	call SubstractHP
 	ld a, [wLoadedCard2ID]
 	ld [wTempNonTurnDuelistCardID], a
-	ld hl, $a
-	call Func_2ec4
+	ld hl, 10
+	call LoadTxRam3
 	ld hl, wLoadedCard2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, ReceivesDamageDueToStrikesBackText
 	call DrawWideTextBox_WaitForInput
 	pop hl
@@ -7690,7 +7752,7 @@ Func_3317: ; 3317 (0:3317)
 	or a
 	jr z, .asm_3379
 	xor a
-	call Func_1aac
+	call PrintPlayAreaCardKnockedOutIfNoHP
 .asm_3379
 	call SwapTurn
 	pop de
@@ -7863,7 +7925,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ld a, [wTempTurnDuelistCardID]
 	ld e, a
 	ld d, $0
-	call LoadCardDataToBuffer2
+	call LoadCardDataToBuffer2_FromCardID
 	ld a, [wLoadedCard2Stage]
 	or a
 	ret z
@@ -8230,12 +8292,12 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 	pop hl
 	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld hl, wLoadedCard2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, KnockedOutDueToDestinyBondText
 	call DrawWideTextBox_WaitForInput
 	ret
@@ -8266,16 +8328,16 @@ HandleStrikesBack: ; 367b (0:367b)
 
 ApplyStrikesBack: ; 36a2 (0:36a2)
 	push hl
-	call Func_2ec4
+	call LoadTxRam3
 	ld a, [wTempTurnDuelistCardID]
 	ld e, a
 	ld d, $0
-	call LoadCardDataToBuffer2
+	call LoadCardDataToBuffer2_FromCardID
 	ld hl, wLoadedCard2Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2ebb
+	call LoadTxRam2
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	pop de
@@ -8290,7 +8352,7 @@ ApplyStrikesBack: ; 36a2 (0:36a2)
 	ret z
 	call WaitForWideTextBoxInput
 	xor a
-	call Func_1aac
+	call PrintPlayAreaCardKnockedOutIfNoHP
 	call $503a
 	scf
 	ret
@@ -8380,7 +8442,7 @@ GetArenaPokemonWeakness: ; 3730 (0:3730)
 
 GetPokemonWeakness:
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Weakness]
 	ret
 ; 0x3743
@@ -8406,7 +8468,7 @@ GetArenaPokemonResistance: ; 374a (0:374a)
 
 GetPokemonResistance:
 	call GetTurnDuelistVariable
-	call LoadDeckCardToBuffer2
+	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Resistance]
 	ret
 ; 0x375d
@@ -8789,7 +8851,29 @@ Func_3a40: ; 3a40 (0:3a40)
 	ret
 ; 0x3a45
 
-	INCROM $3a45, $3a5e
+Func_3a45: ; 3a45 (0:3a45)
+	farcall Func_11343
+	ret
+; 0x3a4a
+
+Func_3a4a: ; 3a4a (0:3a4a)
+	farcall Func_115a3
+	ret
+; 0x3a4f
+
+Func_3a4f: ; 3a4f (0:3a4f)
+	push af
+	push bc
+	push de
+	push hl
+	ld c, $00
+	farcall Func_1157c
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0x3a5e
 
 Func_3a5e: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
@@ -8883,7 +8967,10 @@ Func_3abd: ; 3abd (0:3abd)
 	ret
 ; 0x3ae8
 
-	INCROM $3ae8, $3aed
+Func_3ae8: ; 3ae8 (0:3ae8)
+	farcall Func_11f4e
+	ret
+; 0x3aed
 
 ; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into cb
 RunOverworldScript: ; 3aed (0:3aed)
@@ -8914,7 +9001,16 @@ RunOverworldScript: ; 3aed (0:3aed)
 	jp hl
 ; 0x3b11
 
-	INCROM $3b11, $3b21
+Func_3b11: ; 3b11 (0:3b11)
+	ldh a, [hBankROM]
+	push af
+	ld a, $04
+	call BankswitchHome
+	call $66d1
+	pop af
+	call BankswitchHome
+	ret
+; 0x3b21
 
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
@@ -9039,7 +9135,10 @@ Func_3c45: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-	INCROM $3c46, $3c48
+Func_3c46: ; 3c46 (0:3c46)
+	push bc
+	ret
+; 0x3c48
 
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
@@ -9094,7 +9193,15 @@ Func_3c83: ; 3c83 (0:3c83)
 	ret
 ; 0x3c87
 
-	INCROM $3c87, $3c96
+Func_3c87: ; 3c87 (0:3c87)
+	push af
+	call PauseSong
+	pop af
+	call PlaySong
+	call Func_3c96
+	call ResumeSong
+	ret
+; 0x3c96
 
 Func_3c96: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled

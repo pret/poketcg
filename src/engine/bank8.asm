@@ -28,7 +28,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ld a, [hli]
 	ld [$ce17], a
 	ld a, [$ce16]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	cp $d2
 	jr nz, .asm_2012b
 	ld b, a
@@ -52,7 +52,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ld a, $1
 	call TryExecuteEffectCommandFunction
 	jp c, $41a8
-	farcallx $5, $743b
+	farcall $5, $743b
 	jr c, .asm_201a8
 	pop de
 	pop hl

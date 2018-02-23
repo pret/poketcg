@@ -267,7 +267,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld h, [hl]
 	call DisableSRAM
 	ld l, a
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_0663
 	ld hl, $cfb9
 	ld [hl], $6
@@ -346,8 +346,8 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call Func_9253
 	call DisableSRAM
 	xor a
-	ld [wce3f], a
-	ld [wce40], a
+	ld [wTxRam2], a
+	ld [wTxRam2 + 1], a
 	ldtx hl, ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
@@ -665,12 +665,12 @@ Unknown_9242: ; 9242 (2:5242)
 	INCROM $9242, $9253
 
 Func_9253: ; 9253 (2:5253)
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_92ad
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_23c1
 	ld b, $0
-	ld hl, wc590
+	ld hl, wDefaultText
 	add hl, bc
 	ld d, h
 	ld e, l
@@ -684,19 +684,19 @@ Func_926e: ; 926e (2:526e)
 	pop hl
 	jr c, .asm_929c
 	push de
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_92b4
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_23c1
 	ld b, $0
-	ld hl, wc590
+	ld hl, wDefaultText
 	add hl, bc
 	ld d, h
 	ld e, l
 	ld hl, Unknown_92a7
 	call Func_92ad
 	pop de
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_22ae
 	call Func_21c5
 	or a

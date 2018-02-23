@@ -71,9 +71,9 @@ Medal_1029e: ; 1029e (4:429e)
 	ld hl, Unknown_1030b
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	call $4031
 	ld a, MUSIC_MEDAL
 	call PlaySong
@@ -128,13 +128,13 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call $70ca
 	pop hl
 	ld a, [hli]
-	ld [wce43], a
+	ld [wTxRam3], a
 	xor a
-	ld [wce44], a
+	ld [wTxRam3 + 1], a
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	call $4031
 	call PauseSong
 	ld a, MUSIC_BOOSTER_PACK
@@ -160,7 +160,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wFrameType], a
-	farcallx $1, $7599
+	farcall $1, $7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	pop af
@@ -191,22 +191,22 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld hl, $445b
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hli]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	push hl
 	ld a, [wOpponentName]
-	ld [wce41], a
+	ld [wTxRam2_b], a
 	ld a, [wOpponentName + 1]
-	ld [wce42], a
+	ld [wTxRam2_b + 1], a
 	ld hl, $4451
 	call $51b3 ; LoadDuelistName
 	pop hl
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld c, a
 	ld a, [hli]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	or c
 	jr z, .asm_10425
 	ld hl, $4456
@@ -798,7 +798,10 @@ Func_1124d: ; 1124d (4:524d)
 	INCROM $1124d, $11320
 
 Func_11320: ; 11320 (4:5320)
-	INCROM $11320, $11416
+	INCROM $11320, $11343
+
+Func_11343: ; 11343 (4:5343)
+	INCROM $11343, $11416
 
 Func_11416: ; 11416 (4:5416)
 	INCROM $11416, $11430
@@ -830,7 +833,7 @@ Func_1157c: ; 1157c (4:557c)
 	ret
 ; 0x115a3
 
-
+Func_115a3: ; 115a3 (4:55a3)
 	INCROM $115a3, $1162a
 
 INCLUDE "data/map_scripts.asm"
@@ -960,6 +963,7 @@ Func_118d3: ; 118d3 (4:58d3)
 
 INCLUDE "data/npcs.asm"
 
+Func_11f4e: ; 11f4e (4:5f4e)
 	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
@@ -1119,7 +1123,7 @@ Func_12704: ; 12704 (4:6704)
 	farcall Func_1d306
 	ld a, $0
 	ld [wd0b5], a
-	farcallx $03, Func_383d
+	farcall $03, Func_383d
 	or a
 	ret
 
@@ -1136,7 +1140,7 @@ Func_12741: ; 12741 (4:6741)
 	call DisableSRAM
 	ld a, $0
 	ld [wd0b5], a
-	farcallx $03, Func_383d
+	farcall $03, Func_383d
 	or a
 	ret
 
@@ -1155,11 +1159,11 @@ Func_1277e: ; 1277e (4:677e)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_c9cb
-	farcallx $04, Func_3a40
+	farcall $04, Func_3a40
 	farcall Func_70000
 	ld a, $5
 	ld [wd0b5], a
-	farcallx $03, Func_383d
+	farcall $03, Func_383d
 	or a
 	ret
 ; 0x1279a
@@ -1517,9 +1521,9 @@ Func_13485: ; 13485 (4:7485)
 	or a
 	ret z
 	ld a, [$ba56]
-	ld [wce43], a
+	ld [wTxRam3], a
 	ld a, [$ba57]
-	ld [wce44], a
+	ld [wTxRam3 + 1], a
 	call DisableSRAM
 	call PauseSong
 	ld a, MUSIC_MEDAL

@@ -59,7 +59,10 @@ Func_406f: ; 406f (1:406f)
 	call Func_420b
 	call $66e9
 	ldtx hl, BackUpIsBrokenText
-	jr c, .asm_4097
+	jr c, Func_4097
+;	fallthrough
+
+Func_407a: ; 407a (1:407a)
 	ld hl, sp+$00
 	ld a, l
 	ld [wcbe5], a
@@ -72,7 +75,9 @@ Func_406f: ; 406f (1:406f)
 	ld [wDuelFinished], a
 	call DuelMainScene
 	jp StartDuel.asm_40fb
-.asm_4097
+; 0x4097
+
+Func_4097: ; 4097 (1:4097)
 	call DrawWideTextBox_WaitForInput
 	call ResetSerial
 	scf
@@ -473,7 +478,7 @@ Func_4376: ; 4376 (1:4376)
 	cp -1
 	ret z
 	call GetCardIDFromDeckIndex
-	call LoadCardDataToBuffer1
+	call LoadCardDataToBuffer1_FromCardID
 	ld hl, wcbc9
 	xor a
 	ld [hli], a
@@ -661,7 +666,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld h, a
 	ld l, DUELVARS_ARENA_CARD
 	ld a, [hl]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 
 .wait_for_input
 	call DoFrame
@@ -781,7 +786,7 @@ Func_47fd: ; $47fd (1:47fd)
 	jr Func_481b
 
 Func_4802: ; $4802 (1:4802)
-	ld hl, $cc38
+	ld hl, wLoadedCard1Move1Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
@@ -793,14 +798,14 @@ Func_480d: ; $480d (1:480d)
 	jr Func_481b
 
 Func_4812: ; $4812 (1:4812)
-	ld hl, $cc4b
+	ld hl, wLoadedCard1Move2Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
 	call $5d37
 
 Func_481b: ; $481b (1:481b)
-	ld hl, $cc04
+	ld hl, wcc04
 	ld a, $01
 	xor [hl]
 	ld [hl], a
@@ -814,7 +819,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff98], a
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld c, $00
 	ld b, $0d
 	ld hl, wDuelCardOrAttackList
@@ -920,7 +925,7 @@ CheckIfEnoughEnergies: ; 488f (1:488f)
 _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 	push de
 	ld a, d
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	pop bc
 	push bc
 	ld de, wLoadedCard1Move1Energy
@@ -1097,8 +1102,8 @@ Func_4b60: ; 4b60 (1:4b60)
 	call Func_0f58
 	ld a, [wcc08]
 	ld l, a
-	ld h, $0
-	call Func_2ec4
+	ld h, 0
+	call LoadTxRam3
 	ldtx hl, PleasePlacePrizesText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
@@ -1118,10 +1123,10 @@ Func_4b60: ; 4b60 (1:4b60)
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr nz, .asm_4c52
-	ld de, wc590
-	call PrintPlayerName
+	ld de, wDefaultText
+	call LoadPlayerName
 	ld hl, $0000
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, YouPlayFirstText
 	ldtx de, IfHeadPlayerPlaysFirstText
 	call TossCoin
@@ -1136,10 +1141,10 @@ Func_4b60: ; 4b60 (1:4b60)
 	ret
 
 .asm_4c52
-	ld de, wc590
-	call PrintOpponentName
+	ld de, wDefaultText
+	call LoadOpponentName
 	ld hl, $0000
-	call Func_2ebb
+	call LoadTxRam2
 	ldtx hl, YouPlaySecondText
 	ldtx de, IfHeadPlayerPlaysFirstText
 	call TossCoin
@@ -1209,7 +1214,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call $5502
 	jr c, .asm_4d28
 	ldh a, [hTempCardIndex_ff98]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, $2
 	call $51e7
 	jr c, .asm_4d28
@@ -1375,7 +1380,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ldh [hTempCardIndex_ff98], a
 	call PutHandCardInPlayArea
 	ldh a, [hffa0]
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	call $5e75
 	call $68e4
 	ld a, $1
@@ -1693,7 +1698,7 @@ Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
-        farcallx $6, $591f
+        farcall $6, $591f
         ret
 ; 0x757b
 
@@ -1703,7 +1708,7 @@ Func_758f: ; 758f (1:758f)
 	INCROM $758f, $7594
 
 Func_7594: ; 7594 (1:7594)
-	farcallx $6, $661f
+	farcall $6, $661f
 	ret
 ; 0x7599
 

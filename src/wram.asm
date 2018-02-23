@@ -285,9 +285,9 @@ wOpponentDeck:: ; c480
 wDuelCardOrAttackList:: ; c510
 	ds $80
 
-; this appears to be kept updated with some default text that is used
+; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
-wc590:: ; c590
+wDefaultText:: ; c590
 	ds $70
 
 SECTION "WRAM Text Engine", WRAM0
@@ -791,25 +791,29 @@ wcd9f:: ; cd9f
 ; $b is the bank where the functions associated to card or effect commands are.
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
 wce22:: ; ce22
-	ds $1d
-
-wce3f:: ; cd3f
 	ds $1
 
-wce40:: ; ce40
+	ds $8
+
+wce2b:: ; ce2b
 	ds $1
 
-wce41:: ; ce41
-	ds $1
+	ds $13
 
-wce42:: ; ce42
-	ds $1
+; text pointer for the first TX_RAM2 of a text
+; prints from wDefaultText if $0000
+wTxRam2:: ; cd3f
+	ds $2
 
-wce43:: ; ce43
-	ds $1
+; text pointer for the second TX_RAM2 on a text
+wTxRam2_b:: ; ce41
+	ds $2
 
-wce44:: ; ce44
-	ds $3
+; a number between 0 and 65535 for TX_RAM3
+wTxRam3:: ; ce43
+	ds $2
+
+	ds $2
 
 ; when printing text, number of frames to wait between each text tile
 wTextSpeed:: ; ce47

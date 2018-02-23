@@ -1524,15 +1524,15 @@ Func_cad8: ; cad8 (3:4ad8)
 
 .asm_caff
 	ld a, $c
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb05
 	ld a, $b
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb0b
 	ld a, $a
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb11
 	pop af
@@ -2212,7 +2212,7 @@ Func_cfd4: ; cfd4 (3:4fd4)
 Func_d00b: ; d00b (3:500b)
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	call Func_ca69
@@ -2387,7 +2387,7 @@ Func_d125: ; d125 (3:5125)
 Func_d135: ; d135 (3:5135)
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	ld a, [wd32e]
@@ -2415,7 +2415,7 @@ Func_d16b: ; d16b (3:516b)
 	push de
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	ld a, [$d696]
@@ -2472,9 +2472,9 @@ asm_d1c6
 	ld a, [hli]
 	ld [$d697], a
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	jp IncreaseOWScriptPointerBy1
 
 	INCROM $d1dc, $d209
@@ -2607,9 +2607,9 @@ Func_d28c: ; d28c (3:528c)
 	jr z, .asm_d2f5
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 
 .asm_d2f5
 	ret

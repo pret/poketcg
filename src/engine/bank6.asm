@@ -71,7 +71,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	pop hl
 	call EnableSRAM
 	push hl
-	ld de, wc590
+	ld de, wDefaultText
 .asm_199f3
 	ld a, [de]
 	inc de
@@ -103,7 +103,7 @@ Func_19a12: ; 19a12 (6:5a12)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, wc590
+	ld de, wDefaultText
 	call PrintTextBoxBorderLabel
 	ret
 ; 0x19a1f
@@ -145,15 +145,15 @@ Func_1a61f: ; 1a61f (6:661f)
 	push hl
 	ld e, a
 	ld d, $0
-	call LoadCardDataToBuffer1
+	call LoadCardDataToBuffer1_FromCardID
 	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	ld hl, $cc27
+	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	bank1call Func_2ebb ; switch to bank 1, but call a home func
+	bank1call LoadTxRam2 ; switch to bank 1, but call a home func
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	pop hl

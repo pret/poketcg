@@ -5,9 +5,9 @@ Func_80028: ; 80028 (20:4028)
 	call Func_801f1
 	ld bc, $0000
 	call Func_80077
-	farcallx $3, $49c7
+	farcall $3, $49c7
 	call $41a1
-	farcallx $3, $43ee
+	farcall $3, $43ee
 	ret
 ; 0x8003d
 
@@ -296,7 +296,7 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld a, [hl]
 	ld [wd131], a
 	push bc
-	farcallx $20, $4082
+	farcall $20, $4082
 	pop bc
 	srl b
 	ld a, c
@@ -308,7 +308,7 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld b, $0
 	ld hl, wBoosterViableCardList
 	add hl, bc
-	farcallx $3, $438f
+	farcall $3, $438f
 	pop af
 	ld [$d23b], a
 	pop af
