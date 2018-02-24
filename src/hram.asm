@@ -50,7 +50,14 @@ hWhoseTurn:: ; ff97
 hTempCardIndex_ff98:: ; ff98
 	ds 1
 
-	ds 4
+; used in SortCardsInListByID
+hTempListPtr_ff99:: ; ff99
+	ds 2
+
+; used in SortCardsInListByID
+; this function supports 16-bit card IDs
+hTempCardID_ff9b:: ; ff9b
+	ds 2
 
 ; a PLAY_AREA_ARENA constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocationOffset_ff9d:: ; ff9d

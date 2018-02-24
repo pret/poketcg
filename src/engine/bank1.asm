@@ -694,7 +694,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld d, [hl] ; card number within the deck (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call CopyMoveDataAndDamage
+	call CopyMoveDataAndDamage_FromDeckIndex
 	call HandleAmnesiaSubstatus
 	jr c, .cannot_use_due_to_amnesia
 	ld a, $07

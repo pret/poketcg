@@ -2757,7 +2757,6 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 	pop hl
 	or a
 	ret
-
 .empty_deck
 	pop hl
 	scf
@@ -2973,7 +2972,7 @@ PowersOf2:
 	db $01, $02, $04, $08, $10, $20, $40, $80
 ; 0x11bf
 
-; fill wDuelCardOrAttackList with the turn holder's discard pile cards
+; fill wDuelCardOrAttackList with the turn holder's discard pile cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards in the discard pile
 CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ldh a, [hWhoseTurn]
@@ -3003,7 +3002,7 @@ CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ret
 ; 0x11df
 
-; fill wDuelCardOrAttackList with the turn holder's remaining deck cards
+; fill wDuelCardOrAttackList with the turn holder's remaining deck cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards left in the deck
 CreateDeckCardList: ; 11df (0:11df)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3039,7 +3038,8 @@ CreateDeckCardList: ; 11df (0:11df)
 	ret
 ; 0x120a
 
-; fill wDuelCardOrAttackList with the turn holder's energy cards in the arena or in a bench slot
+; fill wDuelCardOrAttackList with the turn holder's energy cards
+; in the arena or in a bench slot (their 0-59 deck index).
 ; if a == 0: search in CARD_LOCATION_ARENA
 ; if a != 0: search in CARD_LOCATION_BENCH_[A]
 ; return carry if no energy cards were found
@@ -3079,7 +3079,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	ret
 ; 0x123b
 
-; fill wDuelCardOrAttackList with the turn holder's hand cards
+; fill wDuelCardOrAttackList with the turn holder's hand cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards in hand
 CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
@@ -3109,7 +3109,9 @@ CreateHandCardList: ; 123b (0:123b)
 	ret
 ; 0x1258
 
-Func_1258: ; 1258 (0:1258)
+; sort the turn holder's hand cards by ID (highest to lowest ID)
+; makes use of wDuelCardOrAttackList
+SortHandCardsByID: ; 1258 (0:1258)
 	call FindLastCardInHand
 .loop
 	ld a, [hld]
@@ -3119,7 +3121,7 @@ Func_1258: ; 1258 (0:1258)
 	jr nz, .loop
 	ld a, $ff
 	ld [de], a
-	call $12a3
+	call SortCardsInDuelCardOrAttackListByID
 	call FindLastCardInHand
 .loop2
 	ld a, [de]
@@ -3185,7 +3187,96 @@ ShuffleCards: ; 127f (0:127f)
 	ret
 ; 0x12a3
 
-	INCROM $12a3, $12fa
+; sort a $ff-terminated list of deck index cards by ID (lowest to highest ID).
+; the list is wDuelCardOrAttackList.
+SortCardsInDuelCardOrAttackListByID: ; 12a3 (0:12a3)
+	ld hl, hTempListPtr_ff99
+	ld [hl], LOW(wDuelCardOrAttackList)
+	inc hl
+	ld [hl], HIGH(wDuelCardOrAttackList)
+	jr SortCardsInListByID_CheckForListTerminator
+
+; sort a $ff-terminated list of deck index cards by ID (lowest to highest ID).
+; the pointer to the list is given in hTempListPtr_ff99.
+; sorting by ID rather than deck index means that the order of equal (same ID) cards does not matter,
+; even if they have a different deck index.
+SortCardsInListByID: ; 12ad (0:12ad)
+	; load [hTempListPtr_ff99] into hl and de
+	ld hl, hTempListPtr_ff99
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld e, l
+	ld d, h
+
+	; get ID of card with deck index at [de]
+	ld a, [de]
+	call GetCardIDFromDeckIndex_bc
+	ld a, c
+	ldh [hTempCardID_ff9b], a
+	ld a, b
+	ldh [hTempCardID_ff9b + 1], a ; 0
+
+	; hl = [hTempListPtr_ff99] + 1
+	inc hl
+	jr .check_list_end
+
+.next_card_in_list
+	ld a, [hl]
+	call GetCardIDFromDeckIndex_bc
+	ldh a, [hTempCardID_ff9b + 1]
+	cp b
+	jr nz, .go
+	ldh a, [hTempCardID_ff9b]
+	cp c
+
+.go
+	jr c, .not_lower_id
+
+	; this card has the lowest ID of those checked so far
+	ld e, l
+	ld d, h
+	ld a, c
+	ldh [hTempCardID_ff9b], a
+	ld a, b
+	ldh [hTempCardID_ff9b + 1], a
+
+.not_lower_id
+	inc hl
+
+.check_list_end
+	bit 7, [hl] ; $ff is the list terminator
+	jr z, .next_card_in_list
+
+	; reached list terminator
+	ld hl, hTempListPtr_ff99
+	push hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	; swap the lowest ID card found with the card in the current list position
+	ld c, [hl]
+	ld a, [de]
+	ld [hl], a
+	ld a, c
+	ld [de], a
+	pop hl
+	; [hTempListPtr_ff99] += 1 (point hl to next card in list)
+	inc [hl]
+	jr nz, SortCardsInListByID_CheckForListTerminator
+	inc hl
+	inc [hl]
+;	fallthrough
+
+SortCardsInListByID_CheckForListTerminator: ; 12ef (0:12ef)
+	ld hl, hTempListPtr_ff99
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	bit 7, [hl] ; $ff is the list terminator
+	jr z, SortCardsInListByID
+	ret
+; 0x12fa
 
 ; returns, in register bc, the id of the card with the deck index specified in register a
 ; preserves hl
@@ -3691,7 +3782,7 @@ Func_161e: ; 161e (0:161e)
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
 	ld e, $00
-	call CopyMoveDataAndDamage
+	call CopyMoveDataAndDamage_FromDeckIndex
 	call Func_16f6
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempCardIndex_ff9f], a
@@ -3757,7 +3848,11 @@ Func_161e: ; 161e (0:161e)
 	ret
 ; 0x16ad
 
-Func_16ad: ; 16ad (0:16ad)
+; copies, given a card identified by register a (card ID):
+; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
+; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
+; - Also from that move, its Damage field into wDamage
+CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	push de
 	push af
 	ld a, e
@@ -3769,12 +3864,13 @@ Func_16ad: ; 16ad (0:16ad)
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
 	pop de
-	jr CopyMoveDataAndDamage.card_loaded
+	jr CopyMoveDataAndDamage_FromDeckIndex.card_loaded
 
-; copies from card identified by register d (0-59 deck index):
+; copies, given a card identified by register d (0-59 deck index):
+; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
-CopyMoveDataAndDamage: ; 16c0 (0:16c0)
+CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
 	ld a, d
@@ -3807,6 +3903,7 @@ CopyMoveDataAndDamage: ; 16c0 (0:16c0)
 	ld [hl], a
 	ret
 
+; inits hTempCardIndex_ff9f, wTempTurnDuelistCardID, wTempNonTurnDuelistCardID, and other temp variables
 Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -3886,7 +3983,7 @@ Func_1730: ; 1730 (0:1730)
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld a, $3
 	call TryExecuteEffectCommandFunction
-	call Func_1994
+	call ApplyDamageModifiers_DamageToTarget
 	call Func_189d
 	ld hl, wccbf
 	ld [hl], e
@@ -4043,7 +4140,7 @@ Func_189d: ; 189d (0:189d)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetNonTurnDuelistVariable
 	ld [hl], $0
-	ld de, $0000
+	ld de, 0
 	ret
 
 ; return carry and 1 into wccc9 if damage is dealt to oneself due to confusion
@@ -4131,7 +4228,7 @@ Func_1955: ; 1955 (0:1955)
 	ld a, $7a
 	ld [wLoadedMoveAnimation], a
 	pop af
-; this function appears to apply several damage modifiers
+; this function appears to handle dealing damage to self due to confusion
 Func_195c: ; 195c (0:195c)
 	ld hl, wDamage
 	ld [hli], a
@@ -4145,7 +4242,7 @@ Func_195c: ; 195c (0:195c)
 	push af
 	ld a, [wTempTurnDuelistCardID]
 	ld [wTempNonTurnDuelistCardID], a
-	bank1call Func_1a22 ; switch to bank 1, but call a home func
+	bank1call ApplyDamageModifiers_DamageToSelf ; switch to bank 1, but call a home func
 	ld a, [wccc1]
 	ld c, a
 	ld b, $0
@@ -4159,7 +4256,12 @@ Func_195c: ; 195c (0:195c)
 	ld [wNoDamageOrEffect], a
 	ret
 
-Func_1994: ; 1994 (0:1994)
+; given a damage value at wDamage:
+; - if the non-turn holder's arena card is weak to the turn holder's arena card color: double damage
+; - if the non-turn holder's arena card resists the turn holder's arena card color: reduce damage by 30
+; - also apply Pluspower, Defender, and other kinds of damage reduction accordingly
+; return resulting damage in de
+ApplyDamageModifiers_DamageToTarget: ; 1994 (0:1994)
 	xor a
 	ld [wccc1], a
 	ld hl, wDamage
@@ -4169,7 +4271,7 @@ Func_1994: ; 1994 (0:1994)
 	ld de, 0
 	ret
 .non_zero_damage
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld d, [hl]
 	dec hl
@@ -4188,28 +4290,28 @@ Func_1994: ; 1994 (0:1994)
 	ret z
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	call GetPlayAreaCardColor
-	call Func_1a0e
+	call TranslateColorToWR
 	ld b, a
 	call SwapTurn
 	call GetArenaCardWeakness
 	call SwapTurn
 	and b
-	jr z, .asm_19dc
+	jr z, .not_weak
 	sla e
 	rl d
-	ld hl, $ccc1
+	ld hl, wccc1
 	set 1, [hl]
-.asm_19dc
+.not_weak
 	call SwapTurn
 	call GetArenaCardResistance
 	call SwapTurn
 	and b
-	jr z, .check_pluspower_and_defender
+	jr z, .check_pluspower_and_defender ; jump if not resistant
 	ld hl, -30
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, $ccc1
+	ld hl, wccc1
 	set 2, [hl]
 .check_pluspower_and_defender
 	ld b, CARD_LOCATION_ARENA
@@ -4225,21 +4327,26 @@ Func_1994: ; 1994 (0:1994)
 	call SwapTurn
 	ret
 
-Func_1a0e: ; 1a0e (0:1a0e)
+; convert a color to its equivalent WR_* (weakness/resistance) value
+TranslateColorToWR: ; 1a0e (0:1a0e)
 	push hl
-	add LOW(.asm_1a1a)
+	add LOW(InvertedPowersOf2)
 	ld l, a
-	ld a, HIGH(.asm_1a1a)
+	ld a, HIGH(InvertedPowersOf2)
 	adc $0
 	ld h, a
 	ld a, [hl]
 	pop hl
 	ret
 
-.asm_1a1a
+InvertedPowersOf2: ; 1a1a (0:1a1a)
 	db $80, $40, $20, $10, $08, $04, $02, $01
 
-Func_1a22: ; 1a22 (0:1a22)
+; given a damage value at wDamage:
+; - if the turn holder's arena card is weak to its own color: double damage
+; - if the turn holder's arena card resists its own color: reduce damage by 30
+; return resulting damage in de
+ApplyDamageModifiers_DamageToSelf: ; 1a22 (0:1a22)
 	xor a
 	ld [wccc1], a
 	ld hl, wDamage
@@ -4251,26 +4358,26 @@ Func_1a22: ; 1a22 (0:1a22)
 	dec hl
 	ld e, [hl]
 	call GetArenaCardColor
-	call Func_1a0e
+	call TranslateColorToWR
 	ld b, a
 	call GetArenaCardWeakness
 	and b
-	jr z, .asm_1a47
+	jr z, .not_weak
 	sla e
 	rl d
-	ld hl, $ccc1
+	ld hl, wccc1
 	set 1, [hl]
-.asm_1a47
+.not_weak
 	call GetArenaCardResistance
 	and b
-	jr z, .asm_1a58
+	jr z, .not_resistant
 	ld hl, -30
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, $ccc1
+	ld hl, wccc1
 	set 2, [hl]
-.asm_1a58
+.not_resistant
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
 	ld b, CARD_LOCATION_ARENA
@@ -4731,6 +4838,7 @@ CreateTempCardCollection: ; 1d2e (0:1d2e)
 	call DisableSRAM
 	ret
 
+; adds the cards from a deck to wTempCardCollection given de = sDeck*Name
 AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 	ld a, [de]
 	or a
@@ -7914,7 +8022,7 @@ HandleNShieldAndTransparency: ; 337f (0:337f)
 	or a
 	ret
 .nshield
-	ld a, $ce
+	ld a, DUELVARS_ARENA_CARD_STAGE
 	call GetNonTurnDuelistVariable
 	or a
 	jr z, .done
@@ -8517,13 +8625,13 @@ ClearChangedTypesIfMuk: ; 36d9 (0:36d9)
 	ret
 ; 0x36f6
 
-; return the arena card's color in a, accounting for Venomoth's Shift Pokemon Power if active
+; return the turn holder's arena card's color in a, accounting for Venomoth's Shift Pokemon Power if active
 GetArenaCardColor: ; 36f6 (0:36f6)
 	xor a
 ;	fallthrough
 
 ; input: a = play area location offset (PLAY_AREA_*) of the desired card
-; return the card's color in a, accounting for Venomoth's Shift Pokemon Power if active
+; return the turn holder's card's color in a, accounting for Venomoth's Shift Pokemon Power if active
 GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	push hl
 	push de
