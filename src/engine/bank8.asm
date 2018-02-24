@@ -5,7 +5,7 @@
 Func_200e5: ; 200e5 (8:40e5)
 	ld [$ce18], a
 	call CreateHandCardList
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	ld de, wHandCardBuffer
 	call CopyBuffer
 	ld hl, wHandCardBuffer
@@ -86,7 +86,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	and $8
 	jp z, $40f7
 	call CreateHandCardList
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	ld de, $cf68
 	call $697b
 	ld hl, $cf68

@@ -282,8 +282,9 @@ wOpponentDeck:: ; c480
 wc500:: ; c500
 	ds $10
 
-; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
-wDuelCardOrAttackList:: ; c510
+; this holds an $ff-terminated list of card deck indexes (e.g. cards in hand or in bench)
+; or (less often) the attack list of a Pokemon card
+wDuelTempList:: ; c510
 	ds $80
 
 ; this is kept updated with some default text that is used
@@ -643,7 +644,7 @@ wccbc::
 wccbf:: ; ccbf
 	ds $2
 
-wccc1:: ; ccc1
+wDamageEffectiveness:: ; ccc1
 	ds $1
 
 ; used in damage related functions
@@ -1041,9 +1042,18 @@ wd131:: ; d131
 wd132:: ; d132
 	ds $1
 
+UNION
+
 wBoosterViableCardList:: ; d133
-wFloorObjectMap:: ; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
 	ds $100
+
+NEXTU
+
+; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
+wFloorObjectMap::
+	ds $100
+
+ENDU
 
 wd233:: ; d233
 	ds $1

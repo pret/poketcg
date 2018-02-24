@@ -2972,7 +2972,7 @@ PowersOf2:
 	db $01, $02, $04, $08, $10, $20, $40, $80
 ; 0x11bf
 
-; fill wDuelCardOrAttackList with the turn holder's discard pile cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's discard pile cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards in the discard pile
 CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ldh a, [hWhoseTurn]
@@ -2982,7 +2982,7 @@ CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ld a, DUELVARS_DECK_CARDS - 1
 	add [hl] ; point to last card in discard pile
 	ld l, a
-	ld de, wDuelCardOrAttackList
+	ld de, wDuelTempList
 	inc b
 	jr .begin_loop
 .next_card_loop
@@ -3002,7 +3002,7 @@ CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ret
 ; 0x11df
 
-; fill wDuelCardOrAttackList with the turn holder's remaining deck cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's remaining deck cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards left in the deck
 CreateDeckCardList: ; 11df (0:11df)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3017,7 +3017,7 @@ CreateDeckCardList: ; 11df (0:11df)
 	add DUELVARS_DECK_CARDS
 	ld l, a ; l = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
 	inc b
-	ld de, wDuelCardOrAttackList
+	ld de, wDuelTempList
 	jr .begin_loop
 .next_card
 	ld a, [hli]
@@ -3033,12 +3033,12 @@ CreateDeckCardList: ; 11df (0:11df)
 	ret
 .no_cards_left_in_deck
 	ld a, $ff
-	ld [wDuelCardOrAttackList], a
+	ld [wDuelTempList], a
 	scf
 	ret
 ; 0x120a
 
-; fill wDuelCardOrAttackList with the turn holder's energy cards
+; fill wDuelTempList with the turn holder's energy cards
 ; in the arena or in a bench slot (their 0-59 deck index).
 ; if a == 0: search in CARD_LOCATION_ARENA
 ; if a != 0: search in CARD_LOCATION_BENCH_[A]
@@ -3046,7 +3046,7 @@ CreateDeckCardList: ; 11df (0:11df)
 CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	or CARD_LOCATION_PLAY_AREA
 	ld c, a
-	ld de, wDuelCardOrAttackList
+	ld de, wDuelTempList
 	ld a, DUELVARS_CARD_LOCATIONS
 	call GetTurnDuelistVariable
 .next_card_loop
@@ -3059,7 +3059,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	and 1 << TYPE_ENERGY_F
 	jr z, .skip_card ; jump if Pokemon or trainer card
 	ld a, l
-	ld [de], a ; add to wDuelCardOrAttackList
+	ld [de], a ; add to wDuelTempList
 	inc de
 .skip_card
 	inc l
@@ -3069,7 +3069,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	; all cards checked
 	ld a, $ff
 	ld [de], a
-	ld a, [wDuelCardOrAttackList]
+	ld a, [wDuelTempList]
 	cp $ff
 	jr z, .no_energies_found
 	or a
@@ -3079,7 +3079,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	ret
 ; 0x123b
 
-; fill wDuelCardOrAttackList with the turn holder's hand cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck index)
 ; return carry if the turn holder has no cards in hand
 CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
@@ -3110,7 +3110,7 @@ CreateHandCardList: ; 123b (0:123b)
 ; 0x1258
 
 ; sort the turn holder's hand cards by ID (highest to lowest ID)
-; makes use of wDuelCardOrAttackList
+; makes use of wDuelTempList
 SortHandCardsByID: ; 1258 (0:1258)
 	call FindLastCardInHand
 .loop
@@ -3121,7 +3121,7 @@ SortHandCardsByID: ; 1258 (0:1258)
 	jr nz, .loop
 	ld a, $ff
 	ld [de], a
-	call SortCardsInDuelCardOrAttackListByID
+	call SortCardsInDuelTempListByID
 	call FindLastCardInHand
 .loop2
 	ld a, [de]
@@ -3135,7 +3135,7 @@ SortHandCardsByID: ; 1258 (0:1258)
 ; returns:
 ; b = turn holder's number of cards in hand (DUELVARS_NUMBER_OF_CARDS_IN_HAND)
 ; hl = pointer to turn holder's last (newest) card in DUELVARS_HAND
-; de = wDuelCardOrAttackList
+; de = wDuelTempList
 FindLastCardInHand: ; 1271 (0:1271)
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -3144,7 +3144,7 @@ FindLastCardInHand: ; 1271 (0:1271)
 	ld a, DUELVARS_HAND - 1
 	add [hl]
 	ld l, a
-	ld de, wDuelCardOrAttackList
+	ld de, wDuelTempList
 	ret
 
 ; shuffles the deck by swapping the position of each card with the position of another random card
@@ -3188,12 +3188,12 @@ ShuffleCards: ; 127f (0:127f)
 ; 0x12a3
 
 ; sort a $ff-terminated list of deck index cards by ID (lowest to highest ID).
-; the list is wDuelCardOrAttackList.
-SortCardsInDuelCardOrAttackListByID: ; 12a3 (0:12a3)
+; the list is wDuelTempList.
+SortCardsInDuelTempListByID: ; 12a3 (0:12a3)
 	ld hl, hTempListPtr_ff99
-	ld [hl], LOW(wDuelCardOrAttackList)
+	ld [hl], LOW(wDuelTempList)
 	inc hl
-	ld [hl], HIGH(wDuelCardOrAttackList)
+	ld [hl], HIGH(wDuelTempList)
 	jr SortCardsInListByID_CheckForListTerminator
 
 ; sort a $ff-terminated list of deck index cards by ID (lowest to highest ID).
@@ -3289,13 +3289,13 @@ GetCardIDFromDeckIndex_bc: ; 12fa (0:12fa)
 	ret
 ; 0x1303
 
-; return [wDuelCardOrAttackList + a] in a and in hTempCardIndex_ff98
+; return [wDuelTempList + a] in a and in hTempCardIndex_ff98
 Func_1303: ; 1303 (0:1303)
 	push hl
 	push de
 	ld e, a
 	ld d, $0
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	add hl, de
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
@@ -3304,14 +3304,14 @@ Func_1303: ; 1303 (0:1303)
 	ret
 ; 0x1312
 
-; given the deck index (0-59) of a card in [wDuelCardOrAttackList + a], return:
+; given the deck index (0-59) of a card in [wDuelTempList + a], return:
 ;  - the id of the card with that deck index in register de
-;  - [wDuelCardOrAttackList + a] in hTempCardIndex_ff98 and in register a
-GetCardInList: ; 1312 (0:1312)
+;  - [wDuelTempList + a] in hTempCardIndex_ff98 and in register a
+GetCardInDuelTempList: ; 1312 (0:1312)
 	push hl
 	ld e, a
 	ld d, $0
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	add hl, de
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
@@ -3334,7 +3334,56 @@ GetCardIDFromDeckIndex: ; 1324 (0:1324)
 	ret
 ; 0x132f
 
-	INCROM $132f, $1362
+; remove card c from wDuelTempList (it contains a $ff-terminated list of deck indexes)
+RemoveCardFromDuelTempList: ; 132f (0:132f)
+	push hl
+	push de
+	push bc
+	ld hl, wDuelTempList
+	ld e, l
+	ld d, h
+	ld c, a
+	ld b, $00
+.next
+	ld a, [hli]
+	cp $ff
+	jr z, .end_of_list
+	cp c
+	jr z, .match
+	ld [de], a
+	inc de
+	inc b
+.match
+	jr .next
+.end_of_list
+	ld [de], a
+	ld a, b
+	or a
+	jr nz, .done
+	scf
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x1351
+
+; return the number of cards in wDuelTempList in a
+CountCardsInDuelTempList: ; 1351 (0:1351)
+	push hl
+	push bc
+	ld hl, wDuelTempList
+	ld b, -1
+.loop
+	inc b
+	ld a, [hli]
+	cp $ff
+	jr nz, .loop
+	ld a, b
+	pop bc
+	pop hl
+	ret
+; 0x1362
 
 ; returns, in register a, the id of the card with the deck index (0-59) specified in register a
 _GetCardIDFromDeckIndex: ; 1362 (0:1362)
@@ -3990,7 +4039,7 @@ Func_1730: ; 1730 (0:1730)
 	inc hl
 	ld [hl], d
 	ld b, $0
-	ld a, [wccc1]
+	ld a, [wDamageEffectiveness]
 	ld c, a
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -4243,7 +4292,7 @@ Func_195c: ; 195c (0:195c)
 	ld a, [wTempTurnDuelistCardID]
 	ld [wTempNonTurnDuelistCardID], a
 	bank1call ApplyDamageModifiers_DamageToSelf ; switch to bank 1, but call a home func
-	ld a, [wccc1]
+	ld a, [wDamageEffectiveness]
 	ld c, a
 	ld b, $0
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -4263,7 +4312,7 @@ Func_195c: ; 195c (0:195c)
 ; return resulting damage in de
 ApplyDamageModifiers_DamageToTarget: ; 1994 (0:1994)
 	xor a
-	ld [wccc1], a
+	ld [wDamageEffectiveness], a
 	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
@@ -4280,7 +4329,7 @@ ApplyDamageModifiers_DamageToTarget: ; 1994 (0:1994)
 	jr z, .safe
 	res 7, d ; cap at 2^15
 	xor a
-	ld [wccc1], a
+	ld [wDamageEffectiveness], a
 	call HandleDoubleDamageSubstatus
 	jr .check_pluspower_and_defender
 .safe
@@ -4299,8 +4348,8 @@ ApplyDamageModifiers_DamageToTarget: ; 1994 (0:1994)
 	jr z, .not_weak
 	sla e
 	rl d
-	ld hl, wccc1
-	set 1, [hl]
+	ld hl, wDamageEffectiveness
+	set WEAKNESS, [hl]
 .not_weak
 	call SwapTurn
 	call GetArenaCardResistance
@@ -4311,8 +4360,8 @@ ApplyDamageModifiers_DamageToTarget: ; 1994 (0:1994)
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, wccc1
-	set 2, [hl]
+	ld hl, wDamageEffectiveness
+	set RESISTANCE, [hl]
 .check_pluspower_and_defender
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
@@ -4348,7 +4397,7 @@ InvertedPowersOf2: ; 1a1a (0:1a1a)
 ; return resulting damage in de
 ApplyDamageModifiers_DamageToSelf: ; 1a22 (0:1a22)
 	xor a
-	ld [wccc1], a
+	ld [wDamageEffectiveness], a
 	ld hl, wDamage
 	ld a, [hli]
 	or [hl]
@@ -4365,8 +4414,8 @@ ApplyDamageModifiers_DamageToSelf: ; 1a22 (0:1a22)
 	jr z, .not_weak
 	sla e
 	rl d
-	ld hl, wccc1
-	set 1, [hl]
+	ld hl, wDamageEffectiveness
+	set WEAKNESS, [hl]
 .not_weak
 	call GetArenaCardResistance
 	and b
@@ -4375,8 +4424,8 @@ ApplyDamageModifiers_DamageToSelf: ; 1a22 (0:1a22)
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, wccc1
-	set 2, [hl]
+	ld hl, wDamageEffectiveness
+	set RESISTANCE, [hl]
 .not_resistant
 	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedPluspower
@@ -8936,7 +8985,31 @@ GetFloorObjectFromPos: ; 3927 (0:3927)
 	ret
 ; 0x392e
 
-	INCROM $392e, $3946
+SetFloorObjectFromPos: ; 392e (0:392e)
+	push hl
+	push af
+	call FindFloorTileFromPos
+	pop af
+	ld [hl], a
+	pop hl
+	ret
+; 0x3937
+
+UpdateFloorObjectFromPos: ; 3937 (0:3937)
+	push hl
+	push bc
+	push de
+	cpl
+	ld e, a
+	call FindFloorTileFromPos
+	ld a, [hl]
+	and e
+	ld [hl], a
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x3946
 
 ; puts a floor tile in hl given coords in bc (x,y. measured in tiles)
 FindFloorTileFromPos: ; 3946 (0:3946)
@@ -8965,17 +9038,30 @@ Func_395a: ; 395a (0:395a)
 	ret
 
 Unknown_396b: ; 396b (0:396b)
-	INCROM $396b, $3973
+	db $00, -$01, $01, $00, $00, $01, -$01, $00
 
 ; Movement offsets for scripted movements
 ScriptedMovementOffsetTable: ; 3973 (0:3973)
-	db $00, -$02 ; move 2 tiles up
-	db $02, $00 ; move 2 tiles right
-	db $00, $02 ; move 2 tiles down
-	db -$02, $00 ; move 2 tiles left
+	db  0, -2 ; move 2 tiles up
+	db  2,  0 ; move 2 tiles right
+	db  0,  2 ; move 2 tiles down
+	db -2,  0 ; move 2 tiles left
 
 Unknown_397b: ; 397b (0:397b)
-	INCROM $397b, $3997
+	dw $0323
+	dw $0323
+	dw $0324
+	dw $0325
+	dw $0326
+	dw $0327
+	dw $0328
+	dw $0329
+	dw $032a
+	dw $032b
+	dw $032c
+	dw $032d
+	dw $032e
+	dw $032f
 
 Func_3997: ; 3997 (0:3997)
 	ldh a, [hBankROM]
@@ -9043,7 +9129,20 @@ Func_39c3: ; 39c3 (0:39c3)
 	ret
 ; 0x39ea
 
-	INCROM $39ea, $39fc
+Func_39ea: ; 39ea (0:39ea)
+	push bc
+	ldh a, [hBankROM]
+	push af
+	ld a, $03
+	call BankswitchHome
+	ld a, [bc]
+	ld c, a
+	pop af
+	call BankswitchHome
+	ld a, c
+	pop bc
+	ret
+; 0x39fc
 
 Func_39fc: ; 39fc (0:39fc)
 	push hl
@@ -9355,7 +9454,16 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	ret
 ; 0x3be4
 
-	INCROM $3be4, $3bf5
+Func_3be4: ; 3be4 (0:3be4)
+	ldh a, [hBankROM]
+	push af
+	ld a, [wd4c6]
+	call BankswitchHome
+	call Func_08de
+	pop af
+	call BankswitchHome
+	ret
+; 0x3bf5
 
 Func_3bf5: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]

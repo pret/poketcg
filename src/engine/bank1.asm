@@ -648,7 +648,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld [wSelectedDuelSubMenuItem], a
 
 .try_open_attack_menu
-	call LoadPokemonMovesToDuelCardOrAttackList
+	call LoadPokemonMovesToDuelTempList
 	or a
 	jr nz, .open_attack_menu
 	ldtx hl, NoSelectableAttackText
@@ -689,7 +689,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	add hl, de
 	ld d, [hl] ; card number within the deck (0 to 59)
 	inc hl
@@ -811,10 +811,10 @@ Func_481b: ; $481b (1:481b)
 	ld [hl], a
 	ret
 
-; copies the following to the wDuelCardOrAttackList buffer:
+; copies the following to the wDuelTempList buffer:
 ;   if pokemon's second moveslot is empty: <card_no>, 0
 ;   else: <card_no>, 0, <card_no>, 1
-LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
+LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -822,7 +822,7 @@ LoadPokemonMovesToDuelCardOrAttackList: ; 4823 (1:4823)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld c, $00
 	ld b, $0d
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	xor a
 	ld [wCardPageNumber], a
 	ld de, wLoadedCard1Move1Name
@@ -905,7 +905,7 @@ CheckIfEnoughEnergies: ; 488f (1:488f)
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, wDuelCardOrAttackList
+	ld hl, wDuelTempList
 	add hl, de
 	ld d, [hl] ; card number within the deck (0 to 59)
 	inc hl
