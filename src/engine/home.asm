@@ -2958,7 +2958,7 @@ SearchCardInDiscardPileAndAddToHand: ; 1182 (0:1182)
 CheckPrizeTaken: ; 11a5 (0:11a5)
 	ld e, a
 	ld d, 0
-	ld hl, .prize_bits
+	ld hl, PowersOf2
 	add hl, de
 	ld a, [hl]
 	ld e, a
@@ -2969,7 +2969,7 @@ CheckPrizeTaken: ; 11a5 (0:11a5)
 	and e
 	ret
 
-.prize_bits
+PowersOf2:
 	db $01, $02, $04, $08, $10, $20, $40, $80
 ; 0x11bf
 
@@ -3414,7 +3414,7 @@ MovePlayAreaCardToDiscardPile: ; 14dd (0:14dd)
 	call EmptyPlayAreaSlot
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
 	dec [hl]
-	ld l, LOW(DUELVARS_CARD_LOCATIONS)
+	ld l, DUELVARS_CARD_LOCATIONS
 .next_card
 	ld a, e
 	or CARD_LOCATION_PLAY_AREA
@@ -3640,7 +3640,7 @@ GetAttachedEnergies: ; 159f (0:159f)
 ; h = PLAYER_TURN or OPPONENT_TURN
 CountCardIDInLocation: ; 15ef (0:15ef)
 	push bc
-	ld l, LOW(DUELVARS_CARD_LOCATIONS)
+	ld l, DUELVARS_CARD_LOCATIONS
 	ld c, $0
 .next_card
 	ld a, [hl]
@@ -3716,7 +3716,7 @@ Func_161e: ; 161e (0:161e)
 	cp MUK
 	jr z, .use_pokemon_power
 	ld a, $01 ; check only Muk
-	call CheckIfUnderAnyCannotUseStatus2
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr nc, .use_pokemon_power
 	call $6510
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
@@ -4052,7 +4052,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ld [wccc9], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and PASSIVE_STATUS_MASK
+	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr z, .confused
 	or a
@@ -4191,7 +4191,7 @@ Func_1994: ; 1994 (0:1994)
 	call Func_1a0e
 	ld b, a
 	call SwapTurn
-	call GetArenaPokemonWeakness
+	call GetArenaCardWeakness
 	call SwapTurn
 	and b
 	jr z, .asm_19dc
@@ -4201,7 +4201,7 @@ Func_1994: ; 1994 (0:1994)
 	set 1, [hl]
 .asm_19dc
 	call SwapTurn
-	call GetArenaPokemonResistance
+	call GetArenaCardResistance
 	call SwapTurn
 	and b
 	jr z, .check_pluspower_and_defender
@@ -4253,7 +4253,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	call GetArenaCardColor
 	call Func_1a0e
 	ld b, a
-	call GetArenaPokemonWeakness
+	call GetArenaCardWeakness
 	and b
 	jr z, .asm_1a47
 	sla e
@@ -4261,7 +4261,7 @@ Func_1a22: ; 1a22 (0:1a22)
 	ld hl, $ccc1
 	set 1, [hl]
 .asm_1a47
-	call GetArenaPokemonResistance
+	call GetArenaCardResistance
 	and b
 	jr z, .asm_1a58
 	ld hl, -30
@@ -4453,7 +4453,101 @@ Func_1bca: ; 1bca (0:1bca)
 	ret
 ; 0x1c05
 
-	INCROM $1c05, $1c72
+; return in a the retreat cost of the turn holder's arena or benchx Pokemon
+; given the PLAY_AREA_* value in hTempPlayAreaLocationOffset_ff9d
+GetPlayAreaCardRetreatCost: ; 1c05 (0:1c05)
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call GetLoadedCard1RetreatCost
+	ret
+; 0x1c13
+
+; move the turn holder's card with ID at de to the discard pile
+; if it's currently in the arena.
+MoveCardToDiscardPileIfInArena: ; 1c13 (0:1c13)
+	ld c, e
+	ld b, d
+	ld l, DUELVARS_CARD_LOCATIONS
+.next_card
+	ld a, [hl]
+	and CARD_LOCATION_ARENA
+	jr z, .skip ; jump if card not in arena
+	ld a, l
+	call GetCardIDFromDeckIndex
+	ld a, c
+	cp e
+	jr nz, .skip ; jump if not the card id provided in c
+	ld a, b
+	cp d ; card IDs are 8-bit so d is always 0
+	jr nz, .skip
+	ld a, l
+	push bc
+	call PutCardInDiscardPile
+	pop bc
+.skip
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .next_card
+	ret
+; 0x1c35
+
+; substract [hl] HP from the turn holder's card at CARD_LOCATION_PLAY_AREA + e
+; return the result in a
+SubstractHPFromCard: ; 1c35 (0:1c35)
+	push hl
+	push de
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	pop de
+	push de
+	ld a, DUELVARS_ARENA_CARD_HP
+	add e
+	call GetTurnDuelistVariable
+	ld a, [wLoadedCard2HP]
+	ld c, a
+	sub [hl]
+	pop de
+	pop hl
+	ret
+; 0x1c50
+
+; check if a flag of wLoadedMove is set
+; input: a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1, and b = flag bit
+; return carry if the flag is set
+CheckLoadedMoveFlag: ; 1c50 (0:1c50)
+	push hl
+	push de
+	push bc
+	ld c, a ; %fffffbbb
+	and $07
+	ld e, a
+	ld d, $00
+	ld hl, PowersOf2
+	add hl, de
+	ld b, [hl]
+	ld a, c
+	rra
+	rra
+	rra
+	and $1f
+	ld e, a ; %000fffff
+	ld hl, wLoadedMoveFlag1
+	add hl, de
+	ld a, [hl]
+	and b
+	jr z, .done
+	scf ; set carry if the move has this flag set
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x1c72
 
 ; returns [hWhoseTurn] <-- ([hWhoseTurn] ^ $1)
 ;   As a side effect, this also returns a duelist variable in a similar manner to
@@ -4469,9 +4563,10 @@ SwapTurn: ; 1c72 (0:1c72)
 	pop af
 	ret
 
-LoadPlayerName: ; 1c7d (0:1c7d)
+; copy the $00-terminated player's name from sPlayerName to de
+CopyPlayerName: ; 1c7d (0:1c7d)
 	call EnableSRAM
-	ld hl, $a010
+	ld hl, sPlayerName
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -4482,7 +4577,8 @@ LoadPlayerName: ; 1c7d (0:1c7d)
 	call DisableSRAM
 	ret
 
-LoadOpponentName: ; 1c8e (0:1c8e)
+; copy the opponent's name to de (usually via PrintTextBoxBorderLabel)
+CopyOpponentName: ; 1c8e (0:1c8e)
 	ld hl, wOpponentName
 	ld a, [hli]
 	or [hl]
@@ -4492,58 +4588,64 @@ LoadOpponentName: ; 1c8e (0:1c8e)
 	ld h, a
 	jp PrintTextBoxBorderLabel
 .special_name
-	ld hl, $c500
+	ld hl, wc500
 	ld a, [hl]
 	or a
 	jr z, .print_player2
-	jr LoadPlayerName.loop
+	jr CopyPlayerName.loop
 .print_player2
 	ldtx hl, Player2Text
 	jp PrintTextBoxBorderLabel
 
-Func_1caa: ; 1caa (0:1caa)
+; return, in hl, the total amount of cards owned anywhere, including duplicates
+GetRawAmountOfCardsOwned: ; 1caa (0:1caa)
 	push de
 	push bc
 	call EnableSRAM
 	ld hl, $0000
 	ld de, sDeck1Cards
-	ld c, $4
-.asm_1cb7
+	ld c, NUM_DECKS
+.next_deck
 	ld a, [de]
 	or a
-	jr z, .asm_1cc1
+	jr z, .skip_deck ; jump if deck empty
 	ld a, c
-	ld bc, $003c
+	ld bc, DECK_SIZE
 	add hl, bc
 	ld c, a
 
-.asm_1cc1
-	ld a, $54
+.skip_deck
+	ld a, sDeck2Cards - sDeck1Cards
 	add e
 	ld e, a
 	ld a, $0
 	adc d
-	ld d, a
+	ld d, a ; de = sDeck*Cards[x]
 	dec c
-	jr nz, .asm_1cb7
+	jr nz, .next_deck
+
+	; hl = DECK_SIZE * (no. of non-empty decks)
 	ld de, sCardCollection
-.asm_1ccf
+.next_card
 	ld a, [de]
-	bit 7, a
-	jr nz, .asm_1cd8
-	ld c, a
+	bit CARD_NOT_OWNED_F, a
+	jr nz, .skip_card
+	ld c, a ; card count in sCardCollection
 	ld b, $0
 	add hl, bc
 
-.asm_1cd8
+.skip_card
 	inc e
-	jr nz, .asm_1ccf
+	jr nz, .next_card ; assumes sCardCollection is $100 bytes long (CARD_COLLECTION_SIZE)
 	call DisableSRAM
 	pop bc
 	pop de
 	ret
 
-Func_1ce1: ; 1ce1 (0:1ce1)
+; return carry if the count in sCardCollection plus the count in each deck (sDeck*)
+; of the card with id given in a is 0 (if card not owned).
+; also return the count (total owned amount) in a.
+GetCardCountInCollectionAndDecks: ; 1ce1 (0:1ce1)
 	push hl
 	push de
 	push bc
@@ -4551,40 +4653,42 @@ Func_1ce1: ; 1ce1 (0:1ce1)
 	ld c, a
 	ld b, $0
 	ld hl, sDeck1Cards
-	ld d, $4
-.asm_1cef
+	ld d, NUM_DECKS
+.next_deck
 	ld a, [hl]
 	or a
-	jr z, .asm_1cff
+	jr z, .deck_done ; jump if deck empty
 	push hl
-	ld e, $3c
-.asm_1cf6
+	ld e, DECK_SIZE
+.next_card
 	ld a, [hli]
 	cp c
-	jr nz, .asm_1cfb
-	inc b
+	jr nz, .no_match
+	inc b ; this deck card matches card c
 
-.asm_1cfb
+.no_match
 	dec e
-	jr nz, .asm_1cf6
+	jr nz, .next_card
 	pop hl
 
-.asm_1cff
+.deck_done
 	push de
-	ld de, $0054
+	ld de, sDeck2Cards - sDeck1Cards
 	add hl, de
 	pop de
 	dec d
-	jr nz, .asm_1cef
-	ld h, $a1
+	jr nz, .next_deck
+
+	; all decks done
+	ld h, HIGH(sCardCollection)
 	ld l, c
 	ld a, [hl]
-	bit 7, a
-	jr nz, .asm_1d11
-	add b
+	bit CARD_NOT_OWNED_F, a
+	jr nz, .done
+	add b ; if card seen, add b to count
 
-.asm_1d11
-	and $7f
+.done
+	and CARD_COUNT_MASK
 	call DisableSRAM
 	pop bc
 	pop de
@@ -4594,15 +4698,17 @@ Func_1ce1: ; 1ce1 (0:1ce1)
 	scf
 	ret
 
-Func_1d1d: ; 1d1d (0:1d1d)
+; return carry if the count in sCardCollection of the card with id given in a is 0.
+; also return the count (amount owned outside of decks) in a.
+GetCardCountInCollection: ; 1d1d (0:1d1d)
 	push hl
 	call EnableSRAM
-	ld h, $a1
+	ld h, HIGH(sCardCollection)
 	ld l, a
 	ld a, [hl]
 	call DisableSRAM
 	pop hl
-	and $7f
+	and CARD_COUNT_MASK
 	ret nz
 	scf
 	ret
@@ -4628,23 +4734,24 @@ CreateTempCardCollection: ; 1d2e (0:1d2e)
 AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 	ld a, [de]
 	or a
-	ret z
+	ret z ; return if empty name (empty deck)
 	ld hl, sDeck1Cards - sDeck1Name
 	add hl, de
 	ld e, l
 	ld d, h
 	ld h, HIGH(wTempCardCollection)
 	ld c, DECK_SIZE
-.asm_1d66
-	ld a, [de]
-	inc de
+.next_card
+	ld a, [de] ; count of current card being added
+	inc de ; move to next card for next iteration
 	ld l, a
-	inc [hl]
+	inc [hl] ; increment count
 	dec c
-	jr nz, .asm_1d66
+	jr nz, .next_card
 	ret
 
-; adds card a to collection, provided the player has less than 99 of them
+; add card with id given in a to sCardCollection, provided that
+; the player has less than MAX_AMOUNT_OF_CARD (99) of them
 AddCardToCollection: ; 1d6e (0:1d6e)
 	push hl
 	push de
@@ -4654,41 +4761,70 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 	call CreateTempCardCollection
 	pop hl
 	call EnableSRAM
-	ld h, wTempCardCollection >> 8
+	ld h, HIGH(wTempCardCollection)
 	ld a, [hl]
-	and $7f
-	cp 99
-	jr nc, .asm_1d8a
-	ld h, sCardCollection >> 8
+	and CARD_COUNT_MASK
+	cp MAX_AMOUNT_OF_CARD
+	jr nc, .already_max
+	ld h, HIGH(sCardCollection)
 	ld a, [hl]
-	and $7f
+	and CARD_COUNT_MASK
 	inc a
 	ld [hl], a
-.asm_1d8a
+.already_max
 	call DisableSRAM
 	pop bc
 	pop de
 	pop hl
 	ret
 
-Func_1d91: ; 1d91 (0:1d91)
+; remove a card with id given in a from sCardCollection (decrement its count if non-0)
+RemoveCardFromCollection: ; 1d91 (0:1d91)
 	push hl
 	call EnableSRAM
-	ld h, $a1
+	ld h, HIGH(sCardCollection)
 	ld l, a
 	ld a, [hl]
-	and $7f
-	jr z, .asm_1d9f
+	and CARD_COUNT_MASK
+	jr z, .zero
 	dec a
 	ld [hl], a
-
-.asm_1d9f
+.zero
 	call DisableSRAM
 	pop hl
 	ret
 ; 0x1da4
 
-	INCROM $1da4, $1dca
+; return the amount of different cards that the player has collected in d
+; return NUM_CARDS in e, minus 1 if VENUSAUR1 or MEW2 has not been collected (minus 2 if neither)
+GetCardAlbumProgress: ; 1da4 (0:1da4)
+	push hl
+	call EnableSRAM
+	ld e, NUM_CARDS
+	ld h, HIGH(sCardCollection)
+	ld l, VENUSAUR1
+	bit CARD_NOT_OWNED_F, [hl]
+	jr z, .next1
+	dec e ; if VENUSAUR1 not owned
+.next1
+	ld l, MEW2
+	bit CARD_NOT_OWNED_F, [hl]
+	jr z, .next2
+	dec e ; if MEW2 not owned
+.next2
+	ld d, LOW(sCardCollection)
+	ld l, d
+.next_card
+	bit CARD_NOT_OWNED_F, [hl]
+	jr nz, .skip
+	inc d ; if this card owned
+.skip
+	inc l
+	jr nz, .next_card ; assumes sCardCollection is $100 bytes long (CARD_COLLECTION_SIZE)
+	call DisableSRAM
+	pop hl
+	ret
+; 0x1dca
 
 ; copy c bytes of data from de to hl
 ; if LCD on, copy during h-blank only
@@ -6721,7 +6857,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	jp Func_2d43
 .tx_ram1
 	call Func_2ceb
-	call LoadTurnDuelistName
+	call CopyTurnDuelistName
 	ld a, [wcaa0]
 	cp $6
 	jr z, .asm_2dda
@@ -6795,17 +6931,18 @@ Func_2e12: ; 2e12 (0:2e12)
 	jr nz, .asm_2e23
 	ret
 
-LoadTurnDuelistName: ; 2e2c (0:2e2c)
+; copy the name of the duelist whose turn it is to de
+CopyTurnDuelistName: ; 2e2c (0:2e2c)
 	ld de, wcaa0
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
 	jp z, .opponent_turn
-	call LoadPlayerName
+	call CopyPlayerName
 	pop hl
 	ret
 .opponent_turn
-	call LoadOpponentName
+	call CopyOpponentName
 	pop hl
 	ret
 
@@ -6884,8 +7021,8 @@ PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
 .special
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
-	jp z, LoadOpponentName
-	jp LoadPlayerName
+	jp z, CopyOpponentName
+	jp CopyPlayerName
 ; 0x2ea9
 
 Func_2ea9: ; 2ea9 (0:2ea9)
@@ -6923,7 +7060,7 @@ LoadTxRam3: ; 2ec4 (0:2ec4)
 LoadCardDataToBuffer2_FromCardID: ; 2f0a (0:2f0a)
 	push hl
 	ld hl, wLoadedCard2
-	jr LoadCardDataToRAM
+	jr LoadCardDataToHL_FromCardID
 
 ; load data of card with id at e to wLoadedCard1
 LoadCardDataToBuffer1_FromCardID: ; 2f10 (0:2f10)
@@ -6931,7 +7068,7 @@ LoadCardDataToBuffer1_FromCardID: ; 2f10 (0:2f10)
 	ld hl, wLoadedCard1
 ;	fallthrough
 
-LoadCardDataToRAM: ; 2f14 (0:2f14)
+LoadCardDataToHL_FromCardID: ; 2f14 (0:2f14)
 	push de
 	push bc
 	push hl
@@ -7615,7 +7752,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	cp SUBSTATUS1_HALVE_DAMAGE
 	jr z, .halve_damage
 .not_affected_by_substatus1
-	call CheckIfUnderAnyCannotUseStatus
+	call CheckCannotUseDueToStatus
 	ret c
 .pkmn_power
 	ld a, [wLoadedMoveCategory]
@@ -7721,7 +7858,7 @@ Func_3317: ; 3317 (0:3317)
 	ld a, [wcceb]
 	or a
 	jr nz, .asm_333b
-	call CheckIfUnderAnyCannotUseStatus
+	call CheckCannotUseDueToStatus
 	ret c
 .asm_333b
 	push hl
@@ -7903,7 +8040,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	ldtx hl, NoDamageOrEffectDueToAgilityText
 	cp SUBSTATUS1_AGILITY
 	jr z, .no_damage_or_effect
-	call CheckIfUnderAnyCannotUseStatus
+	call CheckCannotUseDueToStatus
 	ccf
 	ret nc
 .pkmn_power
@@ -7948,7 +8085,7 @@ HandleTransparency: ; 348a (0:348a)
 	cp POKEMON_POWER
 	jr z, .done ; Transparency has no effect against Pkmn Powers
 	ld a, [wcceb]
-	call CheckIfUnderAnyCannotUseStatus2
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr c, .done
 	xor a
 	ld [wcac2], a
@@ -8010,16 +8147,16 @@ IsClairvoyanceActive: ; 34e2 (0:34e2)
 
 ; returns carry if paralyzed, asleep, confused, and/or toxic gas in play,
 ; meaning that move and/or pkmn power cannot be used
-CheckIfUnderAnyCannotUseStatus: ; 34ef (0:34ef)
+CheckCannotUseDueToStatus: ; 34ef (0:34ef)
 	xor a
 
 ; same as above, but if a is non-0, only toxic gas is checked
-CheckIfUnderAnyCannotUseStatus2: ; 34f0 (0:34f0)
+CheckCannotUseDueToStatus_OnlyToxicGasIfANon0: ; 34f0 (0:34f0)
 	or a
 	jr nz, .check_toxic_gas
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and PASSIVE_STATUS_MASK
+	and CNF_SLP_PRZ
 	ldtx hl, CannotUseDueToStatusText
 	scf
 	jr nz, .done ; return carry
@@ -8072,7 +8209,7 @@ CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	jr nz, .check_bench
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and PASSIVE_STATUS_MASK
+	and CNF_SLP_PRZ
 	jr nz, .check_bench
 	inc c
 .check_bench
@@ -8318,7 +8455,7 @@ HandleStrikesBack: ; 367b (0:367b)
 	or a
 	ret z
 	call SwapTurn
-	call CheckIfUnderAnyCannotUseStatus
+	call CheckCannotUseDueToStatus
 	call SwapTurn
 	ret c
 	ld hl, 10 ; damage to be dealt to attacker
@@ -8410,7 +8547,7 @@ GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	ret
 .has_changed_color
 	ld a, e
-	call CheckIfUnderAnyCannotUseStatus2
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr c, .regular_color ; jump if can't use Shift
 	ld a, e
 	add DUELVARS_ARENA_CARD_CHANGED_TYPE
@@ -8421,18 +8558,18 @@ GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	ret
 ; 0x3729
 
-; return in a the weakness of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
+; return in a the weakness of the turn holder's arena or benchx Pokemon given the PLAY_AREA_* value in a
 ; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0,
 ; return [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] instead
-GetPlayAreaPokemonWeakness: ; 3729 (0:3729)
+GetPlayAreaCardWeakness: ; 3729 (0:3729)
 	or a
-	jr z, GetArenaPokemonWeakness
+	jr z, GetArenaCardWeakness
 	add DUELVARS_ARENA_CARD
-	jr GetPokemonWeakness
+	jr GetCardWeakness
 
-; return in a the weakness of the arena Pokemon
+; return in a the weakness of the turn holder's arena Pokemon
 ; if [DUELVARS_ARENA_CARD_CHANGED_WEAKNESS] != 0, return it instead
-GetArenaPokemonWeakness: ; 3730 (0:3730)
+GetArenaCardWeakness: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD_CHANGED_WEAKNESS
 	call GetTurnDuelistVariable
 	or a
@@ -8440,25 +8577,25 @@ GetArenaPokemonWeakness: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetPokemonWeakness:
+GetCardWeakness:
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Weakness]
 	ret
 ; 0x3743
 
-; return in a the resistance of the arena Pokemon (a == 0) or of a bench Pokemon (a > 0)
+; return in a the resistance of the turn holder's arena or benchx Pokemon given the PLAY_AREA_* value in a
 ; if a == 0 and [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0,
 ; return [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] instead
-GetPlayAreaPokemonResistance: ; 3743 (0:3743)
+GetPlayAreaCardResistance: ; 3743 (0:3743)
 	or a
-	jr z, GetArenaPokemonResistance
+	jr z, GetArenaCardResistance
 	add DUELVARS_ARENA_CARD
-	jr GetPokemonResistance
+	jr GetCardResistance
 
 ; return in a the resistance of the arena Pokemon
 ; if [DUELVARS_ARENA_CARD_CHANGED_RESISTANCE] != 0, return it instead
-GetArenaPokemonResistance: ; 374a (0:374a)
+GetArenaCardResistance: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
 	call GetTurnDuelistVariable
 	or a
@@ -8466,7 +8603,7 @@ GetArenaPokemonResistance: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetPokemonResistance:
+GetCardResistance:
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Resistance]
@@ -8483,7 +8620,7 @@ HandleEnergyBurn: ; 375d (0:375d)
 	cp CHARIZARD
 	ret nz
 	xor a
-	call CheckIfUnderAnyCannotUseStatus2
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	ret c
 	ld hl, wAttachedEnergies
 	ld c, NUM_COLORED_TYPES

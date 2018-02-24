@@ -505,8 +505,8 @@ DuelMenu_Done: ; 439a (1:439a)
 DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and PASSIVE_STATUS_MASK
-	cp $01
+	and CNF_SLP_PRZ
+	cp CONFUSED
 	ldh [hffa0], a
 	jr nz, Func_43f1
 	ld a, [wcc0c]
@@ -1012,7 +1012,7 @@ _CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and PASSIVE_STATUS_MASK
+	and CNF_SLP_PRZ
 	cp PARALYZED
 	jr z, .paralyzed
 	cp ASLEEP
@@ -1124,7 +1124,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	cp PLAYER_TURN
 	jr nz, .asm_4c52
 	ld de, wDefaultText
-	call LoadPlayerName
+	call CopyPlayerName
 	ld hl, $0000
 	call LoadTxRam2
 	ldtx hl, YouPlayFirstText
@@ -1142,7 +1142,7 @@ Func_4b60: ; 4b60 (1:4b60)
 
 .asm_4c52
 	ld de, wDefaultText
-	call LoadOpponentName
+	call CopyOpponentName
 	ld hl, $0000
 	call LoadTxRam2
 	ldtx hl, YouPlaySecondText
@@ -1288,7 +1288,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ld l, a
 	ld h, $54
 	call HtimesL
-	ld de, $a218
+	ld de, sDeck1Cards
 	add hl, de
 	ld de, wPlayerDeck
 	ld c, DECK_SIZE

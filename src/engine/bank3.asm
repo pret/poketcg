@@ -1952,7 +1952,7 @@ Func_ce84: ; ce84 (3:4e84)
 	call Func_c135
 	jp IncreaseOWScriptPointerBy1
 
-; args: booster pack index, booster pack index, boosterpack index
+; args: booster pack index, booster pack index, booster pack index
 OWScript_GiveBoosterPacks: ; ce8a (3:4e8a)
 	xor a
 	ld [wd117], a
@@ -2027,12 +2027,12 @@ Func_cee2: ; cee2 (3:4ee2)
 
 Func_cf0c: ; cf0c (3:4f0c)
 	ld a, c
-	call Func_1ce1
+	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
 Func_cf12: ; cf12 (3:4f12)
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 
 asm_cf16
 	or a
@@ -2055,7 +2055,7 @@ Func_cf2d: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseOWScriptPointerBy1
 	pop bc
-	call Func_1caa
+	call GetRawAmountOfCardsOwned
 	ld a, h
 	cp b
 	jr nz, .asm_cf3b
@@ -2078,7 +2078,7 @@ Func_cf3f: ; cf3f (3:4f3f)
 
 Func_cf4c: ; cf4c (3:4f4c)
 	ld a, c
-	call Func_1d91
+	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy2
 
 Func_cf53: ; cf53 (3:4f53)
@@ -2086,7 +2086,7 @@ Func_cf53: ; cf53 (3:4f53)
 	ld b, $0
 .asm_cf57
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 	add b
 	ld b, a
 	inc c
@@ -2114,12 +2114,12 @@ Func_cf7b: ; cf7b (3:4f7b)
 .asm_cf7d
 	push bc
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 	jr c, .asm_cf8c
 	ld b, a
 .asm_cf85
 	ld a, c
-	call Func_1d91
+	call RemoveCardFromCollection
 	dec b
 	jr nz, .asm_cf85
 
@@ -2229,21 +2229,21 @@ Func_d00b: ; d00b (3:500b)
 Func_d025: ; d025 (3:5025)
 	call Func_ca69
 	dec hl
-	call Func_1ce1
+	call GetCardCountInCollectionAndDecks
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d032: ; d032 (3:5032)
 	call Func_ca69
 	dec hl
-	call Func_1d1d
+	call GetCardCountInCollection
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d03f: ; d03f (3:503f)
 	call Func_ca69
 	dec hl
-	call Func_1d91
+	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy1
 
 OWScript_ScriptJump: ; d049 (3:5049)

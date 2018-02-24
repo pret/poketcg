@@ -279,6 +279,7 @@ ENDU
 wOpponentDeck:: ; c480
 	ds $80
 
+wc500:: ; c500
 	ds $10
 
 ; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
@@ -594,6 +595,7 @@ wIsPracticeDuel:: ; cc13
 wOpponentPortrait:: ; cc15
 	ds $1
 
+; text id of the opponent's name
 wOpponentName:: ; cc16
 	ds $2
 

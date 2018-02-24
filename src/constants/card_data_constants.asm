@@ -1,7 +1,16 @@
 NONE EQU $0
 
-; wTempCardCollection size
-CARD_COLLECTION_SIZE EQU $100
+; sCardCollection constants
+CARD_COLLECTION_SIZE EQU $100 ; cards
+MAX_AMOUNT_OF_CARD   EQU 99
+CARD_NOT_OWNED_F     EQU 7
+CARD_NOT_OWNED       EQU 1 << CARD_NOT_OWNED_F
+CARD_COUNT_MASK      EQU $7f
+
+; sDeck* and generic deck constants
+NUM_DECKS      EQU 4
+DECK_NAME_SIZE EQU 24
+DECK_SIZE      EQU 60
 
 ; card data offsets (data/cards.asm and card_data_struct)
 

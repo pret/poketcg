@@ -116,9 +116,9 @@ Func_8dea: ; 8dea (2:4dea)
 Func_8e05: ; 8e05 (2:4e05)
 	ld a, $1
 	call Func_90fb
-	call Func_9048
+	call GetPointerToDeckCards
 	push hl
-	call Func_9038
+	call GetPointerToDeckName
 	pop de
 	call Func_8e1f
 	ld a, $ff
@@ -165,7 +165,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld a, [wceb0]
 	or a
 	jp nz, .asm_8ecf
-	call Func_9048
+	call GetPointerToDeckCards
 	ld e, l
 	ld d, h
 	ld hl, $cf17
@@ -174,14 +174,14 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld hl, $cfb9
 	call Func_9843
 	ld de, $cfb9
-	call Func_9038
+	call GetPointerToDeckName
 	call Func_92b4
 	call Func_9345
 	jr nc, .asm_8ec4
 	call EnableSRAM
 	ld hl, $cf17
 	call Func_910a
-	call Func_9048
+	call GetPointerToDeckCards
 	call Func_9152
 	ld e, l
 	ld d, h
@@ -193,12 +193,12 @@ Func_8e42: ; 8e42 (2:4e42)
 	inc de
 	dec b
 	jr nz, .asm_8ea9
-	call Func_9038
+	call GetPointerToDeckName
 	ld d, h
 	ld e, l
 	ld hl, $cfb9
 	call Func_92ad
-	call Func_9038
+	call GetPointerToDeckName
 	ld a, [hl]
 	call DisableSRAM
 	or a
@@ -218,10 +218,10 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld hl, $cfb9
 	call Func_9843
 	ld de, $cfb9
-	call Func_9038
+	call GetPointerToDeckName
 	call Func_92b4
 	call Func_8f05
-	call Func_9038
+	call GetPointerToDeckName
 	ld d, h
 	ld e, l
 	ld hl, $cfb9
@@ -341,7 +341,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	ld [$b700], a
 	call DisableSRAM
 	call Func_9326
-	call Func_9038
+	call GetPointerToDeckName
 	call EnableSRAM
 	call Func_9253
 	call DisableSRAM
@@ -380,25 +380,27 @@ Func_9026: ; 9026 (2:5026)
 Unknown_9027: ; 9027 (2:5027)
 	INCROM $9027, $9038
 
-Func_9038: ; 9038 (2:5038)
+; return, in hl, the pointer to sDeckXName where X is [wceb1] + 1
+GetPointerToDeckName: ; 9038 (2:5038)
 	ld a, [wceb1]
 	ld h, a
-	ld l, $54
+	ld l, sDeck2Name - sDeck1Name
 	call HtimesL
 	push de
-	ld de, $a200
+	ld de, sDeck1Name
 	add hl, de
 	pop de
 	ret
 
-Func_9048: ; 9048 (2:5048)
+; return, in hl, the pointer to sDeckXCards where X is [wceb1] + 1
+GetPointerToDeckCards: ; 9048 (2:5048)
 	push af
 	ld a, [wceb1]
 	ld h, a
-	ld l, $54
+	ld l, sDeck2Cards - sDeck1Cards
 	call HtimesL
 	push de
-	ld de, $a218
+	ld de, sDeck1Cards
 	add hl, de
 	pop de
 	pop af
@@ -529,7 +531,7 @@ Func_910a: ; 910a (2:510a)
 	jr z, .asm_911e
 	ld c, a
 	push hl
-	ld hl, $a100
+	ld hl, sCardCollection
 	add hl, bc
 	dec [hl]
 	pop hl
@@ -552,7 +554,7 @@ Func_9152: ; 9152 (2:5152)
 	jr z, .asm_9166
 	ld c, a
 	push hl
-	ld hl, $a100
+	ld hl, sCardCollection
 	add hl, bc
 	inc [hl]
 	pop hl
@@ -585,11 +587,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 0, a
 	jr z, .asm_91b0
-	ld hl, $a200
+	ld hl, sDeck1Name
 	ld de, $0602
 	call Func_926e
 .asm_91b0
-	ld hl, $a218
+	ld hl, sDeck1Cards
 	call Func_9314
 	jr c, .asm_91bd
 	ld a, $1
@@ -598,11 +600,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 1, a
 	jr z, .asm_91cd
-	ld hl, $a254
+	ld hl, sDeck2Name
 	ld de, $0605
 	call Func_926e
 .asm_91cd
-	ld hl, $a26c
+	ld hl, sDeck2Cards
 	call Func_9314
 	jr c, .asm_91da
 	ld a, $1
@@ -611,11 +613,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 2, a
 	jr z, .asm_91ea
-	ld hl, $a2a8
+	ld hl, sDeck3Name
 	ld de, $0608
 	call Func_926e
 .asm_91ea
-	ld hl, $a2c0
+	ld hl, sDeck3Cards
 	call Func_9314
 	jr c, .asm_91f7
 	ld a, $1
@@ -624,11 +626,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 3, a
 	jr z, .asm_9207
-	ld hl, $a2fc
+	ld hl, sDeck4Name
 	ld de, $060b
 	call Func_926e
 .asm_9207
-	ld hl, $a314
+	ld hl, sDeck4Cards
 	call Func_9314
 	jr c, .asm_9214
 	ld a, $1

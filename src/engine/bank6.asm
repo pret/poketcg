@@ -8,7 +8,7 @@ Func_1996e: ; 1996e (6:596e)
 	call EnableSRAM
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	ld hl, $a100
+	ld hl, sCardCollection
 	ld bc, $1607
 .asm_1997b
 	xor a
@@ -27,8 +27,8 @@ Func_1996e: ; 1996e (6:596e)
 	ld hl, $a3f8
 	call Func_199e0
 	call EnableSRAM
-	ld hl, $a100
-	ld a, $80
+	ld hl, sCardCollection
+	ld a, CARD_NOT_OWNED
 .asm_199a2
 	ld [hl], a
 	inc l

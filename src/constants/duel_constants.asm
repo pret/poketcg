@@ -1,5 +1,3 @@
-DECK_NAME_SIZE        EQU 24
-DECK_SIZE             EQU 60
 MAX_BENCH_POKEMON     EQU 5
 MAX_PLAY_AREA_POKEMON EQU 6 ; arena + bench
 
@@ -100,7 +98,7 @@ PARALYZED       EQU $03
 POISONED        EQU $80
 DOUBLE_POISONED EQU $c0
 
-PASSIVE_STATUS_MASK  EQU $f ; confused, asleep or paralyzed
+CNF_SLP_PRZ  EQU $0f ; confused, asleep or paralyzed
 
 ; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
 SUBSTATUS1_AGILITY      EQU $0c

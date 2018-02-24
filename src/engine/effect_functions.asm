@@ -50,7 +50,7 @@ ApplyStatusEffect:
 	call SwapTurn
 	xor a
 	; ...unless already so, or if affected by Muk's Toxic Gas
-	call CheckIfUnderAnyCannotUseStatus2
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	call SwapTurn
 	jr c, .can_induce_status
 

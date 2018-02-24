@@ -1,7 +1,13 @@
 SECTION "SRAM", SRAM
 
-	ds $100
+	ds $10
 
+sPlayerName:: ds $10
+
+	ds $e0
+
+; for each card, how many (0-127) the player owns
+; CARD_NOT_OWNED ($80) indicates that the player has not yet seen the card
 sCardCollection:: ds $100 ; a100
 
 sDeck1Name::  ds DECK_NAME_SIZE ; a200

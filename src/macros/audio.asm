@@ -35,15 +35,15 @@ G#: MACRO
 ENDM
 
 A_: MACRO
-	db $A0 | (\1 - 1)
+	db $a0 | (\1 - 1)
 ENDM
 
 A#: MACRO
-	db $B0 | (\1 - 1)
+	db $b0 | (\1 - 1)
 ENDM
 
 B_: MACRO
-	db $C0 | (\1 - 1)
+	db $c0 | (\1 - 1)
 ENDM
 
 bass: MACRO
@@ -67,7 +67,7 @@ snare4: MACRO ; long
 ENDM
 
 snare5: MACRO ; long
-	db $C0 | (\1 - 1)
+	db $c0 | (\1 - 1)
 ENDM
 
 rest: MACRO
