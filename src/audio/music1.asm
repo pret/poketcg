@@ -690,7 +690,7 @@ Music1_note: ; f448c (3d:448c)
 	add e
 	jr .asm_f44c1
 .asm_f44c7
-	ld hl, $ddbb
+	ld hl, wddbb
 	add hl, bc
 	ld [hl], a
 	pop de

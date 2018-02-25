@@ -109,7 +109,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call DisableLCD
 	call $4000
 	xor a
-	ld [wFrameType], a
+	ld [wTextBoxFrameType], a
 	pop bc
 	push bc
 	ld b, $0
@@ -159,7 +159,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
-	ld [wFrameType], a
+	ld [wTextBoxFrameType], a
 	farcall $1, $7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
@@ -179,7 +179,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call DisableLCD
 	call $4000
 	ld a, $4
-	ld [wFrameType], a
+	ld [wTextBoxFrameType], a
 	lb de, 0, 12
 	lb bc, 20, 6
 	call DrawRegularTextBox
@@ -484,7 +484,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	ld [wd0bd], a
 	ld a, $0
 	ld [wd0be], a
-	ld hl, $d0b4
+	ld hl, wd0b4
 	set 4, [hl]
 	pop bc
 	pop hl
@@ -681,7 +681,7 @@ Func_11102: ; 11102 (4:5102)
 	ld [wd341], a
 	ld e, a
 	ld d, $0
-	ld hl, $d343
+	ld hl, wd343
 	xor a
 	ld [hli], a
 	bit 7, [hl]
@@ -704,7 +704,7 @@ Func_11102: ; 11102 (4:5102)
 	ld [wd345], a
 	ld a, b
 	ld [wd346], a
-	ld hl, $d344
+	ld hl, wd344
 	ld a, $1
 	bit 7, [hl]
 	jr z, .asm_1113a
@@ -718,7 +718,7 @@ Func_1113e: ; 1113e (4:513e)
 	ld [wd341], a
 	ld e, a
 	ld d, $0
-	ld hl, $d345
+	ld hl, wd345
 	xor a
 	ld [hli], a
 	bit 7, [hl]
@@ -740,7 +740,7 @@ Func_1113e: ; 1113e (4:513e)
 	ld [wd343], a
 	ld a, b
 	ld [wd344], a
-	ld hl, $d346
+	ld hl, wd346
 	ld a, $2
 	bit 7, [hl]
 	jr z, .asm_11175
@@ -784,7 +784,7 @@ Func_11184: ; 11184 (4:5184)
 	ld [wd347], a
 	ld a, e
 	ld [wd348], a
-	ld hl, $d341
+	ld hl, wd341
 	dec [hl]
 	ret
 ; 0x111b3
@@ -859,7 +859,7 @@ Func_11857: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wd3ab], a
 	ld a, [hli]
-	ld [$d3b3], a
+	ld [wd3b3], a
 	ld a, [hli]
 	ld [wd3b1], a
 	ld a, [hli]
@@ -1324,11 +1324,11 @@ Func_12b13: ; 12b13 (4:6b13)
 	ld [wd4c5], a
 	adc $0
 	ld [hl], a
-	ld de, $d23e
+	ld de, wd23e
 	ld bc, $0004
 	call Func_3bf5
 	pop hl
-	ld de, $d23e
+	ld de, wd23e
 	ld a, [de]
 	call Func_12b6a
 	inc de
@@ -1426,7 +1426,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	ld d, $0
 	ld a, [wd618]
 	ld c, a
-	ld hl, $d5d8
+	ld hl, wd5d8
 	or a
 	jr z, .asm_12c22
 .asm_12c15

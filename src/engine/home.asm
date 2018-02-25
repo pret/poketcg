@@ -1442,11 +1442,11 @@ UpdateRNGSources: ; 089b (0:089b)
 	ret
 
 Func_08bf: ; 08bf (0:08bf)
-	ld hl, $cad6
+	ld hl, wcad6
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld hl, $cad8
+	ld hl, wcad8
 	ld [hl], $1
 	inc hl
 	xor a
@@ -1485,7 +1485,7 @@ Func_08de: ; 08de (0:08de)
 	ret
 
 Func_08ef: ; 08ef (0:08ef)
-	ld hl, $cadc
+	ld hl, wcadc
 	ld a, [hl]
 	or a
 	jr z, .asm_902
@@ -1503,7 +1503,7 @@ Func_08ef: ; 08ef (0:08ef)
 	ld [bc], a
 	ret
 .asm_902
-	ld hl, $cad6
+	ld hl, wcad6
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
@@ -1522,11 +1522,11 @@ Func_08ef: ; 08ef (0:08ef)
 	ld a, [bc]
 	inc bc
 	jr nc, .asm_92a
-	ld hl, $cad6
+	ld hl, wcad6
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, $cadd
+	ld hl, wcadd
 	ld b, [hl]
 	inc hl
 	inc hl
@@ -1536,7 +1536,7 @@ Func_08ef: ; 08ef (0:08ef)
 	ret
 .asm_92a
 	ld [wcade], a
-	ld hl, $cada
+	ld hl, wcada
 	bit 0, [hl]
 	jr nz, .asm_94a
 	set 0, [hl]
@@ -1550,7 +1550,7 @@ Func_08ef: ; 08ef (0:08ef)
 	inc a
 	ld [hli], a
 	push hl
-	ld hl, $cad6
+	ld hl, wcad6
 	ld [hl], c
 	inc hl
 	ld [hl], b
@@ -1568,7 +1568,7 @@ Func_08ef: ; 08ef (0:08ef)
 Func_099c: ; 099c (0:099c)
 	xor a
 	ld [wcab5], a
-	ld hl, $ca00
+	ld hl, wBufOAM
 	ld c, $28
 	xor a
 .asm_9a6
@@ -2461,7 +2461,7 @@ DuelTransmissionError: ; 0f35 (0:0f35)
 	call DrawWideTextBox_WaitForInput
 	ld a, $ff
 	ld [wd0c3], a
-	ld hl, $cbe5
+	ld hl, wcbe5
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2481,12 +2481,12 @@ Func_0f58: ; 0f58 (0:0f58)
 	call GetTurnDuelistVariable
 	or a ; cp DUELIST_TYPE_PLAYER
 	jr z, .asm_f70
-	ld hl, $cbe2
+	ld hl, wcbe2
 	ld de, wRNG1
 	jr .asm_f76
 .asm_f70
 	ld hl, wRNG1
-	ld de, $cbe2
+	ld de, wcbe2
 .asm_f76
 	ld c, $3
 	call Func_0e63
@@ -2688,7 +2688,7 @@ CopyDeckData: ; 1072 (0:1072)
 	jr nz, .card_quantity_loop
 	jr .next_card
 .done
-	ld hl, $cce9
+	ld hl, wcce9
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -3436,7 +3436,131 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-	INCROM $13a2, $1461
+Func_13a2: ; 13a2 (0:13a2)
+	ldh a, [hTempCardIndex_ff98]
+	ld d, a
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ld e, a
+	call Func_13f7
+	ret c
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ld e, a
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld [wccee], a
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ldh a, [hTempCardIndex_ff98]
+	call PutHandCardInPlayArea
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld a, [wLoadedCard2HP]
+	ld c, a
+	ld a, [wLoadedCard1HP]
+	sub c
+	add [hl]
+	ld [hl], a
+	ld a, e
+	add $c2
+	ld l, a
+	ld [hl], $00
+	ld a, e
+	add DUELVARS_ARENA_CARD_CHANGED_TYPE
+	ld l, a
+	ld [hl], $00
+	ld a, e
+	or a
+	call z, ResetStatusConditions
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	add DUELVARS_ARENA_CARD_STAGE
+	call GetTurnDuelistVariable
+	ld a, [wLoadedCard1Stage]
+	ld [hl], a
+	or a
+	ret ; !
+	scf
+	ret
+; 0x13f7
+
+Func_13f7: ; 13f7 (0:13f7)
+	push de
+	ld a, e
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, d
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld hl, wLoadedCard2Name
+	ld de, wLoadedCard1NonPokemonDescription
+	ld a, [de]
+	cp [hl]
+	jr nz, .asm_1427
+	inc de
+	inc hl
+	ld a, [de]
+	cp [hl]
+	jr nz, .asm_1427
+	pop de
+	ld a, e
+	add $c2
+	call GetTurnDuelistVariable
+	and $80
+	jr nz, .asm_1425
+	ld a, $01
+	or a
+	scf
+	ret
+.asm_1425
+	or a
+	ret
+.asm_1427
+	pop de
+	xor a
+	scf
+	ret
+; 0x142b
+
+Func_142b: ; 142b (0:142b)
+	ld a, e
+	add $c2
+	call GetTurnDuelistVariable
+	and $80
+	jr nz, .asm_1437
+	jr .asm_145e
+.asm_1437
+	ld a, e
+	add DUELVARS_ARENA_CARD
+	ld l, a
+	ld a, [hl]
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, d
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld hl, wLoadedCard1NonPokemonDescription
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	call $2ecd
+	ld hl, wLoadedCard2Name
+	ld de, wLoadedCard1NonPokemonDescription
+	ld a, [de]
+	cp [hl]
+	jr nz, .asm_145e
+	inc de
+	inc hl
+	ld a, [de]
+	cp [hl]
+	jr nz, .asm_145e
+	or a
+	ret
+.asm_145e
+	xor a
+	scf
+	ret
+; 0x1461
 
 ; init the status and all substatuses of the turn holder's arena Pokemon.
 ; called when sending a new Pokemon into the arena.
@@ -3947,7 +4071,7 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	xor a
 	ld [hl], a
 	ld [wNoDamageOrEffect], a
-	ld hl, wccbf
+	ld hl, wTempDamage_ccbf
 	ld [hli], a
 	ld [hl], a
 	ret
@@ -3971,7 +4095,7 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld [wccec], a
 	ld [wcccd], a
 	ld [wcced], a
-	ld [wcce6], a
+	ld [wDamageToSelfMode], a
 	ld [wccef], a
 	ld [wccf0], a
 	ld [wccf1], a
@@ -4034,7 +4158,7 @@ Func_1730: ; 1730 (0:1730)
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
 	call Func_189d
-	ld hl, wccbf
+	ld hl, wTempDamage_ccbf
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -4076,7 +4200,7 @@ Func_17fb: ; 17fb (0:17fb)
 	call TryExecuteEffectCommandFunction
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
-	call HandleStrikesBack
+	call HandleStrikesBack_AgainstResidualMove
 	bank1call $6df1
 	call Func_1bb4
 	bank1call $7195
@@ -4104,7 +4228,7 @@ Func_1823: ; 1823 (0:1823)
 DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call $4f9d
 	ld a, $1
-	ld [wcce6], a
+	ld [wDamageToSelfMode], a
 	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
@@ -4180,7 +4304,7 @@ Func_189d: ; 189d (0:189d)
 	push de
 	call SwapTurn
 	xor a
-	ld [wcceb], a
+	ld [wTempPlayAreaLocationOffset_cceb], a
 	call HandleTransparency
 	call SwapTurn
 	pop de
@@ -4483,7 +4607,7 @@ SubstractHP: ; 1a96 (0:1a96)
 	sbc d
 	and $80
 	jr z, .no_underflow
-	ld [hl], $0
+	ld [hl], 0
 .no_underflow
 	ld a, [hl]
 	or a
@@ -4543,7 +4667,98 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 	ret
 ; 0x1af3
 
-	INCROM $1af3, $1b8d
+; seems to be a function to deal damage to a card
+Func_1af3: ; 1af3 (0:1af3)
+	ld a, $78
+	ld [wLoadedMoveAnimation], a
+	ld a, b
+	ld [wTempPlayAreaLocationOffset_cceb], a
+	or a ; cp PLAY_AREA_ARENA
+	jr nz, .skip_no_damage_or_effect_check
+	ld a, [wNoDamageOrEffect]
+	or a
+	ret nz
+.skip_no_damage_or_effect_check
+	push hl
+	push de
+	push bc
+	xor a
+	ld [wNoDamageOrEffect], a
+	push de
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempNonTurnDuelistCardID], a
+	pop de
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	or a ; cp PLAY_AREA_ARENA
+	jr nz, .next
+	ld a, [wDamageToSelfMode]
+	or a
+	jr z, .turn_swapped
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedPluspower
+	jr .next
+.turn_swapped
+	call SwapTurn
+	ld b, CARD_LOCATION_ARENA
+	call ApplyAttachedPluspower
+	call SwapTurn
+.next
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	jr z, .skip_defender
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	or CARD_LOCATION_PLAY_AREA
+	ld b, a
+	call ApplyAttachedDefender
+.skip_defender
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	or a ; cp PLAY_AREA_ARENA
+	jr nz, .in_bench
+	push de
+	call HandleNoDamageOrEffectSubstatus
+	pop de
+	call HandleDamageReduction
+.in_bench
+	bit 7, d
+	jr z, .no_underflow
+	ld de, 0
+.no_underflow
+	call HandleDamageReductionOrNoDamageFromPkmnPowerEffects
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	ld b, a
+	or a ; cp PLAY_AREA_ARENA
+	jr nz, .benched
+	; add damage at de to [wTempDamage_ccbf]
+	ld hl, wTempDamage_ccbf
+	ld a, e
+	add [hl]
+	ld [hli], a
+	ld a, d
+	adc [hl]
+	ld [hl], a
+.benched
+	ld c, $00
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	push af
+	bank1call $7469
+	pop af
+	or a
+	jr z, .skip_knocked_out
+	push de
+	call PrintKnockedOutIfHLZero
+	pop de
+.skip_knocked_out
+	call HandleStrikesBack_AgainstDamagingMove
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x1b8d
 
 Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call $4f9d
@@ -4591,7 +4806,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ld [hl], $0
 	ld hl, $0000
 	call LoadTxRam2
-	ld hl, $ccaa
+	ld hl, wLoadedMoveName
 	ld de, wTxRam2_b
 	ld a, [hli]
 	ld [de], a
@@ -5044,7 +5259,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr nz, .draw_top_border
-	ld a, [wFrameType]
+	ld a, [wTextBoxFrameType]
 	or a
 	jr z, .draw_top_border
 ; Console is SGB and frame type is != 0.
@@ -5217,7 +5432,7 @@ ContinueDrawingTextBoxCGB:
 	call CopyLine
 	pop hl
 	call BankswitchVRAM1
-	ld a, [wFrameType]
+	ld a, [wTextBoxFrameType]
 	ld e, a
 	ld d, a
 	xor a
@@ -5242,7 +5457,7 @@ CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 ;	fallthrough
 CopyCurrentLineAttrCGB:
 	call BankswitchVRAM1
-	ld a, [wFrameType] ; on CGB, wFrameType determines the palette and the other attributes
+	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
 	ld d, a
 	call CopyLine
@@ -5255,13 +5470,13 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	call DrawRegularTextBoxDMG
 	pop de
 	pop bc
-	ld a, [wFrameType]
+	ld a, [wTextBoxFrameType]
 	or a
 	ret z
 ColorizeTextBoxSGB:
 	push bc
 	push de
-	ld hl, $cae0
+	ld hl, wTempSGBPacket
 	ld de, AttrBlkPacket_1f4f
 	ld c, $10
 .copy_sgb_command_loop
@@ -5272,7 +5487,7 @@ ColorizeTextBoxSGB:
 	jr nz, .copy_sgb_command_loop
 	pop de
 	pop bc
-	ld hl, $cae4
+	ld hl, wTempSGBPacket + 4
 	ld [hl], d
 	inc hl
 	ld [hl], e
@@ -5285,13 +5500,13 @@ ColorizeTextBoxSGB:
 	add c
 	dec a
 	ld [hli], a
-	ld a, [wFrameType]
+	ld a, [wTextBoxFrameType]
 	and $80
 	jr z, .asm_1f48
 	ld a, $2
-	ld [wcae2], a
+	ld [wTempSGBPacket + 2], a
 .asm_1f48
-	ld hl, $cae0
+	ld hl, wTempSGBPacket
 	call SendSGB
 	ret
 
@@ -5692,7 +5907,7 @@ Func_22f2: ; 22f2 (0:22f2)
 	dec de
 	ld l, e
 	ld h, d
-	ld de, $cd05
+	ld de, wcd05
 	ld c, 1
 	call SafeCopyDataDEtoHL
 	ld hl, hffac
@@ -5722,7 +5937,7 @@ Func_2325: ; 2325 (0:2325)
 	or a
 	ret nz
 	ldh a, [hffa8]
-	ld hl, $cd04
+	ld hl, wcd04
 	cp [hl]
 	jr nz, .asm_2345
 	ldh a, [hffa9]
@@ -5972,13 +6187,13 @@ Func_24ca: ; 24ca (0:24ca)
 	call BankswitchHome
 	push de
 	ld a, e
-	ld de, $ccf4
+	ld de, wccf4
 	call Func_24fa
 	pop de
 	ld a, d
-	ld de, $ccf5
+	ld de, wccf5
 	call Func_24fa
-	ld hl, $ccf4
+	ld hl, wccf4
 	ld b, $8
 .asm_24e8
 	ld a, [hli]
@@ -5991,7 +6206,7 @@ Func_24ca: ; 24ca (0:24ca)
 	jr nz, .asm_24e8
 	call BankpopHome
 	pop bc
-	ld de, $ccf4
+	ld de, wccf4
 	ret
 
 Func_24fa: ; 24fa (0:24fa)
@@ -6019,7 +6234,7 @@ Func_2510: ; 2510 (0:2510)
 	call Func_252e
 	pop bc
 Func_2518: ; 2518 (0:2518)
-	ld hl, $cd07
+	ld hl, wcd07
 	ld a, b
 	xor [hl]
 	ld h, $0
@@ -6038,7 +6253,7 @@ Func_2518: ; 2518 (0:2518)
 Func_252e: ; 252e (0:252e)
 	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
-	ld de, $ccf4
+	ld de, wccf4
 	push de
 	ld c, $8
 .asm_2539
@@ -6929,7 +7144,7 @@ Func_2d15: ; 2d15 (0:2d15)
 	call EnableLCD
 	jr .asm_2d36
 .asm_2d2d
-	ld hl, $ce4c
+	ld hl, wce4c
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -6992,7 +7207,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	xor a
 	ld [wcd0a], a
 	ld de, wTxRam2
-	ld hl, $ce49
+	ld hl, wce49
 	call Func_2de0
 	ld a, l
 	or h
@@ -7007,7 +7222,7 @@ Func_2d43: ; 2d43 (0:2d43)
 .tx_ram3
 	call Func_2ceb
 	ld de, wTxRam3
-	ld hl, $ce4a
+	ld hl, wce4a
 	call Func_2de0
 	call Func_2e12
 	call Func_2cd7
@@ -7358,7 +7573,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	set 6, h ; $4000 ≤ de ≤ $7fff
 	call CopyGfxData
 	ld b, CGB_PAL_SIZE
-	ld de, $ce23
+	ld de, wce23
 .copy_card_palette
 	ld a, [hli]
 	ld [de], a
@@ -7524,7 +7739,7 @@ Func_3061: ; 3061 (0:3061)
 ; function that executes one or more consecutive coin tosses during a duel (a = number of coin tosses),
 ; displaying each result ([O] or [X]) starting from the top left corner of the screen.
 ; text at de is printed in a text box during the coin toss.
-;   returns: the number of heads in a and in $cd9d, and carry if at least one heads
+;   returns: the number of heads in a and in wcd9d, and carry if at least one heads
 TossCoinATimes: ; 3071 (0:3071)
 	push hl
 	ld hl, wCoinTossScreenTextID
@@ -7537,8 +7752,8 @@ TossCoinATimes: ; 3071 (0:3071)
 
 ; function that executes a single coin toss during a duel.
 ; text at de is printed in a text box during the coin toss.
-;   returns: - carry, and 1 in a and in $cd9d if heads
-;            - nc, and 0 in a and in $cd9d if tails
+;   returns: - carry, and 1 in a and in wcd9d if heads
+;            - nc, and 0 in a and in wcd9d if tails
 TossCoin: ; 307d (0:307d)
 	push hl
 	ld hl, wCoinTossScreenTextID
@@ -7547,7 +7762,7 @@ TossCoin: ; 307d (0:307d)
 	ld [hl], d
 	ld a, $1
 	bank1call _TossCoin
-	ld hl, $cac2
+	ld hl, wcac2
 	ld [hl], $0
 	pop hl
 	ret
@@ -7654,7 +7869,7 @@ Func_311d: ; 311d (0:311d)
 
 Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	push hl
-	ld hl, $ce64
+	ld hl, wce64
 	ld a, $88
 	ld [hli], a          ; [wce64] ← $88
 	ld a, $33
@@ -7676,7 +7891,7 @@ Func_312d: ; 312d (0:312d)   ; serial transfer-related
 	ld [hl], e           ; [wce6c] ← $45
 	inc hl
 	ld [hl], d           ; [wce6d] ← $ff
-	ld hl, $ce70
+	ld hl, wce70
 	ld [hl], $64         ; [wce70] ← $64
 	inc hl
 	ld [hl], $ce         ; [wce71] ← $ce
@@ -7734,21 +7949,21 @@ PointerTable_3190: ; 3190 (0:3190)
 Func_31a8: ; 31a8 (0:31a8)
 	call Func_31fc
 Func_31ab: ; 31ab (0:31ab)
-	ld hl, $ce63
+	ld hl, wce63
 	inc [hl]
 	ret
 
 Func_31b0: ; 31b0 (0:31b0)
 	call Func_31ab
-	ld hl, $ce68
+	ld hl, wce68
 	ld a, [hli]
 	or [hl]
 	jr nz, .asm_31bf
 	call Func_31ab
 	jr Func_31dd
 .asm_31bf
-	ld hl, $ce6a
-	ld de, $ce70
+	ld hl, wce6a
+	ld de, wce70
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -7757,7 +7972,7 @@ Func_31b0: ; 31b0 (0:31b0)
 
 Func_31ca: ; 31ca (0:31ca)
 	call Func_31fc
-	ld hl, $ce68
+	ld hl, wce68
 	ld a, [hl]
 	dec [hl]
 	or a
@@ -7796,7 +8011,7 @@ Func_31f2: ; 31f2 (0:31f2)
 	ret
 
 Func_31fc: ; 31fc (0:31fc)
-	ld hl, $ce70
+	ld hl, wce70
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -7806,7 +8021,7 @@ Func_31fc: ; 31fc (0:31fc)
 	dec hl
 	ld [hl], e
 	ld e, a
-	ld hl, $ce6c
+	ld hl, wce6c
 	add [hl]
 	ld [hli], a
 	ld a, $0
@@ -7982,7 +8197,7 @@ HandleDamageReductionOrNoDamageFromPkmnPowerEffects: ; 32f7 (0:32f7)
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	ret c
-	ld a, [wcceb]
+	ld a, [wTempPlayAreaLocationOffset_cceb]
 	or a
 	call nz, HandleDamageReductionExceptSubstatus2.pkmn_power
 	push de ; push damage from call above, which handles Invisible Wall and Kabuto Armor
@@ -7995,12 +8210,14 @@ HandleDamageReductionOrNoDamageFromPkmnPowerEffects: ; 32f7 (0:32f7)
 	ret
 ; 0x3317
 
-; very similar to HandleStrikesBack
-Func_3317: ; 3317 (0:3317)
+; when Machamp is damaged, if its Strikes Back is active,
+; the attacking Pokemon takes 10 damage.
+; used to bounce back a damaging move.
+HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
 	ld a, e
 	or d
 	ret z
-	ld a, [wcce6]
+	ld a, [wDamageToSelfMode]
 	or a
 	ret nz
 	ld a, [wTempNonTurnDuelistCardID]
@@ -8012,12 +8229,12 @@ Func_3317: ; 3317 (0:3317)
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
-	ld a, [wcceb]
-	or a
-	jr nz, .asm_333b
+	ld a, [wTempPlayAreaLocationOffset_cceb]
+	or a ; cp PLAY_AREA_ARENA
+	jr nz, .in_bench
 	call CheckCannotUseDueToStatus
 	ret c
-.asm_333b
+.in_bench
 	push hl
 	push de
 	call SwapTurn
@@ -8044,10 +8261,10 @@ Func_3317: ; 3317 (0:3317)
 	pop hl
 	pop af
 	or a
-	jr z, .asm_3379
+	jr z, .not_knocked_out
 	xor a
 	call PrintPlayAreaCardKnockedOutIfNoHP
-.asm_3379
+.not_knocked_out
 	call SwapTurn
 	pop de
 	pop hl
@@ -8212,7 +8429,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	scf
 	ret
 .neutralizing_shield
-	ld a, [wcce6]
+	ld a, [wDamageToSelfMode]
 	or a
 	ret nz
 	; prevent damage if attacked by a non-basic Pokemon
@@ -8241,7 +8458,7 @@ HandleTransparency: ; 348a (0:348a)
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	jr z, .done ; Transparency has no effect against Pkmn Powers
-	ld a, [wcceb]
+	ld a, [wTempPlayAreaLocationOffset_cceb]
 	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr c, .done
 	xor a
@@ -8598,8 +8815,9 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 ; 0x367b
 
 ; when Machamp is damaged, if its Strikes Back is active,
-; the attacking Pokemon takes 10 damage
-HandleStrikesBack: ; 367b (0:367b)
+; the attacking Pokemon takes 10 damage.
+; used to bounce back a move of the RESIDUAL category
+HandleStrikesBack_AgainstResidualMove: ; 367b (0:367b)
 	ld a, [wTempNonTurnDuelistCardID]
 	cp MACHAMP
 	jr z, .strikes_back
@@ -8608,7 +8826,7 @@ HandleStrikesBack: ; 367b (0:367b)
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	ret nz
-	ld a, [wccbf]
+	ld a, [wTempDamage_ccbf]
 	or a
 	ret z
 	call SwapTurn
@@ -8616,11 +8834,11 @@ HandleStrikesBack: ; 367b (0:367b)
 	call SwapTurn
 	ret c
 	ld hl, 10 ; damage to be dealt to attacker
-	call ApplyStrikesBack
+	call ApplyStrikesBack_AgainstResidualMove
 	call nc, WaitForWideTextBoxInput
 	ret
 
-ApplyStrikesBack: ; 36a2 (0:36a2)
+ApplyStrikesBack_AgainstResidualMove: ; 36a2 (0:36a2)
 	push hl
 	call LoadTxRam3
 	ld a, [wTempTurnDuelistCardID]
@@ -9093,7 +9311,7 @@ Func_39ad: ; 39ad (0:39ad)
 	add l
 	ld l, a
 	ld h, $0
-	ld bc, $d34a
+	ld bc, wd34a
 	add hl, bc
 	pop bc
 	ret
@@ -9107,7 +9325,7 @@ Func_39c3: ; 39c3 (0:39c3)
 	ld b, a
 	ld c, $8
 	ld de, $000c
-	ld hl, $d34a
+	ld hl, wd34a
 	ld a, [wd3ab]
 .asm_39d6
 	cp [hl]
@@ -9155,7 +9373,7 @@ Func_39fc: ; 39fc (0:39fc)
 	pop af
 	jr z, .asm_3a11
 	ld a, c
-	ld hl, $d112
+	ld hl, wd112
 	cp [hl]
 	jr z, .asm_3a1c
 .asm_3a11
@@ -9388,9 +9606,9 @@ Func_3b52: ; 3b52 (0:3b52)
 	push hl
 	push bc
 	ld a, [wd42a]
-	ld hl, $d4c0
+	ld hl, wd4c0
 	and [hl]
-	ld hl, $d423
+	ld hl, wd423
 	ld c, $7
 .asm_3b60
 	and [hl]
@@ -9415,7 +9633,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ld a, [wd422]
 	cp $61
 	jr nc, .asm_3b90
-	ld hl, $d4ad
+	ld hl, wd4ad
 	ld a, [wd4ac]
 	cp [hl]
 	jr nz, .asm_3b90

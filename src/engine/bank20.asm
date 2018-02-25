@@ -15,11 +15,11 @@ Func_80028: ; 80028 (20:4028)
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
-	ld [$d292], a
+	ld [wd292], a
 	jr .asm_80082
 
 	xor a
-	ld [$d292], a
+	ld [wd292], a
 
 .asm_80082
 	push hl
@@ -32,22 +32,22 @@ Func_80077: ; 80077 (20:4077)
 	ld [hl], d
 	call $43b9
 	ld a, [wd4c6]
-	ld [$d23d], a
-	ld de, $d23e
+	ld [wd23d], a
+	ld de, wd23e
 	ld bc, $0006
 	call Func_3bf5
 	ld l, e
 	ld h, d
 	ld a, [hli]
-	ld [$d12f], a
+	ld [wd12f], a
 	ld a, [hli]
-	ld [$d130], a
+	ld [wd130], a
 	ld a, [hli]
-	ld [$d23a], a
+	ld [wd23a], a
 	ld a, [hli]
-	ld [$d23b], a
+	ld [wd23b], a
 	ld a, [hli]
-	ld [$d23c], a
+	ld [wd23c], a
 	call $40bd
 	pop de
 	pop bc
@@ -188,11 +188,11 @@ asm_8027c
 	ld b, a
 	ld a, [wd4c7]
 	ld c, a
-	ld hl, $d4c2
+	ld hl, wd4c2
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld hl, $d4c4
+	ld hl, wd4c4
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -251,7 +251,7 @@ Func_80b7a: ; 80b7a (20:4b7a)
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
-	ld [$d292], a
+	ld [wd292], a
 	pop af
 	push hl
 	push bc
@@ -259,15 +259,15 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld c, a
 	ld a, [wd131]
 	push af
-	ld a, [$d23d]
+	ld a, [wd23d]
 	push af
-	ld a, [$d12f]
+	ld a, [wd12f]
 	push af
-	ld a, [$d130]
+	ld a, [wd130]
 	push af
-	ld a, [$d23a]
+	ld a, [wd23a]
 	push af
-	ld a, [$d23b]
+	ld a, [wd23b]
 	push af
 	ld b, $0
 	ld hl, wd323
@@ -310,15 +310,15 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	add hl, bc
 	farcall $3, $438f
 	pop af
-	ld [$d23b], a
+	ld [wd23b], a
 	pop af
-	ld [$d23a], a
+	ld [wd23a], a
 	pop af
-	ld [$d130], a
+	ld [wd130], a
 	pop af
-	ld [$d12f], a
+	ld [wd12f], a
 	pop af
-	ld [$d23d], a
+	ld [wd23d], a
 	pop af
 	ld [wd131], a
 	pop de

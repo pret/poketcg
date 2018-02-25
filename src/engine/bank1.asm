@@ -67,7 +67,7 @@ Func_407a: ; 407a (1:407a)
 	ld a, l
 	ld [wcbe5], a
 	ld a, h
-	ld [wcbe6], a
+	ld [wcbe5 + 1], a
 	call ClearJoypad
 	ld a, [wDuelTheme]
 	call PlaySong
@@ -112,7 +112,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, l
 	ld [wcbe5], a
 	ld a, h
-	ld [wcbe6], a
+	ld [wcbe5 + 1], a
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call Func_420b
@@ -453,7 +453,7 @@ Func_434e: ; 434e (1:434e)
 	jr c, .no_cards_in_hand
 	call $559a
 	ld a, $09
-	ld [$cbd6], a
+	ld [wcbd6], a
 	jp $55f0
 .no_cards_in_hand
 	ldtx hl, NoCardsInHandText
@@ -734,7 +734,7 @@ Func_478b: ; 478b (1:478b)
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, $c511
+	ld hl, wDuelTempList + 1
 	add hl, de
 	ld a, [hl]
 	or a
@@ -1308,7 +1308,7 @@ LoadPlayerDeck: ; 6793 (1:6793)
 ; called multiple times during one ai turn
 AIMakeDecision: ; 67be (1:67be)
 	ldh [hAIActionTableIndex], a
-	ld hl, $cbf9
+	ld hl, wcbf9
 	ld a, [hl]
 	ld [hl], $0
 	or a
@@ -1321,12 +1321,12 @@ AIMakeDecision: ; 67be (1:67be)
 
 .skip_delay
 	ldh a, [hAIActionTableIndex]
-	ld hl, $cbe1
+	ld hl, wcbe1
 	ld [hl], $0
 	ld hl, AIActionTable
 	call JumpToFunctionInTable
 	ld a, [wDuelFinished]
-	ld hl, $cbe1
+	ld hl, wcbe1
 	or [hl]
 	jr nz, .turn_ended
 	ld a, [wcbf9]
@@ -1603,7 +1603,7 @@ _TossCoin: ; 71ad (1:71ad)
 	jr z, .asm_727c
 	ld b, $5b
 	ld c, $30
-	ld hl, $cd9d
+	ld hl, wcd9d
 	inc [hl]
 
 .asm_727c
@@ -1650,18 +1650,18 @@ _TossCoin: ; 71ad (1:71ad)
 	call FillRectangle
 
 .asm_72b9
-	ld hl, $cd9f
+	ld hl, wcd9f
 	inc [hl]
 	ld a, [wcd9e]
 	or a
 	jr z, .asm_72dc
 	ld a, [hl]
-	ld hl, $cd9c
+	ld hl, wcd9c
 	cp [hl]
 	call z, WaitForWideTextBoxInput
 	call $7324
 	ld a, [wcd9c]
-	ld hl, $cd9d
+	ld hl, wcd9d
 	or [hl]
 	jr nz, .asm_72e2
 	call z, WaitForWideTextBoxInput
@@ -1674,7 +1674,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_72e2
 	call Func_3b31
 	ld a, [wcd9f]
-	ld hl, $cd9c
+	ld hl, wcd9c
 	cp [hl]
 	jp c, .asm_7204
 	call Func_0f58

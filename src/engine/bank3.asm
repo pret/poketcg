@@ -55,12 +55,12 @@ LoadMap: ; c000 (3:4000)
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
 	call Func_c0ce
-	ld hl, $d0b4
+	ld hl, wd0b4
 	ld a, [hl]
 	and $d0
 	jr z, .asm_c092
 	call DoFrameIfLCDEnabled
-	ld hl, $d0b4
+	ld hl, wd0b4
 	ld a, [hl]
 	bit 4, [hl]
 	jr z, .asm_c0b6
@@ -120,7 +120,7 @@ Func_c0f1: ; c0f1 (3:40f1)
 	jr Func_c10a
 
 Func_c10a: ; c10a (3:410a)
-	ld hl, $d0c6
+	ld hl, wd0c6
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -147,13 +147,13 @@ CloseDialogueBox: ; c111 (3:4111)
 Func_c135: ; c135 (3:4135)
 	push hl
 	farcall Func_80028
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 0, [hl]
 	pop hl
 	ret
 
 Func_c141: ; c141 (3:4141)
-	ld hl, $d0c2
+	ld hl, wd0c2
 	ld a, [hl]
 	or a
 	ret z
@@ -352,7 +352,7 @@ Func_c280: ; c280 (3:4280)
 
 Func_c29b: ; c29b (3:429b)
 	push hl
-	ld hl, $d0c1
+	ld hl, wd0c1
 	or [hl]
 	ld [hl], a
 	pop hl
@@ -403,14 +403,14 @@ Func_c2db: ; c2db (3:42db)
 	farcall Func_80000
 	pop af
 	ld [wd111], a
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 0, [hl]
 	call Func_c34e
 	farcall Func_12c5e
 	farcall Func_1c6f8
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 7, [hl]
-	ld hl, $d10f
+	ld hl, wd10f
 	ld a, [hli]
 	or [hl]
 	jr z, .asm_c323
@@ -437,9 +437,9 @@ Func_c335: ; c335 (3:4335)
 	ld [wd10c], a
 	ld a, [wOBP1]
 	ld [wd10d], a
-	ld hl, $cb30
-	ld de, $d0cc
-	ld bc, $0040
+	ld hl, wObjectPalettesCGB
+	ld de, wd0cc
+	ld bc, 8 * CGB_PAL_SIZE
 	call CopyDataHLtoDE_SaveRegisters
 	ret
 
@@ -448,9 +448,9 @@ Func_c34e: ; c34e (3:434e)
 	ld [wOBP0], a
 	ld a, [wd10d]
 	ld [wOBP1], a
-	ld hl, $d0cc
-	ld de, $cb30
-	ld bc, $0040
+	ld hl, wd0cc
+	ld de, wObjectPalettesCGB
+	ld bc, 8 * CGB_PAL_SIZE
 	call CopyDataHLtoDE_SaveRegisters
 	call SetFlushAllPalettes
 	ret
@@ -760,7 +760,7 @@ StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wd336]
 	ld [wWhichSprite], a
-	ld a, [$d339]
+	ld a, [wd339]
 	call FindScriptedMovementWithOffset
 	call AttemptScriptedMovement
 	pop bc
@@ -840,9 +840,9 @@ Func_c66c: ; c66c (3:466c)
 
 Func_c687: ; c687 (3:4687)
 	push bc
-	ld a, [$d33a]
+	ld a, [wd33a]
 	ld c, a
-	ld a, [$d339]
+	ld a, [wd339]
 	call Func_c694
 	pop bc
     ret
@@ -887,7 +887,7 @@ Func_c694: ; c694 (3:4694)
 
 Func_c6cc: ; c6cc (3:46cc)
 	push hl
-	ld hl, $d332
+	ld hl, wd332
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -895,7 +895,7 @@ Func_c6cc: ; c6cc (3:46cc)
 
 Func_c6d4: ; c6d4 (3:46d4)
 	push hl
-	ld hl, $d333
+	ld hl, wd333
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -929,11 +929,11 @@ Func_c6f7: ; c6f7 (3:46f7)
 
 Func_c70d: ; c70d (3:470d)
 	push hl
-	ld hl, $d0bb
+	ld hl, wd0bb
 	ld a, [wCurMap]
 	cp [hl]
 	jr z, .asm_c71c
-	ld hl, $d0b4
+	ld hl, wd0b4
 	set 4, [hl]
 .asm_c71c
 	pop hl
@@ -1105,14 +1105,14 @@ Func_c891: ; c891 (3:4891)
 	ld a, [wd0c1]
 	bit 0, a
 	jr z, .asm_c8a1
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld a, [hli]
 	or [hl]
 	call nz, Func_c135
 
 .asm_c8a1
 	xor a
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hli], a
 	ld [hl], a
 	pop hl
@@ -1132,7 +1132,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	ld a, [wd0c1]
 	bit 0, a
 	jr z, .asm_c8d4
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld a, [hli]
 	cp e
 	jr nz, .asm_c8d1
@@ -1144,7 +1144,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	call Func_c135
 
 .asm_c8d4
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -1173,7 +1173,7 @@ Func_c8ed: ; c8ed (3:c8ed)
 	jr z, .asm_c90e
 	push hl
 	xor a
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hli], a
 	ld [hl], a
 	pop hl
@@ -1210,7 +1210,7 @@ Func_c926: ; c926 (3:4926)
 
 Func_c935: ; c935 (3:4935)
 	push hl
-	ld hl, $d0c6
+	ld hl, wd0c6
 	ld [hl], c
 	inc hl
 	ld [hl], b
@@ -1233,7 +1233,7 @@ Func_c943: ; c943 (3:4943)
 	ld [wd4c5], a
 	ld a, $4
 	ld [wd4c6], a
-	ld de, $d3ab
+	ld de, wd3ab
 	ld bc, $0006
 	call Func_3bf5
 	ld a, [wd3ab]
@@ -1669,12 +1669,12 @@ GetOWSArgsAfterPointer: ; cca0 (3:4ca0)
 
 Func_ccb3: ; ccb3 (3:4cb3)
 	ld a, $ff
-	ld [$d415], a
+	ld [wd415], a
 	ret
 
 Func_ccb9: ; ccb9 (3:4cb9)
 	xor a
-	ld [$d415], a
+	ld [wd415], a
 	ret
 
 OWScript_EndScriptLoop1: ; ccbe (3:4cbe)
@@ -1724,7 +1724,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld h, b
 	call Func_c8ed
 	ld a, [hCurrentMenuItem]
-	ld [$d415], a
+	ld [wd415], a
 	jr c, .asm_ccfe
 	call GetOWSArgs3AfterPointer
 	jr z, .asm_ccfe
@@ -1745,7 +1745,7 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld a, [wcc19]
 	cp $ff
 	jr nz, .asm_cd26
-	ld a, [$d695]
+	ld a, [wd695]
 	ld c, a
 	ld b, $0
 	ld hl, $4d63
@@ -1759,7 +1759,7 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld a, [hl]
 asm_cd2f
 	ld [wd0c4], a
-	ld [$cc14], a
+	ld [wcc14], a
 	push af
 	farcall Func_1c557
 	ld [wd0c5], a
@@ -1773,11 +1773,11 @@ asm_cd2f
 
 Func_cd4f: ; cd4f (3:4d4f)
 	call Func_cd66
-	ld a, [$d696]
+	ld a, [wd696]
 	farcall Func_118bf
 	ld a, $16
 	ld [wMatchStartTheme], a
-	ld a, [$d696]
+	ld a, [wd696]
 	jr asm_cd2f
 
 Unknown_dd63: ; cd4f (3:4d4f)
@@ -1801,7 +1801,7 @@ Func_cd76: ; cd76 (3:4d76)
 	jp IncreaseOWScriptPointerBy1
 
 Func_cd83: ; cd83 (3:4d83)
-	ld a, [$d415]
+	ld a, [wd415]
 	or a
 	jr nz, .asm_cd8c
 	call GetOWSArgs3AfterPointer
@@ -1826,7 +1826,7 @@ Unknown_cd98:
 	jp IncreaseOWScriptPointerBy7
 
 Func_cda8: ; cda8 (3:4da8)
-	ld a, [$d415]
+	ld a, [wd415]
 	or a
 	jr nz, .asm_cdb1
 	call GetOWSArgs3AfterPointer
@@ -1859,7 +1859,7 @@ Func_cdd8: ; cdd8 (3:4dd8)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 	ld [wd3ab], a
 	call Func_39c3
 	call Func_4dd1
@@ -1874,14 +1874,14 @@ Func_cdf5: ; cdf5 (3:4df5)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 	ld [wd3ab], a
 	ld a, c
-	ld [$d3ac], a
+	ld [wd3ac], a
 	ld a, b
-	ld [$d3ad], a
+	ld [wd3ad], a
 	ld a, $2
-	ld [$d3ae], a
+	ld [wd3ae], a
 	ld a, [wd3ab]
 	farcall Func_11857
 	farcall Func_1c485
@@ -1923,7 +1923,7 @@ Func_ce52: ; ce52 (3:4e52)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 asm_ce5d
 	ld [wd3ab], a
 	call Func_39c3
@@ -2008,7 +2008,7 @@ Func_cee2: ; cee2 (3:4ee2)
 	jr z, .asm_cf09
 	or a
 	jr nz, .asm_cef0
-	ld a, [$d697]
+	ld a, [wd697]
 
 .asm_cef0
 	push af
@@ -2070,7 +2070,7 @@ Func_cf3f: ; cf3f (3:4f3f)
 	ld a, c
 	or a
 	jr nz, .asm_cf46
-	ld a, [$d697]
+	ld a, [wd697]
 
 .asm_cf46
 	call AddCardToCollection
@@ -2262,9 +2262,9 @@ Func_d055: ; d055 (3:5055)
 
 OWScript_MovePlayer: ; 505c (3:505c)
 	ld a, c
-	ld [$d339], a
+	ld [wd339], a
 	ld a, b
-	ld [$d33a], a
+	ld [wd33a], a
 	call StartScriptedMovement
 .asm_d067
 	call DoFrameIfLCDEnabled
@@ -2418,7 +2418,7 @@ Func_d16b: ; d16b (3:516b)
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
-	ld a, [$d696]
+	ld a, [wd696]
 	farcall Func_11893
 	pop hl
 	ld a, [wd0c8]
@@ -2470,7 +2470,7 @@ asm_d1c6
 	ld d, $0
 	add hl, de
 	ld a, [hli]
-	ld [$d697], a
+	ld [wd697], a
 	ld a, [hli]
 	ld [wTxRam2], a
 	ld a, [hl]
@@ -2521,7 +2521,7 @@ Func_d24c: ; d24c (3:524c)
 	ld hl, $525e
 	xor a
 	call Func_d28c
-	ld a, [$d695]
+	ld a, [wd695]
 	ld c, a
 	call Func_ca8f
 	halt
@@ -2539,7 +2539,7 @@ Func_d271: ; d271 (3:5271)
 	INCROM $d27b, $d28c
 
 Func_d28c: ; d28c (3:528c)
-	ld [$d416], a
+	ld [wd416], a
 	push hl
 	call Func_c241
 	call Func_c915
@@ -2566,12 +2566,12 @@ Func_d28c: ; d28c (3:528c)
 	push hl
 	ld h, [hl]
 	ld l, a
-	ld a, [$d416]
+	ld a, [wd416]
 	farcall Func_111e9
 	pop hl
 	inc hl
 	ld a, [hli]
-	ld [$d417], a
+	ld [wd417], a
 	push hl
 
 .asm_d2c1
@@ -2581,7 +2581,7 @@ Func_d28c: ; d28c (3:528c)
 	ld a, [hCurrentMenuItem]
 	cp e
 	jr z, .asm_d2d9
-	ld a, [$d417]
+	ld a, [wd417]
 	or a
 	jr z, .asm_d2c1
 	ld e, a
@@ -2618,12 +2618,12 @@ Func_d2f6: ; d2f6 (3:52f6)
 	ld hl, $530c
 	xor a
 	call Func_d28c
-	ld a, [$d694]
+	ld a, [wd694]
 	ld c, a
 	call Func_ca8f
 	ld [hl], l
 	xor a
-	ld [$d694], a
+	ld [wd694], a
 	jp IncreaseOWScriptPointerBy1
 ; 0xd30c
 
@@ -2631,9 +2631,9 @@ Func_d2f6: ; d2f6 (3:52f6)
 
 Func_d317: ; d317 (3:5317)
 	ld hl, $532b
-	ld a, [$d694]
+	ld a, [wd694]
 	call Func_d28c
-	ld a, [$d694]
+	ld a, [wd694]
 	ld c, a
 	call Func_ca8f
 	ld [hl], l
@@ -2732,7 +2732,7 @@ Func_d3d1: ; d3d1 (3:53d1)
     jp IncreaseOWScriptPointerBy1
 
 Func_d3d4: ; d3d4 (3:53d4)
-	ld a, [$d693]
+	ld a, [wd693]
 	bank1call Func_7576
 	jp IncreaseOWScriptPointerBy1
 
@@ -3179,7 +3179,7 @@ Func_f580: ; f580 (3:7580)
 
 .asm_f5ac
 	ld [wd3ab], a
-	ld [$d696], a
+	ld [wd696], a
 	ret
 ; 0xf5b3
 

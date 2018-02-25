@@ -414,13 +414,34 @@ wcad4:: ; cad4
 wcad5:: ; cad5
 	ds $1
 
-	ds $8
+wcad6:: ; cad6
+	ds $2
+
+wcad8:: ; cad8
+	ds $1
+
+wcad9:: ; cad9
+	ds $1
+
+wcada:: ; cada
+	ds $1
+
+wcadb:: ; cadb
+	ds $1
+
+wcadc:: ; cadc
+	ds $1
+
+wcadd:: ; cadd
+	ds $1
 
 wcade:: ; cade
-	ds $4
+	ds $1
 
-wcae2:: ; cae2
-	ds $e
+	ds $1
+
+wTempSGBPacket:: ; cae0
+	ds $10
 
 ; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
 wBackgroundPalettesCGB:: ; caf0
@@ -477,7 +498,7 @@ wcba3:: ; cba3
 wSerialRecvIndex:: ; cba4
 	ds $1
 
-wSerialRecvBuf:: ; cba5 - cbc4
+wSerialRecvBuf:: ; cba5
 	ds $20
 
 	ds $1
@@ -498,6 +519,7 @@ wCardPageNumber:: ; cbc7
 
 	ds $1
 
+; 2-byte something
 wcbc9:: ; cbc9
 	ds $2
 
@@ -507,6 +529,7 @@ wBenchSelectedPokemon:: ; cbcb
 
 	ds $2
 
+; used in CheckIfEnoughEnergies for the calculation
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
@@ -518,22 +541,36 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-	ds $14
+	ds $5
+
+wcbd6:: ; cbd6
+	ds $1
+
+	ds $a
+
+wcbe1:: ; cbe1
+	ds $1
+
+wcbe2:: ; cbe2
+	ds $3
 
 wcbe5:: ; cbe5
-	ds $1
-
-wcbe6:: ; cbe6
-	ds $1
+	ds $2
 
 wcbe7:: ; cbe7
-	ds $6
+	ds $1
+
+	ds $5
 
 wcbed:: ; cbed
-	ds $c
+	ds $8
+
+	ds $4
 
 wcbf9:: ; cbf9
-	ds $b
+	ds $1
+
+	ds $a
 
 wcc04:: ; cc04
 	ds $1
@@ -591,6 +628,7 @@ wcc12:: ; cc12
 wIsPracticeDuel:: ; cc13
 	ds $1
 
+wcc14:: ; cc14
 	ds $1
 
 wOpponentPortrait:: ; cc15
@@ -633,15 +671,15 @@ wDamage:: ; ccb9
 	ds $2
 
 ; wccbb and wccbc appear to be used for AI scoring
-wccbb::
+wccbb:: ; ccbb
 	ds $1
 
-wccbc::
+wccbc:: ; ccbc
 	ds $1
 
 	ds $2
 
-wccbf:: ; ccbf
+wTempDamage_ccbf:: ; ccbf
 	ds $2
 
 wDamageEffectiveness:: ; ccc1
@@ -667,26 +705,40 @@ wSelectedMoveIndex:: ; ccc6
 wNoDamageOrEffect:: ; ccc7
 	ds $2
 
+; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
 wccc9:: ; ccc9
-	ds $4
+	ds $1
+
+	ds $3
 
 wcccd:: ; cccd
 	ds $1
 
+; some array used in effect functions with wcccd as the index. unknown length
 wccce:: ; ccce
 	ds $18
 
-wcce6:: ; cce6
-	ds $5
+; this is 1 (non-0) if dealing damage to self due to confusion
+wDamageToSelfMode:: ; cce6
+	ds $1
 
-wcceb:: ; cceb
+	ds $2
+
+; used in CopyDeckData
+wcce9:: ; cce9
+	ds $2
+
+wTempPlayAreaLocationOffset_cceb:: ; cceb
 	ds $1
 
 wccec:: ; ccec
 	ds $1
 
 wcced:: ; cced
-	ds $2
+	ds $1
+
+wccee:: ; ccee
+	ds $1
 
 wccef:: ; ccef
 	ds $1
@@ -705,10 +757,16 @@ SECTION "WRAM Engine 2", WRAM0
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
-wFrameType:: ; ccf3
+wTextBoxFrameType:: ; ccf3
 	ds $1
 
-	ds $10
+wccf4:: ; ccf4
+	ds $1
+
+wccf5:: ; ccf5
+	ds $1
+
+	ds $e
 
 wcd04:: ; cd04
 	ds $1
@@ -769,18 +827,23 @@ wcd17:: ; cd17
 
 	ds $7f
 
+; x coord of the leftmost item in a horizontal menu
 wLeftmostItemCursorX:: ; cd98
 	ds $1
 
+; used in RefreshMenuCursor_CheckPlaySFX to play a sound during any frame when this address is non-0
 wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
 wcd9a:: ; cd9a
-	ds $2
+	ds $1
+
+	ds $1
 
 wcd9c:: ; cd9c
 	ds $1
 
+; this stores the result from a coin toss (number of heads)
 wcd9d:: ; cd9d
 	ds $1
 
@@ -788,7 +851,53 @@ wcd9e:: ; cd9e
 	ds $1
 
 wcd9f:: ; cd9f
-	ds $83
+	ds $1
+
+	ds $5
+
+wcda5:: ; cda5
+	ds $1
+
+wcda6:: ; cda6
+	ds $1
+
+wcda7:: ; cda7
+	ds $1
+
+	ds $33
+
+wcddb:: ; cddb
+	ds $1
+
+wcddc:: ; cddc
+	ds $1
+
+	ds $26
+
+wce03:: ; ce03
+	ds $1
+
+	ds $12
+
+wce16:: ; ce16
+	ds $1
+
+wce17:: ; ce17
+	ds $1
+
+wce18:: ; ce18
+	ds $1
+
+wce19:: ; ce19
+	ds $1
+
+	ds $6
+
+wce20:: ; ce20
+	ds $1
+
+wce21:: ; ce21
+	ds $1
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
@@ -796,7 +905,9 @@ wcd9f:: ; cd9f
 wce22:: ; ce22
 	ds $1
 
-	ds $8
+; LoadCardGfx loads the card's palette here
+wce23:: ; ce23
+	ds CGB_PAL_SIZE
 
 wce2b:: ; ce2b
 	ds $1
@@ -832,7 +943,10 @@ wce4a:: ; ce4a
 	ds $1
 
 wce4b:: ; ce4b
-	ds $3
+	ds $1
+
+wce4c:: ; ce4c
+	ds $2
 
 wCoinTossScreenTextID:: ; ce4e
 	ds $2
@@ -841,16 +955,51 @@ wce50:: ; ce50
 	ds $1
 
 wce51:: ; ce51
-	ds $8
+	ds $1
 
-wce59:: ; ce59
 	ds $7
 
+wce59:: ; ce59
+	ds $1
+
+	ds $4
+
+wce5e:: ; ce5e
+	ds $1
+
+	ds $1
+
 wce60:: ; ce60
-	ds $3
+	ds $1
+
+	ds $2
 
 wce63:: ; ce63
-	ds $9
+	ds $1
+
+wce64:: ; ce64
+	ds $1
+
+wce65:: ; ce65
+	ds $1
+
+wce66:: ; ce66
+	ds $1
+
+wce67:: ; ce67
+	ds $1
+
+wce68:: ; ce68
+	ds $1
+
+wce69:: ; ce69
+	ds $1
+
+wce6a:: ; ce6a
+	ds $1
+
+wce6b:: ; ce6b
+	ds $1
 
 wce6c:: ; ce6c
 	ds $1
@@ -862,16 +1011,36 @@ wce6e:: ; ce6e
 	ds $1
 
 wce6f:: ; ce6f
-	ds $d
+	ds $1
+
+wce70:: ; ce70
+	ds $1
+
+wce71:: ; ce71
+	ds $1
+
+	ds $a
 
 ; used in CountPokemonIDInPlayArea
 wTempPokemonID_ce7e:: ; ce7c
 	ds $1
 
-	ds $26
+	ds $24
+
+wcea1:: ; cea1
+	ds $1
+
+	ds $1
 
 wcea3:: ; cea3
-	ds $c
+	ds $1
+
+	ds $5
+
+wcea9:: ; cea9
+	ds $1
+
+	ds $5
 
 wceaf:: ; ceaf
 	ds $1
@@ -892,24 +1061,95 @@ wceb4:: ; ceb4
 	ds $1
 
 wceb5:: ; ceb5
-	ds $17
+	ds $1
+
+	ds $5
+
+wcebb:: ; cebb
+	ds $1
+
+	ds $10
 
 wcecc:: ; cecc
-	ds $9c
+	ds $1
 
-wHandCardBuffer:: ; cf68
-	ds $51
+	ds $1
+
+wcece:: ; cece
+	ds $2
+
+	ds $47
+
+; used in bank2, probably related to wTempHandCardList (another temp list?)
+wcf17:: ; cf17
+	ds DECK_SIZE
+
+	ds $15
+
+; used by Func_200e5, AI related
+wTempHandCardList:: ; cf68
+	ds DECK_SIZE
+
+	ds $15
 
 wcfb9:: ; cfb9
-	ds $2a
+	ds $1
+
+	ds $17
+
+wcfd1:: ; cfd1
+	ds $1
+
+	ds $8
+
+wcfda:: ; cfda
+	ds $2
+
+	ds $7
 
 wcfe3:: ; cfe3
+	ds $1
+
+	ds $1c
 
 SECTION "WRAM1", WRAMX
-	ds $a9
+
+	ds $d
+
+wd00d:: ; d00d
+	ds $1
+
+	ds $78
+
+wd086:: ; d086
+	ds $1
+
+wd087:: ; d087
+	ds $1
+
+wd088:: ; d088
+	ds $1
+
+	ds $19
+
+wd0a2:: ; d0a2
+	ds $2
+
+wd0a4:: ; d0a4
+	ds $1
+
+wd0a5:: ; d0a5
+	ds $1
+
+	ds $3
 
 wd0a9:: ; d0a9
-	ds $b
+	ds $1
+
+wd0aa:: ; d0aa
+	ds $1
+
+	ds $9
 
 wd0b4:: ; d0b4
 	ds $1
@@ -981,7 +1221,10 @@ wd0ca:: ; d0ca
 	ds $1
 
 wd0cb:: ; d0cb
-	ds $41
+	ds $1
+
+wd0cc:: ; d0cc
+	ds 8 * CGB_PAL_SIZE
 
 wd10c:: ; d10c
 	ds $1
@@ -1017,10 +1260,14 @@ wd116:: ; d116
 	ds $1
 
 wd117:: ; d117
-	ds $4
+	ds $1
+
+	ds $3
 
 wd11b:: ; d11b
-	ds $2
+	ds $1
+
+	ds $1
 
 wPCPackSelection:: ; d11d
 	ds $1
@@ -1034,7 +1281,13 @@ wPCPacks:: ; d11e
 wPCLastDirectionPressed:: ; d12d
 	ds $1
 
-	ds $3
+	ds $1
+
+wd12f:: ; d12f
+	ds $1
+
+wd130:: ; d130
+	ds $1
 
 wd131:: ; d131
 	ds $1
@@ -1071,7 +1324,26 @@ wd237:: ; d237
 	ds $1
 
 wd238:: ; d238
-	ds $57
+	ds $1
+
+	ds $1
+
+wd23a:: ; d23a
+	ds $1
+
+wd23b:: ; d23b
+	ds $1
+
+wd23c:: ; d23c
+	ds $1
+
+wd23d:: ; d23d
+	ds $1
+
+wd23e:: ; d23e
+	ds $1
+
+	ds $50
 
 wd28f:: ; d28f
 	ds $1
@@ -1080,13 +1352,20 @@ wd290:: ; d290
 	ds $1
 
 wd291:: ; d291
-	ds $92
+	ds $1
+
+wd292:: ; d292
+	ds $1
+
+	ds $90
 
 wd323:: ; d323
 	ds $1
 
 wd324:: ; d324
-	ds $a
+	ds $1
+
+	ds $9
 
 wd32e:: ; d32e
 	ds $1
@@ -1119,7 +1398,13 @@ wd337:: ; d337
 	ds $1
 
 wd338:: ; d338
-	ds $3
+	ds $1
+
+wd339:: ; d339
+	ds $1
+
+wd33a:: ; d33a
+	ds $1
 
 wd33b:: ; d33b
 	ds $1
@@ -1140,7 +1425,9 @@ wd340:: ; d340
 	ds $1
 
 wd341:: ; d341
-	ds $2
+	ds $1
+
+	ds $1
 
 wd343:: ; d343
 	ds $1
@@ -1158,13 +1445,28 @@ wd347:: ; d347
 	ds $1
 
 wd348:: ; d348
-	ds $62
+	ds $1
+
+wd349:: ; d349
+	ds $1
+
+wd34a:: ; d34a
+	ds $60
 
 wd3aa:: ; d3aa
 	ds $1
 
 wd3ab:: ; d3ab
-	ds $4
+	ds $1
+
+wd3ac:: ; d3ac
+	ds $1
+
+wd3ad:: ; d3ad
+	ds $1
+
+wd3ae:: ; d3ae
+	ds $1
 
 wd3af:: ; d3af
 	ds $1
@@ -1176,13 +1478,29 @@ wd3b1:: ; d3b1
 	ds $1
 
 wd3b2:: ; d3b2
-	ds $4
+	ds $1
 
-wd3b6:: ; d3b6
+wd3b3:: ; d3b3
+	ds $1
+
 	ds $2
 
+wd3b6:: ; d3b6
+	ds $1
+
+wc3b7:: ; d3b7
+	ds $1
+
 wd3b8:: ; d3b8
-	ds $18
+	ds $1
+
+wd3b9:: ; d3b9
+	ds $2
+
+wd3bb:: ; d3bb
+	ds $1
+
+	ds $14
 
 wd3d0:: ; d3d0
 	ds $1
@@ -1203,7 +1521,16 @@ wBreakOWScriptLoop:: ; d412
 wOWScriptPointer:: ; d413
 	ds $2
 
-	ds $8
+wd415:: ; d415
+	ds $1
+
+wd416:: ; d416
+	ds $1
+
+wd417:: ; d417
+	ds $1
+
+	ds $5
 
 wd41d:: ; d41d
 	ds $1
@@ -1221,16 +1548,33 @@ wd421:: ; d421
 	ds $1
 
 wd422:: ; d422
-	ds $8
+	ds $1
+
+wd423:: ; d423
+	ds $7
 
 wd42a:: ; d42a
-	ds $82
+	ds $1
+
+	ds $81
 
 wd4ac:: ; d4ac
-	ds $12
+	ds $1
+
+wd4ad:: ; d4ad
+	ds $1
+
+	ds $10
 
 wd4be:: ; d4be
-	ds $4
+	ds $1
+
+	ds $1
+
+wd4c0:: ; d4c0
+	ds $1
+
+	ds $1
 
 wd4c2:: ; d4c2
 	ds $1
@@ -1251,14 +1595,17 @@ wd4c7:: ; d4c7
 	ds $1
 
 wd4c8:: ; d4c8
-	ds $2
+	ds $1
+
+	ds $1
 
 wd4ca:: ; d4ca
 	ds $1
 
 wd4cb:: ; d4cb
-	ds $4
+	ds $1
 
+	ds $3
 
 ; used as an index to manipulate a sprite from wSpriteAnimBuffer
 wWhichSprite:: ; d4cf
@@ -1286,22 +1633,35 @@ wSpriteAnimBuffer:: ; d4d0
 	ds $3
 
 wd5d3:: ; d5d3
-	ds $4
+	ds $1
+
+	ds $3
 
 wd5d7:: ; d5d7
-	ds $41
+	ds $1
+
+wd5d8:: ; d5d8
+	ds $40
 
 wd618:: ; d618
-	ds $3
+	ds $1
+
+	ds $2
 
 wd61b:: ; d61b
-	ds $3
+	ds $1
+
+	ds $2
 
 wd61e:: ; d61e
-	ds $6
+	ds $1
+
+	ds $5
 
 wd624:: ; d624
-	ds $2
+	ds $1
+
+	ds $1
 
 wd626:: ; d626
 	ds $1
@@ -1310,13 +1670,22 @@ wd627:: ; d627
 	ds $1
 
 wd628:: ; d628
-	ds $b
+	ds $1
+
+	ds $a
 
 wd633:: ; d633
-	ds $2
+	ds $1
+
+	ds $1
 
 wd635:: ; d635
-	ds $34
+	ds $1
+
+wd636:: ; d635
+	ds $1
+
+	ds $32
 
 wBoosterIndex:: ; d669
 	ds $1
@@ -1366,7 +1735,24 @@ wBoosterDataEnergyFunctionPointer:: ; d687
 wBoosterDataTypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
-	ds $6ee
+	ds $1
+
+wd693:: ; d693
+	ds $1
+
+wd694:: ; d694
+	ds $1
+
+wd695:: ; d695
+	ds $1
+
+wd696:: ; d696
+	ds $1
+
+wd697:: ; d697
+	ds $1
+
+	ds $6e8
 
 SECTION "WRAM Music", WRAMX
 
@@ -1394,7 +1780,9 @@ wMusicDuty1:: ; dd86
 	ds $1
 
 wMusicDuty2:: ; dd87
-	ds $3
+	ds $1
+
+	ds $2
 
 wMusicWave:: ; dd8a
 	ds $1
@@ -1441,7 +1829,9 @@ wddab:: ; ddab
 	ds $1
 
 wddac:: ; ddac
-	ds $3
+	ds $1
+
+	ds $2
 
 wMusicOctave:: ; ddaf
 	ds $4

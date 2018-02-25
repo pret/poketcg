@@ -149,7 +149,7 @@ Func_1c50a: ; 1c50a (7:450a)
 	ld [hli], a
 	ld a, [hl]
 	farcall $4, $69fd
-	ld hl, $d349
+	ld hl, wd349
 	dec [hl]
 
 .asm_1c52c
@@ -329,7 +329,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	ret
 
 Func_1c7de: ; 1c7de (7:47de)
-	ld a, [$d3b7]
+	ld a, [wc3b7]
 	and $20
     ret
 ; 0x1c7e4
@@ -344,7 +344,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	push bc
 	ld b, a
 	ld c, $a
-	ld hl, $d3bb
+	ld hl, wd3bb
 .asm_1c845
 	ld a, [hl]
 	or a
@@ -387,7 +387,7 @@ Func_1d078: ; 1d078 (7:5078)
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call $5614
-	ld hl, $d635
+	ld hl, wd635
 	inc [hl]
 	call Func_378a
 	or a
@@ -395,7 +395,7 @@ Func_1d078: ; 1d078 (7:5078)
 	farcall Func_10ab4
 	jr .asm_1d07e
 .asm_1d0ae
-	ld hl, $d626
+	ld hl, wd626
 	ld a, [hl]
 	or a
 	jr z, .asm_1d0b8
@@ -460,7 +460,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	jr z, .asm_1d14f
 	ld a, $1
 .asm_1d14f
-	ld hl, $d636
+	ld hl, wd636
 	farcall Func_111e9
 	farcall $4, $4031
 .asm_1d15a

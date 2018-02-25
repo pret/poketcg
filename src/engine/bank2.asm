@@ -58,7 +58,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	INCROM $8d78, $8d9d
 
 Func_8d9d: ; 8d9d (2:4d9d)
-	ld de, $cfd1
+	ld de, wcfd1
 	ld b, $7
 .asm_8da2
 	ld a, [hli]
@@ -129,17 +129,17 @@ Func_8e05: ; 8e05 (2:4e05)
 
 Func_8e1f: ; 8e1f (2:4e1f)
 	push de
-	ld de, $cfb9
+	ld de, wcfb9
 	call Func_92b4
 	pop de
-	ld hl, $cf17
+	ld hl, wcf17
 	call Func_8cd4
 	ld a, $9
-	ld hl, $cebb
+	ld hl, wcebb
 	call Func_9843
 	ld a, $3c
 	ld [wcecc], a
-	ld hl, $cebb
+	ld hl, wcebb
 	ld [hl], a
 	call Func_9e41
 	ret
@@ -168,24 +168,24 @@ Func_8e42: ; 8e42 (2:4e42)
 	call GetPointerToDeckCards
 	ld e, l
 	ld d, h
-	ld hl, $cf17
+	ld hl, wcf17
 	call Func_8cd4
 	ld a, $14
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_9843
-	ld de, $cfb9
+	ld de, wcfb9
 	call GetPointerToDeckName
 	call Func_92b4
 	call Func_9345
 	jr nc, .asm_8ec4
 	call EnableSRAM
-	ld hl, $cf17
+	ld hl, wcf17
 	call Func_910a
 	call GetPointerToDeckCards
 	call Func_9152
 	ld e, l
 	ld d, h
-	ld hl, $cf17
+	ld hl, wcf17
 	ld b, $3c
 .asm_8ea9
 	ld a, [hli]
@@ -196,7 +196,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_92ad
 	call GetPointerToDeckName
 	ld a, [hl]
@@ -215,16 +215,16 @@ Func_8e42: ; 8e42 (2:4e42)
 	jp Func_8dbc
 .asm_8edb
 	ld a, $14
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_9843
-	ld de, $cfb9
+	ld de, wcfb9
 	call GetPointerToDeckName
 	call Func_92b4
 	call Func_8f05
 	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_92b4
 	ld a, $ff
 	call Func_9168
@@ -252,7 +252,7 @@ Func_8f05: ; 8f05 (2:4f05)
 .asm_8f23
 	ld a, $14
 	ld bc, $0401
-	ld de, $cfb9
+	ld de, wcfb9
 	farcall Func_1ad89
 	ld a, [wcfb9]
 	or a
@@ -269,7 +269,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld l, a
 	ld de, wDefaultText
 	call Func_0663
-	ld hl, $cfb9
+	ld hl, wcfb9
 	ld [hl], $6
 	inc hl
 	ld [hl], $44
@@ -361,7 +361,7 @@ Func_8fe8: ; 8fe8 (2:4fe8)
 
 Func_8ff2: ; 8ff2 (2:4ff2)
 	ld a, [wceb1]
-	ld hl, $ceb2
+	ld hl, wceb2
 	ld b, $0
 	ld c, a
 	add hl, bc
@@ -475,7 +475,7 @@ Func_9065: ; 9065 (2:5065)
 	jr z, .asm_90ca
 	call PlaySFX
 .asm_90ca
-	ld hl, $cea3
+	ld hl, wcea3
 	ld a, [hl]
 	inc [hl]
 	and $f
@@ -582,7 +582,7 @@ Func_9168: ; 9168 (2:5168)
 	ld hl, Unknown_9242
 	call Func_2c08
 	ld a, $4
-	ld hl, $ceb2
+	ld hl, wceb2
 	call Func_9843
 	ld a, [hffb5]
 	bit 0, a
@@ -642,7 +642,7 @@ Func_9168: ; 9168 (2:5168)
 	ld b, $0
 	ld d, $2
 .asm_921f
-	ld hl, $ceb2
+	ld hl, wceb2
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -789,15 +789,15 @@ Func_b177: ; b177 (2:7177)
 
 Func_b19d: ; b19d (2:719d)
 	xor a
-	ld [$cea1], a
+	ld [wcea1], a
 	ld de, CheckForCGB
-	ld hl, $d0a2
+	ld hl, wd0a2
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	call $7379
 	ld a, $3c
-	ld [$d0a5], a
+	ld [wd0a5], a
 	xor a
 .asm_b1b3
 	ld hl, $76fb
@@ -813,9 +813,9 @@ Func_b19d: ; b19d (2:719d)
 	cp $ff
 	ret z
 	ld b, a
-	ld a, [$cea1]
+	ld a, [wcea1]
 	add b
-	ld [$d088], a
+	ld [wd088], a
 	call Func_905a
 	call DrawWideTextBox
 	ld hl, $7274
@@ -825,7 +825,7 @@ Func_b19d: ; b19d (2:719d)
 	jp nc, $71e7
 	cp $ff
 	jr nz, .asm_b1fa
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b1fa
@@ -838,17 +838,17 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr nc, .asm_b216
 	call $7592
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
 .asm_b216
 	ld hl, $0272
 	call YesOrNoMenuWithText
-	ld a, [$d086]
+	ld a, [wd086]
 	jr c, .asm_b1b3
 	call $7592
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
@@ -858,14 +858,14 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr c, .asm_b240
 	call $76ca
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
 .asm_b240
 	ld hl, WaitForVBlank
 	call DrawWideTextBox_WaitForInput
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b24c
@@ -874,16 +874,16 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr c, .asm_b240
 	call $77c6
-	ld a, [$d086]
+	ld a, [wd086]
 	jp nc, $71b3
 
 .asm_b25e
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7379
 	call $7704
 	call $7545
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b273
@@ -899,28 +899,28 @@ Func_ba04: ; ba04 (2:7a04)
 	ld c, a
 	ld b, $0
 	add hl, bc
-	ld de, $d0a2
+	ld de, wd0a2
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hl]
 	ld [de], a
 	xor a
-	ld [$cea1], a
+	ld [wcea1], a
 	call $7b97
 	ld a, $5
-	ld [$d0a5], a
+	ld [wd0a5], a
 	xor a
 	ld hl, $7b6e
 	call InitializeCursorParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
-	ld [$cea9], a
+	ld [wcea9], a
 	ld hl, $73fe
 	ld d, h
 	ld a, l
-	ld hl, $cece
+	ld hl, wcece
 	ld [hli], a
 	ld [hl], d
 .asm_ba40
@@ -935,11 +935,11 @@ Func_ba04: ; ba04 (2:7a04)
 	ldh a, [hButtonsPressed2]
 	and START
 	jr z, .asm_ba40
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld b, a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
+	ld [wd086], a
 	add b
 	ld c, a
 	inc a
@@ -947,7 +947,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wceb1], a
 	sla c
 	ld b, $0
-	ld hl, $d00d
+	ld hl, wd00d
 	add hl, bc
 	call $7653
 	ld a, [hli]
@@ -968,25 +968,25 @@ Func_ba04: ; ba04 (2:7a04)
 	call $7653
 	call Func_8e1f
 	call $7644
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_baa3
 	call DrawCursor2
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
+	ld [wd086], a
 	ldh a, [hCurrentMenuItem]
 	cp $ff
 	jp z, $7b0d
-	ld [$d088], a
+	ld [wd088], a
 	call Func_905a
 	xor a
-	ld [$ce5e], a
+	ld [wce5e], a
 	call DrawWideTextBox
 	ld hl, $7b76
 	call Func_2c08
@@ -995,7 +995,7 @@ Func_ba04: ; ba04 (2:7a04)
 	jp nc, $7acc
 	cp $ff
 	jr nz, .asm_badf
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_badf
@@ -1008,38 +1008,38 @@ Func_ba04: ; ba04 (2:7a04)
 	call $7653
 	call $77c6
 	call $7644
-	ld a, [$d086]
+	ld a, [wd086]
 	jp nc, $7a25
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_bb09
 	cp $1
 	jr nz, .asm_bb12
 	xor a
-	ld [$d0a4], a
+	ld [wd0a4], a
 	ret
 
 .asm_bb12
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld b, a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
+	ld [wd086], a
 	add b
 	ld c, a
 	ld [wceb1], a
 	sla c
 	ld b, $0
-	ld hl, $d00d
+	ld hl, wd00d
 	add hl, bc
 	push hl
-	ld hl, $d0aa
+	ld hl, wd0aa
 	add hl, bc
-	ld bc, $cfda
+	ld bc, wcfda
 	ld a, [hli]
 	ld [bc], a
 	inc bc
@@ -1066,10 +1066,10 @@ Func_ba04: ; ba04 (2:7a04)
 	xor a
 	call $6dfe
 	call $7644
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 ; 0xbb6e
 

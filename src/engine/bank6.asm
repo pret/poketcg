@@ -99,7 +99,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	ret
 
 Func_19a12: ; 19a12 (6:5a12)
-	ld hl, $cce9
+	ld hl, wcce9
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a

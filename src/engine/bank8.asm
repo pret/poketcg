@@ -3,48 +3,48 @@
 ; 0 - e4 is a big set of data, seems to be one entry for each card
 
 Func_200e5: ; 200e5 (8:40e5)
-	ld [$ce18], a
+	ld [wce18], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	ld de, wHandCardBuffer
+	ld de, wTempHandCardList
 	call CopyBuffer
-	ld hl, wHandCardBuffer
+	ld hl, wTempHandCardList
 	ld a, [hli]
-	ld [$ce16], a
+	ld [wce16], a
 	cp $ff
 	ret z
 	push hl
-	ld a, [$ce18]
+	ld a, [wce18]
 	ld d, a
 	ld hl, $4000
 .asm_4106
 	xor a
-	ld [$ce21], a
+	ld [wce21], a
 	ld a, [hli]
 	cp $ff
 	jp z, $41b1
 	cp d
 	jp nz, .incHL5
 	ld a, [hli]
-	ld [$ce17], a
-	ld a, [$ce16]
+	ld [wce17], a
+	ld a, [wce16]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	cp $d2
 	jr nz, .asm_2012b
 	ld b, a
-	ld a, [$ce20]
+	ld a, [wce20]
 	and $2
 	jr nz, .incHL4
 	ld a, b
 
 .asm_2012b
 	ld b, a
-	ld a, [$ce17]
+	ld a, [wce17]
 	cp b
 	jr nz, .incHL4
 	push hl
 	push de
-	ld a, [$ce16]
+	ld a, [wce16]
 	ldh [hTempCardIndex_ff9f], a
 	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, $41a8
@@ -62,10 +62,10 @@ Func_200e5: ; 200e5 (8:40e5)
 	jr nc, .incHL4
 	inc hl
 	inc hl
-	ld [$ce19], a
+	ld [wce19], a
 	push de
 	push hl
-	ld a, [$ce16]
+	ld a, [wce16]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, $6
 	bank1call $67be
@@ -77,22 +77,22 @@ Func_200e5: ; 200e5 (8:40e5)
 	pop hl
 	inc hl
 	inc hl
-	ld a, [$ce20]
+	ld a, [wce20]
 	ld b, a
-	ld a, [$ce21]
+	ld a, [wce21]
 	or b
-	ld [$ce20], a
+	ld [wce20], a
 	pop hl
 	and $8
 	jp z, $40f7
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	ld de, $cf68
+	ld de, wTempHandCardList
 	call $697b
-	ld hl, $cf68
-	ld a, [$ce20]
+	ld hl, wTempHandCardList
+	ld a, [wce20]
 	and $f7
-	ld [$ce20], a
+	ld [wce20], a
 	jp $40f7
 
 .incHL5
