@@ -802,7 +802,7 @@ CopyDMAFunction: ; 0593 (0:0593)
 
 ; CopyDMAFunction copies this function to hDMAFunction ($ff83)
 DMA: ; 05a1 (0:05a1)
-	ld a, HIGH(wBufOAM)
+	ld a, HIGH(wOAM)
 	ld [rDMA], a
 	ld a, $28
 .wait
@@ -1565,19 +1565,20 @@ Func_08ef: ; 08ef (0:08ef)
 
 	INCROM $0950, $099c
 
-Func_099c: ; 099c (0:099c)
+; set the Y Position and X Position of all sprites in wOAM to $00
+InitSpritePositions: ; 099c (0:099c)
 	xor a
 	ld [wcab5], a
-	ld hl, wBufOAM
-	ld c, $28
+	ld hl, wOAM
+	ld c, 40
 	xor a
-.asm_9a6
+.loop
 	ld [hli], a
 	ld [hli], a
 	inc hl
 	inc hl
 	dec c
-	jr nz, .asm_9a6
+	jr nz, .loop
 	ret
 
 ; this function affects the stack so that it returns
@@ -2919,7 +2920,7 @@ PutCardInDiscardPile: ; 116a (0:116a)
 
 ; search a card in the turn holder's discard pile, extract it, and add it to the hand
 ; the card is identified by register a, which contains the card number within the deck (0-59)
-SearchCardInDiscardPileAndAddToHand: ; 1182 (0:1182)
+MoveDiscardPileCardToHand: ; 1182 (0:1182)
 	push hl
 	push de
 	push bc
@@ -3290,7 +3291,7 @@ GetCardIDFromDeckIndex_bc: ; 12fa (0:12fa)
 ; 0x1303
 
 ; return [wDuelTempList + a] in a and in hTempCardIndex_ff98
-Func_1303: ; 1303 (0:1303)
+GetCardInDuelTempList_OnlyDeckIndex: ; 1303 (0:1303)
 	push hl
 	push de
 	ld e, a
@@ -3828,11 +3829,11 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	ret
 ; 0x159f
 
-; Find which and how many energy cards are attached to the Pokemon card in the arena,
-; or to a Pokemon card in the bench, depending on the value of register e.
+; Find which and how many energy cards are attached to the turn holder's Pokemon card in the arena,
+; or a Pokemon card in the bench, depending on the value of register e.
 ; input: e (location to check) = CARD_LOCATION_* - CARD_LOCATION_PLAY_AREA
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
-GetAttachedEnergies: ; 159f (0:159f)
+GetPlayAreaCardAttachedEnergies: ; 159f (0:159f)
 	push hl
 	push de
 	push bc
@@ -9595,7 +9596,7 @@ Func_3b31: ; 3b31 (0:3b31)
 	ld [wDoFrameFunction], a
 	ld [wcad4], a
 .asm_3b45
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	pop af

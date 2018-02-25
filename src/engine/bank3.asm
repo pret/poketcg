@@ -11,7 +11,7 @@ LoadMap: ; c000 (3:4000)
 	ld [wMatchStartTheme], a
 	farcall Func_10a9b
 	call Func_c1a4
-	call Func_099c
+	call InitSpritePositions
 	xor a
 	ld [wTileMapFill], a
 	call Func_2119
@@ -341,7 +341,7 @@ Unknown_c27c: ; c27c (3:427c)
 Func_c280: ; c280 (3:4280)
 	call Func_c228
 	call Func_3ca0
-	call Func_099c
+	call InitSpritePositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	call EnableLCD
@@ -370,7 +370,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	call Func_2275
 	farcall Func_12ba7
 	call Func_3ca0
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call EnableLCD

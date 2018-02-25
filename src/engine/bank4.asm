@@ -18,7 +18,7 @@ Func_10000: ; 10000 (4:4000)
 
 .asm_10025
 	call Func_1288c
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ret
@@ -155,7 +155,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
@@ -1078,7 +1078,7 @@ Unknown_1229f: ; 1229f (4:629f)
 	INCROM $1229f, $126d1
 
 Func_126d1: ; 126d1 (4:66d1)
-	call Func_099c
+	call InitSpritePositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018

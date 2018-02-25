@@ -899,7 +899,7 @@ CheckIfEnoughEnergies: ; 488f (1:488f)
 	push hl
 	push bc
 	ld e, $0
-	call GetAttachedEnergies
+	call GetPlayAreaCardAttachedEnergies
 	call HandleEnergyBurn
 	ldh a, [hCurrentMenuItem]
 	add a

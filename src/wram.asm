@@ -308,7 +308,7 @@ wc900:: ; c900
 
 SECTION "WRAM Engine 1", WRAM0
 
-wBufOAM:: ; ca00
+wOAM:: ; ca00
 	ds $a0
 
 wcaa0:: ; caa0
