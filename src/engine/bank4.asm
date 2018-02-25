@@ -1109,9 +1109,9 @@ Func_12704: ; 12704 (4:6704)
 	call Func_128a9
 	farcall Func_1996e
 	call EnableSRAM
-	ld a, [$a007]
+	ld a, [sa007]
 	ld [wd421], a
-	ld a, [$a006]
+	ld a, [sa006]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	ld a, MUSIC_STOP

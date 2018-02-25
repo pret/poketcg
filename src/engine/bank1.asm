@@ -6,9 +6,9 @@ Start_Cont: ; 4000 (1:4000)
 	call EnableInt_VBlank
 	call EnableInt_Timer
 	call EnableSRAM
-	ld a, [$a006]
+	ld a, [sa006]
 	ld [wTextSpeed], a
-	ld a, [$a009]
+	ld a, [sa009]
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, $1
@@ -29,7 +29,7 @@ Start_Cont: ; 4000 (1:4000)
 ; erase sram
 	call EnableSRAM
 	xor a
-	ld [$a000], a
+	ld [sa000], a
 	call DisableSRAM
 .reset_game
 	jp Reset

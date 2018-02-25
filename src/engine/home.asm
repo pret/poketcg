@@ -1305,7 +1305,7 @@ CGBSpeedSwitch: ; 07f1 (0:07f1)
 SetupExtRAM: ; 080b (0:080b)
 	xor a
 	call BankswitchSRAM
-	ld hl, $a000
+	ld hl, sa000
 	ld bc, $1000
 .asm_815
 	ld a, [hli]
@@ -1324,7 +1324,7 @@ SetupExtRAM: ; 080b (0:080b)
 	call DisableSRAM
 	ret
 .asm_82f
-	ld hl, $a000
+	ld hl, sa000
 	ld a, [hli]
 	cp $4
 	jr nz, .asm_842
@@ -1343,13 +1343,13 @@ SetupExtRAM: ; 080b (0:080b)
 	ret
 
 Func_084d: ; 084d (0:084d)
-	ld a, $3
-.asm_84f
+	ld a, 3
+.clear_loop
 	call ClearExtRAMBank
 	dec a
-	cp $ff
-	jr nz, .asm_84f
-	ld hl, $a000
+	cp -1
+	jr nz, .clear_loop
+	ld hl, sa000
 	ld [hl], $4
 	inc hl
 	ld [hl], $21
@@ -2612,7 +2612,7 @@ Func_100b: ; 100b (0:100b)
 	xor a
 	call BankswitchSRAM
 	call EnableSRAM
-	ld hl, $a008
+	ld hl, sa008
 	ld a, [hl]
 	inc [hl]
 	call DisableSRAM
@@ -9191,7 +9191,7 @@ Func_3917: ; 3917 (0:3917)
 	ld a, $22
 	farcall CheckIfEventFlagSet
 	call EnableSRAM
-	ld [$a00a], a
+	ld [sa00a], a
 	call DisableSRAM
 	ret
 

@@ -18,13 +18,13 @@ Func_1996e: ; 1996e (6:596e)
 	or b
 	jr nz, .asm_1997b
 	ld a, $5
-	ld hl, $a350
+	ld hl, sa350
 	call Func_199e0
 	ld a, $7
-	ld hl, $a3a4
+	ld hl, sa3a4
 	call Func_199e0
 	ld a, $9
-	ld hl, $a3f8
+	ld hl, sa3f8
 	call Func_199e0
 	call EnableSRAM
 	ld hl, sCardCollection
@@ -47,16 +47,16 @@ Func_1996e: ; 1996e (6:596e)
 	dec c
 	jr nz, .asm_199b2
 	ld a, $2
-	ld [$a003], a
+	ld [sa003], a
 	ld a, $2
-	ld [$a006], a
+	ld [sa006], a
 	ld [wTextSpeed], a
 	xor a
-	ld [$a007], a
-	ld [$a009], a
-	ld [$a004], a
-	ld [$a005], a
-	ld [$a00a], a
+	ld [sa007], a
+	ld [sa009], a
+	ld [sa004], a
+	ld [sa005], a
+	ld [sa00a], a
 	farcall Func_8cf9
 	call DisableSRAM
 	ret
