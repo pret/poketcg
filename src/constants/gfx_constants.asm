@@ -12,6 +12,11 @@ CGB_PAL_SIZE EQU 8 ; bytes
 ; tile size
 TILE_SIZE EQU 16 ; bytes
 
+; wFlushPaletteFlags constants
+FLUSH_ONE EQU %10000000
+FLUSH_ALL EQU %11000000
+FLUSH_ALL_F EQU 6
+
 ; wSpriteAnimBuffer
 SPRITE_ANIM_BUFFER_CAPACITY EQU 16 ; sprites
 

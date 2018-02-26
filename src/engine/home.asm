@@ -230,7 +230,7 @@ EnableLCD: ; 0277 (0:0277)
 	or rLCDC_ENABLE_MASK ;
 	ld [wLCDC], a        ;
 	ld [rLCDC], a        ; turn LCD on
-	ld a, %11000000
+	ld a, FLUSH_ALL
 	ld [wFlushPaletteFlags], a
 	ret
 
@@ -481,13 +481,13 @@ ZeroRAM: ; 03ec (0:03ec)
 
 ; Flush all non-CGB and CGB palettes
 SetFlushAllPalettes: ; 0404 (0:0404)
-	ld a, $c0
+	ld a, FLUSH_ALL
 	jr SetFlushPalettes
 
 ; Flush non-CGB palettes and a single CGB palette,
 ; provided in a as an index between 0-7 (BGP) or 8-15 (OBP)
 SetFlushPalette: ; 0408 (0:0408)
-	or $80
+	or FLUSH_ONE
 	jr SetFlushPalettes
 
 ; Set wBGP to the specified value, flush non-CGB palettes, and the first CGB palette.
@@ -495,7 +495,7 @@ SetBGP: ; 040c (0:040c)
 	ld [wBGP], a
 
 SetFlushPalette0:
-	ld a, $80
+	ld a, FLUSH_ONE
 
 SetFlushPalettes:
 	ld [wFlushPaletteFlags], a
@@ -547,9 +547,9 @@ FlushPalettes: ; 042d (0:042d)
 	ret
 .CGB
 	; flush a single CGB BG or OB palette
-	; if bit6 of [wFlushPaletteFlags] is set, flush all 16 of them
+	; if bit6 (FLUSH_ALL_F) of [wFlushPaletteFlags] is set, flush all 16 of them
 	ld a, [wFlushPaletteFlags]
-	bit 6, a
+	bit FLUSH_ALL_F, a
 	jr nz, FlushAllCGBPalettes
 	ld b, CGB_PAL_SIZE
 	call CopyCGBPalettes

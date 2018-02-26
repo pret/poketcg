@@ -1687,21 +1687,28 @@ wd636:: ; d635
 
 	ds $32
 
+; which BoosterPack_* corresponds to the booster pack that the player is opening
 wBoosterIndex:: ; d669
 	ds $1
 
-wBoosterTempCard:: ; d66a
+; card being currently processed by the booster pack engine functions
+wBoosterCurrentCard:: ; d66a
 	ds $1
 
-wBoosterSelectedCardType:: ; d66b
+; booster card type of the card that has just been drawn from the pack
+wBoosterJustDrawnCardType:: ; d66b
 	ds $1
 
-wBoosterCurRarity:: ; d66c
+; rarity of the cards being currently generated (non-energy cards are generated ordered by rarity)
+wBoosterCurrentRarity:: ; d66c
 	ds $1
 
+; the averaged value of all values in wBoosterDataTypeChances
+; used to recalculate the chances of a booster card type when a card of said type is drawn from the pack
 wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
+; data of the booster pack copied from the corresponding BoosterSetRarityAmountsTable entry
 wBoosterDataCommonAmount:: ; d66e
 	ds $1
 
@@ -1711,12 +1718,16 @@ wBoosterDataUncommonAmount:: ; d66f
 wBoosterDataRareAmount:: ; d670
 	ds $1
 
+; how many cards of each type are available of a certain rarity in the booster pack's set
 wBoosterAmountOfCardTypeTable:: ; d671
 	ds NUM_BOOSTER_CARD_TYPES
 
-wBoosterTempTypeChanceTable:: ; d67a
+; holds information similar to wBoosterDataTypeChances, except that it contains 00 on any type
+; of which there are no cards remaining in the set for the current rarity
+wBoosterTempTypeChancesTable:: ; d67a
 	ds NUM_BOOSTER_CARD_TYPES
 
+; properties of the card being currently processed by the booster pack engine functions
 wBoosterCurrentCardType:: ; d683
 	ds $1
 
@@ -1726,6 +1737,8 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
+; data of the booster pack copied from the corresponding BoosterPack_* structure.
+; wBoosterDataTypeChances is updated after each card is drawn, to re-balance the type chances.
 wBoosterDataSet:: ; d686
 	ds $1
 
