@@ -30,17 +30,18 @@ ENDM
 
 farcall: MACRO
 	rst $28
+if _NARG == 1
 	db BANK(\1)
 	dw \1
-ENDM
-
-; used when the specified bank does not match the bank of the specified function
-; otherwise, farcall is preferred
-farcallx: MACRO
-	rst $28
+else
 	db \1
 	dw \2
+endc
 ENDM
+
+; the rst $38 handler is a single ret
+; probably used for testing purposes during development
+debug_ret EQUS "rst $38"
 
 emptybank: MACRO
 	rept $4000

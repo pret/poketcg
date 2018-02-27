@@ -147,27 +147,27 @@ UnableDueToParalysisText: ; 364a1 (d:64a1)
 	done
 
 Received10DamageDueToPoisonText: ; 364be (d:64be)
-	text TX_RAM2," received"
+	text TX_RAM2, " received"
 	line "10 damage due to Poison."
 	done
 
 Received20DamageDueToPoisonText: ; 364e3 (d:64e3)
-	text TX_RAM2," received"
+	text TX_RAM2, " received"
 	line "20 damage due to Double Poison."
 	done
 
 IsStillAsleepText: ; 3650f (d:650f)
-	text TX_RAM2," is"
+	text TX_RAM2, " is"
 	line "still Asleep."
 	done
 
 IsCuredOfSleepText: ; 36523 (d:6523)
-	text TX_RAM2," is"
+	text TX_RAM2, " is"
 	line "cured of Sleep."
 	done
 
 IsCuredOfParalysisText: ; 36539 (d:6539)
-	text TX_RAM2," is"
+	text TX_RAM2, " is"
 	line "cured of Paralysis."
 	done
 
@@ -204,7 +204,7 @@ Text0032: ; 365b6 (d:65b6)
 	done
 
 Text0033: ; 365be (d:65be)
-	text "Used ",TX_RAM2,"."
+	text "Used ", TX_RAM2, "."
 	done
 
 Text0034: ; 365c7 (d:65c7)
@@ -212,38 +212,38 @@ Text0034: ; 365c7 (d:65c7)
 	done
 
 PokemonsAttackText: ; 365d8 (d:65d8)
-	text TX_RAM2,"'s"
+	text TX_RAM2, "'s"
 	line ""
-	text TX_RAM2,"!"
+	text TX_RAM2, "!"
 	done
 
 Text0036: ; 365e1 (d:65e1)
-	text TX_RAM2," received"
-	line TX_RAM3," damage due to Resistance!"
+	text TX_RAM2, " received"
+	line TX_RAM3, " damage due to Resistance!"
 	done
 
 Text0037: ; 36609 (d:6609)
-	text TX_RAM2," received"
-	line TX_RAM3," damage due to Weakness!"
+	text TX_RAM2, " received"
+	line TX_RAM3, " damage due to Weakness!"
 	done
 
 Text0038: ; 3662f (d:662f)
-	text TX_RAM2," received"
-	line TX_RAM3," damage due to Weakness!"
+	text TX_RAM2, " received"
+	line TX_RAM3, " damage due to Weakness!"
 	done
 
 Text0039: ; 36655 (d:6655)
-	text TX_RAM2," did not"
+	text TX_RAM2, " did not"
 	line "receive damage due to Resistance."
 	done
 
 Text003a: ; 36682 (d:6682)
-	text TX_RAM2," took"
-	line TX_RAM3," damage."
+	text TX_RAM2, " took"
+	line TX_RAM3, " damage."
 	done
 
 Text003b: ; 36694 (d:6694)
-	text TX_RAM2," did not"
+	text TX_RAM2, " did not"
 	line "receive damage!"
 	done
 
@@ -278,16 +278,16 @@ DiscardDescription: ; 36757 (d:6757)
 	done
 
 Text0042: ; 367cc (d:67cc)
-	text TX_RAM1," will draw ",TX_RAM3," Prize(s)."
+	text TX_RAM1, " will draw ", TX_RAM3, " Prize(s)."
 	done
 
 Text0043: ; 367e5 (d:67e5)
-	text TX_RAM1," drew ",TX_RAM3," Prize(s)."
+	text TX_RAM1, " drew ", TX_RAM3, " Prize(s)."
 	done
 
 Text0044: ; 367f9 (d:67f9)
-	text TX_RAM1," placed"
-	line "a ",TX_RAM2,"."
+	text TX_RAM1, " placed"
+	line "a ", TX_RAM2, "."
 	done
 
 Text0045: ; 36808 (d:6808)
@@ -354,11 +354,11 @@ Text0052: ; 36903 (d:6903)
 	line "When you are ready."
 	done
 
-Text0053: ; 36924 (d:6924)
+YouPlayFirstText: ; 36924 (d:6924)
 	text "You play first."
 	done
 
-Text0054: ; 36935 (d:6935)
+YouPlaySecondText: ; 36935 (d:6935)
 	text "You play second."
 	done
 
@@ -372,7 +372,7 @@ Text0056: ; 3697c (d:697c)
 	line "you wish to examine."
 	done
 
-Text0057: ; 369a2 (d:69a2)
+TransmitingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 
@@ -387,18 +387,18 @@ Text0059: ; 369dc (d:69dc)
 	done
 
 Text005a: ; 36a19 (d:6a19)
-	text TX_RAM2,""
+	text TX_RAM2, ""
 	line "Retreated to the Bench."
 	done
 
 Text005b: ; 36a34 (d:6a34)
-	text TX_RAM2,"'s"
+	text TX_RAM2, "'s"
 	line "Retreat was unsuccessful."
 	done
 
-Text005c: ; 36a53 (d:6a53)
-	text TX_RAM2," will use the"
-	line "Pok`mon Power ",TX_RAM2,"."
+WillUseThePokemonPowerText: ; 36a53 (d:6a53)
+	text TX_RAM2, " will use the"
+	line "Pok`mon Power ", TX_RAM2, "."
 	done
 
 Text005d: ; 36a74 (d:6a74)
@@ -407,31 +407,31 @@ Text005d: ; 36a74 (d:6a74)
 	done
 
 Text005e: ; 36a9a (d:6a9a)
-	text TX_RAM1,"'s Turn."
+	text TX_RAM1, "'s Turn."
 	done
 
 Text005f: ; 36aa5 (d:6aa5)
-	text "Attached ",TX_RAM2,""
-	line "to ",TX_RAM2,"."
+	text "Attached ", TX_RAM2, ""
+	line "to ", TX_RAM2, "."
 	done
 
 Text0060: ; 36ab7 (d:6ab7)
-	text TX_RAM2," evolved"
-	line "into ",TX_RAM2,"."
+	text TX_RAM2, " evolved"
+	line "into ", TX_RAM2, "."
 	done
 
 Text0061: ; 36aca (d:6aca)
-	text "Placed ",TX_RAM2,""
+	text "Placed ", TX_RAM2, ""
 	line "on the Bench."
 	done
 
 Text0062: ; 36ae2 (d:6ae2)
-	text TX_RAM2,""
+	text TX_RAM2, ""
 	line "was placed in the Arena."
 	done
 
 Text0063: ; 36afe (d:6afe)
-	text TX_RAM1," shuffles the Deck."
+	text TX_RAM1, " shuffles the Deck."
 	done
 
 Text0064: ; 36b14 (d:6b14)
@@ -449,25 +449,25 @@ Text0066: ; 36b7a (d:6b7a)
 	done
 
 Text0067: ; 36b9a (d:6b9a)
-	text TX_RAM1,""
+	text TX_RAM1, ""
 	line "drew 7 cards."
 	done
 
 Text0068: ; 36bab (d:6bab)
-	text TX_RAM1,"'s deck has ",TX_RAM3," cards."
+	text TX_RAM1, "'s deck has ", TX_RAM3, " cards."
 	done
 
-Text0069: ; 36bc2 (d:6bc2)
+ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
 	text "Choose a Basic Pok`mon"
 	line "to place in the Arena."
 	done
 
 Text006a: ; 36bf1 (d:6bf1)
 	text "There are no Basic Pok`mon"
-	line "in ",TX_RAM1,"'s hand."
+	line "in ", TX_RAM1, "'s hand."
 	done
 
-Text006b: ; 36c1a (d:6c1a)
+NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
 	text "Neither player has any Basic"
 	line "Pok`mon in his or her hand."
 	done
@@ -477,7 +477,7 @@ Text006c: ; 36c54 (d:6c54)
 	line "and draw again."
 	done
 
-Text006d: ; 36c82 (d:6c82)
+ChooseUpTo5BasicPkmnToPlaceOnBenchText: ; 36c82 (d:6c82)
 	text "You may choose up to 5 Basic Pok`mon"
 	line "to place on the Bench."
 	done
@@ -493,29 +493,29 @@ Text006f: ; 36ce1 (d:6ce1)
 	done
 
 Text0070: ; 36cfd (d:6cfd)
-	text "You drew ",TX_RAM2,"."
+	text "You drew ", TX_RAM2, "."
 	done
 
 Text0071: ; 36d0a (d:6d0a)
 	text "You cannot select this card."
 	done
 
-Text0072: ; 36d28 (d:6d28)
+PlacingThePrizesText: ; 36d28 (d:6d28)
 	text "Placing the Prizes..."
 	done
 
-Text0073: ; 36d3f (d:6d3f)
+PleasePlacePrizesText: ; 36d3f (d:6d3f)
 	text "Please place"
-	line TX_RAM3," Prizes."
+	line TX_RAM3, " Prizes."
 	done
 
-Text0074: ; 36d57 (d:6d57)
+IfHeadPlayerPlaysFirstText: ; 36d57 (d:6d57)
 	text "If heads,"
 	line ""
-	text TX_RAM2," plays first."
+	text TX_RAM2, " plays first."
 	done
 
-Text0075: ; 36d72 (d:6d72)
+CoinTossToDetermineWhoFirstText: ; 36d72 (d:6d72)
 	text "A coin will be tossed"
 	line "to decide who plays first."
 	done
@@ -525,17 +525,17 @@ DecisionText: ; 36da4 (d:6da4)
 	done
 
 DuelWasDrawText: ; 36db1 (d:6db1)
-	text "The Duel with ",TX_RAM1,""
+	text "The Duel with ", TX_RAM1, ""
 	line "was a Draw!"
 	done
 
 WonDuelText: ; 36dce (d:6dce)
-	text "You won the Duel with ",TX_RAM1,"!"
+	text "You won the Duel with ", TX_RAM1, "!"
 	done
 
 LostDuelText: ; 36de8 (d:6de8)
 	text "You lost the Duel"
-	line "with ",TX_RAM1,"..."
+	line "with ", TX_RAM1, "..."
 	done
 
 StartSuddenDeathMatchText: ; 36e05 (d:6e05)
@@ -562,26 +562,26 @@ Text007e: ; 36e63 (d:6e63)
 	done
 
 Text007f: ; 36e6a (d:6e6a)
-	text TX_RAM1," took"
+	text TX_RAM1, " took"
 	line "all the Prizes!"
 	done
 
 Text0080: ; 36e82 (d:6e82)
 	text "There are no Pok`mon"
-	line "in ",TX_RAM1,"'s Play Area!"
+	line "in ", TX_RAM1, "'s Play Area!"
 	done
 
 WasKnockedOutText: ; 36eaa (d:6eaa)
-	text TX_RAM2," was"
+	text TX_RAM2, " was"
 	line "Knocked Out!"
 	done
 
-Text0082: ; 36ebe (d:6ebe)
-	text TX_RAM2," have"
+HavePokemonPowerText: ; 36ebe (d:6ebe)
+	text TX_RAM2, " have"
 	line "Pok`mon Power."
 	done
 
-Text0083: ; 36ed5 (d:6ed5)
+UnableToUsePkmnPowerDueToToxicGasText: ; 36ed5 (d:6ed5)
 	text "Unable to us Pok`mon Power due to"
 	line "the effect of Toxic Gas."
 	done
@@ -606,7 +606,7 @@ Text0087: ; 36f43 (d:6f43)
 	done
 
 DuelistIsThinkingText: ; 36f4a (d:6f4a)
-	text TX_RAM1," is thinking."
+	text TX_RAM1, " is thinking."
 	done
 
 Text0089: ; 36f5a (d:6f5a)
@@ -724,19 +724,19 @@ Text009d: ; 371f7 (d:71f7)
 	done
 
 Text009e: ; 3720c (d:720c)
-	text TX_GRASS," Pok`mon"
+	text TX_GRASS, " Pok`mon"
 	line ""
-	text TX_FIRE," Pok`mon"
+	text TX_FIRE, " Pok`mon"
 	line ""
-	text TX_WATER," Pok`mon"
+	text TX_WATER, " Pok`mon"
 	line ""
-	text TX_LIGHTNING," Pok`mon"
+	text TX_LIGHTNING, " Pok`mon"
 	line ""
-	text TX_FIGHTING," Pok`mon"
+	text TX_FIGHTING, " Pok`mon"
 	line ""
-	text TX_PSYCHIC," Pok`mon"
+	text TX_PSYCHIC, " Pok`mon"
 	line ""
-	text TX_COLORLESS," Pok`mon"
+	text TX_COLORLESS, " Pok`mon"
 	line "Trainer Card"
 	line "Energy Card"
 	done
@@ -780,15 +780,15 @@ Text00a6: ; 3737b (d:737b)
 	done
 
 Text00a7: ; 37392 (d:7392)
-	text TX_RAM1,"'s Hand"
+	text TX_RAM1, "'s Hand"
 	done
 
 Text00a8: ; 3739c (d:739c)
-	text TX_RAM1,"'s Play Area"
+	text TX_RAM1, "'s Play Area"
 	done
 
 Text00a9: ; 373ab (d:73ab)
-	text TX_RAM1,"'s Deck"
+	text TX_RAM1, "'s Deck"
 	done
 
 Text00aa: ; 373b5 (d:73b5)
@@ -829,7 +829,7 @@ Text00b1: ; 374d4 (d:74d4)
 	text "There are no cards left in the Deck."
 	done
 
-Text00b2: ; 374fa (d:74fa)
+NoSpaceOnTheBenchText: ; 374fa (d:74fa)
 	text "There is no space on the Bench."
 	done
 
@@ -892,7 +892,7 @@ Text00be: ; 37715 (d:7715)
 	done
 
 Text00bf: ; 37758 (d:7758)
-	text TX_RAM3," Energy cards"
+	text TX_RAM3, " Energy cards"
 	line "are required to Retreat."
 	done
 
@@ -992,7 +992,7 @@ Text00d5: ; 37a3a (d:7a3a)
 	text "A Transmission Error occured."
 	done
 
-Text00d6: ; 37a59 (d:7a59)
+BackUpIsBrokenText: ; 37a59 (d:7a59)
 	text "Back Up is broken."
 	done
 
@@ -1108,7 +1108,7 @@ Text00ec: ; 37e73 (d:7e73)
 	done
 
 Text00ed: ; 37e92 (d:7e92)
-	text "If Tails, ",TX_RAM3," damage"
+	text "If Tails, ", TX_RAM3, " damage"
 	line "to yourself, too."
 	done
 
@@ -1138,10 +1138,10 @@ Text00f2: ; 37f9a (d:7f9a)
 
 Text00f3: ; 37fa8 (d:7fa8)
 	text "Damage check!"
-	line "If Heads, +",TX_RAM3," damage!!"
+	line "If Heads, +", TX_RAM3, " damage!!"
 	done
 
 Text00f4: ; 37fcd (d:7fcd)
 	text "Damage check!"
-	line "If Heads, x ",TX_RAM3," damage!!"
+	line "If Heads, x ", TX_RAM3, " damage!!"
 	done

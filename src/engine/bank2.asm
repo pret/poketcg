@@ -2,7 +2,7 @@
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld b, $3c
 .asm_8cda
 	ld a, [de]
@@ -12,7 +12,7 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	jr nz, .asm_8cda
 	xor a
 	ld [hl], a
-	call DisableExtRAM
+	call DisableSRAM
 	pop bc
 	ret
 ; 0x8ce7
@@ -20,7 +20,7 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	INCROM $8ce7, $8cf9
 
 Func_8cf9: ; 8cf9 (2:4cf9)
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld hl, $b703
 	ld [hli], a
@@ -29,7 +29,7 @@ Func_8cf9: ; 8cf9 (2:4cf9)
 	ld [hli], a
 	ld [hl], a
 	ld [$b701], a
-	call DisableExtRAM
+	call DisableSRAM
 Func_8d0b: ; 8d0b (2:4d0b)
 	ld hl, Unknown_8d15
 	ld de, $9380
@@ -42,8 +42,8 @@ Unknown_8d15: ; 8d15 (2:4d15)
 Func_8d56: ; 8d56 (2:4d56)
 	xor a
 	ld [wTileMapFill], a
-	call Func_04a2
-	call Func_099c
+	call EmptyScreen
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call Func_2119
@@ -58,7 +58,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	INCROM $8d78, $8d9d
 
 Func_8d9d: ; 8d9d (2:4d9d)
-	ld de, $cfd1
+	ld de, wcfd1
 	ld b, $7
 .asm_8da2
 	ld a, [hli]
@@ -116,9 +116,9 @@ Func_8dea: ; 8dea (2:4dea)
 Func_8e05: ; 8e05 (2:4e05)
 	ld a, $1
 	call Func_90fb
-	call Func_9048
+	call GetPointerToDeckCards
 	push hl
-	call Func_9038
+	call GetPointerToDeckName
 	pop de
 	call Func_8e1f
 	ld a, $ff
@@ -129,17 +129,17 @@ Func_8e05: ; 8e05 (2:4e05)
 
 Func_8e1f: ; 8e1f (2:4e1f)
 	push de
-	ld de, $cfb9
+	ld de, wcfb9
 	call Func_92b4
 	pop de
-	ld hl, $cf17
+	ld hl, wcf17
 	call Func_8cd4
 	ld a, $9
-	ld hl, $cebb
+	ld hl, wcebb
 	call Func_9843
 	ld a, $3c
 	ld [wcecc], a
-	ld hl, $cebb
+	ld hl, wcebb
 	ld [hl], a
 	call Func_9e41
 	ret
@@ -165,27 +165,27 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld a, [wceb0]
 	or a
 	jp nz, .asm_8ecf
-	call Func_9048
+	call GetPointerToDeckCards
 	ld e, l
 	ld d, h
-	ld hl, $cf17
+	ld hl, wcf17
 	call Func_8cd4
 	ld a, $14
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_9843
-	ld de, $cfb9
-	call Func_9038
+	ld de, wcfb9
+	call GetPointerToDeckName
 	call Func_92b4
 	call Func_9345
 	jr nc, .asm_8ec4
-	call EnableExtRAM
-	ld hl, $cf17
+	call EnableSRAM
+	ld hl, wcf17
 	call Func_910a
-	call Func_9048
+	call GetPointerToDeckCards
 	call Func_9152
 	ld e, l
 	ld d, h
-	ld hl, $cf17
+	ld hl, wcf17
 	ld b, $3c
 .asm_8ea9
 	ld a, [hli]
@@ -193,14 +193,14 @@ Func_8e42: ; 8e42 (2:4e42)
 	inc de
 	dec b
 	jr nz, .asm_8ea9
-	call Func_9038
+	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_92ad
-	call Func_9038
+	call GetPointerToDeckName
 	ld a, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 	jr z, .asm_8edb
 .asm_8ec4
@@ -215,16 +215,16 @@ Func_8e42: ; 8e42 (2:4e42)
 	jp Func_8dbc
 .asm_8edb
 	ld a, $14
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_9843
-	ld de, $cfb9
-	call Func_9038
+	ld de, wcfb9
+	call GetPointerToDeckName
 	call Func_92b4
 	call Func_8f05
-	call Func_9038
+	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, $cfb9
+	ld hl, wcfb9
 	call Func_92b4
 	ld a, $ff
 	call Func_9168
@@ -252,7 +252,7 @@ Func_8f05: ; 8f05 (2:4f05)
 .asm_8f23
 	ld a, $14
 	ld bc, $0401
-	ld de, $cfb9
+	ld de, wcfb9
 	farcall Func_1ad89
 	ld a, [wcfb9]
 	or a
@@ -262,14 +262,14 @@ Func_8f05: ; 8f05 (2:4f05)
 
 Func_8f38: ; 8f38 (2:4f38)
 	ld hl, $b701
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [hli]
 	ld h, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	ld l, a
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_0663
-	ld hl, $cfb9
+	ld hl, wcfb9
 	ld [hl], $6
 	inc hl
 	ld [hl], $44
@@ -294,7 +294,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	xor a
 	ld [hl], a
 	ld hl, $b701
-	call EnableExtRAM
+	call EnableSRAM
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -310,7 +310,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld [hl], d
 	dec hl
 	ld [hl], e
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 Func_8f8a: ; 8f8a (2:4f8a)
@@ -323,31 +323,31 @@ Func_8f8a: ; 8f8a (2:4f8a)
 	jp Func_8dbc
 
 Func_8f9d: ; 8f9d (2:4f9d)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
-	call DisableExtRAM
+	call DisableSRAM
 	ld h, $3
 	ld l, a
 	call HtimesL
 	ld e, l
 	inc e
-	ld d, $2
+	ld d, 2
 	xor a
-	ld hl, $0000
-	ld bc, $0202
-	call Func_1f5f
+	lb hl, 0, 0
+	lb bc, 2, 2
+	call FillRectangle
 	ld a, [wceb1]
-	call EnableExtRAM
+	call EnableSRAM
 	ld [$b700], a
-	call DisableExtRAM
+	call DisableSRAM
 	call Func_9326
-	call Func_9038
-	call EnableExtRAM
+	call GetPointerToDeckName
+	call EnableSRAM
 	call Func_9253
-	call DisableExtRAM
+	call DisableSRAM
 	xor a
-	ld [wce3f], a
-	ld [wce40], a
+	ld [wTxRam2], a
+	ld [wTxRam2 + 1], a
 	ldtx hl, ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wceb1]
@@ -361,7 +361,7 @@ Func_8fe8: ; 8fe8 (2:4fe8)
 
 Func_8ff2: ; 8ff2 (2:4ff2)
 	ld a, [wceb1]
-	ld hl, $ceb2
+	ld hl, wceb2
 	ld b, $0
 	ld c, a
 	add hl, bc
@@ -380,25 +380,27 @@ Func_9026: ; 9026 (2:5026)
 Unknown_9027: ; 9027 (2:5027)
 	INCROM $9027, $9038
 
-Func_9038: ; 9038 (2:5038)
+; return, in hl, the pointer to sDeckXName where X is [wceb1] + 1
+GetPointerToDeckName: ; 9038 (2:5038)
 	ld a, [wceb1]
 	ld h, a
-	ld l, $54
+	ld l, sDeck2Name - sDeck1Name
 	call HtimesL
 	push de
-	ld de, $a200
+	ld de, sDeck1Name
 	add hl, de
 	pop de
 	ret
 
-Func_9048: ; 9048 (2:5048)
+; return, in hl, the pointer to sDeckXCards where X is [wceb1] + 1
+GetPointerToDeckCards: ; 9048 (2:5048)
 	push af
 	ld a, [wceb1]
 	ld h, a
-	ld l, $54
+	ld l, sDeck2Cards - sDeck1Cards
 	call HtimesL
 	push de
-	ld de, $a218
+	ld de, sDeck1Cards
 	add hl, de
 	pop de
 	pop af
@@ -473,7 +475,7 @@ Func_9065: ; 9065 (2:5065)
 	jr z, .asm_90ca
 	call PlaySFX
 .asm_90ca
-	ld hl, $cea3
+	ld hl, wcea3
 	ld a, [hl]
 	inc [hl]
 	and $f
@@ -529,7 +531,7 @@ Func_910a: ; 910a (2:510a)
 	jr z, .asm_911e
 	ld c, a
 	push hl
-	ld hl, $a100
+	ld hl, sCardCollection
 	add hl, bc
 	dec [hl]
 	pop hl
@@ -552,7 +554,7 @@ Func_9152: ; 9152 (2:5152)
 	jr z, .asm_9166
 	ld c, a
 	push hl
-	ld hl, $a100
+	ld hl, sCardCollection
 	add hl, bc
 	inc [hl]
 	pop hl
@@ -580,16 +582,16 @@ Func_9168: ; 9168 (2:5168)
 	ld hl, Unknown_9242
 	call Func_2c08
 	ld a, $4
-	ld hl, $ceb2
+	ld hl, wceb2
 	call Func_9843
 	ld a, [hffb5]
 	bit 0, a
 	jr z, .asm_91b0
-	ld hl, $a200
+	ld hl, sDeck1Name
 	ld de, $0602
 	call Func_926e
 .asm_91b0
-	ld hl, $a218
+	ld hl, sDeck1Cards
 	call Func_9314
 	jr c, .asm_91bd
 	ld a, $1
@@ -598,11 +600,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 1, a
 	jr z, .asm_91cd
-	ld hl, $a254
+	ld hl, sDeck2Name
 	ld de, $0605
 	call Func_926e
 .asm_91cd
-	ld hl, $a26c
+	ld hl, sDeck2Cards
 	call Func_9314
 	jr c, .asm_91da
 	ld a, $1
@@ -611,11 +613,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 2, a
 	jr z, .asm_91ea
-	ld hl, $a2a8
+	ld hl, sDeck3Name
 	ld de, $0608
 	call Func_926e
 .asm_91ea
-	ld hl, $a2c0
+	ld hl, sDeck3Cards
 	call Func_9314
 	jr c, .asm_91f7
 	ld a, $1
@@ -624,23 +626,23 @@ Func_9168: ; 9168 (2:5168)
 	ld a, [hffb5]
 	bit 3, a
 	jr z, .asm_9207
-	ld hl, $a2fc
+	ld hl, sDeck4Name
 	ld de, $060b
 	call Func_926e
 .asm_9207
-	ld hl, $a314
+	ld hl, sDeck4Cards
 	call Func_9314
 	jr c, .asm_9214
 	ld a, $1
 	ld [wceb5], a
 .asm_9214
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
 	ld c, a
 	ld b, $0
 	ld d, $2
 .asm_921f
-	ld hl, $ceb2
+	ld hl, wceb2
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -656,7 +658,7 @@ Func_9168: ; 9168 (2:5168)
 .asm_9234
 	ld a, c
 	ld [$b700], a
-	call DisableExtRAM
+	call DisableSRAM
 	call Func_9326
 	call EnableLCD
 	ret
@@ -665,12 +667,12 @@ Unknown_9242: ; 9242 (2:5242)
 	INCROM $9242, $9253
 
 Func_9253: ; 9253 (2:5253)
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_92ad
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_23c1
 	ld b, $0
-	ld hl, wc590
+	ld hl, wDefaultText
 	add hl, bc
 	ld d, h
 	ld e, l
@@ -684,19 +686,19 @@ Func_926e: ; 926e (2:526e)
 	pop hl
 	jr c, .asm_929c
 	push de
-	ld de, wc590
+	ld de, wDefaultText
 	call Func_92b4
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_23c1
 	ld b, $0
-	ld hl, wc590
+	ld hl, wDefaultText
 	add hl, bc
 	ld d, h
 	ld e, l
 	ld hl, Unknown_92a7
 	call Func_92ad
 	pop de
-	ld hl, wc590
+	ld hl, wDefaultText
 	call Func_22ae
 	call Func_21c5
 	or a
@@ -720,9 +722,9 @@ Func_92ad: ; 92ad (2:52ad)
 	jr Func_92ad
 
 Func_92b4: ; 92b4 (2:52b4)
-	call EnableExtRAM
+	call EnableSRAM
 	call Func_92ad
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 ; 0x92be
 
@@ -731,9 +733,9 @@ Func_92b4: ; 92b4 (2:52b4)
 Func_9314: ; 9314 (2:5314)
 	ld bc, $0018
 	add hl, bc
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [hl]
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 	jr nz, .asm_9324
 	scf
@@ -743,19 +745,19 @@ Func_9314: ; 9314 (2:5314)
 	ret
 
 Func_9326: ; 9326 (2:5326)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$b700]
-	call DisableExtRAM
-	ld h, $3
+	call DisableSRAM
+	ld h, 3
 	ld l, a
 	call HtimesL
 	ld e, l
 	inc e
-	ld d, $2
+	ld d, 2
 	ld a, $38
-	ld hl, $0102
-	ld bc, $0202
-	call Func_1f5f
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
 	ret
 
 Func_9345: ; 9345 (2:5345)
@@ -787,33 +789,33 @@ Func_b177: ; b177 (2:7177)
 
 Func_b19d: ; b19d (2:719d)
 	xor a
-	ld [$cea1], a
+	ld [wcea1], a
 	ld de, CheckForCGB
-	ld hl, $d0a2
+	ld hl, wd0a2
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	call $7379
 	ld a, $3c
-	ld [$d0a5], a
+	ld [wd0a5], a
 	xor a
 .asm_b1b3
 	ld hl, $76fb
 	call $5a6d
 	call $7704
 	call $7545
-	ld hl, $0224
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
-	ld de, $0224
+	ld de, $0224 ; PleaseSelectDeckText?
 	call $7285
 	call $729f
 	jr c, .asm_b1b3
 	cp $ff
 	ret z
 	ld b, a
-	ld a, [$cea1]
+	ld a, [wcea1]
 	add b
-	ld [$d088], a
+	ld [wd088], a
 	call Func_905a
 	call DrawWideTextBox
 	ld hl, $7274
@@ -823,7 +825,7 @@ Func_b19d: ; b19d (2:719d)
 	jp nc, $71e7
 	cp $ff
 	jr nz, .asm_b1fa
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b1fa
@@ -836,17 +838,17 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr nc, .asm_b216
 	call $7592
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
 .asm_b216
 	ld hl, $0272
 	call YesOrNoMenuWithText
-	ld a, [$d086]
+	ld a, [wd086]
 	jr c, .asm_b1b3
 	call $7592
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
@@ -856,14 +858,14 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr c, .asm_b240
 	call $76ca
-	ld a, [$d086]
+	ld a, [wd086]
 	jp c, $71b3
 	jr .asm_b25e
 
 .asm_b240
 	ld hl, WaitForVBlank
 	call DrawWideTextBox_WaitForInput
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b24c
@@ -872,16 +874,16 @@ Func_b19d: ; b19d (2:719d)
 	call $735b
 	jr c, .asm_b240
 	call $77c6
-	ld a, [$d086]
+	ld a, [wd086]
 	jp nc, $71b3
 
 .asm_b25e
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7379
 	call $7704
 	call $7545
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $71b3
 
 .asm_b273
@@ -897,47 +899,47 @@ Func_ba04: ; ba04 (2:7a04)
 	ld c, a
 	ld b, $0
 	add hl, bc
-	ld de, $d0a2
+	ld de, wd0a2
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hl]
 	ld [de], a
 	xor a
-	ld [$cea1], a
+	ld [wcea1], a
 	call $7b97
 	ld a, $5
-	ld [$d0a5], a
+	ld [wd0a5], a
 	xor a
 	ld hl, $7b6e
 	call InitializeCursorParameters
-	ld hl, $0224
+	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
-	ld [$cea9], a
+	ld [wcea9], a
 	ld hl, $73fe
 	ld d, h
 	ld a, l
-	ld hl, $cece
+	ld hl, wcece
 	ld [hli], a
 	ld [hl], d
 .asm_ba40
 	call DoFrame
 	call HandleMenuInput
 	jr c, .asm_baa3
-	ld a, [$ff8f]
-	and $c0
+	ldh a, [hButtonsPressed2]
+	and D_UP | D_DOWN
 	jr z, .asm_ba4e
 
 .asm_ba4e
-	ld a, [$ff8f]
-	and $8
+	ldh a, [hButtonsPressed2]
+	and START
 	jr z, .asm_ba40
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld b, a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
+	ld [wd086], a
 	add b
 	ld c, a
 	inc a
@@ -945,7 +947,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wceb1], a
 	sla c
 	ld b, $0
-	ld hl, $d00d
+	ld hl, wd00d
 	add hl, bc
 	call $7653
 	ld a, [hli]
@@ -966,25 +968,25 @@ Func_ba04: ; ba04 (2:7a04)
 	call $7653
 	call Func_8e1f
 	call $7644
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_baa3
 	call DrawCursor2
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
-	ld a, [$ffb1]
+	ld [wd086], a
+	ldh a, [hCurrentMenuItem]
 	cp $ff
 	jp z, $7b0d
-	ld [$d088], a
+	ld [wd088], a
 	call Func_905a
 	xor a
-	ld [$ce5e], a
+	ld [wce5e], a
 	call DrawWideTextBox
 	ld hl, $7b76
 	call Func_2c08
@@ -993,7 +995,7 @@ Func_ba04: ; ba04 (2:7a04)
 	jp nc, $7acc
 	cp $ff
 	jr nz, .asm_badf
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_badf
@@ -1006,38 +1008,38 @@ Func_ba04: ; ba04 (2:7a04)
 	call $7653
 	call $77c6
 	call $7644
-	ld a, [$d086]
+	ld a, [wd086]
 	jp nc, $7a25
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 
 .asm_bb09
 	cp $1
 	jr nz, .asm_bb12
 	xor a
-	ld [$d0a4], a
+	ld [wd0a4], a
 	ret
 
 .asm_bb12
-	ld a, [$cea1]
-	ld [$d087], a
+	ld a, [wcea1]
+	ld [wd087], a
 	ld b, a
 	ld a, [wCurMenuItem]
-	ld [$d086], a
+	ld [wd086], a
 	add b
 	ld c, a
 	ld [wceb1], a
 	sla c
 	ld b, $0
-	ld hl, $d00d
+	ld hl, wd00d
 	add hl, bc
 	push hl
-	ld hl, $d0aa
+	ld hl, wd0aa
 	add hl, bc
-	ld bc, $cfda
+	ld bc, wcfda
 	ld a, [hli]
 	ld [bc], a
 	inc bc
@@ -1064,10 +1066,10 @@ Func_ba04: ; ba04 (2:7a04)
 	xor a
 	call $6dfe
 	call $7644
-	ld a, [$d087]
-	ld [$cea1], a
+	ld a, [wd087]
+	ld [wcea1], a
 	call $7b97
-	ld a, [$d086]
+	ld a, [wd086]
 	jp $7a25
 ; 0xbb6e
 

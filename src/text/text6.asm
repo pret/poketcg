@@ -1,7 +1,7 @@
 Text0524: ; 48000 (12:4000)
 	text "The Challenge Cup is over already! "
 	line "Too bad you couldn't enter!"
-	line "The prize belongs to me! ",TX_LVL,"8 Mew!"
+	line "The prize belongs to me! ", TX_LVL, "8 Mew!"
 	line "You really should enter the next"
 	line "Challenge Cup! But then again, "
 	line "why bother, since I'll also win "
@@ -55,14 +55,14 @@ Text052b: ; 48376 (12:4376)
 	text "The first Challenge Cup is"
 	line "now underway!"
 	line "Defeat 3 opponents to win the"
-	line "wonderful prize of ",TX_LVL,"60 Mewtwo!"
+	line "wonderful prize of ", TX_LVL, "60 Mewtwo!"
 	done
 
 Text052c: ; 483de (12:43de)
 	text "The second Challenge Cup is"
 	line "now under way!"
 	line "Defeat 3 opponents to win the"
-	line "wonderful prize of ",TX_LVL,"8 Mew!"
+	line "wonderful prize of ", TX_LVL, "8 Mew!"
 	done
 
 Text052d: ; 48444 (12:4444)
@@ -98,12 +98,12 @@ Text0532: ; 4856a (12:456a)
 	done
 
 Text0533: ; 485a2 (12:45a2)
-	text "Presently, ",TX_RAM1," is still"
+	text "Presently, ", TX_RAM1, " is still"
 	line "a contender!"
 	done
 
 Text0534: ; 485c6 (12:45c6)
-	text TX_RAM1," is the new challenger!"
+	text TX_RAM1, " is the new challenger!"
 	done
 
 Text0535: ; 485e0 (12:45e0)
@@ -113,22 +113,22 @@ Text0535: ; 485e0 (12:45e0)
 	done
 
 Text0536: ; 48612 (12:4612)
-	text "The winner is ",TX_RAM2,"!!"
+	text "The winner is ", TX_RAM2, "!!"
 	line ""
-	text TX_RAM2," has defeated 2 opponents!"
+	text TX_RAM2, " has defeated 2 opponents!"
 	line "Just 1 more opponent to go"
 	line "before winning the prize!"
 	done
 
 Text0537: ; 48677 (12:4677)
-	text "Too bad, ",TX_RAM1,"."
+	text "Too bad, ", TX_RAM1, "."
 	line "Have a safe trip home!"
 	done
 
 Text0538: ; 4869b (12:469b)
-	text "The Winner is ",TX_RAM2,"!!!"
+	text "The Winner is ", TX_RAM2, "!!!"
 	line ""
-	text TX_RAM2," has defeated 1 opponent!"
+	text TX_RAM2, " has defeated 1 opponent!"
 	line "2 more opponents to go"
 	line "before winning the prize!"
 	done
@@ -136,7 +136,7 @@ Text0538: ; 4869b (12:469b)
 Text0539: ; 486fc (12:46fc)
 	text "How unfortunate!"
 	line "Unable to defeat the last opponent!"
-	line "It was close, but ",TX_RAM1," was "
+	line "It was close, but ", TX_RAM1, " was "
 	line "defeated by the third opponent!"
 	done
 
@@ -150,26 +150,26 @@ Text053b: ; 487c0 (12:47c0)
 	text "Ha ha ha! How about that!?!"
 	line "I win!!"
 	line "2 more opponents to go and"
-	line "the ",TX_LVL,"8 Mew belongs to me!"
+	line "the ", TX_LVL, "8 Mew belongs to me!"
 	done
 
 Text053c: ; 4881b (12:481b)
 	text "Congratulations!"
-	line "The Winner is ",TX_RAM1,"!"
+	line "The Winner is ", TX_RAM1, "!"
 	line ""
-	text TX_RAM1," has defeated"
+	text TX_RAM1, " has defeated"
 	line "1 opponent!!!"
 	done
 
 Text053d: ; 4885c (12:485c)
-	text "Way to go, ",TX_RAM1,"!"
+	text "Way to go, ", TX_RAM1, "!"
 	line "That's 2 wins!!!"
 	line "One more opponent to go before"
 	line "winning the Challenge Cup!"
 	done
 
 Text053e: ; 488b6 (12:48b6)
-	text "Most unfortunate, ",TX_RAM2,"."
+	text "Most unfortunate, ", TX_RAM2, "."
 	line "Have a safe trip home!"
 	done
 
@@ -180,27 +180,27 @@ Text053f: ; 488e3 (12:48e3)
 Text0540: ; 48904 (12:4904)
 	text "Our new challenger is..."
 	line ""
-	text TX_RAM2,"!"
+	text TX_RAM2, "!"
 	done
 
 Text0541: ; 48922 (12:4922)
 	text "The third opponent is"
 	line ""
-	text TX_RAM2,"!"
+	text TX_RAM2, "!"
 	done
 
 Text0542: ; 4893d (12:493d)
-	text "Hey, ",TX_RAM1,"!"
+	text "Hey, ", TX_RAM1, "!"
 	line "I'm not gonna lose to you!"
 	line ""
-	text TX_LVL,"60 Mewtwo belongs to me!!!"
+	text TX_LVL, "60 Mewtwo belongs to me!!!"
 	done
 
 Text0543: ; 4897f (12:497f)
-	text TX_RAM1,"!"
+	text TX_RAM1, "!"
 	line "I'm going to defeat you!"
 	line ""
-	text TX_LVL,"8 Mew belongs to me!!!"
+	text TX_LVL, "8 Mew belongs to me!!!"
 	done
 
 Text0544: ; 489b6 (12:49b6)
@@ -217,12 +217,12 @@ Text0546: ; 489f5 (12:49f5)
 	done
 
 Text0547: ; 48a09 (12:4a09)
-	text "Well then, ",TX_RAM1,"!"
+	text "Well then, ", TX_RAM1, "!"
 	line "Let the second match begin!"
 	done
 
 Text0548: ; 48a34 (12:4a34)
-	text "Well, ",TX_RAM1,", let the third,"
+	text "Well, ", TX_RAM1, ", let the third,"
 	line "and final, match begin!"
 	done
 
@@ -237,7 +237,7 @@ Text054a: ; 48a90 (12:4a90)
 	done
 
 Text054b: ; 48abf (12:4abf)
-	text "Most unfortunate, ",TX_RAM2,"."
+	text "Most unfortunate, ", TX_RAM2, "."
 	line "Do try again in the next"
 	line "Challenge Cup."
 	done
@@ -252,31 +252,31 @@ Text054d: ; 48b25 (12:4b25)
 	done
 
 Text054e: ; 48b3f (12:4b3f)
-	text TX_RAM1,"!"
+	text TX_RAM1, "!"
 	line "I won't lose next time!"
 	done
 
 Text054f: ; 48b5b (12:4b5b)
-	text TX_RAM1,"!"
+	text TX_RAM1, "!"
 	line "I'll win next time!"
 	done
 
 Text0550: ; 48b73 (12:4b73)
 	text "The Winner of this Challenge Cup "
-	line "is ",TX_START,TX_RAM1,"!!!"
+	line "is ", TX_START,  TX_RAM1, "!!!"
 	done
 
 Text0551: ; 48b9f (12:4b9f)
-	text TX_RAM1,", your prize"
-	line "is ",TX_RAM2,"!"
+	text TX_RAM1, ", your prize"
+	line "is ", TX_RAM2, "!"
 	done
 
 Text0552: ; 48bb4 (12:4bb4)
-	text "Congratulations, ",TX_START,TX_RAM1,"!!!"
+	text "Congratulations, ", TX_START,  TX_RAM1, "!!!"
 	done
 
 Text0553: ; 48bcc (12:4bcc)
-	text "Hi, ",TX_RAM1,"."
+	text "Hi, ", TX_RAM1, "."
 	line "What are you doing here?"
 	done
 
@@ -296,9 +296,9 @@ Text0555: ; 48c87 (12:4c87)
 	done
 
 Text0556: ; 48cf5 (12:4cf5)
-	text "Hey, ",TX_RAM1,"!"
-	line "You only have ",TX_RAM3," Medals!"
-	line "I've already collected ",TX_RAM3,"!"
+	text "Hey, ", TX_RAM1, "!"
+	line "You only have ", TX_RAM3, " Medals!"
+	line "I've already collected ", TX_RAM3, "!"
 	line "Why don't you just give up? See ya!"
 	done
 
@@ -329,7 +329,7 @@ Text055a: ; 48eb8 (12:4eb8)
 	done
 
 Text055b: ; 48f10 (12:4f10)
-	text "You're very good, ",TX_RAM1,"."
+	text "You're very good, ", TX_RAM1, "."
 	line "Please take care of my card."
 	done
 
@@ -352,7 +352,7 @@ Text055e: ; 48fcb (12:4fcb)
 
 Text055f: ; 48ff9 (12:4ff9)
 	text "You've really improved your "
-	line "game, ",TX_START,TX_RAM1,"."
+	line "game, ", TX_START,  TX_RAM1, "."
 	line "Use my card to make it better!"
 	done
 
@@ -361,7 +361,7 @@ Text0560: ; 49040 (12:5040)
 	line "The Legendary Cards seem pleased"
 	line "to be passed on to you"
 	line ""
-	text TX_RAM1,". Hurry and go through"
+	text TX_RAM1, ". Hurry and go through"
 	line "to the Hall of Honor!"
 	done
 
@@ -372,14 +372,14 @@ Text0561: ; 490c6 (12:50c6)
 	done
 
 Text0562: ; 4911e (12:511e)
-	text TX_RAM1,", That is not the way"
+	text TX_RAM1, ", That is not the way"
 	line "to the Hall of Honor."
-	line "Hurry, ",TX_START,TX_RAM1,"! Go through to"
+	line "Hurry, ", TX_START,  TX_RAM1, "! Go through to"
 	line "the Hall of Honor!"
 	done
 
 Text0563: ; 49178 (12:5178)
-	text TX_RAM1,", if you leave the "
+	text TX_RAM1, ", if you leave the "
 	line "Grand Hall, you must defeat "
 	line "each of us again to enter"
 	line "the Hall of Honor."
@@ -460,7 +460,7 @@ Text0570: ; 49506 (12:5506)
 	done
 
 Text0571: ; 49570 (12:5570)
-	text TX_RAM1,","
+	text TX_RAM1, ","
 	line "take your place at the table."
 	done
 
@@ -521,12 +521,12 @@ Text057a: ; 49864 (12:5864)
 	done
 
 Text057b: ; 498b8 (12:58b8)
-	text "Very good, ",TX_RAM1,"!"
+	text "Very good, ", TX_RAM1, "!"
 	line "Your second opponent is Steve!"
 	done
 
 Text057c: ; 498e6 (12:58e6)
-	text TX_RAM1,"! Next, you must duel "
+	text TX_RAM1, "! Next, you must duel "
 	line "Steve!"
 	done
 
@@ -538,12 +538,12 @@ Text057d: ; 49906 (12:5906)
 	done
 
 Text057e: ; 49980 (12:5980)
-	text "Hey, ",TX_RAM1,"!"
+	text "Hey, ", TX_RAM1, "!"
 	line "Come battle Steve!"
 	done
 
 Text057f: ; 4999c (12:599c)
-	text "Is your Deck ready, ",TX_START,TX_RAM1,"?"
+	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
 	done
 
 Text0580: ; 499b5 (12:59b5)
@@ -587,12 +587,12 @@ Text0586: ; 49b27 (12:5b27)
 	done
 
 Text0587: ; 49b50 (12:5b50)
-	text "Very good, ",TX_RAM1,"."
+	text "Very good, ", TX_RAM1, "."
 	line "Your next opponent is Jack!"
 	done
 
 Text0588: ; 49b7b (12:5b7b)
-	text "That's great, ",TX_RAM1,"!"
+	text "That's great, ", TX_RAM1, "!"
 	line "Jack is your next opponent!"
 	done
 
@@ -609,7 +609,7 @@ Text058a: ; 49c1c (12:5c1c)
 	done
 
 Text058b: ; 49c5f (12:5c5f)
-	text TX_RAM1,","
+	text TX_RAM1, ","
 	line "have you readied your deck?"
 	done
 
@@ -682,7 +682,7 @@ Text0597: ; 49f7e (12:5f7e)
 	done
 
 Text0598: ; 49fb5 (12:5fb5)
-	text "Is your Deck ready, ",TX_START,TX_RAM1,"?"
+	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
 	done
 
 Text0599: ; 49fce (12:5fce)
@@ -719,7 +719,7 @@ Text059f: ; 4a11a (12:611a)
 	text "Wha-what on earth?  Even"
 	line "I, Rod, have been defeated?!?"
 	line "Wonderful! This is wonderful!!"
-	line "Congratulations, ",TX_RAM1,". "
+	line "Congratulations, ", TX_RAM1, ". "
 	line "You have proven yourself worthy"
 	line "enough to inherit the"
 	line "Legendary Pok`mon Cards!!!"
@@ -727,7 +727,7 @@ Text059f: ; 4a11a (12:611a)
 	done
 
 Text05a0: ; 4a1e1 (12:61e1)
-	text "Congratulations, ",TX_RAM1,"!"
+	text "Congratulations, ", TX_RAM1, "!"
 	line "You're a master duelist!!!"
 	line "But..."
 	done
@@ -744,7 +744,7 @@ Text05a2: ; 4a26c (12:626c)
 	done
 
 Text05a3: ; 4a289 (12:6289)
-	text "Congratulations, ",TX_RAM1,"!"
+	text "Congratulations, ", TX_RAM1, "!"
 	line "You're a master duelist!"
 	done
 
@@ -767,7 +767,7 @@ Text05a6: ; 4a369 (12:6369)
 	line "allowed! He, too, has earned "
 	line "the right to inherit the "
 	line "Legendary Pok`mon Cards!"
-	line "Ronald! ",TX_RAM1,"!"
+	line "Ronald! ", TX_RAM1, "!"
 	line "You two must duel to determine who "
 	line "will inherit the Legendary Pok`mon "
 	line "Cards. So say the Rules!"
@@ -782,11 +782,11 @@ Text05a8: ; 4a452 (12:6452)
 	line "Ronald!!!"
 	line "I'll take your challenge,"
 	line ""
-	text TX_RAM1,"!"
+	text TX_RAM1, "!"
 	done
 
 Text05a9: ; 4a49a (12:649a)
-	text "Is your Deck ready, ",TX_START,TX_RAM1,"?"
+	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
 	done
 
 Text05aa: ; 4a4b3 (12:64b3)
@@ -802,7 +802,7 @@ Text05ac: ; 4a4f5 (12:64f5)
 	text "I was here first! The Legendary"
 	line "Pok`mon Cards belong to me!"
 	line "I'll make it all too clear to"
-	line "you, ",TX_START,TX_RAM1,"!"
+	line "you, ", TX_START,  TX_RAM1, "!"
 	done
 
 Text05ad: ; 4a559 (12:6559)
@@ -827,7 +827,7 @@ Text05af: ; 4a65c (12:665c)
 
 Text05b0: ; 4a67f (12:667f)
 	text "I'm sorry, but the Legendary Pok`mon"
-	line "Cards have chosen ",TX_RAM1,"."
+	line "Cards have chosen ", TX_RAM1, "."
 	done
 
 Text05b1: ; 4a6ba (12:66ba)
@@ -843,7 +843,7 @@ Text05b2: ; 4a6f4 (12:66f4)
 	done
 
 Text05b3: ; 4a72d (12:672d)
-	text "Congratulations, ",TX_RAM1,"!"
+	text "Congratulations, ", TX_RAM1, "!"
 	line "You are a Card Master"
 	line "worthy of inheriting"
 	line "the Legendary Pok`mon Cards!"
@@ -961,7 +961,7 @@ Text05c0: ; 4af26 (12:6f26)
 	done
 
 Text05c1: ; 4afb0 (12:6fb0)
-	text TX_RAM1," received some "
+	text TX_RAM1, " received some "
 	line "Energy cards!"
 	done
 
@@ -987,7 +987,7 @@ Text05c4: ; 4b129 (12:7129)
 	text "You finally inherited the"
 	line "Legendary Pok`mon Cards!"
 	line "Amazing!"
-	line "Congratulations, ",TX_RAM1,"!!!"
+	line "Congratulations, ", TX_RAM1, "!!!"
 	done
 
 Text05c5: ; 4b17c (12:717c)
@@ -1005,7 +1005,7 @@ Text05c6: ; 4b274 (12:7274)
 	text "Congratulations on inheriting "
 	line "the Legendary Pok`mon Cards,"
 	line ""
-	text TX_RAM1,"! Now you should try"
+	text TX_RAM1, "! Now you should try"
 	line "dueling different people using the"
 	line "cards you inherited. I'm sure "
 	line "you'll have a good time!"
@@ -1048,7 +1048,7 @@ Text05ca: ; 4b4ea (12:74ea)
 	line "opponents, you win! You can also "
 	line "play to extend your winning "
 	line "streak! Build a deck and "
-	line "give it a try, ",TX_RAM1,"!"
+	line "give it a try, ", TX_RAM1, "!"
 	done
 
 Text05cb: ; 4b63e (12:763e)
@@ -1129,8 +1129,8 @@ Text05d7: ; 4ba32 (12:7a32)
 	line "by attacking. Pok`mon need Energy "
 	line "cards in order to attack."
 	line "For example, the energy required "
-	line "for Seaking's Waterfall is ",TX_WATER,TX_COLORLESS,"."
-	line TX_WATER,TX_COLORLESS," stands for 1 Water Energy "
+	line "for Seaking's Waterfall is ", TX_WATER,  TX_COLORLESS, "."
+	line TX_WATER,  TX_COLORLESS, " stands for 1 Water Energy "
 	line "card and another Energy card of "
 	line "any type. The energy required "
 	line "differs according to the attack."

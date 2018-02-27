@@ -5,9 +5,9 @@ Func_80028: ; 80028 (20:4028)
 	call Func_801f1
 	ld bc, $0000
 	call Func_80077
-	farcallx $3, $49c7
+	farcall $3, $49c7
 	call $41a1
-	farcallx $3, $43ee
+	farcall $3, $43ee
 	ret
 ; 0x8003d
 
@@ -15,11 +15,11 @@ Func_80028: ; 80028 (20:4028)
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
-	ld [$d292], a
+	ld [wd292], a
 	jr .asm_80082
 
 	xor a
-	ld [$d292], a
+	ld [wd292], a
 
 .asm_80082
 	push hl
@@ -32,22 +32,22 @@ Func_80077: ; 80077 (20:4077)
 	ld [hl], d
 	call $43b9
 	ld a, [wd4c6]
-	ld [$d23d], a
-	ld de, $d23e
+	ld [wd23d], a
+	ld de, wd23e
 	ld bc, $0006
 	call Func_3bf5
 	ld l, e
 	ld h, d
 	ld a, [hli]
-	ld [$d12f], a
+	ld [wd12f], a
 	ld a, [hli]
-	ld [$d130], a
+	ld [wd130], a
 	ld a, [hli]
-	ld [$d23a], a
+	ld [wd23a], a
 	ld a, [hli]
-	ld [$d23b], a
+	ld [wd23b], a
 	ld a, [hli]
-	ld [$d23c], a
+	ld [wd23c], a
 	call $40bd
 	pop de
 	pop bc
@@ -61,12 +61,12 @@ Func_801a1: ; 801a1 (20:41a1)
 	push hl
 	push bc
 	push de
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
-	call BankswitchRAM
-	ld hl, vEnd
-	ld de, vBGMapTiles
+	call BankswitchSRAM
+	ld hl, v0End
+	ld de, v0BGMapTiles1
 	ld c, $20
 .asm_801b4
 	push bc
@@ -83,10 +83,10 @@ Func_801a1: ; 801a1 (20:41a1)
 	push de
 	ld bc, $0400
 	add hl, bc
-	call BankswitchVRAM_1
+	call BankswitchVRAM1
 	ld b, $20
 	call SafeCopyDataHLtoDE
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 
 .asm_801d6
 	pop hl
@@ -101,8 +101,8 @@ Func_801a1: ; 801a1 (20:41a1)
 	dec c
 	jr nz, .asm_801b4
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	pop de
 	pop bc
 	pop hl
@@ -111,17 +111,17 @@ Func_801a1: ; 801a1 (20:41a1)
 Func_801f1: ; 801f1 (20:41f1)
 	push hl
 	push bc
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	ld hl, $a000
 	ld bc, $0800
 	xor a
 	call $3c10
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	pop bc
 	pop hl
 	ret
@@ -188,18 +188,18 @@ asm_8027c
 	ld b, a
 	ld a, [wd4c7]
 	ld c, a
-	ld hl, $d4c2
+	ld hl, wd4c2
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld hl, $d4c4
+	ld hl, wd4c4
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	inc hl
 	inc hl
 	call Func_395a
-	call BankswitchVRAM_0
+	call BankswitchVRAM0
 	pop de
 	pop bc
 	pop hl
@@ -251,7 +251,7 @@ Func_80b7a: ; 80b7a (20:4b7a)
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
-	ld [$d292], a
+	ld [wd292], a
 	pop af
 	push hl
 	push bc
@@ -259,15 +259,15 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld c, a
 	ld a, [wd131]
 	push af
-	ld a, [$d23d]
+	ld a, [wd23d]
 	push af
-	ld a, [$d12f]
+	ld a, [wd12f]
 	push af
-	ld a, [$d130]
+	ld a, [wd130]
 	push af
-	ld a, [$d23a]
+	ld a, [wd23a]
 	push af
-	ld a, [$d23b]
+	ld a, [wd23b]
 	push af
 	ld b, $0
 	ld hl, wd323
@@ -296,7 +296,7 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld a, [hl]
 	ld [wd131], a
 	push bc
-	farcallx $20, $4082
+	farcall $20, $4082
 	pop bc
 	srl b
 	ld a, c
@@ -308,17 +308,17 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 	ld b, $0
 	ld hl, wBoosterViableCardList
 	add hl, bc
-	farcallx $3, $438f
+	farcall $3, $438f
 	pop af
-	ld [$d23b], a
+	ld [wd23b], a
 	pop af
-	ld [$d23a], a
+	ld [wd23a], a
 	pop af
-	ld [$d130], a
+	ld [wd130], a
 	pop af
-	ld [$d12f], a
+	ld [wd12f], a
 	pop af
-	ld [$d23d], a
+	ld [wd23d], a
 	pop af
 	ld [wd131], a
 	pop de

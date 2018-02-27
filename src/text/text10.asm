@@ -94,11 +94,11 @@ TripleAttackX10Description: ; 582fc (16:42fc)
 	line "damage times the number of heads."
 	done
 
-CallforFamilyName: ; 58341 (16:4341)
+CallForFamilyName: ; 58341 (16:4341)
 	text "Call for Family"
 	done
 
-NidoranFsCallforFamilyDescription: ; 58352 (16:4352)
+NidoranFsCallForFamilyDescription: ; 58352 (16:4352)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Nidoran% or Nidoran$ and put"
 	line "it onto your Bench. Shuffle your"
@@ -472,7 +472,7 @@ BellsproutName: ; 592e5 (16:52e5)
 	text "Bellsprout"
 	done
 
-BellsproutsCallforFamilyDescription: ; 592f1 (16:52f1)
+BellsproutsCallForFamilyDescription: ; 592f1 (16:52f1)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Bellsprout and put it onto"
 	line "your Bench. Shuffle your deck"
@@ -777,7 +777,7 @@ EmberName: ; 59e0e (16:5e0e)
 	done
 
 EmberDescription: ; 59e15 (16:5e15)
-	text "Discard 1 ",TX_FIRE," Energy card attached to"
+	text "Discard 1 ", TX_FIRE, " Energy card attached to"
 	line "Charmander in order to use this"
 	line "attack."
 	done
@@ -802,7 +802,7 @@ FlamethrowerName: ; 59ee6 (16:5ee6)
 	done
 
 CharmeleonsFlamethrowerDescription: ; 59ef4 (16:5ef4)
-	text "Discard 1 ",TX_FIRE," Energy card attached to"
+	text "Discard 1 ", TX_FIRE, " Energy card attached to"
 	line "Charmeleon in order to use this"
 	line "attack."
 	done
@@ -829,7 +829,7 @@ EnergyBurnDescription: ; 59fb8 (16:5fb8)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
 	line "turn all Energy attached to"
-	line "Charizard into ",TX_FIRE," Energy for the"
+	line "Charizard into ", TX_FIRE, " Energy for the"
 	line "rest of the turn. This power can't"
 	line "be used if Charizard is Asleep,"
 	line "Confused, or Paralyzed."
@@ -884,7 +884,7 @@ FireBlastName: ; 5a231 (16:6231)
 	done
 
 FireBlastDescription: ; 5a23d (16:623d)
-	text "Discard 1 ",TX_FIRE," Energy card attached"
+	text "Discard 1 ", TX_FIRE, " Energy card attached"
 	line "to Ninetales in order to use this"
 	line "attack."
 	done
@@ -963,12 +963,12 @@ QuickAttackDescription: ; 5a56a (16:656a)
 	line "damage."
 	done
 
-FlamesofRageName: ; 5a5d8 (16:65d8)
+FlamesOfRageName: ; 5a5d8 (16:65d8)
 	text "Flames of Rage"
 	done
 
-FlamesofRageDescription: ; 5a5e8 (16:65e8)
-	text "Discard 2 ",TX_FIRE," Energy cards attached"
+FlamesOfRageDescription: ; 5a5e8 (16:65e8)
+	text "Discard 2 ", TX_FIRE, " Energy cards attached"
 	line "to Arcanine in order to use this"
 	line "attack. This attack does 40 damage"
 	line "plus 10 more damage for each damage"
@@ -986,7 +986,7 @@ Arcanine1Description: ; 5a694 (16:6694)
 	done
 
 ArcaninesFlamethrowerDescription: ; 5a6ed (16:66ed)
-	text "Discard 1 ",TX_FIRE," Energy card attached to"
+	text "Discard 1 ", TX_FIRE, " Energy card attached to"
 	line "Arcanine in order to use this"
 	line "attack."
 	done
@@ -1068,7 +1068,7 @@ FirePunchName: ; 5a9b3 (16:69b3)
 	done
 
 FirePunchDescription: ; 5a9bf (16:69bf)
-	text "Discard 1 ",TX_FIRE," Energy card attached to"
+	text "Discard 1 ", TX_FIRE, " Energy card attached to"
 	line "Magmar in order to use this attack."
 	done
 
@@ -1128,7 +1128,7 @@ Flareon1Description: ; 5abe1 (16:6be1)
 	done
 
 FlareonsFlamethrowerDescription: ; 5ac46 (16:6c46)
-	text "Discard 1 ",TX_FIRE," Energy card attached to"
+	text "Discard 1 ", TX_FIRE, " Energy card attached to"
 	line "Flareon in order to use this attack."
 	done
 
@@ -1147,7 +1147,7 @@ WildfireName: ; 5acf6 (16:6cf6)
 	done
 
 WildfireDescription: ; 5ad00 (16:6d00)
-	text "You may discard any number of ",TX_FIRE,""
+	text "You may discard any number of ", TX_FIRE, ""
 	line "Energy cards attached to Moltres"
 	line "when you use this attack. If you do,"
 	line "discard that many cards from the top"
@@ -1172,7 +1172,7 @@ FiregiverDescription: ; 5ae1e (16:6e1e)
 	text "When you put Moltres into play"
 	line "during your turn (not during"
 	line "set-up), put from 1 to 4 (chosen at"
-	line "random) ",TX_FIRE," Energy cards from your"
+	line "random) ", TX_FIRE, " Energy cards from your"
 	line "deck into your hand. Shuffle your"
 	line "deck afterward."
 	done
@@ -1244,8 +1244,8 @@ RainDanceName: ; 5b159 (16:7159)
 RainDanceDescription: ; 5b165 (16:7165)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
-	line "attach 1 ",TX_WATER," Energy card to 1 of"
-	line "your ",TX_WATER," Pok`mon. (This doesn't use"
+	line "attach 1 ", TX_WATER, " Energy card to 1 of"
+	line "your ", TX_WATER, " Pok`mon. (This doesn't use"
 	line "up your 1 Energy card attachment"
 	line "for the turn.)"
 	done
@@ -1262,7 +1262,7 @@ HydroPumpName: ; 5b267 (16:7267)
 
 HydroPumpDescription: ; 5b273 (16:7273)
 	text "Does 40 damage plus 10 more damage"
-	line "for each ",TX_WATER," Energy attached to"
+	line "for each ", TX_WATER, " Energy attached to"
 	line "Blastoise but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -1335,7 +1335,7 @@ WaterGunName: ; 5b53c (16:753c)
 
 PoliwagsWaterGunDescription: ; 5b547 (16:7547)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ",TX_WATER," Energy attached to"
+	line "for each ", TX_WATER, " Energy attached to"
 	line "Poliwag but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -1382,7 +1382,7 @@ PoliwrathName: ; 5b74f (16:774f)
 
 PoliwrathsWaterGunDescription: ; 5b75a (16:775a)
 	text "Does 30 damage plus 10 more damage"
-	line "for each ",TX_WATER," Energy attached to"
+	line "for each ", TX_WATER, " Energy attached to"
 	line "Poliwrath but not used to pay for"
 	line "this attack's Energy cost. You"
 	line "can't add more than 20 damage in"
@@ -1481,11 +1481,11 @@ ShellderName: ; 5bb6e (16:7b6e)
 	text "Shellder"
 	done
 
-HideinShellName: ; 5bb78 (16:7b78)
+HideInShellName: ; 5bb78 (16:7b78)
 	text "Hide in Shell"
 	done
 
-HideinShellDescription: ; 5bb87 (16:7b87)
+HideInShellDescription: ; 5bb87 (16:7b87)
 	text "Flip a coin. If heads, prevent all"
 	line "damage done to Shellder during your"
 	line "opponent's next turn. (Any other"
@@ -1531,7 +1531,7 @@ KrabbyName: ; 5bd63 (16:7d63)
 	text "Krabby"
 	done
 
-KrabbysCallforFamilyDescription: ; 5bd6b (16:7d6b)
+KrabbysCallForFamilyDescription: ; 5bd6b (16:7d6b)
 	text "Search your deck for a Basic Pok`mon"
 	line "named Krabby and put it onto your"
 	line "Bench. Shuffle your deck afterward."

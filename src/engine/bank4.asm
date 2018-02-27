@@ -1,14 +1,14 @@
 Func_10000: ; 10000 (4:4000)
 	ld a, $0
 	ld [wTileMapFill], a
-	call Func_04a2
+	call EmptyScreen
 	call Func_2119
 	ld de, $307f
 	call Func_2275
 	call Set_OBJ_8x8
 	xor a
-	ld [$ff92], a
-	ld [$ff93], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	ld a, [wLCDC]
 	bit 7, a
 	jr nz, .asm_10025
@@ -18,27 +18,27 @@ Func_10000: ; 10000 (4:4000)
 
 .asm_10025
 	call Func_1288c
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
 Func_10031: ; 10031 (4:4031)
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	call $4cbb
-	call DisableExtRAM
+	call DisableSRAM
 	call $4b28
-	call Func_0404
+	call SetFlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call $4cea
-	call Func_0404
+	call SetFlushAllPalettes
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	ret
 
 Func_10059: ; 10059 (4:4059)
@@ -54,7 +54,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, [wd291]
 	push af
 	push bc
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
@@ -71,9 +71,9 @@ Medal_1029e: ; 1029e (4:429e)
 	ld hl, Unknown_1030b
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	call $4031
 	ld a, MUSIC_MEDAL
 	call PlaySong
@@ -93,7 +93,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ldtx hl, WonTheMedalText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	pop af
 	ld [wd291], a
 	ret
@@ -109,7 +109,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call DisableLCD
 	call $4000
 	xor a
-	ld [wFrameType], a
+	ld [wTextBoxFrameType], a
 	pop bc
 	push bc
 	ld b, $0
@@ -128,16 +128,16 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call $70ca
 	pop hl
 	ld a, [hli]
-	ld [wce43], a
+	ld [wTxRam3], a
 	xor a
-	ld [wce44], a
+	ld [wTxRam3 + 1], a
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	call $4031
-	call Func_379b
-	ld a, MUSIC_BOOSTERPACK
+	call PauseSong
+	ld a, MUSIC_BOOSTER_PACK
 	call PlaySong
 	pop bc
 	ld a, c
@@ -150,17 +150,17 @@ BoosterPack_1031b: ; 1031b (4:431b)
 .asm_10373
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ldtx hl, CheckedCardsInBoosterPackText
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
-	ld [wFrameType], a
-	farcallx $1, $7599
+	ld [wTextBoxFrameType], a
+	farcall $1, $7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	pop af
@@ -179,9 +179,9 @@ Duel_Init: ; 103d3 (4:43d3)
 	call DisableLCD
 	call $4000
 	ld a, $4
-	ld [wFrameType], a
-	ld de, $000c
-	ld bc, $1406
+	ld [wTextBoxFrameType], a
+	lb de, 0, 12
+	lb bc, 20, 6
 	call DrawRegularTextBox
 	ld a, [wcc19]
 	add a
@@ -191,22 +191,22 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld hl, $445b
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hli]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	push hl
-	ld a, [wcc16]
-	ld [wce41], a
-	ld a, [wcc17]
-	ld [wce42], a
+	ld a, [wOpponentName]
+	ld [wTxRam2_b], a
+	ld a, [wOpponentName + 1]
+	ld [wTxRam2_b + 1], a
 	ld hl, $4451
 	call $51b3 ; LoadDuelistName
 	pop hl
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld c, a
 	ld a, [hli]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	or c
 	jr z, .asm_10425
 	ld hl, $4456
@@ -214,7 +214,7 @@ Duel_Init: ; 103d3 (4:43d3)
 
 .asm_10425
 	ld bc, $0703
-	ld a, [wcc15]
+	ld a, [wOpponentPortrait]
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
@@ -262,7 +262,7 @@ Func_10a70: ; 10a70 (4:4a70)
 	inc hl
 	dec c
 	jr nz, .asm_10a87
-	rst $38
+	debug_ret
 	jr .asm_10a97
 
 .asm_10a93
@@ -286,11 +286,11 @@ Func_10af9: ; 10af9 (4:4af9)
 	INCROM $10af9, $10c96
 
 Func_10c96: ; 10c96 (4:4c96)
-	ld a, [$ff81]
+	ldh a, [hBankSRAM]
 	push af
 	push bc
 	ld a, $1
-	call BankswitchRAM
+	call BankswitchSRAM
 	call $4cbb
 	call Func_10ab4
 	pop bc
@@ -303,8 +303,8 @@ Func_10c96: ; 10c96 (4:4c96)
 .asm_10cb0
 	call EnableLCD
 	pop af
-	call BankswitchRAM
-	call DisableExtRAM
+	call BankswitchSRAM
+	call DisableSRAM
 	ret
 ; 0x10cbb
 
@@ -322,7 +322,7 @@ Func_10dba: ; 10dba (4:4dba)
 	jr nc, .asm_10dca
 	ld a, e
 	ld [wd0ba], a
-	ld a, [$ffb1]
+	ldh a, [hCurrentMenuItem]
 	cp e
 	jr z, .asm_10ddd
 	ld a, $4
@@ -345,7 +345,7 @@ Func_10e28: ; 10e28 (4:4e28)
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd33e]
 	or a
 	jr nz, .asm_10e65
@@ -484,7 +484,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	ld [wd0bd], a
 	ld a, $0
 	ld [wd0be], a
-	ld hl, $d0b4
+	ld hl, wd0b4
 	set 4, [hl]
 	pop bc
 	pop hl
@@ -495,15 +495,15 @@ INCLUDE "data/overworld_indexes.asm"
 Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
 	farcall Func_1299f
-	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
 	ld a, $80
 	ld [hli], a
 	ld a, $10
 	ld [hl], a
 	ld b, $34
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_10fd8
 	ld b, $37
 .asm_10fd8
@@ -518,7 +518,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33e], a
 	ld a, $25
 	call Func_1299f
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	ld [wd33b], a
 	ld b, $35
 	ld a, [wConsole]
@@ -533,15 +533,15 @@ Func_10fde: ; 10fde (4:4fde)
 	farcall CheckIfEventFlagSet
 	or a
 	jr nz, .asm_11015
-	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty
 	set 7, [hl]
 .asm_11015
 	ret
 
 Func_11016: ; 11016 (4:5016)
 	ld a, [wd33b]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd33c]
 	inc a
 	call Func_12ab5
@@ -551,9 +551,9 @@ Func_11024: ; 11024 (4:5024)
 	ld a, $57
 	call PlaySFX
 	ld a, [wd336]
-	ld [wd4cf], a
-	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	ld [wWhichSprite], a
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
 	ld a, [wd33d]
@@ -583,7 +583,7 @@ Func_11024: ; 11024 (4:5024)
 
 Func_11060: ; 11060 (4:5060)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd341]
 	or a
 	jp nz, Func_11184
@@ -625,8 +625,8 @@ Func_11060: ; 11060 (4:5060)
 Func_110a6: ; 110a6 (4:50a6)
 	push hl
 	push bc
-	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
 	pop bc
 	ld a, b
 	sub [hl]
@@ -681,7 +681,7 @@ Func_11102: ; 11102 (4:5102)
 	ld [wd341], a
 	ld e, a
 	ld d, $0
-	ld hl, $d343
+	ld hl, wd343
 	xor a
 	ld [hli], a
 	bit 7, [hl]
@@ -704,7 +704,7 @@ Func_11102: ; 11102 (4:5102)
 	ld [wd345], a
 	ld a, b
 	ld [wd346], a
-	ld hl, $d344
+	ld hl, wd344
 	ld a, $1
 	bit 7, [hl]
 	jr z, .asm_1113a
@@ -718,7 +718,7 @@ Func_1113e: ; 1113e (4:513e)
 	ld [wd341], a
 	ld e, a
 	ld d, $0
-	ld hl, $d345
+	ld hl, wd345
 	xor a
 	ld [hli], a
 	bit 7, [hl]
@@ -740,7 +740,7 @@ Func_1113e: ; 1113e (4:513e)
 	ld [wd343], a
 	ld a, b
 	ld [wd344], a
-	ld hl, $d346
+	ld hl, wd346
 	ld a, $2
 	bit 7, [hl]
 	jr z, .asm_11175
@@ -765,8 +765,8 @@ Func_11184: ; 11184 (4:5184)
 	ld d, a
 	ld a, [wd348]
 	ld e, a
-	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
 	ld a, [wd343]
 	add d
 	ld d, a
@@ -784,7 +784,7 @@ Func_11184: ; 11184 (4:5184)
 	ld [wd347], a
 	ld a, e
 	ld [wd348], a
-	ld hl, $d341
+	ld hl, wd341
 	dec [hl]
 	ret
 ; 0x111b3
@@ -798,7 +798,10 @@ Func_1124d: ; 1124d (4:524d)
 	INCROM $1124d, $11320
 
 Func_11320: ; 11320 (4:5320)
-	INCROM $11320, $11416
+	INCROM $11320, $11343
+
+Func_11343: ; 11343 (4:5343)
+	INCROM $11343, $11416
 
 Func_11416: ; 11416 (4:5416)
 	INCROM $11416, $11430
@@ -830,7 +833,7 @@ Func_1157c: ; 1157c (4:557c)
 	ret
 ; 0x115a3
 
-
+Func_115a3: ; 115a3 (4:55a3)
 	INCROM $115a3, $1162a
 
 INCLUDE "data/map_scripts.asm"
@@ -839,9 +842,9 @@ INCLUDE "data/map_scripts.asm"
 Func_1184a: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
-	add (PointerTable_118f5 & $ff)
+	add LOW(PointerTable_118f5)
 	ld l, a
-	ld a, PointerTable_118f5 >> 8
+	ld a, HIGH(PointerTable_118f5)
 	adc $00
 	ld h, a
 	ld a, [hli]
@@ -856,7 +859,7 @@ Func_11857: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wd3ab], a
 	ld a, [hli]
-	ld [$d3b3], a
+	ld [wd3b3], a
 	ld a, [hli]
 	ld [wd3b1], a
 	ld a, [hli]
@@ -912,11 +915,11 @@ Func_118a7: ; 118a7 (4:58a7)
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
-	ld [wcc16], a
+	ld [wOpponentName], a
 	ld a, [hli]
-	ld [wcc17], a
+	ld [wOpponentName + 1], a
 	ld a, [hli]
-	ld [wcc15], a
+	ld [wOpponentPortrait], a
 	pop bc
 	pop hl
 	ret
@@ -960,6 +963,7 @@ Func_118d3: ; 118d3 (4:58d3)
 
 INCLUDE "data/npcs.asm"
 
+Func_11f4e: ; 11f4e (4:5f4e)
 	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
@@ -1073,43 +1077,47 @@ OverworldScriptTable: ; 1217b (4:617b)
 Unknown_1229f: ; 1229f (4:629f)
 	INCROM $1229f, $126d1
 
-Func_126d1: ; 126d1 (4:66d1)
-	call Func_099c
+; usually, the game doesn't loop here at all, since as soon as a main menu option
+; is selected, there is no need to come back to the menu.
+; the only exception is after returning from Card Pop!
+_GameLoop: ; 126d1 (4:66d1)
+	call InitSpritePositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018
 	ld a, $ff
 	ld [wd627], a
-.asm_126e1
+.main_menu_loop
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
 	farcall Func_1d078
 	ld a, [wd628]
-	ld hl, PointerTable_126fc
+	ld hl, MainMenuFunctionTable
 	call JumpToFunctionInTable
-	jr c, .asm_126e1
-	jr Func_126d1
+	jr c, .main_menu_loop ; return to main menu
+	jr _GameLoop ; virtually restart game
 
+; this is never reached
 	scf
 	ret
 
-PointerTable_126fc
-	dw CardPop_12768
-	dw Func_12741
-	dw Func_12704
-	dw Func_1277e
+MainMenuFunctionTable:
+	dw MainMenu_CardPop
+	dw MainMenu_ContinueFromDiary
+	dw MainMenu_NewGame
+	dw MainMenu_ContinueDuel
 
-Func_12704: ; 12704 (4:6704)
+MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
 	call Func_128a9
 	farcall Func_1996e
-	call EnableExtRAM
-	ld a, [$a007]
+	call EnableSRAM
+	ld a, [sa007]
 	ld [wd421], a
-	ld a, [$a006]
+	ld a, [sa006]
 	ld [wTextSpeed], a
-	call DisableExtRAM
+	call DisableSRAM
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
@@ -1117,31 +1125,31 @@ Func_12704: ; 12704 (4:6704)
 	ld [wd111], a
 	call Func_39fc
 	farcall Func_1d306
-	ld a, $0
-	ld [wd0b5], a
-	farcallx $03, Func_383d
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 
-Func_12741: ; 12741 (4:6741)
+MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_11320
-	jr nc, Func_12704
+	jr nc, MainMenu_NewGame
 	farcall Func_c1ed
 	farcall Func_70000
-	call EnableExtRAM
+	call EnableSRAM
 	xor a
 	ld [$ba44], a
-	call DisableExtRAM
-	ld a, $0
-	ld [wd0b5], a
-	farcallx $03, Func_383d
+	call DisableSRAM
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 
-CardPop_12768: ; 12768 (4:6768)
-	ld a, MUSIC_CARDPOP
+MainMenu_CardPop: ; 12768 (4:6768)
+	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call Func_7571
 	farcall Func_c1a4
@@ -1151,15 +1159,15 @@ CardPop_12768: ; 12768 (4:6768)
 	scf
 	ret
 
-Func_1277e: ; 1277e (4:677e)
+MainMenu_ContinueDuel: ; 1277e (4:677e)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_c9cb
-	farcallx $04, Func_3a40
+	farcall $04, Func_3a40
 	farcall Func_70000
-	ld a, $5
-	ld [wd0b5], a
-	farcallx $03, Func_383d
+	ld a, GAME_EVENT_CONTINUE_DUEL
+	ld [wGameEvent], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 ; 0x1279a
@@ -1192,7 +1200,7 @@ Func_1299f: ; 1299f (4:699f)
 	call Func_12c05
 	ld [wd5d3], a
 	xor a
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	call Func_3db7
 	ld bc, $0010
 .asm_129bb
@@ -1200,12 +1208,12 @@ Func_1299f: ; 1299f (4:699f)
 	or a
 	jr z, .asm_129cf
 	add hl, bc
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	inc a
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	cp $10
 	jr nz, .asm_129bb
-	rst $38
+	debug_ret
 	scf
 	jr .asm_129d6
 .asm_129cf
@@ -1253,8 +1261,8 @@ Func_12a21: ; 12a21 (4:6a21)
 Func_12ab5: ; 12ab5 (4:6ab5)
 	push hl
 	push af
-	ld c, $5
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_FIELD_05
+	call GetSpriteAnimBufferProperty
 	pop af
 	cp [hl]
 	pop hl
@@ -1320,11 +1328,11 @@ Func_12b13: ; 12b13 (4:6b13)
 	ld [wd4c5], a
 	adc $0
 	ld [hl], a
-	ld de, $d23e
+	ld de, wd23e
 	ld bc, $0004
 	call Func_3bf5
 	pop hl
-	ld de, $d23e
+	ld de, wd23e
 	ld a, [de]
 	call Func_12b6a
 	inc de
@@ -1422,7 +1430,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	ld d, $0
 	ld a, [wd618]
 	ld c, a
-	ld hl, $d5d8
+	ld hl, wd5d8
 	or a
 	jr z, .asm_12c22
 .asm_12c15
@@ -1467,7 +1475,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	or a
 	jr .asm_12c4b
 .asm_12c48
-	rst $38
+	debug_ret
 	xor a
 	scf
 .asm_12c4b
@@ -1499,35 +1507,35 @@ Func_131d3: ; 131d3 (4:71d3)
 	INCROM $131d3, $1344d
 
 Func_1344d: ; 1344d (4:744d)
-	call Func_379b
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, DefeatedFiveOpponentsText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ret
 ; 0x13462
 
 	INCROM $13462, $13485
 
 Func_13485: ; 13485 (4:7485)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, [$ba68]
 	or a
 	ret z
 	ld a, [$ba56]
-	ld [wce43], a
+	ld [wTxRam3], a
 	ld a, [$ba57]
-	ld [wce44], a
-	call DisableExtRAM
-	call Func_379b
+	ld [wTxRam3 + 1], a
+	call DisableSRAM
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, ConsecutiveWinRecordIncreasedText
 	call Func_2c73
 	call Func_3c96
-	call Func_37a0
+	call ResumeSong
 	ret
 ; 0x134b1
 

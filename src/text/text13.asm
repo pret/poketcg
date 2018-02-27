@@ -66,11 +66,11 @@ ItemFinderDescription: ; 6434f (19:434f)
 	line "your hand."
 	done
 
-GustofWindName: ; 643c2 (19:43c2)
+GustOfWindName: ; 643c2 (19:43c2)
 	text "Gust of Wind"
 	done
 
-GustofWindDescription: ; 643d0 (19:43d0)
+GustOfWindDescription: ; 643d0 (19:43d0)
 	text "Choose 1 of your opponent's Benched"
 	line "Pok`mon and switch it with his or"
 	line "her Active Pok`mon."

@@ -57,25 +57,25 @@ PointerTable_14000: ; 14000 (05:4000)
 	INCROM $1406a, $14226
 
 Func_14226: ; 14226 (5:4226)
-	call CreateHandCardBuffer
-	ld hl, wDuelCardOrAttackList
-.checkForNextPokemon
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.check_for_next_pokemon
 	ld a, [hli]
-	ld [$ff98], a
+	ldh [hTempCardIndex_ff98], a
 	cp $ff
 	ret z
-	call LoadDeckCardToBuffer1
+	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY_FIRE
-	jr nc, .checkForNextPokemon
+	jr nc, .check_for_next_pokemon
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .checkForNextPokemon
+	jr nz, .check_for_next_pokemon
 	push hl
-	ld a, [$ff98]
-	call Func_1485
+	ldh a, [hTempCardIndex_ff98]
+	call PutHandPokemonCardInPlayArea
 	pop hl
-	jr .checkForNextPokemon
+	jr .check_for_next_pokemon
 ; 0x1424b
 
 	INCROM $1424b, $14663
@@ -121,13 +121,13 @@ Func_1468b: ; 1468b (5:468b)
 	call Func_15649
 	ld a, $1
 	call Func_14663
-	farcallx $8, $67d3
+	farcall $8, $67d3
 	jp nc, $4776
-	farcallx $8, $6790
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $6790
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $662d
+	farcall $8, $662d
 	ld a, $2
 	call Func_14663
 	ld a, $3
@@ -158,17 +158,17 @@ Func_1468b: ; 1468b (5:468b)
 
 .asm_146ed
 	call $5eae
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $6790
+	farcall $8, $6790
 	ld a, $d
-	farcallx $8, $619b
+	farcall $8, $619b
 	ld a, $d
 	call Func_14663
 	ld a, $f
 	call Func_14663
-	ld a, [$ce20]
+	ld a, [wce20]
 	and $4
 	jr z, .asm_14776
 	ld a, $1
@@ -203,18 +203,18 @@ Func_1468b: ; 1468b (5:468b)
 
 .asm_1475b
 	call $5eae
-	farcallx $8, $66a3
-	farcallx $8, $637f
+	farcall $8, $66a3
+	farcall $8, $637f
 	ret c
-	farcallx $8, $6790
+	farcall $8, $6790
 	ld a, $d
-	farcallx $8, $619b
+	farcall $8, $619b
 	ld a, $d
 	call Func_14663
 
 .asm_14776
 	ld a, $e
-	farcallx $8, $619b
+	farcall $8, $619b
 	call $69f8
 	ret c
 	ld a, $5
@@ -226,23 +226,23 @@ Func_1468b: ; 1468b (5:468b)
 	INCROM $14786, $15636
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
-	ld hl, $cda5
+	ld hl, wcda5
 	call ZeroData
 	ld a, $5
-	ld [$cda6], a
+	ld [wcda6], a
 	ld a, $ff
-	ld [$cda5], a
+	ld [wcda5], a
 	ret
 
 Func_15649: ; 15649 (5:5649)
-	ld a, [$cda6]
+	ld a, [wcda6]
 	inc a
-	ld [$cda6], a
+	ld [wcda6], a
 	xor a
-	ld [$ce20], a
-	ld [$cddb], a
-	ld [$cddc], a
-	ld [$ce03], a
+	ld [wce20], a
+	ld [wcddb], a
+	ld [wcddc], a
+	ld [wce03], a
 	ld a, [wcc10]
 	cp $ff
 	jr z, .asm_156b1
@@ -252,50 +252,50 @@ Func_15649: ; 15649 (5:5649)
 	cp $ff
 	jr z, .asm_156b1
 	call SwapTurn
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1 ; I believe this is a check for Mewtwo1's Barrier move
 	jr nz, .asm_156b1
-	ld a, [$cda7]
+	ld a, [wcda7]
 	bit 7, a
 	jr nz, .asm_156aa
 	inc a
-	ld [$cda7], a
+	ld [wcda7], a
 	cp $3
 	jr c, .asm_156c2
-	ld a, (wPlayerArenaCard & $FF)
+	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
-	call GetCardInDeckPosition
+	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1
 	jr nz, .asm_156a4
-	farcallx $8, $67a9
+	farcall $8, $67a9
 	jr nc, .asm_156aa
 
 .asm_156a4
 	xor a
-	ld [$cda7], a
+	ld [wcda7], a
 	jr .asm_156c2
 
 .asm_156aa
 	ld a, $80
-	ld [$cda7], a
+	ld [wcda7], a
 	jr .asm_156c2
 
 .asm_156b1
-	ld a, [$cda7]
+	ld a, [wcda7]
 	bit 7, a
 	jr z, .asm_156be
 	inc a
-	ld [$cda7], a
+	ld [wcda7], a
 	jr .asm_156c2
 
 .asm_156be
 	xor a
-	ld [$cda7], a
+	ld [wcda7], a
 
 .asm_156c2
 	ret
@@ -310,10 +310,10 @@ ZeroData: ; 1575e (5:575e)
 	push hl
 	ld b, a
 	xor a
-.clearLoop
+.clear_loop
 	ld [hli], a
 	dec b
-	jr nz, .clearLoop
+	jr nz, .clear_loop
 	pop hl
 	pop bc
 	pop af

@@ -148,8 +148,8 @@ Func_1c50a: ; 1c50a (7:450a)
 	xor a
 	ld [hli], a
 	ld a, [hl]
-	farcallx $4, $69fd
-	ld hl, $d349
+	farcall $4, $69fd
+	ld hl, wd349
 	dec [hl]
 
 .asm_1c52c
@@ -329,7 +329,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	ret
 
 Func_1c7de: ; 1c7de (7:47de)
-	ld a, [$d3b7]
+	ld a, [wc3b7]
 	and $20
     ret
 ; 0x1c7e4
@@ -344,7 +344,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	push bc
 	ld b, a
 	ld c, $a
-	ld hl, $d3bb
+	ld hl, wd3bb
 .asm_1c845
 	ld a, [hl]
 	or a
@@ -354,7 +354,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	inc hl
 	dec c
 	jr nz, .asm_1c845
-	rst $38
+	debug_ret
 	jr .asm_1c855
 
 .asm_1c853
@@ -387,7 +387,7 @@ Func_1d078: ; 1d078 (7:5078)
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call $5614
-	ld hl, $d635
+	ld hl, wd635
 	inc [hl]
 	call Func_378a
 	or a
@@ -395,7 +395,7 @@ Func_1d078: ; 1d078 (7:5078)
 	farcall Func_10ab4
 	jr .asm_1d07e
 .asm_1d0ae
-	ld hl, $d626
+	ld hl, wd626
 	ld a, [hl]
 	or a
 	jr z, .asm_1d0b8
@@ -439,10 +439,10 @@ Func_1d078: ; 1d078 (7:5078)
 	INCROM $1d0fa, $1d11c
 
 Func_1d11c: ; 1d11c (7:511c)
-	ld a, MUSIC_PCMAINMENU
+	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call DisableLCD
-	farcallx $4, $4000
+	farcall $4, $4000
 	ld de, $308f
 	call Func_2275
 	call Func_3ca0
@@ -460,9 +460,9 @@ Func_1d11c: ; 1d11c (7:511c)
 	jr z, .asm_1d14f
 	ld a, $1
 .asm_1d14f
-	ld hl, $d636
+	ld hl, wd636
 	farcall Func_111e9
-	farcallx $4, $4031
+	farcall $4, $4031
 .asm_1d15a
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
@@ -536,7 +536,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld [wd324], a
 	ld a, MUSIC_CREDITS
 	call PlaySong
-	farcallx $4, $4031
+	farcall $4, $4031
 	call $57fc
 .asm_1d6c8
 	call DoFrameIfLCDEnabled
@@ -547,7 +547,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	jr nz, .asm_1d6c8
 	call Func_3c96
 	ld a, $8
-	farcallx $4, $6863
+	farcall $4, $6863
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_10ab4

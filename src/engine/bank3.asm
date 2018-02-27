@@ -1,17 +1,17 @@
 LoadMap: ; c000 (3:4000)
 	call DisableLCD
-	call EnableExtRAM
+	call EnableSRAM
 	bank1call Func_6785
-	call DisableExtRAM
-	ld a, $0
-	ld [wd0b5], a
+	call DisableSRAM
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
 	xor a
 	ld [wd10f], a
 	ld [wd110], a
 	ld [wMatchStartTheme], a
 	farcall Func_10a9b
 	call Func_c1a4
-	call Func_099c
+	call InitSpritePositions
 	xor a
 	ld [wTileMapFill], a
 	call Func_2119
@@ -24,7 +24,7 @@ LoadMap: ; c000 (3:4000)
 	farcall Func_10ab4
 	call Func_c1a4
 	call Func_c241
-	call Func_04a2
+	call EmptyScreen
 	call Func_3ca0
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
@@ -55,12 +55,12 @@ LoadMap: ; c000 (3:4000)
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
 	call Func_c0ce
-	ld hl, $d0b4
+	ld hl, wd0b4
 	ld a, [hl]
 	and $d0
 	jr z, .asm_c092
 	call DoFrameIfLCDEnabled
-	ld hl, $d0b4
+	ld hl, wd0b4
 	ld a, [hl]
 	bit 4, [hl]
 	jr z, .asm_c0b6
@@ -83,9 +83,9 @@ Func_c0ce: ; c0ce (3:40ce)
 	ld a, [wd0bf]
 	res 7, a
 	rlca
-	add PointerTable_c0e0 & $ff
+	add LOW(PointerTable_c0e0)
 	ld l, a
-	ld a, PointerTable_c0e0 >> $8
+	ld a, HIGH(PointerTable_c0e0)
 	adc $0
 	ld h, a
 	ld a, [hli]
@@ -120,7 +120,7 @@ Func_c0f1: ; c0f1 (3:40f1)
 	jr Func_c10a
 
 Func_c10a: ; c10a (3:410a)
-	ld hl, $d0c6
+	ld hl, wd0c6
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -147,13 +147,13 @@ CloseDialogueBox: ; c111 (3:4111)
 Func_c135: ; c135 (3:4135)
 	push hl
 	farcall Func_80028
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 0, [hl]
 	pop hl
 	ret
 
 Func_c141: ; c141 (3:4141)
-	ld hl, $d0c2
+	ld hl, wd0c2
 	ld a, [hl]
 	or a
 	ret z
@@ -219,11 +219,11 @@ Func_c1a0: ; c1a0 (3:41a0)
 
 Func_c1a4: ; c1a4 (3:41a4)
 	xor a
-	call Func_040c
+	call SetBGP
 	xor a
-	call Set_OBP0
+	call SetOBP0
 	xor a
-	call Set_OBP1
+	call SetOBP1
 	ret
 
 Func_c1b1: ; c1b1 (3:41b1)
@@ -266,12 +266,12 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd111], a
 	ld [wd112], a
 	ld [wd3b8], a
-	call EnableExtRAM
-	ld a, [$a007]
+	call EnableSRAM
+	ld a, [sa007]
 	ld [wd421], a
-	ld a, [$a006]
+	ld a, [sa006]
 	ld [wTextSpeed], a
-	call DisableExtRAM
+	call DisableSRAM
 	farcall Func_10756
 	ret
 
@@ -299,22 +299,22 @@ Func_c241: ; c241 (3:4241)
 	ret
 
 Func_c251: ; c251 (3:4251)
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	push af
 	ld a, $1
 	jr asm_c25d
 
 Func_c258: ; c258 (3:4258)
-	ldh a, [$ffb0]
+	ldh a, [hffb0]
 	push af
 	ld a, $2
 asm_c25d
-	ldh [$ffb0], a
+	ldh [hffb0], a
 	push hl
 	call Func_c268
 	pop hl
 	pop af
-	ldh [$ffb0], a
+	ldh [hffb0], a
 	ret
 
 Func_c268: ; c268 (3:4268)
@@ -341,7 +341,7 @@ Unknown_c27c: ; c27c (3:427c)
 Func_c280: ; c280 (3:4280)
 	call Func_c228
 	call Func_3ca0
-	call Func_099c
+	call InitSpritePositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	call EnableLCD
@@ -352,7 +352,7 @@ Func_c280: ; c280 (3:4280)
 
 Func_c29b: ; c29b (3:429b)
 	push hl
-	ld hl, $d0c1
+	ld hl, wd0c1
 	or [hl]
 	ld [hl], a
 	pop hl
@@ -370,7 +370,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	call Func_2275
 	farcall Func_12ba7
 	call Func_3ca0
-	call Func_099c
+	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call EnableLCD
@@ -397,20 +397,20 @@ Func_c2db: ; c2db (3:42db)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_c241
-	call Func_04a2
+	call EmptyScreen
 	ld a, [wd111]
 	push af
 	farcall Func_80000
 	pop af
 	ld [wd111], a
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 0, [hl]
 	call Func_c34e
 	farcall Func_12c5e
 	farcall Func_1c6f8
-	ld hl, $d0c1
+	ld hl, wd0c1
 	res 7, [hl]
-	ld hl, $d10f
+	ld hl, wd10f
 	ld a, [hli]
 	or [hl]
 	jr z, .asm_c323
@@ -437,9 +437,9 @@ Func_c335: ; c335 (3:4335)
 	ld [wd10c], a
 	ld a, [wOBP1]
 	ld [wd10d], a
-	ld hl, $cb30
-	ld de, $d0cc
-	ld bc, $0040
+	ld hl, wObjectPalettesCGB
+	ld de, wd0cc
+	ld bc, 8 * CGB_PAL_SIZE
 	call CopyDataHLtoDE_SaveRegisters
 	ret
 
@@ -448,11 +448,11 @@ Func_c34e: ; c34e (3:434e)
 	ld [wOBP0], a
 	ld a, [wd10d]
 	ld [wOBP1], a
-	ld hl, $d0cc
-	ld de, $cb30
-	ld bc, $0040
+	ld hl, wd0cc
+	ld de, wObjectPalettesCGB
+	ld bc, 8 * CGB_PAL_SIZE
 	call CopyDataHLtoDE_SaveRegisters
-	call Func_0404
+	call SetFlushAllPalettes
 	ret
 
 Func_c36a: ; c36a (3:436a)
@@ -580,7 +580,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld [wd337], a
 	ld a, $0
 	farcall Func_1299f
-	ld a, [wd4cf]
+	ld a, [wWhichSprite]
 	ld [wd336], a
 	ld b, $2
 	ld a, [wCurMap]
@@ -607,7 +607,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 
 Func_c510: ; c510 (3:4510)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd335]
 	bit 4, a
 	ret nz
@@ -630,7 +630,7 @@ Func_c510: ; c510 (3:4510)
 
 Func_c53d: ; c53d (3:453d)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd335]
 	bit 0, a
 	call nz, Func_c687
@@ -641,7 +641,7 @@ Func_c53d: ; c53d (3:453d)
 
 Func_c554: ; c554 (3:4554)
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .asm_c566
@@ -656,8 +656,8 @@ Func_c554: ; c554 (3:4554)
 	ld d, a
 	ld a, [wSCYBuffer]
 	ld e, a
-	ld c, $2
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
 	ld a, [wd332]
 	sub d
 	add $8
@@ -680,8 +680,8 @@ Func_c58b: ; c58b (3:458b)
 	call GetFloorObjectFromPos
 	and $10
 	push af
-	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty
 	pop af
 	ld a, [hl]
 	jr z, .asm_c5a7
@@ -740,7 +740,7 @@ Unknown_c5e5: ; c5e5 (3:45e5)
 Func_c5e9: ; c5e9 (3:45e9)
 	push bc
 	ld a, [wd336]
-	ld [wd4cf], a
+	ld [wWhichSprite], a
 	ld a, [wd337]
 	ld b, a
 	ld a, [wd334]
@@ -759,8 +759,8 @@ Func_c5fe: ; c5fe (3:45fe)
 StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wd336]
-	ld [wd4cf], a
-	ld a, [$d339]
+	ld [wWhichSprite], a
+	ld a, [wd339]
 	call FindScriptedMovementWithOffset
 	call AttemptScriptedMovement
 	pop bc
@@ -772,13 +772,13 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	push bc
 	ld a, b
 	cp $1f
-	jr nc, .quitMovement
+	jr nc, .quit_movement
 	ld a, c
 	cp $1f
-	jr nc, .quitMovement
+	jr nc, .quit_movement
 	call GetFloorObjectFromPos
 	and $40 | $80 ; the two impassable objects found in the floor map
-	jr nz, .quitMovement
+	jr nz, .quit_movement
 	ld a, b
 	ld [wPlayerXCoord], a
 	ld a, c
@@ -788,14 +788,14 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld [wd335], a
 	ld a, $10
 	ld [wd338], a
-	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty
 	set 2, [hl]
-	ld c, $e
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	call GetSpriteAnimBufferProperty
 	ld a, $4
 	ld [hl], a
-.quitMovement
+.quit_movement
 	pop bc
 	pop hl
 	ret
@@ -840,9 +840,9 @@ Func_c66c: ; c66c (3:466c)
 
 Func_c687: ; c687 (3:4687)
 	push bc
-	ld a, [$d33a]
+	ld a, [wd33a]
 	ld c, a
-	ld a, [$d339]
+	ld a, [wd339]
 	call Func_c694
 	pop bc
     ret
@@ -887,7 +887,7 @@ Func_c694: ; c694 (3:4694)
 
 Func_c6cc: ; c6cc (3:46cc)
 	push hl
-	ld hl, $d332
+	ld hl, wd332
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -895,7 +895,7 @@ Func_c6cc: ; c6cc (3:46cc)
 
 Func_c6d4: ; c6d4 (3:46d4)
 	push hl
-	ld hl, $d333
+	ld hl, wd333
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -917,23 +917,23 @@ Func_c6dc: ; c6dc (3:46dc)
 
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wd336]
-	ld [wd4cf], a
-	ld c, $f
-	call ModifyUnknownOAMBufferProperty
+	ld [wWhichSprite], a
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty
 	res 2, [hl]
-	ld c, $e
-	call ModifyUnknownOAMBufferProperty
+	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	call GetSpriteAnimBufferProperty
 	ld a, $ff
 	ld [hl], a
 	ret
 
 Func_c70d: ; c70d (3:470d)
 	push hl
-	ld hl, $d0bb
+	ld hl, wd0bb
 	ld a, [wCurMap]
 	cp [hl]
 	jr z, .asm_c71c
-	ld hl, $d0b4
+	ld hl, wd0b4
 	set 4, [hl]
 .asm_c71c
 	pop hl
@@ -977,8 +977,8 @@ Func_c74d: ; c74d (3:474d)
 	ret
 
 MainMenu_c75a: ; c75a (3:475a)
-	call Func_379b
-	ld a, MUSIC_PAUSEMENU
+	call PauseSong
+	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
 	call Func_c797
 .asm_c765
@@ -1003,7 +1003,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	call Func_c32b
 	jr .asm_c765
 .asm_c793
-	call Func_37a0
+	call ResumeSong
 	ret
 
 Func_c797: ; c797 (3:4797)
@@ -1057,7 +1057,7 @@ Func_c7e5: ; c7e5 (3:47e5)
 	ret
 
 PC_c7ea: ; c7ea (3:47ea)
-	ld a, MUSIC_PCMAINMENU
+	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call Func_c241
 	call $4915
@@ -1105,14 +1105,14 @@ Func_c891: ; c891 (3:4891)
 	ld a, [wd0c1]
 	bit 0, a
 	jr z, .asm_c8a1
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld a, [hli]
 	or [hl]
 	call nz, Func_c135
 
 .asm_c8a1
 	xor a
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hli], a
 	ld [hl], a
 	pop hl
@@ -1132,7 +1132,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	ld a, [wd0c1]
 	bit 0, a
 	jr z, .asm_c8d4
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld a, [hli]
 	cp e
 	jr nz, .asm_c8d1
@@ -1144,7 +1144,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	call Func_c135
 
 .asm_c8d4
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -1173,7 +1173,7 @@ Func_c8ed: ; c8ed (3:c8ed)
 	jr z, .asm_c90e
 	push hl
 	xor a
-	ld hl, $d3b9
+	ld hl, wd3b9
 	ld [hli], a
 	ld [hl], a
 	pop hl
@@ -1210,7 +1210,7 @@ Func_c926: ; c926 (3:4926)
 
 Func_c935: ; c935 (3:4935)
 	push hl
-	ld hl, $d0c6
+	ld hl, wd0c6
 	ld [hl], c
 	inc hl
 	ld [hl], b
@@ -1233,7 +1233,7 @@ Func_c943: ; c943 (3:4943)
 	ld [wd4c5], a
 	ld a, $4
 	ld [wd4c6], a
-	ld de, $d3ab
+	ld de, wd3ab
 	ld bc, $0006
 	call Func_3bf5
 	ld a, [wd3ab]
@@ -1524,15 +1524,15 @@ Func_cad8: ; cad8 (3:4ad8)
 
 .asm_caff
 	ld a, $c
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb05
 	ld a, $b
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb0b
 	ld a, $a
-	farcallx $4, $4a70
+	farcall $4, $4a70
 
 .asm_cb11
 	pop af
@@ -1627,7 +1627,7 @@ IncreaseOWScriptPointer: ; cc7a (3:4c7a)
 	add c
 	ld [wOWScriptPointer], a
 	ld a, [wOWScriptPointer+1]
-	adc a, 00
+	adc 0
 	ld [wOWScriptPointer+1], a
 	ret
 
@@ -1669,12 +1669,12 @@ GetOWSArgsAfterPointer: ; cca0 (3:4ca0)
 
 Func_ccb3: ; ccb3 (3:4cb3)
 	ld a, $ff
-	ld [$d415], a
+	ld [wd415], a
 	ret
 
 Func_ccb9: ; ccb9 (3:4cb9)
 	xor a
-	ld [$d415], a
+	ld [wd415], a
 	ret
 
 OWScript_EndScriptLoop1: ; ccbe (3:4cbe)
@@ -1724,7 +1724,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld h, b
 	call Func_c8ed
 	ld a, [hCurrentMenuItem]
-	ld [$d415], a
+	ld [wd415], a
 	jr c, .asm_ccfe
 	call GetOWSArgs3AfterPointer
 	jr z, .asm_ccfe
@@ -1745,7 +1745,7 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld a, [wcc19]
 	cp $ff
 	jr nz, .asm_cd26
-	ld a, [$d695]
+	ld a, [wd695]
 	ld c, a
 	ld b, $0
 	ld hl, $4d63
@@ -1759,25 +1759,25 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld a, [hl]
 asm_cd2f
 	ld [wd0c4], a
-	ld [$cc14], a
+	ld [wcc14], a
 	push af
 	farcall Func_1c557
 	ld [wd0c5], a
 	pop af
 	farcall Func_118a7
-	ld a, $1
-	ld [wd0b5], a
+	ld a, GAME_EVENT_DUEL
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy4
 
 Func_cd4f: ; cd4f (3:4d4f)
 	call Func_cd66
-	ld a, [$d696]
+	ld a, [wd696]
 	farcall Func_118bf
 	ld a, $16
 	ld [wMatchStartTheme], a
-	ld a, [$d696]
+	ld a, [wd696]
 	jr asm_cd2f
 
 Unknown_dd63: ; cd4f (3:4d4f)
@@ -1794,14 +1794,14 @@ Func_cd66: ; cd66 (3:4d66)
 	ret
 
 Func_cd76: ; cd76 (3:4d76)
-	ld a, $2
-	ld [wd0b5], a
+	ld a, GAME_EVENT_BATTLE_CENTER
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
 
 Func_cd83: ; cd83 (3:4d83)
-	ld a, [$d415]
+	ld a, [wd415]
 	or a
 	jr nz, .asm_cd8c
 	call GetOWSArgs3AfterPointer
@@ -1826,7 +1826,7 @@ Unknown_cd98:
 	jp IncreaseOWScriptPointerBy7
 
 Func_cda8: ; cda8 (3:4da8)
-	ld a, [$d415]
+	ld a, [wd415]
 	or a
 	jr nz, .asm_cdb1
 	call GetOWSArgs3AfterPointer
@@ -1859,7 +1859,7 @@ Func_cdd8: ; cdd8 (3:4dd8)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 	ld [wd3ab], a
 	call Func_39c3
 	call Func_4dd1
@@ -1874,14 +1874,14 @@ Func_cdf5: ; cdf5 (3:4df5)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 	ld [wd3ab], a
 	ld a, c
-	ld [$d3ac], a
+	ld [wd3ac], a
 	ld a, b
-	ld [$d3ad], a
+	ld [wd3ad], a
 	ld a, $2
-	ld [$d3ae], a
+	ld [wd3ae], a
 	ld a, [wd3ab]
 	farcall Func_11857
 	farcall Func_1c485
@@ -1923,7 +1923,7 @@ Func_ce52: ; ce52 (3:4e52)
 	push af
 	ld a, [wd3ab]
 	push af
-	ld a, [$d696]
+	ld a, [wd696]
 asm_ce5d
 	ld [wd3ab], a
 	call Func_39c3
@@ -1952,7 +1952,7 @@ Func_ce84: ; ce84 (3:4e84)
 	call Func_c135
 	jp IncreaseOWScriptPointerBy1
 
-; args: booster pack index, booster pack index, boosterpack index
+; args: booster pack index, booster pack index, booster pack index
 OWScript_GiveBoosterPacks: ; ce8a (3:4e8a)
 	xor a
 	ld [wd117], a
@@ -2008,7 +2008,7 @@ Func_cee2: ; cee2 (3:4ee2)
 	jr z, .asm_cf09
 	or a
 	jr nz, .asm_cef0
-	ld a, [$d697]
+	ld a, [wd697]
 
 .asm_cef0
 	push af
@@ -2027,12 +2027,12 @@ Func_cee2: ; cee2 (3:4ee2)
 
 Func_cf0c: ; cf0c (3:4f0c)
 	ld a, c
-	call Func_1ce1
+	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
 Func_cf12: ; cf12 (3:4f12)
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 
 asm_cf16
 	or a
@@ -2055,7 +2055,7 @@ Func_cf2d: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseOWScriptPointerBy1
 	pop bc
-	call Func_1caa
+	call GetRawAmountOfCardsOwned
 	ld a, h
 	cp b
 	jr nz, .asm_cf3b
@@ -2070,7 +2070,7 @@ Func_cf3f: ; cf3f (3:4f3f)
 	ld a, c
 	or a
 	jr nz, .asm_cf46
-	ld a, [$d697]
+	ld a, [wd697]
 
 .asm_cf46
 	call AddCardToCollection
@@ -2078,7 +2078,7 @@ Func_cf3f: ; cf3f (3:4f3f)
 
 Func_cf4c: ; cf4c (3:4f4c)
 	ld a, c
-	call Func_1d91
+	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy2
 
 Func_cf53: ; cf53 (3:4f53)
@@ -2086,7 +2086,7 @@ Func_cf53: ; cf53 (3:4f53)
 	ld b, $0
 .asm_cf57
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 	add b
 	ld b, a
 	inc c
@@ -2114,12 +2114,12 @@ Func_cf7b: ; cf7b (3:4f7b)
 .asm_cf7d
 	push bc
 	ld a, c
-	call Func_1d1d
+	call GetCardCountInCollection
 	jr c, .asm_cf8c
 	ld b, a
 .asm_cf85
 	ld a, c
-	call Func_1d91
+	call RemoveCardFromCollection
 	dec b
 	jr nz, .asm_cf85
 
@@ -2212,14 +2212,14 @@ Func_cfd4: ; cfd4 (3:4fd4)
 Func_d00b: ; d00b (3:500b)
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	call Func_ca69
 	dec hl
 	ld e, a
 	ld d, $0
-	call Func_2f45
+	call GetCardName
 	pop hl
 	ld [hl], e
 	inc hl
@@ -2229,21 +2229,21 @@ Func_d00b: ; d00b (3:500b)
 Func_d025: ; d025 (3:5025)
 	call Func_ca69
 	dec hl
-	call Func_1ce1
+	call GetCardCountInCollectionAndDecks
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d032: ; d032 (3:5032)
 	call Func_ca69
 	dec hl
-	call Func_1d1d
+	call GetCardCountInCollection
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d03f: ; d03f (3:503f)
 	call Func_ca69
 	dec hl
-	call Func_1d91
+	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy1
 
 OWScript_ScriptJump: ; d049 (3:5049)
@@ -2262,9 +2262,9 @@ Func_d055: ; d055 (3:5055)
 
 OWScript_MovePlayer: ; 505c (3:505c)
 	ld a, c
-	ld [$d339], a
+	ld [wd339], a
 	ld a, b
-	ld [$d33a], a
+	ld [wd33a], a
 	call StartScriptedMovement
 .asm_d067
 	call DoFrameIfLCDEnabled
@@ -2387,7 +2387,7 @@ Func_d125: ; d125 (3:5125)
 Func_d135: ; d135 (3:5135)
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	ld a, [wd32e]
@@ -2415,10 +2415,10 @@ Func_d16b: ; d16b (3:516b)
 	push de
 	sla c
 	ld b, $0
-	ld hl, wce3f
+	ld hl, wTxRam2
 	add hl, bc
 	push hl
-	ld a, [$d696]
+	ld a, [wd696]
 	farcall Func_11893
 	pop hl
 	ld a, [wd0c8]
@@ -2470,11 +2470,11 @@ asm_d1c6
 	ld d, $0
 	add hl, de
 	ld a, [hli]
-	ld [$d697], a
+	ld [wd697], a
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 	jp IncreaseOWScriptPointerBy1
 
 	INCROM $d1dc, $d209
@@ -2521,7 +2521,7 @@ Func_d24c: ; d24c (3:524c)
 	ld hl, $525e
 	xor a
 	call Func_d28c
-	ld a, [$d695]
+	ld a, [wd695]
 	ld c, a
 	call Func_ca8f
 	halt
@@ -2539,7 +2539,7 @@ Func_d271: ; d271 (3:5271)
 	INCROM $d27b, $d28c
 
 Func_d28c: ; d28c (3:528c)
-	ld [$d416], a
+	ld [wd416], a
 	push hl
 	call Func_c241
 	call Func_c915
@@ -2566,12 +2566,12 @@ Func_d28c: ; d28c (3:528c)
 	push hl
 	ld h, [hl]
 	ld l, a
-	ld a, [$d416]
+	ld a, [wd416]
 	farcall Func_111e9
 	pop hl
 	inc hl
 	ld a, [hli]
-	ld [$d417], a
+	ld [wd417], a
 	push hl
 
 .asm_d2c1
@@ -2581,7 +2581,7 @@ Func_d28c: ; d28c (3:528c)
 	ld a, [hCurrentMenuItem]
 	cp e
 	jr z, .asm_d2d9
-	ld a, [$d417]
+	ld a, [wd417]
 	or a
 	jr z, .asm_d2c1
 	ld e, a
@@ -2607,9 +2607,9 @@ Func_d28c: ; d28c (3:528c)
 	jr z, .asm_d2f5
 	add hl, bc
 	ld a, [hli]
-	ld [wce3f], a
+	ld [wTxRam2], a
 	ld a, [hl]
-	ld [wce40], a
+	ld [wTxRam2 + 1], a
 
 .asm_d2f5
 	ret
@@ -2618,12 +2618,12 @@ Func_d2f6: ; d2f6 (3:52f6)
 	ld hl, $530c
 	xor a
 	call Func_d28c
-	ld a, [$d694]
+	ld a, [wd694]
 	ld c, a
 	call Func_ca8f
 	ld [hl], l
 	xor a
-	ld [$d694], a
+	ld [wd694], a
 	jp IncreaseOWScriptPointerBy1
 ; 0xd30c
 
@@ -2631,9 +2631,9 @@ Func_d2f6: ; d2f6 (3:52f6)
 
 Func_d317: ; d317 (3:5317)
 	ld hl, $532b
-	ld a, [$d694]
+	ld a, [wd694]
 	call Func_d28c
-	ld a, [$d694]
+	ld a, [wd694]
 	ld c, a
 	call Func_ca8f
 	ld [hl], l
@@ -2645,10 +2645,10 @@ Func_d317: ; d317 (3:5317)
 DeckMachine_d336: ; d336 (3:5336)
 	push bc
 	call Func_c2a3
-	call Func_379b
-	ld a, MUSIC_DECKMACHINE
+	call PauseSong
+	ld a, MUSIC_DECK_MACHINE
 	call PlaySong
-	call Func_04a2
+	call EmptyScreen
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -2665,7 +2665,7 @@ DeckMachine_d336: ; d336 (3:5336)
 .asm_d360
 	farcall Func_b19d
 .asm_d364
-	call Func_37a0
+	call ResumeSong
 	call Func_c2d4
 	jp IncreaseOWScriptPointerBy2
 
@@ -2707,8 +2707,8 @@ Func_d39d: ; d39d (3:539d)
 	jr .asm_d3b6
 
 .asm_d3ac
-	ld a, $3
-	ld [wd0b5], a
+	ld a, GAME_EVENT_GIFT_CENTER
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 
@@ -2717,8 +2717,8 @@ Func_d39d: ; d39d (3:539d)
 
 Func_d3b9: ; d3b9 (3:53b9)
 	call Func_3917
-	ld a, $4
-	ld [wd0b5], a
+	ld a, GAME_EVENT_CREDITS
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
@@ -2732,7 +2732,7 @@ Func_d3d1: ; d3d1 (3:53d1)
     jp IncreaseOWScriptPointerBy1
 
 Func_d3d4: ; d3d4 (3:53d4)
-	ld a, [$d693]
+	ld a, [wd693]
 	bank1call Func_7576
 	jp IncreaseOWScriptPointerBy1
 
@@ -2777,11 +2777,11 @@ Func_d41d: ; d41d (3:541d)
 	jp IncreaseOWScriptPointerBy1
 
 Func_d423: ; d423 (3:5423)
-	call Func_379b
+	call PauseSong
 	jp IncreaseOWScriptPointerBy1
 
 Func_d429: ; d429 (3:5429)
-	call Func_37a0
+	call ResumeSong
 	jp IncreaseOWScriptPointerBy1
 
 Func_d42f: ; d42f (3:542f)
@@ -2794,8 +2794,8 @@ Func_d435: ; d435 (3:5435)
 	jp IncreaseOWScriptPointerBy2
 
 Func_d43d: ; d43d (3:543d)
-	ld a, $6
-	ld [wd0b5], a
+	ld a, GAME_EVENT_CHALLENGE_MACHINE
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
@@ -2981,11 +2981,11 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	jp Func_c926
 
 WaterClubAfterDuel: ;e157 (3:6157)
-	ld hl, .afterDuelTable
+	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
 
-.afterDuelTable
+.after_duel_table
 	dw $1f1f
 	dw OWSequence_BeatSara
 	dw OWSequence_LostToSara
@@ -3009,17 +3009,17 @@ OWSequence_Sara: ; e177 (3:6177)
 	tx Text042c
 	run_script OWScript_AskQuestionJump
 	tx Text042d
-	dw .yesDuel
+	dw .yes_duel
 	run_script OWScript_PrintTextString
 	tx Text042e
 	run_script OWScript_EndScriptCloseText
-.yesDuel
+.yes_duel
 	run_script OWScript_PrintTextString
 	tx Text042f
 	run_script OWScript_StartBattle
 	db 2
 	db WATERFRONT_POKEMON_DECK - 2 ; 6189
-	db MUSIC_DUELTHEME1
+	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatSara: ; e18c (3:618c)
@@ -3047,17 +3047,17 @@ OWSequence_Amanda: ; e19e (03:619e)
 	tx Text0433
 	run_script OWScript_AskQuestionJump
 	tx Text0434
-	dw .yesDuel
+	dw .yes_duel
 	run_script OWScript_PrintTextString
 	tx Text0435
 	run_script OWScript_EndScriptCloseText
-.yesDuel
+.yes_duel
 	run_script OWScript_PrintTextString
 	tx Text0436
 	run_script OWScript_StartBattle
 	db 03
 	db LONELY_FRIENDS_DECK - 2
-	db MUSIC_DUELTHEME1
+	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatAmanda: ; e1b3 (03:61b3)
@@ -3086,20 +3086,20 @@ OWSequence_Joshua:
 	start_script
 	run_script OWScript_JumpIfFlagNotSet
 	db FLAG_BEAT_AMANDA
-	dw .saraAndAmandaNotBeaten
+	dw .sara_and_amanda_not_beaten
 	run_script OWScript_JumpIfFlagNotSet
 	db FLAG_BEAT_SARA
-	dw .saraAndAmandaNotBeaten
+	dw .sara_and_amanda_not_beaten
 	run_script OWScript_ScriptJump
-	dw .beatSaraAndAmanda
-.saraAndAmandaNotBeaten
+	dw .beat_sara_and_amanda
+.sara_and_amanda_not_beaten
 	run_script OWScript_CustomModifyEventFlags
 	db $33 ; offset on flagmod table
 	db $01 ; the control bit
 	run_script OWScript_PrintTextString
 	tx Text043b
 	run_script OWScript_EndScriptCloseText
-.beatSaraAndAmanda
+.beat_sara_and_amanda
 	run_script OWScript_JumpIfFlagSet
 	db $33
 	dw $623c
@@ -3120,23 +3120,23 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
 	ld a, [wd0c3]
 	or a
-	jr z, .playerWon
+	jr z, .player_won
 	ld c, $2
 
-.playerWon
+.player_won
 	ld a, [wd0c4]
 	ld b, a
 	ld de, $0005
-.checkEnemyByteLoop
+.check_enemy_byte_loop
 	ld a, [hli]
 	or a
 	ret z
 	cp b
-	jr z, .foundEnemy
+	jr z, .found_enemy
 	add hl, de
-	jr .checkEnemyByteLoop
+	jr .check_enemy_byte_loop
 
-.foundEnemy
+.found_enemy
 	ld a, [hli]
 	ld [wd3ab], a
 	ld b, $0
@@ -3179,7 +3179,7 @@ Func_f580: ; f580 (3:7580)
 
 .asm_f5ac
 	ld [wd3ab], a
-	ld [$d696], a
+	ld [wd696], a
 	ret
 ; 0xf5b3
 

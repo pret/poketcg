@@ -22,7 +22,16 @@ Func_70018: ; 70018 (1c:4018)
 	ret
 ; 0x70024
 
-	INCROM $70024, $70044
+AtrcEnPacket_Disable: ; 70024 (1c:4024)
+	sgb ATRC_EN, 1 ; sgb_command, length
+	db 1
+	ds $0e
+
+; disable Controller Set-up Screen
+IconEnPacket: ; 70034 (1c:4034)
+	sgb ICON_EN, 3 ; sgb_command, length
+	db $01
+	ds $0e
 
 Func_70044: ; 70044 (1c:4044)
 	push hl
@@ -80,10 +89,10 @@ Func_700a3: ; 700a3 (1c:40a3)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, vTiles1
+	ld de, v0Tiles1
 	call Func_701e9
 	call Func_701fe
-	ld hl, SGB_700de
+	ld hl, ChrTrnPacket_BGTiles1
 	call Func_70177
 	pop hl
 	ld de, $0002
@@ -96,9 +105,9 @@ Func_700a3: ; 700a3 (1c:40a3)
 	jr z, .asm_700da
 	call Func_70136
 	dec hl
-	ld de, vTiles1
+	ld de, v0Tiles1
 	call Func_701e9
-	ld hl, SGB_700ee
+	ld hl, ChrTrnPacket_BGTiles2
 	call Func_70177
 .asm_700da
 	pop de
@@ -107,12 +116,16 @@ Func_700a3: ; 700a3 (1c:40a3)
 	ret
 
 ; CHR_TRN: tiles $00-$7F, BG (border) tiles (from SNES $000-$FFF)
-SGB_700de: ; 700de (1c:40de)
-	INCROM $700de, $700ee
+ChrTrnPacket_BGTiles1: ; 700de (1c:40de)
+	sgb CHR_TRN, 1 ; sgb_command, length
+	db 0
+	ds $0e
 
 ; CHR_TRN: tiles $80-$FF, BG (border) tiles (from SNES $000-$FFF)
-SGB_700ee: ; 700ee (1c:40ee)
-	INCROM $700ee, $700fe
+ChrTrnPacket_BGTiles2: ; 700ee (1c:40ee)
+	sgb CHR_TRN, 1 ; sgb_command, length
+	db 1
+	ds $0e
 
 Func_700fe: ; 700fe (1c:40fe)
 	push hl
@@ -123,15 +136,15 @@ Func_700fe: ; 700fe (1c:40fe)
 	push hl
 	call Func_70136
 	pop hl
-	ld de, vTiles1
+	ld de, v0Tiles1
 	call Func_701e9
 	pop hl
-	ld de, vTiles2
+	ld de, v0Tiles2
 	call Func_701e9
 	call Func_701fe
 	pop hl
 	call Func_70214
-	ld hl, SGB_70126
+	ld hl, PctTrnPacket
 	call Func_70177
 	pop de
 	pop bc
@@ -139,8 +152,9 @@ Func_700fe: ; 700fe (1c:40fe)
 	ret
 
 ; PCT_TRN: read tile map & palette data into VRAM (from SNES $000-$87F)
-SGB_70126: ; 70126 (1c:4126)
-	INCROM $70126, $70136
+PctTrnPacket: ; 70126 (1c:4126)
+	sgb PCT_TRN, 1 ; sgb_command, length
+	ds $0f
 
 Func_70136: ; 70136 (1c:4136)
 	push hl
@@ -155,7 +169,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld a, [wLCDC]
 	ld [wd420], a
 	di
-	ld hl, SGB_MASK_EN_ON_701a0
+	ld hl, MaskEnPacket_Freeze_Bank1c
 	call SendSGB
 	call DisableLCD
 	ld a, [wLCDC]
@@ -164,7 +178,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld [wLCDC], a
 	ld a, $e4
 	ld [rBGP], a
-	call Func_040c
+	call SetBGP
 	xor a
 	ldh [hSCX], a
 	ld [rSCX], a
@@ -188,7 +202,7 @@ Func_70177: ; 70177 (1c:4177)
 	ld a, [wd41e]
 	ldh [hSCY], a
 	ld a, [wd41f]
-	call Func_040c
+	call SetBGP
 	ld a, [wd420]
 	ld [wLCDC], a
 	call DisableLCD
@@ -199,12 +213,16 @@ Func_70177: ; 70177 (1c:4177)
 	ret
 
 ; MASK_EN on
-SGB_MASK_EN_ON_701a0: ; 701a0 (1c:41a0)
-	INCROM $701a0, $701b0
+MaskEnPacket_Freeze_Bank1c: ; 701a0 (1c:41a0)
+	sgb MASK_EN, 1 ; sgb_command, length
+	db MASK_EN_FREEZE_SCREEN
+	ds $0e
 
 ; MASK_EN off
-SGB_MASK_EN_OFF_701b0: ; 701b0 (1c:41b0)
-	INCROM $701b0, $701c0
+MaskEnPacket_Cancel_Bank1c: ; 701b0 (1c:41b0)
+	sgb MASK_EN, 1 ; sgb_command, length
+	db MASK_EN_CANCEL_MASK
+	ds $0e
 
 Func_701c0: ; 701c0 (1c:41c0)
 	push hl
@@ -212,7 +230,7 @@ Func_701c0: ; 701c0 (1c:41c0)
 	call DisableLCD
 	xor a
 	ld c, $10
-	ld hl, vTiles2
+	ld hl, v0Tiles2
 .asm_701cb
 	ld [hli], a
 	dec c
@@ -221,11 +239,11 @@ Func_701c0: ; 701c0 (1c:41c0)
 	push af
 	xor a
 	ld [wTileMapFill], a
-	call Func_04a2
+	call EmptyScreen
 	pop af
 	ld [wTileMapFill], a
 	di
-	ld hl, SGB_MASK_EN_OFF_701b0
+	ld hl, MaskEnPacket_Cancel_Bank1c
 	call SendSGB
 	ei
 	pop bc
@@ -251,7 +269,7 @@ Func_701e9: ; 701e9 (1c:41e9)
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
-	ld hl, vBGMapTiles
+	ld hl, v0BGMapTiles1
 	ld de, $000c
 	ld a, $80
 	ld c, $d

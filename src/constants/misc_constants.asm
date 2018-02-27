@@ -1,12 +1,4 @@
-; screen size
-SCREEN_WIDTH  EQU 20 ; tiles
-SCREEN_HEIGHT EQU 18 ; tiles
-
-; background map size
-BG_MAP_WIDTH  EQU 32 ; tiles
-BG_MAP_HEIGHT EQU 32 ; tiles
-
-; console types (for wConsole)
+; console types (wConsole)
 CONSOLE_DMG EQU $00
 CONSOLE_SGB EQU $01
 CONSOLE_CGB EQU $02
@@ -32,3 +24,14 @@ D_DOWN     EQU 1 << D_DOWN_F   ; $80
 
 BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
 D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
+
+; Game event constants (wGameEvent)
+	const_def
+	const GAME_EVENT_OVERWORLD         ; $0
+	const GAME_EVENT_DUEL              ; $1
+	const GAME_EVENT_BATTLE_CENTER     ; $2
+	const GAME_EVENT_GIFT_CENTER       ; $3
+	const GAME_EVENT_CREDITS           ; $4
+	const GAME_EVENT_CONTINUE_DUEL     ; $5
+	const GAME_EVENT_CHALLENGE_MACHINE ; $6
+NUM_GAME_EVENTS EQU const_value

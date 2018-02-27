@@ -5,10 +5,10 @@ INCLUDE "data/effect_commands.asm"
 	INCROM $18f9c, $1996e
 
 Func_1996e: ; 1996e (6:596e)
-	call EnableExtRAM
+	call EnableSRAM
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	ld hl, $a100
+	ld hl, sCardCollection
 	ld bc, $1607
 .asm_1997b
 	xor a
@@ -18,17 +18,17 @@ Func_1996e: ; 1996e (6:596e)
 	or b
 	jr nz, .asm_1997b
 	ld a, $5
-	ld hl, $a350
+	ld hl, sa350
 	call Func_199e0
 	ld a, $7
-	ld hl, $a3a4
+	ld hl, sa3a4
 	call Func_199e0
 	ld a, $9
-	ld hl, $a3f8
+	ld hl, sa3f8
 	call Func_199e0
-	call EnableExtRAM
-	ld hl, $a100
-	ld a, $80
+	call EnableSRAM
+	ld hl, sCardCollection
+	ld a, CARD_NOT_OWNED
 .asm_199a2
 	ld [hl], a
 	inc l
@@ -47,18 +47,18 @@ Func_1996e: ; 1996e (6:596e)
 	dec c
 	jr nz, .asm_199b2
 	ld a, $2
-	ld [$a003], a
+	ld [sa003], a
 	ld a, $2
-	ld [$a006], a
+	ld [sa006], a
 	ld [wTextSpeed], a
 	xor a
-	ld [$a007], a
-	ld [$a009], a
-	ld [$a004], a
-	ld [$a005], a
-	ld [$a00a], a
+	ld [sa007], a
+	ld [sa009], a
+	ld [sa004], a
+	ld [sa005], a
+	ld [sa00a], a
 	farcall Func_8cf9
-	call DisableExtRAM
+	call DisableSRAM
 	ret
 
 Func_199e0: ; 199e0 (6:59e0)
@@ -69,9 +69,9 @@ Func_199e0: ; 199e0 (6:59e0)
 	jr c, .asm_19a0e
 	call Func_19a12
 	pop hl
-	call EnableExtRAM
+	call EnableSRAM
 	push hl
-	ld de, wc590
+	ld de, wDefaultText
 .asm_199f3
 	ld a, [de]
 	inc de
@@ -90,7 +90,7 @@ Func_199e0: ; 199e0 (6:59e0)
 	ld [hli], a
 	dec c
 	jr nz, .asm_19a04
-	call DisableExtRAM
+	call DisableSRAM
 	or a
 .asm_19a0e
 	pop hl
@@ -99,11 +99,11 @@ Func_199e0: ; 199e0 (6:59e0)
 	ret
 
 Func_19a12: ; 19a12 (6:5a12)
-	ld hl, $cce9
+	ld hl, wcce9
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, wc590
+	ld de, wDefaultText
 	call PrintTextBoxBorderLabel
 	ret
 ; 0x19a1f
@@ -145,15 +145,15 @@ Func_1a61f: ; 1a61f (6:661f)
 	push hl
 	ld e, a
 	ld d, $0
-	call LoadCardDataToBuffer1
-	call Func_379b
+	call LoadCardDataToBuffer1_FromCardID
+	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	ld hl, $cc27
+	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	bank1call Func_2ebb ; switch to bank 1, but call a home func
+	bank1call LoadTxRam2 ; switch to bank 1, but call a home func
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	pop hl
@@ -162,7 +162,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	call Func_378a
 	or a
 	jr nz, .asm_1a680
-	call Func_37a0
+	call ResumeSong
 	bank1call $5773
 	ret
 ; 0x1a68d

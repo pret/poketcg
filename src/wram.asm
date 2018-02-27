@@ -3,7 +3,7 @@ INCLUDE "constants.asm"
 
 INCLUDE "vram.asm"
 
-SECTION "WRAM 0", WRAM0
+SECTION "WRAM0", WRAM0
 
 wTempCardCollection:: ; c000
 	ds $100
@@ -12,11 +12,17 @@ wTempCardCollection:: ; c000
 
 SECTION "WRAM Duels 1", WRAM0
 
-wPlayerDuelVariables:: ; c200
-
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
-; These indexes are assigned following the internal order of the cards that make up the deck.
-; This temporary index identifies the card during the current duel and within the duelist's deck.
+; These indexes are assigned following the order of the card list in wPlayerDeck or wOpponentDeck,
+; which, in turn, follows the internal order of the cards.
+; This temporary index of a card identifies the card within the duelist's deck during an ongoing duel.
+
+; Terminology used in labels and comments:
+; - The deck index, or the index within the deck of a card refers to the identifier mentioned just above,
+;   that is, its temporary position in the wPlayerDeck or wOpponentDeck card list during the current duel.
+; - The card ID is its actual internal identifier, that is, its number from card_constants.asm.
+
+wPlayerDuelVariables:: ; c200
 
 ; 60-byte array that indicates where each of the 60 cards is.
 ;	$00 - deck
@@ -34,26 +40,29 @@ wPlayerCardLocations:: ; c200
 wPlayerHand:: ; c242
 	ds DECK_SIZE
 
-; 60-byte array that maps each card to its position in the deck.
+; 60-byte array that maps each card to its position in the deck or anywhere else
 ; This array is initialized to 00, 01, 02, ..., 59, until deck is shuffled.
+; Cards in the discard pile go first, cards still in the deck go last, and others go in-between.
 wPlayerDeckCards:: ; c27e
 	ds DECK_SIZE
 
-; Stores x = (60 - deck remaining cards)
-; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel
-; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck]
+; Stores x = (60 - deck remaining cards).
+; The first x cards in the wPlayerDeckCards array are no longer in the drawable deck this duel.
+; The top card of the player's deck is at wPlayerDeckCards + [wPlayerNumberOfCardsNotInDeck].
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
 ; Which card is in player's side of the field, as number 0 to 59
+; -1 indicates no pokemon
 wPlayerArenaCard:: ; c2bb
 	ds $1
 
-; Which cards are in player's bench, as numbers 0 to 59
+; Which cards are in player's bench, as numbers 0 to 59, plus an $ff (-1) terminator
+; -1 indicates no pokemon
 wPlayerBench:: ; c2bc
-	ds BENCH_SIZE
+	ds MAX_BENCH_POKEMON + 1
 
-	ds $7
+	ds $6
 
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
@@ -68,7 +77,35 @@ wPlayerBench4CardHP:: ; c2cc
 wPlayerBench5CardHP:: ; c2cd
 	ds $1
 
-	ds $19
+wPlayerArenaCardStage:: ; c2ce
+	ds $1
+wPlayerBench1CardStage:: ; c2cf
+	ds $1
+wPlayerBench2CardStage:: ; c2d0
+	ds $1
+wPlayerBench3CardStage:: ; c2d1
+	ds $1
+wPlayerBench4CardStage:: ; c2d2
+	ds $1
+wPlayerBench5CardStage:: ; c2d3
+	ds $1
+
+; changed type from Venomoth's Shift Pokemon Power
+; if bit 7 == 1, then bits 0-3 override the Pokemon's actual type
+wPlayerArenaCardChangedType:: ; c2d4
+	ds $1
+wPlayerBench1CardChangedType:: ; c2d5
+	ds $1
+wPlayerBench2CardChangedType:: ; c2d6
+	ds $1
+wPlayerBench3CardChangedType:: ; c2d7
+	ds $1
+wPlayerBench4CardChangedType:: ; c2d8
+	ds $1
+wPlayerBench5CardChangedType:: ; c2d9
+	ds $1
+
+	ds $d
 
 wPlayerArenaCardSubstatus1:: ; c2e7
 	ds $1
@@ -76,13 +113,15 @@ wPlayerArenaCardSubstatus1:: ; c2e7
 wPlayerArenaCardSubstatus2:: ; c2e8
 	ds $1
 
-wPlayerArenaCardSubstatus3:: ; c2e9
+; changed weakness from Conversion 1
+wPlayerArenaCardChangedWeakness:: ; c2e9
 	ds $1
 
-wPlayerArenaCardSubstatus4:: ; c2ea
+; changed resistance from Conversion 2
+wPlayerArenaCardChangedResistance:: ; c2ea
 	ds $1
 
-wPlayerArenaCardSubstatus5:: ; c2eb
+wPlayerArenaCardSubstatus3:: ; c2eb
 	ds $1
 
 ; Each bit represents a prize (1 = not taken ; 0 = taken)
@@ -134,9 +173,9 @@ wOpponentArenaCard:: ; c3bb
 	ds $1
 
 wOpponentBench:: ; c3bc
-	ds BENCH_SIZE
+	ds MAX_BENCH_POKEMON + 1
 
-	ds $7
+	ds $6
 
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
@@ -151,7 +190,33 @@ wOpponentBench4CardHP:: ; c3cc
 wOpponentBench5CardHP:: ; c3cd
 	ds $1
 
-	ds $19
+wOpponentArenaCardStage:: ; c3ce
+	ds $1
+wOpponentBench1CardStage:: ; c3cf
+	ds $1
+wOpponentBench2CardStage:: ; c3d0
+	ds $1
+wOpponentBench3CardStage:: ; c3d1
+	ds $1
+wOpponentBench4CardStage:: ; c3d2
+	ds $1
+wOpponentBench5CardStage:: ; c3d3
+	ds $1
+
+wOpponentArenaCardChangedType:: ; c2d4
+	ds $1
+wOpponentBench1CardChangedType:: ; c2d5
+	ds $1
+wOpponentBench2CardChangedType:: ; c2d6
+	ds $1
+wOpponentBench3CardChangedType:: ; c2d7
+	ds $1
+wOpponentBench4CardChangedType:: ; c2d8
+	ds $1
+wOpponentBench5CardChangedType:: ; c2d9
+	ds $1
+
+	ds $d
 
 wOpponentArenaCardSubstatus1:: ; c3e7
 	ds $1
@@ -159,13 +224,13 @@ wOpponentArenaCardSubstatus1:: ; c3e7
 wOpponentArenaCardSubstatus2:: ; c3e8
 	ds $1
 
-wOpponentArenaCardSubstatus3:: ; c3e9
+wOpponentArenaCardChangedWeakness:: ; c3e9
 	ds $1
 
-wOpponentArenaCardSubstatus4:: ; c3ea
+wOpponentArenaCardChangedResistance:: ; c3ea
 	ds $1
 
-wOpponentArenaCardSubstatus5:: ; c3eb
+wOpponentArenaCardSubstatus3:: ; c3eb
 	ds $1
 
 wOpponentPrizes:: ; c3ec
@@ -214,15 +279,17 @@ ENDU
 wOpponentDeck:: ; c480
 	ds $80
 
+wc500:: ; c500
 	ds $10
 
-; this holds a list of cards (e.g. in hand or in bench) or the attack list of a pokemon card
-wDuelCardOrAttackList:: ; c510
+; this holds an $ff-terminated list of card deck indexes (e.g. cards in hand or in bench)
+; or (less often) the attack list of a Pokemon card
+wDuelTempList:: ; c510
 	ds $80
 
-; this appears to be kept updated with some default text that is used
+; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
-wc590:: ; c590
+wDefaultText:: ; c590
 	ds $70
 
 SECTION "WRAM Text Engine", WRAM0
@@ -241,7 +308,7 @@ wc900:: ; c900
 
 SECTION "WRAM Engine 1", WRAM0
 
-wBufOAM:: ; ca00
+wOAM:: ; ca00
 	ds $a0
 
 wcaa0:: ; caa0
@@ -347,20 +414,45 @@ wcad4:: ; cad4
 wcad5:: ; cad5
 	ds $1
 
-	ds $8
+wcad6:: ; cad6
+	ds $2
+
+wcad8:: ; cad8
+	ds $1
+
+wcad9:: ; cad9
+	ds $1
+
+wcada:: ; cada
+	ds $1
+
+wcadb:: ; cadb
+	ds $1
+
+wcadc:: ; cadc
+	ds $1
+
+wcadd:: ; cadd
+	ds $1
 
 wcade:: ; cade
+	ds $1
+
+	ds $1
+
+wTempSGBPacket:: ; cae0
+	ds $10
+
+; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
+wBackgroundPalettesCGB:: ; caf0
+	ds 8 * CGB_PAL_SIZE
+
+wObjectPalettesCGB:: ; cb30
+	ds 8 * CGB_PAL_SIZE
+
 	ds $4
 
-wcae2:: ; cae2
-	ds $e
-
-wBufPalette:: ; caf0
-	ds $80
-
-	ds $4
-
-SECTION "WRAM Serial transfer bytes", WRAM0
+SECTION "WRAM Serial Transfer", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -406,7 +498,7 @@ wcba3:: ; cba3
 wSerialRecvIndex:: ; cba4
 	ds $1
 
-wSerialRecvBuf:: ; cba5 - cbc4
+wSerialRecvBuf:: ; cba5
 	ds $20
 
 	ds $1
@@ -427,14 +519,17 @@ wCardPageNumber:: ; cbc7
 
 	ds $1
 
+; 2-byte something
 wcbc9:: ; cbc9
 	ds $2
 
+; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
 	ds $2
 
+; used in CheckIfEnoughEnergies for the calculation
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
@@ -446,22 +541,36 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-	ds $14
+	ds $5
+
+wcbd6:: ; cbd6
+	ds $1
+
+	ds $a
+
+wcbe1:: ; cbe1
+	ds $1
+
+wcbe2:: ; cbe2
+	ds $3
 
 wcbe5:: ; cbe5
-	ds $1
-
-wcbe6:: ; cbe6
-	ds $1
+	ds $2
 
 wcbe7:: ; cbe7
-	ds $6
+	ds $1
+
+	ds $5
 
 wcbed:: ; cbed
-	ds $c
+	ds $8
+
+	ds $4
 
 wcbf9:: ; cbf9
-	ds $b
+	ds $1
+
+	ds $a
 
 wcc04:: ; cc04
 	ds $1
@@ -469,7 +578,8 @@ wcc04:: ; cc04
 wcc05:: ; cc05
 	ds $1
 
-wcc06:: ; cc06
+; number of turns taken by both players
+wDuelTurns:: ; cc06
 	ds $1
 
 ; 0 = no one has won duel yet
@@ -494,13 +604,14 @@ wAlreadyPlayedEnergy:: ; cc0b
 wcc0c:: ; cc0c
 	ds $1
 
-wcc0d:: ; cc0d
+; DUELIST_TYPE_* of the turn holder
+wDuelistType:: ; cc0d
 	ds $1
 
 ; this seems to hold the current opponent's deck id - 2,
 ; perhaps to account for the two unused pointers at the
 ; beginning of DeckPointers
-wOpponentDeckId:: ; cc0e
+wOpponentDeckID:: ; cc0e
 	ds $1
 
 	ds $1
@@ -517,16 +628,15 @@ wcc12:: ; cc12
 wIsPracticeDuel:: ; cc13
 	ds $1
 
+wcc14:: ; cc14
 	ds $1
 
-wcc15:: ; cc15
+wOpponentPortrait:: ; cc15
 	ds $1
 
-wcc16:: ; cc16
-	ds $1
-
-wcc17:: ; cc17
-	ds $1
+; text id of the opponent's name
+wOpponentName:: ; cc16
+	ds $2
 
 wcc18:: ; cc18
 	ds $1
@@ -561,27 +671,28 @@ wDamage:: ; ccb9
 	ds $2
 
 ; wccbb and wccbc appear to be used for AI scoring
-wccbb::
+wccbb:: ; ccbb
 	ds $1
 
-wccbc::
+wccbc:: ; ccbc
 	ds $1
 
 	ds $2
 
-wccbf:: ; ccbf
+wTempDamage_ccbf:: ; ccbf
 	ds $2
 
-wccc1:: ; ccc1
+wDamageEffectiveness:: ; ccc1
 	ds $1
 
-wTempCardId:: ; ccc2
+; used in damage related functions
+wTempCardID_ccc2:: ; ccc2
 	ds $1
 
-wTempTurnDuelistCardId:: ; ccc3
+wTempTurnDuelistCardID:: ; ccc3
 	ds $1
 
-wTempNonTurnDuelistCardId:: ; ccc4
+wTempNonTurnDuelistCardID:: ; ccc4
 	ds $1
 
 	ds $1
@@ -594,26 +705,40 @@ wSelectedMoveIndex:: ; ccc6
 wNoDamageOrEffect:: ; ccc7
 	ds $2
 
+; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
 wccc9:: ; ccc9
-	ds $4
+	ds $1
+
+	ds $3
 
 wcccd:: ; cccd
 	ds $1
 
+; some array used in effect functions with wcccd as the index. unknown length
 wccce:: ; ccce
 	ds $18
 
-wcce6:: ; cce6
-	ds $5
+; this is 1 (non-0) if dealing damage to self due to confusion
+wDamageToSelfMode:: ; cce6
+	ds $1
 
-wcceb:: ; cceb
+	ds $2
+
+; used in CopyDeckData
+wcce9:: ; cce9
+	ds $2
+
+wTempPlayAreaLocationOffset_cceb:: ; cceb
 	ds $1
 
 wccec:: ; ccec
 	ds $1
 
 wcced:: ; cced
-	ds $2
+	ds $1
+
+wccee:: ; ccee
+	ds $1
 
 wccef:: ; ccef
 	ds $1
@@ -632,10 +757,16 @@ SECTION "WRAM Engine 2", WRAM0
 ; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
 ; Note that this doesn't appear to be a selectable option, just changes with the situation.
 ; For example the value 4 seems to be used a lot during duels.
-wFrameType:: ; ccf3
+wTextBoxFrameType:: ; ccf3
 	ds $1
 
-	ds $10
+wccf4:: ; ccf4
+	ds $1
+
+wccf5:: ; ccf5
+	ds $1
+
+	ds $e
 
 wcd04:: ; cd04
 	ds $1
@@ -692,22 +823,27 @@ wTileBehindCursor:: ; cd16
 	ds $1
 
 wcd17:: ; cd17
-	ds 2
+	ds $2
 
 	ds $7f
 
+; x coord of the leftmost item in a horizontal menu
 wLeftmostItemCursorX:: ; cd98
 	ds $1
 
+; used in RefreshMenuCursor_CheckPlaySFX to play a sound during any frame when this address is non-0
 wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
 wcd9a:: ; cd9a
-	ds $2
+	ds $1
+
+	ds $1
 
 wcd9c:: ; cd9c
 	ds $1
 
+; this stores the result from a coin toss (number of heads)
 wcd9d:: ; cd9d
 	ds $1
 
@@ -715,31 +851,83 @@ wcd9e:: ; cd9e
 	ds $1
 
 wcd9f:: ; cd9f
-	ds $83
+	ds $1
+
+	ds $5
+
+wcda5:: ; cda5
+	ds $1
+
+wcda6:: ; cda6
+	ds $1
+
+wcda7:: ; cda7
+	ds $1
+
+	ds $33
+
+wcddb:: ; cddb
+	ds $1
+
+wcddc:: ; cddc
+	ds $1
+
+	ds $26
+
+wce03:: ; ce03
+	ds $1
+
+	ds $12
+
+wce16:: ; ce16
+	ds $1
+
+wce17:: ; ce17
+	ds $1
+
+wce18:: ; ce18
+	ds $1
+
+wce19:: ; ce19
+	ds $1
+
+	ds $6
+
+wce20:: ; ce20
+	ds $1
+
+wce21:: ; ce21
+	ds $1
 
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
 wce22:: ; ce22
-	ds $1d
-
-wce3f:: ; cd3f
 	ds $1
 
-wce40:: ; ce40
+; LoadCardGfx loads the card's palette here
+wce23:: ; ce23
+	ds CGB_PAL_SIZE
+
+wce2b:: ; ce2b
 	ds $1
 
-wce41:: ; ce41
-	ds $1
+	ds $13
 
-wce42:: ; ce42
-	ds $1
+; text pointer for the first TX_RAM2 of a text
+; prints from wDefaultText if $0000
+wTxRam2:: ; cd3f
+	ds $2
 
-wce43:: ; ce43
-	ds $1
+; text pointer for the second TX_RAM2 on a text
+wTxRam2_b:: ; ce41
+	ds $2
 
-wce44:: ; ce44
-	ds $3
+; a number between 0 and 65535 for TX_RAM3
+wTxRam3:: ; ce43
+	ds $2
+
+	ds $2
 
 ; when printing text, number of frames to wait between each text tile
 wTextSpeed:: ; ce47
@@ -755,25 +943,63 @@ wce4a:: ; ce4a
 	ds $1
 
 wce4b:: ; ce4b
-	ds $3
+	ds $1
 
-wCoinTossScreenTextId:: ; ce4e
+wce4c:: ; ce4c
+	ds $2
+
+wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
 wce50:: ; ce50
 	ds $1
 
 wce51:: ; ce51
-	ds $8
+	ds $1
 
-wce59:: ; ce59
 	ds $7
 
+wce59:: ; ce59
+	ds $1
+
+	ds $4
+
+wce5e:: ; ce5e
+	ds $1
+
+	ds $1
+
 wce60:: ; ce60
-	ds $3
+	ds $1
+
+	ds $2
 
 wce63:: ; ce63
-	ds $9
+	ds $1
+
+wce64:: ; ce64
+	ds $1
+
+wce65:: ; ce65
+	ds $1
+
+wce66:: ; ce66
+	ds $1
+
+wce67:: ; ce67
+	ds $1
+
+wce68:: ; ce68
+	ds $1
+
+wce69:: ; ce69
+	ds $1
+
+wce6a:: ; ce6a
+	ds $1
+
+wce6b:: ; ce6b
+	ds $1
 
 wce6c:: ; ce6c
 	ds $1
@@ -785,13 +1011,36 @@ wce6e:: ; ce6e
 	ds $1
 
 wce6f:: ; ce6f
-	ds $d
+	ds $1
 
-wce7c:: ; ce7c
-	ds $27
+wce70:: ; ce70
+	ds $1
+
+wce71:: ; ce71
+	ds $1
+
+	ds $a
+
+; used in CountPokemonIDInPlayArea
+wTempPokemonID_ce7e:: ; ce7c
+	ds $1
+
+	ds $24
+
+wcea1:: ; cea1
+	ds $1
+
+	ds $1
 
 wcea3:: ; cea3
-	ds $c
+	ds $1
+
+	ds $5
+
+wcea9:: ; cea9
+	ds $1
+
+	ds $5
 
 wceaf:: ; ceaf
 	ds $1
@@ -812,29 +1061,100 @@ wceb4:: ; ceb4
 	ds $1
 
 wceb5:: ; ceb5
-	ds $17
+	ds $1
+
+	ds $5
+
+wcebb:: ; cebb
+	ds $1
+
+	ds $10
 
 wcecc:: ; cecc
-	ds $9c
+	ds $1
 
-wHandCardBuffer:: ; cf68
-	ds $51
+	ds $1
+
+wcece:: ; cece
+	ds $2
+
+	ds $47
+
+; used in bank2, probably related to wTempHandCardList (another temp list?)
+wcf17:: ; cf17
+	ds DECK_SIZE
+
+	ds $15
+
+; used by Func_200e5, AI related
+wTempHandCardList:: ; cf68
+	ds DECK_SIZE
+
+	ds $15
 
 wcfb9:: ; cfb9
-	ds $2a
+	ds $1
+
+	ds $17
+
+wcfd1:: ; cfd1
+	ds $1
+
+	ds $8
+
+wcfda:: ; cfda
+	ds $2
+
+	ds $7
 
 wcfe3:: ; cfe3
+	ds $1
+
+	ds $1c
 
 SECTION "WRAM1", WRAMX
-	ds $a9
+
+	ds $d
+
+wd00d:: ; d00d
+	ds $1
+
+	ds $78
+
+wd086:: ; d086
+	ds $1
+
+wd087:: ; d087
+	ds $1
+
+wd088:: ; d088
+	ds $1
+
+	ds $19
+
+wd0a2:: ; d0a2
+	ds $2
+
+wd0a4:: ; d0a4
+	ds $1
+
+wd0a5:: ; d0a5
+	ds $1
+
+	ds $3
 
 wd0a9:: ; d0a9
-	ds $b
+	ds $1
+
+wd0aa:: ; d0aa
+	ds $1
+
+	ds $9
 
 wd0b4:: ; d0b4
 	ds $1
 
-wd0b5:: ; d0b5
+wGameEvent:: ; d0b5
 	ds $1
 
 wSCX:: ; d0b6
@@ -901,7 +1221,10 @@ wd0ca:: ; d0ca
 	ds $1
 
 wd0cb:: ; d0cb
-	ds $41
+	ds $1
+
+wd0cc:: ; d0cc
+	ds 8 * CGB_PAL_SIZE
 
 wd10c:: ; d10c
 	ds $1
@@ -937,10 +1260,14 @@ wd116:: ; d116
 	ds $1
 
 wd117:: ; d117
-	ds $4
+	ds $1
+
+	ds $3
 
 wd11b:: ; d11b
-	ds $2
+	ds $1
+
+	ds $1
 
 wPCPackSelection:: ; d11d
 	ds $1
@@ -954,7 +1281,13 @@ wPCPacks:: ; d11e
 wPCLastDirectionPressed:: ; d12d
 	ds $1
 
-	ds $3
+	ds $1
+
+wd12f:: ; d12f
+	ds $1
+
+wd130:: ; d130
+	ds $1
 
 wd131:: ; d131
 	ds $1
@@ -962,9 +1295,18 @@ wd131:: ; d131
 wd132:: ; d132
 	ds $1
 
+UNION
+
 wBoosterViableCardList:: ; d133
-wFloorObjectMap:: ; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
 	ds $100
+
+NEXTU
+
+; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
+wFloorObjectMap::
+	ds $100
+
+ENDU
 
 wd233:: ; d233
 	ds $1
@@ -982,7 +1324,26 @@ wd237:: ; d237
 	ds $1
 
 wd238:: ; d238
-	ds $57
+	ds $1
+
+	ds $1
+
+wd23a:: ; d23a
+	ds $1
+
+wd23b:: ; d23b
+	ds $1
+
+wd23c:: ; d23c
+	ds $1
+
+wd23d:: ; d23d
+	ds $1
+
+wd23e:: ; d23e
+	ds $1
+
+	ds $50
 
 wd28f:: ; d28f
 	ds $1
@@ -991,13 +1352,20 @@ wd290:: ; d290
 	ds $1
 
 wd291:: ; d291
-	ds $92
+	ds $1
+
+wd292:: ; d292
+	ds $1
+
+	ds $90
 
 wd323:: ; d323
 	ds $1
 
 wd324:: ; d324
-	ds $a
+	ds $1
+
+	ds $9
 
 wd32e:: ; d32e
 	ds $1
@@ -1030,7 +1398,13 @@ wd337:: ; d337
 	ds $1
 
 wd338:: ; d338
-	ds $3
+	ds $1
+
+wd339:: ; d339
+	ds $1
+
+wd33a:: ; d33a
+	ds $1
 
 wd33b:: ; d33b
 	ds $1
@@ -1051,7 +1425,9 @@ wd340:: ; d340
 	ds $1
 
 wd341:: ; d341
-	ds $2
+	ds $1
+
+	ds $1
 
 wd343:: ; d343
 	ds $1
@@ -1069,13 +1445,28 @@ wd347:: ; d347
 	ds $1
 
 wd348:: ; d348
-	ds $62
+	ds $1
+
+wd349:: ; d349
+	ds $1
+
+wd34a:: ; d34a
+	ds $60
 
 wd3aa:: ; d3aa
 	ds $1
 
 wd3ab:: ; d3ab
-	ds $4
+	ds $1
+
+wd3ac:: ; d3ac
+	ds $1
+
+wd3ad:: ; d3ad
+	ds $1
+
+wd3ae:: ; d3ae
+	ds $1
 
 wd3af:: ; d3af
 	ds $1
@@ -1087,13 +1478,29 @@ wd3b1:: ; d3b1
 	ds $1
 
 wd3b2:: ; d3b2
-	ds $4
+	ds $1
 
-wd3b6:: ; d3b6
+wd3b3:: ; d3b3
+	ds $1
+
 	ds $2
 
+wd3b6:: ; d3b6
+	ds $1
+
+wc3b7:: ; d3b7
+	ds $1
+
 wd3b8:: ; d3b8
-	ds $18
+	ds $1
+
+wd3b9:: ; d3b9
+	ds $2
+
+wd3bb:: ; d3bb
+	ds $1
+
+	ds $14
 
 wd3d0:: ; d3d0
 	ds $1
@@ -1114,7 +1521,16 @@ wBreakOWScriptLoop:: ; d412
 wOWScriptPointer:: ; d413
 	ds $2
 
-	ds $8
+wd415:: ; d415
+	ds $1
+
+wd416:: ; d416
+	ds $1
+
+wd417:: ; d417
+	ds $1
+
+	ds $5
 
 wd41d:: ; d41d
 	ds $1
@@ -1132,16 +1548,33 @@ wd421:: ; d421
 	ds $1
 
 wd422:: ; d422
-	ds $8
+	ds $1
+
+wd423:: ; d423
+	ds $7
 
 wd42a:: ; d42a
-	ds $82
+	ds $1
+
+	ds $81
 
 wd4ac:: ; d4ac
-	ds $12
+	ds $1
+
+wd4ad:: ; d4ad
+	ds $1
+
+	ds $10
 
 wd4be:: ; d4be
-	ds $4
+	ds $1
+
+	ds $1
+
+wd4c0:: ; d4c0
+	ds $1
+
+	ds $1
 
 wd4c2:: ; d4c2
 	ds $1
@@ -1162,39 +1595,73 @@ wd4c7:: ; d4c7
 	ds $1
 
 wd4c8:: ; d4c8
-	ds $2
+	ds $1
+
+	ds $1
 
 wd4ca:: ; d4ca
 	ds $1
 
 wd4cb:: ; d4cb
-	ds $4
-
-; some sort of control bit for the OAMBuffer
-wd4cf:: ; d4cf
 	ds $1
 
-; this might be more of an animation buffer as I can't find any properties like which tile sprites go where.
-wOAMBuffer:: ; d4d0
-	ds $103
+	ds $3
+
+; used as an index to manipulate a sprite from wSpriteAnimBuffer
+wWhichSprite:: ; d4cf
+	ds $1
+
+; 16-byte data for up to 16 sprites
+wSpriteAnimBuffer:: ; d4d0
+	sprite_anim_struct wSprite1
+	sprite_anim_struct wSprite2
+	sprite_anim_struct wSprite3
+	sprite_anim_struct wSprite4
+	sprite_anim_struct wSprite5
+	sprite_anim_struct wSprite6
+	sprite_anim_struct wSprite7
+	sprite_anim_struct wSprite8
+	sprite_anim_struct wSprite9
+	sprite_anim_struct wSprite10
+	sprite_anim_struct wSprite11
+	sprite_anim_struct wSprite12
+	sprite_anim_struct wSprite13
+	sprite_anim_struct wSprite14
+	sprite_anim_struct wSprite15
+	sprite_anim_struct wSprite16
+
+	ds $3
 
 wd5d3:: ; d5d3
-	ds $4
+	ds $1
+
+	ds $3
 
 wd5d7:: ; d5d7
-	ds $41
+	ds $1
+
+wd5d8:: ; d5d8
+	ds $40
 
 wd618:: ; d618
-	ds $3
+	ds $1
+
+	ds $2
 
 wd61b:: ; d61b
-	ds $3
+	ds $1
+
+	ds $2
 
 wd61e:: ; d61e
-	ds $6
+	ds $1
+
+	ds $5
 
 wd624:: ; d624
-	ds $2
+	ds $1
+
+	ds $1
 
 wd626:: ; d626
 	ds $1
@@ -1203,29 +1670,45 @@ wd627:: ; d627
 	ds $1
 
 wd628:: ; d628
-	ds $b
+	ds $1
+
+	ds $a
 
 wd633:: ; d633
-	ds $2
+	ds $1
+
+	ds $1
 
 wd635:: ; d635
-	ds $34
-
-wBoosterIndex:: ; d669
 	ds $1
 
-wBoosterTempCard:: ; d66a
+wd636:: ; d635
 	ds $1
 
-wBoosterSelectedCardType:: ; d66b
+	ds $32
+
+; which BoosterPack_* corresponds to the booster pack that the player is opening
+wBoosterPackID:: ; d669
 	ds $1
 
-wBoosterCurRarity:: ; d66c
+; card being currently processed by the booster pack engine functions
+wBoosterCurrentCard:: ; d66a
 	ds $1
 
+; booster card type of the card that has just been drawn from the pack
+wBoosterJustDrawnCardType:: ; d66b
+	ds $1
+
+; rarity of the cards being currently generated (non-energy cards are generated ordered by rarity)
+wBoosterCurrentRarity:: ; d66c
+	ds $1
+
+; the averaged value of all values in wBoosterDataTypeChances
+; used to recalculate the chances of a booster card type when a card of said type is drawn from the pack
 wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
+; data of the booster pack copied from the corresponding BoosterSetRarityAmountsTable entry
 wBoosterDataCommonAmount:: ; d66e
 	ds $1
 
@@ -1235,12 +1718,16 @@ wBoosterDataUncommonAmount:: ; d66f
 wBoosterDataRareAmount:: ; d670
 	ds $1
 
+; how many cards of each type are available of a certain rarity in the booster pack's set
 wBoosterAmountOfCardTypeTable:: ; d671
 	ds NUM_BOOSTER_CARD_TYPES
 
-wBoosterTempTypeChanceTable:: ; d67a
+; holds information similar to wBoosterDataTypeChances, except that it contains 00 on any type
+; of which there are no cards remaining in the set for the current rarity
+wBoosterTempTypeChancesTable:: ; d67a
 	ds NUM_BOOSTER_CARD_TYPES
 
+; properties of the card being currently processed by the booster pack engine functions
 wBoosterCurrentCardType:: ; d683
 	ds $1
 
@@ -1250,6 +1737,8 @@ wBoosterCurrentCardRarity:: ; d684
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
+; data of the booster pack copied from the corresponding BoosterPack_* structure.
+; wBoosterDataTypeChances is updated after each card is drawn, to re-balance the type chances.
 wBoosterDataSet:: ; d686
 	ds $1
 
@@ -1259,7 +1748,24 @@ wBoosterDataEnergyFunctionPointer:: ; d687
 wBoosterDataTypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
-	ds $6ee
+	ds $1
+
+wd693:: ; d693
+	ds $1
+
+wd694:: ; d694
+	ds $1
+
+wd695:: ; d695
+	ds $1
+
+wd696:: ; d696
+	ds $1
+
+wd697:: ; d697
+	ds $1
+
+	ds $6e8
 
 SECTION "WRAM Music", WRAMX
 
@@ -1287,7 +1793,9 @@ wMusicDuty1:: ; dd86
 	ds $1
 
 wMusicDuty2:: ; dd87
-	ds $3
+	ds $1
+
+	ds $2
 
 wMusicWave:: ; dd8a
 	ds $1
@@ -1334,7 +1842,9 @@ wddab:: ; ddab
 	ds $1
 
 wddac:: ; ddac
-	ds $3
+	ds $1
+
+	ds $2
 
 wMusicOctave:: ; ddaf
 	ds $4

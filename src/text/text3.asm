@@ -108,7 +108,7 @@ Text0282: ; 3c357 (f:4357)
 
 Text0283: ; 3c36a (f:436a)
 	text "Received these cards"
-	line "from  ",TX_RAM2,"!"
+	line "from  ", TX_RAM2, "!"
 	done
 
 Text0284: ; 3c389 (f:4389)
@@ -126,7 +126,7 @@ Text0286: ; 3c3d3 (f:43d3)
 
 Text0287: ; 3c3eb (f:43eb)
 	text "Received a deck configuration"
-	line "from  ",TX_RAM2,"!"
+	line "from  ", TX_RAM2, "!"
 	done
 
 Text0288: ; 3c413 (f:4413)
@@ -808,10 +808,10 @@ Text0315: ; 3dcb2 (f:5cb2)
 	line "your Pok`mon, making them able"
 	line "to Attack."
 	line "There are 7 types of Energy Cards"
-	line "[",TX_GRASS," Grass] [",TX_FIRE," Fire]"
-	line "[",TX_WATER," Water] [",TX_LIGHTNING," Lightning]"
-	line "[",TX_PSYCHIC," Psychic] [",TX_FIGHTING," Fighting]"
-	line "and [",TX_COLORLESS," Double Colorless]"
+	line "[", TX_GRASS, " Grass] [", TX_FIRE, " Fire]"
+	line "[", TX_WATER, " Water] [", TX_LIGHTNING, " Lightning]"
+	line "[", TX_PSYCHIC, " Psychic] [", TX_FIGHTING, " Fighting]"
+	line "and [", TX_COLORLESS, " Double Colorless]"
 	line "You may only play 1 Energy Card"
 	line "from your Hand per turn."
 	done
@@ -1065,7 +1065,7 @@ Text033e: ; 3e834 (f:6834)
 	done
 
 Text033f: ; 3e85f (f:685f)
-	text "Name ",TX_RAM1
+	text "Name ", TX_RAM1
 	done
 
 Text0340: ; 3e867 (f:6867)
@@ -1077,7 +1077,7 @@ Text0341: ; 3e87b (f:687b)
 	done
 
 Text0342: ; 3e892 (f:6892)
-	text TX_RAM1,"'s diary"
+	text TX_RAM1, "'s diary"
 	done
 
 Text0343: ; 3e89d (f:689d)
@@ -1089,7 +1089,7 @@ Text0344: ; 3e8b1 (f:68b1)
 	done
 
 Text0345: ; 3e8d2 (f:68d2)
-	text TX_RAM1,""
+	text TX_RAM1, ""
 	line "wrote in the diary."
 	done
 
@@ -1123,8 +1123,8 @@ Text034b: ; 3e9a0 (f:69a0)
 	done
 
 Text034c: ; 3e9b2 (f:69b2)
-	text "Duel           [",TX_RAM2,"]"
-	line "SELECT         [",TX_RAM2,"]"
+	text "Duel           [", TX_RAM2, "]"
+	line "SELECT         [", TX_RAM2, "]"
 	line "Receive many cards"
 	line "To Pok`mon Dome 1"
 	line "To Pok`mon Dome 2"
@@ -1155,12 +1155,12 @@ Text0351: ; 3ea3a (f:6a3a)
 	done
 
 TurnedPCOnText: ; 3ea69 (f:6a69)
-	text TX_RAM1,""
+	text TX_RAM1, ""
 	line "turned the PC on!"
 	done
 
 TurnedPCOffText: ; 3ea7e (f:6a7e)
-	text TX_RAM1,""
+	text TX_RAM1, ""
 	line "turned the PC off!"
 	done
 
@@ -1189,7 +1189,7 @@ Text0358: ; 3eb16 (f:6b16)
 	done
 
 Text0359: ; 3eb32 (f:6b32)
-	text "   Mail ",TX_RAM1," "
+	text "   Mail ", TX_RAM1, " "
 	done
 
 Text035a: ; 3eb3e (f:6b3e)
@@ -1287,7 +1287,7 @@ Text036f: ; 3ec74 (f:6c74)
 	done
 
 Text0370: ; 3ecb9 (f:6cb9)
-	text "  ",TX_RAM1,"  ",TX_RAM2,""
+	text "  ", TX_RAM1, "  ", TX_RAM2, ""
 	line "      Master Medals Won ",$07,$0c,$06,""
 	line "      Album           ",$07,$6d,$06,""
 	line "      Play time         ",$07,$03,$5e,$06
@@ -1343,10 +1343,10 @@ Text0378: ; 3ef66 (f:6f66)
 	done
 
 Text0379: ; 3efc3 (f:6fc3)
-	text TX_RAM1," is crazy about Pok`mon"
+	text TX_RAM1, " is crazy about Pok`mon"
 	line "and Pok`mon card collecting!"
 	line "One day,"
-	line TX_RAM1," heard a rumor:"
+	line TX_RAM1, " heard a rumor:"
 	line " \"The Legendary Pok`mon Cards..."
 	line "  the extremely rare and powerful "
 	line "  cards held by Pok`mon Trading "
@@ -1355,7 +1355,7 @@ Text0379: ; 3efc3 (f:6fc3)
 	line "  for one to inherit the legend!\""
 	line "Dreaming of inheriting the"
 	line "Legendary Pok`mon Cards,"
-	line TX_RAM1," visits the Pok`mon"
+	line TX_RAM1, " visits the Pok`mon"
 	line "card researcher, Dr. Mason..."
 	done
 
@@ -1440,26 +1440,26 @@ Text0384: ; 3f2c0 (f:72c0)
 	done
 
 Text0385: ; 3f2c6 (f:72c6)
-	text "WIN      ",TX_RAM3," Prizes Duel"
-	line "LOSE     with ",TX_RAM2,"(",TX_RAM3,")"
+	text "WIN      ", TX_RAM3, " Prizes Duel"
+	line "LOSE     with ", TX_RAM2, "(", TX_RAM3, ")"
 	done
 
 Text0386: ; 3f2f1 (f:72f1)
-	text "         Use ",TX_RAM3,"'s Deck"
+	text "         Use ", TX_RAM3, "'s Deck"
 	done
 
 ReceivedBoosterPackText: ; 3f308 (f:7308)
-	text TX_RAM1," received a Booster"
-	line "Pack: ",TX_RAM2,"."
+	text TX_RAM1, " received a Booster"
+	line "Pack: ", TX_RAM2, "."
 	done
 
 AndAnotherBoosterPackText: ; 3f327 (f:7327)
 	text "...And another Booster Pack:"
-	line TX_RAM2,"."
+	line TX_RAM2, "."
 	done
 
 CheckedCardsInBoosterPackText: ; 3f348 (f:7348)
-	text TX_RAM1," checked the cards"
+	text TX_RAM1, " checked the cards"
 	line "in the Booster Pack!!"
 	done
 
@@ -1469,8 +1469,8 @@ Text038a: ; 3f373 (f:7373)
 	done
 
 WonTheMedalText: ; 3f39b (f:739b)
-	text TX_RAM1,""
-	line "Won the ",TX_RAM2," Medal!"
+	text TX_RAM1, ""
+	line "Won the ", TX_RAM2, " Medal!"
 	done
 
 Text038c: ; 3f3af (f:73af)
@@ -1515,11 +1515,11 @@ Text0394: ; 3f4d6 (f:74d6)
 	done
 
 Text0395: ; 3f4f3 (f:74f3)
-	text TX_RAM2,"  ",TX_RAM2
+	text TX_RAM2, "  ", TX_RAM2
 	done
 
 Text0396: ; 3f4f9 (f:74f9)
-	text TX_RAM2," Deck"
+	text TX_RAM2, " Deck"
 	done
 
 Text0397: ; 3f501 (f:7501)
@@ -1846,51 +1846,51 @@ Text03e7: ; 3f823 (f:7823)
 	done
 
 Text03e8: ; 3f82a (f:782a)
-	text TX_LVL,"60 MEWTWO "
+	text TX_LVL, "60 MEWTWO "
 	done
 
 Text03e9: ; 3f838 (f:7838)
-	text TX_LVL,"8 MEW "
+	text TX_LVL, "8 MEW "
 	done
 
 Text03ea: ; 3f842 (f:7842)
-	text TX_LVL,"34 ARCANINE"
+	text TX_LVL, "34 ARCANINE"
 	done
 
 Text03eb: ; 3f851 (f:7851)
-	text TX_LVL,"16 PIKACHU"
+	text TX_LVL, "16 PIKACHU"
 	done
 
 Text03ec: ; 3f85f (f:785f)
-	text TX_LVL,"13 SURFING PIKACHU"
+	text TX_LVL, "13 SURFING PIKACHU"
 	done
 
 Text03ed: ; 3f875 (f:7875)
-	text TX_LVL,"20 ELECTABUZZ"
+	text TX_LVL, "20 ELECTABUZZ"
 	done
 
 Text03ee: ; 3f886 (f:7886)
-	text TX_LVL,"9 SLOWPOKE"
+	text TX_LVL, "9 SLOWPOKE"
 	done
 
 Text03ef: ; 3f894 (f:7894)
-	text TX_LVL,"12 JIGGLYPUFF"
+	text TX_LVL, "12 JIGGLYPUFF"
 	done
 
 Text03f0: ; 3f8a5 (f:78a5)
-	text TX_LVL,"68 ZAPDOS"
+	text TX_LVL, "68 ZAPDOS"
 	done
 
 Text03f1: ; 3f8b2 (f:78b2)
-	text TX_LVL,"37 MOLTRES"
+	text TX_LVL, "37 MOLTRES"
 	done
 
 Text03f2: ; 3f8c0 (f:78c0)
-	text TX_LVL,"37 ARTICUNO"
+	text TX_LVL, "37 ARTICUNO"
 	done
 
 Text03f3: ; 3f8cf (f:78cf)
-	text TX_LVL,"41 DRAGONITE"
+	text TX_LVL, "41 DRAGONITE"
 	done
 
 Text03f4: ; 3f8df (f:78df)
@@ -1898,7 +1898,7 @@ Text03f4: ; 3f8df (f:78df)
 	done
 
 Text03f5: ; 3f8f7 (f:78f7)
-	text TX_LVL,"12 FLYING PIKACHU"
+	text TX_LVL, "12 FLYING PIKACHU"
 	done
 
 Text03f6: ; 3f90c (f:790c)
@@ -1935,7 +1935,7 @@ Text03fd: ; 3f9d0 (f:79d0)
 	done
 
 Text03fe: ; 3f9f2 (f:79f2)
-	text "Hi, ",TX_RAM1,"."
+	text "Hi, ", TX_RAM1, "."
 	line "How can I help you?"
 	done
 
@@ -1958,7 +1958,7 @@ Text0400: ; 3fa32 (f:7a32)
 	done
 
 Text0401: ; 3faaa (f:7aaa)
-	text TX_RAM1,","
+	text TX_RAM1, ","
 	line "It's me, Doctor Mason."
 	line "Are you getting the hang of"
 	line "the Pok`mon Trading Card Game?"
@@ -1995,7 +1995,7 @@ Text0402: ; 3fd72 (f:7d72)
 	done
 
 Text0403: ; 3fe10 (f:7e10)
-	text TX_RAM1,","
+	text TX_RAM1, ","
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
 	line "about Mitch's deck - he's "
@@ -2010,7 +2010,7 @@ Text0403: ; 3fe10 (f:7e10)
 	done
 
 Text0404: ; 3ff4d (f:7f4d)
-	text TX_RAM1,", I know you can do it!"
+	text TX_RAM1, ", I know you can do it!"
 	line "Go win the Fighting Medal!"
 	line "Mason Laboratory"
 	line "      Doctor Mason ;)"

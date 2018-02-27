@@ -5,17 +5,17 @@ Poison50PercentEffect: ; 2c000 (b:4000)
 
 PoisonEffect: ; 2c007 (b:4007)
 	lb bc, $0f, POISONED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 	lb bc, $0f, DOUBLE_POISONED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
 	ldtx de, ParalysisCheckText
 	call TossCoin_BankB
 	ret nc
 	lb bc, $f0, PARALYZED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
 	ldtx de, ConfusionCheckText
@@ -24,7 +24,7 @@ Confusion50PercentEffect: ; 2c01d (b:401d)
 
 ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, $f0, CONFUSED
-	jr applyEffect
+	jr ApplyStatusEffect
 
 	ldtx de, SleepCheckText
 	call TossCoin_BankB
@@ -32,36 +32,36 @@ ConfusionEffect: ; 2c024 (b:4024)
 
 SleepEffect: ; 2c030 (b:4030)
 	lb bc, $f0, ASLEEP
-	jr applyEffect
+	jr ApplyStatusEffect
 
-applyEffect
+ApplyStatusEffect:
 	ldh a, [hWhoseTurn]
 	ld hl, wcc05
 	cp [hl]
-	jr nz, .canInduceStatus
-	ld a, [wTempNonTurnDuelistCardId]
+	jr nz, .can_induce_status
+	ld a, [wTempNonTurnDuelistCardID]
 	cp CLEFAIRY_DOLL
-	jr z, .cantInduceStatus
+	jr z, .cant_induce_status
 	cp MYSTERIOUS_FOSSIL
-	jr z, .cantInduceStatus
-	; snorlax's thick skinned prevents it from being statused...
+	jr z, .cant_induce_status
+	; Snorlax's Thick Skinned prevents it from being statused...
 	cp SNORLAX
-	jr nz, .canInduceStatus
+	jr nz, .can_induce_status
 	call SwapTurn
 	xor a
-	; ...unless already so, or if affected by muk's toxic gas
-	call CheckIfUnderAnyCannotUseStatus2
+	; ...unless already so, or if affected by Muk's Toxic Gas
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	call SwapTurn
-	jr c, .canInduceStatus
+	jr c, .can_induce_status
 
-.cantInduceStatus
+.cant_induce_status
 	ld a, c
 	ld [wccf1], a
 	call Func_2c09c
 	or a
 	ret
 
-.canInduceStatus
+.can_induce_status
 	ld hl, wcccd
 	push hl
 	ld e, [hl]
@@ -99,16 +99,16 @@ CommentedOut_2c086: ; 2c086 (b:4086)
 
 Func_2c087: ; 2c087 (b:4087)
 	xor a
-	jr asm_2c08c
+	jr Func_2c08c
 
-Func_2c08a: ; 2c08a (b:408a)		
+Func_2c08a: ; 2c08a (b:408a)
 	ld a, $1
 
-asm_2c08c
+Func_2c08c:
 	push de
 	push af
 	ld a, $11
-	call Func_0f7f
+	call SetDuelAIAction
 	pop af
 	pop de
 	call Func_0fac
@@ -143,7 +143,7 @@ Func_2c0d4: ; 2c0d4 (b:40d4)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	and DOUBLE_POISONED
-	jr z, .notDoublePoisoned
+	jr z, .not_double_poisoned
 	pop af
 	ld a, [wDamage]
 	ld [wccbb], a
@@ -152,7 +152,7 @@ Func_2c0d4: ; 2c0d4 (b:40d4)
 
 	push af
 
-.notDoublePoisoned
+.not_double_poisoned
 	ld hl, wDamage
 	ld a, [hl]
 	add d
@@ -198,7 +198,7 @@ ApplySubstatus1ToDefendingCard: ; 2c140 (b:4140)
 ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	push af
 	call CheckNoDamageOrEffect
-	jr c, .noDamageOrEffect
+	jr c, .no_damage_orEffect
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetNonTurnDuelistVariable
 	pop af
@@ -207,7 +207,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	ld [hl], a
 	ret
 
-.noDamageOrEffect
+.no_damage_orEffect
 	pop af
 	push hl
 	bank1call $4f9d
@@ -296,7 +296,7 @@ KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	INCROM $2c7bc, $2c7d0
 
 SwordsDanceEffect: ; 2c7d0 (b:47d0)
-	ld a, [wTempTurnDuelistCardId]
+	ld a, [wTempTurnDuelistCardID]
 	cp SCYTHER
 	ret nz
 	ld a, SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE
