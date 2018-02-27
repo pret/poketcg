@@ -5570,69 +5570,78 @@ FillRectangle: ; 1f5f (0:1f5f)
 
 	INCROM $1f96, $20b0
 
-Func_20b0: ; 20b0 (0:20b0)
-	ld hl, DuelGraphics + $680 - $4000
+; loads the symbols that are displayed near the names of a list of cards in the hand or discard pile
+LoadDuelCardSymbolTiles: ; 20b0 (0:20b0)
+	ld hl, DuelGraphics - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_20bd
-	ld hl, DuelGraphics + $e90 - $4000
-.asm_20bd
+	jr nz, .copy
+	ld hl, DuelGraphics + $810 - $4000
+.copy
 	ld de, v0Tiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
-Func_20c4: ; 20c4 (0:20c4)
-	ld hl, DuelGraphics + $6c0 - $4000
+; similar to LoadDuelCardSymbolTiles, but instead of loading the
+; basic Pokemon card symbol, it loads the face down stage 0 card
+LoadDuelCardSymbolTiles2: ; 20c4 (0:20c4)
+	ld hl, DuelGraphics + $40 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $ed0 - $4000
+	ld hl, DuelGraphics + $850 - $4000
 .copy
 	ld de, v0Tiles1 + $540
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
 
-Func_20d8: ; 20d8 (0:20d8)
+; load the face down stage0 / stage1 / stage2 card images shown in the ckeck Pokemon screens
+LoadDuelFaceDownCardTiles: ; 20d8 (0:20d8)
 	ld b, $10
-	jr Func_20dc.asm_20de
+	jr LoadDuelCheckPokemonScreenTiles.asm_20de
 
-Func_20dc: ; 20dc (0:20dc)
+; same as LoadDuelFaceDownCardTiles, plus also load the ACT / BP text tiles
+LoadDuelCheckPokemonScreenTiles: ; 20dc (0:20dc)
 	ld b, $24
 .asm_20de
-	ld hl, DuelGraphics + $980 - $4000
+	ld hl, DuelGraphics + $300 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $1190 - $4000
+	ld hl, DuelGraphics + $b10 - $4000
 .copy
 	ld de, v0Tiles1 + $500
 	jr CopyFontsOrDuelGraphicsTiles
 
-Func_20f0: ; 20f0 (0:20f0)
-	ld hl, Fonts + $8
+; load the tiles for the "Placing the prizes..." screen
+LoadPlacingThePrizesScreenTiles: ; 20f0 (0:20f0)
+	; load the Pokeball field tiles
+	ld hl, DuelGraphics + $1020 - $4000
 	ld de, v0Tiles1 + $200
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelGraphics + $bc0 - $4000
+	; load the Deck image and the Discard Pile image
+	ld hl, DuelGraphics + $540 - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $13d0 - $4000
+	ld hl, DuelGraphics + $d50 - $4000
 .copy
 	ld de, v0Tiles1 + $500
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
-Func_210f: ; 210f (0:210f)
-	ld hl, DuelGraphics + $1770 - $4000
+; load the tiles for the [O] and [X] symbols used to display the results of a coin toss
+LoadDuelCoinTossResultTiles: ; 210f (0:210f)
+	ld hl, DuelGraphics + $10f0 - $4000
 	ld de, v0Tiles2 + $300
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
 
-Func_2119: ; 2119 (0:2119)
-	ld hl, DuelGraphics - $4000
+LoadDuelHUDTiles: ; 2119 (0:2119)
+	ld hl, DuelHUDGraphics - $4000
 	ld de, v0Tiles2 ; destination
-	ld b, $38 ; number of tiles
+	ld b, (DuelCardTypeGraphics - DuelHUDGraphics) / TILE_SIZE ; number of tiles
 ;	fallthrough
 
 ; if hl ≤ $3fff
@@ -5650,11 +5659,11 @@ CopyFontsOrDuelGraphicsTiles:
 
 ; this function appears to copy duel gfx data into sram
 Func_212f: ; 212f (0:212f)
-	ld hl, DuelGraphics - $4000
+	ld hl, DuelHUDGraphics - $4000
 	ld de, $a400
 	ld b, $30
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelGraphics + $17f0 - $4000
+	ld hl, DuelGraphics + $1170 - $4000
 	ld de, $a700
 	ld b, $08
 	call CopyFontsOrDuelGraphicsTiles
@@ -5666,12 +5675,12 @@ Func_212f: ; 212f (0:212f)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld de, DuelGraphics + $680 - $4000
+	ld de, DuelGraphics - $4000
 	add hl, de
 	ld de, $a780
 	ld b, $04
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelGraphics + $680 - $4000
+	ld hl, DuelGraphics - $4000
 	ld de, $b100
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles

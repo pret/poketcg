@@ -169,7 +169,7 @@ Func_1a61f: ; 1a61f (6:661f)
 
 	INCROM $1a68d, $1a6cc
 
-Func_1a6cc: ; 1a6cc (6:66cc)
+CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ret
 ; 0x1a6cd
 

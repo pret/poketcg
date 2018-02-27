@@ -46,8 +46,8 @@ Func_8d56: ; 8d56 (2:4d56)
 	call InitSpritePositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
-	call Func_2119
-	call Func_20b0
+	call LoadDuelHUDTiles
+	call LoadDuelCardSymbolTiles
 	call Func_8d0b
 	bank1call Func_5aeb
 	ld de, $3cbf

@@ -15,7 +15,7 @@ GameLoop: ; 4000 (1:4000)
 	ld a, $1
 	ld [wUppercaseFlag], a
 	ei
-	farcall Func_1a6cc
+	farcall CommentedOut_1a6cc
 	ldh a, [hButtonsHeld]
 	cp A_BUTTON | B_BUTTON
 	jr z, .ask_erase_backup_ram
@@ -45,7 +45,7 @@ Func_405a: ; 405a (1:405a)
 	xor a
 	ld [wTileMapFill], a
 	call DisableLCD
-	call Func_2119
+	call LoadDuelHUDTiles
 	call Func_5aeb
 	ld de, $387f
 	call Func_2275
@@ -280,7 +280,7 @@ Func_420b: ; 420b (1:420b)
 	ld [wTileMapFill], a
 	call $5990
 	call EmptyScreen
-	call Func_2119
+	call LoadDuelHUDTiles
 	call Func_5aeb
 	ld de, $389f
 	call Func_2275
@@ -1503,7 +1503,7 @@ _TossCoin: ; 71ad (1:71ad)
 	xor a
 	ld [wcd9f], a
 	call EmptyScreen
-	call Func_210f
+	call LoadDuelCoinTossResultTiles
 
 .asm_71c1
 	ld a, [wcd9f]

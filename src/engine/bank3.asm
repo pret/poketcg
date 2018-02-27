@@ -14,7 +14,7 @@ LoadMap: ; c000 (3:4000)
 	call InitSpritePositions
 	xor a
 	ld [wTileMapFill], a
-	call Func_2119
+	call LoadDuelHUDTiles
 	call Set_OBJ_8x8
 	xor a
 	ld [wcd08], a
