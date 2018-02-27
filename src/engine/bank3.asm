@@ -3,8 +3,8 @@ LoadMap: ; c000 (3:4000)
 	call EnableSRAM
 	bank1call Func_6785
 	call DisableSRAM
-	ld a, GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME
-	ld [wGameEventIndex], a
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
 	xor a
 	ld [wd10f], a
 	ld [wd110], a
@@ -1766,7 +1766,7 @@ asm_cd2f
 	pop af
 	farcall Func_118a7
 	ld a, GAME_EVENT_DUEL
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy4
@@ -1795,7 +1795,7 @@ Func_cd66: ; cd66 (3:4d66)
 
 Func_cd76: ; cd76 (3:4d76)
 	ld a, GAME_EVENT_BATTLE_CENTER
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
@@ -2708,7 +2708,7 @@ Func_d39d: ; d39d (3:539d)
 
 .asm_d3ac
 	ld a, GAME_EVENT_GIFT_CENTER
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 
@@ -2718,7 +2718,7 @@ Func_d39d: ; d39d (3:539d)
 Func_d3b9: ; d3b9 (3:53b9)
 	call Func_3917
 	ld a, GAME_EVENT_CREDITS
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
@@ -2795,7 +2795,7 @@ Func_d435: ; d435 (3:5435)
 
 Func_d43d: ; d43d (3:543d)
 	ld a, GAME_EVENT_CHALLENGE_MACHINE
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1

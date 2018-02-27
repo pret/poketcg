@@ -1125,8 +1125,8 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	ld [wd111], a
 	call Func_39fc
 	farcall Func_1d306
-	ld a, GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME
-	ld [wGameEventIndex], a
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent
 	or a
 	ret
@@ -1142,8 +1142,8 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	xor a
 	ld [$ba44], a
 	call DisableSRAM
-	ld a, GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME
-	ld [wGameEventIndex], a
+	ld a, GAME_EVENT_OVERWORLD
+	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent
 	or a
 	ret
@@ -1166,7 +1166,7 @@ MainMenu_ContinueDuel: ; 1277e (4:677e)
 	farcall $04, Func_3a40
 	farcall Func_70000
 	ld a, GAME_EVENT_CONTINUE_DUEL
-	ld [wGameEventIndex], a
+	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent
 	or a
 	ret

@@ -9067,8 +9067,8 @@ Func_380e: ; 380e (0:380e)
 	call BankswitchHome
 	ret
 
-; enable the play time counter and execute the game event at [wGameEventIndex],
-; then return to the overworld or restart the game.
+; enable the play time counter and execute the game event at [wGameEvent].
+; then return to the overworld, or restart the game (only after Credits).
 ExecuteGameEvent: ; 383d (0:383d)
 	ld a, $1
 	ld [wPlayTimeCounterEnable], a
@@ -9084,9 +9084,9 @@ ExecuteGameEvent: ; 383d (0:383d)
 	call BankswitchHome
 	ret
 
-; execute a game event at [wGameEventIndex] from GameEventPointerTable
+; execute a game event at [wGameEvent] from GameEventPointerTable
 _ExecuteGameEvent: ; 3855 (0:3855)
-	ld a, [wGameEventIndex]
+	ld a, [wGameEvent]
 	cp NUM_GAME_EVENTS
 	jr c, .got_game_event
 	ld a, GAME_EVENT_CHALLENGE_MACHINE
@@ -9095,16 +9095,16 @@ _ExecuteGameEvent: ; 3855 (0:3855)
 	jp JumpToFunctionInTable
 
 GameEventPointerTable: ; 3864 (0:3864)
-	dw GameEvent_ContinueFromDiaryOrNewGame
-	dw GameEvent_PracticeDuel
+	dw GameEvent_Overworld
+	dw GameEvent_Duel
 	dw GameEvent_BattleCenter
 	dw GameEvent_GiftCenter
 	dw GameEvent_Credits
 	dw GameEvent_ContinueDuel
 	dw GameEvent_ChallengeMachine
-	dw GameEvent_ContinueFromDiaryOrNewGame
+	dw GameEvent_Overworld
 
-GameEvent_ContinueFromDiaryOrNewGame: ; 3874 (0:3874)
+GameEvent_Overworld: ; 3874 (0:3874)
 	scf
 	ret
 
@@ -9144,7 +9144,7 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	scf
 	ret
 
-GameEvent_PracticeDuel: ; 38c0 (0:38c0)
+GameEvent_Duel: ; 38c0 (0:38c0)
 	ld a, $1
 	ld [wd0c2], a
 	xor a

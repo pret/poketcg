@@ -1154,7 +1154,7 @@ wd0aa:: ; d0aa
 wd0b4:: ; d0b4
 	ds $1
 
-wGameEventIndex:: ; d0b5
+wGameEvent:: ; d0b5
 	ds $1
 
 wSCX:: ; d0b6
