@@ -8,18 +8,26 @@ INCBIN "gfx/fonts.t3.1bpp"
 VWF:: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
 
+DuelGraphics::
+
 DuelHUDGraphics:: ; 76968 (1d:6968)
 INCBIN "gfx/duel/hud.2bpp"
 
 DuelCardTypeGraphics:: ; 76ce8 (1d:6ce8)
 INCBIN "gfx/duel/card_types.2bpp"
 
-DuelGraphics:: ; 76fe8 (1d:6fe8)
-INCBIN "gfx/duel/duel_graphics.t5.2bpp", $0, $1018
+DuelDmgSgbSymbolGraphics:: ; 76fe8 (1d:6fe8)
+INCBIN "gfx/duel/dmg_sgb_symbols.t7.2bpp"
+
+DuelCgbSymbolGraphics:: ; 777f8 (1d:77f8)
+INCBIN "gfx/duel/cgb_symbols.t7.2bpp", $0, $808
 
 SECTION "Gfx 2", ROMX
 
-INCBIN "gfx/duel/duel_graphics.t5.2bpp", $1018, $318
+INCBIN "gfx/duel/cgb_symbols.t7.2bpp", $808, $8
+
+DuelOtherGraphics:: ; 78008 (1e:4008)
+INCBIN "gfx/duel/other.t7.2bpp"
 
 DuelBoxMessages:: ; 78318 (1e:4318)
 INCBIN "gfx/duel/box_messages.2bpp"

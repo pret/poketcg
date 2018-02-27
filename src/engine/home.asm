@@ -5572,69 +5572,68 @@ FillRectangle: ; 1f5f (0:1f5f)
 
 ; loads the symbols that are displayed near the names of a list of cards in the hand or discard pile
 LoadDuelCardSymbolTiles: ; 20b0 (0:20b0)
-	ld hl, DuelGraphics - $4000
+	ld hl, DuelDmgSgbSymbolGraphics - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $810 - $4000
+	ld hl, DuelCgbSymbolGraphics - $4000
 .copy
-	ld de, v0Tiles1 + $500
+	ld de, v0Tiles1 + $50 tiles
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
-; similar to LoadDuelCardSymbolTiles, but instead of loading the
-; basic Pokemon card symbol, it loads the face down stage 0 card
+; loads the symbols for Stage 1 Pkmn card, Stage 2 Pkmn card, and Trainer card
 LoadDuelCardSymbolTiles2: ; 20c4 (0:20c4)
-	ld hl, DuelGraphics + $40 - $4000
+	ld hl, DuelDmgSgbSymbolGraphics + $4 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $850 - $4000
+	ld hl, DuelCgbSymbolGraphics + $4 tiles - $4000
 .copy
-	ld de, v0Tiles1 + $540
+	ld de, v0Tiles1 + $54 tiles
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
 
 ; load the face down stage0 / stage1 / stage2 card images shown in the ckeck Pokemon screens
 LoadDuelFaceDownCardTiles: ; 20d8 (0:20d8)
 	ld b, $10
-	jr LoadDuelCheckPokemonScreenTiles.asm_20de
+	jr LoadDuelCheckPokemonScreenTiles.got_num_tiles
 
 ; same as LoadDuelFaceDownCardTiles, plus also load the ACT / BP text tiles
 LoadDuelCheckPokemonScreenTiles: ; 20dc (0:20dc)
 	ld b, $24
-.asm_20de
-	ld hl, DuelGraphics + $300 - $4000
+.got_num_tiles
+	ld hl, DuelDmgSgbSymbolGraphics + $30 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $b10 - $4000
+	ld hl, DuelCgbSymbolGraphics + $30 tiles - $4000
 .copy
-	ld de, v0Tiles1 + $500
+	ld de, v0Tiles1 + $50 tiles
 	jr CopyFontsOrDuelGraphicsTiles
 
 ; load the tiles for the "Placing the prizes..." screen
 LoadPlacingThePrizesScreenTiles: ; 20f0 (0:20f0)
 	; load the Pokeball field tiles
-	ld hl, DuelGraphics + $1020 - $4000
-	ld de, v0Tiles1 + $200
+	ld hl, DuelOtherGraphics
+	ld de, v0Tiles1 + $20 tiles
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
 	; load the Deck image and the Discard Pile image
-	ld hl, DuelGraphics + $540 - $4000
+	ld hl, DuelDmgSgbSymbolGraphics + $54 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .copy
-	ld hl, DuelGraphics + $d50 - $4000
+	ld hl, DuelCgbSymbolGraphics + $54 tiles - $4000
 .copy
-	ld de, v0Tiles1 + $500
+	ld de, v0Tiles1 + $50 tiles
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
 ; load the tiles for the [O] and [X] symbols used to display the results of a coin toss
 LoadDuelCoinTossResultTiles: ; 210f (0:210f)
-	ld hl, DuelGraphics + $10f0 - $4000
-	ld de, v0Tiles2 + $300
+	ld hl, DuelOtherGraphics + $d tiles
+	ld de, v0Tiles2 + $30 tiles
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
 
@@ -5663,7 +5662,7 @@ Func_212f: ; 212f (0:212f)
 	ld de, $a400
 	ld b, $30
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelGraphics + $1170 - $4000
+	ld hl, DuelOtherGraphics + $150
 	ld de, $a700
 	ld b, $08
 	call CopyFontsOrDuelGraphicsTiles
@@ -5675,12 +5674,12 @@ Func_212f: ; 212f (0:212f)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld de, DuelGraphics - $4000
+	ld de, DuelDmgSgbSymbolGraphics - $4000
 	add hl, de
 	ld de, $a780
 	ld b, $04
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelGraphics - $4000
+	ld hl, DuelDmgSgbSymbolGraphics - $4000
 	ld de, $b100
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
@@ -5688,7 +5687,7 @@ Func_212f: ; 212f (0:212f)
 
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
-	ld h, (40 * TILE_SIZE) / 4 ; boxes are 10x4 tiles
+	ld h, (40 tiles) / 4 ; boxes are 10x4 tiles
 	call HtimesL
 	add hl, hl
 	add hl, hl

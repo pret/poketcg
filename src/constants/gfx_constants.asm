@@ -11,6 +11,7 @@ CGB_PAL_SIZE EQU 8 ; bytes
 
 ; tile size
 TILE_SIZE EQU 16 ; bytes
+tiles EQUS "* TILE_SIZE"
 
 ; wFlushPaletteFlags constants
 FLUSH_ONE EQU %10000000
