@@ -11,9 +11,13 @@ DUELTYPE_PRACTICE EQU $80
 ; for normal duels (vs AI), wDuelType is $80 + [wOpponentDeckID]
 
 ; wDuelFinished constants
-DUEL_WON  EQU $1
-DUEL_LOST EQU $2
-DUEL_DRAW EQU $3
+TURN_PLAYER_WON  EQU $1
+TURN_PLAYER_LOST EQU $2
+TURN_PLAYER_TIED EQU $3
+
+; wDuelResult constants
+DUEL_WIN  EQU $0
+DUEL_LOSS EQU $1
 
 ; Box message id's
 	const_def

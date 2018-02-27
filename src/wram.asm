@@ -1204,7 +1204,8 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-; stores the result of a duel (0: lost, 1: won, -1: transmission error (?) ) to be read by the overworld caller
+; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error? )
+; to be read by the overworld caller
 wDuelResult:: ; d0c3
 	ds $1
 

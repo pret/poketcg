@@ -163,7 +163,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, [hl]
 	cp 15 ; the practice duel lasts 15 turns
 	jr c, .next_turn
-	xor a
+	xor a ; DUEL_WIN
 	ld [wDuelResult], a
 	ret
 
@@ -185,9 +185,9 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	call Func_3b21
 	ld a, [wDuelFinished]
-	cp DUEL_WON
+	cp TURN_PLAYER_WON
 	jr z, .active_duelist_won_battle
-	cp DUEL_LOST
+	cp TURN_PLAYER_LOST
 	jr z, .active_duelist_lost_batte
 	ld a, $5f
 	ld c, MUSIC_DARK_DIDDLY
@@ -199,7 +199,7 @@ StartDuel: ; 409f (1:409f)
 	cp PLAYER_TURN
 	jr nz, .opponent_won_battle
 .player_won_battle
-	xor a
+	xor a ; DUEL_WIN
 	ld [wDuelResult], a
 	ld a, $5d
 	ld c, MUSIC_MATCH_VICTORY
@@ -211,7 +211,7 @@ StartDuel: ; 409f (1:409f)
 	cp PLAYER_TURN
 	jr nz, .player_won_battle
 .opponent_won_battle
-	ld a, 1
+	ld a, DUEL_LOSS
 	ld [wDuelResult], a
 	ld a, $5e
 	ld c, MUSIC_MATCH_LOSS
@@ -231,7 +231,7 @@ StartDuel: ; 409f (1:409f)
 	or a
 	jr nz, .wait_song
 	ld a, [wDuelFinished]
-	cp DUEL_DRAW
+	cp TURN_PLAYER_TIED
 	jr z, .tied_battle
 	call Func_39fc
 	call WaitForWideTextBoxInput
@@ -302,7 +302,7 @@ HandleTurn: ; 4225 (1:4225)
 	call $4933
 	call DrawCardFromDeck
 	jr nc, .deck_not_empty
-	ld a, DUEL_LOST
+	ld a, TURN_PLAYER_LOST
 	ld [wDuelFinished], a
 	ret
 
