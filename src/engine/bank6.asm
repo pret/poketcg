@@ -159,7 +159,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	pop hl
 	bank1call $5e5f
 .asm_1a680
-	call Func_378a
+	call AssertSongFinished
 	or a
 	jr nz, .asm_1a680
 	call ResumeSong

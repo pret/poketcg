@@ -13,11 +13,11 @@ _PlaySFX:: ; f4009 (3d:4009)
 Func_f400c:: ; f400c (3d:400c)
 	jp Func_f404e
 
-Func_f400f:: ; f400f (3d:400f)
-	jp Func_f4052
+_AssertSongFinished:: ; f400f (3d:400f)
+	jp Music1_AssertSongFinished
 
-Func_f4012:: ; f4012 (3d:4012)
-	jp Func_f405c
+_AssertSFXFinished:: ; f4012 (3d:4012)
+	jp Music1_AssertSFXFinished
 
 Func_f4015:: ; f4015 (3d:4015)
 	jp Func_f4066
@@ -70,7 +70,7 @@ Func_f404e: ; f404e (3d:404e)
 	ld [wddf0], a
 	ret
 
-Func_f4052: ; f4052 (3d:4052)
+Music1_AssertSongFinished: ; f4052 (3d:4052)
 	ld a, [wCurSongID]
 	cp $80
 	ld a, $1
@@ -78,7 +78,7 @@ Func_f4052: ; f4052 (3d:4052)
 	xor a
 	ret
 
-Func_f405c: ; f405c (3d:405c)
+Music1_AssertSFXFinished: ; f405c (3d:405c)
 	ld a, [wCurSfxID]
 	cp $80
 	ld a, $1

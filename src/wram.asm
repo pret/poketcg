@@ -135,7 +135,7 @@ wPlayerNumberOfCardsInHand:: ; c2ee
 	ds $1
 
 ; Pokemon cards in arena + bench
-wPlayerNumberOfPokemonInPlay:: ; c2ef
+wPlayerNumberOfPokemonInPlayArea:: ; c2ef
 	ds $1
 
 wPlayerArenaCardStatus:: ; c2f0
@@ -242,7 +242,7 @@ wOpponentNumberOfCardsInDiscardPile:: ; c3ed
 wOpponentNumberOfCardsInHand:: ; c3ee
 	ds $1
 
-wOpponentNumberOfPokemonInPlay:: ; c3ef
+wOpponentNumberOfPokemonInPlayArea:: ; c3ef
 	ds $1
 
 wOpponentArenaCardStatus:: ; c3f0
@@ -251,6 +251,7 @@ wOpponentArenaCardStatus:: ; c3f0
 ; $00   - player
 ; $01   - link
 ; other - AI controlled
+; this is equal to wDuelType
 wOpponentDuelistType:: ; c3f1
 	ds $1
 
@@ -554,7 +555,9 @@ wcbe1:: ; cbe1
 wcbe2:: ; cbe2
 	ds $3
 
-wcbe5:: ; cbe5
+; sp is saved here when starting a duel, in order to save the return address
+; however, it only seems to be read after a transmission error in a link duel
+wDuelReturnAddress:: ; cbe5
 	ds $2
 
 wcbe7:: ; cbe7
@@ -582,17 +585,20 @@ wcc05:: ; cc05
 wDuelTurns:: ; cc06
 	ds $1
 
+; used to signal that the current duel has finished, not to be mistaken with wDuelResult
 ; 0 = no one has won duel yet
 ; 1 = player whose turn it is has won the duel
 ; 2 = player whose turn it is has lost the duel
-; 3 = duel ended in a draw
+; 3 = duel ended in a draw (start sudden death match)
 wDuelFinished:: ; cc07
 	ds $1
 
-wcc08:: ; cc08
+; current duel is a [wDuelInitialPrizes]-prize match
+wDuelInitialPrizes:: ; cc08
 	ds $1
 
-wcc09:: ; cc09
+; note that for a practice duel, wIsPracticeDuel must also be set to $1
+wDuelType:: ; cc09
 	ds $1
 
 wcc0a:: ; cc0a
@@ -638,9 +644,11 @@ wOpponentPortrait:: ; cc15
 wOpponentName:: ; cc16
 	ds $2
 
+; an overworld script starting a duel sets this address to the value to be written into wDuelInitialPrizes
 wcc18:: ; cc18
 	ds $1
 
+; an overworld script starting a duel sets this address to the value to be written into wOpponentDeckID
 wcc19:: ; cc19
 	ds $1
 
@@ -1196,7 +1204,8 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-wd0c3:: ; d0c3
+; stores the result of a duel (0: lost, 1: won, -1: transmission error (?) ) to be read by the overworld caller
+wDuelResult:: ; d0c3
 	ds $1
 
 wd0c4:: ; d0c4

@@ -67,16 +67,16 @@ TryContinueDuel: ; 406f (1:406f)
 ContinueDuel: ; 407a (1:407a)
 	ld hl, sp+$00
 	ld a, l
-	ld [wcbe5], a
+	ld [wDuelReturnAddress], a
 	ld a, h
-	ld [wcbe5 + 1], a
+	ld [wDuelReturnAddress + 1], a
 	call ClearJoypad
 	ld a, [wDuelTheme]
 	call PlaySong
 	xor a
 	ld [wDuelFinished], a
 	call DuelMainScene
-	jp StartDuel.asm_40fb
+	jp StartDuel.begin_turn
 ; 0x4097
 
 FailedToContinueDuel: ; 4097 (1:4097)
@@ -99,7 +99,7 @@ StartDuel: ; 409f (1:409f)
 	call SwapTurn
 	call LoadOpponentDeck
 	call SwapTurn
-	jr .asm_40ca
+	jr .continue
 
 	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
@@ -109,17 +109,17 @@ StartDuel: ; 409f (1:409f)
 	ld [hl], a
 	ld [wIsPracticeDuel], a
 
-.asm_40ca
+.continue
 	ld hl, sp+$0
 	ld a, l
-	ld [wcbe5], a
+	ld [wDuelReturnAddress], a
 	ld a, h
-	ld [wcbe5 + 1], a
+	ld [wDuelReturnAddress + 1], a
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call Func_420b
 	ld a, [wcc18]
-	ld [wcc08], a
+	ld [wDuelInitialPrizes], a
 	call $70aa
 	ld a, [wDuelTheme]
 	call PlaySong
@@ -134,7 +134,7 @@ StartDuel: ; 409f (1:409f)
 	call $54c8
 	call HandleTurn
 
-.asm_40fb
+.begin_turn
 	call Func_0f58
 	ld a, [wDuelFinished]
 	or a
@@ -148,23 +148,23 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .duel_finished
 	ld hl, wDuelTurns
 	inc [hl]
-	ld a, [wcc09]
-	cp $80
-	jr z, .asm_4126
+	ld a, [wDuelType]
+	cp DUELTYPE_PRACTICE
+	jr z, .practice_duel
 
 .next_turn
 	call SwapTurn
 	jr .main_duel_loop
 
-.asm_4126
+.practice_duel
 	ld a, [wIsPracticeDuel]
 	or a
 	jr z, .next_turn
 	ld a, [hl]
-	cp $f
+	cp 15 ; the practice duel lasts 15 turns
 	jr c, .next_turn
 	xor a
-	ld [wd0c3], a
+	ld [wDuelResult], a
 	ret
 
 .duel_finished
@@ -200,7 +200,7 @@ StartDuel: ; 409f (1:409f)
 	jr nz, .opponent_won_battle
 .player_won_battle
 	xor a
-	ld [wd0c3], a
+	ld [wDuelResult], a
 	ld a, $5d
 	ld c, MUSIC_MATCH_VICTORY
 	ldtx hl, WonDuelText
@@ -211,8 +211,8 @@ StartDuel: ; 409f (1:409f)
 	cp PLAYER_TURN
 	jr nz, .player_won_battle
 .opponent_won_battle
-	ld a, $1
-	ld [wd0c3], a
+	ld a, 1
+	ld [wDuelResult], a
 	ld a, $5e
 	ld c, MUSIC_MATCH_LOSS
 	ldtx hl, LostDuelText
@@ -225,11 +225,11 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-.asm_41a7
+.wait_song
 	call DoFrame
-	call Func_378a
+	call AssertSongFinished
 	or a
-	jr nz, .asm_41a7
+	jr nz, .wait_song
 	ld a, [wDuelFinished]
 	cp DUEL_DRAW
 	jr z, .tied_battle
@@ -248,26 +248,26 @@ StartDuel: ; 409f (1:409f)
 	call PlaySong
 	ldtx hl, StartSuddenDeathMatchText
 	call DrawWideTextBox_WaitForInput
-	ld a, $1
-	ld [wcc08], a
+	ld a, 1
+	ld [wDuelInitialPrizes], a
 	call $70aa
-	ld a, [wcc09]
-	cp $1
-	jr z, .asm_41f3
+	ld a, [wDuelType]
+	cp DUELTYPE_LINK
+	jr z, .link_duel
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_4b60
 	jp .main_duel_loop
 
-.asm_41f3
+.link_duel
 	call Func_0f58
 	ld h, PLAYER_TURN
 	ld a, [wSerialOp]
 	cp $29
-	jr z, .asm_4201
+	jr z, .got_turn
 	ld h, OPPONENT_TURN
 
-.asm_4201
+.got_turn
 	ld a, h
 	ldh [hWhoseTurn], a
 	call Func_4b60
@@ -294,10 +294,10 @@ HandleTurn: ; 4225 (1:4225)
 	ld [wDuelistType], a
 	ld a, [wDuelTurns]
 	cp 2
-	jr c, .asm_4237 ; jump if it's the turn holder's first turn
+	jr c, .first_turn ; jump if it's the turn holder's first turn
 	call $70f6
 
-.asm_4237
+.first_turn
 	call $70e6
 	call $4933
 	call DrawCardFromDeck
@@ -1102,7 +1102,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	ldtx hl, PlacingThePrizesText
 	call DrawWideTextBox_WaitForInput
 	call Func_0f58
-	ld a, [wcc08]
+	ld a, [wDuelInitialPrizes]
 	ld l, a
 	ld h, 0
 	call LoadTxRam3
@@ -1240,7 +1240,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld hl, $006f
 	call $5502
 	jr c, .asm_4d8e
-	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .asm_4d86

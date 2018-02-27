@@ -2460,9 +2460,9 @@ DuelTransmissionError: ; 0f35 (0:0f35)
 	call LoadTxRam3
 	ldtx hl, TransmissionErrorText
 	call DrawWideTextBox_WaitForInput
-	ld a, $ff
-	ld [wd0c3], a
-	ld hl, wcbe5
+	ld a, -1
+	ld [wDuelResult], a
+	ld hl, wDuelReturnAddress
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2473,8 +2473,8 @@ DuelTransmissionError: ; 0f35 (0:0f35)
 	ret
 
 Func_0f58: ; 0f58 (0:0f58)
-	ld a, [wcc09]
-	cp $1
+	ld a, [wDuelType]
+	cp DUELTYPE_LINK
 	jr z, .asm_f60
 	ret
 .asm_f60
@@ -3437,26 +3437,34 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	ret
 ; 0x13a2
 
-Func_13a2: ; 13a2 (0:13a2)
+; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocationOffset_ff9d
+; into another turn holder's Pokemon card identifier by it's deck index (0-59) in hTempCardIndex_ff98.
+; always returns nc, but it's unclear if it's intentional.
+EvolvePokemonCard: ; 13a2 (0:13a2)
+	; first make sure the attempted evolution is viable
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld e, a
-	call Func_13f7
-	ret c
+	call CheckIfCanEvolveInto
+	ret c ; return if it's not capable of evolving into the selected Pokemon
+
+	; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld e, a
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ld [wccee], a
+	ld [wccee], a ; save pre-evolved Pokemon card into wccee
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandCardInPlayArea
+
+	; update the Pokemon's HP with the difference
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ld a, e
+	ld a, e ; derp
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld a, [wLoadedCard2HP]
@@ -3465,8 +3473,9 @@ Func_13a2: ; 13a2 (0:13a2)
 	sub c
 	add [hl]
 	ld [hl], a
+	; reset status (if in arena) and set the flag that prevents it from evolving again this turn
 	ld a, e
-	add $c2
+	add DUELVARS_ARENA_CARD_FLAGS_C2
 	ld l, a
 	ld [hl], $00
 	ld a, e
@@ -3476,18 +3485,24 @@ Func_13a2: ; 13a2 (0:13a2)
 	ld a, e
 	or a
 	call z, ResetStatusConditions
+
+	; set the new evolution stage of the card
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld a, [wLoadedCard1Stage]
 	ld [hl], a
+	; this is buggy but the return value would've always been the same anyway, as the Pokemon can't be basic
 	or a
 	ret ; !
 	scf
 	ret
 ; 0x13f7
 
-Func_13f7: ; 13f7 (0:13f7)
+; check if the turn holder's Pokemon card e can evolve into the turn holder's Pokemon card d.
+; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
+; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
+CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	push de
 	ld a, e
 	add DUELVARS_ARENA_CARD
@@ -3496,43 +3511,45 @@ Func_13f7: ; 13f7 (0:13f7)
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard2Name
-	ld de, wLoadedCard1NonPokemonDescription
+	ld de, wLoadedCard1PreEvoName
 	ld a, [de]
 	cp [hl]
-	jr nz, .asm_1427
+	jr nz, .cant_evolve ; jump if they are incompatible to evolve
 	inc de
 	inc hl
 	ld a, [de]
 	cp [hl]
-	jr nz, .asm_1427
+	jr nz, .cant_evolve ; jump if they are incompatible to evolve
 	pop de
 	ld a, e
-	add $c2
+	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
-	and $80
-	jr nz, .asm_1425
+	and CAN_EVOLVE_THIS_TURN
+	jr nz, .can_evolve
+	; if the card trying to evolve was played this turn, it can't evolve
 	ld a, $01
 	or a
 	scf
 	ret
-.asm_1425
+.can_evolve
 	or a
 	ret
-.asm_1427
+.cant_evolve
 	pop de
 	xor a
 	scf
 	ret
 ; 0x142b
 
+; similar to CheckIfCanEvolveInto, but with the twist of calling Func_2ecd
 Func_142b: ; 142b (0:142b)
 	ld a, e
-	add $c2
+	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
-	and $80
-	jr nz, .asm_1437
-	jr .asm_145e
-.asm_1437
+	and CAN_EVOLVE_THIS_TURN
+	jr nz, .can_evolve
+	jr .cant_evolve
+.can_evolve
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	ld l, a
@@ -3540,24 +3557,24 @@ Func_142b: ; 142b (0:142b)
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld hl, wLoadedCard1NonPokemonDescription
+	ld hl, wLoadedCard1PreEvoName
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	call $2ecd
 	ld hl, wLoadedCard2Name
-	ld de, wLoadedCard1NonPokemonDescription
+	ld de, wLoadedCard1PreEvoName
 	ld a, [de]
 	cp [hl]
-	jr nz, .asm_145e
+	jr nz, .cant_evolve
 	inc de
 	inc hl
 	ld a, [de]
 	cp [hl]
-	jr nz, .asm_145e
+	jr nz, .cant_evolve
 	or a
 	ret
-.asm_145e
+.cant_evolve
 	xor a
 	scf
 	ret
@@ -3603,7 +3620,7 @@ ResetStatusConditions: ; 1461 (0:1461)
 ; return carry if there is no room for more Pokemon
 PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	push af
-	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
 	jr nc, .already_max_pkmn_in_play
@@ -3623,7 +3640,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld l, a
 	ld a, [wLoadedCard2HP]
 	ld [hl], a ; set card's HP
-	ld a, $c2
+	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
 	add e
 	ld l, a
 	ld [hl], $0
@@ -3677,7 +3694,7 @@ PutHandCardInPlayArea: ; 14d2 (0:14d2)
 ; to the discard pile
 MovePlayAreaCardToDiscardPile: ; 14dd (0:14dd)
 	call EmptyPlayAreaSlot
-	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY
+	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	dec [hl]
 	ld l, DUELVARS_CARD_LOCATIONS
 .next_card
@@ -3776,7 +3793,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_HP
 	call .swap_duelvar
-	ld a, $c2
+	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call .swap_duelvar
@@ -9028,12 +9045,14 @@ PlaySong: ; 3785 (0:3785)
 	farcall _PlaySong
 	ret
 
-Func_378a: ; 378a (0:378a)
-	farcall Func_f400f
+; return a = 0: song finished, a = 1: song not finished
+AssertSongFinished: ; 378a (0:378a)
+	farcall _AssertSongFinished
 	ret
 
-Func_378f: ; 378f (0:378f)
-	farcall Func_f4012
+; return a = 0: SFX finished, a = 1: SFX not finished
+AssertSFXFinished: ; 378f (0:378f)
+	farcall _AssertSFXFinished
 	ret
 
 Func_3794: ; 3794 (0:3794)
@@ -9142,8 +9161,8 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ld [wd0c2], a
 	xor a
 	ld [wd112], a
-	ld a, $ff
-	ld [wd0c3], a
+	ld a, -1
+	ld [wDuelResult], a
 	ld a, $2
 	ld [wDuelTheme], a
 	ld a, MUSIC_CARD_POP
@@ -9308,6 +9327,7 @@ Func_39a7: ; 39a7 (0:39a7)
 	call Func_39ad
 	ret
 
+; return hl = wd34a + a * $c + l, a < $8
 Func_39ad: ; 39ad (0:39ad)
 	push bc
 	cp $8
@@ -9377,7 +9397,7 @@ Func_39ea: ; 39ea (0:39ea)
 Func_39fc: ; 39fc (0:39fc)
 	push hl
 	push bc
-	call Func_378a
+	call AssertSongFinished
 	or a
 	push af
 	call Func_3a1f
@@ -9788,7 +9808,7 @@ Func_3c87: ; 3c87 (0:3c87)
 
 Func_3c96: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled
-	call Func_378a
+	call AssertSongFinished
 	or a
 	jr nz, Func_3c96
 	ret

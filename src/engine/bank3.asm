@@ -3118,7 +3118,7 @@ OWSequence_Joshua:
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
-	ld a, [wd0c3]
+	ld a, [wDuelResult]
 	or a
 	jr z, .player_won
 	ld c, $2
@@ -3186,7 +3186,7 @@ Func_f580: ; f580 (3:7580)
 	INCROM $f5b3, $fc2b
 
 Func_fc2b: ; fc2b (3:7c2b)
-	ld a, [wd0c3]
+	ld a, [wDuelResult]
 	cp $2
 	jr c, .asm_fc34
 	ld a, $2

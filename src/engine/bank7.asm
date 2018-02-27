@@ -389,7 +389,7 @@ Func_1d078: ; 1d078 (7:5078)
 	call $5614
 	ld hl, wd635
 	inc [hl]
-	call Func_378a
+	call AssertSongFinished
 	or a
 	jr nz, .asm_1d0ae
 	farcall Func_10ab4
@@ -492,7 +492,7 @@ Func_1d306: ; 1d306 (7:5306)
 	INCROM $1d306, $1d386
 
 Titlescreen_1d386: ; 1d386 (7:5386)
-	call Func_378a
+	call AssertSongFinished
 	or a
 	jr nz, .asm_1d39f
 	call DisableLCD

@@ -5,6 +5,11 @@ MAX_PLAY_AREA_POKEMON EQU 6 ; arena + bench
 PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
 OPPONENT_TURN EQUS "HIGH(wOpponentDuelVariables)"
 
+; wDuelType constants
+DUELTYPE_LINK     EQU $1
+DUELTYPE_PRACTICE EQU $80
+; for normal duels (vs AI), wDuelType is $80 + [wOpponentDeckID]
+
 ; wDuelFinished constants
 DUEL_WON  EQU $1
 DUEL_LOST EQU $2
@@ -27,6 +32,7 @@ DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"           
 DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"     ; ba
 DUELVARS_ARENA_CARD                      EQUS "LOW(wPlayerArenaCard)"                  ; bb
 DUELVARS_BENCH                           EQUS "LOW(wPlayerBench)"                      ; bc
+DUELVARS_ARENA_CARD_FLAGS_C2             EQU                                            $c2
 DUELVARS_ARENA_CARD_HP                   EQUS "LOW(wPlayerArenaCardHP)"                ; c8
 DUELVARS_BENCH1_CARD_HP                  EQUS "LOW(wPlayerBench1CardHP)"               ; c9
 DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"               ; ca
@@ -53,7 +59,7 @@ DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)" 
 DUELVARS_PRIZES                          EQUS "LOW(wPlayerPrizes)"                     ; ec
 DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "LOW(wPlayerNumberOfCardsInDiscardPile)" ; ed
 DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "LOW(wPlayerNumberOfCardsInHand)"        ; ee
-DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "LOW(wPlayerNumberOfPokemonInPlay)"      ; ef
+DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA  EQUS "LOW(wPlayerNumberOfPokemonInPlayArea)"  ; ef
 DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"            ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                ; f1
 DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)" ; f2
@@ -87,7 +93,7 @@ PLAY_AREA_BENCH_5 EQU $5
 ; duelist types (DUELVARS_DUELIST_TYPE)
 DUELIST_TYPE_PLAYER   EQU $00
 DUELIST_TYPE_LINK_OPP EQU $01
-DUELIST_TYPE_AI_OPP   EQU $80
+DUELIST_TYPE_AI_OPP   EQU $80 ; $80 + [wOpponentDeckID]
 
 ; status conditions (DUELVARS_ARENA_CARD_STATUS)
 ; two statuses can be combined if they are identified by a different nybble
@@ -128,6 +134,10 @@ SUBSTATUS2_GROWL          EQU $12
 
 SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE EQU 0
 SUBSTATUS3_HEADACHE                EQU 1
+
+; DUELVARS_ARENA_CARD_FLAGS_C2 constants
+CAN_EVOLVE_THIS_TURN_F EQU 7
+CAN_EVOLVE_THIS_TURN   EQU 1 << CAN_EVOLVE_THIS_TURN_F
 
 ; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01
