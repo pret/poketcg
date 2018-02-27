@@ -1,5 +1,6 @@
 ; continuation of Bank0 Start
-Start_Cont: ; 4000 (1:4000)
+; supposed to be the main loop, but the game never returns from _GameLoop anyway
+GameLoop: ; 4000 (1:4000)
 	di
 	ld sp, $e000
 	call ResetSerial
@@ -18,8 +19,8 @@ Start_Cont: ; 4000 (1:4000)
 	ldh a, [hButtonsHeld]
 	cp A_BUTTON | B_BUTTON
 	jr z, .ask_erase_backup_ram
-	farcall Func_126d1
-	jr Start_Cont
+	farcall _GameLoop
+	jr GameLoop
 .ask_erase_backup_ram
 	call Func_405a
 	call EmptyScreen
@@ -55,14 +56,15 @@ CommentedOut_406e: ; 406e (1:406e)
 	ret
 ; 0x406f
 
-Func_406f: ; 406f (1:406f)
+; try to resume a saved duel from the main menu
+TryContinueDuel: ; 406f (1:406f)
 	call Func_420b
 	call $66e9
 	ldtx hl, BackUpIsBrokenText
-	jr c, Func_4097
+	jr c, FailedToContinueDuel
 ;	fallthrough
 
-Func_407a: ; 407a (1:407a)
+ContinueDuel: ; 407a (1:407a)
 	ld hl, sp+$00
 	ld a, l
 	ld [wcbe5], a
@@ -77,7 +79,7 @@ Func_407a: ; 407a (1:407a)
 	jp StartDuel.asm_40fb
 ; 0x4097
 
-Func_4097: ; 4097 (1:4097)
+FailedToContinueDuel: ; 4097 (1:4097)
 	call DrawWideTextBox_WaitForInput
 	call ResetSerial
 	scf

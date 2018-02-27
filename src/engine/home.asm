@@ -61,10 +61,10 @@ Start: ; 0150 (0:0150)
 	call ResetSerial
 	call CopyDMAFunction
 	call SetupExtRAM
-	ld a, BANK(Start_Cont)
+	ld a, BANK(GameLoop)
 	call BankswitchHome
 	ld sp, $e000
-	jp Start_Cont
+	jp GameLoop
 
 VBlankHandler: ; 019b (0:019b)
 	push af
@@ -6879,9 +6879,9 @@ PrintYesOrNoItems: ; 2b66 (0:2b66)
 ; 0x2b70
 
 Func_2b70: ; 2b70 (0:2b70)
-	ld a, BANK(Func_407a)
+	ld a, BANK(ContinueDuel)
 	call BankswitchHome
-	jp Func_407a
+	jp ContinueDuel
 ; 0x2b78
 
 ; loads opponent deck to wOpponentDeck
@@ -9067,45 +9067,48 @@ Func_380e: ; 380e (0:380e)
 	call BankswitchHome
 	ret
 
-Func_383d: ; 383d (0:383d)
+; enable the play time counter and execute the game event at [wGameEventIndex],
+; then return to the overworld or restart the game.
+ExecuteGameEvent: ; 383d (0:383d)
 	ld a, $1
 	ld [wPlayTimeCounterEnable], a
 	ldh a, [hBankROM]
 	push af
-.asm_3845
-	call Func_3855
-	jr nc, .asm_3850
+.loop
+	call _ExecuteGameEvent
+	jr nc, .restart
 	farcall LoadMap
-	jr .asm_3845
-.asm_3850
+	jr .loop
+.restart
 	pop af
 	call BankswitchHome
 	ret
 
-Func_3855: ; 3855 (0:3855)
-	ld a, [wd0b5]
-	cp $7
-	jr c, .asm_385e
-	ld a, $6
-.asm_385e
-	ld hl, PointerTable_3864
+; execute a game event at [wGameEventIndex] from GameEventPointerTable
+_ExecuteGameEvent: ; 3855 (0:3855)
+	ld a, [wGameEventIndex]
+	cp NUM_GAME_EVENTS
+	jr c, .got_game_event
+	ld a, GAME_EVENT_CHALLENGE_MACHINE
+.got_game_event
+	ld hl, GameEventPointerTable
 	jp JumpToFunctionInTable
 
-PointerTable_3864: ; 3864 (0:3864)
-	dw Func_3874
-	dw Func_38c0
-	dw Func_38a3
-	dw Func_3876
-	dw Credits_3911
-	dw Func_38fb
-	dw Func_38db
-	dw Func_3874
+GameEventPointerTable: ; 3864 (0:3864)
+	dw GameEvent_ContinueFromDiaryOrNewGame
+	dw GameEvent_PracticeDuel
+	dw GameEvent_BattleCenter
+	dw GameEvent_GiftCenter
+	dw GameEvent_Credits
+	dw GameEvent_ContinueDuel
+	dw GameEvent_ChallengeMachine
+	dw GameEvent_ContinueFromDiaryOrNewGame
 
-Func_3874: ; 3874 (0:3874)
+GameEvent_ContinueFromDiaryOrNewGame: ; 3874 (0:3874)
 	scf
 	ret
 
-Func_3876: ; 3876 (0:3876)
+GameEvent_GiftCenter: ; 3876 (0:3876)
 	ldh a, [hBankROM]
 	push af
 	call PauseSong
@@ -9126,7 +9129,7 @@ Func_3876: ; 3876 (0:3876)
 	scf
 	ret
 
-Func_38a3: ; 38a3 (0:38a3)
+GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ld a, $2
 	ld [wd0c2], a
 	xor a
@@ -9141,7 +9144,7 @@ Func_38a3: ; 38a3 (0:38a3)
 	scf
 	ret
 
-Func_38c0: ; 38c0 (0:38c0)
+GameEvent_PracticeDuel: ; 38c0 (0:38c0)
 	ld a, $1
 	ld [wd0c2], a
 	xor a
@@ -9155,7 +9158,7 @@ Func_38c0: ; 38c0 (0:38c0)
 	scf
 	ret
 
-Func_38db: ; 38db (0:38db)
+GameEvent_ChallengeMachine: ; 38db (0:38db)
 	ld a, $6
 	ld [wd111], a
 	call Func_39fc
@@ -9171,19 +9174,19 @@ Func_38db: ; 38db (0:38db)
 	scf
 	ret
 
-Func_38fb: ; 38fb (0:38fb)
+GameEvent_ContinueDuel: ; 38fb (0:38fb)
 	xor a
 	ld [wd112], a
-	bank1call Func_406f
+	bank1call TryContinueDuel
 	call EnableSRAM
 	ld a, [$ba44]
 	call DisableSRAM
 	cp $ff
-	jr z, Func_38db.asm_38ed
+	jr z, GameEvent_ChallengeMachine.asm_38ed
 	scf
 	ret
 
-Credits_3911: ; 3911 (0:3911)
+GameEvent_Credits: ; 3911 (0:3911)
 	farcall Credits_1d6ad
 	or a
 	ret

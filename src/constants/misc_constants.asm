@@ -24,3 +24,14 @@ D_DOWN     EQU 1 << D_DOWN_F   ; $80
 
 BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
 D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
+
+; Game event constants (wGameEventIndex)
+	const_def
+	const GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME ; $0
+	const GAME_EVENT_DUEL                            ; $1
+	const GAME_EVENT_BATTLE_CENTER                   ; $2
+	const GAME_EVENT_GIFT_CENTER                     ; $3
+	const GAME_EVENT_CREDITS                         ; $4
+	const GAME_EVENT_CONTINUE_DUEL                   ; $5
+	const GAME_EVENT_CHALLENGE_MACHINE               ; $6
+NUM_GAME_EVENTS EQU const_value

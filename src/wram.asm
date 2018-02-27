@@ -1154,7 +1154,7 @@ wd0aa:: ; d0aa
 wd0b4:: ; d0b4
 	ds $1
 
-wd0b5:: ; d0b5
+wGameEventIndex:: ; d0b5
 	ds $1
 
 wSCX:: ; d0b6
@@ -1688,7 +1688,7 @@ wd636:: ; d635
 	ds $32
 
 ; which BoosterPack_* corresponds to the booster pack that the player is opening
-wBoosterIndex:: ; d669
+wBoosterPackID:: ; d669
 	ds $1
 
 ; card being currently processed by the booster pack engine functions

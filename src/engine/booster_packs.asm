@@ -4,7 +4,7 @@ GenerateBoosterPack: ; 1e1c4 (7:61c4)
 	push hl
 	push bc
 	push de
-	ld [wBoosterIndex], a
+	ld [wBoosterPackID], a
 .no_cards_found_loop
 	call InitBoosterData
 	call GenerateBoosterEnergies
@@ -524,10 +524,10 @@ InitBoosterData: ; 1e430 (7:6430)
 	ld [wBoosterAveragedTypeChances], a
 	ret
 
-; get the pointer to the data of the booster pack at [wBoosterIndex]
+; get the pointer to the data of the booster pack at [wBoosterPackID]
 FindBoosterDataPointer: ; 1e46f (7:646f)
 	push bc
-	ld a, [wBoosterIndex]
+	ld a, [wBoosterPackID]
 	add a
 	ld c, a
 	ld b, $0

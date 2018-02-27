@@ -1077,34 +1077,38 @@ OverworldScriptTable: ; 1217b (4:617b)
 Unknown_1229f: ; 1229f (4:629f)
 	INCROM $1229f, $126d1
 
-Func_126d1: ; 126d1 (4:66d1)
+; usually, the game doesn't loop here at all, since as soon as a main menu option
+; is selected, there is no need to come back to the menu.
+; the only exception is after returning from Card Pop!
+_GameLoop: ; 126d1 (4:66d1)
 	call InitSpritePositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018
 	ld a, $ff
 	ld [wd627], a
-.asm_126e1
+.main_menu_loop
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
 	farcall Func_1d078
 	ld a, [wd628]
-	ld hl, PointerTable_126fc
+	ld hl, MainMenuFunctionTable
 	call JumpToFunctionInTable
-	jr c, .asm_126e1
-	jr Func_126d1
+	jr c, .main_menu_loop ; return to main menu
+	jr _GameLoop ; virtually restart game
 
+; this is never reached
 	scf
 	ret
 
-PointerTable_126fc:
-	dw CardPop_12768
-	dw Func_12741
-	dw Func_12704
-	dw Func_1277e
+MainMenuFunctionTable:
+	dw MainMenu_CardPop
+	dw MainMenu_ContinueFromDiary
+	dw MainMenu_NewGame
+	dw MainMenu_ContinueDuel
 
-Func_12704: ; 12704 (4:6704)
+MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
 	call Func_128a9
 	farcall Func_1996e
@@ -1121,30 +1125,30 @@ Func_12704: ; 12704 (4:6704)
 	ld [wd111], a
 	call Func_39fc
 	farcall Func_1d306
-	ld a, $0
-	ld [wd0b5], a
-	farcall $03, Func_383d
+	ld a, GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME
+	ld [wGameEventIndex], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 
-Func_12741: ; 12741 (4:6741)
+MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_11320
-	jr nc, Func_12704
+	jr nc, MainMenu_NewGame
 	farcall Func_c1ed
 	farcall Func_70000
 	call EnableSRAM
 	xor a
 	ld [$ba44], a
 	call DisableSRAM
-	ld a, $0
-	ld [wd0b5], a
-	farcall $03, Func_383d
+	ld a, GAME_EVENT_CONTINUE_FROM_DIARY_OR_NEW_GAME
+	ld [wGameEventIndex], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 
-CardPop_12768: ; 12768 (4:6768)
+MainMenu_CardPop: ; 12768 (4:6768)
 	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call Func_7571
@@ -1155,15 +1159,15 @@ CardPop_12768: ; 12768 (4:6768)
 	scf
 	ret
 
-Func_1277e: ; 1277e (4:677e)
+MainMenu_ContinueDuel: ; 1277e (4:677e)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_c9cb
 	farcall $04, Func_3a40
 	farcall Func_70000
-	ld a, $5
-	ld [wd0b5], a
-	farcall $03, Func_383d
+	ld a, GAME_EVENT_CONTINUE_DUEL
+	ld [wGameEventIndex], a
+	farcall $03, ExecuteGameEvent
 	or a
 	ret
 ; 0x1279a
