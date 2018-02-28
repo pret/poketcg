@@ -547,7 +547,16 @@ wSelectedDuelSubMenuScrollOffset:: ; cbd0
 wcbd6:: ; cbd6
 	ds $1
 
-	ds $a
+	ds $7
+
+wcbde:: ; cbde
+	ds $1
+
+wcbdf:: ; cbdf
+	ds $1
+
+wcbe0:: ; cbe0
+	ds $1
 
 wcbe1:: ; cbe1
 	ds $1
@@ -563,7 +572,13 @@ wDuelReturnAddress:: ; cbe5
 wcbe7:: ; cbe7
 	ds $1
 
-	ds $5
+wcbe8:: ; cbe8
+	ds $1
+
+wcbe9:: ; cbe9
+	ds $1
+
+	ds $3
 
 wcbed:: ; cbed
 	ds $8
@@ -601,7 +616,8 @@ wDuelInitialPrizes:: ; cc08
 wDuelType:: ; cc09
 	ds $1
 
-wcc0a:: ; cc0a
+; set to 1 if the coin toss during the CheckSandAttackOrSmokescreenSubstatus check is heads
+wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 	ds $1
 
 wAlreadyPlayedEnergy:: ; cc0b
@@ -714,7 +730,7 @@ wNoDamageOrEffect:: ; ccc7
 	ds $2
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
-wccc9:: ; ccc9
+wGotHeadsFromConfusionCheck:: ; ccc9
 	ds $1
 
 	ds $3

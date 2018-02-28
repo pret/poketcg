@@ -179,8 +179,8 @@ StartDuel: ; 409f (1:409f)
 	push af
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call $4a97
-	call $4ad6
+	call Func_4a97
+	call Func_4ad6
 	pop af
 	ldh [hWhoseTurn], a
 	call Func_3b21
@@ -294,12 +294,12 @@ HandleTurn: ; 4225 (1:4225)
 	ld [wDuelistType], a
 	ld a, [wDuelTurns]
 	cp 2
-	jr c, .first_turn ; jump if it's the turn holder's first turn
-	call $70f6
+	jr c, .skip_let_evolve ; jump if it's the turn holder's first turn
+	call SetAllPlayAreaPokemonCanEvolve
 
-.first_turn
-	call $70e6
-	call $4933
+.skip_let_evolve
+	call Func_70e6
+	call Func_4933
 	call DrawCardFromDeck
 	jr nc, .deck_not_empty
 	ld a, TURN_PLAYER_LOST
@@ -315,11 +315,11 @@ HandleTurn: ; 4225 (1:4225)
 	call SwapTurn
 	call IsClairvoyanceActive
 	call SwapTurn
-	call c, $4b2c
+	call c, Func_4b2c
 	jr DuelMainScene
 
 Func_4262:
-	call $4b2c
+	call Func_4b2c
 	call Func_100b
 
 Func_4268:
@@ -572,10 +572,38 @@ DuelMenu_Hand: ; 4425 (1:4425)
 	jp PrintDuelMenu
 
 Func_4436: ; 4436 (1:4436)
-	INCROM $4436,  $4477
+	call CreateHandCardList
+	call $559a
+	ld hl, $00aa
+	call $5588
+	ld a, $1
+	ld [wcbde], a
+.asm_4447
+	call $55f0
+	push af
+	ld a, [wcbdf]
+	or a
+	call nz, SortHandCardsByID
+	pop af
+	jp c, DuelMainScene
+	ldh a, [hTempCardIndex_ff98]
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	ld c, a
+	bit TYPE_TRAINER_F, c
+	jr nz, .asm_446f
+	bit TYPE_ENERGY_F, c
+	jr nz, UseEnergyCard
+	call $44db
+	jr c, UseEnergyCard.asm_44d2
+	jp DuelMainScene
+.asm_446f
+	call UseTrainerCard
+	jr c, UseEnergyCard.asm_44d2
+	jp DuelMainScene
 
 ; c contains the type of energy card being played
-PlayerUseEnergyCard: ; 4477 (1:4477)
+UseEnergyCard: ; 4477 (1:4477)
 	ld a, c
 	cp TYPE_ENERGY_WATER
 	jr nz, .not_water_energy
@@ -621,9 +649,11 @@ PlayerUseEnergyCard: ; 4477 (1:4477)
 .already_played_energy
 	ldtx hl, OnlyOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
+
+.asm_44d2
 	call CreateHandCardList
 	call $55be
-	jp $4447
+	jp Func_4436.asm_4447
 ; 0x44db
 
 	INCROM $44db,  $4585
@@ -1011,6 +1041,8 @@ _CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
 	ret
 ; 0x4918
 
+; return carry and the corresponding text in hl if the turn holder's
+; arena Pokemon card is paralyzed or asleep.
 CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -1021,19 +1053,264 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	jr z, .asleep
 	or a
 	ret
-
 .paralyzed
 	ldtx hl, UnableDueToParalysisText
 	jr .return_with_status_condition
-
 .asleep
 	ldtx hl, UnableDueToSleepText
-
 .return_with_status_condition
 	scf
 	ret
 
-	INCROM $4933,  $4b60
+; this handles drawing a card at the beginning of the turn among other things
+Func_4933: ; 4933 (1:4933)
+	ld a, $01
+	push hl
+	push de
+	push bc
+	ld [wcbe8], a
+	xor a
+	ld [wcbe9], a
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld a, DECK_SIZE
+	sub [hl]
+	ld hl, wcbe8
+	cp [hl]
+	jr nc, .has_cards_left
+	ld [hl], a
+.has_cards_left
+	ld a, [wcac2]
+	cp $07
+	jr z, .asm_495f
+	cp $09
+	jr z, .asm_495f
+	call EmptyScreen
+	call Func_4a97
+.asm_495f
+	ld a, $07
+	ld [wcac2], a
+	call Func_49ca
+	ld a, [wcbe8]
+	or a
+	jr nz, .can_draw
+	ldtx hl, NoCardsInDeckCannotDraw
+	call DrawWideTextBox_WaitForInput
+	jr .done
+.can_draw
+	ld l, a
+	ld h, 0
+	call LoadTxRam3
+	ldtx hl, DrawCardsFromTheDeck
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+.asm_4984
+	call Func_49a8
+	ld hl, wcbe9
+	inc [hl]
+	call Func_49ed
+	ld a, [wcbe9]
+	ld hl, wcbe8
+	cp [hl]
+	jr c, .asm_4984
+	ld c, 30
+.asm_4999
+	call DoFrame
+	call Func_67b2
+	jr c, .done
+	dec c
+	jr nz, .asm_4999
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x49a8
+
+Func_49a8: ; 49a8 (1:49a8)
+	call Func_3b21
+	ld e, $56
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
+	jr z, .asm_49b5
+	ld e, $57
+.asm_49b5
+	ld a, e
+	call Func_3b6a
+.asm_49b9
+	call DoFrame
+	call Func_67b2
+	jr c, .asm_49c6
+	call Func_3b52
+	jr c, .asm_49b9
+.asm_49c6
+	call Func_3b31
+	ret
+; 0x49ca
+
+Func_49ca: ; 49ca (1:49ca)
+	call LoadDuelDrawCardsScreenTiles
+	ld hl, $4a35
+	call Func_0695
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	call BankswitchVRAM1
+	ld hl, $4a6e
+	call Func_0695
+	call BankswitchVRAM0
+.not_cgb
+	call Func_49ed.player_turn
+	call Func_49ed.opponent_turn
+	ret
+; 0x49ed
+
+Func_49ed: ; 49ed (1:49ed)
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
+	jr nz, .opponent_turn
+.player_turn
+	ld a, [wPlayerNumberOfCardsInHand]
+	ld hl, wcbe9
+	add [hl]
+	ld d, a
+	ld a, DECK_SIZE
+	ld hl, wPlayerNumberOfCardsNotInDeck
+	sub [hl]
+	ld hl, wcbe9
+	sub [hl]
+	ld e, a
+	ld a, d
+	lb bc, 16, 10
+	call $65b7
+	ld a, e
+	lb bc, 10, 10
+	jp $65b7
+.opponent_turn
+	ld a, [wOpponentNumberOfCardsInHand]
+	ld hl, wcbe9
+	add [hl]
+	ld d, a
+	ld a, DECK_SIZE
+	ld hl, wOpponentNumberOfCardsNotInDeck
+	sub [hl]
+	ld hl, wcbe9
+	sub [hl]
+	ld e, a
+	ld a, d
+	lb bc, 5, 3
+	call $65b7
+	ld a, e
+	lb bc, 11, 3
+	jp $65b7
+; 0x4a35
+
+	INCROM $4a35, $4a97
+
+Func_4a97: ; 4a97 (1:4a97)
+	call LoadDuelHUDTiles
+	ld de, wDefaultText
+	push de
+	call CopyPlayerName
+	ld de, $b
+	call Func_22ae
+	pop hl
+	call Func_21c5
+	ld bc, $5
+	call Func_3e10
+	ld de, wDefaultText
+	push de
+	call CopyOpponentName
+	pop hl
+	call Func_23c1
+	push hl
+	add $14
+	ld d, a
+	ld e, $00
+	call Func_22ae
+	pop hl
+	call Func_21c5
+	ld a, [wOpponentPortrait]
+	ld bc, $d01
+	call Func_3e2a
+	call $516f
+	ret
+; 0x4ad6
+
+Func_4ad6: ; 4ad6 (1:4ad6)
+	lb de, 8, 8
+	call Func_4ae9
+	call SwapTurn
+	lb de, 1, 1
+	call Func_4ae9
+	call SwapTurn
+	ret
+; 0x4ae9
+
+Func_4ae9: ; 4ae9 (1:4ae9)
+	call $5f4a
+	ld hl, $7b
+	call Func_2c1b
+	call $5f50
+	ld c, e
+	ld a, d
+	add $07
+	ld b, a
+	inc a
+	inc a
+	ld d, a
+	call CountPrizes
+	call .asm_4b22
+	inc e
+	inc c
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld hl, $7d
+	or a
+	jr nz, .pkmn_in_play_area
+	ld hl, $7c
+.pkmn_in_play_area
+	dec d
+	call Func_2c1b
+	inc e
+	inc d
+	inc c
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld a, DECK_SIZE
+	sub [hl]
+.asm_4b22
+	call $65b7
+	ld hl, $7e
+	call Func_2c1b
+	ret
+; 0x4b2c
+
+Func_4b2c: ; 4b2c (1:4b2c)
+	ldtx hl, YouDrewText
+	ldh a, [hTempCardIndex_ff98]
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call $5e5f
+	ret
+; 0x4b38
+
+Func_4b38: ; 4b38 (1:4b38)
+	ld a, [wDuelTempList]
+	cp -1
+	ret z
+	call $559a
+	call CountCardsInDuelTempList
+	ld hl, $5710
+	ld de, $0
+	call $2799
+	ldtx hl, TheCardYouReceivedText
+	lb de, 1, 1
+	call Func_22ae
+	call PrintTextNoDelay
+	ldtx hl, YouReceivedTheseCardsText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x4b60
 
 Func_4b60: ; 4b60 (1:4b60)
 	call $7107
@@ -1160,7 +1437,6 @@ Func_4b60: ; 4b60 (1:4b60)
 	or a
 	ret
 ; 0x4c77
-
 
 	INCROM $4c77,  $4cd5
 
@@ -1304,7 +1580,16 @@ LoadPlayerDeck: ; 6793 (1:6793)
 	ret
 ; 0x67b2
 
-	INCROM $67b2, $67be
+Func_67b2: ; 67b2 (1:67b2)
+	ld a, [wccf2]
+	or a
+	ret z
+	ldh a, [hButtonsHeld]
+	and B_BUTTON
+	ret z
+	scf
+	ret
+; 0x67be
 
 ; related to ai taking their turn in a duel
 ; called multiple times during one ai turn
@@ -1448,7 +1733,31 @@ ConvertTrainerCardToPokemon:
     db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
-	INCROM $6df1, $7107
+	INCROM $6df1, $70e6
+
+Func_70e6: ; 70e6 (1:70e6)
+	xor a
+	ld [wAlreadyPlayedEnergy], a
+	ld [wcc0c], a
+	ld [wGotHeadsFromSandAttackOrSmokescreenCheck], a
+	ldh a, [hWhoseTurn]
+	ld [wcc05], a
+	ret
+; 0x70f6
+
+SetAllPlayAreaPokemonCanEvolve: ; 70f6 (1:70f6)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, DUELVARS_ARENA_CARD_FLAGS_C2
+.next_pkmn_loop
+	res 5, [hl]
+	set CAN_EVOLVE_THIS_TURN_F, [hl]
+	inc l
+	dec c
+	jr nz, .next_pkmn_loop
+	ret
+; 0x7107
 
 ; initializes duel variables such as cards in deck and in hand, or Pokemon in play area
 ; player turn: [c200, c2ff]

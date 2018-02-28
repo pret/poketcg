@@ -173,11 +173,11 @@ Text0117: ; 386f2 (e:46f2)
 	text "Draw 1 card from the Deck."
 	done
 
-Text0118: ; 3870e (e:470e)
+DrawCardsFromTheDeck: ; 3870e (e:470e)
 	text "Draw ", TX_RAM3, " card(s) from the Deck."
 	done
 
-Text0119: ; 3872d (e:472d)
+NoCardsInDeckCannotDraw: ; 3872d (e:472d)
 	text "Cannot draw a card because"
 	line "there are no cards in the Deck."
 	done
@@ -661,11 +661,11 @@ Text016f: ; 39a31 (e:5a31)
 	line "in the Hand."
 	done
 
-Text0170: ; 39a4c (e:5a4c)
+TheCardYouReceivedText: ; 39a4c (e:5a4c)
 	text "The card you received"
 	done
 
-Text0171: ; 39a63 (e:5a63)
+YouReceivedTheseCardsText: ; 39a63 (e:5a63)
 	text "You received these cards:"
 	done
 

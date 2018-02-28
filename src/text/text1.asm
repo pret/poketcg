@@ -492,7 +492,7 @@ Text006f: ; 36ce1 (d:6ce1)
 	line "Bench Pok`mon."
 	done
 
-Text0070: ; 36cfd (d:6cfd)
+YouDrewText: ; 36cfd (d:6cfd)
 	text "You drew ", TX_RAM2, "."
 	done
 

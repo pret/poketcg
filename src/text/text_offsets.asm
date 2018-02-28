@@ -113,7 +113,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChooseUpTo5BasicPkmnToPlaceOnBenchText  ; 0x006d
 	textpointer Text006e                                ; 0x006e
 	textpointer Text006f                                ; 0x006f
-	textpointer Text0070                                ; 0x0070
+	textpointer YouDrewText                                ; 0x0070
 	textpointer Text0071                                ; 0x0071
 	textpointer PlacingThePrizesText                    ; 0x0072
 	textpointer PleasePlacePrizesText                   ; 0x0073
@@ -281,8 +281,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0115                                ; 0x0115
 	textpointer Text0116                                ; 0x0116
 	textpointer Text0117                                ; 0x0117
-	textpointer Text0118                                ; 0x0118
-	textpointer Text0119                                ; 0x0119
+	textpointer DrawCardsFromTheDeck                                ; 0x0118
+	textpointer NoCardsInDeckCannotDraw                                ; 0x0119
 	textpointer Text011a                                ; 0x011a
 	textpointer Text011b                                ; 0x011b
 	textpointer Text011c                                ; 0x011c
@@ -369,8 +369,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text016d                                ; 0x016d
 	textpointer Text016e                                ; 0x016e
 	textpointer Text016f                                ; 0x016f
-	textpointer Text0170                                ; 0x0170
-	textpointer Text0171                                ; 0x0171
+	textpointer TheCardYouReceivedText                                ; 0x0170
+	textpointer YouReceivedTheseCardsText                                ; 0x0171
 	textpointer Text0172                                ; 0x0172
 	textpointer Text0173                                ; 0x0173
 	textpointer Text0174                                ; 0x0174

@@ -923,15 +923,15 @@ Func_061b:
 
 Func_0663: ; 0663 (0:0663)
 	push bc
-	ld bc, $d8f0
+	ld bc, -10000
 	call Func_0686
-	ld bc, $fc18
+	ld bc, -1000
 	call Func_0686
-	ld bc, $ff9c
+	ld bc, -100
 	call Func_0686
-	ld bc, $fff6
+	ld bc, -10
 	call Func_0686
-	ld bc, $ffff
+	ld bc, -1
 	call Func_0686
 	xor a
 	ld [de], a
@@ -940,10 +940,10 @@ Func_0663: ; 0663 (0:0663)
 
 Func_0686: ; 0686 (0:0686)
 	ld a, $2f
-.asm_688
+.substract_loop
 	inc a
 	add hl, bc
-	jr c, .asm_688
+	jr c, .substract_loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -969,7 +969,7 @@ Func_069d: ; 069d (0:069d)
 	inc hl
 	push hl
 	push bc
-	ld b, $ff
+	ld b, -1
 .asm_6a5
 	inc b
 	ld a, [hli]
@@ -4334,10 +4334,10 @@ Func_189d: ; 189d (0:189d)
 	ld de, 0
 	ret
 
-; return carry and 1 into wccc9 if damage is dealt to oneself due to confusion
+; return carry and 1 into wGotHeadsFromConfusionCheck if damage will be dealt to oneself due to confusion
 CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	xor a
-	ld [wccc9], a
+	ld [wGotHeadsFromConfusionCheck], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
@@ -4350,7 +4350,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	call TossCoin
 	jr c, .no_confusion_damage
 	ld a, $1
-	ld [wccc9], a
+	ld [wGotHeadsFromConfusionCheck], a
 	scf
 	ret
 .no_confusion_damage
@@ -5585,7 +5585,17 @@ FillRectangle: ; 1f5f (0:1f5f)
 	ret
 ; 0x1f96
 
-	INCROM $1f96, $20b0
+	INCROM $1f96, $208d
+
+; load the Deck and Hand icons for the "Draw X card(s) from the deck." screen
+LoadDuelDrawCardsScreenTiles: ; 208d (0:208d)
+	ld hl, DuelOtherGraphics + $29 tiles
+	ld de, v0Tiles1 + $74 tiles
+	ld b, $08
+	jp CopyFontsOrDuelGraphicsTiles
+; 0x2098
+
+	INCROM $2098, $20b0
 
 ; loads the symbols that are displayed near the names of a list of cards in the hand or discard pile
 LoadDuelCardSymbolTiles: ; 20b0 (0:20b0)
@@ -5636,7 +5646,7 @@ LoadPlacingThePrizesScreenTiles: ; 20f0 (0:20f0)
 	ld de, v0Tiles1 + $20 tiles
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
-	; load the Deck image and the Discard Pile image
+	; load the Deck and the Discard Pile icons
 	ld hl, DuelDmgSgbSymbolGraphics + $54 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -8388,7 +8398,7 @@ HandleSandAttackOrSmokescreenSubstatus: ; 3400 (0:3400)
 	call CheckSandAttackOrSmokescreenSubstatus
 	ret nc
 	call TossCoin
-	ld [wcc0a], a
+	ld [wGotHeadsFromSandAttackOrSmokescreenCheck], a
 	ccf
 	ret nc
 	ldtx hl, AttackUnsuccessfulText
@@ -8411,7 +8421,7 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 	or a
 	ret
 .card_is_affected
-	ld a, [wcc0a]
+	ld a, [wGotHeadsFromSandAttackOrSmokescreenCheck]
 	or a
 	ret nz
 	scf
