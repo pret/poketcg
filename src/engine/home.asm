@@ -6419,7 +6419,7 @@ HandleMenuInput: ; 264b (0:264b)
 .up_down_done
 	ld a, [wCurMenuItem]
 	ldh [hCurrentMenuItem], a
-	ld hl, wcd17
+	ld hl, wMenuFunctionPointer ; call the function if non-0 (periodically)
 	ld a, [hli]
 	or [hl]
 	jr z, .check_A_or_B
@@ -6520,35 +6520,41 @@ SetMenuItem: ; 2710 (0:2710)
 	ld [wCursorBlinkCounter], a
 	ret
 
-Func_271a: ; 271a (0:271a)
+; handle input for the 2-row 3-column duel menu.
+; only handles input not involving the B, START, or SELECT buttons, that is,
+; navigating through the menu or selecting an item with the A button.
+; other input in handled by HandleDuelMenuInputAndShortcuts.
+HandleDuelMenuInput: ; 271a (0:271a)
 	ldh a, [hButtonsPressed2]
 	or a
-	jr z, .asm_2764
+	jr z, .blink_cursor
 	ld b, a
 	ld hl, wCurMenuItem
-	and $c0
-	jr z, .asm_272c
+	and D_UP | D_DOWN
+	jr z, .check_left
 	ld a, [hl]
-	xor $1
-	jr .asm_2748
-.asm_272c
+	xor 1 ; move to the other menu item in the same column
+	jr .dpad_pressed
+.check_left
 	bit D_LEFT_F, b
-	jr z, .asm_273b
+	jr z, .check_right
 	ld a, [hl]
-	sub $2
-	jr nc, .asm_2748
-	and $1
-	add $4
-	jr .asm_2748
-.asm_273b
+	sub 2
+	jr nc, .dpad_pressed
+	; wrap to the rightmost item in the same row
+	and 1
+	add 4
+	jr .dpad_pressed
+.check_right
 	bit D_RIGHT_F, b
-	jr z, .asm_275d
+	jr z, .dpad_not_pressed
 	ld a, [hl]
-	add $2
-	cp $6
-	jr c, .asm_2748
-	and $1
-.asm_2748
+	add 2
+	cp 6
+	jr c, .dpad_pressed
+	; wrap to the leftmost item in the same row
+	and 1
+.dpad_pressed
 	push af
 	ld a, $1
 	call PlaySFX
@@ -6558,12 +6564,13 @@ Func_271a: ; 271a (0:271a)
 	ldh [hCurrentMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
-	jr .asm_2764
-.asm_275d
+	jr .blink_cursor
+.dpad_not_pressed
 	ldh a, [hButtonsPressed2]
 	and A_BUTTON
 	jp nz, HandleMenuInput.A_pressed
-.asm_2764
+.blink_cursor
+	; blink cursor every 16 frames
 	ld hl, wCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -6781,7 +6788,7 @@ NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
 	db 1 ; number of items
 	db $2f ; cursor tile number
 	db $1d ; tile behind cursor
-	dw $0000 ; unknown function pointer if non-0
+	dw $0000 ; function pointer if non-0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
@@ -6814,7 +6821,7 @@ WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
 	db 1 ; number of items
 	db $2f ; cursor tile number
 	db $1d ; tile behind cursor
-	dw $0000 ; unknown function pointer if non-0
+	dw $0000 ; function pointer if non-0
 
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	call DrawWideTextBox_PrintText
@@ -6900,7 +6907,7 @@ HandleYesOrNoMenu:
 .no
 	xor a
 	ld [wcd9a], a ; 0
-	ld a, $1
+	ld a, 1
 	ldh [hCurrentMenuItem], a
 	scf
 	ret

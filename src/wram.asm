@@ -518,6 +518,7 @@ wCurrentDuelMenuItem:: ; cbc6
 wCardPageNumber:: ; cbc7
 	ds $1
 
+wcbc8:: ; cbc8
 	ds $1
 
 ; 2-byte something
@@ -542,12 +543,44 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-	ds $5
+wcbd1:: ; cbd1
+	ds $1
+
+wcbd2:: ; cbd2
+	ds $1
+
+wcbd3:: ; cbd3
+	ds $1
+
+wcbd4:: ; cbd4
+	ds $1
+
+wcbd5:: ; cbd5
+	ds $1
 
 wcbd6:: ; cbd6
 	ds $1
 
-	ds $7
+wcbd7:: ; cbd7
+	ds $1
+
+wcbd8:: ; cbd8
+	ds $1
+
+wcbd9:: ; cbd9
+	ds $1
+
+wcbda:: ; cbda
+	ds $1
+
+wcbdb:: ; cbdb
+	ds $1
+
+wcbdc:: ; cbdc
+	ds $1
+
+wcbdd:: ; cbdd
+	ds $1
 
 wcbde:: ; cbde
 	ds $1
@@ -846,7 +879,7 @@ wCursorTileNumber:: ; cd15
 wTileBehindCursor:: ; cd16
 	ds $1
 
-wcd17:: ; cd17
+wMenuFunctionPointer:: ; cd17
 	ds $2
 
 	ds $7f

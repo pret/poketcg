@@ -771,7 +771,7 @@ NoCardsInHandText: ; 37348 (d:7348)
 	text "No cards in hand."
 	done
 
-Text00a5: ; 3735b (d:735b)
+TheDiscardPileHasNoCardsText: ; 3735b (d:735b)
 	text "The Discard Pile has no cards."
 	done
 
