@@ -255,7 +255,7 @@ UnableToRetreatText: ; 366c5 (d:66c5)
 	text "Unable to Retreat."
 	done
 
-OnlyOneEnergyCardText: ; 366d9 (d:66d9)
+MayOnlyAttachOneEnergyCardText: ; 366d9 (d:66d9)
 	text "You may only attach 1 Energy card"
 	line "per turn."
 	done

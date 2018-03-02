@@ -333,7 +333,7 @@ wInitialA:: ; cab3
 wConsole:: ; cab4
 	ds $1
 
-wcab5:: ; cab5
+wOAMOffset:: ; cab5
 	ds $1
 
 wTileMapFill:: ; cab6

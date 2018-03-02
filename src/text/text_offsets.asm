@@ -63,7 +63,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text003b                                ; 0x003b
 	textpointer NoSelectableAttackText                  ; 0x003c
 	textpointer UnableToRetreatText                     ; 0x003d
-	textpointer OnlyOneEnergyCardText                   ; 0x003e
+	textpointer MayOnlyAttachOneEnergyCardText                   ; 0x003e
 	textpointer Text003f                                ; 0x003f
 	textpointer Text0040                                ; 0x0040
 	textpointer DiscardDescription                      ; 0x0041

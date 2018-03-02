@@ -43,7 +43,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call LoadDuelHUDTiles

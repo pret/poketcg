@@ -1563,12 +1563,82 @@ Func_08ef: ; 08ef (0:08ef)
 	jr .asm_93c
 ; 0x950
 
-	INCROM $0950, $099c
+; set attributes for [hl] sprites starting from wOAM + [wOAMOffset] / 4
+; return carry if reached end of wOAM before finishing
+SetManyObjectsAttributes: ; 950 (0:950)
+	push hl
+	ld a, [wOAMOffset]
+	ld c, a
+	ld b, HIGH(wOAM)
+	cp 40 * 4
+	jr nc, .beyond_oam
+	pop hl
+	ld a, [hli] ; [hl] = how many obj?
+.copy_obj_loop
+	push af
+	ld a, [hli]
+	add e
+	ld [bc], a ; Y Position <- [hl + 1 + 4*i] + e
+	inc bc
+	ld a, [hli]
+	add d
+	ld [bc], a ; X Position <- [hl + 2 + 4*i] + d
+	inc bc
+	ld a, [hli]
+	ld [bc], a ; Tile/Pattern Number <- [hl + 3 + 4*i]
+	inc bc
+	ld a, [hli]
+	ld [bc], a ; Attributes/Flags <- [hl + 4 + 4*i]
+	inc bc
+	ld a, c
+	cp 40 * 4
+	jr nc, .beyond_oam
+	pop af
+	dec a
+	jr nz, .copy_obj_loop
+	or a
+.done
+	ld hl, wOAMOffset
+	ld [hl], c
+	ret
+.beyond_oam
+	pop hl
+	scf
+	jr .done
+; 0x97f
+
+; for the sprite at wOAM + [wOAMOffset] / 4, set its attributes from registers e, d, c, b
+; return carry if [wOAMOffset] > 40 * 4 (beyond the end of wOAM)
+SetOneObjectAttributes: ; 97f (0:97f)
+	push hl
+	ld a, [wOAMOffset]
+	ld l, a
+	ld h, HIGH(wOAM)
+	cp 40 * 4
+	jr nc, .beyond_oam
+	ld [hl], e ; Y Position
+	inc hl
+	ld [hl], d ; X Position
+	inc hl
+	ld [hl], c ; Tile/Pattern Number
+	inc hl
+	ld [hl], b ; Attributes/Flags
+	inc hl
+	ld a, l
+	ld [wOAMOffset], a
+	pop hl
+	or a
+	ret
+.beyond_oam
+	pop hl
+	scf
+	ret
+; 0x99c
 
 ; set the Y Position and X Position of all sprites in wOAM to $00
-InitSpritePositions: ; 099c (0:099c)
+ZeroObjectPositions: ; 099c (0:099c)
 	xor a
-	ld [wcab5], a
+	ld [wOAMOffset], a
 	ld hl, wOAM
 	ld c, 40
 	xor a
@@ -3589,7 +3659,7 @@ ResetStatusConditions: ; 1461 (0:1461)
 	ld h, a
 	xor a
 	ld l, DUELVARS_ARENA_CARD_STATUS
-	ld [hl], a
+	ld [hl], a ; NO_STATUS
 	ld l, DUELVARS_ARENA_CARD_SUBSTATUS1
 	ld [hl], a
 	ld l, DUELVARS_ARENA_CARD_SUBSTATUS2
@@ -9644,7 +9714,7 @@ Func_3b31: ; 3b31 (0:3b31)
 	ld [wDoFrameFunction], a
 	ld [wcad4], a
 .asm_3b45
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	pop af

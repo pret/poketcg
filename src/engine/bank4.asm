@@ -18,7 +18,7 @@ Func_10000: ; 10000 (4:4000)
 
 .asm_10025
 	call Func_1288c
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ret
@@ -155,7 +155,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
@@ -1081,7 +1081,7 @@ Unknown_1229f: ; 1229f (4:629f)
 ; is selected, there is no need to come back to the menu.
 ; the only exception is after returning from Card Pop!
 _GameLoop: ; 126d1 (4:66d1)
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018

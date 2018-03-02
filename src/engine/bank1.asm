@@ -321,10 +321,12 @@ HandleTurn: ; 4225 (1:4225)
 Func_4262:
 	call Func_4b2c
 	call Func_100b
+;	fallthrough
 
 Func_4268:
 	ld a, $06
 	call $51e7
+;	fallthrough
 
 ; print the main interface during a duel, including background, Pokemon, HUDs and a text box.
 ; the bottom text box changes depending on whether the turn belongs to the player (show the duel menu),
@@ -466,7 +468,7 @@ Func_434e: ; 434e (1:434e)
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
 	call Func_559a
-	ld a, $09
+	ld a, START + A_BUTTON
 	ld [wcbd6], a
 	jp $55f0
 .no_cards_in_hand
@@ -477,18 +479,19 @@ Func_434e: ; 434e (1:434e)
 ; triggered by pressing B + START in the duel menu
 DuelMenuShortcut_OpponentActivePokemon: ; 4364 (1:4364)
 	call SwapTurn
-	call Func_4376
+	call OpenActivePokemonScreen
 	call SwapTurn
 	jp DuelMainInterface
 ; 0x4370
 
 ; triggered by pressing START in the duel menu
 DuelMenuShortcut_PlayerActivePokemon: ; 4370 (1:4370)
-	call Func_4376
+	call OpenActivePokemonScreen
 	jp DuelMainInterface
 ; 0x4376
 
-Func_4376: ; 4376 (1:4376)
+; draw the turn holder's active Pokemon screen if it exists
+OpenActivePokemonScreen: ; 4376 (1:4376)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
@@ -499,7 +502,7 @@ Func_4376: ; 4376 (1:4376)
 	xor a
 	ld [hli], a
 	ld [hl], a
-	call $576a
+	call Func_576a
 	ret
 ; 0x438e
 
@@ -656,12 +659,12 @@ UseEnergyCard: ; 4477 (1:4477)
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr z, .play_energy_set_played
-	ldtx hl, OnlyOneEnergyCardText
+	ldtx hl, MayOnlyAttachOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 	jp Func_4436
 
 .already_played_energy
-	ldtx hl, OnlyOneEnergyCardText
+	ldtx hl, MayOnlyAttachOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
 
 .asm_44d2
@@ -1001,10 +1004,10 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 .next_energy_type_pair
 	ld a, [de]
 	swap a
-	call _CheckIfEnoughEnergiesOfType
+	call CheckIfEnoughEnergiesOfType
 	jr c, .not_usable_or_not_enough_energies
 	ld a, [de]
-	call _CheckIfEnoughEnergiesOfType
+	call CheckIfEnoughEnergiesOfType
 	jr c, .not_usable_or_not_enough_energies
 	inc de
 	dec c
@@ -1032,7 +1035,7 @@ _CheckIfEnoughEnergies: ; 48ac (1:48ac)
 ; given the amount of energies of a specific type required for an attack in the
 ; lower nybble of register a, test if the pokemon card has enough energies of that type
 ; to use the move. Return carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
+CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
 	and $f
 	push af
 	push hl
@@ -1640,7 +1643,7 @@ OpenDiscardPileScreen: ; 5550 (1:5550)
 	jr c, .discard_pile_empty
 	call Func_559a
 	call Func_556d
-	ld a, $09
+	ld a, START + A_BUTTON
 	ld [wcbd6], a
 	call $55f0
 	or a
@@ -1696,7 +1699,7 @@ Func_559a: ; 559a (1:559a)
 	ld [hli], a
 	ld [hl], a
 	ld [wcbde], a
-	ld a, $08
+	ld a, START
 	ld [wcbd6], a
 	ld hl, wcbda
 	ld [hl], $aa
@@ -1729,7 +1732,185 @@ Func_559a: ; 559a (1:559a)
 	ret
 ; 0x55f0
 
-	INCROM $55f0,  $5aeb
+	INCROM $55f0,  $576a
+
+Func_576a: ; 576a (1:576a)
+	ld a, B_BUTTON
+	ld [wcbd7], a
+	ld a, $01
+	jr Func_5779
+
+Func_5773: ; 5773 (1:5773)
+	ld a, B_BUTTON
+	ld [wcbd7], a
+	xor a
+;	fallthrough
+
+Func_5779: ; 5779 (1:5779)
+	ld [wcbd1], a
+	call $5990
+	call EmptyScreen
+	call Func_3b31
+	call LoadDuelCardSymbolTiles
+	ld de, v0Tiles1 + $20 tiles
+	call $59ca
+	call $5a0e
+	call $59f5
+	call $5a34
+	ld de, $3830
+	call $5999
+	lb de, 6, 4
+	call $5a56
+	xor a
+	ld [wCardPageNumber], a
+.asm_57a7
+	call Func_5898
+	jr c, .asm_57cc
+	call EnableLCD
+.asm_57af
+	call DoFrame
+	ldh a, [hButtonsPressed2]
+	ld b, a
+	ld a, [wcbd7]
+	and b
+	jr nz, .asm_57cc
+	ldh a, [hButtonsPressed]
+	and START + A_BUTTON
+	jr nz, .asm_57a7
+	ldh a, [hButtonsPressed]
+	and D_RIGHT + D_LEFT
+	jr z, .asm_57af
+	call Func_57cd
+	jr .asm_57af
+.asm_57cc
+	ret
+; 0x57cd
+
+Func_57cd: ; 57cd (1:57cd)
+	bit D_LEFT_F, a
+	jr nz, .left
+;.right
+	call Func_5898
+	call c, Func_589c
+	ret
+.left
+	call Func_5892
+	call c, Func_589c
+	ret
+; 0x57df
+
+	INCROM $57df,  $5892
+
+Func_5892: ; 5892 (1:5892)
+	call Func_5911
+	jr nc, Func_589c
+	ret
+
+Func_5898: ; 5898 (1:5898)
+	call Func_58e2
+	ret c
+;	fallthrough
+
+Func_589c: ; 589c (1:589c)
+	ld a, [wCardPageNumber]
+	ld hl, CardPagePointerTable
+	call JumpToFunctionInTable
+	call EnableLCD
+	or a
+	ret
+; 0x58aa
+
+Func_58aa: ; 58aa (1:58aa)
+	ldh a, [hCurrentMenuItem]
+	call GetCardInDuelTempList
+	call LoadCardDataToBuffer1_FromCardID
+	ld de, v0Tiles1 + $20 tiles
+	call $59ca
+	ld de, $c0c
+	call $59f5
+	call $5a34
+	ret
+; 0x58c2
+
+CardPagePointerTable: ; 58c2 (1:58c2)
+	dw DrawDuelMainScene
+	dw $5b7d
+	dw $5d1f
+	dw $5d27
+	dw $5d2f
+	dw $5d37
+	dw $5d54
+	dw DrawDuelMainScene
+	dw DrawDuelMainScene
+	dw $5e28
+	dw $5e28
+	dw DrawDuelMainScene
+	dw DrawDuelMainScene
+	dw $5e1c
+	dw $5e22
+	dw DrawDuelMainScene
+; 0x58e2
+
+Func_58e2: ; 58e2 (1:58e2)
+	ld a, [wCardPageNumber]
+	or a
+	jr nz, .asm_58ff
+	ld a, [wLoadedCard1Type]
+	ld b, a
+	ld a, $09
+	bit TYPE_ENERGY_F, b
+	jr nz, .set_card_page_nc
+	ld a, $0d
+	bit TYPE_TRAINER_F, b
+	jr nz, .set_card_page_nc
+	ld a, $01
+.set_card_page_nc
+	ld [wCardPageNumber], a
+	or a
+	ret
+.asm_58ff
+	ld hl, wCardPageNumber
+	inc [hl]
+	ld a, [hl]
+	call Func_5930
+	jr c, .set_card_page_c
+	or a
+	ret nz
+	jr .asm_58ff
+.set_card_page_c
+	ld [wCardPageNumber], a
+	ret
+; 0x5911
+
+Func_5911: ; 5911 (1:5911)
+	ld hl, wCardPageNumber
+	dec [hl]
+	ld a, [hl]
+	call Func_5930
+	jr c, .asm_591f
+	or a
+	ret nz
+	jr Func_5911
+.asm_591f
+	ld [wCardPageNumber], a
+.asm_5922
+	call Func_5930
+	or a
+	jr nz, .asm_592e
+	ld hl, wCardPageNumber
+	dec [hl]
+	jr .asm_5922
+.asm_592e
+	scf
+	ret
+; 0x5930
+
+Func_5930: ; 5930 (1:5930)
+	ld hl, $5936
+	jp JumpToFunctionInTable
+; 0x5936
+
+	INCROM $5936,  $5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
 	INCROM $5aeb, $5fdd
@@ -1835,7 +2016,7 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	jr z, .asm_6022
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	call $576a
+	call Func_576a
 	jr .asm_6022
 .asm_6091
 	ld a, [wcbd2]
