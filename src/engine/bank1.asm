@@ -765,7 +765,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	jp .try_open_attack_menu
 
 Func_478b: ; 478b (1:478b)
-	ld a, $01
+	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
 	xor a
 	ld [wcbc9], a
@@ -1834,20 +1834,20 @@ Func_58aa: ; 58aa (1:58aa)
 
 CardPagePointerTable: ; 58c2 (1:58c2)
 	dw DrawDuelMainScene
-	dw $5b7d
-	dw $5d1f
-	dw $5d27
-	dw $5d2f
-	dw $5d37
-	dw $5d54
+	dw $5b7d ; CARDPAGE_POKEMON_OVERVIEW
+	dw $5d1f ; CARDPAGE_POKEMON_MOVE1_1
+	dw $5d27 ; CARDPAGE_POKEMON_MOVE1_2
+	dw $5d2f ; CARDPAGE_POKEMON_MOVE2_1
+	dw $5d37 ; CARDPAGE_POKEMON_MOVE2_2
+	dw $5d54 ; CARDPAGE_POKEMON_DESCRIPTION
 	dw DrawDuelMainScene
 	dw DrawDuelMainScene
-	dw $5e28
-	dw $5e28
+	dw $5e28 ; CARDPAGE_ENERGY
+	dw $5e28 ; CARDPAGE_ENERGY + 1
 	dw DrawDuelMainScene
 	dw DrawDuelMainScene
-	dw $5e1c
-	dw $5e22
+	dw $5e1c ; CARDPAGE_TRAINER_1
+	dw $5e22 ; CARDPAGE_TRAINER_2
 	dw DrawDuelMainScene
 ; 0x58e2
 
@@ -1857,13 +1857,13 @@ Func_58e2: ; 58e2 (1:58e2)
 	jr nz, .asm_58ff
 	ld a, [wLoadedCard1Type]
 	ld b, a
-	ld a, $09
+	ld a, CARDPAGE_ENERGY
 	bit TYPE_ENERGY_F, b
 	jr nz, .set_card_page_nc
-	ld a, $0d
+	ld a, CARDPAGE_TRAINER_1
 	bit TYPE_TRAINER_F, b
 	jr nz, .set_card_page_nc
-	ld a, $01
+	ld a, CARDPAGE_POKEMON_OVERVIEW
 .set_card_page_nc
 	ld [wCardPageNumber], a
 	or a
