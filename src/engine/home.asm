@@ -3509,7 +3509,7 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 
 ; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocationOffset_ff9d
 ; into another turn holder's Pokemon card identifier by it's deck index (0-59) in hTempCardIndex_ff98.
-; always returns nc, but it's unclear if it's intentional.
+; return nc if evolution was succesful.
 EvolvePokemonCard: ; 13a2 (0:13a2)
 	; first make sure the attempted evolution is viable
 	ldh a, [hTempCardIndex_ff98]
@@ -3562,9 +3562,9 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	call GetTurnDuelistVariable
 	ld a, [wLoadedCard1Stage]
 	ld [hl], a
-	; this is buggy but the return value would've always been the same anyway, as the Pokemon can't be basic
 	or a
-	ret ; !
+	ret
+
 	scf
 	ret
 ; 0x13f7
@@ -3572,6 +3572,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 ; check if the turn holder's Pokemon card e can evolve into the turn holder's Pokemon card d.
 ; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
 ; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
+; return carry if can't evolve, plus nz if the reason for it is the card was played this turn.
 CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	push de
 	ld a, e
@@ -4352,7 +4353,7 @@ Func_1874: ; 1874 (0:1874)
 	ld a, [wccec]
 	or a
 	ret nz
-	ldh a, [hffa0]
+	ldh a, [hTemp_ffa0]
 	push af
 	ldh a, [hTempCardIndex_ff9f]
 	push af
@@ -4361,14 +4362,14 @@ Func_1874: ; 1874 (0:1874)
 	ld a, [wcc11]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wcc10]
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	ld a, $8
 	call SetDuelAIAction
 	call Func_0f58
 	pop af
 	ldh [hTempCardIndex_ff9f], a
 	pop af
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	ret
 
 Func_189d: ; 189d (0:189d)
@@ -4428,8 +4429,9 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 ; 0x18f9
 
-; use the trainer card with deck index at hTempCardIndex_ff98
-; a trainer card is like a move effect, with its own effect commands
+; use the trainer card with deck index at hTempCardIndex_ff98.
+; a trainer card is like a move effect, with its own effect commands.
+; return nc if the card was played, carry if it wasn't.
 UseTrainerCard: ; 18f9 (0:18f9)
 	call CheckCantUseTrainerDueToHeadache
 	jr c, .cant_use
@@ -6536,7 +6538,7 @@ HandleMenuInput: ; 264b (0:264b)
 	ret
 
 ; plays an "open screen" sound if [hCurrentMenuItem] != 0xff
-; plays a "exit screen" sound if [hCurrentMenuItem] == 0xff
+; plays an "exit screen" sound if [hCurrentMenuItem] == 0xff
 PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
 	ldh a, [hCurrentMenuItem]
@@ -7164,7 +7166,7 @@ Func_2bc7: ; 2bc7 (0:2bc7)
 Func_2bcf: ; 2bcf (0:2bcf)
 	ld a, $4
 	call Func_2bdb
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	ret
 
 Func_2bd7: ; 2bd7 (0:2bd7)
@@ -8894,7 +8896,7 @@ CheckCantUseTrainerDueToHeadache: ; 35a9 (0:35a9)
 	ret
 ; 0x35b7
 
-; return carry if turn holder has Aerodactyl and its Prehistoric Power Pkmn Power is active
+; return carry if any duelist has Aerodactyl and its Prehistoric Power Pkmn Power is active
 IsPrehistoricPowerActive: ; 35b7 (0:35b7)
 	ld a, AERODACTYL
 	call CountPokemonIDInBothPlayAreas

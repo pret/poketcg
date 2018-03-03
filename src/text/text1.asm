@@ -420,7 +420,7 @@ Text0060: ; 36ab7 (d:6ab7)
 	line "into ", TX_RAM2, "."
 	done
 
-Text0061: ; 36aca (d:6aca)
+PlacedOnTheBenchText: ; 36aca (d:6aca)
 	text "Placed ", TX_RAM2, ""
 	line "on the Bench."
 	done
@@ -833,12 +833,12 @@ NoSpaceOnTheBenchText: ; 374fa (d:74fa)
 	text "There is no space on the Bench."
 	done
 
-Text00b3: ; 3751b (d:751b)
+NoPokemonCapableOfEvolvingText: ; 3751b (d:751b)
 	text "There are no Pok`mon capable"
 	line "of Evolving."
 	done
 
-Text00b4: ; 37546 (d:7546)
+CantEvolvePokemonInSameTurnItsPlacedText: ; 37546 (d:7546)
 	text "You cannot Evolve a Pok`mon"
 	line "in the same turn it was placed."
 	done

@@ -98,7 +98,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text005e                                ; 0x005e
 	textpointer Text005f                                ; 0x005f
 	textpointer Text0060                                ; 0x0060
-	textpointer Text0061                                ; 0x0061
+	textpointer PlacedOnTheBenchText                                ; 0x0061
 	textpointer Text0062                                ; 0x0062
 	textpointer Text0063                                ; 0x0063
 	textpointer Text0064                                ; 0x0064
@@ -180,8 +180,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00b0                                ; 0x00b0
 	textpointer Text00b1                                ; 0x00b1
 	textpointer NoSpaceOnTheBenchText                   ; 0x00b2
-	textpointer Text00b3                                ; 0x00b3
-	textpointer Text00b4                                ; 0x00b4
+	textpointer NoPokemonCapableOfEvolvingText                                ; 0x00b3
+	textpointer CantEvolvePokemonInSameTurnItsPlacedText                                ; 0x00b4
 	textpointer Text00b5                                ; 0x00b5
 	textpointer Text00b6                                ; 0x00b6
 	textpointer Text00b7                                ; 0x00b7

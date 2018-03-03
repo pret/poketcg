@@ -506,12 +506,14 @@ OpenActivePokemonScreen: ; 4376 (1:4376)
 	ret
 ; 0x438e
 
+; triggered by selecting the "Pkmn Power" item in the duel menu
 DuelMenu_PkmnPower: ; 438e (1:438e)
 	call $6431
 	jp c, DuelMainInterface
 	call Func_1730
 	jp DuelMainInterface
 
+; triggered by selecting the "Done" item in the duel menu
 DuelMenu_Done: ; 439a (1:439a)
 	ld a, $08
 	call $51e7
@@ -521,12 +523,13 @@ DuelMenu_Done: ; 439a (1:439a)
 	call $717a
 	ret
 
+; triggered by selecting the "Retreat" item in the duel menu
 DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	jr nz, Func_43f1
 	ld a, [wcc0c]
 	or a
@@ -579,23 +582,26 @@ Func_441f: ; 441f (1:441f)
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
+; triggered by selecting the "Hand" item in the duel menu
 DuelMenu_Hand: ; 4425 (1:4425)
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
 	or a
-	jr nz, Func_4436
+	jr nz, OpenPlayerHandScreen
 	ldtx hl, NoCardsInHandText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-Func_4436: ; 4436 (1:4436)
+; draw the screen for the player's hand and handle user input to for example check
+; a card or attempt to use a card, playing the card if possible in that case.
+OpenPlayerHandScreen: ; 4436 (1:4436)
 	call CreateHandCardList
 	call DrawCardListScreenLayout
 	ldtx hl, PleaseSelectHandText
 	call SetCardListInfoBoxText
 	ld a, $1
 	ld [wcbde], a
-.asm_4447
+.handle_input
 	call Func_55f0
 	push af
 	ld a, [wcbdf]
@@ -608,17 +614,18 @@ Func_4436: ; 4436 (1:4436)
 	ld a, [wLoadedCard1Type]
 	ld c, a
 	bit TYPE_TRAINER_F, c
-	jr nz, .asm_446f
+	jr nz, .trainer_card
 	bit TYPE_ENERGY_F, c
 	jr nz, UseEnergyCard
-	call $44db
-	jr c, UseEnergyCard.asm_44d2
+	call UsePokemonCard
+	jr c, ReloadCardListScreen ; jump if card not played
 	jp DuelMainInterface
-.asm_446f
+.trainer_card
 	call UseTrainerCard
-	jr c, UseEnergyCard.asm_44d2
+	jr c, ReloadCardListScreen ; jump if card not played
 	jp DuelMainInterface
 
+; use the energy card with deck index at hTempCardIndex_ff98
 ; c contains the type of energy card being played
 UseEnergyCard: ; 4477 (1:4477)
 	ld a, c
@@ -642,7 +649,7 @@ UseEnergyCard: ; 4477 (1:4477)
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld e, a
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	call PutHandCardInPlayArea
 	call $61b8
 	ld a, $3
@@ -661,20 +668,122 @@ UseEnergyCard: ; 4477 (1:4477)
 	jr z, .play_energy_set_played
 	ldtx hl, MayOnlyAttachOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
-	jp Func_4436
+	jp OpenPlayerHandScreen
 
 .already_played_energy
 	ldtx hl, MayOnlyAttachOneEnergyCardText
 	call DrawWideTextBox_WaitForInput
+;	fallthrough
 
-.asm_44d2
+; reload the card list screen after the card trying to play couldn't be played
+ReloadCardListScreen: ; 44d2 (1:44d2)
 	call CreateHandCardList
+	; skip doing the things that have already been done when initially opened
 	call DrawCardListScreenLayout.draw
-	jp Func_4436.asm_4447
+	jp OpenPlayerHandScreen.handle_input
 ; 0x44db
 
-	INCROM $44db,  $4585
+; use a basic Pokemon card on the arena or bench, or place an stage 1 or 2
+; Pokemon card over a Pokemon card already in play to evolve it.
+; the card to use is loaded in wLoadedCard1 and its deck index is at hTempCardIndex_ff98.
+; return nc if the card was played, carry if it wasn't.
+UsePokemonCard: ; 44db (1:44db)
+	ld a, [wLoadedCard1Stage]
+	or a ; BASIC
+	jr nz, .try_evolve ; jump if the card being played is a Stage 1 or 2 Pokemon
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .no_space
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	call PutHandPokemonCardInPlayArea
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	add DUELVARS_ARENA_CARD_STAGE
+	call GetTurnDuelistVariable
+	ld [hl], BASIC
+	ld a, $01
+	call SetDuelAIAction
+	ldh a, [hTempCardIndex_ff98]
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, $14
+	call Func_29f5
+	ld [hl], $00
+	ld hl, $0000
+	call LoadTxRam2
+	ldtx hl, PlacedOnTheBenchText
+	call DrawWideTextBox_WaitForInput
+	call Func_161e
+	or a
+	ret
+.no_space
+	ldtx hl, NoSpaceOnTheBenchText
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+.try_evolve
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ldh a, [hTempCardIndex_ff98]
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+	push de
+	push bc
+.next_play_area_pkmn
+	push de
+	call CheckIfCanEvolveInto
+	pop de
+	jr nc, .can_evolve
+	inc e
+	dec c
+	jr nz, .next_play_area_pkmn
+	pop bc
+	pop de
+.find_cant_evolve_reason_loop
+	push de
+	call CheckIfCanEvolveInto
+	pop de
+	ldtx hl, CantEvolvePokemonInSameTurnItsPlacedText
+	jr nz, .cant_same_turn
+	inc e
+	dec c
+	jr nz, .find_cant_evolve_reason_loop
+	ldtx hl, NoPokemonCapableOfEvolvingText
+.cant_same_turn
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+.can_evolve
+	pop bc
+	pop de
+	call IsPrehistoricPowerActive
+	jr c, .prehistoric_power
+	call HasAlivePokemonInPlayArea
+.try_evolve_loop
+	call OpenPlayAreaScreenForSelection
+	jr c, .done
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh [hTempPlayAreaLocationOffset_ffa1], a
+	call EvolvePokemonCard
+	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
+	ld a, $02
+	call SetDuelAIAction
+	call $61b8
+	call $68fa
+	call Func_161e
+.done
+	or a
+	ret
+.prehistoric_power
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+; 0x4585
 
+; triggered by selecting the "Check" item in the duel menu
 DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
 	call Func_3096
@@ -684,6 +793,7 @@ DuelMenu_Check: ; 4585 (1:4585)
 DuelMenuShortcut_BothActivePokemon:: ; 458e (1:458e)
 	INCROM $458e,  $46fc
 
+; triggered by selecting the "Attack" item in the duel menu
 DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
 	jr c, .alert_cant_attack_and_cancel_menu
@@ -1337,12 +1447,12 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	call $4e84
 	call $4d97
-	ldh [hffa0], a
+	ldh [hTemp_ffa0], a
 	call SwapTurn
 	call $4d97
 	call SwapTurn
 	ld c, a
-	ldh a, [hffa0]
+	ldh a, [hTemp_ffa0]
 	ld b, a
 	and c
 	jr nz, .asm_4bd0
@@ -2573,10 +2683,10 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ldh a, [hTempPlayAreaLocationOffset_ffa1]
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld e, a
-	ldh a, [hffa0]
+	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
 	call PutHandCardInPlayArea
-	ldh a, [hffa0]
+	ldh a, [hTemp_ffa0]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call $5e75
 	call $68e4
