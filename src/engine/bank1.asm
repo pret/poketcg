@@ -191,7 +191,7 @@ StartDuel: ; 409f (1:409f)
 	jr z, .active_duelist_lost_batte
 	ld a, $5f
 	ld c, MUSIC_DARK_DIDDLY
-	ldtx hl, DuelWasDrawText
+	ldtx hl, DuelWasADrawText
 	jr .handle_duel_finished
 
 .active_duelist_won_battle
@@ -436,25 +436,25 @@ DuelMenuShortcut_PlayerDiscardPile: ; 4320 (1:4320)
 	jp c, PrintDuelMenu
 	jp DuelMainInterface
 
-; draw the opponent's play area interface
+; draw the opponent's play area screen
 OpenOpponentPlayAreaScreen: ; 4329 (1:4329)
 	call SwapTurn
 	call OpenPlayAreaScreen
 	call SwapTurn
 	ret
 
-; draw the turn holder's play area interface
+; draw the turn holder's play area screen
 OpenPlayAreaScreen: ; 4333 (1:4333)
 	call HasAlivePokemonInPlayArea
 	jp OpenPlayAreaScreenForViewing
 
-; draw the opponent's discard pile interface
+; draw the opponent's discard pile screen
 OpenOpponentDiscardPileScreen: ; 4339 (1:4339)
 	call SwapTurn
 	call OpenDiscardPileScreen
 	jp SwapTurn
 
-; draw the player's discard pile interface
+; draw the player's discard pile screen
 OpenPlayerDiscardPileScreen: ; 4342 (1:4342)
 	jp OpenDiscardPileScreen
 
@@ -467,10 +467,10 @@ Func_4345: ; 4345 (1:4345)
 Func_434e: ; 434e (1:434e)
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
-	call Func_559a
+	call DrawCardListScreenLayout
 	ld a, START + A_BUTTON
 	ld [wcbd6], a
-	jp $55f0
+	jp Func_55f0
 .no_cards_in_hand
 	ldtx hl, NoCardsInHandText
 	jp DrawWideTextBox_WaitForInput
@@ -590,13 +590,13 @@ DuelMenu_Hand: ; 4425 (1:4425)
 
 Func_4436: ; 4436 (1:4436)
 	call CreateHandCardList
-	call Func_559a
-	ld hl, $00aa
-	call Func_5588
+	call DrawCardListScreenLayout
+	ldtx hl, PleaseSelectHandText
+	call SetCardListInfoBoxText
 	ld a, $1
 	ld [wcbde], a
 .asm_4447
-	call $55f0
+	call Func_55f0
 	push af
 	ld a, [wcbdf]
 	or a
@@ -669,7 +669,7 @@ UseEnergyCard: ; 4477 (1:4477)
 
 .asm_44d2
 	call CreateHandCardList
-	call Func_559a.asm_55be
+	call DrawCardListScreenLayout.draw
 	jp Func_4436.asm_4447
 ; 0x44db
 
@@ -1314,13 +1314,13 @@ Func_4b2c: ; 4b2c (1:4b2c)
 
 Func_4b38: ; 4b38 (1:4b38)
 	ld a, [wDuelTempList]
-	cp -1
+	cp $ff
 	ret z
-	call Func_559a
+	call DrawCardListScreenLayout
 	call CountCardsInDuelTempList
 	ld hl, $5710
 	ld de, $0
-	call $2799
+	call Func_2799
 	ldtx hl, TheCardYouReceivedText
 	lb de, 1, 1
 	call Func_22ae
@@ -1638,14 +1638,15 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 
 	INCROM $503a,  $5550
 
+; draw the turn holder's discard pile screen
 OpenDiscardPileScreen: ; 5550 (1:5550)
 	call CreateDiscardPileCardList
 	jr c, .discard_pile_empty
-	call Func_559a
-	call Func_556d
+	call DrawCardListScreenLayout
+	call SetDiscardPileScreenTexts
 	ld a, START + A_BUTTON
 	ld [wcbd6], a
-	call $55f0
+	call Func_55f0
 	or a
 	ret
 .discard_pile_empty
@@ -1655,41 +1656,47 @@ OpenDiscardPileScreen: ; 5550 (1:5550)
 	ret
 ; 0x556d
 
-Func_556d: ; 556d (1:556d)
-	ld de, $217
+; set wCardListHeaderText and SetCardListInfoBoxText to the text
+; that correspond to the Discard Pile screen
+SetDiscardPileScreenTexts: ; 556d (1:556d)
+	ldtx de, YourDiscardPileText
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_5579
-	ld de, $218
-.asm_5579
-	ld hl, $56
-	call Func_5580
+	jr z, .got_header_text
+	ldtx de, OpponentsDiscardPileText
+.got_header_text
+	ldtx hl, ChooseTheCardYouWishToExamineText
+	call SetCardListHeaderText
 	ret
 ; 0x5580
 
-Func_5580: ; 5580 (1:5580)
+SetCardListHeaderText: ; 5580 (1:5580)
 	ld a, e
-	ld [wcbdc], a
+	ld [wCardListHeaderText], a
 	ld a, d
-	ld [wcbdd], a
+	ld [wCardListHeaderText + 1], a
 ;	fallthrough
 
-Func_5588: ; 5588 (1:5588)
+SetCardListInfoBoxText: ; 5588 (1:5588)
 	ld a, l
-	ld [wcbda], a
+	ld [wCardListInfoBoxText], a
 	ld a, h
-	ld [wcbdb], a
+	ld [wCardListInfoBoxText + 1], a
 	ret
 ; 0x5591
 
 Func_5591: ; 5591 (1:5591)
-	call Func_559a
+	call DrawCardListScreenLayout
 	ld a, $02
 	ld [wcbde], a
 	ret
 ; 0x559a
 
-Func_559a: ; 559a (1:559a)
+; draw the layout of the screen that displays the player's Hand card list or a
+; Discard Pile card list, including a bottom-right image of the current card.
+; since this loads the text for the Hand card list screen, SetDiscardPileScreenTexts
+; is called after this if the screen corresponds to a Discard Pile list.
+DrawCardListScreenLayout: ; 559a (1:559a)
 	xor a
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
@@ -1701,29 +1708,31 @@ Func_559a: ; 559a (1:559a)
 	ld [wcbde], a
 	ld a, START
 	ld [wcbd6], a
-	ld hl, wcbda
-	ld [hl], $aa
+	ld hl, wCardListInfoBoxText
+	ld [hl], LOW(PleaseSelectHandText_)
 	inc hl
-	ld [hl], $00
+	ld [hl], HIGH(PleaseSelectHandText_)
+	inc hl ; wCardListHeaderText
+	ld [hl], LOW(DuelistsHandText_)
 	inc hl
-	ld [hl], $a7
-	inc hl
-	ld [hl], $00
-.asm_55be
+	ld [hl], HIGH(DuelistsHandText_)
+.draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
 	call LoadDuelCardSymbolTiles
+	; draw the surrounding box
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
+	; draw the image of the selected card
 	ld a, $a0
 	lb hl, 6, 1
 	lb de, 12, 12
 	lb bc, 8, 6
 	call FillRectangle
 	call ApplyBGP6OrSGB3ToCardImage
-	call $5744
+	call Func_5744
 	ld a, [wDuelTempList]
 	cp $ff
 	scf
@@ -1732,7 +1741,103 @@ Func_559a: ; 559a (1:559a)
 	ret
 ; 0x55f0
 
-	INCROM $55f0,  $576a
+Func_55f0: ; 55f0 (1:55f0)
+	call DrawNarrowTextBox
+	call $56a0
+.asm_55f6
+	call CountCardsInDuelTempList
+	ld hl, wSelectedDuelSubMenuItem
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld hl, $5710
+	call Func_2799
+	call Func_58aa
+	call EnableLCD
+.asm_560b
+	call DoFrame
+	call $5690
+	call Func_2626
+	jr nc, .asm_560b
+	ld hl, wSelectedDuelSubMenuItem
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ldh a, [hButtonsPressed]
+	ld b, a
+	bit SELECT_F, b
+	jr nz, .asm_563b
+	bit B_BUTTON_F, b
+	jr nz, .asm_568c
+	ld a, [wcbd6]
+	and b
+	jr nz, .asm_5654
+	ldh a, [hCurrentMenuItem]
+	call GetCardInDuelTempList_OnlyDeckIndex
+	call $56c2
+	jr c, Func_55f0
+	ldh a, [hTempCardIndex_ff98]
+	or a
+	ret
+.asm_563b
+	ld a, [wcbdf]
+	or a
+	jr nz, .asm_560b
+	call SortCardsInDuelTempListByID
+	xor a
+	ld hl, wSelectedDuelSubMenuItem
+	ld [hli], a
+	ld [hl], a
+	ld a, $01
+	ld [wcbdf], a
+	call EraseCursor
+	jr .asm_55f6
+.asm_5654
+	ldh a, [hCurrentMenuItem]
+	call GetCardInDuelTempList
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call $5762
+	ldh a, [hButtonsPressed2]
+	bit D_UP_F, a
+	jr nz, .asm_566f
+	bit D_DOWN_F, a
+	jr nz, .asm_5677
+	call DrawCardListScreenLayout.draw
+	jp Func_55f0
+.asm_566f
+	ldh a, [hCurrentMenuItem]
+	or a
+	jr z, .asm_5654
+	dec a
+	jr .asm_5681
+.asm_5677
+	call CountCardsInDuelTempList
+	ld b, a
+	ldh a, [hCurrentMenuItem]
+	inc a
+	cp b
+	jr nc, .asm_5654
+.asm_5681
+	ldh [hCurrentMenuItem], a
+	ld hl, wSelectedDuelSubMenuItem
+	ld [hl], $00
+	inc hl
+	ld [hl], a
+	jr .asm_5654
+.asm_568c
+	ldh a, [hCurrentMenuItem]
+	scf
+	ret
+; 0x5690
+
+	INCROM $5690,  $5744
+
+Func_5744: ; 5744 (1:5744)
+	ld hl, wcbd8
+	jp CallIndirect
+; 0x574a
+
+	INCROM $574a,  $576a
 
 Func_576a: ; 576a (1:576a)
 	ld a, B_BUTTON

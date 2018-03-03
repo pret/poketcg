@@ -367,7 +367,7 @@ TransmissionErrorText: ; 36947 (d:6947)
 	line "Start again from the beginning."
 	done
 
-Text0056: ; 3697c (d:697c)
+ChooseTheCardYouWishToExamineText: ; 3697c (d:697c)
 	text "Choose the card"
 	line "you wish to examine."
 	done
@@ -524,7 +524,7 @@ DecisionText: ; 36da4 (d:6da4)
 	text "Decision..."
 	done
 
-DuelWasDrawText: ; 36db1 (d:6db1)
+DuelWasADrawText: ; 36db1 (d:6db1)
 	text "The Duel with ", TX_RAM1, ""
 	line "was a Draw!"
 	done
@@ -779,19 +779,19 @@ Text00a6: ; 3737b (d:737b)
 	text "Player's Discard Pile"
 	done
 
-Text00a7: ; 37392 (d:7392)
+DuelistsHandText: ; 37392 (d:7392)
 	text TX_RAM1, "'s Hand"
 	done
 
-Text00a8: ; 3739c (d:739c)
+DuelistsPlayAreaText: ; 3739c (d:739c)
 	text TX_RAM1, "'s Play Area"
 	done
 
-Text00a9: ; 373ab (d:73ab)
+DuelistsDeckText: ; 373ab (d:73ab)
 	text TX_RAM1, "'s Deck"
 	done
 
-Text00aa: ; 373b5 (d:73b5)
+PleaseSelectHandText: ; 373b5 (d:73b5)
 	text "Please select"
 	line "Hand."
 	done

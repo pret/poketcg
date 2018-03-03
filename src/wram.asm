@@ -570,17 +570,13 @@ wcbd8:: ; cbd8
 wcbd9:: ; cbd9
 	ds $1
 
-wcbda:: ; cbda
-	ds $1
+; in the hand or discard pile card screen, id of the text printed in the bottom-left box
+wCardListInfoBoxText:: ; cbda
+	ds $2
 
-wcbdb:: ; cbdb
-	ds $1
-
-wcbdc:: ; cbdc
-	ds $1
-
-wcbdd:: ; cbdd
-	ds $1
+; in the hand or discard pile card screen, id of the text printed as the header title
+wCardListHeaderText:: ; cbdc
+	ds $2
 
 wcbde:: ; cbde
 	ds $1
@@ -882,7 +878,22 @@ wTileBehindCursor:: ; cd16
 wMenuFunctionPointer:: ; cd17
 	ds $2
 
-	ds $7f
+wcd19:: ; cd19
+	ds $1
+
+wcd1a:: ; cd1a
+	ds $1
+
+wcd1b:: ; cd1b
+	ds $1
+
+wcd1c:: ; cd1c
+	ds $1
+
+	ds $7a
+
+wcd97:: ; cd97
+	ds $1
 
 ; x coord of the leftmost item in a horizontal menu
 wLeftmostItemCursorX:: ; cd98

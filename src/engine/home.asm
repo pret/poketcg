@@ -6428,7 +6428,19 @@ Func_256d: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-	INCROM $2589, $2636
+	INCROM $2589, $2626
+
+Func_2626: ; 2626 (0:2626)
+	call HandleMenuInput
+	ret nc
+	ld a, [wcd19]
+	ld d, a
+	ld a, [wCurMenuItem]
+	ld e, a
+	ldh a, [hCurrentMenuItem]
+	scf
+	ret
+; 0x2636
 
 ; initializes cursor parameters given the 8 bytes starting at hl,
 ; which represent the following:
@@ -6657,7 +6669,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, $278d
+	ld hl, DuelMenuCursorCoords
 	add hl, bc
 	ld b, [hl]
 	inc hl
@@ -6670,7 +6682,97 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	ret
 ; 0x278d
 
-	INCROM $278d, $2988
+DuelMenuCursorCoords: ; 278d (0:278d)
+	db  2, 14 ; Hand
+	db  2, 16 ; Attack
+	db  8, 14 ; Check
+	db  8, 16 ; Pkmn Power
+	db 14, 14 ; Retreat
+	db 14, 16 ; Done
+
+Func_2799: ; 2799 (0:2799)
+	call $25ea
+	ld hl, wMenuFunctionPointer
+	ld a, LOW($283f)
+	ld [hli], a
+	ld a, HIGH($283f)
+	ld [hli], a
+	ld a, 2
+	ld [wYDisplacementBetweenMenuItems], a
+	ld a, $01
+	ld [wcd97], a
+	ld e, $00
+	ld a, [wcd19]
+	or a
+	jr z, .asm_27b9
+	ld e, $0c
+.asm_27b9
+	ld a, [wCursorYPosition]
+	dec a
+	ld c, a
+	ld b, $12
+	ld a, e
+	call Func_06c3
+	ld e, $00
+	ld a, [wcd19]
+	ld hl, wNumMenuItems
+	add [hl]
+	ld hl, wcd1b
+	cp [hl]
+	jr nc, .asm_27d5
+	ld e, $2f
+.asm_27d5
+	ld a, [wNumMenuItems]
+	add a
+	add c
+	dec a
+	ld c, a
+	ld a, e
+	call Func_06c3
+	ld a, [wcd19]
+	ld e, a
+	ld d, $00
+	ld hl, wDuelTempList
+	add hl, de
+	ld a, [wNumMenuItems]
+	ld b, a
+	ld a, [wcd1a]
+	ld d, a
+	ld a, [wCursorYPosition]
+	ld e, a
+	ld c, $00
+.asm_27f8
+	ld a, [hl]
+	cp $ff
+	jr z, .asm_2826
+	push hl
+	push bc
+	push de
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call DrawCardSymbol
+	call Func_22ae
+	ld a, [wcd1c]
+	call Func_29f5
+	ld hl, wDefaultText
+	call Func_21c5
+	pop de
+	pop bc
+	pop hl
+	inc hl
+	ld a, [wcd1b]
+	dec a
+	inc c
+	cp c
+	jr c, .asm_2826
+	inc e
+	inc e
+	dec b
+	jr nz, .asm_27f8
+.asm_2826
+	ret
+; 0x2827
+
+	INCROM $2827, $2988
 
 CardTypeToSymbolID: ; 2988 (0:2988)
 	ld a, [wLoadedCard1Type]

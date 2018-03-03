@@ -1498,11 +1498,11 @@ Text0216: ; 3b7b9 (e:77b9)
 	db $03,$7b
 	done
 
-Text0217: ; 3b7bc (e:77bc)
+YourDiscardPileText: ; 3b7bc (e:77bc)
 	text "Your Discard Pile"
 	done
 
-Text0218: ; 3b7cf (e:77cf)
+OpponentsDiscardPileText: ; 3b7cf (e:77cf)
 	text "Opponent's Discard Pile"
 	done
 

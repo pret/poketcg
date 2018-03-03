@@ -87,7 +87,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YouPlayFirstText                        ; 0x0053
 	textpointer YouPlaySecondText                       ; 0x0054
 	textpointer TransmissionErrorText                   ; 0x0055
-	textpointer Text0056                                ; 0x0056
+	textpointer ChooseTheCardYouWishToExamineText                                ; 0x0056
 	textpointer TransmitingDataText                     ; 0x0057
 	textpointer Text0058                                ; 0x0058
 	textpointer Text0059                                ; 0x0059
@@ -120,7 +120,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IfHeadPlayerPlaysFirstText              ; 0x0074
 	textpointer CoinTossToDetermineWhoFirstText         ; 0x0075
 	textpointer DecisionText                            ; 0x0076
-	textpointer DuelWasDrawText                         ; 0x0077
+	textpointer DuelWasADrawText                         ; 0x0077
 	textpointer WonDuelText                             ; 0x0078
 	textpointer LostDuelText                            ; 0x0079
 	textpointer StartSuddenDeathMatchText               ; 0x007a
@@ -168,10 +168,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoCardsInHandText                       ; 0x00a4
 	textpointer TheDiscardPileHasNoCardsText                                ; 0x00a5
 	textpointer Text00a6                                ; 0x00a6
-	textpointer Text00a7                                ; 0x00a7
-	textpointer Text00a8                                ; 0x00a8
-	textpointer Text00a9                                ; 0x00a9
-	textpointer Text00aa                                ; 0x00aa
+	textpointer DuelistsHandText                                ; 0x00a7
+	textpointer DuelistsPlayAreaText                                ; 0x00a8
+	textpointer DuelistsDeckText                                ; 0x00a9
+	textpointer PleaseSelectHandText                                ; 0x00aa
 	textpointer Text00ab                                ; 0x00ab
 	textpointer Text00ac                                ; 0x00ac
 	textpointer Text00ad                                ; 0x00ad
@@ -536,8 +536,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0214                                ; 0x0214
 	textpointer Text0215                                ; 0x0215
 	textpointer Text0216                                ; 0x0216
-	textpointer Text0217                                ; 0x0217
-	textpointer Text0218                                ; 0x0218
+	textpointer YourDiscardPileText                                ; 0x0217
+	textpointer OpponentsDiscardPileText                                ; 0x0218
 	textpointer Text0219                                ; 0x0219
 	textpointer Text021a                                ; 0x021a
 	textpointer Text021b                                ; 0x021b
