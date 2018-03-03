@@ -168,7 +168,7 @@ StartDuel: ; 409f (1:409f)
 	ret
 
 .duel_finished
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	ld a, BOXMSG_DECISION
 	call DrawDuelBoxMessage
@@ -278,7 +278,7 @@ StartDuel: ; 409f (1:409f)
 Func_420b: ; 420b (1:420b)
 	xor a
 	ld [wTileMapFill], a
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
 	call Func_5aeb
@@ -771,15 +771,15 @@ Func_478b: ; 478b (1:478b)
 	ld [wcbc9], a
 	call EmptyScreen
 	call Func_3b31
-	ld de, $8a00
-	call $59ca
-	call $5a0e
-	call $59f5
-	call $5a34
-	ld de, $3830
-	call $5999
-	ld de, $0604
-	call $5a56
+	ld de, v0Tiles1 + $20 tiles
+	call LoadLoaded1CardGfx
+	call SetOBP1OrSGB3ToCardPalette
+	call SetBGP6OrSGB3ToCardPalette
+	call FlushAllPalettesOrSendPal23Packet
+	lb de, $38, $30 ; X Position and Y Position of top-left corner
+	call PlaceCardImageOAM
+	lb de, 6, 4
+	call ApplyBGP6OrSGB3ToCardImage
 	ldh a, [hCurrentMenuItem]
 	ld [wSelectedDuelSubMenuItem], a
 	add a
@@ -1583,7 +1583,7 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ld a, [wcac2]
 	cp $01
 	ret z
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
 	ld a, $01
@@ -1591,15 +1591,15 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld de, v0Tiles1 + $50 tiles
-	call $59c2
-	call $59d7
+	call LoadPlayAreaCardGfx
+	call SetBGP7OrSGB2ToCardPalette
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld de, v0Tiles1 + $20 tiles
-	call $59c2
-	call $59f5
-	call $5a34
+	call LoadPlayAreaCardGfx
+	call SetBGP6OrSGB3ToCardPalette
+	call FlushAllPalettesOrSendPal23Packet
 	call SwapTurn
 ; next, draw the Pokemon in the arena
 ;.place_player_arena_pkmn
@@ -1612,7 +1612,7 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	lb de, 0, 5
 	lb bc, 8, 6
 	call FillRectangle
-	call $5a6e
+	call ApplyBGP7OrSGB2ToCardImage
 .place_opponent_arena_pkmn
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
@@ -1624,7 +1624,7 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	lb de, 12, 1
 	lb bc, 8, 6
 	call FillRectangle
-	call $5a56
+	call ApplyBGP6OrSGB3ToCardImage
 .place_other_elements
 	call SwapTurn
 	ld hl, $5188
@@ -1710,7 +1710,7 @@ Func_559a: ; 559a (1:559a)
 	inc hl
 	ld [hl], $00
 .asm_55be
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
 	call LoadDuelCardSymbolTiles
@@ -1722,7 +1722,7 @@ Func_559a: ; 559a (1:559a)
 	lb de, 12, 12
 	lb bc, 8, 6
 	call FillRectangle
-	call $5a56
+	call ApplyBGP6OrSGB3ToCardImage
 	call $5744
 	ld a, [wDuelTempList]
 	cp $ff
@@ -1748,19 +1748,19 @@ Func_5773: ; 5773 (1:5773)
 
 Func_5779: ; 5779 (1:5779)
 	ld [wcbd1], a
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call Func_3b31
 	call LoadDuelCardSymbolTiles
 	ld de, v0Tiles1 + $20 tiles
-	call $59ca
-	call $5a0e
-	call $59f5
-	call $5a34
-	ld de, $3830
-	call $5999
+	call LoadLoaded1CardGfx
+	call SetOBP1OrSGB3ToCardPalette
+	call SetBGP6OrSGB3ToCardPalette
+	call FlushAllPalettesOrSendPal23Packet
+	lb de, $38, $30 ; X Position and Y Position of top-left corner
+	call PlaceCardImageOAM
 	lb de, 6, 4
-	call $5a56
+	call ApplyBGP6OrSGB3ToCardImage
 	xor a
 	ld [wCardPageNumber], a
 .asm_57a7
@@ -1825,10 +1825,10 @@ Func_58aa: ; 58aa (1:58aa)
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromCardID
 	ld de, v0Tiles1 + $20 tiles
-	call $59ca
-	ld de, $c0c
-	call $59f5
-	call $5a34
+	call LoadLoaded1CardGfx
+	ld de, $c0c ; useless
+	call SetBGP6OrSGB3ToCardPalette
+	call FlushAllPalettesOrSendPal23Packet
 	ret
 ; 0x58c2
 
@@ -1906,11 +1906,297 @@ Func_5911: ; 5911 (1:5911)
 ; 0x5930
 
 Func_5930: ; 5930 (1:5930)
-	ld hl, $5936
+	ld hl, CardPagePointerTable2
 	jp JumpToFunctionInTable
 ; 0x5936
 
-	INCROM $5936,  $5aeb
+CardPagePointerTable2: ; 5936 (1:5936)
+	dw $5956
+	dw $595a ; CARDPAGE_POKEMON_OVERVIEW
+	dw $595e ; CARDPAGE_POKEMON_MOVE1_1
+	dw $5963 ; CARDPAGE_POKEMON_MOVE1_2
+	dw $5968 ; CARDPAGE_POKEMON_MOVE2_1
+	dw $596d ; CARDPAGE_POKEMON_MOVE2_2
+	dw $595a ; CARDPAGE_POKEMON_DESCRIPTION
+	dw $5973
+	dw $5977
+	dw $597b ; CARDPAGE_ENERGY
+	dw $597f ; CARDPAGE_ENERGY + 1
+	dw $5984
+	dw $5988
+	dw $597b ; CARDPAGE_TRAINER_1
+	dw $597f ; CARDPAGE_TRAINER_2
+	dw $598c
+; 0x5956
+
+	INCROM $5956,  $5990
+
+ZeroObjectPositionsAndToggleOAMCopy: ; 5990 (1:5990)
+	call ZeroObjectPositions
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	ret
+; 0x5999
+
+; place OAM for a 8x6 image, using object size 8x16 and obj palette 1.
+; d, e: X Position and Y Position of the top-left corner.
+; starting tile number is $a0 (v0Tiles1 + $20 tiles).
+; used to draw the image of a card in the check card screens.
+PlaceCardImageOAM: ; 5999 (1:5999)
+	call Set_OBJ_8x16
+	ld l, $a0
+	ld c, 8 ; number of rows
+.next_column
+	ld b, 3 ; number of columns
+	push de
+.next_row
+	push bc
+	ld c, l ; tile number
+	ld b, 1 ; attributes (palette)
+	call SetOneObjectAttributes
+	pop bc
+	inc l
+	inc l ; next 8x16 tile
+	ld a, 16
+	add e ; Y Position += 16 (next 8x16 row)
+	ld e, a
+	dec b
+	jr nz, .next_row
+	pop de
+	ld a, 8
+	add d ; X Position += 8 (next 8x16 column)
+	ld d, a
+	dec c
+	jr nz, .next_column
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	ret
+; 0x59c2
+
+; given the deck index of a card in the play area (i.e. -1 indicates empty)
+; load the graphics (tiles and palette) of the card to de
+LoadPlayAreaCardGfx: ; 59c2 (1:59c2)
+	cp -1
+	ret z
+	push de
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop de
+;	fallthrough
+
+; load the graphics (tiles and palette) of the card loaded in wLoadedCard1 to de
+LoadLoaded1CardGfx: ; 59ca (1:59ca)
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb bc, $30, TILE_SIZE
+	call LoadCardGfx
+	ret
+; 0x59d7
+
+SetBGP7OrSGB2ToCardPalette: ; 59d7 (1:59d7)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, .sgb
+	ld a, $07 ; CGB BG Palette 7
+	call CopyCGBCardPalette
+	ret
+.sgb
+	ld hl, wCardPalette
+	ld de, wTempSGBPacket + 1 ; PAL Packet color #0 (PAL23's SGB2)
+	ld b, CGB_PAL_SIZE
+.copy_pal_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .copy_pal_loop
+	ret
+; 0x59f5
+
+SetBGP6OrSGB3ToCardPalette: ; 59f5 (1:59f5)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, SetSGB3ToCardPalette
+	ld a, $06 ; CGB BG Palette 6
+	call CopyCGBCardPalette
+	ret
+
+SetSGB3ToCardPalette: ; 5a04 (1:5a04)
+	ld hl, wCardPalette + 2
+	ld de, wTempSGBPacket + 9 ; Pal Packet color #4 (PAL23's SGB3)
+	ld b, 6
+	jr SetBGP7OrSGB2ToCardPalette.copy_pal_loop
+; 0x5a0e
+
+SetOBP1OrSGB3ToCardPalette: ; 5a0e (1:5a0e)
+	ld a, $e4
+	ld [wOBP0], a
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, SetSGB3ToCardPalette
+	ld a, $09 ; CGB Object Palette 1
+;	fallthrough
+
+CopyCGBCardPalette: ; 5a1e (1:5a1e)
+	add a
+	add a
+	add a ; a *= CGB_PAL_SIZE
+	ld e, a
+	ld d, $00
+	ld hl, wBackgroundPalettesCGB ; wObjectPalettesCGB - 8 * CGB_PAL_SIZE
+	add hl, de
+	ld de, wCardPalette
+	ld b, CGB_PAL_SIZE
+.copy_pal_loop
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec b
+	jr nz, .copy_pal_loop
+	ret
+; 0x5a34
+
+FlushAllPalettesOrSendPal23Packet: ; 5a34 (1:5a34)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, .sgb
+	call SetFlushAllPalettes
+	ret
+.sgb
+; sgb PAL23, 1 ; sgb_command, length
+; rgb 28, 28, 24
+; colors 1-7 carried over
+	ld a, PAL23 << 3 + 1
+	ld hl, wTempSGBPacket
+	ld [hli], a
+	ld a, $9c
+	ld [hli], a
+	ld a, $63
+	ld [hld], a
+	dec hl
+	xor a
+	ld [wTempSGBPacket + $f], a
+	call SendSGB
+	ret
+; 0x5a56
+
+ApplyBGP6OrSGB3ToCardImage: ; 5a56 (1:5a56)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, .sgb
+	ld a, $06 ; CGB BG Palette 6
+	call ApplyCardCGBAttributes
+	ret
+.sgb
+	ld a, 3 << 0 + 3 << 2 ; Color Palette Designation
+;	fallthrough
+
+SendCardAttrBlkPacket: ; 5a67 (1:5a67)
+	call CreateCardAttrBlkPacket
+	call SendSGB
+	ret
+; 0x5a6e
+
+ApplyBGP7OrSGB2ToCardImage: ; 5a6e (1:5a6e)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, .sgb
+	ld a, $07 ; CGB BG Palette 7
+	call ApplyCardCGBAttributes
+	ret
+.sgb
+	ld a, 2 << 0 + 2 << 2 ; Color Palette Designation
+	jr SendCardAttrBlkPacket
+; 0x5a81
+
+Func_5a81: ; 5a81 (1:5a81)
+	ld a, [wConsole]
+	or a ; CONSOLE_DMG
+	ret z
+	cp CONSOLE_SGB
+	jr z, .sgb
+	lb de, 0, 5
+	call ApplyBGP7OrSGB2ToCardImage
+	lb de, 12, 1
+	call ApplyBGP6OrSGB3ToCardImage
+	ret
+.sgb
+	ld a, 2 << 0 + 2 << 2 ; Data Set #1: Color Palette Designation
+	lb de, 0, 5 ; Data Set #1: X, Y
+	call CreateCardAttrBlkPacket
+	push hl
+	ld a, 2
+	ld [wTempSGBPacket + 1], a ; set number of data sets to 2
+	ld hl, wTempSGBPacket + 8
+	ld a, 3 << 0 + 3 << 2 ; Data Set #2: Color Palette Designation
+	lb de, 12, 1 ; Data Set #2: X, Y
+	call CreateCardAttrBlkPacket_DataSet
+	pop hl
+	call SendSGB
+	ret
+; 0x5ab5
+
+CreateCardAttrBlkPacket: ; 5ab5 (1:5ab5)
+; sgb ATTR_BLK, 1 ; sgb_command, length
+; db 1 ; number of data sets
+	ld hl, wTempSGBPacket
+	push hl
+	ld [hl], ATTR_BLK << 3 + 1
+	inc hl
+	ld [hl], 1
+	inc hl
+	call CreateCardAttrBlkPacket_DataSet
+	xor a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	pop hl
+	ret
+; 0x5ac9
+
+CreateCardAttrBlkPacket_DataSet: ; 5ac9 (1:5ac9)
+; Control Code, Color Palette Designation, X1, Y1, X2, Y2
+; db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, a, d, e, d+7, e+5 ; data set 1
+	ld [hl], ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE
+	inc hl
+	ld [hl], a
+	inc hl
+	ld [hl], d
+	inc hl
+	ld [hl], e
+	inc hl
+	ld a, 7
+	add d
+	ld [hli], a
+	ld a, 5
+	add e
+	ld [hli], a
+	ret
+; 0x5adb
+
+; given the 8x6 card image with coordinates at de, fill its BGMap attributes with a
+ApplyCardCGBAttributes: ; 5adb (1:5adb)
+	call BankswitchVRAM1
+	lb hl, 0, 0
+	lb bc, 8, 6
+	call FillRectangle
+	call BankswitchVRAM0
+	ret
+; 0x5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
 	INCROM $5aeb, $5fdd
@@ -1969,7 +2255,7 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	inc a
 	ld [wcbd3], a
 .asm_6022
-	call $5990
+	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
 	call LoadDuelCheckPokemonScreenTiles

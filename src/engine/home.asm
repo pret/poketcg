@@ -1065,7 +1065,7 @@ JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
 ; 0x70c
 
 ; copy c bytes of data from hl to de, b times.
-; used to copy gfx data.
+; used to copy gfx data with c = TILE_SIZE
 CopyGfxData: ; 070c (0:070c)
 	ld a, [wLCDC]
 	rla
@@ -7664,8 +7664,10 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop de
 	ret
 
-; input: hl = card_gfx_index
+; input: hl = card_gfx_index, de = where to load the card gfx to
+; bc are supposed to be $30 and TILE_SIZE
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
+; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ldh a, [hBankROM]
 	push af
@@ -7686,7 +7688,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	set 6, h ; $4000 ≤ de ≤ $7fff
 	call CopyGfxData
 	ld b, CGB_PAL_SIZE
-	ld de, wce23
+	ld de, wCardPalette
 .copy_card_palette
 	ld a, [hli]
 	ld [de], a

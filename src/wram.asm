@@ -963,7 +963,7 @@ wce22:: ; ce22
 	ds $1
 
 ; LoadCardGfx loads the card's palette here
-wce23:: ; ce23
+wCardPalette:: ; ce23
 	ds CGB_PAL_SIZE
 
 wce2b:: ; ce2b
