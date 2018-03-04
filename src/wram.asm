@@ -5,8 +5,17 @@ INCLUDE "vram.asm"
 
 SECTION "WRAM0", WRAM0
 
+UNION
+
 wTempCardCollection:: ; c000
 	ds $100
+
+NEXTU
+
+wc000:: ; c000
+	ds $100
+
+ENDU
 
 	ds $100
 
@@ -921,6 +930,8 @@ wRefreshMenuCursorSFX:: ; cd99
 wcd9a:: ; cd9a
 	ds $1
 
+; used in _CopyCardNameAndLevel to keep track of the remaining space to copy the text
+wcd9b:: ; cd9b
 	ds $1
 
 wcd9c:: ; cd9c

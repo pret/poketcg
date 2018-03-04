@@ -4856,8 +4856,8 @@ Func_1b8d: ; 1b8d (0:1b8d)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld a, $12
-	call Func_29f5
+	ld a, 18
+	call CopyCardNameAndLevel
 	ld [hl], $0
 	ld hl, wTxRam2
 	xor a
@@ -4892,8 +4892,8 @@ Func_1bca: ; 1bca (0:1bca)
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld a, $12
-	call Func_29f5
+	ld a, 18
+	call CopyCardNameAndLevel
 	ld [hl], $0
 	ld hl, $0000
 	call LoadTxRam2
@@ -5039,7 +5039,7 @@ CopyPlayerName: ; 1c7d (0:1c7d)
 	call DisableSRAM
 	ret
 
-; copy the opponent's name to de (usually via PrintTextBoxBorderLabel)
+; copy the opponent's name to de (usually via CopyText)
 CopyOpponentName: ; 1c8e (0:1c8e)
 	ld hl, wOpponentName
 	ld a, [hli]
@@ -5048,7 +5048,7 @@ CopyOpponentName: ; 1c8e (0:1c8e)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	jp PrintTextBoxBorderLabel
+	jp CopyText
 .special_name
 	ld hl, wc500
 	ld a, [hl]
@@ -5057,7 +5057,7 @@ CopyOpponentName: ; 1c8e (0:1c8e)
 	jr CopyPlayerName.loop
 .print_player2
 	ldtx hl, Player2Text
-	jp PrintTextBoxBorderLabel
+	jp CopyText
 
 ; return, in hl, the total amount of cards owned anywhere, including duplicates
 GetRawAmountOfCardsOwned: ; 1caa (0:1caa)
@@ -5367,7 +5367,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push bc
 	push hl
 	; top left tile of the box
-	ld hl, wTempCardCollection
+	ld hl, wc000
 	ld a, $5
 	ld [hli], a
 	ld a, $18
@@ -5375,10 +5375,11 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	; white tile before the text
 	ld a, $70
 	ld [hli], a
+	; text label
 	ld e, l
 	ld d, h
 	pop hl
-	call PrintTextBoxBorderLabel
+	call CopyText
 	ld hl, $c003
 	call Func_23c1
 	ld l, e
@@ -5414,7 +5415,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push de
 	push bc
 	call Func_22ae
-	ld hl, wTempCardCollection
+	ld hl, wc000
 	call Func_21c5
 	pop bc
 	pop de
@@ -6218,15 +6219,15 @@ Func_245d: ; 245d (0:245d)
 	push bc
 	ld de, wcaa0
 	push de
-	ld bc, $d8f0
+	ld bc, -10000
 	call Func_2499
-	ld bc, $fc18
+	ld bc, -1000
 	call Func_2499
-	ld bc, $ff9c
+	ld bc, -100
 	call Func_2499
-	ld bc, $fff6
+	ld bc, -10
 	call Func_2499
-	ld bc, $ffff
+	ld bc, -1
 	call Func_2499
 	xor a
 	ld [de], a
@@ -6797,7 +6798,7 @@ PrintCardListItems: ; 2799 (0:2799)
 	call DrawCardSymbol
 	call Func_22ae
 	ld a, [wcd1c]
-	call Func_29f5
+	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call Func_21c5
 	pop de
@@ -6823,7 +6824,7 @@ CardTypeToSymbolID: ; 2988 (0:2988)
 	ld a, [wLoadedCard1Type]
 	cp TYPE_TRAINER
 	jr nc, .trainer_card
-	cp TYPE_ENERGY_FIRE
+	cp TYPE_ENERGY
 	jr c, .pokemon_card
 	; energy card
 	and 7 ; convert energy constant to type constant
@@ -6895,8 +6896,10 @@ CardSymbolTable:
 	db $d8, $01 ; TYPE_PKMN_*, Stage 2
 	db $dc, $02 ; TYPE_TRAINER
 
-Func_29f5: ; 29f5 (0:29f5)
-	farcall $6, $4000
+; copy the name and level of the card at wLoadedCard1 to wDefaultText
+; a = string length in number of tiles (padded with spaces to fit)
+CopyCardNameAndLevel: ; 29f5 (0:29f5)
+	farcall _CopyCardNameAndLevel
 	ret
 ; 0x29fa
 
@@ -7294,22 +7297,22 @@ Func_2c37: ; 2c37 (0:2c37)
 	push af
 	call ReadTextOffset
 	ld c, $00
-.asm_2c42
+.char_loop
 	ld a, [hli]
-	or a
-	jr z, .asm_2c58
+	or a ; TX_END
+	jr z, .end
 	cp $10
-	jr nc, .asm_2c42
-	cp $06
-	jr c, .asm_2c55
-	cp $0a
-	jr nz, .asm_2c42
+	jr nc, .char_loop
+	cp TX_START
+	jr c, .skip
+	cp "\n"
+	jr nz, .char_loop
 	inc c
-	jr .asm_2c42
-.asm_2c55
+	jr .char_loop
+.skip
 	inc hl
-	jr .asm_2c42
-.asm_2c58
+	jr .char_loop
+.end
 	pop af
 	call BankswitchHome
 	ld a, c
@@ -7465,9 +7468,9 @@ Func_2d15: ; 2d15 (0:2d15)
 Func_2d43: ; 2d43 (0:2d43)
 	call Func_2cf3
 	ld a, [hli]
-	or a
+	or a ; TX_END
 	jr z, .asm_2d79
-	cp $5
+	cp TX_LARGE
 	jr c, .asm_2d65
 	cp $10
 	jr nc, .asm_2d65
@@ -7674,11 +7677,9 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	call BankswitchHome
 	ret
 
-; Prints a name in the left side of the top border of a text box, usually to identify the talked-to NPC.
-; input:
-	; hl: text id
-	; de: where to print the name
-PrintTextBoxBorderLabel: ; 2e89 (0:2e89)
+; copies a text given its id at hl, to de
+; if hl is 0, the name of the turn duelist is copied instead
+CopyText: ; 2e89 (0:2e89)
 	ld a, l
 	or h
 	jr z, .special

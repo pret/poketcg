@@ -706,8 +706,8 @@ UsePokemonCard: ; 44db (1:44db)
 	call SetDuelAIAction
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld a, $14
-	call Func_29f5
+	ld a, 20
+	call CopyCardNameAndLevel
 	ld [hl], $00
 	ld hl, $0000
 	call LoadTxRam2
@@ -1848,7 +1848,7 @@ Func_522a: ; 522a (1:522a)
 Func_5236: ; 5236 (1:5236)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	cp $2
+	cp 2
 	ret z
 	ldtx hl, Text01a7
 	scf
@@ -2895,8 +2895,8 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 
 	INCROM $69c5, $6d84
 
-; converts clefairy doll/mysterious fossil at specified wLoadedCard to pokemon card
-ConvertTrainerCardToPokemon:
+; converts clefairy doll/mysterious fossil to pokemon card
+ConvertTrainerCardToPokemon: ; 6d84 (1:6d84)
 	ld c, a
 	ld a, [hl]
 	cp TYPE_TRAINER
