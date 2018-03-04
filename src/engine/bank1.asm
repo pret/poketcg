@@ -1306,13 +1306,13 @@ Func_49a8: ; 49a8 (1:49a8)
 Func_49ca: ; 49ca (1:49ca)
 	call LoadDuelDrawCardsScreenTiles
 	ld hl, $4a35
-	call Func_0695
+	call WriteDataBlocksToBGMap0
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
 	call BankswitchVRAM1
 	ld hl, $4a6e
-	call Func_0695
+	call WriteDataBlocksToBGMap0
 	call BankswitchVRAM0
 .not_cgb
 	call Func_49ed.player_turn
@@ -1367,7 +1367,7 @@ Func_4a97: ; 4a97 (1:4a97)
 	ld de, wDefaultText
 	push de
 	call CopyPlayerName
-	ld de, $b
+	lb de, 0, 11
 	call Func_22ae
 	pop hl
 	call Func_21c5
@@ -1379,16 +1379,16 @@ Func_4a97: ; 4a97 (1:4a97)
 	pop hl
 	call Func_23c1
 	push hl
-	add $14
+	add SCREEN_WIDTH
 	ld d, a
-	ld e, $00
+	ld e, 0
 	call Func_22ae
 	pop hl
 	call Func_21c5
 	ld a, [wOpponentPortrait]
 	ld bc, $d01
 	call Func_3e2a
-	call $516f
+	call Func_516f
 	ret
 ; 0x4ad6
 
@@ -1786,15 +1786,192 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 .place_other_elements
 	call SwapTurn
 	ld hl, $5188
-	call Func_0695
-	call $516f ; draw the vertical separator
-	call $503a ; draw the HUDs
+	call WriteDataBlocksToBGMap0
+	call Func_516f ; draw the vertical separator
+	call Func_503a ; draw the HUDs
 	call DrawWideTextBox
 	call EnableLCD
 	ret
 ; 0x503a
 
-	INCROM $503a,  $51e7
+Func_503a: ; 503a (1:503a)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .asm_5051
+	ldh a, [hWhoseTurn]
+	push af
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
+	call .asm_5051
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+.asm_5051
+	ld de, $10b
+	ld bc, $b08
+	call Func_5093
+	ld bc, $805
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	call $63ce
+	inc c
+	call $63bb
+	inc c
+	call $63c7
+	call SwapTurn
+	ld de, $700
+	ld bc, $301
+	call GetNonTurnDuelistVariable
+	call Func_5093
+	ld bc, $b06
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	call $63ce
+	dec c
+	call $63bb
+	dec c
+	call $63c7
+	call SwapTurn
+	ret
+; 0x5093
+
+Func_5093: ; 5093 (1:5093)
+	ld hl, wcbc9
+	ld [hl], b
+	inc hl
+	ld [hl], c
+	push de
+	ld d, $01
+	ld a, e
+	or a
+	jr z, .asm_50a2
+	ld d, $0f
+.asm_50a2
+	push de
+	pop bc
+	ld a, $0d
+	call WriteByteToBGMap0
+	inc b
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	add $1f
+	call WriteByteToBGMap0
+	inc b
+	ld a, $30
+	call WriteByteToBGMap0
+	inc b
+	call CountPrizes
+	add $20
+	call WriteByteToBGMap0
+	pop de
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	cp -1
+	ret z
+	call LoadCardDataToBuffer1_FromDeckIndex
+	push de
+	ld a, 32
+	call CopyCardNameAndLevel
+	ld [hl], TX_END
+	pop de
+	ld a, e
+	or a
+	jr nz, .asm_50e5
+	ld hl, wDefaultText
+	call Func_23c1
+	add $14
+	ld d, a
+.asm_50e5
+	call Func_22ae
+	ld hl, wDefaultText
+	call Func_21c5
+	push de
+	pop bc
+	call GetArenaCardColor
+	inc a
+	dec b
+	call $5b7a
+	ld hl, wcbc9
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	ld de, $900
+	call $63e6
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1HP]
+	ld d, a ; max HP
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld e, a ; cur HP
+	call $6614
+	ld hl, wcbc9
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc c
+	call BCCoordToBGMap0Address
+	push de
+	ld hl, wDefaultText
+	ld b, $06
+	call SafeCopyDataHLtoDE
+	pop de
+	ld hl, BG_MAP_WIDTH
+	add hl, de
+	ld e, l
+	ld d, h
+	ld hl, wDefaultText + $06
+	ld b, $06
+	call SafeCopyDataHLtoDE
+	ld hl, wcbc9
+	ld a, [hli]
+	add $06
+	ld b, a
+	ld c, [hl]
+	inc c
+	ld a, $e0
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_5159
+	ld a, $14
+	call WriteByteToBGMap0
+	inc b
+	ld a, [hl]
+	add $20
+	call WriteByteToBGMap0
+	dec b
+.asm_5159
+	ld a, $da
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_516e
+	inc c
+	ld a, $15
+	call WriteByteToBGMap0
+	inc b
+	ld a, [hl]
+	add $20
+	call WriteByteToBGMap0
+.asm_516e
+	ret
+; 0x516f
+
+Func_516f: ; 516f (1:516f)
+	ld hl, $5199
+	call WriteDataBlocksToBGMap0
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ret nz
+	call BankswitchVRAM1
+	ld hl, $51c0
+	call WriteDataBlocksToBGMap0
+	call BankswitchVRAM0
+	ret
+; 0x5188
+
+	INCROM $5188,  $51e7
 
 ; if this is a practice duel, execute the practice duel action at wPracticeDuelAction
 DoPracticeDuelAction: ; 51e7 (1:51e7)
@@ -2038,7 +2215,7 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 
 Func_55f0: ; 55f0 (1:55f0)
 	call DrawNarrowTextBox
-	call $56a0
+	call Func_56a0
 .asm_55f6
 	call CountCardsInDuelTempList ; list length
 	ld hl, wSelectedDuelSubMenuItem
@@ -2047,11 +2224,11 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld d, [hl] ; initial page scroll offset
 	ld hl, CardListParameters ; other list params
 	call PrintCardListItems
-	call Func_58aa
+	call DrawSelectedCard
 	call EnableLCD
 .asm_560b
 	call DoFrame
-	call $5690
+	call Func_5690
 	call HandleCardListInput
 	jr nc, .asm_560b
 	ld hl, wSelectedDuelSubMenuItem
@@ -2125,7 +2302,38 @@ Func_55f0: ; 55f0 (1:55f0)
 	ret
 ; 0x5690
 
-	INCROM $5690,  $5710
+Func_5690: ; 5690 (1:5690)
+	ldh a, [hButtonsPressed2]
+	and D_PAD
+	ret z
+	ld a, $01
+	ldh [hffb0], a
+	call Func_56a0
+	xor a
+	ldh [hffb0], a
+	ret
+; 0x56a0
+
+Func_56a0: ; 56a0 (1:56a0)
+	lb de, 1, 14
+	call AdjustCoordinatesForWindow
+	call Func_22ae
+	ld hl, wCardListInfoBoxText
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	ld hl, wCardListHeaderText
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb de, 1, 1
+	call Func_22ae
+	call PrintTextNoDelay
+	ret
+; 0x56c2
+
+	INCROM $56c2,  $5710
 
 CardListParameters: ; 5710 (1;5710)
 	db 1, 3 ; cursor x, cursor y
@@ -2232,7 +2440,8 @@ Func_589c: ; 589c (1:589c)
 	ret
 ; 0x58aa
 
-Func_58aa: ; 58aa (1:58aa)
+; load the tiles and palette of the card selected in card list screen
+DrawSelectedCard: ; 58aa (1:58aa)
 	ldh a, [hCurrentMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromCardID
@@ -3074,7 +3283,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call $65b7
 	ld b, 17
 	ld a, $2e
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	inc b
 	ld a, [wcd9c]
 	call $65b7

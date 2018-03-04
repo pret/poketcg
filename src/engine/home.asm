@@ -420,7 +420,7 @@ SetupVRAM: ; 03a1 (0:03a1)
 	call BankswitchVRAM0
 .vram0
 	ld hl, v0Tiles0
-	ld bc, v0BGMapTiles1 - v0Tiles0
+	ld bc, v0BGMap0 - v0Tiles0
 .loop
 	xor a
 	ld [hli], a
@@ -433,8 +433,8 @@ SetupVRAM: ; 03a1 (0:03a1)
 ; fill VRAM0 BG maps with [wTileMapFill] and VRAM1 BG Maps with 0
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM0
-	ld hl, v0BGMapTiles1
-	ld bc, v0BGMapTiles2 - v0BGMapTiles1
+	ld hl, v0BGMap0
+	ld bc, v0BGMap1 - v0BGMap0
 .vram0_loop
 	ld a, [wTileMapFill]
 	ld [hli], a
@@ -446,8 +446,8 @@ FillTileMap: ; 03c0 (0:03c0)
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM1
-	ld hl, v1BGMapTiles1
-	ld bc, v1BGMapTiles2 - v1BGMapTiles1
+	ld hl, v1BGMap0
+	ld bc, v1BGMap1 - v1BGMap0
 .vram1_loop
 	xor a
 	ld [hli], a
@@ -641,7 +641,7 @@ AttrBlkPacket_04bf: ; 04bf (0:04bf)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-; returns v*BGMapTiles1 + BG_MAP_WIDTH * c + b in de.
+; returns v*BGMap0 + BG_MAP_WIDTH * c + b in de.
 ; used to map coordinates at bc to a BGMap0 address.
 BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld l, c
@@ -652,7 +652,7 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	add hl, hl
 	add hl, hl
 	ld c, b
-	ld b, HIGH(v0BGMapTiles1)
+	ld b, HIGH(v0BGMap0)
 	add hl, bc
 	ld e, l
 	ld d, h
@@ -848,7 +848,7 @@ Func_05c2: ; 5c2 (0:5c2)
 	ld hl, wcaa0
 	push hl
 	push bc
-	call Func_0614
+	call WriteNumbersInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -867,7 +867,7 @@ Func_05db: ; 5db (0:5db)
 	ld hl, wcaa0
 	push hl
 	push bc
-	call Func_061b
+	call WriteNumberInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -889,9 +889,9 @@ Func_05f4: ; 5f4 (0:5f4)
 	push hl
 	push bc
 	ld a, d
-	call Func_0614
+	call WriteNumbersInTextFormat
 	ld a, e
-	call Func_0614
+	call WriteNumbersInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -903,43 +903,48 @@ Func_05f4: ; 5f4 (0:5f4)
 	ret
 ; 0x614
 
-Func_0614: ; 614 (0:614)
+; given two numbers in the two nybbles of register a, write them
+; in text format to hl (most significant nybble first)
+WriteNumbersInTextFormat: ; 614 (0:614)
 	push af
 	swap a
-	call Func_061b
+	call WriteNumberInTextFormat
 	pop af
-Func_061b:
+;	fallthrough
+
+; given a number in the (bottom nybble) of register a, write it in text format to hl
+WriteNumberInTextFormat:
 	and $0f
-	add $30
-	cp $3a
-	jr c, .asm_625
+	add "0"
+	cp "9" + 1
+	jr c, .write_num
 	add $07
-.asm_625
+.write_num
 	ld [hli], a
 	ret
 ; 0x627
 
 	INCROM $0627, $0663
 
-Func_0663: ; 0663 (0:0663)
+; convert the number at hl to text (ascii) format and write it to de
+TwoByteNumberToText: ; 0663 (0:0663)
 	push bc
 	ld bc, -10000
-	call Func_0686
+	call .get_digit
 	ld bc, -1000
-	call Func_0686
+	call .get_digit
 	ld bc, -100
-	call Func_0686
+	call .get_digit
 	ld bc, -10
-	call Func_0686
+	call .get_digit
 	ld bc, -1
-	call Func_0686
-	xor a
+	call .get_digit
+	xor a ; TX_END
 	ld [de], a
 	pop bc
 	ret
-
-Func_0686: ; 0686 (0:0686)
-	ld a, $2f
+.get_digit
+	ld a, "0" - 1
 .substract_loop
 	inc a
 	add hl, bc
@@ -955,51 +960,60 @@ Func_0686: ; 0686 (0:0686)
 	ret
 ; 0x695
 
-Func_0695: ; 0695 (0:0695)
-	call Func_069d
-	bit 7, [hl]
-	jr z, Func_0695
+; reads structs:
+;   x (1 byte), y (1 byte), data (n bytes), $00
+;   x (1 byte), y (1 byte), data (n bytes), $00
+;   ...
+;   $ff
+; for each struct, writes data to BGMap0-translated x,y
+WriteDataBlocksToBGMap0: ; 0695 (0:0695)
+	call WriteDataBlockToBGMap0
+	bit 7, [hl] ; check for $ff
+	jr z, WriteDataBlocksToBGMap0
 	ret
 ; 0x69d
 
-Func_069d: ; 069d (0:069d)
+; reads struct:
+;   x (1 byte), y (1 byte), data (n bytes), $00
+; writes data to BGMap0-translated x,y
+WriteDataBlockToBGMap0: ; 069d (0:069d)
 	ld b, [hl]
 	inc hl
 	ld c, [hl]
 	inc hl
-	push hl
-	push bc
+	push hl ; hl = addr of data
+	push bc ; b,c = x,y
 	ld b, -1
-.asm_6a5
+.find_zero_loop
 	inc b
 	ld a, [hli]
 	or a
-	jr nz, .asm_6a5
-	ld a, b
-	pop bc
+	jr nz, .find_zero_loop
+	ld a, b ; length of data
+	pop bc ; x,y
 	push af
 	call BCCoordToBGMap0Address
 	pop af
-	ld b, a
-	pop hl
+	ld b, a ; length of data
+	pop hl ; addr of data
 	or a
-	jr z, .asm_6bd
+	jr z, .move_to_next
 	push bc
 	push hl
-	call SafeCopyDataHLtoDE
+	call SafeCopyDataHLtoDE ; copy data to de (BGMap0 translated x,y)
 	pop hl
 	pop bc
 
-.asm_6bd
-	inc b
+.move_to_next
+	inc b ; length of data += 1 (to account for the last $0)
 	ld c, b
-	ld b, $0
-	add hl, bc
+	ld b, 0
+	add hl, bc ; point to next structure
 	ret
 ; 0x6c3
 
-; writes a to [v*BGMapTiles1 + BG_MAP_WIDTH * c + b]
-WriteToBGMap0AddressFromBCCoord: ; 06c3 (0:06c3)
+; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b]
+WriteByteToBGMap0: ; 06c3 (0:06c3)
 	push af
 	ld a, [wLCDC]
 	rla
@@ -1035,7 +1049,7 @@ WriteToBGMap0AddressFromBCCoord: ; 06c3 (0:06c3)
 ; 0x6ee
 
 ; copy a bytes of data from hl to vBGMap0 address pointed to by coord at bc
-Func_06ee: ; 06ee (0:06ee)
+CopyDataToBGMap0: ; 06ee (0:06ee)
 	push bc
 	push hl
 	push af
@@ -1949,7 +1963,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld a, %11100100
 	ld [rBGP], a
 	ld de, v0Tiles1
-	ld bc, v0BGMapTiles1 - v0Tiles1
+	ld bc, v0BGMap0 - v0Tiles1
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -1958,7 +1972,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld a, b
 	or c
 	jr nz, .loop
-	ld hl, v0BGMapTiles1
+	ld hl, v0BGMap0
 	ld de, $000c
 	ld a, $80
 	ld c, $d
@@ -5305,7 +5319,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 .lcd_on
 	jp HblankCopyDataDEtoHL
 
-; returns v*BGMapTiles1 + BG_MAP_WIDTH * e + d in hl.
+; returns v*BGMap0 + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
 DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld l, e
@@ -5319,7 +5333,7 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	add d
 	ld l, a
 	ld a, h
-	adc HIGH(v0BGMapTiles1)
+	adc HIGH(v0BGMap0)
 	ld h, a
 	ret
 
@@ -6214,51 +6228,53 @@ Func_23d3: ; 23d3 (0:23d3)
 
 	INCROM $23fd, $245d
 
-Func_245d: ; 245d (0:245d)
+; convert the number at hl to large (TX_LARGE) text format and write it to wcaa0
+; replace leading zeros with $00
+TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
 	ld de, wcaa0
 	push de
 	ld bc, -10000
-	call Func_2499
+	call .get_digit
 	ld bc, -1000
-	call Func_2499
+	call .get_digit
 	ld bc, -100
-	call Func_2499
+	call .get_digit
 	ld bc, -10
-	call Func_2499
+	call .get_digit
 	ld bc, -1
-	call Func_2499
+	call .get_digit
 	xor a
 	ld [de], a
 	pop hl
-	ld e, $5
-.asm_2486
+	ld e, 5
+.digit_loop
 	inc hl
 	ld a, [hl]
 	cp $20
-	jr nz, .asm_2495
-	ld [hl], $0
+	jr nz, .done ; jump if not zero
+	ld [hl], $0 ; trim leading zero
 	inc hl
 	dec e
-	jr nz, .asm_2486
+	jr nz, .digit_loop
 	dec hl
 	ld [hl], $20
-.asm_2495
+.done
 	dec hl
 	pop bc
 	pop de
 	ret
 
-Func_2499: ; 2499 (0:2499)
-	ld a, $5
+.get_digit
+	ld a, TX_LARGE
 	ld [de], a
 	inc de
-	ld a, $1f
-.asm_249f
+	ld a, $20 - 1
+.substract_loop
 	inc a
 	add hl, bc
-	jr c, .asm_249f
+	jr c, .substract_loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -6630,7 +6646,7 @@ DrawCursor:
 	ld a, c
 	ld c, e
 	ld b, d
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	or a
 	ret
 
@@ -6719,7 +6735,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	inc hl
 	ld c, [hl]
 	ld a, e
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	ld a, [wCurMenuItem]
 	ld e, a
 	or a
@@ -6758,7 +6774,7 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld c, a
 	ld b, 18
 	ld a, e
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	ld e, $00
 	ld a, [wListScrollOffset]
 	ld hl, wNumMenuItems
@@ -6774,7 +6790,7 @@ PrintCardListItems: ; 2799 (0:2799)
 	dec a
 	ld c, a
 	ld a, e
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	ld a, [wListScrollOffset]
 	ld e, a
 	ld d, $00
@@ -7532,7 +7548,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld de, wTxRam3
 	ld hl, wce4a
 	call Func_2de0
-	call Func_2e12
+	call TwoByteNumberToText_CountLeadingZeros
 	call Func_2cd7
 	jp Func_2d43
 .tx_ram1
@@ -7593,22 +7609,24 @@ ReadTextOffset: ; 2ded (0:2ded)
 	pop de
 	ret
 
-Func_2e12: ; 2e12 (0:2e12)
+; convert the number at hl to text (ascii) format and write it to wcaa0
+; return c = 4 - leading_zeros
+TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wcd0a]
 	or a
-	jp z, Func_245d
+	jp z, TwoByteNumberToLargeText_TrimLeadingZeros
 	ld de, wcaa0
 	push de
-	call Func_0663
+	call TwoByteNumberToText
 	pop hl
-	ld c, $4
-.asm_2e23
+	ld c, 4
+.digit_loop
 	ld a, [hl]
-	cp $30
+	cp "0"
 	ret nz
 	inc hl
 	dec c
-	jr nz, .asm_2e23
+	jr nz, .digit_loop
 	ret
 
 ; copy the name of the duelist whose turn it is to de

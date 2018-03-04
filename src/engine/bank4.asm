@@ -434,7 +434,7 @@ Unknown_10f14: ; 10f14 (4:4f14)
 Func_10f2e: ; 10f2e (4:4f2e)
 	push hl
 	push de
-	ld de, $0101
+	lb de, 1, 1
 	call Func_22ae
 	call Func_10f4a
 	rlca

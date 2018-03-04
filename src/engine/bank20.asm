@@ -66,7 +66,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	ld a, $1
 	call BankswitchSRAM
 	ld hl, v0End
-	ld de, v0BGMapTiles1
+	ld de, v0BGMap0
 	ld c, $20
 .asm_801b4
 	push bc

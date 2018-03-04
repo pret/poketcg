@@ -268,7 +268,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	call DisableSRAM
 	ld l, a
 	ld de, wDefaultText
-	call Func_0663
+	call TwoByteNumberToText
 	ld hl, wcfb9
 	ld [hl], $6
 	inc hl
@@ -500,7 +500,7 @@ asm_90da
 	add $e
 	ld c, a
 	ld a, e
-	call WriteToBGMap0AddressFromBCCoord
+	call WriteByteToBGMap0
 	or a
 	ret
 
