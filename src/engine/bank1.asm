@@ -846,8 +846,8 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 .open_attack_menu
 	push af
 	ld a, [wSelectedDuelSubMenuItem]
-	ld hl, AttackMenuCursorData
-	call InitializeCursorParameters
+	ld hl, AttackMenuParameters
+	call InitializeMenuParameters
 	pop af
 	ld [wNumMenuItems], a
 	ldh a, [hWhoseTurn]
@@ -950,8 +950,8 @@ Func_478b: ; 478b (1:478b)
 	jr z, .asm_47d4
 	ret
 
-AttackMenuCursorData:
-	db 1, 13 ; x, y
+AttackMenuParameters:
+	db 1, 13 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
 	db $0f ; cursor tile number
@@ -1454,10 +1454,10 @@ Func_4b38: ; 4b38 (1:4b38)
 	cp $ff
 	ret z
 	call DrawCardListScreenLayout
-	call CountCardsInDuelTempList
-	ld hl, $5710
-	ld de, $0
-	call Func_2799
+	call CountCardsInDuelTempList ; list length
+	ld hl, CardListParameters ; other list params
+	lb de, 0, 0 ; initial page scroll offset, initial item (in the visible page)
+	call PrintCardListItems
 	ldtx hl, TheCardYouReceivedText
 	lb de, 1, 1
 	call Func_22ae
@@ -1706,10 +1706,10 @@ Func_4e40: ; 4e40 (1:4e40)
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
-	call CountCardsInDuelTempList
-	ld hl, $5710
-	ld de, $0
-	call Func_2799
+	call CountCardsInDuelTempList ; list length
+	ld hl, CardListParameters ; other list params
+	lb de, 0, 0 ; initial page scroll offset, initial item (in the visible page)
+	call PrintCardListItems
 	ldtx hl, DuelistHandText
 	lb de, 1, 1
 	call Func_22ae
@@ -2040,19 +2040,19 @@ Func_55f0: ; 55f0 (1:55f0)
 	call DrawNarrowTextBox
 	call $56a0
 .asm_55f6
-	call CountCardsInDuelTempList
+	call CountCardsInDuelTempList ; list length
 	ld hl, wSelectedDuelSubMenuItem
-	ld e, [hl]
+	ld e, [hl] ; initial item (in the visible page)
 	inc hl
-	ld d, [hl]
-	ld hl, $5710
-	call Func_2799
+	ld d, [hl] ; initial page scroll offset
+	ld hl, CardListParameters ; other list params
+	call PrintCardListItems
 	call Func_58aa
 	call EnableLCD
 .asm_560b
 	call DoFrame
 	call $5690
-	call Func_2626
+	call HandleCardListInput
 	jr nc, .asm_560b
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hl], e
@@ -2125,7 +2125,19 @@ Func_55f0: ; 55f0 (1:55f0)
 	ret
 ; 0x5690
 
-	INCROM $5690,  $5744
+	INCROM $5690,  $5710
+
+CardListParameters: ; 5710 (1;5710)
+	db 1, 3 ; cursor x, cursor y
+	db 4 ; item x
+	db $0e
+	db 5 ; number of items selectable without scrolling
+	db $0f ; cursor tile number
+	db $00 ; tile behind cursor
+	dw $5719 ; function pointer if non-0
+; 0x5719
+
+	INCROM $5719,  $5744
 
 Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
@@ -2662,14 +2674,14 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	call $61c7
 	call EnableLCD
 .asm_6034
-	ld hl, CursorData_60be
+	ld hl, MenuParameters_60be
 	ld a, [wcbd2]
 	or a
 	jr z, .asm_6040
-	ld hl, CursorData_60c6
+	ld hl, MenuParameters_60c6
 .asm_6040
 	ld a, [wSelectedDuelSubMenuItem]
-	call InitializeCursorParameters
+	call InitializeMenuParameters
 	ld a, [wcbc8]
 	ld [wNumMenuItems], a
 .asm_604c
@@ -2735,16 +2747,16 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	ret
 ; 0x60be
 
-CursorData_60be: ; 60be (1:60be)
-	db 0, 0 ; x, y
+MenuParameters_60be: ; 60be (1:60be)
+	db 0, 0 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items
 	db $0f ; cursor tile number
 	db $00 ; tile behind cursor
 	dw $60ce ; function pointer if non-0
 
-CursorData_60c6: ; 60c6 (1:60c6)
-	db 0, 3 ; x, y
+MenuParameters_60c6: ; 60c6 (1:60c6)
+	db 0, 3 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items
 	db $0f ; cursor tile number

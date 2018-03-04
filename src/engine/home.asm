@@ -6431,12 +6431,52 @@ Func_256d: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-	INCROM $2589, $2626
+	INCROM $2589, $25ea
 
-Func_2626: ; 2626 (0:2626)
+; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
+; input: a = list length, de = initial page scroll offset, initial item (in the visible page)
+; hl: 9 bytes with the rest of the parameters
+InitializeCardListParameters: ; 25ea (0:25ea)
+	ld [wNumListItems], a
+	ld a, d
+	ld [wListScrollOffset], a
+	ld a, e
+	ld [wCurMenuItem], a
+	add d
+	ldh [hCurrentMenuItem], a
+	ld a, [hli]
+	ld [wCursorXPosition], a
+	ld a, [hli]
+	ld [wCursorYPosition], a
+	ld a, [hli]
+	ld [wListItemXPosition], a
+	ld a, [hli]
+	ld [wcd1c], a
+	ld a, [hli]
+	ld [wNumMenuItems], a
+	ld a, [hli]
+	ld [wCursorTileNumber], a
+	ld a, [hli]
+	ld [wTileBehindCursor], a
+	ld a, [hli]
+	ld [wListFunctionPointer], a
+	ld a, [hli]
+	ld [wListFunctionPointer + 1], a
+	xor a
+	ld [wCursorBlinkCounter], a
+	ld a, 1
+	ld [wYDisplacementBetweenMenuItems], a
+	ret
+; 0x2626
+
+; similar to HandleMenuInput, but conveniently returns parameters related
+; to the state of the list in a, d, and e if A or B were pressed.
+; also returns carry if A or B were pressed, nc otherwise.
+; used in the Hand card list and Discard Pile card list screens.
+HandleCardListInput: ; 2626 (0:2626)
 	call HandleMenuInput
 	ret nc
-	ld a, [wcd19]
+	ld a, [wListScrollOffset]
 	ld d, a
 	ld a, [wCurMenuItem]
 	ld e, a
@@ -6445,12 +6485,12 @@ Func_2626: ; 2626 (0:2626)
 	ret
 ; 0x2636
 
-; initializes cursor parameters given the 8 bytes starting at hl,
+; initializes parameters for a menu, given the 8 bytes starting at hl,
 ; which represent the following:
-;   x coord, y coord, y displacement between items, number of items,
-;   cursor tile number, tile behind cursor, ???? (unknown function pointer if non-0)
+;   cursor x coord, cursor y coord, y displacement between items, number of items,
+;   cursor tile number, tile behind cursor, function pointer if non-0.
 ; also sets the current menu item to the one specified in register a
-InitializeCursorParameters: ; 2636 (0:2636)
+InitializeMenuParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
 	ldh [hCurrentMenuItem], a
 	ld de, wCursorXPosition
@@ -6693,8 +6733,10 @@ DuelMenuCursorCoords: ; 278d (0:278d)
 	db 14, 14 ; Retreat
 	db 14, 16 ; Done
 
-Func_2799: ; 2799 (0:2799)
-	call $25ea
+; print the items of a list of cards (hand cards in a duel, cards from a booster pack...)
+; and initialize the parameters of the list
+PrintCardListItems: ; 2799 (0:2799)
+	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
 	ld a, LOW($283f)
 	ld [hli], a
@@ -6705,7 +6747,7 @@ Func_2799: ; 2799 (0:2799)
 	ld a, $01
 	ld [wcd97], a
 	ld e, $00
-	ld a, [wcd19]
+	ld a, [wListScrollOffset]
 	or a
 	jr z, .asm_27b9
 	ld e, $0c
@@ -6717,10 +6759,10 @@ Func_2799: ; 2799 (0:2799)
 	ld a, e
 	call WriteToBGMap0AddressFromBCCoord
 	ld e, $00
-	ld a, [wcd19]
+	ld a, [wListScrollOffset]
 	ld hl, wNumMenuItems
 	add [hl]
-	ld hl, wcd1b
+	ld hl, wNumListItems
 	cp [hl]
 	jr nc, .asm_27d5
 	ld e, $2f
@@ -6732,14 +6774,14 @@ Func_2799: ; 2799 (0:2799)
 	ld c, a
 	ld a, e
 	call WriteToBGMap0AddressFromBCCoord
-	ld a, [wcd19]
+	ld a, [wListScrollOffset]
 	ld e, a
 	ld d, $00
 	ld hl, wDuelTempList
 	add hl, de
 	ld a, [wNumMenuItems]
 	ld b, a
-	ld a, [wcd1a]
+	ld a, [wListItemXPosition]
 	ld d, a
 	ld a, [wCursorYPosition]
 	ld e, a
@@ -6762,7 +6804,7 @@ Func_2799: ; 2799 (0:2799)
 	pop bc
 	pop hl
 	inc hl
-	ld a, [wcd1b]
+	ld a, [wNumListItems]
 	dec a
 	inc c
 	cp c
@@ -6946,8 +6988,8 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
-	ld hl, NarrowTextBoxPromptCursorData
-	call InitializeCursorParameters
+	ld hl, NarrowTextBoxMenuParameters
+	call InitializeMenuParameters
 	call EnableLCD
 .wait_A_or_B_loop
 	call DoFrame
@@ -6957,8 +6999,8 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	jr z, .wait_A_or_B_loop
 	ret
 
-NarrowTextBoxPromptCursorData: ; 2a96 (0:2a96)
-	db 10, 17 ; x, y
+NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
+	db 10, 17 ; corsor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
 	db $2f ; cursor tile number
@@ -6978,8 +7020,8 @@ DrawWideTextBox_WaitForInput: ; 2aab (0:2aab)
 ;	fallthrough
 WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	xor a
-	ld hl, WideTextBoxPromptCursorData
-	call InitializeCursorParameters
+	ld hl, WideTextBoxMenuParameters
+	call InitializeMenuParameters
 	call EnableLCD
 .wait_A_or_B_loop
 	call DoFrame
@@ -6990,8 +7032,8 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 	call EraseCursor
 	ret
 
-WideTextBoxPromptCursorData: ; 2ac8 (0:2ac8)
-	db 18, 17 ; x, y
+WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
+	db 18, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
 	db $2f ; cursor tile number

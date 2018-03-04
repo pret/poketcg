@@ -890,19 +890,22 @@ wTileBehindCursor:: ; cd16
 wMenuFunctionPointer:: ; cd17
 	ds $2
 
-wcd19:: ; cd19
+wListScrollOffset:: ; cd19
 	ds $1
 
-wcd1a:: ; cd1a
+wListItemXPosition:: ; cd1a
 	ds $1
 
-wcd1b:: ; cd1b
+wNumListItems:: ; cd1b
 	ds $1
 
 wcd1c:: ; cd1c
 	ds $1
 
-	ds $7a
+wListFunctionPointer:: ; cd1d
+	ds $2
+
+	ds $78
 
 wcd97:: ; cd97
 	ds $1

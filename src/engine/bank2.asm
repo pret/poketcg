@@ -80,7 +80,7 @@ Func_8db0: ; 8db0 (2:4db0)
 
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
-	call InitializeCursorParameters
+	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 .asm_8dc8
@@ -912,7 +912,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wd0a5], a
 	xor a
 	ld hl, $7b6e
-	call InitializeCursorParameters
+	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
