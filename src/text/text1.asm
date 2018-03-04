@@ -779,15 +779,15 @@ Text00a6: ; 3737b (d:737b)
 	text "Player's Discard Pile"
 	done
 
-DuelistsHandText: ; 37392 (d:7392)
+DuelistHandText: ; 37392 (d:7392)
 	text TX_RAM1, "'s Hand"
 	done
 
-DuelistsPlayAreaText: ; 3739c (d:739c)
+DuelistPlayAreaText: ; 3739c (d:739c)
 	text TX_RAM1, "'s Play Area"
 	done
 
-DuelistsDeckText: ; 373ab (d:73ab)
+DuelistDeckText: ; 373ab (d:73ab)
 	text TX_RAM1, "'s Deck"
 	done
 

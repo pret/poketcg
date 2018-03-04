@@ -902,7 +902,7 @@ Text01a2: ; 3a111 (e:6111)
 	text "Now printing..."
 	done
 
-Text01a3: ; 3a122 (e:6122)
+DrMasonText: ; 3a122 (e:6122)
 	text "Dr. Mason"
 	done
 

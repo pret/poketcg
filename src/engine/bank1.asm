@@ -325,7 +325,7 @@ Func_4262:
 
 Func_4268:
 	ld a, $06
-	call $51e7
+	call DoPracticeDuelAction
 ;	fallthrough
 
 ; print the main interface during a duel, including background, Pokemon, HUDs and a text box.
@@ -516,7 +516,7 @@ DuelMenu_PkmnPower: ; 438e (1:438e)
 ; triggered by selecting the "Done" item in the duel menu
 DuelMenu_Done: ; 439a (1:439a)
 	ld a, $08
-	call $51e7
+	call DoPracticeDuelAction
 	jp c, Func_4268
 	ld a, $05
 	call SetDuelAIAction
@@ -751,6 +751,7 @@ UsePokemonCard: ; 44db (1:44db)
 	jr nz, .find_cant_evolve_reason_loop
 	ldtx hl, NoPokemonCapableOfEvolvingText
 .cant_same_turn
+	; don't bother opening the selection screen if there are no pokemon capable of evolving
 	call DrawWideTextBox_WaitForInput
 	scf
 	ret
@@ -791,23 +792,49 @@ DuelMenu_Check: ; 4585 (1:4585)
 
 ; triggered by pressing SELECT in the duel menu
 DuelMenuShortcut_BothActivePokemon:: ; 458e (1:458e)
-	INCROM $458e,  $46fc
+	call Func_3b31
+	call Func_4597
+	jp DuelMainInterface
+; 0x4597
+
+Func_4597: ; 4597 (1:4597)
+	call Func_30a6
+	ret c
+	call Func_45a9
+	ret c
+	call SwapTurn
+	call Func_45a9
+	call SwapTurn
+	ret
+; 0x45a9
+
+Func_45a9: ; 45a9 (1:45a9)
+	call HasAlivePokemonInPlayArea
+	ld a, $02
+	ld [wcbd4], a
+	call OpenPlayAreaScreenForViewing
+	ldh a, [hButtonsPressed]
+	and B_BUTTON
+	ret z
+	scf
+	ret
+; 0x45bb
+
+	INCROM $45bb,  $46fc
 
 ; triggered by selecting the "Attack" item in the duel menu
 DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleCantAttackSubstatus
 	jr c, .alert_cant_attack_and_cancel_menu
 	call CheckIfActiveCardParalyzedOrAsleep
-	jr nc, .clear_sub_menu_selection
-
+	jr nc, .can_attack
 .alert_cant_attack_and_cancel_menu
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-.clear_sub_menu_selection
+.can_attack
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
-
 .try_open_attack_menu
 	call LoadPokemonMovesToDuelTempList
 	or a
@@ -836,7 +863,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	jr nz, .display_selected_move_info
 	call HandleMenuInput
 	jr nc, .wait_for_input
-	cp $ff ; was B pressed?
+	cp -1 ; was B pressed?
 	jp z, PrintDuelMenu
 	ld [wSelectedDuelSubMenuItem], a
 	call CheckIfEnoughEnergies
@@ -859,7 +886,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call HandleAmnesiaSubstatus
 	jr c, .cannot_use_due_to_amnesia
 	ld a, $07
-	call $51e7
+	call DoPracticeDuelAction
 	jp c, Func_4268
 	call Func_1730
 	jp c, DuelMainInterface
@@ -1613,7 +1640,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ldtx hl, ChooseBasicPkmnToPlaceInArenaText
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
-	call $51e7
+	call DoPracticeDuelAction
 .asm_4d28
 	xor a
 	ld hl, $006e
@@ -1622,7 +1649,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, $2
-	call $51e7
+	call DoPracticeDuelAction
 	jr c, .asm_4d28
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
@@ -1638,7 +1665,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ldtx hl, ChooseUpTo5BasicPkmnToPlaceOnBenchText
 	call Func_2c73
 	ld a, $3
-	call $51e7
+	call DoPracticeDuelAction
 .asm_4d5f
 	ld a, $1
 	ld hl, $006f
@@ -1654,7 +1681,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld hl, $0061
 	call $4b31
 	ld a, $5
-	call $51e7
+	call DoPracticeDuelAction
 	jr .asm_4d5f
 
 .asm_4d86
@@ -1664,13 +1691,34 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 
 .asm_4d8e
 	ld a, $4
-	call $51e7
+	call DoPracticeDuelAction
 	jr c, .asm_4d5f
 	or a
 	ret
 ; 0x4d97
 
-	INCROM $4d97,  $4f9d
+	INCROM $4d97,  $4e40
+
+Func_4e40: ; 4e40 (1:4e40)
+	call CreateHandCardList
+	call EmptyScreen
+	call LoadDuelCardSymbolTiles
+	lb de, 0, 0
+	lb bc, 20, 13
+	call DrawRegularTextBox
+	call CountCardsInDuelTempList
+	ld hl, $5710
+	ld de, $0
+	call Func_2799
+	ldtx hl, DuelistHandText
+	lb de, 1, 1
+	call Func_22ae
+	call PrintTextNoDelay
+	call EnableLCD
+	ret
+; 0x4e6e
+
+	INCROM $4e6e,  $4f9d
 
 ; draw the main scene during a duel, except the contents of the bottom text box,
 ; which depend on the type of duelist holding the turn.
@@ -1746,7 +1794,144 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ret
 ; 0x503a
 
-	INCROM $503a,  $5550
+	INCROM $503a,  $51e7
+
+; if this is a practice duel, execute the practice duel action at wPracticeDuelAction
+DoPracticeDuelAction: ; 51e7 (1:51e7)
+	ld [wPracticeDuelAction], a
+	ld a, [wIsPracticeDuel]
+	or a
+	ret z
+	ld a, [wPracticeDuelAction]
+	ld hl, PracticeDuelActionTable
+	jp JumpToFunctionInTable
+; 0x51f8
+
+PracticeDuelActionTable:: ; 51f8 (1:51f8)
+	dw $0000
+	dw Func_520e
+	dw Func_521a
+	dw Func_522a
+	dw Func_5236
+	dw Func_5245
+	dw Func_5256
+	dw Func_5278
+	dw Func_5284
+	dw Func_529b
+	dw Func_52b0
+; 0x520e
+
+Func_520e: ; 520e (1:520e)
+	call Func_4e40
+	call EnableLCD
+	ldtx hl, Text01a4
+	jp Func_52bc
+; 0x521a
+
+Func_521a: ; 521a (1:521a)
+	ld a, [wLoadedCard1ID]
+	cp GOLDEEN
+	ret z
+	ldtx hl, Text01a5
+	ldtx de, DrMasonText
+	scf
+	jp Func_52bc
+; 0x522a
+
+Func_522a: ; 522a (1:522a)
+	call Func_4e40
+	call EnableLCD
+	ldtx hl, Text01a6
+	jp Func_52bc
+; 0x5236
+
+Func_5236: ; 5236 (1:5236)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp $2
+	ret z
+	ldtx hl, Text01a7
+	scf
+	jp Func_52bc
+; 0x5245
+
+Func_5245: ; 5245 (1:5245)
+	call Func_4e40
+	call EnableLCD
+	ld a, $ff
+	ld [wcc00], a
+	ldtx hl, Text01a8
+	jp Func_52bc
+; 0x5256
+
+Func_5256: ; 5256 (1:5256)
+	call $5351
+	call EnableLCD
+	ld a, [wDuelTurns]
+	ld hl, wcc00
+	cp [hl]
+	ld [hl], a
+	ld a, $00
+	jp nz, $5382
+	ldtx de, DrMasonText
+	ldtx hl, Text01d9
+	call Func_2c62.asm_2c67
+	call YesOrNoMenu
+	jp $5382
+; 0x5278
+
+Func_5278: ; 5278 (1:5278)
+	ld a, [wDuelTurns]
+	srl a
+	ld hl, $541f
+	call JumpToFunctionInTable
+	ret nc
+;	fallthrough
+
+Func_5284: ; 5284 (1:5284)
+	ldtx hl, Text01da
+	call Func_52bc
+	ld a, $02
+	call BankswitchSRAM
+	ld de, $bc00
+	call $66ff
+	xor a
+	call BankswitchSRAM
+	scf
+	ret
+; 0x529b
+
+Func_529b: ; 529b (1:529b)
+	ld a, [wDuelTurns]
+	cp 7
+	jr z, .asm_52a4
+	or a
+	ret
+.asm_52a4
+	call $5351
+	call EnableLCD
+	ld hl, $5346
+	jp $5396
+; 0x52b0
+
+Func_52b0: ; 52b0 (1:52b0)
+	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	cp PLAY_AREA_BENCH_1
+	ret z
+	call $5fd9
+	ldtx hl, Text01d7
+	scf
+;	fallthrough
+
+Func_52bc: ; 52bc (1:52bc)
+	push af
+	ldtx de, DrMasonText
+	call Func_2c62
+	pop af
+	ret
+; 0x52c5
+
+	INCROM $52c5,  $5550
 
 ; draw the turn holder's discard pile screen
 OpenDiscardPileScreen: ; 5550 (1:5550)
@@ -1823,9 +2008,9 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 	inc hl
 	ld [hl], HIGH(PleaseSelectHandText_)
 	inc hl ; wCardListHeaderText
-	ld [hl], LOW(DuelistsHandText_)
+	ld [hl], LOW(DuelistHandText_)
 	inc hl
-	ld [hl], HIGH(DuelistsHandText_)
+	ld [hl], HIGH(DuelistHandText_)
 .draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -2875,9 +3060,9 @@ _TossCoin: ; 71ad (1:71ad)
 	ld a, [wcd9f]
 	inc a
 	call $65b7
-	ld b, $11
+	ld b, 17
 	ld a, $2e
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	inc b
 	ld a, [wcd9c]
 	call $65b7

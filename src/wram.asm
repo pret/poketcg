@@ -617,7 +617,19 @@ wcbed:: ; cbed
 wcbf9:: ; cbf9
 	ds $1
 
-	ds $a
+	ds $4
+
+; during a practice duel, identifies an entry of PracticeDuelActionTable
+wPracticeDuelAction:: ; cbfe
+	ds $1
+
+wcbff:: ; cbff
+	ds $1
+
+wcc00:: ; cc00
+	ds $1
+
+	ds $3
 
 wcc04:: ; cc04
 	ds $1

@@ -168,9 +168,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoCardsInHandText                       ; 0x00a4
 	textpointer TheDiscardPileHasNoCardsText                                ; 0x00a5
 	textpointer Text00a6                                ; 0x00a6
-	textpointer DuelistsHandText                                ; 0x00a7
-	textpointer DuelistsPlayAreaText                                ; 0x00a8
-	textpointer DuelistsDeckText                                ; 0x00a9
+	textpointer DuelistHandText                                ; 0x00a7
+	textpointer DuelistPlayAreaText                                ; 0x00a8
+	textpointer DuelistDeckText                                ; 0x00a9
 	textpointer PleaseSelectHandText                                ; 0x00aa
 	textpointer Text00ab                                ; 0x00ab
 	textpointer Text00ac                                ; 0x00ac
@@ -420,7 +420,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text01a0                                ; 0x01a0
 	textpointer Text01a1                                ; 0x01a1
 	textpointer Text01a2                                ; 0x01a2
-	textpointer Text01a3                                ; 0x01a3
+	textpointer DrMasonText                                ; 0x01a3
 	textpointer Text01a4                                ; 0x01a4
 	textpointer Text01a5                                ; 0x01a5
 	textpointer Text01a6                                ; 0x01a6

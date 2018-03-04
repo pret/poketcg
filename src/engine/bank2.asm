@@ -500,7 +500,7 @@ asm_90da
 	add $e
 	ld c, a
 	ld a, e
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	or a
 	ret
 

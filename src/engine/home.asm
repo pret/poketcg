@@ -998,7 +998,8 @@ Func_069d: ; 069d (0:069d)
 	ret
 ; 0x6c3
 
-Func_06c3: ; 06c3 (0:06c3)
+; writes a to [v*BGMapTiles1 + BG_MAP_WIDTH * c + b]
+WriteToBGMap0AddressFromBCCoord: ; 06c3 (0:06c3)
 	push af
 	ld a, [wLCDC]
 	rla
@@ -4085,7 +4086,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, $07
 	call CheckMatchingCommand
 	ret c ; return if command not found
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld de, wLoadedCard1Name
@@ -4315,7 +4316,7 @@ Func_1823: ; 1823 (0:1823)
 	ret
 
 DealConfusionDamageToSelf: ; 1828 (0:1828)
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	ld a, $1
 	ld [wDamageToSelfMode], a
 	ldtx hl, DamageToSelfDueToConfusionText
@@ -4398,7 +4399,7 @@ Func_189d: ; 189d (0:189d)
 	call SwapTurn
 	pop de
 	ret nc
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetNonTurnDuelistVariable
 	ld [hl], $0
@@ -4851,7 +4852,7 @@ Func_1af3: ; 1af3 (0:1af3)
 ; 0x1b8d
 
 Func_1b8d: ; 1b8d (0:1b8d)
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -4872,7 +4873,7 @@ Func_1b8d: ; 1b8d (0:1b8d)
 
 Func_1bb4: ; 1bb4 (0:1bb4)
 	call Func_3b31
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	call $503a
 	xor a
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
@@ -6588,7 +6589,7 @@ DrawCursor:
 	ld a, c
 	ld c, e
 	ld b, d
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	or a
 	ret
 
@@ -6677,7 +6678,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	inc hl
 	ld c, [hl]
 	ld a, e
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	ld a, [wCurMenuItem]
 	ld e, a
 	or a
@@ -6712,9 +6713,9 @@ Func_2799: ; 2799 (0:2799)
 	ld a, [wCursorYPosition]
 	dec a
 	ld c, a
-	ld b, $12
+	ld b, 18
 	ld a, e
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	ld e, $00
 	ld a, [wcd19]
 	ld hl, wNumMenuItems
@@ -6730,7 +6731,7 @@ Func_2799: ; 2799 (0:2799)
 	dec a
 	ld c, a
 	ld a, e
-	call Func_06c3
+	call WriteToBGMap0AddressFromBCCoord
 	ld a, [wcd19]
 	ld e, a
 	ld d, $00
@@ -7243,7 +7244,52 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-	INCROM $2c37, $2c73
+Func_2c37: ; 2c37 (0:2c37)
+	push hl
+	push de
+	push bc
+	ldh a, [hBankROM]
+	push af
+	call ReadTextOffset
+	ld c, $00
+.asm_2c42
+	ld a, [hli]
+	or a
+	jr z, .asm_2c58
+	cp $10
+	jr nc, .asm_2c42
+	cp $06
+	jr c, .asm_2c55
+	cp $0a
+	jr nz, .asm_2c42
+	inc c
+	jr .asm_2c42
+.asm_2c55
+	inc hl
+	jr .asm_2c42
+.asm_2c58
+	pop af
+	call BankswitchHome
+	ld a, c
+	inc a
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x2c62
+
+Func_2c62: ; 2c62 (0:2c62)
+	call .asm_2c67
+	jr Func_2c77
+.asm_2c67
+	push hl
+	ld hl, wce4c
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	pop hl
+	ld a, $01
+	jr Func_2c84
 
 Func_2c73: ; 2c73 (0:2c73)
 	xor a
