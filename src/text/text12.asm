@@ -51,7 +51,7 @@ ScavengeName: ; 602b5 (18:42b5)
 	done
 
 ScavengeDescription: ; 602bf (18:42bf)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached"
+	text "Discard 1 <PSYCHIC> Energy card attached"
 	line "to Slowpoke in order to use this"
 	line "attack. Put a Trainer card from your"
 	line "discard pile into your hand."
@@ -103,7 +103,7 @@ DestinyBondName: ; 6050e (18:450e)
 	done
 
 DestinyBondDescription: ; 6051c (18:451c)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Gastly in order to use this attack."
 	line "If a Pokémon Knocks Out Gastly"
 	line "during your opponent's next turn,"
@@ -334,7 +334,7 @@ PsychicDescription: ; 60ee9 (18:4ee9)
 	done
 
 BarrierDescription: ; 60f45 (18:4f45)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Mewtwo in order to use this attack."
 	line "During your opponent's next turn,"
 	line "prevent all effects of attacks,"
@@ -889,7 +889,7 @@ RetreatAidName: ; 62796 (18:6796)
 
 RetreatAidDescription: ; 627a3 (18:67a3)
 	text "As long as Dodrio is Benched, pay"
-	line TX_COLORLESS, " less to retreat your Active"
+	line "<COLORLESS> less to retreat your Active"
 	line "Pokémon."
 	done
 
@@ -1250,7 +1250,7 @@ ImakuniDescription: ; 635cb (18:75cb)
 	line "Basic Pokémon, but you can't."
 	line "A mysterious creature not listed in"
 	line "the Pok`dex. He asks kids around the"
-	line "world,\"Who is cuter-Pikachu or me?\""
+	line "world,”Who is cuter-Pikachu or me?”"
 	done
 
 PokemonTraderName: ; 6369f (18:769f)

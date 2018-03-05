@@ -304,27 +304,27 @@ Text0046: ; 3681b (d:681b)
 	done
 
 Text0047: ; 36848 (d:6848)
-	db TX_GRASS
+	db "<GRASS>"
 	done
 
 Text0048: ; 3684b (d:684b)
-	db TX_FIRE
+	db "<FIRE>"
 	done
 
 Text0049: ; 3684e (d:684e)
-	db TX_WATER
+	db "<WATER>"
 	done
 
 Text004a: ; 36851 (d:6851)
-	db TX_LIGHTNING
+	db "<LIGHTNING>"
 	done
 
 Text004b: ; 36854 (d:6854)
-	db TX_FIGHTING
+	db "<FIGHTING>"
 	done
 
 Text004c: ; 36857 (d:6857)
-	db TX_PSYCHIC
+	db "<PSYCHIC>"
 	done
 
 Text004d: ; 3685a (d:685a)
@@ -724,19 +724,19 @@ Text009d: ; 371f7 (d:71f7)
 	done
 
 Text009e: ; 3720c (d:720c)
-	text TX_GRASS, " Pokémon"
+	text "<GRASS> Pokémon"
 	line ""
-	text TX_FIRE, " Pokémon"
+	text "<FIRE> Pokémon"
 	line ""
-	text TX_WATER, " Pokémon"
+	text "<WATER> Pokémon"
 	line ""
-	text TX_LIGHTNING, " Pokémon"
+	text "<LIGHTNING> Pokémon"
 	line ""
-	text TX_FIGHTING, " Pokémon"
+	text "<FIGHTING> Pokémon"
 	line ""
-	text TX_PSYCHIC, " Pokémon"
+	text "<PSYCHIC> Pokémon"
 	line ""
-	text TX_COLORLESS, " Pokémon"
+	text "<COLORLESS> Pokémon"
 	line "Trainer Card"
 	line "Energy Card"
 	done

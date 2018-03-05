@@ -692,7 +692,7 @@ Text04f4: ; 46aae (11:6aae)
 	line "for Game Boy includes many "
 	line "original cards, like the "
 	line ""
-	text TX_LVL, "14 Meowth with the Cat Punch "
+	text "<Lv>14 Meowth with the Cat Punch "
 	line "attack. There are many new cards,"
 	line "so go search them out!"
 	done
@@ -720,7 +720,7 @@ Text04f8: ; 46c3f (11:6c3f)
 	line "Pokémon and have no weaknesses."
 	line "They can attack with any type"
 	line "of Energy card - they are truly"
-	line "worthy of the name \"dragon!\""
+	line "worthy of the name ”dragon!”"
 	done
 
 Text04f9: ; 46cf5 (11:6cf5)
@@ -743,7 +743,7 @@ Text04fb: ; 46dcb (11:6dcb)
 
 Text04fc: ; 46dec (11:6dec)
 	text "The first of the Legendary Pokémon"
-	line "Cards is ", TX_LVL, "37 Moltres. With"
+	line "Cards is <Lv>37 Moltres. With"
 	line "Firegiver, you can place Fire"
 	line "Energy cards in your hand! Also,"
 	line "Dive Bomb is a powerful attack!"
@@ -757,7 +757,7 @@ Text04fd: ; 46ec2 (11:6ec2)
 
 Text04fe: ; 46ee3 (11:6ee3)
 	text "The second Legendary Pokémon Card"
-	line "is ", TX_LVL, "68 Zapdos. With Peal of"
+	line "is <Lv>68 Zapdos. With Peal of"
 	line "Thunder, just putting this card on"
 	line "the bench causes damage!"
 	line "Also, Big Thunder is a powerful"
@@ -771,7 +771,7 @@ Text04ff: ; 46fb8 (11:6fb8)
 
 Text0500: ; 46fd9 (11:6fd9)
 	text "The third Legendary Pokémon Card"
-	line "is ", TX_LVL, "37 Articuno. Its Quickfreeze"
+	line "is <Lv>37 Articuno. Its Quickfreeze"
 	line "will paralyze opponents' Pokémon"
 	line "when the card is put in play!"
 	line "Also, Ice Breath is a powerful"
@@ -785,7 +785,7 @@ Text0501: ; 470b3 (11:70b3)
 
 Text0502: ; 470d4 (11:70d4)
 	text "The fourth Legendary Pokémon Card"
-	line "is ", TX_LVL, "41 Dragonite. Its Healing"
+	line "is <Lv>41 Dragonite. Its Healing"
 	line "Wind will heal damage done to "
 	line "Pokémon when this card is played!"
 	line "Also, Slam is a powerful attack!"
@@ -823,14 +823,14 @@ Text0507: ; 47334 (11:7334)
 	done
 
 Text0508: ; 47346 (11:7346)
-	text "\"Those in search of the Legendary"
+	text "”Those in search of the Legendary"
 	line " Pokémon Cards..."
 	line " Defeat the Masters of the 8 Clubs"
 	line " and attain the 8 Medals."
 	line " Once attained, defeat the Grand"
 	line " Master here at Pokémon Dome..."
 	line " Then you shall inherit"
-	line " the Legendary Pokémon Cards.\""
+	line " the Legendary Pokémon Cards.”"
 	done
 
 Text0509: ; 47430 (11:7430)
@@ -927,7 +927,7 @@ Text0516: ; 479a4 (11:79a4)
 	text "I'm the one who's going to"
 	line "defeat 3 opponents! The prize, "
 	line ""
-	text TX_LVL, "60 Mewtwo, belongs to me!"
+	text "<Lv>60 Mewtwo, belongs to me!"
 	line "You just sit tight and watch me win!"
 	line "See Ya! Ha ha ha ha ha ha!"
 	done
@@ -954,7 +954,7 @@ Text0519: ; 47b25 (11:7b25)
 Text051a: ; 47b47 (11:7b47)
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
-	line "the prize - ", TX_LVL, "60 Mewtwo!"
+	line "the prize - <Lv>60 Mewtwo!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
@@ -966,7 +966,7 @@ Text051b: ; 47bb6 (11:7bb6)
 Text051c: ; 47bd7 (11:7bd7)
 	text "The Challenge Cup is over! I"
 	line "defeated 3 opponents and won"
-	line "the prize - ", TX_LVL, "60 Mewtwo!"
+	line "the prize - <Lv>60 Mewtwo!"
 	line "I guess you could try entering"
 	line "the next Challenge Cup, but "
 	line "you won't have a chance since "
@@ -983,7 +983,7 @@ Text051e: ; 47cd1 (11:7cd1)
 	text "No matter who enters the Challenge"
 	line "Cup, I'll be the winner! "
 	line ""
-	text TX_LVL, "8 Mew, this Cup's prize, will "
+	text "<Lv>8 Mew, this Cup's prize, will "
 	line "belong to me! Why don't you just"
 	line "give up and go home!"
 	line "See ya! Ha ha ha ha ha ha!"
@@ -1012,7 +1012,7 @@ Text0522: ; 47e73 (11:7e73)
 	line "over! What? Who won?"
 	line "Who do you expect!?! Me, of "
 	line "course! The prize belongs to"
-	line "me! ", TX_LVL, "8 Mew! See ya!"
+	line "me! <Lv>8 Mew! See ya!"
 	line "Ha ha ha ha ha ha!"
 	done
 

@@ -320,7 +320,7 @@ Text0419: ; 41965 (10:5965)
 	done
 
 Text041a: ; 4199b (10:599b)
-	text "\"Pokémon Trading Cards 101\""
+	text "”Pokémon Trading Cards 101”"
 	done
 
 Text041b: ; 419b8 (10:59b8)
@@ -786,7 +786,7 @@ Text0463: ; 430ab (10:70ab)
 	line "me so many cards,"
 	line "please accept this card as a gift"
 	line "from me to you."
-	line "It's a ", TX_LVL, "16 Pikachu."
+	line "It's a <Lv>16 Pikachu."
 	line "Please take good care of it!"
 	done
 

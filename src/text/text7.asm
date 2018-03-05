@@ -382,25 +382,25 @@ Text060e: ; 4d767 (13:5767)
 
 Text060f: ; 4d7fc (13:57fc)
 	text "Hey! Kid!"
-	line "I've got a ", TX_LVL, "20 Electabuzz,"
+	line "I've got a <Lv>20 Electabuzz,"
 	line "but what I really want is"
-	line "a ", TX_LVL, "35 Electabuzz!"
+	line "a <Lv>35 Electabuzz!"
 	line "Hey! Kid! Do you have a"
 	line ""
-	text TX_LVL, "35 Electabuzz?"
+	text "<Lv>35 Electabuzz?"
 	done
 
 Text0610: ; 4d87a (13:587a)
 	text "Hey! Kid!"
 	line "We meet again!"
-	line "Do you have a ", TX_LVL, "35 Electabuzz?"
+	line "Do you have a <Lv>35 Electabuzz?"
 	line "Come on! Trade it for my"
 	line ""
-	text TX_LVL, "20 Electabuzz!"
+	text "<Lv>20 Electabuzz!"
 	done
 
 Text0611: ; 4d8de (13:58de)
-	text "Trade your ", TX_LVL, "35 Electabuzz?"
+	text "Trade your <Lv>35 Electabuzz?"
 	done
 
 Text0612: ; 4d8fb (13:58fb)
@@ -413,14 +413,14 @@ Text0612: ; 4d8fb (13:58fb)
 Text0613: ; 4d938 (13:5938)
 	text "Hey, kid!"
 	line "It's not cool to lie!"
-	line "You don't own a ", TX_LVL, "35 Electabuzz!"
+	line "You don't own a <Lv>35 Electabuzz!"
 	line "You could get hurt lying to me, kid!"
 	done
 
 Text0614: ; 4d99f (13:599f)
 	text "You're gonna trade me your"
 	line ""
-	text TX_LVL, "35 Electabuzz?"
+	text "<Lv>35 Electabuzz?"
 	line "Way cool!...Hey! Wait, kid!"
 	line "That card's in your Deck!"
 	line "It isn't cool to take that card!"
@@ -432,10 +432,10 @@ Text0614: ; 4d99f (13:599f)
 Text0615: ; 4da6d (13:5a6d)
 	text "You're gonna trade me your"
 	line ""
-	text TX_LVL, "35 Electabuzz? Way cool, kid!"
+	text "<Lv>35 Electabuzz? Way cool, kid!"
 	line "OK, I'll trade you my"
 	line ""
-	text TX_LVL, "20 Electabuzz for it!"
+	text "<Lv>20 Electabuzz for it!"
 	done
 
 Text0616: ; 4dad9 (13:5ad9)
@@ -445,8 +445,8 @@ Text0616: ; 4dad9 (13:5ad9)
 
 Text0617: ; 4dafe (13:5afe)
 	text "Whoa! Cool, kid! Thanks for "
-	line "that ", TX_LVL, "35 Electabuzz! "
-	line "My ", TX_LVL, "20 Electabuzz is a cool card!"
+	line "that <Lv>35 Electabuzz! "
+	line "My <Lv>20 Electabuzz is a cool card!"
 	line "Charge it up with Electabuzz!"
 	done
 

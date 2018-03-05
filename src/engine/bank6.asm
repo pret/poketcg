@@ -56,16 +56,16 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	ld a, [wLoadedCard1Level]
 	or a
 	jr z, .done
-	ld a, TX_LARGE
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld [hl], $11 ; Lv
+	ld [hl], LOW("<Lv>")
 	inc hl
 	ld a, [wLoadedCard1Level]
 	cp 10
 	jr c, .one_digit
-	ld [hl], TX_LARGE
+	ld [hl], TX_SYMBOL
 	inc hl
-	ld b, $20 - 1
+	ld b, LOW("<0>") - 1
 .first_digit_loop
 	inc b
 	sub 10
@@ -74,9 +74,9 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	ld [hl], b ; first digit
 	inc hl
 .one_digit
-	ld [hl], TX_LARGE
+	ld [hl], TX_SYMBOL
 	inc hl
-	add $20
+	add LOW("<0>")
 	ld [hl], a ; last (or only) digit
 	inc hl
 .done

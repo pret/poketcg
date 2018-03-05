@@ -210,7 +210,7 @@ Text06a2: ; 50a9e (14:4a9e)
 	line "checked the wall!"
 	line ""
 	text TX_RAM1, ""
-	line "found a ", TX_LVL, "9 Slowpoke!"
+	line "found a <Lv>9 Slowpoke!"
 	done
 
 Text06a3: ; 50acc (14:4acc)

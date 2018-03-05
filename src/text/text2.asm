@@ -1101,7 +1101,7 @@ Text01c4: ; 3ab08 (e:6b08)
 	line "Energy to use Waterfall."
 	line "You need to attach a Psychic Energy"
 	line "card to Seaking."
-	line TX_COLORLESS, " means any Energy card."
+	line "<COLORLESS> means any Energy card."
 	line "Now you can use Waterfall."
 	line "Keep the Water Energy card for"
 	line "other Pokémon."
@@ -1553,7 +1553,7 @@ Text0221: ; 3b8f2 (e:78f2)
 	line $03,$39,$70,$03,$3a,$70,$03,$3b,$70,$03,$3c,$70,$03,$3d,$70,$03,$3e,$70,$03,$3f,$70,$03,$40,$70,$03,$41,""
 	line $03,$42,$70,$03,$43,$70,$03,$44,$70,$03,$45,$70,$03,$46,$70,$03,$47,$70,$03,$48,$70,$03,$49,$70,$6e,""
 	line $6f,$70,$03,$5d,$70,$6a,$70,$6b,$70,$77,$70,$60,$70,$61,$70,$62,$70,$63,""
-	line $64,$70,$65,$70,$66,$70,$67,$70,$68,$70,$69,$70,$05,$13,$70, TX_LVL, $70,$70,""
+	line $64,$70,$65,$70,$66,$70,$67,$70,$68,$70,$69,$70,$05,$13,$70,$05,$11,$70,$70,""
 	line $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70
 	done
 

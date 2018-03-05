@@ -1153,27 +1153,27 @@ Text07f5: ; 5736a (15:736a)
 	done
 
 Text07f6: ; 5736d (15:736d)
-	db $03,$50, TX_FIRE,  $03,$51
+	db $03,$50, "<FIRE>", $03,$51
 	done
 
 Text07f7: ; 57374 (15:7374)
-	db $03,$50, TX_LIGHTNING,  $03,$51
+	db $03,$50, "<LIGHTNING>", $03,$51
 	done
 
 Text07f8: ; 5737b (15:737b)
-	db $03,$50, TX_WATER,  $03,$51
+	db $03,$50, "<WATER>", $03,$51
 	done
 
 Text07f9: ; 57382 (15:7382)
-	db $03,$50, TX_FIGHTING,  $03,$51
+	db $03,$50, "<FIGHTING>", $03,$51
 	done
 
 Text07fa: ; 57389 (15:7389)
-	db $03,$50, TX_PSYCHIC,  $03,$51
+	db $03,$50, "<PSYCHIC>", $03,$51
 	done
 
 Text07fb: ; 57390 (15:7390)
-	db $03,$50, TX_GRASS,  $03,$51
+	db $03,$50, "<GRASS>", $03,$51
 	done
 
 GrassEnergyName: ; 57397 (15:7397)
@@ -1181,7 +1181,7 @@ GrassEnergyName: ; 57397 (15:7397)
 	done
 
 GrassEnergyDescription: ; 573a5 (15:73a5)
-	text "Provides 1 ", TX_GRASS,  " Energy."
+	text "Provides 1 <GRASS> Energy."
 	done
 
 FireEnergyName: ; 573bc (15:73bc)
@@ -1189,7 +1189,7 @@ FireEnergyName: ; 573bc (15:73bc)
 	done
 
 FireEnergyDescription: ; 573c9 (15:73c9)
-	text "Provides 1 ", TX_FIRE,  " Energy."
+	text "Provides 1 <FIRE> Energy."
 	done
 
 WaterEnergyName: ; 573e0 (15:73e0)
@@ -1197,7 +1197,7 @@ WaterEnergyName: ; 573e0 (15:73e0)
 	done
 
 WaterEnergyDescription: ; 573ee (15:73ee)
-	text "Provides 1 ", TX_WATER,  " Energy."
+	text "Provides 1 <WATER> Energy."
 	done
 
 LightningEnergyName: ; 57405 (15:7405)
@@ -1205,7 +1205,7 @@ LightningEnergyName: ; 57405 (15:7405)
 	done
 
 LightningEnergyDescription: ; 57417 (15:7417)
-	text "Provides 1 ", TX_LIGHTNING,  " Energy."
+	text "Provides 1 <LIGHTNING> Energy."
 	done
 
 FightingEnergyName: ; 5742e (15:742e)
@@ -1213,7 +1213,7 @@ FightingEnergyName: ; 5742e (15:742e)
 	done
 
 FightingEnergyDescription: ; 5743f (15:743f)
-	text "Provides 1 ", TX_FIGHTING,  " Energy."
+	text "Provides 1 <FIGHTING> Energy."
 	done
 
 PsychicEnergyName: ; 57456 (15:7456)
@@ -1221,7 +1221,7 @@ PsychicEnergyName: ; 57456 (15:7456)
 	done
 
 PsychicEnergyDescription: ; 57466 (15:7466)
-	text "Provides 1 ", TX_PSYCHIC,  " Energy."
+	text "Provides 1 <PSYCHIC> Energy."
 	done
 
 DoubleColorlessEnergyName: ; 5747d (15:747d)
@@ -1229,7 +1229,7 @@ DoubleColorlessEnergyName: ; 5747d (15:747d)
 	done
 
 DoubleColorlessEnergyDescription: ; 57496 (15:7496)
-	text "Provides ", TX_COLORLESS,   TX_COLORLESS,  " Energy. (Doesn't"
+	text "Provides <COLORLESS><COLORLESS> Energy. (Doesn't"
 	line "count as a basic Energy card.) "
 	line "Colorless Energy can't be used to"
 	line "pay colored Energy costs. (Any type"
@@ -1340,7 +1340,7 @@ EnergyTransName: ; 57960 (15:7960)
 EnergyTransDescription: ; 5796e (15:796e)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
-	line "take 1 ", TX_GRASS,  " Energy card attached to 1"
+	line "take 1 <GRASS> Energy card attached to 1"
 	line "of your Pokémon and attach it to a"
 	line "different one. This power can't be"
 	line "used if Venusaur is Asleep,"

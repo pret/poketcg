@@ -808,10 +808,10 @@ Text0315: ; 3dcb2 (f:5cb2)
 	line "your Pokémon, making them able"
 	line "to Attack."
 	line "There are 7 types of Energy Cards"
-	line "[", TX_GRASS, " Grass] [", TX_FIRE, " Fire]"
-	line "[", TX_WATER, " Water] [", TX_LIGHTNING, " Lightning]"
-	line "[", TX_PSYCHIC, " Psychic] [", TX_FIGHTING, " Fighting]"
-	line "and [", TX_COLORLESS, " Double Colorless]"
+	line "[<GRASS> Grass] [<FIRE> Fire]"
+	line "[<WATER> Water] [<LIGHTNING> Lightning]"
+	line "[<PSYCHIC> Psychic] [<FIGHTING> Fighting]"
+	line "and [<COLORLESS> Double Colorless]"
 	line "You may only play 1 Energy Card"
 	line "from your Hand per turn."
 	done
@@ -1347,12 +1347,12 @@ Text0379: ; 3efc3 (f:6fc3)
 	line "and Pokémon card collecting!"
 	line "One day,"
 	line TX_RAM1, " heard a rumor:"
-	line " \"The Legendary Pokémon Cards..."
+	line " ”The Legendary Pokémon Cards..."
 	line "  the extremely rare and powerful "
 	line "  cards held by Pokémon Trading "
 	line "  Card Game's greatest players... "
 	line "  The Grand Masters are searching"
-	line "  for one to inherit the legend!\""
+	line "  for one to inherit the legend!”"
 	line "Dreaming of inheriting the"
 	line "Legendary Pokémon Cards,"
 	line TX_RAM1, " visits the Pokémon"
@@ -1846,51 +1846,51 @@ Text03e7: ; 3f823 (f:7823)
 	done
 
 Text03e8: ; 3f82a (f:782a)
-	text TX_LVL, "60 MEWTWO "
+	text "<Lv>60 MEWTWO "
 	done
 
 Text03e9: ; 3f838 (f:7838)
-	text TX_LVL, "8 MEW "
+	text "<Lv>8 MEW "
 	done
 
 Text03ea: ; 3f842 (f:7842)
-	text TX_LVL, "34 ARCANINE"
+	text "<Lv>34 ARCANINE"
 	done
 
 Text03eb: ; 3f851 (f:7851)
-	text TX_LVL, "16 PIKACHU"
+	text "<Lv>16 PIKACHU"
 	done
 
 Text03ec: ; 3f85f (f:785f)
-	text TX_LVL, "13 SURFING PIKACHU"
+	text "<Lv>13 SURFING PIKACHU"
 	done
 
 Text03ed: ; 3f875 (f:7875)
-	text TX_LVL, "20 ELECTABUZZ"
+	text "<Lv>20 ELECTABUZZ"
 	done
 
 Text03ee: ; 3f886 (f:7886)
-	text TX_LVL, "9 SLOWPOKE"
+	text "<Lv>9 SLOWPOKE"
 	done
 
 Text03ef: ; 3f894 (f:7894)
-	text TX_LVL, "12 JIGGLYPUFF"
+	text "<Lv>12 JIGGLYPUFF"
 	done
 
 Text03f0: ; 3f8a5 (f:78a5)
-	text TX_LVL, "68 ZAPDOS"
+	text "<Lv>68 ZAPDOS"
 	done
 
 Text03f1: ; 3f8b2 (f:78b2)
-	text TX_LVL, "37 MOLTRES"
+	text "<Lv>37 MOLTRES"
 	done
 
 Text03f2: ; 3f8c0 (f:78c0)
-	text TX_LVL, "37 ARTICUNO"
+	text "<Lv>37 ARTICUNO"
 	done
 
 Text03f3: ; 3f8cf (f:78cf)
-	text TX_LVL, "41 DRAGONITE"
+	text "<Lv>41 DRAGONITE"
 	done
 
 Text03f4: ; 3f8df (f:78df)
@@ -1898,7 +1898,7 @@ Text03f4: ; 3f8df (f:78df)
 	done
 
 Text03f5: ; 3f8f7 (f:78f7)
-	text TX_LVL, "12 FLYING PIKACHU"
+	text "<Lv>12 FLYING PIKACHU"
 	done
 
 Text03f6: ; 3f90c (f:790c)

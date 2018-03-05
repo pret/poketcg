@@ -1,7 +1,7 @@
 Text0524: ; 48000 (12:4000)
 	text "The Challenge Cup is over already! "
 	line "Too bad you couldn't enter!"
-	line "The prize belongs to me! ", TX_LVL, "8 Mew!"
+	line "The prize belongs to me! <Lv>8 Mew!"
 	line "You really should enter the next"
 	line "Challenge Cup! But then again, "
 	line "why bother, since I'll also win "
@@ -55,14 +55,14 @@ Text052b: ; 48376 (12:4376)
 	text "The first Challenge Cup is"
 	line "now underway!"
 	line "Defeat 3 opponents to win the"
-	line "wonderful prize of ", TX_LVL, "60 Mewtwo!"
+	line "wonderful prize of <Lv>60 Mewtwo!"
 	done
 
 Text052c: ; 483de (12:43de)
 	text "The second Challenge Cup is"
 	line "now under way!"
 	line "Defeat 3 opponents to win the"
-	line "wonderful prize of ", TX_LVL, "8 Mew!"
+	line "wonderful prize of <Lv>8 Mew!"
 	done
 
 Text052d: ; 48444 (12:4444)
@@ -150,7 +150,7 @@ Text053b: ; 487c0 (12:47c0)
 	text "Ha ha ha! How about that!?!"
 	line "I win!!"
 	line "2 more opponents to go and"
-	line "the ", TX_LVL, "8 Mew belongs to me!"
+	line "the <Lv>8 Mew belongs to me!"
 	done
 
 Text053c: ; 4881b (12:481b)
@@ -193,14 +193,14 @@ Text0542: ; 4893d (12:493d)
 	text "Hey, ", TX_RAM1, "!"
 	line "I'm not gonna lose to you!"
 	line ""
-	text TX_LVL, "60 Mewtwo belongs to me!!!"
+	text "<Lv>60 Mewtwo belongs to me!!!"
 	done
 
 Text0543: ; 4897f (12:497f)
 	text TX_RAM1, "!"
 	line "I'm going to defeat you!"
 	line ""
-	text TX_LVL, "8 Mew belongs to me!!!"
+	text "<Lv>8 Mew belongs to me!!!"
 	done
 
 Text0544: ; 489b6 (12:49b6)
@@ -878,7 +878,7 @@ Text05b8: ; 4a898 (12:6898)
 Text05b9: ; 4a8d2 (12:68d2)
 	text "The Legendary Pokémon Cards"
 	line "speak to you..."
-	line " \"You who have inherited us..."
+	line " ”You who have inherited us..."
 	line "  Great Card Master! "
 	line "  Our Master must not forget:"
 	line "  Inheriting us does not make you"
@@ -891,7 +891,7 @@ Text05b9: ; 4a8d2 (12:68d2)
 	line "  of all, the ability to love the"
 	line "  Pokémon Trading Card Game"
 	line "  no matter what - win or lose!"
-	line "  A new journey has just begun...\""
+	line "  A new journey has just begun...”"
 	done
 
 Text05ba: ; 4aaad (12:6aad)
@@ -907,7 +907,7 @@ Text05bb: ; 4aaed (12:6aed)
 Text05bc: ; 4ab23 (12:6b23)
 	text "The Legendary Pokémon Cards"
 	line "speak to you..."
-	line " \"You who have inherited us..."
+	line " ”You who have inherited us..."
 	line "  Great Card Master!"
 	line "  There are no cards left for us"
 	line "  to give you, but do not forget:"
@@ -921,7 +921,7 @@ Text05bc: ; 4ab23 (12:6b23)
 	line "  all, the ability to love the"
 	line "  Pokémon Trading Card Game no"
 	line "  matter what - win or lose!"
-	line "  A new journey has just begun...\""
+	line "  A new journey has just begun...”"
 	done
 
 Text05bd: ; 4ad20 (12:6d20)
@@ -1129,8 +1129,8 @@ Text05d7: ; 4ba32 (12:7a32)
 	line "by attacking. Pokémon need Energy "
 	line "cards in order to attack."
 	line "For example, the energy required "
-	line "for Seaking's Waterfall is ", TX_WATER,  TX_COLORLESS, "."
-	line TX_WATER,  TX_COLORLESS, " stands for 1 Water Energy "
+	line "for Seaking's Waterfall is <WATER><COLORLESS>."
+	line "<WATER><COLORLESS> stands for 1 Water Energy "
 	line "card and another Energy card of "
 	line "any type. The energy required "
 	line "differs according to the attack."

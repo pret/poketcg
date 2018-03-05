@@ -6174,7 +6174,7 @@ Uppercase: ; 23b1 (0:23b1)
 	ret c
 	cp $7b
 	ret nc
-	sub $20
+	sub "a" - "A"
 	ld e, a
 	ret
 
@@ -6228,7 +6228,7 @@ Func_23d3: ; 23d3 (0:23d3)
 
 	INCROM $23fd, $245d
 
-; convert the number at hl to large (TX_LARGE) text format and write it to wcaa0
+; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
 ; replace leading zeros with $00
 TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 	push de
@@ -6252,14 +6252,14 @@ TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 .digit_loop
 	inc hl
 	ld a, [hl]
-	cp $20
+	cp LOW("<0>")
 	jr nz, .done ; jump if not zero
-	ld [hl], $0 ; trim leading zero
+	ld [hl], LOW("< >") ; trim leading zero
 	inc hl
 	dec e
 	jr nz, .digit_loop
 	dec hl
-	ld [hl], $20
+	ld [hl], LOW("<0>")
 .done
 	dec hl
 	pop bc
@@ -6267,10 +6267,10 @@ TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 	ret
 
 .get_digit
-	ld a, TX_LARGE
+	ld a, TX_SYMBOL
 	ld [de], a
 	inc de
-	ld a, $20 - 1
+	ld a, LOW("<0>") - 1
 .substract_loop
 	inc a
 	add hl, bc
@@ -7486,7 +7486,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .asm_2d79
-	cp TX_LARGE
+	cp TX_SYMBOL
 	jr c, .asm_2d65
 	cp $10
 	jr nc, .asm_2d65

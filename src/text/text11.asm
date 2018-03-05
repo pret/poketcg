@@ -10,7 +10,7 @@ SeadraName: ; 5c05d (17:405d)
 
 SeadrasWaterGunDescription: ; 5c065 (17:4065)
 	text "Does 20 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Seadra but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -44,7 +44,7 @@ GoldeenKind: ; 5c202 (17:4202)
 GoldeenDescription: ; 5c20c (17:420c)
 	text "Its tail fin billows like an elegant"
 	line "ballroom dress, giving it the"
-	line "nickname \"Water Queen.\""
+	line "nickname ”Water Queen.”"
 	done
 
 SeakingName: ; 5c268 (17:4268)
@@ -88,7 +88,7 @@ RecoverName: ; 5c352 (17:4352)
 	done
 
 StarmiesRecoverDescription: ; 5c35b (17:435b)
-	text "Discard 1 ", TX_WATER, " Energy card attached to"
+	text "Discard 1 <WATER> Energy card attached to"
 	line "Starmie in order to use this attack."
 	line "Remove all damage counters from"
 	line "Starmie."
@@ -159,7 +159,7 @@ LaprasName: ; 5c58f (17:458f)
 
 LaprasWaterGunDescription: ; 5c597 (17:4597)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Lapras but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -201,7 +201,7 @@ Vaporeon1Description: ; 5c717 (17:4717)
 
 VaporeonsWaterGunDescription: ; 5c77b (17:477b)
 	text "Does 30 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Vaporeon but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -234,7 +234,7 @@ ClairvoyanceDescription: ; 5c8b5 (17:48b5)
 
 OmanytesWaterGunDescription: ; 5c932 (17:4932)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Omanyte but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -256,7 +256,7 @@ OmastarName: ; 5ca3e (17:4a3e)
 
 OmastarsWaterGunDescription: ; 5ca47 (17:4a47)
 	text "Does 20 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Omastar but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -1145,7 +1145,7 @@ CallforFriendName: ; 5f33e (17:733e)
 	done
 
 CallforFriendDescription: ; 5f34f (17:734f)
-	text "Search your deck for a ", TX_FIGHTING, " Basic"
+	text "Search your deck for a <FIGHTING> Basic"
 	line "Pokémon card and put it onto your"
 	line "Bench. Shuffle your deck afterward."
 	line "(You can't use this attack if your"
@@ -1405,7 +1405,7 @@ KadabraName: ; 5fed3 (17:7ed3)
 	done
 
 KadabrasRecoverDescription: ; 5fedc (17:7edc)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Kadabra in order to use this attack."
 	line "Remove all damage counters from"
 	line "Kadabra."
