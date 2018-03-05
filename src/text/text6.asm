@@ -281,9 +281,9 @@ Text0553: ; 48bcc (12:4bcc)
 	done
 
 Text0554: ; 48bed (12:4bed)
-	text "Yes! The Legendary Pok`mon Cards"
+	text "Yes! The Legendary Pokémon Cards"
 	line "will be inherited here at"
-	line "Pok`mon Dome! Of course, I, "
+	line "Pokémon Dome! Of course, I, "
 	line "Ronald, will inherit the cards!"
 	line "Hey, did you collect the Medals?"
 	done
@@ -410,7 +410,7 @@ Text0568: ; 4928f (12:528f)
 	done
 
 Text0569: ; 492b9 (12:52b9)
-	text "Welcome to Pok`mon Dome!"
+	text "Welcome to Pokémon Dome!"
 	done
 
 Text056a: ; 492d3 (12:52d3)
@@ -437,24 +437,24 @@ Text056d: ; 4937b (12:537b)
 
 Text056e: ; 493a3 (12:53a3)
 	text "We are the 4 Grand Masters who"
-	line "guard the Legendary Pok`mon Cards."
+	line "guard the Legendary Pokémon Cards."
 	line "If you can defeat all of us, then "
 	line "you will have earned the right to "
-	line "inherit the Legendary Pok`mon Cards!"
+	line "inherit the Legendary Pokémon Cards!"
 	done
 
 Text056f: ; 49451 (12:5451)
 	text "We are the Grand Masters who guard"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	line "We will accept your challenge as"
 	line "many times as will take for you "
 	line "to inherit all 4 of the "
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	done
 
 Text0570: ; 49506 (12:5506)
 	text "We are the Grand Masters who guard"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	line "Challenge us as many times as "
 	line "you wish!"
 	done
@@ -491,13 +491,13 @@ Text0576: ; 496d5 (12:56d5)
 	text "Hm-hmm-hmm..."
 	line "I  W I N ! Come back when you've"
 	line "gotten a little better. I can't"
-	line "give a Legendary Pok`mon Card to"
+	line "give a Legendary Pokémon Card to"
 	line "someone who plays like that!"
 	done
 
 Text0577: ; 49763 (12:5763)
 	text "Hm-hmm-hmm...I  W I N !"
-	line "The Legendary Pok`mon Cards "
+	line "The Legendary Pokémon Cards "
 	line "deserve better than that!"
 	done
 
@@ -517,7 +517,7 @@ Text0579: ; 497e9 (12:57e9)
 Text057a: ; 49864 (12:5864)
 	text "Hmm-hmm-hmm...I lose."
 	line "I find you worthy of inheriting"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	done
 
 Text057b: ; 498b8 (12:58b8)
@@ -533,7 +533,7 @@ Text057c: ; 498e6 (12:58e6)
 Text057d: ; 49906 (12:5906)
 	text "I, Thunder Steve, am your next "
 	line "opponent. Hey! Do you want the"
-	line "Legendary Pok`mon Cards!?!"
+	line "Legendary Pokémon Cards!?!"
 	line "Then you must defeat me first!"
 	done
 
@@ -578,7 +578,7 @@ Text0585: ; 49ab6 (12:5ab6)
 	text "You're the Winner! You're the "
 	line "Greatest! With that skill, I "
 	line "feel we can give you the "
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	done
 
 Text0586: ; 49b27 (12:5b27)
@@ -705,7 +705,7 @@ Text059c: ; 4a047 (12:6047)
 
 Text059d: ; 4a079 (12:6079)
 	text "I'm sorry, but I cannot pass the"
-	line "the Legendary Pok`mon Cards to you."
+	line "the Legendary Pokémon Cards to you."
 	line "Continue training and try again."
 	line "Until then!"
 	done
@@ -722,7 +722,7 @@ Text059f: ; 4a11a (12:611a)
 	line "Congratulations, ", TX_RAM1, ". "
 	line "You have proven yourself worthy"
 	line "enough to inherit the"
-	line "Legendary Pok`mon Cards!!!"
+	line "Legendary Pokémon Cards!!!"
 	line "Except..."
 	done
 
@@ -759,17 +759,17 @@ Text05a5: ; 4a308 (12:6308)
 	text "Yeah! That's right! "
 	line "It's me!!! Ronald!!!"
 	line "I have already inherited the"
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	done
 
 Text05a6: ; 4a369 (12:6369)
 	text "No, Ronald! That cannot be "
 	line "allowed! He, too, has earned "
 	line "the right to inherit the "
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	line "Ronald! ", TX_RAM1, "!"
 	line "You two must duel to determine who "
-	line "will inherit the Legendary Pok`mon "
+	line "will inherit the Legendary Pokémon "
 	line "Cards. So say the Rules!"
 	done
 
@@ -800,7 +800,7 @@ Text05ab: ; 4a4ca (12:64ca)
 
 Text05ac: ; 4a4f5 (12:64f5)
 	text "I was here first! The Legendary"
-	line "Pok`mon Cards belong to me!"
+	line "Pokémon Cards belong to me!"
 	line "I'll make it all too clear to"
 	line "you, ", TX_START,  TX_RAM1, "!"
 	done
@@ -813,7 +813,7 @@ Text05ad: ; 4a559 (12:6559)
 Text05ae: ; 4a58b (12:658b)
 	text "Now do you know who the better "
 	line "player is!?!"
-	line "The Legendary Pok`mon Cards"
+	line "The Legendary Pokémon Cards"
 	line "belong to me!"
 	line "If you still won't give up,"
 	line "I'll take you on again..."
@@ -826,18 +826,18 @@ Text05af: ; 4a65c (12:665c)
 	done
 
 Text05b0: ; 4a67f (12:667f)
-	text "I'm sorry, but the Legendary Pok`mon"
+	text "I'm sorry, but the Legendary Pokémon"
 	line "Cards have chosen ", TX_RAM1, "."
 	done
 
 Text05b1: ; 4a6ba (12:66ba)
-	text "The Legendary Pok`mon Cards"
+	text "The Legendary Pokémon Cards"
 	line "vanished from Ronald's Deck!"
 	done
 
 Text05b2: ; 4a6f4 (12:66f4)
 	text "No! My...My Legendary "
-	line "Pok`mon Cards!"
+	line "Pokémon Cards!"
 	line "No...!"
 	line "Noooooo!!!"
 	done
@@ -846,8 +846,8 @@ Text05b3: ; 4a72d (12:672d)
 	text "Congratulations, ", TX_RAM1, "!"
 	line "You are a Card Master"
 	line "worthy of inheriting"
-	line "the Legendary Pok`mon Cards!"
-	line "The Legendary Pok`mon Cards"
+	line "the Legendary Pokémon Cards!"
+	line "The Legendary Pokémon Cards"
 	line "recognize you as a true Master!"
 	done
 
@@ -871,55 +871,55 @@ Text05b7: ; 4a862 (12:6862)
 	done
 
 Text05b8: ; 4a898 (12:6898)
-	text "The 4 Legendary Pok`mon Cards"
+	text "The 4 Legendary Pokémon Cards"
 	line "float, glowing in the air!"
 	done
 
 Text05b9: ; 4a8d2 (12:68d2)
-	text "The Legendary Pok`mon Cards"
+	text "The Legendary Pokémon Cards"
 	line "speak to you..."
 	line " \"You who have inherited us..."
 	line "  Great Card Master! "
 	line "  Our Master must not forget:"
 	line "  Inheriting us does not make you"
-	line "  a Pok`mon Card Master!"
-	line "  A true Pok`mon Card Master is"
+	line "  a Pokémon Card Master!"
+	line "  A true Pokémon Card Master is"
 	line "  one who has the skill to use"
 	line "  the abilities of the different"
 	line "  cards and the courage to duel"
 	line "  powerful opponents. And most"
 	line "  of all, the ability to love the"
-	line "  Pok`mon Trading Card Game"
+	line "  Pokémon Trading Card Game"
 	line "  no matter what - win or lose!"
 	line "  A new journey has just begun...\""
 	done
 
 Text05ba: ; 4aaad (12:6aad)
-	text "One of the Legendary Pok`mon Cards"
+	text "One of the Legendary Pokémon Cards"
 	line "floats, glowing in the air!"
 	done
 
 Text05bb: ; 4aaed (12:6aed)
-	text "A Legendary Pok`mon Card"
+	text "A Legendary Pokémon Card"
 	line "floats, glowing in the air!"
 	done
 
 Text05bc: ; 4ab23 (12:6b23)
-	text "The Legendary Pok`mon Cards"
+	text "The Legendary Pokémon Cards"
 	line "speak to you..."
 	line " \"You who have inherited us..."
 	line "  Great Card Master!"
 	line "  There are no cards left for us"
 	line "  to give you, but do not forget:"
 	line "  Inheriting us does not make you"
-	line "  a Pok`mon Card Master!"
-	line "  A true Pok`mon Card Master"
+	line "  a Pokémon Card Master!"
+	line "  A true Pokémon Card Master"
 	line "  is one who has the skill to use"
 	line "  the abilities of the different"
 	line "  cards and the courage to duel"
 	line "  powerful opponents. And above"
 	line "  all, the ability to love the"
-	line "  Pok`mon Trading Card Game no"
+	line "  Pokémon Trading Card Game no"
 	line "  matter what - win or lose!"
 	line "  A new journey has just begun...\""
 	done
@@ -943,11 +943,11 @@ Text05be: ; 4ad53 (12:6d53)
 
 Text05bf: ; 4ae4d (12:6e4d)
 	text "You finally inherited the"
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	line "Did you see the Legendary Auto"
 	line "Deck Machine?"
 	line "It is rumored that it's in the "
-	line "Hall of Honor at Pok`mon Dome."
+	line "Hall of Honor at Pokémon Dome."
 	line "It supposedly holds the secret "
 	line "to a very powerful deck!"
 	done
@@ -972,20 +972,20 @@ Text05c2: ; 4afd0 (12:6fd0)
 
 Text05c3: ; 4afe5 (12:6fe5)
 	text "Are you also hoping to inherit"
-	line "the Legendary Pok`mon Cards?"
+	line "the Legendary Pokémon Cards?"
 	line "If you want the Legendary Cards,"
 	line "you must defeat the Grand Masters."
 	line "To duel the Grand Masters, you"
 	line "must first get the Master Medals."
 	line "The 8 Masters of the Card Clubs"
 	line "each have a Master Medal. Go to"
-	line "Pok`mon Dome if you want to learn"
+	line "Pokémon Dome if you want to learn"
 	line "more about the Legendary Cards."
 	done
 
 Text05c4: ; 4b129 (12:7129)
 	text "You finally inherited the"
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	line "Amazing!"
 	line "Congratulations, ", TX_RAM1, "!!!"
 	done
@@ -1003,7 +1003,7 @@ Text05c5: ; 4b17c (12:717c)
 
 Text05c6: ; 4b274 (12:7274)
 	text "Congratulations on inheriting "
-	line "the Legendary Pok`mon Cards,"
+	line "the Legendary Pokémon Cards,"
 	line ""
 	text TX_RAM1, "! Now you should try"
 	line "dueling different people using the"
@@ -1040,7 +1040,7 @@ Text05ca: ; 4b4ea (12:74ea)
 	text "This is the Challenge Machine"
 	line "created by Dr. Mason!"
 	line "The Challenge Machine is a "
-	line "Pok`mon Card Dueling Machine. "
+	line "Pokémon Card Dueling Machine. "
 	line "The rules of the game are simple: "
 	line "choose 1 deck with which you must"
 	line "duel 5 computer opponents!"
@@ -1101,7 +1101,7 @@ Text05d4: ; 4b842 (12:7842)
 	text "So, have you learned how to "
 	line "play the game?"
 	line "I hope you enjoy playing the"
-	line "Pok`mon Trading Card Game!"
+	line "Pokémon Trading Card Game!"
 	done
 
 Text05d5: ; 4b8a7 (12:78a7)
@@ -1110,23 +1110,23 @@ Text05d5: ; 4b8a7 (12:78a7)
 	done
 
 Text05d6: ; 4b8c8 (12:78c8)
-	text "In order to do anything, Pok`mon "
+	text "In order to do anything, Pokémon "
 	line "must have Energy cards. "
 	line "If no Energy cards are attached,"
-	line "the Pok`mon will not be able to "
+	line "the Pokémon will not be able to "
 	line "attack or retreat. There are 7 "
 	line "types of Energy cards: Grass, "
 	line "Fire, Water, Lightning, Psychic, "
 	line "Fighting and Colorless."
 	line "The type of Energy required "
-	line "depends on the Pok`mon."
-	line "Be sure to learn which Pok`mon "
+	line "depends on the Pokémon."
+	line "Be sure to learn which Pokémon "
 	line "require which type of Energy!"
 	done
 
 Text05d7: ; 4ba32 (12:7a32)
-	text "Pok`mon damage defending Pok`mon "
-	line "by attacking. Pok`mon need Energy "
+	text "Pokémon damage defending Pokémon "
+	line "by attacking. Pokémon need Energy "
 	line "cards in order to attack."
 	line "For example, the energy required "
 	line "for Seaking's Waterfall is ", TX_WATER,  TX_COLORLESS, "."
@@ -1137,43 +1137,43 @@ Text05d7: ; 4ba32 (12:7a32)
 	done
 
 Text05d8: ; 4bb56 (12:7b56)
-	text "To switch your Active Pok`mon"
-	line "with a Bench Pok`mon, choose "
+	text "To switch your Active Pokémon"
+	line "with a Bench Pokémon, choose "
 	line "the Retreat command. If the "
-	line "Active Pok`mon is in danger,"
+	line "Active Pokémon is in danger,"
 	line "move it back to your Bench."
 	line "Energy is required in order"
 	line "to Retreat. The number of "
 	line "Energy cards required varies,"
-	line "depending on the Pok`mon."
+	line "depending on the Pokémon."
 	done
 
 Text05d9: ; 4bc58 (12:7c58)
-	text "There are 3 types of Pok`mon cards:"
-	line "Basic Pok`mon, Stage 1 Pok`mon and "
-	line "Stage 2 Pok`mon. Squirtle is a "
+	text "There are 3 types of Pokémon cards:"
+	line "Basic Pokémon, Stage 1 Pokémon and "
+	line "Stage 2 Pokémon. Squirtle is a "
 	line "Basic, Wartortle a Stage 1 and "
-	line "Blastoise a Stage 2 Pok`mon."
-	line "Basic Pok`mon are the only cards"
+	line "Blastoise a Stage 2 Pokémon."
+	line "Basic Pokémon are the only cards"
 	line "that can be put directly into play."
-	line "A Basic Pok`mon in play can be"
-	line "evolved to a Stage 1 Pok`mon. A"
-	line "Stage 1 Pok`mon in the Play Area "
+	line "A Basic Pokémon in play can be"
+	line "evolved to a Stage 1 Pokémon. A"
+	line "Stage 1 Pokémon in the Play Area "
 	line "can then be evolved to a Stage 2 "
-	line "Pok`mon. Therefore, Squirtle is "
+	line "Pokémon. Therefore, Squirtle is "
 	line "needed in order to play Wartortle,"
 	line "and Wartortle is needed in"
 	line "order to play Blastoise."
 	done
 
 Text05da: ; 4be3e (12:7e3e)
-	text "Some Pok`mon have special"
-	line "abilities called Pok`mon Powers."
-	line "Some Pok`mon Powers are used as"
-	line "soon as the Pok`mon is played,"
+	text "Some Pokémon have special"
+	line "abilities called Pokémon Powers."
+	line "Some Pokémon Powers are used as"
+	line "soon as the Pokémon is played,"
 	line "while others must be used by"
 	line "choosing the PKMN Power command."
-	line "There are many different Pok`mon"
+	line "There are many different Pokémon"
 	line "Powers, so read each card's text"
 	line "carefully."
 	done

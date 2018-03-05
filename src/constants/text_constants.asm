@@ -10,6 +10,10 @@ text EQUS "db TX_START, "
 line EQUS "db TX_LINE, "
 done EQUS "db TX_END"
 
+	charmap "é", "`"
+	charmap "♂", "$"
+	charmap "♀", "%"
+
 ; TX_LARGE symbols from v0Tiles2 (full tile length)
 TX_FIRE      EQUS "$05, $01"
 TX_GRASS     EQUS "$05, $02"

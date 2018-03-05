@@ -1,7 +1,7 @@
 Text05db: ; 4c000 (13:4000)
 	text "Your Turn ends after you Attack."
 	line "If you do not have enough energy"
-	line "to attack, or if your Active Pok`mon"
+	line "to attack, or if your Active Pokémon"
 	line "cannot move due to Paralysis or"
 	line "Sleep, you can end your turn by"
 	line "choosing the DONE command."
@@ -16,21 +16,21 @@ Text05dc: ; 4c141 (13:4141)
 	line "duel is decided by prizes."
 	line "Prizes are cards that you may"
 	line "draw when you knock out one of"
-	line "your opponent's Pok`mon."
+	line "your opponent's Pokémon."
 	line "You win if you Knock Out as many"
-	line "of your opponent's Pok`mon as there"
+	line "of your opponent's Pokémon as there"
 	line "are Prizes to be drawn. You "
 	line "will lose the duel if you have"
 	line "no cards in your deck at the start "
 	line "of your turn or if there are "
-	line "no Pok`mon in your Play Area,"
+	line "no Pokémon in your Play Area,"
 	line "so be careful!"
 	done
 
 Text05dd: ; 4c2c4 (13:42c4)
 	text "Gathering information is important"
 	line "if you wish to inherit the Legendary"
-	line "Pok`mon Cards! Listen to what people"
+	line "Pokémon Cards! Listen to what people"
 	line "have to say and read the books on "
 	line "the bookshelves. If I have any "
 	line "information, I'll send you an"
@@ -53,7 +53,7 @@ Text05de: ; 4c3cd (13:43cd)
 
 Text05df: ; 4c501 (13:4501)
 	text "Are you getting the hang of the"
-	line "Pok`mon Trading Card Game?"
+	line "Pokémon Trading Card Game?"
 	line "How about building a deck yourself?"
 	line "It's a great feeling to win with "
 	line "a deck you built on your own."
@@ -71,12 +71,12 @@ Text05e0: ; 4c5a1 (13:45a1)
 Text05e1: ; 4c66a (13:466a)
 	text "Congratulations, ", TX_RAM1, "!"
 	line "I hear you have inherited the"
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	line "The strength of a Deck does"
 	line "not depend on any single card,"
 	line "But on how skillfully you are able"
 	line "to use that card."
-	line "The power of the Legendary Pok`mon"
+	line "The power of the Legendary Pokémon"
 	line "Cards depends on you!"
 	line "You must become a skilled"
 	line "Card Master!"
@@ -97,7 +97,7 @@ Text05e3: ; 4c86f (13:486f)
 	text "Oh! Why the rush, ", TX_RAM1, "?"
 	line "What? "
 	line "You want to learn how to play"
-	line "the Pok`mon Trading Card Game?"
+	line "the Pokémon Trading Card Game?"
 	line "So you, too, finally want to "
 	line "start playing the card game. "
 	line "Well, dueling is more fun than "
@@ -149,18 +149,18 @@ Text05ea: ; 4ca87 (13:4a87)
 	line "If you don't do as I say, "
 	line "we won't be able to proceed."
 	line "It might be easier if you read the"
-	line "Pok`mon Trading Card Game"
+	line "Pokémon Trading Card Game"
 	line "Instruction Booklet while we play. "
 	line "OK then, let's start your "
 	line "practice game!"
 	done
 
 Text05eb: ; 4cbfe (13:4bfe)
-	text "Basically, this is how the Pok`mon "
+	text "Basically, this is how the Pokémon "
 	line "Trading Card Game is played:"
 	line "It's a game in which you try to "
 	line "knock out as many of your "
-	line "opponent's Pok`mon as there are "
+	line "opponent's Pokémon as there are "
 	line "prizes. That's the gist of it..."
 	done
 
@@ -242,14 +242,14 @@ Text05f7: ; 4d01e (13:501e)
 
 Text05f8: ; 4d0a1 (13:50a1)
 	text "Congratulations on inheriting"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	line "But that's not all there is"
 	line "to this game!"
 	line "Were you able to build all the Decks"
 	line "here in this Auto Deck Machine?"
 	line "There are as many duels as there"
 	line "are decks to duel with! Keep "
-	line "dueling with Pok`mon Trading Cards!"
+	line "dueling with Pokémon Trading Cards!"
 	done
 
 Text05f9: ; 4d1af (13:51af)
@@ -266,11 +266,11 @@ Text05f9: ; 4d1af (13:51af)
 
 Text05fa: ; 4d2c2 (13:52c2)
 	text "Congratulations on inheriting"
-	line "the Legendary Pok`mon Cards!!!"
+	line "the Legendary Pokémon Cards!!!"
 	line "Please save your deck in this"
 	line "Deck Save Machine - "
 	line "the Deck with the Legendary "
-	line "Pok`mon Cards!!!"
+	line "Pokémon Cards!!!"
 	done
 
 Text05fb: ; 4d361 (13:5361)
@@ -375,7 +375,7 @@ Text060e: ; 4d767 (13:5767)
 	text "Greetings!"
 	line "Welcome to the Lightning Club!"
 	line "At this club, we use decks made up"
-	line "mostly of Lightning Pok`mon."
+	line "mostly of Lightning Pokémon."
 	line "Would you like to get charged up"
 	line "with us?"
 	done
@@ -459,7 +459,7 @@ Text0618: ; 4db74 (13:5b74)
 
 Text0619: ; 4dbcb (13:5bcb)
 	text "Hey! You charged up!?!"
-	line "You playin' the Pok`mon "
+	line "You playin' the Pokémon "
 	line "Trading Card Game!?!"
 	line "Yeah! Gotta be a Grand Master!"
 	done
@@ -468,7 +468,7 @@ Text061a: ; 4dc30 (13:5c30)
 	text "Hey! ", TX_RAM1, "!"
 	line "You beat the Grand Masters?"
 	line "Cool! Got all the Legendary "
-	line "Pok`mon Cards? Yeah!"
+	line "Pokémon Cards? Yeah!"
 	line "Gotta Catch 'Em All!(TM)"
 	done
 
@@ -499,7 +499,7 @@ Text061f: ; 4dda7 (13:5da7)
 
 Text0620: ; 4ddbf (13:5dbf)
 	text "You have to take care of your"
-	line "Pok`mon cards!"
+	line "Pokémon cards!"
 	done
 
 Text0621: ; 4dded (13:5ded)
@@ -508,10 +508,10 @@ Text0621: ; 4dded (13:5ded)
 	done
 
 Text0622: ; 4de1a (13:5e1a)
-	text "Lightning Pok`mon can attack"
+	text "Lightning Pokémon can attack"
 	line "the opponent's Bench!"
-	line "Lightning Pok`mon are the toughest"
-	line "Pok`mon! How about it?"
+	line "Lightning Pokémon are the toughest"
+	line "Pokémon! How about it?"
 	line "You want to duel me?"
 	done
 
@@ -559,7 +559,7 @@ Text062a: ; 4e076 (13:6076)
 	done
 
 Text062b: ; 4e097 (13:6097)
-	text "What? a Pok`mon Trading Card duel?"
+	text "What? a Pokémon Trading Card duel?"
 	line "I'll be glad to Duel any time!"
 	done
 
@@ -608,7 +608,7 @@ Text0633: ; 4e235 (13:6235)
 	done
 
 Text0634: ; 4e2cc (13:62cc)
-	text "My Lightning Pok`mon Deck"
+	text "My Lightning Pokémon Deck"
 	line "is the greatest!"
 	line "How about it?"
 	line "You want to see how good it is?"
@@ -627,7 +627,7 @@ Text0637: ; 4e37b (13:637b)
 	text "The sparks will fly with"
 	line "6 Prizes!"
 	line "I'll show you what my Lightning"
-	line "Pok`mon Deck can do!"
+	line "Pokémon Deck can do!"
 	done
 
 Text0638: ; 4e3d4 (13:63d4)
@@ -689,21 +689,21 @@ Text0642: ; 4e671 (13:6671)
 	text "Greetings."
 	line "Welcome to the Psychic Club!"
 	line "This Club is for people who use"
-	line "Psychic Pok`mon."
-	line "Psychic Pok`mon are difficult to "
+	line "Psychic Pokémon."
+	line "Psychic Pokémon are difficult to "
 	line "use, but they're very strong."
 	done
 
 Text0643: ; 4e70b (13:670b)
 	text "What? You also want the Legendary"
-	line "Pok`mon Cards?"
+	line "Pokémon Cards?"
 	line "I want them too, but I'm still "
 	line "not quite good enough."
 	done
 
 Text0644: ; 4e774 (13:6774)
 	text "I hear you got the Legendary"
-	line "Pok`mon Cards."
+	line "Pokémon Cards."
 	line "Wow! That's great!"
 	line "I'm going to train so I can get"
 	line "them myself!"
@@ -713,7 +713,7 @@ Text0645: ; 4e7e1 (13:67e1)
 	text "Well, getting the ", TX_RAM2, " Medal "
 	line "wasn't that hard! If I keep "
 	line "this up, I should be able to get "
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	done
 
 Text0646: ; 4e859 (13:6859)
@@ -721,7 +721,7 @@ Text0646: ; 4e859 (13:6859)
 	line "What are you doing?"
 	line "Huh? That's a Deck!"
 	line "Are you... trying to get the"
-	line "Legendary Pok`mon Cards?"
+	line "Legendary Pokémon Cards?"
 	done
 
 Text0647: ; 4e8cb (13:68cb)
@@ -732,7 +732,7 @@ Text0647: ; 4e8cb (13:68cb)
 
 Text0648: ; 4e92b (13:692b)
 	text "What!?! I can't believe it!"
-	line "You? The Legendary Pok`mon Cards?"
+	line "You? The Legendary Pokémon Cards?"
 	line "Ha ha ha ha ha!"
 	line "Don't make me laugh!!!"
 	done
@@ -740,16 +740,16 @@ Text0648: ; 4e92b (13:692b)
 Text0649: ; 4e991 (13:6991)
 	text "Alright! Listen up!"
 	line "I'll teach you what it's about!"
-	line "To inherit the Legendary Pok`mon"
+	line "To inherit the Legendary Pokémon"
 	line "Cards, you must defeat the 8 Club"
 	line "Masters and get the 8 Medals!"
-	line "Then you have to go to Pok`mon"
+	line "Then you have to go to Pokémon"
 	line "Dome and defeat all 4 of the "
 	line "Grand Masters there!!!"
 	line "There's no way you can do it!!!"
 	line "You might as well just give up"
 	line "and go home!"
-	line "'Cause the Legendary Pok`mon Cards"
+	line "'Cause the Legendary Pokémon Cards"
 	line "are gonna be mine!"
 	line "I already won the first Medal!"
 	line "See ya, ", TX_RAM1, "!"
@@ -816,7 +816,7 @@ Text0651: ; 4ede7 (13:6de7)
 Text0652: ; 4ee31 (13:6e31)
 	text "Don't get so cocky just because"
 	line "you won."
-	line "The Legendary Pok`mon Cards"
+	line "The Legendary Pokémon Cards"
 	line "belong to Me!!!"
 	done
 
@@ -824,7 +824,7 @@ Text0653: ; 4ee87 (13:6e87)
 	text "Huh?!? You're not even half as good"
 	line "as I am!"
 	line "There's no way you'll be able to"
-	line "inherit the Legendary Pok`mon Cards!"
+	line "inherit the Legendary Pokémon Cards!"
 	line "Why don't you just give up!?!"
 	line "See ya!"
 	line "Ha ha ha ha ha ha!"
@@ -852,7 +852,7 @@ Text0656: ; 4f01e (13:701e)
 Text0657: ; 4f04d (13:704d)
 	text "A single match with 4 prizes!"
 	line "Come on, my precious ghosts!"
-	line "Let's make his Pok`mon disappear!"
+	line "Let's make his Pokémon disappear!"
 	done
 
 Text0658: ; 4f0ab (13:70ab)
@@ -943,13 +943,13 @@ Text0664: ; 4f574 (13:7574)
 	line "I've already won 5 Medals!"
 	line "By the time you win your 8th Medal,"
 	line "I will have inherited the"
-	line "Legendary Pok`mon Cards!"
+	line "Legendary Pokémon Cards!"
 	line "I'll catch you later!"
 	line "See ya! Ha ha ha ha ha ha!"
 	done
 
 Text0665: ; 4f640 (13:7640)
-	text "The Legendary Pok`mon Cards are "
+	text "The Legendary Pokémon Cards are "
 	line "the ultimate cards. Everyone wants "
 	line "to inherit the Legendary Cards - "
 	line "that's why we play against so many "
@@ -960,7 +960,7 @@ Text0665: ; 4f640 (13:7640)
 Text0666: ; 4f70e (13:770e)
 	text "Did you hear?"
 	line "Someone inherited the Legendary"
-	line "Pok`mon Cards! Whomever it is,"
+	line "Pokémon Cards! Whomever it is,"
 	line "he must be really cool if he "
 	line "can defeat the Grand Masters!"
 	done
@@ -1124,7 +1124,7 @@ Text0682: ; 4ff1a (13:7f1a)
 	line "Hmmmm..."
 	line "Well, you must be pretty good if"
 	line "you're trying to inherit"
-	line "the Legendary Pok`mon Cards."
+	line "the Legendary Pokémon Cards."
 	line "Here, take this Psychic Medal."
 	done
 

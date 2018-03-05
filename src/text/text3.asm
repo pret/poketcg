@@ -49,7 +49,7 @@ Text0277: ; 3c12f (f:412f)
 	done
 
 Text0278: ; 3c156 (f:4156)
-	text "Pok`mon Cards"
+	text "Pokémon Cards"
 	line "Deck Configuration"
 	line "Card List"
 	line "Print Quality"
@@ -170,7 +170,7 @@ Text0291: ; 3c4cb (f:44cb)
 	done
 
 Text0292: ; 3c4e3 (f:44e3)
-	text "All Fighting Pok`mon"
+	text "All Fighting Pokémon"
 	done
 
 Text0293: ; 3c4f9 (f:44f9)
@@ -230,11 +230,11 @@ Text02a0: ; 3c5ae (f:45ae)
 	done
 
 Text02a1: ; 3c5bb (f:45bb)
-	text "Cute Pok`mon"
+	text "Cute Pokémon"
 	done
 
 Text02a2: ; 3c5c9 (f:45c9)
-	text "Pok`mon Flute"
+	text "Pokémon Flute"
 	done
 
 Text02a3: ; 3c5d8 (f:45d8)
@@ -298,7 +298,7 @@ Text02b1: ; 3c6bb (f:46bb)
 	done
 
 Text02b2: ; 3c6ca (f:46ca)
-	text "Flyin' Pok`mon"
+	text "Flyin' Pokémon"
 	done
 
 Text02b3: ; 3c6da (f:46da)
@@ -322,7 +322,7 @@ Text02b7: ; 3c713 (f:4713)
 	done
 
 Text02b8: ; 3c722 (f:4722)
-	text "Fire Pok`mon"
+	text "Fire Pokémon"
 	done
 
 Text02b9: ; 3c730 (f:4730)
@@ -366,16 +366,16 @@ Text02c2: ; 3c7d4 (f:47d4)
 	done
 
 Text02c3: ; 3c7e9 (f:47e9)
-	text "Mysterious Pok`mon"
+	text "Mysterious Pokémon"
 	done
 
 Text02c4: ; 3c7fd (f:47fd)
-	text "A Deck of Fighting Pok`mon:"
+	text "A Deck of Fighting Pokémon:"
 	line "Feel their Fighting power!"
 	done
 
 Text02c5: ; 3c835 (f:4835)
-	text "A Deck of Pok`mon that can"
+	text "A Deck of Pokémon that can"
 	line "attack the Bench."
 	done
 
@@ -386,7 +386,7 @@ Text02c6: ; 3c863 (f:4863)
 
 Text02c7: ; 3c8a0 (f:48a0)
 	text "A powerful Deck with both Fire"
-	line "and Fighting Pok`mon."
+	line "and Fighting Pokémon."
 	done
 
 Text02c8: ; 3c8d6 (f:48d6)
@@ -395,7 +395,7 @@ Text02c8: ; 3c8d6 (f:48d6)
 	done
 
 Text02c9: ; 3c8fd (f:48fd)
-	text "A Deck made of Mouse Pok`mon."
+	text "A Deck made of Mouse Pokémon."
 	line "Uses PlusPower to Power up!"
 	done
 
@@ -410,27 +410,27 @@ Text02cb: ; 3c969 (f:4969)
 	done
 
 Text02cc: ; 3c99b (f:499b)
-	text "A Deck which creates Pok`mon by"
+	text "A Deck which creates Pokémon by"
 	line "evolving Mysterious Fossils."
 	done
 
 Text02cd: ; 3c9d9 (f:49d9)
-	text "A Deck of Rock Pok`mon. It's"
-	line "Strong against Lightning Pok`mon."
+	text "A Deck of Rock Pokémon. It's"
+	line "Strong against Lightning Pokémon."
 	done
 
 Text02ce: ; 3ca19 (f:4a19)
-	text "A Deck of Water Pok`mon: Their"
+	text "A Deck of Water Pokémon: Their"
 	line "Blue Horror washes over enemies."
 	done
 
 Text02cf: ; 3ca5a (f:4a5a)
 	text "A well balanced Deck"
-	line "of Sandshrew and Water Pok`mon!"
+	line "of Sandshrew and Water Pokémon!"
 	done
 
 Text02d0: ; 3ca90 (f:4a90)
-	text "Paralyze the opponent's Pok`mon:"
+	text "Paralyze the opponent's Pokémon:"
 	line "Stop 'em and drop 'em!"
 	done
 
@@ -445,17 +445,17 @@ Text02d2: ; 3cb0b (f:4b0b)
 	done
 
 Text02d3: ; 3cb48 (f:4b48)
-	text "A Deck of cute Pok`mon such as"
+	text "A Deck of cute Pokémon such as"
 	line "Pikachu and Eevee."
 	done
 
 Text02d4: ; 3cb7b (f:4b7b)
-	text "Use the Pok`mon Flute to revive"
-	line "opponents' Pok`mon and Attack!"
+	text "Use the Pokémon Flute to revive"
+	line "opponents' Pokémon and Attack!"
 	done
 
 Text02d5: ; 3cbbb (f:4bbb)
-	text "A deck of Pok`mon that use Lightning"
+	text "A deck of Pokémon that use Lightning"
 	line "Energy to zap opponents."
 	done
 
@@ -470,22 +470,22 @@ Text02d7: ; 3cc39 (f:4c39)
 	done
 
 Text02d8: ; 3cc7c (f:4c7c)
-	text "A Deck made of Insect Pok`mon"
+	text "A Deck made of Insect Pokémon"
 	line "Go Bug Power!"
 	done
 
 Text02d9: ; 3cca9 (f:4ca9)
-	text "A Deck of Grass Pok`mon: There "
+	text "A Deck of Grass Pokémon: There "
 	line "are many dangers in the Jungle."
 	done
 
 Text02da: ; 3ccea (f:4cea)
-	text "A Deck of Flower Pok`mon:"
+	text "A Deck of Flower Pokémon:"
 	line "Beautiful but Dangerous"
 	done
 
 Text02db: ; 3cd1d (f:4d1d)
-	text "Uses Venomoth's Pok`mon Power to"
+	text "Uses Venomoth's Pokémon Power to"
 	line "change the opponent's Weakness."
 	done
 
@@ -496,7 +496,7 @@ Text02dc: ; 3cd5f (f:4d5f)
 
 Text02dd: ; 3cd97 (f:4d97)
 	text "Use the Psychic power of the"
-	line "Psychic Pok`mon to Attack!"
+	line "Psychic Pokémon to Attack!"
 	done
 
 Text02de: ; 3cdd0 (f:4dd0)
@@ -530,7 +530,7 @@ Text02e3: ; 3cede (f:4ede)
 	done
 
 Text02e4: ; 3cf21 (f:4f21)
-	text "Pok`mon with feathers flock "
+	text "Pokémon with feathers flock "
 	line "together! Retreating is easy!"
 	done
 
@@ -540,7 +540,7 @@ Text02e5: ; 3cf5d (f:4f5d)
 	done
 
 Text02e6: ; 3cf99 (f:4f99)
-	text "Block Pok`mon Powers with "
+	text "Block Pokémon Powers with "
 	line "Muk and attack with Mewtwo!"
 	done
 
@@ -555,12 +555,12 @@ Text02e8: ; 3cffc (f:4ffc)
 	done
 
 Text02e9: ; 3d039 (f:5039)
-	text "Pok`mon that can Attack with"
+	text "Pokémon that can Attack with"
 	line "Fire, Water or Lightning Energy!"
 	done
 
 Text02ea: ; 3d078 (f:5078)
-	text "With Fire Pok`mon like Charizard, "
+	text "With Fire Pokémon like Charizard, "
 	line "Rapidash and Magmar, it's hot!"
 	done
 
@@ -591,7 +591,7 @@ Text02ef: ; 3d1af (f:51af)
 
 Text02f0: ; 3d1f0 (f:51f0)
 	text "An Evolution Deck with Weedle, "
-	line "Nidoran$ and Bellsprout."
+	line "Nidoran♂ and Bellsprout."
 	done
 
 Text02f1: ; 3d22a (f:522a)
@@ -610,31 +610,31 @@ Text02f3: ; 3d284 (f:5284)
 	done
 
 Text02f4: ; 3d2b5 (f:52b5)
-	text "Heal your Pok`mon with the"
+	text "Heal your Pokémon with the"
 	line "Legendary Dragonite!"
 	done
 
 Text02f5: ; 3d2e6 (f:52e6)
 	text "A very special Deck made of"
-	line "very rare Pok`mon cards!"
+	line "very rare Pokémon cards!"
 	done
 
 Text02f6: ; 3d31c (f:531c)
-	text "Pok`mon Card Glossary"
+	text "Pokémon Card Glossary"
 	done
 
 Text02f7: ; 3d333 (f:5333)
-	text "Deck                Active Pok`mon"
-	line "Discard Pile        Bench Pok`mon"
+	text "Deck                Active Pokémon"
+	line "Discard Pile        Bench Pokémon"
 	line "Hand                Prizes    "
 	line "Arena               Damage Counter"
 	line "Bench               To next page    "
 	done
 
 Text02f8: ; 3d3e0 (f:53e0)
-	text "Energy Card         Pok`mon Power "
+	text "Energy Card         Pokémon Power "
 	line "Trainer Card        Weakness       "
-	line "Basic Pok`mon       Resistance"
+	line "Basic Pokémon       Resistance"
 	line "Evolution Card      Retreat       "
 	line "Attack              To previous page"
 	done
@@ -665,11 +665,11 @@ Text02fe: ; 3d4ff (f:54ff)
 	done
 
 Text02ff: ; 3d510 (f:5510)
-	text "About the Active Pok`mon"
+	text "About the Active Pokémon"
 	done
 
 Text0300: ; 3d52a (f:552a)
-	text "About Bench Pok`mon"
+	text "About Bench Pokémon"
 	done
 
 Text0301: ; 3d53f (f:553f)
@@ -689,7 +689,7 @@ Text0304: ; 3d578 (f:5578)
 	done
 
 Text0305: ; 3d58d (f:558d)
-	text "About Basic Pok`mon"
+	text "About Basic Pokémon"
 	done
 
 Text0306: ; 3d5a2 (f:55a2)
@@ -701,7 +701,7 @@ Text0307: ; 3d5b9 (f:55b9)
 	done
 
 Text0308: ; 3d5ca (f:55ca)
-	text "About Pok`mon Power"
+	text "About Pokémon Power"
 	done
 
 Text0309: ; 3d5df (f:55df)
@@ -743,49 +743,49 @@ Text030e: ; 3d769 (f:5769)
 	done
 
 Text030f: ; 3d807 (f:5807)
-	text "The place where the Pok`mon"
+	text "The place where the Pokémon"
 	line "that is actively fighting"
 	line "is placed is called the Arena."
 	line "The game proceeds by using the"
-	line "Active Pok`mon in the Arena."
+	line "Active Pokémon in the Arena."
 	done
 
 Text0310: ; 3d899 (f:5899)
-	text "The Bench is where your Pok`mon"
+	text "The Bench is where your Pokémon"
 	line "that are in play but aren't actively"
 	line "fighting sit."
 	line "They're ready to come out and fight"
-	line "if the Active Pok`mon retreats or"
+	line "if the Active Pokémon retreats or"
 	line "is Knocked Out."
-	line "You can have up to 5 Pok`mon on"
+	line "You can have up to 5 Pokémon on"
 	line "the Bench."
 	done
 
 Text0311: ; 3d96e (f:596e)
-	text "The Active Pok`mon is the "
-	line "Pok`mon that is in the Arena."
-	line "Only Active Pok`mon can "
+	text "The Active Pokémon is the "
+	line "Pokémon that is in the Arena."
+	line "Only Active Pokémon can "
 	line "attack."
 	done
 
 Text0312: ; 3d9c9 (f:59c9)
-	text "The Pok`mon that are in play"
+	text "The Pokémon that are in play"
 	line "but aren't actively fighting"
-	line "are called Bench Pok`mon."
+	line "are called Bench Pokémon."
 	line "They're ready to come out and fight"
-	line "if the Active Pok`mon retreats or"
+	line "if the Active Pokémon retreats or"
 	line "is Knocked Out."
-	line "If the Active Pok`mon is Knocked"
+	line "If the Active Pokémon is Knocked"
 	line "Out and you don't have a Bench "
-	line "Pok`mon, you lose the game."
+	line "Pokémon, you lose the game."
 	done
 
 Text0313: ; 3dad1 (f:5ad1)
 	text "Prizes are the cards placed to"
 	line "count the number of the opponent's"
-	line "Pok`mon you Knocked Out."
+	line "Pokémon you Knocked Out."
 	line "Every time one of your opponent's"
-	line "Pok`mon is Knocked Out, you take 1"
+	line "Pokémon is Knocked Out, you take 1"
 	line "of your Prizes into your Hand."
 	line "When you take all of your Prizes,"
 	line "you win the game."
@@ -793,11 +793,11 @@ Text0313: ; 3dad1 (f:5ad1)
 
 Text0314: ; 3dbc5 (f:5bc5)
 	text "A Damage Counter represents the"
-	line "amount of damage a certain Pok`mon"
+	line "amount of damage a certain Pokémon"
 	line "has taken."
 	line "1 Damage Counter represents"
 	line "10 HP of damage."
-	line "If a Pok`mon with an HP of 30 has"
+	line "If a Pokémon with an HP of 30 has"
 	line "3 Damage Counters, it has received"
 	line "30 HP of damage, and its remaining"
 	line "HP is 0."
@@ -805,7 +805,7 @@ Text0314: ; 3dbc5 (f:5bc5)
 
 Text0315: ; 3dcb2 (f:5cb2)
 	text "Energy Cards are cards that power"
-	line "your Pok`mon, making them able"
+	line "your Pokémon, making them able"
 	line "to Attack."
 	line "There are 7 types of Energy Cards"
 	line "[", TX_GRASS, " Grass] [", TX_FIRE, " Fire]"
@@ -829,23 +829,23 @@ Text0316: ; 3ddbe (f:5dbe)
 	done
 
 Text0317: ; 3deb0 (f:5eb0)
-	text "Basic Pok`mon are cards that "
+	text "Basic Pokémon are cards that "
 	line "can be played directly from your "
 	line "hand into the play area. Basic "
-	line "Pok`mon act as the base for "
+	line "Pokémon act as the base for "
 	line "Evolution Cards. Charmander, "
 	line "Squirtle and Bulbasaur are"
-	line "examples of Basic Pok`mon."
+	line "examples of Basic Pokémon."
 	done
 
 Text0318: ; 3df82 (f:5f82)
 	text "Evolution Cards are cards you"
-	line "play on top of a Basic Pok`mon card"
+	line "play on top of a Basic Pokémon card"
 	line "(or sometimes on top of another"
 	line "Evolution Card) to make it stronger."
 	line "There are Stage 1 and Stage 2"
 	line "Evolution Cards."
-	line "If you do not have a Basic Pok`mon"
+	line "If you do not have a Basic Pokémon"
 	line "in the Play Area, you cannot place"
 	line "the Stage 1 Evolution Card, and if"
 	line "you do not have a Stage 1 Evolution"
@@ -854,52 +854,52 @@ Text0318: ; 3df82 (f:5f82)
 	done
 
 Text0319: ; 3e10a (f:610a)
-	text "By choosing Attack, your Pok`mon"
-	line "will fight your opponent's Pok`mon."
-	line "Your Pok`mon require Energy"
+	text "By choosing Attack, your Pokémon"
+	line "will fight your opponent's Pokémon."
+	line "Your Pokémon require Energy"
 	line "in order to Attack."
 	line "The amount of Energy required"
 	line "differs according to the Attack."
-	line "The Active Pok`mon is the only"
-	line "Pok`mon that can Attack."
+	line "The Active Pokémon is the only"
+	line "Pokémon that can Attack."
 	done
 
 Text031a: ; 3e1f7 (f:61f7)
-	text "Unlike Attacks, Pok`mon Power"
+	text "Unlike Attacks, Pokémon Power"
 	line "can be used by Active or Benched"
-	line "Pok`mon. Some Pok`mon Power are"
+	line "Pokémon. Some Pokémon Power are"
 	line "effective by just placing the"
-	line "Pok`mon in the Play Area, but for"
+	line "Pokémon in the Play Area, but for"
 	line "some you must choose the"
 	line "command, PKMN Power."
 	done
 
 Text031b: ; 3e2c5 (f:62c5)
-	text "Some Pok`mon have a Weakness."
-	line "If a Pok`mon has a Weakness, it"
+	text "Some Pokémon have a Weakness."
+	line "If a Pokémon has a Weakness, it"
 	line "takes double damage when attacked by"
-	line "Pok`mon of a certain type."
+	line "Pokémon of a certain type."
 	done
 
 Text031c: ; 3e344 (f:6344)
-	text "Some Pok`mon have Resistance."
-	line "If a Pok`mon has Resistance, it"
+	text "Some Pokémon have Resistance."
+	line "If a Pokémon has Resistance, it"
 	line "takes 30 less damage whenever"
-	line "attacked by Pok`mon of"
+	line "attacked by Pokémon of"
 	line "a certain type."
 	done
 
 Text031d: ; 3e3c8 (f:63c8)
 	text "By choosing Retreat, you can"
-	line "switch the Active Pok`mon with"
-	line "a Pok`mon on your Bench."
+	line "switch the Active Pokémon with"
+	line "a Pokémon on your Bench."
 	line "Energy is required to Retreat"
-	line "your Active Pok`mon."
+	line "your Active Pokémon."
 	line "The amount of Energy required to"
-	line "Retreat differs for each Pok`mon."
+	line "Retreat differs for each Pokémon."
 	line "To Retreat, you must discard"
 	line "Energy equal to the Retreat Cost"
-	line "of the retreating Pok`mon."
+	line "of the retreating Pokémon."
 	done
 
 Text031e: ; 3e4ed (f:64ed)
@@ -986,7 +986,7 @@ Text032d: ; 3e73c (f:673c)
 	done
 
 Text032e: ; 3e752 (f:6752)
-	text "    Pok`mon Dome    "
+	text "    Pokémon Dome    "
 	done
 
 Text032f: ; 3e768 (f:6768)
@@ -1038,7 +1038,7 @@ Text033a: ; 3e7e6 (f:67e6)
 	done
 
 Text033b: ; 3e7f6 (f:67f6)
-	text "Pok`mon Dome"
+	text "Pokémon Dome"
 	done
 
 Text033c: ; 3e804 (f:6804)
@@ -1126,8 +1126,8 @@ Text034c: ; 3e9b2 (f:69b2)
 	text "Duel           [", TX_RAM2, "]"
 	line "SELECT         [", TX_RAM2, "]"
 	line "Receive many cards"
-	line "To Pok`mon Dome 1"
-	line "To Pok`mon Dome 2"
+	line "To Pokémon Dome 1"
+	line "To Pokémon Dome 2"
 	done
 
 Text034d: ; 3ea10 (f:6a10)
@@ -1343,19 +1343,19 @@ Text0378: ; 3ef66 (f:6f66)
 	done
 
 Text0379: ; 3efc3 (f:6fc3)
-	text TX_RAM1, " is crazy about Pok`mon"
-	line "and Pok`mon card collecting!"
+	text TX_RAM1, " is crazy about Pokémon"
+	line "and Pokémon card collecting!"
 	line "One day,"
 	line TX_RAM1, " heard a rumor:"
-	line " \"The Legendary Pok`mon Cards..."
+	line " \"The Legendary Pokémon Cards..."
 	line "  the extremely rare and powerful "
-	line "  cards held by Pok`mon Trading "
+	line "  cards held by Pokémon Trading "
 	line "  Card Game's greatest players... "
 	line "  The Grand Masters are searching"
 	line "  for one to inherit the legend!\""
 	line "Dreaming of inheriting the"
-	line "Legendary Pok`mon Cards,"
-	line TX_RAM1, " visits the Pok`mon"
+	line "Legendary Pokémon Cards,"
+	line TX_RAM1, " visits the Pokémon"
 	line "card researcher, Dr. Mason..."
 	done
 
@@ -1950,8 +1950,8 @@ Text0400: ; 3fa32 (f:7a32)
 	text "Energy"
 	line "Attacking"
 	line "Retreating"
-	line "Evolving Pok`mon"
-	line "Using Pok`mon Power"
+	line "Evolving Pokémon"
+	line "Using Pokémon Power"
 	line "Ending Your Turn"
 	line "Win or Loss of a Duel"
 	line "Nothing to Ask"
@@ -1961,7 +1961,7 @@ Text0401: ; 3faaa (f:7aaa)
 	text TX_RAM1, ","
 	line "It's me, Doctor Mason."
 	line "Are you getting the hang of"
-	line "the Pok`mon Trading Card Game?"
+	line "the Pokémon Trading Card Game?"
 	line "I have some information for you"
 	line "about Booster Packs. "
 	line "If you want to collect the same"
@@ -1977,7 +1977,7 @@ Text0401: ; 3faaa (f:7aaa)
 	line "Once you POP! with a certain"
 	line "friend, you won't be able to POP!"
 	line "with that friend again, so find "
-	line "many friends who own the Pok`mon "
+	line "many friends who own the Pokémon "
 	line "Trading Card Game for Game Boy,"
 	line "and CARD POP! with them to"
 	line "get new cards!"
@@ -2002,7 +2002,7 @@ Text0403: ; 3fe10 (f:7e10)
 	line "the Master of the Fighting Club."
 	line "His First-Strike Deck is built"
 	line "for a quick attack, but it's"
-	line "weak against Psychic Pok`mon!"
+	line "weak against Psychic Pokémon!"
 	line "I suggest you duel him using"
 	line "the Deck from the Psychic Medal"
 	line "Deck Machine."

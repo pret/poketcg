@@ -51,7 +51,7 @@ Start: ; 0150 (0:0150)
 	pop af
 	ld [wInitialA], a
 	call DetectConsole
-	ld a, $20
+	ld a, " "
 	ld [wTileMapFill], a
 	call SetupVRAM
 	call SetupLCD

@@ -1,6 +1,6 @@
 ScoopUpDescription: ; 64000 (19:4000)
-	text "Choose 1 of your Pok`mon in play"
-	line "and return its Basic Pok`mon card to"
+	text "Choose 1 of your Pokémon in play"
+	line "and return its Basic Pokémon card to"
 	line "your hand. (Discard all cards"
 	line "attached to that card.)"
 	done
@@ -33,12 +33,12 @@ PlusPowerName: ; 64177 (19:4177)
 
 PlusPowerDescription: ; 64182 (19:4182)
 	text "Attach PlusPower to your Active"
-	line "Pok`mon. At the end of your turn,"
-	line "discard PlusPower. If this Pok`mon's"
+	line "Pokémon. At the end of your turn,"
+	line "discard PlusPower. If this Pokémon's"
 	line "attack does damage to any Active"
-	line "Pok`mon (after applying Weakness and"
+	line "Pokémon (after applying Weakness and"
 	line "Resistance), the attack does 10 more"
-	line "damage to that Active Pok`mon."
+	line "damage to that Active Pokémon."
 	done
 
 DefenderName: ; 64274 (19:4274)
@@ -47,10 +47,10 @@ DefenderName: ; 64274 (19:4274)
 
 DefenderDescription: ; 6427e (19:427e)
 	text "Attach Defender to 1 of your"
-	line "Pok`mon. At the end of your"
+	line "Pokémon. At the end of your"
 	line "opponent's next turn, discard"
 	line "Defender. Damage done to that"
-	line "Pok`mon by attacks is reduced by 20"
+	line "Pokémon by attacks is reduced by 20"
 	line "(after applying Weakness and"
 	line "Resistance)."
 	done
@@ -72,8 +72,8 @@ GustOfWindName: ; 643c2 (19:43c2)
 
 GustOfWindDescription: ; 643d0 (19:43d0)
 	text "Choose 1 of your opponent's Benched"
-	line "Pok`mon and switch it with his or"
-	line "her Active Pok`mon."
+	line "Pokémon and switch it with his or"
+	line "her Active Pokémon."
 	done
 
 DevolutionSprayName: ; 6442b (19:442b)
@@ -81,14 +81,14 @@ DevolutionSprayName: ; 6442b (19:442b)
 	done
 
 DevolutionSprayDescription: ; 6443d (19:443d)
-	text "Choose 1 of your own Pok`mon in play"
+	text "Choose 1 of your own Pokémon in play"
 	line "and a Stage of Evolution. Discard"
 	line "all Evolution cards of that Stage or"
-	line "higher attached to that Pok`mon."
+	line "higher attached to that Pokémon."
 	done
 
 DevolutionSprayDescriptionCont: ; 644cb (19:44cb)
-	text "That Pok`mon is no longer Asleep,"
+	text "That Pokémon is no longer Asleep,"
 	line "Confused, Paralyzed, Poisoned, or"
 	line "anything else that might be the"
 	line "result of an attack (just as if you"
@@ -101,7 +101,7 @@ PotionName: ; 64565 (19:4565)
 
 PotionDescription: ; 6456d (19:456d)
 	text "Remove 2 damage counters from 1 of"
-	line "your Pok`mon. If that Pok`mon has"
+	line "your Pokémon. If that Pokémon has"
 	line "fewer damage counters than that,"
 	line "remove all of them."
 	done
@@ -112,9 +112,9 @@ SuperPotionName: ; 645e8 (19:45e8)
 
 SuperPotionDescription: ; 645f6 (19:45f6)
 	text "Discard 1 Energy card attached to 1"
-	line "of your own Pok`mon in order to"
+	line "of your own Pokémon in order to"
 	line "remove 4 damage counters from that"
-	line "Pok`mon. If the Pok`mon has fewer"
+	line "Pokémon. If the Pokémon has fewer"
 	line "damage counters than that, remove"
 	line "all of them."
 	done
@@ -124,7 +124,7 @@ FullHealName: ; 646af (19:46af)
 	done
 
 FullHealDescription: ; 646ba (19:46ba)
-	text "Your Active Pok`mon is no longer"
+	text "Your Active Pokémon is no longer"
 	line "Asleep, Confused, Paralyzed, or"
 	line "Poisoned."
 	done
@@ -134,9 +134,9 @@ ReviveName: ; 64706 (19:4706)
 	done
 
 ReviveDescription: ; 6470e (19:470e)
-	text "Put 1 Basic Pok`mon card from your"
+	text "Put 1 Basic Pokémon card from your"
 	line "discard pile onto your Bench."
-	line "Put damage counters on that Pok`mon"
+	line "Put damage counters on that Pokémon"
 	line "equal to half its HP (rounded down"
 	line "to the nearest 10). (You can't play"
 	line "Revive if your Bench is full.)"
@@ -153,14 +153,14 @@ MaintenanceDescription: ; 647e7 (19:47e7)
 	done
 
 PokemonFluteName: ; 6483c (19:483c)
-	text "Pok`mon Flute"
+	text "Pokémon Flute"
 	done
 
 PokemonFluteDescription: ; 6484b (19:484b)
-	text "Choose 1 Basic Pok`mon card from"
+	text "Choose 1 Basic Pokémon card from"
 	line "your opponent's discard pile and put"
 	line "it onto his or her Bench. (You can't"
-	line "play Pok`mon Flute if your"
+	line "play Pokémon Flute if your"
 	line "opponent's Bench is full.)"
 	done
 

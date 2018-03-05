@@ -5,10 +5,10 @@ Text073f: ; 54000 (15:4000)
 	line "lose, but now..."
 	line "Now I understand."
 	line "The fun thing about the "
-	line "Pok`mon Trading Card Game"
+	line "Pokémon Trading Card Game"
 	line "is not who wins or loses..."
 	line "I couldn't inherit the Legendary "
-	line "Pok`mon Cards because all that "
+	line "Pokémon Cards because all that "
 	line "was important to me was winning."
 	line "But now I understand!"
 	line "What's important..."
@@ -52,7 +52,7 @@ Text0744: ; 5434c (15:434c)
 	line "Welcome to the Science Club!"
 	line "This Club is for technicians"
 	line "who love the sciences."
-	line "The Pok`mon cards used here are "
+	line "The Pokémon cards used here are "
 	line "those with the powers of science!"
 	done
 
@@ -104,7 +104,7 @@ Text074a: ; 54613 (15:4613)
 
 Text074b: ; 54680 (15:4680)
 	text "I don't understand science,"
-	line "but I understand Pok`mon cards!"
+	line "but I understand Pokémon cards!"
 	line "... I  L O S T..."
 	done
 
@@ -120,9 +120,9 @@ Text074d: ; 5471b (15:471b)
 	done
 
 Text074e: ; 54740 (15:4740)
-	text "I get so involved in the Pok`mon "
+	text "I get so involved in the Pokémon "
 	line "Trading Card Game, I lose track "
-	line "of time. Isn't the Pok`mon Trading"
+	line "of time. Isn't the Pokémon Trading"
 	line "Card Game really fun?"
 	done
 
@@ -174,12 +174,12 @@ Text0756: ; 54a19 (15:4a19)
 	done
 
 Text0757: ; 54a4b (15:4a4b)
-	text "We research Pok`mon cards here"
+	text "We research Pokémon cards here"
 	line "at the Science Club, especially"
-	line "Science Pok`mon Cards! Science"
-	line "Pok`mon are exceedingly strong."
+	line "Science Pokémon Cards! Science"
+	line "Pokémon are exceedingly strong."
 	line "Would you like to Duel against"
-	line "my Science Pok`mon Deck?"
+	line "my Science Pokémon Deck?"
 	done
 
 Text0758: ; 54b02 (15:4b02)
@@ -197,7 +197,7 @@ Text075a: ; 54b62 (15:4b62)
 	done
 
 Text075b: ; 54b8a (15:4b8a)
-	text "I can't believe my Science Pok`mon"
+	text "I can't believe my Science Pokémon"
 	line "Deck could lose..."
 	done
 
@@ -249,7 +249,7 @@ Text0764: ; 54ded (15:4ded)
 	text "Legendary Cards are but a Legend!"
 	line "Science is the only truth!"
 	line "I must continue my research"
-	line "of Science Pok`mon!"
+	line "of Science Pokémon!"
 	done
 
 Text0765: ; 54e5b (15:4e5b)
@@ -283,7 +283,7 @@ Text0769: ; 54f4b (15:4f4b)
 
 Text076a: ; 54fae (15:4fae)
 	text "I will keep researching the "
-	line "Science Pok`mon."
+	line "Science Pokémon."
 	done
 
 Text076b: ; 54fdd (15:4fdd)
@@ -367,8 +367,8 @@ Text0779: ; 5532c (15:532c)
 	text "Greetings."
 	line "Welcome to the Rock Club!"
 	line "This Club is for members who"
-	line "use Rock Pok`mon cards."
-	line "Rock Pok`mon are defensive"
+	line "use Rock Pokémon cards."
+	line "Rock Pokémon are defensive"
 	line "and take very little damage."
 	done
 
@@ -458,7 +458,7 @@ Text0787: ; 55786 (15:5786)
 
 Text0788: ; 557c1 (15:57c1)
 	text "Wow! So that's the strength of"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	done
 
 Text0789: ; 557fe (15:57fe)
@@ -468,7 +468,7 @@ Text0789: ; 557fe (15:57fe)
 
 Text078a: ; 55828 (15:5828)
 	text "I won again! I guess the Legendary "
-	line "Pok`mon Cards will eventually "
+	line "Pokémon Cards will eventually "
 	line "belong to me!"
 	done
 
@@ -530,7 +530,7 @@ Text0792: ; 55b6f (15:5b6f)
 	text "Gee! I lost!"
 	line "Matthew's really good!"
 	line "He'll probably inherit"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	done
 
 Text0793: ; 55bc8 (15:5bc8)
@@ -538,9 +538,9 @@ Text0793: ; 55bc8 (15:5bc8)
 	line "I can't win, no matter how many "
 	line "times I duel against him!"
 	line "He's probably going to inherit"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	line "What? You already inherited"
-	line "the Legendary Pok`mon Cards???"
+	line "the Legendary Pokémon Cards???"
 	line "Then you must be better"
 	line "than Matthew!"
 	done
@@ -550,11 +550,11 @@ Text0794: ; 55cba (15:5cba)
 	line "to a faraway place."
 	line "But I'm not sad."
 	line "I'll make new friends dueling"
-	line "with Pok`mon cards..."
+	line "with Pokémon cards..."
 	done
 
 Text0795: ; 55d30 (15:5d30)
-	text "I'm carving a statue of a Pok`mon"
+	text "I'm carving a statue of a Pokémon"
 	line "out of this Rock!"
 	line "What? You want to Duel?"
 	line "Alright. You want to duel now?"
@@ -595,10 +595,10 @@ Text079b: ; 55e84 (15:5e84)
 Text079c: ; 55eda (15:5eda)
 	text "I've always wanted to be"
 	line "a Hard Rocker!"
-	line "Rock Pok`mon..."
+	line "Rock Pokémon..."
 	line "Doesn't the name Rock?"
 	line "Won't you Duel against my"
-	line "Rock Pok`mon Deck?"
+	line "Rock Pokémon Deck?"
 	done
 
 Text079d: ; 55f57 (15:5f57)
@@ -682,7 +682,7 @@ Text07aa: ; 562ee (15:62ee)
 	text "You see? Isn't Rock good?"
 	line "Isn't Rock wonderful?"
 	line "'Fess up and admit the greatness"
-	line "of Rock Pok`mon!"
+	line "of Rock Pokémon!"
 	done
 
 Text07ab: ; 56351 (15:6351)
@@ -721,7 +721,7 @@ Text07b0: ; 56478 (15:6478)
 
 Text07b1: ; 564db (15:64db)
 	text ""
-	line "        Pok`mon Trading Card Game "
+	line "        Pokémon Trading Card Game "
 	line "                  Staff"
 	done
 
@@ -883,7 +883,7 @@ Text07c5: ; 56b71 (15:6b71)
 	text ""
 	line "             US COORDINATION"
 	line "           Wizards of the Coast"
-	line "          Pok`mon Templating Team"
+	line "          Pokémon Templating Team"
 	line ""
 	line ""
 	line "            Robert Gutschera"
@@ -930,7 +930,7 @@ Text07ca: ; 56d12 (15:6d12)
 
 Text07cb: ; 56d53 (15:6d53)
 	text ""
-	line "          Pok`mon Original Story"
+	line "          Pokémon Original Story"
 	line ""
 	line ""
 	line "             Satoshi Tajiri"
@@ -1259,7 +1259,7 @@ BulbasaurDescription: ; 575d1 (15:75d1)
 	text "A strange seed was planted on its"
 	line "back at birth. Thus, a plant"
 	line "sprouted and now grows with this"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 IvysaurName: ; 5763b (15:763b)
@@ -1275,13 +1275,13 @@ PoisonPowderName: ; 5764f (15:764f)
 	done
 
 InflictPoisonDescription: ; 5765d (15:765d)
-	text "The Defending Pok`mon is now"
+	text "The Defending Pokémon is now"
 	line "Poisoned."
 	done
 
 IvysaurDescription: ; 57685 (15:7685)
 	text "When the bulb on its back grows"
-	line "large, the Pok`mon seems to lose the"
+	line "large, the Pokémon seems to lose the"
 	line "ability to stand on its hind legs."
 	done
 
@@ -1296,8 +1296,8 @@ SolarPowerName: ; 576f8 (15:76f8)
 SolarPowerDescription: ; 57705 (15:7705)
 	text "Once during your turn (before your"
 	line "attack), you may use this power."
-	line "Your Active Pok`mon and the"
-	line "Defending Pok`mon are no longer"
+	line "Your Active Pokémon and the"
+	line "Defending Pokémon are no longer"
 	line "Asleep, Confused, Paralyzed, or"
 	line "Poisoned."
 	done
@@ -1315,7 +1315,7 @@ MegaDrainName: ; 577f9 (15:77f9)
 VenusaursMegaDrainDescription: ; 57805 (15:7805)
 	text "Remove a number of damage counters"
 	line "from Venusaur equal to half the"
-	line "damage done to the Defending Pok`mon"
+	line "damage done to the Defending Pokémon"
 	line "(after applying Weakness and"
 	line "Resistance) (rounded up to the"
 	line "nearest 10)."
@@ -1341,7 +1341,7 @@ EnergyTransDescription: ; 5796e (15:796e)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
 	line "take 1 ", TX_GRASS,  " Energy card attached to 1"
-	line "of your Pok`mon and attach it to a"
+	line "of your Pokémon and attach it to a"
 	line "different one. This power can't be"
 	line "used if Venusaur is Asleep,"
 	line "Confused, or Paralyzed."
@@ -1367,7 +1367,7 @@ StringShotName: ; 57ac3 (15:7ac3)
 
 MayInflictParalysisDescription: ; 57ad0 (15:7ad0)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Paralyzed."
+	line "Pokémon is now Paralyzed."
 	done
 
 CaterpieKind: ; 57b10 (15:7b10)
@@ -1419,16 +1419,16 @@ WhirlwindName: ; 57c8e (15:7c8e)
 
 WhirlwindDescription: ; 57c99 (15:7c99)
 	text "If your opponent has any Benched"
-	line "Pok`mon, he or she chooses 1 of them"
+	line "Pokémon, he or she chooses 1 of them"
 	line "and switches it with the Defending"
-	line "Pok`mon. (Do the damage before"
-	line "switching the Pok`mon.)"
+	line "Pokémon. (Do the damage before"
+	line "switching the Pokémon.)"
 	done
 
 ButterfreesMegaDrainDescription: ; 57d3a (15:7d3a)
 	text "Remove a number of damage counters"
 	line "from Butterfree equal to half the"
-	line "damage done to the Defending Pok`mon"
+	line "damage done to the Defending Pokémon"
 	line "(after applying Weakness and"
 	line "Resistance) (rounded up to the"
 	line "nearest 10)."
@@ -1460,7 +1460,7 @@ PoisonStingName: ; 57ea1 (15:7ea1)
 
 MayInflictPoisonDescription: ; 57eaf (15:7eaf)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Poisoned."
+	line "Pokémon is now Poisoned."
 	done
 
 WeedleKind: ; 57eee (15:7eee)

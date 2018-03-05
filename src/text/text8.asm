@@ -9,7 +9,7 @@ Text0685: ; 5005b (14:405b)
 	text "It seems you weren't really ready."
 	line "If you keep playing like that,"
 	line "You'll only inherit the Legendary "
-	line "Pok`mon Cards in your dreams!"
+	line "Pokémon Cards in your dreams!"
 	done
 
 Text0686: ; 500df (14:40df)
@@ -55,9 +55,9 @@ Text068c: ; 502da (14:42da)
 	text "Greetings."
 	line "Welcome to the Fire Club!"
 	line "This is a Club for boys with a "
-	line "burning passion for Fire Pok`mon."
-	line "Fire Pok`mon have the greatest "
-	line "attack power of all Pok`mon!"
+	line "burning passion for Fire Pokémon."
+	line "Fire Pokémon have the greatest "
+	line "attack power of all Pokémon!"
 	done
 
 Text068d: ; 5037f (14:437f)
@@ -214,14 +214,14 @@ Text06a2: ; 50a9e (14:4a9e)
 	done
 
 Text06a3: ; 50acc (14:4acc)
-	text "I'm burning with Pok`mon "
+	text "I'm burning with Pokémon "
 	line "fever today!"
 	line "One day, I'm going to inherit"
 	line "the Legendary Cards!"
 	done
 
 Text06a4: ; 50b27 (14:4b27)
-	text "I'm burning with Pok`mon "
+	text "I'm burning with Pokémon "
 	line "fever today!"
 	line "One day, I'm going to inherit"
 	line "the Legendary Cards!"
@@ -233,7 +233,7 @@ Text06a4: ; 50b27 (14:4b27)
 
 Text06a5: ; 50bc0 (14:4bc0)
 	text "This is the Fire Club, where guys"
-	line "with a burning passion for Pok`mon "
+	line "with a burning passion for Pokémon "
 	line "Trading Cards get together for "
 	line "heated duels! Join the fiery fun!"
 	done
@@ -272,7 +272,7 @@ Text06ab: ; 50d3f (14:4d3f)
 Text06ac: ; 50d8b (14:4d8b)
 	text "Hey! Does everyone have the fever?"
 	line "Do you have the fever?"
-	line "If you have Pok`mon fever,"
+	line "If you have Pokémon fever,"
 	line "duel with me!!!"
 	done
 
@@ -308,9 +308,9 @@ Text06b2: ; 50ec6 (14:4ec6)
 	done
 
 Text06b3: ; 50f03 (14:4f03)
-	text "Come on, people, say Fire Pok`mon!"
+	text "Come on, people, say Fire Pokémon!"
 	line "You! Come on, say Fire! "
-	line "Fire Pok`mon! OK! Let's duel!!!"
+	line "Fire Pokémon! OK! Let's duel!!!"
 	done
 
 Text06b4: ; 50f60 (14:4f60)
@@ -319,12 +319,12 @@ Text06b4: ; 50f60 (14:4f60)
 
 Text06b5: ; 50f82 (14:4f82)
 	text "Dang! You're icy cold!"
-	line "Come on! Say Fire Pok`mon!"
+	line "Come on! Say Fire Pokémon!"
 	done
 
 Text06b6: ; 50fb5 (14:4fb5)
 	text "A 4-prize match!"
-	line "Here we go! Fire Pok`mon!"
+	line "Here we go! Fire Pokémon!"
 	done
 
 Text06b7: ; 50fe1 (14:4fe1)
@@ -334,12 +334,12 @@ Text06b7: ; 50fe1 (14:4fe1)
 
 Text06b8: ; 51012 (14:5012)
 	text "Let's duel again!"
-	line "Come on, people, say Fire Pok`mon!"
+	line "Come on, people, say Fire Pokémon!"
 	done
 
 Text06b9: ; 51048 (14:5048)
 	text "That was a great Duel!"
-	line "Let's duel again! Fire Pok`mon!"
+	line "Let's duel again! Fire Pokémon!"
 	done
 
 Text06ba: ; 51080 (14:5080)
@@ -355,7 +355,7 @@ Text06bb: ; 51131 (14:5131)
 	text "I am Ken, the Fire Club Master!"
 	line "You still need to collect more"
 	line "cards if you wish to inherit"
-	line "the Legendary Pok`mon Cards!"
+	line "the Legendary Pokémon Cards!"
 	line "If you wish to duel me, go collect "
 	line "more cards!"
 	done
@@ -400,7 +400,7 @@ Text06c1: ; 513d2 (14:53d2)
 
 Text06c2: ; 51408 (14:5408)
 	text "With this, you're a little closer"
-	line "to the Legendary Pok`mon Cards!"
+	line "to the Legendary Pokémon Cards!"
 	line "Here, take this, too!"
 	line "I hope it will help you out!"
 	done
@@ -535,7 +535,7 @@ Text06d7: ; 519de (14:59de)
 	line "Welcome to the Grass Club."
 	line "This Club is for girls who love"
 	line "to grow flowers."
-	line "The Pok`mon cards used here are "
+	line "The Pokémon cards used here are "
 	line "also beautiful flowers."
 	done
 
@@ -593,7 +593,7 @@ Text06e0: ; 51ccb (14:5ccb)
 	line "Who? The Master of the Grass Club?"
 	line "Do you mean Nikki? Nikki's out. "
 	line "I need a break."
-	line "Do you want to play the Pok`mon "
+	line "Do you want to play the Pokémon "
 	line "Trading Card Game with me?"
 	done
 
@@ -604,7 +604,7 @@ Text06e1: ; 51d9b (14:5d9b)
 	line "break! "
 	line "You need a gentle heart"
 	line "to take care of plants!"
-	line "Say, would you play the Pok`mon"
+	line "Say, would you play the Pokémon"
 	line "Trading Card Game with me?"
 	done
 
@@ -850,7 +850,7 @@ Text0709: ; 528bf (14:68bf)
 	done
 
 Text070a: ; 528ed (14:68ed)
-	text "The Pok`mon Trading Card Game is "
+	text "The Pokémon Trading Card Game is "
 	line "fun, but so is taking care of trees!"
 	done
 
@@ -977,7 +977,7 @@ Text071f: ; 52eae (14:6eae)
 	text "Oh, no! I lost!"
 	line "Well, you truly are skilled."
 	line "Maybe one day you will inherit"
-	line "the Legendary Pok`mon Cards."
+	line "the Legendary Pokémon Cards."
 	line "Please allow me to give you"
 	line "this Grass Medal."
 	done
@@ -1019,7 +1019,7 @@ Text0724: ; 5312e (14:712e)
 	text "Thank you very much, ISHIHARA."
 	line "Your books were very helpful!"
 	line "You are indeed the Number 1"
-	line "Pok`mon Trading Card Collector."
+	line "Pokémon Trading Card Collector."
 	done
 
 Text0725: ; 531a8 (14:71a8)
@@ -1037,10 +1037,10 @@ Text0726: ; 5320c (14:720c)
 Text0727: ; 53245 (14:7245)
 	text "Hello, nice to meet you."
 	line "I'm ISHIHARA."
-	line "I'm a Pok`mon Card Collector."
+	line "I'm a Pokémon Card Collector."
 	line "I love collecting cards."
 	line "I see you also love"
-	line "Pok`mon Cards."
+	line "Pokémon Cards."
 	line "Please come see me again."
 	line "We must trade some sometime."
 	line "OH!"
@@ -1073,7 +1073,7 @@ Text0729: ; 53435 (14:7435)
 Text072a: ; 534e1 (14:74e1)
 	text "Hello, ", TX_RAM1, "."
 	line "Are you enjoying the "
-	line "Pok`mon Trading Card Game?"
+	line "Pokémon Trading Card Game?"
 	line "By the way, I'm looking for a "
 	line "Clefable..."
 	line "I'm thinking about trading"
@@ -1136,7 +1136,7 @@ Text0732: ; 5377f (14:777f)
 Text0733: ; 53829 (14:7829)
 	text "Hello, ", TX_RAM1, ". "
 	line "Are you enjoying the"
-	line "Pok`mon Trading Card Game?"
+	line "Pokémon Trading Card Game?"
 	line "I'm looking for a Ditto"
 	line "this time..."
 	line "I'm thinking about trading"
@@ -1186,7 +1186,7 @@ Text0738: ; 53a4a (14:7a4a)
 Text0739: ; 53b25 (14:7b25)
 	text "Hello, ", TX_RAM1, ". "
 	line "Are you enjoying the"
-	line "Pok`mon Trading Card Game?"
+	line "Pokémon Trading Card Game?"
 	line "I'm looking for a Chansey"
 	line "this time! I'm thinking about "
 	line "trading my Surfing Pikachu for "
@@ -1224,12 +1224,12 @@ Text073d: ; 53d24 (14:7d24)
 Text073e: ; 53d5b (14:7d5b)
 	text "Oh! Congratulations, ", TX_RAM1, "!"
 	line "I heard the news! You've finally "
-	line "inherited the Legendary Pok`mon "
+	line "inherited the Legendary Pokémon "
 	line "Cards! Don't worry, I'm not going "
 	line "to ask you to trade them to me."
 	line "Besides, it would be a waste "
 	line "not to use the Legendary Cards "
 	line "for dueling. Make sure your "
 	line "Duels are worthy of"
-	line "the Legendary Pok`mon Cards."
+	line "the Legendary Pokémon Cards."
 	done

@@ -122,17 +122,17 @@ Text010d: ; 3851f (e:451f)
 	done
 
 SelectPkmnOnBenchToSwitchWithActiveText: ; 38533 (e:4533)
-	text "Select a Pok`mon on the Bench"
-	line "to switch with the Active Pok`mon."
+	text "Select a Pokémon on the Bench"
+	line "to switch with the Active Pokémon."
 	done
 
 Text010f: ; 38575 (e:4575)
-	text "Select a Pok`mon to place"
+	text "Select a Pokémon to place"
 	line "in the Arena."
 	done
 
 Text0110: ; 3859e (e:459e)
-	text TX_RAM1, " is selecting a Pok`mon"
+	text TX_RAM1, " is selecting a Pokémon"
 	line "to place in the Arena."
 	done
 
@@ -147,7 +147,7 @@ Text0112: ; 3860a (e:460a)
 	done
 
 Text0113: ; 38647 (e:4647)
-	text "Choose the Pok`mon whose color you"
+	text "Choose the Pokémon whose color you"
 	line "wish to change with Color change."
 	done
 
@@ -183,12 +183,12 @@ NoCardsInDeckCannotDraw: ; 3872d (e:472d)
 	done
 
 Text011a: ; 38769 (e:4769)
-	text "Choose a Pok`mon on the Bench"
+	text "Choose a Pokémon on the Bench"
 	line "to give damage to."
 	done
 
 Text011b: ; 3879b (e:479b)
-	text "Choose up to 3 Pok`mon on the"
+	text "Choose up to 3 Pokémon on the"
 	line "Bench to give damage to."
 	done
 
@@ -198,7 +198,7 @@ Text011c: ; 387d3 (e:47d3)
 	done
 
 Text011d: ; 387fe (e:47fe)
-	text "Choose a Pok`mon to attach"
+	text "Choose a Pokémon to attach"
 	line "the Energy card to."
 	done
 
@@ -229,7 +229,7 @@ Text0122: ; 388ee (e:48ee)
 
 Text0123: ; 3890e (e:490e)
 	text "Choose and Discard an Energy card"
-	line "from the opponent's Active Pok`mon."
+	line "from the opponent's Active Pokémon."
 	done
 
 Text0124: ; 38955 (e:4955)
@@ -238,7 +238,7 @@ Text0124: ; 38955 (e:4955)
 	done
 
 Text0125: ; 3899f (e:499f)
-	text "Choose a Basic Fighting Pok`mon"
+	text "Choose a Basic Fighting Pokémon"
 	line "from the Deck."
 	done
 
@@ -261,27 +261,27 @@ Text0129: ; 38a14 (e:4a14)
 	done
 
 Text012a: ; 38a31 (e:4a31)
-	text "Choose a Nidoran% or a"
-	line "Nidoran$ from the Deck."
+	text "Choose a Nidoran♀ or a"
+	line "Nidoran♂ from the Deck."
 	done
 
 Text012b: ; 38a61 (e:4a61)
-	text "Choose a Nidoran%"
-	line "or a Nidoran$."
+	text "Choose a Nidoran♀"
+	line "or a Nidoran♂."
 	done
 
 Text012c: ; 38a83 (e:4a83)
 	text "Choose a Basic"
-	line "Fighting Pok`mon"
+	line "Fighting Pokémon"
 	done
 
 Text012d: ; 38aa4 (e:4aa4)
 	text "Procedure for Energy Transfer:"
 	line ""
-	line "1. Choose the Pok`mon to move Grass"
+	line "1. Choose the Pokémon to move Grass"
 	line "   Energy from.  Press the A Button."
 	line ""
-	line "2. Choose the Pok`mon to move the"
+	line "2. Choose the Pokémon to move the"
 	line "   energy to and press the A Button."
 	line ""
 	line "3. Repeat steps 1 and 2."
@@ -299,18 +299,18 @@ Text012f: ; 38bb3 (e:4bb3)
 	done
 
 Text0130: ; 38bc9 (e:4bc9)
-	text "Choose a Pok`mon to remove"
+	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done
 
 Text0131: ; 38bfe (e:4bfe)
 	text "Procedure for Curse:"
 	line ""
-	line "1. Choose a Pok`mon to move the"
+	line "1. Choose a Pokémon to move the"
 	line "   Damage counter from and press"
 	line "   the A Button."
 	line ""
-	line "2. Choose a Pok`mon to move the"
+	line "2. Choose a Pokémon to move the"
 	line "   Damage counter to and press"
 	line "   the A Button."
 	line ""
@@ -319,7 +319,7 @@ Text0131: ; 38bfe (e:4bfe)
 
 Text0132: ; 38cda (e:4cda)
 	text "Choose 2 Energy cards from the"
-	line "Discard Pileto attach to a Pok`mon."
+	line "Discard Pileto attach to a Pokémon."
 	done
 
 Text0133: ; 38d1e (e:4d1e)
@@ -356,11 +356,11 @@ Text0136: ; 38e70 (e:4e70)
 Text0137: ; 38e90 (e:4e90)
 	text "Procedure for Damage Swap:"
 	line ""
-	line "1. Choose a Pok`mon to move a"
+	line "1. Choose a Pokémon to move a"
 	line "   Damage counter from and press"
 	line "   the A Button."
 	line ""
-	line "2. Choose a Pok`mon to move the"
+	line "2. Choose a Pokémon to move the"
 	line "   Damage counter to and press"
 	line "   the A Button."
 	line ""
@@ -369,17 +369,17 @@ Text0137: ; 38e90 (e:4e90)
 	line "4. Press the B Button to end."
 	line ""
 	line "5. You cannot move the counter if"
-	line "   it will Knock Out the Pok`mon."
+	line "   it will Knock Out the Pokémon."
 	done
 
 Text0138: ; 38fcc (e:4fcc)
 	text "Procedure for Devolution Beam."
 	line ""
-	line "1. Choose either a Pok`mon in your"
+	line "1. Choose either a Pokémon in your"
 	line "   Play Area or your opponent's"
 	line "   Play Area and press the A Button."
 	line ""
-	line "2. Choose the Pok`mon to Devolve"
+	line "2. Choose the Pokémon to Devolve"
 	line "   and press the A Button."
 	line ""
 	line "3. Press the B Button to cancel."
@@ -388,7 +388,7 @@ Text0138: ; 38fcc (e:4fcc)
 Text0139: ; 390b4 (e:50b4)
 	text "Procedure for Strange Behavior:"
 	line ""
-	line "1. Choose the Pok`mon with the"
+	line "1. Choose the Pokémon with the"
 	line "   Damage counters to move to"
 	line "   Slowbro and press the A Button."
 	line ""
@@ -426,7 +426,7 @@ Text013e: ; 3928c (e:528c)
 	done
 
 Text013f: ; 392c9 (e:52c9)
-	text "Nidoran$ Nidoran%"
+	text "Nidoran♂ Nidoran♀"
 	done
 
 Text0140: ; 392dc (e:52dc)
@@ -442,7 +442,7 @@ Text0142: ; 392f0 (e:52f0)
 	done
 
 Text0143: ; 392f8 (e:52f8)
-	text "Fighting Pok`mon"
+	text "Fighting Pokémon"
 	done
 
 Text0144: ; 3930a (e:530a)
@@ -469,7 +469,7 @@ Text0148: ; 39392 (e:5392)
 	done
 
 Text0149: ; 393bb (e:53bb)
-	text "A Basic Pok`mon was placed"
+	text "A Basic Pokémon was placed"
 	line "on each Bench."
 	done
 
@@ -494,7 +494,7 @@ Text014d: ; 3944b (e:544b)
 	done
 
 Text014e: ; 39470 (e:5470)
-	text "The Pok`mon cards in ", TX_RAM1, "'s"
+	text "The Pokémon cards in ", TX_RAM1, "'s"
 	line "Hand and Deck were shuffled"
 	done
 
@@ -504,7 +504,7 @@ Text014f: ; 394a6 (e:54a6)
 	done
 
 Text0150: ; 394f0 (e:54f0)
-	text "Choose a Pok`mon to remove"
+	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done
 
@@ -514,7 +514,7 @@ Text0151: ; 39525 (e:5525)
 	done
 
 Text0152: ; 39550 (e:5550)
-	text "Choose a Pok`mon to remove"
+	text "Choose a Pokémon to remove"
 	line "Energy from and choose the Energy."
 	done
 
@@ -524,7 +524,7 @@ Text0153: ; 3958f (e:558f)
 	done
 
 Text0154: ; 395c3 (e:55c3)
-	text "Choose a Pok`mon and press the A"
+	text "Choose a Pokémon and press the A"
 	line "Button to remove Damage counters."
 	done
 
@@ -544,7 +544,7 @@ Text0157: ; 39666 (e:5666)
 	done
 
 Text0158: ; 3968b (e:568b)
-	text "Choose a Pok`mon to"
+	text "Choose a Pokémon to"
 	line "attach Defender to."
 	done
 
@@ -554,22 +554,22 @@ Text0159: ; 396b4 (e:56b4)
 	done
 
 Text015a: ; 396e6 (e:56e6)
-	text "Choose a Pok`mon to"
+	text "Choose a Pokémon to"
 	line "return to the Deck."
 	done
 
 Text015b: ; 3970f (e:570f)
-	text "Choose a Pok`mon to"
+	text "Choose a Pokémon to"
 	line "place in play."
 	done
 
 Text015c: ; 39733 (e:5733)
-	text "Choose a Basic Pok`mon"
+	text "Choose a Basic Pokémon"
 	line "to Evolve."
 	done
 
 Text015d: ; 39756 (e:5756)
-	text "Choose a Pok`mon to"
+	text "Choose a Pokémon to"
 	line "Scoop Up."
 	done
 
@@ -585,12 +585,12 @@ Text015f: ; 3979e (e:579e)
 
 Text0160: ; 397b8 (e:57b8)
 	text "Choose a Basic or Evolution"
-	line "Pok`mon card from the Deck."
+	line "Pokémon card from the Deck."
 	done
 
 Text0161: ; 397f1 (e:57f1)
 	text "Choose"
-	line "a Pok`mon card."
+	line "a Pokémon card."
 	done
 
 Text0162: ; 39809 (e:5809)
@@ -612,7 +612,7 @@ Text0165: ; 3986b (e:586b)
 	done
 
 Text0166: ; 3987a (e:587a)
-	text "Choose a Basic Pok`mon"
+	text "Choose a Basic Pokémon"
 	line "to place on the Bench."
 	done
 
@@ -622,8 +622,8 @@ Text0167: ; 398a9 (e:58a9)
 	done
 
 Text0168: ; 398e8 (e:58e8)
-	text "Choose a Pok`mon in your Area, then"
-	line "a Pok`mon in your opponent's."
+	text "Choose a Pokémon in your Area, then"
+	line "a Pokémon in your opponent's."
 	done
 
 Text0169: ; 3992b (e:592b)
@@ -632,8 +632,8 @@ Text0169: ; 3992b (e:592b)
 	done
 
 Text016a: ; 39952 (e:5952)
-	text "Choose a Pok`mon to switch"
-	line "with the Active Pok`mon."
+	text "Choose a Pokémon to switch"
+	line "with the Active Pokémon."
 	done
 
 Text016b: ; 39987 (e:5987)
@@ -910,9 +910,9 @@ Text01a4: ; 3a12d (e:612d)
 	text "Draw 7 cards,"
 	line ""
 	line "and get ready for the battle!"
-	line "Choose your Active Pok`mon."
-	line "You can only choose Basic Pok`mon"
-	line "as your Active Pok`mon,"
+	line "Choose your Active Pokémon."
+	line "You can only choose Basic Pokémon"
+	line "as your Active Pokémon,"
 	line "so you can choose either Goldeen"
 	line "or Staryu."
 	line "For our practice duel,"
@@ -925,11 +925,11 @@ Text01a5: ; 3a204 (e:6204)
 	done
 
 Text01a6: ; 3a230 (e:6230)
-	text "Next, put your Pok`mon on your"
+	text "Next, put your Pokémon on your"
 	line "Bench."
-	line "You can switch Benched Pok`mon"
-	line "with your Active Pok`mon."
-	line "Again, only Basic Pok`mon can be"
+	line "You can switch Benched Pokémon"
+	line "with your Active Pokémon."
+	line "Again, only Basic Pokémon can be"
 	line "placed on your Bench."
 	line "Choose Staryu from your hand and"
 	line "put it there."
@@ -941,7 +941,7 @@ Text01a7: ; 3a2f6 (e:62f6)
 	done
 
 Text01a8: ; 3a321 (e:6321)
-	text "When you have no Pok`mon to put on"
+	text "When you have no Pokémon to put on"
 	line "your Bench, press the B Button to"
 	line "finish."
 	done
@@ -953,7 +953,7 @@ Text01a9: ; 3a36f (e:636f)
 
 Text01aa: ; 3a3ad (e:63ad)
 	text "2. Attach a Water Energy card to"
-	line "   your Active Pok`mon, Goldeen."
+	line "   your Active Pokémon, Goldeen."
 	done
 
 Text01ab: ; 3a3f0 (e:63f0)
@@ -1056,25 +1056,25 @@ Text01be: ; 3a83c (e:683c)
 	text "1. Your Seaking was Knocked Out."
 	line "   Choose your Benched Staryu"
 	line "   and press the A Button to set"
-	line "   it as your Active Pok`mon."
+	line "   it as your Active Pokémon."
 	done
 
 Text01bf: ; 3a8bb (e:68bb)
-	text "2. You can check Pok`mon data by"
+	text "2. You can check Pokémon data by"
 	line "   pressing SELECT."
 	done
 
 Text01c0: ; 3a8f1 (e:68f1)
 	text "To use the attack command, you need"
 	line "to attach Energy cards to your"
-	line "Pok`mon."
+	line "Pokémon."
 	line ""
 	line "Choose Cards from the Menu, and"
 	line "select a Water Energy card."
 	done
 
 Text01c1: ; 3a97b (e:697b)
-	text "Next, choose your Active Pok`mon,"
+	text "Next, choose your Active Pokémon,"
 	line "Goldeen, and press the A Button."
 	line "Then the Water Energy card will"
 	line "be attached to Goldeen."
@@ -1104,7 +1104,7 @@ Text01c4: ; 3ab08 (e:6b08)
 	line TX_COLORLESS, " means any Energy card."
 	line "Now you can use Waterfall."
 	line "Keep the Water Energy card for"
-	line "other Pok`mon."
+	line "other Pokémon."
 	done
 
 Text01c5: ; 3abdb (e:6bdb)
@@ -1116,7 +1116,7 @@ Text01c6: ; 3ac15 (e:6c15)
 	text "Seaking's got enough Energy, so"
 	line "you don't need to attach any more."
 	line "Attach Energy cards to your Benched"
-	line "Pok`mon to get them ready for"
+	line "Pokémon to get them ready for"
 	line "battle."
 	line ""
 	line "Attach a Water Energy card to your"
@@ -1136,16 +1136,16 @@ Text01c8: ; 3ad6d (e:6d6d)
 	text "Now Machop's HP is 0 and it is"
 	line "Knocked Out."
 	line "When you Knock Out the Defending"
-	line "Pok`mon, you can pick up a"
+	line "Pokémon, you can pick up a"
 	line "Prize."
 	done
 
 Text01c9: ; 3addd (e:6ddd)
-	text "When all your Pok`mon are Knocked"
-	line "Out and there are no Pok`mon on your"
+	text "When all your Pokémon are Knocked"
+	line "Out and there are no Pokémon on your"
 	line "Bench, you lose the game."
 	line ""
-	line "Put Drowzee, the Basic Pok`mon"
+	line "Put Drowzee, the Basic Pokémon"
 	line "you just drew, on your Bench."
 	done
 
@@ -1224,19 +1224,19 @@ Text01d4: ; 3b1f4 (e:71f4)
 	done
 
 Text01d5: ; 3b242 (e:7242)
-	text "Choose a Benched Pok`mon to replace"
-	line "your Knocked Out Pok`mon."
+	text "Choose a Benched Pokémon to replace"
+	line "your Knocked Out Pokémon."
 	line "You now have Drowzee and Staryu"
 	line "on your Bench."
-	line "Choose Staryu as the Active Pok`mon"
+	line "Choose Staryu as the Active Pokémon"
 	line "for this practice duel."
 	done
 
 Text01d6: ; 3b2ec (e:72ec)
 	text "Here, press SELECT to"
-	line "check Pok`mon data."
+	line "check Pokémon data."
 	line "It is important to know your cards"
-	line "and the status of your Pok`mon."
+	line "and the status of your Pokémon."
 	done
 
 Text01d7: ; 3b35a (e:735a)
@@ -1367,7 +1367,7 @@ LegendaryRonaldDeckName: ; 3b5c3 (e:75c3)
 	done
 
 WaterfrontPokemonDeckName: ; 3b5d5 (e:75d5)
-	text "Waterfront Pok`mon"
+	text "Waterfront Pokémon"
 	done
 
 LonelyFriendsDeckName: ; 3b5e9 (e:75e9)
@@ -1395,11 +1395,11 @@ ExcavationDeckName: ; 3b62d (e:762d)
 	done
 
 BlisteringPokemonDeckName: ; 3b639 (e:7639)
-	text "Blistering Pok`mon"
+	text "Blistering Pokémon"
 	done
 
 HardPokemonDeckName: ; 3b64d (e:764d)
-	text "Hard Pok`mon"
+	text "Hard Pokémon"
 	done
 
 EtceteraDeckName: ; 3b65b (e:765b)
@@ -1451,7 +1451,7 @@ StrangePowerDeckName: ; 3b6f8 (e:76f8)
 	done
 
 FlyinPokemonDeckName: ; 3b707 (e:7707)
-	text "Flyin' Pok`mon"
+	text "Flyin' Pokémon"
 	done
 
 LovelyNidoranDeckName: ; 3b717 (e:7717)
@@ -1645,12 +1645,12 @@ Text0235: ; 3bac4 (e:7ac4)
 	done
 
 Text0236: ; 3bafe (e:7afe)
-	text "There are no Basic Pok`mon"
+	text "There are no Basic Pokémon"
 	line "in this Deck!"
 	done
 
 Text0237: ; 3bb28 (e:7b28)
-	text "You must include a Basic Pok`mon"
+	text "You must include a Basic Pokémon"
 	line "in the Deck!"
 	done
 
@@ -1683,7 +1683,7 @@ Text023e: ; 3bbf8 (e:7bf8)
 	done
 
 Text023f: ; 3bc0a (e:7c0a)
-	text "Your Pok`mon"
+	text "Your Pokémon"
 	done
 
 Text0240: ; 3bc18 (e:7c18)
@@ -1699,7 +1699,7 @@ Text0242: ; 3bc36 (e:7c36)
 	done
 
 Text0243: ; 3bc49 (e:7c49)
-	text "Opponent's Pok`mon"
+	text "Opponent's Pokémon"
 	done
 
 Text0244: ; 3bc5d (e:7c5d)
