@@ -114,7 +114,33 @@ wPlayerBench4CardChangedType:: ; c2d8
 wPlayerBench5CardChangedType:: ; c2d9
 	ds $1
 
-	ds $d
+wPlayerArenaCardAttachedDefender:: ; c2da
+	ds $1
+wPlayerBench1CardAttachedDefender:: ; c2db
+	ds $1
+wPlayerBench2CardAttachedDefender:: ; c2dc
+	ds $1
+wPlayerBench3CardAttachedDefender:: ; c2dd
+	ds $1
+wPlayerBench4CardAttachedDefender:: ; c2de
+	ds $1
+wPlayerBench5CardAttachedDefender:: ; c2df
+	ds $1
+
+wPlayerArenaCardAttachedPluspower:: ; c2e0
+	ds $1
+wPlayerBench1CardAttachedPluspower:: ; c2e1
+	ds $1
+wPlayerBench2CardAttachedPluspower:: ; c2e2
+	ds $1
+wPlayerBench3CardAttachedPluspower:: ; c2e3
+	ds $1
+wPlayerBench4CardAttachedPluspower:: ; c2e4
+	ds $1
+wPlayerBench5CardAttachedPluspower:: ; c2e5
+	ds $1
+
+	ds $1
 
 wPlayerArenaCardSubstatus1:: ; c2e7
 	ds $1
@@ -212,20 +238,46 @@ wOpponentBench4CardStage:: ; c3d2
 wOpponentBench5CardStage:: ; c3d3
 	ds $1
 
-wOpponentArenaCardChangedType:: ; c2d4
+wOpponentArenaCardChangedType:: ; c3d4
 	ds $1
-wOpponentBench1CardChangedType:: ; c2d5
+wOpponentBench1CardChangedType:: ; c3d5
 	ds $1
-wOpponentBench2CardChangedType:: ; c2d6
+wOpponentBench2CardChangedType:: ; c3d6
 	ds $1
-wOpponentBench3CardChangedType:: ; c2d7
+wOpponentBench3CardChangedType:: ; c3d7
 	ds $1
-wOpponentBench4CardChangedType:: ; c2d8
+wOpponentBench4CardChangedType:: ; c3d8
 	ds $1
-wOpponentBench5CardChangedType:: ; c2d9
+wOpponentBench5CardChangedType:: ; c3d9
 	ds $1
 
-	ds $d
+wOpponentArenaCardAttachedDefender:: ; c3da
+	ds $1
+wOpponentBench1CardAttachedDefender:: ; c3db
+	ds $1
+wOpponentBench2CardAttachedDefender:: ; c3dc
+	ds $1
+wOpponentBench3CardAttachedDefender:: ; c3dd
+	ds $1
+wOpponentBench4CardAttachedDefender:: ; c3de
+	ds $1
+wOpponentBench5CardAttachedDefender:: ; c3df
+	ds $1
+
+wOpponentArenaCardAttachedPluspower:: ; c3e0
+	ds $1
+wOpponentBench1CardAttachedPluspower:: ; c3e1
+	ds $1
+wOpponentBench2CardAttachedPluspower:: ; c3e2
+	ds $1
+wOpponentBench3CardAttachedPluspower:: ; c3e3
+	ds $1
+wOpponentBench4CardAttachedPluspower:: ; c3e4
+	ds $1
+wOpponentBench5CardAttachedPluspower:: ; c3e5
+	ds $1
+
+	ds $1
 
 wOpponentArenaCardSubstatus1:: ; c3e7
 	ds $1

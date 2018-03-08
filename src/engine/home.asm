@@ -853,7 +853,7 @@ Func_05c2: ; 5c2 (0:5c2)
 	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $02
-	call JumpToHblankCopyDataHLtoDE
+	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
 	pop hl
@@ -872,7 +872,7 @@ Func_05db: ; 5db (0:5db)
 	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $01
-	call JumpToHblankCopyDataHLtoDE
+	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
 	pop hl
@@ -896,7 +896,7 @@ Func_05f4: ; 5f4 (0:5f4)
 	call BCCoordToBGMap0Address
 	pop hl
 	ld b, $04
-	call JumpToHblankCopyDataHLtoDE
+	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
 	pop hl
@@ -1067,7 +1067,7 @@ CopyDataToBGMap0: ; 06ee (0:06ee)
 SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	ld a, [wLCDC]
 	rla
-	jr c, JumpToHblankCopyDataHLtoDE
+	jr c, JPHblankCopyDataHLtoDE
 .lcd_off_loop
 	ld a, [hli]
 	ld [de], a
@@ -1075,7 +1075,7 @@ SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	dec b
 	jr nz, .lcd_off_loop
 	ret
-JumpToHblankCopyDataHLtoDE: ; 0709 (0:0709)
+JPHblankCopyDataHLtoDE: ; 0709 (0:0709)
 	jp HblankCopyDataHLtoDE
 ; 0x70c
 
@@ -1090,7 +1090,7 @@ CopyGfxData: ; 070c (0:070c)
 	push hl
 	push de
 	ld b, c
-	call JumpToHblankCopyDataHLtoDE
+	call JPHblankCopyDataHLtoDE
 	ld b, $0
 	pop hl
 	add hl, bc
@@ -3734,11 +3734,11 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	add e
 	ld l, a
 	ld [hl], $0
-	ld a, $e0
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	add e
 	ld l, a
 	ld [hl], $0
-	ld a, $da
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	add e
 	ld l, a
 	ld [hl], $0
@@ -3815,9 +3815,9 @@ EmptyPlayAreaSlot: ; 14f8 (0:14f8)
 	call .init_duelvar
 	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call .init_duelvar
-	ld a, $da
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	call .init_duelvar
-	ld a, $e0
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 .init_duelvar
 	add e
 	ld l, a
@@ -3885,9 +3885,9 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call .swap_duelvar
-	ld a, $e0
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call .swap_duelvar
-	ld a, $da
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	call .swap_duelvar
 	set CARD_LOCATION_PLAY_AREA_F, d
 	set CARD_LOCATION_PLAY_AREA_F, e

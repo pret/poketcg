@@ -1788,30 +1788,30 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ld hl, $5188
 	call WriteDataBlocksToBGMap0
 	call Func_516f ; draw the vertical separator
-	call Func_503a ; draw the HUDs
+	call DrawDuelHUDs ; draw the HUDs
 	call DrawWideTextBox
 	call EnableLCD
 	ret
 ; 0x503a
 
-Func_503a: ; 503a (1:503a)
+DrawDuelHUDs: ; 503a (1:503a)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
-	jr z, .asm_5051
+	jr z, .draw_hud
 	ldh a, [hWhoseTurn]
 	push af
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call .asm_5051
+	call .draw_hud
 	pop af
 	ldh [hWhoseTurn], a
 	ret
-.asm_5051
-	ld de, $10b
-	ld bc, $b08
-	call Func_5093
-	ld bc, $805
+.draw_hud
+	lb de, 1, 11 ; coordinates for player's arena card name and info icons
+	lb bc, 11, 8 ; coordinates for player's attached energies and HP bar
+	call DrawDuelHUD
+	lb bc, 8, 5
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	call $63ce
@@ -1820,11 +1820,11 @@ Func_503a: ; 503a (1:503a)
 	inc c
 	call $63c7
 	call SwapTurn
-	ld de, $700
-	ld bc, $301
+	lb de, 7, 0 ; coordinates for opponent's arena card name and info icons
+	lb bc, 3, 1 ; coordinates for opponent's attached energies and HP bar
 	call GetNonTurnDuelistVariable
-	call Func_5093
-	ld bc, $b06
+	call DrawDuelHUD
+	lb bc, 11, 6
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	call $63ce
@@ -1836,34 +1836,40 @@ Func_503a: ; 503a (1:503a)
 	ret
 ; 0x5093
 
-Func_5093: ; 5093 (1:5093)
+DrawDuelHUD: ; 5093 (1:5093)
 	ld hl, wcbc9
 	ld [hl], b
 	inc hl
-	ld [hl], c
-	push de
-	ld d, $01
+	ld [hl], c ; save coordinates for the HP bar
+	push de ; save coordinates for the arena card name
+	ld d, 1 ; opponent's info icons start in the second tile to the right
 	ld a, e
 	or a
-	jr z, .asm_50a2
-	ld d, $0f
-.asm_50a2
+	jr z, .go
+	ld d, 15 ; player's info icons start in the 15th tile to the right
+.go
 	push de
 	pop bc
-	ld a, $0d
+
+	; print the Pkmn icon along with the no. of play area Pokemon
+	ld a, LOW("<PKMN_ICON>")
 	call WriteByteToBGMap0
 	inc b
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	add $1f
+	add LOW("<0>") - 1
 	call WriteByteToBGMap0
 	inc b
-	ld a, $30
+
+	; print the Prize icon along with the no. of prizes yet to draw
+	ld a, LOW("<PRIZE_ICON>")
 	call WriteByteToBGMap0
 	inc b
 	call CountPrizes
-	add $20
+	add LOW("<0>")
 	call WriteByteToBGMap0
+
+	; print the arena Pokemon card name and level text
 	pop de
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1874,30 +1880,36 @@ Func_5093: ; 5093 (1:5093)
 	ld a, 32
 	call CopyCardNameAndLevel
 	ld [hl], TX_END
+
+	; print the arena Pokemon card color symbol just before the name
 	pop de
 	ld a, e
 	or a
-	jr nz, .asm_50e5
+	jr nz, .print_color_icon
 	ld hl, wDefaultText
 	call Func_23c1
-	add $14
+	add SCREEN_WIDTH
 	ld d, a
-.asm_50e5
+.print_color_icon
 	call Func_22ae
 	ld hl, wDefaultText
 	call Func_21c5
 	push de
 	pop bc
 	call GetArenaCardColor
-	inc a
-	dec b
-	call $5b7a
+	inc a ; TX_SYMBOL color tiles start at 1
+	dec b ; place the color symbol one tile to the left of the start of the card's name
+	call JPWriteByteToBGMap0
+
+	; print attached energies
 	ld hl, wcbc9
 	ld b, [hl]
 	inc hl
 	ld c, [hl]
 	ld de, $900
 	call $63e6
+
+	; print HP bar
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -1915,46 +1927,48 @@ Func_5093: ; 5093 (1:5093)
 	call BCCoordToBGMap0Address
 	push de
 	ld hl, wDefaultText
-	ld b, $06
+	ld b, 6 ; first row of the HP bar
 	call SafeCopyDataHLtoDE
 	pop de
 	ld hl, BG_MAP_WIDTH
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, wDefaultText + $06
-	ld b, $06
+	ld hl, wDefaultText + 6
+	ld b, 6 ; second row of the HP bar
 	call SafeCopyDataHLtoDE
+
+	; print number of attached Pluspower and Defender with respective icon, if any
 	ld hl, wcbc9
 	ld a, [hli]
-	add $06
+	add 6
 	ld b, a
 	ld c, [hl]
 	inc c
-	ld a, $e0
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_5159
-	ld a, $14
+	jr z, .check_defender
+	ld a, LOW("<PLUSPOWER>")
 	call WriteByteToBGMap0
 	inc b
-	ld a, [hl]
-	add $20
+	ld a, [hl] ; number of attached Pluspower
+	add LOW("<0>")
 	call WriteByteToBGMap0
 	dec b
-.asm_5159
-	ld a, $da
+.check_defender
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_516e
+	jr z, .done
 	inc c
-	ld a, $15
+	ld a, LOW("<DEFENDER>")
 	call WriteByteToBGMap0
 	inc b
-	ld a, [hl]
-	add $20
+	ld a, [hl] ; number of attached Defender
+	add LOW("<0>")
 	call WriteByteToBGMap0
-.asm_516e
+.done
 	ret
 ; 0x516f
 
@@ -2820,7 +2834,13 @@ ApplyCardCGBAttributes: ; 5adb (1:5adb)
 ; 0x5aeb
 
 Func_5aeb: ; 5aeb (1:5aeb)
-	INCROM $5aeb, $5fdd
+	INCROM $5aeb, $5b7a
+
+JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
+	jp WriteByteToBGMap0
+; 0x5b7d
+
+	INCROM $5b7d, $5fdd
 
 ; return carry if the turn holder has any Pokemon with non-zero HP in the play area.
 ; return how many Pokemon with non-zero HP in b.
