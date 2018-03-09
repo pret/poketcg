@@ -1908,8 +1908,8 @@ DrawDuelHUD: ; 5093 (1:5093)
 	ld b, [hl]
 	inc hl
 	ld c, [hl]
-	ld de, $900
-	call $63e6
+	lb de, 9, PLAY_AREA_ARENA
+	call PrintPlayAreaCardAttachedEnergies
 
 	; print HP bar
 	ld a, DUELVARS_ARENA_CARD
@@ -3021,7 +3021,56 @@ MenuParameters_60c6: ; 60c6 (1:60c6)
 	db $00 ; tile behind cursor
 	dw $60ce ; function pointer if non-0
 
-	INCROM $60ce, $6785
+	INCROM $60ce, $63e6
+
+; print the symbols of the attached energies of a turn holder's play area card
+; input:
+; - e: PLAY_AREA_*
+; - b, c: where to print (x, y)
+; - wAttachedEnergies and wTotalAttachedEnergies
+PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
+	push bc
+	call GetPlayAreaCardAttachedEnergies
+	ld hl, wDefaultText
+	push hl
+	ld c, NUM_TYPES
+	xor a
+.empty_loop
+	ld [hli], a
+	dec c
+	jr nz, .empty_loop
+	pop hl
+	ld de, wAttachedEnergies
+	lb bc, LOW("<FIRE>"), NUM_TYPES - 1
+.next_color
+	ld a, [de] ; energy count of current color
+	inc de
+	inc a
+	jr .check_amount
+.has_energy
+	ld [hl], b
+	inc hl
+.check_amount
+	dec a
+	jr nz, .has_energy
+	inc b
+	dec c
+	jr nz, .next_color
+	ld a, [wTotalAttachedEnergies]
+	cp 9
+	jr c, .place_tiles
+	ld a, LOW("<+>")
+	ld [wDefaultText + 7], a
+.place_tiles
+	pop bc
+	call BCCoordToBGMap0Address
+	ld hl, wDefaultText
+	ld b, NUM_TYPES
+	call SafeCopyDataHLtoDE
+	ret
+; 0x6423
+
+	INCROM $6423, $6785
 
 Func_6785: ; 6785 (1:6785)
 	call EnableSRAM

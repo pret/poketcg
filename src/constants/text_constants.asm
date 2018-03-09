@@ -48,4 +48,5 @@ done EQUS "db TX_END"
 	charmap "7>",          $27
 	charmap "8>",          $28
 	charmap "9>",          $29
+	charmap "+>",          $2b
 	charmap "PRIZE_ICON>", $30 ; icon displayed along with no. of prizes in duel screen
