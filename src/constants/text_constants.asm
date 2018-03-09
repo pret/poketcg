@@ -32,6 +32,7 @@ done EQUS "db TX_END"
 	charmap "PKMN_ICON>",  $0d ; icon displayed along with no. of Pkmn in duel screen
 	charmap "HP>",         $10
 	charmap "Lv>",         $11
+	charmap "E>",          $12
 	charmap "No>",         $13
 	charmap "PLUSPOWER>",  $14
 	charmap "DEFENDER>",   $15

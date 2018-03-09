@@ -1388,7 +1388,7 @@ Func_4a97: ; 4a97 (1:4a97)
 	ld a, [wOpponentPortrait]
 	ld bc, $d01
 	call Func_3e2a
-	call Func_516f
+	call DrawDuelHorizontalSeparator
 	ret
 ; 0x4ad6
 
@@ -1785,15 +1785,17 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	call ApplyBGP6OrSGB3ToCardImage
 .place_other_elements
 	call SwapTurn
-	ld hl, $5188
+	ld hl, DuelEAndHPTileData
 	call WriteDataBlocksToBGMap0
-	call Func_516f ; draw the vertical separator
-	call DrawDuelHUDs ; draw the HUDs
+	call DrawDuelHorizontalSeparator
+	call DrawDuelHUDs
 	call DrawWideTextBox
 	call EnableLCD
 	ret
 ; 0x503a
 
+; draws the main elements of the main duel interface, including HUDs, HPs, card names
+; and color symbols, attached cards, and other information, of both duelists.
 DrawDuelHUDs: ; 503a (1:503a)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -1972,20 +1974,47 @@ DrawDuelHUD: ; 5093 (1:5093)
 	ret
 ; 0x516f
 
-Func_516f: ; 516f (1:516f)
-	ld hl, $5199
+; draws an horizonal line that separates the arena side of each duelist
+; also colorizes the line on CGB
+DrawDuelHorizontalSeparator: ; 516f (1:516f)
+	ld hl, DuelHorizontalSeparatorTileData
 	call WriteDataBlocksToBGMap0
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ret nz
 	call BankswitchVRAM1
-	ld hl, $51c0
+	ld hl, DuelHorizontalSeparatorCGBPalData
 	call WriteDataBlocksToBGMap0
 	call BankswitchVRAM0
 	ret
 ; 0x5188
 
-	INCROM $5188,  $51e7
+DuelEAndHPTileData: ; 5188 (1:5188)
+; x, y, tiles[], 0
+	db 1, 1, LOW("<E>"),  0
+	db 1, 2, LOW("<HP>"), 0
+	db 9, 8, LOW("<E>"),  0
+	db 9, 9, LOW("<HP>"), 0
+	db $ff
+; 0x5199
+
+DuelHorizontalSeparatorTileData: ; 5199 (1:5199)
+; x, y, tiles[], 0
+	db 0, 4, $37, $37, $37, $37, $37, $37, $37, $37, $37, $31, $32, 0
+	db 9, 5, $33, $34, 0
+	db 9, 6, $33, $34, 0
+	db 9, 7, $35, $36, $37, $37, $37, $37, $37, $37, $37, $37, $37, 0
+	db $ff
+; 0x51c0
+
+DuelHorizontalSeparatorCGBPalData: ; 51c0 (1:51c0)
+; x, y, tiles[], 0
+	db 0, 4, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, 0
+	db 9, 5, $02, $02, 0
+	db 9, 6, $02, $02, 0
+	db 9, 7, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, 0
+	db $ff
+; 0x51e7
 
 ; if this is a practice duel, execute the practice duel action at wPracticeDuelAction
 DoPracticeDuelAction: ; 51e7 (1:51e7)
