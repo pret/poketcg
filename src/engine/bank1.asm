@@ -1816,11 +1816,11 @@ DrawDuelHUDs: ; 503a (1:503a)
 	lb bc, 8, 5
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	call $63ce
+	call CheckPrintCnfSlpPrz
 	inc c
-	call $63bb
+	call CheckPrintPoisoned
 	inc c
-	call $63c7
+	call CheckPrintDoublePoisoned
 	call SwapTurn
 	lb de, 7, 0 ; coordinates for opponent's arena card name and info icons
 	lb bc, 3, 1 ; coordinates for opponent's attached energies and HP bar
@@ -1829,11 +1829,11 @@ DrawDuelHUDs: ; 503a (1:503a)
 	lb bc, 11, 6
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	call $63ce
+	call CheckPrintCnfSlpPrz
 	dec c
-	call $63bb
+	call CheckPrintPoisoned
 	dec c
-	call $63c7
+	call CheckPrintDoublePoisoned
 	call SwapTurn
 	ret
 ; 0x5093
@@ -3021,7 +3021,47 @@ MenuParameters_60c6: ; 60c6 (1:60c6)
 	db $00 ; tile behind cursor
 	dw $60ce ; function pointer if non-0
 
-	INCROM $60ce, $63e6
+	INCROM $60ce, $63bb
+
+CheckPrintPoisoned: ; 63bb (1:63bb)
+	push af
+	and POISONED
+	jr z, .print
+.poison
+	ld a, LOW("<POISONED>")
+.print
+	call WriteByteToBGMap0
+	pop af
+	ret
+; 0x63c7
+
+CheckPrintDoublePoisoned: ; 63c7 (1:63c7)
+	push af
+	and DOUBLE_POISONED - POISONED
+	jr nz, CheckPrintPoisoned.poison ; double poison (print a second symbol)
+	jr CheckPrintPoisoned.print ; not double poisoned
+; 0x63ce
+
+CheckPrintCnfSlpPrz: ; 63ce (1:63ce)
+	push af
+	push hl
+	push de
+	and CNF_SLP_PRZ
+	ld e, a
+	ld d, $00
+	ld hl, .status_symbols
+	add hl, de
+	ld a, [hl]
+	call WriteByteToBGMap0
+	pop de
+	pop hl
+	pop af
+	ret
+
+.status_symbols
+	; NO_STATUS,   CONFUSED,          ASLEEP,          PARALYZED
+	db LOW("< >"), LOW("<CONFUSED>"), LOW("<ASLEEP>"), LOW("<PARALYZED>")
+; 0x63e6
 
 ; print the symbols of the attached energies of a turn holder's play area card
 ; input:
