@@ -13,8 +13,8 @@ DuelGraphics::
 DuelHUDGraphics:: ; 76968 (1d:6968)
 INCBIN "gfx/duel/hud.2bpp"
 
-DuelCardTypeGraphics:: ; 76ce8 (1d:6ce8)
-INCBIN "gfx/duel/card_types.2bpp"
+DuelCardHeaderGraphics:: ; 76ce8 (1d:6ce8)
+INCBIN "gfx/duel/card_headers.2bpp"
 
 DuelDmgSgbSymbolGraphics:: ; 76fe8 (1d:6fe8)
 INCBIN "gfx/duel/dmg_sgb_symbols.t7.2bpp"

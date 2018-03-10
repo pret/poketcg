@@ -2691,7 +2691,9 @@ Func_0fe9: ; 0fe9 (0:0fe9)
 	ret
 ; 0x100b
 
-Func_100b: ; 100b (0:100b)
+; save duel state to SRAM
+; called between each two-player turn, just after player draws card
+SaveDuelStateToSRAM: ; 100b (0:100b)
 	ld a, $2
 	call BankswitchSRAM
 	call $669d
@@ -4281,11 +4283,11 @@ Func_1730: ; 1730 (0:1730)
 	call SubstractHP
 	ld a, [wcac2]
 	cp $1
-	jr nz, .asm_17e8
+	jr nz, .skip_draw_huds
 	push hl
-	bank1call $503a
+	bank1call DrawDuelHUDs
 	pop hl
-.asm_17e8
+.skip_draw_huds
 	call PrintKnockedOutIfHLZero
 	jr Func_17fb
 
@@ -5675,7 +5677,7 @@ FillRectangle: ; 1f5f (0:1f5f)
 
 	INCROM $1f96, $208d
 
-; load the Deck and Hand icons for the "Draw X card(s) from the deck." screen
+; loads the Deck and Hand icons for the "Draw X card(s) from the deck." screen
 LoadDuelDrawCardsScreenTiles: ; 208d (0:208d)
 	ld hl, DuelOtherGraphics + $29 tiles
 	ld de, v0Tiles1 + $74 tiles
@@ -5683,7 +5685,26 @@ LoadDuelDrawCardsScreenTiles: ; 208d (0:208d)
 	jp CopyFontsOrDuelGraphicsTiles
 ; 0x2098
 
-	INCROM $2098, $20b0
+; loads the 8 tiles that make up the border of the main duel menu as well as the border
+; of a large card picture (displayed after drawing the card or placing it in the arena).
+LoadCardOrDuelMenuBorderTiles: ; 2098 (0:2098)
+	ld hl, DuelOtherGraphics + $15 tiles
+	ld de, v0Tiles1 + $50 tiles
+	ld b, $08
+	jr CopyFontsOrDuelGraphicsTiles
+; 0x20a2
+
+; loads the graphics of a card type header, used to display a picture of a card after drawing it
+; or placing it in the arena. register e determines which header (TRAINER, ENERGY, PoKéMoN)
+LoadCardTypeHeaderTiles: ; 20a2 (0:20a2)
+	ld d, a
+	ld e, 0
+	ld hl, DuelCardHeaderGraphics - $4000
+	add hl, de
+	ld de, v0Tiles1 + $60 tiles
+	ld b, $10
+	jr CopyFontsOrDuelGraphicsTiles
+; 0x20b0
 
 ; loads the symbols that are displayed near the names of a list of cards in the hand or discard pile
 LoadDuelCardSymbolTiles: ; 20b0 (0:20b0)
@@ -5755,14 +5776,14 @@ LoadDuelCoinTossResultTiles: ; 210f (0:210f)
 LoadDuelHUDTiles: ; 2119 (0:2119)
 	ld hl, DuelHUDGraphics - $4000
 	ld de, v0Tiles2 ; destination
-	ld b, (DuelCardTypeGraphics - DuelHUDGraphics) / TILE_SIZE ; number of tiles
+	ld b, (DuelCardHeaderGraphics - DuelHUDGraphics) / TILE_SIZE ; number of tiles
 ;	fallthrough
 
 ; if hl ≤ $3fff
 ;   copy b tiles from Gfx1:(hl+$4000) to de
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
-CopyFontsOrDuelGraphicsTiles:
+CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
 	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
 	ld c, TILE_SIZE
@@ -5861,9 +5882,9 @@ Func_21f2: ; 21f2 (0:21f2)
 	jr z, .asm_2221
 	cp $a
 	jr z, .asm_224d
-	cp $5
+	cp TX_SYMBOL
 	jr z, .asm_2225
-	cp $6
+	cp TX_START
 	jr z, .asm_220f
 	cp $7
 	jr z, .asm_2215
@@ -5957,6 +5978,10 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
+; wcd0a <- 0
+; hffac <- 0
+; wcd0b <- 0
+; hffaf <- $f
 Func_2298: ; 2298 (0:2298)
 	xor a
 	ld [wcd0a], a
@@ -5966,6 +5991,8 @@ Func_2298: ; 2298 (0:2298)
 	ldh [hffaf], a
 	ret
 
+; Func_22ae
+; hffae <- a
 Func_22a6: ; 22a6 (0:22a6)
 	push af
 	call Func_22ae
@@ -5973,6 +6000,13 @@ Func_22a6: ; 22a6 (0:22a6)
 	ldh [hffae], a
 	ret
 
+; hffad <- d
+; hffae <- 0
+; wcd09 <- 0
+; hffaa <- BGMap0(e)
+; hffab <- BGMap0(d)
+; Func_2298
+;; writes BGMap0-translated DE to (hffab,hffaa)
 Func_22ae: ; 22ae (0:22ae)
 	push hl
 	ld a, d
@@ -6018,6 +6052,11 @@ Func_22ca: ; 22ca (0:22ca)
 	call Func_235e
 	jr .asm_22e9
 
+; wcd05 <- a
+; &(hffab,hffaa) <- a
+; (hffab,hffaa) ++
+; hffac ++
+;; writes a to addr pointed to by (hffab,hffaa), then increments (hffab,hffaa) and hffac
 Func_22f2: ; 22f2 (0:22f2)
 	ld [wcd05], a
 	ld hl, hffaa
@@ -6180,7 +6219,7 @@ Uppercase: ; 23b1 (0:23b1)
 
 Func_23c1: ; 23c1 (0:23c1)
 	ld a, [hl]
-	cp $6
+	cp TX_START
 	jr nz, .asm_23cf
 	call Func_23d3
 	inc b
@@ -6204,7 +6243,7 @@ Func_23d3: ; 23d3 (0:23d3)
 	jr c, .asm_23ec
 	cp $10
 	jr nc, .asm_23ec
-	cp $5
+	cp TX_SYMBOL
 	jr nz, .asm_23d8
 	inc b
 	jr .asm_23f4

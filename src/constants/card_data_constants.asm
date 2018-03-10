@@ -195,3 +195,8 @@ CARDPAGE_POKEMON_DESCRIPTION EQU $06
 CARDPAGE_ENERGY              EQU $09
 CARDPAGE_TRAINER_1           EQU $0d
 CARDPAGE_TRAINER_2           EQU $0e
+
+; card type header constants ($10-tile headers in DuelCardHeaderGraphics)
+HEADER_TRAINER EQU $00
+HEADER_ENERGY  EQU $01
+HEADER_POKEMON EQU $02

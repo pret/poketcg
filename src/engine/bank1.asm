@@ -288,6 +288,7 @@ Func_420b: ; 420b (1:420b)
 	ret
 ; 0x4225
 
+; handle the turn of the duelist identified by hWhoseTurn
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -311,16 +312,19 @@ HandleTurn: ; 4225 (1:4225)
 	call AddCardToHand
 	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
-	jr z, Func_4262
+	jr z, HandleTurn_PlayerDrewCard
 	call SwapTurn
 	call IsClairvoyanceActive
 	call SwapTurn
-	call c, Func_4b2c
+	call c, DisplayPlayerDrawCardScreen
 	jr DuelMainInterface
 
-Func_4262:
-	call Func_4b2c
-	call Func_100b
+; display the animation of the player drawing the card at hTempCardIndex_ff98
+; save duel state to SRAM, and fall through to DuelMainInterface to effectively
+; begin the turn
+HandleTurn_PlayerDrewCard:
+	call DisplayPlayerDrawCardScreen
+	call SaveDuelStateToSRAM
 ;	fallthrough
 
 Func_4268:
@@ -1441,11 +1445,12 @@ Func_4ae9: ; 4ae9 (1:4ae9)
 	ret
 ; 0x4b2c
 
-Func_4b2c: ; 4b2c (1:4b2c)
+; display the animation of the player drawing the card at hTempCardIndex_ff98
+DisplayPlayerDrawCardScreen: ; 4b2c (1:4b2c)
 	ldtx hl, YouDrewText
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call $5e5f
+	call _DisplayPlayerDrawCardScreen
 	ret
 ; 0x4b38
 
@@ -1920,7 +1925,7 @@ DrawDuelHUD: ; 5093 (1:5093)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld e, a ; cur HP
-	call $6614
+	call DrawHPBar
 	ld hl, wcbc9
 	ld b, [hl]
 	inc hl
@@ -1929,15 +1934,15 @@ DrawDuelHUD: ; 5093 (1:5093)
 	call BCCoordToBGMap0Address
 	push de
 	ld hl, wDefaultText
-	ld b, 6 ; first row of the HP bar
+	ld b, HP_BAR_LENGTH / 2 ; first row of the HP bar
 	call SafeCopyDataHLtoDE
 	pop de
 	ld hl, BG_MAP_WIDTH
 	add hl, de
 	ld e, l
 	ld d, h
-	ld hl, wDefaultText + 6
-	ld b, 6 ; second row of the HP bar
+	ld hl, wDefaultText + HP_BAR_LENGTH / 2
+	ld b, HP_BAR_LENGTH / 2 ; second row of the HP bar
 	call SafeCopyDataHLtoDE
 
 	; print number of attached Pluspower and Defender with respective icon, if any
@@ -2869,7 +2874,74 @@ JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 	jp WriteByteToBGMap0
 ; 0x5b7d
 
-	INCROM $5b7d, $5fdd
+	INCROM $5b7d, $5e5f
+
+; display the animation of the player drawing the card loaded in wLoadedCard1
+; print the text at hl (which is YouDrewText)
+_DisplayPlayerDrawCardScreen: ; 5e5f (1:5e5f)
+	push hl
+	call DrawLargePictureOfCard
+	ld a, 18
+	call CopyCardNameAndLevel
+	ld [hl], TX_END
+	ld hl, 0
+	call LoadTxRam2
+	pop hl
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x5e75
+
+; draw a large picture of the card loaded in wLoadedCard1, including its image
+; and a header indicating the type of card (TRAINER, ENERGY, PoKéMoN)
+DrawLargePictureOfCard: ; 5e75 (1:5e75)
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	call LoadDuelHUDTiles
+	call Func_5aeb
+	ld a, $08
+	ld [wcac2], a
+	call LoadCardOrDuelMenuBorderTiles
+	ld e, HEADER_TRAINER
+	ld a, [wLoadedCard1Type]
+	cp TYPE_TRAINER
+	jr z, .draw
+	ld e, HEADER_ENERGY
+	and TYPE_ENERGY
+	jr nz, .draw
+	ld e, HEADER_POKEMON
+.draw
+	ld a, e
+	call LoadCardTypeHeaderTiles
+	ld de, v0Tiles1 + $20 tiles
+	call LoadLoaded1CardGfx
+	call SetBGP6OrSGB3ToCardPalette
+	call FlushAllPalettesOrSendPal23Packet
+	ld hl, LargeCardTileData
+	call WriteDataBlocksToBGMap0
+	lb de, 6, 3
+	call ApplyBGP6OrSGB3ToCardImage
+	ret
+; 0x5eb7
+
+LargeCardTileData: ; 5eb7 (1:5eb7)
+	db  5,  0, $d0, $d4, $d4, $d4, $d4, $d4, $d4, $d4, $d4, $d1, 0 ; top border
+	db  5,  1, $d6, $e0, $e1, $e2, $e3, $e4, $e5, $e6, $e7, $d7, 0 ; header top
+	db  5,  2, $d6, $e8, $e9, $ea, $eb, $ec, $ed, $ee, $ef, $d7, 0 ; header bottom
+	db  5,  3, $d6, $a0, $a6, $ac, $b2, $b8, $be, $c4, $ca, $d7, 0 ; image
+	db  5,  4, $d6, $a1, $a7, $ad, $b3, $b9, $bf, $c5, $cb, $d7, 0 ; image
+	db  5,  5, $d6, $a2, $a8, $ae, $b4, $ba, $c0, $c6, $cc, $d7, 0 ; image
+	db  5,  6, $d6, $a3, $a9, $af, $b5, $bb, $c1, $c7, $cd, $d7, 0 ; image
+	db  5,  7, $d6, $a4, $aa, $b0, $b6, $bc, $c2, $c8, $ce, $d7, 0 ; image
+	db  5,  8, $d6, $a5, $ab, $b1, $b7, $bd, $c3, $c9, $cf, $d7, 0 ; image
+	db  5,  9, $d6, 0                                              ; empty line 1 (left)
+	db 14,  9, $d7, 0                                              ; empty line 1 (right)
+	db  5, 10, $d6, 0                                              ; empty line 2 (left)
+	db 14, 10, $d7, 0                                              ; empty line 2 (right)
+	db  5, 11, $d2, $d5, $d5, $d5, $d5, $d5, $d5, $d5, $d5, $d3, 0 ; bottom border
+	db $ff
+; 0x5f4a
+
+	INCROM $5f4a, $5fdd
 
 ; return carry if the turn holder has any Pokemon with non-zero HP in the play area.
 ; return how many Pokemon with non-zero HP in b.
@@ -3023,6 +3095,7 @@ MenuParameters_60c6: ; 60c6 (1:60c6)
 
 	INCROM $60ce, $63bb
 
+; given a card's status in a, print the Poison symbol at bc if it's poisoned
 CheckPrintPoisoned: ; 63bb (1:63bb)
 	push af
 	and POISONED
@@ -3035,6 +3108,7 @@ CheckPrintPoisoned: ; 63bb (1:63bb)
 	ret
 ; 0x63c7
 
+; given a card's status in a, print the Poison symbol at bc if it's double poisoned
 CheckPrintDoublePoisoned: ; 63c7 (1:63c7)
 	push af
 	and DOUBLE_POISONED - POISONED
@@ -3042,6 +3116,8 @@ CheckPrintDoublePoisoned: ; 63c7 (1:63c7)
 	jr CheckPrintPoisoned.print ; not double poisoned
 ; 0x63ce
 
+; given a card's status in a, print the Confusion, Sleep, or Paralysis symbol at bc
+; for each of those status that is active
 CheckPrintCnfSlpPrz: ; 63ce (1:63ce)
 	push af
 	push hl
@@ -3110,7 +3186,36 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ret
 ; 0x6423
 
-	INCROM $6423, $6785
+	INCROM $6423, $6614
+
+; input d, e: max. HP, current HP
+DrawHPBar: ; 6614 (1:6614)
+	ld a, MAX_HP
+	ld c, LOW("< >")
+	call .fill_hp_bar ; empty bar
+	ld a, d
+	ld c, LOW("<🌕>")
+	call .fill_hp_bar ; fill (max. HP) with HP counters
+	ld a, d
+	sub e
+	ld c, LOW("<🌑>")
+	; fill (max. HP - current HP) with damaged HP counters
+.fill_hp_bar
+	or a
+	ret z
+	ld hl, wDefaultText
+	ld b, HP_BAR_LENGTH
+.tile_loop
+	ld [hl], c
+	inc hl
+	dec b
+	ret z
+	sub MAX_HP / HP_BAR_LENGTH
+	jr nz, .tile_loop
+	ret
+; 0x6635
+
+	INCROM $6635, $6785
 
 Func_6785: ; 6785 (1:6785)
 	call EnableSRAM
@@ -3232,7 +3337,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	call PutHandCardInPlayArea
 	ldh a, [hTemp_ffa0]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call $5e75
+	call DrawLargePictureOfCard
 	call $68e4
 	ld a, $1
 	ld [wAlreadyPlayedEnergy], a

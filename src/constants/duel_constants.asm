@@ -1,5 +1,7 @@
 MAX_BENCH_POKEMON     EQU 5
 MAX_PLAY_AREA_POKEMON EQU 6 ; arena + bench
+MAX_HP                EQU 120
+HP_BAR_LENGTH         EQU MAX_HP / 10
 
 ; hWhoseTurn constants
 PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
