@@ -49,7 +49,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	call LoadDuelHUDTiles
 	call LoadDuelCardSymbolTiles
 	call Func_8d0b
-	bank1call Func_5aeb
+	bank1call SetDefaultPalettes
 	ld de, $3cbf
 	call Func_2275
 	ret

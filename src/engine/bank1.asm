@@ -46,7 +46,7 @@ Func_405a: ; 405a (1:405a)
 	ld [wTileMapFill], a
 	call DisableLCD
 	call LoadDuelHUDTiles
-	call Func_5aeb
+	call SetDefaultPalettes
 	ld de, $387f
 	call Func_2275
 	ret
@@ -281,7 +281,7 @@ Func_420b: ; 420b (1:420b)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
-	call Func_5aeb
+	call SetDefaultPalettes
 	ld de, $389f
 	call Func_2275
 	call EnableLCD
@@ -2719,7 +2719,7 @@ CopyCGBCardPalette: ; 5a1e (1:5a1e)
 	add a ; a *= CGB_PAL_SIZE
 	ld e, a
 	ld d, $00
-	ld hl, wBackgroundPalettesCGB ; wObjectPalettesCGB - 8 * CGB_PAL_SIZE
+	ld hl, wBackgroundPalettesCGB ; wObjectPalettesCGB - 8 palettes
 	add hl, de
 	ld de, wCardPalette
 	ld b, CGB_PAL_SIZE
@@ -2867,8 +2867,97 @@ ApplyCardCGBAttributes: ; 5adb (1:5adb)
 	ret
 ; 0x5aeb
 
-Func_5aeb: ; 5aeb (1:5aeb)
-	INCROM $5aeb, $5b7a
+; set the default game palettes for all three systems
+; BGP and OBP0 on DMG
+; SGB0 and SGB1 on SGB
+; BGP0 to BGP5 and OBP1 on CGB
+SetDefaultPalettes: ; 5aeb (1:5aeb)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	jr z, .sgb
+	cp CONSOLE_CGB
+	jr z, .cgb
+	ld a, $e4
+	ld [wOBP0], a
+	ld [wBGP], a
+	ld a, $01 ; equivalent to FLUSH_ONE
+	ld [wFlushPaletteFlags], a
+	ret
+.cgb
+	ld a, $04
+	ld [wTextBoxFrameType], a
+	ld de, CGBDefaultPalettes
+	ld hl, wBackgroundPalettesCGB
+	ld c, 5 palettes
+	call .copy_de_to_hl
+	ld de, CGBDefaultPalettes
+	ld hl, wObjectPalettesCGB
+	ld c, CGB_PAL_SIZE
+	call .copy_de_to_hl
+	call SetFlushAllPalettes
+	ret
+.sgb
+	ld a, $04
+	ld [wTextBoxFrameType], a
+	ld a, PAL01 << 3 + 1
+	ld hl, wTempSGBPacket
+	push hl
+	ld [hli], a
+	ld de, Pal01Packet_Default
+	ld c, $0e
+	call .copy_de_to_hl
+	ld [hl], c
+	pop hl
+	call SendSGB
+	ret
+
+.copy_de_to_hl
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec c
+	jr nz, .copy_de_to_hl
+	ret
+; 0x5b44
+
+CGBDefaultPalettes:
+; BGP0 and OBP0
+	rgb 28, 28, 24
+	rgb 21, 21, 16
+	rgb 10, 10, 8
+	rgb 0, 0, 0
+; BGP1
+	rgb 28, 28, 24
+	rgb 30, 29, 0
+	rgb 30, 3, 0
+	rgb 0, 0, 0
+; BGP2
+	rgb 28, 28, 24
+	rgb 0, 18, 0
+	rgb 12, 11, 20
+	rgb 0, 0, 0
+; BGP3
+	rgb 28, 28, 24
+	rgb 22, 0 ,22
+	rgb 27, 7, 3
+	rgb 0, 0, 0
+; BGP4
+	rgb 28, 28, 24
+	rgb 26, 10, 0
+	rgb 28, 0, 0
+	rgb 0, 0, 0
+
+; first and last byte of the packet not contained here (see SetDefaultPalettes.sgb)
+Pal01Packet_Default:
+; SGB0
+	rgb 28, 28, 24
+	rgb 21, 21, 16
+	rgb 10, 10, 8
+	rgb 0, 0, 0
+; SGB1
+	rgb 26, 10, 0
+	rgb 28, 0, 0
+	rgb 0, 0, 0
 
 JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 	jp WriteByteToBGMap0
@@ -2897,7 +2986,7 @@ DrawLargePictureOfCard: ; 5e75 (1:5e75)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelHUDTiles
-	call Func_5aeb
+	call SetDefaultPalettes
 	ld a, $08
 	ld [wcac2], a
 	call LoadCardOrDuelMenuBorderTiles

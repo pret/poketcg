@@ -558,16 +558,16 @@ FlushPalettes: ; 042d (0:042d)
 FlushAllCGBPalettes: ; 0458 (0:0458)
 	; flush 8 BGP palettes
 	xor a
-	ld b, 8 * CGB_PAL_SIZE
+	ld b, 8 palettes
 	call CopyCGBPalettes
 	; flush 8 OBP palettes
 	ld a, CGB_PAL_SIZE
-	ld b, 8 * CGB_PAL_SIZE
+	ld b, 8 palettes
 	call CopyCGBPalettes
 	jr FlushPalettes.done
 
 ; copy b bytes of CGB palette data starting at
-; wBackgroundPalettesCGB + a * CGB_PAL_SIZE into rBGPD or rOGPD.
+; wBackgroundPalettesCGB + a palettes into rBGPD or rOGPD.
 CopyCGBPalettes: ; 0467 (0:0467)
 	add a
 	add a
@@ -5370,7 +5370,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	or a
 	jr z, .draw_top_border
 ; Console is SGB and frame type is != 0.
-; The text box will be colorized so a SGB command needs to be transferred
+; The text box will be colorized so a SGB command needs to be sent
 	push de
 	push bc
 	call .draw_top_border ; this falls through to drawing the whole box
@@ -5540,7 +5540,7 @@ ContinueDrawingTextBoxCGB:
 	call CopyLine
 	pop hl
 	call BankswitchVRAM1
-	ld a, [wTextBoxFrameType]
+	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
 	ld d, a
 	xor a

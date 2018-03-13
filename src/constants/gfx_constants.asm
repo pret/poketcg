@@ -8,6 +8,7 @@ BG_MAP_HEIGHT EQU 32 ; tiles
 
 ; cgb palette size
 CGB_PAL_SIZE EQU 8 ; bytes
+palettes EQUS "* CGB_PAL_SIZE"
 
 ; tile size
 TILE_SIZE EQU 16 ; bytes

@@ -439,7 +439,7 @@ Func_c335: ; c335 (3:4335)
 	ld [wd10d], a
 	ld hl, wObjectPalettesCGB
 	ld de, wd0cc
-	ld bc, 8 * CGB_PAL_SIZE
+	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	ret
 
@@ -450,7 +450,7 @@ Func_c34e: ; c34e (3:434e)
 	ld [wOBP1], a
 	ld hl, wd0cc
 	ld de, wObjectPalettesCGB
-	ld bc, 8 * CGB_PAL_SIZE
+	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	call SetFlushAllPalettes
 	ret

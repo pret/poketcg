@@ -507,10 +507,10 @@ wTempSGBPacket:: ; cae0
 
 ; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
 wBackgroundPalettesCGB:: ; caf0
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 wObjectPalettesCGB:: ; cb30
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 	ds $4
 
@@ -880,9 +880,8 @@ wccf2:: ; ccf2
 
 SECTION "WRAM Engine 2", WRAM0
 
-; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
-; Note that this doesn't appear to be a selectable option, just changes with the situation.
-; For example the value 4 seems to be used a lot during duels.
+; on CGB, attributes of the text box borders. (values 0-7? so only affects palette?)
+; on SGB, colorize text box border with SGB1 if non-0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
@@ -1372,7 +1371,7 @@ wd0cb:: ; d0cb
 	ds $1
 
 wd0cc:: ; d0cc
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 wd10c:: ; d10c
 	ds $1
