@@ -11,10 +11,10 @@ LoadMap: ; c000 (3:4000)
 	ld [wMatchStartTheme], a
 	farcall Func_10a9b
 	call Func_c1a4
-	call InitSpritePositions
+	call ZeroObjectPositions
 	xor a
 	ld [wTileMapFill], a
-	call Func_2119
+	call LoadDuelHUDTiles
 	call Set_OBJ_8x8
 	xor a
 	ld [wcd08], a
@@ -341,7 +341,7 @@ Unknown_c27c: ; c27c (3:427c)
 Func_c280: ; c280 (3:4280)
 	call Func_c228
 	call Func_3ca0
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	call EnableLCD
@@ -370,7 +370,7 @@ Func_c2a3: ; c2a3 (3:42a3)
 	call Func_2275
 	farcall Func_12ba7
 	call Func_3ca0
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call EnableLCD
@@ -439,7 +439,7 @@ Func_c335: ; c335 (3:4335)
 	ld [wd10d], a
 	ld hl, wObjectPalettesCGB
 	ld de, wd0cc
-	ld bc, 8 * CGB_PAL_SIZE
+	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	ret
 
@@ -450,7 +450,7 @@ Func_c34e: ; c34e (3:434e)
 	ld [wOBP1], a
 	ld hl, wd0cc
 	ld de, wObjectPalettesCGB
-	ld bc, 8 * CGB_PAL_SIZE
+	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	call SetFlushAllPalettes
 	ret
@@ -3118,8 +3118,8 @@ OWSequence_Joshua:
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
-	ld a, [wd0c3]
-	or a
+	ld a, [wDuelResult]
+	or a ; cp DUEL_WIN
 	jr z, .player_won
 	ld c, $2
 
@@ -3186,8 +3186,8 @@ Func_f580: ; f580 (3:7580)
 	INCROM $f5b3, $fc2b
 
 Func_fc2b: ; fc2b (3:7c2b)
-	ld a, [wd0c3]
-	cp $2
+	ld a, [wDuelResult]
+	cp 2
 	jr c, .asm_fc34
 	ld a, $2
 .asm_fc34

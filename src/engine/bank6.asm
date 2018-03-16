@@ -1,4 +1,153 @@
-	INCROM $18000, $186f7
+_CopyCardNameAndLevel: ; 18000 (6:4000)
+	push bc
+	push de
+	ld [wcd9b], a
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, wDefaultText
+	push de
+	call CopyText ; copy card name to wDefaultText
+	pop hl
+	ld a, [hli]
+	cp TX_START
+	jp z, Func_18086
+	ld a, [wcd9b]
+	ld c, a
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .level_done ; jump if energy or trainer
+	ld a, [wLoadedCard1Level]
+	or a
+	jr z, .level_done
+	inc c
+	inc c
+	ld a, [wLoadedCard1Level]
+	cp 10
+	jr c, .level_done
+	inc c ; second digit
+.level_done
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, wDefaultText
+	push de
+	call CopyText
+	pop hl
+	push de
+	ld e, c
+	call Func_23c1
+	add e
+	ld c, a
+	pop hl
+	push hl
+.fill_loop
+	ld a, $70
+	ld [hli], a
+	dec c
+	jr nz, .fill_loop
+	ld [hl], TX_END
+	pop hl
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .done
+	ld a, [wLoadedCard1Level]
+	or a
+	jr z, .done
+	ld a, TX_SYMBOL
+	ld [hli], a
+	ld [hl], LOW("<Lv>")
+	inc hl
+	ld a, [wLoadedCard1Level]
+	cp 10
+	jr c, .one_digit
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld b, LOW("<0>") - 1
+.first_digit_loop
+	inc b
+	sub 10
+	jr nc, .first_digit_loop
+	add 10
+	ld [hl], b ; first digit
+	inc hl
+.one_digit
+	ld [hl], TX_SYMBOL
+	inc hl
+	add LOW("<0>")
+	ld [hl], a ; last (or only) digit
+	inc hl
+.done
+	pop de
+	pop bc
+	ret
+; 0x18086
+
+Func_18086: ; 18086 (6:4086)
+	ld a, [wcd9b]
+	inc a
+	add a
+	ld b, a
+	ld hl, wDefaultText
+.find_end_text_loop
+	dec b
+	ld a, [hli]
+	or a ; TX_END
+	jr nz, .find_end_text_loop
+	dec hl
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .level_done
+	ld a, [wLoadedCard1Level]
+	or a
+	jr z, .level_done
+	ld c, a
+	ld a, " "
+	ld [hli], a
+	dec b
+	ld a, "L"
+	ld [hli], a
+	dec b
+	ld a, "v"
+	ld [hli], a
+	dec b
+	ld a, c
+	cp 10
+	jr c, .got_level
+	push bc
+	ld b, "0" - 1
+.first_digit_loop
+	inc b
+	sub 10
+	jr nc, .first_digit_loop
+	add 10
+	ld [hl], b ; first digit
+	inc hl
+	pop bc
+	ld c, a
+	dec b
+.got_level
+	ld a, c
+	add "0"
+	ld [hli], a ; last (or only) digit
+	dec b
+.level_done
+	push hl
+	ld a, " "
+.fill_spaces_loop
+	ld [hli], a
+	dec b
+	jr nz, .fill_spaces_loop
+	ld [hl], TX_END
+	pop hl
+	pop de
+	pop bc
+	ret
+; 0x180d5
+
+	INCROM $180d5, $186f7
 
 INCLUDE "data/effect_commands.asm"
 
@@ -104,7 +253,7 @@ Func_19a12: ; 19a12 (6:5a12)
 	ld h, [hl]
 	ld l, a
 	ld de, wDefaultText
-	call PrintTextBoxBorderLabel
+	call CopyText
 	ret
 ; 0x19a1f
 
@@ -159,7 +308,7 @@ Func_1a61f: ; 1a61f (6:661f)
 	pop hl
 	bank1call $5e5f
 .asm_1a680
-	call Func_378a
+	call AssertSongFinished
 	or a
 	jr nz, .asm_1a680
 	call ResumeSong
@@ -169,7 +318,7 @@ Func_1a61f: ; 1a61f (6:661f)
 
 	INCROM $1a68d, $1a6cc
 
-Func_1a6cc: ; 1a6cc (6:66cc)
+CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ret
 ; 0x1a6cd
 

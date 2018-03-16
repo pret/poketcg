@@ -14,10 +14,10 @@ Func_f800c: ; f800c (3e:400c)
 	jp Func_f804e
 
 Func_f800f: ; f800f (3e:400f)
-	jp Func_f8052
+	jp Music2_AssertSongFinished
 
 Func_f8012: ; f8012 (3e:4012)
-	jp Func_f805c
+	jp Music2_AssertSFXFinished
 
 Func_f8015: ; f8015 (3e:4015)
 	jp Func_f8066
@@ -70,7 +70,7 @@ Func_f804e: ; f804e (3e:404e)
 	ld [wddf0], a
 	ret
 
-Func_f8052: ; f8052 (3e:4052)
+Music2_AssertSongFinished: ; f8052 (3e:4052)
 	ld a, [wCurSongID]
 	cp $80
 	ld a, $1
@@ -78,7 +78,7 @@ Func_f8052: ; f8052 (3e:4052)
 	xor a
 	ret
 
-Func_f805c: ; f805c (3e:405c)
+Music2_AssertSFXFinished: ; f805c (3e:405c)
 	ld a, [wCurSfxID]
 	cp $80
 	ld a, $1

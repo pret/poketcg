@@ -269,7 +269,7 @@ Func_701e9: ; 701e9 (1c:41e9)
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
-	ld hl, v0BGMapTiles1
+	ld hl, v0BGMap0
 	ld de, $000c
 	ld a, $80
 	ld c, $d

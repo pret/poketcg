@@ -1,6 +1,6 @@
 KakunaDescription: ; 58000 (16:4000)
 	text "Almost incapable of moving, this"
-	line "Pok`mon can only harden its shell to"
+	line "Pokémon can only harden its shell to"
 	line "protect itself from predators."
 	done
 
@@ -59,12 +59,12 @@ TerrorStrikeName: ; 581ad (16:41ad)
 
 TerrorStrikeDescription: ; 581bc (16:41bc)
 	text "Flip a coin. If heads and if your"
-	line "opponent has any Benched Pok`mon,"
+	line "opponent has any Benched Pokémon,"
 	line "he or she chooses 1 of them and"
 	line "switches it with the Defending"
-	line "Pok`mon."
+	line "Pokémon."
 	line "(Do the damage before switching"
-	line "the Pok`mon.)"
+	line "the Pokémon.)"
 	done
 
 PoisonFangName: ; 58277 (16:4277)
@@ -82,7 +82,7 @@ ArbokDescription: ; 5828b (16:428b)
 	done
 
 NidoranFName: ; 582e5 (16:42e5)
-	text "Nidoran%"
+	text "Nidoran♀"
 	done
 
 FurySweepesName: ; 582ef (16:42ef)
@@ -99,8 +99,8 @@ CallForFamilyName: ; 58341 (16:4341)
 	done
 
 NidoranFsCallForFamilyDescription: ; 58352 (16:4352)
-	text "Search your deck for a Basic Pok`mon"
-	line "named Nidoran% or Nidoran$ and put"
+	text "Search your deck for a Basic Pokémon"
+	line "named Nidoran♀ or Nidoran♂ and put"
 	line "it onto your Bench. Shuffle your"
 	line "deck afterward. (You can't use this"
 	line "attack if your Bench is full.)"
@@ -112,7 +112,7 @@ NidoranFKind: ; 583ff (16:43ff)
 
 NidoranFDescription: ; 5840b (16:440b)
 	text "Although small, its venomous barbs"
-	line "make this Pok`mon dangerous."
+	line "make this Pokémon dangerous."
 	line "The female has smaller horns."
 	done
 
@@ -126,7 +126,7 @@ SupersonicName: ; 58474 (16:4474)
 
 MayInflictConfusionDescription: ; 58480 (16:4480)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Confused."
+	line "Pokémon is now Confused."
 	done
 
 DoubleKickName: ; 584bf (16:44bf)
@@ -167,7 +167,7 @@ NidoqueenDescription: ; 58597 (16:4597)
 	done
 
 NidoranMName: ; 585f5 (16:45f5)
-	text "Nidoran$"
+	text "Nidoran♂"
 	done
 
 HornHazardName: ; 585ff (16:45ff)
@@ -194,7 +194,7 @@ HornDrillName: ; 586a3 (16:46a3)
 	done
 
 NidorinoDescription: ; 586af (16:46af)
-	text "An aggressive Pok`mon that is quick"
+	text "An aggressive Pokémon that is quick"
 	line "to attack. The horn on its head"
 	line "secretes a powerful venom."
 	done
@@ -220,7 +220,7 @@ ToxicName: ; 587b5 (16:47b5)
 	done
 
 ToxicDescription: ; 587bc (16:47bc)
-	text "The Defending Pok`mon is now"
+	text "The Defending Pokémon is now"
 	line "Poisoned. It now takes 20 Poison"
 	line "damage instead of 10 after each"
 	line "player's turn (even if it was"
@@ -244,7 +244,7 @@ LeechLifeName: ; 588a7 (16:48a7)
 ZubatsLeechLifeDescription: ; 588b3 (16:48b3)
 	text "Remove a number of damage counters"
 	line "from Zubat equal to the damage done"
-	line "to the Defending Pok`mon (after"
+	line "to the Defending Pokémon (after"
 	line "applying Weakness and Resistance)."
 	line "If Zubat has fewer damage counters"
 	line "than that, remove all of them."
@@ -271,7 +271,7 @@ WingAttackName: ; 589f1 (16:49f1)
 GolbatsLeechLifeDescription: ; 589fe (16:49fe)
 	text "Remove a number of damage counters"
 	line "from Golbat equal to the damage done"
-	line "to the Defending Pok`mon (after"
+	line "to the Defending Pokémon (after"
 	line "applying Weakness and Resistance)."
 	line "If Golbat has fewer damage counters"
 	line "than that, remove all of them."
@@ -292,7 +292,7 @@ SproutName: ; 58b3a (16:4b3a)
 	done
 
 SproutDescription: ; 58b42 (16:4b42)
-	text "Search your deck for a Basic Pok`mon"
+	text "Search your deck for a Basic Pokémon"
 	line "named Oddish and put it onto your"
 	line "Bench. Shuffle your deck afterward."
 	line "(You can't use this attack if your"
@@ -318,7 +318,7 @@ FoulOdorName: ; 58c55 (16:4c55)
 	done
 
 FoulOdorDescription: ; 58c60 (16:4c60)
-	text "Both the Defending Pok`mon and"
+	text "Both the Defending Pokémon and"
 	line "Gloom are now Confused (after doing"
 	line "damage)."
 	done
@@ -341,7 +341,7 @@ HealDescription: ; 58d1d (16:4d1d)
 	text "Once during your turn (before your"
 	line "attack), you may flip a coin. If"
 	line "heads, remove 1 damage counter from"
-	line "1 of your Pok`mon. This power can't"
+	line "1 of your Pokémon. This power can't"
 	line "be used if Vileplume is Asleep,"
 	line "Confused, or Paralyzed."
 	done
@@ -380,7 +380,7 @@ SporeName: ; 58ee2 (16:4ee2)
 	done
 
 InflictSleepDescription: ; 58ee9 (16:4ee9)
-	text "The Defending Pok`mon is now Asleep."
+	text "The Defending Pokémon is now Asleep."
 	done
 
 ParasKind: ; 58f0f (16:4f0f)
@@ -414,7 +414,7 @@ VenonatName: ; 58ff5 (16:4ff5)
 VenonatLeechLifeDescription: ; 58ffe (16:4ffe)
 	text "Remove a number of damage counters"
 	line "from Venonat equal to the damage"
-	line "done to the Defending Pok`mon (after"
+	line "done to the Defending Pokémon (after"
 	line "applying Weakness and Resistance)."
 	line "If Venonat has fewer damage counters"
 	line "than that, remove all of them."
@@ -442,7 +442,7 @@ ShiftDescription: ; 59146 (16:5146)
 	text "Once during your turn (before your"
 	line "attack), you may change the type of"
 	line "Venomoth to the type of any other"
-	line "Pok`mon in play other than"
+	line "Pokémon in play other than"
 	line "Colorless."
 	line "This power can't be used if Venomoth"
 	line "is Asleep, Confused, or Paralyzed."
@@ -454,7 +454,7 @@ VenomPowderName: ; 5921e (16:521e)
 
 VenomPowderDescription: ; 5922c (16:522c)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Confused and"
+	line "Pokémon is now Confused and"
 	line "Poisoned."
 	done
 
@@ -473,7 +473,7 @@ BellsproutName: ; 592e5 (16:52e5)
 	done
 
 BellsproutsCallForFamilyDescription: ; 592f1 (16:52f1)
-	text "Search your deck for a Basic Pok`mon"
+	text "Search your deck for a Basic Pokémon"
 	line "named Bellsprout and put it onto"
 	line "your Bench. Shuffle your deck"
 	line "afterward. (You can't use this"
@@ -481,7 +481,7 @@ BellsproutsCallForFamilyDescription: ; 592f1 (16:52f1)
 	done
 
 BellsproutDescription: ; 59394 (16:5394)
-	text "A carnivorous Pok`mon that traps and"
+	text "A carnivorous Pokémon that traps and"
 	line "eats bugs. It uses its root feet to"
 	line "soak up needed moisture."
 	done
@@ -515,8 +515,8 @@ LureName: ; 5948d (16:548d)
 
 VictreebelsLureDescription: ; 59493 (16:5493)
 	text "If your opponent has any Benched"
-	line "Pok`mon, choose 1 of them and switch"
-	line "it with his or her Active Pok`mon."
+	line "Pokémon, choose 1 of them and switch"
+	line "it with his or her Active Pokémon."
 	done
 
 AcidName: ; 594fd (16:54fd)
@@ -525,7 +525,7 @@ AcidName: ; 594fd (16:54fd)
 
 VictreebelsAcidDescription: ; 59503 (16:5503)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon can't retreat during your"
+	line "Pokémon can't retreat during your"
 	line "opponent's next turn."
 	done
 
@@ -573,7 +573,7 @@ ToxicGasName: ; 596cc (16:56cc)
 	done
 
 ToxicGasDescription: ; 596d7 (16:56d7)
-	text "Ignore all Pok`mon Powers other"
+	text "Ignore all Pokémon Powers other"
 	line "than Toxic Gases. This power stops"
 	line "working while Muk is Asleep,"
 	line "Confused, or Paralyzed."
@@ -619,7 +619,7 @@ TeleportName: ; 5988c (16:588c)
 
 TeleportDescription: ; 59896 (16:5896)
 	text "Switch Exeggutor with 1 of your"
-	line "Benched Pok`mon."
+	line "Benched Pokémon."
 	done
 
 BigEggsplosionName: ; 598c8 (16:58c8)
@@ -654,7 +654,7 @@ FoulGasName: ; 599d5 (16:59d5)
 
 FoulGasDescription: ; 599df (16:59df)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Poisoned; if tails,"
+	line "Pokémon is now Poisoned; if tails,"
 	line "it is now Confused."
 	done
 
@@ -681,10 +681,10 @@ SelfdestructName: ; 59abe (16:5abe)
 	done
 
 WeezingsSelfdestructDescription: ; 59acc (16:5acc)
-	text "Does 10 damage to each Pok`mon on"
+	text "Does 10 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.) Weezing does 60 damage to"
+	line "Pokémon.) Weezing does 60 damage to"
 	line "itself."
 	done
 
@@ -777,7 +777,7 @@ EmberName: ; 59e0e (16:5e0e)
 	done
 
 EmberDescription: ; 59e15 (16:5e15)
-	text "Discard 1 ", TX_FIRE, " Energy card attached to"
+	text "Discard 1 <FIRE> Energy card attached to"
 	line "Charmander in order to use this"
 	line "attack."
 	done
@@ -802,7 +802,7 @@ FlamethrowerName: ; 59ee6 (16:5ee6)
 	done
 
 CharmeleonsFlamethrowerDescription: ; 59ef4 (16:5ef4)
-	text "Discard 1 ", TX_FIRE, " Energy card attached to"
+	text "Discard 1 <FIRE> Energy card attached to"
 	line "Charmeleon in order to use this"
 	line "attack."
 	done
@@ -829,7 +829,7 @@ EnergyBurnDescription: ; 59fb8 (16:5fb8)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
 	line "turn all Energy attached to"
-	line "Charizard into ", TX_FIRE, " Energy for the"
+	line "Charizard into <FIRE> Energy for the"
 	line "rest of the turn. This power can't"
 	line "be used if Charizard is Asleep,"
 	line "Confused, or Paralyzed."
@@ -875,8 +875,8 @@ NinetailsName: ; 5a1c0 (16:61c0)
 
 NinetailsLureDescription: ; 5a1cb (16:61cb)
 	text "If your opponent has any Benched"
-	line "Pok`mon, choose 1 of them and switch"
-	line "it with the Defending Pok`mon."
+	line "Pokémon, choose 1 of them and switch"
+	line "it with the Defending Pokémon."
 	done
 
 FireBlastName: ; 5a231 (16:6231)
@@ -884,7 +884,7 @@ FireBlastName: ; 5a231 (16:6231)
 	done
 
 FireBlastDescription: ; 5a23d (16:623d)
-	text "Discard 1 ", TX_FIRE, " Energy card attached"
+	text "Discard 1 <FIRE> Energy card attached"
 	line "to Ninetales in order to use this"
 	line "attack."
 	done
@@ -901,11 +901,11 @@ MixUpName: ; 5a2ec (16:62ec)
 
 MixUpDescription: ; 5a2f4 (16:62f4)
 	text "If your opponent has any Basic"
-	line "Pok`mon or Evolution cards in his"
+	line "Pokémon or Evolution cards in his"
 	line "or her hand, your opponent shuffles"
 	line "them into his or her deck. Then,"
 	line "your opponent puts an equal number"
-	line "of Basic Pok`mon or Evolution cards"
+	line "of Basic Pokémon or Evolution cards"
 	line "chosen at random from his or"
 	done
 
@@ -968,7 +968,7 @@ FlamesOfRageName: ; 5a5d8 (16:65d8)
 	done
 
 FlamesOfRageDescription: ; 5a5e8 (16:65e8)
-	text "Discard 2 ", TX_FIRE, " Energy cards attached"
+	text "Discard 2 <FIRE> Energy cards attached"
 	line "to Arcanine in order to use this"
 	line "attack. This attack does 40 damage"
 	line "plus 10 more damage for each damage"
@@ -980,13 +980,13 @@ ArcanineKind: ; 5a689 (16:6689)
 	done
 
 Arcanine1Description: ; 5a694 (16:6694)
-	text "A legendary Pok`mon famous for its"
+	text "A legendary Pokémon famous for its"
 	line "beauty. It looks almost as if it"
 	line "flies when it runs."
 	done
 
 ArcaninesFlamethrowerDescription: ; 5a6ed (16:66ed)
-	text "Discard 1 ", TX_FIRE, " Energy card attached to"
+	text "Discard 1 <FIRE> Energy card attached to"
 	line "Arcanine in order to use this"
 	line "attack."
 	done
@@ -1000,7 +1000,7 @@ TakeDownDescription: ; 5a744 (16:6744)
 	done
 
 Arcanine2Description: ; 5a768 (16:6768)
-	text "A Pok`mon that has been long admired"
+	text "A Pokémon that has been long admired"
 	line "for its beauty. It runs gracefully,"
 	line "as if on wings."
 	done
@@ -1054,7 +1054,7 @@ RapidashsAgilityDescription: ; 5a8ce (16:68ce)
 	done
 
 RapidashDescription: ; 5a94c (16:694c)
-	text "Very competitive, this Pok`mon will"
+	text "Very competitive, this Pokémon will"
 	line "chase anything that moves fast in"
 	line "the hopes of racing it."
 	done
@@ -1068,7 +1068,7 @@ FirePunchName: ; 5a9b3 (16:69b3)
 	done
 
 FirePunchDescription: ; 5a9bf (16:69bf)
-	text "Discard 1 ", TX_FIRE, " Energy card attached to"
+	text "Discard 1 <FIRE> Energy card attached to"
 	line "Magmar in order to use this attack."
 	done
 
@@ -1087,7 +1087,7 @@ SmokescreenName: ; 5aa6e (16:6a6e)
 	done
 
 MagmarsSmokescreenDescription: ; 5aa7b (16:6a7b)
-	text "If the Defending Pok`mon tries to"
+	text "If the Defending Pokémon tries to"
 	line "attack during your opponent's next"
 	line "turn, your opponent flips a coin. If"
 	line "tails, that attack does nothing."
@@ -1097,7 +1097,7 @@ Magmar2Description: ; 5ab07 (16:6b07)
 	text "Found at the mouths of volcanoes and"
 	line "extremely hard to spot. There are"
 	line "very few instances of capturing this"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 FlareonName: ; 5ab7d (16:6b7d)
@@ -1128,7 +1128,7 @@ Flareon1Description: ; 5abe1 (16:6be1)
 	done
 
 FlareonsFlamethrowerDescription: ; 5ac46 (16:6c46)
-	text "Discard 1 ", TX_FIRE, " Energy card attached to"
+	text "Discard 1 <FIRE> Energy card attached to"
 	line "Flareon in order to use this attack."
 	done
 
@@ -1147,7 +1147,7 @@ WildfireName: ; 5acf6 (16:6cf6)
 	done
 
 WildfireDescription: ; 5ad00 (16:6d00)
-	text "You may discard any number of ", TX_FIRE, ""
+	text "You may discard any number of <FIRE>"
 	line "Energy cards attached to Moltres"
 	line "when you use this attack. If you do,"
 	line "discard that many cards from the top"
@@ -1172,13 +1172,13 @@ FiregiverDescription: ; 5ae1e (16:6e1e)
 	text "When you put Moltres into play"
 	line "during your turn (not during"
 	line "set-up), put from 1 to 4 (chosen at"
-	line "random) ", TX_FIRE, " Energy cards from your"
+	line "random) <FIRE> Energy cards from your"
 	line "deck into your hand. Shuffle your"
 	line "deck afterward."
 	done
 
 Moltres2Description: ; 5aed3 (16:6ed3)
-	text "A legendary bird Pok`mon. As it"
+	text "A legendary bird Pokémon. As it"
 	line "flaps its flaming wings, even the"
 	line "night sky will turn red."
 	done
@@ -1244,8 +1244,8 @@ RainDanceName: ; 5b159 (16:7159)
 RainDanceDescription: ; 5b165 (16:7165)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
-	line "attach 1 ", TX_WATER, " Energy card to 1 of"
-	line "your ", TX_WATER, " Pok`mon. (This doesn't use"
+	line "attach 1 <WATER> Energy card to 1 of"
+	line "your <WATER> Pokémon. (This doesn't use"
 	line "up your 1 Energy card attachment"
 	line "for the turn.)"
 	done
@@ -1262,7 +1262,7 @@ HydroPumpName: ; 5b267 (16:7267)
 
 HydroPumpDescription: ; 5b273 (16:7273)
 	text "Does 40 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Blastoise but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -1273,7 +1273,7 @@ BlastoiseKind: ; 5b322 (16:7322)
 	done
 
 BlastoiseDescription: ; 5b32d (16:732d)
-	text "A brutal Pok`mon with pressurized"
+	text "A brutal Pokémon with pressurized"
 	line "water jets on its shell. They are"
 	line "used for high-speed tackles."
 	done
@@ -1297,7 +1297,7 @@ PsyduckKind: ; 5b3e7 (16:73e7)
 
 PsyduckDescription: ; 5b3ed (16:73ed)
 	text "While lulling its enemies with its"
-	line "vacant look, this wily Pok`mon will"
+	line "vacant look, this wily Pokémon will"
 	line "use psychokinetic powers."
 	done
 
@@ -1314,7 +1314,7 @@ HyperBeamName: ; 5b462 (16:7462)
 	done
 
 Discard1EnergyFromTargetDescription: ; 5b46e (16:746e)
-	text "If the Defending Pok`mon has any"
+	text "If the Defending Pokémon has any"
 	line "Energy cards attached to it, choose"
 	line "1 of them and discard it."
 	done
@@ -1335,7 +1335,7 @@ WaterGunName: ; 5b53c (16:753c)
 
 PoliwagsWaterGunDescription: ; 5b547 (16:7547)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Poliwag but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -1360,8 +1360,8 @@ AmnesiaName: ; 5b66b (16:766b)
 	done
 
 PoliwhirlsAmnesiaDescription: ; 5b674 (16:7674)
-	text "Choose 1 of the Defending Pok`mon's"
-	line "attacks. That Pok`mon can't use that"
+	text "Choose 1 of the Defending Pokémon's"
+	line "attacks. That Pokémon can't use that"
 	line "attack during your opponent's next"
 	line "turn."
 	done
@@ -1382,7 +1382,7 @@ PoliwrathName: ; 5b74f (16:774f)
 
 PoliwrathsWaterGunDescription: ; 5b75a (16:775a)
 	text "Does 30 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Poliwrath but not used to pay for"
 	line "this attack's Energy cost. You"
 	line "can't add more than 20 damage in"
@@ -1512,7 +1512,7 @@ ClampName: ; 5bc7e (16:7c7e)
 
 ClampDescription: ; 5bc85 (16:7c85)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Paralyzed. If tails,"
+	line "Pokémon is now Paralyzed. If tails,"
 	line "this attack does nothing (not even"
 	line "damage)."
 	done
@@ -1532,7 +1532,7 @@ KrabbyName: ; 5bd63 (16:7d63)
 	done
 
 KrabbysCallForFamilyDescription: ; 5bd6b (16:7d6b)
-	text "Search your deck for a Basic Pok`mon"
+	text "Search your deck for a Basic Pokémon"
 	line "named Krabby and put it onto your"
 	line "Bench. Shuffle your deck afterward."
 	line "(You can't use this attack if your"
@@ -1582,7 +1582,7 @@ HorseaName: ; 5bf43 (16:7f43)
 	done
 
 OpponentAttackMayDoNothingDescription: ; 5bf4b (16:7f4b)
-	text "If the Defending Pok`mon tries to"
+	text "If the Defending Pokémon tries to"
 	line "attack during your opponent's next"
 	line "turn, your opponent flips a coin."
 	line "If tails, that attack does nothing."

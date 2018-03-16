@@ -51,7 +51,7 @@ WeightText: ; 36370 (d:6370)
 	done
 
 PokemonText: ; 36378 (d:6378)
-	text " Pok`mon"
+	text " Pokémon"
 	done
 
 Text000f: ; 36382 (d:6382)
@@ -91,31 +91,31 @@ Text0017: ; 363c0 (d:63c0)
 	done
 
 Text0018: ; 363d0 (d:63d0)
-	text "Grass Pok`mon"
+	text "Grass Pokémon"
 	done
 
 Text0019: ; 363df (d:63df)
-	text "Fire Pok`mon"
+	text "Fire Pokémon"
 	done
 
 Text001a: ; 363ed (d:63ed)
-	text "Water Pok`mon"
+	text "Water Pokémon"
 	done
 
 Text001b: ; 363fc (d:63fc)
-	text "Lightning Pok`mon"
+	text "Lightning Pokémon"
 	done
 
 Text001c: ; 3640f (d:640f)
-	text "Fighting Pok`mon"
+	text "Fighting Pokémon"
 	done
 
 Text001d: ; 36421 (d:6421)
-	text "Psychic Pok`mon"
+	text "Psychic Pokémon"
 	done
 
 Text001e: ; 36432 (d:6432)
-	text "Colorless Pok`mon"
+	text "Colorless Pokémon"
 	done
 
 Text001f: ; 36445 (d:6445)
@@ -135,7 +135,7 @@ Text0022: ; 36466 (d:6466)
 	done
 
 NoPokemonOnTheBenchText: ; 3646e (d:646e)
-	text "No Pok`mon on the Bench."
+	text "No Pokémon on the Bench."
 	done
 
 UnableDueToSleepText: ; 36488 (d:6488)
@@ -255,18 +255,18 @@ UnableToRetreatText: ; 366c5 (d:66c5)
 	text "Unable to Retreat."
 	done
 
-OnlyOneEnergyCardText: ; 366d9 (d:66d9)
+MayOnlyAttachOneEnergyCardText: ; 366d9 (d:66d9)
 	text "You may only attach 1 Energy card"
 	line "per turn."
 	done
 
 Text003f: ; 36706 (d:6706)
-	text "Use this Pok`mon Power?"
+	text "Use this Pokémon Power?"
 	done
 
 Text0040: ; 3671f (d:671f)
 	text "You do not need to select the"
-	line "Pok`mon Power to use it."
+	line "Pokémon Power to use it."
 	done
 
 DiscardDescription: ; 36757 (d:6757)
@@ -274,7 +274,7 @@ DiscardDescription: ; 36757 (d:6757)
 	line "your turn."
 	line "It will be counted as a Knock Out"
 	line "(This Discard is not"
-	line "a Pok`mon Power)"
+	line "a Pokémon Power)"
 	done
 
 Text0042: ; 367cc (d:67cc)
@@ -304,27 +304,27 @@ Text0046: ; 3681b (d:681b)
 	done
 
 Text0047: ; 36848 (d:6848)
-	db TX_GRASS
+	db "<GRASS>"
 	done
 
 Text0048: ; 3684b (d:684b)
-	db TX_FIRE
+	db "<FIRE>"
 	done
 
 Text0049: ; 3684e (d:684e)
-	db TX_WATER
+	db "<WATER>"
 	done
 
 Text004a: ; 36851 (d:6851)
-	db TX_LIGHTNING
+	db "<LIGHTNING>"
 	done
 
 Text004b: ; 36854 (d:6854)
-	db TX_FIGHTING
+	db "<FIGHTING>"
 	done
 
 Text004c: ; 36857 (d:6857)
-	db TX_PSYCHIC
+	db "<PSYCHIC>"
 	done
 
 Text004d: ; 3685a (d:685a)
@@ -345,8 +345,8 @@ Text0050: ; 36891 (d:6891)
 	done
 
 Text0051: ; 368be (d:68be)
-	text "The Active Pok`mon was Knocked Out."
-	line "Please choose the next Pok`mon."
+	text "The Active Pokémon was Knocked Out."
+	line "Please choose the next Pokémon."
 	done
 
 Text0052: ; 36903 (d:6903)
@@ -367,7 +367,7 @@ TransmissionErrorText: ; 36947 (d:6947)
 	line "Start again from the beginning."
 	done
 
-Text0056: ; 3697c (d:697c)
+ChooseTheCardYouWishToExamineText: ; 3697c (d:697c)
 	text "Choose the card"
 	line "you wish to examine."
 	done
@@ -382,7 +382,7 @@ Text0058: ; 369b8 (d:69b8)
 	done
 
 Text0059: ; 369dc (d:69dc)
-	text "Selecting Bench Pok`mon..."
+	text "Selecting Bench Pokémon..."
 	line "    Hand        Examine     Back"
 	done
 
@@ -398,7 +398,7 @@ Text005b: ; 36a34 (d:6a34)
 
 WillUseThePokemonPowerText: ; 36a53 (d:6a53)
 	text TX_RAM2, " will use the"
-	line "Pok`mon Power ", TX_RAM2, "."
+	line "Pokémon Power ", TX_RAM2, "."
 	done
 
 Text005d: ; 36a74 (d:6a74)
@@ -420,7 +420,7 @@ Text0060: ; 36ab7 (d:6ab7)
 	line "into ", TX_RAM2, "."
 	done
 
-Text0061: ; 36aca (d:6aca)
+PlacedOnTheBenchText: ; 36aca (d:6aca)
 	text "Placed ", TX_RAM2, ""
 	line "on the Bench."
 	done
@@ -458,18 +458,18 @@ Text0068: ; 36bab (d:6bab)
 	done
 
 ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
-	text "Choose a Basic Pok`mon"
+	text "Choose a Basic Pokémon"
 	line "to place in the Arena."
 	done
 
 Text006a: ; 36bf1 (d:6bf1)
-	text "There are no Basic Pok`mon"
+	text "There are no Basic Pokémon"
 	line "in ", TX_RAM1, "'s hand."
 	done
 
 NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
 	text "Neither player has any Basic"
-	line "Pok`mon in his or her hand."
+	line "Pokémon in his or her hand."
 	done
 
 Text006c: ; 36c54 (d:6c54)
@@ -478,21 +478,21 @@ Text006c: ; 36c54 (d:6c54)
 	done
 
 ChooseUpTo5BasicPkmnToPlaceOnBenchText: ; 36c82 (d:6c82)
-	text "You may choose up to 5 Basic Pok`mon"
+	text "You may choose up to 5 Basic Pokémon"
 	line "to place on the Bench."
 	done
 
 Text006e: ; 36cbf (d:6cbf)
 	text "Please choose an"
-	line "Active Pok`mon."
+	line "Active Pokémon."
 	done
 
 Text006f: ; 36ce1 (d:6ce1)
 	text "Choose your"
-	line "Bench Pok`mon."
+	line "Bench Pokémon."
 	done
 
-Text0070: ; 36cfd (d:6cfd)
+YouDrewText: ; 36cfd (d:6cfd)
 	text "You drew ", TX_RAM2, "."
 	done
 
@@ -524,7 +524,7 @@ DecisionText: ; 36da4 (d:6da4)
 	text "Decision..."
 	done
 
-DuelWasDrawText: ; 36db1 (d:6db1)
+DuelWasADrawText: ; 36db1 (d:6db1)
 	text "The Duel with ", TX_RAM1, ""
 	line "was a Draw!"
 	done
@@ -545,7 +545,7 @@ StartSuddenDeathMatchText: ; 36e05 (d:6e05)
 
 Text007b: ; 36e2e (d:6e2e)
 	text "Prizes Left"
-	line "Active Pok`mon"
+	line "Active Pokémon"
 	line "Cards in Deck"
 	done
 
@@ -567,7 +567,7 @@ Text007f: ; 36e6a (d:6e6a)
 	done
 
 Text0080: ; 36e82 (d:6e82)
-	text "There are no Pok`mon"
+	text "There are no Pokémon"
 	line "in ", TX_RAM1, "'s Play Area!"
 	done
 
@@ -578,11 +578,11 @@ WasKnockedOutText: ; 36eaa (d:6eaa)
 
 HavePokemonPowerText: ; 36ebe (d:6ebe)
 	text TX_RAM2, " have"
-	line "Pok`mon Power."
+	line "Pokémon Power."
 	done
 
 UnableToUsePkmnPowerDueToToxicGasText: ; 36ed5 (d:6ed5)
-	text "Unable to us Pok`mon Power due to"
+	text "Unable to us Pokémon Power due to"
 	line "the effect of Toxic Gas."
 	done
 
@@ -724,19 +724,19 @@ Text009d: ; 371f7 (d:71f7)
 	done
 
 Text009e: ; 3720c (d:720c)
-	text TX_GRASS, " Pok`mon"
+	text "<GRASS> Pokémon"
 	line ""
-	text TX_FIRE, " Pok`mon"
+	text "<FIRE> Pokémon"
 	line ""
-	text TX_WATER, " Pok`mon"
+	text "<WATER> Pokémon"
 	line ""
-	text TX_LIGHTNING, " Pok`mon"
+	text "<LIGHTNING> Pokémon"
 	line ""
-	text TX_FIGHTING, " Pok`mon"
+	text "<FIGHTING> Pokémon"
 	line ""
-	text TX_PSYCHIC, " Pok`mon"
+	text "<PSYCHIC> Pokémon"
 	line ""
-	text TX_COLORLESS, " Pok`mon"
+	text "<COLORLESS> Pokémon"
 	line "Trainer Card"
 	line "Energy Card"
 	done
@@ -771,7 +771,7 @@ NoCardsInHandText: ; 37348 (d:7348)
 	text "No cards in hand."
 	done
 
-Text00a5: ; 3735b (d:735b)
+TheDiscardPileHasNoCardsText: ; 3735b (d:735b)
 	text "The Discard Pile has no cards."
 	done
 
@@ -779,19 +779,19 @@ Text00a6: ; 3737b (d:737b)
 	text "Player's Discard Pile"
 	done
 
-Text00a7: ; 37392 (d:7392)
+DuelistHandText: ; 37392 (d:7392)
 	text TX_RAM1, "'s Hand"
 	done
 
-Text00a8: ; 3739c (d:739c)
+DuelistPlayAreaText: ; 3739c (d:739c)
 	text TX_RAM1, "'s Play Area"
 	done
 
-Text00a9: ; 373ab (d:73ab)
+DuelistDeckText: ; 373ab (d:73ab)
 	text TX_RAM1, "'s Deck"
 	done
 
-Text00aa: ; 373b5 (d:73b5)
+PleaseSelectHandText: ; 373b5 (d:73b5)
 	text "Please select"
 	line "Hand."
 	done
@@ -802,7 +802,7 @@ Text00ab: ; 373ca (d:73ca)
 	done
 
 Text00ac: ; 373df (d:73df)
-	text "There are no Pok`mon"
+	text "There are no Pokémon"
 	line "with Damage Counters."
 	done
 
@@ -812,7 +812,7 @@ Text00ad: ; 3740b (d:740b)
 
 Text00ae: ; 3742a (d:742a)
 	text "No Energy cards are attached to"
-	line "the opponent's Active Pok`mon."
+	line "the opponent's Active Pokémon."
 	done
 
 Text00af: ; 3746a (d:746a)
@@ -833,13 +833,13 @@ NoSpaceOnTheBenchText: ; 374fa (d:74fa)
 	text "There is no space on the Bench."
 	done
 
-Text00b3: ; 3751b (d:751b)
-	text "There are no Pok`mon capable"
+NoPokemonCapableOfEvolvingText: ; 3751b (d:751b)
+	text "There are no Pokémon capable"
 	line "of Evolving."
 	done
 
-Text00b4: ; 37546 (d:7546)
-	text "You cannot Evolve a Pok`mon"
+CantEvolvePokemonInSameTurnItsPlacedText: ; 37546 (d:7546)
+	text "You cannot Evolve a Pokémon"
 	line "in the same turn it was placed."
 	done
 
@@ -853,11 +853,11 @@ Text00b6: ; 375bc (d:75bc)
 	done
 
 Text00b7: ; 375d7 (d:75d7)
-	text "No Pok`mon on the Bench."
+	text "No Pokémon on the Bench."
 	done
 
 Text00b8: ; 375f1 (d:75f1)
-	text "There are no Pok`mon"
+	text "There are no Pokémon"
 	line "in the Discard Pile."
 	done
 
@@ -877,17 +877,17 @@ Text00bb: ; 37680 (d:7680)
 	done
 
 Text00bc: ; 376a9 (d:76a9)
-	text "There are no Stage 1 Pok`mon"
+	text "There are no Stage 1 Pokémon"
 	line "in the Play Area."
 	done
 
 Text00bd: ; 376d9 (d:76d9)
 	text "No Energy cards are attached to"
-	line "Pok`mon in your Play Area."
+	line "Pokémon in your Play Area."
 	done
 
 Text00be: ; 37715 (d:7715)
-	text "No Energy cards attached to Pok`mon"
+	text "No Energy cards attached to Pokémon"
 	line "in your opponent's Play Area."
 	done
 
@@ -963,7 +963,7 @@ Text00ce: ; 37946 (d:7946)
 
 Text00cf: ; 37958 (d:7958)
 	text "Cannot use since there's only"
-	line "1 Pok`mon."
+	line "1 Pokémon."
 	done
 
 Text00d0: ; 37982 (d:7982)
@@ -976,7 +976,7 @@ Text00d1: ; 379ae (d:79ae)
 	done
 
 Text00d2: ; 379ce (d:79ce)
-	text "There are no Pok`mon on the Bench."
+	text "There are no Pokémon on the Bench."
 	done
 
 Text00d3: ; 379f2 (d:79f2)
@@ -1068,7 +1068,7 @@ VenomPowderCheckText: ; 37cdf (d:7cdf)
 	done
 
 Text00e5: ; 37d1f (d:7d1f)
-	text "If Tails,  your Pok`mon"
+	text "If Tails,  your Pokémon"
 	line "becomes Confused."
 	done
 
@@ -1099,7 +1099,7 @@ Text00ea: ; 37e03 (d:7e03)
 
 Text00eb: ; 37e46 (d:7e46)
 	text "If Heads, change opponent's"
-	line "Active Pok`mon."
+	line "Active Pokémon."
 	done
 
 Text00ec: ; 37e73 (d:7e73)

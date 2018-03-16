@@ -70,7 +70,7 @@ hTempCardIndex_ff9f:: ; ff9f
 	ds 1
 
 ; multipurpose temp storage
-hffa0:: ; ffa0
+hTemp_ffa0:: ; ffa0
 	ds 1
 
 hTempPlayAreaLocationOffset_ffa1:: ; ffa1

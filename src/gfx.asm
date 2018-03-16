@@ -8,12 +8,26 @@ INCBIN "gfx/fonts.t3.1bpp"
 VWF:: ; 76668 (1d:6668)
 INCBIN "gfx/vwf.1bpp"
 
-DuelGraphics:: ; 76968 (1d:6968)
-INCBIN "gfx/duel/duel_graphics.t5.2bpp", $0, $1698
+DuelGraphics::
+
+DuelHUDGraphics:: ; 76968 (1d:6968)
+INCBIN "gfx/duel/hud.2bpp"
+
+DuelCardHeaderGraphics:: ; 76ce8 (1d:6ce8)
+INCBIN "gfx/duel/card_headers.2bpp"
+
+DuelDmgSgbSymbolGraphics:: ; 76fe8 (1d:6fe8)
+INCBIN "gfx/duel/dmg_sgb_symbols.t7.2bpp"
+
+DuelCgbSymbolGraphics:: ; 777f8 (1d:77f8)
+INCBIN "gfx/duel/cgb_symbols.t7.2bpp", $0, $808
 
 SECTION "Gfx 2", ROMX
 
-INCBIN "gfx/duel/duel_graphics.t5.2bpp", $1698, $318
+INCBIN "gfx/duel/cgb_symbols.t7.2bpp", $808, $8
+
+DuelOtherGraphics:: ; 78008 (1e:4008)
+INCBIN "gfx/duel/other.t7.2bpp"
 
 DuelBoxMessages:: ; 78318 (1e:4318)
 INCBIN "gfx/duel/box_messages.2bpp"
@@ -47,11 +61,11 @@ PlayerGfx: ; 87d7e (21:7d7e)
 
 Duel55Gfx: ; 87fc0 (21:7fc0)
 	dw $2
-	INCBIN "gfx/duel/55.2bpp"
+	INCBIN "gfx/duel/anims/55.2bpp"
 
 Duel56Gfx: ; 87fe2 (21:7fe2)
 	dw $1
-	INCBIN "gfx/duel/56.2bpp"
+	INCBIN "gfx/duel/anims/56.2bpp"
 
 	INCROM $87ff4, $88000
 
@@ -95,7 +109,7 @@ OWSpritePlayer: ; 8be90 (22:7e90)
 
 Duel57Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
-	INCBIN "gfx/duel/57.2bpp"
+	INCBIN "gfx/duel/anims/57.2bpp"
 
 	INCROM $8bfe4, $8c000
 
@@ -160,7 +174,7 @@ NintendoGfx: ; 8fe22 (23:7e22)
 
 Duel58Gfx: ; 8ffa4 (23:7fa4)
 	dw $4
-	INCBIN "gfx/duel/58.2bpp"
+	INCBIN "gfx/duel/anims/58.2bpp"
 
 	INCROM $8ffe6, $90000
 
@@ -216,11 +230,11 @@ HelpDeskLadyGfx: ; 93f26 (24:7f26)
 
 Duel59Gfx: ; 93fa8 (24:7fa8)
 	dw $3
-	INCBIN "gfx/duel/59.2bpp"
+	INCBIN "gfx/duel/anims/59.2bpp"
 
 Duel60Gfx: ; 93fda (24:7fda)
 	dw $2
-	INCBIN "gfx/duel/60.2bpp"
+	INCBIN "gfx/duel/anims/60.2bpp"
 
 rept $4
 	db $ff
@@ -306,11 +320,11 @@ OverworldMapOAMGfx: ; 9bf3a (26:7f3a)
 
 Duel61Gfx: ; 9bfbc (26:7fbc)
 	dw $3
-	INCBIN "gfx/duel/61.2bpp"
+	INCBIN "gfx/duel/anims/61.2bpp"
 
 Duel62Gfx: ; 9bfee (26:7fee)
 	dw $1
-	INCBIN "gfx/duel/62.2bpp"
+	INCBIN "gfx/duel/anims/62.2bpp"
 
 SECTION "Gfx 9", ROMX
 
@@ -428,11 +442,11 @@ MichaelGfx: ; 9fcf6 (27:7cf6)
 
 Duel63Gfx: ; 9ff38 (27:7f38)
 	dw $a
-	INCBIN "gfx/duel/63.2bpp"
+	INCBIN "gfx/duel/anims/63.2bpp"
 
 Duel64Gfx: ; 9ffda (27:7fda)
 	dw $2
-	INCBIN "gfx/duel/64.2bpp"
+	INCBIN "gfx/duel/anims/64.2bpp"
 
 rept $4
 	db $ff
@@ -606,11 +620,11 @@ OWSprite29: ; a3dc0 (28:7dc0)
 
 Duel65Gfx: ; a3f02 (28:7f02)
 	dw $b
-	INCBIN "gfx/duel/65.2bpp"
+	INCBIN "gfx/duel/anims/65.2bpp"
 
 Duel66Gfx: ; a3fb4 (28:7fb4)
 	dw $4
-	INCBIN "gfx/duel/66.2bpp"
+	INCBIN "gfx/duel/anims/66.2bpp"
 
 	INCROM $a3ff6, $a4000
 
@@ -630,187 +644,187 @@ OWSprite32: ; a4284 (29:4284)
 
 Duel0Gfx: ; a43c6 (29:43c6)
 	dw $16
-	INCBIN "gfx/duel/0.2bpp"
+	INCBIN "gfx/duel/anims/0.2bpp"
 
 Duel1Gfx: ; a4528 (29:4528)
 	dw $06
-	INCBIN "gfx/duel/1.2bpp"
+	INCBIN "gfx/duel/anims/1.2bpp"
 
 Duel2Gfx: ; a458a (29:458a)
 	dw $08
-	INCBIN "gfx/duel/2.2bpp"
+	INCBIN "gfx/duel/anims/2.2bpp"
 
 Duel3Gfx: ; a460c (29:460c)
 	dw $09
-	INCBIN "gfx/duel/3.2bpp"
+	INCBIN "gfx/duel/anims/3.2bpp"
 
 Duel4Gfx: ; a469e (29:469e)
 	dw $12
-	INCBIN "gfx/duel/4.2bpp"
+	INCBIN "gfx/duel/anims/4.2bpp"
 
 Duel5Gfx: ; a47c0 (29:47c0)
 	dw $09
-	INCBIN "gfx/duel/5.2bpp"
+	INCBIN "gfx/duel/anims/5.2bpp"
 
 Duel6Gfx: ; a4852 (29:4852)
 	dw $11
-	INCBIN "gfx/duel/6.2bpp"
+	INCBIN "gfx/duel/anims/6.2bpp"
 
 Duel7Gfx: ; a4964 (29:4964)
 	dw $2d
-	INCBIN "gfx/duel/7.2bpp"
+	INCBIN "gfx/duel/anims/7.2bpp"
 
 Duel8Gfx: ; a4c36 (29:4c36)
 	dw $0d
-	INCBIN "gfx/duel/8.2bpp"
+	INCBIN "gfx/duel/anims/8.2bpp"
 
 Duel9Gfx: ; a4d08 (29:4d08)
 	dw $1c
-	INCBIN "gfx/duel/9.2bpp"
+	INCBIN "gfx/duel/anims/9.2bpp"
 
 Duel10Gfx: ; a4eca (29:4eca)
 	dw $4c
-	INCBIN "gfx/duel/10.2bpp"
+	INCBIN "gfx/duel/anims/10.2bpp"
 
 Duel11Gfx: ; a538c (29:538c)
 	dw $1b
-	INCBIN "gfx/duel/11.2bpp"
+	INCBIN "gfx/duel/anims/11.2bpp"
 
 Duel12Gfx: ; a553e (29:553e)
 	dw $07
-	INCBIN "gfx/duel/12.2bpp"
+	INCBIN "gfx/duel/anims/12.2bpp"
 
 Duel13Gfx: ; a55b0 (29:55b0)
 	dw $0c
-	INCBIN "gfx/duel/13.2bpp"
+	INCBIN "gfx/duel/anims/13.2bpp"
 
 Duel14Gfx: ; a5672 (29:5672)
 	dw $22
-	INCBIN "gfx/duel/14.2bpp"
+	INCBIN "gfx/duel/anims/14.2bpp"
 
 Duel15Gfx: ; a5894 (29:5894)
 	dw $20
-	INCBIN "gfx/duel/15.2bpp"
+	INCBIN "gfx/duel/anims/15.2bpp"
 
 Duel16Gfx: ; a5a96 (29:5a96)
 	dw $0a
-	INCBIN "gfx/duel/16.2bpp"
+	INCBIN "gfx/duel/anims/16.2bpp"
 
 Duel17Gfx: ; a5b38 (29:5b38)
 	dw $25
-	INCBIN "gfx/duel/17.2bpp"
+	INCBIN "gfx/duel/anims/17.2bpp"
 
 Duel18Gfx: ; a5d8a (29:5d8a)
 	dw $18
-	INCBIN "gfx/duel/18.2bpp"
+	INCBIN "gfx/duel/anims/18.2bpp"
 
 Duel19Gfx: ; a5f0c (29:5f0c)
 	dw $1b
-	INCBIN "gfx/duel/19.2bpp"
+	INCBIN "gfx/duel/anims/19.2bpp"
 
 Duel20Gfx: ; a60be (29:60be)
 	dw $08
-	INCBIN "gfx/duel/20.2bpp"
+	INCBIN "gfx/duel/anims/20.2bpp"
 
 Duel21Gfx: ; a6140 (29:6140)
 	dw $0d
-	INCBIN "gfx/duel/21.2bpp"
+	INCBIN "gfx/duel/anims/21.2bpp"
 
 Duel22Gfx: ; a6212 (29:6212)
 	dw $22
-	INCBIN "gfx/duel/22.2bpp"
+	INCBIN "gfx/duel/anims/22.2bpp"
 
 Duel23Gfx: ; a6434 (29:6434)
 	dw $0c
-	INCBIN "gfx/duel/23.2bpp"
+	INCBIN "gfx/duel/anims/23.2bpp"
 
 Duel24Gfx: ; a64f6 (29:64f6)
 	dw $25
-	INCBIN "gfx/duel/24.2bpp"
+	INCBIN "gfx/duel/anims/24.2bpp"
 
 Duel25Gfx: ; a6748 (29:6748)
 	dw $22
-	INCBIN "gfx/duel/25.2bpp"
+	INCBIN "gfx/duel/anims/25.2bpp"
 
 Duel26Gfx: ; a696a (29:696a)
 	dw $0c
-	INCBIN "gfx/duel/26.2bpp"
+	INCBIN "gfx/duel/anims/26.2bpp"
 
 Duel27Gfx: ; a6a2c (29:6a2c)
 	dw $4c
-	INCBIN "gfx/duel/27.2bpp"
+	INCBIN "gfx/duel/anims/27.2bpp"
 
 Duel28Gfx: ; a6eee (29:6eee)
 	dw $08
-	INCBIN "gfx/duel/28.2bpp"
+	INCBIN "gfx/duel/anims/28.2bpp"
 
 Duel29Gfx: ; a6f70 (29:6f70)
 	dw $07
-	INCBIN "gfx/duel/29.2bpp"
+	INCBIN "gfx/duel/anims/29.2bpp"
 
 Duel30Gfx: ; a6fe2 (29:6fe2)
 	dw $1a
-	INCBIN "gfx/duel/30.2bpp"
+	INCBIN "gfx/duel/anims/30.2bpp"
 
 Duel31Gfx: ; a7184 (29:7184)
 	dw $0a
-	INCBIN "gfx/duel/31.2bpp"
+	INCBIN "gfx/duel/anims/31.2bpp"
 
 Duel32Gfx: ; a7226 (29:7226)
 	dw $2e
-	INCBIN "gfx/duel/32.2bpp"
+	INCBIN "gfx/duel/anims/32.2bpp"
 
 Duel33Gfx: ; a7508 (29:7508)
 	dw $08
-	INCBIN "gfx/duel/33.2bpp"
+	INCBIN "gfx/duel/anims/33.2bpp"
 
 Duel34Gfx: ; a758a (29:758a)
 	dw $07
-	INCBIN "gfx/duel/34.2bpp"
+	INCBIN "gfx/duel/anims/34.2bpp"
 
 Duel35Gfx: ; a75fc (29:75fc)
 	dw $1c
-	INCBIN "gfx/duel/35.2bpp"
+	INCBIN "gfx/duel/anims/35.2bpp"
 
 Duel36Gfx: ; a77be (29:77be)
 	dw $08
-	INCBIN "gfx/duel/36.2bpp"
+	INCBIN "gfx/duel/anims/36.2bpp"
 
 Duel37Gfx: ; a7840 (29:7840)
 	dw $0b
-	INCBIN "gfx/duel/37.2bpp"
+	INCBIN "gfx/duel/anims/37.2bpp"
 
 Duel38Gfx: ; a78f2 (29:78f2)
 	dw $1c
-	INCBIN "gfx/duel/38.2bpp"
+	INCBIN "gfx/duel/anims/38.2bpp"
 
 Duel39Gfx: ; a7ab4 (29:7ab4)
 	dw $16
-	INCBIN "gfx/duel/39.2bpp"
+	INCBIN "gfx/duel/anims/39.2bpp"
 
 Duel40Gfx: ; a7c16 (29:7c16)
 	dw $10
-	INCBIN "gfx/duel/40.2bpp"
+	INCBIN "gfx/duel/anims/40.2bpp"
 
 Duel41Gfx: ; a7d18 (29:7d18)
 	dw $0f
-	INCBIN "gfx/duel/41.2bpp"
+	INCBIN "gfx/duel/anims/41.2bpp"
 
 Duel42Gfx: ; a7e0a (29:7e0a)
 	dw $07
-	INCBIN "gfx/duel/42.2bpp"
+	INCBIN "gfx/duel/anims/42.2bpp"
 
 Duel43Gfx: ; a7e7c (29:7e7c)
 	dw $0a
-	INCBIN "gfx/duel/43.2bpp"
+	INCBIN "gfx/duel/anims/43.2bpp"
 
 Duel44Gfx: ; a7f1e (29:7f1e)
 	dw $09
-	INCBIN "gfx/duel/44.2bpp"
+	INCBIN "gfx/duel/anims/44.2bpp"
 
 Duel45Gfx: ; a7fb0 (29:7fb0)
 	dw $03
-	INCBIN "gfx/duel/45.2bpp"
+	INCBIN "gfx/duel/anims/45.2bpp"
 
 	INCROM $a7fe2, $a8000
 
@@ -818,39 +832,39 @@ SECTION "Gfx 12", ROMX
 
 Duel46Gfx: ; a8000 (2a:4000)
 	dw $08
-	INCBIN "gfx/duel/46.2bpp"
+	INCBIN "gfx/duel/anims/46.2bpp"
 
 Duel47Gfx: ; a8082 (2a:4082)
 	dw $0f
-	INCBIN "gfx/duel/47.2bpp"
+	INCBIN "gfx/duel/anims/47.2bpp"
 
 Duel48Gfx: ; a8174 (2a:4174)
 	dw $03
-	INCBIN "gfx/duel/48.2bpp"
+	INCBIN "gfx/duel/anims/48.2bpp"
 
 Duel49Gfx: ; a81a6 (2a:41a6)
 	dw $05
-	INCBIN "gfx/duel/49.2bpp"
+	INCBIN "gfx/duel/anims/49.2bpp"
 
 Duel50Gfx: ; a81f8 (2a:41f8)
 	dw $17
-	INCBIN "gfx/duel/50.2bpp"
+	INCBIN "gfx/duel/anims/50.2bpp"
 
 Duel51Gfx: ; a836a (2a:436a)
 	dw $36
-	INCBIN "gfx/duel/51.t10.2bpp"
+	INCBIN "gfx/duel/anims/51.t10.2bpp"
 
 Duel52Gfx: ; a86cc (2a:46cc)
 	dw $0b
-	INCBIN "gfx/duel/52.2bpp"
+	INCBIN "gfx/duel/anims/52.2bpp"
 
 Duel53Gfx: ; a877e (2a:477e)
 	dw $06
-	INCBIN "gfx/duel/53.2bpp"
+	INCBIN "gfx/duel/anims/53.2bpp"
 
 Duel54Gfx: ; a87e0 (2a:47e0)
 	dw $16
-	INCBIN "gfx/duel/54.2bpp"
+	INCBIN "gfx/duel/anims/54.2bpp"
 
 BoosterPackOAMGfx: ; a8942 (2a:4942)
 	dw $20

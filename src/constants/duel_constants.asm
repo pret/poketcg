@@ -1,14 +1,25 @@
 MAX_BENCH_POKEMON     EQU 5
 MAX_PLAY_AREA_POKEMON EQU 6 ; arena + bench
+MAX_HP                EQU 120
+HP_BAR_LENGTH         EQU MAX_HP / 10
 
 ; hWhoseTurn constants
 PLAYER_TURN   EQUS "HIGH(wPlayerDuelVariables)"
 OPPONENT_TURN EQUS "HIGH(wOpponentDuelVariables)"
 
+; wDuelType constants
+DUELTYPE_LINK     EQU $1
+DUELTYPE_PRACTICE EQU $80
+; for normal duels (vs AI), wDuelType is $80 + [wOpponentDeckID]
+
 ; wDuelFinished constants
-DUEL_WON  EQU $1
-DUEL_LOST EQU $2
-DUEL_DRAW EQU $3
+TURN_PLAYER_WON  EQU $1
+TURN_PLAYER_LOST EQU $2
+TURN_PLAYER_TIED EQU $3
+
+; wDuelResult constants
+DUEL_WIN  EQU $0
+DUEL_LOSS EQU $1
 
 ; Box message id's
 	const_def
@@ -21,42 +32,55 @@ DUEL_DRAW EQU $3
 	const BOXMSG_COIN_TOSS
 
 ; wPlayerDuelVariables or wOpponentDuelVariables constants
-DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"              ; 00
-DUELVARS_HAND                            EQUS "LOW(wPlayerHand)"                       ; 42
-DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"                  ; 7e
-DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"     ; ba
-DUELVARS_ARENA_CARD                      EQUS "LOW(wPlayerArenaCard)"                  ; bb
-DUELVARS_BENCH                           EQUS "LOW(wPlayerBench)"                      ; bc
-DUELVARS_ARENA_CARD_HP                   EQUS "LOW(wPlayerArenaCardHP)"                ; c8
-DUELVARS_BENCH1_CARD_HP                  EQUS "LOW(wPlayerBench1CardHP)"               ; c9
-DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"               ; ca
-DUELVARS_BENCH3_CARD_HP                  EQUS "LOW(wPlayerBench3CardHP)"               ; cb
-DUELVARS_BENCH4_CARD_HP                  EQUS "LOW(wPlayerBench4CardHP)"               ; cc
-DUELVARS_BENCH5_CARD_HP                  EQUS "LOW(wPlayerBench5CardHP)"               ; cd
-DUELVARS_ARENA_CARD_STAGE                EQUS "LOW(wPlayerArenaCardStage)"             ; ce
-DUELVARS_BENCH1_CARD_STAGE               EQUS "LOW(wPlayerBench1CardStage)"            ; cf
-DUELVARS_BENCH2_CARD_STAGE               EQUS "LOW(wPlayerBench2CardStage)"            ; d0
-DUELVARS_BENCH3_CARD_STAGE               EQUS "LOW(wPlayerBench3CardStage)"            ; d1
-DUELVARS_BENCH4_CARD_STAGE               EQUS "LOW(wPlayerBench4CardStage)"            ; d2
-DUELVARS_BENCH5_CARD_STAGE               EQUS "LOW(wPlayerBench5CardStage)"            ; d3
-DUELVARS_ARENA_CARD_CHANGED_TYPE         EQUS "LOW(wPlayerArenaCardChangedType)"       ; d4
-DUELVARS_BENCH1_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench1CardChangedType)"      ; d5
-DUELVARS_BENCH2_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench2CardChangedType)"      ; d6
-DUELVARS_BENCH3_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench3CardChangedType)"      ; d7
-DUELVARS_BENCH4_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench4CardChangedType)"      ; d8
-DUELVARS_BENCH5_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench5CardChangedType)"      ; d9
-DUELVARS_ARENA_CARD_SUBSTATUS1           EQUS "LOW(wPlayerArenaCardSubstatus1)"        ; e7
-DUELVARS_ARENA_CARD_SUBSTATUS2           EQUS "LOW(wPlayerArenaCardSubstatus2)"        ; e8
-DUELVARS_ARENA_CARD_CHANGED_WEAKNESS     EQUS "LOW(wPlayerArenaCardChangedWeakness)"   ; e9
-DUELVARS_ARENA_CARD_CHANGED_RESISTANCE   EQUS "LOW(wPlayerArenaCardChangedResistance)" ; ea
-DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)"        ; eb
-DUELVARS_PRIZES                          EQUS "LOW(wPlayerPrizes)"                     ; ec
-DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "LOW(wPlayerNumberOfCardsInDiscardPile)" ; ed
-DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "LOW(wPlayerNumberOfCardsInHand)"        ; ee
-DUELVARS_NUMBER_OF_POKEMON_IN_PLAY       EQUS "LOW(wPlayerNumberOfPokemonInPlay)"      ; ef
-DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"            ; f0
-DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                ; f1
-DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)" ; f2
+DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"               ; 00
+DUELVARS_HAND                            EQUS "LOW(wPlayerHand)"                        ; 42
+DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"                   ; 7e
+DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"      ; ba
+DUELVARS_ARENA_CARD                      EQUS "LOW(wPlayerArenaCard)"                   ; bb
+DUELVARS_BENCH                           EQUS "LOW(wPlayerBench)"                       ; bc
+DUELVARS_ARENA_CARD_FLAGS_C2             EQU                                             $c2
+DUELVARS_ARENA_CARD_HP                   EQUS "LOW(wPlayerArenaCardHP)"                 ; c8
+DUELVARS_BENCH1_CARD_HP                  EQUS "LOW(wPlayerBench1CardHP)"                ; c9
+DUELVARS_BENCH2_CARD_HP                  EQUS "LOW(wPlayerBench2CardHP)"                ; ca
+DUELVARS_BENCH3_CARD_HP                  EQUS "LOW(wPlayerBench3CardHP)"                ; cb
+DUELVARS_BENCH4_CARD_HP                  EQUS "LOW(wPlayerBench4CardHP)"                ; cc
+DUELVARS_BENCH5_CARD_HP                  EQUS "LOW(wPlayerBench5CardHP)"                ; cd
+DUELVARS_ARENA_CARD_STAGE                EQUS "LOW(wPlayerArenaCardStage)"              ; ce
+DUELVARS_BENCH1_CARD_STAGE               EQUS "LOW(wPlayerBench1CardStage)"             ; cf
+DUELVARS_BENCH2_CARD_STAGE               EQUS "LOW(wPlayerBench2CardStage)"             ; d0
+DUELVARS_BENCH3_CARD_STAGE               EQUS "LOW(wPlayerBench3CardStage)"             ; d1
+DUELVARS_BENCH4_CARD_STAGE               EQUS "LOW(wPlayerBench4CardStage)"             ; d2
+DUELVARS_BENCH5_CARD_STAGE               EQUS "LOW(wPlayerBench5CardStage)"             ; d3
+DUELVARS_ARENA_CARD_CHANGED_TYPE         EQUS "LOW(wPlayerArenaCardChangedType)"        ; d4
+DUELVARS_BENCH1_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench1CardChangedType)"       ; d5
+DUELVARS_BENCH2_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench2CardChangedType)"       ; d6
+DUELVARS_BENCH3_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench3CardChangedType)"       ; d7
+DUELVARS_BENCH4_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench4CardChangedType)"       ; d8
+DUELVARS_BENCH5_CARD_CHANGED_TYPE        EQUS "LOW(wPlayerBench5CardChangedType)"       ; d9
+DUELVARS_ARENA_CARD_ATTACHED_DEFENDER    EQUS "LOW(wPlayerArenaCardAttachedDefender)"   ; da
+DUELVARS_BENCH1_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench1CardAttachedDefender)"  ; db
+DUELVARS_BENCH2_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench2CardAttachedDefender)"  ; dc
+DUELVARS_BENCH3_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench3CardAttachedDefender)"  ; dd
+DUELVARS_BENCH4_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench4CardAttachedDefender)"  ; de
+DUELVARS_BENCH5_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench5CardAttachedDefender)"  ; df
+DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER   EQUS "LOW(wPlayerArenaCardAttachedPluspower)"  ; e0
+DUELVARS_BENCH1_CARD_ATTACHED_PLUSPOWER  EQUS "LOW(wPlayerBench1CardAttachedPluspower)" ; e1
+DUELVARS_BENCH2_CARD_ATTACHED_PLUSPOWER  EQUS "LOW(wPlayerBench2CardAttachedPluspower)" ; e2
+DUELVARS_BENCH3_CARD_ATTACHED_PLUSPOWER  EQUS "LOW(wPlayerBench3CardAttachedPluspower)" ; e3
+DUELVARS_BENCH4_CARD_ATTACHED_PLUSPOWER  EQUS "LOW(wPlayerBench4CardAttachedPluspower)" ; e4
+DUELVARS_BENCH5_CARD_ATTACHED_PLUSPOWER  EQUS "LOW(wPlayerBench5CardAttachedPluspower)" ; e5
+DUELVARS_ARENA_CARD_SUBSTATUS1           EQUS "LOW(wPlayerArenaCardSubstatus1)"         ; e7
+DUELVARS_ARENA_CARD_SUBSTATUS2           EQUS "LOW(wPlayerArenaCardSubstatus2)"         ; e8
+DUELVARS_ARENA_CARD_CHANGED_WEAKNESS     EQUS "LOW(wPlayerArenaCardChangedWeakness)"    ; e9
+DUELVARS_ARENA_CARD_CHANGED_RESISTANCE   EQUS "LOW(wPlayerArenaCardChangedResistance)"  ; ea
+DUELVARS_ARENA_CARD_SUBSTATUS3           EQUS "LOW(wPlayerArenaCardSubstatus3)"         ; eb
+DUELVARS_PRIZES                          EQUS "LOW(wPlayerPrizes)"                      ; ec
+DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE EQUS "LOW(wPlayerNumberOfCardsInDiscardPile)"  ; ed
+DUELVARS_NUMBER_OF_CARDS_IN_HAND         EQUS "LOW(wPlayerNumberOfCardsInHand)"         ; ee
+DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA  EQUS "LOW(wPlayerNumberOfPokemonInPlayArea)"   ; ef
+DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"             ; f0
+DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                 ; f1
+DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)"  ; f2
 
 ; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00
@@ -87,7 +111,7 @@ PLAY_AREA_BENCH_5 EQU $5
 ; duelist types (DUELVARS_DUELIST_TYPE)
 DUELIST_TYPE_PLAYER   EQU $00
 DUELIST_TYPE_LINK_OPP EQU $01
-DUELIST_TYPE_AI_OPP   EQU $80
+DUELIST_TYPE_AI_OPP   EQU $80 ; $80 + [wOpponentDeckID]
 
 ; status conditions (DUELVARS_ARENA_CARD_STATUS)
 ; two statuses can be combined if they are identified by a different nybble
@@ -128,6 +152,10 @@ SUBSTATUS2_GROWL          EQU $12
 
 SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE EQU 0
 SUBSTATUS3_HEADACHE                EQU 1
+
+; DUELVARS_ARENA_CARD_FLAGS_C2 constants
+CAN_EVOLVE_THIS_TURN_F EQU 7
+CAN_EVOLVE_THIS_TURN   EQU 1 << CAN_EVOLVE_THIS_TURN_F
 
 ; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01

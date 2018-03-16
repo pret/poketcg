@@ -43,13 +43,13 @@ Func_8d56: ; 8d56 (2:4d56)
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
-	call Func_2119
-	call Func_20b0
+	call LoadDuelHUDTiles
+	call LoadDuelCardSymbolTiles
 	call Func_8d0b
-	bank1call Func_5aeb
+	bank1call SetDefaultPalettes
 	ld de, $3cbf
 	call Func_2275
 	ret
@@ -80,7 +80,7 @@ Func_8db0: ; 8db0 (2:4db0)
 
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, Unknown_8de2
-	call InitializeCursorParameters
+	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 .asm_8dc8
@@ -268,7 +268,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	call DisableSRAM
 	ld l, a
 	ld de, wDefaultText
-	call Func_0663
+	call TwoByteNumberToText
 	ld hl, wcfb9
 	ld [hl], $6
 	inc hl
@@ -500,7 +500,7 @@ asm_90da
 	add $e
 	ld c, a
 	ld a, e
-	call Func_06c3
+	call WriteByteToBGMap0
 	or a
 	ret
 
@@ -912,7 +912,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wd0a5], a
 	xor a
 	ld hl, $7b6e
-	call InitializeCursorParameters
+	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5

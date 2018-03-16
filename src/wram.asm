@@ -5,8 +5,17 @@ INCLUDE "vram.asm"
 
 SECTION "WRAM0", WRAM0
 
+UNION
+
 wTempCardCollection:: ; c000
 	ds $100
+
+NEXTU
+
+wc000:: ; c000
+	ds $100
+
+ENDU
 
 	ds $100
 
@@ -105,7 +114,33 @@ wPlayerBench4CardChangedType:: ; c2d8
 wPlayerBench5CardChangedType:: ; c2d9
 	ds $1
 
-	ds $d
+wPlayerArenaCardAttachedDefender:: ; c2da
+	ds $1
+wPlayerBench1CardAttachedDefender:: ; c2db
+	ds $1
+wPlayerBench2CardAttachedDefender:: ; c2dc
+	ds $1
+wPlayerBench3CardAttachedDefender:: ; c2dd
+	ds $1
+wPlayerBench4CardAttachedDefender:: ; c2de
+	ds $1
+wPlayerBench5CardAttachedDefender:: ; c2df
+	ds $1
+
+wPlayerArenaCardAttachedPluspower:: ; c2e0
+	ds $1
+wPlayerBench1CardAttachedPluspower:: ; c2e1
+	ds $1
+wPlayerBench2CardAttachedPluspower:: ; c2e2
+	ds $1
+wPlayerBench3CardAttachedPluspower:: ; c2e3
+	ds $1
+wPlayerBench4CardAttachedPluspower:: ; c2e4
+	ds $1
+wPlayerBench5CardAttachedPluspower:: ; c2e5
+	ds $1
+
+	ds $1
 
 wPlayerArenaCardSubstatus1:: ; c2e7
 	ds $1
@@ -135,7 +170,7 @@ wPlayerNumberOfCardsInHand:: ; c2ee
 	ds $1
 
 ; Pokemon cards in arena + bench
-wPlayerNumberOfPokemonInPlay:: ; c2ef
+wPlayerNumberOfPokemonInPlayArea:: ; c2ef
 	ds $1
 
 wPlayerArenaCardStatus:: ; c2f0
@@ -203,20 +238,46 @@ wOpponentBench4CardStage:: ; c3d2
 wOpponentBench5CardStage:: ; c3d3
 	ds $1
 
-wOpponentArenaCardChangedType:: ; c2d4
+wOpponentArenaCardChangedType:: ; c3d4
 	ds $1
-wOpponentBench1CardChangedType:: ; c2d5
+wOpponentBench1CardChangedType:: ; c3d5
 	ds $1
-wOpponentBench2CardChangedType:: ; c2d6
+wOpponentBench2CardChangedType:: ; c3d6
 	ds $1
-wOpponentBench3CardChangedType:: ; c2d7
+wOpponentBench3CardChangedType:: ; c3d7
 	ds $1
-wOpponentBench4CardChangedType:: ; c2d8
+wOpponentBench4CardChangedType:: ; c3d8
 	ds $1
-wOpponentBench5CardChangedType:: ; c2d9
+wOpponentBench5CardChangedType:: ; c3d9
 	ds $1
 
-	ds $d
+wOpponentArenaCardAttachedDefender:: ; c3da
+	ds $1
+wOpponentBench1CardAttachedDefender:: ; c3db
+	ds $1
+wOpponentBench2CardAttachedDefender:: ; c3dc
+	ds $1
+wOpponentBench3CardAttachedDefender:: ; c3dd
+	ds $1
+wOpponentBench4CardAttachedDefender:: ; c3de
+	ds $1
+wOpponentBench5CardAttachedDefender:: ; c3df
+	ds $1
+
+wOpponentArenaCardAttachedPluspower:: ; c3e0
+	ds $1
+wOpponentBench1CardAttachedPluspower:: ; c3e1
+	ds $1
+wOpponentBench2CardAttachedPluspower:: ; c3e2
+	ds $1
+wOpponentBench3CardAttachedPluspower:: ; c3e3
+	ds $1
+wOpponentBench4CardAttachedPluspower:: ; c3e4
+	ds $1
+wOpponentBench5CardAttachedPluspower:: ; c3e5
+	ds $1
+
+	ds $1
 
 wOpponentArenaCardSubstatus1:: ; c3e7
 	ds $1
@@ -242,7 +303,7 @@ wOpponentNumberOfCardsInDiscardPile:: ; c3ed
 wOpponentNumberOfCardsInHand:: ; c3ee
 	ds $1
 
-wOpponentNumberOfPokemonInPlay:: ; c3ef
+wOpponentNumberOfPokemonInPlayArea:: ; c3ef
 	ds $1
 
 wOpponentArenaCardStatus:: ; c3f0
@@ -251,6 +312,7 @@ wOpponentArenaCardStatus:: ; c3f0
 ; $00   - player
 ; $01   - link
 ; other - AI controlled
+; this is equal to wDuelType
 wOpponentDuelistType:: ; c3f1
 	ds $1
 
@@ -332,7 +394,7 @@ wInitialA:: ; cab3
 wConsole:: ; cab4
 	ds $1
 
-wcab5:: ; cab5
+wOAMOffset:: ; cab5
 	ds $1
 
 wTileMapFill:: ; cab6
@@ -445,10 +507,10 @@ wTempSGBPacket:: ; cae0
 
 ; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
 wBackgroundPalettesCGB:: ; caf0
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 wObjectPalettesCGB:: ; cb30
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 	ds $4
 
@@ -517,6 +579,7 @@ wCurrentDuelMenuItem:: ; cbc6
 wCardPageNumber:: ; cbc7
 	ds $1
 
+wcbc8:: ; cbc8
 	ds $1
 
 ; 2-byte something
@@ -541,12 +604,49 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-	ds $5
+wcbd1:: ; cbd1
+	ds $1
+
+wcbd2:: ; cbd2
+	ds $1
+
+wcbd3:: ; cbd3
+	ds $1
+
+wcbd4:: ; cbd4
+	ds $1
+
+wcbd5:: ; cbd5
+	ds $1
 
 wcbd6:: ; cbd6
 	ds $1
 
-	ds $a
+wcbd7:: ; cbd7
+	ds $1
+
+wcbd8:: ; cbd8
+	ds $1
+
+wcbd9:: ; cbd9
+	ds $1
+
+; in the hand or discard pile card screen, id of the text printed in the bottom-left box
+wCardListInfoBoxText:: ; cbda
+	ds $2
+
+; in the hand or discard pile card screen, id of the text printed as the header title
+wCardListHeaderText:: ; cbdc
+	ds $2
+
+wcbde:: ; cbde
+	ds $1
+
+wcbdf:: ; cbdf
+	ds $1
+
+wcbe0:: ; cbe0
+	ds $1
 
 wcbe1:: ; cbe1
 	ds $1
@@ -554,13 +654,21 @@ wcbe1:: ; cbe1
 wcbe2:: ; cbe2
 	ds $3
 
-wcbe5:: ; cbe5
+; sp is saved here when starting a duel, in order to save the return address
+; however, it only seems to be read after a transmission error in a link duel
+wDuelReturnAddress:: ; cbe5
 	ds $2
 
 wcbe7:: ; cbe7
 	ds $1
 
-	ds $5
+wcbe8:: ; cbe8
+	ds $1
+
+wcbe9:: ; cbe9
+	ds $1
+
+	ds $3
 
 wcbed:: ; cbed
 	ds $8
@@ -570,7 +678,19 @@ wcbed:: ; cbed
 wcbf9:: ; cbf9
 	ds $1
 
-	ds $a
+	ds $4
+
+; during a practice duel, identifies an entry of PracticeDuelActionTable
+wPracticeDuelAction:: ; cbfe
+	ds $1
+
+wcbff:: ; cbff
+	ds $1
+
+wcc00:: ; cc00
+	ds $1
+
+	ds $3
 
 wcc04:: ; cc04
 	ds $1
@@ -582,20 +702,24 @@ wcc05:: ; cc05
 wDuelTurns:: ; cc06
 	ds $1
 
+; used to signal that the current duel has finished, not to be mistaken with wDuelResult
 ; 0 = no one has won duel yet
 ; 1 = player whose turn it is has won the duel
 ; 2 = player whose turn it is has lost the duel
-; 3 = duel ended in a draw
+; 3 = duel ended in a draw (start sudden death match)
 wDuelFinished:: ; cc07
 	ds $1
 
-wcc08:: ; cc08
+; current duel is a [wDuelInitialPrizes]-prize match
+wDuelInitialPrizes:: ; cc08
 	ds $1
 
-wcc09:: ; cc09
+; note that for a practice duel, wIsPracticeDuel must also be set to $1
+wDuelType:: ; cc09
 	ds $1
 
-wcc0a:: ; cc0a
+; set to 1 if the coin toss during the CheckSandAttackOrSmokescreenSubstatus check is heads
+wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 	ds $1
 
 wAlreadyPlayedEnergy:: ; cc0b
@@ -638,9 +762,11 @@ wOpponentPortrait:: ; cc15
 wOpponentName:: ; cc16
 	ds $2
 
+; an overworld script starting a duel sets this address to the value to be written into wDuelInitialPrizes
 wcc18:: ; cc18
 	ds $1
 
+; an overworld script starting a duel sets this address to the value to be written into wOpponentDeckID
 wcc19:: ; cc19
 	ds $1
 
@@ -706,7 +832,7 @@ wNoDamageOrEffect:: ; ccc7
 	ds $2
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
-wccc9:: ; ccc9
+wGotHeadsFromConfusionCheck:: ; ccc9
 	ds $1
 
 	ds $3
@@ -754,9 +880,8 @@ wccf2:: ; ccf2
 
 SECTION "WRAM Engine 2", WRAM0
 
-; color/pattern of the text box border. Values between 0-7?. Interpreted differently depending on console type
-; Note that this doesn't appear to be a selectable option, just changes with the situation.
-; For example the value 4 seems to be used a lot during duels.
+; on CGB, attributes of the text box borders. (values 0-7? so only affects palette?)
+; on SGB, colorize text box border with SGB1 if non-0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
@@ -822,10 +947,28 @@ wCursorTileNumber:: ; cd15
 wTileBehindCursor:: ; cd16
 	ds $1
 
-wcd17:: ; cd17
+wMenuFunctionPointer:: ; cd17
 	ds $2
 
-	ds $7f
+wListScrollOffset:: ; cd19
+	ds $1
+
+wListItemXPosition:: ; cd1a
+	ds $1
+
+wNumListItems:: ; cd1b
+	ds $1
+
+wcd1c:: ; cd1c
+	ds $1
+
+wListFunctionPointer:: ; cd1d
+	ds $2
+
+	ds $78
+
+wcd97:: ; cd97
+	ds $1
 
 ; x coord of the leftmost item in a horizontal menu
 wLeftmostItemCursorX:: ; cd98
@@ -838,6 +981,8 @@ wRefreshMenuCursorSFX:: ; cd99
 wcd9a:: ; cd9a
 	ds $1
 
+; used in _CopyCardNameAndLevel to keep track of the remaining space to copy the text
+wcd9b:: ; cd9b
 	ds $1
 
 wcd9c:: ; cd9c
@@ -906,7 +1051,7 @@ wce22:: ; ce22
 	ds $1
 
 ; LoadCardGfx loads the card's palette here
-wce23:: ; ce23
+wCardPalette:: ; ce23
 	ds CGB_PAL_SIZE
 
 wce2b:: ; ce2b
@@ -1196,7 +1341,9 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-wd0c3:: ; d0c3
+; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error? )
+; to be read by the overworld caller
+wDuelResult:: ; d0c3
 	ds $1
 
 wd0c4:: ; d0c4
@@ -1224,7 +1371,7 @@ wd0cb:: ; d0cb
 	ds $1
 
 wd0cc:: ; d0cc
-	ds 8 * CGB_PAL_SIZE
+	ds 8 palettes
 
 wd10c:: ; d10c
 	ds $1

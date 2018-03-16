@@ -10,7 +10,7 @@ SeadraName: ; 5c05d (17:405d)
 
 SeadrasWaterGunDescription: ; 5c065 (17:4065)
 	text "Does 20 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Seadra but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -44,7 +44,7 @@ GoldeenKind: ; 5c202 (17:4202)
 GoldeenDescription: ; 5c20c (17:420c)
 	text "Its tail fin billows like an elegant"
 	line "ballroom dress, giving it the"
-	line "nickname \"Water Queen.\""
+	line "nickname ”Water Queen.”"
 	done
 
 SeakingName: ; 5c268 (17:4268)
@@ -74,7 +74,7 @@ StaryuKind: ; 5c2e5 (17:42e5)
 	done
 
 StaryuDescription: ; 5c2f0 (17:42f0)
-	text "An enigmatic Pok`mon that can"
+	text "An enigmatic Pokémon that can"
 	line "effortlessly regenerate any"
 	line "appendage it loses in battle."
 	done
@@ -88,7 +88,7 @@ RecoverName: ; 5c352 (17:4352)
 	done
 
 StarmiesRecoverDescription: ; 5c35b (17:435b)
-	text "Discard 1 ", TX_WATER, " Energy card attached to"
+	text "Discard 1 <WATER> Energy card attached to"
 	line "Starmie in order to use this attack."
 	line "Remove all damage counters from"
 	line "Starmie."
@@ -159,7 +159,7 @@ LaprasName: ; 5c58f (17:458f)
 
 LaprasWaterGunDescription: ; 5c597 (17:4597)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Lapras but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -170,7 +170,7 @@ LaprasKind: ; 5c643 (17:4643)
 	done
 
 LaprasDescription: ; 5c64e (17:464e)
-	text "A Pok`mon that has been overhunted"
+	text "A Pokémon that has been overhunted"
 	line "almost to extinction. It can ferry"
 	line "people across water."
 	done
@@ -201,7 +201,7 @@ Vaporeon1Description: ; 5c717 (17:4717)
 
 VaporeonsWaterGunDescription: ; 5c77b (17:477b)
 	text "Does 30 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Vaporeon but not used to pay for"
 	line "this attack's Energy cost. You can't"
 	line "add more than 20 damage in this way."
@@ -234,7 +234,7 @@ ClairvoyanceDescription: ; 5c8b5 (17:48b5)
 
 OmanytesWaterGunDescription: ; 5c932 (17:4932)
 	text "Does 10 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Omanyte but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
@@ -256,14 +256,14 @@ OmastarName: ; 5ca3e (17:4a3e)
 
 OmastarsWaterGunDescription: ; 5ca47 (17:4a47)
 	text "Does 20 damage plus 10 more damage"
-	line "for each ", TX_WATER, " Energy attached to"
+	line "for each <WATER> Energy attached to"
 	line "Omastar but not used to pay for this"
 	line "attack's Energy cost. You can't add"
 	line "more than 20 damage in this way."
 	done
 
 OmastarDescription: ; 5caf4 (17:4af4)
-	text "A prehistoric Pok`mon that died out"
+	text "A prehistoric Pokémon that died out"
 	line "when its heavy shell made it"
 	line "impossible for it to catch prey."
 	done
@@ -283,11 +283,11 @@ BlizzardName: ; 5cb6d (17:4b6d)
 BlizzardDescription: ; 5cb77 (17:4b77)
 	text "Flip a coin. If heads, this attack"
 	line "does 10 damage to each of your"
-	line "opponent's Benched Pok`mon."
+	line "opponent's Benched Pokémon."
 	line "If tails, this attack does 10 damage"
-	line "to each of your own Benched Pok`mon."
+	line "to each of your own Benched Pokémon."
 	line "(Don't apply Weakness and Resistance"
-	line "for Benched Pok`mon.)"
+	line "for Benched Pokémon.)"
 	done
 
 ArticunoKind: ; 5cc5b (17:4c5b)
@@ -295,7 +295,7 @@ ArticunoKind: ; 5cc5b (17:4c5b)
 	done
 
 Articuno1Description: ; 5cc63 (17:4c63)
-	text "A legendary bird Pok`mon that is"
+	text "A legendary bird Pokémon that is"
 	line "said to appear to doomed people who"
 	line "are lost in icy mountains."
 	done
@@ -308,7 +308,7 @@ QuickfreezeDescription: ; 5ccd1 (17:4cd1)
 	text "When you put Articuno into play"
 	line "during your turn (not during"
 	line "set-up), flip a coin. If heads, the"
-	line "Defending Pok`mon is now Paralyzed."
+	line "Defending Pokémon is now Paralyzed."
 	done
 
 IceBreathName: ; 5cd57 (17:4d57)
@@ -317,7 +317,7 @@ IceBreathName: ; 5cd57 (17:4d57)
 
 IceBreathDescription: ; 5cd63 (17:4d63)
 	text "Does 40 damage to 1 of your"
-	line "opponent's Pok`mon chosen at random."
+	line "opponent's Pokémon chosen at random."
 	line "Don't apply Weakness and Resistance"
 	line "for this attack. (Any other effects"
 	line "that would happen after applying"
@@ -326,7 +326,7 @@ IceBreathDescription: ; 5cd63 (17:4d63)
 	done
 
 Articuno2Description: ; 5ce35 (17:4e35)
-	text "A legendary bird Pok`mon. It freezes"
+	text "A legendary bird Pokémon. It freezes"
 	line "water that is contained in winter"
 	line "air and makes it snow."
 	done
@@ -353,7 +353,7 @@ PikachuKind: ; 5ceeb (17:4eeb)
 	done
 
 Pikachu1Description: ; 5cef2 (17:4ef2)
-	text "When several of these Pok`mon"
+	text "When several of these Pokémon"
 	line "gather, their electricity can cause"
 	line "lightning storms."
 	done
@@ -364,14 +364,14 @@ SparkName: ; 5cf47 (17:4f47)
 
 SparkDescription: ; 5cf4e (17:4f4e)
 	text "If your opponent has any Benched"
-	line "Pok`mon, choose 1 of them and this"
+	line "Pokémon, choose 1 of them and this"
 	line "attack does 10 damage to it. (Don't"
 	line "apply Weakness and Resistance for"
-	line "Benched Pok`mon.)"
+	line "Benched Pokémon.)"
 	done
 
 Pikachu2Description: ; 5cfeb (17:4feb)
-	text "When several of these Pok`mon"
+	text "When several of these Pokémon"
 	line "gather, their electricity can build"
 	line "and cause lightning storms."
 	done
@@ -381,12 +381,12 @@ GrowlName: ; 5d04a (17:504a)
 	done
 
 GrowlDescription: ; 5d051 (17:5051)
-	text "If the Defending Pok`mon attacks"
+	text "If the Defending Pokémon attacks"
 	line "Pikachu during your opponent's next"
 	line "turn, any damage done by the attack"
 	line "is reduced by 10 (after applying"
 	line "Weakness and Resistance). "
-	line "(Benching or evolving either Pok`mon"
+	line "(Benching or evolving either Pokémon"
 	line "ends this effect.)"
 	done
 
@@ -395,7 +395,7 @@ ThundershockName: ; 5d12f (17:512f)
 	done
 
 Pikachu3Description: ; 5d13d (17:513d)
-	text "When several of these Pok`mon"
+	text "When several of these Pokémon"
 	line "gather, their electricity could"
 	line "build and cause lightning storms."
 	done
@@ -420,7 +420,7 @@ FlyDescription: ; 5d1b3 (17:51b3)
 FlyingPikachuDescription: ; 5d26f (17:526f)
 	text "By learning how to fly, Pikachu"
 	line "overcame its weakness to Fighting"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 SurfingPikachuName: ; 5d2bb (17:52bb)
@@ -469,11 +469,11 @@ GigashockName: ; 5d43c (17:543c)
 
 GigashockDescription: ; 5d447 (17:5447)
 	text "Choose 3 of your opponent's Benched"
-	line "Pok`mon and this attack does 10"
+	line "Pokémon and this attack does 10"
 	line "damage to each of them. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.) If your opponent has fewer"
-	line "than 3 Benched Pok`mon, do the"
+	line "Pokémon.) If your opponent has fewer"
+	line "than 3 Benched Pokémon, do the"
 	line "damage to each of them."
 	done
 
@@ -492,10 +492,10 @@ ThunderWaveName: ; 5d591 (17:5591)
 	done
 
 MagnemitesSelfdestructDescription: ; 5d59f (17:559f)
-	text "Does 10 damage to each Pok`mon on"
+	text "Does 10 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.) Magnemite does 40 damage"
+	line "Pokémon.) Magnemite does 40 damage"
 	line "to itself."
 	done
 
@@ -515,7 +515,7 @@ MagneticStormName: ; 5d6a0 (17:56a0)
 
 MagneticStormDescription: ; 5d6b0 (17:56b0)
 	text "Remove all Energy cards attached to"
-	line "all of your Pok`mon, then randomly"
+	line "all of your Pokémon, then randomly"
 	line "reattach each of them."
 	done
 
@@ -530,10 +530,10 @@ MagnetonName: ; 5d76e (17:576e)
 	done
 
 Magneton1sSelfdestructDescription: ; 5d778 (17:5778)
-	text "Does 20 damage to each Pok`mon on"
+	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.)"
+	line "Pokémon.)"
 	line "Magneton does 80 damage to itself."
 	done
 
@@ -556,10 +556,10 @@ SonicboomDescription: ; 5d876 (17:5876)
 	done
 
 Magneton2sSelfdestructDescription: ; 5d907 (17:5907)
-	text "Does 20 damage to each Pok`mon on"
+	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.) Magneton does 100 damage"
+	line "Pokémon.) Magneton does 100 damage"
 	line "to itself."
 	done
 
@@ -594,7 +594,7 @@ EnergySpikeName: ; 5da72 (17:5a72)
 EnergySpikeDescription: ; 5da80 (17:5a80)
 	text "Search your deck for a basic Energy"
 	line "card and attach it to 1 of your"
-	line "Pok`mon. Shuffle your deck"
+	line "Pokémon. Shuffle your deck"
 	line "afterward."
 	done
 
@@ -609,11 +609,11 @@ ChainLightningName: ; 5db4f (17:5b4f)
 	done
 
 ChainLightningDescription: ; 5db60 (17:5b60)
-	text "If the Defending Pok`mon isn't"
+	text "If the Defending Pokémon isn't"
 	line "Colorless, this attack does 10"
-	line "damage to each Benched Pok`mon of"
+	line "damage to each Benched Pokémon of"
 	line "the same type as the Defending"
-	line "Pok`mon (including your own)."
+	line "Pokémon (including your own)."
 	done
 
 Electrode2Description: ; 5dbfe (17:5bfe)
@@ -658,7 +658,7 @@ ElectabuzzKind: ; 5ddec (17:5dec)
 	done
 
 Electabuzz1Description: ; 5ddf6 (17:5df6)
-	text "A wild Pok`mon with a short temper."
+	text "A wild Pokémon with a short temper."
 	line "It is able to distinguish colors"
 	line "and likes the color red."
 	done
@@ -699,7 +699,7 @@ JolteonKind: ; 5dfaf (17:5faf)
 	done
 
 Jolteon1Description: ; 5dfba (17:5fba)
-	text "A sensitive Pok`mon that easily"
+	text "A sensitive Pokémon that easily"
 	line "becomes sad or angry. Every time"
 	line "its mood changes, it charges power."
 	done
@@ -729,16 +729,16 @@ ThunderstormName: ; 5e0d7 (17:60d7)
 
 ThunderstormDescription: ; 5e0e5 (17:60e5)
 	text "For each of your opponent's Benched"
-	line "Pok`mon, flip a coin. If heads,"
+	line "Pokémon, flip a coin. If heads,"
 	line "this attack does 20 damage to that"
-	line "Pok`mon. (Don't apply Weakness and"
-	line "Resistance for Benched Pok`mon.)"
+	line "Pokémon. (Don't apply Weakness and"
+	line "Resistance for Benched Pokémon.)"
 	line "Then, Zapdos does 10 damage times"
 	line "the number of tails to itself."
 	done
 
 Zapdos1Description: ; 5e1d2 (17:61d2)
-	text "A legendary thunderbird Pok`mon"
+	text "A legendary thunderbird Pokémon"
 	line "whose anger is said to cause storms."
 	line "Some say it has lived above the"
 	line "clouds for thousands of years."
@@ -759,7 +759,7 @@ ThunderboltDescription: ; 5e29d (17:629d)
 	done
 
 Zapdos2Description: ; 5e2e7 (17:62e7)
-	text "A legendary bird Pok`mon said to"
+	text "A legendary bird Pokémon said to"
 	line "appear from clouds while wielding"
 	line "enormous lightning bolts."
 	done
@@ -771,7 +771,7 @@ PealOfThunderName: ; 5e345 (17:6345)
 PealOfThunderDescription: ; 5e356 (17:6356)
 	text "When you put Zapdos into play during"
 	line "your turn (not during set-up), do"
-	line "30 damage to a Pok`mon other than"
+	line "30 damage to a Pokémon other than"
 	line "Zapdos chosen at random. (Don't"
 	line "apply Weakness and Resistance.)"
 	done
@@ -781,9 +781,9 @@ BigThunderName: ; 5e400 (17:6400)
 	done
 
 BigThunderDescription: ; 5e40d (17:640d)
-	text "Choose a Pok`mon other than Zapdos"
+	text "Choose a Pokémon other than Zapdos"
 	line "at random. This attack does 70"
-	line "damage to that Pok`mon. Don't apply"
+	line "damage to that Pokémon. Don't apply"
 	line "Weakness and Resistance for this"
 	line "attack. (Any other effects that"
 	line "would happen after applying Weakness"
@@ -791,7 +791,7 @@ BigThunderDescription: ; 5e40d (17:640d)
 	done
 
 Zapdos3Description: ; 5e4f8 (17:64f8)
-	text "This legendary bird Pok`mon is said"
+	text "This legendary bird Pokémon is said"
 	line "to appear when the sky turns dark"
 	line "and lightning showers down."
 	done
@@ -857,9 +857,9 @@ EarthquakeName: ; 5e70d (17:670d)
 
 EarthquakeDescription: ; 5e719 (17:6719)
 	text "Does 10 damage to each of your own"
-	line "Benched Pok`mon. (Don't apply"
+	line "Benched Pokémon. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.)"
+	line "Pokémon.)"
 	done
 
 DugtrioDescription: ; 5e789 (17:6789)
@@ -977,7 +977,7 @@ StrikesBackDescription: ; 5eba7 (17:6ba7)
 	text "Whenever your opponent's attack"
 	line "damages Machamp (even if Machamp is"
 	line "Knocked Out), this power does 10"
-	line "damage to the attacking Pok`mon."
+	line "damage to the attacking Pokémon."
 	line "(Don't apply Weakness and"
 	line "Resistance.) "
 	done
@@ -1059,10 +1059,10 @@ AvalancheName: ; 5ef53 (17:6f53)
 	done
 
 GolemsSelfdestructDescription: ; 5ef5e (17:6f5e)
-	text "Does 20 damage to each Pok`mon on"
+	text "Does 20 damage to each Pokémon on"
 	line "each player's Bench. (Don't apply"
 	line "Weakness and Resistance for Benched"
-	line "Pok`mon.) Golem does 100 damage to"
+	line "Pokémon.) Golem does 100 damage to"
 	line "itself."
 	done
 
@@ -1108,12 +1108,12 @@ SnivelName: ; 5f19b (17:719b)
 	done
 
 SnivelDescription: ; 5f1a3 (17:71a3)
-	text "If the Defending Pok`mon attacks"
+	text "If the Defending Pokémon attacks"
 	line "Cubone during your opponent's next"
 	line "turn, any damage done by the attack"
 	line "is reduced by 20 (after applying"
 	line "Weakness and Resistance). (Benching"
-	line "or evolving either Pok`mon ends this"
+	line "or evolving either Pokémon ends this"
 	line "effect.)"
 	done
 
@@ -1129,7 +1129,7 @@ CuboneKind: ; 5f2c6 (17:72c6)
 CuboneDescription: ; 5f2ce (17:72ce)
 	text "Because it never removes its skull"
 	line "helmet, no one has ever seen this"
-	line "Pok`mon's real face."
+	line "Pokémon's real face."
 	done
 
 MarowakName: ; 5f329 (17:7329)
@@ -1145,8 +1145,8 @@ CallforFriendName: ; 5f33e (17:733e)
 	done
 
 CallforFriendDescription: ; 5f34f (17:734f)
-	text "Search your deck for a ", TX_FIGHTING, " Basic"
-	line "Pok`mon card and put it onto your"
+	text "Search your deck for a <FIGHTING> Basic"
+	line "Pokémon card and put it onto your"
 	line "Bench. Shuffle your deck afterward."
 	line "(You can't use this attack if your"
 	line "Bench is full.)"
@@ -1168,7 +1168,7 @@ BoneAttackName: ; 5f45b (17:745b)
 
 BoneAttackDescription: ; 5f468 (17:7468)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon can't attack during your"
+	line "Pokémon can't attack during your"
 	line "opponent's next turn."
 	done
 
@@ -1178,16 +1178,16 @@ WailName: ; 5f4c5 (17:74c5)
 
 WailDescription: ; 5f4cb (17:74cb)
 	text "Each player fills his or her Bench"
-	line "with Basic Pok`mon chosen at random"
+	line "with Basic Pokémon chosen at random"
 	line "from his or her deck. If a player"
-	line "has fewer Basic Pok`mon than that in"
+	line "has fewer Basic Pokémon than that in"
 	line "his or deck, he or she chooses all"
 	line "of them. Each player shuffles his"
 	line "or her deck afterward."
 	done
 
 Marowak2Description: ; 5f5b6 (17:75b6)
-	text "Small and weak, this Pok`mon is"
+	text "Small and weak, this Pokémon is"
 	line "adept with its bone club. It has"
 	line "grown more vicious over the ages."
 	done
@@ -1202,10 +1202,10 @@ StretchKickName: ; 5f625 (17:7625)
 
 StretchKickDescription: ; 5f633 (17:7633)
 	text "If your opponent has any Benched"
-	line "Pok`mon, choose 1 of them and this"
+	line "Pokémon, choose 1 of them and this"
 	line "attack does 20 damage to it."
 	line "(Don't apply Weakness and"
-	line "Resistance for Benched Pok`mon.)"
+	line "Resistance for Benched Pokémon.)"
 	done
 
 HighJumpKickName: ; 5f6d0 (17:76d0)
@@ -1254,9 +1254,9 @@ LeerName: ; 5f7e6 (17:77e6)
 
 LeerDescription: ; 5f7ec (17:77ec)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon can't attack Rhyhorn during"
+	line "Pokémon can't attack Rhyhorn during"
 	line "your opponent's next turn."
-	line "(Benching or evolving either Pok`mon"
+	line "(Benching or evolving either Pokémon"
 	line "ends this effect.)"
 	done
 
@@ -1281,14 +1281,14 @@ RamName: ; 5f8fa (17:78fa)
 RamDescription: ; 5f8ff (17:78ff)
 	text "Rhydon does 20 damage to itself."
 	line "If your opponent has any Benched"
-	line "Pok`mon, he or she chooses 1 of them"
+	line "Pokémon, he or she chooses 1 of them"
 	line "and switches it with the Defending"
-	line "Pok`mon.(Do the damage before"
-	line "switching the Pok`mon."
+	line "Pokémon.(Do the damage before"
+	line "switching the Pokémon."
 	done
 
 RamDescriptionCont: ; 5f9bf (17:79bf)
-	text "Switch the Pok`mon even if Rhydon"
+	text "Switch the Pokémon even if Rhydon"
 	line "is Knocked Out.)"
 	done
 
@@ -1323,7 +1323,7 @@ KabutoArmorDescriptionCont: ; 5fb19 (17:7b19)
 	done
 
 KabutoDescription: ; 5fb90 (17:7b90)
-	text "A Pok`mon that was resurrected from"
+	text "A Pokémon that was resurrected from"
 	line "a fossil found in what was once the"
 	line "ocean floor eons ago."
 	done
@@ -1344,7 +1344,7 @@ AbsorbDescription: ; 5fc0f (17:7c0f)
 	text "Remove a number of damage counters"
 	line "from Kabutops equal to half the"
 	line "damage done to the Defending"
-	line "Pok`mon (after applying Weakness"
+	line "Pokémon (after applying Weakness"
 	line "and Resistance)"
 	line "(rounded up to the nearest 10)."
 	done
@@ -1381,7 +1381,7 @@ AerodactylKind: ; 5fe00 (17:7e00)
 	done
 
 AerodactylDescription: ; 5fe08 (17:7e08)
-	text "A ferocious prehistoric Pok`mon that"
+	text "A ferocious prehistoric Pokémon that"
 	line "goes for the enemy's throat with its"
 	line "serrated saw-like fangs."
 	done
@@ -1405,7 +1405,7 @@ KadabraName: ; 5fed3 (17:7ed3)
 	done
 
 KadabrasRecoverDescription: ; 5fedc (17:7edc)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Kadabra in order to use this attack."
 	line "Remove all damage counters from"
 	line "Kadabra."

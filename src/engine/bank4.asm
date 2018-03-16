@@ -2,7 +2,7 @@ Func_10000: ; 10000 (4:4000)
 	ld a, $0
 	ld [wTileMapFill], a
 	call EmptyScreen
-	call Func_2119
+	call LoadDuelHUDTiles
 	ld de, $307f
 	call Func_2275
 	call Set_OBJ_8x8
@@ -18,7 +18,7 @@ Func_10000: ; 10000 (4:4000)
 
 .asm_10025
 	call Func_1288c
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ret
@@ -155,7 +155,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	call Func_2c73
 	call DisableLCD
 	call Func_1288c
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
@@ -434,7 +434,7 @@ Unknown_10f14: ; 10f14 (4:4f14)
 Func_10f2e: ; 10f2e (4:4f2e)
 	push hl
 	push de
-	ld de, $0101
+	lb de, 1, 1
 	call Func_22ae
 	call Func_10f4a
 	rlca
@@ -1081,7 +1081,7 @@ Unknown_1229f: ; 1229f (4:629f)
 ; is selected, there is no need to come back to the menu.
 ; the only exception is after returning from Card Pop!
 _GameLoop: ; 126d1 (4:66d1)
-	call InitSpritePositions
+	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
 	farcall Func_70018

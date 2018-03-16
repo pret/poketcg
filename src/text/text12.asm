@@ -2,8 +2,8 @@ DamageSwapDescription: ; 60000 (18:4000)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
 	line "move 1 damage counter from 1 of your"
-	line "Pok`mon to another as long as you"
-	line "don't Knock Out that Pok`mon."
+	line "Pokémon to another as long as you"
+	line "don't Knock Out that Pokémon."
 	line "This power can't be used if Alakazam"
 	line "is Asleep, Confused, or Paralyzed."
 	done
@@ -19,8 +19,8 @@ SlowpokeName: ; 6014b (18:414b)
 	done
 
 SlowpokesAmnesiaDescription: ; 60155 (18:4155)
-	text "Choose 1 of the Defending Pok`mon's"
-	line "attacks. That Pok`mon can't use"
+	text "Choose 1 of the Defending Pokémon's"
+	line "attacks. That Pokémon can't use"
 	line "that attack during your opponent's"
 	line "next turn."
 	done
@@ -51,7 +51,7 @@ ScavengeName: ; 602b5 (18:42b5)
 	done
 
 ScavengeDescription: ; 602bf (18:42bf)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached"
+	text "Discard 1 <PSYCHIC> Energy card attached"
 	line "to Slowpoke in order to use this"
 	line "attack. Put a Trainer card from your"
 	line "discard pile into your hand."
@@ -69,7 +69,7 @@ StrangeBehaviorDescription: ; 60360 (18:4360)
 	text "As often as you like during your"
 	line "turn (before your attack), you may"
 	line "move 1 damage counter from 1 of your"
-	line "Pok`mon to Slowbro as long as you"
+	line "Pokémon to Slowbro as long as you"
 	line "don't Knock Out Slowbro. This power"
 	line "can't be used if Slowbro is Asleep,"
 	line "Confused, or Paralyzed."
@@ -95,7 +95,7 @@ SleepingGasName: ; 604c3 (18:44c3)
 
 MayInflictSleepDescription: ; 604d1 (18:44d1)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon is now Asleep."
+	line "Pokémon is now Asleep."
 	done
 
 DestinyBondName: ; 6050e (18:450e)
@@ -103,11 +103,11 @@ DestinyBondName: ; 6050e (18:450e)
 	done
 
 DestinyBondDescription: ; 6051c (18:451c)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Gastly in order to use this attack."
-	line "If a Pok`mon Knocks Out Gastly"
+	line "If a Pokémon Knocks Out Gastly"
 	line "during your opponent's next turn,"
-	line "Knock Out that Pok`mon."
+	line "Knock Out that Pokémon."
 	done
 
 GastlyKind: ; 605bf (18:45bf)
@@ -116,7 +116,7 @@ GastlyKind: ; 605bf (18:45bf)
 
 Gastly1Description: ; 605c4 (18:45c4)
 	text "Almost invisible, this gaseous"
-	line "Pok`mon cloaks the target and puts"
+	line "Pokémon cloaks the target and puts"
 	line "it to sleep without notice."
 	done
 
@@ -135,7 +135,7 @@ EnergyConversionDescription: ; 6063c (18:463c)
 	done
 
 Gastly2Description: ; 6069e (18:469e)
-	text "A mysterious Pok`mon. Some say it is"
+	text "A mysterious Pokémon. Some say it is"
 	line "a lifeform from another dimension,"
 	line "while others believe it is formed"
 	line "from smog."
@@ -175,7 +175,7 @@ DreamEaterName: ; 6086a (18:486a)
 
 DreamEaterDescription: ; 60877 (18:4877)
 	text "You can't use this attack unless"
-	line "the Defending Pok`mon is Asleep."
+	line "the Defending Pokémon is Asleep."
 	done
 
 GengarName: ; 608ba (18:48ba)
@@ -190,8 +190,8 @@ CurseDescription: ; 608c9 (18:48c9)
 	text "Once during your turn (before your"
 	line "attack), you may move 1 damage"
 	line "counter from 1 of your opponent's"
-	line "Pok`mon to another (even if it would"
-	line "Knock Out the other Pok`mon)."
+	line "Pokémon to another (even if it would"
+	line "Knock Out the other Pokémon)."
 	line "This power can't be used if Gengar"
 	line "is Asleep, Confused, or Paralyzed."
 	done
@@ -202,10 +202,10 @@ DarkMindName: ; 609b7 (18:49b7)
 
 DarkMindDescription: ; 609c2 (18:49c2)
 	text "If your opponent has any Benched"
-	line "Pok`mon, choose 1 of them and this"
+	line "Pokémon, choose 1 of them and this"
 	line "attack does 10 damage to it."
 	line "(Don't apply Weakness and Resistance"
-	line "for Benched Pok`mon.)"
+	line "for Benched Pokémon.)"
 	done
 
 GengarKind: ; 60a5f (18:4a5f)
@@ -213,7 +213,7 @@ GengarKind: ; 60a5f (18:4a5f)
 	done
 
 GengarDescription: ; 60a67 (18:4a67)
-	text "Under a full moon, this Pok`mon"
+	text "Under a full moon, this Pokémon"
 	line "likes to mimic the shadows of people"
 	line "and laugh at their fright."
 	done
@@ -281,7 +281,7 @@ MeditateName: ; 60d21 (18:4d21)
 MrMimesMeditateDescription: ; 60d2b (18:4d2b)
 	text "Does 10 damage plus 10 more damage"
 	line "for each damage counter on the"
-	line "Defending Pok`mon."
+	line "Defending Pokémon."
 	done
 
 MrMimeKindOrBarrierName: ; 60d81 (18:4d81)
@@ -306,7 +306,7 @@ DoubleAttackX10Description: ; 60de2 (18:4de2)
 JynxsMeditateDescription: ; 60e27 (18:4e27)
 	text "Does 20 damage plus 10 more damage"
 	line "for each damage counter on the"
-	line "Defending Pok`mon."
+	line "Defending Pokémon."
 	done
 
 JynxKind: ; 60e7d (18:4e7d)
@@ -314,7 +314,7 @@ JynxKind: ; 60e7d (18:4e7d)
 	done
 
 JynxDescription: ; 60e8a (18:4e8a)
-	text "Merely by meditating, the Pok`mon"
+	text "Merely by meditating, the Pokémon"
 	line "launches a powerful psychic energy"
 	line "attack."
 	done
@@ -330,11 +330,11 @@ PsychicName: ; 60ee0 (18:4ee0)
 PsychicDescription: ; 60ee9 (18:4ee9)
 	text "Does 10 damage plus 10 more damage"
 	line "for each Energy card attached to the"
-	line "Defending Pok`mon."
+	line "Defending Pokémon."
 	done
 
 BarrierDescription: ; 60f45 (18:4f45)
-	text "Discard 1 ", TX_PSYCHIC, " Energy card attached to"
+	text "Discard 1 <PSYCHIC> Energy card attached to"
 	line "Mewtwo in order to use this attack."
 	line "During your opponent's next turn,"
 	line "prevent all effects of attacks,"
@@ -346,7 +346,7 @@ MewtwoKind: ; 60ff3 (18:4ff3)
 	done
 
 Mewtwo1Description: ; 60ffc (18:4ffc)
-	text "A scientist created this Pok`mon"
+	text "A scientist created this Pokémon"
 	line "after years of horrific"
 	line "gene-splicing and DNA engineering"
 	line "experiments."
@@ -369,7 +369,7 @@ PsyburnName: ; 610c7 (18:50c7)
 Mewtwo2Description: ; 610d0 (18:50d0)
 	text "Years of genetic experiments"
 	line "resulted in the creation of this"
-	line "never-before-seen violent Pok`mon."
+	line "never-before-seen violent Pokémon."
 	done
 
 MewName: ; 61132 (18:5132)
@@ -383,7 +383,7 @@ NeutralizingShieldName: ; 61137 (18:5137)
 NeutralizingShieldDescription: ; 6114c (18:514c)
 	text "Prevent all effects of attacks,"
 	line "including damage, done to Mew by"
-	line "evolved Pok`mon (excluding your"
+	line "evolved Pokémon (excluding your"
 	line "own). This power stops working while"
 	line "Mew is Asleep, Confused, or"
 	line "Paralyzed."
@@ -405,14 +405,14 @@ MysteryAttackName: ; 61270 (18:5270)
 
 MysteryAttackDescription: ; 61280 (18:5280)
 	text "Does a random amount of damage to"
-	line "the Defending Pok`mon and may cause"
+	line "the Defending Pokémon and may cause"
 	line "a random effect to the Defending"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 Mew2Description: ; 612f1 (18:52f1)
 	text "When viewed through a microscope, "
-	line "this Pok`mon's short, fine, delicate"
+	line "this Pokémon's short, fine, delicate"
 	line "hair can be seen."
 	done
 
@@ -423,7 +423,7 @@ PsywaveName: ; 6134c (18:534c)
 PsywaveDescription: ; 61355 (18:5355)
 	text "Does 10 damage times the number of"
 	line "Energy cards attached to the"
-	line "Defending Pok`mon."
+	line "Defending Pokémon."
 	done
 
 DevolutionBeamName: ; 613a9 (18:53a9)
@@ -431,10 +431,10 @@ DevolutionBeamName: ; 613a9 (18:53a9)
 	done
 
 DevolutionBeamDescription: ; 613ba (18:53ba)
-	text "Choose an evolved Pok`mon (Your"
+	text "Choose an evolved Pokémon (Your"
 	line "own or your opponent's). Return"
 	line "the highest stage evolution card"
-	line "on that Pok`mon to Its player's"
+	line "on that Pokémon to Its player's"
 	line "hand."
 	done
 
@@ -464,7 +464,7 @@ PidgeottosMirrorMoveDescription: ; 614d0 (18:54d0)
 	text "If Pidgeotto was attacked last turn,"
 	line "do the final result of that attack"
 	line "on Pidgeotto to the Defending"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 PidgeottoKind: ; 61540 (18:5540)
@@ -473,7 +473,7 @@ PidgeottoKind: ; 61540 (18:5540)
 
 PidgeottoDescription: ; 61546 (18:5546)
 	text "Very protective of its sprawling"
-	line "territory, this Pok`mon will"
+	line "territory, this Pokémon will"
 	line "fiercely peck at any intruder."
 	done
 
@@ -487,7 +487,7 @@ SlicingWindName: ; 615ad (18:55ad)
 
 SlicingWildDescription: ; 615bb (18:55bb)
 	text "Does 30 damage to 1 of your"
-	line "opponent's Pok`mon chosen at random."
+	line "opponent's Pokémon chosen at random."
 	line "Don't apply Weakness and Resistance"
 	line "for this attack. (Any other effects"
 	line "that would happen after applying"
@@ -501,16 +501,16 @@ GaleName: ; 6168d (18:568d)
 
 GaleDescription: ; 61693 (18:5693)
 	text "Switch Pidgeot with 1 of your"
-	line "Benched Pok`mon chosen at random."
+	line "Benched Pokémon chosen at random."
 	line "If your opponent has any Benched"
-	line "Pok`mon, switch the Defending"
-	line "Pok`mon with 1 of them chosen at"
+	line "Pokémon, switch the Defending"
+	line "Pokémon with 1 of them chosen at"
 	line "random. (Do the damage before"
-	line "switching the Pok`mon.)"
+	line "switching the Pokémon.)"
 	done
 
 Pidgeot1Description: ; 6176a (18:576a)
-	text "This Pok`mon flies at Mach 2 speed,"
+	text "This Pokémon flies at Mach 2 speed,"
 	line "seeking prey. Its large talons are"
 	line "feared as wicked weapons."
 	done
@@ -521,8 +521,8 @@ HurricaneName: ; 617cc (18:57cc)
 
 HurricaneDescription: ; 617d7 (18:57d7)
 	text "Unless this attack Knocks Out the"
-	line "Defending Pok`mon, return the"
-	line "Defending Pok`mon and all cards"
+	line "Defending Pokémon, return the"
+	line "Defending Pokémon and all cards"
 	line "attached to it to your opponent's"
 	line "hand."
 	done
@@ -556,9 +556,9 @@ SuperFangName: ; 61939 (18:5939)
 	done
 
 SuperFangDescription: ; 61945 (18:5945)
-	text "Does damage to the Defending Pok`mon"
+	text "Does damage to the Defending Pokémon"
 	line "equal to half the Defending"
-	line "Pok`mon's remaining HP (rounded up"
+	line "Pokémon's remaining HP (rounded up"
 	line "to the nearest 10)."
 	done
 
@@ -579,7 +579,7 @@ PeckName: ; 61a21 (18:5a21)
 SpearowsMirrorMoveDescription: ; 61a27 (18:5a27)
 	text "If Spearow was attacked last turn,"
 	line "do the final result of that attack"
-	line "on Spearow to the Defending Pok`mon."
+	line "on Spearow to the Defending Pokémon."
 	done
 
 SpearowDescription: ; 61a93 (18:5a93)
@@ -626,7 +626,7 @@ MetronomeName: ; 61bf2 (18:5bf2)
 	done
 
 ClefairysMetronomeDescription: ; 61bfd (18:5bfd)
-	text "Choose 1 of the Defending Pok`mon's"
+	text "Choose 1 of the Defending Pokémon's"
 	line "attacks. Metronome copies that"
 	line "attack except for its Energy costs."
 	line "(No matter what type the Defending"
@@ -649,11 +649,11 @@ ClefableName: ; 61d1c (18:5d1c)
 	done
 
 ClefablesMetronomeDescription: ; 61d26 (18:5d26)
-	text "Choose 1 of the Defending Pok`mon's"
+	text "Choose 1 of the Defending Pokémon's"
 	line "attacks. Metronome copies that"
 	line "attack except for its Energy costs."
 	line "(No matter what type the Defending"
-	line "Pok`mon is, Clefable's type is"
+	line "Pokémon is, Clefable's type is"
 	line "still Colorless.)"
 	done
 
@@ -665,7 +665,7 @@ ClefablesMinimizeDescription: ; 61de2 (18:5de2)
 	done
 
 ClefableDescription: ; 61e66 (18:5e66)
-	text "A timid Fairy Pok`mon that is rarely"
+	text "A timid Fairy Pokémon that is rarely"
 	line "seen. It will run and hide the"
 	line "moment it senses people."
 	done
@@ -708,7 +708,7 @@ FriendshipSongName: ; 61fa8 (18:5fa8)
 
 FriendshipSongDescription: ; 61fb9 (18:5fb9)
 	text "Flip a coin. If heads, put a Basic"
-	line "Pok`mon card chosen at random from"
+	line "Pokémon card chosen at random from"
 	line "your deck onto your Bench. (You"
 	line "can't use this attack if your Bench"
 	line "is full.)"
@@ -751,7 +751,7 @@ DoTheWaveName: ; 621b8 (18:61b8)
 
 DoTheWaveDescription: ; 621c5 (18:61c5)
 	text "Does 10 damage plus 10 more damage"
-	line "for each of your Benched Pok`mon."
+	line "for each of your Benched Pokémon."
 	done
 
 WigglytuffDescription: ; 6220b (18:620b)
@@ -770,7 +770,7 @@ CatPunchName: ; 6227c (18:627c)
 
 CatPunchDescription: ; 62287 (18:6287)
 	text "Does 20 damage to 1 of your"
-	line "opponent's Pok`mon chosen at random."
+	line "opponent's Pokémon chosen at random."
 	line "Don't apply Weakness and Resistance"
 	line "for this attack. (Any other effects"
 	line "that would happen after applying"
@@ -811,12 +811,12 @@ PounceName: ; 6246d (18:646d)
 	done
 
 PounceDescription: ; 62475 (18:6475)
-	text "If the Defending Pok`mon attacks"
+	text "If the Defending Pokémon attacks"
 	line "Persian during your opponent's next"
 	line "turn, any damage done by the attack"
 	line "is reduced by 10 (after applying"
 	line "Weakness and Resistance). (Benching"
-	line "or evolving either Pok`mon ends this"
+	line "or evolving either Pokémon ends this"
 	line "effect.)"
 	done
 
@@ -889,8 +889,8 @@ RetreatAidName: ; 62796 (18:6796)
 
 RetreatAidDescription: ; 627a3 (18:67a3)
 	text "As long as Dodrio is Benched, pay"
-	line TX_COLORLESS, " less to retreat your Active"
-	line "Pok`mon."
+	line "<COLORLESS> less to retreat your Active"
+	line "Pokémon."
 	done
 
 DodriosRageDescription: ; 627ee (18:67ee)
@@ -946,7 +946,7 @@ ChanseysDoubleEdgeDescription: ; 629c2 (18:69c2)
 	done
 
 ChanseyDescription: ; 629e5 (18:69e5)
-	text "A rare and elusive Pok`mon that is"
+	text "A rare and elusive Pokémon that is"
 	line "said to bring happiness to those"
 	line "who manage to catch it."
 	done
@@ -1014,7 +1014,7 @@ MorphDescription: ; 62be8 (18:6be8)
 	text "Remove all damage counters from"
 	line "Ditto. For the rest of the game,"
 	line "replace Ditto with a copy of a Basic"
-	line "Pok`mon card (other than Ditto)"
+	line "Pokémon card (other than Ditto)"
 	line "chosen at random from your deck."
 	done
 
@@ -1042,9 +1042,9 @@ TailWagName: ; 62d8a (18:6d8a)
 
 TailWagDescription: ; 62d94 (18:6d94)
 	text "Flip a coin. If heads, the Defending"
-	line "Pok`mon can't attack Eevee during"
+	line "Pokémon can't attack Eevee during"
 	line "your opponent's next turn. (Benching"
-	line "or evolving either Pok`mon ends this"
+	line "or evolving either Pokémon ends this"
 	line "effect.)"
 	done
 
@@ -1067,7 +1067,7 @@ Conversion1Name: ; 62ea6 (18:6ea6)
 	done
 
 Conversion1Description: ; 62eb4 (18:6eb4)
-	text "If the Defending Pok`mon has a"
+	text "If the Defending Pokémon has a"
 	line "Weakness, you may change it to a"
 	line "type of your choice other than"
 	line "Colorless."
@@ -1088,7 +1088,7 @@ PorygonKind: ; 62f79 (18:6f79)
 	done
 
 PorygonDescription: ; 62f82 (18:6f82)
-	text "A Pok`mon that consists entirely of"
+	text "A Pokémon that consists entirely of"
 	line "programming code. Capable of moving"
 	line "freely in cyberspace."
 	done
@@ -1128,7 +1128,7 @@ DratiniName: ; 630fd (18:70fd)
 	done
 
 DratiniDescription: ; 63106 (18:7106)
-	text "Long considered a mythical Pok`mon"
+	text "Long considered a mythical Pokémon"
 	line "until recently, when a small colony"
 	line "was found living underwater."
 	done
@@ -1142,7 +1142,7 @@ SlamName: ; 63176 (18:7176)
 	done
 
 DragonairDescription: ; 6317c (18:717c)
-	text "A mystical Pok`mon that exudes a"
+	text "A mystical Pokémon that exudes a"
 	line "gentle aura. Has the ability to"
 	line "change climate conditions."
 	done
@@ -1158,14 +1158,14 @@ HealingWindName: ; 631e4 (18:71e4)
 HealingWindDescription: ; 631f2 (18:71f2)
 	text "When you put Dragonite into play,"
 	line "remove 2 damage counters from each"
-	line "of your Pok`mon. If a Pok`mon has "
+	line "of your Pokémon. If a Pokémon has "
 	line "fewer damage counters than that,"
 	line "remove all of them from that"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 Dragonite1Description: ; 632a2 (18:72a2)
-	text "It is said that this Pok`mon lives"
+	text "It is said that this Pokémon lives"
 	line "somewhere in the sea and that it"
 	line "flies. However, it is only a rumor."
 	done
@@ -1178,7 +1178,7 @@ StepInDescription: ; 63314 (18:7314)
 	text "Once during your turn (before your"
 	line "attack), if Dragonite is on your"
 	line "Bench, you may switch it with your"
-	line "Active Pok`mon."
+	line "Active Pokémon."
 	done
 
 DoubleAttackX40Description: ; 6338c (18:738c)
@@ -1188,7 +1188,7 @@ DoubleAttackX40Description: ; 6338c (18:738c)
 
 DragoniteDescription: ; 633d1 (18:73d1)
 	text "An extremely rarely seen marine"
-	line "Pok`mon. Its intelligence is said"
+	line "Pokémon. Its intelligence is said"
 	line "to match that of humans."
 	done
 
@@ -1224,7 +1224,7 @@ MrFujiName: ; 634e2 (18:74e2)
 	done
 
 MrFujiDescription: ; 634eb (18:74eb)
-	text "Choose a Pok`mon on your Bench."
+	text "Choose a Pokémon on your Bench."
 	line "Shuffle it and any cards attached"
 	line "to it into your deck."
 	done
@@ -1245,37 +1245,37 @@ ImakuniName: ; 635c1 (18:75c1)
 	done
 
 ImakuniDescription: ; 635cb (18:75cb)
-	text "Your Active Pok`mon is now Confused."
+	text "Your Active Pokémon is now Confused."
 	line "Imakuni wants you to play him as a"
-	line "Basic Pok`mon, but you can't."
+	line "Basic Pokémon, but you can't."
 	line "A mysterious creature not listed in"
 	line "the Pok`dex. He asks kids around the"
-	line "world,\"Who is cuter-Pikachu or me?\""
+	line "world,”Who is cuter-Pikachu or me?”"
 	done
 
 PokemonTraderName: ; 6369f (18:769f)
-	text "Pok`mon Trader"
+	text "Pokémon Trader"
 	done
 
 PokemonTraderDescription: ; 636af (18:76af)
-	text "Trade 1 of the Basic Pok`mon or"
+	text "Trade 1 of the Basic Pokémon or"
 	line "Evolution cards in your hand for 1"
-	line "of the Basic Pok`mon or Evolution"
+	line "of the Basic Pokémon or Evolution"
 	line "cards from your deck. Show both"
 	line "cards to your opponent."
 	line "Shuffle your deck afterward."
 	done
 
 PokemonBreederName: ; 6376a (18:776a)
-	text "Pok`mon Breeder"
+	text "Pokémon Breeder"
 	done
 
 PokemonBreederDescription: ; 6377b (18:777b)
 	text "Put a Stage 2 Evolution card from"
 	line "your hand on the matching Basic"
-	line "Pok`mon. You can only play this card"
+	line "Pokémon. You can only play this card"
 	line "when you would be allowed to evolve"
-	line "that Pok`mon anyway."
+	line "that Pokémon anyway."
 	done
 
 ClefairyDollName: ; 6381c (18:781c)
@@ -1284,8 +1284,8 @@ ClefairyDollName: ; 6381c (18:781c)
 
 ClefairyDollDescription: ; 6382b (18:782b)
 	text "Play Clefairy Doll as if it were a"
-	line "Basic Pok`mon. While in play,"
-	line "Clefairy Doll counts as a Pok`mon"
+	line "Basic Pokémon. While in play,"
+	line "Clefairy Doll counts as a Pokémon"
 	line "(instead of a Trainer card)."
 	line "Clefairy Doll has no attacks, can't"
 	line "retreat, and can't be Asleep,"
@@ -1295,18 +1295,18 @@ ClefairyDollDescription: ; 6382b (18:782b)
 ClefairyDollDescriptionCont: ; 63910 (18:7910)
 	text "If Clefairy Doll is Knocked Out, it"
 	line "doesn't count as a Knocked Out"
-	line "Pok`mon. At any time during your"
+	line "Pokémon. At any time during your"
 	line "turn before your attack, you may"
 	line "discard Clefairy Doll."
-	line "(Use GameBoy Pok`mon Power menu"
+	line "(Use GameBoy Pokémon Power menu"
 	line "option to do this.)"
 	done
 
 MysteriousFossilDescription: ; 639e1 (18:79e1)
 	text "Play Mysterious Fossil as if it were"
-	line "a Basic Pok`mon. While in play,"
+	line "a Basic Pokémon. While in play,"
 	line "Mysterious Fossil counts as a"
-	line "Pok`mon (instead of a Trainer card)."
+	line "Pokémon (instead of a Trainer card)."
 	line "Mysterious Fossil has no attacks,"
 	line "can't retreat, and can't be Asleep,"
 	line "Confused, Paralyzed, or Poisoned."
@@ -1315,7 +1315,7 @@ MysteriousFossilDescription: ; 639e1 (18:79e1)
 MysteriousFossilDescriptionCont: ; 63ad2 (18:7ad2)
 	text "If Mysterious Fossil is Knocked Out,"
 	line "it doesn't count as a Knocked Out"
-	line "Pok`mon. (Discard it anyway.) At any"
+	line "Pokémon. (Discard it anyway.) At any"
 	line "time during your turn before your"
 	line "attack, you may discard Mysterious"
 	line "Fossil from play. (Use GameBoy Pok`-"
@@ -1358,7 +1358,7 @@ EnergyRemovalName: ; 63d27 (18:7d27)
 
 EnergyRemovalDescription: ; 63d37 (18:7d37)
 	text "Choose 1 Energy card attached to 1"
-	line "of your opponent's Pok`mon and"
+	line "of your opponent's Pokémon and"
 	line "discard it."
 	done
 
@@ -1368,8 +1368,8 @@ SuperEnergyRemovalName: ; 63d86 (18:7d86)
 
 SuperEnergyRemovalDescription: ; 63d9c (18:7d9c)
 	text "Discard 1 Energy card attached to 1"
-	line "of your own Pok`mon in order to"
-	line "choose 1 of your opponent's Pok`mon"
+	line "of your own Pokémon in order to"
+	line "choose 1 of your opponent's Pokémon"
 	line "and up to 2 Energy cards attached"
 	line "to it. Discard those Energy cards."
 	done
@@ -1379,20 +1379,20 @@ SwitchName: ; 63e4a (18:7e4a)
 	done
 
 SwitchDescription: ; 63e52 (18:7e52)
-	text "Switch 1 of your Benched Pok`mon"
-	line "with your Active Pok`mon."
+	text "Switch 1 of your Benched Pokémon"
+	line "with your Active Pokémon."
 	done
 
 PokemonCenterName: ; 63e8e (18:7e8e)
-	text "Pok`mon Center"
+	text "Pokémon Center"
 	done
 
 PokemonCenterDescription: ; 63e9e (18:7e9e)
 	text "Remove all damage counters from all"
-	line "of your own Pok`mon with damage"
+	line "of your own Pokémon with damage"
 	line "counters on them, then discard all"
 	line "Energy cards attached to those"
-	line "Pok`mon."
+	line "Pokémon."
 	done
 
 PokeBallName: ; 63f2e (18:7f2e)
@@ -1402,7 +1402,7 @@ PokeBallName: ; 63f2e (18:7f2e)
 PokeBallDescription: ; 63f39 (18:7f39)
 	text "Flip a coin. If heads, you may"
 	line "search your deck for any Basic"
-	line "Pok`mon or Evolution card. Show that"
+	line "Pokémon or Evolution card. Show that"
 	line "card to your opponent, then put it"
 	line "into your hand. Shuffle your deck"
 	line "afterward."
