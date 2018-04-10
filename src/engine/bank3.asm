@@ -1733,7 +1733,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 .asm_ccfe
 	jp IncreaseOWScriptPointerBy5
 
-; args - prize cards, deck index - 2, duel theme index
+; args - prize cards, deck id, duel theme index
 ; sets a battle up, doesn't start until we break out of the script system.
 OWScript_StartBattle: ; cd01 (3:4d01)
 	call Func_cd66
@@ -3018,7 +3018,7 @@ OWSequence_Sara: ; e177 (3:6177)
 	tx Text042f
 	run_script OWScript_StartBattle
 	db 2
-	db WATERFRONT_POKEMON_DECK - 2 ; 6189
+	db WATERFRONT_POKEMON_DECK_ID ; 6189
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
@@ -3056,7 +3056,7 @@ OWSequence_Amanda: ; e19e (03:619e)
 	tx Text0436
 	run_script OWScript_StartBattle
 	db 03
-	db LONELY_FRIENDS_DECK - 2
+	db LONELY_FRIENDS_DECK_ID
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
