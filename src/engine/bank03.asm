@@ -2642,7 +2642,7 @@ Func_d317: ; d317 (3:5317)
 
 	INCROM $d32b, $d336
 
-DeckMachine_d336: ; d336 (3:5336)
+OWScript_OpenDeckMachine: ; d336 (3:5336)
 	push bc
 	call Func_c2a3
 	call PauseSong
@@ -3025,7 +3025,7 @@ OWSequence_Sara: ; e177 (3:6177)
 OWSequence_BeatSara: ; e18c (3:618c)
 	start_script
 	run_script OWScript_SetEventFlags
-	db FLAG_BEAT_SARA
+	db EVENT_BEAT_SARA
 	run_script OWScript_PrintTextString
 	tx Text0430
 	run_script OWScript_GiveBoosterPacks
@@ -3063,7 +3063,7 @@ OWSequence_Amanda: ; e19e (03:619e)
 OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
 	run_script OWScript_SetEventFlags
-	db FLAG_BEAT_AMANDA
+	db EVENT_BEAT_AMANDA
 	run_script OWScript_PrintTextString
 	tx Text0437
 	run_script OWScript_GiveBoosterPacks
@@ -3085,10 +3085,10 @@ OWSequence_NotReadyToSeeAmy:
 OWSequence_Joshua:
 	start_script
 	run_script OWScript_JumpIfFlagNotSet
-	db FLAG_BEAT_AMANDA
+	db EVENT_BEAT_AMANDA
 	dw .sara_and_amanda_not_beaten
 	run_script OWScript_JumpIfFlagNotSet
-	db FLAG_BEAT_SARA
+	db EVENT_BEAT_SARA
 	dw .sara_and_amanda_not_beaten
 	run_script OWScript_ScriptJump
 	dw .beat_sara_and_amanda
