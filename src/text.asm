@@ -40,9 +40,3 @@ INCLUDE "text/text12.asm"
 
 SECTION "Text 13", ROMX
 INCLUDE "text/text13.asm"
-
-SECTION "Empty Bank 1A", ROMX
-	emptybank
-
-SECTION "Empty Bank 1B", ROMX
-	emptybank
