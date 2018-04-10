@@ -1023,7 +1023,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_EndScriptCloseText
 	dw Func_d244
 	dw Func_d24c
-	dw DeckMachine_d336
+	dw OWScript_OpenDeckMachine
 	dw Func_d271
 	dw Func_d36d
 	dw Func_ce6f

@@ -1733,7 +1733,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 .asm_ccfe
 	jp IncreaseOWScriptPointerBy5
 
-; args - prize cards, deck index - 2, duel theme index
+; args - prize cards, deck id, duel theme index
 ; sets a battle up, doesn't start until we break out of the script system.
 OWScript_StartBattle: ; cd01 (3:4d01)
 	call Func_cd66
@@ -2642,7 +2642,7 @@ Func_d317: ; d317 (3:5317)
 
 	INCROM $d32b, $d336
 
-DeckMachine_d336: ; d336 (3:5336)
+OWScript_OpenDeckMachine: ; d336 (3:5336)
 	push bc
 	call Func_c2a3
 	call PauseSong
@@ -3018,14 +3018,14 @@ OWSequence_Sara: ; e177 (3:6177)
 	tx Text042f
 	run_script OWScript_StartBattle
 	db 2
-	db WATERFRONT_POKEMON_DECK - 2 ; 6189
+	db WATERFRONT_POKEMON_DECK_ID ; 6189
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatSara: ; e18c (3:618c)
 	start_script
 	run_script OWScript_SetEventFlags
-	db FLAG_BEAT_SARA
+	db EVENT_BEAT_SARA
 	run_script OWScript_PrintTextString
 	tx Text0430
 	run_script OWScript_GiveBoosterPacks
@@ -3056,14 +3056,14 @@ OWSequence_Amanda: ; e19e (03:619e)
 	tx Text0436
 	run_script OWScript_StartBattle
 	db 03
-	db LONELY_FRIENDS_DECK - 2
+	db LONELY_FRIENDS_DECK_ID
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
 	run_script OWScript_SetEventFlags
-	db FLAG_BEAT_AMANDA
+	db EVENT_BEAT_AMANDA
 	run_script OWScript_PrintTextString
 	tx Text0437
 	run_script OWScript_GiveBoosterPacks
@@ -3085,10 +3085,10 @@ OWSequence_NotReadyToSeeAmy:
 OWSequence_Joshua:
 	start_script
 	run_script OWScript_JumpIfFlagNotSet
-	db FLAG_BEAT_AMANDA
+	db EVENT_BEAT_AMANDA
 	dw .sara_and_amanda_not_beaten
 	run_script OWScript_JumpIfFlagNotSet
-	db FLAG_BEAT_SARA
+	db EVENT_BEAT_SARA
 	dw .sara_and_amanda_not_beaten
 	run_script OWScript_ScriptJump
 	dw .beat_sara_and_amanda

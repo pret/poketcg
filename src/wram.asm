@@ -732,9 +732,8 @@ wcc0c:: ; cc0c
 wDuelistType:: ; cc0d
 	ds $1
 
-; this seems to hold the current opponent's deck id - 2,
-; perhaps to account for the two unused pointers at the
-; beginning of DeckPointers
+; this holds the current opponent's deck minus 2 (that is, a *_DECK_ID constant),
+; perhaps to account for the two unused pointers at the beginning of DeckPointers.
 wOpponentDeckID:: ; cc0e
 	ds $1
 

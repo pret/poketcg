@@ -30,24 +30,24 @@ ROM0
 	org $0150
 	"start"
 ROMX $01
-	"bank1"
+	"Bank 1"
 ROMX $02
-	"bank2"
+	"Bank 2"
 ROMX $03
-	"bank3"
+	"Bank 3"
 ROMX $04
-	"bank4"
+	"Bank 4"
 ROMX $06
-	"bank6"
+	"Bank 6"
 ROMX $07
-	"bank7"
+	"Bank 7"
 	"Booster Packs"
 ROMX $08
-	"bank8"
+	"Bank 8"
 ROMX $09
-	"bank9"
+	"Bank 9"
 ROMX $0a
-	"bankA"
+	"Bank A"
 ROMX $0b
 	"Effect Functions"
 ROMX $0c
@@ -84,7 +84,7 @@ ROMX $1a
 ROMX $1b
 	"Empty Bank 1B"
 ROMX $1c
-	"bank1C"
+	"Bank 1C"
 ROMX $1d
 	"Gfx 1"
 ROMX $1e
@@ -92,7 +92,7 @@ ROMX $1e
 ROMX $1f
 	"Empty Bank 1F"
 ROMX $20
-	"bank20"
+	"Bank 20"
 ROMX $21
 	"Gfx 3"
 ROMX $22

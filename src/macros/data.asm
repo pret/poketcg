@@ -1,3 +1,7 @@
+INCROM: MACRO
+INCBIN "baserom.gbc", \1, \2 - \1
+ENDM
+
 dn: MACRO
 	db \1 << 4 | \2
 ENDM
@@ -40,7 +44,20 @@ rgb: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
-; macros used in data/cards.asm, but might be useful elsewhere eventually
+emptybank: MACRO
+	rept $4000
+	db $ff
+	endr
+ENDM
+
+; poketcg specific macros below
+
+textpointer: MACRO
+	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
+	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
+	const \1_
+GLOBAL \1_
+ENDM
 
 energy: MACRO
 en = 0

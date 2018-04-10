@@ -1,20 +1,3 @@
-INCROM: MACRO
-INCBIN "baserom.gbc", \1, \2 - \1
-ENDM
-
-const_def: MACRO
-if _NARG > 0
-const_value = \1
-else
-const_value = 0
-endc
-ENDM
-
-const: MACRO
-\1 EQU const_value
-const_value = const_value + 1
-ENDM
-
 lb: MACRO ; r, hi, lo
 	ld \1, (\2) << 8 + ((\3) & $ff)
 ENDM
@@ -39,19 +22,6 @@ else
 endc
 ENDM
 
-; the rst $38 handler is a single ret
+; the rst $38 handler is a single ret instruction
 ; probably used for testing purposes during development
 debug_ret EQUS "rst $38"
-
-emptybank: MACRO
-	rept $4000
-	db $ff
-	endr
-ENDM
-
-textpointer: MACRO
-	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
-	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
-	const \1_
-GLOBAL \1_
-ENDM

@@ -7206,9 +7206,9 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	xor a
 	ld [wIsPracticeDuel], a
 	ld a, [wOpponentDeckID]
-	cp SAMS_NORMAL_DECK - 2
+	cp SAMS_NORMAL_DECK_ID
 	jr z, .normal_sam_duel
-	or a ; cp SAMS_PRACTICE_DECK - 2
+	or a ; cp SAMS_PRACTICE_DECK_ID
 	jr nz, .not_practice_duel
 
 ; only practice duels will display help messages, but
@@ -7233,12 +7233,12 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 
 .not_practice_duel
 	inc a
-	inc a
+	inc a ; convert from *_DECK_ID constant read from wOpponentDeckID to *_DECK constant
 	call LoadDeck
 	ld a, [wOpponentDeckID]
 	cp DECKS_END
 	jr c, .valid_deck
-	ld a, PRACTICE_PLAYER_DECK - 2
+	ld a, PRACTICE_PLAYER_DECK_ID
 	ld [wOpponentDeckID], a
 
 .valid_deck
