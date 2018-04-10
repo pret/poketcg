@@ -12,7 +12,7 @@ const_value = const_value + 1
 ENDM
 
 deck_const: MACRO
-if const_value > 1
+if const_value >= 2
 \1_ID EQU const_value + -2
 endc
 	const \1
