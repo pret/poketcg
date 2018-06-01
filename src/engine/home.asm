@@ -3499,7 +3499,7 @@ LoadCardDataToBuffer1_FromDeckIndex: ; 1376 (0:1376)
 	call LoadCardDataToBuffer1_FromCardID
 	pop af
 	ld hl, wLoadedCard1
-	bank1call ConvertTrainerCardToPokemon
+	bank1call ConvertSpecialTrainerCardToPokemon
 	ld a, e
 	pop bc
 	pop de
@@ -3516,7 +3516,7 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	call LoadCardDataToBuffer2_FromCardID
 	pop af
 	ld hl, wLoadedCard2
-	bank1call ConvertTrainerCardToPokemon
+	bank1call ConvertSpecialTrainerCardToPokemon
 	ld a, e
 	pop bc
 	pop de
