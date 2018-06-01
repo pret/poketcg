@@ -3436,39 +3436,42 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 
 	INCROM $69c5, $6d84
 
-; converts clefairy doll/mysterious fossil to pokemon card
-ConvertTrainerCardToPokemon: ; 6d84 (1:6d84)
+; given the deck index of a turn holder's card in register a,
+; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
+; check if the card is Clefairy Doll or Mysterious Fossil, and, if so, convert it
+; to a Pokemon card in the wLoadedCard* buffer, using .trainer_to_pkmn_data.
+ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
 	ld c, a
 	ld a, [hl]
 	cp TYPE_TRAINER
-	ret nz
+	ret nz ; return if the card is not TRAINER type
 	push hl
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, c
 	ld a, [hl]
-	and TYPE_TRAINER
+	and CARD_LOCATION_PLAY_AREA
 	pop hl
-	ret z
+	ret z ; return if the card is not in the arena or bench
 	ld a, e
 	cp MYSTERIOUS_FOSSIL
 	jr nz, .check_for_clefairy_doll
 	ld a, d
-	cp $00
+	cp $00 ; MYSTERIOUS_FOSSIL >> 8
 	jr z, .start_ram_data_overwrite
 	ret
 .check_for_clefairy_doll
 	cp CLEFAIRY_DOLL
 	ret nz
 	ld a, d
-	cp $00
+	cp $00 ; CLEFAIRY_DOLL >> 8
 	ret nz
 .start_ram_data_overwrite
 	push de
-	ld [hl], COLORLESS
+	ld [hl], TYPE_PKMN_COLORLESS
 	ld bc, CARD_DATA_HP
 	add hl, bc
-	ld de, .data_to_overwrite
+	ld de, .trainer_to_pkmn_data
 	ld c, CARD_DATA_UNKNOWN2 - CARD_DATA_HP
 .loop
 	ld a, [de]
@@ -3479,7 +3482,7 @@ ConvertTrainerCardToPokemon: ; 6d84 (1:6d84)
 	pop de
 	ret
 
-.data_to_overwrite
+.trainer_to_pkmn_data
     db 10                 ; CARD_DATA_HP
     ds $07                ; CARD_DATA_MOVE1_NAME - (CARD_DATA_HP + 1)
     tx DiscardName        ; CARD_DATA_MOVE1_NAME

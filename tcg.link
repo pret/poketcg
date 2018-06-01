@@ -45,9 +45,9 @@ ROMX $07
 ROMX $08
 	"Bank 8"
 ROMX $09
-	"Bank 9"
+	"Empty Bank 9"
 ROMX $0a
-	"Bank A"
+	"Empty Bank A"
 ROMX $0b
 	"Effect Functions"
 ROMX $0c

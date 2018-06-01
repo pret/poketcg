@@ -36,9 +36,6 @@ rept $2b68
 	db $ff
 endr
 
-SECTION "Empty Bank 1F", ROMX
-	emptybank
-
 SECTION "Gfx 3", ROMX
 
 	INCROM $84000, $87828
@@ -905,22 +902,16 @@ FightingGfx: ; a8e12 (2a:4e12)
 	INCROM $a8e54, $ac000
 
 SECTION "Gfx 13", ROMX
-INCBIN "baserom.gbc", $ac000, $4000
+	INCROM  $ac000, $b0000
 
 SECTION "Gfx 14", ROMX
-INCBIN "baserom.gbc", $b0000, $4000
+	INCROM  $b0000, $b4000
 
 SECTION "Gfx 15", ROMX
-INCBIN "baserom.gbc", $b4000, $4000
+	INCROM  $b4000, $b8000
 
 SECTION "Gfx 16", ROMX
-INCBIN "baserom.gbc", $b8000, $4000
-
-SECTION "Empty Bank 2F", ROMX
-	emptybank
-
-SECTION "Empty Bank 30", ROMX
-	emptybank
+	INCROM  $b8000, $bc000
 
 SECTION "Card Gfx 1", ROMX
 
@@ -1861,6 +1852,3 @@ RecycleCardGfx:: ; ef388 (3b:7388)
 rept $970
 	db $ff
 endr
-
-SECTION "Empty Bank 3C", ROMX
-	emptybank
