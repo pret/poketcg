@@ -4333,7 +4333,7 @@ Func_1823: ; 1823 (0:1823)
 
 DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call DrawDuelMainScene
-	ld a, $1
+	ld a, 1
 	ld [wDamageToSelfMode], a
 	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
@@ -4437,7 +4437,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ldtx de, ConfusionCheckDamageText
 	call TossCoin
 	jr c, .no_confusion_damage
-	ld a, $1
+	ld a, 1
 	ld [wGotHeadsFromConfusionCheck], a
 	scf
 	ret
@@ -5384,9 +5384,9 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	push hl
 	; top left tile of the box
 	ld hl, wc000
-	ld a, $5
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, $18
+	ld a, LOW("<╔>")
 	ld [hli], a
 	; white tile before the text
 	ld a, $70
@@ -5396,7 +5396,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld d, h
 	pop hl
 	call CopyText
-	ld hl, $c003
+	ld hl, wc000 + 3
 	call Func_23c1
 	ld l, e
 	ld h, d
@@ -5413,17 +5413,17 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	jr z, .draw_top_border_right_tile
 	ld b, a
 .draw_top_border_line_loop
-	ld a, $5
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, $1c
+	ld a, LOW("<TOP ═>")
 	ld [hli], a
 	dec b
 	jr nz, .draw_top_border_line_loop
 
 .draw_top_border_right_tile
-	ld a, $5
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, $19
+	ld a, LOW("<╗>")
 	ld [hli], a
 	ld [hl], $0
 	pop bc
@@ -6507,7 +6507,7 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ld a, [hli]
 	ld [wListItemXPosition], a
 	ld a, [hli]
-	ld [wcd1c], a
+	ld [wListItemNameMaxLength], a
 	ld a, [hli]
 	ld [wNumMenuItems], a
 	ld a, [hli]
@@ -6852,7 +6852,7 @@ PrintCardListItems: ; 2799 (0:2799)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawCardSymbol
 	call Func_22ae
-	ld a, [wcd1c]
+	ld a, [wListItemNameMaxLength]
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call Func_21c5
@@ -9436,7 +9436,7 @@ Func_380e: ; 380e (0:380e)
 ; enable the play time counter and execute the game event at [wGameEvent].
 ; then return to the overworld, or restart the game (only after Credits).
 ExecuteGameEvent: ; 383d (0:383d)
-	ld a, $1
+	ld a, 1
 	ld [wPlayTimeCounterEnable], a
 	ldh a, [hBankROM]
 	push af
@@ -9967,7 +9967,7 @@ Func_3b31: ; 3b31 (0:3b31)
 	ld [wcad4], a
 .asm_3b45
 	call ZeroObjectPositions
-	ld a, $1
+	ld a, 1
 	ld [wVBlankOAMCopyToggle], a
 	pop af
 	call BankswitchHome

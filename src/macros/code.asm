@@ -3,7 +3,11 @@ lb: MACRO ; r, hi, lo
 ENDM
 
 ldtx: MACRO
+if _NARG == 2
 	ld \1, \2_
+else
+	ld \1, \2_ \3
+endc
 ENDM
 
 bank1call: MACRO

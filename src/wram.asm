@@ -642,7 +642,8 @@ wCardListHeaderText:: ; cbdc
 wcbde:: ; cbde
 	ds $1
 
-wcbdf:: ; cbdf
+; flag indicating whether a list of cards should be sorted by ID
+wSortCardListByID:: ; cbdf
 	ds $1
 
 wcbe0:: ; cbe0
@@ -958,7 +959,7 @@ wListItemXPosition:: ; cd1a
 wNumListItems:: ; cd1b
 	ds $1
 
-wcd1c:: ; cd1c
+wListItemNameMaxLength:: ; cd1c
 	ds $1
 
 wListFunctionPointer:: ; cd1d
@@ -1298,6 +1299,8 @@ wd0aa:: ; d0aa
 wd0b4:: ; d0b4
 	ds $1
 
+; a GAME_EVENT_* constant corresponding to an entry in GameEventPointerTable
+; overworld, duel, credits...
 wGameEvent:: ; d0b5
 	ds $1
 

@@ -12,7 +12,7 @@ GameLoop: ; 4000 (1:4000)
 	ld a, [sa009]
 	ld [wccf2], a
 	call DisableSRAM
-	ld a, $1
+	ld a, 1
 	ld [wUppercaseFlag], a
 	ei
 	farcall CommentedOut_1a6cc
@@ -37,7 +37,7 @@ GameLoop: ; 4000 (1:4000)
 
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
-	ld a, $1
+	ld a, 1
 	ld [wUppercaseFlag], a
 	ret
 
@@ -608,7 +608,7 @@ OpenPlayerHandScreen: ; 4436 (1:4436)
 .handle_input
 	call Func_55f0
 	push af
-	ld a, [wcbdf]
+	ld a, [wSortCardListByID]
 	or a
 	call nz, SortHandCardsByID
 	pop af
@@ -646,7 +646,7 @@ UseEnergyCard: ; 4477 (1:4477)
 	call OpenPlayAreaScreenForSelection ; choose card to play energy card on
 	jp c, DuelMainInterface ; exit if no card was chosen
 .play_energy_set_played
-	ld a, $1
+	ld a, 1
 	ld [wAlreadyPlayedEnergy], a
 .play_energy
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
@@ -2221,7 +2221,7 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
 	ld [hl], a
-	ld [wcbdf], a
+	ld [wSortCardListByID], a
 	ld hl, wcbd8
 	ld [hli], a
 	ld [hl], a
@@ -2229,13 +2229,13 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 	ld a, START
 	ld [wcbd6], a
 	ld hl, wCardListInfoBoxText
-	ld [hl], LOW(PleaseSelectHandText_)
+	ldtx [hl], PleaseSelectHandText, & $ff
 	inc hl
-	ld [hl], HIGH(PleaseSelectHandText_)
+	ldtx [hl], PleaseSelectHandText, >> 8
 	inc hl ; wCardListHeaderText
-	ld [hl], LOW(DuelistHandText_)
+	ldtx [hl], DuelistHandText, & $ff
 	inc hl
-	ld [hl], HIGH(DuelistHandText_)
+	ldtx [hl], DuelistHandText, >> 8
 .draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -2300,7 +2300,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	or a
 	ret
 .asm_563b
-	ld a, [wcbdf]
+	ld a, [wSortCardListByID]
 	or a
 	jr nz, .asm_560b
 	call SortCardsInDuelTempListByID
@@ -2308,8 +2308,8 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
 	ld [hl], a
-	ld a, $01
-	ld [wcbdf], a
+	ld a, 1
+	ld [wSortCardListByID], a
 	call EraseCursor
 	jr .asm_55f6
 .asm_5654
@@ -2386,7 +2386,7 @@ Func_56a0: ; 56a0 (1:56a0)
 CardListParameters: ; 5710 (1;5710)
 	db 1, 3 ; cursor x, cursor y
 	db 4 ; item x
-	db $0e
+	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
 	db 5 ; number of items selectable without scrolling
 	db $0f ; cursor tile number
 	db $00 ; tile behind cursor
@@ -3428,7 +3428,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
 	call $68e4
-	ld a, $1
+	ld a, 1
 	ld [wAlreadyPlayedEnergy], a
 	call DrawDuelMainScene
 	ret
@@ -3762,7 +3762,7 @@ _TossCoin: ; 71ad (1:71ad)
 	INCROM $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
-	db "VER 12/20 09:36",TX_END
+	db "VER 12/20 09:36", TX_END
 
 	INCROM $7364, $7571
 
@@ -3770,8 +3770,8 @@ Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
-        farcall $6, $591f
-        ret
+	farcall $6, $591f
+	ret
 ; 0x757b
 
 	INCROM $757b, $758f

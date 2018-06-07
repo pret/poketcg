@@ -15,7 +15,8 @@ done EQUS "db TX_END"
 	charmap "♀", "%"
 	charmap "”", "\""
 
-; TX_SYMBOL (full-tile symbols loaded into v0Tiles2)
+; TX_SYMBOL (full-tile icons/symbols loaded at the beginning of v0Tiles2)
+; TODO: Use symbols in menus (cursor tile number, tile behind cursor), draw text boxes, WriteByteToBGMap0, etc
 	charmap "<",     TX_SYMBOL
 	charmap " >",          $00
 	charmap "FIRE>",       $01
@@ -29,7 +30,10 @@ done EQUS "db TX_END"
 	charmap "ASLEEP>",     $09
 	charmap "CONFUSED>",   $0a
 	charmap "PARALYZED>",  $0b
+	charmap "△>",          $0c
 	charmap "PKMN_ICON>",  $0d ; icon displayed along with no. of Pkmn in duel screen
+;	charmap                $0e
+	charmap "▷>",          $0f
 	charmap "HP>",         $10
 	charmap "Lv>",         $11
 	charmap "E>",          $12
@@ -38,6 +42,14 @@ done EQUS "db TX_END"
 	charmap "DEFENDER>",   $15
 	charmap "🌕>",          $16 ; HP tile
 	charmap "🌑>",          $17 ; HP tile with damage counter
+	charmap "╔>",          $18
+	charmap "╗>",          $19
+	charmap "╚>",          $1a
+	charmap "╝>",          $1b
+	charmap "TOP ═>",      $1c
+	charmap "BOTTOM ═>",   $1d
+	charmap "LEFT ║>",     $1e
+	charmap "RIGHT ║>",    $1f
 	charmap "0>",          $20
 	charmap "1>",          $21
 	charmap "2>",          $22
@@ -49,4 +61,5 @@ done EQUS "db TX_END"
 	charmap "8>",          $28
 	charmap "9>",          $29
 	charmap "+>",          $2b
+	charmap "▽>",          $2f
 	charmap "PRIZE_ICON>", $30 ; icon displayed along with no. of prizes in duel screen
