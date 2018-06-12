@@ -191,7 +191,7 @@ SetupTimer: ; 0241 (0:0241)
 .set_timer
 	ld a, b
 	ld [rTMA], a
-	ld a, rTAC_16384_HZ
+	ld a, TAC_16384_HZ
 	ld [rTAC], a
 	ld a, $7
 	ld [rTAC], a
@@ -209,7 +209,7 @@ CheckForCGB: ; 025c (0:025c)
 WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
-	bit rLCDC_ENABLE, a
+	bit LCDC_ON, a
 	jr z, .asm_275
 	ld hl, wVBlankCtr
 	ld a, [hl]
@@ -224,12 +224,12 @@ WaitForVBlank: ; 0264 (0:0264)
 
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
-	ld a, [wLCDC]        ;
-	bit rLCDC_ENABLE, a  ;
-	ret nz               ; assert that LCD is off
-	or rLCDC_ENABLE_MASK ;
-	ld [wLCDC], a        ;
-	ld [rLCDC], a        ; turn LCD on
+	ld a, [wLCDC]      ;
+	bit LCDC_ON, a     ;
+	ret nz             ; assert that LCD is off
+	or 1 << LCDC_ON    ;
+	ld [wLCDC], a      ;
+	ld [rLCDC], a      ; turn LCD on
 	ld a, FLUSH_ALL
 	ld [wFlushPaletteFlags], a
 	ret
@@ -237,7 +237,7 @@ EnableLCD: ; 0277 (0:0277)
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
 	ld a, [rLCDC]        ;
-	bit rLCDC_ENABLE, a  ;
+	bit LCDC_ON, a  ;
 	ret z                ; assert that LCD is on
 	ld a, [rIE]
 	ld [wIE], a
@@ -903,8 +903,9 @@ Func_05f4: ; 5f4 (0:5f4)
 	ret
 ; 0x614
 
-; given two numbers in the two nybbles of register a, write them
-; in text format to hl (most significant nybble first)
+; given two one-digit numbers in the two nybbles of register a,
+; write them in text (ascii) format to hl (most significant nybble first).
+; numbers above 9 are converted to VWF tiles.
 WriteNumbersInTextFormat: ; 614 (0:614)
 	push af
 	swap a
@@ -912,7 +913,9 @@ WriteNumbersInTextFormat: ; 614 (0:614)
 	pop af
 ;	fallthrough
 
-; given a number in the (bottom nybble) of register a, write it in text format to hl
+; given a one-digit number in the (bottom nybble) of register a,
+; write it in text (ascii) format to hl.
+; numbers above 9 are converted to VWF tiles.
 WriteNumberInTextFormat:
 	and $0f
 	add "0"
@@ -5309,7 +5312,7 @@ GetCardAlbumProgress: ; 1da4 (0:1da4)
 ; if LCD on, copy during h-blank only
 SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
-	bit rLCDC_ENABLE, a  ;
+	bit LCDC_ON, a  ;
 	jr nz, .lcd_on       ; assert that LCD is on
 .lcd_off_loop
 	ld a, [de]
@@ -5386,7 +5389,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld hl, wc000
 	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, LOW("<╔>")
+	ld a, SYM_BOX_TOP_L
 	ld [hli], a
 	; white tile before the text
 	ld a, $70
@@ -5415,7 +5418,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 .draw_top_border_line_loop
 	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, LOW("<TOP ═>")
+	ld a, SYM_BOX_TOP
 	ld [hli], a
 	dec b
 	jr nz, .draw_top_border_line_loop
@@ -5423,7 +5426,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 .draw_top_border_right_tile
 	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, LOW("<╗>")
+	ld a, SYM_BOX_TOP_R
 	ld [hli], a
 	ld [hl], $0
 	pop bc
@@ -6140,7 +6143,7 @@ Func_2325: ; 2325 (0:2325)
 	ret
 
 ; search linked-list for letters e/d (regisers), if found hoist the result to
-; head of list and return it.  carry flag denotes success.
+; head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
 	ld a, [wcd0a]        ;
 	or a                 ;
@@ -6171,7 +6174,7 @@ Func_235e: ; 235e (0:235e)
 	ld a, [hl]           ; if key1[l] == e and    ;
 	cp d                 ;    key2[l] == d:       ;
 	jr z, .asm_238f      ;   break                ;
-.asm_238a                                             ;
+.asm_238a
 	ld h, $c8            ;                        ;
 	ld l, [hl]           ; l ← next[l]            ;
 	jr .asm_237d
@@ -6269,7 +6272,7 @@ Func_23d3: ; 23d3 (0:23d3)
 
 ; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
 ; replace leading zeros with $00
-TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
+TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
 	ld de, wcaa0
@@ -6291,14 +6294,14 @@ TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 .digit_loop
 	inc hl
 	ld a, [hl]
-	cp LOW("<0>")
+	cp SYM_0
 	jr nz, .done ; jump if not zero
-	ld [hl], LOW("< >") ; trim leading zero
+	ld [hl], SYM_SPACE ; trim leading zero
 	inc hl
 	dec e
 	jr nz, .digit_loop
 	dec hl
-	ld [hl], LOW("<0>")
+	ld [hl], SYM_0
 .done
 	dec hl
 	pop bc
@@ -6309,7 +6312,7 @@ TwoByteNumberToLargeText_TrimLeadingZeros: ; 245d (0:245d)
 	ld a, TX_SYMBOL
 	ld [de], a
 	inc de
-	ld a, LOW("<0>") - 1
+	ld a, SYM_0 - 1
 .substract_loop
 	inc a
 	add hl, bc
@@ -7648,12 +7651,16 @@ ReadTextOffset: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; convert the number at hl to text (ascii) format and write it to wcaa0
-; return c = 4 - leading_zeros
+; if [wcd0a] != 0:
+;   convert the number at hl to text (ascii) format and write it to wcaa0
+;   return c = 4 - leading_zeros
+; if [wcd0a] == 0:
+;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
+;   replace leading zeros with $00
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wcd0a]
 	or a
-	jp z, TwoByteNumberToLargeText_TrimLeadingZeros
+	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
 	ld de, wcaa0
 	push de
 	call TwoByteNumberToText
@@ -7683,7 +7690,7 @@ CopyTurnDuelistName: ; 2e2c (0:2e2c)
 	pop hl
 	ret
 
-; prints text with id at hl with letter delay in a textbox area
+; prints text with id at hl, with letter delay, in a textbox area
 PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
@@ -7721,7 +7728,7 @@ PrintText: ; 2e41 (0:2e41)
 	jr nc, .next_tile_loop
 	ret
 
-; prints text with id at hl without letter delay in a textbox area
+; prints text with id at hl, without letter delay, in a textbox area
 PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
@@ -10085,7 +10092,7 @@ Func_3c46: ; 3c46 (0:3c46)
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
 	ld a, [rLCDC]
-	bit rLCDC_ENABLE, a
+	bit LCDC_ON, a
 	jr z, .done
 	push bc
 	push de

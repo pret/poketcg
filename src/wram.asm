@@ -1064,7 +1064,7 @@ wce2b:: ; ce2b
 wTxRam2:: ; cd3f
 	ds $2
 
-; text pointer for the second TX_RAM2 on a text
+; text pointer for the second TX_RAM2 of a text
 wTxRam2_b:: ; ce41
 	ds $2
 

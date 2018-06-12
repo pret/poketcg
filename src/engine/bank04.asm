@@ -10,7 +10,7 @@ Func_10000: ; 10000 (4:4000)
 	ldh [hSCX], a
 	ldh [hSCY], a
 	ld a, [wLCDC]
-	bit 7, a
+	bit LCDC_ON, a
 	jr nz, .asm_10025
 	xor a
 	ld [rSCX], a

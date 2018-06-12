@@ -1858,22 +1858,22 @@ DrawDuelHUD: ; 5093 (1:5093)
 	push de
 	pop bc
 
-	; print the Pkmn icon along with the no. of play area Pokemon
-	ld a, LOW("<PKMN_ICON>")
+	; print the Pokemon icon along with the no. of play area Pokemon
+	ld a, SYM_POKEMON
 	call WriteByteToBGMap0
 	inc b
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	add LOW("<0>") - 1
+	add SYM_0 - 1
 	call WriteByteToBGMap0
 	inc b
 
 	; print the Prize icon along with the no. of prizes yet to draw
-	ld a, LOW("<PRIZE_ICON>")
+	ld a, SYM_PRIZE
 	call WriteByteToBGMap0
 	inc b
 	call CountPrizes
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 
 	; print the arena Pokemon card name and level text
@@ -1956,11 +1956,11 @@ DrawDuelHUD: ; 5093 (1:5093)
 	call GetTurnDuelistVariable
 	or a
 	jr z, .check_defender
-	ld a, LOW("<PLUSPOWER>")
+	ld a, SYM_PLUSPOWER
 	call WriteByteToBGMap0
 	inc b
 	ld a, [hl] ; number of attached Pluspower
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 	dec b
 .check_defender
@@ -1969,11 +1969,11 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr z, .done
 	inc c
-	ld a, LOW("<DEFENDER>")
+	ld a, SYM_DEFENDER
 	call WriteByteToBGMap0
 	inc b
 	ld a, [hl] ; number of attached Defender
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 .done
 	ret
@@ -1996,10 +1996,10 @@ DrawDuelHorizontalSeparator: ; 516f (1:516f)
 
 DuelEAndHPTileData: ; 5188 (1:5188)
 ; x, y, tiles[], 0
-	db 1, 1, LOW("<E>"),  0
-	db 1, 2, LOW("<HP>"), 0
-	db 9, 8, LOW("<E>"),  0
-	db 9, 9, LOW("<HP>"), 0
+	db 1, 1, SYM_E,  0
+	db 1, 2, SYM_HP, 0
+	db 9, 8, SYM_E,  0
+	db 9, 9, SYM_HP, 0
 	db $ff
 ; 0x5199
 
@@ -3190,7 +3190,7 @@ CheckPrintPoisoned: ; 63bb (1:63bb)
 	and POISONED
 	jr z, .print
 .poison
-	ld a, LOW("<POISONED>")
+	ld a, SYM_POISONED
 .print
 	call WriteByteToBGMap0
 	pop af
@@ -3224,8 +3224,8 @@ CheckPrintCnfSlpPrz: ; 63ce (1:63ce)
 	ret
 
 .status_symbols
-	; NO_STATUS,   CONFUSED,          ASLEEP,          PARALYZED
-	db LOW("< >"), LOW("<CONFUSED>"), LOW("<ASLEEP>"), LOW("<PARALYZED>")
+	;  NO_STATUS, CONFUSED,     ASLEEP,     PARALYZED
+	db SYM_SPACE, SYM_CONFUSED, SYM_ASLEEP, SYM_PARALYZED
 ; 0x63e6
 
 ; print the symbols of the attached energies of a turn holder's play area card
@@ -3246,7 +3246,7 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	jr nz, .empty_loop
 	pop hl
 	ld de, wAttachedEnergies
-	lb bc, LOW("<FIRE>"), NUM_TYPES - 1
+	lb bc, SYM_FIRE, NUM_TYPES - 1
 .next_color
 	ld a, [de] ; energy count of current color
 	inc de
@@ -3264,7 +3264,7 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ld a, [wTotalAttachedEnergies]
 	cp 9
 	jr c, .place_tiles
-	ld a, LOW("<+>")
+	ld a, SYM_PLUS
 	ld [wDefaultText + 7], a
 .place_tiles
 	pop bc
@@ -3280,14 +3280,14 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 ; input d, e: max. HP, current HP
 DrawHPBar: ; 6614 (1:6614)
 	ld a, MAX_HP
-	ld c, LOW("< >")
+	ld c, SYM_SPACE
 	call .fill_hp_bar ; empty bar
 	ld a, d
-	ld c, LOW("<🌕>")
+	ld c, SYM_HP_OK
 	call .fill_hp_bar ; fill (max. HP) with HP counters
 	ld a, d
 	sub e
-	ld c, LOW("<🌑>")
+	ld c, SYM_HP_NOK
 	; fill (max. HP - current HP) with damaged HP counters
 .fill_hp_bar
 	or a
