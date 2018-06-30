@@ -37,7 +37,7 @@ HornAttackName: ; 5c1f5 (17:41f5)
 	text "Horn Attack"
 	done
 
-GoldeenKind: ; 5c202 (17:4202)
+GoldfishName: ; 5c202 (17:4202)
 	text "Goldfish"
 	done
 
@@ -69,7 +69,7 @@ SlapName: ; 5c2df (17:42df)
 	text "Slap"
 	done
 
-StaryuKind: ; 5c2e5 (17:42e5)
+StarshapeName: ; 5c2e5 (17:42e5)
 	text "Starshape"
 	done
 
@@ -98,7 +98,7 @@ StarFreezeName: ; 5c3cf (17:43cf)
 	text "Star Freeze"
 	done
 
-StarmieKind: ; 5c3dc (17:43dc)
+MysteriousName: ; 5c3dc (17:43dc)
 	text "Mysterious"
 	done
 
@@ -121,7 +121,7 @@ MagikarpsFlailDescription: ; 5c45e (17:445e)
 	line "damage counters on Magikarp."
 	done
 
-MagikarpKind: ; 5c49f (17:449f)
+FishName: ; 5c49f (17:449f)
 	text "Fish"
 	done
 
@@ -143,7 +143,7 @@ BubblebeamName: ; 5c517 (17:4517)
 	text "Bubblebeam"
 	done
 
-GyaradosKind: ; 5c523 (17:4523)
+AtrociousName: ; 5c523 (17:4523)
 	text "Atrocious"
 	done
 
@@ -165,7 +165,7 @@ LaprasWaterGunDescription: ; 5c597 (17:4597)
 	line "more than 20 damage in this way."
 	done
 
-LaprasKind: ; 5c643 (17:4643)
+TransportName: ; 5c643 (17:4643)
 	text "Transport"
 	done
 
@@ -189,7 +189,7 @@ FocusEnergyDescription: ; 5c6c2 (17:46c2)
 	line "doubled."
 	done
 
-VaporeonKind: ; 5c70b (17:470b)
+BubbleJetName: ; 5c70b (17:470b)
 	text "Bubble Jet"
 	done
 
@@ -240,7 +240,7 @@ OmanytesWaterGunDescription: ; 5c932 (17:4932)
 	line "more than 20 damage in this way."
 	done
 
-OmanyteKind: ; 5c9df (17:49df)
+SpiralName: ; 5c9df (17:49df)
 	text "Spiral"
 	done
 
@@ -290,7 +290,7 @@ BlizzardDescription: ; 5cb77 (17:4b77)
 	line "for Benched Pokémon.)"
 	done
 
-ArticunoKind: ; 5cc5b (17:4c5b)
+FreezeName: ; 5cc5b (17:4c5b)
 	text "Freeze"
 	done
 
@@ -348,7 +348,7 @@ ThunderJoltDescription: ; 5ceb1 (17:4eb1)
 	line "10 damage to itself."
 	done
 
-PikachuKind: ; 5ceeb (17:4eeb)
+MouseName: ; 5ceeb (17:4eeb)
 	text "Mouse"
 	done
 
@@ -499,7 +499,7 @@ MagnemitesSelfdestructDescription: ; 5d59f (17:559f)
 	line "to itself."
 	done
 
-MagnemiteKind: ; 5d636 (17:5636)
+MagnetName: ; 5d636 (17:5636)
 	text "Magnet"
 	done
 
@@ -573,7 +573,7 @@ VoltorbName: ; 5d9fc (17:59fc)
 	text "Voltorb"
 	done
 
-VoltorbKind: ; 5da05 (17:5a05)
+BallName: ; 5da05 (17:5a05)
 	text "Ball"
 	done
 
@@ -653,7 +653,7 @@ ElectabuzzsQuickAttackDescription: ; 5dd7d (17:5d7d)
 	line "10 damage."
 	done
 
-ElectabuzzKind: ; 5ddec (17:5dec)
+ElectricName: ; 5ddec (17:5dec)
 	text "Electric"
 	done
 
@@ -694,7 +694,7 @@ StunNeedleName: ; 5dfa2 (17:5fa2)
 	text "Stun Needle"
 	done
 
-JolteonKind: ; 5dfaf (17:5faf)
+LightningName: ; 5dfaf (17:5faf)
 	text "Lightning"
 	done
 
@@ -837,7 +837,7 @@ MudSlapName: ; 5e68d (17:668d)
 	text "Mud Slap"
 	done
 
-DiglettKind: ; 5e697 (17:6697)
+MoleName: ; 5e697 (17:6697)
 	text "Mole"
 	done
 
@@ -890,7 +890,7 @@ PeekDescriptionCont: ; 5e8b8 (17:68b8)
 	line "is Asleep, Confused, or Paralyzed."
 	done
 
-MankeyKind: ; 5e8ff (17:68ff)
+PigMonkeyName: ; 5e8ff (17:68ff)
 	text "Pig Monkey"
 	done
 
@@ -928,7 +928,7 @@ LowKickName: ; 5ea2f (17:6a2f)
 	text "Low Kick"
 	done
 
-MachopKindOrSuperpowerName: ; 5ea39 (17:6a39)
+SuperpowerName: ; 5ea39 (17:6a39)
 	text "Superpower"
 	done
 
@@ -1013,7 +1013,7 @@ StoneBarrageDescription: ; 5ed50 (17:6d50)
 	line "the number of heads."
 	done
 
-GeodudeKind: ; 5eda8 (17:6da8)
+RockName: ; 5eda8 (17:6da8)
 	text "Rock"
 	done
 
@@ -1066,7 +1066,7 @@ GolemsSelfdestructDescription: ; 5ef5e (17:6f5e)
 	line "itself."
 	done
 
-GolemKind: ; 5eff2 (17:6ff2)
+MegatonName: ; 5eff2 (17:6ff2)
 	text "Megaton"
 	done
 
@@ -1089,7 +1089,7 @@ OnixsHardenDescription: ; 5f063 (17:7063)
 	line "happen.)"
 	done
 
-OnixKind: ; 5f11d (17:711d)
+RockSnakeName: ; 5f11d (17:711d)
 	text "Rock Snake"
 	done
 
@@ -1122,7 +1122,7 @@ CubonesRageDescription: ; 5f27f (17:727f)
 	line "for each damage counter on Cubone."
 	done
 
-CuboneKind: ; 5f2c6 (17:72c6)
+LonelyName: ; 5f2c6 (17:72c6)
 	text "Lonely"
 	done
 
@@ -1152,7 +1152,7 @@ CallforFriendDescription: ; 5f34f (17:734f)
 	line "Bench is full.)"
 	done
 
-MarowakKind: ; 5f3e9 (17:73e9)
+BonekeeperName: ; 5f3e9 (17:73e9)
 	text "Bonekeeper"
 	done
 
@@ -1212,7 +1212,7 @@ HighJumpKickName: ; 5f6d0 (17:76d0)
 	text "High Jump Kick"
 	done
 
-HitmonleeKind: ; 5f6e0 (17:76e0)
+KickingName: ; 5f6e0 (17:76e0)
 	text "Kicking"
 	done
 
@@ -1234,7 +1234,7 @@ SpecialPunch: ; 5f75f (17:775f)
 	text "Special Punch"
 	done
 
-HitmonchanKind: ; 5f76e (17:776e)
+PunchingName: ; 5f76e (17:776e)
 	text "Punching"
 	done
 
@@ -1260,7 +1260,7 @@ LeerDescription: ; 5f7ec (17:77ec)
 	line "ends this effect.)"
 	done
 
-RhyhornKind: ; 5f889 (17:7889)
+SpikeName: ; 5f889 (17:7889)
 	text "Spike"
 	done
 
@@ -1376,7 +1376,7 @@ PrehistoricPowerDescription: ; 5fd8b (17:7d8b)
 	line "Confused, or Paralyzed."
 	done
 
-AerodactylKind: ; 5fe00 (17:7e00)
+FossilName: ; 5fe00 (17:7e00)
 	text "Fossil"
 	done
 
@@ -1390,7 +1390,7 @@ AbraName: ; 5fe6c (17:7e6c)
 	text "Abra"
 	done
 
-AbraKind: ; 5fe72 (17:7e72)
+PsiName: ; 5fe72 (17:7e72)
 	text "Psi"
 	done
 

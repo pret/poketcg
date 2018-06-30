@@ -1251,7 +1251,7 @@ BulbasaursLeechSeedDescription: ; 57569 (15:7569)
 	line "damage counter from Bulbasaur."
 	done
 
-BulbasaurKind: ; 575cb (15:75cb)
+SeedName: ; 575cb (15:75cb)
 	text "Seed"
 	done
 
@@ -1370,7 +1370,7 @@ MayInflictParalysisDescription: ; 57ad0 (15:7ad0)
 	line "Pokémon is now Paralyzed."
 	done
 
-CaterpieKind: ; 57b10 (15:7b10)
+WormName: ; 57b10 (15:7b10)
 	text "Worm"
 	done
 
@@ -1399,7 +1399,7 @@ StunSporeName: ; 57c14 (15:7c14)
 	text "Stun Spore"
 	done
 
-MetapodKind: ; 57c20 (15:7c20)
+CocoonName: ; 57c20 (15:7c20)
 	text "Cocoon"
 	done
 
@@ -1440,7 +1440,7 @@ ButterfreesMegaDrainDescriptionCont: ; 57dee (15:7dee)
 	line "them."
 	done
 
-ButterfreeKind: ; 57e36 (15:7e36)
+ButterflyName: ; 57e36 (15:7e36)
 	text "Butterfly"
 	done
 
@@ -1463,7 +1463,7 @@ MayInflictPoisonDescription: ; 57eaf (15:7eaf)
 	line "Pokémon is now Poisoned."
 	done
 
-WeedleKind: ; 57eee (15:7eee)
+HairyBugName: ; 57eee (15:7eee)
 	text "Hairy Bug"
 	done
 

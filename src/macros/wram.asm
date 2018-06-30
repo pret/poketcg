@@ -15,7 +15,7 @@ card_data_struct: MACRO
 \1RetreatCost::   ds 1
 \1Weakness::      ds 1
 \1Resistance::    ds 1
-\1Kind::          ds 2
+\1Category::      ds 2
 \1PokedexNumber:: ds 1
 \1Unknown1::      ds 1
 \1Level::         ds 1

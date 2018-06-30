@@ -797,7 +797,7 @@ MewtwoPsychicEffectCommands:
 	dbw $09, $5d7b
 	db  $00
 
-MewtwoMrMimeKindAndBarrierEffectCommands:
+MewtwoBarrierEffectCommands:
 	dbw $01, $5d8e
 	dbw $02, $5d9c
 	dbw $03, $5dbf
