@@ -76,7 +76,7 @@ ContinueDuel: ; 407a (1:407a)
 	xor a
 	ld [wDuelFinished], a
 	call DuelMainInterface
-	jp StartDuel.begin_turn
+	jp MainDuelLoop.begin_turn
 ; 0x4097
 
 FailedToContinueDuel: ; 4097 (1:4097)
@@ -125,9 +125,10 @@ StartDuel: ; 409f (1:409f)
 	call PlaySong
 	call Func_4b60
 	ret c
+;	fallthrough
 
 ; the loop returns here after every turn switch
-.main_duel_loop ; 40ee (1:40ee)
+MainDuelLoop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call UpdateSubstatusConditions_StartOfTurn
@@ -154,7 +155,7 @@ StartDuel: ; 409f (1:409f)
 
 .next_turn
 	call SwapTurn
-	jr .main_duel_loop
+	jr MainDuelLoop
 
 .practice_duel
 	ld a, [wIsPracticeDuel]
@@ -257,7 +258,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp .main_duel_loop
+	jp MainDuelLoop
 
 .link_duel
 	call Func_0f58
@@ -271,7 +272,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, h
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp nc, .main_duel_loop
+	jp nc, MainDuelLoop
 	ret
 ; 0x420b
 
@@ -365,9 +366,8 @@ PrintDuelMenu: ; 4295 (1:4295)
 	ret nz
 	ld a, [wCurrentDuelMenuItem]
 	call SetMenuItem
-;	fallthrough
 
-HandleDuelMenuInputAndShortcuts:
+.handle_input
 	call DoFrame
 	ldh a, [hButtonsHeld]
 	and B_BUTTON
@@ -393,11 +393,11 @@ HandleDuelMenuInputAndShortcuts:
 	jp nz, DuelMenuShortcut_BothActivePokemon
 	ld a, [wcbe7]
 	or a
-	jr nz, HandleDuelMenuInputAndShortcuts
+	jr nz, .handle_input
 	call HandleDuelMenuInput
 	ld a, e
 	ld [wCurrentDuelMenuItem], a
-	jr nc, HandleDuelMenuInputAndShortcuts
+	jr nc, .handle_input
 	ldh a, [hCurrentMenuItem]
 	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
