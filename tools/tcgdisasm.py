@@ -234,8 +234,8 @@ z80_table = [
 	('call c, {}', 2),             # dc
 	('db $dd', 2),                 # dd
 	('sbc ${:02x}', 1),            # de
-	('rst $18', 0),                # df
-	('ld [{}], a', 1),             # e0
+	('bank1call {}', 2),           # df
+	('ldh [{}], a', 1),            # e0
 	('pop hl', 0),                 # e1
 	('ld [$ff00+c], a', 0),        # e2
 	('db $e3', 0),                 # e3
@@ -250,8 +250,8 @@ z80_table = [
 	('db $ec', 2),                 # ec
 	('db $ed', 2),                 # ed
 	('xor ${:02x}', 1),            # ee
-	('rst $28', 0),                # ef
-	('ld a, [{}]', 1),             # f0
+	('farcall {}', 3),             # ef
+	('ldh a, [{}]', 1),            # f0
 	('pop af', 0),                 # f1
 	('db $f2', 0),                 # f2
 	('di', 0),                     # f3
@@ -266,7 +266,7 @@ z80_table = [
 	('db $fc', 2),                 # fc
 	('db $fd', 2),                 # fd
 	('cp ${:02x}', 1),             # fe
-	('rst $38', 0),                # ff
+	('debug_ret', 0),              # ff
 ]
 
 bit_ops_table = [
@@ -306,7 +306,7 @@ bit_ops_table = [
 
 unconditional_returns = [0xc9, 0xd9]
 absolute_jumps = [0xc3, 0xc2, 0xca, 0xd2, 0xda]
-call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc]
+call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc, 0xdf, 0xef]
 relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
 unconditional_jumps = [0xc3, 0x18]
 
@@ -656,7 +656,7 @@ class Disassembler(object):
 			byte_labels[local_offset]["definition"] = True
 			data_tables[local_offset]["definition"] = True
 
-			# for now, output the byte and data labels (unused labels will be removed later
+			# for now, output the byte and data labels (unused labels will be removed later)
 			output += line_label + "\n" + data_line_label + "\n"
 
 			# get the current byte
@@ -671,6 +671,7 @@ class Disassembler(object):
 				# get opcode arguments in advance (may not be used)
 				opcode_arg_1 = rom[offset+1]
 				opcode_arg_2 = rom[offset+2]
+				opcode_arg_3 = rom[offset+3]
 
 				if opcode_nargs == 0:
 				# set output string simply as the opcode
@@ -745,7 +746,12 @@ class Disassembler(object):
 					# get the global offset of the pointer
 					target_offset = get_global_address(local_target_offset, bank_id)
 					# attempt to look for a matching label
-					target_label = self.find_label(target_offset, bank_id)
+					if opcode_byte == 0xdf:
+					# bank1call
+						target_label = self.find_label(local_target_offset, 1)
+					else:
+					# regular call or jump instructions
+						target_label = self.find_label(local_target_offset, bank_id)
 
 					if opcode_byte in call_commands + absolute_jumps:
 						if target_label is None:
@@ -785,6 +791,23 @@ class Disassembler(object):
 								data_tables[local_target_offset]["name"] = target_label
 								data_tables[local_target_offset]["usage"] = 0
 								data_tables[local_target_offset]["definition"] = False
+
+					# format the label that was created into the opcode string
+					opcode_output_str = opcode_str.format(target_label)
+
+				elif opcode_nargs == 3:
+				# macros with bank and pointer as an argument
+					# format the three arguments into a three-byte pointer
+					local_target_offset = opcode_arg_3 << 8 | opcode_arg_2
+					# get the global offset of the pointer
+					target_offset = get_global_address(local_target_offset, opcode_arg_1)
+					# attempt to look for a matching label
+					target_label = self.find_label(local_target_offset, opcode_arg_1)
+
+					if opcode_byte in call_commands + absolute_jumps:
+						if target_label is None:
+						# if this is a call or jump opcode and the target label is not defined, create an undocumented label descriptor
+							target_label = "Func_%x" % target_offset
 
 					# format the label that was created into the opcode string
 					opcode_output_str = opcode_str.format(target_label)
@@ -886,9 +909,10 @@ if __name__ == "__main__":
 	# argument parser
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-r", dest="rom", default="baserom.gbc")
-	ap.add_argument("-o", dest="filename", default="gbz80disasm_output.asm")
+	ap.add_argument("-o", dest="filename", default="tcgdisasm_output.asm")
 	ap.add_argument("-s", dest="symfile", default="tcg.sym")
 	ap.add_argument("-q", "--quiet", dest="quiet", action="store_true")
+	ap.add_argument("-a", "--append", dest="append", action="store_true")
 	ap.add_argument("-nw", "--no-write", dest="no_write", action="store_true")
 	ap.add_argument("-d", "--dry-run", dest="dry_run", action="store_true")
 	ap.add_argument("-pd", "--parse_data", dest="parse_data", action="store_true")
@@ -915,5 +939,9 @@ if __name__ == "__main__":
 
 	# only write to the output file if the no write flag is unset
 	if not args.no_write:
-		with open(args.filename, "w") as f:
-			f.write(output)
+		if args.append:
+			with open(args.filename, "a") as f:
+				f.write("\n\n" + output)
+		else:
+			with open(args.filename, "w") as f:
+				f.write(output)
