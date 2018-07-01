@@ -52,7 +52,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DiscardName                              ; 0x0030
 	textpointer Text0031                                 ; 0x0031
 	textpointer Text0032                                 ; 0x0032
-	textpointer Text0033                                 ; 0x0033
+	textpointer UsedText                                 ; 0x0033
 	textpointer Text0034                                 ; 0x0034
 	textpointer PokemonsAttackText                       ; 0x0035
 	textpointer Text0036                                 ; 0x0036
@@ -91,21 +91,21 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransmitingDataText                      ; 0x0057
 	textpointer Text0058                                 ; 0x0058
 	textpointer Text0059                                 ; 0x0059
-	textpointer Text005a                                 ; 0x005a
-	textpointer Text005b                                 ; 0x005b
+	textpointer RetreatedPokemonText                     ; 0x005a
+	textpointer RetreatFailedText                        ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
-	textpointer Text005d                                 ; 0x005d
+	textpointer FinishedTurnNoAttackText                 ; 0x005d
 	textpointer Text005e                                 ; 0x005e
 	textpointer Text005f                                 ; 0x005f
 	textpointer Text0060                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
-	textpointer Text0062                                 ; 0x0062
-	textpointer Text0063                                 ; 0x0063
+	textpointer PlacedInTheArenaText                     ; 0x0062
+	textpointer ShufflesTheDeckText                      ; 0x0063
 	textpointer Text0064                                 ; 0x0064
 	textpointer Text0065                                 ; 0x0065
 	textpointer Text0066                                 ; 0x0066
 	textpointer Text0067                                 ; 0x0067
-	textpointer Text0068                                 ; 0x0068
+	textpointer DeckHasXCardsText                        ; 0x0068
 	textpointer ChooseBasicPkmnToPlaceInArenaText        ; 0x0069
 	textpointer Text006a                                 ; 0x006a
 	textpointer NeitherPlayerHasBasicPkmnText            ; 0x006b

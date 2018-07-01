@@ -203,7 +203,7 @@ Text0032: ; 365b6 (d:65b6)
 	text "Damage"
 	done
 
-Text0033: ; 365be (d:65be)
+UsedText: ; 365be (d:65be)
 	text "Used ", TX_RAM2, "."
 	done
 
@@ -386,12 +386,12 @@ Text0059: ; 369dc (d:69dc)
 	line "    Hand        Examine     Back"
 	done
 
-Text005a: ; 36a19 (d:6a19)
+RetreatedPokemonText: ; 36a19 (d:6a19)
 	text TX_RAM2, ""
 	line "Retreated to the Bench."
 	done
 
-Text005b: ; 36a34 (d:6a34)
+RetreatFailedText: ; 36a34 (d:6a34)
 	text TX_RAM2, "'s"
 	line "Retreat was unsuccessful."
 	done
@@ -401,7 +401,7 @@ WillUseThePokemonPowerText: ; 36a53 (d:6a53)
 	line "Pokémon Power ", TX_RAM2, "."
 	done
 
-Text005d: ; 36a74 (d:6a74)
+FinishedTurnNoAttackText: ; 36a74 (d:6a74)
 	text "Finished the Turn"
 	line "without Attacking."
 	done
@@ -425,12 +425,12 @@ PlacedOnTheBenchText: ; 36aca (d:6aca)
 	line "on the Bench."
 	done
 
-Text0062: ; 36ae2 (d:6ae2)
+PlacedInTheArenaText: ; 36ae2 (d:6ae2)
 	text TX_RAM2, ""
 	line "was placed in the Arena."
 	done
 
-Text0063: ; 36afe (d:6afe)
+ShufflesTheDeckText: ; 36afe (d:6afe)
 	text TX_RAM1, " shuffles the Deck."
 	done
 
@@ -453,7 +453,7 @@ Text0067: ; 36b9a (d:6b9a)
 	line "drew 7 cards."
 	done
 
-Text0068: ; 36bab (d:6bab)
+DeckHasXCardsText: ; 36bab (d:6bab)
 	text TX_RAM1, "'s deck has ", TX_RAM3, " cards."
 	done
 

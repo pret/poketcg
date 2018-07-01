@@ -76,6 +76,8 @@ hTemp_ffa0:: ; ffa0
 hTempPlayAreaLocationOffset_ffa1:: ; ffa1
 	ds 1
 
+; FF-terminated list of cards to be discarded upon retreat
+hTempRetreatCostCards:: ; ffa2
 	ds 6
 
 ; hffa8 through hffb0 appear to be related to text processing

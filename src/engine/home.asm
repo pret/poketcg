@@ -4358,6 +4358,9 @@ Func_1730: ; 1730 (0:1730)
 	call TryExecuteEffectCommandFunction
 	ld a, $a
 	call SetDuelAIAction
+;	fallthrough
+
+Func_179a: ; 179a (0:179a)
 	call $7415
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
@@ -4977,6 +4980,7 @@ Func_1af3: ; 1af3 (0:1af3)
 
 Func_1b8d: ; 1b8d (0:1b8d)
 	bank1call DrawDuelMainScene
+Func_1b90: ; 1b90 (0:1b90)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -9024,11 +9028,11 @@ CheckCannotUseDueToStatus_OnlyToxicGasIfANon0: ; 34f0 (0:34f0)
 ; input: a = Pokemon card ID to search
 CountPokemonIDInBothPlayAreas: ; 3509 (0:3509)
 	push bc
-	ld [wTempPokemonID_ce7e], a
+	ld [wTempPokemonID_ce7c], a
 	call CountPokemonIDInPlayArea
 	ld c, a
 	call SwapTurn
-	ld a, [wTempPokemonID_ce7e]
+	ld a, [wTempPokemonID_ce7c]
 	call CountPokemonIDInPlayArea
 	call SwapTurn
 	add c
@@ -9048,14 +9052,14 @@ CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	push hl
 	push de
 	push bc
-	ld [wTempPokemonID_ce7e], a
+	ld [wTempPokemonID_ce7c], a
 	ld c, $0
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
 	jr z, .check_bench
 	call GetCardIDFromDeckIndex
-	ld a, [wTempPokemonID_ce7e]
+	ld a, [wTempPokemonID_ce7c]
 	cp e
 	jr nz, .check_bench
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -9071,7 +9075,7 @@ CountPokemonIDInPlayArea: ; 3525 (0:3525)
 	cp -1
 	jr z, .done
 	call GetCardIDFromDeckIndex
-	ld a, [wTempPokemonID_ce7e]
+	ld a, [wTempPokemonID_ce7c]
 	cp e
 	jr nz, .skip
 	inc c

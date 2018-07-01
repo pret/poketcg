@@ -654,7 +654,7 @@ wSortCardListByID:: ; cbdf
 wcbe0:: ; cbe0
 	ds $1
 
-wcbe1:: ; cbe1
+wAITurnEnded:: ; cbe1
 	ds $1
 
 wcbe2:: ; cbe2
@@ -1172,10 +1172,15 @@ wce71:: ; ce71
 	ds $a
 
 ; used in CountPokemonIDInPlayArea
-wTempPokemonID_ce7e:: ; ce7c
+wTempPokemonID_ce7c:: ; ce7c
 	ds $1
 
-	ds $24
+	ds $1
+
+wce7e:: ; ce7e
+	ds $1
+
+	ds $22
 
 wcea1:: ; cea1
 	ds $1
