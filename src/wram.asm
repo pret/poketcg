@@ -512,7 +512,12 @@ wBackgroundPalettesCGB:: ; caf0
 wObjectPalettesCGB:: ; cb30
 	ds 8 palettes
 
-	ds $4
+	ds $2
+
+; stores a pointer to a temporary list of elements (e.g. pointer to wDuelTempList)
+; to be read or written sequentially
+wListPointer:: ; cb72
+	ds $2
 
 SECTION "WRAM Serial Transfer", WRAM0
 
@@ -642,7 +647,8 @@ wCardListHeaderText:: ; cbdc
 wcbde:: ; cbde
 	ds $1
 
-wcbdf:: ; cbdf
+; flag indicating whether a list of cards should be sorted by ID
+wSortCardListByID:: ; cbdf
 	ds $1
 
 wcbe0:: ; cbe0
@@ -958,7 +964,7 @@ wListItemXPosition:: ; cd1a
 wNumListItems:: ; cd1b
 	ds $1
 
-wcd1c:: ; cd1c
+wListItemNameMaxLength:: ; cd1c
 	ds $1
 
 wListFunctionPointer:: ; cd1d
@@ -1063,7 +1069,7 @@ wce2b:: ; ce2b
 wTxRam2:: ; cd3f
 	ds $2
 
-; text pointer for the second TX_RAM2 on a text
+; text pointer for the second TX_RAM2 of a text
 wTxRam2_b:: ; ce41
 	ds $2
 
@@ -1298,6 +1304,8 @@ wd0aa:: ; d0aa
 wd0b4:: ; d0b4
 	ds $1
 
+; a GAME_EVENT_* constant corresponding to an entry in GameEventPointerTable
+; overworld, duel, credits...
 wGameEvent:: ; d0b5
 	ds $1
 

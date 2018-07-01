@@ -25,7 +25,7 @@ SlowpokesAmnesiaDescription: ; 60155 (18:4155)
 	line "next turn."
 	done
 
-SlowpokeKind: ; 601c8 (18:41c8)
+DopeyName: ; 601c8 (18:41c8)
 	text "Dopey"
 	done
 
@@ -75,7 +75,7 @@ StrangeBehaviorDescription: ; 60360 (18:4360)
 	line "Confused, or Paralyzed."
 	done
 
-SlowbroKind: ; 6044c (18:444c)
+HermitcrabName: ; 6044c (18:444c)
 	text "Hermitcrab"
 	done
 
@@ -110,7 +110,7 @@ DestinyBondDescription: ; 6051c (18:451c)
 	line "Knock Out that Pokémon."
 	done
 
-GastlyKind: ; 605bf (18:45bf)
+GasName: ; 605bf (18:45bf)
 	text "Gas"
 	done
 
@@ -208,7 +208,7 @@ DarkMindDescription: ; 609c2 (18:49c2)
 	line "for Benched Pokémon.)"
 	done
 
-GengarKind: ; 60a5f (18:4a5f)
+ShadowName: ; 60a5f (18:4a5f)
 	text "Shadow"
 	done
 
@@ -284,7 +284,7 @@ MrMimesMeditateDescription: ; 60d2b (18:4d2b)
 	line "Defending Pokémon."
 	done
 
-MrMimeKindOrBarrierName: ; 60d81 (18:4d81)
+BarrierName: ; 60d81 (18:4d81)
 	text "Barrier"
 	done
 
@@ -309,7 +309,7 @@ JynxsMeditateDescription: ; 60e27 (18:4e27)
 	line "Defending Pokémon."
 	done
 
-JynxKind: ; 60e7d (18:4e7d)
+HumanShapeName: ; 60e7d (18:4e7d)
 	text "Human Shape"
 	done
 
@@ -341,7 +341,7 @@ BarrierDescription: ; 60f45 (18:4f45)
 	line "including damage, done to Mewtwo."
 	done
 
-MewtwoKind: ; 60ff3 (18:4ff3)
+GeneticName: ; 60ff3 (18:4ff3)
 	text "Genetic"
 	done
 
@@ -389,7 +389,7 @@ NeutralizingShieldDescription: ; 6114c (18:514c)
 	line "Paralyzed."
 	done
 
-MewKind: ; 611fa (18:51fa)
+NewSpeciesName: ; 611fa (18:51fa)
 	text "New Species"
 	done
 
@@ -442,7 +442,7 @@ PidgeyName: ; 61442 (18:5442)
 	text "Pidgey"
 	done
 
-PidgeyKind: ; 6144a (18:544a)
+TinyBirdName: ; 6144a (18:544a)
 	text "Tiny Bird"
 	done
 
@@ -467,7 +467,7 @@ PidgeottosMirrorMoveDescription: ; 614d0 (18:54d0)
 	line "Pokémon."
 	done
 
-PidgeottoKind: ; 61540 (18:5540)
+BirdName: ; 61540 (18:5540)
 	text "Bird"
 	done
 
@@ -537,7 +537,7 @@ RattataName: ; 618c5 (18:58c5)
 	text "Rattata"
 	done
 
-RattataKind: ; 618ce (18:58ce)
+RatName: ; 618ce (18:58ce)
 	text "Rat"
 	done
 
@@ -603,7 +603,7 @@ DrillPeckName: ; 61b72 (18:5b72)
 	text "Drill Peck"
 	done
 
-FearowKind: ; 61b7e (18:5b7e)
+BeakName: ; 61b7e (18:5b7e)
 	text "Beak"
 	done
 
@@ -634,7 +634,7 @@ ClefairysMetronomeDescription: ; 61bfd (18:5bfd)
 	line "still Colorless.)"
 	done
 
-ClefairyKind: ; 61cb9 (18:5cb9)
+FairyName: ; 61cb9 (18:5cb9)
 	text "Fairy"
 	done
 
@@ -691,7 +691,7 @@ JigglypuffsDoubleEdgeDescription: ; 61f12 (18:5f12)
 	text "Jigglypuff does 20 damage to itself."
 	done
 
-JigglypuffKind: ; 61f38 (18:5f38)
+BalloonName: ; 61f38 (18:5f38)
 	text "Balloon"
 	done
 
@@ -778,7 +778,7 @@ CatPunchDescription: ; 62287 (18:6287)
 	line "happen.)"
 	done
 
-MeowthKind: ; 62359 (18:6359)
+ScratchCatName: ; 62359 (18:6359)
 	text "Scratch Cat"
 	done
 
@@ -820,7 +820,7 @@ PounceDescription: ; 62475 (18:6475)
 	line "effect.)"
 	done
 
-PersianKind: ; 62552 (18:6552)
+ClassyCatName: ; 62552 (18:6552)
 	text "Classy Cat"
 	done
 
@@ -851,7 +851,7 @@ PotSmashName: ; 6269d (18:669d)
 	text "Pot Smash"
 	done
 
-FarfetchdKind: ; 626a8 (18:66a8)
+WildDuckName: ; 626a8 (18:66a8)
 	text "Wild Duck"
 	done
 
@@ -869,7 +869,7 @@ FuryAttackName: ; 62719 (18:6719)
 	text "Fury Attack"
 	done
 
-DoduoKind: ; 62726 (18:6726)
+TwinBirdName: ; 62726 (18:6726)
 	text "Twin Bird"
 	done
 
@@ -898,7 +898,7 @@ DodriosRageDescription: ; 627ee (18:67ee)
 	line "for each damage counter on Dodrio."
 	done
 
-DodrioKind: ; 62835 (18:6835)
+TriplebirdName: ; 62835 (18:6835)
 	text "Triplebird"
 	done
 
@@ -916,7 +916,7 @@ TongueWrapName: ; 628aa (18:68aa)
 	text "Tongue Wrap"
 	done
 
-LickitungKind: ; 628b7 (18:68b7)
+LickingName: ; 628b7 (18:68b7)
 	text "Licking"
 	done
 
@@ -967,7 +967,7 @@ CometPunchName: ; 62a63 (18:6a63)
 	text "Comet Punch"
 	done
 
-KangaskhanKind: ; 62a70 (18:6a70)
+ParentName: ; 62a70 (18:6a70)
 	text "Parent"
 	done
 
@@ -992,7 +992,7 @@ RampageDescription: ; 62ae7 (18:6ae7)
 	line "now Confused (after doing damage)."
 	done
 
-TaurosKind: ; 62b72 (18:6b72)
+WildBullName: ; 62b72 (18:6b72)
 	text "Wild Bull"
 	done
 
@@ -1026,7 +1026,7 @@ MorphDescriptionCont: ; 62c90 (18:6c90)
 	line "it)."
 	done
 
-DittoKind: ; 62d23 (18:6d23)
+TransformName: ; 62d23 (18:6d23)
 	text "Transform"
 	done
 
@@ -1048,7 +1048,7 @@ TailWagDescription: ; 62d94 (18:6d94)
 	line "effect.)"
 	done
 
-EeveeKind: ; 62e2f (18:6e2f)
+EvolutionName: ; 62e2f (18:6e2f)
 	text "Evolution"
 	done
 
@@ -1083,7 +1083,7 @@ Conversion2Description: ; 62f2d (18:6f2d)
 	line "Colorless."
 	done
 
-PorygonKind: ; 62f79 (18:6f79)
+VirtualName: ; 62f79 (18:6f79)
 	text "Virtual"
 	done
 
@@ -1113,7 +1113,7 @@ BodySlamName: ; 63088 (18:7088)
 	text "Body Slam"
 	done
 
-SnorlaxKind: ; 63093 (18:7093)
+SleepingName: ; 63093 (18:7093)
 	text "Sleeping"
 	done
 

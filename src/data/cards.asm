@@ -275,7 +275,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx BulbasaurKind ; kind
+	tx SeedName ; category
 	db 1 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -326,7 +326,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx BulbasaurKind ; kind
+	tx SeedName ; category
 	db 2 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -377,7 +377,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx BulbasaurKind ; kind
+	tx SeedName ; category
 	db 3 ; Pokedex number
 	db 0
 	db 64 ; level
@@ -428,7 +428,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx BulbasaurKind ; kind
+	tx SeedName ; category
 	db 3 ; Pokedex number
 	db 0
 	db 67 ; level
@@ -479,7 +479,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx CaterpieKind ; kind
+	tx WormName ; category
 	db 10 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -530,7 +530,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx MetapodKind ; kind
+	tx CocoonName ; category
 	db 11 ; Pokedex number
 	db 0
 	db 21 ; level
@@ -581,7 +581,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ButterfreeKind ; kind
+	tx ButterflyName ; category
 	db 12 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -632,7 +632,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx WeedleKind ; kind
+	tx HairyBugName ; category
 	db 13 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -683,7 +683,7 @@ KakunaCard: ; 31030 (c:5030)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx MetapodKind ; kind
+	tx CocoonName ; category
 	db 14 ; Pokedex number
 	db 0
 	db 23 ; level
@@ -734,7 +734,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
 	db WR_FIGHTING ; resistance
-	tx BeedrillKind ; kind
+	tx PoisonBeeName ; category
 	db 15 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -785,7 +785,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx EkansKind ; kind
+	tx SnakeName ; category
 	db 23 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -836,7 +836,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx ArbokKind ; kind
+	tx CobraName ; category
 	db 24 ; Pokedex number
 	db 0
 	db 27 ; level
@@ -887,7 +887,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoranFKind ; kind
+	tx PoisonPinName ; category
 	db 29 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -938,7 +938,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoranFKind ; kind
+	tx PoisonPinName ; category
 	db 30 ; Pokedex number
 	db 0
 	db 24 ; level
@@ -989,7 +989,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoqueenKind ; kind
+	tx DrillName ; category
 	db 31 ; Pokedex number
 	db 0
 	db 43 ; level
@@ -1040,7 +1040,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoranFKind ; kind
+	tx PoisonPinName ; category
 	db 32 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -1091,7 +1091,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoranFKind ; kind
+	tx PoisonPinName ; category
 	db 33 ; Pokedex number
 	db 0
 	db 25 ; level
@@ -1142,7 +1142,7 @@ NidokingCard: ; 31279 (c:5279)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx NidoqueenKind ; kind
+	tx DrillName ; category
 	db 34 ; Pokedex number
 	db 0
 	db 48 ; level
@@ -1193,7 +1193,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db WR_FIGHTING ; resistance
-	tx ZubatKind ; kind
+	tx BatName ; category
 	db 41 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -1244,7 +1244,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db WR_FIGHTING ; resistance
-	tx ZubatKind ; kind
+	tx BatName ; category
 	db 42 ; Pokedex number
 	db 0
 	db 29 ; level
@@ -1295,7 +1295,7 @@ OddishCard: ; 3133c (c:533c)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx OddishKind ; kind
+	tx WeedName ; category
 	db 43 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -1346,7 +1346,7 @@ GloomCard: ; 3137d (c:537d)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx OddishKind ; kind
+	tx WeedName ; category
 	db 44 ; Pokedex number
 	db 0
 	db 22 ; level
@@ -1397,7 +1397,7 @@ VileplumeCard: ; 313be (c:53be)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx VileplumeKind ; kind
+	tx FlowerName ; category
 	db 45 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -1448,7 +1448,7 @@ ParasCard: ; 313ff (c:53ff)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx ParasKind ; kind
+	tx MushroomName ; category
 	db 46 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -1499,7 +1499,7 @@ ParasectCard: ; 31440 (c:5440)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx ParasKind ; kind
+	tx MushroomName ; category
 	db 47 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -1550,7 +1550,7 @@ VenonatCard: ; 31481 (c:5481)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx VenonatKind ; kind
+	tx InsectName ; category
 	db 48 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -1601,7 +1601,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
 	db WR_FIGHTING ; resistance
-	tx VenomothKind ; kind
+	tx PoisonmothName ; category
 	db 49 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -1652,7 +1652,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx VileplumeKind ; kind
+	tx FlowerName ; category
 	db 69 ; Pokedex number
 	db 0
 	db 11 ; level
@@ -1703,7 +1703,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx WeepinbellKind ; kind
+	tx FlycatcherName ; category
 	db 70 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -1754,7 +1754,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx WeepinbellKind ; kind
+	tx FlycatcherName ; category
 	db 71 ; Pokedex number
 	db 0
 	db 42 ; level
@@ -1805,7 +1805,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx GrimerKindOrSludgeName ; kind
+	tx SludgeName ; category
 	db 88 ; Pokedex number
 	db 0
 	db 17 ; level
@@ -1841,7 +1841,7 @@ MukCard: ; 31607 (c:5607)
 
 	; move 2
 	energy GRASS, 3 ; energies
-	tx GrimerKindOrSludgeName ; name
+	tx SludgeName ; name
 	tx MayInflictPoisonDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
@@ -1856,7 +1856,7 @@ MukCard: ; 31607 (c:5607)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx GrimerKindOrSludgeName ; kind
+	tx SludgeName ; category
 	db 89 ; Pokedex number
 	db 0
 	db 34 ; level
@@ -1878,7 +1878,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 
 	; move 1
 	energy PSYCHIC, 1 ; energies
-	tx DrowzeeKindOrHypnosisName ; name
+	tx HypnosisName ; name
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
@@ -1907,7 +1907,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx ExeggcuteKind ; kind
+	tx EggName ; category
 	db 102 ; Pokedex number
 	db 0
 	db 14 ; level
@@ -1958,7 +1958,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db 3 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx ExeggutorKind ; kind
+	tx CoconutName ; category
 	db 103 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -2009,7 +2009,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx KoffingKind ; kind
+	tx PoisonGasName ; category
 	db 109 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -2060,7 +2060,7 @@ WeezingCard: ; 3170b (c:570b)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx KoffingKind ; kind
+	tx PoisonGasName ; category
 	db 110 ; Pokedex number
 	db 0
 	db 27 ; level
@@ -2111,7 +2111,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx TangelaKind ; kind
+	tx VineName ; category
 	db 114 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -2162,7 +2162,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 2 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx TangelaKind ; kind
+	tx VineName ; category
 	db 114 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -2213,7 +2213,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db 0 ; retreat cost
 	db WR_FIRE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ScytherKind ; kind
+	tx MantisName ; category
 	db 123 ; Pokedex number
 	db 0
 	db 25 ; level
@@ -2264,7 +2264,7 @@ PinsirCard: ; 3180f (c:580f)
 	db 1 ; retreat cost
 	db WR_FIRE ; weakness
 	db NONE ; resistance
-	tx PinsirKind ; kind
+	tx StagbeetleName ; category
 	db 127 ; Pokedex number
 	db 0
 	db 24 ; level
@@ -2315,7 +2315,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx CharmanderKind ; kind
+	tx LizardName ; category
 	db 4 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -2366,7 +2366,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 5 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -2417,7 +2417,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db 3 ; retreat cost
 	db WR_WATER ; weakness
 	db WR_FIGHTING ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 6 ; Pokedex number
 	db 0
 	db 76 ; level
@@ -2468,7 +2468,7 @@ VulpixCard: ; 31913 (c:5913)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx VulpixKind ; kind
+	tx FoxName ; category
 	db 37 ; Pokedex number
 	db 0
 	db 11 ; level
@@ -2519,7 +2519,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx VulpixKind ; kind
+	tx FoxName ; category
 	db 38 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -2570,7 +2570,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx VulpixKind ; kind
+	tx FoxName ; category
 	db 38 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -2621,7 +2621,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx GrowlitheKind ; kind
+	tx PuppyName ; category
 	db 58 ; Pokedex number
 	db 0
 	db 18 ; level
@@ -2672,7 +2672,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx ArcanineKind ; kind
+	tx LegendaryName ; category
 	db 59 ; Pokedex number
 	db 0
 	db 34 ; level
@@ -2723,7 +2723,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db 3 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx ArcanineKind ; kind
+	tx LegendaryName ; category
 	db 59 ; Pokedex number
 	db 0
 	db 45 ; level
@@ -2774,7 +2774,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx PonytaKind ; kind
+	tx FireHorseName ; category
 	db 77 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -2825,7 +2825,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db 0 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx PonytaKind ; kind
+	tx FireHorseName ; category
 	db 78 ; Pokedex number
 	db 0
 	db 33 ; level
@@ -2876,7 +2876,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db 2 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx MagmarKind ; kind
+	tx SpitfireName ; category
 	db 126 ; Pokedex number
 	db 0
 	db 24 ; level
@@ -2927,7 +2927,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx MagmarKind ; kind
+	tx SpitfireName ; category
 	db 126 ; Pokedex number
 	db 0
 	db 31 ; level
@@ -2978,7 +2978,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 136 ; Pokedex number
 	db 0
 	db 22 ; level
@@ -3029,7 +3029,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db 1 ; retreat cost
 	db WR_WATER ; weakness
 	db NONE ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 136 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -3080,7 +3080,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 146 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -3131,7 +3131,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx CharmeleonKind ; kind
+	tx FlameName ; category
 	db 146 ; Pokedex number
 	db 0
 	db 37 ; level
@@ -3182,7 +3182,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx SquirtleKind ; kind
+	tx TinyTurtleName ; category
 	db 7 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -3233,7 +3233,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx WartortleKind ; kind
+	tx TurtleName ; category
 	db 8 ; Pokedex number
 	db 0
 	db 22 ; level
@@ -3284,7 +3284,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx BlastoiseKind ; kind
+	tx ShellfishName ; category
 	db 9 ; Pokedex number
 	db 0
 	db 52 ; level
@@ -3335,7 +3335,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx PsyduckKind ; kind
+	tx DuckName ; category
 	db 54 ; Pokedex number
 	db 0
 	db 15 ; level
@@ -3386,7 +3386,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx PsyduckKind ; kind
+	tx DuckName ; category
 	db 55 ; Pokedex number
 	db 0
 	db 27 ; level
@@ -3437,7 +3437,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx PoliwagKind ; kind
+	tx TadpoleName ; category
 	db 60 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -3488,7 +3488,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx PoliwagKind ; kind
+	tx TadpoleName ; category
 	db 61 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -3539,7 +3539,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx PoliwagKind ; kind
+	tx TadpoleName ; category
 	db 62 ; Pokedex number
 	db 0
 	db 48 ; level
@@ -3590,7 +3590,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx TentacoolKind ; kind
+	tx JellyfishName ; category
 	db 72 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -3641,7 +3641,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx TentacoolKind ; kind
+	tx JellyfishName ; category
 	db 73 ; Pokedex number
 	db 0
 	db 21 ; level
@@ -3692,7 +3692,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx SeelKind ; kind
+	tx SeaLionName ; category
 	db 86 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -3743,7 +3743,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx SeelKind ; kind
+	tx SeaLionName ; category
 	db 87 ; Pokedex number
 	db 0
 	db 42 ; level
@@ -3794,7 +3794,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx ShellderKind ; kind
+	tx BivalveName ; category
 	db 90 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -3845,7 +3845,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx ShellderKind ; kind
+	tx BivalveName ; category
 	db 91 ; Pokedex number
 	db 0
 	db 25 ; level
@@ -3896,7 +3896,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx KrabbyKind ; kind
+	tx RiverCrabName ; category
 	db 98 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -3947,7 +3947,7 @@ KinglerCard: ; 32070 (c:6070)
 	db 3 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx KinglerKind ; kind
+	tx PincerName ; category
 	db 99 ; Pokedex number
 	db 0
 	db 27 ; level
@@ -3998,7 +3998,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 116 ; Pokedex number
 	db 0
 	db 19 ; level
@@ -4049,7 +4049,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 117 ; Pokedex number
 	db 0
 	db 23 ; level
@@ -4100,7 +4100,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx GoldeenKind ; kind
+	tx GoldfishName ; category
 	db 118 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -4151,7 +4151,7 @@ SeakingCard: ; 32174 (c:6174)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx GoldeenKind ; kind
+	tx GoldfishName ; category
 	db 119 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -4202,7 +4202,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx StaryuKind ; kind
+	tx StarshapeName ; category
 	db 120 ; Pokedex number
 	db 0
 	db 15 ; level
@@ -4253,7 +4253,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx StarmieKind ; kind
+	tx MysteriousName ; category
 	db 121 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -4304,7 +4304,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx MagikarpKind ; kind
+	tx FishName ; category
 	db 129 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -4355,7 +4355,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_FIGHTING ; resistance
-	tx GyaradosKind ; kind
+	tx AtrociousName ; category
 	db 130 ; Pokedex number
 	db 0
 	db 41 ; level
@@ -4406,7 +4406,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db 2 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx LaprasKind ; kind
+	tx TransportName ; category
 	db 131 ; Pokedex number
 	db 0
 	db 31 ; level
@@ -4457,7 +4457,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx VaporeonKind ; kind
+	tx BubbleJetName ; category
 	db 134 ; Pokedex number
 	db 0
 	db 29 ; level
@@ -4508,7 +4508,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db NONE ; resistance
-	tx VaporeonKind ; kind
+	tx BubbleJetName ; category
 	db 134 ; Pokedex number
 	db 0
 	db 42 ; level
@@ -4559,7 +4559,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx OmanyteKind ; kind
+	tx SpiralName ; category
 	db 138 ; Pokedex number
 	db 0
 	db 19 ; level
@@ -4610,7 +4610,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx OmanyteKind ; kind
+	tx SpiralName ; category
 	db 139 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -4661,7 +4661,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ArticunoKind ; kind
+	tx FreezeName ; category
 	db 144 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -4712,7 +4712,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ArticunoKind ; kind
+	tx FreezeName ; category
 	db 144 ; Pokedex number
 	db 0
 	db 37 ; level
@@ -4763,7 +4763,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -4814,7 +4814,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 14 ; level
@@ -4865,7 +4865,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 16 ; level
@@ -4916,7 +4916,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 16 ; level
@@ -4967,7 +4967,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db 1 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -5018,7 +5018,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -5069,7 +5069,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 25 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -5120,7 +5120,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 26 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -5171,7 +5171,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 26 ; Pokedex number
 	db 0
 	db 45 ; level
@@ -5222,7 +5222,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx MagnemiteKind ; kind
+	tx MagnetName ; category
 	db 81 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -5273,7 +5273,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx MagnemiteKind ; kind
+	tx MagnetName ; category
 	db 81 ; Pokedex number
 	db 0
 	db 15 ; level
@@ -5324,7 +5324,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx MagnemiteKind ; kind
+	tx MagnetName ; category
 	db 82 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -5375,7 +5375,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx MagnemiteKind ; kind
+	tx MagnetName ; category
 	db 82 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -5426,7 +5426,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx VoltorbKind ; kind
+	tx BallName ; category
 	db 100 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -5477,7 +5477,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx VoltorbKind ; kind
+	tx BallName ; category
 	db 101 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -5528,7 +5528,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx VoltorbKind ; kind
+	tx BallName ; category
 	db 101 ; Pokedex number
 	db 0
 	db 42 ; level
@@ -5579,7 +5579,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx ElectabuzzKind ; kind
+	tx ElectricName ; category
 	db 125 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -5630,7 +5630,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx ElectabuzzKind ; kind
+	tx ElectricName ; category
 	db 125 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -5681,7 +5681,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx JolteonKind ; kind
+	tx LightningName ; category
 	db 135 ; Pokedex number
 	db 0
 	db 24 ; level
@@ -5732,7 +5732,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db NONE ; resistance
-	tx JolteonKind ; kind
+	tx LightningName ; category
 	db 135 ; Pokedex number
 	db 0
 	db 29 ; level
@@ -5783,7 +5783,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ElectabuzzKind ; kind
+	tx ElectricName ; category
 	db 145 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -5834,7 +5834,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db 3 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ElectabuzzKind ; kind
+	tx ElectricName ; category
 	db 145 ; Pokedex number
 	db 0
 	db 64 ; level
@@ -5885,7 +5885,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx ElectabuzzKind ; kind
+	tx ElectricName ; category
 	db 145 ; Pokedex number
 	db 0
 	db 68 ; level
@@ -5936,7 +5936,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 27 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -5987,7 +5987,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx PikachuKind ; kind
+	tx MouseName ; category
 	db 28 ; Pokedex number
 	db 0
 	db 33 ; level
@@ -6038,7 +6038,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db 0 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx DiglettKind ; kind
+	tx MoleName ; category
 	db 50 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -6089,7 +6089,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx DiglettKind ; kind
+	tx MoleName ; category
 	db 51 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -6140,7 +6140,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MankeyKind ; kind
+	tx PigMonkeyName ; category
 	db 56 ; Pokedex number
 	db 0
 	db 7 ; level
@@ -6191,7 +6191,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MankeyKind ; kind
+	tx PigMonkeyName ; category
 	db 57 ; Pokedex number
 	db 0
 	db 35 ; level
@@ -6242,7 +6242,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MachopKindOrSuperpowerName ; kind
+	tx SuperpowerName ; category
 	db 66 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -6293,7 +6293,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MachopKindOrSuperpowerName ; kind
+	tx SuperpowerName ; category
 	db 67 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -6344,7 +6344,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MachopKindOrSuperpowerName ; kind
+	tx SuperpowerName ; category
 	db 68 ; Pokedex number
 	db 0
 	db 67 ; level
@@ -6395,7 +6395,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx GeodudeKind ; kind
+	tx RockName ; category
 	db 74 ; Pokedex number
 	db 0
 	db 16 ; level
@@ -6446,7 +6446,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx GeodudeKind ; kind
+	tx RockName ; category
 	db 75 ; Pokedex number
 	db 0
 	db 29 ; level
@@ -6497,7 +6497,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db 4 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx GolemKind ; kind
+	tx MegatonName ; category
 	db 76 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -6548,7 +6548,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx OnixKind ; kind
+	tx RockSnakeName ; category
 	db 95 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -6599,7 +6599,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx CuboneKind ; kind
+	tx LonelyName ; category
 	db 104 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -6650,7 +6650,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx MarowakKind ; kind
+	tx BonekeeperName ; category
 	db 105 ; Pokedex number
 	db 0
 	db 26 ; level
@@ -6701,7 +6701,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx MarowakKind ; kind
+	tx BonekeeperName ; category
 	db 105 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -6752,7 +6752,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx HitmonleeKind ; kind
+	tx KickingName ; category
 	db 106 ; Pokedex number
 	db 0
 	db 30 ; level
@@ -6803,7 +6803,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx HitmonchanKind ; kind
+	tx PunchingName ; category
 	db 107 ; Pokedex number
 	db 0
 	db 33 ; level
@@ -6854,7 +6854,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx RhyhornKind ; kind
+	tx SpikeName ; category
 	db 111 ; Pokedex number
 	db 0
 	db 18 ; level
@@ -6905,7 +6905,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db 3 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_LIGHTNING ; resistance
-	tx NidoqueenKind ; kind
+	tx DrillName ; category
 	db 112 ; Pokedex number
 	db 0
 	db 48 ; level
@@ -6956,7 +6956,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx BlastoiseKind ; kind
+	tx ShellfishName ; category
 	db 140 ; Pokedex number
 	db 0
 	db 9 ; level
@@ -7007,7 +7007,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db 1 ; retreat cost
 	db WR_GRASS ; weakness
 	db NONE ; resistance
-	tx BlastoiseKind ; kind
+	tx ShellfishName ; category
 	db 141 ; Pokedex number
 	db 0
 	db 30 ; level
@@ -7058,7 +7058,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db 2 ; retreat cost
 	db WR_GRASS ; weakness
 	db WR_FIGHTING ; resistance
-	tx AerodactylKind ; kind
+	tx FossilName ; category
 	db 142 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -7109,7 +7109,7 @@ AbraCard: ; 3302e (c:702e)
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx AbraKind ; kind
+	tx PsiName ; category
 	db 63 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -7160,7 +7160,7 @@ KadabraCard: ; 3306f (c:706f)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx AbraKind ; kind
+	tx PsiName ; category
 	db 64 ; Pokedex number
 	db 0
 	db 38 ; level
@@ -7211,7 +7211,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx AbraKind ; kind
+	tx PsiName ; category
 	db 65 ; Pokedex number
 	db 0
 	db 42 ; level
@@ -7262,7 +7262,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SlowpokeKind ; kind
+	tx DopeyName ; category
 	db 79 ; Pokedex number
 	db 0
 	db 9 ; level
@@ -7313,7 +7313,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SlowpokeKind ; kind
+	tx DopeyName ; category
 	db 79 ; Pokedex number
 	db 0
 	db 18 ; level
@@ -7364,7 +7364,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx SlowbroKind ; kind
+	tx HermitcrabName ; category
 	db 80 ; Pokedex number
 	db 0
 	db 26 ; level
@@ -7415,7 +7415,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db 0 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx GastlyKind ; kind
+	tx GasName ; category
 	db 92 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -7466,7 +7466,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db 0 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx GastlyKind ; kind
+	tx GasName ; category
 	db 92 ; Pokedex number
 	db 0
 	db 17 ; level
@@ -7517,7 +7517,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db 0 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx GastlyKind ; kind
+	tx GasName ; category
 	db 93 ; Pokedex number
 	db 0
 	db 17 ; level
@@ -7539,7 +7539,7 @@ Haunter2Card: ; 33277 (c:7277)
 
 	; move 1
 	energy PSYCHIC, 1 ; energies
-	tx DrowzeeKindOrHypnosisName ; name
+	tx HypnosisName ; name
 	tx InflictSleepDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
@@ -7568,7 +7568,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db 1 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx GastlyKind ; kind
+	tx GasName ; category
 	db 93 ; Pokedex number
 	db 0
 	db 22 ; level
@@ -7619,7 +7619,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db 1 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx GengarKind ; kind
+	tx ShadowName ; category
 	db 94 ; Pokedex number
 	db 0
 	db 38 ; level
@@ -7670,7 +7670,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx DrowzeeKindOrHypnosisName ; kind
+	tx HypnosisName ; category
 	db 96 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -7721,7 +7721,7 @@ HypnoCard: ; 3333a (c:733a)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx DrowzeeKindOrHypnosisName ; kind
+	tx HypnosisName ; category
 	db 97 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -7772,7 +7772,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MrMimeKindOrBarrierName ; kind
+	tx BarrierName ; category
 	db 122 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -7823,7 +7823,7 @@ JynxCard: ; 333bc (c:73bc)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx JynxKind ; kind
+	tx HumanShapeName ; category
 	db 124 ; Pokedex number
 	db 0
 	db 23 ; level
@@ -7859,12 +7859,12 @@ Mewtwo1Card: ; 333fd (c:73fd)
 
 	; move 2
 	energy PSYCHIC, 2 ; energies
-	tx MrMimeKindOrBarrierName ; name
+	tx BarrierName ; name
 	tx BarrierDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw MewtwoMrMimeKindAndBarrierEffectCommands ; effect commands
+	dw MewtwoBarrierEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NULLIFY_OR_WEAKEN_ATTACK + DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
@@ -7874,7 +7874,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db 3 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewtwoKind ; kind
+	tx GeneticName ; category
 	db 150 ; Pokedex number
 	db 0
 	db 53 ; level
@@ -7925,7 +7925,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewtwoKind ; kind
+	tx GeneticName ; category
 	db 150 ; Pokedex number
 	db 0
 	db 60 ; level
@@ -7976,7 +7976,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db 2 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewtwoKind ; kind
+	tx GeneticName ; category
 	db 150 ; Pokedex number
 	db 0
 	db 60 ; level
@@ -8027,7 +8027,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewKind ; kind
+	tx NewSpeciesName ; category
 	db 151 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -8078,7 +8078,7 @@ Mew2Card: ; 33501 (c:7501)
 	db 0 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewKind ; kind
+	tx NewSpeciesName ; category
 	db 151 ; Pokedex number
 	db 0
 	db 15 ; level
@@ -8129,7 +8129,7 @@ Mew3Card: ; 33542 (c:7542)
 	db 1 ; retreat cost
 	db WR_PSYCHIC ; weakness
 	db NONE ; resistance
-	tx MewKind ; kind
+	tx NewSpeciesName ; category
 	db 151 ; Pokedex number
 	db 0
 	db 23 ; level
@@ -8180,7 +8180,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx PidgeyKind ; kind
+	tx TinyBirdName ; category
 	db 16 ; Pokedex number
 	db 0
 	db 8 ; level
@@ -8231,7 +8231,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx PidgeottoKind ; kind
+	tx BirdName ; category
 	db 17 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -8282,7 +8282,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx PidgeottoKind ; kind
+	tx BirdName ; category
 	db 18 ; Pokedex number
 	db 0
 	db 38 ; level
@@ -8333,7 +8333,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx PidgeottoKind ; kind
+	tx BirdName ; category
 	db 18 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -8384,7 +8384,7 @@ RattataCard: ; 33687 (c:7687)
 	db 0 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx RattataKind ; kind
+	tx RatName ; category
 	db 19 ; Pokedex number
 	db 0
 	db 9 ; level
@@ -8435,7 +8435,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx RattataKind ; kind
+	tx RatName ; category
 	db 20 ; Pokedex number
 	db 0
 	db 41 ; level
@@ -8486,7 +8486,7 @@ SpearowCard: ; 33709 (c:7709)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx PidgeyKind ; kind
+	tx TinyBirdName ; category
 	db 21 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -8537,7 +8537,7 @@ FearowCard: ; 3374a (c:774a)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx FearowKind ; kind
+	tx BeakName ; category
 	db 22 ; Pokedex number
 	db 0
 	db 27 ; level
@@ -8588,7 +8588,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx ClefairyKind ; kind
+	tx FairyName ; category
 	db 35 ; Pokedex number
 	db 0
 	db 14 ; level
@@ -8639,7 +8639,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx ClefairyKind ; kind
+	tx FairyName ; category
 	db 36 ; Pokedex number
 	db 0
 	db 34 ; level
@@ -8690,7 +8690,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx JigglypuffKind ; kind
+	tx BalloonName ; category
 	db 39 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -8741,7 +8741,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx JigglypuffKind ; kind
+	tx BalloonName ; category
 	db 39 ; Pokedex number
 	db 0
 	db 13 ; level
@@ -8792,7 +8792,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx JigglypuffKind ; kind
+	tx BalloonName ; category
 	db 39 ; Pokedex number
 	db 0
 	db 14 ; level
@@ -8843,7 +8843,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx JigglypuffKind ; kind
+	tx BalloonName ; category
 	db 40 ; Pokedex number
 	db 0
 	db 36 ; level
@@ -8894,7 +8894,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx MeowthKind ; kind
+	tx ScratchCatName ; category
 	db 52 ; Pokedex number
 	db 0
 	db 14 ; level
@@ -8945,7 +8945,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx MeowthKind ; kind
+	tx ScratchCatName ; category
 	db 52 ; Pokedex number
 	db 0
 	db 15 ; level
@@ -8996,7 +8996,7 @@ PersianCard: ; 33993 (c:7993)
 	db 0 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx PersianKind ; kind
+	tx ClassyCatName ; category
 	db 53 ; Pokedex number
 	db 0
 	db 25 ; level
@@ -9047,7 +9047,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db 1 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx FarfetchdKind ; kind
+	tx WildDuckName ; category
 	db 83 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -9098,7 +9098,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx DoduoKind ; kind
+	tx TwinBirdName ; category
 	db 84 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -9149,7 +9149,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db 0 ; retreat cost
 	db WR_LIGHTNING ; weakness
 	db WR_FIGHTING ; resistance
-	tx DodrioKind ; kind
+	tx TriplebirdName ; category
 	db 85 ; Pokedex number
 	db 0
 	db 28 ; level
@@ -9200,7 +9200,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db 3 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx LickitungKind ; kind
+	tx LickingName ; category
 	db 108 ; Pokedex number
 	db 0
 	db 26 ; level
@@ -9251,7 +9251,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx ExeggcuteKind ; kind
+	tx EggName ; category
 	db 113 ; Pokedex number
 	db 0
 	db 55 ; level
@@ -9302,7 +9302,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db 3 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx KangaskhanKind ; kind
+	tx ParentName ; category
 	db 115 ; Pokedex number
 	db 0
 	db 40 ; level
@@ -9353,7 +9353,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db 2 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx TaurosKind ; kind
+	tx WildBullName ; category
 	db 128 ; Pokedex number
 	db 0
 	db 32 ; level
@@ -9404,7 +9404,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx DittoKind ; kind
+	tx TransformName ; category
 	db 132 ; Pokedex number
 	db 0
 	db 19 ; level
@@ -9455,7 +9455,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx EeveeKind ; kind
+	tx EvolutionName ; category
 	db 133 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -9506,7 +9506,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db 1 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx PorygonKind ; kind
+	tx VirtualName ; category
 	db 137 ; Pokedex number
 	db 0
 	db 12 ; level
@@ -9557,7 +9557,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db 4 ; retreat cost
 	db WR_FIGHTING ; weakness
 	db WR_PSYCHIC ; resistance
-	tx SnorlaxKind ; kind
+	tx SleepingName ; category
 	db 143 ; Pokedex number
 	db 0
 	db 20 ; level
@@ -9608,7 +9608,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db 1 ; retreat cost
 	db NONE ; weakness
 	db WR_PSYCHIC ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 147 ; Pokedex number
 	db 0
 	db 10 ; level
@@ -9659,7 +9659,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_PSYCHIC ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 148 ; Pokedex number
 	db 0
 	db 33 ; level
@@ -9710,7 +9710,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db 2 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 149 ; Pokedex number
 	db 0
 	db 41 ; level
@@ -9761,7 +9761,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db 1 ; retreat cost
 	db NONE ; weakness
 	db WR_FIGHTING ; resistance
-	tx HorseaKind ; kind
+	tx DragonName ; category
 	db 149 ; Pokedex number
 	db 0
 	db 45 ; level

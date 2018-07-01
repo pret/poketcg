@@ -5,7 +5,7 @@
 .SECONDEXPANSION:
 
 OBJS = src/main.o src/gfx.o src/text.o src/audio.o src/wram.o src/hram.o
-EXTRAS = extras/pokemontools
+EXTRAS = tools
 
 $(foreach obj, $(OBJS), \
 	$(eval $(obj:.o=)_dep = $(shell python $(EXTRAS)/scan_includes.py $(obj:.o=.asm))) \

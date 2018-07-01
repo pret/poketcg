@@ -17,7 +17,7 @@ DoubleAttackX30Description: ; 5807b (16:407b)
 	line "damage times the number of heads."
 	done
 
-BeedrillKind: ; 580c0 (16:40c0)
+PoisonBeeName: ; 580c0 (16:40c0)
 	text "Poison Bee"
 	done
 
@@ -39,7 +39,7 @@ WrapName: ; 5813e (16:413e)
 	text "Wrap"
 	done
 
-EkansKind: ; 58144 (16:4144)
+SnakeName: ; 58144 (16:4144)
 	text "Snake"
 	done
 
@@ -71,7 +71,7 @@ PoisonFangName: ; 58277 (16:4277)
 	text "Poison Fang"
 	done
 
-ArbokKind: ; 58284 (16:4284)
+CobraName: ; 58284 (16:4284)
 	text "Cobra"
 	done
 
@@ -106,7 +106,7 @@ NidoranFsCallForFamilyDescription: ; 58352 (16:4352)
 	line "attack if your Bench is full.)"
 	done
 
-NidoranFKind: ; 583ff (16:43ff)
+PoisonPinName: ; 583ff (16:43ff)
 	text "Poison Pin"
 	done
 
@@ -156,7 +156,7 @@ MegaPunchName: ; 58584 (16:4584)
 	text "Mega Punch"
 	done
 
-NidoqueenKind: ; 58590 (16:4590)
+DrillName: ; 58590 (16:4590)
 	text "Drill"
 	done
 
@@ -250,7 +250,7 @@ ZubatsLeechLifeDescription: ; 588b3 (16:48b3)
 	line "than that, remove all of them."
 	done
 
-ZubatKind: ; 58980 (16:4980)
+BatName: ; 58980 (16:4980)
 	text "Bat"
 	done
 
@@ -299,7 +299,7 @@ SproutDescription: ; 58b42 (16:4b42)
 	line "Bench is full.)"
 	done
 
-OddishKind: ; 58be1 (16:4be1)
+WeedName: ; 58be1 (16:4be1)
 	text "Weed"
 	done
 
@@ -357,7 +357,7 @@ PetalDanceDescription: ; 58def (16:4def)
 	line "doing damage)."
 	done
 
-VileplumeKind: ; 58e64 (16:4e64)
+FlowerName: ; 58e64 (16:4e64)
 	text "Flower"
 	done
 
@@ -383,7 +383,7 @@ InflictSleepDescription: ; 58ee9 (16:4ee9)
 	text "The Defending Pokémon is now Asleep."
 	done
 
-ParasKind: ; 58f0f (16:4f0f)
+MushroomName: ; 58f0f (16:4f0f)
 	text "Mushroom"
 	done
 
@@ -420,7 +420,7 @@ VenonatLeechLifeDescription: ; 58ffe (16:4ffe)
 	line "than that, remove all of them."
 	done
 
-VenonatKind: ; 590cf (16:50cf)
+InsectName: ; 590cf (16:50cf)
 	text "Insect"
 	done
 
@@ -458,7 +458,7 @@ VenomPowderDescription: ; 5922c (16:522c)
 	line "Poisoned."
 	done
 
-VenomothKind: ; 59278 (16:5278)
+PoisonmothName: ; 59278 (16:5278)
 	text "Poisonmoth"
 	done
 
@@ -494,7 +494,7 @@ RazorLeafName: ; 59403 (16:5403)
 	text "Razor Leaf"
 	done
 
-WeepinbellKind: ; 5940f (16:540f)
+FlycatcherName: ; 5940f (16:540f)
 	text "Flycatcher"
 	done
 
@@ -554,7 +554,7 @@ GrimersMinimizeDescription: ; 595dc (16:55dc)
 	line "Weakness and Resistance)."
 	done
 
-GrimerKindOrSludgeName: ; 5965e (16:565e)
+SludgeName: ; 5965e (16:565e)
 	text "Sludge"
 	done
 
@@ -589,7 +589,7 @@ ExeggcuteName: ; 597b1 (16:57b1)
 	text "Exeggcute"
 	done
 
-DrowzeeKindOrHypnosisName: ; 597bc (16:57bc)
+HypnosisName: ; 597bc (16:57bc)
 	text "Hypnosis"
 	done
 
@@ -599,7 +599,7 @@ ExeggcutesLeechSeedDescription: ; 597c6 (16:57c6)
 	line "damage counter from Exeggcute."
 	done
 
-ExeggcuteKind: ; 59828 (16:5828)
+EggName: ; 59828 (16:5828)
 	text "Egg"
 	done
 
@@ -633,7 +633,7 @@ BigEggsplosionDescription: ; 598d9 (16:58d9)
 	line "damage times the number of heads."
 	done
 
-ExeggutorKind: ; 5995c (16:595c)
+CoconutName: ; 5995c (16:595c)
 	text "Coconut"
 	done
 
@@ -658,7 +658,7 @@ FoulGasDescription: ; 599df (16:59df)
 	line "it is now Confused."
 	done
 
-KoffingKind: ; 59a3c (16:5a3c)
+PoisonGasName: ; 59a3c (16:5a3c)
 	text "Poison Gas"
 	done
 
@@ -702,7 +702,7 @@ BindName: ; 59bc7 (16:5bc7)
 	text "Bind"
 	done
 
-TangelaKind: ; 59bcd (16:5bcd)
+VineName: ; 59bcd (16:5bcd)
 	text "Vine"
 	done
 
@@ -736,7 +736,7 @@ SwordsDanceDescription: ; 59cc2 (16:5cc2)
 	line "doubled."
 	done
 
-ScytherKind: ; 59d0b (16:5d0b)
+MantisName: ; 59d0b (16:5d0b)
 	text "Mantis"
 	done
 
@@ -758,7 +758,7 @@ GuillotineName: ; 59d87 (16:5d87)
 	text "Guillotine"
 	done
 
-PinsirKind: ; 59d93 (16:5d93)
+StagbeetleName: ; 59d93 (16:5d93)
 	text "Stagbeetle"
 	done
 
@@ -782,7 +782,7 @@ EmberDescription: ; 59e15 (16:5e15)
 	line "attack."
 	done
 
-CharmanderKind: ; 59e63 (16:5e63)
+LizardName: ; 59e63 (16:5e63)
 	text "Lizard"
 	done
 
@@ -807,7 +807,7 @@ CharmeleonsFlamethrowerDescription: ; 59ef4 (16:5ef4)
 	line "attack."
 	done
 
-CharmeleonKind: ; 59f42 (16:5f42)
+FlameName: ; 59f42 (16:5f42)
 	text "Flame"
 	done
 
@@ -859,7 +859,7 @@ ConfuseRayName: ; 5a151 (16:6151)
 	text "Confuse Ray"
 	done
 
-VulpixKind: ; 5a15e (16:615e)
+FoxName: ; 5a15e (16:615e)
 	text "Fox"
 	done
 
@@ -938,7 +938,7 @@ FlareName: ; 5a4e8 (16:64e8)
 	text "Flare"
 	done
 
-GrowlitheKind: ; 5a4ef (16:64ef)
+PuppyName: ; 5a4ef (16:64ef)
 	text "Puppy"
 	done
 
@@ -975,7 +975,7 @@ FlamesOfRageDescription: ; 5a5e8 (16:65e8)
 	line "counter on Arcanine."
 	done
 
-ArcanineKind: ; 5a689 (16:6689)
+LegendaryName: ; 5a689 (16:6689)
 	text "Legendary"
 	done
 
@@ -1017,7 +1017,7 @@ FlameTailName: ; 5a7d6 (16:67d6)
 	text "Flame Tail"
 	done
 
-PonytaKind: ; 5a7e2 (16:67e2)
+FireHorseName: ; 5a7e2 (16:67e2)
 	text "Fire Horse"
 	done
 
@@ -1072,7 +1072,7 @@ FirePunchDescription: ; 5a9bf (16:69bf)
 	line "Magmar in order to use this attack."
 	done
 
-MagmarKind: ; 5aa09 (16:6a09)
+SpitfireName: ; 5aa09 (16:6a09)
 	text "Spitfire"
 	done
 
@@ -1202,7 +1202,7 @@ SquirtlesWithdrawDescription: ; 5af4b (16:6f4b)
 	line "effects of attacks still happen.)"
 	done
 
-SquirtleKind: ; 5afd6 (16:6fd6)
+TinyTurtleName: ; 5afd6 (16:6fd6)
 	text "Tiny Turtle"
 	done
 
@@ -1223,7 +1223,7 @@ WartortlesWithdrawDescription: ; 5b050 (16:7050)
 	line "effects of attacks still happen.)"
 	done
 
-WartortleKind: ; 5b0dc (16:70dc)
+TurtleName: ; 5b0dc (16:70dc)
 	text "Turtle"
 	done
 
@@ -1268,7 +1268,7 @@ HydroPumpDescription: ; 5b273 (16:7273)
 	line "add more than 20 damage in this way."
 	done
 
-BlastoiseKind: ; 5b322 (16:7322)
+ShellfishName: ; 5b322 (16:7322)
 	text "Shellfish"
 	done
 
@@ -1291,7 +1291,7 @@ HeadacheDescription: ; 5b3a2 (16:73a2)
 	line "cards during his or her next turn."
 	done
 
-PsyduckKind: ; 5b3e7 (16:73e7)
+DuckName: ; 5b3e7 (16:73e7)
 	text "Duck"
 	done
 
@@ -1341,7 +1341,7 @@ PoliwagsWaterGunDescription: ; 5b547 (16:7547)
 	line "add more than 20 damage in this way."
 	done
 
-PoliwagKind: ; 5b5f4 (16:75f4)
+TadpoleName: ; 5b5f4 (16:75f4)
 	text "Tadpole"
 	done
 
@@ -1417,7 +1417,7 @@ CowardiceDescription: ; 5b890 (16:7890)
 	line "is Asleep, Confused, or Paralyzed."
 	done
 
-TentacoolKind: ; 5b987 (16:7987)
+JellyfishName: ; 5b987 (16:7987)
 	text "Jellyfish"
 	done
 
@@ -1449,7 +1449,7 @@ HeadbuttName: ; 5ba7d (16:7a7d)
 	text "Headbutt"
 	done
 
-SeelKind: ; 5ba87 (16:7a87)
+SeaLionName: ; 5ba87 (16:7a87)
 	text "Sea Lion"
 	done
 
@@ -1492,7 +1492,7 @@ HideInShellDescription: ; 5bb87 (16:7b87)
 	line "effects of attacks still happen.)"
 	done
 
-ShellderKind: ; 5bc12 (16:7c12)
+BivalveName: ; 5bc12 (16:7c12)
 	text "Bivalve"
 	done
 
@@ -1539,7 +1539,7 @@ KrabbysCallForFamilyDescription: ; 5bd6b (16:7d6b)
 	line "Bench is full.)"
 	done
 
-KrabbyKind: ; 5be0a (16:7e0a)
+RiverCrabName: ; 5be0a (16:7e0a)
 	text "River Crab"
 	done
 
@@ -1566,7 +1566,7 @@ CrabhammerName: ; 5bec3 (16:7ec3)
 	text "Crabhammer"
 	done
 
-KinglerKind: ; 5becf (16:7ecf)
+PincerName: ; 5becf (16:7ecf)
 	text "Pincer"
 	done
 
@@ -1588,6 +1588,6 @@ OpponentAttackMayDoNothingDescription: ; 5bf4b (16:7f4b)
 	line "If tails, that attack does nothing."
 	done
 
-HorseaKind: ; 5bfd7 (16:7fd7)
+DragonName: ; 5bfd7 (16:7fd7)
 	text "Dragon"
 	done

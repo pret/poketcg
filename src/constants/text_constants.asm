@@ -15,38 +15,58 @@ done EQUS "db TX_END"
 	charmap "♀", "%"
 	charmap "”", "\""
 
-; TX_SYMBOL (full-tile symbols loaded into v0Tiles2)
-	charmap "<",     TX_SYMBOL
-	charmap " >",          $00
-	charmap "FIRE>",       $01
-	charmap "GRASS>",      $02
-	charmap "LIGHTNING>",  $03
-	charmap "WATER>",      $04
-	charmap "FIGHTING>",   $05
-	charmap "PSYCHIC>",    $06
-	charmap "COLORLESS>",  $07
-	charmap "POISONED>",   $08
-	charmap "ASLEEP>",     $09
-	charmap "CONFUSED>",   $0a
-	charmap "PARALYZED>",  $0b
-	charmap "PKMN_ICON>",  $0d ; icon displayed along with no. of Pkmn in duel screen
-	charmap "HP>",         $10
-	charmap "Lv>",         $11
-	charmap "E>",          $12
-	charmap "No>",         $13
-	charmap "PLUSPOWER>",  $14
-	charmap "DEFENDER>",   $15
-	charmap "🌕>",          $16 ; HP tile
-	charmap "🌑>",          $17 ; HP tile with damage counter
-	charmap "0>",          $20
-	charmap "1>",          $21
-	charmap "2>",          $22
-	charmap "3>",          $23
-	charmap "4>",          $24
-	charmap "5>",          $25
-	charmap "6>",          $26
-	charmap "7>",          $27
-	charmap "8>",          $28
-	charmap "9>",          $29
-	charmap "+>",          $2b
-	charmap "PRIZE_ICON>", $30 ; icon displayed along with no. of prizes in duel screen
+; TX_SYMBOL (full-tile icons/symbols loaded at the beginning of v0Tiles2)
+; TODO: Use symbols in menus (cursor tile number, tile behind cursor), draw text boxes, WriteByteToBGMap0, etc
+;       If user-defined functions ever become a thing a symbol(*) syntax would probably be preferred over SYM_*
+
+	charmap "<", TX_SYMBOL
+	const_def
+	txsymbol SPACE
+	txsymbol FIRE
+	txsymbol GRASS
+	txsymbol LIGHTNING
+	txsymbol WATER
+	txsymbol FIGHTING
+	txsymbol PSYCHIC
+	txsymbol COLORLESS
+	txsymbol POISONED
+	txsymbol ASLEEP
+	txsymbol CONFUSED
+	txsymbol PARALYZED
+	txsymbol CURSOR_U
+	txsymbol POKEMON
+	txsymbol UNKNOWN_0E
+	txsymbol CURSOR_R
+	txsymbol HP
+	txsymbol Lv
+	txsymbol E
+	txsymbol No
+	txsymbol PLUSPOWER
+	txsymbol DEFENDER
+	txsymbol HP_OK
+	txsymbol HP_NOK
+	txsymbol BOX_TOP_L
+	txsymbol BOX_TOP_R
+	txsymbol BOX_BTM_L
+	txsymbol BOX_BTM_R
+	txsymbol BOX_TOP
+	txsymbol BOX_BOTTOM
+	txsymbol BOX_LEFT
+	txsymbol BOX_RIGHT
+	txsymbol 0
+	txsymbol 1
+	txsymbol 2
+	txsymbol 3
+	txsymbol 4
+	txsymbol 5
+	txsymbol 6
+	txsymbol 7
+	txsymbol 8
+	txsymbol 9
+	txsymbol DOT
+	txsymbol PLUS
+	txsymbol MINUS
+	txsymbol x
+	txsymbol SLASH
+	txsymbol CURSOR_D
+	txsymbol PRIZE

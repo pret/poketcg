@@ -12,7 +12,7 @@ GameLoop: ; 4000 (1:4000)
 	ld a, [sa009]
 	ld [wccf2], a
 	call DisableSRAM
-	ld a, $1
+	ld a, 1
 	ld [wUppercaseFlag], a
 	ei
 	farcall CommentedOut_1a6cc
@@ -37,7 +37,7 @@ GameLoop: ; 4000 (1:4000)
 
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
-	ld a, $1
+	ld a, 1
 	ld [wUppercaseFlag], a
 	ret
 
@@ -76,7 +76,7 @@ ContinueDuel: ; 407a (1:407a)
 	xor a
 	ld [wDuelFinished], a
 	call DuelMainInterface
-	jp StartDuel.begin_turn
+	jp MainDuelLoop.begin_turn
 ; 0x4097
 
 FailedToContinueDuel: ; 4097 (1:4097)
@@ -125,9 +125,10 @@ StartDuel: ; 409f (1:409f)
 	call PlaySong
 	call Func_4b60
 	ret c
+;	fallthrough
 
 ; the loop returns here after every turn switch
-.main_duel_loop ; 40ee (1:40ee)
+MainDuelLoop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call UpdateSubstatusConditions_StartOfTurn
@@ -154,7 +155,7 @@ StartDuel: ; 409f (1:409f)
 
 .next_turn
 	call SwapTurn
-	jr .main_duel_loop
+	jr MainDuelLoop
 
 .practice_duel
 	ld a, [wIsPracticeDuel]
@@ -257,7 +258,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp .main_duel_loop
+	jp MainDuelLoop
 
 .link_duel
 	call Func_0f58
@@ -271,7 +272,7 @@ StartDuel: ; 409f (1:409f)
 	ld a, h
 	ldh [hWhoseTurn], a
 	call Func_4b60
-	jp nc, .main_duel_loop
+	jp nc, MainDuelLoop
 	ret
 ; 0x420b
 
@@ -365,9 +366,8 @@ PrintDuelMenu: ; 4295 (1:4295)
 	ret nz
 	ld a, [wCurrentDuelMenuItem]
 	call SetMenuItem
-;	fallthrough
 
-HandleDuelMenuInputAndShortcuts:
+.handle_input
 	call DoFrame
 	ldh a, [hButtonsHeld]
 	and B_BUTTON
@@ -393,11 +393,11 @@ HandleDuelMenuInputAndShortcuts:
 	jp nz, DuelMenuShortcut_BothActivePokemon
 	ld a, [wcbe7]
 	or a
-	jr nz, HandleDuelMenuInputAndShortcuts
+	jr nz, .handle_input
 	call HandleDuelMenuInput
 	ld a, e
 	ld [wCurrentDuelMenuItem], a
-	jr nc, HandleDuelMenuInputAndShortcuts
+	jr nc, .handle_input
 	ldh a, [hCurrentMenuItem]
 	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
@@ -608,7 +608,7 @@ OpenPlayerHandScreen: ; 4436 (1:4436)
 .handle_input
 	call Func_55f0
 	push af
-	ld a, [wcbdf]
+	ld a, [wSortCardListByID]
 	or a
 	call nz, SortHandCardsByID
 	pop af
@@ -646,7 +646,7 @@ UseEnergyCard: ; 4477 (1:4477)
 	call OpenPlayAreaScreenForSelection ; choose card to play energy card on
 	jp c, DuelMainInterface ; exit if no card was chosen
 .play_energy_set_played
-	ld a, $1
+	ld a, 1
 	ld [wAlreadyPlayedEnergy], a
 .play_energy
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
@@ -1858,22 +1858,22 @@ DrawDuelHUD: ; 5093 (1:5093)
 	push de
 	pop bc
 
-	; print the Pkmn icon along with the no. of play area Pokemon
-	ld a, LOW("<PKMN_ICON>")
+	; print the Pokemon icon along with the no. of play area Pokemon
+	ld a, SYM_POKEMON
 	call WriteByteToBGMap0
 	inc b
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	add LOW("<0>") - 1
+	add SYM_0 - 1
 	call WriteByteToBGMap0
 	inc b
 
 	; print the Prize icon along with the no. of prizes yet to draw
-	ld a, LOW("<PRIZE_ICON>")
+	ld a, SYM_PRIZE
 	call WriteByteToBGMap0
 	inc b
 	call CountPrizes
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 
 	; print the arena Pokemon card name and level text
@@ -1956,11 +1956,11 @@ DrawDuelHUD: ; 5093 (1:5093)
 	call GetTurnDuelistVariable
 	or a
 	jr z, .check_defender
-	ld a, LOW("<PLUSPOWER>")
+	ld a, SYM_PLUSPOWER
 	call WriteByteToBGMap0
 	inc b
 	ld a, [hl] ; number of attached Pluspower
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 	dec b
 .check_defender
@@ -1969,11 +1969,11 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr z, .done
 	inc c
-	ld a, LOW("<DEFENDER>")
+	ld a, SYM_DEFENDER
 	call WriteByteToBGMap0
 	inc b
 	ld a, [hl] ; number of attached Defender
-	add LOW("<0>")
+	add SYM_0
 	call WriteByteToBGMap0
 .done
 	ret
@@ -1996,10 +1996,10 @@ DrawDuelHorizontalSeparator: ; 516f (1:516f)
 
 DuelEAndHPTileData: ; 5188 (1:5188)
 ; x, y, tiles[], 0
-	db 1, 1, LOW("<E>"),  0
-	db 1, 2, LOW("<HP>"), 0
-	db 9, 8, LOW("<E>"),  0
-	db 9, 9, LOW("<HP>"), 0
+	db 1, 1, SYM_E,  0
+	db 1, 2, SYM_HP, 0
+	db 9, 8, SYM_E,  0
+	db 9, 9, SYM_HP, 0
 	db $ff
 ; 0x5199
 
@@ -2221,7 +2221,7 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
 	ld [hl], a
-	ld [wcbdf], a
+	ld [wSortCardListByID], a
 	ld hl, wcbd8
 	ld [hli], a
 	ld [hl], a
@@ -2229,13 +2229,13 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 	ld a, START
 	ld [wcbd6], a
 	ld hl, wCardListInfoBoxText
-	ld [hl], LOW(PleaseSelectHandText_)
+	ldtx [hl], PleaseSelectHandText, & $ff
 	inc hl
-	ld [hl], HIGH(PleaseSelectHandText_)
+	ldtx [hl], PleaseSelectHandText, >> 8
 	inc hl ; wCardListHeaderText
-	ld [hl], LOW(DuelistHandText_)
+	ldtx [hl], DuelistHandText, & $ff
 	inc hl
-	ld [hl], HIGH(DuelistHandText_)
+	ldtx [hl], DuelistHandText, >> 8
 .draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -2300,7 +2300,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	or a
 	ret
 .asm_563b
-	ld a, [wcbdf]
+	ld a, [wSortCardListByID]
 	or a
 	jr nz, .asm_560b
 	call SortCardsInDuelTempListByID
@@ -2308,8 +2308,8 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hli], a
 	ld [hl], a
-	ld a, $01
-	ld [wcbdf], a
+	ld a, 1
+	ld [wSortCardListByID], a
 	call EraseCursor
 	jr .asm_55f6
 .asm_5654
@@ -2386,7 +2386,7 @@ Func_56a0: ; 56a0 (1:56a0)
 CardListParameters: ; 5710 (1;5710)
 	db 1, 3 ; cursor x, cursor y
 	db 4 ; item x
-	db $0e
+	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
 	db 5 ; number of items selectable without scrolling
 	db $0f ; cursor tile number
 	db $00 ; tile behind cursor
@@ -3190,7 +3190,7 @@ CheckPrintPoisoned: ; 63bb (1:63bb)
 	and POISONED
 	jr z, .print
 .poison
-	ld a, LOW("<POISONED>")
+	ld a, SYM_POISONED
 .print
 	call WriteByteToBGMap0
 	pop af
@@ -3224,8 +3224,8 @@ CheckPrintCnfSlpPrz: ; 63ce (1:63ce)
 	ret
 
 .status_symbols
-	; NO_STATUS,   CONFUSED,          ASLEEP,          PARALYZED
-	db LOW("< >"), LOW("<CONFUSED>"), LOW("<ASLEEP>"), LOW("<PARALYZED>")
+	;  NO_STATUS, CONFUSED,     ASLEEP,     PARALYZED
+	db SYM_SPACE, SYM_CONFUSED, SYM_ASLEEP, SYM_PARALYZED
 ; 0x63e6
 
 ; print the symbols of the attached energies of a turn holder's play area card
@@ -3246,7 +3246,7 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	jr nz, .empty_loop
 	pop hl
 	ld de, wAttachedEnergies
-	lb bc, LOW("<FIRE>"), NUM_TYPES - 1
+	lb bc, SYM_FIRE, NUM_TYPES - 1
 .next_color
 	ld a, [de] ; energy count of current color
 	inc de
@@ -3264,7 +3264,7 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ld a, [wTotalAttachedEnergies]
 	cp 9
 	jr c, .place_tiles
-	ld a, LOW("<+>")
+	ld a, SYM_PLUS
 	ld [wDefaultText + 7], a
 .place_tiles
 	pop bc
@@ -3280,14 +3280,14 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 ; input d, e: max. HP, current HP
 DrawHPBar: ; 6614 (1:6614)
 	ld a, MAX_HP
-	ld c, LOW("< >")
+	ld c, SYM_SPACE
 	call .fill_hp_bar ; empty bar
 	ld a, d
-	ld c, LOW("<🌕>")
+	ld c, SYM_HP_OK
 	call .fill_hp_bar ; fill (max. HP) with HP counters
 	ld a, d
 	sub e
-	ld c, LOW("<🌑>")
+	ld c, SYM_HP_NOK
 	; fill (max. HP - current HP) with damaged HP counters
 .fill_hp_bar
 	or a
@@ -3428,7 +3428,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
 	call $68e4
-	ld a, $1
+	ld a, 1
 	ld [wAlreadyPlayedEnergy], a
 	call DrawDuelMainScene
 	ret
@@ -3762,7 +3762,7 @@ _TossCoin: ; 71ad (1:71ad)
 	INCROM $72ff, $7354
 
 BuildVersion: ; 7354 (1:7354)
-	db "VER 12/20 09:36",TX_END
+	db "VER 12/20 09:36", TX_END
 
 	INCROM $7364, $7571
 
@@ -3770,8 +3770,8 @@ Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
-        farcall $6, $591f
-        ret
+	farcall $6, $591f
+	ret
 ; 0x757b
 
 	INCROM $757b, $758f

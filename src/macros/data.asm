@@ -84,3 +84,8 @@ ENDM
 tx: MACRO
 	dw \1_
 ENDM
+
+txsymbol: MACRO
+	const SYM_\1
+	charmap "\1>", const_value + -1
+ENDM
