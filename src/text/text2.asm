@@ -13,7 +13,7 @@ ConfusionCheckDamageText: ; 3807c (e:407c)
 	line "If Tails, damage to yourself!"
 	done
 
-Text00f8: ; 380ac (e:40ac)
+ConfusionCheckRetreatText: ; 380ac (e:40ac)
 	text "Confusion check!"
 	line "If Tails, unable to Retreat."
 	done

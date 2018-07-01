@@ -386,12 +386,12 @@ Text0059: ; 369dc (d:69dc)
 	line "    Hand        Examine     Back"
 	done
 
-RetreatedPokemonText: ; 36a19 (d:6a19)
+RetreatedToTheBenchText: ; 36a19 (d:6a19)
 	text TX_RAM2, ""
 	line "Retreated to the Bench."
 	done
 
-RetreatFailedText: ; 36a34 (d:6a34)
+RetreatWasUnsuccessfulText: ; 36a34 (d:6a34)
 	text TX_RAM2, "'s"
 	line "Retreat was unsuccessful."
 	done
@@ -401,7 +401,7 @@ WillUseThePokemonPowerText: ; 36a53 (d:6a53)
 	line "Pokémon Power ", TX_RAM2, "."
 	done
 
-FinishedTurnNoAttackText: ; 36a74 (d:6a74)
+FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	text "Finished the Turn"
 	line "without Attacking."
 	done

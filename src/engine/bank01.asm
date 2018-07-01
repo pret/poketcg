@@ -1743,7 +1743,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	ld [wcac2], a
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
-	ld a, 60
+	ld a, DECK_SIZE
 	sub [hl]
 	cp $02
 	jr c, .asm_4f83
@@ -3032,7 +3032,7 @@ JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 Func_5c33: ; 5c33 (1:5c33
 	INCROM $5c33, $5e5f
 
-; display the card details of the card index in a
+; display the card details of the card index in wLoadedCard1
 ; print the text at hl
 _DisplayCardDetailScreen: ; 5e5f (1:5e5f)
 	push hl
@@ -3460,10 +3460,10 @@ DiscardRetreatCostCards: ; 6558 (1:6558)
 AttemptRetreat: ; 657a (1:657a)
 	call DiscardRetreatCostCards
 	ldh a, [hTemp_ffa0]
-	and $0f
-	cp $01
+	and CNF_SLP_PRZ
+	cp CONFUSED
 	jr nz, .success
-	ld de, $f8
+	ldtx de, ConfusionCheckRetreatText
 	call TossCoin
 	jr c, .success
 	ld a, $01
@@ -3652,46 +3652,46 @@ Func_68fa: ; 68fa (1:68fa)
 
 AIActionTable: ; 695e (1:695e)
 	dw DuelTransmissionError
-	dw AIPlayBenchPokemon
-	dw AIEvolvePokemon
-	dw AIUseEnergyCard
-	dw AITryRetreat
-	dw AIFinishedTurnNoAttack
-	dw AIPlayNonPokemonCard
-	dw AITryExecuteEffect
-	dw AIAttack
-	dw AIAttackEffect
-	dw AIAttackDamage
-	dw AIDrawCard
-	dw AIPokemonPower
+	dw AIAction_PlayBenchPokemon
+	dw AIAction_EvolvePokemon
+	dw AIAction_UseEnergyCard
+	dw AIAction_TryRetreat
+	dw AIAction_FinishedTurnNoAttack
+	dw AIAction_PlayNonPokemonCard
+	dw AIAction_TryExecuteEffect
+	dw AIAction_Attack
+	dw AIAction_AttackEffect
+	dw AIAction_AttackDamage
+	dw AIAction_DrawCard
+	dw AIAction_PokemonPower
 	dw AIAction_6b07
-	dw AIForceOpponentSwitchActive
-	dw AINoAction
-	dw AINoAction
+	dw AIAction_ForceOpponentSwitchActive
+	dw AIAction_NoAction
+	dw AIAction_NoAction
 	dw AIAction_TossCoinATimes
 	dw AIAction_6b30
-	dw AINoAction
+	dw AIAction_NoAction
 	dw AIAction_6b3e
 	dw AIAction_6b15
 	dw AIAction_DrawDuelMainScene
 
-AIDrawCard: ; 698c (1:698c)
+AIAction_DrawCard: ; 698c (1:698c)
 	call DrawCardFromDeck
 	call nc, AddCardToHand
 	ret
 ; 0x6993
 
-AIFinishedTurnNoAttack: ; 6993 (1:6993)
+AIAction_FinishedTurnNoAttack: ; 6993 (1:6993)
 	call DrawDuelMainScene
 	call Func_717a
-	ldtx hl, FinishedTurnNoAttackText
+	ldtx hl, FinishedTurnWithoutAttackingText
 	call DrawWideTextBox_WaitForInput
 	ld a, 1
 	ld [wAITurnEnded], a
 	ret
 ; 0x69a5
 
-AIUseEnergyCard: ; 69a5 (1:69a5)
+AIAction_UseEnergyCard: ; 69a5 (1:69a5)
 	ldh a, [hTempPlayAreaLocationOffset_ffa1]
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ld e, a
@@ -3708,7 +3708,7 @@ AIUseEnergyCard: ; 69a5 (1:69a5)
 	ret
 ; 0x69c5
 
-AIEvolvePokemon: ; 69c5 (1:69c5)
+AIAction_EvolvePokemon: ; 69c5 (1:69c5)
 	ldh a, [hTempPlayAreaLocationOffset_ffa1]
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	ldh a, [hTemp_ffa0]
@@ -3722,7 +3722,7 @@ AIEvolvePokemon: ; 69c5 (1:69c5)
 	ret
 ; 0x69e0
 
-AIPlayBenchPokemon: ; 69e0 (1:69e0)
+AIAction_PlayBenchPokemon: ; 69e0 (1:69e0)
 	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
 	call PutHandPokemonCardInPlayArea
@@ -3738,16 +3738,16 @@ AIPlayBenchPokemon: ; 69e0 (1:69e0)
 	ret
 ; 0x69ff
 
-AITryRetreat: ; 69ff (1:69ff)
+AIAction_TryRetreat: ; 69ff (1:69ff)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
 	call AttemptRetreat
-	ldtx hl, RetreatFailedText
+	ldtx hl, RetreatWasUnsuccessfulText
 	jr c, .failed
 	xor a
 	ld [wcac2], a
-	ldtx hl, RetreatedPokemonText
+	ldtx hl, RetreatedToTheBenchText
 .failed
 	push hl
 	call DrawDuelMainScene
@@ -3760,7 +3760,7 @@ AITryRetreat: ; 69ff (1:69ff)
 	ret
 ; 0x6a23
 
-AIPlayNonPokemonCard: ; 6a23 (1:6a23)
+AIAction_PlayNonPokemonCard: ; 6a23 (1:6a23)
 	call LoadNonPokemonCardEffectCommands
 	call Func_666a
 	call Func_6673
@@ -3771,7 +3771,7 @@ AIPlayNonPokemonCard: ; 6a23 (1:6a23)
 ; 0x6a35
 
 ; for trainer card effects
-AITryExecuteEffect: ; 6a35 (1:6a35)
+AIAction_TryExecuteEffect: ; 6a35 (1:6a35)
 	ld a, $06
 	call TryExecuteEffectCommandFunction
 	ld a, $03
@@ -3786,8 +3786,8 @@ AITryExecuteEffect: ; 6a35 (1:6a35)
 
 ; determine if an attack is successful
 ; if no, end the turn early
-; if yes, AIAttackEffect and AIAttackDamage can be called next
-AIAttack: ; 6a4e (1:6a4e)
+; if yes, AIAction_AttackEffect and AIAction_AttackDamage can be called next
+AIAction_Attack: ; 6a4e (1:6a4e)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ldh a, [hTemp_ffa0]
@@ -3800,8 +3800,8 @@ AIAttack: ; 6a4e (1:6a4e)
 	jr c, .has_status_effect
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $0f
-	cp $01
+	and CNF_SLP_PRZ
+	cp CONFUSED
 	jr z, .has_status_effect
 	call Func_0f58
 	ret
@@ -3819,7 +3819,7 @@ AIAttack: ; 6a4e (1:6a4e)
 	ret
 ; 0x6a8c
 
-AIAttackEffect: ; 6a8c (1:6a8c)
+AIAction_AttackEffect: ; 6a8c (1:6a8c)
 	ld a, $06
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
@@ -3839,14 +3839,14 @@ AIAttackEffect: ; 6a8c (1:6a8c)
 	ret
 ; 0x6ab1
 
-AIAttackDamage: ; 6ab1 (1:6ab1)
+AIAction_AttackDamage: ; 6ab1 (1:6ab1)
 	call Func_179a
 	ld a, 1
 	ld [wAITurnEnded], a
 	ret
 ; 0x6aba
 
-AIForceOpponentSwitchActive: ; 6aba (1:6aba)
+AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
@@ -3862,7 +3862,7 @@ AIForceOpponentSwitchActive: ; 6aba (1:6aba)
 	ret
 ; 0x6ad9
 
-AIPokemonPower: ; 6ad9 (1:6ad9)
+AIAction_PokemonPower: ; 6ad9 (1:6ad9)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ld e, $00
@@ -3930,8 +3930,8 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $0f
-	cp $01
+	and CNF_SLP_PRZ
+	cp CONFUSED
 	jr z, .asm_6b56
 	call Func_1b90
 	call .asm_6b56
@@ -3956,7 +3956,7 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	ret
 ; 0x6b7d
 
-AINoAction: ; 6b7d (1:6b7d)
+AIAction_NoAction: ; 6b7d (1:6b7d)
 	ret
 ; 0x6b7e
 

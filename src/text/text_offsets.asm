@@ -91,10 +91,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransmitingDataText                      ; 0x0057
 	textpointer Text0058                                 ; 0x0058
 	textpointer Text0059                                 ; 0x0059
-	textpointer RetreatedPokemonText                     ; 0x005a
-	textpointer RetreatFailedText                        ; 0x005b
+	textpointer RetreatedToTheBenchText                  ; 0x005a
+	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
-	textpointer FinishedTurnNoAttackText                 ; 0x005d
+	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
 	textpointer Text005e                                 ; 0x005e
 	textpointer Text005f                                 ; 0x005f
 	textpointer Text0060                                 ; 0x0060
@@ -249,7 +249,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer AcidCheckText                            ; 0x00f5
 	textpointer TransparencyCheckText                    ; 0x00f6
 	textpointer ConfusionCheckDamageText                 ; 0x00f7
-	textpointer Text00f8                                 ; 0x00f8
+	textpointer ConfusionCheckRetreatText                ; 0x00f8
 	textpointer Text00f9                                 ; 0x00f9
 	textpointer Text00fa                                 ; 0x00fa
 	textpointer Text00fb                                 ; 0x00fb
