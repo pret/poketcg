@@ -841,7 +841,9 @@ CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
 
-Func_05c2: ; 5c2 (0:5c2)
+; converts two one-digit numbers provided in a to text (ascii) format,
+; writes them to [wcaa0] and [wcaa0 + 1], and to the BGMap0 address at bc
+WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 	push hl
 	push bc
 	push de
@@ -852,7 +854,7 @@ Func_05c2: ; 5c2 (0:5c2)
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
-	ld b, $02
+	ld b, 2
 	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
@@ -860,7 +862,9 @@ Func_05c2: ; 5c2 (0:5c2)
 	ret
 ; 0x5db
 
-Func_05db: ; 5db (0:5db)
+; converts a one-digit number provided in the lower nybble of a to text
+; (ascii) format, and writes it to [wcaa0] and to the BGMap0 address at bc
+WriteOneDigitNumber: ; 05db (0:05db)
 	push hl
 	push bc
 	push de
@@ -871,7 +875,7 @@ Func_05db: ; 5db (0:5db)
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
-	ld b, $01
+	ld b, 1
 	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
@@ -879,7 +883,9 @@ Func_05db: ; 5db (0:5db)
 	ret
 ; 0x5f4
 
-Func_05f4: ; 5f4 (0:5f4)
+; converts four one-digit numbers provided in h and l to text (ascii) format,
+; writes them to [wcaa0] through [wcaa0 + 3], and to the BGMap0 address at bc
+WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	push de
@@ -895,7 +901,7 @@ Func_05f4: ; 5f4 (0:5f4)
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
-	ld b, $04
+	ld b, 4
 	call JPHblankCopyDataHLtoDE
 	pop de
 	pop bc
@@ -906,14 +912,14 @@ Func_05f4: ; 5f4 (0:5f4)
 ; given two one-digit numbers in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
 ; numbers above 9 are converted to VWF tiles.
-WriteNumbersInTextFormat: ; 614 (0:614)
+WriteNumbersInTextFormat: ; 0614 (0:0614)
 	push af
 	swap a
 	call WriteNumberInTextFormat
 	pop af
 ;	fallthrough
 
-; given a one-digit number in the (bottom nybble) of register a,
+; given a one-digit number in the (lower nybble) of register a,
 ; write it in text (ascii) format to hl.
 ; numbers above 9 are converted to VWF tiles.
 WriteNumberInTextFormat:
@@ -927,7 +933,46 @@ WriteNumberInTextFormat:
 	ret
 ; 0x627
 
-	INCROM $0627, $0663
+; converts the one-byte number at a to text (ascii) format,
+; and writes it to [wcaa0] and the BGMap0 address at bc
+WriteOneByteNumber: ; 0627 (0:0627)
+	push bc
+	push hl
+	ld l, a
+	ld h, $00
+	ld de, wcaa0
+	push de
+	push bc
+	ld bc, -100
+	call TwoByteNumberToText.get_digit
+	ld bc, -10
+	call TwoByteNumberToText.get_digit
+	ld bc, -1
+	call TwoByteNumberToText.get_digit
+	pop bc
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, 3
+	call JPHblankCopyDataHLtoDE
+	pop hl
+	pop bc
+	ret
+; 0x650
+
+; converts the two-byte number at hl to text (ascii) format,
+; and writes it to [wcaa0] and the BGMap0 address at bc
+WriteTwoByteNumber: ; 0650 (0:0650)
+	push bc
+	ld de, wcaa0
+	push de
+	call TwoByteNumberToText
+	call BCCoordToBGMap0Address
+	pop hl
+	ld b, 5
+	call JPHblankCopyDataHLtoDE
+	pop bc
+	ret
+; 0x663
 
 ; convert the number at hl to text (ascii) format and write it to de
 TwoByteNumberToText: ; 0663 (0:0663)
@@ -1043,7 +1088,7 @@ WriteByteToBGMap0: ; 06c3 (0:06c3)
 	ld [hl], a
 	call BCCoordToBGMap0Address
 	pop hl
-	ld b, $1
+	ld b, 1
 	call HblankCopyDataHLtoDE
 	pop bc
 	pop de
@@ -2086,7 +2131,67 @@ Func_0c53: ; 0c53 (0:0c53)
 	ret
 ; 0xc5f
 
-	INCROM $0c5f, $0c91
+; returns a /= 10
+; returns carry if a % 10 >= 5
+Func_0c5f: ; 0c5f (0:0c5f)
+	push de
+	ld e, -1
+.asm_c62
+	inc e
+	sub 10
+	jr nc, .asm_c62
+	add 5
+	ld a, e
+	pop de
+	ret
+; 0xc6c
+
+; Save a pointer to a list, given at de, to wListPointer
+SetListPointer: ; 0c6c (0:0c6c)
+	push hl
+	ld hl, wListPointer
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	pop hl
+	ret
+; 0xc75
+
+; Return the current element of the list at wListPointer,
+; and advance the list to the next element
+GetNextElementOfList: ; 0c75 (0:0c75)
+	push hl
+	push de
+	ld hl, wListPointer
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld a, [de]
+	inc de
+;	fallthrough
+
+SetListToNextPosition: ; 0c7f (0:0c7f)
+	ld [hl], d
+	dec hl
+	ld [hl], e
+	pop de
+	pop hl
+	ret
+; 0xc85
+
+; Set the current element of the list at wListPointer to a,
+; and advance the list to the next element
+SetNextElementOfList: ; 0c85 (0:0c85)
+	push hl
+	push de
+	ld hl, wListPointer
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld [de], a
+	inc de
+	jr SetListToNextPosition
+; 0xc91
 
 ; called at roughly 240Hz by TimerHandler
 SerialTimerHandler: ; 0c91 (0:0c91)

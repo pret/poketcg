@@ -512,7 +512,12 @@ wBackgroundPalettesCGB:: ; caf0
 wObjectPalettesCGB:: ; cb30
 	ds 8 palettes
 
-	ds $4
+	ds $2
+
+; stores a pointer to a temporary list of elements (e.g. pointer to wDuelTempList)
+; to be read or written sequentially
+wListPointer:: ; cb72
+	ds $2
 
 SECTION "WRAM Serial Transfer", WRAM0
 
