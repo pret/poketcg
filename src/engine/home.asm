@@ -3017,7 +3017,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 ; 0x10e8
 
 ; add a card to the top of the turn holder's deck
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 ReturnCardToDeck: ; 10e8 (0:10e8)
 	push hl
 	push af
@@ -3038,7 +3038,7 @@ ReturnCardToDeck: ; 10e8 (0:10e8)
 
 ; search a card in the turn holder's deck, extract it, and set its location to
 ; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 	push af
 	push hl
@@ -3075,7 +3075,7 @@ SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 ; 0x1123
 
 ; adds a card to the turn holder's hand and increments the number of cards in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 AddCardToHand: ; 1123 (0:1123)
 	push af
 	push hl
@@ -3101,7 +3101,7 @@ AddCardToHand: ; 1123 (0:1123)
 ; 0x1139
 
 ; removes a card from the turn holder's hand and decrements the number of cards in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 RemoveCardFromHand: ; 1139 (0:1139)
 	push af
 	push hl
@@ -3140,7 +3140,7 @@ RemoveCardFromHand: ; 1139 (0:1139)
 ; 0x1160
 
 ; moves a card to the turn holder's discard pile, as long as it is in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 MoveHandCardToDiscardPile: ; 1160 (0:1160)
 	call GetTurnDuelistVariable
 	ld a, [hl]
@@ -3173,7 +3173,7 @@ PutCardInDiscardPile: ; 116a (0:116a)
 
 ; search a card in the turn holder's discard pile, extract it, and set its location to
 ; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 MoveDiscardPileCardToHand: ; 1182 (0:1182)
 	push hl
 	push de

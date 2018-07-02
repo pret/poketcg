@@ -1072,7 +1072,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld d, $00
 	ld hl, wDuelTempList
 	add hl, de
-	ld d, [hl] ; card index within the deck (0 to 59)
+	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
 	call CopyMoveDataAndDamage_FromDeckIndex
@@ -1288,7 +1288,7 @@ CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
 	ld d, $0
 	ld hl, wDuelTempList
 	add hl, de
-	ld d, [hl] ; card index within the deck (0 to 59)
+	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
 	call _CheckIfEnoughEnergiesToMove
@@ -1299,7 +1299,7 @@ CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
 
 ; check if a pokemon card has enough energy attached to it in order to use a move
 ; input:
-;   d = card index within the deck (0 to 59)
+;   d = deck index of card (0 to 59)
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
