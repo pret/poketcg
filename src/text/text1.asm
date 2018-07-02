@@ -339,7 +339,7 @@ DamageToSelfDueToConfusionText: ; 3686c (d:686c)
 	text "20 damage to Self due to Confusion."
 	done
 
-Text0050: ; 36891 (d:6891)
+ChooseEnergyCardToDiscardText: ; 36891 (d:6891)
 	text "Choose the Energy card"
 	line "you wish to discard."
 	done
@@ -891,7 +891,7 @@ Text00be: ; 37715 (d:7715)
 	line "in your opponent's Play Area."
 	done
 
-Text00bf: ; 37758 (d:7758)
+EnergyCardsRequiredToRetreatText: ; 37758 (d:7758)
 	text TX_RAM3, " Energy cards"
 	line "are required to Retreat."
 	done

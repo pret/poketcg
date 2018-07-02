@@ -2644,7 +2644,64 @@ Func_0ed5: ; 0ed5 (0:0ed5)
 	ret
 ; 0xef1
 
-	INCROM $0ef1, $0f35
+Func_0ef1: ; 0ef1 (0:0ef1)
+	ld de, wcb79
+	ld hl, sp+$fe
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	inc de
+	pop hl
+	push hl
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	or a
+	ret
+; 0xf05
+
+Func_0f05: ; 0f05 (0:0f05)
+	push hl
+	ld hl, wcb7b
+	ld a, [hli]
+	or [hl]
+	pop hl
+	ret z
+	ld hl, wcb79
+	ld a, [hli]
+	ld h, a
+	ld l, a
+	ld sp, hl
+	ld hl, wcb7b
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push hl
+	scf
+	ret
+; 0xf1d
+
+Func_0f1d: ; 0f1d (0:0f1d)
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_f27
+	call Func_0e32
+	ret nc
+.asm_f27
+	ld a, $01
+	call BankswitchHome
+	ld hl, wcbf7
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld sp, hl
+	scf
+	ret
+; 0xf35
 
 DuelTransmissionError: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
@@ -7173,8 +7230,8 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 	db 10, 17 ; corsor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
-	db $2f ; cursor tile number
-	db $1d ; tile behind cursor
+	db SYM_CURSOR_D ; cursor tile number
+	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
@@ -7206,8 +7263,8 @@ WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
 	db 18, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
-	db $2f ; cursor tile number
-	db $1d ; tile behind cursor
+	db SYM_CURSOR_D ; cursor tile number
+	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)

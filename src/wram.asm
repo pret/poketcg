@@ -536,7 +536,14 @@ wSerialCounter2:: ; cb77
 wSerialTimeoutCounter:: ; cb78
 	ds $1
 
-	ds $4
+wcb79:: ; cb79
+	ds $1
+
+wcb7a:: ; cb7a
+	ds $1
+
+wcb7b:: ; cb7b
+	ds $2
 
 wSerialSendSave:: ; cb7d
 	ds $1
@@ -595,9 +602,13 @@ wcbc9:: ; cbc9
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
-	ds $2
+wEnergyCardsRequiredToRetreat:: ; cbcc
+	ds $1
 
-; used in CheckIfEnoughEnergies for the calculation
+wcbcd:: ; cbcd
+	ds $1
+
+; used in CheckIfEnoughEnergiesToMove for the calculation
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
@@ -679,12 +690,21 @@ wcbe9:: ; cbe9
 wcbed:: ; cbed
 	ds $8
 
-	ds $4
+	ds $2
+
+wcbf7:: ; cbf7
+	ds $2
 
 wcbf9:: ; cbf9
 	ds $1
 
-	ds $4
+wcbfa:: ; cbfa
+	ds $1
+
+wcbfb:: ; cbfb
+	ds $1
+
+	ds $2
 
 ; during a practice duel, identifies an entry of PracticeDuelActionTable
 wPracticeDuelAction:: ; cbfe
@@ -731,7 +751,7 @@ wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
-wcc0c:: ; cc0c
+wGotHeadsFromConfusionCheckDuringRetreat:: ; cc0c
 	ds $1
 
 ; DUELIST_TYPE_* of the turn holder

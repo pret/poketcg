@@ -81,7 +81,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text004d                                 ; 0x004d
 	textpointer Text004e                                 ; 0x004e
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
-	textpointer Text0050                                 ; 0x0050
+	textpointer ChooseEnergyCardToDiscardText                                 ; 0x0050
 	textpointer Text0051                                 ; 0x0051
 	textpointer Text0052                                 ; 0x0052
 	textpointer YouPlayFirstText                         ; 0x0053
@@ -192,7 +192,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00bc                                 ; 0x00bc
 	textpointer Text00bd                                 ; 0x00bd
 	textpointer Text00be                                 ; 0x00be
-	textpointer Text00bf                                 ; 0x00bf
+	textpointer EnergyCardsRequiredToRetreatText                                 ; 0x00bf
 	textpointer NotEnoughEnergyCardsText                 ; 0x00c0
 	textpointer Text00c1                                 ; 0x00c1
 	textpointer Text00c2                                 ; 0x00c2
