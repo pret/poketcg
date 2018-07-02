@@ -561,6 +561,12 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	jp PrintDuelMenu
 
 .not_confused
+	; note that the energy cards are discarded (DiscardRetreatCostCards), then returned
+	; (ReturnRetreatCostCardsToArena), then discarded again for good (AttemptRetreat).
+	; It's done this way so that the retreating Pokemon is listed with its energies updated
+	; when the Play Area screen is shown to select the Pokemon to switch to. The reason why
+	; AttemptRetreat is responsible for discarding the energy cards is because, if the
+	; Pokemon is confused, it may not be able to retreat, so they cannot be discarded earlier.
 	call CheckAbleToRetreat
 	jr c, .unable_to_retreat
 	call Func_4611
@@ -572,7 +578,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld [wBenchSelectedPokemon], a
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	push af
-	call $6564
+	call ReturnRetreatCostCardsToArena
 	pop af
 	jp c, DuelMainInterface
 	ld a, $04
@@ -3637,10 +3643,26 @@ DiscardRetreatCostCards: ; 6558 (1:6558)
 	jr .discard_loop
 ; 0x6564
 
-	INCROM $6564, $657a
+; moves the discard pile cards that were loaded to hTempRetreatCostCards back to the active Pokemon.
+; this exists because they will be discarded again during the call to AttemptRetreat, so
+; it prevents the energy cards from being discarded twice.
+ReturnRetreatCostCardsToArena: ; 6564 (1:6564)
+	ld hl, hTempRetreatCostCards
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	push hl
+	call MoveDiscardPileCardToHand
+	call AddCardToHand
+	ld e, PLAY_AREA_ARENA
+	call PutHandCardInPlayArea
+	pop hl
+	jr .loop
+; 0x657a
 
-; discard retreat cost energy cards and attempt retreat
-; return carry if unable to retreat this turn due to unsuccesful confusion check
+; discard retreat cost energy cards and attempt retreat.
+; return carry if unable to retreat this turn due to unsuccessful confusion check
 AttemptRetreat: ; 657a (1:657a)
 	call DiscardRetreatCostCards
 	ldh a, [hTemp_ffa0]

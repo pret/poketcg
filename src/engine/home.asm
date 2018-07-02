@@ -20,7 +20,7 @@ SECTION "rst38", ROM0
 SECTION "vblank", ROM0
 	jp VBlankHandler
 SECTION "lcdc", ROM0
-	call wLCDCFunctiontrampoline
+	call wLCDCFunctionTrampoline
 	reti
 SECTION "timer", ROM0
 	jp TimerHandler
@@ -339,7 +339,7 @@ SetupLCD: ; 030b (0:030b)
 	xor a
 	ld [wReentrancyFlag], a
 	ld a, $c3            ; $c3 = jp nn
-	ld [wLCDCFunctiontrampoline], a
+	ld [wLCDCFunctionTrampoline], a
 	ld [wVBlankFunctionTrampoline], a
 	ld hl, wVBlankFunctionTrampoline + 1
 	ld [hl], LOW(NopF)   ;
@@ -3036,7 +3036,8 @@ ReturnCardToDeck: ; 10e8 (0:10e8)
 	ret
 ; 0x10fc
 
-; search a card in the turn holder's deck, extract it, and add it to the hand
+; search a card in the turn holder's deck, extract it, and set its location to
+; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
 ; the card is identified by register a, which contains the card number within the deck (0-59)
 SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 	push af
@@ -3170,7 +3171,8 @@ PutCardInDiscardPile: ; 116a (0:116a)
 	ret
 ; 0x1182
 
-; search a card in the turn holder's discard pile, extract it, and add it to the hand
+; search a card in the turn holder's discard pile, extract it, and set its location to
+; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
 ; the card is identified by register a, which contains the card number within the deck (0-59)
 MoveDiscardPileCardToHand: ; 1182 (0:1182)
 	push hl

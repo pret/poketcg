@@ -461,7 +461,7 @@ wCounter:: ; cacc
 	ds $1
 
 ; the LCDC status interrupt is always disabled and this always reads as jp $0000
-wLCDCFunctiontrampoline:: ; cacd
+wLCDCFunctionTrampoline:: ; cacd
 	ds $3
 
 wVBlankFunctionTrampoline:: ; cad0
