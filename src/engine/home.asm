@@ -3463,7 +3463,6 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ld l, a
 	ld e, l
 	ld d, h
-
 	; get ID of card with deck index at [de]
 	ld a, [de]
 	call GetCardIDFromDeckIndex_bc
@@ -3471,7 +3470,6 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ldh [hTempCardID_ff9b], a
 	ld a, b
 	ldh [hTempCardID_ff9b + 1], a ; 0
-
 	; hl = [hTempListPtr_ff99] + 1
 	inc hl
 	jr .check_list_end
@@ -3484,10 +3482,8 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	jr nz, .go
 	ldh a, [hTempCardID_ff9b]
 	cp c
-
 .go
 	jr c, .not_lower_id
-
 	; this card has the lowest ID of those checked so far
 	ld e, l
 	ld d, h
@@ -3495,14 +3491,11 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ldh [hTempCardID_ff9b], a
 	ld a, b
 	ldh [hTempCardID_ff9b + 1], a
-
 .not_lower_id
 	inc hl
-
 .check_list_end
 	bit 7, [hl] ; $ff is the list terminator
 	jr z, .next_card_in_list
-
 	; reached list terminator
 	ld hl, hTempListPtr_ff99
 	push hl
@@ -5638,8 +5631,8 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
-	ld a, $1c
-	lb de, $18, $19
+	ld a, SYM_BOX_TOP
+	lb de, SYM_BOX_TOP_L, SYM_BOX_TOP_R
 	call CopyLine
 ;	fallthrough
 
@@ -5647,14 +5640,14 @@ ContinueDrawingTextBoxDMGorSGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
-	ld a, $0
-	lb de, $1e, $1f
+	ld a, SYM_SPACE
+	lb de, SYM_BOX_LEFT, SYM_BOX_RIGHT
 	call CopyLine
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
-	ld a, $1d
-	lb de, $1a, $1b
+	ld a, SYM_BOX_BOTTOM
+	lb de, SYM_BOX_BTM_L, SYM_BOX_BTM_R
 ;	fallthrough
 
 ; copies b bytes of data to sp-$1f and to hl, and returns hl += BG_MAP_WIDTH
@@ -5696,8 +5689,8 @@ CopyLine: ; 1ea5 (0:1ea5)
 DrawRegularTextBoxCGB:
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
-	ld a, $1c
-	lb de, $18, $19
+	ld a, SYM_BOX_TOP
+	lb de, SYM_BOX_TOP_L, SYM_BOX_TOP_R
 	call CopyCurrentLineTilesAndAttrCGB
 ;	fallthrough
 
@@ -5705,8 +5698,8 @@ ContinueDrawingTextBoxCGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
-	ld a, $0
-	lb de, $1e, $1f
+	ld a, SYM_SPACE
+	lb de, SYM_BOX_LEFT, SYM_BOX_RIGHT
 	push hl
 	call CopyLine
 	pop hl
@@ -5720,8 +5713,8 @@ ContinueDrawingTextBoxCGB:
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
-	ld a, $1d
-	lb de, $1a, $1b
+	ld a, SYM_BOX_BOTTOM
+	lb de, SYM_BOX_BTM_L, SYM_BOX_BTM_R
 	call CopyCurrentLineTilesAndAttrCGB
 	ret
 
@@ -6206,24 +6199,24 @@ Func_22ca: ; 22ca (0:22ca)
 	and $1
 	jr nz, .asm_22ed
 	call Func_2325
-	jr c, .asm_22de
+	jr c, .tile_already_exists
 	or a
-	jr nz, .asm_22e9
+	jr nz, .done
 	call GenerateTextTile
-.asm_22de
+.tile_already_exists
 	ldh a, [hffb0]
 	and $2
-	jr nz, .asm_22e9
+	jr nz, .done
 	ldh a, [hffa9]
 	call PlaceNextTextTile
-.asm_22e9
+.done
 	pop bc
 	pop de
 	pop hl
 	ret
 .asm_22ed
 	call Func_235e
-	jr .asm_22e9
+	jr .done
 
 ; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
 ; then increments hTextBGMap0Address and hTextLineCurPos
@@ -7158,7 +7151,7 @@ CopyCardNameAndLevel: ; 29f5 (0:29f5)
 ; 0x29fa
 
 Func_29fa: ; 29fa (0:29fa)
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
@@ -7302,7 +7295,7 @@ TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	lb de, 6, 16 ; x, y
 	ld a, d
 	ld [wLeftmostItemCursorX], a
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, 1
 	ld [wCurMenuItem], a
@@ -7335,7 +7328,7 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 HandleYesOrNoMenu:
 	ld a, d
 	ld [wLeftmostItemCursorX], a
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, [wcd9a]
 	ld [wCurMenuItem], a
@@ -7598,7 +7591,7 @@ Func_2c73: ; 2c73 (0:2c73)
 	call Func_2c84
 
 Func_2c77: ; 2c77 (0:2c77)
-	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
 	call WaitForButtonAorB
@@ -8120,8 +8113,10 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop de
 	ret
 
-; input: hl = card_gfx_index, de = where to load the card gfx to
-; bc are supposed to be $30 and TILE_SIZE
+; input:
+	; hl = card_gfx_index
+	; de = where to load the card gfx to
+	; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
 ; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
