@@ -97,14 +97,14 @@ CommentedOut_2c086: ; 2c086 (b:4086)
 	ret
 ; 0x2c087
 
-Func_2c087: ; 2c087 (b:4087)
+PlaceTextItems7: ; 2c087 (b:4087)
 	xor a
-	jr Func_2c08c
+	jr PlaceTextItemsc
 
-Func_2c08a: ; 2c08a (b:408a)
+PlaceTextItemsa: ; 2c08a (b:408a)
 	ld a, $1
 
-Func_2c08c:
+PlaceTextItemsc:
 	push de
 	push af
 	ld a, $11

@@ -7477,20 +7477,23 @@ Func_2bdb: ; 2bdb (0:2bdb)
 	ld a, c
 	ret
 
-Func_2c08: ; 2c08 (0:2c08)
-	ld d, [hl]
+; writes n items of text each given in the following format in hl:
+; x coord, y coord, text id
+; $ff-terminated
+PlaceTextItems: ; 2c08 (0:2c08)
+	ld d, [hl] ; x coord
 	inc hl
 	bit 7, d
-	ret nz
-	ld e, [hl]
-	inc hl
+	ret nz ; return if no more items of text
+	ld e, [hl] ; y coord
+	inc hl ; hl = text id
 	call Func_22ae
 	push hl
 	call Func_2c23
 	pop hl
 	inc hl
 	inc hl
-	jr Func_2c08
+	jr PlaceTextItems ; do next item
 
 Func_2c1b: ; 2c1b (0:2c1b)
 	call Func_22ae

@@ -165,8 +165,7 @@ WRAM0
 	"WRAM Engine 2"
 WRAMX 1
 	"WRAM1"
-	"WRAM Music"
-	"WRAM Sfx"
+	"WRAM Audio"
 VRAM $00
 	"VRAM0"
 VRAM $01

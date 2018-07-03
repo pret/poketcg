@@ -357,8 +357,8 @@ DuelMainInterface: ; 426d (1:426d)
 
 PrintDuelMenu: ; 4295 (1:4295)
 	call DrawWideTextBox
-	ld hl, $54e9
-	call Func_2c08
+	ld hl, DuelMenuData
+	call PlaceTextItems
 .asm_429e
 	call $669d
 	ld a, [wDuelFinished]
@@ -801,7 +801,7 @@ DuelMenu_Check: ; 4585 (1:4585)
 	jp DuelMainInterface
 
 ; triggered by pressing SELECT in the duel menu
-DuelMenuShortcut_BothActivePokemon:: ; 458e (1:458e)
+DuelMenuShortcut_BothActivePokemon: ; 458e (1:458e)
 	call Func_3b31
 	call Func_4597
 	jp DuelMainInterface
@@ -964,7 +964,7 @@ Func_4693: ; 4693 (1:4693)
 	call DrawWideTextBox_PrintTextNoDelay
 	call EnableLCD
 	call CountCardsInDuelTempList
-	ld hl, MenuParameters_46f3
+	ld hl, EnergyDiscardCardListParameters
 	lb de, 0, 0 ; initial page scroll offset, initial item (in the visible page)
 	call PrintCardListItems
 	ld a, $04
@@ -1006,7 +1006,7 @@ Func_46b7: ; 46b7 (1:46b7)
 	ret
 ; 0x46f3
 
-MenuParameters_46f3:
+EnergyDiscardCardListParameters:
 	db 1, 5 ; cursor x, cursor y
 	db 4 ; item x
 	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
@@ -2285,7 +2285,7 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 	jp JumpToFunctionInTable
 ; 0x51f8
 
-PracticeDuelActionTable:: ; 51f8 (1:51f8)
+PracticeDuelActionTable: ; 51f8 (1:51f8)
 	dw $0000
 	dw Func_520e
 	dw Func_521a
@@ -2409,7 +2409,20 @@ Func_52bc: ; 52bc (1:52bc)
 	ret
 ; 0x52c5
 
-	INCROM $52c5,  $5550
+	INCROM $52c5,  $54e9
+
+DuelMenuData: ; 54e9 (1:54e9)
+	; x, y, text id
+	textitem 3,  14, HandText
+	textitem 9,  14, CheckText
+	textitem 15, 14, RetreatText
+	textitem 3,  16, AttackText
+	textitem 9,  16, PKMNPowerText
+	textitem 15, 16, DoneText
+	db $ff
+; 0x5502
+
+	INCROM $5502,  $5550
 
 ; draw the turn holder's discard pile screen
 OpenDiscardPileScreen: ; 5550 (1:5550)
@@ -3312,7 +3325,7 @@ HasAlivePokemonOnBench: ; 5fd9 (1:5fd9)
 HasAlivePokemonInPlayArea: ; 5fdd (1:5fdd)
 	xor a
 _HasAlivePokemonInPlayArea: ; 5fde (1:5fde)
-	ld [wcbd2], a
+	ld [wExcludeArenaPokemon], a
 	ld b, a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -3369,11 +3382,11 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	call $61c7
 	call EnableLCD
 .asm_6034
-	ld hl, MenuParameters_60be
-	ld a, [wcbd2]
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonIncluded
+	ld a, [wExcludeArenaPokemon]
 	or a
 	jr z, .asm_6040
-	ld hl, MenuParameters_60c6
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonExcluded
 .asm_6040
 	ld a, [wSelectedDuelSubMenuItem]
 	call InitializeMenuParameters
@@ -3387,14 +3400,14 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	jp z, $60ac
 	pop af
 	ldh [hTempCardIndex_ff98], a
-	ld a, [wcbd4]
+	ld a, [wcbd4] ; useless
 	jr OpenPlayAreaScreenForSelection
 .asm_6061
 	call HandleMenuInput
 	jr nc, .asm_604c
 	ld a, e
 	ld [wSelectedDuelSubMenuItem], a
-	ld a, [wcbd2]
+	ld a, [wExcludeArenaPokemon]
 	add e
 	ld [wcbc9], a
 	ld a, [wcbd6]
@@ -3412,7 +3425,7 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	call Func_576a
 	jr .asm_6022
 .asm_6091
-	ld a, [wcbd2]
+	ld a, [wExcludeArenaPokemon]
 	ld c, a
 	ldh a, [hCurrentMenuItem]
 	add c
@@ -3442,7 +3455,7 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	ret
 ; 0x60be
 
-MenuParameters_60be: ; 60be (1:60be)
+PlayAreaScreenMenuParameters_ActivePokemonIncluded: ; 60be (1:60be)
 	db 0, 0 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items
@@ -3450,7 +3463,7 @@ MenuParameters_60be: ; 60be (1:60be)
 	db SYM_SPACE ; tile behind cursor
 	dw $60ce ; function pointer if non-0
 
-MenuParameters_60c6: ; 60c6 (1:60c6)
+PlayAreaScreenMenuParameters_ActivePokemonExcluded: ; 60c6 (1:60c6)
 	db 0, 3 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items

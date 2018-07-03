@@ -623,7 +623,9 @@ wSelectedDuelSubMenuScrollOffset:: ; cbd0
 wcbd1:: ; cbd1
 	ds $1
 
-wcbd2:: ; cbd2
+; when processing or displaying the play area Pokemon cards of a duelist,
+; whether to account for only the benched Pokemon ($01) or also the arena Pokemon ($00).
+wExcludeArenaPokemon:: ; cbd2
 	ds $1
 
 wcbd3:: ; cbd3
@@ -1946,7 +1948,7 @@ wd697:: ; d697
 
 	ds $6e8
 
-SECTION "WRAM Music", WRAMX
+SECTION "WRAM Audio", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80
@@ -2115,8 +2117,6 @@ wMusicCh3Stack:: ; de13
 
 wMusicCh4Stack:: ; de1f
 	ds $c
-
-SECTION "WRAM Sfx", WRAMX
 
 wde2b:: ; de2b
 	ds $3
