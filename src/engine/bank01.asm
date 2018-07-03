@@ -13,7 +13,7 @@ GameLoop: ; 4000 (1:4000)
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, 1
-	ld [wUppercaseFlag], a
+	ld [wUppercaseVWFLetters], a
 	ei
 	farcall CommentedOut_1a6cc
 	ldh a, [hButtonsHeld]
@@ -38,7 +38,7 @@ GameLoop: ; 4000 (1:4000)
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
 	ld a, 1
-	ld [wUppercaseFlag], a
+	ld [wUppercaseVWFLetters], a
 	ret
 
 Func_405a: ; 405a (1:405a)
@@ -2630,7 +2630,7 @@ Func_5690: ; 5690 (1:5690)
 
 Func_56a0: ; 56a0 (1:56a0)
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22ae
 	ld hl, wCardListInfoBoxText
 	ld a, [hli]
@@ -3302,7 +3302,7 @@ LargeCardTileData: ; 5eb7 (1:5eb7)
 Func_5f4a: ; 5f4a (1:5f4a)
 	ld a, $01
 Func_5f4c: ; 5f4c (1:5f4c)
-	ld [wcd08], a
+	ld [wLineSeparation], a
 	ret
 ; 0x5f50
 
@@ -3638,7 +3638,7 @@ Func_653e: ; 653e (1:653e)
 	jr c, .asm_654c
 	dec e
 .asm_654c
-	ld a, $13
+	ld a, 19
 	call Func_22a6
 	call Func_2c29
 	call Func_5f50
@@ -3766,7 +3766,7 @@ Func_6673: ; 6673 (1:6673)
 	call Func_22ae
 	ld hl, wLoadedCard1Name
 	call Func_2c23
-	ld a, $13
+	ld a, 19
 	lb de, 1, 3
 	call Func_22a6
 	ld hl, wLoadedCard1NonPokemonDescription
@@ -4372,7 +4372,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call DrawLabeledTextBox
 	call EnableLCD
 	lb de, 1, 14
-	ld a, $13
+	ld a, 19
 	call Func_22a6
 	ld hl, wCoinTossScreenTextID
 	ld a, [hli]

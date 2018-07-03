@@ -5510,8 +5510,8 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld h, a
 	ret
 
-; Apply window correction to xy coordinates at de
-AdjustCoordinatesForWindow: ; 1deb (0:1deb)
+; Apply SCX and SCY correction to xy coordinates at de
+AdjustCoordinatesForBGScroll: ; 1deb (0:1deb)
 	push af
 	ldh a, [hSCX]
 	rra
@@ -6052,7 +6052,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	cp $f
 	jr z, .asm_2221
 	cp $a
-	jr z, .asm_224d
+	jr z, .reached_line_length
 	cp TX_SYMBOL
 	jr z, .asm_2225
 	cp TX_START
@@ -6063,12 +6063,12 @@ Func_21f2: ; 21f2 (0:21f2)
 	ret
 .asm_220f
 	ld a, $1
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ret
 .asm_2215
 	call Func_230f
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
@@ -6077,53 +6077,55 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ret
 .asm_2225
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	push af
 	ld a, $1
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	call Func_230f
 	pop af
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ldh a, [hffb0]
 	or a
 	jr nz, .asm_2240
 	ld a, [hl]
 	push hl
-	call Func_22f2
+	call PlaceNextTextTile
 	pop hl
 .asm_2240
 	inc hl
 .asm_2241
-	ldh a, [hffae]
+	ldh a, [hTextLineLength]
 	or a
 	ret z
 	ld b, a
-	ldh a, [hffac]
+	ldh a, [hTextLineCurPos]
 	cp b
-	jr z, .asm_224d
+	jr z, .reached_line_length
 	xor a
 	ret
-.asm_224d
+.reached_line_length
 	call Func_230f
-	ld a, [wcd08]
+	ld a, [wLineSeparation]
 	or a
-	call z, .asm_2257
-.asm_2257
+	call z, .next_line
+.next_line
 	xor a
-	ldh [hffac], a
-	ldh a, [hffad]
-	add $20
+	ldh [hTextLineCurPos], a
+	ldh a, [hTextHorizontalAlign]
+	add BG_MAP_WIDTH
 	ld b, a
-	ldh a, [hffaa]
+	; get current line's starting BGMap0 address
+	ldh a, [hTextBGMap0Address]
 	and $e0
-	add b
-	ldh [hffaa], a
-	ldh a, [hffab]
+	; advance to next line
+	add b ; apply background scroll correction
+	ldh [hTextBGMap0Address], a
+	ldh a, [hTextBGMap0Address + 1]
 	adc $0
-	ldh [hffab], a
-	ld a, [wcd09]
+	ldh [hTextBGMap0Address + 1], a
+	ld a, [wCurTextLine]
 	inc a
-	ld [wcd09], a
+	ld [wCurTextLine], a
 	xor a
 	ret
 
@@ -6138,9 +6140,9 @@ Func_2275: ; 2275 (0:2275)
 	ldh [hffb0], a
 	ldh [hffa9], a
 	ld a, $88
-	ld [wcd06], a
+	ld [wTilePatternSelector], a
 	ld a, $80
-	ld [wcd07], a
+	ld [wTilePatternSelectorCorrection], a
 	ld hl, wc600
 .asm_2292
 	xor a
@@ -6149,47 +6151,47 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
-; wcd0a <- 0
-; hffac <- 0
+; wRegularFontOrVWF <- 0
+; hTextLineCurPos <- 0
 ; wcd0b <- 0
 ; hffaf <- $f
 Func_2298: ; 2298 (0:2298)
 	xor a
-	ld [wcd0a], a
-	ldh [hffac], a
+	ld [wRegularFontOrVWF], a
+	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
 
 ; Func_22ae
-; hffae <- a
+; hTextLineLength <- a
 Func_22a6: ; 22a6 (0:22a6)
 	push af
 	call Func_22ae
 	pop af
-	ldh [hffae], a
+	ldh [hTextLineLength], a
 	ret
 
-; hffad <- d
-; hffae <- 0
-; wcd09 <- 0
-; hffaa <- BGMap0(e)
-; hffab <- BGMap0(d)
+; hTextHorizontalAlign <- d
+; hTextLineLength <- 0
+; wCurTextLine <- 0
+; hTextBGMap0Address <- BGMap0(e)
+; hTextBGMap0Address + 1 <- BGMap0(d)
 ; Func_2298
-;; writes BGMap0-translated DE to (hffab,hffaa)
+;; writes BGMap0-translated DE to hTextBGMap0Address
 Func_22ae: ; 22ae (0:22ae)
 	push hl
 	ld a, d
-	ldh [hffad], a
+	ldh [hTextHorizontalAlign], a
 	xor a
-	ldh [hffae], a
-	ld [wcd09], a
+	ldh [hTextLineLength], a
+	ld [wCurTextLine], a
 	call DECoordToBGMap0Address
 	ld a, l
-	ldh [hffaa], a
+	ldh [hTextBGMap0Address], a
 	ld a, h
-	ldh [hffab], a
+	ldh [hTextBGMap0Address + 1], a
 	call Func_2298
 	xor a
 	ld [wcd0b], a
@@ -6207,13 +6209,13 @@ Func_22ca: ; 22ca (0:22ca)
 	jr c, .asm_22de
 	or a
 	jr nz, .asm_22e9
-	call Func_24ac
+	call GenerateTextTile
 .asm_22de
 	ldh a, [hffb0]
 	and $2
 	jr nz, .asm_22e9
 	ldh a, [hffa9]
-	call Func_22f2
+	call PlaceNextTextTile
 .asm_22e9
 	pop bc
 	pop de
@@ -6223,14 +6225,11 @@ Func_22ca: ; 22ca (0:22ca)
 	call Func_235e
 	jr .asm_22e9
 
-; wcd05 <- a
-; &(hffab,hffaa) <- a
-; (hffab,hffaa) ++
-; hffac ++
-;; writes a to addr pointed to by (hffab,hffaa), then increments (hffab,hffaa) and hffac
-Func_22f2: ; 22f2 (0:22f2)
-	ld [wcd05], a
-	ld hl, hffaa
+; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
+; then increments hTextBGMap0Address and hTextLineCurPos
+PlaceNextTextTile: ; 22f2 (0:22f2)
+	ld [wCurTextTile], a
+	ld hl, hTextBGMap0Address
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -6241,15 +6240,15 @@ Func_22f2: ; 22f2 (0:22f2)
 	dec de
 	ld l, e
 	ld h, d
-	ld de, wcd05
+	ld de, wCurTextTile
 	ld c, 1
 	call SafeCopyDataDEtoHL
-	ld hl, hffac
+	ld hl, hTextLineCurPos
 	inc [hl]
 	ret
 
 Func_230f: ; 230f (0:230f)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	ret z
 	ld a, [wcd0b]
@@ -6310,13 +6309,13 @@ Func_2325: ; 2325 (0:2325)
 	xor a
 	ret
 
-; search linked-list for letters e/d (regisers), if found hoist the result to
+; search linked-list for letters e/d (registers), if found hoist the result to
 ; head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [wcd0a]        ;
+	ld a, [wRegularFontOrVWF]        ;
 	or a                 ;
-	jr z, .asm_2376      ; if [wcd0a] nonzero:
-	call Uppercase       ;   uppercase e
+	jr z, .asm_2376      ; if [wRegularFontOrVWF] nonzero:
+	call CaseVWFLetter   ;   uppercase e if wUppercaseVWFLetters != 0
 	ld a, [wcd0b]
 	ld d, a
 	or a
@@ -6374,9 +6373,9 @@ Func_235e: ; 235e (0:235e)
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
-; uppercases e if [wUppercaseFlag] is nonzero
-Uppercase: ; 23b1 (0:23b1)
-	ld a, [wUppercaseFlag]
+; uppercases e if [wUppercaseVWFLetters] is nonzero
+CaseVWFLetter: ; 23b1 (0:23b1)
+	ld a, [wUppercaseVWFLetters]
 	or a
 	ret z
 	ld a, e
@@ -6400,7 +6399,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	ret
 .asm_23cf
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 Func_23d3: ; 23d3 (0:23d3)
 	push hl
 	push de
@@ -6495,43 +6494,55 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ld h, a
 	ret
 
-Func_24ac: ; 24ac (0:24ac)
+; generates a text tile and copies it to VRAM
+; if wRegularFontOrVWF == 0
+	; de = regular font tile number (d = $e and d = $f are treated differently)
+; if wRegularFontOrVWF != 0
+	; d = VWF character 1 (left)
+	; e = VWF character 2 (right)
+; b = destination VRAM tile number
+GenerateTextTile: ; 24ac (0:24ac)
 	push hl
 	push de
 	push bc
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
-	jr nz, .asm_24bf
-	call Func_2510
+	jr nz, .vwf
+;.regular_font
+	call CreateRegularFontTile_ConvertToTileDataAddress
 	call SafeCopyDataDEtoHL
-.asm_24bb
+.done
 	pop bc
 	pop de
 	pop hl
 	ret
-.asm_24bf
-	call Func_24ca
-	call Func_2518
+.vwf
+	call CreateVWFTile
+	call ConvertTileNumberToTileDataAddress
 	call SafeCopyDataDEtoHL
-	jr .asm_24bb
+	jr .done
 
-Func_24ca: ; 24ca (0:24ca)
+; create, at wVWFOrRegularFontTile, a VWF tile made from the ascii characters given in d and e
+CreateVWFTile: ; 24ca (0:24ca)
 	push bc
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(VWF)
 	call BankswitchHome
+	; write the right half of the VWF tile (first character) to wVWFOrRegularFontTile + 2n
 	push de
 	ld a, e
-	ld de, wccf4
-	call Func_24fa
+	ld de, wVWFOrRegularFontTile
+	call CopyVWFCharacterToDE
 	pop de
+	; write the left half of the VWF tile (second character) to wVWFOrRegularFontTile + 2n+1
 	ld a, d
-	ld de, wccf5
-	call Func_24fa
-	ld hl, wccf4
-	ld b, $8
-.asm_24e8
+	ld de, wVWFOrRegularFontTile + 1
+	call CopyVWFCharacterToDE
+	; construct the resulting VWF tile
+	ld hl, wVWFOrRegularFontTile
+	ld b, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	swap a
 	or [hl]
@@ -6539,14 +6550,17 @@ Func_24ca: ; 24ca (0:24ca)
 	ld [hli], a
 	ld [hli], a
 	dec b
-	jr nz, .asm_24e8
+	jr nz, .loop
 	call BankpopHome
 	pop bc
-	ld de, wccf4
+	ld de, wVWFOrRegularFontTile
 	ret
 
-Func_24fa: ; 24fa (0:24fa)
-	sub $20
+; copies a half-tile corresponding to a VWF character to de
+; the ascii value of the character to copy is provided in a
+; assumes BANK(VWF) is already loaded
+CopyVWFCharacterToDE: ; 24fa (0:24fa)
+	sub $20 ; VWF begins at ascii $20
 	ld l, a
 	ld h, $0
 	add hl, hl
@@ -6554,23 +6568,32 @@ Func_24fa: ; 24fa (0:24fa)
 	add hl, hl
 	ld bc, VWF
 	add hl, bc
-	ld b, $8
-.set_timer8
+	ld b, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
-	inc de
+	inc de ; skip the other half of the tile
 	dec b
-	jr nz, .set_timer8
+	jr nz, .loop
 	ret
 
-Func_2510: ; 2510 (0:2510)
+; create, at wVWFOrRegularFontTile, a regular font tile
+; given its tile number within the regular font graphics in de.
+; return its v*Tiles address in hl, and return c = TILE_SIZE.
+CreateRegularFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 	push bc
-	call Func_256d
-	call Func_252e
+	call GetRegularFontTileOffset
+	call CreateRegularFontTile
 	pop bc
-Func_2518: ; 2518 (0:2518)
-	ld hl, wcd07
+;	fallthrough
+
+; given a tile number in b, return its v*Tiles address in hl, and return c = TILE_SIZE
+; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
+; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
+; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
+ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
+	ld hl, wTilePatternSelectorCorrection
 	ld a, b
 	xor [hl]
 	ld h, $0
@@ -6579,33 +6602,35 @@ Func_2518: ; 2518 (0:2518)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld a, [wcd06]
+	ld a, [wTilePatternSelector]
 	ld b, a
 	ld c, $0
 	add hl, bc
-	ld c, $10
+	ld c, TILE_SIZE
 	ret
 
-Func_252e: ; 252e (0:252e)
+; create, at wVWFOrRegularFontTile, a regular font tile
+; given its offset within the font graphics in hl
+CreateRegularFontTile: ; 252e (0:252e)
 	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
-	ld de, wccf4
+	ld de, wVWFOrRegularFontTile
 	push de
-	ld c, $8
-.asm_2539
+	ld c, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_2539
+	jr nz, .loop
 	pop de
 	call BankpopHome
 	ret
 
 Func_2546: ; 2546 (0:2546)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	jr nz, .asm_255f
 	ld a, e
@@ -6635,20 +6660,23 @@ Func_2546: ; 2546 (0:2546)
 	scf
 	ret
 
-Func_256d: ; 256d (0:256d)
-	ld bc, $0280
+; convert the regular font tile number at de to the
+; equivalent offset within the font tile graphics.
+; d = $e and d = $f are treated differently
+GetRegularFontTileOffset: ; 256d (0:256d)
+	ld bc, 40 tiles
 	ld a, d
 	cp $e
 	jr z, .asm_2580
 	cp $f
-	jr nz, .asm_2582
+	jr nz, .get_address
 	ld bc, $0000
 	ld a, e
 	sub $10
 	ld e, a
 .asm_2580
 	ld d, $0
-.asm_2582
+.get_address
 	ld l, e
 	ld h, d
 	add hl, hl
@@ -6852,7 +6880,7 @@ DrawCursor:
 	inc hl
 	add [hl]
 	ld e, a
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	ld a, c
 	ld c, e
 	ld b, d
@@ -7181,12 +7209,12 @@ DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
-	ld a, $b
+	ld a, 11
 ;	fallthrough
 
 Func_2a44: ; 2a44 (0:2a44)
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22a6
 	pop hl
 	ld a, l
@@ -7198,9 +7226,9 @@ Func_2a44: ; 2a44 (0:2a44)
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
-	ld a, $13
+	ld a, 19
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22a6
 	call EnableLCD
 	pop hl
@@ -7210,7 +7238,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	lb de, 0, 12
 	lb bc, 12, 6
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call DrawRegularTextBox
 	ret
 
@@ -7240,7 +7268,7 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 DrawWideTextBox: ; 2a9e (0:2a9e)
 	lb de, 0, 12
 	lb bc, 20, 6
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call DrawRegularTextBox
 	ret
 
@@ -7360,7 +7388,7 @@ HandleYesOrNoMenu:
 
 ; prints YES NO at de
 PrintYesOrNoItems: ; 2b66 (0:2b66)
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
 	call Func_2c1b
 	ret
@@ -7557,7 +7585,7 @@ Func_2c62: ; 2c62 (0:2c62)
 	jr Func_2c77
 .asm_2c67
 	push hl
-	ld hl, wce4c
+	ld hl, wTextBoxLabel
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -7577,7 +7605,7 @@ Func_2c77: ; 2c77 (0:2c77)
 	ret
 
 Func_2c84: ; 2c84 (0:2c84)
-	ld [wce4b], a
+	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
@@ -7605,8 +7633,8 @@ Func_2c84: ; 2c84 (0:2c84)
 .asm_2caf
 	call Func_2d43
 	jr c, .asm_2cc3
-	ld a, [wcd09]
-	cp $3
+	ld a, [wCurTextLine]
+	cp 3
 	jr c, .asm_2c93
 	call Func_2c77
 	call Func_2d15
@@ -7629,7 +7657,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	pop bc
 	ld a, [hffaf]
 	ld [hli], a
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	ld [hli], a
 	ldh a, [hBankROM]
 	ld [hli], a
@@ -7649,7 +7677,7 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld a, [hli]
 	ld [hffaf], a
 	ld a, [hli]
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld a, [hli]
 	call BankswitchHome
 	ld a, [hli]
@@ -7673,23 +7701,23 @@ Func_2d15: ; 2d15 (0:2d15)
 	push hl
 	lb de, 0, 12
 	lb bc, 20, 6
-	call AdjustCoordinatesForWindow
-	ld a, [wce4b]
+	call AdjustCoordinatesForBGScroll
+	ld a, [wIsTextBoxLabeled]
 	or a
-	jr nz, .asm_2d2d
+	jr nz, .labeled
 	call DrawRegularTextBox
 	call EnableLCD
 	jr .asm_2d36
-.asm_2d2d
-	ld hl, wce4c
+.labeled
+	ld hl, wTextBoxLabel
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call DrawLabeledTextBox
 .asm_2d36
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
-	ld a, $13
+	call AdjustCoordinatesForBGScroll
+	ld a, 19
 	call Func_22a6
 	pop hl
 	ret
@@ -7742,7 +7770,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, $f
 	ld [hffaf], a
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld de, wTxRam2
 	ld hl, wce49
 	call Func_2de0
@@ -7822,14 +7850,14 @@ ReadTextOffset: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; if [wcd0a] != 0:
+; if [wRegularFontOrVWF] != 0:
 ;   convert the number at hl to text (ascii) format and write it to wcaa0
 ;   return c = 4 - leading_zeros
-; if [wcd0a] == 0:
+; if [wRegularFontOrVWF] == 0:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
 ;   replace leading zeros with $00
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
 	ld de, wcaa0
@@ -7950,7 +7978,7 @@ Func_2ea9: ; 2ea9 (0:2ea9)
 	ret
 ; 0x2ebb
 
-; text pointer (usually of a card name) for TX_RAM2
+; text id (usually of a card name) for TX_RAM2
 LoadTxRam2: ; 2ebb (0:2ebb)
 	ld a, l
 	ld [wTxRam2], a
@@ -9016,7 +9044,7 @@ HandleTransparency: ; 348a (0:348a)
 	ret
 ; 0x34b7
 
-; return carry and return the appropriate text pointer in hl if the target has an
+; return carry and return the appropriate text id in hl if the target has an
 ; special status or power that prevents any damage or effect done to it this turn
 CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	ld a, [wNoDamageOrEffect]

@@ -447,7 +447,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	call Func_2275
 	call Func_3ca0
 	xor a
-	ld [wcd08], a
+	ld [wLineSeparation], a
 	call $51e1
 	call $517f
 	ld a, $ff

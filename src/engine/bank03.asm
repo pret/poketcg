@@ -17,7 +17,7 @@ LoadMap: ; c000 (3:4000)
 	call LoadDuelHUDTiles
 	call Set_OBJ_8x8
 	xor a
-	ld [wcd08], a
+	ld [wLineSeparation], a
 	xor a
 	ld [wd291], a
 .asm_c037
@@ -1194,7 +1194,7 @@ Func_c915: ; c915 (3:4915)
 	push de
 	ld de, $000c
 	ld bc, $1406
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call $43ca
 	pop de
 	pop bc
