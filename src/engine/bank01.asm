@@ -2582,7 +2582,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call $5762
+	call Func_5762
 	ldh a, [hButtonsPressed2]
 	bit D_UP_F, a
 	jr nz, .asm_566f
@@ -2681,14 +2681,47 @@ CardListFunction: ; 5719 (1:5719)
 	ret
 ; 0x5735
 
-	INCROM $5735,  $5744
+Func_5735: ; 5735 (1:5735)
+	ld hl, wcbd8
+	ld de, Func_574a
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld a, 1
+	ld [wSortCardListByID], a
+	ret
+; 0x5744
 
 Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
 	jp CallIndirect
 ; 0x574a
 
-	INCROM $574a,  $576a
+Func_574a: ; 574a (1:574a)
+	lb bc, 1, 2
+	ld hl, wDuelTempList + 10
+.next
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	or a ; SYM_SPACE
+	jr z, .space
+	add SYM_0
+.space
+	call WriteByteToBGMap0
+	; move two lines down
+	inc c
+	inc c
+	jr .next
+.done
+	ret
+; 0x5762
+
+Func_5762: ; 5762 (1:5762)
+	ld a, B_BUTTON | D_UP | D_DOWN
+	ld [wcbd7], a
+	xor a
+	jr Func_5779
 
 Func_576a: ; 576a (1:576a)
 	ld a, B_BUTTON
