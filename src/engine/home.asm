@@ -2993,7 +2993,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ret
 
 ; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN
-; returns c if deck is empty, nc if a card was succesfully drawn
+; returns carry if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3746,7 +3746,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ret
 ; 0x13f7
 
-; check if the turn holder's Pokemon card e can evolve into the turn holder's Pokemon card d.
+; check if the turn holder's Pokemon card at e can evolve into the turn holder's Pokemon card d.
 ; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
 ; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
 ; return carry if can't evolve, plus nz if the reason for it is the card was played this turn.
@@ -4096,7 +4096,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 
 ; Find which and how many energy cards are attached to the turn holder's Pokemon card in the arena,
 ; or a Pokemon card in the bench, depending on the value of register e.
-; input: e (location to check) = CARD_LOCATION_* - CARD_LOCATION_PLAY_AREA
+; input: e = location to check, i.e. PLAY_AREA_*
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
 GetPlayAreaCardAttachedEnergies: ; 159f (0:159f)
 	push hl
@@ -4303,7 +4303,7 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
 	pop de
-	jr CopyMoveDataAndDamage_FromDeckIndex.card_loaded
+	jr CopyMoveDataAndDamage
 
 ; copies, given a card identified by register d (0-59 deck index):
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
@@ -4315,7 +4315,9 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
 	call LoadCardDataToBuffer1_FromDeckIndex
-.card_loaded
+;	fallthrough
+
+CopyMoveDataAndDamage:
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Move1
@@ -5159,7 +5161,9 @@ SubstractHPFromCard: ; 1c35 (0:1c35)
 ; 0x1c50
 
 ; check if a flag of wLoadedMove is set
-; input: a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1, and b = flag bit
+; input:
+	; a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1
+	; b = flag bit
 ; return carry if the flag is set
 CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	push hl
@@ -6296,21 +6300,21 @@ Func_2325: ; 2325 (0:2325)
 	ld [hl], c
 	ld h, $c6
 	ld [hl], e
-	inc h
+	inc h ; $c7
 	ld [hl], d
 	ld b, l
 	xor a
 	ret
 
-; search linked-list for letters e/d (registers), if found hoist the result to
-; head of list and return it. carry flag denotes success.
+; search linked-list for text characters e/d (registers), if found hoist
+; the result to head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [wRegularFontOrVWF]        ;
+	ld a, [wRegularFontOrVWF]
 	or a                 ;
 	jr z, .asm_2376      ; if [wRegularFontOrVWF] nonzero:
 	call CaseVWFLetter   ;   uppercase e if wUppercaseVWFLetters != 0
 	ld a, [wcd0b]
-	ld d, a
+	ld d, a              ;   d ← [wcd0b]
 	or a
 	jr nz, .asm_2376     ;   if [wcd0b] is zero:
 	ld a, e              ;
@@ -6330,9 +6334,9 @@ Func_235e: ; 235e (0:235e)
 	ret z                ; if NULL, return a = 0  ;
 	cp e                                          ; loop for e/d key in
 	jr nz, .asm_238a     ;                        ; linked list
-	inc h                ;                        ;
+	inc h ; $c7          ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
-	cp d                 ;    key2[l] == d:       ;
+	cp d                 ;   key2[l] == d:        ;
 	jr z, .asm_238f      ;   break                ;
 .asm_238a
 	ld h, $c8            ;                        ;
@@ -6431,7 +6435,7 @@ Func_23d3: ; 23d3 (0:23d3)
 	INCROM $23fd, $245d
 
 ; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
-; replace leading zeros with $00
+; replace leading zeros with SYM_SPACE
 TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
@@ -6682,8 +6686,10 @@ GetRegularFontTileOffset: ; 256d (0:256d)
 	INCROM $2589, $25ea
 
 ; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
-; input: a = list length, de = initial page scroll offset, initial item (in the visible page)
-; hl: 9 bytes with the rest of the parameters
+; input:
+	; a = list length
+	; de = initial page scroll offset, initial item (in the visible page)
+	; hl: 9 bytes with the rest of the parameters
 InitializeCardListParameters: ; 25ea (0:25ea)
 	ld [wNumListItems], a
 	ld a, d
@@ -6691,7 +6697,7 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ld a, e
 	ld [wCurMenuItem], a
 	add d
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld a, [hli]
 	ld [wCursorXPosition], a
 	ld a, [hli]
@@ -6728,7 +6734,7 @@ HandleCardListInput: ; 2626 (0:2626)
 	ld d, a
 	ld a, [wCurMenuItem]
 	ld e, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 ; 0x2636
@@ -6740,7 +6746,7 @@ HandleCardListInput: ; 2626 (0:2626)
 ; also sets the current menu item to the one specified in register a
 InitializeMenuParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld de, wCursorXPosition
 	ld b, $8
 .loop
@@ -6791,7 +6797,7 @@ HandleMenuInput: ; 264b (0:264b)
 	ld [wCursorBlinkCounter], a
 .up_down_done
 	ld a, [wCurMenuItem]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld hl, wMenuFunctionPointer ; call the function if non-0 (periodically)
 	ld a, [hli]
 	or [hl]
@@ -6799,7 +6805,7 @@ HandleMenuInput: ; 264b (0:264b)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call CallHL
 	jr nc, RefreshMenuCursor_CheckPlaySFX
 .A_pressed_draw_cursor
@@ -6808,7 +6814,7 @@ HandleMenuInput: ; 264b (0:264b)
 	call PlayOpenOrExitScreenSFX
 	ld a, [wCurMenuItem]
 	ld e, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 .check_A_or_B
@@ -6821,16 +6827,16 @@ HandleMenuInput: ; 264b (0:264b)
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	call PlayOpenOrExitScreenSFX
 	scf
 	ret
 
-; plays an "open screen" sound if [hCurrentMenuItem] != 0xff
-; plays an "exit screen" sound if [hCurrentMenuItem] == 0xff
+; plays an "open screen" sound if [hCurMenuItem] != 0xff
+; plays an "exit screen" sound if [hCurMenuItem] == 0xff
 PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	inc a
 	jr z, .play_exit_sfx
 	ld a, $2
@@ -6888,7 +6894,7 @@ DrawCursor2: ; 270b (0:270b)
 
 SetMenuItem: ; 2710 (0:2710)
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	ret
@@ -6896,7 +6902,7 @@ SetMenuItem: ; 2710 (0:2710)
 ; handle input for the 2-row 3-column duel menu.
 ; only handles input not involving the B, START, or SELECT buttons, that is,
 ; navigating through the menu or selecting an item with the A button.
-; other input in handled by HandleDuelMenuInputAndShortcuts.
+; other input in handled by PrintDuelMenu.handle_input
 HandleDuelMenuInput: ; 271a (0:271a)
 	ldh a, [hButtonsPressed2]
 	or a
@@ -6934,7 +6940,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	call .asm_2772
 	pop af
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	jr .blink_cursor
@@ -6986,14 +6992,15 @@ DuelMenuCursorCoords: ; 278d (0:278d)
 PrintCardListItems: ; 2799 (0:2799)
 	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
-	ld a, LOW($283f)
+	ld a, LOW(CardListMenuFunction)
 	ld [hli], a
-	ld a, HIGH($283f)
+	ld a, HIGH(CardListMenuFunction)
 	ld [hli], a
 	ld a, 2
 	ld [wYDisplacementBetweenMenuItems], a
-	ld a, $01
-	ld [wcd97], a
+	ld a, 1
+	ld [wCardListIndicatorYPosition], a
+.reload
 	ld e, $00
 	ld a, [wListScrollOffset]
 	or a
@@ -7065,8 +7072,226 @@ PrintCardListItems: ; 2799 (0:2799)
 	ret
 ; 0x2827
 
-	INCROM $2827, $2988
+Func_2827: ; 2827 (0:2827)
+	ld a, $01
+	ldh [hffb0], a
+	call PrintCardListItems.reload
+	xor a
+	ldh [hffb0], a
+	ret
+; 0x2832
 
+Func_2832: ; 2832 (0:2832)
+	call OneByteNumberToTxSymbol
+	ld a, [hli]
+	cp $20
+	jr nz, .asm_283e
+	ld a, [hld]
+	ld [hli], a
+	ld [hl], $00
+.asm_283e
+	ret
+; 0x283f
+
+; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
+CardListMenuFunction: ; 283f (0:283f)
+	ldh a, [hButtonsPressed2]
+	ld b, a
+	ld a, [wNumMenuItems]
+	dec a
+	ld c, a
+	ld a, [wCurMenuItem]
+	bit D_UP_F, b
+	jr z, .not_up
+	cp c
+	jp nz, .continue
+	; we're at the top of the page
+	xor a
+	ld [wCurMenuItem], a ; set to first item
+	ld hl, wListScrollOffset
+	ld a, [hl]
+	or a ; can we scroll up?
+	jr z, .no_more_items
+	dec [hl] ; scroll page up
+	call PrintCardListItems.reload
+	jp .continue
+.not_up
+	bit D_DOWN_F, b
+	jr z, .not_down
+	or a
+	jr nz, .not_last_visible_item
+	; we're at the bottom of the page
+	ld a, c
+	ld [wCurMenuItem], a ; set to last item
+	ld a, [wListScrollOffset]
+	add c
+	inc a
+	ld hl, wNumListItems
+	cp [hl] ; can we scroll down?
+	jr z, .no_more_items
+	ld hl, wListScrollOffset
+	inc [hl] ; scroll page down
+	call PrintCardListItems.reload
+	jp .continue
+.not_last_visible_item
+	; this appears to be a redundant check
+	ld hl, wListScrollOffset
+	add [hl]
+	ld hl, wNumListItems
+	cp [hl]
+	jp c, .continue ; should always jump
+	ld hl, wCurMenuItem
+	dec [hl]
+.no_more_items
+	xor a
+	ld [wRefreshMenuCursorSFX], a
+	jp .continue
+.not_down
+	bit D_LEFT_F, b
+	jr z, .not_left
+	ld a, [wListScrollOffset]
+	or a
+	jr z, .continue
+	ld hl, wNumMenuItems
+	sub [hl]
+	jr c, .top_of_page_reached
+	ld [wListScrollOffset], a
+	call PrintCardListItems.reload
+	jr .continue
+.top_of_page_reached
+	call EraseCursor
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ld c, a
+	ld hl, wNumMenuItems
+	sub [hl]
+	jr nc, .asm_28c4
+	add [hl]
+.asm_28c4
+	ld [wCurMenuItem], a
+	xor a
+	ld [wListScrollOffset], a
+	ld [wRefreshMenuCursorSFX], a
+	call PrintCardListItems.reload
+	jr .continue
+.not_left
+	bit D_RIGHT_F, b
+	jr z, .continue
+	ld a, [wNumMenuItems]
+	ld hl, wNumListItems
+	cp [hl]
+	jr nc, .continue
+	ld a, [wListScrollOffset]
+	ld hl, wNumMenuItems
+	add [hl]
+	ld c, a
+	add [hl]
+	dec a
+	ld hl, wNumListItems
+	cp [hl]
+	jr nc, .asm_28f9
+	ld a, c
+	ld [wListScrollOffset], a
+	call PrintCardListItems.reload
+	jr .continue
+.asm_28f9
+	call EraseCursor
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ld c, a
+	ld a, [wNumListItems]
+	ld hl, wNumMenuItems
+	sub [hl]
+	ld [wListScrollOffset], a
+	ld b, a
+	ld a, c
+	sub b
+	jr nc, .asm_2914
+	add [hl]
+.asm_2914
+	ld [wCurMenuItem], a
+	call PrintCardListItems.reload
+.continue
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ldh [hCurMenuItem], a
+	ld a, [wCardListIndicatorYPosition]
+	cp $ff
+	jr z, .skip_printing_indicator
+	; print <sel_item>/<num_items>
+	ld c, a
+	ldh a, [hCurMenuItem]
+	inc a
+	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	ld b, 13
+	ld a, 2
+	call CopyDataToBGMap0
+	ld b, 15
+	ld a, SYM_SLASH
+	call WriteByteToBGMap0
+	ld a, [wNumListItems]
+	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	ld b, 16
+	ld a, 2
+	call CopyDataToBGMap0
+.skip_printing_indicator
+	ld hl, wListFunctionPointer
+	ld a, [hli]
+	or [hl]
+	jr z, .no_list_function
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ldh a, [hCurMenuItem]
+	jp hl ; execute the function at wListFunctionPointer
+.no_list_function
+	ldh a, [hButtonsPressed]
+	and A_BUTTON | B_BUTTON
+	ret z
+	and B_BUTTON
+	jr nz, .pressed_b
+	scf
+	ret
+.pressed_b
+	ld a, $ff
+	ldh [hCurMenuItem], a
+	scf
+	ret
+; 0x296a
+
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+; replace leading zeros with SYM_SPACE
+OneByteNumberToTxSymbol_TrimLeadingZeros: ; 296a (0:296a)
+	call OneByteNumberToTxSymbol
+	ld a, [hl]
+	cp SYM_0
+	ret nz
+	ld [hl], SYM_SPACE
+	ret
+; 0x2974
+
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+OneByteNumberToTxSymbol: ; 2974 (0:2974)
+	ld hl, wDefaultText
+	push hl
+	ld e, SYM_0 - 1
+.first_digit_loop
+	inc e
+	sub 10
+	jr nc, .first_digit_loop
+	ld [hl], e ; first digit
+	inc hl
+	add SYM_0 + 10
+	ld [hli], a ; second digit
+	ld [hl], SYM_SPACE
+	pop hl
+	ret
+; 0x2988
+
+; translate the TYPE_* constant in wLoadedCard1Type to an index for CardSymbolTable
 CardTypeToSymbolID: ; 2988 (0:2988)
 	ld a, [wLoadedCard1Type]
 	cp TYPE_TRAINER
@@ -7085,6 +7310,8 @@ CardTypeToSymbolID: ; 2988 (0:2988)
 	ret
 ; 0x299f
 
+; return the entry in CardSymbolTable of the TYPE_* constant in wLoadedCard1Type
+; also return the first byte of said entry (starting tile number) in a
 GetCardSymbolData: ; 299f (0:299f)
 	call CardTypeToSymbolID
 	add a
@@ -7096,6 +7323,7 @@ GetCardSymbolData: ; 299f (0:299f)
 	ret
 ; 0x29ac
 
+; draw, at de, the 2x2 tile card symbol associated to the TYPE_* constant in wLoadedCard1Type
 DrawCardSymbol: ; 29ac (0:29ac)
 	push hl
 	push de
@@ -7129,7 +7357,7 @@ DrawCardSymbol: ; 29ac (0:29ac)
 ; 0x29dd
 
 CardSymbolTable:
-; starting tile, cgb palette (grey, red, blue, pink)
+; starting tile number, cgb palette (grey, red, blue, pink)
 	db $e0, $01 ; TYPE_ENERGY_FIRE
 	db $e4, $02 ; TYPE_ENERGY_GRASS
 	db $e8, $01 ; TYPE_ENERGY_LIGHTNING
@@ -7365,7 +7593,7 @@ HandleYesOrNoMenu:
 	jr .wait_button_loop
 .a_pressed
 	ld a, [wCurMenuItem]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	or a
 	jr nz, .no
 ;.yes
@@ -7375,7 +7603,7 @@ HandleYesOrNoMenu:
 	xor a
 	ld [wcd9a], a ; 0
 	ld a, 1
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	scf
 	ret
 
@@ -7720,7 +7948,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .asm_2d79
-	cp TX_SYMBOL
+	cp $5
 	jr c, .asm_2d65
 	cp $10
 	jr nc, .asm_2d65
@@ -7848,7 +8076,7 @@ ReadTextOffset: ; 2ded (0:2ded)
 ;   return c = 4 - leading_zeros
 ; if [wRegularFontOrVWF] == 0:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
-;   replace leading zeros with $00
+;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wRegularFontOrVWF]
 	or a
@@ -8198,13 +8426,13 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 ; input:
   ; a = command type to check
   ; hl = list of commands of current move or trainer card
-; return nc if command type matching a is found, c otherwise
+; return nc if command type matching a is found, carry otherwise
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
 	or h
 	jr nz, .not_null_pointer
-; return c if pointer is $0000
+; return carry if pointer is $0000
 	scf
 	ret
 

@@ -90,7 +90,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call HandleMenuInput
 	jr nc, .asm_8dc8
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
 	ld [wceb1], a
@@ -980,7 +980,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wd087], a
 	ld a, [wCurMenuItem]
 	ld [wd086], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	jp z, $7b0d
 	ld [wd088], a

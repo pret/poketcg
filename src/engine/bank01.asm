@@ -398,7 +398,7 @@ PrintDuelMenu: ; 4295 (1:4295)
 	ld a, e
 	ld [wCurrentDuelMenuItem], a
 	jr nc, .handle_input
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
 
@@ -967,8 +967,8 @@ Func_4693: ; 4693 (1:4693)
 	ld hl, EnergyDiscardCardListParameters
 	lb de, 0, 0 ; initial page scroll offset, initial item (in the visible page)
 	call PrintCardListItems
-	ld a, $04
-	ld [wcd97], a
+	ld a, 4
+	ld [wCardListIndicatorYPosition], a
 	ret
 ; 0x46b7
 
@@ -1066,7 +1066,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	jr .try_open_attack_menu
 
 .enough_energy
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
 	ld d, $00
@@ -1110,7 +1110,7 @@ Func_478b: ; 478b (1:478b)
 	call PlaceCardImageOAM
 	lb de, 6, 4
 	call ApplyBGP6OrSGB3ToCardImage
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	ld [wSelectedDuelSubMenuItem], a
 	add a
 	ld e, a
@@ -1282,7 +1282,7 @@ CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	call HandleEnergyBurn
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
 	ld d, $0
@@ -2538,7 +2538,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld d, [hl] ; initial page scroll offset
 	ld hl, CardListParameters ; other list params
 	call PrintCardListItems
-	call DrawSelectedCard
+	call LoadSelectedCardGfx
 	call EnableLCD
 .asm_560b
 	call DoFrame
@@ -2558,7 +2558,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld a, [wcbd6]
 	and b
 	jr nz, .asm_5654
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList_OnlyDeckIndex
 	call $56c2
 	jr c, Func_55f0
@@ -2579,7 +2579,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	call EraseCursor
 	jr .asm_55f6
 .asm_5654
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call $5762
@@ -2591,7 +2591,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	call DrawCardListScreenLayout.draw
 	jp Func_55f0
 .asm_566f
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	or a
 	jr z, .asm_5654
 	dec a
@@ -2599,19 +2599,19 @@ Func_55f0: ; 55f0 (1:55f0)
 .asm_5677
 	call CountCardsInDuelTempList
 	ld b, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	inc a
 	cp b
 	jr nc, .asm_5654
 .asm_5681
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hl], $00
 	inc hl
 	ld [hl], a
 	jr .asm_5654
 .asm_568c
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 ; 0x5690
@@ -2656,10 +2656,32 @@ CardListParameters: ; 5710 (1;5710)
 	db 5 ; number of items selectable without scrolling
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $5719 ; function pointer if non-0
+	dw CardListFunction ; function pointer if non-0
 ; 0x5719
 
-	INCROM $5719,  $5744
+CardListFunction: ; 5719 (1:5719)
+	ldh a, [hButtonsPressed]
+	bit B_BUTTON_F, a
+	jr nz, .exit
+	and A_BUTTON | SELECT | START
+	jr nz, .action_button
+	ldh a, [hButtonsReleased]
+	and D_PAD
+	jr nz, .reload_card_image ; jump if the D_PAD button was released this frame
+	ret
+.exit
+	ld a, $ff
+	ldh [hCurMenuItem], a
+.action_button
+	scf
+	ret
+.reload_card_image
+	call LoadSelectedCardGfx
+	or a
+	ret
+; 0x5735
+
+	INCROM $5735,  $5744
 
 Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
@@ -2709,10 +2731,10 @@ Func_5779: ; 5779 (1:5779)
 	and b
 	jr nz, .asm_57cc
 	ldh a, [hButtonsPressed]
-	and START + A_BUTTON
+	and START | A_BUTTON
 	jr nz, .asm_57a7
 	ldh a, [hButtonsPressed]
-	and D_RIGHT + D_LEFT
+	and D_RIGHT | D_LEFT
 	jr z, .asm_57af
 	call Func_57cd
 	jr .asm_57af
@@ -2755,8 +2777,8 @@ Func_589c: ; 589c (1:589c)
 ; 0x58aa
 
 ; load the tiles and palette of the card selected in card list screen
-DrawSelectedCard: ; 58aa (1:58aa)
-	ldh a, [hCurrentMenuItem]
+LoadSelectedCardGfx: ; 58aa (1:58aa)
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromCardID
 	ld de, v0Tiles1 + $20 tiles
@@ -3427,10 +3449,10 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 .asm_6091
 	ld a, [wExcludeArenaPokemon]
 	ld c, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add c
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	jr z, .asm_60b5
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
@@ -3443,14 +3465,14 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	pop af
 	ldh [hTempCardIndex_ff98], a
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	or a
 	ret
 .asm_60b5
 	pop af
 	ldh [hTempCardIndex_ff98], a
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	scf
 	ret
 ; 0x60be
@@ -3461,7 +3483,7 @@ PlayAreaScreenMenuParameters_ActivePokemonIncluded: ; 60be (1:60be)
 	db 6 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $60ce ; function pointer if non-0
+	dw PlayAreaScreenMenuFunction ; function pointer if non-0
 
 PlayAreaScreenMenuParameters_ActivePokemonExcluded: ; 60c6 (1:60c6)
 	db 0, 3 ; cursor x, cursor y
@@ -3469,9 +3491,22 @@ PlayAreaScreenMenuParameters_ActivePokemonExcluded: ; 60c6 (1:60c6)
 	db 6 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $60ce ; function pointer if non-0
+	dw PlayAreaScreenMenuFunction ; function pointer if non-0
 
-	INCROM $60ce, $622a
+PlayAreaScreenMenuFunction: ; 60ce (1:60ce)
+	ldh a, [hButtonsPressed]
+	and A_BUTTON | B_BUTTON | START
+	ret z
+	bit B_BUTTON_F, a
+	jr z, .start_or_a
+	ld a, $ff
+	ldh [hCurMenuItem], a
+.start_or_a
+	scf
+	ret
+; 0x60dd
+
+	INCROM $60dd, $622a
 
 Func_622a: ; 622a (1:622a)
 	ld a, [wcbc9]

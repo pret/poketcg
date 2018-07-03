@@ -112,7 +112,8 @@ hffaf:: ; ffaf
 hffb0:: ; ffb0
 	ds $1
 
-hCurrentMenuItem:: ; ffb1
+; unlike wCurMenuItem, this accounts for the scroll offset (wListScrollOffset)
+hCurMenuItem:: ; ffb1
 	ds $1
 
 	ds $3

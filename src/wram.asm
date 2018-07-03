@@ -955,7 +955,7 @@ wUppercaseVWFLetters:: ; cd0d
 
 	ds $1
 
-; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
+; handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
 wCursorBlinkCounter:: ; cd0f
 	ds $1
 
@@ -980,6 +980,7 @@ wCursorTileNumber:: ; cd15
 wTileBehindCursor:: ; cd16
 	ds $1
 
+; if non-$0000, the function loaded here is called once per frame by HandleMenuInput
 wMenuFunctionPointer:: ; cd17
 	ds $2
 
@@ -995,12 +996,16 @@ wNumListItems:: ; cd1b
 wListItemNameMaxLength:: ; cd1c
 	ds $1
 
+; if non-$0000, the function loaded here is called once per frame by CardListMenuFunction,
+; which is the function loaded to wMenuFunctionPointer for card lists
 wListFunctionPointer:: ; cd1d
 	ds $2
 
 	ds $78
 
-wcd97:: ; cd97
+; in a card list, the Y position where the <sel_item>/<num_items> indicator is placed
+; if wCardListIndicatorYPosition == $ff, no indicator is displayed
+wCardListIndicatorYPosition:: ; cd97
 	ds $1
 
 ; x coord of the leftmost item in a horizontal menu

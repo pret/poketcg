@@ -990,7 +990,7 @@ MainMenu_c75a: ; c75a (3:475a)
 	jr nc, .asm_c76a
 	ld a, e
 	ld [wd0b8], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp e
 	jr nz, .asm_c793
 	cp $5
@@ -1074,7 +1074,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr nc, .asm_c806
 	ld a, e
 	ld [wd0b9], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp e
 	jr nz, .asm_c82f
 	cp $4
@@ -1723,7 +1723,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld l, c
 	ld h, b
 	call Func_c8ed
-	ld a, [hCurrentMenuItem]
+	ld a, [hCurMenuItem]
 	ld [wd415], a
 	jr c, .asm_ccfe
 	call GetOWSArgs3AfterPointer
@@ -2578,14 +2578,14 @@ Func_d28c: ; d28c (3:528c)
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
 	jr nc, .asm_d2c1
-	ld a, [hCurrentMenuItem]
+	ld a, [hCurMenuItem]
 	cp e
 	jr z, .asm_d2d9
 	ld a, [wd417]
 	or a
 	jr z, .asm_d2c1
 	ld e, a
-	ld [hCurrentMenuItem], a
+	ld [hCurMenuItem], a
 
 .asm_d2d9
 	pop hl
