@@ -20,7 +20,7 @@ SECTION "rst38", ROM0
 SECTION "vblank", ROM0
 	jp VBlankHandler
 SECTION "lcdc", ROM0
-	call wLCDCFunctiontrampoline
+	call wLCDCFunctionTrampoline
 	reti
 SECTION "timer", ROM0
 	jp TimerHandler
@@ -339,7 +339,7 @@ SetupLCD: ; 030b (0:030b)
 	xor a
 	ld [wReentrancyFlag], a
 	ld a, $c3            ; $c3 = jp nn
-	ld [wLCDCFunctiontrampoline], a
+	ld [wLCDCFunctionTrampoline], a
 	ld [wVBlankFunctionTrampoline], a
 	ld hl, wVBlankFunctionTrampoline + 1
 	ld [hl], LOW(NopF)   ;
@@ -2644,7 +2644,64 @@ Func_0ed5: ; 0ed5 (0:0ed5)
 	ret
 ; 0xef1
 
-	INCROM $0ef1, $0f35
+Func_0ef1: ; 0ef1 (0:0ef1)
+	ld de, wcb79
+	ld hl, sp+$fe
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	inc de
+	pop hl
+	push hl
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	or a
+	ret
+; 0xf05
+
+Func_0f05: ; 0f05 (0:0f05)
+	push hl
+	ld hl, wcb7b
+	ld a, [hli]
+	or [hl]
+	pop hl
+	ret z
+	ld hl, wcb79
+	ld a, [hli]
+	ld h, a
+	ld l, a
+	ld sp, hl
+	ld hl, wcb7b
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push hl
+	scf
+	ret
+; 0xf1d
+
+Func_0f1d: ; 0f1d (0:0f1d)
+	ld a, [wSerialFlags]
+	or a
+	jr nz, .asm_f27
+	call Func_0e32
+	ret nc
+.asm_f27
+	ld a, $01
+	call BankswitchHome
+	ld hl, wcbf7
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld sp, hl
+	scf
+	ret
+; 0xf35
 
 DuelTransmissionError: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
@@ -2936,7 +2993,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ret
 
 ; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN
-; returns c if deck is empty, nc if a card was succesfully drawn
+; returns carry if deck is empty, nc if a card was succesfully drawn
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -2960,7 +3017,7 @@ DrawCardFromDeck: ; 10cf (0:10cf)
 ; 0x10e8
 
 ; add a card to the top of the turn holder's deck
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 ReturnCardToDeck: ; 10e8 (0:10e8)
 	push hl
 	push af
@@ -2979,8 +3036,9 @@ ReturnCardToDeck: ; 10e8 (0:10e8)
 	ret
 ; 0x10fc
 
-; search a card in the turn holder's deck, extract it, and add it to the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; search a card in the turn holder's deck, extract it, and set its location to
+; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
+; the card is identified by register a, which contains the deck index (0-59) of the card
 SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 	push af
 	push hl
@@ -3017,7 +3075,7 @@ SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 ; 0x1123
 
 ; adds a card to the turn holder's hand and increments the number of cards in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 AddCardToHand: ; 1123 (0:1123)
 	push af
 	push hl
@@ -3043,7 +3101,7 @@ AddCardToHand: ; 1123 (0:1123)
 ; 0x1139
 
 ; removes a card from the turn holder's hand and decrements the number of cards in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 RemoveCardFromHand: ; 1139 (0:1139)
 	push af
 	push hl
@@ -3082,7 +3140,7 @@ RemoveCardFromHand: ; 1139 (0:1139)
 ; 0x1160
 
 ; moves a card to the turn holder's discard pile, as long as it is in the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; the card is identified by register a, which contains the deck index (0-59) of the card
 MoveHandCardToDiscardPile: ; 1160 (0:1160)
 	call GetTurnDuelistVariable
 	ld a, [hl]
@@ -3113,8 +3171,9 @@ PutCardInDiscardPile: ; 116a (0:116a)
 	ret
 ; 0x1182
 
-; search a card in the turn holder's discard pile, extract it, and add it to the hand
-; the card is identified by register a, which contains the card number within the deck (0-59)
+; search a card in the turn holder's discard pile, extract it, and set its location to
+; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
+; the card is identified by register a, which contains the deck index (0-59) of the card
 MoveDiscardPileCardToHand: ; 1182 (0:1182)
 	push hl
 	push de
@@ -3404,7 +3463,6 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ld l, a
 	ld e, l
 	ld d, h
-
 	; get ID of card with deck index at [de]
 	ld a, [de]
 	call GetCardIDFromDeckIndex_bc
@@ -3412,7 +3470,6 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ldh [hTempCardID_ff9b], a
 	ld a, b
 	ldh [hTempCardID_ff9b + 1], a ; 0
-
 	; hl = [hTempListPtr_ff99] + 1
 	inc hl
 	jr .check_list_end
@@ -3425,10 +3482,8 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	jr nz, .go
 	ldh a, [hTempCardID_ff9b]
 	cp c
-
 .go
 	jr c, .not_lower_id
-
 	; this card has the lowest ID of those checked so far
 	ld e, l
 	ld d, h
@@ -3436,14 +3491,11 @@ SortCardsInListByID: ; 12ad (0:12ad)
 	ldh [hTempCardID_ff9b], a
 	ld a, b
 	ldh [hTempCardID_ff9b + 1], a
-
 .not_lower_id
 	inc hl
-
 .check_list_end
 	bit 7, [hl] ; $ff is the list terminator
 	jr z, .next_card_in_list
-
 	; reached list terminator
 	ld hl, hTempListPtr_ff99
 	push hl
@@ -3694,7 +3746,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ret
 ; 0x13f7
 
-; check if the turn holder's Pokemon card e can evolve into the turn holder's Pokemon card d.
+; check if the turn holder's Pokemon card at e can evolve into the turn holder's Pokemon card d.
 ; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
 ; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
 ; return carry if can't evolve, plus nz if the reason for it is the card was played this turn.
@@ -4044,7 +4096,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 
 ; Find which and how many energy cards are attached to the turn holder's Pokemon card in the arena,
 ; or a Pokemon card in the bench, depending on the value of register e.
-; input: e (location to check) = CARD_LOCATION_* - CARD_LOCATION_PLAY_AREA
+; input: e = location to check, i.e. PLAY_AREA_*
 ; Feedback is returned in wAttachedEnergies and wTotalAttachedEnergies.
 GetPlayAreaCardAttachedEnergies: ; 159f (0:159f)
 	push hl
@@ -4251,7 +4303,7 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
 	pop de
-	jr CopyMoveDataAndDamage_FromDeckIndex.card_loaded
+	jr CopyMoveDataAndDamage
 
 ; copies, given a card identified by register d (0-59 deck index):
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
@@ -4263,7 +4315,9 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
 	call LoadCardDataToBuffer1_FromDeckIndex
-.card_loaded
+;	fallthrough
+
+CopyMoveDataAndDamage:
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Move1
@@ -5107,7 +5161,9 @@ SubstractHPFromCard: ; 1c35 (0:1c35)
 ; 0x1c50
 
 ; check if a flag of wLoadedMove is set
-; input: a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1, and b = flag bit
+; input:
+	; a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1
+	; b = flag bit
 ; return carry if the flag is set
 CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	push hl
@@ -5451,8 +5507,8 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ld h, a
 	ret
 
-; Apply window correction to xy coordinates at de
-AdjustCoordinatesForWindow: ; 1deb (0:1deb)
+; Apply SCX and SCY correction to xy coordinates at de
+AdjustCoordinatesForBGScroll: ; 1deb (0:1deb)
 	push af
 	ldh a, [hSCX]
 	rra
@@ -5579,8 +5635,8 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
-	ld a, $1c
-	lb de, $18, $19
+	ld a, SYM_BOX_TOP
+	lb de, SYM_BOX_TOP_L, SYM_BOX_TOP_R
 	call CopyLine
 ;	fallthrough
 
@@ -5588,14 +5644,14 @@ ContinueDrawingTextBoxDMGorSGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
-	ld a, $0
-	lb de, $1e, $1f
+	ld a, SYM_SPACE
+	lb de, SYM_BOX_LEFT, SYM_BOX_RIGHT
 	call CopyLine
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
-	ld a, $1d
-	lb de, $1a, $1b
+	ld a, SYM_BOX_BOTTOM
+	lb de, SYM_BOX_BTM_L, SYM_BOX_BTM_R
 ;	fallthrough
 
 ; copies b bytes of data to sp-$1f and to hl, and returns hl += BG_MAP_WIDTH
@@ -5637,8 +5693,8 @@ CopyLine: ; 1ea5 (0:1ea5)
 DrawRegularTextBoxCGB:
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
-	ld a, $1c
-	lb de, $18, $19
+	ld a, SYM_BOX_TOP
+	lb de, SYM_BOX_TOP_L, SYM_BOX_TOP_R
 	call CopyCurrentLineTilesAndAttrCGB
 ;	fallthrough
 
@@ -5646,8 +5702,8 @@ ContinueDrawingTextBoxCGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
-	ld a, $0
-	lb de, $1e, $1f
+	ld a, SYM_SPACE
+	lb de, SYM_BOX_LEFT, SYM_BOX_RIGHT
 	push hl
 	call CopyLine
 	pop hl
@@ -5661,8 +5717,8 @@ ContinueDrawingTextBoxCGB:
 	dec c
 	jr nz, .draw_text_box_body_loop
 	; bottom line (border) of the text box
-	ld a, $1d
-	lb de, $1a, $1b
+	ld a, SYM_BOX_BOTTOM
+	lb de, SYM_BOX_BTM_L, SYM_BOX_BTM_R
 	call CopyCurrentLineTilesAndAttrCGB
 	ret
 
@@ -5993,7 +6049,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	cp $f
 	jr z, .asm_2221
 	cp $a
-	jr z, .asm_224d
+	jr z, .reached_line_length
 	cp TX_SYMBOL
 	jr z, .asm_2225
 	cp TX_START
@@ -6004,12 +6060,12 @@ Func_21f2: ; 21f2 (0:21f2)
 	ret
 .asm_220f
 	ld a, $1
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ret
 .asm_2215
 	call Func_230f
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
@@ -6018,53 +6074,55 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ret
 .asm_2225
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	push af
 	ld a, $1
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	call Func_230f
 	pop af
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ldh a, [hffb0]
 	or a
 	jr nz, .asm_2240
 	ld a, [hl]
 	push hl
-	call Func_22f2
+	call PlaceNextTextTile
 	pop hl
 .asm_2240
 	inc hl
 .asm_2241
-	ldh a, [hffae]
+	ldh a, [hTextLineLength]
 	or a
 	ret z
 	ld b, a
-	ldh a, [hffac]
+	ldh a, [hTextLineCurPos]
 	cp b
-	jr z, .asm_224d
+	jr z, .reached_line_length
 	xor a
 	ret
-.asm_224d
+.reached_line_length
 	call Func_230f
-	ld a, [wcd08]
+	ld a, [wLineSeparation]
 	or a
-	call z, .asm_2257
-.asm_2257
+	call z, .next_line
+.next_line
 	xor a
-	ldh [hffac], a
-	ldh a, [hffad]
-	add $20
+	ldh [hTextLineCurPos], a
+	ldh a, [hTextHorizontalAlign]
+	add BG_MAP_WIDTH
 	ld b, a
-	ldh a, [hffaa]
+	; get current line's starting BGMap0 address
+	ldh a, [hTextBGMap0Address]
 	and $e0
-	add b
-	ldh [hffaa], a
-	ldh a, [hffab]
+	; advance to next line
+	add b ; apply background scroll correction
+	ldh [hTextBGMap0Address], a
+	ldh a, [hTextBGMap0Address + 1]
 	adc $0
-	ldh [hffab], a
-	ld a, [wcd09]
+	ldh [hTextBGMap0Address + 1], a
+	ld a, [wCurTextLine]
 	inc a
-	ld [wcd09], a
+	ld [wCurTextLine], a
 	xor a
 	ret
 
@@ -6079,9 +6137,9 @@ Func_2275: ; 2275 (0:2275)
 	ldh [hffb0], a
 	ldh [hffa9], a
 	ld a, $88
-	ld [wcd06], a
+	ld [wTilePatternSelector], a
 	ld a, $80
-	ld [wcd07], a
+	ld [wTilePatternSelectorCorrection], a
 	ld hl, wc600
 .asm_2292
 	xor a
@@ -6090,47 +6148,47 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
-; wcd0a <- 0
-; hffac <- 0
+; wRegularFontOrVWF <- 0
+; hTextLineCurPos <- 0
 ; wcd0b <- 0
 ; hffaf <- $f
 Func_2298: ; 2298 (0:2298)
 	xor a
-	ld [wcd0a], a
-	ldh [hffac], a
+	ld [wRegularFontOrVWF], a
+	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
 
 ; Func_22ae
-; hffae <- a
+; hTextLineLength <- a
 Func_22a6: ; 22a6 (0:22a6)
 	push af
 	call Func_22ae
 	pop af
-	ldh [hffae], a
+	ldh [hTextLineLength], a
 	ret
 
-; hffad <- d
-; hffae <- 0
-; wcd09 <- 0
-; hffaa <- BGMap0(e)
-; hffab <- BGMap0(d)
+; hTextHorizontalAlign <- d
+; hTextLineLength <- 0
+; wCurTextLine <- 0
+; hTextBGMap0Address <- BGMap0(e)
+; hTextBGMap0Address + 1 <- BGMap0(d)
 ; Func_2298
-;; writes BGMap0-translated DE to (hffab,hffaa)
+;; writes BGMap0-translated DE to hTextBGMap0Address
 Func_22ae: ; 22ae (0:22ae)
 	push hl
 	ld a, d
-	ldh [hffad], a
+	ldh [hTextHorizontalAlign], a
 	xor a
-	ldh [hffae], a
-	ld [wcd09], a
+	ldh [hTextLineLength], a
+	ld [wCurTextLine], a
 	call DECoordToBGMap0Address
 	ld a, l
-	ldh [hffaa], a
+	ldh [hTextBGMap0Address], a
 	ld a, h
-	ldh [hffab], a
+	ldh [hTextBGMap0Address + 1], a
 	call Func_2298
 	xor a
 	ld [wcd0b], a
@@ -6145,33 +6203,30 @@ Func_22ca: ; 22ca (0:22ca)
 	and $1
 	jr nz, .asm_22ed
 	call Func_2325
-	jr c, .asm_22de
+	jr c, .tile_already_exists
 	or a
-	jr nz, .asm_22e9
-	call Func_24ac
-.asm_22de
+	jr nz, .done
+	call GenerateTextTile
+.tile_already_exists
 	ldh a, [hffb0]
 	and $2
-	jr nz, .asm_22e9
+	jr nz, .done
 	ldh a, [hffa9]
-	call Func_22f2
-.asm_22e9
+	call PlaceNextTextTile
+.done
 	pop bc
 	pop de
 	pop hl
 	ret
 .asm_22ed
 	call Func_235e
-	jr .asm_22e9
+	jr .done
 
-; wcd05 <- a
-; &(hffab,hffaa) <- a
-; (hffab,hffaa) ++
-; hffac ++
-;; writes a to addr pointed to by (hffab,hffaa), then increments (hffab,hffaa) and hffac
-Func_22f2: ; 22f2 (0:22f2)
-	ld [wcd05], a
-	ld hl, hffaa
+; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
+; then increments hTextBGMap0Address and hTextLineCurPos
+PlaceNextTextTile: ; 22f2 (0:22f2)
+	ld [wCurTextTile], a
+	ld hl, hTextBGMap0Address
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -6182,15 +6237,15 @@ Func_22f2: ; 22f2 (0:22f2)
 	dec de
 	ld l, e
 	ld h, d
-	ld de, wcd05
+	ld de, wCurTextTile
 	ld c, 1
 	call SafeCopyDataDEtoHL
-	ld hl, hffac
+	ld hl, hTextLineCurPos
 	inc [hl]
 	ret
 
 Func_230f: ; 230f (0:230f)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	ret z
 	ld a, [wcd0b]
@@ -6245,21 +6300,21 @@ Func_2325: ; 2325 (0:2325)
 	ld [hl], c
 	ld h, $c6
 	ld [hl], e
-	inc h
+	inc h ; $c7
 	ld [hl], d
 	ld b, l
 	xor a
 	ret
 
-; search linked-list for letters e/d (regisers), if found hoist the result to
-; head of list and return it. carry flag denotes success.
+; search linked-list for text characters e/d (registers), if found hoist
+; the result to head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [wcd0a]        ;
+	ld a, [wRegularFontOrVWF]
 	or a                 ;
-	jr z, .asm_2376      ; if [wcd0a] nonzero:
-	call Uppercase       ;   uppercase e
+	jr z, .asm_2376      ; if [wRegularFontOrVWF] nonzero:
+	call CaseVWFLetter   ;   uppercase e if wUppercaseVWFLetters != 0
 	ld a, [wcd0b]
-	ld d, a
+	ld d, a              ;   d ← [wcd0b]
 	or a
 	jr nz, .asm_2376     ;   if [wcd0b] is zero:
 	ld a, e              ;
@@ -6279,9 +6334,9 @@ Func_235e: ; 235e (0:235e)
 	ret z                ; if NULL, return a = 0  ;
 	cp e                                          ; loop for e/d key in
 	jr nz, .asm_238a     ;                        ; linked list
-	inc h                ;                        ;
+	inc h ; $c7          ;                        ;
 	ld a, [hl]           ; if key1[l] == e and    ;
-	cp d                 ;    key2[l] == d:       ;
+	cp d                 ;   key2[l] == d:        ;
 	jr z, .asm_238f      ;   break                ;
 .asm_238a
 	ld h, $c8            ;                        ;
@@ -6315,9 +6370,9 @@ Func_235e: ; 235e (0:235e)
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
-; uppercases e if [wUppercaseFlag] is nonzero
-Uppercase: ; 23b1 (0:23b1)
-	ld a, [wUppercaseFlag]
+; uppercases e if [wUppercaseVWFLetters] is nonzero
+CaseVWFLetter: ; 23b1 (0:23b1)
+	ld a, [wUppercaseVWFLetters]
 	or a
 	ret z
 	ld a, e
@@ -6341,7 +6396,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	ret
 .asm_23cf
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 Func_23d3: ; 23d3 (0:23d3)
 	push hl
 	push de
@@ -6380,7 +6435,7 @@ Func_23d3: ; 23d3 (0:23d3)
 	INCROM $23fd, $245d
 
 ; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
-; replace leading zeros with $00
+; replace leading zeros with SYM_SPACE
 TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
@@ -6436,43 +6491,55 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ld h, a
 	ret
 
-Func_24ac: ; 24ac (0:24ac)
+; generates a text tile and copies it to VRAM
+; if wRegularFontOrVWF == 0
+	; de = regular font tile number (d = $e and d = $f are treated differently)
+; if wRegularFontOrVWF != 0
+	; d = VWF character 1 (left)
+	; e = VWF character 2 (right)
+; b = destination VRAM tile number
+GenerateTextTile: ; 24ac (0:24ac)
 	push hl
 	push de
 	push bc
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
-	jr nz, .asm_24bf
-	call Func_2510
+	jr nz, .vwf
+;.regular_font
+	call CreateRegularFontTile_ConvertToTileDataAddress
 	call SafeCopyDataDEtoHL
-.asm_24bb
+.done
 	pop bc
 	pop de
 	pop hl
 	ret
-.asm_24bf
-	call Func_24ca
-	call Func_2518
+.vwf
+	call CreateVWFTile
+	call ConvertTileNumberToTileDataAddress
 	call SafeCopyDataDEtoHL
-	jr .asm_24bb
+	jr .done
 
-Func_24ca: ; 24ca (0:24ca)
+; create, at wVWFOrRegularFontTile, a VWF tile made from the ascii characters given in d and e
+CreateVWFTile: ; 24ca (0:24ca)
 	push bc
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(VWF)
 	call BankswitchHome
+	; write the right half of the VWF tile (first character) to wVWFOrRegularFontTile + 2n
 	push de
 	ld a, e
-	ld de, wccf4
-	call Func_24fa
+	ld de, wVWFOrRegularFontTile
+	call CopyVWFCharacterToDE
 	pop de
+	; write the left half of the VWF tile (second character) to wVWFOrRegularFontTile + 2n+1
 	ld a, d
-	ld de, wccf5
-	call Func_24fa
-	ld hl, wccf4
-	ld b, $8
-.asm_24e8
+	ld de, wVWFOrRegularFontTile + 1
+	call CopyVWFCharacterToDE
+	; construct the resulting VWF tile
+	ld hl, wVWFOrRegularFontTile
+	ld b, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	swap a
 	or [hl]
@@ -6480,14 +6547,17 @@ Func_24ca: ; 24ca (0:24ca)
 	ld [hli], a
 	ld [hli], a
 	dec b
-	jr nz, .asm_24e8
+	jr nz, .loop
 	call BankpopHome
 	pop bc
-	ld de, wccf4
+	ld de, wVWFOrRegularFontTile
 	ret
 
-Func_24fa: ; 24fa (0:24fa)
-	sub $20
+; copies a half-tile corresponding to a VWF character to de
+; the ascii value of the character to copy is provided in a
+; assumes BANK(VWF) is already loaded
+CopyVWFCharacterToDE: ; 24fa (0:24fa)
+	sub $20 ; VWF begins at ascii $20
 	ld l, a
 	ld h, $0
 	add hl, hl
@@ -6495,23 +6565,32 @@ Func_24fa: ; 24fa (0:24fa)
 	add hl, hl
 	ld bc, VWF
 	add hl, bc
-	ld b, $8
-.set_timer8
+	ld b, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
-	inc de
+	inc de ; skip the other half of the tile
 	dec b
-	jr nz, .set_timer8
+	jr nz, .loop
 	ret
 
-Func_2510: ; 2510 (0:2510)
+; create, at wVWFOrRegularFontTile, a regular font tile
+; given its tile number within the regular font graphics in de.
+; return its v*Tiles address in hl, and return c = TILE_SIZE.
+CreateRegularFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 	push bc
-	call Func_256d
-	call Func_252e
+	call GetRegularFontTileOffset
+	call CreateRegularFontTile
 	pop bc
-Func_2518: ; 2518 (0:2518)
-	ld hl, wcd07
+;	fallthrough
+
+; given a tile number in b, return its v*Tiles address in hl, and return c = TILE_SIZE
+; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
+; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
+; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
+ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
+	ld hl, wTilePatternSelectorCorrection
 	ld a, b
 	xor [hl]
 	ld h, $0
@@ -6520,33 +6599,35 @@ Func_2518: ; 2518 (0:2518)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld a, [wcd06]
+	ld a, [wTilePatternSelector]
 	ld b, a
 	ld c, $0
 	add hl, bc
-	ld c, $10
+	ld c, TILE_SIZE
 	ret
 
-Func_252e: ; 252e (0:252e)
+; create, at wVWFOrRegularFontTile, a regular font tile
+; given its offset within the font graphics in hl
+CreateRegularFontTile: ; 252e (0:252e)
 	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
 	call BankpushHome
-	ld de, wccf4
+	ld de, wVWFOrRegularFontTile
 	push de
-	ld c, $8
-.asm_2539
+	ld c, TILE_SIZE / 2
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .asm_2539
+	jr nz, .loop
 	pop de
 	call BankpopHome
 	ret
 
 Func_2546: ; 2546 (0:2546)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	jr nz, .asm_255f
 	ld a, e
@@ -6576,20 +6657,23 @@ Func_2546: ; 2546 (0:2546)
 	scf
 	ret
 
-Func_256d: ; 256d (0:256d)
-	ld bc, $0280
+; convert the regular font tile number at de to the
+; equivalent offset within the font tile graphics.
+; d = $e and d = $f are treated differently
+GetRegularFontTileOffset: ; 256d (0:256d)
+	ld bc, 40 tiles
 	ld a, d
 	cp $e
 	jr z, .asm_2580
 	cp $f
-	jr nz, .asm_2582
+	jr nz, .get_address
 	ld bc, $0000
 	ld a, e
 	sub $10
 	ld e, a
 .asm_2580
 	ld d, $0
-.asm_2582
+.get_address
 	ld l, e
 	ld h, d
 	add hl, hl
@@ -6602,8 +6686,10 @@ Func_256d: ; 256d (0:256d)
 	INCROM $2589, $25ea
 
 ; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
-; input: a = list length, de = initial page scroll offset, initial item (in the visible page)
-; hl: 9 bytes with the rest of the parameters
+; input:
+	; a = list length
+	; de = initial page scroll offset, initial item (in the visible page)
+	; hl: 9 bytes with the rest of the parameters
 InitializeCardListParameters: ; 25ea (0:25ea)
 	ld [wNumListItems], a
 	ld a, d
@@ -6611,7 +6697,7 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ld a, e
 	ld [wCurMenuItem], a
 	add d
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld a, [hli]
 	ld [wCursorXPosition], a
 	ld a, [hli]
@@ -6648,7 +6734,7 @@ HandleCardListInput: ; 2626 (0:2626)
 	ld d, a
 	ld a, [wCurMenuItem]
 	ld e, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 ; 0x2636
@@ -6660,7 +6746,7 @@ HandleCardListInput: ; 2626 (0:2626)
 ; also sets the current menu item to the one specified in register a
 InitializeMenuParameters: ; 2636 (0:2636)
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld de, wCursorXPosition
 	ld b, $8
 .loop
@@ -6711,7 +6797,7 @@ HandleMenuInput: ; 264b (0:264b)
 	ld [wCursorBlinkCounter], a
 .up_down_done
 	ld a, [wCurMenuItem]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld hl, wMenuFunctionPointer ; call the function if non-0 (periodically)
 	ld a, [hli]
 	or [hl]
@@ -6719,7 +6805,7 @@ HandleMenuInput: ; 264b (0:264b)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call CallHL
 	jr nc, RefreshMenuCursor_CheckPlaySFX
 .A_pressed_draw_cursor
@@ -6728,7 +6814,7 @@ HandleMenuInput: ; 264b (0:264b)
 	call PlayOpenOrExitScreenSFX
 	ld a, [wCurMenuItem]
 	ld e, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 .check_A_or_B
@@ -6741,16 +6827,16 @@ HandleMenuInput: ; 264b (0:264b)
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	call PlayOpenOrExitScreenSFX
 	scf
 	ret
 
-; plays an "open screen" sound if [hCurrentMenuItem] != 0xff
-; plays an "exit screen" sound if [hCurrentMenuItem] == 0xff
+; plays an "open screen" sound if [hCurMenuItem] != 0xff
+; plays an "exit screen" sound if [hCurMenuItem] == 0xff
 PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	inc a
 	jr z, .play_exit_sfx
 	ld a, $2
@@ -6793,7 +6879,7 @@ DrawCursor:
 	inc hl
 	add [hl]
 	ld e, a
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	ld a, c
 	ld c, e
 	ld b, d
@@ -6808,7 +6894,7 @@ DrawCursor2: ; 270b (0:270b)
 
 SetMenuItem: ; 2710 (0:2710)
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	ret
@@ -6816,7 +6902,7 @@ SetMenuItem: ; 2710 (0:2710)
 ; handle input for the 2-row 3-column duel menu.
 ; only handles input not involving the B, START, or SELECT buttons, that is,
 ; navigating through the menu or selecting an item with the A button.
-; other input in handled by HandleDuelMenuInputAndShortcuts.
+; other input in handled by PrintDuelMenu.handle_input
 HandleDuelMenuInput: ; 271a (0:271a)
 	ldh a, [hButtonsPressed2]
 	or a
@@ -6854,7 +6940,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	call .asm_2772
 	pop af
 	ld [wCurMenuItem], a
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	xor a
 	ld [wCursorBlinkCounter], a
 	jr .blink_cursor
@@ -6906,14 +6992,15 @@ DuelMenuCursorCoords: ; 278d (0:278d)
 PrintCardListItems: ; 2799 (0:2799)
 	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
-	ld a, LOW($283f)
+	ld a, LOW(CardListMenuFunction)
 	ld [hli], a
-	ld a, HIGH($283f)
+	ld a, HIGH(CardListMenuFunction)
 	ld [hli], a
 	ld a, 2
 	ld [wYDisplacementBetweenMenuItems], a
-	ld a, $01
-	ld [wcd97], a
+	ld a, 1
+	ld [wCardListIndicatorYPosition], a
+.reload
 	ld e, $00
 	ld a, [wListScrollOffset]
 	or a
@@ -6985,8 +7072,229 @@ PrintCardListItems: ; 2799 (0:2799)
 	ret
 ; 0x2827
 
-	INCROM $2827, $2988
+Func_2827: ; 2827 (0:2827)
+	ld a, $01
+	ldh [hffb0], a
+	call PrintCardListItems.reload
+	xor a
+	ldh [hffb0], a
+	ret
+; 0x2832
 
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+; if the first digit is a 0, delete it and shift the number one tile to the left
+OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign: ; 2832 (0:2832)
+	call OneByteNumberToTxSymbol
+	ld a, [hli]
+	cp SYM_0
+	jr nz, .not_zero
+	; shift number one tile to the left
+	ld a, [hld]
+	ld [hli], a
+	ld [hl], $00
+.not_zero
+	ret
+; 0x283f
+
+; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
+CardListMenuFunction: ; 283f (0:283f)
+	ldh a, [hButtonsPressed2]
+	ld b, a
+	ld a, [wNumMenuItems]
+	dec a
+	ld c, a
+	ld a, [wCurMenuItem]
+	bit D_UP_F, b
+	jr z, .not_up
+	cp c
+	jp nz, .continue
+	; we're at the top of the page
+	xor a
+	ld [wCurMenuItem], a ; set to first item
+	ld hl, wListScrollOffset
+	ld a, [hl]
+	or a ; can we scroll up?
+	jr z, .no_more_items
+	dec [hl] ; scroll page up
+	call PrintCardListItems.reload
+	jp .continue
+.not_up
+	bit D_DOWN_F, b
+	jr z, .not_down
+	or a
+	jr nz, .not_last_visible_item
+	; we're at the bottom of the page
+	ld a, c
+	ld [wCurMenuItem], a ; set to last item
+	ld a, [wListScrollOffset]
+	add c
+	inc a
+	ld hl, wNumListItems
+	cp [hl] ; can we scroll down?
+	jr z, .no_more_items
+	ld hl, wListScrollOffset
+	inc [hl] ; scroll page down
+	call PrintCardListItems.reload
+	jp .continue
+.not_last_visible_item
+	; this appears to be a redundant check
+	ld hl, wListScrollOffset
+	add [hl]
+	ld hl, wNumListItems
+	cp [hl]
+	jp c, .continue ; should always jump
+	ld hl, wCurMenuItem
+	dec [hl]
+.no_more_items
+	xor a
+	ld [wRefreshMenuCursorSFX], a
+	jp .continue
+.not_down
+	bit D_LEFT_F, b
+	jr z, .not_left
+	ld a, [wListScrollOffset]
+	or a
+	jr z, .continue
+	ld hl, wNumMenuItems
+	sub [hl]
+	jr c, .top_of_page_reached
+	ld [wListScrollOffset], a
+	call PrintCardListItems.reload
+	jr .continue
+.top_of_page_reached
+	call EraseCursor
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ld c, a
+	ld hl, wNumMenuItems
+	sub [hl]
+	jr nc, .asm_28c4
+	add [hl]
+.asm_28c4
+	ld [wCurMenuItem], a
+	xor a
+	ld [wListScrollOffset], a
+	ld [wRefreshMenuCursorSFX], a
+	call PrintCardListItems.reload
+	jr .continue
+.not_left
+	bit D_RIGHT_F, b
+	jr z, .continue
+	ld a, [wNumMenuItems]
+	ld hl, wNumListItems
+	cp [hl]
+	jr nc, .continue
+	ld a, [wListScrollOffset]
+	ld hl, wNumMenuItems
+	add [hl]
+	ld c, a
+	add [hl]
+	dec a
+	ld hl, wNumListItems
+	cp [hl]
+	jr nc, .asm_28f9
+	ld a, c
+	ld [wListScrollOffset], a
+	call PrintCardListItems.reload
+	jr .continue
+.asm_28f9
+	call EraseCursor
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ld c, a
+	ld a, [wNumListItems]
+	ld hl, wNumMenuItems
+	sub [hl]
+	ld [wListScrollOffset], a
+	ld b, a
+	ld a, c
+	sub b
+	jr nc, .asm_2914
+	add [hl]
+.asm_2914
+	ld [wCurMenuItem], a
+	call PrintCardListItems.reload
+.continue
+	ld a, [wListScrollOffset]
+	ld hl, wCurMenuItem
+	add [hl]
+	ldh [hCurMenuItem], a
+	ld a, [wCardListIndicatorYPosition]
+	cp $ff
+	jr z, .skip_printing_indicator
+	; print <sel_item>/<num_items>
+	ld c, a
+	ldh a, [hCurMenuItem]
+	inc a
+	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	ld b, 13
+	ld a, 2
+	call CopyDataToBGMap0
+	ld b, 15
+	ld a, SYM_SLASH
+	call WriteByteToBGMap0
+	ld a, [wNumListItems]
+	call OneByteNumberToTxSymbol_TrimLeadingZeros
+	ld b, 16
+	ld a, 2
+	call CopyDataToBGMap0
+.skip_printing_indicator
+	ld hl, wListFunctionPointer
+	ld a, [hli]
+	or [hl]
+	jr z, .no_list_function
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ldh a, [hCurMenuItem]
+	jp hl ; execute the function at wListFunctionPointer
+.no_list_function
+	ldh a, [hButtonsPressed]
+	and A_BUTTON | B_BUTTON
+	ret z
+	and B_BUTTON
+	jr nz, .pressed_b
+	scf
+	ret
+.pressed_b
+	ld a, $ff
+	ldh [hCurMenuItem], a
+	scf
+	ret
+; 0x296a
+
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+; replace leading zeros with SYM_SPACE
+OneByteNumberToTxSymbol_TrimLeadingZeros: ; 296a (0:296a)
+	call OneByteNumberToTxSymbol
+	ld a, [hl]
+	cp SYM_0
+	ret nz
+	ld [hl], SYM_SPACE
+	ret
+; 0x2974
+
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+OneByteNumberToTxSymbol: ; 2974 (0:2974)
+	ld hl, wDefaultText
+	push hl
+	ld e, SYM_0 - 1
+.first_digit_loop
+	inc e
+	sub 10
+	jr nc, .first_digit_loop
+	ld [hl], e ; first digit
+	inc hl
+	add SYM_0 + 10
+	ld [hli], a ; second digit
+	ld [hl], SYM_SPACE
+	pop hl
+	ret
+; 0x2988
+
+; translate the TYPE_* constant in wLoadedCard1Type to an index for CardSymbolTable
 CardTypeToSymbolID: ; 2988 (0:2988)
 	ld a, [wLoadedCard1Type]
 	cp TYPE_TRAINER
@@ -7005,6 +7313,8 @@ CardTypeToSymbolID: ; 2988 (0:2988)
 	ret
 ; 0x299f
 
+; return the entry in CardSymbolTable of the TYPE_* constant in wLoadedCard1Type
+; also return the first byte of said entry (starting tile number) in a
 GetCardSymbolData: ; 299f (0:299f)
 	call CardTypeToSymbolID
 	add a
@@ -7016,6 +7326,7 @@ GetCardSymbolData: ; 299f (0:299f)
 	ret
 ; 0x29ac
 
+; draw, at de, the 2x2 tile card symbol associated to the TYPE_* constant in wLoadedCard1Type
 DrawCardSymbol: ; 29ac (0:29ac)
 	push hl
 	push de
@@ -7049,7 +7360,7 @@ DrawCardSymbol: ; 29ac (0:29ac)
 ; 0x29dd
 
 CardSymbolTable:
-; starting tile, cgb palette (grey, red, blue, pink)
+; starting tile number, cgb palette (grey, red, blue, pink)
 	db $e0, $01 ; TYPE_ENERGY_FIRE
 	db $e4, $02 ; TYPE_ENERGY_GRASS
 	db $e8, $01 ; TYPE_ENERGY_LIGHTNING
@@ -7071,7 +7382,7 @@ CopyCardNameAndLevel: ; 29f5 (0:29f5)
 ; 0x29fa
 
 Func_29fa: ; 29fa (0:29fa)
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
@@ -7122,12 +7433,12 @@ DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
-	ld a, $b
+	ld a, 11
 ;	fallthrough
 
 Func_2a44: ; 2a44 (0:2a44)
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22a6
 	pop hl
 	ld a, l
@@ -7139,9 +7450,9 @@ Func_2a44: ; 2a44 (0:2a44)
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
-	ld a, $13
+	ld a, 19
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22a6
 	call EnableLCD
 	pop hl
@@ -7151,7 +7462,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	lb de, 0, 12
 	lb bc, 12, 6
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call DrawRegularTextBox
 	ret
 
@@ -7173,15 +7484,15 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 	db 10, 17 ; corsor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
-	db $2f ; cursor tile number
-	db $1d ; tile behind cursor
+	db SYM_CURSOR_D ; cursor tile number
+	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
 ; draws a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
 	lb de, 0, 12
 	lb bc, 20, 6
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call DrawRegularTextBox
 	ret
 
@@ -7206,8 +7517,8 @@ WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
 	db 18, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
-	db $2f ; cursor tile number
-	db $1d ; tile behind cursor
+	db SYM_CURSOR_D ; cursor tile number
+	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
@@ -7215,7 +7526,7 @@ TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	lb de, 6, 16 ; x, y
 	ld a, d
 	ld [wLeftmostItemCursorX], a
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, 1
 	ld [wCurMenuItem], a
@@ -7248,7 +7559,7 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 HandleYesOrNoMenu:
 	ld a, d
 	ld [wLeftmostItemCursorX], a
-	lb bc, $0f, $00 ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 	ld a, [wcd9a]
 	ld [wCurMenuItem], a
@@ -7285,7 +7596,7 @@ HandleYesOrNoMenu:
 	jr .wait_button_loop
 .a_pressed
 	ld a, [wCurMenuItem]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	or a
 	jr nz, .no
 ;.yes
@@ -7295,13 +7606,13 @@ HandleYesOrNoMenu:
 	xor a
 	ld [wcd9a], a ; 0
 	ld a, 1
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	scf
 	ret
 
 ; prints YES NO at de
 PrintYesOrNoItems: ; 2b66 (0:2b66)
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
 	call Func_2c1b
 	ret
@@ -7418,20 +7729,23 @@ Func_2bdb: ; 2bdb (0:2bdb)
 	ld a, c
 	ret
 
-Func_2c08: ; 2c08 (0:2c08)
-	ld d, [hl]
+; writes n items of text each given in the following format in hl:
+; x coord, y coord, text id
+; $ff-terminated
+PlaceTextItems: ; 2c08 (0:2c08)
+	ld d, [hl] ; x coord
 	inc hl
 	bit 7, d
-	ret nz
-	ld e, [hl]
-	inc hl
+	ret nz ; return if no more items of text
+	ld e, [hl] ; y coord
+	inc hl ; hl = text id
 	call Func_22ae
 	push hl
 	call Func_2c23
 	pop hl
 	inc hl
 	inc hl
-	jr Func_2c08
+	jr PlaceTextItems ; do next item
 
 Func_2c1b: ; 2c1b (0:2c1b)
 	call Func_22ae
@@ -7495,7 +7809,7 @@ Func_2c62: ; 2c62 (0:2c62)
 	jr Func_2c77
 .asm_2c67
 	push hl
-	ld hl, wce4c
+	ld hl, wTextBoxLabel
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -7508,14 +7822,14 @@ Func_2c73: ; 2c73 (0:2c73)
 	call Func_2c84
 
 Func_2c77: ; 2c77 (0:2c77)
-	lb bc, $2f, $1d ; cursor tile, tile behind cursor
+	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
 	call WaitForButtonAorB
 	ret
 
 Func_2c84: ; 2c84 (0:2c84)
-	ld [wce4b], a
+	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
 	call ReadTextOffset
@@ -7543,8 +7857,8 @@ Func_2c84: ; 2c84 (0:2c84)
 .asm_2caf
 	call Func_2d43
 	jr c, .asm_2cc3
-	ld a, [wcd09]
-	cp $3
+	ld a, [wCurTextLine]
+	cp 3
 	jr c, .asm_2c93
 	call Func_2c77
 	call Func_2d15
@@ -7567,7 +7881,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	pop bc
 	ld a, [hffaf]
 	ld [hli], a
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	ld [hli], a
 	ldh a, [hBankROM]
 	ld [hli], a
@@ -7587,7 +7901,7 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld a, [hli]
 	ld [hffaf], a
 	ld a, [hli]
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld a, [hli]
 	call BankswitchHome
 	ld a, [hli]
@@ -7611,23 +7925,23 @@ Func_2d15: ; 2d15 (0:2d15)
 	push hl
 	lb de, 0, 12
 	lb bc, 20, 6
-	call AdjustCoordinatesForWindow
-	ld a, [wce4b]
+	call AdjustCoordinatesForBGScroll
+	ld a, [wIsTextBoxLabeled]
 	or a
-	jr nz, .asm_2d2d
+	jr nz, .labeled
 	call DrawRegularTextBox
 	call EnableLCD
 	jr .asm_2d36
-.asm_2d2d
-	ld hl, wce4c
+.labeled
+	ld hl, wTextBoxLabel
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call DrawLabeledTextBox
 .asm_2d36
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
-	ld a, $13
+	call AdjustCoordinatesForBGScroll
+	ld a, 19
 	call Func_22a6
 	pop hl
 	ret
@@ -7637,7 +7951,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .asm_2d79
-	cp TX_SYMBOL
+	cp $5
 	jr c, .asm_2d65
 	cp $10
 	jr nc, .asm_2d65
@@ -7680,7 +7994,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, $f
 	ld [hffaf], a
 	xor a
-	ld [wcd0a], a
+	ld [wRegularFontOrVWF], a
 	ld de, wTxRam2
 	ld hl, wce49
 	call Func_2de0
@@ -7760,14 +8074,14 @@ ReadTextOffset: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; if [wcd0a] != 0:
+; if [wRegularFontOrVWF] != 0:
 ;   convert the number at hl to text (ascii) format and write it to wcaa0
 ;   return c = 4 - leading_zeros
-; if [wcd0a] == 0:
+; if [wRegularFontOrVWF] == 0:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
-;   replace leading zeros with $00
+;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
-	ld a, [wcd0a]
+	ld a, [wRegularFontOrVWF]
 	or a
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
 	ld de, wcaa0
@@ -7888,7 +8202,7 @@ Func_2ea9: ; 2ea9 (0:2ea9)
 	ret
 ; 0x2ebb
 
-; text pointer (usually of a card name) for TX_RAM2
+; text id (usually of a card name) for TX_RAM2
 LoadTxRam2: ; 2ebb (0:2ebb)
 	ld a, l
 	ld [wTxRam2], a
@@ -8030,8 +8344,10 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	pop de
 	ret
 
-; input: hl = card_gfx_index, de = where to load the card gfx to
-; bc are supposed to be $30 and TILE_SIZE
+; input:
+	; hl = card_gfx_index
+	; de = where to load the card gfx to
+	; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
 ; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
@@ -8113,13 +8429,13 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 ; input:
   ; a = command type to check
   ; hl = list of commands of current move or trainer card
-; return nc if command type matching a is found, c otherwise
+; return nc if command type matching a is found, carry otherwise
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
 	ld a, l
 	or h
 	jr nz, .not_null_pointer
-; return c if pointer is $0000
+; return carry if pointer is $0000
 	scf
 	ret
 
@@ -8954,7 +9270,7 @@ HandleTransparency: ; 348a (0:348a)
 	ret
 ; 0x34b7
 
-; return carry and return the appropriate text pointer in hl if the target has an
+; return carry and return the appropriate text id in hl if the target has an
 ; special status or power that prevents any damage or effect done to it this turn
 CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	ld a, [wNoDamageOrEffect]

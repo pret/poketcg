@@ -461,7 +461,7 @@ wCounter:: ; cacc
 	ds $1
 
 ; the LCDC status interrupt is always disabled and this always reads as jp $0000
-wLCDCFunctiontrampoline:: ; cacd
+wLCDCFunctionTrampoline:: ; cacd
 	ds $3
 
 wVBlankFunctionTrampoline:: ; cad0
@@ -536,7 +536,14 @@ wSerialCounter2:: ; cb77
 wSerialTimeoutCounter:: ; cb78
 	ds $1
 
-	ds $4
+wcb79:: ; cb79
+	ds $1
+
+wcb7a:: ; cb7a
+	ds $1
+
+wcb7b:: ; cb7b
+	ds $2
 
 wSerialSendSave:: ; cb7d
 	ds $1
@@ -595,9 +602,13 @@ wcbc9:: ; cbc9
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
-	ds $2
+wEnergyCardsRequiredToRetreat:: ; cbcc
+	ds $1
 
-; used in CheckIfEnoughEnergies for the calculation
+wcbcd:: ; cbcd
+	ds $1
+
+; used in CheckIfEnoughEnergiesToMove for the calculation
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
@@ -612,7 +623,9 @@ wSelectedDuelSubMenuScrollOffset:: ; cbd0
 wcbd1:: ; cbd1
 	ds $1
 
-wcbd2:: ; cbd2
+; when processing or displaying the play area Pokemon cards of a duelist,
+; whether to account for only the benched Pokemon ($01) or also the arena Pokemon ($00).
+wExcludeArenaPokemon:: ; cbd2
 	ds $1
 
 wcbd3:: ; cbd3
@@ -679,12 +692,21 @@ wcbe9:: ; cbe9
 wcbed:: ; cbed
 	ds $8
 
-	ds $4
+	ds $2
+
+wcbf7:: ; cbf7
+	ds $2
 
 wcbf9:: ; cbf9
 	ds $1
 
-	ds $4
+wcbfa:: ; cbfa
+	ds $1
+
+wcbfb:: ; cbfb
+	ds $1
+
+	ds $2
 
 ; during a practice duel, identifies an entry of PracticeDuelActionTable
 wPracticeDuelAction:: ; cbfe
@@ -731,7 +753,7 @@ wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
-wcc0c:: ; cc0c
+wGotHeadsFromConfusionCheckDuringRetreat:: ; cc0c
 	ds $1
 
 ; DUELIST_TYPE_* of the turn holder
@@ -890,44 +912,50 @@ SECTION "WRAM Engine 2", WRAM0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
-wccf4:: ; ccf4
-	ds $1
-
-wccf5:: ; ccf5
-	ds $1
-
-	ds $e
+wVWFOrRegularFontTile:: ; ccf4
+	ds $10
 
 wcd04:: ; cd04
 	ds $1
 
-wcd05:: ; cd05
+wCurTextTile:: ; cd05
 	ds $1
 
-wcd06:: ; cd06
+; VRAM tile patterns selector for text tiles
+; if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> select tiles at $8000-$8FFF
+; if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> select tiles at $8800-$97FF
+wTilePatternSelector:: ; cd06
 	ds $1
 
-wcd07:: ; cd07
+; complements wTilePatternSelector by correcting the VRAM tile order when $8800-$97FF is selected
+; a value of $80 in wTilePatternSelectorCorrection reflects tiles $00-$7f being located after tiles $80-$ff
+wTilePatternSelectorCorrection:: ; cd07
 	ds $1
 
-wcd08:: ; cd08
+; if 0, text lines are separated by a blank line
+wLineSeparation:: ; cd08
 	ds $1
 
-wcd09:: ; cd09
+; line number in which text is being printed as an offset to
+; the topmost line, including separator lines
+wCurTextLine:: ; cd09
 	ds $1
 
-wcd0a:: ; cd0a
+; how to process the current text tile
+; 0: regular font | non-0: VWF
+wRegularFontOrVWF:: ; cd0a
 	ds $1
 
 wcd0b:: ; cd0b
 	ds $2
 
-wUppercaseFlag:: ; cd0d
+; VWF letters become uppercase if non-0, lowercase if 0
+wUppercaseVWFLetters:: ; cd0d
 	ds $1
 
 	ds $1
 
-; Handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
+; handles timing of (horizontal or vertical) arrow blinking while waiting for user input.
 wCursorBlinkCounter:: ; cd0f
 	ds $1
 
@@ -952,6 +980,7 @@ wCursorTileNumber:: ; cd15
 wTileBehindCursor:: ; cd16
 	ds $1
 
+; if non-$0000, the function loaded here is called once per frame by HandleMenuInput
 wMenuFunctionPointer:: ; cd17
 	ds $2
 
@@ -967,12 +996,16 @@ wNumListItems:: ; cd1b
 wListItemNameMaxLength:: ; cd1c
 	ds $1
 
+; if non-$0000, the function loaded here is called once per frame by CardListMenuFunction,
+; which is the function loaded to wMenuFunctionPointer for card lists
 wListFunctionPointer:: ; cd1d
 	ds $2
 
 	ds $78
 
-wcd97:: ; cd97
+; in a card list, the Y position where the <sel_item>/<num_items> indicator is placed
+; if wCardListIndicatorYPosition == $ff, no indicator is displayed
+wCardListIndicatorYPosition:: ; cd97
 	ds $1
 
 ; x coord of the leftmost item in a horizontal menu
@@ -1064,12 +1097,12 @@ wce2b:: ; ce2b
 
 	ds $13
 
-; text pointer for the first TX_RAM2 of a text
+; text id for the first TX_RAM2 of a text
 ; prints from wDefaultText if $0000
 wTxRam2:: ; cd3f
 	ds $2
 
-; text pointer for the second TX_RAM2 of a text
+; text id for the second TX_RAM2 of a text
 wTxRam2_b:: ; ce41
 	ds $2
 
@@ -1092,10 +1125,10 @@ wce49:: ; ce49
 wce4a:: ; ce4a
 	ds $1
 
-wce4b:: ; ce4b
+wIsTextBoxLabeled:: ; ce4b
 	ds $1
 
-wce4c:: ; ce4c
+wTextBoxLabel:: ; ce4c
 	ds $2
 
 wCoinTossScreenTextID:: ; ce4e
@@ -1926,7 +1959,7 @@ wd697:: ; d697
 
 	ds $6e8
 
-SECTION "WRAM Music", WRAMX
+SECTION "WRAM Audio", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80
@@ -2095,8 +2128,6 @@ wMusicCh3Stack:: ; de13
 
 wMusicCh4Stack:: ; de1f
 	ds $c
-
-SECTION "WRAM Sfx", WRAMX
 
 wde2b:: ; de2b
 	ds $3

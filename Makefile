@@ -24,6 +24,7 @@ $(OBJS): $$*.asm $$($$*_dep)
 tcg.gbc: $(OBJS)
 	rgblink -n $*.sym -m $*.map -l $*.link -o $@ $^
 	rgbfix -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE $@
+	sort $*.sym -o $*.sym
 
 clean:
 	rm -f tcg.gbc $(OBJS) *.sym *.map

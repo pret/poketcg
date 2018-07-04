@@ -13,7 +13,7 @@ GameLoop: ; 4000 (1:4000)
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, 1
-	ld [wUppercaseFlag], a
+	ld [wUppercaseVWFLetters], a
 	ei
 	farcall CommentedOut_1a6cc
 	ldh a, [hButtonsHeld]
@@ -38,7 +38,7 @@ GameLoop: ; 4000 (1:4000)
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
 	ld a, 1
-	ld [wUppercaseFlag], a
+	ld [wUppercaseVWFLetters], a
 	ret
 
 Func_405a: ; 405a (1:405a)
@@ -357,8 +357,8 @@ DuelMainInterface: ; 426d (1:426d)
 
 PrintDuelMenu: ; 4295 (1:4295)
 	call DrawWideTextBox
-	ld hl, $54e9
-	call Func_2c08
+	ld hl, DuelMenuData
+	call PlaceTextItems
 .asm_429e
 	call $669d
 	ld a, [wDuelFinished]
@@ -398,7 +398,7 @@ PrintDuelMenu: ; 4295 (1:4295)
 	ld a, e
 	ld [wCurrentDuelMenuItem], a
 	jr nc, .handle_input
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	ld hl, DuelMenuFunctionTable
 	jp JumpToFunctionInTable
 
@@ -534,37 +534,43 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	ldh [hTemp_ffa0], a
-	jr nz, Func_43f1
-	ld a, [wcc0c]
+	jr nz, .not_confused
+	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
 	or a
-	jr nz, Func_43e8
-	call $45bb
-	jr c, Func_441f
-	call $4611
-	jr c, Func_441c
+	jr nz, .unable_due_to_confusion
+	call CheckAbleToRetreat
+	jr c, .unable_to_retreat
+	call Func_4611
+	jr c, .done
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call OpenPlayAreaScreenForSelection
-	jr c, Func_441c
+	jr c, .done
 	ld [wBenchSelectedPokemon], a
 	ld a, [wBenchSelectedPokemon]
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld a, $04
 	call SetDuelAIAction
 	call AttemptRetreat
-	jr nc, Func_441c
+	jr nc, .done
 	call DrawDuelMainScene
 
-Func_43e8: ; 43e8
+.unable_due_to_confusion
 	ldtx hl, UnableToRetreatText
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
-Func_43f1: ; 43f1 (1:43f1)
-	call $45bb
-	jr c, Func_441f
-	call $4611
-	jr c, Func_441c
+.not_confused
+	; note that the energy cards are discarded (DiscardRetreatCostCards), then returned
+	; (ReturnRetreatCostCardsToArena), then discarded again for good (AttemptRetreat).
+	; It's done this way so that the retreating Pokemon is listed with its energies updated
+	; when the Play Area screen is shown to select the Pokemon to switch to. The reason why
+	; AttemptRetreat is responsible for discarding the energy cards is because, if the
+	; Pokemon is confused, it may not be able to retreat, so they cannot be discarded earlier.
+	call CheckAbleToRetreat
+	jr c, .unable_to_retreat
+	call Func_4611
+	jr c, .done
 	call DiscardRetreatCostCards
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
@@ -572,17 +578,17 @@ Func_43f1: ; 43f1 (1:43f1)
 	ld [wBenchSelectedPokemon], a
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	push af
-	call $6564
+	call ReturnRetreatCostCardsToArena
 	pop af
 	jp c, DuelMainInterface
 	ld a, $04
 	call SetDuelAIAction
 	call AttemptRetreat
 
-Func_441c: ; 441c (1:441c)
+.done
 	jp DuelMainInterface
 
-Func_441f: ; 441f (1:441f)
+.unable_to_retreat
 	call DrawWideTextBox_WaitForInput
 	jp PrintDuelMenu
 
@@ -795,7 +801,7 @@ DuelMenu_Check: ; 4585 (1:4585)
 	jp DuelMainInterface
 
 ; triggered by pressing SELECT in the duel menu
-DuelMenuShortcut_BothActivePokemon:: ; 458e (1:458e)
+DuelMenuShortcut_BothActivePokemon: ; 458e (1:458e)
 	call Func_3b31
 	call Func_4597
 	jp DuelMainInterface
@@ -824,7 +830,190 @@ Func_45a9: ; 45a9 (1:45a9)
 	ret
 ; 0x45bb
 
-	INCROM $45bb,  $46fc
+; check if the turn holder's arena Pokemon is unable to retreat due to
+; some status condition or due the bench containing no alive Pokemon.
+; return carry if unable, nc if able.
+CheckAbleToRetreat: ; 45bb (1:45bb)
+	call CheckCantRetreatDueToAcid
+	ret c
+	call CheckIfActiveCardParalyzedOrAsleep
+	ret c
+	call HasAlivePokemonOnBench
+	jr c, .unable_to_retreat
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, [wLoadedCard1Type]
+	cp TYPE_TRAINER
+	jr z, .unable_to_retreat
+	call CheckIfEnoughEnergiesToRetreat
+	jr c, .not_enough_energies
+	or a
+	ret
+.not_enough_energies
+	ld a, [wEnergyCardsRequiredToRetreat]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ldtx hl, EnergyCardsRequiredToRetreatText
+	jr .done
+.unable_to_retreat
+	ldtx hl, UnableToRetreatText
+.done
+	scf
+	ret
+; 0x45f4
+
+; check if the turn holder's arena Pokemon has enough energies attached to it
+; in order to retreat. Return carry if it doesn't.
+; load amount of energies required to wEnergyCardsRequiredToRetreat.
+CheckIfEnoughEnergiesToRetreat: ; 45f4 (1:45f4)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	xor a
+	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	ld [wEnergyCardsRequiredToRetreat], a
+	ld c, a
+	ld a, [wTotalAttachedEnergies]
+	cp c
+	ret c
+	ld [wcbcd], a
+	ld a, c
+	ld [wEnergyCardsRequiredToRetreat], a
+	or a
+	ret
+; 0x4611
+
+Func_4611: ; 4611 (1:4611)
+	ld a, $ff
+	ldh [hTempRetreatCostCards], a
+	ld a, [wEnergyCardsRequiredToRetreat]
+	or a
+	ret z
+	xor a
+	ld [wcbcd], a
+	call CreateArenaOrBenchEnergyCardList
+	call SortCardsInDuelTempListByID
+	ld a, LOW(hTempRetreatCostCards)
+	ld [wcbd5], a
+	xor a
+	call Func_4673
+	ld a, [wEnergyCardsRequiredToRetreat]
+	ld [wcbfa], a
+.asm_4633
+	ld a, [wcbcd]
+	ld [wcbfb], a
+	call Func_46b7
+	ret c
+	ldh a, [hTempCardIndex_ff98]
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld hl, wcbd5
+	ld c, [hl]
+	inc [hl]
+	ldh a, [hTempCardIndex_ff98]
+	ld [$ff00+c], a
+	ld c, $01
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr nz, .not_double
+	inc c
+.not_double
+	ld hl, wcbcd
+	ld a, [hl]
+	add c
+	ld [hl], a
+	ld hl, wEnergyCardsRequiredToRetreat
+	cp [hl]
+	jr nc, .asm_466a
+	ldh a, [hTempCardIndex_ff98]
+	call RemoveCardFromDuelTempList
+	call Func_4693
+	jr .asm_4633
+.asm_466a
+	ld a, [wcbd5]
+	ld c, a
+	ld a, $ff
+	ld [$ff00+c], a
+	or a
+	ret
+; 0x4673
+
+Func_4673: ; 4673 (1:4673)
+	ld [wcbe0], a
+	call EmptyScreen
+	call LoadDuelCardSymbolTiles
+	call LoadDuelFaceDownCardTiles
+	ld a, [wcbe0]
+	ld hl, wcbc9
+	ld [hli], a
+	ld [hl], $00
+	call Func_627c
+	xor a
+	ld [wcbfb], a
+	inc a
+	ld [wcbfa], a
+;	fallthrough
+
+Func_4693: ; 4693 (1:4693)
+	lb de, 0, 3
+	lb bc, 20, 10
+	call DrawRegularTextBox
+	ldtx hl, ChooseEnergyCardToDiscardText
+	call DrawWideTextBox_PrintTextNoDelay
+	call EnableLCD
+	call CountCardsInDuelTempList
+	ld hl, EnergyDiscardCardListParameters
+	lb de, 0, 0 ; initial page scroll offset, initial item (in the visible page)
+	call PrintCardListItems
+	ld a, 4
+	ld [wCardListIndicatorYPosition], a
+	ret
+; 0x46b7
+
+Func_46b7: ; 46b7 (1:46b7)
+	lb bc, $10, $10
+	ld a, [wcbfa]
+	or a
+	jr z, .asm_46d9
+	ld a, [wcbfb]
+	add SYM_0
+	call WriteByteToBGMap0
+	inc b
+	ld a, SYM_SLASH
+	call WriteByteToBGMap0
+	inc b
+	ld a, [wcbfa]
+	add SYM_0
+	call WriteByteToBGMap0
+	jr .asm_46e0
+.asm_46d9
+	ld a, [wcbfb]
+	inc b
+	call $65b7
+.asm_46e0
+	call DoFrame
+	call HandleCardListInput
+	jr nc, .asm_46e0
+	cp $ff
+	jr z, .asm_46f1
+	call GetCardInDuelTempList_OnlyDeckIndex
+	or a
+	ret
+.asm_46f1
+	scf
+	ret
+; 0x46f3
+
+EnergyDiscardCardListParameters:
+	db 1, 5 ; cursor x, cursor y
+	db 4 ; item x
+	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
+	db 4 ; number of items selectable without scrolling
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
 
 ; triggered by selecting the "Attack" item in the duel menu
 DuelMenu_Attack: ; 46fc (1:46fc)
@@ -870,20 +1059,20 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	cp -1 ; was B pressed?
 	jp z, PrintDuelMenu
 	ld [wSelectedDuelSubMenuItem], a
-	call CheckIfEnoughEnergies
+	call CheckIfEnoughEnergiesToMove
 	jr nc, .enough_energy
 	ldtx hl, NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
 	jr .try_open_attack_menu
 
 .enough_energy
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
 	ld d, $00
 	ld hl, wDuelTempList
 	add hl, de
-	ld d, [hl] ; card index within the deck (0 to 59)
+	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
 	call CopyMoveDataAndDamage_FromDeckIndex
@@ -921,7 +1110,7 @@ Func_478b: ; 478b (1:478b)
 	call PlaceCardImageOAM
 	lb de, 6, 4
 	call ApplyBGP6OrSGB3ToCardImage
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	ld [wSelectedDuelSubMenuItem], a
 	add a
 	ld e, a
@@ -958,8 +1147,8 @@ AttackMenuParameters:
 	db 1, 13 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
-	db $0f ; cursor tile number
-	db $00 ; tile behind cursor
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
 Func_47ec: ; $47ec (1:47ec)
@@ -1087,22 +1276,22 @@ CheckIfMoveExists: ; 4872 (1:4872)
 ; check if the arena pokemon card has enough energy attached to it
 ; in order to use the selected move.
 ; returns: carry if not enough energy, nc if enough energy.
-CheckIfEnoughEnergies: ; 488f (1:488f)
+CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
 	push hl
 	push bc
-	ld e, $0
+	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	call HandleEnergyBurn
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
 	ld d, $0
 	ld hl, wDuelTempList
 	add hl, de
-	ld d, [hl] ; card index within the deck (0 to 59)
+	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call _CheckIfEnoughEnergies
+	call _CheckIfEnoughEnergiesToMove
 	pop bc
 	pop hl
 	ret
@@ -1110,11 +1299,11 @@ CheckIfEnoughEnergies: ; 488f (1:488f)
 
 ; check if a pokemon card has enough energy attached to it in order to use a move
 ; input:
-;   d = card index within the deck (0 to 59)
+;   d = deck index of card (0 to 59)
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergies: ; 48ac (1:48ac)
+_CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
 	push de
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -1746,7 +1935,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	ld a, DECK_SIZE
 	sub [hl]
 	cp $02
-	jr c, .asm_4f83
+	jr c, .one_card_in_deck
 	ldtx hl, ShufflesTheDeckText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
@@ -1773,7 +1962,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	call Func_3b31
 	ld a, $01
 	ret
-.asm_4f83
+.one_card_in_deck
 	ld l, a
 	ld h, $00
 	call LoadTxRam3
@@ -2096,7 +2285,7 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 	jp JumpToFunctionInTable
 ; 0x51f8
 
-PracticeDuelActionTable:: ; 51f8 (1:51f8)
+PracticeDuelActionTable: ; 51f8 (1:51f8)
 	dw $0000
 	dw Func_520e
 	dw Func_521a
@@ -2207,7 +2396,7 @@ Func_52b0: ; 52b0 (1:52b0)
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	cp PLAY_AREA_BENCH_1
 	ret z
-	call $5fd9
+	call HasAlivePokemonOnBench
 	ldtx hl, Text01d7
 	scf
 ;	fallthrough
@@ -2220,7 +2409,20 @@ Func_52bc: ; 52bc (1:52bc)
 	ret
 ; 0x52c5
 
-	INCROM $52c5,  $5550
+	INCROM $52c5,  $54e9
+
+DuelMenuData: ; 54e9 (1:54e9)
+	; x, y, text id
+	textitem 3,  14, HandText
+	textitem 9,  14, CheckText
+	textitem 15, 14, RetreatText
+	textitem 3,  16, AttackText
+	textitem 9,  16, PKMNPowerText
+	textitem 15, 16, DoneText
+	db $ff
+; 0x5502
+
+	INCROM $5502,  $5550
 
 ; draw the turn holder's discard pile screen
 OpenDiscardPileScreen: ; 5550 (1:5550)
@@ -2336,7 +2538,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld d, [hl] ; initial page scroll offset
 	ld hl, CardListParameters ; other list params
 	call PrintCardListItems
-	call DrawSelectedCard
+	call LoadSelectedCardGfx
 	call EnableLCD
 .asm_560b
 	call DoFrame
@@ -2356,7 +2558,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld a, [wcbd6]
 	and b
 	jr nz, .asm_5654
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList_OnlyDeckIndex
 	call $56c2
 	jr c, Func_55f0
@@ -2377,10 +2579,10 @@ Func_55f0: ; 55f0 (1:55f0)
 	call EraseCursor
 	jr .asm_55f6
 .asm_5654
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call $5762
+	call Func_5762
 	ldh a, [hButtonsPressed2]
 	bit D_UP_F, a
 	jr nz, .asm_566f
@@ -2389,7 +2591,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	call DrawCardListScreenLayout.draw
 	jp Func_55f0
 .asm_566f
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	or a
 	jr z, .asm_5654
 	dec a
@@ -2397,19 +2599,19 @@ Func_55f0: ; 55f0 (1:55f0)
 .asm_5677
 	call CountCardsInDuelTempList
 	ld b, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	inc a
 	cp b
 	jr nc, .asm_5654
 .asm_5681
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hl], $00
 	inc hl
 	ld [hl], a
 	jr .asm_5654
 .asm_568c
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	scf
 	ret
 ; 0x5690
@@ -2428,7 +2630,7 @@ Func_5690: ; 5690 (1:5690)
 
 Func_56a0: ; 56a0 (1:56a0)
 	lb de, 1, 14
-	call AdjustCoordinatesForWindow
+	call AdjustCoordinatesForBGScroll
 	call Func_22ae
 	ld hl, wCardListInfoBoxText
 	ld a, [hli]
@@ -2452,19 +2654,74 @@ CardListParameters: ; 5710 (1;5710)
 	db 4 ; item x
 	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
 	db 5 ; number of items selectable without scrolling
-	db $0f ; cursor tile number
-	db $00 ; tile behind cursor
-	dw $5719 ; function pointer if non-0
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw CardListFunction ; function pointer if non-0
 ; 0x5719
 
-	INCROM $5719,  $5744
+CardListFunction: ; 5719 (1:5719)
+	ldh a, [hButtonsPressed]
+	bit B_BUTTON_F, a
+	jr nz, .exit
+	and A_BUTTON | SELECT | START
+	jr nz, .action_button
+	ldh a, [hButtonsReleased]
+	and D_PAD
+	jr nz, .reload_card_image ; jump if the D_PAD button was released this frame
+	ret
+.exit
+	ld a, $ff
+	ldh [hCurMenuItem], a
+.action_button
+	scf
+	ret
+.reload_card_image
+	call LoadSelectedCardGfx
+	or a
+	ret
+; 0x5735
+
+Func_5735: ; 5735 (1:5735)
+	ld hl, wcbd8
+	ld de, Func_574a
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld a, 1
+	ld [wSortCardListByID], a
+	ret
+; 0x5744
 
 Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
 	jp CallIndirect
 ; 0x574a
 
-	INCROM $574a,  $576a
+Func_574a: ; 574a (1:574a)
+	lb bc, 1, 2
+	ld hl, wDuelTempList + 10
+.next
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	or a ; SYM_SPACE
+	jr z, .space
+	add SYM_0
+.space
+	call WriteByteToBGMap0
+	; move two lines down
+	inc c
+	inc c
+	jr .next
+.done
+	ret
+; 0x5762
+
+Func_5762: ; 5762 (1:5762)
+	ld a, B_BUTTON | D_UP | D_DOWN
+	ld [wcbd7], a
+	xor a
+	jr Func_5779
 
 Func_576a: ; 576a (1:576a)
 	ld a, B_BUTTON
@@ -2507,10 +2764,10 @@ Func_5779: ; 5779 (1:5779)
 	and b
 	jr nz, .asm_57cc
 	ldh a, [hButtonsPressed]
-	and START + A_BUTTON
+	and START | A_BUTTON
 	jr nz, .asm_57a7
 	ldh a, [hButtonsPressed]
-	and D_RIGHT + D_LEFT
+	and D_RIGHT | D_LEFT
 	jr z, .asm_57af
 	call Func_57cd
 	jr .asm_57af
@@ -2553,8 +2810,8 @@ Func_589c: ; 589c (1:589c)
 ; 0x58aa
 
 ; load the tiles and palette of the card selected in card list screen
-DrawSelectedCard: ; 58aa (1:58aa)
-	ldh a, [hCurrentMenuItem]
+LoadSelectedCardGfx: ; 58aa (1:58aa)
+	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromCardID
 	ld de, v0Tiles1 + $20 tiles
@@ -3100,7 +3357,7 @@ LargeCardTileData: ; 5eb7 (1:5eb7)
 Func_5f4a: ; 5f4a (1:5f4a)
 	ld a, $01
 Func_5f4c: ; 5f4c (1:5f4c)
-	ld [wcd08], a
+	ld [wLineSeparation], a
 	ret
 ; 0x5f50
 
@@ -3123,7 +3380,7 @@ HasAlivePokemonOnBench: ; 5fd9 (1:5fd9)
 HasAlivePokemonInPlayArea: ; 5fdd (1:5fdd)
 	xor a
 _HasAlivePokemonInPlayArea: ; 5fde (1:5fde)
-	ld [wcbd2], a
+	ld [wExcludeArenaPokemon], a
 	ld b, a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -3180,11 +3437,11 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	call $61c7
 	call EnableLCD
 .asm_6034
-	ld hl, MenuParameters_60be
-	ld a, [wcbd2]
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonIncluded
+	ld a, [wExcludeArenaPokemon]
 	or a
 	jr z, .asm_6040
-	ld hl, MenuParameters_60c6
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonExcluded
 .asm_6040
 	ld a, [wSelectedDuelSubMenuItem]
 	call InitializeMenuParameters
@@ -3198,14 +3455,14 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	jp z, $60ac
 	pop af
 	ldh [hTempCardIndex_ff98], a
-	ld a, [wcbd4]
+	ld a, [wcbd4] ; useless
 	jr OpenPlayAreaScreenForSelection
 .asm_6061
 	call HandleMenuInput
 	jr nc, .asm_604c
 	ld a, e
 	ld [wSelectedDuelSubMenuItem], a
-	ld a, [wcbd2]
+	ld a, [wExcludeArenaPokemon]
 	add e
 	ld [wcbc9], a
 	ld a, [wcbd6]
@@ -3223,12 +3480,12 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	call Func_576a
 	jr .asm_6022
 .asm_6091
-	ld a, [wcbd2]
+	ld a, [wExcludeArenaPokemon]
 	ld c, a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	add c
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	jr z, .asm_60b5
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
@@ -3241,41 +3498,54 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	pop af
 	ldh [hTempCardIndex_ff98], a
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	or a
 	ret
 .asm_60b5
 	pop af
 	ldh [hTempCardIndex_ff98], a
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hCurrentMenuItem], a
+	ldh [hCurMenuItem], a
 	scf
 	ret
 ; 0x60be
 
-MenuParameters_60be: ; 60be (1:60be)
+PlayAreaScreenMenuParameters_ActivePokemonIncluded: ; 60be (1:60be)
 	db 0, 0 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items
-	db $0f ; cursor tile number
-	db $00 ; tile behind cursor
-	dw $60ce ; function pointer if non-0
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw PlayAreaScreenMenuFunction ; function pointer if non-0
 
-MenuParameters_60c6: ; 60c6 (1:60c6)
+PlayAreaScreenMenuParameters_ActivePokemonExcluded: ; 60c6 (1:60c6)
 	db 0, 3 ; cursor x, cursor y
 	db 3 ; y displacement between items
 	db 6 ; number of items
-	db $0f ; cursor tile number
-	db $00 ; tile behind cursor
-	dw $60ce ; function pointer if non-0
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw PlayAreaScreenMenuFunction ; function pointer if non-0
 
-	INCROM $60ce, $622a
+PlayAreaScreenMenuFunction: ; 60ce (1:60ce)
+	ldh a, [hButtonsPressed]
+	and A_BUTTON | B_BUTTON | START
+	ret z
+	bit B_BUTTON_F, a
+	jr z, .start_or_a
+	ld a, $ff
+	ldh [hCurMenuItem], a
+.start_or_a
+	scf
+	ret
+; 0x60dd
+
+	INCROM $60dd, $622a
 
 Func_622a: ; 622a (1:622a)
 	ld a, [wcbc9]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call Func_627c
 	ld a, [wcbc9]
@@ -3290,7 +3560,7 @@ Func_622a: ; 622a (1:622a)
 	jr z, .asm_624c
 	ld d, $0a
 .asm_624c
-	ld a, [$cbca]
+	ld a, [wcbc9 + 1]
 	ld b, $01
 	ld c, a
 	ld a, [hli]
@@ -3416,11 +3686,11 @@ Func_6510: ; 6510 (1:6510)
 	call LoadDuelCardSymbolTiles
 	call LoadDuelCheckPokemonScreenTiles
 	call Func_622a
-	ld de, $104
+	lb de, 1, 4
 	call Func_22ae
 	ld hl, wLoadedCard1Move1Name
 	call Func_2c20
-	ld de, $106
+	lb de, 1, 6
 	ld hl, wLoadedCard1Move1Description
 	call Func_653e
 	ret
@@ -3436,27 +3706,44 @@ Func_653e: ; 653e (1:653e)
 	jr c, .asm_654c
 	dec e
 .asm_654c
-	ld a, $13
+	ld a, 19
 	call Func_22a6
 	call Func_2c29
 	call Func_5f50
 	ret
 ; 0x6558
 
+; moves the cards loaded by deck index at hTempRetreatCostCards to the discard pile
 DiscardRetreatCostCards: ; 6558 (1:6558)
 	ld hl, hTempRetreatCostCards
-.discardLoop
+.discard_loop
 	ld a, [hli]
 	cp $ff
 	ret z
 	call PutCardInDiscardPile
-	jr .discardLoop
+	jr .discard_loop
 ; 0x6564
 
-	INCROM $6564, $657a
+; moves the discard pile cards that were loaded to hTempRetreatCostCards back to the active Pokemon.
+; this exists because they will be discarded again during the call to AttemptRetreat, so
+; it prevents the energy cards from being discarded twice.
+ReturnRetreatCostCardsToArena: ; 6564 (1:6564)
+	ld hl, hTempRetreatCostCards
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	push hl
+	call MoveDiscardPileCardToHand
+	call AddCardToHand
+	ld e, PLAY_AREA_ARENA
+	call PutHandCardInPlayArea
+	pop hl
+	jr .loop
+; 0x657a
 
-; discard retreat cost energy cards and attempt retreat
-; return carry on failure
+; discard retreat cost energy cards and attempt retreat.
+; return carry if unable to retreat this turn due to unsuccessful confusion check
 AttemptRetreat: ; 657a (1:657a)
 	call DiscardRetreatCostCards
 	ldh a, [hTemp_ffa0]
@@ -3466,8 +3753,8 @@ AttemptRetreat: ; 657a (1:657a)
 	ldtx de, ConfusionCheckRetreatText
 	call TossCoin
 	jr c, .success
-	ld a, $01
-	ld [wcc0c], a
+	ld a, 1
+	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
 	scf
 	ret
 .success
@@ -3475,7 +3762,7 @@ AttemptRetreat: ; 657a (1:657a)
 	ld e, a
 	call SwapArenaWithBenchPokemon
 	xor a
-	ld [wcc0c], a
+	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
 	ret
 ; 0x659f
 
@@ -3517,17 +3804,17 @@ Func_6635: ; 6635 (1:6635)
 	ld e, a
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
-	ld a, $01
+	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
 	ld hl, wLoadedCard1Move1Name
 	ld a, [wSelectedMoveIndex]
 	or a
-	jr z, .move_one
+	jr z, .first_move
 	ld hl, wLoadedCard1Move2Name
-.move_one
+.first_move
 	ld e, $01
 	call Func_5c33
-	ld de, $104
+	lb de, 1, 4
 	ld hl, wLoadedMoveDescription
 	call Func_653e
 	ret
@@ -3543,12 +3830,12 @@ Func_666a: ; 666a (1:666a)
 Func_6673: ; 6673 (1:6673)
 	call EmptyScreen
 	call Func_5f4a
-	ld de, $101
+	lb de, 1, 1
 	call Func_22ae
 	ld hl, wLoadedCard1Name
 	call Func_2c23
-	ld a, $13
-	ld de, $103
+	ld a, 19
+	lb de, 1, 3
 	call Func_22a6
 	ld hl, wLoadedCard1NonPokemonDescription
 	call Func_2c23
@@ -4048,7 +4335,7 @@ ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
 Func_70e6: ; 70e6 (1:70e6)
 	xor a
 	ld [wAlreadyPlayedEnergy], a
-	ld [wcc0c], a
+	ld [wGotHeadsFromConfusionCheckDuringRetreat], a
 	ld [wGotHeadsFromSandAttackOrSmokescreenCheck], a
 	ldh a, [hWhoseTurn]
 	ld [wcc05], a
@@ -4152,8 +4439,8 @@ _TossCoin: ; 71ad (1:71ad)
 	ld hl, $0000
 	call DrawLabeledTextBox
 	call EnableLCD
-	ld de, $010e
-	ld a, $13
+	lb de, 1, 14
+	ld a, 19
 	call Func_22a6
 	ld hl, wCoinTossScreenTextID
 	ld a, [hli]

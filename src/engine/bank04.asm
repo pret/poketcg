@@ -322,7 +322,7 @@ Func_10dba: ; 10dba (4:4dba)
 	jr nc, .asm_10dca
 	ld a, e
 	ld [wd0ba], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp e
 	jr z, .asm_10ddd
 	ld a, $4

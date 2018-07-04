@@ -90,7 +90,7 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	jr c, Func_8dbc
 	call HandleMenuInput
 	jr nc, .asm_8dc8
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
 	ld [wceb1], a
@@ -147,7 +147,7 @@ Func_8e1f: ; 8e1f (2:4e1f)
 Func_8e42: ; 8e42 (2:4e42)
 	call DrawWideTextBox
 	ld hl, Unknown_9027
-	call Func_2c08
+	call PlaceTextItems
 	call Func_905a
 .asm_8e4e
 	call DoFrame
@@ -580,7 +580,7 @@ Func_9168: ; 9168 (2:5168)
 	ld bc, $1404
 	call DrawRegularTextBox
 	ld hl, Unknown_9242
-	call Func_2c08
+	call PlaceTextItems
 	ld a, $4
 	ld hl, wceb2
 	call Func_9843
@@ -819,7 +819,7 @@ Func_b19d: ; b19d (2:719d)
 	call Func_905a
 	call DrawWideTextBox
 	ld hl, $7274
-	call Func_2c08
+	call PlaceTextItems
 	call DoFrame
 	call Func_9065
 	jp nc, $71e7
@@ -980,7 +980,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wd087], a
 	ld a, [wCurMenuItem]
 	ld [wd086], a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp $ff
 	jp z, $7b0d
 	ld [wd088], a
@@ -989,7 +989,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wce5e], a
 	call DrawWideTextBox
 	ld hl, $7b76
-	call Func_2c08
+	call PlaceTextItems
 	call DoFrame
 	call $46ac
 	jp nc, $7acc

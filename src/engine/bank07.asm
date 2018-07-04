@@ -447,7 +447,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	call Func_2275
 	call Func_3ca0
 	xor a
-	ld [wcd08], a
+	ld [wLineSeparation], a
 	call $51e1
 	call $517f
 	ld a, $ff
@@ -471,7 +471,7 @@ Func_1d11c: ; 1d11c (7:511c)
 	call $51e9
 	pop af
 	jr nc, .asm_1d15a
-	ldh a, [hCurrentMenuItem]
+	ldh a, [hCurMenuItem]
 	cp e
 	jr nz, .asm_1d15a
 	ld [wd627], a

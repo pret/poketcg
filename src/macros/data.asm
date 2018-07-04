@@ -89,3 +89,8 @@ txsymbol: MACRO
 	const SYM_\1
 	charmap "\1>", const_value + -1
 ENDM
+
+textitem: MACRO
+	db \1, \2
+	tx \3
+ENDM
