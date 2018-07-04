@@ -7081,15 +7081,18 @@ Func_2827: ; 2827 (0:2827)
 	ret
 ; 0x2832
 
-Func_2832: ; 2832 (0:2832)
+; convert the number at a to TX_SYMBOL text format and write it to wDefaultText
+; if the first digit is a 0, delete it and shift the number one tile to the left
+OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign: ; 2832 (0:2832)
 	call OneByteNumberToTxSymbol
 	ld a, [hli]
-	cp $20
-	jr nz, .asm_283e
+	cp SYM_0
+	jr nz, .not_zero
+	; shift number one tile to the left
 	ld a, [hld]
 	ld [hli], a
 	ld [hl], $00
-.asm_283e
+.not_zero
 	ret
 ; 0x283f
 
