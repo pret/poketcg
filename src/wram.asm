@@ -753,6 +753,7 @@ wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
+; set to 1 if the confusion check coin toss in AttemptRetreat is heads
 wGotHeadsFromConfusionCheckDuringRetreat:: ; cc0c
 	ds $1
 
@@ -881,6 +882,7 @@ wDamageToSelfMode:: ; cce6
 wcce9:: ; cce9
 	ds $2
 
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 wTempPlayAreaLocationOffset_cceb:: ; cceb
 	ds $1
 

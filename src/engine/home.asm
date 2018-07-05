@@ -6848,6 +6848,9 @@ PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	pop af
 	ret
 
+; called once per frame when a menu is open
+; play the sound effect at wRefreshMenuCursorSFX if non-0 and blink the
+; cursor when wCursorBlinkCounter hits 16 (i.e. every 16 frames)
 RefreshMenuCursor_CheckPlaySFX: ; 26d1 (0:26d1)
 	ld a, [wRefreshMenuCursorSFX]
 	or a
@@ -7001,27 +7004,27 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld a, 1
 	ld [wCardListIndicatorYPosition], a
 .reload
-	ld e, $00
+	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
-	jr z, .asm_27b9
-	ld e, $0c
-.asm_27b9
+	jr z, .cant_go_up
+	ld e, SYM_CURSOR_U
+.cant_go_up
 	ld a, [wCursorYPosition]
 	dec a
 	ld c, a
 	ld b, 18
 	ld a, e
 	call WriteByteToBGMap0
-	ld e, $00
+	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	ld hl, wNumMenuItems
 	add [hl]
 	ld hl, wNumListItems
 	cp [hl]
-	jr nc, .asm_27d5
-	ld e, $2f
-.asm_27d5
+	jr nc, .cant_go_down
+	ld e, SYM_CURSOR_D
+.cant_go_down
 	ld a, [wNumMenuItems]
 	add a
 	add c
@@ -7041,10 +7044,10 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld a, [wCursorYPosition]
 	ld e, a
 	ld c, $00
-.asm_27f8
+.next_card
 	ld a, [hl]
 	cp $ff
-	jr z, .asm_2826
+	jr z, .done
 	push hl
 	push bc
 	push de
@@ -7063,12 +7066,12 @@ PrintCardListItems: ; 2799 (0:2799)
 	dec a
 	inc c
 	cp c
-	jr c, .asm_2826
+	jr c, .done
 	inc e
 	inc e
 	dec b
-	jr nz, .asm_27f8
-.asm_2826
+	jr nz, .next_card
+.done
 	ret
 ; 0x2827
 
@@ -7096,6 +7099,7 @@ OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign: ; 2832 (0:2832)
 	ret
 ; 0x283f
 
+; this function is always loaded to wMenuFunctionPointer by PrintCardListItems
 ; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
 CardListMenuFunction: ; 283f (0:283f)
 	ldh a, [hButtonsPressed2]
@@ -7384,6 +7388,10 @@ CopyCardNameAndLevel: ; 29f5 (0:29f5)
 Func_29fa: ; 29fa (0:29fa)
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
+;	fallthrough
+
+; wait until A or B is pressed.
+; return carry if A is pressed, nc if B is pressed. erase the cursor either way
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
 	call RefreshMenuCursor
@@ -7419,17 +7427,23 @@ SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	ret
 ; 0x2a30
 
+; draw a 20x6 text box aligned to the bottom of the screen,
+; print the text at hl without letter delay, and wait for A or B pressed
 Func_2a30: ; 2a30 (0:2a30)
 	call DrawWideTextBox_PrintTextNoDelay
 	jp WaitForWideTextBoxInput
 ; 0x2a36
 
+; draw a 20x6 text box aligned to the bottom of the screen
+; and print the text at hl without letter delay
 DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 	push hl
 	call DrawWideTextBox
-	ld a, $13
+	ld a, 19
 	jr Func_2a44
 
+; draw a 12x6 text box aligned to the bottom left of the screen
+; and print the text at hl without letter delay
 DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
@@ -7447,6 +7461,8 @@ Func_2a44: ; 2a44 (0:2a44)
 	ld hl, wDefaultText
 	jp Func_21c5
 
+; draw a 20x6 text box aligned to the bottom of the screen
+; and print the text at hl with letter delay
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
@@ -7458,7 +7474,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	pop hl
 	jp PrintText
 
-; draws a 12x6 text box aligned to the bottom left of the screen
+; draw a 12x6 text box aligned to the bottom left of the screen
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	lb de, 0, 12
 	lb bc, 12, 6
@@ -7466,6 +7482,8 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	call DrawRegularTextBox
 	ret
 
+; draw a 12x6 text box aligned to the bottom left of the screen,
+; print the text at hl without letter delay, and wait for A or B pressed
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
@@ -7488,7 +7506,7 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-; draws a 20x6 text box aligned to the bottom of the screen
+; draw a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
 	lb de, 0, 12
 	lb bc, 20, 6
@@ -7496,6 +7514,8 @@ DrawWideTextBox: ; 2a9e (0:2a9e)
 	call DrawRegularTextBox
 	ret
 
+; draw a 20x6 text box aligned to the bottom of the screen,
+; print the text at hl with letter delay, and wait for A or B pressed
 DrawWideTextBox_WaitForInput: ; 2aab (0:2aab)
 	call DrawWideTextBox_PrintText
 ;	fallthrough
@@ -7521,6 +7541,7 @@ WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
 	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
+; display a two-item horizontal menu with custom text provided in hl and handle input
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	call DrawWideTextBox_PrintText
 	lb de, 6, 16 ; x, y
@@ -7539,7 +7560,7 @@ Func_2aeb: ; 2aeb (0:2aeb)
 	ld [wcd9a], a
 ;	fallthrough
 
-; handle a yes / no menu with custom text provided in hl
+; display a yes / no menu with custom text provided in hl and handle input
 ; returns carry if "no" selected
 YesOrNoMenuWithText: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
@@ -7610,7 +7631,7 @@ HandleYesOrNoMenu:
 	scf
 	ret
 
-; prints YES NO at de
+; prints "YES NO" at de
 PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
@@ -7763,7 +7784,7 @@ Func_2c23: ; 2c23 (0:2c23)
 Func_2c29: ; 2c29 (0:2c29)
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call Func_21c5
 	pop af
 	call BankswitchHome
@@ -7776,7 +7797,7 @@ Func_2c37: ; 2c37 (0:2c37)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	ld c, $00
 .char_loop
 	ld a, [hli]
@@ -7832,7 +7853,7 @@ Func_2c84: ; 2c84 (0:2c84)
 	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call Func_2d15
 	call Func_2cc8
 .asm_2c93
@@ -8001,7 +8022,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, l
 	or h
 	jr z, .asm_2dab
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call Func_2cd7
 	jr Func_2d43
 .asm_2dab
@@ -8046,7 +8067,7 @@ Func_2de0: ; 2de0 (0:2de0)
 
 ; uses the two byte text id in hl to read the three byte text offset
 ; loads the correct bank for the specific text and returns the pointer in hl
-ReadTextOffset: ; 2ded (0:2ded)
+GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	push de
 	ld e, l
 	ld d, h
@@ -8120,7 +8141,7 @@ PrintText: ; 2e41 (0:2e41)
 	jr z, .from_ram
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call .print_text
 	pop af
 	call BankswitchHome
@@ -8155,7 +8176,7 @@ PrintText: ; 2e41 (0:2e41)
 PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call Func_2cc8
 .next_tile_loop
 	call Func_2d43
@@ -8172,7 +8193,7 @@ CopyText: ; 2e89 (0:2e89)
 	jr z, .special
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 .next_tile_loop
 	ld a, [hli]
 	ld [de], a
@@ -8194,7 +8215,7 @@ Func_2ea9: ; 2ea9 (0:2ea9)
 	ldh [hff96], a
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	ldh a, [hff96]
 	call $23fd
 	pop af

@@ -320,9 +320,9 @@ HandleTurn: ; 4225 (1:4225)
 	call c, DisplayPlayerDrawCardScreen
 	jr DuelMainInterface
 
-; display the animation of the player drawing the card at hTempCardIndex_ff98
-; save duel state to SRAM, and fall through to DuelMainInterface to effectively
-; begin the turn
+; display the animation of the player drawing the card at hTempCardIndex_ff98,
+; save duel state to SRAM, and fall through to DuelMainInterface
+; to effectively begin the turn
 HandleTurn_PlayerDrewCard:
 	call DisplayPlayerDrawCardScreen
 	call SaveDuelStateToSRAM
@@ -929,7 +929,7 @@ Func_4611: ; 4611 (1:4611)
 	jr nc, .asm_466a
 	ldh a, [hTempCardIndex_ff98]
 	call RemoveCardFromDuelTempList
-	call Func_4693
+	call DisplayEnergyDiscardScreen
 	jr .asm_4633
 .asm_466a
 	ld a, [wcbd5]
@@ -956,7 +956,9 @@ Func_4673: ; 4673 (1:4673)
 	ld [wcbfa], a
 ;	fallthrough
 
-Func_4693: ; 4693 (1:4693)
+; display the screen that prompts the player to select energy cards to discard
+; in order to retreat a Pokemon card
+DisplayEnergyDiscardScreen: ; 4693 (1:4693)
 	lb de, 0, 3
 	lb bc, 20, 10
 	call DrawRegularTextBox
