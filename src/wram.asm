@@ -914,8 +914,8 @@ SECTION "WRAM Engine 2", WRAM0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
-wVWFOrRegularFontTile:: ; ccf4
-	ds $10
+wTextTileBuffer:: ; ccf4
+	ds TILE_SIZE
 
 wcd04:: ; cd04
 	ds $1
@@ -944,15 +944,15 @@ wCurTextLine:: ; cd09
 	ds $1
 
 ; how to process the current text tile
-; 0: regular font | non-0: VWF
-wRegularFontOrVWF:: ; cd0a
+; 0: full-width font | non-0: half-width font
+wFontWidth:: ; cd0a
 	ds $1
 
 wcd0b:: ; cd0b
 	ds $2
 
-; VWF letters become uppercase if non-0, lowercase if 0
-wUppercaseVWFLetters:: ; cd0d
+; half-width font letters become uppercase if non-0, lowercase if 0
+wUppercaseHalfWidthLetters:: ; cd0d
 	ds $1
 
 	ds $1
@@ -976,7 +976,7 @@ wYDisplacementBetweenMenuItems:: ; cd13
 wNumMenuItems:: ; cd14
 	ds $1
 
-wCursorTileNumber:: ; cd15
+wCursorTile:: ; cd15
 	ds $1
 
 wTileBehindCursor:: ; cd16

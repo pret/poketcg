@@ -911,7 +911,7 @@ WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 
 ; given two one-digit numbers in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
-; numbers above 9 are converted to VWF tiles.
+; numbers above 9 end up converted to half-width font tiles.
 WriteNumbersInTextFormat: ; 0614 (0:0614)
 	push af
 	swap a
@@ -921,7 +921,7 @@ WriteNumbersInTextFormat: ; 0614 (0:0614)
 
 ; given a one-digit number in the (lower nybble) of register a,
 ; write it in text (ascii) format to hl.
-; numbers above 9 are converted to VWF tiles.
+; numbers above 9 end up converted to half-width font tiles.
 WriteNumberInTextFormat:
 	and $0f
 	add "0"
@@ -5952,7 +5952,7 @@ LoadDuelHUDTiles: ; 2119 (0:2119)
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -6060,12 +6060,12 @@ Func_21f2: ; 21f2 (0:21f2)
 	ret
 .asm_220f
 	ld a, $1
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ret
 .asm_2215
 	call Func_230f
 	xor a
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ld a, $f
 	ldh [hffaf], a
 	ret
@@ -6074,13 +6074,13 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ret
 .asm_2225
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	push af
 	ld a, $1
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	call Func_230f
 	pop af
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ldh a, [hffb0]
 	or a
 	jr nz, .asm_2240
@@ -6148,13 +6148,13 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
-; wRegularFontOrVWF <- 0
+; wFontWidth <- 0
 ; hTextLineCurPos <- 0
 ; wcd0b <- 0
 ; hffaf <- $f
 Func_2298: ; 2298 (0:2298)
 	xor a
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
 	ld a, $f
@@ -6245,7 +6245,7 @@ PlaceNextTextTile: ; 22f2 (0:22f2)
 	ret
 
 Func_230f: ; 230f (0:230f)
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a
 	ret z
 	ld a, [wcd0b]
@@ -6309,10 +6309,11 @@ Func_2325: ; 2325 (0:2325)
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a                 ;
-	jr z, .asm_2376      ; if [wRegularFontOrVWF] nonzero:
-	call CaseVWFLetter   ;   uppercase e if wUppercaseVWFLetters != 0
+	jr z, .asm_2376      ; if [wFontWidth] nonzero:
+	                     ;   uppercase e if wUppercaseHalfWidthLetters != 0
+	call CaseHalfWidthLetter
 	ld a, [wcd0b]
 	ld d, a              ;   d ← [wcd0b]
 	or a
@@ -6370,9 +6371,9 @@ Func_235e: ; 235e (0:235e)
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
-; uppercases e if [wUppercaseVWFLetters] is nonzero
-CaseVWFLetter: ; 23b1 (0:23b1)
-	ld a, [wUppercaseVWFLetters]
+; uppercases e if [wUppercaseHalfWidthLetters] is nonzero
+CaseHalfWidthLetter: ; 23b1 (0:23b1)
+	ld a, [wUppercaseHalfWidthLetters]
 	or a
 	ret z
 	ld a, e
@@ -6396,7 +6397,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	ret
 .asm_23cf
 	xor a
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 Func_23d3: ; 23d3 (0:23d3)
 	push hl
 	push de
@@ -6492,52 +6493,53 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ret
 
 ; generates a text tile and copies it to VRAM
-; if wRegularFontOrVWF == 0
-	; de = regular font tile number (d = $e and d = $f are treated differently)
-; if wRegularFontOrVWF != 0
-	; d = VWF character 1 (left)
-	; e = VWF character 2 (right)
+; if wFontWidth == 0
+	; de = full-width font tile number (d = $e and d = $f are treated differently)
+; if wFontWidth != 0
+	; d = half-width character 1 (left)
+	; e = half-width character 2 (right)
 ; b = destination VRAM tile number
 GenerateTextTile: ; 24ac (0:24ac)
 	push hl
 	push de
 	push bc
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a
-	jr nz, .vwf
-;.regular_font
-	call CreateRegularFontTile_ConvertToTileDataAddress
+	jr nz, .half_width
+;.full_width
+	call CreateFullWidthFontTile_ConvertToTileDataAddress
 	call SafeCopyDataDEtoHL
 .done
 	pop bc
 	pop de
 	pop hl
 	ret
-.vwf
-	call CreateVWFTile
+.half_width
+	call CreateHalfWidthFontTile
 	call ConvertTileNumberToTileDataAddress
 	call SafeCopyDataDEtoHL
 	jr .done
 
-; create, at wVWFOrRegularFontTile, a VWF tile made from the ascii characters given in d and e
-CreateVWFTile: ; 24ca (0:24ca)
+; create, at wTextTileBuffer, a half-width font tile
+; made from the ascii characters given in d and e
+CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(VWF)
+	ld a, BANK(HalfWidthFont)
 	call BankswitchHome
-	; write the right half of the VWF tile (first character) to wVWFOrRegularFontTile + 2n
+	; write the right half of the tile (first character) to wTextTileBuffer + 2n
 	push de
 	ld a, e
-	ld de, wVWFOrRegularFontTile
-	call CopyVWFCharacterToDE
+	ld de, wTextTileBuffer
+	call CopyHalfWidthCharacterToDE
 	pop de
-	; write the left half of the VWF tile (second character) to wVWFOrRegularFontTile + 2n+1
+	; write the left half of the tile (second character) to wTextTileBuffer + 2n+1
 	ld a, d
-	ld de, wVWFOrRegularFontTile + 1
-	call CopyVWFCharacterToDE
-	; construct the resulting VWF tile
-	ld hl, wVWFOrRegularFontTile
+	ld de, wTextTileBuffer + 1
+	call CopyHalfWidthCharacterToDE
+	; construct the resulting half-width font tile
+	ld hl, wTextTileBuffer
 	ld b, TILE_SIZE / 2
 .loop
 	ld a, [hli]
@@ -6550,20 +6552,20 @@ CreateVWFTile: ; 24ca (0:24ca)
 	jr nz, .loop
 	call BankpopHome
 	pop bc
-	ld de, wVWFOrRegularFontTile
+	ld de, wTextTileBuffer
 	ret
 
-; copies a half-tile corresponding to a VWF character to de
-; the ascii value of the character to copy is provided in a
-; assumes BANK(VWF) is already loaded
-CopyVWFCharacterToDE: ; 24fa (0:24fa)
-	sub $20 ; VWF begins at ascii $20
+; copies a half-tile corresponding to a half-width font character to de.
+; the ascii value of the character to copy is provided in a.
+; assumes BANK(HalfWidthFont) is already loaded.
+CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
+	sub $20 ; HalfWidthFont begins at ascii $20
 	ld l, a
 	ld h, $0
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld bc, VWF
+	ld bc, HalfWidthFont
 	add hl, bc
 	ld b, TILE_SIZE / 2
 .loop
@@ -6575,13 +6577,13 @@ CopyVWFCharacterToDE: ; 24fa (0:24fa)
 	jr nz, .loop
 	ret
 
-; create, at wVWFOrRegularFontTile, a regular font tile
-; given its tile number within the regular font graphics in de.
+; create, at wTextTileBuffer, a full-width font tile
+; given its tile number within the full-width font graphics in de.
 ; return its v*Tiles address in hl, and return c = TILE_SIZE.
-CreateRegularFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
+CreateFullWidthFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 	push bc
-	call GetRegularFontTileOffset
-	call CreateRegularFontTile
+	call GetFullWidthFontTileOffset
+	call CreateFullWidthFontTile
 	pop bc
 ;	fallthrough
 
@@ -6606,12 +6608,12 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 	ld c, TILE_SIZE
 	ret
 
-; create, at wVWFOrRegularFontTile, a regular font tile
-; given its offset within the font graphics in hl
-CreateRegularFontTile: ; 252e (0:252e)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+; create, at wTextTileBuffer, a full-width font tile
+; given its offset within the full-width font graphics in hl
+CreateFullWidthFontTile: ; 252e (0:252e)
+	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
 	call BankpushHome
-	ld de, wVWFOrRegularFontTile
+	ld de, wTextTileBuffer
 	push de
 	ld c, TILE_SIZE / 2
 .loop
@@ -6627,7 +6629,7 @@ CreateRegularFontTile: ; 252e (0:252e)
 	ret
 
 Func_2546: ; 2546 (0:2546)
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a
 	jr nz, .asm_255f
 	ld a, e
@@ -6657,10 +6659,10 @@ Func_2546: ; 2546 (0:2546)
 	scf
 	ret
 
-; convert the regular font tile number at de to the
-; equivalent offset within the font tile graphics.
+; convert the full-width font tile number at de to the
+; equivalent offset within the full-width font tile graphics.
 ; d = $e and d = $f are treated differently
-GetRegularFontTileOffset: ; 256d (0:256d)
+GetFullWidthFontTileOffset: ; 256d (0:256d)
 	ld bc, 40 tiles
 	ld a, d
 	cp $e
@@ -6709,7 +6711,7 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ld a, [hli]
 	ld [wNumMenuItems], a
 	ld a, [hli]
-	ld [wCursorTileNumber], a
+	ld [wCursorTile], a
 	ld a, [hli]
 	ld [wTileBehindCursor], a
 	ld a, [hli]
@@ -6864,7 +6866,7 @@ RefreshMenuCursor: ; 26da (0:26da)
 ; blink the cursor every 16 frames
 	and $f
 	ret nz
-	ld a, [wCursorTileNumber]
+	ld a, [wCursorTile]
 	bit 4, [hl]
 	jr z, DrawCursor
 EraseCursor: ; 26e9 (0:26e9)
@@ -6890,9 +6892,9 @@ DrawCursor:
 	or a
 	ret
 
-; unlike DrawCursor, read cursor tile from wCursorTileNumber instead of register a
+; unlike DrawCursor, read cursor tile from wCursorTile instead of register a
 DrawCursor2: ; 270b (0:270b)
-	ld a, [wCursorTileNumber]
+	ld a, [wCursorTile]
 	jr DrawCursor
 
 SetMenuItem: ; 2710 (0:2710)
@@ -7420,7 +7422,7 @@ SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	inc hl
 	ld [hl], 1 ; wNumMenuItems
 	inc hl
-	ld [hl], b ; wCursorTileNumber
+	ld [hl], b ; wCursorTile
 	inc hl
 	ld [hl], c ; wTileBehindCursor
 	ld [wCursorBlinkCounter], a
@@ -7902,7 +7904,7 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	pop bc
 	ld a, [hffaf]
 	ld [hli], a
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	ld [hli], a
 	ldh a, [hBankROM]
 	ld [hli], a
@@ -7922,7 +7924,7 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld a, [hli]
 	ld [hffaf], a
 	ld a, [hli]
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ld a, [hli]
 	call BankswitchHome
 	ld a, [hli]
@@ -8015,7 +8017,7 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, $f
 	ld [hffaf], a
 	xor a
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ld de, wTxRam2
 	ld hl, wce49
 	call Func_2de0
@@ -8095,14 +8097,14 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; if [wRegularFontOrVWF] != 0:
+; if [wFontWidth] != 0:
 ;   convert the number at hl to text (ascii) format and write it to wcaa0
 ;   return c = 4 - leading_zeros
-; if [wRegularFontOrVWF] == 0:
+; if [wFontWidth] == 0:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
 	ld de, wcaa0
@@ -8404,7 +8406,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData

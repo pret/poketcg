@@ -2,11 +2,11 @@ INCLUDE "macros.asm"
 
 SECTION "Gfx 1", ROMX
 
-Fonts:: ; 74000 (1d:4000)
-INCBIN "gfx/fonts.t3.1bpp"
+FullWidthFonts:: ; 74000 (1d:4000)
+INCBIN "gfx/fonts/full_width.t3.1bpp"
 
-VWF:: ; 76668 (1d:6668)
-INCBIN "gfx/vwf.1bpp"
+HalfWidthFont:: ; 76668 (1d:6668)
+INCBIN "gfx/fonts/half_width.1bpp"
 
 DuelGraphics::
 

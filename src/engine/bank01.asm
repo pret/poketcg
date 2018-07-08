@@ -13,7 +13,7 @@ GameLoop: ; 4000 (1:4000)
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, 1
-	ld [wUppercaseVWFLetters], a
+	ld [wUppercaseHalfWidthLetters], a
 	ei
 	farcall CommentedOut_1a6cc
 	ldh a, [hButtonsHeld]
@@ -38,7 +38,7 @@ GameLoop: ; 4000 (1:4000)
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
 	ld a, 1
-	ld [wUppercaseVWFLetters], a
+	ld [wUppercaseHalfWidthLetters], a
 	ret
 
 Func_405a: ; 405a (1:405a)
