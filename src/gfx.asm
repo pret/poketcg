@@ -8,10 +8,10 @@ INCBIN "gfx/fonts/full_width.t3.1bpp"
 HalfWidthFont:: ; 76668 (1d:6668)
 INCBIN "gfx/fonts/half_width.1bpp"
 
-DuelGraphics::
+SymbolsFont:: ; 76968 (1d:6968)
+INCBIN "gfx/fonts/symbols.2bpp"
 
-DuelHUDGraphics:: ; 76968 (1d:6968)
-INCBIN "gfx/duel/hud.2bpp"
+DuelGraphics::
 
 DuelCardHeaderGraphics:: ; 76ce8 (1d:6ce8)
 INCBIN "gfx/duel/card_headers.2bpp"

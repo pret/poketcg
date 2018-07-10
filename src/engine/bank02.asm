@@ -46,7 +46,7 @@ Func_8d56: ; 8d56 (2:4d56)
 	call ZeroObjectPositions
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
 	call Func_8d0b
 	bank1call SetDefaultPalettes

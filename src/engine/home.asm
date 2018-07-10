@@ -5941,10 +5941,10 @@ LoadDuelCoinTossResultTiles: ; 210f (0:210f)
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
 
-LoadDuelHUDTiles: ; 2119 (0:2119)
-	ld hl, DuelHUDGraphics - $4000
+LoadSymbolsFont: ; 2119 (0:2119)
+	ld hl, SymbolsFont - $4000
 	ld de, v0Tiles2 ; destination
-	ld b, (DuelCardHeaderGraphics - DuelHUDGraphics) / TILE_SIZE ; number of tiles
+	ld b, (DuelCardHeaderGraphics - SymbolsFont) / TILE_SIZE ; number of tiles
 ;	fallthrough
 
 ; if hl ≤ $3fff
@@ -5960,9 +5960,9 @@ CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
 	ret
 ; 0x212f
 
-; this function appears to copy duel gfx data into sram
+; this function appears to copy gfx data into sram
 Func_212f: ; 212f (0:212f)
-	ld hl, DuelHUDGraphics - $4000
+	ld hl, SymbolsFont - $4000
 	ld de, $a400
 	ld b, $30
 	call CopyFontsOrDuelGraphicsTiles
@@ -5998,7 +5998,7 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	; hl = a * $280
 	ld de, DuelBoxMessages
 	add hl, de
-	ld de, v0Tiles1 + $200
+	ld de, v0Tiles1 + $20 tiles
 	ld b, $28
 	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
@@ -6059,12 +6059,12 @@ Func_21f2: ; 21f2 (0:21f2)
 	scf
 	ret
 .asm_220f
-	ld a, $1
+	ld a, HALF_WIDTH
 	ld [wFontWidth], a
 	ret
 .asm_2215
 	call Func_230f
-	xor a
+	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ld a, $f
 	ldh [hffaf], a
@@ -6076,7 +6076,7 @@ Func_21f2: ; 21f2 (0:21f2)
 .asm_2225
 	ld a, [wFontWidth]
 	push af
-	ld a, $1
+	ld a, HALF_WIDTH
 	ld [wFontWidth], a
 	call Func_230f
 	pop af
@@ -6148,12 +6148,12 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
-; wFontWidth <- 0
+; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
 ; wcd0b <- 0
 ; hffaf <- $f
 Func_2298: ; 2298 (0:2298)
-	xor a
+	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
@@ -6246,7 +6246,7 @@ PlaceNextTextTile: ; 22f2 (0:22f2)
 
 Func_230f: ; 230f (0:230f)
 	ld a, [wFontWidth]
-	or a
+	or a ; FULL_WIDTH
 	ret z
 	ld a, [wcd0b]
 	or a
@@ -6254,7 +6254,7 @@ Func_230f: ; 230f (0:230f)
 	push hl
 	push de
 	push bc
-	ld e, $20
+	ld e, " "
 	call Func_22ca
 	pop bc
 	pop de
@@ -6311,7 +6311,7 @@ Func_2325: ; 2325 (0:2325)
 Func_235e: ; 235e (0:235e)
 	ld a, [wFontWidth]
 	or a                 ;
-	jr z, .asm_2376      ; if [wFontWidth] nonzero:
+	jr z, .asm_2376      ; if [wFontWidth] == HALF_WIDTH:
 	                     ;   uppercase e if wUppercaseHalfWidthLetters != 0
 	call CaseHalfWidthLetter
 	ld a, [wcd0b]
@@ -6396,7 +6396,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	sub b
 	ret
 .asm_23cf
-	xor a
+	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 Func_23d3: ; 23d3 (0:23d3)
 	push hl
@@ -6493,9 +6493,9 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ret
 
 ; generates a text tile and copies it to VRAM
-; if wFontWidth == 0
+; if wFontWidth == FULL_WIDTH
 	; de = full-width font tile number (d = $e and d = $f are treated differently)
-; if wFontWidth != 0
+; if wFontWidth == HALF_WIDTH
 	; d = half-width character 1 (left)
 	; e = half-width character 2 (right)
 ; b = destination VRAM tile number
@@ -6630,7 +6630,7 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 
 Func_2546: ; 2546 (0:2546)
 	ld a, [wFontWidth]
-	or a
+	or a ; FULL_WIDTH
 	jr nz, .asm_255f
 	ld a, e
 	cp $10
@@ -7829,7 +7829,7 @@ Func_2c37: ; 2c37 (0:2c37)
 
 Func_2c62: ; 2c62 (0:2c62)
 	call .asm_2c67
-	jr Func_2c77
+	jr WaitForPlayerToAdvanceText
 .asm_2c67
 	push hl
 	ld hl, wTextBoxLabel
@@ -7844,7 +7844,9 @@ Func_2c73: ; 2c73 (0:2c73)
 	xor a
 	call Func_2c84
 
-Func_2c77: ; 2c77 (0:2c77)
+; when a text box is full, prompt the player to press A or B
+; in order to clear the text and print the next lines.
+WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
@@ -7857,50 +7859,58 @@ Func_2c84: ; 2c84 (0:2c84)
 	push af
 	call GetTextOffsetFromTextID
 	call Func_2d15
-	call Func_2cc8
-.asm_2c93
+	call InitRegistersForPrintingText
+.print_char_loop
 	ld a, [wTextSpeed]
 	ld c, a
 	inc c
 	jr .asm_2cac
-.asm_2c9a
+.nonzero_text_speed
 	ld a, [wTextSpeed]
-	cp $2
-	jr nc, .asm_2ca7
+	cp 2
+	jr nc, .apply_delay
+	; if text speed is 1, pressing b ignores it
 	ldh a, [hButtonsHeld]
 	and B_BUTTON
-	jr nz, .asm_2caf
-.asm_2ca7
+	jr nz, .skip_delay
+.apply_delay
 	push bc
 	call DoFrame
 	pop bc
 .asm_2cac
 	dec c
-	jr nz, .asm_2c9a
-.asm_2caf
+	jr nz, .nonzero_text_speed
+.skip_delay
 	call Func_2d43
 	jr c, .asm_2cc3
 	ld a, [wCurTextLine]
 	cp 3
-	jr c, .asm_2c93
-	call Func_2c77
+	jr c, .print_char_loop
+	; two lines of text already printed, so need to advance text
+	call WaitForPlayerToAdvanceText
 	call Func_2d15
-	jr .asm_2c93
+	jr .print_char_loop
 .asm_2cc3
 	pop af
 	call BankswitchHome
 	ret
 
-Func_2cc8: ; 2cc8 (0:2cc8)
+; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hffaf to $f
+; fill wTextStruct1 with $f, wFontWidth, hBankROM, and register bc for the text's pointer.
+InitRegistersForPrintingText: ; 2cc8 (0:2cc8)
 	xor a
-	ld [wce48], a
-	ld [wce49], a
-	ld [wce4a], a
+	ld [wWhichTextStruct], a
+	ld [wWhichTxRam2], a
+	ld [wWhichTxRam3], a
 	ld a, $f
 	ld [hffaf], a
-Func_2cd7: ; 2cd7 (0:2cd7)
+;	fallthrough
+
+; fill the wTextStruct specified in wWhichTextStruct (0-3) with hffaf,
+; wFontWidth, hBankROM, and register bc for the text's pointer.
+WriteToTextStruct: ; 2cd7 (0:2cd7)
 	push hl
-	call Func_2d06
+	call GetPointerToTextStruct
 	pop bc
 	ld a, [hffaf]
 	ld [hli], a
@@ -7913,14 +7923,20 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	ld [hl], b
 	ret
 
-Func_2ceb: ; 2ceb (0:2ceb)
-	call Func_2cd7
-	ld hl, wce48
+; same as WriteToTextStruct, except it then increases wWhichTextStruct to
+; set the following text struct to the current one (usually, because
+; it will soon be written to due to a TX_RAM command).
+WriteToTextStruct_MoveToNext: ; 2ceb (0:2ceb)
+	call WriteToTextStruct
+	ld hl, wWhichTextStruct
 	inc [hl]
 	ret
 
-Func_2cf3: ; 2cf3 (0:2cf3)
-	call Func_2d06
+; read the wTextStruct specified in wWhichTextStruct (0-3) and use the data to
+; populate the corresponding memory addresses. also switch to the text's rombank
+; and return the address of the next character in hl.
+ReadTextStruct: ; 2cf3 (0:2cf3)
+	call GetPointerToTextStruct
 	ld a, [hli]
 	ld [hffaf], a
 	ld a, [hli]
@@ -7932,15 +7948,16 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld l, a
 	ret
 
-Func_2d06: ; 2d06 (0:2d06)
-	ld a, [wce48]
+; return in hl, the address of the wTextStruct specified in wWhichTextStruct (0-3)
+GetPointerToTextStruct: ; 2d06 (0:2d06)
+	ld a, [wWhichTextStruct]
 	ld e, a
 	add a
 	add a
 	add e
 	ld e, a
 	ld d, $0
-	ld hl, wce2b
+	ld hl, wTextStruct1
 	add hl, de
 	ret
 
@@ -7970,7 +7987,7 @@ Func_2d15: ; 2d15 (0:2d15)
 	ret
 
 Func_2d43: ; 2d43 (0:2d43)
-	call Func_2cf3
+	call ReadTextStruct
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .asm_2d79
@@ -7998,49 +8015,49 @@ Func_2d43: ; 2d43 (0:2d43)
 	xor a
 	call Func_21f2
 .asm_2d74
-	call Func_2cd7
+	call WriteToTextStruct
 	or a
 	ret
 .asm_2d79
-	ld a, [wce48]
+	ld a, [wWhichTextStruct]
 	or a
 	jr z, .asm_2d85
 	dec a
-	ld [wce48], a
+	ld [wWhichTextStruct], a
 	jr Func_2d43
 .asm_2d85
 	call Func_230f
 	scf
 	ret
 .tx_ram2
-	call Func_2ceb
+	call WriteToTextStruct_MoveToNext
 	ld a, $f
 	ld [hffaf], a
-	xor a
+	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ld de, wTxRam2
-	ld hl, wce49
-	call Func_2de0
+	ld hl, wWhichTxRam2
+	call HandleTxRam2Or3
 	ld a, l
 	or h
 	jr z, .asm_2dab
 	call GetTextOffsetFromTextID
-	call Func_2cd7
+	call WriteToTextStruct
 	jr Func_2d43
 .asm_2dab
 	ld hl, wDefaultText
-	call Func_2cd7
+	call WriteToTextStruct
 	jr Func_2d43
 .tx_ram3
-	call Func_2ceb
+	call WriteToTextStruct_MoveToNext
 	ld de, wTxRam3
-	ld hl, wce4a
-	call Func_2de0
+	ld hl, wWhichTxRam3
+	call HandleTxRam2Or3
 	call TwoByteNumberToText_CountLeadingZeros
-	call Func_2cd7
+	call WriteToTextStruct
 	jp Func_2d43
 .tx_ram1
-	call Func_2ceb
+	call WriteToTextStruct_MoveToNext
 	call CopyTurnDuelistName
 	ld a, [wcaa0]
 	cp $6
@@ -8048,12 +8065,15 @@ Func_2d43: ; 2d43 (0:2d43)
 	ld a, $7
 	call Func_21f2
 .asm_2dda
-	call Func_2cd7
+	call WriteToTextStruct
 	jp Func_2d43
 
-; inc [hl]
-; hl = [de + 2*[hl]]
-Func_2de0: ; 2de0 (0:2de0)
+; input:
+  ; de: wTxRam2 or wTxRam3
+  ; hl: wWhichTxRam2 or wWhichTxRam3
+; return, in hl, the contents of the contents of the
+; wTxRam* buffer's current entry, and increment wWhichTxRam*.
+HandleTxRam2Or3: ; 2de0 (0:2de0)
 	push de
 	ld a, [hl]
 	inc [hl]
@@ -8097,15 +8117,15 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; if [wFontWidth] != 0:
+; if [wFontWidth] == HALF_WIDTH:
 ;   convert the number at hl to text (ascii) format and write it to wcaa0
 ;   return c = 4 - leading_zeros
-; if [wFontWidth] == 0:
+; if [wFontWidth] == FULL_WIDTH:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wFontWidth]
-	or a
+	or a ; FULL_WIDTH
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
 	ld de, wcaa0
 	push de
@@ -8151,7 +8171,7 @@ PrintText: ; 2e41 (0:2e41)
 .from_ram
 	ld hl, wDefaultText
 .print_text
-	call Func_2cc8
+	call InitRegistersForPrintingText
 .next_tile_loop
 	ldh a, [hButtonsHeld]
 	ld b, a
@@ -8179,7 +8199,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
-	call Func_2cc8
+	call InitRegistersForPrintingText
 .next_tile_loop
 	call Func_2d43
 	jr nc, .next_tile_loop

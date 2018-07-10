@@ -1201,7 +1201,7 @@ Text035b: ; 3eb62 (f:6b62)
 	done
 
 Text035c: ; 3eb88 (f:6b88)
-	db "ppppp"
+	db $70,$70,$70,$70,$70
 	done
 
 Text035d: ; 3eb8e (f:6b8e)
@@ -1587,7 +1587,7 @@ Text03a6: ; 3f631 (f:7631)
 	done
 
 Text03a7: ; 3f643 (f:7643)
-	db TX_END
+	done
 
 Text03a8: ; 3f644 (f:7644)
 	text "COLOSSEUM"

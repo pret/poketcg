@@ -1094,10 +1094,17 @@ wce22:: ; ce22
 wCardPalette:: ; ce23
 	ds CGB_PAL_SIZE
 
-wce2b:: ; ce2b
-	ds $1
-
-	ds $13
+; information about the text being currently processed, like the font width
+; the rom bank, and the memory address of the next character to be printed.
+; supports up to four nested texts (used with TX_RAM).
+wTextStruct1:: ; ce2b
+	text_struct wTextStruct1
+wTextStruct2:: ; ce30
+	text_struct wTextStruct2
+wTextStruct3:: ; ce35
+	text_struct wTextStruct3
+wTextStruct4:: ; ce3a
+	text_struct wTextStruct4
 
 ; text id for the first TX_RAM2 of a text
 ; prints from wDefaultText if $0000
@@ -1108,23 +1115,30 @@ wTxRam2:: ; cd3f
 wTxRam2_b:: ; ce41
 	ds $2
 
-; a number between 0 and 65535 for TX_RAM3
+; text id for the first TX_RAM3 of a text
+; a number between 0 and 65535
 wTxRam3:: ; ce43
 	ds $2
 
+; text id for the second TX_RAM3 of a text
+; a number between 0 and 65535
+wTxRam3_b:: ; ce45
 	ds $2
 
 ; when printing text, number of frames to wait between each text tile
 wTextSpeed:: ; ce47
 	ds $1
 
-wce48:: ; ce48
+; a number between 0 and 3 to select a wTextStruct to use for the current text
+wWhichTextStruct:: ; ce48
 	ds $1
 
-wce49:: ; ce49
+; selects wTxRam2 or wTxRam2_b
+wWhichTxRam2:: ; ce49
 	ds $1
 
-wce4a:: ; ce4a
+; selects wTxRam3 or wTxRam3_b
+wWhichTxRam3:: ; ce4a
 	ds $1
 
 wIsTextBoxLabeled:: ; ce4b

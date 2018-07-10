@@ -15,6 +15,10 @@ done EQUS "db TX_END"
 	charmap "♀", "%"
 	charmap "”", "\""
 
+; wFontWidth constants
+FULL_WIDTH EQU $0
+HALF_WIDTH EQU $1 ; non-0
+
 ; TX_SYMBOL (full-tile icons/symbols loaded at the beginning of v0Tiles2)
 ; TODO: Use symbols in menus (cursor tile number, tile behind cursor), draw text boxes, WriteByteToBGMap0, etc
 ;       If user-defined functions ever become a thing a symbol(*) syntax would probably be preferred over SYM_*

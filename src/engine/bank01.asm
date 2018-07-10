@@ -45,7 +45,7 @@ Func_405a: ; 405a (1:405a)
 	xor a
 	ld [wTileMapFill], a
 	call DisableLCD
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld de, $387f
 	call Func_2275
@@ -281,7 +281,7 @@ Func_420b: ; 420b (1:420b)
 	ld [wTileMapFill], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld de, $389f
 	call Func_2275
@@ -1558,7 +1558,7 @@ Func_49ed: ; 49ed (1:49ed)
 	INCROM $4a35, $4a97
 
 Func_4a97: ; 4a97 (1:4a97)
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	ld de, wDefaultText
 	push de
 	call CopyPlayerName
@@ -2003,7 +2003,7 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ret z
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	ld a, $01
 	ld [wcac2], a
 	ld a, DUELVARS_ARENA_CARD
@@ -2507,7 +2507,7 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 .draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
 	; draw the surrounding box
 	lb de, 0, 0
@@ -3311,7 +3311,7 @@ _DisplayCardDetailScreen: ; 5e5f (1:5e5f)
 DrawLargePictureOfCard: ; 5e75 (1:5e75)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld a, $08
 	ld [wcac2], a

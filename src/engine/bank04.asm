@@ -2,7 +2,7 @@ Func_10000: ; 10000 (4:4000)
 	ld a, $0
 	ld [wTileMapFill], a
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	ld de, $307f
 	call Func_2275
 	call Set_OBJ_8x8

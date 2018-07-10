@@ -14,7 +14,7 @@ LoadMap: ; c000 (3:4000)
 	call ZeroObjectPositions
 	xor a
 	ld [wTileMapFill], a
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call Set_OBJ_8x8
 	xor a
 	ld [wLineSeparation], a
