@@ -108,7 +108,12 @@ hTextHorizontalAlign:: ; ffad
 hTextLineLength:: ; ffae
 	ds $1
 
-hffaf:: ; ffaf
+; when printing text and no leading control character is specified, whether characters $10 to $60
+; map to the first 50 tiles of the full width font graphics as characters $0 to $50
+; (TX_FULLWIDTH6 mode), or map to the first 256-tile font located right after (TX_FULLWIDTH5 mode).
+; the TX_FULLWIDTH5 and TX_FULLWIDTH6 control characters are used to set this address to said value.
+; only these two values are admitted, as any other is interpreted as TX_FULLWIDTH5.
+hDefaultFont:: ; ffaf
 	ds $1
 
 hffb0:: ; ffb0

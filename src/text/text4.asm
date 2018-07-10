@@ -120,7 +120,7 @@ Text040d: ; 40819 (10:4819)
 	done
 
 Text040e: ; 409c6 (10:49c6)
-	text "Fight to the end, ", TX_START,  TX_RAM1, ","
+	text "Fight to the end, ", TX_HALFWIDTH,  TX_RAM1, ","
 	line "and don't give up!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
@@ -815,7 +815,7 @@ Text0467: ; 43221 (10:7221)
 	line "I am the super musical star,"
 	line "Imakuni?!"
 	line "I'll sing the Pok`Rap - You dance!"
-	line $07,$03,$63, TX_START, "La di da la di da"
+	line $07,$03,$63, TX_HALFWIDTH, "La di da la di da"
 	line "  La di da la di da..."
 	line "Hey!"
 	line "Move those feet!"
@@ -878,7 +878,7 @@ Text0471: ; 435a7 (10:75a7)
 	line "You weren't too bad, but since "
 	line "I won...Let's see you shake it!"
 	line "Come on, shake it!!!"
-	line $07,$03,$63, TX_START, "La di da la di da"
+	line $07,$03,$63, TX_HALFWIDTH, "La di da la di da"
 	line "  La di da la di da..."
 	line "... You dance weird!"
 	done

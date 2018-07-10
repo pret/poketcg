@@ -1,14 +1,36 @@
-TX_END    EQU $00
-TX_SYMBOL EQU $05
-TX_START  EQU $06
-TX_RAM1   EQU $09
-TX_LINE   EQU "\n" ; $0a
-TX_RAM2   EQU $0B
-TX_RAM3   EQU $0C
+TX_END        EQU $00
 
-text EQUS "db TX_START, "
-line EQUS "db TX_LINE, "
-done EQUS "db TX_END"
+; TX_FULLWIDTH*, char1, TX_FULLWIDTH*, char2, ...
+TX_FULLWIDTH1 EQU $01
+TX_FULLWIDTH2 EQU $02
+TX_FULLWIDTH3 EQU $03
+TX_FULLWIDTH4 EQU $04
+
+TX_CTRL_BEGIN EQU $05
+
+; TX_SYMBOL, char1, TX_SYMBOL, char2, ...
+TX_SYMBOL     EQU $05
+
+; TX_HALFWIDTH, char1, char2, ...
+TX_HALFWIDTH  EQU $06 ; sets wFontWidth to HALF_WIDTH
+
+TX_HALF2FULL  EQU $07 ; sets wFontWidth to FULL_WIDTH, and hDefaultFont to TX_FULLWIDTH6
+TX_RAM1       EQU $09
+TX_LINE       EQU "\n" ; $0a
+TX_RAM2       EQU $0b
+TX_RAM3       EQU $0c
+
+; usage: TX_FULLWIDTH*, char1, char2, ...
+; db char1, char2, ... defaults to the value at hDefaultFont, unless
+; wFontWidth was set to HALF_WIDTH by TX_HALFWIDTH (it is FULL_WIDTH by default)
+TX_FULLWIDTH5 EQU $0e ; sets hDefaultFont to TX_FULLWIDTH5
+TX_FULLWIDTH6 EQU $0f ; sets hDefaultFont to TX_FULLWIDTH6
+
+TX_CTRL_END   EQU $10
+
+text   EQUS "db TX_HALFWIDTH, "
+line   EQUS "db TX_LINE, "
+done   EQUS "db TX_END"
 
 	charmap "é", "`"
 	charmap "♂", "$"

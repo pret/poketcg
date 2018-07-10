@@ -373,7 +373,7 @@ SECTION "WRAM Engine 1", WRAM0
 wOAM:: ; ca00
 	ds $a0
 
-wcaa0:: ; caa0
+wTextBuf:: ; caa0
 	ds $10
 
 wcab0:: ; cab0

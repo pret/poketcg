@@ -40,10 +40,10 @@ move_data_struct: MACRO
 ENDM
 
 text_struct: MACRO
-\1Unknown::   ds 1
-\1FontWidth:: ds 1
-\1Address::   ds 2
-\1RomBank::   ds 1
+\1DefaultFont:: ds 1
+\1FontWidth::   ds 1
+\1Address::     ds 2
+\1RomBank::     ds 1
 ENDM
 
 ; TODO: Figure out what the rest are for

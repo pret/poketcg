@@ -1092,7 +1092,7 @@ DefeatedFiveOpponentsText: ; 5728e (15:728e)
 
 Text07e7: ; 572ba (15:72ba)
 	text TX_RAM1,  " successfully defeated "
-	line "5 opponents ", TX_START,   TX_RAM3,  " time(s)!!!"
+	line "5 opponents ", TX_HALFWIDTH,   TX_RAM3,  " time(s)!!!"
 	done
 
 ConsecutiveWinRecordIncreasedText: ; 572ee (15:72ee)

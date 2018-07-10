@@ -842,12 +842,12 @@ CallHL: ; 05c1 (0:05c1)
 ; 0x5c2
 
 ; converts two one-digit numbers provided in a to text (ascii) format,
-; writes them to [wcaa0] and [wcaa0 + 1], and to the BGMap0 address at bc
+; writes them to [wTextBuf] and [wTextBuf + 1], and to the BGMap0 address at bc
 WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 	push hl
 	push bc
 	push de
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	call WriteNumbersInTextFormat
@@ -863,12 +863,12 @@ WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 ; 0x5db
 
 ; converts a one-digit number provided in the lower nybble of a to text
-; (ascii) format, and writes it to [wcaa0] and to the BGMap0 address at bc
+; (ascii) format, and writes it to [wTextBuf] and to the BGMap0 address at bc
 WriteOneDigitNumber: ; 05db (0:05db)
 	push hl
 	push bc
 	push de
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	call WriteNumberInTextFormat
@@ -884,14 +884,14 @@ WriteOneDigitNumber: ; 05db (0:05db)
 ; 0x5f4
 
 ; converts four one-digit numbers provided in h and l to text (ascii) format,
-; writes them to [wcaa0] through [wcaa0 + 3], and to the BGMap0 address at bc
+; writes them to [wTextBuf] through [wTextBuf + 3], and to the BGMap0 address at bc
 WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	push de
 	ld e, l
 	ld d, h
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	ld a, d
@@ -934,13 +934,13 @@ WriteNumberInTextFormat:
 ; 0x627
 
 ; converts the one-byte number at a to text (ascii) format,
-; and writes it to [wcaa0] and the BGMap0 address at bc
+; and writes it to [wTextBuf] and the BGMap0 address at bc
 WriteOneByteNumber: ; 0627 (0:0627)
 	push bc
 	push hl
 	ld l, a
 	ld h, $00
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	push bc
 	ld bc, -100
@@ -960,10 +960,10 @@ WriteOneByteNumber: ; 0627 (0:0627)
 ; 0x650
 
 ; converts the two-byte number at hl to text (ascii) format,
-; and writes it to [wcaa0] and the BGMap0 address at bc
+; and writes it to [wTextBuf] and the BGMap0 address at bc
 WriteTwoByteNumber: ; 0650 (0:0650)
 	push bc
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	call TwoByteNumberToText
 	call BCCoordToBGMap0Address
@@ -5991,7 +5991,7 @@ Func_212f: ; 212f (0:212f)
 
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
-	ld h, (40 tiles) / 4 ; boxes are 10x4 tiles
+	ld h, 40 tiles / 4 ; boxes are 10x4 tiles
 	call HtimesL
 	add hl, hl
 	add hl, hl
@@ -6016,16 +6016,16 @@ Func_21c5: ; 21c5 (0:21c5)
 	call Func_2298
 	jr .asm_21e8
 .asm_21cc
-	cp $5
+	cp TX_CTRL_BEGIN
 	jr c, .asm_21d9
-	cp $10
+	cp TX_CTRL_END
 	jr nc, .asm_21d9
 	call Func_21f2
 	jr .asm_21e8
 .asm_21d9
 	ld e, a
 	ld d, [hl]
-	call Func_2546
+	call ProcessFullWidthFontCharacterPair
 	jr nc, .asm_21e1
 	inc hl
 .asm_21e1
@@ -6042,38 +6042,38 @@ Func_21c5: ; 21c5 (0:21c5)
 	ret
 
 Func_21f2: ; 21f2 (0:21f2)
-	or a
-	jr z, .asm_2241
-	cp $e
+	or a ; TX_END
+	jr z, .tx_end
+	cp TX_FULLWIDTH5
 	jr z, .asm_2221
-	cp $f
+	cp TX_FULLWIDTH6
 	jr z, .asm_2221
-	cp $a
-	jr z, .reached_line_length
+	cp "\n"
+	jr z, .end_of_line
 	cp TX_SYMBOL
-	jr z, .asm_2225
-	cp TX_START
-	jr z, .asm_220f
-	cp $7
-	jr z, .asm_2215
+	jr z, .tx_symbol
+	cp TX_HALFWIDTH
+	jr z, .tx_halfwidth
+	cp TX_HALF2FULL
+	jr z, .tx_half2full
 	scf
 	ret
-.asm_220f
+.tx_halfwidth
 	ld a, HALF_WIDTH
 	ld [wFontWidth], a
 	ret
-.asm_2215
+.tx_half2full
 	call Func_230f
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
-	ld a, $f
-	ldh [hffaf], a
+	ld a, TX_FULLWIDTH6
+	ldh [hDefaultFont], a
 	ret
 .asm_2221
-	ldh [hffaf], a
+	ldh [hDefaultFont], a
 	xor a
 	ret
-.asm_2225
+.tx_symbol
 	ld a, [wFontWidth]
 	push af
 	ld a, HALF_WIDTH
@@ -6090,17 +6090,17 @@ Func_21f2: ; 21f2 (0:21f2)
 	pop hl
 .asm_2240
 	inc hl
-.asm_2241
+.tx_end
 	ldh a, [hTextLineLength]
 	or a
 	ret z
 	ld b, a
 	ldh a, [hTextLineCurPos]
 	cp b
-	jr z, .reached_line_length
+	jr z, .end_of_line
 	xor a
 	ret
-.reached_line_length
+.end_of_line
 	call Func_230f
 	ld a, [wLineSeparation]
 	or a
@@ -6151,14 +6151,14 @@ Func_2275: ; 2275 (0:2275)
 ; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
 ; wcd0b <- 0
-; hffaf <- $f
+; hDefaultFont <- TX_FULLWIDTH6
 Func_2298: ; 2298 (0:2298)
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
-	ld a, $f
-	ldh [hffaf], a
+	ld a, TX_FULLWIDTH6
+	ldh [hDefaultFont], a
 	ret
 
 ; Func_22ae
@@ -6387,7 +6387,7 @@ CaseHalfWidthLetter: ; 23b1 (0:23b1)
 
 Func_23c1: ; 23c1 (0:23c1)
 	ld a, [hl]
-	cp TX_START
+	cp TX_HALFWIDTH
 	jr nz, .asm_23cf
 	call Func_23d3
 	inc b
@@ -6407,9 +6407,9 @@ Func_23d3: ; 23d3 (0:23d3)
 	or a
 	jr z, .asm_23f8
 	inc c
-	cp $5
+	cp TX_CTRL_BEGIN
 	jr c, .asm_23ec
-	cp $10
+	cp TX_CTRL_END
 	jr nc, .asm_23ec
 	cp TX_SYMBOL
 	jr nz, .asm_23d8
@@ -6419,7 +6419,7 @@ Func_23d3: ; 23d3 (0:23d3)
 	ld e, a
 	ld d, [hl]
 	inc b
-	call Func_2546
+	call ProcessFullWidthFontCharacterPair
 	jr nc, .asm_23d8
 .asm_23f4
 	inc c
@@ -6435,12 +6435,12 @@ Func_23d3: ; 23d3 (0:23d3)
 
 	INCROM $23fd, $245d
 
-; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
+; convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
 ; replace leading zeros with SYM_SPACE
 TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	ld bc, -10000
 	call .get_digit
@@ -6538,9 +6538,9 @@ CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	ld a, d
 	ld de, wTextTileBuffer + 1
 	call CopyHalfWidthCharacterToDE
-	; construct the resulting half-width font tile
+	; construct the 2bpp-converted half-width font tile
 	ld hl, wTextTileBuffer
-	ld b, TILE_SIZE / 2
+	ld b, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	swap a
@@ -6555,7 +6555,7 @@ CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	ld de, wTextTileBuffer
 	ret
 
-; copies a half-tile corresponding to a half-width font character to de.
+; copies a 1bpp tile corresponding to a half-width font character to de.
 ; the ascii value of the character to copy is provided in a.
 ; assumes BANK(HalfWidthFont) is already loaded.
 CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
@@ -6567,12 +6567,12 @@ CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
 	add hl, hl
 	ld bc, HalfWidthFont
 	add hl, bc
-	ld b, TILE_SIZE / 2
+	ld b, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	ld [de], a
 	inc de
-	inc de ; skip the other half of the tile
+	inc de
 	dec b
 	jr nz, .loop
 	ret
@@ -6615,7 +6615,7 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 	call BankpushHome
 	ld de, wTextTileBuffer
 	push de
-	ld c, TILE_SIZE / 2
+	ld c, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -6628,32 +6628,37 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 	call BankpopHome
 	ret
 
-Func_2546: ; 2546 (0:2546)
+; given two text characters at de, use the char at d to determine
+; which type of TX_FULLWIDTH this pair of characters belongs to.
+; return carry if TX_FULLWIDTH1 to TX_FULLWIDTH4.
+ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
-	jr nz, .asm_255f
+	jr nz, .half_width
 	ld a, e
-	cp $10
-	jr c, .asm_2561
+	cp TX_CTRL_END
+	jr c, .continue_check
 	cp $60
-	jr nc, .asm_2565
-	ldh a, [hffaf]
-	cp $f
-	jr nz, .asm_2565
-	ld d, $f
+	jr nc, .first_font
+	ldh a, [hDefaultFont]
+	cp TX_FULLWIDTH6
+	jr nz, .first_font
+	ld d, TX_FULLWIDTH6
 	or a
 	ret
-.asm_255f
+.half_width
 	or a
 	ret
-.asm_2561
-	cp $5
-	jr c, .asm_2569
-.asm_2565
+.continue_check
+	cp TX_CTRL_BEGIN
+	jr c, .ath_font
+.first_font
+; TX_FULLWIDTH5
 	ld d, $0
 	or a
 	ret
-.asm_2569
+.ath_font
+; TX_FULLWIDTH1 to TX_FULLWIDTH4
 	ld e, d
 	ld d, a
 	scf
@@ -6661,19 +6666,21 @@ Func_2546: ; 2546 (0:2546)
 
 ; convert the full-width font tile number at de to the
 ; equivalent offset within the full-width font tile graphics.
-; d = $e and d = $f are treated differently
+;   if d == TX_FULLWIDTH6: get tile from the 80-tile font at the top of the graphics.
+;   if d == TX_FULLWIDTH5 or d == $0: get tile from first 256-tile font of the graphics.
+;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from N+1th 256-tile font of the graphics.
 GetFullWidthFontTileOffset: ; 256d (0:256d)
-	ld bc, 40 tiles
+	ld bc, $50 tiles_1bpp
 	ld a, d
-	cp $e
-	jr z, .asm_2580
-	cp $f
+	cp TX_FULLWIDTH5
+	jr z, .first_font
+	cp TX_FULLWIDTH6
 	jr nz, .get_address
-	ld bc, $0000
+	ld bc, $0 tiles
 	ld a, e
-	sub $10
+	sub $10 ; the first $10 are control characters, but this font's graphics start at $0
 	ld e, a
-.asm_2580
+.first_font
 	ld d, $0
 .get_address
 	ld l, e
@@ -7805,9 +7812,9 @@ Func_2c37: ; 2c37 (0:2c37)
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .end
-	cp $10
+	cp TX_CTRL_END
 	jr nc, .char_loop
-	cp TX_START
+	cp TX_HALFWIDTH
 	jr c, .skip
 	cp "\n"
 	jr nz, .char_loop
@@ -7838,11 +7845,11 @@ Func_2c62: ; 2c62 (0:2c62)
 	ld [hl], d
 	pop hl
 	ld a, $01
-	jr Func_2c84
+	jr PrintScrollableText
 
 Func_2c73: ; 2c73 (0:2c73)
 	xor a
-	call Func_2c84
+	call PrintScrollableText
 
 ; when a text box is full, prompt the player to press A or B
 ; in order to clear the text and print the next lines.
@@ -7853,7 +7860,11 @@ WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 	call WaitForButtonAorB
 	ret
 
-Func_2c84: ; 2c84 (0:2c84)
+; prints text with id at hl, with letter delay, in a textbox area.
+; unlike PrintText, PrintScrollableText supports scrollable text, and prompts
+; the user to press A or B to advance the page or close the text.
+; used mostly for overworld NPC text.
+PrintScrollableText: ; 2c84 (0:2c84)
 	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
@@ -7864,7 +7875,7 @@ Func_2c84: ; 2c84 (0:2c84)
 	ld a, [wTextSpeed]
 	ld c, a
 	inc c
-	jr .asm_2cac
+	jr .go
 .nonzero_text_speed
 	ld a, [wTextSpeed]
 	cp 2
@@ -7877,7 +7888,7 @@ Func_2c84: ; 2c84 (0:2c84)
 	push bc
 	call DoFrame
 	pop bc
-.asm_2cac
+.go
 	dec c
 	jr nz, .nonzero_text_speed
 .skip_delay
@@ -7895,24 +7906,24 @@ Func_2c84: ; 2c84 (0:2c84)
 	call BankswitchHome
 	ret
 
-; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hffaf to $f
-; fill wTextStruct1 with $f, wFontWidth, hBankROM, and register bc for the text's pointer.
+; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hDefaultFont to TX_FULLWIDTH6
+; fill wTextStruct1 with TX_FULLWIDTH6, wFontWidth, hBankROM, and register bc for the text's pointer.
 InitRegistersForPrintingText: ; 2cc8 (0:2cc8)
 	xor a
 	ld [wWhichTextStruct], a
 	ld [wWhichTxRam2], a
 	ld [wWhichTxRam3], a
-	ld a, $f
-	ld [hffaf], a
+	ld a, TX_FULLWIDTH6
+	ld [hDefaultFont], a
 ;	fallthrough
 
-; fill the wTextStruct specified in wWhichTextStruct (0-3) with hffaf,
+; fill the wTextStruct specified in wWhichTextStruct (0-3) with hDefaultFont,
 ; wFontWidth, hBankROM, and register bc for the text's pointer.
 WriteToTextStruct: ; 2cd7 (0:2cd7)
 	push hl
 	call GetPointerToTextStruct
 	pop bc
-	ld a, [hffaf]
+	ld a, [hDefaultFont]
 	ld [hli], a
 	ld a, [wFontWidth]
 	ld [hli], a
@@ -7938,7 +7949,7 @@ WriteToTextStruct_MoveToNext: ; 2ceb (0:2ceb)
 ReadTextStruct: ; 2cf3 (0:2cf3)
 	call GetPointerToTextStruct
 	ld a, [hli]
-	ld [hffaf], a
+	ld [hDefaultFont], a
 	ld a, [hli]
 	ld [wFontWidth], a
 	ld a, [hli]
@@ -7990,11 +8001,12 @@ Func_2d43: ; 2d43 (0:2d43)
 	call ReadTextStruct
 	ld a, [hli]
 	or a ; TX_END
-	jr z, .asm_2d79
-	cp $5
-	jr c, .asm_2d65
-	cp $10
-	jr nc, .asm_2d65
+	jr z, .tx_end
+	cp TX_CTRL_BEGIN
+	jr c, .full_width_font
+	cp TX_CTRL_END
+	jr nc, .full_width_font
+	; special character
 	call Func_21f2
 	jr nc, .asm_2d74
 	cp TX_RAM1
@@ -8004,10 +8016,10 @@ Func_2d43: ; 2d43 (0:2d43)
 	cp TX_RAM3
 	jr z, .tx_ram3
 	jr .asm_2d74
-.asm_2d65
-	ld e, a
-	ld d, [hl]
-	call Func_2546
+.full_width_font
+	ld e, a ; first char
+	ld d, [hl] ; second char
+	call ProcessFullWidthFontCharacterPair
 	jr nc, .asm_2d6d
 	inc hl
 .asm_2d6d
@@ -8018,21 +8030,22 @@ Func_2d43: ; 2d43 (0:2d43)
 	call WriteToTextStruct
 	or a
 	ret
-.asm_2d79
+.tx_end
 	ld a, [wWhichTextStruct]
 	or a
-	jr z, .asm_2d85
+	jr z, .no_more_text
+	; handle text struct in the above level
 	dec a
 	ld [wWhichTextStruct], a
 	jr Func_2d43
-.asm_2d85
+.no_more_text
 	call Func_230f
 	scf
 	ret
 .tx_ram2
 	call WriteToTextStruct_MoveToNext
-	ld a, $f
-	ld [hffaf], a
+	ld a, TX_FULLWIDTH6
+	ld [hDefaultFont], a
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ld de, wTxRam2
@@ -8058,11 +8071,11 @@ Func_2d43: ; 2d43 (0:2d43)
 	jp Func_2d43
 .tx_ram1
 	call WriteToTextStruct_MoveToNext
-	call CopyTurnDuelistName
-	ld a, [wcaa0]
-	cp $6
+	call CopyPlayerNameOrTurnDuelistName
+	ld a, [wTextBuf]
+	cp TX_HALFWIDTH
 	jr z, .asm_2dda
-	ld a, $7
+	ld a, TX_HALF2FULL
 	call Func_21f2
 .asm_2dda
 	call WriteToTextStruct
@@ -8118,16 +8131,16 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	ret
 
 ; if [wFontWidth] == HALF_WIDTH:
-;   convert the number at hl to text (ascii) format and write it to wcaa0
+;   convert the number at hl to text (ascii) format and write it to wTextBuf
 ;   return c = 4 - leading_zeros
 ; if [wFontWidth] == FULL_WIDTH:
-;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
+;   convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	call TwoByteNumberToText
 	pop hl
@@ -8141,9 +8154,10 @@ TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	jr nz, .digit_loop
 	ret
 
-; copy the name of the duelist whose turn it is to de
-CopyTurnDuelistName: ; 2e2c (0:2e2c)
-	ld de, wcaa0
+; in the overworld: copy the player's name to wTextBuf
+; in a duel: copy the name of the duelist whose turn it is to wTextBuf
+CopyPlayerNameOrTurnDuelistName: ; 2e2c (0:2e2c)
+	ld de, wTextBuf
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
@@ -8156,7 +8170,8 @@ CopyTurnDuelistName: ; 2e2c (0:2e2c)
 	pop hl
 	ret
 
-; prints text with id at hl, with letter delay, in a textbox area
+; prints text with id at hl, with letter delay, in a textbox area.
+; the text must fit in the textbox; PrintScrollableText should be used instead.
 PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
@@ -8194,7 +8209,8 @@ PrintText: ; 2e41 (0:2e41)
 	jr nc, .next_tile_loop
 	ret
 
-; prints text with id at hl, without letter delay, in a textbox area
+; prints text with id at hl, without letter delay, in a textbox area.
+; the text must fit in the textbox; PrintScrollableText should be used instead.
 PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af

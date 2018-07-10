@@ -14,6 +14,9 @@ palettes EQUS "* CGB_PAL_SIZE"
 TILE_SIZE EQU 16 ; bytes
 tiles EQUS "* TILE_SIZE"
 
+TILE_SIZE_1BPP EQU 8 ; bytes
+tiles_1bpp EQUS "* TILE_SIZE_1BPP"
+
 ; wFlushPaletteFlags constants
 FLUSH_ONE EQU %10000000
 FLUSH_ALL EQU %11000000

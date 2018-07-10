@@ -263,7 +263,7 @@ Text054f: ; 48b5b (12:4b5b)
 
 Text0550: ; 48b73 (12:4b73)
 	text "The Winner of this Challenge Cup "
-	line "is ", TX_START,  TX_RAM1, "!!!"
+	line "is ", TX_HALFWIDTH,  TX_RAM1, "!!!"
 	done
 
 Text0551: ; 48b9f (12:4b9f)
@@ -272,7 +272,7 @@ Text0551: ; 48b9f (12:4b9f)
 	done
 
 Text0552: ; 48bb4 (12:4bb4)
-	text "Congratulations, ", TX_START,  TX_RAM1, "!!!"
+	text "Congratulations, ", TX_HALFWIDTH,  TX_RAM1, "!!!"
 	done
 
 Text0553: ; 48bcc (12:4bcc)
@@ -352,7 +352,7 @@ Text055e: ; 48fcb (12:4fcb)
 
 Text055f: ; 48ff9 (12:4ff9)
 	text "You've really improved your "
-	line "game, ", TX_START,  TX_RAM1, "."
+	line "game, ", TX_HALFWIDTH,  TX_RAM1, "."
 	line "Use my card to make it better!"
 	done
 
@@ -374,7 +374,7 @@ Text0561: ; 490c6 (12:50c6)
 Text0562: ; 4911e (12:511e)
 	text TX_RAM1, ", That is not the way"
 	line "to the Hall of Honor."
-	line "Hurry, ", TX_START,  TX_RAM1, "! Go through to"
+	line "Hurry, ", TX_HALFWIDTH,  TX_RAM1, "! Go through to"
 	line "the Hall of Honor!"
 	done
 
@@ -543,7 +543,7 @@ Text057e: ; 49980 (12:5980)
 	done
 
 Text057f: ; 4999c (12:599c)
-	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
+	text "Is your Deck ready, ", TX_HALFWIDTH,  TX_RAM1, "?"
 	done
 
 Text0580: ; 499b5 (12:59b5)
@@ -682,7 +682,7 @@ Text0597: ; 49f7e (12:5f7e)
 	done
 
 Text0598: ; 49fb5 (12:5fb5)
-	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
+	text "Is your Deck ready, ", TX_HALFWIDTH,  TX_RAM1, "?"
 	done
 
 Text0599: ; 49fce (12:5fce)
@@ -786,7 +786,7 @@ Text05a8: ; 4a452 (12:6452)
 	done
 
 Text05a9: ; 4a49a (12:649a)
-	text "Is your Deck ready, ", TX_START,  TX_RAM1, "?"
+	text "Is your Deck ready, ", TX_HALFWIDTH,  TX_RAM1, "?"
 	done
 
 Text05aa: ; 4a4b3 (12:64b3)
@@ -802,7 +802,7 @@ Text05ac: ; 4a4f5 (12:64f5)
 	text "I was here first! The Legendary"
 	line "Pokémon Cards belong to me!"
 	line "I'll make it all too clear to"
-	line "you, ", TX_START,  TX_RAM1, "!"
+	line "you, ", TX_HALFWIDTH,  TX_RAM1, "!"
 	done
 
 Text05ad: ; 4a559 (12:6559)
