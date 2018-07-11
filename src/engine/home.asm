@@ -6389,7 +6389,7 @@ Func_23c1: ; 23c1 (0:23c1)
 	ld a, [hl]
 	cp TX_HALFWIDTH
 	jr nz, .asm_23cf
-	call Func_23d3
+	call .asm_23d3
 	inc b
 	srl b
 	xor a
@@ -6398,7 +6398,7 @@ Func_23c1: ; 23c1 (0:23c1)
 .asm_23cf
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
-Func_23d3: ; 23d3 (0:23d3)
+.asm_23d3
 	push hl
 	push de
 	ld bc, $0000

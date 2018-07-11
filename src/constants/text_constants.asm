@@ -22,7 +22,8 @@ TX_RAM3       EQU $0c
 
 ; usage: TX_FULLWIDTH*, char1, char2, ...
 ; db char1, char2, ... defaults to the value at hDefaultFont, unless
-; wFontWidth was set to HALF_WIDTH by TX_HALFWIDTH (it is FULL_WIDTH by default)
+; wFontWidth was set to HALF_WIDTH by TX_HALFWIDTH (it is FULL_WIDTH by default).
+; hDefaultFont is TX_FULLWIDTH6 by default.
 TX_FULLWIDTH5 EQU $0e ; sets hDefaultFont to TX_FULLWIDTH5
 TX_FULLWIDTH6 EQU $0f ; sets hDefaultFont to TX_FULLWIDTH6
 
