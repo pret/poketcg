@@ -55,7 +55,7 @@ PokemonText: ; 36378 (d:6378)
 	done
 
 Text000f: ; 36382 (d:6382)
-	db $03,$4c
+	textfw $4c
 	done
 
 LbsText: ; 36385 (d:6385)
@@ -67,15 +67,15 @@ Text0011: ; 3638b (d:638b)
 	done
 
 Text0012: ; 3638d (d:638d)
-	db $03,$52
+	textfw $52
 	done
 
 Text0013: ; 36390 (d:6390)
-	db $03,$53
+	textfw $53
 	done
 
 Text0014: ; 36393 (d:6393)
-	db $03,$54
+	textfw $54
 	done
 
 Text0015: ; 36396 (d:6396)
@@ -278,16 +278,16 @@ DiscardDescription: ; 36757 (d:6757)
 	done
 
 Text0042: ; 367cc (d:67cc)
-	text TX_RAM1, " will draw ", TX_RAM3, " Prize(s)."
+	text "<RAMNAME> will draw <RAMNUM> Prize(s)."
 	done
 
 Text0043: ; 367e5 (d:67e5)
-	text TX_RAM1, " drew ", TX_RAM3, " Prize(s)."
+	text "<RAMNAME> drew <RAMNUM> Prize(s)."
 	done
 
 Text0044: ; 367f9 (d:67f9)
-	text TX_RAM1, " placed"
-	line "a ", TX_RAM2, "."
+	text "<RAMNAME> placed"
+	line "a <RAMTEXT>."
 	done
 
 Text0045: ; 36808 (d:6808)

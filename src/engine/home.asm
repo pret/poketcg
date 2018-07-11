@@ -6044,9 +6044,9 @@ Func_21c5: ; 21c5 (0:21c5)
 Func_21f2: ; 21f2 (0:21f2)
 	or a ; TX_END
 	jr z, .tx_end
-	cp TX_FULLWIDTH5
+	cp TX_HIRAGANA
 	jr z, .asm_2221
-	cp TX_FULLWIDTH6
+	cp TX_KATAKANA
 	jr z, .asm_2221
 	cp "\n"
 	jr z, .end_of_line
@@ -6066,11 +6066,11 @@ Func_21f2: ; 21f2 (0:21f2)
 	call Func_230f
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
-	ld a, TX_FULLWIDTH6
-	ldh [hDefaultFont], a
+	ld a, TX_KATAKANA
+	ldh [hJapaneseSyllabary], a
 	ret
 .asm_2221
-	ldh [hDefaultFont], a
+	ldh [hJapaneseSyllabary], a
 	xor a
 	ret
 .tx_symbol
@@ -6151,14 +6151,14 @@ Func_2275: ; 2275 (0:2275)
 ; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
 ; wcd0b <- 0
-; hDefaultFont <- TX_FULLWIDTH6
+; hJapaneseSyllabary <- TX_KATAKANA
 Func_2298: ; 2298 (0:2298)
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
 	ld [wcd0b], a
-	ld a, TX_FULLWIDTH6
-	ldh [hDefaultFont], a
+	ld a, TX_KATAKANA
+	ldh [hJapaneseSyllabary], a
 	ret
 
 ; Func_22ae
@@ -6494,7 +6494,7 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 
 ; generates a text tile and copies it to VRAM
 ; if wFontWidth == FULL_WIDTH
-	; de = full-width font tile number (d = $e and d = $f are treated differently)
+	; de = full-width font tile number
 ; if wFontWidth == HALF_WIDTH
 	; d = half-width character 1 (left)
 	; e = half-width character 2 (right)
@@ -6577,8 +6577,8 @@ CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
 	jr nz, .loop
 	ret
 
-; create, at wTextTileBuffer, a full-width font tile
-; given its tile number within the full-width font graphics in de.
+; create, at wTextTileBuffer, a full-width font tile given its tile
+; number within the full-width font graphics (FullWidthFonts) in de.
 ; return its v*Tiles address in hl, and return c = TILE_SIZE.
 CreateFullWidthFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 	push bc
@@ -6608,8 +6608,8 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 	ld c, TILE_SIZE
 	ret
 
-; create, at wTextTileBuffer, a full-width font tile
-; given its offset within the full-width font graphics in hl
+; create, at wTextTileBuffer, a full-width font tile given its
+; within the full-width font graphics (FullWidthFonts) in hl
 CreateFullWidthFontTile: ; 252e (0:252e)
 	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
 	call BankpushHome
@@ -6629,7 +6629,7 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 	ret
 
 ; given two text characters at de, use the char at d to determine
-; which type of TX_FULLWIDTH this pair of characters belongs to.
+; which type of full width text this pair of characters belongs to.
 ; return carry if TX_FULLWIDTH1 to TX_FULLWIDTH4.
 ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 	ld a, [wFontWidth]
@@ -6639,11 +6639,11 @@ ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 	cp TX_CTRL_END
 	jr c, .continue_check
 	cp $60
-	jr nc, .first_font
-	ldh a, [hDefaultFont]
-	cp TX_FULLWIDTH6
-	jr nz, .first_font
-	ld d, TX_FULLWIDTH6
+	jr nc, .not_katakana
+	ldh a, [hJapaneseSyllabary]
+	cp TX_KATAKANA
+	jr nz, .not_katakana
+	ld d, TX_KATAKANA
 	or a
 	ret
 .half_width
@@ -6652,8 +6652,8 @@ ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 .continue_check
 	cp TX_CTRL_BEGIN
 	jr c, .ath_font
-.first_font
-; TX_FULLWIDTH5
+.not_katakana
+; 0_1_hiragana.1bpp (e < $60) or 0_2_digits_kanji1.1bpp (e >= $60)
 	ld d, $0
 	or a
 	ret
@@ -6666,21 +6666,21 @@ ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 
 ; convert the full-width font tile number at de to the
 ; equivalent offset within the full-width font tile graphics.
-;   if d == TX_FULLWIDTH6: get tile from the 80-tile font at the top of the graphics.
-;   if d == TX_FULLWIDTH5 or d == $0: get tile from first 256-tile font of the graphics.
-;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from N+1th 256-tile font of the graphics.
+;   if d == TX_KATAKANA: get tile from the 0_0_katakana.1bpp font.
+;   if d == TX_HIRAGANA or d == $0: get tile from the 0_1_hiragana.1bpp or 0_2_digits_kanji1.1bpp font.
+;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from one of the other full-width fonts.
 GetFullWidthFontTileOffset: ; 256d (0:256d)
 	ld bc, $50 tiles_1bpp
 	ld a, d
-	cp TX_FULLWIDTH5
-	jr z, .first_font
-	cp TX_FULLWIDTH6
+	cp TX_HIRAGANA
+	jr z, .hiragana
+	cp TX_KATAKANA
 	jr nz, .get_address
 	ld bc, $0 tiles
 	ld a, e
 	sub $10 ; the first $10 are control characters, but this font's graphics start at $0
 	ld e, a
-.first_font
+.hiragana
 	ld d, $0
 .get_address
 	ld l, e
@@ -7906,24 +7906,24 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	call BankswitchHome
 	ret
 
-; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hDefaultFont to TX_FULLWIDTH6
-; fill wTextStruct1 with TX_FULLWIDTH6, wFontWidth, hBankROM, and register bc for the text's pointer.
+; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
+; fill wTextStruct1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
 InitRegistersForPrintingText: ; 2cc8 (0:2cc8)
 	xor a
 	ld [wWhichTextStruct], a
 	ld [wWhichTxRam2], a
 	ld [wWhichTxRam3], a
-	ld a, TX_FULLWIDTH6
-	ld [hDefaultFont], a
+	ld a, TX_KATAKANA
+	ld [hJapaneseSyllabary], a
 ;	fallthrough
 
-; fill the wTextStruct specified in wWhichTextStruct (0-3) with hDefaultFont,
+; fill the wTextStruct specified in wWhichTextStruct (0-3) with hJapaneseSyllabary,
 ; wFontWidth, hBankROM, and register bc for the text's pointer.
 WriteToTextStruct: ; 2cd7 (0:2cd7)
 	push hl
 	call GetPointerToTextStruct
 	pop bc
-	ld a, [hDefaultFont]
+	ld a, [hJapaneseSyllabary]
 	ld [hli], a
 	ld a, [wFontWidth]
 	ld [hli], a
@@ -7949,7 +7949,7 @@ WriteToTextStruct_MoveToNext: ; 2ceb (0:2ceb)
 ReadTextStruct: ; 2cf3 (0:2cf3)
 	call GetPointerToTextStruct
 	ld a, [hli]
-	ld [hDefaultFont], a
+	ld [hJapaneseSyllabary], a
 	ld a, [hli]
 	ld [wFontWidth], a
 	ld a, [hli]
@@ -8044,8 +8044,8 @@ Func_2d43: ; 2d43 (0:2d43)
 	ret
 .tx_ram2
 	call WriteToTextStruct_MoveToNext
-	ld a, TX_FULLWIDTH6
-	ld [hDefaultFont], a
+	ld a, TX_KATAKANA
+	ld [hJapaneseSyllabary], a
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ld de, wTxRam2
