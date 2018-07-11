@@ -670,7 +670,7 @@ Func_9253: ; 9253 (2:5253)
 	ld de, wDefaultText
 	call Func_92ad
 	ld hl, wDefaultText
-	call Func_23c1
+	call GetTextSizeInHalfTiles
 	ld b, $0
 	ld hl, wDefaultText
 	add hl, bc
@@ -689,7 +689,7 @@ Func_926e: ; 926e (2:526e)
 	ld de, wDefaultText
 	call Func_92b4
 	ld hl, wDefaultText
-	call Func_23c1
+	call GetTextSizeInHalfTiles
 	ld b, $0
 	ld hl, wDefaultText
 	add hl, bc
@@ -699,12 +699,12 @@ Func_926e: ; 926e (2:526e)
 	call Func_92ad
 	pop de
 	ld hl, wDefaultText
-	call Func_22ae
-	call Func_21c5
+	call InitTextPrinting
+	call ProcessText
 	or a
 	ret
 .asm_929c
-	call Func_22ae
+	call InitTextPrinting
 	ldtx hl, NewDeckText
 	call Func_2c29
 	scf

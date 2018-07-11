@@ -435,7 +435,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	push hl
 	push de
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call Func_10f4a
 	rlca
 	ld e, a

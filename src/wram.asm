@@ -948,8 +948,15 @@ wCurTextLine:: ; cd09
 wFontWidth:: ; cd0a
 	ds $1
 
-wcd0b:: ; cd0b
-	ds $2
+; when printing half-width text, this variable alternates between 0 and the value
+; of the first character. 0 signals that no text should be printed in the current
+; iteration of Func_235e, while non-0 means to print the character pair
+; made of [wHalfWidthPrintState] (first char) and register e (second char).
+wHalfWidthPrintState:: ; cd0b
+	ds $1
+
+wcd0c:: ; cd0c
+	ds $1
 
 ; half-width font letters become uppercase if non-0, lowercase if 0
 wUppercaseHalfWidthLetters:: ; cd0d

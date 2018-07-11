@@ -1563,23 +1563,23 @@ Func_4a97: ; 4a97 (1:4a97)
 	push de
 	call CopyPlayerName
 	lb de, 0, 11
-	call Func_22ae
+	call InitTextPrinting
 	pop hl
-	call Func_21c5
+	call ProcessText
 	ld bc, $5
 	call Func_3e10
 	ld de, wDefaultText
 	push de
 	call CopyOpponentName
 	pop hl
-	call Func_23c1
+	call GetTextSizeInHalfTiles
 	push hl
 	add SCREEN_WIDTH
 	ld d, a
 	ld e, 0
-	call Func_22ae
+	call InitTextPrinting
 	pop hl
-	call Func_21c5
+	call ProcessText
 	ld a, [wOpponentPortrait]
 	ld bc, $d01
 	call Func_3e2a
@@ -1662,7 +1662,7 @@ Func_4b38: ; 4b38 (1:4b38)
 	call PrintCardListItems
 	ldtx hl, TheCardYouReceivedText
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	ldtx hl, YouReceivedTheseCardsText
 	call DrawWideTextBox_WaitForInput
@@ -1914,7 +1914,7 @@ Func_4e40: ; 4e40 (1:4e40)
 	call PrintCardListItems
 	ldtx hl, DuelistHandText
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	call EnableLCD
 	ret
@@ -2149,13 +2149,13 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr nz, .print_color_icon
 	ld hl, wDefaultText
-	call Func_23c1
+	call GetTextSizeInHalfTiles
 	add SCREEN_WIDTH
 	ld d, a
 .print_color_icon
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wDefaultText
-	call Func_21c5
+	call ProcessText
 	push de
 	pop bc
 	call GetArenaCardColor
@@ -2633,7 +2633,7 @@ Func_5690: ; 5690 (1:5690)
 Func_56a0: ; 56a0 (1:56a0)
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wCardListInfoBoxText
 	ld a, [hli]
 	ld h, [hl]
@@ -2644,7 +2644,7 @@ Func_56a0: ; 56a0 (1:56a0)
 	ld h, [hl]
 	ld l, a
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	ret
 ; 0x56c2
@@ -3689,7 +3689,7 @@ Func_6510: ; 6510 (1:6510)
 	call LoadDuelCheckPokemonScreenTiles
 	call Func_622a
 	lb de, 1, 4
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wLoadedCard1Move1Name
 	call Func_2c20
 	lb de, 1, 6
@@ -3709,7 +3709,7 @@ Func_653e: ; 653e (1:653e)
 	dec e
 .asm_654c
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	call Func_2c29
 	call Func_5f50
 	ret
@@ -3833,12 +3833,12 @@ Func_6673: ; 6673 (1:6673)
 	call EmptyScreen
 	call Func_5f4a
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wLoadedCard1Name
 	call Func_2c23
 	ld a, 19
 	lb de, 1, 3
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	ld hl, wLoadedCard1NonPokemonDescription
 	call Func_2c23
 	call Func_5f50
@@ -4443,7 +4443,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call EnableLCD
 	lb de, 1, 14
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	ld hl, wCoinTossScreenTextID
 	ld a, [hli]
 	ld h, [hl]

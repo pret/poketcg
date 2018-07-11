@@ -5162,8 +5162,9 @@ SubstractHPFromCard: ; 1c35 (0:1c35)
 
 ; check if a flag of wLoadedMove is set
 ; input:
-	; a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1
-	; b = flag bit
+  ; a = %fffffbbb, where
+     ; fffff = flag address counting from wLoadedMoveFlag1
+     ; bbb = flag bit
 ; return carry if the flag is set
 CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	push hl
@@ -5565,7 +5566,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	pop hl
 	call CopyText
 	ld hl, wc000 + 3
-	call Func_23c1
+	call GetTextSizeInHalfTiles
 	ld l, e
 	ld h, d
 	; white tile after the text
@@ -5598,9 +5599,9 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	pop de
 	push de
 	push bc
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wc000
-	call Func_21c5
+	call ProcessText
 	pop bc
 	pop de
 	ld a, [wConsole]
@@ -6010,44 +6011,50 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 
 	INCROM $2189, $21c5
 
-Func_21c5: ; 21c5 (0:21c5)
+; reads the characters from the text at hl processes them. loops until TX_END
+; is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
+ProcessText: ; 21c5 (0:21c5)
 	push de
 	push bc
-	call Func_2298
-	jr .asm_21e8
-.asm_21cc
+	call InitTextFormat
+	jr .next_char
+.char_loop
 	cp TX_CTRL_BEGIN
-	jr c, .asm_21d9
+	jr c, .character_pair
 	cp TX_CTRL_END
-	jr nc, .asm_21d9
-	call Func_21f2
-	jr .asm_21e8
-.asm_21d9
-	ld e, a
-	ld d, [hl]
-	call ProcessFullWidthFontCharacterPair
-	jr nc, .asm_21e1
+	jr nc, .character_pair
+	call ProcessSpecialTextCharacter
+	jr .next_char
+.character_pair
+	ld e, a ; first char
+	ld d, [hl] ; second char
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
 	inc hl
-.asm_21e1
+.not_tx_fullwidth
 	call Func_22ca
 	xor a
-	call Func_21f2
-.asm_21e8
+	call ProcessSpecialTextCharacter
+.next_char
 	ld a, [hli]
 	or a
-	jr nz, .asm_21cc
-	call Func_230f
+	jr nz, .char_loop
+	; TX_END
+	call TerminateHalfWidthText
 	pop bc
 	pop de
 	ret
 
-Func_21f2: ; 21f2 (0:21f2)
+; processes the text character provided in a checking for specific control characters.
+; hl points to the text character coming right after the one loaded into a.
+; returns carry if the character was not processed by this function.
+ProcessSpecialTextCharacter: ; 21f2 (0:21f2)
 	or a ; TX_END
 	jr z, .tx_end
 	cp TX_HIRAGANA
-	jr z, .asm_2221
+	jr z, .set_syllabary
 	cp TX_KATAKANA
-	jr z, .asm_2221
+	jr z, .set_syllabary
 	cp "\n"
 	jr z, .end_of_line
 	cp TX_SYMBOL
@@ -6063,13 +6070,13 @@ Func_21f2: ; 21f2 (0:21f2)
 	ld [wFontWidth], a
 	ret
 .tx_half2full
-	call Func_230f
+	call TerminateHalfWidthText
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ld a, TX_KATAKANA
 	ldh [hJapaneseSyllabary], a
 	ret
-.asm_2221
+.set_syllabary
 	ldh [hJapaneseSyllabary], a
 	xor a
 	ret
@@ -6078,17 +6085,17 @@ Func_21f2: ; 21f2 (0:21f2)
 	push af
 	ld a, HALF_WIDTH
 	ld [wFontWidth], a
-	call Func_230f
+	call TerminateHalfWidthText
 	pop af
 	ld [wFontWidth], a
 	ldh a, [hffb0]
 	or a
-	jr nz, .asm_2240
+	jr nz, .skip_placing_tile
 	ld a, [hl]
 	push hl
 	call PlaceNextTextTile
 	pop hl
-.asm_2240
+.skip_placing_tile
 	inc hl
 .tx_end
 	ldh a, [hTextLineLength]
@@ -6101,7 +6108,7 @@ Func_21f2: ; 21f2 (0:21f2)
 	xor a
 	ret
 .end_of_line
-	call Func_230f
+	call TerminateHalfWidthText
 	ld a, [wLineSeparation]
 	or a
 	call z, .next_line
@@ -6132,7 +6139,7 @@ Func_2275: ; 2275 (0:2275)
 	ld [wcd04], a
 	ld a, e
 	ldh [hffa8], a
-	call Func_2298
+	call InitTextFormat
 	xor a
 	ldh [hffb0], a
 	ldh [hffa9], a
@@ -6150,22 +6157,22 @@ Func_2275: ; 2275 (0:2275)
 
 ; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
-; wcd0b <- 0
+; wHalfWidthPrintState <- 0
 ; hJapaneseSyllabary <- TX_KATAKANA
-Func_2298: ; 2298 (0:2298)
+InitTextFormat: ; 2298 (0:2298)
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
-	ld [wcd0b], a
+	ld [wHalfWidthPrintState], a
 	ld a, TX_KATAKANA
 	ldh [hJapaneseSyllabary], a
 	ret
 
-; Func_22ae
+; call InitTextPrinting
 ; hTextLineLength <- a
-Func_22a6: ; 22a6 (0:22a6)
+InitTextPrintingInTextbox: ; 22a6 (0:22a6)
 	push af
-	call Func_22ae
+	call InitTextPrinting
 	pop af
 	ldh [hTextLineLength], a
 	ret
@@ -6173,11 +6180,9 @@ Func_22a6: ; 22a6 (0:22a6)
 ; hTextHorizontalAlign <- d
 ; hTextLineLength <- 0
 ; wCurTextLine <- 0
-; hTextBGMap0Address <- BGMap0(e)
-; hTextBGMap0Address + 1 <- BGMap0(d)
-; Func_2298
-;; writes BGMap0-translated DE to hTextBGMap0Address
-Func_22ae: ; 22ae (0:22ae)
+; write BGMap0-translated DE to hTextBGMap0Address
+; call InitTextFormat
+InitTextPrinting: ; 22ae (0:22ae)
 	push hl
 	ld a, d
 	ldh [hTextHorizontalAlign], a
@@ -6189,9 +6194,9 @@ Func_22ae: ; 22ae (0:22ae)
 	ldh [hTextBGMap0Address], a
 	ld a, h
 	ldh [hTextBGMap0Address + 1], a
-	call Func_2298
+	call InitTextFormat
 	xor a
-	ld [wcd0b], a
+	ld [wHalfWidthPrintState], a
 	pop hl
 	ret
 
@@ -6244,13 +6249,16 @@ PlaceNextTextTile: ; 22f2 (0:22f2)
 	inc [hl]
 	ret
 
-Func_230f: ; 230f (0:230f)
+; when terminating half-width text with "\n" or TX_END, or switching to full-width
+; with TX_HALF2FULL or to symbols with TX_SYMBOL, check if it's necessary to append
+; a half-width space to finish an incomplete character pair.
+TerminateHalfWidthText: ; 230f (0:230f)
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	ret z
-	ld a, [wcd0b]
+	ld a, [wHalfWidthPrintState]
 	or a
-	ret z
+	ret z ; return if the last printed character was the second of a pair
 	push hl
 	push de
 	push bc
@@ -6310,22 +6318,25 @@ Func_2325: ; 2325 (0:2325)
 ; the result to head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
 	ld a, [wFontWidth]
-	or a                 ;
-	jr z, .asm_2376      ; if [wFontWidth] == HALF_WIDTH:
-	                     ;   uppercase e if wUppercaseHalfWidthLetters != 0
-	call CaseHalfWidthLetter
-	ld a, [wcd0b]
-	ld d, a              ;   d ← [wcd0b]
 	or a
-	jr nz, .asm_2376     ;   if [wcd0b] is zero:
-	ld a, e              ;
-	ld [wcd0b], a        ;     [wcd0b] ← e
-	ld a, $1             ;
-	or a                 ;     return a = 1
-	ret
-.asm_2376
+	jr z, .print
+	call CaseHalfWidthLetter
+	; if [wHalfWidthPrintState] != 0, load it to d and print the pair of chars
+	; zero wHalfWidthPrintState for next iteration
+	ld a, [wHalfWidthPrintState]
+	ld d, a
+	or a
+	jr nz, .print
+	; if [wHalfWidthPrintState] == 0, don't print text in this iteration
+	; load the next value of register d into wHalfWidthPrintState
+	ld a, e
+	ld [wHalfWidthPrintState], a
+	ld a, $1
+	or a
+	ret ; nz
+.print
 	xor a
-	ld [wcd0b], a        ; [wcd0b] ← 0
+	ld [wHalfWidthPrintState], a
 	ldh a, [hffa9]
 	ld l, a              ; l ← [hffa9]; index to to linked-list head
 .asm_237d
@@ -6385,47 +6396,64 @@ CaseHalfWidthLetter: ; 23b1 (0:23b1)
 	ld e, a
 	ret
 
-Func_23c1: ; 23c1 (0:23c1)
+; iterates over text at hl until TX_END is found, and sets wFontWidth to
+; FULL_WIDTH if the first character is TX_HALFWIDTH
+; returns:
+;   b = size of text in half-tiles
+;   c = size of text in bytes
+;   a = -b
+GetTextSizeInHalfTiles: ; 23c1 (0:23c1)
 	ld a, [hl]
 	cp TX_HALFWIDTH
-	jr nz, .asm_23cf
-	call .asm_23d3
+	jr nz, .full_width
+	call GetTextSizeInTiles
+	; return a = - ceil(b/2)
 	inc b
 	srl b
 	xor a
 	sub b
 	ret
-.asm_23cf
+.full_width
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
-.asm_23d3
+;	fallthrough
+
+GetTextSizeInTiles: ; 23d3 (0:23d3)
+; iterates over text at hl until TX_END is found
+; returns:
+;   b = size of text in tiles
+;   c = size of text in bytes
+;   a = -b
 	push hl
 	push de
-	ld bc, $0000
-.asm_23d8
+	lb bc, $00, $00
+.char_loop
 	ld a, [hli]
-	or a
-	jr z, .asm_23f8
-	inc c
+	or a ; TX_END
+	jr z, .tx_end
+	inc c ; any char except TX_END: c ++
+	; TX_FULLWIDTH, TX_SYMBOL, or > TX_CTRL_END : b ++
 	cp TX_CTRL_BEGIN
-	jr c, .asm_23ec
+	jr c, .character_pair
 	cp TX_CTRL_END
-	jr nc, .asm_23ec
+	jr nc, .character_pair
 	cp TX_SYMBOL
-	jr nz, .asm_23d8
+	jr nz, .char_loop
 	inc b
-	jr .asm_23f4
-.asm_23ec
-	ld e, a
-	ld d, [hl]
+	jr .next
+.character_pair
+	ld e, a ; first char
+	ld d, [hl] ; second char
 	inc b
-	call ProcessFullWidthFontCharacterPair
-	jr nc, .asm_23d8
-.asm_23f4
-	inc c
+	call ClassifyTextCharacterPair
+	jr nc, .char_loop
+	; TX_FULLWIDTH
+.next
+	inc c ; TX_FULLWIDTH or TX_SYMBOL: c ++
 	inc hl
-	jr .asm_23d8
-.asm_23f8
+	jr .char_loop
+.tx_end
+	; return a = -b
 	xor a
 	sub b
 	pop de
@@ -6628,10 +6656,10 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 	call BankpopHome
 	ret
 
-; given two text characters at de, use the char at d to determine
-; which type of full width text this pair of characters belongs to.
+; given two text characters at de, use the char at e (first one)
+; to determine which type of text this pair of characters belongs to.
 ; return carry if TX_FULLWIDTH1 to TX_FULLWIDTH4.
-ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
+ClassifyTextCharacterPair: ; 2546 (0:2546)
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	jr nz, .half_width
@@ -6647,6 +6675,7 @@ ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 	or a
 	ret
 .half_width
+; in half width mode, the first character goes in e, so leave them like that
 	or a
 	ret
 .continue_check
@@ -6659,6 +6688,7 @@ ProcessFullWidthFontCharacterPair: ; 2546 (0:2546)
 	ret
 .ath_font
 ; TX_FULLWIDTH1 to TX_FULLWIDTH4
+; swap d and e to put the TX_FULLWIDTH* character first
 	ld e, d
 	ld d, a
 	scf
@@ -7062,11 +7092,11 @@ PrintCardListItems: ; 2799 (0:2799)
 	push de
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawCardSymbol
-	call Func_22ae
+	call InitTextPrinting
 	ld a, [wListItemNameMaxLength]
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
-	call Func_21c5
+	call ProcessText
 	pop de
 	pop bc
 	pop hl
@@ -7462,13 +7492,13 @@ DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 Func_2a44: ; 2a44 (0:2a44)
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	pop hl
 	ld a, l
 	or h
 	jp nz, PrintTextNoDelay
 	ld hl, wDefaultText
-	jp Func_21c5
+	jp ProcessText
 
 ; draw a 20x6 text box aligned to the bottom of the screen
 ; and print the text at hl with letter delay
@@ -7478,7 +7508,7 @@ DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	ld a, 19
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	call EnableLCD
 	pop hl
 	jp PrintText
@@ -7769,7 +7799,7 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	ret nz ; return if no more items of text
 	ld e, [hl] ; y coord
 	inc hl ; hl = text id
-	call Func_22ae
+	call InitTextPrinting
 	push hl
 	call Func_2c23
 	pop hl
@@ -7778,11 +7808,11 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	jr PlaceTextItems ; do next item
 
 Func_2c1b: ; 2c1b (0:2c1b)
-	call Func_22ae
+	call InitTextPrinting
 	jr Func_2c29
 
 Func_2c20: ; 2c20 (0:2c20)
-	call Func_22ae
+	call InitTextPrinting
 Func_2c23: ; 2c23 (0:2c23)
 	ld a, [hli]
 	or [hl]
@@ -7794,7 +7824,7 @@ Func_2c29: ; 2c29 (0:2c29)
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
-	call Func_21c5
+	call ProcessText
 	pop af
 	call BankswitchHome
 	ret
@@ -7892,7 +7922,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	dec c
 	jr nz, .nonzero_text_speed
 .skip_delay
-	call Func_2d43
+	call ProcessTextStruct
 	jr c, .asm_2cc3
 	ld a, [wCurTextLine]
 	cp 3
@@ -7982,51 +8012,54 @@ Func_2d15: ; 2d15 (0:2d15)
 	jr nz, .labeled
 	call DrawRegularTextBox
 	call EnableLCD
-	jr .asm_2d36
+	jr .init_text
 .labeled
 	ld hl, wTextBoxLabel
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call DrawLabeledTextBox
-.asm_2d36
+.init_text
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	pop hl
 	ret
 
-Func_2d43: ; 2d43 (0:2d43)
+; reads the incoming character from the current wTextStruct and processes it
+; then updates the current wTextStruct to point to the next character.
+; a TX_RAM command causes a switch to a wTextStruct in the level below, and a TX_END
+; command terminates the text unless there is a pending wTextStruct in the above level.
+ProcessTextStruct: ; 2d43 (0:2d43)
 	call ReadTextStruct
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .tx_end
 	cp TX_CTRL_BEGIN
-	jr c, .full_width_font
+	jr c, .character_pair
 	cp TX_CTRL_END
-	jr nc, .full_width_font
-	; special character
-	call Func_21f2
-	jr nc, .asm_2d74
+	jr nc, .character_pair
+	call ProcessSpecialTextCharacter
+	jr nc, .processed_char
 	cp TX_RAM1
 	jr z, .tx_ram1
 	cp TX_RAM2
 	jr z, .tx_ram2
 	cp TX_RAM3
 	jr z, .tx_ram3
-	jr .asm_2d74
-.full_width_font
+	jr .processed_char
+.character_pair
 	ld e, a ; first char
 	ld d, [hl] ; second char
-	call ProcessFullWidthFontCharacterPair
-	jr nc, .asm_2d6d
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
 	inc hl
-.asm_2d6d
+.not_tx_fullwidth
 	call Func_22ca
 	xor a
-	call Func_21f2
-.asm_2d74
+	call ProcessSpecialTextCharacter
+.processed_char
 	call WriteToTextStruct
 	or a
 	ret
@@ -8037,9 +8070,9 @@ Func_2d43: ; 2d43 (0:2d43)
 	; handle text struct in the above level
 	dec a
 	ld [wWhichTextStruct], a
-	jr Func_2d43
+	jr ProcessTextStruct
 .no_more_text
-	call Func_230f
+	call TerminateHalfWidthText
 	scf
 	ret
 .tx_ram2
@@ -8053,14 +8086,14 @@ Func_2d43: ; 2d43 (0:2d43)
 	call HandleTxRam2Or3
 	ld a, l
 	or h
-	jr z, .asm_2dab
+	jr z, .empty
 	call GetTextOffsetFromTextID
 	call WriteToTextStruct
-	jr Func_2d43
-.asm_2dab
+	jr ProcessTextStruct
+.empty
 	ld hl, wDefaultText
 	call WriteToTextStruct
-	jr Func_2d43
+	jr ProcessTextStruct
 .tx_ram3
 	call WriteToTextStruct_MoveToNext
 	ld de, wTxRam3
@@ -8068,18 +8101,18 @@ Func_2d43: ; 2d43 (0:2d43)
 	call HandleTxRam2Or3
 	call TwoByteNumberToText_CountLeadingZeros
 	call WriteToTextStruct
-	jp Func_2d43
+	jp ProcessTextStruct
 .tx_ram1
 	call WriteToTextStruct_MoveToNext
 	call CopyPlayerNameOrTurnDuelistName
 	ld a, [wTextBuf]
 	cp TX_HALFWIDTH
-	jr z, .asm_2dda
+	jr z, .tx_halfwidth
 	ld a, TX_HALF2FULL
-	call Func_21f2
-.asm_2dda
+	call ProcessSpecialTextCharacter
+.tx_halfwidth
 	call WriteToTextStruct
-	jp Func_2d43
+	jp ProcessTextStruct
 
 ; input:
   ; de: wTxRam2 or wTxRam3
@@ -8205,7 +8238,7 @@ PrintText: ; 2e41 (0:2e41)
 	dec a
 	jr nz, .text_delay_loop
 .skip_delay
-	call Func_2d43
+	call ProcessTextStruct
 	jr nc, .next_tile_loop
 	ret
 
@@ -8217,7 +8250,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	call GetTextOffsetFromTextID
 	call InitRegistersForPrintingText
 .next_tile_loop
-	call Func_2d43
+	call ProcessTextStruct
 	jr nc, .next_tile_loop
 	pop af
 	call BankswitchHome
