@@ -344,7 +344,7 @@ Text04c2: ; 4548b (11:548b)
 	text "The Trainer card, Computer Search,"
 	line "is useful when you want to draw a"
 	line "certain card! Item Finder and"
-	line "Pok` Ball will also help!"
+	line "Poké Ball will also help!"
 	done
 
 Text04c3: ; 45509 (11:5509)
@@ -864,14 +864,14 @@ Text050c: ; 475ab (11:75ab)
 	done
 
 Text050d: ; 47644 (11:7644)
-	text "Most unfortunate, ", TX_RAM1, "."
+	text "Most unfortunate, <RAMNAME>."
 	line "Once you enter, you won't be able"
 	line "to re-enter for some time. "
 	line "Please try again another day."
 	done
 
 Text050e: ; 476b6 (11:76b6)
-	text "Congratulations, ", TX_RAM1, "!"
+	text "Congratulations, <RAMNAME>!"
 	line "You received a card!"
 	line "Please join us for the next "
 	line "Challenge Cup, too."
@@ -919,7 +919,7 @@ Text0514: ; 47913 (11:7913)
 	done
 
 Text0515: ; 47984 (11:7984)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "Are you competing, too?"
 	done
 
@@ -933,7 +933,7 @@ Text0516: ; 479a4 (11:79a4)
 	done
 
 Text0517: ; 47a3d (11:7a3d)
-	text "Hey, it's ", TX_RAM1, " - the loser"
+	text "Hey, it's <RAMNAME> - the loser"
 	line "of the Challenge Cup!"
 	done
 
@@ -947,7 +947,7 @@ Text0518: ; 47a6c (11:7a6c)
 	done
 
 Text0519: ; 47b25 (11:7b25)
-	text "Hey ", TX_RAM1, ", too bad "
+	text "Hey <RAMNAME>, too bad "
 	line "you're too late!"
 	done
 
@@ -959,7 +959,7 @@ Text051a: ; 47b47 (11:7b47)
 	done
 
 Text051b: ; 47bb6 (11:7bb6)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "What are you doing here?"
 	done
 
@@ -975,7 +975,7 @@ Text051c: ; 47bd7 (11:7bd7)
 	done
 
 Text051d: ; 47cb9 (11:7cb9)
-	text "Hey, ", TX_RAM1, "."
+	text "Hey, <RAMNAME>."
 	line "We meet again."
 	done
 
@@ -990,7 +990,7 @@ Text051e: ; 47cd1 (11:7cd1)
 	done
 
 Text051f: ; 47d82 (11:7d82)
-	text "Hey, it's ", TX_RAM1, " - the"
+	text "Hey, it's <RAMNAME> - the"
 	line "loser of the Challenge Cup!"
 	done
 
@@ -1003,7 +1003,7 @@ Text0520: ; 47db1 (11:7db1)
 	done
 
 Text0521: ; 47e4f (11:7e4f)
-	text "Hey, isn't that ", TX_RAM1, "?"
+	text "Hey, isn't that <RAMNAME>?"
 	line "Late as always!"
 	done
 
@@ -1017,6 +1017,6 @@ Text0522: ; 47e73 (11:7e73)
 	done
 
 Text0523: ; 47f08 (11:7f08)
-	text "Hey, ", TX_RAM1, "!"
+	text "Hey, <RAMNAME>!"
 	line "What are you doing here?"
 	done

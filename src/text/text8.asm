@@ -13,7 +13,7 @@ Text0685: ; 5005b (14:405b)
 	done
 
 Text0686: ; 500df (14:40df)
-	text "Hello, ", TX_RAM1, "!"
+	text "Hello, <RAMNAME>!"
 	line "I just came up with a new card"
 	line "strategy and was looking for"
 	line "someone to test it on."
@@ -65,7 +65,7 @@ Text068d: ; 5037f (14:437f)
 	line "date. Why do I have to do it?"
 	line "Why me?"
 	line "I'm Jessica of the Fighting Club."
-	line "Oh! You must be ", TX_RAM1, "."
+	line "Oh! You must be <RAMNAME>."
 	line "I heard about you from Mitch."
 	line "Defeating you should be more"
 	line "fun than training!"
@@ -75,7 +75,7 @@ Text068e: ; 5044a (14:444a)
 	text "Training's so boring and out of "
 	line "date. Why do I have to do it?"
 	line ""
-	text TX_RAM1, ", it's you again!"
+	text "<RAMNAME>, it's you again!"
 	line "What a pain."
 	line "But defeating you should be more"
 	line "fun than training."
@@ -188,7 +188,7 @@ Text069f: ; 50988 (14:4988)
 	done
 
 Text06a0: ; 509d3 (14:49d3)
-	text TX_RAM1, " lost all "
+	text "<RAMNAME> lost all "
 	line "his Energy cards!"
 	done
 
@@ -206,10 +206,10 @@ Text06a1: ; 509f2 (14:49f2)
 	done
 
 Text06a2: ; 50a9e (14:4a9e)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "checked the wall!"
 	line ""
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "found a <Lv>9 Slowpoke!"
 	done
 
@@ -472,7 +472,7 @@ Text06cd: ; 51720 (14:5720)
 
 Text06ce: ; 5175f (14:575f)
 	text "OK, "
-	line "To ", TX_RAM2, "."
+	line "To <RAMTEXT>."
 	line "Please write in your Diary before"
 	line "the transaction."
 	done
@@ -487,7 +487,7 @@ Text06d0: ; 517b4 (14:57b4)
 	done
 
 Text06d1: ; 517f7 (14:57f7)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "wrote in the Diary."
 	done
 
@@ -498,21 +498,21 @@ Text06d2: ; 5180e (14:580e)
 
 Text06d3: ; 5182d (14:582d)
 	text "You sent a card to"
-	line TX_RAM2, "!"
+	line "<RAMTEXT>!"
 	line "Thank you."
 	line "Please come again."
 	done
 
 Text06d4: ; 51862 (14:5862)
 	text "You sent the configuration for"
-	line "the ", TX_RAM2, " Deck!"
+	line "the <RAMTEXT> Deck!"
 	line "Thank you."
 	line "Please come again."
 	done
 
 Text06d5: ; 518ac (14:58ac)
 	text "You received the configuration for"
-	line "the ", TX_RAM2, " Deck!"
+	line "the <RAMTEXT> Deck!"
 	line "Thank you."
 	line "Please come again."
 	done
@@ -544,14 +544,14 @@ Text06d8: ; 51a6f (14:5a6f)
 	line "are girls."
 	line "But I can't beat girls who"
 	line "are this tough!"
-	line "Huh? You must be ", TX_RAM1, "."
+	line "Huh? You must be <RAMNAME>."
 	line "Mitch told me all about you."
 	line "Beating you will be much better"
 	line "than losing to the girls!"
 	done
 
 Text06d9: ; 51b2e (14:5b2e)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "Would you duel me?"
 	done
 
@@ -697,7 +697,7 @@ Text06f1: ; 521a8 (14:61a8)
 	done
 
 Text06f2: ; 521d8 (14:61d8)
-	text TX_RAM1, " traded an Oddish"
+	text "<RAMNAME> traded an Oddish"
 	line "for a Vileplume!"
 	done
 
@@ -747,7 +747,7 @@ Text06f9: ; 523c4 (14:63c4)
 	done
 
 Text06fa: ; 523f0 (14:63f0)
-	text TX_RAM1, " traded a Clefairy"
+	text "<RAMNAME> traded a Clefairy"
 	line "for a Pikachu!"
 	done
 
@@ -792,7 +792,7 @@ Text0700: ; 525d9 (14:65d9)
 	done
 
 Text0701: ; 5260b (14:660b)
-	text TX_RAM1, " traded a Charizard"
+	text "<RAMNAME> traded a Charizard"
 	line "for a Blastoise!"
 	done
 
@@ -941,7 +941,7 @@ Text0718: ; 52cc3 (14:6cc3)
 	done
 
 Text0719: ; 52d1a (14:6d1a)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "Did you come for a Duel?"
 	done
 
@@ -1050,7 +1050,7 @@ Text0727: ; 53245 (14:7245)
 	done
 
 Text0728: ; 53368 (14:7368)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "Welcome."
 	line "There aren't any cards I want "
 	line "or can trade at the moment."
@@ -1061,7 +1061,7 @@ Text0728: ; 53368 (14:7368)
 	done
 
 Text0729: ; 53435 (14:7435)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "I guess you're here because you"
 	line "heard the rumor that I'm looking"
 	line "for a Clefable..."
@@ -1071,7 +1071,7 @@ Text0729: ; 53435 (14:7435)
 	done
 
 Text072a: ; 534e1 (14:74e1)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "Are you enjoying the "
 	line "Pokémon Trading Card Game?"
 	line "By the way, I'm looking for a "
@@ -1114,7 +1114,7 @@ Text072f: ; 536f6 (14:76f6)
 	done
 
 Text0730: ; 5371b (14:771b)
-	text TX_RAM1, " traded a Clefable"
+	text "<RAMNAME> traded a Clefable"
 	line "for a Surfing Pikachu!"
 	done
 
@@ -1124,7 +1124,7 @@ Text0731: ; 53747 (14:7747)
 	done
 
 Text0732: ; 5377f (14:777f)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "I suppose you're here because you"
 	line "heard that I was looking for"
 	line "a Ditto this time..."
@@ -1134,7 +1134,7 @@ Text0732: ; 5377f (14:777f)
 	done
 
 Text0733: ; 53829 (14:7829)
-	text "Hello, ", TX_RAM1, ". "
+	text "Hello, <RAMNAME>. "
 	line "Are you enjoying the"
 	line "Pokémon Trading Card Game?"
 	line "I'm looking for a Ditto"
@@ -1163,7 +1163,7 @@ Text0735: ; 5395a (14:795a)
 	done
 
 Text0736: ; 539ed (14:79ed)
-	text TX_RAM1, " traded a Ditto"
+	text "<RAMNAME> traded a Ditto"
 	line "for a Flying Pikachu!"
 	done
 
@@ -1173,7 +1173,7 @@ Text0737: ; 53a15 (14:7a15)
 	done
 
 Text0738: ; 53a4a (14:7a4a)
-	text "Hello, ", TX_RAM1, "."
+	text "Hello, <RAMNAME>."
 	line "You're really current on the news!"
 	line "I'm looking for a Chansey this "
 	line "time! I'm thinking about trading"
@@ -1184,7 +1184,7 @@ Text0738: ; 53a4a (14:7a4a)
 	done
 
 Text0739: ; 53b25 (14:7b25)
-	text "Hello, ", TX_RAM1, ". "
+	text "Hello, <RAMNAME>. "
 	line "Are you enjoying the"
 	line "Pokémon Trading Card Game?"
 	line "I'm looking for a Chansey"
@@ -1212,7 +1212,7 @@ Text073b: ; 53c6a (14:7c6a)
 	done
 
 Text073c: ; 53cf9 (14:7cf9)
-	text TX_RAM1, " traded a Chansey"
+	text "<RAMNAME> traded a Chansey"
 	line "for a Surfing Pikachu!"
 	done
 
@@ -1222,7 +1222,7 @@ Text073d: ; 53d24 (14:7d24)
 	done
 
 Text073e: ; 53d5b (14:7d5b)
-	text "Oh! Congratulations, ", TX_RAM1, "!"
+	text "Oh! Congratulations, <RAMNAME>!"
 	line "I heard the news! You've finally "
 	line "inherited the Legendary Pokémon "
 	line "Cards! Don't worry, I'm not going "

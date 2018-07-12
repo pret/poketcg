@@ -69,7 +69,7 @@ Text05e0: ; 4c5a1 (13:45a1)
 	done
 
 Text05e1: ; 4c66a (13:466a)
-	text "Congratulations, ", TX_RAM1, "!"
+	text "Congratulations, <RAMNAME>!"
 	line "I hear you have inherited the"
 	line "Legendary Pokémon Cards!"
 	line "The strength of a Deck does"
@@ -94,7 +94,7 @@ Text05e2: ; 4c786 (13:4786)
 	done
 
 Text05e3: ; 4c86f (13:486f)
-	text "Oh! Why the rush, ", TX_RAM1, "?"
+	text "Oh! Why the rush, <RAMNAME>?"
 	line "What? "
 	line "You want to learn how to play"
 	line "the Pokémon Trading Card Game?"
@@ -112,7 +112,7 @@ Text05e3: ; 4c86f (13:486f)
 
 Text05e4: ; 4c9d7 (13:49d7)
 	text "Yes, Dr. Mason."
-	line "Hello, ", TX_RAM1, "."
+	line "Hello, <RAMNAME>."
 	done
 
 Text05e5: ; 4c9f2 (13:49f2)
@@ -121,7 +121,7 @@ Text05e5: ; 4c9f2 (13:49f2)
 	done
 
 Text05e6: ; 4ca0c (13:4a0c)
-	text "Hey! ", TX_RAM1, "!"
+	text "Hey! <RAMNAME>!"
 	line "Hurry and come here!"
 	done
 
@@ -131,7 +131,7 @@ Text05e7: ; 4ca2a (13:4a2a)
 	done
 
 Text05e8: ; 4ca52 (13:4a52)
-	text "OK, ", TX_RAM1, "."
+	text "OK, <RAMNAME>."
 	line "What do you want to ask about?"
 	done
 
@@ -196,31 +196,31 @@ Text05f0: ; 4ce5a (13:4e5a)
 	done
 
 Text05f1: ; 4ce96 (13:4e96)
-	text TX_RAM1, " handed his cards to "
+	text "<RAMNAME> handed his cards to "
 	line "Dr. Mason."
 	done
 
 Text05f2: ; 4ceb9 (13:4eb9)
 	text "Hmm...let me add some of my own "
 	line "cards to yours!"
-	line "Now, ", TX_RAM1, ", what kind"
+	line "Now, <RAMNAME>, what kind"
 	line "of Deck do you want?"
 	done
 
 Text05f3: ; 4cf12 (13:4f12)
-	text "A ", TX_RAM2, "?"
+	text "A <RAMTEXT>?"
 	done
 
 Text05f4: ; 4cf18 (13:4f18)
-	text "OK, a ", TX_RAM2, "!"
+	text "OK, a <RAMTEXT>!"
 	line "Here are the remaining cards!"
 	done
 
 Text05f5: ; 4cf40 (13:4f40)
-	text TX_RAM1, " received"
-	line "a ", TX_RAM2, "!"
+	text "<RAMNAME> received"
+	line "a <RAMTEXT>!"
 	line ""
-	text TX_RAM1, " received"
+	text "<RAMNAME> received"
 	line "30 cards!"
 	done
 
@@ -284,7 +284,7 @@ Text05fb: ; 4d361 (13:5361)
 	done
 
 Text05fc: ; 4d423 (13:5423)
-	text TX_RAM1, ", thanks to you, all"
+	text "<RAMNAME>, thanks to you, all"
 	line "the Auto Deck Machines have"
 	line "been activated!"
 	done
@@ -312,7 +312,7 @@ Text0600: ; 4d531 (13:5531)
 	done
 
 Text0601: ; 4d56a (13:556a)
-	text "Is it ", TX_RAM2, "?"
+	text "Is it <RAMTEXT>?"
 	done
 
 Text0602: ; 4d574 (13:5574)
@@ -341,17 +341,17 @@ Text0606: ; 4d655 (13:5655)
 	done
 
 Text0607: ; 4d676 (13:5676)
-	text "It's a ", TX_RAM2, " Medal"
+	text "It's a <RAMTEXT> Medal"
 	line "Auto Deck Machine."
 	done
 
 Text0608: ; 4d699 (13:5699)
 	text "It isn't working since the "
-	line TX_RAM2, " Medal is not inserted."
+	line "<RAMTEXT> Medal is not inserted."
 	done
 
 Text0609: ; 4d6cf (13:56cf)
-	text "Insert the ", TX_RAM2, " Medal?"
+	text "Insert the <RAMTEXT> Medal?"
 	done
 
 Text060a: ; 4d6e4 (13:56e4)
@@ -465,7 +465,7 @@ Text0619: ; 4dbcb (13:5bcb)
 	done
 
 Text061a: ; 4dc30 (13:5c30)
-	text "Hey! ", TX_RAM1, "!"
+	text "Hey! <RAMNAME>!"
 	line "You beat the Grand Masters?"
 	line "Cool! Got all the Legendary "
 	line "Pokémon Cards? Yeah!"
@@ -710,14 +710,14 @@ Text0644: ; 4e774 (13:6774)
 	done
 
 Text0645: ; 4e7e1 (13:67e1)
-	text "Well, getting the ", TX_RAM2, " Medal "
+	text "Well, getting the <RAMTEXT> Medal "
 	line "wasn't that hard! If I keep "
 	line "this up, I should be able to get "
 	line "the Legendary Pokémon Cards!"
 	done
 
 Text0646: ; 4e859 (13:6859)
-	text "What? It's you, ", TX_RAM1, "!"
+	text "What? It's you, <RAMNAME>!"
 	line "What are you doing?"
 	line "Huh? That's a Deck!"
 	line "Are you... trying to get the"
@@ -752,12 +752,12 @@ Text0649: ; 4e991 (13:6991)
 	line "'Cause the Legendary Pokémon Cards"
 	line "are gonna be mine!"
 	line "I already won the first Medal!"
-	line "See ya, ", TX_RAM1, "!"
+	line "See ya, <RAMNAME>!"
 	line "Ha ha ha ha ha!!!"
 	done
 
 Text064a: ; 4eb39 (13:6b39)
-	text "Hi, ", TX_RAM1, "!"
+	text "Hi, <RAMNAME>!"
 	line "How ya doin'?"
 	done
 
@@ -793,7 +793,7 @@ Text064e: ; 4ec9a (13:6c9a)
 	done
 
 Text064f: ; 4ed1c (13:6d1c)
-	text "Hi, ", TX_RAM1, "!"
+	text "Hi, <RAMNAME>!"
 	line "Have you gotten any better?"
 	done
 
@@ -938,7 +938,7 @@ Text0663: ; 4f522 (13:7522)
 	done
 
 Text0664: ; 4f574 (13:7574)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "So you've finally come this far?"
 	line "I've already won 5 Medals!"
 	line "By the time you win your 8th Medal,"

@@ -1249,7 +1249,7 @@ ImakuniDescription: ; 635cb (18:75cb)
 	line "Imakuni wants you to play him as a"
 	line "Basic Pokémon, but you can't."
 	line "A mysterious creature not listed in"
-	line "the Pok`dex. He asks kids around the"
+	line "the Pokédex. He asks kids around the"
 	line "world,”Who is cuter-Pikachu or me?”"
 	done
 
@@ -1318,7 +1318,7 @@ MysteriousFossilDescriptionCont: ; 63ad2 (18:7ad2)
 	line "Pokémon. (Discard it anyway.) At any"
 	line "time during your turn before your"
 	line "attack, you may discard Mysterious"
-	line "Fossil from play. (Use GameBoy Pok`-"
+	line "Fossil from play. (Use GameBoy Poké-"
 	line "mon Power menu option to do this.)"
 	done
 
@@ -1396,7 +1396,7 @@ PokemonCenterDescription: ; 63e9e (18:7e9e)
 	done
 
 PokeBallName: ; 63f2e (18:7f2e)
-	text "Pok` Ball"
+	text "Poké Ball"
 	done
 
 PokeBallDescription: ; 63f39 (18:7f39)

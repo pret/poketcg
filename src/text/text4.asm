@@ -1,5 +1,5 @@
 Text0405: ; 40000 (10:4000)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information about"
 	line "Gene's deck - he's the Master "
@@ -14,14 +14,14 @@ Text0405: ; 40000 (10:4000)
 	done
 
 Text0406: ; 4014a (10:414a)
-	text TX_RAM1, "! Go defeat Gene,"
+	text "<RAMNAME>! Go defeat Gene,"
 	line "the Master of the Rock Club!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
 Text0407: ; 401a3 (10:41a3)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
 	line "about Amy's deck - she's the "
@@ -41,14 +41,14 @@ Text0407: ; 401a3 (10:41a3)
 	done
 
 Text0408: ; 4033e (10:433e)
-	text TX_RAM1, "!"
+	text "<RAMNAME>!"
 	line "Keep at it, and don't give up!"
 	line "Mason Laboratory"
 	line "      Doctor Mason  ;)"
 	done
 
 Text0409: ; 40389 (10:4389)
-	text "How's it going, ", TX_RAM1, "?"
+	text "How's it going, <RAMNAME>?"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
 	line "about Isaac's deck - he's"
@@ -120,7 +120,8 @@ Text040d: ; 40819 (10:4819)
 	done
 
 Text040e: ; 409c6 (10:49c6)
-	text "Fight to the end, ", TX_HALFWIDTH,  TX_RAM1, ","
+	text "Fight to the end, "
+	text "<RAMNAME>,"
 	line "and don't give up!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
@@ -128,7 +129,7 @@ Text040e: ; 409c6 (10:49c6)
 
 Text040f: ; 40a15 (10:4a15)
 	text "It's me, Dr. Mason."
-	line "How are you doing, ", TX_RAM1, "?"
+	line "How are you doing, <RAMNAME>?"
 	line "I have some information for you"
 	line "about Rick's deck - he's "
 	line "the Master of the Science Club."
@@ -148,7 +149,7 @@ Text040f: ; 40a15 (10:4a15)
 Text0410: ; 40bea (10:4bea)
 	text "Win all 8 Master Medals, "
 	line ""
-	text TX_RAM1, "!"
+	text "<RAMNAME>!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
 	done
@@ -226,7 +227,7 @@ Text0414: ; 40fca (10:4fca)
 	done
 
 Text0415: ; 4123d (10:523d)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Dr. Mason."
 	line "You're finally going to be dueling"
 	line "a Grand Master..."
@@ -247,7 +248,7 @@ Text0415: ; 4123d (10:523d)
 	done
 
 Text0416: ; 413f1 (10:53f1)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Dr. Mason!"
 	line "Grand Master Steve uses"
 	line "the Legendary ZAPDOS."
@@ -264,7 +265,7 @@ Text0416: ; 413f1 (10:53f1)
 	line "using your Fighting Pokémon."
 	line "Defeat the Grand Masters,"
 	line ""
-	text TX_RAM1, "!!!"
+	text "<RAMNAME>!!!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
 	line "p.s."
@@ -284,7 +285,7 @@ Text0417: ; 415cf (10:55cf)
 	line "His deck should be mostly"
 	line "Water Pokémon, so it will be"
 	line "weak against Lightning Pokémon!"
-	line "Go get 'em, ", TX_RAM1, "!"
+	line "Go get 'em, <RAMNAME>!"
 	line "You're almost there!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
@@ -305,7 +306,7 @@ Text0418: ; 4174c (10:574c)
 	line "of striking early. This is the "
 	line "final test in inheriting "
 	line "the Legendary Pokémon Cards!"
-	line "Go, ", TX_RAM1, "!"
+	line "Go, <RAMNAME>!"
 	line "Be a part of the legend!"
 	line "Mason Laboratory"
 	line "      Dr. Mason  ;)"
@@ -378,7 +379,8 @@ Text0422: ; 41c57 (10:5c57)
 	line "I'd feel guilty taking a card"
 	line "from your deck."
 	line "Maybe next time."
-	line TX_END
+	line ""
+	done
 
 Text0423: ; 41cf7 (10:5cf7)
 	text "OK then, let's trade your"
@@ -386,12 +388,12 @@ Text0423: ; 41cf7 (10:5cf7)
 	done
 
 Text0424: ; 41d2a (10:5d2a)
-	text TX_RAM1, " traded a Lapras"
+	text "<RAMNAME> traded a Lapras"
 	line "for an Arcanine!"
 	done
 
 Text0425: ; 41d4e (10:5d4e)
-	text "Thanks, ", TX_RAM1, "!"
+	text "Thanks, <RAMNAME>!"
 	line "I'll take good care"
 	line "of this Lapras."
 	done
@@ -642,14 +644,14 @@ Text044d: ; 4294b (10:694b)
 	done
 
 Text044e: ; 4296d (10:696d)
-	text "Was it ", TX_RAM1, "?"
+	text "Was it <RAMNAME>?"
 	line "I will be your next opponent."
 	line "I, Amy, the Master of the "
 	line "Water Club!"
 	done
 
 Text044f: ; 429bd (10:69bd)
-	text "Aren't you ", TX_RAM1, "?"
+	text "Aren't you <RAMNAME>?"
 	line "So you decided you want to"
 	line "duel me?"
 	done
@@ -698,7 +700,7 @@ Text0457: ; 42ba1 (10:6ba1)
 	done
 
 Text0458: ; 42be9 (10:6be9)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "Nice to see you again!!!"
 	line "Did you come to play the"
 	line "Pokémon Trading Card Game?"
@@ -724,7 +726,7 @@ Text045b: ; 42d1e (10:6d1e)
 	line "Card Game. I'm not into dueling."
 	line "I prefer collecting the cards."
 	line "By the way, would you happen to have"
-	line TX_RAM2, "?"
+	line "<RAMTEXT>?"
 	line "If you do, I was wondering if you"
 	line "might want to give it to me?"
 	line "How about it?"
@@ -734,20 +736,20 @@ Text045c: ; 42df7 (10:6df7)
 	text "Hi! It's you!"
 	line "What's up?"
 	line "Did you decide to give me"
-	line "your ", TX_RAM2, "?"
+	line "your <RAMTEXT>?"
 	done
 
 Text045d: ; 42e33 (10:6e33)
 	text "Hi! I see you're playing with"
 	line "the cards again."
 	line "By the way, I'm looking for"
-	line TX_RAM2, " this time."
+	line "<RAMTEXT> this time."
 	line "If you should happen to have one,"
 	line "would you mind giving it to me?"
 	done
 
 Text045e: ; 42ece (10:6ece)
-	text "Give away your ", TX_RAM2, "?"
+	text "Give away your <RAMTEXT>?"
 	done
 
 Text045f: ; 42ee1 (10:6ee1)
@@ -757,17 +759,17 @@ Text045f: ; 42ee1 (10:6ee1)
 	done
 
 Text0460: ; 42f2d (10:6f2d)
-	text "But you don't have ", TX_RAM2, "!"
+	text "But you don't have <RAMTEXT>!"
 	line "I appreciate your generosity, but "
 	line "you can't give me what you don't "
 	line "have. Come see me again after "
-	line "you get ", TX_RAM2, "."
+	line "you get <RAMTEXT>."
 	done
 
 Text0461: ; 42fb3 (10:6fb3)
 	text "You're going to give it to me?"
 	line "Thank you!"
-	line "But your ", TX_RAM2, ""
+	line "But your <RAMTEXT>"
 	line "is in your Deck."
 	line "I can't take a card that you're"
 	line "playing with!"
@@ -814,8 +816,11 @@ Text0467: ; 43221 (10:7221)
 	line "Who? Me? You don't know who I am?"
 	line "I am the super musical star,"
 	line "Imakuni?!"
-	line "I'll sing the Pok`Rap - You dance!"
-	line $07,$03,$63, TX_HALFWIDTH, "La di da la di da"
+	line "I'll sing the PokéRap - You dance!"
+	line ""
+	half2full
+	textfw3 "♪"
+	text "La di da la di da"
 	line "  La di da la di da..."
 	line "Hey!"
 	line "Move those feet!"
@@ -878,7 +883,10 @@ Text0471: ; 435a7 (10:75a7)
 	line "You weren't too bad, but since "
 	line "I won...Let's see you shake it!"
 	line "Come on, shake it!!!"
-	line $07,$03,$63, TX_HALFWIDTH, "La di da la di da"
+	line ""
+	half2full
+	textfw3 "♪"
+	text "La di da la di da"
 	line "  La di da la di da..."
 	line "... You dance weird!"
 	done

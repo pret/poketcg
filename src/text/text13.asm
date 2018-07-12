@@ -18,7 +18,7 @@ ComputerSearchDescription: ; 6408e (19:408e)
 	done
 
 PokedexName: ; 6411d (19:411d)
-	text "Pok`dex"
+	text "Pokédex"
 	done
 
 PokedexDescription: ; 64126 (19:4126)
