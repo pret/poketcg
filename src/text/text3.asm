@@ -1066,7 +1066,7 @@ Text033e: ; 3e834 (f:6834)
 	done
 
 Text033f: ; 3e85f (f:685f)
-	text "Name ", TX_RAM1
+	text "Name <RAMNAME>"
 	done
 
 Text0340: ; 3e867 (f:6867)
@@ -1295,7 +1295,7 @@ Text0370: ; 3ecb9 (f:6cb9)
 	text "  <RAMNAME>  <RAMTEXT>"
 	line "      Master Medals Won "
 	half2full
-	db "<RAMNUM>"
+	textfw0 "<RAMNUM>"
 	text ""
 	line "      Album           "
 	half2full
@@ -1530,7 +1530,7 @@ Text0394: ; 3f4d6 (f:74d6)
 	done
 
 Text0395: ; 3f4f3 (f:74f3)
-	text "<RAMTEXT>  ", TX_RAM2
+	text "<RAMTEXT>  <RAMTEXT>"
 	done
 
 Text0396: ; 3f4f9 (f:74f9)

@@ -22,35 +22,63 @@ ENDM
 
 textfw0: MACRO
 	rept _NARG
+if STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+	db \1
+else
 	db STRCAT("FW0_", \1)
+endc
 	shift
 	endr
 ENDM
 
 textfw1: MACRO
 	rept _NARG
+if (\1) == " "
+	db STRCAT("FW0_", \1)
+elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+	db \1
+else
 	db TX_FULLWIDTH1, STRCAT("FW1_", \1)
+endc
 	shift
 	endr
 ENDM
 
 textfw2: MACRO
 	rept _NARG
+if (\1) == " "
+	db STRCAT("FW0_", \1)
+elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+	db \1
+else
 	db TX_FULLWIDTH2, STRCAT("FW2_", \1)
+endc
 	shift
 	endr
 ENDM
 
 textfw3: MACRO
 	rept _NARG
+if (\1) == " "
+	db STRCAT("FW0_", \1)
+elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+	db \1
+else
 	db TX_FULLWIDTH3, STRCAT("FW3_", \1)
+endc
 	shift
 	endr
 ENDM
 
 textfw4: MACRO
 	rept _NARG
-	db TX_FULLWIDTH2, STRCAT("FW4_", \1)
+if (\1) == " "
+	db STRCAT("FW0_", \1)
+elif STRSUB(\1, 1, 1) == "<" && STRLEN(\1) > 1
+	db \1
+else
+	db TX_FULLWIDTH4, STRCAT("FW4_", \1)
+endc
 	shift
 	endr
 ENDM

@@ -1155,39 +1155,27 @@ Text07f5: ; 5736a (15:736a)
 	done
 
 Text07f6: ; 5736d (15:736d)
-	textfw3 "["
-	db "<FIRE>"
-	textfw3 "]"
+	textfw3 "[", "<FIRE>", "]"
 	done
 
 Text07f7: ; 57374 (15:7374)
-	textfw3 "["
-	db "<LIGHTNING>"
-	textfw3 "]"
+	textfw3 "[", "<LIGHTNING>", "]"
 	done
 
 Text07f8: ; 5737b (15:737b)
-	textfw3 "["
-	db "<WATER>"
-	textfw3 "]"
+	textfw3 "[", "<WATER>", "]"
 	done
 
 Text07f9: ; 57382 (15:7382)
-	textfw3 "["
-	db "<FIGHTING>"
-	textfw3 "]"
+	textfw3 "[", "<FIGHTING>", "]"
 	done
 
 Text07fa: ; 57389 (15:7389)
-	textfw3 "["
-	db "<PSYCHIC>"
-	textfw3 "]"
+	textfw3 "[", "<PSYCHIC>", "]"
 	done
 
 Text07fb: ; 57390 (15:7390)
-	textfw3 "["
-	db "<GRASS>"
-	textfw3 "]"
+	textfw3 "[", "<GRASS>", "]"
 	done
 
 GrassEnergyName: ; 57397 (15:7397)

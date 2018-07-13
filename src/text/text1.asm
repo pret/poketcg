@@ -306,27 +306,27 @@ Text0046: ; 3681b (d:681b)
 	done
 
 Text0047: ; 36848 (d:6848)
-	db "<GRASS>"
+	textfw0 "<GRASS>"
 	done
 
 Text0048: ; 3684b (d:684b)
-	db "<FIRE>"
+	textfw0 "<FIRE>"
 	done
 
 Text0049: ; 3684e (d:684e)
-	db "<WATER>"
+	textfw0 "<WATER>"
 	done
 
 Text004a: ; 36851 (d:6851)
-	db "<LIGHTNING>"
+	textfw0 "<LIGHTNING>"
 	done
 
 Text004b: ; 36854 (d:6854)
-	db "<FIGHTING>"
+	textfw0 "<FIGHTING>"
 	done
 
 Text004c: ; 36857 (d:6857)
-	db "<PSYCHIC>"
+	textfw0 "<PSYCHIC>"
 	done
 
 Text004d: ; 3685a (d:685a)
@@ -605,9 +605,9 @@ Text0086: ; 36f31 (d:6f31)
 
 Text0087: ; 36f43 (d:6f43)
 	textfw3 "B"
-	db "<RAMNUM>"
+	textfw0 "<RAMNUM>"
 	textfw3 "S"
-	db "<RAMNUM>"
+	textfw0 "<RAMNUM>"
 	done
 
 DuelistIsThinkingText: ; 36f4a (d:6f4a)
