@@ -42,8 +42,8 @@
 	fwcharmap 3, "r.", $4d
 	fwcharmap 3, "♀", $4e
 	fwcharmap 3, "♂", $4f
-	fwcharmap 3, "[", $50
-	fwcharmap 3, "]", $51
+	fwcharmap 3, "【", $50
+	fwcharmap 3, "】", $51
 	fwcharmap 3, "●", $52
 	fwcharmap 3, "◆", $53
 	fwcharmap 3, "★", $54
@@ -59,11 +59,67 @@
 	fwcharmap 3, ":", $5e
 	fwcharmap 3, "○", $5f
 	fwcharmap 3, "❄", $60
-	fwcharmap 3, "o", $61
 	fwcharmap 3, "^", $62
 	fwcharmap 3, "♪", $63
+	fwcharmap 3, "a", $64
+	fwcharmap 3, "b", $65
+	fwcharmap 3, "d", $66
+	fwcharmap 3, "e", $67
+	fwcharmap 3, "f", $68
+	fwcharmap 3, "h", $69
+	fwcharmap 3, "i", $6a
+	fwcharmap 3, "j", $6b
+	fwcharmap 3, "k", $6c
+	fwcharmap 3, "l", $6d
+	fwcharmap 3, "n", $6e
+	fwcharmap 3, "o", $6f
+	fwcharmap 3, "p", $70
+	fwcharmap 3, "q", $71
+	fwcharmap 3, "s", $72
+	fwcharmap 3, "t", $73
+	fwcharmap 3, "u", $74
+	fwcharmap 3, "v", $75
+	fwcharmap 3, "w", $76
+	fwcharmap 3, "x", $77
+	fwcharmap 3, "y", $78
+	fwcharmap 3, "z", $79
 	fwcharmap 3, "'", $7a
 	fwcharmap 3, "”", $7b
+	fwcharmap 3, "r", $8e
+	fwcharmap 3, "┌", $97
+	fwcharmap 3, "＼", $98
+	fwcharmap 3, "┐", $99
+	fwcharmap 3, "|", $9a
+	fwcharmap 3, "!", $9d
+	fwcharmap 3, "#", $9f
+	fwcharmap 3, "$", $a0
+	fwcharmap 3, "%", $a1
+	fwcharmap 3, "(", $a4
+	fwcharmap 3, ")", $a5
+	fwcharmap 3, "*", $a6
+	fwcharmap 3, "+", $a7
+	fwcharmap 3, "､", $a8
+	fwcharmap 3, "-", $a9
+	fwcharmap 3, "/", $ab
+	fwcharmap 3, "0", $ac
+	fwcharmap 3, "1", $ad
+	fwcharmap 3, "2", $ae
+	fwcharmap 3, "3", $af
+	fwcharmap 3, "4", $b0
+	fwcharmap 3, "5", $b1
+	fwcharmap 3, "6", $b2
+	fwcharmap 3, "7", $b3
+	fwcharmap 3, "8", $b4
+	fwcharmap 3, "9", $b5
+	fwcharmap 3, ";", $b7
+	fwcharmap 3, "<", $b8
+	fwcharmap 3, "=", $b9
+	fwcharmap 3, ">", $ba
+	fwcharmap 3, "?", $bb
+	fwcharmap 3, "@", $bc
+	fwcharmap 3, "[", $d7
+	fwcharmap 3, "¥", $d8
+	fwcharmap 3, "]", $d9
 
 ; TX_KATAKANA
 	fwcharmap 0, "ヲ", $10
@@ -95,7 +151,7 @@
 	fwcharmap 0, "ハ", $2a
 	fwcharmap 0, "ヒ", $2b
 	fwcharmap 0, "フ", $2c
-;	fwcharmap 0, " ", $2d
+	fwcharmap 0, "ヘ", $2d
 	fwcharmap 0, "ホ", $2e
 	fwcharmap 0, "マ", $2f
 	fwcharmap 0, "ミ", $30
@@ -106,13 +162,37 @@
 	fwcharmap 0, "ユ", $35
 	fwcharmap 0, "ヨ", $36
 	fwcharmap 0, "ラ", $37
-;	fwcharmap 0, " ", $38
+	fwcharmap 0, "リ", $38
 	fwcharmap 0, "ル", $39
 	fwcharmap 0, "レ", $3a
 	fwcharmap 0, "ロ", $3b
 	fwcharmap 0, "ワ", $3c
 	fwcharmap 0, "ン", $3d
-;	fwcharmap 0, " ", $3e-$56
+	fwcharmap 0, "ガ", $3e
+	fwcharmap 0, "ギ", $3f
+	fwcharmap 0, "グ", $40
+	fwcharmap 0, "ゲ", $41
+	fwcharmap 0, "ゴ", $42
+	fwcharmap 0, "ザ", $43
+	fwcharmap 0, "ジ", $44
+	fwcharmap 0, "ズ", $45
+	fwcharmap 0, "ゼ", $46
+	fwcharmap 0, "ゾ", $47
+	fwcharmap 0, "ダ", $48
+	fwcharmap 0, "ヂ", $49
+	fwcharmap 0, "ヅ", $4a
+	fwcharmap 0, "デ", $4b
+	fwcharmap 0, "ド", $4c
+	fwcharmap 0, "バ", $4d
+	fwcharmap 0, "ビ", $4e
+	fwcharmap 0, "ブ", $4f
+	fwcharmap 0, "ベ", $50
+	fwcharmap 0, "ボ", $51
+	fwcharmap 0, "パ", $52
+	fwcharmap 0, "ピ", $53
+	fwcharmap 0, "プ", $54
+	fwcharmap 0, "ペ", $55
+	fwcharmap 0, "ポ", $56
 	fwcharmap 0, "ァ", $57
 	fwcharmap 0, "ィ", $58
 	fwcharmap 0, "ゥ", $59
@@ -170,7 +250,36 @@
 	fwcharmap 0, "ろ", $3b
 	fwcharmap 0, "わ", $3c
 	fwcharmap 0, "ん", $3d
-;	fwcharmap 0, " ", $3e-$5b
+	fwcharmap 0, "が", $3e
+	fwcharmap 0, "ぎ", $3f
+	fwcharmap 0, "ぐ", $40
+	fwcharmap 0, "げ", $41
+	fwcharmap 0, "ご", $42
+	fwcharmap 0, "ざ", $43
+	fwcharmap 0, "じ", $44
+	fwcharmap 0, "ず", $45
+	fwcharmap 0, "ぜ", $46
+	fwcharmap 0, "ぞ", $47
+	fwcharmap 0, "だ", $48
+	fwcharmap 0, "ぢ", $49
+	fwcharmap 0, "づ", $4a
+	fwcharmap 0, "で", $4b
+	fwcharmap 0, "ど", $4c
+	fwcharmap 0, "ば", $4d
+	fwcharmap 0, "び", $4e
+	fwcharmap 0, "ぶ", $4f
+	fwcharmap 0, "べ", $50
+	fwcharmap 0, "ぼ", $51
+	fwcharmap 0, "ぱ", $52
+	fwcharmap 0, "ぴ", $53
+	fwcharmap 0, "ぷ", $54
+	fwcharmap 0, "ぺ", $55
+	fwcharmap 0, "ぽ", $56
+	fwcharmap 0, "あ", $57
+	fwcharmap 0, "い", $58
+	fwcharmap 0, "う", $59
+	fwcharmap 0, "え", $5a
+	fwcharmap 0, "お", $5b
 	fwcharmap 0, "ゃ", $5c
 	fwcharmap 0, "ゅ", $5d
 	fwcharmap 0, "ょ", $5e

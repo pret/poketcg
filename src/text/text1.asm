@@ -39,9 +39,7 @@ PKMNPWRText: ; 36356 (d:6356)
 	done
 
 Text000b: ; 36360 (d:6360)
-	db $56
-	textfw0 "ケ", "モ", "ン", "カ", "-(2)"
-	db $4c
+	textfw0 "ポ", "ケ", "モ", "ン", "カ", "-(2)", "ド"
 	done
 
 LengthText: ; 36368 (d:6368)
