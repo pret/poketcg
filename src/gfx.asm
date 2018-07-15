@@ -2,6 +2,8 @@ INCLUDE "macros.asm"
 
 SECTION "Gfx 1", ROMX
 
+Fonts::
+
 FullWidthFonts:: ; 74000 (1d:4000)
 INCBIN "gfx/fonts/full_width/0_0_katakana.1bpp"
 INCBIN "gfx/fonts/full_width/0_1_hiragana.1bpp"

@@ -394,6 +394,7 @@ wInitialA:: ; cab3
 wConsole:: ; cab4
 	ds $1
 
+; used to select a sprite or a starting sprite from wOAM
 wOAMOffset:: ; cab5
 	ds $1
 
@@ -431,13 +432,15 @@ wFlushPaletteFlags:: ; cabf
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
 
-wcac1:: ; cac1
+; used by HblankWriteByteToBGMap0
+wTempByte:: ; cac1
 	ds $1
 
 wcac2:: ; cac2
 	ds $1
 
-wCounterCtr:: ; cac3
+; used to increase the play time counter every four timer interrupts (60.24 Hz)
+wTimerCounter:: ; cac3
 	ds $1
 
 wPlayTimeCounterEnable:: ; cac4
@@ -457,7 +460,7 @@ wRNG1:: ; caca
 wRNG2:: ; cacb
 	ds $1
 
-wCounter:: ; cacc
+wRNGCounter:: ; cacc
 	ds $1
 
 ; the LCDC status interrupt is always disabled and this always reads as jp $0000

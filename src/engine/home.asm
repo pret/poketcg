@@ -120,7 +120,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	ei
 	call SerialTimerHandler
 	; only trigger every fourth interrupt ≈ 60.24 Hz
-	ld hl, wCounterCtr
+	ld hl, wTimerCounter
 	ld a, [hl]
 	inc [hl]
 	and $3
@@ -1080,10 +1080,14 @@ WriteByteToBGMap0: ; 06c3 (0:06c3)
 	ret
 .lcd_on
 	pop af
+;	fallthrough
+
+; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b] during hblank
+HblankWriteByteToBGMap0: ; 06d9
 	push hl
 	push de
 	push bc
-	ld hl, wcac1
+	ld hl, wTempByte
 	push hl
 	ld [hl], a
 	call BCCoordToBGMap0Address
@@ -1475,7 +1479,7 @@ UpdateRNGSources: ; 089b (0:089b)
 	push de
 	ld hl, wRNG1
 	ld a, [hli]
-	ld d, [hl]
+	ld d, [hl] ; wRNG2
 	inc hl
 	ld e, a
 	ld a, d
@@ -1487,7 +1491,7 @@ UpdateRNGSources: ; 089b (0:089b)
 	ld a, d
 	xor e
 	ld d, a
-	ld a, [hl]
+	ld a, [hl] ; wRNGCounter
 	xor e
 	ld e, a
 	pop af
@@ -1495,11 +1499,11 @@ UpdateRNGSources: ; 089b (0:089b)
 	rl d
 	ld a, d
 	xor e
-	inc [hl]
+	inc [hl] ; wRNGCounter
 	dec hl
-	ld [hl], d
+	ld [hl], d ; wRNG2
 	dec hl
-	ld [hl], e
+	ld [hl], e ; wRNG1
 	pop de
 	pop hl
 	ret
@@ -5844,7 +5848,195 @@ FillRectangle: ; 1f5f (0:1f5f)
 	ret
 ; 0x1f96
 
-	INCROM $1f96, $208d
+Func_1f96: ; 1f96 (0:1f96)
+	add sp, -10
+	ld hl, sp+0
+	ld [hli], a ; sp-10 <- a
+	ld [hl], $00 ; sp-9 <- 0
+	inc hl
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-8 <- [de]
+	ld [hl], $00 ; sp-7 <- 0
+	ld hl, sp+5
+	ld a, [de]
+	inc de
+	ld [hld], a ; sp-5 <- [de+1]
+	ld a, [de]
+	inc de
+	ld [hl], a ; sp-6 <- [de+2]
+	ld hl, sp+6
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-4 <- [de+3]
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-3 <- [de+4]
+	ld a, [de]
+	inc de
+	ld l, a ; l <- [de+5]
+	ld a, [de]
+	dec de
+	ld h, a ; h <- [de+6]
+	or l
+	jr z, .asm_1fbd
+	add hl, de
+.asm_1fbd
+	ld e, l
+	ld d, h ; de += hl
+	ld hl, sp+8
+	ld [hl], e ; sp-2 <- e
+	inc hl
+	ld [hl], d ; sp-1 <- d
+	ld hl, sp+0
+	ld e, [hl] ; e <- sp
+	jr .asm_2013
+	push hl
+	push de
+	push hl
+	add sp, -4
+	ld hl, sp+0
+	ld [hl], c
+	inc hl
+	ld [hl], $00
+	inc hl
+	ld [hl], b
+	ld hl, sp+8
+	xor a
+	ld [hli], a
+	ld [hl], a
+.asm_1fdb
+	call DoFrame
+	ld hl, sp+3
+	ld [hl], a
+	ld c, a
+	and $09
+	jr nz, .asm_2032
+	ld a, c
+	and $06
+	jr nz, .asm_203c
+	ld hl, sp+2
+	ld b, [hl]
+	ld hl, sp+0
+	ld a, [hl]
+	bit 6, c
+	jr nz, .asm_1ffe
+	bit 7, c
+	jr nz, .asm_2007
+	call Func_2046
+	jr .asm_1fdb
+.asm_1ffe
+	dec a
+	bit 7, a
+	jr z, .asm_200c
+	ld a, b
+	dec a
+	jr .asm_200c
+.asm_2007
+	inc a
+	cp b
+	jr c, .asm_200c
+	xor a
+.asm_200c
+	ld e, a
+	call Func_2051
+	ld hl, sp+0
+	ld [hl], e
+.asm_2013
+	inc hl
+	ld [hl], $00
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	ld hl, sp+8
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .asm_202d
+	ld a, e
+	ld de, .asm_2028
+	push de
+	jp hl
+.asm_2028
+	jr nc, .asm_202d
+	ld hl, sp+0
+	ld [hl], a
+.asm_202d
+	call Func_2046
+	jr .asm_1fdb
+.asm_2032
+	call Func_2051
+	ld hl, sp+0
+	ld a, [hl]
+	add sp, 10
+	or a
+	ret
+.asm_203c
+	call Func_2051
+	ld hl, sp+0
+	ld a, [hl]
+	add sp, 10
+	scf
+	ret
+; 0x2046
+
+Func_2046: ; 2046 (0:2046)
+	ld hl, sp+3
+	ld a, [hl]
+	inc [hl]
+	and $0f
+	ret nz
+	bit 4, [hl]
+	jr z, Func_2055
+;	fallthrough
+
+Func_2051: ; 2051 (0:2051)
+	ld hl, sp+9
+	jr Func_2057
+
+Func_2055: ; 2055 (0:2055)
+	ld hl, sp+8
+;	fallthrough
+
+Func_2057: ; 2057 (0:2057)
+	ld e, [hl]
+	ld hl, sp+2
+	ld a, [hl]
+	ld hl, sp+6
+	add [hl]
+	inc hl
+	ld c, a
+	ld b, [hl]
+	ld a, e
+	call HblankWriteByteToBGMap0
+	ret
+; 0x2066
+
+; loads the four tiles of the card set 2 icon constant provided in register a
+LoadCardSetTiles: ; 2066 (0:2066)
+	and $7
+	ld e, a
+	ld d, 0
+	ld hl, .tile_offsets
+	add hl, de
+	ld a, [hl]
+	cp -1
+	ccf
+	ret z
+	ld e, a
+	ld d, 0
+	ld hl, DuelOtherGraphics + $1d tiles
+	add hl, de
+	ld de, v0Tiles1 + $7c tiles
+	ld b, $04
+	call CopyFontsOrDuelGraphicsTiles
+	or a
+	ret
+
+.tile_offsets
+	db -1, $0 tiles, $4 tiles, -1, -1, -1, -1, $8 tiles
 
 ; loads the Deck and Hand icons for the "Draw X card(s) from the deck." screen
 LoadDuelDrawCardsScreenTiles: ; 208d (0:208d)
@@ -5953,7 +6145,7 @@ LoadSymbolsFont: ; 2119 (0:2119)
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
-	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -5990,17 +6182,18 @@ Func_212f: ; 212f (0:212f)
 	jr CopyFontsOrDuelGraphicsTiles
 ; 0x2167
 
+; load the graphics and draw the duel box message given a BOXMSC_* constant in a
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
 	ld h, 40 tiles / 4 ; boxes are 10x4 tiles
 	call HtimesL
 	add hl, hl
 	add hl, hl
-	; hl = a * $280
+	; hl = a * 40 tiles
 	ld de, DuelBoxMessages
 	add hl, de
 	ld de, v0Tiles1 + $20 tiles
-	ld b, $28
+	ld b, 40
 	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
 	lb hl, 1, 10
@@ -6009,7 +6202,55 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	jp FillRectangle
 ; 0x2189
 
-	INCROM $2189, $21c5
+; load the tiles for the latin, katakana, and hiragana fonts into VRAM
+; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.t3.1bpp
+LoadFullWidthFontTiles: ; 2189 (0:2189)
+	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
+	ld a, BANK(Fonts); BANK(DuelGraphics)
+	call BankpushHome
+	push hl
+	ld e, l
+	ld d, h
+	ld hl, v0Tiles0
+	call Copy1bppTiles
+	pop de
+	ld hl, v0Tiles2
+	call Copy1bppTiles
+	ld hl, v0Tiles1
+	call Copy1bppTiles
+	call BankpopHome
+	ret
+; 0x21ab
+
+; copy 128 1bpp tiles from de to hl as 2bpp
+Copy1bppTiles: ; 21ab (0:21ab)
+	ld b, $80
+.tile_loop
+	ld c, TILE_SIZE_1BPP
+.pixel_loop
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld [hli], a
+	dec c
+	jr nz, .pixel_loop
+	dec b
+	jr nz, .tile_loop
+	ret
+; 0x21ba
+
+; similar to ProcessText except it calls InitTextPrinting first
+; with register de as an argument to set hTextBGMap0Address.
+; (the caller to ProcessText usually calls InitTextPrinting first)
+ProcessText_InitTextPrinting: ; 21ba (0:21ba)
+	push de
+	push bc
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	call InitTextPrinting
+	jr ProcessText.next_char
 
 ; reads the characters from the text at hl processes them. loops until TX_END
 ; is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
@@ -6639,7 +6880,7 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 ; create, at wTextTileBuffer, a full-width font tile given its
 ; within the full-width font graphics (FullWidthFonts) in hl
 CreateFullWidthFontTile: ; 252e (0:252e)
-	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
 	ld de, wTextTileBuffer
 	push de
@@ -6979,7 +7220,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	push af
 	ld a, $1
 	call PlaySFX
-	call .asm_2772
+	call .erase_cursor
 	pop af
 	ld [wCurMenuItem], a
 	ldh [hCurMenuItem], a
@@ -6997,12 +7238,12 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	inc [hl]
 	and $f
 	ret nz
-	ld a, $f
+	ld a, SYM_CURSOR_R
 	bit 4, [hl]
-	jr z, .asm_2774
-.asm_2772
-	ld a, $0
-.asm_2774
+	jr z, .draw_cursor
+.erase_cursor
+	ld a, SYM_SPACE
+.draw_cursor
 	ld e, a
 	ld a, [wCurMenuItem]
 	add a
@@ -7900,7 +8141,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	push af
 	call GetTextOffsetFromTextID
 	call Func_2d15
-	call InitRegistersForPrintingText
+	call ResetTxRam_WriteToTextHeader
 .print_char_loop
 	ld a, [wTextSpeed]
 	ld c, a
@@ -7938,7 +8179,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 
 ; zero wWhichTextHeader, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
 ; fill wTextHeader1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
-InitRegistersForPrintingText: ; 2cc8 (0:2cc8)
+ResetTxRam_WriteToTextHeader: ; 2cc8 (0:2cc8)
 	xor a
 	ld [wWhichTextHeader], a
 	ld [wWhichTxRam2], a
@@ -8219,7 +8460,7 @@ PrintText: ; 2e41 (0:2e41)
 .from_ram
 	ld hl, wDefaultText
 .print_text
-	call InitRegistersForPrintingText
+	call ResetTxRam_WriteToTextHeader
 .next_tile_loop
 	ldh a, [hButtonsHeld]
 	ld b, a
@@ -8248,7 +8489,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
-	call InitRegistersForPrintingText
+	call ResetTxRam_WriteToTextHeader
 .next_tile_loop
 	call ProcessTextHeader
 	jr nc, .next_tile_loop
@@ -8475,7 +8716,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
-	ld a, BANK(FullWidthFonts); BANK(DuelGraphics); BANK(HalfWidthFont)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
