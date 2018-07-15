@@ -1101,17 +1101,17 @@ wce22:: ; ce22
 wCardPalette:: ; ce23
 	ds CGB_PAL_SIZE
 
-; information about the text being currently processed, like the font width
+; information about the text being currently processed, including font width,
 ; the rom bank, and the memory address of the next character to be printed.
 ; supports up to four nested texts (used with TX_RAM).
-wTextStruct1:: ; ce2b
-	text_struct wTextStruct1
-wTextStruct2:: ; ce30
-	text_struct wTextStruct2
-wTextStruct3:: ; ce35
-	text_struct wTextStruct3
-wTextStruct4:: ; ce3a
-	text_struct wTextStruct4
+wTextHeader1:: ; ce2b
+	text_header wTextHeader1
+wTextHeader2:: ; ce30
+	text_header wTextHeader2
+wTextHeader3:: ; ce35
+	text_header wTextHeader3
+wTextHeader4:: ; ce3a
+	text_header wTextHeader4
 
 ; text id for the first TX_RAM2 of a text
 ; prints from wDefaultText if $0000
@@ -1136,8 +1136,8 @@ wTxRam3_b:: ; ce45
 wTextSpeed:: ; ce47
 	ds $1
 
-; a number between 0 and 3 to select a wTextStruct to use for the current text
-wWhichTextStruct:: ; ce48
+; a number between 0 and 3 to select a wTextHeader to use for the current text
+wWhichTextHeader:: ; ce48
 	ds $1
 
 ; selects wTxRam2 or wTxRam2_b

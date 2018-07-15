@@ -7922,7 +7922,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	dec c
 	jr nz, .nonzero_text_speed
 .skip_delay
-	call ProcessTextStruct
+	call ProcessTextHeader
 	jr c, .asm_2cc3
 	ld a, [wCurTextLine]
 	cp 3
@@ -7936,22 +7936,22 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	call BankswitchHome
 	ret
 
-; zero wWhichTextStruct, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
-; fill wTextStruct1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
+; zero wWhichTextHeader, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
+; fill wTextHeader1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
 InitRegistersForPrintingText: ; 2cc8 (0:2cc8)
 	xor a
-	ld [wWhichTextStruct], a
+	ld [wWhichTextHeader], a
 	ld [wWhichTxRam2], a
 	ld [wWhichTxRam3], a
 	ld a, TX_KATAKANA
 	ld [hJapaneseSyllabary], a
 ;	fallthrough
 
-; fill the wTextStruct specified in wWhichTextStruct (0-3) with hJapaneseSyllabary,
+; fill the wTextHeader specified in wWhichTextHeader (0-3) with hJapaneseSyllabary,
 ; wFontWidth, hBankROM, and register bc for the text's pointer.
-WriteToTextStruct: ; 2cd7 (0:2cd7)
+WriteToTextHeader: ; 2cd7 (0:2cd7)
 	push hl
-	call GetPointerToTextStruct
+	call GetPointerToTextHeader
 	pop bc
 	ld a, [hJapaneseSyllabary]
 	ld [hli], a
@@ -7964,20 +7964,20 @@ WriteToTextStruct: ; 2cd7 (0:2cd7)
 	ld [hl], b
 	ret
 
-; same as WriteToTextStruct, except it then increases wWhichTextStruct to
-; set the following text struct to the current one (usually, because
+; same as WriteToTextHeader, except it then increases wWhichTextHeader to
+; set the next text header to the current one (usually, because
 ; it will soon be written to due to a TX_RAM command).
-WriteToTextStruct_MoveToNext: ; 2ceb (0:2ceb)
-	call WriteToTextStruct
-	ld hl, wWhichTextStruct
+WriteToTextHeader_MoveToNext: ; 2ceb (0:2ceb)
+	call WriteToTextHeader
+	ld hl, wWhichTextHeader
 	inc [hl]
 	ret
 
-; read the wTextStruct specified in wWhichTextStruct (0-3) and use the data to
+; read the wTextHeader specified in wWhichTextHeader (0-3) and use the data to
 ; populate the corresponding memory addresses. also switch to the text's rombank
 ; and return the address of the next character in hl.
-ReadTextStruct: ; 2cf3 (0:2cf3)
-	call GetPointerToTextStruct
+ReadTextHeader: ; 2cf3 (0:2cf3)
+	call GetPointerToTextHeader
 	ld a, [hli]
 	ld [hJapaneseSyllabary], a
 	ld a, [hli]
@@ -7989,16 +7989,16 @@ ReadTextStruct: ; 2cf3 (0:2cf3)
 	ld l, a
 	ret
 
-; return in hl, the address of the wTextStruct specified in wWhichTextStruct (0-3)
-GetPointerToTextStruct: ; 2d06 (0:2d06)
-	ld a, [wWhichTextStruct]
+; return in hl, the address of the wTextHeader specified in wWhichTextHeader (0-3)
+GetPointerToTextHeader: ; 2d06 (0:2d06)
+	ld a, [wWhichTextHeader]
 	ld e, a
 	add a
 	add a
 	add e
 	ld e, a
 	ld d, $0
-	ld hl, wTextStruct1
+	ld hl, wTextHeader1
 	add hl, de
 	ret
 
@@ -8027,12 +8027,12 @@ Func_2d15: ; 2d15 (0:2d15)
 	pop hl
 	ret
 
-; reads the incoming character from the current wTextStruct and processes it
-; then updates the current wTextStruct to point to the next character.
-; a TX_RAM command causes a switch to a wTextStruct in the level below, and a TX_END
-; command terminates the text unless there is a pending wTextStruct in the above level.
-ProcessTextStruct: ; 2d43 (0:2d43)
-	call ReadTextStruct
+; reads the incoming character from the current wTextHeader and processes it
+; then updates the current wTextHeader to point to the next character.
+; a TX_RAM command causes a switch to a wTextHeader in the level below, and a TX_END
+; command terminates the text unless there is a pending wTextHeader in the above level.
+ProcessTextHeader: ; 2d43 (0:2d43)
+	call ReadTextHeader
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .tx_end
@@ -8060,23 +8060,23 @@ ProcessTextStruct: ; 2d43 (0:2d43)
 	xor a
 	call ProcessSpecialTextCharacter
 .processed_char
-	call WriteToTextStruct
+	call WriteToTextHeader
 	or a
 	ret
 .tx_end
-	ld a, [wWhichTextStruct]
+	ld a, [wWhichTextHeader]
 	or a
 	jr z, .no_more_text
-	; handle text struct in the above level
+	; handle text header in the above level
 	dec a
-	ld [wWhichTextStruct], a
-	jr ProcessTextStruct
+	ld [wWhichTextHeader], a
+	jr ProcessTextHeader
 .no_more_text
 	call TerminateHalfWidthText
 	scf
 	ret
 .tx_ram2
-	call WriteToTextStruct_MoveToNext
+	call WriteToTextHeader_MoveToNext
 	ld a, TX_KATAKANA
 	ld [hJapaneseSyllabary], a
 	xor a ; FULL_WIDTH
@@ -8088,22 +8088,22 @@ ProcessTextStruct: ; 2d43 (0:2d43)
 	or h
 	jr z, .empty
 	call GetTextOffsetFromTextID
-	call WriteToTextStruct
-	jr ProcessTextStruct
+	call WriteToTextHeader
+	jr ProcessTextHeader
 .empty
 	ld hl, wDefaultText
-	call WriteToTextStruct
-	jr ProcessTextStruct
+	call WriteToTextHeader
+	jr ProcessTextHeader
 .tx_ram3
-	call WriteToTextStruct_MoveToNext
+	call WriteToTextHeader_MoveToNext
 	ld de, wTxRam3
 	ld hl, wWhichTxRam3
 	call HandleTxRam2Or3
 	call TwoByteNumberToText_CountLeadingZeros
-	call WriteToTextStruct
-	jp ProcessTextStruct
+	call WriteToTextHeader
+	jp ProcessTextHeader
 .tx_ram1
-	call WriteToTextStruct_MoveToNext
+	call WriteToTextHeader_MoveToNext
 	call CopyPlayerNameOrTurnDuelistName
 	ld a, [wTextBuf]
 	cp TX_HALFWIDTH
@@ -8111,8 +8111,8 @@ ProcessTextStruct: ; 2d43 (0:2d43)
 	ld a, TX_HALF2FULL
 	call ProcessSpecialTextCharacter
 .tx_halfwidth
-	call WriteToTextStruct
-	jp ProcessTextStruct
+	call WriteToTextHeader
+	jp ProcessTextHeader
 
 ; input:
   ; de: wTxRam2 or wTxRam3
@@ -8238,7 +8238,7 @@ PrintText: ; 2e41 (0:2e41)
 	dec a
 	jr nz, .text_delay_loop
 .skip_delay
-	call ProcessTextStruct
+	call ProcessTextHeader
 	jr nc, .next_tile_loop
 	ret
 
@@ -8250,7 +8250,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	call GetTextOffsetFromTextID
 	call InitRegistersForPrintingText
 .next_tile_loop
-	call ProcessTextStruct
+	call ProcessTextHeader
 	jr nc, .next_tile_loop
 	pop af
 	call BankswitchHome

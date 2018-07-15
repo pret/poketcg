@@ -39,7 +39,7 @@ move_data_struct: MACRO
 \1Animation::      ds 1
 ENDM
 
-text_struct: MACRO
+text_header: MACRO
 \1DefaultFont:: ds 1
 \1FontWidth::   ds 1
 \1Address::     ds 2
