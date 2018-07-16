@@ -2,8 +2,6 @@
 
 GBC EQU $11
 
-LY_VBLANK EQU 145
-
 ; MBC3
 MBC3SRamEnable EQU $0000
 MBC3RomBank    EQU $2000
@@ -79,11 +77,12 @@ rNR50       EQU $ff24 ; Channel control / ON-OFF / Volume (R/W)
 rNR51       EQU $ff25 ; Selection of Sound output terminal (R/W)
 rNR52       EQU $ff26 ; Sound on/off
 rLCDC       EQU $ff40 ; LCD Control (R/W)
-LCDC_ON    EQU 7
+LCDC_ON EQU 7
 rSTAT       EQU $ff41 ; LCDC Status (R/W)
 rSCY        EQU $ff42 ; Scroll Y (R/W)
 rSCX        EQU $ff43 ; Scroll X (R/W)
 rLY         EQU $ff44 ; LCDC Y-Coordinate (R)
+LY_VBLANK EQU 145
 rLYC        EQU $ff45 ; LY Compare (R/W)
 rDMA        EQU $ff46 ; DMA Transfer and Start Address (W)
 rBGP        EQU $ff47 ; BG Palette Data (R/W) - Non CGB Mode Only

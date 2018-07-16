@@ -3793,8 +3793,12 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	ret
 ; 0x142b
 
-; similar to CheckIfCanEvolveInto, but with the twist of calling Func_2ecd
-Func_142b: ; 142b (0:142b)
+; check if the turn holder's Pokemon card at e can evolve this turn, and is a basic
+; Pokemon card that whose second stage evolution is the turn holder's Pokemon card d.
+; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
+; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
+; return carry if not basic to stage 2 evolution, or if evolution not possible this turn.
+CheckIfCanEvolveInto_BasicToStage2: ; 142b (0:142b)
 	ld a, e
 	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
@@ -3813,7 +3817,7 @@ Func_142b: ; 142b (0:142b)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	call $2ecd
+	call LoadCardDataToBuffer1_FromName
 	ld hl, wLoadedCard2Name
 	ld de, wLoadedCard1PreEvoName
 	ld a, [de]
@@ -5562,7 +5566,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, SYM_BOX_TOP_L
 	ld [hli], a
 	; white tile before the text
-	ld a, $70
+	ld a, FW_SPACE
 	ld [hli], a
 	; text label
 	ld e, l
@@ -5570,13 +5574,13 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	pop hl
 	call CopyText
 	ld hl, wc000 + 3
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	ld l, e
 	ld h, d
 	; white tile after the text
-	ld a, $7
+	ld a, TX_HALF2FULL
 	ld [hli], a
-	ld a, $70
+	ld a, FW_SPACE
 	ld [hli], a
 	pop de
 	push de
@@ -5598,7 +5602,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld [hli], a
 	ld a, SYM_BOX_TOP_R
 	ld [hli], a
-	ld [hl], $0
+	ld [hl], TX_END
 	pop bc
 	pop de
 	push de
@@ -6015,8 +6019,9 @@ Func_2057: ; 2057 (0:2057)
 ; 0x2066
 
 ; loads the four tiles of the card set 2 icon constant provided in register a
-LoadCardSetTiles: ; 2066 (0:2066)
-	and $7
+; returns carry if the specified set does not have an icon
+LoadCardSet2Tiles: ; 2066 (0:2066)
+	and $7 ; mask out PRO
 	ld e, a
 	ld d, 0
 	ld hl, .tile_offsets
@@ -6036,6 +6041,7 @@ LoadCardSetTiles: ; 2066 (0:2066)
 	ret
 
 .tile_offsets
+	; PRO/NONE, JUNGLE, FOSSIL, -1, -1, -1, -1, GB
 	db -1, $0 tiles, $4 tiles, -1, -1, -1, -1, $8 tiles
 
 ; loads the Deck and Hand icons for the "Draw X card(s) from the deck." screen
@@ -6260,7 +6266,7 @@ ProcessText: ; 21c5 (0:21c5)
 	call InitTextFormat
 	jr .next_char
 .char_loop
-	cp TX_CTRL_BEGIN
+	cp TX_CTRL_START
 	jr c, .character_pair
 	cp TX_CTRL_END
 	jr nc, .character_pair
@@ -6640,14 +6646,14 @@ CaseHalfWidthLetter: ; 23b1 (0:23b1)
 ; iterates over text at hl until TX_END is found, and sets wFontWidth to
 ; FULL_WIDTH if the first character is TX_HALFWIDTH
 ; returns:
-;   b = size of text in half-tiles
+;   b = size of text in tiles
 ;   c = size of text in bytes
 ;   a = -b
-GetTextSizeInHalfTiles: ; 23c1 (0:23c1)
+GetTextSizeInTiles: ; 23c1 (0:23c1)
 	ld a, [hl]
 	cp TX_HALFWIDTH
 	jr nz, .full_width
-	call GetTextSizeInTiles
+	call GetTextSizeInHalfTiles
 	; return a = - ceil(b/2)
 	inc b
 	srl b
@@ -6659,12 +6665,12 @@ GetTextSizeInHalfTiles: ; 23c1 (0:23c1)
 	ld [wFontWidth], a
 ;	fallthrough
 
-GetTextSizeInTiles: ; 23d3 (0:23d3)
 ; iterates over text at hl until TX_END is found
 ; returns:
-;   b = size of text in tiles
+;   b = size of text in half-tiles
 ;   c = size of text in bytes
 ;   a = -b
+GetTextSizeInHalfTiles: ; 23d3 (0:23d3)
 	push hl
 	push de
 	lb bc, $00, $00
@@ -6674,7 +6680,7 @@ GetTextSizeInTiles: ; 23d3 (0:23d3)
 	jr z, .tx_end
 	inc c ; any char except TX_END: c ++
 	; TX_FULLWIDTH, TX_SYMBOL, or > TX_CTRL_END : b ++
-	cp TX_CTRL_BEGIN
+	cp TX_CTRL_START
 	jr c, .character_pair
 	cp TX_CTRL_END
 	jr nc, .character_pair
@@ -6702,7 +6708,88 @@ GetTextSizeInTiles: ; 23d3 (0:23d3)
 	ret
 ; 0x23fd
 
-	INCROM $23fd, $245d
+; copy text of maximum length a (in tiles) from hl to de, then terminate
+; the text with TX_END if it doesn't contain it already.
+; fill any remaining bytes with spaces plus TX_END to match the length specified in a.
+; return the text's actual length in characters (i.e. before the first TX_END) in e.
+CopyTextData: ; 23fd (0:23fd)
+	ld [wTextMaxLength], a
+	ld a, [hl]
+	cp TX_HALFWIDTH
+	jr z, .half_width_text
+	ld a, [wTextMaxLength]
+	call .copyTextData
+	jr c, .fw_text_done
+	push hl
+.fill_fw_loop
+	ld a, FW_SPACE
+	ld [hli], a
+	dec d
+	jr nz, .fill_fw_loop
+	ld [hl], TX_END
+	pop hl
+.fw_text_done
+	ld a, e
+	ret
+.half_width_text
+	ld a, [wTextMaxLength]
+	add a
+	call .copyTextData
+	jr c, .hw_text_done
+	push hl
+.fill_hw_loop
+	ld a, " "
+	ld [hli], a
+	dec d
+	jr nz, .fill_hw_loop
+	ld [hl], TX_END
+	pop hl
+.hw_text_done
+	ld a, e
+	ret
+
+.copyTextData
+	push bc
+	ld c, l
+	ld b, h
+	ld l, e
+	ld h, d
+	ld d, a
+	ld e, 0
+.loop
+	ld a, [bc]
+	or a ; TX_END
+	jr z, .done
+	inc bc
+	ld [hli], a
+	cp TX_CTRL_START
+	jr c, .character_pair
+	cp TX_CTRL_END
+	jr c, .loop
+.character_pair
+	push de
+	ld e, a ; first char
+	ld a, [bc]
+	ld d, a ; second char
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
+	ld a, [bc]
+	inc bc
+	ld [hli], a
+.not_tx_fullwidth
+	pop de
+	inc e ; return in e the amount of characters actually copied
+	dec d ; return in d the difference between the maximum length and e
+	jr nz, .loop
+	ld [hl], TX_END
+	pop bc
+	scf ; return carry if the text did not already end with TX_END
+	ret
+.done
+	pop bc
+	or a
+	ret
+; 0x245d
 
 ; convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
 ; replace leading zeros with SYM_SPACE
@@ -6920,7 +7007,7 @@ ClassifyTextCharacterPair: ; 2546 (0:2546)
 	or a
 	ret
 .continue_check
-	cp TX_CTRL_BEGIN
+	cp TX_CTRL_START
 	jr c, .ath_font
 .not_katakana
 ; 0_1_hiragana.1bpp (e < $60) or 0_2_digits_kanji1.1bpp (e >= $60)
@@ -6963,7 +7050,57 @@ GetFullWidthFontTileOffset: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-	INCROM $2589, $25ea
+Unknown_2589: ; 2589 (0:2589)
+	db $18
+	dw $8140
+	dw $817e
+	dw $8180
+	dw $81ac
+	dw $81b8
+	dw $81bf
+	dw $81c8
+	dw $81ce
+	dw $81da
+	dw $81e8
+	dw $81f0
+	dw $81f7
+	dw $81fc
+	dw $81fc
+	dw $824f
+	dw $8258
+	dw $8260
+	dw $8279
+	dw $8281
+	dw $829a
+	dw $829f
+	dw $82f1
+	dw $8340
+	dw $837e
+	dw $8380
+	dw $8396
+	dw $839f
+	dw $83b6
+	dw $83bf
+	dw $83d6
+	dw $8440
+	dw $8460
+	dw $8470
+	dw $847e
+	dw $8480
+	dw $8491
+	dw $849f
+	dw $84be
+	dw $889f
+	dw $88fc
+	dw $8940
+	dw $9443
+	dw $9840
+	dw $9872
+	dw $989f
+	dw $98fc
+	dw $9940
+	dw $ffff
+; 0x25ea
 
 ; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
 ; input:
@@ -8277,7 +8414,7 @@ ProcessTextHeader: ; 2d43 (0:2d43)
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .tx_end
-	cp TX_CTRL_BEGIN
+	cp TX_CTRL_START
 	jr c, .character_pair
 	cp TX_CTRL_END
 	jr nc, .character_pair
@@ -8529,7 +8666,7 @@ Func_2ea9: ; 2ea9 (0:2ea9)
 	push af
 	call GetTextOffsetFromTextID
 	ldh a, [hff96]
-	call $23fd
+	call CopyTextData
 	pop af
 	call BankswitchHome
 	ret
@@ -8552,7 +8689,52 @@ LoadTxRam3: ; 2ec4 (0:2ec4)
 	ret
 ; 0x2ecd
 
-	INCROM $2ecd, $2f0a
+; load data of card with text id of name at de to wLoadedCard1
+LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
+	ld hl, CardPointers + 2 ; skip first $0000 pointer
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+.find_card_loop
+	ld a, [hli]
+	or [hl]
+	jr z, .done
+	push hl
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+	ld bc, CARD_DATA_NAME
+	add hl, bc
+	ld a, [hli]
+	cp e
+	jr nz, .no_match
+	ld a, [hl]
+	cp d
+.no_match
+	pop hl
+	pop hl
+	inc hl
+	jr nz, .find_card_loop
+	dec hl
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+	ld de, wLoadedCard1
+	ld b, PKMN_CARD_DATA_LENGTH
+.copy_card_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .copy_card_loop
+	pop hl
+.done
+	call BankpopHome
+	ret
+; 0x2f0a
 
 ; load data of card with id at e to wLoadedCard2
 LoadCardDataToBuffer2_FromCardID: ; 2f0a (0:2f0a)
@@ -8681,7 +8863,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	; hl = card_gfx_index
 	; de = where to load the card gfx to
 	; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
-; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
+; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ldh a, [hBankROM]
@@ -8700,7 +8882,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	add hl, hl
 	add hl, hl
 	res 7, h
-	set 6, h ; $4000 ≤ de ≤ $7fff
+	set 6, h ; $4000 ≤ hl ≤ $7fff
 	call CopyGfxData
 	ld b, CGB_PAL_SIZE
 	ld de, wCardPalette
@@ -10174,7 +10356,87 @@ ResumeSong: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-	INCROM $37a5, $380e
+Func_37a5: ; 37a5 (0:37a5)
+	ldh a, [hBankROM]
+	push af
+	push hl
+	srl h
+	srl h
+	srl h
+	ld a, BANK(CardGraphics)
+	add h
+	call BankswitchHome
+	pop hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	res 7, h
+	set 6, h ; $4000 ≤ hl ≤ $7fff
+	call Func_37c5
+	pop af
+	call BankswitchHome
+	ret
+; 0x37c5
+
+Func_37c5: ; 37c5 (0:37c5)
+	ld c, $08
+.asm_37c7
+	ld b, $06
+.asm_37c9
+	push bc
+	ld c, $08
+.asm_37cc
+	ld b, $02
+.asm_37ce
+	push bc
+	push hl
+	ld c, [hl]
+	ld b, $04
+.asm_37d3
+	rr c
+	rra
+	sra a
+	dec b
+	jr nz, .asm_37d3
+	ld hl, $c0
+	add hl, de
+	ld [hli], a
+	inc hl
+	ld [hl], a
+	ld b, $04
+.asm_37e4
+	rr c
+	rra
+	sra a
+	dec b
+	jr nz, .asm_37e4
+	ld [de], a
+	ld hl, $2
+	add hl, de
+	ld [hl], a
+	pop hl
+	pop bc
+	inc de
+	inc hl
+	dec b
+	jr nz, .asm_37ce
+	inc de
+	inc de
+	dec c
+	jr nz, .asm_37cc
+	pop bc
+	dec b
+	jr nz, .asm_37c9
+	ld a, $c0
+	add e
+	ld e, a
+	ld a, $00
+	adc d
+	ld d, a
+	dec c
+	jr nz, .asm_37c7
+	ret
+; 0x380e
 
 Func_380e: ; 380e (0:380e)
 	ld a, [wd0c1]
@@ -10790,7 +11052,33 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ret
 ; 0x3ba2
 
-	INCROM $3ba2, $3bd2
+Func_3ba2: ; 3ba2 (0:3ba2)
+	ldh a, [hBankROM]
+	push af
+	ld a, $07
+	call BankswitchHome
+	call $4ac5
+	call Func_3cb4
+	pop af
+	call BankswitchHome
+	ret
+; 0x3bb5
+
+Func_3bb5: ; 3bb5 (0:3bb5)
+	xor a
+	ld [wd4c0], a
+	ldh a, [hBankROM]
+	push af
+	ld a, [wd4be]
+	call BankswitchHome
+	call Func_3cb4
+	call CallHL2
+	pop af
+	call BankswitchHome
+	ld a, $80
+	ld [wd4c0], a
+	ret
+; 0x3bd2
 
 ; writes from hl the pointer to the function to be called by DoFrame
 SetDoFrameFunction: ; 3bd2 (0:3bd2)
@@ -10836,13 +11124,68 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ret
 ; 0x3c10
 
-	INCROM $3c10, $3c45
+; fill bc bytes of data at hl with a
+FillMemoryWithA: ; 3c10 (0:3c10)
+	push hl
+	push de
+	push bc
+	ld e, a
+.loop
+	ld [hl], e
+	inc hl
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x3c1f
 
-Func_3c45: ; 3c45 (0:3c45)
+; fill 2*bc bytes of data at hl with d,e
+FillMemoryWithDE: ; 3c1f (0:3c1f)
+	push hl
+	push bc
+.loop
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop bc
+	pop hl
+	ret
+; 0x3c2d
+
+Func_3c2d: ; 3c2d (0:3c2d)
+	push hl
+	push af
+	ldh a, [hBankROM]
+	push af
+	push hl
+	ld hl, sp+$05
+	ld a, [hl]
+	call BankswitchHome
+	pop hl
+	ld a, [hl]
+	ld hl, sp+$03
+	ld [hl], a
+	pop af
+	call BankswitchHome
+	pop af
+	pop hl
+	ret
+; 0x3c45
+
+CallHL2: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-Func_3c46: ; 3c46 (0:3c46)
+PushBC_Ret: ; 3c46 (0:3c46)
 	push bc
 	ret
 ; 0x3c48
@@ -11002,6 +11345,9 @@ Func_3db7: ; 3db7 (0:3db7)
 ; the sprite is identified by its index in wWhichSprite.
 GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
+;	fallthrough
+
+GetSpriteAnimBufferProperty_SpriteInA:
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_ret
@@ -11022,7 +11368,27 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ret
 ; 0x3ddb
 
-	INCROM $3ddb, $3df3
+Func_3ddb: ; 3ddb (0:3ddb)
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty_SpriteInA
+	res 2, [hl]
+	pop bc
+	pop hl
+	ret
+; 0x3de7
+
+Func_3de7: ; 3de7 (0:3de7)
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty_SpriteInA
+	set 2, [hl]
+	pop bc
+	pop hl
+	ret
+; 0x3df3
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
@@ -11064,20 +11430,45 @@ Func_3e2a: ; 3e2a (0:3e2a)
 	jr Func_3e17
 ; 0x3e31
 
-	INCROM $3e31, $3fe0
+	INCROM $3e31, $3f5a
 
-; jumps to 3f:hl
+EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
+	push hl
+	ld hl, rSTAT
+	set 6, [hl]
+	xor a
+	ld hl, rIE
+	set 1, [hl]
+	pop hl
+	ret
+; 0x3f68
+
+DisableInt_LYCoincidence: ; 3f68 (0:3f68)
+	push hl
+	ld hl, rSTAT
+	res 6, [hl]
+	xor a
+	ld hl, rIE
+	res 1, [hl]
+	pop hl
+	ret
+; 0x3f76
+
+rept $6a
+	db $ff
+endr
+
+; jumps to 3f:hl, then switches to bank 3d
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
-	ld bc, Bankswitch3d
+	ld bc, .bankswitch3d
 	push bc
 	jp hl
-
-Bankswitch3d: ; 3fe0 (0:3fe0)
+.bankswitch3d
 	ld a, $3d
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a

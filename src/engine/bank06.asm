@@ -38,7 +38,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop hl
 	push de
 	ld e, c
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	add e
 	ld c, a
 	pop hl

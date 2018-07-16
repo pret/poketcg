@@ -958,7 +958,8 @@ wFontWidth:: ; cd0a
 wHalfWidthPrintState:: ; cd0b
 	ds $1
 
-wcd0c:: ; cd0c
+; used by CopyTextData
+wTextMaxLength:: ; cd0c
 	ds $1
 
 ; half-width font letters become uppercase if non-0, lowercase if 0

@@ -417,7 +417,7 @@ Func_c2db: ; c2db (3:42db)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	call Func_3c45
+	call CallHL2
 .asm_c323
 	farcall Func_10af9
 	pop de
@@ -1246,7 +1246,7 @@ Func_c943: ; c943 (3:4943)
 	ld h, a
 	or l
 	jr z, .asm_c97a
-	call Func_3c45
+	call CallHL2
 	jr nc, .asm_c988
 .asm_c97a
 	ld a, [wd3ab]

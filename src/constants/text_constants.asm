@@ -10,7 +10,7 @@ TX_FULLWIDTH3 EQU $03
 ; source: gfx/fonts/full_width/4.1bpp
 TX_FULLWIDTH4 EQU $04
 
-TX_CTRL_BEGIN EQU $05
+TX_CTRL_START EQU $05
 
 ; usage: TX_SYMBOL, char1, TX_SYMBOL, char2, ...
 ; source: gfx/fonts/symbols.2bpp

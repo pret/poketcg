@@ -1572,7 +1572,7 @@ Func_4a97: ; 4a97 (1:4a97)
 	push de
 	call CopyOpponentName
 	pop hl
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	push hl
 	add SCREEN_WIDTH
 	ld d, a
@@ -2149,7 +2149,7 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr nz, .print_color_icon
 	ld hl, wDefaultText
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	add SCREEN_WIDTH
 	ld d, a
 .print_color_icon

@@ -308,6 +308,8 @@
 	fwcharmap 0, "·", $77
 	fwcharmap 0, "-(2)", $78 ; duplicate
 
+FW_SPACE EQU $70
+
 ; TX_SYMBOL
 ; TODO: If user-defined functions ever become a thing a symbol(*) syntax
 ;       would probably be preferred over SYM_*

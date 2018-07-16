@@ -670,7 +670,7 @@ Func_9253: ; 9253 (2:5253)
 	ld de, wDefaultText
 	call Func_92ad
 	ld hl, wDefaultText
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	ld b, $0
 	ld hl, wDefaultText
 	add hl, bc
@@ -689,7 +689,7 @@ Func_926e: ; 926e (2:526e)
 	ld de, wDefaultText
 	call Func_92b4
 	ld hl, wDefaultText
-	call GetTextSizeInHalfTiles
+	call GetTextSizeInTiles
 	ld b, $0
 	ld hl, wDefaultText
 	add hl, bc
