@@ -677,7 +677,7 @@ Func_c58b: ; c58b (3:458b)
 	ld b, a
 	ld a, [wPlayerYCoord]
 	ld c, a
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $10
 	push af
 	ld c, SPRITE_ANIM_FIELD_0F
@@ -776,7 +776,7 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld a, c
 	cp $1f
 	jr nc, .quit_movement
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $40 | $80 ; the two impassable objects found in the floor map
 	jr nz, .quit_movement
 	ld a, b
@@ -943,7 +943,7 @@ Func_c71e: ; c71e (3:471e)
 	ld a, $ff
 	ld [wd3b6], a
 	call Func_c653
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $40
 	jr z, .asm_c73d
 	farcall Func_1c72e

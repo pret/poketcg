@@ -1521,8 +1521,11 @@ wBoosterViableCardList:: ; d133
 
 NEXTU
 
-; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
-wFloorObjectMap::
+; permission map of the current room with unpassable objects (walls, NPCs, etc).
+; $00: passable (floor)
+; $40: unpassable and talkable (NPC or talkable wall)
+; $80: unpassable and untalkable (wall)
+wPermissionMap::
 	ds $100
 
 ENDU

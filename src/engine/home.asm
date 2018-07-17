@@ -10592,31 +10592,35 @@ Func_3917: ; 3917 (0:3917)
 	call DisableSRAM
 	ret
 
-GetFloorObjectFromPos: ; 3927 (0:3927)
+; return in a the permission byte corresponding to the current map's x,y coordinates at bc
+GetPermissionOfMapPosition: ; 3927 (0:3927)
 	push hl
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	ld a, [hl]
 	pop hl
 	ret
 ; 0x392e
 
-SetFloorObjectFromPos: ; 392e (0:392e)
+; set to a the permission byte corresponding to the current map's x,y coordinates at bc
+SetPermissionOfMapPosition: ; 392e (0:392e)
 	push hl
 	push af
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	pop af
 	ld [hl], a
 	pop hl
 	ret
 ; 0x3937
 
-UpdateFloorObjectFromPos: ; 3937 (0:3937)
+; set the permission byte corresponding to the current map's x,y coordinates at bc
+; to the value of register a anded by its current value
+UpdatePermissionOfMapPosition: ; 3937 (0:3937)
 	push hl
 	push bc
 	push de
 	cpl
 	ld e, a
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	ld a, [hl]
 	and e
 	ld [hl], a
@@ -10626,8 +10630,9 @@ UpdateFloorObjectFromPos: ; 3937 (0:3937)
 	ret
 ; 0x3946
 
-; puts a floor tile in hl given coords in bc (x,y. measured in tiles)
-FindFloorTileFromPos: ; 3946 (0:3946)
+; returns in hl the address within wPermissionMap that corresponds to
+; the current map's x,y coordinates at bc
+GetPermissionByteOfMapPosition: ; 3946 (0:3946)
 	push bc
 	srl b
 	srl c
@@ -10637,7 +10642,7 @@ FindFloorTileFromPos: ; 3946 (0:3946)
 	or b
 	ld c, a
 	ld b, $0
-	ld hl, wFloorObjectMap
+	ld hl, wPermissionMap
 	add hl, bc
 	pop bc
 	ret
