@@ -345,7 +345,7 @@ DuelMainInterface: ; 426d (1:426d)
 	jp z, $6911
 	; DUELIST_TYPE_AI_OPP
 	xor a
-	ld [wVBlankCtr], a
+	ld [wVBlankCounter], a
 	ld [wcbf9], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
@@ -3903,7 +3903,7 @@ AIMakeDecision: ; 67be (1:67be)
 	jr nz, .skip_delay
 .delay_loop
 	call DoFrame
-	ld a, [wVBlankCtr]
+	ld a, [wVBlankCounter]
 	cp $3c
 	jr c, .delay_loop
 
@@ -3920,7 +3920,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ld a, [wcbf9]
 	or a
 	ret nz
-	ld [wVBlankCtr], a
+	ld [wVBlankCounter], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
 	or a

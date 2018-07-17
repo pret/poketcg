@@ -404,7 +404,7 @@ wTileMapFill:: ; cab6
 wIE:: ; cab7
 	ds $1
 
-wVBlankCtr:: ; cab8
+wVBlankCounter:: ; cab8
 	ds $1
 
 	ds $1
@@ -1849,12 +1849,26 @@ wSpriteAnimBuffer:: ; d4d0
 	sprite_anim_struct wSprite15
 	sprite_anim_struct wSprite16
 
-	ds $3
+wd5d0:: ; d5d0
+	ds $1
+
+wd5d1:: ; d5d1
+	ds $1
+
+wd5d2:: ; d5d2
+	ds $1
 
 wd5d3:: ; d5d3
 	ds $1
 
-	ds $3
+wd5d4:: ; d5d4
+	ds $1
+
+wd5d5:: ; d5d5
+	ds $1
+
+wd5d6:: ; d5d6
+	ds $1
 
 wd5d7:: ; d5d7
 	ds $1
@@ -1904,7 +1918,41 @@ wd635:: ; d635
 wd636:: ; d635
 	ds $1
 
-	ds $32
+	ds $14
+
+; wd64b to wd665 used by Func_3e44
+wd64b:: ; d64b
+	ds $6
+
+wd651:: ; d651
+	ds $6
+
+wd657:: ; d657
+	ds $1
+
+wd658:: ; d658
+	ds $1
+
+wd659:: ; d659
+	ds $6
+
+wd65f:: ; d65f
+	ds $6
+
+wd665:: ; d665
+	ds $1
+
+; used by GetNextBackgroundScroll
+wBGScrollMod:: ; d666
+	ds $1
+
+; used by ApplyBackgroundScroll
+wApplyBGScroll:: ; d667
+	ds $1
+
+; used by ApplyBackgroundScroll
+wNextScrollLY:: ; d668
+	ds $1
 
 ; which BoosterPack_* corresponds to the booster pack that the player is opening
 wBoosterPackID:: ; d669

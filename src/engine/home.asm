@@ -99,7 +99,7 @@ VBlankHandler: ; 019b (0:019b)
 	ei
 	call wVBlankFunctionTrampoline
 	call FlushPalettes
-	ld hl, wVBlankCtr
+	ld hl, wVBlankCounter
 	inc [hl]
 	ld hl, wReentrancyFlag
 	res 0, [hl]
@@ -193,7 +193,7 @@ SetupTimer: ; 0241 (0:0241)
 	ld [rTMA], a
 	ld a, TAC_16384_HZ
 	ld [rTAC], a
-	ld a, $7
+	ld a, TAC_16384_HZ | 1 << TAC_ON
 	ld [rTAC], a
 	ret
 
@@ -210,15 +210,15 @@ WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
 	bit LCDC_ON, a
-	jr z, .asm_275
-	ld hl, wVBlankCtr
+	jr z, .lcd_off
+	ld hl, wVBlankCounter
 	ld a, [hl]
-.asm_270
+.wait_vblank
 	halt
 	nop
 	cp [hl]
-	jr z, .asm_270
-.asm_275
+	jr z, .wait_vblank
+.lcd_off
 	pop hl
 	ret
 
@@ -11285,7 +11285,120 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 	ret
 ; 0x3cc4
 
-	INCROM $3cc4, $3d72
+; refresh sprites?
+Func_3cc4: ; 3cc4 (0:3cc4)
+	ldh a, [hBankROM]
+	push af
+	ld a, [wd5d6]
+	call BankswitchHome
+	ld a, [wd5d1]
+	cp $f0
+	ld a, $00
+	jr c, .asm_3cd7
+	dec a
+.asm_3cd7
+	ld [wd5d4], a
+	ld a, [wd5d2]
+	cp $f0
+	ld a, $00
+	jr c, .asm_3ce4
+	dec a
+.asm_3ce4
+	ld [wd5d5], a
+	ld a, [hli]
+	or a
+	jp z, .done
+	ld c, a
+.asm_3ced
+	push bc
+	push hl
+	ld b, $00
+	bit 7, [hl]
+	jr z, .asm_3cf6
+	dec b
+.asm_3cf6
+	ld a, [wd5d0]
+	bit 6, a
+	jr z, .asm_3d10
+	ld a, [hl]
+	add $08
+	ld c, a
+	ld a, $00
+	adc b
+	ld b, a
+	ld a, [wd5d2]
+	sub c
+	ld e, a
+	ld a, [wd5d5]
+	sbc b
+	jr .asm_3d19
+.asm_3d10
+	ld a, [wd5d2]
+	add [hl]
+	ld e, a
+	ld a, [wd5d5]
+	adc b
+.asm_3d19
+	or a
+	jr nz, .asm_3d64
+	inc hl
+	ld b, $00
+	bit 7, [hl]
+	jr z, .asm_3d24
+	dec b
+.asm_3d24
+	ld a, [wd5d0]
+	bit 5, a
+	jr z, .asm_3d3e
+	ld a, [hl]
+	add $08
+	ld c, a
+	ld a, $00
+	adc b
+	ld b, a
+	ld a, [wd5d1]
+	sub c
+	ld d, a
+	ld a, [wd5d4]
+	sbc b
+	jr .asm_3d47
+.asm_3d3e
+	ld a, [wd5d1]
+	add [hl]
+	ld d, a
+	ld a, [wd5d4]
+	adc b
+.asm_3d47
+	or a
+	jr nz, .asm_3d64
+	inc hl
+	ld a, [wd5d3]
+	add [hl]
+	ld c, a
+	inc hl
+	ld a, [wd5d0]
+	add [hl]
+	and $17
+	ld b, a
+	ld a, [wd5d0]
+	xor [hl]
+	and $e0
+	or b
+	ld b, a
+	inc hl
+	call SetOneObjectAttributes
+.asm_3d64
+	pop hl
+	ld bc, $4
+	add hl, bc
+	pop bc
+	dec c
+	jr nz, .asm_3ced
+.done
+	pop af
+	call BankswitchHome
+	ret
+; 0x3d72
 
 Func_3d72: ; 3d72 (0:3d72)
 	ldh a, [hBankROM]
@@ -11430,7 +11543,166 @@ Func_3e2a: ; 3e2a (0:3e2a)
 	jr Func_3e17
 ; 0x3e31
 
-	INCROM $3e31, $3f5a
+Func_3e31: ; 3e31 (0:3e31)
+	ldh a, [hBankROM]
+	push af
+	call Func_3cb4
+	ld a, $20
+	call BankswitchHome
+	call $44d8
+	pop af
+	call BankswitchHome
+	ret
+; 0x3e44
+
+; something window scroll
+Func_3e44: ; 3e44 (0:3e44)
+	push af
+	push hl
+	push bc
+	push de
+	ld hl, wd657
+	bit 0, [hl]
+	jr nz, .done
+	set 0, [hl]
+	ld b, $00
+	ld hl, wd658
+	ld c, [hl]
+	inc [hl]
+	ld hl, wd64b
+	add hl, bc
+	ld a, [hl]
+	ldh [rWX], a
+	ld hl, rLCDC
+	cp $a7
+	jr c, .disable_sprites
+	set 1, [hl] ; enable sprites
+	jr .asm_3e6c
+.disable_sprites
+	res 1, [hl] ; disable sprites
+.asm_3e6c
+	ld hl, wd651
+	add hl, bc
+	ld a, [hl]
+	cp $8f
+	jr c, .asm_3e9a
+	ld a, [wd665]
+	or a
+	jr z, .asm_3e93
+	ld hl, wd659
+	ld de, wd64b
+	ld bc, $6
+	call CopyDataHLtoDE
+	ld hl, wd65f
+	ld de, wd651
+	ld bc, $6
+	call CopyDataHLtoDE
+.asm_3e93
+	xor a
+	ld [wd665], a
+	ld [wd658], a
+.asm_3e9a
+	ldh [rLYC], a
+	ld hl, wd657
+	res 0, [hl]
+.done
+	pop de
+	pop bc
+	pop hl
+	pop af
+	ret
+; 0x3ea6
+
+; apply background scroll for lines 0 to 96 using the values at BGScrollData
+; skip if wApplyBGScroll is non-0
+ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
+	push af
+	push hl
+	call DisableInt_LYCoincidence
+	ld hl, rSTAT
+	res 2, [hl] ; reset coincidence flag
+	ei
+	ld hl, wApplyBGScroll
+	ld a, [hl]
+	or a
+	jr nz, .done
+	inc [hl]
+	push bc
+	push de
+	xor a
+	ld [wNextScrollLY], a
+.ly_loop
+	ld a, [wNextScrollLY]
+	ld b, a
+.wait_ly
+	ldh a, [rLY]
+	cp $60
+	jr nc, .ly_over_0x60
+	cp b ; already hit LY=b?
+	jr c, .wait_ly
+	call GetNextBackgroundScroll
+	ld hl, rSTAT
+.wait_hblank_or_vblank
+	bit 1, [hl]
+	jr nz, .wait_hblank_or_vblank
+	ldh [rSCX], a
+	ldh a, [rLY]
+	inc a
+	ld [wNextScrollLY], a
+	jr .ly_loop
+.ly_over_0x60
+	xor a
+	ldh [rSCX], a
+	ld a, $00
+	ldh [rLYC], a
+	call GetNextBackgroundScroll
+	ldh [hSCX], a
+	pop de
+	pop bc
+	xor a
+	ld [wApplyBGScroll], a
+	call EnableInt_LYCoincidence
+.done
+	pop hl
+	pop af
+	ret
+; 0x3ef8
+
+BGScrollData: ; 3ef8 (0:3ef8)
+	db  0,  0,  0,  1,  1,  1,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3
+	db  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  1,  1,  1,  0,  0
+	db  0, -1, -1, -1, -2, -2, -2, -3, -3, -3, -4, -4, -4, -4, -4, -4
+	db -5, -4, -4, -4, -4, -4, -4, -3, -3, -3, -2, -2, -2, -1, -1, -1
+; 3f38
+
+; x = BGScrollData[(wVBlankCounter + a) & $3f]
+; return, in register a, x rotated right [wBGScrollMod]-1 times (max 3 times)
+GetNextBackgroundScroll: ; 3f38 (0:3f38)
+	ld hl, wVBlankCounter
+	add [hl]
+	and $3f
+	ld c, a
+	ld b, $00
+	ld hl, BGScrollData
+	add hl, bc
+	ld a, [wBGScrollMod]
+	ld c, a
+	ld a, [hl]
+	dec c
+	jr z, .done
+	dec c
+	jr z, .halve
+	dec c
+	jr z, .quarter
+; effectively zero
+	sra a
+.quarter
+	sra a
+.halve
+	sra a
+.done
+	ret
+; 0x3f5a
 
 EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
 	push hl
