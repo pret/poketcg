@@ -59,13 +59,14 @@ hTempListPtr_ff99:: ; ff99
 hTempCardID_ff9b:: ; ff9b
 	ds $2
 
-; a PLAY_AREA_ARENA constant (0: arena card, 1-5: bench card)
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocationOffset_ff9d:: ; ff9d
 	ds $1
 
 hAIActionTableIndex:: ; ff9e
 	ds $1
 
+; deck index of a card (0-59)
 hTempCardIndex_ff9f:: ; ff9f
 	ds $1
 
@@ -73,10 +74,11 @@ hTempCardIndex_ff9f:: ; ff9f
 hTemp_ffa0:: ; ffa0
 	ds $1
 
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocationOffset_ffa1:: ; ffa1
 	ds $1
 
-; FF-terminated list of cards $to be discarded upon retreat
+; FF-terminated list of cards to be discarded upon retreat
 hTempRetreatCostCards:: ; ffa2
 	ds $6
 
@@ -106,7 +108,12 @@ hTextHorizontalAlign:: ; ffad
 hTextLineLength:: ; ffae
 	ds $1
 
-hffaf:: ; ffaf
+; when printing text and no leading control character is specified, whether characters
+; $10 to $60 map to the katakana.1bpp font graphics as characters $0 to $50
+; (TX_KATAKANA mode), or map to the hiragana.1bpp font graphics (TX_HIRAGANA mode).
+; the TX_HIRAGANA and TX_KATAKANA control characters are used to set this address to said
+; value. only these two values are admitted, as any other is interpreted as TX_HIRAGANA.
+hJapaneseSyllabary:: ; ffaf
 	ds $1
 
 hffb0:: ; ffb0

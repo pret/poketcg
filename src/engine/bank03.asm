@@ -14,7 +14,7 @@ LoadMap: ; c000 (3:4000)
 	call ZeroObjectPositions
 	xor a
 	ld [wTileMapFill], a
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call Set_OBJ_8x8
 	xor a
 	ld [wLineSeparation], a
@@ -417,7 +417,7 @@ Func_c2db: ; c2db (3:42db)
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-	call Func_3c45
+	call CallHL2
 .asm_c323
 	farcall Func_10af9
 	pop de
@@ -677,7 +677,7 @@ Func_c58b: ; c58b (3:458b)
 	ld b, a
 	ld a, [wPlayerYCoord]
 	ld c, a
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $10
 	push af
 	ld c, SPRITE_ANIM_FIELD_0F
@@ -776,7 +776,7 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ld a, c
 	cp $1f
 	jr nc, .quit_movement
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $40 | $80 ; the two impassable objects found in the floor map
 	jr nz, .quit_movement
 	ld a, b
@@ -943,7 +943,7 @@ Func_c71e: ; c71e (3:471e)
 	ld a, $ff
 	ld [wd3b6], a
 	call Func_c653
-	call GetFloorObjectFromPos
+	call GetPermissionOfMapPosition
 	and $40
 	jr z, .asm_c73d
 	farcall Func_1c72e
@@ -1246,7 +1246,7 @@ Func_c943: ; c943 (3:4943)
 	ld h, a
 	or l
 	jr z, .asm_c97a
-	call Func_3c45
+	call CallHL2
 	jr nc, .asm_c988
 .asm_c97a
 	ld a, [wd3ab]

@@ -373,7 +373,7 @@ SECTION "WRAM Engine 1", WRAM0
 wOAM:: ; ca00
 	ds $a0
 
-wcaa0:: ; caa0
+wTextBuf:: ; caa0
 	ds $10
 
 wcab0:: ; cab0
@@ -394,6 +394,7 @@ wInitialA:: ; cab3
 wConsole:: ; cab4
 	ds $1
 
+; used to select a sprite or a starting sprite from wOAM
 wOAMOffset:: ; cab5
 	ds $1
 
@@ -403,7 +404,7 @@ wTileMapFill:: ; cab6
 wIE:: ; cab7
 	ds $1
 
-wVBlankCtr:: ; cab8
+wVBlankCounter:: ; cab8
 	ds $1
 
 	ds $1
@@ -431,13 +432,15 @@ wFlushPaletteFlags:: ; cabf
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
 
-wcac1:: ; cac1
+; used by HblankWriteByteToBGMap0
+wTempByte:: ; cac1
 	ds $1
 
 wcac2:: ; cac2
 	ds $1
 
-wCounterCtr:: ; cac3
+; used to increase the play time counter every four timer interrupts (60.24 Hz)
+wTimerCounter:: ; cac3
 	ds $1
 
 wPlayTimeCounterEnable:: ; cac4
@@ -457,7 +460,7 @@ wRNG1:: ; caca
 wRNG2:: ; cacb
 	ds $1
 
-wCounter:: ; cacc
+wRNGCounter:: ; cacc
 	ds $1
 
 ; the LCDC status interrupt is always disabled and this always reads as jp $0000
@@ -753,6 +756,7 @@ wGotHeadsFromSandAttackOrSmokescreenCheck:: ; cc0a
 wAlreadyPlayedEnergy:: ; cc0b
 	ds $1
 
+; set to 1 if the confusion check coin toss in AttemptRetreat is heads
 wGotHeadsFromConfusionCheckDuringRetreat:: ; cc0c
 	ds $1
 
@@ -881,6 +885,7 @@ wDamageToSelfMode:: ; cce6
 wcce9:: ; cce9
 	ds $2
 
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 wTempPlayAreaLocationOffset_cceb:: ; cceb
 	ds $1
 
@@ -912,8 +917,8 @@ SECTION "WRAM Engine 2", WRAM0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
-wVWFOrRegularFontTile:: ; ccf4
-	ds $10
+wTextTileBuffer:: ; ccf4
+	ds TILE_SIZE
 
 wcd04:: ; cd04
 	ds $1
@@ -942,15 +947,23 @@ wCurTextLine:: ; cd09
 	ds $1
 
 ; how to process the current text tile
-; 0: regular font | non-0: VWF
-wRegularFontOrVWF:: ; cd0a
+; 0: full-width font | non-0: half-width font
+wFontWidth:: ; cd0a
 	ds $1
 
-wcd0b:: ; cd0b
-	ds $2
+; when printing half-width text, this variable alternates between 0 and the value
+; of the first character. 0 signals that no text should be printed in the current
+; iteration of Func_235e, while non-0 means to print the character pair
+; made of [wHalfWidthPrintState] (first char) and register e (second char).
+wHalfWidthPrintState:: ; cd0b
+	ds $1
 
-; VWF letters become uppercase if non-0, lowercase if 0
-wUppercaseVWFLetters:: ; cd0d
+; used by CopyTextData
+wTextMaxLength:: ; cd0c
+	ds $1
+
+; half-width font letters become uppercase if non-0, lowercase if 0
+wUppercaseHalfWidthLetters:: ; cd0d
 	ds $1
 
 	ds $1
@@ -974,7 +987,7 @@ wYDisplacementBetweenMenuItems:: ; cd13
 wNumMenuItems:: ; cd14
 	ds $1
 
-wCursorTileNumber:: ; cd15
+wCursorTile:: ; cd15
 	ds $1
 
 wTileBehindCursor:: ; cd16
@@ -1092,10 +1105,17 @@ wce22:: ; ce22
 wCardPalette:: ; ce23
 	ds CGB_PAL_SIZE
 
-wce2b:: ; ce2b
-	ds $1
-
-	ds $13
+; information about the text being currently processed, including font width,
+; the rom bank, and the memory address of the next character to be printed.
+; supports up to four nested texts (used with TX_RAM).
+wTextHeader1:: ; ce2b
+	text_header wTextHeader1
+wTextHeader2:: ; ce30
+	text_header wTextHeader2
+wTextHeader3:: ; ce35
+	text_header wTextHeader3
+wTextHeader4:: ; ce3a
+	text_header wTextHeader4
 
 ; text id for the first TX_RAM2 of a text
 ; prints from wDefaultText if $0000
@@ -1106,23 +1126,30 @@ wTxRam2:: ; cd3f
 wTxRam2_b:: ; ce41
 	ds $2
 
-; a number between 0 and 65535 for TX_RAM3
+; text id for the first TX_RAM3 of a text
+; a number between 0 and 65535
 wTxRam3:: ; ce43
 	ds $2
 
+; text id for the second TX_RAM3 of a text
+; a number between 0 and 65535
+wTxRam3_b:: ; ce45
 	ds $2
 
 ; when printing text, number of frames to wait between each text tile
 wTextSpeed:: ; ce47
 	ds $1
 
-wce48:: ; ce48
+; a number between 0 and 3 to select a wTextHeader to use for the current text
+wWhichTextHeader:: ; ce48
 	ds $1
 
-wce49:: ; ce49
+; selects wTxRam2 or wTxRam2_b
+wWhichTxRam2:: ; ce49
 	ds $1
 
-wce4a:: ; ce4a
+; selects wTxRam3 or wTxRam3_b
+wWhichTxRam3:: ; ce4a
 	ds $1
 
 wIsTextBoxLabeled:: ; ce4b
@@ -1494,8 +1521,11 @@ wBoosterViableCardList:: ; d133
 
 NEXTU
 
-; map of the current room with unpassable objects (walls, NPCs, etc). Might be a permission map
-wFloorObjectMap::
+; permission map of the current room with unpassable objects (walls, NPCs, etc).
+; $00: passable (floor)
+; $40: unpassable and talkable (NPC or talkable wall)
+; $80: unpassable and untalkable (wall)
+wPermissionMap::
 	ds $100
 
 ENDU
@@ -1822,12 +1852,26 @@ wSpriteAnimBuffer:: ; d4d0
 	sprite_anim_struct wSprite15
 	sprite_anim_struct wSprite16
 
-	ds $3
+wd5d0:: ; d5d0
+	ds $1
+
+wd5d1:: ; d5d1
+	ds $1
+
+wd5d2:: ; d5d2
+	ds $1
 
 wd5d3:: ; d5d3
 	ds $1
 
-	ds $3
+wd5d4:: ; d5d4
+	ds $1
+
+wd5d5:: ; d5d5
+	ds $1
+
+wd5d6:: ; d5d6
+	ds $1
 
 wd5d7:: ; d5d7
 	ds $1
@@ -1877,7 +1921,41 @@ wd635:: ; d635
 wd636:: ; d635
 	ds $1
 
-	ds $32
+	ds $14
+
+; wd64b to wd665 used by Func_3e44
+wd64b:: ; d64b
+	ds $6
+
+wd651:: ; d651
+	ds $6
+
+wd657:: ; d657
+	ds $1
+
+wd658:: ; d658
+	ds $1
+
+wd659:: ; d659
+	ds $6
+
+wd65f:: ; d65f
+	ds $6
+
+wd665:: ; d665
+	ds $1
+
+; used by GetNextBackgroundScroll
+wBGScrollMod:: ; d666
+	ds $1
+
+; used by ApplyBackgroundScroll
+wApplyBGScroll:: ; d667
+	ds $1
+
+; used by ApplyBackgroundScroll
+wNextScrollLY:: ; d668
+	ds $1
 
 ; which BoosterPack_* corresponds to the booster pack that the player is opening
 wBoosterPackID:: ; d669

@@ -11,7 +11,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	call CopyText ; copy card name to wDefaultText
 	pop hl
 	ld a, [hli]
-	cp TX_START
+	cp TX_HALFWIDTH
 	jp z, Func_18086
 	ld a, [wcd9b]
 	ld c, a
@@ -38,7 +38,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop hl
 	push de
 	ld e, c
-	call Func_23c1
+	call GetTextSizeInTiles
 	add e
 	ld c, a
 	pop hl

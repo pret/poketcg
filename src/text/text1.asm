@@ -39,7 +39,7 @@ PKMNPWRText: ; 36356 (d:6356)
 	done
 
 Text000b: ; 36360 (d:6360)
-	db $56,$19,$33,$3d,$16,$78,$4c
+	textfw0 "ポ", "ケ", "モ", "ン", "カ", "-(2)", "ド"
 	done
 
 LengthText: ; 36368 (d:6368)
@@ -55,7 +55,7 @@ PokemonText: ; 36378 (d:6378)
 	done
 
 Text000f: ; 36382 (d:6382)
-	db $03,$4c
+	textfw3 "m"
 	done
 
 LbsText: ; 36385 (d:6385)
@@ -63,19 +63,19 @@ LbsText: ; 36385 (d:6385)
 	done
 
 Text0011: ; 3638b (d:638b)
-	db $70
+	textfw0 " "
 	done
 
 Text0012: ; 3638d (d:638d)
-	db $03,$52
+	textfw3 "●"
 	done
 
 Text0013: ; 36390 (d:6390)
-	db $03,$53
+	textfw3 "◆"
 	done
 
 Text0014: ; 36393 (d:6393)
-	db $03,$54
+	textfw3 "★"
 	done
 
 Text0015: ; 36396 (d:6396)
@@ -147,27 +147,27 @@ UnableDueToParalysisText: ; 364a1 (d:64a1)
 	done
 
 Received10DamageDueToPoisonText: ; 364be (d:64be)
-	text TX_RAM2, " received"
+	text "<RAMTEXT> received"
 	line "10 damage due to Poison."
 	done
 
 Received20DamageDueToPoisonText: ; 364e3 (d:64e3)
-	text TX_RAM2, " received"
+	text "<RAMTEXT> received"
 	line "20 damage due to Double Poison."
 	done
 
 IsStillAsleepText: ; 3650f (d:650f)
-	text TX_RAM2, " is"
+	text "<RAMTEXT> is"
 	line "still Asleep."
 	done
 
 IsCuredOfSleepText: ; 36523 (d:6523)
-	text TX_RAM2, " is"
+	text "<RAMTEXT> is"
 	line "cured of Sleep."
 	done
 
 IsCuredOfParalysisText: ; 36539 (d:6539)
-	text TX_RAM2, " is"
+	text "<RAMTEXT> is"
 	line "cured of Paralysis."
 	done
 
@@ -204,7 +204,7 @@ Text0032: ; 365b6 (d:65b6)
 	done
 
 UsedText: ; 365be (d:65be)
-	text "Used ", TX_RAM2, "."
+	text "Used <RAMTEXT>."
 	done
 
 Text0034: ; 365c7 (d:65c7)
@@ -212,38 +212,38 @@ Text0034: ; 365c7 (d:65c7)
 	done
 
 PokemonsAttackText: ; 365d8 (d:65d8)
-	text TX_RAM2, "'s"
+	text "<RAMTEXT>'s"
 	line ""
-	text TX_RAM2, "!"
+	text "<RAMTEXT>!"
 	done
 
 Text0036: ; 365e1 (d:65e1)
-	text TX_RAM2, " received"
-	line TX_RAM3, " damage due to Resistance!"
+	text "<RAMTEXT> received"
+	line "<RAMNUM> damage due to Resistance!"
 	done
 
 Text0037: ; 36609 (d:6609)
-	text TX_RAM2, " received"
-	line TX_RAM3, " damage due to Weakness!"
+	text "<RAMTEXT> received"
+	line "<RAMNUM> damage due to Weakness!"
 	done
 
 Text0038: ; 3662f (d:662f)
-	text TX_RAM2, " received"
-	line TX_RAM3, " damage due to Weakness!"
+	text "<RAMTEXT> received"
+	line "<RAMNUM> damage due to Weakness!"
 	done
 
 Text0039: ; 36655 (d:6655)
-	text TX_RAM2, " did not"
+	text "<RAMTEXT> did not"
 	line "receive damage due to Resistance."
 	done
 
 Text003a: ; 36682 (d:6682)
-	text TX_RAM2, " took"
-	line TX_RAM3, " damage."
+	text "<RAMTEXT> took"
+	line "<RAMNUM> damage."
 	done
 
 Text003b: ; 36694 (d:6694)
-	text TX_RAM2, " did not"
+	text "<RAMTEXT> did not"
 	line "receive damage!"
 	done
 
@@ -278,16 +278,16 @@ DiscardDescription: ; 36757 (d:6757)
 	done
 
 Text0042: ; 367cc (d:67cc)
-	text TX_RAM1, " will draw ", TX_RAM3, " Prize(s)."
+	text "<RAMNAME> will draw <RAMNUM> Prize(s)."
 	done
 
 Text0043: ; 367e5 (d:67e5)
-	text TX_RAM1, " drew ", TX_RAM3, " Prize(s)."
+	text "<RAMNAME> drew <RAMNUM> Prize(s)."
 	done
 
 Text0044: ; 367f9 (d:67f9)
-	text TX_RAM1, " placed"
-	line "a ", TX_RAM2, "."
+	text "<RAMNAME> placed"
+	line "a <RAMTEXT>."
 	done
 
 Text0045: ; 36808 (d:6808)
@@ -304,27 +304,27 @@ Text0046: ; 3681b (d:681b)
 	done
 
 Text0047: ; 36848 (d:6848)
-	db "<GRASS>"
+	textfw0 "<GRASS>"
 	done
 
 Text0048: ; 3684b (d:684b)
-	db "<FIRE>"
+	textfw0 "<FIRE>"
 	done
 
 Text0049: ; 3684e (d:684e)
-	db "<WATER>"
+	textfw0 "<WATER>"
 	done
 
 Text004a: ; 36851 (d:6851)
-	db "<LIGHTNING>"
+	textfw0 "<LIGHTNING>"
 	done
 
 Text004b: ; 36854 (d:6854)
-	db "<FIGHTING>"
+	textfw0 "<FIGHTING>"
 	done
 
 Text004c: ; 36857 (d:6857)
-	db "<PSYCHIC>"
+	textfw0 "<PSYCHIC>"
 	done
 
 Text004d: ; 3685a (d:685a)
@@ -387,18 +387,18 @@ Text0059: ; 369dc (d:69dc)
 	done
 
 RetreatedToTheBenchText: ; 36a19 (d:6a19)
-	text TX_RAM2, ""
+	text "<RAMTEXT>"
 	line "Retreated to the Bench."
 	done
 
 RetreatWasUnsuccessfulText: ; 36a34 (d:6a34)
-	text TX_RAM2, "'s"
+	text "<RAMTEXT>'s"
 	line "Retreat was unsuccessful."
 	done
 
 WillUseThePokemonPowerText: ; 36a53 (d:6a53)
-	text TX_RAM2, " will use the"
-	line "Pokémon Power ", TX_RAM2, "."
+	text "<RAMTEXT> will use the"
+	line "Pokémon Power <RAMTEXT>."
 	done
 
 FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
@@ -407,31 +407,31 @@ FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	done
 
 Text005e: ; 36a9a (d:6a9a)
-	text TX_RAM1, "'s Turn."
+	text "<RAMNAME>'s Turn."
 	done
 
 Text005f: ; 36aa5 (d:6aa5)
-	text "Attached ", TX_RAM2, ""
-	line "to ", TX_RAM2, "."
+	text "Attached <RAMTEXT>"
+	line "to <RAMTEXT>."
 	done
 
 Text0060: ; 36ab7 (d:6ab7)
-	text TX_RAM2, " evolved"
-	line "into ", TX_RAM2, "."
+	text "<RAMTEXT> evolved"
+	line "into <RAMTEXT>."
 	done
 
 PlacedOnTheBenchText: ; 36aca (d:6aca)
-	text "Placed ", TX_RAM2, ""
+	text "Placed <RAMTEXT>"
 	line "on the Bench."
 	done
 
 PlacedInTheArenaText: ; 36ae2 (d:6ae2)
-	text TX_RAM2, ""
+	text "<RAMTEXT>"
 	line "was placed in the Arena."
 	done
 
 ShufflesTheDeckText: ; 36afe (d:6afe)
-	text TX_RAM1, " shuffles the Deck."
+	text "<RAMNAME> shuffles the Deck."
 	done
 
 Text0064: ; 36b14 (d:6b14)
@@ -449,12 +449,12 @@ Text0066: ; 36b7a (d:6b7a)
 	done
 
 Text0067: ; 36b9a (d:6b9a)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "drew 7 cards."
 	done
 
 DeckHasXCardsText: ; 36bab (d:6bab)
-	text TX_RAM1, "'s deck has ", TX_RAM3, " cards."
+	text "<RAMNAME>'s deck has <RAMNUM> cards."
 	done
 
 ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
@@ -464,7 +464,7 @@ ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
 
 Text006a: ; 36bf1 (d:6bf1)
 	text "There are no Basic Pokémon"
-	line "in ", TX_RAM1, "'s hand."
+	line "in <RAMNAME>'s hand."
 	done
 
 NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
@@ -493,7 +493,7 @@ Text006f: ; 36ce1 (d:6ce1)
 	done
 
 YouDrewText: ; 36cfd (d:6cfd)
-	text "You drew ", TX_RAM2, "."
+	text "You drew <RAMTEXT>."
 	done
 
 Text0071: ; 36d0a (d:6d0a)
@@ -506,13 +506,13 @@ PlacingThePrizesText: ; 36d28 (d:6d28)
 
 PleasePlacePrizesText: ; 36d3f (d:6d3f)
 	text "Please place"
-	line TX_RAM3, " Prizes."
+	line "<RAMNUM> Prizes."
 	done
 
 IfHeadPlayerPlaysFirstText: ; 36d57 (d:6d57)
 	text "If heads,"
 	line ""
-	text TX_RAM2, " plays first."
+	text "<RAMTEXT> plays first."
 	done
 
 CoinTossToDetermineWhoFirstText: ; 36d72 (d:6d72)
@@ -525,17 +525,17 @@ DecisionText: ; 36da4 (d:6da4)
 	done
 
 DuelWasADrawText: ; 36db1 (d:6db1)
-	text "The Duel with ", TX_RAM1, ""
+	text "The Duel with <RAMNAME>"
 	line "was a Draw!"
 	done
 
 WonDuelText: ; 36dce (d:6dce)
-	text "You won the Duel with ", TX_RAM1, "!"
+	text "You won the Duel with <RAMNAME>!"
 	done
 
 LostDuelText: ; 36de8 (d:6de8)
 	text "You lost the Duel"
-	line "with ", TX_RAM1, "..."
+	line "with <RAMNAME>..."
 	done
 
 StartSuddenDeathMatchText: ; 36e05 (d:6e05)
@@ -562,22 +562,22 @@ Text007e: ; 36e63 (d:6e63)
 	done
 
 Text007f: ; 36e6a (d:6e6a)
-	text TX_RAM1, " took"
+	text "<RAMNAME> took"
 	line "all the Prizes!"
 	done
 
 Text0080: ; 36e82 (d:6e82)
 	text "There are no Pokémon"
-	line "in ", TX_RAM1, "'s Play Area!"
+	line "in <RAMNAME>'s Play Area!"
 	done
 
 WasKnockedOutText: ; 36eaa (d:6eaa)
-	text TX_RAM2, " was"
+	text "<RAMTEXT> was"
 	line "Knocked Out!"
 	done
 
 HavePokemonPowerText: ; 36ebe (d:6ebe)
-	text TX_RAM2, " have"
+	text "<RAMTEXT> have"
 	line "Pokémon Power."
 	done
 
@@ -602,15 +602,18 @@ Text0086: ; 36f31 (d:6f31)
 	done
 
 Text0087: ; 36f43 (d:6f43)
-	db $03,$31,$0c,$03,$42,$0c
+	textfw3 "B"
+	textfw0 "<RAMNUM>"
+	textfw3 "S"
+	textfw0 "<RAMNUM>"
 	done
 
 DuelistIsThinkingText: ; 36f4a (d:6f4a)
-	text TX_RAM1, " is thinking."
+	text "<RAMNAME> is thinking."
 	done
 
 Text0089: ; 36f5a (d:6f5a)
-	db $70,$70,$70,$70,$70,$70,$70,$70,$70,$70
+	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done
 
 Text008a: ; 36f65 (d:6f65)
@@ -703,7 +706,10 @@ Text0098: ; 37179 (d:7179)
 
 Text0099: ; 37184 (d:7184)
 	text "Load File"
-	line "  ",$07,$60,$06,"  Last Saved File"
+	line "  "
+	half2full
+	textfw0 "0"
+	text "  Last Saved File"
 	done
 
 Text009a: ; 371a6 (d:71a6)
@@ -780,15 +786,15 @@ Text00a6: ; 3737b (d:737b)
 	done
 
 DuelistHandText: ; 37392 (d:7392)
-	text TX_RAM1, "'s Hand"
+	text "<RAMNAME>'s Hand"
 	done
 
 DuelistPlayAreaText: ; 3739c (d:739c)
-	text TX_RAM1, "'s Play Area"
+	text "<RAMNAME>'s Play Area"
 	done
 
 DuelistDeckText: ; 373ab (d:73ab)
-	text TX_RAM1, "'s Deck"
+	text "<RAMNAME>'s Deck"
 	done
 
 PleaseSelectHandText: ; 373b5 (d:73b5)
@@ -892,7 +898,7 @@ Text00be: ; 37715 (d:7715)
 	done
 
 EnergyCardsRequiredToRetreatText: ; 37758 (d:7758)
-	text TX_RAM3, " Energy cards"
+	text "<RAMNUM> Energy cards"
 	line "are required to Retreat."
 	done
 
@@ -1108,7 +1114,7 @@ Text00ec: ; 37e73 (d:7e73)
 	done
 
 Text00ed: ; 37e92 (d:7e92)
-	text "If Tails, ", TX_RAM3, " damage"
+	text "If Tails, <RAMNUM> damage"
 	line "to yourself, too."
 	done
 
@@ -1138,10 +1144,10 @@ Text00f2: ; 37f9a (d:7f9a)
 
 Text00f3: ; 37fa8 (d:7fa8)
 	text "Damage check!"
-	line "If Heads, +", TX_RAM3, " damage!!"
+	line "If Heads, +<RAMNUM> damage!!"
 	done
 
 Text00f4: ; 37fcd (d:7fcd)
 	text "Damage check!"
-	line "If Heads, x ", TX_RAM3, " damage!!"
+	line "If Heads, x <RAMNUM> damage!!"
 	done

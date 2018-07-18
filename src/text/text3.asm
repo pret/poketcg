@@ -5,7 +5,7 @@ Text026d: ; 3c000 (f:4000)
 
 Text026e: ; 3c035 (f:4035)
 	text "Built"
-	line TX_RAM2
+	line "<RAMTEXT>"
 	done
 
 Text026f: ; 3c03e (f:403e)
@@ -108,7 +108,7 @@ Text0282: ; 3c357 (f:4357)
 
 Text0283: ; 3c36a (f:436a)
 	text "Received these cards"
-	line "from  ", TX_RAM2, "!"
+	line "from  <RAMTEXT>!"
 	done
 
 Text0284: ; 3c389 (f:4389)
@@ -126,7 +126,7 @@ Text0286: ; 3c3d3 (f:43d3)
 
 Text0287: ; 3c3eb (f:43eb)
 	text "Received a deck configuration"
-	line "from  ", TX_RAM2, "!"
+	line "from  <RAMTEXT>!"
 	done
 
 Text0288: ; 3c413 (f:4413)
@@ -939,7 +939,8 @@ Text0321: ; 3e63e (f:663e)
 
 Text0322: ; 3e64c (f:664c)
 	text "First Strike Deck"
-	line TX_END
+	line ""
+	done
 
 Text0323: ; 3e660 (f:6660)
 	text "  Mason Laboratory  "
@@ -1065,19 +1066,23 @@ Text033e: ; 3e834 (f:6834)
 	done
 
 Text033f: ; 3e85f (f:685f)
-	text "Name ", TX_RAM1
+	text "Name <RAMNAME>"
 	done
 
 Text0340: ; 3e867 (f:6867)
-	text "Album           ",$07,$6d
+	text "Album           "
+	half2full
+	textfw0 "/"
 	done
 
 Text0341: ; 3e87b (f:687b)
-	text "Play time         ",$07,$03,$5e
+	text "Play time         "
+	half2full
+	textfw3 ":"
 	done
 
 Text0342: ; 3e892 (f:6892)
-	text TX_RAM1, "'s diary"
+	text "<RAMNAME>'s diary"
 	done
 
 Text0343: ; 3e89d (f:689d)
@@ -1089,7 +1094,7 @@ Text0344: ; 3e8b1 (f:68b1)
 	done
 
 Text0345: ; 3e8d2 (f:68d2)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "wrote in the diary."
 	done
 
@@ -1123,8 +1128,8 @@ Text034b: ; 3e9a0 (f:69a0)
 	done
 
 Text034c: ; 3e9b2 (f:69b2)
-	text "Duel           [", TX_RAM2, "]"
-	line "SELECT         [", TX_RAM2, "]"
+	text "Duel           [<RAMTEXT>]"
+	line "SELECT         [<RAMTEXT>]"
 	line "Receive many cards"
 	line "To Pokémon Dome 1"
 	line "To Pokémon Dome 2"
@@ -1155,12 +1160,12 @@ Text0351: ; 3ea3a (f:6a3a)
 	done
 
 TurnedPCOnText: ; 3ea69 (f:6a69)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "turned the PC on!"
 	done
 
 TurnedPCOffText: ; 3ea7e (f:6a7e)
-	text TX_RAM1, ""
+	text "<RAMNAME>"
 	line "turned the PC off!"
 	done
 
@@ -1189,7 +1194,7 @@ Text0358: ; 3eb16 (f:6b16)
 	done
 
 Text0359: ; 3eb32 (f:6b32)
-	text "   Mail ", TX_RAM1, " "
+	text "   Mail <RAMNAME> "
 	done
 
 Text035a: ; 3eb3e (f:6b3e)
@@ -1201,7 +1206,7 @@ Text035b: ; 3eb62 (f:6b62)
 	done
 
 Text035c: ; 3eb88 (f:6b88)
-	db "ppppp"
+	textfw0 " ", " ", " ", " ", " "
 	done
 
 Text035d: ; 3eb8e (f:6b8e)
@@ -1287,15 +1292,25 @@ Text036f: ; 3ec74 (f:6c74)
 	done
 
 Text0370: ; 3ecb9 (f:6cb9)
-	text "  ", TX_RAM1, "  ", TX_RAM2, ""
-	line "      Master Medals Won ",$07,$0c,$06,""
-	line "      Album           ",$07,$6d,$06,""
-	line "      Play time         ",$07,$03,$5e,$06
+	text "  <RAMNAME>  <RAMTEXT>"
+	line "      Master Medals Won "
+	half2full
+	textfw0 "<RAMNUM>"
+	text ""
+	line "      Album           "
+	half2full
+	textfw0 "/"
+	text ""
+	line "      Play time         "
+	half2full
+	textfw3 ":"
+	text ""
 	done
 
 Text0371: ; 3ed14 (f:6d14)
 	text "Start a New Game."
-	line TX_END
+	line ""
+	done
 
 Text0372: ; 3ed28 (f:6d28)
 	text "The Game will continue from "
@@ -1343,10 +1358,10 @@ Text0378: ; 3ef66 (f:6f66)
 	done
 
 Text0379: ; 3efc3 (f:6fc3)
-	text TX_RAM1, " is crazy about Pokémon"
+	text "<RAMNAME> is crazy about Pokémon"
 	line "and Pokémon card collecting!"
 	line "One day,"
-	line TX_RAM1, " heard a rumor:"
+	line "<RAMNAME> heard a rumor:"
 	line " ”The Legendary Pokémon Cards..."
 	line "  the extremely rare and powerful "
 	line "  cards held by Pokémon Trading "
@@ -1355,7 +1370,7 @@ Text0379: ; 3efc3 (f:6fc3)
 	line "  for one to inherit the legend!”"
 	line "Dreaming of inheriting the"
 	line "Legendary Pokémon Cards,"
-	line TX_RAM1, " visits the Pokémon"
+	line "<RAMNAME> visits the Pokémon"
 	line "card researcher, Dr. Mason..."
 	done
 
@@ -1440,26 +1455,26 @@ Text0384: ; 3f2c0 (f:72c0)
 	done
 
 Text0385: ; 3f2c6 (f:72c6)
-	text "WIN      ", TX_RAM3, " Prizes Duel"
-	line "LOSE     with ", TX_RAM2, "(", TX_RAM3, ")"
+	text "WIN      <RAMNUM> Prizes Duel"
+	line "LOSE     with <RAMTEXT>(<RAMNUM>)"
 	done
 
 Text0386: ; 3f2f1 (f:72f1)
-	text "         Use ", TX_RAM3, "'s Deck"
+	text "         Use <RAMNUM>'s Deck"
 	done
 
 ReceivedBoosterPackText: ; 3f308 (f:7308)
-	text TX_RAM1, " received a Booster"
-	line "Pack: ", TX_RAM2, "."
+	text "<RAMNAME> received a Booster"
+	line "Pack: <RAMTEXT>."
 	done
 
 AndAnotherBoosterPackText: ; 3f327 (f:7327)
 	text "...And another Booster Pack:"
-	line TX_RAM2, "."
+	line "<RAMTEXT>."
 	done
 
 CheckedCardsInBoosterPackText: ; 3f348 (f:7348)
-	text TX_RAM1, " checked the cards"
+	text "<RAMNAME> checked the cards"
 	line "in the Booster Pack!!"
 	done
 
@@ -1469,8 +1484,8 @@ Text038a: ; 3f373 (f:7373)
 	done
 
 WonTheMedalText: ; 3f39b (f:739b)
-	text TX_RAM1, ""
-	line "Won the ", TX_RAM2, " Medal!"
+	text "<RAMNAME>"
+	line "Won the <RAMTEXT> Medal!"
 	done
 
 Text038c: ; 3f3af (f:73af)
@@ -1515,11 +1530,11 @@ Text0394: ; 3f4d6 (f:74d6)
 	done
 
 Text0395: ; 3f4f3 (f:74f3)
-	text TX_RAM2, "  ", TX_RAM2
+	text "<RAMTEXT>  <RAMTEXT>"
 	done
 
 Text0396: ; 3f4f9 (f:74f9)
-	text TX_RAM2, " Deck"
+	text "<RAMTEXT> Deck"
 	done
 
 Text0397: ; 3f501 (f:7501)
@@ -1587,7 +1602,7 @@ Text03a6: ; 3f631 (f:7631)
 	done
 
 Text03a7: ; 3f643 (f:7643)
-	db TX_END
+	done
 
 Text03a8: ; 3f644 (f:7644)
 	text "COLOSSEUM"
@@ -1935,7 +1950,7 @@ Text03fd: ; 3f9d0 (f:79d0)
 	done
 
 Text03fe: ; 3f9f2 (f:79f2)
-	text "Hi, ", TX_RAM1, "."
+	text "Hi, <RAMNAME>."
 	line "How can I help you?"
 	done
 
@@ -1958,7 +1973,7 @@ Text0400: ; 3fa32 (f:7a32)
 	done
 
 Text0401: ; 3faaa (f:7aaa)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "Are you getting the hang of"
 	line "the Pokémon Trading Card Game?"
@@ -1995,7 +2010,7 @@ Text0402: ; 3fd72 (f:7d72)
 	done
 
 Text0403: ; 3fe10 (f:7e10)
-	text TX_RAM1, ","
+	text "<RAMNAME>,"
 	line "It's me, Doctor Mason."
 	line "I have some information for you"
 	line "about Mitch's deck - he's "
@@ -2010,7 +2025,7 @@ Text0403: ; 3fe10 (f:7e10)
 	done
 
 Text0404: ; 3ff4d (f:7f4d)
-	text TX_RAM1, ", I know you can do it!"
+	text "<RAMNAME>, I know you can do it!"
 	line "Go win the Fighting Medal!"
 	line "Mason Laboratory"
 	line "      Doctor Mason ;)"

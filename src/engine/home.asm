@@ -99,7 +99,7 @@ VBlankHandler: ; 019b (0:019b)
 	ei
 	call wVBlankFunctionTrampoline
 	call FlushPalettes
-	ld hl, wVBlankCtr
+	ld hl, wVBlankCounter
 	inc [hl]
 	ld hl, wReentrancyFlag
 	res 0, [hl]
@@ -120,7 +120,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	ei
 	call SerialTimerHandler
 	; only trigger every fourth interrupt ≈ 60.24 Hz
-	ld hl, wCounterCtr
+	ld hl, wTimerCounter
 	ld a, [hl]
 	inc [hl]
 	and $3
@@ -193,7 +193,7 @@ SetupTimer: ; 0241 (0:0241)
 	ld [rTMA], a
 	ld a, TAC_16384_HZ
 	ld [rTAC], a
-	ld a, $7
+	ld a, TAC_16384_HZ | 1 << TAC_ON
 	ld [rTAC], a
 	ret
 
@@ -210,15 +210,15 @@ WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
 	bit LCDC_ON, a
-	jr z, .asm_275
-	ld hl, wVBlankCtr
+	jr z, .lcd_off
+	ld hl, wVBlankCounter
 	ld a, [hl]
-.asm_270
+.wait_vblank
 	halt
 	nop
 	cp [hl]
-	jr z, .asm_270
-.asm_275
+	jr z, .wait_vblank
+.lcd_off
 	pop hl
 	ret
 
@@ -842,12 +842,12 @@ CallHL: ; 05c1 (0:05c1)
 ; 0x5c2
 
 ; converts two one-digit numbers provided in a to text (ascii) format,
-; writes them to [wcaa0] and [wcaa0 + 1], and to the BGMap0 address at bc
+; writes them to [wTextBuf] and [wTextBuf + 1], and to the BGMap0 address at bc
 WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 	push hl
 	push bc
 	push de
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	call WriteNumbersInTextFormat
@@ -863,12 +863,12 @@ WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 ; 0x5db
 
 ; converts a one-digit number provided in the lower nybble of a to text
-; (ascii) format, and writes it to [wcaa0] and to the BGMap0 address at bc
+; (ascii) format, and writes it to [wTextBuf] and to the BGMap0 address at bc
 WriteOneDigitNumber: ; 05db (0:05db)
 	push hl
 	push bc
 	push de
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	call WriteNumberInTextFormat
@@ -884,14 +884,14 @@ WriteOneDigitNumber: ; 05db (0:05db)
 ; 0x5f4
 
 ; converts four one-digit numbers provided in h and l to text (ascii) format,
-; writes them to [wcaa0] through [wcaa0 + 3], and to the BGMap0 address at bc
+; writes them to [wTextBuf] through [wTextBuf + 3], and to the BGMap0 address at bc
 WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	push de
 	ld e, l
 	ld d, h
-	ld hl, wcaa0
+	ld hl, wTextBuf
 	push hl
 	push bc
 	ld a, d
@@ -911,7 +911,7 @@ WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 
 ; given two one-digit numbers in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
-; numbers above 9 are converted to VWF tiles.
+; numbers above 9 end up converted to half-width font tiles.
 WriteNumbersInTextFormat: ; 0614 (0:0614)
 	push af
 	swap a
@@ -921,7 +921,7 @@ WriteNumbersInTextFormat: ; 0614 (0:0614)
 
 ; given a one-digit number in the (lower nybble) of register a,
 ; write it in text (ascii) format to hl.
-; numbers above 9 are converted to VWF tiles.
+; numbers above 9 end up converted to half-width font tiles.
 WriteNumberInTextFormat:
 	and $0f
 	add "0"
@@ -934,13 +934,13 @@ WriteNumberInTextFormat:
 ; 0x627
 
 ; converts the one-byte number at a to text (ascii) format,
-; and writes it to [wcaa0] and the BGMap0 address at bc
+; and writes it to [wTextBuf] and the BGMap0 address at bc
 WriteOneByteNumber: ; 0627 (0:0627)
 	push bc
 	push hl
 	ld l, a
 	ld h, $00
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	push bc
 	ld bc, -100
@@ -960,10 +960,10 @@ WriteOneByteNumber: ; 0627 (0:0627)
 ; 0x650
 
 ; converts the two-byte number at hl to text (ascii) format,
-; and writes it to [wcaa0] and the BGMap0 address at bc
+; and writes it to [wTextBuf] and the BGMap0 address at bc
 WriteTwoByteNumber: ; 0650 (0:0650)
 	push bc
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	call TwoByteNumberToText
 	call BCCoordToBGMap0Address
@@ -1080,10 +1080,14 @@ WriteByteToBGMap0: ; 06c3 (0:06c3)
 	ret
 .lcd_on
 	pop af
+;	fallthrough
+
+; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b] during hblank
+HblankWriteByteToBGMap0: ; 06d9
 	push hl
 	push de
 	push bc
-	ld hl, wcac1
+	ld hl, wTempByte
 	push hl
 	ld [hl], a
 	call BCCoordToBGMap0Address
@@ -1475,7 +1479,7 @@ UpdateRNGSources: ; 089b (0:089b)
 	push de
 	ld hl, wRNG1
 	ld a, [hli]
-	ld d, [hl]
+	ld d, [hl] ; wRNG2
 	inc hl
 	ld e, a
 	ld a, d
@@ -1487,7 +1491,7 @@ UpdateRNGSources: ; 089b (0:089b)
 	ld a, d
 	xor e
 	ld d, a
-	ld a, [hl]
+	ld a, [hl] ; wRNGCounter
 	xor e
 	ld e, a
 	pop af
@@ -1495,11 +1499,11 @@ UpdateRNGSources: ; 089b (0:089b)
 	rl d
 	ld a, d
 	xor e
-	inc [hl]
+	inc [hl] ; wRNGCounter
 	dec hl
-	ld [hl], d
+	ld [hl], d ; wRNG2
 	dec hl
-	ld [hl], e
+	ld [hl], e ; wRNG1
 	pop de
 	pop hl
 	ret
@@ -3789,8 +3793,12 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	ret
 ; 0x142b
 
-; similar to CheckIfCanEvolveInto, but with the twist of calling Func_2ecd
-Func_142b: ; 142b (0:142b)
+; check if the turn holder's Pokemon card at e can evolve this turn, and is a basic
+; Pokemon card that whose second stage evolution is the turn holder's Pokemon card d.
+; e is the play area location offset (PLAY_AREA_*) of the Pokemon trying to evolve.
+; d is the deck index (0-59) of the Pokemon card that was selected to be the evolution target.
+; return carry if not basic to stage 2 evolution, or if evolution not possible this turn.
+CheckIfCanEvolveInto_BasicToStage2: ; 142b (0:142b)
 	ld a, e
 	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
@@ -3809,7 +3817,7 @@ Func_142b: ; 142b (0:142b)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	call $2ecd
+	call LoadCardDataToBuffer1_FromName
 	ld hl, wLoadedCard2Name
 	ld de, wLoadedCard1PreEvoName
 	ld a, [de]
@@ -5162,8 +5170,9 @@ SubstractHPFromCard: ; 1c35 (0:1c35)
 
 ; check if a flag of wLoadedMove is set
 ; input:
-	; a = %fffffbbb, where f = flag address counting from wLoadedMoveFlag1
-	; b = flag bit
+  ; a = %fffffbbb, where
+     ; fffff = flag address counting from wLoadedMoveFlag1
+     ; bbb = flag bit
 ; return carry if the flag is set
 CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	push hl
@@ -5557,7 +5566,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld a, SYM_BOX_TOP_L
 	ld [hli], a
 	; white tile before the text
-	ld a, $70
+	ld a, FW_SPACE
 	ld [hli], a
 	; text label
 	ld e, l
@@ -5565,13 +5574,13 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	pop hl
 	call CopyText
 	ld hl, wc000 + 3
-	call Func_23c1
+	call GetTextSizeInTiles
 	ld l, e
 	ld h, d
 	; white tile after the text
-	ld a, $7
+	ld a, TX_HALF2FULL
 	ld [hli], a
-	ld a, $70
+	ld a, FW_SPACE
 	ld [hli], a
 	pop de
 	push de
@@ -5593,14 +5602,14 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	ld [hli], a
 	ld a, SYM_BOX_TOP_R
 	ld [hli], a
-	ld [hl], $0
+	ld [hl], TX_END
 	pop bc
 	pop de
 	push de
 	push bc
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wc000
-	call Func_21c5
+	call ProcessText
 	pop bc
 	pop de
 	ld a, [wConsole]
@@ -5843,7 +5852,197 @@ FillRectangle: ; 1f5f (0:1f5f)
 	ret
 ; 0x1f96
 
-	INCROM $1f96, $208d
+Func_1f96: ; 1f96 (0:1f96)
+	add sp, -10
+	ld hl, sp+0
+	ld [hli], a ; sp-10 <- a
+	ld [hl], $00 ; sp-9 <- 0
+	inc hl
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-8 <- [de]
+	ld [hl], $00 ; sp-7 <- 0
+	ld hl, sp+5
+	ld a, [de]
+	inc de
+	ld [hld], a ; sp-5 <- [de+1]
+	ld a, [de]
+	inc de
+	ld [hl], a ; sp-6 <- [de+2]
+	ld hl, sp+6
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-4 <- [de+3]
+	ld a, [de]
+	inc de
+	ld [hli], a ; sp-3 <- [de+4]
+	ld a, [de]
+	inc de
+	ld l, a ; l <- [de+5]
+	ld a, [de]
+	dec de
+	ld h, a ; h <- [de+6]
+	or l
+	jr z, .asm_1fbd
+	add hl, de
+.asm_1fbd
+	ld e, l
+	ld d, h ; de += hl
+	ld hl, sp+8
+	ld [hl], e ; sp-2 <- e
+	inc hl
+	ld [hl], d ; sp-1 <- d
+	ld hl, sp+0
+	ld e, [hl] ; e <- sp
+	jr .asm_2013
+	push hl
+	push de
+	push hl
+	add sp, -4
+	ld hl, sp+0
+	ld [hl], c
+	inc hl
+	ld [hl], $00
+	inc hl
+	ld [hl], b
+	ld hl, sp+8
+	xor a
+	ld [hli], a
+	ld [hl], a
+.asm_1fdb
+	call DoFrame
+	ld hl, sp+3
+	ld [hl], a
+	ld c, a
+	and $09
+	jr nz, .asm_2032
+	ld a, c
+	and $06
+	jr nz, .asm_203c
+	ld hl, sp+2
+	ld b, [hl]
+	ld hl, sp+0
+	ld a, [hl]
+	bit 6, c
+	jr nz, .asm_1ffe
+	bit 7, c
+	jr nz, .asm_2007
+	call Func_2046
+	jr .asm_1fdb
+.asm_1ffe
+	dec a
+	bit 7, a
+	jr z, .asm_200c
+	ld a, b
+	dec a
+	jr .asm_200c
+.asm_2007
+	inc a
+	cp b
+	jr c, .asm_200c
+	xor a
+.asm_200c
+	ld e, a
+	call Func_2051
+	ld hl, sp+0
+	ld [hl], e
+.asm_2013
+	inc hl
+	ld [hl], $00
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	ld hl, sp+8
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .asm_202d
+	ld a, e
+	ld de, .asm_2028
+	push de
+	jp hl
+.asm_2028
+	jr nc, .asm_202d
+	ld hl, sp+0
+	ld [hl], a
+.asm_202d
+	call Func_2046
+	jr .asm_1fdb
+.asm_2032
+	call Func_2051
+	ld hl, sp+0
+	ld a, [hl]
+	add sp, 10
+	or a
+	ret
+.asm_203c
+	call Func_2051
+	ld hl, sp+0
+	ld a, [hl]
+	add sp, 10
+	scf
+	ret
+; 0x2046
+
+Func_2046: ; 2046 (0:2046)
+	ld hl, sp+3
+	ld a, [hl]
+	inc [hl]
+	and $0f
+	ret nz
+	bit 4, [hl]
+	jr z, Func_2055
+;	fallthrough
+
+Func_2051: ; 2051 (0:2051)
+	ld hl, sp+9
+	jr Func_2057
+
+Func_2055: ; 2055 (0:2055)
+	ld hl, sp+8
+;	fallthrough
+
+Func_2057: ; 2057 (0:2057)
+	ld e, [hl]
+	ld hl, sp+2
+	ld a, [hl]
+	ld hl, sp+6
+	add [hl]
+	inc hl
+	ld c, a
+	ld b, [hl]
+	ld a, e
+	call HblankWriteByteToBGMap0
+	ret
+; 0x2066
+
+; loads the four tiles of the card set 2 icon constant provided in register a
+; returns carry if the specified set does not have an icon
+LoadCardSet2Tiles: ; 2066 (0:2066)
+	and $7 ; mask out PRO
+	ld e, a
+	ld d, 0
+	ld hl, .tile_offsets
+	add hl, de
+	ld a, [hl]
+	cp -1
+	ccf
+	ret z
+	ld e, a
+	ld d, 0
+	ld hl, DuelOtherGraphics + $1d tiles
+	add hl, de
+	ld de, v0Tiles1 + $7c tiles
+	ld b, $04
+	call CopyFontsOrDuelGraphicsTiles
+	or a
+	ret
+
+.tile_offsets
+	; PRO/NONE, JUNGLE, FOSSIL, -1, -1, -1, -1, GB
+	db -1, $0 tiles, $4 tiles, -1, -1, -1, -1, $8 tiles
 
 ; loads the Deck and Hand icons for the "Draw X card(s) from the deck." screen
 LoadDuelDrawCardsScreenTiles: ; 208d (0:208d)
@@ -5941,10 +6140,10 @@ LoadDuelCoinTossResultTiles: ; 210f (0:210f)
 	ld b, $8
 	jr CopyFontsOrDuelGraphicsTiles
 
-LoadDuelHUDTiles: ; 2119 (0:2119)
-	ld hl, DuelHUDGraphics - $4000
+LoadSymbolsFont: ; 2119 (0:2119)
+	ld hl, SymbolsFont - $4000
 	ld de, v0Tiles2 ; destination
-	ld b, (DuelCardHeaderGraphics - DuelHUDGraphics) / TILE_SIZE ; number of tiles
+	ld b, (DuelCardHeaderGraphics - SymbolsFont) / TILE_SIZE ; number of tiles
 ;	fallthrough
 
 ; if hl ≤ $3fff
@@ -5952,7 +6151,7 @@ LoadDuelHUDTiles: ; 2119 (0:2119)
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -5960,9 +6159,9 @@ CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
 	ret
 ; 0x212f
 
-; this function appears to copy duel gfx data into sram
+; this function appears to copy gfx data into sram
 Func_212f: ; 212f (0:212f)
-	ld hl, DuelHUDGraphics - $4000
+	ld hl, SymbolsFont - $4000
 	ld de, $a400
 	ld b, $30
 	call CopyFontsOrDuelGraphicsTiles
@@ -5989,17 +6188,18 @@ Func_212f: ; 212f (0:212f)
 	jr CopyFontsOrDuelGraphicsTiles
 ; 0x2167
 
+; load the graphics and draw the duel box message given a BOXMSC_* constant in a
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
-	ld h, (40 tiles) / 4 ; boxes are 10x4 tiles
+	ld h, 40 tiles / 4 ; boxes are 10x4 tiles
 	call HtimesL
 	add hl, hl
 	add hl, hl
-	; hl = a * $280
+	; hl = a * 40 tiles
 	ld de, DuelBoxMessages
 	add hl, de
-	ld de, v0Tiles1 + $200
-	ld b, $28
+	ld de, v0Tiles1 + $20 tiles
+	ld b, 40
 	call CopyFontsOrDuelGraphicsTiles
 	ld a, $a0
 	lb hl, 1, 10
@@ -6008,100 +6208,154 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	jp FillRectangle
 ; 0x2189
 
-	INCROM $2189, $21c5
+; load the tiles for the latin, katakana, and hiragana fonts into VRAM
+; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.t3.1bpp
+LoadFullWidthFontTiles: ; 2189 (0:2189)
+	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
+	ld a, BANK(Fonts); BANK(DuelGraphics)
+	call BankpushHome
+	push hl
+	ld e, l
+	ld d, h
+	ld hl, v0Tiles0
+	call Copy1bppTiles
+	pop de
+	ld hl, v0Tiles2
+	call Copy1bppTiles
+	ld hl, v0Tiles1
+	call Copy1bppTiles
+	call BankpopHome
+	ret
+; 0x21ab
 
-Func_21c5: ; 21c5 (0:21c5)
+; copy 128 1bpp tiles from de to hl as 2bpp
+Copy1bppTiles: ; 21ab (0:21ab)
+	ld b, $80
+.tile_loop
+	ld c, TILE_SIZE_1BPP
+.pixel_loop
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld [hli], a
+	dec c
+	jr nz, .pixel_loop
+	dec b
+	jr nz, .tile_loop
+	ret
+; 0x21ba
+
+; similar to ProcessText except it calls InitTextPrinting first
+; with register de as an argument to set hTextBGMap0Address.
+; (the caller to ProcessText usually calls InitTextPrinting first)
+ProcessText_InitTextPrinting: ; 21ba (0:21ba)
 	push de
 	push bc
-	call Func_2298
-	jr .asm_21e8
-.asm_21cc
-	cp $5
-	jr c, .asm_21d9
-	cp $10
-	jr nc, .asm_21d9
-	call Func_21f2
-	jr .asm_21e8
-.asm_21d9
-	ld e, a
 	ld d, [hl]
-	call Func_2546
-	jr nc, .asm_21e1
 	inc hl
-.asm_21e1
+	ld e, [hl]
+	inc hl
+	call InitTextPrinting
+	jr ProcessText.next_char
+
+; reads the characters from the text at hl processes them. loops until TX_END
+; is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
+ProcessText: ; 21c5 (0:21c5)
+	push de
+	push bc
+	call InitTextFormat
+	jr .next_char
+.char_loop
+	cp TX_CTRL_START
+	jr c, .character_pair
+	cp TX_CTRL_END
+	jr nc, .character_pair
+	call ProcessSpecialTextCharacter
+	jr .next_char
+.character_pair
+	ld e, a ; first char
+	ld d, [hl] ; second char
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
+	inc hl
+.not_tx_fullwidth
 	call Func_22ca
 	xor a
-	call Func_21f2
-.asm_21e8
+	call ProcessSpecialTextCharacter
+.next_char
 	ld a, [hli]
 	or a
-	jr nz, .asm_21cc
-	call Func_230f
+	jr nz, .char_loop
+	; TX_END
+	call TerminateHalfWidthText
 	pop bc
 	pop de
 	ret
 
-Func_21f2: ; 21f2 (0:21f2)
-	or a
-	jr z, .asm_2241
-	cp $e
-	jr z, .asm_2221
-	cp $f
-	jr z, .asm_2221
-	cp $a
-	jr z, .reached_line_length
+; processes the text character provided in a checking for specific control characters.
+; hl points to the text character coming right after the one loaded into a.
+; returns carry if the character was not processed by this function.
+ProcessSpecialTextCharacter: ; 21f2 (0:21f2)
+	or a ; TX_END
+	jr z, .tx_end
+	cp TX_HIRAGANA
+	jr z, .set_syllabary
+	cp TX_KATAKANA
+	jr z, .set_syllabary
+	cp "\n"
+	jr z, .end_of_line
 	cp TX_SYMBOL
-	jr z, .asm_2225
-	cp TX_START
-	jr z, .asm_220f
-	cp $7
-	jr z, .asm_2215
+	jr z, .tx_symbol
+	cp TX_HALFWIDTH
+	jr z, .tx_halfwidth
+	cp TX_HALF2FULL
+	jr z, .tx_half2full
 	scf
 	ret
-.asm_220f
-	ld a, $1
-	ld [wRegularFontOrVWF], a
+.tx_halfwidth
+	ld a, HALF_WIDTH
+	ld [wFontWidth], a
 	ret
-.asm_2215
-	call Func_230f
+.tx_half2full
+	call TerminateHalfWidthText
+	xor a ; FULL_WIDTH
+	ld [wFontWidth], a
+	ld a, TX_KATAKANA
+	ldh [hJapaneseSyllabary], a
+	ret
+.set_syllabary
+	ldh [hJapaneseSyllabary], a
 	xor a
-	ld [wRegularFontOrVWF], a
-	ld a, $f
-	ldh [hffaf], a
 	ret
-.asm_2221
-	ldh [hffaf], a
-	xor a
-	ret
-.asm_2225
-	ld a, [wRegularFontOrVWF]
+.tx_symbol
+	ld a, [wFontWidth]
 	push af
-	ld a, $1
-	ld [wRegularFontOrVWF], a
-	call Func_230f
+	ld a, HALF_WIDTH
+	ld [wFontWidth], a
+	call TerminateHalfWidthText
 	pop af
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ldh a, [hffb0]
 	or a
-	jr nz, .asm_2240
+	jr nz, .skip_placing_tile
 	ld a, [hl]
 	push hl
 	call PlaceNextTextTile
 	pop hl
-.asm_2240
+.skip_placing_tile
 	inc hl
-.asm_2241
+.tx_end
 	ldh a, [hTextLineLength]
 	or a
 	ret z
 	ld b, a
 	ldh a, [hTextLineCurPos]
 	cp b
-	jr z, .reached_line_length
+	jr z, .end_of_line
 	xor a
 	ret
-.reached_line_length
-	call Func_230f
+.end_of_line
+	call TerminateHalfWidthText
 	ld a, [wLineSeparation]
 	or a
 	call z, .next_line
@@ -6132,7 +6386,7 @@ Func_2275: ; 2275 (0:2275)
 	ld [wcd04], a
 	ld a, e
 	ldh [hffa8], a
-	call Func_2298
+	call InitTextFormat
 	xor a
 	ldh [hffb0], a
 	ldh [hffa9], a
@@ -6148,24 +6402,24 @@ Func_2275: ; 2275 (0:2275)
 	jr nz, .asm_2292
 	ret
 
-; wRegularFontOrVWF <- 0
+; wFontWidth <- FULL_WIDTH
 ; hTextLineCurPos <- 0
-; wcd0b <- 0
-; hffaf <- $f
-Func_2298: ; 2298 (0:2298)
-	xor a
-	ld [wRegularFontOrVWF], a
+; wHalfWidthPrintState <- 0
+; hJapaneseSyllabary <- TX_KATAKANA
+InitTextFormat: ; 2298 (0:2298)
+	xor a ; FULL_WIDTH
+	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
-	ld [wcd0b], a
-	ld a, $f
-	ldh [hffaf], a
+	ld [wHalfWidthPrintState], a
+	ld a, TX_KATAKANA
+	ldh [hJapaneseSyllabary], a
 	ret
 
-; Func_22ae
+; call InitTextPrinting
 ; hTextLineLength <- a
-Func_22a6: ; 22a6 (0:22a6)
+InitTextPrintingInTextbox: ; 22a6 (0:22a6)
 	push af
-	call Func_22ae
+	call InitTextPrinting
 	pop af
 	ldh [hTextLineLength], a
 	ret
@@ -6173,11 +6427,9 @@ Func_22a6: ; 22a6 (0:22a6)
 ; hTextHorizontalAlign <- d
 ; hTextLineLength <- 0
 ; wCurTextLine <- 0
-; hTextBGMap0Address <- BGMap0(e)
-; hTextBGMap0Address + 1 <- BGMap0(d)
-; Func_2298
-;; writes BGMap0-translated DE to hTextBGMap0Address
-Func_22ae: ; 22ae (0:22ae)
+; write BGMap0-translated DE to hTextBGMap0Address
+; call InitTextFormat
+InitTextPrinting: ; 22ae (0:22ae)
 	push hl
 	ld a, d
 	ldh [hTextHorizontalAlign], a
@@ -6189,9 +6441,9 @@ Func_22ae: ; 22ae (0:22ae)
 	ldh [hTextBGMap0Address], a
 	ld a, h
 	ldh [hTextBGMap0Address + 1], a
-	call Func_2298
+	call InitTextFormat
 	xor a
-	ld [wcd0b], a
+	ld [wHalfWidthPrintState], a
 	pop hl
 	ret
 
@@ -6244,17 +6496,20 @@ PlaceNextTextTile: ; 22f2 (0:22f2)
 	inc [hl]
 	ret
 
-Func_230f: ; 230f (0:230f)
-	ld a, [wRegularFontOrVWF]
-	or a
+; when terminating half-width text with "\n" or TX_END, or switching to full-width
+; with TX_HALF2FULL or to symbols with TX_SYMBOL, check if it's necessary to append
+; a half-width space to finish an incomplete character pair.
+TerminateHalfWidthText: ; 230f (0:230f)
+	ld a, [wFontWidth]
+	or a ; FULL_WIDTH
 	ret z
-	ld a, [wcd0b]
+	ld a, [wHalfWidthPrintState]
 	or a
-	ret z
+	ret z ; return if the last printed character was the second of a pair
 	push hl
 	push de
 	push bc
-	ld e, $20
+	ld e, " "
 	call Func_22ca
 	pop bc
 	pop de
@@ -6309,22 +6564,26 @@ Func_2325: ; 2325 (0:2325)
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
 Func_235e: ; 235e (0:235e)
-	ld a, [wRegularFontOrVWF]
-	or a                 ;
-	jr z, .asm_2376      ; if [wRegularFontOrVWF] nonzero:
-	call CaseVWFLetter   ;   uppercase e if wUppercaseVWFLetters != 0
-	ld a, [wcd0b]
-	ld d, a              ;   d ← [wcd0b]
+	ld a, [wFontWidth]
 	or a
-	jr nz, .asm_2376     ;   if [wcd0b] is zero:
-	ld a, e              ;
-	ld [wcd0b], a        ;     [wcd0b] ← e
-	ld a, $1             ;
-	or a                 ;     return a = 1
-	ret
-.asm_2376
+	jr z, .print
+	call CaseHalfWidthLetter
+	; if [wHalfWidthPrintState] != 0, load it to d and print the pair of chars
+	; zero wHalfWidthPrintState for next iteration
+	ld a, [wHalfWidthPrintState]
+	ld d, a
+	or a
+	jr nz, .print
+	; if [wHalfWidthPrintState] == 0, don't print text in this iteration
+	; load the next value of register d into wHalfWidthPrintState
+	ld a, e
+	ld [wHalfWidthPrintState], a
+	ld a, $1
+	or a
+	ret ; nz
+.print
 	xor a
-	ld [wcd0b], a        ; [wcd0b] ← 0
+	ld [wHalfWidthPrintState], a
 	ldh a, [hffa9]
 	ld l, a              ; l ← [hffa9]; index to to linked-list head
 .asm_237d
@@ -6370,9 +6629,9 @@ Func_235e: ; 235e (0:235e)
 	scf                  ; set carry to indicate success
 	ret                  ; (return new linked-list head in a)
 
-; uppercases e if [wUppercaseVWFLetters] is nonzero
-CaseVWFLetter: ; 23b1 (0:23b1)
-	ld a, [wUppercaseVWFLetters]
+; uppercases e if [wUppercaseHalfWidthLetters] is nonzero
+CaseHalfWidthLetter: ; 23b1 (0:23b1)
+	ld a, [wUppercaseHalfWidthLetters]
 	or a
 	ret z
 	ld a, e
@@ -6384,47 +6643,64 @@ CaseVWFLetter: ; 23b1 (0:23b1)
 	ld e, a
 	ret
 
-Func_23c1: ; 23c1 (0:23c1)
+; iterates over text at hl until TX_END is found, and sets wFontWidth to
+; FULL_WIDTH if the first character is TX_HALFWIDTH
+; returns:
+;   b = size of text in tiles
+;   c = size of text in bytes
+;   a = -b
+GetTextSizeInTiles: ; 23c1 (0:23c1)
 	ld a, [hl]
-	cp TX_START
-	jr nz, .asm_23cf
-	call Func_23d3
+	cp TX_HALFWIDTH
+	jr nz, .full_width
+	call GetTextSizeInHalfTiles
+	; return a = - ceil(b/2)
 	inc b
 	srl b
 	xor a
 	sub b
 	ret
-.asm_23cf
-	xor a
-	ld [wRegularFontOrVWF], a
-Func_23d3: ; 23d3 (0:23d3)
+.full_width
+	xor a ; FULL_WIDTH
+	ld [wFontWidth], a
+;	fallthrough
+
+; iterates over text at hl until TX_END is found
+; returns:
+;   b = size of text in half-tiles
+;   c = size of text in bytes
+;   a = -b
+GetTextSizeInHalfTiles: ; 23d3 (0:23d3)
 	push hl
 	push de
-	ld bc, $0000
-.asm_23d8
+	lb bc, $00, $00
+.char_loop
 	ld a, [hli]
-	or a
-	jr z, .asm_23f8
-	inc c
-	cp $5
-	jr c, .asm_23ec
-	cp $10
-	jr nc, .asm_23ec
+	or a ; TX_END
+	jr z, .tx_end
+	inc c ; any char except TX_END: c ++
+	; TX_FULLWIDTH, TX_SYMBOL, or > TX_CTRL_END : b ++
+	cp TX_CTRL_START
+	jr c, .character_pair
+	cp TX_CTRL_END
+	jr nc, .character_pair
 	cp TX_SYMBOL
-	jr nz, .asm_23d8
+	jr nz, .char_loop
 	inc b
-	jr .asm_23f4
-.asm_23ec
-	ld e, a
-	ld d, [hl]
+	jr .next
+.character_pair
+	ld e, a ; first char
+	ld d, [hl] ; second char
 	inc b
-	call Func_2546
-	jr nc, .asm_23d8
-.asm_23f4
-	inc c
+	call ClassifyTextCharacterPair
+	jr nc, .char_loop
+	; TX_FULLWIDTH
+.next
+	inc c ; TX_FULLWIDTH or TX_SYMBOL: c ++
 	inc hl
-	jr .asm_23d8
-.asm_23f8
+	jr .char_loop
+.tx_end
+	; return a = -b
 	xor a
 	sub b
 	pop de
@@ -6432,14 +6708,95 @@ Func_23d3: ; 23d3 (0:23d3)
 	ret
 ; 0x23fd
 
-	INCROM $23fd, $245d
+; copy text of maximum length a (in tiles) from hl to de, then terminate
+; the text with TX_END if it doesn't contain it already.
+; fill any remaining bytes with spaces plus TX_END to match the length specified in a.
+; return the text's actual length in characters (i.e. before the first TX_END) in e.
+CopyTextData: ; 23fd (0:23fd)
+	ld [wTextMaxLength], a
+	ld a, [hl]
+	cp TX_HALFWIDTH
+	jr z, .half_width_text
+	ld a, [wTextMaxLength]
+	call .copyTextData
+	jr c, .fw_text_done
+	push hl
+.fill_fw_loop
+	ld a, FW_SPACE
+	ld [hli], a
+	dec d
+	jr nz, .fill_fw_loop
+	ld [hl], TX_END
+	pop hl
+.fw_text_done
+	ld a, e
+	ret
+.half_width_text
+	ld a, [wTextMaxLength]
+	add a
+	call .copyTextData
+	jr c, .hw_text_done
+	push hl
+.fill_hw_loop
+	ld a, " "
+	ld [hli], a
+	dec d
+	jr nz, .fill_hw_loop
+	ld [hl], TX_END
+	pop hl
+.hw_text_done
+	ld a, e
+	ret
 
-; convert the number at hl to TX_SYMBOL text format and write it to wcaa0
+.copyTextData
+	push bc
+	ld c, l
+	ld b, h
+	ld l, e
+	ld h, d
+	ld d, a
+	ld e, 0
+.loop
+	ld a, [bc]
+	or a ; TX_END
+	jr z, .done
+	inc bc
+	ld [hli], a
+	cp TX_CTRL_START
+	jr c, .character_pair
+	cp TX_CTRL_END
+	jr c, .loop
+.character_pair
+	push de
+	ld e, a ; first char
+	ld a, [bc]
+	ld d, a ; second char
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
+	ld a, [bc]
+	inc bc
+	ld [hli], a
+.not_tx_fullwidth
+	pop de
+	inc e ; return in e the amount of characters actually copied
+	dec d ; return in d the difference between the maximum length and e
+	jr nz, .loop
+	ld [hl], TX_END
+	pop bc
+	scf ; return carry if the text did not already end with TX_END
+	ret
+.done
+	pop bc
+	or a
+	ret
+; 0x245d
+
+; convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
 ; replace leading zeros with SYM_SPACE
 TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	ld bc, -10000
 	call .get_digit
@@ -6492,53 +6849,54 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ret
 
 ; generates a text tile and copies it to VRAM
-; if wRegularFontOrVWF == 0
-	; de = regular font tile number (d = $e and d = $f are treated differently)
-; if wRegularFontOrVWF != 0
-	; d = VWF character 1 (left)
-	; e = VWF character 2 (right)
+; if wFontWidth == FULL_WIDTH
+	; de = full-width font tile number
+; if wFontWidth == HALF_WIDTH
+	; d = half-width character 1 (left)
+	; e = half-width character 2 (right)
 ; b = destination VRAM tile number
 GenerateTextTile: ; 24ac (0:24ac)
 	push hl
 	push de
 	push bc
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	or a
-	jr nz, .vwf
-;.regular_font
-	call CreateRegularFontTile_ConvertToTileDataAddress
+	jr nz, .half_width
+;.full_width
+	call CreateFullWidthFontTile_ConvertToTileDataAddress
 	call SafeCopyDataDEtoHL
 .done
 	pop bc
 	pop de
 	pop hl
 	ret
-.vwf
-	call CreateVWFTile
+.half_width
+	call CreateHalfWidthFontTile
 	call ConvertTileNumberToTileDataAddress
 	call SafeCopyDataDEtoHL
 	jr .done
 
-; create, at wVWFOrRegularFontTile, a VWF tile made from the ascii characters given in d and e
-CreateVWFTile: ; 24ca (0:24ca)
+; create, at wTextTileBuffer, a half-width font tile
+; made from the ascii characters given in d and e
+CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(VWF)
+	ld a, BANK(HalfWidthFont)
 	call BankswitchHome
-	; write the right half of the VWF tile (first character) to wVWFOrRegularFontTile + 2n
+	; write the right half of the tile (first character) to wTextTileBuffer + 2n
 	push de
 	ld a, e
-	ld de, wVWFOrRegularFontTile
-	call CopyVWFCharacterToDE
+	ld de, wTextTileBuffer
+	call CopyHalfWidthCharacterToDE
 	pop de
-	; write the left half of the VWF tile (second character) to wVWFOrRegularFontTile + 2n+1
+	; write the left half of the tile (second character) to wTextTileBuffer + 2n+1
 	ld a, d
-	ld de, wVWFOrRegularFontTile + 1
-	call CopyVWFCharacterToDE
-	; construct the resulting VWF tile
-	ld hl, wVWFOrRegularFontTile
-	ld b, TILE_SIZE / 2
+	ld de, wTextTileBuffer + 1
+	call CopyHalfWidthCharacterToDE
+	; construct the 2bpp-converted half-width font tile
+	ld hl, wTextTileBuffer
+	ld b, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	swap a
@@ -6550,38 +6908,38 @@ CreateVWFTile: ; 24ca (0:24ca)
 	jr nz, .loop
 	call BankpopHome
 	pop bc
-	ld de, wVWFOrRegularFontTile
+	ld de, wTextTileBuffer
 	ret
 
-; copies a half-tile corresponding to a VWF character to de
-; the ascii value of the character to copy is provided in a
-; assumes BANK(VWF) is already loaded
-CopyVWFCharacterToDE: ; 24fa (0:24fa)
-	sub $20 ; VWF begins at ascii $20
+; copies a 1bpp tile corresponding to a half-width font character to de.
+; the ascii value of the character to copy is provided in a.
+; assumes BANK(HalfWidthFont) is already loaded.
+CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
+	sub $20 ; HalfWidthFont begins at ascii $20
 	ld l, a
 	ld h, $0
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	ld bc, VWF
+	ld bc, HalfWidthFont
 	add hl, bc
-	ld b, TILE_SIZE / 2
+	ld b, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	ld [de], a
 	inc de
-	inc de ; skip the other half of the tile
+	inc de
 	dec b
 	jr nz, .loop
 	ret
 
-; create, at wVWFOrRegularFontTile, a regular font tile
-; given its tile number within the regular font graphics in de.
+; create, at wTextTileBuffer, a full-width font tile given its tile
+; number within the full-width font graphics (FullWidthFonts) in de.
 ; return its v*Tiles address in hl, and return c = TILE_SIZE.
-CreateRegularFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
+CreateFullWidthFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 	push bc
-	call GetRegularFontTileOffset
-	call CreateRegularFontTile
+	call GetFullWidthFontTileOffset
+	call CreateFullWidthFontTile
 	pop bc
 ;	fallthrough
 
@@ -6606,14 +6964,14 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 	ld c, TILE_SIZE
 	ret
 
-; create, at wVWFOrRegularFontTile, a regular font tile
-; given its offset within the font graphics in hl
-CreateRegularFontTile: ; 252e (0:252e)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+; create, at wTextTileBuffer, a full-width font tile given its
+; within the full-width font graphics (FullWidthFonts) in hl
+CreateFullWidthFontTile: ; 252e (0:252e)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
-	ld de, wVWFOrRegularFontTile
+	ld de, wTextTileBuffer
 	push de
-	ld c, TILE_SIZE / 2
+	ld c, TILE_SIZE_1BPP
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -6626,52 +6984,61 @@ CreateRegularFontTile: ; 252e (0:252e)
 	call BankpopHome
 	ret
 
-Func_2546: ; 2546 (0:2546)
-	ld a, [wRegularFontOrVWF]
-	or a
-	jr nz, .asm_255f
+; given two text characters at de, use the char at e (first one)
+; to determine which type of text this pair of characters belongs to.
+; return carry if TX_FULLWIDTH1 to TX_FULLWIDTH4.
+ClassifyTextCharacterPair: ; 2546 (0:2546)
+	ld a, [wFontWidth]
+	or a ; FULL_WIDTH
+	jr nz, .half_width
 	ld a, e
-	cp $10
-	jr c, .asm_2561
+	cp TX_CTRL_END
+	jr c, .continue_check
 	cp $60
-	jr nc, .asm_2565
-	ldh a, [hffaf]
-	cp $f
-	jr nz, .asm_2565
-	ld d, $f
+	jr nc, .not_katakana
+	ldh a, [hJapaneseSyllabary]
+	cp TX_KATAKANA
+	jr nz, .not_katakana
+	ld d, TX_KATAKANA
 	or a
 	ret
-.asm_255f
+.half_width
+; in half width mode, the first character goes in e, so leave them like that
 	or a
 	ret
-.asm_2561
-	cp $5
-	jr c, .asm_2569
-.asm_2565
+.continue_check
+	cp TX_CTRL_START
+	jr c, .ath_font
+.not_katakana
+; 0_1_hiragana.1bpp (e < $60) or 0_2_digits_kanji1.1bpp (e >= $60)
 	ld d, $0
 	or a
 	ret
-.asm_2569
+.ath_font
+; TX_FULLWIDTH1 to TX_FULLWIDTH4
+; swap d and e to put the TX_FULLWIDTH* character first
 	ld e, d
 	ld d, a
 	scf
 	ret
 
-; convert the regular font tile number at de to the
-; equivalent offset within the font tile graphics.
-; d = $e and d = $f are treated differently
-GetRegularFontTileOffset: ; 256d (0:256d)
-	ld bc, 40 tiles
+; convert the full-width font tile number at de to the
+; equivalent offset within the full-width font tile graphics.
+;   if d == TX_KATAKANA: get tile from the 0_0_katakana.1bpp font.
+;   if d == TX_HIRAGANA or d == $0: get tile from the 0_1_hiragana.1bpp or 0_2_digits_kanji1.1bpp font.
+;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from one of the other full-width fonts.
+GetFullWidthFontTileOffset: ; 256d (0:256d)
+	ld bc, $50 tiles_1bpp
 	ld a, d
-	cp $e
-	jr z, .asm_2580
-	cp $f
+	cp TX_HIRAGANA
+	jr z, .hiragana
+	cp TX_KATAKANA
 	jr nz, .get_address
-	ld bc, $0000
+	ld bc, $0 tiles
 	ld a, e
-	sub $10
+	sub $10 ; the first $10 are control characters, but this font's graphics start at $0
 	ld e, a
-.asm_2580
+.hiragana
 	ld d, $0
 .get_address
 	ld l, e
@@ -6683,7 +7050,57 @@ GetRegularFontTileOffset: ; 256d (0:256d)
 	ret
 ; 0x2589
 
-	INCROM $2589, $25ea
+Unknown_2589: ; 2589 (0:2589)
+	db $18
+	dw $8140
+	dw $817e
+	dw $8180
+	dw $81ac
+	dw $81b8
+	dw $81bf
+	dw $81c8
+	dw $81ce
+	dw $81da
+	dw $81e8
+	dw $81f0
+	dw $81f7
+	dw $81fc
+	dw $81fc
+	dw $824f
+	dw $8258
+	dw $8260
+	dw $8279
+	dw $8281
+	dw $829a
+	dw $829f
+	dw $82f1
+	dw $8340
+	dw $837e
+	dw $8380
+	dw $8396
+	dw $839f
+	dw $83b6
+	dw $83bf
+	dw $83d6
+	dw $8440
+	dw $8460
+	dw $8470
+	dw $847e
+	dw $8480
+	dw $8491
+	dw $849f
+	dw $84be
+	dw $889f
+	dw $88fc
+	dw $8940
+	dw $9443
+	dw $9840
+	dw $9872
+	dw $989f
+	dw $98fc
+	dw $9940
+	dw $ffff
+; 0x25ea
 
 ; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
 ; input:
@@ -6709,7 +7126,7 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ld a, [hli]
 	ld [wNumMenuItems], a
 	ld a, [hli]
-	ld [wCursorTileNumber], a
+	ld [wCursorTile], a
 	ld a, [hli]
 	ld [wTileBehindCursor], a
 	ld a, [hli]
@@ -6848,6 +7265,9 @@ PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	pop af
 	ret
 
+; called once per frame when a menu is open
+; play the sound effect at wRefreshMenuCursorSFX if non-0 and blink the
+; cursor when wCursorBlinkCounter hits 16 (i.e. every 16 frames)
 RefreshMenuCursor_CheckPlaySFX: ; 26d1 (0:26d1)
 	ld a, [wRefreshMenuCursorSFX]
 	or a
@@ -6861,7 +7281,7 @@ RefreshMenuCursor: ; 26da (0:26da)
 ; blink the cursor every 16 frames
 	and $f
 	ret nz
-	ld a, [wCursorTileNumber]
+	ld a, [wCursorTile]
 	bit 4, [hl]
 	jr z, DrawCursor
 EraseCursor: ; 26e9 (0:26e9)
@@ -6887,9 +7307,9 @@ DrawCursor:
 	or a
 	ret
 
-; unlike DrawCursor, read cursor tile from wCursorTileNumber instead of register a
+; unlike DrawCursor, read cursor tile from wCursorTile instead of register a
 DrawCursor2: ; 270b (0:270b)
-	ld a, [wCursorTileNumber]
+	ld a, [wCursorTile]
 	jr DrawCursor
 
 SetMenuItem: ; 2710 (0:2710)
@@ -6937,7 +7357,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	push af
 	ld a, $1
 	call PlaySFX
-	call .asm_2772
+	call .erase_cursor
 	pop af
 	ld [wCurMenuItem], a
 	ldh [hCurMenuItem], a
@@ -6955,12 +7375,12 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	inc [hl]
 	and $f
 	ret nz
-	ld a, $f
+	ld a, SYM_CURSOR_R
 	bit 4, [hl]
-	jr z, .asm_2774
-.asm_2772
-	ld a, $0
-.asm_2774
+	jr z, .draw_cursor
+.erase_cursor
+	ld a, SYM_SPACE
+.draw_cursor
 	ld e, a
 	ld a, [wCurMenuItem]
 	add a
@@ -7001,27 +7421,27 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld a, 1
 	ld [wCardListIndicatorYPosition], a
 .reload
-	ld e, $00
+	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
-	jr z, .asm_27b9
-	ld e, $0c
-.asm_27b9
+	jr z, .cant_go_up
+	ld e, SYM_CURSOR_U
+.cant_go_up
 	ld a, [wCursorYPosition]
 	dec a
 	ld c, a
 	ld b, 18
 	ld a, e
 	call WriteByteToBGMap0
-	ld e, $00
+	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	ld hl, wNumMenuItems
 	add [hl]
 	ld hl, wNumListItems
 	cp [hl]
-	jr nc, .asm_27d5
-	ld e, $2f
-.asm_27d5
+	jr nc, .cant_go_down
+	ld e, SYM_CURSOR_D
+.cant_go_down
 	ld a, [wNumMenuItems]
 	add a
 	add c
@@ -7041,20 +7461,20 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld a, [wCursorYPosition]
 	ld e, a
 	ld c, $00
-.asm_27f8
+.next_card
 	ld a, [hl]
 	cp $ff
-	jr z, .asm_2826
+	jr z, .done
 	push hl
 	push bc
 	push de
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawCardSymbol
-	call Func_22ae
+	call InitTextPrinting
 	ld a, [wListItemNameMaxLength]
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
-	call Func_21c5
+	call ProcessText
 	pop de
 	pop bc
 	pop hl
@@ -7063,12 +7483,12 @@ PrintCardListItems: ; 2799 (0:2799)
 	dec a
 	inc c
 	cp c
-	jr c, .asm_2826
+	jr c, .done
 	inc e
 	inc e
 	dec b
-	jr nz, .asm_27f8
-.asm_2826
+	jr nz, .next_card
+.done
 	ret
 ; 0x2827
 
@@ -7096,6 +7516,7 @@ OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign: ; 2832 (0:2832)
 	ret
 ; 0x283f
 
+; this function is always loaded to wMenuFunctionPointer by PrintCardListItems
 ; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
 CardListMenuFunction: ; 283f (0:283f)
 	ldh a, [hButtonsPressed2]
@@ -7384,6 +7805,10 @@ CopyCardNameAndLevel: ; 29f5 (0:29f5)
 Func_29fa: ; 29fa (0:29fa)
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
+;	fallthrough
+
+; wait until A or B is pressed.
+; return carry if A is pressed, nc if B is pressed. erase the cursor either way
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
 	call RefreshMenuCursor
@@ -7412,24 +7837,30 @@ SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	inc hl
 	ld [hl], 1 ; wNumMenuItems
 	inc hl
-	ld [hl], b ; wCursorTileNumber
+	ld [hl], b ; wCursorTile
 	inc hl
 	ld [hl], c ; wTileBehindCursor
 	ld [wCursorBlinkCounter], a
 	ret
 ; 0x2a30
 
+; draw a 20x6 text box aligned to the bottom of the screen,
+; print the text at hl without letter delay, and wait for A or B pressed
 Func_2a30: ; 2a30 (0:2a30)
 	call DrawWideTextBox_PrintTextNoDelay
 	jp WaitForWideTextBoxInput
 ; 0x2a36
 
+; draw a 20x6 text box aligned to the bottom of the screen
+; and print the text at hl without letter delay
 DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 	push hl
 	call DrawWideTextBox
-	ld a, $13
+	ld a, 19
 	jr Func_2a44
 
+; draw a 12x6 text box aligned to the bottom left of the screen
+; and print the text at hl without letter delay
 DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	push hl
 	call DrawNarrowTextBox
@@ -7439,26 +7870,28 @@ DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 Func_2a44: ; 2a44 (0:2a44)
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	pop hl
 	ld a, l
 	or h
 	jp nz, PrintTextNoDelay
 	ld hl, wDefaultText
-	jp Func_21c5
+	jp ProcessText
 
+; draw a 20x6 text box aligned to the bottom of the screen
+; and print the text at hl with letter delay
 DrawWideTextBox_PrintText: ; 2a59 (0:2a59)
 	push hl
 	call DrawWideTextBox
 	ld a, 19
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	call EnableLCD
 	pop hl
 	jp PrintText
 
-; draws a 12x6 text box aligned to the bottom left of the screen
+; draw a 12x6 text box aligned to the bottom left of the screen
 DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	lb de, 0, 12
 	lb bc, 12, 6
@@ -7466,6 +7899,8 @@ DrawNarrowTextBox: ; 2a6f (0:2a6f)
 	call DrawRegularTextBox
 	ret
 
+; draw a 12x6 text box aligned to the bottom left of the screen,
+; print the text at hl without letter delay, and wait for A or B pressed
 DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	call DrawNarrowTextBox_PrintTextNoDelay
 	xor a
@@ -7488,7 +7923,7 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-; draws a 20x6 text box aligned to the bottom of the screen
+; draw a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
 	lb de, 0, 12
 	lb bc, 20, 6
@@ -7496,6 +7931,8 @@ DrawWideTextBox: ; 2a9e (0:2a9e)
 	call DrawRegularTextBox
 	ret
 
+; draw a 20x6 text box aligned to the bottom of the screen,
+; print the text at hl with letter delay, and wait for A or B pressed
 DrawWideTextBox_WaitForInput: ; 2aab (0:2aab)
 	call DrawWideTextBox_PrintText
 ;	fallthrough
@@ -7521,6 +7958,7 @@ WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
 	db SYM_BOX_BOTTOM ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
+; display a two-item horizontal menu with custom text provided in hl and handle input
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	call DrawWideTextBox_PrintText
 	lb de, 6, 16 ; x, y
@@ -7539,7 +7977,7 @@ Func_2aeb: ; 2aeb (0:2aeb)
 	ld [wcd9a], a
 ;	fallthrough
 
-; handle a yes / no menu with custom text provided in hl
+; display a yes / no menu with custom text provided in hl and handle input
 ; returns carry if "no" selected
 YesOrNoMenuWithText: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
@@ -7610,7 +8048,7 @@ HandleYesOrNoMenu:
 	scf
 	ret
 
-; prints YES NO at de
+; prints "YES NO" at de
 PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
@@ -7739,7 +8177,7 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	ret nz ; return if no more items of text
 	ld e, [hl] ; y coord
 	inc hl ; hl = text id
-	call Func_22ae
+	call InitTextPrinting
 	push hl
 	call Func_2c23
 	pop hl
@@ -7748,11 +8186,11 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	jr PlaceTextItems ; do next item
 
 Func_2c1b: ; 2c1b (0:2c1b)
-	call Func_22ae
+	call InitTextPrinting
 	jr Func_2c29
 
 Func_2c20: ; 2c20 (0:2c20)
-	call Func_22ae
+	call InitTextPrinting
 Func_2c23: ; 2c23 (0:2c23)
 	ld a, [hli]
 	or [hl]
@@ -7763,8 +8201,8 @@ Func_2c23: ; 2c23 (0:2c23)
 Func_2c29: ; 2c29 (0:2c29)
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
-	call Func_21c5
+	call GetTextOffsetFromTextID
+	call ProcessText
 	pop af
 	call BankswitchHome
 	ret
@@ -7776,15 +8214,15 @@ Func_2c37: ; 2c37 (0:2c37)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	ld c, $00
 .char_loop
 	ld a, [hli]
 	or a ; TX_END
 	jr z, .end
-	cp $10
+	cp TX_CTRL_END
 	jr nc, .char_loop
-	cp TX_START
+	cp TX_HALFWIDTH
 	jr c, .skip
 	cp "\n"
 	jr nz, .char_loop
@@ -7806,7 +8244,7 @@ Func_2c37: ; 2c37 (0:2c37)
 
 Func_2c62: ; 2c62 (0:2c62)
 	call .asm_2c67
-	jr Func_2c77
+	jr WaitForPlayerToAdvanceText
 .asm_2c67
 	push hl
 	ld hl, wTextBoxLabel
@@ -7815,73 +8253,87 @@ Func_2c62: ; 2c62 (0:2c62)
 	ld [hl], d
 	pop hl
 	ld a, $01
-	jr Func_2c84
+	jr PrintScrollableText
 
 Func_2c73: ; 2c73 (0:2c73)
 	xor a
-	call Func_2c84
+	call PrintScrollableText
 
-Func_2c77: ; 2c77 (0:2c77)
+; when a text box is full, prompt the player to press A or B
+; in order to clear the text and print the next lines.
+WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
 	call WaitForButtonAorB
 	ret
 
-Func_2c84: ; 2c84 (0:2c84)
+; prints text with id at hl, with letter delay, in a textbox area.
+; unlike PrintText, PrintScrollableText supports scrollable text, and prompts
+; the user to press A or B to advance the page or close the text.
+; used mostly for overworld NPC text.
+PrintScrollableText: ; 2c84 (0:2c84)
 	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call Func_2d15
-	call Func_2cc8
-.asm_2c93
+	call ResetTxRam_WriteToTextHeader
+.print_char_loop
 	ld a, [wTextSpeed]
 	ld c, a
 	inc c
-	jr .asm_2cac
-.asm_2c9a
+	jr .go
+.nonzero_text_speed
 	ld a, [wTextSpeed]
-	cp $2
-	jr nc, .asm_2ca7
+	cp 2
+	jr nc, .apply_delay
+	; if text speed is 1, pressing b ignores it
 	ldh a, [hButtonsHeld]
 	and B_BUTTON
-	jr nz, .asm_2caf
-.asm_2ca7
+	jr nz, .skip_delay
+.apply_delay
 	push bc
 	call DoFrame
 	pop bc
-.asm_2cac
+.go
 	dec c
-	jr nz, .asm_2c9a
-.asm_2caf
-	call Func_2d43
+	jr nz, .nonzero_text_speed
+.skip_delay
+	call ProcessTextHeader
 	jr c, .asm_2cc3
 	ld a, [wCurTextLine]
 	cp 3
-	jr c, .asm_2c93
-	call Func_2c77
+	jr c, .print_char_loop
+	; two lines of text already printed, so need to advance text
+	call WaitForPlayerToAdvanceText
 	call Func_2d15
-	jr .asm_2c93
+	jr .print_char_loop
 .asm_2cc3
 	pop af
 	call BankswitchHome
 	ret
 
-Func_2cc8: ; 2cc8 (0:2cc8)
+; zero wWhichTextHeader, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
+; fill wTextHeader1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
+ResetTxRam_WriteToTextHeader: ; 2cc8 (0:2cc8)
 	xor a
-	ld [wce48], a
-	ld [wce49], a
-	ld [wce4a], a
-	ld a, $f
-	ld [hffaf], a
-Func_2cd7: ; 2cd7 (0:2cd7)
+	ld [wWhichTextHeader], a
+	ld [wWhichTxRam2], a
+	ld [wWhichTxRam3], a
+	ld a, TX_KATAKANA
+	ld [hJapaneseSyllabary], a
+;	fallthrough
+
+; fill the wTextHeader specified in wWhichTextHeader (0-3) with hJapaneseSyllabary,
+; wFontWidth, hBankROM, and register bc for the text's pointer.
+WriteToTextHeader: ; 2cd7 (0:2cd7)
 	push hl
-	call Func_2d06
+	call GetPointerToTextHeader
 	pop bc
-	ld a, [hffaf]
+	ld a, [hJapaneseSyllabary]
 	ld [hli], a
-	ld a, [wRegularFontOrVWF]
+	ld a, [wFontWidth]
 	ld [hli], a
 	ldh a, [hBankROM]
 	ld [hli], a
@@ -7890,18 +8342,24 @@ Func_2cd7: ; 2cd7 (0:2cd7)
 	ld [hl], b
 	ret
 
-Func_2ceb: ; 2ceb (0:2ceb)
-	call Func_2cd7
-	ld hl, wce48
+; same as WriteToTextHeader, except it then increases wWhichTextHeader to
+; set the next text header to the current one (usually, because
+; it will soon be written to due to a TX_RAM command).
+WriteToTextHeader_MoveToNext: ; 2ceb (0:2ceb)
+	call WriteToTextHeader
+	ld hl, wWhichTextHeader
 	inc [hl]
 	ret
 
-Func_2cf3: ; 2cf3 (0:2cf3)
-	call Func_2d06
+; read the wTextHeader specified in wWhichTextHeader (0-3) and use the data to
+; populate the corresponding memory addresses. also switch to the text's rombank
+; and return the address of the next character in hl.
+ReadTextHeader: ; 2cf3 (0:2cf3)
+	call GetPointerToTextHeader
 	ld a, [hli]
-	ld [hffaf], a
+	ld [hJapaneseSyllabary], a
 	ld a, [hli]
-	ld [wRegularFontOrVWF], a
+	ld [wFontWidth], a
 	ld a, [hli]
 	call BankswitchHome
 	ld a, [hli]
@@ -7909,15 +8367,16 @@ Func_2cf3: ; 2cf3 (0:2cf3)
 	ld l, a
 	ret
 
-Func_2d06: ; 2d06 (0:2d06)
-	ld a, [wce48]
+; return in hl, the address of the wTextHeader specified in wWhichTextHeader (0-3)
+GetPointerToTextHeader: ; 2d06 (0:2d06)
+	ld a, [wWhichTextHeader]
 	ld e, a
 	add a
 	add a
 	add e
 	ld e, a
 	ld d, $0
-	ld hl, wce2b
+	ld hl, wTextHeader1
 	add hl, de
 	ret
 
@@ -7931,106 +8390,114 @@ Func_2d15: ; 2d15 (0:2d15)
 	jr nz, .labeled
 	call DrawRegularTextBox
 	call EnableLCD
-	jr .asm_2d36
+	jr .init_text
 .labeled
 	ld hl, wTextBoxLabel
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call DrawLabeledTextBox
-.asm_2d36
+.init_text
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	pop hl
 	ret
 
-Func_2d43: ; 2d43 (0:2d43)
-	call Func_2cf3
+; reads the incoming character from the current wTextHeader and processes it
+; then updates the current wTextHeader to point to the next character.
+; a TX_RAM command causes a switch to a wTextHeader in the level below, and a TX_END
+; command terminates the text unless there is a pending wTextHeader in the above level.
+ProcessTextHeader: ; 2d43 (0:2d43)
+	call ReadTextHeader
 	ld a, [hli]
 	or a ; TX_END
-	jr z, .asm_2d79
-	cp $5
-	jr c, .asm_2d65
-	cp $10
-	jr nc, .asm_2d65
-	call Func_21f2
-	jr nc, .asm_2d74
+	jr z, .tx_end
+	cp TX_CTRL_START
+	jr c, .character_pair
+	cp TX_CTRL_END
+	jr nc, .character_pair
+	call ProcessSpecialTextCharacter
+	jr nc, .processed_char
 	cp TX_RAM1
 	jr z, .tx_ram1
 	cp TX_RAM2
 	jr z, .tx_ram2
 	cp TX_RAM3
 	jr z, .tx_ram3
-	jr .asm_2d74
-.asm_2d65
-	ld e, a
-	ld d, [hl]
-	call Func_2546
-	jr nc, .asm_2d6d
+	jr .processed_char
+.character_pair
+	ld e, a ; first char
+	ld d, [hl] ; second char
+	call ClassifyTextCharacterPair
+	jr nc, .not_tx_fullwidth
 	inc hl
-.asm_2d6d
+.not_tx_fullwidth
 	call Func_22ca
 	xor a
-	call Func_21f2
-.asm_2d74
-	call Func_2cd7
+	call ProcessSpecialTextCharacter
+.processed_char
+	call WriteToTextHeader
 	or a
 	ret
-.asm_2d79
-	ld a, [wce48]
+.tx_end
+	ld a, [wWhichTextHeader]
 	or a
-	jr z, .asm_2d85
+	jr z, .no_more_text
+	; handle text header in the above level
 	dec a
-	ld [wce48], a
-	jr Func_2d43
-.asm_2d85
-	call Func_230f
+	ld [wWhichTextHeader], a
+	jr ProcessTextHeader
+.no_more_text
+	call TerminateHalfWidthText
 	scf
 	ret
 .tx_ram2
-	call Func_2ceb
-	ld a, $f
-	ld [hffaf], a
-	xor a
-	ld [wRegularFontOrVWF], a
+	call WriteToTextHeader_MoveToNext
+	ld a, TX_KATAKANA
+	ld [hJapaneseSyllabary], a
+	xor a ; FULL_WIDTH
+	ld [wFontWidth], a
 	ld de, wTxRam2
-	ld hl, wce49
-	call Func_2de0
+	ld hl, wWhichTxRam2
+	call HandleTxRam2Or3
 	ld a, l
 	or h
-	jr z, .asm_2dab
-	call ReadTextOffset
-	call Func_2cd7
-	jr Func_2d43
-.asm_2dab
+	jr z, .empty
+	call GetTextOffsetFromTextID
+	call WriteToTextHeader
+	jr ProcessTextHeader
+.empty
 	ld hl, wDefaultText
-	call Func_2cd7
-	jr Func_2d43
+	call WriteToTextHeader
+	jr ProcessTextHeader
 .tx_ram3
-	call Func_2ceb
+	call WriteToTextHeader_MoveToNext
 	ld de, wTxRam3
-	ld hl, wce4a
-	call Func_2de0
+	ld hl, wWhichTxRam3
+	call HandleTxRam2Or3
 	call TwoByteNumberToText_CountLeadingZeros
-	call Func_2cd7
-	jp Func_2d43
+	call WriteToTextHeader
+	jp ProcessTextHeader
 .tx_ram1
-	call Func_2ceb
-	call CopyTurnDuelistName
-	ld a, [wcaa0]
-	cp $6
-	jr z, .asm_2dda
-	ld a, $7
-	call Func_21f2
-.asm_2dda
-	call Func_2cd7
-	jp Func_2d43
+	call WriteToTextHeader_MoveToNext
+	call CopyPlayerNameOrTurnDuelistName
+	ld a, [wTextBuf]
+	cp TX_HALFWIDTH
+	jr z, .tx_halfwidth
+	ld a, TX_HALF2FULL
+	call ProcessSpecialTextCharacter
+.tx_halfwidth
+	call WriteToTextHeader
+	jp ProcessTextHeader
 
-; inc [hl]
-; hl = [de + 2*[hl]]
-Func_2de0: ; 2de0 (0:2de0)
+; input:
+  ; de: wTxRam2 or wTxRam3
+  ; hl: wWhichTxRam2 or wWhichTxRam3
+; return, in hl, the contents of the contents of the
+; wTxRam* buffer's current entry, and increment wWhichTxRam*.
+HandleTxRam2Or3: ; 2de0 (0:2de0)
 	push de
 	ld a, [hl]
 	inc [hl]
@@ -8046,7 +8513,7 @@ Func_2de0: ; 2de0 (0:2de0)
 
 ; uses the two byte text id in hl to read the three byte text offset
 ; loads the correct bank for the specific text and returns the pointer in hl
-ReadTextOffset: ; 2ded (0:2ded)
+GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	push de
 	ld e, l
 	ld d, h
@@ -8074,17 +8541,17 @@ ReadTextOffset: ; 2ded (0:2ded)
 	pop de
 	ret
 
-; if [wRegularFontOrVWF] != 0:
-;   convert the number at hl to text (ascii) format and write it to wcaa0
+; if [wFontWidth] == HALF_WIDTH:
+;   convert the number at hl to text (ascii) format and write it to wTextBuf
 ;   return c = 4 - leading_zeros
-; if [wRegularFontOrVWF] == 0:
-;   convert the number at hl to TX_SYMBOL text format and write it to wcaa0
+; if [wFontWidth] == FULL_WIDTH:
+;   convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
-	ld a, [wRegularFontOrVWF]
-	or a
+	ld a, [wFontWidth]
+	or a ; FULL_WIDTH
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
-	ld de, wcaa0
+	ld de, wTextBuf
 	push de
 	call TwoByteNumberToText
 	pop hl
@@ -8098,9 +8565,10 @@ TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	jr nz, .digit_loop
 	ret
 
-; copy the name of the duelist whose turn it is to de
-CopyTurnDuelistName: ; 2e2c (0:2e2c)
-	ld de, wcaa0
+; in the overworld: copy the player's name to wTextBuf
+; in a duel: copy the name of the duelist whose turn it is to wTextBuf
+CopyPlayerNameOrTurnDuelistName: ; 2e2c (0:2e2c)
+	ld de, wTextBuf
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
@@ -8113,14 +8581,15 @@ CopyTurnDuelistName: ; 2e2c (0:2e2c)
 	pop hl
 	ret
 
-; prints text with id at hl, with letter delay, in a textbox area
+; prints text with id at hl, with letter delay, in a textbox area.
+; the text must fit in the textbox; PrintScrollableText should be used instead.
 PrintText: ; 2e41 (0:2e41)
 	ld a, l
 	or h
 	jr z, .from_ram
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	call .print_text
 	pop af
 	call BankswitchHome
@@ -8128,7 +8597,7 @@ PrintText: ; 2e41 (0:2e41)
 .from_ram
 	ld hl, wDefaultText
 .print_text
-	call Func_2cc8
+	call ResetTxRam_WriteToTextHeader
 .next_tile_loop
 	ldh a, [hButtonsHeld]
 	ld b, a
@@ -8147,18 +8616,19 @@ PrintText: ; 2e41 (0:2e41)
 	dec a
 	jr nz, .text_delay_loop
 .skip_delay
-	call Func_2d43
+	call ProcessTextHeader
 	jr nc, .next_tile_loop
 	ret
 
-; prints text with id at hl, without letter delay, in a textbox area
+; prints text with id at hl, without letter delay, in a textbox area.
+; the text must fit in the textbox; PrintScrollableText should be used instead.
 PrintTextNoDelay: ; 2e76 (0:2e76)
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
-	call Func_2cc8
+	call GetTextOffsetFromTextID
+	call ResetTxRam_WriteToTextHeader
 .next_tile_loop
-	call Func_2d43
+	call ProcessTextHeader
 	jr nc, .next_tile_loop
 	pop af
 	call BankswitchHome
@@ -8172,7 +8642,7 @@ CopyText: ; 2e89 (0:2e89)
 	jr z, .special
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 .next_tile_loop
 	ld a, [hli]
 	ld [de], a
@@ -8194,9 +8664,9 @@ Func_2ea9: ; 2ea9 (0:2ea9)
 	ldh [hff96], a
 	ldh a, [hBankROM]
 	push af
-	call ReadTextOffset
+	call GetTextOffsetFromTextID
 	ldh a, [hff96]
-	call $23fd
+	call CopyTextData
 	pop af
 	call BankswitchHome
 	ret
@@ -8219,7 +8689,52 @@ LoadTxRam3: ; 2ec4 (0:2ec4)
 	ret
 ; 0x2ecd
 
-	INCROM $2ecd, $2f0a
+; load data of card with text id of name at de to wLoadedCard1
+LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
+	ld hl, CardPointers + 2 ; skip first $0000 pointer
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+.find_card_loop
+	ld a, [hli]
+	or [hl]
+	jr z, .done
+	push hl
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+	ld bc, CARD_DATA_NAME
+	add hl, bc
+	ld a, [hli]
+	cp e
+	jr nz, .no_match
+	ld a, [hl]
+	cp d
+.no_match
+	pop hl
+	pop hl
+	inc hl
+	jr nz, .find_card_loop
+	dec hl
+	ld a, [hld]
+	ld l, [hl]
+	ld h, a
+	ld a, BANK(CardPointers)
+	call BankpushHome2
+	ld de, wLoadedCard1
+	ld b, PKMN_CARD_DATA_LENGTH
+.copy_card_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .copy_card_loop
+	pop hl
+.done
+	call BankpopHome
+	ret
+; 0x2f0a
 
 ; load data of card with id at e to wLoadedCard2
 LoadCardDataToBuffer2_FromCardID: ; 2f0a (0:2f0a)
@@ -8348,7 +8863,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	; hl = card_gfx_index
 	; de = where to load the card gfx to
 	; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
-; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8 ; using absolute ROM addresses
+; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
 	ldh a, [hBankROM]
@@ -8367,7 +8882,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	add hl, hl
 	add hl, hl
 	res 7, h
-	set 6, h ; $4000 ≤ de ≤ $7fff
+	set 6, h ; $4000 ≤ hl ≤ $7fff
 	call CopyGfxData
 	ld b, CGB_PAL_SIZE
 	ld de, wCardPalette
@@ -8383,7 +8898,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
-	ld a, BANK(Fonts); BANK(DuelGraphics); BANK(VWF)
+	ld a, BANK(Fonts); BANK(DuelGraphics)
 	call BankpushHome
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -9841,7 +10356,87 @@ ResumeSong: ; 37a0 (0:37a0)
 	ret
 ; 0x37a5
 
-	INCROM $37a5, $380e
+Func_37a5: ; 37a5 (0:37a5)
+	ldh a, [hBankROM]
+	push af
+	push hl
+	srl h
+	srl h
+	srl h
+	ld a, BANK(CardGraphics)
+	add h
+	call BankswitchHome
+	pop hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	res 7, h
+	set 6, h ; $4000 ≤ hl ≤ $7fff
+	call Func_37c5
+	pop af
+	call BankswitchHome
+	ret
+; 0x37c5
+
+Func_37c5: ; 37c5 (0:37c5)
+	ld c, $08
+.asm_37c7
+	ld b, $06
+.asm_37c9
+	push bc
+	ld c, $08
+.asm_37cc
+	ld b, $02
+.asm_37ce
+	push bc
+	push hl
+	ld c, [hl]
+	ld b, $04
+.asm_37d3
+	rr c
+	rra
+	sra a
+	dec b
+	jr nz, .asm_37d3
+	ld hl, $c0
+	add hl, de
+	ld [hli], a
+	inc hl
+	ld [hl], a
+	ld b, $04
+.asm_37e4
+	rr c
+	rra
+	sra a
+	dec b
+	jr nz, .asm_37e4
+	ld [de], a
+	ld hl, $2
+	add hl, de
+	ld [hl], a
+	pop hl
+	pop bc
+	inc de
+	inc hl
+	dec b
+	jr nz, .asm_37ce
+	inc de
+	inc de
+	dec c
+	jr nz, .asm_37cc
+	pop bc
+	dec b
+	jr nz, .asm_37c9
+	ld a, $c0
+	add e
+	ld e, a
+	ld a, $00
+	adc d
+	ld d, a
+	dec c
+	jr nz, .asm_37c7
+	ret
+; 0x380e
 
 Func_380e: ; 380e (0:380e)
 	ld a, [wd0c1]
@@ -9997,31 +10592,35 @@ Func_3917: ; 3917 (0:3917)
 	call DisableSRAM
 	ret
 
-GetFloorObjectFromPos: ; 3927 (0:3927)
+; return in a the permission byte corresponding to the current map's x,y coordinates at bc
+GetPermissionOfMapPosition: ; 3927 (0:3927)
 	push hl
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	ld a, [hl]
 	pop hl
 	ret
 ; 0x392e
 
-SetFloorObjectFromPos: ; 392e (0:392e)
+; set to a the permission byte corresponding to the current map's x,y coordinates at bc
+SetPermissionOfMapPosition: ; 392e (0:392e)
 	push hl
 	push af
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	pop af
 	ld [hl], a
 	pop hl
 	ret
 ; 0x3937
 
-UpdateFloorObjectFromPos: ; 3937 (0:3937)
+; set the permission byte corresponding to the current map's x,y coordinates at bc
+; to the value of register a anded by its current value
+UpdatePermissionOfMapPosition: ; 3937 (0:3937)
 	push hl
 	push bc
 	push de
 	cpl
 	ld e, a
-	call FindFloorTileFromPos
+	call GetPermissionByteOfMapPosition
 	ld a, [hl]
 	and e
 	ld [hl], a
@@ -10031,8 +10630,9 @@ UpdateFloorObjectFromPos: ; 3937 (0:3937)
 	ret
 ; 0x3946
 
-; puts a floor tile in hl given coords in bc (x,y. measured in tiles)
-FindFloorTileFromPos: ; 3946 (0:3946)
+; returns in hl the address within wPermissionMap that corresponds to
+; the current map's x,y coordinates at bc
+GetPermissionByteOfMapPosition: ; 3946 (0:3946)
 	push bc
 	srl b
 	srl c
@@ -10042,7 +10642,7 @@ FindFloorTileFromPos: ; 3946 (0:3946)
 	or b
 	ld c, a
 	ld b, $0
-	ld hl, wFloorObjectMap
+	ld hl, wPermissionMap
 	add hl, bc
 	pop bc
 	ret
@@ -10457,7 +11057,33 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ret
 ; 0x3ba2
 
-	INCROM $3ba2, $3bd2
+Func_3ba2: ; 3ba2 (0:3ba2)
+	ldh a, [hBankROM]
+	push af
+	ld a, $07
+	call BankswitchHome
+	call $4ac5
+	call Func_3cb4
+	pop af
+	call BankswitchHome
+	ret
+; 0x3bb5
+
+Func_3bb5: ; 3bb5 (0:3bb5)
+	xor a
+	ld [wd4c0], a
+	ldh a, [hBankROM]
+	push af
+	ld a, [wd4be]
+	call BankswitchHome
+	call Func_3cb4
+	call CallHL2
+	pop af
+	call BankswitchHome
+	ld a, $80
+	ld [wd4c0], a
+	ret
+; 0x3bd2
 
 ; writes from hl the pointer to the function to be called by DoFrame
 SetDoFrameFunction: ; 3bd2 (0:3bd2)
@@ -10503,13 +11129,68 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	ret
 ; 0x3c10
 
-	INCROM $3c10, $3c45
+; fill bc bytes of data at hl with a
+FillMemoryWithA: ; 3c10 (0:3c10)
+	push hl
+	push de
+	push bc
+	ld e, a
+.loop
+	ld [hl], e
+	inc hl
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x3c1f
 
-Func_3c45: ; 3c45 (0:3c45)
+; fill 2*bc bytes of data at hl with d,e
+FillMemoryWithDE: ; 3c1f (0:3c1f)
+	push hl
+	push bc
+.loop
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	inc hl
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop bc
+	pop hl
+	ret
+; 0x3c2d
+
+Func_3c2d: ; 3c2d (0:3c2d)
+	push hl
+	push af
+	ldh a, [hBankROM]
+	push af
+	push hl
+	ld hl, sp+$05
+	ld a, [hl]
+	call BankswitchHome
+	pop hl
+	ld a, [hl]
+	ld hl, sp+$03
+	ld [hl], a
+	pop af
+	call BankswitchHome
+	pop af
+	pop hl
+	ret
+; 0x3c45
+
+CallHL2: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-Func_3c46: ; 3c46 (0:3c46)
+PushBC_Ret: ; 3c46 (0:3c46)
 	push bc
 	ret
 ; 0x3c48
@@ -10609,7 +11290,120 @@ Func_3cb4: ; 3cb4 (0:3cb4)
 	ret
 ; 0x3cc4
 
-	INCROM $3cc4, $3d72
+; refresh sprites?
+Func_3cc4: ; 3cc4 (0:3cc4)
+	ldh a, [hBankROM]
+	push af
+	ld a, [wd5d6]
+	call BankswitchHome
+	ld a, [wd5d1]
+	cp $f0
+	ld a, $00
+	jr c, .asm_3cd7
+	dec a
+.asm_3cd7
+	ld [wd5d4], a
+	ld a, [wd5d2]
+	cp $f0
+	ld a, $00
+	jr c, .asm_3ce4
+	dec a
+.asm_3ce4
+	ld [wd5d5], a
+	ld a, [hli]
+	or a
+	jp z, .done
+	ld c, a
+.asm_3ced
+	push bc
+	push hl
+	ld b, $00
+	bit 7, [hl]
+	jr z, .asm_3cf6
+	dec b
+.asm_3cf6
+	ld a, [wd5d0]
+	bit 6, a
+	jr z, .asm_3d10
+	ld a, [hl]
+	add $08
+	ld c, a
+	ld a, $00
+	adc b
+	ld b, a
+	ld a, [wd5d2]
+	sub c
+	ld e, a
+	ld a, [wd5d5]
+	sbc b
+	jr .asm_3d19
+.asm_3d10
+	ld a, [wd5d2]
+	add [hl]
+	ld e, a
+	ld a, [wd5d5]
+	adc b
+.asm_3d19
+	or a
+	jr nz, .asm_3d64
+	inc hl
+	ld b, $00
+	bit 7, [hl]
+	jr z, .asm_3d24
+	dec b
+.asm_3d24
+	ld a, [wd5d0]
+	bit 5, a
+	jr z, .asm_3d3e
+	ld a, [hl]
+	add $08
+	ld c, a
+	ld a, $00
+	adc b
+	ld b, a
+	ld a, [wd5d1]
+	sub c
+	ld d, a
+	ld a, [wd5d4]
+	sbc b
+	jr .asm_3d47
+.asm_3d3e
+	ld a, [wd5d1]
+	add [hl]
+	ld d, a
+	ld a, [wd5d4]
+	adc b
+.asm_3d47
+	or a
+	jr nz, .asm_3d64
+	inc hl
+	ld a, [wd5d3]
+	add [hl]
+	ld c, a
+	inc hl
+	ld a, [wd5d0]
+	add [hl]
+	and $17
+	ld b, a
+	ld a, [wd5d0]
+	xor [hl]
+	and $e0
+	or b
+	ld b, a
+	inc hl
+	call SetOneObjectAttributes
+.asm_3d64
+	pop hl
+	ld bc, $4
+	add hl, bc
+	pop bc
+	dec c
+	jr nz, .asm_3ced
+.done
+	pop af
+	call BankswitchHome
+	ret
+; 0x3d72
 
 Func_3d72: ; 3d72 (0:3d72)
 	ldh a, [hBankROM]
@@ -10669,6 +11463,9 @@ Func_3db7: ; 3db7 (0:3db7)
 ; the sprite is identified by its index in wWhichSprite.
 GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
+;	fallthrough
+
+GetSpriteAnimBufferProperty_SpriteInA:
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_ret
@@ -10689,7 +11486,27 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ret
 ; 0x3ddb
 
-	INCROM $3ddb, $3df3
+Func_3ddb: ; 3ddb (0:3ddb)
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty_SpriteInA
+	res 2, [hl]
+	pop bc
+	pop hl
+	ret
+; 0x3de7
+
+Func_3de7: ; 3de7 (0:3de7)
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_FIELD_0F
+	call GetSpriteAnimBufferProperty_SpriteInA
+	set 2, [hl]
+	pop bc
+	pop hl
+	ret
+; 0x3df3
 
 Func_3df3: ; 3df3 (0:3df3)
 	push af
@@ -10731,20 +11548,204 @@ Func_3e2a: ; 3e2a (0:3e2a)
 	jr Func_3e17
 ; 0x3e31
 
-	INCROM $3e31, $3fe0
+Func_3e31: ; 3e31 (0:3e31)
+	ldh a, [hBankROM]
+	push af
+	call Func_3cb4
+	ld a, $20
+	call BankswitchHome
+	call $44d8
+	pop af
+	call BankswitchHome
+	ret
+; 0x3e44
 
-; jumps to 3f:hl
+; something window scroll
+Func_3e44: ; 3e44 (0:3e44)
+	push af
+	push hl
+	push bc
+	push de
+	ld hl, wd657
+	bit 0, [hl]
+	jr nz, .done
+	set 0, [hl]
+	ld b, $00
+	ld hl, wd658
+	ld c, [hl]
+	inc [hl]
+	ld hl, wd64b
+	add hl, bc
+	ld a, [hl]
+	ldh [rWX], a
+	ld hl, rLCDC
+	cp $a7
+	jr c, .disable_sprites
+	set 1, [hl] ; enable sprites
+	jr .asm_3e6c
+.disable_sprites
+	res 1, [hl] ; disable sprites
+.asm_3e6c
+	ld hl, wd651
+	add hl, bc
+	ld a, [hl]
+	cp $8f
+	jr c, .asm_3e9a
+	ld a, [wd665]
+	or a
+	jr z, .asm_3e93
+	ld hl, wd659
+	ld de, wd64b
+	ld bc, $6
+	call CopyDataHLtoDE
+	ld hl, wd65f
+	ld de, wd651
+	ld bc, $6
+	call CopyDataHLtoDE
+.asm_3e93
+	xor a
+	ld [wd665], a
+	ld [wd658], a
+.asm_3e9a
+	ldh [rLYC], a
+	ld hl, wd657
+	res 0, [hl]
+.done
+	pop de
+	pop bc
+	pop hl
+	pop af
+	ret
+; 0x3ea6
+
+; apply background scroll for lines 0 to 96 using the values at BGScrollData
+; skip if wApplyBGScroll is non-0
+ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
+	push af
+	push hl
+	call DisableInt_LYCoincidence
+	ld hl, rSTAT
+	res 2, [hl] ; reset coincidence flag
+	ei
+	ld hl, wApplyBGScroll
+	ld a, [hl]
+	or a
+	jr nz, .done
+	inc [hl]
+	push bc
+	push de
+	xor a
+	ld [wNextScrollLY], a
+.ly_loop
+	ld a, [wNextScrollLY]
+	ld b, a
+.wait_ly
+	ldh a, [rLY]
+	cp $60
+	jr nc, .ly_over_0x60
+	cp b ; already hit LY=b?
+	jr c, .wait_ly
+	call GetNextBackgroundScroll
+	ld hl, rSTAT
+.wait_hblank_or_vblank
+	bit 1, [hl]
+	jr nz, .wait_hblank_or_vblank
+	ldh [rSCX], a
+	ldh a, [rLY]
+	inc a
+	ld [wNextScrollLY], a
+	jr .ly_loop
+.ly_over_0x60
+	xor a
+	ldh [rSCX], a
+	ld a, $00
+	ldh [rLYC], a
+	call GetNextBackgroundScroll
+	ldh [hSCX], a
+	pop de
+	pop bc
+	xor a
+	ld [wApplyBGScroll], a
+	call EnableInt_LYCoincidence
+.done
+	pop hl
+	pop af
+	ret
+; 0x3ef8
+
+BGScrollData: ; 3ef8 (0:3ef8)
+	db  0,  0,  0,  1,  1,  1,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3
+	db  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  1,  1,  1,  0,  0
+	db  0, -1, -1, -1, -2, -2, -2, -3, -3, -3, -4, -4, -4, -4, -4, -4
+	db -5, -4, -4, -4, -4, -4, -4, -3, -3, -3, -2, -2, -2, -1, -1, -1
+; 3f38
+
+; x = BGScrollData[(wVBlankCounter + a) & $3f]
+; return, in register a, x rotated right [wBGScrollMod]-1 times (max 3 times)
+GetNextBackgroundScroll: ; 3f38 (0:3f38)
+	ld hl, wVBlankCounter
+	add [hl]
+	and $3f
+	ld c, a
+	ld b, $00
+	ld hl, BGScrollData
+	add hl, bc
+	ld a, [wBGScrollMod]
+	ld c, a
+	ld a, [hl]
+	dec c
+	jr z, .done
+	dec c
+	jr z, .halve
+	dec c
+	jr z, .quarter
+; effectively zero
+	sra a
+.quarter
+	sra a
+.halve
+	sra a
+.done
+	ret
+; 0x3f5a
+
+EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
+	push hl
+	ld hl, rSTAT
+	set 6, [hl]
+	xor a
+	ld hl, rIE
+	set 1, [hl]
+	pop hl
+	ret
+; 0x3f68
+
+DisableInt_LYCoincidence: ; 3f68 (0:3f68)
+	push hl
+	ld hl, rSTAT
+	res 6, [hl]
+	xor a
+	ld hl, rIE
+	res 1, [hl]
+	pop hl
+	ret
+; 0x3f76
+
+rept $6a
+	db $ff
+endr
+
+; jumps to 3f:hl, then switches to bank 3d
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	push af
 	ld a, $3f
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	pop af
-	ld bc, Bankswitch3d
+	ld bc, .bankswitch3d
 	push bc
 	jp hl
-
-Bankswitch3d: ; 3fe0 (0:3fe0)
+.bankswitch3d
 	ld a, $3d
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a

@@ -13,7 +13,7 @@ GameLoop: ; 4000 (1:4000)
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, 1
-	ld [wUppercaseVWFLetters], a
+	ld [wUppercaseHalfWidthLetters], a
 	ei
 	farcall CommentedOut_1a6cc
 	ldh a, [hButtonsHeld]
@@ -38,14 +38,14 @@ GameLoop: ; 4000 (1:4000)
 Func_4050: ; 4050 (1:4050)
 	farcall Func_1996e
 	ld a, 1
-	ld [wUppercaseVWFLetters], a
+	ld [wUppercaseHalfWidthLetters], a
 	ret
 
 Func_405a: ; 405a (1:405a)
 	xor a
 	ld [wTileMapFill], a
 	call DisableLCD
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld de, $387f
 	call Func_2275
@@ -281,7 +281,7 @@ Func_420b: ; 420b (1:420b)
 	ld [wTileMapFill], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld de, $389f
 	call Func_2275
@@ -320,9 +320,9 @@ HandleTurn: ; 4225 (1:4225)
 	call c, DisplayPlayerDrawCardScreen
 	jr DuelMainInterface
 
-; display the animation of the player drawing the card at hTempCardIndex_ff98
-; save duel state to SRAM, and fall through to DuelMainInterface to effectively
-; begin the turn
+; display the animation of the player drawing the card at hTempCardIndex_ff98,
+; save duel state to SRAM, and fall through to DuelMainInterface
+; to effectively begin the turn
 HandleTurn_PlayerDrewCard:
 	call DisplayPlayerDrawCardScreen
 	call SaveDuelStateToSRAM
@@ -345,7 +345,7 @@ DuelMainInterface: ; 426d (1:426d)
 	jp z, $6911
 	; DUELIST_TYPE_AI_OPP
 	xor a
-	ld [wVBlankCtr], a
+	ld [wVBlankCounter], a
 	ld [wcbf9], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
@@ -929,7 +929,7 @@ Func_4611: ; 4611 (1:4611)
 	jr nc, .asm_466a
 	ldh a, [hTempCardIndex_ff98]
 	call RemoveCardFromDuelTempList
-	call Func_4693
+	call DisplayEnergyDiscardScreen
 	jr .asm_4633
 .asm_466a
 	ld a, [wcbd5]
@@ -956,7 +956,9 @@ Func_4673: ; 4673 (1:4673)
 	ld [wcbfa], a
 ;	fallthrough
 
-Func_4693: ; 4693 (1:4693)
+; display the screen that prompts the player to select energy cards to discard
+; in order to retreat a Pokemon card
+DisplayEnergyDiscardScreen: ; 4693 (1:4693)
 	lb de, 0, 3
 	lb bc, 20, 10
 	call DrawRegularTextBox
@@ -1556,28 +1558,28 @@ Func_49ed: ; 49ed (1:49ed)
 	INCROM $4a35, $4a97
 
 Func_4a97: ; 4a97 (1:4a97)
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	ld de, wDefaultText
 	push de
 	call CopyPlayerName
 	lb de, 0, 11
-	call Func_22ae
+	call InitTextPrinting
 	pop hl
-	call Func_21c5
+	call ProcessText
 	ld bc, $5
 	call Func_3e10
 	ld de, wDefaultText
 	push de
 	call CopyOpponentName
 	pop hl
-	call Func_23c1
+	call GetTextSizeInTiles
 	push hl
 	add SCREEN_WIDTH
 	ld d, a
 	ld e, 0
-	call Func_22ae
+	call InitTextPrinting
 	pop hl
-	call Func_21c5
+	call ProcessText
 	ld a, [wOpponentPortrait]
 	ld bc, $d01
 	call Func_3e2a
@@ -1660,7 +1662,7 @@ Func_4b38: ; 4b38 (1:4b38)
 	call PrintCardListItems
 	ldtx hl, TheCardYouReceivedText
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	ldtx hl, YouReceivedTheseCardsText
 	call DrawWideTextBox_WaitForInput
@@ -1912,7 +1914,7 @@ Func_4e40: ; 4e40 (1:4e40)
 	call PrintCardListItems
 	ldtx hl, DuelistHandText
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	call EnableLCD
 	ret
@@ -2001,7 +2003,7 @@ DrawDuelMainScene: ; 4f9d (1:4f9d)
 	ret z
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	ld a, $01
 	ld [wcac2], a
 	ld a, DUELVARS_ARENA_CARD
@@ -2147,13 +2149,13 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr nz, .print_color_icon
 	ld hl, wDefaultText
-	call Func_23c1
+	call GetTextSizeInTiles
 	add SCREEN_WIDTH
 	ld d, a
 .print_color_icon
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wDefaultText
-	call Func_21c5
+	call ProcessText
 	push de
 	pop bc
 	call GetArenaCardColor
@@ -2505,7 +2507,7 @@ DrawCardListScreenLayout: ; 559a (1:559a)
 .draw
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
 	; draw the surrounding box
 	lb de, 0, 0
@@ -2631,7 +2633,7 @@ Func_5690: ; 5690 (1:5690)
 Func_56a0: ; 56a0 (1:56a0)
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wCardListInfoBoxText
 	ld a, [hli]
 	ld h, [hl]
@@ -2642,7 +2644,7 @@ Func_56a0: ; 56a0 (1:56a0)
 	ld h, [hl]
 	ld l, a
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	call PrintTextNoDelay
 	ret
 ; 0x56c2
@@ -3309,7 +3311,7 @@ _DisplayCardDetailScreen: ; 5e5f (1:5e5f)
 DrawLargePictureOfCard: ; 5e75 (1:5e75)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call LoadDuelHUDTiles
+	call LoadSymbolsFont
 	call SetDefaultPalettes
 	ld a, $08
 	ld [wcac2], a
@@ -3687,7 +3689,7 @@ Func_6510: ; 6510 (1:6510)
 	call LoadDuelCheckPokemonScreenTiles
 	call Func_622a
 	lb de, 1, 4
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wLoadedCard1Move1Name
 	call Func_2c20
 	lb de, 1, 6
@@ -3707,7 +3709,7 @@ Func_653e: ; 653e (1:653e)
 	dec e
 .asm_654c
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	call Func_2c29
 	call Func_5f50
 	ret
@@ -3831,12 +3833,12 @@ Func_6673: ; 6673 (1:6673)
 	call EmptyScreen
 	call Func_5f4a
 	lb de, 1, 1
-	call Func_22ae
+	call InitTextPrinting
 	ld hl, wLoadedCard1Name
 	call Func_2c23
 	ld a, 19
 	lb de, 1, 3
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	ld hl, wLoadedCard1NonPokemonDescription
 	call Func_2c23
 	call Func_5f50
@@ -3901,7 +3903,7 @@ AIMakeDecision: ; 67be (1:67be)
 	jr nz, .skip_delay
 .delay_loop
 	call DoFrame
-	ld a, [wVBlankCtr]
+	ld a, [wVBlankCounter]
 	cp $3c
 	jr c, .delay_loop
 
@@ -3918,7 +3920,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ld a, [wcbf9]
 	or a
 	ret nz
-	ld [wVBlankCtr], a
+	ld [wVBlankCounter], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
 	or a
@@ -4441,7 +4443,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call EnableLCD
 	lb de, 1, 14
 	ld a, 19
-	call Func_22a6
+	call InitTextPrintingInTextbox
 	ld hl, wCoinTossScreenTextID
 	ld a, [hli]
 	ld h, [hl]

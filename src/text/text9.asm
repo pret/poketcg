@@ -1,6 +1,6 @@
 Text073f: ; 54000 (15:4000)
 	text "Who?"
-	line "Oh! It's you, ", TX_RAM1,  "..."
+	line "Oh! It's you, <RAMNAME>..."
 	line "I couldn't believe that I could"
 	line "lose, but now..."
 	line "Now I understand."
@@ -16,14 +16,14 @@ Text073f: ; 54000 (15:4000)
 	line "the different cards to build "
 	line "different types of Decks, and"
 	line "to play against different people!"
-	line "So...", TX_RAM1,  "..."
+	line "So...<RAMNAME>..."
 	line "Will you play with me again?"
 	line "With all sorts of different Decks?"
 	line "And this time, I not gonna lose!"
 	done
 
 Text0740: ; 54223 (15:4223)
-	text "Oh, hi ", TX_RAM1,  "..."
+	text "Oh, hi <RAMNAME>..."
 	line "Do you want to Duel?"
 	done
 
@@ -115,7 +115,7 @@ Text074c: ; 546cf (15:46cf)
 	done
 
 Text074d: ; 5471b (15:471b)
-	text "If I use ", TX_RAM2,  " now,"
+	text "If I use <RAMTEXT> now,"
 	line "This will happen..."
 	done
 
@@ -420,7 +420,7 @@ Text0781: ; 5557a (15:557a)
 	done
 
 Text0782: ; 55621 (15:5621)
-	text "Hi, ", TX_RAM1,  "."
+	text "Hi, <RAMNAME>."
 	line "Would you like to duel?"
 	line "The Legendary Cards will eventually"
 	line "belong to me!"
@@ -429,7 +429,7 @@ Text0782: ; 55621 (15:5621)
 	done
 
 Text0783: ; 5569c (15:569c)
-	text "Hi, ", TX_RAM1,  "."
+	text "Hi, <RAMNAME>."
 	line "Would you like to duel?"
 	done
 
@@ -634,7 +634,7 @@ Text07a2: ; 56049 (15:6049)
 Text07a3: ; 5606c (15:606c)
 	text "I am Gene, the Master of the"
 	line "Rock Club! Rock is good..."
-	line "Isn't Rock good, ", TX_RAM1,  "...?"
+	line "Isn't Rock good, <RAMNAME>...?"
 	line "Rock is hard and strong!"
 	line "Doesn't crumble under pressure!"
 	line "After you Duel me, you'll know "
@@ -934,7 +934,8 @@ Text07cb: ; 56d53 (15:6d53)
 	line ""
 	line ""
 	line "             Satoshi Tajiri"
-	line TX_END
+	line ""
+	done
 
 Text07cc: ; 56d95 (15:6d95)
 	text ""
@@ -1010,7 +1011,7 @@ Text07d4: ; 5705e (15:705e)
 	done
 
 Text07d5: ; 57075 (15:7075)
-	text TX_RAM1,  "'s Score"
+	text "<RAMNAME>'s Score"
 	done
 
 Text07d6: ; 57080 (15:7080)
@@ -1023,7 +1024,7 @@ Text07d7: ; 570a4 (15:70a4)
 
 Text07d8: ; 570be (15:70be)
 	text "Maximum Consecutive Wins"
-	line "    [ ", TX_RAM2,  "  ]"
+	line "    [ <RAMTEXT>  ]"
 	done
 
 Text07d9: ; 570e3 (15:70e3)
@@ -1031,13 +1032,13 @@ Text07d9: ; 570e3 (15:70e3)
 	done
 
 Text07da: ; 570e9 (15:70e9)
-	text TX_RAM1,  " ", TX_RAM3,  " Consecutive Wins!"
+	text "<RAMNAME> <RAMNUM> Consecutive Wins!"
 	line ""
-	text TX_RAM3,  " opponent is ", TX_RAM2,  "."
+	text "<RAMNUM> opponent is <RAMTEXT>."
 	done
 
 Text07db: ; 57112 (15:7112)
-	text TX_RAM3,  " opponent is ", TX_RAM2,  "."
+	text "<RAMNUM> opponent is <RAMTEXT>."
 	done
 
 Text07dc: ; 57124 (15:7124)
@@ -1063,13 +1064,13 @@ Text07e0: ; 571bd (15:71bd)
 	done
 
 Text07e1: ; 571df (15:71df)
-	text "You lost to the ", TX_RAM3,  " opponent,"
-	line TX_RAM2,  "!"
+	text "You lost to the <RAMNUM> opponent,"
+	line "<RAMTEXT>!"
 	done
 
 Text07e2: ; 571ff (15:71ff)
-	text TX_RAM1,  "'s consecutive wins"
-	line "ended at ", TX_RAM3,  "."
+	text "<RAMNAME>'s consecutive wins"
+	line "ended at <RAMNUM>."
 	done
 
 Text07e3: ; 57221 (15:7221)
@@ -1082,7 +1083,7 @@ Text07e4: ; 57240 (15:7240)
 
 Text07e5: ; 5725f (15:725f)
 	text "Congratulations!"
-	line "You won against ", TX_RAM3,  " opponents!"
+	line "You won against <RAMNUM> opponents!"
 	done
 
 DefeatedFiveOpponentsText: ; 5728e (15:728e)
@@ -1091,13 +1092,14 @@ DefeatedFiveOpponentsText: ; 5728e (15:728e)
 	done
 
 Text07e7: ; 572ba (15:72ba)
-	text TX_RAM1,  " successfully defeated "
-	line "5 opponents ", TX_START,   TX_RAM3,  " time(s)!!!"
+	text "<RAMNAME> successfully defeated "
+	line "5 opponents "
+	text "<RAMNUM> time(s)!!!"
 	done
 
 ConsecutiveWinRecordIncreasedText: ; 572ee (15:72ee)
-	text TX_RAM1,  "'s consecutive win"
-	line "record increased to ", TX_RAM3,  "!"
+	text "<RAMNAME>'s consecutive win"
+	line "record increased to <RAMNUM>!"
 	done
 
 Text07e9: ; 5731a (15:731a)
@@ -1121,59 +1123,59 @@ Text07ed: ; 5734d (15:734d)
 	done
 
 Text07ee: ; 5735b (15:735b)
-	db $61
+	textfw0 "1"
 	done
 
 Text07ef: ; 5735d (15:735d)
-	db $62
+	textfw0 "2"
 	done
 
 Text07f0: ; 5735f (15:735f)
-	db $63
+	textfw0 "3"
 	done
 
 Text07f1: ; 57361 (15:7361)
-	db $64
+	textfw0 "4"
 	done
 
 Text07f2: ; 57363 (15:7363)
-	db $65
+	textfw0 "5"
 	done
 
 Text07f3: ; 57365 (15:7365)
-	db $70
+	textfw0 " "
 	done
 
 Text07f4: ; 57367 (15:7367)
-	db $03,$55
+	textfw3 "☆"
 	done
 
 Text07f5: ; 5736a (15:736a)
-	db $03,$54
+	textfw3 "★"
 	done
 
 Text07f6: ; 5736d (15:736d)
-	db $03,$50, "<FIRE>", $03,$51
+	textfw3 "【", "<FIRE>", "】"
 	done
 
 Text07f7: ; 57374 (15:7374)
-	db $03,$50, "<LIGHTNING>", $03,$51
+	textfw3 "【", "<LIGHTNING>", "】"
 	done
 
 Text07f8: ; 5737b (15:737b)
-	db $03,$50, "<WATER>", $03,$51
+	textfw3 "【", "<WATER>", "】"
 	done
 
 Text07f9: ; 57382 (15:7382)
-	db $03,$50, "<FIGHTING>", $03,$51
+	textfw3 "【", "<FIGHTING>", "】"
 	done
 
 Text07fa: ; 57389 (15:7389)
-	db $03,$50, "<PSYCHIC>", $03,$51
+	textfw3 "【", "<PSYCHIC>", "】"
 	done
 
 Text07fb: ; 57390 (15:7390)
-	db $03,$50, "<GRASS>", $03,$51
+	textfw3 "【", "<GRASS>", "】"
 	done
 
 GrassEnergyName: ; 57397 (15:7397)

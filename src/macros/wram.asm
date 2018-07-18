@@ -39,6 +39,13 @@ move_data_struct: MACRO
 \1Animation::      ds 1
 ENDM
 
+text_header: MACRO
+\1DefaultFont:: ds 1
+\1FontWidth::   ds 1
+\1Address::     ds 2
+\1RomBank::     ds 1
+ENDM
+
 ; TODO: Figure out what the rest are for
 sprite_anim_struct: MACRO
 \1Field0x00::  ds 1
