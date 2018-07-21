@@ -42,7 +42,7 @@ Func_4050: ; 4050 (1:4050)
 	ret
 
 Func_405a: ; 405a (1:405a)
-	xor a
+	xor a ; SYM_SPACE
 	ld [wTileMapFill], a
 	call DisableLCD
 	call LoadSymbolsFont
@@ -277,7 +277,7 @@ MainDuelLoop ; 40ee (1:40ee)
 ; 0x420b
 
 Func_420b: ; 420b (1:420b)
-	xor a
+	xor a ; SYM_SPACE
 	ld [wTileMapFill], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -3061,7 +3061,7 @@ FlushAllPalettesOrSendPal23Packet: ; 5a34 (1:5a34)
 	ret z
 	cp CONSOLE_SGB
 	jr z, .sgb
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	ret
 .sgb
 ; sgb PAL23, 1 ; sgb_command, length
@@ -3203,7 +3203,7 @@ SetDefaultPalettes: ; 5aeb (1:5aeb)
 	ld a, $e4
 	ld [wOBP0], a
 	ld [wBGP], a
-	ld a, $01 ; equivalent to FLUSH_ONE
+	ld a, $01 ; equivalent to FLUSH_ONE_PAL
 	ld [wFlushPaletteFlags], a
 	ret
 .cgb
@@ -3217,7 +3217,7 @@ SetDefaultPalettes: ; 5aeb (1:5aeb)
 	ld hl, wObjectPalettesCGB
 	ld c, CGB_PAL_SIZE
 	call .copy_de_to_hl
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	ret
 .sgb
 	ld a, $04

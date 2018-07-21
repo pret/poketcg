@@ -75,15 +75,15 @@ PKMN_CARD_DATA_LENGTH EQU $41
 
 ; generic type (color) constants
 	const_def
-	const FIRE        ; $0
-	const GRASS       ; $1
-	const LIGHTNING   ; $2
-	const WATER       ; $3
-	const FIGHTING    ; $4
-	const PSYCHIC     ; $5
+	const FIRE        ; $00
+	const GRASS       ; $01
+	const LIGHTNING   ; $02
+	const WATER       ; $03
+	const FIGHTING    ; $04
+	const PSYCHIC     ; $05
 NUM_COLORED_TYPES EQU const_value
-	const COLORLESS   ; $6
-	const UNUSED_TYPE ; $7
+	const COLORLESS   ; $06
+	const UNUSED_TYPE ; $07
 NUM_TYPES EQU const_value
 
 ; CARD_DATA_TYPE constants
@@ -120,12 +120,12 @@ STAR      EQU $2
 PROMOSTAR EQU $ff
 
 ; CARD_DATA_SET constants (set 1)
-COLOSSEUM   EQU $00
-EVOLUTION   EQU $10
-MYSTERY     EQU $20
-LABORATORY  EQU $30
-PROMOTIONAL EQU $40
-ENERGY      EQU $50
+COLOSSEUM   EQU $0 << 4
+EVOLUTION   EQU $1 << 4
+MYSTERY     EQU $2 << 4
+LABORATORY  EQU $3 << 4
+PROMOTIONAL EQU $4 << 4
+ENERGY      EQU $5 << 4
 
 ; CARD_DATA_SET constants (set 2)
 JUNGLE EQU $1
@@ -134,9 +134,9 @@ GB     EQU $7
 PRO    EQU $8
 
 ; CARD_DATA_STAGE constants
-BASIC  EQU $0
-STAGE1 EQU $1
-STAGE2 EQU $2
+BASIC  EQU $00
+STAGE1 EQU $01
+STAGE2 EQU $02
 
 ; CARD_DATA_WEAKNESS and CARD_DATA_RESISTANCE constants
 WR_FIRE      EQU $80
@@ -147,13 +147,13 @@ WR_FIGHTING  EQU $08
 WR_PSYCHIC   EQU $04
 
 ; CARD_DATA_MOVE*_CATEGORY constants
-DAMAGE_NORMAL EQU $0
-DAMAGE_PLUS   EQU $1
-DAMAGE_MINUS  EQU $2
-DAMAGE_X      EQU $3
-POKEMON_POWER EQU $4
-RESIDUAL_F    EQU  7
-RESIDUAL      EQU  1 << RESIDUAL_F
+DAMAGE_NORMAL EQU $00
+DAMAGE_PLUS   EQU $01
+DAMAGE_MINUS  EQU $02
+DAMAGE_X      EQU $03
+POKEMON_POWER EQU $04
+RESIDUAL_F    EQU 7
+RESIDUAL      EQU 1 << RESIDUAL_F
 
 ; CARD_DATA_MOVE*_FLAG1 constants
 INFLICT_POISON           EQU %00000001

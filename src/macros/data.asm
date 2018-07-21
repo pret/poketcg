@@ -85,15 +85,6 @@ tx: MACRO
 	dw \1_
 ENDM
 
-txsymbol: MACRO
-	const SYM_\1
-	charmap "\1>", const_value + -1
-ENDM
-
-fwcharmap: MACRO
-	charmap STRCAT("FW\1_", \2), \3
-ENDM
-
 textitem: MACRO
 	db \1, \2
 	tx \3

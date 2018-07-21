@@ -61,7 +61,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	add c
 	ld c, a
 	ld b, $0
-	ld hl, MapSongs
+	ld hl, MapHeaders
 	add hl, bc
 	ld a, [hli]
 	ld [wd131], a
@@ -88,7 +88,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	pop hl
 	ret
 
-INCLUDE "data/map_songs.asm"
+INCLUDE "data/map_headers.asm"
 
 Func_1c440: ; 1c440 (7:4440)
 	INCROM $1c440, $1c455

@@ -51,10 +51,10 @@ Start: ; 0150 (0:0150)
 	pop af
 	ld [wInitialA], a
 	call DetectConsole
-	ld a, " "
+	ld a, $20
 	ld [wTileMapFill], a
 	call SetupVRAM
-	call SetupLCD
+	call SetupRegisters
 	call SetupPalettes
 	call SetupSound
 	call SetupTimer
@@ -66,6 +66,7 @@ Start: ; 0150 (0:0150)
 	ld sp, $e000
 	jp GameLoop
 
+; vblank interrupt handler
 VBlankHandler: ; 019b (0:019b)
 	push af
 	push bc
@@ -74,9 +75,9 @@ VBlankHandler: ; 019b (0:019b)
 	ldh a, [hBankROM]
 	push af
 	ld hl, wReentrancyFlag
-	bit 0, [hl]
+	bit IN_VBLANK, [hl]
 	jr nz, .done
-	set 0, [hl]
+	set IN_VBLANK, [hl]
 	ld a, [wVBlankOAMCopyToggle]
 	or a
 	jr z, .no_oam_copy
@@ -98,11 +99,11 @@ VBlankHandler: ; 019b (0:019b)
 	ld [rLCDC], a
 	ei
 	call wVBlankFunctionTrampoline
-	call FlushPalettes
+	call FlushPalettesIfRequested
 	ld hl, wVBlankCounter
 	inc [hl]
 	ld hl, wReentrancyFlag
-	res 0, [hl]
+	res IN_VBLANK, [hl]
 .done
 	pop af
 	call BankswitchHome
@@ -112,6 +113,7 @@ VBlankHandler: ; 019b (0:019b)
 	pop af
 	reti
 
+; timer interrupt handler
 TimerHandler: ; 01e6 (0:01e6)
 	push af
 	push hl
@@ -129,9 +131,9 @@ TimerHandler: ; 01e6 (0:01e6)
 	call IncrementPlayTimeCounter
 	; check in-timer flag
 	ld hl, wReentrancyFlag
-	bit 1, [hl]
+	bit IN_TIMER, [hl]
 	jr nz, .done
-	set 1, [hl]
+	set IN_TIMER, [hl]
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(SoundTimerHandler)
@@ -141,7 +143,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	call BankswitchHome
 	; clear in-timer flag
 	ld hl, wReentrancyFlag
-	res 1, [hl]
+	res IN_TIMER, [hl]
 .done
 	pop bc
 	pop de
@@ -149,7 +151,7 @@ TimerHandler: ; 01e6 (0:01e6)
 	pop af
 	reti
 
-; increment timer counter by a tick
+; increment play time counter by a tick
 IncrementPlayTimeCounter: ; 021c (0:021c)
 	ld a, [wPlayTimeCounterEnable]
 	or a
@@ -193,7 +195,7 @@ SetupTimer: ; 0241 (0:0241)
 	ld [rTMA], a
 	ld a, TAC_16384_HZ
 	ld [rTAC], a
-	ld a, TAC_16384_HZ | 1 << TAC_ON
+	ld a, TAC_START | TAC_16384_HZ
 	ld [rTAC], a
 	ret
 
@@ -205,11 +207,11 @@ CheckForCGB: ; 025c (0:025c)
 	scf
 	ret
 
-; wait for vblank
+; wait for VBlankHandler to finish unless lcd is off
 WaitForVBlank: ; 0264 (0:0264)
 	push hl
 	ld a, [wLCDC]
-	bit LCDC_ON, a
+	bit LCDC_ENABLE_F, a
 	jr z, .lcd_off
 	ld hl, wVBlankCounter
 	ld a, [hl]
@@ -224,34 +226,34 @@ WaitForVBlank: ; 0264 (0:0264)
 
 ; turn LCD on
 EnableLCD: ; 0277 (0:0277)
-	ld a, [wLCDC]      ;
-	bit LCDC_ON, a     ;
-	ret nz             ; assert that LCD is off
-	or 1 << LCDC_ON    ;
-	ld [wLCDC], a      ;
-	ld [rLCDC], a      ; turn LCD on
-	ld a, FLUSH_ALL
+	ld a, [wLCDC]        ;
+	bit LCDC_ENABLE_F, a ;
+	ret nz               ; assert that LCD is off
+	or LCDC_ON           ;
+	ld [wLCDC], a        ;
+	ld [rLCDC], a        ; turn LCD on
+	ld a, FLUSH_ALL_PALS
 	ld [wFlushPaletteFlags], a
 	ret
 
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
 	ld a, [rLCDC]        ;
-	bit LCDC_ON, a  ;
+	bit LCDC_ENABLE_F, a ;
 	ret z                ; assert that LCD is on
 	ld a, [rIE]
 	ld [wIE], a
-	res 0, a             ;
+	res INT_VBLANK, a    ;
 	ld [rIE], a          ; disable vblank interrupt
-.asm_298
+.wait_vblank
 	ld a, [rLY]          ;
 	cp LY_VBLANK         ;
-	jr nz, .asm_298      ; wait for vblank
+	jr nz, .wait_vblank  ; wait for vblank
 	ld a, [rLCDC]        ;
-	and $7f              ;
+	and LCDC_OFF         ;
 	ld [rLCDC], a        ;
 	ld a, [wLCDC]        ;
-	and $7f              ;
+	and LCDC_OFF         ;
 	ld [wLCDC], a        ; turn LCD off
 	xor a
 	ld [rBGP], a
@@ -264,66 +266,72 @@ DisableLCD: ; 028a (0:028a)
 ; set OBJ size: 8x8
 Set_OBJ_8x8: ; 02b9 (0:02b9)
 	ld a, [wLCDC]
-	and $fb
+	and LCDC_OBJ8
 	ld [wLCDC], a
 	ret
 
 ; set OBJ size: 8x16
 Set_OBJ_8x16: ; 02c2 (0:02c2)
 	ld a, [wLCDC]
-	or $4
+	or LCDC_OBJ16
 	ld [wLCDC], a
 	ret
 
 ; set Window Display on
 Set_WD_on: ; 02cb (0:02cb)
 	ld a, [wLCDC]
-	or $20
+	or LCDC_WINON
 	ld [wLCDC], a
 	ret
 
 ; set Window Display off
 Set_WD_off: ; 02d4 (0:02d4)
 	ld a, [wLCDC]
-	and $df
+	and LCDC_WINOFF
 	ld [wLCDC], a
 	ret
 
+; enable timer interrupt
 EnableInt_Timer: ; 02dd (0:02dd)
 	ld a, [rIE]
-	or $4
+	or 1 << INT_TIMER
 	ld [rIE], a
 	ret
 
+; enable vblank interrupt
 EnableInt_VBlank: ; 02e4 (0:02e4)
 	ld a, [rIE]
-	or $1
+	or 1 << INT_VBLANK
 	ld [rIE], a
 	ret
 
+; enable lcdc interrupt on hblank mode
 EnableInt_HBlank: ; 02eb (0:02eb)
 	ld a, [rSTAT]
-	or $8
+	or 1 << STAT_MODE_HBLANK
 	ld [rSTAT], a
 	xor a
 	ld [rIF], a
 	ld a, [rIE]
-	or $2
+	or 1 << INT_LCD_STAT
 	ld [rIE], a
 	ret
 
+; disable lcdc interrupt and the hblank mode trigger
 DisableInt_HBlank: ; 02fb (0:02fb)
 	ld a, [rSTAT]
-	and $f7
+	and ~(1 << STAT_MODE_HBLANK)
 	ld [rSTAT], a
 	xor a
 	ld [rIF], a
 	ld a, [rIE]
-	and $fd
+	and ~(1 << INT_LCD_STAT)
 	ld [rIE], a
 	ret
 
-SetupLCD: ; 030b (0:030b)
+; initialize scroll, window, and lcdc registers, set trampoline functions
+; for the lcdc and vblank interrupts, latch clock data, and enable SRAM/RTC
+SetupRegisters: ; 030b (0:030b)
 	xor a
 	ld [rSCY], a
 	ld [rSCX], a
@@ -342,33 +350,34 @@ SetupLCD: ; 030b (0:030b)
 	ld [wLCDCFunctionTrampoline], a
 	ld [wVBlankFunctionTrampoline], a
 	ld hl, wVBlankFunctionTrampoline + 1
-	ld [hl], LOW(NopF)   ;
-	inc hl               ; load `jp NopF`
-	ld [hl], HIGH(NopF)  ;
-	ld a, $47
+	ld [hl], LOW(NoOp)   ;
+	inc hl               ; load `jp NoOp`
+	ld [hl], HIGH(NoOp)  ;
+	ld a, LCDC_BGON | LCDC_OBJON | LCDC_OBJ16 | LCDC_WIN9C00
 	ld [wLCDC], a
 	ld a, $1
 	ld [MBC3LatchClock], a
 	ld a, SRAM_ENABLE
 	ld [MBC3SRamEnable], a
-NopF: ; 0348 (0:0348)
+NoOp: ; 0348 (0:0348)
 	ret
 
+; sets wConsole and, if CGB, selects WRAM bank 1 and switches to double speed mode
 DetectConsole: ; 0349 (0:0349)
 	ld b, CONSOLE_CGB
 	cp GBC
-	jr z, .asm_35b
+	jr z, .got_console
 	call DetectSGB
 	ld b, CONSOLE_DMG
-	jr nc, .asm_35b
+	jr nc, .got_console
 	call InitSGB
 	ld b, CONSOLE_SGB
-.asm_35b
+.got_console
 	ld a, b
 	ld [wConsole], a
 	cp CONSOLE_CGB
 	ret nz
-	ld a, CONSOLE_SGB
+	ld a, $01
 	ld [rSVBK], a
 	call SwitchToCGBDoubleSpeed
 	ret
@@ -410,7 +419,7 @@ InitialPalette: ; 0399 (0:0399)
 	rgb 10,10,08
 	rgb 00,00,00
 
-; clear VRAM tile data
+; clear VRAM tile data ([wTileMapFill] should be an empty tile)
 SetupVRAM: ; 03a1 (0:03a1)
 	call FillTileMap
 	call CheckForCGB
@@ -458,7 +467,7 @@ FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM0
 	ret
 
-; zero work RAM, stack area & high RAM ($C000-$DFFF, $FF80-$FFEF)
+; zero work RAM, stack area, and high RAM ($C000-$DFFF, $FF80-$FFEF)
 ZeroRAM: ; 03ec (0:03ec)
 	ld hl, $c000
 	ld bc, $e000 - $c000
@@ -480,24 +489,25 @@ ZeroRAM: ; 03ec (0:03ec)
 	ret
 
 ; Flush all non-CGB and CGB palettes
-SetFlushAllPalettes: ; 0404 (0:0404)
-	ld a, FLUSH_ALL
-	jr SetFlushPalettes
+FlushAllPalettes: ; 0404 (0:0404)
+	ld a, FLUSH_ALL_PALS
+	jr FlushPalettes
 
 ; Flush non-CGB palettes and a single CGB palette,
 ; provided in a as an index between 0-7 (BGP) or 8-15 (OBP)
-SetFlushPalette: ; 0408 (0:0408)
-	or FLUSH_ONE
-	jr SetFlushPalettes
+FlushPalette: ; 0408 (0:0408)
+	or FLUSH_ONE_PAL
+	jr FlushPalettes
 
 ; Set wBGP to the specified value, flush non-CGB palettes, and the first CGB palette.
 SetBGP: ; 040c (0:040c)
 	ld [wBGP], a
 
-SetFlushPalette0:
-	ld a, FLUSH_ONE
+; Flush non-CGB palettes and the first CGB palette
+FlushPalette0:
+	ld a, FLUSH_ONE_PAL
 
-SetFlushPalettes:
+FlushPalettes:
 	ld [wFlushPaletteFlags], a
 	ld a, [wLCDC]
 	rla
@@ -505,7 +515,7 @@ SetFlushPalettes:
 	push hl
 	push de
 	push bc
-	call FlushPalettes
+	call FlushPalettesIfRequested
 	pop bc
 	pop de
 	pop hl
@@ -514,19 +524,19 @@ SetFlushPalettes:
 ; Set wOBP0 to the specified value, flush non-CGB palettes, and the first CGB palette.
 SetOBP0: ; 0423 (0:0423)
 	ld [wOBP0], a
-	jr SetFlushPalette0
+	jr FlushPalette0
 
 ; Set wOBP1 to the specified value, flush non-CGB palettes, and the first CGB palette.
 SetOBP1: ; 0428 (0:0428)
 	ld [wOBP1], a
-	jr SetFlushPalette0
+	jr FlushPalette0
 
 ; Flushes non-CGB palettes from [wBGP], [wOBP0], [wOBP1] as well as CGB
 ; palettes from [wBackgroundPalettesCGB..wBackgroundPalettesCGB+$3f] (BG palette)
 ; and [wObjectPalettesCGB+$00..wObjectPalettesCGB+$3f] (sprite palette).
 ; Only flushes if [wFlushPaletteFlags] is nonzero, and only flushes
 ; a single CGB palette if bit6 of that location is reset.
-FlushPalettes: ; 042d (0:042d)
+FlushPalettesIfRequested: ; 042d (0:042d)
 	ld a, [wFlushPaletteFlags]
 	or a
 	ret z
@@ -547,9 +557,9 @@ FlushPalettes: ; 042d (0:042d)
 	ret
 .CGB
 	; flush a single CGB BG or OB palette
-	; if bit6 (FLUSH_ALL_F) of [wFlushPaletteFlags] is set, flush all 16 of them
+	; if bit6 (FLUSH_ALL_PALS_F) of [wFlushPaletteFlags] is set, flush all 16 of them
 	ld a, [wFlushPaletteFlags]
-	bit FLUSH_ALL_F, a
+	bit FLUSH_ALL_PALS_F, a
 	jr nz, FlushAllCGBPalettes
 	ld b, CGB_PAL_SIZE
 	call CopyCGBPalettes
@@ -564,10 +574,10 @@ FlushAllCGBPalettes: ; 0458 (0:0458)
 	ld a, CGB_PAL_SIZE
 	ld b, 8 palettes
 	call CopyCGBPalettes
-	jr FlushPalettes.done
+	jr FlushPalettesIfRequested.done
 
 ; copy b bytes of CGB palette data starting at
-; wBackgroundPalettesCGB + a palettes into rBGPD or rOGPD.
+; (wBackgroundPalettesCGB + a palettes) into rBGPD or rOGPD.
 CopyCGBPalettes: ; 0467 (0:0467)
 	add a
 	add a
@@ -589,7 +599,7 @@ CopyCGBPalettes: ; 0467 (0:0467)
 	inc c
 .wait
 	ld a, [rSTAT]
-	and $2
+	and 1 << STAT_BUSY ; wait until hblank or vblank
 	jr nz, .wait
 	ld a, [hl]
 	ld [$ff00+c], a
@@ -603,20 +613,24 @@ CopyCGBPalettes: ; 0467 (0:0467)
 	jr nz, .next_byte
 	ret
 
-Func_0492: ; 0492 (0:0492)
+; reads struct:
+;   x (1 byte), y (1 byte), data (n bytes), $00
+; writes data to BGMap0-translated x,y
+; important: make sure VRAM can be accessed first, else use WriteDataBlockToBGMap0
+UnsafeWriteDataBlockToBGMap0: ; 0492 (0:0492)
 	ld a, [hli]
 	ld b, a
 	ld a, [hli]
 	ld c, a
 	call BCCoordToBGMap0Address
-	jr .asm_49d
-.asm_49b
+	jr .next
+.loop
 	ld [de], a
 	inc de
-.asm_49d
+.next
 	ld a, [hli]
 	or a
-	jr nz, .asm_49b
+	jr nz, .loop
 	ret
 
 EmptyScreen: ; 04a2 (0:04a2)
@@ -2010,7 +2024,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld a, [rLY]
 	cp LY_VBLANK + 3
 	jr nz, .wait_vbalnk
-	ld a, $43
+	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00
 	ld [rLCDC], a
 	ld a, %11100100
 	ld [rBGP], a
@@ -2038,7 +2052,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	add hl, de
 	dec c
 	jr nz, .asm_bf3
-	ld a, $c3
+	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00 | LCDC_ON
 	ld [rLCDC], a
 	pop hl
 	call SendSGB
@@ -2070,12 +2084,12 @@ HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	ei
 	di
 	ld a, [rSTAT]        ;
-	and $3               ;
+	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert hblank
 	ld a, [hl]
 	ld [de], a
 	ld a, [rSTAT]        ;
-	and $3               ;
+	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert still in hblank
 	ei
 	inc hl
@@ -2091,14 +2105,14 @@ HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 .loop
 	ei
 	di
-	ld a, [rSTAT]
-	and $3
-	jr nz, .loop
+	ld a, [rSTAT]        ;
+	and STAT_LCDC_STATUS ;
+	jr nz, .loop         ; assert hblank
 	ld a, [de]
 	ld [hl], a
-	ld a, [rSTAT]
-	and $3
-	jr nz, .loop
+	ld a, [rSTAT]        ;
+	and STAT_LCDC_STATUS ;
+	jr nz, .loop         ; assert still in hblank
 	ei
 	inc hl
 	inc de
@@ -2209,9 +2223,9 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ld a, [rSC]          ;
 	add a                ; make sure that no serial transfer is active
 	ret c                ;
-	ld a, $1
+	ld a, SC_INTERNAL
 	ld [rSC], a          ; use internal clock
-	ld a, $81
+	ld a, SC_START | SC_INTERNAL
 	ld [rSC], a          ; use internal clock, set transfer start flag
 	ret
 .check_for_timeout
@@ -2253,9 +2267,9 @@ Func_0cc5: ; 0cc5 (0:0cc5)
 .asm_cdc
 	ld a, $29
 	ld [rSB], a
-	ld a, $01
+	ld a, SC_INTERNAL
 	ld [rSC], a
-	ld a, $81
+	ld a, SC_START | SC_INTERNAL
 	ld [rSC], a
 .asm_ce8
 	ld a, [hl]
@@ -2336,7 +2350,7 @@ SerialHandler: ; 0d26 (0:0d26)
 	cp $12               ; if [wSerialRecvBuf] != $12, use external clock
 	jr z, .done          ; and prepare for next byte.  either way, return
 .asm_d6a
-	ld a, $80            ;
+	ld a, SC_START | SC_EXTERNAL
 	ld [rSC], a          ; transfer start, use external clock
 .done
 	ld hl, wSerialCounter
@@ -2571,19 +2585,19 @@ Func_0e8e: ; 0e8e (0:0e8e)
 	call ClearSerialData
 	ld a, $12
 	ld [rSB], a          ; send $12
-	ld a, $80
+	ld a, SC_START | SC_EXTERNAL
 	ld [rSC], a          ; use external clock, set transfer start flag
 	ld a, [rIF]
-	and $f7
+	and ~(1 << INT_SERIAL)
 	ld [rIF], a          ; clear serial interrupt flag
 	ld a, [rIE]
-	or $8                ; enable serial interrupt
+	or 1 << INT_SERIAL   ; enable serial interrupt
 	ld [rIE], a
 	ret
 
 ResetSerial: ; 0ea6 (0:0ea6)
 	ld a, [rIE]
-	and $f7
+	and ~(1 << INT_SERIAL)
 	ld [rIE], a
 	xor a
 	ld [rSB], a
@@ -5486,7 +5500,7 @@ GetCardAlbumProgress: ; 1da4 (0:1da4)
 ; if LCD on, copy during h-blank only
 SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 	ld a, [wLCDC]        ;
-	bit LCDC_ON, a  ;
+	bit LCDC_ENABLE_F, a ;
 	jr nz, .lcd_on       ; assert that LCD is on
 .lcd_off_loop
 	ld a, [de]
@@ -9344,9 +9358,9 @@ Func_31fc: ; 31fc (0:31fc)
 
 Func_3212: ; 3212 (0:3212)
 	ld [rSB], a
-	ld a, $1
+	ld a, SC_INTERNAL
 	ld [rSC], a
-	ld a, $81
+	ld a, SC_START | SC_INTERNAL
 	ld [rSC], a
 	ret
 
@@ -10529,7 +10543,7 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ld [wd112], a
 	ld a, -1
 	ld [wDuelResult], a
-	ld a, $2
+	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
 	ld a, MUSIC_CARD_POP
 	call PlaySong
@@ -10996,7 +11010,7 @@ Func_3b31: ; 3b31 (0:3b31)
 	jr c, .asm_3b45
 	xor a
 	ld [wDoFrameFunction], a
-	ld [wcad4], a
+	ld [wDoFrameFunction + 1], a
 .asm_3b45
 	call ZeroObjectPositions
 	ld a, 1
@@ -11198,7 +11212,7 @@ PushBC_Ret: ; 3c46 (0:3c46)
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
 	ld a, [rLCDC]
-	bit LCDC_ON, a
+	bit LCDC_ENABLE_F, a
 	jr z, .done
 	push bc
 	push de
@@ -11518,7 +11532,7 @@ Func_3df3: ; 3df3 (0:3df3)
 	ld hl, sp+$5
 	ld a, [hl]
 	call Func_12c7f
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	pop hl
 	pop af
 	call BankswitchHome
@@ -11625,7 +11639,7 @@ ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
 	push hl
 	call DisableInt_LYCoincidence
 	ld hl, rSTAT
-	res 2, [hl] ; reset coincidence flag
+	res STAT_LYCFLAG, [hl] ; reset coincidence flag
 	ei
 	ld hl, wApplyBGScroll
 	ld a, [hl]
@@ -11648,7 +11662,7 @@ ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
 	call GetNextBackgroundScroll
 	ld hl, rSTAT
 .wait_hblank_or_vblank
-	bit 1, [hl]
+	bit STAT_BUSY, [hl]
 	jr nz, .wait_hblank_or_vblank
 	ldh [rSCX], a
 	ldh a, [rLY]
@@ -11709,24 +11723,26 @@ GetNextBackgroundScroll: ; 3f38 (0:3f38)
 	ret
 ; 0x3f5a
 
+; enable lcdc interrupt on LYC=LC coincidence
 EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
 	push hl
 	ld hl, rSTAT
-	set 6, [hl]
+	set STAT_LYC, [hl]
 	xor a
 	ld hl, rIE
-	set 1, [hl]
+	set INT_LCD_STAT, [hl]
 	pop hl
 	ret
 ; 0x3f68
 
+; disable lcdc interrupt and the LYC=LC coincidence trigger
 DisableInt_LYCoincidence: ; 3f68 (0:3f68)
 	push hl
 	ld hl, rSTAT
-	res 6, [hl]
+	res STAT_LYC, [hl]
 	xor a
 	ld hl, rIE
-	res 1, [hl]
+	res INT_LCD_STAT, [hl]
 	pop hl
 	ret
 ; 0x3f76

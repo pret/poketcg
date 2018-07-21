@@ -452,7 +452,7 @@ Func_c34e: ; c34e (3:434e)
 	ld de, wObjectPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	ret
 
 Func_c36a: ; c36a (3:436a)

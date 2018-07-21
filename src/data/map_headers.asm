@@ -1,6 +1,6 @@
-; todo: figure out the rest of the data for each map
+; TODO: figure out the rest of the data for each map
 ; related to the table at 20:4e5d
-MapSongs: ; 1c374 (7:4374)
+MapHeaders: ; 1c374 (7:4374)
 	db $00,$01,$00,$01,$01,MUSIC_OVERWORLD   ; OVERWORLD_MAP
 	db $02,$03,$00,$02,$02,MUSIC_OVERWORLD   ; MASON_LABORATORY
 	db $06,$07,$00,$02,$02,MUSIC_OVERWORLD   ; DECK_MACHINE_ROOM

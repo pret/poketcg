@@ -9,6 +9,10 @@
 	charmap "♀", "%"
 	charmap "”", "\""
 
+fwcharmap: MACRO
+	charmap STRCAT("FW\1_", \2), \3
+ENDM
+
 ; TX_FULLWIDTH3
 	fwcharmap 3, "A", $30
 	fwcharmap 3, "B", $31
@@ -309,6 +313,11 @@
 	fwcharmap 0, "-(2)", $78 ; duplicate
 
 FW_SPACE EQU $70
+
+txsymbol: MACRO
+	const SYM_\1
+	charmap "\1>", const_value + -1
+ENDM
 
 ; TX_SYMBOL
 ; TODO: If user-defined functions ever become a thing a symbol(*) syntax

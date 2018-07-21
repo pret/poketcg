@@ -19,7 +19,7 @@ ENDU
 
 	ds $100
 
-SECTION "WRAM Duels 1", WRAM0
+SECTION "WRAM0 Duels 1", WRAM0
 
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
 ; These indexes are assigned following the order of the card list in wPlayerDeck or wOpponentDeck,
@@ -45,7 +45,7 @@ wPlayerCardLocations:: ; c200
 
 	ds $6
 
-; Which cards are in player's hand, as numbers 0 to 59
+; Deck indexes of the cards that are in the player's hand
 wPlayerHand:: ; c242
 	ds DECK_SIZE
 
@@ -61,12 +61,12 @@ wPlayerDeckCards:: ; c27e
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
-; Which card is in player's side of the field, as number 0 to 59
+; Deck index of the card that is in player's side of the field
 ; -1 indicates no pokemon
 wPlayerArenaCard:: ; c2bb
 	ds $1
 
-; Which cards are in player's bench, as numbers 0 to 59, plus an $ff (-1) terminator
+; Deck indexes of the cards that are in player's bench, plus an $ff (-1) terminator
 ; -1 indicates no pokemon
 wPlayerBench:: ; c2bc
 	ds MAX_BENCH_POKEMON + 1
@@ -323,6 +323,7 @@ wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 
 UNION
 
+; temporary list of the cards drawn from a booster pack
 wBoosterCardsDrawn:: ; c400
 wBoosterTempNonEnergiesDrawn:: ; c400
 	ds $b
@@ -354,7 +355,7 @@ wDuelTempList:: ; c510
 wDefaultText:: ; c590
 	ds $70
 
-SECTION "WRAM Text Engine", WRAM0
+SECTION "WRAM0 Text Engine", WRAM0
 
 wc600:: ; c600
 	ds $100
@@ -368,11 +369,13 @@ wc800:: ; c800
 wc900:: ; c900
 	ds $100
 
-SECTION "WRAM Engine 1", WRAM0
+SECTION "WRAM0 1", WRAM0
 
 wOAM:: ; ca00
 	ds $a0
 
+; 16-byte buffer to store text, usually a name or a number
+; used by TX_RAM1 but not exclusively
 wTextBuf:: ; caa0
 	ds $10
 
@@ -385,7 +388,7 @@ wcab1:: ; cab1
 wcab2:: ; cab2
 	ds $1
 
-; initial value of the A register--used to tell the console when reset
+; initial value of the A register. used to tell the console when reset
 wInitialA:: ; cab3
 	ds $1
 
@@ -398,12 +401,14 @@ wConsole:: ; cab4
 wOAMOffset:: ; cab5
 	ds $1
 
+; FillTileMap fills VRAM0 BG Maps with the tile stored here
 wTileMapFill:: ; cab6
 	ds $1
 
 wIE:: ; cab7
 	ds $1
 
+; incremented whenever the vblank handler ends. used to wait for it to end
 wVBlankCounter:: ; cab8
 	ds $1
 
@@ -426,9 +431,12 @@ wOBP0:: ; cabd
 wOBP1:: ; cabe
 	ds $1
 
+; used to request palette(s) to be flushed by FlushPalettes from wBGP, wOBP0, wOBP1,
+; wBackgroundPalettesCGB, and/or wBackgroundPalettesCGB to the corresponding hw registers
 wFlushPaletteFlags:: ; cabf
 	ds $1
 
+; set to non-0 to request OAM copy during vblank
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
 
@@ -467,14 +475,13 @@ wRNGCounter:: ; cacc
 wLCDCFunctionTrampoline:: ; cacd
 	ds $3
 
+; a jp $nnnn instruction called by the vblank handler. calls a single ret by default
 wVBlankFunctionTrampoline:: ; cad0
 	ds $3
 
+; pointer to a function to be called by DoFrame
 wDoFrameFunction:: ; cad3
-	ds $1
-
-wcad4:: ; cad4
-	ds $1
+	ds $2
 
 wcad5:: ; cad5
 	ds $1
@@ -508,10 +515,11 @@ wcade:: ; cade
 wTempSGBPacket:: ; cae0
 	ds $10
 
-; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
+; temporary CGB palette data buffer to eventually save into BGPD registers.
 wBackgroundPalettesCGB:: ; caf0
 	ds 8 palettes
 
+; temporary CGB palette data buffer to eventually save into OBPD registers.
 wObjectPalettesCGB:: ; cb30
 	ds 8 palettes
 
@@ -522,7 +530,7 @@ wObjectPalettesCGB:: ; cb30
 wListPointer:: ; cb72
 	ds $2
 
-SECTION "WRAM Serial Transfer", WRAM0
+SECTION "WRAM0 Serial Transfer", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -580,14 +588,14 @@ wSerialRecvBuf:: ; cba5
 
 	ds $1
 
-SECTION "WRAM Duels 2", WRAM0
+SECTION "WRAM0 Duels 2", WRAM0
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
 wCurrentDuelMenuItem:: ; cbc6
 	ds $1
 
-; When we're viewing a card's information, the page we are currently at
+; When we're viewing a card's information, the page we are currently at.
 ; For Pokemon cards, values from $1 to $6 (two pages for move descriptions)
 ; For Energy cards, it's always $9
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
@@ -605,6 +613,7 @@ wcbc9:: ; cbc9
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
+; used by CheckIfEnoughEnergiesToRetreat and Func_4611
 wEnergyCardsRequiredToRetreat:: ; cbcc
 	ds $1
 
@@ -745,7 +754,7 @@ wDuelFinished:: ; cc07
 wDuelInitialPrizes:: ; cc08
 	ds $1
 
-; note that for a practice duel, wIsPracticeDuel must also be set to $1
+; a DUELTYPE_* constant. note that for a practice duel, wIsPracticeDuel must also be set to $1
 wDuelType:: ; cc09
 	ds $1
 
@@ -765,7 +774,7 @@ wDuelistType:: ; cc0d
 	ds $1
 
 ; this holds the current opponent's deck minus 2 (that is, a *_DECK_ID constant),
-; perhaps to account for the two unused pointers at the beginning of DeckPointers.
+; in order to account for the two unused pointers at the beginning of DeckPointers.
 wOpponentDeckID:: ; cc0e
 	ds $1
 
@@ -801,11 +810,12 @@ wcc18:: ; cc18
 wcc19:: ; cc19
 	ds $1
 
+; song played during a duel
 wDuelTheme:: ; cc1a
 	ds $1
 
 ; holds the energies attached to a given pokemon card. 1 byte for each of the
-; 8 energy types (including the unused one that shares byte with the colorless energy)
+; 8 energy types (includes the unused one that shares byte with the colorless energy)
 wAttachedEnergies:: ; cc1b
 	ds NUM_TYPES
 
@@ -813,17 +823,15 @@ wAttachedEnergies:: ; cc1b
 wTotalAttachedEnergies:: ; cc23
 	ds $1
 
-; Used as temporary storage for a loaded card's data
+; Used as temporary storage for a card's data
 wLoadedCard1:: ; cc24
 	card_data_struct wLoadedCard1
-
 wLoadedCard2:: ; cc65
 	card_data_struct wLoadedCard2
-
 wLoadedMove:: ; cca6
 	move_data_struct wLoadedMove
 
-; big-endian
+; damage dealt by an attack. little-endian
 wDamage:: ; ccb9
 	ds $2
 
@@ -839,6 +847,7 @@ wccbc:: ; ccbc
 wTempDamage_ccbf:: ; ccbf
 	ds $2
 
+; WEAKNESS and RESISTANCE flags	for a damaging attack
 wDamageEffectiveness:: ; ccc1
 	ds $1
 
@@ -910,19 +919,22 @@ wccf1:: ; ccf1
 wccf2:: ; ccf2
 	ds $1
 
-SECTION "WRAM Engine 2", WRAM0
+SECTION "WRAM0 2", WRAM0
 
 ; on CGB, attributes of the text box borders. (values 0-7? so only affects palette?)
 ; on SGB, colorize text box border with SGB1 if non-0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
+; pixel data of a tile used for text
+; either a combination of two half-width characters or a full-width character
 wTextTileBuffer:: ; ccf4
 	ds TILE_SIZE
 
 wcd04:: ; cd04
 	ds $1
 
+; used by PlaceNextTextTile
 wCurTextTile:: ; cd05
 	ds $1
 
@@ -1098,6 +1110,7 @@ wce21:: ; ce21
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
+; possibly used in other contexts too
 wce22:: ; ce22
 	ds $1
 
@@ -1155,6 +1168,7 @@ wWhichTxRam3:: ; ce4a
 wIsTextBoxLabeled:: ; ce4b
 	ds $1
 
+; text id of a text box's label
 wTextBoxLabel:: ; ce4c
 	ds $2
 
@@ -1413,7 +1427,7 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error? )
+; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error?)
 ; to be read by the overworld caller
 wDuelResult:: ; d0c3
 	ds $1
@@ -1516,6 +1530,7 @@ wd132:: ; d132
 
 UNION
 
+; when opening a booster pack, list of cards available in the booster pack of a specific rarity
 wBoosterViableCardList:: ; d133
 	ds $100
 
@@ -1965,7 +1980,7 @@ wBoosterPackID:: ; d669
 wBoosterCurrentCard:: ; d66a
 	ds $1
 
-; booster card type of the card that has just been drawn from the pack
+; BOOSTER_CARD_TYPE_* of the card that has just been drawn from the pack
 wBoosterJustDrawnCardType:: ; d66b
 	ds $1
 
@@ -1973,26 +1988,24 @@ wBoosterJustDrawnCardType:: ; d66b
 wBoosterCurrentRarity:: ; d66c
 	ds $1
 
-; the averaged value of all values in wBoosterDataTypeChances
+; the averaged value of all values in wBoosterData_TypeChances
 ; used to recalculate the chances of a booster card type when a card of said type is drawn from the pack
 wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
 ; data of the booster pack copied from the corresponding BoosterSetRarityAmountsTable entry
-wBoosterDataCommonAmount:: ; d66e
+wBoosterData_CommonAmount:: ; d66e
 	ds $1
-
-wBoosterDataUncommonAmount:: ; d66f
+wBoosterData_UncommonAmount:: ; d66f
 	ds $1
-
-wBoosterDataRareAmount:: ; d670
+wBoosterData_RareAmount:: ; d670
 	ds $1
 
 ; how many cards of each type are available of a certain rarity in the booster pack's set
 wBoosterAmountOfCardTypeTable:: ; d671
 	ds NUM_BOOSTER_CARD_TYPES
 
-; holds information similar to wBoosterDataTypeChances, except that it contains 00 on any type
+; holds information similar to wBoosterData_TypeChances, except that it contains 00 on any type
 ; of which there are no cards remaining in the set for the current rarity
 wBoosterTempTypeChancesTable:: ; d67a
 	ds NUM_BOOSTER_CARD_TYPES
@@ -2000,22 +2013,18 @@ wBoosterTempTypeChancesTable:: ; d67a
 ; properties of the card being currently processed by the booster pack engine functions
 wBoosterCurrentCardType:: ; d683
 	ds $1
-
 wBoosterCurrentCardRarity:: ; d684
 	ds $1
-
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
 ; data of the booster pack copied from the corresponding BoosterPack_* structure.
-; wBoosterDataTypeChances is updated after each card is drawn, to re-balance the type chances.
-wBoosterDataSet:: ; d686
+; wBoosterData_TypeChances is updated after each card is drawn, to re-balance the type chances.
+wBoosterData_Set:: ; d686
 	ds $1
-
-wBoosterDataEnergyFunctionPointer:: ; d687
+wBoosterData_EnergyFunctionPointer:: ; d687
 	ds $2
-
-wBoosterDataTypeChances:: ; d689
+wBoosterData_TypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
 	ds $1
@@ -2037,7 +2046,7 @@ wd697:: ; d697
 
 	ds $6e8
 
-SECTION "WRAM Audio", WRAMX
+SECTION "WRAM1 Audio", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80

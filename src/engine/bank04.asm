@@ -10,7 +10,7 @@ Func_10000: ; 10000 (4:4000)
 	ldh [hSCX], a
 	ldh [hSCY], a
 	ld a, [wLCDC]
-	bit LCDC_ON, a
+	bit LCDC_ENABLE_F, a
 	jr nz, .asm_10025
 	xor a
 	ld [rSCX], a
@@ -31,11 +31,11 @@ Func_10031: ; 10031 (4:4031)
 	call $4cbb
 	call DisableSRAM
 	call $4b28
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call $4cea
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM

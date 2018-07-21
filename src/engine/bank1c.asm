@@ -173,10 +173,10 @@ Func_70136: ; 70136 (1c:4136)
 	call SendSGB
 	call DisableLCD
 	ld a, [wLCDC]
-	and $41
-	or $1
+	and LCDC_BGENABLE | LCDC_WINSELECT
+	or LCDC_BGON
 	ld [wLCDC], a
-	ld a, $e4
+	ld a, %11100100
 	ld [rBGP], a
 	call SetBGP
 	xor a
