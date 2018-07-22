@@ -376,7 +376,7 @@ wOAM:: ; ca00
 
 ; 16-byte buffer to store text, usually a name or a number
 ; used by TX_RAM1 but not exclusively
-wTextBuf:: ; caa0
+wStringBuffer:: ; caa0
 	ds $10
 
 wcab0:: ; cab0
@@ -586,9 +586,11 @@ wSerialRecvIndex:: ; cba4
 wSerialRecvBuf:: ; cba5
 	ds $20
 
-	ds $1
+wSerialEnd:: ; cbc5
 
 SECTION "WRAM0 Duels 2", WRAM0
+
+	ds $1
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
@@ -682,8 +684,14 @@ wcbe0:: ; cbe0
 wAITurnEnded:: ; cbe1
 	ds $1
 
-wcbe2:: ; cbe2
-	ds $3
+wOppRNG1:: ; cbe2
+	ds $1
+
+wOppRNG2:: ; cbe3
+	ds $1
+
+wOppRNGCounter:: ; cbe4
+	ds $1
 
 ; sp is saved here when starting a duel, in order to save the return address
 ; however, it only seems to be read after a transmission error in a link duel
@@ -701,7 +709,9 @@ wcbe9:: ; cbe9
 
 	ds $3
 
-wcbed:: ; cbed
+; temporarily stores 8 bytes for serial send/recv.
+; used by SerialSend8Bytes and SerialRecv8Bytes
+wTempSerialBuf:: ; cbed
 	ds $8
 
 	ds $2

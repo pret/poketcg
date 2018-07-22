@@ -108,10 +108,10 @@ PlaceTextItemsc:
 	push de
 	push af
 	ld a, $11
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	pop af
 	pop de
-	call Func_0fac
+	call SerialSend8Bytes
 	call TossCoinATimes
 	ret
 ; 0x2c09c

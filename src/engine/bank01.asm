@@ -136,14 +136,14 @@ MainDuelLoop ; 40ee (1:40ee)
 	call HandleTurn
 
 .begin_turn
-	call Func_0f58
+	call ExchangeRNG
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duel_finished
 	call UpdateSubstatusConditions_EndOfTurn
 	call $6baf
 	call Func_3b31
-	call Func_0f58
+	call ExchangeRNG
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duel_finished
@@ -261,7 +261,7 @@ MainDuelLoop ; 40ee (1:40ee)
 	jp MainDuelLoop
 
 .link_duel
-	call Func_0f58
+	call ExchangeRNG
 	ld h, PLAYER_TURN
 	ld a, [wSerialOp]
 	cp $29
@@ -414,7 +414,7 @@ Func_42fd: ; 42fd (1:42fd)
 	call DrawCardFromDeck
 	call nc, AddCardToHand
 	ld a, $0b
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	jp PrintDuelMenu.asm_429e
 ; 0x430b
 
@@ -523,7 +523,7 @@ DuelMenu_Done: ; 439a (1:439a)
 	call DoPracticeDuelAction
 	jp c, Func_4268
 	ld a, $05
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	call Func_717a
 	ret
 
@@ -550,7 +550,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld a, [wBenchSelectedPokemon]
 	ldh [hTempPlayAreaLocationOffset_ffa1], a
 	ld a, $04
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	call AttemptRetreat
 	jr nc, .done
 	call DrawDuelMainScene
@@ -582,7 +582,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	pop af
 	jp c, DuelMainInterface
 	ld a, $04
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	call AttemptRetreat
 
 .done
@@ -662,8 +662,8 @@ UseEnergyCard: ; 4477 (1:4477)
 	ldh [hTemp_ffa0], a
 	call PutHandCardInPlayArea
 	call $61b8
-	ld a, $3
-	call SetDuelAIAction
+	ld a, $03
+	call SetAIAction_SerialSendDuelData
 	call Func_68e4
 	jp DuelMainInterface
 
@@ -713,7 +713,7 @@ UsePokemonCard: ; 44db (1:44db)
 	call GetTurnDuelistVariable
 	ld [hl], BASIC
 	ld a, $01
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, 20
@@ -781,7 +781,7 @@ UsePokemonCard: ; 44db (1:44db)
 	call EvolvePokemonCard
 	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
 	ld a, $02
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	call $61b8
 	call Func_68fa
 	call Func_161e
@@ -1735,7 +1735,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call Func_311d
 	ldtx hl, PlacingThePrizesText
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	ld a, [wDuelInitialPrizes]
 	ld l, a
 	ld h, 0
@@ -1772,7 +1772,7 @@ Func_4b60: ; 4b60 (1:4b60)
 
 .asm_4c4a
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	or a
 	ret
 
@@ -1790,7 +1790,7 @@ Func_4b60: ; 4b60 (1:4b60)
 
 .asm_4c6f
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	or a
 	ret
 ; 0x4c77
@@ -1817,14 +1817,14 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 .asm_4cec
 	ldtx hl, TransmitingDataText
 	call DrawWideTextBox_PrintText
-	call Func_0f58
+	call ExchangeRNG
 	ld hl, wPlayerCardLocations
 	ld de, wOpponentCardLocations
 	ld c, $80
-	call Func_0e63
+	call SerialExchangeBytes
 	jr c, .asm_4d12
 	ld c, $80
-	call Func_0e63
+	call SerialExchangeBytes
 	jr c, .asm_4d12
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -4053,7 +4053,7 @@ AIAction_PlayNonPokemonCard: ; 6a23 (1:6a23)
 	call LoadNonPokemonCardEffectCommands
 	call Func_666a
 	call Func_6673
-	call Func_0f58
+	call ExchangeRNG
 	ld a, $01
 	ld [wcbf9], a
 	ret
@@ -4068,7 +4068,7 @@ AIAction_TryExecuteEffect: ; 6a35 (1:6a35)
 	call DrawDuelMainScene
 	ldh a, [hTempCardIndex_ff9f]
 	call MoveHandCardToDiscardPile
-	call Func_0f58
+	call ExchangeRNG
 	call DrawDuelMainScene
 	ret
 ; 0x6a4e
@@ -4092,13 +4092,13 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr z, .has_status_effect
-	call Func_0f58
+	call ExchangeRNG
 	ret
 .has_status_effect
 	call DrawDuelMainScene
 	call Func_1b90
 	call WaitForWideTextBoxInput
-	call Func_0f58
+	call ExchangeRNG
 	call HandleSandAttackOrSmokescreenSubstatus
 	ret nc ; attack is successful
 	call Func_717a
@@ -4116,7 +4116,7 @@ AIAction_AttackEffect: ; 6a8c (1:6a8c)
 	call Func_6635
 	call Func_1b90
 	call WaitForWideTextBoxInput
-	call Func_0f58
+	call ExchangeRNG
 	ld a, $01
 	ld [wcbf9], a
 	ret
@@ -4147,7 +4147,7 @@ AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
 	jr c, .force_selection
 	call SwapTurn
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	call Func_0e0a
+	call SerialSendByte
 	ret
 ; 0x6ad9
 
@@ -4168,7 +4168,7 @@ AIAction_PokemonPower: ; 6ad9 (1:6ad9)
 	ld [wTxRam2_b + 1], a
 	ldtx hl, WillUseThePokemonPowerText
 	call Func_6b9e
-	call Func_0f58
+	call ExchangeRNG
 	ld a, $01
 	ld [wcbf9], a
 	ret
@@ -4197,7 +4197,7 @@ AIAction_DrawDuelMainScene: ; 6b20 (1:6b20)
 ; 0x6b24
 
 AIAction_TossCoinATimes: ; 6b24 (1:6b24)
-	call Func_0fe9
+	call SerialRecv8Bytes
 	call TossCoinATimes
 	ld a, $01
 	ld [wcbf9], a
@@ -4227,7 +4227,7 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	call WaitForWideTextBoxInput
 	ret
 .asm_6b56
-	call Func_0fe9
+	call SerialRecv8Bytes
 	push bc
 	call SwapTurn
 	call CopyMoveDataAndDamage_FromDeckIndex
@@ -4459,7 +4459,7 @@ _TossCoin: ; 71ad (1:71ad)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [wcd9e], a
-	call Func_0f58
+	call ExchangeRNG
 	xor a
 	ld [wcd9d], a
 
@@ -4604,7 +4604,7 @@ _TossCoin: ; 71ad (1:71ad)
 	ld hl, wcd9c
 	cp [hl]
 	jp c, .asm_7204
-	call Func_0f58
+	call ExchangeRNG
 	call Func_3b31
 	call Func_3b21
 	ld a, [wcd9d]

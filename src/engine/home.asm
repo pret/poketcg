@@ -863,12 +863,12 @@ CallHL: ; 05c1 (0:05c1)
 ; 0x5c2
 
 ; converts two one-digit numbers provided in a to text (ascii) format,
-; writes them to [wTextBuf] and [wTextBuf + 1], and to the BGMap0 address at bc
+; writes them to [wStringBuffer] and [wStringBuffer + 1], and to the BGMap0 address at bc
 WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 	push hl
 	push bc
 	push de
-	ld hl, wTextBuf
+	ld hl, wStringBuffer
 	push hl
 	push bc
 	call WriteNumbersInTextFormat
@@ -884,12 +884,12 @@ WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 ; 0x5db
 
 ; converts a one-digit number provided in the lower nybble of a to text
-; (ascii) format, and writes it to [wTextBuf] and to the BGMap0 address at bc
+; (ascii) format, and writes it to [wStringBuffer] and to the BGMap0 address at bc
 WriteOneDigitNumber: ; 05db (0:05db)
 	push hl
 	push bc
 	push de
-	ld hl, wTextBuf
+	ld hl, wStringBuffer
 	push hl
 	push bc
 	call WriteNumberInTextFormat
@@ -905,14 +905,14 @@ WriteOneDigitNumber: ; 05db (0:05db)
 ; 0x5f4
 
 ; converts four one-digit numbers provided in h and l to text (ascii) format,
-; writes them to [wTextBuf] through [wTextBuf + 3], and to the BGMap0 address at bc
+; writes them to [wStringBuffer] through [wStringBuffer + 3], and to the BGMap0 address at bc
 WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	push de
 	ld e, l
 	ld d, h
-	ld hl, wTextBuf
+	ld hl, wStringBuffer
 	push hl
 	push bc
 	ld a, d
@@ -955,13 +955,13 @@ WriteNumberInTextFormat:
 ; 0x627
 
 ; converts the one-byte number at a to text (ascii) format,
-; and writes it to [wTextBuf] and the BGMap0 address at bc
+; and writes it to [wStringBuffer] and the BGMap0 address at bc
 WriteOneByteNumber: ; 0627 (0:0627)
 	push bc
 	push hl
 	ld l, a
 	ld h, $00
-	ld de, wTextBuf
+	ld de, wStringBuffer
 	push de
 	push bc
 	ld bc, -100
@@ -981,10 +981,10 @@ WriteOneByteNumber: ; 0627 (0:0627)
 ; 0x650
 
 ; converts the two-byte number at hl to text (ascii) format,
-; and writes it to [wTextBuf] and the BGMap0 address at bc
+; and writes it to [wStringBuffer] and the BGMap0 address at bc
 WriteTwoByteNumber: ; 0650 (0:0650)
 	push bc
-	ld de, wTextBuf
+	ld de, wStringBuffer
 	push de
 	call TwoByteNumberToText
 	call BCCoordToBGMap0Address
@@ -2275,15 +2275,15 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	cp [hl]
 	ld [hl], a
 	ld hl, wSerialTimeoutCounter
-	jr nz, .clear_counter
+	jr nz, .clear_timeout_counter
 	inc [hl]
 	ld a, [hl]
-	cp $4
+	cp 4
 	ret c
 	ld hl, wSerialFlags
 	set 7, [hl]
 	ret
-.clear_counter
+.clear_timeout_counter
 	ld [hl], $0
 	ret
 ; 0xcc5
@@ -2361,7 +2361,7 @@ SerialHandler: ; 0d26 (0:0d26)
 .asm_d35
 	ld a, [wSerialOp]    ;
 	or a                 ;
-	jr z, .asm_d55       ; skip ahead if [wcb74] zero
+	jr z, .asm_d55       ; skip ahead if [wSerialOp] zero
 	; send/receive a byte
 	ld a, [rSB]
 	call SerialHandleRecv
@@ -2376,8 +2376,8 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld [rSB], a          ; prepare sending byte (from Func_0dc8?)
 	ld a, [wSerialOp]
 	cp $29
-	jr z, .done          ; if [wcb74] != $29, use external clock
-	jr .asm_d6a          ; and prepare for next byte.  either way, return
+	jr z, .done          ; if [wSerialOp] != $29, use external clock
+	jr .asm_d6a          ; and prepare for next byte. either way, return
 .asm_d55
 	ld a, $1
 	ld [wSerialRecvCounter], a
@@ -2387,7 +2387,7 @@ SerialHandler: ; 0d26 (0:0d26)
 	ld [rSB], a
 	ld a, [wSerialRecvBuf]
 	cp $12               ; if [wSerialRecvBuf] != $12, use external clock
-	jr z, .done          ; and prepare for next byte.  either way, return
+	jr z, .done          ; and prepare for next byte. either way, return
 .asm_d6a
 	ld a, SC_START | SC_EXTERNAL
 	ld [rSC], a          ; transfer start, use external clock
@@ -2513,8 +2513,8 @@ SerialHandleSend: ; 0dc8 (0:0dc8)
 	ld a, $ca
 	ret
 
-; store data in sendbuf for sending?
-Func_0e0a: ; 0e0a (0:0e0a)
+; store byte at a in wSerialSendBuf for sending
+SerialSendByte: ; 0e0a (0:0e0a)
 	push hl
 	push de
 	push bc
@@ -2551,7 +2551,8 @@ Func_0e32: ; 0e32 (0:0e32)
 	scf
 	ret
 
-Func_0e39: ; 0e39 (0:0e39)
+; receive byte in wSerialRecvBuf
+SerialRecvByte: ; 0e39 (0:0e39)
 	push hl
 	ld hl, wSerialRecvCounter
 	ld a, [hl]
@@ -2583,7 +2584,8 @@ Func_0e39: ; 0e39 (0:0e39)
 	or a
 	ret
 
-Func_0e63: ; 0e63 (0:0e63)
+; exchange c bytes. send bytes at hl and store received bytes at de
+SerialExchangeBytes: ; 0e63 (0:0e63)
 	ld b, c
 .asm_e64
 	ld a, b
@@ -2596,13 +2598,13 @@ Func_0e63: ; 0e63 (0:0e63)
 	dec c
 	jr z, .asm_e75
 	ld a, [hli]
-	call Func_0e0a
+	call SerialSendByte
 	dec c
 .asm_e75
 	inc b
 	dec b
 	jr z, .asm_e81
-	call Func_0e39
+	call SerialRecvByte
 	jr c, .asm_e81
 	ld [de], a
 	inc de
@@ -2634,6 +2636,7 @@ Func_0e8e: ; 0e8e (0:0e8e)
 	ld [rIE], a
 	ret
 
+; disable serial interrupt, and clear rSB, rSC, and serial registers in WRAM
 ResetSerial: ; 0ea6 (0:0ea6)
 	ld a, [rIE]
 	and ~(1 << INT_SERIAL)
@@ -2642,9 +2645,11 @@ ResetSerial: ; 0ea6 (0:0ea6)
 	ld [rSB], a
 	ld [rSC], a
 ;	fallthrough
+
+; zero serial registers in WRAM
 ClearSerialData: ; 0eb1 (0:0eb1)
 	ld hl, wSerialOp
-	ld bc, $0051
+	ld bc, wSerialEnd - wSerialOp
 .loop
 	xor a
 	ld [hli], a
@@ -2654,48 +2659,50 @@ ClearSerialData: ; 0eb1 (0:0eb1)
 	jr nz, .loop
 	ret
 
-Func_0ebf: ; 0ebf (0:0ebf)
+; store bc bytes from hl in wSerialSendBuf for sending
+SerialSendBytes: ; 0ebf (0:0ebf)
 	push bc
-.asm_ec0
+.send_loop
 	ld a, [hli]
-	call Func_0e0a
+	call SerialSendByte
 	ld a, [wSerialFlags]
 	or a
-	jr nz, .asm_ed2
+	jr nz, .done
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_ec0
+	jr nz, .send_loop
 	pop bc
 	or a
 	ret
-.asm_ed2
+.done
 	pop bc
 	scf
 	ret
 ; 0xed5
 
-Func_0ed5: ; 0ed5 (0:0ed5)
+; receive bc bytes in wSerialRecvBuf and save them to hl
+SerialRecvBytes: ; 0ed5 (0:0ed5)
 	push bc
-.asm_ed6
-	call Func_0e39
-	jr nc, .asm_edf
+.recv_loop
+	call SerialRecvByte
+	jr nc, .save_byte
 	halt
 	nop
-	jr .asm_ed6
-.asm_edf
+	jr .recv_loop
+.save_byte
 	ld [hli], a
 	ld a, [wSerialFlags]
 	or a
-	jr nz, .asm_eee
+	jr nz, .done
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_ed6
+	jr nz, .recv_loop
 	pop bc
 	or a
 	ret
-.asm_eee
+.done
 	pop bc
 	scf
 	ret
@@ -2760,6 +2767,8 @@ Func_0f1d: ; 0f1d (0:0f1d)
 	ret
 ; 0xf35
 
+; load the number at wSerialFlags (error code?) to TxRam3, print
+; TransmissionErrorText, exit the duel, and reset serial registers.
 DuelTransmissionError: ; 0f35 (0:0f35)
 	ld a, [wSerialFlags]
 	ld l, a
@@ -2779,31 +2788,35 @@ DuelTransmissionError: ; 0f35 (0:0f35)
 	call ResetSerial
 	ret
 
-Func_0f58: ; 0f58 (0:0f58)
+; exchange RNG during a link duel between both games
+ExchangeRNG: ; 0f58 (0:0f58)
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, .asm_f60
+	jr z, .link_duel
 	ret
-.asm_f60
+.link_duel
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	or a ; cp DUELIST_TYPE_PLAYER
-	jr z, .asm_f70
-	ld hl, wcbe2
+	jr z, .player_turn
+; link opponent's turn
+	ld hl, wOppRNG1
 	ld de, wRNG1
-	jr .asm_f76
-.asm_f70
+	jr .exchange
+.player_turn
 	ld hl, wRNG1
-	ld de, wcbe2
-.asm_f76
-	ld c, $3
-	call Func_0e63
+	ld de, wOppRNG1
+.exchange
+	ld c, 3 ; wRNG1, wRNG2, and wRNGCounter
+	call SerialExchangeBytes
 	jp c, DuelTransmissionError
 	ret
 
-; sets hAIActionTableIndex to an AI action specified in register a
-; also appears to handle sending data in a link duel
-SetDuelAIAction: ; 0f7f (0:0f7f)
+; sets hAIActionTableIndex to an AI action specified in register a.
+; send 10 bytes of data to the other game from hAIActionTableIndex, hTempCardIndex_ff9f,
+; hTemp_ffa0, and hTempPlayAreaLocationOffset_ffa1, and hTempRetreatCostCards.
+; finally exchange RNG data
+SetAIAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	push hl
 	push bc
 	ldh [hAIActionTableIndex], a
@@ -2812,28 +2825,32 @@ SetDuelAIAction: ; 0f7f (0:0f7f)
 	cp DUELIST_TYPE_LINK_OPP
 	jr nz, .not_link
 	ld hl, hAIActionTableIndex
-	ld bc, $000a
-	call Func_0ebf
-	call Func_0f58
+	ld bc, 10
+	call SerialSendBytes
+	call ExchangeRNG
 .not_link
 	pop bc
 	pop hl
 	ret
 ; 0xf9b
 
-Func_0f9b: ; 0f9b (0:0f9b)
+; receive 10 bytes of data from wSerialRecvBuf and store them into hAIActionTableIndex,
+; hTempCardIndex_ff9f, hTemp_ffa0, and hTempPlayAreaLocationOffset_ffa1, and hTempRetreatCostCards
+SerialRecvDuelData: ; 0f9b (0:0f9b)
 	push hl
 	push bc
 	ld hl, hAIActionTableIndex
-	ld bc, $000a
-	call Func_0ed5
-	call Func_0f58
+	ld bc, 10
+	call SerialRecvBytes
+	call ExchangeRNG
 	pop bc
 	pop hl
 	ret
 ; 0xfac
 
-Func_0fac: ; 0fac (0:0fac)
+; serial send 8 bytes at sp, sp-1, sp-2, sp-3, e, d, c, b
+; only during a duel against a link opponent
+SerialSend8Bytes: ; 0fac (0:0fac)
 	push hl
 	push af
 	ld a, DUELVARS_DUELIST_TYPE
@@ -2854,7 +2871,7 @@ Func_0fac: ; 0fac (0:0fac)
 	push de
 	push hl
 	push af
-	ld hl, wcbed
+	ld hl, wTempSerialBuf
 	pop de
 	ld [hl], e
 	inc hl
@@ -2873,9 +2890,9 @@ Func_0fac: ; 0fac (0:0fac)
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, wcbed
-	ld bc, $0008
-	call Func_0ebf
+	ld hl, wTempSerialBuf
+	ld bc, 8
+	call SerialSendBytes
 	jp c, DuelTransmissionError
 	pop bc
 	pop de
@@ -2884,11 +2901,12 @@ Func_0fac: ; 0fac (0:0fac)
 	ret
 ; 0xfe9
 
-Func_0fe9: ; 0fe9 (0:0fe9)
-	ld hl, wcbed
-	ld bc, $0008
+; serial recv 8 bytes to sp, sp-1, sp-2, sp-3, e, d, c, b
+SerialRecv8Bytes: ; 0fe9 (0:0fe9)
+	ld hl, wTempSerialBuf
+	ld bc, 8
 	push hl
-	call Func_0ed5
+	call SerialRecvBytes
 	jp c, DuelTransmissionError
 	pop hl
 	ld e, [hl]
@@ -3461,8 +3479,8 @@ FindLastCardInHand: ; 1271 (0:1271)
 
 ; shuffles the deck by swapping the position of each card with the position of another random card
 ; input:
-; - a  = how many cards to shuffle
-; - hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
+   ; a  = how many cards to shuffle
+   ; hl = DUELVARS_DECK_CARDS + [DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK]
 ShuffleCards: ; 127f (0:127f)
 	or a
 	ret z ; return if deck is empty
@@ -3925,7 +3943,7 @@ ResetStatusConditions: ; 1461 (0:1461)
 ; Removes a Pokemon card from the hand and places it in the arena or first available bench slot.
 ; If the Pokemon is placed in the arena, the status conditions of the player's arena card are zeroed.
 ; input:
-; - a = deck index of the card
+   ; a = deck index of the card
 ; return carry if there is no room for more Pokemon
 PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	push af
@@ -3986,10 +4004,10 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 ; Removes a card from the hand and changes its location to arena or bench. Given that
 ; DUELVARS_ARENA_CARD or DUELVARS_BENCH aren't affected, this function is meant for energy and trainer cards.
 ; input:
-; - a = deck index of the card
-; - e = play area location offset (PLAY_AREA_*)
-; returns
-; - a = CARD_LOCATION_PLAY_AREA + e
+   ; a = deck index of the card
+   ; e = play area location offset (PLAY_AREA_*)
+; returns:
+   ; a = CARD_LOCATION_PLAY_AREA + e
 PutHandCardInPlayArea: ; 14d2 (0:14d2)
 	call RemoveCardFromHand
 	call GetTurnDuelistVariable
@@ -4302,7 +4320,7 @@ Func_161e: ; 161e (0:161e)
 	call LoadTxRam2
 	ldtx hl, HavePokemonPowerText
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	ld a, [wLoadedCard1ID]
 	cp MUK
 	jr z, .use_pokemon_power
@@ -4312,7 +4330,7 @@ Func_161e: ; 161e (0:161e)
 	call $6510
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	ret
 
 .use_pokemon_power
@@ -4341,7 +4359,7 @@ Func_161e: ; 161e (0:161e)
 	ld [hl], a
 	ldtx hl, WillUseThePokemonPowerText
 	call DrawWideTextBox_WaitForInput
-	call Func_0f58
+	call ExchangeRNG
 	call $7415
 	ld a, $07
 	call TryExecuteEffectCommandFunction
@@ -4461,18 +4479,18 @@ Func_1730: ; 1730 (0:1730)
 	jp c, Func_1821
 .asm_1777
 	ld a, $9
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	ld a, $6
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jp c, DealConfusionDamageToSelf
 	call Func_1b8d
 	call WaitForWideTextBoxInput
-	call Func_0f58
+	call ExchangeRNG
 	ld a, $5
 	call TryExecuteEffectCommandFunction
 	ld a, $a
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 ;	fallthrough
 
 Func_179a: ; 179a (0:179a)
@@ -4582,14 +4600,14 @@ Func_184b: ; 184b (0:184b)
 	call TryExecuteEffectCommandFunction
 	jr c, Func_1821
 	ld a, $c
-	call SetDuelAIAction
-	call Func_0f58
+	call SetAIAction_SerialSendDuelData
+	call ExchangeRNG
 	ld a, $d
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	ld a, $3
 	call TryExecuteEffectCommandFunction
 	ld a, $16
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	ret
 
 Func_1874: ; 1874 (0:1874)
@@ -4607,8 +4625,8 @@ Func_1874: ; 1874 (0:1874)
 	ld a, [wcc10]
 	ldh [hTemp_ffa0], a
 	ld a, $8
-	call SetDuelAIAction
-	call Func_0f58
+	call SetAIAction_SerialSendDuelData
+	call ExchangeRNG
 	pop af
 	ldh [hTempCardIndex_ff9f], a
 	pop af
@@ -4695,20 +4713,20 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	call TryExecuteEffectCommandFunction
 	jr c, .done
 	ld a, $06
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	call $666a
-	call Func_0f58
+	call ExchangeRNG
 	ld a, $06
 	call TryExecuteEffectCommandFunction
 	ld a, $05
 	call TryExecuteEffectCommandFunction
 	ld a, $07
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	ld a, $03
 	call TryExecuteEffectCommandFunction
 	ldh a, [hTempCardIndex_ff9f]
 	call MoveHandCardToDiscardPile
-	call Func_0f58
+	call ExchangeRNG
 .done
 	or a
 	ret
@@ -5122,7 +5140,7 @@ Func_1bb4: ; 1bb4 (0:1bb4)
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	call Func_1bca
 	call WaitForWideTextBoxInput
-	call Func_0f58
+	call ExchangeRNG
 	ret
 
 Func_1bca: ; 1bca (0:1bca)
@@ -5223,9 +5241,9 @@ SubstractHPFromCard: ; 1c35 (0:1c35)
 
 ; check if a flag of wLoadedMove is set
 ; input:
-  ; a = %fffffbbb, where
-     ; fffff = flag address counting from wLoadedMoveFlag1
-     ; bbb = flag bit
+   ; a = %fffffbbb, where
+      ; fffff = flag address counting from wLoadedMoveFlag1
+      ; bbb = flag bit
 ; return carry if the flag is set
 CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	push hl
@@ -6844,12 +6862,12 @@ CopyTextData: ; 23fd (0:23fd)
 	ret
 ; 0x245d
 
-; convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
+; convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
 ; replace leading zeros with SYM_SPACE
 TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	push de
 	push bc
-	ld de, wTextBuf
+	ld de, wStringBuffer
 	push de
 	ld bc, -10000
 	call .get_digit
@@ -7157,9 +7175,9 @@ Unknown_2589: ; 2589 (0:2589)
 
 ; initializes parameters for a card list (e.g. list of hand cards in a duel or booster pack cards)
 ; input:
-	; a = list length
-	; de = initial page scroll offset, initial item (in the visible page)
-	; hl: 9 bytes with the rest of the parameters
+   ; a = list length
+   ; de = initial page scroll offset, initial item (in the visible page)
+   ; hl: 9 bytes with the rest of the parameters
 InitializeCardListParameters: ; 25ea (0:25ea)
 	ld [wNumListItems], a
 	ld a, d
@@ -8536,7 +8554,7 @@ ProcessTextHeader: ; 2d43 (0:2d43)
 .tx_ram1
 	call WriteToTextHeader_MoveToNext
 	call CopyPlayerNameOrTurnDuelistName
-	ld a, [wTextBuf]
+	ld a, [wStringBuffer]
 	cp TX_HALFWIDTH
 	jr z, .tx_halfwidth
 	ld a, TX_HALF2FULL
@@ -8595,16 +8613,16 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	ret
 
 ; if [wFontWidth] == HALF_WIDTH:
-;   convert the number at hl to text (ascii) format and write it to wTextBuf
+;   convert the number at hl to text (ascii) format and write it to wStringBuffer
 ;   return c = 4 - leading_zeros
 ; if [wFontWidth] == FULL_WIDTH:
-;   convert the number at hl to TX_SYMBOL text format and write it to wTextBuf
+;   convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
 ;   replace leading zeros with SYM_SPACE
 TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
-	ld de, wTextBuf
+	ld de, wStringBuffer
 	push de
 	call TwoByteNumberToText
 	pop hl
@@ -8618,10 +8636,10 @@ TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 	jr nz, .digit_loop
 	ret
 
-; in the overworld: copy the player's name to wTextBuf
-; in a duel: copy the name of the duelist whose turn it is to wTextBuf
+; in the overworld: copy the player's name to wStringBuffer
+; in a duel: copy the name of the duelist whose turn it is to wStringBuffer
 CopyPlayerNameOrTurnDuelistName: ; 2e2c (0:2e2c)
-	ld de, wTextBuf
+	ld de, wStringBuffer
 	push de
 	ldh a, [hWhoseTurn]
 	cp OPPONENT_TURN
@@ -8913,9 +8931,9 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ret
 
 ; input:
-	; hl = card_gfx_index
-	; de = where to load the card gfx to
-	; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
+   ; hl = card_gfx_index
+   ; de = where to load the card gfx to
+   ; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
 LoadCardGfx: ; 2fa0 (0:2fa0)
@@ -8958,11 +8976,11 @@ CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
 	call BankpopHome
 	ret
 
-; Checks if the command type at a is one of the commands of the move or card effect currently in use,
-; and executes its associated function if so.
+; Checks if the command type at a is one of the commands of the move or
+; card effect currently in use, and executes its associated function if so.
 ; input:
-; a = command type to check
-; [wLoadedMoveEffectCommands] = pointer to list of commands of current move or trainer card
+   ; a = command type to check
+   ; [wLoadedMoveEffectCommands] = pointer to list of commands of current move or trainer card
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
 ; grab pointer to command list from wLoadedMoveEffectCommands
@@ -8995,8 +9013,8 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ret
 
 ; input:
-  ; a = command type to check
-  ; hl = list of commands of current move or trainer card
+   ; a = command type to check
+   ; hl = list of commands of current move or trainer card
 ; return nc if command type matching a is found, carry otherwise
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
@@ -9232,7 +9250,8 @@ Func_311d: ; 311d (0:311d)
 	call BankswitchHome
 	ret
 
-Func_312d: ; 312d (0:312d)   ; serial transfer-related
+; serial transfer-related
+Func_312d: ; 312d (0:312d)
 	push hl
 	ld hl, wce64
 	ld a, $88
