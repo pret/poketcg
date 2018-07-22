@@ -12,19 +12,25 @@ hBankVRAM:: ; ff82
 hDMAFunction:: ; ff83
 	ds $a
 
+; D-pad repeat counter. see HandleDPadRepeat
 hDPadRepeat:: ; ff8d
 	ds $1
 
-hButtonsReleased:: ; ff8e
+; keys pressed in last frame but not in current frame
+hKeysReleased:: ; ff8e
 	ds $1
 
-hButtonsPressed2:: ; ff8f
+; used to quickly scroll through menus when a relevant D-pad key is held
+; see HandleDPadRepeat
+hDPadHeld:: ; ff8f
 	ds $1
 
-hButtonsHeld:: ; ff90
+; keys pressed in last frame and in current frame
+hKeysHeld:: ; ff90
 	ds $1
 
-hButtonsPressed:: ; ff91
+; keys pressed in current frame but not in last frame
+hKeysPressed:: ; ff91
 	ds $1
 
 hSCX:: ; ff92
@@ -63,6 +69,7 @@ hTempCardID_ff9b:: ; ff9b
 hTempPlayAreaLocationOffset_ff9d:: ; ff9d
 	ds $1
 
+; index for AIActionTable
 hAIActionTableIndex:: ; ff9e
 	ds $1
 

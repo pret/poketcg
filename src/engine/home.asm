@@ -6,11 +6,11 @@ SECTION "rst08", ROM0
 SECTION "rst10", ROM0
 	ret
 SECTION "rst18", ROM0
-	jp RST18
+	jp Bank1Call
 SECTION "rst20", ROM0
 	jp RST20
 SECTION "rst28", ROM0
-	jp RST28
+	jp FarCall
 SECTION "rst30", ROM0
 	ret
 SECTION "rst38", ROM0
@@ -60,7 +60,7 @@ Start: ; 0150 (0:0150)
 	call SetupTimer
 	call ResetSerial
 	call CopyDMAFunction
-	call SetupExtRAM
+	call ValidateSRAM
 	ld a, BANK(GameLoop)
 	call BankswitchHome
 	ld sp, $e000
@@ -439,7 +439,7 @@ SetupVRAM: ; 03a1 (0:03a1)
 	jr nz, .loop
 	ret
 
-; fill VRAM0 BG maps with [wTileMapFill] and VRAM1 BG Maps with 0
+; fill VRAM0 BG map 0 with [wTileMapFill] and VRAM1 BG map 0 with $00
 FillTileMap: ; 03c0 (0:03c0)
 	call BankswitchVRAM0
 	ld hl, v0BGMap0
@@ -502,10 +502,12 @@ FlushPalette: ; 0408 (0:0408)
 ; Set wBGP to the specified value, flush non-CGB palettes, and the first CGB palette.
 SetBGP: ; 040c (0:040c)
 	ld [wBGP], a
+;	fallthrough
 
 ; Flush non-CGB palettes and the first CGB palette
 FlushPalette0:
 	ld a, FLUSH_ONE_PAL
+;	fallthrough
 
 FlushPalettes:
 	ld [wFlushPaletteFlags], a
@@ -633,6 +635,7 @@ UnsafeWriteDataBlockToBGMap0: ; 0492 (0:0492)
 	jr nz, .loop
 	ret
 
+; initialize the screen by emptying the tilemap. used during screen transitions
 EmptyScreen: ; 04a2 (0:04a2)
 	call DisableLCD
 	call FillTileMap
@@ -642,12 +645,12 @@ EmptyScreen: ; 04a2 (0:04a2)
 	cp CONSOLE_SGB
 	ret nz
 	call EnableLCD
-	ld hl, AttrBlkPacket_04bf
+	ld hl, AttrBlkPacket_EmptyScreen
 	call SendSGB
 	call DisableLCD
 	ret
 
-AttrBlkPacket_04bf: ; 04bf (0:04bf)
+AttrBlkPacket_EmptyScreen: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
 	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
@@ -672,16 +675,18 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 	ld d, h
 	ret
 
+; read joypad data to refresh hKeysHeld, hKeysPressed, and hKeysReleased
+; the A + B + Start + Select combination resets the game
 ReadJoypad: ; 04de (0:04de)
-	ld a, $20
+	ld a, JOY_BTNS_SELECT
 	ld [rJOYP], a
 	ld a, [rJOYP]
 	ld a, [rJOYP]
 	cpl
-	and $f
+	and JOY_INPUT_MASK
 	swap a
-	ld b, a
-	ld a, $10
+	ld b, a ; buttons data
+	ld a, JOY_DPAD_SELECT
 	ld [rJOYP], a
 	ld a, [rJOYP]
 	ld a, [rJOYP]
@@ -690,24 +695,24 @@ ReadJoypad: ; 04de (0:04de)
 	ld a, [rJOYP]
 	ld a, [rJOYP]
 	cpl
-	and $f
+	and JOY_INPUT_MASK
 	or b
-	ld c, a ; joypad data
+	ld c, a ; dpad data
 	cpl
-	ld b, a
-	ldh a, [hButtonsHeld]
+	ld b, a ; buttons data
+	ldh a, [hKeysHeld]
 	xor c
 	and b
-	ldh [hButtonsReleased], a
-	ldh a, [hButtonsHeld]
+	ldh [hKeysReleased], a
+	ldh a, [hKeysHeld]
 	xor c
 	and c
 	ld b, a
-	ldh [hButtonsPressed], a
-	ldh a, [hButtonsHeld]
+	ldh [hKeysPressed], a
+	ldh a, [hKeysHeld]
 	and BUTTONS
 	cp BUTTONS
-	jr nz, ReadJoypad_SaveButtonsHeld
+	jr nz, SaveButtonsHeld
 	; A + B + Start + Select: reset game
 	call ResetSerial
 ;	fallthrough
@@ -717,10 +722,10 @@ Reset: ; 051b (0:051b)
 	di
 	jp Start
 
-ReadJoypad_SaveButtonsHeld:
+SaveButtonsHeld:
 	ld a, c
-	ldh [hButtonsHeld], a
-	ld a, $30
+	ldh [hKeysHeld], a
+	ld a, JOY_BTNS_SELECT | JOY_DPAD_SELECT
 	ld [rJOYP], a
 	ret
 
@@ -729,11 +734,11 @@ ClearJoypad: ; 052a (0:052a)
 	push hl
 	ld hl, hDPadRepeat
 	xor a
-	ld [hli], a
-	ld [hli], a
-	ld [hli], a
-	ld [hli], a
-	ld [hli], a
+	ld [hli], a ; hDPadRepeat
+	ld [hli], a ; hKeysReleased
+	ld [hli], a ; hDPadHeld
+	ld [hli], a ; hKeysHeld
+	ld [hli], a ; hKeysPressed
 	pop hl
 	ret
 
@@ -748,7 +753,7 @@ DoAFrames: ; 0536 (0:0536)
 	ret
 
 ; updates background, sprites and other game variables, halts until vblank, and reads user input
-; if wcad5 is not 0, the game can be paused (and resumed) by pressing the select button
+; if wcad5 is not 0, the game can be paused (and resumed) by pressing the SELECT button
 DoFrame: ; 053f (0:053f)
 	push af
 	push hl
@@ -762,14 +767,14 @@ DoFrame: ; 053f (0:053f)
 	ld a, [wcad5]
 	or a
 	jr z, .done
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and SELECT
 	jr z, .done
 .game_paused_loop
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and SELECT
 	jr z, .game_paused_loop
 .done
@@ -779,29 +784,31 @@ DoFrame: ; 053f (0:053f)
 	pop af
 	ret
 
-; handle D-pad repeatcounter
+; handle D-pad repeat counter
+; used to quickly scroll through menus when a relevant D-pad key is held
 HandleDPadRepeat: ; 0572 (0:0572)
-	ldh a, [hButtonsHeld]
-	ldh [hButtonsPressed2], a
+	ldh a, [hKeysHeld]
+	ldh [hDPadHeld], a
 	and D_PAD
-	jr z, .asm_58c
+	jr z, .done
 	ld hl, hDPadRepeat
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and D_PAD
-	jr z, .asm_586
+	jr z, .dpad_key_held
 	ld [hl], 24
 	ret
-.asm_586
+.dpad_key_held
 	dec [hl]
-	jr nz, .asm_58c
+	jr nz, .done
 	ld [hl], 6
 	ret
-.asm_58c
-	ldh a, [hButtonsPressed]
+.done
+	ldh a, [hKeysPressed]
 	and BUTTONS
-	ldh [hButtonsPressed2], a
+	ldh [hDPadHeld], a
 	ret
 
+; copy DMA to hDMAFunction
 CopyDMAFunction: ; 0593 (0:0593)
 	ld c, LOW(hDMAFunction)
 	ld b, JumpToFunctionInTable - DMA
@@ -1181,6 +1188,7 @@ CopyGfxData: ; 070c (0:070c)
 	jr nz, .next_tile
 	ret
 
+; copy bc bytes from hl to de. preserves all regsters except af
 CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
 	push hl
 	push de
@@ -1191,7 +1199,7 @@ CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
 	pop hl
 	ret
 
-; copies bc bytes from hl to de
+; copy bc bytes from hl to de
 CopyDataHLtoDE: ; 073c (0:073c)
 	ld a, [hli]
 	ld [de], a
@@ -1202,8 +1210,8 @@ CopyDataHLtoDE: ; 073c (0:073c)
 	jr nz, CopyDataHLtoDE
 	ret
 
-; switch to rombank (A + top2 of H shifted down),
-; set top2 of H to 01 (switchable ROM bank area),
+; switch to rombank (a + top2 of h shifted down),
+; set top2 of h to 01 (switchable ROM bank area),
 ; return old rombank id on top-of-stack
 BankpushHome: ; 0745 (0:0745)
 	push hl
@@ -1241,7 +1249,7 @@ BankpushHome: ; 0745 (0:0745)
 	ret
 ; 0x76f
 
-; switch to rombank A,
+; switch to rombank a,
 ; return old rombank id on top-of-stack
 BankpushHome2: ; 076f (0:076f)
 	push hl
@@ -1292,13 +1300,13 @@ BankpopHome: ; 078e (0:078e)
 	pop af
 	ret
 
-; switch ROM bank
+; switch ROM bank to a
 BankswitchHome: ; 07a3 (0:07a3)
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
 
-; switch SRAM bank
+; switch SRAM bank to a
 BankswitchSRAM: ; 07a9 (0:07a9)
 	push af
 	ldh [hBankSRAM], a
@@ -1308,7 +1316,7 @@ BankswitchSRAM: ; 07a9 (0:07a9)
 	pop af
 	ret
 
-; enable external RAM
+; enable external RAM (SRAM)
 EnableSRAM: ; 07b6 (0:07b6)
 	push af
 	ld a, SRAM_ENABLE
@@ -1316,7 +1324,7 @@ EnableSRAM: ; 07b6 (0:07b6)
 	pop af
 	ret
 
-; disable external RAM
+; disable external RAM (SRAM)
 DisableSRAM: ; 07be (0:07be)
 	push af
 	xor a ; SRAM_DISABLE
@@ -1342,14 +1350,14 @@ BankswitchVRAM1: ; 07cd (0:07cd)
 	pop af
 	ret
 
-; set current dest VRAM bank
-; a: value to write
+; set current dest VRAM bank to a
 BankswitchVRAM: ; 07d6 (0:07d6)
 	ldh [hBankVRAM], a
 	ld [rVBK], a
 	ret
 ; 0x7db
 
+; switch to CGB Normal Speed Mode if playing on CGB and current mode is Double Speed Mode
 SwitchToCGBNormalSpeed: ; 7db (0:7db)
 	call CheckForCGB
 	ret c
@@ -1358,6 +1366,7 @@ SwitchToCGBNormalSpeed: ; 7db (0:7db)
 	ret z
 	jr CGBSpeedSwitch
 
+; switch to CGB Double Speed Mode if playing on CGB and current mode is Normal Speed Mode
 SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 	call CheckForCGB
 	ret c
@@ -1366,6 +1375,7 @@ SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 	ret nz
 ;	fallthrough
 
+; switch between CGB Double Speed Mode and Normal Speed Mode
 CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ld a, [rIE]
 	push af
@@ -1383,74 +1393,78 @@ CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ld [rIE], a
 	ret
 
-SetupExtRAM: ; 080b (0:080b)
+; validate the saved data in SRAM
+; it must contain with the sequence $04, $21, $05 at sa000
+ValidateSRAM: ; 080b (0:080b)
 	xor a
 	call BankswitchSRAM
-	ld hl, sa000
-	ld bc, $1000
-.asm_815
+	ld hl, $a000
+	ld bc, $2000 / 2
+.check_pattern_loop
 	ld a, [hli]
 	cp $41
-	jr nz, .asm_82f
+	jr nz, .check_sequence
 	ld a, [hli]
 	cp $93
-	jr nz, .asm_82f
+	jr nz, .check_sequence
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_815
-	call Func_084d
+	jr nz, .check_pattern_loop
+	call RestartSRAM
 	scf
 	call Func_4050
 	call DisableSRAM
 	ret
-.asm_82f
+.check_sequence
 	ld hl, sa000
 	ld a, [hli]
-	cp $4
-	jr nz, .asm_842
+	cp $04
+	jr nz, .restart_sram
 	ld a, [hli]
 	cp $21
-	jr nz, .asm_842
+	jr nz, .restart_sram
 	ld a, [hl]
-	cp $5
-	jr nz, .asm_842
+	cp $05
+	jr nz, .restart_sram
 	ret
-.asm_842
-	call Func_084d
+.restart_sram
+	call RestartSRAM
 	or a
 	call Func_4050
 	call DisableSRAM
 	ret
 
-Func_084d: ; 084d (0:084d)
+; zero all SRAM banks and set sa000 to $04, $21, $05
+RestartSRAM: ; 084d (0:084d)
 	ld a, 3
 .clear_loop
-	call ClearExtRAMBank
+	call ClearSRAMBank
 	dec a
 	cp -1
 	jr nz, .clear_loop
 	ld hl, sa000
-	ld [hl], $4
+	ld [hl], $04
 	inc hl
 	ld [hl], $21
 	inc hl
-	ld [hl], $5
+	ld [hl], $05
 	ret
 
-ClearExtRAMBank: ; 0863 (0:0863)
+; zero the loaded SRAM bank
+ClearSRAMBank: ; 0863 (0:0863)
 	push af
 	call BankswitchSRAM
 	call EnableSRAM
 	ld hl, $a000
 	ld bc, $2000
-.asm_870
+.loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_870
+	jr nz, .loop
 	pop af
 	ret
 
@@ -1488,6 +1502,7 @@ Random: ; 088f (0:088f)
 	ret
 ; 0x89b
 
+; get the next random numbers of the wRNG1 and wRNG2 sequences
 UpdateRNGSources: ; 089b (0:089b)
 	push hl
 	push de
@@ -1732,10 +1747,10 @@ ZeroObjectPositions: ; 099c (0:099c)
 	jr nz, .loop
 	ret
 
-; this function affects the stack so that it returns
-; to the pointer following the rst call
-; similar to rst 28, except this always loads bank 1
-RST18: ; 09ae (0:09ae)
+; RST18
+; this function affects the stack so that it returns to the pointer following
+; the rst call. similar to rst 28, except this always loads bank 1
+Bank1Call: ; 09ae (0:09ae)
 	push hl
 	push hl
 	push hl
@@ -1763,7 +1778,8 @@ RST18: ; 09ae (0:09ae)
 	ld [hl], a
 	ld a, $1
 ;	fallthrough
-Func_09ce: ; 09ce (0:09ce)
+
+Bank1Call_FarCall_Common: ; 09ce (0:09ce)
 	call BankswitchHome
 	ld hl, sp+$d
 	inc de
@@ -1777,6 +1793,7 @@ Func_09ce: ; 09ce (0:09ce)
 	ret
 ; 0x9dc
 
+; switch to the ROM bank at sp+4
 SwitchToBankAtSP: ; 9dc (0:9dc)
 	push af
 	push hl
@@ -1790,9 +1807,10 @@ SwitchToBankAtSP: ; 9dc (0:9dc)
 	ret
 ; 0x9e9
 
+; RST28
 ; this function affects the stack so that it returns
 ; to the three byte pointer following the rst call
-RST28: ; 09e9 (0:09e9)
+FarCall: ; 09e9 (0:09e9)
 	push hl
 	push hl
 	push hl
@@ -1822,65 +1840,81 @@ RST28: ; 09e9 (0:09e9)
 	dec de
 	ld a, [de]
 	inc de
-	jr Func_09ce
+	jr Bank1Call_FarCall_Common
 
 ; setup SNES memory $810-$867 and palette
 InitSGB: ; 0a0d (0:0a0d)
 	ld hl, MaskEnPacket_Freeze
 	call SendSGB
-	ld hl, DataSndPacket_0a50
+	ld hl, DataSndPacket1
 	call SendSGB
-	ld hl, DataSndPacket_0a60
+	ld hl, DataSndPacket2
 	call SendSGB
-	ld hl, DataSndPacket_0a70
+	ld hl, DataSndPacket3
 	call SendSGB
-	ld hl, DataSndPacket_0a80
+	ld hl, DataSndPacket4
 	call SendSGB
-	ld hl, DataSndPacket_0a90
+	ld hl, DataSndPacket5
 	call SendSGB
-	ld hl, DataSndPacket_0aa0
+	ld hl, DataSndPacket6
 	call SendSGB
-	ld hl, DataSndPacket_0ab0
+	ld hl, DataSndPacket7
 	call SendSGB
-	ld hl, DataSndPacket_0ac0
+	ld hl, DataSndPacket8
 	call SendSGB
-	ld hl, Pal01Packet
+	ld hl, Pal01Packet_InitSGB
 	call SendSGB
 	ld hl, MaskEnPacket_Cancel
 	call SendSGB
 	ret
 
-DataSndPacket_0a50: ; 0a50 (0:0a50)
+DataSndPacket1: ; 0a50 (0:0a50)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $5d,$08,$00,$0b,$8c,$d0,$f4,$60,$00,$00,$00,$00,$00,$00,$00
+	dwb $085d, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $8c, $d0, $f4, $60, $00, $00, $00, $00, $00, $00, $00 ; data bytes
 
-DataSndPacket_0a60: ; 0a60 (0:0a60)
+DataSndPacket2: ; 0a60 (0:0a60)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $52,$08,$00,$0b,$a9,$e7,$9f,$01,$c0,$7e,$e8,$e8,$e8,$e8,$e0
+	dwb $0852, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $a9, $e7, $9f, $01, $c0, $7e, $e8, $e8, $e8, $e8, $e0 ; data bytes
 
-DataSndPacket_0a70: ; 0a70 (0:0a70)
+DataSndPacket3: ; 0a70 (0:0a70)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $47,$08,$00,$0b,$c4,$d0,$16,$a5,$cb,$c9,$05,$d0,$10,$a2,$28
+	dwb $0847, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $c4, $d0, $16, $a5, $cb, $c9, $05, $d0, $10, $a2, $28 ; data bytes
 
-DataSndPacket_0a80: ; 0a80 (0:0a80)
+DataSndPacket4: ; 0a80 (0:0a80)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $3c,$08,$00,$0b,$f0,$12,$a5,$c9,$c9,$c8,$d0,$1c,$a5,$ca,$c9
+	dwb $083c, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $f0, $12, $a5, $c9, $c9, $c8, $d0, $1c, $a5, $ca, $c9 ; data bytes
 
-DataSndPacket_0a90: ; 0a90 (0:0a90)
+DataSndPacket5: ; 0a90 (0:0a90)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $31,$08,$00,$0b,$0c,$a5,$ca,$c9,$7e,$d0,$06,$a5,$cb,$c9,$7e
+	dwb $0831, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $0c, $a5, $ca, $c9, $7e, $d0, $06, $a5, $cb, $c9, $7e ; data bytes
 
-DataSndPacket_0aa0: ; 0aa0 (0:0aa0)
+DataSndPacket6: ; 0aa0 (0:0aa0)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $26,$08,$00,$0b,$39,$cd,$48,$0c,$d0,$34,$a5,$c9,$c9,$80,$d0
+	dwb $0826, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $39, $cd, $48, $0c, $d0, $34, $a5, $c9, $c9, $80, $d0 ; data bytes
 
-DataSndPacket_0ab0: ; 0ab0 (0:0ab0)
+DataSndPacket7: ; 0ab0 (0:0ab0)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $1b,$08,$00,$0b,$ea,$ea,$ea,$ea,$ea,$a9,$01,$cd,$4f,$0c,$d0
+	dwb $081b, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $ea, $ea, $ea, $ea, $ea, $a9, $01, $cd, $4f, $0c, $d0 ; data bytes
 
-DataSndPacket_0ac0: ; 0ac0 (0:0ac0)
+DataSndPacket8: ; 0ac0 (0:0ac0)
 	sgb DATA_SND, 1 ; sgb_command, length
-	db $10,$08,$00,$0b,$4c,$20,$08,$ea,$ea,$ea,$ea,$ea,$60,$ea,$ea
+	dwb $0810, $00 ; destination address, bank
+	db $0b ; number of bytes to write
+	db $4c, $20, $08, $ea, $ea, $ea, $ea, $ea, $60, $ea, $ea ; data bytes
 
 MaskEnPacket_Freeze: ; 0ad0 (0:0ad0)
 	sgb MASK_EN, 1 ; sgb_command, length
@@ -1892,7 +1926,7 @@ MaskEnPacket_Cancel: ; 0ae0 (0:0ae0)
 	db MASK_EN_CANCEL_MASK
 	ds $0e
 
-Pal01Packet: ; 0af0 (0:0af0)
+Pal01Packet_InitSGB: ; 0af0 (0:0af0)
 	sgb PAL01, 1 ; sgb_command, length
 	rgb 28, 28, 24
 	rgb 20, 20, 16
@@ -1903,7 +1937,7 @@ Pal01Packet: ; 0af0 (0:0af0)
 	rgb 7, 0, 0
 	db $00
 
-Pal23Packet: ; 0b00 (0:0b00)
+Pal23Packet_0b00: ; 0b00 (0:0b00)
 	sgb PAL23, 1 ; sgb_command, length
 	rgb 0, 31, 0
 	rgb 0, 15, 0
@@ -1922,80 +1956,82 @@ AttrBlkPacket_0b10: ; 0b10 (0:0b10)
 	ds 6 ; data set 2
 	ds 2 ; data set 3
 
-; send SGB command
+; send SGB packet at hl (or packets, if length > 1)
 SendSGB: ; 0b20 (0:0b20)
 	ld a, [hl]
 	and $7
-	ret z
-	ld b, a
-	ld c, $0
-.asm_b27
+	ret z ; return if packet length is 0
+	ld b, a ; length (1-7)
+	ld c, LOW(rJOYP)
+.send_packets_loop
 	push bc
 	ld a, $0
 	ld [$ff00+c], a
-	ld a, $30
+	ld a, P15 | P14
 	ld [$ff00+c], a
-	ld b, $10
-.asm_b30
+	ld b, SGB_PACKET_SIZE
+.send_packet_loop
 	ld e, $8
 	ld a, [hli]
 	ld d, a
-.asm_b34
+.read_byte_loop
 	bit 0, d
-	ld a, $10
-	jr nz, .asm_b3c
-	ld a, $20
-.asm_b3c
+	ld a, P14 ; '1' bit
+	jr nz, .transfer_bit
+	ld a, P15 ; '0' bit
+.transfer_bit
 	ld [$ff00+c], a
-	ld a, $30
+	ld a, P15 | P14
 	ld [$ff00+c], a
 	rr d
 	dec e
-	jr nz, .asm_b34
+	jr nz, .read_byte_loop
 	dec b
-	jr nz, .asm_b30
-	ld a, $20
+	jr nz, .send_packet_loop
+	ld a, P15 ; stop bit
 	ld [$ff00+c], a
-	ld a, $30
+	ld a, P15 | P14
 	ld [$ff00+c], a
 	pop bc
 	dec b
-	jr nz, .asm_b27
+	jr nz, .send_packets_loop
 	ld bc, 4
 	call Wait
 	ret
 
+; SGB hardware detection
+; return carry if SGB detected and disable multi-controller mode before returning
 DetectSGB: ; 0b59 (0:0b59)
 	ld bc, 60
 	call Wait
 	ld hl, MltReq2Packet
 	call SendSGB
 	ld a, [rJOYP]
-	and $3
-	cp $3
+	and %11
+	cp SNES_JOYPAD1
 	jr nz, .sgb
-	ld a, $20
+	ld a, P15
 	ld [rJOYP], a
 	ld a, [rJOYP]
 	ld a, [rJOYP]
-	ld a, $30
+	ld a, P15 | P14
 	ld [rJOYP], a
-	ld a, $10
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, $30
+	ld a, P14
 	ld [rJOYP], a
 	ld a, [rJOYP]
 	ld a, [rJOYP]
 	ld a, [rJOYP]
 	ld a, [rJOYP]
-	and $3
-	cp $3
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, P15 | P14
+	ld [rJOYP], a
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	ld a, [rJOYP]
+	and %11
+	cp SNES_JOYPAD1
 	jr nz, .sgb
 	ld hl, MltReq1Packet
 	call SendSGB
@@ -2017,6 +2053,9 @@ MltReq2Packet: ; 0bbb (0:0bbb)
 	db MLT_REQ_2_PLAYERS
 	ds $0e
 
+; fill v*Tiles1 and v*Tiles2 with data at hl
+; write $0d sequences of $80,$81,$82,...,$94 separated each by $0c bytes to v*BGMap0
+; send the SGB packet at de
 Func_0bcb: ; 0bcb (0:0bcb)
 	di
 	push de
@@ -2030,28 +2069,28 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ld [rBGP], a
 	ld de, v0Tiles1
 	ld bc, v0BGMap0 - v0Tiles1
-.loop
+.tiles_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec bc
 	ld a, b
 	or c
-	jr nz, .loop
+	jr nz, .tiles_loop
 	ld hl, v0BGMap0
 	ld de, $000c
 	ld a, $80
-	ld c, $d
-.asm_bf3
+	ld c, $0d
+.bgmap_outer_loop
 	ld b, $14
-.asm_bf5
+.bgmap_inner_loop
 	ld [hli], a
 	inc a
 	dec b
-	jr nz, .asm_bf5
+	jr nz, .bgmap_inner_loop
 	add hl, de
 	dec c
-	jr nz, .asm_bf3
+	jr nz, .bgmap_outer_loop
 	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00 | LCDC_ON
 	ld [rLCDC], a
 	pop hl
@@ -2123,7 +2162,7 @@ HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 ; 0xc4b
 
 ; returns a *= 10
-Func_0c4b: ; 0c4b (0:0c4b)
+ATimes10: ; 0c4b (0:0c4b)
 	push de
 	ld e, a
 	add a
@@ -2135,7 +2174,7 @@ Func_0c4b: ; 0c4b (0:0c4b)
 ; 0xc53
 
 ; returns hl *= 10
-Func_0c53: ; 0c53 (0:0c53)
+HLTimes10: ; 0c53 (0:0c53)
 	push de
 	ld l, a
 	ld e, a
@@ -2151,7 +2190,7 @@ Func_0c53: ; 0c53 (0:0c53)
 
 ; returns a /= 10
 ; returns carry if a % 10 >= 5
-Func_0c5f: ; 0c5f (0:0c5f)
+ADividedBy10: ; 0c5f (0:0c5f)
 	push de
 	ld e, -1
 .asm_c62
@@ -7195,7 +7234,7 @@ InitializeMenuParameters: ; 2636 (0:2636)
 HandleMenuInput: ; 264b (0:264b)
 	xor a
 	ld [wRefreshMenuCursorSFX], a
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	or a
 	jr z, .up_down_done
 	ld b, a
@@ -7249,7 +7288,7 @@ HandleMenuInput: ; 264b (0:264b)
 	scf
 	ret
 .check_A_or_B
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, RefreshMenuCursor_CheckPlaySFX
 	and A_BUTTON
@@ -7338,7 +7377,7 @@ SetMenuItem: ; 2710 (0:2710)
 ; navigating through the menu or selecting an item with the A button.
 ; other input in handled by PrintDuelMenu.handle_input
 HandleDuelMenuInput: ; 271a (0:271a)
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	or a
 	jr z, .blink_cursor
 	ld b, a
@@ -7379,7 +7418,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	ld [wCursorBlinkCounter], a
 	jr .blink_cursor
 .dpad_not_pressed
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and A_BUTTON
 	jp nz, HandleMenuInput.A_pressed
 .blink_cursor
@@ -7533,7 +7572,7 @@ OneByteNumberToTxSymbol_TrimLeadingZerosAndAlign: ; 2832 (0:2832)
 ; this function is always loaded to wMenuFunctionPointer by PrintCardListItems
 ; takes care of things like handling page scrolling and calling the function at wListFunctionPointer
 CardListMenuFunction: ; 283f (0:283f)
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	ld b, a
 	ld a, [wNumMenuItems]
 	dec a
@@ -7686,7 +7725,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	ldh a, [hCurMenuItem]
 	jp hl ; execute the function at wListFunctionPointer
 .no_list_function
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	ret z
 	and B_BUTTON
@@ -7826,7 +7865,7 @@ Func_29fa: ; 29fa (0:29fa)
 WaitForButtonAorB: ; 2a00 (0:2a00)
 	call DoFrame
 	call RefreshMenuCursor
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	bit A_BUTTON_F, a
 	jr nz, .a_pressed
 	bit B_BUTTON_F, a
@@ -7924,7 +7963,7 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 .wait_A_or_B_loop
 	call DoFrame
 	call RefreshMenuCursor
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .wait_A_or_B_loop
 	ret
@@ -7958,7 +7997,7 @@ WaitForWideTextBoxInput: ; 2aae (0:2aae)
 .wait_A_or_B_loop
 	call DoFrame
 	call RefreshMenuCursor
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .wait_A_or_B_loop
 	call EraseCursor
@@ -8020,10 +8059,10 @@ HandleYesOrNoMenu:
 .wait_button_loop
 	call DoFrame
 	call RefreshMenuCursor
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	bit A_BUTTON_F, a
 	jr nz, .a_pressed
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and D_RIGHT | D_LEFT
 	jr z, .wait_button_loop
 	; left or right pressed, so switch to the other menu item
@@ -8303,7 +8342,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	cp 2
 	jr nc, .apply_delay
 	; if text speed is 1, pressing b ignores it
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	and B_BUTTON
 	jr nz, .skip_delay
 .apply_delay
@@ -8613,7 +8652,7 @@ PrintText: ; 2e41 (0:2e41)
 .print_text
 	call ResetTxRam_WriteToTextHeader
 .next_tile_loop
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	ld b, a
 	ld a, [wTextSpeed]
 	inc a

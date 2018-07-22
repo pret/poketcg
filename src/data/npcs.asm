@@ -1,4 +1,4 @@
-; When you press the a button in front of something it will find a data entry somewhere on this list
+; When you press the A button in front of something it will find a data entry somewhere on this list
 ; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
 PointerTable_118f5:
 	dw Data_119dd

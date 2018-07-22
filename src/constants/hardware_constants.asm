@@ -40,6 +40,27 @@ OAM_PRIORITY  EQU 7 ; 0: OBJ above BG, 1: OBJ behind BG (colors 1-3)
 
 ; Hardware registers
 rJOYP       EQU $ff00 ; Joypad (R/W)
+P15              EQU %00100000
+JOY_BTNS_SELECT  EQU P15
+P14              EQU %00010000
+JOY_DPAD_SELECT  EQU P14
+JOY_INPUT_MASK   EQU %00001111
+P13              EQU %00001000
+P12              EQU %00000100
+P11              EQU %00000010
+P10              EQU %00000001
+JOY_INPUT_DOWN   EQU P13
+JOY_INPUT_UP     EQU P12
+JOY_INPUT_LEFT   EQU P11
+JOY_INPUT_RIGHT  EQU P10
+JOY_INPUT_START  EQU P13
+JOY_INPUT_SELECT EQU P12
+JOY_INPUT_B      EQU P11
+JOY_INPUT_A      EQU P10
+SNES_JOYPAD1     EQU $3 ; lower two bits
+SNES_JOYPAD2     EQU $2 ; lower two bits
+SNES_JOYPAD3     EQU $1 ; lower two bits
+SNES_JOYPAD4     EQU $0 ; lower two bits
 
 rSB         EQU $ff01 ; Serial transfer data (R/W)
 rSC         EQU $ff02 ; Serial Transfer Control (R/W)

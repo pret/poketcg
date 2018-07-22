@@ -16,7 +16,7 @@ GameLoop: ; 4000 (1:4000)
 	ld [wUppercaseHalfWidthLetters], a
 	ei
 	farcall CommentedOut_1a6cc
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	cp A_BUTTON | B_BUTTON
 	jr z, .ask_erase_backup_ram
 	farcall _GameLoop
@@ -369,10 +369,10 @@ PrintDuelMenu: ; 4295 (1:4295)
 
 .handle_input
 	call DoFrame
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	and B_BUTTON
 	jr z, .b_not_held
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	bit D_UP_F, a
 	jr nz, DuelMenuShortcut_OpponentPlayArea
 	bit D_DOWN_F, a
@@ -385,10 +385,10 @@ PrintDuelMenu: ; 4295 (1:4295)
 	jp nz, DuelMenuShortcut_OpponentActivePokemon
 
 .b_not_held
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and START
 	jp nz, DuelMenuShortcut_PlayerActivePokemon
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	bit SELECT_F, a
 	jp nz, DuelMenuShortcut_BothActivePokemon
 	ld a, [wcbe7]
@@ -823,7 +823,7 @@ Func_45a9: ; 45a9 (1:45a9)
 	ld a, $02
 	ld [wcbd4], a
 	call OpenPlayAreaScreenForViewing
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and B_BUTTON
 	ret z
 	scf
@@ -1053,7 +1053,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 
 .wait_for_input
 	call DoFrame
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and START
 	jr nz, .display_selected_move_info
 	call HandleMenuInput
@@ -1137,10 +1137,10 @@ Func_478b: ; 478b (1:478b)
 
 .asm_47d4
 	call DoFrame
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and D_RIGHT | D_LEFT
 	jr nz, .asm_47ce
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .asm_47d4
 	ret
@@ -2551,7 +2551,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	ld b, a
 	bit SELECT_F, b
 	jr nz, .asm_563b
@@ -2585,7 +2585,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call Func_5762
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	bit D_UP_F, a
 	jr nz, .asm_566f
 	bit D_DOWN_F, a
@@ -2619,7 +2619,7 @@ Func_55f0: ; 55f0 (1:55f0)
 ; 0x5690
 
 Func_5690: ; 5690 (1:5690)
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and D_PAD
 	ret z
 	ld a, $01
@@ -2662,14 +2662,14 @@ CardListParameters: ; 5710 (1;5710)
 ; 0x5719
 
 CardListFunction: ; 5719 (1:5719)
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	bit B_BUTTON_F, a
 	jr nz, .exit
 	and A_BUTTON | SELECT | START
 	jr nz, .action_button
-	ldh a, [hButtonsReleased]
+	ldh a, [hKeysReleased]
 	and D_PAD
-	jr nz, .reload_card_image ; jump if the D_PAD button was released this frame
+	jr nz, .reload_card_image ; jump if the D_PAD key was released this frame
 	ret
 .exit
 	ld a, $ff
@@ -2760,15 +2760,15 @@ Func_5779: ; 5779 (1:5779)
 	call EnableLCD
 .asm_57af
 	call DoFrame
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	ld b, a
 	ld a, [wcbd7]
 	and b
 	jr nz, .asm_57cc
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and START | A_BUTTON
 	jr nz, .asm_57a7
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and D_RIGHT | D_LEFT
 	jr z, .asm_57af
 	call Func_57cd
@@ -3469,7 +3469,7 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	ld [wcbc9], a
 	ld a, [wcbd6]
 	ld b, a
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and b
 	jr z, .asm_6091
 	ld a, [wcbc9]
@@ -3529,7 +3529,7 @@ PlayAreaScreenMenuParameters_ActivePokemonExcluded: ; 60c6 (1:60c6)
 	dw PlayAreaScreenMenuFunction ; function pointer if non-0
 
 PlayAreaScreenMenuFunction: ; 60ce (1:60ce)
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON | START
 	ret z
 	bit B_BUTTON_F, a
@@ -3885,7 +3885,7 @@ Func_67b2: ; 67b2 (1:67b2)
 	ld a, [wccf2]
 	or a
 	ret z
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	and B_BUTTON
 	ret z
 	scf

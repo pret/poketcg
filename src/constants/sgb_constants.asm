@@ -1,3 +1,5 @@
+SGB_PACKET_SIZE EQU $10 ; bytes
+
 PAL01    EQU $00 ; Set SGB Palette 0,1 Data
 PAL23    EQU $01 ; Set SGB Palette 2,3 Data
 PAL03    EQU $02 ; Set SGB Palette 0,3 Data

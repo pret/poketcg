@@ -223,7 +223,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	lb bc, $2f, $1d ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
-	call WaitForButtonAorB ; wait for the user to press a or b
+	call WaitForButtonAorB
 	call Func_3c96
 	call Func_10ab4 ; fade out
 	pop af
@@ -361,7 +361,7 @@ Func_10e55: ; 10e55 (4:4e55)
 	ret
 
 Func_10e71: ; 10e71 (4:4e71)
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and D_PAD
 	jr z, .asm_10e83
 	farcall Func_c5d5
@@ -369,7 +369,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	call Func_10e97
 	jr .asm_10e96
 .asm_10e83
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .asm_10e96
 	ld a, $2

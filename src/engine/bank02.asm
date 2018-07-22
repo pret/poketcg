@@ -100,7 +100,7 @@ Unknown_8de2: ; 8de2 (2:4de2)
 	INCROM $8de2, $8dea
 
 Func_8dea: ; 8dea (2:4dea)
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and START
 	ret z
 	ld a, [wCurMenuItem]
@@ -420,7 +420,7 @@ Func_9065: ; 9065 (2:5065)
 	ld d, a
 	ld a, [wceb0]
 	ld e, a
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	or a
 	jr z, .asm_90a6
 	bit D_LEFT_F, a
@@ -454,7 +454,7 @@ Func_9065: ; 9065 (2:5065)
 	xor a
 	ld [wcea3], a
 .asm_90a6
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .asm_90c1
 	and A_BUTTON
@@ -927,12 +927,12 @@ Func_ba04: ; ba04 (2:7a04)
 	call DoFrame
 	call HandleMenuInput
 	jr c, .asm_baa3
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and D_UP | D_DOWN
 	jr z, .asm_ba4e
 
 .asm_ba4e
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and START
 	jr z, .asm_ba40
 	ld a, [wcea1]

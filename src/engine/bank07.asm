@@ -402,7 +402,7 @@ Func_1d078: ; 1d078 (7:5078)
 	dec [hl]
 	jr .asm_1d095
 .asm_1d0b8
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | START
 	jr z, .asm_1d095
 	ld a, $2
