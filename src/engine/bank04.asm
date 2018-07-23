@@ -91,7 +91,7 @@ Medal_1029e: ; 1029e (4:429e)
 	cp $e0
 	jr nz, .asm_102e2
 	ldtx hl, WonTheMedalText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	pop af
@@ -148,11 +148,11 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	jr nz, .asm_10373
 	ldtx hl, AndAnotherBoosterPackText
 .asm_10373
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ldtx hl, CheckedCardsInBoosterPackText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call DisableLCD
 	call Func_1288c
 	call ZeroObjectPositions
@@ -445,7 +445,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2c29
+	call ProcessTextFromID
 	pop de
 	pop hl
 	ret
@@ -1511,7 +1511,7 @@ Func_1344d: ; 1344d (4:744d)
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, DefeatedFiveOpponentsText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ret
@@ -1533,7 +1533,7 @@ Func_13485: ; 13485 (4:7485)
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, ConsecutiveWinRecordIncreasedText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ret

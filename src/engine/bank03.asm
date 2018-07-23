@@ -326,7 +326,7 @@ Func_c268: ; c268 (3:4268)
 	ld l, a
 	or h
 	jr z, .asm_c27a
-	call Func_2c29
+	call ProcessTextFromID
 	pop hl
 	inc hl
 	inc hl
@@ -1063,7 +1063,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call $4915
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOnText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call $484e
 .asm_c801
 	ld a, $1
@@ -1121,7 +1121,7 @@ Func_c891: ; c891 (3:4891)
 	call Func_c241
 	call $4915
 	call DoFrameIfLCDEnabled
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	ret
 
 Func_c8ba: ; c8ba (3:48ba)
@@ -1716,7 +1716,7 @@ Func_ccdc: ; ccdc (3:4cdc)
 
 Func_cce4: ; cce4 (3:4ce4)
 	ld a, $1
-	ld [wcd9a], a
+	ld [wDefaultYesOrNo], a
 
 ; Asks the player a question then jumps if they answer yes
 OWScript_AskQuestionJump: ; cce9 (3:4ce9)

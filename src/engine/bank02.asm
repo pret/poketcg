@@ -324,7 +324,7 @@ Func_8f8a: ; 8f8a (2:4f8a)
 
 Func_8f9d: ; 8f9d (2:4f9d)
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	call DisableSRAM
 	ld h, $3
 	ld l, a
@@ -338,7 +338,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call FillRectangle
 	ld a, [wceb1]
 	call EnableSRAM
-	ld [$b700], a
+	ld [s0b700], a
 	call DisableSRAM
 	call Func_9326
 	call GetPointerToDeckName
@@ -637,7 +637,7 @@ Func_9168: ; 9168 (2:5168)
 	ld [wceb5], a
 .asm_9214
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	ld c, a
 	ld b, $0
 	ld d, $2
@@ -657,7 +657,7 @@ Func_9168: ; 9168 (2:5168)
 	jr .asm_921f
 .asm_9234
 	ld a, c
-	ld [$b700], a
+	ld [s0b700], a
 	call DisableSRAM
 	call Func_9326
 	call EnableLCD
@@ -706,7 +706,7 @@ Func_926e: ; 926e (2:526e)
 .asm_929c
 	call InitTextPrinting
 	ldtx hl, NewDeckText
-	call Func_2c29
+	call ProcessTextFromID
 	scf
 	ret
 
@@ -746,7 +746,7 @@ Func_9314: ; 9314 (2:5314)
 
 Func_9326: ; 9326 (2:5326)
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	call DisableSRAM
 	ld h, 3
 	ld l, a

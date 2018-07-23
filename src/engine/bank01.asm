@@ -64,7 +64,7 @@ TryContinueDuel: ; 406f (1:406f)
 	jr c, FailedToContinueDuel
 ;	fallthrough
 
-ContinueDuel: ; 407a (1:407a)
+_ContinueDuel: ; 407a (1:407a)
 	ld hl, sp+$00
 	ld a, l
 	ld [wDuelReturnAddress], a
@@ -1600,7 +1600,7 @@ Func_4ad6: ; 4ad6 (1:4ad6)
 Func_4ae9: ; 4ae9 (1:4ae9)
 	call $5f4a
 	ld hl, $7b
-	call Func_2c1b
+	call InitTextPrinting_ProcessTextFromID
 	call $5f50
 	ld c, e
 	ld a, d
@@ -1621,7 +1621,7 @@ Func_4ae9: ; 4ae9 (1:4ae9)
 	ld hl, $7c
 .pkmn_in_play_area
 	dec d
-	call Func_2c1b
+	call InitTextPrinting_ProcessTextFromID
 	inc e
 	inc d
 	inc c
@@ -1632,7 +1632,7 @@ Func_4ae9: ; 4ae9 (1:4ae9)
 .asm_4b22
 	call $65b7
 	ld hl, $7e
-	call Func_2c1b
+	call InitTextPrinting_ProcessTextFromID
 	ret
 ; 0x4b2c
 
@@ -1865,7 +1865,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ld a, BOXMSG_BENCH_POKEMON
 	call DrawDuelBoxMessage
 	ldtx hl, ChooseUpTo5BasicPkmnToPlaceOnBenchText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	ld a, $3
 	call DoPracticeDuelAction
 .asm_4d5f
@@ -2355,7 +2355,7 @@ Func_5256: ; 5256 (1:5256)
 	jp nz, $5382
 	ldtx de, DrMasonText
 	ldtx hl, Text01d9
-	call Func_2c62.asm_2c67
+	call PrintScrollableText_WithTextBoxLabel_NoWait
 	call YesOrNoMenu
 	jp $5382
 ; 0x5278
@@ -2373,7 +2373,7 @@ Func_5284: ; 5284 (1:5284)
 	call Func_52bc
 	ld a, $02
 	call BankswitchSRAM
-	ld de, $bc00
+	ld de, sCurrentDuelData
 	call $66ff
 	xor a
 	call BankswitchSRAM
@@ -2406,7 +2406,7 @@ Func_52b0: ; 52b0 (1:52b0)
 Func_52bc: ; 52bc (1:52bc)
 	push af
 	ldtx de, DrMasonText
-	call Func_2c62
+	call PrintScrollableText_WithTextBoxLabel
 	pop af
 	ret
 ; 0x52c5
@@ -3356,16 +3356,20 @@ LargeCardTileData: ; 5eb7 (1:5eb7)
 	db $ff
 ; 0x5f4a
 
-Func_5f4a: ; 5f4a (1:5f4a)
+; print lines of text with no separation between them
+SetNoLineSeparation: ; 5f4a (1:5f4a)
 	ld a, $01
-Func_5f4c: ; 5f4c (1:5f4c)
+;	fallthrough
+
+SetLineSeparation: ; 5f4c (1:5f4c)
 	ld [wLineSeparation], a
 	ret
 ; 0x5f50
 
-Func_5f50: ; 5f50 (1:5f50)
+; separate lines of text by an empty line
+SetOneLineSeparation: ; 5f50 (1:5f50)
 	xor a
-	jr Func_5f4c
+	jr SetLineSeparation
 ; 0x5f53
 
 	INCROM $5f53, $5fd9
@@ -3691,27 +3695,30 @@ Func_6510: ; 6510 (1:6510)
 	lb de, 1, 4
 	call InitTextPrinting
 	ld hl, wLoadedCard1Move1Name
-	call Func_2c20
+	call ProcessTextFromPointerToID_InitTextPrinting
 	lb de, 1, 6
 	ld hl, wLoadedCard1Move1Description
-	call Func_653e
+	call PrintMoveOrCardDescription
 	ret
 ; 0x653e
 
-Func_653e: ; 653e (1:653e)
-	call Func_5f4a
+; print the description of a move or of a trainer or energy card
+; x,y coordinates of where to start printing the text are given at de
+; don't separate lines of text
+PrintMoveOrCardDescription: ; 653e (1:653e)
+	call SetNoLineSeparation
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2c37
-	cp $07
-	jr c, .asm_654c
-	dec e
-.asm_654c
+	call CountLinesOfTextFromID
+	cp 7
+	jr c, .print
+	dec e ; move one line up to fit (assumes it will be enough)
+.print
 	ld a, 19
 	call InitTextPrintingInTextbox
-	call Func_2c29
-	call Func_5f50
+	call ProcessTextFromID
+	call SetOneLineSeparation
 	ret
 ; 0x6558
 
@@ -3818,7 +3825,7 @@ Func_6635: ; 6635 (1:6635)
 	call Func_5c33
 	lb de, 1, 4
 	ld hl, wLoadedMoveDescription
-	call Func_653e
+	call PrintMoveOrCardDescription
 	ret
 ; 0x666a
 
@@ -3831,17 +3838,17 @@ Func_666a: ; 666a (1:666a)
 
 Func_6673: ; 6673 (1:6673)
 	call EmptyScreen
-	call Func_5f4a
+	call SetNoLineSeparation
 	lb de, 1, 1
 	call InitTextPrinting
 	ld hl, wLoadedCard1Name
-	call Func_2c23
+	call ProcessTextFromPointerToID
 	ld a, 19
 	lb de, 1, 3
 	call InitTextPrintingInTextbox
 	ld hl, wLoadedCard1NonPokemonDescription
-	call Func_2c23
-	call Func_5f50
+	call ProcessTextFromPointerToID
+	call SetOneLineSeparation
 	ldtx hl, UsedText
 	call DrawWideTextBox_WaitForInput
 	ret
@@ -3935,7 +3942,7 @@ DuelDataToSave: ; 6729 (1:6729)
 
 Func_6785: ; 6785 (1:6785)
 	call EnableSRAM
-	ld hl, $bc00
+	ld hl, sCurrentDuelData
 	xor a
 	ld [hli], a
 	ld [hli], a
@@ -3944,23 +3951,24 @@ Func_6785: ; 6785 (1:6785)
 	ret
 ; 0x6793
 
-; loads player deck from SRAM to wPlayerDeck
+; loads a player deck (sDeck*Cards) from SRAM to wPlayerDeck
+; s0b700 determines which sDeck*Cards source (0-3)
 LoadPlayerDeck: ; 6793 (1:6793)
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	ld l, a
-	ld h, $54
+	ld h, sDeck2Cards - sDeck1Cards
 	call HtimesL
 	ld de, sDeck1Cards
 	add hl, de
 	ld de, wPlayerDeck
 	ld c, DECK_SIZE
-.next_card_loop
+.copy_cards_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .next_card_loop
+	jr nz, .copy_cards_loop
 	call DisableSRAM
 	ret
 ; 0x67b2
@@ -3988,7 +3996,7 @@ AIMakeDecision: ; 67be (1:67be)
 .delay_loop
 	call DoFrame
 	ld a, [wVBlankCounter]
-	cp $3c
+	cp 60
 	jr c, .delay_loop
 
 .skip_delay

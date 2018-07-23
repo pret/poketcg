@@ -2933,7 +2933,7 @@ SerialRecv8Bytes: ; 0fe9 (0:0fe9)
 ; 0x100b
 
 ; save duel state to SRAM
-; called between each two-player turn, just after player draws card (bank 1 loaded)
+; called between each two-player turn, just after player draws card (ROM bank 1 loaded)
 SaveDuelStateToSRAM: ; 100b (0:100b)
 	ld a, $2
 	call BankswitchSRAM
@@ -2990,7 +2990,7 @@ SaveDuelStateToSRAM: ; 100b (0:100b)
 	call BankswitchSRAM
 	ret
 
-; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck
+; copies the deck pointed to by de to wPlayerDeck or wOpponentDeck (depending on whose turn it is)
 CopyDeckData: ; 1072 (0:1072)
 	ld hl, wPlayerDeck
 	ldh a, [hWhoseTurn]
@@ -3038,7 +3038,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ret
 ; 0x10aa
 
-; return, in register a, the amount of unclaimed prizes that the turn holder has left
+; return, in register a, the amount of prizes that the turn holder has not yet drawn
 CountPrizes: ; 10aa (0:10aa)
 	push hl
 	ld a, DUELVARS_PRIZES
@@ -3056,7 +3056,7 @@ CountPrizes: ; 10aa (0:10aa)
 ; 0x10bc
 
 ; shuffles the turn holder's deck
-; if less than 60 cards remain in the deck, make sure the rest are ignored
+; if less than 60 cards remain in the deck, it makes sure that the rest are ignored
 ShuffleDeck: ; 10bc (0:10bc)
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -3072,8 +3072,9 @@ ShuffleDeck: ; 10bc (0:10bc)
 	call ShuffleCards
 	ret
 
-; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN
-; returns carry if deck is empty, nc if a card was succesfully drawn
+; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN.
+; returns carry if deck is empty, nc if a card was succesfully drawn.
+; AddCardToHand is meant to be called next (unless this function returned carry).
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3118,7 +3119,7 @@ ReturnCardToDeck: ; 10e8 (0:10e8)
 
 ; search a card in the turn holder's deck, extract it, and set its location to
 ; CARD_LOCATION_JUST_DRAWN. AddCardToHand is meant to be called next.
-; the card is identified by register a, which contains the deck index (0-59) of the card
+; the card is identified by register a, which contains the deck index (0-59) of the card.
 SearchCardInDeckAndAddToHand: ; 10fc (0:10fc)
 	push af
 	push hl
@@ -3206,7 +3207,7 @@ RemoveCardFromHand: ; 1139 (0:1139)
 	pop hl
 	jr .done_card
 .no_match
-	ld [de], a ; keep card in hand
+	ld [de], a ; keep any card that doesn't match in the player's hand
 	inc de
 .done_card
 	dec b
@@ -3231,7 +3232,7 @@ MoveHandCardToDiscardPile: ; 1160 (0:1160)
 	call RemoveCardFromHand
 ;	fallthrough
 
-; puts the card with the deck index (0-59) given in a into the discard pile
+; puts the turn holder's card with the deck index (0-59) given in a into the discard pile
 PutCardInDiscardPile: ; 116a (0:116a)
 	push af
 	push hl
@@ -3307,7 +3308,7 @@ PowersOf2:
 	db $01, $02, $04, $08, $10, $20, $40, $80
 ; 0x11bf
 
-; fill wDuelTempList with the turn holder's discard pile cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's discard pile cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in the discard pile
 CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ldh a, [hWhoseTurn]
@@ -3337,7 +3338,7 @@ CreateDiscardPileCardList: ; 11bf (0:11bf)
 	ret
 ; 0x11df
 
-; fill wDuelTempList with the turn holder's remaining deck cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's remaining deck cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards left in the deck
 CreateDeckCardList: ; 11df (0:11df)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3374,7 +3375,7 @@ CreateDeckCardList: ; 11df (0:11df)
 ; 0x120a
 
 ; fill wDuelTempList with the turn holder's energy cards
-; in the arena or in a bench slot (their 0-59 deck index).
+; in the arena or in a bench slot (their 0-59 deck indexes).
 ; if a == 0: search in CARD_LOCATION_ARENA
 ; if a != 0: search in CARD_LOCATION_BENCH_[A]
 ; return carry if no energy cards were found
@@ -3414,7 +3415,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 	ret
 ; 0x123b
 
-; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck index)
+; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in hand
 CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
@@ -3775,7 +3776,6 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld e, a
 	call CheckIfCanEvolveInto
 	ret c ; return if it's not capable of evolving into the selected Pokemon
-
 	; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld e, a
@@ -3788,7 +3788,6 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandCardInPlayArea
-
 	; update the Pokemon's HP with the difference
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld a, e ; derp
@@ -3812,7 +3811,6 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld a, e
 	or a
 	call z, ResetStatusConditions
-
 	; set the new evolution stage of the card
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	add DUELVARS_ARENA_CARD_STAGE
@@ -3822,6 +3820,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	or a
 	ret
 
+; never executed
 	scf
 	ret
 ; 0x13f7
@@ -3995,7 +3994,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld [hl], a ; set card's evolution stage
 	ld a, e
 	or a
-	call z, ResetStatusConditions ; only call if Pokemon is being place in the arena
+	call z, ResetStatusConditions ; only call if Pokemon is being placed in the arena
 	ld a, e
 	or a
 	ret
@@ -4277,7 +4276,7 @@ CountCardIDInLocation: ; 15ef (0:15ef)
 	ret
 
 ; returns [[hWhoseTurn] << 8 + a] in a and in [hl]
-; i.e. variable a of the player whose turn it is
+; i.e. duelvar a of the player whose turn it is
 GetTurnDuelistVariable: ; 160b (0:160b)
 	ld l, a
 	ldh a, [hWhoseTurn]
@@ -4286,7 +4285,7 @@ GetTurnDuelistVariable: ; 160b (0:160b)
 	ret
 
 ; returns [([hWhoseTurn] ^ $1) << 8 + a] in a and in [hl]
-; i.e. variable a of the player whose turn it is not
+; i.e. duelvar a of the player whose turn it is not
 GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ld l, a
 	ldh a, [hWhoseTurn]
@@ -4315,7 +4314,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret nz
-	call $6510
+	call Func_6510
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1Name
@@ -4332,7 +4331,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, $01 ; check only Muk
 	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr nc, .use_pokemon_power
-	call $6510
+	call Func_6510
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
@@ -4565,7 +4564,7 @@ Func_17fb: ; 17fb (0:17fb)
 
 Func_1819: ; 1819 (0:1819)
 	push hl
-	call $6510
+	call Func_6510
 	pop hl
 
 Func_181e: ; 181e (0:181e)
@@ -6322,9 +6321,9 @@ Copy1bppTiles: ; 21ab (0:21ab)
 ; 0x21ba
 
 ; similar to ProcessText except it calls InitTextPrinting first
-; with register de as an argument to set hTextBGMap0Address.
+; with the first two bytes of hl being used to set hTextBGMap0Address.
 ; (the caller to ProcessText usually calls InitTextPrinting first)
-ProcessText_InitTextPrinting: ; 21ba (0:21ba)
+InitTextPrinting_ProcessText: ; 21ba (0:21ba)
 	push de
 	push bc
 	ld d, [hl]
@@ -6334,8 +6333,8 @@ ProcessText_InitTextPrinting: ; 21ba (0:21ba)
 	call InitTextPrinting
 	jr ProcessText.next_char
 
-; reads the characters from the text at hl processes them. loops until TX_END
-; is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
+; reads the characters from the text at hl processes them. loops until
+; TX_END is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
 ProcessText: ; 21c5 (0:21c5)
 	push de
 	push bc
@@ -7878,7 +7877,10 @@ CopyCardNameAndLevel: ; 29f5 (0:29f5)
 	ret
 ; 0x29fa
 
-Func_29fa: ; 29fa (0:29fa)
+; sets cursor parameters for navigating in a text box, but using
+; default values for the cursor tile and the tile behind it.
+; d,e: coordinates of the cursor
+SetCursorParametersForTextBox_Default: ; 29fa (0:29fa)
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
 ;	fallthrough
@@ -7901,6 +7903,9 @@ WaitForButtonAorB: ; 2a00 (0:2a00)
 	or a
 	ret
 
+; sets cursor parameters for navigating in a text box
+; d,e: coordinates of the cursor
+; b,c: tile numbers of the cursor and of the tile behind it
 SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 	xor a
 	ld hl, wCurMenuItem
@@ -7922,7 +7927,7 @@ SetCursorParametersForTextBox: ; 2a1a (0:2a1a)
 
 ; draw a 20x6 text box aligned to the bottom of the screen,
 ; print the text at hl without letter delay, and wait for A or B pressed
-Func_2a30: ; 2a30 (0:2a30)
+DrawWideTextBox_PrintTextNoDelay_Wait: ; 2a30 (0:2a30)
 	call DrawWideTextBox_PrintTextNoDelay
 	jp WaitForWideTextBoxInput
 ; 0x2a36
@@ -7933,7 +7938,7 @@ DrawWideTextBox_PrintTextNoDelay: ; 2a36 (0:2a36)
 	push hl
 	call DrawWideTextBox
 	ld a, 19
-	jr Func_2a44
+	jr DrawTextBox_PrintTextNoDelay
 
 ; draw a 12x6 text box aligned to the bottom left of the screen
 ; and print the text at hl without letter delay
@@ -7943,7 +7948,7 @@ DrawNarrowTextBox_PrintTextNoDelay: ; 2a3e (0:2a3e)
 	ld a, 11
 ;	fallthrough
 
-Func_2a44: ; 2a44 (0:2a44)
+DrawTextBox_PrintTextNoDelay: ; 2a44 (0:2a44)
 	lb de, 1, 14
 	call AdjustCoordinatesForBGScroll
 	call InitTextPrintingInTextbox
@@ -8048,16 +8053,18 @@ TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
 	jp HandleYesOrNoMenu.refresh_menu
 ; 0x2aeb
 
-Func_2aeb: ; 2aeb (0:2aeb)
+YesOrNoMenuWithText_SetCursorToYes: ; 2aeb (0:2aeb)
 	ld a, $01
-	ld [wcd9a], a
+	ld [wDefaultYesOrNo], a
 ;	fallthrough
 
 ; display a yes / no menu with custom text provided in hl and handle input
+; wDefaultYesOrNo determines whether the cursor initially points to YES or to NO
 ; returns carry if "no" selected
 YesOrNoMenuWithText: ; 2af0 (0:2af0)
 	call DrawWideTextBox_PrintText
 ;	fallthrough
+
 YesOrNoMenu: ; 2af3 (0:2af3)
 	lb de, 7, 16 ; x, y
 	call PrintYesOrNoItems
@@ -8070,12 +8077,13 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 	call PrintYesOrNoItems
 	lb de, 2, 16 ; x, y
 ;	fallthrough
+
 HandleYesOrNoMenu:
 	ld a, d
 	ld [wLeftmostItemCursorX], a
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
 	call SetCursorParametersForTextBox
-	ld a, [wcd9a]
+	ld a, [wDefaultYesOrNo]
 	ld [wCurMenuItem], a
 	call EnableLCD
 	jr .refresh_menu
@@ -8114,11 +8122,11 @@ HandleYesOrNoMenu:
 	or a
 	jr nz, .no
 ;.yes
-	ld [wcd9a], a ; 0
+	ld [wDefaultYesOrNo], a ; 0
 	ret
 .no
 	xor a
-	ld [wcd9a], a ; 0
+	ld [wDefaultYesOrNo], a ; 0
 	ld a, 1
 	ldh [hCurMenuItem], a
 	scf
@@ -8128,14 +8136,14 @@ HandleYesOrNoMenu:
 PrintYesOrNoItems: ; 2b66 (0:2b66)
 	call AdjustCoordinatesForBGScroll
 	ldtx hl, YesOrNoText
-	call Func_2c1b
+	call InitTextPrinting_ProcessTextFromID
 	ret
 ; 0x2b70
 
-Func_2b70: ; 2b70 (0:2b70)
-	ld a, BANK(ContinueDuel)
+ContinueDuel: ; 2b70 (0:2b70)
+	ld a, BANK(_ContinueDuel)
 	call BankswitchHome
-	jp ContinueDuel
+	jp _ContinueDuel
 ; 0x2b78
 
 ; loads opponent deck to wOpponentDeck
@@ -8255,26 +8263,37 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	inc hl ; hl = text id
 	call InitTextPrinting
 	push hl
-	call Func_2c23
+	call ProcessTextFromPointerToID
 	pop hl
 	inc hl
 	inc hl
 	jr PlaceTextItems ; do next item
 
-Func_2c1b: ; 2c1b (0:2c1b)
+; like ProcessTextFromID, except it calls InitTextPrinting first
+InitTextPrinting_ProcessTextFromID: ; 2c1b (0:2c1b)
 	call InitTextPrinting
-	jr Func_2c29
+	jr ProcessTextFromID
 
-Func_2c20: ; 2c20 (0:2c20)
+; like ProcessTextFromPointerToID, except it calls InitTextPrinting first
+ProcessTextFromPointerToID_InitTextPrinting: ; 2c20 (0:2c20)
 	call InitTextPrinting
-Func_2c23: ; 2c23 (0:2c23)
+;	fallthrough
+
+; like ProcessTextFromID below, except a memory address containing a text ID is
+; provided in hl rather than the text ID directly.
+ProcessTextFromPointerToID: ; 2c23 (0:2c23)
 	ld a, [hli]
 	or [hl]
 	ret z
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
-Func_2c29: ; 2c29 (0:2c29)
+;	fallthrough
+
+; given the ID of a text in hl, reads the characters from it processes them.
+; loops until TX_END is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
+; restores original ROM bank before returning.
+ProcessTextFromID: ; 2c29 (0:2c29)
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
@@ -8284,7 +8303,9 @@ Func_2c29: ; 2c29 (0:2c29)
 	ret
 ; 0x2c37
 
-Func_2c37: ; 2c37 (0:2c37)
+; return, in a, the number of lines of the text given in hl as an ID
+; this is calculated by counting the amount of '\n' characters and adding 1 to the result
+CountLinesOfTextFromID: ; 2c37 (0:2c37)
 	push hl
 	push de
 	push bc
@@ -8318,10 +8339,13 @@ Func_2c37: ; 2c37 (0:2c37)
 	ret
 ; 0x2c62
 
-Func_2c62: ; 2c62 (0:2c62)
-	call .asm_2c67
+; call PrintScrollableText with text box label, then wait for the
+; player to press A or B to advance the printed text
+PrintScrollableText_WithTextBoxLabel: ; 2c62 (0:2c62)
+	call PrintScrollableText_WithTextBoxLabel_NoWait
 	jr WaitForPlayerToAdvanceText
-.asm_2c67
+
+PrintScrollableText_WithTextBoxLabel_NoWait: ; 2c67 (0:2c67)
 	push hl
 	ld hl, wTextBoxLabel
 	ld [hl], e
@@ -8331,12 +8355,15 @@ Func_2c62: ; 2c62 (0:2c62)
 	ld a, $01
 	jr PrintScrollableText
 
-Func_2c73: ; 2c73 (0:2c73)
+; call PrintScrollableText with no text box label, then wait for the
+; player to press A or B to advance the printed text
+PrintScrollableText_NoTextBoxLabel: ; 2c73 (0:2c73)
 	xor a
 	call PrintScrollableText
+;	fallthrough
 
-; when a text box is full, prompt the player to press A or B
-; in order to clear the text and print the next lines.
+; when a text box is full or the text is over, prompt the player to
+; press A or B in order to clear the text and print the next lines.
 WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
@@ -8344,16 +8371,17 @@ WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 	call WaitForButtonAorB
 	ret
 
-; prints text with id at hl, with letter delay, in a textbox area.
-; unlike PrintText, PrintScrollableText supports scrollable text, and prompts
-; the user to press A or B to advance the page or close the text.
-; used mostly for overworld NPC text.
+; draws a text box, and prints the text with id at hl, with letter delay. unlike PrintText,
+; PrintScrollableText also supports scrollable text, and prompts the user to press A or B
+; to advance the page or close the text. register a determines whether the textbox is
+; labeled or not. if labeled, the text id of the label is provided in wTextBoxLabel.
+; PrintScrollableText is used mostly for overworld NPC text.
 PrintScrollableText: ; 2c84 (0:2c84)
 	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
-	call Func_2d15
+	call DrawTextReadyLabeledOrRegularTextBox
 	call ResetTxRam_WriteToTextHeader
 .print_char_loop
 	ld a, [wTextSpeed]
@@ -8383,7 +8411,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	jr c, .print_char_loop
 	; two lines of text already printed, so need to advance text
 	call WaitForPlayerToAdvanceText
-	call Func_2d15
+	call DrawTextReadyLabeledOrRegularTextBox
 	jr .print_char_loop
 .asm_2cc3
 	pop af
@@ -8456,7 +8484,10 @@ GetPointerToTextHeader: ; 2d06 (0:2d06)
 	add hl, de
 	ret
 
-Func_2d15: ; 2d15 (0:2d15)
+; draws a wide text box with or without label depending on wIsTextBoxLabeled
+; if labeled, the label's text ID is provided in wTextBoxLabel
+; calls InitTextPrintingInTextbox after drawing the text box
+DrawTextReadyLabeledOrRegularTextBox: ; 2d15 (0:2d15)
 	push hl
 	lb de, 0, 12
 	lb bc, 20, 6

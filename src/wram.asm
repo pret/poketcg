@@ -1051,7 +1051,9 @@ wLeftmostItemCursorX:: ; cd98
 wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
-wcd9a:: ; cd9a
+; when printing a YES/NO menu, whether the cursor is
+; initialized to the YES ($01) or to the NO ($00) item
+wDefaultYesOrNo:: ; cd9a
 	ds $1
 
 ; used in _CopyCardNameAndLevel to keep track of the remaining space to copy the text
