@@ -1394,7 +1394,7 @@ CGBSpeedSwitch: ; 07f1 (0:07f1)
 	ret
 
 ; validate the saved data in SRAM
-; it must contain with the sequence $04, $21, $05 at sa000
+; it must contain with the sequence $04, $21, $05 at s0a000
 ValidateSRAM: ; 080b (0:080b)
 	xor a
 	call BankswitchSRAM
@@ -1417,7 +1417,7 @@ ValidateSRAM: ; 080b (0:080b)
 	call DisableSRAM
 	ret
 .check_sequence
-	ld hl, sa000
+	ld hl, s0a000
 	ld a, [hli]
 	cp $04
 	jr nz, .restart_sram
@@ -1435,7 +1435,7 @@ ValidateSRAM: ; 080b (0:080b)
 	call DisableSRAM
 	ret
 
-; zero all SRAM banks and set sa000 to $04, $21, $05
+; zero all SRAM banks and set s0a000 to $04, $21, $05
 RestartSRAM: ; 084d (0:084d)
 	ld a, 3
 .clear_loop
@@ -1443,7 +1443,7 @@ RestartSRAM: ; 084d (0:084d)
 	dec a
 	cp -1
 	jr nz, .clear_loop
-	ld hl, sa000
+	ld hl, s0a000
 	ld [hl], $04
 	inc hl
 	ld [hl], $21
@@ -2584,7 +2584,7 @@ SerialRecvByte: ; 0e39 (0:0e39)
 	or a
 	ret
 
-; exchange c bytes. send bytes at hl and store received bytes at de
+; exchange c bytes. send bytes at hl and store received bytes in de
 SerialExchangeBytes: ; 0e63 (0:0e63)
 	ld b, c
 .asm_e64
@@ -2815,7 +2815,7 @@ ExchangeRNG: ; 0f58 (0:0f58)
 ; sets hAIActionTableIndex to an AI action specified in register a.
 ; send 10 bytes of data to the other game from hAIActionTableIndex, hTempCardIndex_ff9f,
 ; hTemp_ffa0, and hTempPlayAreaLocationOffset_ffa1, and hTempRetreatCostCards.
-; finally exchange RNG data
+; finally exchange RNG data.
 SetAIAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	push hl
 	push bc
@@ -2835,7 +2835,8 @@ SetAIAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 ; 0xf9b
 
 ; receive 10 bytes of data from wSerialRecvBuf and store them into hAIActionTableIndex,
-; hTempCardIndex_ff9f, hTemp_ffa0, and hTempPlayAreaLocationOffset_ffa1, and hTempRetreatCostCards
+; hTempCardIndex_ff9f, hTemp_ffa0, and hTempPlayAreaLocationOffset_ffa1,
+; and hTempRetreatCostCards. also exchange RNG data.
 SerialRecvDuelData: ; 0f9b (0:0f9b)
 	push hl
 	push bc
@@ -2932,20 +2933,23 @@ SerialRecv8Bytes: ; 0fe9 (0:0fe9)
 ; 0x100b
 
 ; save duel state to SRAM
-; called between each two-player turn, just after player draws card
+; called between each two-player turn, just after player draws card (bank 1 loaded)
 SaveDuelStateToSRAM: ; 100b (0:100b)
 	ld a, $2
 	call BankswitchSRAM
-	call $669d
+	; save duel data to sCurrentDuelData
+	call SaveDuelData
 	xor a
 	call BankswitchSRAM
 	call EnableSRAM
-	ld hl, sa008
+	ld hl, s0a008
 	ld a, [hl]
 	inc [hl]
 	call DisableSRAM
+	; select hl = SRAM3:(a000 + $400 * [s0a008] & $3)
+	; save wDuelTurns, non-turn holder's arena card ID, turn holder's arena card ID
 	and $3
-	add $28
+	add HIGH($a000) / 4
 	ld l, $0
 	ld h, a
 	add hl, hl
@@ -2974,13 +2978,14 @@ SaveDuelStateToSRAM: ; 100b (0:100b)
 	ld [hli], a
 	ld a, [wTempTurnDuelistCardID]
 	ld [hli], a
+	; save duel data to SRAM3:(a000 + $400 * [s0a008] & $3) + $0010
 	pop hl
 	ld de, $0010
 	add hl, de
 	ld e, l
 	ld d, h
 	call DisableSRAM
-	bank1call $66a4
+	bank1call SaveDuelDataToDE
 	xor a
 	call BankswitchSRAM
 	ret
@@ -10660,7 +10665,7 @@ Func_3917: ; 3917 (0:3917)
 	ld a, $22
 	farcall CheckIfEventFlagSet
 	call EnableSRAM
-	ld [sa00a], a
+	ld [s0a00a], a
 	call DisableSRAM
 	ret
 

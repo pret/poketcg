@@ -267,9 +267,9 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd112], a
 	ld [wd3b8], a
 	call EnableSRAM
-	ld a, [sa007]
+	ld a, [s0a007]
 	ld [wd421], a
-	ld a, [sa006]
+	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	farcall Func_10756

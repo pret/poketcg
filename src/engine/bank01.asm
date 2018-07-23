@@ -7,9 +7,9 @@ GameLoop: ; 4000 (1:4000)
 	call EnableInt_VBlank
 	call EnableInt_Timer
 	call EnableSRAM
-	ld a, [sa006]
+	ld a, [s0a006]
 	ld [wTextSpeed], a
-	ld a, [sa009]
+	ld a, [s0a009]
 	ld [wccf2], a
 	call DisableSRAM
 	ld a, 1
@@ -30,7 +30,7 @@ GameLoop: ; 4000 (1:4000)
 ; erase sram
 	call EnableSRAM
 	xor a
-	ld [sa000], a
+	ld [s0a000], a
 	call DisableSRAM
 .reset_game
 	jp Reset
@@ -360,7 +360,7 @@ PrintDuelMenu: ; 4295 (1:4295)
 	ld hl, DuelMenuData
 	call PlaceTextItems
 .asm_429e
-	call $669d
+	call SaveDuelData
 	ld a, [wDuelFinished]
 	or a
 	ret nz
@@ -3847,7 +3847,91 @@ Func_6673: ; 6673 (1:6673)
 	ret
 ; 0x669d
 
-	INCROM $669d, $6785
+; save data of the current duel to sCurrentDuelData
+; byte 0 is $01, bytes 1 and 2 are the checksum, byte 3 is [wDuelType]
+; next $33a bytes come from DuelDataToSave
+SaveDuelData: ; 669d (1:669d)
+	farcall CommentedOut_1a6cc
+	ld de, sCurrentDuelData
+;	fallthrough
+
+; save data of the current duel to de (in SRAM)
+; byte 0 is $01, bytes 1 and 2 are the checksum, byte 3 is [wDuelType]
+; next $33a bytes come from DuelDataToSave
+SaveDuelDataToDE: ; 66a4 (1:66a4)
+	call EnableSRAM
+	push de
+	inc de
+	inc de
+	inc de
+	inc de
+	ld hl, DuelDataToSave
+	push de
+.save_duel_data_loop
+	; start copying data to de = sCurrentDuelData + 4
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld a, c
+	or b
+	jr z, .asm_66c7
+	push hl
+	push bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	pop hl
+	call CopyDataHLtoDE
+	pop hl
+	inc hl
+	inc hl
+	jr .save_duel_data_loop
+.asm_66c7
+	pop hl
+	; hl = sCurrentDuelData + 4
+	lb de, $23, $45
+	ld bc, $334 ; misses last 6 bytes to calculate checksum
+.checksum_loop
+	ld a, e
+	sub [hl]
+	ld e, a
+	ld a, [hli]
+	xor d
+	ld d, a
+	dec bc
+	ld a, c
+	or b
+	jr nz, .checksum_loop
+	pop hl
+	ld a, $01
+	ld [hli], a ; sCurrentDuelData
+	ld [hl], e ; sCurrentDuelData + 1
+	inc hl
+	ld [hl], d ; sCurrentDuelData + 2
+	inc hl
+	ld a, [wDuelType]
+	ld [hl], a ; sCurrentDuelData + 3
+	call DisableSRAM
+	ret
+; 0x66e9
+
+	INCROM $66e9, $6729
+
+DuelDataToSave: ; 6729 (1:6729)
+;	dw address, number_of_bytes_to_copy
+	dw wPlayerDuelVariables, wOpponentDuelVariables - wPlayerDuelVariables
+	dw wOpponentDuelVariables, wPlayerDeck - wOpponentDuelVariables
+	dw wPlayerDeck, wc500 + $10 - wPlayerDeck
+	dw wcc05, wDuelTheme + $1 - wcc05
+	dw hWhoseTurn, $1
+	dw wRNG1, wRNGCounter + $1 - wRNG1
+	dw wcda5, $0010
+	dw $0000
+; 0x6747
+
+	INCROM $6747, $6785
 
 Func_6785: ; 6785 (1:6785)
 	call EnableSRAM

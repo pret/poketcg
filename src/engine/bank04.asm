@@ -1113,9 +1113,9 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call Func_128a9
 	farcall Func_1996e
 	call EnableSRAM
-	ld a, [sa007]
+	ld a, [s0a007]
 	ld [wd421], a
-	ld a, [sa006]
+	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	ld a, MUSIC_STOP

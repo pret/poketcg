@@ -1,15 +1,15 @@
-SECTION "SRAM", SRAM
+SECTION "SRAM0", SRAM
 
-sa000:: ds $3 ; a000
+s0a000:: ds $3 ; a000
 
-sa003:: ds $1 ; a003
-sa004:: ds $1 ; a004
-sa005:: ds $1 ; a005
-sa006:: ds $1 ; a006
-sa007:: ds $1 ; a007
-sa008:: ds $1 ; a008
-sa009:: ds $1 ; a009
-sa00a:: ds $1 ; a00a
+s0a003:: ds $1 ; a003
+s0a004:: ds $1 ; a004
+s0a005:: ds $1 ; a005
+s0a006:: ds $1 ; a006
+s0a007:: ds $1 ; a007
+s0a008:: ds $1 ; a008
+s0a009:: ds $1 ; a009
+s0a00a:: ds $1 ; a00a
 
 	ds $5
 
@@ -33,6 +33,18 @@ sDeck3Cards:: ds DECK_SIZE      ; a2c0
 sDeck4Name::  ds DECK_NAME_SIZE ; a2fc
 sDeck4Cards:: ds DECK_SIZE      ; a314
 
-sa350:: ds DECK_NAME_SIZE + DECK_SIZE ; a350
-sa3a4:: ds DECK_NAME_SIZE + DECK_SIZE ; a3a4
-sa3f8:: ds DECK_NAME_SIZE + DECK_SIZE ; a3f8
+s0a350:: ds DECK_NAME_SIZE + DECK_SIZE ; a350
+s0a3a4:: ds DECK_NAME_SIZE + DECK_SIZE ; a3a4
+s0a3f8:: ds DECK_NAME_SIZE + DECK_SIZE ; a3f8
+
+SECTION "SRAM1", SRAM
+
+SECTION "SRAM2", SRAM
+
+	ds $1c00
+
+; saved data of the current duel, including a two-byte checksum
+; see SaveDuelDataToDE
+sCurrentDuelData:: ds $33e ; bc00
+
+SECTION "SRAM3", SRAM
