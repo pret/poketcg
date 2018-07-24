@@ -3810,7 +3810,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld [hl], $00
 	ld a, e
 	or a
-	call z, ResetStatusConditions
+	call z, ClearAllStatusConditions
 	; set the new evolution stage of the card
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	add DUELVARS_ARENA_CARD_STAGE
@@ -3911,10 +3911,10 @@ CheckIfCanEvolveInto_BasicToStage2: ; 142b (0:142b)
 	ret
 ; 0x1461
 
-; init the status and all substatuses of the turn holder's arena Pokemon.
-; called when sending a new Pokemon into the arena.
+; clear the status, all substatuses, and temporary duelvars of the turn holder's
+; arena Pokemon. called when sending a new Pokemon into the arena.
 ; does not reset Headache, since it targets a player rather than a Pokemon.
-ResetStatusConditions: ; 1461 (0:1461)
+ClearAllStatusConditions: ; 1461 (0:1461)
 	push hl
 	ldh a, [hWhoseTurn]
 	ld h, a
@@ -3994,7 +3994,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld [hl], a ; set card's evolution stage
 	ld a, e
 	or a
-	call z, ResetStatusConditions ; only call if Pokemon is being placed in the arena
+	call z, ClearAllStatusConditions ; only call if Pokemon is being placed in the arena
 	ld a, e
 	or a
 	ret
@@ -4103,7 +4103,7 @@ ShiftTurnPokemonToFirstPlayAreaSlots: ; 152b (0:152b)
 ; reset the status and all substatuses of the arena Pokemon before swapping.
 ; e is the play area location offset of the bench Pokemon (PLAY_AREA_*).
 SwapArenaWithBenchPokemon: ; 1543 (0:1543)
-	call ResetStatusConditions
+	call ClearAllStatusConditions
 	ld d, PLAY_AREA_ARENA
 ;	fallthrough
 
@@ -4364,7 +4364,7 @@ Func_161e: ; 161e (0:161e)
 	ldtx hl, WillUseThePokemonPowerText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
-	call $7415
+	call Func_7415
 	ld a, $07
 	call TryExecuteEffectCommandFunction
 	ret
@@ -4427,7 +4427,9 @@ CopyMoveDataAndDamage:
 	ld [hl], a
 	ret
 
-; inits hTempCardIndex_ff9f, wTempTurnDuelistCardID, wTempNonTurnDuelistCardID, and other temp variables
+; inits hTempCardIndex_ff9f and wTempTurnDuelistCardID to the turn holder's arena card,
+; wTempNonTurnDuelistCardID to the non-turn holder's arena card, and zeroes other temp
+; variables that only last between each two-player turn.
 Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -4444,13 +4446,13 @@ Func_16f6: ; 16f6 (0:16f6)
 	call SwapTurn
 	xor a
 	ld [wccec], a
-	ld [wcccd], a
+	ld [wEffectFunctionsFeedbackIndex], a
 	ld [wcced], a
 	ld [wDamageToSelfMode], a
 	ld [wccef], a
 	ld [wccf0], a
 	ld [wccf1], a
-	bank1call $7189
+	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
 
 Func_1730: ; 1730 (0:1730)
@@ -4498,7 +4500,7 @@ Func_1730: ; 1730 (0:1730)
 ;	fallthrough
 
 Func_179a: ; 179a (0:179a)
-	call $7415
+	call Func_7415
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	jr nz, .asm_17ad
@@ -4575,7 +4577,7 @@ Func_1821: ; 1821 (0:1821)
 	ret
 
 Func_1823: ; 1823 (0:1823)
-	bank1call $717a
+	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
 
@@ -4591,12 +4593,12 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 	call Func_195c
 	call Func_1bb4
 	call $6e49
-	bank1call $717a
+	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
 
 Func_184b: ; 184b (0:184b)
-	call $7415
+	call Func_7415
 	ld a, $2
 	call TryExecuteEffectCommandFunction
 	jr c, Func_1819
@@ -4651,7 +4653,7 @@ Func_189d: ; 189d (0:189d)
 	call GetNonTurnDuelistVariable
 	or a
 	jr nz, .asm_18b9
-	ld a, [wcccd]
+	ld a, [wEffectFunctionsFeedbackIndex]
 	or a
 	ret z
 .asm_18b9
@@ -4765,7 +4767,7 @@ Func_195c: ; 195c (0:195c)
 	push af
 	xor a
 	ld [wNoDamageOrEffect], a
-	bank1call $7415
+	bank1call Func_7415
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
 	ld a, [wTempTurnDuelistCardID]
@@ -5174,7 +5176,7 @@ Func_1bca: ; 1bca (0:1bca)
 	scf
 	ret
 .asm_1bfd
-	call $700a
+	call PrintThereWasNoEffectFromStatusText
 	call DrawWideTextBox_PrintText
 	scf
 	ret
@@ -6172,7 +6174,7 @@ LoadDuelCardSymbolTiles2: ; 20c4 (0:20c4)
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
 
-; load the face down stage0 / stage1 / stage2 card images shown in the ckeck Pokemon screens
+; load the face down basic / stage1 / stage2 card images shown in the ckeck Pokemon screens
 LoadDuelFaceDownCardTiles: ; 20d8 (0:20d8)
 	ld b, $10
 	jr LoadDuelCheckPokemonScreenTiles.got_num_tiles
@@ -6883,7 +6885,7 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	call .get_digit
 	ld bc, -1
 	call .get_digit
-	xor a
+	xor a ; TX_END
 	ld [de], a
 	pop hl
 	ld e, 5
@@ -7865,7 +7867,7 @@ CardSymbolTable:
 	db $f4, $03 ; TYPE_ENERGY_FIGHTING
 	db $f8, $00 ; TYPE_ENERGY_DOUBLE_COLORLESS
 	db $fc, $02 ; TYPE_ENERGY_UNUSED
-	db $d0, $02 ; TYPE_PKMN_*, Stage 0
+	db $d0, $02 ; TYPE_PKMN_*, Basic
 	db $d4, $02 ; TYPE_PKMN_*, Stage 1
 	db $d8, $01 ; TYPE_PKMN_*, Stage 2
 	db $dc, $02 ; TYPE_TRAINER
@@ -8767,7 +8769,11 @@ CopyText: ; 2e89 (0:2e89)
 	jp CopyPlayerName
 ; 0x2ea9
 
-Func_2ea9: ; 2ea9 (0:2ea9)
+; copy text of maximum length a (in tiles) from its ID at hl to de,
+; then terminate the text with TX_END if it doesn't contain it already.
+; fill any remaining bytes with spaces plus TX_END to match the length specified in a.
+; return the text's actual length in characters (i.e. before the first TX_END) in e.
+CopyTextData_FromTextID: ; 2ea9 (0:2ea9)
 	ldh [hff96], a
 	ldh a, [hBankROM]
 	push af

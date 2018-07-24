@@ -478,7 +478,7 @@ WasUnsuccessfulText: ; 393e6 (e:53e6)
 	line "<RAMTEXT> was unsuccessful."
 	done
 
-Text014b: ; 393ff (e:53ff)
+ThereWasNoEffectFromTxRam2Text: ; 393ff (e:53ff)
 	text "There was no effect"
 	line "from <RAMTEXT>."
 	done
@@ -725,32 +725,32 @@ Text017d: ; 39b97 (e:5b97)
 	text "There was no effect!"
 	done
 
-Text017e: ; 39bad (e:5bad)
+ThereWasNoEffectFromToxicText: ; 39bad (e:5bad)
 	text "There was no effect"
 	line "from Toxic"
 	done
 
-Text017f: ; 39bcd (e:5bcd)
+ThereWasNoEffectFromPoisonText: ; 39bcd (e:5bcd)
 	text "There was no effect"
 	line "from Poison."
 	done
 
-Text0180: ; 39bef (e:5bef)
+ThereWasNoEffectFromSleepText: ; 39bef (e:5bef)
 	text "There was no effect"
 	line "from Sleep."
 	done
 
-Text0181: ; 39c10 (e:5c10)
+ThereWasNoEffectFromParalysisText: ; 39c10 (e:5c10)
 	text "There was no effect"
 	line "from Paralysis."
 	done
 
-Text0182: ; 39c35 (e:5c35)
+ThereWasNoEffectFromConfusionText: ; 39c35 (e:5c35)
 	text "There was no effect"
 	line "from Confusion."
 	done
 
-Text0183: ; 39c5a (e:5c5a)
+ThereWasNoEffectFromPoisonConfusionText: ; 39c5a (e:5c5a)
 	text "There was no effet"
 	line "from Poison, Confusion."
 	done

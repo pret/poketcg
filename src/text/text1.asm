@@ -331,7 +331,7 @@ Text004d: ; 3685a (d:685a)
 	text "Bench"
 	done
 
-Text004e: ; 36861 (d:6861)
+KnockOutText: ; 36861 (d:6861)
 	text "Knock Out"
 	done
 

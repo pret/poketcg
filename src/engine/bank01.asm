@@ -524,7 +524,7 @@ DuelMenu_Done: ; 439a (1:439a)
 	jp c, Func_4268
 	ld a, $05
 	call SetAIAction_SerialSendDuelData
-	call Func_717a
+	call ClearNonTurnTemporaryDuelvars
 	ret
 
 ; triggered by selecting the "Retreat" item in the duel menu
@@ -993,7 +993,7 @@ Func_46b7: ; 46b7 (1:46b7)
 .asm_46d9
 	ld a, [wcbfb]
 	inc b
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 .asm_46e0
 	call DoFrame
 	call HandleCardListInput
@@ -1532,10 +1532,10 @@ Func_49ed: ; 49ed (1:49ed)
 	ld e, a
 	ld a, d
 	lb bc, 16, 10
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 	ld a, e
 	lb bc, 10, 10
-	jp $65b7
+	jp WriteTwoDigitNumberInTxSymbolFormat
 .opponent_turn
 	ld a, [wOpponentNumberOfCardsInHand]
 	ld hl, wcbe9
@@ -1549,10 +1549,10 @@ Func_49ed: ; 49ed (1:49ed)
 	ld e, a
 	ld a, d
 	lb bc, 5, 3
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 	ld a, e
 	lb bc, 11, 3
-	jp $65b7
+	jp WriteTwoDigitNumberInTxSymbolFormat
 ; 0x4a35
 
 	INCROM $4a35, $4a97
@@ -1630,7 +1630,7 @@ Func_4ae9: ; 4ae9 (1:4ae9)
 	ld a, DECK_SIZE
 	sub [hl]
 .asm_4b22
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 	ld hl, $7e
 	call InitTextPrinting_ProcessTextFromID
 	ret
@@ -3566,7 +3566,7 @@ Func_622a: ; 622a (1:622a)
 	jr z, .asm_624c
 	ld d, $0a
 .asm_624c
-	ld a, [wcbc9 + 1]
+	ld a, [wcbca]
 	ld b, $01
 	ld c, a
 	ld a, [hli]
@@ -3587,7 +3587,175 @@ UnknownData_6264: ; 6264 (1:6264)
 	INCROM $6264, $627c
 
 Func_627c: ; 627c (1:627c)
-	INCROM $627c, $63bb
+	call Func_62d5
+	ld a, [wcbc9]
+	ld e, a
+	ld a, [wcbca]
+	inc a
+	ld c, a
+	ld b, 7
+	call PrintPlayAreaCardAttachedEnergies
+	ld a, [wcbca]
+	inc a
+	ld c, a
+	ld b, 5
+	ld a, SYM_E
+	call WriteByteToBGMap0
+	inc c
+	ld a, SYM_HP
+	call WriteByteToBGMap0
+	ld a, [wcbc9]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	or a
+	jr z, .zero_hp
+	ld e, a
+	ld a, [wLoadedCard1HP]
+	ld d, a
+	call DrawHPBar
+	ld a, [wcbca]
+	inc a
+	inc a
+	ld c, a
+	ld b, 7
+	call BCCoordToBGMap0Address
+	ld hl, wDefaultText
+	ld b, 12
+	call SafeCopyDataHLtoDE
+	ret
+.zero_hp
+	; if fainted, print "Knock Out" in place of the HP bar
+	ld a, [wcbca]
+	inc a
+	inc a
+	ld e, a
+	ld d, 7
+	ldtx hl, KnockOutText
+	call InitTextPrinting_ProcessTextFromID
+	ret
+; 0x62d5
+
+Func_62d5: ; 62d5 (1:62d5)
+	ld a, [wcbc9]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wcbca]
+	ld e, a
+	ld d, 4
+	call InitTextPrinting
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, wDefaultText
+	push de
+	ld a, 10 ; card name maximum length
+	call CopyTextData_FromTextID
+	pop hl
+	call ProcessText
+	ld a, [wcbca]
+	ld c, a
+	ld b, 18
+	ld a, [wcbc9]
+	call GetPlayAreaCardColor
+	inc a
+	call JPWriteByteToBGMap0
+	ld b, 14
+	ld a, SYM_Lv
+	call WriteByteToBGMap0
+	ld a, [wcbca]
+	ld c, a
+	ld b, 15
+	ld a, [wLoadedCard1Level]
+	call WriteTwoDigitNumberInTxSymbolFormat
+	ld a, [wcbc9]
+	add DUELVARS_ARENA_CARD_STAGE
+	call GetTurnDuelistVariable
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, FaceDownCardTileNumbers
+	add hl, de
+	ld a, [hli] ; starting tile to fill the 2x2 rectangle with
+	push hl
+	push af
+	lb hl, 1, 2
+	lb bc, 2, 2
+	ld a, [wcbca]
+	ld e, a
+	ld d, 2
+	pop af
+	call FillRectangle
+	pop hl
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	; in cgb, we have to take care of palettes too
+	ld a, [hl]
+	lb hl, 0, 0
+	lb bc, 2, 2
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+.not_cgb
+	ld hl, wcbc9
+	ld a, [hli]
+	or a
+	jr nz, .asm_6376
+	ld c, [hl]
+	inc c
+	inc c
+	ld b, 2
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	call CheckPrintCnfSlpPrz
+	inc b
+	call CheckPrintPoisoned
+	inc b
+	call CheckPrintDoublePoisoned
+.asm_6376
+	ld a, [wcbc9]
+	add DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
+	call GetTurnDuelistVariable
+	or a
+	jr z, .not_pluspower
+	ld a, [wcbca]
+	inc a
+	ld c, a
+	ld b, 15
+	ld a, SYM_PLUSPOWER
+	call WriteByteToBGMap0
+	inc b
+	ld a, [hl]
+	add SYM_0
+	call WriteByteToBGMap0
+.not_pluspower
+	ld a, [wcbc9]
+	add DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
+	call GetTurnDuelistVariable
+	or a
+	jr z, .not_defender
+	ld a, [wcbca]
+	inc a
+	ld c, a
+	ld b, 17
+	ld a, SYM_DEFENDER
+	call WriteByteToBGMap0
+	inc b
+	ld a, [hl]
+	add SYM_0
+	call WriteByteToBGMap0
+.not_defender
+	ret
+; 0x63b3
+
+FaceDownCardTileNumbers: ; 63b3 (1:63b3)
+	db $d0, $02
+	db $d4, $02
+	db $d8, $01
+	db $dc, $01
+; 0x63bb
 
 ; given a card's status in a, print the Poison symbol at bc if it's poisoned
 CheckPrintPoisoned: ; 63bb (1:63bb)
@@ -3686,7 +3854,7 @@ Func_6510: ; 6510 (1:6510)
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld [wcbc9], a
 	xor a
-	ld [wcbc9 + 1], a
+	ld [wcbca], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -3775,7 +3943,75 @@ AttemptRetreat: ; 657a (1:657a)
 	ret
 ; 0x659f
 
-	INCROM $659f, $6614
+	INCROM $659f, $65b7
+
+; given a number between 0-99 in a, converts it to TX_SYMBOL format, and writes it
+; to wStringBuffer + 3 and to the BGMap0 address at bc.
+; if the number is between 0-9, the first digit is replaced with SYM_SPACE.
+WriteTwoDigitNumberInTxSymbolFormat: ; 65b7 (1:65b7)
+	push hl
+	push de
+	push bc
+	ld l, a
+	ld h, $00
+	call TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1
+	pop bc
+	push bc
+	call BCCoordToBGMap0Address
+	ld hl, wStringBuffer + 3
+	ld b, 2
+	call SafeCopyDataHLtoDE
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0x65d1
+
+; convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
+; replace leading zeros with SYM_SPACE
+TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1: ; 65d1 (1:65d1)
+	ld de, wStringBuffer
+	ld bc, -10000
+	call .get_digit
+	ld bc, -1000
+	call .get_digit
+	ld bc, -100
+	call .get_digit
+	ld bc, -10
+	call .get_digit
+	ld bc, -1
+	call .get_digit
+	xor a ; TX_END
+	ld [de], a
+	ld hl, wStringBuffer
+	ld b, 4
+.digit_loop
+	ld a, [hl]
+	cp SYM_0
+	jr nz, .done ; jump if not zero
+	ld [hl], SYM_SPACE ; trim leading zero
+	inc hl
+	dec b
+	jr nz, .digit_loop
+.done
+	ret
+
+.get_digit
+	ld a, SYM_0 - 1
+.substract_loop
+	inc a
+	add hl, bc
+	jr c, .substract_loop
+	ld [de], a
+	inc de
+	ld a, l
+	sub c
+	ld l, a
+	ld a, h
+	sbc b
+	ld h, a
+	ret
+; 0x6614
 
 ; input d, e: max. HP, current HP
 DrawHPBar: ; 6614 (1:6614)
@@ -4064,7 +4300,7 @@ AIAction_DrawCard: ; 698c (1:698c)
 
 AIAction_FinishedTurnNoAttack: ; 6993 (1:6993)
 	call DrawDuelMainScene
-	call Func_717a
+	call ClearNonTurnTemporaryDuelvars
 	ldtx hl, FinishedTurnWithoutAttackingText
 	call DrawWideTextBox_WaitForInput
 	ld a, 1
@@ -4193,7 +4429,7 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 	call ExchangeRNG
 	call HandleSandAttackOrSmokescreenSubstatus
 	ret nc ; attack is successful
-	call Func_717a
+	call ClearNonTurnTemporaryDuelvars
 	; only end the turn if the attack fails
 	ld a, 1
 	ld [wAITurnEnded], a
@@ -4424,7 +4660,116 @@ ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
     db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
-	INCROM $6df1, $70e6
+Func_6df1: ; 6df1 (1:6df1)
+	xor a
+	ld [wPlayerArenaCardLastTurnStatus], a
+	ld [wOpponentArenaCardLastTurnStatus], a
+	ld hl, wEffectFunctionsFeedbackIndex
+	ld a, [hl]
+	or a
+	ret z
+	ld e, [hl]
+	ld d, $00
+	ld hl, wEffectFunctionsFeedback
+	add hl, de
+	ld [hl], $00
+	call CheckNoDamageOrEffect
+	jr c, .asm_6e1b
+	ld hl, wEffectFunctionsFeedback
+.asm_6e0f
+	ld a, [hli]
+	or a
+	jr z, .asm_6e19
+	ld d, a
+	call ApplyStatusConditionToArenaPokemon
+	jr .asm_6e0f
+.asm_6e19
+	scf
+	ret
+.asm_6e1b
+	ld a, l
+	or h
+	call nz, DrawWideTextBox_PrintText
+	ld hl, wEffectFunctionsFeedback
+.asm_6e23
+	ld a, [hli]
+	or a
+	jr z, .asm_6e37
+	ld d, a
+	ld a, [wcc05]
+	cp d
+	jr z, .asm_6e32
+	inc hl
+	inc hl
+	jr .asm_6e23
+.asm_6e32
+	call ApplyStatusConditionToArenaPokemon
+	jr .asm_6e23
+.asm_6e37
+	ret
+; 0x6e38
+
+; apply the status condition at hl+1 to the arena Pokemon
+; discard the arena Pokemon's status conditions contained in the bitmask at hl
+ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
+	ld e, DUELVARS_ARENA_CARD_STATUS
+	ld a, [de]
+	and [hl]
+	inc hl
+	or [hl]
+	ld [de], a
+	dec hl
+	ld e, DUELVARS_ARENA_CARD_LAST_TURN_STATUS
+	ld a, [de]
+	and [hl]
+	inc hl
+	or [hl]
+	inc hl
+	ld [de], a
+	ret
+; 0x6e49
+
+	INCROM $6e49, $700a
+
+; print one of the "There was no effect from" texts depending
+; on the value at wccf1 ($00 or a status condition constant)
+PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
+	ld a, [wccf1]
+	or a
+	jr nz, .status
+	ld hl, wLoadedMoveName
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call LoadTxRam2
+	ldtx hl, ThereWasNoEffectFromTxRam2Text
+	ret
+.status
+	ld c, a
+	ldtx hl, ThereWasNoEffectFromPoisonConfusionText
+	cp POISONED | CONFUSED
+	ret z
+	and PSN_DBLPSN
+	jr nz, .poison
+	ld a, c
+	and CNF_SLP_PRZ
+	ldtx hl, ThereWasNoEffectFromParalysisText
+	cp PARALYZED
+	ret z
+	ldtx hl, ThereWasNoEffectFromSleepText
+	cp ASLEEP
+	ret z
+	ldtx hl, ThereWasNoEffectFromConfusionText
+	ret
+.poison
+	ldtx hl, ThereWasNoEffectFromPoisonText
+	cp POISONED
+	ret z
+	ldtx hl, ThereWasNoEffectFromToxicText
+	ret
+; 0x7045
+
+	INCROM $7045, $70e6
 
 Func_70e6: ; 70e6 (1:70e6)
 	xor a
@@ -4495,7 +4840,9 @@ InitializeDuelVariables: ; 7107 (1:7107)
 
 	INCROM $7133, $717a
 
-Func_717a: ; 717a (1:717a)
+; clear the non-turn holder's duelvars starting at DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+; these duelvars only last a two-player turn at most.
+ClearNonTurnTemporaryDuelvars: ; 717a (1:717a)
 	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
 	call GetNonTurnDuelistVariable
 	xor a
@@ -4510,7 +4857,33 @@ Func_717a: ; 717a (1:717a)
 	ret
 ; 0x7189
 
-	INCROM $7189, $71ad
+; same as ClearNonTurnTemporaryDuelvars, except the non-turn holder's arena
+; Pokemon status condition is copied to wccc5
+ClearNonTurnTemporaryDuelvars_CopyStatus: ; 7189 (1:7189)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	ld [wccc5], a
+	call ClearNonTurnTemporaryDuelvars
+	ret
+; 0x7195
+
+Func_7195: ; 7195 (1:7195)
+	ld a, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+	call GetNonTurnDuelistVariable
+	ld a, [wccef]
+	or a
+	jr nz, .asm_71a9
+	ld a, [wTempDamage_ccbf]
+	ld [hli], a
+	ld a, [wccc0]
+	ld [hl], a
+	ret
+.asm_71a9
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ret
+; 0x71ad
 
 _TossCoin: ; 71ad (1:71ad)
 	ld [wcd9c], a
@@ -4562,13 +4935,13 @@ _TossCoin: ; 71ad (1:71ad)
 	ld bc, $0f0b
 	ld a, [wcd9f]
 	inc a
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 	ld b, 17
 	ld a, $2e
 	call WriteByteToBGMap0
 	inc b
 	ld a, [wcd9c]
-	call $65b7
+	call WriteTwoDigitNumberInTxSymbolFormat
 
 .asm_7223
 	call Func_3b21

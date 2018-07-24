@@ -81,6 +81,8 @@ DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA  EQUS "LOW(wPlayerNumberOfPokemonInPlayA
 DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"             ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                 ; f1
 DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)"  ; f2
+DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE     EQUS "LOW(wPlayerArenaCardLastTurnDamage)"  ; f3
+DUELVARS_ARENA_CARD_LAST_TURN_STATUS     EQUS "LOW(wPlayerArenaCardLastTurnStatus)"  ; f5
 
 ; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00
@@ -123,6 +125,7 @@ POISONED        EQU $80
 DOUBLE_POISONED EQU $c0
 
 CNF_SLP_PRZ  EQU $0f ; confused, asleep or paralyzed
+PSN_DBLPSN   EQU $f0 ; poisoned or double poisoned
 
 ; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
 SUBSTATUS1_AGILITY      EQU $0c

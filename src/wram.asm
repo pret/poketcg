@@ -186,7 +186,17 @@ wPlayerDuelistType:: ; c2f1
 wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 	ds $1
 
-	ds $d
+; damage taken the last time the opponent attacked (0 if no damage)
+wPlayerArenaCardLastTurnDamage:: ; c2f3
+	ds $1
+
+	ds $1
+
+; status condition received the last time the opponent attacked (0 if none)
+wPlayerArenaCardLastTurnStatus:: ; c2f5
+	ds $1
+
+	ds $a
 
 wOpponentDuelVariables:: ; c300
 
@@ -319,7 +329,15 @@ wOpponentDuelistType:: ; c3f1
 wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
 
-	ds $d
+wOpponentArenaCardLastTurnDamage:: ; c3f3
+	ds $1
+
+	ds $1
+
+wOpponentArenaCardLastTurnStatus:: ; c3f5
+	ds $1
+
+	ds $a
 
 UNION
 
@@ -607,9 +625,11 @@ wCardPageNumber:: ; cbc7
 wcbc8:: ; cbc8
 	ds $1
 
-; 2-byte something
 wcbc9:: ; cbc9
-	ds $2
+	ds $1
+
+wcbca:: ; cbca
+	ds $1
 
 ; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
 wBenchSelectedPokemon:: ; cbcb
@@ -855,7 +875,10 @@ wccbc:: ; ccbc
 	ds $2
 
 wTempDamage_ccbf:: ; ccbf
-	ds $2
+	ds $1
+
+wccc0:: ; ccc0
+	ds $1
 
 ; WEAKNESS and RESISTANCE flags	for a damaging attack
 wDamageEffectiveness:: ; ccc1
@@ -871,6 +894,8 @@ wTempTurnDuelistCardID:: ; ccc3
 wTempNonTurnDuelistCardID:: ; ccc4
 	ds $1
 
+; the status condition of the defending Pokemon is loaded here after an attack
+wccc5:: ; ccc5
 	ds $1
 
 ; may contain 0 or 1 depending on which move was selected
@@ -887,11 +912,12 @@ wGotHeadsFromConfusionCheck:: ; ccc9
 
 	ds $3
 
-wcccd:: ; cccd
+wEffectFunctionsFeedbackIndex:: ; cccd
 	ds $1
 
-; some array used in effect functions with wcccd as the index. unknown length
-wccce:: ; ccce
+; some array used in effect functions with wEffectFunctionsFeedbackIndex
+; as the index, used to return feedback. unknown length.
+wEffectFunctionsFeedback:: ; ccce
 	ds $18
 
 ; this is 1 (non-0) if dealing damage to self due to confusion
@@ -911,18 +937,25 @@ wTempPlayAreaLocationOffset_cceb:: ; cceb
 wccec:: ; ccec
 	ds $1
 
+; used by the effect functions to return the cause of an effect to fail
+; $01: was not affected by a status condition
+; $02: prints WasUnsuccessfulText
 wcced:: ; cced
 	ds $1
 
 wccee:: ; ccee
 	ds $1
 
+; when this is non-0, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE and the
+; next duelvar are always set to 0 after an attack
 wccef:: ; ccef
 	ds $1
 
 wccf0:: ; ccf0
 	ds $1
 
+; effect functions return a status condition constant here when it had no effect
+; on the target, in order to print one of the ThereWasNoEffectFrom* texts
 wccf1:: ; ccf1
 	ds $1
 

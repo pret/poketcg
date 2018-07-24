@@ -79,7 +79,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text004b                                 ; 0x004b
 	textpointer Text004c                                 ; 0x004c
 	textpointer Text004d                                 ; 0x004d
-	textpointer Text004e                                 ; 0x004e
+	textpointer KnockOutText                                 ; 0x004e
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
 	textpointer ChooseEnergyCardToDiscardText                                 ; 0x0050
 	textpointer Text0051                                 ; 0x0051
@@ -332,7 +332,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0148                                 ; 0x0148
 	textpointer Text0149                                 ; 0x0149
 	textpointer WasUnsuccessfulText                      ; 0x014a
-	textpointer Text014b                                 ; 0x014b
+	textpointer ThereWasNoEffectFromTxRam2Text                                 ; 0x014b
 	textpointer Text014c                                 ; 0x014c
 	textpointer Text014d                                 ; 0x014d
 	textpointer Text014e                                 ; 0x014e
@@ -383,12 +383,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text017b                                 ; 0x017b
 	textpointer Text017c                                 ; 0x017c
 	textpointer Text017d                                 ; 0x017d
-	textpointer Text017e                                 ; 0x017e
-	textpointer Text017f                                 ; 0x017f
-	textpointer Text0180                                 ; 0x0180
-	textpointer Text0181                                 ; 0x0181
-	textpointer Text0182                                 ; 0x0182
-	textpointer Text0183                                 ; 0x0183
+	textpointer ThereWasNoEffectFromToxicText                                 ; 0x017e
+	textpointer ThereWasNoEffectFromPoisonText                                 ; 0x017f
+	textpointer ThereWasNoEffectFromSleepText                                 ; 0x0180
+	textpointer ThereWasNoEffectFromParalysisText                                 ; 0x0181
+	textpointer ThereWasNoEffectFromConfusionText                                 ; 0x0182
+	textpointer ThereWasNoEffectFromPoisonConfusionText                                 ; 0x0183
 	textpointer Text0184                                 ; 0x0184
 	textpointer Text0185                                 ; 0x0185
 	textpointer Text0186                                 ; 0x0186
