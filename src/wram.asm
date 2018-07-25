@@ -426,7 +426,8 @@ wTileMapFill:: ; cab6
 wIE:: ; cab7
 	ds $1
 
-; incremented whenever the vblank handler ends. used to wait for it to end
+; incremented whenever the vblank handler ends. used to wait for it to end,
+; or to delay a specific amount of frames
 wVBlankCounter:: ; cab8
 	ds $1
 
@@ -739,7 +740,8 @@ wTempSerialBuf:: ; cbed
 wcbf7:: ; cbf7
 	ds $2
 
-wcbf9:: ; cbf9
+; when non-0, AIMakeDecision doesn't wait 60 frames and print DuelistIsThinkingText
+wSkipDuelistIsThinkingDelay:: ; cbf9
 	ds $1
 
 wcbfa:: ; cbfa
@@ -921,7 +923,7 @@ wEffectFunctionsFeedback:: ; ccce
 	ds $18
 
 ; this is 1 (non-0) if dealing damage to self due to confusion
-wDamageToSelfMode:: ; cce6
+wIsDamageToSelf:: ; cce6
 	ds $1
 
 	ds $2
@@ -1299,7 +1301,22 @@ wTempPokemonID_ce7c:: ; ce7c
 wce7e:: ; ce7e
 	ds $1
 
-	ds $22
+wce7f:: ; ce7f
+	ds $2
+
+wce81:: ; ce81
+	ds $1
+
+wce82:: ; ce82
+	ds $1
+
+wce83:: ; ce83
+	ds $1
+
+wce84:: ; ce84
+	ds $1
+
+	ds $1c
 
 wcea1:: ; cea1
 	ds $1
@@ -1846,7 +1863,12 @@ wd4ac:: ; d4ac
 wd4ad:: ; d4ad
 	ds $1
 
-	ds $10
+	ds $2
+
+wd4b0:: ; d4b0
+	ds $1
+
+	ds $d
 
 wd4be:: ; d4be
 	ds $1

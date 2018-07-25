@@ -346,7 +346,7 @@ DuelMainInterface: ; 426d (1:426d)
 	; DUELIST_TYPE_AI_OPP
 	xor a
 	ld [wVBlankCounter], a
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
 	call Func_2bbf
@@ -514,7 +514,7 @@ OpenActivePokemonScreen: ; 4376 (1:4376)
 DuelMenu_PkmnPower: ; 438e (1:438e)
 	call $6431
 	jp c, DuelMainInterface
-	call Func_1730
+	call UseAttackOrPokemonPower
 	jp DuelMainInterface
 
 ; triggered by selecting the "Done" item in the duel menu
@@ -949,7 +949,7 @@ Func_4673: ; 4673 (1:4673)
 	ld hl, wcbc9
 	ld [hli], a
 	ld [hl], $00
-	call Func_627c
+	call PrintPlayAreaCardInformation
 	xor a
 	ld [wcbfb], a
 	inc a
@@ -1083,7 +1083,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld a, $07
 	call DoPracticeDuelAction
 	jp c, Func_4268
-	call Func_1730
+	call UseAttackOrPokemonPower
 	jp c, DuelMainInterface
 	ret
 
@@ -1644,7 +1644,7 @@ DisplayPlayerDrawCardScreen: ; 4b2c (1:4b2c)
 
 ; display card detail when a card is drawn or played
 ; hl is text to display
-; a is card index
+; a is the card's deck index
 DisplayCardDetailScreen: ; 4b31 (1:4b31)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call _DisplayCardDetailScreen
@@ -3291,7 +3291,7 @@ JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 Func_5c33: ; 5c33 (1:5c33
 	INCROM $5c33, $5e5f
 
-; display the card details of the card index in wLoadedCard1
+; display the card details of the card in wLoadedCard1
 ; print the text at hl
 _DisplayCardDetailScreen: ; 5e5f (1:5e5f)
 	push hl
@@ -3547,27 +3547,37 @@ PlayAreaScreenMenuFunction: ; 60ce (1:60ce)
 
 	INCROM $60dd, $622a
 
-Func_622a: ; 622a (1:622a)
+; print a turn holder's play area Pokemon card's name, level, face down stage card,
+; color symbol, status symbol (if any), pluspower/defender symbols (if any),
+; attached energies (if any), HP bar, and the play area location (ACT/BPx indicator)
+; input:
+   ; wcbc9: PLAY_AREA_* of the card to display the information of
+   ; wcbca: Y coordinate of where to print the card's information
+; total space occupied is a rectangle of 20x3 tiles
+PrintPlayAreaCardInformationAndLocation: ; 622a (1:622a)
 	ld a, [wcbc9]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
 	ret z
-	call Func_627c
+	call PrintPlayAreaCardInformation
+	; print the ACT/BPx indicator
 	ld a, [wcbc9]
 	add a
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, UnknownData_6264
+	ld hl, PlayAreaLocationTileNumbers
 	add hl, de
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_624c
+	jr z, .write_tiles
+	; move forward to the opponent's side tile numbers
+	; they have black letters and white background instead of the other way around
 	ld d, $0a
-.asm_624c
+.write_tiles
 	ld a, [wcbca]
-	ld b, $01
+	ld b, 1
 	ld c, a
 	ld a, [hli]
 	add d
@@ -3583,11 +3593,25 @@ Func_622a: ; 622a (1:622a)
 	ret
 ; 0x6264
 
-UnknownData_6264: ; 6264 (1:6264)
-	INCROM $6264, $627c
+PlayAreaLocationTileNumbers: ; 6264 (1:6264)
+	db $e0, $e1, $e2, $00 ; ACT
+	db $e3, $e4, $e5, $00 ; BP1
+	db $e3, $e4, $e6, $00 ; BP2
+	db $e3, $e4, $e7, $00 ; BP3
+	db $e3, $e4, $e8, $00 ; BP4
+	db $e3, $e4, $e9, $00 ; BP5
 
-Func_627c: ; 627c (1:627c)
-	call Func_62d5
+; print a turn holder's play area Pokemon card's name, level, face down stage card,
+; color symbol, status symbol (if any), pluspower/defender symbols (if any),
+; attached energies (if any), and HP bar.
+; input:
+   ; wcbc9: PLAY_AREA_* of the card to display the information of
+   ; wcbca: Y coordinate of where to print the card's information
+; total space occupied is a rectangle of 20x3 tiles
+PrintPlayAreaCardInformation: ; 627c (1:627c)
+	; print name, level, color, stage, status, pluspower/defender
+	call PrintPlayAreaCardHeader
+	; print the symbols of the attached energies
 	ld a, [wcbc9]
 	ld e, a
 	ld a, [wcbca]
@@ -3601,6 +3625,7 @@ Func_627c: ; 627c (1:627c)
 	ld b, 5
 	ld a, SYM_E
 	call WriteByteToBGMap0
+	; print the HP bar
 	inc c
 	ld a, SYM_HP
 	call WriteByteToBGMap0
@@ -3635,7 +3660,13 @@ Func_627c: ; 627c (1:627c)
 	ret
 ; 0x62d5
 
-Func_62d5: ; 62d5 (1:62d5)
+; print a turn holder's play area Pokemon card's name, level, face down stage card,
+; color symbol, status symbol (if any), and pluspower/defender symbols (if any).
+; input:
+   ; wcbc9: PLAY_AREA_* of the card to display the information of
+   ; wcbca: Y coordinate of where to print the card's information
+PrintPlayAreaCardHeader: ; 62d5 (1:62d5)
+	; start by printing the Pokemon's name
 	ld a, [wcbc9]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -3644,6 +3675,8 @@ Func_62d5: ; 62d5 (1:62d5)
 	ld e, a
 	ld d, 4
 	call InitTextPrinting
+	; copy the name to wDefaultText (max. 10 characters)
+	; then call ProcessText with hl = wDefaultText
 	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
@@ -3654,6 +3687,8 @@ Func_62d5: ; 62d5 (1:62d5)
 	call CopyTextData_FromTextID
 	pop hl
 	call ProcessText
+
+	; print the Pokemon's color and the level
 	ld a, [wcbca]
 	ld c, a
 	ld b, 18
@@ -3669,6 +3704,8 @@ Func_62d5: ; 62d5 (1:62d5)
 	ld b, 15
 	ld a, [wLoadedCard1Level]
 	call WriteTwoDigitNumberInTxSymbolFormat
+
+	; print the 2x2 face down card image depending on the Pokemon's evolution stage
 	ld a, [wcbc9]
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
@@ -3691,18 +3728,20 @@ Func_62d5: ; 62d5 (1:62d5)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
-	; in cgb, we have to take care of palettes too
+	; in cgb, we have to take care of coloring it too
 	ld a, [hl]
 	lb hl, 0, 0
 	lb bc, 2, 2
 	call BankswitchVRAM1
 	call FillRectangle
 	call BankswitchVRAM0
+
 .not_cgb
+	; print the status condition symbol if any (only for the arena Pokemon card)
 	ld hl, wcbc9
 	ld a, [hli]
 	or a
-	jr nz, .asm_6376
+	jr nz, .skip_status
 	ld c, [hl]
 	inc c
 	inc c
@@ -3714,7 +3753,9 @@ Func_62d5: ; 62d5 (1:62d5)
 	call CheckPrintPoisoned
 	inc b
 	call CheckPrintDoublePoisoned
-.asm_6376
+
+.skip_status
+	; finally check whether to print the Pluspower and/or Defender symbols
 	ld a, [wcbc9]
 	add DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call GetTurnDuelistVariable
@@ -3850,7 +3891,11 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 
 	INCROM $6423, $6510
 
-Func_6510: ; 6510 (1:6510)
+; display the screen that prompts the player to use the selected card's
+; Pokemon Power. Includes the card's information above, and the Pokemon Power's
+; description below.
+; input: hTempPlayAreaLocationOffset_ff9d
+DisplayUsePokemonPowerScreen: ; 6510 (1:6510)
 	ldh a, [hTempPlayAreaLocationOffset_ff9d]
 	ld [wcbc9], a
 	xor a
@@ -3859,7 +3904,7 @@ Func_6510: ; 6510 (1:6510)
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
 	call LoadDuelCheckPokemonScreenTiles
-	call Func_622a
+	call PrintPlayAreaCardInformationAndLocation
 	lb de, 1, 4
 	call InitTextPrinting
 	ld hl, wLoadedCard1Move1Name
@@ -4065,14 +4110,19 @@ Func_6635: ; 6635 (1:6635)
 	ret
 ; 0x666a
 
-Func_666a: ; 666a (1:666a)
+; display card detail when a trainer card is used, and print "Used xxx"
+; hTempCardIndex_ff9f contains the card's deck index
+DisplayUsedTrainerCardDetailScreen: ; 666a (1:666a)
 	ldh a, [hTempCardIndex_ff9f]
 	ldtx hl, UsedText
 	call DisplayCardDetailScreen
 	ret
 ; 0x6673
 
-Func_6673: ; 6673 (1:6673)
+; prints the name and description of a trainer card, along with the
+; "Used xxx" text in a text box. this function is used to show the player
+; the information of a trainer card being used by the opponent.
+PrintUsedTrainerCardDescription: ; 6673 (1:6673)
 	call EmptyScreen
 	call SetNoLineSeparation
 	lb de, 1, 1
@@ -4176,7 +4226,9 @@ DuelDataToSave: ; 6729 (1:6729)
 
 	INCROM $6747, $6785
 
-Func_6785: ; 6785 (1:6785)
+; discard data of a duel that was saved by SaveDuelData, by setting the first byte
+; of sCurrentDuelData to $00, and zeroing the checksum (next two bytes)
+DiscardSavedDuelData: ; 6785 (1:6785)
 	call EnableSRAM
 	ld hl, sCurrentDuelData
 	xor a
@@ -4224,7 +4276,7 @@ Func_67b2: ; 67b2 (1:67b2)
 ; called multiple times during one ai turn
 AIMakeDecision: ; 67be (1:67be)
 	ldh [hAIActionTableIndex], a
-	ld hl, wcbf9
+	ld hl, wSkipDuelistIsThinkingDelay
 	ld a, [hl]
 	ld [hl], $0
 	or a
@@ -4245,7 +4297,7 @@ AIMakeDecision: ; 67be (1:67be)
 	ld hl, wAITurnEnded
 	or [hl]
 	jr nz, .turn_ended
-	ld a, [wcbf9]
+	ld a, [wSkipDuelistIsThinkingDelay]
 	or a
 	ret nz
 	ld [wVBlankCounter], a
@@ -4274,13 +4326,13 @@ AIActionTable: ; 695e (1:695e)
 	dw AIAction_UseEnergyCard
 	dw AIAction_TryRetreat
 	dw AIAction_FinishedTurnNoAttack
-	dw AIAction_PlayNonPokemonCard
+	dw AIAction_UseTrainerCard
 	dw AIAction_TryExecuteEffect
 	dw AIAction_Attack
 	dw AIAction_AttackEffect
 	dw AIAction_AttackDamage
 	dw AIAction_DrawCard
-	dw AIAction_PokemonPower
+	dw AIAction_UsePokemonPower
 	dw AIAction_6b07
 	dw AIAction_ForceOpponentSwitchActive
 	dw AIAction_NoAction
@@ -4371,19 +4423,19 @@ AIAction_TryRetreat: ; 69ff (1:69ff)
 	pop hl
 	pop af
 	push hl
-	call Func_6b7e
+	call LoadCardNameToTxRam2
 	pop hl
-	call Func_6b9e
+	call DrawWideTextBox_WaitForInput_Bank1
 	ret
 ; 0x6a23
 
-AIAction_PlayNonPokemonCard: ; 6a23 (1:6a23)
+AIAction_UseTrainerCard: ; 6a23 (1:6a23)
 	call LoadNonPokemonCardEffectCommands
-	call Func_666a
-	call Func_6673
+	call DisplayUsedTrainerCardDetailScreen
+	call PrintUsedTrainerCardDescription
 	call ExchangeRNG
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6a35
 
@@ -4412,7 +4464,7 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 	call CopyMoveDataAndDamage_FromDeckIndex
 	call Func_16f6
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	call CheckSandAttackOrSmokescreenSubstatus
 	jr c, .has_status_effect
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -4424,7 +4476,7 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 	ret
 .has_status_effect
 	call DrawDuelMainScene
-	call Func_1b90
+	call PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	call HandleSandAttackOrSmokescreenSubstatus
@@ -4442,11 +4494,11 @@ AIAction_AttackEffect: ; 6a8c (1:6a8c)
 	call CheckSelfConfusionDamage
 	jr c, .confusion_damage
 	call Func_6635
-	call Func_1b90
+	call PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 .confusion_damage
 	call DealConfusionDamageToSelf
@@ -4479,26 +4531,26 @@ AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
 	ret
 ; 0x6ad9
 
-AIAction_PokemonPower: ; 6ad9 (1:6ad9)
+AIAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ld e, $00
 	call CopyMoveDataAndDamage_FromDeckIndex
 	ldh a, [hTemp_ffa0]
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
-	call Func_6510
+	call DisplayUsePokemonPowerScreen
 	ldh a, [hTempCardIndex_ff9f]
-	call Func_6b7e
+	call LoadCardNameToTxRam2
 	ld hl, wLoadedMoveName
 	ld a, [hli]
 	ld [wTxRam2_b], a
 	ld a, [hl]
 	ld [wTxRam2_b + 1], a
 	ldtx hl, WillUseThePokemonPowerText
-	call Func_6b9e
+	call DrawWideTextBox_WaitForInput_Bank1
 	call ExchangeRNG
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b07
 
@@ -4507,7 +4559,7 @@ AIAction_6b07: ; 6b07 (1:6b07)
 	ld a, $03
 	call TryExecuteEffectCommandFunction
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b15
 
@@ -4515,7 +4567,7 @@ AIAction_6b15: ; 6b15 (1:6b15)
 	ld a, $04
 	call TryExecuteEffectCommandFunction
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b20
 
@@ -4528,7 +4580,7 @@ AIAction_TossCoinATimes: ; 6b24 (1:6b24)
 	call SerialRecv8Bytes
 	call TossCoinATimes
 	ld a, $01
-	ld [wcbf9], a
+	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b30
 
@@ -4550,7 +4602,7 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr z, .asm_6b56
-	call Func_1b90
+	call PrintPokemonsAttackText
 	call .asm_6b56
 	call WaitForWideTextBoxInput
 	ret
@@ -4577,7 +4629,9 @@ AIAction_NoAction: ; 6b7d (1:6b7d)
 	ret
 ; 0x6b7e
 
-Func_6b7e: ; 6b7e (1:6b7e)
+; load the text ID of the card name with deck index given in a to TxRam2
+; also loads the card to wLoadedCard1
+LoadCardNameToTxRam2: ; 6b7e (1:6b7e)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Name]
 	ld [wTxRam2], a
@@ -4586,7 +4640,9 @@ Func_6b7e: ; 6b7e (1:6b7e)
 	ret
 ; 0x6b8e
 
-Func_6b8e: ; 6b8e (1:6b8e)
+; load the text ID of the card name with deck index given in a to TxRam2_b
+; also loads the card to wLoadedCard1
+LoadCardNameToTxRam2_b: ; 6b8e (1:6b8e)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Name]
 	ld [wTxRam2_b], a
@@ -4595,7 +4651,7 @@ Func_6b8e: ; 6b8e (1:6b8e)
 	ret
 ; 0x6b9e
 
-Func_6b9e: ; 6b9e (1:6b9e)
+DrawWideTextBox_WaitForInput_Bank1: ; 6b9e (1:6b9e)
 	call DrawWideTextBox_WaitForInput
 	ret
 ; 0x6ba2
@@ -4660,6 +4716,8 @@ ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
     db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
     ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
+; this function applies status conditions to the defending Pokemon,
+; returned by the effect functions in wEffectFunctionsFeedback
 Func_6df1: ; 6df1 (1:6df1)
 	xor a
 	ld [wPlayerArenaCardLastTurnStatus], a
@@ -4674,19 +4732,19 @@ Func_6df1: ; 6df1 (1:6df1)
 	add hl, de
 	ld [hl], $00
 	call CheckNoDamageOrEffect
-	jr c, .asm_6e1b
+	jr c, .no_damage_or_effect
 	ld hl, wEffectFunctionsFeedback
-.asm_6e0f
+.apply_status_loop
 	ld a, [hli]
 	or a
-	jr z, .asm_6e19
+	jr z, .done
 	ld d, a
 	call ApplyStatusConditionToArenaPokemon
-	jr .asm_6e0f
-.asm_6e19
+	jr .apply_status_loop
+.done
 	scf
 	ret
-.asm_6e1b
+.no_damage_or_effect
 	ld a, l
 	or h
 	call nz, DrawWideTextBox_PrintText
@@ -4729,6 +4787,7 @@ ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
 	ret
 ; 0x6e49
 
+Func_6e49: ; 6e49 (1:6e49)
 	INCROM $6e49, $700a
 
 ; print one of the "There was no effect from" texts depending
@@ -5092,7 +5151,132 @@ Func_7415: ; 7415 (1:7415)
 	ret
 ; 0x741a
 
-	INCROM $741a, $7571
+Func_741a: ; 741a (1:741a)
+	ld hl, wEffectFunctionsFeedbackIndex
+	ld a, [hl]
+	or a
+	ret z
+	ld e, a
+	ld d, $00
+	ld hl, wEffectFunctionsFeedback
+	add hl, de
+	ld [hl], $00
+	ld hl, wEffectFunctionsFeedback
+.loop
+	ld a, [hli]
+	or a
+	jr z, .done
+	ld d, a
+	inc hl
+	ld a, [hli]
+	ld e, $7e
+	cp ASLEEP
+	jr z, .got_anim
+	ld e, $7d
+	cp PARALYZED
+	jr z, .got_anim
+	ld e, $7b
+	cp POISONED
+	jr z, .got_anim
+	ld e, $7b
+	cp DOUBLE_POISONED
+	jr z, .got_anim
+	ld e, $7c
+	cp CONFUSED
+	jr nz, .loop
+	ldh a, [hWhoseTurn]
+	cp d
+	jr nz, .got_anim
+	ld e, $7f
+.got_anim
+	ld a, e
+	ld [wLoadedMoveAnimation], a
+	xor a
+	ld [wd4b0], a
+	push hl
+	farcall $6, $4f9c
+	pop hl
+	jr .loop
+.done
+	ret
+; 0x7469
+
+Func_7469: ; 7469 (1:7469)
+	push hl
+	push de
+	call Func_7494
+	call Func_7484
+	pop de
+	pop hl
+	call SubstractHP
+	ld a, [wcac2]
+	cp $01
+	ret nz
+	push hl
+	push de
+	call DrawDuelHUDs
+	pop de
+	pop hl
+	ret
+; 0x7484
+
+Func_7484: ; 7484 (1:7484)
+	ld a, [wLoadedMoveAnimation]
+	or a
+	ret z
+	push de
+.asm_748a
+	call DoFrame
+	call Func_3b52
+	jr c, .asm_748a
+	pop de
+	ret
+; 0x7494
+
+Func_7494: ; 7494 (1:7494)
+	ldh a, [hWhoseTurn]
+	push af
+	push hl
+	push de
+	push bc
+	ld a, [wcc05]
+	ldh [hWhoseTurn], a
+	ld a, c
+	ld [wce81], a
+	ldh a, [hWhoseTurn]
+	cp h
+	jr z, .asm_74aa
+	set 7, b
+.asm_74aa
+	ld a, b
+	ld [wce82], a
+	ld a, [wcc05]
+	ld [wce83], a
+	ld a, [wTempNonTurnDuelistCardID]
+	ld [wce84], a
+	ld hl, wce7f
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld a, [wLoadedMoveAnimation]
+	cp $01
+	jr nz, .asm_74d1
+	ld a, e
+	cp $46
+	jr c, .asm_74d1
+	ld a, $02
+	ld [wLoadedMoveAnimation], a
+.asm_74d1
+	farcall $6, $4f9c
+	pop bc
+	pop de
+	pop hl
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+; 0x74dc
+
+	INCROM $74dc, $7571
 
 Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576

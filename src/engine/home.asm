@@ -43,7 +43,7 @@ Start: ; 0150 (0:0150)
 	ld [rIE], a
 	call ZeroRAM
 	ld a, $1
-	call BankswitchHome
+	call BankswitchROM
 	xor a
 	call BankswitchSRAM
 	call BankswitchVRAM0
@@ -62,7 +62,7 @@ Start: ; 0150 (0:0150)
 	call CopyDMAFunction
 	call ValidateSRAM
 	ld a, BANK(GameLoop)
-	call BankswitchHome
+	call BankswitchROM
 	ld sp, $e000
 	jp GameLoop
 
@@ -106,7 +106,7 @@ VBlankHandler: ; 019b (0:019b)
 	res IN_VBLANK, [hl]
 .done
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	pop de
 	pop bc
@@ -137,10 +137,10 @@ TimerHandler: ; 01e6 (0:01e6)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(SoundTimerHandler)
-	call BankswitchHome
+	call BankswitchROM
 	call SoundTimerHandler
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	; clear in-timer flag
 	ld hl, wReentrancyFlag
 	res IN_TIMER, [hl]
@@ -862,16 +862,16 @@ CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
 
-; converts two one-digit numbers provided in a to text (ascii) format,
+; converts the two-digit BCD number provided in a to text (ascii) format,
 ; writes them to [wStringBuffer] and [wStringBuffer + 1], and to the BGMap0 address at bc
-WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
+WriteTwoDigitBCDNumber: ; 05c2 (0:05c2)
 	push hl
 	push bc
 	push de
 	ld hl, wStringBuffer
 	push hl
 	push bc
-	call WriteNumbersInTextFormat
+	call WriteBCDNumberInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -883,16 +883,16 @@ WriteTwoOneDigitNumbers: ; 05c2 (0:05c2)
 	ret
 ; 0x5db
 
-; converts a one-digit number provided in the lower nybble of a to text
+; converts the one-digit BCD number provided in the lower nybble of a to text
 ; (ascii) format, and writes it to [wStringBuffer] and to the BGMap0 address at bc
-WriteOneDigitNumber: ; 05db (0:05db)
+WriteOneDigitBCDNumber: ; 05db (0:05db)
 	push hl
 	push bc
 	push de
 	ld hl, wStringBuffer
 	push hl
 	push bc
-	call WriteNumberInTextFormat
+	call WriteBCDDigitInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -904,9 +904,9 @@ WriteOneDigitNumber: ; 05db (0:05db)
 	ret
 ; 0x5f4
 
-; converts four one-digit numbers provided in h and l to text (ascii) format,
+; converts the four-digit BCD number provided in h and l to text (ascii) format,
 ; writes them to [wStringBuffer] through [wStringBuffer + 3], and to the BGMap0 address at bc
-WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
+WriteFourDigitBCDNumber: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	push de
@@ -916,9 +916,9 @@ WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	push hl
 	push bc
 	ld a, d
-	call WriteNumbersInTextFormat
+	call WriteBCDNumberInTextFormat
 	ld a, e
-	call WriteNumbersInTextFormat
+	call WriteBCDNumberInTextFormat
 	pop bc
 	call BCCoordToBGMap0Address
 	pop hl
@@ -930,20 +930,19 @@ WriteFourOneDigitNumbers: ; 05f4 (0:05f4)
 	ret
 ; 0x614
 
-; given two one-digit numbers in the two nybbles of register a,
+; given two BCD digits in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
 ; numbers above 9 end up converted to half-width font tiles.
-WriteNumbersInTextFormat: ; 0614 (0:0614)
+WriteBCDNumberInTextFormat: ; 0614 (0:0614)
 	push af
 	swap a
-	call WriteNumberInTextFormat
+	call WriteBCDDigitInTextFormat
 	pop af
 ;	fallthrough
 
-; given a one-digit number in the (lower nybble) of register a,
-; write it in text (ascii) format to hl.
-; numbers above 9 end up converted to half-width font tiles.
-WriteNumberInTextFormat:
+; given a BCD digit in the (lower nybble) of register a, write it in text (ascii)
+;  format to hl. numbers above 9 end up converted to half-width font tiles.
+WriteBCDDigitInTextFormat:
 	and $0f
 	add "0"
 	cp "9" + 1
@@ -1213,7 +1212,7 @@ CopyDataHLtoDE: ; 073c (0:073c)
 ; switch to rombank (a + top2 of h shifted down),
 ; set top2 of h to 01 (switchable ROM bank area),
 ; return old rombank id on top-of-stack
-BankpushHome: ; 0745 (0:0745)
+BankpushROM: ; 0745 (0:0745)
 	push hl
 	push bc
 	push af
@@ -1244,14 +1243,14 @@ BankpushHome: ; 0745 (0:0745)
 	pop de
 	pop af
 	add b
-	call BankswitchHome
+	call BankswitchROM
 	pop bc
 	ret
 ; 0x76f
 
 ; switch to rombank a,
 ; return old rombank id on top-of-stack
-BankpushHome2: ; 076f (0:076f)
+BankpushROM2: ; 076f (0:076f)
 	push hl
 	push bc
 	push af
@@ -1274,18 +1273,18 @@ BankpushHome2: ; 076f (0:076f)
 	ld h, d
 	pop de
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop bc
 	ret
 ; 0x78e
 
 ; restore rombank from top-of-stack
-BankpopHome: ; 078e (0:078e)
+BankpopROM: ; 078e (0:078e)
 	push hl
 	push de
 	ld hl, sp+$7
 	ld a, [hld]
-	call BankswitchHome
+	call BankswitchROM
 	dec hl
 	ld d, [hl]
 	dec hl
@@ -1301,7 +1300,7 @@ BankpopHome: ; 078e (0:078e)
 	ret
 
 ; switch ROM bank to a
-BankswitchHome: ; 07a3 (0:07a3)
+BankswitchROM: ; 07a3 (0:07a3)
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
@@ -1780,7 +1779,7 @@ Bank1Call: ; 09ae (0:09ae)
 ;	fallthrough
 
 Bank1Call_FarCall_Common: ; 09ce (0:09ce)
-	call BankswitchHome
+	call BankswitchROM
 	ld hl, sp+$d
 	inc de
 	inc de
@@ -1799,7 +1798,7 @@ SwitchToBankAtSP: ; 9dc (0:9dc)
 	push hl
 	ld hl, sp+$04
 	ld a, [hl]
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	pop af
 	inc sp
@@ -2757,7 +2756,7 @@ Func_0f1d: ; 0f1d (0:0f1d)
 	ret nc
 .asm_f27
 	ld a, $01
-	call BankswitchHome
+	call BankswitchROM
 	ld hl, wcbf7
 	ld a, [hli]
 	ld h, [hl]
@@ -2849,7 +2848,7 @@ SerialRecvDuelData: ; 0f9b (0:0f9b)
 	ret
 ; 0xfac
 
-; serial send 8 bytes at sp, sp-1, sp-2, sp-3, e, d, c, b
+; serial send 8 bytes at f, a, l, h, e, d, c, b
 ; only during a duel against a link opponent
 SerialSend8Bytes: ; 0fac (0:0fac)
 	push hl
@@ -2902,7 +2901,7 @@ SerialSend8Bytes: ; 0fac (0:0fac)
 	ret
 ; 0xfe9
 
-; serial recv 8 bytes to sp, sp-1, sp-2, sp-3, e, d, c, b
+; serial recv 8 bytes to f, a, l, h, e, d, c, b
 SerialRecv8Bytes: ; 0fe9 (0:0fe9)
 	ld hl, wTempSerialBuf
 	ld bc, 8
@@ -4298,6 +4297,9 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ret
 ; 0x161e
 
+; when playing a Pokemon card, initializes some variables according to the
+; card played, and checks if the played card has Pokemon Power to show it to
+; the player, and possibly to use it if it triggers when the card is played.
 Func_161e: ; 161e (0:161e)
 	ldh a, [hTempCardIndex_ff98]
 	call ClearChangedTypesIfMuk
@@ -4314,7 +4316,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret nz
-	call Func_6510
+	call DisplayUsePokemonPowerScreen
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1Name
@@ -4331,7 +4333,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, $01 ; check only Muk
 	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr nc, .use_pokemon_power
-	call Func_6510
+	call DisplayUsePokemonPowerScreen
 	ldtx hl, UnableToUsePkmnPowerDueToToxicGasText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
@@ -4374,6 +4376,7 @@ Func_161e: ; 161e (0:161e)
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
+; finally, clears wNoDamageOrEffect and wTempDamage_ccbf
 CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	push de
 	push af
@@ -4392,6 +4395,7 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
+; finally, clears wNoDamageOrEffect and wTempDamage_ccbf
 CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
@@ -4430,6 +4434,7 @@ CopyMoveDataAndDamage:
 ; inits hTempCardIndex_ff9f and wTempTurnDuelistCardID to the turn holder's arena card,
 ; wTempNonTurnDuelistCardID to the non-turn holder's arena card, and zeroes other temp
 ; variables that only last between each two-player turn.
+; this is called when a Pokemon card is played or when an attack is used
 Func_16f6: ; 16f6 (0:16f6)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -4448,14 +4453,15 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld [wccec], a
 	ld [wEffectFunctionsFeedbackIndex], a
 	ld [wcced], a
-	ld [wDamageToSelfMode], a
+	ld [wIsDamageToSelf], a
 	ld [wccef], a
 	ld [wccf0], a
 	ld [wccf1], a
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
 
-Func_1730: ; 1730 (0:1730)
+; use attack or Pokemon Power
+UseAttackOrPokemonPower: ; 1730 (0:1730)
 	ld a, [wSelectedMoveIndex]
 	ld [wcc10], a
 	ldh a, [hTempCardIndex_ff9f]
@@ -4464,25 +4470,25 @@ Func_1730: ; 1730 (0:1730)
 	ld [wcc12], a
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jp z, Func_184b
+	jp z, UsePokemonPower
 	call Func_16f6
 	ld a, $1
 	call TryExecuteEffectCommandFunction
-	jp c, Func_181e
+	jp c, DrawWideTextBox_WaitForInput_ReturnCarry
 	call CheckSandAttackOrSmokescreenSubstatus
 	jr c, .asm_1766
 	ld a, $2
 	call TryExecuteEffectCommandFunction
-	jp c, Func_1821
+	jp c, ReturnCarry
 	call Func_1874
 	jr .asm_1777
 .asm_1766
 	call Func_1874
 	call HandleSandAttackOrSmokescreenSubstatus
-	jp c, Func_1823
+	jp c, ClearNonTurnTemporaryDuelvars_ResetCarry
 	ld a, $2
 	call TryExecuteEffectCommandFunction
-	jp c, Func_1821
+	jp c, ReturnCarry
 .asm_1777
 	ld a, $9
 	call SetAIAction_SerialSendDuelData
@@ -4490,7 +4496,7 @@ Func_1730: ; 1730 (0:1730)
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jp c, DealConfusionDamageToSelf
-	call Func_1b8d
+	call DrawDuelMainScene_PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	ld a, $5
@@ -4499,6 +4505,7 @@ Func_1730: ; 1730 (0:1730)
 	call SetAIAction_SerialSendDuelData
 ;	fallthrough
 
+; deal attack damage
 Func_179a: ; 179a (0:179a)
 	call Func_7415
 	ld a, [wLoadedMoveCategory]
@@ -4525,9 +4532,9 @@ Func_179a: ; 179a (0:179a)
 	call GetNonTurnDuelistVariable
 	push de
 	push hl
-	call $7494
-	call $741a
-	call $7484
+	call Func_7494
+	call Func_741a
+	call Func_7484
 	pop hl
 	pop de
 	call SubstractHP
@@ -4549,6 +4556,8 @@ Func_17ed: ; 17ed (0:17ed)
 	ld [hl], a
 	ld a, NO_DAMAGE_OR_EFFECT_AGILITY
 	ld [wNoDamageOrEffect], a
+;	fallthrough
+
 Func_17fb: ; 17fb (0:17fb)
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
@@ -4557,26 +4566,26 @@ Func_17fb: ; 17fb (0:17fb)
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
 	call HandleStrikesBack_AgainstResidualMove
-	bank1call $6df1
+	bank1call Func_6df1
 	call Func_1bb4
-	bank1call $7195
-	call $6e49
+	bank1call Func_7195
+	call Func_6e49
 	or a
 	ret
 
-Func_1819: ; 1819 (0:1819)
+DisplayUsePokemonPowerScreen_WaitForInput: ; 1819 (0:1819)
 	push hl
-	call Func_6510
+	call DisplayUsePokemonPowerScreen
 	pop hl
 
-Func_181e: ; 181e (0:181e)
+DrawWideTextBox_WaitForInput_ReturnCarry: ; 181e (0:181e)
 	call DrawWideTextBox_WaitForInput
 
-Func_1821: ; 1821 (0:1821)
+ReturnCarry: ; 1821 (0:1821)
 	scf
 	ret
 
-Func_1823: ; 1823 (0:1823)
+ClearNonTurnTemporaryDuelvars_ResetCarry: ; 1823 (0:1823)
 	bank1call ClearNonTurnTemporaryDuelvars
 	or a
 	ret
@@ -4584,7 +4593,7 @@ Func_1823: ; 1823 (0:1823)
 DealConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call DrawDuelMainScene
 	ld a, 1
-	ld [wDamageToSelfMode], a
+	ld [wIsDamageToSelf], a
 	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, $75
@@ -4597,14 +4606,15 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 	or a
 	ret
 
-Func_184b: ; 184b (0:184b)
+; use Pokemon Power
+UsePokemonPower: ; 184b (0:184b)
 	call Func_7415
 	ld a, $2
 	call TryExecuteEffectCommandFunction
-	jr c, Func_1819
+	jr c, DisplayUsePokemonPowerScreen_WaitForInput
 	ld a, $5
 	call TryExecuteEffectCommandFunction
-	jr c, Func_1821
+	jr c, ReturnCarry
 	ld a, $c
 	call SetAIAction_SerialSendDuelData
 	call ExchangeRNG
@@ -4720,7 +4730,7 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	jr c, .done
 	ld a, $06
 	call SetAIAction_SerialSendDuelData
-	call $666a
+	call DisplayUsedTrainerCardDetailScreen
 	call ExchangeRNG
 	ld a, $06
 	call TryExecuteEffectCommandFunction
@@ -4739,7 +4749,7 @@ UseTrainerCard: ; 18f9 (0:18f9)
 ; 0x1944
 
 ; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
-; into wLoadedMoveEffectCommands
+; into wLoadedMoveEffectCommands. in practice, only used for trainer cards
 LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -4758,6 +4768,8 @@ Func_1955: ; 1955 (0:1955)
 	ld a, $7a
 	ld [wLoadedMoveAnimation], a
 	pop af
+;	fallthrough
+
 ; this function appears to handle dealing damage to self due to confusion
 Func_195c: ; 195c (0:195c)
 	ld hl, wDamage
@@ -4778,7 +4790,7 @@ Func_195c: ; 195c (0:195c)
 	ld b, $0
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	bank1call $7469
+	bank1call Func_7469
 	call PrintKnockedOutIfHLZero
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
@@ -5003,7 +5015,8 @@ PrintKnockedOutIfHLZero: ; 1ad0 (0:1ad0)
 	ret nz
 ;	fallthrough
 
-; print in a text box that the Pokemon card at wTempNonTurnDuelistCardID was knocked out and wait 40 frames
+; print in a text box that the Pokemon card at wTempNonTurnDuelistCardID
+; was knocked out and wait 40 frames
 PrintKnockedOut: ; 1ad3 (0:1ad3)
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
@@ -5024,7 +5037,10 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 	ret
 ; 0x1af3
 
-; seems to be a function to deal damage to a card
+; seems to be a function to deal damage to a card, but can be used
+; to deal damage to a benched Pokemon.
+; shows the defending player's play area screen when dealing the damage
+; instead of the main duel interface, and has a fixed move animation
 Func_1af3: ; 1af3 (0:1af3)
 	ld a, $78
 	ld [wLoadedMoveAnimation], a
@@ -5052,7 +5068,7 @@ Func_1af3: ; 1af3 (0:1af3)
 	ld a, [wTempPlayAreaLocationOffset_cceb]
 	or a ; cp PLAY_AREA_ARENA
 	jr nz, .next
-	ld a, [wDamageToSelfMode]
+	ld a, [wIsDamageToSelf]
 	or a
 	jr z, .turn_swapped
 	ld b, CARD_LOCATION_ARENA
@@ -5102,7 +5118,7 @@ Func_1af3: ; 1af3 (0:1af3)
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	push af
-	bank1call $7469
+	bank1call Func_7469
 	pop af
 	or a
 	jr z, .skip_knocked_out
@@ -5117,15 +5133,24 @@ Func_1af3: ; 1af3 (0:1af3)
 	ret
 ; 0x1b8d
 
-Func_1b8d: ; 1b8d (0:1b8d)
+; draw duel main scene, then print the "<Pokemon Lvxx>'s <attack>" text
+; The Pokemon's name is the turn holder's arena Pokemon, and the
+; attack's name is taken from wLoadedMoveName.
+DrawDuelMainScene_PrintPokemonsAttackText: ; 1b8d (0:1b8d)
 	bank1call DrawDuelMainScene
-Func_1b90: ; 1b90 (0:1b90)
+;	fallthrough
+
+; print the "<Pokemon Lvxx>'s <attack>" text
+; The Pokemon's name is the turn holder's arena Pokemon, and the
+; attack's name is taken from wLoadedMoveName.
+PrintPokemonsAttackText: ; 1b90 (0:1b90)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, 18
 	call CopyCardNameAndLevel
-	ld [hl], $0
+	ld [hl], TX_END
+	; zero wTxRam2 so that the name & level text just loaded to wDefaultText is printed
 	ld hl, wTxRam2
 	xor a
 	ld [hli], a
@@ -5134,14 +5159,14 @@ Func_1b90: ; 1b90 (0:1b90)
 	ld [hli], a ; wTxRam2_b
 	ld a, [wLoadedMoveName + 1]
 	ld [hli], a
-	ldtx hl, PokemonsAttackText ; text when using an attack
+	ldtx hl, PokemonsAttackText
 	call DrawWideTextBox_PrintText
 	ret
 
 Func_1bb4: ; 1bb4 (0:1bb4)
 	call Func_3b31
 	bank1call DrawDuelMainScene
-	call $503a
+	call DrawDuelHUDs
 	xor a
 	ldh [hTempPlayAreaLocationOffset_ff9d], a
 	call Func_1bca
@@ -6179,7 +6204,7 @@ LoadDuelFaceDownCardTiles: ; 20d8 (0:20d8)
 	ld b, $10
 	jr LoadDuelCheckPokemonScreenTiles.got_num_tiles
 
-; same as LoadDuelFaceDownCardTiles, plus also load the ACT / BP text tiles
+; same as LoadDuelFaceDownCardTiles, plus also load the ACT / BPx tiles
 LoadDuelCheckPokemonScreenTiles: ; 20dc (0:20dc)
 	ld b, $24
 .got_num_tiles
@@ -6229,10 +6254,10 @@ LoadSymbolsFont: ; 2119 (0:2119)
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
 	ld a, BANK(Fonts); BANK(DuelGraphics)
-	call BankpushHome
+	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
-	call BankpopHome
+	call BankpopROM
 	ret
 ; 0x212f
 
@@ -6290,7 +6315,7 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 LoadFullWidthFontTiles: ; 2189 (0:2189)
 	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
 	ld a, BANK(Fonts); BANK(DuelGraphics)
-	call BankpushHome
+	call BankpushROM
 	push hl
 	ld e, l
 	ld d, h
@@ -6301,7 +6326,7 @@ LoadFullWidthFontTiles: ; 2189 (0:2189)
 	call Copy1bppTiles
 	ld hl, v0Tiles1
 	call Copy1bppTiles
-	call BankpopHome
+	call BankpopROM
 	ret
 ; 0x21ab
 
@@ -6960,7 +6985,7 @@ CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(HalfWidthFont)
-	call BankswitchHome
+	call BankswitchROM
 	; write the right half of the tile (first character) to wTextTileBuffer + 2n
 	push de
 	ld a, e
@@ -6983,7 +7008,7 @@ CreateHalfWidthFontTile: ; 24ca (0:24ca)
 	ld [hli], a
 	dec b
 	jr nz, .loop
-	call BankpopHome
+	call BankpopROM
 	pop bc
 	ld de, wTextTileBuffer
 	ret
@@ -7045,7 +7070,7 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 ; within the full-width font graphics (FullWidthFonts) in hl
 CreateFullWidthFontTile: ; 252e (0:252e)
 	ld a, BANK(Fonts); BANK(DuelGraphics)
-	call BankpushHome
+	call BankpushROM
 	ld de, wTextTileBuffer
 	push de
 	ld c, TILE_SIZE_1BPP
@@ -7058,7 +7083,7 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 	dec c
 	jr nz, .loop
 	pop de
-	call BankpopHome
+	call BankpopROM
 	ret
 
 ; given two text characters at de, use the char at e (first one)
@@ -8144,7 +8169,7 @@ PrintYesOrNoItems: ; 2b66 (0:2b66)
 
 ContinueDuel: ; 2b70 (0:2b70)
 	ld a, BANK(_ContinueDuel)
-	call BankswitchHome
+	call BankswitchROM
 	jp _ContinueDuel
 ; 0x2b78
 
@@ -8226,7 +8251,7 @@ Func_2bdb: ; 2bdb (0:2bdb)
 	ldh a, [hBankROM]
 	push af
 	ld a, $5
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [wOpponentDeckID]
 	ld l, a
 	ld h, $0
@@ -8249,7 +8274,7 @@ Func_2bdb: ; 2bdb (0:2bdb)
 .asm_2c01
 	ld c, a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, c
 	ret
 
@@ -8301,7 +8326,7 @@ ProcessTextFromID: ; 2c29 (0:2c29)
 	call GetTextOffsetFromTextID
 	call ProcessText
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x2c37
 
@@ -8332,7 +8357,7 @@ CountLinesOfTextFromID: ; 2c37 (0:2c37)
 	jr .char_loop
 .end
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, c
 	inc a
 	pop bc
@@ -8417,7 +8442,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 	jr .print_char_loop
 .asm_2cc3
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; zero wWhichTextHeader, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
@@ -8467,7 +8492,7 @@ ReadTextHeader: ; 2cf3 (0:2cf3)
 	ld a, [hli]
 	ld [wFontWidth], a
 	ld a, [hli]
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -8630,7 +8655,7 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	add hl, de
 	set 6, h ; hl = (hl * 3) + $4000
 	ld a, BANK(TextOffsets)
-	call BankswitchHome
+	call BankswitchROM
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -8642,7 +8667,7 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 	rl h
 	rla
 	add BANK(TextOffsets)
-	call BankswitchHome
+	call BankswitchROM
 	res 7, d
 	set 6, d ; $4000 ≤ de ≤ $7fff
 	ld l, e
@@ -8701,7 +8726,7 @@ PrintText: ; 2e41 (0:2e41)
 	call GetTextOffsetFromTextID
 	call .print_text
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 .from_ram
 	ld hl, wDefaultText
@@ -8740,7 +8765,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 	call ProcessTextHeader
 	jr nc, .next_tile_loop
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; copies a text given its id at hl, to de
@@ -8759,7 +8784,7 @@ CopyText: ; 2e89 (0:2e89)
 	or a
 	jr nz, .next_tile_loop
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	dec de
 	ret
 .special
@@ -8781,7 +8806,7 @@ CopyTextData_FromTextID: ; 2ea9 (0:2ea9)
 	ldh a, [hff96]
 	call CopyTextData
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x2ebb
 
@@ -8806,7 +8831,7 @@ LoadTxRam3: ; 2ec4 (0:2ec4)
 LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
 	ld hl, CardPointers + 2 ; skip first $0000 pointer
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 .find_card_loop
 	ld a, [hli]
 	or [hl]
@@ -8816,7 +8841,7 @@ LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
 	ld l, [hl]
 	ld h, a
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld bc, CARD_DATA_NAME
 	add hl, bc
 	ld a, [hli]
@@ -8834,7 +8859,7 @@ LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
 	ld l, [hl]
 	ld h, a
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld de, wLoadedCard1
 	ld b, PKMN_CARD_DATA_LENGTH
 .copy_card_loop
@@ -8845,7 +8870,7 @@ LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
 	jr nz, .copy_card_loop
 	pop hl
 .done
-	call BankpopHome
+	call BankpopROM
 	ret
 ; 0x2f0a
 
@@ -8869,7 +8894,7 @@ LoadCardDataToHL_FromCardID: ; 2f14 (0:2f14)
 	pop de
 	jr c, .done
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld b, PKMN_CARD_DATA_LENGTH
 .copy_card_data_loop
 	ld a, [hli]
@@ -8877,7 +8902,7 @@ LoadCardDataToHL_FromCardID: ; 2f14 (0:2f14)
 	inc de
 	dec b
 	jr nz, .copy_card_data_loop
-	call BankpopHome
+	call BankpopROM
 	or a
 .done
 	pop bc
@@ -8891,9 +8916,9 @@ GetCardType: ; 2f32 (0:2f32)
 	call GetCardPointer
 	jr c, .done
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld l, [hl]
-	call BankpopHome
+	call BankpopROM
 	ld a, l
 	or a
 .done
@@ -8906,13 +8931,13 @@ GetCardName: ; 2f45 (0:2f45)
 	call GetCardPointer
 	jr c, .done
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld de, CARD_DATA_NAME
 	add hl, de
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	call BankpopHome
+	call BankpopROM
 	or a
 .done
 	pop hl
@@ -8927,14 +8952,14 @@ GetCardTypeRarityAndSet: ; 2f5d (0:2f5d)
 	call GetCardPointer
 	jr c, .done
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld e, [hl] ; CARD_DATA_TYPE
 	ld bc, CARD_DATA_RARITY
 	add hl, bc
 	ld b, [hl] ; CARD_DATA_RARITY
 	inc hl
 	ld c, [hl] ; CARD_DATA_SET
-	call BankpopHome
+	call BankpopROM
 	ld a, e
 	or a
 .done
@@ -8961,11 +8986,11 @@ GetCardPointer: ; 2f7c (0:2f7c)
 	ccf
 	jr c, .out_of_bounds
 	ld a, BANK(CardPointers)
-	call BankpushHome2
+	call BankpushROM2
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call BankpopHome
+	call BankpopROM
 	or a
 .out_of_bounds
 	pop bc
@@ -8988,7 +9013,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	srl h
 	ld a, BANK(CardGraphics)
 	add h
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	; once we have the bank, get the pointer: multiply by 8 and discard the bank offset
 	add hl, hl
@@ -9006,16 +9031,16 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	dec b
 	jr nz, .copy_card_palette
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
 	ld a, BANK(Fonts); BANK(DuelGraphics)
-	call BankpushHome
+	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
-	call BankpopHome
+	call BankpopROM
 	ret
 
 ; Checks if the command type at a is one of the commands of the move or
@@ -9042,14 +9067,14 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wce22]
-	call BankswitchHome
+	call BankswitchROM
 	or a
 	call CallHL
 	push af
 ; restore original bank and return
 	pop bc
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	push bc
 	pop af
 	ret
@@ -9071,7 +9096,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(EffectCommands)
-	call BankswitchHome
+	call BankswitchROM
 ; store the bank number of command functions ($b) in wce22
 	ld a, $b
 	ld [wce22], a
@@ -9093,13 +9118,13 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld l, a
 ; restore bank and return nc
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	or a
 	ret
 ; restore bank and return c
 .no_more_commands
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	scf
 	ret
 
@@ -9112,7 +9137,7 @@ LoadDeck: ; 302c (0:302c)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(DeckPointers)
-	call BankswitchHome
+	call BankswitchROM
 	add hl, hl
 	ld de, DeckPointers
 	add hl, de
@@ -9124,13 +9149,13 @@ LoadDeck: ; 302c (0:302c)
 	jr z, .null_pointer
 	call CopyDeckData
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	or a
 	ret
 .null_pointer
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	scf
 	ret
@@ -9204,23 +9229,23 @@ Func_3096: ; 3096 (0:3096)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4000
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_30a6: ; 30a6 (0:30a6)
 	ldh a, [hBankROM]
 	push af
 	ld a, $6
-	call BankswitchHome
+	call BankswitchROM
 	ld a, $1
 	ld [wce60], a
 	call $40d5
 	pop bc
 	ld a, b
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_30bc: ; 30bc (0:30bc)
@@ -9231,32 +9256,32 @@ Func_30bc: ; 30bc (0:30bc)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4211
 	call DrawWideTextBox
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_30d7: ; 30d7 (0:30d7)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $433c
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_30e7: ; 30e7 (0:30e7)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4764
 	ld b, a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, b
 	ret
 
@@ -9265,10 +9290,10 @@ Func_30f9: ; 30f9 (0:30f9)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4932
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_310a: ; 310a (0:310a)
@@ -9276,20 +9301,20 @@ Func_310a: ; 310a (0:310a)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4aaa
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_311d: ; 311d (0:311d)
 	ldh a, [hBankROM]
 	push af
 	ld a, $2
-	call BankswitchHome
+	call BankswitchROM
 	call $4b85
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; serial transfer-related
@@ -9643,7 +9668,7 @@ HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
 	ld a, e
 	or d
 	ret z
-	ld a, [wDamageToSelfMode]
+	ld a, [wIsDamageToSelf]
 	or a
 	ret nz
 	ld a, [wTempNonTurnDuelistCardID]
@@ -9855,7 +9880,7 @@ HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	scf
 	ret
 .neutralizing_shield
-	ld a, [wDamageToSelfMode]
+	ld a, [wIsDamageToSelf]
 	or a
 	ret nz
 	; prevent damage if attacked by a non-basic Pokemon
@@ -10479,7 +10504,7 @@ Func_37a5: ; 37a5 (0:37a5)
 	srl h
 	ld a, BANK(CardGraphics)
 	add h
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	add hl, hl
 	add hl, hl
@@ -10488,7 +10513,7 @@ Func_37a5: ; 37a5 (0:37a5)
 	set 6, h ; $4000 ≤ hl ≤ $7fff
 	call Func_37c5
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x37c5
 
@@ -10559,19 +10584,19 @@ Func_380e: ; 380e (0:380e)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(SetScreenScrollWram)
-	call BankswitchHome
+	call BankswitchROM
 	call SetScreenScrollWram
 	call Func_c554
 	ld a, BANK(Func_1c610)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_1c610
 	call Func_3cb4
 	ld a, BANK(Func_804d8)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_804d8
 	call UpdateRNGSources
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; enable the play time counter and execute the game event at [wGameEvent].
@@ -10588,7 +10613,7 @@ ExecuteGameEvent: ; 383d (0:383d)
 	jr .loop
 .restart
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 ; execute a game event at [wGameEvent] from GameEventPointerTable
@@ -10632,7 +10657,7 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 	ld [wd10e], a
 	call ResumeSong
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	scf
 	ret
 
@@ -10765,10 +10790,10 @@ Func_395a: ; 395a (0:395a)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd4c6]
-	call BankswitchHome
+	call BankswitchROM
 	call CopyGfxData
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Unknown_396b: ; 396b (0:396b)
@@ -10801,10 +10826,10 @@ Func_3997: ; 3997 (0:3997)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1c056)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_1c056
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_39a7: ; 39a7 (0:39a7)
@@ -10869,11 +10894,11 @@ Func_39ea: ; 39ea (0:39ea)
 	ldh a, [hBankROM]
 	push af
 	ld a, $03
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [bc]
 	ld c, a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, c
 	pop bc
 	ret
@@ -10961,10 +10986,10 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	call Func_3abd
 	jr nc, .asm_3ab3
 	ld a, BANK(Func_c653)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_c653
 	ld a, $4
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [wd334]
 	ld d, a
 .asm_3a79
@@ -10996,7 +11021,7 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	pop hl
 	pop bc
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	scf
 	ret
 .asm_3aab
@@ -11007,7 +11032,7 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	jr .asm_3a79
 .asm_3ab3
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld l, $6
 	call $49c2
 	ret
@@ -11030,12 +11055,12 @@ Func_3abd: ; 3abd (0:3abd)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(MapScripts)
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, l
 	or h
 	jr nz, .asm_3ae5
@@ -11070,12 +11095,12 @@ RunOverworldScript: ; 3aed (0:3aed)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(OverworldScriptTable)
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop bc
 	jp hl
 ; 0x3b11
@@ -11084,10 +11109,10 @@ Func_3b11: ; 3b11 (0:3b11)
 	ldh a, [hBankROM]
 	push af
 	ld a, $04
-	call BankswitchHome
+	call BankswitchROM
 	call $66d1
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3b21
 
@@ -11095,17 +11120,17 @@ Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
 	push af
 	ld a, $7
-	call BankswitchHome
+	call BankswitchROM
 	call $48bc
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_3b31: ; 3b31 (0:3b31)
 	ldh a, [hBankROM]
 	push af
 	ld a, $7
-	call BankswitchHome
+	call BankswitchROM
 	call $4b18
 	jr c, .asm_3b45
 	xor a
@@ -11116,7 +11141,7 @@ Func_3b31: ; 3b31 (0:3b31)
 	ld a, 1
 	ld [wVBlankOAMCopyToggle], a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_3b52: ; 3b52 (0:3b52)
@@ -11146,7 +11171,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	push bc
 	push de
 	ld a, $7
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [wd422]
 	cp $61
 	jr nc, .asm_3b90
@@ -11167,7 +11192,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	pop bc
 	pop hl
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3ba2
 
@@ -11175,11 +11200,11 @@ Func_3ba2: ; 3ba2 (0:3ba2)
 	ldh a, [hBankROM]
 	push af
 	ld a, $07
-	call BankswitchHome
+	call BankswitchROM
 	call $4ac5
 	call Func_3cb4
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3bb5
 
@@ -11189,11 +11214,11 @@ Func_3bb5: ; 3bb5 (0:3bb5)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd4be]
-	call BankswitchHome
+	call BankswitchROM
 	call Func_3cb4
 	call CallHL2
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ld a, $80
 	ld [wd4c0], a
 	ret
@@ -11219,10 +11244,10 @@ Func_3be4: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd4c6]
-	call BankswitchHome
+	call BankswitchROM
 	call Func_08de
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3bf5
 
@@ -11231,7 +11256,7 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	push af
 	push hl
 	ld a, [wd4c6]
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [wd4c4]
 	ld l, a
 	ld a, [wd4c5]
@@ -11239,7 +11264,7 @@ Func_3bf5: ; 3bf5 (0:3bf5)
 	call CopyDataHLtoDE_SaveRegisters
 	pop hl
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3c10
 
@@ -11288,13 +11313,13 @@ Func_3c2d: ; 3c2d (0:3c2d)
 	push hl
 	ld hl, sp+$05
 	ld a, [hl]
-	call BankswitchHome
+	call BankswitchROM
 	pop hl
 	ld a, [hl]
 	ld hl, sp+$03
 	ld [hl], a
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop af
 	pop hl
 	ret
@@ -11387,20 +11412,20 @@ Func_3ca4: ; 3ca4 (0:3ca4)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_1296e
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_3cb4: ; 3cb4 (0:3cb4)
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_12a21)
-	call BankswitchHome
+	call BankswitchROM
 	call Func_12a21
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3cc4
 
@@ -11409,7 +11434,7 @@ Func_3cc4: ; 3cc4 (0:3cc4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd5d6]
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [wd5d1]
 	cp $f0
 	ld a, $00
@@ -11515,7 +11540,7 @@ Func_3cc4: ; 3cc4 (0:3cc4)
 	jr nz, .asm_3ced
 .done
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3d72
 
@@ -11536,7 +11561,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld a, [wd4c5]
 	ld h, a
 	ld a, [wd4c6]
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [hli]
 	push af
 	ld a, [wd4ca]
@@ -11555,7 +11580,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld bc, $000b
 	add hl, bc
 	ld [hli], a
-	call BankswitchHome
+	call BankswitchROM
 	ld a, [de]
 	ld [hli], a
 	inc de
@@ -11563,7 +11588,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld [hl], a
 	pop hl
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_3db7: ; 3db7 (0:3db7)
@@ -11628,14 +11653,14 @@ Func_3df3: ; 3df3 (0:3df3)
 	push af
 	push hl
 	ld a, BANK(Func_12c7f)
-	call BankswitchHome
+	call BankswitchROM
 	ld hl, sp+$5
 	ld a, [hl]
 	call Func_12c7f
 	call FlushAllPalettes
 	pop hl
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	pop af
 	ld a, [wd61b]
 	ret
@@ -11650,10 +11675,10 @@ Func_3e17: ; 3e17 (0:3e17)
 	ldh a, [hBankROM]
 	push af
 	ld a, $4
-	call BankswitchHome
+	call BankswitchROM
 	call $6fc6
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 
 Func_3e2a: ; 3e2a (0:3e2a)
@@ -11667,10 +11692,10 @@ Func_3e31: ; 3e31 (0:3e31)
 	push af
 	call Func_3cb4
 	ld a, $20
-	call BankswitchHome
+	call BankswitchROM
 	call $44d8
 	pop af
-	call BankswitchHome
+	call BankswitchROM
 	ret
 ; 0x3e44
 

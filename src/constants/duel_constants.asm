@@ -81,8 +81,8 @@ DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA  EQUS "LOW(wPlayerNumberOfPokemonInPlayA
 DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"             ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                 ; f1
 DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)"  ; f2
-DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE     EQUS "LOW(wPlayerArenaCardLastTurnDamage)"  ; f3
-DUELVARS_ARENA_CARD_LAST_TURN_STATUS     EQUS "LOW(wPlayerArenaCardLastTurnStatus)"  ; f5
+DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE     EQUS "LOW(wPlayerArenaCardLastTurnDamage)"     ; f3
+DUELVARS_ARENA_CARD_LAST_TURN_STATUS     EQUS "LOW(wPlayerArenaCardLastTurnStatus)"     ; f5
 
 ; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00
