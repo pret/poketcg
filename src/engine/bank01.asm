@@ -47,8 +47,8 @@ Func_405a: ; 405a (1:405a)
 	call DisableLCD
 	call LoadSymbolsFont
 	call SetDefaultPalettes
-	ld de, $387f
-	call Func_2275
+	lb de, $38, $7f
+	call SetupText
 	ret
 ; 0x406e
 
@@ -283,8 +283,8 @@ Func_420b: ; 420b (1:420b)
 	call EmptyScreen
 	call LoadSymbolsFont
 	call SetDefaultPalettes
-	ld de, $389f
-	call Func_2275
+	lb de, $38, $9f
+	call SetupText
 	call EnableLCD
 	ret
 ; 0x4225
@@ -548,7 +548,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	jr c, .done
 	ld [wBenchSelectedPokemon], a
 	ld a, [wBenchSelectedPokemon]
-	ldh [hTempPlayAreaLocationOffset_ffa1], a
+	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, $04
 	call SetAIAction_SerialSendDuelData
 	call AttemptRetreat
@@ -576,7 +576,7 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	call DrawWideTextBox_WaitForInput
 	call OpenPlayAreaScreenForSelection
 	ld [wBenchSelectedPokemon], a
-	ldh [hTempPlayAreaLocationOffset_ffa1], a
+	ldh [hTempPlayAreaLocation_ffa1], a
 	push af
 	call ReturnRetreatCostCardsToArena
 	pop af
@@ -655,8 +655,8 @@ UseEnergyCard: ; 4477 (1:4477)
 	ld a, 1
 	ld [wAlreadyPlayedEnergy], a
 .play_energy
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hTempPlayAreaLocationOffset_ffa1], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
 	ld e, a
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTemp_ffa0], a
@@ -708,7 +708,7 @@ UsePokemonCard: ; 44db (1:44db)
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTemp_ffa0], a
 	call PutHandPokemonCardInPlayArea
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh [hTempPlayAreaLocation_ff9d], a
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld [hl], BASIC
@@ -776,8 +776,8 @@ UsePokemonCard: ; 44db (1:44db)
 	jr c, .done
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTemp_ffa0], a
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
-	ldh [hTempPlayAreaLocationOffset_ffa1], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
 	call EvolvePokemonCard
 	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
 	ld a, $02
@@ -872,7 +872,7 @@ CheckIfEnoughEnergiesToRetreat: ; 45f4 (1:45f4)
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	xor a
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	ld [wEnergyCardsRequiredToRetreat], a
 	ld c, a
@@ -2395,7 +2395,7 @@ Func_529b: ; 529b (1:529b)
 ; 0x52b0
 
 Func_52b0: ; 52b0 (1:52b0)
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	cp PLAY_AREA_BENCH_1
 	ret z
 	call HasAlivePokemonOnBench
@@ -3490,11 +3490,11 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 	ld c, a
 	ldh a, [hCurMenuItem]
 	add c
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh [hTempPlayAreaLocation_ff9d], a
 	ldh a, [hCurMenuItem]
 	cp $ff
 	jr z, .asm_60b5
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
@@ -3503,14 +3503,14 @@ _OpenPlayAreaScreen: ; 600e (1:600e)
 .asm_60ac
 	pop af
 	ldh [hTempCardIndex_ff98], a
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hCurMenuItem], a
 	or a
 	ret
 .asm_60b5
 	pop af
 	ldh [hTempCardIndex_ff98], a
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hCurMenuItem], a
 	scf
 	ret
@@ -3792,10 +3792,11 @@ PrintPlayAreaCardHeader: ; 62d5 (1:62d5)
 ; 0x63b3
 
 FaceDownCardTileNumbers: ; 63b3 (1:63b3)
-	db $d0, $02
-	db $d4, $02
-	db $d8, $01
-	db $dc, $01
+; starting tile number, cgb palette (grey, yellow/red, green/blue, pink/orange)
+	db $d0, $02 ; basic
+	db $d4, $02 ; stage 1
+	db $d8, $01 ; stage 2
+	db $dc, $01 ; stage 2 special
 ; 0x63bb
 
 ; given a card's status in a, print the Poison symbol at bc if it's poisoned
@@ -3894,9 +3895,9 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
 ; description below.
-; input: hTempPlayAreaLocationOffset_ff9d
+; input: hTempPlayAreaLocation_ff9d
 DisplayUsePokemonPowerScreen: ; 6510 (1:6510)
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld [wcbc9], a
 	xor a
 	ld [wcbca], a
@@ -3980,7 +3981,7 @@ AttemptRetreat: ; 657a (1:657a)
 	scf
 	ret
 .success
-	ldh a, [hTempPlayAreaLocationOffset_ffa1]
+	ldh a, [hTempPlayAreaLocation_ffa1]
 	ld e, a
 	call SwapArenaWithBenchPokemon
 	xor a
@@ -4361,8 +4362,8 @@ AIAction_FinishedTurnNoAttack: ; 6993 (1:6993)
 ; 0x69a5
 
 AIAction_UseEnergyCard: ; 69a5 (1:69a5)
-	ldh a, [hTempPlayAreaLocationOffset_ffa1]
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, a
 	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
@@ -4378,8 +4379,8 @@ AIAction_UseEnergyCard: ; 69a5 (1:69a5)
 ; 0x69c5
 
 AIAction_EvolvePokemon: ; 69c5 (1:69c5)
-	ldh a, [hTempPlayAreaLocationOffset_ffa1]
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh [hTempPlayAreaLocation_ff9d], a
 	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -4395,7 +4396,7 @@ AIAction_PlayBenchPokemon: ; 69e0 (1:69e0)
 	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
 	call PutHandPokemonCardInPlayArea
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh [hTempPlayAreaLocation_ff9d], a
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld [hl], 0
@@ -4526,7 +4527,7 @@ AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
 	call OpenPlayAreaScreenForSelection
 	jr c, .force_selection
 	call SwapTurn
-	ldh a, [hTempPlayAreaLocationOffset_ff9d]
+	ldh a, [hTempPlayAreaLocation_ff9d]
 	call SerialSendByte
 	ret
 ; 0x6ad9
@@ -4537,7 +4538,7 @@ AIAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 	ld e, $00
 	call CopyMoveDataAndDamage_FromDeckIndex
 	ldh a, [hTemp_ffa0]
-	ldh [hTempPlayAreaLocationOffset_ff9d], a
+	ldh [hTempPlayAreaLocation_ff9d], a
 	call DisplayUsePokemonPowerScreen
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardNameToTxRam2
@@ -4985,7 +4986,7 @@ _TossCoin: ; 71ad (1:71ad)
 	ld [wcd9e], a
 	call ExchangeRNG
 	xor a
-	ld [wcd9d], a
+	ld [wCoinTossNumHeads], a
 
 .asm_7204
 	ld a, [wcd9c]
@@ -5054,7 +5055,7 @@ _TossCoin: ; 71ad (1:71ad)
 	jr z, .asm_727c
 	ld b, $5b
 	ld c, $30
-	ld hl, wcd9d
+	ld hl, wCoinTossNumHeads
 	inc [hl]
 
 .asm_727c
@@ -5112,7 +5113,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call z, WaitForWideTextBoxInput
 	call $7324
 	ld a, [wcd9c]
-	ld hl, wcd9d
+	ld hl, wCoinTossNumHeads
 	or [hl]
 	jr nz, .asm_72e2
 	call z, WaitForWideTextBoxInput
@@ -5131,7 +5132,7 @@ _TossCoin: ; 71ad (1:71ad)
 	call ExchangeRNG
 	call Func_3b31
 	call Func_3b21
-	ld a, [wcd9d]
+	ld a, [wCoinTossNumHeads]
 	or a
 	ret z
 	scf

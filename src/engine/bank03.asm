@@ -290,8 +290,8 @@ Func_c241: ; c241 (3:4241)
 	push hl
 	push bc
 	push de
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	call Func_c258
 	pop de
 	pop bc
@@ -366,8 +366,8 @@ Func_c2a3: ; c2a3 (3:42a3)
 	farcall Func_10ab4
 	ld a, $80
 	call Func_c29b
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	farcall Func_12ba7
 	call Func_3ca0
 	call ZeroObjectPositions

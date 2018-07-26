@@ -128,6 +128,8 @@ CNF_SLP_PRZ  EQU $0f ; confused, asleep or paralyzed
 PSN_DBLPSN   EQU $f0 ; poisoned or double poisoned
 
 ; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
+
+; SUBSTATUS1 are checked on a defending Pokemon
 SUBSTATUS1_AGILITY      EQU $0c
 SUBSTATUS1_FLY          EQU $0d
 SUBSTATUS1_HARDEN       EQU $0e
@@ -142,6 +144,7 @@ SUBSTATUS1_NO_DAMAGE_17 EQU $17
 SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE EQU $19
 SUBSTATUS1_REDUCE_BY_10 EQU $1e
 
+; SUBSTATUS2 are checked on an attacking Pokemon
 SUBSTATUS2_SMOKESCREEN    EQU $01
 SUBSTATUS2_SAND_ATTACK    EQU $02
 SUBSTATUS2_REDUCE_BY_20   EQU $03

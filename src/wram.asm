@@ -933,7 +933,7 @@ wcce9:: ; cce9
 	ds $2
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-wTempPlayAreaLocationOffset_cceb:: ; cceb
+wTempPlayAreaLocation_cceb:: ; cceb
 	ds $1
 
 wccec:: ; ccec
@@ -966,7 +966,7 @@ wccf2:: ; ccf2
 
 SECTION "WRAM0 2", WRAM0
 
-; on CGB, attributes of the text box borders. (values 0-7? so only affects palette?)
+; on CGB, attributes of the text box borders. (values 0-7 seem to be used, which only affect palette)
 ; on SGB, colorize text box border with SGB1 if non-0
 wTextBoxFrameType:: ; ccf3
 	ds $1
@@ -1099,7 +1099,7 @@ wcd9c:: ; cd9c
 	ds $1
 
 ; this stores the result from a coin toss (number of heads)
-wcd9d:: ; cd9d
+wCoinTossNumHeads:: ; cd9d
 	ds $1
 
 wcd9e:: ; cd9e

@@ -66,7 +66,7 @@ hTempCardID_ff9b:: ; ff9b
 	ds $2
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-hTempPlayAreaLocationOffset_ff9d:: ; ff9d
+hTempPlayAreaLocation_ff9d:: ; ff9d
 	ds $1
 
 ; index for AIActionTable
@@ -82,7 +82,7 @@ hTemp_ffa0:: ; ffa0
 	ds $1
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-hTempPlayAreaLocationOffset_ffa1:: ; ffa1
+hTempPlayAreaLocation_ffa1:: ; ffa1
 	ds $1
 
 ; FF-terminated list of cards to be discarded upon retreat

@@ -1,4 +1,23 @@
-	INCROM $8000, $8cd4
+Func_8000: ; 8000 (2:4000)
+	INCROM $8000, $8211
+
+Func_8211: ; 8211 (2:4211)
+	INCROM $8211, $833c
+
+Func_833c: ; 833c (2:433c)
+	INCROM $833c, $8764
+
+Func_8764: ; 8764 (2:4764)
+	INCROM $8764, $8932
+
+Func_8932: ; 8932 (2:4932)
+	INCROM $8932, $8aaa
+
+Func_8aaa: ; 8aaa (2:4aaa)
+	INCROM $8aaa, $8b85
+
+Func_8b85: ; 8b85 (2:4b85)
+	INCROM $8b85, $8cd4
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
@@ -50,8 +69,8 @@ Func_8d56: ; 8d56 (2:4d56)
 	call LoadDuelCardSymbolTiles
 	call Func_8d0b
 	bank1call SetDefaultPalettes
-	ld de, $3cbf
-	call Func_2275
+	lb de, $3c, $bf
+	call SetupText
 	ret
 ; 0x8d78
 

@@ -147,6 +147,7 @@ Func_18086: ; 18086 (6:4086)
 	ret
 ; 0x180d5
 
+Func_180d5: ; 180d5 (6:40d5)
 	INCROM $180d5, $186f7
 
 INCLUDE "data/effect_commands.asm"
@@ -261,8 +262,8 @@ Func_19a12: ; 19a12 (6:5a12)
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
-	ld de, $389f
-	call Func_2275
+	lb de, $38, $9f
+	call SetupText
 	pop af
 	or a
 	jr nz, .asm_1a640

@@ -3,8 +3,8 @@ Func_10000: ; 10000 (4:4000)
 	ld [wTileMapFill], a
 	call EmptyScreen
 	call LoadSymbolsFont
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	call Set_OBJ_8x8
 	xor a
 	ldh [hSCX], a

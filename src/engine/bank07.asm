@@ -443,8 +443,8 @@ Func_1d11c: ; 1d11c (7:511c)
 	call PlaySong
 	call DisableLCD
 	farcall $4, $4000
-	ld de, $308f
-	call Func_2275
+	lb de, $30, $8f
+	call SetupText
 	call Func_3ca0
 	xor a
 	ld [wLineSeparation], a

@@ -57,7 +57,7 @@ ApplyStatusEffect:
 .cant_induce_status
 	ld a, c
 	ld [wccf1], a
-	call Func_2c09c
+	call SetNoEffectFromStatus
 	or a
 	ret
 
@@ -117,13 +117,13 @@ Func_2c08c:
 	ret
 ; 0x2c09c
 
-Func_2c09c: ; 2c09c (b:409c)
+SetNoEffectFromStatus: ; 2c09c (b:409c)
 	ld a, $1
 	ld [wcced], a
 	ret
 ; 0x2c0a2
 
-Func_2c0a2: ; 2c0a2 (b:40a2)
+SetWasUnsuccessful: ; 2c0a2 (b:40a2)
 	ld a, $2
 	ld [wcced], a
 	ret
@@ -233,7 +233,7 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	jp c, PoisonEffect
 	ld a, $8c
 	ld [wLoadedMoveAnimation], a
-	call Func_2c09c
+	call SetNoEffectFromStatus
 	ret
 ; 0x2c70a
 
@@ -280,7 +280,7 @@ FoulOdorEffect: ; 2c793 (b:4793)
 KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
-	jp nc, Func_2c0a2
+	jp nc, SetWasUnsuccessful
 	ld a, $4f
 	ld [wLoadedMoveAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
@@ -307,7 +307,7 @@ SwordsDanceEffect: ; 2c7d0 (b:47d0)
 
 ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 	call Confusion50PercentEffect
-	call nc, Func_2c09c
+	call nc, SetNoEffectFromStatus
 	ret
 ; 0x2c7e3
 
@@ -317,7 +317,7 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 MetapodStiffenEffect: ; 2c836 (b:4836)
 	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
-	jp nc, Func_2c0a2
+	jp nc, SetWasUnsuccessful
 	ld a, $4f
 	ld [wLoadedMoveAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
