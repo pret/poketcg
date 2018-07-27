@@ -171,7 +171,7 @@ IsCuredOfParalysisText: ; 36539 (d:6539)
 	line "cured of Paralysis."
 	done
 
-Text002b: ; 36553 (d:6553)
+BetweenTurnsText: ; 36553 (d:6553)
 	text "Between Turns."
 	done
 
@@ -406,7 +406,7 @@ FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	line "without Attacking."
 	done
 
-Text005e: ; 36a9a (d:6a9a)
+DuelistsTurnText: ; 36a9a (d:6a9a)
 	text "<RAMNAME>'s Turn."
 	done
 

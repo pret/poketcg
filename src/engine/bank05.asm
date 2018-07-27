@@ -243,12 +243,12 @@ Func_15649: ; 15649 (5:5649)
 	ld [wcddb], a
 	ld [wcddc], a
 	ld [wce03], a
-	ld a, [wcc10]
+	ld a, [wPlayerAttackingMoveIndex]
 	cp $ff
 	jr z, .asm_156b1
 	or a
 	jr z, .asm_156b1
-	ld a, [wcc11]
+	ld a, [wPlayerAttackingCardIndex]
 	cp $ff
 	jr z, .asm_156b1
 	call SwapTurn

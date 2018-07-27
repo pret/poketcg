@@ -77,7 +77,7 @@ hAIActionTableIndex:: ; ff9e
 hTempCardIndex_ff9f:: ; ff9f
 	ds $1
 
-; multipurpose temp storage
+; multipurpose temp storage (card's deck index, selected move index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
 
@@ -89,7 +89,7 @@ hTempPlayAreaLocation_ffa1:: ; ffa1
 hTempRetreatCostCards:: ; ffa2
 	ds $6
 
-; hffa8 through hffb0 appear to be related to text processing
+; hffa8 through hffb0 belong to the text engine
 hffa8:: ; ffa8
 	ds $1
 

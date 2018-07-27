@@ -1,5 +1,5 @@
 ; continuation of Bank0 Start
-; supposed to be the main loop, but the game never returns from _GameLoop anyway
+; meant as the main loop, but the game never returns from _GameLoop anyway
 GameLoop: ; 4000 (1:4000)
 	di
 	ld sp, $e000
@@ -22,7 +22,7 @@ GameLoop: ; 4000 (1:4000)
 	farcall _GameLoop
 	jr GameLoop
 .ask_erase_backup_ram
-	call Func_405a
+	call SetupResetBackUpRamScreen
 	call EmptyScreen
 	ldtx hl, ResetBackUpRamText
 	call YesOrNoMenuWithText
@@ -41,7 +41,8 @@ Func_4050: ; 4050 (1:4050)
 	ld [wUppercaseHalfWidthLetters], a
 	ret
 
-Func_405a: ; 405a (1:405a)
+; basic setup to be able to print the ResetBackUpRamText in an empty screen
+SetupResetBackUpRamScreen: ; 405a (1:405a)
 	xor a ; SYM_SPACE
 	ld [wTileMapFill], a
 	call DisableLCD
@@ -58,10 +59,10 @@ CommentedOut_406e: ; 406e (1:406e)
 
 ; try to resume a saved duel from the main menu
 TryContinueDuel: ; 406f (1:406f)
-	call Func_420b
-	call $66e9
+	call SetupDuel
+	call Func_66e9
 	ldtx hl, BackUpIsBrokenText
-	jr c, FailedToContinueDuel
+	jr c, HandleFailedToContinueDuel
 ;	fallthrough
 
 _ContinueDuel: ; 407a (1:407a)
@@ -76,10 +77,10 @@ _ContinueDuel: ; 407a (1:407a)
 	xor a
 	ld [wDuelFinished], a
 	call DuelMainInterface
-	jp MainDuelLoop.begin_turn
+	jp MainDuelLoop.between_turns
 ; 0x4097
 
-FailedToContinueDuel: ; 4097 (1:4097)
+HandleFailedToContinueDuel: ; 4097 (1:4097)
 	call DrawWideTextBox_WaitForInput
 	call ResetSerial
 	scf
@@ -99,8 +100,9 @@ StartDuel: ; 409f (1:409f)
 	call SwapTurn
 	call LoadOpponentDeck
 	call SwapTurn
-	jr .continue
+	jr .decks_loaded
 
+; unreferenced?
 	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
 	ld hl, wOpponentName
@@ -109,7 +111,7 @@ StartDuel: ; 409f (1:409f)
 	ld [hl], a
 	ld [wIsPracticeDuel], a
 
-.continue
+.decks_loaded
 	ld hl, sp+$0
 	ld a, l
 	ld [wDuelReturnAddress], a
@@ -117,10 +119,10 @@ StartDuel: ; 409f (1:409f)
 	ld [wDuelReturnAddress + 1], a
 	xor a
 	ld [wCurrentDuelMenuItem], a
-	call Func_420b
+	call SetupDuel
 	ld a, [wcc18]
 	ld [wDuelInitialPrizes], a
-	call $70aa
+	call Func_70aa
 	ld a, [wDuelTheme]
 	call PlaySong
 	call Func_4b60
@@ -132,16 +134,16 @@ MainDuelLoop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call UpdateSubstatusConditions_StartOfTurn
-	call $54c8
+	call DisplayDuelistsTurnScreen
 	call HandleTurn
 
-.begin_turn
+.between_turns
 	call ExchangeRNG
 	ld a, [wDuelFinished]
 	or a
 	jr nz, .duel_finished
 	call UpdateSubstatusConditions_EndOfTurn
-	call $6baf
+	call HandleBetweenTurnsEvents
 	call Func_3b31
 	call ExchangeRNG
 	ld a, [wDuelFinished]
@@ -251,7 +253,7 @@ MainDuelLoop ; 40ee (1:40ee)
 	call DrawWideTextBox_WaitForInput
 	ld a, 1
 	ld [wDuelInitialPrizes], a
-	call $70aa
+	call Func_70aa
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, .link_duel
@@ -276,7 +278,8 @@ MainDuelLoop ; 40ee (1:40ee)
 	ret
 ; 0x420b
 
-Func_420b: ; 420b (1:420b)
+; empty the screen, and setup text and graphics for a duel
+SetupDuel: ; 420b (1:420b)
 	xor a ; SYM_SPACE
 	ld [wTileMapFill], a
 	call ZeroObjectPositionsAndToggleOAMCopy
@@ -351,8 +354,8 @@ DuelMainInterface: ; 426d (1:426d)
 	call DrawWideTextBox_PrintTextNoDelay
 	call Func_2bbf
 	ld a, $ff
-	ld [wcc11], a
-	ld [wcc10], a
+	ld [wPlayerAttackingCardIndex], a
+	ld [wPlayerAttackingMoveIndex], a
 	ret
 
 PrintDuelMenu: ; 4295 (1:4295)
@@ -2373,7 +2376,7 @@ Func_5284: ; 5284 (1:5284)
 	call Func_52bc
 	ld a, $02
 	call BankswitchSRAM
-	ld de, sCurrentDuelData
+	ld de, sCurrentDuel
 	call $66ff
 	xor a
 	call BankswitchSRAM
@@ -2411,7 +2414,30 @@ Func_52bc: ; 52bc (1:52bc)
 	ret
 ; 0x52c5
 
-	INCROM $52c5,  $54e9
+	INCROM $52c5,  $54c8
+
+; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
+; DuelistsTurnText in a textbox. also call ExchangeRNG.
+DisplayDuelistsTurnScreen: ; 54c8 (1:54c8)
+	call EmptyScreen
+	ld c, BOXMSG_PLAYERS_TURN
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
+	jr z, .got_turn
+	inc c ; BOXMSG_OPPONENTS_TURN
+.got_turn
+	ld a, c
+	call DrawDuelBoxMessage
+	ldtx hl, DuelistsTurnText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	ret
+; 0x54e2
+
+Unknown_54e2: ; 54e2 (1:54e2)
+; ???
+	db $00, $0c, $06, $0f, $00, $00, $00
+; 0x54e9
 
 DuelMenuData: ; 54e9 (1:54e9)
 	; x, y, text id
@@ -4141,12 +4167,12 @@ PrintUsedTrainerCardDescription: ; 6673 (1:6673)
 	ret
 ; 0x669d
 
-; save data of the current duel to sCurrentDuelData
+; save data of the current duel to sCurrentDuel
 ; byte 0 is $01, bytes 1 and 2 are the checksum, byte 3 is [wDuelType]
 ; next $33a bytes come from DuelDataToSave
 SaveDuelData: ; 669d (1:669d)
 	farcall CommentedOut_1a6cc
-	ld de, sCurrentDuelData
+	ld de, sCurrentDuel
 ;	fallthrough
 
 ; save data of the current duel to de (in SRAM)
@@ -4162,14 +4188,14 @@ SaveDuelDataToDE: ; 66a4 (1:66a4)
 	ld hl, DuelDataToSave
 	push de
 .save_duel_data_loop
-	; start copying data to de = sCurrentDuelData + 4
+	; start copying data to de = sCurrentDuelData + $1
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
 	inc hl
 	ld a, c
 	or b
-	jr z, .asm_66c7
+	jr z, .data_done
 	push hl
 	push bc
 	ld c, [hl]
@@ -4182,9 +4208,9 @@ SaveDuelDataToDE: ; 66a4 (1:66a4)
 	inc hl
 	inc hl
 	jr .save_duel_data_loop
-.asm_66c7
+.data_done
 	pop hl
-	; hl = sCurrentDuelData + 4
+	; save a checksum to hl = sCurrentDuelData + $1
 	lb de, $23, $45
 	ld bc, $334 ; misses last 6 bytes to calculate checksum
 .checksum_loop
@@ -4200,18 +4226,70 @@ SaveDuelDataToDE: ; 66a4 (1:66a4)
 	jr nz, .checksum_loop
 	pop hl
 	ld a, $01
-	ld [hli], a ; sCurrentDuelData
-	ld [hl], e ; sCurrentDuelData + 1
+	ld [hli], a ; sCurrentDuel
+	ld [hl], e ; sCurrentDuelChecksum
 	inc hl
-	ld [hl], d ; sCurrentDuelData + 2
+	ld [hl], d ; sCurrentDuelChecksum
 	inc hl
 	ld a, [wDuelType]
-	ld [hl], a ; sCurrentDuelData + 3
+	ld [hl], a ; sCurrentDuelData
 	call DisableSRAM
 	ret
 ; 0x66e9
 
-	INCROM $66e9, $6729
+Func_66e9: ; 66e9 (1:66e9)
+	ld hl, sCurrentDuel
+	call ValidateSavedDuelData
+	ret c
+	ld de, sCurrentDuel
+	call LoadSavedDuelData
+	call Func_3a45
+	ret nc
+	call Func_3a40
+	or a
+	ret
+; 0x66ff
+
+; load the data saved in sCurrentDuelData to WRAM according to the distribution
+; of DuelDataToSave. assumes saved data exists and that the checksum is valid.
+LoadSavedDuelData: ; 66ff (1:66ff)
+	call EnableSRAM
+	inc de
+	inc de
+	inc de
+	inc de
+	ld hl, DuelDataToSave
+.next_block
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld a, c
+	or b
+	jr z, .done
+	push hl
+	push bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	pop hl
+.copy_loop
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec bc
+	ld a, c
+	or b
+	jr nz, .copy_loop
+	pop hl
+	inc hl
+	inc hl
+	jr .next_block
+.done
+	call DisableSRAM
+	ret
+; 0x6729
 
 DuelDataToSave: ; 6729 (1:6729)
 ;	dw address, number_of_bytes_to_copy
@@ -4225,13 +4303,65 @@ DuelDataToSave: ; 6729 (1:6729)
 	dw $0000
 ; 0x6747
 
-	INCROM $6747, $6785
+; return carry if there is no data saved at sCurrentDuel or if the checksum isn't correct,
+; or if the value saved from wDuelType is DUELTYPE_LINK
+ValidateSavedNonLinkDuelData: ; 6747 (1:6747)
+	call EnableSRAM
+	ld hl, sCurrentDuel
+	ld a, [sCurrentDuelData]
+	call DisableSRAM
+	cp DUELTYPE_LINK
+	jr nz, ValidateSavedDuelData
+	; ignore any saved data of a link duel
+	scf
+	ret
+
+; return carry if there is no data saved at sCurrentDuel or if the checksum isn't correct
+; input: hl = sCurrentDuel
+ValidateSavedDuelData: ; 6759 (1:6759)
+	call EnableSRAM
+	push de
+	ld a, [hli]
+	or a
+	jr z, .no_saved_data
+	lb de, $23, $45
+	ld bc, $334
+	ld a, [hl]
+	sub e
+	ld e, a
+	inc hl
+	ld a, [hl]
+	xor d
+	ld d, a
+	inc hl
+	inc hl
+.loop
+	ld a, [hl]
+	add e
+	ld e, a
+	ld a, [hli]
+	xor d
+	ld d, a
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop
+	ld a, e
+	or d
+	jr z, .ok
+.no_saved_data
+	scf
+.ok
+	call DisableSRAM
+	pop de
+	ret
+; 0x6785
 
 ; discard data of a duel that was saved by SaveDuelData, by setting the first byte
-; of sCurrentDuelData to $00, and zeroing the checksum (next two bytes)
+; of sCurrentDuel to $00, and zeroing the checksum (next two bytes)
 DiscardSavedDuelData: ; 6785 (1:6785)
 	call EnableSRAM
-	ld hl, sCurrentDuelData
+	ld hl, sCurrentDuel
 	xor a
 	ld [hli], a
 	ld [hli], a
@@ -4614,11 +4744,11 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	call CopyMoveDataAndDamage_FromDeckIndex
 	call SwapTurn
 	ldh a, [hTempCardIndex_ff9f]
-	ld [wcc11], a
+	ld [wPlayerAttackingCardIndex], a
 	ld a, [wSelectedMoveIndex]
-	ld [wcc10], a
+	ld [wPlayerAttackingMoveIndex], a
 	ld a, [wTempCardID_ccc2]
-	ld [wcc12], a
+	ld [wPlayerAttackingCardID], a
 	call Func_16f6
 	pop bc
 	ld a, c
@@ -4657,7 +4787,248 @@ DrawWideTextBox_WaitForInput_Bank1: ; 6b9e (1:6b9e)
 	ret
 ; 0x6ba2
 
-	INCROM $6ba2, $6d84
+Func_6ba2: ; 6ba2 (1:6ba2)
+	call DrawWideTextBox_PrintText
+	ld a, [wDuelistType]
+	cp DUELIST_TYPE_LINK_OPP
+	ret z
+	call WaitForWideTextBoxInput
+	ret
+; 0x6baf
+
+; apply and/or refresh status conditions and other events that trigger between turns
+HandleBetweenTurnsEvents: ; 6baf (1:6baf)
+	call IsArenaPokemonAsleepOrDoublePoisoned
+	jr c, .something_to_handle
+	cp PARALYZED
+	jr z, .something_to_handle
+	call SwapTurn
+	call IsArenaPokemonAsleepOrDoublePoisoned
+	call SwapTurn
+	jr c, .something_to_handle
+	call DiscardAttachedPluspowers
+	call SwapTurn
+	call DiscardAttachedDefenders
+	call SwapTurn
+	ret
+.something_to_handle
+	; either:
+	; 1. turn holder's arena Pokemon is paralyzed, asleep or double poisoned
+	; 2. non-turn holder's arena Pokemon is asleep or double poisoned
+	call Func_3b21
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	ld a, BOXMSG_BETWEEN_TURNS
+	call DrawDuelBoxMessage
+	ldtx hl, BetweenTurnsText
+	call DrawWideTextBox_WaitForInput
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempNonTurnDuelistCardID], a
+	ld l, DUELVARS_ARENA_CARD_STATUS
+	ld a, [hl]
+	or a
+	jr z, .asm_6c1a
+	call $6d3f
+	jr c, .asm_6c1a
+	call Func_6cfa
+	ld a, [hl]
+	and CNF_SLP_PRZ
+	cp PARALYZED
+	jr nz, .asm_6c1a
+	ld a, DOUBLE_POISONED
+	and [hl]
+	ld [hl], a
+	call Func_6c7e
+	ldtx hl, IsCuredOfParalysisText
+	call Func_6ce4
+	ld a, $3e
+	call Func_6cab
+	call WaitForWideTextBoxInput
+.asm_6c1a
+	call DiscardAttachedPluspowers
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempNonTurnDuelistCardID], a
+	ld l, DUELVARS_ARENA_CARD_STATUS
+	ld a, [hl]
+	or a
+	jr z, .asm_6c3a
+	call $6d3f
+	jr c, .asm_6c3a
+	call Func_6cfa
+.asm_6c3a
+	call DiscardAttachedDefenders
+	call SwapTurn
+	call $6e4c
+	ret
+; 0x6c44
+
+; discard any PLUSPOWER attached to the turn holder's arena and/or bench Pokemon
+DiscardAttachedPluspowers: ; 6c44 (1:6c44)
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
+	call GetTurnDuelistVariable
+	ld e, MAX_PLAY_AREA_POKEMON
+	xor a
+.unattach_pluspower_loop
+	ld [hli], a
+	dec e
+	jr nz, .unattach_pluspower_loop
+	ld de, PLUSPOWER
+	jp MoveCardToDiscardPileIfInArena
+; 0x6c56
+
+; discard any DEFENDER attached to the turn holder's arena and/or bench Pokemon
+DiscardAttachedDefenders: ; 6c56 (1:6c56)
+	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
+	call GetTurnDuelistVariable
+	ld e, MAX_PLAY_AREA_POKEMON
+	xor a
+.unattach_defender_loop
+	ld [hli], a
+	dec e
+	jr nz, .unattach_defender_loop
+	ld de, DEFENDER
+	jp MoveCardToDiscardPileIfInArena
+; 0x6c68
+
+; return carry if the turn holder's arena Pokemon card is double poisoned or asleep.
+; also, if confused, paralyzed, or asleep, return the status condition in a.
+IsArenaPokemonAsleepOrDoublePoisoned: ; 6c68 (1:6c68)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	or a
+	ret z
+	and DOUBLE_POISONED
+	jr nz, .set_carry
+	ld a, [hl]
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	jr z, .set_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x6c7e
+
+Func_6c7e: ; 6c7e (1:6c7e)
+	ld a, [wcac2]
+	cp $01
+	jr z, .asm_6c98
+	ld hl, wcc05
+	ldh a, [hWhoseTurn]
+	cp [hl]
+	jp z, DrawDuelMainScene
+	call SwapTurn
+	call DrawDuelMainScene
+	call SwapTurn
+	ret
+.asm_6c98
+	ld hl, wcc05
+	ldh a, [hWhoseTurn]
+	cp [hl]
+	jp z, DrawDuelHUDs
+	call SwapTurn
+	call DrawDuelHUDs
+	call SwapTurn
+	ret
+; 0x6cab
+
+Func_6cab: ; 6cab (1:6cab)
+	push af
+	ld a, [wDuelType]
+	or a
+	jr nz, .asm_6cc6
+	ld a, [wcc05]
+	cp PLAYER_TURN
+	jr z, .asm_6cc6
+	call SwapTurn
+	ldh a, [hWhoseTurn]
+	ld [wd4af], a
+	call SwapTurn
+	jr .asm_6ccb
+.asm_6cc6
+	ldh a, [hWhoseTurn]
+	ld [wd4af], a
+.asm_6ccb
+	xor a
+	ld [wd4b0], a
+	ld a, $00
+	ld [wd4ae], a
+	pop af
+	call Func_3b6a
+.asm_6cd8
+	call DoFrame
+	call Func_3b52
+	jr c, .asm_6cd8
+	call Func_6c7e.asm_6c98
+	ret
+; 0x6ce4
+
+; prints the name of the card at wTempNonTurnDuelistCardID in a text box
+Func_6ce4: ; 6ce4 (1:6ce4)
+	push hl
+	ld a, [wTempNonTurnDuelistCardID]
+	ld e, a
+	call LoadCardDataToBuffer1_FromCardID
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call LoadTxRam2
+	pop hl
+	call DrawWideTextBox_PrintText
+	ret
+; 0x6cfa
+
+Func_6cfa: ; 6cfa (1:6cfa)
+	ld a, [hl]
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	ret nz
+	push hl
+	ld a, [wTempNonTurnDuelistCardID]
+	ld e, a
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, 18
+	call CopyCardNameAndLevel
+	ld [hl], TX_END
+	ld hl, wTxRam2
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ldtx de, PokemonsSleepCheckText
+	call TossCoin
+	ld a, $03
+	ldtx hl, IsStillAsleepText
+	jr nc, .asm_6d2d
+	pop hl
+	push hl
+	ld a, DOUBLE_POISONED
+	and [hl]
+	ld [hl], a
+	ld a, $3e
+	ldtx hl, IsCuredOfSleepText
+.asm_6d2d
+	push af
+	push hl
+	call Func_6c7e
+	pop hl
+	call Func_6ce4
+	pop af
+	call Func_6cab
+	pop hl
+	call WaitForWideTextBoxInput
+	ret
+; 0x6d3f
+
+	INCROM $6d3f, $6d84
 
 ; given the deck index of a turn holder's card in register a,
 ; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
@@ -4829,7 +5200,36 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 	ret
 ; 0x7045
 
-	INCROM $7045, $70e6
+	INCROM $7045, $70aa
+
+Func_70aa: ; 70aa (1:70aa)
+	xor a
+	ld [wDuelFinished], a
+	ld [wDuelTurns], a
+	ld [wcce7], a
+	ld a, $ff
+	ld [wcc0f], a
+	ld [wPlayerAttackingCardIndex], a
+	ld [wPlayerAttackingMoveIndex], a
+	call EnableSRAM
+	ld a, [s0a009]
+	ld [wccf2], a
+	call DisableSRAM
+	ld a, [wPlayerDuelistType]
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .set_duel_type
+	bit 7, a ; DUELIST_TYPE_AI_OPP
+	jr nz, .set_duel_type
+	ld a, [wOpponentDuelistType]
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .set_duel_type
+	bit 7, a ; DUELIST_TYPE_AI_OPP
+	jr nz, .set_duel_type
+	xor a
+.set_duel_type
+	ld [wDuelType], a
+	ret
+; 0x70e6
 
 Func_70e6: ; 70e6 (1:70e6)
 	xor a
@@ -4933,7 +5333,7 @@ Func_7195: ; 7195 (1:7195)
 	ld a, [wccef]
 	or a
 	jr nz, .asm_71a9
-	ld a, [wTempDamage_ccbf]
+	ld a, [wDealtDamage]
 	ld [hli], a
 	ld a, [wccc0]
 	ld [hl], a

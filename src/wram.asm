@@ -810,15 +810,21 @@ wDuelistType:: ; cc0d
 wOpponentDeckID:: ; cc0e
 	ds $1
 
+wcc0f:: ; cc0f
 	ds $1
 
-wcc10:: ; cc10
+; index (0-1) of the move or Pokemon Power being used by the player's arena card
+; set to $ff when the duel starts and at the end of the opponent's turn
+wPlayerAttackingMoveIndex:: ; cc10
 	ds $1
 
-wcc11:: ; cc11
+; deck index of the player's arena card that is attacking or using a Pokemon Power
+; set to $ff when the duel starts and at the end of the opponent's turn
+wPlayerAttackingCardIndex:: ; cc11
 	ds $1
 
-wcc12:: ; cc12
+; ID of the player's arena card that is attacking or using a Pokemon Power
+wPlayerAttackingCardID:: ; cc12
 	ds $1
 
 wIsPracticeDuel:: ; cc13
@@ -863,7 +869,7 @@ wLoadedCard2:: ; cc65
 wLoadedMove:: ; cca6
 	move_data_struct wLoadedMove
 
-; damage dealt by an attack. little-endian
+; the damage field of an used move is loaded here
 wDamage:: ; ccb9
 	ds $2
 
@@ -876,7 +882,8 @@ wccbc:: ; ccbc
 
 	ds $2
 
-wTempDamage_ccbf:: ; ccbf
+; damage dealt by an attack to a target
+wDealtDamage:: ; ccbf
 	ds $1
 
 wccc0:: ; ccc0
@@ -926,7 +933,10 @@ wEffectFunctionsFeedback:: ; ccce
 wIsDamageToSelf:: ; cce6
 	ds $1
 
-	ds $2
+wcce7:: ; cce7
+	ds $1
+
+	ds $1
 
 ; used in CopyDeckData
 wcce9:: ; cce9
@@ -1863,7 +1873,11 @@ wd4ac:: ; d4ac
 wd4ad:: ; d4ad
 	ds $1
 
-	ds $2
+wd4ae:: ; d4ae
+	ds $1
+
+wd4af:: ; d4af
+	ds $1
 
 wd4b0:: ; d4b0
 	ds $1

@@ -44,7 +44,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IsStillAsleepText                        ; 0x0028
 	textpointer IsCuredOfSleepText                       ; 0x0029
 	textpointer IsCuredOfParalysisText                   ; 0x002a
-	textpointer Text002b                                 ; 0x002b
+	textpointer BetweenTurnsText                         ; 0x002b
 	textpointer Text002c                                 ; 0x002c
 	textpointer Text002d                                 ; 0x002d
 	textpointer Text002e                                 ; 0x002e
@@ -79,9 +79,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text004b                                 ; 0x004b
 	textpointer Text004c                                 ; 0x004c
 	textpointer Text004d                                 ; 0x004d
-	textpointer KnockOutText                                 ; 0x004e
+	textpointer KnockOutText                             ; 0x004e
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
-	textpointer ChooseEnergyCardToDiscardText                                 ; 0x0050
+	textpointer ChooseEnergyCardToDiscardText            ; 0x0050
 	textpointer Text0051                                 ; 0x0051
 	textpointer Text0052                                 ; 0x0052
 	textpointer YouPlayFirstText                         ; 0x0053
@@ -95,7 +95,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
 	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
-	textpointer Text005e                                 ; 0x005e
+	textpointer DuelistsTurnText                         ; 0x005e
 	textpointer Text005f                                 ; 0x005f
 	textpointer Text0060                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
@@ -192,7 +192,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00bc                                 ; 0x00bc
 	textpointer Text00bd                                 ; 0x00bd
 	textpointer Text00be                                 ; 0x00be
-	textpointer EnergyCardsRequiredToRetreatText                                 ; 0x00bf
+	textpointer EnergyCardsRequiredToRetreatText         ; 0x00bf
 	textpointer NotEnoughEnergyCardsText                 ; 0x00c0
 	textpointer Text00c1                                 ; 0x00c1
 	textpointer Text00c2                                 ; 0x00c2
@@ -250,7 +250,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransparencyCheckText                    ; 0x00f6
 	textpointer ConfusionCheckDamageText                 ; 0x00f7
 	textpointer ConfusionCheckRetreatText                ; 0x00f8
-	textpointer Text00f9                                 ; 0x00f9
+	textpointer PokemonsSleepCheckText                   ; 0x00f9
 	textpointer Text00fa                                 ; 0x00fa
 	textpointer Text00fb                                 ; 0x00fb
 	textpointer Text00fc                                 ; 0x00fc

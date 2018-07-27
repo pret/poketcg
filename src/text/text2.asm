@@ -18,7 +18,7 @@ ConfusionCheckRetreatText: ; 380ac (e:40ac)
 	line "If Tails, unable to Retreat."
 	done
 
-Text00f9: ; 380db (e:40db)
+PokemonsSleepCheckText: ; 380db (e:40db)
 	text "<RAMTEXT>'s Sleep check."
 	done
 

@@ -367,7 +367,53 @@ Func_1c83d: ; 1c83d (7:483d)
 	ret
 ; 0x1c858
 
-	INCROM $1c858, $1d078
+	INCROM $1c858, $1cb18
+
+Func_1cb18: ; 1cb18 (7:4b18)
+	push hl
+	push bc
+	push de
+	ld a, [wDoFrameFunction]
+	cp LOW(Func_3ba2)
+	jr nz, .asm_1cb5b
+	ld a, [wDoFrameFunction + 1]
+	cp HIGH(Func_3ba2)
+	jr nz, .asm_1cb5b
+	ld a, $ff
+	ld [wd4c0], a
+	ld a, [wd42a]
+	cp $ff
+	call nz, $4cd4
+	ld hl, wd423
+	ld c, $07
+.asm_1cb3b
+	push bc
+	ld a, [hl]
+	cp $ff
+	jr z, .asm_1cb4b
+	ld [wWhichSprite], a
+	farcall $4, $69fa
+	ld a, $ff
+	ld [hl], a
+.asm_1cb4b
+	pop bc
+	inc hl
+	dec c
+	jr nz, .asm_1cb3b
+	xor a
+	ld [wd4ac], a
+	ld [wd4ad], a
+.asm_1cb57
+	pop de
+	pop bc
+	pop hl
+	ret
+.asm_1cb5b
+	scf
+	jr .asm_1cb57
+; 0x1cb5e
+
+	INCROM $1cb5e, $1d078
 
 Func_1d078: ; 1d078 (7:5078)
 	ld a, [wd627]

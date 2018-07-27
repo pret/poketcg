@@ -2936,7 +2936,7 @@ SerialRecv8Bytes: ; 0fe9 (0:0fe9)
 SaveDuelStateToSRAM: ; 100b (0:100b)
 	ld a, $2
 	call BankswitchSRAM
-	; save duel data to sCurrentDuelData
+	; save duel data to sCurrentDuel
 	call SaveDuelData
 	xor a
 	call BankswitchSRAM
@@ -4376,7 +4376,7 @@ Func_161e: ; 161e (0:161e)
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
-; finally, clears wNoDamageOrEffect and wTempDamage_ccbf
+; finally, clears wNoDamageOrEffect and wDealtDamage
 CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	push de
 	push af
@@ -4395,7 +4395,7 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 ; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
-; finally, clears wNoDamageOrEffect and wTempDamage_ccbf
+; finally, clears wNoDamageOrEffect and wDealtDamage
 CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedMoveIndex], a
@@ -4426,7 +4426,7 @@ CopyMoveDataAndDamage:
 	xor a
 	ld [hl], a
 	ld [wNoDamageOrEffect], a
-	ld hl, wTempDamage_ccbf
+	ld hl, wDealtDamage
 	ld [hli], a
 	ld [hl], a
 	ret
@@ -4463,11 +4463,11 @@ Func_16f6: ; 16f6 (0:16f6)
 ; use attack or Pokemon Power
 UseAttackOrPokemonPower: ; 1730 (0:1730)
 	ld a, [wSelectedMoveIndex]
-	ld [wcc10], a
+	ld [wPlayerAttackingMoveIndex], a
 	ldh a, [hTempCardIndex_ff9f]
-	ld [wcc11], a
+	ld [wPlayerAttackingCardIndex], a
 	ld a, [wTempCardID_ccc2]
-	ld [wcc12], a
+	ld [wPlayerAttackingCardID], a
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	jp z, UsePokemonPower
@@ -4521,7 +4521,7 @@ Func_179a: ; 179a (0:179a)
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
 	call Func_189d
-	ld hl, wTempDamage_ccbf
+	ld hl, wDealtDamage
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -4636,9 +4636,9 @@ Func_1874: ; 1874 (0:1874)
 	push af
 	ld a, $1
 	ld [wccec], a
-	ld a, [wcc11]
+	ld a, [wPlayerAttackingCardIndex]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wcc10]
+	ld a, [wPlayerAttackingMoveIndex]
 	ldh [hTemp_ffa0], a
 	ld a, $8
 	call SetAIAction_SerialSendDuelData
@@ -5105,8 +5105,8 @@ Func_1af3: ; 1af3 (0:1af3)
 	ld b, a
 	or a ; cp PLAY_AREA_ARENA
 	jr nz, .benched
-	; add damage at de to [wTempDamage_ccbf]
-	ld hl, wTempDamage_ccbf
+	; add damage at de to [wDealtDamage]
+	ld hl, wDealtDamage
 	ld a, e
 	add [hl]
 	ld [hli], a
@@ -10322,7 +10322,7 @@ HandleStrikesBack_AgainstResidualMove: ; 367b (0:367b)
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
 	ret nz
-	ld a, [wTempDamage_ccbf]
+	ld a, [wDealtDamage]
 	or a
 	ret z
 	call SwapTurn
