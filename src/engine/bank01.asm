@@ -87,8 +87,8 @@ HandleFailedToContinueDuel: ; 4097 (1:4097)
 	ret
 ; 0x409f
 
-; this function begins the duel after the opponent's
-; graphics, name and deck have been introduced
+; this function begins the duel after the opponent's graphics, name and deck have been introduced
+; loads both player's decks and sets up the variables and resources required to begin a duel.
 StartDuel: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
@@ -122,7 +122,7 @@ StartDuel: ; 409f (1:409f)
 	call SetupDuel
 	ld a, [wcc18]
 	ld [wDuelInitialPrizes], a
-	call Func_70aa
+	call InitVariablesToBeginDuel
 	ld a, [wDuelTheme]
 	call PlaySong
 	call Func_4b60
@@ -134,7 +134,7 @@ MainDuelLoop ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call UpdateSubstatusConditions_StartOfTurn
-	call DisplayDuelistsTurnScreen
+	call DisplayDuelistTurnScreen
 	call HandleTurn
 
 .between_turns
@@ -182,8 +182,8 @@ MainDuelLoop ; 40ee (1:40ee)
 	push af
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call Func_4a97
-	call Func_4ad6
+	call DrawDuelistPortraitsAndNames
+	call PrintDuelResultStats
 	pop af
 	ldh [hWhoseTurn], a
 	call Func_3b21
@@ -253,7 +253,7 @@ MainDuelLoop ; 40ee (1:40ee)
 	call DrawWideTextBox_WaitForInput
 	ld a, 1
 	ld [wDuelInitialPrizes], a
-	call Func_70aa
+	call InitVariablesToBeginDuel
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, .link_duel
@@ -261,7 +261,6 @@ MainDuelLoop ; 40ee (1:40ee)
 	ldh [hWhoseTurn], a
 	call Func_4b60
 	jp MainDuelLoop
-
 .link_duel
 	call ExchangeRNG
 	ld h, PLAYER_TURN
@@ -269,7 +268,6 @@ MainDuelLoop ; 40ee (1:40ee)
 	cp $29
 	jr z, .got_turn
 	ld h, OPPONENT_TURN
-
 .got_turn
 	ld a, h
 	ldh [hWhoseTurn], a
@@ -292,7 +290,9 @@ SetupDuel: ; 420b (1:420b)
 	ret
 ; 0x4225
 
-; handle the turn of the duelist identified by hWhoseTurn
+; handle the turn of the duelist identified by hWhoseTurn.
+; if player's turn, display the animation of the player drawing the card at
+; hTempCardIndex_ff98, and save the duel state to SRAM.
 HandleTurn: ; 4225 (1:4225)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
@@ -301,7 +301,6 @@ HandleTurn: ; 4225 (1:4225)
 	cp 2
 	jr c, .skip_let_evolve ; jump if it's the turn holder's first turn
 	call SetAllPlayAreaPokemonCanEvolve
-
 .skip_let_evolve
 	call Func_70e6
 	call Func_4933
@@ -316,17 +315,17 @@ HandleTurn: ; 4225 (1:4225)
 	call AddCardToHand
 	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
-	jr z, HandleTurn_PlayerDrewCard
+	jr z, .player_turn
+
+; opponent's turn
 	call SwapTurn
 	call IsClairvoyanceActive
 	call SwapTurn
 	call c, DisplayPlayerDrawCardScreen
 	jr DuelMainInterface
 
-; display the animation of the player drawing the card at hTempCardIndex_ff98,
-; save duel state to SRAM, and fall through to DuelMainInterface
-; to effectively begin the turn
-HandleTurn_PlayerDrewCard:
+; player's turn
+.player_turn
 	call DisplayPlayerDrawCardScreen
 	call SaveDuelStateToSRAM
 ;	fallthrough
@@ -1439,7 +1438,7 @@ Func_4933: ; 4933 (1:4933)
 	cp $09
 	jr z, .asm_495f
 	call EmptyScreen
-	call Func_4a97
+	call DrawDuelistPortraitsAndNames
 .asm_495f
 	ld a, $07
 	ld [wcac2], a
@@ -1560,8 +1559,11 @@ Func_49ed: ; 49ed (1:49ed)
 
 	INCROM $4a35, $4a97
 
-Func_4a97: ; 4a97 (1:4a97)
+; draw the portraits of the two duelists and print their names.
+; also draw an horizontal line separating the two sides.
+DrawDuelistPortraitsAndNames: ; 4a97 (1:4a97)
 	call LoadSymbolsFont
+	; player's name
 	ld de, wDefaultText
 	push de
 	call CopyPlayerName
@@ -1569,8 +1571,10 @@ Func_4a97: ; 4a97 (1:4a97)
 	call InitTextPrinting
 	pop hl
 	call ProcessText
-	ld bc, $5
+	; player's portrait
+	lb bc, 0, 5
 	call Func_3e10
+	; opponent's name (aligned to the right)
 	ld de, wDefaultText
 	push de
 	call CopyOpponentName
@@ -1583,45 +1587,52 @@ Func_4a97: ; 4a97 (1:4a97)
 	call InitTextPrinting
 	pop hl
 	call ProcessText
+	; opponent's portrait
 	ld a, [wOpponentPortrait]
-	ld bc, $d01
+	lb bc, 13, 1
 	call Func_3e2a
+	; middle line
 	call DrawDuelHorizontalSeparator
 	ret
 ; 0x4ad6
 
-Func_4ad6: ; 4ad6 (1:4ad6)
+; print the number of prizes left, of active Pokemon, and of cards left in the deck
+; of both duelists. this is called when the duel ends.
+PrintDuelResultStats: ; 4ad6 (1:4ad6)
 	lb de, 8, 8
-	call Func_4ae9
+	call PrintDuelistResultStats
 	call SwapTurn
 	lb de, 1, 1
-	call Func_4ae9
+	call PrintDuelistResultStats
 	call SwapTurn
 	ret
 ; 0x4ae9
 
-Func_4ae9: ; 4ae9 (1:4ae9)
-	call $5f4a
-	ld hl, $7b
+; print, at d,e, the number of prizes left, of active Pokemon, and of cards left in
+; the deck of the turn duelist. b,c are used throughout as input coords for
+; WriteTwoDigitNumberInTxSymbolFormat, and d,e for InitTextPrinting_ProcessTextFromID.
+PrintDuelistResultStats: ; 4ae9 (1:4ae9)
+	call SetNoLineSeparation
+	ldtx hl, PrizesLeftActivePokemonCardsInDeckText
 	call InitTextPrinting_ProcessTextFromID
-	call $5f50
+	call SetOneLineSeparation
 	ld c, e
 	ld a, d
-	add $07
+	add 7
 	ld b, a
 	inc a
 	inc a
 	ld d, a
 	call CountPrizes
-	call .asm_4b22
+	call .print_x_cards
 	inc e
 	inc c
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	ld hl, $7d
+	ldtx hl, YesText
 	or a
 	jr nz, .pkmn_in_play_area
-	ld hl, $7c
+	ldtx hl, NoneText
 .pkmn_in_play_area
 	dec d
 	call InitTextPrinting_ProcessTextFromID
@@ -1632,9 +1643,9 @@ Func_4ae9: ; 4ae9 (1:4ae9)
 	call GetTurnDuelistVariable
 	ld a, DECK_SIZE
 	sub [hl]
-.asm_4b22
+.print_x_cards
 	call WriteTwoDigitNumberInTxSymbolFormat
-	ld hl, $7e
+	ldtx hl, CardsText
 	call InitTextPrinting_ProcessTextFromID
 	ret
 ; 0x4b2c
@@ -1673,59 +1684,61 @@ Func_4b38: ; 4b38 (1:4b38)
 ; 0x4b60
 
 Func_4b60: ; 4b60 (1:4b60)
-	call $7107
+	call InitializeDuelVariables
 	call SwapTurn
-	call $7107
+	call InitializeDuelVariables
 	call SwapTurn
-	call $4e84
-	call $4d97
+	call Func_4e84
+	call ShuffleDeckAndDrawSevenCards
 	ldh [hTemp_ffa0], a
 	call SwapTurn
-	call $4d97
+	call ShuffleDeckAndDrawSevenCards
 	call SwapTurn
 	ld c, a
 	ldh a, [hTemp_ffa0]
 	ld b, a
 	and c
-	jr nz, .asm_4bd0
+	jr nz, .hand_cards_ok
 	ld a, b
 	or c
-	jr z, .asm_4bb2
+	jr z, .neither_drew_basic_pkmn
 	ld a, b
 	or a
-	jr nz, .asm_4b9c
-.asm_4b8c
-	call $4df3
-	call $7107
-	call $4e6e
-	call $4d97
-	jr c, .asm_4b8c
-	jr .asm_4bd0
+	jr nz, .opp_drew_no_basic_pkmn
 
-.asm_4b9c
-	call SwapTurn
-.asm_4b9f
-	call $4df3
-	call $7107
-	call $4e6e
-	call $4d97
-	jr c, .asm_4b9f
-	call SwapTurn
-	jr .asm_4bd0
+;.player_drew_no_basic_pkmn
+.ensure_player_basic_pkmn_loop
+	call DisplayNoBasicPokemonInHandScreenAndText
+	call InitializeDuelVariables
+	call Func_4e6e
+	call ShuffleDeckAndDrawSevenCards
+	jr c, .ensure_player_basic_pkmn_loop
+	jr .hand_cards_ok
 
-.asm_4bb2
+.opp_drew_no_basic_pkmn
+	call SwapTurn
+.ensure_opp_basic_pkmn_loop
+	call DisplayNoBasicPokemonInHandScreenAndText
+	call InitializeDuelVariables
+	call Func_4e6e
+	call ShuffleDeckAndDrawSevenCards
+	jr c, .ensure_opp_basic_pkmn_loop
+	call SwapTurn
+	jr .hand_cards_ok
+
+.neither_drew_basic_pkmn
 	ldtx hl, NeitherPlayerHasBasicPkmnText
 	call DrawWideTextBox_WaitForInput
-	call $4e06
-	call $7107
+	call DisplayNoBasicPokemonInHandScreen
+	call InitializeDuelVariables
 	call SwapTurn
-	call $4e06
-	call $7107
+	call DisplayNoBasicPokemonInHandScreen
+	call InitializeDuelVariables
 	call SwapTurn
-	call $4dfc
+	call PrintReturnCardsToDeckDrawAgain
 	jp Func_4b60
 
-.asm_4bd0
+.hand_cards_ok
 	ldh a, [hWhoseTurn]
 	push af
 	ld a, PLAYER_TURN
@@ -1734,7 +1747,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	call Func_4cd5
 	call SwapTurn
-	jp c, $4c77
+	jp c, .asm_4c77
 	call Func_311d
 	ldtx hl, PlacingThePrizesText
 	call DrawWideTextBox_WaitForInput
@@ -1746,13 +1759,13 @@ Func_4b60: ; 4b60 (1:4b60)
 	ldtx hl, PleasePlacePrizesText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-	call $4c7c
+	call .asm_4c7c
 	call WaitForWideTextBoxInput
 	pop af
 	ldh [hWhoseTurn], a
-	call $7133
+	call InitTurnDuelistPrizes
 	call SwapTurn
-	call $7133
+	call InitTurnDuelistPrizes
 	call SwapTurn
 	call EmptyScreen
 	ld a, BOXMSG_COIN_TOSS
@@ -1772,7 +1785,6 @@ Func_4b60: ; 4b60 (1:4b60)
 	jr c, .asm_4c4a
 	call SwapTurn
 	ldtx hl, YouPlaySecondText
-
 .asm_4c4a
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
@@ -1790,24 +1802,75 @@ Func_4b60: ; 4b60 (1:4b60)
 	jr c, .asm_4c6f
 	call SwapTurn
 	ldtx hl, YouPlayFirstText
-
 .asm_4c6f
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
 	or a
 	ret
-; 0x4c77
 
-	INCROM $4c77,  $4cd5
+.asm_4c77
+	pop af
+	ldh [hWhoseTurn], a
+	scf
+	ret
 
-; Select Basic Pokemon From Hand
+.asm_4c7c
+	ld hl, .data_4cbd
+	ld e, $34
+	ld a, [wDuelInitialPrizes]
+	ld d, a
+.asm_4c85
+	push de
+	ld b, $14
+.asm_4c88
+	call DoFrame
+	call Func_67b2
+	jr c, .asm_4c93
+	dec b
+	jr nz, .asm_4c88
+.asm_4c93
+	call .asm_4cb4
+	call .asm_4cb4
+	push hl
+	ld a, $08
+	call PlaySFX
+	lb bc, 3, 5
+	ld a, e
+	call WriteTwoDigitNumberInTxSymbolFormat
+	lb bc, 18, 7
+	ld a, e
+	call WriteTwoDigitNumberInTxSymbolFormat
+	pop hl
+	pop de
+	dec e
+	dec d
+	jr nz, .asm_4c85
+	ret
+
+.asm_4cb4
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld a, $ac
+	jp WriteByteToBGMap0
+
+.data_4cbd
+	db $05, $06, $0e, $05
+	db $06, $06, $0d, $05
+	db $05, $07, $0e, $04
+	db $06, $07, $0d, $04
+	db $05, $08, $0e, $03
+	db $06, $08, $0d, $03
+; 0x4cd5
+
 Func_4cd5: ; 4cd5 (1:4cd5)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
-	jr z, .asm_4d15
+	jr z, .player_choose_arena
 	cp DUELIST_TYPE_LINK_OPP
-	jr z, .asm_4cec
+	jr z, .exchange_duelvars
 	push af
 	push hl
 	call Func_2bc3
@@ -1817,28 +1880,27 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	or a
 	ret
 
-.asm_4cec
+.exchange_duelvars
 	ldtx hl, TransmitingDataText
 	call DrawWideTextBox_PrintText
 	call ExchangeRNG
-	ld hl, wPlayerCardLocations
-	ld de, wOpponentCardLocations
-	ld c, $80
+	ld hl, wPlayerDuelVariables
+	ld de, wOpponentDuelVariables
+	ld c, (wOpponentDuelVariables - wPlayerDuelVariables) / 2
 	call SerialExchangeBytes
-	jr c, .asm_4d12
-	ld c, $80
+	jr c, .error
+	ld c, (wOpponentDuelVariables - wPlayerDuelVariables) / 2
 	call SerialExchangeBytes
-	jr c, .asm_4d12
+	jr c, .error
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	ld [hl], DUELIST_TYPE_LINK_OPP
 	or a
 	ret
-
-.asm_4d12
+.error
 	jp DuelTransmissionError
 
-.asm_4d15
+.player_choose_arena
 	call EmptyScreen
 	ld a, BOXMSG_ARENA_POKEMON
 	call DrawDuelBoxMessage
@@ -1848,8 +1910,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DoPracticeDuelAction
 .asm_4d28
 	xor a
-	ld hl, $006e
-	call $5502
+	ldtx hl, PleaseChooseAnActivePokemonText
+	call Func_5502
 	jr c, .asm_4d28
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -1861,9 +1923,9 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ldh a, [hTempCardIndex_ff98]
 	ldtx hl, PlacedInTheArenaText
 	call DisplayCardDetailScreen
-	jr .asm_4d4c
+	jr .choose_bench
 
-.asm_4d4c
+.choose_bench
 	call EmptyScreen
 	ld a, BOXMSG_BENCH_POKEMON
 	call DrawDuelBoxMessage
@@ -1871,15 +1933,15 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call PrintScrollableText_NoTextBoxLabel
 	ld a, $3
 	call DoPracticeDuelAction
-.asm_4d5f
+.bench_loop
 	ld a, $1
-	ld hl, $006f
-	call $5502
+	ldtx hl, ChooseYourBenchPokemonText
+	call Func_5502
 	jr c, .asm_4d8e
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
-	jr nc, .asm_4d86
+	jr nc, .no_space
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
 	ldh a, [hTempCardIndex_ff98]
@@ -1887,22 +1949,131 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DisplayCardDetailScreen
 	ld a, $5
 	call DoPracticeDuelAction
-	jr .asm_4d5f
+	jr .bench_loop
 
-.asm_4d86
+.no_space
 	ldtx hl, NoSpaceOnTheBenchText
 	call DrawWideTextBox_WaitForInput
-	jr .asm_4d5f
+	jr .bench_loop
 
 .asm_4d8e
 	ld a, $4
 	call DoPracticeDuelAction
-	jr c, .asm_4d5f
+	jr c, .bench_loop
 	or a
 	ret
 ; 0x4d97
 
-	INCROM $4d97,  $4e40
+; the turn duelist shuffles the deck unless it's a practice duel, then draws 7 cards
+; returns $00 in a and carry if no basic Pokemon cards are drawn, and $01 in a otherwise
+ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
+	call InitializeDuelVariables
+	ld a, [wDuelType]
+	cp DUELTYPE_PRACTICE
+	jr z, .deck_ready
+	call ShuffleDeck
+	call ShuffleDeck
+.deck_ready
+	ld b, 7
+.draw_loop
+	call DrawCardFromDeck
+	call AddCardToHand
+	dec b
+	jr nz, .draw_loop
+	ld a, DUELVARS_HAND
+	call GetTurnDuelistVariable
+	ld b, $00
+	ld c, 7
+.cards_loop
+	ld a, [hli]
+	push hl
+	push bc
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call .check_basic_pokemon
+	pop bc
+	pop hl
+	or b
+	ld b, a
+	dec c
+	jr nz, .cards_loop
+	ld a, b
+	or a
+	ret nz
+	xor a
+	scf
+	ret
+
+.asm_4dd1
+	ld a, [wLoadedCard1ID]
+	cp MYSTERIOUS_FOSSIL
+	jr z, .basic
+	cp CLEFAIRY_DOLL
+	jr z, .basic
+.check_basic_pokemon
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .energy_trainer_nonbasic
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .energy_trainer_nonbasic
+
+; basic
+	ld a, $01
+	ret
+.energy_trainer_nonbasic
+	xor a
+	scf
+	ret
+.basic
+	ld a, $01
+	or a
+	ret
+; 0x4df3
+
+DisplayNoBasicPokemonInHandScreenAndText: ; 4df3 (1:4df3)
+	ldtx hl, ThereAreNoBasicPokemonInHand
+	call DrawWideTextBox_WaitForInput
+	call DisplayNoBasicPokemonInHandScreen
+;	fallthrough
+
+; prints ReturnCardsToDeckAndDrawAgainText in a textbox and calls ExchangeRNG
+PrintReturnCardsToDeckDrawAgain: ; 4dfc (1:4dfc)
+	ldtx hl, ReturnCardsToDeckAndDrawAgainText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	ret
+; 0x4e06
+
+; display a bare list of seven hand cards of the turn duelist, and the duelist's name above
+; used to let the player know that there are no basic Pokemon in the hand and need to redraw
+DisplayNoBasicPokemonInHandScreen: ; 4e06 (1:4e06)
+	call EmptyScreen
+	call LoadDuelCardSymbolTiles
+	lb de, 0, 0
+	lb bc, 20, 18
+	call DrawRegularTextBox
+	call CreateHandCardList
+	call CountCardsInDuelTempList
+	ld hl, NoBasicPokemonCardListParameters
+	lb de, 0, 0
+	call PrintCardListItems
+	ldtx hl, DuelistHandText
+	lb de, 1, 1
+	call InitTextPrinting
+	call PrintTextNoDelay
+	call EnableLCD
+	call WaitForWideTextBoxInput
+	ret
+; 0x4e37
+
+NoBasicPokemonCardListParameters:
+	db 1, 3 ; cursor x, cursor y
+	db 4 ; item x
+	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
+	db 7 ; number of items selectable without scrolling
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
 
 Func_4e40: ; 4e40 (1:4e40)
 	call CreateHandCardList
@@ -1923,7 +2094,108 @@ Func_4e40: ; 4e40 (1:4e40)
 	ret
 ; 0x4e6e
 
-	INCROM $4e6e,  $4f2d
+Func_4e6e: ; 4e6e (1:4e6e)
+	ld b, $51
+	ld c, $56
+	ldh a, [hWhoseTurn]
+	cp PLAYER_TURN
+	jr z, .asm_4e7c
+	ld b, $52
+	ld c, $57
+.asm_4e7c
+	ld hl, $63
+	ld de, $67
+	jr Func_4e98
+
+Func_4e84: ; 4e84 (1:4e84)
+	ld b, $53
+	ld c, $55
+	ld hl, $65
+	ld de, $66
+	ld a, [wDuelType]
+	cp DUELTYPE_PRACTICE
+	jr nz, Func_4e98
+	ld hl, $64
+;	fallthrough
+
+Func_4e98: ; 4e98 (1:4e98)
+	push bc
+	push de
+	push hl
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	call DrawDuelistPortraitsAndNames
+	call LoadDuelDrawCardsScreenTiles
+	ld a, $09
+	ld [wcac2], a
+	pop hl
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	ld a, [wDuelType]
+	cp DUELTYPE_PRACTICE
+	jr nz, .asm_4ebf
+	call WaitForWideTextBoxInput
+	jr .asm_4ee0
+.asm_4ebf
+	call Func_3b21
+	ld hl, sp+$03
+	ld a, [hl]
+	call Func_3b6a
+	ld a, [hl]
+	call Func_3b6a
+	ld a, [hl]
+	call Func_3b6a
+.asm_4ed0
+	call DoFrame
+	call Func_67b2
+	jr c, .asm_4edd
+	call Func_3b52
+	jr c, .asm_4ed0
+.asm_4edd
+	call Func_3b31
+.asm_4ee0
+	xor a
+	ld [wcbe9], a
+	call Func_49ca
+	call Func_3b21
+	pop hl
+	call DrawWideTextBox_PrintText
+.asm_4eee
+	ld hl, sp+$00
+	ld a, [hl]
+	call Func_3b6a
+.asm_4ef4
+	call DoFrame
+	call Func_67b2
+	jr c, .asm_4f28
+	call Func_3b52
+	jr c, .asm_4ef4
+	ld hl, wcbe9
+	inc [hl]
+	ld hl, sp+$00
+	ld a, [hl]
+	cp $55
+	jr nz, .asm_4f11
+	call Func_49ca.not_cgb
+	jr .asm_4f14
+.asm_4f11
+	call Func_49ed
+.asm_4f14
+	ld a, [wcbe9]
+	cp $07
+	jr c, .asm_4eee
+	ld c, $1e
+.asm_4f1d
+	call DoFrame
+	call Func_67b2
+	jr c, .asm_4f28
+	dec c
+	jr nz, .asm_4f1d
+.asm_4f28
+	call Func_3b31
+	pop bc
+	ret
+; 0x4f2d
 
 Func_4f2d: ; 4f2d (1:4f2d)
 	ld a, [wcac2]
@@ -1931,7 +2203,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	jr z, .asm_4f3d
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
-	call Func_4a97
+	call DrawDuelistPortraitsAndNames
 .asm_4f3d
 	ld a, $09
 	ld [wcac2], a
@@ -2418,7 +2690,7 @@ Func_52bc: ; 52bc (1:52bc)
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
 ; DuelistsTurnText in a textbox. also call ExchangeRNG.
-DisplayDuelistsTurnScreen: ; 54c8 (1:54c8)
+DisplayDuelistTurnScreen: ; 54c8 (1:54c8)
 	call EmptyScreen
 	ld c, BOXMSG_PLAYERS_TURN
 	ldh a, [hWhoseTurn]
@@ -2450,7 +2722,49 @@ DuelMenuData: ; 54e9 (1:54e9)
 	db $ff
 ; 0x5502
 
-	INCROM $5502,  $5550
+Func_5502: ; 5502 (1:5502)
+	ld [wcbfd], a
+	push hl
+	call CreateHandCardList
+	call DrawCardListScreenLayout
+	pop hl
+	call SetCardListInfoBoxText
+	ld a, $01
+	ld [wcbde], a
+.asm_5515
+	call Func_55f0
+	jr nc, .asm_5523
+	ld a, [wcbfd]
+	or a
+	jr z, .asm_5515
+	scf
+	jr .asm_5538
+.asm_5523
+	ldh a, [hTempCardIndex_ff98]
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call Func_4dd1
+	jr nc, .asm_5538
+	ldtx hl, YouCannotSelectThisCardText
+	call DrawWideTextBox_WaitForInput
+	call DrawCardListScreenLayout.draw
+	jr .asm_5515
+.asm_5538
+	push af
+	ld a, [wSortCardListByID]
+	or a
+	call nz, SortHandCardsByID
+	pop af
+	ret
+; 0x5542
+
+Func_5542: ; 5542 (1:5542)
+	call CreateDiscardPileCardList
+	ret c
+	call DrawCardListScreenLayout
+	call SetDiscardPileScreenTexts
+	call Func_55f0
+	ret
+; 0x5550
 
 ; draw the turn holder's discard pile screen
 OpenDiscardPileScreen: ; 5550 (1:5550)
@@ -5202,7 +5516,9 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 
 	INCROM $7045, $70aa
 
-Func_70aa: ; 70aa (1:70aa)
+; initializes variables when a duel begins, such as zeroing wDuelFinished or wDuelTurns,
+; and setting wDuelType based on wPlayerDuelistType and wOpponentDuelistType
+InitVariablesToBeginDuel: ; 70aa (1:70aa)
 	xor a
 	ld [wDuelFinished], a
 	ld [wDuelTurns], a
@@ -5298,7 +5614,62 @@ InitializeDuelVariables: ; 7107 (1:7107)
 	ret
 ; 0x7133
 
-	INCROM $7133, $717a
+; draw [wDuelInitialPrizes] cards from the turn holder's deck and place them as prizes:
+; write their deck indexes to DUELVARS_PRIZE_CARDS, set their location to
+; CARD_LOCATION_PRIZE, and set [wDuelInitialPrizes] bits of DUELVARS_PRIZES.
+InitTurnDuelistPrizes: ; 7133 (1:7133)
+	ldh a, [hWhoseTurn]
+	ld d, a
+	ld e, DUELVARS_PRIZE_CARDS
+	ld a, [wDuelInitialPrizes]
+	ld c, a
+	ld b, 0
+.draw_prizes_loop
+	call DrawCardFromDeck
+	ld [de], a
+	inc de
+	ld h, d
+	ld l, a
+	ld [hl], CARD_LOCATION_PRIZE
+	inc b
+	ld a, b
+	cp c
+	jr nz, .draw_prizes_loop
+	push hl
+	ld e, c
+	ld d, $00
+	ld hl, PrizeBitmasks
+	add hl, de
+	ld a, [hl]
+	pop hl
+	ld l, DUELVARS_PRIZES
+	ld [hl], a
+	ret
+; 0x715a
+
+PrizeBitmasks: ; 715a (1:715a)
+	db %0, %1, %11, %111, %1111, %11111, %111111
+; 0x7161
+
+Func_7161: ; 7161 (1:7161)
+	or a
+	ret z
+	ld c, a
+	call CountPrizes
+	sub c
+	jr nc, .asm_716b
+	xor a
+.asm_716b
+	ld c, a
+	ld b, $00
+	ld hl, PrizeBitmasks
+	add hl, bc
+	ld b, [hl]
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld [hl], b
+	ret
+; 0x717a
 
 ; clear the non-turn holder's duelvars starting at DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
 ; these duelvars only last a two-player turn at most.

@@ -462,7 +462,7 @@ ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
 	line "to place in the Arena."
 	done
 
-Text006a: ; 36bf1 (d:6bf1)
+ThereAreNoBasicPokemonInHand: ; 36bf1 (d:6bf1)
 	text "There are no Basic Pokémon"
 	line "in <RAMNAME>'s hand."
 	done
@@ -472,7 +472,7 @@ NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
 	line "Pokémon in his or her hand."
 	done
 
-Text006c: ; 36c54 (d:6c54)
+ReturnCardsToDeckAndDrawAgainText: ; 36c54 (d:6c54)
 	text "Return the cards to the Deck"
 	line "and draw again."
 	done
@@ -482,12 +482,12 @@ ChooseUpTo5BasicPkmnToPlaceOnBenchText: ; 36c82 (d:6c82)
 	line "to place on the Bench."
 	done
 
-Text006e: ; 36cbf (d:6cbf)
+PleaseChooseAnActivePokemonText: ; 36cbf (d:6cbf)
 	text "Please choose an"
 	line "Active Pokémon."
 	done
 
-Text006f: ; 36ce1 (d:6ce1)
+ChooseYourBenchPokemonText: ; 36ce1 (d:6ce1)
 	text "Choose your"
 	line "Bench Pokémon."
 	done
@@ -496,7 +496,7 @@ YouDrewText: ; 36cfd (d:6cfd)
 	text "You drew <RAMTEXT>."
 	done
 
-Text0071: ; 36d0a (d:6d0a)
+YouCannotSelectThisCardText: ; 36d0a (d:6d0a)
 	text "You cannot select this card."
 	done
 
@@ -543,21 +543,21 @@ StartSuddenDeathMatchText: ; 36e05 (d:6e05)
 	line "Match for 1 Prize!"
 	done
 
-Text007b: ; 36e2e (d:6e2e)
+PrizesLeftActivePokemonCardsInDeckText: ; 36e2e (d:6e2e)
 	text "Prizes Left"
 	line "Active Pokémon"
 	line "Cards in Deck"
 	done
 
-Text007c: ; 36e58 (d:6e58)
+NoneText: ; 36e58 (d:6e58)
 	text "None"
 	done
 
-Text007d: ; 36e5e (d:6e5e)
+YesText: ; 36e5e (d:6e5e)
 	text "Yes"
 	done
 
-Text007e: ; 36e63 (d:6e63)
+CardsText: ; 36e63 (d:6e63)
 	text "Cards"
 	done
 

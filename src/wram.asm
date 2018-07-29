@@ -43,6 +43,8 @@ wPlayerDuelVariables:: ; c200
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE
 
+; deck indexes of the up to 6 cards placed as prizes
+wPlayerPrizeCards:: ; c23c
 	ds $6
 
 ; Deck indexes of the cards that are in the player's hand
@@ -203,6 +205,7 @@ wOpponentDuelVariables:: ; c300
 wOpponentCardLocations:: ; c300
 	ds DECK_SIZE
 
+wOpponentPrizeCards:: ; c33c
 	ds $6
 
 wOpponentHand:: ; c342
@@ -750,7 +753,11 @@ wcbfa:: ; cbfa
 wcbfb:: ; cbfb
 	ds $1
 
-	ds $2
+wcbfc:: ; cbfc
+	ds $1
+
+wcbfd:: ; cbfd
+	ds $1
 
 ; during a practice duel, identifies an entry of PracticeDuelActionTable
 wPracticeDuelAction:: ; cbfe

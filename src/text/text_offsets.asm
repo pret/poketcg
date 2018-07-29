@@ -107,14 +107,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0067                                 ; 0x0067
 	textpointer DeckHasXCardsText                        ; 0x0068
 	textpointer ChooseBasicPkmnToPlaceInArenaText        ; 0x0069
-	textpointer Text006a                                 ; 0x006a
+	textpointer ThereAreNoBasicPokemonInHand                                 ; 0x006a
 	textpointer NeitherPlayerHasBasicPkmnText            ; 0x006b
-	textpointer Text006c                                 ; 0x006c
+	textpointer ReturnCardsToDeckAndDrawAgainText                                 ; 0x006c
 	textpointer ChooseUpTo5BasicPkmnToPlaceOnBenchText   ; 0x006d
-	textpointer Text006e                                 ; 0x006e
-	textpointer Text006f                                 ; 0x006f
+	textpointer PleaseChooseAnActivePokemonText                                 ; 0x006e
+	textpointer ChooseYourBenchPokemonText                                 ; 0x006f
 	textpointer YouDrewText                              ; 0x0070
-	textpointer Text0071                                 ; 0x0071
+	textpointer YouCannotSelectThisCardText                                 ; 0x0071
 	textpointer PlacingThePrizesText                     ; 0x0072
 	textpointer PleasePlacePrizesText                    ; 0x0073
 	textpointer IfHeadPlayerPlaysFirstText               ; 0x0074
@@ -124,10 +124,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WonDuelText                              ; 0x0078
 	textpointer LostDuelText                             ; 0x0079
 	textpointer StartSuddenDeathMatchText                ; 0x007a
-	textpointer Text007b                                 ; 0x007b
-	textpointer Text007c                                 ; 0x007c
-	textpointer Text007d                                 ; 0x007d
-	textpointer Text007e                                 ; 0x007e
+	textpointer PrizesLeftActivePokemonCardsInDeckText                                 ; 0x007b
+	textpointer NoneText                                 ; 0x007c
+	textpointer YesText                                 ; 0x007d
+	textpointer CardsText                                 ; 0x007e
 	textpointer Text007f                                 ; 0x007f
 	textpointer Text0080                                 ; 0x0080
 	textpointer WasKnockedOutText                        ; 0x0081

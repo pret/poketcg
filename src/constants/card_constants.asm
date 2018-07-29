@@ -8,12 +8,12 @@
 	const DOUBLE_COLORLESS_ENERGY ; $07
 	const BULBASAUR               ; $08
 	const IVYSAUR                 ; $09
-	const VENUSAUR1               ; $0A
-	const VENUSAUR2               ; $0B
-	const CATERPIE                ; $0C
-	const METAPOD                 ; $0D
-	const BUTTERFREE              ; $0E
-	const WEEDLE                  ; $0F
+	const VENUSAUR1               ; $0a
+	const VENUSAUR2               ; $0b
+	const CATERPIE                ; $0c
+	const METAPOD                 ; $0d
+	const BUTTERFREE              ; $0e
+	const WEEDLE                  ; $0f
 	const KAKUNA                  ; $10
 	const BEEDRILL                ; $11
 	const EKANS                   ; $12
@@ -24,12 +24,12 @@
 	const NIDORANM                ; $17
 	const NIDORINO                ; $18
 	const NIDOKING                ; $19
-	const ZUBAT                   ; $1A
-	const GOLBAT                  ; $1B
-	const ODDISH                  ; $1C
-	const GLOOM                   ; $1D
-	const VILEPLUME               ; $1E
-	const PARAS                   ; $1F
+	const ZUBAT                   ; $1a
+	const GOLBAT                  ; $1b
+	const ODDISH                  ; $1c
+	const GLOOM                   ; $1d
+	const VILEPLUME               ; $1e
+	const PARAS                   ; $1f
 	const PARASECT                ; $20
 	const VENONAT                 ; $21
 	const VENOMOTH                ; $22
@@ -40,12 +40,12 @@
 	const MUK                     ; $27
 	const EXEGGCUTE               ; $28
 	const EXEGGUTOR               ; $29
-	const KOFFING                 ; $2A
-	const WEEZING                 ; $2B
-	const TANGELA1                ; $2C
-	const TANGELA2                ; $2D
-	const SCYTHER                 ; $2E
-	const PINSIR                  ; $2F
+	const KOFFING                 ; $2a
+	const WEEZING                 ; $2b
+	const TANGELA1                ; $2c
+	const TANGELA2                ; $2d
+	const SCYTHER                 ; $2e
+	const PINSIR                  ; $2f
 	const CHARMANDER              ; $30
 	const CHARMELEON              ; $31
 	const CHARIZARD               ; $32
@@ -56,12 +56,12 @@
 	const ARCANINE1               ; $37
 	const ARCANINE2               ; $38
 	const PONYTA                  ; $39
-	const RAPIDASH                ; $3A
-	const MAGMAR1                 ; $3B
-	const MAGMAR2                 ; $3C
-	const FLAREON1                ; $3D
-	const FLAREON2                ; $3E
-	const MOLTRES1                ; $3F
+	const RAPIDASH                ; $3a
+	const MAGMAR1                 ; $3b
+	const MAGMAR2                 ; $3c
+	const FLAREON1                ; $3d
+	const FLAREON2                ; $3e
+	const MOLTRES1                ; $3f
 	const MOLTRES2                ; $40
 	const SQUIRTLE                ; $41
 	const WARTORTLE               ; $42
@@ -72,12 +72,12 @@
 	const POLIWHIRL               ; $47
 	const POLIWRATH               ; $48
 	const TENTACOOL               ; $49
-	const TENTACRUEL              ; $4A
-	const SEEL                    ; $4B
-	const DEWGONG                 ; $4C
-	const SHELLDER                ; $4D
-	const CLOYSTER                ; $4E
-	const KRABBY                  ; $4F
+	const TENTACRUEL              ; $4a
+	const SEEL                    ; $4b
+	const DEWGONG                 ; $4c
+	const SHELLDER                ; $4d
+	const CLOYSTER                ; $4e
+	const KRABBY                  ; $4f
 	const KINGLER                 ; $50
 	const HORSEA                  ; $51
 	const SEADRA                  ; $52
@@ -88,12 +88,12 @@
 	const MAGIKARP                ; $57
 	const GYARADOS                ; $58
 	const LAPRAS                  ; $59
-	const VAPOREON1               ; $5A
-	const VAPOREON2               ; $5B
-	const OMANYTE                 ; $5C
-	const OMASTAR                 ; $5D
-	const ARTICUNO1               ; $5E
-	const ARTICUNO2               ; $5F
+	const VAPOREON1               ; $5a
+	const VAPOREON2               ; $5b
+	const OMANYTE                 ; $5c
+	const OMASTAR                 ; $5d
+	const ARTICUNO1               ; $5e
+	const ARTICUNO2               ; $5f
 	const PIKACHU1                ; $60
 	const PIKACHU2                ; $61
 	const PIKACHU3                ; $62
@@ -104,12 +104,12 @@
 	const RAICHU1                 ; $67
 	const RAICHU2                 ; $68
 	const MAGNEMITE1              ; $69
-	const MAGNEMITE2              ; $6A
-	const MAGNETON1               ; $6B
-	const MAGNETON2               ; $6C
-	const VOLTORB                 ; $6D
-	const ELECTRODE1              ; $6E
-	const ELECTRODE2              ; $6F
+	const MAGNEMITE2              ; $6a
+	const MAGNETON1               ; $6b
+	const MAGNETON2               ; $6c
+	const VOLTORB                 ; $6d
+	const ELECTRODE1              ; $6e
+	const ELECTRODE2              ; $6f
 	const ELECTABUZZ1             ; $70
 	const ELECTABUZZ2             ; $71
 	const JOLTEON1                ; $72
@@ -120,12 +120,12 @@
 	const SANDSHREW               ; $77
 	const SANDSLASH               ; $78
 	const DIGLETT                 ; $79
-	const DUGTRIO                 ; $7A
-	const MANKEY                  ; $7B
-	const PRIMEAPE                ; $7C
-	const MACHOP                  ; $7D
-	const MACHOKE                 ; $7E
-	const MACHAMP                 ; $7F
+	const DUGTRIO                 ; $7a
+	const MANKEY                  ; $7b
+	const PRIMEAPE                ; $7c
+	const MACHOP                  ; $7d
+	const MACHOKE                 ; $7e
+	const MACHAMP                 ; $7f
 	const GEODUDE                 ; $80
 	const GRAVELER                ; $81
 	const GOLEM                   ; $82
@@ -136,12 +136,12 @@
 	const HITMONLEE               ; $87
 	const HITMONCHAN              ; $88
 	const RHYHORN                 ; $89
-	const RHYDON                  ; $8A
-	const KABUTO                  ; $8B
-	const KABUTOPS                ; $8C
-	const AERODACTYL              ; $8D
-	const ABRA                    ; $8E
-	const KADABRA                 ; $8F
+	const RHYDON                  ; $8a
+	const KABUTO                  ; $8b
+	const KABUTOPS                ; $8c
+	const AERODACTYL              ; $8d
+	const ABRA                    ; $8e
+	const KADABRA                 ; $8f
 	const ALAKAZAM                ; $90
 	const SLOWPOKE1               ; $91
 	const SLOWPOKE2               ; $92
@@ -152,79 +152,79 @@
 	const HAUNTER2                ; $97
 	const GENGAR                  ; $98
 	const DROWZEE                 ; $99
-	const HYPNO                   ; $9A
-	const MR_MIME                 ; $9B
-	const JYNX                    ; $9C
-	const MEWTWO1                 ; $9D
-	const MEWTWO2                 ; $9E
-	const MEWTWO3                 ; $9F
-	const MEW1                    ; $A0
-	const MEW2                    ; $A1
-	const MEW3                    ; $A2
-	const PIDGEY                  ; $A3
-	const PIDGEOTTO               ; $A4
-	const PIDGEOT1                ; $A5
-	const PIDGEOT2                ; $A6
-	const RATTATA                 ; $A7
-	const RATICATE                ; $A8
-	const SPEAROW                 ; $A9
-	const FEAROW                  ; $AA
-	const CLEFAIRY                ; $AB
-	const CLEFABLE                ; $AC
-	const JIGGLYPUFF1             ; $AD
-	const JIGGLYPUFF2             ; $AE
-	const JIGGLYPUFF3             ; $AF
-	const WIGGLYTUFF              ; $B0
-	const MEOWTH1                 ; $B1
-	const MEOWTH2                 ; $B2
-	const PERSIAN                 ; $B3
-	const FARFETCHD               ; $B4
-	const DODUO                   ; $B5
-	const DODRIO                  ; $B6
-	const LICKITUNG               ; $B7
-	const CHANSEY                 ; $B8
-	const KANGASKHAN              ; $B9
-	const TAUROS                  ; $BA
-	const DITTO                   ; $BB
-	const EEVEE                   ; $BC
-	const PORYGON                 ; $BD
-	const SNORLAX                 ; $BE
-	const DRATINI                 ; $BF
-	const DRAGONAIR               ; $C0
-	const DRAGONITE1              ; $C1
-	const DRAGONITE2              ; $C2
-	const PROFESSOR_OAK           ; $C3
-	const IMPOSTER_PROFESSOR_OAK  ; $C4
-	const BILL                    ; $C5
-	const MR_FUJI                 ; $C6
-	const LASS                    ; $C7
-	const IMAKUNI_CARD            ; $C8
-	const POKEMON_TRADER          ; $C9
-	const POKEMON_BREEDER         ; $CA
-	const CLEFAIRY_DOLL           ; $CB
-	const MYSTERIOUS_FOSSIL       ; $CC
-	const ENERGY_RETRIEVAL        ; $CD
-	const SUPER_ENERGY_RETRIEVAL  ; $CE
-	const ENERGY_SEARCH           ; $CF
-	const ENERGY_REMOVAL          ; $D0
-	const SUPER_ENERGY_REMOVAL    ; $D1
-	const SWITCH                  ; $D2
-	const POKEMON_CENTER          ; $D3
-	const POKE_BALL               ; $D4
-	const SCOOP_UP                ; $D5
-	const COMPUTER_SEARCH         ; $D6
-	const POKEDEX                 ; $D7
-	const PLUSPOWER               ; $D8
-	const DEFENDER                ; $D9
-	const ITEM_FINDER             ; $DA
-	const GUST_OF_WIND            ; $DB
-	const DEVOLUTION_SPRAY        ; $DC
-	const POTION                  ; $DD
-	const SUPER_POTION            ; $DE
-	const FULL_HEAL               ; $DF
-	const REVIVE                  ; $E0
-	const MAINTENANCE             ; $E1
-	const POKEMON_FLUTE           ; $E2
-	const GAMBLER                 ; $E3
-	const RECYCLE                 ; $E4
+	const HYPNO                   ; $9a
+	const MR_MIME                 ; $9b
+	const JYNX                    ; $9c
+	const MEWTWO1                 ; $9d
+	const MEWTWO2                 ; $9e
+	const MEWTWO3                 ; $9f
+	const MEW1                    ; $a0
+	const MEW2                    ; $a1
+	const MEW3                    ; $a2
+	const PIDGEY                  ; $a3
+	const PIDGEOTTO               ; $a4
+	const PIDGEOT1                ; $a5
+	const PIDGEOT2                ; $a6
+	const RATTATA                 ; $a7
+	const RATICATE                ; $a8
+	const SPEAROW                 ; $a9
+	const FEAROW                  ; $aa
+	const CLEFAIRY                ; $ab
+	const CLEFABLE                ; $ac
+	const JIGGLYPUFF1             ; $ad
+	const JIGGLYPUFF2             ; $ae
+	const JIGGLYPUFF3             ; $af
+	const WIGGLYTUFF              ; $b0
+	const MEOWTH1                 ; $b1
+	const MEOWTH2                 ; $b2
+	const PERSIAN                 ; $b3
+	const FARFETCHD               ; $b4
+	const DODUO                   ; $b5
+	const DODRIO                  ; $b6
+	const LICKITUNG               ; $b7
+	const CHANSEY                 ; $b8
+	const KANGASKHAN              ; $b9
+	const TAUROS                  ; $ba
+	const DITTO                   ; $bb
+	const EEVEE                   ; $bc
+	const PORYGON                 ; $bd
+	const SNORLAX                 ; $be
+	const DRATINI                 ; $bf
+	const DRAGONAIR               ; $c0
+	const DRAGONITE1              ; $c1
+	const DRAGONITE2              ; $c2
+	const PROFESSOR_OAK           ; $c3
+	const IMPOSTER_PROFESSOR_OAK  ; $c4
+	const BILL                    ; $c5
+	const MR_FUJI                 ; $c6
+	const LASS                    ; $c7
+	const IMAKUNI_CARD            ; $c8
+	const POKEMON_TRADER          ; $c9
+	const POKEMON_BREEDER         ; $ca
+	const CLEFAIRY_DOLL           ; $cb
+	const MYSTERIOUS_FOSSIL       ; $cc
+	const ENERGY_RETRIEVAL        ; $cd
+	const SUPER_ENERGY_RETRIEVAL  ; $ce
+	const ENERGY_SEARCH           ; $cf
+	const ENERGY_REMOVAL          ; $d0
+	const SUPER_ENERGY_REMOVAL    ; $d1
+	const SWITCH                  ; $d2
+	const POKEMON_CENTER          ; $d3
+	const POKE_BALL               ; $d4
+	const SCOOP_UP                ; $d5
+	const COMPUTER_SEARCH         ; $d6
+	const POKEDEX                 ; $d7
+	const PLUSPOWER               ; $d8
+	const DEFENDER                ; $d9
+	const ITEM_FINDER             ; $da
+	const GUST_OF_WIND            ; $db
+	const DEVOLUTION_SPRAY        ; $dc
+	const POTION                  ; $dd
+	const SUPER_POTION            ; $de
+	const FULL_HEAL               ; $df
+	const REVIVE                  ; $e0
+	const MAINTENANCE             ; $e1
+	const POKEMON_FLUTE           ; $e2
+	const GAMBLER                 ; $e3
+	const RECYCLE                 ; $e4
 NUM_CARDS EQU const_value + -1

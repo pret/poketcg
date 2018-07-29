@@ -33,6 +33,7 @@ DUEL_LOSS EQU $1
 
 ; wPlayerDuelVariables or wOpponentDuelVariables constants
 DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"               ; 00
+DUELVARS_PRIZE_CARDS                     EQUS "LOW(wPlayerPrizeCards)"                  ; 3c
 DUELVARS_HAND                            EQUS "LOW(wPlayerHand)"                        ; 42
 DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"                   ; 7e
 DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"      ; ba

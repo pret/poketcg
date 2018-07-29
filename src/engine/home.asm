@@ -7541,7 +7541,10 @@ DuelMenuCursorCoords: ; 278d (0:278d)
 	db 14, 16 ; Done
 
 ; print the items of a list of cards (hand cards in a duel, cards from a booster pack...)
-; and initialize the parameters of the list
+; and initialize the parameters of the list given:
+   ; a = list length
+   ; de = initial page scroll offset, initial item (in the visible page)
+   ; hl: 9 bytes with the rest of the parameters
 PrintCardListItems: ; 2799 (0:2799)
 	call InitializeCardListParameters
 	ld hl, wMenuFunctionPointer
@@ -11164,7 +11167,7 @@ Func_3b11: ; 3b11 (0:3b11)
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
 	push af
-	ld a, $7
+	ld a, $07
 	call BankswitchROM
 	call $48bc
 	pop af
@@ -11174,9 +11177,9 @@ Func_3b21: ; 3b21 (0:3b21)
 Func_3b31: ; 3b31 (0:3b31)
 	ldh a, [hBankROM]
 	push af
-	ld a, $7
+	ld a, BANK(Func_1cb18)
 	call BankswitchROM
-	call $4b18
+	call Func_1cb18
 	jr c, .asm_3b45
 	xor a
 	ld [wDoFrameFunction], a
@@ -11215,7 +11218,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	push hl
 	push bc
 	push de
-	ld a, $7
+	ld a, $07
 	call BankswitchROM
 	ld a, [wd422]
 	cp $61
@@ -11711,10 +11714,13 @@ Func_3df3: ; 3df3 (0:3df3)
 	ret
 ; 0x3e10
 
+; draws player's portrait at b,c
 Func_3e10: ; 3e10 (0:3e10)
 	ld a, $1
 	ld [wd61e], a
 	ld a, $62
+;	fallthrough
+
 Func_3e17: ; 3e17 (0:3e17)
 	ld [wd131], a
 	ldh a, [hBankROM]
@@ -11726,6 +11732,7 @@ Func_3e17: ; 3e17 (0:3e17)
 	call BankswitchROM
 	ret
 
+; draws opponent's portrait given in a at b,c
 Func_3e2a: ; 3e2a (0:3e2a)
 	ld [wd61e], a
 	ld a, $63
