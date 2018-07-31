@@ -376,12 +376,12 @@ TransmitingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 
-Text0058: ; 369b8 (d:69b8)
+WaitingHandExamineText: ; 369b8 (d:69b8)
 	text "Waiting..."
 	line "    Hand        Examine"
 	done
 
-Text0059: ; 369dc (d:69dc)
+SelectingBenchPokemonHandExamineBackText: ; 369dc (d:69dc)
 	text "Selecting Bench Pokémon..."
 	line "    Hand        Examine     Back"
 	done
@@ -410,12 +410,12 @@ DuelistsTurnText: ; 36a9a (d:6a9a)
 	text "<RAMNAME>'s Turn."
 	done
 
-Text005f: ; 36aa5 (d:6aa5)
+AttachedEnergyToPokemonText: ; 36aa5 (d:6aa5)
 	text "Attached <RAMTEXT>"
 	line "to <RAMTEXT>."
 	done
 
-Text0060: ; 36ab7 (d:6ab7)
+PokemonEvolvedIntoPokemonText: ; 36ab7 (d:6ab7)
 	text "<RAMTEXT> evolved"
 	line "into <RAMTEXT>."
 	done
@@ -509,13 +509,13 @@ PleasePlacePrizesText: ; 36d3f (d:6d3f)
 	line "<RAMNUM> Prizes."
 	done
 
-IfHeadPlayerPlaysFirstText: ; 36d57 (d:6d57)
+IfHeadsDuelistPlaysFirstText: ; 36d57 (d:6d57)
 	text "If heads,"
 	line ""
 	text "<RAMTEXT> plays first."
 	done
 
-CoinTossToDetermineWhoFirstText: ; 36d72 (d:6d72)
+CoinTossToDecideWhoPlaysFirstText: ; 36d72 (d:6d72)
 	text "A coin will be tossed"
 	line "to decide who plays first."
 	done
@@ -586,17 +586,17 @@ UnableToUsePkmnPowerDueToToxicGasText: ; 36ed5 (d:6ed5)
 	line "the effect of Toxic Gas."
 	done
 
-Text0084: ; 36f11 (d:6f11)
+PlayCheck1Text: ; 36f11 (d:6f11)
 	text "  Play"
 	line "  Check"
 	done
 
-Text0085: ; 36f21 (d:6f21)
+PlayCheck2Text: ; 36f21 (d:6f21)
 	text "  Play"
 	line "  Check"
 	done
 
-Text0086: ; 36f31 (d:6f31)
+SelectCheckText: ; 36f31 (d:6f31)
 	text "  Select"
 	line "  Check"
 	done

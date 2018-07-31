@@ -173,11 +173,11 @@ Text0117: ; 386f2 (e:46f2)
 	text "Draw 1 card from the Deck."
 	done
 
-DrawCardsFromTheDeck: ; 3870e (e:470e)
+DrawCardsFromTheDeckText: ; 3870e (e:470e)
 	text "Draw <RAMNUM> card(s) from the Deck."
 	done
 
-NoCardsInDeckCannotDraw: ; 3872d (e:472d)
+CannotDrawCardBecauseNoCardsInDeckText: ; 3872d (e:472d)
 	text "Cannot draw a card because"
 	line "there are no cards in the Deck."
 	done

@@ -36,7 +36,7 @@ SleepEffect: ; 2c030 (b:4030)
 
 ApplyStatusEffect:
 	ldh a, [hWhoseTurn]
-	ld hl, wcc05
+	ld hl, wWhoseTurn
 	cp [hl]
 	jr nz, .can_induce_status
 	ld a, [wTempNonTurnDuelistCardID]

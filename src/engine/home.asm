@@ -640,7 +640,7 @@ EmptyScreen: ; 04a2 (0:04a2)
 	call DisableLCD
 	call FillTileMap
 	xor a
-	ld [wcac2], a
+	ld [wDuelDisplayedScreen], a
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -4538,8 +4538,8 @@ Func_179a: ; 179a (0:179a)
 	pop hl
 	pop de
 	call SubstractHP
-	ld a, [wcac2]
-	cp $1
+	ld a, [wDuelDisplayedScreen]
+	cp DUEL_MAIN_SCENE
 	jr nz, .skip_draw_huds
 	push hl
 	bank1call DrawDuelHUDs
@@ -7265,10 +7265,10 @@ InitializeCardListParameters: ; 25ea (0:25ea)
 	ret
 ; 0x2626
 
-; similar to HandleMenuInput, but conveniently returns parameters related
-; to the state of the list in a, d, and e if A or B were pressed.
-; also returns carry if A or B were pressed, nc otherwise.
-; used in the Hand card list and Discard Pile card list screens.
+; similar to HandleMenuInput, but conveniently returns parameters related to the
+; state of the list in a, d, and e if A or B were pressed. also returns carry
+; if A or B were pressed, nc otherwise. returns -1 in a if B was pressed.
+; used for example in the Hand card list and Discard Pile card list screens.
 HandleCardListInput: ; 2626 (0:2626)
 	call HandleMenuInput
 	ret nc
@@ -7455,7 +7455,7 @@ SetMenuItem: ; 2710 (0:2710)
 ; handle input for the 2-row 3-column duel menu.
 ; only handles input not involving the B, START, or SELECT buttons, that is,
 ; navigating through the menu or selecting an item with the A button.
-; other input in handled by PrintDuelMenu.handle_input
+; other input in handled by PrintDuelMenuAndHandleInput.handle_input
 HandleDuelMenuInput: ; 271a (0:271a)
 	ldh a, [hDPadHeld]
 	or a
@@ -9089,7 +9089,7 @@ CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
    ; [wLoadedMoveEffectCommands] = pointer to list of commands of current move or trainer card
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
-; grab pointer to command list from wLoadedMoveEffectCommands
+	; grab pointer to command list from wLoadedMoveEffectCommands
 	ld hl, wLoadedMoveEffectCommands
 	ld a, [hli]
 	ld h, [hl]
@@ -9097,11 +9097,12 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	pop af
 	call CheckMatchingCommand
 	jr nc, .execute_function
-; return if no matching command was found
+	; return if no matching command was found
 	or a
 	ret
+
 .execute_function
-; executes the function at [wce22]:hl
+	; execute the function at [wce22]:hl
 	ldh a, [hBankROM]
 	push af
 	ld a, [wce22]
@@ -9109,7 +9110,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	or a
 	call CallHL
 	push af
-; restore original bank and return
+	; restore original bank and return
 	pop bc
 	pop af
 	call BankswitchROM
@@ -9126,7 +9127,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld a, l
 	or h
 	jr nz, .not_null_pointer
-; return carry if pointer is $0000
+	; return carry if pointer is $0000
 	scf
 	ret
 
@@ -9135,7 +9136,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	push af
 	ld a, BANK(EffectCommands)
 	call BankswitchROM
-; store the bank number of command functions ($b) in wce22
+	; store the bank number of command functions ($b) in wce22
 	ld a, $b
 	ld [wce22], a
 .check_command_loop
@@ -9144,23 +9145,24 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	jr z, .no_more_commands
 	cp c
 	jr z, .matching_command_found
-; skip function pointer for this command and move to the next one
+	; skip function pointer for this command and move to the next one
 	inc hl
 	inc hl
 	jr .check_command_loop
 
 .matching_command_found
-; load function pointer for this command
+	; load function pointer for this command
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-; restore bank and return nc
+	; restore bank and return nc
 	pop af
 	call BankswitchROM
 	or a
 	ret
-; restore bank and return c
+
 .no_more_commands
+	; restore bank and return c
 	pop af
 	call BankswitchROM
 	scf
@@ -9253,8 +9255,8 @@ TossCoin: ; 307d (0:307d)
 	ld [hl], d
 	ld a, 1
 	bank1call _TossCoin
-	ld hl, wcac2
-	ld [hl], $0
+	ld hl, wDuelDisplayedScreen
+	ld [hl], 0
 	pop hl
 	ret
 
@@ -9799,7 +9801,7 @@ HandleNShieldAndTransparency: ; 337f (0:337f)
 	ret
 .transparency
 	xor a
-	ld [wcac2], a
+	ld [wDuelDisplayedScreen], a
 	ldtx de, TransparencyCheckText
 	call TossCoin
 	jr nc, .done
@@ -9960,7 +9962,7 @@ HandleTransparency: ; 348a (0:348a)
 	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr c, .done
 	xor a
-	ld [wcac2], a
+	ld [wDuelDisplayedScreen], a
 	ldtx de, TransparencyCheckText
 	call TossCoin
 	ret nc

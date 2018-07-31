@@ -466,7 +466,9 @@ wVBlankOAMCopyToggle:: ; cac0
 wTempByte:: ; cac1
 	ds $1
 
-wcac2:: ; cac2
+; which screen or interface is currently displayed in the screen during a duel
+; used to prevent loading graphics or drawing stuff more times than necessary
+wDuelDisplayedScreen:: ; cac2
 	ds $1
 
 ; used to increase the play time counter every four timer interrupts (60.24 Hz)
@@ -626,20 +628,35 @@ wCurrentDuelMenuItem:: ; cbc6
 wCardPageNumber:: ; cbc7
 	ds $1
 
-wcbc8:: ; cbc8
+; how many selectable items are in a play area screen. used to set wNumMenuItems
+; in order to navigate through a play area screen. this becomes the number of bench
+; Pokemon cards if wExcludeArenaPokemon is 1, and that number plus 1 if it's 0.
+wNumPlayAreaItems:: ; cbc8
 	ds $1
 
-wcbc9:: ; cbc9
+; selects a PLAY_AREA_* slot in order to display information related to it. used by functions
+; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
+wCurPlayAreaSlot:: ; cbc9
+
+; X position to display the attached energies, HP bar, and Pluspower/Defender icons
+; obviously different for player and opponent side. used by DrawDuelHUD.
+wHUDEnergyAndHPBarsX:: ; cbc9
 	ds $1
 
-wcbca:: ; cbca
+; current Y coordinate where some play area information is being printed at. used by functions
+; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
+wCurPlayAreaY:: ; cbca
+
+; Y position to display the attached energies, HP bar, and Pluspower/Defender icons
+; obviously different for player and opponent side. used by DrawDuelHUD.
+wHUDEnergyAndHPBarsY:: ; cbca
 	ds $1
 
 ; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
-; used by CheckIfEnoughEnergiesToRetreat and Func_4611
+; used by CheckIfEnoughEnergiesToRetreat and DisplayRetreatScreen
 wEnergyCardsRequiredToRetreat:: ; cbcc
 	ds $1
 
@@ -675,10 +692,10 @@ wcbd4:: ; cbd4
 wcbd5:: ; cbd5
 	ds $1
 
-wcbd6:: ; cbd6
+wWatchedButtons_cbd6:: ; cbd6
 	ds $1
 
-wcbd7:: ; cbd7
+wExitButtons_cbd7:: ; cbd7
 	ds $1
 
 wcbd8:: ; cbd8
@@ -695,7 +712,8 @@ wCardListInfoBoxText:: ; cbda
 wCardListHeaderText:: ; cbdc
 	ds $2
 
-wcbde:: ; cbde
+; when selecting an item of a list of cards which type of menu shows up
+wCardListItemSelectionMenuType:: ; cbde
 	ds $1
 
 ; flag indicating whether a list of cards should be sorted by ID
@@ -725,10 +743,12 @@ wDuelReturnAddress:: ; cbe5
 wcbe7:: ; cbe7
 	ds $1
 
-wcbe8:: ; cbe8
+wNumCardsTryingToDraw:: ; cbe8
 	ds $1
 
-wcbe9:: ; cbe9
+; number of cards being drawn in order to animate the number of cards in
+; the hand and in the deck in the draw card screen
+wNumCardsBeingDrawn:: ; cbe9
 	ds $1
 
 	ds $3
@@ -774,7 +794,11 @@ wcc00:: ; cc00
 wcc04:: ; cc04
 	ds $1
 
-wcc05:: ; cc05
+; the value of hWhoseTurn gets loaded here at the beginning of each duelist's turn.
+; more reliable than hWhoseTurn, as hWhoseTurn may change temporarily in order to handle status
+; conditions or other events of the non-turn duelist. used mostly between turns (to check which
+; duelist's turn just finished), or to restore the value of hWhoseTurn at some point.
+wWhoseTurn:: ; cc05
 	ds $1
 
 ; number of turns taken by both players
@@ -978,7 +1002,9 @@ wccf0:: ; ccf0
 wccf1:: ; ccf1
 	ds $1
 
-wccf2:: ; ccf2
+; when non-0, allows the player to skip some delays during a duel by pressing B.
+; value read from s0a009. probably only used for debugging.
+wSkipDelayAllowed:: ; ccf2
 	ds $1
 
 SECTION "WRAM0 2", WRAM0

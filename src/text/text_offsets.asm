@@ -89,15 +89,15 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransmissionErrorText                    ; 0x0055
 	textpointer ChooseTheCardYouWishToExamineText        ; 0x0056
 	textpointer TransmitingDataText                      ; 0x0057
-	textpointer Text0058                                 ; 0x0058
-	textpointer Text0059                                 ; 0x0059
+	textpointer WaitingHandExamineText                                 ; 0x0058
+	textpointer SelectingBenchPokemonHandExamineBackText                                 ; 0x0059
 	textpointer RetreatedToTheBenchText                  ; 0x005a
 	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
 	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
 	textpointer DuelistsTurnText                         ; 0x005e
-	textpointer Text005f                                 ; 0x005f
-	textpointer Text0060                                 ; 0x0060
+	textpointer AttachedEnergyToPokemonText                                 ; 0x005f
+	textpointer PokemonEvolvedIntoPokemonText                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
 	textpointer PlacedInTheArenaText                     ; 0x0062
 	textpointer ShufflesTheDeckText                      ; 0x0063
@@ -117,8 +117,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YouCannotSelectThisCardText                                 ; 0x0071
 	textpointer PlacingThePrizesText                     ; 0x0072
 	textpointer PleasePlacePrizesText                    ; 0x0073
-	textpointer IfHeadPlayerPlaysFirstText               ; 0x0074
-	textpointer CoinTossToDetermineWhoFirstText          ; 0x0075
+	textpointer IfHeadsDuelistPlaysFirstText               ; 0x0074
+	textpointer CoinTossToDecideWhoPlaysFirstText          ; 0x0075
 	textpointer DecisionText                             ; 0x0076
 	textpointer DuelWasADrawText                         ; 0x0077
 	textpointer WonDuelText                              ; 0x0078
@@ -133,9 +133,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WasKnockedOutText                        ; 0x0081
 	textpointer HavePokemonPowerText                     ; 0x0082
 	textpointer UnableToUsePkmnPowerDueToToxicGasText    ; 0x0083
-	textpointer Text0084                                 ; 0x0084
-	textpointer Text0085                                 ; 0x0085
-	textpointer Text0086                                 ; 0x0086
+	textpointer PlayCheck1Text                                 ; 0x0084
+	textpointer PlayCheck2Text                                 ; 0x0085
+	textpointer SelectCheckText                                 ; 0x0086
 	textpointer Text0087                                 ; 0x0087
 	textpointer DuelistIsThinkingText                    ; 0x0088
 	textpointer Text0089                                 ; 0x0089
@@ -281,8 +281,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0115                                 ; 0x0115
 	textpointer Text0116                                 ; 0x0116
 	textpointer Text0117                                 ; 0x0117
-	textpointer DrawCardsFromTheDeck                     ; 0x0118
-	textpointer NoCardsInDeckCannotDraw                  ; 0x0119
+	textpointer DrawCardsFromTheDeckText                     ; 0x0118
+	textpointer CannotDrawCardBecauseNoCardsInDeckText                  ; 0x0119
 	textpointer Text011a                                 ; 0x011a
 	textpointer Text011b                                 ; 0x011b
 	textpointer Text011c                                 ; 0x011c

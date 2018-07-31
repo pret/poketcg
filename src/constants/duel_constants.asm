@@ -21,16 +21,6 @@ TURN_PLAYER_TIED EQU $3
 DUEL_WIN  EQU $0
 DUEL_LOSS EQU $1
 
-; Box message id's
-	const_def
-	const BOXMSG_PLAYERS_TURN
-	const BOXMSG_OPPONENTS_TURN
-	const BOXMSG_BETWEEN_TURNS
-	const BOXMSG_DECISION
-	const BOXMSG_BENCH_POKEMON
-	const BOXMSG_ARENA_POKEMON
-	const BOXMSG_COIN_TOSS
-
 ; wPlayerDuelVariables or wOpponentDuelVariables constants
 DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"               ; 00
 DUELVARS_PRIZE_CARDS                     EQUS "LOW(wPlayerPrizeCards)"                  ; 3c
@@ -174,3 +164,27 @@ NO_DAMAGE_OR_EFFECT_NSHIELD      EQU $05
 ; wDamageEffectiveness constants
 WEAKNESS   EQU 1
 RESISTANCE EQU 2
+
+; Box message id's
+	const_def
+	const BOXMSG_PLAYERS_TURN
+	const BOXMSG_OPPONENTS_TURN
+	const BOXMSG_BETWEEN_TURNS
+	const BOXMSG_DECISION
+	const BOXMSG_BENCH_POKEMON
+	const BOXMSG_ARENA_POKEMON
+	const BOXMSG_COIN_TOSS
+
+; wDuelDisplayedScreen constants
+DUEL_MAIN_SCENE     EQU $01
+PLAY_AREA_CARD_LIST EQU $02
+COIN_TOSS           EQU $06
+DRAW_CARDS          EQU $07
+LARGE_CARD_PICTURE  EQU $08
+SHUFFLE_DECK        EQU $09
+CHECK_PLAY_AREA     EQU $0a
+
+; wCardListItemSelectionMenuType constants
+;NONE        EQU $00
+PLAY_CHECK   EQU $01
+SELECT_CHECK EQU $02
