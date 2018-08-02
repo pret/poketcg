@@ -62,19 +62,19 @@ LbsText: ; 36385 (d:6385)
 	text "lbs."
 	done
 
-Text0011: ; 3638b (d:638b)
+PromostarRarityText: ; 3638b (d:638b)
 	textfw0 " "
 	done
 
-Text0012: ; 3638d (d:638d)
+CircleRarityText: ; 3638d (d:638d)
 	textfw3 "●"
 	done
 
-Text0013: ; 36390 (d:6390)
+DiamondRarityText: ; 36390 (d:6390)
 	textfw3 "◆"
 	done
 
-Text0014: ; 36393 (d:6393)
+StarRarityText: ; 36393 (d:6393)
 	textfw3 "★"
 	done
 

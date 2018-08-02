@@ -675,7 +675,7 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-wcbd1:: ; cbd1
+wCardPageType:: ; cbd1
 	ds $1
 
 ; when processing or displaying the play area Pokemon cards of a duelist,
@@ -695,7 +695,7 @@ wcbd5:: ; cbd5
 wWatchedButtons_cbd6:: ; cbd6
 	ds $1
 
-wExitButtons_cbd7:: ; cbd7
+wCardPageExitButtons:: ; cbd7
 	ds $1
 
 wcbd8:: ; cbd8

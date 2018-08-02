@@ -1479,7 +1479,7 @@ GrassAndPsychicDeckName: ; 3b75d (e:775d)
 	text "Grass & Psychic"
 	done
 
-Text0212: ; 3b76e (e:776e)
+RetreatCostText: ; 3b76e (e:776e)
 	text "Retreat Cost"
 	done
 

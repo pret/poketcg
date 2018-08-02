@@ -508,7 +508,7 @@ OpenActivePokemonScreen: ; 4376 (1:4376)
 	xor a
 	ld [hli], a
 	ld [hl], a ; wCurPlayAreaY
-	call Func_576a
+	call OpenCardPage_CheckPlayArea
 	ret
 ; 0x438e
 
@@ -1245,7 +1245,7 @@ LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
 	push bc
 	ld e, b
 	ld hl, wLoadedCard1Move1Name
-	call Func_5c33
+	call PrintMoveOrPkmnPowerInformation
 	pop bc
 	pop hl
 	inc b
@@ -1264,7 +1264,7 @@ LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
 	push bc
 	ld e, b
 	ld hl, wLoadedCard1Move2Name
-	call Func_5c33
+	call PrintMoveOrPkmnPowerInformation
 	pop bc
 	pop hl
 
@@ -1336,11 +1336,11 @@ _CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	pop bc
 	push bc
-	ld de, wLoadedCard1Move1Energy
+	ld de, wLoadedCard1Move1EnergyCost
 	ld a, c
 	or a
 	jr z, .got_move
-	ld de, wLoadedCard1Move2Energy
+	ld de, wLoadedCard1Move2EnergyCost
 
 .got_move
 	ld hl, CARD_DATA_MOVE1_NAME - CARD_DATA_MOVE1_ENERGY
@@ -2990,7 +2990,7 @@ Func_55f0: ; 55f0 (1:55f0)
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call Func_5762
+	call OpenCardPage_CheckHandOrDiscardPile
 	ldh a, [hDPadHeld]
 	bit D_UP_F, a
 	jr nz, .asm_566f
@@ -3088,7 +3088,7 @@ Func_56c2: ; 56c2 (1:56c2)
 	ret z
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call Func_5773
+	call OpenCardPage_Hand
 	call DrawCardListScreenLayout
 .b_pressed
 	scf
@@ -3175,29 +3175,41 @@ Func_574a: ; 574a (1:574a)
 	ret
 ; 0x5762
 
-Func_5762: ; 5762 (1:5762)
+; draw the card page of the card at wLoadedCard1 and listen for input
+; in order to switch the page or to exit.
+; triggered by checking a hand card or a discard pile card in the Check menu.
+OpenCardPage_CheckHandOrDiscardPile: ; 5762 (1:5762)
 	ld a, B_BUTTON | D_UP | D_DOWN
-	ld [wExitButtons_cbd7], a
-	xor a
-	jr Func_5779
+	ld [wCardPageExitButtons], a
+	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
+	jr OpenCardPage
 
-Func_576a: ; 576a (1:576a)
+; draw the card page of the card at wLoadedCard1 and listen for input
+; in order to switch the page or to exit.
+; triggered by checking an arena card or a bench card in the Check menu.
+OpenCardPage_CheckPlayArea: ; 576a (1:576a)
 	ld a, B_BUTTON
-	ld [wExitButtons_cbd7], a
-	ld a, $01
-	jr Func_5779
+	ld [wCardPageExitButtons], a
+	ld a, CARDPAGETYPE_PLAY_AREA
+	jr OpenCardPage
 
-Func_5773: ; 5773 (1:5773)
+; draw the card page of the card at wLoadedCard1 and listen for input
+; in order to switch the page or to exit.
+; triggered by checking a card in the Hand menu.
+OpenCardPage_Hand: ; 5773 (1:5773)
 	ld a, B_BUTTON
-	ld [wExitButtons_cbd7], a
-	xor a
+	ld [wCardPageExitButtons], a
+	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 ;	fallthrough
 
-Func_5779: ; 5779 (1:5779)
-	ld [wcbd1], a
+; draw the card page of the card at wLoadedCard1 and listen for input
+; in order to switch the page or to exit.
+OpenCardPage: ; 5779 (1:5779)
+	ld [wCardPageType], a
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call Func_3b31
+	; load the graphics and display the card image of wLoadedCard1
 	call LoadDuelCardSymbolTiles
 	ld de, v0Tiles1 + $20 tiles
 	call LoadLoaded1CardGfx
@@ -3208,59 +3220,73 @@ Func_5779: ; 5779 (1:5779)
 	call PlaceCardImageOAM
 	lb de, 6, 4
 	call ApplyBGP6OrSGB3ToCardImage
+	; display the initial card page for the card at wLoadedCard1
 	xor a
 	ld [wCardPageNumber], a
-.asm_57a7
-	call Func_5898
-	jr c, .done
+.load_next
+	call DisplayFirstOrNextCardPage
+	jr c, .done ; done if trying to advance past the last page with START or A_BUTTON
 	call EnableLCD
-.asm_57af
+.input_loop
 	call DoFrame
 	ldh a, [hDPadHeld]
 	ld b, a
-	ld a, [wExitButtons_cbd7]
+	ld a, [wCardPageExitButtons]
 	and b
 	jr nz, .done
+	; START and A_BUTTON advance to the next valid card page, but close it
+	; after trying to advance from the last page
 	ldh a, [hKeysPressed]
 	and START | A_BUTTON
-	jr nz, .asm_57a7
+	jr nz, .load_next
+	; D_RIGHT and D_LEFT advance to the next and previous valid card page respectively.
+	; however, unlike START and A_BUTTON, D_RIGHT past the last page goes back to the start.
 	ldh a, [hKeysPressed]
 	and D_RIGHT | D_LEFT
-	jr z, .asm_57af
-	call Func_57cd
-	jr .asm_57af
+	jr z, .input_loop
+	call DisplayCardPageOnLeftOrRightPressed
+	jr .input_loop
 .done
 	ret
 ; 0x57cd
 
-Func_57cd: ; 57cd (1:57cd)
+; display the previous valid card page of the card at wLoadedCard1 if bit D_LEFT_F
+; of a is set, and the first or next valid card page otherwise.
+; DisplayFirstOrNextCardPage and DisplayPreviousCardPage only call DisplayCardPage
+; when GoToFirstOrNextCardPage and GoToPreviousCardPage respectively return nc
+; so the "call c, DisplayCardPage" instructions makes sure the card page switched
+; to is always displayed.
+DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	bit D_LEFT_F, a
 	jr nz, .left
 ;.right
-	call Func_5898
-	call c, Func_589c
+	call DisplayFirstOrNextCardPage
+	call c, DisplayCardPage
 	ret
 .left
-	call Func_5892
-	call c, Func_589c
+	call DisplayPreviousCardPage
+	call c, DisplayCardPage
 	ret
 ; 0x57df
 
 	INCROM $57df,  $5892
 
-Func_5892: ; 5892 (1:5892)
-	call Func_5911
-	jr nc, Func_589c
+; display the previous valid card page
+DisplayPreviousCardPage: ; 5892 (1:5892)
+	call GoToPreviousCardPage
+	jr nc, DisplayCardPage
 	ret
 
-Func_5898: ; 5898 (1:5898)
-	call Func_58e2
+; display the next valid card page or load the first valid card page if [wCardPageNumber] == 0
+DisplayFirstOrNextCardPage: ; 5898 (1:5898)
+	call GoToFirstOrNextCardPage
 	ret c
 ;	fallthrough
 
-Func_589c: ; 589c (1:589c)
+; display the card page with id at wCardPageNumber of wLoadedCard1
+DisplayCardPage: ; 589c (1:589c)
 	ld a, [wCardPageNumber]
-	ld hl, CardPagePointerTable
+	ld hl, CardPageDisplayPointerTable
 	call JumpToFunctionInTable
 	call EnableLCD
 	or a
@@ -3280,9 +3306,9 @@ LoadSelectedCardGfx: ; 58aa (1:58aa)
 	ret
 ; 0x58c2
 
-CardPagePointerTable: ; 58c2 (1:58c2)
+CardPageDisplayPointerTable: ; 58c2 (1:58c2)
 	dw DrawDuelMainScene
-	dw $5b7d ; CARDPAGE_POKEMON_OVERVIEW
+	dw CardPageDisplay_PokemonOverview ; CARDPAGE_POKEMON_OVERVIEW
 	dw $5d1f ; CARDPAGE_POKEMON_MOVE1_1
 	dw $5d27 ; CARDPAGE_POKEMON_MOVE1_2
 	dw $5d2f ; CARDPAGE_POKEMON_MOVE2_1
@@ -3299,85 +3325,190 @@ CardPagePointerTable: ; 58c2 (1:58c2)
 	dw DrawDuelMainScene
 ; 0x58e2
 
-Func_58e2: ; 58e2 (1:58e2)
+; given the current card page at [wCardPageNumber], go to the next valid card page or load
+; the first valid card page of the current card at wLoadedCard1 if [wCardPageNumber] == 0
+GoToFirstOrNextCardPage: ; 58e2 (1:58e2)
 	ld a, [wCardPageNumber]
 	or a
-	jr nz, .asm_58ff
+	jr nz, .advance_page
+	; load the first page for this type of card
 	ld a, [wLoadedCard1Type]
 	ld b, a
 	ld a, CARDPAGE_ENERGY
 	bit TYPE_ENERGY_F, b
-	jr nz, .set_card_page_nc
+	jr nz, .set_initial_page
 	ld a, CARDPAGE_TRAINER_1
 	bit TYPE_TRAINER_F, b
-	jr nz, .set_card_page_nc
+	jr nz, .set_initial_page
 	ld a, CARDPAGE_POKEMON_OVERVIEW
-.set_card_page_nc
+.set_initial_page
 	ld [wCardPageNumber], a
 	or a
 	ret
-.asm_58ff
+.advance_page
 	ld hl, wCardPageNumber
 	inc [hl]
 	ld a, [hl]
-	call Func_5930
-	jr c, .set_card_page_c
+	call SwitchCardPage
+	jr c, .set_card_page
+	; stay in this page if it exists, or skip to previous page if it doesn't
 	or a
 	ret nz
-	jr .asm_58ff
-.set_card_page_c
+	; non-existant page: skip to next
+	jr .advance_page
+.set_card_page
 	ld [wCardPageNumber], a
 	ret
 ; 0x5911
 
-Func_5911: ; 5911 (1:5911)
+; given the current card page at [wCardPageNumber], go to the previous
+; valid card page for the current card at wLoadedCard1
+GoToPreviousCardPage: ; 5911 (1:5911)
 	ld hl, wCardPageNumber
 	dec [hl]
 	ld a, [hl]
-	call Func_5930
-	jr c, .asm_591f
+	call SwitchCardPage
+	jr c, .set_card_page
+	; stay in this page if it exists, or skip to previous page if it doesn't
 	or a
 	ret nz
-	jr Func_5911
-.asm_591f
+	; non-existant page: skip to previous
+	jr GoToPreviousCardPage
+.set_card_page
 	ld [wCardPageNumber], a
-.asm_5922
-	call Func_5930
+.previous_page_loop
+	call SwitchCardPage
 	or a
-	jr nz, .asm_592e
+	jr nz, .stay
 	ld hl, wCardPageNumber
 	dec [hl]
-	jr .asm_5922
-.asm_592e
+	jr .previous_page_loop
+.stay
 	scf
 	ret
 ; 0x5930
 
-Func_5930: ; 5930 (1:5930)
-	ld hl, CardPagePointerTable2
+; check if the card page trying to switch to is valid for the card at wLoadedCard1
+; return with the equivalent to one of these three actions:
+   ; stay in card page trying to switch to (nc, nz)
+   ; change to card page returned in a if D_LEFT/D_RIGHT pressed, or exit if A_BUTTON/START pressed (c)
+   ; non-existant page, so skip to next/previous (nc, z)
+SwitchCardPage: ; 5930 (1:5930)
+	ld hl, CardPageSwitchPointerTable
 	jp JumpToFunctionInTable
 ; 0x5936
 
-CardPagePointerTable2: ; 5936 (1:5936)
-	dw $5956
-	dw $595a ; CARDPAGE_POKEMON_OVERVIEW
-	dw $595e ; CARDPAGE_POKEMON_MOVE1_1
-	dw $5963 ; CARDPAGE_POKEMON_MOVE1_2
-	dw $5968 ; CARDPAGE_POKEMON_MOVE2_1
-	dw $596d ; CARDPAGE_POKEMON_MOVE2_2
-	dw $595a ; CARDPAGE_POKEMON_DESCRIPTION
-	dw $5973
-	dw $5977
-	dw $597b ; CARDPAGE_ENERGY
-	dw $597f ; CARDPAGE_ENERGY + 1
-	dw $5984
-	dw $5988
-	dw $597b ; CARDPAGE_TRAINER_1
-	dw $597f ; CARDPAGE_TRAINER_2
-	dw $598c
+CardPageSwitchPointerTable: ; 5936 (1:5936)
+	dw CardPageSwitch_00
+	dw CardPageSwitch_PokemonOverviewOrDescription ; CARDPAGE_POKEMON_OVERVIEW
+	dw CardPageSwitch_PokemonMove1Page1 ; CARDPAGE_POKEMON_MOVE1_1
+	dw CardPageSwitch_PokemonMove1Page2 ; CARDPAGE_POKEMON_MOVE1_2
+	dw CardPageSwitch_PokemonMove2Page1 ; CARDPAGE_POKEMON_MOVE2_1
+	dw CardPageSwitch_PokemonMove2Page2 ; CARDPAGE_POKEMON_MOVE2_2
+	dw CardPageSwitch_PokemonOverviewOrDescription ; CARDPAGE_POKEMON_DESCRIPTION
+	dw CardPageSwitch_PokemonEnd
+	dw CardPageSwitch_08
+	dw CardPageSwitch_EnergyOrTrainerPage1 ; CARDPAGE_ENERGY
+	dw CardPageSwitch_TrainerPage2 ; CARDPAGE_ENERGY + 1
+	dw CardPageSwitch_EnergyEnd
+	dw CardPageSwitch_0c
+	dw CardPageSwitch_EnergyOrTrainerPage1 ; CARDPAGE_TRAINER_1
+	dw CardPageSwitch_TrainerPage2 ; CARDPAGE_TRAINER_2
+	dw CardPageSwitch_TrainerEnd
 ; 0x5956
 
-	INCROM $5956,  $5990
+; return with CARDPAGE_POKEMON_DESCRIPTION
+CardPageSwitch_00: ; 5956 (1:5956)
+	ld a, CARDPAGE_POKEMON_DESCRIPTION
+	scf
+	ret
+; 0x595a
+
+; return with current page
+CardPageSwitch_PokemonOverviewOrDescription: ; 595a (1:595a)
+	ld a, $1
+	or a
+	ret ; nz
+; 0x595e
+
+; return with current page if [wLoadedCard1Move1Name] non-0
+; (if card has at least one move)
+CardPageSwitch_PokemonMove1Page1: ; 595e (1:595e)
+	ld hl, wLoadedCard1Move1Name
+	jr CheckCardPageExists
+
+; return with current page if [wLoadedCard1Move1Description + 2] non-0
+; (if card's first move has a two-page description)
+CardPageSwitch_PokemonMove1Page2: ; 5963 (1:5963)
+	ld hl, wLoadedCard1Move1Description + 2
+	jr CheckCardPageExists
+
+; return with current page if [wLoadedCard1Move2Name] non-0
+; (if card has two moves)
+CardPageSwitch_PokemonMove2Page1: ; 5968 (1:5968)
+	ld hl, wLoadedCard1Move2Name
+	jr CheckCardPageExists
+
+; return with current page if [wLoadedCard1Move1Description + 2] non-0
+; (if card's second move has a two-page description)
+CardPageSwitch_PokemonMove2Page2: ; 596d (1:596d)
+	ld hl, wLoadedCard1Move2Description + 2
+;	fallthrough
+
+CheckCardPageExists: ; 5970 (1:5970)
+	ld a, [hli]
+	or [hl]
+	ret
+; 0x5973
+
+; return with CARDPAGE_POKEMON_OVERVIEW
+CardPageSwitch_PokemonEnd: ; 5973 (1:5973)
+	ld a, CARDPAGE_POKEMON_OVERVIEW
+	scf
+	ret
+; 0x5977
+
+; return with CARDPAGE_ENERGY + 1
+CardPageSwitch_08: ; 5977 (1:5977)
+	ld a, CARDPAGE_ENERGY + 1
+	scf
+	ret
+; 0x597b
+
+; return with current page
+CardPageSwitch_EnergyOrTrainerPage1: ; 597b (1:597b)
+	ld a, $1
+	or a
+	ret ; nz
+; 0x597f
+
+; return with current page if [wLoadedCard1NonPokemonDescription + 2] non-0
+; (if this trainer card has a two-page description)
+CardPageSwitch_TrainerPage2: ; 597f (1:597f)
+	ld hl, wLoadedCard1NonPokemonDescription + 2
+	jr CheckCardPageExists
+; 0x5984
+
+; return with CARDPAGE_ENERGY
+CardPageSwitch_EnergyEnd: ; 5984 (1:5984)
+	ld a, CARDPAGE_ENERGY
+	scf
+	ret
+; 0x5988
+
+; return with CARDPAGE_TRAINER_2
+CardPageSwitch_0c: ; 5988 (1:5988)
+	ld a, CARDPAGE_TRAINER_2
+	scf
+	ret
+; 0x598c
+
+; return with CARDPAGE_TRAINER_1
+CardPageSwitch_TrainerEnd: ; 598c (1:598c)
+	ld a, CARDPAGE_TRAINER_1
+	scf
+	ret
+; 0x5990
 
 ZeroObjectPositionsAndToggleOAMCopy: ; 5990 (1:5990)
 	call ZeroObjectPositions
@@ -3742,10 +3873,337 @@ JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 	jp WriteByteToBGMap0
 ; 0x5b7d
 
-	INCROM $5b7d, $5c33
+CardPageDisplay_PokemonOverview: ; 5b7d (1:5b7d)
+	ld a, [wCardPageType]
+	or a ; CARDPAGETYPE_NOT_PLAY_AREA
+	jr nz, .play_area_card_page
 
-Func_5c33: ; 5c33 (1:5c33
-	INCROM $5c33, $5e5f
+; CARDPAGETYPE_NOT_PLAY_AREA
+	call PrintNonPlayAreaCardPageMainInfo
+	; print fixed text and draw the card symbol associated to its TYPE_*
+	ld hl, CardPageRetreatWRTextData
+	call PlaceTextItems
+	ld hl, CardPageLvHPNoTextTileData
+	call WriteDataBlocksToBGMap0
+	lb de, 3, 2
+	call DrawCardSymbol
+	; print pre-evolution's name (if any)
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr z, .basic
+	ld hl, wLoadedCard1PreEvoName
+	lb de, 1, 3
+	call ProcessTextFromPointerToID_InitTextPrinting
+.basic
+	; print card level and maximum HP
+	lb bc, 12, 2
+	ld a, [wLoadedCard1Level]
+	call WriteTwoDigitNumberInTxSymbolFormat
+	lb bc, 16, 2
+	ld a, [wLoadedCard1HP]
+	call WriteTwoByteNumberInTxSymbolFormat
+	jr .print_numbers_and_energies
+
+; CARDPAGETYPE_PLAY_AREA
+.play_area_card_page
+	; draw the surrounding box, and print fixed text
+	call DrawCardPageSurroundingBox
+	call LoadDuelCheckPokemonScreenTiles
+	ld hl, CardPageRetreatWRTextData
+	call PlaceTextItems
+	ld hl, CardPageNoTextTileData
+	call WriteDataBlocksToBGMap0
+	ld a, 1
+	ld [wCurPlayAreaY], a
+	; print set 2 icon and rarity symbol at fixed positions
+	call DrawCardPageSet2AndRarityIcons
+	; print (Y coord at [wCurPlayAreaY]) card name, level, type, energies, HP, location...
+	call PrintPlayAreaCardInformationAndLocation
+
+; common for both card page types
+.print_numbers_and_energies
+	; print Pokedex number in the bottom right corner (16,16)
+	lb bc, 16, 16
+	ld a, [wLoadedCard1PokedexNumber]
+	call WriteTwoByteNumberInTxSymbolFormat
+	; print the name, damage, and energy cost of each move and/or Pokemon power that exists
+	; first move at 5,10 and second at 5,12
+	lb bc, 5, 10
+	ld e, c
+	ld hl, wLoadedCard1Move1Name
+	call PrintMoveOrPkmnPowerInformation
+	inc c
+	inc c ; 12
+	ld e, c
+	ld hl, wLoadedCard1Move2Name
+	call PrintMoveOrPkmnPowerInformation
+	; print the retreat cost (some amount of colorless energies) at 8,14
+	inc c
+	inc c ; 14
+	ld b, 8
+	ld a, [wLoadedCard1RetreatCost]
+	ld e, a
+	inc e
+.retreat_cost_loop
+	dec e
+	jr z, .retreat_cost_done
+	ld a, SYM_COLORLESS
+	call JPWriteByteToBGMap0
+	inc b
+	jr .retreat_cost_loop
+.retreat_cost_done
+	; print the colors (energies) of the weakness(es) and resistance(s)
+	inc c ; 15
+	ld a, [wCardPageType]
+	or a
+	jr z, .wr_from_loaded_card
+	ld a, [wCurPlayAreaSlot]
+	or a
+	jr nz, .wr_from_loaded_card
+	call GetArenaCardWeakness
+	ld d, a
+	call GetArenaCardResistance
+	ld e, a
+	jr .got_wr
+.wr_from_loaded_card
+	ld a, [wLoadedCard1Weakness]
+	ld d, a
+	ld a, [wLoadedCard1Resistance]
+	ld e, a
+.got_wr
+	ld a, d
+	ld b, 8
+	call PrintCardPageWeaknessesOrResistances
+	inc c ; 16
+	ld a, e
+	call PrintCardPageWeaknessesOrResistances
+	ret
+; 0x5c33
+
+; displays the name, damage, and energy cost of a move or Pokemon power.
+; used in the Attack menu and in the card page of a Pokemon.
+; input:
+   ; hl: pointer to move 1 name in a move_data_struct (which can be inside at card_data_struct)
+   ; e: Y coordinate to start printing the data at
+PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
+	ld a, [hli]
+	or [hl]
+	ret z
+	push bc
+	push hl
+	dec hl
+	; print text ID pointed to by hl at 7,e
+	ld d, 7
+	call ProcessTextFromPointerToID_InitTextPrinting
+	pop hl
+	inc hl
+	inc hl
+	ld a, [wCardPageNumber]
+	or a
+	jr nz, .print_damage
+	dec hl
+	ld a, [hli]
+	or [hl]
+	jr z, .print_damage
+	; if in Attack menu and move 1 description exists, print at 18,e:
+	ld b, 18
+	ld c, e
+	ld a, SYM_MOVE_DESCR
+	call WriteByteToBGMap0
+.print_damage
+	inc hl
+	inc hl
+	inc hl
+	push hl
+	ld a, [hl]
+	or a
+	jr z, .print_category
+	; print move damage at 15,(e+1) if non-0
+	ld b, 15 ; unless damage has three digits, this is effectively 16
+	ld c, e
+	inc c
+	call WriteTwoByteNumberInTxSymbolFormat
+.print_category
+	pop hl
+	inc hl
+	ld a, [hl]
+	and $ff ^ RESIDUAL
+	jr z, .print_energy_cost
+	cp POKEMON_POWER
+	jr z, .print_pokemon_power
+	; register a is DAMAGE_PLUS, DAMAGE_MINUS, or DAMAGE_X
+	; print the damage modifier (+, -, x) at 18,(e+1) (after the damage value)
+	add SYM_PLUS - DAMAGE_PLUS
+	ld b, 18
+	ld c, e
+	inc c
+	call WriteByteToBGMap0
+	jr .print_energy_cost
+.print_energy_cost
+	ld bc, wLoadedMoveEnergyCost - wLoadedMoveCategory
+	add hl, bc
+	ld c, e
+	ld b, 2 ; bc = 2, e
+	lb de, NUM_TYPES / 2, 0
+.energy_loop
+	ld a, [hl]
+	swap a
+	call PrintEnergiesOfColor
+	ld a, [hli]
+	call PrintEnergiesOfColor
+	dec d
+	jr nz, .energy_loop
+	pop bc
+	ret
+.print_pokemon_power
+	; print "PKMN PWR" at 2,e
+	ld d, 2
+	ldtx hl, PKMNPWRText
+	call InitTextPrinting_ProcessTextFromID
+	pop bc
+	ret
+; 0x5c9c
+
+; print the number of energies required of color (type) e, and return e ++ (next color).
+; the requirement of the current color is provided as input in the lower nybble of a.
+PrintEnergiesOfColor: ; 5c9c (1:5c9c)
+	inc e
+	and $0f
+	ret z
+	push de
+	ld d, a
+.print_energies_loop
+	ld a, e
+	call JPWriteByteToBGMap0
+	inc b
+	dec d
+	jr nz, .print_energies_loop
+	pop de
+	ret
+; 0x5cac
+
+; print the weaknesses or resistances of a Pokemon card, given in a, at b,c
+PrintCardPageWeaknessesOrResistances: ; 5cac (1:5cac)
+	push bc
+	push de
+	ld d, a
+	xor a ; FIRE
+.loop
+	; each WR_* constant is a different bit. rotate the value to find out
+	; which bits are set and therefore which WR_* values are active.
+	; a is kept updated with the equivalent TYPE_* constant.
+	inc a
+	cp 8
+	jr nc, .done
+	rl d
+	jr nc, .loop
+	push af
+	call JPWriteByteToBGMap0
+	inc b
+	pop af
+	jr .loop
+.done
+	pop de
+	pop bc
+	ret
+; 0x5cc4
+
+; prints surrounding box, card name at 5,1, color, set 2, and rarity
+PrintNonPlayAreaCardPageMainInfo: ; 5cc4 (1:5cc4)
+	call DrawCardPageSurroundingBox
+	lb de, 5, 1
+	ld hl, wLoadedCard1Name
+	call ProcessTextFromPointerToID_InitTextPrinting
+	ld a, [wCardPageType]
+	or a
+	jr z, .from_loaded_card
+	ld a, [wCurPlayAreaSlot]
+	call GetPlayAreaCardColor
+	jr .got_color
+.from_loaded_card
+	ld a, [wLoadedCard1Type]
+.got_color
+	lb bc, 18, 1
+	inc a
+	call JPWriteByteToBGMap0
+	call DrawCardPageSet2AndRarityIcons
+	ret
+; 0x5cec
+
+; draws the 20x18 surrounding box and also colorizes the card image
+DrawCardPageSurroundingBox: ; 5cec (1:5cec)
+	ld hl, wTextBoxFrameType
+	set 7, [hl] ; colorize textbox border also on SGB (with SGB1)
+	push hl
+	lb de, 0, 0
+	lb bc, 20, 18
+	call DrawRegularTextBox
+	pop hl
+	res 7, [hl]
+	lb de, 6, 4
+	call ApplyBGP6OrSGB3ToCardImage
+	ret
+; 0x5d05
+
+CardPageRetreatWRTextData: ; 5d05 (1:5d05)
+	textitem 1, 14, RetreatCostText
+	textitem 1, 15, WeaknessText
+	textitem 1, 16, ResistanceText
+	db $ff
+
+CardPageLvHPNoTextTileData: ; 5d12 (1:5d12)
+	db 11,  2, SYM_Lv, 0
+	db 15,  2, SYM_HP, 0
+;	continues to CardPageNoTextTileData
+
+CardPageNoTextTileData: ; 5d1a (1:5d1a)
+	db 15, 16, SYM_No, 0
+	db $ff
+
+	INCROM $5d1f,  $5dd3
+
+; given a card rarity constant in a, and CardRarityTextIDs in hl,
+; print the text character associated to it at d,e
+PrintCardPageRarityIcon: ; 5dd3 (1:5dd3)
+	inc a
+	add a
+	ld c, a
+	ld b, $00
+	add hl, bc
+	call ProcessTextFromPointerToID_InitTextPrinting
+	ret
+; 0x5ddd
+
+; prints the card's set 2 icon and the full width text character of the card's rarity
+DrawCardPageSet2AndRarityIcons: ; 5ddd (1:5ddd)
+	ld a, [wLoadedCard1Set]
+	call LoadCardSet2Tiles
+	jr c, .icon_done
+	; draw the 2x2 set 2 icon of this card
+	ld a, $fc
+	lb hl, 1, 2
+	lb bc, 2, 2
+	lb de, 15, 8
+	call FillRectangle
+.icon_done
+	lb de, 18, 9
+	ld hl, CardRarityTextIDs
+	ld a, [wLoadedCard1Rarity]
+	cp PROMOSTAR
+	call nz, PrintCardPageRarityIcon
+	ret
+; 0x5e02
+
+	INCROM $5e02,  $5e14
+
+CardRarityTextIDs: ; 5e14 (1:5e14)
+	tx PromostarRarityText ; PROMOSTAR (unused)
+	tx CircleRarityText    ; CIRCLE
+	tx DiamondRarityText   ; DIAMOND
+	tx StarRarityText      ; STAR
+; 0x5e1c
+
+	INCROM $5e1c, $5e5f
 
 ; display the card details of the card in wLoadedCard1
 ; print the text at hl
@@ -3941,7 +4399,7 @@ DisplayPlayAreaScreen: ; 600e (1:600e)
 	jr z, .asm_6022
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	call Func_576a
+	call OpenCardPage_CheckPlayArea
 	jr .asm_6022
 .asm_6091
 	ld a, [wExcludeArenaPokemon]
@@ -4667,10 +5125,28 @@ AttemptRetreat: ; 657a (1:657a)
 	ret
 ; 0x659f
 
-	INCROM $659f, $65b7
+; given a number between 0-255 in a, converts it to TX_SYMBOL format,
+; and writes it to wStringBuffer + 2 and to the BGMap0 address at bc.
+; leading zeros replaced with SYM_SPACE.
+WriteTwoByteNumberInTxSymbolFormat: ; 659f (1:659f)
+	push de
+	push bc
+	ld l, a
+	ld h, $00
+	call TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1
+	pop bc
+	push bc
+	call BCCoordToBGMap0Address
+	ld hl, wStringBuffer + 2
+	ld b, 3
+	call SafeCopyDataHLtoDE
+	pop bc
+	pop de
+	ret
+; 0x65b7
 
-; given a number between 0-99 in a, converts it to TX_SYMBOL format, and writes it
-; to wStringBuffer + 3 and to the BGMap0 address at bc.
+; given a number between 0-99 in a, converts it to TX_SYMBOL format,
+; and writes it to wStringBuffer + 3 and to the BGMap0 address at bc.
 ; if the number is between 0-9, the first digit is replaced with SYM_SPACE.
 WriteTwoDigitNumberInTxSymbolFormat: ; 65b7 (1:65b7)
 	push hl
@@ -4781,8 +5257,8 @@ Func_6635: ; 6635 (1:6635)
 	jr z, .first_move
 	ld hl, wLoadedCard1Move2Name
 .first_move
-	ld e, $01
-	call Func_5c33
+	ld e, 1
+	call PrintMoveOrPkmnPowerInformation
 	lb de, 1, 4
 	ld hl, wLoadedMoveDescription
 	call PrintMoveOrCardDescription
@@ -5190,7 +5666,7 @@ Func_6862: ; 6862 (1:6862)
 	xor a
 	ld [hli], a
 	ld [hl], a ; wCurPlayAreaY
-	call Func_576a
+	call OpenCardPage_CheckPlayArea
 .return_carry
 	scf
 	ret

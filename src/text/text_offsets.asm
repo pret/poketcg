@@ -18,10 +18,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PokemonText                              ; 0x000e
 	textpointer Text000f                                 ; 0x000f
 	textpointer LbsText                                  ; 0x0010
-	textpointer Text0011                                 ; 0x0011
-	textpointer Text0012                                 ; 0x0012
-	textpointer Text0013                                 ; 0x0013
-	textpointer Text0014                                 ; 0x0014
+	textpointer PromostarRarityText                                 ; 0x0011
+	textpointer CircleRarityText                                 ; 0x0012
+	textpointer DiamondRarityText                                 ; 0x0013
+	textpointer StarRarityText                                 ; 0x0014
 	textpointer Text0015                                 ; 0x0015
 	textpointer Text0016                                 ; 0x0016
 	textpointer Text0017                                 ; 0x0017
@@ -531,7 +531,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer LightningAndFireDeckName                 ; 0x020f
 	textpointer WaterAndFightingDeckName                 ; 0x0210
 	textpointer GrassAndPsychicDeckName                  ; 0x0211
-	textpointer Text0212                                 ; 0x0212
+	textpointer RetreatCostText                                 ; 0x0212
 	textpointer Text0213                                 ; 0x0213
 	textpointer Text0214                                 ; 0x0214
 	textpointer Text0215                                 ; 0x0215
