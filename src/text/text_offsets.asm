@@ -534,8 +534,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer RetreatCostText                                 ; 0x0212
 	textpointer Text0213                                 ; 0x0213
 	textpointer Text0214                                 ; 0x0214
-	textpointer Text0215                                 ; 0x0215
-	textpointer Text0216                                 ; 0x0216
+	textpointer FeetText                                 ; 0x0215
+	textpointer InchesText                                 ; 0x0216
 	textpointer YourDiscardPileText                      ; 0x0217
 	textpointer OpponentsDiscardPileText                 ; 0x0218
 	textpointer Text0219                                 ; 0x0219

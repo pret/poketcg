@@ -430,13 +430,13 @@ DuelMenuShortcut_PlayerPlayArea: ; 4311 (1:4311)
 	call OpenPlayAreaScreen
 	jp DuelMainInterface
 
-; triggered by pressing B + LEFT in the duel menu
+; triggered by pressing B + RIGHT in the duel menu
 DuelMenuShortcut_OpponentDiscardPile: ; 4317 (1:4317)
 	call OpenOpponentDiscardPileScreen
 	jp c, PrintDuelMenuAndHandleInput
 	jp DuelMainInterface
 
-; triggered by pressing B + RIGHT in the duel menu
+; triggered by pressing B + LEFT in the duel menu
 DuelMenuShortcut_PlayerDiscardPile: ; 4320 (1:4320)
 	call OpenPlayerDiscardPileScreen
 	jp c, PrintDuelMenuAndHandleInput
@@ -475,8 +475,8 @@ Func_434e: ; 434e (1:434e)
 	jr c, .no_cards_in_hand
 	call InitAndDrawCardListScreenLayout
 	ld a, START + A_BUTTON
-	ld [wWatchedButtons_cbd6], a
-	jp Func_55f0
+	ld [wNoItemSelectionMenuKeys], a
+	jp DisplayCardList
 .no_cards_in_hand
 	ldtx hl, NoCardsInHandText
 	jp DrawWideTextBox_WaitForInput
@@ -508,7 +508,7 @@ OpenActivePokemonScreen: ; 4376 (1:4376)
 	xor a
 	ld [hli], a
 	ld [hl], a ; wCurPlayAreaY
-	call OpenCardPage_CheckPlayArea
+	call OpenCardPage_FromCheckPlayArea
 	ret
 ; 0x438e
 
@@ -614,7 +614,7 @@ OpenPlayerHandScreen: ; 4436 (1:4436)
 	ld a, PLAY_CHECK
 	ld [wCardListItemSelectionMenuType], a
 .handle_input
-	call Func_55f0
+	call DisplayCardList
 	push af
 	ld a, [wSortCardListByID]
 	or a
@@ -1056,7 +1056,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
 .try_open_attack_menu
-	call LoadPokemonMovesToDuelTempList
+	call PrintAndLoadMovesToDuelTempList
 	or a
 	jr nz, .open_attack_menu
 	ldtx hl, NoSelectableAttackText
@@ -1117,11 +1117,13 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	jr .try_open_attack_menu
 
 .display_selected_move_info
-	call Func_478b
+	call OpenMovePage
 	call DrawDuelMainScene
 	jp .try_open_attack_menu
 
-Func_478b: ; 478b (1:478b)
+; draw the move page of the card at wLoadedCard1 and of the move selected in the Attack
+; menu by hCurMenuItem, and listen for input in order to switch the page or to exit.
+OpenMovePage: ; 478b (1:478b)
 	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
 	xor a
@@ -1146,28 +1148,30 @@ Func_478b: ; 478b (1:478b)
 	add hl, de
 	ld a, [hl]
 	or a
-	jr nz, .asm_47c9
-	xor a
-	jr .asm_47cb
+	jr nz, .move_2
+	xor a ; MOVEPAGE_MOVE1_1
+	jr .move_1
 
-.asm_47c9
-	ld a, $02
+.move_2
+	ld a, MOVEPAGE_MOVE2_1
 
-.asm_47cb
-	ld [wcc04], a
+.move_1
+	ld [wMovePageNumber], a
 
-.asm_47ce
-	call Func_47ec
+.open_page
+	call DisplayMovePage
 	call EnableLCD
 
-.asm_47d4
+.loop
 	call DoFrame
+	; switch page (see SwitchMovePage) if Right or Left pressed
 	ldh a, [hDPadHeld]
 	and D_RIGHT | D_LEFT
-	jr nz, .asm_47ce
+	jr nz, .open_page
+	; return to Attack menu if A or B pressed
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_47d4
+	jr z, .loop
 	ret
 
 AttackMenuParameters:
@@ -1178,64 +1182,77 @@ AttackMenuParameters:
 	db SYM_SPACE ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-Func_47ec: ; $47ec (1:47ec)
-	ld a, [wcc04]
-	ld hl, $47f5
+; display the card page with id at wMovePageNumber of wLoadedCard1
+DisplayMovePage: ; $47ec (1:47ec)
+	ld a, [wMovePageNumber]
+	ld hl, MovePageDisplayPointerTable
 	jp JumpToFunctionInTable
 
-PtrTable_47f5: ; $47f5 (1:47f5)
-	dw Func_47fd
-	dw Func_4802
-	dw Func_480d
-	dw Func_4812
+MovePageDisplayPointerTable: ; $47f5 (1:47f5)
+	dw DisplayMovePage_Move1Page1 ; MOVEPAGE_MOVE1_1
+	dw DisplayMovePage_Move1Page2 ; MOVEPAGE_MOVE1_2
+	dw DisplayMovePage_Move2Page1 ; MOVEPAGE_MOVE2_1
+	dw DisplayMovePage_Move2Page2 ; MOVEPAGE_MOVE2_2
 
-Func_47fd: ; $47fd (1:47fd)
-	call $5d1f
-	jr Func_481b
+; display MOVEPAGE_MOVE1_1
+DisplayMovePage_Move1Page1: ; $47fd (1:47fd)
+	call DisplayCardPage_PokemonMove1Page1
+	jr SwitchMovePage
 
-Func_4802: ; $4802 (1:4802)
+; display MOVEPAGE_MOVE1_2 if it exists. otherwise return in order
+; to switch back to MOVEPAGE_MOVE1_1 and display it instead.
+DisplayMovePage_Move1Page2: ; $4802 (1:4802)
 	ld hl, wLoadedCard1Move1Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
-	call $5d27
-	jr Func_481b
+	call DisplayCardPage_PokemonMove1Page2
+	jr SwitchMovePage
 
-Func_480d: ; $480d (1:480d)
-	call $5d2f
-	jr Func_481b
+; display MOVEPAGE_MOVE2_1
+DisplayMovePage_Move2Page1: ; $480d (1:480d)
+	call DisplayCardPage_PokemonMove2Page1
+	jr SwitchMovePage
 
-Func_4812: ; $4812 (1:4812)
+; display MOVEPAGE_MOVE2_2 if it exists. otherwise return in order
+; to switch back to MOVEPAGE_MOVE2_1 and display it instead.
+DisplayMovePage_Move2Page2: ; $4812 (1:4812)
 	ld hl, wLoadedCard1Move2Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
-	call $5d37
+	call DisplayCardPage_PokemonMove2Page2
+;	fallthrough
 
-Func_481b: ; $481b (1:481b)
-	ld hl, wcc04
+; switch to MOVEPAGE_MOVE*_2 if in MOVEPAGE_MOVE*_1 and vice versa.
+; sets the next move page to switch to if Right or Left are pressed.
+SwitchMovePage: ; $481b (1:481b)
+	ld hl, wMovePageNumber
 	ld a, $01
 	xor [hl]
 	ld [hl], a
 	ret
 
-; copies the following to the wDuelTempList buffer:
-;   if pokemon's second moveslot is empty: <card_no>, 0
-;   else: <card_no>, 0, <card_no>, 1
-LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
+; given the card at hTempCardIndex_ff98, for each non-empty, non-Pokemon Power moveslot,
+; prints its information at lines 13 (first move, if any), and 15 (second move, if any)
+; also, copies zero, one, or both of the following to wDuelTempList, $ff terminated:
+;   if pokemon's first moveslot isn't empty or a Pokemon Power: <card_index>, 0
+;   if pokemon's second moveslot isn't empty or a Pokemon Power: <card_index>, 1
+; return the amount of non-empty, non-Pokemon Power attacks in a.
+PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff98], a
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld c, $00
-	ld b, $0d
+	ld c, 0
+	ld b, 13
 	ld hl, wDuelTempList
 	xor a
 	ld [wCardPageNumber], a
 	ld de, wLoadedCard1Move1Name
-	call CheckIfMoveExists
-	jr c, .check_for_second_attack_slot
+	call CheckMoveslotEmptyOrPokemonPower
+	jr c, .check_second_moveslot
 	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
 	xor a
@@ -1249,12 +1266,12 @@ LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
 	pop bc
 	pop hl
 	inc b
-	inc b
+	inc b ; 15
 
-.check_for_second_attack_slot
+.check_second_moveslot
 	ld de, wLoadedCard1Move2Name
-	call CheckIfMoveExists
-	jr c, .finish_loading_attacks
+	call CheckMoveslotEmptyOrPokemonPower
+	jr c, .done
 	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
 	ld a, $01
@@ -1268,13 +1285,13 @@ LoadPokemonMovesToDuelTempList: ; 4823 (1:4823)
 	pop bc
 	pop hl
 
-.finish_loading_attacks
+.done
 	ld a, c
 	ret
 
 ; given de = wLoadedCard*Move*Name, return carry if the move is a
-; Pkmn Power or the moveslot is empty.
-CheckIfMoveExists: ; 4872 (1:4872)
+; Pkmn Power or if the moveslot is empty.
+CheckMoveslotEmptyOrPokemonPower: ; 4872 (1:4872)
 	push hl
 	push de
 	push bc
@@ -1343,12 +1360,12 @@ _CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
 	ld de, wLoadedCard1Move2EnergyCost
 
 .got_move
-	ld hl, CARD_DATA_MOVE1_NAME - CARD_DATA_MOVE1_ENERGY
+	ld hl, CARD_DATA_MOVE1_NAME - CARD_DATA_MOVE1_ENERGY_COST
 	add hl, de
 	ld a, [hli]
 	or [hl]
 	jr z, .not_usable_or_not_enough_energies
-	ld hl, CARD_DATA_MOVE1_CATEGORY - CARD_DATA_MOVE1_ENERGY
+	ld hl, CARD_DATA_MOVE1_CATEGORY - CARD_DATA_MOVE1_ENERGY_COST
 	add hl, de
 	ld a, [hl]
 	cp POKEMON_POWER
@@ -2794,7 +2811,7 @@ Func_5502: ; 5502 (1:5502)
 	ld a, PLAY_CHECK
 	ld [wCardListItemSelectionMenuType], a
 .asm_5515
-	call Func_55f0
+	call DisplayCardList
 	jr nc, .asm_5523
 	ld a, [wcbfd]
 	or a
@@ -2824,7 +2841,7 @@ Func_5542: ; 5542 (1:5542)
 	ret c
 	call InitAndDrawCardListScreenLayout
 	call SetDiscardPileScreenTexts
-	call Func_55f0
+	call DisplayCardList
 	ret
 ; 0x5550
 
@@ -2835,8 +2852,8 @@ OpenDiscardPileScreen: ; 5550 (1:5550)
 	call InitAndDrawCardListScreenLayout
 	call SetDiscardPileScreenTexts
 	ld a, START + A_BUTTON
-	ld [wWatchedButtons_cbd6], a
-	call Func_55f0
+	ld [wNoItemSelectionMenuKeys], a
+	call DisplayCardList
 	or a
 	ret
 .discard_pile_empty
@@ -2897,7 +2914,7 @@ InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 	ld [hl], a
 	ld [wCardListItemSelectionMenuType], a
 	ld a, START
-	ld [wWatchedButtons_cbd6], a
+	ld [wNoItemSelectionMenuKeys], a
 	ld hl, wCardListInfoBoxText
 	ldtx [hl], PleaseSelectHandText, & $ff
 	inc hl
@@ -2909,7 +2926,7 @@ InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 ; fallthrough
 
 ; same as InitAndDrawCardListScreenLayout, except that variables like wSelectedDuelSubMenuItem,
-; wWatchedButtons_cbd6, wCardListInfoBoxText, wCardListHeaderText, etc already set by caller.
+; wNoItemSelectionMenuKeys, wCardListInfoBoxText, wCardListHeaderText, etc already set by caller.
 DrawCardListScreenLayout:
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -2935,11 +2952,22 @@ DrawCardListScreenLayout:
 	ret
 ; 0x55f0
 
-Func_55f0: ; 55f0 (1:55f0)
+; displays a list of cards and handles input in order to navigate through the list,
+; select a card, open a card page...
+; input:
+   ; - text IDs at wCardListInfoBoxText and wCardListHeaderText
+   ; - $ff-terminated list of cards to display at wDuelTempList
+   ; - wSelectedDuelSubMenuItem (initial item) and wSelectedDuelSubMenuScrollOffset
+   ;   (initial page scroll offset). Usually both 0 to begin with the first card.
+; returns carry if B is pressed to exit the card list screen, or the selected
+; card at hTempCardIndex_ff98 and at a.
+DisplayCardList: ; 55f0 (1:55f0)
 	call DrawNarrowTextBox
 	call PrintCardListHeaderAndInfoBoxTexts
-.asm_55f6
-	call CountCardsInDuelTempList ; list length
+.reload_list
+	; get the list length
+	call CountCardsInDuelTempList
+	; get the position and scroll within the list
 	ld hl, wSelectedDuelSubMenuItem
 	ld e, [hl] ; initial item (in the visible page)
 	inc hl
@@ -2953,6 +2981,8 @@ Func_55f0: ; 55f0 (1:55f0)
 	call Func_5690
 	call HandleCardListInput
 	jr nc, .wait_button
+	; refresh the position of the last checked card of the list, so that
+	; the cursor points to said card when the list is reloaded
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hl], e
 	inc hl
@@ -2963,17 +2993,21 @@ Func_55f0: ; 55f0 (1:55f0)
 	jr nz, .select_pressed
 	bit B_BUTTON_F, b
 	jr nz, .b_pressed
-	ld a, [wWatchedButtons_cbd6]
+	ld a, [wNoItemSelectionMenuKeys]
 	and b
-	jr nz, .relevant_press
+	jr nz, .open_card_page
+	; display the item selection menu (PLAY|CHECK or SELECT|CHECK) for the selected card
+	; open the card page if CHECK is selected
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList_OnlyDeckIndex
-	call Func_56c2
-	jr c, Func_55f0
+	call CardListItemSelectionMenu
+	; jump back if B pressed to exit the item selection menu
+	jr c, DisplayCardList
 	ldh a, [hTempCardIndex_ff98]
 	or a
 	ret
 .select_pressed
+	; sort cards by ID if SELECT is pressed and return to the first item
 	ld a, [wSortCardListByID]
 	or a
 	jr nz, .wait_button
@@ -2985,39 +3019,46 @@ Func_55f0: ; 55f0 (1:55f0)
 	ld a, 1
 	ld [wSortCardListByID], a
 	call EraseCursor
-	jr .asm_55f6
-.relevant_press
+	jr .reload_list
+.open_card_page
+	; open the card page directly, without an item selection menu
+	; in this mode, D_UP and D_DOWN can be used to open the card page
+	; of the card above and below the current card
 	ldh a, [hCurMenuItem]
 	call GetCardInDuelTempList
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call OpenCardPage_CheckHandOrDiscardPile
+	call OpenCardPage_FromCheckHandOrDiscardPile
 	ldh a, [hDPadHeld]
 	bit D_UP_F, a
-	jr nz, .asm_566f
+	jr nz, .up_pressed
 	bit D_DOWN_F, a
-	jr nz, .asm_5677
+	jr nz, .down_pressed
+	; if B pressed, exit card page and reload the card list
 	call DrawCardListScreenLayout
-	jp Func_55f0
-.asm_566f
+	jp DisplayCardList
+.up_pressed
 	ldh a, [hCurMenuItem]
 	or a
-	jr z, .relevant_press
+	jr z, .open_card_page ; if can't go up, reload card page of current card
 	dec a
-	jr .asm_5681
-.asm_5677
+	jr .move_to_another_card
+.down_pressed
 	call CountCardsInDuelTempList
 	ld b, a
 	ldh a, [hCurMenuItem]
 	inc a
 	cp b
-	jr nc, .relevant_press
-.asm_5681
+	jr nc, .open_card_page ; if can't go down, reload card page of current card
+.move_to_another_card
+	; update hCurMenuItem, and wSelectedDuelSubMenuScrollOffset.
+	; this means that when navigating up/down through card pages, the page is
+	; scrolled to reflect the movement, rather than the cursor going up/down.
 	ldh [hCurMenuItem], a
 	ld hl, wSelectedDuelSubMenuItem
 	ld [hl], $00
 	inc hl
 	ld [hl], a
-	jr .relevant_press
+	jr .open_card_page
 .b_pressed
 	ldh a, [hCurMenuItem]
 	scf
@@ -3057,7 +3098,10 @@ PrintCardListHeaderAndInfoBoxTexts: ; 56a0 (1:56a0)
 	ret
 ; 0x56c2
 
-Func_56c2: ; 56c2 (1:56c2)
+; display the SELECT|CHECK or PLAY|CHECK menu when a card of a list is selected
+; and handle input. return carry if b is pressed.
+; input: wCardListItemSelectionMenuType
+CardListItemSelectionMenu: ; 56c2 (1:56c2)
 	ld a, [wCardListItemSelectionMenuType]
 	or a
 	ret z
@@ -3083,12 +3127,13 @@ Func_56c2: ; 56c2 (1:56c2)
 	jr nc, .wait_a_or_b
 	cp -1
 	jr z, .b_pressed
-	; a pressed
+	; A pressed
 	or a
 	ret z
+	; CHECK option selected: open the card page
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call OpenCardPage_Hand
+	call OpenCardPage_FromHand
 	call DrawCardListScreenLayout
 .b_pressed
 	scf
@@ -3178,27 +3223,29 @@ Func_574a: ; 574a (1:574a)
 ; draw the card page of the card at wLoadedCard1 and listen for input
 ; in order to switch the page or to exit.
 ; triggered by checking a hand card or a discard pile card in the Check menu.
-OpenCardPage_CheckHandOrDiscardPile: ; 5762 (1:5762)
+; D_UP and D_DOWN exit the card page allowing the caller to load the card page
+; of the card above or below in the list.
+OpenCardPage_FromCheckHandOrDiscardPile: ; 5762 (1:5762)
 	ld a, B_BUTTON | D_UP | D_DOWN
-	ld [wCardPageExitButtons], a
+	ld [wCardPageExitKeys], a
 	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 	jr OpenCardPage
 
 ; draw the card page of the card at wLoadedCard1 and listen for input
 ; in order to switch the page or to exit.
 ; triggered by checking an arena card or a bench card in the Check menu.
-OpenCardPage_CheckPlayArea: ; 576a (1:576a)
+OpenCardPage_FromCheckPlayArea: ; 576a (1:576a)
 	ld a, B_BUTTON
-	ld [wCardPageExitButtons], a
+	ld [wCardPageExitKeys], a
 	ld a, CARDPAGETYPE_PLAY_AREA
 	jr OpenCardPage
 
 ; draw the card page of the card at wLoadedCard1 and listen for input
 ; in order to switch the page or to exit.
 ; triggered by checking a card in the Hand menu.
-OpenCardPage_Hand: ; 5773 (1:5773)
+OpenCardPage_FromHand: ; 5773 (1:5773)
 	ld a, B_BUTTON
-	ld [wCardPageExitButtons], a
+	ld [wCardPageExitKeys], a
 	xor a ; CARDPAGETYPE_NOT_PLAY_AREA
 ;	fallthrough
 
@@ -3231,7 +3278,7 @@ OpenCardPage: ; 5779 (1:5779)
 	call DoFrame
 	ldh a, [hDPadHeld]
 	ld b, a
-	ld a, [wCardPageExitButtons]
+	ld a, [wCardPageExitKeys]
 	and b
 	jr nz, .done
 	; START and A_BUTTON advance to the next valid card page, but close it
@@ -3308,20 +3355,20 @@ LoadSelectedCardGfx: ; 58aa (1:58aa)
 
 CardPageDisplayPointerTable: ; 58c2 (1:58c2)
 	dw DrawDuelMainScene
-	dw CardPageDisplay_PokemonOverview ; CARDPAGE_POKEMON_OVERVIEW
-	dw $5d1f ; CARDPAGE_POKEMON_MOVE1_1
-	dw $5d27 ; CARDPAGE_POKEMON_MOVE1_2
-	dw $5d2f ; CARDPAGE_POKEMON_MOVE2_1
-	dw $5d37 ; CARDPAGE_POKEMON_MOVE2_2
-	dw $5d54 ; CARDPAGE_POKEMON_DESCRIPTION
+	dw DisplayCardPage_PokemonOverview    ; CARDPAGE_POKEMON_OVERVIEW
+	dw DisplayCardPage_PokemonMove1Page1  ; CARDPAGE_POKEMON_MOVE1_1
+	dw DisplayCardPage_PokemonMove1Page2  ; CARDPAGE_POKEMON_MOVE1_2
+	dw DisplayCardPage_PokemonMove2Page1  ; CARDPAGE_POKEMON_MOVE2_1
+	dw DisplayCardPage_PokemonMove2Page2  ; CARDPAGE_POKEMON_MOVE2_2
+	dw DisplayCardPage_PokemonDescription ; CARDPAGE_POKEMON_DESCRIPTION
 	dw DrawDuelMainScene
 	dw DrawDuelMainScene
-	dw $5e28 ; CARDPAGE_ENERGY
-	dw $5e28 ; CARDPAGE_ENERGY + 1
+	dw DisplayCardPage_Energy ; CARDPAGE_ENERGY
+	dw DisplayCardPage_Energy ; CARDPAGE_ENERGY + 1
 	dw DrawDuelMainScene
 	dw DrawDuelMainScene
-	dw $5e1c ; CARDPAGE_TRAINER_1
-	dw $5e22 ; CARDPAGE_TRAINER_2
+	dw DisplayCardPage_TrainerPage1 ; CARDPAGE_TRAINER_1
+	dw DisplayCardPage_TrainerPage2 ; CARDPAGE_TRAINER_2
 	dw DrawDuelMainScene
 ; 0x58e2
 
@@ -3873,12 +3920,13 @@ JPWriteByteToBGMap0: ; 5b7a (1:5b7a)
 	jp WriteByteToBGMap0
 ; 0x5b7d
 
-CardPageDisplay_PokemonOverview: ; 5b7d (1:5b7d)
+DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 	ld a, [wCardPageType]
 	or a ; CARDPAGETYPE_NOT_PLAY_AREA
 	jr nz, .play_area_card_page
 
 ; CARDPAGETYPE_NOT_PLAY_AREA
+	; print surrounding box, card name at 5,1, type, set 2, and rarity
 	call PrintNonPlayAreaCardPageMainInfo
 	; print fixed text and draw the card symbol associated to its TYPE_*
 	ld hl, CardPageRetreatWRTextData
@@ -4108,7 +4156,7 @@ PrintCardPageWeaknessesOrResistances: ; 5cac (1:5cac)
 	ret
 ; 0x5cc4
 
-; prints surrounding box, card name at 5,1, color, set 2, and rarity
+; prints surrounding box, card name at 5,1, type, set 2, and rarity
 PrintNonPlayAreaCardPageMainInfo: ; 5cc4 (1:5cc4)
 	call DrawCardPageSurroundingBox
 	lb de, 5, 1
@@ -4160,7 +4208,113 @@ CardPageNoTextTileData: ; 5d1a (1:5d1a)
 	db 15, 16, SYM_No, 0
 	db $ff
 
-	INCROM $5d1f,  $5dd3
+DisplayCardPage_PokemonMove1Page1: ; 5d1f (1:5d1f)
+	ld hl, wLoadedCard1Move1Name
+	ld de, wLoadedCard1Move1Description
+	jr DisplayPokemonMoveCardPage
+
+DisplayCardPage_PokemonMove1Page2: ; 5d27 (1:5d27)
+	ld hl, wLoadedCard1Move1Name
+	ld de, wLoadedCard1Move1Description + 2
+	jr DisplayPokemonMoveCardPage
+
+DisplayCardPage_PokemonMove2Page1: ; 5d2f (1:5d2f)
+	ld hl, wLoadedCard1Move2Name
+	ld de, wLoadedCard1Move2Description
+	jr DisplayPokemonMoveCardPage
+
+DisplayCardPage_PokemonMove2Page2: ; 5d37 (1:5d37)
+	ld hl, wLoadedCard1Move2Name
+	ld de, wLoadedCard1Move2Description + 2
+;	fallthrough
+
+; input:
+   ; hl = address of the move's name (text id)
+   ; de = address of the move's description (either first or second text id)
+DisplayPokemonMoveCardPage: ; 5d3d (1:5d3d)
+	push de
+	push hl
+	; print surrounding box, card name at 5,1, type, set 2, and rarity
+	call PrintNonPlayAreaCardPageMainInfo
+	; print name, damage, and energy cost of move or Pokemon power starting at line 2
+	ld e, 2
+	pop hl
+	call PrintMoveOrPkmnPowerInformation
+	pop hl
+;	fallthrough
+
+; print, if non-null, the description of the trainer card, energy card, move,
+; or Pokemon power, given as a pointer to text id in hl, starting from 1,11
+PrintMoveOrNonPokemonCardDescription: ; 5d49 (1:5d49)
+	ld a, [hli]
+	or [hl]
+	ret z
+	dec hl
+	lb de, 1, 11
+	call PrintMoveOrCardDescription
+	ret
+; 0x5d54
+
+DisplayCardPage_PokemonDescription: ; 5d54 (1:5d54)
+	call PrintNonPlayAreaCardPageMainInfo
+	call LoadDuelCardSymbolTiles2
+	; print "LENGTH", "WEIGHT", "Lv", and "HP" where it corresponds in the page
+	ld hl, CardPageLengthWeightTextData
+	call PlaceTextItems
+	ld hl, CardPageLvHPTextTileData
+	call WriteDataBlocksToBGMap0
+	; draw the card symbol associated to its TYPE_* at 3,2
+	lb de, 3, 2
+	call DrawCardSymbol
+	; print the Level and HP numbers at 12,2 and 16,2 respectively
+	lb bc, 12, 2
+	ld a, [wLoadedCard1Level]
+	call WriteTwoDigitNumberInTxSymbolFormat
+	lb bc, 16, 2
+	ld a, [wLoadedCard1HP]
+	call WriteTwoByteNumberInTxSymbolFormat
+	; print the Pokemon's category at 1,10 (just above the length and weight texts)
+	lb de, 1, 10
+	ld hl, wLoadedCard1Category
+	call ProcessTextFromPointerToID_InitTextPrinting
+	ld a, TX_KATAKANA
+	call ProcessSpecialTextCharacter
+	ldtx hl, PokemonText
+	call ProcessTextFromID
+	; print the length and weight values at 5,11 and 5,12 respectively
+	lb bc, 5, 11
+	ld hl, wLoadedCard1Length
+	ld a, [hli]
+	ld l, [hl]
+	ld h, a
+	call PrintPokemonCardLength
+	lb bc, 5, 12
+	ld hl, wLoadedCard1Weight
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call PrintPokemonCardWeight
+	ldtx hl, LbsText
+	call InitTextPrinting_ProcessTextFromID
+	; print the card's description without line separation
+	call SetNoLineSeparation
+	ld hl, wLoadedCard1Description
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CountLinesOfTextFromID
+	lb de, 1, 13
+	cp 4
+	jr nc, .print_description
+	inc e ; move a line down, as the description is short enough to fit in three lines
+.print_description
+	ld a, 19 ; line length
+	call InitTextPrintingInTextbox
+	ld hl, wLoadedCard1Description
+	call ProcessTextFromPointerToID
+	call SetOneLineSeparation
+	ret
+; 0x5dd3
 
 ; given a card rarity constant in a, and CardRarityTextIDs in hl,
 ; print the text character associated to it at d,e
@@ -4194,7 +4348,15 @@ DrawCardPageSet2AndRarityIcons: ; 5ddd (1:5ddd)
 	ret
 ; 0x5e02
 
-	INCROM $5e02,  $5e14
+CardPageLengthWeightTextData: ; 5e02 (1:5e02)
+	textitem 1, 11, LengthText
+	textitem 1, 12, WeightText
+	db $ff
+
+CardPageLvHPTextTileData: ; 5e0b (1:5e0b)
+	db 11, 2, SYM_Lv, 0
+	db 15, 2, SYM_HP, 0
+	db $ff
 
 CardRarityTextIDs: ; 5e14 (1:5e14)
 	tx PromostarRarityText ; PROMOSTAR (unused)
@@ -4203,7 +4365,50 @@ CardRarityTextIDs: ; 5e14 (1:5e14)
 	tx StarRarityText      ; STAR
 ; 0x5e1c
 
-	INCROM $5e1c, $5e5f
+DisplayCardPage_TrainerPage1: ; 5e1c (1:5e1c)
+	xor a ; HEADER_TRAINER
+	ld hl, wLoadedCard1NonPokemonDescription
+	jr DisplayEnergyOrTrainerCardPage
+
+DisplayCardPage_TrainerPage2: ; 5e22 (1:5e22)
+	xor a ; HEADER_TRAINER
+	ld hl, wLoadedCard1NonPokemonDescription + 2
+	jr DisplayEnergyOrTrainerCardPage
+
+DisplayCardPage_Energy: ; 5e28 (1:5e28)
+	ld a, HEADER_ENERGY
+	ld hl, wLoadedCard1NonPokemonDescription
+;	fallthrough
+
+; input:
+   ; a = HEADER_ENERGY or HEADER_TRAINER
+   ; hl = address of the card's description (text id)
+DisplayEnergyOrTrainerCardPage: ; 5e2d (1:5e2d)
+	push hl
+	call LoadCardTypeHeaderTiles
+	; draw surrounding box
+	lb de, 0, 0
+	lb bc, 20, 18
+	call DrawRegularTextBox
+	; print the card's name at 4,3
+	lb de, 4, 3
+	ld hl, wLoadedCard1Name
+	call ProcessTextFromPointerToID_InitTextPrinting
+	; colorize the card image
+	lb de, 6, 4
+	call ApplyBGP6OrSGB3ToCardImage
+	; display the card type header
+	ld a, $e0
+	lb hl, 1, 8
+	lb de, 6, 1
+	lb bc, 8, 2
+	call FillRectangle
+	; print the set 2 icon and rarity symbol of the card
+	call DrawCardPageSet2AndRarityIcons
+	pop hl
+	call PrintMoveOrNonPokemonCardDescription
+	ret
+; 0x5e5f
 
 ; display the card details of the card in wLoadedCard1
 ; print the text at hl
@@ -4286,7 +4491,108 @@ SetOneLineSeparation: ; 5f50 (1:5f50)
 	jr SetLineSeparation
 ; 0x5f53
 
-	INCROM $5f53, $5fd9
+; given a number in hl, print it divided by 10 at b,c, with decimal part
+; separated by a dot (unless it's 0). used to print a Pokemon card's weight.
+PrintPokemonCardWeight: ; 5f53 (1:5f53)
+	push bc
+	ld de, -1
+	ld bc, -10
+.divide_by_10_loop
+	inc de
+	add hl, bc
+	jr c, .divide_by_10_loop
+	ld bc, 10
+	add hl, bc
+	pop bc
+	push hl
+	push bc
+	ld l, e
+	ld h, d
+	call TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1
+	pop bc
+	pop hl
+	ld a, l
+	ld hl, wStringBuffer + 5
+	or a
+	jr z, .decimal_done
+	ld [hl], SYM_DOT
+	inc hl
+	add SYM_0
+	ld [hli], a
+.decimal_done
+	ld [hl], 0
+	push bc
+	call BCCoordToBGMap0Address
+	ld hl, wStringBuffer
+.find_first_digit_loop
+	ld a, [hli]
+	or a
+	jr z, .find_first_digit_loop
+	dec hl
+	push hl
+	ld b, -1
+.get_number_length_loop
+	inc b
+	ld a, [hli]
+	or a
+	jr nz, .get_number_length_loop
+	pop hl
+	push bc
+	call SafeCopyDataHLtoDE
+	pop bc
+	pop de
+	ld a, b
+	add d
+	ld d, a
+	ret
+; 0x5f9a
+
+; given a number in h and another in l, print them formatted as <l>'<h>" at b,c.
+; used to print the length (feet and inches) of a Pokemon card.
+PrintPokemonCardLength: ; 5f9a (1:5f9a)
+	push hl
+	ld l, h
+	ld h, $00
+	ldtx de, FeetText ; '
+	call .print_feet_or_inches
+	pop hl
+	ld h, $00
+	ldtx de, InchesText ; "
+	call .print_feet_or_inches
+	ret
+
+.print_feet_or_inches
+; keep track how many digits each number consists of in wPokemonLengthPrintOffset,
+; in order to align the rest of the string. the text with id at de
+; is printed after the number.
+	push de
+	push bc
+	call TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1
+	ld a, b
+	inc a
+	ld [wPokemonLengthPrintOffset], a
+	pop bc
+	push bc
+	push hl
+	call BCCoordToBGMap0Address
+	ld a, [wPokemonLengthPrintOffset]
+	ld b, a
+	pop hl
+	call SafeCopyDataHLtoDE
+	pop bc
+	ld a, [wPokemonLengthPrintOffset]
+	add b
+	ld b, a
+	pop hl
+	push bc
+	ld e, c
+	ld d, b
+	call InitTextPrinting
+	call ProcessTextFromID
+	pop bc
+	inc b
+	ret
+; 0x5fd9
 
 ; return carry if the turn holder has any Pokemon with non-zero HP on the bench.
 ; return how many Pokemon with non-zero HP in b.
@@ -4341,7 +4647,7 @@ OpenPlayAreaScreenForSelection: ; 600c (1:600c)
 ;	fallthrough
 
 DisplayPlayAreaScreen: ; 600e (1:600e)
-	ld [wWatchedButtons_cbd6], a
+	ld [wNoItemSelectionMenuKeys], a
 	ldh a, [hTempCardIndex_ff98]
 	push af
 	ld a, [wcbd3]
@@ -4387,7 +4693,7 @@ DisplayPlayAreaScreen: ; 600e (1:600e)
 	ld a, [wExcludeArenaPokemon]
 	add e
 	ld [wCurPlayAreaSlot], a
-	ld a, [wWatchedButtons_cbd6]
+	ld a, [wNoItemSelectionMenuKeys]
 	ld b, a
 	ldh a, [hKeysPressed]
 	and b
@@ -4399,7 +4705,7 @@ DisplayPlayAreaScreen: ; 600e (1:600e)
 	jr z, .asm_6022
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	call OpenCardPage_CheckPlayArea
+	call OpenCardPage_FromCheckPlayArea
 	jr .asm_6022
 .asm_6091
 	ld a, [wExcludeArenaPokemon]
@@ -5052,7 +5358,7 @@ DisplayUsePokemonPowerScreen: ; 6510 (1:6510)
 	ret
 ; 0x653e
 
-; print the description of a move or of a trainer or energy card
+; print the description of a move, a Pokemon power, or a trainer or energy card
 ; x,y coordinates of where to start printing the text are given at de
 ; don't separate lines of text
 PrintMoveOrCardDescription: ; 653e (1:653e)
@@ -5666,7 +5972,7 @@ Func_6862: ; 6862 (1:6862)
 	xor a
 	ld [hli], a
 	ld [hl], a ; wCurPlayAreaY
-	call OpenCardPage_CheckPlayArea
+	call OpenCardPage_FromCheckPlayArea
 .return_carry
 	scf
 	ret
@@ -7089,4 +7395,11 @@ Func_7594: ; 7594 (1:7594)
 	ret
 ; 0x7599
 
-	INCROM $7599, $8000
+Func_7599: ; 7599 (1:7599)
+	farcall $6, $668d
+	ret
+; 0x759e
+
+rept $a62
+	db $ff
+endr

@@ -6200,7 +6200,8 @@ LoadDuelCardSymbolTiles: ; 20b0 (0:20b0)
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
-; loads the symbols for Stage 1 Pkmn card, Stage 2 Pkmn card, and Trainer card
+; loads the symbols for Stage 1 Pkmn card, Stage 2 Pkmn card, and Trainer card.
+; unlike LoadDuelCardSymbolTiles excludes the symbols for Basic Pkmn and all energies.
 LoadDuelCardSymbolTiles2: ; 20c4 (0:20c4)
 	ld hl, DuelDmgSgbSymbolGraphics + $4 tiles - $4000
 	ld a, [wConsole]
@@ -7303,6 +7304,7 @@ InitializeMenuParameters: ; 2636 (0:2636)
 
 ; returns with the carry flag set if A or B were pressed
 ; returns a = 0 if A was pressed, a = -1 if B was pressed
+; note: return values still subject to those of the function at [wMenuFunctionPointer] if any
 HandleMenuInput: ; 264b (0:264b)
 	xor a
 	ld [wRefreshMenuCursorSFX], a
@@ -7364,8 +7366,8 @@ HandleMenuInput: ; 264b (0:264b)
 	and A_BUTTON | B_BUTTON
 	jr z, RefreshMenuCursor_CheckPlaySFX
 	and A_BUTTON
-	jr nz, HandleMenuInput.A_pressed_draw_cursor
-	; b button pressed
+	jr nz, .A_pressed_draw_cursor
+	; B button pressed
 	ld a, [wCurMenuItem]
 	ld e, a
 	ld a, $ff
@@ -7542,6 +7544,7 @@ DuelMenuCursorCoords: ; 278d (0:278d)
 
 ; print the items of a list of cards (hand cards in a duel, cards from a booster pack...)
 ; and initialize the parameters of the list given:
+   ; wDuelTempList = card list source
    ; a = list length
    ; de = initial page scroll offset, initial item (in the visible page)
    ; hl: 9 bytes with the rest of the parameters
@@ -7556,7 +7559,11 @@ PrintCardListItems: ; 2799 (0:2799)
 	ld [wYDisplacementBetweenMenuItems], a
 	ld a, 1
 	ld [wCardListIndicatorYPosition], a
-.reload
+;	fallthrough
+
+; like PrintCardListItems, except more parameters are already initialized
+; called instead of PrintCardListItems to reload the list after moving up or down
+ReloadCardListItems:
 	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
@@ -7632,7 +7639,7 @@ PrintCardListItems: ; 2799 (0:2799)
 Func_2827: ; 2827 (0:2827)
 	ld a, $01
 	ldh [hffb0], a
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	xor a
 	ldh [hffb0], a
 	ret
@@ -7674,7 +7681,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	or a ; can we scroll up?
 	jr z, .no_more_items
 	dec [hl] ; scroll page up
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	jp .continue
 .not_up
 	bit D_DOWN_F, b
@@ -7692,7 +7699,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	jr z, .no_more_items
 	ld hl, wListScrollOffset
 	inc [hl] ; scroll page down
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	jp .continue
 .not_last_visible_item
 	; this appears to be a redundant check
@@ -7717,7 +7724,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	sub [hl]
 	jr c, .top_of_page_reached
 	ld [wListScrollOffset], a
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	jr .continue
 .top_of_page_reached
 	call EraseCursor
@@ -7734,7 +7741,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	xor a
 	ld [wListScrollOffset], a
 	ld [wRefreshMenuCursorSFX], a
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	jr .continue
 .not_left
 	bit D_RIGHT_F, b
@@ -7754,7 +7761,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	jr nc, .asm_28f9
 	ld a, c
 	ld [wListScrollOffset], a
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 	jr .continue
 .asm_28f9
 	call EraseCursor
@@ -7773,7 +7780,7 @@ CardListMenuFunction: ; 283f (0:283f)
 	add [hl]
 .asm_2914
 	ld [wCurMenuItem], a
-	call PrintCardListItems.reload
+	call ReloadCardListItems
 .continue
 	ld a, [wListScrollOffset]
 	ld hl, wCurMenuItem

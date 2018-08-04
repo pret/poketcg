@@ -625,6 +625,7 @@ wCurrentDuelMenuItem:: ; cbc6
 ; For Pokemon cards, values from $1 to $6 (two pages for move descriptions)
 ; For Energy cards, it's always $9
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
+; see CARDPAGE_* constants
 wCardPageNumber:: ; cbc7
 	ds $1
 
@@ -667,7 +668,7 @@ wcbcd:: ; cbcd
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
-; When you're in a duel submenu like the cards in your hand and you press A,
+; when you're in a duel submenu like the cards in your hand and you press A,
 ; the following two addresses keep track of which item was selected by the cursor
 wSelectedDuelSubMenuItem:: ; cbcf
 	ds $1
@@ -675,6 +676,8 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
+; CARDPAGETYPE_PLAY_AREA or CARDPAGETYPE_NOT_PLAY_AREA
+; some of the elements displayed in a card page change depending on which value
 wCardPageType:: ; cbd1
 	ds $1
 
@@ -692,10 +695,14 @@ wcbd4:: ; cbd4
 wcbd5:: ; cbd5
 	ds $1
 
-wWatchedButtons_cbd6:: ; cbd6
+; in a card list, which keys (among START and A_BUTTON) do not open the item selection
+; menu when a card is selected, directly "submitting" the selected card instead.
+wNoItemSelectionMenuKeys:: ; cbd6
 	ds $1
 
-wCardPageExitButtons:: ; cbd7
+; when viewing a card page, which keys (among B_BUTTON, D_UP, and D_DOWN) will exit the page,
+; either to go back to the previous menu orlist, or to load the card page of the card above/below it
+wCardPageExitKeys:: ; cbd7
 	ds $1
 
 wcbd8:: ; cbd8
@@ -712,7 +719,8 @@ wCardListInfoBoxText:: ; cbda
 wCardListHeaderText:: ; cbdc
 	ds $2
 
-; when selecting an item of a list of cards which type of menu shows up
+; when selecting an item of a list of cards which type of menu shows up.
+; PLAY_CHECK, SELECT_CHECK, or $00 for none.
 wCardListItemSelectionMenuType:: ; cbde
 	ds $1
 
@@ -789,9 +797,15 @@ wcbff:: ; cbff
 wcc00:: ; cc00
 	ds $1
 
-	ds $3
+	ds $2
 
-wcc04:: ; cc04
+; used to print a Pokemon card's length in feet and inches
+wPokemonLengthPrintOffset:: ; cc03
+	ds $1
+
+; used when opening the card page of a move when attacking, serving as an index for MovePageDisplayPointerTable.
+; see MOVEPAGE_* constants
+wMovePageNumber:: ; cc04
 	ds $1
 
 ; the value of hWhoseTurn gets loaded here at the beginning of each duelist's turn.

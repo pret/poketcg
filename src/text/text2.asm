@@ -1491,11 +1491,11 @@ Text0214: ; 3b799 (e:7799)
 	textfw3 "S", "W", "I", "T", "C", "H", " ", "T", "O", " ", "L", "O", "W", "E", "R"
 	done
 
-Text0215: ; 3b7b6 (e:77b6)
+FeetText: ; 3b7b6 (e:77b6)
 	textfw3 "'"
 	done
 
-Text0216: ; 3b7b9 (e:77b9)
+InchesText: ; 3b7b9 (e:77b9)
 	textfw3 "”"
 	done
 
