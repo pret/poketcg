@@ -3927,7 +3927,7 @@ DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 
 ; CARDPAGETYPE_NOT_PLAY_AREA
 	; print surrounding box, card name at 5,1, type, set 2, and rarity
-	call PrintNonPlayAreaCardPageMainInfo
+	call PrintPokemonCardPageGenericInformation
 	; print fixed text and draw the card symbol associated to its TYPE_*
 	ld hl, CardPageRetreatWRTextData
 	call PlaceTextItems
@@ -4088,7 +4088,7 @@ PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	call WriteByteToBGMap0
 	jr .print_energy_cost
 .print_energy_cost
-	ld bc, wLoadedMoveEnergyCost - wLoadedMoveCategory
+	ld bc, CARD_DATA_MOVE1_ENERGY_COST - CARD_DATA_MOVE1_CATEGORY
 	add hl, bc
 	ld c, e
 	ld b, 2 ; bc = 2, e
@@ -4156,8 +4156,10 @@ PrintCardPageWeaknessesOrResistances: ; 5cac (1:5cac)
 	ret
 ; 0x5cc4
 
-; prints surrounding box, card name at 5,1, type, set 2, and rarity
-PrintNonPlayAreaCardPageMainInfo: ; 5cc4 (1:5cc4)
+; prints surrounding box, card name at 5,1, type, set 2, and rarity.
+; used in all CARDPAGE_POKEMON_* and MOVEPAGE_*, except in
+; CARDPAGE_POKEMON_OVERVIEW when wCardPageType is CARDPAGETYPE_PLAY_AREA.
+PrintPokemonCardPageGenericInformation: ; 5cc4 (1:5cc4)
 	call DrawCardPageSurroundingBox
 	lb de, 5, 1
 	ld hl, wLoadedCard1Name
@@ -4235,7 +4237,7 @@ DisplayPokemonMoveCardPage: ; 5d3d (1:5d3d)
 	push de
 	push hl
 	; print surrounding box, card name at 5,1, type, set 2, and rarity
-	call PrintNonPlayAreaCardPageMainInfo
+	call PrintPokemonCardPageGenericInformation
 	; print name, damage, and energy cost of move or Pokemon power starting at line 2
 	ld e, 2
 	pop hl
@@ -4256,7 +4258,8 @@ PrintMoveOrNonPokemonCardDescription: ; 5d49 (1:5d49)
 ; 0x5d54
 
 DisplayCardPage_PokemonDescription: ; 5d54 (1:5d54)
-	call PrintNonPlayAreaCardPageMainInfo
+	; print surrounding box, card name at 5,1, type, set 2, and rarity
+	call PrintPokemonCardPageGenericInformation
 	call LoadDuelCardSymbolTiles2
 	; print "LENGTH", "WEIGHT", "Lv", and "HP" where it corresponds in the page
 	ld hl, CardPageLengthWeightTextData

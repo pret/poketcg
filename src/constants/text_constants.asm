@@ -14,6 +14,8 @@ TX_CTRL_START EQU $05
 
 ; usage: TX_SYMBOL, char1, TX_SYMBOL, char2, ...
 ; source: gfx/fonts/symbols.2bpp
+; note: precede each symbol with TX_SYMBOL only when it's going to be processed as text.
+; if copying directly to VRAM, don't precede symbols with TX_SYMBOL as they are just tile numbers.
 TX_SYMBOL     EQU $05
 
 ; usage: TX_HALFWIDTH, char1, char2, ...
