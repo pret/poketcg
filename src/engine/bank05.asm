@@ -222,8 +222,8 @@ Func_1468b: ; 1468b (5:468b)
 	ret
 ; 0x14786
 
-
 	INCROM $14786, $15636
+
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
 	ld hl, wcda5
@@ -243,12 +243,12 @@ Func_15649: ; 15649 (5:5649)
 	ld [wcddb], a
 	ld [wcddc], a
 	ld [wce03], a
-	ld a, [wcc10]
+	ld a, [wPlayerAttackingMoveIndex]
 	cp $ff
 	jr z, .asm_156b1
 	or a
 	jr z, .asm_156b1
-	ld a, [wcc11]
+	ld a, [wPlayerAttackingCardIndex]
 	cp $ff
 	jr z, .asm_156b1
 	call SwapTurn

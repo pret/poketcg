@@ -1,3 +1,10 @@
+deck_const: MACRO
+if const_value >= 2
+\1_ID EQU const_value + -2
+endc
+	const \1
+ENDM
+
 ; Both *_DECK and *_DECK_ID constants are defined here.
 ; *_DECK constants are to be used with LoadDeck and related routines.
 ; *_DECK_ID constants are specific to be loaded into wOpponentDeckID.

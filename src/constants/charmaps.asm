@@ -9,6 +9,10 @@
 	charmap "♀", "%"
 	charmap "”", "\""
 
+fwcharmap: MACRO
+	charmap STRCAT("FW\1_", \2), \3
+ENDM
+
 ; TX_FULLWIDTH3
 	fwcharmap 3, "A", $30
 	fwcharmap 3, "B", $31
@@ -310,6 +314,11 @@
 
 FW_SPACE EQU $70
 
+txsymbol: MACRO
+	const SYM_\1
+	charmap "\1>", const_value + -1
+ENDM
+
 ; TX_SYMBOL
 ; TODO: If user-defined functions ever become a thing a symbol(*) syntax
 ;       would probably be preferred over SYM_*
@@ -329,7 +338,7 @@ FW_SPACE EQU $70
 	txsymbol PARALYZED  ; $0b
 	txsymbol CURSOR_U   ; $0c
 	txsymbol POKEMON    ; $0d
-	txsymbol UNKNOWN_0E ; $0e
+	txsymbol MOVE_DESCR ; $0e
 	txsymbol CURSOR_R   ; $0f
 	txsymbol HP         ; $10
 	txsymbol Lv         ; $11

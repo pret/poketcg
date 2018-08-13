@@ -26,7 +26,7 @@ card_data_struct: MACRO
 ENDM
 
 move_data_struct: MACRO
-\1Energy::         ds NUM_TYPES / 2
+\1EnergyCost::     ds NUM_TYPES / 2
 \1Name::           ds 2
 \1Description::    ds 4
 \1Damage::         ds 1

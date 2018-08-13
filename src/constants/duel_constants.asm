@@ -21,18 +21,9 @@ TURN_PLAYER_TIED EQU $3
 DUEL_WIN  EQU $0
 DUEL_LOSS EQU $1
 
-; Box message id's
-	const_def
-	const BOXMSG_PLAYERS_TURN
-	const BOXMSG_OPPONENTS_TURN
-	const BOXMSG_BETWEEN_TURNS
-	const BOXMSG_DECISION
-	const BOXMSG_BENCH_POKEMON
-	const BOXMSG_ARENA_POKEMON
-	const BOXMSG_COIN_TOSS
-
 ; wPlayerDuelVariables or wOpponentDuelVariables constants
 DUELVARS_CARD_LOCATIONS                  EQUS "LOW(wPlayerCardLocations)"               ; 00
+DUELVARS_PRIZE_CARDS                     EQUS "LOW(wPlayerPrizeCards)"                  ; 3c
 DUELVARS_HAND                            EQUS "LOW(wPlayerHand)"                        ; 42
 DUELVARS_DECK_CARDS                      EQUS "LOW(wPlayerDeckCards)"                   ; 7e
 DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK     EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"      ; ba
@@ -81,6 +72,8 @@ DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA  EQUS "LOW(wPlayerNumberOfPokemonInPlayA
 DUELVARS_ARENA_CARD_STATUS               EQUS "LOW(wPlayerArenaCardStatus)"             ; f0
 DUELVARS_DUELIST_TYPE                    EQUS "LOW(wPlayerDuelistType)"                 ; f1
 DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX  EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)"  ; f2
+DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE     EQUS "LOW(wPlayerArenaCardLastTurnDamage)"     ; f3
+DUELVARS_ARENA_CARD_LAST_TURN_STATUS     EQUS "LOW(wPlayerArenaCardLastTurnStatus)"     ; f5
 
 ; card location constants (DUELVARS_CARD_LOCATIONS)
 CARD_LOCATION_DECK         EQU $00
@@ -123,8 +116,11 @@ POISONED        EQU $80
 DOUBLE_POISONED EQU $c0
 
 CNF_SLP_PRZ  EQU $0f ; confused, asleep or paralyzed
+PSN_DBLPSN   EQU $f0 ; poisoned or double poisoned
 
 ; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
+
+; SUBSTATUS1 are checked on a defending Pokemon
 SUBSTATUS1_AGILITY      EQU $0c
 SUBSTATUS1_FLY          EQU $0d
 SUBSTATUS1_HARDEN       EQU $0e
@@ -139,6 +135,7 @@ SUBSTATUS1_NO_DAMAGE_17 EQU $17
 SUBSTATUS1_NEXT_TURN_DOUBLE_DAMAGE EQU $19
 SUBSTATUS1_REDUCE_BY_10 EQU $1e
 
+; SUBSTATUS2 are checked on an attacking Pokemon
 SUBSTATUS2_SMOKESCREEN    EQU $01
 SUBSTATUS2_SAND_ATTACK    EQU $02
 SUBSTATUS2_REDUCE_BY_20   EQU $03
@@ -167,3 +164,27 @@ NO_DAMAGE_OR_EFFECT_NSHIELD      EQU $05
 ; wDamageEffectiveness constants
 WEAKNESS   EQU 1
 RESISTANCE EQU 2
+
+; Box message id's
+	const_def
+	const BOXMSG_PLAYERS_TURN
+	const BOXMSG_OPPONENTS_TURN
+	const BOXMSG_BETWEEN_TURNS
+	const BOXMSG_DECISION
+	const BOXMSG_BENCH_POKEMON
+	const BOXMSG_ARENA_POKEMON
+	const BOXMSG_COIN_TOSS
+
+; wDuelDisplayedScreen constants
+DUEL_MAIN_SCENE     EQU $01
+PLAY_AREA_CARD_LIST EQU $02
+COIN_TOSS           EQU $06
+DRAW_CARDS          EQU $07
+LARGE_CARD_PICTURE  EQU $08
+SHUFFLE_DECK        EQU $09
+CHECK_PLAY_AREA     EQU $0a
+
+; wCardListItemSelectionMenuType constants
+;NONE        EQU $00
+PLAY_CHECK   EQU $01
+SELECT_CHECK EQU $02

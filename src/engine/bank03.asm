@@ -1,7 +1,7 @@
 LoadMap: ; c000 (3:4000)
 	call DisableLCD
 	call EnableSRAM
-	bank1call Func_6785
+	bank1call DiscardSavedDuelData
 	call DisableSRAM
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
@@ -267,9 +267,9 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd112], a
 	ld [wd3b8], a
 	call EnableSRAM
-	ld a, [sa007]
+	ld a, [s0a007]
 	ld [wd421], a
-	ld a, [sa006]
+	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	farcall Func_10756
@@ -290,8 +290,8 @@ Func_c241: ; c241 (3:4241)
 	push hl
 	push bc
 	push de
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	call Func_c258
 	pop de
 	pop bc
@@ -326,7 +326,7 @@ Func_c268: ; c268 (3:4268)
 	ld l, a
 	or h
 	jr z, .asm_c27a
-	call Func_2c29
+	call ProcessTextFromID
 	pop hl
 	inc hl
 	inc hl
@@ -366,8 +366,8 @@ Func_c2a3: ; c2a3 (3:42a3)
 	farcall Func_10ab4
 	ld a, $80
 	call Func_c29b
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	farcall Func_12ba7
 	call Func_3ca0
 	call ZeroObjectPositions
@@ -452,7 +452,7 @@ Func_c34e: ; c34e (3:434e)
 	ld de, wObjectPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	ret
 
 Func_c36a: ; c36a (3:436a)
@@ -623,7 +623,7 @@ Func_c510: ; c510 (3:4510)
 	call nz, Func_c6dc
 	ret
 .asm_c535
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and START
 	call nz, Func_c74d
 	ret
@@ -695,7 +695,7 @@ Func_c58b: ; c58b (3:458b)
 	ret
 
 Func_c5ac: ; c5ac (3:45ac)
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	and D_PAD
 	jr z, .asm_c5bf
 	call Func_c5cb
@@ -704,7 +704,7 @@ Func_c5ac: ; c5ac (3:45ac)
 	and $1
 	jr nz, .asm_c5ca
 .asm_c5bf
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .asm_c5ca
 	call Func_c71e
@@ -824,7 +824,7 @@ Func_c66c: ; c66c (3:466c)
 	push hl
 	push bc
 	ld c, $1
-	ldh a, [hButtonsHeld]
+	ldh a, [hKeysHeld]
 	bit B_BUTTON_F, a
 	jr z, .asm_c67e
 	ld a, [wd338]
@@ -1063,7 +1063,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call $4915
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOnText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call $484e
 .asm_c801
 	ld a, $1
@@ -1121,7 +1121,7 @@ Func_c891: ; c891 (3:4891)
 	call Func_c241
 	call $4915
 	call DoFrameIfLCDEnabled
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	ret
 
 Func_c8ba: ; c8ba (3:48ba)
@@ -1716,7 +1716,7 @@ Func_ccdc: ; ccdc (3:4cdc)
 
 Func_cce4: ; cce4 (3:4ce4)
 	ld a, $1
-	ld [wcd9a], a
+	ld [wDefaultYesOrNo], a
 
 ; Asks the player a question then jumps if they answer yes
 OWScript_AskQuestionJump: ; cce9 (3:4ce9)

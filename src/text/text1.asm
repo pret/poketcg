@@ -62,19 +62,19 @@ LbsText: ; 36385 (d:6385)
 	text "lbs."
 	done
 
-Text0011: ; 3638b (d:638b)
+PromostarRarityText: ; 3638b (d:638b)
 	textfw0 " "
 	done
 
-Text0012: ; 3638d (d:638d)
+CircleRarityText: ; 3638d (d:638d)
 	textfw3 "●"
 	done
 
-Text0013: ; 36390 (d:6390)
+DiamondRarityText: ; 36390 (d:6390)
 	textfw3 "◆"
 	done
 
-Text0014: ; 36393 (d:6393)
+StarRarityText: ; 36393 (d:6393)
 	textfw3 "★"
 	done
 
@@ -171,7 +171,7 @@ IsCuredOfParalysisText: ; 36539 (d:6539)
 	line "cured of Paralysis."
 	done
 
-Text002b: ; 36553 (d:6553)
+BetweenTurnsText: ; 36553 (d:6553)
 	text "Between Turns."
 	done
 
@@ -331,7 +331,7 @@ Text004d: ; 3685a (d:685a)
 	text "Bench"
 	done
 
-Text004e: ; 36861 (d:6861)
+KnockOutText: ; 36861 (d:6861)
 	text "Knock Out"
 	done
 
@@ -376,12 +376,12 @@ TransmitingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 
-Text0058: ; 369b8 (d:69b8)
+WaitingHandExamineText: ; 369b8 (d:69b8)
 	text "Waiting..."
 	line "    Hand        Examine"
 	done
 
-Text0059: ; 369dc (d:69dc)
+SelectingBenchPokemonHandExamineBackText: ; 369dc (d:69dc)
 	text "Selecting Bench Pokémon..."
 	line "    Hand        Examine     Back"
 	done
@@ -406,16 +406,16 @@ FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	line "without Attacking."
 	done
 
-Text005e: ; 36a9a (d:6a9a)
+DuelistsTurnText: ; 36a9a (d:6a9a)
 	text "<RAMNAME>'s Turn."
 	done
 
-Text005f: ; 36aa5 (d:6aa5)
+AttachedEnergyToPokemonText: ; 36aa5 (d:6aa5)
 	text "Attached <RAMTEXT>"
 	line "to <RAMTEXT>."
 	done
 
-Text0060: ; 36ab7 (d:6ab7)
+PokemonEvolvedIntoPokemonText: ; 36ab7 (d:6ab7)
 	text "<RAMTEXT> evolved"
 	line "into <RAMTEXT>."
 	done
@@ -462,7 +462,7 @@ ChooseBasicPkmnToPlaceInArenaText: ; 36bc2 (d:6bc2)
 	line "to place in the Arena."
 	done
 
-Text006a: ; 36bf1 (d:6bf1)
+ThereAreNoBasicPokemonInHand: ; 36bf1 (d:6bf1)
 	text "There are no Basic Pokémon"
 	line "in <RAMNAME>'s hand."
 	done
@@ -472,7 +472,7 @@ NeitherPlayerHasBasicPkmnText: ; 36c1a (d:6c1a)
 	line "Pokémon in his or her hand."
 	done
 
-Text006c: ; 36c54 (d:6c54)
+ReturnCardsToDeckAndDrawAgainText: ; 36c54 (d:6c54)
 	text "Return the cards to the Deck"
 	line "and draw again."
 	done
@@ -482,12 +482,12 @@ ChooseUpTo5BasicPkmnToPlaceOnBenchText: ; 36c82 (d:6c82)
 	line "to place on the Bench."
 	done
 
-Text006e: ; 36cbf (d:6cbf)
+PleaseChooseAnActivePokemonText: ; 36cbf (d:6cbf)
 	text "Please choose an"
 	line "Active Pokémon."
 	done
 
-Text006f: ; 36ce1 (d:6ce1)
+ChooseYourBenchPokemonText: ; 36ce1 (d:6ce1)
 	text "Choose your"
 	line "Bench Pokémon."
 	done
@@ -496,7 +496,7 @@ YouDrewText: ; 36cfd (d:6cfd)
 	text "You drew <RAMTEXT>."
 	done
 
-Text0071: ; 36d0a (d:6d0a)
+YouCannotSelectThisCardText: ; 36d0a (d:6d0a)
 	text "You cannot select this card."
 	done
 
@@ -509,13 +509,13 @@ PleasePlacePrizesText: ; 36d3f (d:6d3f)
 	line "<RAMNUM> Prizes."
 	done
 
-IfHeadPlayerPlaysFirstText: ; 36d57 (d:6d57)
+IfHeadsDuelistPlaysFirstText: ; 36d57 (d:6d57)
 	text "If heads,"
 	line ""
 	text "<RAMTEXT> plays first."
 	done
 
-CoinTossToDetermineWhoFirstText: ; 36d72 (d:6d72)
+CoinTossToDecideWhoPlaysFirstText: ; 36d72 (d:6d72)
 	text "A coin will be tossed"
 	line "to decide who plays first."
 	done
@@ -543,21 +543,21 @@ StartSuddenDeathMatchText: ; 36e05 (d:6e05)
 	line "Match for 1 Prize!"
 	done
 
-Text007b: ; 36e2e (d:6e2e)
+PrizesLeftActivePokemonCardsInDeckText: ; 36e2e (d:6e2e)
 	text "Prizes Left"
 	line "Active Pokémon"
 	line "Cards in Deck"
 	done
 
-Text007c: ; 36e58 (d:6e58)
+NoneText: ; 36e58 (d:6e58)
 	text "None"
 	done
 
-Text007d: ; 36e5e (d:6e5e)
+YesText: ; 36e5e (d:6e5e)
 	text "Yes"
 	done
 
-Text007e: ; 36e63 (d:6e63)
+CardsText: ; 36e63 (d:6e63)
 	text "Cards"
 	done
 
@@ -586,17 +586,17 @@ UnableToUsePkmnPowerDueToToxicGasText: ; 36ed5 (d:6ed5)
 	line "the effect of Toxic Gas."
 	done
 
-Text0084: ; 36f11 (d:6f11)
+PlayCheck1Text: ; 36f11 (d:6f11)
 	text "  Play"
 	line "  Check"
 	done
 
-Text0085: ; 36f21 (d:6f21)
+PlayCheck2Text: ; 36f21 (d:6f21)
 	text "  Play"
 	line "  Check"
 	done
 
-Text0086: ; 36f31 (d:6f31)
+SelectCheckText: ; 36f31 (d:6f31)
 	text "  Select"
 	line "  Check"
 	done

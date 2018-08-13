@@ -147,6 +147,7 @@ Func_18086: ; 18086 (6:4086)
 	ret
 ; 0x180d5
 
+Func_180d5: ; 180d5 (6:40d5)
 	INCROM $180d5, $186f7
 
 INCLUDE "data/effect_commands.asm"
@@ -167,13 +168,13 @@ Func_1996e: ; 1996e (6:596e)
 	or b
 	jr nz, .asm_1997b
 	ld a, $5
-	ld hl, sa350
+	ld hl, s0a350
 	call Func_199e0
 	ld a, $7
-	ld hl, sa3a4
+	ld hl, s0a3a4
 	call Func_199e0
 	ld a, $9
-	ld hl, sa3f8
+	ld hl, s0a3f8
 	call Func_199e0
 	call EnableSRAM
 	ld hl, sCardCollection
@@ -196,16 +197,16 @@ Func_1996e: ; 1996e (6:596e)
 	dec c
 	jr nz, .asm_199b2
 	ld a, $2
-	ld [sa003], a
+	ld [s0a003], a
 	ld a, $2
-	ld [sa006], a
+	ld [s0a006], a
 	ld [wTextSpeed], a
 	xor a
-	ld [sa007], a
-	ld [sa009], a
-	ld [sa004], a
-	ld [sa005], a
-	ld [sa00a], a
+	ld [s0a007], a
+	ld [s0a009], a
+	ld [s0a004], a
+	ld [s0a005], a
+	ld [s0a00a], a
 	farcall Func_8cf9
 	call DisableSRAM
 	ret
@@ -261,8 +262,8 @@ Func_19a12: ; 19a12 (6:5a12)
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
-	ld de, $389f
-	call Func_2275
+	lb de, $38, $9f
+	call SetupText
 	pop af
 	or a
 	jr nz, .asm_1a640

@@ -655,7 +655,7 @@ CharmanderExtraDeck: ; 30465 (c:4465)
 	db 2, ABRA
 	db 1, KADABRA
 	db 1, GASTLY1
-	db 30, GRASS_ENERGY
+	db 30, GRASS_ENERGY ; irrelevant
 	db 0 ; end
 	tx CharmanderExtraDeckName
 
@@ -715,7 +715,7 @@ SquirtleExtraDeck: ; 304cf (c:44cf)
 	db 1, MAGNEMITE1
 	db 1, MAGNETON1
 	db 1, ELECTABUZZ2
-	db 30, GRASS_ENERGY
+	db 30, GRASS_ENERGY ; irrelevant
 	db 0 ; end
 	tx SquirtleExtraDeckName
 
@@ -773,7 +773,7 @@ BulbasaurExtraDeck: ; 3053b (c:453b)
 	db 1, BILL
 	db 2, POTION
 	db 1, GUST_OF_WIND
-	db 30, GRASS_ENERGY
+	db 30, GRASS_ENERGY ; irrelevant
 	db 0 ; end
 	tx BulbasaurExtraDeckName
 

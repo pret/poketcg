@@ -12,19 +12,25 @@ hBankVRAM:: ; ff82
 hDMAFunction:: ; ff83
 	ds $a
 
+; D-pad repeat counter. see HandleDPadRepeat
 hDPadRepeat:: ; ff8d
 	ds $1
 
-hButtonsReleased:: ; ff8e
+; keys pressed in last frame but not in current frame
+hKeysReleased:: ; ff8e
 	ds $1
 
-hButtonsPressed2:: ; ff8f
+; used to quickly scroll through menus when a relevant D-pad key is held
+; see HandleDPadRepeat
+hDPadHeld:: ; ff8f
 	ds $1
 
-hButtonsHeld:: ; ff90
+; keys pressed in last frame and in current frame
+hKeysHeld:: ; ff90
 	ds $1
 
-hButtonsPressed:: ; ff91
+; keys pressed in current frame but not in last frame
+hKeysPressed:: ; ff91
 	ds $1
 
 hSCX:: ; ff92
@@ -60,9 +66,10 @@ hTempCardID_ff9b:: ; ff9b
 	ds $2
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-hTempPlayAreaLocationOffset_ff9d:: ; ff9d
+hTempPlayAreaLocation_ff9d:: ; ff9d
 	ds $1
 
+; index for AIActionTable
 hAIActionTableIndex:: ; ff9e
 	ds $1
 
@@ -70,19 +77,19 @@ hAIActionTableIndex:: ; ff9e
 hTempCardIndex_ff9f:: ; ff9f
 	ds $1
 
-; multipurpose temp storage
+; multipurpose temp storage (card's deck index, selected move index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-hTempPlayAreaLocationOffset_ffa1:: ; ffa1
+hTempPlayAreaLocation_ffa1:: ; ffa1
 	ds $1
 
-; FF-terminated list of cards to be discarded upon retreat
+; $ff-terminated list of cards to be discarded upon retreat
 hTempRetreatCostCards:: ; ffa2
 	ds $6
 
-; hffa8 through hffb0 appear to be related to text processing
+; hffa8 through hffb0 belong to the text engine
 hffa8:: ; ffa8
 	ds $1
 

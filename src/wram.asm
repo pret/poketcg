@@ -19,7 +19,7 @@ ENDU
 
 	ds $100
 
-SECTION "WRAM Duels 1", WRAM0
+SECTION "WRAM0 Duels 1", WRAM0
 
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
 ; These indexes are assigned following the order of the card list in wPlayerDeck or wOpponentDeck,
@@ -43,9 +43,11 @@ wPlayerDuelVariables:: ; c200
 wPlayerCardLocations:: ; c200
 	ds DECK_SIZE
 
+; deck indexes of the up to 6 cards placed as prizes
+wPlayerPrizeCards:: ; c23c
 	ds $6
 
-; Which cards are in player's hand, as numbers 0 to 59
+; Deck indexes of the cards that are in the player's hand
 wPlayerHand:: ; c242
 	ds DECK_SIZE
 
@@ -61,12 +63,12 @@ wPlayerDeckCards:: ; c27e
 wPlayerNumberOfCardsNotInDeck:: ; c2ba
 	ds $1
 
-; Which card is in player's side of the field, as number 0 to 59
+; Deck index of the card that is in player's side of the field
 ; -1 indicates no pokemon
 wPlayerArenaCard:: ; c2bb
 	ds $1
 
-; Which cards are in player's bench, as numbers 0 to 59, plus an $ff (-1) terminator
+; Deck indexes of the cards that are in player's bench, plus an $ff (-1) terminator
 ; -1 indicates no pokemon
 wPlayerBench:: ; c2bc
 	ds MAX_BENCH_POKEMON + 1
@@ -186,13 +188,24 @@ wPlayerDuelistType:: ; c2f1
 wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 	ds $1
 
-	ds $d
+; damage taken the last time the opponent attacked (0 if no damage)
+wPlayerArenaCardLastTurnDamage:: ; c2f3
+	ds $1
+
+	ds $1
+
+; status condition received the last time the opponent attacked (0 if none)
+wPlayerArenaCardLastTurnStatus:: ; c2f5
+	ds $1
+
+	ds $a
 
 wOpponentDuelVariables:: ; c300
 
 wOpponentCardLocations:: ; c300
 	ds DECK_SIZE
 
+wOpponentPrizeCards:: ; c33c
 	ds $6
 
 wOpponentHand:: ; c342
@@ -319,10 +332,19 @@ wOpponentDuelistType:: ; c3f1
 wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
 
-	ds $d
+wOpponentArenaCardLastTurnDamage:: ; c3f3
+	ds $1
+
+	ds $1
+
+wOpponentArenaCardLastTurnStatus:: ; c3f5
+	ds $1
+
+	ds $a
 
 UNION
 
+; temporary list of the cards drawn from a booster pack
 wBoosterCardsDrawn:: ; c400
 wBoosterTempNonEnergiesDrawn:: ; c400
 	ds $b
@@ -354,7 +376,7 @@ wDuelTempList:: ; c510
 wDefaultText:: ; c590
 	ds $70
 
-SECTION "WRAM Text Engine", WRAM0
+SECTION "WRAM0 Text Engine", WRAM0
 
 wc600:: ; c600
 	ds $100
@@ -368,12 +390,14 @@ wc800:: ; c800
 wc900:: ; c900
 	ds $100
 
-SECTION "WRAM Engine 1", WRAM0
+SECTION "WRAM0 1", WRAM0
 
 wOAM:: ; ca00
 	ds $a0
 
-wTextBuf:: ; caa0
+; 16-byte buffer to store text, usually a name or a number
+; used by TX_RAM1 but not exclusively
+wStringBuffer:: ; caa0
 	ds $10
 
 wcab0:: ; cab0
@@ -385,7 +409,7 @@ wcab1:: ; cab1
 wcab2:: ; cab2
 	ds $1
 
-; initial value of the A register--used to tell the console when reset
+; initial value of the A register. used to tell the console when reset
 wInitialA:: ; cab3
 	ds $1
 
@@ -398,12 +422,15 @@ wConsole:: ; cab4
 wOAMOffset:: ; cab5
 	ds $1
 
+; FillTileMap fills VRAM0 BG Maps with the tile stored here
 wTileMapFill:: ; cab6
 	ds $1
 
 wIE:: ; cab7
 	ds $1
 
+; incremented whenever the vblank handler ends. used to wait for it to end,
+; or to delay a specific amount of frames
 wVBlankCounter:: ; cab8
 	ds $1
 
@@ -426,9 +453,12 @@ wOBP0:: ; cabd
 wOBP1:: ; cabe
 	ds $1
 
+; used to request palette(s) to be flushed by FlushPalettes from wBGP, wOBP0, wOBP1,
+; wBackgroundPalettesCGB, and/or wBackgroundPalettesCGB to the corresponding hw registers
 wFlushPaletteFlags:: ; cabf
 	ds $1
 
+; set to non-0 to request OAM copy during vblank
 wVBlankOAMCopyToggle:: ; cac0
 	ds $1
 
@@ -436,7 +466,9 @@ wVBlankOAMCopyToggle:: ; cac0
 wTempByte:: ; cac1
 	ds $1
 
-wcac2:: ; cac2
+; which screen or interface is currently displayed in the screen during a duel
+; used to prevent loading graphics or drawing stuff more times than necessary
+wDuelDisplayedScreen:: ; cac2
 	ds $1
 
 ; used to increase the play time counter every four timer interrupts (60.24 Hz)
@@ -467,14 +499,13 @@ wRNGCounter:: ; cacc
 wLCDCFunctionTrampoline:: ; cacd
 	ds $3
 
+; a jp $nnnn instruction called by the vblank handler. calls a single ret by default
 wVBlankFunctionTrampoline:: ; cad0
 	ds $3
 
+; pointer to a function to be called by DoFrame
 wDoFrameFunction:: ; cad3
-	ds $1
-
-wcad4:: ; cad4
-	ds $1
+	ds $2
 
 wcad5:: ; cad5
 	ds $1
@@ -508,10 +539,11 @@ wcade:: ; cade
 wTempSGBPacket:: ; cae0
 	ds $10
 
-; temporal CGB palette data buffer to eventually save into BGPD or OBPD registers.
+; temporary CGB palette data buffer to eventually save into BGPD registers.
 wBackgroundPalettesCGB:: ; caf0
 	ds 8 palettes
 
+; temporary CGB palette data buffer to eventually save into OBPD registers.
 wObjectPalettesCGB:: ; cb30
 	ds 8 palettes
 
@@ -522,7 +554,7 @@ wObjectPalettesCGB:: ; cb30
 wListPointer:: ; cb72
 	ds $2
 
-SECTION "WRAM Serial Transfer", WRAM0
+SECTION "WRAM0 Serial Transfer", WRAM0
 
 wSerialOp:: ; cb74
 	ds $1
@@ -578,33 +610,54 @@ wSerialRecvIndex:: ; cba4
 wSerialRecvBuf:: ; cba5
 	ds $20
 
-	ds $1
+wSerialEnd:: ; cbc5
 
-SECTION "WRAM Duels 2", WRAM0
+SECTION "WRAM0 Duels 2", WRAM0
+
+	ds $1
 
 ; In a duel, the main menu current or last selected menu item
 ; From 0 to 5: Hand, Attack, Check, Pkmn Power, Retreat, Done
 wCurrentDuelMenuItem:: ; cbc6
 	ds $1
 
-; When we're viewing a card's information, the page we are currently at
+; When we're viewing a card's information, the page we are currently at.
 ; For Pokemon cards, values from $1 to $6 (two pages for move descriptions)
 ; For Energy cards, it's always $9
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
+; see CARDPAGE_* constants
 wCardPageNumber:: ; cbc7
 	ds $1
 
-wcbc8:: ; cbc8
+; how many selectable items are in a play area screen. used to set wNumMenuItems
+; in order to navigate through a play area screen. this becomes the number of bench
+; Pokemon cards if wExcludeArenaPokemon is 1, and that number plus 1 if it's 0.
+wNumPlayAreaItems:: ; cbc8
 	ds $1
 
-; 2-byte something
-wcbc9:: ; cbc9
-	ds $2
+; selects a PLAY_AREA_* slot in order to display information related to it. used by functions
+; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
+wCurPlayAreaSlot:: ; cbc9
+
+; X position to display the attached energies, HP bar, and Pluspower/Defender icons
+; obviously different for player and opponent side. used by DrawDuelHUD.
+wHUDEnergyAndHPBarsX:: ; cbc9
+	ds $1
+
+; current Y coordinate where some play area information is being printed at. used by functions
+; such as PrintPlayAreaCardLocation, PrintPlayAreaCardInformation and PrintPlayAreaCardHeader
+wCurPlayAreaY:: ; cbca
+
+; Y position to display the attached energies, HP bar, and Pluspower/Defender icons
+; obviously different for player and opponent side. used by DrawDuelHUD.
+wHUDEnergyAndHPBarsY:: ; cbca
+	ds $1
 
 ; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
 wBenchSelectedPokemon:: ; cbcb
 	ds $1
 
+; used by CheckIfEnoughEnergiesToRetreat and DisplayRetreatScreen
 wEnergyCardsRequiredToRetreat:: ; cbcc
 	ds $1
 
@@ -615,7 +668,7 @@ wcbcd:: ; cbcd
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
-; When you're in a duel submenu like the cards in your hand and you press A,
+; when you're in a duel submenu like the cards in your hand and you press A,
 ; the following two addresses keep track of which item was selected by the cursor
 wSelectedDuelSubMenuItem:: ; cbcf
 	ds $1
@@ -623,7 +676,9 @@ wSelectedDuelSubMenuItem:: ; cbcf
 wSelectedDuelSubMenuScrollOffset:: ; cbd0
 	ds $1
 
-wcbd1:: ; cbd1
+; CARDPAGETYPE_PLAY_AREA or CARDPAGETYPE_NOT_PLAY_AREA
+; some of the elements displayed in a card page change depending on which value
+wCardPageType:: ; cbd1
 	ds $1
 
 ; when processing or displaying the play area Pokemon cards of a duelist,
@@ -640,10 +695,14 @@ wcbd4:: ; cbd4
 wcbd5:: ; cbd5
 	ds $1
 
-wcbd6:: ; cbd6
+; in a card list, which keys (among START and A_BUTTON) do not open the item selection
+; menu when a card is selected, directly "submitting" the selected card instead.
+wNoItemSelectionMenuKeys:: ; cbd6
 	ds $1
 
-wcbd7:: ; cbd7
+; when viewing a card page, which keys (among B_BUTTON, D_UP, and D_DOWN) will exit the page,
+; either to go back to the previous menu orlist, or to load the card page of the card above/below it
+wCardPageExitKeys:: ; cbd7
 	ds $1
 
 wcbd8:: ; cbd8
@@ -660,7 +719,9 @@ wCardListInfoBoxText:: ; cbda
 wCardListHeaderText:: ; cbdc
 	ds $2
 
-wcbde:: ; cbde
+; when selecting an item of a list of cards which type of menu shows up.
+; PLAY_CHECK, SELECT_CHECK, or $00 for none.
+wCardListItemSelectionMenuType:: ; cbde
 	ds $1
 
 ; flag indicating whether a list of cards should be sorted by ID
@@ -673,8 +734,14 @@ wcbe0:: ; cbe0
 wAITurnEnded:: ; cbe1
 	ds $1
 
-wcbe2:: ; cbe2
-	ds $3
+wOppRNG1:: ; cbe2
+	ds $1
+
+wOppRNG2:: ; cbe3
+	ds $1
+
+wOppRNGCounter:: ; cbe4
+	ds $1
 
 ; sp is saved here when starting a duel, in order to save the return address
 ; however, it only seems to be read after a transmission error in a link duel
@@ -684,15 +751,19 @@ wDuelReturnAddress:: ; cbe5
 wcbe7:: ; cbe7
 	ds $1
 
-wcbe8:: ; cbe8
+wNumCardsTryingToDraw:: ; cbe8
 	ds $1
 
-wcbe9:: ; cbe9
+; number of cards being drawn in order to animate the number of cards in
+; the hand and in the deck in the draw card screen
+wNumCardsBeingDrawn:: ; cbe9
 	ds $1
 
 	ds $3
 
-wcbed:: ; cbed
+; temporarily stores 8 bytes for serial send/recv.
+; used by SerialSend8Bytes and SerialRecv8Bytes
+wTempSerialBuf:: ; cbed
 	ds $8
 
 	ds $2
@@ -700,7 +771,8 @@ wcbed:: ; cbed
 wcbf7:: ; cbf7
 	ds $2
 
-wcbf9:: ; cbf9
+; when non-0, AIMakeDecision doesn't wait 60 frames and print DuelistIsThinkingText
+wSkipDuelistIsThinkingDelay:: ; cbf9
 	ds $1
 
 wcbfa:: ; cbfa
@@ -709,7 +781,11 @@ wcbfa:: ; cbfa
 wcbfb:: ; cbfb
 	ds $1
 
-	ds $2
+wcbfc:: ; cbfc
+	ds $1
+
+wcbfd:: ; cbfd
+	ds $1
 
 ; during a practice duel, identifies an entry of PracticeDuelActionTable
 wPracticeDuelAction:: ; cbfe
@@ -721,12 +797,22 @@ wcbff:: ; cbff
 wcc00:: ; cc00
 	ds $1
 
-	ds $3
+	ds $2
 
-wcc04:: ; cc04
+; used to print a Pokemon card's length in feet and inches
+wPokemonLengthPrintOffset:: ; cc03
 	ds $1
 
-wcc05:: ; cc05
+; used when opening the card page of a move when attacking, serving as an index for MovePageDisplayPointerTable.
+; see MOVEPAGE_* constants
+wMovePageNumber:: ; cc04
+	ds $1
+
+; the value of hWhoseTurn gets loaded here at the beginning of each duelist's turn.
+; more reliable than hWhoseTurn, as hWhoseTurn may change temporarily in order to handle status
+; conditions or other events of the non-turn duelist. used mostly between turns (to check which
+; duelist's turn just finished), or to restore the value of hWhoseTurn at some point.
+wWhoseTurn:: ; cc05
 	ds $1
 
 ; number of turns taken by both players
@@ -745,7 +831,7 @@ wDuelFinished:: ; cc07
 wDuelInitialPrizes:: ; cc08
 	ds $1
 
-; note that for a practice duel, wIsPracticeDuel must also be set to $1
+; a DUELTYPE_* constant. note that for a practice duel, wIsPracticeDuel must also be set to $1
 wDuelType:: ; cc09
 	ds $1
 
@@ -765,19 +851,25 @@ wDuelistType:: ; cc0d
 	ds $1
 
 ; this holds the current opponent's deck minus 2 (that is, a *_DECK_ID constant),
-; perhaps to account for the two unused pointers at the beginning of DeckPointers.
+; in order to account for the two unused pointers at the beginning of DeckPointers.
 wOpponentDeckID:: ; cc0e
 	ds $1
 
+wcc0f:: ; cc0f
 	ds $1
 
-wcc10:: ; cc10
+; index (0-1) of the move or Pokemon Power being used by the player's arena card
+; set to $ff when the duel starts and at the end of the opponent's turn
+wPlayerAttackingMoveIndex:: ; cc10
 	ds $1
 
-wcc11:: ; cc11
+; deck index of the player's arena card that is attacking or using a Pokemon Power
+; set to $ff when the duel starts and at the end of the opponent's turn
+wPlayerAttackingCardIndex:: ; cc11
 	ds $1
 
-wcc12:: ; cc12
+; ID of the player's arena card that is attacking or using a Pokemon Power
+wPlayerAttackingCardID:: ; cc12
 	ds $1
 
 wIsPracticeDuel:: ; cc13
@@ -801,11 +893,12 @@ wcc18:: ; cc18
 wcc19:: ; cc19
 	ds $1
 
+; song played during a duel
 wDuelTheme:: ; cc1a
 	ds $1
 
 ; holds the energies attached to a given pokemon card. 1 byte for each of the
-; 8 energy types (including the unused one that shares byte with the colorless energy)
+; 8 energy types (includes the unused one that shares byte with the colorless energy)
 wAttachedEnergies:: ; cc1b
 	ds NUM_TYPES
 
@@ -813,17 +906,15 @@ wAttachedEnergies:: ; cc1b
 wTotalAttachedEnergies:: ; cc23
 	ds $1
 
-; Used as temporary storage for a loaded card's data
+; Used as temporary storage for a card's data
 wLoadedCard1:: ; cc24
 	card_data_struct wLoadedCard1
-
 wLoadedCard2:: ; cc65
 	card_data_struct wLoadedCard2
-
 wLoadedMove:: ; cca6
 	move_data_struct wLoadedMove
 
-; big-endian
+; the damage field of an used move is loaded here
 wDamage:: ; ccb9
 	ds $2
 
@@ -836,9 +927,14 @@ wccbc:: ; ccbc
 
 	ds $2
 
-wTempDamage_ccbf:: ; ccbf
-	ds $2
+; damage dealt by an attack to a target
+wDealtDamage:: ; ccbf
+	ds $1
 
+wccc0:: ; ccc0
+	ds $1
+
+; WEAKNESS and RESISTANCE flags	for a damaging attack
 wDamageEffectiveness:: ; ccc1
 	ds $1
 
@@ -852,6 +948,8 @@ wTempTurnDuelistCardID:: ; ccc3
 wTempNonTurnDuelistCardID:: ; ccc4
 	ds $1
 
+; the status condition of the defending Pokemon is loaded here after an attack
+wccc5:: ; ccc5
 	ds $1
 
 ; may contain 0 or 1 depending on which move was selected
@@ -868,61 +966,77 @@ wGotHeadsFromConfusionCheck:: ; ccc9
 
 	ds $3
 
-wcccd:: ; cccd
+wEffectFunctionsFeedbackIndex:: ; cccd
 	ds $1
 
-; some array used in effect functions with wcccd as the index. unknown length
-wccce:: ; ccce
+; some array used in effect functions with wEffectFunctionsFeedbackIndex
+; as the index, used to return feedback. unknown length.
+wEffectFunctionsFeedback:: ; ccce
 	ds $18
 
 ; this is 1 (non-0) if dealing damage to self due to confusion
-wDamageToSelfMode:: ; cce6
+wIsDamageToSelf:: ; cce6
 	ds $1
 
-	ds $2
+wcce7:: ; cce7
+	ds $1
+
+	ds $1
 
 ; used in CopyDeckData
 wcce9:: ; cce9
 	ds $2
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-wTempPlayAreaLocationOffset_cceb:: ; cceb
+wTempPlayAreaLocation_cceb:: ; cceb
 	ds $1
 
 wccec:: ; ccec
 	ds $1
 
+; used by the effect functions to return the cause of an effect to fail
+; $01: was not affected by a status condition
+; $02: prints WasUnsuccessfulText
 wcced:: ; cced
 	ds $1
 
 wccee:: ; ccee
 	ds $1
 
+; when this is non-0, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE and the
+; next duelvar are always set to 0 after an attack
 wccef:: ; ccef
 	ds $1
 
 wccf0:: ; ccf0
 	ds $1
 
+; effect functions return a status condition constant here when it had no effect
+; on the target, in order to print one of the ThereWasNoEffectFrom* texts
 wccf1:: ; ccf1
 	ds $1
 
-wccf2:: ; ccf2
+; when non-0, allows the player to skip some delays during a duel by pressing B.
+; value read from s0a009. probably only used for debugging.
+wSkipDelayAllowed:: ; ccf2
 	ds $1
 
-SECTION "WRAM Engine 2", WRAM0
+SECTION "WRAM0 2", WRAM0
 
-; on CGB, attributes of the text box borders. (values 0-7? so only affects palette?)
+; on CGB, attributes of the text box borders. (values 0-7 seem to be used, which only affect palette)
 ; on SGB, colorize text box border with SGB1 if non-0
 wTextBoxFrameType:: ; ccf3
 	ds $1
 
+; pixel data of a tile used for text
+; either a combination of two half-width characters or a full-width character
 wTextTileBuffer:: ; ccf4
 	ds TILE_SIZE
 
 wcd04:: ; cd04
 	ds $1
 
+; used by PlaceNextTextTile
 wCurTextTile:: ; cd05
 	ds $1
 
@@ -1029,7 +1143,9 @@ wLeftmostItemCursorX:: ; cd98
 wRefreshMenuCursorSFX:: ; cd99
 	ds $1
 
-wcd9a:: ; cd9a
+; when printing a YES/NO menu, whether the cursor is
+; initialized to the YES ($01) or to the NO ($00) item
+wDefaultYesOrNo:: ; cd9a
 	ds $1
 
 ; used in _CopyCardNameAndLevel to keep track of the remaining space to copy the text
@@ -1040,7 +1156,7 @@ wcd9c:: ; cd9c
 	ds $1
 
 ; this stores the result from a coin toss (number of heads)
-wcd9d:: ; cd9d
+wCoinTossNumHeads:: ; cd9d
 	ds $1
 
 wcd9e:: ; cd9e
@@ -1098,6 +1214,7 @@ wce21:: ; ce21
 ; During a duel, this is always $b after the first attack.
 ; $b is the bank where the functions associated to card or effect commands are.
 ; Its only purpose seems to be store this value to be read by TryExecuteEffectCommandFunction.
+; possibly used in other contexts too
 wce22:: ; ce22
 	ds $1
 
@@ -1155,6 +1272,7 @@ wWhichTxRam3:: ; ce4a
 wIsTextBoxLabeled:: ; ce4b
 	ds $1
 
+; text id of a text box's label
 wTextBoxLabel:: ; ce4c
 	ds $2
 
@@ -1240,7 +1358,22 @@ wTempPokemonID_ce7c:: ; ce7c
 wce7e:: ; ce7e
 	ds $1
 
-	ds $22
+wce7f:: ; ce7f
+	ds $2
+
+wce81:: ; ce81
+	ds $1
+
+wce82:: ; ce82
+	ds $1
+
+wce83:: ; ce83
+	ds $1
+
+wce84:: ; ce84
+	ds $1
+
+	ds $1c
 
 wcea1:: ; cea1
 	ds $1
@@ -1413,7 +1546,7 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error? )
+; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error?)
 ; to be read by the overworld caller
 wDuelResult:: ; d0c3
 	ds $1
@@ -1516,6 +1649,7 @@ wd132:: ; d132
 
 UNION
 
+; when opening a booster pack, list of cards available in the booster pack of a specific rarity
 wBoosterViableCardList:: ; d133
 	ds $100
 
@@ -1786,7 +1920,16 @@ wd4ac:: ; d4ac
 wd4ad:: ; d4ad
 	ds $1
 
-	ds $10
+wd4ae:: ; d4ae
+	ds $1
+
+wd4af:: ; d4af
+	ds $1
+
+wd4b0:: ; d4b0
+	ds $1
+
+	ds $d
 
 wd4be:: ; d4be
 	ds $1
@@ -1965,7 +2108,7 @@ wBoosterPackID:: ; d669
 wBoosterCurrentCard:: ; d66a
 	ds $1
 
-; booster card type of the card that has just been drawn from the pack
+; BOOSTER_CARD_TYPE_* of the card that has just been drawn from the pack
 wBoosterJustDrawnCardType:: ; d66b
 	ds $1
 
@@ -1973,26 +2116,24 @@ wBoosterJustDrawnCardType:: ; d66b
 wBoosterCurrentRarity:: ; d66c
 	ds $1
 
-; the averaged value of all values in wBoosterDataTypeChances
+; the averaged value of all values in wBoosterData_TypeChances
 ; used to recalculate the chances of a booster card type when a card of said type is drawn from the pack
 wBoosterAveragedTypeChances:: ; d66d
 	ds $1
 
 ; data of the booster pack copied from the corresponding BoosterSetRarityAmountsTable entry
-wBoosterDataCommonAmount:: ; d66e
+wBoosterData_CommonAmount:: ; d66e
 	ds $1
-
-wBoosterDataUncommonAmount:: ; d66f
+wBoosterData_UncommonAmount:: ; d66f
 	ds $1
-
-wBoosterDataRareAmount:: ; d670
+wBoosterData_RareAmount:: ; d670
 	ds $1
 
 ; how many cards of each type are available of a certain rarity in the booster pack's set
 wBoosterAmountOfCardTypeTable:: ; d671
 	ds NUM_BOOSTER_CARD_TYPES
 
-; holds information similar to wBoosterDataTypeChances, except that it contains 00 on any type
+; holds information similar to wBoosterData_TypeChances, except that it contains 00 on any type
 ; of which there are no cards remaining in the set for the current rarity
 wBoosterTempTypeChancesTable:: ; d67a
 	ds NUM_BOOSTER_CARD_TYPES
@@ -2000,22 +2141,18 @@ wBoosterTempTypeChancesTable:: ; d67a
 ; properties of the card being currently processed by the booster pack engine functions
 wBoosterCurrentCardType:: ; d683
 	ds $1
-
 wBoosterCurrentCardRarity:: ; d684
 	ds $1
-
 wBoosterCurrentCardSet:: ; d685
 	ds $1
 
 ; data of the booster pack copied from the corresponding BoosterPack_* structure.
-; wBoosterDataTypeChances is updated after each card is drawn, to re-balance the type chances.
-wBoosterDataSet:: ; d686
+; wBoosterData_TypeChances is updated after each card is drawn, to re-balance the type chances.
+wBoosterData_Set:: ; d686
 	ds $1
-
-wBoosterDataEnergyFunctionPointer:: ; d687
+wBoosterData_EnergyFunctionPointer:: ; d687
 	ds $2
-
-wBoosterDataTypeChances:: ; d689
+wBoosterData_TypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
 	ds $1
@@ -2037,7 +2174,7 @@ wd697:: ; d697
 
 	ds $6e8
 
-SECTION "WRAM Audio", WRAMX
+SECTION "WRAM1 Audio", WRAMX
 
 ; bit 7 is set once the song has been started
 wCurSongID:: ; dd80

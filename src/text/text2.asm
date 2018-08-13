@@ -18,7 +18,7 @@ ConfusionCheckRetreatText: ; 380ac (e:40ac)
 	line "If Tails, unable to Retreat."
 	done
 
-Text00f9: ; 380db (e:40db)
+PokemonsSleepCheckText: ; 380db (e:40db)
 	text "<RAMTEXT>'s Sleep check."
 	done
 
@@ -173,11 +173,11 @@ Text0117: ; 386f2 (e:46f2)
 	text "Draw 1 card from the Deck."
 	done
 
-DrawCardsFromTheDeck: ; 3870e (e:470e)
+DrawCardsFromTheDeckText: ; 3870e (e:470e)
 	text "Draw <RAMNUM> card(s) from the Deck."
 	done
 
-NoCardsInDeckCannotDraw: ; 3872d (e:472d)
+CannotDrawCardBecauseNoCardsInDeckText: ; 3872d (e:472d)
 	text "Cannot draw a card because"
 	line "there are no cards in the Deck."
 	done
@@ -478,7 +478,7 @@ WasUnsuccessfulText: ; 393e6 (e:53e6)
 	line "<RAMTEXT> was unsuccessful."
 	done
 
-Text014b: ; 393ff (e:53ff)
+ThereWasNoEffectFromTxRam2Text: ; 393ff (e:53ff)
 	text "There was no effect"
 	line "from <RAMTEXT>."
 	done
@@ -725,32 +725,32 @@ Text017d: ; 39b97 (e:5b97)
 	text "There was no effect!"
 	done
 
-Text017e: ; 39bad (e:5bad)
+ThereWasNoEffectFromToxicText: ; 39bad (e:5bad)
 	text "There was no effect"
 	line "from Toxic"
 	done
 
-Text017f: ; 39bcd (e:5bcd)
+ThereWasNoEffectFromPoisonText: ; 39bcd (e:5bcd)
 	text "There was no effect"
 	line "from Poison."
 	done
 
-Text0180: ; 39bef (e:5bef)
+ThereWasNoEffectFromSleepText: ; 39bef (e:5bef)
 	text "There was no effect"
 	line "from Sleep."
 	done
 
-Text0181: ; 39c10 (e:5c10)
+ThereWasNoEffectFromParalysisText: ; 39c10 (e:5c10)
 	text "There was no effect"
 	line "from Paralysis."
 	done
 
-Text0182: ; 39c35 (e:5c35)
+ThereWasNoEffectFromConfusionText: ; 39c35 (e:5c35)
 	text "There was no effect"
 	line "from Confusion."
 	done
 
-Text0183: ; 39c5a (e:5c5a)
+ThereWasNoEffectFromPoisonConfusionText: ; 39c5a (e:5c5a)
 	text "There was no effet"
 	line "from Poison, Confusion."
 	done
@@ -1479,7 +1479,7 @@ GrassAndPsychicDeckName: ; 3b75d (e:775d)
 	text "Grass & Psychic"
 	done
 
-Text0212: ; 3b76e (e:776e)
+RetreatCostText: ; 3b76e (e:776e)
 	text "Retreat Cost"
 	done
 
@@ -1491,11 +1491,11 @@ Text0214: ; 3b799 (e:7799)
 	textfw3 "S", "W", "I", "T", "C", "H", " ", "T", "O", " ", "L", "O", "W", "E", "R"
 	done
 
-Text0215: ; 3b7b6 (e:77b6)
+FeetText: ; 3b7b6 (e:77b6)
 	textfw3 "'"
 	done
 
-Text0216: ; 3b7b9 (e:77b9)
+InchesText: ; 3b7b9 (e:77b9)
 	textfw3 "”"
 	done
 

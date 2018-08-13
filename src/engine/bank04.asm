@@ -3,14 +3,14 @@ Func_10000: ; 10000 (4:4000)
 	ld [wTileMapFill], a
 	call EmptyScreen
 	call LoadSymbolsFont
-	ld de, $307f
-	call Func_2275
+	lb de, $30, $7f
+	call SetupText
 	call Set_OBJ_8x8
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
 	ld a, [wLCDC]
-	bit LCDC_ON, a
+	bit LCDC_ENABLE_F, a
 	jr nz, .asm_10025
 	xor a
 	ld [rSCX], a
@@ -31,11 +31,11 @@ Func_10031: ; 10031 (4:4031)
 	call $4cbb
 	call DisableSRAM
 	call $4b28
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call $4cea
-	call SetFlushAllPalettes
+	call FlushAllPalettes
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -91,7 +91,7 @@ Medal_1029e: ; 1029e (4:429e)
 	cp $e0
 	jr nz, .asm_102e2
 	ldtx hl, WonTheMedalText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	pop af
@@ -148,11 +148,11 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	jr nz, .asm_10373
 	ldtx hl, AndAnotherBoosterPackText
 .asm_10373
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ldtx hl, CheckedCardsInBoosterPackText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call DisableLCD
 	call Func_1288c
 	call ZeroObjectPositions
@@ -223,7 +223,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	lb bc, $2f, $1d ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
-	call WaitForButtonAorB ; wait for the user to press a or b
+	call WaitForButtonAorB
 	call Func_3c96
 	call Func_10ab4 ; fade out
 	pop af
@@ -361,7 +361,7 @@ Func_10e55: ; 10e55 (4:4e55)
 	ret
 
 Func_10e71: ; 10e71 (4:4e71)
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and D_PAD
 	jr z, .asm_10e83
 	farcall Func_c5d5
@@ -369,7 +369,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	call Func_10e97
 	jr .asm_10e96
 .asm_10e83
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .asm_10e96
 	ld a, $2
@@ -445,7 +445,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_2c29
+	call ProcessTextFromID
 	pop de
 	pop hl
 	ret
@@ -1113,9 +1113,9 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call Func_128a9
 	farcall Func_1996e
 	call EnableSRAM
-	ld a, [sa007]
+	ld a, [s0a007]
 	ld [wd421], a
-	ld a, [sa006]
+	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	ld a, MUSIC_STOP
@@ -1511,7 +1511,7 @@ Func_1344d: ; 1344d (4:744d)
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, DefeatedFiveOpponentsText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ret
@@ -1533,7 +1533,7 @@ Func_13485: ; 13485 (4:7485)
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ldtx hl, ConsecutiveWinRecordIncreasedText
-	call Func_2c73
+	call PrintScrollableText_NoTextBoxLabel
 	call Func_3c96
 	call ResumeSong
 	ret

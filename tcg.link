@@ -157,18 +157,24 @@ ROMX $3f
 	"Audio 3"
 WRAM0
 	"WRAM0"
-	"WRAM Duels 1"
-	"WRAM Text Engine"
-	"WRAM Engine 1"
-	"WRAM Serial Transfer"
-	"WRAM Duels 2"
-	"WRAM Engine 2"
+	"WRAM0 Duels 1"
+	"WRAM0 Text Engine"
+	"WRAM0 1"
+	"WRAM0 Serial Transfer"
+	"WRAM0 Duels 2"
+	"WRAM0 2"
 WRAMX 1
 	"WRAM1"
-	"WRAM Audio"
+	"WRAM1 Audio"
 VRAM $00
 	"VRAM0"
 VRAM $01
 	"VRAM1"
 SRAM $00
-	"SRAM"
+	"SRAM0"
+SRAM $01
+	"SRAM1"
+SRAM $02
+	"SRAM2"
+SRAM $03
+	"SRAM3"

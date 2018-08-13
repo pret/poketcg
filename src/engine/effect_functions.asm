@@ -4,17 +4,17 @@ Poison50PercentEffect: ; 2c000 (b:4000)
 	ret nc
 
 PoisonEffect: ; 2c007 (b:4007)
-	lb bc, $0f, POISONED
+	lb bc, CNF_SLP_PRZ, POISONED
 	jr ApplyStatusEffect
 
-	lb bc, $0f, DOUBLE_POISONED
+	lb bc, CNF_SLP_PRZ, DOUBLE_POISONED
 	jr ApplyStatusEffect
 
 Paralysis50PercentEffect: ; 2c011 (b:4011)
 	ldtx de, ParalysisCheckText
 	call TossCoin_BankB
 	ret nc
-	lb bc, $f0, PARALYZED
+	lb bc, PSN_DBLPSN, PARALYZED
 	jr ApplyStatusEffect
 
 Confusion50PercentEffect: ; 2c01d (b:401d)
@@ -23,7 +23,7 @@ Confusion50PercentEffect: ; 2c01d (b:401d)
 	ret nc
 
 ConfusionEffect: ; 2c024 (b:4024)
-	lb bc, $f0, CONFUSED
+	lb bc, PSN_DBLPSN, CONFUSED
 	jr ApplyStatusEffect
 
 	ldtx de, SleepCheckText
@@ -31,12 +31,12 @@ ConfusionEffect: ; 2c024 (b:4024)
 	ret nc
 
 SleepEffect: ; 2c030 (b:4030)
-	lb bc, $f0, ASLEEP
+	lb bc, PSN_DBLPSN, ASLEEP
 	jr ApplyStatusEffect
 
 ApplyStatusEffect:
 	ldh a, [hWhoseTurn]
-	ld hl, wcc05
+	ld hl, wWhoseTurn
 	cp [hl]
 	jr nz, .can_induce_status
 	ld a, [wTempNonTurnDuelistCardID]
@@ -57,25 +57,26 @@ ApplyStatusEffect:
 .cant_induce_status
 	ld a, c
 	ld [wccf1], a
-	call Func_2c09c
+	call SetNoEffectFromStatus
 	or a
 	ret
 
 .can_induce_status
-	ld hl, wcccd
+	ld hl, wEffectFunctionsFeedbackIndex
 	push hl
 	ld e, [hl]
 	ld d, $0
-	ld hl, wccce
+	ld hl, wEffectFunctionsFeedback
 	add hl, de
 	call SwapTurn
 	ldh a, [hWhoseTurn]
 	ld [hli], a
 	call SwapTurn
-	ld [hl], b
+	ld [hl], b ; mask of status conditions not to discard on the target
 	inc hl
-	ld [hl], c
+	ld [hl], c ; status condition to inflict to the target
 	pop hl
+	; advance wEffectFunctionsFeedbackIndex
 	inc [hl]
 	inc [hl]
 	inc [hl]
@@ -97,32 +98,32 @@ CommentedOut_2c086: ; 2c086 (b:4086)
 	ret
 ; 0x2c087
 
-PlaceTextItems7: ; 2c087 (b:4087)
+Func_2c087: ; 2c087 (b:4087)
 	xor a
-	jr PlaceTextItemsc
+	jr Func_2c08c
 
-PlaceTextItemsa: ; 2c08a (b:408a)
+Func_2c08a: ; 2c08a (b:408a)
 	ld a, $1
 
-PlaceTextItemsc:
+Func_2c08c:
 	push de
 	push af
 	ld a, $11
-	call SetDuelAIAction
+	call SetAIAction_SerialSendDuelData
 	pop af
 	pop de
-	call Func_0fac
+	call SerialSend8Bytes
 	call TossCoinATimes
 	ret
 ; 0x2c09c
 
-Func_2c09c: ; 2c09c (b:409c)
+SetNoEffectFromStatus: ; 2c09c (b:409c)
 	ld a, $1
 	ld [wcced], a
 	ret
 ; 0x2c0a2
 
-Func_2c0a2: ; 2c0a2 (b:40a2)
+SetWasUnsuccessful: ; 2c0a2 (b:40a2)
 	ld a, $2
 	ld [wcced], a
 	ret
@@ -232,7 +233,7 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	jp c, PoisonEffect
 	ld a, $8c
 	ld [wLoadedMoveAnimation], a
-	call Func_2c09c
+	call SetNoEffectFromStatus
 	ret
 ; 0x2c70a
 
@@ -279,7 +280,7 @@ FoulOdorEffect: ; 2c793 (b:4793)
 KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
-	jp nc, Func_2c0a2
+	jp nc, SetWasUnsuccessful
 	ld a, $4f
 	ld [wLoadedMoveAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
@@ -306,7 +307,7 @@ SwordsDanceEffect: ; 2c7d0 (b:47d0)
 
 ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 	call Confusion50PercentEffect
-	call nc, Func_2c09c
+	call nc, SetNoEffectFromStatus
 	ret
 ; 0x2c7e3
 
@@ -316,7 +317,7 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 MetapodStiffenEffect: ; 2c836 (b:4836)
 	ldtx de, IfHeadsNoDamageNextTurnText
 	call TossCoin_BankB
-	jp nc, Func_2c0a2
+	jp nc, SetWasUnsuccessful
 	ld a, $4f
 	ld [wLoadedMoveAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN

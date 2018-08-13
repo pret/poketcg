@@ -1,4 +1,23 @@
-	INCROM $8000, $8cd4
+Func_8000: ; 8000 (2:4000)
+	INCROM $8000, $8211
+
+Func_8211: ; 8211 (2:4211)
+	INCROM $8211, $833c
+
+Func_833c: ; 833c (2:433c)
+	INCROM $833c, $8764
+
+Func_8764: ; 8764 (2:4764)
+	INCROM $8764, $8932
+
+Func_8932: ; 8932 (2:4932)
+	INCROM $8932, $8aaa
+
+Func_8aaa: ; 8aaa (2:4aaa)
+	INCROM $8aaa, $8b85
+
+Func_8b85: ; 8b85 (2:4b85)
+	INCROM $8b85, $8cd4
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
@@ -50,8 +69,8 @@ Func_8d56: ; 8d56 (2:4d56)
 	call LoadDuelCardSymbolTiles
 	call Func_8d0b
 	bank1call SetDefaultPalettes
-	ld de, $3cbf
-	call Func_2275
+	lb de, $3c, $bf
+	call SetupText
 	ret
 ; 0x8d78
 
@@ -100,7 +119,7 @@ Unknown_8de2: ; 8de2 (2:4de2)
 	INCROM $8de2, $8dea
 
 Func_8dea: ; 8dea (2:4dea)
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and START
 	ret z
 	ld a, [wCurMenuItem]
@@ -324,7 +343,7 @@ Func_8f8a: ; 8f8a (2:4f8a)
 
 Func_8f9d: ; 8f9d (2:4f9d)
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	call DisableSRAM
 	ld h, $3
 	ld l, a
@@ -338,7 +357,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call FillRectangle
 	ld a, [wceb1]
 	call EnableSRAM
-	ld [$b700], a
+	ld [s0b700], a
 	call DisableSRAM
 	call Func_9326
 	call GetPointerToDeckName
@@ -420,7 +439,7 @@ Func_9065: ; 9065 (2:5065)
 	ld d, a
 	ld a, [wceb0]
 	ld e, a
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	or a
 	jr z, .asm_90a6
 	bit D_LEFT_F, a
@@ -454,7 +473,7 @@ Func_9065: ; 9065 (2:5065)
 	xor a
 	ld [wcea3], a
 .asm_90a6
-	ldh a, [hButtonsPressed]
+	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .asm_90c1
 	and A_BUTTON
@@ -637,7 +656,7 @@ Func_9168: ; 9168 (2:5168)
 	ld [wceb5], a
 .asm_9214
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	ld c, a
 	ld b, $0
 	ld d, $2
@@ -657,7 +676,7 @@ Func_9168: ; 9168 (2:5168)
 	jr .asm_921f
 .asm_9234
 	ld a, c
-	ld [$b700], a
+	ld [s0b700], a
 	call DisableSRAM
 	call Func_9326
 	call EnableLCD
@@ -706,7 +725,7 @@ Func_926e: ; 926e (2:526e)
 .asm_929c
 	call InitTextPrinting
 	ldtx hl, NewDeckText
-	call Func_2c29
+	call ProcessTextFromID
 	scf
 	ret
 
@@ -746,7 +765,7 @@ Func_9314: ; 9314 (2:5314)
 
 Func_9326: ; 9326 (2:5326)
 	call EnableSRAM
-	ld a, [$b700]
+	ld a, [s0b700]
 	call DisableSRAM
 	ld h, 3
 	ld l, a
@@ -927,12 +946,12 @@ Func_ba04: ; ba04 (2:7a04)
 	call DoFrame
 	call HandleMenuInput
 	jr c, .asm_baa3
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and D_UP | D_DOWN
 	jr z, .asm_ba4e
 
 .asm_ba4e
-	ldh a, [hButtonsPressed2]
+	ldh a, [hDPadHeld]
 	and START
 	jr z, .asm_ba40
 	ld a, [wcea1]

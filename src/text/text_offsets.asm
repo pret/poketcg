@@ -18,10 +18,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PokemonText                              ; 0x000e
 	textpointer Text000f                                 ; 0x000f
 	textpointer LbsText                                  ; 0x0010
-	textpointer Text0011                                 ; 0x0011
-	textpointer Text0012                                 ; 0x0012
-	textpointer Text0013                                 ; 0x0013
-	textpointer Text0014                                 ; 0x0014
+	textpointer PromostarRarityText                                 ; 0x0011
+	textpointer CircleRarityText                                 ; 0x0012
+	textpointer DiamondRarityText                                 ; 0x0013
+	textpointer StarRarityText                                 ; 0x0014
 	textpointer Text0015                                 ; 0x0015
 	textpointer Text0016                                 ; 0x0016
 	textpointer Text0017                                 ; 0x0017
@@ -44,7 +44,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IsStillAsleepText                        ; 0x0028
 	textpointer IsCuredOfSleepText                       ; 0x0029
 	textpointer IsCuredOfParalysisText                   ; 0x002a
-	textpointer Text002b                                 ; 0x002b
+	textpointer BetweenTurnsText                         ; 0x002b
 	textpointer Text002c                                 ; 0x002c
 	textpointer Text002d                                 ; 0x002d
 	textpointer Text002e                                 ; 0x002e
@@ -79,9 +79,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text004b                                 ; 0x004b
 	textpointer Text004c                                 ; 0x004c
 	textpointer Text004d                                 ; 0x004d
-	textpointer Text004e                                 ; 0x004e
+	textpointer KnockOutText                             ; 0x004e
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
-	textpointer ChooseEnergyCardToDiscardText                                 ; 0x0050
+	textpointer ChooseEnergyCardToDiscardText            ; 0x0050
 	textpointer Text0051                                 ; 0x0051
 	textpointer Text0052                                 ; 0x0052
 	textpointer YouPlayFirstText                         ; 0x0053
@@ -89,15 +89,15 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransmissionErrorText                    ; 0x0055
 	textpointer ChooseTheCardYouWishToExamineText        ; 0x0056
 	textpointer TransmitingDataText                      ; 0x0057
-	textpointer Text0058                                 ; 0x0058
-	textpointer Text0059                                 ; 0x0059
+	textpointer WaitingHandExamineText                                 ; 0x0058
+	textpointer SelectingBenchPokemonHandExamineBackText                                 ; 0x0059
 	textpointer RetreatedToTheBenchText                  ; 0x005a
 	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
 	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
-	textpointer Text005e                                 ; 0x005e
-	textpointer Text005f                                 ; 0x005f
-	textpointer Text0060                                 ; 0x0060
+	textpointer DuelistsTurnText                         ; 0x005e
+	textpointer AttachedEnergyToPokemonText                                 ; 0x005f
+	textpointer PokemonEvolvedIntoPokemonText                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
 	textpointer PlacedInTheArenaText                     ; 0x0062
 	textpointer ShufflesTheDeckText                      ; 0x0063
@@ -107,35 +107,35 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0067                                 ; 0x0067
 	textpointer DeckHasXCardsText                        ; 0x0068
 	textpointer ChooseBasicPkmnToPlaceInArenaText        ; 0x0069
-	textpointer Text006a                                 ; 0x006a
+	textpointer ThereAreNoBasicPokemonInHand                                 ; 0x006a
 	textpointer NeitherPlayerHasBasicPkmnText            ; 0x006b
-	textpointer Text006c                                 ; 0x006c
+	textpointer ReturnCardsToDeckAndDrawAgainText                                 ; 0x006c
 	textpointer ChooseUpTo5BasicPkmnToPlaceOnBenchText   ; 0x006d
-	textpointer Text006e                                 ; 0x006e
-	textpointer Text006f                                 ; 0x006f
+	textpointer PleaseChooseAnActivePokemonText                                 ; 0x006e
+	textpointer ChooseYourBenchPokemonText                                 ; 0x006f
 	textpointer YouDrewText                              ; 0x0070
-	textpointer Text0071                                 ; 0x0071
+	textpointer YouCannotSelectThisCardText                                 ; 0x0071
 	textpointer PlacingThePrizesText                     ; 0x0072
 	textpointer PleasePlacePrizesText                    ; 0x0073
-	textpointer IfHeadPlayerPlaysFirstText               ; 0x0074
-	textpointer CoinTossToDetermineWhoFirstText          ; 0x0075
+	textpointer IfHeadsDuelistPlaysFirstText               ; 0x0074
+	textpointer CoinTossToDecideWhoPlaysFirstText          ; 0x0075
 	textpointer DecisionText                             ; 0x0076
 	textpointer DuelWasADrawText                         ; 0x0077
 	textpointer WonDuelText                              ; 0x0078
 	textpointer LostDuelText                             ; 0x0079
 	textpointer StartSuddenDeathMatchText                ; 0x007a
-	textpointer Text007b                                 ; 0x007b
-	textpointer Text007c                                 ; 0x007c
-	textpointer Text007d                                 ; 0x007d
-	textpointer Text007e                                 ; 0x007e
+	textpointer PrizesLeftActivePokemonCardsInDeckText                                 ; 0x007b
+	textpointer NoneText                                 ; 0x007c
+	textpointer YesText                                 ; 0x007d
+	textpointer CardsText                                 ; 0x007e
 	textpointer Text007f                                 ; 0x007f
 	textpointer Text0080                                 ; 0x0080
 	textpointer WasKnockedOutText                        ; 0x0081
 	textpointer HavePokemonPowerText                     ; 0x0082
 	textpointer UnableToUsePkmnPowerDueToToxicGasText    ; 0x0083
-	textpointer Text0084                                 ; 0x0084
-	textpointer Text0085                                 ; 0x0085
-	textpointer Text0086                                 ; 0x0086
+	textpointer PlayCheck1Text                                 ; 0x0084
+	textpointer PlayCheck2Text                                 ; 0x0085
+	textpointer SelectCheckText                                 ; 0x0086
 	textpointer Text0087                                 ; 0x0087
 	textpointer DuelistIsThinkingText                    ; 0x0088
 	textpointer Text0089                                 ; 0x0089
@@ -192,7 +192,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00bc                                 ; 0x00bc
 	textpointer Text00bd                                 ; 0x00bd
 	textpointer Text00be                                 ; 0x00be
-	textpointer EnergyCardsRequiredToRetreatText                                 ; 0x00bf
+	textpointer EnergyCardsRequiredToRetreatText         ; 0x00bf
 	textpointer NotEnoughEnergyCardsText                 ; 0x00c0
 	textpointer Text00c1                                 ; 0x00c1
 	textpointer Text00c2                                 ; 0x00c2
@@ -250,7 +250,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer TransparencyCheckText                    ; 0x00f6
 	textpointer ConfusionCheckDamageText                 ; 0x00f7
 	textpointer ConfusionCheckRetreatText                ; 0x00f8
-	textpointer Text00f9                                 ; 0x00f9
+	textpointer PokemonsSleepCheckText                   ; 0x00f9
 	textpointer Text00fa                                 ; 0x00fa
 	textpointer Text00fb                                 ; 0x00fb
 	textpointer Text00fc                                 ; 0x00fc
@@ -281,8 +281,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0115                                 ; 0x0115
 	textpointer Text0116                                 ; 0x0116
 	textpointer Text0117                                 ; 0x0117
-	textpointer DrawCardsFromTheDeck                     ; 0x0118
-	textpointer NoCardsInDeckCannotDraw                  ; 0x0119
+	textpointer DrawCardsFromTheDeckText                     ; 0x0118
+	textpointer CannotDrawCardBecauseNoCardsInDeckText                  ; 0x0119
 	textpointer Text011a                                 ; 0x011a
 	textpointer Text011b                                 ; 0x011b
 	textpointer Text011c                                 ; 0x011c
@@ -332,7 +332,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0148                                 ; 0x0148
 	textpointer Text0149                                 ; 0x0149
 	textpointer WasUnsuccessfulText                      ; 0x014a
-	textpointer Text014b                                 ; 0x014b
+	textpointer ThereWasNoEffectFromTxRam2Text                                 ; 0x014b
 	textpointer Text014c                                 ; 0x014c
 	textpointer Text014d                                 ; 0x014d
 	textpointer Text014e                                 ; 0x014e
@@ -383,12 +383,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text017b                                 ; 0x017b
 	textpointer Text017c                                 ; 0x017c
 	textpointer Text017d                                 ; 0x017d
-	textpointer Text017e                                 ; 0x017e
-	textpointer Text017f                                 ; 0x017f
-	textpointer Text0180                                 ; 0x0180
-	textpointer Text0181                                 ; 0x0181
-	textpointer Text0182                                 ; 0x0182
-	textpointer Text0183                                 ; 0x0183
+	textpointer ThereWasNoEffectFromToxicText                                 ; 0x017e
+	textpointer ThereWasNoEffectFromPoisonText                                 ; 0x017f
+	textpointer ThereWasNoEffectFromSleepText                                 ; 0x0180
+	textpointer ThereWasNoEffectFromParalysisText                                 ; 0x0181
+	textpointer ThereWasNoEffectFromConfusionText                                 ; 0x0182
+	textpointer ThereWasNoEffectFromPoisonConfusionText                                 ; 0x0183
 	textpointer Text0184                                 ; 0x0184
 	textpointer Text0185                                 ; 0x0185
 	textpointer Text0186                                 ; 0x0186
@@ -531,11 +531,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer LightningAndFireDeckName                 ; 0x020f
 	textpointer WaterAndFightingDeckName                 ; 0x0210
 	textpointer GrassAndPsychicDeckName                  ; 0x0211
-	textpointer Text0212                                 ; 0x0212
+	textpointer RetreatCostText                                 ; 0x0212
 	textpointer Text0213                                 ; 0x0213
 	textpointer Text0214                                 ; 0x0214
-	textpointer Text0215                                 ; 0x0215
-	textpointer Text0216                                 ; 0x0216
+	textpointer FeetText                                 ; 0x0215
+	textpointer InchesText                                 ; 0x0216
 	textpointer YourDiscardPileText                      ; 0x0217
 	textpointer OpponentsDiscardPileText                 ; 0x0218
 	textpointer Text0219                                 ; 0x0219
