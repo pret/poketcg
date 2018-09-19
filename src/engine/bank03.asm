@@ -1850,7 +1850,7 @@ OWScript_PrintTextCloseBox: ; cdb9 (3:4db9)
 Func_cdcb: ; cdcb (3:4dcb)
 	ld a, [wd3b6]
 	ld [wd3aa], a
-Func_4dd1: ; cdd1 (3:4dd1)
+Func_cdd1: ; cdd1 (3:4dd1)
 	farcall Func_1c50a
 	jp IncreaseOWScriptPointerBy1
 
@@ -1862,7 +1862,7 @@ Func_cdd8: ; cdd8 (3:4dd8)
 	ld a, [wd696]
 	ld [wd3ab], a
 	call Func_39c3
-	call Func_4dd1
+	call Func_cdd1
 	pop af
 	ld [wd3ab], a
 	pop af

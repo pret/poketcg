@@ -1822,9 +1822,9 @@ Func_4b60: ; 4b60 (1:4b60)
 	push af
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call Func_4cd5
+	call ChooseInitialArenaAndBenchPokemon
 	call SwapTurn
-	call Func_4cd5
+	call ChooseInitialArenaAndBenchPokemon
 	call SwapTurn
 	jp c, .asm_4c77
 	call Func_311d
@@ -1943,13 +1943,19 @@ Func_4b60: ; 4b60 (1:4b60)
 	db $06, $08, $0d, $03
 ; 0x4cd5
 
-Func_4cd5: ; 4cd5 (1:4cd5)
+; have the turn duelist place, at the beginning of the duel, the active Pokemon
+; and 0 more bench Pokemon, all of which must be basic Pokemon cards.
+; also transmits the turn holder's duelvars to the other duelist in a link duel.
+; called twice, once for each duelist.
+ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
-	jr z, .player_choose_arena
+	jr z, .choose_arena
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .exchange_duelvars
+
+; AI opponent's turn
 	push af
 	push hl
 	call Func_2bc3
@@ -1959,6 +1965,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	or a
 	ret
 
+; link opponent's turn
 .exchange_duelvars
 	ldtx hl, TransmitingDataText
 	call DrawWideTextBox_PrintText
@@ -1979,7 +1986,9 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 .error
 	jp DuelTransmissionError
 
-.player_choose_arena
+; player's turn (either AI or link duel)
+; prompt (force) the player to choose a basic Pokemon card to place in the arena
+.choose_arena
 	call EmptyScreen
 	ld a, BOXMSG_ARENA_POKEMON
 	call DrawDuelBoxMessage
@@ -1987,16 +1996,16 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DrawWideTextBox_WaitForInput
 	ld a, $1
 	call DoPracticeDuelAction
-.asm_4d28
+.choose_arena_loop
 	xor a
 	ldtx hl, PleaseChooseAnActivePokemonText
-	call Func_5502
-	jr c, .asm_4d28
+	call DisplayPlaceInitialPokemonCardsScreen
+	jr c, .choose_arena_loop
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, $2
 	call DoPracticeDuelAction
-	jr c, .asm_4d28
+	jr c, .choose_arena_loop
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
 	ldh a, [hTempCardIndex_ff98]
@@ -2004,6 +2013,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DisplayCardDetailScreen
 	jr .choose_bench
 
+; after choosing the active Pokemon, let the player place 0 or more basic Pokemon
+; cards in the bench. loop until the player decides to stop placing Pokemon cards.
 .choose_bench
 	call EmptyScreen
 	ld a, BOXMSG_BENCH_POKEMON
@@ -2015,8 +2026,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 .bench_loop
 	ld a, $1
 	ldtx hl, ChooseYourBenchPokemonText
-	call Func_5502
-	jr c, .asm_4d8e
+	call DisplayPlaceInitialPokemonCardsScreen
+	jr c, .bench_done
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
@@ -2035,7 +2046,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DrawWideTextBox_WaitForInput
 	jr .bench_loop
 
-.asm_4d8e
+.bench_done
 	ld a, $4
 	call DoPracticeDuelAction
 	jr c, .bench_loop
@@ -2068,7 +2079,7 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 	push hl
 	push bc
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call .check_basic_pokemon
+	call IsLoadedCard1BasicPokemon.skip_mysterious_fossil_clefairy_doll
 	pop bc
 	pop hl
 	or b
@@ -2082,13 +2093,19 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 	scf
 	ret
 
-.asm_4dd1
+; return nc if the card at wLoadedCard1 is a basic Pokemon card
+; MYSTERIOUS_FOSSIL and CLEFAIRY_DOLL do count as basic Pokemon cards
+IsLoadedCard1BasicPokemon: ; 4dd1 (1:4dd1)
 	ld a, [wLoadedCard1ID]
 	cp MYSTERIOUS_FOSSIL
 	jr z, .basic
 	cp CLEFAIRY_DOLL
 	jr z, .basic
-.check_basic_pokemon
+;	fallthrough
+
+; return nc if the card at wLoadedCard1 is a basic Pokemon card
+; MYSTERIOUS_FOSSIL and CLEFAIRY_DOLL do NOT count unless already checked
+.skip_mysterious_fossil_clefairy_doll
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
 	jr nc, .energy_trainer_nonbasic
@@ -2098,15 +2115,17 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 
 ; basic
 	ld a, $01
-	ret
+	ret ; z
+
 .energy_trainer_nonbasic
 	xor a
 	scf
 	ret
-.basic
+
+.basic ; MYSTERIOUS_FOSSIL or CLEFAIRY_DOLL
 	ld a, $01
 	or a
-	ret
+	ret ; nz
 ; 0x4df3
 
 DisplayNoBasicPokemonInHandScreenAndText: ; 4df3 (1:4df3)
@@ -2154,7 +2173,9 @@ NoBasicPokemonCardListParameters:
 	db SYM_SPACE ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-Func_4e40: ; 4e40 (1:4e40)
+; used only during the practice duel with Sam.
+; displays the list with the player's cards in hand, and the player's name above the list.
+DisplayPracticeDuelPlayerHandScreen: ; 4e40 (1:4e40)
 	call CreateHandCardList
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -2656,7 +2677,7 @@ PracticeDuelActionTable: ; 51f8 (1:51f8)
 ; 0x520e
 
 Func_520e: ; 520e (1:520e)
-	call Func_4e40
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ldtx hl, Text01a4
 	jp Func_52bc
@@ -2673,7 +2694,7 @@ Func_521a: ; 521a (1:521a)
 ; 0x522a
 
 Func_522a: ; 522a (1:522a)
-	call Func_4e40
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ldtx hl, Text01a6
 	jp Func_52bc
@@ -2690,7 +2711,7 @@ Func_5236: ; 5236 (1:5236)
 ; 0x5245
 
 Func_5245: ; 5245 (1:5245)
-	call Func_4e40
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ld a, $ff
 	ld [wcc00], a
@@ -2801,7 +2822,13 @@ DuelMenuData: ; 54e9 (1:54e9)
 	db $ff
 ; 0x5502
 
-Func_5502: ; 5502 (1:5502)
+; display the screen that prompts the player to choose a Pokemon card to
+; place in the arena or in the bench at the beginning of the duel.
+; input:
+   ; a = 0 -> prompted to place Pokemon card in arena
+   ; a = 1 -> prompted to place Pokemon card in bench
+; return carry if no card was placed (only allowed for bench)
+DisplayPlaceInitialPokemonCardsScreen: ; 5502 (1:5502)
 	ld [wcbfd], a
 	push hl
 	call CreateHandCardList
@@ -2810,24 +2837,30 @@ Func_5502: ; 5502 (1:5502)
 	call SetCardListInfoBoxText
 	ld a, PLAY_CHECK
 	ld [wCardListItemSelectionMenuType], a
-.asm_5515
+.display_card_list
 	call DisplayCardList
-	jr nc, .asm_5523
+	jr nc, .card_selected
+	; attempted to exit screen
 	ld a, [wcbfd]
 	or a
-	jr z, .asm_5515
+	; player is forced to place a Pokemon card in the arena
+	jr z, .display_card_list
+	; in the bench, however, we can get away without placing anything
+	; alternatively, the player doesn't want or can't place more bench Pokemon
 	scf
-	jr .asm_5538
-.asm_5523
+	jr .done
+.card_selected
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call Func_4dd1
-	jr nc, .asm_5538
+	call IsLoadedCard1BasicPokemon
+	jr nc, .done
+	; invalid card selected, tell the player and go back
 	ldtx hl, YouCannotSelectThisCardText
 	call DrawWideTextBox_WaitForInput
 	call DrawCardListScreenLayout
-	jr .asm_5515
-.asm_5538
+	jr .display_card_list
+.done
+	; valid basic Pokemon card selected, or no card selected (bench only)
 	push af
 	ld a, [wSortCardListByID]
 	or a
@@ -2903,6 +2936,8 @@ Func_5591: ; 5591 (1:5591)
 ; Discard Pile card list, including a bottom-right image of the current card.
 ; since this loads the text for the Hand card list screen, SetDiscardPileScreenTexts
 ; is called after this if the screen corresponds to a Discard Pile list.
+; the dimensions of text box where the card list is printed are 20x13, in order to accomodate
+; another text box below it (wCardListInfoBoxText) as well as the image of the selected card.
 InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 	xor a
 	ld hl, wSelectedDuelSubMenuItem
@@ -2953,14 +2988,14 @@ DrawCardListScreenLayout:
 ; 0x55f0
 
 ; displays a list of cards and handles input in order to navigate through the list,
-; select a card, open a card page...
+; select a card, open a card page, etc.
 ; input:
    ; - text IDs at wCardListInfoBoxText and wCardListHeaderText
    ; - $ff-terminated list of cards to display at wDuelTempList
    ; - wSelectedDuelSubMenuItem (initial item) and wSelectedDuelSubMenuScrollOffset
    ;   (initial page scroll offset). Usually both 0 to begin with the first card.
-; returns carry if B is pressed to exit the card list screen, or the selected
-; card at hTempCardIndex_ff98 and at a.
+; returns carry if B is pressed to exit the card list screen.
+; otherwise returns the selected card at hTempCardIndex_ff98 and at a.
 DisplayCardList: ; 55f0 (1:55f0)
 	call DrawNarrowTextBox
 	call PrintCardListHeaderAndInfoBoxTexts
