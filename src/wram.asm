@@ -796,7 +796,7 @@ wPracticeDuelAction:: ; cbfe
 wcbff:: ; cbff
 	ds $1
 
-wcc00:: ; cc00
+wPracticeDuelTurn:: ; cc00
 	ds $1
 
 wcc01:: ; cc01

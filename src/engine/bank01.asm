@@ -2664,75 +2664,78 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 
 PracticeDuelActionTable: ; 51f8 (1:51f8)
 	dw $0000
-	dw PracticeDuel_520e
-	dw PracticeDuel_521a
-	dw PracticeDuel_522a
-	dw PracticeDuel_5236
-	dw PracticeDuel_5245
-	dw PracticeDuel_5256
+	dw PracticeDuel_DrawSevenCards
+	dw PracticeDuel_PlayGoldeen
+	dw PracticeDuel_PutStaryuInBench
+	dw PracticeDuel_VerifyInitialPlay
+	dw PracticeDuel_DonePuttingOnBench
+	dw PracticeDuel_PrintTurnInstructions
 	dw PracticeDuel_5278
 	dw PracticeDuel_5284
 	dw PracticeDuel_529b
 	dw PracticeDuel_52b0
 ; 0x520e
 
-PracticeDuel_520e: ; 520e (1:520e)
+PracticeDuel_DrawSevenCards: ; 520e (1:520e)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ldtx hl, DrawSevenCardsPracticeDuelText
-	jp PrintDrMasonInstructions
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x521a
 
-PracticeDuel_521a: ; 521a (1:521a)
+PracticeDuel_PlayGoldeen: ; 521a (1:521a)
 	ld a, [wLoadedCard1ID]
 	cp GOLDEEN
 	ret z
 	ldtx hl, ChooseGoldeenPracticeDuelText
 	ldtx de, DrMasonText
 	scf
-	jp PrintDrMasonInstructions
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x522a
 
-PracticeDuel_522a: ; 522a (1:522a)
+PracticeDuel_PutStaryuInBench: ; 522a (1:522a)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ldtx hl, PutPokemonOnBenchPracticeDuelText
-	jp PrintDrMasonInstructions
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5236
 
-PracticeDuel_5236: ; 5236 (1:5236)
+PracticeDuel_VerifyInitialPlay: ; 5236 (1:5236)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
 	ret z
 	ldtx hl, ChooseStaryuPracticeDuelText
 	scf
-	jp PrintDrMasonInstructions
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5245
 
-PracticeDuel_5245: ; 5245 (1:5245)
+PracticeDuel_DonePuttingOnBench: ; 5245 (1:5245)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ld a, $ff
-	ld [wcc00], a
+	ld [wPracticeDuelTurn], a
 	ldtx hl, PressBToFinishPracticeDuelText
-	jp PrintDrMasonInstructions
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5256
 
-PracticeDuel_5256: ; 5256 (1:5256)
-	call Func_5351
+PracticeDuel_PrintTurnInstructions: ; 5256 (1:5256)
+	call DrawPracticeDuelInstructionsTextBox
 	call EnableLCD
 	ld a, [wDuelTurns]
-	ld hl, wcc00
+	ld hl, wPracticeDuelTurn
 	cp [hl]
 	ld [hl], a
-	ld a, $00
-	jp nz, Func_5382
+	; calling PrintPracticeDuelInstructionsForCurrentTurn with a = 0 means that Dr. Mason's
+	; instructions are also printed along with each of the point-by-point instructions
+	ld a, 0
+	jp nz, PrintPracticeDuelInstructionsForCurrentTurn
+	; practice duel over
 	ldtx de, DrMasonText
 	ldtx hl, NeedPracticeAgainPracticeDuelText
 	call PrintScrollableText_WithTextBoxLabel_NoWait
 	call YesOrNoMenu
-	jp Func_5382
+	jp PrintPracticeDuelInstructionsForCurrentTurn
 ; 0x5278
 
 PracticeDuel_5278: ; 5278 (1:5278)
@@ -2745,7 +2748,7 @@ PracticeDuel_5278: ; 5278 (1:5278)
 
 PracticeDuel_5284: ; 5284 (1:5284)
 	ldtx hl, ThisIsPracticeModePracticeDuelText
-	call PrintDrMasonInstructions
+	call PrintPracticeDuelDrMasonInstructions
 	ld a, $02
 	call BankswitchSRAM
 	ld de, sCurrentDuel
@@ -2763,10 +2766,10 @@ PracticeDuel_529b: ; 529b (1:529b)
 	or a
 	ret
 .asm_52a4
-	call Func_5351
+	call DrawPracticeDuelInstructionsTextBox
 	call EnableLCD
 	ld hl, PracticeDuelText_5346
-	jp Func_5396
+	jp PrintPracticeDuelInstructions
 ; 0x52b0
 
 PracticeDuel_52b0: ; 52b0 (1:52b0)
@@ -2779,7 +2782,7 @@ PracticeDuel_52b0: ; 52b0 (1:52b0)
 ;	fallthrough
 
 ; print a text box with given the text id at hl, labeled as 'Dr. Mason'
-PrintDrMasonInstructions: ; 52bc (1:52bc)
+PrintPracticeDuelDrMasonInstructions: ; 52bc (1:52bc)
 	push af
 	ldtx de, DrMasonText
 	call PrintScrollableText_WithTextBoxLabel
@@ -2799,9 +2802,9 @@ PracticeDuelTextPointerTable: ; 52c5 (1:52c5)
 ; 0x52d5
 
 practicetext: MACRO
-	db \1 ; Y coord to place text
-	tx \2 ; help text
-	tx \3 ; instruction text
+	db \1 ; Y coord to place the point-by-point instruction
+	tx \2 ; Dr. Mason's instruction
+	tx \3 ; Static point-by-point instruction
 ENDM
 
 PracticeDuelText_52d5:
@@ -2854,14 +2857,17 @@ PracticeDuelText_5346:
 	practicetext 7, Text01d6, Text01bf
 	db $00
 
-Func_5351: ; 5351 (1:5351)
+; in a practice duel, draws the text box where the point-by-point
+; instructions for the next player action will be written into
+DrawPracticeDuelInstructionsTextBox: ; 5351 (1:5351)
 	call EmptyScreen
 	lb de, 0, 0
 	lb bc, 20, 12
 	call DrawRegularTextBox
 ;	fallthrough
 
-Func_535d: ; 535d (1:535d)
+; print "<Player>'s Turn [wDuelTurns]" (usually) as the textbox label
+PrintPracticeDuelInstructionsTextBoxLabel: ; 535d (1:535d)
 	ld a, [wDuelTurns]
 	cp 7
 	jr z, .replace_due_to_knockout
@@ -2881,7 +2887,11 @@ Func_535d: ; 535d (1:535d)
 	jp InitTextPrinting_ProcessTextFromID
 ; 0x5382
 
-Func_5382: ; 5382 (1:5382)
+; print the instructions of the current practice duel turn, taken from
+; one of the structs in PracticeDuelTextPointerTable.
+; if a != 0, only the point-by-point instructions are printed, otherwise
+; Dr. Mason instructions are also shown in a textbox at the bottom of the screen.
+PrintPracticeDuelInstructionsForCurrentTurn: ; 5382 (1:5382)
 	push af
 	ld a, [wDuelTurns]
 	and %11111110
@@ -2894,10 +2904,13 @@ Func_5382: ; 5382 (1:5382)
 	ld l, a
 	pop af
 	or a
-	jr nz, Func_53da
+	jr nz, PrintPracticeDuelInstructions_Debug
 ;	fallthrough
 
-Func_5396: ; 5396 (1:5396)
+; print practice duel instructions given hl = PracticeDuelText_*
+; each practicetext entry (see above) contains a Dr. Mason text along with
+; a numbered instruction text, that is later printed without text delay.
+PrintPracticeDuelInstructions: ; 5396 (1:5396)
 	xor a
 	ld [wcbca], a
 	ld a, l
@@ -2909,7 +2922,7 @@ Func_5396: ; 5396 (1:5396)
 	ld a, [hli]
 	ld [wcbca], a
 	or a
-	jr z, Func_53d3
+	jr z, PrintPracticeDuelLetsPlayTheGame
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -2936,22 +2949,28 @@ Func_5396: ; 5396 (1:5396)
 	pop hl
 	jr .asm_53a2
 
-Func_53d3: ; 53d3 (1:53d3)
+; print the generic Dr. Mason's text that completes all his practice duel instructions
+PrintPracticeDuelLetsPlayTheGame: ; 53d3 (1:53d3)
 	ldtx hl, LetsPlayTheGamePracticeDuelText
-	call PrintDrMasonInstructions
+	call PrintPracticeDuelDrMasonInstructions
 	ret
 
-Func_53da: ; 53da (1:53da)
+; simplified version of PrintPracticeDuelInstructions that skips Dr. Mason's text
+; and instead places the point-by-point instructions all at once.
+; doesn't appear to be ever used, so it was probably used for testing during development.
+PrintPracticeDuelInstructions_Debug: ; 53da (1:53da)
 	ld a, [hli]
 	or a
-	jr z, Func_53d3
+	jr z, PrintPracticeDuelLetsPlayTheGame
 	ld e, a
 	ld d, 1
-	call Func_53e6
-	jr Func_53da
+	call PrintPracticeDuelNumberedInstruction
+	jr PrintPracticeDuelInstructions_Debug
 ; 0x53e6
 
-Func_53e6: ; 53e6 (1:53e6)
+; print a practice duel point-by-point instruction at d,e, with text id at hl,
+; that has been read from an entry of PracticeDuelText_*
+PrintPracticeDuelNumberedInstruction: ; 53e6 (1:53e6)
 	inc hl
 	inc hl
 	ld c, [hl]
@@ -2972,7 +2991,7 @@ Func_53fa: ; 53fa (1:53fa)
 	ld a, $01
 	ldh [hffb0], a
 	push hl
-	call Func_535d
+	call PrintPracticeDuelInstructionsTextBoxLabel
 	ld hl, wcc01
 	ld a, [hli]
 	ld h, [hl]
@@ -2986,7 +3005,7 @@ Func_53fa: ; 53fa (1:53fa)
 	jr z, .asm_541a
 	ld e, a
 	ld d, $01
-	call Func_53e6
+	call PrintPracticeDuelNumberedInstruction
 	jr .asm_5408
 .asm_541a
 	pop hl
@@ -2996,16 +3015,107 @@ Func_53fa: ; 53fa (1:53fa)
 ; 0x541f
 
 PointerTable_541f: ; 541f (1:541f)
-	dw $542f
-	dw $5438
-	dw $5454
-	dw $5467
-	dw $5488
-	dw $549c
-	dw $54b7
-	dw $54b7
+	dw Func_542f
+	dw Func_5438
+	dw Func_5454
+	dw Func_5467
+	dw Func_5488
+	dw Func_549c
+	dw Func_54b7
+	dw Func_54b7
 
-	INCROM $542f,  $54c8
+Func_542f: ; 542f (1:542f)
+	ld a, [wTempCardID_ccc2]
+	cp GOLDEEN
+	jp nz, Func_54c6
+	ret
+; 0x5438
+
+Func_5438: ; 5438 (1:5438)
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jp nz, Func_54c6
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jp nz, Func_54c6
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	or a
+	jr z, Func_54c6
+	ret
+; 0x5454
+
+Func_5454: ; 5454 (1:5454)
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jr nz, Func_54c6
+	ld e, PLAY_AREA_BENCH_1
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	or a
+	jr z, Func_54c6
+	ret
+; 0x5467
+
+Func_5467: ; 5467 (1:5467)
+	ld a, [wPlayerNumberOfPokemonInPlayArea]
+	cp 3
+	jr nz, Func_54c6
+	ld e, PLAY_AREA_BENCH_2
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	or a
+	jr z, Func_54c6
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jr nz, Func_54c6
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jr nz, Func_54c6
+	ret
+; 0x5488
+
+Func_5488: ; 5488 (1:5488)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	cp 2
+	jr nz, Func_54c6
+	ld a, [wTempCardID_ccc2]
+	cp STARYU
+	jr nz, Func_54c6
+	ret
+; 0x549c
+
+Func_549c: ; 549c (1:549c)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	cp 3
+	jr nz, Func_54c6
+	ld a, [wPlayerArenaCardHP]
+	cp 40
+	jr nz, Func_54c6
+	ld a, [wTempCardID_ccc2]
+	cp STARYU
+	jr nz, Func_54c6
+	ret
+; 0x54b7
+
+Func_54b7: ; 54b7 (1:54b7)
+	ld a, [wTempCardID_ccc2]
+	cp STARMIE
+	jr nz, Func_54c6
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jr nz, Func_54c6
+	ret
+
+Func_54c6:
+	scf
+	ret
+; 0x54c8
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
 ; DuelistsTurnText in a textbox. also call ExchangeRNG.
