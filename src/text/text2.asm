@@ -906,7 +906,7 @@ DrMasonText: ; 3a122 (e:6122)
 	text "Dr. Mason"
 	done
 
-Text01a4: ; 3a12d (e:612d)
+DrawSevenCardsPracticeDuelText: ; 3a12d (e:612d)
 	text "Draw 7 cards,"
 	line ""
 	line "and get ready for the battle!"
@@ -919,12 +919,12 @@ Text01a4: ; 3a12d (e:612d)
 	line "choose Goldeen."
 	done
 
-Text01a5: ; 3a204 (e:6204)
+ChooseGoldeenPracticeDuelText: ; 3a204 (e:6204)
 	text "Choose Goldeen for this"
 	line "practice duel, OK?"
 	done
 
-Text01a6: ; 3a230 (e:6230)
+PutPokemonOnBenchPracticeDuelText: ; 3a230 (e:6230)
 	text "Next, put your Pokémon on your"
 	line "Bench."
 	line "You can switch Benched Pokémon"
@@ -935,12 +935,12 @@ Text01a6: ; 3a230 (e:6230)
 	line "put it there."
 	done
 
-Text01a7: ; 3a2f6 (e:62f6)
+ChooseStaryuPracticeDuelText: ; 3a2f6 (e:62f6)
 	text "Choose Staryu for this"
 	line "practice duel, OK?"
 	done
 
-Text01a8: ; 3a321 (e:6321)
+PressBToFinishPracticeDuelText: ; 3a321 (e:6321)
 	text "When you have no Pokémon to put on"
 	line "your Bench, press the B Button to"
 	line "finish."

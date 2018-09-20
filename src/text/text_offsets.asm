@@ -421,11 +421,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text01a1                                 ; 0x01a1
 	textpointer Text01a2                                 ; 0x01a2
 	textpointer DrMasonText                              ; 0x01a3
-	textpointer Text01a4                                 ; 0x01a4
-	textpointer Text01a5                                 ; 0x01a5
-	textpointer Text01a6                                 ; 0x01a6
-	textpointer Text01a7                                 ; 0x01a7
-	textpointer Text01a8                                 ; 0x01a8
+	textpointer DrawSevenCardsPracticeDuelText                                 ; 0x01a4
+	textpointer ChooseGoldeenPracticeDuelText                                 ; 0x01a5
+	textpointer PutPokemonOnBenchPracticeDuelText                                 ; 0x01a6
+	textpointer ChooseStaryuPracticeDuelText                                 ; 0x01a7
+	textpointer PressBToFinishPracticeDuelText                                 ; 0x01a8
 	textpointer Text01a9                                 ; 0x01a9
 	textpointer Text01aa                                 ; 0x01aa
 	textpointer Text01ab                                 ; 0x01ab

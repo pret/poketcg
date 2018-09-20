@@ -2664,62 +2664,62 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 
 PracticeDuelActionTable: ; 51f8 (1:51f8)
 	dw $0000
-	dw Func_520e
-	dw Func_521a
-	dw Func_522a
-	dw Func_5236
-	dw Func_5245
-	dw Func_5256
-	dw Func_5278
-	dw Func_5284
-	dw Func_529b
-	dw Func_52b0
+	dw PracticeDuel_520e
+	dw PracticeDuel_521a
+	dw PracticeDuel_522a
+	dw PracticeDuel_5236
+	dw PracticeDuel_5245
+	dw PracticeDuel_5256
+	dw PracticeDuel_5278
+	dw PracticeDuel_5284
+	dw PracticeDuel_529b
+	dw PracticeDuel_52b0
 ; 0x520e
 
-Func_520e: ; 520e (1:520e)
+PracticeDuel_520e: ; 520e (1:520e)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
-	ldtx hl, Text01a4
-	jp Func_52bc
+	ldtx hl, DrawSevenCardsPracticeDuelText
+	jp PrintDrMasonInstructions
 ; 0x521a
 
-Func_521a: ; 521a (1:521a)
+PracticeDuel_521a: ; 521a (1:521a)
 	ld a, [wLoadedCard1ID]
 	cp GOLDEEN
 	ret z
-	ldtx hl, Text01a5
+	ldtx hl, ChooseGoldeenPracticeDuelText
 	ldtx de, DrMasonText
 	scf
-	jp Func_52bc
+	jp PrintDrMasonInstructions
 ; 0x522a
 
-Func_522a: ; 522a (1:522a)
+PracticeDuel_522a: ; 522a (1:522a)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
-	ldtx hl, Text01a6
-	jp Func_52bc
+	ldtx hl, PutPokemonOnBenchPracticeDuelText
+	jp PrintDrMasonInstructions
 ; 0x5236
 
-Func_5236: ; 5236 (1:5236)
+PracticeDuel_5236: ; 5236 (1:5236)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
 	ret z
-	ldtx hl, Text01a7
+	ldtx hl, ChooseStaryuPracticeDuelText
 	scf
-	jp Func_52bc
+	jp PrintDrMasonInstructions
 ; 0x5245
 
-Func_5245: ; 5245 (1:5245)
+PracticeDuel_5245: ; 5245 (1:5245)
 	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ld a, $ff
 	ld [wcc00], a
-	ldtx hl, Text01a8
-	jp Func_52bc
+	ldtx hl, PressBToFinishPracticeDuelText
+	jp PrintDrMasonInstructions
 ; 0x5256
 
-Func_5256: ; 5256 (1:5256)
+PracticeDuel_5256: ; 5256 (1:5256)
 	call $5351
 	call EnableLCD
 	ld a, [wDuelTurns]
@@ -2735,7 +2735,7 @@ Func_5256: ; 5256 (1:5256)
 	jp $5382
 ; 0x5278
 
-Func_5278: ; 5278 (1:5278)
+PracticeDuel_5278: ; 5278 (1:5278)
 	ld a, [wDuelTurns]
 	srl a
 	ld hl, $541f
@@ -2743,9 +2743,9 @@ Func_5278: ; 5278 (1:5278)
 	ret nc
 ;	fallthrough
 
-Func_5284: ; 5284 (1:5284)
+PracticeDuel_5284: ; 5284 (1:5284)
 	ldtx hl, Text01da
-	call Func_52bc
+	call PrintDrMasonInstructions
 	ld a, $02
 	call BankswitchSRAM
 	ld de, sCurrentDuel
@@ -2756,7 +2756,7 @@ Func_5284: ; 5284 (1:5284)
 	ret
 ; 0x529b
 
-Func_529b: ; 529b (1:529b)
+PracticeDuel_529b: ; 529b (1:529b)
 	ld a, [wDuelTurns]
 	cp 7
 	jr z, .asm_52a4
@@ -2769,7 +2769,7 @@ Func_529b: ; 529b (1:529b)
 	jp $5396
 ; 0x52b0
 
-Func_52b0: ; 52b0 (1:52b0)
+PracticeDuel_52b0: ; 52b0 (1:52b0)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	cp PLAY_AREA_BENCH_1
 	ret z
@@ -2778,7 +2778,8 @@ Func_52b0: ; 52b0 (1:52b0)
 	scf
 ;	fallthrough
 
-Func_52bc: ; 52bc (1:52bc)
+; print a text box with given the text id at hl, labeled as 'Dr. Mason'
+PrintDrMasonInstructions: ; 52bc (1:52bc)
 	push af
 	ldtx de, DrMasonText
 	call PrintScrollableText_WithTextBoxLabel
@@ -2786,7 +2787,74 @@ Func_52bc: ; 52bc (1:52bc)
 	ret
 ; 0x52c5
 
-	INCROM $52c5,  $54c8
+PracticeDuelTextPointerTable: ; 52c5 (1:52c5)
+	dw PracticeDuelText_52d5
+	dw PracticeDuelText_52e5
+	dw PracticeDuelText_52f5
+	dw PracticeDuelText_5305
+	dw PracticeDuelText_5315
+	dw PracticeDuelText_5320
+	dw PracticeDuelText_5330
+	dw PracticeDuelText_533b
+; 0x52d5
+
+practicetext: MACRO
+	db \1 ; Y coord to place text
+	tx \2 ; help text
+	tx \3 ; instruction text
+ENDM
+
+PracticeDuelText_52d5:
+	practicetext 2, Text01c0, Text01a9
+	practicetext 5, Text01c1, Text01aa
+	practicetext 8, Text01c2, Text01ab
+	db $00
+
+PracticeDuelText_52e5:
+	practicetext 2, Text01c3, Text01ac
+	practicetext 5, Text01c4, Text01ad
+	practicetext 8, Text01c5, Text01ae
+	db $00
+
+PracticeDuelText_52f5:
+	practicetext 2, Text01c6, Text01af
+	practicetext 5, Text01c7, Text01b0
+	practicetext 8, Text01c8, Text01b1
+	db $00
+
+PracticeDuelText_5305:
+	practicetext 2, Text01c9, Text01b2
+	practicetext 5, Text01ca, Text01b3
+	practicetext 8, Text01cb, Text01b4
+	db $00
+
+PracticeDuelText_5315:
+	practicetext 2, Text01cc, Text01b5
+	practicetext 6, Text01cd, Text01b6
+	db $00
+
+PracticeDuelText_5320:
+	practicetext 2, Text01ce, Text01b7
+	practicetext 5, Text01cf, Text01b8
+	practicetext 8, Text01d0, Text01b9
+	db $00
+
+PracticeDuelText_5330:
+	practicetext 2, Text01d1, Text01ba
+	practicetext 5, Text01d2, Text01bb
+	db $00
+
+PracticeDuelText_533b:
+	practicetext 2, Text01d3, Text01bc
+	practicetext 5, Text01d4, Text01bd
+	db $00
+
+PracticeDuelText_5346:
+	practicetext 2, Text01d5, Text01be
+	practicetext 7, Text01d6, Text01bf
+	db $00
+
+	INCROM $5351,  $54c8
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
 ; DuelistsTurnText in a textbox. also call ExchangeRNG.
