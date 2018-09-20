@@ -651,6 +651,8 @@ wCurPlayAreaY:: ; cbca
 ; Y position to display the attached energies, HP bar, and Pluspower/Defender icons
 ; obviously different for player and opponent side. used by DrawDuelHUD.
 wHUDEnergyAndHPBarsY:: ; cbca
+
+wcbca:: ; cbca
 	ds $1
 
 ; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
@@ -797,6 +799,7 @@ wcbff:: ; cbff
 wcc00:: ; cc00
 	ds $1
 
+wcc01:: ; cc01
 	ds $2
 
 ; used to print a Pokemon card's length in feet and inches

@@ -2720,36 +2720,36 @@ PracticeDuel_5245: ; 5245 (1:5245)
 ; 0x5256
 
 PracticeDuel_5256: ; 5256 (1:5256)
-	call $5351
+	call Func_5351
 	call EnableLCD
 	ld a, [wDuelTurns]
 	ld hl, wcc00
 	cp [hl]
 	ld [hl], a
 	ld a, $00
-	jp nz, $5382
+	jp nz, Func_5382
 	ldtx de, DrMasonText
-	ldtx hl, Text01d9
+	ldtx hl, NeedPracticeAgainPracticeDuelText
 	call PrintScrollableText_WithTextBoxLabel_NoWait
 	call YesOrNoMenu
-	jp $5382
+	jp Func_5382
 ; 0x5278
 
 PracticeDuel_5278: ; 5278 (1:5278)
 	ld a, [wDuelTurns]
 	srl a
-	ld hl, $541f
+	ld hl, PointerTable_541f
 	call JumpToFunctionInTable
 	ret nc
 ;	fallthrough
 
 PracticeDuel_5284: ; 5284 (1:5284)
-	ldtx hl, Text01da
+	ldtx hl, ThisIsPracticeModePracticeDuelText
 	call PrintDrMasonInstructions
 	ld a, $02
 	call BankswitchSRAM
 	ld de, sCurrentDuel
-	call $66ff
+	call LoadSavedDuelData
 	xor a
 	call BankswitchSRAM
 	scf
@@ -2763,10 +2763,10 @@ PracticeDuel_529b: ; 529b (1:529b)
 	or a
 	ret
 .asm_52a4
-	call $5351
+	call Func_5351
 	call EnableLCD
-	ld hl, $5346
-	jp $5396
+	ld hl, PracticeDuelText_5346
+	jp Func_5396
 ; 0x52b0
 
 PracticeDuel_52b0: ; 52b0 (1:52b0)
@@ -2854,7 +2854,158 @@ PracticeDuelText_5346:
 	practicetext 7, Text01d6, Text01bf
 	db $00
 
-	INCROM $5351,  $54c8
+Func_5351: ; 5351 (1:5351)
+	call EmptyScreen
+	lb de, 0, 0
+	lb bc, 20, 12
+	call DrawRegularTextBox
+;	fallthrough
+
+Func_535d: ; 535d (1:535d)
+	ld a, [wDuelTurns]
+	cp 7
+	jr z, .replace_due_to_knockout
+	; load the player's turn number to TX_RAM3 in order to print it
+	srl a
+	inc a
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	lb de, 1, 0
+	call InitTextPrinting
+	ldtx hl, PlayersTurnPracticeDuelText
+	jp PrintText
+.replace_due_to_knockout
+	lb de, 1, 0
+	ldtx hl, ReplaceDueToKnockoutPracticeDuelText
+	jp InitTextPrinting_ProcessTextFromID
+; 0x5382
+
+Func_5382: ; 5382 (1:5382)
+	push af
+	ld a, [wDuelTurns]
+	and %11111110
+	ld e, a
+	ld d, $00
+	ld hl, PracticeDuelTextPointerTable
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop af
+	or a
+	jr nz, Func_53da
+;	fallthrough
+
+Func_5396: ; 5396 (1:5396)
+	xor a
+	ld [wcbca], a
+	ld a, l
+	ld [wcc01], a
+	ld a, h
+	ld [wcc01 + 1], a
+.asm_53a2
+	call Func_53fa
+	ld a, [hli]
+	ld [wcbca], a
+	or a
+	jr z, Func_53d3
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push hl
+	ld l, e
+	ld h, d
+	ldtx de, DrMasonText
+	call PrintScrollableText_WithTextBoxLabel
+	pop hl
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push hl
+	call SetNoLineSeparation
+	ld l, e
+	ld h, d
+	ld a, [wcbca]
+	ld e, a
+	ld d, 1
+	call InitTextPrinting_ProcessTextFromID
+	call SetOneLineSeparation
+	pop hl
+	jr .asm_53a2
+
+Func_53d3: ; 53d3 (1:53d3)
+	ldtx hl, LetsPlayTheGamePracticeDuelText
+	call PrintDrMasonInstructions
+	ret
+
+Func_53da: ; 53da (1:53da)
+	ld a, [hli]
+	or a
+	jr z, Func_53d3
+	ld e, a
+	ld d, 1
+	call Func_53e6
+	jr Func_53da
+; 0x53e6
+
+Func_53e6: ; 53e6 (1:53e6)
+	inc hl
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	push hl
+	ld l, c
+	ld h, b
+	call SetNoLineSeparation
+	call InitTextPrinting_ProcessTextFromID
+	call SetOneLineSeparation
+	pop hl
+	ret
+; 0x53fa
+
+Func_53fa: ; 53fa (1:53fa)
+	ld a, $01
+	ldh [hffb0], a
+	push hl
+	call Func_535d
+	ld hl, wcc01
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+.asm_5408
+	ld a, [wcbca]
+	cp [hl]
+	jr c, .asm_541a
+	ld a, [hli]
+	or a
+	jr z, .asm_541a
+	ld e, a
+	ld d, $01
+	call Func_53e6
+	jr .asm_5408
+.asm_541a
+	pop hl
+	xor a
+	ldh [hffb0], a
+	ret
+; 0x541f
+
+PointerTable_541f: ; 541f (1:541f)
+	dw $542f
+	dw $5438
+	dw $5454
+	dw $5467
+	dw $5488
+	dw $549c
+	dw $54b7
+	dw $54b7
+
+	INCROM $542f,  $54c8
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
 ; DuelistsTurnText in a textbox. also call ExchangeRNG.

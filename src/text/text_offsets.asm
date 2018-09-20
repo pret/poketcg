@@ -473,11 +473,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text01d5                                 ; 0x01d5
 	textpointer Text01d6                                 ; 0x01d6
 	textpointer Text01d7                                 ; 0x01d7
-	textpointer Text01d8                                 ; 0x01d8
-	textpointer Text01d9                                 ; 0x01d9
-	textpointer Text01da                                 ; 0x01da
-	textpointer Text01db                                 ; 0x01db
-	textpointer Text01dc                                 ; 0x01dc
+	textpointer LetsPlayTheGamePracticeDuelText                                 ; 0x01d8
+	textpointer NeedPracticeAgainPracticeDuelText                                 ; 0x01d9
+	textpointer ThisIsPracticeModePracticeDuelText                                 ; 0x01da
+	textpointer PlayersTurnPracticeDuelText                                 ; 0x01db
+	textpointer ReplaceDueToKnockoutPracticeDuelText                                 ; 0x01dc
 	textpointer Text01dd                                 ; 0x01dd
 	textpointer PracticePlayerDeckName                   ; 0x01de
 	textpointer SamsPracticeDeckName                     ; 0x01df

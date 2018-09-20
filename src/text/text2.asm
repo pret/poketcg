@@ -1245,25 +1245,25 @@ Text01d7: ; 3b35a (e:735a)
 	line "OK?"
 	done
 
-Text01d8: ; 3b380 (e:7380)
+LetsPlayTheGamePracticeDuelText: ; 3b380 (e:7380)
 	text "Now, let's play the game!"
 	done
 
-Text01d9: ; 3b39b (e:739b)
+NeedPracticeAgainPracticeDuelText: ; 3b39b (e:739b)
 	text "Do you need to practice again?"
 	done
 
-Text01da: ; 3b3bb (e:73bb)
+ThisIsPracticeModePracticeDuelText: ; 3b3bb (e:73bb)
 	text "This is Practice Mode, so"
 	line "please follow my guidance."
 	line "Do it again."
 	done
 
-Text01db: ; 3b3fe (e:73fe)
+PlayersTurnPracticeDuelText: ; 3b3fe (e:73fe)
 	text "<RAMNAME>'s turn <RAMNUM>"
 	done
 
-Text01dc: ; 3b40a (e:740a)
+ReplaceDueToKnockoutPracticeDuelText: ; 3b40a (e:740a)
 	text " Replace due to Knockout "
 	done
 
