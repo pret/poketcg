@@ -331,9 +331,9 @@ HandleTurn: ; 4225 (1:4225)
 ;	fallthrough
 
 ; when a practice duel turn needs to be restarted because the player did not
-; follow the instructions correctly, the game jumps here
+; follow the instructions correctly, the game loops back here
 RestartPracticeDuelTurn: ; 4268 (1:4268)
-	ld a, $06
+	ld a, PRACTICEDUEL_PRINT_TURN_INSTRUCTIONS
 	call DoPracticeDuelAction
 ;	fallthrough
 
