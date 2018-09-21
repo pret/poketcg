@@ -946,125 +946,125 @@ PressBToFinishPracticeDuelText: ; 3a321 (e:6321)
 	line "finish."
 	done
 
-Text01a9: ; 3a36f (e:636f)
+Turn1Instr1PracticeDuelText: ; 3a36f (e:636f)
 	text "1. Choose Hand from the Menu."
 	line "   Select a Water Energy card."
 	done
 
-Text01aa: ; 3a3ad (e:63ad)
+Turn1Instr2PracticeDuelText: ; 3a3ad (e:63ad)
 	text "2. Attach a Water Energy card to"
 	line "   your Active Pokémon, Goldeen."
 	done
 
-Text01ab: ; 3a3f0 (e:63f0)
+Turn1Instr3PracticeDuelText: ; 3a3f0 (e:63f0)
 	text "3. Choose Attack from the Menu"
 	line "   and select Horn Attack."
 	done
 
-Text01ac: ; 3a42b (e:642b)
+Turn2Instr1PracticeDuelText: ; 3a42b (e:642b)
 	text "1. Evolve Goldeen by"
 	line "   attaching Seaking to it."
 	done
 
-Text01ad: ; 3a45d (e:645d)
+Turn2Instr2PracticeDuelText: ; 3a45d (e:645d)
 	text "2. Attach a Psychic Energy card"
 	line "   to the evolved Seaking."
 	done
 
-Text01ae: ; 3a499 (e:6499)
+Turn2Instr3PracticeDuelText: ; 3a499 (e:6499)
 	text "3. Choose Attack and select"
 	line "   Waterfall to attack your"
 	line "   opponent."
 	done
 
-Text01af: ; 3a4df (e:64df)
+Turn3Instr1PracticeDuelText: ; 3a4df (e:64df)
 	text "1. Attach a Water Energy card to"
 	line "   your Benched Staryu."
 	done
 
-Text01b0: ; 3a519 (e:6519)
+Turn3Instr2PracticeDuelText: ; 3a519 (e:6519)
 	text "2. Choose Attack and attack your"
 	line "   opponent with Horn Attack."
 	done
 
-Text01b1: ; 3a559 (e:6559)
+Turn3Instr3PracticeDuelText: ; 3a559 (e:6559)
 	done
 
-Text01b2: ; 3a55a (e:655a)
+Turn4Instr1PracticeDuelText: ; 3a55a (e:655a)
 	text "1. Take Drowzee from your hand"
 	line "   and put it on your Bench."
 	done
 
-Text01b3: ; 3a597 (e:6597)
+Turn4Instr2PracticeDuelText: ; 3a597 (e:6597)
 	text "2. Attach a Water Energy card to"
 	line "   your Benched Drowzee."
 	done
 
-Text01b4: ; 3a5d2 (e:65d2)
+Turn4Instr3PracticeDuelText: ; 3a5d2 (e:65d2)
 	text "3. Choose Seaking and attack your"
 	line "   opponent with Waterfall."
 	done
 
-Text01b5: ; 3a611 (e:6611)
+Turn5Instr1PracticeDuelText: ; 3a611 (e:6611)
 	text "1. Choose a Water Energy card from"
 	line "   your hand and attach it to"
 	line "   Staryu."
 	done
 
-Text01b6: ; 3a65e (e:665e)
+Turn5Instr2PracticeDuelText: ; 3a65e (e:665e)
 	text "2. Choose Staryu and attack your"
 	line "   opponent with Slap."
 	done
 
-Text01b7: ; 3a697 (e:6697)
+Turn6Instr1PracticeDuelText: ; 3a697 (e:6697)
 	text "1. Choose the Potion card in your"
 	line "   hand to recover Staryu's HP."
 	done
 
-Text01b8: ; 3a6da (e:66da)
+Turn6Instr2PracticeDuelText: ; 3a6da (e:66da)
 	text "2. Attach a Water Energy card to"
 	line "   Staryu."
 	done
 
-Text01b9: ; 3a707 (e:6707)
+Turn6Instr3PracticeDuelText: ; 3a707 (e:6707)
 	text "3. Choose Staryu and attack your"
 	line "   opponent with Slap."
 	done
 
-Text01ba: ; 3a740 (e:6740)
+Turn7Instr1PracticeDuelText: ; 3a740 (e:6740)
 	text "1. Evolve Staryu by"
 	line "   attaching Starmie to it."
 	done
 
-Text01bb: ; 3a771 (e:6771)
+Turn7Instr2PracticeDuelText: ; 3a771 (e:6771)
 	text "2. Select the evolved Starmie and"
 	line "   attack your opponent with Star "
 	line "   Freeze."
 	done
 
-Text01bc: ; 3a7c2 (e:67c2)
+Turn8Instr1PracticeDuelText: ; 3a7c2 (e:67c2)
 	text "1. Select Starmie and attack your"
 	line "   opponent with Star Freeze."
 	done
 
-Text01bd: ; 3a803 (e:6803)
+Turn8Instr2PracticeDuelText: ; 3a803 (e:6803)
 	text "2. You Knocked Machop Out."
 	line "   Now you can draw a Prize."
 	done
 
-Text01be: ; 3a83c (e:683c)
+SamTurn4Instr1PracticeDuelText: ; 3a83c (e:683c)
 	text "1. Your Seaking was Knocked Out."
 	line "   Choose your Benched Staryu"
 	line "   and press the A Button to set"
 	line "   it as your Active Pokémon."
 	done
 
-Text01bf: ; 3a8bb (e:68bb)
+SamTurn4Instr2PracticeDuelText: ; 3a8bb (e:68bb)
 	text "2. You can check Pokémon data by"
 	line "   pressing SELECT."
 	done
 
-Text01c0: ; 3a8f1 (e:68f1)
+Turn1DrMason1PracticeDuelText: ; 3a8f1 (e:68f1)
 	text "To use the attack command, you need"
 	line "to attach Energy cards to your"
 	line "Pokémon."
@@ -1073,21 +1073,21 @@ Text01c0: ; 3a8f1 (e:68f1)
 	line "select a Water Energy card."
 	done
 
-Text01c1: ; 3a97b (e:697b)
+Turn1DrMason2PracticeDuelText: ; 3a97b (e:697b)
 	text "Next, choose your Active Pokémon,"
 	line "Goldeen, and press the A Button."
 	line "Then the Water Energy card will"
 	line "be attached to Goldeen."
 	done
 
-Text01c2: ; 3a9f7 (e:69f7)
+Turn1DrMason3PracticeDuelText: ; 3a9f7 (e:69f7)
 	text "Finally, attack your opponent by"
 	line "selecting an attack command."
 	line "Choose Attack from the Menu, and"
 	line "select Horn Attack."
 	done
 
-Text01c3: ; 3aa6b (e:6a6b)
+Turn2DrMason1PracticeDuelText: ; 3aa6b (e:6a6b)
 	text "Your Goldeen's gonna get Knocked"
 	line "Out. Let's evolve it!"
 	line "Choose Seaking from your hand and"
@@ -1096,7 +1096,7 @@ Text01c3: ; 3aa6b (e:6a6b)
 	line "Its HP increases from 40 to 70."
 	done
 
-Text01c4: ; 3ab08 (e:6b08)
+Turn2DrMason2PracticeDuelText: ; 3ab08 (e:6b08)
 	text "Your Seaking doesn't have enough"
 	line "Energy to use Waterfall."
 	line "You need to attach a Psychic Energy"
@@ -1107,12 +1107,12 @@ Text01c4: ; 3ab08 (e:6b08)
 	line "other Pokémon."
 	done
 
-Text01c5: ; 3abdb (e:6bdb)
+Turn2DrMason3PracticeDuelText: ; 3abdb (e:6bdb)
 	text "Now let's attack your opponent with"
 	line "Seaking's Waterfall!"
 	done
 
-Text01c6: ; 3ac15 (e:6c15)
+Turn3DrMason1PracticeDuelText: ; 3ac15 (e:6c15)
 	text "Seaking's got enough Energy, so"
 	line "you don't need to attach any more."
 	line "Attach Energy cards to your Benched"
@@ -1123,7 +1123,7 @@ Text01c6: ; 3ac15 (e:6c15)
 	line "Benched Staryu."
 	done
 
-Text01c7: ; 3acd7 (e:6cd7)
+Turn3DrMason2PracticeDuelText: ; 3acd7 (e:6cd7)
 	text "Next, select the attack command."
 	line "Machop has 10 HP left."
 	line "Seaking's Horn Attack will be"
@@ -1132,7 +1132,7 @@ Text01c7: ; 3acd7 (e:6cd7)
 	line "Horn Attack."
 	done
 
-Text01c8: ; 3ad6d (e:6d6d)
+Turn3DrMason3PracticeDuelText: ; 3ad6d (e:6d6d)
 	text "Now Machop's HP is 0 and it is"
 	line "Knocked Out."
 	line "When you Knock Out the Defending"
@@ -1140,7 +1140,7 @@ Text01c8: ; 3ad6d (e:6d6d)
 	line "Prize."
 	done
 
-Text01c9: ; 3addd (e:6ddd)
+Turn4DrMason1PracticeDuelText: ; 3addd (e:6ddd)
 	text "When all your Pokémon are Knocked"
 	line "Out and there are no Pokémon on your"
 	line "Bench, you lose the game."
@@ -1149,19 +1149,19 @@ Text01c9: ; 3addd (e:6ddd)
 	line "you just drew, on your Bench."
 	done
 
-Text01ca: ; 3ae7d (e:6e7d)
+Turn4DrMason2PracticeDuelText: ; 3ae7d (e:6e7d)
 	text "Attach a Water Energy card to"
 	line "Drowzee to get it ready to"
 	line "attack."
 	done
 
-Text01cb: ; 3aebf (e:6ebf)
+Turn4DrMason3PracticeDuelText: ; 3aebf (e:6ebf)
 	text "Choose your Active Seaking and"
 	line "attack your opponent with"
 	line "Waterfall."
 	done
 
-Text01cc: ; 3af04 (e:6f04)
+Turn5DrMason1PracticeDuelText: ; 3af04 (e:6f04)
 	text "Staryu evolves into Starmie!"
 	line ""
 	line "Let's get Staryu ready to use"
@@ -1172,51 +1172,51 @@ Text01cc: ; 3af04 (e:6f04)
 	line "your hand and attach it to Staryu."
 	done
 
-Text01cd: ; 3afbc (e:6fbc)
+Turn5DrMason2PracticeDuelText: ; 3afbc (e:6fbc)
 	text "Attack your opponent with Staryu's"
 	line "Slap."
 	done
 
-Text01ce: ; 3afe6 (e:6fe6)
+Turn6DrMason1PracticeDuelText: ; 3afe6 (e:6fe6)
 	text "Now, recover Staryu with a Trainer"
 	line "card."
 	line "Choose Potion from your hand."
 	done
 
-Text01cf: ; 3b02e (e:702e)
+Turn6DrMason2PracticeDuelText: ; 3b02e (e:702e)
 	text "Now let's get ready to evolve"
 	line "it to Starmie."
 	line "Also, attach a Water Energy card to"
 	line "Staryu."
 	done
 
-Text01d0: ; 3b088 (e:7088)
+Turn6DrMason3PracticeDuelText: ; 3b088 (e:7088)
 	text "Attack your opponent with Staryu's"
 	line "Slap to end your turn."
 	done
 
-Text01d1: ; 3b0c3 (e:70c3)
+Turn7DrMason1PracticeDuelText: ; 3b0c3 (e:70c3)
 	text "Now you have finally drawn a"
 	line "Starmie card!"
 	line "Choose Starmie from your hand and"
 	line "use it to evolve Staryu."
 	done
 
-Text01d2: ; 3b12a (e:712a)
+Turn7DrMason2PracticeDuelText: ; 3b12a (e:712a)
 	text "You've already attached enough"
 	line "Energy to use Star Freeze."
 	line "Attack your opponent with"
 	line "Starmie's Star Freeze."
 	done
 
-Text01d3: ; 3b196 (e:7196)
+Turn8DrMason1PracticeDuelText: ; 3b196 (e:7196)
 	text "Now Machop has only 10 HP left."
 	line "Let's finish the battle!"
 	line "Attack with Starmie's Star Freeze."
 	line ""
 	done
 
-Text01d4: ; 3b1f4 (e:71f4)
+Turn8DrMason2PracticeDuelText: ; 3b1f4 (e:71f4)
 	text "You've Knocked Out your opponent!"
 	line ""
 	line "Pick up the last Prize."
@@ -1224,7 +1224,7 @@ Text01d4: ; 3b1f4 (e:71f4)
 	text "<RAMNAME> is the winner!"
 	done
 
-Text01d5: ; 3b242 (e:7242)
+SamTurn4DrMason1PracticeDuelText: ; 3b242 (e:7242)
 	text "Choose a Benched Pokémon to replace"
 	line "your Knocked Out Pokémon."
 	line "You now have Drowzee and Staryu"
@@ -1233,14 +1233,14 @@ Text01d5: ; 3b242 (e:7242)
 	line "for this practice duel."
 	done
 
-Text01d6: ; 3b2ec (e:72ec)
+SamTurn4DrMason2PracticeDuelText: ; 3b2ec (e:72ec)
 	text "Here, press SELECT to"
 	line "check Pokémon data."
 	line "It is important to know your cards"
 	line "and the status of your Pokémon."
 	done
 
-Text01d7: ; 3b35a (e:735a)
+SelectStaryuPracticeDuelText: ; 3b35a (e:735a)
 	text "Select Staryu for this practice,"
 	line "OK?"
 	done
@@ -1253,7 +1253,7 @@ NeedPracticeAgainPracticeDuelText: ; 3b39b (e:739b)
 	text "Do you need to practice again?"
 	done
 
-ThisIsPracticeModePracticeDuelText: ; 3b3bb (e:73bb)
+FollowMyGuidancePracticeDuelText: ; 3b3bb (e:73bb)
 	text "This is Practice Mode, so"
 	line "please follow my guidance."
 	line "Do it again."
