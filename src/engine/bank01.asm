@@ -164,7 +164,7 @@ MainDuelLoop ; 40ee (1:40ee)
 	or a
 	jr z, .next_turn
 	ld a, [hl]
-	cp 15 ; the practice duel lasts 15 turns
+	cp 15 ; the practice duel lasts 15 turns (8 player turns and 7 opponent turns)
 	jr c, .next_turn
 	xor a ; DUEL_WIN
 	ld [wDuelResult], a
@@ -330,8 +330,10 @@ HandleTurn: ; 4225 (1:4225)
 	call SaveDuelStateToSRAM
 ;	fallthrough
 
-Func_4268:
-	ld a, $06
+; when a practice duel turn needs to be restarted because the player did not
+; follow the instructions correctly, the game loops back here
+RestartPracticeDuelTurn: ; 4268 (1:4268)
+	ld a, PRACTICEDUEL_PRINT_TURN_INSTRUCTIONS
 	call DoPracticeDuelAction
 ;	fallthrough
 
@@ -521,9 +523,10 @@ DuelMenu_PkmnPower: ; 438e (1:438e)
 
 ; triggered by selecting the "Done" item in the duel menu
 DuelMenu_Done: ; 439a (1:439a)
-	ld a, $08
+	ld a, PRACTICEDUEL_REPEAT_INSTRUCTIONS
 	call DoPracticeDuelAction
-	jp c, Func_4268
+	; always jumps on practice duel (no action requires player to select Done)
+	jp c, RestartPracticeDuelTurn
 	ld a, $05
 	call SetAIAction_SerialSendDuelData
 	call ClearNonTurnTemporaryDuelvars
@@ -1105,9 +1108,10 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call CopyMoveDataAndDamage_FromDeckIndex
 	call HandleAmnesiaSubstatus
 	jr c, .cannot_use_due_to_amnesia
-	ld a, $07
+	ld a, PRACTICEDUEL_VERIFY_PLAYER_TURN_ACTIONS
 	call DoPracticeDuelAction
-	jp c, Func_4268
+	; if player did something wrong in the practice duel, jump in order to restart turn
+	jp c, RestartPracticeDuelTurn
 	call UseAttackOrPokemonPower
 	jp c, DuelMainInterface
 	ret
@@ -1822,9 +1826,9 @@ Func_4b60: ; 4b60 (1:4b60)
 	push af
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	call Func_4cd5
+	call ChooseInitialArenaAndBenchPokemon
 	call SwapTurn
-	call Func_4cd5
+	call ChooseInitialArenaAndBenchPokemon
 	call SwapTurn
 	jp c, .asm_4c77
 	call Func_311d
@@ -1943,13 +1947,19 @@ Func_4b60: ; 4b60 (1:4b60)
 	db $06, $08, $0d, $03
 ; 0x4cd5
 
-Func_4cd5: ; 4cd5 (1:4cd5)
+; have the turn duelist place, at the beginning of the duel, the active Pokemon
+; and 0 more bench Pokemon, all of which must be basic Pokemon cards.
+; also transmits the turn holder's duelvars to the other duelist in a link duel.
+; called twice, once for each duelist.
+ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
-	jr z, .player_choose_arena
+	jr z, .choose_arena
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .exchange_duelvars
+
+; AI opponent's turn
 	push af
 	push hl
 	call Func_2bc3
@@ -1959,6 +1969,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	or a
 	ret
 
+; link opponent's turn
 .exchange_duelvars
 	ldtx hl, TransmitingDataText
 	call DrawWideTextBox_PrintText
@@ -1979,24 +1990,26 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 .error
 	jp DuelTransmissionError
 
-.player_choose_arena
+; player's turn (either AI or link duel)
+; prompt (force) the player to choose a basic Pokemon card to place in the arena
+.choose_arena
 	call EmptyScreen
 	ld a, BOXMSG_ARENA_POKEMON
 	call DrawDuelBoxMessage
 	ldtx hl, ChooseBasicPkmnToPlaceInArenaText
 	call DrawWideTextBox_WaitForInput
-	ld a, $1
+	ld a, PRACTICEDUEL_DRAW_SEVEN_CARDS
 	call DoPracticeDuelAction
-.asm_4d28
+.choose_arena_loop
 	xor a
 	ldtx hl, PleaseChooseAnActivePokemonText
-	call Func_5502
-	jr c, .asm_4d28
+	call DisplayPlaceInitialPokemonCardsScreen
+	jr c, .choose_arena_loop
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld a, $2
+	ld a, PRACTICEDUEL_PLAY_GOLDEEN
 	call DoPracticeDuelAction
-	jr c, .asm_4d28
+	jr c, .choose_arena_loop
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
 	ldh a, [hTempCardIndex_ff98]
@@ -2004,19 +2017,21 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DisplayCardDetailScreen
 	jr .choose_bench
 
+; after choosing the active Pokemon, let the player place 0 or more basic Pokemon
+; cards in the bench. loop until the player decides to stop placing Pokemon cards.
 .choose_bench
 	call EmptyScreen
 	ld a, BOXMSG_BENCH_POKEMON
 	call DrawDuelBoxMessage
 	ldtx hl, ChooseUpTo5BasicPkmnToPlaceOnBenchText
 	call PrintScrollableText_NoTextBoxLabel
-	ld a, $3
+	ld a, PRACTICEDUEL_PUT_STARYU_IN_BENCH
 	call DoPracticeDuelAction
 .bench_loop
 	ld a, $1
 	ldtx hl, ChooseYourBenchPokemonText
-	call Func_5502
-	jr c, .asm_4d8e
+	call DisplayPlaceInitialPokemonCardsScreen
+	jr c, .bench_done
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
@@ -2026,7 +2041,7 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	ldh a, [hTempCardIndex_ff98]
 	ldtx hl, PlacedOnTheBenchText
 	call DisplayCardDetailScreen
-	ld a, $5
+	ld a, PRACTICEDUEL_DONE_PUTTING_ON_BENCH
 	call DoPracticeDuelAction
 	jr .bench_loop
 
@@ -2035,8 +2050,8 @@ Func_4cd5: ; 4cd5 (1:4cd5)
 	call DrawWideTextBox_WaitForInput
 	jr .bench_loop
 
-.asm_4d8e
-	ld a, $4
+.bench_done
+	ld a, PRACTICEDUEL_VERIFY_INITIAL_PLAY
 	call DoPracticeDuelAction
 	jr c, .bench_loop
 	or a
@@ -2068,7 +2083,7 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 	push hl
 	push bc
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call .check_basic_pokemon
+	call IsLoadedCard1BasicPokemon.skip_mysterious_fossil_clefairy_doll
 	pop bc
 	pop hl
 	or b
@@ -2082,13 +2097,19 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 	scf
 	ret
 
-.asm_4dd1
+; return nc if the card at wLoadedCard1 is a basic Pokemon card
+; MYSTERIOUS_FOSSIL and CLEFAIRY_DOLL do count as basic Pokemon cards
+IsLoadedCard1BasicPokemon: ; 4dd1 (1:4dd1)
 	ld a, [wLoadedCard1ID]
 	cp MYSTERIOUS_FOSSIL
 	jr z, .basic
 	cp CLEFAIRY_DOLL
 	jr z, .basic
-.check_basic_pokemon
+;	fallthrough
+
+; return nc if the card at wLoadedCard1 is a basic Pokemon card
+; MYSTERIOUS_FOSSIL and CLEFAIRY_DOLL do NOT count unless already checked
+.skip_mysterious_fossil_clefairy_doll
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
 	jr nc, .energy_trainer_nonbasic
@@ -2098,15 +2119,17 @@ ShuffleDeckAndDrawSevenCards: ; 4d97 (1:4d97)
 
 ; basic
 	ld a, $01
-	ret
+	ret ; z
+
 .energy_trainer_nonbasic
 	xor a
 	scf
 	ret
-.basic
+
+.basic ; MYSTERIOUS_FOSSIL or CLEFAIRY_DOLL
 	ld a, $01
 	or a
-	ret
+	ret ; nz
 ; 0x4df3
 
 DisplayNoBasicPokemonInHandScreenAndText: ; 4df3 (1:4df3)
@@ -2154,7 +2177,9 @@ NoBasicPokemonCardListParameters:
 	db SYM_SPACE ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-Func_4e40: ; 4e40 (1:4e40)
+; used only during the practice duel with Sam.
+; displays the list with the player's cards in hand, and the player's name above the list.
+DisplayPracticeDuelPlayerHandScreen: ; 4e40 (1:4e40)
 	call CreateHandCardList
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -2631,6 +2656,8 @@ DuelHorizontalSeparatorCGBPalData: ; 51c0 (1:51c0)
 ; 0x51e7
 
 ; if this is a practice duel, execute the practice duel action at wPracticeDuelAction
+; if not a practice duel, always return nc
+; the practice duel functions below return carry when something's wrong
 DoPracticeDuelAction: ; 51e7 (1:51e7)
 	ld [wPracticeDuelAction], a
 	ld a, [wIsPracticeDuel]
@@ -2643,121 +2670,132 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 
 PracticeDuelActionTable: ; 51f8 (1:51f8)
 	dw $0000
-	dw Func_520e
-	dw Func_521a
-	dw Func_522a
-	dw Func_5236
-	dw Func_5245
-	dw Func_5256
-	dw Func_5278
-	dw Func_5284
-	dw Func_529b
-	dw Func_52b0
+	dw PracticeDuel_DrawSevenCards
+	dw PracticeDuel_PlayGoldeen
+	dw PracticeDuel_PutStaryuInBench
+	dw PracticeDuel_VerifyInitialPlay
+	dw PracticeDuel_DonePuttingOnBench
+	dw PracticeDuel_PrintTurnInstructions
+	dw PracticeDuel_VerifyPlayerTurnActions
+	dw PracticeDuel_RepeatInstructions
+	dw PracticeDuel_PlayStaryuFromBench
+	dw PracticeDuel_ReplaceKnockedOutPokemon
 ; 0x520e
 
-Func_520e: ; 520e (1:520e)
-	call Func_4e40
+PracticeDuel_DrawSevenCards: ; 520e (1:520e)
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
-	ldtx hl, Text01a4
-	jp Func_52bc
+	ldtx hl, DrawSevenCardsPracticeDuelText
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x521a
 
-Func_521a: ; 521a (1:521a)
+PracticeDuel_PlayGoldeen: ; 521a (1:521a)
 	ld a, [wLoadedCard1ID]
 	cp GOLDEEN
 	ret z
-	ldtx hl, Text01a5
+	ldtx hl, ChooseGoldeenPracticeDuelText
 	ldtx de, DrMasonText
 	scf
-	jp Func_52bc
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x522a
 
-Func_522a: ; 522a (1:522a)
-	call Func_4e40
+PracticeDuel_PutStaryuInBench: ; 522a (1:522a)
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
-	ldtx hl, Text01a6
-	jp Func_52bc
+	ldtx hl, PutPokemonOnBenchPracticeDuelText
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5236
 
-Func_5236: ; 5236 (1:5236)
+PracticeDuel_VerifyInitialPlay: ; 5236 (1:5236)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
 	ret z
-	ldtx hl, Text01a7
+	ldtx hl, ChooseStaryuPracticeDuelText
 	scf
-	jp Func_52bc
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5245
 
-Func_5245: ; 5245 (1:5245)
-	call Func_4e40
+PracticeDuel_DonePuttingOnBench: ; 5245 (1:5245)
+	call DisplayPracticeDuelPlayerHandScreen
 	call EnableLCD
 	ld a, $ff
-	ld [wcc00], a
-	ldtx hl, Text01a8
-	jp Func_52bc
+	ld [wPracticeDuelTurn], a
+	ldtx hl, PressBToFinishPracticeDuelText
+	jp PrintPracticeDuelDrMasonInstructions
 ; 0x5256
 
-Func_5256: ; 5256 (1:5256)
-	call $5351
+PracticeDuel_PrintTurnInstructions: ; 5256 (1:5256)
+	call DrawPracticeDuelInstructionsTextBox
 	call EnableLCD
 	ld a, [wDuelTurns]
-	ld hl, wcc00
+	ld hl, wPracticeDuelTurn
 	cp [hl]
 	ld [hl], a
-	ld a, $00
-	jp nz, $5382
+	; calling PrintPracticeDuelInstructionsForCurrentTurn with a = 0 means that Dr. Mason's
+	; instructions are also printed along with each of the point-by-point instructions
+	ld a, 0
+	jp nz, PrintPracticeDuelInstructionsForCurrentTurn
+	; if we're here, the player followed the current turn actions wrong and has to
+	; epeat them. ask the player whether to show detailed instructions again, in
+	; order to call PrintPracticeDuelInstructionsForCurrentTurn with a = 0 or a = 1.
 	ldtx de, DrMasonText
-	ldtx hl, Text01d9
+	ldtx hl, NeedPracticeAgainPracticeDuelText
 	call PrintScrollableText_WithTextBoxLabel_NoWait
 	call YesOrNoMenu
-	jp $5382
+	jp PrintPracticeDuelInstructionsForCurrentTurn
 ; 0x5278
 
-Func_5278: ; 5278 (1:5278)
+PracticeDuel_VerifyPlayerTurnActions: ; 5278 (1:5278)
 	ld a, [wDuelTurns]
 	srl a
-	ld hl, $541f
+	ld hl, PracticeDuelTurnVerificationPointerTable
 	call JumpToFunctionInTable
+	; return nc if player followed instructions correctly
 	ret nc
 ;	fallthrough
 
-Func_5284: ; 5284 (1:5284)
-	ldtx hl, Text01da
-	call Func_52bc
+PracticeDuel_RepeatInstructions: ; 5284 (1:5284)
+	ldtx hl, FollowMyGuidancePracticeDuelText
+	call PrintPracticeDuelDrMasonInstructions
+	; restart the turn from the saved data of the previous turn
 	ld a, $02
 	call BankswitchSRAM
 	ld de, sCurrentDuel
-	call $66ff
+	call LoadSavedDuelData
 	xor a
 	call BankswitchSRAM
+	; return carry in order to repeat instructions
 	scf
 	ret
 ; 0x529b
 
-Func_529b: ; 529b (1:529b)
+PracticeDuel_PlayStaryuFromBench: ; 529b (1:529b)
 	ld a, [wDuelTurns]
 	cp 7
-	jr z, .asm_52a4
+	jr z, .its_sam_turn_4
 	or a
 	ret
-.asm_52a4
-	call $5351
+.its_sam_turn_4
+	; ask player to choose Staryu from bench to replace knocked out Seaking
+	call DrawPracticeDuelInstructionsTextBox
 	call EnableLCD
-	ld hl, $5346
-	jp $5396
+	ld hl, PracticeDuelText_SamTurn4
+	jp PrintPracticeDuelInstructions
 ; 0x52b0
 
-Func_52b0: ; 52b0 (1:52b0)
+PracticeDuel_ReplaceKnockedOutPokemon: ; 52b0 (1:52b0)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	cp PLAY_AREA_BENCH_1
 	ret z
+	; if player selected Drowzee instead (which is at PLAY_AREA_BENCH_2)
 	call HasAlivePokemonOnBench
-	ldtx hl, Text01d7
+	ldtx hl, SelectStaryuPracticeDuelText
 	scf
 ;	fallthrough
 
-Func_52bc: ; 52bc (1:52bc)
+; print a text box with given the text id at hl, labeled as 'Dr. Mason'
+PrintPracticeDuelDrMasonInstructions: ; 52bc (1:52bc)
 	push af
 	ldtx de, DrMasonText
 	call PrintScrollableText_WithTextBoxLabel
@@ -2765,7 +2803,334 @@ Func_52bc: ; 52bc (1:52bc)
 	ret
 ; 0x52c5
 
-	INCROM $52c5,  $54c8
+PracticeDuelTextPointerTable: ; 52c5 (1:52c5)
+	dw PracticeDuelText_Turn1
+	dw PracticeDuelText_Turn2
+	dw PracticeDuelText_Turn3
+	dw PracticeDuelText_Turn4
+	dw PracticeDuelText_Turn5
+	dw PracticeDuelText_Turn6
+	dw PracticeDuelText_Turn7
+	dw PracticeDuelText_Turn8
+; 0x52d5
+
+practicetext: MACRO
+	db \1 ; Y coord to place the point-by-point instruction
+	tx \2 ; Dr. Mason's instruction
+	tx \3 ; static point-by-point instruction
+ENDM
+
+PracticeDuelText_Turn1:
+	practicetext 2, Turn1DrMason1PracticeDuelText, Turn1Instr1PracticeDuelText
+	practicetext 5, Turn1DrMason2PracticeDuelText, Turn1Instr2PracticeDuelText
+	practicetext 8, Turn1DrMason3PracticeDuelText, Turn1Instr3PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn2:
+	practicetext 2, Turn2DrMason1PracticeDuelText, Turn2Instr1PracticeDuelText
+	practicetext 5, Turn2DrMason2PracticeDuelText, Turn2Instr2PracticeDuelText
+	practicetext 8, Turn2DrMason3PracticeDuelText, Turn2Instr3PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn3:
+	practicetext 2, Turn3DrMason1PracticeDuelText, Turn3Instr1PracticeDuelText
+	practicetext 5, Turn3DrMason2PracticeDuelText, Turn3Instr2PracticeDuelText
+	practicetext 8, Turn3DrMason3PracticeDuelText, Turn3Instr3PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn4:
+	practicetext 2, Turn4DrMason1PracticeDuelText, Turn4Instr1PracticeDuelText
+	practicetext 5, Turn4DrMason2PracticeDuelText, Turn4Instr2PracticeDuelText
+	practicetext 8, Turn4DrMason3PracticeDuelText, Turn4Instr3PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn5:
+	practicetext 2, Turn5DrMason1PracticeDuelText, Turn5Instr1PracticeDuelText
+	practicetext 6, Turn5DrMason2PracticeDuelText, Turn5Instr2PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn6:
+	practicetext 2, Turn6DrMason1PracticeDuelText, Turn6Instr1PracticeDuelText
+	practicetext 5, Turn6DrMason2PracticeDuelText, Turn6Instr2PracticeDuelText
+	practicetext 8, Turn6DrMason3PracticeDuelText, Turn6Instr3PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn7:
+	practicetext 2, Turn7DrMason1PracticeDuelText, Turn7Instr1PracticeDuelText
+	practicetext 5, Turn7DrMason2PracticeDuelText, Turn7Instr2PracticeDuelText
+	db $00
+
+PracticeDuelText_Turn8:
+	practicetext 2, Turn8DrMason1PracticeDuelText, Turn8Instr1PracticeDuelText
+	practicetext 5, Turn8DrMason2PracticeDuelText, Turn8Instr2PracticeDuelText
+	db $00
+
+; on player's Seaking knocked out
+PracticeDuelText_SamTurn4:
+	practicetext 2, SamTurn4DrMason1PracticeDuelText, SamTurn4Instr1PracticeDuelText
+	practicetext 7, SamTurn4DrMason2PracticeDuelText, SamTurn4Instr2PracticeDuelText
+	db $00
+
+; in a practice duel, draws the text box where the point-by-point
+; instructions for the next player action will be written into
+DrawPracticeDuelInstructionsTextBox: ; 5351 (1:5351)
+	call EmptyScreen
+	lb de, 0, 0
+	lb bc, 20, 12
+	call DrawRegularTextBox
+;	fallthrough
+
+; print "<Player>'s Turn [wDuelTurns]" (usually) as the textbox label
+PrintPracticeDuelInstructionsTextBoxLabel: ; 535d (1:535d)
+	ld a, [wDuelTurns]
+	cp 7
+	jr z, .replace_due_to_knockout
+	; load the player's turn number to TX_RAM3 in order to print it
+	srl a
+	inc a
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	lb de, 1, 0
+	call InitTextPrinting
+	ldtx hl, PlayersTurnPracticeDuelText
+	jp PrintText
+.replace_due_to_knockout
+	; when the player needs to replace a knocked out Pokemon, the label text is different
+	; this happens at the end of Sam's fourth turn
+	lb de, 1, 0
+	ldtx hl, ReplaceDueToKnockoutPracticeDuelText
+	jp InitTextPrinting_ProcessTextFromID
+; 0x5382
+
+; print the instructions of the current practice duel turn, taken from
+; one of the structs in PracticeDuelTextPointerTable.
+; if a != 0, only the point-by-point instructions are printed, otherwise
+; Dr. Mason instructions are also shown in a textbox at the bottom of the screen.
+PrintPracticeDuelInstructionsForCurrentTurn: ; 5382 (1:5382)
+	push af
+	ld a, [wDuelTurns]
+	and %11111110
+	ld e, a
+	ld d, $00
+	ld hl, PracticeDuelTextPointerTable
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop af
+	or a
+	jr nz, PrintPracticeDuelInstructions_Fast
+;	fallthrough
+
+; print practice duel instructions given hl = PracticeDuelText_*
+; each practicetext entry (see above) contains a Dr. Mason text along with
+; a numbered instruction text, that is later printed without text delay.
+PrintPracticeDuelInstructions: ; 5396 (1:5396)
+	xor a
+	ld [wcbca], a
+	ld a, l
+	ld [wcc01], a
+	ld a, h
+	ld [wcc01 + 1], a
+.asm_53a2
+	call Func_53fa
+	ld a, [hli]
+	ld [wcbca], a
+	or a
+	jr z, PrintPracticeDuelLetsPlayTheGame
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push hl
+	ld l, e
+	ld h, d
+	ldtx de, DrMasonText
+	call PrintScrollableText_WithTextBoxLabel
+	pop hl
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push hl
+	call SetNoLineSeparation
+	ld l, e
+	ld h, d
+	ld a, [wcbca]
+	ld e, a
+	ld d, 1
+	call InitTextPrinting_ProcessTextFromID
+	call SetOneLineSeparation
+	pop hl
+	jr .asm_53a2
+
+; print the generic Dr. Mason's text that completes all his practice duel instructions
+PrintPracticeDuelLetsPlayTheGame: ; 53d3 (1:53d3)
+	ldtx hl, LetsPlayTheGamePracticeDuelText
+	call PrintPracticeDuelDrMasonInstructions
+	ret
+
+; simplified version of PrintPracticeDuelInstructions that skips Dr. Mason's text
+; and instead places the point-by-point instructions all at once.
+PrintPracticeDuelInstructions_Fast: ; 53da (1:53da)
+	ld a, [hli]
+	or a
+	jr z, PrintPracticeDuelLetsPlayTheGame
+	ld e, a
+	ld d, 1
+	call PrintPracticeDuelNumberedInstruction
+	jr PrintPracticeDuelInstructions_Fast
+; 0x53e6
+
+; print a practice duel point-by-point instruction at d,e, with text id at hl,
+; that has been read from an entry of PracticeDuelText_*
+PrintPracticeDuelNumberedInstruction: ; 53e6 (1:53e6)
+	inc hl
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	push hl
+	ld l, c
+	ld h, b
+	call SetNoLineSeparation
+	call InitTextPrinting_ProcessTextFromID
+	call SetOneLineSeparation
+	pop hl
+	ret
+; 0x53fa
+
+Func_53fa: ; 53fa (1:53fa)
+	ld a, $01
+	ldh [hffb0], a
+	push hl
+	call PrintPracticeDuelInstructionsTextBoxLabel
+	ld hl, wcc01
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+.asm_5408
+	ld a, [wcbca]
+	cp [hl]
+	jr c, .asm_541a
+	ld a, [hli]
+	or a
+	jr z, .asm_541a
+	ld e, a
+	ld d, $01
+	call PrintPracticeDuelNumberedInstruction
+	jr .asm_5408
+.asm_541a
+	pop hl
+	xor a
+	ldh [hffb0], a
+	ret
+; 0x541f
+
+PracticeDuelTurnVerificationPointerTable: ; 541f (1:541f)
+	dw PracticeDuelVerify_Turn1
+	dw PracticeDuelVerify_Turn2
+	dw PracticeDuelVerify_Turn3
+	dw PracticeDuelVerify_Turn4
+	dw PracticeDuelVerify_Turn5
+	dw PracticeDuelVerify_Turn6
+	dw PracticeDuelVerify_Turn7Or8
+	dw PracticeDuelVerify_Turn7Or8
+
+PracticeDuelVerify_Turn1: ; 542f (1:542f)
+	ld a, [wTempCardID_ccc2]
+	cp GOLDEEN
+	jp nz, ReturnWrongAction
+	ret
+; 0x5438
+
+PracticeDuelVerify_Turn2: ; 5438 (1:5438)
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jp nz, ReturnWrongAction
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jp nz, ReturnWrongAction
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	or a
+	jr z, ReturnWrongAction
+	ret
+; 0x5454
+
+PracticeDuelVerify_Turn3: ; 5454 (1:5454)
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jr nz, ReturnWrongAction
+	ld e, PLAY_AREA_BENCH_1
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	or a
+	jr z, ReturnWrongAction
+	ret
+; 0x5467
+
+PracticeDuelVerify_Turn4: ; 5467 (1:5467)
+	ld a, [wPlayerNumberOfPokemonInPlayArea]
+	cp 3
+	jr nz, ReturnWrongAction
+	ld e, PLAY_AREA_BENCH_2
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	or a
+	jr z, ReturnWrongAction
+	ld a, [wTempCardID_ccc2]
+	cp SEAKING
+	jr nz, ReturnWrongAction
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jr nz, ReturnWrongAction
+	ret
+; 0x5488
+
+PracticeDuelVerify_Turn5: ; 5488 (1:5488)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	cp 2
+	jr nz, ReturnWrongAction
+	ld a, [wTempCardID_ccc2]
+	cp STARYU
+	jr nz, ReturnWrongAction
+	ret
+; 0x549c
+
+PracticeDuelVerify_Turn6: ; 549c (1:549c)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + WATER]
+	cp 3
+	jr nz, ReturnWrongAction
+	ld a, [wPlayerArenaCardHP]
+	cp 40
+	jr nz, ReturnWrongAction
+	ld a, [wTempCardID_ccc2]
+	cp STARYU
+	jr nz, ReturnWrongAction
+	ret
+; 0x54b7
+
+PracticeDuelVerify_Turn7Or8: ; 54b7 (1:54b7)
+	ld a, [wTempCardID_ccc2]
+	cp STARMIE
+	jr nz, ReturnWrongAction
+	ld a, [wSelectedMoveIndex]
+	cp 1
+	jr nz, ReturnWrongAction
+	ret
+
+ReturnWrongAction:
+	scf
+	ret
+; 0x54c8
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
 ; DuelistsTurnText in a textbox. also call ExchangeRNG.
@@ -2801,7 +3166,13 @@ DuelMenuData: ; 54e9 (1:54e9)
 	db $ff
 ; 0x5502
 
-Func_5502: ; 5502 (1:5502)
+; display the screen that prompts the player to choose a Pokemon card to
+; place in the arena or in the bench at the beginning of the duel.
+; input:
+   ; a = 0 -> prompted to place Pokemon card in arena
+   ; a = 1 -> prompted to place Pokemon card in bench
+; return carry if no card was placed (only allowed for bench)
+DisplayPlaceInitialPokemonCardsScreen: ; 5502 (1:5502)
 	ld [wcbfd], a
 	push hl
 	call CreateHandCardList
@@ -2810,24 +3181,30 @@ Func_5502: ; 5502 (1:5502)
 	call SetCardListInfoBoxText
 	ld a, PLAY_CHECK
 	ld [wCardListItemSelectionMenuType], a
-.asm_5515
+.display_card_list
 	call DisplayCardList
-	jr nc, .asm_5523
+	jr nc, .card_selected
+	; attempted to exit screen
 	ld a, [wcbfd]
 	or a
-	jr z, .asm_5515
+	; player is forced to place a Pokemon card in the arena
+	jr z, .display_card_list
+	; in the bench, however, we can get away without placing anything
+	; alternatively, the player doesn't want or can't place more bench Pokemon
 	scf
-	jr .asm_5538
-.asm_5523
+	jr .done
+.card_selected
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	call Func_4dd1
-	jr nc, .asm_5538
+	call IsLoadedCard1BasicPokemon
+	jr nc, .done
+	; invalid card selected, tell the player and go back
 	ldtx hl, YouCannotSelectThisCardText
 	call DrawWideTextBox_WaitForInput
 	call DrawCardListScreenLayout
-	jr .asm_5515
-.asm_5538
+	jr .display_card_list
+.done
+	; valid basic Pokemon card selected, or no card selected (bench only)
 	push af
 	ld a, [wSortCardListByID]
 	or a
@@ -2903,6 +3280,8 @@ Func_5591: ; 5591 (1:5591)
 ; Discard Pile card list, including a bottom-right image of the current card.
 ; since this loads the text for the Hand card list screen, SetDiscardPileScreenTexts
 ; is called after this if the screen corresponds to a Discard Pile list.
+; the dimensions of text box where the card list is printed are 20x13, in order to accomodate
+; another text box below it (wCardListInfoBoxText) as well as the image of the selected card.
 InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 	xor a
 	ld hl, wSelectedDuelSubMenuItem
@@ -2953,14 +3332,14 @@ DrawCardListScreenLayout:
 ; 0x55f0
 
 ; displays a list of cards and handles input in order to navigate through the list,
-; select a card, open a card page...
+; select a card, open a card page, etc.
 ; input:
    ; - text IDs at wCardListInfoBoxText and wCardListHeaderText
    ; - $ff-terminated list of cards to display at wDuelTempList
    ; - wSelectedDuelSubMenuItem (initial item) and wSelectedDuelSubMenuScrollOffset
    ;   (initial page scroll offset). Usually both 0 to begin with the first card.
-; returns carry if B is pressed to exit the card list screen, or the selected
-; card at hTempCardIndex_ff98 and at a.
+; returns carry if B is pressed to exit the card list screen.
+; otherwise returns the selected card at hTempCardIndex_ff98 and at a.
 DisplayCardList: ; 55f0 (1:55f0)
 	call DrawNarrowTextBox
 	call PrintCardListHeaderAndInfoBoxTexts
