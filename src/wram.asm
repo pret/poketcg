@@ -1459,9 +1459,15 @@ wcfda:: ; cfda
 	ds $7
 
 wcfe3:: ; cfe3
-	ds $1
+	ds $4
 
-	ds $1c
+; name buffer in naming screen
+wNameBuffer:: ; cfe7
+	ds $18
+
+; current name length in naming screen
+wNameLength:: ; cfff
+	ds $1
 
 SECTION "WRAM1", WRAMX
 
