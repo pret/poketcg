@@ -3695,6 +3695,7 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	ret
 ; 0x57df
 
+Func_57df:
 	INCROM $57df,  $5892
 
 ; display the previous valid card page

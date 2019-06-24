@@ -1386,12 +1386,20 @@ wcea1:: ; cea1
 wcea3:: ; cea3
 	ds $1
 
-	ds $5
+wcea4:: ; cea4
+	ds $1
+
+wcea5:: ; cea5
+	ds $4
 
 wcea9:: ; cea9
 	ds $1
 
-	ds $5
+wceaa:: ; ceaa
+	ds $1
+
+wceab:: ; ceab
+	ds $4
 
 wceaf:: ; ceaf
 	ds $1
@@ -1462,16 +1470,34 @@ wcfe3:: ; cfe3
 	ds $4
 
 ; name buffer in naming screen
-wNameBuffer:: ; cfe7
+wNamingScreenBuffer:: ; cfe7
 	ds $18
 
 ; current name length in naming screen
-wNameLength:: ; cfff
+wNamingScreenBufferLength:: ; cfff
 	ds $1
 
 SECTION "WRAM1", WRAMX
+wd000:: ; d000
+	ds $2
 
-	ds $d
+wd002:: ; d002
+	ds $2
+
+wd004:: ; d004
+	ds $1
+
+wd005:: ; d005
+	ds $1
+
+wd006:: ; d006
+	ds $1
+
+wd007:: ; d007
+	ds $2
+
+wd009:: ; d009
+	ds $4
 
 wd00d:: ; d00d
 	ds $1
