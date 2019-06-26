@@ -547,7 +547,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text021f                                 ; 0x021f
 	textpointer Text0220                                 ; 0x0220
 	textpointer Text0221                                 ; 0x0221
-	textpointer Text0222                                 ; 0x0222
+	textpointer NamingScreenKeyboardText                                 ; 0x0222
 	textpointer NewDeckText                              ; 0x0223
 	textpointer PleaseSelectDeckText                     ; 0x0224
 	textpointer Text0225                                 ; 0x0225

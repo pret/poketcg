@@ -7774,12 +7774,12 @@ Func_758f: ; 758f (1:758f)
 	INCROM $758f, $7594
 
 Func_7594: ; 7594 (1:7594)
-	farcall $6, $661f
+	farcall Func_1a61f
 	ret
 ; 0x7599
 
 Func_7599: ; 7599 (1:7599)
-	farcall $6, $668d
+	farcall Func_006_668d
 	ret
 ; 0x759e
 

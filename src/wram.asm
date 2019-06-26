@@ -1513,7 +1513,11 @@ wd087:: ; d087
 wd088:: ; d088
 	ds $1
 
-	ds $19
+wd089:: ; d089
+	ds $1
+
+wd08a:: ; d08a
+	ds $18
 
 wd0a2:: ; d0a2
 	ds $2
@@ -1524,7 +1528,11 @@ wd0a4:: ; d0a4
 wd0a5:: ; d0a5
 	ds $1
 
-	ds $3
+wd0a6:: ; d0a6
+	ds $1
+
+dw0a7:: ; d0a7
+	ds $2
 
 wd0a9:: ; d0a9
 	ds $1

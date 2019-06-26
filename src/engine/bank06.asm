@@ -183,7 +183,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [hl], a
 	inc l
 	jr nz, .asm_199a2
-	ld hl, $bc00
+	ld hl, sCurrentDuel
 	xor a
 	ld [hli], a
 	ld [hli], a
@@ -319,34 +319,30 @@ Func_1a61f: ; 1a61f (6:661f)
 	ret
 ; 0x1a68d
 
-	ld a, $c2
-	ldh [$97], a
+Func_006_668d:
+	ld a, $c2 ; player's turn
+	ldh [hWhoseTurn], a
 	ld h, a
 	ld l, $00
-
 .asm_006_6694
 	xor a
 	ld [hli], a
 	ld a, l
 	cp $3c
 	jr c, .asm_006_6694
-
 	xor a
 	ld hl, wBoosterCardsDrawn
 	ld de, wDuelTempList
 	ld c, $00
-
 .asm_006_66a4
 	ld a, [hli]
 	or a
 	jr z, .asm_006_66ae
-
 	ld a, c
 	ld [de], a
 	inc de
 	inc c
 	jr .asm_006_66a4
-
 .asm_006_66ae
 	ld a, $ff
 	ld [de], a
@@ -364,18 +360,17 @@ Func_1a61f: ; 1a61f (6:661f)
 CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ret
 
-	ldh a, [$81]
+Func_006_66cd: ; (6:66cd)
+	ldh a, [hBankSRAM]
 	or a
 	ret nz
-
 	push hl
 	push de
 	push bc
-	ld hl, $a100
+	ld hl, sCardCollection
 	ld bc, $0250
-	ld a, [$a00b]
+	ld a, [$s0a000 + $b]
 	ld e, a
-
 .asm_006_66de
 	ld a, [hli]
 	xor e
@@ -384,21 +379,19 @@ CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ld a, c
 	or b
 	jr nz, .asm_006_66de
-
 	ld a, e
 	pop bc
 	pop de
 	pop hl
 	or a
 	ret z
-
 	xor a
 	ld [wTileMapFill], a
 	ld hl, wDoFrameFunction
 	ld [hli], a
 	ld [hl], a
-	ldh [$92], a
-	ldh [$93], a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	bank1call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
@@ -406,13 +399,11 @@ CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ld a, [wConsole]
 	cp $01
 	jr nz, .asm_006_6719
-
 	ld a, $e4
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01
 	ld [wFlushPaletteFlags], a
-
 .asm_006_6719
 	lb de, $38, $9f
 	call SetupText
@@ -421,25 +412,23 @@ CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ld a, $0a
 	ld [$0000], a
 	xor a
-	ldh [$81], a
+	ldh [hBankSRAM], a
 	ld [$4000], a
 	ld [$a000], a
 	ld [$0000], a
 	jp Reset
-
 	ret
 
-	ldh a, [$81]
+Func_006_673a: ; (6:673a)
+	ldh a, [hBankSRAM]
 	or a
 	ret nz
-
 	push hl
 	push de
 	push bc
-	ld hl, $a100
+	ld hl, sCardCollection
 	ld bc, $0250
 	ld e, $00
-
 .asm_006_6749
 	ld a, [hli]
 	xor e
@@ -448,7 +437,6 @@ CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ld a, c
 	or b
 	jr nz, .asm_006_6749
-
 	ld a, $0a
 	ld [$0000], a
 	ld a, e
@@ -458,43 +446,41 @@ CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	pop hl
 	ret
 
-Unknown_1a75e:
-    INCROM $1a75e,$1a787
+Unknown_1a75e: ; data
+    INCROM $1a75e, $1a787
 
-; set zero from hl in b bytes
-ClearMemory:
+; set each byte zero from hl for b bytes
+ClearMemory: ; (6:6787)
 	push af
 	push bc
 	push hl
 	ld b, a
 	xor a
-
 .loop
 	ld [hli], a
 	dec b
 	jr nz, .loop
-
 	pop hl
 	pop bc
 	pop af
 	ret
 
-Func_006_6794:
+Func_006_6794: ; (6:6794)
 	push af
 	inc a
 	jr z, .asm_006_679c
-
 	ld a, $02
 	jr .asm_006_679e
-
 .asm_006_679c
 	ld a, $03
-
 .asm_006_679e
 	call PlaySFX
 	pop af
 	ret
 
+; enter when naming starts,
+; leave when naming ends.
+OnNamingScreen: ; (6:67a3)
 	ld e, l
 	ld d, h
 	ld a, $0c
@@ -526,16 +512,14 @@ Func_006_6794:
 	ld [wceaa], a
 	ld a, $00
 	ld [wceab], a
-
 .asm_006_67f1
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call UpdateRNGSources
-	ldh a, [$8f]
-	and $08
-	jr z, .asm_006_6819
-
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .on_start
 	ld a, $01
 	call Func_006_6794
 	call Func_006_6a07
@@ -545,25 +529,19 @@ Func_006_6794:
 	ld [wcea4], a
 	call Func_006_6a23
 	jr .asm_006_67f1
-
-.asm_006_6819
+.on_start
 	call Func_006_6908
 	jr nc, .asm_006_67f1
-
 	cp $ff
 	jr z, .asm_006_682b
-
 	call Func_006_6a87
 	jr nc, .asm_006_67f1
-
 	call Func_006_6880
 	ret
-
 .asm_006_682b
 	ld a, [wNamingScreenBufferLength]
 	or a
 	jr z, .asm_006_67f1
-
 	ld e, a
 	ld d, $00
 	ld hl, wNamingScreenBuffer
@@ -576,7 +554,7 @@ Func_006_6794:
 	dec [hl]
 	call Func_006_68cb
 	jr .asm_006_67f1
-
+	
 Func_006_6846:
 	ld [wd004], a
 	push hl
@@ -602,14 +580,12 @@ Func_006_6846:
 	ld a, [wd004]
 	ld b, a
 	inc b
-
 .asm_006_686f
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec b
-	jr nz, Func_006_6846.asm_006_686f
-
+	jr nz, .asm_006_686f
 	ld hl, wNamingScreenBuffer
 	call GetTextSizeInTiles
 	ld a, c
@@ -639,10 +615,8 @@ Func_006_6892:
 	ld h, a
 	or c
 	jr z, .asm_006_68a6
-
 	ld l, c
 	call PlaceTextItems
-
 .asm_006_68a6
 	ld hl, .data
 	call PlaceTextItems
@@ -652,9 +626,9 @@ Func_006_6892:
 	call ProcessTextFromID
 	call EnableLCD
 	ret
-
 .data
-	db $0f, $10, $1d, $02, $ff
+	textitem $0f, $10, Text021d ; "End"
+	db $ff
 
 Func_006_68c1:
 	ld de, $0003
@@ -685,7 +659,7 @@ Func_006_68cb:
 	call ProcessText
 	ret
 .char_underbar
-rept $a
+rept 10
     db $56, $03 ; "_"
 endr
     db $56, $00
@@ -693,7 +667,7 @@ endr
 Func_006_6908:
 	xor a
 	ld [wcfe3], a
-	ldh a, [$8f]
+	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_006_69d9
 	ld b, a
@@ -839,7 +813,7 @@ Func_006_6908:
 	ld a, $01
 	ld [wcfe3], a
 .asm_006_69d9
-	ldh a, [$91]
+	ldh a, [hKeysPressed]
 	and $03
 	jr z, .asm_006_69ef
 	and $01
@@ -1178,7 +1152,7 @@ Func_006_6b93:
 	jr nz, .asm_006_6ba5
 	ret
 .data
-    INCROM $1abaf,$1ad89
+    INCROM $1abaf, $1ad89
 
 Func_1ad89: ; 1ad89 (6:6d89)
 	push af
@@ -1199,9 +1173,9 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
-	ld de, $38bf
+	lb de, $38, $bf
 	call SetupText
-	call Func_006_6e37
+	call FillVramWithF0
 	xor a
 	ld [wd009], a
 	call Func_006_6e99
@@ -1221,9 +1195,9 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call UpdateRNGSources
-	ldh a, [$8f]
-	and $08
-	jr z, .asm_006_6dfc
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .on_start
 	ld a, $01
 	call Func_006_6794
 	call Func_006_6fa1
@@ -1232,7 +1206,7 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	ld [wcea4], a
 	call Func_006_6fbd
 	jr .asm_006_6dd6
-.asm_006_6dfc
+.on_start
 	call Func_006_6efb
 	jr nc, .asm_006_6dd6
 	cp $ff
@@ -1267,7 +1241,9 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	call Func_006_6e59
 	jp .asm_006_6dd6
 
-Func_006_6e37:
+; fill v0Tiles0 for 0x10 tiles
+; with 0xF0.
+FillVramWithF0:
 	ld hl, v0Tiles0
 	ld de, .data
 	ld b, $00
@@ -1281,7 +1257,7 @@ Func_006_6e37:
 	ld [hli], a
 	jr .asm_006_6e3f
 .data
-rept $6e58-$6e48
+rept $10
     db $f0
 endr
 
@@ -1313,7 +1289,11 @@ Func_006_6e59:
 	call ProcessText
 	ret
 .data
-    INCROM $1ae83,$1ae99
+	db $06
+rept $14
+	db $5f
+endr
+	db $00
 
 Func_006_6e99:
 	call Func_006_68c1
@@ -1328,9 +1308,9 @@ Func_006_6e99:
 	ld l, c
 	call PlaceTextItems
 .asm_006_6ead
-	ld hl, $68bc
+	ld hl, Func_006_6892.data
 	call PlaceTextItems
-	ld hl, $0222
+	ldtx hl, NamingScreenKeyboardText ; "A B C D..."
 	ld de, $0204
 	call InitTextPrinting
 	call ProcessTextFromID
@@ -1379,7 +1359,7 @@ Func_006_6ec3:
 Func_006_6efb:
 	xor a
 	ld [wcfe3], a
-	ldh a, [$8f]
+	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_006_6f73
 	ld b, a
@@ -1454,7 +1434,7 @@ Func_006_6efb:
 	ld a, $01
 	ld [wcfe3], a
 .asm_006_6f73
-	ldh a, [$91]
+	ldh a, [hKeysPressed]
 	and $03
 	jr z, .asm_006_6f89
 	and $01
@@ -1572,7 +1552,7 @@ Func_006_7000:
 
 ; a bunch of data
 Unknown_006_7019:
-    INCROM $1b019,$1ba12
+    INCROM $1b019, $1ba12
 
 Func_006_7a12: ; 1ba12
 	push af
@@ -1590,7 +1570,7 @@ Func_006_7a12: ; 1ba12
 	call Func_006_7a5b
 	call Func_006_7a7d
 	push hl
-	ld de, $d0aa
+	ld de, wd0aa
 	ld h, b
 	ld l, $02
 	call HtimesL
@@ -1615,7 +1595,7 @@ Func_006_7a4c:
 	ld l, b
 	ld h, $54
 	call HtimesL
-	ld de, $a350
+	ld de, s0a350
 	add hl, de
 	ld d, h
 	ld e, l
@@ -1639,7 +1619,6 @@ Func_006_7a5b:
 	ld b, a
 	or a
 	jr z, .asm_006_7a77
-
 	ld a, [de]
 	inc de
 	ld c, a
@@ -1664,10 +1643,10 @@ Func_006_7a7d:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, $d089
+	ld de, wd089
 	call CopyText
 	pop hl
-	ld de, $d089
+	ld de, wd089
 .asm_006_7a8d
 	ld a, [de]
 	ld [hli], a
@@ -1681,8 +1660,11 @@ Func_006_7a7d:
 	inc hl
 	inc hl
 	ret
+
+; pointed from 0xb87e: [06|9A|7A]
+Func_006_7a9a: ; (6:7a9a)
 	xor a
-	ld [$d0a6], a
+	ld [wd0a6], a
 	ld a, $01
 .asm_006_7aa0
 	call Func_006_7ae4
@@ -1726,15 +1708,12 @@ Func_006_7a7d:
 
 Func_006_7ae4:
 	push af
-	ld hl, $d088
+	ld hl, wd088
 	ld b, [hl]
-	rst $28
-	ld [bc], a
-	dec h
-	db $76
+	farcall $2, $7625
 	jr c, .asm_006_7af5
 	pop af
-	ld [$d0a6], a
+	ld [wd0a6], a
 	or a
 	ret
 .asm_006_7af5
