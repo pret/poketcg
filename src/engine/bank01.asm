@@ -2737,7 +2737,7 @@ PracticeDuel_PrintTurnInstructions: ; 5256 (1:5256)
 	ld a, 0
 	jp nz, PrintPracticeDuelInstructionsForCurrentTurn
 	; if we're here, the player followed the current turn actions wrong and has to
-	; epeat them. ask the player whether to show detailed instructions again, in
+	; repeat them. ask the player whether to show detailed instructions again, in
 	; order to call PrintPracticeDuelInstructionsForCurrentTurn with a = 0 or a = 1.
 	ldtx de, DrMasonText
 	ldtx hl, NeedPracticeAgainPracticeDuelText
@@ -2933,7 +2933,7 @@ PrintPracticeDuelInstructions: ; 5396 (1:5396)
 	ld [wcc01], a
 	ld a, h
 	ld [wcc01 + 1], a
-.asm_53a2
+.print_instructions_loop
 	call Func_53fa
 	ld a, [hli]
 	ld [wcbca], a
@@ -2963,7 +2963,7 @@ PrintPracticeDuelInstructions: ; 5396 (1:5396)
 	call InitTextPrinting_ProcessTextFromID
 	call SetOneLineSeparation
 	pop hl
-	jr .asm_53a2
+	jr .print_instructions_loop
 
 ; print the generic Dr. Mason's text that completes all his practice duel instructions
 PrintPracticeDuelLetsPlayTheGame: ; 53d3 (1:53d3)
