@@ -369,7 +369,7 @@ Func_006_66cd: ; (6:66cd)
 	push bc
 	ld hl, sCardCollection
 	ld bc, $0250
-	ld a, [$s0a000 + $b]
+	ld a, [s0a000 + $b]
 	ld e, a
 .asm_006_66de
 	ld a, [hli]
@@ -440,14 +440,31 @@ Func_006_673a: ; (6:673a)
 	ld a, $0a
 	ld [$0000], a
 	ld a, e
-	ld [$a00b], a
+	ld [s0a00b], a
 	pop bc
 	pop de
 	pop hl
 	ret
 
 Unknown_1a75e: ; data
-    INCROM $1a75e, $1a787
+	textitem 1, 1, WhatIsYourNameText
+	db $ff
+
+	textitem 2, 1, Text022b
+	textitem 14, 1, Text0219
+	db $ff
+
+	textitem 2, 1, Text022c
+	textitem 14, 1, Text0219
+	db $ff
+
+	textitem 2, 1, Text022d
+	textitem 14, 1, Text0219
+	db $ff
+
+	textitem 2, 1, Text022e
+	textitem 14, 1, Text0219
+	db $ff
 
 ; set each byte zero from hl for b bytes
 ClearMemory: ; (6:6787)
@@ -480,6 +497,8 @@ Func_006_6794: ; (6:6794)
 
 ; enter when naming starts,
 ; leave when naming ends.
+; [input]
+; hl: dest. buffer.
 OnNamingScreen: ; (6:67a3)
 	ld e, l
 	ld d, h
@@ -497,7 +516,7 @@ OnNamingScreen: ; (6:67a3)
 	call LoadSymbolsFont
 	lb de, $38, $bf
 	call SetupText
-	call Func_006_6a65
+	call SetVram0xFF
 	ld a, $02
 	ld [wd009], a
 	call Func_006_6892
@@ -552,9 +571,12 @@ OnNamingScreen: ; (6:67a3)
 	ld hl, wNamingScreenBufferLength
 	dec [hl]
 	dec [hl]
-	call Func_006_68cb
+	call PrintPlayerNameFromInput
 	jr .asm_006_67f1
 	
+; a: length
+; de: dest. pointer
+; hl: data pointer
 Func_006_6846:
 	ld [wd004], a
 	push hl
@@ -580,12 +602,13 @@ Func_006_6846:
 	ld a, [wd004]
 	ld b, a
 	inc b
-.asm_006_686f
+.loop
+	; copy data from de to hl.
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec b
-	jr nz, .asm_006_686f
+	jr nz, .loop
 	ld hl, wNamingScreenBuffer
 	call GetTextSizeInTiles
 	ld a, c
@@ -603,21 +626,21 @@ Func_006_6880:
 	ld a, [wd004]
 	ld b, a
 	inc b
-	jr Func_006_6846.asm_006_686f
+	jr Func_006_6846.loop
 
 Func_006_6892:
-	call Func_006_68c1
-	call Func_006_68cb
+	call DrawTextboxForKeyboard
+	call PrintPlayerNameFromInput
 	ld hl, wd002
 	ld c, [hl]
 	inc hl
 	ld a, [hl]
 	ld h, a
 	or c
-	jr z, .asm_006_68a6
+	jr z, .put_text_end
 	ld l, c
 	call PlaceTextItems
-.asm_006_68a6
+.put_text_end
 	ld hl, .data
 	call PlaceTextItems
 	ld hl, $0221
@@ -627,16 +650,16 @@ Func_006_6892:
 	call EnableLCD
 	ret
 .data
-	textitem $0f, $10, Text021d ; "End"
+	textitem $0f, $10, EndText ; "End"
 	db $ff
 
-Func_006_68c1:
-	ld de, $0003
-	ld bc, $140f
+DrawTextboxForKeyboard:
+	ld de, $0003 ; x, y
+	ld bc, $140f ; w, h
 	call DrawRegularTextBox
 	ret
 
-Func_006_68cb:
+PrintPlayerNameFromInput:
 	ld hl, wd007
 	ld d, [hl]
 	inc hl
@@ -650,19 +673,23 @@ Func_006_68cb:
 	inc a
 	ld e, a
 	ld d, $00
+	; print the underbars
+	; before print the input.
 	ld hl, .char_underbar
 	add hl, de
 	call ProcessText
 	pop de
 	call InitTextPrinting
+	; print the input from the user.
 	ld hl, wNamingScreenBuffer
 	call ProcessText
 	ret
 .char_underbar
+	db $56
 rept 10
-    db $56, $03 ; "_"
+	textfw3 "_"
 endr
-    db $56, $00
+    db $00 ; null
 
 Func_006_6908:
 	xor a
@@ -906,11 +933,15 @@ Func_006_6a28:
 	pop af
 	ret
 
-Func_006_6a65:
+SetVram0xFF:
 	ld hl, v0Tiles0
 	ld de, .data
 	ld b, $00
-.asm_006_6a6d
+.loop
+	; copy data from de to hl
+	; for 0x10 bytes.
+	; and de has all of 0xff data,
+	; which means that it puts only 0xff.
 	ld a, $10
 	cp b
 	ret z
@@ -918,7 +949,7 @@ Func_006_6a65:
 	ld a, [de]
 	inc de
 	ld [hli], a
-	jr .asm_006_6a6d
+	jr .loop
 .data
 rept $6a87-$6a77
 	db $ff
@@ -1062,7 +1093,7 @@ Func_006_6a87:
 	jr .asm_006_6b51
 ; increase name length before add the character.
 .asm_006_6b4c
-	inc [hl] ; hl: wNamingScreenBufferLength => name length 
+	inc [hl]
 	inc [hl]
 	ld hl, wNamingScreenBuffer
 ; write 2 bytes character codes to the name buffer.
@@ -1076,7 +1107,7 @@ Func_006_6a87:
 	ld [hl], e
 	inc hl
 	ld [hl], $00 ; null terminator.
-	call Func_006_68cb
+	call PrintPlayerNameFromInput
 .asm_006_6b5d
 	or a
 	ret
@@ -1296,7 +1327,7 @@ endr
 	db $00
 
 Func_006_6e99:
-	call Func_006_68c1
+	call DrawTextboxForKeyboard
 	call Func_006_6e59
 	ld hl, wd002
 	ld c, [hl]

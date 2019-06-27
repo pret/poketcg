@@ -1523,11 +1523,11 @@ Text021c: ; 3b7f9 (e:77f9)
 	textfw3 "A", "B", "C"
 	done
 
-Text021d: ; 3b800 (e:7800)
+EndText: ; 3b800 (e:7800)
 	text "End"
 	done
 
-Text021e: ; 3b805 (e:7805)
+WhatIsYourNameText: ; 3b805 (e:7805)
 	text "What is your name?"
 	done
 

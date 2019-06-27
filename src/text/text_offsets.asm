@@ -542,8 +542,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text021a                                 ; 0x021a
 	textpointer Text021b                                 ; 0x021b
 	textpointer Text021c                                 ; 0x021c
-	textpointer Text021d                                 ; 0x021d
-	textpointer Text021e                                 ; 0x021e
+	textpointer EndText                                 ; 0x021d
+	textpointer WhatIsYourNameText                                 ; 0x021e
 	textpointer Text021f                                 ; 0x021f
 	textpointer Text0220                                 ; 0x0220
 	textpointer Text0221                                 ; 0x0221

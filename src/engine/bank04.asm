@@ -1181,14 +1181,17 @@ Func_1288c: ; 1288c (4:688c)
 	INCROM $1288c, $128a9
 
 InputPlayerName:: ; 128a9 (4:68a9)
-	ld hl, wc500
+	; clear name buffer.
+	ld hl, wc500 ; c500: name buffer.
 	ld bc, $0010
 	ld a, $00
 	call FillMemoryWithA
+
+	; get player's name
+	; from the user into hl.
 	ld hl, wc500
-	; get player's name from the user
-	; into hl.
 	farcall OnNamingScreen
+	
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	call DisableLCD
@@ -1215,7 +1218,7 @@ InputPlayerName:: ; 128a9 (4:68a9)
 .data
 	; "MARK": default player name.
 	; last two bytes are reserved for RNG.
-	db $03, $3C, $03, $30, $03, $41, $03, $3A
+	textfw3 "M", "A", "R", "K"
 	db $00, $00, $00, $00, $00, $00, $10, $12
 Unknown_128fb: ; 128fb
 	INCROM $128fb, $1296e
