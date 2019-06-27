@@ -1386,13 +1386,13 @@ wcea1:: ; cea1
 wcea3:: ; cea3
 	ds $1
 
-wcea4:: ; cea4
+wNamingScreenCursorY:: ; cea4
 	ds $1
 
 wcea5:: ; cea5
 	ds $4
 
-wcea9:: ; cea9
+wNamingScreenKeyboardHeight:: ; cea9
 	ds $1
 
 wceaa:: ; ceaa
@@ -1478,19 +1478,21 @@ wNamingScreenBufferLength:: ; cfff
 	ds $1
 
 SECTION "WRAM1", WRAMX
-wd000:: ; d000
+wNamingScreenDestPointer:: ; d000
 	ds $2
 
-wd002:: ; d002
+wNamingScreenQuestionPointer:: ; d002
 	ds $2
 
-wd004:: ; d004
+; max length of name buffer.
+; it's given for limiting the player's input.
+wNamingScreenBufferMaxLength:: ; d004
 	ds $1
 
 wd005:: ; d005
 	ds $1
 
-wd006:: ; d006
+wNamingScreenCursorX:: ; d006
 	ds $1
 
 wd007:: ; d007

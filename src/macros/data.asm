@@ -89,3 +89,8 @@ textitem: MACRO
 	db \1, \2
 	tx \3
 ENDM
+
+kbitem: MACRO
+	db \1, \2, \3, \4
+	dw \5
+ENDM

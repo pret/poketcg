@@ -446,7 +446,7 @@ Func_006_673a: ; (6:673a)
 	pop hl
 	ret
 
-Unknown_1a75e: ; data
+WhatIsYourNameData: ; data
 	textitem 1, 1, WhatIsYourNameText
 	db $ff
 
@@ -482,7 +482,8 @@ ClearMemory: ; (6:6787)
 	pop af
 	ret
 
-Func_006_6794: ; (6:6794)
+; play different sfx by a.
+PlaySFXByA: ; (6:6794)
 	push af
 	inc a
 	jr z, .asm_006_679c
@@ -495,17 +496,15 @@ Func_006_6794: ; (6:6794)
 	pop af
 	ret
 
-; enter when naming starts,
-; leave when naming ends.
-; [input]
-; hl: dest. buffer.
-OnNamingScreen: ; (6:67a3)
+; get player name from the user
+; into hl
+InputPlayerName: ; (6:67a3)
 	ld e, l
 	ld d, h
 	ld a, $0c
-	ld hl, Unknown_1a75e
-	ld bc, $0c01
-	call Func_006_6846
+	ld hl, WhatIsYourNameData
+	lb bc, $0c, $01
+	call InitializeInputName
 	call Set_OBJ_8x8
 	xor a
 	ld [wTileMapFill], a
@@ -519,48 +518,53 @@ OnNamingScreen: ; (6:67a3)
 	call SetVram0xFF
 	ld a, $02
 	ld [wd009], a
-	call Func_006_6892
+	call DrawNamingScreenBG
 	xor a
-	ld [wd006], a
-	ld [wcea4], a
+	ld [wNamingScreenCursorX], a
+	ld [wNamingScreenCursorY], a
 	ld a, $09
 	ld [wd005], a
 	ld a, $06
-	ld [wcea9], a
+	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
 	ld [wceaa], a
 	ld a, $00
 	ld [wceab], a
-.asm_006_67f1
+.loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call UpdateRNGSources
 	ldh a, [hDPadHeld]
 	and START
-	jr z, .on_start
+	jr z, .else
+	; if pressed start button.
 	ld a, $01
-	call Func_006_6794
+	call PlaySFXByA
 	call Func_006_6a07
 	ld a, $06
-	ld [wd006], a
+	ld [wNamingScreenCursorX], a
 	ld a, $05
-	ld [wcea4], a
+	ld [wNamingScreenCursorY], a
 	call Func_006_6a23
-	jr .asm_006_67f1
-.on_start
-	call Func_006_6908
-	jr nc, .asm_006_67f1
+	jr .loop
+.else
+	call NamingScreen_CheckButtonState
+	jr nc, .loop ; if not pressed, go back to the loop.
 	cp $ff
-	jr z, .asm_006_682b
-	call Func_006_6a87
-	jr nc, .asm_006_67f1
-	call Func_006_6880
+	jr z, .on_b_button
+	; on A button.
+	call NamingScreen_ProcessInput
+	jr nc, .loop
+	; if the player selected the end button,
+	; end its naming.
+	call FinalizeInputName
 	ret
-.asm_006_682b
+.on_b_button
+	; erase one character.
 	ld a, [wNamingScreenBufferLength]
 	or a
-	jr z, .asm_006_67f1
+	jr z, .loop
 	ld e, a
 	ld d, $00
 	ld hl, wNamingScreenBuffer
@@ -572,13 +576,14 @@ OnNamingScreen: ; (6:67a3)
 	dec [hl]
 	dec [hl]
 	call PrintPlayerNameFromInput
-	jr .asm_006_67f1
+	jr .loop
 	
-; a: length
-; de: dest. pointer
-; hl: data pointer
-Func_006_6846:
-	ld [wd004], a
+; it's called when naming(either player's or deck's) starts.
+; a: maximum length of name.
+; de: dest. pointer.
+; hl: pointer to text item of the question.
+InitializeInputName:
+	ld [wNamingScreenBufferMaxLength], a
 	push hl
 	ld hl, wd007
 	ld [hl], b
@@ -587,23 +592,27 @@ Func_006_6846:
 	pop hl
 	ld b, h
 	ld c, l
-	ld hl, wd002
+	; set the question string.
+	ld hl, wNamingScreenQuestionPointer
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, wd000
+	; set the destination buffer.
+	ld hl, wNamingScreenDestPointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
+	; clear the name buffer.
 	ld a, $18
 	ld hl, wNamingScreenBuffer
 	call ClearMemory
 	ld hl, wNamingScreenBuffer
-	ld a, [wd004]
+	ld a, [wNamingScreenBufferMaxLength]
 	ld b, a
 	inc b
 .loop
-	; copy data from de to hl.
+	; copy data from de to hl
+	; for b bytes.
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -615,32 +624,37 @@ Func_006_6846:
 	ld [wNamingScreenBufferLength], a
 	ret
 
-Func_006_6880:
-	ld hl, wd000
+FinalizeInputName:
+	ld hl, wNamingScreenDestPointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	ld l, e
 	ld h, d
 	ld de, wNamingScreenBuffer
-	ld a, [wd004]
+	ld a, [wNamingScreenBufferMaxLength]
 	ld b, a
 	inc b
-	jr Func_006_6846.loop
+	jr InitializeInputName.loop
 
-Func_006_6892:
+; draws the keyboard frame
+; and the question if it exists.
+DrawNamingScreenBG:
 	call DrawTextboxForKeyboard
 	call PrintPlayerNameFromInput
-	ld hl, wd002
+	ld hl, wNamingScreenQuestionPointer
 	ld c, [hl]
 	inc hl
 	ld a, [hl]
 	ld h, a
 	or c
 	jr z, .put_text_end
+	; print the question string.
+	; ex) "What is your name?"
 	ld l, c
 	call PlaceTextItems
 .put_text_end
+	; print "End".
 	ld hl, .data
 	call PlaceTextItems
 	ld hl, $0221
@@ -666,7 +680,7 @@ PrintPlayerNameFromInput:
 	ld e, [hl]
 	push de
 	call InitTextPrinting
-	ld a, [wd004]
+	ld a, [wNamingScreenBufferMaxLength]
 	ld e, a
 	ld a, $14
 	sub e
@@ -691,30 +705,35 @@ rept 10
 endr
     db $00 ; null
 
-Func_006_6908:
+; check if button pressed.
+; if pressed, set the carry bit on.
+NamingScreen_CheckButtonState:
 	xor a
 	ld [wcfe3], a
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_006_69d9
+	jp z, .no_press
+	; detected any button press.
 	ld b, a
-	ld a, [wcea9]
+	ld a, [wNamingScreenKeyboardHeight]
 	ld c, a
-	ld a, [wd006]
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
-	bit 6, b
+	bit D_UP_F, b
 	jr z, .asm_006_692c
+	; up
 	dec a
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_006_69a7
 	ld a, c
 	dec a
 	jr .asm_006_69a7
 .asm_006_692c
-	bit 7, b
+	bit D_DOWN_F, b
 	jr z, .asm_006_6937
+	; down
 	inc a
 	cp c
 	jr c, .asm_006_69a7
@@ -724,8 +743,9 @@ Func_006_6908:
 	ld a, [wd005]
 	ld c, a
 	ld a, h
-	bit 5, b
+	bit D_LEFT_F, b
 	jr z, .asm_006_6974
+	; left
 	ld d, a
 	ld a, $06
 	cp l
@@ -734,7 +754,7 @@ Func_006_6908:
 	push hl
 	push bc
 	push af
-	call Func_006_6b93
+	call GetCharacterInfoFromCursorPos
 	inc hl
 	inc hl
 	inc hl
@@ -760,14 +780,14 @@ Func_006_6908:
 	jr .asm_006_69aa
 .asm_006_696b
 	dec a
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_006_69aa
 	ld a, c
 	dec a
 	jr .asm_006_69aa
 .asm_006_6974
-	bit 4, b
-	jr z, .asm_006_69d9
+	bit D_RIGHT_F, b
+	jr z, .no_press
 	ld d, a
 	ld a, $06
 	cp l
@@ -776,7 +796,7 @@ Func_006_6908:
 	push hl
 	push bc
 	push af
-	call Func_006_6b93
+	call GetCharacterInfoFromCursorPos
 	inc hl
 	inc hl
 	inc hl
@@ -813,7 +833,7 @@ Func_006_6908:
 	ld h, a
 .asm_006_69ab
 	push hl
-	call Func_006_6b93
+	call GetCharacterInfoFromCursorPos
 	inc hl
 	inc hl
 	inc hl
@@ -829,25 +849,25 @@ Func_006_6908:
 	pop de
 	pop hl
 	ld a, l
-	ld [wcea4], a
+	ld [wNamingScreenCursorY], a
 	ld a, h
-	ld [wd006], a
+	ld [wNamingScreenCursorX], a
 	xor a
 	ld [wcea3], a
 	ld a, $06
 	cp d
-	jp z, Func_006_6908
+	jp z, NamingScreen_CheckButtonState
 	ld a, $01
 	ld [wcfe3], a
-.asm_006_69d9
+.no_press
 	ldh a, [hKeysPressed]
-	and $03
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_006_69ef
-	and $01
+	and A_BUTTON
 	jr nz, .asm_006_69e5
 	ld a, $ff
 .asm_006_69e5
-	call Func_006_6794
+	call PlaySFXByA
 	push af
 	call Func_006_6a23
 	pop af
@@ -872,11 +892,11 @@ Func_006_6a07:
 	ld a, [wceab]
 .asm_006_6a0a
 	ld e, a
-	ld a, [wd006]
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call Func_006_6b93
+	call GetCharacterInfoFromCursorPos
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
@@ -906,7 +926,7 @@ Func_006_6a28:
 	ld a, [wNamingScreenBufferLength]
 	srl a
 	ld d, a
-	ld a, [wd004]
+	ld a, [wNamingScreenBufferMaxLength]
 	srl a
 	ld e, a
 	ld a, d
@@ -955,15 +975,13 @@ rept $6a87-$6a77
 	db $ff
 endr
 
-; bc = xy coordinate(by each tile) in the naming screen
-; hl = the pointer to its character information(by 6bytes)
-; info. structure: (1) / (1) / (1) / character code(2) / (1)
-Func_006_6a87:
-	ld a, [wd006]
+; set the carry bit on if "End" was selected.
+NamingScreen_ProcessInput:
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call Func_006_6b93
+	call GetCharacterInfoFromCursorPos
 	inc hl
 	inc hl
 	ld e, [hl]
@@ -971,7 +989,7 @@ Func_006_6a87:
 	ld a, [hli]
 	ld d, a
 	cp $09
-	jp z, .asm_006_6b5f
+	jp z, .on_end
 	cp $07
 	jr nz, .asm_006_6ab8
 	ld a, [wd009]
@@ -1004,7 +1022,7 @@ Func_006_6a87:
 	ld a, $01
 .asm_006_6ace
 	ld [wd009], a
-	call Func_006_6892
+	call DrawNamingScreenBG
 	or a
 	ret
 .asm_006_6ad6
@@ -1019,7 +1037,7 @@ Func_006_6a87:
 	cp c
 	jr nz, .asm_006_6af4
 	push hl
-	ld hl, $6cf9
+	ld hl, KeyboardData + ($6cf9 - $6baf)
 	call Func_006_6b61
 	pop hl
 	jr c, .asm_006_6b5d
@@ -1033,16 +1051,16 @@ Func_006_6a87:
 	cp c
 	jr nz, .asm_006_6b1d
 	push hl
-	ld hl, $6d5f
+	ld hl, KeyboardData + ($6d5f - $6baf)
 	call Func_006_6b61
 	pop hl
 	jr c, .asm_006_6b5d
 .asm_006_6b09
-	ld a, [wNamingScreenBufferLength] ; cfff: current player name length(by byte).
+	ld a, [wNamingScreenBufferLength]
 	dec a
 	dec a
 	ld [wNamingScreenBufferLength], a
-	ld hl, wNamingScreenBuffer ; cfe7: temporary buffer for player name.
+	ld hl, wNamingScreenBuffer
 	push de
 	ld d, $00
 	ld e, a
@@ -1081,7 +1099,7 @@ Func_006_6a87:
 	ld a, [hl]
 	ld c, a
 	push hl
-	ld hl, wd004
+	ld hl, wNamingScreenBufferMaxLength
 	cp [hl]
 	pop hl
 	jr nz, .asm_006_6b4c
@@ -1111,7 +1129,7 @@ Func_006_6a87:
 .asm_006_6b5d
 	or a
 	ret
-.asm_006_6b5f
+.on_end
 	scf
 	ret
 
@@ -1159,20 +1177,26 @@ Func_006_6b61:
 	scf
 	ret
 
-Func_006_6b93:
+; given the position of the current cursor,
+; it returns the pointer to the proper information.
+; h: position x.
+; l: position y.
+GetCharacterInfoFromCursorPos:
 	push de
+	; (information index) = (x) * (height) + (y)
+	; (height) = 0x05(Deck) or 0x06(Player)
 	ld e, l
 	ld d, h
-	ld a, [wcea9]
+	ld a, [wNamingScreenKeyboardHeight]
 	ld l, a
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, .data
+	ld hl, KeyboardData
 	pop de
 	or a
 	ret z
-.asm_006_6ba5
+.loop
 	inc hl
 	inc hl
 	inc hl
@@ -1180,12 +1204,99 @@ Func_006_6b93:
 	inc hl
 	inc hl
 	dec a
-	jr nz, .asm_006_6ba5
+	jr nz, .loop
 	ret
-.data
-    INCROM $1abaf, $1ad89
 
-Func_1ad89: ; 1ad89 (6:6d89)
+; a set of keyboard datum.
+; unit: 6 bytes.
+; structure:
+; unk 1 (1) / unk 2 (1) / type 1 (1) / type 2 (1) / character code(2)
+; - some of one byte characters have 0x0e in their high byte.
+; - unused data contains its character code as zero.
+KeyboardData: ; (6:6baf)
+	kbitem $04, $02, $11, $00, $0330
+	kbitem $06, $02, $12, $00, $0339
+	kbitem $08, $02, $13, $00, $0342
+	kbitem $0a, $02, $14, $00, $006f
+	kbitem $0c, $02, $15, $00, $0064
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $04, $16, $00, $0331
+	kbitem $06, $04, $17, $00, $033a
+	kbitem $08, $04, $18, $00, $0343
+	kbitem $0a, $04, $19, $00, $035d
+	kbitem $0c, $04, $1a, $00, $0065
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $06, $1b, $00, $0332
+	kbitem $06, $06, $1c, $00, $033b
+	kbitem $08, $06, $1d, $00, $0344
+	kbitem $0a, $06, $1e, $00, $006a
+	kbitem $0c, $06, $1f, $00, $0066
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $08, $20, $00, $0333
+	kbitem $06, $08, $21, $00, $033c
+	kbitem $08, $08, $22, $00, $0345
+	kbitem $0a, $08, $23, $00, $006b
+	kbitem $0c, $08, $24, $00, $0067
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $0a, $25, $00, $0334
+	kbitem $06, $0a, $26, $00, $033d
+	kbitem $08, $0a, $27, $00, $0346
+	kbitem $0a, $0a, $28, $00, $0077
+	kbitem $0c, $0a, $29, $00, $0068
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $0c, $2a, $00, $0335
+	kbitem $06, $0c, $2b, $00, $033e
+	kbitem $08, $0c, $2c, $00, $0347
+	kbitem $0a, $0c, $2d, $00, $0060
+	kbitem $0c, $0c, $2e, $00, $0069
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $0e, $2f, $00, $0336
+	kbitem $06, $0e, $30, $00, $033f
+	kbitem $08, $0e, $31, $00, $0348
+	kbitem $0a, $0e, $32, $00, $0061
+	kbitem $0c, $0e, $33, $00, $0513
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $10, $34, $00, $0337
+	kbitem $06, $10, $35, $00, $0340
+	kbitem $08, $10, $36, $00, $0349
+	kbitem $0a, $10, $3c, $00, $0062
+	kbitem $0c, $10, $3d, $00, $0511
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $04, $12, $37, $00, $0338
+	kbitem $06, $12, $38, $00, $0341
+	kbitem $08, $12, $39, $00, $006e
+	kbitem $0a, $12, $3a, $00, $0063
+	kbitem $0c, $12, $3b, $00, $0070
+	kbitem $10, $0f, $01, $09, $0000
+	kbitem $00, $00, $00, $00, $0000
+	kbitem $16, $0e, $3e, $00, $0e17
+	kbitem $3f, $00, $18, $0e, $0040
+	kbitem $19, $0e, $41, $00, $0e1a
+	kbitem $42, $00, $1b, $0e, $0043
+	kbitem $1c, $0e, $44, $00, $0e1d
+	kbitem $45, $00, $1e, $0e, $0046
+	kbitem $1f, $0e, $47, $00, $0e20
+	kbitem $48, $00, $21, $0e, $0049
+	kbitem $22, $0e, $4a, $00, $0e23
+	kbitem $4b, $00, $24, $0e, $004c
+	kbitem $2a, $0e, $4d, $00, $0e2b
+	kbitem $4e, $00, $2c, $0e, $004f
+	kbitem $2d, $0e, $50, $00, $0e2e
+	kbitem $51, $00, $52, $0e, $004d
+	kbitem $53, $0e, $4e, $00, $0e54
+	kbitem $4f, $00, $55, $0e, $0050
+	kbitem $56, $0e, $51, $00, $0000
+	kbitem $2a, $0e, $52, $00, $0e2b
+	kbitem $53, $00, $2c, $0e, $0054
+	kbitem $2d, $0e, $55, $00, $0e2e
+	kbitem $56, $00, $4d, $0e, $0052
+	kbitem $4e, $0e, $53, $00, $0e4f
+	kbitem $54, $00, $50, $0e, $0055
+	kbitem $51, $0e, $56, $00, $0000
+
+; get deck name from the user
+; into de.
+InputDeckName: ; 1ad89 (6:6d89)
 	push af
 	ld a, [de]
 	or a
@@ -1195,7 +1306,7 @@ Func_1ad89: ; 1ad89 (6:6d89)
 .asm_006_6d91
 	pop af
 	inc a
-	call Func_006_6846
+	call InitializeInputName
 	call Set_OBJ_8x8
 	xor a
 	ld [wTileMapFill], a
@@ -1206,17 +1317,17 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	call LoadSymbolsFont
 	lb de, $38, $bf
 	call SetupText
-	call FillVramWithF0
+	call FillVramWith0xF0
 	xor a
 	ld [wd009], a
 	call Func_006_6e99
 	xor a
-	ld [wd006], a
-	ld [wcea4], a
+	ld [wNamingScreenCursorX], a
+	ld [wNamingScreenCursorY], a
 	ld a, $09
 	ld [wd005], a
 	ld a, $07
-	ld [wcea9], a
+	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
 	ld [wceaa], a
 	ld a, $00
@@ -1230,11 +1341,11 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	and START
 	jr z, .on_start
 	ld a, $01
-	call Func_006_6794
+	call PlaySFXByA
 	call Func_006_6fa1
 	ld a, $06
-	ld [wd006], a
-	ld [wcea4], a
+	ld [wNamingScreenCursorX], a
+	ld [wNamingScreenCursorY], a
 	call Func_006_6fbd
 	jr .asm_006_6dd6
 .on_start
@@ -1244,8 +1355,8 @@ Func_1ad89: ; 1ad89 (6:6d89)
 	jr z, .asm_006_6e1c
 	call Func_006_6ec3
 	jr nc, .asm_006_6dd6
-	call Func_006_6880
-	ld hl, wd000
+	call FinalizeInputName
+	ld hl, wNamingScreenDestPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -1274,7 +1385,7 @@ Func_1ad89: ; 1ad89 (6:6d89)
 
 ; fill v0Tiles0 for 0x10 tiles
 ; with 0xF0.
-FillVramWithF0:
+FillVramWith0xF0:
 	ld hl, v0Tiles0
 	ld de, .data
 	ld b, $00
@@ -1329,18 +1440,21 @@ endr
 Func_006_6e99:
 	call DrawTextboxForKeyboard
 	call Func_006_6e59
-	ld hl, wd002
+	ld hl, wNamingScreenQuestionPointer
 	ld c, [hl]
 	inc hl
 	ld a, [hl]
 	ld h, a
 	or c
-	jr z, .asm_006_6ead
+	jr z, .print
+	; print the question string.
 	ld l, c
 	call PlaceTextItems
-.asm_006_6ead
-	ld hl, Func_006_6892.data
+.print
+	; print "End"
+	ld hl, DrawNamingScreenBG.data
 	call PlaceTextItems
+	; print the keyboard characters.
 	ldtx hl, NamingScreenKeyboardText ; "A B C D..."
 	ld de, $0204
 	call InitTextPrinting
@@ -1349,9 +1463,9 @@ Func_006_6e99:
 	ret
 
 Func_006_6ec3:
-	ld a, [wd006]
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
 	call Func_006_7000
 	inc hl
@@ -1367,7 +1481,7 @@ Func_006_6ec3:
 	ld a, [hl]
 	ld c, a
 	push hl
-	ld hl, wd004
+	ld hl, wNamingScreenBufferMaxLength
 	cp [hl]
 	pop hl
 	jr nz, .asm_006_6eeb
@@ -1394,11 +1508,11 @@ Func_006_6efb:
 	or a
 	jp z, .asm_006_6f73
 	ld b, a
-	ld a, [wcea9]
+	ld a, [wNamingScreenKeyboardHeight]
 	ld c, a
-	ld a, [wd006]
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
 	bit 6, b
 	jr z, .asm_006_6f1f
@@ -1454,9 +1568,9 @@ Func_006_6efb:
 	pop de
 	pop hl
 	ld a, l
-	ld [wcea4], a
+	ld [wNamingScreenCursorY], a
 	ld a, h
-	ld [wd006], a
+	ld [wNamingScreenCursorX], a
 	xor a
 	ld [wcea3], a
 	ld a, $02
@@ -1472,7 +1586,7 @@ Func_006_6efb:
 	jr nz, .asm_006_6f7f
 	ld a, $ff
 .asm_006_6f7f
-	call Func_006_6794
+	call PlaySFXByA
 	push af
 	call Func_006_6fbd
 	pop af
@@ -1497,9 +1611,9 @@ Func_006_6fa1:
 	ld a, [wceab]
 .asm_006_6fa4
 	ld e, a
-	ld a, [wd006]
+	ld a, [wNamingScreenCursorX]
 	ld h, a
-	ld a, [wcea4]
+	ld a, [wNamingScreenCursorY]
 	ld l, a
 	call Func_006_7000
 	ld a, [hli]
@@ -1530,7 +1644,7 @@ Func_006_6fc2:
 	jr z, .asm_006_6ffb
 	ld a, [wNamingScreenBufferLength]
 	ld d, a
-	ld a, [wd004]
+	ld a, [wNamingScreenBufferMaxLength]
 	ld e, a
 	ld a, d
 	cp e
@@ -1564,7 +1678,7 @@ Func_006_7000:
 	push de
 	ld e, l
 	ld d, h
-	ld a, [wcea9]
+	ld a, [wNamingScreenKeyboardHeight]
 	ld l, a
 	call HtimesL
 	ld a, l

@@ -1110,7 +1110,7 @@ MainMenuFunctionTable:
 
 MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
-	call InputPlayerName
+	call OnPlayerNamingScreen
 	farcall Func_1996e
 	call EnableSRAM
 	ld a, [s0a007]
@@ -1180,7 +1180,7 @@ Func_12871: ; 12871 (4:6871)
 Func_1288c: ; 1288c (4:688c)
 	INCROM $1288c, $128a9
 
-InputPlayerName:: ; 128a9 (4:68a9)
+OnPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; clear name buffer.
 	ld hl, wc500 ; c500: name buffer.
 	ld bc, $0010
@@ -1190,7 +1190,7 @@ InputPlayerName:: ; 128a9 (4:68a9)
 	; get player's name
 	; from the user into hl.
 	ld hl, wc500
-	farcall OnNamingScreen
+	farcall InputPlayerName
 	
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled

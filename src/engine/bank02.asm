@@ -272,7 +272,7 @@ Func_8f05: ; 8f05 (2:4f05)
 	ld a, $14
 	ld bc, $0401
 	ld de, wcfb9
-	farcall Func_1ad89
+	farcall InputDeckName
 	ld a, [wcfb9]
 	or a
 	ret nz
@@ -935,7 +935,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
-	ld [wcea9], a
+	ld [wNamingScreenKeyboardHeight], a
 	ld hl, $73fe
 	ld d, h
 	ld a, l
