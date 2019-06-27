@@ -446,22 +446,26 @@ Func_006_673a: ; (6:673a)
 	pop hl
 	ret
 
-WhatIsYourNameData: ; data
+WhatIsYourNameData: ; (6:675e)
 	textitem 1, 1, WhatIsYourNameText
 	db $ff
-
+; [Deck1Data ~ Deck4Data]
+; These are directed from (2:4f05),
+; without any bank description.
+; That is, the developers hard-coded it. -_-;;
+Deck1Data: ; (6:6763)
 	textitem 2, 1, Text022b
 	textitem 14, 1, Text0219
 	db $ff
-
+Deck2Data: ; (6:676c)
 	textitem 2, 1, Text022c
 	textitem 14, 1, Text0219
 	db $ff
-
+Deck3Data: ; (6:6775)
 	textitem 2, 1, Text022d
 	textitem 14, 1, Text0219
 	db $ff
-
+Deck4Data: ; (6:677e)
 	textitem 2, 1, Text022e
 	textitem 14, 1, Text0219
 	db $ff
@@ -1210,7 +1214,7 @@ GetCharacterInfoFromCursorPos:
 ; a set of keyboard datum.
 ; unit: 6 bytes.
 ; structure:
-; unk 1 (1) / unk 2 (1) / type 1 (1) / type 2 (1) / character code(2)
+; unk 1 (1) / unk 2 (1) / type 1 (1) / type 2 (1) / character (2)
 ; - some of one byte characters have 0x0e in their high byte.
 ; - unused data contains its character code as zero.
 KeyboardData: ; (6:6baf)
@@ -1696,10 +1700,11 @@ Func_006_7000:
 	ret
 
 ; a bunch of data
-Unknown_006_7019:
-    INCROM $1b019, $1ba12
+Unknown_006_7019: ; (6:7019)
+    INCROM $1b019, $1b8e8
+	INCROM $1b8e8, $1ba12
 
-Func_006_7a12: ; 1ba12
+Func_006_7a12: ; (6:7a12)
 	push af
 	ld [bc], a
 	call EnableSRAM

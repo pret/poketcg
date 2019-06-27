@@ -254,20 +254,20 @@ Func_8f05: ; 8f05 (2:4f05)
 	ld a, [wceb1]
 	or a
 	jr nz, .asm_8f10
-	ld hl, Unknown_a763
+	ld hl, Deck1Data
 	jr .asm_8f23
 .asm_8f10
 	dec a
 	jr nz, .asm_8f18
-	ld hl, Unknown_a76c
+	ld hl, Deck2Data
 	jr .asm_8f23
 .asm_8f18
 	dec a
 	jr nz, .asm_8f20
-	ld hl, Unknown_a775
+	ld hl, Deck3Data
 	jr .asm_8f23
 .asm_8f20
-	ld hl, Unknown_a77e
+	ld hl, Deck4Data
 .asm_8f23
 	ld a, $14
 	ld bc, $0401
@@ -789,19 +789,7 @@ Func_9e41: ; 9e41 (2:5e41)
 	INCROM $9e41, $a288
 
 Func_a288: ; a288 (2:6288)
-	INCROM $a288, $a763
-
-Unknown_a763: ; a763 (2:6763)
-	INCROM $a763, $a76c
-
-Unknown_a76c: ; a76c (2:676c)
-	INCROM $a76c, $a775
-
-Unknown_a775: ; a775 (2:6775)
-	INCROM $a775, $a77e
-
-Unknown_a77e: ; a77e (2:677e)
-	INCROM $a77e, $b177
+	INCROM $a288, $b177
 
 Func_b177: ; b177 (2:7177)
 	INCROM $b177, $b19d
