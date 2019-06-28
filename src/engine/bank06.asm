@@ -684,13 +684,16 @@ Func_006_4598: ; 18598 (6:4598)
 	call DrawRegularTextBox
 	ld a, [$ce62]
 	or a
-	jr nz, .asm_006_45c0
-	ld hl, Data_006_4607
-	jr .asm_006_45c3
-.asm_006_45c0
-	ld hl, Data_006_4634
-.asm_006_45c3
+	jr nz, .back_page
+	ld hl, GlossaryData1
+	jr .front_page
+.back_page
+	ld hl, GlossaryData2
+.front_page
 	pop af
+	; hl += (a + (a << 2)).
+	; that is,
+	; hl += (5 * a).
 	ld c, a
 	ld b, $00
 	add hl, bc
@@ -730,11 +733,66 @@ Func_006_4598: ; 18598 (6:4598)
 	farcall Func_90fb
 	ret
 
-Data_006_4607:
-	INCROM $18607, $18634
+; unit: 5 bytes.
+; [structure]
+; horizonal align (1) / text id 1 (2) / text id 2 (2)
+GlossaryData1:
+	db 7
+	tx Text02fa
+	tx Text030c
+	db 5
+	tx Text02fb
+	tx Text030d
+	db 7
+	tx Text02fc
+	tx Text030e
+	db 6
+	tx Text02fd
+	tx Text030f
+	db 6
+	tx Text02fe
+	tx Text0310
+	db 4
+	tx Text02ff
+	tx Text0311
+	db 5
+	tx Text0300
+	tx Text0312
+	db 7
+	tx Text0301
+	tx Text0313
+	db 5
+	tx Text0302
+	tx Text0314
 
-Data_006_4634:
-	INCROM $18634, $18661
+GlossaryData2:
+	db 5
+	tx Text0303
+	tx Text0315
+	db 5
+	tx Text0304
+	tx Text0316
+	db 5
+	tx Text0305
+	tx Text0317
+	db 5
+	tx Text0306
+	tx Text0318
+	db 6
+	tx Text0307
+	tx Text0319
+	db 5
+	tx Text0308
+	tx Text031a
+	db 6
+	tx Text0309
+	tx Text031b
+	db 6
+	tx Text030a
+	tx Text031c
+	db 6
+	tx Text030b
+	tx Text031d
 
 ; (6:4661)
 	xor a
@@ -833,7 +891,7 @@ Data_006_4634:
 ; (6:46f7)
 INCLUDE "data/effect_commands.asm"
 
-Func_006_49fc: ; 18f9c (6:4f9c)
+Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
@@ -921,7 +979,7 @@ Func_006_5014:
 	jr z, .asm_006_5063
 .asm_006_5026
 	call Func_3b6a
-	jr Func_006_49fc.asm_006_4fd4
+	jr Func_006_4f9c.asm_006_4fd4
 .asm_006_502b
 	ld a, $97
 	call Func_3b6a
@@ -944,7 +1002,7 @@ Func_006_5014:
 	ld a, $98
 	call Func_3b6a
 .asm_006_5054
-	jp Func_006_49fc.asm_006_4fd4
+	jp Func_006_4f9c.asm_006_4fd4
 .asm_006_5057
 	ld c, $61
 	ld b, $63
@@ -977,7 +1035,7 @@ Func_006_5079:
 	call Func_006_509d
 	ld a, $96
 	call Func_3b6a
-	jp Func_006_49fc.asm_006_4fd4
+	jp Func_006_4f9c.asm_006_4fd4
 
 PointerTable_006_508f: ; (6:508f)
 	dw Func_006_4fdc
@@ -2211,7 +2269,7 @@ GetCharacterInfoFromCursorPos:
 ; unit: 6 bytes.
 ; structure:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
-; - some of one byte characters have 0x0e in their high byte.
+; - some of one byte characters may have 0x0e in their high byte.
 ; - unused data contains its character code as zero.
 KeyboardData: ; (6:6baf)
 	kbitem $04, $02, $11, $00, $0330

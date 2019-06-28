@@ -7749,7 +7749,7 @@ Func_7494: ; 7494 (1:7494)
 	ld a, $02
 	ld [wLoadedMoveAnimation], a
 .asm_74d1
-	farcall Func_006_49fc
+	farcall Func_006_4f9c
 	pop bc
 	pop de
 	pop hl
