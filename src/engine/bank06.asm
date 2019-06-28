@@ -153,9 +153,7 @@ Func_180d5: ; 180d5 (6:40d5)
 .asm_006_40da
 	xor a
 	ld [wcea3], a
-	rst $28
-	ld [bc], a
-	adc $42
+	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
 	jr c, .asm_006_40ef
@@ -294,9 +292,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	inc sp
-	ld b, e
+	bank1call OpenPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
@@ -307,9 +303,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	add hl, hl
-	ld b, e
+	bank1call OpenOpponentPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
@@ -350,9 +344,7 @@ Func_006_4248:
 	call LoadCardDataToBuffer1_FromCardID
 	xor a
 	ld [wHUDEnergyAndHPBarsY], a
-	rst $18
-	ld l, d
-	ld d, a
+	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
 Func_006_426a:
@@ -372,18 +364,14 @@ Func_006_426a:
 	call LoadCardDataToBuffer1_FromCardID
 	xor a
 	ld [wHUDEnergyAndHPBarsY], a
-	rst $18
-	ld l, d
-	ld d, a
+	bank1call OpenCardPage_FromCheckPlayArea
 	call SwapTurn
 	ret
 
 Func_006_4293:
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	ld c, [hl]
-	ld b, e
+	bank1call Func_434e
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -391,9 +379,7 @@ Func_006_4293:
 Func_006_429d:
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	ld b, l
-	ld b, e
+	bank1call Func_4345
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -401,9 +387,7 @@ Func_006_429d:
 Func_006_42a7:
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	ld b, d
-	ld b, e
+	bank1call OpenPlayerDiscardPileScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -411,9 +395,7 @@ Func_006_42a7:
 Func_006_42b1:
 	ldh a, [hWhoseTurn]
 	push af
-	rst $18
-	add hl, sp
-	ld b, e
+	bank1call OpenOpponentDiscardPileScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -536,19 +518,13 @@ Func_006_43bb: ; 183bb (6:43bb)
 	and $01
 	jr nz, .asm_006_447d
 	ld a, $ff
-	rst $28
-	ld [bc], a
-	ei
-	ld d, b
+	farcall Func_90fb
 	scf
 	ret
 .asm_006_447d
 	call Func_006_44a0
 	ld a, $01
-	rst $28
-	ld [bc], a
-	ei
-	ld d, b
+	farcall Func_90fb
 	ld a, [$ce52]
 	scf
 	ret
@@ -615,24 +591,15 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ldh a, [hKeysPressed]
 	and $04
 	jr nz, .asm_006_4518
-	rst $28
-	ld [bc], a
-	xor [hl]
-	ld c, c
+	farcall $2, $49ae
 	jr nc, .asm_006_44e5
 	cp $ff
 	jr nz, .asm_006_4502
-	rst $28
-	ld [bc], a
-	and c
-	ld c, d
+	farcall $2, $4aa1
 	ret
 .asm_006_4502
 	push af
-	rst $28
-	ld [bc], a
-	and c
-	ld c, d
+	farcall $2, $4aa1
 	pop af
 	cp $09
 	jr z, .asm_006_451e
@@ -643,10 +610,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	jr .asm_006_44e5
 .asm_006_4518
 	ld a, $01
-	rst $28
-	ld [bc], a
-	ei
-	ld d, b
+	farcall Func_90fb
 .asm_006_451e
 	ld a, [$ce62]
 	xor $01
@@ -663,10 +627,7 @@ Func_006_452b: ; 1852b (6:452b)
 	call DoFrame
 	call EmptyScreen
 	call Set_OBJ_8x8
-	rst $28
-	ld [bc], a
-	sub d
-	ld c, c
+	farcall $2, $4992
 	ld de, $0500
 	call InitTextPrinting
 	ld hl, $02f6
@@ -766,10 +727,7 @@ Func_006_4598: ; 18598 (6:4598)
 	and $02
 	jr z, .asm_006_45f7
 	ld a, $ff
-	rst $28
-	ld [bc], a
-	ei
-	ld d, b
+	farcall Func_90fb
 	ret
 
 Data_006_4607:
@@ -1096,9 +1054,7 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [wDuelDisplayedScreen]
 	cp $01
 	jr z, .asm_006_510e
-	rst $18
-	sbc l
-	ld c, a
+	bank1call DrawDuelMainScene
 .asm_006_510e
 	ret
 .asm_006_510f
@@ -1187,9 +1143,7 @@ Func_006_5168: ; 19168 (6:5168)
 	ld a, [wDuelDisplayedScreen]
 	cp $01
 	ret nz
-	rst $18
-	ld a, [hld]
-	ld d, b
+	bank1call DrawDuelHUDs
 	ret
 
 	INCROM $191a3, $1996e
