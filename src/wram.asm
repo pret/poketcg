@@ -363,8 +363,9 @@ ENDU
 wOpponentDeck:: ; c480
 	ds $80
 
-wc500:: ; c500
-	ds $10
+; this holds names like player's or opponent's.
+wNameBuffer:: ; c500
+	ds NAME_BUFFER_LENGTH
 
 ; this holds an $ff-terminated list of card deck indexes (e.g. cards in hand or in bench)
 ; or (less often) the attack list of a Pokemon card
@@ -1499,7 +1500,8 @@ wd005:: ; d005
 wNamingScreenCursorX:: ; d006
 	ds $1
 
-wd007:: ; d007
+; the position to display the input on.
+wNamingScreenNamePosition:: ; d007
 	ds $2
 
 wd009:: ; d009

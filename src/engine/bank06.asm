@@ -731,7 +731,7 @@ Func_006_4598: ; 18598 (6:4598)
 .asm_006_45f7
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and $02
+	and B_BUTTON
 	jr z, .asm_006_45f7
 	ld a, $ff
 	farcall Func_90fb
@@ -1532,9 +1532,9 @@ PlaySFXByA: ; (6:6794)
 InputPlayerName: ; (6:67a3)
 	ld e, l
 	ld d, h
-	ld a, $0c
+	ld a, MAX_PLAYER_NAME_LENGTH
 	ld hl, WhatIsYourNameData
-	lb bc, $0c, $01
+	lb bc, 12, 1
 	call InitializeInputName
 	call Set_OBJ_8x8
 	xor a
@@ -1573,9 +1573,9 @@ InputPlayerName: ; (6:67a3)
 	ld a, $01
 	call PlaySFXByA
 	call Func_006_6a07
-	ld a, $06
+	ld a, 6
 	ld [wNamingScreenCursorX], a
-	ld a, $05
+	ld a, 5
 	ld [wNamingScreenCursorY], a
 	call Func_006_6a23
 	jr .loop
@@ -1597,12 +1597,12 @@ InputPlayerName: ; (6:67a3)
 	jr z, .loop ; empty string?
 	; erase one character.
 	ld e, a
-	ld d, $00
+	ld d, 0
 	ld hl, wNamingScreenBuffer
 	add hl, de
 	dec hl
 	dec hl
-	ld [hl], $00
+	ld [hl], TX_END
 	ld hl, wNamingScreenBufferLength ; note that its unit is byte, not word.
 	dec [hl]
 	dec [hl]
@@ -1611,12 +1611,13 @@ InputPlayerName: ; (6:67a3)
 	
 ; it's called when naming(either player's or deck's) starts.
 ; a: maximum length of name(depending on whether player's or deck's).
+; bc: position of name.
 ; de: dest. pointer.
 ; hl: pointer to text item of the question.
 InitializeInputName:
 	ld [wNamingScreenBufferMaxLength], a
 	push hl
-	ld hl, wd007
+	ld hl, wNamingScreenNamePosition
 	ld [hl], b
 	inc hl
 	ld [hl], c
@@ -1634,7 +1635,7 @@ InitializeInputName:
 	inc hl
 	ld [hl], d
 	; clear the name buffer.
-	ld a, $18
+	ld a, NAMING_SCREEN_BUFFER_LENGTH
 	ld hl, wNamingScreenBuffer
 	call ClearMemory
 	ld hl, wNamingScreenBuffer
@@ -1699,13 +1700,13 @@ DrawNamingScreenBG:
 	db $ff
 
 DrawTextboxForKeyboard:
-	ld de, $0003 ; x, y
-	ld bc, $140f ; w, h
+	lb de, 0, 3 ; x, y
+	lb bc, 20, 15 ; w, h
 	call DrawRegularTextBox
 	ret
 
 PrintPlayerNameFromInput:
-	ld hl, wd007
+	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -1965,7 +1966,7 @@ Func_006_6a28:
 	jr nz, .asm_006_6a49
 	dec a
 .asm_006_6a49
-	ld hl, wd007
+	ld hl, wNamingScreenNamePosition
 	add [hl]
 	ld d, a
 	ld h, $08
@@ -2329,20 +2330,24 @@ KeyboardData: ; (6:6baf)
 	kbitem $54, $00, $50, $0e, $0055
 	kbitem $51, $0e, $56, $00, $0000
 
-; get deck name from the user
-; into de.
+; get deck name from the user into de.
+; function description is similar to the player's.
+; refer to 'InputPlayerName'.
 InputDeckName: ; 1ad89 (6:6d89)
 	push af
+	; check if the buffer is empty.
 	ld a, [de]
 	or a
-	jr nz, .asm_006_6d91
-	ld a, $06
+	jr nz, .not_empty
+	; this buffer will contain half-width chars.
+	ld a, TX_HALFWIDTH
 	ld [de], a
-.asm_006_6d91
+.not_empty
 	pop af
 	inc a
 	call InitializeInputName
 	call Set_OBJ_8x8
+
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
@@ -2367,7 +2372,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld [wceaa], a
 	ld a, $00
 	ld [wceab], a
-.asm_006_6dd6
+.loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
@@ -2378,18 +2383,18 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld a, $01
 	call PlaySFXByA
 	call Func_006_6fa1
-	ld a, $06
+	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
 	call Func_006_6fbd
-	jr .asm_006_6dd6
+	jr .loop
 .on_start
 	call Func_006_6efb
-	jr nc, .asm_006_6dd6
+	jr nc, .loop
 	cp $ff
 	jr z, .asm_006_6e1c
 	call Func_006_6ec3
-	jr nc, .asm_006_6dd6
+	jr nc, .loop
 	call FinalizeInputName
 	ld hl, wNamingScreenDestPointer
 	ld a, [hli]
@@ -2400,23 +2405,23 @@ InputDeckName: ; 1ad89 (6:6d89)
 	or a
 	jr nz, .asm_006_6e1b
 	dec hl
-	ld [hl], $00
+	ld [hl], TX_END
 .asm_006_6e1b
 	ret
 .asm_006_6e1c
 	ld a, [wNamingScreenBufferLength]
 	cp $02
-	jr c, .asm_006_6dd6
+	jr c, .loop
 	ld e, a
-	ld d, $00
+	ld d, 0
 	ld hl, wNamingScreenBuffer
 	add hl, de
 	dec hl
-	ld [hl], $00
+	ld [hl], TX_END
 	ld hl, wNamingScreenBufferLength
 	dec [hl]
 	call ProcessTextWithUnderbar
-	jp .asm_006_6dd6
+	jp .loop
 
 ; fill v0Tiles0 for 0x10 tiles
 ; with 0xF0.
@@ -2439,7 +2444,7 @@ rept $10
 endr
 
 ProcessTextWithUnderbar:
-	ld hl, wd007
+	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -2688,7 +2693,7 @@ Func_006_6fc2:
 .asm_006_6fdf
 	dec a
 	ld d, a
-	ld hl, wd007
+	ld hl, wNamingScreenNamePosition
 	ld a, [hl]
 	sla a
 	add d

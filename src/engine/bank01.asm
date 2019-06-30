@@ -6112,7 +6112,7 @@ DuelDataToSave: ; 6729 (1:6729)
 ;	dw address, number_of_bytes_to_copy
 	dw wPlayerDuelVariables, wOpponentDuelVariables - wPlayerDuelVariables
 	dw wOpponentDuelVariables, wPlayerDeck - wOpponentDuelVariables
-	dw wPlayerDeck, wc500 + $10 - wPlayerDeck
+	dw wPlayerDeck, wNameBuffer + $10 - wPlayerDeck
 	dw wWhoseTurn, wDuelTheme + $1 - wWhoseTurn
 	dw hWhoseTurn, $1
 	dw wRNG1, wRNGCounter + $1 - wRNG1

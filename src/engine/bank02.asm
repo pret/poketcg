@@ -254,6 +254,7 @@ Func_8f05: ; 8f05 (2:4f05)
 	ld a, [wceb1]
 	or a
 	jr nz, .asm_8f10
+	; it refers to a data in the other bank without any bank desc.
 	ld hl, Deck1Data
 	jr .asm_8f23
 .asm_8f10
@@ -269,8 +270,8 @@ Func_8f05: ; 8f05 (2:4f05)
 .asm_8f20
 	ld hl, Deck4Data
 .asm_8f23
-	ld a, $14
-	ld bc, $0401
+	ld a, MAX_DECK_NAME_LENGTH
+	lb bc, 4, 1
 	ld de, wcfb9
 	farcall InputDeckName
 	ld a, [wcfb9]

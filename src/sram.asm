@@ -25,7 +25,7 @@ s0a00c:: ; a00c
 	ds $4
 
 sPlayerName:: ; a010
-	ds $10
+	ds NAME_BUFFER_LENGTH
 
 	ds $e0
 

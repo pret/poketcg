@@ -5351,7 +5351,7 @@ CopyOpponentName: ; 1c8e (0:1c8e)
 	ld h, a
 	jp CopyText
 .special_name
-	ld hl, wc500
+	ld hl, wNameBuffer
 	ld a, [hl]
 	or a
 	jr z, .print_player2

@@ -1182,20 +1182,20 @@ Func_1288c: ; 1288c (4:688c)
 
 DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; clear the name buffer.
-	ld hl, wc500 ; c500: name buffer.
-	ld bc, PLAYER_NAME_LENGTH
+	ld hl, wNameBuffer ; c500: name buffer.
+	ld bc, NAME_BUFFER_LENGTH
 	ld a, TX_END
 	call FillMemoryWithA
 
 	; get player's name
 	; from the user into hl.
-	ld hl, wc500
+	ld hl, wNameBuffer
 	farcall InputPlayerName
 	
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	call DisableLCD
-	ld hl, wc500
+	ld hl, wNameBuffer
 	; get the first byte of the name buffer.
 	ld a, [hl]
 	or a
@@ -1205,7 +1205,7 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 .no_name
 	; set the default name.
 	ld de, sPlayerName
-	ld bc, PLAYER_NAME_LENGTH
+	ld bc, NAME_BUFFER_LENGTH
 	call EnableSRAM
 	call CopyDataHLtoDE_SaveRegisters
 	; it seems for integrity checking.
