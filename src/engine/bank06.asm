@@ -236,7 +236,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call InitTextPrinting
 	pop af
 	ld hl, Data_006_42bb
-	ld b, $00
+	ld b, 0
 	sla a
 	ld c, a
 	add hl, bc
@@ -309,7 +309,6 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld a, [$ce57]
 	ld [$ce52], a
 	jp .asm_006_40da
-
 .jump_table ; (6:4228)
 	dw Func_006_4248
 	dw Func_006_4248
@@ -583,7 +582,6 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld [$ce55], a
 	xor a
 	ld [wcea3], a
-
 .asm_006_44e5
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -699,7 +697,7 @@ Func_006_4598: ; 18598 (6:4598)
 	; that is,
 	; hl += (5 * a).
 	ld c, a
-	ld b, $00
+	ld b, 0
 	add hl, bc
 	sla a
 	sla a
@@ -755,7 +753,6 @@ GlossaryData1:
 	glossary_entry 5, Text0300, Text0312
 	glossary_entry 7, Text0301, Text0313
 	glossary_entry 5, Text0302, Text0314
-
 GlossaryData2:
 	glossary_entry 5, Text0303, Text0315
 	glossary_entry 5, Text0304, Text0316
@@ -869,7 +866,7 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	or a
 	ret z
 	ld l, a
-	ld h, $00
+	ld h, 0
 	add hl, hl
 	ld de, $51a4
 .asm_006_4fa8
@@ -1102,7 +1099,7 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [wWhoseTurn]
 	ld l, a
 .asm_006_5127
-	call $30bc
+	call Func_30bc
 	pop af
 	ld [wDuelDisplayedScreen], a
 .asm_006_512e
@@ -1786,7 +1783,7 @@ NamingScreen_CheckButtonState:
 	push hl
 	push bc
 	push af
-	call GetCharacterInfoFromCursorPos
+	call GetCharInfoFromPos_Player
 	inc hl
 	inc hl
 	inc hl
@@ -1828,7 +1825,7 @@ NamingScreen_CheckButtonState:
 	push hl
 	push bc
 	push af
-	call GetCharacterInfoFromCursorPos
+	call GetCharInfoFromPos_Player
 	inc hl
 	inc hl
 	inc hl
@@ -1865,7 +1862,7 @@ NamingScreen_CheckButtonState:
 	ld h, a
 .asm_006_69ab
 	push hl
-	call GetCharacterInfoFromCursorPos
+	call GetCharInfoFromPos_Player
 	inc hl
 	inc hl
 	inc hl
@@ -1928,7 +1925,7 @@ Func_006_6a07:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharacterInfoFromCursorPos
+	call GetCharInfoFromPos_Player
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
@@ -1988,7 +1985,7 @@ Func_006_6a28:
 SetVram0xFF:
 	ld hl, v0Tiles0
 	ld de, .data
-	ld b, $00
+	ld b, 0
 .loop
 	; copy data from de to hl
 	; for 0x10 bytes.
@@ -2003,19 +2000,21 @@ SetVram0xFF:
 	ld [hli], a
 	jr .loop
 .data
-rept $6a87-$6a77
+rept $10
 	db $ff
 endr
 
-; set the carry bit on if "End" was selected.
+; set the carry bit on,
+; if "End" was selected.
 NamingScreen_ProcessInput:
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call GetCharacterInfoFromCursorPos
+	call GetCharInfoFromPos_Player
 	inc hl
 	inc hl
+	; load types into de.
 	ld e, [hl]
 	inc hl
 	ld a, [hli]
@@ -2061,7 +2060,7 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
-	ld bc, $0359
+	ld bc, $0359 ; “
 	ld a, d
 	cp b
 	jr nz, .asm_006_6af4
@@ -2069,13 +2068,13 @@ NamingScreen_ProcessInput:
 	cp c
 	jr nz, .asm_006_6af4
 	push hl
-	ld hl, KeyboardData + ($6cf9 - $6baf)
-	call Func_006_6b61
+	ld hl, TransitionTable1 ; from 55th.
+	call TransformCharacter
 	pop hl
-	jr c, .asm_006_6b5d
+	jr c, .nothing
 	jr .asm_006_6b09
 .asm_006_6af4
-	ld bc, $035b
+	ld bc, $035b ; º
 	ld a, d
 	cp b
 	jr nz, .asm_006_6b1d
@@ -2083,10 +2082,10 @@ NamingScreen_ProcessInput:
 	cp c
 	jr nz, .asm_006_6b1d
 	push hl
-	ld hl, KeyboardData + ($6d5f - $6baf)
-	call Func_006_6b61
+	ld hl, TransitionTable2 ; from 72th.
+	call TransformCharacter
 	pop hl
-	jr c, .asm_006_6b5d
+	jr c, .nothing
 .asm_006_6b09
 	ld a, [wNamingScreenBufferLength]
 	dec a
@@ -2094,7 +2093,7 @@ NamingScreen_ProcessInput:
 	ld [wNamingScreenBufferLength], a
 	ld hl, wNamingScreenBuffer
 	push de
-	ld d, $00
+	ld d, 0
 	ld e, a
 	add hl, de
 	pop de
@@ -2107,10 +2106,10 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	or a
 	jr nz, .asm_006_6b2b
-	ld a, $0e
+	ld a, TX_HIRAGANA
 	jr .asm_006_6b37
 .asm_006_6b2b
-	ld a, $0f
+	ld a, TX_KATAKANA
 	jr .asm_006_6b37
 ; read character code from info. to register.
 ; hl: pointer.
@@ -2150,62 +2149,71 @@ NamingScreen_ProcessInput:
 ; de: 2 bytes character codes.
 ; hl: dest.
 .asm_006_6b51
-	ld b, $00
+	ld b, 0
 	add hl, bc
 	ld [hl], d
 	inc hl
 	ld [hl], e
 	inc hl
-	ld [hl], $00 ; null terminator.
+	ld [hl], TX_END ; null terminator.
 	call PrintPlayerNameFromInput
-.asm_006_6b5d
+.nothing
 	or a
 	ret
 .on_end
 	scf
 	ret
 
-Func_006_6b61:
+; this transforms the last japanese character
+; in the name buffer into its dakuon shape or something.
+; it seems to have been deprecated as the game was translated into english.
+; but it can still be applied to english, such as upper-lower case transition.
+; hl: info. pointer.
+TransformCharacter:
 	ld a, [wNamingScreenBufferLength]
 	or a
-	jr z, .asm_006_6b91
+	jr z, .return ; if the length is zero, just return.
 	dec a
 	dec a
 	push hl
 	ld hl, wNamingScreenBuffer
-	ld d, $00
+	ld d, 0
 	ld e, a
 	add hl, de
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, $0f
+	; de: last character in the buffer,
+	; but byte-wise swapped.
+	ld a, TX_KATAKANA
 	cp e
-	jr nz, .asm_006_6b7a
+	jr nz, .hiragana
+	; if it's katakana,
+	; make it hiragana by decreasing its high byte.
 	dec e
-.asm_006_6b7a
+.hiragana
 	pop hl
-.asm_006_6b7b
+.loop
 	ld a, [hli]
 	or a
-	jr z, .asm_006_6b91
+	jr z, .return
 	cp d
-	jr nz, .asm_006_6b8c
+	jr nz, .next
 	ld a, [hl]
 	cp e
-	jr nz, .asm_006_6b8c
+	jr nz, .next
 	inc hl
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	or a
 	ret
-.asm_006_6b8c
+.next
 	inc hl
 	inc hl
 	inc hl
-	jr .asm_006_6b7b
-.asm_006_6b91
+	jr .loop
+.return
 	scf
 	ret
 
@@ -2213,7 +2221,7 @@ Func_006_6b61:
 ; it returns the pointer to the proper information.
 ; h: position x.
 ; l: position y.
-GetCharacterInfoFromCursorPos:
+GetCharInfoFromPos_Player:
 	push de
 	; (information index) = (x) * (height) + (y)
 	; (height) = 0x05(Deck) or 0x06(Player)
@@ -2224,7 +2232,7 @@ GetCharacterInfoFromCursorPos:
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, KeyboardData
+	ld hl, KeyboardData_Player
 	pop de
 	or a
 	ret z
@@ -2243,13 +2251,12 @@ GetCharacterInfoFromCursorPos:
 ; unit: 6 bytes.
 ; structure:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
-; - some of one byte characters may have 0x0e in their high byte.
 ; - unused data contains its character code as zero.
 kbitem: MACRO
 	db \1, \2, \3, \4
 	dw \5
 ENDM
-KeyboardData: ; (6:6baf)
+KeyboardData_Player: ; (6:6baf)
 	kbitem $04, $02, $11, $00, $0330
 	kbitem $06, $02, $12, $00, $0339
 	kbitem $08, $02, $13, $00, $0342
@@ -2305,30 +2312,51 @@ KeyboardData: ; (6:6baf)
 	kbitem $0c, $12, $3b, $00, $0070
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
-	kbitem $16, $0e, $3e, $00, $0e17
-	kbitem $3f, $00, $18, $0e, $0040
-	kbitem $19, $0e, $41, $00, $0e1a
-	kbitem $42, $00, $1b, $0e, $0043
-	kbitem $1c, $0e, $44, $00, $0e1d
-	kbitem $45, $00, $1e, $0e, $0046
-	kbitem $1f, $0e, $47, $00, $0e20
-	kbitem $48, $00, $21, $0e, $0049
-	kbitem $22, $0e, $4a, $00, $0e23
-	kbitem $4b, $00, $24, $0e, $004c
-	kbitem $2a, $0e, $4d, $00, $0e2b
-	kbitem $4e, $00, $2c, $0e, $004f
-	kbitem $2d, $0e, $50, $00, $0e2e
-	kbitem $51, $00, $52, $0e, $004d
-	kbitem $53, $0e, $4e, $00, $0e54
-	kbitem $4f, $00, $55, $0e, $0050
-	kbitem $56, $0e, $51, $00, $0000
-	kbitem $2a, $0e, $52, $00, $0e2b
-	kbitem $53, $00, $2c, $0e, $0054
-	kbitem $2d, $0e, $55, $00, $0e2e
-	kbitem $56, $00, $4d, $0e, $0052
-	kbitem $4e, $0e, $53, $00, $0e4f
-	kbitem $54, $00, $50, $0e, $0055
-	kbitem $51, $0e, $56, $00, $0000
+; a set of transition datum.
+; unit: 4 bytes.
+; structure:
+; previous char. code (2) / translated char. code (2)
+; - the former char. code contains 0x0e in high byte.
+; - the latter char. code contains only low byte.
+TransitionTable1:
+	dw $0e16, $003e
+	dw $0e17, $003f
+	dw $0e18, $0040
+	dw $0e19, $0041
+	dw $0e1a, $0042
+	dw $0e1b, $0043
+	dw $0e1c, $0044
+	dw $0e1d, $0045
+	dw $0e1e, $0046
+	dw $0e1f, $0047
+	dw $0e20, $0048
+	dw $0e21, $0049
+	dw $0e22, $004a
+	dw $0e23, $004b
+	dw $0e24, $004c
+	dw $0e2a, $004d
+	dw $0e2b, $004e
+	dw $0e2c, $004f
+	dw $0e2d, $0050
+	dw $0e2e, $0051
+	dw $0e52, $004d
+	dw $0e53, $004e
+	dw $0e54, $004f
+	dw $0e55, $0050
+	dw $0e56, $0051
+	dw $0000
+TransitionTable2:
+	dw $0e2a, $0052
+	dw $0e2b, $0053
+	dw $0e2c, $0054
+	dw $0e2d, $0055
+	dw $0e2e, $0056
+	dw $0e4d, $0052
+	dw $0e4e, $0053
+	dw $0e4f, $0054
+	dw $0e50, $0055
+	dw $0e51, $0056
+	dw $0000
 
 ; get deck name from the user into de.
 ; function description is similar to the player's.
@@ -2352,18 +2380,23 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld [wTileMapFill], a
 	call EmptyScreen
 	call ZeroObjectPositions
+
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
+
 	lb de, $38, $bf
 	call SetupText
 	call FillVramWith0xF0
+
 	xor a
 	ld [wd009], a
 	call Func_006_6e99
+
 	xor a
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
+
 	ld a, $09
 	ld [wd005], a
 	ld a, $07
@@ -2376,51 +2409,65 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
+
 	call UpdateRNGSources
+
 	ldh a, [hDPadHeld]
 	and START
 	jr z, .on_start
+
 	ld a, $01
 	call PlaySFXByA
 	call Func_006_6fa1
+
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
 	call Func_006_6fbd
+
 	jr .loop
 .on_start
 	call Func_006_6efb
 	jr nc, .loop
+
 	cp $ff
 	jr z, .asm_006_6e1c
+
 	call Func_006_6ec3
 	jr nc, .loop
+
 	call FinalizeInputName
+
 	ld hl, wNamingScreenDestPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	inc hl
+
 	ld a, [hl]
 	or a
-	jr nz, .asm_006_6e1b
+	jr nz, .return
+
 	dec hl
 	ld [hl], TX_END
-.asm_006_6e1b
+.return
 	ret
 .asm_006_6e1c
 	ld a, [wNamingScreenBufferLength]
 	cp $02
 	jr c, .loop
+
 	ld e, a
 	ld d, 0
 	ld hl, wNamingScreenBuffer
 	add hl, de
 	dec hl
 	ld [hl], TX_END
+
 	ld hl, wNamingScreenBufferLength
 	dec [hl]
 	call ProcessTextWithUnderbar
+
 	jp .loop
 
 ; fill v0Tiles0 for 0x10 tiles
@@ -2428,7 +2475,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 FillVramWith0xF0:
 	ld hl, v0Tiles0
 	ld de, .data
-	ld b, $00
+	ld b, 0
 .asm_006_6e3f
 	ld a, $10
 	cp b
@@ -2443,6 +2490,7 @@ rept $10
     db $f0
 endr
 
+; it's only for naming the deck.
 ProcessTextWithUnderbar:
 	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
@@ -2451,31 +2499,32 @@ ProcessTextWithUnderbar:
 	call InitTextPrinting
 	ld hl, .underbar_data
 	ld de, wDefaultText
-.asm_006_6e68
+.loop ; copy the underbar string.
 	ld a, [hli]
 	ld [de], a
 	inc de
 	or a
-	jr nz, .asm_006_6e68
+	jr nz, .loop
+
 	ld hl, wNamingScreenBuffer
 	ld de, wDefaultText
-.asm_006_6e74
+.loop2 ; copy the input from the user.
 	ld a, [hli]
 	or a
-	jr z, .asm_006_6e7c
+	jr z, .print_name
 	ld [de], a
 	inc de
-	jr .asm_006_6e74
-.asm_006_6e7c
+	jr .loop2
+.print_name
 	ld hl, wDefaultText
 	call ProcessText
 	ret
 .underbar_data
-	db $06
-rept $14
+	db TX_HALFWIDTH
+rept MAX_DECK_NAME_LENGTH
 	db "_"
 endr
-	db $00
+	db TX_END
 
 Func_006_6e99:
 	call DrawTextboxForKeyboard
@@ -2507,7 +2556,7 @@ Func_006_6ec3:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call Func_006_7000
+	call GetCharInfoFromPos_Deck
 	inc hl
 	inc hl
 	ld a, [hl]
@@ -2532,11 +2581,11 @@ Func_006_6ec3:
 	inc [hl]
 	ld hl, wNamingScreenBuffer
 .asm_006_6eef
-	ld b, $00
+	ld b, 0
 	add hl, bc
 	ld [hl], d
 	inc hl
-	ld [hl], $00
+	ld [hl], TX_END
 	call ProcessTextWithUnderbar
 	or a
 	ret
@@ -2599,7 +2648,7 @@ Func_006_6efb:
 	ld h, a
 .asm_006_6f4f
 	push hl
-	call Func_006_7000
+	call GetCharInfoFromPos_Deck
 	inc hl
 	inc hl
 	ld d, [hl]
@@ -2655,7 +2704,7 @@ Func_006_6fa1:
 	ld h, a
 	ld a, [wNamingScreenCursorY]
 	ld l, a
-	call Func_006_7000
+	call GetCharInfoFromPos_Deck
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
@@ -2714,7 +2763,14 @@ Func_006_6fc2:
 	pop af
 	ret
 
-Func_006_7000:
+; given the cursor position,
+; returns the character information which the cursor directs.
+; it's similar to "GetCharInfoFromPos_Player",
+; but the data structure is different in its unit size.
+; its unit size is 3, and player's is 6.
+; h: x
+; l: y
+GetCharInfoFromPos_Deck:
 	push de
 	ld e, l
 	ld d, h
@@ -2723,20 +2779,21 @@ Func_006_7000:
 	call HtimesL
 	ld a, l
 	add e
-	ld hl, Unknown_006_7019
+	; x * h + y
+	ld hl, KeyboardData_Deck
 	pop de
 	or a
 	ret z
-.asm_006_7012
+.loop
 	inc hl
 	inc hl
 	inc hl
 	dec a
-	jr nz, .asm_006_7012
+	jr nz, .loop
 	ret
 
 ; a bunch of data
-Unknown_006_7019: ; (6:7019)
+KeyboardData_Deck: ; (6:7019)
     INCROM $1b019, $1b8e8
 	INCROM $1b8e8, $1ba12
 

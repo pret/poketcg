@@ -160,7 +160,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wTextBoxFrameType], a
-	farcall $1, $7599
+	farcall Func_7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	pop af
