@@ -2244,6 +2244,10 @@ GetCharacterInfoFromCursorPos:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
 ; - some of one byte characters may have 0x0e in their high byte.
 ; - unused data contains its character code as zero.
+kbitem: MACRO
+	db \1, \2, \3, \4
+	dw \5
+ENDM
 KeyboardData: ; (6:6baf)
 	kbitem $04, $02, $11, $00, $0330
 	kbitem $06, $02, $12, $00, $0339
