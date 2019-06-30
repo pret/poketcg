@@ -199,19 +199,19 @@ Func_180d5: ; 180d5 (6:40d5)
 	cp $ff
 	jr nz, .asm_006_4153
 	call Func_006_44bf
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	scf
 	ret
 .asm_006_4148
 	call Func_006_44bf
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	or a
 	ret
 .asm_006_4153
 	call Func_006_44bf
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	ld a, [$ce52]
 	ld [$ce57], a
@@ -222,7 +222,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	jp .asm_006_40da
 .asm_006_4171 ; 18171 (6:4171)
 	push af
-	ld de, $0111
+	lb de, 1, 17
 	call InitTextPrinting
 	ldtx hl, Text0251
 	call ProcessTextFromID
@@ -232,7 +232,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $00
-	ld de, $0111
+	lb de, 1, 17
 	call InitTextPrinting
 	pop af
 	ld hl, Data_006_42bb
@@ -253,25 +253,25 @@ Func_180d5: ; 180d5 (6:40d5)
 	cp $06
 	jr nc, .asm_006_41c2
 	ld a, l
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	jr .asm_006_41d7
 .asm_006_41c2
 	ld a, l
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	call SwapTurn
 .asm_006_41d7
-	ld a, $12
+	ld a, 18
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call ProcessText
@@ -288,7 +288,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call SwapTurn
 	ret
 .asm_006_41f8
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
@@ -299,7 +299,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld [$ce52], a
 	jp .asm_006_40da
 .asm_006_4210
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
@@ -336,14 +336,14 @@ Func_006_4248:
 	xor a
 .asm_006_4251
 	ld [wHUDEnergyAndHPBarsX], a
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	xor a
-	ld [wHUDEnergyAndHPBarsY], a
+	ld [wCurPlayAreaY], a
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
@@ -355,15 +355,15 @@ Func_006_426a:
 	sub $02
 .asm_006_4274
 	ld [wHUDEnergyAndHPBarsX], a
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-	cp $ff
+	cp -1
 	ret z
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	xor a
-	ld [wHUDEnergyAndHPBarsY], a
+	ld [wCurPlayAreaY], a
 	bank1call OpenCardPage_FromCheckPlayArea
 	call SwapTurn
 	ret
@@ -423,26 +423,26 @@ Func_006_43bb: ; 183bb (6:43bb)
 	inc hl
 	inc hl
 	inc hl
-	bit 6, a
+	bit D_UP_F, a
 	jr z, .asm_006_43df
 .asm_006_43dc
 	ld a, [hl]
 	jr .asm_006_43f5
 .asm_006_43df
 	inc hl
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_006_43e7
 	ld a, [hl]
 	jr .asm_006_43f5
 .asm_006_43e7
 	inc hl
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr z, .asm_006_43ef
 	ld a, [hl]
 	jr .asm_006_43f5
 .asm_006_43ef
 	inc hl
-	bit 5, a
+	bit D_LEFT_F, a
 	jr z, .asm_006_446b
 	ld a, [hl]
 .asm_006_43f5
@@ -459,7 +459,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	jr c, .asm_006_4437
 	jr .asm_006_4462
 .asm_006_440e
-	ld a, $ef
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
 	jr nz, .asm_006_441d
@@ -472,7 +472,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	cp b
 	jr c, .asm_006_4462
 	ldh a, [hDPadHeld]
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr z, .asm_006_4430
 	xor a
 	ld [$ce52], a
@@ -483,7 +483,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	ld [$ce52], a
 	jr .asm_006_4462
 .asm_006_4437:
-	ld a, $ef
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
 	jr nz, .asm_006_4446
@@ -497,7 +497,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	cp b
 	jr c, .asm_006_4462
 	ldh a, [hDPadHeld]
-	bit 5, a
+	bit D_LEFT_F, a
 	jr z, .asm_006_445c
 	ld a, $0b
 	ld [$ce52], a
@@ -539,7 +539,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	inc [hl]
 	and $0f
 	ret nz
-	bit 4, [hl]
+	bit D_RIGHT_F, [hl]
 	jr nz, Func_006_44bf
 
 Func_006_44a0: ; 184a0 (6:44a0)
@@ -570,7 +570,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ret
 
 	xor a
-	ld [$ce62], a
+	ld [wGlossaryPageNo], a
 	call Func_006_452b
 	xor a
 	ld [$ce52], a
@@ -612,9 +612,9 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld a, $01
 	farcall Func_90fb
 .asm_006_451e
-	ld a, [$ce62]
+	ld a, [wGlossaryPageNo]
 	xor $01
-	ld [$ce62], a
+	ld [wGlossaryPageNo], a
 	call Func_006_455a
 	jr .asm_006_44e5
 
@@ -628,45 +628,49 @@ Func_006_452b: ; 1852b (6:452b)
 	call EmptyScreen
 	call Set_OBJ_8x8
 	farcall $2, $4992
-	ld de, $0500
+	lb de, 5, 0
 	call InitTextPrinting
-	ld hl, $02f6
+	ldtx hl, Text02f6
 	call ProcessTextFromID
 	call Func_006_455a
-	ld hl, $02f9
+	ldtx hl, Text02f9
 	call DrawWideTextBox_PrintText
 	ret
 
+; print glossary
 Func_006_455a: ; 1855a (6:455a)
 	ld hl, wDefaultText
-	ld a, $05
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, [$ce62]
-	add $21
+	ld a, [wGlossaryPageNo]
+	add SYM_1
 	ld [hli], a
-	ld a, $05
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, $2e
+	ld a, SYM_SLASH
 	ld [hli], a
-	ld a, $05
+	ld a, TX_SYMBOL
 	ld [hli], a
-	ld a, $22
+	ld a, SYM_2
 	ld [hli], a
-	ld [hl], $00
-	ld de, $1001
+	ld [hl], TX_END
+
+	lb de, 16, 1
 	call InitTextPrinting
 	ld hl, wDefaultText
 	call ProcessText
-	ld de, $0103
+
+	lb de, 1, 3
 	call InitTextPrinting
-	ld a, [$ce62]
+	ld a, [wGlossaryPageNo]
 	or a
-	jr nz, .asm_006_4591
-	ld hl, $02f7
-	jr .asm_006_4594
-.asm_006_4591
+
+	jr nz, .page_two
+	ldtx hl, Text02f7
+	jr .page_one
+.page_two
 	ldtx hl, Text02f8
-.asm_006_4594
+.page_one
 	call ProcessTextFromID
 	ret
 
@@ -675,14 +679,14 @@ Func_006_4598: ; 18598 (6:4598)
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
-	ld de, $0500
+	lb de, 5, 0
 	call InitTextPrinting
 	ldtx hl, Text02f6
 	call ProcessTextFromID
 	ld de, $0004
 	ld bc, $140e
 	call DrawRegularTextBox
-	ld a, [$ce62]
+	ld a, [wGlossaryPageNo]
 	or a
 	jr nz, .back_page
 	ld hl, GlossaryData1
@@ -711,7 +715,7 @@ Func_006_4598: ; 18598 (6:4598)
 	ld l, a
 	call ProcessTextFromID
 	pop hl
-	ld de, $0105
+	lb de, 1, 5
 	call InitTextPrinting
 	inc hl
 	inc hl
@@ -736,63 +740,32 @@ Func_006_4598: ; 18598 (6:4598)
 ; unit: 5 bytes.
 ; [structure]
 ; horizonal align (1) / text id 1 (2) / text id 2 (2)
+glossary_entry: MACRO
+	db \1
+	tx \2
+	tx \3
+ENDM
 GlossaryData1:
-	db 7
-	tx Text02fa
-	tx Text030c
-	db 5
-	tx Text02fb
-	tx Text030d
-	db 7
-	tx Text02fc
-	tx Text030e
-	db 6
-	tx Text02fd
-	tx Text030f
-	db 6
-	tx Text02fe
-	tx Text0310
-	db 4
-	tx Text02ff
-	tx Text0311
-	db 5
-	tx Text0300
-	tx Text0312
-	db 7
-	tx Text0301
-	tx Text0313
-	db 5
-	tx Text0302
-	tx Text0314
+	glossary_entry 7, Text02fa, Text030c
+	glossary_entry 5, Text02fb, Text030d
+	glossary_entry 7, Text02fc, Text030e
+	glossary_entry 6, Text02fd, Text030f
+	glossary_entry 6, Text02fe, Text0310
+	glossary_entry 4, Text02ff, Text0311
+	glossary_entry 5, Text0300, Text0312
+	glossary_entry 7, Text0301, Text0313
+	glossary_entry 5, Text0302, Text0314
 
 GlossaryData2:
-	db 5
-	tx Text0303
-	tx Text0315
-	db 5
-	tx Text0304
-	tx Text0316
-	db 5
-	tx Text0305
-	tx Text0317
-	db 5
-	tx Text0306
-	tx Text0318
-	db 6
-	tx Text0307
-	tx Text0319
-	db 5
-	tx Text0308
-	tx Text031a
-	db 6
-	tx Text0309
-	tx Text031b
-	db 6
-	tx Text030a
-	tx Text031c
-	db 6
-	tx Text030b
-	tx Text031d
+	glossary_entry 5, Text0303, Text0315
+	glossary_entry 5, Text0304, Text0316
+	glossary_entry 5, Text0305, Text0317
+	glossary_entry 5, Text0306, Text0318
+	glossary_entry 6, Text0307, Text0319
+	glossary_entry 5, Text0308, Text031a
+	glossary_entry 6, Text0309, Text031b
+	glossary_entry 6, Text030a, Text031c
+	glossary_entry 6, Text030b, Text031d
 
 ; (6:4661)
 	xor a
@@ -804,9 +777,9 @@ GlossaryData2:
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .asm_006_46a2
-	bit 5, a
+	bit D_LEFT_F, a
 	jr nz, .asm_006_467a
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr z, .asm_006_4680
 .asm_006_467a
 	ld a, d
@@ -814,9 +787,9 @@ GlossaryData2:
 	ld d, a
 	jr .asm_006_468c
 .asm_006_4680
-	bit 6, a
+	bit D_UP_F, a
 	jr nz, .asm_006_4688
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_006_46a2
 .asm_006_4688
 	ld a, e
@@ -862,7 +835,7 @@ GlossaryData2:
 	and $0f
 	ret nz
 	ld a, $0f
-	bit 4, [hl]
+	bit D_RIGHT_F, [hl]
 	jr z, .asm_006_46d6
 .asm_006_46d4 ; 186d4 (6:46d4)
 	ld a, $00
@@ -1715,8 +1688,8 @@ DrawNamingScreenBG:
 	; print "End".
 	ld hl, .data
 	call PlaceTextItems
-	ld hl, $0221
-	ld de, $0204
+	ldtx hl, Text0221
+	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID
 	call EnableLCD
@@ -1761,7 +1734,7 @@ PrintPlayerNameFromInput:
 rept 10
 	textfw3 "_"
 endr
-    db $00 ; null
+    done
 
 ; check if button pressed.
 ; if pressed, set the carry bit on.
@@ -2514,7 +2487,7 @@ Func_006_6e99:
 	call PlaceTextItems
 	; print the keyboard characters.
 	ldtx hl, NamingScreenKeyboardText ; "A B C D..."
-	ld de, $0204
+	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID
 	call EnableLCD

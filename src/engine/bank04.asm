@@ -1110,7 +1110,7 @@ MainMenuFunctionTable:
 
 MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
-	call OnPlayerNamingScreen
+	call DisplayPlayerNamingScreen
 	farcall Func_1996e
 	call EnableSRAM
 	ld a, [s0a007]
@@ -1180,11 +1180,11 @@ Func_12871: ; 12871 (4:6871)
 Func_1288c: ; 1288c (4:688c)
 	INCROM $1288c, $128a9
 
-OnPlayerNamingScreen:: ; 128a9 (4:68a9)
-	; clear name buffer.
+DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
+	; clear the name buffer.
 	ld hl, wc500 ; c500: name buffer.
-	ld bc, $0010
-	ld a, $00
+	ld bc, PLAYER_NAME_LENGTH
+	ld a, TX_END
 	call FillMemoryWithA
 
 	; get player's name
@@ -1205,7 +1205,7 @@ OnPlayerNamingScreen:: ; 128a9 (4:68a9)
 .no_name
 	; set the default name.
 	ld de, sPlayerName
-	ld bc, $0010
+	ld bc, PLAYER_NAME_LENGTH
 	call EnableSRAM
 	call CopyDataHLtoDE_SaveRegisters
 	; it seems for integrity checking.
@@ -1219,7 +1219,10 @@ OnPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; "MARK": default player name.
 	; last two bytes are reserved for RNG.
 	textfw3 "M", "A", "R", "K"
-	db $00, $00, $00, $00, $00, $00, $10, $12
+rept 6
+	done
+endr
+	db $10, $12
 Unknown_128fb: ; 128fb
 	INCROM $128fb, $1296e
 

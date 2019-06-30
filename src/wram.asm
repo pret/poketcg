@@ -1303,7 +1303,11 @@ wce5e:: ; ce5e
 wce60:: ; ce60
 	ds $1
 
-	ds $2
+wce61:: ; ce61
+	ds $1
+
+wGlossaryPageNo:: ; ce62
+	ds $1
 
 wce63:: ; ce63
 	ds $1
@@ -1469,11 +1473,11 @@ wcfda:: ; cfda
 wcfe3:: ; cfe3
 	ds $4
 
-; name buffer in naming screen
+; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7
-	ds $18
+	ds NAMING_SCREEN_BUFFER_LENGTH
 
-; current name length in naming screen
+; current name length in the naming screen.
 wNamingScreenBufferLength:: ; cfff
 	ds $1
 
