@@ -1,0 +1,6 @@
+NAME_BUFFER_LENGTH          EQU 16
+
+MAX_PLAYER_NAME_LENGTH      EQU 6   * 2
+MAX_DECK_NAME_LENGTH        EQU 20  * 1 ; note that its unit is byte!
+
+NAMING_SCREEN_BUFFER_LENGTH EQU 24

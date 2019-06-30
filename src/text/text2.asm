@@ -1523,11 +1523,11 @@ Text021c: ; 3b7f9 (e:77f9)
 	textfw3 "A", "B", "C"
 	done
 
-Text021d: ; 3b800 (e:7800)
+EndText: ; 3b800 (e:7800)
 	text "End"
 	done
 
-Text021e: ; 3b805 (e:7805)
+WhatIsYourNameText: ; 3b805 (e:7805)
 	text "What is your name?"
 	done
 
@@ -1580,7 +1580,7 @@ Text0221: ; 3b8f2 (e:78f2)
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done
 
-Text0222: ; 3b97b (e:797b)
+NamingScreenKeyboardText: ; 3b97b (e:797b)
 	textfw3 "A", " ", "B", " ", "C", " ", "D", " ", "E", " ", "F", " ", "G", " ", "H", " ", "I"
 	line ""
 	textfw3 "J", " ", "K", " ", "L", " ", "M", " ", "N", " ", "O", " ", "P", " ", "Q", " ", "R"

@@ -1704,7 +1704,7 @@ SetManyObjectsAttributes: ; 950 (0:950)
 
 ; for the sprite at wOAM + [wOAMOffset] / 4, set its attributes from registers e, d, c, b
 ; return carry if [wOAMOffset] > 40 * 4 (beyond the end of wOAM)
-SetOneObjectAttributes: ; 97f (0:97f)
+SetOneObjectAttributes: ; 097f (0:097f)
 	push hl
 	ld a, [wOAMOffset]
 	ld l, a
@@ -5351,7 +5351,7 @@ CopyOpponentName: ; 1c8e (0:1c8e)
 	ld h, a
 	jp CopyText
 .special_name
-	ld hl, wc500
+	ld hl, wNameBuffer
 	ld a, [hl]
 	or a
 	jr z, .print_player2

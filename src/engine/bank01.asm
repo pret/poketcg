@@ -3695,6 +3695,7 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	ret
 ; 0x57df
 
+Func_57df:
 	INCROM $57df,  $5892
 
 ; display the previous valid card page
@@ -6111,7 +6112,7 @@ DuelDataToSave: ; 6729 (1:6729)
 ;	dw address, number_of_bytes_to_copy
 	dw wPlayerDuelVariables, wOpponentDuelVariables - wPlayerDuelVariables
 	dw wOpponentDuelVariables, wPlayerDeck - wOpponentDuelVariables
-	dw wPlayerDeck, wc500 + $10 - wPlayerDeck
+	dw wPlayerDeck, wNameBuffer + $10 - wPlayerDeck
 	dw wWhoseTurn, wDuelTheme + $1 - wWhoseTurn
 	dw hWhoseTurn, $1
 	dw wRNG1, wRNGCounter + $1 - wRNG1
@@ -7748,7 +7749,7 @@ Func_7494: ; 7494 (1:7494)
 	ld a, $02
 	ld [wLoadedMoveAnimation], a
 .asm_74d1
-	farcall $6, $4f9c
+	farcall Func_006_4f9c
 	pop bc
 	pop de
 	pop hl
@@ -7773,12 +7774,12 @@ Func_758f: ; 758f (1:758f)
 	INCROM $758f, $7594
 
 Func_7594: ; 7594 (1:7594)
-	farcall $6, $661f
+	farcall Func_1a61f
 	ret
 ; 0x7599
 
 Func_7599: ; 7599 (1:7599)
-	farcall $6, $668d
+	farcall Func_006_668d
 	ret
 ; 0x759e
 

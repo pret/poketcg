@@ -19,11 +19,13 @@ s0a009:: ; a009
 	ds $1
 s0a00a:: ; a00a
 	ds $1
-
-	ds $5
+s0a00b:: ; a00b
+	ds $1
+s0a00c:: ; a00c
+	ds $4
 
 sPlayerName:: ; a010
-	ds $10
+	ds NAME_BUFFER_LENGTH
 
 	ds $e0
 

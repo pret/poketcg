@@ -160,7 +160,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wTextBoxFrameType], a
-	farcall $1, $7599
+	farcall Func_7599
 	farcall Func_c1a4
 	call DoFrameIfLCDEnabled
 	pop af
@@ -1110,7 +1110,7 @@ MainMenuFunctionTable:
 
 MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
-	call Func_128a9
+	call DisplayPlayerNamingScreen
 	farcall Func_1996e
 	call EnableSRAM
 	ld a, [s0a007]
@@ -1180,8 +1180,51 @@ Func_12871: ; 12871 (4:6871)
 Func_1288c: ; 1288c (4:688c)
 	INCROM $1288c, $128a9
 
-Func_128a9: ; 128a9 (4:68a9)
-	INCROM $128a9, $1296e
+DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
+	; clear the name buffer.
+	ld hl, wNameBuffer ; c500: name buffer.
+	ld bc, NAME_BUFFER_LENGTH
+	ld a, TX_END
+	call FillMemoryWithA
+
+	; get player's name
+	; from the user into hl.
+	ld hl, wNameBuffer
+	farcall InputPlayerName
+	
+	farcall Func_c1a4
+	call DoFrameIfLCDEnabled
+	call DisableLCD
+	ld hl, wNameBuffer
+	; get the first byte of the name buffer.
+	ld a, [hl]
+	or a
+	; check if anything typed.
+	jr nz, .no_name
+	ld hl, .data
+.no_name
+	; set the default name.
+	ld de, sPlayerName
+	ld bc, NAME_BUFFER_LENGTH
+	call EnableSRAM
+	call CopyDataHLtoDE_SaveRegisters
+	; it seems for integrity checking.
+	call UpdateRNGSources
+	ld [sPlayerName+$e], a
+	call UpdateRNGSources
+	ld [sPlayerName+$f], a
+	call DisableSRAM
+	ret
+.data
+	; "MARK": default player name.
+	; last two bytes are reserved for RNG.
+	textfw3 "M", "A", "R", "K"
+rept 6
+	done
+endr
+	db $10, $12
+Unknown_128fb: ; 128fb
+	INCROM $128fb, $1296e
 
 Func_1296e: ; 1296e (4:696e)
 	INCROM $1296e, $1299f

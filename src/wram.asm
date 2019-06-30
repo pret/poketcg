@@ -363,8 +363,9 @@ ENDU
 wOpponentDeck:: ; c480
 	ds $80
 
-wc500:: ; c500
-	ds $10
+; this holds names like player's or opponent's.
+wNameBuffer:: ; c500
+	ds NAME_BUFFER_LENGTH
 
 ; this holds an $ff-terminated list of card deck indexes (e.g. cards in hand or in bench)
 ; or (less often) the attack list of a Pokemon card
@@ -1303,7 +1304,11 @@ wce5e:: ; ce5e
 wce60:: ; ce60
 	ds $1
 
-	ds $2
+wce61:: ; ce61
+	ds $1
+
+wGlossaryPageNo:: ; ce62
+	ds $1
 
 wce63:: ; ce63
 	ds $1
@@ -1386,12 +1391,20 @@ wcea1:: ; cea1
 wcea3:: ; cea3
 	ds $1
 
-	ds $5
-
-wcea9:: ; cea9
+wNamingScreenCursorY:: ; cea4
 	ds $1
 
-	ds $5
+wcea5:: ; cea5
+	ds $4
+
+wNamingScreenKeyboardHeight:: ; cea9
+	ds $1
+
+wceaa:: ; ceaa
+	ds $1
+
+wceab:: ; ceab
+	ds $4
 
 wceaf:: ; ceaf
 	ds $1
@@ -1459,13 +1472,40 @@ wcfda:: ; cfda
 	ds $7
 
 wcfe3:: ; cfe3
+	ds $4
+
+; a name buffer in the naming screen.
+wNamingScreenBuffer:: ; cfe7
+	ds NAMING_SCREEN_BUFFER_LENGTH
+
+; current name length in the naming screen.
+wNamingScreenBufferLength:: ; cfff
 	ds $1
 
-	ds $1c
-
 SECTION "WRAM1", WRAMX
+wNamingScreenDestPointer:: ; d000
+	ds $2
 
-	ds $d
+wNamingScreenQuestionPointer:: ; d002
+	ds $2
+
+; max length of name buffer.
+; it's given for limiting the player's input.
+wNamingScreenBufferMaxLength:: ; d004
+	ds $1
+
+wd005:: ; d005
+	ds $1
+
+wNamingScreenCursorX:: ; d006
+	ds $1
+
+; the position to display the input on.
+wNamingScreenNamePosition:: ; d007
+	ds $2
+
+wd009:: ; d009
+	ds $4
 
 wd00d:: ; d00d
 	ds $1
@@ -1481,7 +1521,11 @@ wd087:: ; d087
 wd088:: ; d088
 	ds $1
 
-	ds $19
+wd089:: ; d089
+	ds $1
+
+wd08a:: ; d08a
+	ds $18
 
 wd0a2:: ; d0a2
 	ds $2
@@ -1492,7 +1536,11 @@ wd0a4:: ; d0a4
 wd0a5:: ; d0a5
 	ds $1
 
-	ds $3
+wd0a6:: ; d0a6
+	ds $1
+
+dw0a7:: ; d0a7
+	ds $2
 
 wd0a9:: ; d0a9
 	ds $1
