@@ -1715,7 +1715,7 @@ PrintPlayerNameFromInput:
 	sub e
 	inc a
 	ld e, a
-	ld d, $00
+	ld d, 0
 	; print the underbars
 	; before print the input.
 	ld hl, .char_underbar
@@ -2792,10 +2792,83 @@ GetCharInfoFromPos_Deck:
 	jr nz, .loop
 	ret
 
-; a bunch of data
 KeyboardData_Deck: ; (6:7019)
-    INCROM $1b019, $1b8e8
-	INCROM $1b8e8, $1ba12
+    db $04, $02, "A"
+	db $06, $02, "J"
+	db $08, $02, "S"
+	db $0a, $02, "?"
+	db $0c, $02, "4"
+	db $0e, $02, $02
+	db $10, $0f, $01
+
+	db $04, $04, "B"
+	db $06, $04, "K"
+	db $08, $04, "T"
+	db $0a, $04, "&"
+	db $0c, $04, "5"
+	db $0e, $04, $02
+	db $10, $0f, $01
+
+	db $04, $06, "C"
+	db $06, $06, "L"
+	db $08, $06, "U"
+	db $0a, $06, "+"
+	db $0c, $06, "6"
+	db $0e, $06, $02
+	db $10, $0f, $01
+
+	db $04, $08, "D"
+	db $06, $08, "M"
+	db $08, $08, "V"
+	db $0a, $08, "-"
+	db $0c, $08, "7"
+	db $0e, $08, $02
+	db $10, $0f, $01
+
+	db $04, $0a, "E"
+	db $06, $0a, "N"
+	db $08, $0a, "W"
+	db $0a, $0a, "'"
+	db $0c, $0a, "8"
+	db $0e, $0a, $02
+	db $10, $0f, $01
+
+	db $04, $0c, "F"
+	db $06, $0c, "O"
+	db $08, $0c, "X"
+	db $0a, $0c, "0"
+	db $0c, $0c, "9"
+	db $0e, $0c, $02
+	db $10, $0f, $01
+
+	db $04, $0e, "G"
+	db $06, $0e, "P"
+	db $08, $0e, "Y"
+	db $0a, $0e, "1"
+	db $0c, $0e, " "
+	db $0e, $0e, $02
+	db $10, $0f, $01
+
+	db $04, $10, "H"
+	db $06, $10, "Q"
+	db $08, $10, "Z"
+	db $0a, $10, "2"
+	db $0c, $10, " "
+	db $0e, $10, $02
+	db $10, $0f, $01
+
+	db $04, $12, "I"
+	db $06, $12, "R"
+	db $08, $12, "!"
+	db $0a, $12, "3"
+	db $0c, $12, " "
+	db $0e, $12, $02
+	db $10, $0f, $01
+
+; unknown data.
+; needs analyze.
+; (6:70d6)
+	INCROM $1b0d6, $1ba12
 
 Func_006_7a12: ; (6:7a12)
 	push af
