@@ -161,7 +161,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, $4
 	ld [wTextBoxFrameType], a
 	farcall Func_7599
-	farcall Func_c1a4
+	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	pop af
 	ld [wd291], a
@@ -1152,7 +1152,7 @@ MainMenu_CardPop: ; 12768 (4:6768)
 	ld a, MUSIC_CARD_POP
 	call PlaySong
 	bank1call Func_7571
-	farcall Func_c1a4
+	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	ld a, MUSIC_STOP
 	call PlaySong
@@ -1192,7 +1192,7 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	ld hl, wNameBuffer
 	farcall InputPlayerName
 	
-	farcall Func_c1a4
+	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	call DisableLCD
 	ld hl, wNameBuffer

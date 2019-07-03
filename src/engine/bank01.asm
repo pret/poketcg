@@ -424,55 +424,61 @@ Func_42fd: ; 42fd (1:42fd)
 
 ; triggered by pressing B + UP in the duel menu
 DuelMenuShortcut_OpponentPlayArea: ; 430b (1:430b)
-	call OpenOpponentPlayAreaScreen
+	call OpenNonTurnHolderPlayAreaScreen
 	jp DuelMainInterface
 
 ; triggered by pressing B + DOWN in the duel menu
 DuelMenuShortcut_PlayerPlayArea: ; 4311 (1:4311)
-	call OpenPlayAreaScreen
+	call OpenTurnHolderPlayAreaScreen
 	jp DuelMainInterface
 
 ; triggered by pressing B + RIGHT in the duel menu
 DuelMenuShortcut_OpponentDiscardPile: ; 4317 (1:4317)
-	call OpenOpponentDiscardPileScreen
+	call OpenNonTurnHolderDiscardPileScreen
 	jp c, PrintDuelMenuAndHandleInput
 	jp DuelMainInterface
 
 ; triggered by pressing B + LEFT in the duel menu
 DuelMenuShortcut_PlayerDiscardPile: ; 4320 (1:4320)
-	call OpenPlayerDiscardPileScreen
+	call OpenTurnHolderDiscardPileScreen
 	jp c, PrintDuelMenuAndHandleInput
 	jp DuelMainInterface
 
-; draw the opponent's play area screen
-OpenOpponentPlayAreaScreen: ; 4329 (1:4329)
+; draw the non-turn holder's play area screen
+OpenNonTurnHolderPlayAreaScreen: ; 4329 (1:4329)
 	call SwapTurn
-	call OpenPlayAreaScreen
+	call OpenTurnHolderPlayAreaScreen
 	call SwapTurn
 	ret
 
 ; draw the turn holder's play area screen
-OpenPlayAreaScreen: ; 4333 (1:4333)
+OpenTurnHolderPlayAreaScreen: ; 4333 (1:4333)
 	call HasAlivePokemonInPlayArea
 	jp OpenPlayAreaScreenForViewing
 
-; draw the opponent's discard pile screen
-OpenOpponentDiscardPileScreen: ; 4339 (1:4339)
+; draw the non-turn holder's discard pile screen
+OpenNonTurnHolderDiscardPileScreen: ; 4339 (1:4339)
 	call SwapTurn
 	call OpenDiscardPileScreen
 	jp SwapTurn
 
-; draw the player's discard pile screen
-OpenPlayerDiscardPileScreen: ; 4342 (1:4342)
+; draw the turn holder's discard pile screen
+OpenTurnHolderDiscardPileScreen: ; 4342 (1:4342)
 	jp OpenDiscardPileScreen
 
-Func_4345: ; 4345 (1:4345)
+; draw the non-turn holder's hand screen.
+; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
+; and the duelist could also be the opponent.
+OpenNonTurnHolderHandScreen_Simple: ; 4345 (1:4345)
 	call SwapTurn
-	call Func_434e
+	call OpenTurnHolderHandScreen_Simple
 	jp SwapTurn
 ; 0x434e
 
-Func_434e: ; 434e (1:434e)
+; draw the turn holder's hand screen.
+; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
+; and the duelist could also be the opponent.
+OpenTurnHolderHandScreen_Simple: ; 434e (1:434e)
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
 	call InitAndDrawCardListScreenLayout
@@ -1662,7 +1668,7 @@ DrawDuelistPortraitsAndNames: ; 4a97 (1:4a97)
 	push de
 	call CopyOpponentName
 	pop hl
-	call GetTextSizeInTiles
+	call GetTextLengthInTiles
 	push hl
 	add SCREEN_WIDTH
 	ld d, a
@@ -2528,7 +2534,7 @@ DrawDuelHUD: ; 5093 (1:5093)
 	or a
 	jr nz, .print_color_icon
 	ld hl, wDefaultText
-	call GetTextSizeInTiles
+	call GetTextLengthInTiles
 	add SCREEN_WIDTH
 	ld d, a
 .print_color_icon
@@ -5196,7 +5202,7 @@ Func_60dd: ; 60dd (1:60dd)
 	call Func_3096
 	jr .asm_60f2
 .asm_6132
-	call Func_434e
+	call OpenTurnHolderHandScreen_Simple
 	jr .asm_60f2
 ; 0x6137
 
@@ -6294,7 +6300,7 @@ Func_67fb: ; 67fb (1:67fb)
 	call Func_3096
 	jr .asm_6829
 .asm_6839
-	call Func_434e
+	call OpenTurnHolderHandScreen_Simple
 	jr .asm_6829
 ; 0x683e
 
@@ -6369,16 +6375,16 @@ Func_6862: ; 6862 (1:6862)
 	call Func_4597
 	jr .return_carry
 .down_pressed
-	call OpenPlayAreaScreen
+	call OpenTurnHolderPlayAreaScreen
 	jr .return_carry
 .left_pressed
-	call OpenPlayerDiscardPileScreen
+	call OpenTurnHolderDiscardPileScreen
 	jr .return_carry
 .up_pressed
-	call OpenOpponentPlayAreaScreen
+	call OpenNonTurnHolderPlayAreaScreen
 	jr .return_carry
 .right_pressed
-	call OpenOpponentDiscardPileScreen
+	call OpenNonTurnHolderDiscardPileScreen
 	jr .return_carry
 ; 0x68c6
 

@@ -10,7 +10,7 @@ LoadMap: ; c000 (3:4000)
 	ld [wd110], a
 	ld [wMatchStartTheme], a
 	farcall Func_10a9b
-	call Func_c1a4
+	call WhiteOutDMGPals
 	call ZeroObjectPositions
 	xor a
 	ld [wTileMapFill], a
@@ -22,7 +22,7 @@ LoadMap: ; c000 (3:4000)
 	ld [wd291], a
 .asm_c037
 	farcall Func_10ab4
-	call Func_c1a4
+	call WhiteOutDMGPals
 	call Func_c241
 	call EmptyScreen
 	call Func_3ca0
@@ -217,7 +217,7 @@ Func_c1a0: ; c1a0 (3:41a0)
 	call ResetDoFrameFunction
 	ret
 
-Func_c1a4: ; c1a4 (3:41a4)
+WhiteOutDMGPals: ; c1a4 (3:41a4)
 	xor a
 	call SetBGP
 	xor a
@@ -2016,7 +2016,7 @@ Func_cee2: ; cee2 (3:4ee2)
 	farcall Func_10031
 	pop af
 	bank1call Func_7594
-	call Func_c1a4
+	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	call Func_c2d4
 	jp IncreaseOWScriptPointerBy2

@@ -38,7 +38,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop hl
 	push de
 	ld e, c
-	call GetTextSizeInTiles
+	call GetTextLengthInTiles
 	add e
 	ld c, a
 	pop hl
@@ -292,7 +292,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call OpenPlayAreaScreen
+	bank1call OpenTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
@@ -303,7 +303,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call SetupText
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call OpenOpponentPlayAreaScreen
+	bank1call OpenNonTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
@@ -330,11 +330,11 @@ Func_180d5: ; 180d5 (6:40d5)
 Func_006_4248:
 	ld a, [$ce52]
 	inc a
-	cp $06
+	cp PLAY_AREA_BENCH_5 + $01
 	jr nz, .asm_006_4251
-	xor a
+	xor a ; PLAY_AREA_ARENA
 .asm_006_4251
-	ld [wHUDEnergyAndHPBarsX], a
+	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
@@ -353,7 +353,7 @@ Func_006_426a:
 	jr z, .asm_006_4274
 	sub $02
 .asm_006_4274
-	ld [wHUDEnergyAndHPBarsX], a
+	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	cp -1
@@ -370,7 +370,7 @@ Func_006_426a:
 Func_006_4293:
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call Func_434e
+	bank1call OpenTurnHolderHandScreen_Simple
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -378,7 +378,7 @@ Func_006_4293:
 Func_006_429d:
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call Func_4345
+	bank1call OpenNonTurnHolderHandScreen_Simple
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -386,7 +386,7 @@ Func_006_429d:
 Func_006_42a7:
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call OpenPlayerDiscardPileScreen
+	bank1call OpenTurnHolderDiscardPileScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ret
@@ -394,14 +394,14 @@ Func_006_42a7:
 Func_006_42b1:
 	ldh a, [hWhoseTurn]
 	push af
-	bank1call OpenOpponentDiscardPileScreen
+	bank1call OpenNonTurnHolderDiscardPileScreen
 	pop af
 	ldh [hWhoseTurn], a
 	ret
 
 Data_006_42bb:
 	INCROM $182bb, $183bb
-	
+
 Func_006_43bb: ; 183bb (6:43bb)
 	xor a
 	ld [wcfe3], a
@@ -1509,17 +1509,17 @@ ClearMemory: ; (6:6787)
 	ret
 
 ; play different sfx by a.
-; if a is 0xff play sfx with 0x03,
-; else with 0x02.
-PlaySFXByA: ; (6:6794)
+; if a is 0xff play sfx with 0x03 (usually following a B press),
+; else with 0x02 (usually following an A press).
+PlayAcceptOrDeclineSFX: ; (6:6794)
 	push af
 	inc a
-	jr z, .on_three
+	jr z, .sfx_decline
 	ld a, $02
-	jr .on_two
-.on_three
+	jr .sfx_accept
+.sfx_decline
 	ld a, $03
-.on_two
+.sfx_accept
 	call PlaySFX
 	pop af
 	ret
@@ -1543,7 +1543,7 @@ InputPlayerName: ; (6:67a3)
 	call LoadSymbolsFont
 	lb de, $38, $bf
 	call SetupText
-	call SetVram0xFF
+	call LoadTextCursorTile
 	ld a, $02
 	ld [wd009], a
 	call DrawNamingScreenBG
@@ -1568,7 +1568,7 @@ InputPlayerName: ; (6:67a3)
 	jr z, .else
 	; if pressed start button.
 	ld a, $01
-	call PlaySFXByA
+	call PlayAcceptOrDeclineSFX
 	call Func_006_6a07
 	ld a, 6
 	ld [wNamingScreenCursorX], a
@@ -1605,7 +1605,7 @@ InputPlayerName: ; (6:67a3)
 	dec [hl]
 	call PrintPlayerNameFromInput
 	jr .loop
-	
+
 ; it's called when naming(either player's or deck's) starts.
 ; a: maximum length of name(depending on whether player's or deck's).
 ; bc: position of name.
@@ -1648,7 +1648,7 @@ InitializeInputName:
 	dec b
 	jr nz, .loop
 	ld hl, wNamingScreenBuffer
-	call GetTextSizeInTiles
+	call GetTextLengthInTiles
 	ld a, c
 	ld [wNamingScreenBufferLength], a
 	ret
@@ -1896,7 +1896,7 @@ NamingScreen_CheckButtonState:
 	jr nz, .asm_006_69e5
 	ld a, $ff
 .asm_006_69e5
-	call PlaySFXByA
+	call PlayAcceptOrDeclineSFX
 	push af
 	call Func_006_6a23
 	pop af
@@ -1982,16 +1982,15 @@ Func_006_6a28:
 	pop af
 	ret
 
-SetVram0xFF:
-	ld hl, v0Tiles0
+; load, to the first tile of v0Tiles0, the graphics for the
+; blinking black square used in name input screens.
+; for inputting full width text.
+LoadTextCursorTile:
+	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
 	ld b, 0
 .loop
-	; copy data from de to hl
-	; for 0x10 bytes.
-	; and de has all of 0xff data,
-	; which means that it puts only 0xff.
-	ld a, $10
+	ld a, TILE_SIZE
 	cp b
 	ret z
 	inc b
@@ -1999,8 +1998,9 @@ SetVram0xFF:
 	inc de
 	ld [hli], a
 	jr .loop
+
 .data
-rept $10
+rept TILE_SIZE
 	db $ff
 endr
 
@@ -2387,7 +2387,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 
 	lb de, $38, $bf
 	call SetupText
-	call FillVramWith0xF0
+	call LoadHalfWidthTextCursorTile
 
 	xor a
 	ld [wd009], a
@@ -2417,7 +2417,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 	jr z, .on_start
 
 	ld a, $01
-	call PlaySFXByA
+	call PlayAcceptOrDeclineSFX
 	call Func_006_6fa1
 
 	ld a, 6
@@ -2470,23 +2470,25 @@ InputDeckName: ; 1ad89 (6:6d89)
 
 	jp .loop
 
-; fill v0Tiles0 for 0x10 tiles
-; with 0xF0.
-FillVramWith0xF0:
-	ld hl, v0Tiles0
+; load, to the first tile of v0Tiles0, the graphics for the
+; blinking black square used in name input screens.
+; for inputting half width text.
+LoadHalfWidthTextCursorTile:
+	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
 	ld b, 0
-.asm_006_6e3f
-	ld a, $10
+.loop
+	ld a, TILE_SIZE
 	cp b
 	ret z
 	inc b
 	ld a, [de]
 	inc de
 	ld [hli], a
-	jr .asm_006_6e3f
+	jr .loop
+
 .data
-rept $10
+rept TILE_SIZE
     db $f0
 endr
 
@@ -2675,7 +2677,7 @@ Func_006_6efb:
 	jr nz, .asm_006_6f7f
 	ld a, $ff
 .asm_006_6f7f
-	call PlaySFXByA
+	call PlayAcceptOrDeclineSFX
 	push af
 	call Func_006_6fbd
 	pop af
