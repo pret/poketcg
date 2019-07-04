@@ -1388,7 +1388,8 @@ wcea1:: ; cea1
 
 	ds $1
 
-wcea3:: ; cea3
+; used to blink the cursor in duel menu
+wDuelCursorBlinkCounter:: ; cea3
 	ds $1
 
 wNamingScreenCursorY:: ; cea4

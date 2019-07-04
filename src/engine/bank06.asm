@@ -152,7 +152,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld [$ce52], a
 .asm_006_40da
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
@@ -509,7 +509,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	ld a, $01
 	ld [wcfe3], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 .asm_006_446b
 	ldh a, [hKeysPressed]
 	and $03
@@ -533,7 +533,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	jr z, .asm_006_4494
 	call PlaySFX
 .asm_006_4494
-	ld hl, wcea3
+	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -581,7 +581,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld a, $ff
 	ld [$ce55], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 .asm_006_44e5
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -604,7 +604,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	call Func_006_4598
 	call Func_006_452b
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	jr .asm_006_44e5
 .asm_006_4518
 	ld a, $01
@@ -803,7 +803,7 @@ GlossaryData2:
 	ld a, e
 	ld [wceb0], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
 	and $03
@@ -826,7 +826,7 @@ GlossaryData2:
 	jr z, .asm_006_46c6
 	call PlaySFX
 .asm_006_46c6
-	ld hl, wcea3
+	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -1882,7 +1882,7 @@ NamingScreen_CheckButtonState:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
@@ -1908,7 +1908,7 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_006_69f8
 	call PlaySFX
 .asm_006_69f8
-	ld hl, wcea3
+	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2663,7 +2663,7 @@ Func_006_6efb:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	ld a, $02
 	cp d
 	jp z, Func_006_6efb
@@ -2689,7 +2689,7 @@ Func_006_6efb:
 	jr z, .asm_006_6f92
 	call PlaySFX
 .asm_006_6f92
-	ld hl, wcea3
+	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f

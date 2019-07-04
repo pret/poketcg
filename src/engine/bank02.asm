@@ -5,7 +5,7 @@ Func_8000: ; 8000 (2:4000)
 	ld [wce5e], a
 	call DrawWideTextBox
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	ld hl, CheckMenuData
 	call PlaceTextItems
 .asm_8014
@@ -466,7 +466,7 @@ Func_905a: ; 905a (2:505a)
 	xor a
 	ld [wceaf], a
 	ld [wceb0], a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 	ret
 
 Func_9065: ; 9065 (2:5065)
@@ -508,7 +508,7 @@ Func_9065: ; 9065 (2:5065)
 	ld a, e
 	ld [wceb0], a
 	xor a
-	ld [wcea3], a
+	ld [wDuelCursorBlinkCounter], a
 .asm_90a6
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -531,7 +531,7 @@ Func_9065: ; 9065 (2:5065)
 	jr z, .asm_90ca
 	call PlaySFX
 .asm_90ca
-	ld hl, wcea3
+	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $f
