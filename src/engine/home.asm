@@ -9276,12 +9276,12 @@ CompareDEtoBC: ; 3090 (0:3090)
 	cp c
 	ret
 
-Func_3096: ; 3096 (0:3096)
+CallDuelCheckInterface: ; 3096 (0:3096)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8000)
+	ld a, BANK(DuelCheckInterface)
 	call BankswitchROM
-	call Func_8000
+	call DuelCheckInterface
 	pop af
 	call BankswitchROM
 	ret

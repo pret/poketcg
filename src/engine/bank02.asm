@@ -1,4 +1,4 @@
-Func_8000: ; 8000 (2:4000)
+DuelCheckInterface: ; 8000 (2:4000)
 .begin
 	call Func_905a
 	xor a
