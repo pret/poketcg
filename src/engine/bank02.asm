@@ -1,5 +1,41 @@
 Func_8000: ; 8000 (2:4000)
-	INCROM $8000, $8211
+.asm_8000
+	call Func_905a
+	xor a
+	ld [wce5e], a
+	call DrawWideTextBox
+	xor a
+	ld [wcea3], a
+	ld hl, $4158
+	call PlaceTextItems
+.asm_8014
+	call DoFrame
+	call Func_9065
+	jr nc, .asm_8014
+	cp $ff
+	ret z
+	ld a, [wceb0]
+	sla a
+	ld b, a
+	ld a, [wceaf]
+	add b
+	ld hl, $4031
+	call JumpToFunctionInTable
+	jr .asm_8000
+; 0x8031
+
+Func_8031: ; 8031 (2:4031)
+	INCROM $8031, $8158
+
+.asm_8158
+	textitem  2, 14, Text024a
+	textitem  2, 16, Text0248
+	textitem 12, 14, Text024b
+	textitem 12, 16, Text0249
+	db $ff
+
+Func_8169: ; 8169 (2:4169)
+	INCROM $8169, $8211
 
 Func_8211: ; 8211 (2:4211)
 	INCROM $8211, $833c
