@@ -5675,7 +5675,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 	pop hl
 	call CopyText
 	ld hl, wc000 + 3
-	call GetTextSizeInTiles
+	call GetTextLengthInTiles
 	ld l, e
 	ld h, d
 	; white tile after the text
@@ -6771,14 +6771,14 @@ CaseHalfWidthLetter: ; 23b1 (0:23b1)
 ; iterates over text at hl until TX_END is found, and sets wFontWidth to
 ; FULL_WIDTH if the first character is TX_HALFWIDTH
 ; returns:
-;   b = size of text in tiles
-;   c = size of text in bytes
+;   b = length of text in tiles
+;   c = length of text in bytes
 ;   a = -b
-GetTextSizeInTiles: ; 23c1 (0:23c1)
+GetTextLengthInTiles: ; 23c1 (0:23c1)
 	ld a, [hl]
 	cp TX_HALFWIDTH
 	jr nz, .full_width
-	call GetTextSizeInHalfTiles
+	call GetTextLengthInHalfTiles
 	; return a = - ceil(b/2)
 	inc b
 	srl b
@@ -6792,10 +6792,10 @@ GetTextSizeInTiles: ; 23c1 (0:23c1)
 
 ; iterates over text at hl until TX_END is found
 ; returns:
-;   b = size of text in half-tiles
-;   c = size of text in bytes
+;   b = length of text in half-tiles
+;   c = length of text in bytes
 ;   a = -b
-GetTextSizeInHalfTiles: ; 23d3 (0:23d3)
+GetTextLengthInHalfTiles: ; 23d3 (0:23d3)
 	push hl
 	push de
 	lb bc, $00, $00
