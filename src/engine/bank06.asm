@@ -1175,7 +1175,7 @@ Func_006_5168: ; 19168 (6:5168)
 	ret
 
 	INCROM $191a3, $1996e
-
+	
 Func_1996e: ; 1996e (6:596e)
 	call EnableSRAM
 	ld a, PLAYER_TURN
@@ -1371,8 +1371,8 @@ Func_006_668d:
 	lb de, $38, $9f
 	call SetupText
     bank1call InitAndDrawCardListScreenLayout
-	ld hl, $0056
-	ld de, $0196
+	ldtx hl, ChooseTheCardYouWishToExamineText
+	ldtx de, Text0196
 	bank1call SetCardListHeaderText
 	ld a, A_BUTTON | START
 	ld [wNoItemSelectionMenuKeys], a
@@ -2060,7 +2060,7 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
-	ld bc, $0359 ; “
+	ldfw3 bc, "“"
 	ld a, d
 	cp b
 	jr nz, .asm_006_6af4
@@ -2074,7 +2074,7 @@ NamingScreen_ProcessInput:
 	jr c, .nothing
 	jr .asm_006_6b09
 .asm_006_6af4
-	ld bc, $035b ; º
+	ldfw3 bc, "º(2)"
 	ld a, d
 	cp b
 	jr nz, .asm_006_6b1d
@@ -2254,62 +2254,76 @@ GetCharInfoFromPos_Player:
 ; - unused data contains its character code as zero.
 kbitem: MACRO
 	db \1, \2, \3, \4
+if (_NARG == 5)
 	dw \5
+elif (\5 == TX_FULLWIDTH3)
+	dw (\5 << 8) | STRCAT("FW3_", \6)
+else
+	dw (\5 << 8) | \6
+endc
 ENDM
 KeyboardData_Player: ; (6:6baf)
-	kbitem $04, $02, $11, $00, $0330
-	kbitem $06, $02, $12, $00, $0339
-	kbitem $08, $02, $13, $00, $0342
-	kbitem $0a, $02, $14, $00, $006f
-	kbitem $0c, $02, $15, $00, $0064
+	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
+	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
+	kbitem $08, $02, $13, $00, TX_FULLWIDTH3,   "S"
+	kbitem $0a, $02, $14, $00,                  "o"
+	kbitem $0c, $02, $15, $00,                  "d"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $04, $16, $00, $0331
-	kbitem $06, $04, $17, $00, $033a
-	kbitem $08, $04, $18, $00, $0343
-	kbitem $0a, $04, $19, $00, $035d
-	kbitem $0c, $04, $1a, $00, $0065
+
+	kbitem $04, $04, $16, $00, TX_FULLWIDTH3,   "B"
+	kbitem $06, $04, $17, $00, TX_FULLWIDTH3,   "K"
+	kbitem $08, $04, $18, $00, TX_FULLWIDTH3,   "T"
+	kbitem $0a, $04, $19, $00, TX_FULLWIDTH3,   "&"
+	kbitem $0c, $04, $1a, $00,                  "e"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $06, $1b, $00, $0332
-	kbitem $06, $06, $1c, $00, $033b
-	kbitem $08, $06, $1d, $00, $0344
-	kbitem $0a, $06, $1e, $00, $006a
-	kbitem $0c, $06, $1f, $00, $0066
+
+	kbitem $04, $06, $1b, $00, TX_FULLWIDTH3,   "C"
+	kbitem $06, $06, $1c, $00, TX_FULLWIDTH3,   "L"
+	kbitem $08, $06, $1d, $00, TX_FULLWIDTH3,   "U"
+	kbitem $0a, $06, $1e, $00,                  "j"
+	kbitem $0c, $06, $1f, $00,                  "f"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $08, $20, $00, $0333
-	kbitem $06, $08, $21, $00, $033c
-	kbitem $08, $08, $22, $00, $0345
-	kbitem $0a, $08, $23, $00, $006b
-	kbitem $0c, $08, $24, $00, $0067
+
+	kbitem $04, $08, $20, $00, TX_FULLWIDTH3,   "D"
+	kbitem $06, $08, $21, $00, TX_FULLWIDTH3,   "M"
+	kbitem $08, $08, $22, $00, TX_FULLWIDTH3,   "V"
+	kbitem $0a, $08, $23, $00,                  "k"
+	kbitem $0c, $08, $24, $00,                  "g"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0a, $25, $00, $0334
-	kbitem $06, $0a, $26, $00, $033d
-	kbitem $08, $0a, $27, $00, $0346
-	kbitem $0a, $0a, $28, $00, $0077
-	kbitem $0c, $0a, $29, $00, $0068
+
+	kbitem $04, $0a, $25, $00, TX_FULLWIDTH3,   "E"
+	kbitem $06, $0a, $26, $00, TX_FULLWIDTH3,   "N"
+	kbitem $08, $0a, $27, $00, TX_FULLWIDTH3,   "W"
+	kbitem $0a, $0a, $28, $00,                  "w"
+	kbitem $0c, $0a, $29, $00,                  "h"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0c, $2a, $00, $0335
-	kbitem $06, $0c, $2b, $00, $033e
-	kbitem $08, $0c, $2c, $00, $0347
-	kbitem $0a, $0c, $2d, $00, $0060
-	kbitem $0c, $0c, $2e, $00, $0069
+
+	kbitem $04, $0c, $2a, $00, TX_FULLWIDTH3,   "F"
+	kbitem $06, $0c, $2b, $00, TX_FULLWIDTH3,   "O"
+	kbitem $08, $0c, $2c, $00, TX_FULLWIDTH3,   "X"
+	kbitem $0a, $0c, $2d, $00,                  "`"
+	kbitem $0c, $0c, $2e, $00,                  "i"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0e, $2f, $00, $0336
-	kbitem $06, $0e, $30, $00, $033f
-	kbitem $08, $0e, $31, $00, $0348
-	kbitem $0a, $0e, $32, $00, $0061
-	kbitem $0c, $0e, $33, $00, $0513
+
+	kbitem $04, $0e, $2f, $00, TX_FULLWIDTH3,   "G"
+	kbitem $06, $0e, $30, $00, TX_FULLWIDTH3,   "P"
+	kbitem $08, $0e, $31, $00, TX_FULLWIDTH3,   "Y"
+	kbitem $0a, $0e, $32, $00,                  "a"
+	kbitem $0c, $0e, $33, $00, TX_SYMBOL,       SYM_No
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $10, $34, $00, $0337
-	kbitem $06, $10, $35, $00, $0340
-	kbitem $08, $10, $36, $00, $0349
-	kbitem $0a, $10, $3c, $00, $0062
-	kbitem $0c, $10, $3d, $00, $0511
+
+	kbitem $04, $10, $34, $00, TX_FULLWIDTH3,   "H"
+	kbitem $06, $10, $35, $00, TX_FULLWIDTH3,   "Q"
+	kbitem $08, $10, $36, $00, TX_FULLWIDTH3,   "Z"
+	kbitem $0a, $10, $3c, $00,                  "b"
+	kbitem $0c, $10, $3d, $00, TX_SYMBOL,       SYM_Lv
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $12, $37, $00, $0338
-	kbitem $06, $12, $38, $00, $0341
-	kbitem $08, $12, $39, $00, $006e
-	kbitem $0a, $12, $3a, $00, $0063
-	kbitem $0c, $12, $3b, $00, $0070
+
+	kbitem $04, $12, $37, $00, TX_FULLWIDTH3,   "I"
+	kbitem $06, $12, $38, $00, TX_FULLWIDTH3,   "R"
+	kbitem $08, $12, $39, $00,                  "n"
+	kbitem $0a, $12, $3a, $00,	                "c"
+	kbitem $0c, $12, $3b, $00,	                "p"
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
 ; a set of transition datum.

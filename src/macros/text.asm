@@ -82,3 +82,7 @@ endc
 	shift
 	endr
 ENDM
+
+ldfw3: MACRO
+	ld \1, (TX_FULLWIDTH3 << 8) | STRCAT("FW3_", \2)
+ENDM
