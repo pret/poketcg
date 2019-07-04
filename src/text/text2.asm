@@ -1751,19 +1751,19 @@ Text0247: ; 3bc9e (e:7c9e)
 	text "<RAMNAME>'s Play Area"
 	done
 
-Text0248: ; 3bcad (e:7cad)
+YourPlayAreaText: ; 3bcad (e:7cad)
 	text "Your Play Area"
 	done
 
-Text0249: ; 3bcbd (e:7cbd)
+OppPlayAreaText: ; 3bcbd (e:7cbd)
 	text "Opp. Play Area"
 	done
 
-Text024a: ; 3bccd (e:7ccd)
+InPlayAreaText: ; 3bccd (e:7ccd)
 	text "In Play Area"
 	done
 
-Text024b: ; 3bcdb (e:7cdb)
+GlossaryText: ; 3bcdb (e:7cdb)
 	text "Glossary"
 	done
 

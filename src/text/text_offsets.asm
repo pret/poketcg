@@ -585,10 +585,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0245                                 ; 0x0245
 	textpointer Text0246                                 ; 0x0246
 	textpointer Text0247                                 ; 0x0247
-	textpointer Text0248                                 ; 0x0248
-	textpointer Text0249                                 ; 0x0249
-	textpointer Text024a                                 ; 0x024a
-	textpointer Text024b                                 ; 0x024b
+	textpointer YourPlayAreaText                         ; 0x0248
+	textpointer OppPlayAreaText                          ; 0x0249
+	textpointer InPlayAreaText                           ; 0x024a
+	textpointer GlossaryText                             ; 0x024b
 	textpointer Text024c                                 ; 0x024c
 	textpointer Text024d                                 ; 0x024d
 	textpointer Text024e                                 ; 0x024e

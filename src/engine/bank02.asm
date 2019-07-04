@@ -1,12 +1,12 @@
 Func_8000: ; 8000 (2:4000)
-.asm_8000
+.begin
 	call Func_905a
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
 	xor a
 	ld [wcea3], a
-	ld hl, $4158
+	ld hl, CheckMenuData
 	call PlaceTextItems
 .asm_8014
 	call DoFrame
@@ -21,17 +21,17 @@ Func_8000: ; 8000 (2:4000)
 	add b
 	ld hl, $4031
 	call JumpToFunctionInTable
-	jr .asm_8000
+	jr .begin
 ; 0x8031
 
 Func_8031: ; 8031 (2:4031)
 	INCROM $8031, $8158
 
-.asm_8158
-	textitem  2, 14, Text024a
-	textitem  2, 16, Text0248
-	textitem 12, 14, Text024b
-	textitem 12, 16, Text0249
+CheckMenuData ; (2:4158)
+	textitem  2, 14, InPlayAreaText
+	textitem  2, 16, YourPlayAreaText
+	textitem 12, 14, GlossaryText
+	textitem 12, 16, OppPlayAreaText
 	db $ff
 
 Func_8169: ; 8169 (2:4169)
