@@ -1407,10 +1407,10 @@ wceaa:: ; ceaa
 wceab:: ; ceab
 	ds $4
 
-wceaf:: ; ceaf
+wCursorDuelXPosition:: ; ceaf
 	ds $1
 
-wceb0:: ; ceb0
+wCursorDuelYPosition:: ; ceb0
 	ds $1
 
 wceb1:: ; ceb1

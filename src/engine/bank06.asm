@@ -767,9 +767,9 @@ GlossaryData2:
 ; (6:4661)
 	xor a
 	ld [wcfe3], a
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	ld d, a
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
@@ -799,9 +799,9 @@ GlossaryData2:
 	call .asm_006_46d4
 	pop de
 	ld a, d
-	ld [wceaf], a
+	ld [wCursorDuelXPosition], a
 	ld a, e
-	ld [wceb0], a
+	ld [wCursorDuelYPosition], a
 	xor a
 	ld [wDuelCursorBlinkCounter], a
 .asm_006_46a2
@@ -840,13 +840,13 @@ GlossaryData2:
 	ld e, a
 	ld a, $0a
 	ld l, a
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $01
 	ld b, a
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	sla a
 	add $0e
 	ld c, a

@@ -1,6 +1,6 @@
 DuelCheckInterface: ; 8000 (2:4000)
 .begin
-	call Func_905a
+	call ResetCursorPosAndBlink
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
@@ -14,10 +14,10 @@ DuelCheckInterface: ; 8000 (2:4000)
 	jr nc, .asm_8014
 	cp $ff
 	ret z
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	add b
 	ld hl, $4031
 	call JumpToFunctionInTable
@@ -203,7 +203,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call DrawWideTextBox
 	ld hl, Unknown_9027
 	call PlaceTextItems
-	call Func_905a
+	call ResetCursorPosAndBlink
 .asm_8e4e
 	call DoFrame
 	call Func_9065
@@ -214,10 +214,10 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8e64
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	or a
 	jp nz, Func_8f8a
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	or a
 	jp nz, .asm_8ecf
 	call GetPointerToDeckCards
@@ -370,7 +370,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ret
 
 Func_8f8a: ; 8f8a (2:4f8a)
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	or a
 	jp nz, Func_9026
 	call Func_8ff2
@@ -462,19 +462,19 @@ GetPointerToDeckCards: ; 9048 (2:5048)
 	pop af
 	ret
 
-Func_905a: ; 905a (2:505a)
+ResetCursorPosAndBlink: ; 905a (2:505a)
 	xor a
-	ld [wceaf], a
-	ld [wceb0], a
+	ld [wCursorDuelXPosition], a
+	ld [wCursorDuelYPosition], a
 	ld [wDuelCursorBlinkCounter], a
 	ret
 
 Func_9065: ; 9065 (2:5065)
 	xor a
 	ld [wcfe3], a
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	ld d, a
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
@@ -504,9 +504,9 @@ Func_9065: ; 9065 (2:5065)
 	call Func_90d8
 	pop de
 	ld a, d
-	ld [wceaf], a
+	ld [wCursorDuelXPosition], a
 	ld a, e
-	ld [wceb0], a
+	ld [wCursorDuelYPosition], a
 	xor a
 	ld [wDuelCursorBlinkCounter], a
 .asm_90a6
@@ -545,13 +545,13 @@ asm_90da
 	ld e, a
 	ld a, $a
 	ld l, a
-	ld a, [wceaf]
+	ld a, [wCursorDuelXPosition]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $1
 	ld b, a
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	sla a
 	add $e
 	ld c, a
@@ -860,7 +860,7 @@ Func_b19d: ; b19d (2:719d)
 	ld a, [wcea1]
 	add b
 	ld [wd088], a
-	call Func_905a
+	call ResetCursorPosAndBlink
 	call DrawWideTextBox
 	ld hl, $7274
 	call PlaceTextItems
@@ -873,9 +873,9 @@ Func_b19d: ; b19d (2:719d)
 	jp $71b3
 
 .asm_b1fa
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	sla a
-	ld hl, wceaf
+	ld hl, wCursorDuelXPosition
 	add [hl]
 	or a
 	jr nz, .asm_b22c
@@ -1028,7 +1028,7 @@ Func_ba04: ; ba04 (2:7a04)
 	cp $ff
 	jp z, $7b0d
 	ld [wd088], a
-	call Func_905a
+	call ResetCursorPosAndBlink
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
@@ -1043,9 +1043,9 @@ Func_ba04: ; ba04 (2:7a04)
 	jp $7a25
 
 .asm_badf
-	ld a, [wceb0]
+	ld a, [wCursorDuelYPosition]
 	sla a
-	ld hl, wceaf
+	ld hl, wCursorDuelXPosition
 	add [hl]
 	or a
 	jr nz, .asm_bb09
