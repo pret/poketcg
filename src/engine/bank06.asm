@@ -681,8 +681,8 @@ Func_006_4598: ; 18598 (6:4598)
 	call InitTextPrinting
 	ldtx hl, Text02f6
 	call ProcessTextFromID
-	ld de, $0004
-	ld bc, $140e
+	lb de, 0, 4
+	lb bc, 20, 14
 	call DrawRegularTextBox
 	ld a, [wGlossaryPageNo]
 	or a
@@ -1174,7 +1174,55 @@ Func_006_5168: ; 19168 (6:5168)
 	bank1call DrawDuelHUDs
 	ret
 
-	INCROM $191a3, $1996e
+	INCROM $191a3, $1991f
+
+Func_006_591f:
+	add a
+	ld e, a
+	ld d, 0
+	ld hl, .data
+	add hl, de
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
+	ld a, [hli]
+	add $02
+	push hl
+	ld hl, sDeck1Name
+	call Func_199e0
+	pop hl
+	call SwapTurn
+	ld a, [hli]
+	add $02
+	call LoadDeck
+	call SwapTurn
+	call EnableSRAM
+	ld h, $a1
+	ld de, wPlayerDeck
+	ld c, $3c
+.asm_006_594c
+	ld a, [de]
+	inc de
+	ld l, a
+	res 7, [hl]
+	dec c
+	jr nz, .asm_006_594c
+
+	ld h, $a1
+	ld de, wOpponentDeck
+	ld c, $1e
+.asm_006_595b
+	ld a, [de]
+	inc de
+	ld l, a
+	res 7, [hl]
+	inc [hl]
+	dec c
+	jr nz, .asm_006_595b
+
+	call DisableSRAM
+	ret
+.data
+	db $03, $04, $05, $06, $07, $08
 	
 Func_1996e: ; 1996e (6:596e)
 	call EnableSRAM

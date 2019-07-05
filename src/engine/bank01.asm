@@ -7682,7 +7682,7 @@ Func_741a: ; 741a (1:741a)
 	xor a
 	ld [wd4b0], a
 	push hl
-	farcall $6, $4f9c
+	farcall Func_006_4f9c
 	pop hl
 	jr .loop
 .done
@@ -7770,7 +7770,7 @@ Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
-	farcall $6, $591f
+	farcall Func_006_591f
 	ret
 ; 0x757b
 
