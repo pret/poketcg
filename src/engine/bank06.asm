@@ -568,6 +568,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
+Func_006_44c8:  ; 184c8 (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b

@@ -19,15 +19,33 @@ DuelCheckInterface: ; 8000 (2:4000)
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	ld hl, $4031
+	ld hl, DuelCheckMenuFunctionTable
 	call JumpToFunctionInTable
 	jr .begin
-; 0x8031
 
-Func_8031: ; 8031 (2:4031)
-	INCROM $8031, $8158
+DuelCheckMenuFunctionTable: ; 8031 (2:4031)
+	dw DuelCheckMenu_InPlayArea
+	dw DuelCheckMenu_Glossary
+	dw DuelCheckMenu_YourPlayArea
+	dw DuelCheckMenu_OppPlayArea
 
-CheckMenuData ; (2:4158)
+DuelCheckMenu_InPlayArea: ; 8039 (2:4039)
+	xor a
+	ld [wce60], a
+	farcall Func_180d5
+	ret
+
+DuelCheckMenu_Glossary: ; 8042 (2:4042)
+	farcall Func_006_44c8
+	ret
+
+DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
+	INCROM $8047, $80da
+
+DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
+	INCROM $80da, $8158
+
+CheckMenuData: ; (2:4158)
 	textitem  2, 14, InPlayAreaText
 	textitem  2, 16, YourPlayAreaText
 	textitem 12, 14, GlossaryText
