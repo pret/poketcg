@@ -1289,7 +1289,19 @@ wce50:: ; ce50
 wce51:: ; ce51
 	ds $1
 
-	ds $7
+; the position of cursor
+; in the display of play area.
+; note that it's used in neither
+; player's nor opponent's alone.
+wPlayAreaCursorPosition:: ; ce52
+	ds $1
+
+; pointer to the table which contains
+; information for each key-press.
+wPlayAreaInputTablePointer:: ; ce53
+	ds $2
+
+	ds $4
 
 wce59:: ; ce59
 	ds $1
@@ -1301,7 +1313,7 @@ wce5e:: ; ce5e
 
 	ds $1
 
-wce60:: ; ce60
+wIsFromSelectButton:: ; ce60
 	ds $1
 
 wce61:: ; ce61

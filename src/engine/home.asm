@@ -9292,7 +9292,7 @@ Func_30a6: ; 30a6 (0:30a6)
 	ld a, BANK(Func_180d5)
 	call BankswitchROM
 	ld a, $1
-	ld [wce60], a
+	ld [wIsFromSelectButton], a
 	call Func_180d5
 	pop bc
 	ld a, b

@@ -147,80 +147,103 @@ Func_18086: ; 18086 (6:4086)
 	ret
 ; 0x180d5
 
+; this function is called when the player
+; is shown the appearance of the play area.
+; it can be called in the command window
+; from either pressing select button
+; or selecting check command.
 Func_180d5: ; 180d5 (6:40d5)
 	ld a, $05
-	ld [$ce52], a
-.asm_006_40da
+	ld [wPlayAreaCursorPosition], a
+.start
 	xor a
 	ld [wcea3], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
-	jr c, .asm_006_40ef
+	jr c, .clairvoyance_on
+
 	ld de, $42db
-	jr .asm_006_40f2
-.asm_006_40ef
+	jr .clairvoyance_off
+
+.clairvoyance_on
 	ld de, $434b
-.asm_006_40f2
-	ld hl, $ce53
+.clairvoyance_off
+	ld hl, wPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, [$ce52]
-	call .asm_006_4171
-.asm_006_40fe
+	ld a, [wPlayAreaCursorPosition]
+	call Func_006_4171
+.on_frame
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
+
 	ldh a, [hDPadHeld]
-	and $08
-	jr nz, .asm_006_4153
-	ld a, [wce60]
+	and START
+	jr nz, .selection
+
+	; if this function's been called from 'select' button,
+	; wIsFromSelectButton is on.
+	ld a, [wIsFromSelectButton]
 	or a
-	jr z, .asm_006_4118
+	jr z, .from_check_command
+
 	ldh a, [hDPadHeld]
-	and $04
-	jr nz, .asm_006_4148
-.asm_006_4118
-	ld a, [$ce52]
+	and SELECT
+	jr nz, .toggle_view
+
+.from_check_command
+	ld a, [wPlayAreaCursorPosition]
 	ld [$ce58], a
-	call Func_006_43bb
-	jr c, .asm_006_4139
-	ld a, [$ce52]
+	call HandleInput_PlayArea
+	jr c, .pressed
+
+	ld a, [wPlayAreaCursorPosition]
 	cp $10
-	jp z, .asm_006_41f8
+	jp z, Func_006_4171.asm_006_41f8
 	cp $11
-	jp z, .asm_006_4210
+	jp z, Func_006_4171.asm_006_4210
+
 	ld hl, $ce58
 	cp [hl]
-	call nz, .asm_006_4171
-	jr .asm_006_40fe
-.asm_006_4139
-	cp $ff
-	jr nz, .asm_006_4153
+	call nz, Func_006_4171
+
+	jr .on_frame
+
+.pressed
+	cp -1
+	jr nz, .selection
+
+	; pressed b button.
 	call Func_006_44bf
 	lb de, $38, $9f
 	call SetupText
 	scf
 	ret
-.asm_006_4148
+
+.toggle_view
 	call Func_006_44bf
 	lb de, $38, $9f
 	call SetupText
 	or a
 	ret
-.asm_006_4153
+
+.selection ; pressed a button or start button.
 	call Func_006_44bf
 	lb de, $38, $9f
 	call SetupText
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	ld [$ce57], a
-	ld hl, .jump_table
+	ld hl, Func_006_4171.jump_table
 	call JumpToFunctionInTable
 	ld a, [$ce57]
-	ld [$ce52], a
-	jp .asm_006_40da
-.asm_006_4171 ; 18171 (6:4171)
+	ld [wPlayAreaCursorPosition], a
+
+	jp .start
+
+Func_006_4171 ; 18171 (6:4171)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
@@ -228,7 +251,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $01
-	ldtx hl, Text024e
+	ldtx hl, HandText_2
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $00
@@ -249,7 +272,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld a, l
 	cp $06
 	jr nc, .asm_006_41e3
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	cp $06
 	jr nc, .asm_006_41c2
 	ld a, l
@@ -277,7 +300,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call ProcessText
 	ret
 .asm_006_41e3
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	cp $08
 	jr nc, .asm_006_41ee
 	call PrintTextNoDelay
@@ -296,8 +319,8 @@ Func_180d5: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
-	ld [$ce52], a
-	jp .asm_006_40da
+	ld [wPlayAreaCursorPosition], a
+	jp Func_180d5.start
 .asm_006_4210
 	lb de, $38, $9f
 	call SetupText
@@ -307,8 +330,9 @@ Func_180d5: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
-	ld [$ce52], a
-	jp .asm_006_40da
+	ld [wPlayAreaCursorPosition], a
+	jp Func_180d5.start
+
 .jump_table ; (6:4228)
 	dw Func_006_4248
 	dw Func_006_4248
@@ -328,7 +352,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	dw Func_006_426a
 
 Func_006_4248:
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	inc a
 	cp PLAY_AREA_BENCH_5 + $01
 	jr nz, .asm_006_4251
@@ -347,7 +371,7 @@ Func_006_4248:
 	ret
 
 Func_006_426a:
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	sub $08
 	or a
 	jr z, .asm_006_4274
@@ -402,137 +426,165 @@ Func_006_42b1:
 Data_006_42bb:
 	INCROM $182bb, $183bb
 
-Func_006_43bb: ; 183bb (6:43bb)
+HandleInput_PlayArea: ; 183bb (6:43bb)
 	xor a
 	ld [wcfe3], a
-	ld hl, $ce53
-.asm_006_43c2
+	ld hl, wPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	ld l, a
-.asm_006_43c9
 	ld h, $07
 	call HtimesL
 	add hl, de
+
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_006_446b
+	jp z, .check_button
+
 	inc hl
 	inc hl
 	inc hl
+
+	; check d-pad
 	bit D_UP_F, a
-	jr z, .asm_006_43df
-.asm_006_43dc
+	jr z, .else_if_down
+	
+	; up
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43df
+	jr .process_dpad
+
+.else_if_down
 	inc hl
 	bit D_DOWN_F, a
-	jr z, .asm_006_43e7
+	jr z, .else_if_right
+	
+	; down
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43e7
+	jr .process_dpad
+
+.else_if_right
 	inc hl
 	bit D_RIGHT_F, a
-	jr z, .asm_006_43ef
+	jr z, .else_if_left
+	
+	; right
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43ef
+	jr .process_dpad
+
+.else_if_left
 	inc hl
 	bit D_LEFT_F, a
-	jr z, .asm_006_446b
+	jr z, .check_button
+
+	; left
 	ld a, [hl]
-.asm_006_43f5
+.process_dpad
 	push af
-	ld a, [$ce52]
-	ld [$ce57], a
+	ld a, [wPlayAreaCursorPosition]
+	ld [$ce57], a ; saved state
 	pop af
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a ; current state
+
 	cp $05
 	jr c, .asm_006_440e
 	cp $0b
 	jr c, .asm_006_4462
 	cp $10
 	jr c, .asm_006_4437
+
 	jr .asm_006_4462
 .asm_006_440e
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
 	jr nz, .asm_006_441d
+
 	ld a, $10
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
 .asm_006_441d
 	ld b, a
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	cp b
 	jr c, .asm_006_4462
+
 	ldh a, [hDPadHeld]
 	bit D_RIGHT_F, a
 	jr z, .asm_006_4430
+
 	xor a
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
-.asm_006_4430:
+
+.asm_006_4430
 	ld a, b
 	dec a
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
-.asm_006_4437:
+
+.asm_006_4437
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
 	jr nz, .asm_006_4446
+
 	ld a, $11
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
+
 .asm_006_4446
 	ld b, a
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	sub $0b
 	cp b
 	jr c, .asm_006_4462
+
 	ldh a, [hDPadHeld]
 	bit D_LEFT_F, a
 	jr z, .asm_006_445c
+
 	ld a, $0b
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
+
 .asm_006_445c
 	ld a, b
 	add $0a
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 .asm_006_4462
 	ld a, $01
 	ld [wcfe3], a
 	xor a
 	ld [wcea3], a
-.asm_006_446b
+.check_button
 	ldh a, [hKeysPressed]
-	and $03
-	jr z, .asm_006_448b
-	and $01
-	jr nz, .asm_006_447d
-	ld a, $ff
+	and A_BUTTON | B_BUTTON
+	jr z, .return
+
+	and A_BUTTON
+	jr nz, .a_button
+
+	; pressed b button
+	ld a, -1
 	farcall Func_90fb
 	scf
 	ret
-.asm_006_447d
+.a_button
 	call Func_006_44a0
 	ld a, $01
 	farcall Func_90fb
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	scf
 	ret
-.asm_006_448b
+
+.return
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_006_4494
+	jr z, .skip_sfx
 	call PlaySFX
-.asm_006_4494
+.skip_sfx
 	ld hl, wcea3
 	ld a, [hl]
 	inc [hl]
@@ -543,11 +595,11 @@ Func_006_43bb: ; 183bb (6:43bb)
 
 Func_006_44a0: ; 184a0 (6:44a0)
 	call ZeroObjectPositions
-	ld hl, $ce53
+	ld hl, wPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+	ld a, [wPlayAreaCursorPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -572,9 +624,9 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
 	xor a
-	ld [$ce52], a
+	ld [wPlayAreaCursorPosition], a
 	ld de, $4c8e
-	ld hl, $ce53
+	ld hl, wPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
