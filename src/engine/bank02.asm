@@ -1,5 +1,4 @@
 DuelCheckInterface: ; 8000 (2:4000)
-.begin
 	call ResetCursorPosAndBlink
 	xor a
 	ld [wce5e], a
@@ -10,7 +9,7 @@ DuelCheckInterface: ; 8000 (2:4000)
 	call PlaceTextItems
 .asm_8014
 	call DoFrame
-	call Func_9065
+	call HandleDuelMenuInput2
 	jr nc, .asm_8014
 	cp $ff
 	ret z
@@ -21,7 +20,7 @@ DuelCheckInterface: ; 8000 (2:4000)
 	add b
 	ld hl, DuelCheckMenuFunctionTable
 	call JumpToFunctionInTable
-	jr .begin
+	jr DuelCheckInterface
 
 DuelCheckMenuFunctionTable: ; 8031 (2:4031)
 	dw DuelCheckMenu_InPlayArea
@@ -224,11 +223,11 @@ Func_8e42: ; 8e42 (2:4e42)
 	call ResetCursorPosAndBlink
 .asm_8e4e
 	call DoFrame
-	call Func_9065
+	call HandleDuelMenuInput2
 	jp nc, .asm_8e4e
 	cp $ff
 	jr nz, .asm_8e64
-	call Func_90d8
+	call DrawCursorEmpty
 	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8e64
@@ -487,7 +486,12 @@ ResetCursorPosAndBlink: ; 905a (2:505a)
 	ld [wDuelCursorBlinkCounter], a
 	ret
 
-Func_9065: ; 9065 (2:5065)
+; handle player input in menu
+; works out which cursor coordinate to go to
+; and sets carry flag if A or B are pressed
+; returns a =  $1 if A pressed
+; returns a = $ff if B pressed
+HandleDuelMenuInput2: ; 9065 (2:5065)
 	xor a
 	ld [wcfe3], a
 	ld a, [wCursorDuelXPosition]
@@ -496,30 +500,30 @@ Func_9065: ; 9065 (2:5065)
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
-	jr z, .asm_90a6
+	jr z, .no_pad
 	bit D_LEFT_F, a
-	jr nz, .asm_907e
+	jr nz, .horizontal
 	bit D_RIGHT_F, a
-	jr z, .asm_9084
-.asm_907e
+	jr z, .check_vertical
+.horizontal
 	ld a, d
-	xor $1
+	xor $1 ; flips x coordinate
 	ld d, a
-	jr .asm_9090
-.asm_9084
+	jr .okay
+.check_vertical
 	bit D_UP_F, a
-	jr nz, .asm_908c
+	jr nz, .vertical
 	bit D_DOWN_F, a
-	jr z, .asm_90a6
-.asm_908c
+	jr z, .no_pad
+.vertical
 	ld a, e
-	xor $1
+	xor $1 ; flips y coordinate
 	ld e, a
-.asm_9090
+.okay
 	ld a, $1
 	ld [wcfe3], a
 	push de
-	call Func_90d8
+	call DrawCursorEmpty
 	pop de
 	ld a, d
 	ld [wCursorDuelXPosition], a
@@ -527,39 +531,45 @@ Func_9065: ; 9065 (2:5065)
 	ld [wCursorDuelYPosition], a
 	xor a
 	ld [wDuelCursorBlinkCounter], a
-.asm_90a6
+.no_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_90c1
+	jr z, .no_input
 	and A_BUTTON
-	jr nz, .asm_90b7
+	jr nz, .a_press
 	ld a, $ff
 	call Func_90fb
 	scf
 	ret
-.asm_90b7
+.a_press
 	call Func_90f7
 	ld a, $1
 	call Func_90fb
 	scf
 	ret
-.asm_90c1
+.no_input
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_90ca
+	jr z, .check_blink
 	call PlaySFX
-.asm_90ca
+.check_blink
 	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $f
-	ret nz
+	ret nz ; don't update cursor
 	ld a, $f
 	bit 4, [hl]
-	jr z, asm_90da
-Func_90d8: ; 90d8 (2:50d8)
-	ld a, $0
-asm_90da
+	jr z, DrawByteInCursor
+
+; draws in the cursor position
+DrawCursorEmpty: ; 90d8 (2:50d8)
+	ld a, $0 ; empty cursor
+; fallthrough
+
+; draws in the cursor position
+; with byte in a
+DrawByteInCursor:
 	ld e, a
 	ld a, $a
 	ld l, a
@@ -580,7 +590,7 @@ asm_90da
 
 Func_90f7: ; 90f7 (2:50f7)
 	ld a, $f
-	jr asm_90da
+	jr DrawByteInCursor
 
 Func_90fb: ; 90fb (2:50fb)
 	push af
@@ -883,7 +893,7 @@ Func_b19d: ; b19d (2:719d)
 	ld hl, $7274
 	call PlaceTextItems
 	call DoFrame
-	call Func_9065
+	call HandleDuelMenuInput2
 	jp nc, $71e7
 	cp $ff
 	jr nz, .asm_b1fa
