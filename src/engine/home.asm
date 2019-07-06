@@ -9279,12 +9279,12 @@ CompareDEtoBC: ; 3090 (0:3090)
 	cp c
 	ret
 
-CallDuelCheckInterface: ; 3096 (0:3096)
+DuelCheckInterface: ; 3096 (0:3096)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(DuelCheckInterface)
+	ld a, BANK(_DuelCheckInterface)
 	call BankswitchROM
-	call DuelCheckInterface
+	call _DuelCheckInterface
 	pop af
 	call BankswitchROM
 	ret
@@ -9302,16 +9302,16 @@ Func_30a6: ; 30a6 (0:30a6)
 	call BankswitchROM
 	ret
 
-Func_30bc: ; 30bc (0:30bc)
+DrawPlayArea: ; 30bc (0:30bc)
 	ld a, h
 	ld [wTurnHolder1], a
 	ld a, l
 	ld [wTurnHolder2], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8211)
+	ld a, BANK(_DrawPlayArea)
 	call BankswitchROM
-	call Func_8211
+	call _DrawPlayArea
 	call DrawWideTextBox
 	pop af
 	call BankswitchROM

@@ -1,4 +1,4 @@
-DuelCheckInterface: ; 8000 (2:4000)
+_DuelCheckInterface: ; 8000 (2:4000)
 	call ResetCursorPosAndBlink
 	xor a
 	ld [wce5e], a
@@ -20,7 +20,7 @@ DuelCheckInterface: ; 8000 (2:4000)
 	add b
 	ld hl, DuelCheckMenuFunctionTable
 	call JumpToFunctionInTable
-	jr DuelCheckInterface
+	jr _DuelCheckInterface
 
 DuelCheckMenuFunctionTable: ; 8031 (2:4031)
 	dw DuelCheckMenu_InPlayArea
@@ -58,7 +58,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DrawWideTextBox
 	xor a
 	ld [wDuelCursorBlinkCounter], a
-	ld hl, $4169
+	lb hl, $41, $69
 	call PlaceTextItems
 .asm_8074
 	call DoFrame
@@ -74,7 +74,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	ld hl, $4098
+	lb hl, $40, $98
 	call JumpToFunctionInTable
 	jr .asm_8050
 ; 0x8098
@@ -113,7 +113,7 @@ LoadTurnHolders: ; 8209 (2:4209)
 
 ; loads tiles and icons to display play area
 ; and draws the screen according to the turn player
-Func_8211: ; 8211 (2:4211)
+_DrawPlayArea: ; 8211 (2:4211)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -159,20 +159,20 @@ Func_8211: ; 8211 (2:4211)
 	jr nz, .swap
 .opp_turn2
 	call PrintTextNoDelay
-	jr .asm_8275
+	jr .draw
 .swap
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
 
-.asm_8275
+.draw
 	ld a, [wTurnHolder1]
 	ld b, a
 	ld a, [wTurnHolder2]
 	cp b
 	jr nz, .not_equal
 	ld hl, PrizeCardsCoordinateData.player
-	call Func_8464
+	call DrawPrizeCards
 	lb de, $06, 02
 	call Func_837e
 	lb de, $01, $09
@@ -183,7 +183,7 @@ Func_8211: ; 8211 (2:4211)
 	jr .lcd
 .not_equal
 	ld hl, PrizeCardsCoordinateData.opponent
-	call Func_8464
+	call DrawPrizeCards
 	lb de, $06, $05
 	call Func_837e
 	lb de, $01, $02
@@ -205,9 +205,9 @@ Func_833c: ; 833c (2:433c)
 Func_837e: ; 837e (2:437e)
 	INCROM $837e, $8464
 
-Func_8464: ; 8464 (2:4464)
+DrawPrizeCards: ; 8464 (2:4464)
 	push hl
-	call Func_84fc
+	call GetDuelInitialPrizesUpperBitsSet
 	ld a, [wTurnHolder1]
 	ld h, a
 	ld l, DUELVARS_PRIZES
@@ -282,13 +282,13 @@ PrizeCardsCoordinateData:
 
 	INCROM $84cc, $84fc
 
-; returns in a bits set up to the number of
+; calculates bits set up to the number of
 ; initial prizes, with upper 2 bits set, i.e:
 ; 6 prizes: a = %11111111
 ; 4 prizes: a = %11001111
 ; 3 prizes: a = %11000111
 ; 2 prizes: a = %11000011
-Func_84fc: ; 84fc (2:44fc)
+GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 	ld a, [wDuelInitialPrizes]
 	ld b, $01
 .loop
