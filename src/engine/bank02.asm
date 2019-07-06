@@ -60,12 +60,13 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DrawWideTextBox
 	xor a
 	ld [wDuelCursorBlinkCounter], a
-	lb hl, $41, $69
+	ld hl, YourPlayAreaMenuData
 	call PlaceTextItems
+
 .asm_8074
 	call DoFrame
 	xor a
-	call DrawByteToTabulatedPositions_FromCursor
+	call DrawArrowsToTabulatedPositions
 	call Func_86ac
 	jr nc, .asm_8074
 	call EraseByteFromTabulatedPositions
@@ -92,12 +93,17 @@ CheckMenuData: ; (2:4158)
 	textitem 12, 16, OppPlayAreaText
 	db $ff
 
-Func_8169: ; 8169 (2:4169)
-	INCROM $8169, $818c
+YourPlayAreaMenuData: ; (2:4169)
+	textitem  2, 14, YourPokemonText
+	textitem 12, 14, YourHandText
+	textitem  2, 16, YourDiscardPileText2
+	db $ff
+
+	INCROM $8176, $818c
 
 ; checks if arrows need to be erased in Play Area
 ; and draws new arrows upon cursor position change
-DrawByteToTabulatedPositions_FromCursor: ; 818c (2:418c)
+DrawArrowsToTabulatedPositions: ; 818c (2:418c)
 	push af
 	ld b, a
 	add b

@@ -1715,15 +1715,15 @@ Text023e: ; 3bbf8 (e:7bf8)
 	text "No cards chosen."
 	done
 
-Text023f: ; 3bc0a (e:7c0a)
+YourPokemonText: ; 3bc0a (e:7c0a)
 	text "Your Pokémon"
 	done
 
-Text0240: ; 3bc18 (e:7c18)
+YourDiscardPileText2: ; 3bc18 (e:7c18)
 	text "Your Discard Pile"
 	done
 
-Text0241: ; 3bc2b (e:7c2b)
+YourHandText: ; 3bc2b (e:7c2b)
 	text "Your Hand"
 	done
 

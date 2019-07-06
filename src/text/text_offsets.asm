@@ -576,9 +576,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text023c                                 ; 0x023c
 	textpointer Text023d                                 ; 0x023d
 	textpointer Text023e                                 ; 0x023e
-	textpointer Text023f                                 ; 0x023f
-	textpointer Text0240                                 ; 0x0240
-	textpointer Text0241                                 ; 0x0241
+	textpointer YourPokemonText                          ; 0x023f
+	textpointer YourDiscardPileText2                     ; 0x0240
+	textpointer YourHandText                             ; 0x0241
 	textpointer Text0242                                 ; 0x0242
 	textpointer Text0243                                 ; 0x0243
 	textpointer Text0244                                 ; 0x0244
