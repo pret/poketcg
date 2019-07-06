@@ -152,7 +152,7 @@ Func_18086: ; 18086 (6:4086)
 ; it can be called in the command window
 ; from either pressing select button
 ; or selecting check command.
-Func_180d5: ; 180d5 (6:40d5)
+HandlePlayAreaView: ; 180d5 (6:40d5)
 	ld a, $05
 	ld [wPlayAreaCursorPosition], a
 .start
@@ -174,7 +174,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	inc hl
 	ld [hl], d
 	ld a, [wPlayAreaCursorPosition]
-	call Func_006_4171
+	call PrintCardName_HandlePlayAreaView
 .on_frame
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -188,27 +188,28 @@ Func_180d5: ; 180d5 (6:40d5)
 	; wIsFromSelectButton is on.
 	ld a, [wIsFromSelectButton]
 	or a
-	jr z, .from_check_command
+	jr z, .handle_input ; if it's from the check command, jump.
 
 	ldh a, [hDPadHeld]
 	and SELECT
 	jr nz, .toggle_view
 
-.from_check_command
+.handle_input
 	ld a, [wPlayAreaCursorPosition]
-	ld [$ce58], a
+	ld [wPlayAreaPreservedPosition_2], a
 	call HandleInput_PlayArea
 	jr c, .pressed
 
 	ld a, [wPlayAreaCursorPosition]
-	cp $10
-	jp z, Func_006_4171.asm_006_41f8
-	cp $11
-	jp z, Func_006_4171.asm_006_4210
+	cp $10 ; player's hand
+	jp z, ShowPlayerHand_HandlePlayAreaView
+	cp $11 ; opponent's hand
+	jp z, ShowOpponentHand_HandlePlayAreaView
 
-	ld hl, $ce58
+	; check if the cursor moved.
+	ld hl, wPlayAreaPreservedPosition_2
 	cp [hl]
-	call nz, Func_006_4171
+	call nz, PrintCardName_HandlePlayAreaView
 
 	jr .on_frame
 
@@ -235,60 +236,70 @@ Func_180d5: ; 180d5 (6:40d5)
 	lb de, $38, $9f
 	call SetupText
 	ld a, [wPlayAreaCursorPosition]
-	ld [$ce57], a
-	ld hl, Func_006_4171.jump_table
+	ld [wPlayAreaPreservedPosition], a
+	ld hl, JumpTable_HandlePlayAreaView
 	call JumpToFunctionInTable
-	ld a, [$ce57]
+	ld a, [wPlayAreaPreservedPosition]
 	ld [wPlayAreaCursorPosition], a
 
 	jp .start
 
-Func_006_4171 ; 18171 (6:4171)
+PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
 	ldtx hl, Text0251
 	call ProcessTextFromID
+
 	ld hl, hffb0
 	ld [hl], $01
 	ldtx hl, HandText_2
 	call ProcessTextFromID
+
 	ld hl, hffb0
 	ld [hl], $00
 	lb de, 1, 17
 	call InitTextPrinting
 	pop af
+
 	ld hl, Data_006_42bb
 	ld b, 0
 	sla a
 	ld c, a
-	add hl, bc
+	add hl, bc ; hl = 0x42bb + 2 * (wPlayAreaCursorPostion)
+
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld a, h
 	or a
 	jr nz, .asm_006_41e3
+
 	ld a, l
 	cp $06
 	jr nc, .asm_006_41e3
+
 	ld a, [wPlayAreaCursorPosition]
 	cp $06
 	jr nc, .asm_006_41c2
+
 	ld a, l
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
 	ret z
+
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	jr .asm_006_41d7
+
 .asm_006_41c2
 	ld a, l
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	cp -1
 	ret z
+
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
@@ -299,18 +310,21 @@ Func_006_4171 ; 18171 (6:4171)
 	ld hl, wDefaultText
 	call ProcessText
 	ret
+
 .asm_006_41e3
 	ld a, [wPlayAreaCursorPosition]
 	cp $08
 	jr nc, .asm_006_41ee
 	call PrintTextNoDelay
 	ret
+
 .asm_006_41ee
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
 	ret
-.asm_006_41f8
+
+ShowPlayerHand_HandlePlayAreaView:
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -318,10 +332,11 @@ Func_006_4171 ; 18171 (6:4171)
 	bank1call OpenTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [$ce57]
+	ld a, [wPlayAreaPreservedPosition]
 	ld [wPlayAreaCursorPosition], a
-	jp Func_180d5.start
-.asm_006_4210
+	jp HandlePlayAreaView.start
+
+ShowOpponentHand_HandlePlayAreaView:
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -329,11 +344,11 @@ Func_006_4171 ; 18171 (6:4171)
 	bank1call OpenNonTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [$ce57]
+	ld a, [wPlayAreaPreservedPosition]
 	ld [wPlayAreaCursorPosition], a
-	jp Func_180d5.start
+	jp HandlePlayAreaView.start
 
-.jump_table ; (6:4228)
+JumpTable_HandlePlayAreaView ; (6:4228)
 	dw Func_006_4248
 	dw Func_006_4248
 	dw Func_006_4248
@@ -424,7 +439,134 @@ Func_006_42b1:
 	ret
 
 Data_006_42bb:
-	INCROM $182bb, $183bb
+	db $01, $00
+	db $02, $00
+	db $03, $00
+	db $04, $00
+	db $05, $00
+	db $00, $00
+	db $4f, $02
+	db $50, $02
+	db $00, $00
+	db $4f, $02
+	db $50, $02
+	db $01, $00
+	db $02, $00
+	db $03, $00
+	db $04, $00
+	db $05, $00
+	db $18, $8c
+	db $00, $05
+	db $10, $01
+	db $04, $30
+	db $8c, $00
+	db $05, $10
+	db $02, $00
+	db $48, $8c
+	db $00, $05
+	db $10, $03
+	db $01, $60
+	db $8c, $00
+	db $05, $10
+	db $04, $02
+	db $78, $8c
+	db $00, $05
+	db $10, $00
+	db $03, $30
+	db $6c, $00
+	db $08, $00
+	db $07, $07
+	db $78, $80
+	db $00, $07
+	db $00, $05
+	db $05, $78
+	db $70, $00
+	db $08, $06
+	db $05, $05
+	db $78, $34
+	db $20, $0b
+	db $05, $0a
+	db $0a, $30
+	db $20, $20
+	db $0b, $0a
+	db $08, $08
+	db $30, $38
+	db $20, $0b
+	db $05, $08
+	db $08, $90
+	db $14, $20
+	db $11, $08
+	db $0f, $0c
+	db $78, $14
+	db $20, $11
+	db $08, $0b
+	db $0d, $60
+	db $14, $20
+	db $11, $08
+	db $0c, $0e
+	db $48, $14
+	db $20, $11
+	db $08, $0d
+	db $0f, $30
+	db $14, $20
+	db $11, $08
+	db $0e, $0b
+	db $18, $8c
+	db $00, $05
+	db $10, $01
+	db $04, $30
+	db $8c, $00
+	db $05, $10
+	db $02, $00
+	db $48, $8c
+	db $00, $05
+	db $10, $03
+	db $01, $60
+	db $8c, $00
+	db $05, $10
+	db $04, $02
+	db $78, $8c
+	db $00, $05
+	db $10, $00
+	db $03, $30
+	db $6c, $00
+	db $08, $00
+	db $07, $07
+	db $78, $80
+	db $00, $07
+	db $00, $05
+	db $05, $78
+	db $70, $00
+	db $08, $06
+	db $05, $05
+	db $78, $34
+	db $20, $0b
+	db $05, $0a
+	db $0a, $30
+	db $20, $20
+	db $0b, $0a
+	db $08, $08
+	db $30, $38
+	db $20, $09
+	db $05, $08
+	db $08, $90
+	db $14, $20
+	db $11, $08
+	db $0f, $0c
+	db $78, $14
+	db $20, $11
+	db $08, $0b
+	db $0d, $60
+	db $14, $20
+	db $11, $08
+	db $0c, $0e
+	db $48, $14
+	db $20, $11
+	db $08, $0d
+	db $0f, $30
+	db $14, $20
+	db $11, $08
+	db $0e, $0b
 
 HandleInput_PlayArea: ; 183bb (6:43bb)
 	xor a
@@ -483,9 +625,9 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 .process_dpad
 	push af
 	ld a, [wPlayAreaCursorPosition]
-	ld [$ce57], a ; saved state
+	ld [wPlayAreaPreservedPosition], a
 	pop af
-	ld [wPlayAreaCursorPosition], a ; current state
+	ld [wPlayAreaCursorPosition], a
 
 	cp $05
 	jr c, .asm_006_440e
@@ -495,6 +637,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr c, .asm_006_4437
 
 	jr .asm_006_4462
+
 .asm_006_440e
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -504,6 +647,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ld a, $10
 	ld [wPlayAreaCursorPosition], a
 	jr .asm_006_4462
+	
 .asm_006_441d
 	ld b, a
 	ld a, [wPlayAreaCursorPosition]
@@ -571,6 +715,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	farcall Func_90fb
 	scf
 	ret
+
 .a_button
 	call Func_006_44a0
 	ld a, $01
@@ -590,6 +735,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	inc [hl]
 	and $0f
 	ret nz
+
 	bit D_RIGHT_F, [hl]
 	jr nz, Func_006_44bf
 
@@ -623,6 +769,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
+	
 	xor a
 	ld [wPlayAreaCursorPosition], a
 	ld de, $4c8e
@@ -639,26 +786,29 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and $04
-	jr nz, .asm_006_4518
+	and SELECT
+	jr nz, .on_select
 	farcall $2, $49ae
 	jr nc, .asm_006_44e5
-	cp $ff
+	cp -1
 	jr nz, .asm_006_4502
 	farcall $2, $4aa1
 	ret
+	
 .asm_006_4502
 	push af
 	farcall $2, $4aa1
 	pop af
 	cp $09
 	jr z, .asm_006_451e
+
 	call Func_006_4598
 	call Func_006_452b
 	xor a
 	ld [wcea3], a
 	jr .asm_006_44e5
-.asm_006_4518
+
+.on_select
 	ld a, $01
 	farcall Func_90fb
 .asm_006_451e
@@ -680,10 +830,10 @@ Func_006_452b: ; 1852b (6:452b)
 	farcall $2, $4992
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, Text02f6
+	ldtx hl, GlossaryText
 	call ProcessTextFromID
 	call Func_006_455a
-	ldtx hl, Text02f9
+	ldtx hl, ChooseWordInGlossaryText
 	call DrawWideTextBox_PrintText
 	ret
 
@@ -731,7 +881,7 @@ Func_006_4598: ; 18598 (6:4598)
 	call EmptyScreen
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, Text02f6
+	ldtx hl, GlossaryText
 	call ProcessTextFromID
 	lb de, 0, 4
 	lb bc, 20, 14

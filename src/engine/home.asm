@@ -9289,11 +9289,11 @@ Func_3096: ; 3096 (0:3096)
 Func_30a6: ; 30a6 (0:30a6)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_180d5)
+	ld a, BANK(HandlePlayAreaView)
 	call BankswitchROM
 	ld a, $1
 	ld [wIsFromSelectButton], a
-	call Func_180d5
+	call HandlePlayAreaView
 	pop bc
 	ld a, b
 	call BankswitchROM
