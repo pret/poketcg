@@ -164,14 +164,14 @@ Func_8211: ; 8211 (2:4211)
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
-	
+
 .asm_8275
 	ld a, [wTurnHolder1]
 	ld b, a
 	ld a, [wTurnHolder2]
 	cp b
 	jr nz, .not_equal
-	lb hl, $44, $b4
+	ld hl, PrizeCardsCoordinateData.player
 	call Func_8464
 	lb de, $06, 02
 	call Func_837e
@@ -182,7 +182,7 @@ Func_8211: ; 8211 (2:4211)
 	call Func_85aa
 	jr .lcd
 .not_equal
-	lb hl, $44, $c0
+	ld hl, PrizeCardsCoordinateData.opponent
 	call Func_8464
 	lb de, $06, $05
 	call Func_837e
@@ -206,7 +206,104 @@ Func_837e: ; 837e (2:437e)
 	INCROM $837e, $8464
 
 Func_8464: ; 8464 (2:4464)
-	INCROM $8464, $8511
+	push hl
+	call Func_84fc
+	ld a, [wTurnHolder1]
+	ld h, a
+	ld l, DUELVARS_PRIZES
+	ld a, [hl]
+
+	pop hl
+	ld b, 0
+	push af
+; loop each prize card + 1
+.loop
+	inc b
+	ld a, [wDuelInitialPrizes]
+	inc a
+	cp b
+	jr z, .done
+
+	pop af
+	srl a ; right shift prize cards left
+	push af
+	jr c, .not_taken
+	ld a, $e0 ; tile byte for empty slot
+	jr .draw
+.not_taken
+	ld a, $dc ; tile byte for card
+.draw
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	
+	push hl
+	push bc
+	lb hl, $01, $02 ; card tile gfx
+	lb bc, 2, 2 ; rectangle size
+	call FillRectangle
+
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	ld a, $02 ; blue colour
+	lb bc, 2, 2
+	lb hl, $00, $00
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+.not_cgb
+	pop bc
+	pop hl
+	jr .loop
+.done
+	pop af
+	ret
+; 0x84b4
+
+PrizeCardsCoordinateData:
+; x and y coordinates for player prize cards
+.player
+	db 2, 1
+	db 2, 3
+	db 4, 1
+	db 4, 3
+	db 6, 1
+	db 6, 3
+; x and y coordinates for opponent prize cards
+.opponent
+	db 9, 17
+	db 9, 15
+	db 7, 17
+	db 7, 15
+	db 5, 17
+	db 5, 15
+
+	INCROM $84cc, $84fc
+
+; returns in a bits set up to the number of
+; initial prizes, with upper 2 bits set, i.e:
+; 6 prizes: a = %11111111
+; 4 prizes: a = %11001111
+; 3 prizes: a = %11000111
+; 2 prizes: a = %11000011
+Func_84fc: ; 84fc (2:44fc)
+	ld a, [wDuelInitialPrizes]
+	ld b, $01
+.loop
+	or a
+	jr z, .done
+	sla b
+	dec a
+	jr .loop
+.done
+	dec b
+	ld a, b
+	or %11000000
+	ld [wDuelInitialPrizesUpperBitsSet], a
+	ret
+; 0x8511
 
 Func_8511: ; 8511 (2:4511)
 	INCROM $8511, $85aa

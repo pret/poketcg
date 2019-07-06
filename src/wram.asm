@@ -1291,7 +1291,14 @@ wTurnHolder1:: ; ce50
 wTurnHolder2:: ; ce51
 	ds $1
 
-	ds $7
+	ds $3
+
+; same as wDuelInitialPrizes but
+; with upper 2 bits set
+wDuelInitialPrizesUpperBitsSet:: ; ce55
+	ds $1
+
+	ds $3
 
 wce59:: ; ce59
 	ds $1

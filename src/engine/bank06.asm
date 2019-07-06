@@ -580,7 +580,7 @@ Func_006_44c8:  ; 184c8 (6:44c8)
 	inc hl
 	ld [hl], d
 	ld a, $ff
-	ld [$ce55], a
+	ld [wDuelInitialPrizesUpperBitsSet], a
 	xor a
 	ld [wDuelCursorBlinkCounter], a
 .asm_006_44e5
