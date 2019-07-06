@@ -1283,10 +1283,12 @@ wTextBoxLabel:: ; ce4c
 wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
-wce50:: ; ce50
+; these hold either player or opponent turn
+; for temporary calculations
+wTurnHolder1:: ; ce50
 	ds $1
 
-wce51:: ; ce51
+wTurnHolder2:: ; ce51
 	ds $1
 
 	ds $7

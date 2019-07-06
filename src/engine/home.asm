@@ -9304,9 +9304,9 @@ Func_30a6: ; 30a6 (0:30a6)
 
 Func_30bc: ; 30bc (0:30bc)
 	ld a, h
-	ld [wce50], a
+	ld [wTurnHolder1], a
 	ld a, l
-	ld [wce51], a
+	ld [wTurnHolder2], a
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_8211)

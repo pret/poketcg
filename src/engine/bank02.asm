@@ -46,7 +46,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .asm_8050
 	ld h, a
 	ld l, a
-	call Func_8209
+	call LoadTurnHolders
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
@@ -102,84 +102,96 @@ Func_81af: ; 81af (2:41af)
 Func_81ba: ; 81ba (2:41ba)
 	INCROM $81ba, $8209
 
-Func_8209: ; 8209 (2:4209)
+; loads the turn holders
+; with the turn that a holds
+LoadTurnHolders: ; 8209 (2:4209)
 	ld a, h
-	ld [wce50], a
+	ld [wTurnHolder1], a
 	ld a, l
-	ld [wce51], a
+	ld [wTurnHolder2], a
+; fallthrough
 
+; loads tiles and icons to display play area
+; and draws the screen according to the turn player
 Func_8211: ; 8211 (2:4211)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
+
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
+
 	call DoFrame
 	call EmptyScreen
 	call Set_OBJ_8x8
-	call Func_8992
+	call LoadCursorTile
 	call LoadSymbolsFont
 	call LoadDeckAndDiscardPileIcons
-	ld a, [wce50]
-	cp $c2
-	jr nz, .asm_823e
+
+	ld a, [wTurnHolder1]
+	cp PLAYER_TURN
+	jr nz, .opp_turn1
 	ld de, wDefaultText
 	call CopyPlayerName
-	jr .asm_8244
-.asm_823e
+	jr .get_text_length
+.opp_turn1
 	ld de, wDefaultText
 	call CopyOpponentName
-.asm_8244
+.get_text_length
 	ld hl, wDefaultText
+
 	call GetTextLengthInTiles
-	ld a, $06
+	ld a, 6 ; max name size in tiles
 	sub b
 	srl a
-	add $04
-	ld d, a
+	add 4
+	; a = (6 - name text in tiles) / 2 + 4
+	ld d, a ; text horizontal alignment
+
 	ld e, $00
 	call InitTextPrinting
-	ld hl, $247
+	lb hl, $02, $47
 	ldh a, [hWhoseTurn]
-	cp $c2
-	jr nz, .asm_8267
-	ld a, [wce50]
-	cp $c2
-	jr nz, .asm_826c
-.asm_8267
+	cp PLAYER_TURN
+	jr nz, .opp_turn2
+	ld a, [wTurnHolder1]
+	cp PLAYER_TURN
+	jr nz, .swap
+.opp_turn2
 	call PrintTextNoDelay
 	jr .asm_8275
-.asm_826c
+.swap
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
+	
 .asm_8275
-	ld a, [wce50]
+	ld a, [wTurnHolder1]
 	ld b, a
-	ld a, [wce51]
+	ld a, [wTurnHolder2]
 	cp b
-	jr nz, .asm_8299
-	ld hl, $44b4
+	jr nz, .not_equal
+	lb hl, $44, $b4
 	call Func_8464
-	ld de, $602
+	lb de, $06, 02
 	call Func_837e
-	ld de, $109
+	lb de, $01, $09
 	ld c, $04
 	call Func_8511
 	xor a
 	call Func_85aa
-	jr .asm_82b2
-.asm_8299
-	ld hl, $44c0
+	jr .lcd
+.not_equal
+	lb hl, $44, $c0
 	call Func_8464
-	ld de, $605
+	lb de, $06, $05
 	call Func_837e
-	ld de, $102
+	lb de, $01, $02
 	ld c, $04
 	call Func_8511
 	ld a, $01
 	call Func_85aa
-.asm_82b2
+.lcd
 	call EnableLCD
 	ret
 ; 0x82b6
@@ -211,15 +223,15 @@ Func_8764: ; 8764 (2:4764)
 Func_8932: ; 8932 (2:4932)
 	INCROM $8932, $8992
 
-Func_8992: ; 8992 (2:4992)
+LoadCursorTile: ; 8992 (2:4992)
 	ld de, v0Tiles0
-	ld hl, Data_899e
+	ld hl, .tile_data
 	ld b, 16
 	call SafeCopyDataHLtoDE
 	ret
 ; 0x899e
 
-Data_899e: ; 899e (2:499e)
+.tile_data: ; 899e (2:499e)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
