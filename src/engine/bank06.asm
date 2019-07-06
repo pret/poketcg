@@ -1,3 +1,5 @@
+; copy the name and level of the card at wLoadedCard1 to wDefaultText
+; a = length in number of tiles (the resulting string will be padded with spaces to match it)
 _CopyCardNameAndLevel: ; 18000 (6:4000)
 	push bc
 	push de
@@ -12,7 +14,10 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop hl
 	ld a, [hli]
 	cp TX_HALFWIDTH
-	jp z, Func_18086
+	jp z, _CopyCardNameAndLevel_HalfwidthText
+
+; the name doesn't start with TX_HALFWIDTH
+; this doesn't appear to be ever the case (unless caller manipulates wLoadedCard1Name)
 	ld a, [wcd9b]
 	ld c, a
 	ld a, [wLoadedCard1Type]
@@ -83,9 +88,9 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop de
 	pop bc
 	ret
-; 0x18086
 
-Func_18086: ; 18086 (6:4086)
+; the name starts with TX_HALFWIDTH
+_CopyCardNameAndLevel_HalfwidthText:
 	ld a, [wcd9b]
 	inc a
 	add a
@@ -224,18 +229,18 @@ Func_180d5: ; 180d5 (6:40d5)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
-	ldtx hl, Text0251
+	ldtx hl, EmptyLineText
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $01
-	ldtx hl, Text024e
+	ldtx hl, HandText_2
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $00
 	lb de, 1, 17
 	call InitTextPrinting
 	pop af
-	ld hl, Data_006_42bb
+	ld hl, TextIDTable_182bb
 	ld b, 0
 	sla a
 	ld c, a
@@ -399,8 +404,25 @@ Func_006_42b1:
 	ldh [hWhoseTurn], a
 	ret
 
-Data_006_42bb:
-	INCROM $182bb, $183bb
+TextIDTable_182bb:
+	tx HandText
+	tx CheckText
+	tx AttackText
+	tx PKMNPowerText
+	tx DoneText
+	dw NONE
+	tx DuelistHandText_2
+	tx DuelistDiscardPileText
+	dw NONE
+	tx DuelistHandText_2
+	tx DuelistDiscardPileText
+	tx HandText
+	tx CheckText
+	tx AttackText
+	tx PKMNPowerText
+	tx DoneText
+
+	INCROM $182db, $183bb
 
 Func_006_43bb: ; 183bb (6:43bb)
 	xor a

@@ -7940,7 +7940,7 @@ CardSymbolTable:
 	db $dc, $02 ; TYPE_TRAINER
 
 ; copy the name and level of the card at wLoadedCard1 to wDefaultText
-; a = string length in number of tiles (padded with spaces to fit)
+; a = length in number of tiles (the resulting string will be padded with spaces to match it)
 CopyCardNameAndLevel: ; 29f5 (0:29f5)
 	farcall _CopyCardNameAndLevel
 	ret
@@ -8348,7 +8348,7 @@ InitTextPrinting_ProcessTextFromID: ; 2c1b (0:2c1b)
 	jr ProcessTextFromID
 
 ; like ProcessTextFromPointerToID, except it calls InitTextPrinting first
-ProcessTextFromPointerToID_InitTextPrinting: ; 2c20 (0:2c20)
+InitTextPrinting_ProcessTextFromPointerToID: ; 2c20 (0:2c20)
 	call InitTextPrinting
 ;	fallthrough
 
@@ -9995,7 +9995,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, NoDamageOrEffectTextPointerTable
+	ld hl, NoDamageOrEffectTextIDTable
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -10009,7 +10009,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	ret
 ; 0x34d8
 
-NoDamageOrEffectTextPointerTable: ; 34d8 (0:34d8)
+NoDamageOrEffectTextIDTable: ; 34d8 (0:34d8)
 	tx NoDamageOrEffectDueToAgilityText      ; NO_DAMAGE_OR_EFFECT_AGILITY
 	tx NoDamageOrEffectDueToBarrierText      ; NO_DAMAGE_OR_EFFECT_BARRIER
 	tx NoDamageOrEffectDueToFlyText          ; NO_DAMAGE_OR_EFFECT_FLY

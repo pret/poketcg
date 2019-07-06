@@ -406,7 +406,7 @@ FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	line "without Attacking."
 	done
 
-DuelistsTurnText: ; 36a9a (d:6a9a)
+DuelistTurnText: ; 36a9a (d:6a9a)
 	text "<RAMNAME>'s Turn."
 	done
 

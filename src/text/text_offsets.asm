@@ -95,7 +95,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
 	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
-	textpointer DuelistsTurnText                         ; 0x005e
+	textpointer DuelistTurnText                          ; 0x005e
 	textpointer AttachedEnergyToPokemonText                                 ; 0x005f
 	textpointer PokemonEvolvedIntoPokemonText                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
@@ -591,10 +591,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text024b                                 ; 0x024b
 	textpointer Text024c                                 ; 0x024c
 	textpointer Text024d                                 ; 0x024d
-	textpointer Text024e                                 ; 0x024e
-	textpointer Text024f                                 ; 0x024f
-	textpointer Text0250                                 ; 0x0250
-	textpointer Text0251                                 ; 0x0251
+	textpointer HandText_2                                 ; 0x024e
+	textpointer DuelistHandText_2                                 ; 0x024f
+	textpointer DuelistDiscardPileText                                 ; 0x0250
+	textpointer EmptyLineText                                 ; 0x0251
 	textpointer Text0252                                 ; 0x0252
 	textpointer Text0253                                 ; 0x0253
 	textpointer Text0254                                 ; 0x0254
