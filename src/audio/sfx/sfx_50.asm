@@ -1,4 +1,4 @@
-SFX_50_Ch1: ; ff4fa (3f:74fa)
+Sfx50_Ch1: ; ff4fa (3f:74fa)
 	sfx_1 159
 	sfx_8 17
 	sfx_2 0
@@ -87,7 +87,7 @@ SFX_50_Ch1: ; ff4fa (3f:74fa)
 	sfx_1 31
 	sfx_end
 
-SFX_50_Ch2: ; ff5a0 (3f:75a0)
+Sfx50_Ch2: ; ff5a0 (3f:75a0)
 	sfx_1 207
 	sfx_8 17
 	sfx_loop 3

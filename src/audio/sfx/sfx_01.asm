@@ -1,4 +1,4 @@
-SFX_01_Ch1: ; fc4df (3f:44df)
+Sfx01_Ch1: ; fc4df (3f:44df)
 	sfx_1 196
 	sfx_8 17
 	sfx_2 0

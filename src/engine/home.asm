@@ -7376,17 +7376,17 @@ HandleMenuInput: ; 264b (0:264b)
 	scf
 	ret
 
-; plays an "open screen" sound if [hCurMenuItem] != 0xff
-; plays an "exit screen" sound if [hCurMenuItem] == 0xff
+; plays an "open screen" sound (SFX_02) if [hCurMenuItem] != 0xff
+; plays an "exit screen" sound (SFX_03) if [hCurMenuItem] == 0xff
 PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
 	ldh a, [hCurMenuItem]
 	inc a
 	jr z, .play_exit_sfx
-	ld a, $2
+	ld a, SFX_02
 	jr .play_sfx
 .play_exit_sfx
-	ld a, $3
+	ld a, SFX_03
 .play_sfx
 	call PlaySFX
 	pop af
@@ -7490,7 +7490,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	and 1
 .dpad_pressed
 	push af
-	ld a, $1
+	ld a, SFX_01
 	call PlaySFX
 	call .erase_cursor
 	pop af
@@ -8172,7 +8172,7 @@ HandleYesOrNoMenu:
 	and D_RIGHT | D_LEFT
 	jr z, .wait_button_loop
 	; left or right pressed, so switch to the other menu item
-	ld a, $1
+	ld a, SFX_01
 	call PlaySFX
 	call EraseCursor
 .refresh_menu

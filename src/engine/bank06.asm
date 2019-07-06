@@ -1531,16 +1531,16 @@ ClearMemory: ; (6:6787)
 	ret
 
 ; play different sfx by a.
-; if a is 0xff play sfx with 0x03 (usually following a B press),
-; else with 0x02 (usually following an A press).
+; if a is 0xff play SFX_03 (usually following a B press),
+; else play SFX_02 (usually following an A press).
 PlayAcceptOrDeclineSFX: ; (6:6794)
 	push af
 	inc a
 	jr z, .sfx_decline
-	ld a, $02
+	ld a, SFX_02
 	jr .sfx_accept
 .sfx_decline
-	ld a, $03
+	ld a, SFX_03
 .sfx_accept
 	call PlaySFX
 	pop af

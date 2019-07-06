@@ -1,4 +1,4 @@
-SFX_3e_Ch1: ; fe7c0 (3f:67c0)
+Sfx3e_Ch1: ; fe7c0 (3f:67c0)
 	sfx_1 207
 	sfx_8 17
 	sfx_2 8

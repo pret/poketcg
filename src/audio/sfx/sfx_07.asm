@@ -1,4 +1,4 @@
-SFX_07_Ch1: ; fc6c2 (3f:46c2)
+Sfx07_Ch1: ; fc6c2 (3f:46c2)
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 240

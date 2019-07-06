@@ -1,4 +1,4 @@
-SFX_52_Ch1: ; ff714 (3f:7714)
+Sfx52_Ch1: ; ff714 (3f:7714)
 	sfx_1 255
 	sfx_8 17
 	sfx_2 8
@@ -91,7 +91,7 @@ SFX_52_Ch1: ; ff714 (3f:7714)
 	sfx_1 31
 	sfx_end
 
-SFX_52_Ch2: ; ff7bf (3f:77bf)
+Sfx52_Ch2: ; ff7bf (3f:77bf)
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 0

@@ -1,4 +1,4 @@
-SFX_2b_Ch1: ; fd8c4 (3f:58c4)
+Sfx2b_Ch1: ; fd8c4 (3f:58c4)
 	sfx_1 255
 	sfx_8 17
 	sfx_2 8

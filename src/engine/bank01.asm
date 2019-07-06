@@ -1921,7 +1921,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call .asm_4cb4
 	call .asm_4cb4
 	push hl
-	ld a, $08
+	ld a, SFX_08
 	call PlaySFX
 	lb bc, 3, 5
 	ld a, e
@@ -6428,7 +6428,7 @@ PrintAttachedEnergyToPokemon: ; 68e4 (1:68e4)
 ; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wccee,
 ; and the evolved Pokemon card in hTempCardIndex_ff98. also play a sound effect.
 PrintPokemonEvolvedIntoPokemon: ; 68fa (1:68fa)
-	ld a, $5e
+	ld a, SFX_5E
 	call PlaySFX
 	ld a, [wccee]
 	call LoadCardNameToTxRam2
@@ -7556,11 +7556,11 @@ _TossCoin: ; 71ad (1:71ad)
 	ld e, a
 
 .asm_728a
-	ld d, $54
+	ld d, SFX_54
 	ld a, e
 	or a
 	jr nz, .asm_7292
-	ld d, $55
+	ld d, SFX_55
 
 .asm_7292
 	ld a, d

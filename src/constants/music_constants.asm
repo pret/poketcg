@@ -9,12 +9,12 @@
 	const MUSIC_DECK_MACHINE   ; $07
 	const MUSIC_CARD_POP       ; $08
 	const MUSIC_OVERWORLD      ; $09
-	const MUSIC_POKEMON_DOME   ; $0A
-	const MUSIC_CHALLENGE_HALL ; $0B
-	const MUSIC_CLUB_1         ; $0C
-	const MUSIC_CLUB_2         ; $0D
-	const MUSIC_CLUB_3         ; $0E
-	const MUSIC_RONALD         ; $0F
+	const MUSIC_POKEMON_DOME   ; $0a
+	const MUSIC_CHALLENGE_HALL ; $0b
+	const MUSIC_CLUB_1         ; $0c
+	const MUSIC_CLUB_2         ; $0d
+	const MUSIC_CLUB_3         ; $0e
+	const MUSIC_RONALD         ; $0f
 	const MUSIC_IMAKUNI        ; $10
 	const MUSIC_HALL_OF_HONOR  ; $11
 	const MUSIC_CREDITS        ; $12
@@ -25,8 +25,8 @@
 	const MUSIC_MATCH_START_3  ; $17
 	const MUSIC_MATCH_VICTORY  ; $18
 	const MUSIC_MATCH_LOSS     ; $19
-	const MUSIC_DARK_DIDDLY    ; $1A
-	const MUSIC_UNUSED_1B      ; $1B
-	const MUSIC_BOOSTER_PACK   ; $1C
-	const MUSIC_MEDAL          ; $1D
-	const MUSIC_UNUSED_1E      ; $1E
+	const MUSIC_DARK_DIDDLY    ; $1a
+	const MUSIC_UNUSED_1B      ; $1b
+	const MUSIC_BOOSTER_PACK   ; $1c
+	const MUSIC_MEDAL          ; $1d
+	const MUSIC_UNUSED_1E      ; $1e

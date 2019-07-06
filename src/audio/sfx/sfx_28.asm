@@ -1,4 +1,4 @@
-SFX_28_Ch1: ; fd799 (3f:5799)
+Sfx28_Ch1: ; fd799 (3f:5799)
 	sfx_1 100
 	sfx_8 17
 	sfx_2 4
@@ -22,7 +22,7 @@ SFX_28_Ch1: ; fd799 (3f:5799)
 	sfx_0 7, 131
 	sfx_end
 
-SFX_28_Ch2: ; fd7bf (3f:57bf)
+Sfx28_Ch2: ; fd7bf (3f:57bf)
 	sfx_8 17
 	sfx_1 255
 	sfx_1 0

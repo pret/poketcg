@@ -1,4 +1,4 @@
-SFX_33_Ch1: ; fdddd (3f:5ddd)
+Sfx33_Ch1: ; fdddd (3f:5ddd)
 	sfx_1 255
 	sfx_8 17
 	sfx_2 0
@@ -76,7 +76,7 @@ SFX_33_Ch1: ; fdddd (3f:5ddd)
 	sfx_1 255
 	sfx_end
 
-SFX_33_Ch2: ; fde73 (3f:5e73)
+Sfx33_Ch2: ; fde73 (3f:5e73)
 	sfx_8 17
 	sfx_1 223
 	sfx_1 0

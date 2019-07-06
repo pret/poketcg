@@ -1,4 +1,4 @@
-SFX_4d_Ch1: ; ff0b7 (3f:70b7)
+Sfx4d_Ch1: ; ff0b7 (3f:70b7)
 	sfx_1 239
 	sfx_8 17
 	sfx_2 0

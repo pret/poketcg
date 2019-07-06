@@ -1,4 +1,4 @@
-SFX_30_Ch1: ; fdb03 (3f:5b03)
+Sfx30_Ch1: ; fdb03 (3f:5b03)
 	sfx_8 17
 	sfx_loop 8
 	sfx_1 129
