@@ -619,7 +619,7 @@ Text02f5: ; 3d2e6 (f:52e6)
 	line "very rare Pokémon cards!"
 	done
 
-Text02f6: ; 3d31c (f:531c)
+GlossaryText: ; 3d31c (f:531c)
 	text "Pokémon Card Glossary"
 	done
 
@@ -639,7 +639,7 @@ Text02f8: ; 3d3e0 (f:53e0)
 	line "Attack              To previous page"
 	done
 
-Text02f9: ; 3d48f (f:548f)
+ChooseWordInGlossaryText: ; 3d48f (f:548f)
 	text "Choose a word and press the"
 	line "A button."
 	done

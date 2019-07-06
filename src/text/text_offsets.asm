@@ -759,10 +759,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text02f3                                 ; 0x02f3
 	textpointer Text02f4                                 ; 0x02f4
 	textpointer Text02f5                                 ; 0x02f5
-	textpointer Text02f6                                 ; 0x02f6
+	textpointer GlossaryText                                 ; 0x02f6
 	textpointer Text02f7                                 ; 0x02f7
 	textpointer Text02f8                                 ; 0x02f8
-	textpointer Text02f9                                 ; 0x02f9
+	textpointer ChooseWordInGlossaryText                                 ; 0x02f9
 	textpointer Text02fa                                 ; 0x02fa
 	textpointer Text02fb                                 ; 0x02fb
 	textpointer Text02fc                                 ; 0x02fc
