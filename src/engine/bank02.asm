@@ -47,12 +47,13 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld h, a
 	ld l, a
 	call LoadTurnHolders
+
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	ld [$ce5f], a
+	ld [wLastCursorPosition_YourPlayArea], a
 	ld b, $f8
 	call Func_81ba
 	call DrawWideTextBox
@@ -94,13 +95,114 @@ Func_8169: ; 8169 (2:4169)
 	INCROM $8169, $818c
 
 Func_818c: ; 818c (2:418c)
-	INCROM $818c, $81af
+	push af
+	ld b, a
+	add b
+	add b
+	ld c, a
+	ld a, [wCursorDuelYPosition]
+	sla a
+	ld b, a
+	ld a, [wCursorDuelXPosition]
+	add b
+	add c
+	; a = 2 * cursor ycoord + cursor xcoord + 3*a
 
+	ld hl, wLastCursorPosition_YourPlayArea
+	cp [hl]
+	jr z, .unchanged
+	call Func_81af
+	ld [wLastCursorPosition_YourPlayArea], a
+	ld b, $f8 ; black cursor tile byte
+	call Func_81ba
+.unchanged
+	pop af
+	ret
+
+; load white tile in b to erase
+; the bytes drawn previously
 Func_81af: ; 81af (2:41af)
-	INCROM $81af, $81ba
+	push af
+	ld a, [wLastCursorPosition_YourPlayArea]
+	ld b, $00 ; white tile
+	call Func_81ba
+	pop af
+	ret
 
+; writes tile in b to positions tabulated in
+; Data_81d7, with offset calculated from the
+; cursor x and y positions
 Func_81ba: ; 81ba (2:41ba)
-	INCROM $81ba, $8209
+	push bc
+	ld hl, Data_81d7
+	sla a
+	ld c, a
+	ld b, $00
+	add hl, bc
+	; hl points to Data_81d7 plus offset corresponding to a
+
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop de
+
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	ld b, a
+	ld a, [hli]
+	ld c, a
+	ld a, d
+	call WriteByteToBGMap0
+	jr .loop
+.done
+	ret
+; 0x81d7
+
+Data_81d7: ; 81d7 (2:41d7)
+	dw Data_81e3.data_81e3
+	dw Data_81e3.data_81f0
+	dw Data_81e3.data_81f3
+	dw Data_81e3.data_81f6
+	dw Data_81e3.data_8203
+	dw Data_81e3.data_8206
+
+Data_81e3: ; 81e3 (2:41e3)
+; x and y coordinates to draw byte
+.data_81e3:
+	db  5,  5
+	db  0, 10
+	db  4, 10
+	db  8, 10
+	db 12, 10
+	db 16, 10
+	db $ff
+
+.data_81f0:
+	db 14, 7
+	db $ff
+
+.data_81f3:
+	db 14, 5
+	db $ff
+
+.data_81f6:
+	db  5, 7
+	db  0, 3
+	db  4, 3
+	db  8, 3
+	db 12, 3
+	db 16, 3
+	db $ff
+
+.data_8203:
+	db 0, 5
+	db $ff
+
+.data_8206:
+	db 0, 8
+	db $ff
 
 ; loads the turn holders
 ; with the turn that a holds

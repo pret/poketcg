@@ -1308,6 +1308,9 @@ wce59:: ; ce59
 wce5e:: ; ce5e
 	ds $1
 
+; this is used to store last cursor position
+; in the Your Play Area screen
+wLastCursorPosition_YourPlayArea:: ; ce5f
 	ds $1
 
 wce60:: ; ce60
