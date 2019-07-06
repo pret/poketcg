@@ -7,13 +7,13 @@ DuelCheckInterface: ; 8000 (2:4000)
 	ld [wDuelCursorBlinkCounter], a
 	ld hl, CheckMenuData
 	call PlaceTextItems
-.asm_8014
+.loop
 	call DoFrame
 	call HandleDuelMenuInput2
-	jr nc, .asm_8014
+	jr nc, .loop
 	cp $ff
-	ret z
-	ld a, [wCursorDuelYPosition]
+	ret z ; B was pressed
+	ld a, [wCursorDuelYPosition] ; A was pressed
 	sla a
 	ld b, a
 	ld a, [wCursorDuelXPosition]
@@ -39,7 +39,46 @@ DuelCheckMenu_Glossary: ; 8042 (2:4042)
 	ret
 
 DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
-	INCROM $8047, $80da
+	call ResetCursorPosAndBlink
+	xor a
+	ld [wce5e], a
+	ldh a, [hWhoseTurn]
+.asm_8050
+	ld h, a
+	ld l, a
+	call Func_8209
+	ld a, [wCursorDuelYPosition]
+	sla a
+	ld b, a
+	ld a, [wCursorDuelXPosition]
+	add b
+	ld [$ce5f], a
+	ld b, $f8
+	call Func_81ba
+	call DrawWideTextBox
+	xor a
+	ld [wDuelCursorBlinkCounter], a
+	ld hl, $4169
+	call PlaceTextItems
+.asm_8074
+	call DoFrame
+	xor a
+	call Func_818c
+	call Func_86ac
+	jr nc, .asm_8074
+	call Func_81af
+	cp $ff
+	ret z
+	ld a, [wCursorDuelYPosition]
+	sla a
+	ld b, a
+	ld a, [wCursorDuelXPosition]
+	add b
+	ld hl, $4098
+	call JumpToFunctionInTable
+	jr .asm_8050
+; 0x8098
+	INCROM $8098, $80da
 
 DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	INCROM $80da, $8158
@@ -52,19 +91,139 @@ CheckMenuData: ; (2:4158)
 	db $ff
 
 Func_8169: ; 8169 (2:4169)
-	INCROM $8169, $8211
+	INCROM $8169, $818c
+
+Func_818c: ; 818c (2:418c)
+	INCROM $818c, $81af
+
+Func_81af: ; 81af (2:41af)
+	INCROM $81af, $81ba
+
+Func_81ba: ; 81ba (2:41ba)
+	INCROM $81ba, $8209
+
+Func_8209: ; 8209 (2:4209)
+	ld a, h
+	ld [wce50], a
+	ld a, l
+	ld [wce51], a
 
 Func_8211: ; 8211 (2:4211)
-	INCROM $8211, $833c
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositions
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call EmptyScreen
+	call Set_OBJ_8x8
+	call Func_8992
+	call LoadSymbolsFont
+	call LoadDeckAndDiscardPileIcons
+	ld a, [wce50]
+	cp $c2
+	jr nz, .asm_823e
+	ld de, wDefaultText
+	call CopyPlayerName
+	jr .asm_8244
+.asm_823e
+	ld de, wDefaultText
+	call CopyOpponentName
+.asm_8244
+	ld hl, wDefaultText
+	call GetTextLengthInTiles
+	ld a, $06
+	sub b
+	srl a
+	add $04
+	ld d, a
+	ld e, $00
+	call InitTextPrinting
+	ld hl, $247
+	ldh a, [hWhoseTurn]
+	cp $c2
+	jr nz, .asm_8267
+	ld a, [wce50]
+	cp $c2
+	jr nz, .asm_826c
+.asm_8267
+	call PrintTextNoDelay
+	jr .asm_8275
+.asm_826c
+	call SwapTurn
+	call PrintTextNoDelay
+	call SwapTurn
+.asm_8275
+	ld a, [wce50]
+	ld b, a
+	ld a, [wce51]
+	cp b
+	jr nz, .asm_8299
+	ld hl, $44b4
+	call Func_8464
+	ld de, $602
+	call Func_837e
+	ld de, $109
+	ld c, $04
+	call Func_8511
+	xor a
+	call Func_85aa
+	jr .asm_82b2
+.asm_8299
+	ld hl, $44c0
+	call Func_8464
+	ld de, $605
+	call Func_837e
+	ld de, $102
+	ld c, $04
+	call Func_8511
+	ld a, $01
+	call Func_85aa
+.asm_82b2
+	call EnableLCD
+	ret
+; 0x82b6
+
+Func_82b6: ; 82b6 (2:42b6)
+	INCROM $82b6, $833c
 
 Func_833c: ; 833c (2:433c)
-	INCROM $833c, $8764
+	INCROM $833c, $837e
+
+Func_837e: ; 837e (2:437e)
+	INCROM $837e, $8464
+
+Func_8464: ; 8464 (2:4464)
+	INCROM $8464, $8511
+
+Func_8511: ; 8511 (2:4511)
+	INCROM $8511, $85aa
+
+Func_85aa: ; 85aa (2:45aa)
+	INCROM $85aa, $86ac
+
+Func_86ac: ; 86ac (2:46ac)
+	INCROM $86ac, $8764
 
 Func_8764: ; 8764 (2:4764)
 	INCROM $8764, $8932
 
 Func_8932: ; 8932 (2:4932)
-	INCROM $8932, $8aaa
+	INCROM $8932, $8992
+
+Func_8992: ; 8992 (2:4992)
+	ld de, v0Tiles0
+	ld hl, Data_899e
+	ld b, 16
+	call SafeCopyDataHLtoDE
+	ret
+; 0x899e
+
+Data_899e: ; 899e (2:499e)
+	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
+	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
+
+	INCROM $89ae, $8aaa
 
 Func_8aaa: ; 8aaa (2:4aaa)
 	INCROM $8aaa, $8b85

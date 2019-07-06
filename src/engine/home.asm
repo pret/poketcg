@@ -6238,7 +6238,10 @@ LoadPlacingThePrizesScreenTiles: ; 20f0 (0:20f0)
 	ld de, v0Tiles1 + $20 tiles
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
-	; load the Deck and the Discard Pile icons
+; fallthrough
+
+; load the Deck and the Discard Pile icons
+LoadDeckAndDiscardPileIcons: ; 20fb (0:20fb)
 	ld hl, DuelDmgSgbSymbolGraphics + $54 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
