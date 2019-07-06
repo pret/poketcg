@@ -54,8 +54,9 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld a, [wCursorDuelXPosition]
 	add b
 	ld [wLastCursorPosition_YourPlayArea], a
-	ld b, $f8
-	call Func_81ba
+	ld b, $f8 ; black arrow tile
+	call DrawByteToTabulatedPositions
+
 	call DrawWideTextBox
 	xor a
 	ld [wDuelCursorBlinkCounter], a
@@ -64,10 +65,10 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .asm_8074
 	call DoFrame
 	xor a
-	call Func_818c
+	call DrawByteToTabulatedPositions_FromCursor
 	call Func_86ac
 	jr nc, .asm_8074
-	call Func_81af
+	call EraseByteFromTabulatedPositions
 	cp $ff
 	ret z
 	ld a, [wCursorDuelYPosition]
@@ -78,7 +79,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	lb hl, $40, $98
 	call JumpToFunctionInTable
 	jr .asm_8050
-; 0x8098
+
 	INCROM $8098, $80da
 
 DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
@@ -94,7 +95,9 @@ CheckMenuData: ; (2:4158)
 Func_8169: ; 8169 (2:4169)
 	INCROM $8169, $818c
 
-Func_818c: ; 818c (2:418c)
+; checks if arrows need to be erased in Play Area
+; and draws new arrows upon cursor position change
+DrawByteToTabulatedPositions_FromCursor: ; 818c (2:418c)
 	push af
 	ld b, a
 	add b
@@ -111,35 +114,37 @@ Func_818c: ; 818c (2:418c)
 	ld hl, wLastCursorPosition_YourPlayArea
 	cp [hl]
 	jr z, .unchanged
-	call Func_81af
+	call EraseByteFromTabulatedPositions
+
 	ld [wLastCursorPosition_YourPlayArea], a
-	ld b, $f8 ; black cursor tile byte
-	call Func_81ba
+	ld b, $f8 ; black arrow tile byte
+	call DrawByteToTabulatedPositions
 .unchanged
 	pop af
 	ret
 
 ; load white tile in b to erase
 ; the bytes drawn previously
-Func_81af: ; 81af (2:41af)
+EraseByteFromTabulatedPositions: ; 81af (2:41af)
 	push af
 	ld a, [wLastCursorPosition_YourPlayArea]
 	ld b, $00 ; white tile
-	call Func_81ba
+	call DrawByteToTabulatedPositions
 	pop af
 	ret
 
 ; writes tile in b to positions tabulated in
-; Data_81d7, with offset calculated from the
-; cursor x and y positions
-Func_81ba: ; 81ba (2:41ba)
+; PlayAreaDrawPositionsPointerTable, with offset calculated from the
+; cursor x and y positions in a
+DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	push bc
-	ld hl, Data_81d7
+	ld hl, PlayAreaDrawPositionsPointerTable
 	sla a
 	ld c, a
 	ld b, $00
 	add hl, bc
-	; hl points to Data_81d7 plus offset corresponding to a
+	; hl points to PlayAreaDrawPositionsPointerTable 
+	; plus offset corresponding to a
 
 	ld a, [hli]
 	ld h, [hl]
@@ -158,17 +163,16 @@ Func_81ba: ; 81ba (2:41ba)
 	jr .loop
 .done
 	ret
-; 0x81d7
 
-Data_81d7: ; 81d7 (2:41d7)
-	dw Data_81e3.data_81e3
-	dw Data_81e3.data_81f0
-	dw Data_81e3.data_81f3
-	dw Data_81e3.data_81f6
-	dw Data_81e3.data_8203
-	dw Data_81e3.data_8206
+PlayAreaDrawPositionsPointerTable: ; 81d7 (2:41d7)
+	dw PlayAreaDrawPositions.data_81e3
+	dw PlayAreaDrawPositions.data_81f0
+	dw PlayAreaDrawPositions.data_81f3
+	dw PlayAreaDrawPositions.data_81f6
+	dw PlayAreaDrawPositions.data_8203
+	dw PlayAreaDrawPositions.data_8206
 
-Data_81e3: ; 81e3 (2:41e3)
+PlayAreaDrawPositions: ; 81e3 (2:41e3)
 ; x and y coordinates to draw byte
 .data_81e3:
 	db  5,  5
@@ -296,7 +300,6 @@ _DrawPlayArea: ; 8211 (2:4211)
 .lcd
 	call EnableLCD
 	ret
-; 0x82b6
 
 Func_82b6: ; 82b6 (2:42b6)
 	INCROM $82b6, $833c
@@ -362,9 +365,8 @@ DrawPrizeCards: ; 8464 (2:4464)
 .done
 	pop af
 	ret
-; 0x84b4
 
-PrizeCardsCoordinateData:
+PrizeCardsCoordinateData: ; 0x84b4 (2:44b4)
 ; x and y coordinates for player prize cards
 .player
 	db 2, 1
@@ -405,7 +407,6 @@ GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 	or %11000000
 	ld [wDuelInitialPrizesUpperBitsSet], a
 	ret
-; 0x8511
 
 Func_8511: ; 8511 (2:4511)
 	INCROM $8511, $85aa
@@ -428,7 +429,6 @@ LoadCursorTile: ; 8992 (2:4992)
 	ld b, 16
 	call SafeCopyDataHLtoDE
 	ret
-; 0x899e
 
 .tile_data: ; 899e (2:499e)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
