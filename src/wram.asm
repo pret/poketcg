@@ -1301,7 +1301,18 @@ wPlayAreaCursorPosition:: ; ce52
 wPlayAreaInputTablePointer:: ; ce53
 	ds $2
 
-	ds $4
+	ds $2
+
+; it's used for restore the position of cursor
+; when going into another view, and returning to
+; the previous view.
+wPlayAreaPreservedPosition:: ; ce57
+	ds $1
+
+; it's used for checking if the player changed
+; the cursor in the play area view.
+wPlayAreaPreservedPosition_2:: ; ce58
+	ds $1
 
 wce59:: ; ce59
 	ds $1
