@@ -4,12 +4,12 @@ _DuelCheckInterface: ; 8000 (2:4000)
 	ld [wce5e], a
 	call DrawWideTextBox
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
 	ld hl, CheckMenuData
 	call PlaceTextItems
 .loop
 	call DoFrame
-	call HandleDuelMenuInput2
+	call HandleDuelMenuInput_YourPlayArea
 	jr nc, .loop
 	cp $ff
 	ret z ; B was pressed
@@ -59,7 +59,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 
 	call DrawWideTextBox
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
 	ld hl, YourPlayAreaMenuData
 	call PlaceTextItems
 
@@ -67,7 +67,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DoFrame
 	xor a
 	call DrawArrowsToTabulatedPositions
-	call Func_86ac
+	call HandleDuelMenuInput_OppPlayArea
 	jr nc, .loop
 
 	call EraseByteFromTabulatedPositions
@@ -180,7 +180,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DrawWideTextBox
 
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
 	
 	call IsClairvoyanceActive
 	jr c, .clairvoyance2
@@ -195,7 +195,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DoFrame
 	ld a, $01
 	call DrawArrowsToTabulatedPositions
-	call Func_86ac
+	call HandleDuelMenuInput_OppPlayArea
 	jr nc, .loop
 
 	call EraseByteFromTabulatedPositions
@@ -914,8 +914,154 @@ PrintsHandTextAndValue: ; 8676 (2:4676)
 	pop hl
 	ret
 
-Func_86ac: ; 86ac (2:46ac)
-	INCROM $86ac, $8764
+; handle player input in menu in Opp. Play Area
+; works out which cursor coordinate to go to
+; and sets carry flag if A or B are pressed
+; input
+; returns a =  $1 if A pressed
+; returns a = $ff if B pressed
+HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
+	xor a
+	ld [wcfe3], a
+	ld a, [wCursorDuelXPosition]
+	ld d, a
+	ld a, [wCursorDuelYPosition]
+	ld e, a
+
+	ldh a, [hDPadHeld]
+	or a
+	jr z, .asm_870f
+
+; pad is pressed
+	ld a, [wce5e]
+	and $80
+	ldh a, [hDPadHeld]
+	jr nz, .asm_86e8
+	bit 5, a
+	jr nz, .asm_86ce
+	bit 4, a
+	jr z, .asm_86e8
+.asm_86ce
+	ld a, [wce5e]
+	and %01111111
+	or a
+	jr nz, .asm_86dd
+	ld a, e
+	or a
+	jr z, .asm_86e2
+	dec e
+	jr .asm_86e2
+.asm_86dd
+	ld a, e
+	or a
+	jr nz, .asm_86e2
+	inc e
+.asm_86e2
+	ld a, d
+	xor $01
+	ld d, a
+	jr .asm_86f9
+.asm_86e8
+	bit 6, a
+	jr nz, .asm_86f0
+	bit 7, a
+	jr z, .asm_870f
+.asm_86f0
+	ld a, d
+	or a
+	jr z, .asm_86f5
+	dec d
+.asm_86f5
+	ld a, e
+	xor $01
+	ld e, a
+.asm_86f9
+	ld a, $01
+	ld [wcfe3], a
+	push de
+	call DrawCursorEmpty_OppPlayArea
+	pop de
+
+	ld a, d
+	ld [wCursorDuelXPosition], a
+	ld a, e
+	ld [wCursorDuelYPosition], a
+
+	xor a
+	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
+.asm_870f
+	ldh a, [hKeysPressed]
+	and A_BUTTON | B_BUTTON
+	jr z, .sfx
+	and A_BUTTON
+	jr nz, .a_pressed
+
+; b pressed
+	ld a, $ff
+	call Func_90fb
+	scf
+	ret
+	
+.a_pressed
+	call Func_8760
+	ld a, $01
+	call Func_90fb
+	scf
+	ret
+
+.sfx
+	ld a, [wcfe3]
+	or a
+	jr z, .draw_cursor
+	call PlaySFX
+
+.draw_cursor
+	ld hl, wDuelCursorBlinkCounter
+	ld a, [hl]
+	inc [hl]
+	and %00001111
+	ret nz ; only update cursor if blink's lower nibble is 0
+
+	ld a, $0f
+	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
+	jr z, DrawByteInCursor_OppPlayArea
+; fallthrough
+
+; transforms cursor position into coordinates
+; in order to draw byte on menu cursor
+DrawCursorEmpty_OppPlayArea: ; 8741 (2:4741)
+	ld a, $00 ; white tile
+; fallthrough
+
+; draws in the cursor position
+; input:
+; a = tile byte to draw
+DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
+	ld e, a
+	ld a, 10
+	ld l, a
+	ld a, [wCursorDuelXPosition]
+	ld h, a
+	call HtimesL
+; h = 10 * cursor x pos
+
+	ld a, l
+	add 1
+	ld b, a
+	ld a, [wCursorDuelYPosition]
+	sla a
+	add 14
+	ld c, a
+; c = 11 + 2 * cursor y pos + 14
+
+; draw tile loaded in e
+	ld a, e
+	call WriteByteToBGMap0
+	or a
+	ret
+
+Func_8760: ; 8760 (2:4760)
+	INCROM $8760, $8764
 
 Func_8764: ; 8764 (2:4764)
 	INCROM $8764, $8932
@@ -1093,11 +1239,11 @@ Func_8e42: ; 8e42 (2:4e42)
 	call ResetCursorPosAndBlink
 .asm_8e4e
 	call DoFrame
-	call HandleDuelMenuInput2
+	call HandleDuelMenuInput_YourPlayArea
 	jp nc, .asm_8e4e
 	cp $ff
 	jr nz, .asm_8e64
-	call DrawCursorEmpty
+	call DrawCursorEmpty_YourPlayArea
 	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8e64
@@ -1356,13 +1502,13 @@ ResetCursorPosAndBlink: ; 905a (2:505a)
 	ld [wDuelCursorBlinkCounter], a
 	ret
 
-; handle player input in menu
+; handle player input in menu in Your Play Area
 ; works out which cursor coordinate to go to
 ; and sets carry flag if A or B are pressed
 ; input
 ; returns a =  $1 if A pressed
 ; returns a = $ff if B pressed
-HandleDuelMenuInput2: ; 9065 (2:5065)
+HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	xor a
 	ld [wcfe3], a
 	ld a, [wCursorDuelXPosition]
@@ -1396,15 +1542,16 @@ HandleDuelMenuInput2: ; 9065 (2:5065)
 	ld a, $1
 	ld [wcfe3], a
 	push de
-	call DrawCursorEmpty
+	call DrawCursorEmpty_YourPlayArea
 	pop de
 
 	ld a, d
 	ld [wCursorDuelXPosition], a
 	ld a, e
 	ld [wCursorDuelYPosition], a
+
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
 .no_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -1434,20 +1581,21 @@ HandleDuelMenuInput2: ; 9065 (2:5065)
 	ld a, [hl]
 	inc [hl]
 	and $f
-	ret nz ; don't update cursor
-	ld a, $f
-	bit 4, [hl]
-	jr z, DrawByteInCursor
+	ret nz  ; only update cursor if blink's lower nibble is 0
+
+	ld a, $0f
+	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
+	jr z, DrawByteInCursor_YourPlayArea
 
 ; draws in the cursor position
-DrawCursorEmpty: ; 90d8 (2:50d8)
+DrawCursorEmpty_YourPlayArea: ; 90d8 (2:50d8)
 	ld a, $0 ; empty cursor
 ; fallthrough
 
 ; draws in the cursor position
 ; input:
 ; a = tile byte to draw
-DrawByteInCursor:
+DrawByteInCursor_YourPlayArea:
 	ld e, a
 	ld a, $a
 	ld l, a
@@ -1468,7 +1616,7 @@ DrawByteInCursor:
 
 Func_90f7: ; 90f7 (2:50f7)
 	ld a, $f
-	jr DrawByteInCursor
+	jr DrawByteInCursor_YourPlayArea
 
 Func_90fb: ; 90fb (2:50fb)
 	push af
@@ -1812,7 +1960,7 @@ Func_b19d: ; b19d (2:719d)
 	ld hl, $7274
 	call PlaceTextItems
 	call DoFrame
-	call HandleDuelMenuInput2
+	call HandleDuelMenuInput_YourPlayArea
 	jp nc, $71e7
 	cp $ff
 	jr nz, .asm_b1fa
