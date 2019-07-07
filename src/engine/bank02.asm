@@ -932,7 +932,7 @@ DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 	ld e, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	ld a, [de]
 	ld b, a
-	ld a, $d0
+	ld a, $d0 ; hand icon, unused?
 	call PrintsHandTextAndValue
 
 ; deck icon and value
@@ -1045,8 +1045,37 @@ PlayAreaIconCoordinates ; 8635 (2:4635)
 	db  0,  6
 	db  0,  4
 
-Func_864d: ; 864d (2:464d)
-	INCROM $864d, $8676
+; draws In Play Area icons
+DrawInPlayArea_Icons: ; 864d (2:464d)
+	ldh a, [hWhoseTurn]
+	ld d, a
+	ld e, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	ld a, [de]
+	ld b, a
+	ld a, $d0 ; hand icon, unused?
+	call PrintsHandTextAndValue
+
+; deck
+	ldh a, [hWhoseTurn]
+	ld d, a
+	ld e, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	ld a, [de]
+	ld b, a
+	ld a, DECK_SIZE
+	sub b
+	ld b, a
+	ld a, $d4 ; deck tile
+	call DrawIconWithValue
+
+; discard pile
+	ldh a, [hWhoseTurn]
+	ld d, a
+	ld e, $ed
+	ld a, [de]
+	ld b, a
+	ld a, $d8 ; discard pile tile
+	call DrawIconWithValue
+	ret
 
 ; prints text HandText2 and a cross with 
 ; decimal value of b
