@@ -1440,11 +1440,13 @@ wceb4:: ; ceb4
 wceb5:: ; ceb5
 	ds $1
 
-wceb6:: ; ceb6
-	ds $1
-
-wceb7:: ; ceb7
-	ds $1
+; used to store the tens digit and 
+; ones digit of a value for printing
+; the ones digit is added $20
+; ceb6 = ones digit (+ $20)
+; ceb7 = tens digit
+wOnesAndTensPlace:: ; ceb6
+	ds $2
 
 	ds $3
 

@@ -650,22 +650,22 @@ Func_85e1: ; 85e1 (2:45e1)
 	call InitTextPrinting
 	pop bc
 	ld a, b
-	call Func_98a6
+	call CalculateOnesAndTensDigits
 
-	ld hl, $ceb6
+	ld hl, wOnesAndTensPlace
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
 
 	ld hl, wDefaultText
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld [hl], SYM_CROSS
 	inc hl
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld [hli], a
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld a, b
 	ld [hli], a
@@ -700,28 +700,32 @@ Func_8676: ; 8676 (2:4676)
 	inc hl
 	ld e, [hl]
 	inc hl
+
 	push hl
 	push bc
 	call InitTextPrinting
 	ld hl, $24e
 	call ProcessTextFromID
 	pop bc
+
 	ld a, b
-	call Func_98a6
-	ld hl, $ceb6
+	call CalculateOnesAndTensDigits
+	ld hl, wOnesAndTensPlace
 	ld a, [hli]
 	ld b, a
 	ld a, [hl]
+
 	ld hl, wDefaultText
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
-	ld [hl], $2d
+	ld [hl], SYM_CROSS
 	inc hl
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld [hli], a
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
+
 	ld a, b
 	ld [hli], a
 	ld [hl], $00
@@ -1537,28 +1541,38 @@ Func_9345: ; 9345 (2:5345)
 Func_9843: ; 9843 (2:5843)
 	INCROM $9843, $98a6
 
-Func_98a6: ; 98a6 (2:58a6)
+; determines the ones and tens digits in a for printing 
+; the ones place is added $20 so that it maps to a 
+; numerical character while if the tens is 0, 
+; it maps to an empty character
+CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	push af
 	push bc
 	push de
 	push hl
 	ld c, $ff
-.asm_98ac
+.loop
 	inc c
-	sub $0a
-	jr nc, .asm_98ac
-	jr z, .asm_98b5
-	add $0a
-.asm_98b5
+	sub 10
+	jr nc, .loop
+	jr z, .zero1
+	add 10
+	; a = a mod 10
+	; c = floor(a / 10)
+.zero1
+; ones digit
 	add $20
-	ld hl, $ceb6
+	ld hl, wOnesAndTensPlace
 	ld [hli], a
+
+; tens digit
 	ld a, c
 	or a
-	jr z, .asm_98c1
+	jr z, .zero2
 	add $20
-.asm_98c1
+.zero2
 	ld [hl], a
+
 	pop hl
 	pop de
 	pop bc
