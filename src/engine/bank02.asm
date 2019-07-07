@@ -142,6 +142,8 @@ EraseByteFromTabulatedPositions: ; 81af (2:41af)
 ; writes tile in b to positions tabulated in
 ; PlayAreaDrawPositionsPointerTable, with offset calculated from the
 ; cursor x and y positions in a
+; input:
+; a = cursor position (2*y + x)
 DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	push bc
 	ld hl, PlayAreaDrawPositionsPointerTable
@@ -171,16 +173,16 @@ DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	ret
 
 PlayAreaDrawPositionsPointerTable: ; 81d7 (2:41d7)
-	dw PlayAreaDrawPositions.asm_81e3
-	dw PlayAreaDrawPositions.asm_81f0
-	dw PlayAreaDrawPositions.asm_81f3
-	dw PlayAreaDrawPositions.asm_81f6
-	dw PlayAreaDrawPositions.asm_8203
-	dw PlayAreaDrawPositions.asm_8206
+	dw PlayAreaDrawPositions.player_pokemon
+	dw PlayAreaDrawPositions.player_hand
+	dw PlayAreaDrawPositions.player_discard_pile
+	dw PlayAreaDrawPositions.opponent_pokemon
+	dw PlayAreaDrawPositions.opponent_hand
+	dw PlayAreaDrawPositions.opponent_discard_pile
 
 PlayAreaDrawPositions: ; 81e3 (2:41e3)
 ; x and y coordinates to draw byte
-.asm_81e3:
+.player_pokemon:
 	db  5,  5
 	db  0, 10
 	db  4, 10
@@ -189,15 +191,15 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 	db 16, 10
 	db $ff
 
-.asm_81f0:
+.player_hand:
 	db 14, 7
 	db $ff
 
-.asm_81f3:
+.player_discard_pile:
 	db 14, 5
 	db $ff
 
-.asm_81f6:
+.opponent_pokemon:
 	db  5, 7
 	db  0, 3
 	db  4, 3
@@ -206,16 +208,17 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 	db 16, 3
 	db $ff
 
-.asm_8203:
+.opponent_hand:
 	db 0, 5
 	db $ff
 
-.asm_8206:
+.opponent_discard_pile:
 	db 0, 8
 	db $ff
 
 ; loads the turn holders
-; with the turn that a holds
+; input:
+; a = turn player
 LoadTurnHolders: ; 8209 (2:4209)
 	ld a, h
 	ld [wTurnHolder1], a
@@ -289,10 +292,10 @@ _DrawPlayArea: ; 8211 (2:4211)
 	lb de, 6, 2 ; coordinates to draw player's active card
 	call DrawActiveCardGfx
 	lb de, 1, 9
-	ld c, $04
+	ld c, 4
 	call DrawPlayAreaBenchCards
 	xor a
-	call Func_85aa
+	call DrawPlayAreaIcons
 	jr .lcd
 .not_equal
 	ld hl, PrizeCardsCoordinateData.opponent
@@ -300,10 +303,10 @@ _DrawPlayArea: ; 8211 (2:4211)
 	lb de, 6, 5 ; coordinates to draw opponent's active card
 	call DrawActiveCardGfx
 	lb de, $01, $02
-	ld c, $04
+	ld c, 4
 	call DrawPlayAreaBenchCards
 	ld a, $01
-	call Func_85aa
+	call DrawPlayAreaIcons
 
 .lcd
 	call EnableLCD
@@ -317,6 +320,8 @@ Func_833c: ; 833c (2:433c)
 
 ; draws the active card gfx at coordinates de
 ; of the player (or opponent) depending on wTurnHolder1
+; input:
+; de = coordinates
 DrawActiveCardGfx: ; 837e (2:437e)
 	push de
 	ld a, DUELVARS_ARENA_CARD
@@ -368,6 +373,10 @@ DrawActiveCardGfx: ; 837e (2:437e)
 
 	INCROM $83cc, $8464
 
+; draws prize cards depending on the turn
+; loaded in wTurnHolder1
+; input:
+; hl = coordinates
 DrawPrizeCards: ; 8464 (2:4464)
 	push hl
 	call GetDuelInitialPrizesUpperBitsSet
@@ -468,9 +477,11 @@ GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 
 ; draws filled and empty bench slots depending
 ; on the turn loaded in wTurnHolder1
-; at coordinates loaded in de
 ; if wTurnHolder1 is different from wTurnHolder2
 ; adjusts coordinates of the bench slots
+; input:
+; de = coordinates to draw bench
+; c  = spacing between slots
 DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	ld a, [wTurnHolder2]
 	ld b, a
@@ -478,6 +489,7 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	cp b
 	jr z, .skip
 
+; adjust the starting bench position for opponent
 	ld a, d
 	add c
 	add c
@@ -486,6 +498,7 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	ld d, a
 	; d = d + 4 * c
 
+; have the spacing go to the left instead of right
 	xor a
 	sub c
 	ld c, a
@@ -585,14 +598,19 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	ld d, a
 	jr .loop2
 
-Func_85aa: ; 85aa (2:45aa)
+; draws Play Area icons depending on value in a
+; input:
+; a = $00: draws player icons
+; a = $01: draws opponent icons
+DrawPlayAreaIcons: ; 85aa (2:45aa)
 	or a
-	jr nz, .asm_85b2
-	ld hl, Data_8635.asm_8635
-	jr .asm_85b5
-.asm_85b2
-	ld hl, Data_8635.asm_863b
-.asm_85b5
+	jr nz, .opponent
+	ld hl, PlayAreaIconCoordinates.player
+	jr .draw
+.opponent
+	ld hl, PlayAreaIconCoordinates.opponent
+
+.draw
 ; hand icon and value
 	ld a, [wTurnHolder1]
 	ld d, a
@@ -626,9 +644,13 @@ Func_85aa: ; 85aa (2:45aa)
 
 ; draws the interface icon corresponding to
 ; the gfx tile loaded in a
-; also prints the number in decimalcorresponding
-; to the value variable loaded in b
+; also prints the number in decimal corresponding
+; to the value loaded in b
 ; the coordinates in screen are given by [hl]
+; input:
+; a  = tile for the icon
+; b  = value to print alongside icon
+; hl = pointer to coordinates
 DrawIconWithValue: ; 85e1 (2:45e1)
 ; drawing the icon
 	ld d, [hl]
@@ -687,15 +709,15 @@ DrawIconWithValue: ; 85e1 (2:45e1)
 	pop hl
 	ret
 
-Data_8635 ; 8635 (2:4635)
-.asm_8635
-	db 15,  7
-	db 15,  2
-	db 15,  4
-.asm_863b
-	db  1,  5
-	db  1,  9
-	db  1,  7
+PlayAreaIconCoordinates ; 8635 (2:4635)
+.player
+	db 15,  7 ; hand
+	db 15,  2 ; deck
+	db 15,  4 ; discard pile
+.opponent
+	db  1,  5 ; hand
+	db  1,  9 ; deck
+	db  1,  7 ; discard pile
 .asm_8641
 	db 15, 14
 	db 15,  9
@@ -709,6 +731,8 @@ Data_8635 ; 8635 (2:4635)
 
 ; prints text HandText2 and a cross with 
 ; decimal value of b
+; input
+; b = value to print alongside text
 PrintsHandTextAndValue: ; 8676 (2:4676)
 	ld d, [hl]
 	inc hl
@@ -1195,6 +1219,7 @@ ResetCursorPosAndBlink: ; 905a (2:505a)
 ; handle player input in menu
 ; works out which cursor coordinate to go to
 ; and sets carry flag if A or B are pressed
+; input
 ; returns a =  $1 if A pressed
 ; returns a = $ff if B pressed
 HandleDuelMenuInput2: ; 9065 (2:5065)
@@ -1204,6 +1229,7 @@ HandleDuelMenuInput2: ; 9065 (2:5065)
 	ld d, a
 	ld a, [wCursorDuelYPosition]
 	ld e, a
+
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .no_pad
@@ -1225,12 +1251,14 @@ HandleDuelMenuInput2: ; 9065 (2:5065)
 	ld a, e
 	xor $1 ; flips y coordinate
 	ld e, a
+
 .okay
 	ld a, $1
 	ld [wcfe3], a
 	push de
 	call DrawCursorEmpty
 	pop de
+
 	ld a, d
 	ld [wCursorDuelXPosition], a
 	ld a, e
@@ -1247,17 +1275,20 @@ HandleDuelMenuInput2: ; 9065 (2:5065)
 	call Func_90fb
 	scf
 	ret
+
 .a_press
 	call Func_90f7
 	ld a, $1
 	call Func_90fb
 	scf
 	ret
+
 .no_input
 	ld a, [wcfe3]
 	or a
 	jr z, .check_blink
 	call PlaySFX
+
 .check_blink
 	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
@@ -1274,7 +1305,8 @@ DrawCursorEmpty: ; 90d8 (2:50d8)
 ; fallthrough
 
 ; draws in the cursor position
-; with byte in a
+; input:
+; a = tile byte to draw
 DrawByteInCursor:
 	ld e, a
 	ld a, $a
@@ -1560,6 +1592,7 @@ Func_9843: ; 9843 (2:5843)
 ; the ones place is added $20 so that it maps to a 
 ; numerical character while if the tens is 0, 
 ; it maps to an empty character
+; a = value to calculate digits
 CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	push af
 	push bc
