@@ -427,7 +427,7 @@ _DrawPlayArea: ; 8211 (2:4211)
 	cp b
 	jr nz, .not_equal
 
-	ld hl, PrizeCardsCoordinateData.player
+	ld hl, PrizeCardsCoordinateData1.player
 	call DrawPrizeCards
 	lb de, 6, 2 ; coordinates to draw player's active card
 	call DrawActiveCardGfx
@@ -438,7 +438,7 @@ _DrawPlayArea: ; 8211 (2:4211)
 	call DrawPlayAreaIcons
 	jr .lcd
 .not_equal
-	ld hl, PrizeCardsCoordinateData.opponent
+	ld hl, PrizeCardsCoordinateData1.opponent
 	call DrawPrizeCards
 	lb de, 6, 5 ; coordinates to draw opponent's active card
 	call DrawActiveCardGfx
@@ -459,17 +459,72 @@ DrawTurnHolderPrizeCards: ; 82b6 (2:42b6)
 	cp b
 	jr nz, .not_equal
 
-	ld hl, PrizeCardsCoordinateData.player
+	ld hl, PrizeCardsCoordinateData1.player
 	call DrawPrizeCards
 	ret
 
 .not_equal
-	ld hl, PrizeCardsCoordinateData.opponent
+	ld hl, PrizeCardsCoordinateData1.opponent
 	call DrawPrizeCards
 	ret
 
 Func_82ce: ; 82ce (2:42ce)
-	INCROM $82ce, $833c
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositions
+
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call EmptyScreen
+
+	ld a, $0a
+	ld [wDuelDisplayedScreen], a
+	call Set_OBJ_8x8
+	call LoadCursorTile
+	call LoadSymbolsFont
+	call LoadDeckAndDiscardPileIcons
+
+	lb de, $80, $9f
+	call SetupText
+
+; reset turn holders
+	ldh a, [hWhoseTurn]
+	ld [wTurnHolder1], a
+	ld [wTurnHolder2], a
+
+; player prize cards
+	ld hl, PrizeCardsCoordinateData2.player
+	call DrawPrizeCards
+
+; player bench cards
+	lb de, 3, 15
+	ld c, 3
+	call DrawPlayAreaBenchCards
+
+	ld hl, $4641
+	call Func_864d
+
+	call SwapTurn
+	ldh a, [hWhoseTurn]
+	ld [wTurnHolder1], a
+	call SwapTurn
+
+; opponent prize cards
+	ld hl, PrizeCardsCoordinateData2.opponent
+	call DrawPrizeCards
+
+; opponent bench cards
+	lb de, 3, 0
+	ld c, 3
+	call DrawPlayAreaBenchCards
+
+	call SwapTurn
+	ld hl, $4647
+	call Func_864d
+	call SwapTurn
+	call Func_83cc
+	ret
 
 Func_833c: ; 833c (2:433c)
 	INCROM $833c, $837e
@@ -527,6 +582,7 @@ DrawActiveCardGfx: ; 837e (2:437e)
 	pop de
 	ret
 
+Func_83cc:  ; 83cc (2:43cc)
 	INCROM $83cc, $8464
 
 ; draws prize cards depending on the turn
@@ -589,7 +645,7 @@ DrawPrizeCards: ; 8464 (2:4464)
 	pop af
 	ret
 
-PrizeCardsCoordinateData: ; 0x84b4 (2:44b4)
+PrizeCardsCoordinateData1: ; 0x84b4 (2:44b4)
 ; x and y coordinates for player prize cards
 .player
 	db 2, 1
@@ -607,7 +663,25 @@ PrizeCardsCoordinateData: ; 0x84b4 (2:44b4)
 	db 5, 17
 	db 5, 15
 
-	INCROM $84cc, $84fc
+	INCROM $84cc, $84e4
+
+PrizeCardsCoordinateData2: ; 0x84e4 (2:44e4)
+; x and y coordinates for player prize cards
+.player
+	db  9, 1
+	db  9, 3
+	db 11, 1
+	db 11, 3
+	db 13, 1
+	db 13, 3
+; x and y coordinates for opponent prize cards
+.opponent
+	db 6, 17
+	db 6, 15
+	db 4, 17
+	db 4, 15
+	db 2, 17
+	db 2, 15
 
 ; calculates bits set up to the number of
 ; initial prizes, with upper 2 bits set, i.e:
@@ -883,6 +957,7 @@ PlayAreaIconCoordinates ; 8635 (2:4635)
 	db  0,  6
 	db  0,  4
 
+Func_864d: ; 864d (2:464d)
 	INCROM $864d, $8676
 
 ; prints text HandText2 and a cross with 
