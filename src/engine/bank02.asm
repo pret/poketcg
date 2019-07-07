@@ -137,8 +137,84 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
+; handles the menu when in the Opponent's Play Area submenu
+; if clairvoyance is active, add the option to check
+; opponent's hand
 DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
-	INCROM $80da, $8158
+	call ResetCursorPosAndBlink
+	call IsClairvoyanceActive
+	jr c, .clairvoyance1
+
+	ld a, $80
+	ld [wce5e], a
+	jr .begin
+.clairvoyance1
+	xor a
+	ld [wce5e], a
+
+.begin
+	ldh a, [hWhoseTurn]
+.turns
+	ld l, a
+	cp PLAYER_TURN
+	jr nz, .opponent
+	ld a, OPPONENT_TURN
+	ld h, a
+	jr .cursor
+.opponent
+	ld a, PLAYER_TURN
+	ld h, a
+
+.cursor
+	call LoadTurnHolders
+	ld a, [wCursorDuelYPosition]
+	sla a
+	ld b, a
+	ld a, [wCursorDuelXPosition]
+	add b
+	add $03
+	ld [wLastCursorPosition_YourPlayArea], a
+
+	ld b, $f8 ; black arrow tile
+	call DrawByteToTabulatedPositions
+	call DrawWideTextBox
+
+	xor a
+	ld [wDuelCursorBlinkCounter], a
+	
+	call IsClairvoyanceActive
+	jr c, .clairvoyance2
+	ld hl, OppPlayAreaMenuData
+	call PlaceTextItems
+	jr .loop
+.clairvoyance2
+	ld hl, OppPlayAreaMenuData_WithClairvoyance
+	call PlaceTextItems
+
+.loop
+	call DoFrame
+	ld a, $01
+	call DrawArrowsToTabulatedPositions
+	call Func_86ac
+	jr nc, .loop
+
+	call EraseByteFromTabulatedPositions
+	cp $ff
+	ret z
+
+	ld a, [wCursorDuelYPosition]
+	sla a
+	ld b, a
+	ld a, [wCursorDuelXPosition]
+	add b
+	ld hl, .table
+	call JumpToFunctionInTable
+	jr .turns
+
+.table
+	dw OpenDuelScreen.non_turn_holder_play_area
+	dw OpenDuelScreen.non_turn_holder_hand
+	dw OpenDuelScreen.non_turn_holder_discard_pile
 
 CheckMenuData: ; (2:4158)
 	textitem  2, 14, InPlayAreaText
@@ -153,7 +229,16 @@ YourPlayAreaMenuData: ; (2:4169)
 	textitem  2, 16, YourDiscardPileText2
 	db $ff
 
-	INCROM $8176, $818c
+OppPlayAreaMenuData: ; (2:4176)
+	textitem 2, 14, OpponentsPokemonText
+	textitem 2, 16, OpponentsDiscardPileText2
+	db $ff
+
+OppPlayAreaMenuData_WithClairvoyance: ; (2:4176)
+	textitem  2, 14, OpponentsPokemonText
+	textitem 12, 14, OpponentsHandText
+	textitem  2, 16, OpponentsDiscardPileText2
+	db $ff
 
 ; checks if arrows need to be erased in Play Area
 ; and draws new arrows upon cursor position change
@@ -198,6 +283,7 @@ EraseByteFromTabulatedPositions: ; 81af (2:41af)
 ; cursor x and y positions in a
 ; input:
 ; a = cursor position (2*y + x)
+; b = byte to draw
 DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	push bc
 	ld hl, PlayAreaDrawPositionsPointerTable

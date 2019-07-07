@@ -580,9 +580,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YourDiscardPileText2                     ; 0x0240
 	textpointer YourHandText                             ; 0x0241
 	textpointer Text0242                                 ; 0x0242
-	textpointer Text0243                                 ; 0x0243
-	textpointer Text0244                                 ; 0x0244
-	textpointer Text0245                                 ; 0x0245
+	textpointer OpponentsPokemonText                     ; 0x0243
+	textpointer OpponentsDiscardPileText2                ; 0x0244
+	textpointer OpponentsHandText                        ; 0x0245
 	textpointer Text0246                                 ; 0x0246
 	textpointer Text0247                                 ; 0x0247
 	textpointer YourPlayAreaText                         ; 0x0248

@@ -1731,15 +1731,15 @@ Text0242: ; 3bc36 (e:7c36)
 	text "To Your Play Area"
 	done
 
-Text0243: ; 3bc49 (e:7c49)
+OpponentsPokemonText: ; 3bc49 (e:7c49)
 	text "Opponent's Pokémon"
 	done
 
-Text0244: ; 3bc5d (e:7c5d)
+OpponentsDiscardPileText2: ; 3bc5d (e:7c5d)
 	text "Opponent's Discard Pile"
 	done
 
-Text0245: ; 3bc76 (e:7c76)
+OpponentsHandText: ; 3bc76 (e:7c76)
 	text "Opponent Hand"
 	done
 
