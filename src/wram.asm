@@ -1440,7 +1440,13 @@ wceb4:: ; ceb4
 wceb5:: ; ceb5
 	ds $1
 
-	ds $5
+wceb6:: ; ceb6
+	ds $1
+
+wceb7:: ; ceb7
+	ds $1
+
+	ds $3
 
 wcebb:: ; cebb
 	ds $1

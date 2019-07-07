@@ -288,7 +288,7 @@ _DrawPlayArea: ; 8211 (2:4211)
 	call DrawPrizeCards
 	lb de, 6, 2 ; coordinates to draw player's active card
 	call DrawActiveCardGfx
-	lb de, $01, $09
+	lb de, 1, 9
 	ld c, $04
 	call DrawPlayAreaBenchCards
 	xor a
@@ -527,10 +527,10 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	jr z, .two_stage
 
 	ld a, $02 ; blue colour
-	jr .palette1
+	jr .palette
 .two_stage
 	ld a, $01 ; red colour
-.palette1
+.palette
 	lb bc, $02, $02
 	lb hl, $00, $00
 	call BankswitchVRAM1
@@ -586,7 +586,132 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 	jr .loop2
 
 Func_85aa: ; 85aa (2:45aa)
-	INCROM $85aa, $86ac
+	or a
+	jr nz, .asm_85b2
+	lb hl, $46, $35
+	jr .asm_85b5
+.asm_85b2
+	lb hl, $46, $3b
+.asm_85b5
+	ld a, [wTurnHolder1]
+	ld d, a
+	ld e, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	ld a, [de]
+	ld b, a
+	ld a, $d0
+	call Func_8676
+
+	ld a, [wTurnHolder1]
+	ld d, a
+	ld e, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	ld a, [de]
+	ld b, a
+	ld a, DECK_SIZE
+	sub b
+	ld b, a
+	ld a, $d4
+	call Func_85e1
+
+	ld a, [wTurnHolder1]
+	ld d, a
+	ld e, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	ld a, [de]
+	ld b, a
+	ld a, $d8
+	call Func_85e1
+	ret
+
+Func_85e1: ; 85e1 (2:45e1)
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	push hl
+	push bc
+	lb hl, $01, $02
+	lb bc, $02, $02
+	call FillRectangle
+
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .asm_8608
+
+	ld a, $02
+	lb bc, $02, $02
+	lb hl, $00, $00
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+
+.asm_8608
+	inc d
+	inc d
+	inc e
+	call InitTextPrinting
+	pop bc
+	ld a, b
+	call Func_98a6
+
+	ld hl, $ceb6
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+
+	ld hl, wDefaultText
+	ld [hl], $05
+	inc hl
+	ld [hl], SYM_CROSS
+	inc hl
+	ld [hl], $05
+	inc hl
+	ld [hli], a
+	ld [hl], $05
+	inc hl
+	ld a, b
+	ld [hli], a
+	ld [hl], $00
+	ld hl, wDefaultText
+	call ProcessText
+	pop hl
+	ret
+
+	INCROM $8635, $8676
+
+Func_8676: ; 8676 (2:4676)
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	push hl
+	push bc
+	call InitTextPrinting
+	ld hl, $24e
+	call ProcessTextFromID
+	pop bc
+	ld a, b
+	call Func_98a6
+	ld hl, $ceb6
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	ld hl, wDefaultText
+	ld [hl], $05
+	inc hl
+	ld [hl], $2d
+	inc hl
+	ld [hl], $05
+	inc hl
+	ld [hli], a
+	ld [hl], $05
+	inc hl
+	ld a, b
+	ld [hli], a
+	ld [hl], $00
+	ld hl, wDefaultText
+	call ProcessText
+	pop hl
+	ret
+; 0x86ac
 
 Func_86ac: ; 86ac (2:46ac)
 	INCROM $86ac, $8764
@@ -1392,7 +1517,37 @@ Func_9345: ; 9345 (2:5345)
 	INCROM $9345, $9843
 
 Func_9843: ; 9843 (2:5843)
-	INCROM $9843, $9e41
+	INCROM $9843, $98a6
+
+Func_98a6: ; 98a6 (2:58a6)
+	push af
+	push bc
+	push de
+	push hl
+	ld c, $ff
+.asm_98ac
+	inc c
+	sub $0a
+	jr nc, .asm_98ac
+	jr z, .asm_98b5
+	add $0a
+.asm_98b5
+	add $20
+	ld hl, $ceb6
+	ld [hli], a
+	ld a, c
+	or a
+	jr z, .asm_98c1
+	add $20
+.asm_98c1
+	ld [hl], a
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
+	INCROM $98c7, $9e41
 
 Func_9e41: ; 9e41 (2:5e41)
 	INCROM $9e41, $a288
