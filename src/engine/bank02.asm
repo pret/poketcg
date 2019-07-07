@@ -430,7 +430,7 @@ _DrawPlayArea: ; 8211 (2:4211)
 	ld hl, PrizeCardsCoordinateData1.player
 	call DrawPrizeCards
 	lb de, 6, 2 ; coordinates to draw player's active card
-	call DrawActiveCardGfx
+	call DrawActiveCardGfx_YourOrOppPlayArea
 	lb de, 1, 9
 	ld c, 4
 	call DrawPlayAreaBenchCards
@@ -441,7 +441,7 @@ _DrawPlayArea: ; 8211 (2:4211)
 	ld hl, PrizeCardsCoordinateData1.opponent
 	call DrawPrizeCards
 	lb de, 6, 5 ; coordinates to draw opponent's active card
-	call DrawActiveCardGfx
+	call DrawActiveCardGfx_YourOrOppPlayArea
 	lb de, $01, $02
 	ld c, 4
 	call DrawPlayAreaBenchCards
@@ -502,7 +502,7 @@ Func_82ce: ; 82ce (2:42ce)
 	ld c, 3
 	call DrawPlayAreaBenchCards
 
-	ld hl, $4641
+	ld hl, PlayAreaIconCoordinates.player2
 	call Func_864d
 
 	call SwapTurn
@@ -520,10 +520,11 @@ Func_82ce: ; 82ce (2:42ce)
 	call DrawPlayAreaBenchCards
 
 	call SwapTurn
-	ld hl, $4647
+	ld hl, PlayAreaIconCoordinates.opponent2
 	call Func_864d
+
 	call SwapTurn
-	call Func_83cc
+	call DrawActiveCardGfx_InPlayArea
 	ret
 
 Func_833c: ; 833c (2:433c)
@@ -533,7 +534,7 @@ Func_833c: ; 833c (2:433c)
 ; of the player (or opponent) depending on wTurnHolder1
 ; input:
 ; de = coordinates
-DrawActiveCardGfx: ; 837e (2:437e)
+DrawActiveCardGfx_YourOrOppPlayArea: ; 837e (2:437e)
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	ld l, a
@@ -582,8 +583,91 @@ DrawActiveCardGfx: ; 837e (2:437e)
 	pop de
 	ret
 
-Func_83cc:  ; 83cc (2:43cc)
-	INCROM $83cc, $8464
+; draws player and opponent arena card graphics
+DrawActiveCardGfx_InPlayArea: ; 83cc (2:43cc)
+	xor a
+	ld [wArenaCardsInPlayArea], a
+
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	cp $ff ; no pokemon
+	jr z, .opponent1
+
+	push af
+	ld a, [wArenaCardsInPlayArea]
+	or $01 ; set the player arena Pokemon bit
+	ld [wArenaCardsInPlayArea], a
+	pop af
+
+; load card gfx
+	call LoadCardDataToBuffer1_FromDeckIndex
+	lb de, $8a, $00
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb bc, $30, TILE_SIZE
+	call LoadCardGfx
+	bank1call SetBGP6OrSGB3ToCardPalette
+
+.opponent1
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	cp $ff ; no pokemon
+	jr z, .draw
+
+	push af
+	ld a, [wArenaCardsInPlayArea]
+	or $02 ; set the opponent arena Pokemon bit
+	ld [wArenaCardsInPlayArea], a
+	pop af
+
+; load card gfx
+	call SwapTurn
+	call LoadCardDataToBuffer1_FromDeckIndex
+	lb de, $95, $00
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb bc, $30, TILE_SIZE
+	call LoadCardGfx
+	bank1call SetBGP7OrSGB2ToCardPalette
+	call SwapTurn
+
+.draw
+	ld a, [wArenaCardsInPlayArea]
+	or a
+	ret z ; no arena cards in play
+
+	bank1call FlushAllPalettesOrSendPal23Packet
+	ld a, [wArenaCardsInPlayArea]
+	and $01 ; test player arena card bit
+	jr z, .opponent2
+
+; draw player arena card
+	ld a, $a0
+	lb de, 6, 9
+	lb hl, $06, $01
+	lb bc, $08, $06
+	call FillRectangle
+	bank1call ApplyBGP6OrSGB3ToCardImage
+
+.opponent2
+	ld a, [wArenaCardsInPlayArea]
+	and $02
+	ret z
+
+; draw opponent arena card
+	call SwapTurn
+	ld a, $50
+	lb de, 6, 2
+	lb hl, $06, $01
+	lb bc, $08, $06
+	call FillRectangle
+	bank1call ApplyBGP7OrSGB2ToCardImage
+	call SwapTurn
+	ret
 
 ; draws prize cards depending on the turn
 ; loaded in wTurnHolder1
@@ -835,10 +919,10 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 DrawPlayAreaIcons: ; 85aa (2:45aa)
 	or a
 	jr nz, .opponent
-	ld hl, PlayAreaIconCoordinates.player
+	ld hl, PlayAreaIconCoordinates.player1
 	jr .draw
 .opponent
-	ld hl, PlayAreaIconCoordinates.opponent
+	ld hl, PlayAreaIconCoordinates.opponent1
 
 .draw
 ; hand icon and value
@@ -940,19 +1024,22 @@ DrawIconWithValue: ; 85e1 (2:45e1)
 	ret
 
 PlayAreaIconCoordinates ; 8635 (2:4635)
-.player
+; used for "Your/Opp. Play Area" screen
+.player1
 	db 15,  7 ; hand
 	db 15,  2 ; deck
 	db 15,  4 ; discard pile
-.opponent
+.opponent1
 	db  1,  5 ; hand
 	db  1,  9 ; deck
 	db  1,  7 ; discard pile
-.asm_8641
+
+; used for "In Play Area" screen
+.player2
 	db 15, 14
 	db 15,  9
 	db 15, 11
-.asm_8647
+.opponent2
 	db  0,  2
 	db  0,  6
 	db  0,  4

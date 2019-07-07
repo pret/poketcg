@@ -1303,7 +1303,13 @@ wDuelInitialPrizesUpperBitsSet:: ; ce55
 wce59:: ; ce59
 	ds $1
 
-	ds $4
+	ds $3
+
+; stores whether there are Pokemon in play area
+; player arena Pokemon sets bit 0
+; opponent arena Pokemon sets bit 1
+wArenaCardsInPlayArea:: ; ce5e
+	ds $1
 
 wce5e:: ; ce5e
 	ds $1
