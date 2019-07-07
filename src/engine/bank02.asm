@@ -46,7 +46,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .draw
 	ld h, a
 	ld l, a
-	call LoadTurnHolders
+	call DrawPlayArea_LoadTurnHolders
 
 	ld a, [wCursorDuelYPosition]
 	sla a
@@ -67,7 +67,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DoFrame
 	xor a
 	call DrawArrowsToTabulatedPositions
-	call HandleDuelMenuInput_OppPlayArea
+	call HandleDuelMenuInput_PlayArea
 	jr nc, .loop
 
 	call EraseByteFromTabulatedPositions
@@ -83,7 +83,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call JumpToFunctionInTable
 	jr .draw
 
-.table ; 8098 (2:8098)
+.table ; 8098 (2:4098)
 	dw OpenDuelScreen.turn_holder_play_area
 	dw OpenDuelScreen.turn_holder_hand
 	dw OpenDuelScreen.turn_holder_discard_pile
@@ -145,7 +145,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call IsClairvoyanceActive
 	jr c, .clairvoyance1
 
-	ld a, $80
+	ld a, %10000000
 	ld [wce5e], a
 	jr .begin
 .clairvoyance1
@@ -166,7 +166,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld h, a
 
 .cursor
-	call LoadTurnHolders
+	call DrawPlayArea_LoadTurnHolders
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
@@ -195,7 +195,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DoFrame
 	ld a, $01
 	call DrawArrowsToTabulatedPositions
-	call HandleDuelMenuInput_OppPlayArea
+	call HandleDuelMenuInput_PlayArea
 	jr nc, .loop
 
 	call EraseByteFromTabulatedPositions
@@ -359,7 +359,7 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 ; loads the turn holders
 ; input:
 ; a = turn player
-LoadTurnHolders: ; 8209 (2:4209)
+DrawPlayArea_LoadTurnHolders: ; 8209 (2:4209)
 	ld a, h
 	ld [wTurnHolder1], a
 	ld a, l
@@ -452,8 +452,24 @@ _DrawPlayArea: ; 8211 (2:4211)
 	call EnableLCD
 	ret
 
-Func_82b6: ; 82b6 (2:42b6)
-	INCROM $82b6, $833c
+DrawTurnHolderPrizeCards: ; 82b6 (2:42b6)
+	ld a, [wTurnHolder1]
+	ld b, a
+	ld a, [wTurnHolder2]
+	cp b
+	jr nz, .not_equal
+
+	ld hl, PrizeCardsCoordinateData.player
+	call DrawPrizeCards
+	ret
+
+.not_equal
+	ld hl, PrizeCardsCoordinateData.opponent
+	call DrawPrizeCards
+	ret
+
+Func_82ce: ; 82ce (2:42ce)
+	INCROM $82ce, $833c
 
 Func_833c: ; 833c (2:433c)
 	INCROM $833c, $837e
@@ -920,7 +936,7 @@ PrintsHandTextAndValue: ; 8676 (2:4676)
 ; input
 ; returns a =  $1 if A pressed
 ; returns a = $ff if B pressed
-HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
+HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	xor a
 	ld [wcfe3], a
 	ld a, [wCursorDuelXPosition]
@@ -928,60 +944,74 @@ HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
 	ld a, [wCursorDuelYPosition]
 	ld e, a
 
+; d = cursor x position
+; e = cursor y position
+
 	ldh a, [hDPadHeld]
 	or a
-	jr z, .asm_870f
+	jr z, .skip
 
 ; pad is pressed
 	ld a, [wce5e]
-	and $80
+	and %10000000
 	ldh a, [hDPadHeld]
-	jr nz, .asm_86e8
-	bit 5, a
-	jr nz, .asm_86ce
-	bit 4, a
-	jr z, .asm_86e8
-.asm_86ce
+	jr nz, .check_vertical
+	bit 5, a ; test left button
+	jr nz, .horizontal
+	bit 4, a ; test right button
+	jr z, .check_vertical
+
+; handle horizontal input
+.horizontal
 	ld a, [wce5e]
 	and %01111111
 	or a
-	jr nz, .asm_86dd
+	jr nz, .asm_86dd ; jump if wce5e's lower 7 bits aren't set
 	ld a, e
 	or a
-	jr z, .asm_86e2
-	dec e
-	jr .asm_86e2
+	jr z, .flip_x ; jump if y is 0
+
+; wce5e = %10000000
+; e = 1
+	dec e ; change y position
+	jr .flip_x
+
 .asm_86dd
 	ld a, e
 	or a
-	jr nz, .asm_86e2
-	inc e
-.asm_86e2
+	jr nz, .flip_x ; jump if y is not 0
+	inc e ; change y position
+.flip_x
 	ld a, d
-	xor $01
+	xor $01 ; flip x position
 	ld d, a
-	jr .asm_86f9
-.asm_86e8
-	bit 6, a
-	jr nz, .asm_86f0
-	bit 7, a
-	jr z, .asm_870f
-.asm_86f0
+	jr .erase
+
+.check_vertical
+	bit 6, a ; test up button
+	jr nz, .vertical
+	bit 7, a ; test down button
+	jr z, .skip
+
+; handle vertical input
+.vertical
 	ld a, d
 	or a
-	jr z, .asm_86f5
+	jr z, .flip_y ; jump if x is 0
 	dec d
-.asm_86f5
+.flip_y
 	ld a, e
-	xor $01
+	xor $01 ; flip y position
 	ld e, a
-.asm_86f9
+
+.erase
 	ld a, $01
 	ld [wcfe3], a
 	push de
 	call DrawCursorEmpty_OppPlayArea
 	pop de
 
+;update x and y cursor positions
 	ld a, d
 	ld [wCursorDuelXPosition], a
 	ld a, e
@@ -989,7 +1019,8 @@ HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
 
 	xor a
 	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
-.asm_870f
+
+.skip
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
 	jr z, .sfx
@@ -1003,7 +1034,7 @@ HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
 	ret
 	
 .a_pressed
-	call Func_8760
+	call DrawCursor_OppPlayArea
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	scf
@@ -1060,8 +1091,9 @@ DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
 	or a
 	ret
 
-Func_8760: ; 8760 (2:4760)
-	INCROM $8760, $8764
+DrawCursor_OppPlayArea: ; 8760 (2:4760)
+	ld a, $0f ; load cursor byte
+	jr DrawByteInCursor_OppPlayArea
 
 Func_8764: ; 8764 (2:4764)
 	INCROM $8764, $8932
@@ -1516,6 +1548,9 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	ld a, [wCursorDuelYPosition]
 	ld e, a
 
+; d = cursor x position
+; e = cursor y position
+
 	ldh a, [hDPadHeld]
 	or a
 	jr z, .no_pad
@@ -1523,6 +1558,8 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	jr nz, .horizontal
 	bit D_RIGHT_F, a
 	jr z, .check_vertical
+
+; handle horizontal input
 .horizontal
 	ld a, d
 	xor $1 ; flips x coordinate
@@ -1533,6 +1570,8 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	jr nz, .vertical
 	bit D_DOWN_F, a
 	jr z, .no_pad
+
+; handle vertical input
 .vertical
 	ld a, e
 	xor $1 ; flips y coordinate
@@ -1545,6 +1584,7 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	call DrawCursorEmpty_YourPlayArea
 	pop de
 
+;update x and y cursor positions
 	ld a, d
 	ld [wCursorDuelXPosition], a
 	ld a, e
