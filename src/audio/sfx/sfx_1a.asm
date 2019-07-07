@@ -1,4 +1,4 @@
-SFX_1a_Ch1: ; fcf1d (3f:4f1d)
+Sfx1a_Ch1: ; fcf1d (3f:4f1d)
 	sfx_8 17
 	sfx_1 97
 	sfx_loop 2

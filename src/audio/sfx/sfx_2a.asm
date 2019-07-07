@@ -1,4 +1,4 @@
-SFX_2a_Ch1: ; fd866 (3f:5866)
+Sfx2a_Ch1: ; fd866 (3f:5866)
 	sfx_8 17
 	sfx_1 223
 	sfx_loop 4

@@ -1,4 +1,4 @@
-SFX_3d_Ch1: ; fe6fc (3f:66fc)
+Sfx3d_Ch1: ; fe6fc (3f:66fc)
 	sfx_8 17
 	sfx_1 255
 	sfx_2 0

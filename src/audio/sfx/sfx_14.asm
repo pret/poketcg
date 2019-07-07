@@ -1,4 +1,4 @@
-SFX_14_Ch1: ; fcc80 (3f:4c80)
+Sfx14_Ch1: ; fcc80 (3f:4c80)
 	sfx_1 228
 	sfx_8 17
 	sfx_2 0

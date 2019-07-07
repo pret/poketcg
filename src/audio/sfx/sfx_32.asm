@@ -1,4 +1,4 @@
-SFX_32_Ch1: ; fdbdb (3f:5bdb)
+Sfx32_Ch1: ; fdbdb (3f:5bdb)
 	sfx_1 143
 	sfx_8 17
 	sfx_2 8
@@ -193,7 +193,7 @@ SFX_32_Ch1: ; fdbdb (3f:5bdb)
 	sfx_0 7, 157
 	sfx_end
 
-SFX_32_Ch2: ; fdd3e (3f:5d3e)
+Sfx32_Ch2: ; fdd3e (3f:5d3e)
 	sfx_8 17
 	sfx_1 223
 	sfx_1 0

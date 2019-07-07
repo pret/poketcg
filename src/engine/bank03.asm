@@ -64,7 +64,7 @@ LoadMap: ; c000 (3:4000)
 	ld a, [hl]
 	bit 4, [hl]
 	jr z, .asm_c0b6
-	ld a, $c
+	ld a, SFX_0C
 	call PlaySFX
 	jp .asm_c037
 .asm_c0b6

@@ -1,4 +1,4 @@
-SFX_17_Ch1: ; fcdb0 (3f:4db0)
+Sfx17_Ch1: ; fcdb0 (3f:4db0)
 	sfx_8 17
 	sfx_1 241
 	sfx_0 0, 45

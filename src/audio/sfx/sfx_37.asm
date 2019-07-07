@@ -1,4 +1,4 @@
-SFX_37_Ch1: ; fe04e (3f:604e)
+Sfx37_Ch1: ; fe04e (3f:604e)
 	sfx_1 255
 	sfx_8 17
 	sfx_2 0
@@ -76,7 +76,7 @@ SFX_37_Ch1: ; fe04e (3f:604e)
 	sfx_1 255
 	sfx_end
 
-SFX_37_Ch2: ; fe0e4 (3f:60e4)
+Sfx37_Ch2: ; fe0e4 (3f:60e4)
 	sfx_8 17
 	sfx_1 223
 	sfx_1 0

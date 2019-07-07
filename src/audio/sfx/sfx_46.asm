@@ -1,4 +1,4 @@
-SFX_46_Ch1: ; febd1 (3f:6bd1)
+Sfx46_Ch1: ; febd1 (3f:6bd1)
 	sfx_1 239
 	sfx_8 17
 	sfx_2 8

@@ -1,3 +1,5 @@
+; copy the name and level of the card at wLoadedCard1 to wDefaultText
+; a = length in number of tiles (the resulting string will be padded with spaces to match it)
 _CopyCardNameAndLevel: ; 18000 (6:4000)
 	push bc
 	push de
@@ -12,7 +14,10 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop hl
 	ld a, [hli]
 	cp TX_HALFWIDTH
-	jp z, Func_18086
+	jp z, _CopyCardNameAndLevel_HalfwidthText
+
+; the name doesn't start with TX_HALFWIDTH
+; this doesn't appear to be ever the case (unless caller manipulates wLoadedCard1Name)
 	ld a, [wcd9b]
 	ld c, a
 	ld a, [wLoadedCard1Type]
@@ -83,9 +88,9 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	pop de
 	pop bc
 	ret
-; 0x18086
 
-Func_18086: ; 18086 (6:4086)
+; the name starts with TX_HALFWIDTH
+_CopyCardNameAndLevel_HalfwidthText:
 	ld a, [wcd9b]
 	inc a
 	add a
@@ -248,7 +253,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
-	ldtx hl, Text0251
+	ldtx hl, EmptyLineText
 	call ProcessTextFromID
 
 	ld hl, hffb0
@@ -261,8 +266,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	lb de, 1, 17
 	call InitTextPrinting
 	pop af
-
-	ld hl, Data_006_42bb
+	ld hl, TextIDTable_182bb
 	ld b, 0
 	sla a
 	ld c, a
@@ -438,24 +442,23 @@ Func_006_42b1:
 	ldh [hWhoseTurn], a
 	ret
 
-Data_006_42bb:
-;
-	db $01, $00
-	db $02, $00
-	db $03, $00
-	db $04, $00
-	db $05, $00
-	db $00, $00
-	db $4f, $02
-	db $50, $02
-	db $00, $00
-	db $4f, $02
-	db $50, $02
-	db $01, $00
-	db $02, $00
-	db $03, $00
-	db $04, $00
-	db $05, $00
+TextIDTable_182bb:
+	tx HandText
+	tx CheckText
+	tx AttackText
+	tx PKMNPowerText
+	tx DoneText
+	dw NONE
+	tx DuelistHandText_2
+	tx DuelistDiscardPileText
+	dw NONE
+	tx DuelistHandText_2
+	tx DuelistDiscardPileText
+	tx HandText
+	tx CheckText
+	tx AttackText
+	tx PKMNPowerText
+	tx DoneText
 
 Data_006_42db:
 ; transitions[]
@@ -1686,16 +1689,16 @@ ClearMemory: ; (6:6787)
 	ret
 
 ; play different sfx by a.
-; if a is 0xff play sfx with 0x03 (usually following a B press),
-; else with 0x02 (usually following an A press).
+; if a is 0xff play SFX_03 (usually following a B press),
+; else play SFX_02 (usually following an A press).
 PlayAcceptOrDeclineSFX: ; (6:6794)
 	push af
 	inc a
 	jr z, .sfx_decline
-	ld a, $02
+	ld a, SFX_02
 	jr .sfx_accept
 .sfx_decline
-	ld a, $03
+	ld a, SFX_03
 .sfx_accept
 	call PlaySFX
 	pop af

@@ -1,4 +1,4 @@
-SFX_4f_Ch1: ; ff49b (3f:749b)
+Sfx4f_Ch1: ; ff49b (3f:749b)
 	sfx_1 239
 	sfx_8 17
 	sfx_2 0

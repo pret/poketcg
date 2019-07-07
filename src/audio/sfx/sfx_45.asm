@@ -1,4 +1,4 @@
-SFX_45_Ch1: ; feb5e (3f:6b5e)
+Sfx45_Ch1: ; feb5e (3f:6b5e)
 	sfx_loop 17
 	sfx_1 135
 	sfx_8 17

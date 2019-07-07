@@ -1921,7 +1921,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call .asm_4cb4
 	call .asm_4cb4
 	push hl
-	ld a, $08
+	ld a, SFX_08
 	call PlaySFX
 	lb bc, 3, 5
 	ld a, e
@@ -3139,7 +3139,7 @@ ReturnWrongAction:
 ; 0x54c8
 
 ; display BOXMSG_PLAYERS_TURN or BOXMSG_OPPONENTS_TURN and print
-; DuelistsTurnText in a textbox. also call ExchangeRNG.
+; DuelistTurnText in a textbox. also call ExchangeRNG.
 DisplayDuelistTurnScreen: ; 54c8 (1:54c8)
 	call EmptyScreen
 	ld c, BOXMSG_PLAYERS_TURN
@@ -3150,7 +3150,7 @@ DisplayDuelistTurnScreen: ; 54c8 (1:54c8)
 .got_turn
 	ld a, c
 	call DrawDuelBoxMessage
-	ldtx hl, DuelistsTurnText
+	ldtx hl, DuelistTurnText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
 	ret
@@ -3503,7 +3503,7 @@ CardListItemSelectionMenu: ; 56c2 (1:56c2)
 	ldtx hl, PlayCheck1Text
 .got_text
 	call DrawNarrowTextBox_PrintTextNoDelay
-	ld hl, ItemSelectionMenuParamenters
+	ld hl, ItemSelectionMenuParameters
 	xor a
 	call InitializeMenuParameters
 .wait_a_or_b
@@ -3525,7 +3525,7 @@ CardListItemSelectionMenu: ; 56c2 (1:56c2)
 	ret
 ; 0x5708
 
-ItemSelectionMenuParamenters ; 5708 (1:5708)
+ItemSelectionMenuParameters: ; 5708 (1:5708)
 	db 1, 14 ; corsor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
@@ -4327,7 +4327,7 @@ DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 	jr z, .basic
 	ld hl, wLoadedCard1PreEvoName
 	lb de, 1, 3
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 .basic
 	; print card level and maximum HP
 	lb bc, 12, 2
@@ -4428,7 +4428,7 @@ PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	dec hl
 	; print text ID pointed to by hl at 7,e
 	ld d, 7
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	pop hl
 	inc hl
 	inc hl
@@ -4549,7 +4549,7 @@ PrintPokemonCardPageGenericInformation: ; 5cc4 (1:5cc4)
 	call DrawCardPageSurroundingBox
 	lb de, 5, 1
 	ld hl, wLoadedCard1Name
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	ld a, [wCardPageType]
 	or a
 	jr z, .from_loaded_card
@@ -4665,7 +4665,7 @@ DisplayCardPage_PokemonDescription: ; 5d54 (1:5d54)
 	; print the Pokemon's category at 1,10 (just above the length and weight texts)
 	lb de, 1, 10
 	ld hl, wLoadedCard1Category
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	ld a, TX_KATAKANA
 	call ProcessSpecialTextCharacter
 	ldtx hl, PokemonText
@@ -4713,7 +4713,7 @@ PrintCardPageRarityIcon: ; 5dd3 (1:5dd3)
 	ld c, a
 	ld b, $00
 	add hl, bc
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	ret
 ; 0x5ddd
 
@@ -4782,7 +4782,7 @@ DisplayEnergyOrTrainerCardPage: ; 5e2d (1:5e2d)
 	; print the card's name at 4,3
 	lb de, 4, 3
 	ld hl, wLoadedCard1Name
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	; colorize the card image
 	lb de, 6, 4
 	call ApplyBGP6OrSGB3ToCardImage
@@ -5740,7 +5740,7 @@ DisplayUsePokemonPowerScreen: ; 6510 (1:6510)
 	lb de, 1, 4
 	call InitTextPrinting
 	ld hl, wLoadedCard1Move1Name
-	call ProcessTextFromPointerToID_InitTextPrinting
+	call InitTextPrinting_ProcessTextFromPointerToID
 	lb de, 1, 6
 	ld hl, wLoadedCard1Move1Description
 	call PrintMoveOrCardDescription
@@ -6428,7 +6428,7 @@ PrintAttachedEnergyToPokemon: ; 68e4 (1:68e4)
 ; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wccee,
 ; and the evolved Pokemon card in hTempCardIndex_ff98. also play a sound effect.
 PrintPokemonEvolvedIntoPokemon: ; 68fa (1:68fa)
-	ld a, $5e
+	ld a, SFX_5E
 	call PlaySFX
 	ld a, [wccee]
 	call LoadCardNameToTxRam2
@@ -7556,11 +7556,11 @@ _TossCoin: ; 71ad (1:71ad)
 	ld e, a
 
 .asm_728a
-	ld d, $54
+	ld d, SFX_54
 	ld a, e
 	or a
 	jr nz, .asm_7292
-	ld d, $55
+	ld d, SFX_55
 
 .asm_7292
 	ld a, d

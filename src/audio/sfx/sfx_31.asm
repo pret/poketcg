@@ -1,4 +1,4 @@
-SFX_31_Ch1: ; fdb1e (3f:5b1e)
+Sfx31_Ch1: ; fdb1e (3f:5b1e)
 	sfx_8 17
 	sfx_1 111
 	sfx_2 0

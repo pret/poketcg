@@ -532,10 +532,10 @@ Func_90fb: ; 90fb (2:50fb)
 	push af
 	inc a
 	jr z, .asm_9103
-	ld a, $2
+	ld a, SFX_02
 	jr .asm_9105
 .asm_9103
-	ld a, $3
+	ld a, SFX_03
 .asm_9105
 	call PlaySFX
 	pop af

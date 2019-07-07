@@ -1,4 +1,4 @@
-SFX_4a_Ch1: ; fee7c (3f:6e7c)
+Sfx4a_Ch1: ; fee7c (3f:6e7c)
 	sfx_1 228
 	sfx_8 17
 	sfx_2 4

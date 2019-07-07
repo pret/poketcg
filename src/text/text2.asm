@@ -1779,15 +1779,15 @@ HandText_2: ; 3bd20 (e:7d20)
 	text "Hand"
 	done
 
-Text024f: ; 3bd26 (e:7d26)
+DuelistHandText_2: ; 3bd26 (e:7d26)
 	text "<RAMNAME>'s Hand"
 	done
 
-Text0250: ; 3bd30 (e:7d30)
+DuelistDiscardPileText: ; 3bd30 (e:7d30)
 	text "<RAMNAME>'s Discard Pile"
 	done
 
-Text0251: ; 3bd42 (e:7d42)
+EmptyLineText: ; 3bd42 (e:7d42)
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " "
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done

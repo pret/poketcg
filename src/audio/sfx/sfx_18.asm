@@ -1,4 +1,4 @@
-SFX_18_Ch1: ; fce31 (3f:4e31)
+Sfx18_Ch1: ; fce31 (3f:4e31)
 	sfx_8 17
 	sfx_1 192
 	sfx_0 0, 81
