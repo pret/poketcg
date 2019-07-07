@@ -610,7 +610,7 @@ Func_85aa: ; 85aa (2:45aa)
 	sub b
 	ld b, a
 	ld a, $d4
-	call Func_85e1
+	call DrawIconWithValue
 
 	ld a, [wTurnHolder1]
 	ld d, a
@@ -618,10 +618,16 @@ Func_85aa: ; 85aa (2:45aa)
 	ld a, [de]
 	ld b, a
 	ld a, $d8
-	call Func_85e1
+	call DrawIconWithValue
 	ret
 
-Func_85e1: ; 85e1 (2:45e1)
+; draws the interface icon corresponding to
+; the gfx tile loaded in a
+; also prints the number in decimalcorresponding
+; to the value variable loaded in b
+; the coordinates in screen are given by [hl]
+DrawIconWithValue: ; 85e1 (2:45e1)
+; drawing the icon
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -634,7 +640,7 @@ Func_85e1: ; 85e1 (2:45e1)
 
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_8608
+	jr nz, .skip
 
 	ld a, $02
 	lb bc, $02, $02
@@ -643,7 +649,8 @@ Func_85e1: ; 85e1 (2:45e1)
 	call FillRectangle
 	call BankswitchVRAM0
 
-.asm_8608
+.skip
+; adjust coordinate to the lower right
 	inc d
 	inc d
 	inc e
@@ -664,12 +671,14 @@ Func_85e1: ; 85e1 (2:45e1)
 	inc hl
 	ld [hl], TX_SYMBOL
 	inc hl
-	ld [hli], a
+	ld [hli], a ; tens place
 	ld [hl], TX_SYMBOL
 	inc hl
 	ld a, b
-	ld [hli], a
-	ld [hl], $00
+	ld [hli], a ; ones place
+	ld [hl], TX_END
+
+; printing the decimal value
 	ld hl, wDefaultText
 	call ProcessText
 	pop hl
@@ -728,12 +737,11 @@ Func_8676: ; 8676 (2:4676)
 
 	ld a, b
 	ld [hli], a
-	ld [hl], $00
+	ld [hl], TX_END
 	ld hl, wDefaultText
 	call ProcessText
 	pop hl
 	ret
-; 0x86ac
 
 Func_86ac: ; 86ac (2:46ac)
 	INCROM $86ac, $8764
