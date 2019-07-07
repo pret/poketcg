@@ -1411,7 +1411,11 @@ wcea1:: ; cea1
 
 	ds $1
 
-wcea3:: ; cea3
+; it's used when the player enters check command menu, and its sub-menus.
+; it increases from 0x00 to 0xff.
+; the game makes its blinking cursor by this.
+; note that the check command contains the pokemon glossary.
+wCheckCommandCounter:: ; cea3
 	ds $1
 
 wNamingScreenCursorY:: ; cea4

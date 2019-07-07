@@ -430,7 +430,7 @@ Func_905a: ; 905a (2:505a)
 	xor a
 	ld [wceaf], a
 	ld [wceb0], a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 	ret
 
 Func_9065: ; 9065 (2:5065)
@@ -472,7 +472,7 @@ Func_9065: ; 9065 (2:5065)
 	ld a, e
 	ld [wceb0], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 .asm_90a6
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -495,7 +495,7 @@ Func_9065: ; 9065 (2:5065)
 	jr z, .asm_90ca
 	call PlaySFX
 .asm_90ca
-	ld hl, wcea3
+	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
 	and $f

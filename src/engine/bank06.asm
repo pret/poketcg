@@ -160,17 +160,17 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 	ld [wPlayAreaCursorPosition], a
 .start
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
 	jr c, .clairvoyance_on
 
-	ld de, Data_006_42db
+	ld de, PlayAreaViewTransitionTable1
 	jr .clairvoyance_off
 
 .clairvoyance_on
-	ld de, Data_006_434b
+	ld de, PlayAreaViewTransitionTable2
 .clairvoyance_off
 	ld hl, wPlayAreaInputTablePointer
 	ld [hl], e
@@ -213,7 +213,7 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 	ld hl, wPlayAreaPreservedPosition_2
 	cp [hl]
 	call nz, PrintCardName_HandlePlayAreaView
-
+	
 	jr .on_frame
 
 .pressed
@@ -221,21 +221,21 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 	jr nz, .selection
 
 	; pressed b button.
-	call Func_006_44bf
+	call HandleInput_PlayArea.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
 	scf
 	ret
 
 .toggle_view
-	call Func_006_44bf
+	call HandleInput_PlayArea.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
 	or a
 	ret
 
 .selection ; pressed a button or start button.
-	call Func_006_44bf
+	call HandleInput_PlayArea.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
 	ld a, [wPlayAreaCursorPosition]
@@ -268,7 +268,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	ld b, 0
 	sla a
 	ld c, a
-	add hl, bc ; hl = 0x42bb + 2 * (wPlayAreaCursorPostion)
+	add hl, bc ; hl = TextIDTable_182bb + 2 * (wPlayAreaCursorPostion)
 
 	ld a, [hli]
 	ld h, [hl]
@@ -458,8 +458,13 @@ TextIDTable_182bb:
 	tx PKMNPowerText
 	tx DoneText
 
-Data_006_42db:
-; transitions[]
+; it's related to wPlayAreaInputTablePointer.
+; with this table, the cursor moves into the proper location by the input.
+; note that the unit of the position is not a 8x8 tile.
+; idx-[direction] means the index to get when the input is in the direction.
+; its attribute is used for drawing a flipped cursor.
+PlayAreaViewTransitionTable1:
+; cursor x pos. / cursor y pos. / attribute / idx-up / idx-down / idx-right / idx-left
 	db $18, $8c, $00, $05, $10, $01, $04
 	db $30, $8c, $00, $05, $10, $02, $00
 	db $48, $8c, $00, $05, $10, $03, $01
@@ -477,8 +482,8 @@ Data_006_42db:
 	db $48, $14, $20, $11, $08, $0d, $0f
 	db $30, $14, $20, $11, $08, $0e, $0b
 
-Data_006_434b:
-; transitions[]
+PlayAreaViewTransitionTable2:
+; same as 1.
 	db $18, $8c, $00, $05, $10, $01, $04
 	db $30, $8c, $00, $05, $10, $02, $00
 	db $48, $8c, $00, $05, $10, $03, $01
@@ -629,7 +634,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ld a, $01
 	ld [wcfe3], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 .check_button
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -645,7 +650,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ret
 
 .a_button
-	call Func_006_44a0
+	call .draw_cursor
 	ld a, $01
 	farcall Func_90fb
 	ld a, [wPlayAreaCursorPosition]
@@ -658,16 +663,16 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr z, .skip_sfx
 	call PlaySFX
 .skip_sfx
-	ld hl, wcea3
+	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
 	ret nz
 
-	bit D_RIGHT_F, [hl]
-	jr nz, Func_006_44bf
+	bit 4, [hl] ; and $10
+	jr nz, .non_draw_cursor
 
-Func_006_44a0: ; 184a0 (6:44a0)
+.draw_cursor ; 184a0 (6:44a0)
 	call ZeroObjectPositions
 	ld hl, wPlayAreaInputTablePointer
 	ld e, [hl]
@@ -678,22 +683,24 @@ Func_006_44a0: ; 184a0 (6:44a0)
 	ld h, $07
 	call HtimesL
 	add hl, de
-	ld d, [hl]
+	
+	ld d, [hl] ; x position.
 	inc hl
-	ld e, [hl]
+	ld e, [hl] ; y position.
 	inc hl
-	ld b, [hl]
+	ld b, [hl] ; attribute.
 	ld c, $00
 	call SetOneObjectAttributes
 	or a
 	ret
 
-Func_006_44bf: ; 184bf (6:44bf)
+.non_draw_cursor ; 184bf (6:44bf)
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
+Func_006_44c8: ; (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
@@ -708,7 +715,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld a, $ff
 	ld [$ce55], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 .asm_006_44e5
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -733,7 +740,7 @@ Func_006_44bf: ; 184bf (6:44bf)
 	call Func_006_4598
 	call Func_006_452b
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 	jr .asm_006_44e5
 
 .on_select
@@ -933,7 +940,7 @@ GlossaryData_2:
 	ld a, e
 	ld [wceb0], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
 	and $03
@@ -956,7 +963,7 @@ GlossaryData_2:
 	jr z, .asm_006_46c6
 	call PlaySFX
 .asm_006_46c6
-	ld hl, wcea3
+	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2060,7 +2067,7 @@ NamingScreen_CheckButtonState:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
@@ -2086,7 +2093,7 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_006_69f8
 	call PlaySFX
 .asm_006_69f8
-	ld hl, wcea3
+	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2538,7 +2545,7 @@ TransitionTable1:
 	dw $0e55, $0050
 	dw $0e56, $0051
 	dw $0000
-	
+
 TransitionTable2:
 	dw $0e2a, $0052
 	dw $0e2b, $0053
@@ -2857,7 +2864,7 @@ Func_006_6efb:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckCommandCounter], a
 	ld a, $02
 	cp d
 	jp z, Func_006_6efb
@@ -2883,7 +2890,7 @@ Func_006_6efb:
 	jr z, .asm_006_6f92
 	call PlaySFX
 .asm_006_6f92
-	ld hl, wcea3
+	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
