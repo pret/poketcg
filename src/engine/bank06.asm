@@ -228,7 +228,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $01
-	ldtx hl, Text024e
+	ldtx hl, HandText2
 	call ProcessTextFromID
 	ld hl, hffb0
 	ld [hl], $00

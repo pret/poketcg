@@ -591,7 +591,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer GlossaryText                             ; 0x024b
 	textpointer Text024c                                 ; 0x024c
 	textpointer Text024d                                 ; 0x024d
-	textpointer Text024e                                 ; 0x024e
+	textpointer HandText2                                ; 0x024e
 	textpointer Text024f                                 ; 0x024f
 	textpointer Text0250                                 ; 0x0250
 	textpointer Text0251                                 ; 0x0251

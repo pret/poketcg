@@ -593,14 +593,16 @@ Func_85aa: ; 85aa (2:45aa)
 .asm_85b2
 	ld hl, Data_8635.asm_863b
 .asm_85b5
+; hand icon and value
 	ld a, [wTurnHolder1]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	ld a, [de]
 	ld b, a
 	ld a, $d0
-	call Func_8676
+	call PrintsHandTextAndValue
 
+; deck icon and value
 	ld a, [wTurnHolder1]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -609,15 +611,16 @@ Func_85aa: ; 85aa (2:45aa)
 	ld a, DECK_SIZE
 	sub b
 	ld b, a
-	ld a, $d4
+	ld a, $d4 ; deck icon
 	call DrawIconWithValue
 
+; discard pile icon and value
 	ld a, [wTurnHolder1]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
 	ld a, [de]
 	ld b, a
-	ld a, $d8
+	ld a, $d8 ; discard pile icon
 	call DrawIconWithValue
 	ret
 
@@ -704,19 +707,23 @@ Data_8635 ; 8635 (2:4635)
 
 	INCROM $864d, $8676
 
-Func_8676: ; 8676 (2:4676)
+; prints text HandText2 and a cross with 
+; decimal value of b
+PrintsHandTextAndValue: ; 8676 (2:4676)
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
 	inc hl
 
+; text
 	push hl
 	push bc
 	call InitTextPrinting
-	ld hl, $24e
+	ldtx hl, HandText2
 	call ProcessTextFromID
 	pop bc
 
+; decimal value
 	ld a, b
 	call CalculateOnesAndTensDigits
 	ld hl, wOnesAndTensPlace

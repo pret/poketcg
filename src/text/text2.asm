@@ -1775,7 +1775,7 @@ Text024d: ; 3bd08 (e:7d08)
 	text "Please choose a Prize."
 	done
 
-Text024e: ; 3bd20 (e:7d20)
+HandText2: ; 3bd20 (e:7d20)
 	text "Hand"
 	done
 
