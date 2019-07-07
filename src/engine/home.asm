@@ -9302,16 +9302,16 @@ Func_30a6: ; 30a6 (0:30a6)
 	call BankswitchROM
 	ret
 
-DrawPlayArea: ; 30bc (0:30bc)
+DrawYourOrOppPlayArea: ; 30bc (0:30bc)
 	ld a, h
 	ld [wTurnHolder1], a
 	ld a, l
 	ld [wTurnHolder2], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(_DrawPlayArea)
+	ld a, BANK(_DrawYourOrOppPlayArea)
 	call BankswitchROM
-	call _DrawPlayArea
+	call _DrawYourOrOppPlayArea
 	call DrawWideTextBox
 	pop af
 	call BankswitchROM

@@ -46,7 +46,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .draw
 	ld h, a
 	ld l, a
-	call DrawPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea_LoadTurnHolders
 
 	ld a, [wCursorDuelYPosition]
 	sla a
@@ -166,7 +166,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld h, a
 
 .cursor
-	call DrawPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea_LoadTurnHolders
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
@@ -359,16 +359,16 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 ; loads the turn holders
 ; input:
 ; a = turn player
-DrawPlayArea_LoadTurnHolders: ; 8209 (2:4209)
+DrawYourOrOppPlayArea_LoadTurnHolders: ; 8209 (2:4209)
 	ld a, h
 	ld [wTurnHolder1], a
 	ld a, l
 	ld [wTurnHolder2], a
 ; fallthrough
 
-; loads tiles and icons to display play area
+; loads tiles and icons to display your/opp play area
 ; and draws the screen according to the turn player
-_DrawPlayArea: ; 8211 (2:4211)
+_DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -433,9 +433,9 @@ _DrawPlayArea: ; 8211 (2:4211)
 	call DrawActiveCardGfx_YourOrOppPlayArea
 	lb de, 1, 9
 	ld c, 4
-	call DrawPlayAreaBenchCards
+	call DrawYourOrOppPlayArea_BenchCards
 	xor a
-	call DrawPlayAreaIcons
+	call DrawYourOrOppPlayArea_Icons
 	jr .lcd
 .not_equal
 	ld hl, PrizeCardsCoordinateData1.opponent
@@ -444,9 +444,9 @@ _DrawPlayArea: ; 8211 (2:4211)
 	call DrawActiveCardGfx_YourOrOppPlayArea
 	lb de, $01, $02
 	ld c, 4
-	call DrawPlayAreaBenchCards
+	call DrawYourOrOppPlayArea_BenchCards
 	ld a, $01
-	call DrawPlayAreaIcons
+	call DrawYourOrOppPlayArea_Icons
 
 .lcd
 	call EnableLCD
@@ -468,7 +468,8 @@ DrawTurnHolderPrizeCards: ; 82b6 (2:42b6)
 	call DrawPrizeCards
 	ret
 
-Func_82ce: ; 82ce (2:42ce)
+; draws icons and cards to the In Play Area screen
+_DrawInPlayArea: ; 82ce (2:42ce)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -500,7 +501,7 @@ Func_82ce: ; 82ce (2:42ce)
 ; player bench cards
 	lb de, 3, 15
 	ld c, 3
-	call DrawPlayAreaBenchCards
+	call DrawYourOrOppPlayArea_BenchCards
 
 	ld hl, PlayAreaIconCoordinates.player2
 	call Func_864d
@@ -517,7 +518,7 @@ Func_82ce: ; 82ce (2:42ce)
 ; opponent bench cards
 	lb de, 3, 0
 	ld c, 3
-	call DrawPlayAreaBenchCards
+	call DrawYourOrOppPlayArea_BenchCards
 
 	call SwapTurn
 	ld hl, PlayAreaIconCoordinates.opponent2
@@ -796,7 +797,7 @@ GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 ; input:
 ; de = coordinates to draw bench
 ; c  = spacing between slots
-DrawPlayAreaBenchCards: ; 8511 (2:4511)
+DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	ld a, [wTurnHolder2]
 	ld b, a
 	ld a, [wTurnHolder1]
@@ -916,7 +917,7 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 ; input:
 ; a = $00: draws player icons
 ; a = $01: draws opponent icons
-DrawPlayAreaIcons: ; 85aa (2:45aa)
+DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 	or a
 	jr nz, .opponent
 	ld hl, PlayAreaIconCoordinates.player1
