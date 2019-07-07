@@ -18,11 +18,11 @@ _DuelCheckInterface: ; 8000 (2:4000)
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	ld hl, DuelCheckMenuFunctionTable
+	ld hl, .table
 	call JumpToFunctionInTable
 	jr _DuelCheckInterface
 
-DuelCheckMenuFunctionTable: ; 8031 (2:4031)
+.table: ; 8031 (2:4031)
 	dw DuelCheckMenu_InPlayArea
 	dw DuelCheckMenu_Glossary
 	dw DuelCheckMenu_YourPlayArea
@@ -43,7 +43,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	xor a
 	ld [wce5e], a
 	ldh a, [hWhoseTurn]
-.asm_8050
+.draw
 	ld h, a
 	ld l, a
 	call LoadTurnHolders
@@ -63,25 +63,79 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld hl, YourPlayAreaMenuData
 	call PlaceTextItems
 
-.asm_8074
+.loop
 	call DoFrame
 	xor a
 	call DrawArrowsToTabulatedPositions
 	call Func_86ac
-	jr nc, .asm_8074
+	jr nc, .loop
+
 	call EraseByteFromTabulatedPositions
 	cp $ff
 	ret z
+
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	lb hl, $40, $98
+	ld hl, .table
 	call JumpToFunctionInTable
-	jr .asm_8050
+	jr .draw
 
-	INCROM $8098, $80da
+.table ; 8098 (2:8098)
+	dw OpenDuelScreen.turn_holder_play_area
+	dw OpenDuelScreen.turn_holder_hand
+	dw OpenDuelScreen.turn_holder_discard_pile
+	
+OpenDuelScreen: ; 809e (2:409e)
+.turn_holder_play_area
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenTurnHolderPlayAreaScreen
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+
+.non_turn_holder_play_area
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenNonTurnHolderPlayAreaScreen
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+
+.turn_holder_hand
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenTurnHolderHandScreen_Simple
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+
+.non_turn_holder_hand
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenNonTurnHolderHandScreen_Simple
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+
+.turn_holder_discard_pile
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenTurnHolderDiscardPileScreen
+	pop af
+	ldh [hWhoseTurn], a
+	ret
+
+.non_turn_holder_discard_pile
+	ldh a, [hWhoseTurn]
+	push af
+	bank1call OpenNonTurnHolderDiscardPileScreen
+	pop af
+	ldh [hWhoseTurn], a
+	ret
 
 DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	INCROM $80da, $8158
