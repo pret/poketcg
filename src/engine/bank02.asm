@@ -283,26 +283,28 @@ _DrawPlayArea: ; 8211 (2:4211)
 	ld a, [wTurnHolder2]
 	cp b
 	jr nz, .not_equal
+
 	ld hl, PrizeCardsCoordinateData.player
 	call DrawPrizeCards
-	lb de, $06, 02
-	call Func_837e
+	lb de, 6, 2 ; coordinates to draw player's active card
+	call DrawActiveCardGfx
 	lb de, $01, $09
 	ld c, $04
-	call Func_8511
+	call DrawPlayAreaBenchCards
 	xor a
 	call Func_85aa
 	jr .lcd
 .not_equal
 	ld hl, PrizeCardsCoordinateData.opponent
 	call DrawPrizeCards
-	lb de, $06, $05
-	call Func_837e
+	lb de, 6, 5 ; coordinates to draw opponent's active card
+	call DrawActiveCardGfx
 	lb de, $01, $02
 	ld c, $04
-	call Func_8511
+	call DrawPlayAreaBenchCards
 	ld a, $01
 	call Func_85aa
+
 .lcd
 	call EnableLCD
 	ret
@@ -313,8 +315,58 @@ Func_82b6: ; 82b6 (2:42b6)
 Func_833c: ; 833c (2:433c)
 	INCROM $833c, $837e
 
-Func_837e: ; 837e (2:437e)
-	INCROM $837e, $8464
+; draws the active card gfx at coordinates de
+; of the player (or opponent) depending on wTurnHolder1
+DrawActiveCardGfx: ; 837e (2:437e)
+	push de
+	ld a, DUELVARS_ARENA_CARD
+	ld l, a
+	ld a, [wTurnHolder1]
+	ld h, a
+	ld a, [hl]
+	cp $ff
+	jr z, .no_pokemon
+
+	ld d, a
+	ld a, [wTurnHolder1]
+	ld b, a
+	ldh a, [hWhoseTurn]
+	cp b
+	jr nz, .swap
+	ld a, d
+	call LoadCardDataToBuffer1_FromDeckIndex
+	jr .draw
+.swap
+	call SwapTurn
+	ld a, d
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call SwapTurn
+
+.draw
+	lb de, $8a, $00 ; destination offset of loaded gfx
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb bc, $30, TILE_SIZE
+	call LoadCardGfx
+	bank1call SetBGP6OrSGB3ToCardPalette
+	bank1call FlushAllPalettesOrSendPal23Packet
+	pop de
+
+	; draw card gfx
+	ld a, $a0
+	lb hl, $06, $01
+	lb bc, 8, 6
+	call FillRectangle
+	bank1call ApplyBGP6OrSGB3ToCardImage
+	ret
+
+.no_pokemon
+	pop de
+	ret
+
+	INCROM $83cc, $8464
 
 DrawPrizeCards: ; 8464 (2:4464)
 	push hl
@@ -327,7 +379,7 @@ DrawPrizeCards: ; 8464 (2:4464)
 	pop hl
 	ld b, 0
 	push af
-; loop each prize card + 1
+; loop each prize card
 .loop
 	inc b
 	ld a, [wDuelInitialPrizes]
@@ -414,8 +466,124 @@ GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 	ld [wDuelInitialPrizesUpperBitsSet], a
 	ret
 
-Func_8511: ; 8511 (2:4511)
-	INCROM $8511, $85aa
+; draws filled and empty bench slots depending
+; on the turn loaded in wTurnHolder1
+; at coordinates loaded in de
+; if wTurnHolder1 is different from wTurnHolder2
+; adjusts coordinates of the bench slots
+DrawPlayAreaBenchCards: ; 8511 (2:4511)
+	ld a, [wTurnHolder2]
+	ld b, a
+	ld a, [wTurnHolder1]
+	cp b
+	jr z, .skip
+
+	ld a, d
+	add c
+	add c
+	add c
+	add c
+	ld d, a
+	; d = d + 4 * c
+
+	xor a
+	sub c
+	ld c, a
+	; c = $ff - c + 1
+
+	ld a, [wTurnHolder1]
+.skip
+	ld h, a
+	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	ld b, [hl]
+	ld l, DUELVARS_BENCH1_CARD_STAGE
+.loop1
+	dec b ; num of Bench Pokemon left
+	jr z, .done
+
+	ld a, [hli]
+	push hl
+	push bc
+	sla a
+	sla a
+	add $e4 
+	; a holds the correct stage gfx tile
+	ld b, a
+	push bc
+
+	lb hl, $01, $02
+	lb bc, $02, $02
+	call FillRectangle
+
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	pop bc
+	jr nz, .next
+
+	ld a, b
+	cp $ec ; tile offset of 2 stage
+	jr z, .two_stage
+	cp $f0 ; tile offset of 2 stage with no 1 stage
+	jr z, .two_stage
+
+	ld a, $02 ; blue colour
+	jr .palette1
+.two_stage
+	ld a, $01 ; red colour
+.palette1
+	lb bc, $02, $02
+	lb hl, $00, $00
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+
+.next ; adjust coordinates for next card
+	pop bc
+	pop hl
+	ld a, d
+	add c
+	ld d, a
+	; d = d + c
+	jr .loop1
+
+.done
+	ld a, [wTurnHolder1]
+	ld h, a
+	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	ld b, [hl]
+	ld a, MAX_PLAY_AREA_POKEMON
+	sub b
+	ret z ; return if already full
+
+	ld b, a
+	inc b
+.loop2
+	dec b
+	ret z 
+
+	push bc
+	ld a, $f4 ; empty bench slot tile
+	lb hl, $01, $02
+	lb bc, $02, $02
+	call FillRectangle
+
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+
+	ld a, $02 ; colour
+	lb bc, $02, $02
+	lb hl, $00, $00
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+
+.not_cgb
+	pop bc
+	ld a, d
+	add c
+	ld d, a
+	jr .loop2
 
 Func_85aa: ; 85aa (2:45aa)
 	INCROM $85aa, $86ac
