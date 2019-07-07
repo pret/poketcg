@@ -998,14 +998,14 @@ HandleDuelMenuInput_OppPlayArea: ; 86ac (2:46ac)
 
 ; b pressed
 	ld a, $ff
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 	
 .a_pressed
 	call Func_8760
 	ld a, $01
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
@@ -1196,14 +1196,14 @@ Func_8dea: ; 8dea (2:4dea)
 	call Func_8ff2
 	jp nc, Func_8e05
 	ld a, $ff
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	call Func_8fe8
 	scf
 	ret
 
 Func_8e05: ; 8e05 (2:4e05)
 	ld a, $1
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	call GetPointerToDeckCards
 	push hl
 	call GetPointerToDeckName
@@ -1559,14 +1559,14 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	and A_BUTTON
 	jr nz, .a_press
 	ld a, $ff
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_press
 	call Func_90f7
 	ld a, $1
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
@@ -1618,15 +1618,20 @@ Func_90f7: ; 90f7 (2:50f7)
 	ld a, $f
 	jr DrawByteInCursor_YourPlayArea
 
-Func_90fb: ; 90fb (2:50fb)
+; plays sound depending on value in a
+; input:
+; a  = $ff: play cancel sound
+; a != $ff: play confirm sound
+PlaySFXConfirmOrCancel: ; 90fb (2:50fb)
 	push af
 	inc a
-	jr z, .asm_9103
-	ld a, $2
-	jr .asm_9105
-.asm_9103
-	ld a, $3
-.asm_9105
+	jr z, .cancel
+	ld a, $2 ; confirmation sfx
+	jr .sfx
+.cancel
+	ld a, $3 ; cancellation sfx
+
+.sfx
 	call PlaySFX
 	pop af
 	ret
@@ -2103,7 +2108,7 @@ Func_ba04: ; ba04 (2:7a04)
 	or a
 	jr z, .asm_ba40
 	ld a, $1
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	call $7653
 	call Func_8e1f
 	call $7644
@@ -2200,7 +2205,7 @@ Func_ba04: ; ba04 (2:7a04)
 	or a
 	jp z, $7a40
 	ld a, $1
-	call Func_90fb
+	call PlaySFXConfirmOrCancel
 	call $7653
 	xor a
 	call $6dfe

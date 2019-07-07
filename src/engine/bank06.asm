@@ -517,13 +517,13 @@ Func_006_43bb: ; 183bb (6:43bb)
 	and $01
 	jr nz, .asm_006_447d
 	ld a, $ff
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	scf
 	ret
 .asm_006_447d
 	call Func_006_44a0
 	ld a, $01
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	ld a, [$ce52]
 	scf
 	ret
@@ -609,7 +609,7 @@ Func_006_44c8:  ; 184c8 (6:44c8)
 	jr .asm_006_44e5
 .asm_006_4518
 	ld a, $01
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 .asm_006_451e
 	ld a, [wGlossaryPageNo]
 	xor $01
@@ -733,7 +733,7 @@ Func_006_4598: ; 18598 (6:4598)
 	and B_BUTTON
 	jr z, .asm_006_45f7
 	ld a, $ff
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	ret
 
 ; unit: 5 bytes.
