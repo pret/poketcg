@@ -152,10 +152,8 @@ _CopyCardNameAndLevel_HalfwidthText:
 	ret
 ; 0x180d5
 
-; this function is called when the player
-; is shown the appearance of the play area.
-; it can be called in the command window
-; from either pressing select button
+; this function is called when the player is shown the appearance of the play area.
+; it can be called in the command window from either pressing select button
 ; or selecting check command.
 HandlePlayAreaView: ; 180d5 (6:40d5)
 	ld a, $05
@@ -760,10 +758,10 @@ Func_006_452b: ; 1852b (6:452b)
 	farcall $2, $4992
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, GlossaryText
+	ldtx hl, PokemonCardGlossaryText
 	call ProcessTextFromID
 	call Func_006_455a
-	ldtx hl, ChooseWordInGlossaryText
+	ldtx hl, ChooseWordAndPressAButtonText
 	call DrawWideTextBox_PrintText
 	ret
 
@@ -811,7 +809,7 @@ Func_006_4598: ; 18598 (6:4598)
 	call EmptyScreen
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, GlossaryText
+	ldtx hl, PokemonCardGlossaryText
 	call ProcessTextFromID
 	lb de, 0, 4
 	lb bc, 20, 14
@@ -819,10 +817,10 @@ Func_006_4598: ; 18598 (6:4598)
 	ld a, [wGlossaryPageNo]
 	or a
 	jr nz, .back_page
-	ld hl, GlossaryData1
+	ld hl, GlossaryData_1
 	jr .front_page
 .back_page
-	ld hl, GlossaryData2
+	ld hl, GlossaryData_2
 .front_page
 	pop af
 	; hl += (a + (a << 2)).
@@ -875,7 +873,7 @@ glossary_entry: MACRO
 	tx \2
 	tx \3
 ENDM
-GlossaryData1:
+GlossaryData_1:
 	glossary_entry 7, Text02fa, Text030c
 	glossary_entry 5, Text02fb, Text030d
 	glossary_entry 7, Text02fc, Text030e
@@ -885,7 +883,7 @@ GlossaryData1:
 	glossary_entry 5, Text0300, Text0312
 	glossary_entry 7, Text0301, Text0313
 	glossary_entry 5, Text0302, Text0314
-GlossaryData2:
+GlossaryData_2:
 	glossary_entry 5, Text0303, Text0315
 	glossary_entry 5, Text0304, Text0316
 	glossary_entry 5, Text0305, Text0317
@@ -2431,7 +2429,7 @@ GetCharInfoFromPos_Player:
 ; unit: 6 bytes.
 ; structure:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
-; - unused data contains its character code as zero.
+; unused data contains its character code as zero.
 kbitem: MACRO
 	db \1, \2, \3, \4
 if (_NARG == 5)
@@ -2506,6 +2504,7 @@ KeyboardData_Player: ; (6:6baf)
 	kbitem $0c, $12, $3b, $00,	                "p"
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
+
 ; a set of transition datum.
 ; unit: 4 bytes.
 ; structure:
@@ -2539,6 +2538,7 @@ TransitionTable1:
 	dw $0e55, $0050
 	dw $0e56, $0051
 	dw $0000
+	
 TransitionTable2:
 	dw $0e2a, $0052
 	dw $0e2b, $0053
