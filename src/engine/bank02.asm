@@ -171,16 +171,16 @@ DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	ret
 
 PlayAreaDrawPositionsPointerTable: ; 81d7 (2:41d7)
-	dw PlayAreaDrawPositions.data_81e3
-	dw PlayAreaDrawPositions.data_81f0
-	dw PlayAreaDrawPositions.data_81f3
-	dw PlayAreaDrawPositions.data_81f6
-	dw PlayAreaDrawPositions.data_8203
-	dw PlayAreaDrawPositions.data_8206
+	dw PlayAreaDrawPositions.asm_81e3
+	dw PlayAreaDrawPositions.asm_81f0
+	dw PlayAreaDrawPositions.asm_81f3
+	dw PlayAreaDrawPositions.asm_81f6
+	dw PlayAreaDrawPositions.asm_8203
+	dw PlayAreaDrawPositions.asm_8206
 
 PlayAreaDrawPositions: ; 81e3 (2:41e3)
 ; x and y coordinates to draw byte
-.data_81e3:
+.asm_81e3:
 	db  5,  5
 	db  0, 10
 	db  4, 10
@@ -189,15 +189,15 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 	db 16, 10
 	db $ff
 
-.data_81f0:
+.asm_81f0:
 	db 14, 7
 	db $ff
 
-.data_81f3:
+.asm_81f3:
 	db 14, 5
 	db $ff
 
-.data_81f6:
+.asm_81f6:
 	db  5, 7
 	db  0, 3
 	db  4, 3
@@ -206,11 +206,11 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 	db 16, 3
 	db $ff
 
-.data_8203:
+.asm_8203:
 	db 0, 5
 	db $ff
 
-.data_8206:
+.asm_8206:
 	db 0, 8
 	db $ff
 
@@ -588,10 +588,10 @@ DrawPlayAreaBenchCards: ; 8511 (2:4511)
 Func_85aa: ; 85aa (2:45aa)
 	or a
 	jr nz, .asm_85b2
-	lb hl, $46, $35
+	ld hl, Data_8635.asm_8635
 	jr .asm_85b5
 .asm_85b2
-	lb hl, $46, $3b
+	ld hl, Data_8635.asm_863b
 .asm_85b5
 	ld a, [wTurnHolder1]
 	ld d, a
@@ -675,7 +675,25 @@ Func_85e1: ; 85e1 (2:45e1)
 	pop hl
 	ret
 
-	INCROM $8635, $8676
+Data_8635 ; 8635 (2:4635)
+.asm_8635
+	db 15,  7
+	db 15,  2
+	db 15,  4
+.asm_863b
+	db  1,  5
+	db  1,  9
+	db  1,  7
+.asm_8641
+	db 15, 14
+	db 15,  9
+	db 15, 11
+.asm_8647
+	db  0,  2
+	db  0,  6
+	db  0,  4
+
+	INCROM $864d, $8676
 
 Func_8676: ; 8676 (2:4676)
 	ld d, [hl]
