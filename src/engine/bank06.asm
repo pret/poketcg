@@ -274,16 +274,17 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	ld h, [hl]
 	ld l, a
 	ld a, h
+	
 	or a
-	jr nz, .asm_006_41e3
+	jr nz, .raw_string
 
 	ld a, l
 	cp $06
-	jr nc, .asm_006_41e3
+	jr nc, .raw_string
 
 	ld a, [wPlayAreaCursorPosition]
 	cp $06
-	jr nc, .asm_006_41c2
+	jr nc, .opponent_side
 
 	ld a, l
 	add DUELVARS_ARENA_CARD
@@ -293,9 +294,9 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	jr .asm_006_41d7
+	jr .display_card_info
 
-.asm_006_41c2
+.opponent_side
 	ld a, l
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -306,21 +307,21 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	call SwapTurn
-.asm_006_41d7
+.display_card_info
 	ld a, 18
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call ProcessText
 	ret
 
-.asm_006_41e3
+.raw_string
 	ld a, [wPlayAreaCursorPosition]
 	cp $08
-	jr nc, .asm_006_41ee
+	jr nc, .opponent_side_raw_string
 	call PrintTextNoDelay
 	ret
 
-.asm_006_41ee
+.opponent_side_raw_string
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
