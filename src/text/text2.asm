@@ -1767,7 +1767,7 @@ GlossaryText: ; 3bcdb (e:7cdb)
 	text "Glossary"
 	done
 
-Text024c: ; 3bce5 (e:7ce5)
+WhichCardWouldYouLikeToSeeText: ; 3bce5 (e:7ce5)
 	text "Which card would you like to see?"
 	done
 

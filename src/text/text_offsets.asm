@@ -589,7 +589,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer OppPlayAreaText                          ; 0x0249
 	textpointer InPlayAreaText                           ; 0x024a
 	textpointer GlossaryText                             ; 0x024b
-	textpointer Text024c                                 ; 0x024c
+	textpointer WhichCardWouldYouLikeToSeeText           ; 0x024c
 	textpointer Text024d                                 ; 0x024d
 	textpointer HandText2                                ; 0x024e
 	textpointer Text024f                                 ; 0x024f

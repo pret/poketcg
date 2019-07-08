@@ -358,7 +358,8 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 
 ; loads the turn holders
 ; input:
-; a = turn player
+; h = turn holder 1
+; l = turn holder 2
 DrawYourOrOppPlayArea_LoadTurnHolders: ; 8209 (2:4209)
 	ld a, h
 	ld [wTurnHolder1], a
@@ -504,7 +505,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 	call DrawYourOrOppPlayArea_BenchCards
 
 	ld hl, PlayAreaIconCoordinates.player2
-	call Func_864d
+	call DrawInPlayArea_Icons
 
 	call SwapTurn
 	ldh a, [hWhoseTurn]
@@ -522,7 +523,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 
 	call SwapTurn
 	ld hl, PlayAreaIconCoordinates.opponent2
-	call Func_864d
+	call DrawInPlayArea_Icons
 
 	call SwapTurn
 	call DrawActiveCardGfx_InPlayArea
@@ -1288,7 +1289,116 @@ DrawCursor_OppPlayArea: ; 8760 (2:4760)
 	jr DrawByteInCursor_OppPlayArea
 
 Func_8764: ; 8764 (2:4764)
-	INCROM $8764, $8932
+	call Set_OBJ_8x8
+	call LoadCursorTile
+
+; reset ce5c and ce56
+	xor a
+	ld [$ce5c], a
+	ld [$ce56], a
+
+; draw play area screen for the turn player
+	ldh a, [hWhoseTurn]
+	ld h, a
+	ld l, a
+	call DrawYourOrOppPlayArea_LoadTurnHolders
+
+.swap
+	ld a, [$ce56]
+	or a
+	jr z, .draw_menu
+
+; if ce56 != 0, swap turn
+	call SwapTurn
+	xor a
+	ld [$ce56], a
+
+.draw_menu
+	xor a
+	ld hl, PlayAreaMenuParameters
+	call InitializeMenuParameters
+	call DrawWideTextBox
+	
+	ld hl, YourOrOppPlayAreaData
+	call PlaceTextItems
+
+.loop1
+	call DoFrame
+	call HandleMenuInput ; await input
+	jr nc, .loop1
+	cp $ff ; test if input was to cancel
+	jr z, .loop1
+
+	call EraseCursor
+	ldh a, [hCurMenuItem]
+	or a
+	jp nz, Func_8883 ; jump if not first option
+
+; hCurMenuItem = 0
+	ld a, [wTurnHolder1]
+	ld b, a
+	ldh a, [hWhoseTurn]
+	cp b
+	jr z, .asm_87bc
+
+; switch the play area to draw
+	ld h, a
+	ld l, a
+	call DrawYourOrOppPlayArea_LoadTurnHolders
+	xor a
+	ld [$ce56], a
+
+.asm_87bc
+	call DrawWideTextBox
+	lb de, $01, $0e
+	call InitTextPrinting
+	ldtx hl, WhichCardWouldYouLikeToSeeText
+	call ProcessTextFromID
+
+	xor a
+	ld [$ce52], a
+	lb de, $48, $c2
+	ld hl, wce53
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	
+.loop2
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call Func_89ae
+	jr c, .asm_87e7
+	jr .loop2
+.asm_87e7
+	cp $ff
+	jr nz, .asm_87f0
+	call Func_8aa1
+	jr .swap
+.asm_87f0
+	ld hl, $47f8
+	call JumpToFunctionInTable
+	jr .loop2
+
+	INCROM $87f8, $8808
+
+YourOrOppPlayAreaData: ; 8808 (2:4808)
+	textitem 2, 14, YourPlayAreaText
+	textitem 2, 16, OppPlayAreaText
+	db $ff
+
+PlayAreaMenuParameters: ; 8811 (2:4811)
+	db 1, 14 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 2 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
+
+	INCROM $8819, $8883
+
+Func_8883: ; 8883 (2:4883)
+	INCROM $8883, $8932
 
 Func_8932: ; 8932 (2:4932)
 	INCROM $8932, $8992
@@ -1304,7 +1414,11 @@ LoadCursorTile: ; 8992 (2:4992)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
-	INCROM $89ae, $8aaa
+Func_89ae: ; 89ae (2:49ae)
+	INCROM $89ae, $8aa1
+
+Func_8aa1: ; 8aa1 (2:4aa1)
+	INCROM $8aa1, $8aaa
 
 Func_8aaa: ; 8aaa (2:4aaa)
 	INCROM $8aaa, $8b85
