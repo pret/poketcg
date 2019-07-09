@@ -352,30 +352,31 @@ ShowOpponentHand_HandlePlayAreaView:
 	jp HandlePlayAreaView.start
 
 JumpTable_HandlePlayAreaView ; (6:4228)
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4293
-	dw Func_006_42a7
-	dw Func_006_426a
-	dw Func_006_429d
-	dw Func_006_42b1
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x00: my bench pokemon 1
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x01: my bench pokemon 2
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x02: my bench pokemon 3
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x03: my bench pokemon 4
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x04: my bench pokemon 5
+	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x05: my active pokemon
+	dw ShowPlayerHand_HandlePlayAreaView_2 ; 0x06: my hand
+	dw ShowPlayerDiscardPile_HandlePlayAreaView ; 0x07: my discard pile
+	
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x08: opp. active pokemon
+	dw ShowOpponentHand_HandlePlayAreaView_2 ; 0x09: opp. hand
+	dw ShowOpponentDiscardPile_HandlePlayAreaView ; 0x0a: opp. discard pile
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0b: opp. bench pokemon 1
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0c: opp. bench pokemon 2
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0d: opp. bench pokemon 3
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0e: opp. bench pokemon 4
+	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0f: opp. bench pokemon 5
 
-Func_006_4248:
+ShowPlayerAreaPokemon_HandlePlayAreaView:
 	ld a, [wPlayAreaCursorPosition]
 	inc a
-	cp PLAY_AREA_BENCH_5 + $01
-	jr nz, .asm_006_4251
+	cp $05 + 1 ; $05: my active pokemon
+	jr nz, .on_bench
 	xor a ; PLAY_AREA_ARENA
-.asm_006_4251
+.on_bench
 	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -388,13 +389,13 @@ Func_006_4248:
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
-Func_006_426a:
+ShowOpponentAreaPokemon_HandlePlayAreaView:
 	ld a, [wPlayAreaCursorPosition]
 	sub $08
 	or a
-	jr z, .asm_006_4274
+	jr z, .on_bench
 	sub $02
-.asm_006_4274
+.on_bench
 	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -409,7 +410,7 @@ Func_006_426a:
 	call SwapTurn
 	ret
 
-Func_006_4293:
+ShowPlayerHand_HandlePlayAreaView_2:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -417,7 +418,7 @@ Func_006_4293:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_429d:
+ShowOpponentHand_HandlePlayAreaView_2:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -425,7 +426,7 @@ Func_006_429d:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_42a7:
+ShowPlayerDiscardPile_HandlePlayAreaView:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -433,7 +434,7 @@ Func_006_42a7:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_42b1:
+ShowOpponentDiscardPile_HandlePlayAreaView:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
