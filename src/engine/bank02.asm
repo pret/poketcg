@@ -454,7 +454,7 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	cp b
 	jr nz, .not_equal
 
-	ld hl, PrizeCardsCoordinateData1.player
+	ld hl, PrizeCardsCoordinateData_1.player
 	call DrawPrizeCards
 	lb de, 6, 2 ; coordinates of player's active card
 	call DrawActiveCardGfx_YourOrOppPlayArea
@@ -465,7 +465,7 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	call DrawYourOrOppPlayArea_Icons
 	jr .lcd
 .not_equal
-	ld hl, PrizeCardsCoordinateData1.opponent
+	ld hl, PrizeCardsCoordinateData_1.opponent
 	call DrawPrizeCards
 	lb de, 6, 5 ; coordinates of opponent's active card
 	call DrawActiveCardGfx_YourOrOppPlayArea
@@ -486,12 +486,12 @@ DrawTurnHolderPrizeCards: ; 82b6 (2:42b6)
 	cp b
 	jr nz, .not_equal
 
-	ld hl, PrizeCardsCoordinateData1.player
+	ld hl, PrizeCardsCoordinateData_1.player
 	call DrawPrizeCards
 	ret
 
 .not_equal
-	ld hl, PrizeCardsCoordinateData1.opponent
+	ld hl, PrizeCardsCoordinateData_1.opponent
 	call DrawPrizeCards
 	ret
 
@@ -522,7 +522,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 	ld [wTurnHolder2], a
 
 ; player prize cards
-	ld hl, PrizeCardsCoordinateData2.player
+	ld hl, PrizeCardsCoordinateData_3.player
 	call DrawPrizeCards
 
 ; player bench cards
@@ -539,7 +539,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 	call SwapTurn
 
 ; opponent prize cards
-	ld hl, PrizeCardsCoordinateData2.opponent
+	ld hl, PrizeCardsCoordinateData_3.opponent
 	call DrawPrizeCards
 
 ; opponent bench cards
@@ -555,8 +555,38 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 	call DrawActiveCardGfx_InPlayArea
 	ret
 
-Func_833c: ; 833c (2:433c)
-	INCROM $833c, $837e
+; draws players prize cards 
+; and bench cards
+DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositions
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call EmptyScreen
+	call LoadSymbolsFont
+	call LoadDeckAndDiscardPileIcons
+
+; player cards
+	ld a, PLAYER_TURN
+	ld [wTurnHolder1], a
+	ld [wTurnHolder2], a
+	ld hl, PrizeCardsCoordinateData_2.player
+	call DrawPrizeCards
+	lb de, 5, 10 ; coordinates
+	ld c, 3 ; spacing
+	call DrawYourOrOppPlayArea_BenchCards
+
+; opponent cards
+	ld a, OPPONENT_TURN
+	ld [wTurnHolder1], a
+	ld hl, PrizeCardsCoordinateData_2.opponent
+	call DrawPrizeCards
+	lb de, 1, 0 ; coordinates
+	ld c, 3 ; spacing
+	call DrawYourOrOppPlayArea_BenchCards
+	ret
 
 ; draws the active card gfx at coordinates de
 ; of the player (or opponent) depending on wTurnHolder1
@@ -701,7 +731,7 @@ DrawActiveCardGfx_InPlayArea: ; 83cc (2:43cc)
 ; draws prize cards depending on the turn
 ; loaded in wTurnHolder1
 ; input:
-; hl = coordinates
+; hl = pointer to coordinates
 DrawPrizeCards: ; 8464 (2:4464)
 	push hl
 	call GetDuelInitialPrizesUpperBitsSet
@@ -758,7 +788,7 @@ DrawPrizeCards: ; 8464 (2:4464)
 	pop af
 	ret
 
-PrizeCardsCoordinateData1: ; 0x84b4 (2:44b4)
+PrizeCardsCoordinateData_1: ; 0x84b4 (2:44b4)
 ; x and y coordinates for player prize cards
 .player
 	db 2, 1
@@ -776,9 +806,25 @@ PrizeCardsCoordinateData1: ; 0x84b4 (2:44b4)
 	db 5, 17
 	db 5, 15
 
-	INCROM $84cc, $84e4
+PrizeCardsCoordinateData_2:
+; x and y coordinates for player prize cards
+.player
+	db  6, 0
+	db  6, 2
+	db  8, 0
+	db  8, 2
+	db 10, 0
+	db 10, 2
+; x and y coordinates for opponent prize cards
+.opponent
+	db 4, 18
+	db 4, 16
+	db 2, 18
+	db 2, 16
+	db 0, 18
+	db 0, 16
 
-PrizeCardsCoordinateData2: ; 0x84e4 (2:44e4)
+PrizeCardsCoordinateData_3: ; 0x84e4 (2:44e4)
 ; x and y coordinates for player prize cards
 .player
 	db  9, 1
@@ -1176,9 +1222,9 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	and %10000000
 	ldh a, [hDPadHeld]
 	jr nz, .check_vertical
-	bit 5, a ; test left button
+	bit D_LEFT_F, a ; test left button
 	jr nz, .horizontal
-	bit 4, a ; test right button
+	bit D_RIGHT_F, a ; test right button
 	jr z, .check_vertical
 
 ; handle horizontal input
