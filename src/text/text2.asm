@@ -1747,7 +1747,7 @@ Text0246: ; 3bc85 (e:7c85)
 	text "To Opponent's Play Area"
 	done
 
-Text0247: ; 3bc9e (e:7c9e)
+PlayersPlayAreaText: ; 3bc9e (e:7c9e)
 	text "<RAMNAME>'s Play Area"
 	done
 

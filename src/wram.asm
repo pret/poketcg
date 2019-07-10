@@ -1311,7 +1311,7 @@ wce59:: ; ce59
 ; stores whether there are Pokemon in play area
 ; player arena Pokemon sets bit 0
 ; opponent arena Pokemon sets bit 1
-wArenaCardsInPlayArea:: ; ce5e
+wArenaCardsInPlayArea:: ; ce5d
 	ds $1
 
 wce5e:: ; ce5e

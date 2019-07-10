@@ -3,8 +3,10 @@ _DuelCheckInterface: ; 8000 (2:4000)
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
+
+; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
+	ld [wDuelCursorBlinkCounter], a
 	ld hl, CheckMenuData
 	call PlaceTextItems
 .loop
@@ -12,8 +14,10 @@ _DuelCheckInterface: ; 8000 (2:4000)
 	call HandleDuelMenuInput_YourPlayArea
 	jr nc, .loop
 	cp $ff
-	ret z ; B was pressed
-	ld a, [wCursorDuelYPosition] ; A was pressed
+	ret z ; B pressed
+
+; A was pressed
+	ld a, [wCursorDuelYPosition] 
 	sla a
 	ld b, a
 	ld a, [wCursorDuelXPosition]
@@ -58,8 +62,10 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DrawByteToTabulatedPositions
 
 	call DrawWideTextBox
+	
+; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
+	ld [wDuelCursorBlinkCounter], a
 	ld hl, YourPlayAreaMenuData
 	call PlaceTextItems
 
@@ -167,21 +173,29 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 
 .cursor
 	call DrawYourOrOppPlayArea_LoadTurnHolders
+
+; convert cursor position and 
+; store it in wLastCursorPosition_YourPlayArea
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
 	ld a, [wCursorDuelXPosition]
 	add b
-	add $03
+	add 3
 	ld [wLastCursorPosition_YourPlayArea], a
 
+; draw black arrows in the Play Area
 	ld b, $f8 ; black arrow tile
 	call DrawByteToTabulatedPositions
 	call DrawWideTextBox
 
-	xor a
-	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
 	
+; reset cursor blink
+	xor a
+	ld [wDuelCursorBlinkCounter], a
+
+; place text items depending on clairvoyance
+; when active, allows to look at opp. hand
 	call IsClairvoyanceActive
 	jr c, .clairvoyance2
 	ld hl, OppPlayAreaMenuData
@@ -191,17 +205,19 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld hl, OppPlayAreaMenuData_WithClairvoyance
 	call PlaceTextItems
 
+; handle input
 .loop
 	call DoFrame
-	ld a, $01
+	ld a, 1
 	call DrawArrowsToTabulatedPositions
 	call HandleDuelMenuInput_PlayArea
 	jr nc, .loop
-
 	call EraseByteFromTabulatedPositions
 	cp $ff
-	ret z
+	ret z ; B was pressed
 
+; A was pressed
+; jump to function corresponding to cursor position
 	ld a, [wCursorDuelYPosition]
 	sla a
 	ld b, a
@@ -242,6 +258,8 @@ OppPlayAreaMenuData_WithClairvoyance: ; (2:4176)
 
 ; checks if arrows need to be erased in Play Area
 ; and draws new arrows upon cursor position change
+; input:
+; a = an initial offset applied to the cursor position
 DrawArrowsToTabulatedPositions: ; 818c (2:418c)
 	push af
 	ld b, a
@@ -254,16 +272,20 @@ DrawArrowsToTabulatedPositions: ; 818c (2:418c)
 	ld a, [wCursorDuelXPosition]
 	add b
 	add c
-	; a = 2 * cursor ycoord + cursor xcoord + 3*a
+; a = 2 * cursor ycoord + cursor xcoord + 3*a
 
+; if cursor position is different than
+; last position, then update arrows
 	ld hl, wLastCursorPosition_YourPlayArea
 	cp [hl]
 	jr z, .unchanged
-	call EraseByteFromTabulatedPositions
 
+; erase and draw arrows
+	call EraseByteFromTabulatedPositions
 	ld [wLastCursorPosition_YourPlayArea], a
 	ld b, $f8 ; black arrow tile byte
 	call DrawByteToTabulatedPositions
+
 .unchanged
 	pop af
 	ret
@@ -291,9 +313,10 @@ DrawByteToTabulatedPositions: ; 81ba (2:41ba)
 	ld c, a
 	ld b, $00
 	add hl, bc
-	; hl points to PlayAreaDrawPositionsPointerTable 
-	; plus offset corresponding to a
+; hl points to PlayAreaDrawPositionsPointerTable 
+; plus offset corresponding to a
 
+; load hl with draw position pointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -356,11 +379,12 @@ PlayAreaDrawPositions: ; 81e3 (2:41e3)
 	db 0, 8
 	db $ff
 
-; loads the turn holders
-; input:
+; loads tiles and icons to display your/opp play area
+; and draws the screen according to the turn player
 ; h = turn holder 1
 ; l = turn holder 2
 DrawYourOrOppPlayArea_LoadTurnHolders: ; 8209 (2:4209)
+; loads the turn holders
 	ld a, h
 	ld [wTurnHolder1], a
 	ld a, l
@@ -387,6 +411,8 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	ld a, [wTurnHolder1]
 	cp PLAYER_TURN
 	jr nz, .opp_turn1
+
+; print <RAMNAME>'s Play Area
 	ld de, wDefaultText
 	call CopyPlayerName
 	jr .get_text_length
@@ -401,12 +427,12 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	sub b
 	srl a
 	add 4
-	; a = (6 - name text in tiles) / 2 + 4
+; a = (6 - name text in tiles) / 2 + 4
 	ld d, a ; text horizontal alignment
 
 	ld e, $00
 	call InitTextPrinting
-	lb hl, $02, $47
+	ldtx hl, PlayersPlayAreaText
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr nz, .opp_turn2
@@ -430,10 +456,10 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 
 	ld hl, PrizeCardsCoordinateData1.player
 	call DrawPrizeCards
-	lb de, 6, 2 ; coordinates to draw player's active card
+	lb de, 6, 2 ; coordinates of player's active card
 	call DrawActiveCardGfx_YourOrOppPlayArea
-	lb de, 1, 9
-	ld c, 4
+	lb de, 1, 9 ; coordinates of player's bench cards
+	ld c, 4 ; spacing
 	call DrawYourOrOppPlayArea_BenchCards
 	xor a
 	call DrawYourOrOppPlayArea_Icons
@@ -441,10 +467,10 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 .not_equal
 	ld hl, PrizeCardsCoordinateData1.opponent
 	call DrawPrizeCards
-	lb de, 6, 5 ; coordinates to draw opponent's active card
+	lb de, 6, 5 ; coordinates of opponent's active card
 	call DrawActiveCardGfx_YourOrOppPlayArea
-	lb de, $01, $02
-	ld c, 4
+	lb de, 1, 2 ; coordinates of opponent's bench cards
+	ld c, 4 ; spacing
 	call DrawYourOrOppPlayArea_BenchCards
 	ld a, $01
 	call DrawYourOrOppPlayArea_Icons
@@ -543,7 +569,7 @@ DrawActiveCardGfx_YourOrOppPlayArea: ; 837e (2:437e)
 	ld a, [wTurnHolder1]
 	ld h, a
 	ld a, [hl]
-	cp $ff
+	cp -1
 	jr z, .no_pokemon
 
 	ld d, a
@@ -573,9 +599,9 @@ DrawActiveCardGfx_YourOrOppPlayArea: ; 837e (2:437e)
 	bank1call FlushAllPalettesOrSendPal23Packet
 	pop de
 
-	; draw card gfx
+; draw card gfx
 	ld a, $a0
-	lb hl, $06, $01
+	lb hl, 6, 1
 	lb bc, 8, 6
 	call FillRectangle
 	bank1call ApplyBGP6OrSGB3ToCardImage
@@ -586,18 +612,19 @@ DrawActiveCardGfx_YourOrOppPlayArea: ; 837e (2:437e)
 	ret
 
 ; draws player and opponent arena card graphics
+; in the play area screen
 DrawActiveCardGfx_InPlayArea: ; 83cc (2:43cc)
 	xor a
 	ld [wArenaCardsInPlayArea], a
 
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	cp $ff ; no pokemon
+	cp -1 ; no pokemon
 	jr z, .opponent1
 
 	push af
 	ld a, [wArenaCardsInPlayArea]
-	or $01 ; set the player arena Pokemon bit
+	or %00000001 ; set the player arena Pokemon bit
 	ld [wArenaCardsInPlayArea], a
 	pop af
 
@@ -615,12 +642,12 @@ DrawActiveCardGfx_InPlayArea: ; 83cc (2:43cc)
 .opponent1
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-	cp $ff ; no pokemon
+	cp -1 ; no pokemon
 	jr z, .draw
 
 	push af
 	ld a, [wArenaCardsInPlayArea]
-	or $02 ; set the opponent arena Pokemon bit
+	or %00000010 ; set the opponent arena Pokemon bit
 	ld [wArenaCardsInPlayArea], a
 	pop af
 
@@ -644,28 +671,28 @@ DrawActiveCardGfx_InPlayArea: ; 83cc (2:43cc)
 
 	bank1call FlushAllPalettesOrSendPal23Packet
 	ld a, [wArenaCardsInPlayArea]
-	and $01 ; test player arena card bit
+	and %00000001 ; test player arena card bit
 	jr z, .opponent2
 
 ; draw player arena card
 	ld a, $a0
 	lb de, 6, 9
-	lb hl, $06, $01
-	lb bc, $08, $06
+	lb hl, 6, 1
+	lb bc, 8, 6
 	call FillRectangle
 	bank1call ApplyBGP6OrSGB3ToCardImage
 
 .opponent2
 	ld a, [wArenaCardsInPlayArea]
-	and $02
+	and %00000010 ; test opponent arena card bit
 	ret z
 
 ; draw opponent arena card
 	call SwapTurn
 	ld a, $50
 	lb de, 6, 2
-	lb hl, $06, $01
-	lb bc, $08, $06
+	lb hl, 6, 1
+	lb bc, 8, 6
 	call FillRectangle
 	bank1call ApplyBGP7OrSGB2ToCardImage
 	call SwapTurn
@@ -719,7 +746,7 @@ DrawPrizeCards: ; 8464 (2:4464)
 	jr nz, .not_cgb
 	ld a, $02 ; blue colour
 	lb bc, 2, 2
-	lb hl, $00, $00
+	lb hl, 0, 0
 	call BankswitchVRAM1
 	call FillRectangle
 	call BankswitchVRAM0
@@ -836,12 +863,12 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	sla a
 	sla a
 	add $e4 
-	; a holds the correct stage gfx tile
+; a holds the correct stage gfx tile
 	ld b, a
 	push bc
 
-	lb hl, $01, $02
-	lb bc, $02, $02
+	lb hl, 1, 2
+	lb bc, 2, 2
 	call FillRectangle
 
 	ld a, [wConsole]
@@ -860,8 +887,8 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 .two_stage
 	ld a, $01 ; red colour
 .palette
-	lb bc, $02, $02
-	lb hl, $00, $00
+	lb bc, 2, 2
+	lb hl, 0, 0
 	call BankswitchVRAM1
 	call FillRectangle
 	call BankswitchVRAM0
@@ -892,8 +919,8 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 
 	push bc
 	ld a, $f4 ; empty bench slot tile
-	lb hl, $01, $02
-	lb bc, $02, $02
+	lb hl, 1, 2
+	lb bc, 2, 2
 	call FillRectangle
 
 	ld a, [wConsole]
@@ -901,8 +928,8 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	jr nz, .not_cgb
 
 	ld a, $02 ; colour
-	lb bc, $02, $02
-	lb hl, $00, $00
+	lb bc, 2, 2
+	lb hl, 0, 0
 	call BankswitchVRAM1
 	call FillRectangle
 	call BankswitchVRAM0
@@ -958,10 +985,8 @@ DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 	call DrawIconWithValue
 	ret
 
-; draws the interface icon corresponding to
-; the gfx tile loaded in a
-; also prints the number in decimal corresponding
-; to the value loaded in b
+; draws the interface icon corresponding to the gfx tile in a
+; also prints the number in decimal corresponding to the value in b
 ; the coordinates in screen are given by [hl]
 ; input:
 ; a  = tile for the icon
@@ -975,8 +1000,8 @@ DrawIconWithValue: ; 85e1 (2:45e1)
 	inc hl
 	push hl
 	push bc
-	lb hl, $01, $02
-	lb bc, $02, $02
+	lb hl, 1, 2
+	lb bc, 2, 2
 	call FillRectangle
 
 	ld a, [wConsole]
@@ -984,8 +1009,8 @@ DrawIconWithValue: ; 85e1 (2:45e1)
 	jr nz, .skip
 
 	ld a, $02
-	lb bc, $02, $02
-	lb hl, $00, $00
+	lb bc, 2, 2
+	lb hl, 0, 0
 	call BankswitchVRAM1
 	call FillRectangle
 	call BankswitchVRAM0
@@ -1005,6 +1030,7 @@ DrawIconWithValue: ; 85e1 (2:45e1)
 	ld b, a
 	ld a, [hl]
 
+; loading numerical and cross symbols
 	ld hl, wDefaultText
 	ld [hl], TX_SYMBOL
 	inc hl
@@ -1115,6 +1141,7 @@ PrintsHandTextAndValue: ; 8676 (2:4676)
 	ld [hl], TX_SYMBOL
 	inc hl
 
+; draw to screen
 	ld a, b
 	ld [hli], a
 	ld [hl], TX_END
@@ -1181,9 +1208,9 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	jr .erase
 
 .check_vertical
-	bit 6, a ; test up button
+	bit D_UP_F, a
 	jr nz, .vertical
-	bit 7, a ; test down button
+	bit D_DOWN_F, a
 	jr z, .skip
 
 ; handle vertical input
@@ -1210,8 +1237,9 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	ld a, e
 	ld [wCursorDuelYPosition], a
 
+; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
+	ld [wDuelCursorBlinkCounter], a
 
 .skip
 	ldh a, [hKeysPressed]
@@ -1220,7 +1248,7 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	and A_BUTTON
 	jr nz, .a_pressed
 
-; b pressed
+; B pressed
 	ld a, $ff
 	call PlaySFXConfirmOrCancel
 	scf
@@ -1246,7 +1274,7 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	and %00001111
 	ret nz ; only update cursor if blink's lower nibble is 0
 
-	ld a, $0f
+	ld a, $0f ; cursor byte
 	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
 	jr z, DrawByteInCursor_OppPlayArea
 ; fallthrough
@@ -1398,7 +1426,44 @@ PlayAreaMenuParameters: ; 8811 (2:4811)
 	INCROM $8819, $8883
 
 Func_8883: ; 8883 (2:4883)
-	INCROM $8883, $8932
+	ld a, [wTurnHolder1]
+	ld b, a
+	ldh a, [hWhoseTurn]
+	cp b
+	jr nz, .asm_889b
+
+	ld l, a
+	cp PLAYER_TURN
+	jr nz, .opponent
+	ld a, OPPONENT_TURN
+	jr .draw
+.opponent
+	ld a, PLAYER_TURN
+.draw
+	ld h, a
+	call DrawYourOrOppPlayArea_LoadTurnHolders
+
+.asm_889b
+	call DrawWideTextBox
+	lb de, $01, $0e
+	call InitTextPrinting
+	ldtx hl, WhichCardWouldYouLikeToSeeText
+	call ProcessTextFromID
+
+	xor a
+	ld [$ce52], a
+	ld de, $48fa
+	ld hl, wce53
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call SwapTurn
+
+	ld a, $01
+	ld [$ce56], a
+	jp Func_8764.loop2
+
+	INCROM $88c2, $8932
 
 Func_8932: ; 8932 (2:4932)
 	INCROM $8932, $8992
@@ -1880,11 +1945,11 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 ; handle vertical input
 .vertical
 	ld a, e
-	xor $1 ; flips y coordinate
+	xor $01 ; flips y coordinate
 	ld e, a
 
 .okay
-	ld a, $1
+	ld a, $01
 	ld [wcfe3], a
 	push de
 	call DrawCursorEmpty_YourPlayArea
@@ -1895,9 +1960,10 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	ld [wCursorDuelXPosition], a
 	ld a, e
 	ld [wCursorDuelYPosition], a
-
+	
+; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a ; reset cursor blink
+	ld [wDuelCursorBlinkCounter], a
 .no_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -1911,7 +1977,7 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 
 .a_press
 	call Func_90f7
-	ld a, $1
+	ld a, $01
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
@@ -1926,16 +1992,16 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	ld hl, wDuelCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $f
+	and %00001111
 	ret nz  ; only update cursor if blink's lower nibble is 0
 
-	ld a, $0f
+	ld a, $0f ; cursor byte
 	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
 	jr z, DrawByteInCursor_YourPlayArea
 
 ; draws in the cursor position
 DrawCursorEmpty_YourPlayArea: ; 90d8 (2:50d8)
-	ld a, $0 ; empty cursor
+	ld a, $00 ; empty cursor
 ; fallthrough
 
 ; draws in the cursor position
@@ -1943,18 +2009,20 @@ DrawCursorEmpty_YourPlayArea: ; 90d8 (2:50d8)
 ; a = tile byte to draw
 DrawByteInCursor_YourPlayArea:
 	ld e, a
-	ld a, $a
+	ld a, 10
 	ld l, a
 	ld a, [wCursorDuelXPosition]
 	ld h, a
 	call HtimesL
+
 	ld a, l
-	add $1
+	add 1
 	ld b, a
 	ld a, [wCursorDuelYPosition]
 	sla a
-	add $e
+	add 14
 	ld c, a
+
 	ld a, e
 	call WriteByteToBGMap0
 	or a
@@ -2237,7 +2305,7 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	push bc
 	push de
 	push hl
-	ld c, $ff
+	ld c, -1
 .loop
 	inc c
 	sub 10
