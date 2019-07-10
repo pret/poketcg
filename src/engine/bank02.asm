@@ -1526,10 +1526,156 @@ LoadCursorTile: ; 8992 (2:4992)
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
 Func_89ae: ; 89ae (2:49ae)
-	INCROM $89ae, $8aa1
+	xor a
+	ld [wcfe3], a
+	ld hl, wce53
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld a, [$ce52]
+	ld [wce61], a
+	ld l, a
+	ld h, $07
+	call HtimesL
+	add hl, de
+	ldh a, [hDPadHeld]
+	or a
+	jp z, .asm_8a4f
+	inc hl
+	inc hl
+	inc hl
+	bit 6, a
+	jr z, .asm_89d5
+	ld a, [hl]
+	jr .asm_89eb
+.asm_89d5
+	inc hl
+	bit 7, a
+	jr z, .asm_89dd
+	ld a, [hl]
+	jr .asm_89eb
+.asm_89dd
+	inc hl
+	bit 4, a
+	jr z, .asm_89e5
+	ld a, [hl]
+	jr .asm_89eb
+.asm_89e5
+	inc hl
+	bit 5, a
+	jr z, .asm_8a4f
+	ld a, [hl]
+.asm_89eb
+	ld [$ce52], a
+	cp $08
+	jr nc, .asm_8a46
+	ld b, $01
+.asm_89f4
+	or a
+	jr z, .asm_89fc
+	sla b
+	dec a
+	jr .asm_89f4
+.asm_89fc
+	ld a, [wDuelInitialPrizesUpperBitsSet]
+	and b
+	jr nz, .asm_8a46
+	ld a, [wce61]
+	cp $06
+	jr nz, Func_89ae
+	ldh a, [hDPadHeld]
+	bit 4, a
+	jr nz, .asm_8a13
+	bit 5, a
+	jr z, Func_89ae
+.asm_8a13
+	ld a, [wDuelInitialPrizes]
+	cp $05
+	jr nc, .asm_8a46
+	ld a, [$ce52]
+	cp $05
+	jr nz, .asm_8a28
+	ld a, $03
+	ld [$ce52], a
+	jr .asm_8a2d
+.asm_8a28
+	ld a, $02
+	ld [$ce52], a
+.asm_8a2d
+	ld a, [wDuelInitialPrizes]
+	cp $03
+	jr nc, .asm_8a3c
+	ld a, [$ce52]
+	sub $02
+	ld [$ce52], a
+.asm_8a3c
+	ld a, [$ce52]
+	ld [wce61], a
+	ld b, $01
+	jr .asm_89f4
+.asm_8a46
+	ld a, $01
+	ld [wcfe3], a
+	xor a
+	ld [wDuelCursorBlinkCounter], a
+.asm_8a4f
+	ldh a, [hKeysPressed]
+	and $03
+	jr z, .asm_8a6d
+	and $01
+	jr nz, .asm_8a60
+	ld a, $ff
+	call PlaySFXConfirmOrCancel
+	scf
+	ret
+.asm_8a60
+	call Func_8a82
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [$ce52]
+	scf
+	ret
+.asm_8a6d
+	ld a, [wcfe3]
+	or a
+	jr z, .asm_8a76
+	call PlaySFX
+.asm_8a76
+	ld hl, wDuelCursorBlinkCounter
+	ld a, [hl]
+	inc [hl]
+	and $0f
+	ret nz
+	bit 4, [hl]
+	jr nz, Func_8aa1
+
+Func_8a82 ; 8a82 (2:4a82)
+	call ZeroObjectPositions
+	ld hl, wce53
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld a, [$ce52]
+	ld l, a
+	ld h, $07
+	call HtimesL
+	add hl, de
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	ld b, [hl]
+	ld c, $00
+	call SetOneObjectAttributes
+	or a
+	ret
 
 Func_8aa1: ; 8aa1 (2:4aa1)
-	INCROM $8aa1, $8aaa
+	call ZeroObjectPositions
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	ret
+; 0x8aaa
 
 Func_8aaa: ; 8aaa (2:4aaa)
 	INCROM $8aaa, $8b85
