@@ -557,7 +557,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 
 ; draws players prize cards 
 ; and bench cards
-DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
+_DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -1361,11 +1361,11 @@ DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
 DrawCursor_OppPlayArea: ; 8760 (2:4760)
 	ld a, $0f ; load cursor byte
 	jr DrawByteInCursor_OppPlayArea
+; fallthrough
 
 Func_8764: ; 8764 (2:4764)
 	call Set_OBJ_8x8
 	call LoadCursorTile
-
 ; reset ce5c and ce56
 	xor a
 	ld [$ce5c], a
@@ -1381,7 +1381,6 @@ Func_8764: ; 8764 (2:4764)
 	ld a, [$ce56]
 	or a
 	jr z, .draw_menu
-
 ; if ce56 != 0, swap turn
 	call SwapTurn
 	xor a
@@ -1400,7 +1399,7 @@ Func_8764: ; 8764 (2:4764)
 	call DoFrame
 	call HandleMenuInput ; await input
 	jr nc, .loop1
-	cp $ff ; test if input was to cancel
+	cp $ff
 	jr z, .loop1
 
 	call EraseCursor
@@ -1413,7 +1412,7 @@ Func_8764: ; 8764 (2:4764)
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
-	jr z, .asm_87bc
+	jr z, .text
 
 ; switch the play area to draw
 	ld h, a
@@ -1422,7 +1421,7 @@ Func_8764: ; 8764 (2:4764)
 	xor a
 	ld [$ce56], a
 
-.asm_87bc
+.text
 	call DrawWideTextBox
 	lb de, $01, $0e
 	call InitTextPrinting
@@ -1476,7 +1475,7 @@ Func_8883: ; 8883 (2:4883)
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
-	jr nz, .asm_889b
+	jr nz, .text
 
 	ld l, a
 	cp PLAYER_TURN
@@ -1485,11 +1484,12 @@ Func_8883: ; 8883 (2:4883)
 	jr .draw
 .opponent
 	ld a, PLAYER_TURN
+
 .draw
 	ld h, a
 	call DrawYourOrOppPlayArea_LoadTurnHolders
 
-.asm_889b
+.text
 	call DrawWideTextBox
 	lb de, $01, $0e
 	call InitTextPrinting
@@ -1503,8 +1503,8 @@ Func_8883: ; 8883 (2:4883)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	call SwapTurn
 
+	call SwapTurn
 	ld a, $01
 	ld [$ce56], a
 	jp Func_8764.loop2

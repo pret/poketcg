@@ -9317,12 +9317,12 @@ DrawYourOrOppPlayArea: ; 30bc (0:30bc)
 	call BankswitchROM
 	ret
 
-Func_30d7: ; 30d7 (0:30d7)
+DrawPlayersPrizeAndBenchCards: ; 30d7 (0:30d7)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_833c)
+	ld a, BANK(_DrawPlayersPrizeAndBenchCards)
 	call BankswitchROM
-	call Func_833c
+	call _DrawPlayersPrizeAndBenchCards
 	pop af
 	call BankswitchROM
 	ret
