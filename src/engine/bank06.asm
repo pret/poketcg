@@ -562,77 +562,81 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ld a, [wPlayAreaCursorPosition]
 	ld [wPlayAreaPreservedPosition], a
 	pop af
+
 	ld [wPlayAreaCursorPosition], a
 
 	cp $05
-	jr c, .asm_006_440e
+	jr c, .player_area
 	cp $0b
-	jr c, .asm_006_4462
+	jr c, .next
 	cp $10
-	jr c, .asm_006_4437
+	jr c, .opponent_area
 
-	jr .asm_006_4462
+	jr .next
 
-.asm_006_440e
+.player_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
-	jr nz, .asm_006_441d
+	jr nz, .bench_pokemon_exists
 
+	; no pokemon in player's bench.
+	; then move to player's hand.
 	ld a, $10
 	ld [wPlayAreaCursorPosition], a
-	jr .asm_006_4462
+	jr .next
 	
-.asm_006_441d
+.bench_pokemon_exists
 	ld b, a
 	ld a, [wPlayAreaCursorPosition]
 	cp b
-	jr c, .asm_006_4462
+	jr c, .next
 
+	; handle index overflow
 	ldh a, [hDPadHeld]
 	bit D_RIGHT_F, a
-	jr z, .asm_006_4430
+	jr z, .on_left
 
 	xor a
 	ld [wPlayAreaCursorPosition], a
-	jr .asm_006_4462
+	jr .next
 
-.asm_006_4430
+.on_left
 	ld a, b
 	dec a
 	ld [wPlayAreaCursorPosition], a
-	jr .asm_006_4462
+	jr .next
 
-.asm_006_4437
+.opponent_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
-	jr nz, .asm_006_4446
+	jr nz, .bench_pokemon_exists_2
 
 	ld a, $11
 	ld [wPlayAreaCursorPosition], a
-	jr .asm_006_4462
+	jr .next
 
-.asm_006_4446
+.bench_pokemon_exists_2
 	ld b, a
 	ld a, [wPlayAreaCursorPosition]
 	sub $0b
 	cp b
-	jr c, .asm_006_4462
+	jr c, .next
 
 	ldh a, [hDPadHeld]
 	bit D_LEFT_F, a
-	jr z, .asm_006_445c
+	jr z, .on_right
 
 	ld a, $0b
 	ld [wPlayAreaCursorPosition], a
-	jr .asm_006_4462
+	jr .next
 
-.asm_006_445c
+.on_right
 	ld a, b
 	add $0a
 	ld [wPlayAreaCursorPosition], a
-.asm_006_4462
+.next
 	ld a, $01
 	ld [wcfe3], a
 	xor a
@@ -668,10 +672,10 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ld hl, wCheckCommandCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and $10 - 1
 	ret nz
 
-	bit 4, [hl] ; and $10
+	bit 4, [hl] ; = and $10
 	jr nz, .non_draw_cursor
 
 .draw_cursor ; 184a0 (6:44a0)
@@ -709,52 +713,57 @@ Func_006_44c8: ; (6:44c8)
 
 	xor a
 	ld [wPlayAreaCursorPosition], a
-	ld de, $4c8e
+	ld de, $4c8e ; this data is stored in bank 2.
 	ld hl, wPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	ld a, $ff
-	ld [$ce55], a
+	ld [wce55], a
 	xor a
 	ld [wCheckCommandCounter], a
-.asm_006_44e5
+.next
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	ldh a, [hKeysPressed]
 	and SELECT
 	jr nz, .on_select
+
 	farcall $2, $49ae
-	jr nc, .asm_006_44e5
-	cp -1
-	jr nz, .asm_006_4502
+	jr nc, .next
+	
+	cp -1 ; b button
+	jr nz, .check_button
+
 	farcall $2, $4aa1
 	ret
 	
-.asm_006_4502
+.check_button
 	push af
 	farcall $2, $4aa1
 	pop af
-	cp $09
-	jr z, .asm_006_451e
+
+	cp $09 ; $09: next page or prev page
+	jr z, .change_page
 
 	call Func_006_4598
 	call Func_006_452b
 	xor a
 	ld [wCheckCommandCounter], a
-	jr .asm_006_44e5
+	jr .next
 
 .on_select
 	ld a, $01
 	farcall Func_90fb
-.asm_006_451e
+.change_page
 	ld a, [wGlossaryPageNo]
-	xor $01
+	xor $01 ; swap page
 	ld [wGlossaryPageNo], a
 	call Func_006_455a
-	jr .asm_006_44e5
+	jr .next
 
+; display glossary menu.
 Func_006_452b: ; 1852b (6:452b)
 	xor a
 	ld [wTileMapFill], a
@@ -765,6 +774,7 @@ Func_006_452b: ; 1852b (6:452b)
 	call EmptyScreen
 	call Set_OBJ_8x8
 	farcall $2, $4992
+
 	lb de, 5, 0
 	call InitTextPrinting
 	ldtx hl, PokemonCardGlossaryText
@@ -774,22 +784,29 @@ Func_006_452b: ; 1852b (6:452b)
 	call DrawWideTextBox_PrintText
 	ret
 
-; print glossary
+; print texts in glossary menu.
 Func_006_455a: ; 1855a (6:455a)
 	ld hl, wDefaultText
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, [wGlossaryPageNo]
 	add SYM_1
 	ld [hli], a
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, SYM_SLASH
 	ld [hli], a
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, SYM_2
 	ld [hli], a
+
 	ld [hl], TX_END
 
 	lb de, 16, 1
@@ -801,16 +818,18 @@ Func_006_455a: ; 1855a (6:455a)
 	call InitTextPrinting
 	ld a, [wGlossaryPageNo]
 	or a
-
 	jr nz, .page_two
-	ldtx hl, Text02f7
+
+	ldtx hl, GlossaryMenuPage1Text
 	jr .page_one
+
 .page_two
-	ldtx hl, Text02f8
+	ldtx hl, GlossaryMenuPage2Text
 .page_one
 	call ProcessTextFromID
 	ret
 
+; display glossary description.
 Func_006_4598: ; 18598 (6:4598)
 	push af
 	xor a
@@ -823,11 +842,14 @@ Func_006_4598: ; 18598 (6:4598)
 	lb de, 0, 4
 	lb bc, 20, 14
 	call DrawRegularTextBox
+
 	ld a, [wGlossaryPageNo]
 	or a
 	jr nz, .back_page
+
 	ld hl, GlossaryData_1
 	jr .front_page
+
 .back_page
 	ld hl, GlossaryData_2
 .front_page
@@ -865,18 +887,19 @@ Func_006_4598: ; 18598 (6:4598)
 	xor a
 	ld [wLineSeparation], a
 	call EnableLCD
-.asm_006_45f7
+.loop
 	call DoFrame
 	ldh a, [hKeysPressed]
 	and B_BUTTON
-	jr z, .asm_006_45f7
-	ld a, $ff
+	jr z, .loop
+
+	ld a, -1
 	farcall Func_90fb
 	ret
 
 ; unit: 5 bytes.
 ; [structure]
-; horizonal align (1) / text id 1 (2) / text id 2 (2)
+; horizonal align (1) / title text id (2) / desc. text id (2)
 glossary_entry: MACRO
 	db \1
 	tx \2

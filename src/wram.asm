@@ -1301,6 +1301,7 @@ wPlayAreaCursorPosition:: ; ce52
 wPlayAreaInputTablePointer:: ; ce53
 	ds $2
 
+wce55:: ; ce55
 	ds $2
 
 ; it's used for restore the position of cursor
@@ -1498,8 +1499,13 @@ wcfda:: ; cfda
 
 	ds $7
 
+; it's a flag variable being used in play-area view.
+; need analysis.
 wcfe3:: ; cfe3
-	ds $4
+	ds $1
+
+wcfe4:: ; cfe4
+	ds $3
 
 ; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7
