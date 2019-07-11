@@ -1449,11 +1449,16 @@ Func_8764: ; 8764 (2:4764)
 	call Func_8aa1
 	jr .swap
 .asm_87f0
-	ld hl, $47f8
+	ld hl, .asm_87f8
 	call JumpToFunctionInTable
 	jr .loop2
 
-	INCROM $87f8, $8808
+.asm_87f8
+REPT 6
+	dw Func_8819
+ENDR
+	dw Func_8819.asm_883C
+	dw Func_8819.asm_8849
 
 YourOrOppPlayAreaData: ; 8808 (2:4808)
 	textitem 2, 14, YourPlayAreaText
@@ -1468,7 +1473,68 @@ PlayAreaMenuParameters: ; 8811 (2:4811)
 	db SYM_SPACE ; tile behind cursor
 	dw $0000 ; function pointer if non-0
 
-	INCROM $8819, $8883
+Func_8819: ; 8819 (2:4819)
+	ld a, [wPrizeCardCursorPosition]
+	ld c, a
+	ld b, $01
+.asm_881f
+	or a
+	jr z, .asm_8827
+	sla b
+	dec a
+	jr .asm_881f
+.asm_8827
+	ld a, $ec
+	call GetTurnDuelistVariable
+	and b
+	ret z
+	ld a, c
+	add $40
+	ld [$ce5c], a
+	ld a, c
+	add $3c
+	call GetTurnDuelistVariable
+	jr .asm_8855
+
+.asm_883C:
+	call CreateHandCardList
+	ret c
+	ld hl, wDuelTempList
+	call ShuffleCards
+	ld a, [hl]
+	jr .asm_8855
+
+.asm_8849:
+	call CreateDeckCardList
+	ret c
+	ld a, $7f
+	ld [$ce5c], a
+	ld a, [wDuelTempList]
+.asm_8855
+	ld b, a
+	ld a, [$ce5c]
+	or a
+	jr nz, .asm_8860
+	ld a, b
+	ld [$ce5c], a
+.asm_8860
+	ld a, b
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call Set_OBJ_8x16
+	bank1call OpenCardPage_FromHand
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	pop af
+	ld a, [$ce56]
+	or a
+	jr z, .asm_887f
+	call SwapTurn
+	ld a, [$ce5c]
+	or $80
+	ret
+.asm_887f
+	ld a, [$ce5c]
+	ret
 
 Func_8883: ; 8883 (2:4883)
 	ld a, [wTurnHolder1]
