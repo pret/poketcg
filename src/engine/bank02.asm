@@ -1295,7 +1295,7 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	jr nz, .a_pressed
 
 ; B pressed
-	ld a, $ff
+	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
@@ -1429,7 +1429,7 @@ Func_8764: ; 8764 (2:4764)
 	call ProcessTextFromID
 
 	xor a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	lb de, $48, $c2
 	ld hl, wce53
 	ld [hl], e
@@ -1497,7 +1497,7 @@ Func_8883: ; 8883 (2:4883)
 	call ProcessTextFromID
 
 	xor a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	ld de, $48fa
 	ld hl, wce53
 	ld [hl], e
@@ -1528,45 +1528,51 @@ LoadCursorTile: ; 8992 (2:4992)
 Func_89ae: ; 89ae (2:49ae)
 	xor a
 	ld [wcfe3], a
+
 	ld hl, wce53
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+
+	ld a, [wPrizeCardCursorPosition]
 	ld [wce61], a
 	ld l, a
-	ld h, $07
+	ld h, 7
 	call HtimesL
 	add hl, de
+; hl = [wce53] + 7 * wce52
+
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_8a4f
+
 	inc hl
 	inc hl
 	inc hl
-	bit 6, a
+	bit D_UP_F, a
 	jr z, .asm_89d5
 	ld a, [hl]
 	jr .asm_89eb
+
 .asm_89d5
 	inc hl
-	bit 7, a
+	bit D_DOWN_F, a
 	jr z, .asm_89dd
 	ld a, [hl]
 	jr .asm_89eb
 .asm_89dd
 	inc hl
-	bit 4, a
+	bit D_RIGHT_F, a
 	jr z, .asm_89e5
 	ld a, [hl]
 	jr .asm_89eb
 .asm_89e5
 	inc hl
-	bit 5, a
+	bit D_LEFT_F, a
 	jr z, .asm_8a4f
 	ld a, [hl]
 .asm_89eb
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	cp $08
 	jr nc, .asm_8a46
 	ld b, $01
@@ -1592,47 +1598,51 @@ Func_89ae: ; 89ae (2:49ae)
 	ld a, [wDuelInitialPrizes]
 	cp $05
 	jr nc, .asm_8a46
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	cp $05
 	jr nz, .asm_8a28
 	ld a, $03
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_8a2d
 .asm_8a28
 	ld a, $02
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 .asm_8a2d
 	ld a, [wDuelInitialPrizes]
 	cp $03
 	jr nc, .asm_8a3c
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	sub $02
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 .asm_8a3c
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld [wce61], a
 	ld b, $01
 	jr .asm_89f4
 .asm_8a46
 	ld a, $01
 	ld [wcfe3], a
+
+; reset cursor blink
 	xor a
 	ld [wDuelCursorBlinkCounter], a
+
 .asm_8a4f
 	ldh a, [hKeysPressed]
-	and $03
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_8a6d
-	and $01
+	and A_BUTTON
 	jr nz, .asm_8a60
-	ld a, $ff
+	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
+
 .asm_8a60
 	call Func_8a82
 	ld a, $01
 	call PlaySFXConfirmOrCancel
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	scf
 	ret
 .asm_8a6d
@@ -1655,11 +1665,13 @@ Func_8a82 ; 8a82 (2:4a82)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld l, a
-	ld h, $07
+	ld h, 7
 	call HtimesL
 	add hl, de
+; hl = [wce53] + 7 * wce52
+
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
@@ -1790,7 +1802,7 @@ Func_8dea: ; 8dea (2:4dea)
 	ld [wceb1], a
 	call Func_8ff2
 	jp nc, Func_8e05
-	ld a, $ff
+	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel
 	call Func_8fe8
 	scf
@@ -2162,7 +2174,7 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	jr z, .no_input
 	and A_BUTTON
 	jr nz, .a_press
-	ld a, $ff
+	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel
 	scf
 	ret

@@ -1291,9 +1291,12 @@ wTurnHolder1:: ; ce50
 wTurnHolder2:: ; ce51
 	ds $1
 
+; holds the position of the cursor
+; when selecting a prize card
+wPrizeCardCursorPosition::
 	ds $1
 
-wce53:: ; ce51
+wce53:: ; ce53
 	ds $2
 
 ; same as wDuelInitialPrizes but
