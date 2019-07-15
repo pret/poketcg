@@ -1030,7 +1030,7 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld l, a
 	ld h, 0
 	add hl, hl
-	ld de, $51a4
+	ld de, Data_006_51a4
 .asm_006_4fa8
 	add hl, de
 	ld e, [hl]
@@ -1336,7 +1336,156 @@ Func_006_5168: ; 19168 (6:5168)
 	bank1call DrawDuelHUDs
 	ret
 
-	INCROM $191a3, $1991f
+	ret
+
+Data_006_51a4:
+	dw $0000
+	dw $52c6
+	dw $52cf
+	dw $52c6
+	dw $52c6
+	dw $52c6
+	dw $52d8
+	dw $52d8
+	dw $52e3
+	dw $52d8
+	dw $52f0
+	dw $52f0
+	dw $52f0
+	dw $52f0
+	dw $52fd
+	dw $5308
+	dw $5313
+	dw $531e
+	dw $5329
+	dw $5334
+	dw $533f
+	dw $534a
+	dw $5357
+	dw $5362
+	dw $5362
+	dw $536d
+	dw $536d
+	dw $536d
+	dw $5378
+	dw $5383
+	dw $538e
+	dw $5383
+	dw $5399
+	dw $53a4
+	dw $53af
+	dw $53ba
+	dw $53c5
+	dw $53d0
+	dw $53d5
+	dw $53e0
+	dw $53eb
+	dw $53f6
+	dw $53f6
+	dw $53f6
+	dw $5401
+	dw $540c
+	dw $5417
+	dw $5422
+	dw $542d
+	dw $542d
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5443
+	dw $5443
+	dw $544e
+	dw $5443
+	dw $5443
+	dw $5443
+	dw $5453
+	dw $5453
+	dw $5460
+	dw $5453
+	dw $5467
+	dw $5467
+	dw $5472
+	dw $5472
+	dw $547d
+	dw $5488
+	dw $548f
+	dw $549c
+	dw $549c
+	dw $54a9
+	dw $54a9
+	dw $54ae
+	dw $54ae
+	dw $54b3
+	dw $54be
+	dw $54c3
+	dw $54c8
+	dw $54d3
+	dw $54e0
+	dw $54eb
+	dw $54f2
+	dw $54f9
+	dw $5504
+	dw $5513
+	dw $5516
+	dw $5521
+	dw $552e
+	dw $5533
+	dw $553a
+	dw $5543
+	dw $554a
+	dw $5555
+	dw $555e
+	dw $556d
+	dw $5574
+	dw $557b
+	dw $557e
+	dw $5583
+	dw $5583
+	dw $5583
+	dw $558c
+	dw $5597
+	dw $559c
+	dw $55a1
+	dw $55a4
+	dw $55a9
+	dw $55b4
+	dw $55b4
+	dw $55bf
+	dw $55c4
+	dw $55c9
+	dw $55ce
+	dw $55d5
+	dw $55e0
+	dw $55e5
+	dw $55e6
+	dw $55ed
+	dw $55f2
+	dw $55fb
+	dw $55fe
+	dw $5601
+	dw $5604
+	dw $5607
+	dw $560a
+	dw $560f
+	dw $5612
+	dw $561d
+	dw $5628
+	dw $562d
+	dw $5632
+	dw $5637
+	dw $5644
+	dw $564f
+	dw $5654
+	dw $5659
+	dw $565e
+	dw $5665
+	dw $5668
+	dw $5673
+	dw $5673
+
+	INCROM $192c6, $1991f
 
 Func_006_591f:
 	add a
