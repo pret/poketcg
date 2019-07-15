@@ -1363,6 +1363,8 @@ DrawCursor_OppPlayArea: ; 8760 (2:4760)
 	jr DrawByteInCursor_OppPlayArea
 ; fallthrough
 
+; seems to be function to deal with the Peek menu 
+; to select a prize card to view
 Func_8764: ; 8764 (2:4764)
 	call Set_OBJ_8x8
 	call LoadCursorTile
@@ -1457,8 +1459,8 @@ Func_8764: ; 8764 (2:4764)
 REPT 6
 	dw Func_8819
 ENDR
-	dw Func_8819.asm_883C
-	dw Func_8819.asm_8849
+	dw Func_883C
+	dw Func_8849
 
 YourOrOppPlayAreaData: ; 8808 (2:4808)
 	textitem 2, 14, YourPlayAreaText
@@ -1477,47 +1479,59 @@ Func_8819: ; 8819 (2:4819)
 	ld a, [wPrizeCardCursorPosition]
 	ld c, a
 	ld b, $01
-.asm_881f
+
+; left-shift b a number of times
+; corresponding to this prize card 
+.loop
 	or a
 	jr z, .asm_8827
 	sla b
 	dec a
-	jr .asm_881f
+	jr .loop
+
 .asm_8827
-	ld a, $ec
+	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	and b
-	ret z
+	ret z ; return if prize card taken
+
 	ld a, c
 	add $40
 	ld [$ce5c], a
 	ld a, c
-	add $3c
+	add DUELVARS_PRIZE_CARDS
 	call GetTurnDuelistVariable
-	jr .asm_8855
+	jr Func_8855
 
-.asm_883C:
+Func_883C:
 	call CreateHandCardList
 	ret c
 	ld hl, wDuelTempList
 	call ShuffleCards
 	ld a, [hl]
-	jr .asm_8855
+	jr Func_8855
 
-.asm_8849:
+Func_8849:
 	call CreateDeckCardList
 	ret c
-	ld a, $7f
+	ld a, %01111111
 	ld [$ce5c], a
 	ld a, [wDuelTempList]
-.asm_8855
+; fallthrough
+
+; input:
+; a = deck index of card to be loaded
+; output:
+; a = ce5c 
+; with upper bit set if turn was swapped
+Func_8855:
 	ld b, a
 	ld a, [$ce5c]
 	or a
-	jr nz, .asm_8860
+	jr nz, .display
 	ld a, b
 	ld [$ce5c], a
-.asm_8860
+.display
 	ld a, b
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call Set_OBJ_8x16
@@ -1525,14 +1539,16 @@ Func_8819: ; 8819 (2:4819)
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	pop af
+
+; if ce56 != 0, swap turn
 	ld a, [$ce56]
 	or a
-	jr z, .asm_887f
+	jr z, .dont_swap
 	call SwapTurn
 	ld a, [$ce5c]
-	or $80
+	or %10000000
 	ret
-.asm_887f
+.dont_swap
 	ld a, [$ce5c]
 	ret
 
