@@ -152,7 +152,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld [wPrizeCardCursorPosition], a
 .asm_006_40da
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
@@ -509,7 +509,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	ld a, $01
 	ld [wcfe3], a
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_446b
 	ldh a, [hKeysPressed]
 	and $03
@@ -533,7 +533,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	jr z, .asm_006_4494
 	call PlaySFX
 .asm_006_4494
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -582,7 +582,7 @@ Func_006_44c8:  ; 184c8 (6:44c8)
 	ld a, $ff
 	ld [wDuelInitialPrizesUpperBitsSet], a
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_44e5
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -605,7 +605,7 @@ Func_006_44c8:  ; 184c8 (6:44c8)
 	call Func_006_4598
 	call Func_006_452b
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	jr .asm_006_44e5
 .asm_006_4518
 	ld a, $01
@@ -768,9 +768,9 @@ GlossaryData2:
 ; (6:4661)
 	xor a
 	ld [wcfe3], a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
@@ -800,11 +800,11 @@ GlossaryData2:
 	call .asm_006_46d4
 	pop de
 	ld a, d
-	ld [wCursorDuelXPosition], a
+	ld [wCheckMenuCursorXPosition], a
 	ld a, e
-	ld [wCursorDuelYPosition], a
+	ld [wCheckMenuCursorYPosition], a
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
 	and $03
@@ -827,7 +827,7 @@ GlossaryData2:
 	jr z, .asm_006_46c6
 	call PlaySFX
 .asm_006_46c6
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -841,13 +841,13 @@ GlossaryData2:
 	ld e, a
 	ld a, $0a
 	ld l, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $01
 	ld b, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	add $0e
 	ld c, a
@@ -1883,7 +1883,7 @@ NamingScreen_CheckButtonState:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
@@ -1909,7 +1909,7 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_006_69f8
 	call PlaySFX
 .asm_006_69f8
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2664,7 +2664,7 @@ Func_006_6efb:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
 	jp z, Func_006_6efb
@@ -2690,7 +2690,7 @@ Func_006_6efb:
 	jr z, .asm_006_6f92
 	call PlaySFX
 .asm_006_6f92
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f

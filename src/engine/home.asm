@@ -9279,12 +9279,12 @@ CompareDEtoBC: ; 3090 (0:3090)
 	cp c
 	ret
 
-DuelCheckInterface: ; 3096 (0:3096)
+OpenDuelCheckMenu: ; 3096 (0:3096)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(_DuelCheckInterface)
+	ld a, BANK(_OpenDuelCheckMenu)
 	call BankswitchROM
-	call _DuelCheckInterface
+	call _OpenDuelCheckMenu
 	pop af
 	call BankswitchROM
 	ret

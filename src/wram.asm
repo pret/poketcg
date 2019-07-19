@@ -1322,7 +1322,7 @@ wce5e:: ; ce5e
 
 ; this is used to store last cursor position
 ; in the Your Play Area screen
-wLastCursorPosition_YourPlayArea:: ; ce5f
+wLastCursorPosition_YourOrOppPlayArea:: ; ce5f
 	ds $1
 
 wce60:: ; ce60
@@ -1413,7 +1413,7 @@ wcea1:: ; cea1
 	ds $1
 
 ; used to blink the cursor in duel menu
-wDuelCursorBlinkCounter:: ; cea3
+wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
 wNamingScreenCursorY:: ; cea4
@@ -1431,10 +1431,10 @@ wceaa:: ; ceaa
 wceab:: ; ceab
 	ds $4
 
-wCursorDuelXPosition:: ; ceaf
+wCheckMenuCursorXPosition:: ; ceaf
 	ds $1
 
-wCursorDuelYPosition:: ; ceb0
+wCheckMenuCursorYPosition:: ; ceb0
 	ds $1
 
 wceb1:: ; ceb1

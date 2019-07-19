@@ -1,30 +1,30 @@
-_DuelCheckInterface: ; 8000 (2:4000)
-	call ResetCursorPosAndBlink
+_OpenDuelCheckMenu: ; 8000 (2:4000)
+	call ResetCursorPositionAndBlink
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
 
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld hl, CheckMenuData
 	call PlaceTextItems
 .loop
 	call DoFrame
-	call HandleDuelMenuInput_YourPlayArea
+	call HandleCheckMenuInput
 	jr nc, .loop
 	cp $ff
 	ret z ; B pressed
 
 ; A was pressed
-	ld a, [wCursorDuelYPosition] 
+	ld a, [wCheckMenuCursorYPosition] 
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
 	ld hl, .table
 	call JumpToFunctionInTable
-	jr _DuelCheckInterface
+	jr _OpenDuelCheckMenu
 
 .table: ; 8031 (2:4031)
 	dw DuelCheckMenu_InPlayArea
@@ -43,7 +43,7 @@ DuelCheckMenu_Glossary: ; 8042 (2:4042)
 	ret
 
 DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
-	call ResetCursorPosAndBlink
+	call ResetCursorPositionAndBlink
 	xor a
 	ld [wce5e], a
 	ldh a, [hWhoseTurn]
@@ -52,12 +52,12 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld l, a
 	call DrawYourOrOppPlayArea_LoadTurnHolders
 
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
-	ld [wLastCursorPosition_YourPlayArea], a
+	ld [wLastCursorPosition_YourOrOppPlayArea], a
 	ld b, $f8 ; black arrow tile
 	call DrawByteToTabulatedPositions
 
@@ -65,7 +65,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld hl, YourPlayAreaMenuData
 	call PlaceTextItems
 
@@ -73,29 +73,28 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	call DoFrame
 	xor a
 	call DrawArrowsToTabulatedPositions
-	call HandleDuelMenuInput_PlayArea
+	call HandleCheckMenuInput_YourOrOppPlayArea
 	jr nc, .loop
 
 	call EraseByteFromTabulatedPositions
 	cp $ff
 	ret z
 
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
 	ld hl, .table
 	call JumpToFunctionInTable
 	jr .draw
 
 .table ; 8098 (2:4098)
-	dw OpenDuelScreen.turn_holder_play_area
-	dw OpenDuelScreen.turn_holder_hand
-	dw OpenDuelScreen.turn_holder_discard_pile
+	dw OpenDuelScreen_TurnHolderPlayArea
+	dw OpenDuelScreen_TurnHolderHand
+	dw OpenDuelScreen_TurnHolderDiscardPile
 	
-OpenDuelScreen: ; 809e (2:409e)
-.turn_holder_play_area
+OpenDuelScreen_TurnHolderPlayArea: ; 809e (2:409e)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderPlayAreaScreen
@@ -103,7 +102,7 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-.non_turn_holder_play_area
+OpenDuelScreen_NonTurnHolderPlayArea
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderPlayAreaScreen
@@ -111,7 +110,7 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-.turn_holder_hand
+OpenDuelScreen_TurnHolderHand
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -119,7 +118,7 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-.non_turn_holder_hand
+OpenDuelScreen_NonTurnHolderHand
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -127,7 +126,7 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-.turn_holder_discard_pile
+OpenDuelScreen_TurnHolderDiscardPile
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -135,7 +134,7 @@ OpenDuelScreen: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-.non_turn_holder_discard_pile
+OpenDuelScreen_NonTurnHolderDiscardPile
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -147,7 +146,7 @@ OpenDuelScreen: ; 809e (2:409e)
 ; if clairvoyance is active, add the option to check
 ; opponent's hand
 DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
-	call ResetCursorPosAndBlink
+	call ResetCursorPositionAndBlink
 	call IsClairvoyanceActive
 	jr c, .clairvoyance1
 
@@ -175,14 +174,14 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DrawYourOrOppPlayArea_LoadTurnHolders
 
 ; convert cursor position and 
-; store it in wLastCursorPosition_YourPlayArea
-	ld a, [wCursorDuelYPosition]
+; store it in wLastCursorPosition_YourOrOppPlayArea
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
 	add 3
-	ld [wLastCursorPosition_YourPlayArea], a
+	ld [wLastCursorPosition_YourOrOppPlayArea], a
 
 ; draw black arrows in the Play Area
 	ld b, $f8 ; black arrow tile
@@ -192,7 +191,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 
 ; place text items depending on clairvoyance
 ; when active, allows to look at opp. hand
@@ -210,7 +209,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DoFrame
 	ld a, 1
 	call DrawArrowsToTabulatedPositions
-	call HandleDuelMenuInput_PlayArea
+	call HandleCheckMenuInput_YourOrOppPlayArea
 	jr nc, .loop
 	call EraseByteFromTabulatedPositions
 	cp $ff
@@ -218,19 +217,19 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 
 ; A was pressed
 ; jump to function corresponding to cursor position
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
 	ld hl, .table
 	call JumpToFunctionInTable
 	jr .turns
 
 .table
-	dw OpenDuelScreen.non_turn_holder_play_area
-	dw OpenDuelScreen.non_turn_holder_hand
-	dw OpenDuelScreen.non_turn_holder_discard_pile
+	dw OpenDuelScreen_NonTurnHolderPlayArea
+	dw OpenDuelScreen_NonTurnHolderHand
+	dw OpenDuelScreen_NonTurnHolderDiscardPile
 
 CheckMenuData: ; (2:4158)
 	textitem  2, 14, InPlayAreaText
@@ -266,23 +265,23 @@ DrawArrowsToTabulatedPositions: ; 818c (2:418c)
 	add b
 	add b
 	ld c, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	ld b, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	add b
 	add c
 ; a = 2 * cursor ycoord + cursor xcoord + 3*a
 
 ; if cursor position is different than
 ; last position, then update arrows
-	ld hl, wLastCursorPosition_YourPlayArea
+	ld hl, wLastCursorPosition_YourOrOppPlayArea
 	cp [hl]
 	jr z, .unchanged
 
 ; erase and draw arrows
 	call EraseByteFromTabulatedPositions
-	ld [wLastCursorPosition_YourPlayArea], a
+	ld [wLastCursorPosition_YourOrOppPlayArea], a
 	ld b, $f8 ; black arrow tile byte
 	call DrawByteToTabulatedPositions
 
@@ -294,8 +293,8 @@ DrawArrowsToTabulatedPositions: ; 818c (2:418c)
 ; the bytes drawn previously
 EraseByteFromTabulatedPositions: ; 81af (2:41af)
 	push af
-	ld a, [wLastCursorPosition_YourPlayArea]
-	ld b, $00 ; white tile
+	ld a, [wLastCursorPosition_YourOrOppPlayArea]
+	ld b, SYM_SPACE ; white tile
 	call DrawByteToTabulatedPositions
 	pop af
 	ret
@@ -432,7 +431,7 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 
 	ld e, $00
 	call InitTextPrinting
-	ldtx hl, PlayersPlayAreaText
+	ldtx hl, DuelistsPlayAreaText
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr nz, .opp_turn2
@@ -899,7 +898,7 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	ld b, [hl]
 	ld l, DUELVARS_BENCH1_CARD_STAGE
-.loop1
+.loop_1
 	dec b ; num of Bench Pokemon left
 	jr z, .done
 
@@ -946,7 +945,7 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	add c
 	ld d, a
 	; d = d + c
-	jr .loop1
+	jr .loop_1
 
 .done
 	ld a, [wTurnHolder1]
@@ -959,7 +958,7 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 
 	ld b, a
 	inc b
-.loop2
+.loop_2
 	dec b
 	ret z 
 
@@ -985,7 +984,7 @@ DrawYourOrOppPlayArea_BenchCards: ; 8511 (2:4511)
 	ld a, d
 	add c
 	ld d, a
-	jr .loop2
+	jr .loop_2
 
 ; draws Play Area icons depending on value in a
 ; input:
@@ -1196,18 +1195,17 @@ PrintsHandTextAndValue: ; 8676 (2:4676)
 	pop hl
 	ret
 
-; handle player input in menu in Opp. Play Area
+; handle player input in menu in Your or Opp. Play Area
 ; works out which cursor coordinate to go to
 ; and sets carry flag if A or B are pressed
-; input
 ; returns a =  $1 if A pressed
 ; returns a = $ff if B pressed
-HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
+HandleCheckMenuInput_YourOrOppPlayArea: ; 86ac (2:46ac)
 	xor a
 	ld [wcfe3], a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	ld e, a
 
 ; d = cursor x position
@@ -1274,18 +1272,18 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	ld a, $01
 	ld [wcfe3], a
 	push de
-	call DrawCursorEmpty_OppPlayArea
+	call EraseCheckMenuCursor_YourOrOppPlayArea
 	pop de
 
 ;update x and y cursor positions
 	ld a, d
-	ld [wCursorDuelXPosition], a
+	ld [wCheckMenuCursorXPosition], a
 	ld a, e
-	ld [wCursorDuelYPosition], a
+	ld [wCheckMenuCursorYPosition], a
 
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 
 .skip
 	ldh a, [hKeysPressed]
@@ -1301,7 +1299,7 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	ret
 	
 .a_pressed
-	call DrawCursor_OppPlayArea
+	call DisplayCheckMenuCursor_OppPlayArea
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	scf
@@ -1314,31 +1312,31 @@ HandleDuelMenuInput_PlayArea: ; 86ac (2:46ac)
 	call PlaySFX
 
 .draw_cursor
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and %00001111
 	ret nz ; only update cursor if blink's lower nibble is 0
 
-	ld a, $0f ; cursor byte
+	ld a, SYM_CURSOR_R ; cursor byte
 	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
-	jr z, DrawByteInCursor_OppPlayArea
+	jr z, DrawCheckMenuCursor_YourOrOppPlayArea
 ; fallthrough
 
 ; transforms cursor position into coordinates
 ; in order to draw byte on menu cursor
-DrawCursorEmpty_OppPlayArea: ; 8741 (2:4741)
-	ld a, $00 ; white tile
+EraseCheckMenuCursor_YourOrOppPlayArea: ; 8741 (2:4741)
+	ld a, SYM_SPACE ; white tile
 ; fallthrough
 
 ; draws in the cursor position
 ; input:
 ; a = tile byte to draw
-DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
+DrawCheckMenuCursor_YourOrOppPlayArea: ; 8743 (2:4743)
 	ld e, a
 	ld a, 10
 	ld l, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
 	call HtimesL
 ; h = 10 * cursor x pos
@@ -1346,7 +1344,7 @@ DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
 	ld a, l
 	add 1
 	ld b, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	add 14
 	ld c, a
@@ -1358,9 +1356,9 @@ DrawByteInCursor_OppPlayArea: ; 8743 (2:4743)
 	or a
 	ret
 
-DrawCursor_OppPlayArea: ; 8760 (2:4760)
-	ld a, $0f ; load cursor byte
-	jr DrawByteInCursor_OppPlayArea
+DisplayCheckMenuCursor_OppPlayArea: ; 8760 (2:4760)
+	ld a, SYM_CURSOR_R ; load cursor byte
+	jr DrawCheckMenuCursor_YourOrOppPlayArea
 ; fallthrough
 
 ; seems to be function to deal with the Peek menu 
@@ -1397,12 +1395,12 @@ Func_8764: ; 8764 (2:4764)
 	ld hl, YourOrOppPlayAreaData
 	call PlaceTextItems
 
-.loop1
+.loop_1
 	call DoFrame
 	call HandleMenuInput ; await input
-	jr nc, .loop1
+	jr nc, .loop_1
 	cp $ff
-	jr z, .loop1
+	jr z, .loop_1
 
 	call EraseCursor
 	ldh a, [hCurMenuItem]
@@ -1432,19 +1430,19 @@ Func_8764: ; 8764 (2:4764)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	lb de, $48, $c2
+	ld de, Func_88c2
 	ld hl, wce53
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	
-.loop2
+.loop_2
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	call Func_89ae
 	jr c, .asm_87e7
-	jr .loop2
+	jr .loop_2
 .asm_87e7
 	cp $ff
 	jr nz, .asm_87f0
@@ -1453,13 +1451,13 @@ Func_8764: ; 8764 (2:4764)
 .asm_87f0
 	ld hl, .asm_87f8
 	call JumpToFunctionInTable
-	jr .loop2
+	jr .loop_2
 
 .asm_87f8
-REPT 6
+rept 6
 	dw Func_8819
-ENDR
-	dw Func_883C
+endr
+	dw Func_883c
 	dw Func_8849
 
 YourOrOppPlayAreaData: ; 8808 (2:4808)
@@ -1503,7 +1501,7 @@ Func_8819: ; 8819 (2:4819)
 	call GetTurnDuelistVariable
 	jr Func_8855
 
-Func_883C:
+Func_883c:
 	call CreateHandCardList
 	ret c
 	ld hl, wDuelTempList
@@ -1589,8 +1587,9 @@ Func_8883: ; 8883 (2:4883)
 	call SwapTurn
 	ld a, $01
 	ld [$ce56], a
-	jp Func_8764.loop2
+	jp Func_8764.loop_2
 
+Func_88c2: ; 88c2 (2:48c2)
 	INCROM $88c2, $8932
 
 Func_8932: ; 8932 (2:4932)
@@ -1707,7 +1706,7 @@ Func_89ae: ; 89ae (2:49ae)
 
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 
 .asm_8a4f
 	ldh a, [hKeysPressed]
@@ -1733,7 +1732,7 @@ Func_89ae: ; 89ae (2:49ae)
 	jr z, .asm_8a76
 	call PlaySFX
 .asm_8a76
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -1925,21 +1924,21 @@ Func_8e42: ; 8e42 (2:4e42)
 	call DrawWideTextBox
 	ld hl, Unknown_9027
 	call PlaceTextItems
-	call ResetCursorPosAndBlink
+	call ResetCursorPositionAndBlink
 .asm_8e4e
 	call DoFrame
-	call HandleDuelMenuInput_YourPlayArea
+	call HandleCheckMenuInput
 	jp nc, .asm_8e4e
 	cp $ff
 	jr nz, .asm_8e64
-	call DrawCursorEmpty_YourPlayArea
+	call EraseCheckMenuCursor
 	ld a, [wceb1]
 	jp Func_8dbc
 .asm_8e64
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	or a
 	jp nz, Func_8f8a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	or a
 	jp nz, .asm_8ecf
 	call GetPointerToDeckCards
@@ -2092,7 +2091,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ret
 
 Func_8f8a: ; 8f8a (2:4f8a)
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	or a
 	jp nz, Func_9026
 	call Func_8ff2
@@ -2184,25 +2183,24 @@ GetPointerToDeckCards: ; 9048 (2:5048)
 	pop af
 	ret
 
-ResetCursorPosAndBlink: ; 905a (2:505a)
+ResetCursorPositionAndBlink: ; 905a (2:505a)
 	xor a
-	ld [wCursorDuelXPosition], a
-	ld [wCursorDuelYPosition], a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorXPosition], a
+	ld [wCheckMenuCursorYPosition], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ret
 
-; handle player input in menu in Your Play Area
+; handle player input in check menu
 ; works out which cursor coordinate to go to
 ; and sets carry flag if A or B are pressed
-; input
 ; returns a =  $1 if A pressed
 ; returns a = $ff if B pressed
-HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
+HandleCheckMenuInput: ; 9065 (2:5065)
 	xor a
 	ld [wcfe3], a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	ld e, a
 
 ; d = cursor x position
@@ -2238,18 +2236,18 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	ld a, $01
 	ld [wcfe3], a
 	push de
-	call DrawCursorEmpty_YourPlayArea
+	call EraseCheckMenuCursor
 	pop de
 
 ;update x and y cursor positions
 	ld a, d
-	ld [wCursorDuelXPosition], a
+	ld [wCheckMenuCursorXPosition], a
 	ld a, e
-	ld [wCursorDuelYPosition], a
+	ld [wCheckMenuCursorYPosition], a
 	
 ; reset cursor blink
 	xor a
-	ld [wDuelCursorBlinkCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .no_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -2262,7 +2260,7 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	ret
 
 .a_press
-	call Func_90f7
+	call DisplayCheckMenuCursor
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	scf
@@ -2275,36 +2273,36 @@ HandleDuelMenuInput_YourPlayArea: ; 9065 (2:5065)
 	call PlaySFX
 
 .check_blink
-	ld hl, wDuelCursorBlinkCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and %00001111
 	ret nz  ; only update cursor if blink's lower nibble is 0
 
-	ld a, $0f ; cursor byte
+	ld a, SYM_CURSOR_R ; cursor byte
 	bit 4, [hl] ; only draw cursor if blink counter's fourth bit is not set
-	jr z, DrawByteInCursor_YourPlayArea
+	jr z, DrawCheckMenuCursor
 
 ; draws in the cursor position
-DrawCursorEmpty_YourPlayArea: ; 90d8 (2:50d8)
-	ld a, $00 ; empty cursor
+EraseCheckMenuCursor: ; 90d8 (2:50d8)
+	ld a, SYM_SPACE ; empty cursor
 ; fallthrough
 
 ; draws in the cursor position
 ; input:
 ; a = tile byte to draw
-DrawByteInCursor_YourPlayArea:
+DrawCheckMenuCursor:
 	ld e, a
 	ld a, 10
 	ld l, a
-	ld a, [wCursorDuelXPosition]
+	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
 	call HtimesL
 
 	ld a, l
 	add 1
 	ld b, a
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	add 14
 	ld c, a
@@ -2314,9 +2312,9 @@ DrawByteInCursor_YourPlayArea:
 	or a
 	ret
 
-Func_90f7: ; 90f7 (2:50f7)
-	ld a, $f
-	jr DrawByteInCursor_YourPlayArea
+DisplayCheckMenuCursor: ; 90f7 (2:50f7)
+	ld a, SYM_CURSOR_R
+	jr DrawCheckMenuCursor
 
 ; plays sound depending on value in a
 ; input:
@@ -2602,7 +2600,7 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	; c = floor(a / 10)
 .zero1
 ; ones digit
-	add $20
+	add SYM_0
 	ld hl, wOnesAndTensPlace
 	ld [hli], a
 
@@ -2610,7 +2608,7 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	ld a, c
 	or a
 	jr z, .zero2
-	add $20
+	add SYM_0
 .zero2
 	ld [hl], a
 
@@ -2660,12 +2658,12 @@ Func_b19d: ; b19d (2:719d)
 	ld a, [wcea1]
 	add b
 	ld [wd088], a
-	call ResetCursorPosAndBlink
+	call ResetCursorPositionAndBlink
 	call DrawWideTextBox
 	ld hl, $7274
 	call PlaceTextItems
 	call DoFrame
-	call HandleDuelMenuInput_YourPlayArea
+	call HandleCheckMenuInput
 	jp nc, $71e7
 	cp $ff
 	jr nz, .asm_b1fa
@@ -2673,9 +2671,9 @@ Func_b19d: ; b19d (2:719d)
 	jp $71b3
 
 .asm_b1fa
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
-	ld hl, wCursorDuelXPosition
+	ld hl, wCheckMenuCursorXPosition
 	add [hl]
 	or a
 	jr nz, .asm_b22c
@@ -2828,7 +2826,7 @@ Func_ba04: ; ba04 (2:7a04)
 	cp $ff
 	jp z, $7b0d
 	ld [wd088], a
-	call ResetCursorPosAndBlink
+	call ResetCursorPositionAndBlink
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
@@ -2843,9 +2841,9 @@ Func_ba04: ; ba04 (2:7a04)
 	jp $7a25
 
 .asm_badf
-	ld a, [wCursorDuelYPosition]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
-	ld hl, wCursorDuelXPosition
+	ld hl, wCheckMenuCursorXPosition
 	add [hl]
 	or a
 	jr nz, .asm_bb09

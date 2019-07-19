@@ -584,7 +584,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer OpponentsDiscardPileText2                ; 0x0244
 	textpointer OpponentsHandText                        ; 0x0245
 	textpointer Text0246                                 ; 0x0246
-	textpointer PlayersPlayAreaText                      ; 0x0247
+	textpointer DuelistsPlayAreaText                     ; 0x0247
 	textpointer YourPlayAreaText                         ; 0x0248
 	textpointer OppPlayAreaText                          ; 0x0249
 	textpointer InPlayAreaText                           ; 0x024a
