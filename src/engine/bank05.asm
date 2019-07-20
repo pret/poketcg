@@ -54,7 +54,35 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw $48dc ; IMAKUNI_DECK
 ; 1406a
 
-	INCROM $1406a, $14226
+PointerTable_1406a: ; 1406a (5:406a)
+	dw $406c
+	dw Func_14078
+	dw Func_14078
+	dw $409e
+	dw $40a2
+	dw $40a6
+	dw $40aa
+
+Func_14078: ; 14078 (5:4078)
+	call Func_15eae
+	call Func_158b2
+	jr nc, .asm_14091
+	call Func_15b72
+	call Func_15d4f
+	call Func_158b2
+	jr nc, .asm_14091
+	call Func_15b72
+	call Func_15d4f
+.asm_14091
+	call Func_164e8
+	call Func_169f8
+	ret c
+	ld a, $05
+	bank1call AIMakeDecision
+	ret
+; 0x1409e
+
+	INCROM $1409e, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -218,7 +246,7 @@ Func_1468b: ; 1468b (5:468b)
 	call $69f8
 	ret c
 	ld a, $5
-	bank1call $67be
+	bank1call AIMakeDecision
 	ret
 ; 0x14786
 
@@ -320,4 +348,22 @@ ZeroData: ; 1575e (5:575e)
 	ret
 ; 0x1576b
 
-	INCROM $1576b, $18000
+	INCROM $1576b, $158b2
+
+Func_158b2 ; 158b2 (5:58b2)
+	INCROM $158b2, $15b72
+
+Func_15b72 ; 15b72 (5:5b72)
+	INCROM $15b72, $15d4f
+
+Func_15d4f ; 15d4f (5:5d4f)
+	INCROM $15d4f, $15eae
+
+Func_15eae ; 15eae (5:5eae)
+	INCROM $15eae, $164e8
+
+Func_164e8 ; 164e8 (5:64e8)
+	INCROM $164e8, $169f8
+
+Func_169f8 ; 169f8 (5:69f8)
+	INCROM $169f8, $18000
