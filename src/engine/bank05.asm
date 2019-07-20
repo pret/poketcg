@@ -82,7 +82,13 @@ Func_14078: ; 14078 (5:4078)
 	ret
 ; 0x1409e
 
-	INCROM $1409e, $14226
+	INCROM $1409e, $140fe
+
+Func_140fe: ; 140fe (5:40fe)
+	INCROM $140fe, $1410a
+
+Func_1410a: ; 1410a (5:410a)
+	INCROM $1410a, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -106,7 +112,10 @@ Func_14226: ; 14226 (5:4226)
 	jr .check_for_next_pokemon
 ; 0x1424b
 
-	INCROM $1424b, $14663
+	INCROM $1424b, $1433d
+
+Func_1433d: ; 1433d (5:433d)
+	INCROM $1433d, $14663
 
 Func_14663: ; 14663 (5:4663)
 	farcall Func_200e5
@@ -357,13 +366,114 @@ Func_15b72 ; 15b72 (5:5b72)
 	INCROM $15b72, $15d4f
 
 Func_15d4f ; 15d4f (5:5d4f)
-	INCROM $15d4f, $15eae
+	INCROM $15d4f, $15ea6
 
-Func_15eae ; 15eae (5:5eae)
-	INCROM $15eae, $164e8
+Func_15ea6 ; 15ea6 (5:5ea6)
+	INCROM $15ea6, $15eae
+
+Func_15eae: ; 15eae (5:5eae)
+	call CreateHandCardList
+	call Func_1633f
+	ld hl, wDuelTempList
+	ld de, $ceda
+	call Func_15ea6
+	ld hl, $ceda
+.asm_15ec0
+	ld a, [hli]
+	cp $ff
+	jp z, Func_15f4c
+	ld [$cdf3], a
+	push hl
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	cp $08
+	jr nc, .asm_15f46
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .asm_15f46
+	ld a, $82
+	ld [$cdbe], a
+	call Func_161d5
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $04
+	jr c, .asm_15ef2
+	ld a, $14
+	call Func_1410a
+	jr .asm_15ef7
+.asm_15ef2
+	ld a, $32
+	call Func_140fe
+.asm_15ef7
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call Func_173b1
+	jr nc, .asm_15f04
+	ld a, $14
+	call Func_140fe
+.asm_15f04
+	ld a, [$cdf3]
+	call Func_163c9
+	call Func_1637b
+	jr nc, .asm_15f14
+	ld a, $14
+	call Func_140fe
+.asm_15f14
+	ld a, [$cdf3]
+	call Func_16422
+	jr nc, .asm_15f21
+	ld a, $14
+	call Func_140fe
+.asm_15f21
+	ld a, [$cdf3]
+	call Func_16451
+	jr nc, .asm_15f2e
+	ld a, $0a
+	call Func_140fe
+.asm_15f2e
+	ld a, [$cdbe]
+	cp $b4
+	jr c, .asm_15f46
+	ld a, [$cdf3]
+	ldh [hTemp_ffa0], a
+	call Func_1433d
+	jr c, .asm_15f46
+	ld a, $01
+	bank1call AIMakeDecision
+	jr c, .asm_15f4a
+.asm_15f46
+	pop hl
+	jp .asm_15ec0
+.asm_15f4a
+	pop hl
+	ret
+
+Func_15f4c ; 15f4c (5:5f4c)
+	INCROM $15f4c, $161d5
+
+Func_161d5 ; 161d5 (5:61d5)
+	INCROM $161d5, $1633f
+
+Func_1633f ; 1633f (5:633f)
+	INCROM $1633f, $1637b
+
+Func_1637b ; 1637b (5:637b)
+	INCROM $1637b, $163c9
+
+Func_163c9 ; 163c9 (5:63c9)
+	INCROM $163c9, $16422
+
+Func_16422 ; 16422 (5:6422)
+	INCROM $16422, $16451
+
+Func_16451 ; 16451 (5:6451)
+	INCROM $16451, $164e8
 
 Func_164e8 ; 164e8 (5:64e8)
 	INCROM $164e8, $169f8
 
 Func_169f8 ; 169f8 (5:69f8)
-	INCROM $169f8, $18000
+	INCROM $169f8, $173b1
+
+Func_173b1 ; 173b1 (5:73b1)
+	INCROM $173b1, $18000
