@@ -483,66 +483,82 @@ Func_15f4c ; 15f4c (5:5f4c)
 	INCROM $15f4c, $161d5
 
 Func_161d5: ; 161d5 (5:61d5)
+; check if deck applies
 	ld a, [wOpponentDeckID]
-	cp $0d
-	jr z, .asm_161e5
-	cp $0e
-	jr z, .asm_161e5
-	cp $1b
-	jr z, .asm_161e5
+	cp LEGENDARY_ZAPDOS_DECK_ID
+	jr z, .begin
+	cp LEGENDARY_ARTICUNO_DECK_ID
+	jr z, .begin
+	cp LEGENDARY_RONALD_DECK_ID
+	jr z, .begin
 	ret
-.asm_161e5
+
+; check if card applies
+.begin
 	ld a, [wLoadedCard1ID]
-	cp $5f
-	jr z, .asm_161f5
-	cp $40
-	jr z, .asm_1625e
-	cp $76
-	jr z, .asm_16268
+	cp ARTICUNO2
+	jr z, .articuno
+	cp MOLTRES2
+	jr z, .moltres
+	cp ZAPDOS3
+	jr z, .zapdos
 	ret
-.asm_161f5
-	ld a, $ef
+
+.articuno
+	; exit if not enough Pokemon in Play Area
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	cp $02
+	cp 2
 	ret c
+
 	call Func_1628f
 	jr c, .asm_16258
 	call Func_162a1
 	jr nc, .asm_16258
 	call Func_158b2
 	jr c, .asm_16258
-	ld a, $f0
+	
+	; checks for player's active card status
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
-	and $0f
+	and CNF_SLP_PRZ
 	or a
 	jr nz, .asm_16258
+
+	; checks for player's Pokemon Power
 	call SwapTurn
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
 	ld e, $00
 	call CopyMoveDataAndDamage_FromDeckIndex
 	call SwapTurn
 	ld a, [wLoadedMoveCategory]
-	cp $04
-	jr z, .asm_16238
-	ld a, $ef
+	cp POKEMON_POWER
+	jr z, .check_muk_and_snorlax
+
+	; return if no space on the bench
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	cp $05
-	jr c, .asm_16238
+	cp MAX_BENCH_POKEMON
+	jr c, .check_muk_and_snorlax
 	ret
-.asm_16238
-	ld a, $27
+
+.check_muk_and_snorlax
+	; checks for Muk in both Play Areas
+	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	jr c, .asm_16258
-	ld a, $bb
+	; checks if player's active card is Snorlax
+	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp $be
+	cp SNORLAX
 	jr z, .asm_16258
+
 	ld a, $46
 	call Func_140fe
 	ret
@@ -550,14 +566,18 @@ Func_161d5: ; 161d5 (5:61d5)
 	ld a, $64
 	call Func_1410a
 	ret
-.asm_1625e
-	ld a, $ba
+
+.moltres
+	; checks if there's enough cards in deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
-	cp $38
+	cp $38 ; max number of cards not in deck to activate
 	jr nc, .asm_16258
 	ret
-.asm_16268
-	ld a, $27
+
+.zapdos
+	; checks for Muk in both Play Areas
+	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	jr c, .asm_16258
 	ret
