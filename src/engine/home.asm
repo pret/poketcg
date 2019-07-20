@@ -6239,7 +6239,10 @@ LoadPlacingThePrizesScreenTiles: ; 20f0 (0:20f0)
 	ld de, v0Tiles1 + $20 tiles
 	ld b, $d
 	call CopyFontsOrDuelGraphicsTiles
-	; load the Deck and the Discard Pile icons
+; fallthrough
+
+; load the Deck and the Discard Pile icons
+LoadDeckAndDiscardPileIcons: ; 20fb (0:20fb)
 	ld hl, DuelDmgSgbSymbolGraphics + $54 tiles - $4000
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -9277,12 +9280,12 @@ CompareDEtoBC: ; 3090 (0:3090)
 	cp c
 	ret
 
-Func_3096: ; 3096 (0:3096)
+OpenDuelCheckMenu: ; 3096 (0:3096)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8000)
+	ld a, BANK(_OpenDuelCheckMenu)
 	call BankswitchROM
-	call Func_8000
+	call _OpenDuelCheckMenu
 	pop af
 	call BankswitchROM
 	ret
@@ -9300,27 +9303,27 @@ Func_30a6: ; 30a6 (0:30a6)
 	call BankswitchROM
 	ret
 
-Func_30bc: ; 30bc (0:30bc)
+DrawYourOrOppPlayArea: ; 30bc (0:30bc)
 	ld a, h
-	ld [wce50], a
+	ld [wTurnHolder1], a
 	ld a, l
-	ld [wce51], a
+	ld [wTurnHolder2], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8211)
+	ld a, BANK(_DrawYourOrOppPlayArea)
 	call BankswitchROM
-	call Func_8211
+	call _DrawYourOrOppPlayArea
 	call DrawWideTextBox
 	pop af
 	call BankswitchROM
 	ret
 
-Func_30d7: ; 30d7 (0:30d7)
+DrawPlayersPrizeAndBenchCards: ; 30d7 (0:30d7)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_833c)
+	ld a, BANK(_DrawPlayersPrizeAndBenchCards)
 	call BankswitchROM
-	call Func_833c
+	call _DrawPlayersPrizeAndBenchCards
 	pop af
 	call BankswitchROM
 	ret

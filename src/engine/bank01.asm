@@ -811,7 +811,7 @@ UsePokemonCard: ; 44db (1:44db)
 ; triggered by selecting the "Check" item in the duel menu
 DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
-	call Func_3096
+	call OpenDuelCheckMenu
 	jp DuelMainInterface
 
 ; triggered by pressing SELECT in the duel menu
@@ -5198,7 +5198,7 @@ Func_60dd: ; 60dd (1:60dd)
 	jr z, .asm_6119
 	or a
 	jr z, .asm_6132
-	call Func_3096
+	call OpenDuelCheckMenu
 	jr .asm_60f2
 .asm_6132
 	call OpenTurnHolderHandScreen_Simple
@@ -6296,7 +6296,7 @@ Func_67fb: ; 67fb (1:67fb)
 	ld a, [wCurrentDuelMenuItem]
 	or a
 	jr z, .asm_6839
-	call Func_3096
+	call OpenDuelCheckMenu
 	jr .asm_6829
 .asm_6839
 	call OpenTurnHolderHandScreen_Simple

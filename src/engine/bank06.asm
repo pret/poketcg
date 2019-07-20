@@ -154,10 +154,10 @@ _CopyCardNameAndLevel_HalfwidthText:
 
 Func_180d5: ; 180d5 (6:40d5)
 	ld a, $05
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 .asm_006_40da
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
@@ -171,7 +171,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	call .asm_006_4171
 .asm_006_40fe
 	ld a, $01
@@ -187,11 +187,11 @@ Func_180d5: ; 180d5 (6:40d5)
 	and $04
 	jr nz, .asm_006_4148
 .asm_006_4118
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld [$ce58], a
 	call Func_006_43bb
 	jr c, .asm_006_4139
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	cp $10
 	jp z, .asm_006_41f8
 	cp $11
@@ -218,12 +218,12 @@ Func_180d5: ; 180d5 (6:40d5)
 	call Func_006_44bf
 	lb de, $38, $9f
 	call SetupText
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld [$ce57], a
 	ld hl, .jump_table
 	call JumpToFunctionInTable
 	ld a, [$ce57]
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jp .asm_006_40da
 .asm_006_4171 ; 18171 (6:4171)
 	push af
@@ -254,7 +254,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	ld a, l
 	cp $06
 	jr nc, .asm_006_41e3
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	cp $06
 	jr nc, .asm_006_41c2
 	ld a, l
@@ -282,7 +282,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	call ProcessText
 	ret
 .asm_006_41e3
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	cp $08
 	jr nc, .asm_006_41ee
 	call PrintTextNoDelay
@@ -301,7 +301,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jp .asm_006_40da
 .asm_006_4210
 	lb de, $38, $9f
@@ -312,7 +312,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [$ce57]
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jp .asm_006_40da
 .jump_table ; (6:4228)
 	dw Func_006_4248
@@ -333,7 +333,7 @@ Func_180d5: ; 180d5 (6:40d5)
 	dw Func_006_426a
 
 Func_006_4248:
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	inc a
 	cp PLAY_AREA_BENCH_5 + $01
 	jr nz, .asm_006_4251
@@ -352,7 +352,7 @@ Func_006_4248:
 	ret
 
 Func_006_426a:
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	sub $08
 	or a
 	jr z, .asm_006_4274
@@ -432,7 +432,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld l, a
 .asm_006_43c9
 	ld h, $07
@@ -468,10 +468,10 @@ Func_006_43bb: ; 183bb (6:43bb)
 	ld a, [hl]
 .asm_006_43f5
 	push af
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld [$ce57], a
 	pop af
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	cp $05
 	jr c, .asm_006_440e
 	cp $0b
@@ -485,23 +485,23 @@ Func_006_43bb: ; 183bb (6:43bb)
 	dec a
 	jr nz, .asm_006_441d
 	ld a, $10
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_006_4462
 .asm_006_441d
 	ld b, a
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	cp b
 	jr c, .asm_006_4462
 	ldh a, [hDPadHeld]
 	bit D_RIGHT_F, a
 	jr z, .asm_006_4430
 	xor a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_006_4462
 .asm_006_4430:
 	ld a, b
 	dec a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_006_4462
 .asm_006_4437:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -509,11 +509,11 @@ Func_006_43bb: ; 183bb (6:43bb)
 	dec a
 	jr nz, .asm_006_4446
 	ld a, $11
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_006_4462
 .asm_006_4446
 	ld b, a
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	sub $0b
 	cp b
 	jr c, .asm_006_4462
@@ -521,17 +521,17 @@ Func_006_43bb: ; 183bb (6:43bb)
 	bit D_LEFT_F, a
 	jr z, .asm_006_445c
 	ld a, $0b
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	jr .asm_006_4462
 .asm_006_445c
 	ld a, b
 	add $0a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 .asm_006_4462
 	ld a, $01
 	ld [wcfe3], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_446b
 	ldh a, [hKeysPressed]
 	and $03
@@ -539,14 +539,14 @@ Func_006_43bb: ; 183bb (6:43bb)
 	and $01
 	jr nz, .asm_006_447d
 	ld a, $ff
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	scf
 	ret
 .asm_006_447d
 	call Func_006_44a0
 	ld a, $01
-	farcall Func_90fb
-	ld a, [$ce52]
+	farcall PlaySFXConfirmOrCancel
+	ld a, [wPrizeCardCursorPosition]
 	scf
 	ret
 .asm_006_448b
@@ -555,7 +555,7 @@ Func_006_43bb: ; 183bb (6:43bb)
 	jr z, .asm_006_4494
 	call PlaySFX
 .asm_006_4494
-	ld hl, wcea3
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -569,7 +569,7 @@ Func_006_44a0: ; 184a0 (6:44a0)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [$ce52]
+	ld a, [wPrizeCardCursorPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -590,20 +590,21 @@ Func_006_44bf: ; 184bf (6:44bf)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
+Func_006_44c8:  ; 184c8 (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
 	xor a
-	ld [$ce52], a
+	ld [wPrizeCardCursorPosition], a
 	ld de, $4c8e
 	ld hl, $ce53
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	ld a, $ff
-	ld [$ce55], a
+	ld [wDuelInitialPrizesUpperBitsSet], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_44e5
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -626,11 +627,11 @@ Func_006_44bf: ; 184bf (6:44bf)
 	call Func_006_4598
 	call Func_006_452b
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	jr .asm_006_44e5
 .asm_006_4518
 	ld a, $01
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 .asm_006_451e
 	ld a, [wGlossaryPageNo]
 	xor $01
@@ -754,7 +755,7 @@ Func_006_4598: ; 18598 (6:4598)
 	and B_BUTTON
 	jr z, .asm_006_45f7
 	ld a, $ff
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	ret
 
 ; unit: 5 bytes.
@@ -789,9 +790,9 @@ GlossaryData2:
 ; (6:4661)
 	xor a
 	ld [wcfe3], a
-	ld a, [wceaf]
+	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
-	ld a, [wceb0]
+	ld a, [wCheckMenuCursorYPosition]
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
@@ -821,11 +822,11 @@ GlossaryData2:
 	call .asm_006_46d4
 	pop de
 	ld a, d
-	ld [wceaf], a
+	ld [wCheckMenuCursorXPosition], a
 	ld a, e
-	ld [wceb0], a
+	ld [wCheckMenuCursorYPosition], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
 	and $03
@@ -848,7 +849,7 @@ GlossaryData2:
 	jr z, .asm_006_46c6
 	call PlaySFX
 .asm_006_46c6
-	ld hl, wcea3
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -862,13 +863,13 @@ GlossaryData2:
 	ld e, a
 	ld a, $0a
 	ld l, a
-	ld a, [wceaf]
+	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $01
 	ld b, a
-	ld a, [wceb0]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	add $0e
 	ld c, a
@@ -1121,7 +1122,7 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [wWhoseTurn]
 	ld l, a
 .asm_006_5127
-	call Func_30bc
+	call DrawYourOrOppPlayArea
 	pop af
 	ld [wDuelDisplayedScreen], a
 .asm_006_512e
@@ -1904,7 +1905,7 @@ NamingScreen_CheckButtonState:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
@@ -1930,7 +1931,7 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_006_69f8
 	call PlaySFX
 .asm_006_69f8
-	ld hl, wcea3
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2685,7 +2686,7 @@ Func_006_6efb:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wcea3], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
 	jp z, Func_006_6efb
@@ -2711,7 +2712,7 @@ Func_006_6efb:
 	jr z, .asm_006_6f92
 	call PlaySFX
 .asm_006_6f92
-	ld hl, wcea3
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f

@@ -542,7 +542,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text021a                                 ; 0x021a
 	textpointer Text021b                                 ; 0x021b
 	textpointer Text021c                                 ; 0x021c
-	textpointer EndText                                 ; 0x021d
+	textpointer EndText                                  ; 0x021d
 	textpointer WhatIsYourNameText                                 ; 0x021e
 	textpointer Text021f                                 ; 0x021f
 	textpointer Text0220                                 ; 0x0220
@@ -576,25 +576,25 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text023c                                 ; 0x023c
 	textpointer Text023d                                 ; 0x023d
 	textpointer Text023e                                 ; 0x023e
-	textpointer Text023f                                 ; 0x023f
-	textpointer Text0240                                 ; 0x0240
-	textpointer Text0241                                 ; 0x0241
+	textpointer YourPokemonText                          ; 0x023f
+	textpointer YourDiscardPileText2                     ; 0x0240
+	textpointer YourHandText                             ; 0x0241
 	textpointer Text0242                                 ; 0x0242
-	textpointer Text0243                                 ; 0x0243
-	textpointer Text0244                                 ; 0x0244
-	textpointer Text0245                                 ; 0x0245
+	textpointer OpponentsPokemonText                     ; 0x0243
+	textpointer OpponentsDiscardPileText2                ; 0x0244
+	textpointer OpponentsHandText                        ; 0x0245
 	textpointer Text0246                                 ; 0x0246
-	textpointer Text0247                                 ; 0x0247
-	textpointer Text0248                                 ; 0x0248
-	textpointer Text0249                                 ; 0x0249
-	textpointer Text024a                                 ; 0x024a
-	textpointer Text024b                                 ; 0x024b
-	textpointer Text024c                                 ; 0x024c
+	textpointer DuelistsPlayAreaText                     ; 0x0247
+	textpointer YourPlayAreaText                         ; 0x0248
+	textpointer OppPlayAreaText                          ; 0x0249
+	textpointer InPlayAreaText                           ; 0x024a
+	textpointer GlossaryText                             ; 0x024b
+	textpointer WhichCardWouldYouLikeToSeeText           ; 0x024c
 	textpointer Text024d                                 ; 0x024d
-	textpointer HandText_2                                 ; 0x024e
-	textpointer DuelistHandText_2                                 ; 0x024f
-	textpointer DuelistDiscardPileText                                 ; 0x0250
-	textpointer EmptyLineText                                 ; 0x0251
+	textpointer HandText_2                               ; 0x024e
+	textpointer DuelistHandText_2                        ; 0x024f
+	textpointer DuelistDiscardPileText                   ; 0x0250
+	textpointer EmptyLineText                            ; 0x0251
 	textpointer Text0252                                 ; 0x0252
 	textpointer Text0253                                 ; 0x0253
 	textpointer Text0254                                 ; 0x0254

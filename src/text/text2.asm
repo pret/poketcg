@@ -1715,15 +1715,15 @@ Text023e: ; 3bbf8 (e:7bf8)
 	text "No cards chosen."
 	done
 
-Text023f: ; 3bc0a (e:7c0a)
+YourPokemonText: ; 3bc0a (e:7c0a)
 	text "Your Pokémon"
 	done
 
-Text0240: ; 3bc18 (e:7c18)
+YourDiscardPileText2: ; 3bc18 (e:7c18)
 	text "Your Discard Pile"
 	done
 
-Text0241: ; 3bc2b (e:7c2b)
+YourHandText: ; 3bc2b (e:7c2b)
 	text "Your Hand"
 	done
 
@@ -1731,15 +1731,15 @@ Text0242: ; 3bc36 (e:7c36)
 	text "To Your Play Area"
 	done
 
-Text0243: ; 3bc49 (e:7c49)
+OpponentsPokemonText: ; 3bc49 (e:7c49)
 	text "Opponent's Pokémon"
 	done
 
-Text0244: ; 3bc5d (e:7c5d)
+OpponentsDiscardPileText2: ; 3bc5d (e:7c5d)
 	text "Opponent's Discard Pile"
 	done
 
-Text0245: ; 3bc76 (e:7c76)
+OpponentsHandText: ; 3bc76 (e:7c76)
 	text "Opponent Hand"
 	done
 
@@ -1747,27 +1747,27 @@ Text0246: ; 3bc85 (e:7c85)
 	text "To Opponent's Play Area"
 	done
 
-Text0247: ; 3bc9e (e:7c9e)
+DuelistsPlayAreaText: ; 3bc9e (e:7c9e)
 	text "<RAMNAME>'s Play Area"
 	done
 
-Text0248: ; 3bcad (e:7cad)
+YourPlayAreaText: ; 3bcad (e:7cad)
 	text "Your Play Area"
 	done
 
-Text0249: ; 3bcbd (e:7cbd)
+OppPlayAreaText: ; 3bcbd (e:7cbd)
 	text "Opp. Play Area"
 	done
 
-Text024a: ; 3bccd (e:7ccd)
+InPlayAreaText: ; 3bccd (e:7ccd)
 	text "In Play Area"
 	done
 
-Text024b: ; 3bcdb (e:7cdb)
+GlossaryText: ; 3bcdb (e:7cdb)
 	text "Glossary"
 	done
 
-Text024c: ; 3bce5 (e:7ce5)
+WhichCardWouldYouLikeToSeeText: ; 3bce5 (e:7ce5)
 	text "Which card would you like to see?"
 	done
 

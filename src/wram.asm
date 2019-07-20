@@ -1283,22 +1283,46 @@ wTextBoxLabel:: ; ce4c
 wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
-wce50:: ; ce50
+; these hold either player or opponent turn
+; for temporary calculations
+wTurnHolder1:: ; ce50
 	ds $1
 
-wce51:: ; ce51
+wTurnHolder2:: ; ce51
 	ds $1
 
-	ds $7
+; holds the position of the cursor
+; when selecting a prize card
+wPrizeCardCursorPosition::
+	ds $1
+
+wce53:: ; ce53
+	ds $2
+
+; same as wDuelInitialPrizes but
+; with upper 2 bits set
+wDuelInitialPrizesUpperBitsSet:: ; ce55
+	ds $1
+
+	ds $3
 
 wce59:: ; ce59
 	ds $1
 
-	ds $4
+	ds $3
+
+; stores whether there are Pokemon in play area
+; player arena Pokemon sets bit 0
+; opponent arena Pokemon sets bit 1
+wArenaCardsInPlayArea:: ; ce5d
+	ds $1
 
 wce5e:: ; ce5e
 	ds $1
 
+; this is used to store last cursor position
+; in the Your Play Area screen
+wLastCursorPosition_YourOrOppPlayArea:: ; ce5f
 	ds $1
 
 wce60:: ; ce60
@@ -1388,7 +1412,8 @@ wcea1:: ; cea1
 
 	ds $1
 
-wcea3:: ; cea3
+; used to blink the cursor in duel menu
+wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
 wNamingScreenCursorY:: ; cea4
@@ -1406,10 +1431,10 @@ wceaa:: ; ceaa
 wceab:: ; ceab
 	ds $4
 
-wceaf:: ; ceaf
+wCheckMenuCursorXPosition:: ; ceaf
 	ds $1
 
-wceb0:: ; ceb0
+wCheckMenuCursorYPosition:: ; ceb0
 	ds $1
 
 wceb1:: ; ceb1
@@ -1427,7 +1452,15 @@ wceb4:: ; ceb4
 wceb5:: ; ceb5
 	ds $1
 
-	ds $5
+; used to store the tens digit and 
+; ones digit of a value for printing
+; the ones digit is added $20
+; ceb6 = ones digit (+ $20)
+; ceb7 = tens digit
+wOnesAndTensPlace:: ; ceb6
+	ds $2
+
+	ds $3
 
 wcebb:: ; cebb
 	ds $1
