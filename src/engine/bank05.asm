@@ -259,7 +259,26 @@ Func_1468b: ; 1468b (5:468b)
 	ret
 ; 0x14786
 
-	INCROM $14786, $15636
+	INCROM $14786, $1514f
+
+; these seem to be lists of card IDs
+; for the AI to look up in their hand
+Data_1514f: ; 1514f (5:514f)
+	db KANGASKHAN
+	db CHANSEY
+	db SNORLAX
+	db MR_MIME
+	db ABRA
+	db $00
+
+	db ABRA
+	db MR_MIME
+	db KANGASKHAN
+	db SNORLAX
+	db CHANSEY
+	db $00
+
+	INCROM $1515b, $15636
 
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
@@ -373,7 +392,7 @@ Func_15ea6 ; 15ea6 (5:5ea6)
 
 Func_15eae: ; 15eae (5:5eae)
 	call CreateHandCardList
-	call Func_1633f
+	call SortTempHandByList
 	ld hl, wDuelTempList
 	ld de, $ceda
 	call Func_15ea6
@@ -454,8 +473,59 @@ Func_15f4c ; 15f4c (5:5f4c)
 Func_161d5 ; 161d5 (5:61d5)
 	INCROM $161d5, $1633f
 
-Func_1633f ; 1633f (5:633f)
-	INCROM $1633f, $1637b
+; Goes through $00 terminated list pointed 
+; by wcdae and compares it to each card in hand.
+; Sorts the hand in wDuelTempList so that the found card IDs
+; are in the same order as the list pointed by de.
+SortTempHandByList: ; 1633f (5:633f)
+	ld a, [wcdaf]
+	or a
+	ret z
+	ld d, a
+	ld a, [wcdae]
+	ld e, a
+	ld c, $00
+.next_id
+	ld a, [de]
+	or a
+	ret z
+	inc de
+	ld hl, wDuelTempList
+	ld b, $00
+	add hl, bc
+
+	ld b, a
+.next_card
+	ld a, [hl]
+	ldh [hTempCardIndex_ff98], a
+	cp $ff
+	jr z, .next_id
+	push bc
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	pop bc
+	cp b
+	jr nz, .not_same
+
+; found
+	push bc
+	push hl
+	ld b, $00
+	ld hl, wDuelTempList
+	add hl, bc
+	ld b, [hl]
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a
+	pop hl
+	ld [hl], b
+	pop bc
+	inc c
+.not_same
+	inc hl
+	jr .next_card
+; 0x1637b
 
 Func_1637b ; 1637b (5:637b)
 	INCROM $1637b, $163c9
