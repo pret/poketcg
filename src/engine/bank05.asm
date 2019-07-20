@@ -482,8 +482,94 @@ Func_15eae: ; 15eae (5:5eae)
 Func_15f4c ; 15f4c (5:5f4c)
 	INCROM $15f4c, $161d5
 
-Func_161d5 ; 161d5 (5:61d5)
-	INCROM $161d5, $1633f
+Func_161d5: ; 161d5 (5:61d5)
+	ld a, [wOpponentDeckID]
+	cp $0d
+	jr z, .asm_161e5
+	cp $0e
+	jr z, .asm_161e5
+	cp $1b
+	jr z, .asm_161e5
+	ret
+.asm_161e5
+	ld a, [wLoadedCard1ID]
+	cp $5f
+	jr z, .asm_161f5
+	cp $40
+	jr z, .asm_1625e
+	cp $76
+	jr z, .asm_16268
+	ret
+.asm_161f5
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $02
+	ret c
+	call Func_1628f
+	jr c, .asm_16258
+	call Func_162a1
+	jr nc, .asm_16258
+	call Func_158b2
+	jr c, .asm_16258
+	ld a, $f0
+	call GetNonTurnDuelistVariable
+	and $0f
+	or a
+	jr nz, .asm_16258
+	call SwapTurn
+	ld a, $bb
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, $00
+	call CopyMoveDataAndDamage_FromDeckIndex
+	call SwapTurn
+	ld a, [wLoadedMoveCategory]
+	cp $04
+	jr z, .asm_16238
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $05
+	jr c, .asm_16238
+	ret
+.asm_16238
+	ld a, $27
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_16258
+	ld a, $bb
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp $be
+	jr z, .asm_16258
+	ld a, $46
+	call Func_140fe
+	ret
+.asm_16258
+	ld a, $64
+	call Func_1410a
+	ret
+.asm_1625e
+	ld a, $ba
+	call GetTurnDuelistVariable
+	cp $38
+	jr nc, .asm_16258
+	ret
+.asm_16268
+	ld a, $27
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_16258
+	ret
+; 0x16270
+
+	INCROM $16270, $1628f
+
+Func_1628f ; 1628f (5:628f)
+	INCROM $1628f, $162a1
+
+Func_162a1 ; 162a1 (5:62a1)
+	INCROM $162a1, $1633f
 
 ; Goes through $00 terminated list pointed 
 ; by wcdae and compares it to each card in hand.
