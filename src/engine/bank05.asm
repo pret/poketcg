@@ -82,7 +82,27 @@ Func_14078: ; 14078 (5:4078)
 	ret
 ; 0x1409e
 
-	INCROM $1409e, $140fe
+	INCROM $1409e, $140ae
+
+Func_140ae: ; 140ae (5:40ae)
+	xor a
+	call Func_140b5
+	ret c
+	ld a, $01
+
+Func_140b5: ; 140b5 (5:40b5)
+	call Func_143e5
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	ret c
+	ret nz
+	scf
+	ret
+; 0x140c5
+
+	INCROM $140c5, $140fe
 
 Func_140fe: ; 140fe (5:40fe)
 	INCROM $140fe, $1410a
@@ -112,10 +132,175 @@ Func_14226: ; 14226 (5:4226)
 	jr .check_for_next_pokemon
 ; 0x1424b
 
+Func_1424b: ; 1424b (5:424b)
 	INCROM $1424b, $1433d
 
 Func_1433d: ; 1433d (5:433d)
-	INCROM $1433d, $14663
+	INCROM $1433d, $143e5
+
+Func_143e5: ; 143e5 (5:43e5)
+	ld [wSelectedMoveIndex], a
+	ld e, a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add $bb
+	call GetTurnDuelistVariable
+	ld d, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, [wLoadedMoveCategory]
+	cp $04
+	jr nz, .asm_1440a
+	ld hl, wDamage
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ld [wccbb], a
+	ld [wccbc], a
+	ld e, a
+	ld d, a
+	ret
+.asm_1440a
+	ld a, [wDamage]
+	ld [wccbb], a
+	ld [wccbc], a
+	ld a, $09
+	call TryExecuteEffectCommandFunction
+	ld a, [wccbb]
+	ld hl, wccbc
+	or [hl]
+	jr nz, .asm_1442a
+	ld a, [wDamage]
+	ld [wccbb], a
+	ld [wccbc], a
+.asm_1442a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr z, .asm_14453
+	ld a, $e7
+	call GetTurnDuelistVariable
+	push af
+	push hl
+	ld [hl], $00
+	ld l, $e8
+	ld a, [hl]
+	push af
+	push hl
+	ld [hl], $00
+	ld l, $ea
+	ld a, [hl]
+	push af
+	push hl
+	ld [hl], $00
+	call .asm_14453
+	pop hl
+	pop af
+	ld [hl], a
+	pop hl
+	pop af
+	ld [hl], a
+	pop hl
+	pop af
+	ld [hl], a
+	ret
+.asm_14453
+	ld hl, wccbb
+	call .asm_14462
+	ld hl, wccbc
+	call .asm_14462
+	ld hl, wDamage
+.asm_14462
+	ld e, [hl]
+	ld d, $00
+	push hl
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add $bb
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2ID]
+	ld [wTempTurnDuelistCardID], a
+	call SwapTurn
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2ID]
+	ld [wTempNonTurnDuelistCardID], a
+	call SwapTurn
+	push de
+	call HandleNoDamageOrEffectSubstatus
+	pop de
+	jr nc, .asm_14496
+	ld de, $0
+	jr .asm_14502
+.asm_14496
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	call z, HandleDoubleDamageSubstatus
+	bit 7, d
+	res 7, d
+	jr nz, .asm_144cd
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call GetPlayAreaCardColor
+	call TranslateColorToWR
+	ld b, a
+	call SwapTurn
+	call GetArenaCardWeakness
+	call SwapTurn
+	and b
+	jr z, .asm_144bb
+	sla e
+	rl d
+.asm_144bb
+	call SwapTurn
+	call GetArenaCardResistance
+	call SwapTurn
+	and b
+	jr z, .asm_144cd
+	ld hl, $ffe2
+	add hl, de
+	ld e, l
+	ld d, h
+.asm_144cd
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add $10
+	ld b, a
+	call ApplyAttachedPluspower
+	call SwapTurn
+	ld b, $10
+	call ApplyAttachedDefender
+	call HandleDamageReduction
+	bit 7, d
+	jr z, .asm_144e7
+	ld de, $0
+.asm_144e7
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $c0
+	jr z, .asm_144ff
+	ld c, $14
+	and $40
+	jr nz, .asm_144f8
+	ld c, $0a
+.asm_144f8
+	ld a, c
+	add e
+	ld e, a
+	ld a, $00
+	adc d
+	ld d, a
+.asm_144ff
+	call SwapTurn
+.asm_14502
+	pop hl
+	ld [hl], e
+	ld a, d
+	or a
+	ret z
+	ld a, $ff
+	ld [hl], a
+	ret
+; 0x1450b
+
+Func_1450b ; 1450b (5:450b)
+	INCROM $1450b, $14663
 
 Func_14663: ; 14663 (5:4663)
 	farcall Func_200e5
@@ -585,8 +770,19 @@ Func_161d5: ; 161d5 (5:61d5)
 
 	INCROM $16270, $1628f
 
-Func_1628f ; 1628f (5:628f)
-	INCROM $1628f, $162a1
+Func_1628f: ; 1628f (5:628f)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call Func_140ae
+	jr nc, .asm_1629f
+	call Func_1424b
+	jp c, .asm_1629f
+	scf
+	ret
+.asm_1629f
+	or a
+	ret
+; 0x162a1
 
 Func_162a1 ; 162a1 (5:62a1)
 	INCROM $162a1, $1633f
