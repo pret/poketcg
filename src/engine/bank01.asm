@@ -466,18 +466,17 @@ OpenNonTurnHolderDiscardPileScreen: ; 4339 (1:4339)
 OpenTurnHolderDiscardPileScreen: ; 4342 (1:4342)
 	jp OpenDiscardPileScreen
 
-; draw the non-turn holder's hand screen.
-; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
-; and the duelist could also be the opponent.
+; draw the non-turn holder's hand screen. simpler version of OpenPlayerHandScreen
+; used only for checking the cards rather than for playing them.
 OpenNonTurnHolderHandScreen_Simple: ; 4345 (1:4345)
 	call SwapTurn
 	call OpenTurnHolderHandScreen_Simple
 	jp SwapTurn
 ; 0x434e
 
-; draw the turn holder's hand screen.
-; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
-; and the duelist could also be the opponent.
+; draw the turn holder's hand screen. simpler version of OpenPlayerHandScreen
+; used only for checking the cards rather than for playing them.
+; used for example in the "Your Play Area" screen of the Check menu
 OpenTurnHolderHandScreen_Simple: ; 434e (1:434e)
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
@@ -2213,19 +2212,19 @@ Func_4e6e: ; 4e6e (1:4e6e)
 	ld b, $52
 	ld c, $57
 .asm_4e7c
-	ld hl, $63
-	ld de, $67
+	ldtx hl, ShufflesTheDeckText
+	ldtx de, Drew7CardsText
 	jr Func_4e98
 
 Func_4e84: ; 4e84 (1:4e84)
 	ld b, $53
 	ld c, $55
-	ld hl, $65
-	ld de, $66
+	ldtx hl, EachPlayerShuffleOpponentsDeckText
+	ldtx de, EachPlayerDraw7CardsText
 	ld a, [wDuelType]
 	cp DUELTYPE_PRACTICE
 	jr nz, Func_4e98
-	ld hl, $64
+	ldtx hl, ThisIsJustPracticeDoNotShuffleText
 ;	fallthrough
 
 Func_4e98: ; 4e98 (1:4e98)
@@ -2243,10 +2242,10 @@ Func_4e98: ; 4e98 (1:4e98)
 	call EnableLCD
 	ld a, [wDuelType]
 	cp DUELTYPE_PRACTICE
-	jr nz, .asm_4ebf
+	jr nz, .not_practice
 	call WaitForWideTextBoxInput
 	jr .asm_4ee0
-.asm_4ebf
+.not_practice
 	call Func_3b21
 	ld hl, sp+$03
 	ld a, [hl]

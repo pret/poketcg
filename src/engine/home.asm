@@ -858,6 +858,7 @@ CallIndirect: ; 05b6 (0:05b6)
 	ld h, a
 	pop af
 ;	fallthrough
+
 CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2

@@ -101,10 +101,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PlacedOnTheBenchText                     ; 0x0061
 	textpointer PlacedInTheArenaText                     ; 0x0062
 	textpointer ShufflesTheDeckText                      ; 0x0063
-	textpointer Text0064                                 ; 0x0064
-	textpointer Text0065                                 ; 0x0065
-	textpointer Text0066                                 ; 0x0066
-	textpointer Text0067                                 ; 0x0067
+	textpointer ThisIsJustPracticeDoNotShuffleText                                 ; 0x0064
+	textpointer EachPlayerShuffleOpponentsDeckText                                 ; 0x0065
+	textpointer EachPlayerDraw7CardsText                                 ; 0x0066
+	textpointer Drew7CardsText                                 ; 0x0067
 	textpointer DeckHasXCardsText                        ; 0x0068
 	textpointer ChooseBasicPkmnToPlaceInArenaText        ; 0x0069
 	textpointer ThereAreNoBasicPokemonInHand                                 ; 0x006a
