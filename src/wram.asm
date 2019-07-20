@@ -1283,12 +1283,16 @@ wTextBoxLabel:: ; ce4c
 wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
-; these hold either player or opponent turn
-; for temporary calculations
-wTurnHolder1:: ; ce50
+; set to PLAYER_TURN in the "Your Play Area" screen
+; set to OPPONENT_TURN in the  "Opp Play Area" screen
+; set to [hWhoseTurn] in the "In Play Area" screen
+wCheckMenuPlayAreaWhichDuelist:: ; ce50
 	ds $1
 
-wTurnHolder2:: ; ce51
+; apparently complements wCheckMenuPlayAreaWhichDuelist to be able to combine
+; the usual player or opponent layout with the opposite duelist information
+; appears not to be relevant in the "In Play Area" screen
+wCheckMenuPlayAreaWhichLayout:: ; ce51
 	ds $1
 
 ; holds the position of the cursor
@@ -1452,7 +1456,7 @@ wceb4:: ; ceb4
 wceb5:: ; ceb5
 	ds $1
 
-; used to store the tens digit and 
+; used to store the tens digit and
 ; ones digit of a value for printing
 ; the ones digit is added $20
 ; ceb6 = ones digit (+ $20)

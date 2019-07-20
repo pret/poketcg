@@ -1122,7 +1122,7 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [wWhoseTurn]
 	ld l, a
 .asm_006_5127
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayArea_Bank0
 	pop af
 	ld [wDuelDisplayedScreen], a
 .asm_006_512e

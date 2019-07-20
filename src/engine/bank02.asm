@@ -53,7 +53,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .draw
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea
 
 	ld a, [wCheckMenuCursorYPosition]
 	sla a
@@ -174,7 +174,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld h, a
 
 .cursor
-	call DrawYourOrOppPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea
 
 ; convert cursor position and
 ; store it in wYourOrOppPlayAreaLastCursorPosition
@@ -384,20 +384,20 @@ YourOrOppPlayAreaArrowPositions_OpponentDiscardPile:
 	db 0, 8
 	db $ff
 
-; loads tiles and icons to display your/opp play area
+; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
-; h = turn holder 1
-; l = turn holder 2
-DrawYourOrOppPlayArea_LoadTurnHolders: ; 8209 (2:4209)
+; input: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
+DrawYourOrOppPlayArea: ; 8209 (2:4209)
 ; loads the turn holders
 	ld a, h
-	ld [wTurnHolder1], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
 	ld a, l
-	ld [wTurnHolder2], a
+	ld [wCheckMenuPlayAreaWhichLayout], a
 ; fallthrough
 
 ; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
+; input: [wCheckMenuPlayAreaWhichDuelist] and [wCheckMenuPlayAreaWhichLayout]
 _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	xor a
 	ld [wTileMapFill], a
@@ -413,7 +413,7 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	call LoadSymbolsFont
 	call LoadDeckAndDiscardPileIcons
 
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	cp PLAYER_TURN
 	jr nz, .opp_turn1
 
@@ -441,7 +441,7 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr nz, .opp_turn2
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	cp PLAYER_TURN
 	jr nz, .swap
 .opp_turn2
@@ -453,9 +453,9 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	call SwapTurn
 
 .draw
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
-	ld a, [wTurnHolder2]
+	ld a, [wCheckMenuPlayAreaWhichLayout]
 	cp b
 	jr nz, .not_equal
 
@@ -468,7 +468,8 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	call DrawPlayArea_BenchCards
 	xor a
 	call DrawYourOrOppPlayArea_Icons
-	jr .lcd
+	jr .done
+
 .not_equal
 	ld hl, PrizeCardsCoordinateData_YourOrOppPlayArea.opponent
 	call DrawPlayArea_PrizeCards
@@ -480,14 +481,14 @@ _DrawYourOrOppPlayArea: ; 8211 (2:4211)
 	ld a, $01
 	call DrawYourOrOppPlayArea_Icons
 
-.lcd
+.done
 	call EnableLCD
 	ret
 
 Func_82b6: ; 82b6 (2:42b6)
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
-	ld a, [wTurnHolder2]
+	ld a, [wCheckMenuPlayAreaWhichLayout]
 	cp b
 	jr nz, .not_equal
 
@@ -524,8 +525,8 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 
 ; reset turn holders
 	ldh a, [hWhoseTurn]
-	ld [wTurnHolder1], a
-	ld [wTurnHolder2], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
+	ld [wCheckMenuPlayAreaWhichLayout], a
 
 ; player prize cards
 	ld hl, PrizeCardsCoordinateData_InPlayArea.player
@@ -541,7 +542,7 @@ _DrawInPlayArea: ; 82ce (2:42ce)
 
 	call SwapTurn
 	ldh a, [hWhoseTurn]
-	ld [wTurnHolder1], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
 	call SwapTurn
 
 ; opponent prize cards
@@ -575,8 +576,8 @@ _DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
 
 ; player cards
 	ld a, PLAYER_TURN
-	ld [wTurnHolder1], a
-	ld [wTurnHolder2], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
+	ld [wCheckMenuPlayAreaWhichLayout], a
 	ld hl, PrizeCardsCoordinateData_2.player
 	call DrawPlayArea_PrizeCards
 	lb de, 5, 10 ; coordinates
@@ -585,7 +586,7 @@ _DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
 
 ; opponent cards
 	ld a, OPPONENT_TURN
-	ld [wTurnHolder1], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
 	ld hl, PrizeCardsCoordinateData_2.opponent
 	call DrawPlayArea_PrizeCards
 	lb de, 1, 0 ; coordinates
@@ -594,21 +595,21 @@ _DrawPlayersPrizeAndBenchCards: ; 833c (2:433c)
 	ret
 
 ; draws the active card gfx at coordinates de
-; of the player (or opponent) depending on wTurnHolder1
+; of the player (or opponent) depending on wCheckMenuPlayAreaWhichDuelist
 ; input:
 ; de = coordinates
 DrawYourOrOppPlayArea_ActiveCardGfx: ; 837e (2:437e)
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	ld l, a
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld h, a
 	ld a, [hl]
 	cp -1
 	jr z, .no_pokemon
 
 	ld d, a
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
@@ -623,7 +624,7 @@ DrawYourOrOppPlayArea_ActiveCardGfx: ; 837e (2:437e)
 	call SwapTurn
 
 .draw
-	lb de, $8a, $00 ; destination offset of loaded gfx
+	ld de, v0Tiles1 + $20 tiles ; destination offset of loaded gfx
 	ld hl, wLoadedCard1Gfx
 	ld a, [hli]
 	ld h, [hl]
@@ -734,13 +735,13 @@ DrawInPlayArea_ActiveCardGfx: ; 83cc (2:43cc)
 	ret
 
 ; draws prize cards depending on the turn
-; loaded in wTurnHolder1
+; loaded in wCheckMenuPlayAreaWhichDuelist
 ; input:
 ; hl = pointer to coordinates
 DrawPlayArea_PrizeCards: ; 8464 (2:4464)
 	push hl
 	call GetDuelInitialPrizesUpperBitsSet
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld h, a
 	ld l, DUELVARS_PRIZES
 	ld a, [hl]
@@ -869,15 +870,15 @@ GetDuelInitialPrizesUpperBitsSet: ; 84fc (2:44fc)
 	ld [wDuelInitialPrizesUpperBitsSet], a
 	ret
 
-; draws filled and empty bench slots depending on the turn loaded in wTurnHolder1
-; if wTurnHolder1 is different from wTurnHolder2 adjusts coordinates of the bench slots
+; draws filled and empty bench slots depending on the turn loaded in wCheckMenuPlayAreaWhichDuelist
+; if wCheckMenuPlayAreaWhichDuelist is different from wCheckMenuPlayAreaWhichLayout adjusts coordinates of the bench slots
 ; input:
 ; de = coordinates to draw bench
 ; c  = spacing between slots
 DrawPlayArea_BenchCards: ; 8511 (2:4511)
-	ld a, [wTurnHolder2]
+	ld a, [wCheckMenuPlayAreaWhichLayout]
 	ld b, a
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	cp b
 	jr z, .skip
 
@@ -896,7 +897,7 @@ DrawPlayArea_BenchCards: ; 8511 (2:4511)
 	ld c, a
 	; c = $ff - c + 1
 
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 .skip
 	ld h, a
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -952,7 +953,7 @@ DrawPlayArea_BenchCards: ; 8511 (2:4511)
 	jr .loop_1
 
 .done
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld h, a
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	ld b, [hl]
@@ -1007,7 +1008,7 @@ DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 
 .draw
 ; hand icon and value
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	ld a, [de]
@@ -1016,7 +1017,7 @@ DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 	call DrawPlayArea_HandText
 
 ; deck icon and value
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	ld a, [de]
@@ -1028,7 +1029,7 @@ DrawYourOrOppPlayArea_Icons: ; 85aa (2:45aa)
 	call DrawPlayArea_IconWithValue
 
 ; discard pile icon and value
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld d, a
 	ld e, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
 	ld a, [de]
@@ -1386,7 +1387,7 @@ Func_8764: ; 8764 (2:4764)
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea
 
 .swap
 	ld a, [$ce56]
@@ -1419,7 +1420,7 @@ Func_8764: ; 8764 (2:4764)
 	jp nz, Func_8883 ; jump if not first option
 
 ; hCurMenuItem = 0
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
@@ -1428,7 +1429,7 @@ Func_8764: ; 8764 (2:4764)
 ; switch the play area to draw
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea
 	xor a
 	ld [$ce56], a
 
@@ -1562,7 +1563,7 @@ Func_8855:
 	ret
 
 Func_8883: ; 8883 (2:4883)
-	ld a, [wTurnHolder1]
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
@@ -1578,7 +1579,7 @@ Func_8883: ; 8883 (2:4883)
 
 .draw
 	ld h, a
-	call DrawYourOrOppPlayArea_LoadTurnHolders
+	call DrawYourOrOppPlayArea
 
 .text
 	call DrawWideTextBox

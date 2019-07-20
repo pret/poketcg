@@ -9303,11 +9303,17 @@ Func_30a6: ; 30a6 (0:30a6)
 	call BankswitchROM
 	ret
 
-DrawYourOrOppPlayArea: ; 30bc (0:30bc)
+; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
+; and draws the screen according to the turn player
+; input: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
+; similar to DrawYourOrOppPlayArea (bank 2) except it also draws a wide text box.
+; this is because bank 2's DrawYourOrOppPlayArea is supposed to come from the Check Menu,
+; so the text box is always already there.
+DrawYourOrOppPlayArea_Bank0: ; 30bc (0:30bc)
 	ld a, h
-	ld [wTurnHolder1], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
 	ld a, l
-	ld [wTurnHolder2], a
+	ld [wCheckMenuPlayAreaWhichLayout], a
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(_DrawYourOrOppPlayArea)
