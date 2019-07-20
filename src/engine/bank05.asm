@@ -387,15 +387,21 @@ Func_15b72 ; 15b72 (5:5b72)
 Func_15d4f ; 15d4f (5:5d4f)
 	INCROM $15d4f, $15ea6
 
-Func_15ea6 ; 15ea6 (5:5ea6)
-	INCROM $15ea6, $15eae
+; Copy cards from wDuelTempList to [de]
+CopyHandCardList: ; 15ea6 (5:5ea6)
+	ld a, [hli]
+	ld [de], a
+	cp $ff
+	ret z
+	inc de
+	jr CopyHandCardList
 
 Func_15eae: ; 15eae (5:5eae)
 	call CreateHandCardList
 	call SortTempHandByList
 	ld hl, wDuelTempList
 	ld de, $ceda
-	call Func_15ea6
+	call CopyHandCardList
 	ld hl, $ceda
 .asm_15ec0
 	ld a, [hli]
