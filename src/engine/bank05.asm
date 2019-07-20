@@ -142,13 +142,15 @@ Func_143e5: ; 143e5 (5:43e5)
 	ld [wSelectedMoveIndex], a
 	ld e, a
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
 	call CopyMoveDataAndDamage_FromDeckIndex
 	ld a, [wLoadedMoveCategory]
-	cp $04
-	jr nz, .asm_1440a
+	cp POKEMON_POWER
+	jr nz, .not_pokemon_power
+
+	; set wDamage, wccbb and wccbc to zero
 	ld hl, wDamage
 	xor a
 	ld [hli], a
@@ -158,7 +160,9 @@ Func_143e5: ; 143e5 (5:43e5)
 	ld e, a
 	ld d, a
 	ret
-.asm_1440a
+
+.not_pokemon_power
+	; set wccbb and wccbc to damage of move
 	ld a, [wDamage]
 	ld [wccbb], a
 	ld [wccbc], a
@@ -174,23 +178,26 @@ Func_143e5: ; 143e5 (5:43e5)
 .asm_1442a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
-	jr z, .asm_14453
-	ld a, $e7
+	jr z, CalculateDamageDoneToDefendingCard
+	; reset substatus1
+	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
 	push af
 	push hl
 	ld [hl], $00
-	ld l, $e8
+	; reset substatus2
+	ld l, DUELVARS_ARENA_CARD_SUBSTATUS2
 	ld a, [hl]
 	push af
 	push hl
 	ld [hl], $00
-	ld l, $ea
+	; reset changed resistance
+	ld l, DUELVARS_ARENA_CARD_CHANGED_RESISTANCE
 	ld a, [hl]
 	push af
 	push hl
 	ld [hl], $00
-	call .asm_14453
+	call CalculateDamageDoneToDefendingCard
 	pop hl
 	pop af
 	ld [hl], a
@@ -201,42 +208,65 @@ Func_143e5: ; 143e5 (5:43e5)
 	pop af
 	ld [hl], a
 	ret
-.asm_14453
+
+; calculates the damage that will be dealt to the player's active card
+; using the card that is located in hTempPlayAreaLocation_ff9d
+; taking into account weakness/resistance/pluspowers/defenders/etc
+; and outputs the result capped at a max of $ff
+; input:
+; wccbb   -> base damage
+; wccbc   -> base damage
+; wDamage -> base damage
+; hTempPlayAreaLocation_ff9d = turn holder's card location as the attacker
+CalculateDamageDoneToDefendingCard: ; 14453 (5:4453)
 	ld hl, wccbb
-	call .asm_14462
+	call _CalculateDamageDoneToDefendingCard
 	ld hl, wccbc
-	call .asm_14462
+	call _CalculateDamageDoneToDefendingCard
 	ld hl, wDamage
-.asm_14462
+; fallthrough
+
+_CalculateDamageDoneToDefendingCard: ; 14462 (5:4462)
 	ld e, [hl]
 	ld d, $00
 	push hl
+
+	; load this card's data
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2ID]
 	ld [wTempTurnDuelistCardID], a
+
+	; load player's arena card data
 	call SwapTurn
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2ID]
 	ld [wTempNonTurnDuelistCardID], a
 	call SwapTurn
+
 	push de
 	call HandleNoDamageOrEffectSubstatus
 	pop de
-	jr nc, .asm_14496
+	jr nc, .vulnerable
+	; invulnerable to damage
 	ld de, $0
-	jr .asm_14502
-.asm_14496
+	jr .done
+.vulnerable
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	call z, HandleDoubleDamageSubstatus
+	; skips the weak/res checks if bit 7 is set
+	; I guess to avoid overflowing?
+	; should probably just have skipped weakness test instead?
 	bit 7, d
 	res 7, d
-	jr nz, .asm_144cd
+	jr nz, .not_resistant
+
+	; figure out if player's card is weak to this card
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	call GetPlayAreaCardColor
 	call TranslateColorToWR
@@ -245,55 +275,65 @@ Func_143e5: ; 143e5 (5:43e5)
 	call GetArenaCardWeakness
 	call SwapTurn
 	and b
-	jr z, .asm_144bb
+	jr z, .not_weak
+	; double de
 	sla e
 	rl d
-.asm_144bb
+
+.not_weak
+	; figure out if player's card is resists this card
 	call SwapTurn
 	call GetArenaCardResistance
 	call SwapTurn
 	and b
-	jr z, .asm_144cd
-	ld hl, $ffe2
+	jr z, .not_resistant
+	; subtract 30 from de
+	ld hl, $ffe2 ; $10000 - 30
 	add hl, de
 	ld e, l
 	ld d, h
-.asm_144cd
+
+.not_resistant
+	; apply pluspower and defender boosts
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add $10
+	add CARD_LOCATION_ARENA
 	ld b, a
 	call ApplyAttachedPluspower
 	call SwapTurn
-	ld b, $10
+	ld b, CARD_LOCATION_ARENA
 	call ApplyAttachedDefender
 	call HandleDamageReduction
+	; test if de underflowed
 	bit 7, d
-	jr z, .asm_144e7
+	jr z, .no_underflow
 	ld de, $0
-.asm_144e7
-	ld a, $f0
+
+.no_underflow
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
-	and $c0
-	jr z, .asm_144ff
-	ld c, $14
-	and $40
-	jr nz, .asm_144f8
-	ld c, $0a
-.asm_144f8
+	and DOUBLE_POISONED
+	jr z, .not_poisoned
+	ld c, 20
+	and $40 ; DOUBLE_POISONED - POISONED
+	jr nz, .add_poison
+	ld c, 10
+.add_poison
 	ld a, c
 	add e
 	ld e, a
 	ld a, $00
 	adc d
 	ld d, a
-.asm_144ff
+.not_poisoned
 	call SwapTurn
-.asm_14502
+
+.done
 	pop hl
 	ld [hl], e
 	ld a, d
 	or a
 	ret z
+	; cap damage
 	ld a, $ff
 	ld [hl], a
 	ret
