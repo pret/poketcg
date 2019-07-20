@@ -1321,8 +1321,8 @@ wce5e:: ; ce5e
 	ds $1
 
 ; this is used to store last cursor position
-; in the Your Play Area screen
-wLastCursorPosition_YourOrOppPlayArea:: ; ce5f
+; in the "Your Play Area" and the "Opp. Play Area" screens
+wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 	ds $1
 
 wce60:: ; ce60

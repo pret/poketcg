@@ -158,7 +158,7 @@ Func_180d5: ; 180d5 (6:40d5)
 .asm_006_40da
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-	farcall $2, $42ce
+	farcall _DrawInPlayArea
 	call EnableLCD
 	call IsClairvoyanceActive
 	jr c, .asm_006_40ef
