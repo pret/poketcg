@@ -1180,7 +1180,15 @@ wcda6:: ; cda6
 wcda7:: ; cda7
 	ds $1
 
-	ds $33
+	ds $6
+
+; pointer to a list of card IDs for sorting AI hand
+wcdae:: ; cdae
+	ds $1
+wcdaf:: ; cdaf
+	ds $1
+
+	ds $2b
 
 wcddb:: ; cddb
 	ds $1
