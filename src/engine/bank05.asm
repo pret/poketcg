@@ -387,7 +387,7 @@ Func_15b72 ; 15b72 (5:5b72)
 Func_15d4f ; 15d4f (5:5d4f)
 	INCROM $15d4f, $15ea6
 
-; Copy cards from wDuelTempList to [de]
+; Copy cards from wDuelTempList to wHandTempList
 CopyHandCardList: ; 15ea6 (5:5ea6)
 	ld a, [hli]
 	ld [de], a
@@ -398,26 +398,32 @@ CopyHandCardList: ; 15ea6 (5:5ea6)
 
 Func_15eae: ; 15eae (5:5eae)
 	call CreateHandCardList
-	call SortTempHandByList
+	call SortTempDeckByIdList
 	ld hl, wDuelTempList
-	ld de, $ceda
+	ld de, wHandTempList
 	call CopyHandCardList
-	ld hl, $ceda
-.asm_15ec0
+	ld hl, wHandTempList
+
+.next_card
 	ld a, [hli]
 	cp $ff
 	jp z, Func_15f4c
-	ld [$cdf3], a
+
+	ld [wcdf3], a
 	push hl
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
-	cp $08
-	jr nc, .asm_15f46
+	cp TYPE_ENERGY
+	jr nc, .skip
+	; skip non-pokemon cards
+
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .asm_15f46
+	jr nz, .skip
+	; skip non-basic pokemon
+
 	ld a, $82
-	ld [$cdbe], a
+	ld [wcdbe], a
 	call Func_161d5
 	ld a, $ef
 	call GetTurnDuelistVariable
@@ -437,39 +443,39 @@ Func_15eae: ; 15eae (5:5eae)
 	ld a, $14
 	call Func_140fe
 .asm_15f04
-	ld a, [$cdf3]
+	ld a, [wcdf3]
 	call Func_163c9
 	call Func_1637b
 	jr nc, .asm_15f14
 	ld a, $14
 	call Func_140fe
 .asm_15f14
-	ld a, [$cdf3]
+	ld a, [wcdf3]
 	call Func_16422
 	jr nc, .asm_15f21
 	ld a, $14
 	call Func_140fe
 .asm_15f21
-	ld a, [$cdf3]
+	ld a, [wcdf3]
 	call Func_16451
 	jr nc, .asm_15f2e
 	ld a, $0a
 	call Func_140fe
 .asm_15f2e
-	ld a, [$cdbe]
+	ld a, [wcdbe]
 	cp $b4
-	jr c, .asm_15f46
-	ld a, [$cdf3]
+	jr c, .skip
+	ld a, [wcdf3]
 	ldh [hTemp_ffa0], a
 	call Func_1433d
-	jr c, .asm_15f46
+	jr c, .skip
 	ld a, $01
 	bank1call AIMakeDecision
-	jr c, .asm_15f4a
-.asm_15f46
+	jr c, .done
+.skip
 	pop hl
-	jp .asm_15ec0
-.asm_15f4a
+	jp .next_card
+.done
 	pop hl
 	ret
 
@@ -483,7 +489,7 @@ Func_161d5 ; 161d5 (5:61d5)
 ; by wcdae and compares it to each card in hand.
 ; Sorts the hand in wDuelTempList so that the found card IDs
 ; are in the same order as the list pointed by de.
-SortTempHandByList: ; 1633f (5:633f)
+SortTempDeckByIdList: ; 1633f (5:633f)
 	ld a, [wcdaf]
 	or a
 	ret z

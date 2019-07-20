@@ -1192,7 +1192,12 @@ wcdae:: ; cdae
 wcdaf:: ; cdaf
 	ds $1
 
-	ds $2b
+	ds $e
+
+wcdbe:: ; cdbe
+	ds $1
+
+	ds $1c
 
 wcddb:: ; cddb
 	ds $1
@@ -1200,7 +1205,12 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-	ds $26
+	ds $16
+
+wcdf3:: ; cdf3
+	ds $1
+
+	ds $f
 
 wce03:: ; ce03
 	ds $1
@@ -1510,7 +1520,13 @@ wcecc:: ; cecc
 wcece:: ; cece
 	ds $2
 
-	ds $47
+	ds $a
+
+; pointer to memory to store AI temporary hand card list
+wHandTempList:: ; ceda
+	ds $2
+
+	ds $3b
 
 ; used in bank2, probably related to wTempHandCardList (another temp list?)
 wcf17:: ; cf17
