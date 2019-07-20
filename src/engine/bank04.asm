@@ -372,7 +372,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .asm_10e96
-	ld a, $2
+	ld a, SFX_02
 	call PlaySFX
 	call Func_11016
 	call Func_11024
@@ -398,7 +398,7 @@ Func_10e97: ; 10e97 (4:4e97)
 	jr z, .asm_10eb9
 	ld [wd32e], a
 	call Func_10f2e
-	ld a, $1
+	ld a, SFX_01
 	call PlaySFX
 .asm_10eb9
 	pop bc
@@ -548,7 +548,7 @@ Func_11016: ; 11016 (4:5016)
 	ret
 
 Func_11024: ; 11024 (4:5024)
-	ld a, $57
+	ld a, SFX_57
 	call PlaySFX
 	ld a, [wd336]
 	ld [wWhichSprite], a
@@ -1191,7 +1191,7 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; from the user into hl.
 	ld hl, wNameBuffer
 	farcall InputPlayerName
-	
+
 	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	call DisableLCD

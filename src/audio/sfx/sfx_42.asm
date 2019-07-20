@@ -1,4 +1,4 @@
-SFX_42_Ch1: ; fe9cf (3f:69cf)
+Sfx42_Ch1: ; fe9cf (3f:69cf)
 	sfx_1 239
 	sfx_8 17
 	sfx_2 0

@@ -1,4 +1,4 @@
-SFX_24_Ch1: ; fd5bd (3f:55bd)
+Sfx24_Ch1: ; fd5bd (3f:55bd)
 	sfx_8 17
 	sfx_1 111
 	sfx_loop 80

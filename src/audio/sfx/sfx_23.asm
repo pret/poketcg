@@ -1,4 +1,4 @@
-SFX_23_Ch1: ; fd4ca (3f:54ca)
+Sfx23_Ch1: ; fd4ca (3f:54ca)
 	sfx_8 17
 	sfx_1 246
 	sfx_0 0, 132

@@ -2323,13 +2323,12 @@ DisplayCheckMenuCursor: ; 90f7 (2:50f7)
 PlaySFXConfirmOrCancel: ; 90fb (2:50fb)
 	push af
 	inc a
-	jr z, .cancel
-	ld a, $2 ; confirmation sfx
-	jr .sfx
-.cancel
-	ld a, $3 ; cancellation sfx
-
-.sfx
+	jr z, .asm_9103
+	ld a, SFX_02 ; confirmation sfx
+	jr .asm_9105
+.asm_9103
+	ld a, SFX_03 ; cancellation sfx
+.asm_9105
 	call PlaySFX
 	pop af
 	ret

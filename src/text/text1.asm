@@ -406,7 +406,7 @@ FinishedTurnWithoutAttackingText: ; 36a74 (d:6a74)
 	line "without Attacking."
 	done
 
-DuelistsTurnText: ; 36a9a (d:6a9a)
+DuelistTurnText: ; 36a9a (d:6a9a)
 	text "<RAMNAME>'s Turn."
 	done
 
@@ -434,21 +434,21 @@ ShufflesTheDeckText: ; 36afe (d:6afe)
 	text "<RAMNAME> shuffles the Deck."
 	done
 
-Text0064: ; 36b14 (d:6b14)
+ThisIsJustPracticeDoNotShuffleText: ; 36b14 (d:6b14)
 	text "Since this is just practice,"
 	line "Do not shuffle the Deck."
 	done
 
-Text0065: ; 36b4b (d:6b4b)
+EachPlayerShuffleOpponentsDeckText: ; 36b4b (d:6b4b)
 	text "Each player will"
 	line "shuffle the opponent's Deck."
 	done
 
-Text0066: ; 36b7a (d:6b7a)
+EachPlayerDraw7CardsText: ; 36b7a (d:6b7a)
 	text "Each player will draw 7 cards."
 	done
 
-Text0067: ; 36b9a (d:6b9a)
+Drew7CardsText: ; 36b9a (d:6b9a)
 	text "<RAMNAME>"
 	line "drew 7 cards."
 	done

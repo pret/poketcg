@@ -1,4 +1,4 @@
-SFX_57_Ch1: ; ffa05 (3f:7a05)
+Sfx57_Ch1: ; ffa05 (3f:7a05)
 	sfx_loop 50
 	sfx_1 164
 	sfx_8 17

@@ -858,6 +858,7 @@ CallIndirect: ; 05b6 (0:05b6)
 	ld h, a
 	pop af
 ;	fallthrough
+
 CallHL: ; 05c1 (0:05c1)
 	jp hl
 ; 0x5c2
@@ -7379,17 +7380,17 @@ HandleMenuInput: ; 264b (0:264b)
 	scf
 	ret
 
-; plays an "open screen" sound if [hCurMenuItem] != 0xff
-; plays an "exit screen" sound if [hCurMenuItem] == 0xff
+; plays an "open screen" sound (SFX_02) if [hCurMenuItem] != 0xff
+; plays an "exit screen" sound (SFX_03) if [hCurMenuItem] == 0xff
 PlayOpenOrExitScreenSFX: ; 26c0 (0:26c0)
 	push af
 	ldh a, [hCurMenuItem]
 	inc a
 	jr z, .play_exit_sfx
-	ld a, $2
+	ld a, SFX_02
 	jr .play_sfx
 .play_exit_sfx
-	ld a, $3
+	ld a, SFX_03
 .play_sfx
 	call PlaySFX
 	pop af
@@ -7493,7 +7494,7 @@ HandleDuelMenuInput: ; 271a (0:271a)
 	and 1
 .dpad_pressed
 	push af
-	ld a, $1
+	ld a, SFX_01
 	call PlaySFX
 	call .erase_cursor
 	pop af
@@ -7943,7 +7944,7 @@ CardSymbolTable:
 	db $dc, $02 ; TYPE_TRAINER
 
 ; copy the name and level of the card at wLoadedCard1 to wDefaultText
-; a = string length in number of tiles (padded with spaces to fit)
+; a = length in number of tiles (the resulting string will be padded with spaces to match it)
 CopyCardNameAndLevel: ; 29f5 (0:29f5)
 	farcall _CopyCardNameAndLevel
 	ret
@@ -8175,7 +8176,7 @@ HandleYesOrNoMenu:
 	and D_RIGHT | D_LEFT
 	jr z, .wait_button_loop
 	; left or right pressed, so switch to the other menu item
-	ld a, $1
+	ld a, SFX_01
 	call PlaySFX
 	call EraseCursor
 .refresh_menu
@@ -8351,7 +8352,7 @@ InitTextPrinting_ProcessTextFromID: ; 2c1b (0:2c1b)
 	jr ProcessTextFromID
 
 ; like ProcessTextFromPointerToID, except it calls InitTextPrinting first
-ProcessTextFromPointerToID_InitTextPrinting: ; 2c20 (0:2c20)
+InitTextPrinting_ProcessTextFromPointerToID: ; 2c20 (0:2c20)
 	call InitTextPrinting
 ;	fallthrough
 
@@ -9998,7 +9999,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	add a
 	ld e, a
 	ld d, $0
-	ld hl, NoDamageOrEffectTextPointerTable
+	ld hl, NoDamageOrEffectTextIDTable
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -10012,7 +10013,7 @@ CheckNoDamageOrEffect: ; 34b7 (0:34b7)
 	ret
 ; 0x34d8
 
-NoDamageOrEffectTextPointerTable: ; 34d8 (0:34d8)
+NoDamageOrEffectTextIDTable: ; 34d8 (0:34d8)
 	tx NoDamageOrEffectDueToAgilityText      ; NO_DAMAGE_OR_EFFECT_AGILITY
 	tx NoDamageOrEffectDueToBarrierText      ; NO_DAMAGE_OR_EFFECT_BARRIER
 	tx NoDamageOrEffectDueToFlyText          ; NO_DAMAGE_OR_EFFECT_FLY

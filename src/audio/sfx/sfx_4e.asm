@@ -1,4 +1,4 @@
-SFX_4e_Ch1: ; ff313 (3f:7313)
+Sfx4e_Ch1: ; ff313 (3f:7313)
 	sfx_1 239
 	sfx_8 17
 	sfx_2 8

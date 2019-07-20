@@ -1,4 +1,4 @@
-SFX_3c_Ch1: ; fe685 (3f:6685)
+Sfx3c_Ch1: ; fe685 (3f:6685)
 	sfx_loop 4
 	sfx_1 244
 	sfx_8 17

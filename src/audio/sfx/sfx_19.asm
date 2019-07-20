@@ -1,4 +1,4 @@
-SFX_19_Ch1: ; fce98 (3f:4e98)
+Sfx19_Ch1: ; fce98 (3f:4e98)
 	sfx_8 17
 	sfx_1 240
 	sfx_0 0, 98

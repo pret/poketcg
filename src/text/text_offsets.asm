@@ -95,16 +95,16 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer RetreatWasUnsuccessfulText               ; 0x005b
 	textpointer WillUseThePokemonPowerText               ; 0x005c
 	textpointer FinishedTurnWithoutAttackingText         ; 0x005d
-	textpointer DuelistsTurnText                         ; 0x005e
+	textpointer DuelistTurnText                          ; 0x005e
 	textpointer AttachedEnergyToPokemonText                                 ; 0x005f
 	textpointer PokemonEvolvedIntoPokemonText                                 ; 0x0060
 	textpointer PlacedOnTheBenchText                     ; 0x0061
 	textpointer PlacedInTheArenaText                     ; 0x0062
 	textpointer ShufflesTheDeckText                      ; 0x0063
-	textpointer Text0064                                 ; 0x0064
-	textpointer Text0065                                 ; 0x0065
-	textpointer Text0066                                 ; 0x0066
-	textpointer Text0067                                 ; 0x0067
+	textpointer ThisIsJustPracticeDoNotShuffleText                                 ; 0x0064
+	textpointer EachPlayerShuffleOpponentsDeckText                                 ; 0x0065
+	textpointer EachPlayerDraw7CardsText                                 ; 0x0066
+	textpointer Drew7CardsText                                 ; 0x0067
 	textpointer DeckHasXCardsText                        ; 0x0068
 	textpointer ChooseBasicPkmnToPlaceInArenaText        ; 0x0069
 	textpointer ThereAreNoBasicPokemonInHand                                 ; 0x006a
@@ -542,7 +542,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text021a                                 ; 0x021a
 	textpointer Text021b                                 ; 0x021b
 	textpointer Text021c                                 ; 0x021c
-	textpointer EndText                                 ; 0x021d
+	textpointer EndText                                  ; 0x021d
 	textpointer WhatIsYourNameText                                 ; 0x021e
 	textpointer Text021f                                 ; 0x021f
 	textpointer Text0220                                 ; 0x0220
@@ -591,10 +591,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer GlossaryText                             ; 0x024b
 	textpointer WhichCardWouldYouLikeToSeeText           ; 0x024c
 	textpointer Text024d                                 ; 0x024d
-	textpointer HandText2                                ; 0x024e
-	textpointer Text024f                                 ; 0x024f
-	textpointer Text0250                                 ; 0x0250
-	textpointer Text0251                                 ; 0x0251
+	textpointer HandText_2                               ; 0x024e
+	textpointer DuelistHandText_2                        ; 0x024f
+	textpointer DuelistDiscardPileText                   ; 0x0250
+	textpointer EmptyLineText                            ; 0x0251
 	textpointer Text0252                                 ; 0x0252
 	textpointer Text0253                                 ; 0x0253
 	textpointer Text0254                                 ; 0x0254

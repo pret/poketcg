@@ -1,4 +1,4 @@
-SFX_44_Ch1: ; feaa5 (3f:6aa5)
+Sfx44_Ch1: ; feaa5 (3f:6aa5)
 	sfx_8 17
 	sfx_loop 2
 	sfx_1 31

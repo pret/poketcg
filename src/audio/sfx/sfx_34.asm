@@ -1,4 +1,4 @@
-SFX_34_Ch1: ; fdec8 (3f:5ec8)
+Sfx34_Ch1: ; fdec8 (3f:5ec8)
 	sfx_8 17
 	sfx_2 8
 	sfx_loop 3

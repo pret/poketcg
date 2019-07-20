@@ -1,4 +1,4 @@
-SFX_11_Ch1: ; fca82 (3f:4a82)
+Sfx11_Ch1: ; fca82 (3f:4a82)
 	sfx_8 17
 	sfx_1 241
 	sfx_2 0

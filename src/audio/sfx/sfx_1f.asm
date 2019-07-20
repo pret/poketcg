@@ -1,4 +1,4 @@
-SFX_1f_Ch1: ; fd28a (3f:528a)
+Sfx1f_Ch1: ; fd28a (3f:528a)
 	sfx_8 17
 	sfx_1 111
 	sfx_0 0, 84

@@ -1,4 +1,4 @@
-SFX_05_Ch1: ; fc59d (3f:459d)
+Sfx05_Ch1: ; fc59d (3f:459d)
 	sfx_1 241
 	sfx_8 17
 	sfx_2 8
