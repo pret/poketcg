@@ -53,7 +53,7 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 .draw
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayAreaScreen
 
 	ld a, [wCheckMenuCursorYPosition]
 	sla a
@@ -93,11 +93,11 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	jr .draw
 
 .table ; 8098 (2:4098)
-	dw OpenDuelScreen_TurnHolderPlayArea
-	dw OpenDuelScreen_TurnHolderHand
-	dw OpenDuelScreen_TurnHolderDiscardPile
+	dw OpenYourOrOppPlayAreaScreen_TurnHolderPlayArea
+	dw OpenYourOrOppPlayAreaScreen_TurnHolderHand
+	dw OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile
 
-OpenDuelScreen_TurnHolderPlayArea: ; 809e (2:409e)
+OpenYourOrOppPlayAreaScreen_TurnHolderPlayArea: ; 809e (2:409e)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderPlayAreaScreen
@@ -105,7 +105,7 @@ OpenDuelScreen_TurnHolderPlayArea: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-OpenDuelScreen_NonTurnHolderPlayArea:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderPlayAreaScreen
@@ -113,7 +113,7 @@ OpenDuelScreen_NonTurnHolderPlayArea:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenDuelScreen_TurnHolderHand:
+OpenYourOrOppPlayAreaScreen_TurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -121,7 +121,7 @@ OpenDuelScreen_TurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenDuelScreen_NonTurnHolderHand:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -129,7 +129,7 @@ OpenDuelScreen_NonTurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenDuelScreen_TurnHolderDiscardPile:
+OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -137,7 +137,7 @@ OpenDuelScreen_TurnHolderDiscardPile:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenDuelScreen_NonTurnHolderDiscardPile:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -174,7 +174,7 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld h, a
 
 .cursor
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayAreaScreen
 
 ; convert cursor position and
 ; store it in wYourOrOppPlayAreaLastCursorPosition
@@ -230,9 +230,9 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	jr .turns
 
 .table
-	dw OpenDuelScreen_NonTurnHolderPlayArea
-	dw OpenDuelScreen_NonTurnHolderHand
-	dw OpenDuelScreen_NonTurnHolderDiscardPile
+	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea
+	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderHand
+	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile
 
 CheckMenuData: ; (2:4158)
 	textitem  2, 14, InPlayAreaText
@@ -387,7 +387,7 @@ YourOrOppPlayAreaArrowPositions_OpponentDiscardPile:
 ; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
 ; input: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
-DrawYourOrOppPlayArea: ; 8209 (2:4209)
+DrawYourOrOppPlayAreaScreen: ; 8209 (2:4209)
 ; loads the turn holders
 	ld a, h
 	ld [wCheckMenuPlayAreaWhichDuelist], a
@@ -398,7 +398,7 @@ DrawYourOrOppPlayArea: ; 8209 (2:4209)
 ; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
 ; and draws the screen according to the turn player
 ; input: [wCheckMenuPlayAreaWhichDuelist] and [wCheckMenuPlayAreaWhichLayout]
-_DrawYourOrOppPlayArea: ; 8211 (2:4211)
+_DrawYourOrOppPlayAreaScreen: ; 8211 (2:4211)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -503,7 +503,7 @@ Func_82b6: ; 82b6 (2:42b6)
 
 ; loads tiles and icons to display the In Play Area screen,
 ; and draws the screen
-_DrawInPlayArea: ; 82ce (2:42ce)
+DrawInPlayAreaScreen: ; 82ce (2:42ce)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -1387,7 +1387,7 @@ Func_8764: ; 8764 (2:4764)
 	ldh a, [hWhoseTurn]
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayAreaScreen
 
 .swap
 	ld a, [$ce56]
@@ -1429,7 +1429,7 @@ Func_8764: ; 8764 (2:4764)
 ; switch the play area to draw
 	ld h, a
 	ld l, a
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayAreaScreen
 	xor a
 	ld [$ce56], a
 
@@ -1579,7 +1579,7 @@ Func_8883: ; 8883 (2:4883)
 
 .draw
 	ld h, a
-	call DrawYourOrOppPlayArea
+	call DrawYourOrOppPlayAreaScreen
 
 .text
 	call DrawWideTextBox

@@ -109,8 +109,8 @@ ZubatLeechLifeEffectCommands:
 	db  $00
 
 BeedrillTwineedleEffectCommands:
-	dbw $03, $47f5
-	dbw $09, $47ed
+	dbw $03, Twineedle_MultiplierEffect
+	dbw $09, Twineedle_AIEffect
 	db  $00
 
 BeedrillPoisonStingEffectCommands:
@@ -127,8 +127,8 @@ ExeggcuteLeechSeedEffectCommands:
 	db  $00
 
 KoffingFoulGasEffectCommands:
-	dbw $03, $482a
-	dbw $09, $4822
+	dbw $03, FoulGas_PoisonOrConfusionEffect
+	dbw $09, FoulGas_AIEffect
 	db  $00
 
 MetapodStiffenEffectCommands:
@@ -158,19 +158,19 @@ ExeggutorTeleportEffectCommands:
 	db  $00
 
 ExeggutorBigEggsplosionEffectCommands:
-	dbw $03, $4944
-	dbw $09, $4925
+	dbw $03, BigEggsplosion_MultiplierEffect
+	dbw $09, BigEggsplosion_AIEffect
 	db  $00
 
 NidokingThrashEffectCommands:
-	dbw $03, $4973
-	dbw $04, $4982
-	dbw $09, $496b
+	dbw $03, Thrash_ModifierEffect
+	dbw $04, Func_2c982
+	dbw $09, Thrash_AIEffect
 	db  $00
 
 NidokingToxicEffectCommands:
-	dbw $03, $4994
-	dbw $09, $498c
+	dbw $03, Toxic_DoublePoisonEffect
+	dbw $09, Toxic_AIEffect
 	db  $00
 
 NidoqueenBoyfriendsEffectCommands:

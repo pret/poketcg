@@ -7191,9 +7191,9 @@ Func_6e49: ; 6e49 (1:6e49)
 	INCROM $6e49, $700a
 
 ; print one of the "There was no effect from" texts depending
-; on the value at wccf1 ($00 or a status condition constant)
+; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
 PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
-	ld a, [wccf1]
+	ld a, [wNoEffectFromStatus]
 	or a
 	jr nz, .status
 	ld hl, wLoadedMoveName
@@ -7415,18 +7415,21 @@ ClearNonTurnTemporaryDuelvars_CopyStatus: ; 7189 (1:7189)
 	ret
 ; 0x7195
 
+; update non-turn holder's DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+; if wccef == 0: set to [wDealtDamage]
+; if wceef != 0: set to 0
 Func_7195: ; 7195 (1:7195)
 	ld a, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 	call GetNonTurnDuelistVariable
 	ld a, [wccef]
 	or a
-	jr nz, .asm_71a9
+	jr nz, .zero
 	ld a, [wDealtDamage]
 	ld [hli], a
-	ld a, [wccc0]
+	ld a, [wDealtDamage + 1]
 	ld [hl], a
 	ret
-.asm_71a9
+.zero
 	xor a
 	ld [hli], a
 	ld [hl], a

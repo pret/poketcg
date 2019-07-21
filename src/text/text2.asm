@@ -22,7 +22,7 @@ PokemonsSleepCheckText: ; 380db (e:40db)
 	text "<RAMTEXT>'s Sleep check."
 	done
 
-Text00fa: ; 380ed (e:40ed)
+PoisonedIfHeadsConfusedIfTailsText: ; 380ed (e:40ed)
 	text "Opponent is Poisoned if Heads,"
 	line "and Confused if Tails."
 	done

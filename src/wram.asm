@@ -190,9 +190,7 @@ wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 
 ; damage taken the last time the opponent attacked (0 if no damage)
 wPlayerArenaCardLastTurnDamage:: ; c2f3
-	ds $1
-
-	ds $1
+	ds $2
 
 ; status condition received the last time the opponent attacked (0 if none)
 wPlayerArenaCardLastTurnStatus:: ; c2f5
@@ -333,9 +331,7 @@ wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
 
 wOpponentArenaCardLastTurnDamage:: ; c3f3
-	ds $1
-
-	ds $1
+	ds $2
 
 wOpponentArenaCardLastTurnStatus:: ; c3f5
 	ds $1
@@ -919,24 +915,25 @@ wLoadedMove:: ; cca6
 	move_data_struct wLoadedMove
 
 ; the damage field of an used move is loaded here
+; doubles as "wAIAverageDamage" when complementing wAIMinDamage and wAIMaxDamage
+; little-endian
 wDamage:: ; ccb9
 	ds $2
 
-; wccbb and wccbc appear to be used for AI scoring
-wccbb:: ; ccbb
+; wAIMinDamage and wAIMaxDamage appear to be used for AI scoring
+; they are updated with the minimum (or floor) damage of the current move
+; and with the maximum (or ceiling) damage of the current move
+wAIMinDamage:: ; ccbb
 	ds $1
 
-wccbc:: ; ccbc
+wAIMaxDamage:: ; ccbc
 	ds $1
 
 	ds $2
 
 ; damage dealt by an attack to a target
 wDealtDamage:: ; ccbf
-	ds $1
-
-wccc0:: ; ccc0
-	ds $1
+	ds $2
 
 ; WEAKNESS and RESISTANCE flags	for a damaging attack
 wDamageEffectiveness:: ; ccc1
@@ -999,16 +996,15 @@ wccec:: ; ccec
 	ds $1
 
 ; used by the effect functions to return the cause of an effect to fail
-; $01: was not affected by a status condition
-; $02: prints WasUnsuccessfulText
-wcced:: ; cced
+; in order print the appropriate text
+wEffectFailed:: ; cced
 	ds $1
 
 wccee:: ; ccee
 	ds $1
 
-; when this is non-0, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE and the
-; next duelvar are always set to 0 after an attack
+; flag to determine whether DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+; gets zeroed or gets updated with wDealtDamage
 wccef:: ; ccef
 	ds $1
 
@@ -1017,7 +1013,7 @@ wccf0:: ; ccf0
 
 ; effect functions return a status condition constant here when it had no effect
 ; on the target, in order to print one of the ThereWasNoEffectFrom* texts
-wccf1:: ; ccf1
+wNoEffectFromStatus:: ; ccf1
 	ds $1
 
 ; when non-0, allows the player to skip some delays during a duel by pressing B.
