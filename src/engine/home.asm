@@ -4368,7 +4368,7 @@ Func_161e: ; 161e (0:161e)
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
 	call Func_7415
-	ld a, $07
+	ld a, EFFECTCMDTYPE_PKMN_POWER_TRIGGER
 	call TryExecuteEffectCommandFunction
 	ret
 ; 0x16ad
@@ -4473,12 +4473,12 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 	cp POKEMON_POWER
 	jp z, UsePokemonPower
 	call Func_16f6
-	ld a, $1
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, DrawWideTextBox_WaitForInput_ReturnCarry
 	call CheckSandAttackOrSmokescreenSubstatus
 	jr c, .asm_1766
-	ld a, $2
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jp c, ReturnCarry
 	call Func_1874
@@ -4487,20 +4487,20 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 	call Func_1874
 	call HandleSandAttackOrSmokescreenSubstatus
 	jp c, ClearNonTurnTemporaryDuelvars_ResetCarry
-	ld a, $2
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jp c, ReturnCarry
 .asm_1777
 	ld a, $9
 	call SetAIAction_SerialSendDuelData
-	ld a, $6
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jp c, DealConfusionDamageToSelf
 	call DrawDuelMainScene_PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
-	ld a, $5
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
 	ld a, $a
 	call SetAIAction_SerialSendDuelData
@@ -4518,7 +4518,7 @@ Func_179a: ; 179a (0:179a)
 .asm_17ad
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	ld a, $3
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
 	call Func_189d
@@ -4562,7 +4562,7 @@ Func_17ed: ; 17ed (0:17ed)
 Func_17fb: ; 17fb (0:17fb)
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
-	ld a, $4
+	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
@@ -4610,10 +4610,10 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 ; use Pokemon Power
 UsePokemonPower: ; 184b (0:184b)
 	call Func_7415
-	ld a, $2
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jr c, DisplayUsePokemonPowerScreen_WaitForInput
-	ld a, $5
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
 	jr c, ReturnCarry
 	ld a, $c
@@ -4621,7 +4621,7 @@ UsePokemonPower: ; 184b (0:184b)
 	call ExchangeRNG
 	ld a, $d
 	call SetAIAction_SerialSendDuelData
-	ld a, $3
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $16
 	call SetAIAction_SerialSendDuelData
@@ -4718,7 +4718,7 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempCardIndex_ff9f], a
 	call LoadNonPokemonCardEffectCommands
-	ld a, $01
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jr nc, .can_use
 .cant_use
@@ -4726,20 +4726,20 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	scf
 	ret
 .can_use
-	ld a, $02
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jr c, .done
 	ld a, $06
 	call SetAIAction_SerialSendDuelData
 	call DisplayUsedTrainerCardDetailScreen
 	call ExchangeRNG
-	ld a, $06
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
-	ld a, $05
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
 	ld a, $07
 	call SetAIAction_SerialSendDuelData
-	ld a, $03
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ldh a, [hTempCardIndex_ff9f]
 	call MoveHandCardToDiscardPile

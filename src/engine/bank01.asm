@@ -6598,9 +6598,9 @@ AIAction_UseTrainerCard: ; 6a23 (1:6a23)
 
 ; for trainer card effects
 AIAction_TryExecuteEffect: ; 6a35 (1:6a35)
-	ld a, $06
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
-	ld a, $03
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call DrawDuelMainScene
 	ldh a, [hTempCardIndex_ff9f]
@@ -6646,7 +6646,7 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 ; 0x6a8c
 
 AIAction_AttackEffect: ; 6a8c (1:6a8c)
-	ld a, $06
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jr c, .confusion_damage
@@ -6713,7 +6713,7 @@ AIAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 
 AIAction_6b07: ; 6b07 (1:6b07)
 	call Func_7415
-	ld a, $03
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
@@ -6721,7 +6721,7 @@ AIAction_6b07: ; 6b07 (1:6b07)
 ; 0x6b15
 
 AIAction_6b15: ; 6b15 (1:6b15)
-	ld a, $04
+	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
