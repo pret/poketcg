@@ -2464,7 +2464,7 @@ DrawDuelHUDs: ; 503a (1:503a)
 	inc c
 	call CheckPrintPoisoned
 	inc c
-	call CheckPrintDoublePoisoned
+	call CheckPrintDoublePoisoned ; if double poisoned, print a second poison icon
 	call SwapTurn
 	lb de, 7, 0 ; coordinates for opponent's arena card name and info icons
 	lb bc, 3, 1 ; coordinates for opponent's attached energies and HP bar
@@ -2477,7 +2477,7 @@ DrawDuelHUDs: ; 503a (1:503a)
 	dec c
 	call CheckPrintPoisoned
 	dec c
-	call CheckPrintDoublePoisoned
+	call CheckPrintDoublePoisoned ; if double poisoned, print a second poison icon
 	call SwapTurn
 	ret
 ; 0x5093
@@ -5645,9 +5645,9 @@ CheckPrintPoisoned: ; 63bb (1:63bb)
 ; given a card's status in a, print the Poison symbol at bc if it's double poisoned
 CheckPrintDoublePoisoned: ; 63c7 (1:63c7)
 	push af
-	and DOUBLE_POISONED - POISONED
-	jr nz, CheckPrintPoisoned.poison ; double poison (print a second symbol)
-	jr CheckPrintPoisoned.print ; not double poisoned
+	and DOUBLE_POISONED & (POISONED ^ $ff)
+	jr nz, CheckPrintPoisoned.poison ; double poisoned (print SYM_POISONED)
+	jr CheckPrintPoisoned.print ; not double poisoned (print SYM_SPACE)
 ; 0x63ce
 
 ; given a card's status in a, print the Confusion, Sleep, or Paralysis symbol at bc
@@ -6117,7 +6117,7 @@ DuelDataToSave: ; 6729 (1:6729)
 ;	dw address, number_of_bytes_to_copy
 	dw wPlayerDuelVariables, wOpponentDuelVariables - wPlayerDuelVariables
 	dw wOpponentDuelVariables, wPlayerDeck - wOpponentDuelVariables
-	dw wPlayerDeck, wNameBuffer + $10 - wPlayerDeck
+	dw wPlayerDeck, wDuelTempList - wPlayerDeck
 	dw wWhoseTurn, wDuelTheme + $1 - wWhoseTurn
 	dw hWhoseTurn, $1
 	dw wRNG1, wRNGCounter + $1 - wRNG1
@@ -6824,12 +6824,12 @@ Func_6ba2: ; 6ba2 (1:6ba2)
 
 ; apply and/or refresh status conditions and other events that trigger between turns
 HandleBetweenTurnsEvents: ; 6baf (1:6baf)
-	call IsArenaPokemonAsleepOrDoublePoisoned
+	call IsArenaPokemonAsleepOrPoisoned
 	jr c, .something_to_handle
 	cp PARALYZED
 	jr z, .something_to_handle
 	call SwapTurn
-	call IsArenaPokemonAsleepOrDoublePoisoned
+	call IsArenaPokemonAsleepOrPoisoned
 	call SwapTurn
 	jr c, .something_to_handle
 	call DiscardAttachedPluspowers
@@ -6839,8 +6839,8 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ret
 .something_to_handle
 	; either:
-	; 1. turn holder's arena Pokemon is paralyzed, asleep or double poisoned
-	; 2. non-turn holder's arena Pokemon is asleep or double poisoned
+	; 1. turn holder's arena Pokemon is paralyzed, asleep, poisoned or double poisoned
+	; 2. non-turn holder's arena Pokemon is asleep, poisoned or double poisoned
 	call Func_3b21
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -6923,14 +6923,16 @@ DiscardAttachedDefenders: ; 6c56 (1:6c56)
 	jp MoveCardToDiscardPileIfInArena
 ; 0x6c68
 
-; return carry if the turn holder's arena Pokemon card is double poisoned or asleep.
+; return carry if the turn holder's arena Pokemon card is asleep, poisoned, or double poisoned.
 ; also, if confused, paralyzed, or asleep, return the status condition in a.
-IsArenaPokemonAsleepOrDoublePoisoned: ; 6c68 (1:6c68)
+IsArenaPokemonAsleepOrPoisoned: ; 6c68 (1:6c68)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	and DOUBLE_POISONED
+	; note that POISONED | DOUBLE_POISONED is the same as just DOUBLE_POISONED ($c0)
+	; poison status masking is normally done with PSN_DBLPSN ($f0)
+	and POISONED | DOUBLE_POISONED
 	jr nz, .set_carry
 	ld a, [hl]
 	and CNF_SLP_PRZ

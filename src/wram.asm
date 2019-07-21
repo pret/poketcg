@@ -1285,7 +1285,7 @@ wCoinTossScreenTextID:: ; ce4e
 
 ; set to PLAYER_TURN in the "Your Play Area" screen
 ; set to OPPONENT_TURN in the  "Opp Play Area" screen
-; set to [hWhoseTurn] in the "In Play Area" screen
+; alternates when drawing the "In Play Area" screen
 wCheckMenuPlayAreaWhichDuelist:: ; ce50
 	ds $1
 
