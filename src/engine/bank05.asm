@@ -84,14 +84,19 @@ Func_14078: ; 14078 (5:4078)
 
 	INCROM $1409e, $140ae
 
-Func_140ae: ; 140ae (5:40ae)
-	xor a
-	call Func_140b5
+; returns carry if damage dealt from any of
+; a card's moves knocks out defending Pokémon
+; input:
+; hTempPlayAreaLocation_ff9d = location of attacking card to consider
+CheckIfAnyMoveKnocksOutDefendingCard: ; 140ae (5:40ae)
+	xor a ; first move
+	call CheckIfMoveKnocksOutDefendingCard
 	ret c
-	ld a, $01
+	ld a, $01 ; second move
+; fallthrough
 
-Func_140b5: ; 140b5 (5:40b5)
-	call Func_143e5
+CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
+	call CalculateSelectedMoveDamageDoneToDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
@@ -138,7 +143,12 @@ Func_1424b: ; 1424b (5:424b)
 Func_1433d: ; 1433d (5:433d)
 	INCROM $1433d, $143e5
 
-Func_143e5: ; 143e5 (5:43e5)
+; stores in wDamage, wccbb and wccbc the calculated damage
+; done to the defending Pokémon by a given card and move
+; input:
+; a = move index to take into account
+; hTempPlayAreaLocation_ff9d = location of attacking card to consider
+CalculateSelectedMoveDamageDoneToDefendingCard: ; 143e5 (5:43e5)
 	ld [wSelectedMoveIndex], a
 	ld e, a
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -176,9 +186,13 @@ Func_143e5: ; 143e5 (5:43e5)
 	ld [wccbb], a
 	ld [wccbc], a
 .asm_1442a
+; if temp. location is active, damage calculation can be done...
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr z, CalculateDamageDoneToDefendingCard
+
+; ...otherwise substatuses need to be temporarily reset to account
+; for the switching, to obtain the right damage calculation...
 	; reset substatus1
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
 	call GetTurnDuelistVariable
@@ -198,6 +212,7 @@ Func_143e5: ; 143e5 (5:43e5)
 	push hl
 	ld [hl], $00
 	call CalculateDamageDoneToDefendingCard
+; ...and subsequently recovered to continue the battle normally
 	pop hl
 	pop af
 	ld [hl], a
@@ -813,7 +828,7 @@ Func_161d5: ; 161d5 (5:61d5)
 Func_1628f: ; 1628f (5:628f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	call Func_140ae
+	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .asm_1629f
 	call Func_1424b
 	jp c, .asm_1629f
