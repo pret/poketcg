@@ -234,7 +234,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00e6                                 ; 0x00e6
 	textpointer Text00e7                                 ; 0x00e7
 	textpointer Text00e8                                 ; 0x00e8
-	textpointer Text00e9                                 ; 0x00e9
+	textpointer IfHeadPlus10IfTails10ToYourselfText                                 ; 0x00e9
 	textpointer Text00ea                                 ; 0x00ea
 	textpointer Text00eb                                 ; 0x00eb
 	textpointer Text00ec                                 ; 0x00ec
@@ -244,14 +244,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00f0                                 ; 0x00f0
 	textpointer IfHeadsNoDamageNextTurnText              ; 0x00f1
 	textpointer Text00f2                                 ; 0x00f2
-	textpointer Text00f3                                 ; 0x00f3
-	textpointer Text00f4                                 ; 0x00f4
+	textpointer DamageCheckIfHeadsPlusDamageText                                 ; 0x00f3
+	textpointer DamageCheckIfHeadsXDamageText                                 ; 0x00f4
 	textpointer AcidCheckText                            ; 0x00f5
 	textpointer TransparencyCheckText                    ; 0x00f6
 	textpointer ConfusionCheckDamageText                 ; 0x00f7
 	textpointer ConfusionCheckRetreatText                ; 0x00f8
 	textpointer PokemonsSleepCheckText                   ; 0x00f9
-	textpointer Text00fa                                 ; 0x00fa
+	textpointer PoisonedIfHeadsConfusedIfTailsText                                 ; 0x00fa
 	textpointer Text00fb                                 ; 0x00fb
 	textpointer Text00fc                                 ; 0x00fc
 	textpointer AttackUnsuccessfulText                   ; 0x00fd

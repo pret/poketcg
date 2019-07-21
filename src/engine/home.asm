@@ -4453,11 +4453,11 @@ Func_16f6: ; 16f6 (0:16f6)
 	xor a
 	ld [wccec], a
 	ld [wEffectFunctionsFeedbackIndex], a
-	ld [wcced], a
+	ld [wEffectFailed], a
 	ld [wIsDamageToSelf], a
 	ld [wccef], a
 	ld [wccf0], a
-	ld [wccf1], a
+	ld [wNoEffectFromStatus], a
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
 
@@ -5175,10 +5175,10 @@ Func_1bb4: ; 1bb4 (0:1bb4)
 	call ExchangeRNG
 	ret
 
-; prints one of the ThereWasNoEffectFrom*Text if wcced contains $1,
-; and WasUnsuccessfulText if wcced contains $2
+; prints one of the ThereWasNoEffectFrom*Text if wEffectFailed contains EFFECT_FAILED_NO_EFFECT,
+; and prints WasUnsuccessfulText if wEffectFailed contains EFFECT_FAILED_UNSUCCESSFUL
 Func_1bca: ; 1bca (0:1bca)
-	ld a, [wcced]
+	ld a, [wEffectFailed]
 	or a
 	ret z
 	cp $1
@@ -9303,16 +9303,22 @@ Func_30a6: ; 30a6 (0:30a6)
 	call BankswitchROM
 	ret
 
-DrawYourOrOppPlayArea: ; 30bc (0:30bc)
+; loads tiles and icons to display Your Play Area / Opp. Play Area screen,
+; and draws the screen according to the turn player
+; input: h -> [wCheckMenuPlayAreaWhichDuelist] and l -> [wCheckMenuPlayAreaWhichLayout]
+; similar to DrawYourOrOppPlayArea (bank 2) except it also draws a wide text box.
+; this is because bank 2's DrawYourOrOppPlayArea is supposed to come from the Check Menu,
+; so the text box is always already there.
+DrawYourOrOppPlayAreaScreen_Bank0: ; 30bc (0:30bc)
 	ld a, h
-	ld [wTurnHolder1], a
+	ld [wCheckMenuPlayAreaWhichDuelist], a
 	ld a, l
-	ld [wTurnHolder2], a
+	ld [wCheckMenuPlayAreaWhichLayout], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(_DrawYourOrOppPlayArea)
+	ld a, BANK(_DrawYourOrOppPlayAreaScreen)
 	call BankswitchROM
-	call _DrawYourOrOppPlayArea
+	call _DrawYourOrOppPlayAreaScreen
 	call DrawWideTextBox
 	pop af
 	call BankswitchROM
