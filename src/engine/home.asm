@@ -4504,7 +4504,7 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 	call ExchangeRNG
 	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
-	ld a, OPPACTION_DEAL_ATTACK_DAMAGE
+	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
 	call SetOppAction_SerialSendDuelData
 ;	fallthrough
 

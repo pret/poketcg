@@ -6496,7 +6496,7 @@ OppActionTable: ; 695e (1:695e)
 	dw OppAction_ExecuteTrainerCardEffectCommands
 	dw OppAction_BeginUseAttack
 	dw OppAction_UseAttack
-	dw OppAction_PlayAttackAnimation_DealAttackDamage
+	dw OppAction_PlayAttackAnimationDealAttackDamage
 	dw OppAction_DrawCard
 	dw OppAction_UsePokemonPower
 	dw OppAction_ExecutePokemonPowerEffect
@@ -6686,7 +6686,7 @@ OppAction_UseAttack: ; 6a8c (1:6a8c)
 	ret
 ; 0x6ab1
 
-OppAction_PlayAttackAnimation_DealAttackDamage: ; 6ab1 (1:6ab1)
+OppAction_PlayAttackAnimationDealAttackDamage: ; 6ab1 (1:6ab1)
 	call PlayAttackAnimation_DealAttackDamage
 	ld a, 1
 	ld [wOpponentTurnEnded], a
