@@ -384,7 +384,7 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	ld a, [wd42a]
 	cp $ff
 	call nz, $4cd4
-	ld hl, wd423
+	ld hl, wAnimationQueue
 	ld c, $07
 .asm_1cb3b
 	push bc

@@ -1545,7 +1545,7 @@ Func_49a8: ; 49a8 (1:49a8)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_49c6
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_49b9
 .asm_49c6
 	call Func_3b31
@@ -2258,7 +2258,7 @@ Func_4e98: ; 4e98 (1:4e98)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4edd
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4ed0
 .asm_4edd
 	call Func_3b31
@@ -2277,7 +2277,7 @@ Func_4e98: ; 4e98 (1:4e98)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4f28
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4ef4
 	ld hl, wNumCardsBeingDrawn
 	inc [hl]
@@ -2342,7 +2342,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4f7d
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4f70
 .asm_4f7d
 	call Func_3b31
@@ -6496,7 +6496,7 @@ OppActionTable: ; 695e (1:695e)
 	dw OppAction_ExecuteTrainerCardEffectCommands
 	dw OppAction_BeginUseAttack
 	dw OppAction_UseAttack
-	dw OppAction_DealAttackDamage
+	dw OppAction_PlayAttackAnimation_DealAttackDamage
 	dw OppAction_DrawCard
 	dw OppAction_UsePokemonPower
 	dw OppAction_ExecutePokemonPowerEffect
@@ -6679,15 +6679,15 @@ OppAction_UseAttack: ; 6a8c (1:6a8c)
 	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 .confusion_damage
-	call DealConfusionDamageToSelf
+	call HandleConfusionDamageToSelf
 	; end the turn if dealing damage to self due to confusion
 	ld a, 1
 	ld [wOpponentTurnEnded], a
 	ret
 ; 0x6ab1
 
-OppAction_DealAttackDamage: ; 6ab1 (1:6ab1)
-	call DealAttackDamage
+OppAction_PlayAttackAnimation_DealAttackDamage: ; 6ab1 (1:6ab1)
+	call PlayAttackAnimation_DealAttackDamage
 	ld a, 1
 	ld [wOpponentTurnEnded], a
 	ret
@@ -7016,7 +7016,7 @@ Func_6cab: ; 6cab (1:6cab)
 	call Func_3b6a
 .asm_6cd8
 	call DoFrame
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_6cd8
 	call Func_6c7e.asm_6c98
 	ret
@@ -7211,7 +7211,102 @@ ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
 ; 0x6e49
 
 Func_6e49: ; 6e49 (1:6e49)
-	INCROM $6e49, $700a
+	call HandleDestinyBondSubstatus
+	call ClearDamageReductionSubstatus2OfKnockedOutPokemon
+	xor a
+	ld [wcce8], a
+	call SwapTurn
+	call Func_6ef6
+	call SwapTurn
+	ld a, [wcce8]
+	or a
+	jr z, .asm_6e86
+	call $6ff7
+	jr c, .asm_6e86
+	call $6fc7
+	ld c, a
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	cp c
+	jr c, .asm_6e86
+	ld a, c
+	call SwapTurn
+	call DrawPrizes
+	call SwapTurn
+	ld a, $01
+	jr .asm_6ecc
+.asm_6e86
+	call Func_6ef6
+	ld a, [wcce8]
+	cp $01
+	jr nz, .asm_6e9f
+	call SwapTurn
+	call $6ff7
+	call SwapTurn
+	jr c, .asm_6e9f
+	ld a, $02
+	jr .asm_6ecc
+.asm_6e9f
+	call SwapTurn
+	call $6eff
+	call SwapTurn
+	call $6eff
+	ld a, [wcce8]
+	or a
+	jr nz, .asm_6ec4
+	xor a
+.asm_6eb2
+	push af
+	call $6f08
+	call SwapTurn
+	call $6f08
+	call SwapTurn
+	call ShiftAllPokemonToFirstPlayAreaSlots
+	pop af
+	ret
+.asm_6ec4
+	ld e, a
+	ld d, $00
+	ld hl, Data_6ed2
+	add hl, de
+	ld a, [hl]
+.asm_6ecc
+	ld [wDuelFinished], a
+	scf
+	jr .asm_6eb2
+; 0x6ed2
+
+Data_6ed2: ; 6ed2 (1:6ed2)
+	db DUEL_NOT_FINISHED, TURN_PLAYER_LOST, TURN_PLAYER_WON, TURN_PLAYER_TIED
+	db TURN_PLAYER_LOST, TURN_PLAYER_LOST, TURN_PLAYER_TIED, TURN_PLAYER_LOST
+	db TURN_PLAYER_WON, TURN_PLAYER_TIED, TURN_PLAYER_WON, TURN_PLAYER_WON
+	db TURN_PLAYER_TIED, TURN_PLAYER_LOST, TURN_PLAYER_WON, TURN_PLAYER_TIED
+
+; clears SUBSTATUS2_REDUCE_BY_20, SUBSTATUS2_POUNCE, SUBSTATUS2_GROWL,
+; SUBSTATUS2_TAIL_WAG, and SUBSTATUS2_LEER for each arena Pokemon with 0 HP
+ClearDamageReductionSubstatus2OfKnockedOutPokemon: ; 6ee2 (1:6ee2)
+	call SwapTurn
+	call .clear
+	call SwapTurn
+.clear
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	or a
+	ret nz
+	call ClearDamageReductionSubstatus2
+	ret
+; 0x6ef6
+
+Func_6ef6: ; 6ef6 (1:6ef6)
+	call $6fa5
+	ld hl, wcce8
+	rl [hl]
+	ret
+; 0x6eff
+
+	INCROM $6eff, $700a
 
 ; print one of the "There was no effect from" texts depending
 ; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
@@ -7391,15 +7486,17 @@ PrizeBitmasks: ; 715a (1:715a)
 	db %0, %1, %11, %111, %1111, %11111, %111111
 ; 0x7161
 
-Func_7161: ; 7161 (1:7161)
+; update the turn holder's DUELVARS_PRIZES following that duelist
+; drawing a number of prizes equal to register a
+DrawPrizes: ; 7161 (1:7161)
 	or a
 	ret z
 	ld c, a
 	call CountPrizes
 	sub c
-	jr nc, .asm_716b
+	jr nc, .no_underflow
 	xor a
-.asm_716b
+.no_underflow
 	ld c, a
 	ld b, $00
 	ld hl, PrizeBitmasks
@@ -7555,7 +7652,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_725e
 	push de
 	call DoFrame
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	pop de
 	jr c, .asm_725e
 	ld a, e
@@ -7709,18 +7806,21 @@ Func_741a: ; 741a (1:741a)
 	xor a
 	ld [wd4b0], a
 	push hl
-	farcall $6, $4f9c
+	farcall Func_006_4f9c
 	pop hl
 	jr .loop
 .done
 	ret
 ; 0x7469
 
-Func_7469: ; 7469 (1:7469)
+; this is a simple version of PlayAttackAnimation_DealAttackDamage that doesn't
+; take into account status conditions, damage modifiers, etc, for damage calculation.
+; used for confusion damage to self and for damage to benched Pokemon, for example
+PlayAttackAnimation_DealAttackDamageSimple: ; 7469 (1:7469)
 	push hl
 	push de
-	call Func_7494
-	call Func_7484
+	call PlayMoveAnimation
+	call WaitMoveAnimation
 	pop de
 	pop hl
 	call SubstractHP
@@ -7735,20 +7835,26 @@ Func_7469: ; 7469 (1:7469)
 	ret
 ; 0x7484
 
-Func_7484: ; 7484 (1:7484)
+; if [wLoadedMoveAnimation] != 0, wait until the animation is over
+WaitMoveAnimation: ; 7484 (1:7484)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
 	push de
-.asm_748a
+.anim_loop
 	call DoFrame
-	call Func_3b52
-	jr c, .asm_748a
+	call CheckAnyAnimationPlaying
+	jr c, .anim_loop
 	pop de
 	ret
 ; 0x7494
 
-Func_7494: ; 7494 (1:7494)
+; play move animation
+; input:
+; - [wLoadedMoveAnimation]: animation to play
+; - de: damage dealt by the move (to display the animation with the number)
+; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
+PlayMoveAnimation: ; 7494 (1:7494)
 	ldh a, [hWhoseTurn]
 	push af
 	push hl

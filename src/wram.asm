@@ -161,7 +161,7 @@ wPlayerArenaCardChangedResistance:: ; c2ea
 wPlayerArenaCardSubstatus3:: ; c2eb
 	ds $1
 
-; Each bit represents a prize (1 = not taken ; 0 = taken)
+; each bit represents a prize that this duelist can draw (1 = not drawn ; 0 = drawn)
 wPlayerPrizes:: ; c2ec
 	ds $1
 
@@ -982,6 +982,7 @@ wIsDamageToSelf:: ; cce6
 wcce7:: ; cce7
 	ds $1
 
+wcce8:: ; cce8
 	ds $1
 
 ; used in CopyDeckData
@@ -1299,8 +1300,7 @@ wPrizeCardCursorPosition::
 wce53:: ; ce53
 	ds $2
 
-; same as wDuelInitialPrizes but
-; with upper 2 bits set
+; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
@@ -1990,8 +1990,11 @@ wd421:: ; d421
 wd422:: ; d422
 	ds $1
 
-wd423:: ; d423
-	ds $7
+; holds a list of animations to play
+; as long as any of the slot isn't $ff, there's something to play
+; it may actually not be a queue
+wAnimationQueue:: ; d423
+	ds ANIMATION_QUEUE_LENGTH
 
 wd42a:: ; d42a
 	ds $1
