@@ -2812,19 +2812,21 @@ ExchangeRNG: ; 0f58 (0:0f58)
 	jp c, DuelTransmissionError
 	ret
 
-; sets hAIActionTableIndex to an AI action specified in register a.
-; send 10 bytes of data to the other game from hAIActionTableIndex, hTempCardIndex_ff9f,
+; sets hOppActionTableIndex to an AI action specified in register a.
+; send 10 bytes of data to the other game from hOppActionTableIndex, hTempCardIndex_ff9f,
 ; hTemp_ffa0, and hTempPlayAreaLocation_ffa1, and hTempRetreatCostCards.
 ; finally exchange RNG data.
-SetAIAction_SerialSendDuelData: ; 0f7f (0:0f7f)
+; the receiving side will use this data to read the OPP_ACTION_* value in
+; [hOppActionTableIndex] and match it by calling the correspoding OppAction* function
+SetOppAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	push hl
 	push bc
-	ldh [hAIActionTableIndex], a
+	ldh [hOppActionTableIndex], a
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
 	jr nz, .not_link
-	ld hl, hAIActionTableIndex
+	ld hl, hOppActionTableIndex
 	ld bc, 10
 	call SerialSendBytes
 	call ExchangeRNG
@@ -2834,13 +2836,13 @@ SetAIAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	ret
 ; 0xf9b
 
-; receive 10 bytes of data from wSerialRecvBuf and store them into hAIActionTableIndex,
+; receive 10 bytes of data from wSerialRecvBuf and store them into hOppActionTableIndex,
 ; hTempCardIndex_ff9f, hTemp_ffa0, and hTempPlayAreaLocation_ffa1,
 ; and hTempRetreatCostCards. also exchange RNG data.
 SerialRecvDuelData: ; 0f9b (0:0f9b)
 	push hl
 	push bc
-	ld hl, hAIActionTableIndex
+	ld hl, hOppActionTableIndex
 	ld bc, 10
 	call SerialRecvBytes
 	call ExchangeRNG
@@ -3789,8 +3791,8 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandCardInPlayArea
 	; update the Pokemon's HP with the difference
-	ldh a, [hTempPlayAreaLocation_ff9d]
-	ld a, e ; derp
+	ldh a, [hTempPlayAreaLocation_ff9d] ; derp
+	ld a, e
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld a, [wLoadedCard2HP]
@@ -4368,7 +4370,7 @@ Func_161e: ; 161e (0:161e)
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
 	call Func_7415
-	ld a, $07
+	ld a, EFFECTCMDTYPE_PKMN_POWER_TRIGGER
 	call TryExecuteEffectCommandFunction
 	ret
 ; 0x16ad
@@ -4461,7 +4463,7 @@ Func_16f6: ; 16f6 (0:16f6)
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
 
-; use attack or Pokemon Power
+; Use an attack (from DuelMenu_Attack) or a Pokemon Power (from DuelMenu_PkmnPower)
 UseAttackOrPokemonPower: ; 1730 (0:1730)
 	ld a, [wSelectedMoveIndex]
 	ld [wPlayerAttackingMoveIndex], a
@@ -4473,52 +4475,51 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 	cp POKEMON_POWER
 	jp z, UsePokemonPower
 	call Func_16f6
-	ld a, $1
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, DrawWideTextBox_WaitForInput_ReturnCarry
 	call CheckSandAttackOrSmokescreenSubstatus
-	jr c, .asm_1766
-	ld a, $2
+	jr c, .sand_attack_smokescreen
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jp c, ReturnCarry
-	call Func_1874
-	jr .asm_1777
-.asm_1766
-	call Func_1874
+	call SendAttackDataToLinkOpponent
+	jr .next
+.sand_attack_smokescreen
+	call SendAttackDataToLinkOpponent
 	call HandleSandAttackOrSmokescreenSubstatus
 	jp c, ClearNonTurnTemporaryDuelvars_ResetCarry
-	ld a, $2
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jp c, ReturnCarry
-.asm_1777
-	ld a, $9
-	call SetAIAction_SerialSendDuelData
-	ld a, $6
+.next
+	ld a, OPPACTION_USE_ATTACK
+	call SetOppAction_SerialSendDuelData
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jp c, DealConfusionDamageToSelf
 	call DrawDuelMainScene_PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
-	ld a, $5
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
-	ld a, $a
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_DEAL_ATTACK_DAMAGE
+	call SetOppAction_SerialSendDuelData
 ;	fallthrough
 
-; deal attack damage
-Func_179a: ; 179a (0:179a)
+DealAttackDamage: ; 179a (0:179a)
 	call Func_7415
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
-	jr nz, .asm_17ad
+	jr nz, .deal_damage
 	call SwapTurn
 	call HandleNoDamageOrEffectSubstatus
 	call SwapTurn
-.asm_17ad
+.deal_damage
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	ld a, $3
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call ApplyDamageModifiers_DamageToTarget
 	call Func_189d
@@ -4562,7 +4563,7 @@ Func_17ed: ; 17ed (0:17ed)
 Func_17fb: ; 17fb (0:17fb)
 	ld a, [wTempNonTurnDuelistCardID]
 	push af
-	ld a, $4
+	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
@@ -4610,24 +4611,27 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 ; use Pokemon Power
 UsePokemonPower: ; 184b (0:184b)
 	call Func_7415
-	ld a, $2
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jr c, DisplayUsePokemonPowerScreen_WaitForInput
-	ld a, $5
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
 	jr c, ReturnCarry
-	ld a, $c
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_USE_PKMN_POWER
+	call SetOppAction_SerialSendDuelData
 	call ExchangeRNG
-	ld a, $d
-	call SetAIAction_SerialSendDuelData
-	ld a, $3
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	call SetOppAction_SerialSendDuelData
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
-	ld a, $16
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	call SetOppAction_SerialSendDuelData
 	ret
 
-Func_1874: ; 1874 (0:1874)
+; called by UseAttackOrPokemonPower (on an attack only)
+; in a link duel, it's used to send the other game data about the
+; attack being in use, triggering a call to OppAction_BeginUseAttack in the receiver
+SendAttackDataToLinkOpponent: ; 1874 (0:1874)
 	ld a, [wccec]
 	or a
 	ret nz
@@ -4641,8 +4645,8 @@ Func_1874: ; 1874 (0:1874)
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wPlayerAttackingMoveIndex]
 	ldh [hTemp_ffa0], a
-	ld a, $8
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_BEGIN_ATTACK
+	call SetOppAction_SerialSendDuelData
 	call ExchangeRNG
 	pop af
 	ldh [hTempCardIndex_ff9f], a
@@ -4707,10 +4711,10 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 ; 0x18f9
 
-; use the trainer card with deck index at hTempCardIndex_ff98.
+; play the trainer card with deck index at hTempCardIndex_ff98.
 ; a trainer card is like a move effect, with its own effect commands.
 ; return nc if the card was played, carry if it wasn't.
-UseTrainerCard: ; 18f9 (0:18f9)
+PlayTrainerCard: ; 18f9 (0:18f9)
 	call CheckCantUseTrainerDueToHeadache
 	jr c, .cant_use
 	ldh a, [hWhoseTurn]
@@ -4718,7 +4722,7 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempCardIndex_ff9f], a
 	call LoadNonPokemonCardEffectCommands
-	ld a, $01
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jr nc, .can_use
 .cant_use
@@ -4726,20 +4730,20 @@ UseTrainerCard: ; 18f9 (0:18f9)
 	scf
 	ret
 .can_use
-	ld a, $02
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
 	call TryExecuteEffectCommandFunction
 	jr c, .done
-	ld a, $06
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_PLAY_TRAINER
+	call SetOppAction_SerialSendDuelData
 	call DisplayUsedTrainerCardDetailScreen
 	call ExchangeRNG
-	ld a, $06
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
-	ld a, $05
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
-	ld a, $07
-	call SetAIAction_SerialSendDuelData
-	ld a, $03
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	call SetOppAction_SerialSendDuelData
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ldh a, [hTempCardIndex_ff9f]
 	call MoveHandCardToDiscardPile

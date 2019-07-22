@@ -730,7 +730,7 @@ wSortCardListByID:: ; cbdf
 wcbe0:: ; cbe0
 	ds $1
 
-wAITurnEnded:: ; cbe1
+wOpponentTurnEnded:: ; cbe1
 	ds $1
 
 wOppRNG1:: ; cbe2

@@ -49,7 +49,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, $41a8
 	call LoadNonPokemonCardEffectCommands
-	ld a, $1
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, $41a8
 	farcall $5, $743b
