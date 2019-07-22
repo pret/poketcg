@@ -167,6 +167,32 @@ EFFECTCMDTYPE_PKMN_POWER_TRIGGER    EQU $07
 EFFECTCMDTYPE_AI                    EQU $09
 EFFECTCMDTYPE_UNKNOWN_08            EQU $08
 
+; OppAction_* constants (OppActionTable)
+	const_def
+	const OPPACTION_ERROR                     ; $00
+	const OPPACTION_PLAY_BASIC_PKMN           ; $01
+	const OPPACTION_EVOLVE_PKMN               ; $02
+	const OPPACTION_PLAY_ENERGY               ; $03
+	const OPPACTION_ATTEMPT_RETREAT           ; $04
+	const OPPACTION_FINISH_NO_ATTACK          ; $05
+	const OPPACTION_PLAY_TRAINER              ; $06
+	const OPPACTION_EXECUTE_TRAINER_EFFECTS   ; $07
+	const OPPACTION_BEGIN_ATTACK              ; $08
+	const OPPACTION_USE_ATTACK                ; $09
+	const OPPACTION_DEAL_ATTACK_DAMAGE        ; $0a
+	const OPPACTION_DRAW_CARD                 ; $0b
+	const OPPACTION_USE_PKMN_POWER            ; $0c
+	const OPPACTION_EXECUTE_PKMN_POWER_EFFECT ; $0d
+	const OPPACTION_FORCE_SWITCH_ACTIVE       ; $0e
+	const OPPACTION_NO_ACTION_0F              ; $0f
+	const OPPACTION_NO_ACTION_10              ; $10
+	const OPPACTION_TOSS_COIN_A_TIMES         ; $11
+	const OPPACTION_6B30                      ; $12
+	const OPPACTION_NO_ACTION_13              ; $13
+	const OPPACTION_6B3E                      ; $14
+	const OPPACTION_6B15                      ; $15
+	const OPPACTION_DUEL_MAIN_SCENE           ; $16
+
 ; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01
 NO_DAMAGE_OR_EFFECT_BARRIER      EQU $02

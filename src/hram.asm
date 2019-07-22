@@ -70,7 +70,7 @@ hTempPlayAreaLocation_ff9d:: ; ff9d
 	ds $1
 
 ; index for AIActionTable
-hAIActionTableIndex:: ; ff9e
+hOppActionTableIndex:: ; ff9e
 	ds $1
 
 ; deck index of a card (0-59)

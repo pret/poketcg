@@ -110,7 +110,7 @@ Func_2c08c:
 	push de
 	push af
 	ld a, $11
-	call SetAIAction_SerialSendDuelData
+	call SetOppAction_SerialSendDuelData
 	pop af
 	pop de
 	call SerialSend8Bytes
