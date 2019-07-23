@@ -67,9 +67,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text003f                                 ; 0x003f
 	textpointer Text0040                                 ; 0x0040
 	textpointer DiscardDescription                       ; 0x0041
-	textpointer Text0042                                 ; 0x0042
-	textpointer Text0043                                 ; 0x0043
-	textpointer Text0044                                 ; 0x0044
+	textpointer WillDrawNPrizesText                                 ; 0x0042
+	textpointer DrewNPrizesText                                 ; 0x0043
+	textpointer DuelistPlacedACardText                                 ; 0x0044
 	textpointer Text0045                                 ; 0x0045
 	textpointer Text0046                                 ; 0x0046
 	textpointer Text0047                                 ; 0x0047
@@ -128,8 +128,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoneText                                 ; 0x007c
 	textpointer YesText                                 ; 0x007d
 	textpointer CardsText                                 ; 0x007e
-	textpointer Text007f                                 ; 0x007f
-	textpointer Text0080                                 ; 0x0080
+	textpointer TookAllThePrizesText                                 ; 0x007f
+	textpointer ThereAreNoPokemonInPlayAreaText                                 ; 0x0080
 	textpointer WasKnockedOutText                        ; 0x0081
 	textpointer HavePokemonPowerText                     ; 0x0082
 	textpointer UnableToUsePkmnPowerDueToToxicGasText    ; 0x0083
@@ -272,8 +272,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoDamageOrEffectDueToTransparencyText    ; 0x010c
 	textpointer Text010d                                 ; 0x010d
 	textpointer SelectPkmnOnBenchToSwitchWithActiveText  ; 0x010e
-	textpointer Text010f                                 ; 0x010f
-	textpointer Text0110                                 ; 0x0110
+	textpointer SelectPokemonToPlaceInTheArenaText                                 ; 0x010f
+	textpointer DuelistIsSelectingPokemonToPlaceInArenaText                                 ; 0x0110
 	textpointer Text0111                                 ; 0x0111
 	textpointer Text0112                                 ; 0x0112
 	textpointer Text0113                                 ; 0x0113

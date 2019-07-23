@@ -4023,8 +4023,8 @@ PutHandCardInPlayArea: ; 14d2 (0:14d2)
 	ret
 ; 0x14dd
 
-; move the play area Pokemon card of the turn holder at CARD_LOCATION_PLAY_AREA + a
-; to the discard pile
+; move the Pokemon card of the turn holder in the
+; PLAY_AREA_* location given in e to the discard pile
 MovePlayAreaCardToDiscardPile: ; 14dd (0:14dd)
 	call EmptyPlayAreaSlot
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA

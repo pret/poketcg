@@ -780,6 +780,8 @@ wcbfa:: ; cbfa
 wcbfb:: ; cbfb
 	ds $1
 
+; used by Func_5805 to store the remaining Prizes, so that if more than that
+; amount would be taken, only the remaining amount is taken
 wcbfc:: ; cbfc
 	ds $1
 
@@ -959,7 +961,12 @@ wSelectedMoveIndex:: ; ccc6
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
 wNoDamageOrEffect:: ; ccc7
-	ds $2
+	ds $1
+
+; used by CountKnockedOutPokemon and Func_5805 to store the amount
+; of prizes to take (equal to the number of Pokemon knocked out)
+wccc8:: ; ccc8
+	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
 wGotHeadsFromConfusionCheck:: ; ccc9

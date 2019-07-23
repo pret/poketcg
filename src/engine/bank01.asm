@@ -852,7 +852,7 @@ CheckAbleToRetreat: ; 45bb (1:45bb)
 	ret c
 	call CheckIfActiveCardParalyzedOrAsleep
 	ret c
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	jr c, .unable_to_retreat
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2794,7 +2794,7 @@ PracticeDuel_ReplaceKnockedOutPokemon: ; 52b0 (1:52b0)
 	cp PLAY_AREA_BENCH_1
 	ret z
 	; if player selected Drowzee instead (which is at PLAY_AREA_BENCH_2)
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ldtx hl, SelectStaryuPracticeDuelText
 	scf
 ;	fallthrough
@@ -3700,8 +3700,100 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	ret
 ; 0x57df
 
-Func_57df:
-	INCROM $57df,  $5892
+Func_57df: ; 57df (1:57df)
+	push hl
+	call EmptyScreen
+	lb de, 0, 0
+	lb bc, 20, 18
+	call DrawRegularTextBox
+	ld a, 19
+	lb de, 1, 1
+	call InitTextPrintingInTextbox
+	call SetNoLineSeparation
+	pop hl
+	call ProcessTextFromID
+	call EnableLCD
+	call SetOneLineSeparation
+	call WaitForWideTextBoxInput
+	ret
+; 0x5805
+
+Func_5805: ; 5805 (1:5805)
+	call Func_3b31
+	ld a, [wccc8]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr nz, .opponent
+
+	ldtx hl, WillDrawNPrizesText
+	call DrawWideTextBox_WaitForInput
+	ld a, [wccc8]
+	call Func_310a
+	ld hl, hTemp_ffa0
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	call SerialSend8Bytes
+.asm_582f
+	call ExchangeRNG
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	scf
+	ret
+
+.opponent
+	call Func_588a
+	ldtx hl, WillDrawNPrizesText
+	call DrawWideTextBox_PrintText
+	call CountPrizes
+	ld [wcbfc], a
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opponent
+	call Func_2bd7
+	ld c, DECK_SIZE
+.asm_5858
+	call DoFrame
+	dec c
+	jr nz, .asm_5858
+	jr .asm_586f
+
+.link_opponent
+	call SerialRecv8Bytes
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld [hl], d
+	ld a, e
+	cp $ff
+	call nz, AddCardToHand
+.asm_586f
+	ld a, [wcbfc]
+	ld hl, wccc8
+	cp [hl]
+	jr nc, .asm_587e
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+.asm_587e
+	farcall Func_82b6
+	ldtx hl, DrewNPrizesText
+	call DrawWideTextBox_WaitForInput
+	jr .asm_582f
+; 0x588a
+
+Func_588a: ; 588a (1:588a)
+	ld l, PLAYER_TURN
+	ldh a, [hWhoseTurn]
+	ld h, a
+	jp DrawYourOrOppPlayAreaScreen_Bank0
+; 0x5892
 
 ; display the previous valid card page
 DisplayPreviousCardPage: ; 5892 (1:5892)
@@ -4985,7 +5077,7 @@ PrintPokemonCardLength: ; 5f9a (1:5f9a)
 ; return carry if the turn holder has any Pokemon with non-zero HP on the bench.
 ; return how many Pokemon with non-zero HP in b.
 ; does this by calculating how many Pokemon in play area minus one
-HasAlivePokemonOnBench: ; 5fd9 (1:5fd9)
+HasAlivePokemonInBench: ; 5fd9 (1:5fd9)
 	ld a, $01
 	jr _HasAlivePokemonInPlayArea
 
@@ -5186,7 +5278,7 @@ Func_60dd: ; 60dd (1:60dd)
 	and SELECT
 	jr z, .asm_60f2
 .asm_6119
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ld a, $01
 	ld [wcbd4], a
 .asm_6121
@@ -6698,7 +6790,7 @@ OppAction_ForceSwitchActive: ; 6aba (1:6aba)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ld a, $01
 	ld [wcbd4], a
 .force_selection
@@ -7221,9 +7313,9 @@ Func_6e49: ; 6e49 (1:6e49)
 	ld a, [wcce8]
 	or a
 	jr z, .asm_6e86
-	call $6ff7
+	call Func_6ff7
 	jr c, .asm_6e86
-	call $6fc7
+	call CountKnockedOutPokemon
 	ld c, a
 	call SwapTurn
 	call CountPrizes
@@ -7233,7 +7325,7 @@ Func_6e49: ; 6e49 (1:6e49)
 	jr c, .asm_6e86
 	ld a, c
 	call SwapTurn
-	call DrawPrizes
+	call TakeAPrizes
 	call SwapTurn
 	ld a, $01
 	jr .asm_6ecc
@@ -7243,25 +7335,25 @@ Func_6e49: ; 6e49 (1:6e49)
 	cp $01
 	jr nz, .asm_6e9f
 	call SwapTurn
-	call $6ff7
+	call Func_6ff7
 	call SwapTurn
 	jr c, .asm_6e9f
 	ld a, $02
 	jr .asm_6ecc
 .asm_6e9f
 	call SwapTurn
-	call $6eff
+	call Func_6eff
 	call SwapTurn
-	call $6eff
+	call Func_6eff
 	ld a, [wcce8]
 	or a
 	jr nz, .asm_6ec4
 	xor a
 .asm_6eb2
 	push af
-	call $6f08
+	call MoveAllTurnHolderKnockedOutPokemonToDiscardPile
 	call SwapTurn
-	call $6f08
+	call MoveAllTurnHolderKnockedOutPokemonToDiscardPile
 	call SwapTurn
 	call ShiftAllPokemonToFirstPlayAreaSlots
 	pop af
@@ -7300,13 +7392,195 @@ ClearDamageReductionSubstatus2OfKnockedOutPokemon: ; 6ee2 (1:6ee2)
 ; 0x6ef6
 
 Func_6ef6: ; 6ef6 (1:6ef6)
-	call $6fa5
+	call Func_6fa5
 	ld hl, wcce8
 	rl [hl]
 	ret
 ; 0x6eff
 
-	INCROM $6eff, $700a
+Func_6eff: ; 6eff (1:6eff)
+	call ReplaceKnockedOutPokemon
+	ld hl, wcce8
+	rl [hl]
+	ret
+; 0x6f08
+
+; for each Pokemon in the turn holder's play area (arena and bench),
+; move that card to the discard pile if its HP is 0
+MoveAllTurnHolderKnockedOutPokemonToDiscardPile: ; 6f08 (1:6f08)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld l, DUELVARS_ARENA_CARD_HP
+	ld e, PLAY_AREA_ARENA
+.loop
+	ld a, [hl]
+	or a
+	jr nz, .next
+	push hl
+	push de
+	call MovePlayAreaCardToDiscardPile
+	pop de
+	pop hl
+.next
+	inc hl
+	inc e
+	dec d
+	jr nz, .loop
+	ret
+; 0x6f23
+
+; have the turn holder replace the arena Pokemon card when it's been knocked out.
+; if there are no Pokemon cards in the turn holder's bench, return carry.
+ReplaceKnockedOutPokemon: ; 6f23 (1:6f23)
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	call ClearAllStatusConditions
+	call HasAlivePokemonInBench
+	jr nc, .can_replace_pokemon
+
+; if we made it here, the duelist can't replace the knocked out Pokemon
+	bank1call DrawDuelMainScene
+	ldtx hl, ThereAreNoPokemonInPlayAreaText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	scf
+	ret
+
+.can_replace_pokemon
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr nz, .opponent
+
+; prompt the player to replace the knocked out Pokemon with one from bench
+	bank1call DrawDuelMainScene
+	ldtx hl, SelectPokemonToPlaceInTheArenaText
+	call DrawWideTextBox_WaitForInput
+	ld a, $01
+	ld [wcbd4], a
+	ld a, PRACTICEDUEL_PLAY_STARYU_FROM_BENCH
+	call DoPracticeDuelAction
+.select_pokemon
+	call OpenPlayAreaScreenForSelection
+	jr c, .select_pokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call SerialSend8Bytes
+
+; replace the arena Pokemon with the one at location [hTempPlayAreaLocation_ff9d]
+.replace_pokemon
+	call Func_3b31
+	ld a, PRACTICEDUEL_REPLACE_KNOCKED_OUT_POKEMON
+	call DoPracticeDuelAction
+	jr c, .select_pokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+	call SwapPlayAreaPokemon
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ldtx hl, DuelistPlacedACardText
+	bank1call DisplayCardDetailScreen
+	call ExchangeRNG
+	or a
+	ret
+
+; the AI opponent replaces the knocked out Pokemon with one from bench
+.opponent
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opponent
+	call Func_2bcf
+	ldh a, [hTemp_ffa0]
+	ldh [hTempPlayAreaLocation_ff9d], a
+	jr .replace_pokemon
+
+; wait for link opponent to replace the knocked out Pokemon with one from bench
+.link_opponent
+	bank1call DrawDuelMainScene
+	ldtx hl, DuelistIsSelectingPokemonToPlaceInArenaText
+	call DrawWideTextBox_PrintText
+	call SerialRecv8Bytes
+	ldh [hTempPlayAreaLocation_ff9d], a
+	jr .replace_pokemon
+; 0x6fa5
+
+Func_6fa5: ; 6fa5 (1:6fa5)
+	call CountKnockedOutPokemon
+	ret nc
+	; at least one Pokemon knocked out
+	call SwapTurn
+	bank1call Func_5805
+	call SwapTurn
+	ret nc
+	call SwapTurn
+	bank1call DrawDuelMainScene
+	ldtx hl, TookAllThePrizesText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	call SwapTurn
+	scf
+	ret
+; 0x6fc7
+
+; return in wccc8 the amount of Pokemon in the turn holder's
+; play area that are still there despite having 0 HP.
+; that is, the number of Pokemon that have just been knocked out.
+; Clefairy Doll and Mysterious Fossil don't count.
+CountKnockedOutPokemon: ; 6fc7 (1:6fc7)
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld d, h
+	ld e, DUELVARS_ARENA_CARD
+	ld b, PLAY_AREA_ARENA
+	ld c, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [de]
+	cp -1
+	jr z, .next ; jump if no Pokemon in this location
+	ld a, [hl]
+	or a
+	jr nz, .next ; jump if this Pokemon's HP isn't 0
+	; this Pokemon's HP has just become 0
+	ld a, [de]
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	cp TYPE_TRAINER
+	jr z, .next ; jump if this is a trainer card (Clefairy Doll or Mysterious Fossil)
+	inc b
+.next
+	inc hl
+	inc de
+	dec c
+	jr nz, .loop
+	ld a, b
+	ld [wccc8], a
+	or a
+	ret z
+	scf
+	ret
+; 0x6ff7
+
+Func_6ff7: ; 6ff7 (1:6ff7)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, DUELVARS_ARENA_CARD_HP
+.loop
+	ld a, [hli]
+	or a
+	jr nz, .non_zero_hp
+	dec c
+	jr nz, .loop
+	scf
+	ret
+.non_zero_hp
+	or a
+	ret
+; 0x700a
 
 ; print one of the "There was no effect from" texts depending
 ; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
@@ -7488,7 +7762,7 @@ PrizeBitmasks: ; 715a (1:715a)
 
 ; update the turn holder's DUELVARS_PRIZES following that duelist
 ; drawing a number of prizes equal to register a
-DrawPrizes: ; 7161 (1:7161)
+TakeAPrizes: ; 7161 (1:7161)
 	or a
 	ret z
 	ld c, a

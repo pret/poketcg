@@ -277,15 +277,15 @@ DiscardDescription: ; 36757 (d:6757)
 	line "a Pokémon Power)"
 	done
 
-Text0042: ; 367cc (d:67cc)
+WillDrawNPrizesText: ; 367cc (d:67cc)
 	text "<RAMNAME> will draw <RAMNUM> Prize(s)."
 	done
 
-Text0043: ; 367e5 (d:67e5)
+DrewNPrizesText: ; 367e5 (d:67e5)
 	text "<RAMNAME> drew <RAMNUM> Prize(s)."
 	done
 
-Text0044: ; 367f9 (d:67f9)
+DuelistPlacedACardText: ; 367f9 (d:67f9)
 	text "<RAMNAME> placed"
 	line "a <RAMTEXT>."
 	done
@@ -561,12 +561,12 @@ CardsText: ; 36e63 (d:6e63)
 	text "Cards"
 	done
 
-Text007f: ; 36e6a (d:6e6a)
+TookAllThePrizesText: ; 36e6a (d:6e6a)
 	text "<RAMNAME> took"
 	line "all the Prizes!"
 	done
 
-Text0080: ; 36e82 (d:6e82)
+ThereAreNoPokemonInPlayAreaText: ; 36e82 (d:6e82)
 	text "There are no Pokémon"
 	line "in <RAMNAME>'s Play Area!"
 	done

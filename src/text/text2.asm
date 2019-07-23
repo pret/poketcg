@@ -126,12 +126,12 @@ SelectPkmnOnBenchToSwitchWithActiveText: ; 38533 (e:4533)
 	line "to switch with the Active Pokémon."
 	done
 
-Text010f: ; 38575 (e:4575)
+SelectPokemonToPlaceInTheArenaText: ; 38575 (e:4575)
 	text "Select a Pokémon to place"
 	line "in the Arena."
 	done
 
-Text0110: ; 3859e (e:459e)
+DuelistIsSelectingPokemonToPlaceInArenaText: ; 3859e (e:459e)
 	text "<RAMNAME> is selecting a Pokémon"
 	line "to place in the Arena."
 	done
