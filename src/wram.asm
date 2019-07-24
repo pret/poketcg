@@ -1293,12 +1293,12 @@ wce51:: ; ce51
 ; in the display of play area.
 ; note that it's used in neither
 ; player's nor opponent's alone.
-wPlayAreaCursorPosition:: ; ce52
+wInPlayAreaCursorPosition:: ; ce52
 	ds $1
 
 ; pointer to the table which contains
 ; information for each key-press.
-wPlayAreaInputTablePointer:: ; ce53
+wInPlayAreaInputTablePointer:: ; ce53
 	ds $2
 
 wce55:: ; ce55
@@ -1307,12 +1307,12 @@ wce55:: ; ce55
 ; it's used for restore the position of cursor
 ; when going into another view, and returning to
 ; the previous view.
-wPlayAreaPreservedPosition:: ; ce57
+wInPlayAreaPreservedPosition:: ; ce57
 	ds $1
 
 ; it's used for checking if the player changed
 ; the cursor in the play area view.
-wPlayAreaPreservedPosition_2:: ; ce58
+wInPlayAreaTemporaryCursorPosition:: ; ce58
 	ds $1
 
 wce59:: ; ce59
@@ -1416,7 +1416,7 @@ wcea1:: ; cea1
 ; it increases from 0x00 to 0xff.
 ; the game makes its blinking cursor by this.
 ; note that the check command contains the pokemon glossary.
-wCheckCommandCounter:: ; cea3
+wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
 wNamingScreenCursorY:: ; cea4

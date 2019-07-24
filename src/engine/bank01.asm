@@ -823,7 +823,7 @@ DuelMenuShortcut_BothActivePokemon: ; 458e (1:458e)
 ; 0x4597
 
 Func_4597: ; 4597 (1:4597)
-	call Func_30a6
+	call OpenInPlayAreaScreen_FromSelectButton
 	ret c
 	call Func_45a9
 	ret c
@@ -6369,7 +6369,7 @@ Func_6862: ; 6862 (1:6862)
 	ld a, [wcbff]
 	or a
 	jr nz, .asm_68ad
-	call Func_30a6
+	call OpenInPlayAreaScreen_FromSelectButton
 	jr .return_carry
 .asm_68ad
 	call Func_4597

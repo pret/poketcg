@@ -9286,14 +9286,14 @@ Func_3096: ; 3096 (0:3096)
 	call BankswitchROM
 	ret
 
-Func_30a6: ; 30a6 (0:30a6)
+OpenInPlayAreaScreen_FromSelectButton: ; 30a6 (0:30a6)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(HandlePlayAreaView)
+	ld a, BANK(OpenInPlayAreaScreen)
 	call BankswitchROM
 	ld a, $1
 	ld [wIsFromSelectButton], a
-	call HandlePlayAreaView
+	call OpenInPlayAreaScreen
 	pop bc
 	ld a, b
 	call BankswitchROM

@@ -155,12 +155,12 @@ _CopyCardNameAndLevel_HalfwidthText:
 ; this function is called when the player is shown the appearance of the play area.
 ; it can be called in the command window from either pressing select button
 ; or selecting check command.
-HandlePlayAreaView: ; 180d5 (6:40d5)
+OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld a, $05
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 .start
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	farcall $2, $42ce
 	call EnableLCD
 	call IsClairvoyanceActive
@@ -172,12 +172,12 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 .clairvoyance_on
 	ld de, PlayAreaViewTransitionTable2
 .clairvoyance_off
-	ld hl, wPlayAreaInputTablePointer
+	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, [wPlayAreaCursorPosition]
-	call PrintCardName_HandlePlayAreaView
+	ld a, [wInPlayAreaCursorPosition]
+	call PrintCardName_OpenInPlayAreaScreen
 .on_frame
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -198,21 +198,21 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 	jr nz, .toggle_view
 
 .handle_input
-	ld a, [wPlayAreaCursorPosition]
-	ld [wPlayAreaPreservedPosition_2], a
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaTemporaryCursorPosition], a
 	call HandleInput_PlayArea
 	jr c, .pressed
 
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	cp $10 ; player's hand
-	jp z, ShowPlayerHand_HandlePlayAreaView
+	jp z, ShowPlayerHand_OpenInPlayAreaScreen
 	cp $11 ; opponent's hand
-	jp z, ShowOpponentHand_HandlePlayAreaView
+	jp z, ShowOpponentHand_OpenInPlayAreaScreen
 
 	; check if the cursor moved.
-	ld hl, wPlayAreaPreservedPosition_2
+	ld hl, wInPlayAreaTemporaryCursorPosition
 	cp [hl]
-	call nz, PrintCardName_HandlePlayAreaView
+	call nz, PrintCardName_OpenInPlayAreaScreen
 	
 	jr .on_frame
 
@@ -238,16 +238,16 @@ HandlePlayAreaView: ; 180d5 (6:40d5)
 	call HandleInput_PlayArea.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
-	ld a, [wPlayAreaCursorPosition]
-	ld [wPlayAreaPreservedPosition], a
-	ld hl, JumpTable_HandlePlayAreaView
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaPreservedPosition], a
+	ld hl, JumpTable_OpenInPlayAreaScreen
 	call JumpToFunctionInTable
-	ld a, [wPlayAreaPreservedPosition]
-	ld [wPlayAreaCursorPosition], a
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
 
 	jp .start
 
-PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
+PrintCardName_OpenInPlayAreaScreen: ; 18171 (6:4171)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
@@ -282,7 +282,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	cp $06
 	jr nc, .raw_string
 
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	cp $06
 	jr nc, .opponent_side
 
@@ -315,7 +315,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	ret
 
 .raw_string
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	cp $08
 	jr nc, .opponent_side_raw_string
 	call PrintTextNoDelay
@@ -327,7 +327,7 @@ PrintCardName_HandlePlayAreaView: ; 18171 (6:4171)
 	call SwapTurn
 	ret
 
-ShowPlayerHand_HandlePlayAreaView:
+ShowPlayerHand_OpenInPlayAreaScreen:
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -335,11 +335,11 @@ ShowPlayerHand_HandlePlayAreaView:
 	bank1call OpenTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [wPlayAreaPreservedPosition]
-	ld [wPlayAreaCursorPosition], a
-	jp HandlePlayAreaView.start
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
+	jp OpenInPlayAreaScreen.start
 
-ShowOpponentHand_HandlePlayAreaView:
+ShowOpponentHand_OpenInPlayAreaScreen:
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -347,31 +347,31 @@ ShowOpponentHand_HandlePlayAreaView:
 	bank1call OpenNonTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [wPlayAreaPreservedPosition]
-	ld [wPlayAreaCursorPosition], a
-	jp HandlePlayAreaView.start
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
+	jp OpenInPlayAreaScreen.start
 
-JumpTable_HandlePlayAreaView ; (6:4228)
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x00: my bench pokemon 1
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x01: my bench pokemon 2
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x02: my bench pokemon 3
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x03: my bench pokemon 4
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x04: my bench pokemon 5
-	dw ShowPlayerAreaPokemon_HandlePlayAreaView ; 0x05: my active pokemon
-	dw ShowPlayerHand_HandlePlayAreaView_2 ; 0x06: my hand
-	dw ShowPlayerDiscardPile_HandlePlayAreaView ; 0x07: my discard pile
+JumpTable_OpenInPlayAreaScreen ; (6:4228)
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x00: my bench pokemon 1
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x01: my bench pokemon 2
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x02: my bench pokemon 3
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x03: my bench pokemon 4
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x04: my bench pokemon 5
+	dw ShowPlayerAreaPokemon_OpenInPlayAreaScreen ; 0x05: my active pokemon
+	dw ShowPlayerHand_OpenInPlayAreaScreen_2 ; 0x06: my hand
+	dw ShowPlayerDiscardPile_OpenInPlayAreaScreen ; 0x07: my discard pile
 	
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x08: opp. active pokemon
-	dw ShowOpponentHand_HandlePlayAreaView_2 ; 0x09: opp. hand
-	dw ShowOpponentDiscardPile_HandlePlayAreaView ; 0x0a: opp. discard pile
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0b: opp. bench pokemon 1
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0c: opp. bench pokemon 2
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0d: opp. bench pokemon 3
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0e: opp. bench pokemon 4
-	dw ShowOpponentAreaPokemon_HandlePlayAreaView ; 0x0f: opp. bench pokemon 5
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x08: opp. active pokemon
+	dw ShowOpponentHand_OpenInPlayAreaScreen_2 ; 0x09: opp. hand
+	dw ShowOpponentDiscardPile_OpenInPlayAreaScreen ; 0x0a: opp. discard pile
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x0b: opp. bench pokemon 1
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x0c: opp. bench pokemon 2
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x0d: opp. bench pokemon 3
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x0e: opp. bench pokemon 4
+	dw ShowOpponentAreaPokemon_OpenInPlayAreaScreen ; 0x0f: opp. bench pokemon 5
 
-ShowPlayerAreaPokemon_HandlePlayAreaView:
-	ld a, [wPlayAreaCursorPosition]
+ShowPlayerAreaPokemon_OpenInPlayAreaScreen:
+	ld a, [wInPlayAreaCursorPosition]
 	inc a
 	cp $05 + 1 ; $05: my active pokemon
 	jr nz, .on_bench
@@ -389,8 +389,8 @@ ShowPlayerAreaPokemon_HandlePlayAreaView:
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
-ShowOpponentAreaPokemon_HandlePlayAreaView:
-	ld a, [wPlayAreaCursorPosition]
+ShowOpponentAreaPokemon_OpenInPlayAreaScreen:
+	ld a, [wInPlayAreaCursorPosition]
 	sub $08
 	or a
 	jr z, .on_bench
@@ -410,7 +410,7 @@ ShowOpponentAreaPokemon_HandlePlayAreaView:
 	call SwapTurn
 	ret
 
-ShowPlayerHand_HandlePlayAreaView_2:
+ShowPlayerHand_OpenInPlayAreaScreen_2:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -418,7 +418,7 @@ ShowPlayerHand_HandlePlayAreaView_2:
 	ldh [hWhoseTurn], a
 	ret
 
-ShowOpponentHand_HandlePlayAreaView_2:
+ShowOpponentHand_OpenInPlayAreaScreen_2:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -426,7 +426,7 @@ ShowOpponentHand_HandlePlayAreaView_2:
 	ldh [hWhoseTurn], a
 	ret
 
-ShowPlayerDiscardPile_HandlePlayAreaView:
+ShowPlayerDiscardPile_OpenInPlayAreaScreen:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -434,7 +434,7 @@ ShowPlayerDiscardPile_HandlePlayAreaView:
 	ldh [hWhoseTurn], a
 	ret
 
-ShowOpponentDiscardPile_HandlePlayAreaView:
+ShowOpponentDiscardPile_OpenInPlayAreaScreen:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -460,7 +460,7 @@ TextIDTable_182bb:
 	tx PKMNPowerText
 	tx DoneText
 
-; it's related to wPlayAreaInputTablePointer.
+; it's related to wInPlayAreaInputTablePointer.
 ; with this table, the cursor moves into the proper location by the input.
 ; note that the unit of the position is not a 8x8 tile.
 ; idx-[direction] means the index to get when the input is in the direction.
@@ -506,11 +506,11 @@ PlayAreaViewTransitionTable2:
 HandleInput_PlayArea: ; 183bb (6:43bb)
 	xor a
 	ld [wcfe3], a
-	ld hl, wPlayAreaInputTablePointer
+	ld hl, wInPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -559,11 +559,11 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	ld a, [hl]
 .process_dpad
 	push af
-	ld a, [wPlayAreaCursorPosition]
-	ld [wPlayAreaPreservedPosition], a
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaPreservedPosition], a
 	pop af
 
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 
 	cp $05
 	jr c, .player_area
@@ -583,12 +583,12 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	; no pokemon in player's bench.
 	; then move to player's hand.
 	ld a, $10
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	jr .next
 	
 .bench_pokemon_exists
 	ld b, a
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	cp b
 	jr c, .next
 
@@ -598,13 +598,13 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr z, .on_left
 
 	xor a
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	jr .next
 
 .on_left
 	ld a, b
 	dec a
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	jr .next
 
 .opponent_area
@@ -614,12 +614,12 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr nz, .bench_pokemon_exists_2
 
 	ld a, $11
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	jr .next
 
 .bench_pokemon_exists_2
 	ld b, a
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	sub $0b
 	cp b
 	jr c, .next
@@ -629,18 +629,18 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr z, .on_right
 
 	ld a, $0b
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	jr .next
 
 .on_right
 	ld a, b
 	add $0a
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 .next
 	ld a, $01
 	ld [wcfe3], a
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -659,7 +659,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	call .draw_cursor
 	ld a, $01
 	farcall Func_90fb
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	scf
 	ret
 
@@ -669,7 +669,7 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 	jr z, .skip_sfx
 	call PlaySFX
 .skip_sfx
-	ld hl, wCheckCommandCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $10 - 1
@@ -680,11 +680,11 @@ HandleInput_PlayArea: ; 183bb (6:43bb)
 
 .draw_cursor ; 184a0 (6:44a0)
 	call ZeroObjectPositions
-	ld hl, wPlayAreaInputTablePointer
+	ld hl, wInPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -712,16 +712,16 @@ Func_006_44c8: ; (6:44c8)
 	call Func_006_452b
 
 	xor a
-	ld [wPlayAreaCursorPosition], a
+	ld [wInPlayAreaCursorPosition], a
 	ld de, $4c8e ; this data is stored in bank 2.
-	ld hl, wPlayAreaInputTablePointer
+	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	ld a, $ff
 	ld [wce55], a
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .next
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -750,7 +750,7 @@ Func_006_44c8: ; (6:44c8)
 	call Func_006_4598
 	call Func_006_452b
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	jr .next
 
 .on_select
@@ -965,7 +965,7 @@ GlossaryData_2:
 	ld a, e
 	ld [wceb0], a
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
 	and $03
@@ -988,7 +988,7 @@ GlossaryData_2:
 	jr z, .asm_006_46c6
 	call PlaySFX
 .asm_006_46c6
-	ld hl, wCheckCommandCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -2241,7 +2241,7 @@ NamingScreen_CheckButtonState:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $06
 	cp d
 	jp z, NamingScreen_CheckButtonState
@@ -2267,7 +2267,7 @@ NamingScreen_CheckButtonState:
 	jr z, .asm_006_69f8
 	call PlaySFX
 .asm_006_69f8
-	ld hl, wCheckCommandCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
@@ -3038,7 +3038,7 @@ Func_006_6efb:
 	ld a, h
 	ld [wNamingScreenCursorX], a
 	xor a
-	ld [wCheckCommandCounter], a
+	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
 	jp z, Func_006_6efb
@@ -3064,7 +3064,7 @@ Func_006_6efb:
 	jr z, .asm_006_6f92
 	call PlaySFX
 .asm_006_6f92
-	ld hl, wCheckCommandCounter
+	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
