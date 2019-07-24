@@ -121,7 +121,7 @@ Func_14226: ; 14226 (5:4226)
 .check_for_next_card
 	ld a, [hli]
 	ldh [hTempCardIndex_ff98], a
-	cp -1
+	cp $ff
 	ret z
 
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -138,7 +138,12 @@ Func_14226: ; 14226 (5:4226)
 	jr .check_for_next_card
 ; 0x1424b
 
-Func_1424b: ; 1424b (5:424b)
+; returns carry if Pokémon at hTempPlayAreaLocation_ff9d
+; can't use a move or if that selected move doesn't have enough energy
+; input:
+; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+;	wSelectedMoveIndex 		   = selected move to examine
+CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .bench
@@ -161,14 +166,24 @@ Func_1424b: ; 1424b (5:424b)
 	ret c
 	
 .bench
-	call Func_14279
-	ret c
+	call CheckIfSelectedMoveCanBeUsed
+	ret c ; can't be used
 	ld a, $0d ; $00001101
 	call CheckLoadedMoveFlag
 	ret
 ; 0x14279
 
-Func_14279: ; 14279 (5:4279)
+; load selected move from Pokémon in hTempPlayAreaLocation_ff9d
+; and checks if there is enough energy to execute the selected move
+; input:
+; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+;	wSelectedMoveIndex 		   = selected move to examine
+; output:
+;	z set if move has required energy
+;	c set	   if no move 
+;	   		OR if it's a Pokémon Power
+;	   		OR if no energy required for move
+CheckIfSelectedMoveCanBeUsed: ; 14279 (5:4279)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -209,14 +224,14 @@ Func_14279: ; 14279 (5:4279)
 	; check all basic energy cards except colorless
 	ld a, [de]
 	swap a
-	call CheckIfEnoughAttachedEnergy
+	call CheckIfEnoughParticularAttachedEnergy
 	ld a, [de]
-	call CheckIfEnoughAttachedEnergy
+	call CheckIfEnoughParticularAttachedEnergy
 	inc de
 	dec c
 	jr nz, .loop
 
-; running CheckIfEnoughAttachedEnergy back to back like this
+; running CheckIfEnoughParticularAttachedEnergy back to back like this
 ; overwrites the results of a previous call of this function,
 ; however, no move in the game has energy requirements for two
 ; different energy types (excluding colorless), so this routine
@@ -224,7 +239,7 @@ Func_14279: ; 14279 (5:4279)
 ; while all others will necessarily have an energy cost of 0
 ; if moves are added to the game with energy requirements of
 ; two different basic energy types, then this routine only accounts 
-; for the type with the highest index and will have to be fixed
+; for the type with the highest index
 
 	; colorless
 	ld a, [de]
@@ -234,7 +249,7 @@ Func_14279: ; 14279 (5:4279)
 	ld a, [wTempLoadedMoveEnergyCost]
 	ld hl, wTempLoadedMoveEnergyNeededAmount
 	sub [hl]
-	ld c, a
+	ld c, a ; colorless energy still needed
 	ld a, [wTotalAttachedEnergies]
 	sub c
 	sub b
@@ -244,13 +259,15 @@ Func_14279: ; 14279 (5:4279)
 	or a
 	ret z
 
+; being here means the energy cost isn't satisfied,
+; including with colorless energy
 	xor a
 .not_enough
 	cpl
 	inc a
-	ld c, a
+	ld c, a ; colorless energy still needed
 	ld a, [wTempLoadedMoveEnergyNeededAmount]
-	ld b, a
+	ld b, a ; basic energy still needed
 	ld a, [wTempLoadedMoveEnergyNeededType]
 	call Func_1430f
 	ld e, a
@@ -270,7 +287,7 @@ Func_14279: ; 14279 (5:4279)
 ; output:
 ;	z set if enough energy
 ;	c set if not enough of this energy type attached
-CheckIfEnoughAttachedEnergy: ; 142f4 (5:42f4)
+CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 	and %00001111
 	jr nz, .check
 .has_enough
@@ -295,21 +312,26 @@ CheckIfEnoughAttachedEnergy: ; 142f4 (5:42f4)
 	ret
 ; 0x1430f
 
+; outputs data according to the energy type required for move
+; input:
+;	a = energy type
 Func_1430f: ; 1430f (5:430f)
 	push hl
 	push de
 	ld e, a
 	ld d, 0
-	ld hl, Data_1431c
+	ld hl, .data
 	add hl, de
 	ld a, [hl]
 	pop de
 	pop hl
 	ret
-; 0x1431c
 
-Data_1431c: ; 1431c (5:431c)
-	INCROM $1431c, $1433d
+.data
+	db $2, $1, $4, $3, $5, $6, $7
+	
+Func_14323: ; 14323 (5:4323)
+	INCROM $14323, $1433d
 
 Func_1433d: ; 1433d (5:433d)
 	INCROM $1433d, $143e5
@@ -923,9 +945,9 @@ Func_161d5: ; 161d5 (5:61d5)
 	cp 2
 	ret c
 
-	call Func_1628f
+	call CheckIfCardCanKnockOutOrUseSelectedMove
 	jr c, .asm_16258
-	call Func_162a1
+	call CheckIfActivePokemonCanUseAnyNonResidualMove
 	jr nc, .asm_16258
 	call Func_158b2
 	jr c, .asm_16258
@@ -997,22 +1019,59 @@ Func_161d5: ; 161d5 (5:61d5)
 
 	INCROM $16270, $1628f
 
-Func_1628f: ; 1628f (5:628f)
+; returns carry if card at hTempPlayAreaLocation_ff9d
+; can't knock out defending Pokémon
+; input:
+; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+;	wSelectedMoveIndex 		   = selected move to examine
+CheckIfCardCanKnockOutOrUseSelectedMove: ; 1628f (5:628f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_1629f
-	call Func_1424b
-	jp c, .asm_1629f
+	jr nc, .fail
+	call CheckIfCardCanUseSelectedMove
+	jp c, .fail
 	scf
 	ret
-.asm_1629f
+	
+.fail
 	or a
 	ret
 ; 0x162a1
 
-Func_162a1 ; 162a1 (5:62a1)
-	INCROM $162a1, $1633f
+; outputs carry if any of the active Pokémon attacks
+; can be used and are not residual
+CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
+; active card
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+; first move
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .next_move
+	ld a, [wLoadedMoveCategory]
+	and RESIDUAL
+	jr z, .ok
+
+.next_move
+; second move
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .fail
+	ld a, [wLoadedMoveCategory]
+	and RESIDUAL
+	jr z, .ok
+.fail
+	or a
+	ret
+
+.ok
+	scf
+	ret
+; 0x162c8
+
+	INCROM $162c8, $1633f
 
 ; goes through $00 terminated list pointed 
 ; by wcdae and compares it to each card in hand.
