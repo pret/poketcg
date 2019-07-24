@@ -118,32 +118,203 @@ Func_1410a: ; 1410a (5:410a)
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
 	ld hl, wDuelTempList
-.check_for_next_pokemon
+.check_for_next_card
 	ld a, [hli]
 	ldh [hTempCardIndex_ff98], a
-	cp $ff
+	cp -1
 	ret z
+
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
-	jr nc, .check_for_next_pokemon
+	jr nc, .check_for_next_card
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .check_for_next_pokemon
+	jr nz, .check_for_next_card
 	push hl
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
 	pop hl
-	jr .check_for_next_pokemon
+	jr .check_for_next_card
 ; 0x1424b
 
 Func_1424b: ; 1424b (5:424b)
-	INCROM $1424b, $1433d
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .bench
+
+	bank1call HandleCantAttackSubstatus
+	ret c
+	bank1call CheckIfActiveCardParalyzedOrAsleep
+	ret c
+
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	call HandleAmnesiaSubstatus
+	ret c
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
+	call TryExecuteEffectCommandFunction
+	ret c
+	
+.bench
+	call Func_14279
+	ret c
+	ld a, $0d ; $00001101
+	call CheckLoadedMoveFlag
+	ret
+; 0x14279
+
+Func_14279: ; 14279 (5:4279)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld hl, wLoadedMoveName
+	ld a, [hli]
+	or [hl]
+	jr z, .no_move
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	jr nz, .not_pokemon_power
+.no_move
+	lb bc, $00, $00
+	ld e, c
+	scf
+	ret
+	
+.not_pokemon_power
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	bank1call HandleEnergyBurn
+
+	xor a
+	ld [wTempLoadedMoveEnergyCost], a
+	ld [wTempLoadedMoveEnergyNeededAmount], a
+	ld [wTempLoadedMoveEnergyNeededType], a
+
+	ld hl, wAttachedEnergies
+	ld de, wLoadedMoveEnergyCost
+	ld b, 0
+	ld c, (NUM_TYPES / 2) - 1
+	
+.loop
+	; check all basic energy cards except colorless
+	ld a, [de]
+	swap a
+	call CheckIfEnoughAttachedEnergy
+	ld a, [de]
+	call CheckIfEnoughAttachedEnergy
+	inc de
+	dec c
+	jr nz, .loop
+
+; running CheckIfEnoughAttachedEnergy back to back like this
+; overwrites the results of a previous call of this function,
+; however, no move in the game has energy requirements for two
+; different energy types (excluding colorless), so this routine
+; will always just return the result for one type of basic energy,
+; while all others will necessarily have an energy cost of 0
+; if moves are added to the game with energy requirements of
+; two different basic energy types, then this routine only accounts 
+; for the type with the highest index and will have to be fixed
+
+	; colorless
+	ld a, [de]
+	swap a
+	and %00001111
+	ld b, a
+	ld a, [wTempLoadedMoveEnergyCost]
+	ld hl, wTempLoadedMoveEnergyNeededAmount
+	sub [hl]
+	ld c, a
+	ld a, [wTotalAttachedEnergies]
+	sub c
+	sub b
+	jr c, .not_enough
+
+	ld a, [wTempLoadedMoveEnergyNeededAmount]
+	or a
+	ret z
+
+	xor a
+.not_enough
+	cpl
+	inc a
+	ld c, a
+	ld a, [wTempLoadedMoveEnergyNeededAmount]
+	ld b, a
+	ld a, [wTempLoadedMoveEnergyNeededType]
+	call Func_1430f
+	ld e, a
+	ld d, 0
+	scf
+	ret
+; 0x142f4
+
+; takes as input the energy cost of a move for a 
+; particular energy, stored in the lower nibble of a
+; if the move costs some amount of this energy, the lower nibble of a != 0,
+; and this amount is stored in wTempLoadedMoveEnergyCost
+; sets carry flag if not enough energy of this type attached
+; input:
+; 	a   = this energy cost of move (lower nibble)
+; 	hl -> attached energy
+; output:
+;	z set if enough energy
+;	c set if not enough of this energy type attached
+CheckIfEnoughAttachedEnergy: ; 142f4 (5:42f4)
+	and %00001111
+	jr nz, .check
+.has_enough
+	inc hl
+	inc b
+	or a
+	ret
+
+.check
+	ld [wTempLoadedMoveEnergyCost], a
+	sub [hl]
+	jr z, .has_enough
+	jr c, .has_enough
+
+	; not enough energy
+	ld [wTempLoadedMoveEnergyNeededAmount], a
+	ld a, b
+	ld [wTempLoadedMoveEnergyNeededType], a
+	inc hl
+	inc b
+	scf
+	ret
+; 0x1430f
+
+Func_1430f: ; 1430f (5:430f)
+	push hl
+	push de
+	ld e, a
+	ld d, 0
+	ld hl, Data_1431c
+	add hl, de
+	ld a, [hl]
+	pop de
+	pop hl
+	ret
+; 0x1431c
+
+Data_1431c: ; 1431c (5:431c)
+	INCROM $1431c, $1433d
 
 Func_1433d: ; 1433d (5:433d)
 	INCROM $1433d, $143e5
 
-; stores in wDamage, wccbb and wccbc the calculated damage
+; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
 ; input:
 ; a = move index to take into account
@@ -160,33 +331,34 @@ CalculateSelectedMoveDamageDoneToDefendingCard: ; 143e5 (5:43e5)
 	cp POKEMON_POWER
 	jr nz, .not_pokemon_power
 
-	; set wDamage, wccbb and wccbc to zero
+	; set wDamage, wAIMinDamage and wAIMaxDamage to zero
 	ld hl, wDamage
 	xor a
 	ld [hli], a
 	ld [hl], a
-	ld [wccbb], a
-	ld [wccbc], a
+	ld [wAIMinDamage], a
+	ld [wAIMaxDamage], a
 	ld e, a
 	ld d, a
 	ret
 
 .not_pokemon_power
-	; set wccbb and wccbc to damage of move
+	; set wAIMinDamage and wAIMaxDamage to damage of move
 	ld a, [wDamage]
-	ld [wccbb], a
-	ld [wccbc], a
-	ld a, $09
+	ld [wAIMinDamage], a
+	ld [wAIMaxDamage], a
+	ld a, EFFECTCMDTYPE_AI
 	call TryExecuteEffectCommandFunction
-	ld a, [wccbb]
-	ld hl, wccbc
+	ld a, [wAIMinDamage]
+	ld hl, wAIMaxDamage
 	or [hl]
-	jr nz, .asm_1442a
+	jr nz, .calculation
 	ld a, [wDamage]
-	ld [wccbb], a
-	ld [wccbc], a
-.asm_1442a
-; if temp. location is active, damage calculation can be done...
+	ld [wAIMinDamage], a
+	ld [wAIMaxDamage], a
+	
+.calculation
+; if temp. location is active, damage calculation can be done directly...
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr z, CalculateDamageDoneToDefendingCard
@@ -229,14 +401,14 @@ CalculateSelectedMoveDamageDoneToDefendingCard: ; 143e5 (5:43e5)
 ; taking into account weakness/resistance/pluspowers/defenders/etc
 ; and outputs the result capped at a max of $ff
 ; input:
-; wccbb   -> base damage
-; wccbc   -> base damage
-; wDamage -> base damage
+; wAIMinDamage -> base damage
+; wAIMaxDamage -> base damage
+; wDamage      -> base damage
 ; hTempPlayAreaLocation_ff9d = turn holder's card location as the attacker
 CalculateDamageDoneToDefendingCard: ; 14453 (5:4453)
-	ld hl, wccbb
+	ld hl, wAIMinDamage
 	call _CalculateDamageDoneToDefendingCard
-	ld hl, wccbc
+	ld hl, wAIMaxDamage
 	call _CalculateDamageDoneToDefendingCard
 	ld hl, wDamage
 ; fallthrough
@@ -329,7 +501,7 @@ _CalculateDamageDoneToDefendingCard: ; 14462 (5:4462)
 	and DOUBLE_POISONED
 	jr z, .not_poisoned
 	ld c, 20
-	and $40 ; DOUBLE_POISONED - POISONED
+	and DOUBLE_POISONED & (POISONED ^ $ff)
 	jr nz, .add_poison
 	ld c, 10
 .add_poison
@@ -638,7 +810,7 @@ CopyHandCardList: ; 15ea6 (5:5ea6)
 
 Func_15eae: ; 15eae (5:5eae)
 	call CreateHandCardList
-	call SortTempDeckByIdList
+	call SortTempHandByIDList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
 	call CopyHandCardList
@@ -842,33 +1014,38 @@ Func_1628f: ; 1628f (5:628f)
 Func_162a1 ; 162a1 (5:62a1)
 	INCROM $162a1, $1633f
 
-; Goes through $00 terminated list pointed 
+; goes through $00 terminated list pointed 
 ; by wcdae and compares it to each card in hand.
 ; Sorts the hand in wDuelTempList so that the found card IDs
 ; are in the same order as the list pointed by de.
-SortTempDeckByIdList: ; 1633f (5:633f)
-	ld a, [wcdaf]
+SortTempHandByIDList: ; 1633f (5:633f)
+	ld a, [wcdae+1]
 	or a
 	ret z
+
+; start going down the ID list
 	ld d, a
 	ld a, [wcdae]
 	ld e, a
-	ld c, $00
-.next_id
+	ld c, 0
+.next_list_id
+; get this item's ID
+; if $00, list has ended
 	ld a, [de]
 	or a
 	ret z
 	inc de
 	ld hl, wDuelTempList
-	ld b, $00
+	ld b, 0
 	add hl, bc
-
 	ld b, a
-.next_card
+
+; search in the hand card list
+.next_hand_card
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
-	cp $ff
-	jr z, .next_id
+	cp -1
+	jr z, .next_list_id
 	push bc
 	push de
 	call GetCardIDFromDeckIndex
@@ -879,9 +1056,11 @@ SortTempDeckByIdList: ; 1633f (5:633f)
 	jr nz, .not_same
 
 ; found
+; swap this hand card with the spot
+; in hand corresponding to c
 	push bc
 	push hl
-	ld b, $00
+	ld b, 0
 	ld hl, wDuelTempList
 	add hl, bc
 	ld b, [hl]
@@ -893,7 +1072,7 @@ SortTempDeckByIdList: ; 1633f (5:633f)
 	inc c
 .not_same
 	inc hl
-	jr .next_card
+	jr .next_hand_card
 ; 0x1637b
 
 Func_1637b ; 1637b (5:637b)

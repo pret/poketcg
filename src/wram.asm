@@ -1180,11 +1180,20 @@ wcda7:: ; cda7
 
 ; pointer to a list of card IDs for sorting AI hand
 wcdae:: ; cdae
-	ds $1
-wcdaf:: ; cdaf
+	ds $2
+
+	ds $5
+
+wTempLoadedMoveEnergyCost:: ; cdb5
 	ds $1
 
-	ds $e
+wTempLoadedMoveEnergyNeededType:: ; cdb6
+	ds $1
+
+wTempLoadedMoveEnergyNeededAmount:: ; cdb7
+	ds $1
+
+	ds $6
 
 wcdbe:: ; cdbe
 	ds $1
