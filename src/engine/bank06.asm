@@ -161,7 +161,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 .start
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-	farcall $2, $42ce
+	farcall DrawInPlayAreaScreen
 	call EnableLCD
 	call IsClairvoyanceActive
 	jr c, .clairvoyance_on
@@ -564,7 +564,6 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	pop af
 
 	ld [wInPlayAreaCursorPosition], a
-
 	cp $05
 	jr c, .player_area
 	cp $0b
@@ -651,14 +650,14 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 
 	; pressed b button
 	ld a, -1
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	scf
 	ret
 
 .a_button
 	call .draw_cursor
 	ld a, $01
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	ld a, [wInPlayAreaCursorPosition]
 	scf
 	ret
@@ -706,7 +705,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
-Func_006_44c8: ; (6:44c8)
+Func_006_44c8: ; 184c8 (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
@@ -719,7 +718,7 @@ Func_006_44c8: ; (6:44c8)
 	inc hl
 	ld [hl], d
 	ld a, $ff
-	ld [wce55], a
+	ld [wDuelInitialPrizesUpperBitsSet], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 .next
@@ -755,7 +754,7 @@ Func_006_44c8: ; (6:44c8)
 
 .on_select
 	ld a, $01
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 .change_page
 	ld a, [wGlossaryPageNo]
 	xor $01 ; swap page
@@ -894,7 +893,7 @@ Func_006_4598: ; 18598 (6:4598)
 	jr z, .loop
 
 	ld a, -1
-	farcall Func_90fb
+	farcall PlaySFXConfirmOrCancel
 	ret
 
 ; unit: 5 bytes.
@@ -905,6 +904,7 @@ glossary_entry: MACRO
 	tx \2
 	tx \3
 ENDM
+
 GlossaryData_1:
 	glossary_entry 7, Text02fa, Text030c
 	glossary_entry 5, Text02fb, Text030d
@@ -915,6 +915,7 @@ GlossaryData_1:
 	glossary_entry 5, Text0300, Text0312
 	glossary_entry 7, Text0301, Text0313
 	glossary_entry 5, Text0302, Text0314
+  
 GlossaryData_2:
 	glossary_entry 5, Text0303, Text0315
 	glossary_entry 5, Text0304, Text0316
@@ -926,12 +927,12 @@ GlossaryData_2:
 	glossary_entry 6, Text030a, Text031c
 	glossary_entry 6, Text030b, Text031d
 
-; (6:4661)
+Func_006_4661: ; 18661 (6:4661)
 	xor a
 	ld [wcfe3], a
-	ld a, [wceaf]
+	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
-	ld a, [wceb0]
+	ld a, [wCheckMenuCursorYPosition]
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
@@ -961,9 +962,9 @@ GlossaryData_2:
 	call .asm_006_46d4
 	pop de
 	ld a, d
-	ld [wceaf], a
+	ld [wCheckMenuCursorXPosition], a
 	ld a, e
-	ld [wceb0], a
+	ld [wCheckMenuCursorYPosition], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_46a2
@@ -1002,13 +1003,13 @@ GlossaryData_2:
 	ld e, a
 	ld a, $0a
 	ld l, a
-	ld a, [wceaf]
+	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
 	call HtimesL
 	ld a, l
 	add $01
 	ld b, a
-	ld a, [wceb0]
+	ld a, [wCheckMenuCursorYPosition]
 	sla a
 	add $0e
 	ld c, a
@@ -1261,7 +1262,7 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [wWhoseTurn]
 	ld l, a
 .asm_006_5127
-	call Func_30bc
+	call DrawYourOrOppPlayAreaScreen_Bank0
 	pop af
 	ld [wDuelDisplayedScreen], a
 .asm_006_512e

@@ -346,7 +346,7 @@ DuelMainInterface: ; 426d (1:426d)
 	cp DUELIST_TYPE_PLAYER
 	jr z, PrintDuelMenuAndHandleInput
 	cp DUELIST_TYPE_LINK_OPP
-	jp z, Func_6911
+	jp z, DoLinkOpponentTurn
 	; DUELIST_TYPE_AI_OPP
 	xor a
 	ld [wVBlankCounter], a
@@ -417,8 +417,8 @@ DuelMenuFunctionTable: ; 42f1 (1:42f1)
 Func_42fd: ; 42fd (1:42fd)
 	call DrawCardFromDeck
 	call nc, AddCardToHand
-	ld a, $0b
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_DRAW_CARD
+	call SetOppAction_SerialSendDuelData
 	jp PrintDuelMenuAndHandleInput.menu_items_printed
 ; 0x430b
 
@@ -466,18 +466,17 @@ OpenNonTurnHolderDiscardPileScreen: ; 4339 (1:4339)
 OpenTurnHolderDiscardPileScreen: ; 4342 (1:4342)
 	jp OpenDiscardPileScreen
 
-; draw the non-turn holder's hand screen.
-; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
-; and the duelist could also be the opponent.
+; draw the non-turn holder's hand screen. simpler version of OpenPlayerHandScreen
+; used only for checking the cards rather than for playing them.
 OpenNonTurnHolderHandScreen_Simple: ; 4345 (1:4345)
 	call SwapTurn
 	call OpenTurnHolderHandScreen_Simple
 	jp SwapTurn
 ; 0x434e
 
-; draw the turn holder's hand screen.
-; simpler version of OpenPlayerHandScreen where any selected card is directly submitted
-; and the duelist could also be the opponent.
+; draw the turn holder's hand screen. simpler version of OpenPlayerHandScreen
+; used only for checking the cards rather than for playing them.
+; used for example in the "Your Play Area" screen of the Check menu
 OpenTurnHolderHandScreen_Simple: ; 434e (1:434e)
 	call CreateHandCardList
 	jr c, .no_cards_in_hand
@@ -533,8 +532,8 @@ DuelMenu_Done: ; 439a (1:439a)
 	call DoPracticeDuelAction
 	; always jumps on practice duel (no action requires player to select Done)
 	jp c, RestartPracticeDuelTurn
-	ld a, $05
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	call SetOppAction_SerialSendDuelData
 	call ClearNonTurnTemporaryDuelvars
 	ret
 
@@ -560,8 +559,8 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	ld [wBenchSelectedPokemon], a
 	ld a, [wBenchSelectedPokemon]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, $04
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_ATTEMPT_RETREAT
+	call SetOppAction_SerialSendDuelData
 	call AttemptRetreat
 	jr nc, .done
 	call DrawDuelMainScene
@@ -592,8 +591,8 @@ DuelMenu_Retreat: ; 43ab (1:43ab)
 	call ReturnRetreatCostCardsToArena
 	pop af
 	jp c, DuelMainInterface
-	ld a, $04
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_ATTEMPT_RETREAT
+	call SetOppAction_SerialSendDuelData
 	call AttemptRetreat
 
 .done
@@ -637,18 +636,18 @@ OpenPlayerHandScreen: ; 4436 (1:4436)
 	bit TYPE_TRAINER_F, c
 	jr nz, .trainer_card
 	bit TYPE_ENERGY_F, c
-	jr nz, UseEnergyCard
-	call UsePokemonCard
+	jr nz, PlayEnergyCard
+	call PlayPokemonCard
 	jr c, ReloadCardListScreen ; jump if card not played
 	jp DuelMainInterface
 .trainer_card
-	call UseTrainerCard
+	call PlayTrainerCard
 	jr c, ReloadCardListScreen ; jump if card not played
 	jp DuelMainInterface
 
-; use the energy card with deck index at hTempCardIndex_ff98
+; play the energy card with deck index at hTempCardIndex_ff98
 ; c contains the type of energy card being played
-UseEnergyCard: ; 4477 (1:4477)
+PlayEnergyCard: ; 4477 (1:4477)
 	ld a, c
 	cp TYPE_ENERGY_WATER
 	jr nz, .not_water_energy
@@ -673,8 +672,8 @@ UseEnergyCard: ; 4477 (1:4477)
 	ldh [hTemp_ffa0], a
 	call PutHandCardInPlayArea
 	call PrintPlayAreaCardList_EnableLCD
-	ld a, $03
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_PLAY_ENERGY
+	call SetOppAction_SerialSendDuelData
 	call PrintAttachedEnergyToPokemon
 	jp DuelMainInterface
 
@@ -704,11 +703,11 @@ ReloadCardListScreen: ; 44d2 (1:44d2)
 	jp OpenPlayerHandScreen.handle_input
 ; 0x44db
 
-; use a basic Pokemon card on the arena or bench, or place an stage 1 or 2
+; place a basic Pokemon card on the arena or bench, or place an stage 1 or 2
 ; Pokemon card over a Pokemon card already in play to evolve it.
 ; the card to use is loaded in wLoadedCard1 and its deck index is at hTempCardIndex_ff98.
 ; return nc if the card was played, carry if it wasn't.
-UsePokemonCard: ; 44db (1:44db)
+PlayPokemonCard: ; 44db (1:44db)
 	ld a, [wLoadedCard1Stage]
 	or a ; BASIC
 	jr nz, .try_evolve ; jump if the card being played is a Stage 1 or 2 Pokemon
@@ -723,8 +722,8 @@ UsePokemonCard: ; 44db (1:44db)
 	add DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
 	ld [hl], BASIC
-	ld a, $01
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_PLAY_BASIC_PKMN
+	call SetOppAction_SerialSendDuelData
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, 20
@@ -794,8 +793,8 @@ UsePokemonCard: ; 44db (1:44db)
 	ldh [hTempPlayAreaLocation_ffa1], a
 	call EvolvePokemonCard
 	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
-	ld a, $02
-	call SetAIAction_SerialSendDuelData
+	ld a, OPPACTION_EVOLVE_PKMN
+	call SetOppAction_SerialSendDuelData
 	call PrintPlayAreaCardList_EnableLCD
 	call PrintPokemonEvolvedIntoPokemon
 	call Func_161e
@@ -812,7 +811,7 @@ UsePokemonCard: ; 44db (1:44db)
 ; triggered by selecting the "Check" item in the duel menu
 DuelMenu_Check: ; 4585 (1:4585)
 	call Func_3b31
-	call Func_3096
+	call OpenDuelCheckMenu
 	jp DuelMainInterface
 
 ; triggered by pressing SELECT in the duel menu
@@ -853,7 +852,7 @@ CheckAbleToRetreat: ; 45bb (1:45bb)
 	ret c
 	call CheckIfActiveCardParalyzedOrAsleep
 	ret c
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	jr c, .unable_to_retreat
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1546,7 +1545,7 @@ Func_49a8: ; 49a8 (1:49a8)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_49c6
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_49b9
 .asm_49c6
 	call Func_3b31
@@ -2213,19 +2212,19 @@ Func_4e6e: ; 4e6e (1:4e6e)
 	ld b, $52
 	ld c, $57
 .asm_4e7c
-	ld hl, $63
-	ld de, $67
+	ldtx hl, ShufflesTheDeckText
+	ldtx de, Drew7CardsText
 	jr Func_4e98
 
 Func_4e84: ; 4e84 (1:4e84)
 	ld b, $53
 	ld c, $55
-	ld hl, $65
-	ld de, $66
+	ldtx hl, EachPlayerShuffleOpponentsDeckText
+	ldtx de, EachPlayerDraw7CardsText
 	ld a, [wDuelType]
 	cp DUELTYPE_PRACTICE
 	jr nz, Func_4e98
-	ld hl, $64
+	ldtx hl, ThisIsJustPracticeDoNotShuffleText
 ;	fallthrough
 
 Func_4e98: ; 4e98 (1:4e98)
@@ -2243,10 +2242,10 @@ Func_4e98: ; 4e98 (1:4e98)
 	call EnableLCD
 	ld a, [wDuelType]
 	cp DUELTYPE_PRACTICE
-	jr nz, .asm_4ebf
+	jr nz, .not_practice
 	call WaitForWideTextBoxInput
 	jr .asm_4ee0
-.asm_4ebf
+.not_practice
 	call Func_3b21
 	ld hl, sp+$03
 	ld a, [hl]
@@ -2259,7 +2258,7 @@ Func_4e98: ; 4e98 (1:4e98)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4edd
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4ed0
 .asm_4edd
 	call Func_3b31
@@ -2278,7 +2277,7 @@ Func_4e98: ; 4e98 (1:4e98)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4f28
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4ef4
 	ld hl, wNumCardsBeingDrawn
 	inc [hl]
@@ -2343,7 +2342,7 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4f7d
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_4f70
 .asm_4f7d
 	call Func_3b31
@@ -2465,7 +2464,7 @@ DrawDuelHUDs: ; 503a (1:503a)
 	inc c
 	call CheckPrintPoisoned
 	inc c
-	call CheckPrintDoublePoisoned
+	call CheckPrintDoublePoisoned ; if double poisoned, print a second poison icon
 	call SwapTurn
 	lb de, 7, 0 ; coordinates for opponent's arena card name and info icons
 	lb bc, 3, 1 ; coordinates for opponent's attached energies and HP bar
@@ -2478,7 +2477,7 @@ DrawDuelHUDs: ; 503a (1:503a)
 	dec c
 	call CheckPrintPoisoned
 	dec c
-	call CheckPrintDoublePoisoned
+	call CheckPrintDoublePoisoned ; if double poisoned, print a second poison icon
 	call SwapTurn
 	ret
 ; 0x5093
@@ -2795,7 +2794,7 @@ PracticeDuel_ReplaceKnockedOutPokemon: ; 52b0 (1:52b0)
 	cp PLAY_AREA_BENCH_1
 	ret z
 	; if player selected Drowzee instead (which is at PLAY_AREA_BENCH_2)
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ldtx hl, SelectStaryuPracticeDuelText
 	scf
 ;	fallthrough
@@ -3701,8 +3700,100 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	ret
 ; 0x57df
 
-Func_57df:
-	INCROM $57df,  $5892
+Func_57df: ; 57df (1:57df)
+	push hl
+	call EmptyScreen
+	lb de, 0, 0
+	lb bc, 20, 18
+	call DrawRegularTextBox
+	ld a, 19
+	lb de, 1, 1
+	call InitTextPrintingInTextbox
+	call SetNoLineSeparation
+	pop hl
+	call ProcessTextFromID
+	call EnableLCD
+	call SetOneLineSeparation
+	call WaitForWideTextBoxInput
+	ret
+; 0x5805
+
+Func_5805: ; 5805 (1:5805)
+	call Func_3b31
+	ld a, [wccc8]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr nz, .opponent
+
+	ldtx hl, WillDrawNPrizesText
+	call DrawWideTextBox_WaitForInput
+	ld a, [wccc8]
+	call Func_310a
+	ld hl, hTemp_ffa0
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	call SerialSend8Bytes
+.asm_582f
+	call ExchangeRNG
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	scf
+	ret
+
+.opponent
+	call Func_588a
+	ldtx hl, WillDrawNPrizesText
+	call DrawWideTextBox_PrintText
+	call CountPrizes
+	ld [wcbfc], a
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opponent
+	call Func_2bd7
+	ld c, DECK_SIZE
+.asm_5858
+	call DoFrame
+	dec c
+	jr nz, .asm_5858
+	jr .asm_586f
+
+.link_opponent
+	call SerialRecv8Bytes
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld [hl], d
+	ld a, e
+	cp $ff
+	call nz, AddCardToHand
+.asm_586f
+	ld a, [wcbfc]
+	ld hl, wccc8
+	cp [hl]
+	jr nc, .asm_587e
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+.asm_587e
+	farcall Func_82b6
+	ldtx hl, DrewNPrizesText
+	call DrawWideTextBox_WaitForInput
+	jr .asm_582f
+; 0x588a
+
+Func_588a: ; 588a (1:588a)
+	ld l, PLAYER_TURN
+	ldh a, [hWhoseTurn]
+	ld h, a
+	jp DrawYourOrOppPlayAreaScreen_Bank0
+; 0x5892
 
 ; display the previous valid card page
 DisplayPreviousCardPage: ; 5892 (1:5892)
@@ -4986,7 +5077,7 @@ PrintPokemonCardLength: ; 5f9a (1:5f9a)
 ; return carry if the turn holder has any Pokemon with non-zero HP on the bench.
 ; return how many Pokemon with non-zero HP in b.
 ; does this by calculating how many Pokemon in play area minus one
-HasAlivePokemonOnBench: ; 5fd9 (1:5fd9)
+HasAlivePokemonInBench: ; 5fd9 (1:5fd9)
 	ld a, $01
 	jr _HasAlivePokemonInPlayArea
 
@@ -5187,7 +5278,7 @@ Func_60dd: ; 60dd (1:60dd)
 	and SELECT
 	jr z, .asm_60f2
 .asm_6119
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ld a, $01
 	ld [wcbd4], a
 .asm_6121
@@ -5199,7 +5290,7 @@ Func_60dd: ; 60dd (1:60dd)
 	jr z, .asm_6119
 	or a
 	jr z, .asm_6132
-	call Func_3096
+	call OpenDuelCheckMenu
 	jr .asm_60f2
 .asm_6132
 	call OpenTurnHolderHandScreen_Simple
@@ -5646,9 +5737,9 @@ CheckPrintPoisoned: ; 63bb (1:63bb)
 ; given a card's status in a, print the Poison symbol at bc if it's double poisoned
 CheckPrintDoublePoisoned: ; 63c7 (1:63c7)
 	push af
-	and DOUBLE_POISONED - POISONED
-	jr nz, CheckPrintPoisoned.poison ; double poison (print a second symbol)
-	jr CheckPrintPoisoned.print ; not double poisoned
+	and DOUBLE_POISONED & (POISONED ^ $ff)
+	jr nz, CheckPrintPoisoned.poison ; double poisoned (print SYM_POISONED)
+	jr CheckPrintPoisoned.print ; not double poisoned (print SYM_SPACE)
 ; 0x63ce
 
 ; given a card's status in a, print the Confusion, Sleep, or Paralysis symbol at bc
@@ -5796,8 +5887,9 @@ ReturnRetreatCostCardsToArena: ; 6564 (1:6564)
 	jr .loop
 ; 0x657a
 
-; discard retreat cost energy cards and attempt retreat.
+; discard retreat cost energy cards and attempt retreat of the arena card.
 ; return carry if unable to retreat this turn due to unsuccessful confusion check
+; if successful, the retreated card is replaced with a bench Pokemon card
 AttemptRetreat: ; 657a (1:657a)
 	call DiscardRetreatCostCards
 	ldh a, [hTemp_ffa0]
@@ -5935,7 +6027,9 @@ DrawHPBar: ; 6614 (1:6614)
 	ret
 ; 0x6635
 
-Func_6635: ; 6635 (1:6635)
+; when an opponent's Pokemon card attacks, this displays a screen
+; containing the description and information of the used move
+DisplayOpponentUsedMoveScreen: ; 6635 (1:6635)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -6118,7 +6212,7 @@ DuelDataToSave: ; 6729 (1:6729)
 ;	dw address, number_of_bytes_to_copy
 	dw wPlayerDuelVariables, wOpponentDuelVariables - wPlayerDuelVariables
 	dw wOpponentDuelVariables, wPlayerDeck - wOpponentDuelVariables
-	dw wPlayerDeck, wNameBuffer + $10 - wPlayerDeck
+	dw wPlayerDeck, wDuelTempList - wPlayerDeck
 	dw wWhoseTurn, wDuelTheme + $1 - wWhoseTurn
 	dw hWhoseTurn, $1
 	dw wRNG1, wRNGCounter + $1 - wRNG1
@@ -6228,10 +6322,11 @@ CheckSkipDelayAllowed: ; 67b2 (1:67b2)
 	ret
 ; 0x67be
 
-; related to ai taking their turn in a duel
-; called multiple times during one ai turn
+; related to AI taking their turn in a duel
+; called multiple times during one AI turn
+; each call results in the execution of an OppActionTable function
 AIMakeDecision: ; 67be (1:67be)
-	ldh [hAIActionTableIndex], a
+	ldh [hOppActionTableIndex], a
 	ld hl, wSkipDuelistIsThinkingDelay
 	ld a, [hl]
 	ld [hl], $0
@@ -6244,13 +6339,13 @@ AIMakeDecision: ; 67be (1:67be)
 	jr c, .delay_loop
 
 .skip_delay
-	ldh a, [hAIActionTableIndex]
-	ld hl, wAITurnEnded
+	ldh a, [hOppActionTableIndex]
+	ld hl, wOpponentTurnEnded
 	ld [hl], 0
-	ld hl, AIActionTable
+	ld hl, OppActionTable
 	call JumpToFunctionInTable
 	ld a, [wDuelFinished]
-	ld hl, wAITurnEnded
+	ld hl, wOpponentTurnEnded
 	or [hl]
 	jr nz, .turn_ended
 	ld a, [wSkipDuelistIsThinkingDelay]
@@ -6297,7 +6392,7 @@ Func_67fb: ; 67fb (1:67fb)
 	ld a, [wCurrentDuelMenuItem]
 	or a
 	jr z, .asm_6839
-	call Func_3096
+	call OpenDuelCheckMenu
 	jr .asm_6829
 .asm_6839
 	call OpenTurnHolderHandScreen_Simple
@@ -6439,12 +6534,14 @@ PrintPokemonEvolvedIntoPokemon: ; 68fa (1:68fa)
 	ret
 ; 0x6911
 
-Func_6911: ; 6911 (1:6911)
+; handle the opponent's turn in a link duel
+; loop until either [wOpponentTurnEnded] or [wDuelFinished] is non-0
+DoLinkOpponentTurn: ; 6911 (1:6911)
 	xor a
-	ld [wAITurnEnded], a
+	ld [wOpponentTurnEnded], a
 	xor a
 	ld [wSkipDuelistIsThinkingDelay], a
-.asm_6919
+.link_opp_turn_loop
 	ld a, [wSkipDuelistIsThinkingDelay]
 	or a
 	jr nz, .asm_6932
@@ -6465,60 +6562,64 @@ Func_6911: ; 6911 (1:6911)
 	jp nz, DuelTransmissionError
 	xor a
 	ld [wSkipDuelistIsThinkingDelay], a
-	ldh a, [hAIActionTableIndex]
+	ldh a, [hOppActionTableIndex]
 	cp $17
 	jp nc, DuelTransmissionError
-	ld hl, AIActionTable
+	ld hl, OppActionTable
 	call JumpToFunctionInTable
-	ld hl, wAITurnEnded
+	ld hl, wOpponentTurnEnded
 	ld a, [wDuelFinished]
 	or [hl]
-	jr z, .asm_6919
+	jr z, .link_opp_turn_loop
 	ret
 ; 0x695e
 
-AIActionTable: ; 695e (1:695e)
+; actions for the opponent's turn
+; on a link duel, this is referenced by DoLinkOpponentTurn in a loop (on each opponent's HandleTurn)
+; on a non-link duel (vs AI opponent), this is referenced by AIMakeDecision
+OppActionTable: ; 695e (1:695e)
 	dw DuelTransmissionError
-	dw AIAction_PlayBenchPokemon
-	dw AIAction_EvolvePokemon
-	dw AIAction_UseEnergyCard
-	dw AIAction_TryRetreat
-	dw AIAction_FinishedTurnNoAttack
-	dw AIAction_UseTrainerCard
-	dw AIAction_TryExecuteEffect
-	dw AIAction_Attack
-	dw AIAction_AttackEffect
-	dw AIAction_AttackDamage
-	dw AIAction_DrawCard
-	dw AIAction_UsePokemonPower
-	dw AIAction_6b07
-	dw AIAction_ForceOpponentSwitchActive
-	dw AIAction_NoAction
-	dw AIAction_NoAction
-	dw AIAction_TossCoinATimes
-	dw AIAction_6b30
-	dw AIAction_NoAction
-	dw AIAction_6b3e
-	dw AIAction_6b15
-	dw AIAction_DrawDuelMainScene
+	dw OppAction_PlayBasicPokemonCard
+	dw OppAction_EvolvePokemonCard
+	dw OppAction_PlayEnergyCard
+	dw OppAction_AttemptRetreat
+	dw OppAction_FinishTurnWithoutAttacking
+	dw OppAction_PlayTrainerCard
+	dw OppAction_ExecuteTrainerCardEffectCommands
+	dw OppAction_BeginUseAttack
+	dw OppAction_UseAttack
+	dw OppAction_PlayAttackAnimationDealAttackDamage
+	dw OppAction_DrawCard
+	dw OppAction_UsePokemonPower
+	dw OppAction_ExecutePokemonPowerEffect
+	dw OppAction_ForceSwitchActive
+	dw OppAction_NoAction
+	dw OppAction_NoAction
+	dw OppAction_TossCoinATimes
+	dw OppAction_6b30
+	dw OppAction_NoAction
+	dw OppAction_6b3e
+	dw OppAction_6b15
+	dw OppAction_DrawDuelMainScene
 
-AIAction_DrawCard: ; 698c (1:698c)
+OppAction_DrawCard: ; 698c (1:698c)
 	call DrawCardFromDeck
 	call nc, AddCardToHand
 	ret
 ; 0x6993
 
-AIAction_FinishedTurnNoAttack: ; 6993 (1:6993)
+OppAction_FinishTurnWithoutAttacking: ; 6993 (1:6993)
 	call DrawDuelMainScene
 	call ClearNonTurnTemporaryDuelvars
 	ldtx hl, FinishedTurnWithoutAttackingText
 	call DrawWideTextBox_WaitForInput
 	ld a, 1
-	ld [wAITurnEnded], a
+	ld [wOpponentTurnEnded], a
 	ret
 ; 0x69a5
 
-AIAction_UseEnergyCard: ; 69a5 (1:69a5)
+; attach an energy card from hand to the arena or a benched Pokemon
+OppAction_PlayEnergyCard: ; 69a5 (1:69a5)
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, a
@@ -6535,7 +6636,8 @@ AIAction_UseEnergyCard: ; 69a5 (1:69a5)
 	ret
 ; 0x69c5
 
-AIAction_EvolvePokemon: ; 69c5 (1:69c5)
+; evolve a Pokemon card in the arena or in the bench
+OppAction_EvolvePokemonCard: ; 69c5 (1:69c5)
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ldh a, [hTemp_ffa0]
@@ -6549,7 +6651,8 @@ AIAction_EvolvePokemon: ; 69c5 (1:69c5)
 	ret
 ; 0x69e0
 
-AIAction_PlayBenchPokemon: ; 69e0 (1:69e0)
+; place a basic Pokemon card from hand in the bench
+OppAction_PlayBasicPokemonCard: ; 69e0 (1:69e0)
 	ldh a, [hTemp_ffa0]
 	ldh [hTempCardIndex_ff98], a
 	call PutHandPokemonCardInPlayArea
@@ -6565,7 +6668,10 @@ AIAction_PlayBenchPokemon: ; 69e0 (1:69e0)
 	ret
 ; 0x69ff
 
-AIAction_TryRetreat: ; 69ff (1:69ff)
+; attempt the retreat of the active Pokemon card
+; if successful, discard the required energy cards for retreat and
+; swap the retreated card with a Pokemon card from the bench
+OppAction_AttemptRetreat: ; 69ff (1:69ff)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
@@ -6587,7 +6693,8 @@ AIAction_TryRetreat: ; 69ff (1:69ff)
 	ret
 ; 0x6a23
 
-AIAction_UseTrainerCard: ; 6a23 (1:6a23)
+; play trainer card from hand
+OppAction_PlayTrainerCard: ; 6a23 (1:6a23)
 	call LoadNonPokemonCardEffectCommands
 	call DisplayUsedTrainerCardDetailScreen
 	call PrintUsedTrainerCardDescription
@@ -6597,11 +6704,12 @@ AIAction_UseTrainerCard: ; 6a23 (1:6a23)
 	ret
 ; 0x6a35
 
-; for trainer card effects
-AIAction_TryExecuteEffect: ; 6a35 (1:6a35)
-	ld a, $06
+; execute the effect commands of the trainer card that is being played
+; used only for Trainer cards, as a continuation of OppAction_PlayTrainerCard
+OppAction_ExecuteTrainerCardEffectCommands: ; 6a35 (1:6a35)
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
-	ld a, $03
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	call DrawDuelMainScene
 	ldh a, [hTempCardIndex_ff9f]
@@ -6611,10 +6719,9 @@ AIAction_TryExecuteEffect: ; 6a35 (1:6a35)
 	ret
 ; 0x6a4e
 
-; determine if an attack is successful
-; if no, end the turn early
-; if yes, AIAction_AttackEffect and AIAction_AttackDamage can be called next
-AIAction_Attack: ; 6a4e (1:6a4e)
+; begin the execution of an attack and handle the attack being
+; possibly unsuccessful due to Sand Attack or Smokescreen
+OppAction_BeginUseAttack: ; 6a4e (1:6a4e)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ldh a, [hTemp_ffa0]
@@ -6624,34 +6731,39 @@ AIAction_Attack: ; 6a4e (1:6a4e)
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
 	call CheckSandAttackOrSmokescreenSubstatus
-	jr c, .has_status_effect
+	jr c, .has_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	jr z, .has_status_effect
+	jr z, .has_status
 	call ExchangeRNG
 	ret
-.has_status_effect
+
+; we make it here is attacker is affected by
+; Sand Attack, Smokescreen, or confusion
+.has_status
 	call DrawDuelMainScene
 	call PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	call HandleSandAttackOrSmokescreenSubstatus
-	ret nc ; attack is successful
+	ret nc ; return if attack is successful (won the coin toss)
 	call ClearNonTurnTemporaryDuelvars
-	; only end the turn if the attack fails
+	; end the turn if the attack fails
 	ld a, 1
-	ld [wAITurnEnded], a
+	ld [wOpponentTurnEnded], a
 	ret
 ; 0x6a8c
 
-AIAction_AttackEffect: ; 6a8c (1:6a8c)
-	ld a, $06
+; display the attack used by the opponent, and handle
+; EFFECTCMDTYPE_DISCARD_ENERGY and confusion damage to self
+OppAction_UseAttack: ; 6a8c (1:6a8c)
+	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jr c, .confusion_damage
-	call Func_6635
+	call DisplayOpponentUsedMoveScreen
 	call PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
@@ -6659,25 +6771,26 @@ AIAction_AttackEffect: ; 6a8c (1:6a8c)
 	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 .confusion_damage
-	call DealConfusionDamageToSelf
-	; only end the turn if the attack fails
+	call HandleConfusionDamageToSelf
+	; end the turn if dealing damage to self due to confusion
 	ld a, 1
-	ld [wAITurnEnded], a
+	ld [wOpponentTurnEnded], a
 	ret
 ; 0x6ab1
 
-AIAction_AttackDamage: ; 6ab1 (1:6ab1)
-	call Func_179a
+OppAction_PlayAttackAnimationDealAttackDamage: ; 6ab1 (1:6ab1)
+	call PlayAttackAnimation_DealAttackDamage
 	ld a, 1
-	ld [wAITurnEnded], a
+	ld [wOpponentTurnEnded], a
 	ret
 ; 0x6aba
 
-AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
+; force the player to switch the active Pokemon with a benched Pokemon
+OppAction_ForceSwitchActive: ; 6aba (1:6aba)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
-	call HasAlivePokemonOnBench
+	call HasAlivePokemonInBench
 	ld a, $01
 	ld [wcbd4], a
 .force_selection
@@ -6689,7 +6802,7 @@ AIAction_ForceOpponentSwitchActive: ; 6aba (1:6aba)
 	ret
 ; 0x6ad9
 
-AIAction_UsePokemonPower: ; 6ad9 (1:6ad9)
+OppAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ld e, $00
@@ -6712,29 +6825,30 @@ AIAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 	ret
 ; 0x6b07
 
-AIAction_6b07: ; 6b07 (1:6b07)
+; execute the EFFECTCMDTYPE_BEFORE_DAMAGE command of the used Pokemon Power
+OppAction_ExecutePokemonPowerEffect: ; 6b07 (1:6b07)
 	call Func_7415
-	ld a, $03
+	ld a, EFFECTCMDTYPE_BEFORE_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b15
 
-AIAction_6b15: ; 6b15 (1:6b15)
-	ld a, $04
+OppAction_6b15: ; 6b15 (1:6b15)
+	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
 	ret
 ; 0x6b20
 
-AIAction_DrawDuelMainScene: ; 6b20 (1:6b20)
+OppAction_DrawDuelMainScene: ; 6b20 (1:6b20)
 	call DrawDuelMainScene
 	ret
 ; 0x6b24
 
-AIAction_TossCoinATimes: ; 6b24 (1:6b24)
+OppAction_TossCoinATimes: ; 6b24 (1:6b24)
 	call SerialRecv8Bytes
 	call TossCoinATimes
 	ld a, $01
@@ -6742,7 +6856,7 @@ AIAction_TossCoinATimes: ; 6b24 (1:6b24)
 	ret
 ; 0x6b30
 
-AIAction_6b30: ; 6b30 (1:6b30)
+OppAction_6b30: ; 6b30 (1:6b30)
 	ldh a, [hWhoseTurn]
 	push af
 	ldh a, [hTemp_ffa0]
@@ -6753,7 +6867,7 @@ AIAction_6b30: ; 6b30 (1:6b30)
 	ret
 ; 0x6b3e
 
-AIAction_6b3e: ; 6b3e (1:6b3e)
+OppAction_6b3e: ; 6b3e (1:6b3e)
 	call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -6783,7 +6897,7 @@ AIAction_6b3e: ; 6b3e (1:6b3e)
 	ret
 ; 0x6b7d
 
-AIAction_NoAction: ; 6b7d (1:6b7d)
+OppAction_NoAction: ; 6b7d (1:6b7d)
 	ret
 ; 0x6b7e
 
@@ -6825,12 +6939,12 @@ Func_6ba2: ; 6ba2 (1:6ba2)
 
 ; apply and/or refresh status conditions and other events that trigger between turns
 HandleBetweenTurnsEvents: ; 6baf (1:6baf)
-	call IsArenaPokemonAsleepOrDoublePoisoned
+	call IsArenaPokemonAsleepOrPoisoned
 	jr c, .something_to_handle
 	cp PARALYZED
 	jr z, .something_to_handle
 	call SwapTurn
-	call IsArenaPokemonAsleepOrDoublePoisoned
+	call IsArenaPokemonAsleepOrPoisoned
 	call SwapTurn
 	jr c, .something_to_handle
 	call DiscardAttachedPluspowers
@@ -6840,8 +6954,8 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ret
 .something_to_handle
 	; either:
-	; 1. turn holder's arena Pokemon is paralyzed, asleep or double poisoned
-	; 2. non-turn holder's arena Pokemon is asleep or double poisoned
+	; 1. turn holder's arena Pokemon is paralyzed, asleep, poisoned or double poisoned
+	; 2. non-turn holder's arena Pokemon is asleep, poisoned or double poisoned
 	call Func_3b21
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -6924,14 +7038,16 @@ DiscardAttachedDefenders: ; 6c56 (1:6c56)
 	jp MoveCardToDiscardPileIfInArena
 ; 0x6c68
 
-; return carry if the turn holder's arena Pokemon card is double poisoned or asleep.
+; return carry if the turn holder's arena Pokemon card is asleep, poisoned, or double poisoned.
 ; also, if confused, paralyzed, or asleep, return the status condition in a.
-IsArenaPokemonAsleepOrDoublePoisoned: ; 6c68 (1:6c68)
+IsArenaPokemonAsleepOrPoisoned: ; 6c68 (1:6c68)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
 	ret z
-	and DOUBLE_POISONED
+	; note that POISONED | DOUBLE_POISONED is the same as just DOUBLE_POISONED ($c0)
+	; poison status masking is normally done with PSN_DBLPSN ($f0)
+	and POISONED | DOUBLE_POISONED
 	jr nz, .set_carry
 	ld a, [hl]
 	and CNF_SLP_PRZ
@@ -6992,7 +7108,7 @@ Func_6cab: ; 6cab (1:6cab)
 	call Func_3b6a
 .asm_6cd8
 	call DoFrame
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr c, .asm_6cd8
 	call Func_6c7e.asm_6c98
 	ret
@@ -7187,12 +7303,289 @@ ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
 ; 0x6e49
 
 Func_6e49: ; 6e49 (1:6e49)
-	INCROM $6e49, $700a
+	call HandleDestinyBondSubstatus
+	call ClearDamageReductionSubstatus2OfKnockedOutPokemon
+	xor a
+	ld [wcce8], a
+	call SwapTurn
+	call Func_6ef6
+	call SwapTurn
+	ld a, [wcce8]
+	or a
+	jr z, .asm_6e86
+	call Func_6ff7
+	jr c, .asm_6e86
+	call CountKnockedOutPokemon
+	ld c, a
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	cp c
+	jr c, .asm_6e86
+	ld a, c
+	call SwapTurn
+	call TakeAPrizes
+	call SwapTurn
+	ld a, $01
+	jr .asm_6ecc
+.asm_6e86
+	call Func_6ef6
+	ld a, [wcce8]
+	cp $01
+	jr nz, .asm_6e9f
+	call SwapTurn
+	call Func_6ff7
+	call SwapTurn
+	jr c, .asm_6e9f
+	ld a, $02
+	jr .asm_6ecc
+.asm_6e9f
+	call SwapTurn
+	call Func_6eff
+	call SwapTurn
+	call Func_6eff
+	ld a, [wcce8]
+	or a
+	jr nz, .asm_6ec4
+	xor a
+.asm_6eb2
+	push af
+	call MoveAllTurnHolderKnockedOutPokemonToDiscardPile
+	call SwapTurn
+	call MoveAllTurnHolderKnockedOutPokemonToDiscardPile
+	call SwapTurn
+	call ShiftAllPokemonToFirstPlayAreaSlots
+	pop af
+	ret
+.asm_6ec4
+	ld e, a
+	ld d, $00
+	ld hl, Data_6ed2
+	add hl, de
+	ld a, [hl]
+.asm_6ecc
+	ld [wDuelFinished], a
+	scf
+	jr .asm_6eb2
+; 0x6ed2
+
+Data_6ed2: ; 6ed2 (1:6ed2)
+	db DUEL_NOT_FINISHED, TURN_PLAYER_LOST, TURN_PLAYER_WON, TURN_PLAYER_TIED
+	db TURN_PLAYER_LOST, TURN_PLAYER_LOST, TURN_PLAYER_TIED, TURN_PLAYER_LOST
+	db TURN_PLAYER_WON, TURN_PLAYER_TIED, TURN_PLAYER_WON, TURN_PLAYER_WON
+	db TURN_PLAYER_TIED, TURN_PLAYER_LOST, TURN_PLAYER_WON, TURN_PLAYER_TIED
+
+; clears SUBSTATUS2_REDUCE_BY_20, SUBSTATUS2_POUNCE, SUBSTATUS2_GROWL,
+; SUBSTATUS2_TAIL_WAG, and SUBSTATUS2_LEER for each arena Pokemon with 0 HP
+ClearDamageReductionSubstatus2OfKnockedOutPokemon: ; 6ee2 (1:6ee2)
+	call SwapTurn
+	call .clear
+	call SwapTurn
+.clear
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	or a
+	ret nz
+	call ClearDamageReductionSubstatus2
+	ret
+; 0x6ef6
+
+Func_6ef6: ; 6ef6 (1:6ef6)
+	call Func_6fa5
+	ld hl, wcce8
+	rl [hl]
+	ret
+; 0x6eff
+
+Func_6eff: ; 6eff (1:6eff)
+	call ReplaceKnockedOutPokemon
+	ld hl, wcce8
+	rl [hl]
+	ret
+; 0x6f08
+
+; for each Pokemon in the turn holder's play area (arena and bench),
+; move that card to the discard pile if its HP is 0
+MoveAllTurnHolderKnockedOutPokemonToDiscardPile: ; 6f08 (1:6f08)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld l, DUELVARS_ARENA_CARD_HP
+	ld e, PLAY_AREA_ARENA
+.loop
+	ld a, [hl]
+	or a
+	jr nz, .next
+	push hl
+	push de
+	call MovePlayAreaCardToDiscardPile
+	pop de
+	pop hl
+.next
+	inc hl
+	inc e
+	dec d
+	jr nz, .loop
+	ret
+; 0x6f23
+
+; have the turn holder replace the arena Pokemon card when it's been knocked out.
+; if there are no Pokemon cards in the turn holder's bench, return carry.
+ReplaceKnockedOutPokemon: ; 6f23 (1:6f23)
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	or a
+	ret nz
+	call ClearAllStatusConditions
+	call HasAlivePokemonInBench
+	jr nc, .can_replace_pokemon
+
+; if we made it here, the duelist can't replace the knocked out Pokemon
+	bank1call DrawDuelMainScene
+	ldtx hl, ThereAreNoPokemonInPlayAreaText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	scf
+	ret
+
+.can_replace_pokemon
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr nz, .opponent
+
+; prompt the player to replace the knocked out Pokemon with one from bench
+	bank1call DrawDuelMainScene
+	ldtx hl, SelectPokemonToPlaceInTheArenaText
+	call DrawWideTextBox_WaitForInput
+	ld a, $01
+	ld [wcbd4], a
+	ld a, PRACTICEDUEL_PLAY_STARYU_FROM_BENCH
+	call DoPracticeDuelAction
+.select_pokemon
+	call OpenPlayAreaScreenForSelection
+	jr c, .select_pokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call SerialSend8Bytes
+
+; replace the arena Pokemon with the one at location [hTempPlayAreaLocation_ff9d]
+.replace_pokemon
+	call Func_3b31
+	ld a, PRACTICEDUEL_REPLACE_KNOCKED_OUT_POKEMON
+	call DoPracticeDuelAction
+	jr c, .select_pokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+	call SwapPlayAreaPokemon
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ldtx hl, DuelistPlacedACardText
+	bank1call DisplayCardDetailScreen
+	call ExchangeRNG
+	or a
+	ret
+
+; the AI opponent replaces the knocked out Pokemon with one from bench
+.opponent
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opponent
+	call Func_2bcf
+	ldh a, [hTemp_ffa0]
+	ldh [hTempPlayAreaLocation_ff9d], a
+	jr .replace_pokemon
+
+; wait for link opponent to replace the knocked out Pokemon with one from bench
+.link_opponent
+	bank1call DrawDuelMainScene
+	ldtx hl, DuelistIsSelectingPokemonToPlaceInArenaText
+	call DrawWideTextBox_PrintText
+	call SerialRecv8Bytes
+	ldh [hTempPlayAreaLocation_ff9d], a
+	jr .replace_pokemon
+; 0x6fa5
+
+Func_6fa5: ; 6fa5 (1:6fa5)
+	call CountKnockedOutPokemon
+	ret nc
+	; at least one Pokemon knocked out
+	call SwapTurn
+	bank1call Func_5805
+	call SwapTurn
+	ret nc
+	call SwapTurn
+	bank1call DrawDuelMainScene
+	ldtx hl, TookAllThePrizesText
+	call DrawWideTextBox_WaitForInput
+	call ExchangeRNG
+	call SwapTurn
+	scf
+	ret
+; 0x6fc7
+
+; return in wccc8 the amount of Pokemon in the turn holder's
+; play area that are still there despite having 0 HP.
+; that is, the number of Pokemon that have just been knocked out.
+; Clefairy Doll and Mysterious Fossil don't count.
+CountKnockedOutPokemon: ; 6fc7 (1:6fc7)
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld d, h
+	ld e, DUELVARS_ARENA_CARD
+	ld b, PLAY_AREA_ARENA
+	ld c, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [de]
+	cp -1
+	jr z, .next ; jump if no Pokemon in this location
+	ld a, [hl]
+	or a
+	jr nz, .next ; jump if this Pokemon's HP isn't 0
+	; this Pokemon's HP has just become 0
+	ld a, [de]
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	cp TYPE_TRAINER
+	jr z, .next ; jump if this is a trainer card (Clefairy Doll or Mysterious Fossil)
+	inc b
+.next
+	inc hl
+	inc de
+	dec c
+	jr nz, .loop
+	ld a, b
+	ld [wccc8], a
+	or a
+	ret z
+	scf
+	ret
+; 0x6ff7
+
+Func_6ff7: ; 6ff7 (1:6ff7)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, DUELVARS_ARENA_CARD_HP
+.loop
+	ld a, [hli]
+	or a
+	jr nz, .non_zero_hp
+	dec c
+	jr nz, .loop
+	scf
+	ret
+.non_zero_hp
+	or a
+	ret
+; 0x700a
 
 ; print one of the "There was no effect from" texts depending
-; on the value at wccf1 ($00 or a status condition constant)
+; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
 PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
-	ld a, [wccf1]
+	ld a, [wNoEffectFromStatus]
 	or a
 	jr nz, .status
 	ld hl, wLoadedMoveName
@@ -7367,15 +7760,17 @@ PrizeBitmasks: ; 715a (1:715a)
 	db %0, %1, %11, %111, %1111, %11111, %111111
 ; 0x7161
 
-Func_7161: ; 7161 (1:7161)
+; update the turn holder's DUELVARS_PRIZES following that duelist
+; drawing a number of prizes equal to register a
+TakeAPrizes: ; 7161 (1:7161)
 	or a
 	ret z
 	ld c, a
 	call CountPrizes
 	sub c
-	jr nc, .asm_716b
+	jr nc, .no_underflow
 	xor a
-.asm_716b
+.no_underflow
 	ld c, a
 	ld b, $00
 	ld hl, PrizeBitmasks
@@ -7414,18 +7809,21 @@ ClearNonTurnTemporaryDuelvars_CopyStatus: ; 7189 (1:7189)
 	ret
 ; 0x7195
 
+; update non-turn holder's DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+; if wccef == 0: set to [wDealtDamage]
+; if wceef != 0: set to 0
 Func_7195: ; 7195 (1:7195)
 	ld a, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
 	call GetNonTurnDuelistVariable
 	ld a, [wccef]
 	or a
-	jr nz, .asm_71a9
+	jr nz, .zero
 	ld a, [wDealtDamage]
 	ld [hli], a
-	ld a, [wccc0]
+	ld a, [wDealtDamage + 1]
 	ld [hl], a
 	ret
-.asm_71a9
+.zero
 	xor a
 	ld [hli], a
 	ld [hl], a
@@ -7528,7 +7926,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_725e
 	push de
 	call DoFrame
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	pop de
 	jr c, .asm_725e
 	ld a, e
@@ -7689,11 +8087,14 @@ Func_741a: ; 741a (1:741a)
 	ret
 ; 0x7469
 
-Func_7469: ; 7469 (1:7469)
+; this is a simple version of PlayAttackAnimation_DealAttackDamage that doesn't
+; take into account status conditions, damage modifiers, etc, for damage calculation.
+; used for confusion damage to self and for damage to benched Pokemon, for example
+PlayAttackAnimation_DealAttackDamageSimple: ; 7469 (1:7469)
 	push hl
 	push de
-	call Func_7494
-	call Func_7484
+	call PlayMoveAnimation
+	call WaitMoveAnimation
 	pop de
 	pop hl
 	call SubstractHP
@@ -7708,20 +8109,26 @@ Func_7469: ; 7469 (1:7469)
 	ret
 ; 0x7484
 
-Func_7484: ; 7484 (1:7484)
+; if [wLoadedMoveAnimation] != 0, wait until the animation is over
+WaitMoveAnimation: ; 7484 (1:7484)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
 	push de
-.asm_748a
+.anim_loop
 	call DoFrame
-	call Func_3b52
-	jr c, .asm_748a
+	call CheckAnyAnimationPlaying
+	jr c, .anim_loop
 	pop de
 	ret
 ; 0x7494
 
-Func_7494: ; 7494 (1:7494)
+; play move animation
+; input:
+; - [wLoadedMoveAnimation]: animation to play
+; - de: damage dealt by the move (to display the animation with the number)
+; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
+PlayMoveAnimation: ; 7494 (1:7494)
 	ldh a, [hWhoseTurn]
 	push af
 	push hl

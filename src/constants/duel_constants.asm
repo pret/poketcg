@@ -13,9 +13,10 @@ DUELTYPE_PRACTICE EQU $80
 ; for normal duels (vs AI), wDuelType is $80 + [wOpponentDeckID]
 
 ; wDuelFinished constants
-TURN_PLAYER_WON  EQU $1
-TURN_PLAYER_LOST EQU $2
-TURN_PLAYER_TIED EQU $3
+DUEL_NOT_FINISHED EQU $0
+TURN_PLAYER_WON   EQU $1
+TURN_PLAYER_LOST  EQU $2
+TURN_PLAYER_TIED  EQU $3
 
 ; wDuelResult constants
 DUEL_WIN  EQU $0
@@ -154,6 +155,45 @@ SUBSTATUS3_HEADACHE                EQU 1
 CAN_EVOLVE_THIS_TURN_F EQU 7
 CAN_EVOLVE_THIS_TURN   EQU 1 << CAN_EVOLVE_THIS_TURN_F
 
+; effect command constants (TryExecuteEffectCommandFunction)
+; ordered by (roughly) execution time
+EFFECTCMDTYPE_INITIAL_EFFECT_1      EQU $01
+EFFECTCMDTYPE_INITIAL_EFFECT_2      EQU $02
+EFFECTCMDTYPE_DISCARD_ENERGY        EQU $06
+EFFECTCMDTYPE_REQUIRE_SELECTION     EQU $05
+EFFECTCMDTYPE_BEFORE_DAMAGE         EQU $03
+EFFECTCMDTYPE_AFTER_DAMAGE          EQU $04
+EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN EQU $0a
+EFFECTCMDTYPE_PKMN_POWER_TRIGGER    EQU $07
+EFFECTCMDTYPE_AI                    EQU $09
+EFFECTCMDTYPE_UNKNOWN_08            EQU $08
+
+; OppAction_* constants (OppActionTable)
+	const_def
+	const OPPACTION_ERROR                     ; $00
+	const OPPACTION_PLAY_BASIC_PKMN           ; $01
+	const OPPACTION_EVOLVE_PKMN               ; $02
+	const OPPACTION_PLAY_ENERGY               ; $03
+	const OPPACTION_ATTEMPT_RETREAT           ; $04
+	const OPPACTION_FINISH_NO_ATTACK          ; $05
+	const OPPACTION_PLAY_TRAINER              ; $06
+	const OPPACTION_EXECUTE_TRAINER_EFFECTS   ; $07
+	const OPPACTION_BEGIN_ATTACK              ; $08
+	const OPPACTION_USE_ATTACK                ; $09
+	const OPPACTION_ATTACK_ANIM_AND_DAMAGE    ; $0a
+	const OPPACTION_DRAW_CARD                 ; $0b
+	const OPPACTION_USE_PKMN_POWER            ; $0c
+	const OPPACTION_EXECUTE_PKMN_POWER_EFFECT ; $0d
+	const OPPACTION_FORCE_SWITCH_ACTIVE       ; $0e
+	const OPPACTION_NO_ACTION_0F              ; $0f
+	const OPPACTION_NO_ACTION_10              ; $10
+	const OPPACTION_TOSS_COIN_A_TIMES         ; $11
+	const OPPACTION_6B30                      ; $12
+	const OPPACTION_NO_ACTION_13              ; $13
+	const OPPACTION_6B3E                      ; $14
+	const OPPACTION_6B15                      ; $15
+	const OPPACTION_DUEL_MAIN_SCENE           ; $16
+
 ; wNoDamageOrEffect constants
 NO_DAMAGE_OR_EFFECT_AGILITY      EQU $01
 NO_DAMAGE_OR_EFFECT_BARRIER      EQU $02
@@ -164,6 +204,10 @@ NO_DAMAGE_OR_EFFECT_NSHIELD      EQU $05
 ; wDamageEffectiveness constants
 WEAKNESS   EQU 1
 RESISTANCE EQU 2
+
+; wEffectFailed constants
+EFFECT_FAILED_NO_EFFECT    EQU $01
+EFFECT_FAILED_UNSUCCESSFUL EQU $02
 
 ; Box message id's
 	const_def
@@ -201,3 +245,6 @@ SELECT_CHECK EQU $02
 	const PRACTICEDUEL_REPEAT_INSTRUCTIONS
 	const PRACTICEDUEL_PLAY_STARYU_FROM_BENCH
 	const PRACTICEDUEL_REPLACE_KNOCKED_OUT_POKEMON
+
+; wAnimationQueue length
+ANIMATION_QUEUE_LENGTH EQU 7

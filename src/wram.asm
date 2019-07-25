@@ -161,7 +161,7 @@ wPlayerArenaCardChangedResistance:: ; c2ea
 wPlayerArenaCardSubstatus3:: ; c2eb
 	ds $1
 
-; Each bit represents a prize (1 = not taken ; 0 = taken)
+; each bit represents a prize that this duelist can draw (1 = not drawn ; 0 = drawn)
 wPlayerPrizes:: ; c2ec
 	ds $1
 
@@ -190,9 +190,7 @@ wPlayerArenaCardDisabledMoveIndex:: ; c2f2
 
 ; damage taken the last time the opponent attacked (0 if no damage)
 wPlayerArenaCardLastTurnDamage:: ; c2f3
-	ds $1
-
-	ds $1
+	ds $2
 
 ; status condition received the last time the opponent attacked (0 if none)
 wPlayerArenaCardLastTurnStatus:: ; c2f5
@@ -333,9 +331,7 @@ wOpponentArenaCardDisabledMoveIndex:: ; c3f2
 	ds $1
 
 wOpponentArenaCardLastTurnDamage:: ; c3f3
-	ds $1
-
-	ds $1
+	ds $2
 
 wOpponentArenaCardLastTurnStatus:: ; c3f5
 	ds $1
@@ -734,7 +730,7 @@ wSortCardListByID:: ; cbdf
 wcbe0:: ; cbe0
 	ds $1
 
-wAITurnEnded:: ; cbe1
+wOpponentTurnEnded:: ; cbe1
 	ds $1
 
 wOppRNG1:: ; cbe2
@@ -784,6 +780,8 @@ wcbfa:: ; cbfa
 wcbfb:: ; cbfb
 	ds $1
 
+; used by Func_5805 to store the remaining Prizes, so that if more than that
+; amount would be taken, only the remaining amount is taken
 wcbfc:: ; cbfc
 	ds $1
 
@@ -919,24 +917,25 @@ wLoadedMove:: ; cca6
 	move_data_struct wLoadedMove
 
 ; the damage field of an used move is loaded here
+; doubles as "wAIAverageDamage" when complementing wAIMinDamage and wAIMaxDamage
+; little-endian
 wDamage:: ; ccb9
 	ds $2
 
-; wccbb and wccbc appear to be used for AI scoring
-wccbb:: ; ccbb
+; wAIMinDamage and wAIMaxDamage appear to be used for AI scoring
+; they are updated with the minimum (or floor) damage of the current move
+; and with the maximum (or ceiling) damage of the current move
+wAIMinDamage:: ; ccbb
 	ds $1
 
-wccbc:: ; ccbc
+wAIMaxDamage:: ; ccbc
 	ds $1
 
 	ds $2
 
 ; damage dealt by an attack to a target
 wDealtDamage:: ; ccbf
-	ds $1
-
-wccc0:: ; ccc0
-	ds $1
+	ds $2
 
 ; WEAKNESS and RESISTANCE flags	for a damaging attack
 wDamageEffectiveness:: ; ccc1
@@ -962,7 +961,12 @@ wSelectedMoveIndex:: ; ccc6
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
 wNoDamageOrEffect:: ; ccc7
-	ds $2
+	ds $1
+
+; used by CountKnockedOutPokemon and Func_5805 to store the amount
+; of prizes to take (equal to the number of Pokemon knocked out)
+wccc8:: ; ccc8
+	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
 wGotHeadsFromConfusionCheck:: ; ccc9
@@ -985,6 +989,7 @@ wIsDamageToSelf:: ; cce6
 wcce7:: ; cce7
 	ds $1
 
+wcce8:: ; cce8
 	ds $1
 
 ; used in CopyDeckData
@@ -999,16 +1004,15 @@ wccec:: ; ccec
 	ds $1
 
 ; used by the effect functions to return the cause of an effect to fail
-; $01: was not affected by a status condition
-; $02: prints WasUnsuccessfulText
-wcced:: ; cced
+; in order print the appropriate text
+wEffectFailed:: ; cced
 	ds $1
 
 wccee:: ; ccee
 	ds $1
 
-; when this is non-0, DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE and the
-; next duelvar are always set to 0 after an attack
+; flag to determine whether DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
+; gets zeroed or gets updated with wDealtDamage
 wccef:: ; ccef
 	ds $1
 
@@ -1017,7 +1021,7 @@ wccf0:: ; ccf0
 
 ; effect functions return a status condition constant here when it had no effect
 ; on the target, in order to print one of the ThereWasNoEffectFrom* texts
-wccf1:: ; ccf1
+wNoEffectFromStatus:: ; ccf1
 	ds $1
 
 ; when non-0, allows the player to skip some delays during a duel by pressing B.
@@ -1283,26 +1287,34 @@ wTextBoxLabel:: ; ce4c
 wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
-wce50:: ; ce50
+; set to PLAYER_TURN in the "Your Play Area" screen
+; set to OPPONENT_TURN in the  "Opp Play Area" screen
+; alternates when drawing the "In Play Area" screen
+wCheckMenuPlayAreaWhichDuelist:: ; ce50
 	ds $1
 
-wce51:: ; ce51
+; apparently complements wCheckMenuPlayAreaWhichDuelist to be able to combine
+; the usual player or opponent layout with the opposite duelist information
+; appears not to be relevant in the "In Play Area" screen
+wCheckMenuPlayAreaWhichLayout:: ; ce51
 	ds $1
 
-; the position of cursor
-; in the display of play area.
-; note that it's used in neither
-; player's nor opponent's alone.
+; the position of cursor in the "In Play Area" screen
 wInPlayAreaCursorPosition:: ; ce52
+
+; holds the position of the cursor when selecting a prize card
+wPrizeCardCursorPosition:: ; ce52
 	ds $1
 
-; pointer to the table which contains
-; information for each key-press.
+; pointer to the table which contains information for each key-press.
 wInPlayAreaInputTablePointer:: ; ce53
 	ds $2
 
-wce55:: ; ce55
-	ds $2
+; same as wDuelInitialPrizes but with upper 2 bits set
+wDuelInitialPrizesUpperBitsSet:: ; ce55
+	ds $1
+  
+  ds $1
 
 ; it's used for restore the position of cursor
 ; when going into another view, and returning to
@@ -1318,11 +1330,20 @@ wInPlayAreaTemporaryCursorPosition:: ; ce58
 wce59:: ; ce59
 	ds $1
 
-	ds $4
+	ds $3
+
+; stores whether there are Pokemon in play area
+; player arena Pokemon sets bit 0
+; opponent arena Pokemon sets bit 1
+wArenaCardsInPlayArea:: ; ce5d
+	ds $1
 
 wce5e:: ; ce5e
 	ds $1
 
+; this is used to store last cursor position
+; in the "Your Play Area" and the "Opp. Play Area" screens
+wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 	ds $1
 
 wIsFromSelectButton:: ; ce60
@@ -1412,10 +1433,9 @@ wcea1:: ; cea1
 
 	ds $1
 
-; it's used when the player enters check command menu, and its sub-menus.
-; it increases from 0x00 to 0xff.
-; the game makes its blinking cursor by this.
-; note that the check command contains the pokemon glossary.
+; it's used when the player enters check menu, and its sub-menus.
+; increases from 0x00 to 0xff. the game makes its blinking cursor by this.
+; note that the check menu also contains the pokemon glossary.
 wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
@@ -1434,10 +1454,10 @@ wceaa:: ; ceaa
 wceab:: ; ceab
 	ds $4
 
-wceaf:: ; ceaf
+wCheckMenuCursorXPosition:: ; ceaf
 	ds $1
 
-wceb0:: ; ceb0
+wCheckMenuCursorYPosition:: ; ceb0
 	ds $1
 
 wceb1:: ; ceb1
@@ -1455,7 +1475,15 @@ wceb4:: ; ceb4
 wceb5:: ; ceb5
 	ds $1
 
-	ds $5
+; used to store the tens digit and
+; ones digit of a value for printing
+; the ones digit is added $20
+; ceb6 = ones digit (+ $20)
+; ceb7 = tens digit
+wOnesAndTensPlace:: ; ceb6
+	ds $2
+
+	ds $3
 
 wcebb:: ; cebb
 	ds $1
@@ -1990,8 +2018,11 @@ wd421:: ; d421
 wd422:: ; d422
 	ds $1
 
-wd423:: ; d423
-	ds $7
+; holds a list of animations to play
+; as long as any of the slot isn't $ff, there's something to play
+; it may actually not be a queue
+wAnimationQueue:: ; d423
+	ds ANIMATION_QUEUE_LENGTH
 
 wd42a:: ; d42a
 	ds $1
