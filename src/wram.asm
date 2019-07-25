@@ -1206,7 +1206,19 @@ wTempLoadedMoveEnergyNeededAmount:: ; cdb7
 wcdbe:: ; cdbe
 	ds $1
 
-	ds $1c
+	ds $10
+
+; stores information about the defending Pokémon
+; and about the prize card count on both sides for AI
+; byte 0: player's active Pokémon color
+; byte 1: player's active Pokémon weakness
+; byte 2: player's active Pokémon resistance
+; byte 3: player's prize count
+; byte 4: opponent's prize count
+wcdcf:: ; cdcf
+	ds $5
+
+	ds $7
 
 wcddb:: ; cddb
 	ds $1

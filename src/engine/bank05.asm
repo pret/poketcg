@@ -115,8 +115,26 @@ Func_140fe: ; 140fe (5:40fe)
 Func_1410a: ; 1410a (5:410a)
 	INCROM $1410a, $1411d
 
-Func_1411d: ; 1411d (5:411d)
-	INCROM $1411d, $14226
+; stores defending Pokémon's weakness/resistance
+; and the number of prize cards in both sides
+StoreDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
+	call SwapTurn
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld [wcdcf], a
+	call GetArenaCardWeakness
+	ld [wcdcf+1], a
+	call GetArenaCardResistance
+	ld [wcdcf+2], a
+	call CountPrizes
+	ld [wcdcf+3], a
+	call SwapTurn
+	call CountPrizes
+	ld [wcdcf+4], a
+	ret
+; 0x14145
+
+	INCROM $14145, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -821,7 +839,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jp nz, .asm_15b2f
 	xor a
 	ld [$cdd7], a
-	call Func_1411d
+	call StoreDefendingPokemonColorWRAndPrizeCards
 	ld a, $80
 	ld [wcdbe], a
 	ld a, [$cdb4]
@@ -917,14 +935,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $02
 	call Func_1410a
 .asm_15980
-	ld a, [$cdcf]
+	ld a, [wcdcf]
 	ld b, a
 	call GetArenaCardWeakness
 	and b
 	jr z, .asm_159ad
 	ld a, $02
 	call Func_140fe
-	ld a, [$cdcf]
+	ld a, [wcdcf]
 	ld b, a
 	ld a, $bc
 	call GetTurnDuelistVariable
@@ -941,7 +959,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $03
 	call Func_1410a
 .asm_159ad
-	ld a, [$cdcf]
+	ld a, [wcdcf]
 	ld b, a
 	call GetArenaCardResistance
 	and b
@@ -992,7 +1010,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $03
 	call Func_1410a
 .asm_15a0e
-	ld a, [$cdcf]
+	ld a, [wcdcf]
 	ld b, a
 	ld a, $bc
 	call GetTurnDuelistVariable
