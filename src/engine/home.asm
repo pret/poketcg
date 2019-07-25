@@ -9303,7 +9303,7 @@ OpenInPlayAreaScreen_FromSelectButton: ; 30a6 (0:30a6)
 	ld a, BANK(OpenInPlayAreaScreen)
 	call BankswitchROM
 	ld a, $1
-	ld [wIsFromSelectButton], a
+	ld [wInPlayAreaFromSelectButton], a
 	call OpenInPlayAreaScreen
 	pop bc
 	ld a, b

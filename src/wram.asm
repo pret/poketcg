@@ -1316,7 +1316,7 @@ wce53:: ; ce53
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
-  ds $1
+	ds $1
 
 ; it's used for restore the position of cursor
 ; when going into another view, and returning to
@@ -1348,7 +1348,9 @@ wce5e:: ; ce5e
 wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 	ds $1
 
-wIsFromSelectButton:: ; ce60
+; $00 when the "In Play Area" screen has been opened from the Check menu
+; $01 when the "In Play Area" screen has been opened by pressing the select button
+wInPlayAreaFromSelectButton:: ; ce60
 	ds $1
 
 wce61:: ; ce61

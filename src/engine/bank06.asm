@@ -152,9 +152,9 @@ _CopyCardNameAndLevel_HalfwidthText:
 	ret
 ; 0x180d5
 
-; this function is called when the player is shown the appearance of the play area.
-; it can be called in the command window from either pressing select button
-; or selecting check command.
+; this function is called when the player is shown the "In Play Area" screen.
+; it can be called with either the select button (DuelMenuShortcut_BothActivePokemon),
+; or via the "In Play Area" item of the Check menu (DuelCheckMenu_InPlayArea)
 OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld a, $05
 	ld [wInPlayAreaCursorPosition], a
@@ -188,10 +188,10 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	jr nz, .selection
 
 	; if this function's been called from 'select' button,
-	; wIsFromSelectButton is on.
-	ld a, [wIsFromSelectButton]
+	; wInPlayAreaFromSelectButton is on.
+	ld a, [wInPlayAreaFromSelectButton]
 	or a
-	jr z, .handle_input ; if it's from the check command, jump.
+	jr z, .handle_input ; if it's from the Check menu, jump.
 
 	ldh a, [hDPadHeld]
 	and SELECT
@@ -213,7 +213,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld hl, wInPlayAreaTemporaryCursorPosition
 	cp [hl]
 	call nz, .print_card_name
-	
+
 	jr .on_frame
 
 .pressed
@@ -221,21 +221,21 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	jr nz, .selection
 
 	; pressed b button.
-	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
+	call ZeroObjectPositionsAndToggleOAMCopy_Bank6
 	lb de, $38, $9f
 	call SetupText
 	scf
 	ret
 
 .toggle_view
-	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
+	call ZeroObjectPositionsAndToggleOAMCopy_Bank6
 	lb de, $38, $9f
 	call SetupText
 	or a
 	ret
 
 .selection ; pressed a button or start button.
-	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
+	call ZeroObjectPositionsAndToggleOAMCopy_Bank6
 	lb de, $38, $9f
 	call SetupText
 	ld a, [wInPlayAreaCursorPosition]
@@ -268,18 +268,18 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld b, 0
 	sla a
 	ld c, a
-	add hl, bc ; hl = TextIDTable_182bb + 2 * (wPlayAreaCursorPostion)
+	add hl, bc ; hl = OpenInPlayAreaScreen_TextTable + 2 * (wInPlayAreaCursorPosition)
 
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld a, h
-	
+
 	or a
 	jr nz, .raw_string
 
 	ld a, l
-	cp $06
+	cp TX_HALFWIDTH
 	jr nc, .raw_string
 
 	ld a, [wInPlayAreaCursorPosition]
@@ -352,25 +352,26 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	jp .start
 
 .jump_table ; (6:4228)
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x00: my bench pokemon 1
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x01: my bench pokemon 2
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x02: my bench pokemon 3
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x03: my bench pokemon 4
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x04: my bench pokemon 5
-	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x05: my active pokemon
-	dw OpenInPlayAreaScreen_ShowTurnHolderHand ; 0x06: my hand
-	dw OpenInPlayAreaScreen_ShowPlayerDiscardPile ; 0x07: my discard pile
-	
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x08: opp. active pokemon
-	dw OpenInPlayAreaScreen_ShowNonTurnHolderHand ; 0x09: opp. hand
-	dw OpenInPlayAreaScreen_ShowOpponentDiscardPile ; 0x0a: opp. discard pile
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0b: opp. bench pokemon 1
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0c: opp. bench pokemon 2
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0d: opp. bench pokemon 3
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0e: opp. bench pokemon 4
-	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0f: opp. bench pokemon 5
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x00: my bench pokemon 1
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x01: my bench pokemon 2
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x02: my bench pokemon 3
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x03: my bench pokemon 4
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x04: my bench pokemon 5
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x05: my active pokemon
+	dw OpenInPlayAreaScreen_TurnHolderHand           ; 0x06: my hand
+	dw OpenInPlayAreaScreen_TurnHolderDiscardPile    ; 0x07: my discard pile
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x08: opp. active pokemon
+	dw OpenInPlayAreaScreen_NonTurnHolderHand        ; 0x09: opp. hand
+	dw OpenInPlayAreaScreen_NonTurnHolderDiscardPile ; 0x0a: opp. discard pile
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0b: opp. bench pokemon 1
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0c: opp. bench pokemon 2
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0d: opp. bench pokemon 3
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0e: opp. bench pokemon 4
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0f: opp. bench pokemon 5
 
-OpenInPlayAreaScreen_ShowPlayerAreaPokemon:
+OpenInPlayAreaScreen_TurnHolderPlayArea:
+	; wInPlayAreaCursorPosition constants conveniently map to (PLAY_AREA_* constants - 1)
+	; for bench locations. this mapping is taken for granted in the following code.
 	ld a, [wInPlayAreaCursorPosition]
 	inc a
 	cp $05 + 1 ; $05: my active pokemon
@@ -389,7 +390,7 @@ OpenInPlayAreaScreen_ShowPlayerAreaPokemon:
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
-OpenInPlayAreaScreen_ShowOpponentAreaPokemon:
+OpenInPlayAreaScreen_NonTurnHolderPlayArea:
 	ld a, [wInPlayAreaCursorPosition]
 	sub $08
 	or a
@@ -410,7 +411,7 @@ OpenInPlayAreaScreen_ShowOpponentAreaPokemon:
 	call SwapTurn
 	ret
 
-OpenInPlayAreaScreen_ShowTurnHolderHand:
+OpenInPlayAreaScreen_TurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -418,7 +419,7 @@ OpenInPlayAreaScreen_ShowTurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_ShowNonTurnHolderHand:
+OpenInPlayAreaScreen_NonTurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -426,7 +427,7 @@ OpenInPlayAreaScreen_ShowNonTurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_ShowPlayerDiscardPile:
+OpenInPlayAreaScreen_TurnHolderDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -434,7 +435,7 @@ OpenInPlayAreaScreen_ShowPlayerDiscardPile:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_ShowOpponentDiscardPile:
+OpenInPlayAreaScreen_NonTurnHolderDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -527,7 +528,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	; check d-pad
 	bit D_UP_F, a
 	jr z, .else_if_down
-	
+
 	; up
 	ld a, [hl]
 	jr .process_dpad
@@ -536,7 +537,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	inc hl
 	bit D_DOWN_F, a
 	jr z, .else_if_right
-	
+
 	; down
 	ld a, [hl]
 	jr .process_dpad
@@ -545,7 +546,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	inc hl
 	bit D_RIGHT_F, a
 	jr z, .else_if_left
-	
+
 	; right
 	ld a, [hl]
 	jr .process_dpad
@@ -584,7 +585,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld a, $10
 	ld [wInPlayAreaCursorPosition], a
 	jr .next
-	
+
 .bench_pokemon_exists
 	ld b, a
 	ld a, [wInPlayAreaCursorPosition]
@@ -675,7 +676,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ret nz
 
 	bit 4, [hl] ; = and $10
-	jr nz, .non_draw_cursor
+	jr nz, ZeroObjectPositionsAndToggleOAMCopy_Bank6
 
 .draw_cursor ; 184a0 (6:44a0)
 	call ZeroObjectPositions
@@ -688,7 +689,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld h, $07
 	call HtimesL
 	add hl, de
-	
+
 	ld d, [hl] ; x position.
 	inc hl
 	ld e, [hl] ; y position.
@@ -699,7 +700,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	or a
 	ret
 
-.non_draw_cursor ; 184bf (6:44bf)
+ZeroObjectPositionsAndToggleOAMCopy_Bank6 ; 184bf (6:44bf)
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -729,18 +730,18 @@ Func_006_44c8: ; 184c8 (6:44c8)
 	and SELECT
 	jr nz, .on_select
 
-	farcall $2, $49ae
+	farcall Func_89ae
 	jr nc, .next
-	
+
 	cp -1 ; b button
 	jr nz, .check_button
 
 	farcall $2, $4aa1
 	ret
-	
+
 .check_button
 	push af
-	farcall $2, $4aa1
+	farcall Func_8aa1
 	pop af
 
 	cp $09 ; $09: next page or prev page
@@ -915,7 +916,7 @@ GlossaryData_1:
 	glossary_entry 5, Text0300, Text0312
 	glossary_entry 7, Text0301, Text0313
 	glossary_entry 5, Text0302, Text0314
-  
+
 GlossaryData_2:
 	glossary_entry 5, Text0303, Text0315
 	glossary_entry 5, Text0304, Text0316
@@ -969,9 +970,9 @@ Func_006_4661: ; 18661 (6:4661)
 	ld [wCheckMenuCursorBlinkCounter], a
 .asm_006_46a2
 	ldh a, [hKeysPressed]
-	and $03
+	and A_BUTTON | B_BUTTON
 	jr z, .asm_006_46bd
-	and $01
+	and A_BUTTON
 	jr nz, .asm_006_46b3
 	ld a, $ff
 	call Func_006_50fb
@@ -1535,7 +1536,7 @@ Func_006_591f:
 	ret
 .data
 	db $03, $04, $05, $06, $07, $08
-	
+
 Func_1996e: ; 1996e (6:596e)
 	call EnableSRAM
 	ld a, PLAYER_TURN
@@ -2622,6 +2623,7 @@ else
 	dw (\5 << 8) | \6
 endc
 ENDM
+
 KeyboardData_Player: ; (6:6baf)
 	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
 	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
