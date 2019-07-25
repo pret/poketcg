@@ -121,16 +121,16 @@ StoreDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
 	call SwapTurn
 	call GetArenaCardColor
 	call TranslateColorToWR
-	ld [wcdcf], a
+	ld [wAIPlayerColor], a
 	call GetArenaCardWeakness
-	ld [wcdcf+1], a
+	ld [wAIPlayerWeakness], a
 	call GetArenaCardResistance
-	ld [wcdcf+2], a
+	ld [wAIPlayerResistance], a
 	call CountPrizes
-	ld [wcdcf+3], a
+	ld [wAIPlayerPrizeCount], a
 	call SwapTurn
 	call CountPrizes
-	ld [wcdcf+4], a
+	ld [wAIOpponentPrizeCount], a
 	ret
 ; 0x14145
 
@@ -850,13 +850,13 @@ Func_158b2: ; 158b2 (5:58b2)
 	sla a
 	call Func_140fe
 .asm_158d4
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
 	jr z, .asm_158f1
-	and $c0
+	and DOUBLE_POISONED
 	jr z, .asm_158e5
-	ld a, $02
+	ld a, ASLEEP
 	call Func_140fe
 .asm_158e5
 	ld a, [hl]
@@ -877,8 +877,8 @@ Func_158b2: ; 158b2 (5:58b2)
 .asm_15904
 	ld a, $05
 	call Func_1410a
-	ld a, [$cdd3]
-	cp $02
+	ld a, [wAIOpponentPrizeCount]
+	cp 2
 	jr nc, .asm_15915
 	ld a, $23
 	call Func_1410a
@@ -889,22 +889,22 @@ Func_158b2: ; 158b2 (5:58b2)
 	call Func_140fe
 	call Func_17426
 	jr c, .asm_1594d
-	ld a, [$cdd2]
-	cp $02
+	ld a, [wAIPlayerPrizeCount]
+	cp 2
 	jr nc, .asm_15941
 	ld a, $01
 	ld [$cdd7], a
 .asm_15930
 	call Func_17426
 	jr c, .asm_1594d
-	ld a, [$cdd2]
-	cp $02
+	ld a, [wAIPlayerPrizeCount]
+	cp 2
 	jr nc, .asm_15941
 	ld a, $02
 	call Func_140fe
 .asm_15941
-	ld a, [$cdd3]
-	cp $02
+	ld a, [wAIOpponentPrizeCount]
+	cp 2
 	jr nc, .asm_1594d
 	ld a, $02
 	call Func_1410a
@@ -912,14 +912,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
-	ld a, [$cdd1]
+	ld a, [wAIPlayerResistance]
 	and b
 	jr z, .asm_15980
 	ld a, $01
 	call Func_140fe
-	ld a, [$cdd1]
+	ld a, [wAIPlayerResistance]
 	ld b, a
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 .asm_15968
 	ld a, [hli]
@@ -935,16 +935,16 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $02
 	call Func_1410a
 .asm_15980
-	ld a, [wcdcf]
+	ld a, [wAIPlayerColor]
 	ld b, a
 	call GetArenaCardWeakness
 	and b
 	jr z, .asm_159ad
 	ld a, $02
 	call Func_140fe
-	ld a, [wcdcf]
+	ld a, [wAIPlayerColor]
 	ld b, a
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 .asm_15998
 	ld a, [hli]
@@ -959,7 +959,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $03
 	call Func_1410a
 .asm_159ad
-	ld a, [wcdcf]
+	ld a, [wAIPlayerColor]
 	ld b, a
 	call GetArenaCardResistance
 	and b
@@ -967,9 +967,9 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $03
 	call Func_1410a
 .asm_159bc
-	ld a, [$cdd0]
+	ld a, [wAIPlayerWeakness]
 	ld b, a
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, $00
 .asm_159c7
@@ -987,12 +987,12 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $02
 	call Func_140fe
 	push de
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
 	pop de
-	cp $bd
+	cp PORYGON
 	jr nz, .asm_159fc
 	ld a, e
 	call Func_17383
@@ -1004,15 +1004,15 @@ Func_158b2: ; 158b2 (5:58b2)
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
-	ld a, [$cdd0]
+	ld a, [wAIPlayerWeakness]
 	and b
 	jr z, .asm_15a0e
 	ld a, $03
 	call Func_1410a
 .asm_15a0e
-	ld a, [wcdcf]
+	ld a, [wAIPlayerColor]
 	ld b, a
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 .asm_15a17
 	ld a, [hli]
@@ -1025,7 +1025,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $01
 	call Func_140fe
 .asm_15a2a
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld c, $00
 .asm_15a31
@@ -1052,8 +1052,8 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop hl
 	ld a, $02
 	call Func_140fe
-	ld a, [$cdd3]
-	cp $02
+	ld a, [wAIOpponentPrizeCount]
+	cp 2
 	jr nc, .asm_15a7a
 	call Func_17426
 	jr c, .asm_15a7a
@@ -1069,21 +1069,21 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $01
 	ld [$cdd7], a
 .asm_15a7a
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp $9b
+	cp MR_MIME
 	jr z, .asm_15a91
-	cp $87
+	cp HITMONLEE
 	jr nz, .asm_15abc
 .asm_15a91
 	xor a
 	call Func_17383
 	jr c, .asm_15abc
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld c, $00
 .asm_15a9e
@@ -1110,9 +1110,9 @@ Func_158b2: ; 158b2 (5:58b2)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
-	cp $02
+	cp 2
 	jr c, .asm_15ad6
-	cp $03
+	cp 3
 	jr nc, .asm_15ad1
 	ld a, $01
 	call Func_1410a
@@ -1128,7 +1128,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr c, .asm_15ae5
 	call Func_140fe
 .asm_15ae5
-	ld a, $bc
+	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, $00
 .asm_15aec
@@ -1142,9 +1142,9 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wLoadedCard2ID]
 	pop hl
 	pop de
-	cp $cc
+	cp MYSTERIOUS_FOSSIL
 	jr z, .asm_15aec
-	cp $cb
+	cp CLEFAIRY_DOLL
 	jr z, .asm_15aec
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1159,13 +1159,13 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $14
 	call Func_1410a
 .asm_15b17
-	ld a, $bb
+	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
-	cp $cc
+	cp MYSTERIOUS_FOSSIL
 	jr z, .asm_15b33
-	cp $cb
+	cp CLEFAIRY_DOLL
 	jr z, .asm_15b33
 	ld a, [wcdbe]
 	cp $83
@@ -1181,7 +1181,7 @@ Func_158b2: ; 158b2 (5:58b2)
 .asm_15b35
 	inc e
 	ld a, e
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .asm_15b2f
@@ -1245,7 +1245,7 @@ Func_15eae: ; 15eae (5:5eae)
 	ld a, $82
 	ld [wcdbe], a
 	call Func_161d5
-	ld a, $ef
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp $04
 	jr c, .asm_15ef2
