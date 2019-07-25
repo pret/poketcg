@@ -1300,7 +1300,7 @@ wCheckMenuPlayAreaWhichLayout:: ; ce51
 	ds $1
 
 ; the position of cursor in the "In Play Area" screen
-wInPlayAreaCursorPosition:: ; ce52
+wInPlayAreaCurPosition:: ; ce52
 
 ; holds the position of the cursor when selecting a prize card
 wPrizeCardCursorPosition:: ; ce52
@@ -1326,7 +1326,7 @@ wInPlayAreaPreservedPosition:: ; ce57
 
 ; it's used for checking if the player changed
 ; the cursor in the play area view.
-wInPlayAreaTemporaryCursorPosition:: ; ce58
+wInPlayAreaTemporaryPosition:: ; ce58
 	ds $1
 
 wce59:: ; ce59
