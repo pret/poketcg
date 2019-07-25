@@ -1308,12 +1308,14 @@ wPrizeCardCursorPosition:: ; ce52
 
 ; pointer to the table which contains information for each key-press.
 wInPlayAreaInputTablePointer:: ; ce53
+
+wce53:: ; ce53
 	ds $2
 
 ; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
-  
+
   ds $1
 
 ; it's used for restore the position of cursor
