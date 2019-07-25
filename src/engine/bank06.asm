@@ -156,8 +156,8 @@ _CopyCardNameAndLevel_HalfwidthText:
 ; it can be called with either the select button (DuelMenuShortcut_BothActivePokemon),
 ; or via the "In Play Area" item of the Check menu (DuelCheckMenu_InPlayArea)
 OpenInPlayAreaScreen: ; 180d5 (6:40d5)
-	ld a, $05
-	ld [wInPlayAreaCursorPosition], a
+	ld a, INPLAYAREA_PLAYER_ACTIVE
+	ld [wInPlayAreaCurPosition], a
 .start
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
@@ -176,8 +176,8 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, [wInPlayAreaCursorPosition]
-	call .print_card_name
+	ld a, [wInPlayAreaCurPosition]
+	call .print_associated_text
 .on_frame
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -195,24 +195,24 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 
 	ldh a, [hDPadHeld]
 	and SELECT
-	jr nz, .toggle_view
+	jr nz, .skip_input
 
 .handle_input
-	ld a, [wInPlayAreaCursorPosition]
-	ld [wInPlayAreaTemporaryCursorPosition], a
+	ld a, [wInPlayAreaCurPosition]
+	ld [wInPlayAreaTemporaryPosition], a
 	call OpenInPlayAreaScreen_HandleInput
 	jr c, .pressed
 
-	ld a, [wInPlayAreaCursorPosition]
-	cp $10 ; player's hand
-	jp z, .show_turn_holder_hand
-	cp $11 ; opponent's hand
-	jp z, .show_non_turn_holder_hand
+	ld a, [wInPlayAreaCurPosition]
+	cp INPLAYAREA_PLAYER_PLAY_AREA
+	jp z, .show_turn_holder_play_area
+	cp INPLAYAREA_OPP_PLAY_AREA
+	jp z, .show_non_turn_holder_play_area
 
 	; check if the cursor moved.
-	ld hl, wInPlayAreaTemporaryCursorPosition
+	ld hl, wInPlayAreaTemporaryPosition
 	cp [hl]
-	call nz, .print_card_name
+	call nz, .print_associated_text
 
 	jr .on_frame
 
@@ -227,7 +227,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	scf
 	ret
 
-.toggle_view
+.skip_input
 	call ZeroObjectPositionsAndToggleOAMCopy_Bank6
 	lb de, $38, $9f
 	call SetupText
@@ -238,16 +238,18 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	call ZeroObjectPositionsAndToggleOAMCopy_Bank6
 	lb de, $38, $9f
 	call SetupText
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	ld [wInPlayAreaPreservedPosition], a
 	ld hl, .jump_table
 	call JumpToFunctionInTable
 	ld a, [wInPlayAreaPreservedPosition]
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 
 	jp .start
 
-.print_card_name ; 18171 (6:4171)
+.print_associated_text ; 18171 (6:4171)
+; each position has a text associated to it,
+; which is printed at the bottom of the screen
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
@@ -268,22 +270,30 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld b, 0
 	sla a
 	ld c, a
-	add hl, bc ; hl = OpenInPlayAreaScreen_TextTable + 2 * (wInPlayAreaCursorPosition)
+	add hl, bc
 
+	; hl = OpenInPlayAreaScreen_TextTable + 2 * (wInPlayAreaCurPosition)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld a, h
 
+	; jump ahead if entry does not contain null text (it's not active pokemon)
 	or a
-	jr nz, .raw_string
+	jr nz, .print_hand_or_discard_pile
 
 	ld a, l
-	cp TX_HALFWIDTH
-	jr nc, .raw_string
+	; bench slots have dummy text IDs assigned to them, which are never used.
+	; these are secretly not text id's, but rather, 2-byte PLAY_AREA_BENCH_* constants
+	; check if the value at register l is one of those, and jump ahead if not
+	cp PLAY_AREA_BENCH_5 + $01
+	jr nc, .print_hand_or_discard_pile
 
-	ld a, [wInPlayAreaCursorPosition]
-	cp $06
+; if we make it here, we need to print a Pokemon card name.
+; wInPlayAreaCurPosition determines which duelist
+; and l contains the PLAY_AREA_* location of the card.
+	ld a, [wInPlayAreaCurPosition]
+	cp INPLAYAREA_PLAYER_HAND
 	jr nc, .opponent_side
 
 	ld a, l
@@ -294,7 +304,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	jr .display_card_info
+	jr .display_card_name
 
 .opponent_side
 	ld a, l
@@ -307,27 +317,31 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	call SwapTurn
-.display_card_info
+
+.display_card_name
 	ld a, 18
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call ProcessText
 	ret
 
-.raw_string
-	ld a, [wInPlayAreaCursorPosition]
-	cp $08
-	jr nc, .opponent_side_raw_string
+.print_hand_or_discard_pile
+; if we make it here, cursor position is to Hand or Discard Pile
+; so DuelistHandText_2 or DuelistDiscardPileText will be printed
+
+	ld a, [wInPlayAreaCurPosition]
+	cp INPLAYAREA_OPP_ACTIVE
+	jr nc, .opp_side_print_hand_or_discard_pile
 	call PrintTextNoDelay
 	ret
 
-.opponent_side_raw_string
+.opp_side_print_hand_or_discard_pile
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
 	ret
 
-.show_turn_holder_hand
+.show_turn_holder_play_area
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -336,10 +350,10 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [wInPlayAreaPreservedPosition]
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 	jp .start
 
-.show_non_turn_holder_hand
+.show_non_turn_holder_play_area
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -348,33 +362,33 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	pop af
 	ldh [hWhoseTurn], a
 	ld a, [wInPlayAreaPreservedPosition]
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 	jp .start
 
 .jump_table ; (6:4228)
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x00: my bench pokemon 1
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x01: my bench pokemon 2
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x02: my bench pokemon 3
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x03: my bench pokemon 4
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x04: my bench pokemon 5
-	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x05: my active pokemon
-	dw OpenInPlayAreaScreen_TurnHolderHand           ; 0x06: my hand
-	dw OpenInPlayAreaScreen_TurnHolderDiscardPile    ; 0x07: my discard pile
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x08: opp. active pokemon
-	dw OpenInPlayAreaScreen_NonTurnHolderHand        ; 0x09: opp. hand
-	dw OpenInPlayAreaScreen_NonTurnHolderDiscardPile ; 0x0a: opp. discard pile
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0b: opp. bench pokemon 1
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0c: opp. bench pokemon 2
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0d: opp. bench pokemon 3
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0e: opp. bench pokemon 4
-	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0f: opp. bench pokemon 5
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x00: INPLAYAREA_PLAYER_BENCH_1
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x01: INPLAYAREA_PLAYER_BENCH_2
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x02: INPLAYAREA_PLAYER_BENCH_3
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x03: INPLAYAREA_PLAYER_BENCH_4
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x04: INPLAYAREA_PLAYER_BENCH_5
+	dw OpenInPlayAreaScreen_TurnHolderPlayArea       ; 0x05: INPLAYAREA_PLAYER_ACTIVE
+	dw OpenInPlayAreaScreen_TurnHolderHand           ; 0x06: INPLAYAREA_PLAYER_HAND
+	dw OpenInPlayAreaScreen_TurnHolderDiscardPile    ; 0x07: INPLAYAREA_PLAYER_DISCARD_PILE
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x08: INPLAYAREA_OPP_ACTIVE
+	dw OpenInPlayAreaScreen_NonTurnHolderHand        ; 0x09: INPLAYAREA_OPP_HAND
+	dw OpenInPlayAreaScreen_NonTurnHolderDiscardPile ; 0x0a: INPLAYAREA_OPP_DISCARD_PILE
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0b: INPLAYAREA_OPP_BENCH_1
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0c: INPLAYAREA_OPP_BENCH_2
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0d: INPLAYAREA_OPP_BENCH_3
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0e: INPLAYAREA_OPP_BENCH_4
+	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0f: INPLAYAREA_OPP_BENCH_5
 
 OpenInPlayAreaScreen_TurnHolderPlayArea:
-	; wInPlayAreaCursorPosition constants conveniently map to (PLAY_AREA_* constants - 1)
+	; wInPlayAreaCurPosition constants conveniently map to (PLAY_AREA_* constants - 1)
 	; for bench locations. this mapping is taken for granted in the following code.
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	inc a
-	cp $05 + 1 ; $05: my active pokemon
+	cp INPLAYAREA_PLAYER_ACTIVE + $01
 	jr nz, .on_bench
 	xor a ; PLAY_AREA_ARENA
 .on_bench
@@ -391,12 +405,13 @@ OpenInPlayAreaScreen_TurnHolderPlayArea:
 	ret
 
 OpenInPlayAreaScreen_NonTurnHolderPlayArea:
-	ld a, [wInPlayAreaCursorPosition]
-	sub $08
+	ld a, [wInPlayAreaCurPosition]
+	sub INPLAYAREA_OPP_ACTIVE
 	or a
-	jr z, .on_bench
-	sub $02
-.on_bench
+	jr z, .active
+	; convert INPLAYAREA_OPP_BENCH_* constant to PLAY_AREA_BENCH_* constant
+	sub INPLAYAREA_OPP_BENCH_1 - INPLAYAREA_OPP_ACTIVE - PLAY_AREA_BENCH_1
+.active
 	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -444,22 +459,33 @@ OpenInPlayAreaScreen_NonTurnHolderDiscardPile:
 	ret
 
 OpenInPlayAreaScreen_TextTable:
-	tx HandText
-	tx CheckText
-	tx AttackText
-	tx PKMNPowerText
-	tx DoneText
-	dw NONE
-	tx DuelistHandText_2
-	tx DuelistDiscardPileText
-	dw NONE
-	tx DuelistHandText_2
-	tx DuelistDiscardPileText
-	tx HandText
-	tx CheckText
-	tx AttackText
-	tx PKMNPowerText
-	tx DoneText
+; note that for bench slots, the entries are
+; PLAY_AREA_BENCH_* constants in practice
+	tx HandText               ; INPLAYAREA_PLAYER_BENCH_1
+	tx CheckText              ; INPLAYAREA_PLAYER_BENCH_2
+	tx AttackText             ; INPLAYAREA_PLAYER_BENCH_3
+	tx PKMNPowerText          ; INPLAYAREA_PLAYER_BENCH_4
+	tx DoneText               ; INPLAYAREA_PLAYER_BENCH_5
+	dw NONE                   ; INPLAYAREA_PLAYER_ACTIVE
+	tx DuelistHandText_2      ; INPLAYAREA_PLAYER_HAND
+	tx DuelistDiscardPileText ; INPLAYAREA_PLAYER_DISCARD_PILE
+	dw NONE                   ; INPLAYAREA_OPP_ACTIVE
+	tx DuelistHandText_2      ; INPLAYAREA_OPP_HAND
+	tx DuelistDiscardPileText ; INPLAYAREA_OPP_DISCARD_PILE
+	tx HandText               ; INPLAYAREA_OPP_BENCH_1
+	tx CheckText              ; INPLAYAREA_OPP_BENCH_2
+	tx AttackText             ; INPLAYAREA_OPP_BENCH_3
+	tx PKMNPowerText          ; INPLAYAREA_OPP_BENCH_4
+	tx DoneText               ; INPLAYAREA_OPP_BENCH_5
+
+; cursor x / cursor y / attribute / idx-up / idx-down / idx-right / idx-left
+in_play_area_transition: MACRO
+	db \1, \2, \3
+	rept 4
+		db INPLAYAREA_\4
+		shift
+	endr
+ENDM
 
 ; it's related to wInPlayAreaInputTablePointer.
 ; with this table, the cursor moves into the proper location by the input.
@@ -467,42 +493,40 @@ OpenInPlayAreaScreen_TextTable:
 ; idx-[direction] means the index to get when the input is in the direction.
 ; its attribute is used for drawing a flipped cursor.
 OpenInPlayAreaScreen_TransitionTable1:
-; cursor x pos. / cursor y pos. / attribute / idx-up / idx-down / idx-right / idx-left
-	db $18, $8c, $00, $05, $10, $01, $04
-	db $30, $8c, $00, $05, $10, $02, $00
-	db $48, $8c, $00, $05, $10, $03, $01
-	db $60, $8c, $00, $05, $10, $04, $02
-	db $78, $8c, $00, $05, $10, $00, $03
-	db $30, $6c, $00, $08, $00, $07, $07
-	db $78, $80, $00, $07, $00, $05, $05
-	db $78, $70, $00, $08, $06, $05, $05
-	db $78, $34, $20, $0b, $05, $0a, $0a
-	db $30, $20, $20, $0b, $0a, $08, $08
-	db $30, $38, $20, $0b, $05, $08, $08
-	db $90, $14, $20, $11, $08, $0f, $0c
-	db $78, $14, $20, $11, $08, $0b, $0d
-	db $60, $14, $20, $11, $08, $0c, $0e
-	db $48, $14, $20, $11, $08, $0d, $0f
-	db $30, $14, $20, $11, $08, $0e, $0b
+	in_play_area_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
+	in_play_area_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
+	in_play_area_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
+	in_play_area_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
+	in_play_area_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
+	in_play_area_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
+	in_play_area_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
+	in_play_area_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_transition $30, $38, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
+	in_play_area_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
+	in_play_area_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
+	in_play_area_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
+	in_play_area_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
 
 OpenInPlayAreaScreen_TransitionTable2:
-; same as 1.
-	db $18, $8c, $00, $05, $10, $01, $04
-	db $30, $8c, $00, $05, $10, $02, $00
-	db $48, $8c, $00, $05, $10, $03, $01
-	db $60, $8c, $00, $05, $10, $04, $02
-	db $78, $8c, $00, $05, $10, $00, $03
-	db $30, $6c, $00, $08, $00, $07, $07
-	db $78, $80, $00, $07, $00, $05, $05
-	db $78, $70, $00, $08, $06, $05, $05
-	db $78, $34, $20, $0b, $05, $0a, $0a
-	db $30, $20, $20, $0b, $0a, $08, $08
-	db $30, $38, $20, $09, $05, $08, $08
-	db $90, $14, $20, $11, $08, $0f, $0c
-	db $78, $14, $20, $11, $08, $0b, $0d
-	db $60, $14, $20, $11, $08, $0c, $0e
-	db $48, $14, $20, $11, $08, $0d, $0f
-	db $30, $14, $20, $11, $08, $0e, $0b
+	in_play_area_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
+	in_play_area_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
+	in_play_area_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
+	in_play_area_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
+	in_play_area_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
+	in_play_area_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
+	in_play_area_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
+	in_play_area_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_transition $30, $38, 1 << OAM_X_FLIP, OPP_HAND, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
+	in_play_area_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
+	in_play_area_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
+	in_play_area_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
+	in_play_area_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
 
 OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	xor a
@@ -511,7 +535,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -560,16 +584,16 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld a, [hl]
 .process_dpad
 	push af
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	ld [wInPlayAreaPreservedPosition], a
 	pop af
 
-	ld [wInPlayAreaCursorPosition], a
-	cp $05
+	ld [wInPlayAreaCurPosition], a
+	cp INPLAYAREA_PLAYER_ACTIVE
 	jr c, .player_area
-	cp $0b
+	cp INPLAYAREA_OPP_BENCH_1
 	jr c, .next
-	cp $10
+	cp INPLAYAREA_PLAYER_PLAY_AREA
 	jr c, .opponent_area
 
 	jr .next
@@ -581,14 +605,14 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	jr nz, .bench_pokemon_exists
 
 	; no pokemon in player's bench.
-	; then move to player's hand.
-	ld a, $10
-	ld [wInPlayAreaCursorPosition], a
+	; then move to player's play area.
+	ld a, INPLAYAREA_PLAYER_PLAY_AREA
+	ld [wInPlayAreaCurPosition], a
 	jr .next
 
 .bench_pokemon_exists
 	ld b, a
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	cp b
 	jr c, .next
 
@@ -598,13 +622,13 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	jr z, .on_left
 
 	xor a
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 	jr .next
 
 .on_left
 	ld a, b
 	dec a
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 	jr .next
 
 .opponent_area
@@ -613,14 +637,14 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	dec a
 	jr nz, .bench_pokemon_exists_2
 
-	ld a, $11
-	ld [wInPlayAreaCursorPosition], a
+	ld a, INPLAYAREA_OPP_PLAY_AREA
+	ld [wInPlayAreaCurPosition], a
 	jr .next
 
 .bench_pokemon_exists_2
 	ld b, a
-	ld a, [wInPlayAreaCursorPosition]
-	sub $0b
+	ld a, [wInPlayAreaCurPosition]
+	sub INPLAYAREA_OPP_BENCH_1
 	cp b
 	jr c, .next
 
@@ -628,14 +652,14 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	bit D_LEFT_F, a
 	jr z, .on_right
 
-	ld a, $0b
-	ld [wInPlayAreaCursorPosition], a
+	ld a, INPLAYAREA_OPP_BENCH_1
+	ld [wInPlayAreaCurPosition], a
 	jr .next
 
 .on_right
 	ld a, b
-	add $0a
-	ld [wInPlayAreaCursorPosition], a
+	add INPLAYAREA_OPP_DISCARD_PILE
+	ld [wInPlayAreaCurPosition], a
 .next
 	ld a, $01
 	ld [wcfe3], a
@@ -659,7 +683,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	call .draw_cursor
 	ld a, $01
 	farcall PlaySFXConfirmOrCancel
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	scf
 	ret
 
@@ -684,7 +708,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wInPlayAreaCursorPosition]
+	ld a, [wInPlayAreaCurPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
@@ -712,7 +736,7 @@ Func_184c8: ; 184c8 (6:44c8)
 	call Func_1852b
 
 	xor a
-	ld [wInPlayAreaCursorPosition], a
+	ld [wInPlayAreaCurPosition], a
 	ld de, $4c8e ; this data is stored in bank 2.
 	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e

@@ -22,11 +22,11 @@ _OpenDuelCheckMenu: ; 8000 (2:4000)
 	ld b, a
 	ld a, [wCheckMenuCursorXPosition]
 	add b
-	ld hl, .table
+	ld hl, .jump_table
 	call JumpToFunctionInTable
 	jr _OpenDuelCheckMenu
 
-.table: ; 8031 (2:4031)
+.jump_table: ; 8031 (2:4031)
 	dw DuelCheckMenu_InPlayArea
 	dw DuelCheckMenu_Glossary
 	dw DuelCheckMenu_YourPlayArea
@@ -88,11 +88,11 @@ DuelCheckMenu_YourPlayArea: ; 8047 (2:4047)
 	ld b, a
 	ld a, [wCheckMenuCursorXPosition]
 	add b
-	ld hl, .table
+	ld hl, .jump_table
 	call JumpToFunctionInTable
 	jr .draw
 
-.table ; 8098 (2:4098)
+.jump_table ; 8098 (2:4098)
 	dw OpenYourOrOppPlayAreaScreen_TurnHolderPlayArea
 	dw OpenYourOrOppPlayAreaScreen_TurnHolderHand
 	dw OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile
@@ -225,11 +225,11 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	ld b, a
 	ld a, [wCheckMenuCursorXPosition]
 	add b
-	ld hl, .table
+	ld hl, .jump_table
 	call JumpToFunctionInTable
 	jr .turns
 
-.table
+.jump_table
 	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea
 	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderHand
 	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile
