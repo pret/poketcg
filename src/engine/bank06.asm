@@ -152,147 +152,182 @@ _CopyCardNameAndLevel_HalfwidthText:
 	ret
 ; 0x180d5
 
-Func_180d5: ; 180d5 (6:40d5)
+; this function is called when the player is shown the appearance of the play area.
+; it can be called in the command window from either pressing select button
+; or selecting check command.
+OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	ld a, $05
-	ld [wPrizeCardCursorPosition], a
-.asm_006_40da
+	ld [wInPlayAreaCursorPosition], a
+.start
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 	farcall DrawInPlayAreaScreen
 	call EnableLCD
 	call IsClairvoyanceActive
-	jr c, .asm_006_40ef
-	ld de, $42db
-	jr .asm_006_40f2
-.asm_006_40ef
-	ld de, $434b
-.asm_006_40f2
-	ld hl, $ce53
+	jr c, .clairvoyance_on
+
+	ld de, OpenInPlayAreaScreen_TransitionTable1
+	jr .clairvoyance_off
+
+.clairvoyance_on
+	ld de, OpenInPlayAreaScreen_TransitionTable2
+.clairvoyance_off
+	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld a, [wPrizeCardCursorPosition]
-	call .asm_006_4171
-.asm_006_40fe
+	ld a, [wInPlayAreaCursorPosition]
+	call .print_card_name
+.on_frame
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
+
 	ldh a, [hDPadHeld]
-	and $08
-	jr nz, .asm_006_4153
-	ld a, [wce60]
+	and START
+	jr nz, .selection
+
+	; if this function's been called from 'select' button,
+	; wIsFromSelectButton is on.
+	ld a, [wIsFromSelectButton]
 	or a
-	jr z, .asm_006_4118
+	jr z, .handle_input ; if it's from the check command, jump.
+
 	ldh a, [hDPadHeld]
-	and $04
-	jr nz, .asm_006_4148
-.asm_006_4118
-	ld a, [wPrizeCardCursorPosition]
-	ld [$ce58], a
-	call Func_006_43bb
-	jr c, .asm_006_4139
-	ld a, [wPrizeCardCursorPosition]
-	cp $10
-	jp z, .asm_006_41f8
-	cp $11
-	jp z, .asm_006_4210
-	ld hl, $ce58
+	and SELECT
+	jr nz, .toggle_view
+
+.handle_input
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaTemporaryCursorPosition], a
+	call OpenInPlayAreaScreen_HandleInput
+	jr c, .pressed
+
+	ld a, [wInPlayAreaCursorPosition]
+	cp $10 ; player's hand
+	jp z, .show_turn_holder_hand
+	cp $11 ; opponent's hand
+	jp z, .show_non_turn_holder_hand
+
+	; check if the cursor moved.
+	ld hl, wInPlayAreaTemporaryCursorPosition
 	cp [hl]
-	call nz, .asm_006_4171
-	jr .asm_006_40fe
-.asm_006_4139
-	cp $ff
-	jr nz, .asm_006_4153
-	call Func_006_44bf
+	call nz, .print_card_name
+	
+	jr .on_frame
+
+.pressed
+	cp -1
+	jr nz, .selection
+
+	; pressed b button.
+	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
 	scf
 	ret
-.asm_006_4148
-	call Func_006_44bf
+
+.toggle_view
+	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
 	or a
 	ret
-.asm_006_4153
-	call Func_006_44bf
+
+.selection ; pressed a button or start button.
+	call OpenInPlayAreaScreen_HandleInput.non_draw_cursor
 	lb de, $38, $9f
 	call SetupText
-	ld a, [wPrizeCardCursorPosition]
-	ld [$ce57], a
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaPreservedPosition], a
 	ld hl, .jump_table
 	call JumpToFunctionInTable
-	ld a, [$ce57]
-	ld [wPrizeCardCursorPosition], a
-	jp .asm_006_40da
-.asm_006_4171 ; 18171 (6:4171)
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
+
+	jp .start
+
+.print_card_name ; 18171 (6:4171)
 	push af
 	lb de, 1, 17
 	call InitTextPrinting
 	ldtx hl, EmptyLineText
 	call ProcessTextFromID
+
 	ld hl, hffb0
 	ld [hl], $01
 	ldtx hl, HandText_2
 	call ProcessTextFromID
+
 	ld hl, hffb0
 	ld [hl], $00
 	lb de, 1, 17
 	call InitTextPrinting
 	pop af
-	ld hl, TextIDTable_182bb
+	ld hl, OpenInPlayAreaScreen_TextTable
 	ld b, 0
 	sla a
 	ld c, a
-	add hl, bc
+	add hl, bc ; hl = TextIDTable_182bb + 2 * (wPlayAreaCursorPostion)
+
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld a, h
+	
 	or a
-	jr nz, .asm_006_41e3
+	jr nz, .raw_string
+
 	ld a, l
 	cp $06
-	jr nc, .asm_006_41e3
-	ld a, [wPrizeCardCursorPosition]
+	jr nc, .raw_string
+
+	ld a, [wInPlayAreaCursorPosition]
 	cp $06
-	jr nc, .asm_006_41c2
+	jr nc, .opponent_side
+
 	ld a, l
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp -1
 	ret z
+
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
-	jr .asm_006_41d7
-.asm_006_41c2
+	jr .display_card_info
+
+.opponent_side
 	ld a, l
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	cp -1
 	ret z
+
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
 	call SwapTurn
-.asm_006_41d7
+.display_card_info
 	ld a, 18
 	call CopyCardNameAndLevel
 	ld hl, wDefaultText
 	call ProcessText
 	ret
-.asm_006_41e3
-	ld a, [wPrizeCardCursorPosition]
+
+.raw_string
+	ld a, [wInPlayAreaCursorPosition]
 	cp $08
-	jr nc, .asm_006_41ee
+	jr nc, .opponent_side_raw_string
 	call PrintTextNoDelay
 	ret
-.asm_006_41ee
+
+.opponent_side_raw_string
 	call SwapTurn
 	call PrintTextNoDelay
 	call SwapTurn
 	ret
-.asm_006_41f8
+
+.show_turn_holder_hand
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -300,10 +335,11 @@ Func_180d5: ; 180d5 (6:40d5)
 	bank1call OpenTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [$ce57]
-	ld [wPrizeCardCursorPosition], a
-	jp .asm_006_40da
-.asm_006_4210
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
+	jp .start
+
+.show_non_turn_holder_hand
 	lb de, $38, $9f
 	call SetupText
 	ldh a, [hWhoseTurn]
@@ -311,34 +347,36 @@ Func_180d5: ; 180d5 (6:40d5)
 	bank1call OpenNonTurnHolderPlayAreaScreen
 	pop af
 	ldh [hWhoseTurn], a
-	ld a, [$ce57]
-	ld [wPrizeCardCursorPosition], a
-	jp .asm_006_40da
-.jump_table ; (6:4228)
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4248
-	dw Func_006_4293
-	dw Func_006_42a7
-	dw Func_006_426a
-	dw Func_006_429d
-	dw Func_006_42b1
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
-	dw Func_006_426a
+	ld a, [wInPlayAreaPreservedPosition]
+	ld [wInPlayAreaCursorPosition], a
+	jp .start
 
-Func_006_4248:
-	ld a, [wPrizeCardCursorPosition]
+.jump_table ; (6:4228)
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x00: my bench pokemon 1
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x01: my bench pokemon 2
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x02: my bench pokemon 3
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x03: my bench pokemon 4
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x04: my bench pokemon 5
+	dw OpenInPlayAreaScreen_ShowPlayerAreaPokemon ; 0x05: my active pokemon
+	dw OpenInPlayAreaScreen_ShowTurnHolderHand ; 0x06: my hand
+	dw OpenInPlayAreaScreen_ShowPlayerDiscardPile ; 0x07: my discard pile
+	
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x08: opp. active pokemon
+	dw OpenInPlayAreaScreen_ShowNonTurnHolderHand ; 0x09: opp. hand
+	dw OpenInPlayAreaScreen_ShowOpponentDiscardPile ; 0x0a: opp. discard pile
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0b: opp. bench pokemon 1
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0c: opp. bench pokemon 2
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0d: opp. bench pokemon 3
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0e: opp. bench pokemon 4
+	dw OpenInPlayAreaScreen_ShowOpponentAreaPokemon ; 0x0f: opp. bench pokemon 5
+
+OpenInPlayAreaScreen_ShowPlayerAreaPokemon:
+	ld a, [wInPlayAreaCursorPosition]
 	inc a
-	cp PLAY_AREA_BENCH_5 + $01
-	jr nz, .asm_006_4251
+	cp $05 + 1 ; $05: my active pokemon
+	jr nz, .on_bench
 	xor a ; PLAY_AREA_ARENA
-.asm_006_4251
+.on_bench
 	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -351,13 +389,13 @@ Func_006_4248:
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
-Func_006_426a:
-	ld a, [wPrizeCardCursorPosition]
+OpenInPlayAreaScreen_ShowOpponentAreaPokemon:
+	ld a, [wInPlayAreaCursorPosition]
 	sub $08
 	or a
-	jr z, .asm_006_4274
+	jr z, .on_bench
 	sub $02
-.asm_006_4274
+.on_bench
 	ld [wCurPlayAreaSlot], a
 	add DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -372,7 +410,7 @@ Func_006_426a:
 	call SwapTurn
 	ret
 
-Func_006_4293:
+OpenInPlayAreaScreen_ShowTurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -380,7 +418,7 @@ Func_006_4293:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_429d:
+OpenInPlayAreaScreen_ShowNonTurnHolderHand:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -388,7 +426,7 @@ Func_006_429d:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_42a7:
+OpenInPlayAreaScreen_ShowPlayerDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -396,7 +434,7 @@ Func_006_42a7:
 	ldh [hWhoseTurn], a
 	ret
 
-Func_006_42b1:
+OpenInPlayAreaScreen_ShowOpponentDiscardPile:
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -404,7 +442,7 @@ Func_006_42b1:
 	ldh [hWhoseTurn], a
 	ret
 
-TextIDTable_182bb:
+OpenInPlayAreaScreen_TextTable:
 	tx HandText
 	tx CheckText
 	tx AttackText
@@ -422,182 +460,260 @@ TextIDTable_182bb:
 	tx PKMNPowerText
 	tx DoneText
 
-	INCROM $182db, $183bb
+; it's related to wInPlayAreaInputTablePointer.
+; with this table, the cursor moves into the proper location by the input.
+; note that the unit of the position is not a 8x8 tile.
+; idx-[direction] means the index to get when the input is in the direction.
+; its attribute is used for drawing a flipped cursor.
+OpenInPlayAreaScreen_TransitionTable1:
+; cursor x pos. / cursor y pos. / attribute / idx-up / idx-down / idx-right / idx-left
+	db $18, $8c, $00, $05, $10, $01, $04
+	db $30, $8c, $00, $05, $10, $02, $00
+	db $48, $8c, $00, $05, $10, $03, $01
+	db $60, $8c, $00, $05, $10, $04, $02
+	db $78, $8c, $00, $05, $10, $00, $03
+	db $30, $6c, $00, $08, $00, $07, $07
+	db $78, $80, $00, $07, $00, $05, $05
+	db $78, $70, $00, $08, $06, $05, $05
+	db $78, $34, $20, $0b, $05, $0a, $0a
+	db $30, $20, $20, $0b, $0a, $08, $08
+	db $30, $38, $20, $0b, $05, $08, $08
+	db $90, $14, $20, $11, $08, $0f, $0c
+	db $78, $14, $20, $11, $08, $0b, $0d
+	db $60, $14, $20, $11, $08, $0c, $0e
+	db $48, $14, $20, $11, $08, $0d, $0f
+	db $30, $14, $20, $11, $08, $0e, $0b
 
-Func_006_43bb: ; 183bb (6:43bb)
+OpenInPlayAreaScreen_TransitionTable2:
+; same as 1.
+	db $18, $8c, $00, $05, $10, $01, $04
+	db $30, $8c, $00, $05, $10, $02, $00
+	db $48, $8c, $00, $05, $10, $03, $01
+	db $60, $8c, $00, $05, $10, $04, $02
+	db $78, $8c, $00, $05, $10, $00, $03
+	db $30, $6c, $00, $08, $00, $07, $07
+	db $78, $80, $00, $07, $00, $05, $05
+	db $78, $70, $00, $08, $06, $05, $05
+	db $78, $34, $20, $0b, $05, $0a, $0a
+	db $30, $20, $20, $0b, $0a, $08, $08
+	db $30, $38, $20, $09, $05, $08, $08
+	db $90, $14, $20, $11, $08, $0f, $0c
+	db $78, $14, $20, $11, $08, $0b, $0d
+	db $60, $14, $20, $11, $08, $0c, $0e
+	db $48, $14, $20, $11, $08, $0d, $0f
+	db $30, $14, $20, $11, $08, $0e, $0b
+
+OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	xor a
 	ld [wcfe3], a
-	ld hl, $ce53
-.asm_006_43c2
+	ld hl, wInPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	ld l, a
-.asm_006_43c9
 	ld h, $07
 	call HtimesL
 	add hl, de
+
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_006_446b
+	jp z, .check_button
+
 	inc hl
 	inc hl
 	inc hl
+
+	; check d-pad
 	bit D_UP_F, a
-	jr z, .asm_006_43df
-.asm_006_43dc
+	jr z, .else_if_down
+	
+	; up
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43df
+	jr .process_dpad
+
+.else_if_down
 	inc hl
 	bit D_DOWN_F, a
-	jr z, .asm_006_43e7
+	jr z, .else_if_right
+	
+	; down
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43e7
+	jr .process_dpad
+
+.else_if_right
 	inc hl
 	bit D_RIGHT_F, a
-	jr z, .asm_006_43ef
+	jr z, .else_if_left
+	
+	; right
 	ld a, [hl]
-	jr .asm_006_43f5
-.asm_006_43ef
+	jr .process_dpad
+
+.else_if_left
 	inc hl
 	bit D_LEFT_F, a
-	jr z, .asm_006_446b
+	jr z, .check_button
+
+	; left
 	ld a, [hl]
-.asm_006_43f5
+.process_dpad
 	push af
-	ld a, [wPrizeCardCursorPosition]
-	ld [$ce57], a
+	ld a, [wInPlayAreaCursorPosition]
+	ld [wInPlayAreaPreservedPosition], a
 	pop af
-	ld [wPrizeCardCursorPosition], a
+
+	ld [wInPlayAreaCursorPosition], a
 	cp $05
-	jr c, .asm_006_440e
+	jr c, .player_area
 	cp $0b
-	jr c, .asm_006_4462
+	jr c, .next
 	cp $10
-	jr c, .asm_006_4437
-	jr .asm_006_4462
-.asm_006_440e
+	jr c, .opponent_area
+
+	jr .next
+
+.player_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
-	jr nz, .asm_006_441d
+	jr nz, .bench_pokemon_exists
+
+	; no pokemon in player's bench.
+	; then move to player's hand.
 	ld a, $10
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_006_4462
-.asm_006_441d
+	ld [wInPlayAreaCursorPosition], a
+	jr .next
+	
+.bench_pokemon_exists
 	ld b, a
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	cp b
-	jr c, .asm_006_4462
+	jr c, .next
+
+	; handle index overflow
 	ldh a, [hDPadHeld]
 	bit D_RIGHT_F, a
-	jr z, .asm_006_4430
+	jr z, .on_left
+
 	xor a
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_006_4462
-.asm_006_4430:
+	ld [wInPlayAreaCursorPosition], a
+	jr .next
+
+.on_left
 	ld a, b
 	dec a
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_006_4462
-.asm_006_4437:
+	ld [wInPlayAreaCursorPosition], a
+	jr .next
+
+.opponent_area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
-	jr nz, .asm_006_4446
+	jr nz, .bench_pokemon_exists_2
+
 	ld a, $11
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_006_4462
-.asm_006_4446
+	ld [wInPlayAreaCursorPosition], a
+	jr .next
+
+.bench_pokemon_exists_2
 	ld b, a
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	sub $0b
 	cp b
-	jr c, .asm_006_4462
+	jr c, .next
+
 	ldh a, [hDPadHeld]
 	bit D_LEFT_F, a
-	jr z, .asm_006_445c
+	jr z, .on_right
+
 	ld a, $0b
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_006_4462
-.asm_006_445c
+	ld [wInPlayAreaCursorPosition], a
+	jr .next
+
+.on_right
 	ld a, b
 	add $0a
-	ld [wPrizeCardCursorPosition], a
-.asm_006_4462
+	ld [wInPlayAreaCursorPosition], a
+.next
 	ld a, $01
 	ld [wcfe3], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-.asm_006_446b
+.check_button
 	ldh a, [hKeysPressed]
-	and $03
-	jr z, .asm_006_448b
-	and $01
-	jr nz, .asm_006_447d
-	ld a, $ff
+	and A_BUTTON | B_BUTTON
+	jr z, .return
+
+	and A_BUTTON
+	jr nz, .a_button
+
+	; pressed b button
+	ld a, -1
 	farcall PlaySFXConfirmOrCancel
 	scf
 	ret
-.asm_006_447d
-	call Func_006_44a0
+
+.a_button
+	call .draw_cursor
 	ld a, $01
 	farcall PlaySFXConfirmOrCancel
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	scf
 	ret
-.asm_006_448b
+
+.return
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_006_4494
+	jr z, .skip_sfx
 	call PlaySFX
-.asm_006_4494
+.skip_sfx
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and $10 - 1
 	ret nz
-	bit D_RIGHT_F, [hl]
-	jr nz, Func_006_44bf
 
-Func_006_44a0: ; 184a0 (6:44a0)
+	bit 4, [hl] ; = and $10
+	jr nz, .non_draw_cursor
+
+.draw_cursor ; 184a0 (6:44a0)
 	call ZeroObjectPositions
-	ld hl, $ce53
+	ld hl, wInPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wInPlayAreaCursorPosition]
 	ld l, a
 	ld h, $07
 	call HtimesL
 	add hl, de
-	ld d, [hl]
+	
+	ld d, [hl] ; x position.
 	inc hl
-	ld e, [hl]
+	ld e, [hl] ; y position.
 	inc hl
-	ld b, [hl]
+	ld b, [hl] ; attribute.
 	ld c, $00
 	call SetOneObjectAttributes
 	or a
 	ret
 
-Func_006_44bf: ; 184bf (6:44bf)
+.non_draw_cursor ; 184bf (6:44bf)
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
-Func_006_44c8:  ; 184c8 (6:44c8)
+Func_006_44c8: ; 184c8 (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
 	call Func_006_452b
+
 	xor a
-	ld [wPrizeCardCursorPosition], a
-	ld de, $4c8e
-	ld hl, $ce53
+	ld [wInPlayAreaCursorPosition], a
+	ld de, $4c8e ; this data is stored in bank 2.
+	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -605,40 +721,48 @@ Func_006_44c8:  ; 184c8 (6:44c8)
 	ld [wDuelInitialPrizesUpperBitsSet], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-.asm_006_44e5
+.next
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
 	ldh a, [hKeysPressed]
-	and $04
-	jr nz, .asm_006_4518
+	and SELECT
+	jr nz, .on_select
+
 	farcall $2, $49ae
-	jr nc, .asm_006_44e5
-	cp $ff
-	jr nz, .asm_006_4502
+	jr nc, .next
+	
+	cp -1 ; b button
+	jr nz, .check_button
+
 	farcall $2, $4aa1
 	ret
-.asm_006_4502
+	
+.check_button
 	push af
 	farcall $2, $4aa1
 	pop af
-	cp $09
-	jr z, .asm_006_451e
+
+	cp $09 ; $09: next page or prev page
+	jr z, .change_page
+
 	call Func_006_4598
 	call Func_006_452b
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-	jr .asm_006_44e5
-.asm_006_4518
+	jr .next
+
+.on_select
 	ld a, $01
 	farcall PlaySFXConfirmOrCancel
-.asm_006_451e
+.change_page
 	ld a, [wGlossaryPageNo]
-	xor $01
+	xor $01 ; swap page
 	ld [wGlossaryPageNo], a
 	call Func_006_455a
-	jr .asm_006_44e5
+	jr .next
 
+; display glossary menu.
 Func_006_452b: ; 1852b (6:452b)
 	xor a
 	ld [wTileMapFill], a
@@ -649,31 +773,39 @@ Func_006_452b: ; 1852b (6:452b)
 	call EmptyScreen
 	call Set_OBJ_8x8
 	farcall $2, $4992
+
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, Text02f6
+	ldtx hl, PokemonCardGlossaryText
 	call ProcessTextFromID
 	call Func_006_455a
-	ldtx hl, Text02f9
+	ldtx hl, ChooseWordAndPressAButtonText
 	call DrawWideTextBox_PrintText
 	ret
 
-; print glossary
+; print texts in glossary menu.
 Func_006_455a: ; 1855a (6:455a)
 	ld hl, wDefaultText
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, [wGlossaryPageNo]
 	add SYM_1
 	ld [hli], a
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, SYM_SLASH
 	ld [hli], a
+
 	ld a, TX_SYMBOL
 	ld [hli], a
+
 	ld a, SYM_2
 	ld [hli], a
+
 	ld [hl], TX_END
 
 	lb de, 16, 1
@@ -685,16 +817,18 @@ Func_006_455a: ; 1855a (6:455a)
 	call InitTextPrinting
 	ld a, [wGlossaryPageNo]
 	or a
-
 	jr nz, .page_two
-	ldtx hl, Text02f7
+
+	ldtx hl, GlossaryMenuPage1Text
 	jr .page_one
+
 .page_two
-	ldtx hl, Text02f8
+	ldtx hl, GlossaryMenuPage2Text
 .page_one
 	call ProcessTextFromID
 	ret
 
+; display glossary description.
 Func_006_4598: ; 18598 (6:4598)
 	push af
 	xor a
@@ -702,18 +836,21 @@ Func_006_4598: ; 18598 (6:4598)
 	call EmptyScreen
 	lb de, 5, 0
 	call InitTextPrinting
-	ldtx hl, Text02f6
+	ldtx hl, PokemonCardGlossaryText
 	call ProcessTextFromID
-	ld de, $0004
-	ld bc, $140e
+	lb de, 0, 4
+	lb bc, 20, 14
 	call DrawRegularTextBox
+
 	ld a, [wGlossaryPageNo]
 	or a
 	jr nz, .back_page
-	ld hl, GlossaryData1
+
+	ld hl, GlossaryData_1
 	jr .front_page
+
 .back_page
-	ld hl, GlossaryData2
+	ld hl, GlossaryData_2
 .front_page
 	pop af
 	; hl += (a + (a << 2)).
@@ -749,24 +886,26 @@ Func_006_4598: ; 18598 (6:4598)
 	xor a
 	ld [wLineSeparation], a
 	call EnableLCD
-.asm_006_45f7
+.loop
 	call DoFrame
 	ldh a, [hKeysPressed]
 	and B_BUTTON
-	jr z, .asm_006_45f7
-	ld a, $ff
+	jr z, .loop
+
+	ld a, -1
 	farcall PlaySFXConfirmOrCancel
 	ret
 
 ; unit: 5 bytes.
 ; [structure]
-; horizonal align (1) / text id 1 (2) / text id 2 (2)
+; horizonal align (1) / title text id (2) / desc. text id (2)
 glossary_entry: MACRO
 	db \1
 	tx \2
 	tx \3
 ENDM
-GlossaryData1:
+
+GlossaryData_1:
 	glossary_entry 7, Text02fa, Text030c
 	glossary_entry 5, Text02fb, Text030d
 	glossary_entry 7, Text02fc, Text030e
@@ -776,7 +915,8 @@ GlossaryData1:
 	glossary_entry 5, Text0300, Text0312
 	glossary_entry 7, Text0301, Text0313
 	glossary_entry 5, Text0302, Text0314
-GlossaryData2:
+  
+GlossaryData_2:
 	glossary_entry 5, Text0303, Text0315
 	glossary_entry 5, Text0304, Text0316
 	glossary_entry 5, Text0305, Text0317
@@ -787,7 +927,7 @@ GlossaryData2:
 	glossary_entry 6, Text030a, Text031c
 	glossary_entry 6, Text030b, Text031d
 
-; (6:4661)
+Func_006_4661: ; 18661 (6:4661)
 	xor a
 	ld [wcfe3], a
 	ld a, [wCheckMenuCursorXPosition]
@@ -891,7 +1031,7 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld l, a
 	ld h, 0
 	add hl, hl
-	ld de, $51a4
+	ld de, Data_006_51a4
 .asm_006_4fa8
 	add hl, de
 	ld e, [hl]
@@ -1197,8 +1337,205 @@ Func_006_5168: ; 19168 (6:5168)
 	bank1call DrawDuelHUDs
 	ret
 
-	INCROM $191a3, $1996e
+	ret
 
+Data_006_51a4:
+	dw $0000
+	dw $52c6
+	dw $52cf
+	dw $52c6
+	dw $52c6
+	dw $52c6
+	dw $52d8
+	dw $52d8
+	dw $52e3
+	dw $52d8
+	dw $52f0
+	dw $52f0
+	dw $52f0
+	dw $52f0
+	dw $52fd
+	dw $5308
+	dw $5313
+	dw $531e
+	dw $5329
+	dw $5334
+	dw $533f
+	dw $534a
+	dw $5357
+	dw $5362
+	dw $5362
+	dw $536d
+	dw $536d
+	dw $536d
+	dw $5378
+	dw $5383
+	dw $538e
+	dw $5383
+	dw $5399
+	dw $53a4
+	dw $53af
+	dw $53ba
+	dw $53c5
+	dw $53d0
+	dw $53d5
+	dw $53e0
+	dw $53eb
+	dw $53f6
+	dw $53f6
+	dw $53f6
+	dw $5401
+	dw $540c
+	dw $5417
+	dw $5422
+	dw $542d
+	dw $542d
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5438
+	dw $5443
+	dw $5443
+	dw $544e
+	dw $5443
+	dw $5443
+	dw $5443
+	dw $5453
+	dw $5453
+	dw $5460
+	dw $5453
+	dw $5467
+	dw $5467
+	dw $5472
+	dw $5472
+	dw $547d
+	dw $5488
+	dw $548f
+	dw $549c
+	dw $549c
+	dw $54a9
+	dw $54a9
+	dw $54ae
+	dw $54ae
+	dw $54b3
+	dw $54be
+	dw $54c3
+	dw $54c8
+	dw $54d3
+	dw $54e0
+	dw $54eb
+	dw $54f2
+	dw $54f9
+	dw $5504
+	dw $5513
+	dw $5516
+	dw $5521
+	dw $552e
+	dw $5533
+	dw $553a
+	dw $5543
+	dw $554a
+	dw $5555
+	dw $555e
+	dw $556d
+	dw $5574
+	dw $557b
+	dw $557e
+	dw $5583
+	dw $5583
+	dw $5583
+	dw $558c
+	dw $5597
+	dw $559c
+	dw $55a1
+	dw $55a4
+	dw $55a9
+	dw $55b4
+	dw $55b4
+	dw $55bf
+	dw $55c4
+	dw $55c9
+	dw $55ce
+	dw $55d5
+	dw $55e0
+	dw $55e5
+	dw $55e6
+	dw $55ed
+	dw $55f2
+	dw $55fb
+	dw $55fe
+	dw $5601
+	dw $5604
+	dw $5607
+	dw $560a
+	dw $560f
+	dw $5612
+	dw $561d
+	dw $5628
+	dw $562d
+	dw $5632
+	dw $5637
+	dw $5644
+	dw $564f
+	dw $5654
+	dw $5659
+	dw $565e
+	dw $5665
+	dw $5668
+	dw $5673
+	dw $5673
+
+	INCROM $192c6, $1991f
+
+Func_006_591f:
+	add a
+	ld e, a
+	ld d, 0
+	ld hl, .data
+	add hl, de
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
+	ld a, [hli]
+	add $02
+	push hl
+	ld hl, sDeck1Name
+	call Func_199e0
+	pop hl
+	call SwapTurn
+	ld a, [hli]
+	add $02
+	call LoadDeck
+	call SwapTurn
+	call EnableSRAM
+	ld h, $a1
+	ld de, wPlayerDeck
+	ld c, $3c
+.asm_006_594c
+	ld a, [de]
+	inc de
+	ld l, a
+	res 7, [hl]
+	dec c
+	jr nz, .asm_006_594c
+
+	ld h, $a1
+	ld de, wOpponentDeck
+	ld c, $1e
+.asm_006_595b
+	ld a, [de]
+	inc de
+	ld l, a
+	res 7, [hl]
+	inc [hl]
+	dec c
+	jr nz, .asm_006_595b
+
+	call DisableSRAM
+	ret
+.data
+	db $03, $04, $05, $06, $07, $08
+	
 Func_1996e: ; 1996e (6:596e)
 	call EnableSRAM
 	ld a, PLAYER_TURN
@@ -1394,8 +1731,8 @@ Func_006_668d:
 	lb de, $38, $9f
 	call SetupText
     bank1call InitAndDrawCardListScreenLayout
-	ld hl, $0056
-	ld de, $0196
+	ldtx hl, ChooseTheCardYouWishToExamineText
+	ldtx de, Text0196
 	bank1call SetCardListHeaderText
 	ld a, A_BUTTON | START
 	ld [wNoItemSelectionMenuKeys], a
@@ -1738,7 +2075,7 @@ PrintPlayerNameFromInput:
 	sub e
 	inc a
 	ld e, a
-	ld d, $00
+	ld d, 0
 	; print the underbars
 	; before print the input.
 	ld hl, .char_underbar
@@ -2083,7 +2420,7 @@ NamingScreen_ProcessInput:
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
-	ld bc, $0359 ; “
+	ldfw3 bc, "“"
 	ld a, d
 	cp b
 	jr nz, .asm_006_6af4
@@ -2097,7 +2434,7 @@ NamingScreen_ProcessInput:
 	jr c, .nothing
 	jr .asm_006_6b09
 .asm_006_6af4
-	ld bc, $035b ; º
+	ldfw3 bc, "º(2)"
 	ld a, d
 	cp b
 	jr nz, .asm_006_6b1d
@@ -2274,67 +2611,82 @@ GetCharInfoFromPos_Player:
 ; unit: 6 bytes.
 ; structure:
 ; abs. y pos. (1) / abs. x pos. (1) / type 1 (1) / type 2 (1) / char. code (2)
-; - unused data contains its character code as zero.
+; unused data contains its character code as zero.
 kbitem: MACRO
 	db \1, \2, \3, \4
+if (_NARG == 5)
 	dw \5
+elif (\5 == TX_FULLWIDTH3)
+	dw (\5 << 8) | STRCAT("FW3_", \6)
+else
+	dw (\5 << 8) | \6
+endc
 ENDM
 KeyboardData_Player: ; (6:6baf)
-	kbitem $04, $02, $11, $00, $0330
-	kbitem $06, $02, $12, $00, $0339
-	kbitem $08, $02, $13, $00, $0342
-	kbitem $0a, $02, $14, $00, $006f
-	kbitem $0c, $02, $15, $00, $0064
+	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
+	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
+	kbitem $08, $02, $13, $00, TX_FULLWIDTH3,   "S"
+	kbitem $0a, $02, $14, $00,                  "o"
+	kbitem $0c, $02, $15, $00,                  "d"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $04, $16, $00, $0331
-	kbitem $06, $04, $17, $00, $033a
-	kbitem $08, $04, $18, $00, $0343
-	kbitem $0a, $04, $19, $00, $035d
-	kbitem $0c, $04, $1a, $00, $0065
+
+	kbitem $04, $04, $16, $00, TX_FULLWIDTH3,   "B"
+	kbitem $06, $04, $17, $00, TX_FULLWIDTH3,   "K"
+	kbitem $08, $04, $18, $00, TX_FULLWIDTH3,   "T"
+	kbitem $0a, $04, $19, $00, TX_FULLWIDTH3,   "&"
+	kbitem $0c, $04, $1a, $00,                  "e"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $06, $1b, $00, $0332
-	kbitem $06, $06, $1c, $00, $033b
-	kbitem $08, $06, $1d, $00, $0344
-	kbitem $0a, $06, $1e, $00, $006a
-	kbitem $0c, $06, $1f, $00, $0066
+
+	kbitem $04, $06, $1b, $00, TX_FULLWIDTH3,   "C"
+	kbitem $06, $06, $1c, $00, TX_FULLWIDTH3,   "L"
+	kbitem $08, $06, $1d, $00, TX_FULLWIDTH3,   "U"
+	kbitem $0a, $06, $1e, $00,                  "j"
+	kbitem $0c, $06, $1f, $00,                  "f"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $08, $20, $00, $0333
-	kbitem $06, $08, $21, $00, $033c
-	kbitem $08, $08, $22, $00, $0345
-	kbitem $0a, $08, $23, $00, $006b
-	kbitem $0c, $08, $24, $00, $0067
+
+	kbitem $04, $08, $20, $00, TX_FULLWIDTH3,   "D"
+	kbitem $06, $08, $21, $00, TX_FULLWIDTH3,   "M"
+	kbitem $08, $08, $22, $00, TX_FULLWIDTH3,   "V"
+	kbitem $0a, $08, $23, $00,                  "k"
+	kbitem $0c, $08, $24, $00,                  "g"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0a, $25, $00, $0334
-	kbitem $06, $0a, $26, $00, $033d
-	kbitem $08, $0a, $27, $00, $0346
-	kbitem $0a, $0a, $28, $00, $0077
-	kbitem $0c, $0a, $29, $00, $0068
+
+	kbitem $04, $0a, $25, $00, TX_FULLWIDTH3,   "E"
+	kbitem $06, $0a, $26, $00, TX_FULLWIDTH3,   "N"
+	kbitem $08, $0a, $27, $00, TX_FULLWIDTH3,   "W"
+	kbitem $0a, $0a, $28, $00,                  "w"
+	kbitem $0c, $0a, $29, $00,                  "h"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0c, $2a, $00, $0335
-	kbitem $06, $0c, $2b, $00, $033e
-	kbitem $08, $0c, $2c, $00, $0347
-	kbitem $0a, $0c, $2d, $00, $0060
-	kbitem $0c, $0c, $2e, $00, $0069
+
+	kbitem $04, $0c, $2a, $00, TX_FULLWIDTH3,   "F"
+	kbitem $06, $0c, $2b, $00, TX_FULLWIDTH3,   "O"
+	kbitem $08, $0c, $2c, $00, TX_FULLWIDTH3,   "X"
+	kbitem $0a, $0c, $2d, $00,                  "`"
+	kbitem $0c, $0c, $2e, $00,                  "i"
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $0e, $2f, $00, $0336
-	kbitem $06, $0e, $30, $00, $033f
-	kbitem $08, $0e, $31, $00, $0348
-	kbitem $0a, $0e, $32, $00, $0061
-	kbitem $0c, $0e, $33, $00, $0513
+
+	kbitem $04, $0e, $2f, $00, TX_FULLWIDTH3,   "G"
+	kbitem $06, $0e, $30, $00, TX_FULLWIDTH3,   "P"
+	kbitem $08, $0e, $31, $00, TX_FULLWIDTH3,   "Y"
+	kbitem $0a, $0e, $32, $00,                  "a"
+	kbitem $0c, $0e, $33, $00, TX_SYMBOL,       SYM_No
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $10, $34, $00, $0337
-	kbitem $06, $10, $35, $00, $0340
-	kbitem $08, $10, $36, $00, $0349
-	kbitem $0a, $10, $3c, $00, $0062
-	kbitem $0c, $10, $3d, $00, $0511
+
+	kbitem $04, $10, $34, $00, TX_FULLWIDTH3,   "H"
+	kbitem $06, $10, $35, $00, TX_FULLWIDTH3,   "Q"
+	kbitem $08, $10, $36, $00, TX_FULLWIDTH3,   "Z"
+	kbitem $0a, $10, $3c, $00,                  "b"
+	kbitem $0c, $10, $3d, $00, TX_SYMBOL,       SYM_Lv
 	kbitem $10, $0f, $01, $09, $0000
-	kbitem $04, $12, $37, $00, $0338
-	kbitem $06, $12, $38, $00, $0341
-	kbitem $08, $12, $39, $00, $006e
-	kbitem $0a, $12, $3a, $00, $0063
-	kbitem $0c, $12, $3b, $00, $0070
+
+	kbitem $04, $12, $37, $00, TX_FULLWIDTH3,   "I"
+	kbitem $06, $12, $38, $00, TX_FULLWIDTH3,   "R"
+	kbitem $08, $12, $39, $00,                  "n"
+	kbitem $0a, $12, $3a, $00,	                "c"
+	kbitem $0c, $12, $3b, $00,	                "p"
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
+
 ; a set of transition datum.
 ; unit: 4 bytes.
 ; structure:
@@ -2368,6 +2720,7 @@ TransitionTable1:
 	dw $0e55, $0050
 	dw $0e56, $0051
 	dw $0000
+
 TransitionTable2:
 	dw $0e2a, $0052
 	dw $0e2b, $0053
@@ -2817,10 +3170,83 @@ GetCharInfoFromPos_Deck:
 	jr nz, .loop
 	ret
 
-; a bunch of data
 KeyboardData_Deck: ; (6:7019)
-    INCROM $1b019, $1b8e8
-	INCROM $1b8e8, $1ba12
+	db $04, $02, "A"
+	db $06, $02, "J"
+	db $08, $02, "S"
+	db $0a, $02, "?"
+	db $0c, $02, "4"
+	db $0e, $02, $02
+	db $10, $0f, $01
+
+	db $04, $04, "B"
+	db $06, $04, "K"
+	db $08, $04, "T"
+	db $0a, $04, "&"
+	db $0c, $04, "5"
+	db $0e, $04, $02
+	db $10, $0f, $01
+
+	db $04, $06, "C"
+	db $06, $06, "L"
+	db $08, $06, "U"
+	db $0a, $06, "+"
+	db $0c, $06, "6"
+	db $0e, $06, $02
+	db $10, $0f, $01
+
+	db $04, $08, "D"
+	db $06, $08, "M"
+	db $08, $08, "V"
+	db $0a, $08, "-"
+	db $0c, $08, "7"
+	db $0e, $08, $02
+	db $10, $0f, $01
+
+	db $04, $0a, "E"
+	db $06, $0a, "N"
+	db $08, $0a, "W"
+	db $0a, $0a, "'"
+	db $0c, $0a, "8"
+	db $0e, $0a, $02
+	db $10, $0f, $01
+
+	db $04, $0c, "F"
+	db $06, $0c, "O"
+	db $08, $0c, "X"
+	db $0a, $0c, "0"
+	db $0c, $0c, "9"
+	db $0e, $0c, $02
+	db $10, $0f, $01
+
+	db $04, $0e, "G"
+	db $06, $0e, "P"
+	db $08, $0e, "Y"
+	db $0a, $0e, "1"
+	db $0c, $0e, " "
+	db $0e, $0e, $02
+	db $10, $0f, $01
+
+	db $04, $10, "H"
+	db $06, $10, "Q"
+	db $08, $10, "Z"
+	db $0a, $10, "2"
+	db $0c, $10, " "
+	db $0e, $10, $02
+	db $10, $0f, $01
+
+	db $04, $12, "I"
+	db $06, $12, "R"
+	db $08, $12, "!"
+	db $0a, $12, "3"
+	db $0c, $12, " "
+	db $0e, $12, $02
+	db $10, $0f, $01
+
+; unknown data.
+; needs analyze.
+; (6:70d6)
+	INCROM $1b0d6, $1ba12
 
 Func_006_7a12: ; (6:7a12)
 	push af

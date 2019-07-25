@@ -1299,19 +1299,33 @@ wCheckMenuPlayAreaWhichDuelist:: ; ce50
 wCheckMenuPlayAreaWhichLayout:: ; ce51
 	ds $1
 
-; holds the position of the cursor
-; when selecting a prize card
-wPrizeCardCursorPosition::
+; the position of cursor in the "In Play Area" screen
+wInPlayAreaCursorPosition:: ; ce52
+
+; holds the position of the cursor when selecting a prize card
+wPrizeCardCursorPosition:: ; ce52
 	ds $1
 
-wce53:: ; ce53
+; pointer to the table which contains information for each key-press.
+wInPlayAreaInputTablePointer:: ; ce53
 	ds $2
 
 ; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
+  
+  ds $1
 
-	ds $3
+; it's used for restore the position of cursor
+; when going into another view, and returning to
+; the previous view.
+wInPlayAreaPreservedPosition:: ; ce57
+	ds $1
+
+; it's used for checking if the player changed
+; the cursor in the play area view.
+wInPlayAreaTemporaryCursorPosition:: ; ce58
+	ds $1
 
 wce59:: ; ce59
 	ds $1
@@ -1332,7 +1346,7 @@ wce5e:: ; ce5e
 wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 	ds $1
 
-wce60:: ; ce60
+wIsFromSelectButton:: ; ce60
 	ds $1
 
 wce61:: ; ce61
@@ -1419,7 +1433,9 @@ wcea1:: ; cea1
 
 	ds $1
 
-; used to blink the cursor in duel menu
+; it's used when the player enters check menu, and its sub-menus.
+; increases from 0x00 to 0xff. the game makes its blinking cursor by this.
+; note that the check menu also contains the pokemon glossary.
 wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
@@ -1511,8 +1527,13 @@ wcfda:: ; cfda
 
 	ds $7
 
+; it's a flag variable being used in play-area view.
+; need analysis.
 wcfe3:: ; cfe3
-	ds $4
+	ds $1
+
+wcfe4:: ; cfe4
+	ds $3
 
 ; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7

@@ -9297,14 +9297,14 @@ OpenDuelCheckMenu: ; 3096 (0:3096)
 	call BankswitchROM
 	ret
 
-Func_30a6: ; 30a6 (0:30a6)
+OpenInPlayAreaScreen_FromSelectButton: ; 30a6 (0:30a6)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_180d5)
+	ld a, BANK(OpenInPlayAreaScreen)
 	call BankswitchROM
 	ld a, $1
-	ld [wce60], a
-	call Func_180d5
+	ld [wIsFromSelectButton], a
+	call OpenInPlayAreaScreen
 	pop bc
 	ld a, b
 	call BankswitchROM

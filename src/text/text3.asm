@@ -619,11 +619,11 @@ Text02f5: ; 3d2e6 (f:52e6)
 	line "very rare Pokémon cards!"
 	done
 
-Text02f6: ; 3d31c (f:531c)
+PokemonCardGlossaryText: ; 3d31c (f:531c)
 	text "Pokémon Card Glossary"
 	done
 
-Text02f7: ; 3d333 (f:5333)
+GlossaryMenuPage1Text: ; 3d333 (f:5333)
 	text "Deck                Active Pokémon"
 	line "Discard Pile        Bench Pokémon"
 	line "Hand                Prizes    "
@@ -631,7 +631,7 @@ Text02f7: ; 3d333 (f:5333)
 	line "Bench               To next page    "
 	done
 
-Text02f8: ; 3d3e0 (f:53e0)
+GlossaryMenuPage2Text: ; 3d3e0 (f:53e0)
 	text "Energy Card         Pokémon Power "
 	line "Trainer Card        Weakness       "
 	line "Basic Pokémon       Resistance"
@@ -639,7 +639,7 @@ Text02f8: ; 3d3e0 (f:53e0)
 	line "Attack              To previous page"
 	done
 
-Text02f9: ; 3d48f (f:548f)
+ChooseWordAndPressAButtonText: ; 3d48f (f:548f)
 	text "Choose a word and press the"
 	line "A button."
 	done
