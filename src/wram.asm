@@ -1200,15 +1200,23 @@ wcdbe:: ; cdbe
 
 	ds $10
 
-; stores information about the defending Pokémon
-; and about the prize card count on both sides for AI
-; byte 0: player's active Pokémon color
-; byte 1: player's active Pokémon weakness
-; byte 2: player's active Pokémon resistance
-; byte 3: player's prize count
-; byte 4: opponent's prize count
-wcdcf:: ; cdcf
-	ds $5
+; information about the defending Pokémon and
+; the prize card count on both sides for AI:
+; player's active Pokémon color
+wAIPlayerColor:: ; cdcf
+	ds $1
+; player's active Pokémon weakness
+wAIPlayerWeakness:: ; cdd0
+	ds $1
+; player's active Pokémon resistance
+wAIPlayerResistance:: ; cdd1
+	ds $1
+; player's prize count
+wAIPlayerPrizeCount:: ; cdd2
+	ds $1
+; opponent's prize count
+wAIOpponentPrizeCount:: ; cdd3
+	ds $1
 
 	ds $7
 
