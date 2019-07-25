@@ -8080,7 +8080,7 @@ Func_741a: ; 741a (1:741a)
 	xor a
 	ld [wd4b0], a
 	push hl
-	farcall Func_006_4f9c
+	farcall Func_18f9c
 	pop hl
 	jr .loop
 .done
@@ -8162,7 +8162,7 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	ld a, $02
 	ld [wLoadedMoveAnimation], a
 .asm_74d1
-	farcall Func_006_4f9c
+	farcall Func_18f9c
 	pop bc
 	pop de
 	pop hl
@@ -8177,7 +8177,7 @@ Func_7571: ; 7571 (1:7571)
 	INCROM $7571, $7576
 
 Func_7576: ; 7576 (1:7576)
-	farcall Func_006_591f
+	farcall Func_1991f
 	ret
 ; 0x757b
 
@@ -8192,7 +8192,7 @@ Func_7594: ; 7594 (1:7594)
 ; 0x7599
 
 Func_7599: ; 7599 (1:7599)
-	farcall Func_006_668d
+	farcall Func_1a68d
 	ret
 ; 0x759e
 
