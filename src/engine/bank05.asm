@@ -113,7 +113,10 @@ Func_140fe: ; 140fe (5:40fe)
 	INCROM $140fe, $1410a
 
 Func_1410a: ; 1410a (5:410a)
-	INCROM $1410a, $14226
+	INCROM $1410a, $1411d
+
+Func_1411d: ; 1411d (5:411d)
+	INCROM $1411d, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -812,8 +815,373 @@ ZeroData: ; 1575e (5:575e)
 
 	INCROM $1576b, $158b2
 
-Func_158b2 ; 158b2 (5:58b2)
-	INCROM $158b2, $15b72
+Func_158b2: ; 158b2 (5:58b2)
+	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
+	or a
+	jp nz, .asm_15b2f
+	xor a
+	ld [$cdd7], a
+	call Func_1411d
+	ld a, $80
+	ld [wcdbe], a
+	ld a, [$cdb4]
+	or a
+	jr z, .asm_158d4
+	srl a
+	srl a
+	sla a
+	call Func_140fe
+.asm_158d4
+	ld a, $f0
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_158f1
+	and $c0
+	jr z, .asm_158e5
+	ld a, $02
+	call Func_140fe
+.asm_158e5
+	ld a, [hl]
+	and $0f
+	cp $01
+	jr nz, .asm_158f1
+	ld a, $01
+	call Func_140fe
+.asm_158f1
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_15915
+	call CheckIfCardCanUseSelectedMove
+	jp nc, .asm_15904
+	call Func_16311
+	jr nc, .asm_15915
+.asm_15904
+	ld a, $05
+	call Func_1410a
+	ld a, [$cdd3]
+	cp $02
+	jr nc, .asm_15915
+	ld a, $23
+	call Func_1410a
+.asm_15915
+	call Func_173b1
+	jr nc, .asm_15930
+	ld a, $02
+	call Func_140fe
+	call Func_17426
+	jr c, .asm_1594d
+	ld a, [$cdd2]
+	cp $02
+	jr nc, .asm_15941
+	ld a, $01
+	ld [$cdd7], a
+.asm_15930
+	call Func_17426
+	jr c, .asm_1594d
+	ld a, [$cdd2]
+	cp $02
+	jr nc, .asm_15941
+	ld a, $02
+	call Func_140fe
+.asm_15941
+	ld a, [$cdd3]
+	cp $02
+	jr nc, .asm_1594d
+	ld a, $02
+	call Func_1410a
+.asm_1594d
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	ld a, [$cdd1]
+	and b
+	jr z, .asm_15980
+	ld a, $01
+	call Func_140fe
+	ld a, [$cdd1]
+	ld b, a
+	ld a, $bc
+	call GetTurnDuelistVariable
+.asm_15968
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_1597b
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	call TranslateColorToWR
+	and b
+	jr nz, .asm_15968
+	jr .asm_15980
+.asm_1597b
+	ld a, $02
+	call Func_1410a
+.asm_15980
+	ld a, [$cdcf]
+	ld b, a
+	call GetArenaCardWeakness
+	and b
+	jr z, .asm_159ad
+	ld a, $02
+	call Func_140fe
+	ld a, [$cdcf]
+	ld b, a
+	ld a, $bc
+	call GetTurnDuelistVariable
+.asm_15998
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_159a8
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Weakness]
+	and b
+	jr nz, .asm_15998
+	jr .asm_159ad
+.asm_159a8
+	ld a, $03
+	call Func_1410a
+.asm_159ad
+	ld a, [$cdcf]
+	ld b, a
+	call GetArenaCardResistance
+	and b
+	jr z, .asm_159bc
+	ld a, $03
+	call Func_1410a
+.asm_159bc
+	ld a, [$cdd0]
+	ld b, a
+	ld a, $bc
+	call GetTurnDuelistVariable
+	ld e, $00
+.asm_159c7
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15a0e
+	push de
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	call TranslateColorToWR
+	pop de
+	and b
+	jr z, .asm_159c7
+	ld a, $02
+	call Func_140fe
+	push de
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp $bd
+	jr nz, .asm_159fc
+	ld a, e
+	call Func_17383
+	jr nc, .asm_159fc
+	ld a, $0a
+	call Func_140fe
+	jr .asm_15a0e
+.asm_159fc
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	ld a, [$cdd0]
+	and b
+	jr z, .asm_15a0e
+	ld a, $03
+	call Func_1410a
+.asm_15a0e
+	ld a, [$cdcf]
+	ld b, a
+	ld a, $bc
+	call GetTurnDuelistVariable
+.asm_15a17
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15a2a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Resistance]
+	and b
+	jr z, .asm_15a17
+	ld a, $01
+	call Func_140fe
+.asm_15a2a
+	ld a, $bc
+	call GetTurnDuelistVariable
+	ld c, $00
+.asm_15a31
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15a7a
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	push hl
+	push bc
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_15a4b
+	call CheckIfCardCanUseSelectedMove
+	jr nc, .asm_15a4f
+	call Func_16311
+	jr c, .asm_15a4f
+.asm_15a4b
+	pop bc
+	pop hl
+	jr .asm_15a31
+.asm_15a4f
+	pop bc
+	pop hl
+	ld a, $02
+	call Func_140fe
+	ld a, [$cdd3]
+	cp $02
+	jr nc, .asm_15a7a
+	call Func_17426
+	jr c, .asm_15a7a
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_15a70
+	call CheckIfCardCanUseSelectedMove
+	jp nc, .asm_15a7a
+.asm_15a70
+	ld a, $28
+	call Func_140fe
+	ld a, $01
+	ld [$cdd7], a
+.asm_15a7a
+	ld a, $bb
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp $9b
+	jr z, .asm_15a91
+	cp $87
+	jr nz, .asm_15abc
+.asm_15a91
+	xor a
+	call Func_17383
+	jr c, .asm_15abc
+	ld a, $bc
+	call GetTurnDuelistVariable
+	ld c, $00
+.asm_15a9e
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15abc
+	ld a, c
+	push hl
+	push bc
+	call Func_17383
+	jr c, .asm_15ab0
+	pop bc
+	pop hl
+	jr .asm_15a9e
+.asm_15ab0
+	pop bc
+	pop hl
+	ld a, $05
+	call Func_140fe
+	ld a, $01
+	ld [$cdd7], a
+.asm_15abc
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	cp $02
+	jr c, .asm_15ad6
+	cp $03
+	jr nc, .asm_15ad1
+	ld a, $01
+	call Func_1410a
+	jr .asm_15ad6
+.asm_15ad1
+	ld a, $02
+	call Func_1410a
+.asm_15ad6
+	call Func_170c9
+	jr c, .asm_15ae5
+	call Func_17101
+	cp $02
+	jr c, .asm_15ae5
+	call Func_140fe
+.asm_15ae5
+	ld a, $bc
+	call GetTurnDuelistVariable
+	ld e, $00
+.asm_15aec
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15b12
+	push de
+	push hl
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2ID]
+	pop hl
+	pop de
+	cp $cc
+	jr z, .asm_15aec
+	cp $cb
+	jr z, .asm_15aec
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	push de
+	push hl
+	call Func_173b1
+	pop hl
+	pop de
+	jr c, .asm_15aec
+	jr .asm_15b17
+.asm_15b12
+	ld a, $14
+	call Func_1410a
+.asm_15b17
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp $cc
+	jr z, .asm_15b33
+	cp $cb
+	jr z, .asm_15b33
+	ld a, [wcdbe]
+	cp $83
+	jr nc, .asm_15b31
+.asm_15b2f
+	or a
+	ret
+.asm_15b31
+	scf
+	ret
+.asm_15b33
+	ld e, $00
+.asm_15b35
+	inc e
+	ld a, e
+	add $bb
+	call GetTurnDuelistVariable
+	cp $ff
+	jr z, .asm_15b2f
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	push de
+	call Func_173b1
+	pop de
+	jr c, .asm_15b35
+	ld a, e
+	push de
+	call Func_17383
+	pop de
+	jr nc, .asm_15b35
+	jr .asm_15b31
+; 0x15b54
+
+	INCROM $15b54, $15b72
 
 Func_15b72 ; 15b72 (5:5b72)
 	INCROM $15b72, $15d4f
@@ -1071,7 +1439,10 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 	ret
 ; 0x162c8
 
-	INCROM $162c8, $1633f
+	INCROM $162c8, $16311
+
+Func_16311 ; 16311 (5:6311)
+	INCROM $16311, $1633f
 
 ; goes through $00 terminated list pointed 
 ; by wcdae and compares it to each card in hand.
@@ -1150,7 +1521,19 @@ Func_164e8 ; 164e8 (5:64e8)
 	INCROM $164e8, $169f8
 
 Func_169f8 ; 169f8 (5:69f8)
-	INCROM $169f8, $173b1
+	INCROM $169f8, $170c9
+
+Func_170c9 ; 170c9 (5:70c9)
+	INCROM $170c9, $17101
+
+Func_17101 ; 17101 (5:7101)
+	INCROM $17101, $17383
+
+Func_17383 ; 17383 (5:7383)
+	INCROM $17383, $173b1
 
 Func_173b1 ; 173b1 (5:73b1)
-	INCROM $173b1, $18000
+	INCROM $173b1, $17426
+
+Func_17426 ; 17426 (5:7426)
+	INCROM $17426, $18000
