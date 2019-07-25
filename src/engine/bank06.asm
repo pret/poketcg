@@ -706,10 +706,10 @@ ZeroObjectPositionsAndToggleOAMCopy_Bank6 ; 184bf (6:44bf)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
-Func_006_44c8: ; 184c8 (6:44c8)
+Func_184c8: ; 184c8 (6:44c8)
 	xor a
 	ld [wGlossaryPageNo], a
-	call Func_006_452b
+	call Func_1852b
 
 	xor a
 	ld [wInPlayAreaCursorPosition], a
@@ -747,8 +747,8 @@ Func_006_44c8: ; 184c8 (6:44c8)
 	cp $09 ; $09: next page or prev page
 	jr z, .change_page
 
-	call Func_006_4598
-	call Func_006_452b
+	call Func_18598
+	call Func_1852b
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 	jr .next
@@ -760,11 +760,11 @@ Func_006_44c8: ; 184c8 (6:44c8)
 	ld a, [wGlossaryPageNo]
 	xor $01 ; swap page
 	ld [wGlossaryPageNo], a
-	call Func_006_455a
+	call Func_1855a
 	jr .next
 
 ; display glossary menu.
-Func_006_452b: ; 1852b (6:452b)
+Func_1852b: ; 1852b (6:452b)
 	xor a
 	ld [wTileMapFill], a
 	call ZeroObjectPositions
@@ -779,13 +779,13 @@ Func_006_452b: ; 1852b (6:452b)
 	call InitTextPrinting
 	ldtx hl, PokemonCardGlossaryText
 	call ProcessTextFromID
-	call Func_006_455a
+	call Func_1855a
 	ldtx hl, ChooseWordAndPressAButtonText
 	call DrawWideTextBox_PrintText
 	ret
 
 ; print texts in glossary menu.
-Func_006_455a: ; 1855a (6:455a)
+Func_1855a: ; 1855a (6:455a)
 	ld hl, wDefaultText
 
 	ld a, TX_SYMBOL
@@ -830,7 +830,7 @@ Func_006_455a: ; 1855a (6:455a)
 	ret
 
 ; display glossary description.
-Func_006_4598: ; 18598 (6:4598)
+Func_18598: ; 18598 (6:4598)
 	push af
 	xor a
 	ld [wTileMapFill], a
@@ -928,7 +928,7 @@ GlossaryData_2:
 	glossary_entry 6, Text030a, Text031c
 	glossary_entry 6, Text030b, Text031d
 
-Func_006_4661: ; 18661 (6:4661)
+Func_18661: ; 18661 (6:4661)
 	xor a
 	ld [wcfe3], a
 	ld a, [wCheckMenuCursorXPosition]
@@ -937,30 +937,30 @@ Func_006_4661: ; 18661 (6:4661)
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
-	jr z, .asm_006_46a2
+	jr z, .asm_46a2
 	bit D_LEFT_F, a
-	jr nz, .asm_006_467a
+	jr nz, .asm_467a
 	bit D_RIGHT_F, a
-	jr z, .asm_006_4680
-.asm_006_467a
+	jr z, .asm_4680
+.asm_467a
 	ld a, d
 	xor $01
 	ld d, a
-	jr .asm_006_468c
-.asm_006_4680
+	jr .asm_468c
+.asm_4680
 	bit D_UP_F, a
-	jr nz, .asm_006_4688
+	jr nz, .asm_4688
 	bit D_DOWN_F, a
-	jr z, .asm_006_46a2
-.asm_006_4688
+	jr z, .asm_46a2
+.asm_4688
 	ld a, e
 	xor $01
 	ld e, a
-.asm_006_468c
+.asm_468c
 	ld a, $01
 	ld [wcfe3], a
 	push de
-	call .asm_006_46d4
+	call .asm_46d4
 	pop de
 	ld a, d
 	ld [wCheckMenuCursorXPosition], a
@@ -968,28 +968,28 @@ Func_006_4661: ; 18661 (6:4661)
 	ld [wCheckMenuCursorYPosition], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-.asm_006_46a2
+.asm_46a2
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_006_46bd
+	jr z, .asm_46bd
 	and A_BUTTON
-	jr nz, .asm_006_46b3
+	jr nz, .asm_46b3
 	ld a, $ff
-	call Func_006_50fb
+	call Func_190fb
 	scf
 	ret
-.asm_006_46b3
-	call .asm_006_46f3
+.asm_46b3
+	call .asm_46f3
 	ld a, $01
-	call Func_006_50fb
+	call Func_190fb
 	scf
 	ret
-.asm_006_46bd
+.asm_46bd
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_006_46c6
+	jr z, .asm_46c6
 	call PlaySFX
-.asm_006_46c6
+.asm_46c6
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -997,10 +997,10 @@ Func_006_4661: ; 18661 (6:4661)
 	ret nz
 	ld a, $0f
 	bit D_RIGHT_F, [hl]
-	jr z, .asm_006_46d6
-.asm_006_46d4 ; 186d4 (6:46d4)
+	jr z, .asm_46d6
+.asm_46d4 ; 186d4 (6:46d4)
 	ld a, $00
-.asm_006_46d6
+.asm_46d6
 	ld e, a
 	ld a, $0a
 	ld l, a
@@ -1018,14 +1018,14 @@ Func_006_4661: ; 18661 (6:4661)
 	call WriteByteToBGMap0
 	or a
 	ret
-.asm_006_46f3: ; 186f3 (6:46f3)
+.asm_46f3: ; 186f3 (6:46f3)
 	ld a, $0f
-	jr .asm_006_46d6
+	jr .asm_46d6
 
 ; (6:46f7)
 INCLUDE "data/effect_commands.asm"
 
-Func_006_4f9c: ; 18f9c (6:4f9c)
+Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
@@ -1033,7 +1033,7 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld h, 0
 	add hl, hl
 	ld de, Data_006_51a4
-.asm_006_4fa8
+.asm_4fa8
 	add hl, de
 	ld e, [hl]
 	inc hl
@@ -1042,7 +1042,7 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld hl, wce7e
 	ld a, [hl]
 	or a
-	jr nz, .asm_006_4fd3
+	jr nz, .asm_4fd3
 	ld [hl], $01
 	call Func_3b21
 	pop de
@@ -1055,66 +1055,66 @@ Func_006_4f9c: ; 18f9c (6:4f9c)
 	ld [wd4b0], a
 	ld a, [de]
 	cp $04
-	jr z, .asm_006_4fd3
+	jr z, .asm_4fd3
 	ld a, $96
 	call Func_3b6a
-.asm_006_4fd3
+.asm_4fd3
 	pop de
-.asm_006_4fd4
+.asm_4fd4
 	ld a, [de]
 	inc de
 	ld hl, PointerTable_006_508f
 	jp JumpToFunctionInTable
 
-Func_006_4fdc:
+Func_18fdc: ; 18fdc (6:4fdc)
 	ret
 
-Func_006_4fdd:
+Func_18fdd: ; 18fdd (6:4fdd)
 	ldh a, [hWhoseTurn]
 	ld [wd4af], a
 	ld a, [wDuelType]
 	cp $00
-	jr nz, Func_006_5014
+	jr nz, Func_19014
 	ld a, $c2
 	ld [wd4af], a
-	jr Func_006_5014
+	jr Func_19014
 
-Func_006_4ff0:
+Func_18ff0: ; 18ff0 (6:4ff0)
 	call SwapTurn
 	ldh a, [hWhoseTurn]
 	ld [wd4af], a
 	call SwapTurn
 	ld a, [wDuelType]
 	cp $00
-	jr nz, Func_006_5014
+	jr nz, Func_19014
 	ld a, $c3
 	ld [wd4af], a
-	jr Func_006_5014
+	jr Func_19014
 
-Func_006_5009:
+Func_19009: ; 19009 (6:5009)
 	ld a, [wce82]
 	and $7f
 	ld [wd4b0], a
-	jr Func_006_5014
+	jr Func_19014
 
-Func_006_5013:
+Func_19013: ; 19013 (6:5013)
 	ret
 
-Func_006_5014:
+Func_19014: ; 19014 (6:5014)
 	ld a, [de]
 	inc de
 	cp $09
-	jr z, .asm_006_502b
+	jr z, .asm_502b
 	cp $fa
-	jr z, .asm_006_5057
+	jr z, .asm_5057
 	cp $fb
-	jr z, .asm_006_505d
+	jr z, .asm_505d
 	cp $fc
-	jr z, .asm_006_5063
-.asm_006_5026
+	jr z, .asm_5063
+.asm_5026
 	call Func_3b6a
-	jr Func_006_4f9c.asm_006_4fd4
-.asm_006_502b
+	jr Func_18f9c.asm_4fd4
+.asm_502b
 	ld a, $97
 	call Func_3b6a
 	ld a, [wce81]
@@ -1132,104 +1132,104 @@ Func_006_5014:
 	call Func_3b6a
 	ld a, [wDuelDisplayedScreen]
 	cp $01
-	jr nz, .asm_006_5054
+	jr nz, .asm_5054
 	ld a, $98
 	call Func_3b6a
-.asm_006_5054
-	jp Func_006_4f9c.asm_006_4fd4
-.asm_006_5057
+.asm_5054
+	jp Func_18f9c.asm_4fd4
+.asm_5057
 	ld c, $61
 	ld b, $63
-	jr .asm_006_5067
-.asm_006_505d
+	jr .asm_5067
+.asm_505d
 	ld c, $62
 	ld b, $64
-	jr .asm_006_5067
-.asm_006_5063
+	jr .asm_5067
+.asm_5063
 	ld c, $63
 	ld b, $61
-.asm_006_5067
+.asm_5067
 	ldh a, [hWhoseTurn]
 	cp $c2
 	ld a, c
-	jr z, .asm_006_5026
+	jr z, .asm_5026
 	ld a, [wDuelType]
 	cp $00
 	ld a, c
-	jr z, .asm_006_5026
+	jr z, .asm_5026
 	ld a, b
-	jr .asm_006_5026
+	jr .asm_5026
 
-Func_006_5079:
+Func_19079: ; 19079 (6:5079)
 	ld a, [de]
 	inc de
 	ld [$d4b3], a
 	ld a, [wce82]
 	ld [wd4b0], a
-	call Func_006_509d
+	call Func_1909d
 	ld a, $96
 	call Func_3b6a
-	jp Func_006_4f9c.asm_006_4fd4
+	jp Func_18f9c.asm_4fd4
 
 PointerTable_006_508f: ; (6:508f)
-	dw Func_006_4fdc
-	dw Func_006_5014
-	dw Func_006_4fdd
-	dw Func_006_4ff0
-	dw Func_006_5079
-	dw Func_006_5009
-	dw Func_006_5013
+	dw Func_18fdc
+	dw Func_19014
+	dw Func_18fdd
+	dw Func_18ff0
+	dw Func_19079
+	dw Func_19009
+	dw Func_19013
 
-Func_006_509d: ; 1909d (6:509d)
+Func_1909d: ; 1909d (6:509d)
 	ld a, [$d4b3]
 	cp $04
-	jr z, .asm_006_50ad
+	jr z, .asm_50ad
 	cp $01
 	ret nz
 	ld a, $00
 	ld [wd4ae], a
 	ret
-.asm_006_50ad
+.asm_50ad
 	ld a, [wd4b0]
 	ld l, a
 	ld a, [wWhoseTurn]
 	ld h, a
 	cp $c2
-	jr z, .asm_006_50cc
+	jr z, .asm_50cc
 	ld a, [wDuelType]
 	cp $00
-	jr z, .asm_006_50c6
+	jr z, .asm_50c6
 	bit 7, l
-	jr z, .asm_006_50e2
-	jr .asm_006_50d2
-.asm_006_50c6
+	jr z, .asm_50e2
+	jr .asm_50d2
+.asm_50c6
 	bit 7, l
-	jr z, .asm_006_50da
-	jr .asm_006_50ea
-.asm_006_50cc
+	jr z, .asm_50da
+	jr .asm_50ea
+.asm_50cc
 	bit 7, l
-	jr z, .asm_006_50d2
-	jr .asm_006_50e2
-.asm_006_50d2
+	jr z, .asm_50d2
+	jr .asm_50e2
+.asm_50d2
 	ld l, $04
 	ld h, $c2
 	ld a, $01
-	jr .asm_006_50f0
-.asm_006_50da
+	jr .asm_50f0
+.asm_50da
 	ld l, $04
 	ld h, $c3
 	ld a, $01
-	jr .asm_006_50f0
-.asm_006_50e2
+	jr .asm_50f0
+.asm_50e2
 	ld l, $05
 	ld h, $c3
 	ld a, $02
-	jr .asm_006_50f0
-.asm_006_50ea
+	jr .asm_50f0
+.asm_50ea
 	ld l, $05
 	ld h, $c2
 	ld a, $02
-.asm_006_50f0:
+.asm_50f0:
 	ld [wd4ae], a
 	ret
 
@@ -1237,36 +1237,36 @@ Func_006_509d: ; 1909d (6:509d)
 ; needs some fix.
 	ld a, [$d4b3]
 	cp $04
-	jr z, Func_006_50fb.asm_006_510f
-Func_006_50fb: ; 190fb (6:50fb)
+	jr z, Func_190fb.asm_510f
+Func_190fb: ; 190fb (6:50fb)
 	cp $01
-	jr nz, .asm_006_510e
+	jr nz, .asm_510e
 	ld a, $00
 	ld [wd4ae], a
 	ld a, [wDuelDisplayedScreen]
 	cp $01
-	jr z, .asm_006_510e
+	jr z, .asm_510e
 	bank1call DrawDuelMainScene
-.asm_006_510e
+.asm_510e
 	ret
-.asm_006_510f
-	call Func_006_509d
+.asm_510f
+	call Func_1909d
 	ld a, [wDuelDisplayedScreen]
 	cp l
-	jr z, .asm_006_512e
+	jr z, .asm_512e
 	ld a, l
 	push af
 	ld l, $c2
 	ld a, [wDuelType]
 	cp $00
-	jr nz, .asm_006_5127
+	jr nz, .asm_5127
 	ld a, [wWhoseTurn]
 	ld l, a
-.asm_006_5127
+.asm_5127
 	call DrawYourOrOppPlayAreaScreen_Bank0
 	pop af
 	ld [wDuelDisplayedScreen], a
-.asm_006_512e
+.asm_512e
 	call DrawWideTextBox
 	ret
 
@@ -1276,9 +1276,9 @@ Func_006_50fb: ; 190fb (6:50fb)
 	push de
 	ld a, [wLoadedMoveAnimation]
 	cp $79
-	jr z, .asm_006_5164
+	jr z, .asm_5164
 	cp $86
-	jr z, .asm_006_5164
+	jr z, .asm_5164
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
 	ld d, $00
@@ -1294,20 +1294,20 @@ Func_006_50fb: ; 190fb (6:50fb)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_006_5168
+	call Func_19168
 	ld a, l
 	or h
 	call nz, DrawWideTextBox_PrintText
-.asm_006_5164
+.asm_5164
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_006_5168: ; 19168 (6:5168)
+Func_19168: ; 19168 (6:5168)
 	ld a, l
 	or h
-	jr z, .asm_006_5188
+	jr z, .asm_5188
 	call LoadTxRam3
 	ld a, [wce81]
 	ld hl, $003a
@@ -1321,7 +1321,7 @@ Func_006_5168: ; 19168 (6:5168)
 	ret nz
 	ld hl, $0036
 	ret
-.asm_006_5188
+.asm_5188
 	call CheckNoDamageOrEffect
 	ret c
 	ld hl, $003b
@@ -1489,7 +1489,7 @@ Data_006_51a4:
 
 	INCROM $192c6, $1991f
 
-Func_006_591f:
+Func_1991f: ; 1991f (6:591f)
 	add a
 	ld e, a
 	ld d, 0
@@ -1512,25 +1512,25 @@ Func_006_591f:
 	ld h, $a1
 	ld de, wPlayerDeck
 	ld c, $3c
-.asm_006_594c
+.asm_594c
 	ld a, [de]
 	inc de
 	ld l, a
 	res 7, [hl]
 	dec c
-	jr nz, .asm_006_594c
+	jr nz, .asm_594c
 
 	ld h, $a1
 	ld de, wOpponentDeck
 	ld c, $1e
-.asm_006_595b
+.asm_595b
 	ld a, [de]
 	inc de
 	ld l, a
 	res 7, [hl]
 	inc [hl]
 	dec c
-	jr nz, .asm_006_595b
+	jr nz, .asm_595b
 
 	call DisableSRAM
 	ret
@@ -1702,31 +1702,31 @@ Func_1a61f: ; 1a61f (6:661f)
 	ret
 ; 0x1a68d
 
-Func_006_668d:
+Func_1a68d: ; 1a68d (6:668d)
 	ld a, $c2 ; player's turn
 	ldh [hWhoseTurn], a
 	ld h, a
 	ld l, $00
-.asm_006_6694
+.asm_6694
 	xor a
 	ld [hli], a
 	ld a, l
 	cp $3c
-	jr c, .asm_006_6694
+	jr c, .asm_6694
 	xor a
 	ld hl, wBoosterCardsDrawn
 	ld de, wDuelTempList
 	ld c, $00
-.asm_006_66a4
+.asm_66a4
 	ld a, [hli]
 	or a
-	jr z, .asm_006_66ae
+	jr z, .asm_66ae
 	ld a, c
 	ld [de], a
 	inc de
 	inc c
-	jr .asm_006_66a4
-.asm_006_66ae
+	jr .asm_66a4
+.asm_66ae
 	ld a, $ff
 	ld [de], a
 	lb de, $38, $9f
@@ -1743,7 +1743,7 @@ Func_006_668d:
 CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ret
 
-Func_006_66cd: ; (6:66cd)
+Func_1a6cd: ; 1a6cd (6:66cd)
 	ldh a, [hBankSRAM]
 	or a
 	ret nz
@@ -1754,14 +1754,14 @@ Func_006_66cd: ; (6:66cd)
 	ld bc, $0250
 	ld a, [s0a000 + $b]
 	ld e, a
-.asm_006_66de
+.asm_66de
 	ld a, [hli]
 	xor e
 	ld e, a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_006_66de
+	jr nz, .asm_66de
 	ld a, e
 	pop bc
 	pop de
@@ -1781,13 +1781,13 @@ Func_006_66cd: ; (6:66cd)
 	bank1call SetDefaultPalettes
 	ld a, [wConsole]
 	cp $01
-	jr nz, .asm_006_6719
+	jr nz, .asm_6719
 	ld a, $e4
 	ld [wOBP0], a
 	ld [wBGP], a
 	ld a, $01
 	ld [wFlushPaletteFlags], a
-.asm_006_6719
+.asm_6719
 	lb de, $38, $9f
 	call SetupText
 	ld hl, $00a3
@@ -1802,7 +1802,7 @@ Func_006_66cd: ; (6:66cd)
 	jp Reset
 	ret
 
-Func_006_673a: ; (6:673a)
+Func_1a73a: ; 1a73a (6:673a)
 	ldh a, [hBankSRAM]
 	or a
 	ret nz
@@ -1812,14 +1812,14 @@ Func_006_673a: ; (6:673a)
 	ld hl, sCardCollection
 	ld bc, $0250
 	ld e, $00
-.asm_006_6749
+.asm_6749
 	ld a, [hli]
 	xor e
 	ld e, a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_006_6749
+	jr nz, .asm_6749
 	ld a, $0a
 	ld [$0000], a
 	ld a, e
@@ -1930,12 +1930,12 @@ InputPlayerName: ; (6:67a3)
 	; if pressed start button.
 	ld a, $01
 	call PlayAcceptOrDeclineSFX
-	call Func_006_6a07
+	call Func_1aa07
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld a, 5
 	ld [wNamingScreenCursorY], a
-	call Func_006_6a23
+	call Func_1aa23
 	jr .loop
 .else
 	call NamingScreen_CheckButtonState
@@ -2112,35 +2112,35 @@ NamingScreen_CheckButtonState:
 	ld a, [wNamingScreenCursorY]
 	ld l, a
 	bit D_UP_F, b
-	jr z, .asm_006_692c
+	jr z, .asm_692c
 	; up
 	dec a
 	bit D_DOWN_F, a
-	jr z, .asm_006_69a7
+	jr z, .asm_69a7
 	ld a, c
 	dec a
-	jr .asm_006_69a7
-.asm_006_692c
+	jr .asm_69a7
+.asm_692c
 	bit D_DOWN_F, b
-	jr z, .asm_006_6937
+	jr z, .asm_6937
 	; down
 	inc a
 	cp c
-	jr c, .asm_006_69a7
+	jr c, .asm_69a7
 	xor a
-	jr .asm_006_69a7
-.asm_006_6937
+	jr .asm_69a7
+.asm_6937
 	ld a, [wd005]
 	ld c, a
 	ld a, h
 	bit D_LEFT_F, b
-	jr z, .asm_006_6974
+	jr z, .asm_6974
 	; left
 	ld d, a
 	ld a, $06
 	cp l
 	ld a, d
-	jr nz, .asm_006_696b
+	jr nz, .asm_696b
 	push hl
 	push bc
 	push af
@@ -2158,31 +2158,31 @@ NamingScreen_CheckButtonState:
 	pop hl
 	sub d
 	cp $ff
-	jr nz, .asm_006_6962
+	jr nz, .asm_6962
 	ld a, c
 	sub $02
-	jr .asm_006_69aa
-.asm_006_6962
+	jr .asm_69aa
+.asm_6962
 	cp $fe
-	jr nz, .asm_006_696b
+	jr nz, .asm_696b
 	ld a, c
 	sub $03
-	jr .asm_006_69aa
-.asm_006_696b
+	jr .asm_69aa
+.asm_696b
 	dec a
 	bit D_DOWN_F, a
-	jr z, .asm_006_69aa
+	jr z, .asm_69aa
 	ld a, c
 	dec a
-	jr .asm_006_69aa
-.asm_006_6974
+	jr .asm_69aa
+.asm_6974
 	bit D_RIGHT_F, b
 	jr z, .no_press
 	ld d, a
 	ld a, $06
 	cp l
 	ld a, d
-	jr nz, .asm_006_6990
+	jr nz, .asm_6990
 	push hl
 	push bc
 	push af
@@ -2198,30 +2198,30 @@ NamingScreen_CheckButtonState:
 	pop bc
 	pop hl
 	add d
-.asm_006_6990
+.asm_6990
 	inc a
 	cp c
-	jr c, .asm_006_69aa
+	jr c, .asm_69aa
 	inc c
 	cp c
-	jr c, .asm_006_69a4
+	jr c, .asm_69a4
 	inc c
 	cp c
-	jr c, .asm_006_69a0
+	jr c, .asm_69a0
 	ld a, $02
-	jr .asm_006_69aa
-.asm_006_69a0
+	jr .asm_69aa
+.asm_69a0
 	ld a, $01
-	jr .asm_006_69aa
-.asm_006_69a4
+	jr .asm_69aa
+.asm_69a4
 	xor a
-	jr .asm_006_69aa
-.asm_006_69a7
+	jr .asm_69aa
+.asm_69a7
 	ld l, a
-	jr .asm_006_69ab
-.asm_006_69aa
+	jr .asm_69ab
+.asm_69aa
 	ld h, a
-.asm_006_69ab
+.asm_69ab
 	push hl
 	call GetCharInfoFromPos_Player
 	inc hl
@@ -2229,13 +2229,13 @@ NamingScreen_CheckButtonState:
 	inc hl
 	ld a, [wd009]
 	cp $02
-	jr nz, .asm_006_69bb
+	jr nz, .asm_69bb
 	inc hl
 	inc hl
-.asm_006_69bb
+.asm_69bb
 	ld d, [hl]
 	push de
-	call Func_006_6a07
+	call Func_1aa07
 	pop de
 	pop hl
 	ld a, l
@@ -2252,23 +2252,23 @@ NamingScreen_CheckButtonState:
 .no_press
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_006_69ef
+	jr z, .asm_69ef
 	and A_BUTTON
-	jr nz, .asm_006_69e5
+	jr nz, .asm_69e5
 	ld a, $ff
-.asm_006_69e5
+.asm_69e5
 	call PlayAcceptOrDeclineSFX
 	push af
-	call Func_006_6a23
+	call Func_1aa23
 	pop af
 	scf
 	ret
-.asm_006_69ef
+.asm_69ef
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_006_69f8
+	jr z, .asm_69f8
 	call PlaySFX
-.asm_006_69f8
+.asm_69f8
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -2276,11 +2276,11 @@ NamingScreen_CheckButtonState:
 	ret nz
 	ld a, [wceaa]
 	bit 4, [hl]
-	jr z, Func_006_6a07.asm_006_6a0a
+	jr z, Func_1aa07.asm_6a0a
 
-Func_006_6a07:
+Func_1aa07: ; 1aa07 (6:6a07)
 	ld a, [wceab]
-.asm_006_6a0a
+.asm_6a0a
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
@@ -2292,16 +2292,16 @@ Func_006_6a07:
 	ld b, [hl]
 	dec b
 	ld a, e
-	call Func_006_6a28
+	call Func_1aa28
 	call WriteByteToBGMap0
 	or a
 	ret
 
-Func_006_6a23:
+Func_1aa23: ; 1aa23 (6:6a23)
 	ld a, [wceaa]
-	jr Func_006_6a07.asm_006_6a0a
+	jr Func_1aa07.asm_6a0a
 
-Func_006_6a28:
+Func_1aa28: ; 1aa28 (6:6a28)
 	push af
 	push bc
 	push de
@@ -2312,7 +2312,7 @@ Func_006_6a28:
 	ld b, a
 	ld a, [wceab]
 	cp b
-	jr z, .asm_006_6a60
+	jr z, .asm_6a60
 	ld a, [wNamingScreenBufferLength]
 	srl a
 	ld d, a
@@ -2321,9 +2321,9 @@ Func_006_6a28:
 	ld e, a
 	ld a, d
 	cp e
-	jr nz, .asm_006_6a49
+	jr nz, .asm_6a49
 	dec a
-.asm_006_6a49
+.asm_6a49
 	ld hl, wNamingScreenNamePosition
 	add [hl]
 	ld d, a
@@ -2336,7 +2336,7 @@ Func_006_6a28:
 	ld e, $18
 	ld bc, $0000
 	call SetOneObjectAttributes
-.asm_006_6a60
+.asm_6a60
 	pop hl
 	pop de
 	pop bc
@@ -2383,71 +2383,71 @@ NamingScreen_ProcessInput:
 	cp $09
 	jp z, .on_end
 	cp $07
-	jr nz, .asm_006_6ab8
+	jr nz, .asm_6ab8
 	ld a, [wd009]
 	or a
-	jr nz, .asm_006_6aac
+	jr nz, .asm_6aac
 	ld a, $01
-	jp .asm_006_6ace
-.asm_006_6aac
+	jp .asm_6ace
+.asm_6aac
 	dec a
-	jr nz, .asm_006_6ab4
+	jr nz, .asm_6ab4
 	ld a, $02
-	jp .asm_006_6ace
-.asm_006_6ab4
+	jp .asm_6ace
+.asm_6ab4
 	xor a
-	jp .asm_006_6ace
-.asm_006_6ab8
+	jp .asm_6ace
+.asm_6ab8
 	cp $08
-	jr nz, .asm_006_6ad6
+	jr nz, .asm_6ad6
 	ld a, [wd009]
 	or a
-	jr nz, .asm_006_6ac6
+	jr nz, .asm_6ac6
 	ld a, $02
-	jr .asm_006_6ace
-.asm_006_6ac6
+	jr .asm_6ace
+.asm_6ac6
 	dec a
-	jr nz, .asm_006_6acc
+	jr nz, .asm_6acc
 	xor a
-	jr .asm_006_6ace
-.asm_006_6acc
+	jr .asm_6ace
+.asm_6acc
 	ld a, $01
-.asm_006_6ace
+.asm_6ace
 	ld [wd009], a
 	call DrawNamingScreenBG
 	or a
 	ret
-.asm_006_6ad6
+.asm_6ad6
 	ld a, [wd009]
 	cp $02
 	jr z, .read_char
 	ldfw3 bc, "“"
 	ld a, d
 	cp b
-	jr nz, .asm_006_6af4
+	jr nz, .asm_6af4
 	ld a, e
 	cp c
-	jr nz, .asm_006_6af4
+	jr nz, .asm_6af4
 	push hl
 	ld hl, TransitionTable1 ; from 55th.
 	call TransformCharacter
 	pop hl
 	jr c, .nothing
-	jr .asm_006_6b09
-.asm_006_6af4
+	jr .asm_6b09
+.asm_6af4
 	ldfw3 bc, "º(2)"
 	ld a, d
 	cp b
-	jr nz, .asm_006_6b1d
+	jr nz, .asm_6b1d
 	ld a, e
 	cp c
-	jr nz, .asm_006_6b1d
+	jr nz, .asm_6b1d
 	push hl
 	ld hl, TransitionTable2 ; from 72th.
 	call TransformCharacter
 	pop hl
 	jr c, .nothing
-.asm_006_6b09
+.asm_6b09
 	ld a, [wNamingScreenBufferLength]
 	dec a
 	dec a
@@ -2459,19 +2459,19 @@ NamingScreen_ProcessInput:
 	add hl, de
 	pop de
 	ld a, [hl]
-	jr .asm_006_6b37
-.asm_006_6b1d
+	jr .asm_6b37
+.asm_6b1d
 	ld a, d
 	or a
-	jr nz, .asm_006_6b37
+	jr nz, .asm_6b37
 	ld a, [wd009]
 	or a
-	jr nz, .asm_006_6b2b
+	jr nz, .asm_6b2b
 	ld a, TX_HIRAGANA
-	jr .asm_006_6b37
-.asm_006_6b2b
+	jr .asm_6b37
+.asm_6b2b
 	ld a, TX_KATAKANA
-	jr .asm_006_6b37
+	jr .asm_6b37
 ; read character code from info. to register.
 ; hl: pointer.
 .read_char
@@ -2480,12 +2480,12 @@ NamingScreen_ProcessInput:
 	ld a, [hl] ; a: first byte of the code.
 	or a
 	; if 2 bytes code, jump.
-	jr nz, .asm_006_6b37
+	jr nz, .asm_6b37
 	; if 1 byte code(ascii),
 	; set first byte to $0e.
 	ld a, $0e
 ; on 2 bytes code.
-.asm_006_6b37
+.asm_6b37
 	ld d, a ; de: character code.
 	ld hl, wNamingScreenBufferLength
 	ld a, [hl]
@@ -2494,22 +2494,22 @@ NamingScreen_ProcessInput:
 	ld hl, wNamingScreenBufferMaxLength
 	cp [hl]
 	pop hl
-	jr nz, .asm_006_6b4c
+	jr nz, .asm_6b4c
 	; if the buffer is full
 	; just change the last character of it.
 	ld hl, wNamingScreenBuffer
 	dec hl
 	dec hl
-	jr .asm_006_6b51
+	jr .asm_6b51
 ; increase name length before add the character.
-.asm_006_6b4c
+.asm_6b4c
 	inc [hl]
 	inc [hl]
 	ld hl, wNamingScreenBuffer
 ; write 2 bytes character codes to the name buffer.
 ; de: 2 bytes character codes.
 ; hl: dest.
-.asm_006_6b51
+.asm_6b51
 	ld b, 0
 	add hl, bc
 	ld [hl], d
@@ -2769,7 +2769,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 
 	xor a
 	ld [wd009], a
-	call Func_006_6e99
+	call Func_1ae99
 
 	xor a
 	ld [wNamingScreenCursorX], a
@@ -2796,22 +2796,22 @@ InputDeckName: ; 1ad89 (6:6d89)
 
 	ld a, $01
 	call PlayAcceptOrDeclineSFX
-	call Func_006_6fa1
+	call Func_1afa1
 
 	ld a, 6
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
-	call Func_006_6fbd
+	call Func_1afbd
 
 	jr .loop
 .on_start
-	call Func_006_6efb
+	call Func_1aefb
 	jr nc, .loop
 
 	cp $ff
-	jr z, .asm_006_6e1c
+	jr z, .asm_6e1c
 
-	call Func_006_6ec3
+	call Func_1aec3
 	jr nc, .loop
 
 	call FinalizeInputName
@@ -2830,7 +2830,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld [hl], TX_END
 .return
 	ret
-.asm_006_6e1c
+.asm_6e1c
 	ld a, [wNamingScreenBufferLength]
 	cp $02
 	jr c, .loop
@@ -2906,7 +2906,7 @@ rept MAX_DECK_NAME_LENGTH
 endr
 	db TX_END
 
-Func_006_6e99:
+Func_1ae99: ; 1ae99 (6:6e99)
 	call DrawTextboxForKeyboard
 	call ProcessTextWithUnderbar
 	ld hl, wNamingScreenQuestionPointer
@@ -2931,7 +2931,7 @@ Func_006_6e99:
 	call EnableLCD
 	ret
 
-Func_006_6ec3:
+Func_1aec3: ; 1aec3 (6:6ec3)
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
@@ -2941,10 +2941,10 @@ Func_006_6ec3:
 	inc hl
 	ld a, [hl]
 	cp $01
-	jr nz, .asm_006_6ed7
+	jr nz, .asm_6ed7
 	scf
 	ret
-.asm_006_6ed7
+.asm_6ed7
 	ld d, a
 	ld hl, wNamingScreenBufferLength
 	ld a, [hl]
@@ -2953,14 +2953,14 @@ Func_006_6ec3:
 	ld hl, wNamingScreenBufferMaxLength
 	cp [hl]
 	pop hl
-	jr nz, .asm_006_6eeb
+	jr nz, .asm_6eeb
 	ld hl, wNamingScreenBuffer
 	dec hl
-	jr .asm_006_6eef
-.asm_006_6eeb
+	jr .asm_6eef
+.asm_6eeb
 	inc [hl]
 	ld hl, wNamingScreenBuffer
-.asm_006_6eef
+.asm_6eef
 	ld b, 0
 	add hl, bc
 	ld [hl], d
@@ -2970,12 +2970,12 @@ Func_006_6ec3:
 	or a
 	ret
 
-Func_006_6efb:
+Func_1aefb: ; 1aefb (6:6efb)
 	xor a
 	ld [wcfe3], a
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_006_6f73
+	jp z, .asm_6f73
 	ld b, a
 	ld a, [wNamingScreenKeyboardHeight]
 	ld c, a
@@ -2984,56 +2984,56 @@ Func_006_6efb:
 	ld a, [wNamingScreenCursorY]
 	ld l, a
 	bit 6, b
-	jr z, .asm_006_6f1f
+	jr z, .asm_6f1f
 	dec a
 	bit 7, a
-	jr z, .asm_006_6f4b
+	jr z, .asm_6f4b
 	ld a, c
 	dec a
-	jr .asm_006_6f4b
-.asm_006_6f1f
+	jr .asm_6f4b
+.asm_6f1f
 	bit 7, b
-	jr z, .asm_006_6f2a
+	jr z, .asm_6f2a
 	inc a
 	cp c
-	jr c, .asm_006_6f4b
+	jr c, .asm_6f4b
 	xor a
-	jr .asm_006_6f4b
-.asm_006_6f2a
+	jr .asm_6f4b
+.asm_6f2a
 	cp $06
-	jr z, .asm_006_6f73
+	jr z, .asm_6f73
 	ld a, [wd005]
 	ld c, a
 	ld a, h
 	bit 5, b
-	jr z, .asm_006_6f40
+	jr z, .asm_6f40
 	dec a
 	bit 7, a
-	jr z, .asm_006_6f4e
+	jr z, .asm_6f4e
 	ld a, c
 	dec a
-	jr .asm_006_6f4e
-.asm_006_6f40
+	jr .asm_6f4e
+.asm_6f40
 	bit 4, b
-	jr z, .asm_006_6f73
+	jr z, .asm_6f73
 	inc a
 	cp c
-	jr c, .asm_006_6f4e
+	jr c, .asm_6f4e
 	xor a
-	jr .asm_006_6f4e
-.asm_006_6f4b
+	jr .asm_6f4e
+.asm_6f4b
 	ld l, a
-	jr .asm_006_6f4f
-.asm_006_6f4e
+	jr .asm_6f4f
+.asm_6f4e
 	ld h, a
-.asm_006_6f4f
+.asm_6f4f
 	push hl
 	call GetCharInfoFromPos_Deck
 	inc hl
 	inc hl
 	ld d, [hl]
 	push de
-	call Func_006_6fa1
+	call Func_1afa1
 	pop de
 	pop hl
 	ld a, l
@@ -3044,29 +3044,29 @@ Func_006_6efb:
 	ld [wCheckMenuCursorBlinkCounter], a
 	ld a, $02
 	cp d
-	jp z, Func_006_6efb
+	jp z, Func_1aefb
 	ld a, $01
 	ld [wcfe3], a
-.asm_006_6f73
+.asm_6f73
 	ldh a, [hKeysPressed]
 	and $03
-	jr z, .asm_006_6f89
+	jr z, .asm_6f89
 	and $01
-	jr nz, .asm_006_6f7f
+	jr nz, .asm_6f7f
 	ld a, $ff
-.asm_006_6f7f
+.asm_6f7f
 	call PlayAcceptOrDeclineSFX
 	push af
-	call Func_006_6fbd
+	call Func_1afbd
 	pop af
 	scf
 	ret
-.asm_006_6f89
+.asm_6f89
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_006_6f92
+	jr z, .asm_6f92
 	call PlaySFX
-.asm_006_6f92
+.asm_6f92
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
@@ -3074,11 +3074,11 @@ Func_006_6efb:
 	ret nz
 	ld a, [wceaa]
 	bit 4, [hl]
-	jr z, Func_006_6fa1.asm_006_6fa4
+	jr z, Func_1afa1.asm_6fa4
 
-Func_006_6fa1:
+Func_1afa1: ; 1afa1 (6:6fa1)
 	ld a, [wceab]
-.asm_006_6fa4
+.asm_6fa4
 	ld e, a
 	ld a, [wNamingScreenCursorX]
 	ld h, a
@@ -3090,16 +3090,16 @@ Func_006_6fa1:
 	ld b, [hl]
 	dec b
 	ld a, e
-	call Func_006_6fc2
+	call Func_1afc2
 	call WriteByteToBGMap0
 	or a
 	ret
 
-Func_006_6fbd:
+Func_1afbd: ; 1afbd (6:6fbd)
 	ld a, [wceaa]
-	jr Func_006_6fa1.asm_006_6fa4
+	jr Func_1afa1.asm_6fa4
 
-Func_006_6fc2:
+Func_1afc2: ; 1afc2 (6:6fc2)
 	push af
 	push bc
 	push de
@@ -3110,16 +3110,16 @@ Func_006_6fc2:
 	ld b, a
 	ld a, [wceab]
 	cp b
-	jr z, .asm_006_6ffb
+	jr z, .asm_6ffb
 	ld a, [wNamingScreenBufferLength]
 	ld d, a
 	ld a, [wNamingScreenBufferMaxLength]
 	ld e, a
 	ld a, d
 	cp e
-	jr nz, .asm_006_6fdf
+	jr nz, .asm_6fdf
 	dec a
-.asm_006_6fdf
+.asm_6fdf
 	dec a
 	ld d, a
 	ld hl, wNamingScreenNamePosition
@@ -3136,7 +3136,7 @@ Func_006_6fc2:
 	ld e, $18
 	ld bc, $0000
 	call SetOneObjectAttributes
-.asm_006_6ffb
+.asm_6ffb
 	pop hl
 	pop de
 	pop bc
@@ -3250,7 +3250,7 @@ KeyboardData_Deck: ; (6:7019)
 ; (6:70d6)
 	INCROM $1b0d6, $1ba12
 
-Func_006_7a12: ; (6:7a12)
+Func_1ba12: ; 1ba12 (6:7a12)
 	push af
 	ld [bc], a
 	call EnableSRAM
@@ -3261,10 +3261,10 @@ Func_006_7a12: ; (6:7a12)
 	ld bc, $78e8
 	add hl, bc
 	ld b, $00
-.asm_006_7a26
-	call Func_006_7a4c
-	call Func_006_7a5b
-	call Func_006_7a7d
+.asm_7a26
+	call Func_1ba4c
+	call Func_1ba5b
+	call Func_1ba7d
 	push hl
 	ld de, wd0aa
 	ld h, b
@@ -3282,11 +3282,11 @@ Func_006_7a12: ; (6:7a12)
 	inc b
 	ld a, b
 	cp $05
-	jr nz, .asm_006_7a26
+	jr nz, .asm_7a26
 	call DisableSRAM
 	ret
 
-Func_006_7a4c:
+Func_1ba4c: ; 1ba4c (6:7a4c)
 	push hl
 	ld l, b
 	ld h, $54
@@ -3298,7 +3298,7 @@ Func_006_7a4c:
 	pop hl
 	ret
 
-Func_006_7a5b:
+Func_1ba5b: ; 1ba5b (6:7a5b)
 	push hl
 	push bc
 	push de
@@ -3309,22 +3309,22 @@ Func_006_7a5b:
 	pop hl
 	ld bc, $0018
 	add hl, bc
-.asm_006_7a67
+.asm_7a67
 	ld a, [de]
 	inc de
 	ld b, a
 	or a
-	jr z, .asm_006_7a77
+	jr z, .asm_7a77
 	ld a, [de]
 	inc de
 	ld c, a
-.asm_006_7a70
+.asm_7a70
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .asm_006_7a70
-	jr .asm_006_7a67
-.asm_006_7a77
+	jr nz, .asm_7a70
+	jr .asm_7a67
+.asm_7a77
 	pop de
 	pop bc
 	pop hl
@@ -3332,7 +3332,7 @@ Func_006_7a5b:
 	inc hl
 	ret
 
-Func_006_7a7d:
+Func_1ba7d: ; 1ba7d (6:7a7d)
 	push hl
 	push bc
 	push de
@@ -3343,14 +3343,14 @@ Func_006_7a7d:
 	call CopyText
 	pop hl
 	ld de, wd089
-.asm_006_7a8d
+.asm_7a8d
 	ld a, [de]
 	ld [hli], a
 	or a
-	jr z, .asm_006_7a95
+	jr z, .asm_7a95
 	inc de
-	jr .asm_006_7a8d
-.asm_006_7a95
+	jr .asm_7a8d
+.asm_7a95
 	pop bc
 	pop hl
 	inc hl
@@ -3358,61 +3358,61 @@ Func_006_7a7d:
 	ret
 
 ; farcall from 0xb87e(2:787d): [EF|06|9A|7A]
-Func_006_7a9a: ; (6:7a9a)
+Func_1ba9a: ; 1ba9a (6:7a9a)
 	xor a
 	ld [wd0a6], a
 	ld a, $01
-.asm_006_7aa0
-	call Func_006_7ae4
+.asm_7aa0
+	call Func_1bae4
 	ret nc
 	sla a
 	cp $10
-	jr z, .asm_006_7aac
-	jr .asm_006_7aa0
-.asm_006_7aac
+	jr z, .asm_7aac
+	jr .asm_7aa0
+.asm_7aac
 	ld a, $03
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $05
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $09
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $06
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $0a
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $0c
-	call Func_006_7ae4
+	call Func_1bae4
 	ret nc
 	ld a, $f7
-.asm_006_7ad2
-	call Func_006_7ae4
+.asm_7ad2
+	call Func_1bae4
 	ret nc
 	sra a
 	cp $ff
-	jr z, .asm_006_7ade
-	jr .asm_006_7ad2
-.asm_006_7ade
-	call Func_006_7ae4
+	jr z, .asm_7ade
+	jr .asm_7ad2
+.asm_7ade
+	call Func_1bae4
 	ret nc
 	scf
 	ret
 
-Func_006_7ae4:
+Func_1bae4: ; 1bae4 (6:7ae4)
 	push af
 	ld hl, wd088
 	ld b, [hl]
 	farcall $2, $7625
-	jr c, .asm_006_7af5
+	jr c, .asm_7af5
 	pop af
 	ld [wd0a6], a
 	or a
 	ret
-.asm_006_7af5
+.asm_7af5
 	pop af
 	scf
 	ret
