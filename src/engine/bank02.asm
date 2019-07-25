@@ -35,7 +35,7 @@ _OpenDuelCheckMenu: ; 8000 (2:4000)
 ; opens the In Play Area submenu
 DuelCheckMenu_InPlayArea: ; 8039 (2:4039)
 	xor a
-	ld [wIsFromSelectButton], a
+	ld [wInPlayAreaFromSelectButton], a
 	farcall OpenInPlayAreaScreen
 	ret
 
