@@ -1218,7 +1218,11 @@ wAIPlayerPrizeCount:: ; cdd2
 wAIOpponentPrizeCount:: ; cdd3
 	ds $1
 
-	ds $7
+; AI stores the energy type to look for here
+wTempEnergyTypeToLook:: ; cdd4
+	ds $1
+
+	ds $6
 
 wcddb:: ; cddb
 	ds $1
