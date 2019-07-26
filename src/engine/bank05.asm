@@ -109,8 +109,21 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 
 	INCROM $140c5, $140fe
 
+; adds wcdbe to a, and stores result in wcdbe
+; if there's overflow, it's capped to $ff
+; output:
+; 	a = a + wcdbe (capped at $ff)
 Func_140fe: ; 140fe (5:40fe)
-	INCROM $140fe, $1410a
+	push hl
+	ld hl, wcdbe
+	add [hl]
+	jr nc, .no_cap
+	ld a, $ff
+.no_cap
+	ld [hl], a
+	pop hl
+	ret
+; 0x1410a
 
 Func_1410a: ; 1410a (5:410a)
 	INCROM $1410a, $1411d
@@ -187,7 +200,7 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 	ret c
 	
 .bench
-	call CheckIfSelectedMoveCanBeUsed
+	call CheckEnergyNeededForAttack
 	ret c ; can't be used
 	ld a, $0d ; $00001101
 	call CheckLoadedMoveFlag
@@ -200,11 +213,14 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
 ;	wSelectedMoveIndex 		   = selected move to examine
 ; output:
-;	z set if move has required energy
+;	b = colorless energy still needed
+;	c = basic energy still needed
+;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
+;	z set if move has enough energy
 ;	c set	   if no move 
 ;	   		OR if it's a Pokémon Power
-;	   		OR if no energy required for move
-CheckIfSelectedMoveCanBeUsed: ; 14279 (5:4279)
+;	   		OR if not enough energy for move
+CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -266,11 +282,11 @@ CheckIfSelectedMoveCanBeUsed: ; 14279 (5:4279)
 	ld a, [de]
 	swap a
 	and %00001111
-	ld b, a
+	ld b, a ; colorless energy still needed
 	ld a, [wTempLoadedMoveEnergyCost]
 	ld hl, wTempLoadedMoveEnergyNeededAmount
 	sub [hl]
-	ld c, a ; colorless energy still needed
+	ld c, a ; basic energy still needed
 	ld a, [wTotalAttachedEnergies]
 	sub c
 	sub b
@@ -290,7 +306,7 @@ CheckIfSelectedMoveCanBeUsed: ; 14279 (5:4279)
 	ld a, [wTempLoadedMoveEnergyNeededAmount]
 	ld b, a ; basic energy still needed
 	ld a, [wTempLoadedMoveEnergyNeededType]
-	call Func_1430f
+	call ConvertColorToEnergyCardID
 	ld e, a
 	ld d, 0
 	scf
@@ -333,10 +349,9 @@ CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 	ret
 ; 0x1430f
 
-; outputs data according to the energy type required for move
 ; input:
 ;	a = energy type
-Func_1430f: ; 1430f (5:430f)
+ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	push hl
 	push de
 	ld e, a
@@ -349,13 +364,22 @@ Func_1430f: ; 1430f (5:430f)
 	ret
 
 .data
-	db $2, $1, $4, $3, $5, $6, $7
+	db FIRE_ENERGY
+	db GRASS_ENERGY
+	db LIGHTNING_ENERGY
+	db WATER_ENERGY
+	db FIGHTING_ENERGY
+	db PSYCHIC_ENERGY
+	db DOUBLE_COLORLESS_ENERGY
 	
 Func_14323: ; 14323 (5:4323)
 	INCROM $14323, $1433d
 
 Func_1433d: ; 1433d (5:433d)
-	INCROM $1433d, $143e5
+	INCROM $1433d, $1438c
+
+Func_1438c: ; 1438c (5:438c)
+	INCROM $1438c, $143e5
 
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
@@ -517,8 +541,7 @@ _CalculateDamageDoneToDefendingCard: ; 14462 (5:4462)
 	call SwapTurn
 	and b
 	jr z, .not_resistant
-	; subtract 30 from de
-	ld hl, $ffe2 ; $10000 - 30
+	ld hl, -30
 	add hl, de
 	ld e, l
 	ld d, h
@@ -733,7 +756,38 @@ Data_1514f: ; 1514f (5:514f)
 	db CHANSEY
 	db $00
 
-	INCROM $1515b, $15636
+	INCROM $1515b, $155d2
+
+; return carry if energy loaded in a is found in hand
+; and outputs the card index of that energy card
+; input:
+;	a = energy type
+; output:
+; 	a = card index of energy, if found
+;	c set if found
+LookForEnergyCardInHand: ; 155d2 (5:55d2)
+	ld [wTempEnergyTypeToLook], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	ldh [hTempCardIndex_ff98], a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld b, a
+	ld a, [wTempEnergyTypeToLook]
+	cp b
+	jr nz, .loop
+
+	ldh a, [hTempCardIndex_ff98]
+	scf
+	ret
+; 0x155ef
+
+Func_155ef: ; 155ef (5:55d2)
+	INCROM $155ef, $15636
 
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
@@ -844,20 +898,22 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld [wcdbe], a
 	ld a, [$cdb4]
 	or a
-	jr z, .asm_158d4
+	jr z, .check_status
 	srl a
 	srl a
 	sla a
 	call Func_140fe
-.asm_158d4
+
+.check_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_158f1
+	jr z, .asm_158f1 ; no status
 	and DOUBLE_POISONED
-	jr z, .asm_158e5
-	ld a, ASLEEP
+	jr z, .asm_158e5 ; no poison
+	ld a, $02
 	call Func_140fe
+
 .asm_158e5
 	ld a, [hl]
 	and $0f
@@ -865,24 +921,26 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nz, .asm_158f1
 	ld a, $01
 	call Func_140fe
+
 .asm_158f1
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_15915
+	jr nc, .active_cant_knock_out
 	call CheckIfCardCanUseSelectedMove
-	jp nc, .asm_15904
+	jp nc, .active_cant_use_move
 	call Func_16311
-	jr nc, .asm_15915
-.asm_15904
+	jr nc, .active_cant_knock_out
+
+.active_cant_use_move
 	ld a, $05
 	call Func_1410a
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
-	jr nc, .asm_15915
+	jr nc, .active_cant_knock_out
 	ld a, $23
 	call Func_1410a
-.asm_15915
+.active_cant_knock_out
 	call Func_173b1
 	jr nc, .asm_15930
 	ld a, $02
@@ -1009,6 +1067,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr z, .asm_15a0e
 	ld a, $03
 	call Func_1410a
+
 .asm_15a0e
 	ld a, [wAIPlayerColor]
 	ld b, a
@@ -1024,6 +1083,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr z, .asm_15a17
 	ld a, $01
 	call Func_140fe
+
 .asm_15a2a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -1331,7 +1391,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	cp 2
 	ret c
 
-	call CheckIfCardCanKnockOutOrUseSelectedMove
+	call CheckIfCardCanKnockOutAndUseSelectedMove
 	jr c, .asm_16258
 	call CheckIfActivePokemonCanUseAnyNonResidualMove
 	jr nc, .asm_16258
@@ -1406,11 +1466,11 @@ Func_161d5: ; 161d5 (5:61d5)
 	INCROM $16270, $1628f
 
 ; returns carry if card at hTempPlayAreaLocation_ff9d
-; can't knock out defending Pokémon
+; can knock out defending Pokémon
 ; input:
 ; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
 ;	wSelectedMoveIndex 		   = selected move to examine
-CheckIfCardCanKnockOutOrUseSelectedMove: ; 1628f (5:628f)
+CheckIfCardCanKnockOutAndUseSelectedMove: ; 1628f (5:628f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -1459,8 +1519,42 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 
 	INCROM $162c8, $16311
 
-Func_16311 ; 16311 (5:6311)
-	INCROM $16311, $1633f
+Func_16311: ; 16311 (5:6311)
+	call CheckEnergyNeededForAttack
+	ld a, b
+	add c
+	cp 1
+	jr z, .one_energy
+	cp 2
+	jr nz, .done
+	ld a, c
+	cp 2
+	jr z, .two_colorless
+.done
+	or a
+	ret
+
+.one_energy
+	ld a, b
+	or a
+	jr z, .asm_16330
+	ld a, e
+	call LookForEnergyCardInHand
+	ret c
+	jr .done
+
+.asm_16330
+	call Func_1438c
+	jr c, .done
+	scf
+	ret
+
+.two_colorless
+	ld a, $07
+	call LookForEnergyCardInHand
+	ret c
+	jr .done
+; 0x1633f
 
 ; goes through $00 terminated list pointed 
 ; by wcdae and compares it to each card in hand.
