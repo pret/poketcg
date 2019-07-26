@@ -110,10 +110,10 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 	INCROM $140c5, $140fe
 
 ; adds wcdbe to a, and stores result in wcdbe
-; if there's overflow, it's capped to $ff
+; if there's overflow, it's capped at $ff
 ; output:
 ; 	a = a + wcdbe (capped at $ff)
-Func_140fe: ; 140fe (5:40fe)
+AddToWcdbe: ; 140fe (5:40fe)
 	push hl
 	ld hl, wcdbe
 	add [hl]
@@ -125,8 +125,25 @@ Func_140fe: ; 140fe (5:40fe)
 	ret
 ; 0x1410a
 
-Func_1410a: ; 1410a (5:410a)
-	INCROM $1410a, $1411d
+; subs a from wcdbe, and stores result in wcdbe
+; if there's underflow, it's capped at $00
+SubFromWcdbe: ; 1410a (5:410a)
+	push hl
+	push de
+	ld e, a
+	ld hl, wcdbe
+	ld a, [hl]
+	or a
+	jr z, .done
+	sub e
+	ld [hl], a
+	jr nc, .done
+	ld [hl], $00
+.done
+	pop de
+	pop hl
+	ret
+; 0x1411d
 
 ; stores defending Pokémon's weakness/resistance
 ; and the number of prize cards in both sides
@@ -356,14 +373,14 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	push de
 	ld e, a
 	ld d, 0
-	ld hl, .data
+	ld hl, .card_id
 	add hl, de
 	ld a, [hl]
 	pop de
 	pop hl
 	ret
 
-.data
+.card_id
 	db FIRE_ENERGY
 	db GRASS_ENERGY
 	db LIGHTNING_ENERGY
@@ -378,8 +395,51 @@ Func_14323: ; 14323 (5:4323)
 Func_1433d: ; 1433d (5:433d)
 	INCROM $1433d, $1438c
 
-Func_1438c: ; 1438c (5:438c)
-	INCROM $1438c, $143e5
+; loads all the energy cards
+; in hand in wDuelTempList
+; return carry if no energy cards found
+CreateEnergyCardListFromHand: ; 1438c (5:438c)
+	push hl
+	push de
+	push bc
+	ld de, wDuelTempList
+	ld b, a
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	ld c, a
+	inc c
+	ld l, LOW(wOpponentHand)
+	jr .decrease
+
+.loop
+	ld a, [hli]
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	and TYPE_ENERGY
+	jr z, .decrease
+	dec hl
+	ld a, [hli]
+	ld [de], a
+	inc de
+.decrease
+	dec c
+	jr nz, .loop
+
+	ld a, $ff
+	ld [de], a
+	pop bc
+	pop de
+	pop hl
+	ld a, [wDuelTempList]
+	cp $ff
+	ccf
+	ret
+; 0x143bf
+
+Func_143bf: ; 143bf (5:43bf)
+	INCROM $143bf, $143e5
 
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
@@ -758,15 +818,15 @@ Data_1514f: ; 1514f (5:514f)
 
 	INCROM $1515b, $155d2
 
-; return carry if energy loaded in a is found in hand
-; and outputs the card index of that energy card
+; return carry if card ID loaded in a is found in hand
+; and outputs in a the deck index of that card
 ; input:
-;	a = energy type
+;	a = card ID
 ; output:
-; 	a = card index of energy, if found
+; 	a = card deck index, if found
 ;	c set if found
-LookForEnergyCardInHand: ; 155d2 (5:55d2)
-	ld [wTempEnergyTypeToLook], a
+LookForCardInHand: ; 155d2 (5:55d2)
+	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
 
@@ -777,7 +837,7 @@ LookForEnergyCardInHand: ; 155d2 (5:55d2)
 	ldh [hTempCardIndex_ff98], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld b, a
-	ld a, [wTempEnergyTypeToLook]
+	ld a, [wTempCardIDToLook]
 	cp b
 	jr nz, .loop
 
@@ -902,7 +962,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	srl a
 	srl a
 	sla a
-	call Func_140fe
+	call AddToWcdbe
 
 .check_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -912,7 +972,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and DOUBLE_POISONED
 	jr z, .asm_158e5 ; no poison
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 
 .asm_158e5
 	ld a, [hl]
@@ -920,7 +980,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp $01
 	jr nz, .asm_158f1
 	ld a, $01
-	call Func_140fe
+	call AddToWcdbe
 
 .asm_158f1
 	xor a
@@ -929,22 +989,23 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nc, .active_cant_knock_out
 	call CheckIfCardCanUseSelectedMove
 	jp nc, .active_cant_use_move
-	call Func_16311
+	call LookForEnergyNeededInHand
 	jr nc, .active_cant_knock_out
 
 .active_cant_use_move
 	ld a, $05
-	call Func_1410a
+	call SubFromWcdbe
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .active_cant_knock_out
 	ld a, $23
-	call Func_1410a
+	call SubFromWcdbe
+	
 .active_cant_knock_out
 	call Func_173b1
 	jr nc, .asm_15930
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 	call Func_17426
 	jr c, .asm_1594d
 	ld a, [wAIPlayerPrizeCount]
@@ -959,13 +1020,13 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp 2
 	jr nc, .asm_15941
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 .asm_15941
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .asm_1594d
 	ld a, $02
-	call Func_1410a
+	call SubFromWcdbe
 .asm_1594d
 	call GetArenaCardColor
 	call TranslateColorToWR
@@ -974,7 +1035,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_15980
 	ld a, $01
-	call Func_140fe
+	call AddToWcdbe
 	ld a, [wAIPlayerResistance]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -991,7 +1052,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .asm_15980
 .asm_1597b
 	ld a, $02
-	call Func_1410a
+	call SubFromWcdbe
 .asm_15980
 	ld a, [wAIPlayerColor]
 	ld b, a
@@ -999,7 +1060,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_159ad
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 	ld a, [wAIPlayerColor]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -1015,7 +1076,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .asm_159ad
 .asm_159a8
 	ld a, $03
-	call Func_1410a
+	call SubFromWcdbe
 .asm_159ad
 	ld a, [wAIPlayerColor]
 	ld b, a
@@ -1023,7 +1084,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_159bc
 	ld a, $03
-	call Func_1410a
+	call SubFromWcdbe
 .asm_159bc
 	ld a, [wAIPlayerWeakness]
 	ld b, a
@@ -1043,7 +1104,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_159c7
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1056,7 +1117,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call Func_17383
 	jr nc, .asm_159fc
 	ld a, $0a
-	call Func_140fe
+	call AddToWcdbe
 	jr .asm_15a0e
 .asm_159fc
 	call GetArenaCardColor
@@ -1066,7 +1127,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_15a0e
 	ld a, $03
-	call Func_1410a
+	call SubFromWcdbe
 
 .asm_15a0e
 	ld a, [wAIPlayerColor]
@@ -1082,7 +1143,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .asm_15a17
 	ld a, $01
-	call Func_140fe
+	call AddToWcdbe
 
 .asm_15a2a
 	ld a, DUELVARS_BENCH
@@ -1101,7 +1162,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nc, .asm_15a4b
 	call CheckIfCardCanUseSelectedMove
 	jr nc, .asm_15a4f
-	call Func_16311
+	call LookForEnergyNeededInHand
 	jr c, .asm_15a4f
 .asm_15a4b
 	pop bc
@@ -1111,7 +1172,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop bc
 	pop hl
 	ld a, $02
-	call Func_140fe
+	call AddToWcdbe
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .asm_15a7a
@@ -1125,7 +1186,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jp nc, .asm_15a7a
 .asm_15a70
 	ld a, $28
-	call Func_140fe
+	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
 .asm_15a7a
@@ -1163,7 +1224,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop bc
 	pop hl
 	ld a, $05
-	call Func_140fe
+	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
 .asm_15abc
@@ -1175,18 +1236,18 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp 3
 	jr nc, .asm_15ad1
 	ld a, $01
-	call Func_1410a
+	call SubFromWcdbe
 	jr .asm_15ad6
 .asm_15ad1
 	ld a, $02
-	call Func_1410a
+	call SubFromWcdbe
 .asm_15ad6
 	call Func_170c9
 	jr c, .asm_15ae5
 	call Func_17101
 	cp $02
 	jr c, .asm_15ae5
-	call Func_140fe
+	call AddToWcdbe
 .asm_15ae5
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -1217,7 +1278,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .asm_15b17
 .asm_15b12
 	ld a, $14
-	call Func_1410a
+	call SubFromWcdbe
 .asm_15b17
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1310,37 +1371,37 @@ Func_15eae: ; 15eae (5:5eae)
 	cp $04
 	jr c, .asm_15ef2
 	ld a, $14
-	call Func_1410a
+	call SubFromWcdbe
 	jr .asm_15ef7
 .asm_15ef2
 	ld a, $32
-	call Func_140fe
+	call AddToWcdbe
 .asm_15ef7
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call Func_173b1
 	jr nc, .asm_15f04
 	ld a, $14
-	call Func_140fe
+	call AddToWcdbe
 .asm_15f04
 	ld a, [wcdf3]
 	call Func_163c9
 	call Func_1637b
 	jr nc, .asm_15f14
 	ld a, $14
-	call Func_140fe
+	call AddToWcdbe
 .asm_15f14
 	ld a, [wcdf3]
 	call Func_16422
 	jr nc, .asm_15f21
 	ld a, $14
-	call Func_140fe
+	call AddToWcdbe
 .asm_15f21
 	ld a, [wcdf3]
 	call Func_16451
 	jr nc, .asm_15f2e
 	ld a, $0a
-	call Func_140fe
+	call AddToWcdbe
 .asm_15f2e
 	ld a, [wcdbe]
 	cp $b4
@@ -1440,11 +1501,11 @@ Func_161d5: ; 161d5 (5:61d5)
 	jr z, .asm_16258
 
 	ld a, $46
-	call Func_140fe
+	call AddToWcdbe
 	ret
 .asm_16258
 	ld a, $64
-	call Func_1410a
+	call SubFromWcdbe
 	ret
 
 .moltres
@@ -1519,7 +1580,13 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 
 	INCROM $162c8, $16311
 
-Func_16311: ; 16311 (5:6311)
+; looks for energy card(s) in hand depending on what is needed
+; 	- if one basic energy is required, look for that energy;
+;	- if one colorless is required, create a list at wDuelTempList
+;	  of all energy cards;
+;	- if two colorless are required, look for double colorless;
+; return carry if successful in finding card
+LookForEnergyNeededInHand: ; 16311 (5:6311)
 	call CheckEnergyNeededForAttack
 	ld a, b
 	add c
@@ -1537,21 +1604,21 @@ Func_16311: ; 16311 (5:6311)
 .one_energy
 	ld a, b
 	or a
-	jr z, .asm_16330
+	jr z, .one_colorless
 	ld a, e
-	call LookForEnergyCardInHand
+	call LookForCardInHand
 	ret c
 	jr .done
 
-.asm_16330
-	call Func_1438c
+.one_colorless
+	call CreateEnergyCardListFromHand
 	jr c, .done
 	scf
 	ret
 
 .two_colorless
-	ld a, $07
-	call LookForEnergyCardInHand
+	ld a, DOUBLE_COLORLESS_ENERGY
+	call LookForCardInHand
 	ret c
 	jr .done
 ; 0x1633f
@@ -1644,8 +1711,75 @@ Func_17101 ; 17101 (5:7101)
 Func_17383 ; 17383 (5:7383)
 	INCROM $17383, $173b1
 
-Func_173b1 ; 173b1 (5:73b1)
-	INCROM $173b1, $17426
+Func_173b1: ; 173b1 (5:73b1)
+	xor a
+	ld [$ce00], a
+	ld [$ce01], a
+	call Func_173e4
+	jr nc, .asm_173c3
+	ld a, [wDamage]
+	ld [$ce00], a
+.asm_173c3
+	ld a, $01
+	call Func_173e4
+	jr nc, .asm_173d2
+	ld a, [wDamage]
+	ld [$ce01], a
+	jr .asm_173d7
+.asm_173d2
+	ld a, [$ce00]
+	or a
+	ret z
+.asm_173d7
+	ld a, [$ce00]
+	ld b, a
+	ld a, [$ce01]
+	cp b
+	jr nc, .asm_173e2
+	ld a, b
+.asm_173e2
+	scf
+	ret
+; 0x173e4
+
+; input:
+;	a = move to check
+Func_173e4: ; 173e4 (5:73e4)
+	ld [wSelectedMoveIndex], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	push af
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call SwapTurn
+	call CheckIfCardCanUseSelectedMove
+	call SwapTurn
+	pop bc
+	ld a, b
+	ldh [hTempPlayAreaLocation_ff9d], a
+	jr c, .done
+
+; player's active Pokémon can use move
+	ld a, [wSelectedMoveIndex]
+	call Func_1450b
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jr z, .set_carry
+	ret
+
+.set_carry
+	scf
+	ret
+
+.done
+	or a
+	ret
+; 0x17414
+
+Func_17414 ; 17414 (5:7414)
+	INCROM $17414, $17426
 
 Func_17426 ; 17426 (5:7426)
 	INCROM $17426, $18000

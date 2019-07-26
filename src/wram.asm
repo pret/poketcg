@@ -1218,8 +1218,8 @@ wAIPlayerPrizeCount:: ; cdd2
 wAIOpponentPrizeCount:: ; cdd3
 	ds $1
 
-; AI stores the energy type to look for here
-wTempEnergyTypeToLook:: ; cdd4
+; AI stores the card ID to look for here
+wTempCardIDToLook:: ; cdd4
 	ds $1
 
 	ds $6
