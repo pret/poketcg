@@ -1205,130 +1205,147 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_158f1 ; no status
+	jr z, .check_ko ; no status
 	and DOUBLE_POISONED
-	jr z, .asm_158e5 ; no poison
+	jr z, .check_cnf ; no poison
 	ld a, $02
 	call AddToWcdbe
-
-.asm_158e5
+.check_cnf
 	ld a, [hl]
-	and $0f
-	cp $01
-	jr nz, .asm_158f1
+	and CNF_SLP_PRZ
+	cp CONFUSED
+	jr nz, .check_ko
 	ld a, $01
 	call AddToWcdbe
 
-.asm_158f1
+.check_ko
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .active_cant_knock_out
+	jr nc, .active_cant_ko
 	call CheckIfCardCanUseSelectedMove
 	jp nc, .active_cant_use_move
 	call LookForEnergyNeededInHand
-	jr nc, .active_cant_knock_out
+	jr nc, .active_cant_ko
 
 .active_cant_use_move
 	ld a, $05
 	call SubFromWcdbe
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
-	jr nc, .active_cant_knock_out
+	jr nc, .active_cant_ko
 	ld a, $23
 	call SubFromWcdbe
 	
-.active_cant_knock_out
+.active_cant_ko
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_15930
+	jr nc, .defending_cant_ko
 	ld a, $02
 	call AddToWcdbe
-	call Func_17426
-	jr c, .asm_1594d
+
+	call CheckIfNotABossDeckID
+	jr c, .check_resistance_1
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
 	jr nc, .asm_15941
 	ld a, $01
 	ld [$cdd7], a
-.asm_15930
-	call Func_17426
-	jr c, .asm_1594d
+
+.defending_cant_ko
+	call CheckIfNotABossDeckID
+	jr c, .check_resistance_1
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
 	jr nc, .asm_15941
 	ld a, $02
 	call AddToWcdbe
+
 .asm_15941
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
-	jr nc, .asm_1594d
+	jr nc, .check_resistance_1
 	ld a, $02
 	call SubFromWcdbe
-.asm_1594d
+
+.check_resistance_1
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
 	ld a, [wAIPlayerResistance]
 	and b
-	jr z, .asm_15980
+	jr z, .check_weakness_1
 	ld a, $01
 	call AddToWcdbe
+
+; check bench for Pokémon that
+; the defending card is not resistant to
+; if one is found, skip SubFromWcdbe
 	ld a, [wAIPlayerResistance]
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-.asm_15968
+.loop_resistance_1
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_1597b
+	jr z, .exit_loop_resistance_1
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	call TranslateColorToWR
 	and b
-	jr nz, .asm_15968
-	jr .asm_15980
-.asm_1597b
+	jr nz, .loop_resistance_1
+	jr .check_weakness_1
+.exit_loop_resistance_1
 	ld a, $02
 	call SubFromWcdbe
-.asm_15980
+
+.check_weakness_1
 	ld a, [wAIPlayerColor]
 	ld b, a
 	call GetArenaCardWeakness
 	and b
-	jr z, .asm_159ad
+	jr z, .check_resistance_2
 	ld a, $02
 	call AddToWcdbe
+
+; check bench for Pokémon that
+; is not weak to defending Pokémon
+; if one is found, skip SubFromWcdbe
 	ld a, [wAIPlayerColor]
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-.asm_15998
+.loop_weakness_1
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_159a8
+	jr z, .exit_loop_weakness_1
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Weakness]
 	and b
-	jr nz, .asm_15998
-	jr .asm_159ad
-.asm_159a8
+	jr nz, .loop_weakness_1
+	jr .check_resistance_2
+.exit_loop_weakness_1
 	ld a, $03
 	call SubFromWcdbe
-.asm_159ad
+
+.check_resistance_2
 	ld a, [wAIPlayerColor]
 	ld b, a
 	call GetArenaCardResistance
 	and b
-	jr z, .asm_159bc
+	jr z, .check_weakness_2
 	ld a, $03
 	call SubFromWcdbe
-.asm_159bc
+
+; check bench for Pokémon that
+; is the defending Pokémon's weakness
+; if none is found, skip AddFromWcdbe
+.check_weakness_2
 	ld a, [wAIPlayerWeakness]
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, $00
-.asm_159c7
+.loop_weakness_2
 	inc e
 	ld a, [hli]
 	cp $ff
@@ -1339,9 +1356,10 @@ Func_158b2: ; 158b2 (5:58b2)
 	call TranslateColorToWR
 	pop de
 	and b
-	jr z, .asm_159c7
+	jr z, .loop_weakness_2
 	ld a, $02
 	call AddToWcdbe
+	
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1413,7 +1431,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .asm_15a7a
-	call Func_17426
+	call CheckIfNotABossDeckID
 	jr c, .asm_15a7a
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -2031,8 +2049,45 @@ CheckIfDefendingPokemonCanKnockOutWithMove: ; 173e4 (5:73e4)
 	ret
 ; 0x17414
 
-Func_17414 ; 17414 (5:7414)
-	INCROM $17414, $17426
+; sets carry if Opponent's deck ID
+; is between LEGENDARY_MOLTRES_DECK_ID (inclusive)
+; and MUSCLES_FOR_BRAINS_DECK_ID (exclusive)
+; these are the decks for Grandmaster/Club Master/Ronald
+CheckIfOpponentHasBossDeckID: ; 17414 (5:7414)
+	push af
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_MOLTRES_DECK_ID
+	jr c, .no_carry
+	cp MUSCLES_FOR_BRAINS_DECK_ID
+	jr nc, .no_carry
+	pop af
+	scf
+	ret
 
-Func_17426 ; 17426 (5:7426)
-	INCROM $17426, $18000
+.no_carry
+	pop af
+	or a
+	ret
+; 0x17426
+
+; sets carry if not a boss fight
+; and if s0a00a == 0
+CheckIfNotABossDeckID: ; 17426 (5:7426)
+	call EnableSRAM
+	ld a, [s0a00a]
+	call DisableSRAM
+	or a
+	jr nz, .no_carry
+	call CheckIfOpponentHasBossDeckID
+	jr nc, .carry
+.no_carry
+	or a
+	ret
+
+.carry
+	scf
+	ret
+; 0x1743b
+
+Func_1743b ; 1743b (5:743b)
+	INCROM $1743b, $18000
