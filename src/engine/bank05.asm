@@ -192,7 +192,7 @@ Func_14226: ; 14226 (5:4226)
 ; returns carry if Pokémon at hTempPlayAreaLocation_ff9d
 ; can't use a move or if that selected move doesn't have enough energy
 ; input:
-; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	wSelectedMoveIndex 		   = selected move to examine
 CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -227,7 +227,7 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ; load selected move from Pokémon in hTempPlayAreaLocation_ff9d
 ; and checks if there is enough energy to execute the selected move
 ; input:
-; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	wSelectedMoveIndex 		   = selected move to examine
 ; output:
 ;	b = colorless energy still needed
@@ -532,7 +532,7 @@ CalculateMoveDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 ; 	[wAIMinDamage] = base damage
 ; 	[wAIMaxDamage] = base damage
 ; 	[wDamage]      = base damage
-; 	hTempPlayAreaLocation_ff9d = turn holder's card location as the attacker
+; 	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
 CalculateDamage_VersusDefendingPokemon: ; 14453 (5:4453)
 	ld hl, wAIMinDamage
 	call _CalculateDamage_VersusDefendingPokemon
@@ -1187,7 +1187,7 @@ ZeroData: ; 1575e (5:575e)
 Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
 	or a
-	jp nz, .asm_15b2f
+	jp nz, .no_carry
 	xor a
 	ld [$cdd7], a
 	call StoreDefendingPokemonColorWRAndPrizeCards
@@ -1205,7 +1205,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
-	jr z, .check_ko ; no status
+	jr z, .check_ko_1 ; no status
 	and DOUBLE_POISONED
 	jr z, .check_cnf ; no poison
 	ld a, $02
@@ -1214,11 +1214,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	jr nz, .check_ko
+	jr nz, .check_ko_1
 	ld a, $01
 	call AddToWcdbe
 
-.check_ko
+.check_ko_1
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -1338,7 +1338,7 @@ Func_158b2: ; 158b2 (5:58b2)
 
 ; check bench for Pokémon that
 ; is the defending Pokémon's weakness
-; if none is found, skip AddFromWcdbe
+; if none is found, skip AddToWcdbe
 .check_weakness_2
 	ld a, [wAIPlayerWeakness]
 	ld b, a
@@ -1349,7 +1349,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	inc e
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15a0e
+	jr z, .check_resistance_3
 	push de
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
@@ -1359,7 +1359,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr z, .loop_weakness_2
 	ld a, $02
 	call AddToWcdbe
-	
+
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1367,84 +1367,97 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, e
 	pop de
 	cp PORYGON
-	jr nz, .asm_159fc
+	jr nz, .check_weakness_3
+
+; handle Porygon
 	ld a, e
-	call Func_17383
-	jr nc, .asm_159fc
+	call CheckIfCanDamageDefendingPokemon
+	jr nc, .check_weakness_3
 	ld a, $0a
 	call AddToWcdbe
-	jr .asm_15a0e
-.asm_159fc
+	jr .check_resistance_3
+
+.check_weakness_3
 	call GetArenaCardColor
 	call TranslateColorToWR
 	ld b, a
 	ld a, [wAIPlayerWeakness]
 	and b
-	jr z, .asm_15a0e
+	jr z, .check_resistance_3
 	ld a, $03
 	call SubFromWcdbe
 
-.asm_15a0e
+; check bench for Pokémon that
+; is resistant to defending Pokémon
+; if none is found, skip AddToWcdbe
+.check_resistance_3
 	ld a, [wAIPlayerColor]
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-.asm_15a17
+.loop_resistance_2
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15a2a
+	jr z, .check_ko_2
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Resistance]
 	and b
-	jr z, .asm_15a17
+	jr z, .loop_resistance_2
 	ld a, $01
 	call AddToWcdbe
 
-.asm_15a2a
+; check bench for Pokémon that
+; is can KO defending Pokémon
+; if none is found, skipp AddToWcdbe
+.check_ko_2
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-	ld c, $00
-.asm_15a31
+	ld c, 0
+.loop_ko_1
 	inc c
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15a7a
+	jr z, .check_defending_id
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push hl
 	push bc
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_15a4b
+	jr nc, .no_ko
 	call CheckIfCardCanUseSelectedMove
-	jr nc, .asm_15a4f
+	jr nc, .success
 	call LookForEnergyNeededInHand
-	jr c, .asm_15a4f
-.asm_15a4b
+	jr c, .success
+.no_ko
 	pop bc
 	pop hl
-	jr .asm_15a31
-.asm_15a4f
+	jr .loop_ko_1
+.success
 	pop bc
 	pop hl
 	ld a, $02
 	call AddToWcdbe
+
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
-	jr nc, .asm_15a7a
+	jr nc, .check_defending_id
 	call CheckIfNotABossDeckID
-	jr c, .asm_15a7a
+	jr c, .check_defending_id
+
+; is boss deck and is at last prize card
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_15a70
+	jr nc, .active_can_ko
 	call CheckIfCardCanUseSelectedMove
-	jp nc, .asm_15a7a
-.asm_15a70
+	jp nc, .check_defending_id
+.active_can_ko
 	ld a, $28
 	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
-.asm_15a7a
+
+.check_defending_id
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
@@ -1452,66 +1465,78 @@ Func_158b2: ; 158b2 (5:58b2)
 	call SwapTurn
 	ld a, e
 	cp MR_MIME
-	jr z, .asm_15a91
-	cp HITMONLEE
-	jr nz, .asm_15abc
-.asm_15a91
+	jr z, .mr_mime_or_hitmonlee
+	cp HITMONLEE ; ??
+	jr nz, .check_retreat_cost
+
+; check bench if there's any Pokémon
+; that can damage defending Pokémon
+; this is done because of Mr. Mime's PKMN PWR
+; but why Hitmonlee ($87) as well?
+.mr_mime_or_hitmonlee
 	xor a
-	call Func_17383
-	jr c, .asm_15abc
+	call CheckIfCanDamageDefendingPokemon
+	jr c, .check_retreat_cost
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-	ld c, $00
-.asm_15a9e
+	ld c, 0
+.loop_damage
 	inc c
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15abc
+	jr z, .check_retreat_cost
 	ld a, c
 	push hl
 	push bc
-	call Func_17383
-	jr c, .asm_15ab0
+	call CheckIfCanDamageDefendingPokemon
+	jr c, .cant_damage
 	pop bc
 	pop hl
-	jr .asm_15a9e
-.asm_15ab0
+	jr .loop_damage
+.cant_damage
 	pop bc
 	pop hl
 	ld a, $05
 	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
-.asm_15abc
+
+.check_retreat_cost
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	cp 2
-	jr c, .asm_15ad6
+	jr c, .one_or_none
 	cp 3
-	jr nc, .asm_15ad1
+	jr nc, .three_or_more
+	; exactly two
 	ld a, $01
 	call SubFromWcdbe
-	jr .asm_15ad6
-.asm_15ad1
+	jr .one_or_none
+.three_or_more
+; exactly two
 	ld a, $02
 	call SubFromWcdbe
-.asm_15ad6
+.one_or_none
 	call Func_170c9
-	jr c, .asm_15ae5
+	jr c, .check_defending_can_ko
 	call Func_17101
 	cp $02
-	jr c, .asm_15ae5
+	jr c, .check_defending_can_ko
 	call AddToWcdbe
-.asm_15ae5
+
+; check bench for Pokémon that
+; the defending Pokémon can't knock out
+; if none is found, skip SubFromWcdbe
+.check_defending_can_ko
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-	ld e, $00
-.asm_15aec
+	ld e, 0
+.loop_ko_2
 	inc e
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15b12
+	jr z, .exit_loop_ko
 	push de
 	push hl
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -1519,9 +1544,9 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop hl
 	pop de
 	cp MYSTERIOUS_FOSSIL
-	jr z, .asm_15aec
+	jr z, .loop_ko_2
 	cp CLEFAIRY_DOLL
-	jr z, .asm_15aec
+	jr z, .loop_ko_2
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push de
@@ -1529,50 +1554,58 @@ Func_158b2: ; 158b2 (5:58b2)
 	call CheckIfDefendingPokemonCanKnockOut
 	pop hl
 	pop de
-	jr c, .asm_15aec
-	jr .asm_15b17
-.asm_15b12
+	jr c, .loop_ko_2
+	jr .check_active_id
+.exit_loop_ko
 	ld a, $14
 	call SubFromWcdbe
-.asm_15b17
+
+.check_active_id
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp MYSTERIOUS_FOSSIL
-	jr z, .asm_15b33
+	jr z, .mysterious_fossil_or_clefairy_doll
 	cp CLEFAIRY_DOLL
-	jr z, .asm_15b33
+	jr z, .mysterious_fossil_or_clefairy_doll
+
+; if wcdbe is at least $83, set carry
 	ld a, [wcdbe]
 	cp $83
-	jr nc, .asm_15b31
-.asm_15b2f
+	jr nc, .set_carry
+.no_carry
 	or a
 	ret
-.asm_15b31
+.set_carry
 	scf
 	ret
-.asm_15b33
-	ld e, $00
-.asm_15b35
+
+; set carry regardless if active card is
+; either Mysterious Fossil or Clefairy Doll
+; and there's a bench Pokémon who is not KO'd
+; by defending Pokémon and can damage it
+.mysterious_fossil_or_clefairy_doll
+	ld e, 0
+.loop_ko_3
 	inc e
 	ld a, e
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	cp $ff
-	jr z, .asm_15b2f
+	jr z, .no_carry
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push de
 	call CheckIfDefendingPokemonCanKnockOut
 	pop de
-	jr c, .asm_15b35
+	jr c, .loop_ko_3
 	ld a, e
 	push de
-	call Func_17383
+	call CheckIfCanDamageDefendingPokemon
 	pop de
-	jr nc, .asm_15b35
-	jr .asm_15b31
+	jr nc, .loop_ko_3
+	jr .set_carry
 ; 0x15b54
 
 	INCROM $15b54, $15b72
@@ -1784,7 +1817,7 @@ Func_161d5: ; 161d5 (5:61d5)
 ; returns carry if card at hTempPlayAreaLocation_ff9d
 ; can knock out defending Pokémon
 ; input:
-; 	hTempPlayAreaLocation_ff9d = location of Pokémon card
+; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	wSelectedMoveIndex 		   = selected move to examine
 CheckIfCardCanKnockOutAndUseSelectedMove: ; 1628f (5:628f)
 	xor a
@@ -1963,8 +1996,40 @@ Func_170c9 ; 170c9 (5:70c9)
 Func_17101 ; 17101 (5:7101)
 	INCROM $17101, $17383
 
-Func_17383 ; 17383 (5:7383)
-	INCROM $17383, $173b1
+; returns carry if Pokemon at hTempPlayAreaLocation_ff9d
+; can damage defending Pokémon with any of its moves
+; input:
+; 	[hTempPlayAreaLocation_ff9d] = location of card to check
+CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
+	ldh [hTempPlayAreaLocation_ff9d], a
+	xor a ; first move
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .second_move
+	xor a
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr nz, .set_carry
+
+.second_move
+	ld a, $01 ; second move
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .no_carry
+	ld a, $01
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr nz, .set_carry
+
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x173b1
 
 ; checks if defending Pokémon can knock out
 ; card at hTempPlayAreaLocation_ff9d with any of its moves
@@ -2079,12 +2144,12 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 	or a
 	jr nz, .no_carry
 	call CheckIfOpponentHasBossDeckID
-	jr nc, .carry
+	jr nc, .set_carry
 .no_carry
 	or a
 	ret
 
-.carry
+.set_carry
 	scf
 	ret
 ; 0x1743b
