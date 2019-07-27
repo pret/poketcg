@@ -1235,7 +1235,14 @@ wcddc:: ; cddc
 wcdf3:: ; cdf3
 	ds $1
 
-	ds $f
+	ds $c
+
+wce00:: ; ce00
+	ds $1
+wce01:: ; ce01
+	ds $1
+
+	ds $1
 
 wce03:: ; ce03
 	ds $1
