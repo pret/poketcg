@@ -234,9 +234,9 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ;	c = basic energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
 ;	z set if move has enough energy
-;	c set	   if no move 
-;	   		OR if it's a Pokémon Power
-;	   		OR if not enough energy for move
+;	carry set if no move 
+;			  OR if it's a Pokémon Power
+;			  OR if not enough energy for move
 CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -340,7 +340,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 ; 	hl -> attached energy
 ; output:
 ;	z set if enough energy
-;	c set if not enough of this energy type attached
+;	carry set if not enough of this energy type attached
 CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 	and %00001111
 	jr nz, .check
@@ -1061,7 +1061,7 @@ Data_1514f: ; 1514f (5:514f)
 ;	a = card ID
 ; output:
 ; 	a = card deck index, if found
-;	c set if found
+;	carry set if found
 LookForCardInHand: ; 155d2 (5:55d2)
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
@@ -1239,7 +1239,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call SubFromWcdbe
 	
 .active_cant_knock_out
-	call Func_173b1
+	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_15930
 	ld a, $02
 	call AddToWcdbe
@@ -1508,7 +1508,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push de
 	push hl
-	call Func_173b1
+	call CheckIfDefendingPokemonCanKnockOut
 	pop hl
 	pop de
 	jr c, .asm_15aec
@@ -1546,7 +1546,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push de
-	call Func_173b1
+	call CheckIfDefendingPokemonCanKnockOut
 	pop de
 	jr c, .asm_15b35
 	ld a, e
@@ -1616,7 +1616,7 @@ Func_15eae: ; 15eae (5:5eae)
 .asm_15ef7
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	call Func_173b1
+	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_15f04
 	ld a, $14
 	call AddToWcdbe
@@ -1948,40 +1948,56 @@ Func_17101 ; 17101 (5:7101)
 Func_17383 ; 17383 (5:7383)
 	INCROM $17383, $173b1
 
-Func_173b1: ; 173b1 (5:73b1)
-	xor a
-	ld [$ce00], a
-	ld [$ce01], a
-	call Func_173e4
-	jr nc, .asm_173c3
+; checks if defending Pokémon can knock out
+; card at hTempPlayAreaLocation_ff9d with any of its moves
+; and if so, stores the damage to wce00 and wce01
+; sets carry if any on the moves knocks out
+; also outputs the largest damage dealt in a
+; input:
+;	hTempPlayAreaLocation_ff9d = locaion of card to check
+; output:
+;	a = largest damage of both moves
+;	carry set if can knock out
+CheckIfDefendingPokemonCanKnockOut: ; 173b1 (5:73b1)
+	xor a ; first move
+	ld [wce00], a
+	ld [wce01], a
+	call CheckIfDefendingPokemonCanKnockOutWithMove
+	jr nc, .second_move
 	ld a, [wDamage]
-	ld [$ce00], a
-.asm_173c3
-	ld a, $01
-	call Func_173e4
-	jr nc, .asm_173d2
+	ld [wce00], a
+
+.second_move
+	ld a, $01 ; second move
+	call CheckIfDefendingPokemonCanKnockOutWithMove
+	jr nc, .return_if_neither_kos
 	ld a, [wDamage]
-	ld [$ce01], a
-	jr .asm_173d7
-.asm_173d2
-	ld a, [$ce00]
+	ld [wce01], a
+	jr .compare
+
+.return_if_neither_kos
+	ld a, [wce00]
 	or a
 	ret z
-.asm_173d7
-	ld a, [$ce00]
+
+.compare
+	ld a, [wce00]
 	ld b, a
-	ld a, [$ce01]
+	ld a, [wce01]
 	cp b
-	jr nc, .asm_173e2
+	jr nc, .set_carry
 	ld a, b
-.asm_173e2
+.set_carry
 	scf
 	ret
 ; 0x173e4
 
+; return carry if defending Pokémon can knock out
+; card at hTempPlayAreaLocation_ff9d
 ; input:
 ;	a = move index
-Func_173e4: ; 173e4 (5:73e4)
+;	hTempPlayAreaLocation_ff9d = location of card to check
+CheckIfDefendingPokemonCanKnockOutWithMove: ; 173e4 (5:73e4)
 	ld [wSelectedMoveIndex], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
