@@ -1184,6 +1184,7 @@ ZeroData: ; 1575e (5:575e)
 
 	INCROM $1576b, $158b2
 
+; determine AI score for retreating
 Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
 	or a
@@ -1191,7 +1192,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	xor a
 	ld [$cdd7], a
 	call StoreDefendingPokemonColorWRAndPrizeCards
-	ld a, $80
+	ld a, 128 ; initial retreat score
 	ld [wcdbe], a
 	ld a, [$cdb4]
 	or a
@@ -1208,14 +1209,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr z, .check_ko_1 ; no status
 	and DOUBLE_POISONED
 	jr z, .check_cnf ; no poison
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 .check_cnf
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr nz, .check_ko_1
-	ld a, $01
+	ld a, 1
 	call AddToWcdbe
 
 .check_ko_1
@@ -1229,18 +1230,18 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nc, .active_cant_ko
 
 .active_cant_use_move
-	ld a, $05
+	ld a, 5
 	call SubFromWcdbe
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .active_cant_ko
-	ld a, $23
+	ld a, 35
 	call SubFromWcdbe
 	
 .active_cant_ko
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .defending_cant_ko
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 
 	call CheckIfNotABossDeckID
@@ -1257,14 +1258,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
 	jr nc, .check_prize_count
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 
 .check_prize_count
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .check_resistance_1
-	ld a, $02
+	ld a, 2
 	call SubFromWcdbe
 
 .check_resistance_1
@@ -1274,7 +1275,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wAIPlayerResistance]
 	and b
 	jr z, .check_weakness_1
-	ld a, $01
+	ld a, 1
 	call AddToWcdbe
 
 ; check bench for Pokémon that
@@ -1295,7 +1296,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nz, .loop_resistance_1
 	jr .check_weakness_1
 .exit_loop_resistance_1
-	ld a, $02
+	ld a, 2
 	call SubFromWcdbe
 
 .check_weakness_1
@@ -1304,7 +1305,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call GetArenaCardWeakness
 	and b
 	jr z, .check_resistance_2
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 
 ; check bench for Pokémon that
@@ -1324,7 +1325,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nz, .loop_weakness_1
 	jr .check_resistance_2
 .exit_loop_weakness_1
-	ld a, $03
+	ld a, 3
 	call SubFromWcdbe
 
 .check_resistance_2
@@ -1333,7 +1334,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call GetArenaCardResistance
 	and b
 	jr z, .check_weakness_2
-	ld a, $03
+	ld a, 3
 	call SubFromWcdbe
 
 ; check bench for Pokémon that
@@ -1357,7 +1358,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop de
 	and b
 	jr z, .loop_weakness_2
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 
 	push de
@@ -1373,7 +1374,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, e
 	call CheckIfCanDamageDefendingPokemon
 	jr nc, .check_weakness_3
-	ld a, $0a
+	ld a, 10
 	call AddToWcdbe
 	jr .check_resistance_3
 
@@ -1384,7 +1385,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wAIPlayerWeakness]
 	and b
 	jr z, .check_resistance_3
-	ld a, $03
+	ld a, 3
 	call SubFromWcdbe
 
 ; check bench for Pokémon that
@@ -1403,7 +1404,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, [wLoadedCard1Resistance]
 	and b
 	jr z, .loop_resistance_2
-	ld a, $01
+	ld a, 1
 	call AddToWcdbe
 
 ; check bench for Pokémon that
@@ -1435,7 +1436,7 @@ Func_158b2: ; 158b2 (5:58b2)
 .success
 	pop bc
 	pop hl
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 
 	ld a, [wAIOpponentPrizeCount]
@@ -1452,7 +1453,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call CheckIfCardCanUseSelectedMove
 	jp nc, .check_defending_id
 .active_can_ko
-	ld a, $28
+	ld a, 40
 	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
@@ -1496,7 +1497,7 @@ Func_158b2: ; 158b2 (5:58b2)
 .cant_damage
 	pop bc
 	pop hl
-	ld a, $05
+	ld a, 5
 	call AddToWcdbe
 	ld a, $01
 	ld [$cdd7], a
@@ -1515,12 +1516,12 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp 3
 	jr nc, .three_or_more
 	; exactly two
-	ld a, $01
+	ld a, 1
 	call SubFromWcdbe
 	jr .one_or_none
 
 .three_or_more
-	ld a, $02
+	ld a, 2
 	call SubFromWcdbe
 
 .one_or_none
@@ -1563,7 +1564,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr c, .loop_ko_2
 	jr .check_active_id
 .exit_loop_ko
-	ld a, $14
+	ld a, 20
 	call SubFromWcdbe
 
 .check_active_id
@@ -1576,9 +1577,9 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp CLEFAIRY_DOLL
 	jr z, .mysterious_fossil_or_clefairy_doll
 
-; if wcdbe is at least $83, set carry
+; if wcdbe is at least 131, set carry
 	ld a, [wcdbe]
-	cp $83
+	cp 131
 	jr nc, .set_carry
 .no_carry
 	or a
@@ -1717,6 +1718,8 @@ Func_15eae: ; 15eae (5:5eae)
 Func_15f4c ; 15f4c (5:5f4c)
 	INCROM $15f4c, $161d5
 
+; determine AI score for the legendary cards
+; Moltres, Zapdos and Articuno
 Func_161d5: ; 161d5 (5:61d5)
 ; check if deck applies
 	ld a, [wOpponentDeckID]
@@ -1747,18 +1750,18 @@ Func_161d5: ; 161d5 (5:61d5)
 	ret c
 
 	call CheckIfCardCanKnockOutAndUseSelectedMove
-	jr c, .asm_16258
+	jr c, .subtract
 	call CheckIfActivePokemonCanUseAnyNonResidualMove
-	jr nc, .asm_16258
+	jr nc, .subtract
 	call Func_158b2
-	jr c, .asm_16258
+	jr c, .subtract
 	
 	; checks for player's active card status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	and CNF_SLP_PRZ
 	or a
-	jr nz, .asm_16258
+	jr nz, .subtract
 
 	; checks for player's Pokemon Power
 	call SwapTurn
@@ -1783,7 +1786,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	; checks for Muk in both Play Areas
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
-	jr c, .asm_16258
+	jr c, .subtract
 	; checks if player's active card is Snorlax
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
@@ -1792,13 +1795,14 @@ Func_161d5: ; 161d5 (5:61d5)
 	call SwapTurn
 	ld a, e
 	cp SNORLAX
-	jr z, .asm_16258
+	jr z, .subtract
 
-	ld a, $46
+; add
+	ld a, 70
 	call AddToWcdbe
 	ret
-.asm_16258
-	ld a, $64
+.subtract
+	ld a, 100
 	call SubFromWcdbe
 	ret
 
@@ -1806,15 +1810,15 @@ Func_161d5: ; 161d5 (5:61d5)
 	; checks if there's enough cards in deck
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
-	cp $38 ; max number of cards not in deck to activate
-	jr nc, .asm_16258
+	cp 56 ; max number of cards not in deck to activate
+	jr nc, .subtract
 	ret
 
 .zapdos
 	; checks for Muk in both Play Areas
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
-	jr c, .asm_16258
+	jr c, .subtract
 	ret
 ; 0x16270
 
