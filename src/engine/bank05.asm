@@ -1182,7 +1182,11 @@ ZeroData: ; 1575e (5:575e)
 	ret
 ; 0x1576b
 
-	INCROM $1576b, $158b2
+Func_1576b: ; 1576b (5:576b)
+	INCROM $1576b, $15787
+
+Func_15787: ; 15787 (5:5787)
+	INCROM $15787, $158b2
 
 ; determine AI score for retreating
 Func_158b2: ; 158b2 (5:58b2)
@@ -1715,8 +1719,363 @@ Func_15eae: ; 15eae (5:5eae)
 	pop hl
 	ret
 
-Func_15f4c ; 15f4c (5:5f4c)
-	INCROM $15f4c, $161d5
+Func_15f4c: ; 15f4c (5:5f4c)
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld de, wHandTempList
+	call CopyHandCardList
+	ld hl, wHandTempList
+
+.next
+	ld a, [hli]
+	cp $ff
+	jp z, .done
+	ld [wcdf3], a
+	push hl
+	call IsPrehistoricPowerActive
+	jp c, .asm_1611a
+	ld a, [wcdf3]
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jp nc, .asm_1611a
+	ld a, [wLoadedCard1Stage]
+	or a
+	jp z, .asm_1611a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, $00
+.asm_15f88
+	push bc
+	ld e, b
+	ld a, [wcdf3]
+	ld d, a
+	call CheckIfCanEvolveInto
+	pop bc
+	push bc
+	jp c, .asm_16114
+
+	ld a, b
+	ld [$cdf1], a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, 128
+	ld [wcdbe], a
+	call Func_16120
+	xor a
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr nc, .asm_15fb7
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .asm_15fcd
+.asm_15fb7
+	ld a, $01
+	ld [$cdf2], a
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_15fd4
+	call CheckIfCardCanUseSelectedMove
+	jr c, .asm_15fd4
+	ld a, $01
+	ld [$cdf4], a
+	jr .asm_15fd4
+.asm_15fcd
+	xor a
+	ld [$cdf2], a
+	ld [$cdf4], a
+.asm_15fd4
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add $bb
+	call GetTurnDuelistVariable
+	push af
+	ld a, [wcdf3]
+	ld [hl], a
+	xor a
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr nc, .asm_15ff3
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	jr c, .asm_15ffa
+.asm_15ff3
+	ld a, $05
+	call AddToWcdbe
+	jr .asm_16015
+.asm_15ffa
+	ld a, [$cdf2]
+	or a
+	jr z, .asm_16015
+	ld a, $02
+	call SubFromWcdbe
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_16015
+	call Func_162c8
+	jr nc, .asm_16015
+	ld a, $07
+	call AddToWcdbe
+.asm_16015
+	ld a, [$cdf2]
+	or a
+	jr z, .asm_1603d
+	ld a, [$cdf1]
+	or a
+	jr nz, .asm_1603d
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_16032
+	call CheckIfCardCanUseSelectedMove
+	jr c, .asm_16032
+	ld a, $05
+	call AddToWcdbe
+	jr .asm_1603d
+.asm_16032
+	ld a, [$cdf4]
+	or a
+	jr z, .asm_1603d
+	ld a, $14
+	call SubFromWcdbe
+.asm_1603d
+	ld a, [$cdf1]
+	or a
+	jr nz, .asm_16050
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfDefendingPokemonCanKnockOut
+	jr nc, .asm_16050
+	ld a, $05
+	call SubFromWcdbe
+.asm_16050
+	ld a, [$cdf1]
+	call Func_16270
+	jr c, .asm_1605d
+	ld a, $14
+	call SubFromWcdbe
+.asm_1605d
+	ld a, [$cdf1]
+	add $bb
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, [$cdf1]
+	or a
+	jr nz, .asm_16087
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfDefendingPokemonCanKnockOut
+	jr nc, .asm_1607a
+	ld a, $05
+	call AddToWcdbe
+.asm_1607a
+	ld a, $f0
+	call GetTurnDuelistVariable
+	or a
+	jr z, .asm_16087
+	ld a, $04
+	call AddToWcdbe
+.asm_16087
+	ld a, [wcdf3]
+	call Func_16422
+	jr nc, .asm_16096
+	ld a, $02
+	call AddToWcdbe
+	jr .asm_160a3
+.asm_16096
+	ld a, [wcdf3]
+	call Func_16451
+	jr nc, .asm_160a3
+	ld a, $01
+	call AddToWcdbe
+.asm_160a3
+	ld a, [$cdf1]
+	ld e, a
+	call SubstractHPFromCard
+	or a
+	jr z, .asm_160b7
+	srl a
+	srl a
+	call Func_1576b
+	call SubFromWcdbe
+.asm_160b7
+	ld a, [$cdf1]
+	add $bb
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1ID]
+	cp $cc
+	jr z, .asm_160d7
+	ld a, [wLoadedCard1Unknown2]
+	cp $02
+	jr nz, .asm_160dc
+	ld a, $02
+	call AddToWcdbe
+	jr .asm_160dc
+.asm_160d7
+	ld a, $05
+	call AddToWcdbe
+.asm_160dc
+	ld a, [wOpponentDeckID]
+	cp $25
+	jr nz, .asm_160fb
+	ld a, [wLoadedCard1ID]
+	cp $60
+	jr z, .asm_160f6
+	cp $61
+	jr z, .asm_160f6
+	cp $62
+	jr z, .asm_160f6
+	cp $63
+	jr nz, .asm_160fb
+.asm_160f6
+	ld a, $03
+	call SubFromWcdbe
+.asm_160fb
+	ld a, [wcdbe]
+	cp $85
+	jr c, .asm_16114
+	ld a, [$cdf1]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wcdf3]
+	ldh [hTemp_ffa0], a
+	ld a, $02
+	bank1call AIMakeDecision
+	pop bc
+	jr .asm_1611a
+.asm_16114
+	pop bc
+	inc b
+	dec c
+	jp nz, .asm_15f88
+.asm_1611a
+	pop hl
+	jp .next
+
+.done
+	or a
+	ret
+
+Func_16120: ; 16120 (5:6120)
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_DRAGONITE_DECK_ID
+	jr z, .legendary_dragonite
+	cp INVINCIBLE_RONALD_DECK_ID
+	jr z, .invincible_ronald
+	cp LEGENDARY_RONALD_DECK_ID
+	jr z, .legendary_ronald
+	ret
+
+.legendary_dragonite
+	ld a, [wLoadedCard2ID]
+	cp CHARMELEON
+	jr z, .asm_16140
+	cp MAGIKARP
+	jr z, .asm_16161
+	cp DRAGONAIR
+	jr z, .asm_1618c
+	ret
+
+.asm_16140
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call Func_15787
+	cp $03
+	jr c, .asm_1615b
+	push af
+	farcall Func_22990
+	pop bc
+	add b
+	cp $06
+	jr c, .asm_1615b
+	ld a, 3
+	call AddToWcdbe
+	ret
+
+.asm_1615b
+	ld a, 10
+	call SubFromWcdbe
+	ret
+
+.asm_16161
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	ret z
+	ld e, a
+	call Func_15787
+	cp $02
+	ret c
+	ld a, 3
+	call AddToWcdbe
+	ret
+
+.invincible_ronald
+	ld a, [wLoadedCard2ID]
+	cp GRIMER
+	jr z, .asm_1617a
+	ret
+
+.asm_1617a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	ret z
+	ld a, 10
+	call AddToWcdbe
+	ret
+
+.legendary_ronald
+	ld a, [wLoadedCard2ID]
+	cp DRAGONAIR
+	jr z, .asm_1618c
+	ret
+
+.asm_1618c
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr z, .asm_161be
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, 0
+.asm_16199
+	dec b
+	ld e, b
+	push bc
+	call SubstractHPFromCard
+	pop bc
+	add c
+	ld c, a
+	ld a, b
+	or a
+	jr nz, .asm_16199
+	ld a, $46
+	cp c
+	jr c, .asm_161b1
+.asm_161ab
+	ld a, 10
+	call SubFromWcdbe
+	ret
+
+.asm_161b1
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_161ab
+	ld a, 10
+	call AddToWcdbe
+	ret
+
+.asm_161be
+	ld e, 0
+	call SubstractHPFromCard
+	cp 50
+	jr c, .asm_161ab
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	cp 3
+	jr c, .asm_161ab
+	jr .asm_161b1
+; 0x161d5
 
 ; determine AI score for the legendary cards
 ; Moltres, Zapdos and Articuno
@@ -1822,6 +2181,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	ret
 ; 0x16270
 
+Func_16270 ; 16270 (5:6270)
 	INCROM $16270, $1628f
 
 ; returns carry if card at hTempPlayAreaLocation_ff9d
@@ -1876,6 +2236,7 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 	ret
 ; 0x162c8
 
+Func_162c8 ; 162c8 (5:62c8)
 	INCROM $162c8, $16311
 
 ; looks for energy card(s) in hand depending on what is needed
