@@ -129,4 +129,7 @@ CopyBuffer: ; 2297b (8:697b)
 	jr CopyBuffer
 ; 0x22983
 
-	INCROM $22983, $24000
+	INCROM $22983, $22990
+
+Func_22990 ; 22990 (8:6990)
+	INCROM $22990, $24000
