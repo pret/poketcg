@@ -1247,7 +1247,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr c, .check_resistance_1
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
-	jr nc, .asm_15941
+	jr nc, .check_prize_count
 	ld a, $01
 	ld [$cdd7], a
 
@@ -1256,11 +1256,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr c, .check_resistance_1
 	ld a, [wAIPlayerPrizeCount]
 	cp 2
-	jr nc, .asm_15941
+	jr nc, .check_prize_count
 	ld a, $02
 	call AddToWcdbe
 
-.asm_15941
+.check_prize_count
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .check_resistance_1
@@ -1501,6 +1501,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $01
 	ld [$cdd7], a
 
+; subtract from wcdbe if retreat cost is larger than 2
+; if it's fewer, check if any cards have at least half HP,
+; are final evolutions and can use second move in the bench
+; and adds to wcdbe if the active Pokémon doesn't meet
+; these conditions
 .check_retreat_cost
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1513,15 +1518,16 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $01
 	call SubFromWcdbe
 	jr .one_or_none
+
 .three_or_more
-; exactly two
 	ld a, $02
 	call SubFromWcdbe
+
 .one_or_none
-	call Func_170c9
+	call CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove
 	jr c, .check_defending_can_ko
-	call Func_17101
-	cp $02
+	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
+	cp 2
 	jr c, .check_defending_can_ko
 	call AddToWcdbe
 
@@ -1990,11 +1996,183 @@ Func_164e8 ; 164e8 (5:64e8)
 Func_169f8 ; 169f8 (5:69f8)
 	INCROM $169f8, $170c9
 
-Func_170c9 ; 170c9 (5:70c9)
-	INCROM $170c9, $17101
+; returns carry if the following conditions are met:
+;	- arena card HP >= half max HP
+;	- arena card Unknown2's 4 bit is not set or
+;	  is set but there's no evolution of card in hand/deck
+;	- arena card can use second move
+CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove: ; 170c9 (5:70c9)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	push de
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wLoadedCard1HP]
+	rrca
+	cp d
+	pop de
+	jr nc, .no_carry
 
-Func_17101 ; 17101 (5:7101)
-	INCROM $17101, $17383
+	ld a, [wLoadedCard1Unknown2]
+	and %00010000
+	jr z, .check_second_move
+	ld a, d
+	call CheckCardEvolutionInHandOrDeck
+	jr c, .no_carry
+
+.check_second_move
+	xor a ; active card
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, $01 ; second move
+	ld [wSelectedMoveIndex], a
+	push hl
+	call CheckIfCardCanUseSelectedMove
+	pop hl
+	jr c, .no_carry
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x17101
+
+; returns carry if at least one Pokémon in bench
+; meets the following conditions:
+;	- card HP >= half max HP
+;	- card Unknown2's 4 bit is not set or
+;	  is set but there's no evolution of card in hand/deck
+;	- card can use second move
+; Also outputs the number of Pokémon in bench
+; that meet these requirements in b
+CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	push de
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+	lb bc, 0, 0
+	push hl
+
+.next
+	inc c
+	pop hl
+	ld a, [hli]
+	push hl
+	cp $ff
+	jr z, .done
+	ld d, a
+	push de
+	push bc
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop bc
+	ld a, c
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wLoadedCard1HP]
+	rrca
+	cp d
+	pop de
+	jr nc, .next
+
+	ld a, [wLoadedCard1Unknown2]
+	and $10
+	jr z, .check_second_move
+
+	ld a, d
+	push bc
+	call CheckCardEvolutionInHandOrDeck
+	pop bc
+	jr c, .next
+
+.check_second_move
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, $01 ; second move
+	ld [wSelectedMoveIndex], a
+	push bc
+	push hl
+	call CheckIfCardCanUseSelectedMove
+	pop hl
+	pop bc
+	jr c, .next
+	inc b
+	jr .next
+
+.done
+	pop hl
+	pop de
+	ld a, e
+	ld [wSelectedMoveIndex], a
+	ld a, d
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, b
+	or a
+	ret z
+	scf
+	ret
+; 0x17161
+
+Func_17161 ; 17161 (5:7161)
+	INCROM $17161, $17274
+
+; return carry if there is a card that
+; can evolve a Pokémon in hand or deck
+; input:
+;	a = deck index of card to check
+CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	push af
+	ld [hl], b
+	ld e, $00
+
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp CARD_LOCATION_DECK
+	jr z, .deck_or_hand
+	cp CARD_LOCATION_HAND
+	jr nz, .next
+.deck_or_hand
+	push de
+	ld d, e
+	ld e, PLAY_AREA_ARENA
+	call CheckIfCanEvolveInto
+	pop de
+	jr nc, .set_carry
+.next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop
+
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	or a
+	ret
+
+.set_carry
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, e
+	scf
+	ret
+; 0x172af
+
+Func_172af ; 172af (5:72af)
+	INCROM $172af, $17383
 
 ; returns carry if Pokemon at hTempPlayAreaLocation_ff9d
 ; can damage defending Pokémon with any of its moves
