@@ -109,13 +109,13 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 
 	INCROM $140c5, $140fe
 
-; adds wcdbe to a, and stores result in wcdbe
+; adds a to wAIScore
 ; if there's overflow, it's capped at $ff
 ; output:
-; 	a = a + wcdbe (capped at $ff)
-AddToWcdbe: ; 140fe (5:40fe)
+; 	a = a + wAIScore (capped at $ff)
+AddToAIScore: ; 140fe (5:40fe)
 	push hl
-	ld hl, wcdbe
+	ld hl, wAIScore
 	add [hl]
 	jr nc, .no_cap
 	ld a, $ff
@@ -125,13 +125,13 @@ AddToWcdbe: ; 140fe (5:40fe)
 	ret
 ; 0x1410a
 
-; subs a from wcdbe, and stores result in wcdbe
+; subs a from wAIScore
 ; if there's underflow, it's capped at $00
-SubFromWcdbe: ; 1410a (5:410a)
+SubFromAIScore: ; 1410a (5:410a)
 	push hl
 	push de
 	ld e, a
-	ld hl, wcdbe
+	ld hl, wAIScore
 	ld a, [hl]
 	or a
 	jr z, .done
@@ -1232,14 +1232,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld [$cdd7], a
 	call StoreDefendingPokemonColorWRAndPrizeCards
 	ld a, 128 ; initial retreat score
-	ld [wcdbe], a
+	ld [wAIScore], a
 	ld a, [$cdb4]
 	or a
 	jr z, .check_status
 	srl a
 	srl a
 	sla a
-	call AddToWcdbe
+	call AddToAIScore
 
 .check_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -1249,14 +1249,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	and DOUBLE_POISONED
 	jr z, .check_cnf ; no poison
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 .check_cnf
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr nz, .check_ko_1
 	ld a, 1
-	call AddToWcdbe
+	call AddToAIScore
 
 .check_ko_1
 	xor a
@@ -1270,18 +1270,18 @@ Func_158b2: ; 158b2 (5:58b2)
 
 .active_cant_use_move
 	ld a, 5
-	call SubFromWcdbe
+	call SubFromAIScore
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .active_cant_ko
 	ld a, 35
-	call SubFromWcdbe
+	call SubFromAIScore
 	
 .active_cant_ko
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .defending_cant_ko
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 
 	call CheckIfNotABossDeckID
 	jr c, .check_resistance_1
@@ -1298,14 +1298,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp 2
 	jr nc, .check_prize_count
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 
 .check_prize_count
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .check_resistance_1
 	ld a, 2
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .check_resistance_1
 	call GetArenaCardColor
@@ -1315,11 +1315,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .check_weakness_1
 	ld a, 1
-	call AddToWcdbe
+	call AddToAIScore
 
 ; check bench for Pokémon that
 ; the defending card is not resistant to
-; if one is found, skip SubFromWcdbe
+; if one is found, skip SubFromAIScore
 	ld a, [wAIPlayerResistance]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -1336,7 +1336,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .check_weakness_1
 .exit_loop_resistance_1
 	ld a, 2
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .check_weakness_1
 	ld a, [wAIPlayerColor]
@@ -1345,11 +1345,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .check_resistance_2
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 
 ; check bench for Pokémon that
 ; is not weak to defending Pokémon
-; if one is found, skip SubFromWcdbe
+; if one is found, skip SubFromAIScore
 	ld a, [wAIPlayerColor]
 	ld b, a
 	ld a, DUELVARS_BENCH
@@ -1365,7 +1365,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .check_resistance_2
 .exit_loop_weakness_1
 	ld a, 3
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .check_resistance_2
 	ld a, [wAIPlayerColor]
@@ -1374,11 +1374,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .check_weakness_2
 	ld a, 3
-	call SubFromWcdbe
+	call SubFromAIScore
 
 ; check bench for Pokémon that
 ; is the defending Pokémon's weakness
-; if none is found, skip AddToWcdbe
+; if none is found, skip AddToAIScore
 .check_weakness_2
 	ld a, [wAIPlayerWeakness]
 	ld b, a
@@ -1398,7 +1398,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .loop_weakness_2
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 
 	push de
 	ld a, DUELVARS_ARENA_CARD
@@ -1414,7 +1414,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	call CheckIfCanDamageDefendingPokemon
 	jr nc, .check_weakness_3
 	ld a, 10
-	call AddToWcdbe
+	call AddToAIScore
 	jr .check_resistance_3
 
 .check_weakness_3
@@ -1425,11 +1425,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .check_resistance_3
 	ld a, 3
-	call SubFromWcdbe
+	call SubFromAIScore
 
 ; check bench for Pokémon that
 ; is resistant to defending Pokémon
-; if none is found, skip AddToWcdbe
+; if none is found, skip AddToAIScore
 .check_resistance_3
 	ld a, [wAIPlayerColor]
 	ld b, a
@@ -1444,11 +1444,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	and b
 	jr z, .loop_resistance_2
 	ld a, 1
-	call AddToWcdbe
+	call AddToAIScore
 
 ; check bench for Pokémon that
 ; is can KO defending Pokémon
-; if none is found, skipp AddToWcdbe
+; if none is found, skipp AddToAIScore
 .check_ko_2
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -1476,7 +1476,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop bc
 	pop hl
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
@@ -1493,7 +1493,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jp nc, .check_defending_id
 .active_can_ko
 	ld a, 40
-	call AddToWcdbe
+	call AddToAIScore
 	ld a, $01
 	ld [$cdd7], a
 
@@ -1537,14 +1537,14 @@ Func_158b2: ; 158b2 (5:58b2)
 	pop bc
 	pop hl
 	ld a, 5
-	call AddToWcdbe
+	call AddToAIScore
 	ld a, $01
 	ld [$cdd7], a
 
-; subtract from wcdbe if retreat cost is larger than 2
+; subtract from wAIScore if retreat cost is larger than 2
 ; if it's fewer, check if any cards have at least half HP,
 ; are final evolutions and can use second move in the bench
-; and adds to wcdbe if the active Pokémon doesn't meet
+; and adds to wAIScore if the active Pokémon doesn't meet
 ; these conditions
 .check_retreat_cost
 	xor a
@@ -1556,12 +1556,12 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nc, .three_or_more
 	; exactly two
 	ld a, 1
-	call SubFromWcdbe
+	call SubFromAIScore
 	jr .one_or_none
 
 .three_or_more
 	ld a, 2
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .one_or_none
 	call CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove
@@ -1569,11 +1569,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
 	cp 2
 	jr c, .check_defending_can_ko
-	call AddToWcdbe
+	call AddToAIScore
 
 ; check bench for Pokémon that
 ; the defending Pokémon can't knock out
-; if none is found, skip SubFromWcdbe
+; if none is found, skip SubFromAIScore
 .check_defending_can_ko
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -1604,7 +1604,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .check_active_id
 .exit_loop_ko
 	ld a, 20
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .check_active_id
 	ld a, DUELVARS_ARENA_CARD
@@ -1616,8 +1616,8 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp CLEFAIRY_DOLL
 	jr z, .mysterious_fossil_or_clefairy_doll
 
-; if wcdbe is at least 131, set carry
-	ld a, [wcdbe]
+; if wAIScore is at least 131, set carry
+	ld a, [wAIScore]
 	cp 131
 	jr nc, .set_carry
 .no_carry
@@ -1698,46 +1698,46 @@ Func_15eae: ; 15eae (5:5eae)
 	; skip non-basic pokemon
 
 	ld a, $82
-	ld [wcdbe], a
+	ld [wAIScore], a
 	call Func_161d5
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp $04
 	jr c, .asm_15ef2
 	ld a, $14
-	call SubFromWcdbe
+	call SubFromAIScore
 	jr .asm_15ef7
 .asm_15ef2
 	ld a, $32
-	call AddToWcdbe
+	call AddToAIScore
 .asm_15ef7
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_15f04
 	ld a, $14
-	call AddToWcdbe
+	call AddToAIScore
 .asm_15f04
 	ld a, [wTempEvolutionCard]
 	call Func_163c9
 	call Func_1637b
 	jr nc, .asm_15f14
 	ld a, $14
-	call AddToWcdbe
+	call AddToAIScore
 .asm_15f14
 	ld a, [wTempEvolutionCard]
 	call Func_16422
 	jr nc, .asm_15f21
 	ld a, $14
-	call AddToWcdbe
+	call AddToAIScore
 .asm_15f21
 	ld a, [wTempEvolutionCard]
 	call Func_16451
 	jr nc, .asm_15f2e
 	ld a, $0a
-	call AddToWcdbe
+	call AddToAIScore
 .asm_15f2e
-	ld a, [wcdbe]
+	ld a, [wAIScore]
 	cp $b4
 	jr c, .skip
 	ld a, [wTempEvolutionCard]
@@ -1801,11 +1801,13 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	push bc
 	jp c, .end_bench_pokemon
 
+; store this Play Area location
+; and initialize the AI score
 	ld a, b
 	ld [wcdf1], a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, 128
-	ld [wcdbe], a
+	ld [wAIScore], a
 	call Func_16120
 
 	xor a
@@ -1847,21 +1849,21 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	jr c, .asm_15ffa
 .asm_15ff3
 	ld a, 5
-	call AddToWcdbe
+	call AddToAIScore
 	jr .asm_16015
 .asm_15ffa
 	ld a, [$cdf2]
 	or a
 	jr z, .asm_16015
 	ld a, 2
-	call SubFromWcdbe
+	call SubFromAIScore
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr nz, .asm_16015
 	call Func_162c8
 	jr nc, .asm_16015
 	ld a, 7
-	call AddToWcdbe
+	call AddToAIScore
 .asm_16015
 	ld a, [$cdf2]
 	or a
@@ -1874,14 +1876,14 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CheckIfCardCanUseSelectedMove
 	jr c, .asm_16032
 	ld a, 5
-	call AddToWcdbe
+	call AddToAIScore
 	jr .asm_1603d
 .asm_16032
 	ld a, [$cdf4]
 	or a
 	jr z, .asm_1603d
 	ld a, 20
-	call SubFromWcdbe
+	call SubFromAIScore
 .asm_1603d
 	ld a, [wcdf1]
 	or a
@@ -1891,13 +1893,13 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_16050
 	ld a, 5
-	call SubFromWcdbe
+	call SubFromAIScore
 .asm_16050
 	ld a, [wcdf1]
 	call Func_16270
 	jr c, .asm_1605d
 	ld a, 20
-	call SubFromWcdbe
+	call SubFromAIScore
 .asm_1605d
 	ld a, [wcdf1]
 	add DUELVARS_ARENA_CARD
@@ -1912,27 +1914,27 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_1607a
 	ld a, 5
-	call AddToWcdbe
+	call AddToAIScore
 .asm_1607a
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
 	jr z, .asm_16087
 	ld a, 4
-	call AddToWcdbe
+	call AddToAIScore
 .asm_16087
 	ld a, [wTempEvolutionCard]
 	call Func_16422
 	jr nc, .asm_16096
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 	jr .asm_160a3
 .asm_16096
 	ld a, [wTempEvolutionCard]
 	call Func_16451
 	jr nc, .asm_160a3
 	ld a, 1
-	call AddToWcdbe
+	call AddToAIScore
 .asm_160a3
 	ld a, [wcdf1]
 	ld e, a
@@ -1942,7 +1944,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	srl a
 	srl a
 	call Func_1576b
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .asm_160b7
 	ld a, [wcdf1]
@@ -1956,11 +1958,11 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	cp $02
 	jr nz, .pikachu_deck
 	ld a, 2
-	call AddToWcdbe
+	call AddToAIScore
 	jr .pikachu_deck
 .asm_160d7
 	ld a, 5
-	call AddToWcdbe
+	call AddToAIScore
 
 .pikachu_deck
 	ld a, [wOpponentDeckID]
@@ -1977,10 +1979,10 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	jr nz, .decide_evolution
 .pikachu
 	ld a, 3
-	call SubFromWcdbe
+	call SubFromAIScore
 
 .decide_evolution
-	ld a, [wcdbe]
+	ld a, [wAIScore]
 	cp 133
 	jr c, .end_bench_pokemon
 	ld a, [wcdf1]
@@ -2043,11 +2045,11 @@ Func_16120: ; 16120 (5:6120)
 	cp $06
 	jr c, .asm_1615b
 	ld a, 3
-	call AddToWcdbe
+	call AddToAIScore
 	ret
 .asm_1615b
 	ld a, 10
-	call SubFromWcdbe
+	call SubFromAIScore
 	ret
 
 ; check if Magikarp is not the active card
@@ -2061,7 +2063,7 @@ Func_16120: ; 16120 (5:6120)
 	cp 2
 	ret c
 	ld a, 3
-	call AddToWcdbe
+	call AddToAIScore
 	ret
 
 .invincible_ronald
@@ -2076,7 +2078,7 @@ Func_16120: ; 16120 (5:6120)
 	or a ; active card
 	ret z
 	ld a, 10
-	call AddToWcdbe
+	call AddToAIScore
 	ret
 
 .legendary_ronald
@@ -2114,7 +2116,7 @@ Func_16120: ; 16120 (5:6120)
 	jr c, .check_muk
 .asm_161ab
 	ld a, 10
-	call SubFromWcdbe
+	call SubFromAIScore
 	ret
 
 .check_muk
@@ -2122,7 +2124,7 @@ Func_16120: ; 16120 (5:6120)
 	call CountPokemonIDInBothPlayAreas
 	jr c, .asm_161ab
 	ld a, 10
-	call AddToWcdbe
+	call AddToAIScore
 	ret
 
 ; if Dragonair is active, check its damage in HP
@@ -2222,11 +2224,11 @@ Func_161d5: ; 161d5 (5:61d5)
 
 ; add
 	ld a, 70
-	call AddToWcdbe
+	call AddToAIScore
 	ret
 .subtract
 	ld a, 100
-	call SubFromWcdbe
+	call SubFromAIScore
 	ret
 
 .moltres
