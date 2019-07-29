@@ -1185,8 +1185,43 @@ ZeroData: ; 1575e (5:575e)
 Func_1576b: ; 1576b (5:576b)
 	INCROM $1576b, $15787
 
-Func_15787: ; 15787 (5:5787)
-	INCROM $15787, $158b2
+; returns in a the number of energy cards attached
+; to Pokémon in location held by e
+; this assumes that colorless are paired so
+; that one colorless energy card provides 2 colorless energy
+; input:
+;	e = location to check, i.e. PLAY_AREA_*
+; output:
+; 	a = number of energy cards attached
+CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	or a
+	ret z
+	
+	xor a
+	push hl
+	push bc
+	ld b, NUM_COLORED_TYPES
+	ld hl, wAttachedEnergies
+; sum all the attached energies
+.loop
+	add [hl]
+	inc hl
+	dec b
+	jr nz, .loop
+
+	ld b, [hl]
+	srl b
+; counts colorless ad halves it
+	add b
+	pop bc
+	pop hl
+	ret
+; 0x157a3
+
+Func_157a3: ; 157a3 (5:57a3)
+	INCROM $157a3, $158b2
 
 ; determine AI score for retreating
 Func_158b2: ; 158b2 (5:58b2)
@@ -1644,12 +1679,12 @@ Func_15eae: ; 15eae (5:5eae)
 	call CopyHandCardList
 	ld hl, wHandTempList
 
-.next_card
+.next_hand_card
 	ld a, [hli]
 	cp $ff
 	jp z, Func_15f4c
 
-	ld [wcdf3], a
+	ld [wTempEvolutionCard], a
 	push hl
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
@@ -1683,20 +1718,20 @@ Func_15eae: ; 15eae (5:5eae)
 	ld a, $14
 	call AddToWcdbe
 .asm_15f04
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	call Func_163c9
 	call Func_1637b
 	jr nc, .asm_15f14
 	ld a, $14
 	call AddToWcdbe
 .asm_15f14
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	call Func_16422
 	jr nc, .asm_15f21
 	ld a, $14
 	call AddToWcdbe
 .asm_15f21
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	call Func_16451
 	jr nc, .asm_15f2e
 	ld a, $0a
@@ -1705,7 +1740,7 @@ Func_15eae: ; 15eae (5:5eae)
 	ld a, [wcdbe]
 	cp $b4
 	jr c, .skip
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	ldh [hTemp_ffa0], a
 	call Func_1433d
 	jr c, .skip
@@ -1714,7 +1749,7 @@ Func_15eae: ; 15eae (5:5eae)
 	jr c, .done
 .skip
 	pop hl
-	jp .next_card
+	jp .next_hand_card
 .done
 	pop hl
 	ret
@@ -1726,43 +1761,53 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CopyHandCardList
 	ld hl, wHandTempList
 
-.next
+.next_hand_card
 	ld a, [hli]
 	cp $ff
 	jp z, .done
-	ld [wcdf3], a
+	ld [wTempEvolutionCard], a
+
+; check if Prehistoric Power is active
+; and if so, skip to next card in hand
 	push hl
 	call IsPrehistoricPowerActive
-	jp c, .asm_1611a
-	ld a, [wcdf3]
+	jp c, .end_hand_card
+
+; load evolution data to buffer1
+; skip if it's not a Pokémon card
+; and if it's a basic stage card
+	ld a, [wTempEvolutionCard]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
-	jp nc, .asm_1611a
+	jp nc, .end_hand_card
 	ld a, [wLoadedCard1Stage]
 	or a
-	jp z, .asm_1611a
+	jp z, .end_hand_card
 
+; start looping Pokémon in Play Area
+; to find a card to evolve
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
-	ld b, $00
-.asm_15f88
+	ld b, 0
+.next_bench_pokemon
 	push bc
 	ld e, b
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	ld d, a
 	call CheckIfCanEvolveInto
 	pop bc
 	push bc
-	jp c, .asm_16114
+	jp c, .end_bench_pokemon
 
 	ld a, b
-	ld [$cdf1], a
+	ld [wcdf1], a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, 128
 	ld [wcdbe], a
 	call Func_16120
+
 	xor a
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
@@ -1787,10 +1832,10 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld [$cdf4], a
 .asm_15fd4
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	ld [hl], a
 	xor a
 	ld [wSelectedMoveIndex], a
@@ -1801,95 +1846,95 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CheckIfCardCanUseSelectedMove
 	jr c, .asm_15ffa
 .asm_15ff3
-	ld a, $05
+	ld a, 5
 	call AddToWcdbe
 	jr .asm_16015
 .asm_15ffa
 	ld a, [$cdf2]
 	or a
 	jr z, .asm_16015
-	ld a, $02
+	ld a, 2
 	call SubFromWcdbe
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr nz, .asm_16015
 	call Func_162c8
 	jr nc, .asm_16015
-	ld a, $07
+	ld a, 7
 	call AddToWcdbe
 .asm_16015
 	ld a, [$cdf2]
 	or a
 	jr z, .asm_1603d
-	ld a, [$cdf1]
+	ld a, [wcdf1]
 	or a
 	jr nz, .asm_1603d
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .asm_16032
 	call CheckIfCardCanUseSelectedMove
 	jr c, .asm_16032
-	ld a, $05
+	ld a, 5
 	call AddToWcdbe
 	jr .asm_1603d
 .asm_16032
 	ld a, [$cdf4]
 	or a
 	jr z, .asm_1603d
-	ld a, $14
+	ld a, 20
 	call SubFromWcdbe
 .asm_1603d
-	ld a, [$cdf1]
+	ld a, [wcdf1]
 	or a
 	jr nz, .asm_16050
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_16050
-	ld a, $05
+	ld a, 5
 	call SubFromWcdbe
 .asm_16050
-	ld a, [$cdf1]
+	ld a, [wcdf1]
 	call Func_16270
 	jr c, .asm_1605d
-	ld a, $14
+	ld a, 20
 	call SubFromWcdbe
 .asm_1605d
-	ld a, [$cdf1]
-	add $bb
+	ld a, [wcdf1]
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
 	ld [hl], a
-	ld a, [$cdf1]
+	ld a, [wcdf1]
 	or a
 	jr nz, .asm_16087
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_1607a
-	ld a, $05
+	ld a, 5
 	call AddToWcdbe
 .asm_1607a
-	ld a, $f0
+	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
 	jr z, .asm_16087
-	ld a, $04
+	ld a, 4
 	call AddToWcdbe
 .asm_16087
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	call Func_16422
 	jr nc, .asm_16096
-	ld a, $02
+	ld a, 2
 	call AddToWcdbe
 	jr .asm_160a3
 .asm_16096
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	call Func_16451
 	jr nc, .asm_160a3
-	ld a, $01
+	ld a, 1
 	call AddToWcdbe
 .asm_160a3
-	ld a, [$cdf1]
+	ld a, [wcdf1]
 	ld e, a
 	call SubstractHPFromCard
 	or a
@@ -1898,65 +1943,72 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	srl a
 	call Func_1576b
 	call SubFromWcdbe
+
 .asm_160b7
-	ld a, [$cdf1]
-	add $bb
+	ld a, [wcdf1]
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1ID]
-	cp $cc
+	cp MYSTERIOUS_FOSSIL
 	jr z, .asm_160d7
 	ld a, [wLoadedCard1Unknown2]
 	cp $02
-	jr nz, .asm_160dc
-	ld a, $02
+	jr nz, .pikachu_deck
+	ld a, 2
 	call AddToWcdbe
-	jr .asm_160dc
+	jr .pikachu_deck
 .asm_160d7
-	ld a, $05
+	ld a, 5
 	call AddToWcdbe
-.asm_160dc
+
+.pikachu_deck
 	ld a, [wOpponentDeckID]
-	cp $25
-	jr nz, .asm_160fb
+	cp PIKACHU_DECK_ID
+	jr nz, .decide_evolution
 	ld a, [wLoadedCard1ID]
-	cp $60
-	jr z, .asm_160f6
-	cp $61
-	jr z, .asm_160f6
-	cp $62
-	jr z, .asm_160f6
-	cp $63
-	jr nz, .asm_160fb
-.asm_160f6
-	ld a, $03
+	cp PIKACHU1
+	jr z, .pikachu
+	cp PIKACHU2
+	jr z, .pikachu
+	cp PIKACHU3
+	jr z, .pikachu
+	cp PIKACHU4
+	jr nz, .decide_evolution
+.pikachu
+	ld a, 3
 	call SubFromWcdbe
-.asm_160fb
+
+.decide_evolution
 	ld a, [wcdbe]
-	cp $85
-	jr c, .asm_16114
-	ld a, [$cdf1]
+	cp 133
+	jr c, .end_bench_pokemon
+	ld a, [wcdf1]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, [wcdf3]
+	ld a, [wTempEvolutionCard]
 	ldh [hTemp_ffa0], a
-	ld a, $02
+	ld a, $02 ; OppAction_EvolvePokemonCard
 	bank1call AIMakeDecision
 	pop bc
-	jr .asm_1611a
-.asm_16114
+	jr .end_hand_card
+.end_bench_pokemon
 	pop bc
 	inc b
 	dec c
-	jp nz, .asm_15f88
-.asm_1611a
+	jp nz, .next_bench_pokemon
+.end_hand_card
 	pop hl
-	jp .next
+	jp .next_hand_card
 
 .done
 	or a
 	ret
 
+; determine AI score for evolving
+; Charmeleon, Magikarp, Dragonair and Grimer
+; in certain decks
 Func_16120: ; 16120 (5:6120)
+; check if deck applies
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_DRAGONITE_DECK_ID
 	jr z, .legendary_dragonite
@@ -1969,18 +2021,20 @@ Func_16120: ; 16120 (5:6120)
 .legendary_dragonite
 	ld a, [wLoadedCard2ID]
 	cp CHARMELEON
-	jr z, .asm_16140
+	jr z, .charmeleon
 	cp MAGIKARP
-	jr z, .asm_16161
+	jr z, .magikarp
 	cp DRAGONAIR
-	jr z, .asm_1618c
+	jr z, .dragonair
 	ret
 
-.asm_16140
+; check if Charmeleon has at least 3 energy cards attached
+; and checks output of Func_22990 
+.charmeleon
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
-	call Func_15787
-	cp $03
+	call CountNumberOfEnergyCardsAttached
+	cp 3
 	jr c, .asm_1615b
 	push af
 	farcall Func_22990
@@ -1991,19 +2045,20 @@ Func_16120: ; 16120 (5:6120)
 	ld a, 3
 	call AddToWcdbe
 	ret
-
 .asm_1615b
 	ld a, 10
 	call SubFromWcdbe
 	ret
 
-.asm_16161
+; check if Magikarp is not the active card
+; and has at least 2 energy cards attached
+.magikarp
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	or a
+	or a ; active card
 	ret z
 	ld e, a
-	call Func_15787
-	cp $02
+	call CountNumberOfEnergyCardsAttached
+	cp 2
 	ret c
 	ld a, 3
 	call AddToWcdbe
@@ -2012,12 +2067,13 @@ Func_16120: ; 16120 (5:6120)
 .invincible_ronald
 	ld a, [wLoadedCard2ID]
 	cp GRIMER
-	jr z, .asm_1617a
+	jr z, .grimer
 	ret
 
-.asm_1617a
+; check if Grimer is not active card
+.grimer
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	or a
+	or a ; active card
 	ret z
 	ld a, 10
 	call AddToWcdbe
@@ -2026,18 +2082,23 @@ Func_16120: ; 16120 (5:6120)
 .legendary_ronald
 	ld a, [wLoadedCard2ID]
 	cp DRAGONAIR
-	jr z, .asm_1618c
+	jr z, .dragonair
 	ret
 
-.asm_1618c
+.dragonair
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	or a
-	jr z, .asm_161be
+	or a ; active card
+	jr z, .is_active
+
+; if Dragonair is benched, check all Pokémon in Play Area
+; and sum all the damage in HP of all cards
+; if this result is more than 70, check if there's
+; a Muk in any duelist's Play Area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld b, a
 	ld c, 0
-.asm_16199
+.loop
 	dec b
 	ld e, b
 	push bc
@@ -2047,16 +2108,16 @@ Func_16120: ; 16120 (5:6120)
 	ld c, a
 	ld a, b
 	or a
-	jr nz, .asm_16199
-	ld a, $46
+	jr nz, .loop
+	ld a, 70
 	cp c
-	jr c, .asm_161b1
+	jr c, .check_muk
 .asm_161ab
 	ld a, 10
 	call SubFromWcdbe
 	ret
 
-.asm_161b1
+.check_muk
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	jr c, .asm_161ab
@@ -2064,7 +2125,10 @@ Func_16120: ; 16120 (5:6120)
 	call AddToWcdbe
 	ret
 
-.asm_161be
+; if Dragonair is active, check its damage in HP
+; if this result is more than 50, check if there's
+; a Muk in any duelist's Play Area
+.is_active
 	ld e, 0
 	call SubstractHPFromCard
 	cp 50
@@ -2074,7 +2138,7 @@ Func_16120: ; 16120 (5:6120)
 	ld a, [wTotalAttachedEnergies]
 	cp 3
 	jr c, .asm_161ab
-	jr .asm_161b1
+	jr .check_muk
 ; 0x161d5
 
 ; determine AI score for the legendary cards

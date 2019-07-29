@@ -1238,9 +1238,17 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-	ds $16
+	ds $14
 
-wcdf3:: ; cdf3
+wcdf1:: ; cdf1
+	ds $1
+
+wcdf2:: ; cdf2
+	ds $1
+
+; used to temporarily store the evolution card
+; while AI is deciding whether to evolve Pokémon
+wTempEvolutionCard:: ; cdf3
 	ds $1
 
 	ds $c
