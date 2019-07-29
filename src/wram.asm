@@ -1195,7 +1195,8 @@ wTempLoadedMoveEnergyNeededAmount:: ; cdb7
 
 	ds $6
 
-wcdbe:: ; cdbe
+; used for AI to score decisions for actions
+wAIScore:: ; cdbe
 	ds $1
 
 	ds $10
@@ -1238,7 +1239,7 @@ wcdf1:: ; cdf1
 wcdf2:: ; cdf2
 	ds $1
 
-; used to temporarily store the evolution card
+; used to temporarily store the evolution card deck index
 ; while AI is deciding whether to evolve Pokémon
 wTempEvolutionCard:: ; cdf3
 	ds $1
