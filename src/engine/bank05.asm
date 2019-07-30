@@ -87,13 +87,13 @@ Func_14078: ; 14078 (5:4078)
 ; returns carry if damage dealt from any of
 ; a card's moves knocks out defending Pokémon
 ; input:
-; hTempPlayAreaLocation_ff9d = location of attacking card to consider
+; 	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
 CheckIfAnyMoveKnocksOutDefendingCard: ; 140ae (5:40ae)
 	xor a ; first move
 	call CheckIfMoveKnocksOutDefendingCard
 	ret c
 	ld a, $01 ; second move
-; fallthrough
+;	fallthrough
 
 CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 	call CalculateMoveDamage_VersusDefendingCard
@@ -228,7 +228,7 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ; and checks if there is enough energy to execute the selected move
 ; input:
 ; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	wSelectedMoveIndex 		   = selected move to examine
+;	[wSelectedMoveIndex]		 = selected move to examine
 ; output:
 ;	b = colorless energy still needed
 ;	c = basic energy still needed
@@ -253,7 +253,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	cp POKEMON_POWER
 	jr nz, .is_move
 .no_move
-	lb bc, $00, $00
+	lb bc, 0, 0
 	ld e, c
 	scf
 	ret
@@ -336,8 +336,8 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 ; and this amount is stored in wTempLoadedMoveEnergyCost
 ; sets carry flag if not enough energy of this type attached
 ; input:
-; 	a   = this energy cost of move (lower nibble)
-; 	hl -> attached energy
+; 	a    = this energy cost of move (lower nibble)
+; 	[hl] = attached energy
 ; output:
 ;	z set if enough energy
 ;	carry set if not enough of this energy type attached
@@ -368,6 +368,8 @@ CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 
 ; input:
 ;	a = energy type
+; output:
+; 	a = energy card ID
 ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	push hl
 	push de
@@ -444,8 +446,8 @@ Func_143bf: ; 143bf (5:43bf)
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
 ; input:
-; a = move index to take into account
-; hTempPlayAreaLocation_ff9d = location of attacking card to consider
+; 	a = move index to take into account
+; 	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
 CalculateMoveDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	ld [wSelectedMoveIndex], a
 	ld e, a
@@ -539,7 +541,7 @@ CalculateDamage_VersusDefendingPokemon: ; 14453 (5:4453)
 	ld hl, wAIMaxDamage
 	call _CalculateDamage_VersusDefendingPokemon
 	ld hl, wDamage
-; fallthrough
+;	fallthrough
 
 _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 	ld e, [hl]
@@ -658,7 +660,7 @@ _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 ; by the defending Pokémon, using the move index at a
 ; input:
 ; 	a = move index
-;	hTempPlayAreaLocation_ff9d = location of card to calculate
+;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
 ;								 damage as the receiver
 CalculateMoveDamage_FromDefendingPokemon: ; 1450b (5:450b)
 	call SwapTurn
@@ -756,7 +758,7 @@ CalculateMoveDamage_FromDefendingPokemon: ; 1450b (5:450b)
 ; 	[wAIMinDamage] = base damage
 ; 	[wAIMaxDamage] = base damage
 ; 	[wDamage]      = base damage
-;	hTempPlayAreaLocation_ff9d = location of card to calculate
+;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
 ;								 damage as the receiver
 CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
 	ld hl, wAIMinDamage
@@ -1262,22 +1264,22 @@ Func_158b2: ; 158b2 (5:58b2)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .active_cant_ko
+	jr nc, .active_cant_ko_1
 	call CheckIfCardCanUseSelectedMove
 	jp nc, .active_cant_use_move
-	call LookForEnergyNeededInHand
-	jr nc, .active_cant_ko
+	call LookForEnergyNeededForMoveInHand
+	jr nc, .active_cant_ko_1
 
 .active_cant_use_move
 	ld a, 5
 	call SubFromAIScore
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
-	jr nc, .active_cant_ko
+	jr nc, .active_cant_ko_1
 	ld a, 35
 	call SubFromAIScore
 	
-.active_cant_ko
+.active_cant_ko_1
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .defending_cant_ko
 	ld a, 2
@@ -1447,8 +1449,8 @@ Func_158b2: ; 158b2 (5:58b2)
 	call AddToAIScore
 
 ; check bench for Pokémon that
-; is can KO defending Pokémon
-; if none is found, skipp AddToAIScore
+; can KO defending Pokémon
+; if none is found, skip AddToAIScore
 .check_ko_2
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -1466,7 +1468,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr nc, .no_ko
 	call CheckIfCardCanUseSelectedMove
 	jr nc, .success
-	call LookForEnergyNeededInHand
+	call LookForEnergyNeededForMoveInHand
 	jr c, .success
 .no_ko
 	pop bc
@@ -1485,13 +1487,15 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr c, .check_defending_id
 
 ; is boss deck and is at last prize card
+; if arena Pokémon cannot KO or cannot use
+; its first move, add to AI score
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .active_can_ko
+	jr nc, .active_cant_ko_2
 	call CheckIfCardCanUseSelectedMove
 	jp nc, .check_defending_id
-.active_can_ko
+.active_cant_ko_2
 	ld a, 40
 	call AddToAIScore
 	ld a, $01
@@ -1529,11 +1533,11 @@ Func_158b2: ; 158b2 (5:58b2)
 	push hl
 	push bc
 	call CheckIfCanDamageDefendingPokemon
-	jr c, .cant_damage
+	jr c, .can_damage
 	pop bc
 	pop hl
 	jr .loop_damage
-.cant_damage
+.can_damage
 	pop bc
 	pop hl
 	ld a, 5
@@ -1541,8 +1545,8 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, $01
 	ld [$cdd7], a
 
-; subtract from wAIScore if retreat cost is larger than 2
-; if it's fewer, check if any cards have at least half HP,
+; subtract from wAIScore if retreat cost is larger than 1
+; then check if any cards have at least half HP,
 ; are final evolutions and can use second move in the bench
 ; and adds to wAIScore if the active Pokémon doesn't meet
 ; these conditions
@@ -1860,7 +1864,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld a, [wAlreadyPlayedEnergy]
 	or a
 	jr nz, .asm_16015
-	call Func_162c8
+	call LookForEnergyNeededInHand
 	jr nc, .asm_16015
 	ld a, 7
 	call AddToAIScore
@@ -2254,7 +2258,7 @@ Func_16270 ; 16270 (5:6270)
 ; can knock out defending Pokémon
 ; input:
 ; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	wSelectedMoveIndex 		   = selected move to examine
+;	[wSelectedMoveIndex]		 = selected move to examine
 CheckIfCardCanKnockOutAndUseSelectedMove: ; 1628f (5:628f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -2302,16 +2306,79 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 	ret
 ; 0x162c8
 
-Func_162c8 ; 162c8 (5:62c8)
-	INCROM $162c8, $16311
-
-; looks for energy card(s) in hand depending on what is needed
+; looks for energy card(s) in hand depending on
+; what is needed for selected card, for both moves
 ; 	- if one basic energy is required, look for that energy;
 ;	- if one colorless is required, create a list at wDuelTempList
 ;	  of all energy cards;
 ;	- if two colorless are required, look for double colorless;
 ; return carry if successful in finding card
-LookForEnergyNeededInHand: ; 16311 (5:6311)
+; input:
+; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+LookForEnergyNeededInHand: ; 162c8 (5:62c8)
+	xor a ; first move
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	ld a, b
+	add c
+	cp 1
+	jr z, .one_energy
+	cp 2
+	jr nz, .second_move
+	ld a, c
+	cp 2
+	jr z, .two_colorless
+
+.second_move
+	ld a, $01 ; second move
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	ld a, b
+	add c
+	cp 1
+	jr z, .one_energy
+	cp 2
+	jr nz, .no_carry
+	ld a, c
+	cp 2
+	jr z, .two_colorless
+.no_carry
+	or a
+	ret
+
+.one_energy
+	ld a, b
+	or a
+	jr z, .one_colorless
+	ld a, e
+	call LookForCardInHand
+	ret c
+	jr .no_carry
+
+.one_colorless
+	call CreateEnergyCardListFromHand
+	jr c, .no_carry
+	scf
+	ret
+
+.two_colorless
+	ld a, DOUBLE_COLORLESS_ENERGY
+	call LookForCardInHand
+	ret c
+	jr .no_carry
+; 0x16311
+
+; looks for energy card(s) in hand depending on
+; what is needed for selected card and move
+; 	- if one basic energy is required, look for that energy;
+;	- if one colorless is required, create a list at wDuelTempList
+;	  of all energy cards;
+;	- if two colorless are required, look for double colorless;
+; return carry if successful in finding card
+; input:
+; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[wSelectedMoveIndex]		 = selected move to examine
+LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 	call CheckEnergyNeededForAttack
 	ld a, b
 	add c
@@ -2646,7 +2713,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 ; sets carry if any on the moves knocks out
 ; also outputs the largest damage dealt in a
 ; input:
-;	hTempPlayAreaLocation_ff9d = locaion of card to check
+;	[hTempPlayAreaLocation_ff9d] = locaion of card to check
 ; output:
 ;	a = largest damage of both moves
 ;	carry set if can knock out
@@ -2688,7 +2755,7 @@ CheckIfDefendingPokemonCanKnockOut: ; 173b1 (5:73b1)
 ; card at hTempPlayAreaLocation_ff9d
 ; input:
 ;	a = move index
-;	hTempPlayAreaLocation_ff9d = location of card to check
+;	[hTempPlayAreaLocation_ff9d] = location of card to check
 CheckIfDefendingPokemonCanKnockOutWithMove: ; 173e4 (5:73e4)
 	ld [wSelectedMoveIndex], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
