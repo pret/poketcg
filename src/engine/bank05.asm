@@ -85,9 +85,12 @@ Func_14078: ; 14078 (5:4078)
 	INCROM $1409e, $140ae
 
 ; returns carry if damage dealt from any of
-; a card's moves knocks out defending Pokémon
+; a card's moves KOs defending Pokémon
+; outputs index of the move that KOs
 ; input:
 ; 	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
+; output:
+; 	[wSelectedMoveIndex] = move index that KOs
 CheckIfAnyMoveKnocksOutDefendingCard: ; 140ae (5:40ae)
 	xor a ; first move
 	call CheckIfMoveKnocksOutDefendingCard
@@ -193,7 +196,7 @@ Func_14226: ; 14226 (5:4226)
 ; can't use a move or if that selected move doesn't have enough energy
 ; input:
 ; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	wSelectedMoveIndex 		   = selected move to examine
+;	[wSelectedMoveIndex]		 = selected move to examine
 CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
@@ -1184,8 +1187,23 @@ ZeroData: ; 1575e (5:575e)
 	ret
 ; 0x1576b
 
-Func_1576b: ; 1576b (5:576b)
-	INCROM $1576b, $15787
+; returns in a the tens digit of value in a
+CalculateTensDigit: ; 1576b (5:576b)
+	push bc
+	ld c, 0
+.loop
+	sub 10
+	jr c, .done
+	inc c
+	jr .loop
+.done
+	ld a, c
+	pop bc
+	ret
+; 0x15778
+
+Func_15778: ; 15778 (5:5778)
+	INCROM $15778, $15787
 
 ; returns in a the number of energy cards attached
 ; to Pokémon in location held by e
@@ -1730,13 +1748,13 @@ Func_15eae: ; 15eae (5:5eae)
 	call AddToAIScore
 .asm_15f14
 	ld a, [wTempEvolutionCard]
-	call Func_16422
+	call CheckForEvolutionInList
 	jr nc, .asm_15f21
 	ld a, $14
 	call AddToAIScore
 .asm_15f21
 	ld a, [wTempEvolutionCard]
-	call Func_16451
+	call CheckForEvolutionInDeck
 	jr nc, .asm_15f2e
 	ld a, $0a
 	call AddToAIScore
@@ -1817,12 +1835,12 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	xor a
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	jr nc, .asm_15fb7
+	jr nc, .can_attack
 	ld a, $01
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
 	jr c, .asm_15fcd
-.asm_15fb7
+.can_attack
 	ld a, $01
 	ld [$cdf2], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -1836,6 +1854,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	xor a
 	ld [$cdf2], a
 	ld [$cdf4], a
+
 .asm_15fd4
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -1900,7 +1919,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call SubFromAIScore
 .asm_16050
 	ld a, [wcdf1]
-	call Func_16270
+	call CheckDamageToMrMime
 	jr c, .asm_1605d
 	ld a, 20
 	call SubFromAIScore
@@ -1928,14 +1947,14 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call AddToAIScore
 .asm_16087
 	ld a, [wTempEvolutionCard]
-	call Func_16422
+	call CheckForEvolutionInList
 	jr nc, .asm_16096
 	ld a, 2
 	call AddToAIScore
 	jr .asm_160a3
 .asm_16096
 	ld a, [wTempEvolutionCard]
-	call Func_16451
+	call CheckForEvolutionInDeck
 	jr nc, .asm_160a3
 	ld a, 1
 	call AddToAIScore
@@ -1947,7 +1966,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	jr z, .asm_160b7
 	srl a
 	srl a
-	call Func_1576b
+	call CalculateTensDigit
 	call SubFromAIScore
 
 .asm_160b7
@@ -2178,7 +2197,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	cp 2
 	ret c
 
-	call CheckIfCardCanKnockOutAndUseSelectedMove
+	call CheckIfActiveCardCanKnockOut
 	jr c, .subtract
 	call CheckIfActivePokemonCanUseAnyNonResidualMove
 	jr nc, .subtract
@@ -2251,15 +2270,36 @@ Func_161d5: ; 161d5 (5:61d5)
 	ret
 ; 0x16270
 
-Func_16270 ; 16270 (5:6270)
-	INCROM $16270, $1628f
-
-; returns carry if card at hTempPlayAreaLocation_ff9d
-; can knock out defending Pokémon
+; check if player's active Pokémon is Mr Mime
+; if it isn't, set carry
+; if it is, check if Pokémon at a
+; can damage it, and if it can, set carry
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	[wSelectedMoveIndex]		 = selected move to examine
-CheckIfCardCanKnockOutAndUseSelectedMove: ; 1628f (5:628f)
+; 	a = location of Pokémon card
+CheckDamageToMrMime: ; 16270 (5:6270)
+	push af
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp MR_MIME
+	pop bc
+	jr nz, .set_carry
+	ld a, b
+	call CheckIfCanDamageDefendingPokemon
+	jr c, .set_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x1628f
+
+; returns carry if arena card
+; can knock out defending Pokémon
+CheckIfActiveCardCanKnockOut: ; 1628f (5:628f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -2277,8 +2317,7 @@ CheckIfCardCanKnockOutAndUseSelectedMove: ; 1628f (5:628f)
 ; outputs carry if any of the active Pokémon attacks
 ; can be used and are not residual
 CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
-; active card
-	xor a
+	xor a ; active card
 	ldh [hTempPlayAreaLocation_ff9d], a
 ; first move
 	ld [wSelectedMoveIndex], a
@@ -2482,11 +2521,105 @@ Func_1637b ; 1637b (5:637b)
 Func_163c9 ; 163c9 (5:63c9)
 	INCROM $163c9, $16422
 
-Func_16422 ; 16422 (5:6422)
-	INCROM $16422, $16451
+; set carry flag if any card in
+; wDuelTempList evolves card index in a
+; if found, the evolution card index is returned in a
+; input:
+; 	a = card index to check evolution
+; output:
+;	a = card index of evolution found
+CheckForEvolutionInList: ; 16422 (5:6422)
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
 
-Func_16451 ; 16451 (5:6451)
-	INCROM $16451, $164e8
+	push af
+	ld [hl], b
+	ld hl, wDuelTempList
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+	push de
+	push hl
+	call CheckIfCanEvolveInto
+	pop hl
+	pop de
+	jr c, .loop
+
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, d
+	scf
+	ret
+
+.no_carry
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	or a
+	ret
+; 0x16451
+
+; set carry if it finds an evolution for
+; the card index in a in the deck
+; if found, return that evolution card index in a
+; input:
+; 	a = card index to check evolution
+; output:
+;	a = card index of evolution found
+CheckForEvolutionInDeck: ; 16451 (5:6451)
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+
+	push af
+	ld [hl], b
+	ld e, 0
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp CARD_LOCATION_DECK
+	jr nz, .not_in_deck
+	push de
+	ld d, e
+	ld e, PLAY_AREA_ARENA
+	call CheckIfCanEvolveInto
+	pop de
+	jr nc, .set_carry
+
+; exit when it gets to the prize cards
+.not_in_deck
+	inc e
+	ld a, DUELVARS_PRIZE_CARDS
+	cp e
+	jr nz, .loop
+
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	or a
+	ret
+
+.set_carry
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, e
+	scf
+	ret
+; 0x16488
+
+Func_16488 ; 16488 (5:6488)
+	INCROM $16488, $164e8
 
 Func_164e8 ; 164e8 (5:64e8)
 	INCROM $164e8, $169f8
@@ -2672,10 +2805,10 @@ CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 Func_172af ; 172af (5:72af)
 	INCROM $172af, $17383
 
-; returns carry if Pokemon at hTempPlayAreaLocation_ff9d
+; returns carry if Pokemon at PLAY_AREA* in a
 ; can damage defending Pokémon with any of its moves
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of card to check
+; 	a = location of card to check
 CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	xor a ; first move
