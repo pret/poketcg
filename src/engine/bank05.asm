@@ -1988,7 +1988,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 .check_damage
 	ld a, [wCurCardPlayAreaLocation]
 	ld e, a
-	call SubstractHPFromCard
+	call GetCardDamage
 	or a
 	jr z, .asm_160b7
 	srl a
@@ -2160,7 +2160,7 @@ Func_16120: ; 16120 (5:6120)
 	dec b
 	ld e, b
 	push bc
-	call SubstractHPFromCard
+	call GetCardDamage
 	pop bc
 	add c
 	ld c, a
@@ -2188,7 +2188,7 @@ Func_16120: ; 16120 (5:6120)
 ; a Muk in any duelist's Play Area
 .is_active
 	ld e, 0
-	call SubstractHPFromCard
+	call GetCardDamage
 	cp 50
 	jr c, .asm_161ab
 	ld e, PLAY_AREA_ARENA
