@@ -1240,11 +1240,16 @@ wcddc:: ; cddc
 	ds $1
 
 	ds $14
-
-wcdf1:: ; cdf1
+	
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
+; used by the AI to temporarily store card location
+wCurCardPlayAreaLocation:: ; cdf1
 	ds $1
 
-wcdf2:: ; cdf2
+; used for AI to store whether this card can use any attack
+; $00 = can't attack
+; $01 = can attack
+wCurCardCanAttack:: ; cdf2
 	ds $1
 
 ; used to temporarily store the evolution card deck index
@@ -1252,7 +1257,13 @@ wcdf2:: ; cdf2
 wTempEvolutionCard:: ; cdf3
 	ds $1
 
-	ds $c
+; used for AI to store whether this card can KO defending Pokémon
+; $00 = can't KO
+; $01 = can KO
+wCurCardCanKO:: ; cdf4
+	ds $1
+
+	ds $b
 
 wce00:: ; ce00
 	ds $1

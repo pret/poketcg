@@ -1776,6 +1776,8 @@ Func_15eae: ; 15eae (5:5eae)
 	pop hl
 	ret
 
+; determine whether AI evolves
+; Pokémon in the Play Area
 Func_15f4c: ; 15f4c (5:5f4c)
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -1793,7 +1795,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 ; and if so, skip to next card in hand
 	push hl
 	call IsPrehistoricPowerActive
-	jp c, .end_hand_card
+	jp c, .done_hand_card
 
 ; load evolution data to buffer1
 ; skip if it's not a Pokémon card
@@ -1802,10 +1804,10 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
-	jp nc, .end_hand_card
+	jp nc, .done_hand_card
 	ld a, [wLoadedCard1Stage]
 	or a
-	jp z, .end_hand_card
+	jp z, .done_hand_card
 
 ; start looping Pokémon in Play Area
 ; to find a card to evolve
@@ -1821,17 +1823,19 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CheckIfCanEvolveInto
 	pop bc
 	push bc
-	jp c, .end_bench_pokemon
+	jp c, .done_bench_pokemon
 
-; store this Play Area location
+; store this Play Area location in wCurCardPlayAreaLocation
 ; and initialize the AI score
 	ld a, b
-	ld [wcdf1], a
+	ld [wCurCardPlayAreaLocation], a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, 128
 	ld [wAIScore], a
 	call Func_16120
 
+; check if the card can use any moves
+; and if any of those moves can KO
 	xor a
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
@@ -1839,23 +1843,27 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld a, $01
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	jr c, .asm_15fcd
+	jr c, .cant_attack_or_ko
 .can_attack
 	ld a, $01
-	ld [$cdf2], a
+	ld [wCurCardCanAttack], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_15fd4
+	jr nc, .check_evolution_attacks
 	call CheckIfCardCanUseSelectedMove
-	jr c, .asm_15fd4
+	jr c, .check_evolution_attacks
 	ld a, $01
-	ld [$cdf4], a
-	jr .asm_15fd4
-.asm_15fcd
+	ld [wCurCardCanKO], a
+	jr .check_evolution_attacks
+.cant_attack_or_ko
 	xor a
-	ld [$cdf2], a
-	ld [$cdf4], a
+	ld [wCurCardCanAttack], a
+	ld [wCurCardCanKO], a
 
-.asm_15fd4
+; check evolution to see if it can use any of its attacks:
+; if it can, raise AI score;
+; if it can't, decrease AI score and if an energy card that is needed
+; can be played from the hand, raise AI score.
+.check_evolution_attacks
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1865,101 +1873,120 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	xor a
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	jr nc, .asm_15ff3
+	jr nc, .evolution_can_attack
 	ld a, $01
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	jr c, .asm_15ffa
-.asm_15ff3
+	jr c, .evolution_cant_attack
+.evolution_can_attack
 	ld a, 5
 	call AddToAIScore
-	jr .asm_16015
-.asm_15ffa
-	ld a, [$cdf2]
+	jr .check_evolution_ko
+.evolution_cant_attack
+	ld a, [wCurCardCanAttack]
 	or a
-	jr z, .asm_16015
+	jr z, .check_evolution_ko
 	ld a, 2
 	call SubFromAIScore
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .asm_16015
+	jr nz, .check_evolution_ko
 	call LookForEnergyNeededInHand
-	jr nc, .asm_16015
+	jr nc, .check_evolution_ko
 	ld a, 7
 	call AddToAIScore
-.asm_16015
-	ld a, [$cdf2]
+
+; if it's an active card:
+; if evolution can't KO but the current card can, lower AI score;
+; if evolution can KO as well, raise AI score.
+.check_evolution_ko
+	ld a, [wCurCardCanAttack]
 	or a
-	jr z, .asm_1603d
-	ld a, [wcdf1]
+	jr z, .check_defending_can_ko_evolution
+	ld a, [wCurCardPlayAreaLocation]
 	or a
-	jr nz, .asm_1603d
+	jr nz, .check_defending_can_ko_evolution
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_16032
+	jr nc, .evolution_cant_ko
 	call CheckIfCardCanUseSelectedMove
-	jr c, .asm_16032
+	jr c, .evolution_cant_ko
 	ld a, 5
 	call AddToAIScore
-	jr .asm_1603d
-.asm_16032
-	ld a, [$cdf4]
+	jr .check_defending_can_ko_evolution
+.evolution_cant_ko
+	ld a, [wCurCardCanKO]
 	or a
-	jr z, .asm_1603d
+	jr z, .check_defending_can_ko_evolution
 	ld a, 20
 	call SubFromAIScore
-.asm_1603d
-	ld a, [wcdf1]
+
+; if defending Pokémon can KO evolution, lower AI score
+.check_defending_can_ko_evolution
+	ld a, [wCurCardPlayAreaLocation]
 	or a
-	jr nz, .asm_16050
+	jr nz, .check_mr_mime
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_16050
+	jr nc, .check_mr_mime
 	ld a, 5
 	call SubFromAIScore
-.asm_16050
-	ld a, [wcdf1]
+
+; if evolution can't damage player's Mr Mime, lower AI score
+.check_mr_mime
+	ld a, [wCurCardPlayAreaLocation]
 	call CheckDamageToMrMime
-	jr c, .asm_1605d
+	jr c, .check_defending_can_ko
 	ld a, 20
 	call SubFromAIScore
-.asm_1605d
-	ld a, [wcdf1]
+
+; if defending Pokémon can KO current card, raise AI score
+.check_defending_can_ko
+	ld a, [wCurCardPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
 	ld [hl], a
-	ld a, [wcdf1]
+	ld a, [wCurCardPlayAreaLocation]
 	or a
-	jr nz, .asm_16087
+	jr nz, .check_2nd_stage_hand
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_1607a
+	jr nc, .check_status
 	ld a, 5
 	call AddToAIScore
-.asm_1607a
+
+; if current card has a status condition, raise AI score
+.check_status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	or a
-	jr z, .asm_16087
+	jr z, .check_2nd_stage_hand
 	ld a, 4
 	call AddToAIScore
-.asm_16087
+
+; if hand has 2nd stage card to evolve evolution card, raise AI score
+.check_2nd_stage_hand
 	ld a, [wTempEvolutionCard]
 	call CheckForEvolutionInList
-	jr nc, .asm_16096
+	jr nc, .check_2nd_stage_deck
 	ld a, 2
 	call AddToAIScore
-	jr .asm_160a3
-.asm_16096
+	jr .check_damage
+
+; if deck has 2nd stage card to evolve evolution card, raise AI score
+.check_2nd_stage_deck
 	ld a, [wTempEvolutionCard]
 	call CheckForEvolutionInDeck
-	jr nc, .asm_160a3
+	jr nc, .check_damage
 	ld a, 1
 	call AddToAIScore
-.asm_160a3
-	ld a, [wcdf1]
+
+; decrease AI score proportional to damage
+; AI score -= floor(Damage / 40)
+.check_damage
+	ld a, [wCurCardPlayAreaLocation]
 	ld e, a
 	call SubstractHPFromCard
 	or a
@@ -1969,24 +1996,29 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	call CalculateTensDigit
 	call SubFromAIScore
 
+; if is Mysterious Fossil or 
+; wLoadedCard1Unknown2 is set to $02,
+; raise AI score
 .asm_160b7
-	ld a, [wcdf1]
+	ld a, [wCurCardPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1ID]
 	cp MYSTERIOUS_FOSSIL
-	jr z, .asm_160d7
+	jr z, .mysterious_fossil
 	ld a, [wLoadedCard1Unknown2]
 	cp $02
 	jr nz, .pikachu_deck
 	ld a, 2
 	call AddToAIScore
 	jr .pikachu_deck
-.asm_160d7
+
+.mysterious_fossil
 	ld a, 5
 	call AddToAIScore
 
+; in Pikachu Deck, decrease AI score for evolving Pikachu
 .pikachu_deck
 	ld a, [wOpponentDeckID]
 	cp PIKACHU_DECK_ID
@@ -2004,27 +2036,28 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld a, 3
 	call SubFromAIScore
 
+; if AI score >= 133, go through with the evolution
 .decide_evolution
 	ld a, [wAIScore]
 	cp 133
-	jr c, .end_bench_pokemon
-	ld a, [wcdf1]
+	jr c, .done_bench_pokemon
+	ld a, [wCurCardPlayAreaLocation]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, [wTempEvolutionCard]
 	ldh [hTemp_ffa0], a
 	ld a, $02 ; OppAction_EvolvePokemonCard
 	bank1call AIMakeDecision
 	pop bc
-	jr .end_hand_card
-.end_bench_pokemon
+	jr .done_hand_card
+
+.done_bench_pokemon
 	pop bc
 	inc b
 	dec c
 	jp nz, .next_bench_pokemon
-.end_hand_card
+.done_hand_card
 	pop hl
 	jp .next_hand_card
-
 .done
 	or a
 	ret
