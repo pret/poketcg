@@ -397,8 +397,69 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 Func_14323: ; 14323 (5:4323)
 	INCROM $14323, $1433d
 
-Func_1433d: ; 1433d (5:433d)
-	INCROM $1433d, $1438c
+; return carry depending on card index in a:
+;	- if energy card, return carry if no energy card has been played yet
+;	- if basic Pokémon card, return carry if there's space in bench
+;	- if evolution card, return carry if there's a Pokémon
+;	  in Play Area it can evolve
+;	- if trainer card, return carry if it can be used
+; input:
+;	a = card index to check
+CheckIfCardCanBePlayed: ; 1433d (5:433d)
+	ldh [hTempCardIndex_ff9f], a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr c, .pokemon_card
+	cp TYPE_TRAINER
+	jr z, .trainer_card
+
+; energy card
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	ret z
+	scf
+	ret
+
+.pokemon_card
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .evolution_card
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	ccf
+	ret
+
+.evolution_card
+	bank1call IsPrehistoricPowerActive
+	ret c
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, 0
+.loop
+	push bc
+	ld e, b
+	ldh a, [hTempCardIndex_ff9f]
+	ld d, a
+	call CheckIfCanEvolveInto
+	pop bc
+	ret nc
+	inc b
+	dec c
+	jr nz, .loop
+	scf
+	ret
+
+.trainer_card
+	bank1call CheckCantUseTrainerDueToHeadache
+	ret c
+	call LoadNonPokemonCardEffectCommands
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
+	call TryExecuteEffectCommandFunction
+	ret
+; 0x1438c
 
 ; loads all the energy cards
 ; in hand in wDuelTempList
@@ -1708,7 +1769,7 @@ Func_15eae: ; 15eae (5:5eae)
 	cp $ff
 	jp z, Func_15f4c
 
-	ld [wTempEvolutionCard], a
+	ld [wTempAIPokemonCard], a
 	push hl
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
@@ -1750,7 +1811,7 @@ Func_15eae: ; 15eae (5:5eae)
 ; if energy cards are found in hand
 ; for this card's moves, raise AI score
 .check_energy_cards
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call GetMovesEnergyCostBits
 	call CheckEnergyFlagsNeededInList
 	jr nc, .check_evolution_hand
@@ -1760,7 +1821,7 @@ Func_15eae: ; 15eae (5:5eae)
 ; if evolution card is found in hand
 ; for this card, raise AI score
 .check_evolution_hand
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call CheckForEvolutionInList
 	jr nc, .check_evolution_deck
 	ld a, 20
@@ -1769,7 +1830,7 @@ Func_15eae: ; 15eae (5:5eae)
 ; if evolution card is found in deck
 ; for this card, raise AI score
 .check_evolution_deck
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call CheckForEvolutionInDeck
 	jr nc, .check_score
 	ld a, 10
@@ -1780,9 +1841,9 @@ Func_15eae: ; 15eae (5:5eae)
 	ld a, [wAIScore]
 	cp 180
 	jr c, .skip
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	ldh [hTemp_ffa0], a
-	call Func_1433d
+	call CheckIfCardCanBePlayed
 	jr c, .skip
 	ld a, $01 ; OppAction_PlayBasicPokemonCard
 	bank1call AIMakeDecision
@@ -1807,7 +1868,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld a, [hli]
 	cp $ff
 	jp z, .done
-	ld [wTempEvolutionCard], a
+	ld [wTempAIPokemonCard], a
 
 ; check if Prehistoric Power is active
 ; and if so, skip to next card in hand
@@ -1818,7 +1879,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 ; load evolution data to buffer1
 ; skip if it's not a Pokémon card
 ; and if it's a basic stage card
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
@@ -1836,7 +1897,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 .next_bench_pokemon
 	push bc
 	ld e, b
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	ld d, a
 	call CheckIfCanEvolveInto
 	pop bc
@@ -1886,7 +1947,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	ld [hl], a
 	xor a
 	ld [wSelectedMoveIndex], a
@@ -1986,7 +2047,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 
 ; if hand has 2nd stage card to evolve evolution card, raise AI score
 .check_2nd_stage_hand
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call CheckForEvolutionInList
 	jr nc, .check_2nd_stage_deck
 	ld a, 2
@@ -1995,7 +2056,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 
 ; if deck has 2nd stage card to evolve evolution card, raise AI score
 .check_2nd_stage_deck
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	call CheckForEvolutionInDeck
 	jr nc, .check_damage
 	ld a, 1
@@ -2061,7 +2122,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	jr c, .done_bench_pokemon
 	ld a, [wCurCardPlayAreaLocation]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, [wTempEvolutionCard]
+	ld a, [wTempAIPokemonCard]
 	ldh [hTemp_ffa0], a
 	ld a, $02 ; OppAction_EvolvePokemonCard
 	bank1call AIMakeDecision
