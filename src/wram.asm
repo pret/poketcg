@@ -1252,9 +1252,10 @@ wCurCardPlayAreaLocation:: ; cdf1
 wCurCardCanAttack:: ; cdf2
 	ds $1
 
-; used to temporarily store the evolution card deck index
+; used to temporarily store the card deck index
 ; while AI is deciding whether to evolve Pokémon
-wTempEvolutionCard:: ; cdf3
+; or deciding whether to play Pokémon card from hand
+wTempAIPokemonCard:: ; cdf3
 	ds $1
 
 ; used for AI to store whether this card can KO defending Pokémon
