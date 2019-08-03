@@ -1719,30 +1719,36 @@ Func_15eae: ; 15eae (5:5eae)
 	jr nz, .skip
 	; skip non-basic pokemon
 
-	ld a, $82
+	ld a, 130
 	ld [wAIScore], a
 	call Func_161d5
+
+; if Play Area has more than 4 Pokémon, decrease AI score
+; else, increase AI score
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
-	cp $04
-	jr c, .asm_15ef2
-	ld a, $14
+	cp 4
+	jr c, .has_4_or_fewer
+	ld a, 20
 	call SubFromAIScore
-	jr .asm_15ef7
-.asm_15ef2
-	ld a, $32
+	jr .check_defending_can_ko
+.has_4_or_fewer
+	ld a, 50
 	call AddToAIScore
-.asm_15ef7
+
+; if defending Pokémon can KO active card, increase AI score
+.check_defending_can_ko
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .asm_15f04
-	ld a, $14
+	ld a, 20
 	call AddToAIScore
+
 .asm_15f04
 	ld a, [wTempEvolutionCard]
-	call Func_163c9
-	call Func_1637b
+	call GetMovesEnergyCostBits
+	call CheckEnergyFlagsNeededInList
 	jr nc, .asm_15f14
 	ld a, $14
 	call AddToAIScore
@@ -2150,7 +2156,7 @@ Func_16120: ; 16120 (5:6120)
 
 ; if Dragonair is benched, check all Pokémon in Play Area
 ; and sum all the damage in HP of all cards
-; if this result is more than 70, check if there's
+; if this result is >= 70, check if there's
 ; a Muk in any duelist's Play Area
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -2184,7 +2190,7 @@ Func_16120: ; 16120 (5:6120)
 	ret
 
 ; if Dragonair is active, check its damage in HP
-; if this result is more than 50, check if there's
+; if this result is >= 50, check if there's
 ; a Muk in any duelist's Play Area
 .is_active
 	ld e, 0
@@ -2548,11 +2554,159 @@ SortTempHandByIDList: ; 1633f (5:633f)
 	jr .next_hand_card
 ; 0x1637b
 
-Func_1637b ; 1637b (5:637b)
-	INCROM $1637b, $163c9
+; looks for energy card(s) in list at wDuelTempList
+; depending on energy flags set in a
+; return carry if successful in finding card
+; input:
+; 	a = energy flags needed
+CheckEnergyFlagsNeededInList: ; 1637b (5:637b)
+	ld e, a
+	ld hl, wDuelTempList
+.next_card
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
 
-Func_163c9 ; 163c9 (5:63c9)
-	INCROM $163c9, $16422
+; fire
+	cp FIRE_ENERGY
+	jr nz, .grass
+	ld a, FIRE_F
+	jr .check_energy
+.grass
+	cp GRASS_ENERGY
+	jr nz, .lightning
+	ld a, GRASS_F
+	jr .check_energy
+.lightning
+	cp LIGHTNING_ENERGY
+	jr nz, .water
+	ld a, LIGHTNING_F
+	jr .check_energy
+.water
+	cp WATER_ENERGY
+	jr nz, .fighting
+	ld a, WATER_F
+	jr .check_energy
+.fighting
+	cp FIGHTING_ENERGY
+	jr nz, .psychic
+	ld a, FIGHTING_F
+	jr .check_energy
+.psychic
+	cp PSYCHIC_ENERGY
+	jr nz, .colorless
+	ld a, PSYCHIC_F
+	jr .check_energy
+.colorless
+	cp DOUBLE_COLORLESS_ENERGY
+	jr nz, .next_card
+	ld a, COLORLESS_F
+
+; if energy card matches required energy, return carry
+.check_energy
+	ld d, e
+	and e
+	ld e, d
+	jr z, .next_card
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x163c9
+
+; returns in a the energy cost of both moves from card index in a
+; represented by energy flags
+; i.e. each bit represents a different energy type cost
+; if any colorless energy is required, all bits are set
+; input:
+; 	a = card index
+; output:
+; 	a = bits of each energy requirement
+GetMovesEnergyCostBits: ; 163c9 (5:63c9)
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld hl, wLoadedCard2Move1EnergyCost
+	call GetEnergyCostBits
+	ld b, a
+
+	push bc
+	ld hl, wLoadedCard2Move2EnergyCost
+	call GetEnergyCostBits
+	pop bc
+	or b
+	ret
+; 0x163dd
+
+; returns in a the energy cost of a move in [hl]
+; represented by energy flags
+; i.e. each bit represents a different energy type cost
+; if any colorless energy is required, all bits are set
+; input:
+; 	[hl] = Loaded card move energy cost
+; output:
+; 	a = bits of each energy requirement
+GetEnergyCostBits: ; 163dd (5:63dd)
+	ld c, $00
+	ld a, [hli]
+	ld b, a
+
+; fire
+	and $f0
+	jr z, .grass
+	ld c, FIRE_F
+.grass
+	ld a, b
+	and $0f
+	jr z, .lightning
+	ld a, GRASS_F
+	or c
+	ld c, a
+.lightning
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .water
+	ld a, LIGHTNING_F
+	or c
+	ld c, a
+.water
+	ld a, b
+	and $0f
+	jr z, .fighting
+	ld a, WATER_F
+	or c
+	ld c, a
+.fighting
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .psychic
+	ld a, FIGHTING_F
+	or c
+	ld c, a
+.psychic
+	ld a, b
+	and $0f
+	jr z, .colorless
+	ld a, PSYCHIC_F
+	or c
+	ld c, a
+.colorless
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .done
+	ld a, %11111111
+	or c ; unnecessary
+	ld c, a
+.done
+	ld a, c
+	ret
+; 0x16422
 
 ; set carry flag if any card in
 ; wDuelTempList evolves card index in a

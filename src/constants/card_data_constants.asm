@@ -86,6 +86,15 @@ NUM_COLORED_TYPES EQU const_value
 	const UNUSED_TYPE ; $07
 NUM_TYPES EQU const_value
 
+; generic type (color) flag constants
+FIRE_F      EQU $1 << FIRE      ; $01
+GRASS_F     EQU $1 << GRASS     ; $02
+LIGHTNING_F EQU $1 << LIGHTNING ; $04
+WATER_F     EQU $1 << WATER     ; $08
+FIGHTING_F  EQU $1 << FIGHTING  ; $10
+PSYCHIC_F   EQU $1 << PSYCHIC   ; $20
+COLORLESS_F EQU $1 << COLORLESS ; $40
+
 ; CARD_DATA_TYPE constants
 TYPE_PKMN_FIRE      EQU FIRE
 TYPE_PKMN_GRASS     EQU GRASS
