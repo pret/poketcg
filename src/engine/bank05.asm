@@ -1693,6 +1693,8 @@ CopyHandCardList: ; 15ea6 (5:5ea6)
 	inc de
 	jr CopyHandCardList
 
+; determine whether AI plays
+; basic card from hand
 Func_15eae: ; 15eae (5:5eae)
 	call CreateHandCardList
 	call SortTempHandByIDList
@@ -1741,38 +1743,48 @@ Func_15eae: ; 15eae (5:5eae)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_15f04
+	jr nc, .check_energy_cards
 	ld a, 20
 	call AddToAIScore
 
-.asm_15f04
+; if energy cards are found in hand
+; for this card's moves, raise AI score
+.check_energy_cards
 	ld a, [wTempEvolutionCard]
 	call GetMovesEnergyCostBits
 	call CheckEnergyFlagsNeededInList
-	jr nc, .asm_15f14
-	ld a, $14
+	jr nc, .check_evolution_hand
+	ld a, 20
 	call AddToAIScore
-.asm_15f14
+
+; if evolution card is found in hand
+; for this card, raise AI score
+.check_evolution_hand
 	ld a, [wTempEvolutionCard]
 	call CheckForEvolutionInList
-	jr nc, .asm_15f21
-	ld a, $14
+	jr nc, .check_evolution_deck
+	ld a, 20
 	call AddToAIScore
-.asm_15f21
+
+; if evolution card is found in deck
+; for this card, raise AI score
+.check_evolution_deck
 	ld a, [wTempEvolutionCard]
 	call CheckForEvolutionInDeck
-	jr nc, .asm_15f2e
-	ld a, $0a
+	jr nc, .check_score
+	ld a, 10
 	call AddToAIScore
-.asm_15f2e
+
+; if AI score is >= 180, play card from hand
+.check_score
 	ld a, [wAIScore]
-	cp $b4
+	cp 180
 	jr c, .skip
 	ld a, [wTempEvolutionCard]
 	ldh [hTemp_ffa0], a
 	call Func_1433d
 	jr c, .skip
-	ld a, $01
+	ld a, $01 ; OppAction_PlayBasicPokemonCard
 	bank1call AIMakeDecision
 	jr c, .done
 .skip
@@ -1996,7 +2008,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ld e, a
 	call GetCardDamage
 	or a
-	jr z, .asm_160b7
+	jr z, .check_mysterious_fossil
 	srl a
 	srl a
 	call CalculateTensDigit
@@ -2005,7 +2017,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 ; if is Mysterious Fossil or 
 ; wLoadedCard1Unknown2 is set to $02,
 ; raise AI score
-.asm_160b7
+.check_mysterious_fossil
 	ld a, [wCurCardPlayAreaLocation]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -2028,7 +2040,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 .pikachu_deck
 	ld a, [wOpponentDeckID]
 	cp PIKACHU_DECK_ID
-	jr nz, .decide_evolution
+	jr nz, .check_score
 	ld a, [wLoadedCard1ID]
 	cp PIKACHU1
 	jr z, .pikachu
@@ -2037,13 +2049,13 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	cp PIKACHU3
 	jr z, .pikachu
 	cp PIKACHU4
-	jr nz, .decide_evolution
+	jr nz, .check_score
 .pikachu
 	ld a, 3
 	call SubFromAIScore
 
 ; if AI score >= 133, go through with the evolution
-.decide_evolution
+.check_score
 	ld a, [wAIScore]
 	cp 133
 	jr c, .done_bench_pokemon
