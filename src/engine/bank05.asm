@@ -110,7 +110,34 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 	ret
 ; 0x140c5
 
-	INCROM $140c5, $140fe
+	INCROM $140c5, $140df
+
+Func_140df: ; 140df (5:40df)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, 0
+	ld e, c
+	ld d, c
+	ld hl, wcdbf + 1
+	jp .next
+
+.loop
+	ld a, [hli]
+	cp e
+	jr c, .next
+	ld e, a
+	ld d, c
+.next
+	inc c
+	dec b
+	jr nz, .loop
+
+	ld a, d
+	ldh [hTempPlayAreaLocation_ff9d], a
+	or a
+	ret
+; 0x140fe
 
 ; adds a to wAIScore
 ; if there's overflow, it's capped at $ff
@@ -1264,7 +1291,21 @@ CalculateTensDigit: ; 1576b (5:576b)
 ; 0x15778
 
 Func_15778: ; 15778 (5:5778)
-	INCROM $15778, $15787
+	push bc
+	ld c, a
+	ld a, b
+	ld b, c
+	ld c, $00
+.loop
+	sub b
+	jr c, .done
+	inc c
+	jr .loop
+.done
+	ld a, c
+	pop bc
+	ret
+; 0x15787
 
 ; returns in a the number of energy cards attached
 ; to Pokémon in location held by e
@@ -1737,10 +1778,293 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .set_carry
 ; 0x15b54
 
-	INCROM $15b54, $15b72
+Func_15b54: ; 15b54 (5:5b54)
+	xor a
+	ld [wcdda], a
+	ld a, [wWhoseTurn]
+	cp OPPONENT_TURN
+	jr z, .opponent
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	ret z
+	jr .asm_15b6c
 
-Func_15b72 ; 15b72 (5:5b72)
-	INCROM $15b72, $15d4f
+.opponent
+	ld a, [wcddb]
+	or a
+	ret nz
+
+.asm_15b6c
+	ld a, $80
+	ld [wcdda], a
+	ret
+; 0x15b72
+
+Func_15b72: ; 15b72 (5:5b72)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 2
+	ret c
+
+; has at least 2 Pokémon in Play Area
+	call Func_15b54
+	call StoreDefendingPokemonColorWRAndPrizeCards
+	ld a, 50
+	ld [wAIScore], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, $00
+	push bc
+	jp .asm_15d35
+; 0x15b94
+
+.asm_15b94
+	push bc
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, 50
+	ld [wAIScore], a
+
+	call CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_15bc1
+	call CheckIfCardCanUseSelectedMove
+	jr c, .asm_15bc1
+	ld a, 10
+	call AddToAIScore
+	ld a, [wcdda]
+	or $01
+	ld [wcdda], a
+	call CountPrizes
+	cp 2
+	jp nc, .asm_15c3c
+	ld a, 10
+	call AddToAIScore
+
+.asm_15bc1
+	xor a
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	call nc, .asm_15bd8
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	call CheckIfCardCanUseSelectedMove
+	call nc, .asm_15bd8
+	jr .asm_15be9
+
+.asm_15bd8
+	ld a, [wSelectedMoveIndex]
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	call CalculateTensDigit
+	inc a
+	call AddToAIScore
+	ret
+
+.asm_15be9
+	call LookForEnergyNeededInHand
+	jr nc, .asm_15bff
+	ld a, [wSelectedMoveIndex]
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	call CalculateTensDigit
+	srl a
+	call AddToAIScore
+
+.asm_15bff
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	or a
+	jr nz, .asm_15c10
+	ld a, 1
+	call SubFromAIScore
+
+.asm_15c10
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call LoadCardDataToBuffer2_FromDeckIndex
+	call SwapTurn
+	cp MR_MIME
+	jr nz, .asm_15c3c
+	xor a
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr nz, .asm_15c37
+	ld a, $01
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr z, .asm_15c3c
+.asm_15c37
+	ld a, 5
+	call AddToAIScore
+
+.asm_15c3c
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	call TranslateColorToWR
+	ld c, a
+	ld hl, wAIPlayerWeakness
+	and [hl]
+	jr z, .asm_15c58
+	ld a, 3
+	call AddToAIScore
+
+.asm_15c58
+	ld a, c
+	ld hl, wAIPlayerResistance
+	and [hl]
+	jr z, .asm_15c64
+	ld a, 2
+	call SubFromAIScore
+
+.asm_15c64
+	ld a, [wAIPlayerColor]
+	ld hl, wLoadedCard1Resistance
+	and [hl]
+	jr z, .asm_15c72
+	ld a, 2
+	call AddToAIScore
+.asm_15c72
+	ld a, [wAIPlayerColor]
+	ld hl, wLoadedCard1Weakness
+	and [hl]
+	jr z, .asm_15c80
+	ld a, 3
+	call SubFromAIScore
+
+.asm_15c80
+	call GetPlayAreaCardRetreatCost
+	cp 2
+	jr c, .asm_15c90
+	jr z, .asm_15c95
+	ld a, 1
+	call SubFromAIScore
+	jr .asm_15c95
+.asm_15c90
+	ld a, 1
+	call AddToAIScore
+
+.asm_15c95
+	ld a, [wcdda]
+	cp $81
+	jr z, .asm_15cb0
+	call CheckIfDefendingPokemonCanKnockOut
+	jr nc, .asm_15cb0
+	ld e, 3
+	ld a, [wAIPlayerPrizeCount]
+	cp 1
+	jr nz, .asm_15cac
+	ld e, 10
+.asm_15cac
+	ld a, e
+	call SubFromAIScore
+
+.asm_15cb0
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	or a
+	jr nz, .asm_15cbf
+	ld [wAIScore], a
+	jr .asm_15d35
+
+.asm_15cbf
+	ld b, a
+	ld a, $04
+	call Func_15778
+	call CalculateTensDigit
+	call AddToAIScore
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp MR_MIME
+	jr z, .asm_15ceb
+	cp MEW1
+	jr nz, .asm_15cf0
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr z, .asm_15cf0
+.asm_15ceb
+	ld a, 5
+	call AddToAIScore
+
+.asm_15cf0
+	ld a, [wLoadedCard1Unknown2]
+	cp $01
+	jr nz, .asm_15cfc
+	ld a, 2
+	call SubFromAIScore
+.asm_15cfc
+	ld a, [wLoadedCard1ID]
+	cp MYSTERIOUS_FOSSIL
+	jr z, .asm_15d07
+	cp CLEFAIRY_DOLL
+	jr nz, .asm_15d0c
+.asm_15d07
+	ld a, 10
+	call SubFromAIScore
+
+.asm_15d0c
+	ld b, a
+	ld a, [$cdb1]
+	or a
+	jr z, .asm_15d35
+	ld h, a
+	ld a, [$cdb0]
+	ld l, a
+.asm_15d18
+	ld a, [hli]
+	or a
+	jr z, .asm_15d35
+	cp b
+	jr nz, .asm_15d32
+	ld a, [hl]
+	cp $80
+	jr c, .asm_15d2b
+	sub $80
+	call AddToAIScore
+	jr .asm_15d32
+
+.asm_15d2b
+	ld c, a
+	ld a, $80
+	sub c
+	call SubFromAIScore
+.asm_15d32
+	inc hl
+	jr .asm_15d18
+; 0x15d35
+
+.asm_15d35
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld c, a
+	ld b, $00
+	ld hl, wcdbf
+	add hl, bc
+	ld a, [wAIScore]
+	ld [hl], a
+	pop bc
+	inc c
+	dec b
+	jp nz, .asm_15b94
+	xor a
+	ld [$cdb4], a
+	jp Func_140df
+; 0x15d4f
 
 Func_15d4f ; 15d4f (5:5d4f)
 	INCROM $15d4f, $15ea6
@@ -2165,24 +2489,24 @@ Func_16120: ; 16120 (5:6120)
 	jr z, .dragonair
 	ret
 
-; check if Charmeleon has at least 3 energy cards attached
-; and checks output of Func_22990 
+; check if number of energy cards attached to Charmeleon are at least 3
+; and if adding the energy cards in hand makes at least 6 energy cards
 .charmeleon
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	call CountNumberOfEnergyCardsAttached
 	cp 3
-	jr c, .asm_1615b
+	jr c, .not_enough_energy
 	push af
-	farcall Func_22990
+	farcall CountEnergyCardsInHand
 	pop bc
 	add b
-	cp $06
-	jr c, .asm_1615b
+	cp 6
+	jr c, .not_enough_energy
 	ld a, 3
 	call AddToAIScore
 	ret
-.asm_1615b
+.not_enough_energy
 	ld a, 10
 	call SubFromAIScore
 	ret
@@ -2249,32 +2573,34 @@ Func_16120: ; 16120 (5:6120)
 	ld a, 70
 	cp c
 	jr c, .check_muk
-.asm_161ab
+.subtract_score
 	ld a, 10
 	call SubFromAIScore
 	ret
 
+; if there's no Muk, raise score
 .check_muk
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
-	jr c, .asm_161ab
+	jr c, .subtract_score
 	ld a, 10
 	call AddToAIScore
 	ret
 
 ; if Dragonair is active, check its damage in HP
-; if this result is >= 50, check if there's
-; a Muk in any duelist's Play Area
+; if this result is >= 50, 
+; and if at least 3 energy cards attached,
+; check if there's a Muk in any duelist's Play Area
 .is_active
 	ld e, 0
 	call GetCardDamage
 	cp 50
-	jr c, .asm_161ab
+	jr c, .subtract_score
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	cp 3
-	jr c, .asm_161ab
+	jr c, .subtract_score
 	jr .check_muk
 ; 0x161d5
 
