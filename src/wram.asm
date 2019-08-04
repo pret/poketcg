@@ -1199,7 +1199,10 @@ wTempLoadedMoveEnergyNeededAmount:: ; cdb7
 wAIScore:: ; cdbe
 	ds $1
 
-	ds $10
+wcdbf:: ; cdbf
+	ds MAX_PLAY_AREA_POKEMON
+
+	ds $0a
 
 ; information about the defending Pokémon and
 ; the prize card count on both sides for AI:
@@ -1223,7 +1226,10 @@ wAIOpponentPrizeCount:: ; cdd3
 wTempCardIDToLook:: ; cdd4
 	ds $1
 
-	ds $6
+	ds $5
+
+wcdda:: ; cdda
+	ds $1
 
 wcddb:: ; cddb
 	ds $1

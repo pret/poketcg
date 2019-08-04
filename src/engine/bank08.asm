@@ -131,5 +131,25 @@ CopyBuffer: ; 2297b (8:697b)
 
 	INCROM $22983, $22990
 
-Func_22990 ; 22990 (8:6990)
-	INCROM $22990, $24000
+; counts number of energy cards found in hand
+; and outputs result in a
+; sets carry if none are found
+; output:
+; 	a = number of energy cards found
+CountEnergyCardsInHand: ; 22990 (8:6990)
+	farcall CreateEnergyCardListFromHand
+	ret c
+	ld b, -1
+	ld hl, wDuelTempList
+.loop
+	inc b
+	ld a, [hli]
+	cp $ff
+	jr nz, .loop
+	ld a, b
+	or a
+	ret
+; 0x229a3
+
+Func_229a3 ; 229a3 (8:69a3)
+	INCROM $229a3, $24000
