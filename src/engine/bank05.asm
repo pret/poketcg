@@ -112,14 +112,17 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 
 	INCROM $140c5, $140df
 
-Func_140df: ; 140df (5:40df)
+; checks AI scores for all benched Pokémon
+; returns the location of the card with highest score
+; in hTempPlayAreaLocation_ff9d
+FindHighestBenchScore: ; 140df (5:40df)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld b, a
 	ld c, 0
 	ld e, c
 	ld d, c
-	ld hl, wcdbf + 1
+	ld hl, wBenchAIScore + 1
 	jp .next
 
 .loop
@@ -1290,12 +1293,17 @@ CalculateTensDigit: ; 1576b (5:576b)
 	ret
 ; 0x15778
 
-Func_15778: ; 15778 (5:5778)
+; returns in a the result of
+; dividing b by a, rounded down
+; input:
+; a = 4
+; b = card HP
+CalculateBDividedByA: ; 15778 (5:5778)
 	push bc
 	ld c, a
 	ld a, b
 	ld b, c
-	ld c, $00
+	ld c, 0
 .loop
 	sub b
 	jr c, .done
@@ -1778,28 +1786,34 @@ Func_158b2: ; 158b2 (5:58b2)
 	jr .set_carry
 ; 0x15b54
 
+; if player's turn and loaded move is not a Pokémon Power OR
+; if opponent's turn and wcddb == 0
+; set wcdda's bit 7 flag
 Func_15b54: ; 15b54 (5:5b54)
 	xor a
 	ld [wcdda], a
 	ld a, [wWhoseTurn]
 	cp OPPONENT_TURN
 	jr z, .opponent
+
+; player
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
 	ret z
-	jr .asm_15b6c
+	jr .set_flag
 
 .opponent
 	ld a, [wcddb]
 	or a
 	ret nz
 
-.asm_15b6c
-	ld a, $80
+.set_flag
+	ld a, %10000000
 	ld [wcdda], a
 	ret
 ; 0x15b72
 
+; calculates AI score for bench Pokémon
 Func_15b72: ; 15b72 (5:5b72)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1816,45 +1830,52 @@ Func_15b72: ; 15b72 (5:5b72)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld b, a
-	ld c, $00
+	ld c, PLAY_AREA_ARENA
 	push bc
-	jp .asm_15d35
-; 0x15b94
+	jp .store_score
 
-.asm_15b94
+.next_bench
 	push bc
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, 50
 	ld [wAIScore], a
 
+; check if card can KO defending Pokémon
+; if it can, raise AI score
+; if on last prize card, raise AI score again
 	call CheckIfAnyMoveKnocksOutDefendingCard
-	jr nc, .asm_15bc1
+	jr nc, .check_can_use_moves
 	call CheckIfCardCanUseSelectedMove
-	jr c, .asm_15bc1
+	jr c, .check_can_use_moves
 	ld a, 10
 	call AddToAIScore
 	ld a, [wcdda]
-	or $01
+	or %00000001
 	ld [wcdda], a
 	call CountPrizes
 	cp 2
-	jp nc, .asm_15c3c
+	jp nc, .check_defending_weak
 	ld a, 10
 	call AddToAIScore
 
-.asm_15bc1
+; calculates damage of both moves
+; to raise AI score accordingly
+.check_can_use_moves
 	xor a
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	call nc, .asm_15bd8
+	call nc, .calculate_damage
 	ld a, $01
 	ld [wSelectedMoveIndex], a
 	call CheckIfCardCanUseSelectedMove
-	call nc, .asm_15bd8
-	jr .asm_15be9
+	call nc, .calculate_damage
+	jr .check_energy_card
 
-.asm_15bd8
+; adds to AI score depending on amount of damage
+; it can inflict to the defending Pokémon
+; AI score += floor(Damage / 10) + 1
+.calculate_damage
 	ld a, [wSelectedMoveIndex]
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, [wDamage]
@@ -1863,9 +1884,12 @@ Func_15b72: ; 15b72 (5:5b72)
 	call AddToAIScore
 	ret
 
-.asm_15be9
+; if an energy card that is needed is found in hand
+; calculate damage of the move and raise AI score
+; AI score += floor(Damage / 20)
+.check_energy_card
 	call LookForEnergyNeededInHand
-	jr nc, .asm_15bff
+	jr nc, .check_attached_energy
 	ld a, [wSelectedMoveIndex]
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, [wDamage]
@@ -1873,39 +1897,42 @@ Func_15b72: ; 15b72 (5:5b72)
 	srl a
 	call AddToAIScore
 
-.asm_15bff
+; if no energies attached to card, lower AI score
+.check_attached_energy
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	or a
-	jr nz, .asm_15c10
+	jr nz, .check_mr_mime
 	ld a, 1
 	call SubFromAIScore
 
-.asm_15c10
+; if can damage Mr Mime, raise AI score
+.check_mr_mime
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
 	call LoadCardDataToBuffer2_FromDeckIndex
 	call SwapTurn
 	cp MR_MIME
-	jr nz, .asm_15c3c
+	jr nz, .check_defending_weak
 	xor a
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
-	jr nz, .asm_15c37
+	jr nz, .can_damage
 	ld a, $01
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
-	jr z, .asm_15c3c
-.asm_15c37
+	jr z, .check_defending_weak
+.can_damage
 	ld a, 5
 	call AddToAIScore
 
-.asm_15c3c
+; if defending card is weak to this card, raise AI score
+.check_defending_weak
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1915,81 +1942,97 @@ Func_15b72: ; 15b72 (5:5b72)
 	ld c, a
 	ld hl, wAIPlayerWeakness
 	and [hl]
-	jr z, .asm_15c58
+	jr z, .check_defending_resist
 	ld a, 3
 	call AddToAIScore
 
-.asm_15c58
+; if defending card is resistant to this card, lower AI score
+.check_defending_resist
 	ld a, c
 	ld hl, wAIPlayerResistance
 	and [hl]
-	jr z, .asm_15c64
+	jr z, .check_resistance
 	ld a, 2
 	call SubFromAIScore
 
-.asm_15c64
+; if this card is resistant to defending Pokémon, raise AI score
+.check_resistance
 	ld a, [wAIPlayerColor]
 	ld hl, wLoadedCard1Resistance
 	and [hl]
-	jr z, .asm_15c72
+	jr z, .check_weakness
 	ld a, 2
 	call AddToAIScore
-.asm_15c72
+
+; if this card is weak to defending Pokémon, lower AI score
+.check_weakness
 	ld a, [wAIPlayerColor]
 	ld hl, wLoadedCard1Weakness
 	and [hl]
-	jr z, .asm_15c80
+	jr z, .check_retreat_cost
 	ld a, 3
 	call SubFromAIScore
 
-.asm_15c80
+; if this card's retreat cost < 2, raise AI score
+; if this card's retreat cost > 2, lower AI score
+.check_retreat_cost
 	call GetPlayAreaCardRetreatCost
 	cp 2
-	jr c, .asm_15c90
-	jr z, .asm_15c95
+	jr c, .one_or_none
+	jr z, .check_player_prize_count
 	ld a, 1
 	call SubFromAIScore
-	jr .asm_15c95
-.asm_15c90
+	jr .check_player_prize_count
+.one_or_none
 	ld a, 1
 	call AddToAIScore
 
-.asm_15c95
+; if wcdda != $81
+; if defending Pokémon can KO this card
+; if player is not at last prize card, lower 3 from AI score
+; if player is at last prize card, lower 10 from AI score
+.check_player_prize_count
 	ld a, [wcdda]
-	cp $81
-	jr z, .asm_15cb0
+	cp %10000000 | %00000001
+	jr z, .check_hp
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_15cb0
+	jr nc, .check_hp
 	ld e, 3
 	ld a, [wAIPlayerPrizeCount]
 	cp 1
-	jr nz, .asm_15cac
+	jr nz, .lower_score_1
 	ld e, 10
-.asm_15cac
+.lower_score_1
 	ld a, e
 	call SubFromAIScore
 
-.asm_15cb0
+; if this card's HP is 0, make AI score 0
+.check_hp
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	or a
-	jr nz, .asm_15cbf
+	jr nz, .add_hp_score
 	ld [wAIScore], a
-	jr .asm_15d35
+	jr .store_score
 
-.asm_15cbf
+; AI score += floor(HP/40)
+.add_hp_score
 	ld b, a
-	ld a, $04
-	call Func_15778
+	ld a, 4
+	call CalculateBDividedByA
 	call CalculateTensDigit
 	call AddToAIScore
+
+; raise AI score if
+; 	- is a Mr Mime OR
+;	- is a Mew1 and defending card is not basic stage
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
 	cp MR_MIME
-	jr z, .asm_15ceb
+	jr z, .raise_score
 	cp MEW1
 	jr nz, .asm_15cf0
 	ld a, DUELVARS_ARENA_CARD
@@ -1998,23 +2041,27 @@ Func_15b72: ; 15b72 (5:5b72)
 	ld a, [wLoadedCard2Stage]
 	or a
 	jr z, .asm_15cf0
-.asm_15ceb
+.raise_score
 	ld a, 5
 	call AddToAIScore
 
+; if wLoadedCard1Unknown2 == $01, lower AI score
 .asm_15cf0
 	ld a, [wLoadedCard1Unknown2]
 	cp $01
-	jr nz, .asm_15cfc
+	jr nz, .mysterious_fossil_or_clefairy_doll
 	ld a, 2
 	call SubFromAIScore
-.asm_15cfc
+
+; if card is Mysterious Fossil or Clefairy Doll,
+; lower AI score
+.mysterious_fossil_or_clefairy_doll
 	ld a, [wLoadedCard1ID]
 	cp MYSTERIOUS_FOSSIL
-	jr z, .asm_15d07
+	jr z, .lower_score_2
 	cp CLEFAIRY_DOLL
 	jr nz, .asm_15d0c
-.asm_15d07
+.lower_score_2
 	ld a, 10
 	call SubFromAIScore
 
@@ -2022,14 +2069,15 @@ Func_15b72: ; 15b72 (5:5b72)
 	ld b, a
 	ld a, [$cdb1]
 	or a
-	jr z, .asm_15d35
+	jr z, .store_score
 	ld h, a
 	ld a, [$cdb0]
 	ld l, a
-.asm_15d18
+
+.loop
 	ld a, [hli]
 	or a
-	jr z, .asm_15d35
+	jr z, .store_score
 	cp b
 	jr nz, .asm_15d32
 	ld a, [hl]
@@ -2038,7 +2086,6 @@ Func_15b72: ; 15b72 (5:5b72)
 	sub $80
 	call AddToAIScore
 	jr .asm_15d32
-
 .asm_15d2b
 	ld c, a
 	ld a, $80
@@ -2046,24 +2093,25 @@ Func_15b72: ; 15b72 (5:5b72)
 	call SubFromAIScore
 .asm_15d32
 	inc hl
-	jr .asm_15d18
-; 0x15d35
+	jr .loop
 
-.asm_15d35
+.store_score
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
 	ld b, $00
-	ld hl, wcdbf
+	ld hl, wBenchAIScore
 	add hl, bc
 	ld a, [wAIScore]
 	ld [hl], a
 	pop bc
 	inc c
 	dec b
-	jp nz, .asm_15b94
+	jp nz, .next_bench
+
+; done
 	xor a
 	ld [$cdb4], a
-	jp Func_140df
+	jp FindHighestBenchScore
 ; 0x15d4f
 
 Func_15d4f ; 15d4f (5:5d4f)
@@ -2573,7 +2621,7 @@ Func_16120: ; 16120 (5:6120)
 	ld a, 70
 	cp c
 	jr c, .check_muk
-.subtract_score
+.lower_score
 	ld a, 10
 	call SubFromAIScore
 	ret
@@ -2582,7 +2630,7 @@ Func_16120: ; 16120 (5:6120)
 .check_muk
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
-	jr c, .subtract_score
+	jr c, .lower_score
 	ld a, 10
 	call AddToAIScore
 	ret
@@ -2595,12 +2643,12 @@ Func_16120: ; 16120 (5:6120)
 	ld e, 0
 	call GetCardDamage
 	cp 50
-	jr c, .subtract_score
+	jr c, .lower_score
 	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	cp 3
-	jr c, .subtract_score
+	jr c, .lower_score
 	jr .check_muk
 ; 0x161d5
 
