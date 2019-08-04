@@ -1199,7 +1199,7 @@ wTempLoadedMoveEnergyNeededAmount:: ; cdb7
 wAIScore:: ; cdbe
 	ds $1
 
-wcdbf:: ; cdbf
+wBenchAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
 	ds $0a
