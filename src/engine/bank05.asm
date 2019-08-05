@@ -197,7 +197,11 @@ StoreDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
 	ret
 ; 0x14145
 
-	INCROM $14145, $14226
+Func_14145: ; 14145 (5:4145)
+	INCROM $14145, $14184
+
+Func_14184: ; 14184 (5:4184)
+	INCROM $14184, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -266,7 +270,6 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ;	b = colorless energy still needed
 ;	c = basic energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
-;	z set if move has enough energy
 ;	carry set if no move 
 ;			  OR if it's a Pokémon Power
 ;			  OR if not enough energy for move
@@ -372,7 +375,6 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 ; 	a    = this energy cost of move (lower nibble)
 ; 	[hl] = attached energy
 ; output:
-;	z set if enough energy
 ;	carry set if not enough of this energy type attached
 CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 	and %00001111
@@ -2114,8 +2116,193 @@ Func_15b72: ; 15b72 (5:5b72)
 	jp FindHighestBenchScore
 ; 0x15d4f
 
-Func_15d4f ; 15d4f (5:5d4f)
-	INCROM $15d4f, $15ea6
+Func_15d4f: ; 15d4f (5:5d4f)
+	push af
+	ld a, [$cdd7]
+	or a
+	jr z, .mysterious_fossil_or_clefairy_doll
+
+; check status
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	jp z, .mysterious_fossil_or_clefairy_doll
+	cp PARALYZED
+	jp z, .mysterious_fossil_or_clefairy_doll
+
+; if an energy card hasn't been played yet,
+; checks if the Pokémon needs just one more energy to retreat
+; if it does, check if there are any energy cards in hand
+; and if there are, play that energy card
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .mysterious_fossil_or_clefairy_doll
+	ld e, PLAY_AREA_ARENA
+	call CountNumberOfEnergyCardsAttached
+	push af
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	pop bc
+	cp b
+	jr c, .mysterious_fossil_or_clefairy_doll
+	jr z, .mysterious_fossil_or_clefairy_doll
+	; energy attached < retreat cost
+	sub b
+	cp 1
+	jr nz, .mysterious_fossil_or_clefairy_doll
+	call CreateEnergyCardListFromHand
+	jr c, .mysterious_fossil_or_clefairy_doll
+	ld a, [wDuelTempList]
+	ldh [hTemp_ffa0], a
+	xor a
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, $03 ; OppAction_PlayEnergyCard
+	bank1call AIMakeDecision
+
+.mysterious_fossil_or_clefairy_doll
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp MYSTERIOUS_FOSSIL
+	jp z, Func_15e7c
+	cp CLEFAIRY_DOLL
+	jp z, Func_15e7c
+
+	pop af
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	ld b, a
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	jp z, .set_carry
+	cp PARALYZED
+	jp z, .set_carry
+	ld a, b
+	ldh [hTemp_ffa0], a
+
+	ld a, $ff
+	ldh [hTempRetreatCostCards], a
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	ld [$cdb8], a
+	or a
+	jp z, .retreat
+	xor a
+	call CreateArenaOrBenchEnergyCardList
+	ld e, $00
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	ld c, a
+	ld a, [$cdb8]
+	cp c
+	jr nz, .asm_15df5
+
+	ld hl, hTempRetreatCostCards
+	ld de, wDuelTempList
+.loop_1
+	ld a, [de]
+	inc de
+	ld [hli], a
+	cp $ff
+	jr nz, .loop_1
+	jp .retreat
+
+.asm_15df5
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [$cdb9], a
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [$cdba], a
+	ld a, [$cdb8]
+	ld c, a
+	ld hl, wDuelTempList
+	ld de, hTempRetreatCostCards
+.loop_2
+	ld a, c
+	cp 2
+	jr c, .asm_15e37
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15e37
+	ld [de], a
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp DOUBLE_COLORLESS_ENERGY
+	jr nz, .loop_2
+	ld a, [de]
+	call RemoveCardFromDuelTempList
+	dec hl
+	inc de
+	dec c
+	dec c
+	jr nz, .loop_2
+	jr .asm_15e70
+
+.asm_15e37
+	ld hl, wDuelTempList
+	call CountCardsInDuelTempList
+	call ShuffleCards
+.asm_15e40
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_15e56
+	ld [de], a
+	call Func_14184
+	jr c, .asm_15e40
+	ld a, [de]
+	call RemoveCardFromDuelTempList
+	dec hl
+	inc de
+	dec c
+	jr nz, .asm_15e40
+	jr .asm_15e70
+
+.asm_15e56
+	ld hl, wDuelTempList
+.loop_3
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	ld [de], a
+	inc de
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp DOUBLE_COLORLESS_ENERGY
+	jr nz, .asm_15e6d
+	dec c
+	jr z, .asm_15e70
+.asm_15e6d
+	dec c
+	jr nz, .loop_3
+.asm_15e70
+	ld a, $ff
+	ld [de], a
+	
+.retreat
+	ld a, $04 ; OppAction_AttemptRetreat
+	bank1call AIMakeDecision
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x15e7c
+
+Func_15e7c ; 15e7c (5:5e7c)
+	INCROM $15e7c, $15ea6
 
 ; Copy cards from wDuelTempList to wHandTempList
 CopyHandCardList: ; 15ea6 (5:5ea6)
