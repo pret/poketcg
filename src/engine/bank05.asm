@@ -201,7 +201,65 @@ Func_14145: ; 14145 (5:4145)
 	INCROM $14145, $14184
 
 Func_14184: ; 14184 (5:4184)
-	INCROM $14184, $14226
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp DOUBLE_COLORLESS_ENERGY
+	jr z, .set_carry
+	ld a, [wTempCardType]
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr z, .set_carry
+	ld a, [wTempCardID]
+
+	ld d, PSYCHIC_ENERGY
+	cp EXEGGCUTE
+	jr z, .check_energy
+	cp EXEGGUTOR
+	jr z, .check_energy
+	cp PSYDUCK
+	jr z, .check_energy
+	cp GOLDUCK
+	jr z, .check_energy
+
+	ld d, WATER_ENERGY
+	cp SURFING_PIKACHU1
+	jr z, .check_energy
+	cp SURFING_PIKACHU2
+	jr z, .check_energy
+
+	cp EEVEE
+	jr nz, .check_type
+	ld a, e
+	cp WATER_ENERGY
+	jr z, .set_carry
+	cp FIRE_ENERGY
+	jr z, .set_carry
+	cp LIGHTNING_ENERGY
+	jr z, .set_carry
+
+.check_type
+	ld d, $00
+	call GetCardType
+	ld d, a
+	ld a, [wTempCardType]
+	cp d
+	jr z, .set_carry
+	pop de
+	or a
+	ret
+	
+.check_energy
+	ld a, d
+	cp e
+	jr nz, .check_type
+.set_carry
+	pop de
+	scf
+	ret
+; 0x141da
+
+Func_141da: ; 141da (5:41da)
+	INCROM $141da, $14226
 
 Func_14226: ; 14226 (5:4226)
 	call CreateHandCardList
@@ -2167,9 +2225,9 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp MYSTERIOUS_FOSSIL
-	jp z, Func_15e7c
+	jp z, .asm_15e7c
 	cp CLEFAIRY_DOLL
-	jp z, Func_15e7c
+	jp z, .asm_15e7c
 
 	pop af
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -2189,7 +2247,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
-	ld [$cdb8], a
+	ld [wTempCardRetreatCost], a
 	or a
 	jp z, .retreat
 	xor a
@@ -2198,7 +2256,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	ld c, a
-	ld a, [$cdb8]
+	ld a, [wTempCardRetreatCost]
 	cp c
 	jr nz, .asm_15df5
 
@@ -2217,12 +2275,12 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
-	ld [$cdb9], a
+	ld [wTempCardID], a
 	call LoadCardDataToBuffer1_FromCardID
 	ld a, [wLoadedCard1Type]
 	or TYPE_ENERGY
-	ld [$cdba], a
-	ld a, [$cdb8]
+	ld [wTempCardType], a
+	ld a, [wTempCardRetreatCost]
 	ld c, a
 	ld hl, wDuelTempList
 	ld de, hTempRetreatCostCards
@@ -2290,7 +2348,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 .asm_15e70
 	ld a, $ff
 	ld [de], a
-	
+
 .retreat
 	ld a, $04 ; OppAction_AttemptRetreat
 	bank1call AIMakeDecision
@@ -2299,10 +2357,31 @@ Func_15d4f: ; 15d4f (5:5d4f)
 .set_carry
 	scf
 	ret
-; 0x15e7c
 
-Func_15e7c ; 15e7c (5:5e7c)
-	INCROM $15e7c, $15ea6
+.asm_15e7c:
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 2
+	jr nc, .asm_15e88
+	pop af
+	jr .set_carry
+.asm_15e88
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ldh [hTempCardIndex_ff9f], a
+	xor a
+	ldh [hTemp_ffa0], a
+	ld a, $0c ; OppAction_UsePokemonPower
+	bank1call AIMakeDecision
+	pop af
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, $0d ; OppAction_ExecutePokemonPowerEffect
+	bank1call AIMakeDecision
+	ld a, $16 ; OppAction_DrawDuelMainScene
+	bank1call AIMakeDecision
+	or a
+	ret
+; 0x15ea6
 
 ; Copy cards from wDuelTempList to wHandTempList
 CopyHandCardList: ; 15ea6 (5:5ea6)

@@ -1184,16 +1184,25 @@ wcdae:: ; cdae
 
 	ds $5
 
+; information about various properties of
+; loaded move for AI calculations
 wTempLoadedMoveEnergyCost:: ; cdb5
 	ds $1
-
 wTempLoadedMoveEnergyNeededType:: ; cdb6
 	ds $1
-
 wTempLoadedMoveEnergyNeededAmount:: ; cdb7
 	ds $1
 
-	ds $6
+; used for the AI to store various
+; details about a given card
+wTempCardRetreatCost:: ; cdb8
+	ds $1
+wTempCardID:: ; cdb9
+	ds $1
+wTempCardType:: ; cdba
+	ds $1
+
+	ds $3
 
 ; used for AI to score decisions for actions
 wAIScore:: ; cdbe
