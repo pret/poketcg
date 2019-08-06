@@ -200,6 +200,21 @@ StoreDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
 Func_14145: ; 14145 (5:4145)
 	INCROM $14145, $14184
 
+; return carry if any of the following is satisfied:
+;	- deck index in a corresponds to a double colorless energy card;
+;	- card type in wTempCardType is double colorless energy;
+;	- card ID in wTempCardID is a Pokémon card that has
+;	  moves that require energy other than its color and
+;	  the deck index in a corresponds to that energy type;
+;	- card ID is Eevee and a corresponds to an energy type
+;	  of water, fire or lightning;
+;	- type of card in register a is the same as wTempCardType.
+; used for knowing if a given energy card can be discarded
+; from a given Pokémon card
+; input:
+;	a = energy card attached to Pokémon to check
+;	[wTempCardType] = TYPE_ENERGY_* of given Pokémon
+;	[wTempCardID] = card index of Pokémon card to check
 Func_14184: ; 14184 (5:4184)
 	push de
 	call GetCardIDFromDeckIndex
@@ -238,7 +253,7 @@ Func_14184: ; 14184 (5:4184)
 	jr z, .set_carry
 
 .check_type
-	ld d, $00
+	ld d, $00 ; unnecessary?
 	call GetCardType
 	ld d, a
 	ld a, [wTempCardType]
@@ -2174,20 +2189,23 @@ Func_15b72: ; 15b72 (5:5b72)
 	jp FindHighestBenchScore
 ; 0x15d4f
 
+; handles AI action of retreating Arena Pokémon
+; and chooses which energy cards to discard
+; if card can't discard, return carry
 Func_15d4f: ; 15d4f (5:5d4f)
 	push af
 	ld a, [$cdd7]
 	or a
-	jr z, .mysterious_fossil_or_clefairy_doll
+	jr z, .check_id
 
 ; check status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
 	cp ASLEEP
-	jp z, .mysterious_fossil_or_clefairy_doll
+	jp z, .check_id
 	cp PARALYZED
-	jp z, .mysterious_fossil_or_clefairy_doll
+	jp z, .check_id
 
 ; if an energy card hasn't been played yet,
 ; checks if the Pokémon needs just one more energy to retreat
@@ -2195,7 +2213,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 ; and if there are, play that energy card
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .mysterious_fossil_or_clefairy_doll
+	jr nz, .check_id
 	ld e, PLAY_AREA_ARENA
 	call CountNumberOfEnergyCardsAttached
 	push af
@@ -2204,14 +2222,14 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	call GetPlayAreaCardRetreatCost
 	pop bc
 	cp b
-	jr c, .mysterious_fossil_or_clefairy_doll
-	jr z, .mysterious_fossil_or_clefairy_doll
+	jr c, .check_id
+	jr z, .check_id
 	; energy attached < retreat cost
 	sub b
 	cp 1
-	jr nz, .mysterious_fossil_or_clefairy_doll
+	jr nz, .check_id
 	call CreateEnergyCardListFromHand
-	jr c, .mysterious_fossil_or_clefairy_doll
+	jr c, .check_id
 	ld a, [wDuelTempList]
 	ldh [hTemp_ffa0], a
 	xor a
@@ -2219,16 +2237,18 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ld a, $03 ; OppAction_PlayEnergyCard
 	bank1call AIMakeDecision
 
-.mysterious_fossil_or_clefairy_doll
+.check_id
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp MYSTERIOUS_FOSSIL
-	jp z, .asm_15e7c
+	jp z, .mysterious_fossil_or_clefairy_doll
 	cp CLEFAIRY_DOLL
-	jp z, .asm_15e7c
+	jp z, .mysterious_fossil_or_clefairy_doll
 
+; if card is Asleep or Paralyzed, set carry and exit
+; else, load the status in hTemp_ffa0
 	pop af
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, DUELVARS_ARENA_CARD_STATUS
@@ -2241,24 +2261,29 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	jp z, .set_carry
 	ld a, b
 	ldh [hTemp_ffa0], a
-
 	ld a, $ff
 	ldh [hTempRetreatCostCards], a
+
+; check energy required to retreat
+; if the cost is 0, retreat right away
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	ld [wTempCardRetreatCost], a
 	or a
 	jp z, .retreat
+
+; if cost > 0 and number of energy cards attached == cost
+; discard them all
 	xor a
 	call CreateArenaOrBenchEnergyCardList
-	ld e, $00
+	ld e, PLAY_AREA_ARENA
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	ld c, a
 	ld a, [wTempCardRetreatCost]
 	cp c
-	jr nz, .asm_15df5
+	jr nz, .choose_energy_discard
 
 	ld hl, hTempRetreatCostCards
 	ld de, wDuelTempList
@@ -2270,7 +2295,9 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	jr nz, .loop_1
 	jp .retreat
 
-.asm_15df5
+; if cost > 0 and number of energy cards attached > cost
+; choose energy cards to discard according to color
+.choose_energy_discard
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -2282,15 +2309,18 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ld [wTempCardType], a
 	ld a, [wTempCardRetreatCost]
 	ld c, a
+
+; first, look for and discard double colorless energy
+; if retreat cost is >= 2
 	ld hl, wDuelTempList
 	ld de, hTempRetreatCostCards
 .loop_2
 	ld a, c
 	cp 2
-	jr c, .asm_15e37
+	jr c, .energy_not_same_color
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15e37
+	jr z, .energy_not_same_color
 	ld [de], a
 	push de
 	call GetCardIDFromDeckIndex
@@ -2305,30 +2335,39 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	dec c
 	dec c
 	jr nz, .loop_2
-	jr .asm_15e70
+	jr .end_retreat_list
 
-.asm_15e37
+; second, shuffle attached cards and discard energy cards
+; that are not of the same type as the Pokémon
+; the exception for this are cards that are needed for 
+; some attacks but are not of the same color as the Pokémon
+; (i.e. Psyduck's Headache attack)
+; and energy cards attached to Eevee corresponding to a
+; color of any of its evolutions (water, fire, lightning)
+.energy_not_same_color
 	ld hl, wDuelTempList
 	call CountCardsInDuelTempList
 	call ShuffleCards
-.asm_15e40
+.loop_3
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_15e56
+	jr z, .any_energy
 	ld [de], a
 	call Func_14184
-	jr c, .asm_15e40
+	jr c, .loop_3
 	ld a, [de]
 	call RemoveCardFromDuelTempList
 	dec hl
 	inc de
 	dec c
-	jr nz, .asm_15e40
-	jr .asm_15e70
+	jr nz, .loop_3
+	jr .end_retreat_list
 
-.asm_15e56
+; third, discard any card until
+; cost requirement is met
+.any_energy
 	ld hl, wDuelTempList
-.loop_3
+.loop_4
 	ld a, [hli]
 	cp $ff
 	jr z, .set_carry
@@ -2339,13 +2378,14 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ld a, e
 	pop de
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .asm_15e6d
+	jr nz, .not_double_colorless
 	dec c
-	jr z, .asm_15e70
-.asm_15e6d
+	jr z, .end_retreat_list
+.not_double_colorless
 	dec c
-	jr nz, .loop_3
-.asm_15e70
+	jr nz, .loop_4
+
+.end_retreat_list
 	ld a, $ff
 	ld [de], a
 
@@ -2358,14 +2398,19 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	scf
 	ret
 
-.asm_15e7c:
+; handle Mysterious Fossil and Clefairy Doll
+; if there are bench Pokémon, use effect to discard card
+; this is equivalent to using its Pokémon Power
+.mysterious_fossil_or_clefairy_doll:
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
-	jr nc, .asm_15e88
+	jr nc, .has_bench
+	; doesn't have any bench
 	pop af
 	jr .set_carry
-.asm_15e88
+
+.has_bench
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ldh [hTempCardIndex_ff9f], a
