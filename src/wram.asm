@@ -1243,7 +1243,24 @@ wAIOpponentPrizeCount:: ; cdd3
 wTempCardIDToLook:: ; cdd4
 	ds $1
 
-	ds $5
+wcdd5:: ; cdd5
+	ds $1
+
+wcdd6:: ; cdd6
+	ds $1
+
+; whether AI is allowed to play an energy card
+; from the hand in order to retreat arena card
+;	$00 = not allowed
+;	$01 = allowed
+wAIPlayEnergyCardForRetreat:: ; cdd7
+	ds $1
+
+wcdd8:: ; cdd8
+	ds $1
+
+wcdd9:: ; cdd9
+	ds $1
 
 wcdda:: ; cdda
 	ds $1

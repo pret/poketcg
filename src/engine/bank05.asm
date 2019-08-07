@@ -1434,7 +1434,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	or a
 	jp nz, .no_carry
 	xor a
-	ld [$cdd7], a
+	ld [wAIPlayEnergyCardForRetreat], a
 	call StoreDefendingPokemonColorWRAndPrizeCards
 	ld a, 128 ; initial retreat score
 	ld [wAIScore], a
@@ -1494,7 +1494,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	cp 2
 	jr nc, .check_prize_count
 	ld a, $01
-	ld [$cdd7], a
+	ld [wAIPlayEnergyCardForRetreat], a
 
 .defending_cant_ko
 	call CheckIfNotABossDeckID
@@ -1683,15 +1683,17 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, 2
 	call AddToAIScore
 
+; a bench Pokémon was found that can KO
+; if this is a boss deck and it's at last prize card
+; if arena Pokémon cannot KO, add to AI score
+; and set wAIPlayEnergyCardForRetreat to $01
+
 	ld a, [wAIOpponentPrizeCount]
 	cp 2
 	jr nc, .check_defending_id
 	call CheckIfNotABossDeckID
 	jr c, .check_defending_id
 
-; is boss deck and is at last prize card
-; if arena Pokémon cannot KO or cannot use
-; its first move, add to AI score
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -1702,7 +1704,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, 40
 	call AddToAIScore
 	ld a, $01
-	ld [$cdd7], a
+	ld [wAIPlayEnergyCardForRetreat], a
 
 .check_defending_id
 	ld a, DUELVARS_ARENA_CARD
@@ -1746,7 +1748,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	ld a, 5
 	call AddToAIScore
 	ld a, $01
-	ld [$cdd7], a
+	ld [wAIPlayEnergyCardForRetreat], a
 
 ; subtract from wAIScore if retreat cost is larger than 1
 ; then check if any cards have at least half HP,
@@ -2194,9 +2196,13 @@ Func_15b72: ; 15b72 (5:5b72)
 ; if card can't discard, return carry
 Func_15d4f: ; 15d4f (5:5d4f)
 	push af
-	ld a, [$cdd7]
+	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
 	jr z, .check_id
+
+; AI is allowed to play an energy card
+; from the hand in order to provide
+; the necessary energy for retreat cost
 
 ; check status
 	ld a, DUELVARS_ARENA_CARD_STATUS
