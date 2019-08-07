@@ -1205,7 +1205,71 @@ Func_1468b: ; 1468b (5:468b)
 	ret
 ; 0x14786
 
-	INCROM $14786, $1514f
+Func_14786: ; 14786 (5:4786)
+	INCROM $14786, $14c91
+
+Func_14c91: ; 14c91 (5:4c91)
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	cp 3
+	ret c
+
+; player prizes >= 3
+	ld a, $59
+	call Func_17474
+	jr c, .asm_14ccb
+	ld a, $5e
+	call Func_17474
+	jr c, .asm_14cb4
+	ld a, $4c
+	call Func_17474
+	jr c, .asm_14cb4
+	jr .asm_14ccb
+
+.asm_14cb4
+	ld a, $59
+	ld b, $01
+	call Func_155ef
+	jr nc, .asm_14ccb
+	ld e, a
+	call CountNumberOfEnergyCardsAttached
+	cp 3
+	jr nc, .asm_14ccb
+	ld a, $59
+	call Func_174cd
+	ret
+
+.asm_14ccb
+	ld a, $5e
+	ld b, $01
+	call Func_155ef
+	jr nc, .asm_14cda
+	ld a, $5e
+	call Func_174cd
+	ret
+
+.asm_14cda
+	ld a, $4c
+	ld b, $01
+	call Func_155ef
+	jr nc, .asm_14ce9
+	ld a, $4c
+	call Func_174cd
+	ret
+
+.asm_14ce9
+	ld a, $4b
+	ld b, $01
+	call Func_155ef
+	ret nc
+	ld a, $4b
+	call Func_174cd
+	ret
+; 0x14cf7
+
+Func_14cf7: ; 14cf7 (5:4cf7)
+	INCROM $14cf7, $1514f
 
 ; these seem to be lists of card IDs
 ; for the AI to look up in their hand
@@ -3570,10 +3634,295 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 ; 0x16488
 
 Func_16488 ; 16488 (5:6488)
-	INCROM $16488, $164e8
+	INCROM $16488, $164d3
 
-Func_164e8 ; 164e8 (5:64e8)
-	INCROM $164e8, $169f8
+; copies bench AI score to wcddd
+; and loads in wAIscore value in wcde3
+Func_164d3: ; 164d3 (5:64d3)
+	push af
+	ld de, wBenchAIScore
+	ld hl, wcddd
+	ld b, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+	ld a, [hl]
+	ld [wAIScore], a
+	pop af
+	ret
+; 0x164e8
+
+Func_164e8: ; 164e8 (5:64e8)
+	xor a
+	ld [wcdd8], a
+	call CreateEnergyCardListFromHand
+	jr nc, .has_energy
+
+; no energy
+	ld a, [wcdd8]
+	or a
+	jr z, .exit
+	; can this even be reached?
+	jp Func_164d3
+.exit
+	or a
+	ret
+
+.has_energy
+	ld a, $80
+	ld b, MAX_PLAY_AREA_POKEMON
+	ld hl, wcde4
+.loop
+	ld [hli], a
+	dec b
+	jr nz, .loop
+
+	call Func_175bd
+	ld b, PLAY_AREA_ARENA
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+
+.asm_16512
+	push bc
+	ld a, b
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, $80
+	ld [wAIScore], a
+	ld a, $ff
+	ld [wCurCardPlayAreaLocation], a
+	ld a, [wcdd8]
+	and $02
+	jr nz, .check_venusaur
+
+	call CreateHandCardList
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld [wCurCardCanAttack], a
+	call GetMovesEnergyCostBits
+	ld hl, wDuelTempList
+	call CheckEnergyFlagsNeededInList
+	jp nc, .asm_16661
+	ld a, [wCurCardCanAttack]
+	call CheckForEvolutionInList
+	jr nc, .asm_16552
+	ld [wCurCardPlayAreaLocation], a
+	ld a, 2
+	call AddToAIScore
+	jr .check_venusaur
+.asm_16552
+	ld a, [wCurCardCanAttack]
+	call CheckForEvolutionInDeck
+	jr nc, .check_venusaur
+	ld a, 1
+	call AddToAIScore
+
+; if there's no Muk in Play Area
+; and there's Venusaur1, add to AI score
+.check_venusaur
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_16572
+	ld a, VENUSAUR2
+	call CountPokemonIDInPlayArea
+	jr nc, .asm_16572
+	ld a, 1
+	call AddToAIScore
+
+.asm_16572
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .bench
+
+; arena
+	ld a, [wcda7]
+	bit 7, a
+	jr z, .check_arena_hp
+	ld a, 5
+	call SubFromAIScore
+	jr .check_defending_can_ko
+
+; lower AI score if poison/double poison
+; will KO Pokémon between turns
+; or if the defending Pokémon can KO
+.check_arena_hp
+	ld a, 4
+	call AddToAIScore
+
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	call CalculateTensDigit
+	cp 3
+	jr nc, .check_defending_can_ko
+; hp < 30
+	cp 2
+	jr z, .has_20_hp
+; hp = 10
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and POISONED
+	jr z, .check_defending_can_ko
+	jr .poison_will_ko
+.has_20_hp
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and DOUBLE_POISONED
+	jr z, .check_defending_can_ko
+.poison_will_ko
+	ld a, 10
+	call SubFromAIScore
+	jr .check_bench
+.check_defending_can_ko
+	call CheckIfDefendingPokemonCanKnockOut
+	jr nc, .asm_165e1
+	ld a, 10
+	call SubFromAIScore
+
+; if either poison will KO or
+; defending Pokémon can KO,
+; check if there are bench Pokémon
+; if there are not, add AI score
+.check_bench
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	jr nz, .asm_165e1
+	ld a, 6
+	call AddToAIScore
+	jr .asm_165e1
+
+; lower AI score by 3 - (bench HP)/10
+; if bench HP < 30
+.bench
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	call CalculateTensDigit
+	cp 3
+	jr nc, .asm_165e1
+; hp < 30
+	ld b, a
+	ld a, 3
+	sub b
+	call SubFromAIScore
+
+.asm_165e1
+	ld a, [wcdb3]
+	or a
+	jr z, .asm_1662f
+	ld h, a
+	ld a, [wcdb2]
+	ld l, a
+
+	push hl
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	pop hl
+.asm_165f8
+	ld a, [hli]
+	or a
+	jr z, .asm_1662f
+	cp e
+	jr nz, .asm_1662b
+	ld a, [hli]
+	ld d, a
+	push de
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	pop de
+	cp d
+	jr c, .asm_16616
+	ld a, $0a
+	call SubFromAIScore
+	jr .asm_16661
+.asm_16616
+	ld a, [hli]
+	cp $80
+	jr c, .asm_16622
+	sub $80
+	call AddToAIScore
+	jr .asm_1662f
+.asm_16622
+	ld d, a
+	ld a, $80
+	sub d
+	call SubFromAIScore
+	jr .asm_1662f
+.asm_1662b
+	inc hl
+	inc hl
+	jr .asm_165f8
+
+.asm_1662f
+	call CheckIfNotABossDeckID
+	jr c, .asm_16653
+	call Func_174f2
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld c, a
+	ld b, $00
+	ld hl, wcde4
+	add hl, bc
+	ld a, [hl]
+	cp $80
+	jr c, .asm_1664c
+	sub $80
+	call AddToAIScore
+	jr .asm_16653
+.asm_1664c
+	ld b, a
+	ld a, $80
+	sub b
+	call SubFromAIScore
+.asm_16653
+	ld a, 1
+	call AddToAIScore
+	
+	xor a
+	call Func_16695
+	ld a, $01
+	call Func_16695
+.asm_16661
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld c, a
+	ld b, $00
+	ld hl, wBenchAIScore
+	add hl, bc
+	ld a, [wAIScore]
+	ld [hl], a
+	pop bc
+	inc b
+	dec c
+	jp nz, .asm_16512
+	call Func_167b5
+	jp nc, Func_1668a
+	ld a, [wcdd8]
+	or a
+	jr z, .asm_16684
+	scf
+	jp Func_164d3
+.asm_16684
+	call CreateEnergyCardListFromHand
+	jp Func_1689f
+; 0x1668a
+
+Func_1668a ; 1668a (5:668a)
+	INCROM $1668a, $16695
+
+Func_16695 ; 16695 (5:6695)
+	INCROM $16695, $167b5
+
+Func_167b5 ; 167b5 (5:67b5)
+	INCROM $167b5, $1689f
+
+Func_1689f ; 1689f (5:689f)
+	INCROM $1689f, $169f8
 
 Func_169f8 ; 169f8 (5:69f8)
 	INCROM $169f8, $170c9
@@ -3915,4 +4264,84 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 ; 0x1743b
 
 Func_1743b ; 1743b (5:743b)
-	INCROM $1743b, $18000
+	INCROM $1743b, $17474
+
+Func_17474: ; 17474 (5:7474)
+	ld [wcdf9], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	push de
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	lb bc, 0, 0
+	push hl
+
+.loop
+	inc c
+	pop hl
+	ld a, [hli]
+	push hl
+	cp $ff
+	jr z, .asm_174bf
+	ld d, a
+	push de
+	push bc
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop bc
+	ld a, c
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wLoadedCard1HP]
+	rrca
+	cp d
+	pop de
+	jr nc, .loop
+	ld a, [wLoadedCard1ID]
+	ld hl, wcdf9
+	cp [hl]
+	jr nz, .loop
+	
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	push bc
+	call CheckIfCardCanUseSelectedMove
+	pop bc
+	jr c, .loop
+	inc b
+.asm_174bf
+	pop hl
+	pop de
+	ld a, e
+	ld [wSelectedMoveIndex], a
+	ld a, d
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, b
+	or a
+	ret z
+	scf
+	ret
+; 0x174cd
+
+Func_174cd ; 174cd (5:74cd)
+	INCROM $174cd, $174f2
+
+Func_174f2 ; 174f2 (5:74f2)
+	INCROM $174f2, $175bd
+
+Func_175bd: ; 175bd (5:75bd)
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_ARTICUNO_DECK_ID
+	jr z, .articuno_deck
+	ret
+.articuno_deck
+	call Func_14c91
+	ret
+; 0x175c9
+
+Func_175c9 ; 175c9 (5:75c9)
+	INCROM $175c9, $18000

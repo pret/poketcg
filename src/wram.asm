@@ -1190,7 +1190,14 @@ wcda7:: ; cda7
 wcdae:: ; cdae
 	ds $2
 
-	ds $5
+	ds $2
+
+wcdb2:: ; cdb2
+	ds $1
+wcdb3:: ; cdb3
+	ds $1
+
+	ds $1
 
 ; information about various properties of
 ; loaded move for AI calculations
@@ -1271,7 +1278,16 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-	ds $14
+wcddd:: ; cddd
+	ds MAX_PLAY_AREA_POKEMON
+
+wcde3:: ; cde3
+	ds $1
+
+wcde4:: ; cde4
+	ds MAX_PLAY_AREA_POKEMON
+
+	ds $7
 	
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 ; used by the AI to temporarily store card location
@@ -1296,7 +1312,12 @@ wTempAIPokemonCard:: ; cdf3
 wCurCardCanKO:: ; cdf4
 	ds $1
 
-	ds $b
+	ds $4
+
+wcdf9:: ; cdf9
+	ds $1
+
+	ds $6
 
 wce00:: ; ce00
 	ds $1
