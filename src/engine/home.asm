@@ -3290,8 +3290,8 @@ MoveDiscardPileCardToHand: ; 1182 (0:1182)
 	ret
 ; 0x11a5
 
-; return in the z flag whether turn holder's prize a (0-7) has been taken or not
-; z: taken, nz: not taken
+; return in the z flag whether turn holder's prize a (0-7) has been drawn or not
+; z: drawn, nz: not drawn
 CheckPrizeTaken: ; 11a5 (0:11a5)
 	ld e, a
 	ld d, 0
@@ -4023,8 +4023,8 @@ PutHandCardInPlayArea: ; 14d2 (0:14d2)
 	ret
 ; 0x14dd
 
-; move the play area Pokemon card of the turn holder at CARD_LOCATION_PLAY_AREA + a
-; to the discard pile
+; move the Pokemon card of the turn holder in the
+; PLAY_AREA_* location given in e to the discard pile
 MovePlayAreaCardToDiscardPile: ; 14dd (0:14dd)
 	call EmptyPlayAreaSlot
 	ld l, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -4293,9 +4293,9 @@ GetNonTurnDuelistVariable: ; 1611 (0:1611)
 	ldh a, [hWhoseTurn]
 	ld h, OPPONENT_TURN
 	cp PLAYER_TURN
-	jr z, .asm_161c
+	jr z, .ok
 	ld h, PLAYER_TURN
-.asm_161c
+.ok
 	ld a, [hl]
 	ret
 ; 0x161e
@@ -4498,17 +4498,17 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 	ld a, EFFECTCMDTYPE_DISCARD_ENERGY
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
-	jp c, DealConfusionDamageToSelf
+	jp c, HandleConfusionDamageToSelf
 	call DrawDuelMainScene_PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
 	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
 	call TryExecuteEffectCommandFunction
-	ld a, OPPACTION_DEAL_ATTACK_DAMAGE
+	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
 	call SetOppAction_SerialSendDuelData
 ;	fallthrough
 
-DealAttackDamage: ; 179a (0:179a)
+PlayAttackAnimation_DealAttackDamage: ; 179a (0:179a)
 	call Func_7415
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
@@ -4534,9 +4534,9 @@ DealAttackDamage: ; 179a (0:179a)
 	call GetNonTurnDuelistVariable
 	push de
 	push hl
-	call Func_7494
+	call PlayMoveAnimation
 	call Func_741a
-	call Func_7484
+	call WaitMoveAnimation
 	pop hl
 	pop de
 	call SubstractHP
@@ -4579,9 +4579,11 @@ DisplayUsePokemonPowerScreen_WaitForInput: ; 1819 (0:1819)
 	push hl
 	call DisplayUsePokemonPowerScreen
 	pop hl
+;	fallthrough
 
 DrawWideTextBox_WaitForInput_ReturnCarry: ; 181e (0:181e)
 	call DrawWideTextBox_WaitForInput
+;	fallthrough
 
 ReturnCarry: ; 1821 (0:1821)
 	scf
@@ -4592,7 +4594,9 @@ ClearNonTurnTemporaryDuelvars_ResetCarry: ; 1823 (0:1823)
 	or a
 	ret
 
-DealConfusionDamageToSelf: ; 1828 (0:1828)
+; called when attacker deals damage to itself due to confusion
+; display the corresponding animation and deal damage to self
+HandleConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call DrawDuelMainScene
 	ld a, 1
 	ld [wIsDamageToSelf], a
@@ -4601,7 +4605,7 @@ DealConfusionDamageToSelf: ; 1828 (0:1828)
 	ld a, $75
 	ld [wLoadedMoveAnimation], a
 	ld a, 20 ; damage
-	call Func_195c
+	call DealConfusionDamageToSelf
 	call Func_1bb4
 	call Func_6e49
 	bank1call ClearNonTurnTemporaryDuelvars
@@ -4775,8 +4779,7 @@ Func_1955: ; 1955 (0:1955)
 	pop af
 ;	fallthrough
 
-; this function appears to handle dealing damage to self due to confusion
-Func_195c: ; 195c (0:195c)
+DealConfusionDamageToSelf: ; 195c (0:195c)
 	ld hl, wDamage
 	ld [hli], a
 	ld [hl], 0
@@ -4789,13 +4792,13 @@ Func_195c: ; 195c (0:195c)
 	push af
 	ld a, [wTempTurnDuelistCardID]
 	ld [wTempNonTurnDuelistCardID], a
-	bank1call ApplyDamageModifiers_DamageToSelf ; switch to bank 1, but call a home func
+	bank1call ApplyDamageModifiers_DamageToSelf ; this is at bank 0
 	ld a, [wDamageEffectiveness]
 	ld c, a
 	ld b, $0
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	bank1call Func_7469
+	bank1call PlayAttackAnimation_DealAttackDamageSimple
 	call PrintKnockedOutIfHLZero
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
@@ -5042,11 +5045,11 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 	ret
 ; 0x1af3
 
-; seems to be a function to deal damage to a card, but can be used
-; to deal damage to a benched Pokemon.
+; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
+; damage to deal is given in de.
 ; shows the defending player's play area screen when dealing the damage
-; instead of the main duel interface, and has a fixed move animation
-Func_1af3: ; 1af3 (0:1af3)
+; instead of the main duel interface, and has a fixed move animation.
+DealDamageToPlayAreaPokemon: ; 1af3 (0:1af3)
 	ld a, $78
 	ld [wLoadedMoveAnimation], a
 	ld a, b
@@ -5110,7 +5113,7 @@ Func_1af3: ; 1af3 (0:1af3)
 	ld b, a
 	or a ; cp PLAY_AREA_ARENA
 	jr nz, .benched
-	; add damage at de to [wDealtDamage]
+	; if arena Pokemon, add damage at de to [wDealtDamage]
 	ld hl, wDealtDamage
 	ld a, e
 	add [hl]
@@ -5123,7 +5126,7 @@ Func_1af3: ; 1af3 (0:1af3)
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	push af
-	bank1call Func_7469
+	bank1call PlayAttackAnimation_DealAttackDamageSimple
 	pop af
 	or a
 	jr z, .skip_knocked_out
@@ -9294,14 +9297,14 @@ OpenDuelCheckMenu: ; 3096 (0:3096)
 	call BankswitchROM
 	ret
 
-Func_30a6: ; 30a6 (0:30a6)
+OpenInPlayAreaScreen_FromSelectButton: ; 30a6 (0:30a6)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_180d5)
+	ld a, BANK(OpenInPlayAreaScreen)
 	call BankswitchROM
 	ld a, $1
-	ld [wce60], a
-	call Func_180d5
+	ld [wInPlayAreaFromSelectButton], a
+	call OpenInPlayAreaScreen
 	pop bc
 	ld a, b
 	call BankswitchROM
@@ -10211,8 +10214,10 @@ IsPrehistoricPowerActive: ; 35b7 (0:35b7)
 	ret
 ; 0x35c7
 
-; clears some SUBSTATUS2 conditions from the turn holder's active Pokemon
-Func_35c7: ; 35c7 (0:35c7)
+; clears some SUBSTATUS2 conditions from the turn holder's active Pokemon.
+; more specifically, those conditions that reduce the damage from an attack
+; or prevent the opposing Pokemon from attacking the substatus condition inducer.
+ClearDamageReductionSubstatus2: ; 35c7 (0:35c7)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
 	or a
@@ -11215,19 +11220,21 @@ Func_3b31: ; 3b31 (0:3b31)
 	call BankswitchROM
 	ret
 
-Func_3b52: ; 3b52 (0:3b52)
+; return nc if wd42a, wd4c0, and wAnimationQueue[] are all equal to $ff
+; nc means no animation is playing (or animation(s) has/have ended)
+CheckAnyAnimationPlaying: ; 3b52 (0:3b52)
 	push hl
 	push bc
 	ld a, [wd42a]
 	ld hl, wd4c0
 	and [hl]
-	ld hl, wd423
-	ld c, $7
-.asm_3b60
+	ld hl, wAnimationQueue
+	ld c, ANIMATION_QUEUE_LENGTH
+.loop
 	and [hl]
 	inc hl
 	dec c
-	jr nz, .asm_3b60
+	jr nz, .loop
 	cp $ff
 	pop bc
 	pop hl
@@ -11250,7 +11257,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ld a, [wd4ac]
 	cp [hl]
 	jr nz, .asm_3b90
-	call Func_3b52
+	call CheckAnyAnimationPlaying
 	jr nc, .asm_3b95
 .asm_3b90
 	call $4a31

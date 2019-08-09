@@ -161,7 +161,7 @@ wPlayerArenaCardChangedResistance:: ; c2ea
 wPlayerArenaCardSubstatus3:: ; c2eb
 	ds $1
 
-; Each bit represents a prize (1 = not taken ; 0 = taken)
+; each bit represents a prize that this duelist can draw (1 = not drawn ; 0 = drawn)
 wPlayerPrizes:: ; c2ec
 	ds $1
 
@@ -780,6 +780,8 @@ wcbfa:: ; cbfa
 wcbfb:: ; cbfb
 	ds $1
 
+; used by Func_5805 to store the remaining Prizes, so that if more than that
+; amount would be taken, only the remaining amount is taken
 wcbfc:: ; cbfc
 	ds $1
 
@@ -959,7 +961,12 @@ wSelectedMoveIndex:: ; ccc6
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
 wNoDamageOrEffect:: ; ccc7
-	ds $2
+	ds $1
+
+; used by CountKnockedOutPokemon and Func_5805 to store the amount
+; of prizes to take (equal to the number of Pokemon knocked out)
+wccc8:: ; ccc8
+	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
 wGotHeadsFromConfusionCheck:: ; ccc9
@@ -982,6 +989,7 @@ wIsDamageToSelf:: ; cce6
 wcce7:: ; cce7
 	ds $1
 
+wcce8:: ; cce8
 	ds $1
 
 ; used in CopyDeckData
@@ -1385,20 +1393,35 @@ wCheckMenuPlayAreaWhichDuelist:: ; ce50
 wCheckMenuPlayAreaWhichLayout:: ; ce51
 	ds $1
 
-; holds the position of the cursor
-; when selecting a prize card
-wPrizeCardCursorPosition::
+; the position of cursor in the "In Play Area" screen
+wInPlayAreaCurPosition:: ; ce52
+
+; holds the position of the cursor when selecting a prize card
+wPrizeCardCursorPosition:: ; ce52
 	ds $1
+
+; pointer to the table which contains information for each key-press.
+wInPlayAreaInputTablePointer:: ; ce53
 
 wce53:: ; ce53
 	ds $2
 
-; same as wDuelInitialPrizes but
-; with upper 2 bits set
+; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
-	ds $3
+	ds $1
+
+; it's used for restore the position of cursor
+; when going into another view, and returning to
+; the previous view.
+wInPlayAreaPreservedPosition:: ; ce57
+	ds $1
+
+; it's used for checking if the player changed
+; the cursor in the play area view.
+wInPlayAreaTemporaryPosition:: ; ce58
+	ds $1
 
 wce59:: ; ce59
 	ds $1
@@ -1419,7 +1442,9 @@ wce5e:: ; ce5e
 wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 	ds $1
 
-wce60:: ; ce60
+; $00 when the "In Play Area" screen has been opened from the Check menu
+; $01 when the "In Play Area" screen has been opened by pressing the select button
+wInPlayAreaFromSelectButton:: ; ce60
 	ds $1
 
 wce61:: ; ce61
@@ -1506,7 +1531,9 @@ wcea1:: ; cea1
 
 	ds $1
 
-; used to blink the cursor in duel menu
+; it's used when the player enters check menu, and its sub-menus.
+; increases from 0x00 to 0xff. the game makes its blinking cursor by this.
+; note that the check menu also contains the pokemon glossary.
 wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
@@ -1604,8 +1631,13 @@ wcfda:: ; cfda
 
 	ds $7
 
+; it's a flag variable being used in play-area view.
+; need analysis.
 wcfe3:: ; cfe3
-	ds $4
+	ds $1
+
+wcfe4:: ; cfe4
+	ds $3
 
 ; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7
@@ -2090,8 +2122,11 @@ wd421:: ; d421
 wd422:: ; d422
 	ds $1
 
-wd423:: ; d423
-	ds $7
+; holds a list of animations to play
+; as long as any of the slot isn't $ff, there's something to play
+; it may actually not be a queue
+wAnimationQueue:: ; d423
+	ds ANIMATION_QUEUE_LENGTH
 
 wd42a:: ; d42a
 	ds $1

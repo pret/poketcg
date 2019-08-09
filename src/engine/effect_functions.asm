@@ -109,7 +109,7 @@ Func_2c08a: ; 2c08a (b:408a)
 Func_2c08c:
 	push de
 	push af
-	ld a, $11
+	ld a, OPPACTION_TOSS_COIN_A_TIMES
 	call SetOppAction_SerialSendDuelData
 	pop af
 	pop de
@@ -130,7 +130,39 @@ SetWasUnsuccessful: ; 2c0a2 (b:40a2)
 	ret
 ; 0x2c0a8
 
-	INCROM $2c0a8, $2c0d4
+Func_2c0a8: ; 2c0a8 (b:40a8)
+	ldh a, [hTemp_ffa0]
+	push af
+	ldh a, [hWhoseTurn]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_6B30
+	call SetOppAction_SerialSendDuelData
+	bank1call Func_4f2d
+	ld c, a
+	pop af
+	ldh [hTemp_ffa0], a
+	ld a, c
+	ret
+; 0x2c0bd
+
+Func_2c0bd: ; 2c0bd (b:40bd)
+	call ExchangeRNG
+	bank1call Func_4f2d
+	call ShuffleDeck
+	ret
+; 0x2c0c7
+
+Func_2c0c7: ; 2c0c7 (b:40c7)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+	or a
+	ret
+.player
+	scf
+	ret
+; 0x2c0d4
 
 ; Sets some flags for AI use
 ; if target poisoned
@@ -184,7 +216,46 @@ Func_2c0fb: ; 2c0fb (b:40fb)
 	ret
 ; 0x2c10b
 
-	INCROM $2c10b, $2c140
+Func_2c10b: ; 2c10b (b:410b)
+	ldh [hTempPlayAreaLocation_ff9d], a
+	bank1call Func_61a1
+	bank1call PrintPlayAreaCardList_EnableLCD
+	bank1call Func_6194
+	ret
+; 0x2c117
+
+; deal damage to all the turn holder's benched Pokemon
+; input: a = amount of damage to deal to each Pokemon
+DealDamageToAllBenchedPokemon: ; 2c117 (b:4117)
+	ld e, a
+	ld d, $00
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, PLAY_AREA_ARENA
+	jr .skip_to_bench
+.loop
+	push bc
+	call DealDamageToPlayAreaPokemon
+	pop bc
+.skip_to_bench
+	inc b
+	dec c
+	jr nz, .loop
+	ret
+; 0x2c12e
+
+Func_2c12e: ; 2c12e (b:412e)
+	ld [wLoadedMoveAnimation], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld b, a
+	ld c, $0 ; neither WEAKNESS nor RESISTANCE
+	ldh a, [hWhoseTurn]
+	ld h, a
+	bank1call PlayMoveAnimation
+	bank1call WaitMoveAnimation
+	ret
+; 0x2c140
 
 ; apply a status condition of type 1 identified by register a to the target
 ApplySubstatus1ToDefendingCard: ; 2c140 (b:4140)
