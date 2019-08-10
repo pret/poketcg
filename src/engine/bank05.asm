@@ -1208,6 +1208,9 @@ Func_1468b: ; 1468b (5:468b)
 Func_14786: ; 14786 (5:4786)
 	INCROM $14786, $14c91
 
+; if the player has more than 3 prize cards
+; check for certain card IDs in bench,
+; as well as their HP and energy cards attached
 Func_14c91: ; 14c91 (5:4c91)
 	call SwapTurn
 	call CountPrizes
@@ -1216,54 +1219,64 @@ Func_14c91: ; 14c91 (5:4c91)
 	ret c
 
 ; player prizes >= 3
-	ld a, $59
-	call Func_17474
-	jr c, .asm_14ccb
-	ld a, $5e
-	call Func_17474
-	jr c, .asm_14cb4
-	ld a, $4c
-	call Func_17474
-	jr c, .asm_14cb4
-	jr .asm_14ccb
+; if Lapras has more than half HP and
+; can use second move, check next for Articuno
+; otherwise, check if Articuno or Dewgong
+; have more than half HP and can use second move
+; and if so, the next Pokémon to check is Lapras
+	ld a, LAPRAS
+	call CheckForBenchIDAtHalfHPAndCanUseSecondMove
+	jr c, .articuno
+	ld a, ARTICUNO1
+	call CheckForBenchIDAtHalfHPAndCanUseSecondMove
+	jr c, .lapras
+	ld a, DEWGONG
+	call CheckForBenchIDAtHalfHPAndCanUseSecondMove
+	jr c, .lapras
+	jr .articuno
 
-.asm_14cb4
-	ld a, $59
-	ld b, $01
-	call Func_155ef
-	jr nc, .asm_14ccb
+; the following routines check for certain card IDs in bench
+; and call Func_174cd if these are found
+; for Lapras, an additional check is made to its
+; attached energy count, which skips Func_174cd
+; if this count is >= 3
+.lapras
+	ld a, LAPRAS
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInBench
+	jr nc, .articuno
 	ld e, a
 	call CountNumberOfEnergyCardsAttached
 	cp 3
-	jr nc, .asm_14ccb
-	ld a, $59
+	jr nc, .articuno
+	ld a, LAPRAS
 	call Func_174cd
 	ret
 
-.asm_14ccb
-	ld a, $5e
-	ld b, $01
-	call Func_155ef
-	jr nc, .asm_14cda
-	ld a, $5e
+.articuno
+	ld a, ARTICUNO1
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInBench
+	jr nc, .dewgong
+	ld a, ARTICUNO1
 	call Func_174cd
 	ret
 
-.asm_14cda
-	ld a, $4c
-	ld b, $01
-	call Func_155ef
-	jr nc, .asm_14ce9
-	ld a, $4c
+.dewgong
+	ld a, DEWGONG
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInBench
+	jr nc, .seel
+	ld a, DEWGONG
 	call Func_174cd
 	ret
 
-.asm_14ce9
-	ld a, $4b
-	ld b, $01
-	call Func_155ef
+.seel
+	ld a, SEEL
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInBench
 	ret nc
-	ld a, $4b
+	ld a, SEEL
 	call Func_174cd
 	ret
 ; 0x14cf7
@@ -1318,8 +1331,45 @@ LookForCardInHand: ; 155d2 (5:55d2)
 	ret
 ; 0x155ef
 
-Func_155ef: ; 155ef (5:55d2)
-	INCROM $155ef, $15636
+; returns carry if card ID in a
+; is found in bench, starting with
+; location in b
+; input:
+;	a = card ID
+;	b = PLAY_AREA_* to start with
+; ouput:
+;	a = PLAY_AREA_* of found card
+;	carry set if found
+LookForCardIDInBench: ; 155ef (5:55ef)
+	ld [wTempCardIDToLook], a
+
+.loop
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	cp $ff
+	ret z
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld c, a
+	ld a, [wTempCardIDToLook]
+	cp c
+	jr z, .found
+	inc b
+	ld a, MAX_PLAY_AREA_POKEMON
+	cp b
+	jr nz, .loop
+
+	ld b, $ff
+	or a
+	ret
+.found
+	ld a, b
+	scf
+	ret
+; 0x15612
+
+Func_15612: ; 15612 (5:5612)
+	INCROM $15612, $15636
 
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
@@ -4266,7 +4316,14 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 Func_1743b ; 1743b (5:743b)
 	INCROM $1743b, $17474
 
-Func_17474: ; 17474 (5:7474)
+; checks if any bench Pokémon has same ID
+; as input, and sets carry if it has more than
+; half health and can use its second move
+; input:
+;	a = card ID to check for
+; output:
+;	carry set if the above requirements are met
+CheckForBenchIDAtHalfHPAndCanUseSecondMove: ; 17474 (5:7474)
 	ld [wcdf9], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld d, a
@@ -4275,7 +4332,7 @@ Func_17474: ; 17474 (5:7474)
 	push de
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	lb bc, 0, 0
+	lb bc, 0, PLAY_AREA_ARENA
 	push hl
 
 .loop
@@ -4284,7 +4341,7 @@ Func_17474: ; 17474 (5:7474)
 	ld a, [hli]
 	push hl
 	cp $ff
-	jr z, .asm_174bf
+	jr z, .done
 	ld d, a
 	push de
 	push bc
@@ -4299,6 +4356,7 @@ Func_17474: ; 17474 (5:7474)
 	cp d
 	pop de
 	jr nc, .loop
+	; half max HP < current HP
 	ld a, [wLoadedCard1ID]
 	ld hl, wcdf9
 	cp [hl]
@@ -4306,14 +4364,14 @@ Func_17474: ; 17474 (5:7474)
 	
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
-	ld a, $01
+	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	push bc
 	call CheckIfCardCanUseSelectedMove
 	pop bc
 	jr c, .loop
 	inc b
-.asm_174bf
+.done
 	pop hl
 	pop de
 	ld a, e
@@ -4327,12 +4385,43 @@ Func_17474: ; 17474 (5:7474)
 	ret
 ; 0x174cd
 
-Func_174cd ; 174cd (5:74cd)
-	INCROM $174cd, $174f2
+; add 5 to wcde4 AI score corresponding to all cards
+; in bench that have same ID as register a
+; input:
+;	a = card ID to look for
+Func_174cd: ; 174cd (5:74cd)
+	ld d, a
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+	ld e, 0
+.loop
+	inc e
+	ld a, [hli]
+	cp $ff
+	ret z
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp d
+	jr nz, .loop
+	ld c, e
+	ld b, $00
+	push hl
+	ld hl, wcde4
+	add hl, bc
+	ld a, 5
+	add [hl]
+	ld [hl], a
+	pop hl
+	jr .loop
+; 0x174f2
 
 Func_174f2 ; 174f2 (5:74f2)
 	INCROM $174f2, $175bd
 
+; handle Legendary Articuno deck
+; card IDs in bench
 Func_175bd: ; 175bd (5:75bd)
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_ARTICUNO_DECK_ID
