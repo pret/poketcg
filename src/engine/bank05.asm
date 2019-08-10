@@ -3721,6 +3721,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	or a
 	ret
 
+; initialize wcde4 to $80
 .has_energy
 	ld a, $80
 	ld b, MAX_PLAY_AREA_POKEMON
@@ -3736,7 +3737,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	call GetTurnDuelistVariable
 	ld c, a
 
-.asm_16512
+.loop_bench
 	push bc
 	ld a, b
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -3748,6 +3749,9 @@ Func_164e8: ; 164e8 (5:64e8)
 	and $02
 	jr nz, .check_venusaur
 
+; check if energy needed is found in hand
+; and if there's an evolution in hand or deck
+; and if so, add to AI score
 	call CreateHandCardList
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -3759,12 +3763,13 @@ Func_164e8: ; 164e8 (5:64e8)
 	jp nc, .asm_16661
 	ld a, [wCurCardCanAttack]
 	call CheckForEvolutionInList
-	jr nc, .asm_16552
+	jr nc, .no_evolution_in_hand
 	ld [wCurCardPlayAreaLocation], a
 	ld a, 2
 	call AddToAIScore
 	jr .check_venusaur
-.asm_16552
+
+.no_evolution_in_hand
 	ld a, [wCurCardCanAttack]
 	call CheckForEvolutionInDeck
 	jr nc, .check_venusaur
@@ -3772,18 +3777,18 @@ Func_164e8: ; 164e8 (5:64e8)
 	call AddToAIScore
 
 ; if there's no Muk in Play Area
-; and there's Venusaur1, add to AI score
+; and there's Venusaur2, add to AI score
 .check_venusaur
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
-	jr c, .asm_16572
+	jr c, .check_if_active
 	ld a, VENUSAUR2
 	call CountPokemonIDInPlayArea
-	jr nc, .asm_16572
+	jr nc, .check_if_active
 	ld a, 1
 	call AddToAIScore
 
-.asm_16572
+.check_if_active
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .bench
@@ -3832,9 +3837,8 @@ Func_164e8: ; 164e8 (5:64e8)
 	ld a, 10
 	call SubFromAIScore
 
-; if either poison will KO or
-; defending Pokémon can KO,
-; check if there are bench Pokémon
+; if either poison will KO or defending Pokémon can KO,
+; check if there are bench Pokémon,
 ; if there are not, add AI score
 .check_bench
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -3859,10 +3863,11 @@ Func_164e8: ; 164e8 (5:64e8)
 	sub b
 	call SubFromAIScore
 
+; check list in wcdb2
 .asm_165e1
 	ld a, [wcdb3]
 	or a
-	jr z, .asm_1662f
+	jr z, .check_boss_deck
 	ld h, a
 	ld a, [wcdb2]
 	ld l, a
@@ -3873,12 +3878,15 @@ Func_164e8: ; 164e8 (5:64e8)
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	pop hl
-.asm_165f8
+
+.loop_id_list
 	ld a, [hli]
 	or a
-	jr z, .asm_1662f
+	jr z, .check_boss_deck
 	cp e
-	jr nz, .asm_1662b
+	jr nz, .next_id
+
+	; number of attached energy cards
 	ld a, [hli]
 	ld d, a
 	push de
@@ -3888,29 +3896,32 @@ Func_164e8: ; 164e8 (5:64e8)
 	ld a, [wTotalAttachedEnergies]
 	pop de
 	cp d
-	jr c, .asm_16616
-	ld a, $0a
+	jr c, .check_id_score
+	ld a, 10
 	call SubFromAIScore
 	jr .asm_16661
-.asm_16616
+
+.check_id_score
 	ld a, [hli]
 	cp $80
 	jr c, .asm_16622
 	sub $80
 	call AddToAIScore
-	jr .asm_1662f
+	jr .check_boss_deck
 .asm_16622
 	ld d, a
 	ld a, $80
 	sub d
 	call SubFromAIScore
-	jr .asm_1662f
-.asm_1662b
-	inc hl
-	inc hl
-	jr .asm_165f8
+	jr .check_boss_deck
 
-.asm_1662f
+.next_id
+	inc hl
+	inc hl
+	jr .loop_id_list
+
+; if it's a boss deck, call Func_174f2
+.check_boss_deck
 	call CheckIfNotABossDeckID
 	jr c, .asm_16653
 	call Func_174f2
@@ -3949,7 +3960,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	pop bc
 	inc b
 	dec c
-	jp nz, .asm_16512
+	jp nz, .loop_bench
 	call Func_167b5
 	jp nc, Func_1668a
 	ld a, [wcdd8]
