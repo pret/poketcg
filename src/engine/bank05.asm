@@ -609,8 +609,53 @@ CreateEnergyCardListFromHand: ; 1438c (5:438c)
 	ret
 ; 0x143bf
 
-Func_143bf: ; 143bf (5:43bf)
-	INCROM $143bf, $143e5
+; looks for card ID in hand and
+; sets carry if a card wasn't found
+; as opposed to LookForCardIDInHandList
+; this function doesn't create a list
+; and preserves hl, de and bc
+; input:
+;	a = card ID
+; output:
+; 	a = card deck index, if found
+;	carry set if NOT found
+LookForCardIDInHand: ; 143bf (5:43bf)
+	push hl
+	push de
+	push bc
+	ld b, a
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	ld c, a
+	inc c
+	ld l, DUELVARS_HAND
+	jr .next
+
+.loop
+	ld a, [hli]
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp b
+	jr z, .no_carry
+.next
+	dec c
+	jr nz, .loop
+
+	pop bc
+	pop de
+	pop hl
+	scf
+	ret
+
+.no_carry
+	dec hl
+	ld a, [hl]
+	pop bc
+	pop de
+	pop hl
+	or a
+	ret
+; 0x143e5
 
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
@@ -1305,12 +1350,14 @@ Data_1514f: ; 1514f (5:514f)
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
+; as opposed to LookForCardIDInHand, this function
+; creates a list in wDuelTempList
 ; input:
 ;	a = card ID
 ; output:
 ; 	a = card deck index, if found
 ;	carry set if found
-LookForCardInHand: ; 155d2 (5:55d2)
+LookForCardIDInHandList: ; 155d2 (5:55d2)
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -3307,7 +3354,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 	or a
 	jr z, .one_colorless
 	ld a, e
-	call LookForCardInHand
+	call LookForCardIDInHandList
 	ret c
 	jr .no_carry
 
@@ -3319,7 +3366,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 
 .two_colorless
 	ld a, DOUBLE_COLORLESS_ENERGY
-	call LookForCardInHand
+	call LookForCardIDInHandList
 	ret c
 	jr .no_carry
 ; 0x16311
@@ -3354,7 +3401,7 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 	or a
 	jr z, .one_colorless
 	ld a, e
-	call LookForCardInHand
+	call LookForCardIDInHandList
 	ret c
 	jr .done
 
@@ -3366,7 +3413,7 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 
 .two_colorless
 	ld a, DOUBLE_COLORLESS_ENERGY
-	call LookForCardInHand
+	call LookForCardIDInHandList
 	ret c
 	jr .done
 ; 0x1633f
@@ -3921,9 +3968,11 @@ Func_164e8: ; 164e8 (5:64e8)
 	jr .loop_id_list
 
 ; if it's a boss deck, call Func_174f2
+; and apply to the AI score the values
+; determined for this card
 .check_boss_deck
 	call CheckIfNotABossDeckID
-	jr c, .asm_16653
+	jr c, .skip_boss_deck
 	call Func_174f2
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
@@ -3935,19 +3984,19 @@ Func_164e8: ; 164e8 (5:64e8)
 	jr c, .asm_1664c
 	sub $80
 	call AddToAIScore
-	jr .asm_16653
+	jr .skip_boss_deck
 .asm_1664c
 	ld b, a
 	ld a, $80
 	sub b
 	call SubFromAIScore
-.asm_16653
+.skip_boss_deck
 	ld a, 1
 	call AddToAIScore
 	
-	xor a
+	xor a ; first move
 	call Func_16695
-	ld a, $01
+	ld a, $01 ; second move
 	call Func_16695
 .asm_16661
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -3976,8 +4025,165 @@ Func_164e8: ; 164e8 (5:64e8)
 Func_1668a ; 1668a (5:668a)
 	INCROM $1668a, $16695
 
-Func_16695 ; 16695 (5:6695)
-	INCROM $16695, $167b5
+Func_16695: ; 16695 (5:6695)
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	jp c, .asm_1671e
+	ld a, $0c
+	call CheckLoadedMoveFlag
+	jr c, .asm_166af
+	ld a, $0b
+	call CheckLoadedMoveFlag
+	jr c, .asm_16710
+	jp .asm_16775
+
+.asm_166af
+	ld a, [wLoadedMoveUnknown1]
+	cp $02
+	jr z, .asm_166bc
+	call AddToAIScore
+	jp .asm_16775
+
+.asm_166bc
+	call Func_171fb
+	jr c, .asm_166cd
+	cp $03
+	jr c, .asm_166cd
+.asm_166c5
+	ld a, 5
+	call SubFromAIScore
+	jp .asm_16775
+.asm_166cd
+	ld a, 2
+	call AddToAIScore
+
+	ld a, $0c
+	call CheckLoadedMoveFlag
+	jp nc, .asm_16775
+	ld a, [wSelectedMoveIndex]
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jp c, .asm_16775
+	jp z, .asm_16775
+	ld a, [wDamage]
+	add 10
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	sub b
+	jr c, .asm_166ff
+	jr nz, .asm_16775
+.asm_166ff
+	ld a, 20
+	call AddToAIScore
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .asm_16775
+	ld a, 10
+	call AddToAIScore
+	jr .asm_16775
+
+.asm_16710
+	ld a, [wLoadedCard1ID]
+	cp ZAPDOS2
+	jr z, .asm_16775
+	call Func_171fb
+	jr c, .asm_166cd
+	jr .asm_166c5
+.asm_1671e
+	ld a, $0d
+	call CheckLoadedMoveFlag
+	jr nc, .asm_1672a
+	ld a, 5
+	call SubFromAIScore
+
+.asm_1672a
+	ld a, b
+	or a
+	jr z, .asm_1673b
+	ld a, e
+	call LookForCardIDInHand
+	jr c, .asm_1673b
+	ld a, 4
+	call AddToAIScore
+	jr .asm_16744
+.asm_1673b
+	ld a, c
+	or a
+	jr z, .asm_16775
+	ld a, 3
+	call AddToAIScore
+
+.asm_16744
+	ld a, b
+	add c
+	dec a
+	jr nz, .asm_16775
+	ld a, 3
+	call AddToAIScore
+
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .asm_16775
+	ld a, [wSelectedMoveIndex]
+	call CalculateMoveDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jr z, .asm_16766
+	jr nc, .asm_16775
+.asm_16766
+	ld a, 20
+	call AddToAIScore
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .asm_16775
+	ld a, 10
+	call AddToAIScore
+
+.asm_16775
+	ld a, [wCurCardPlayAreaLocation]
+	cp $ff
+	ret z
+	ld b, a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	push af
+	ld [hl], b
+	call CheckEnergyNeededForAttack
+	jr nc, .asm_167ab
+	ld a, $0d
+	call CheckLoadedMoveFlag
+	jr c, .asm_167ab
+	ld a, b
+	or a
+	jr z, .asm_167a2
+	ld a, e
+	call LookForCardIDInHand
+	jr c, .asm_167a2
+	ld a, 2
+	call AddToAIScore
+	jr .asm_167ab
+.asm_167a2
+	ld a, c
+	or a
+	jr z, .asm_167ab
+	ld a, 1
+	call AddToAIScore
+
+.asm_167ab
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ret
+; 0x167b5
 
 Func_167b5 ; 167b5 (5:67b5)
 	INCROM $167b5, $1689f
@@ -4111,7 +4317,65 @@ CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 ; 0x17161
 
 Func_17161 ; 17161 (5:7161)
-	INCROM $17161, $17274
+	INCROM $17161, $171fb
+
+Func_171fb: ; 171fb (5:71fb)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add $bb
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld hl, wLoadedMoveName
+	ld a, [hli]
+	or [hl]
+	jr z, .asm_17218
+	ld a, [wLoadedMoveCategory]
+	cp $04
+	jr nz, .asm_1721a
+.asm_17218
+	scf
+	ret
+.asm_1721a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	bank1call HandleEnergyBurn
+	xor a
+	ld [wTempLoadedMoveEnergyCost], a
+	ld [wTempLoadedMoveEnergyNeededAmount], a
+	ld [wTempLoadedMoveEnergyNeededType], a
+	ld hl, wAttachedEnergies
+	ld de, wLoadedMoveEnergyCost
+	ld b, $00
+	ld c, $03
+.asm_17237
+	ld a, [de]
+	swap a
+	call Func_17258
+	ld a, [de]
+	call Func_17258
+	inc de
+	dec c
+	jr nz, .asm_17237
+	ld a, [de]
+	swap a
+	and $0f
+	ld b, a
+	ld hl, wTempLoadedMoveEnergyCost
+	ld a, [wTotalAttachedEnergies]
+	sub [hl]
+	sub b
+	ret c
+	or a
+	ret nz
+	scf
+	ret
+; 0x17258
+
+Func_17258 ; 17258 (5:7258)
+	INCROM $17258, $17274
 
 ; return carry if there is a card that
 ; can evolve a Pokémon in hand or deck
