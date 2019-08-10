@@ -1192,6 +1192,8 @@ wcdae:: ; cdae
 
 	ds $2
 
+; these seem to hold pointer to some kind of
+; card ID list with attached energy and score
 wcdb2:: ; cdb2
 	ds $1
 wcdb3:: ; cdb3
@@ -1287,7 +1289,10 @@ wcde3:: ; cde3
 wcde4:: ; cde4
 	ds MAX_PLAY_AREA_POKEMON
 
-	ds $7
+wcdea:: ; cdea
+	ds MAX_PLAY_AREA_POKEMON
+
+	ds $1
 	
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 ; used by the AI to temporarily store card location
@@ -1317,7 +1322,8 @@ wCurCardCanKO:: ; cdf4
 wcdf9:: ; cdf9
 	ds $1
 
-	ds $6
+wcdfa:: ; cdfa
+	ds MAX_PLAY_AREA_POKEMON
 
 wce00:: ; ce00
 	ds $1

@@ -3737,7 +3737,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	call GetTurnDuelistVariable
 	ld c, a
 
-.loop_bench
+.loop_play_area
 	push bc
 	ld a, b
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -3960,7 +3960,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	pop bc
 	inc b
 	dec c
-	jp nz, .loop_bench
+	jp nz, .loop_play_area
 	call Func_167b5
 	jp nc, Func_1668a
 	ld a, [wcdd8]
@@ -4428,8 +4428,179 @@ Func_174cd: ; 174cd (5:74cd)
 	jr .loop
 ; 0x174f2
 
-Func_174f2 ; 174f2 (5:74f2)
-	INCROM $174f2, $175bd
+; goes through each play area Pokémon, and
+; for all cards of the same ID, determine which
+; card has highest value calculated from Func_17583
+; the card with highest value gets increased wcde4
+; while all others get decreased wcde4
+Func_174f2: ; 174f2 (5:74f2)
+	ld a, MAX_PLAY_AREA_POKEMON
+	ld hl, wcdfa
+	call ZeroData
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+	ld e, 0
+
+.loop_play_area
+	push hl
+	ld a, MAX_PLAY_AREA_POKEMON
+	ld hl, wcdea
+	call ZeroData
+	pop hl
+	inc e
+	ld a, [hli]
+	cp $ff
+	ret z
+	ld [wcdf9], a
+	push de
+	push hl
+
+; checks wcdfa + play area location in e
+; if != 0, go to next in play area
+	ld d, $00
+	ld hl, wcdfa
+	add hl, de
+	ld a, [hl]
+	or a
+	pop hl
+	pop de
+	jr nz, .loop_play_area
+
+; loads wcdf9 with card ID
+; and call Func_17583
+	push de
+	ld a, [wcdf9]
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wcdf9], a
+	pop de
+	push hl
+	push de
+	call Func_17583
+
+; check play area Pokémon ahead
+; if there is a card with the same ID,
+; call Func_17583 for it as well
+.loop_1
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .check_if_repeated_id
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, [wcdf9]
+	cp e
+	pop de
+	jr nz, .loop_1
+	call Func_17583
+	jr .loop_1
+
+; if there are more than 1 of the same ID
+; in play area, iterate bench backwards
+; and determines which card has highest
+; score in wcdea
+.check_if_repeated_id
+	call Func_175a8
+	jr c, .next
+	lb bc, 0, 0
+	ld hl, wcdea + MAX_BENCH_POKEMON
+	ld d, MAX_PLAY_AREA_POKEMON
+.loop_2
+	dec d
+	jr z, .asm_17560
+	ld a, [hld]
+	cp b
+	jr c, .loop_2
+	ld b, a
+	ld c, d
+	jr .loop_2
+
+; c = play area location of highest score
+; decrease wcde4 score for all cards with same ID
+; except for the one with highest score
+; increase wcde4 score for card with highest ID
+.asm_17560
+	ld hl, wcde4
+	ld de, wcdea
+	ld b, PLAY_AREA_ARENA
+.loop_3
+	ld a, c
+	cp b
+	jr z, .card_with_highest
+	ld a, [de]
+	or a
+	jr z, .check_next
+; decrease score	
+	dec [hl]
+	jr .check_next
+.card_with_highest
+; increase score
+	inc [hl]
+.check_next
+	inc b
+	ld a, MAX_PLAY_AREA_POKEMON
+	cp b
+	jr z, .next
+	inc de
+	inc hl
+	jr .loop_3
+
+.next
+	pop de
+	pop hl
+	jp .loop_play_area
+; 0x17583
+
+; loads wcdea + play area location in e
+; with nenergy  * 2 + $80 - floor(dam / 10)
+; loads wcdfa + play area location in e
+; with $01
+Func_17583: ; 17583 (5:7583)
+	push hl
+	push de
+	call GetCardDamage
+	call CalculateTensDigit
+	ld b, a
+	push bc
+	call CountNumberOfEnergyCardsAttached
+	pop bc
+	sla a
+	add $80
+	sub b
+	pop de
+	push de
+	ld d, $00
+	ld hl, wcdea
+	add hl, de
+	ld [hl], a
+	ld hl, wcdfa
+	add hl, de
+	ld [hl], $01
+	pop de
+	pop hl
+	ret
+; 0x175a8
+
+; counts how many play area locations in wcdea
+; are != 0, and outputs result in a
+; also returns carry if result is < 2
+Func_175a8: ; 175a8 (5:75a8)
+	ld hl, wcdea
+	ld d, $00
+	ld e, MAX_PLAY_AREA_POKEMON + 1
+.loop
+	dec e
+	jr z, .done
+	ld a, [hli]
+	or a
+	jr z, .loop
+	inc d
+	jr .loop
+.done
+	ld a, d
+	cp 2
+	ret
+; 0x175bd
 
 ; handle Legendary Articuno deck
 ; card IDs in bench
