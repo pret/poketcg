@@ -1458,7 +1458,7 @@ Func_8764: ; 8764 (2:4764)
 .asm_87e7
 	cp $ff
 	jr nz, .asm_87f0
-	call Func_8aa1
+	call ZeroObjectPositionsWithCopyToggleOn
 	jr .swap
 .asm_87f0
 	ld hl, .asm_87f8
@@ -1750,7 +1750,7 @@ Func_89ae: ; 89ae (2:49ae)
 	and $0f
 	ret nz
 	bit 4, [hl]
-	jr nz, Func_8aa1
+	jr nz, ZeroObjectPositionsWithCopyToggleOn
 
 Func_8a82 ; 8a82 (2:4a82)
 	call ZeroObjectPositions
@@ -1775,8 +1775,9 @@ Func_8a82 ; 8a82 (2:4a82)
 	or a
 	ret
 
-Func_8aa1: ; 8aa1 (2:4aa1)
+ZeroObjectPositionsWithCopyToggleOn: ; 8aa1 (2:4aa1)
 	call ZeroObjectPositions
+
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ret

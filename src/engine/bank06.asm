@@ -753,12 +753,12 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 	cp -1 ; b button
 	jr nz, .check_button
 
-	farcall Func_8aa1
+	farcall ZeroObjectPositionsWithCopyToggleOn
 	ret
 
 .check_button
 	push af
-	farcall Func_8aa1
+	farcall ZeroObjectPositionsWithCopyToggleOn
 	pop af
 
 	cp $09 ; $09: next page or prev page
