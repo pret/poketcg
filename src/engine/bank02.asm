@@ -41,7 +41,7 @@ DuelCheckMenu_InPlayArea: ; 8039 (2:4039)
 
 ; opens the Glossary submenu
 DuelCheckMenu_Glossary: ; 8042 (2:4042)
-	farcall Func_184c8
+	farcall OpenGlossaryScreen
 	ret
 
 ; opens the Your Play Area submenu
