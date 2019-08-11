@@ -737,7 +737,7 @@ Func_184c8: ; 184c8 (6:44c8)
 
 	xor a
 	ld [wInPlayAreaCurPosition], a
-	ld de, $4c8e ; this data is stored in bank 2.
+	ld de, GlossaryPage_TransitionTable ; this data is stored in bank 2.
 	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
