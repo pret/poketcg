@@ -89,3 +89,14 @@ textitem: MACRO
 	db \1, \2
 	tx \3
 ENDM
+
+; cursor x / cursor y / attribute / idx-up / idx-down / idx-right / idx-left
+; idx-[direction] means the index to get when the input is in the direction.
+; its attribute is used for drawing a flipped cursor.
+cursor_transition: MACRO
+	db \1, \2, \3
+	rept 4
+		db \4
+		shift
+	endr
+ENDM

@@ -478,55 +478,48 @@ OpenInPlayAreaScreen_TextTable:
 	tx PKMNPowerText          ; INPLAYAREA_OPP_BENCH_4
 	tx DoneText               ; INPLAYAREA_OPP_BENCH_5
 
-; cursor x / cursor y / attribute / idx-up / idx-down / idx-right / idx-left
-in_play_area_transition: MACRO
-	db \1, \2, \3
-	rept 4
-		db INPLAYAREA_\4
-		shift
-	endr
+in_play_area_cursor_transition: MACRO
+	cursor_transition \1, \2, \3, INPLAYAREA_\4, INPLAYAREA_\5, INPLAYAREA_\6, INPLAYAREA_\7
 ENDM
 
 ; it's related to wInPlayAreaInputTablePointer.
 ; with this table, the cursor moves into the proper location by the input.
 ; note that the unit of the position is not a 8x8 tile.
-; idx-[direction] means the index to get when the input is in the direction.
-; its attribute is used for drawing a flipped cursor.
 OpenInPlayAreaScreen_TransitionTable1:
-	in_play_area_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
-	in_play_area_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
-	in_play_area_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
-	in_play_area_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
-	in_play_area_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
-	in_play_area_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
-	in_play_area_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
-	in_play_area_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
-	in_play_area_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
-	in_play_area_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
-	in_play_area_transition $30, $38, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
-	in_play_area_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
-	in_play_area_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
-	in_play_area_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
-	in_play_area_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
-	in_play_area_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
+	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
+	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
+	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
+	in_play_area_cursor_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
+	in_play_area_cursor_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
+	in_play_area_cursor_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
+	in_play_area_cursor_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_cursor_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_cursor_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
+	in_play_area_cursor_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_cursor_transition $30, $38, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_cursor_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
+	in_play_area_cursor_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
+	in_play_area_cursor_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
+	in_play_area_cursor_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
+	in_play_area_cursor_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
 
 OpenInPlayAreaScreen_TransitionTable2:
-	in_play_area_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
-	in_play_area_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
-	in_play_area_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
-	in_play_area_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
-	in_play_area_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
-	in_play_area_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
-	in_play_area_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
-	in_play_area_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
-	in_play_area_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
-	in_play_area_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
-	in_play_area_transition $30, $38, 1 << OAM_X_FLIP, OPP_HAND, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
-	in_play_area_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
-	in_play_area_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
-	in_play_area_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
-	in_play_area_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
-	in_play_area_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
+	in_play_area_cursor_transition $18, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_2, PLAYER_BENCH_5
+	in_play_area_cursor_transition $30, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_3, PLAYER_BENCH_1
+	in_play_area_cursor_transition $48, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_4, PLAYER_BENCH_2
+	in_play_area_cursor_transition $60, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_5, PLAYER_BENCH_3
+	in_play_area_cursor_transition $78, $8c, $00,             PLAYER_ACTIVE, PLAYER_PLAY_AREA, PLAYER_BENCH_1, PLAYER_BENCH_4
+	in_play_area_cursor_transition $30, $6c, $00,             OPP_ACTIVE, PLAYER_BENCH_1, PLAYER_DISCARD_PILE, PLAYER_DISCARD_PILE
+	in_play_area_cursor_transition $78, $80, $00,             PLAYER_DISCARD_PILE, PLAYER_BENCH_1, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_cursor_transition $78, $70, $00,             OPP_ACTIVE, PLAYER_HAND, PLAYER_ACTIVE, PLAYER_ACTIVE
+	in_play_area_cursor_transition $78, $34, 1 << OAM_X_FLIP, OPP_BENCH_1, PLAYER_ACTIVE, OPP_DISCARD_PILE, OPP_DISCARD_PILE
+	in_play_area_cursor_transition $30, $20, 1 << OAM_X_FLIP, OPP_BENCH_1, OPP_DISCARD_PILE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_cursor_transition $30, $38, 1 << OAM_X_FLIP, OPP_HAND, PLAYER_ACTIVE, OPP_ACTIVE, OPP_ACTIVE
+	in_play_area_cursor_transition $90, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_5, OPP_BENCH_2
+	in_play_area_cursor_transition $78, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_1, OPP_BENCH_3
+	in_play_area_cursor_transition $60, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_2, OPP_BENCH_4
+	in_play_area_cursor_transition $48, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_3, OPP_BENCH_5
+	in_play_area_cursor_transition $30, $14, 1 << OAM_X_FLIP, OPP_PLAY_AREA, OPP_ACTIVE, OPP_BENCH_4, OPP_BENCH_1
 
 OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	xor a
@@ -737,7 +730,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 
 	xor a
 	ld [wInPlayAreaCurPosition], a
-	ld de, GlossaryPage_TransitionTable ; this data is stored in bank 2.
+	ld de, OpenGlossaryScreen_TransitionTable ; this data is stored in bank 2.
 	ld hl, wInPlayAreaInputTablePointer
 	ld [hl], e
 	inc hl
