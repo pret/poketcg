@@ -1618,6 +1618,7 @@ LoadCursorTile: ; 8992 (2:4992)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
+; similar to OpenInPlayAreaScreen_HandleInput
 Func_89ae: ; 89ae (2:49ae)
 	xor a
 	ld [wcfe3], a
@@ -1637,37 +1638,47 @@ Func_89ae: ; 89ae (2:49ae)
 
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_8a4f
+	jp z, .check_button
+	inc hl
+	inc hl
+	inc hl
 
-	inc hl
-	inc hl
-	inc hl
 	bit D_UP_F, a
-	jr z, .asm_89d5
-	ld a, [hl]
-	jr .asm_89eb
+	jr z, .else_if_down
 
-.asm_89d5
+	; up
+	ld a, [hl]
+	jr .process_dpad
+
+.else_if_down
 	inc hl
 	bit D_DOWN_F, a
-	jr z, .asm_89dd
+	jr z, .else_if_right
+
+	; down
 	ld a, [hl]
-	jr .asm_89eb
-.asm_89dd
+	jr .process_dpad
+
+.else_if_right
 	inc hl
 	bit D_RIGHT_F, a
-	jr z, .asm_89e5
+	jr z, .else_if_left
+
+	; right
 	ld a, [hl]
-	jr .asm_89eb
-.asm_89e5
+	jr .process_dpad
+
+.else_if_left
 	inc hl
 	bit D_LEFT_F, a
-	jr z, .asm_8a4f
+	jr z, .check_button
+
+	; left
 	ld a, [hl]
-.asm_89eb
+.process_dpad
 	ld [wPrizeCardCursorPosition], a
 	cp $08
-	jr nc, .asm_8a46
+	jr nc, .next
 	ld b, $01
 .asm_89f4
 	or a
@@ -1675,13 +1686,20 @@ Func_89ae: ; 89ae (2:49ae)
 	sla b
 	dec a
 	jr .asm_89f4
+
 .asm_89fc
+; check if the moved cursor refers to an existing item.
+; it's always true when this function was called from the glossary procedure.
 	ld a, [wDuelInitialPrizesUpperBitsSet]
 	and b
-	jr nz, .asm_8a46
+	jr nz, .next
+
+; when no cards exist at the cursor,
 	ld a, [wce61]
 	cp $06
 	jr nz, Func_89ae
+	; move once more in the direction (recursively) until it reaches an existing item.
+
 	ldh a, [hDPadHeld]
 	bit 4, a
 	jr nz, .asm_8a13
@@ -1690,13 +1708,14 @@ Func_89ae: ; 89ae (2:49ae)
 .asm_8a13
 	ld a, [wDuelInitialPrizes]
 	cp $05
-	jr nc, .asm_8a46
+	jr nc, .next
 	ld a, [wPrizeCardCursorPosition]
 	cp $05
 	jr nz, .asm_8a28
 	ld a, $03
 	ld [wPrizeCardCursorPosition], a
 	jr .asm_8a2d
+
 .asm_8a28
 	ld a, $02
 	ld [wPrizeCardCursorPosition], a
@@ -1712,47 +1731,51 @@ Func_89ae: ; 89ae (2:49ae)
 	ld [wce61], a
 	ld b, $01
 	jr .asm_89f4
-.asm_8a46
+
+.next
 	ld a, $01
 	ld [wcfe3], a
 
 ; reset cursor blink
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-
-.asm_8a4f
+.check_button
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_8a6d
+	jr z, .return
+
 	and A_BUTTON
-	jr nz, .asm_8a60
-	ld a, $ff ; cancel
+	jr nz, .a_button
+
+	ld a, -1 ; cancel
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
-.asm_8a60
-	call Func_8a82
+.a_button
+	call .draw_cursor
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	ld a, [wPrizeCardCursorPosition]
 	scf
 	ret
-.asm_8a6d
+
+.return
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_8a76
+	jr z, .skip_sfx
 	call PlaySFX
-.asm_8a76
+.skip_sfx
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
 	and $0f
 	ret nz
+
 	bit 4, [hl]
 	jr nz, ZeroObjectPositionsWithCopyToggleOn
 
-Func_8a82 ; 8a82 (2:4a82)
+.draw_cursor
 	call ZeroObjectPositions
 	ld hl, wce53
 	ld e, [hl]
