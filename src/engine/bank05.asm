@@ -215,7 +215,7 @@ Func_14145: ; 14145 (5:4145)
 ;	a = energy card attached to Pokémon to check
 ;	[wTempCardType] = TYPE_ENERGY_* of given Pokémon
 ;	[wTempCardID] = card index of Pokémon card to check
-Func_14184: ; 14184 (5:4184)
+CheckIfEnergyIsUseful: ; 14184 (5:4184)
 	push de
 	call GetCardIDFromDeckIndex
 	ld a, e
@@ -2520,7 +2520,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	cp $ff
 	jr z, .any_energy
 	ld [de], a
-	call Func_14184
+	call CheckIfEnergyIsUseful
 	jr c, .loop_3
 	ld a, [de]
 	call RemoveCardFromDuelTempList
@@ -3998,6 +3998,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	call Func_16695
 	ld a, $01 ; second move
 	call Func_16695
+	
 .asm_16661
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
@@ -4029,72 +4030,78 @@ Func_16695: ; 16695 (5:6695)
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	jp c, .asm_1671e
-	ld a, $0c
+	ld a, $0c ; ATTACHED_ENERGY_BOOST
 	call CheckLoadedMoveFlag
 	jr c, .asm_166af
-	ld a, $0b
+	ld a, $0b ; FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
 	jr c, .asm_16710
-	jp .asm_16775
+	jp .check_evolution
 
 .asm_166af
 	ld a, [wLoadedMoveUnknown1]
 	cp $02
 	jr z, .asm_166bc
 	call AddToAIScore
-	jp .asm_16775
+	jp .check_evolution
 
 .asm_166bc
 	call Func_171fb
 	jr c, .asm_166cd
-	cp $03
+	cp 3
 	jr c, .asm_166cd
 .asm_166c5
 	ld a, 5
 	call SubFromAIScore
-	jp .asm_16775
+	jp .check_evolution
 .asm_166cd
 	ld a, 2
 	call AddToAIScore
 
+; check whether move has ATTACHED_ENERGY_BOOST flag
+; and add to AI score if attaching another energy
+; will KO defending Pokémon
 	ld a, $0c
 	call CheckLoadedMoveFlag
-	jp nc, .asm_16775
+	jp nc, .check_evolution
 	ld a, [wSelectedMoveIndex]
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
 	sub [hl]
-	jp c, .asm_16775
-	jp z, .asm_16775
+	jp c, .check_evolution
+	jp z, .check_evolution
 	ld a, [wDamage]
-	add 10
+	add 10 ; boost gained by attaching another energy card
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	sub b
 	jr c, .asm_166ff
-	jr nz, .asm_16775
+	jr nz, .check_evolution
 .asm_166ff
 	ld a, 20
 	call AddToAIScore
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
-	jr nz, .asm_16775
+	jr nz, .check_evolution
 	ld a, 10
 	call AddToAIScore
-	jr .asm_16775
+	jr .check_evolution
 
+; FLAG_2_BIT_5 is set only for Pokémon Powers,
+; except for Magnemite2's Magnetic Storm attack
 .asm_16710
 	ld a, [wLoadedCard1ID]
 	cp ZAPDOS2
-	jr z, .asm_16775
+	jr z, .check_evolution
 	call Func_171fb
 	jr c, .asm_166cd
 	jr .asm_166c5
+
 .asm_1671e
-	ld a, $0d
+	ld a, $0d ; FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
 	jr nc, .asm_1672a
 	ld a, 5
@@ -4113,7 +4120,7 @@ Func_16695: ; 16695 (5:6695)
 .asm_1673b
 	ld a, c
 	or a
-	jr z, .asm_16775
+	jr z, .check_evolution
 	ld a, 3
 	call AddToAIScore
 
@@ -4121,13 +4128,13 @@ Func_16695: ; 16695 (5:6695)
 	ld a, b
 	add c
 	dec a
-	jr nz, .asm_16775
+	jr nz, .check_evolution
 	ld a, 3
 	call AddToAIScore
 
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
-	jr nz, .asm_16775
+	jr nz, .check_evolution
 	ld a, [wSelectedMoveIndex]
 	call CalculateMoveDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -4135,17 +4142,17 @@ Func_16695: ; 16695 (5:6695)
 	ld hl, wDamage
 	sub [hl]
 	jr z, .asm_16766
-	jr nc, .asm_16775
+	jr nc, .check_evolution
 .asm_16766
 	ld a, 20
 	call AddToAIScore
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
-	jr nz, .asm_16775
+	jr nz, .check_evolution
 	ld a, 10
 	call AddToAIScore
 
-.asm_16775
+.check_evolution
 	ld a, [wCurCardPlayAreaLocation]
 	cp $ff
 	ret z
@@ -4156,10 +4163,10 @@ Func_16695: ; 16695 (5:6695)
 	push af
 	ld [hl], b
 	call CheckEnergyNeededForAttack
-	jr nc, .asm_167ab
-	ld a, $0d
+	jr nc, .done
+	ld a, $0d ; FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
-	jr c, .asm_167ab
+	jr c, .done
 	ld a, b
 	or a
 	jr z, .asm_167a2
@@ -4168,15 +4175,15 @@ Func_16695: ; 16695 (5:6695)
 	jr c, .asm_167a2
 	ld a, 2
 	call AddToAIScore
-	jr .asm_167ab
+	jr .done
 .asm_167a2
 	ld a, c
 	or a
-	jr z, .asm_167ab
+	jr z, .done
 	ld a, 1
 	call AddToAIScore
 
-.asm_167ab
+.done
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -4319,9 +4326,16 @@ CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 Func_17161 ; 17161 (5:7161)
 	INCROM $17161, $171fb
 
+; return carry if Pokémon at play area location
+; in hTempPlayAreaLocation_ff9d does not have
+; energy required for the move index in wSelectedMoveIndex
+; or has exactly the same amount of energy needed
+; input:
+;	[hTempPlayAreaLocation_ff9d] = play area location
+;	[wSelectedMoveIndex] = move index to check
 Func_171fb: ; 171fb (5:71fb)
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
 	ld a, [wSelectedMoveIndex]
@@ -4330,14 +4344,15 @@ Func_171fb: ; 171fb (5:71fb)
 	ld hl, wLoadedMoveName
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_17218
+	jr z, .not_attack
 	ld a, [wLoadedMoveCategory]
-	cp $04
-	jr nz, .asm_1721a
-.asm_17218
+	cp POKEMON_POWER
+	jr nz, .is_attack
+.not_attack
 	scf
 	ret
-.asm_1721a
+
+.is_attack
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
@@ -4348,34 +4363,71 @@ Func_171fb: ; 171fb (5:71fb)
 	ld [wTempLoadedMoveEnergyNeededType], a
 	ld hl, wAttachedEnergies
 	ld de, wLoadedMoveEnergyCost
-	ld b, $00
-	ld c, $03
-.asm_17237
+	ld b, 0
+	ld c, (NUM_TYPES / 2) - 1
+.loop
+	; check all basic energy cards except colorless
 	ld a, [de]
 	swap a
-	call Func_17258
+	call CalculateParticularAttachedEnergyNeeded
 	ld a, [de]
-	call Func_17258
+	call CalculateParticularAttachedEnergyNeeded
 	inc de
 	dec c
-	jr nz, .asm_17237
+	jr nz, .loop
+	
+	; colorless
 	ld a, [de]
 	swap a
-	and $0f
+	and %00001111
 	ld b, a
 	ld hl, wTempLoadedMoveEnergyCost
 	ld a, [wTotalAttachedEnergies]
 	sub [hl]
 	sub b
-	ret c
+	ret c ; return if not enough energy
+
 	or a
-	ret nz
+	ret nz ; return if surplus energy
+
+; exactly the amount of energy needed
 	scf
 	ret
 ; 0x17258
 
-Func_17258 ; 17258 (5:7258)
-	INCROM $17258, $17274
+; takes as input the energy cost of a move for a 
+; particular energy, stored in the lower nibble of a
+; if the move costs some amount of this energy, the lower nibble of a != 0,
+; and this amount is stored in wTempLoadedMoveEnergyCost
+; also adds the amount of energy still needed
+; to wTempLoadedMoveEnergyNeededAmount
+; input:
+; 	a    = this energy cost of move (lower nibble)
+; 	[hl] = attached energy
+; output:
+;	carry set if not enough of this energy type attached
+CalculateParticularAttachedEnergyNeeded: ; 17258 (5:7258)
+	and %00001111
+	jr nz, .check
+.done
+	inc hl
+	inc b
+	ret
+
+.check
+	ld [wTempLoadedMoveEnergyCost], a
+	sub [hl]
+	jr z, .done
+	jr nc, .done
+	push bc
+	ld a, [wTempLoadedMoveEnergyCost]
+	ld b, a
+	ld a, [hl]
+	sub b
+	pop bc
+	ld [wTempLoadedMoveEnergyNeededAmount], a
+	jr .done
+; 0x17274
 
 ; return carry if there is a card that
 ; can evolve a Pokémon in hand or deck
