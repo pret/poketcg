@@ -99,7 +99,7 @@ CheckIfAnyMoveKnocksOutDefendingCard: ; 140ae (5:40ae)
 ;	fallthrough
 
 CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
@@ -178,9 +178,9 @@ SubFromAIScore: ; 1410a (5:410a)
 	ret
 ; 0x1411d
 
-; stores defending Pokémon's weakness/resistance
+; loads defending Pokémon's weakness/resistance
 ; and the number of prize cards in both sides
-StoreDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
+LoadDefendingPokemonColorWRAndPrizeCards: ; 1411d (5:411d)
 	call SwapTurn
 	call GetArenaCardColor
 	call TranslateColorToWR
@@ -302,8 +302,8 @@ Func_14226: ; 14226 (5:4226)
 ; returns carry if Pokémon at hTempPlayAreaLocation_ff9d
 ; can't use a move or if that selected move doesn't have enough energy
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	[wSelectedMoveIndex]		 = selected move to examine
+;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[wSelectedMoveIndex]         = selected move to examine
 CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
@@ -337,15 +337,15 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 ; load selected move from Pokémon in hTempPlayAreaLocation_ff9d
 ; and checks if there is enough energy to execute the selected move
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	[wSelectedMoveIndex]		 = selected move to examine
+;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[wSelectedMoveIndex]         = selected move to examine
 ; output:
 ;	b = colorless energy still needed
 ;	c = basic energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
 ;	carry set if no move 
-;			  OR if it's a Pokémon Power
-;			  OR if not enough energy for move
+;	       OR if it's a Pokémon Power
+;	       OR if not enough energy for move
 CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -477,7 +477,7 @@ CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
 ; input:
 ;	a = energy type
 ; output:
-; 	a = energy card ID
+;	a = energy card ID
 ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	push hl
 	push de
@@ -617,7 +617,7 @@ CreateEnergyCardListFromHand: ; 1438c (5:438c)
 ; input:
 ;	a = card ID
 ; output:
-; 	a = card deck index, if found
+;	a = card deck index, if found
 ;	carry set if NOT found
 LookForCardIDInHand: ; 143bf (5:43bf)
 	push hl
@@ -660,9 +660,9 @@ LookForCardIDInHand: ; 143bf (5:43bf)
 ; stores in wDamage, wAIMinDamage and wAIMaxDamage the calculated damage
 ; done to the defending Pokémon by a given card and move
 ; input:
-; 	a = move index to take into account
-; 	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
-CalculateMoveDamage_VersusDefendingCard: ; 143e5 (5:43e5)
+;	a = move index to take into account
+;	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
+EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	ld [wSelectedMoveIndex], a
 	ld e, a
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -688,6 +688,8 @@ CalculateMoveDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 
 .is_move
 ; set wAIMinDamage and wAIMaxDamage to damage of move
+; these values take into account the range of damage
+; that the move can span (e.g. min and max number of hits)
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -745,10 +747,10 @@ CalculateMoveDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 ; taking into account weakness/resistance/pluspowers/defenders/etc
 ; and outputs the result capped at a max of $ff
 ; input:
-; 	[wAIMinDamage] = base damage
-; 	[wAIMaxDamage] = base damage
-; 	[wDamage]      = base damage
-; 	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
+;	[wAIMinDamage] = base damage
+;	[wAIMaxDamage] = base damage
+;	[wDamage]      = base damage
+;	[hTempPlayAreaLocation_ff9d] = turn holder's card location as the attacker
 CalculateDamage_VersusDefendingPokemon: ; 14453 (5:4453)
 	ld hl, wAIMinDamage
 	call _CalculateDamage_VersusDefendingPokemon
@@ -873,10 +875,10 @@ _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 ; done to the Pokémon at hTempPlayAreaLocation_ff9d
 ; by the defending Pokémon, using the move index at a
 ; input:
-; 	a = move index
+;	a = move index
 ;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
-;								 damage as the receiver
-CalculateMoveDamage_FromDefendingPokemon: ; 1450b (5:450b)
+;	                               damage as the receiver
+EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 	call SwapTurn
 	ld [wSelectedMoveIndex], a
 	ld e, a
@@ -903,6 +905,8 @@ CalculateMoveDamage_FromDefendingPokemon: ; 1450b (5:450b)
 
 .is_move
 ; set wAIMinDamage and wAIMaxDamage to damage of move
+; these values take into account the range of damage
+; that the move can span (e.g. min and max number of hits)
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -1532,8 +1536,8 @@ CalculateTensDigit: ; 1576b (5:576b)
 ; returns in a the result of
 ; dividing b by a, rounded down
 ; input:
-; a = 4
-; b = card HP
+; 	a = divisor
+; 	b = dividend
 CalculateBDividedByA: ; 15778 (5:5778)
 	push bc
 	ld c, a
@@ -1558,7 +1562,7 @@ CalculateBDividedByA: ; 15778 (5:5778)
 ; input:
 ;	e = location to check, i.e. PLAY_AREA_*
 ; output:
-; 	a = number of energy cards attached
+;	a = number of energy cards attached
 CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
@@ -1596,7 +1600,7 @@ Func_158b2: ; 158b2 (5:58b2)
 	jp nz, .no_carry
 	xor a
 	ld [wAIPlayEnergyCardForRetreat], a
-	call StoreDefendingPokemonColorWRAndPrizeCards
+	call LoadDefendingPokemonColorWRAndPrizeCards
 	ld a, 128 ; initial retreat score
 	ld [wAIScore], a
 	ld a, [$cdb4]
@@ -2062,7 +2066,7 @@ Func_15b72: ; 15b72 (5:5b72)
 
 ; has at least 2 Pokémon in Play Area
 	call Func_15b54
-	call StoreDefendingPokemonColorWRAndPrizeCards
+	call LoadDefendingPokemonColorWRAndPrizeCards
 	ld a, 50
 	ld [wAIScore], a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -2115,7 +2119,7 @@ Func_15b72: ; 15b72 (5:5b72)
 ; AI score += floor(Damage / 10) + 1
 .calculate_damage
 	ld a, [wSelectedMoveIndex]
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	call CalculateTensDigit
 	inc a
@@ -2129,7 +2133,7 @@ Func_15b72: ; 15b72 (5:5b72)
 	call LookForEnergyNeededInHand
 	jr nc, .check_attached_energy
 	ld a, [wSelectedMoveIndex]
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	call CalculateTensDigit
 	srl a
@@ -2156,12 +2160,12 @@ Func_15b72: ; 15b72 (5:5b72)
 	cp MR_MIME
 	jr nz, .check_defending_weak
 	xor a
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
 	jr nz, .can_damage
 	ld a, $01
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
 	jr z, .check_defending_weak
@@ -2263,7 +2267,7 @@ Func_15b72: ; 15b72 (5:5b72)
 	call AddToAIScore
 
 ; raise AI score if
-; 	- is a Mr Mime OR
+;	- is a Mr Mime OR
 ;	- is a Mew1 and defending card is not basic stage
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -2401,7 +2405,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ldh [hTemp_ffa0], a
 	xor a
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, $03 ; OppAction_PlayEnergyCard
+	ld a, OPPACTION_PLAY_ENERGY
 	bank1call AIMakeDecision
 
 .check_id
@@ -2557,7 +2561,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ld [de], a
 
 .retreat
-	ld a, $04 ; OppAction_AttemptRetreat
+	ld a, OPPACTION_ATTEMPT_RETREAT
 	bank1call AIMakeDecision
 	or a
 	ret
@@ -2568,7 +2572,7 @@ Func_15d4f: ; 15d4f (5:5d4f)
 ; handle Mysterious Fossil and Clefairy Doll
 ; if there are bench Pokémon, use effect to discard card
 ; this is equivalent to using its Pokémon Power
-.mysterious_fossil_or_clefairy_doll:
+.mysterious_fossil_or_clefairy_doll
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp 2
@@ -2583,19 +2587,19 @@ Func_15d4f: ; 15d4f (5:5d4f)
 	ldh [hTempCardIndex_ff9f], a
 	xor a
 	ldh [hTemp_ffa0], a
-	ld a, $0c ; OppAction_UsePokemonPower
+	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, $0d ; OppAction_ExecutePokemonPowerEffect
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
-	ld a, $16 ; OppAction_DrawDuelMainScene
+	ld a, OPPACTION_DUEL_MAIN_SCENE
 	bank1call AIMakeDecision
 	or a
 	ret
 ; 0x15ea6
 
-; Copy cards from wDuelTempList to wHandTempList
+; Copy cards from wDuelTempList in hl to wHandTempList in de
 CopyHandCardList: ; 15ea6 (5:5ea6)
 	ld a, [hli]
 	ld [de], a
@@ -2695,7 +2699,7 @@ Func_15eae: ; 15eae (5:5eae)
 	ldh [hTemp_ffa0], a
 	call CheckIfCardCanBePlayed
 	jr c, .skip
-	ld a, $01 ; OppAction_PlayBasicPokemonCard
+	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
 	jr c, .done
 .skip
@@ -2974,7 +2978,7 @@ Func_15f4c: ; 15f4c (5:5f4c)
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, [wTempAIPokemonCard]
 	ldh [hTemp_ffa0], a
-	ld a, $02 ; OppAction_EvolvePokemonCard
+	ld a, OPPACTION_EVOLVE_PKMN
 	bank1call AIMakeDecision
 	pop bc
 	jr .done_hand_card
@@ -3239,7 +3243,7 @@ Func_161d5: ; 161d5 (5:61d5)
 ; if it is, check if Pokémon at a
 ; can damage it, and if it can, set carry
 ; input:
-; 	a = location of Pokémon card
+;	a = location of Pokémon card
 CheckDamageToMrMime: ; 16270 (5:6270)
 	push af
 	ld a, DUELVARS_ARENA_CARD
@@ -3317,7 +3321,7 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 ;	- if two colorless are required, look for double colorless;
 ; return carry if successful in finding card
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 	xor a ; first move
 	ld [wSelectedMoveIndex], a
@@ -3379,8 +3383,8 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 ;	- if two colorless are required, look for double colorless;
 ; return carry if successful in finding card
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
-;	[wSelectedMoveIndex]		 = selected move to examine
+;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[wSelectedMoveIndex]         = selected move to examine
 LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 	call CheckEnergyNeededForAttack
 	ld a, b
@@ -3549,9 +3553,9 @@ CheckEnergyFlagsNeededInList: ; 1637b (5:637b)
 ; i.e. each bit represents a different energy type cost
 ; if any colorless energy is required, all bits are set
 ; input:
-; 	a = card index
+;	a = card index
 ; output:
-; 	a = bits of each energy requirement
+;	a = bits of each energy requirement
 GetMovesEnergyCostBits: ; 163c9 (5:63c9)
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld hl, wLoadedCard2Move1EnergyCost
@@ -3571,9 +3575,9 @@ GetMovesEnergyCostBits: ; 163c9 (5:63c9)
 ; i.e. each bit represents a different energy type cost
 ; if any colorless energy is required, all bits are set
 ; input:
-; 	[hl] = Loaded card move energy cost
+;	[hl] = Loaded card move energy cost
 ; output:
-; 	a = bits of each energy requirement
+;	a = bits of each energy requirement
 GetEnergyCostBits: ; 163dd (5:63dd)
 	ld c, $00
 	ld a, [hli]
@@ -3637,7 +3641,7 @@ GetEnergyCostBits: ; 163dd (5:63dd)
 ; wDuelTempList evolves card index in a
 ; if found, the evolution card index is returned in a
 ; input:
-; 	a = card index to check evolution
+;	a = card index to check evolution
 ; output:
 ;	a = card index of evolution found
 CheckForEvolutionInList: ; 16422 (5:6422)
@@ -3682,7 +3686,7 @@ CheckForEvolutionInList: ; 16422 (5:6422)
 ; the card index in a in the deck
 ; if found, return that evolution card index in a
 ; input:
-; 	a = card index to check evolution
+;	a = card index to check evolution
 ; output:
 ;	a = card index of evolution found
 CheckForEvolutionInDeck: ; 16451 (5:6451)
@@ -4065,7 +4069,7 @@ Func_16695: ; 16695 (5:6695)
 	call CheckLoadedMoveFlag
 	jp nc, .check_evolution
 	ld a, [wSelectedMoveIndex]
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
@@ -4136,7 +4140,7 @@ Func_16695: ; 16695 (5:6695)
 	or a
 	jr nz, .check_evolution
 	ld a, [wSelectedMoveIndex]
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
@@ -4332,7 +4336,7 @@ Func_17161 ; 17161 (5:7161)
 ; or has exactly the same amount of energy needed
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = play area location
-;	[wSelectedMoveIndex] = move index to check
+;	[wSelectedMoveIndex]         = move index to check
 Func_171fb: ; 171fb (5:71fb)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -4493,7 +4497,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	call CheckIfCardCanUseSelectedMove
 	jr c, .second_move
 	xor a
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
 	jr nz, .set_carry
@@ -4504,7 +4508,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	call CheckIfCardCanUseSelectedMove
 	jr c, .no_carry
 	ld a, $01
-	call CalculateMoveDamage_VersusDefendingCard
+	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
 	jr nz, .set_carry
@@ -4582,7 +4586,7 @@ CheckIfDefendingPokemonCanKnockOutWithMove: ; 173e4 (5:73e4)
 
 ; player's active Pokémon can use move
 	ld a, [wSelectedMoveIndex]
-	call CalculateMoveDamage_FromDefendingPokemon
+	call EstimateDamage_FromDefendingPokemon
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
