@@ -1184,7 +1184,95 @@ wcda6:: ; cda6
 wcda7:: ; cda7
 	ds $1
 
-	ds $33
+	ds $6
+
+; pointer to a list of card IDs for sorting AI hand
+wcdae:: ; cdae
+	ds $2
+
+	ds $2
+
+; these seem to hold pointer to some kind of
+; card ID list with attached energy and score
+wcdb2:: ; cdb2
+	ds $1
+wcdb3:: ; cdb3
+	ds $1
+
+	ds $1
+
+; information about various properties of
+; loaded move for AI calculations
+wTempLoadedMoveEnergyCost:: ; cdb5
+	ds $1
+wTempLoadedMoveEnergyNeededType:: ; cdb6
+	ds $1
+wTempLoadedMoveEnergyNeededAmount:: ; cdb7
+	ds $1
+
+; used for the AI to store various
+; details about a given card
+wTempCardRetreatCost:: ; cdb8
+	ds $1
+wTempCardID:: ; cdb9
+	ds $1
+wTempCardType:: ; cdba
+	ds $1
+
+	ds $3
+
+; used for AI to score decisions for actions
+wAIScore:: ; cdbe
+	ds $1
+
+wBenchAIScore:: ; cdbf
+	ds MAX_PLAY_AREA_POKEMON
+
+	ds $0a
+
+; information about the defending Pokémon and
+; the prize card count on both sides for AI:
+; player's active Pokémon color
+wAIPlayerColor:: ; cdcf
+	ds $1
+; player's active Pokémon weakness
+wAIPlayerWeakness:: ; cdd0
+	ds $1
+; player's active Pokémon resistance
+wAIPlayerResistance:: ; cdd1
+	ds $1
+; player's prize count
+wAIPlayerPrizeCount:: ; cdd2
+	ds $1
+; opponent's prize count
+wAIOpponentPrizeCount:: ; cdd3
+	ds $1
+
+; AI stores the card ID to look for here
+wTempCardIDToLook:: ; cdd4
+	ds $1
+
+wcdd5:: ; cdd5
+	ds $1
+
+wcdd6:: ; cdd6
+	ds $1
+
+; whether AI is allowed to play an energy card
+; from the hand in order to retreat arena card
+;	$00 = not allowed
+;	$01 = allowed
+wAIPlayEnergyCardForRetreat:: ; cdd7
+	ds $1
+
+wcdd8:: ; cdd8
+	ds $1
+
+wcdd9:: ; cdd9
+	ds $1
+
+wcdda:: ; cdda
+	ds $1
 
 wcddb:: ; cddb
 	ds $1
@@ -1192,7 +1280,57 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-	ds $26
+wcddd:: ; cddd
+	ds MAX_PLAY_AREA_POKEMON
+
+wcde3:: ; cde3
+	ds $1
+
+wcde4:: ; cde4
+	ds MAX_PLAY_AREA_POKEMON
+
+wcdea:: ; cdea
+	ds MAX_PLAY_AREA_POKEMON
+
+	ds $1
+	
+; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
+; used by the AI to temporarily store card location
+wCurCardPlayAreaLocation:: ; cdf1
+	ds $1
+
+; used for AI to store whether this card can use any attack
+; $00 = can't attack
+; $01 = can attack
+wCurCardCanAttack:: ; cdf2
+	ds $1
+
+; used to temporarily store the card deck index
+; while AI is deciding whether to evolve Pokémon
+; or deciding whether to play Pokémon card from hand
+wTempAIPokemonCard:: ; cdf3
+	ds $1
+
+; used for AI to store whether this card can KO defending Pokémon
+; $00 = can't KO
+; $01 = can KO
+wCurCardCanKO:: ; cdf4
+	ds $1
+
+	ds $4
+
+wcdf9:: ; cdf9
+	ds $1
+
+wcdfa:: ; cdfa
+	ds MAX_PLAY_AREA_POKEMON
+
+wce00:: ; ce00
+	ds $1
+wce01:: ; ce01
+	ds $1
+
+	ds $1
 
 wce03:: ; ce03
 	ds $1
@@ -1502,7 +1640,13 @@ wcecc:: ; cecc
 wcece:: ; cece
 	ds $2
 
-	ds $47
+	ds $a
+
+; pointer to memory to store AI temporary hand card list
+wHandTempList:: ; ceda
+	ds $2
+
+	ds $3b
 
 ; used in bank2, probably related to wTempHandCardList (another temp list?)
 wcf17:: ; cf17
