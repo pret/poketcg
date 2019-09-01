@@ -1442,7 +1442,7 @@ Func_8764: ; 8764 (2:4764)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, Func_88c2
+	ld de, Func_8764_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1590,7 +1590,7 @@ Func_8883: ; 8883 (2:4883)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, $48fa
+	ld de, Func_8883_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1601,8 +1601,25 @@ Func_8883: ; 8883 (2:4883)
 	ld [$ce56], a
 	jp Func_8764.loop_2
 
-Func_88c2: ; 88c2 (2:48c2)
-	INCROM $88c2, $8932
+Func_8764_TransitionTable: ; 88c2 (2:48c2)
+	cursor_transition $08, $28, $00, $04, $02, $01, $07
+	cursor_transition $30, $28, $20, $05, $03, $07, $00
+	cursor_transition $08, $38, $00, $00, $04, $03, $07
+	cursor_transition $30, $38, $20, $01, $05, $07, $02
+	cursor_transition $08, $48, $00, $02, $00, $05, $07
+	cursor_transition $30, $48, $20, $03, $01, $07, $04
+	cursor_transition $78, $50, $00, $07, $07, $00, $01
+	cursor_transition $78, $28, $00, $07, $07, $00, $01
+
+Func_8883_TransitionTable:
+	cursor_transition $a0, $60, $20, $02, $04, $07, $01
+	cursor_transition $78, $60, $00, $03, $05, $00, $07
+	cursor_transition $a0, $50, $20, $04, $00, $06, $03
+	cursor_transition $78, $50, $00, $05, $01, $02, $06
+	cursor_transition $a0, $40, $20, $00, $02, $06, $05
+	cursor_transition $78, $40, $00, $01, $03, $04, $06
+	cursor_transition $08, $38, $00, $07, $07, $05, $04
+	cursor_transition $08, $60, $00, $06, $06, $01, $00
 
 Func_8932: ; 8932 (2:4932)
 	INCROM $8932, $8992
