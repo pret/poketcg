@@ -1629,7 +1629,7 @@ Func_89ae: ; 89ae (2:49ae)
 	ld d, [hl]
 
 	ld a, [wPrizeCardCursorPosition]
-	ld [wce61], a
+	ld [wPrizeCardCursorTemporaryPosition], a
 	ld l, a
 	ld h, 7
 	call HtimesL
@@ -1677,17 +1677,20 @@ Func_89ae: ; 89ae (2:49ae)
 	ld a, [hl]
 .process_dpad
 	ld [wPrizeCardCursorPosition], a
-	cp $08
+	cp $08 ; if a >= 0x8
 	jr nc, .next
 	ld b, $01
-.asm_89f4
+
+; this loop equals to
+; b = (1 << a)
+.make_bitmask_loop
 	or a
-	jr z, .asm_89fc
+	jr z, .make_bitmask_done
 	sla b
 	dec a
-	jr .asm_89f4
+	jr .make_bitmask_loop
 
-.asm_89fc
+.make_bitmask_done
 ; check if the moved cursor refers to an existing item.
 ; it's always true when this function was called from the glossary procedure.
 	ld a, [wDuelInitialPrizesUpperBitsSet]
@@ -1695,17 +1698,20 @@ Func_89ae: ; 89ae (2:49ae)
 	jr nz, .next
 
 ; when no cards exist at the cursor,
-	ld a, [wce61]
+	ld a, [wPrizeCardCursorTemporaryPosition]
 	cp $06
 	jr nz, Func_89ae
 	; move once more in the direction (recursively) until it reaches an existing item.
 
+; check if one of the dpad, left or right, is pressed.
+; if not, just go back to the start.
 	ldh a, [hDPadHeld]
-	bit 4, a
-	jr nz, .asm_8a13
-	bit 5, a
+	bit D_RIGHT_F, a
+	jr nz, .left_or_right
+	bit D_LEFT_F, a
 	jr z, Func_89ae
-.asm_8a13
+
+.left_or_right
 	ld a, [wDuelInitialPrizes]
 	cp $05
 	jr nc, .next
@@ -1728,9 +1734,9 @@ Func_89ae: ; 89ae (2:49ae)
 	ld [wPrizeCardCursorPosition], a
 .asm_8a3c
 	ld a, [wPrizeCardCursorPosition]
-	ld [wce61], a
+	ld [wPrizeCardCursorTemporaryPosition], a
 	ld b, $01
-	jr .asm_89f4
+	jr .make_bitmask_loop
 
 .next
 	ld a, $01
@@ -1769,9 +1775,8 @@ Func_89ae: ; 89ae (2:49ae)
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and (1 << 4) - 1
 	ret nz
-
 	bit 4, [hl]
 	jr nz, ZeroObjectPositionsWithCopyToggleOn
 

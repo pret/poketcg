@@ -1353,7 +1353,9 @@ wYourOrOppPlayAreaLastCursorPosition:: ; ce5f
 wInPlayAreaFromSelectButton:: ; ce60
 	ds $1
 
-wce61:: ; ce61
+; it's used only in one function,
+; which means that it's a kind of local variable, but defined in wram.
+wPrizeCardCursorTemporaryPosition:: ; ce61
 	ds $1
 
 wGlossaryPageNo:: ; ce62
