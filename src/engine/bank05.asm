@@ -58,30 +58,31 @@ PointerTable_1406a: ; 1406a (5:406a)
 	dw $406c
 	dw Func_14078
 	dw Func_14078
-	dw $409e
+	dw Func_1409e
 	dw $40a2
 	dw $40a6
 	dw $40aa
 
 Func_14078: ; 14078 (5:4078)
-	call Func_15eae
-	call Func_158b2
+	call AIDecidePlayPokemonCard
+	call AIDecideWhetherToRetreat
 	jr nc, .asm_14091
-	call Func_15b72
-	call Func_15d4f
-	call Func_158b2
+	call AIDecideBenchPokemonToSwitchTo
+	call AIChooseEnergyToDiscardForRetreatCost
+	call AIDecideWhetherToRetreat
 	jr nc, .asm_14091
-	call Func_15b72
-	call Func_15d4f
+	call AIDecideBenchPokemonToSwitchTo
+	call AIChooseEnergyToDiscardForRetreatCost
 .asm_14091
-	call Func_164e8
+	call AIDecidePlayEnergyCard
 	call Func_169f8
 	ret c
-	ld a, $05
+	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
 ; 0x1409e
 
+Func_1409e: ; 1409e (5:409e)
 	INCROM $1409e, $140ae
 
 ; returns carry if damage dealt from any of
@@ -1257,10 +1258,12 @@ Func_1468b: ; 1468b (5:468b)
 Func_14786: ; 14786 (5:4786)
 	INCROM $14786, $14c91
 
-; if the player has more than 3 prize cards
-; check for certain card IDs in bench,
-; as well as their HP and energy cards attached
-Func_14c91: ; 14c91 (5:4c91)
+; this routine handles how Legendary Articuno
+; prioritises playing energy cards to each Pokémon.
+; first, it makes sure that all Lapras have at least
+; 3 energy cards before moving on to Articuno,
+; and then to Dewgong and Seel
+ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 	call SwapTurn
 	call CountPrizes
 	call SwapTurn
@@ -1285,9 +1288,9 @@ Func_14c91: ; 14c91 (5:4c91)
 	jr .articuno
 
 ; the following routines check for certain card IDs in bench
-; and call Func_174cd if these are found
+; and call RaiseAIScoreToAllMatchingIDsInBench if these are found.
 ; for Lapras, an additional check is made to its
-; attached energy count, which skips Func_174cd
+; attached energy count, which skips calling the routine
 ; if this count is >= 3
 .lapras
 	ld a, LAPRAS
@@ -1299,7 +1302,7 @@ Func_14c91: ; 14c91 (5:4c91)
 	cp 3
 	jr nc, .articuno
 	ld a, LAPRAS
-	call Func_174cd
+	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
 
 .articuno
@@ -1308,7 +1311,7 @@ Func_14c91: ; 14c91 (5:4c91)
 	call LookForCardIDInBench
 	jr nc, .dewgong
 	ld a, ARTICUNO1
-	call Func_174cd
+	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
 
 .dewgong
@@ -1317,7 +1320,7 @@ Func_14c91: ; 14c91 (5:4c91)
 	call LookForCardIDInBench
 	jr nc, .seel
 	ld a, DEWGONG
-	call Func_174cd
+	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
 
 .seel
@@ -1326,7 +1329,7 @@ Func_14c91: ; 14c91 (5:4c91)
 	call LookForCardIDInBench
 	ret nc
 	ld a, SEEL
-	call Func_174cd
+	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
 ; 0x14cf7
 
@@ -1594,7 +1597,8 @@ Func_157a3: ; 157a3 (5:57a3)
 	INCROM $157a3, $158b2
 
 ; determine AI score for retreating
-Func_158b2: ; 158b2 (5:58b2)
+; return carry if AI decides to retreat
+AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	ld a, [wGotHeadsFromConfusionCheckDuringRetreat]
 	or a
 	jp nz, .no_carry
@@ -2056,7 +2060,9 @@ Func_15b54: ; 15b54 (5:5b54)
 ; 0x15b72
 
 ; calculates AI score for bench Pokémon
-Func_15b72: ; 15b72 (5:5b72)
+; returns in hTempPlayAreaLocation_ff9d the
+; Play Area location of best card to switch to
+AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -2359,7 +2365,7 @@ Func_15b72: ; 15b72 (5:5b72)
 ; handles AI action of retreating Arena Pokémon
 ; and chooses which energy cards to discard
 ; if card can't discard, return carry
-Func_15d4f: ; 15d4f (5:5d4f)
+AIChooseEnergyToDiscardForRetreatCost: ; 15d4f (5:5d4f)
 	push af
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
@@ -2609,8 +2615,8 @@ CopyHandCardList: ; 15ea6 (5:5ea6)
 	jr CopyHandCardList
 
 ; determine whether AI plays
-; basic card from hand
-Func_15eae: ; 15eae (5:5eae)
+; basic cards from hand
+AIDecidePlayPokemonCard: ; 15eae (5:5eae)
 	call CreateHandCardList
 	call SortTempHandByIDList
 	ld hl, wDuelTempList
@@ -2621,7 +2627,7 @@ Func_15eae: ; 15eae (5:5eae)
 .next_hand_card
 	ld a, [hli]
 	cp $ff
-	jp z, Func_15f4c
+	jp z, AIDecideEvolution
 
 	ld [wTempAIPokemonCard], a
 	push hl
@@ -2711,7 +2717,7 @@ Func_15eae: ; 15eae (5:5eae)
 
 ; determine whether AI evolves
 ; Pokémon in the Play Area
-Func_15f4c: ; 15f4c (5:5f4c)
+AIDecideEvolution: ; 15f4c (5:5f4c)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wHandTempList
@@ -3169,7 +3175,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	jr c, .subtract
 	call CheckIfActivePokemonCanUseAnyNonResidualMove
 	jr nc, .subtract
-	call Func_158b2
+	call AIDecideWhetherToRetreat
 	jr c, .subtract
 	
 	; checks for player's active card status
@@ -3756,7 +3762,7 @@ Func_164d3: ; 164d3 (5:64d3)
 	ret
 ; 0x164e8
 
-Func_164e8: ; 164e8 (5:64e8)
+AIDecidePlayEnergyCard: ; 164e8 (5:64e8)
 	xor a
 	ld [wcdd8], a
 	call CreateEnergyCardListFromHand
@@ -3782,7 +3788,8 @@ Func_164e8: ; 164e8 (5:64e8)
 	dec b
 	jr nz, .loop
 
-	call Func_175bd
+	call HandleLegendaryArticunoEnergyScoring
+
 	ld b, PLAY_AREA_ARENA
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -3811,7 +3818,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	call GetMovesEnergyCostBits
 	ld hl, wDuelTempList
 	call CheckEnergyFlagsNeededInList
-	jp nc, .asm_16661
+	jp nc, .store_score
 	ld a, [wCurCardCanAttack]
 	call CheckForEvolutionInList
 	jr nc, .no_evolution_in_hand
@@ -3950,16 +3957,17 @@ Func_164e8: ; 164e8 (5:64e8)
 	jr c, .check_id_score
 	ld a, 10
 	call SubFromAIScore
-	jr .asm_16661
+	jr .store_score
 
 .check_id_score
 	ld a, [hli]
 	cp $80
-	jr c, .asm_16622
+	jr c, .decrease_score_1
 	sub $80
 	call AddToAIScore
 	jr .check_boss_deck
-.asm_16622
+
+.decrease_score_1
 	ld d, a
 	ld a, $80
 	sub d
@@ -3985,15 +3993,17 @@ Func_164e8: ; 164e8 (5:64e8)
 	add hl, bc
 	ld a, [hl]
 	cp $80
-	jr c, .asm_1664c
+	jr c, .decrease_score_2
 	sub $80
 	call AddToAIScore
 	jr .skip_boss_deck
-.asm_1664c
+
+.decrease_score_2
 	ld b, a
 	ld a, $80
 	sub b
 	call SubFromAIScore
+	
 .skip_boss_deck
 	ld a, 1
 	call AddToAIScore
@@ -4003,7 +4013,7 @@ Func_164e8: ; 164e8 (5:64e8)
 	ld a, $01 ; second move
 	call Func_16695
 	
-.asm_16661
+.store_score
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
 	ld b, $00
@@ -4015,13 +4025,16 @@ Func_164e8: ; 164e8 (5:64e8)
 	inc b
 	dec c
 	jp nz, .loop_play_area
+
 	call Func_167b5
 	jp nc, Func_1668a
+
 	ld a, [wcdd8]
 	or a
 	jr z, .asm_16684
 	scf
 	jp Func_164d3
+
 .asm_16684
 	call CreateEnergyCardListFromHand
 	jp Func_1689f
@@ -4720,7 +4733,7 @@ CheckForBenchIDAtHalfHPAndCanUseSecondMove: ; 17474 (5:7474)
 ; in bench that have same ID as register a
 ; input:
 ;	a = card ID to look for
-Func_174cd: ; 174cd (5:74cd)
+RaiseAIScoreToAllMatchingIDsInBench: ; 174cd (5:74cd)
 	ld d, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -4922,15 +4935,15 @@ Func_175a8: ; 175a8 (5:75a8)
 	ret
 ; 0x175bd
 
-; handle Legendary Articuno deck
-; card IDs in bench
-Func_175bd: ; 175bd (5:75bd)
+; handle how AI scores giving out Energy Cards
+; when using Legendary Articuno deck
+HandleLegendaryArticunoEnergyScoring: ; 175bd (5:75bd)
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_ARTICUNO_DECK_ID
 	jr z, .articuno_deck
 	ret
 .articuno_deck
-	call Func_14c91
+	call ScoreLegendaryArticunoCards
 	ret
 ; 0x175c9
 
