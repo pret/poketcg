@@ -1292,6 +1292,7 @@ wcde4:: ; cde4
 wcdea:: ; cdea
 	ds MAX_PLAY_AREA_POKEMON
 
+wcdf0:: ; cdf0
 	ds $1
 	
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
@@ -1330,6 +1331,7 @@ wce00:: ; ce00
 wce01:: ; ce01
 	ds $1
 
+wce02:: ; ce02
 	ds $1
 
 wce03:: ; ce03

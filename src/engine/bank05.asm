@@ -4213,10 +4213,563 @@ Func_167b5 ; 167b5 (5:67b5)
 	INCROM $167b5, $1689f
 
 Func_1689f ; 1689f (5:689f)
-	INCROM $1689f, $169f8
+	INCROM $1689f, $169e3
 
-Func_169f8 ; 169f8 (5:69f8)
-	INCROM $169f8, $170c9
+Func_169e3 ; 169e3 (5:69e3)
+	INCROM $169e3, $169f8
+
+Func_169f8: ; 169f8 (5:69f8)
+	xor a
+	ld [wcdd9], a
+	ld a, [wce20]
+	and $01
+	jr z, .asm_16a0b
+	ld a, [wcdd6]
+	ld [wSelectedMoveIndex], a
+	jr .asm_16a3e
+	
+.asm_16a0b
+	ld a, [wcda7]
+	cp $80
+	jp z, .asm_16a77
+	xor a
+	call Func_16a86
+	ld a, [wAIScore]
+	ld [wBenchAIScore], a
+	ld a, $01
+	call Func_16a86
+	ld c, $01
+	ld a, [wBenchAIScore]
+	ld b, a
+	ld a, [wAIScore]
+	cp b
+	jr nc, .asm_16a30
+	dec c
+	ld a, b
+.asm_16a30
+	cp $50
+	jr c, .asm_16a77
+	ld a, c
+	ld [wSelectedMoveIndex], a
+	or a
+	jr z, .asm_16a3e
+	call Func_17019
+	
+.asm_16a3e
+	ld a, [wcdd9]
+	or a
+	jr z, .asm_16a48
+	scf
+	jp Func_169e3
+.asm_16a48
+	ld a, $0e
+	call Func_14663
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, [wSelectedMoveIndex]
+	call EstimateDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr z, .asm_16a62
+.asm_16a5c
+	xor a
+	ld [$cdb4], a
+	jr .asm_16a6d
+.asm_16a62
+	ld a, $05
+	call CheckLoadedMoveFlag
+	jr c, .asm_16a5c
+	ld hl, $cdb4
+	inc [hl]
+.asm_16a6d
+	ld a, $01
+	ld [wcddb], a
+	call Func_14145
+	scf
+	ret
+.asm_16a77
+	ld a, [wcdd9]
+	or a
+	jr z, .asm_16a80
+	jp Func_169e3
+.asm_16a80
+	ld hl, $cdb4
+	inc [hl]
+	or a
+	ret
+; 0x16a86
+
+Func_16a86: ; 16a86 (5:6a86)
+	ld [wSelectedMoveIndex], a
+	ld a, $50
+	ld [wAIScore], a
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CheckIfCardCanUseSelectedMove
+	jr nc, .asm_16a9d
+.asm_16a96
+	xor a
+	ld [wAIScore], a
+	jp .done
+
+.asm_16a9d
+	xor a
+	ld [wcdf0], a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempTurnDuelistCardID], a
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempNonTurnDuelistCardID], a
+	bank1call HandleNoDamageOrEffectSubstatus
+	call SwapTurn
+	jr nc, .skip_no_damage_substatus
+
+	; player is under No Damage substatus
+	ld a, $01
+	ld [wcdf0], a
+	ld a, [wSelectedMoveIndex]
+	call EstimateDamage_VersusDefendingCard
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	jr z, .asm_16a96
+	and $80
+	jr nz, .skip_no_damage_substatus
+	ld a, $05
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16a96
+
+.skip_no_damage_substatus
+	ld a, [wSelectedMoveIndex]
+	call EstimateDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jr c, .can_ko
+	jr z, .can_ko
+	jr .check_damage
+.can_ko
+	ld a, 20
+	call AddToAIScore
+
+.check_damage
+	xor a
+	ld [wce02], a
+	ld a, [wDamage]
+	ld [wCurCardPlayAreaLocation], a
+	or a
+	jr z, .no_damage
+	call CalculateTensDigit
+	call AddToAIScore
+	jr .check_recoil
+.no_damage
+	ld a, $01
+	ld [wce02], a
+	call SubFromAIScore
+	ld a, [wAIMaxDamage]
+	or a
+	jr z, .asm_16b27
+	ld a, $02
+	call AddToAIScore
+	
+	xor a
+	ld [wce02], a
+.asm_16b27
+	ld a, $05
+	call CheckLoadedMoveFlag
+	jr nc, .check_recoil
+	ld a, $02
+	call AddToAIScore
+
+.check_recoil
+	ld a, $04 ; LOW_RECOIL
+	call CheckLoadedMoveFlag
+	jr c, .asm_16b42
+	ld a, $06 ; HIGH_RECOIL
+	call CheckLoadedMoveFlag
+	jp nc, .check_defending_can_ko
+.asm_16b42
+	ld a, [wLoadedMoveUnknown1]
+	or a
+	jp z, .check_defending_can_ko
+	ld [wDamage], a
+	call ApplyDamageModifiers_DamageToSelf
+	ld a, e
+	call CalculateTensDigit
+	call SubFromAIScore
+	
+	push de
+	ld a, $06
+	call CheckLoadedMoveFlag
+	pop de
+	jr c, .high_recoil
+
+	; check if LOW_RECOIL KOs self
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	cp e
+	jr c, .kos_self
+	jp nz, .check_defending_can_ko
+.kos_self
+	ld a, $0a
+	call SubFromAIScore
+
+.high_recoil
+	; dismiss this move if no benched Pokémon
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 2
+	jr c, .dismiss_high_recoil_move
+	; has benched Pokémon
+	ld a, [wOpponentDeckID]
+	cp ROCK_CRUSHER_DECK_ID
+	jr z, .rock_crusher_deck
+	cp ZAPPING_SELFDESTRUCT_DECK_ID
+	jr z, .zapping_selfdestruct_deck
+	cp BOOM_BOOM_SELFDESTRUCT_DECK_ID
+	jr z, .encourage_high_recoil_move
+	cp POWER_GENERATOR_DECK_ID
+	jr nz, .asm_16be0
+
+.dismiss_high_recoil_move
+	xor a
+	ld [wAIScore], a
+	jp .done
+
+.encourage_high_recoil_move
+	ld a, $14
+	call AddToAIScore
+	jp .done
+
+.zapping_selfdestruct_deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp 31
+	jr nc, .asm_16be0
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	sla a
+	cp c
+	jr c, .asm_16be0
+
+	ld b, 0
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp MAGNEMITE1
+	jr z, .magnemite1
+	ld b, 10
+.magnemite1
+	ld a, 10
+	add b
+	ld b, a
+	ld a, $01
+	call .asm_16c35
+	jr c, .dismiss_high_recoil_move
+	jr .encourage_high_recoil_move
+
+.rock_crusher_deck
+	call CountPrizes
+	cp 4
+	jr nc, .dismiss_high_recoil_move
+	; prize count < 4
+	ld b, $14
+	call SwapTurn
+	xor a
+	call .asm_16c35
+	call SwapTurn
+	jr c, .encourage_high_recoil_move
+
+.asm_16be0
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp CHANSEY
+	jr z, .asm_16bfd
+	cp MAGNEMITE1
+	jr z, .asm_16bf9
+	cp WEEZING
+	jr z, .asm_16bf9
+
+	ld b, 20
+	jr .asm_16bff
+.asm_16bf9
+	ld b, 10
+	jr .asm_16bff
+.asm_16bfd
+	ld b, 0
+.asm_16bff
+	push bc
+	call SwapTurn
+	xor a
+	call .asm_16c35
+	call SwapTurn
+	pop bc
+	jr c, .asm_16c1d
+	push de
+	ld a, $01
+	call .asm_16c35
+	pop bc
+	jr nc, .asm_16c25
+
+	xor a
+	ld [wAIScore], a
+	jp .done
+.asm_16c1d
+	ld a, 20
+	call AddToAIScore
+	jp .done
+
+.asm_16c25
+	push bc
+	ld a, d
+	or a
+	jr z, .asm_16c2e
+	dec a
+	call SubFromAIScore
+
+.asm_16c2e
+	pop bc
+	ld a, b
+	call AddToAIScore
+	jr .check_defending_can_ko
+
+.asm_16c35
+	ld d, a
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+	ld e, PLAY_AREA_ARENA
+.loop
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_16c53
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	push hl
+	call GetTurnDuelistVariable
+	pop hl
+	cp b
+	jr z, .asm_16c50
+	jr nc, .loop
+.asm_16c50
+	inc d
+	jr .loop
+.asm_16c53
+	push de
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	pop de
+	cp d
+	jp c, .asm_16c67
+	jp z, .asm_16c67
+	or a
+	ret
+.asm_16c67
+	scf
+	ret
+
+.check_defending_can_ko
+	ld a, [wSelectedMoveIndex]
+	push af
+	call CheckIfDefendingPokemonCanKnockOut
+	pop bc
+	ld a, b
+	ld [wSelectedMoveIndex], a
+	jr nc, .check_discard
+	ld a, 5
+	call AddToAIScore
+	ld a, [wce02]
+	or a
+	jr z, .check_discard
+	ld a, 5
+	call SubFromAIScore
+
+.check_discard
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, $0b ; DISCARD_ENERGY
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16ca6
+	ld a, 1
+	call SubFromAIScore
+	ld a, [wLoadedMoveUnknown1]
+	call SubFromAIScore
+
+.asm_16ca6
+	ld a, $0e ; FLAG_2_BIT_6
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16cb3
+	ld a, [wLoadedMoveUnknown1]
+	call AddToAIScore
+
+.asm_16cb3
+	ld a, $0a ; NULLIFY_OR_WEAKEN_ATTACK
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16cbf
+	ld a, 1
+	call AddToAIScore
+
+.asm_16cbf
+	ld a, $07 ; DRAW_CARD
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16ccb
+	ld a, $01
+	call AddToAIScore
+
+.asm_16ccb
+	ld a, $09 ; HEAL_USER
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16d09
+	ld a, [wLoadedMoveUnknown1]
+	cp $01
+	jr z, .asm_16cf8
+	ld a, [wCurCardPlayAreaLocation]
+	call CalculateTensDigit
+	ld b, a
+	ld a, [wLoadedMoveUnknown1]
+	cp $03
+	jr z, .asm_16cec
+	srl b
+	jr nc, .asm_16cec
+	inc b
+.asm_16cec
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	call CalculateTensDigit
+	cp b
+	jr c, .asm_16cf8
+	ld a, b
+.asm_16cf8
+	push af
+	ld e, $00
+	call GetCardDamage
+	call CalculateTensDigit
+	pop bc
+	cp b
+	jr c, .asm_16d06
+	ld a, b
+.asm_16d06
+	call AddToAIScore
+
+.asm_16d09
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp SNORLAX
+	jp z, .asm_16db0
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	ld [wCurCardPlayAreaLocation], a
+	ld a, $00
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16d4a
+	ld a, [wCurCardPlayAreaLocation]
+	and $c0
+	jr z, .asm_16d45
+	and $40
+	jr z, .asm_16d4a
+	ld a, $0e
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16d4a
+	ld a, $02
+	call SubFromAIScore
+	jr .asm_16d4a
+.asm_16d45
+	ld a, $02
+	call AddToAIScore
+.asm_16d4a
+	ld a, $01
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16d5f
+	ld a, [wCurCardPlayAreaLocation]
+	and $0f
+	cp $02
+	jr z, .asm_16d5f
+	ld a, $01
+	call AddToAIScore
+.asm_16d5f
+	ld a, $02
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16d7b
+	ld a, [wCurCardPlayAreaLocation]
+	and $0f
+	cp $02
+	jr z, .asm_16d76
+	ld a, $01
+	call AddToAIScore
+	jr .asm_16d7b
+.asm_16d76
+	ld a, $01
+	call SubFromAIScore
+.asm_16d7b
+	ld a, $03
+	call CheckLoadedMoveFlag
+	jr nc, .asm_16da0
+	ld a, [wCurCardPlayAreaLocation]
+	and $0f
+	cp $02
+	jr z, .asm_16d9b
+	ld a, [wCurCardPlayAreaLocation]
+	and $0f
+	cp $01
+	jr z, .asm_16da0
+	ld a, $01
+	call AddToAIScore
+	jr .asm_16da0
+.asm_16d9b
+	ld a, $01
+	call SubFromAIScore
+.asm_16da0
+	ld a, $f0
+	call GetTurnDuelistVariable
+	and $0f
+	cp $01
+	jr nz, .asm_16db0
+	ld a, $01
+	call SubFromAIScore
+
+.asm_16db0
+	ld a, $11 ; FLAG_3_BIT_1
+	call CheckLoadedMoveFlag
+	jr nc, .done
+	call Func_16dcd
+	cp $80
+	jr c, .asm_16dc5
+	sub $80
+	call AddToAIScore
+	jr .done
+
+.asm_16dc5
+	ld b, a
+	ld a, $80
+	sub b
+	call SubFromAIScore
+.done
+	ret
+; 0x16dcd
+
+Func_16dcd ; 16dcd (5:6dcd)
+	INCROM $16dcd, $17019
+
+Func_17019 ; 17019 (5:7019)
+	INCROM $17019, $170c9
 
 ; returns carry if the following conditions are met:
 ;	- arena card HP >= half max HP
