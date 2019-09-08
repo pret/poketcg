@@ -305,7 +305,7 @@ Func_14226: ; 14226 (5:4226)
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	[wSelectedMoveIndex]         = selected move to examine
-CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
+CheckIfSelectedMoveIsUnusable: ; 1424b (5:424b)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .bench
@@ -330,7 +330,7 @@ CheckIfCardCanUseSelectedMove: ; 1424b (5:424b)
 .bench
 	call CheckEnergyNeededForAttack
 	ret c ; can't be used
-	ld a, $0d ; $00001101
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
 	ret
 ; 0x14279
@@ -1637,7 +1637,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .active_cant_ko_1
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jp nc, .active_cant_use_move
 	call LookForEnergyNeededForMoveInHand
 	jr nc, .active_cant_ko_1
@@ -1838,7 +1838,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	push bc
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .no_ko
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr nc, .success
 	call LookForEnergyNeededForMoveInHand
 	jr c, .success
@@ -1867,7 +1867,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .active_cant_ko_2
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jp nc, .check_defending_id
 .active_cant_ko_2
 	ld a, 40
@@ -2094,7 +2094,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 ; if on last prize card, raise AI score again
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .check_can_use_moves
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .check_can_use_moves
 	ld a, 10
 	call AddToAIScore
@@ -2112,11 +2112,11 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 .check_can_use_moves
 	xor a
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	call nc, .calculate_damage
 	ld a, $01
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	call nc, .calculate_damage
 	jr .check_energy_card
 
@@ -2777,18 +2777,18 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 ; and if any of those moves can KO
 	xor a
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr nc, .can_attack
 	ld a, $01
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .cant_attack_or_ko
 .can_attack
 	ld a, $01
 	ld [wCurCardCanAttack], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .check_evolution_attacks
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .check_evolution_attacks
 	ld a, $01
 	ld [wCurCardCanKO], a
@@ -2811,11 +2811,11 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	ld [hl], a
 	xor a
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr nc, .evolution_can_attack
 	ld a, $01
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .evolution_cant_attack
 .evolution_can_attack
 	ld a, 5
@@ -2847,7 +2847,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	jr nz, .check_defending_can_ko_evolution
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .evolution_cant_ko
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .evolution_cant_ko
 	ld a, 5
 	call AddToAIScore
@@ -3278,7 +3278,7 @@ CheckIfActiveCardCanKnockOut: ; 1628f (5:628f)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .fail
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jp c, .fail
 	scf
 	ret
@@ -3295,7 +3295,7 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 	ldh [hTempPlayAreaLocation_ff9d], a
 ; first move
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .next_move
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
@@ -3305,7 +3305,7 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 ; second move
 	ld a, $01
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .fail
 	ld a, [wLoadedMoveCategory]
 	and RESIDUAL
@@ -4047,10 +4047,10 @@ Func_16695: ; 16695 (5:6695)
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	jp c, .asm_1671e
-	ld a, $0c ; ATTACHED_ENERGY_BOOST
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST
 	call CheckLoadedMoveFlag
 	jr c, .asm_166af
-	ld a, $0b ; FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY
 	call CheckLoadedMoveFlag
 	jr c, .asm_16710
 	jp .check_evolution
@@ -4078,7 +4078,7 @@ Func_16695: ; 16695 (5:6695)
 ; check whether move has ATTACHED_ENERGY_BOOST flag
 ; and add to AI score if attaching another energy
 ; will KO defending Pokémon
-	ld a, $0c
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST
 	call CheckLoadedMoveFlag
 	jp nc, .check_evolution
 	ld a, [wSelectedMoveIndex]
@@ -4118,7 +4118,7 @@ Func_16695: ; 16695 (5:6695)
 	jr .asm_166c5
 
 .asm_1671e
-	ld a, $0d ; FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
 	jr nc, .asm_1672a
 	ld a, 5
@@ -4181,7 +4181,7 @@ Func_16695: ; 16695 (5:6695)
 	ld [hl], b
 	call CheckEnergyNeededForAttack
 	jr nc, .done
-	ld a, $0d ; FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
 	call CheckLoadedMoveFlag
 	jr c, .done
 	ld a, b
@@ -4276,7 +4276,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	ld [$cdb4], a
 	jr .asm_16a6d
 .asm_16a62
-	ld a, $05
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
 	call CheckLoadedMoveFlag
 	jr c, .asm_16a5c
 	ld hl, $cdb4
@@ -4305,8 +4305,9 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld [wAIScore], a
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr nc, .asm_16a9d
+	
 .asm_16a96
 	xor a
 	ld [wAIScore], a
@@ -4340,7 +4341,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr z, .asm_16a96
 	and $80
 	jr nz, .skip_no_damage_substatus
-	ld a, $05
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16a96
 
@@ -4381,17 +4382,17 @@ Func_16a86: ; 16a86 (5:6a86)
 	xor a
 	ld [wce02], a
 .asm_16b27
-	ld a, $05
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
 	call CheckLoadedMoveFlag
 	jr nc, .check_recoil
 	ld a, $02
 	call AddToAIScore
 
 .check_recoil
-	ld a, $04 ; LOW_RECOIL
+	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL
 	call CheckLoadedMoveFlag
 	jr c, .asm_16b42
-	ld a, $06 ; HIGH_RECOIL
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL
 	call CheckLoadedMoveFlag
 	jp nc, .check_defending_can_ko
 .asm_16b42
@@ -4405,7 +4406,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 	
 	push de
-	ld a, $06
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL
 	call CheckLoadedMoveFlag
 	pop de
 	jr c, .high_recoil
@@ -4601,7 +4602,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call GetTurnDuelistVariable
 	ld d, a
 	call CopyMoveDataAndDamage_FromDeckIndex
-	ld a, $0b ; DISCARD_ENERGY
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16ca6
 	ld a, 1
@@ -4610,28 +4611,28 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 
 .asm_16ca6
-	ld a, $0e ; FLAG_2_BIT_6
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16cb3
 	ld a, [wLoadedMoveUnknown1]
 	call AddToAIScore
 
 .asm_16cb3
-	ld a, $0a ; NULLIFY_OR_WEAKEN_ATTACK
+	ld a, MOVE_FLAG2_ADDRESS | NULLIFY_OR_WEAKEN_ATTACK
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16cbf
 	ld a, 1
 	call AddToAIScore
 
 .asm_16cbf
-	ld a, $07 ; DRAW_CARD
+	ld a, MOVE_FLAG1_ADDRESS | DRAW_CARD
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16ccb
 	ld a, $01
 	call AddToAIScore
 
 .asm_16ccb
-	ld a, $09 ; HEAL_USER
+	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16d09
 	ld a, [wLoadedMoveUnknown1]
@@ -4677,7 +4678,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	ld [wCurCardPlayAreaLocation], a
-	ld a, $00
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16d4a
 	ld a, [wCurCardPlayAreaLocation]
@@ -4685,7 +4686,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr z, .asm_16d45
 	and $40
 	jr z, .asm_16d4a
-	ld a, $0e
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16d4a
 	ld a, $02
@@ -4695,7 +4696,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, $02
 	call AddToAIScore
 .asm_16d4a
-	ld a, $01
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16d5f
 	ld a, [wCurCardPlayAreaLocation]
@@ -4705,7 +4706,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, $01
 	call AddToAIScore
 .asm_16d5f
-	ld a, $02
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16d7b
 	ld a, [wCurCardPlayAreaLocation]
@@ -4719,7 +4720,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, $01
 	call SubFromAIScore
 .asm_16d7b
-	ld a, $03
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16da0
 	ld a, [wCurCardPlayAreaLocation]
@@ -4746,7 +4747,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 
 .asm_16db0
-	ld a, $11 ; FLAG_3_BIT_1
+	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1
 	call CheckLoadedMoveFlag
 	jr nc, .done
 	call Func_16dcd
@@ -4804,7 +4805,7 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove: ; 170c9 (5:70c9)
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	push hl
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	pop hl
 	jr c, .no_carry
 	scf
@@ -4872,7 +4873,7 @@ CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 	ld [wSelectedMoveIndex], a
 	push bc
 	push hl
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	pop hl
 	pop bc
 	jr c, .next
@@ -5060,7 +5061,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	xor a ; first move
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .second_move
 	xor a
 	call EstimateDamage_VersusDefendingCard
@@ -5071,7 +5072,7 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 .second_move
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	jr c, .no_carry
 	ld a, $01
 	call EstimateDamage_VersusDefendingCard
@@ -5143,7 +5144,7 @@ CheckIfDefendingPokemonCanKnockOutWithMove: ; 173e4 (5:73e4)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call SwapTurn
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	call SwapTurn
 	pop bc
 	ld a, b
@@ -5264,7 +5265,7 @@ CheckForBenchIDAtHalfHPAndCanUseSecondMove: ; 17474 (5:7474)
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	push bc
-	call CheckIfCardCanUseSelectedMove
+	call CheckIfSelectedMoveIsUnusable
 	pop bc
 	jr c, .loop
 	inc b
