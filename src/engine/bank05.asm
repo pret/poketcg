@@ -1593,8 +1593,43 @@ CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
 	ret
 ; 0x157a3
 
-Func_157a3: ; 157a3 (5:57a3)
-	INCROM $157a3, $158b2
+; returns carry if any card with ID in e is found
+; in card location in a
+; input:
+;	a = card location to look in;
+;	e = card ID to look for.
+CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
+	ld b, a
+	ld c, e
+	lb de, 0, 0
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp b
+	jr nz, .next
+	ld a, e
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp c
+	jr z, .set_carry
+.next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop
+	or a
+	ret
+.set_carry
+	ld a, e
+	scf
+	ret
+; 0x157c6
+
+Func_157c6: ; 157c6 (5:57c6)
+	INCROM $157c6, $158b2
 
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
@@ -4889,7 +4924,7 @@ Func_16dcd: ; 16dcd (5:6dcd)
 
 .asm_16e3e
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr nc, .done
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -4904,11 +4939,11 @@ Func_16dcd: ; 16dcd (5:6dcd)
 .asm_16e55
 	ld e, NIDORANM
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr c, .asm_16e67
 	ld e, NIDORANF
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr nc, .done
 .asm_16e67
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -4924,19 +4959,19 @@ Func_16dcd: ; 16dcd (5:6dcd)
 .asm_16e77
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr c, .asm_16e9d
 	ld e, ONIX
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr c, .asm_16e9d
 	ld e, CUBONE
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr c, .asm_16e9d
 	ld e, RHYHORN
 	ld a, CARD_LOCATION_DECK
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jr c, .asm_16e9d
 	jr .done
 .asm_16e9d
@@ -5041,7 +5076,7 @@ Func_16dcd: ; 16dcd (5:6dcd)
 .asm_16f41: ; 16f41 (5:6f41)
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jp nc, .done
 	ld a, $82
 	ret
@@ -5150,7 +5185,7 @@ Func_16dcd: ; 16dcd (5:6dcd)
 .asm_16ff2: ; 16ff2 (5:6ff2)
 	ld a, CARD_LOCATION_DECK
 	ld e, LIGHTNING_ENERGY
-	call Func_157a3
+	call CheckIfAnyCardIDinLocation
 	jp nc, .done
 	call Func_164a1
 	jp nc, .done
