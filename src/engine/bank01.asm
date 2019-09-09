@@ -7620,6 +7620,7 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 	ret
 ; 0x7045
 
+Func_7045: ; 7045 (1:7045)
 	INCROM $7045, $70aa
 
 ; initializes variables when a duel begins, such as zeroing wDuelFinished or wDuelTurns,

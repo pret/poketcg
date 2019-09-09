@@ -5241,8 +5241,56 @@ CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
 	ret
 ; 0x17080
 
-Func_17080 ; 17080 (5:7080)
-	INCROM $17080, $170c9
+Func_17080: ; 17080 (5:7080)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	push af
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, PLAY_AREA_ARENA
+
+.loop
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	push bc
+	bank1call Func_7045
+	pop bc
+	jr c, .next
+	ld a, d
+	push bc
+	call LoadCardDataToBuffer2_FromDeckIndex
+	pop bc
+	ld a, [wLoadedCard2HP]
+	ld [wCurMoveDamage], a
+	ld e, c
+	push bc
+	call GetCardDamage
+	pop bc
+	ld e, a
+	ld a, [wCurMoveDamage]
+	cp e
+	jr c, .set_carry
+	jr z, .set_carry
+.next
+	inc c
+	ld a, c
+	cp b
+	jr nz, .loop
+
+	call SwapTurn
+	pop af
+	ldh [hTempPlayAreaLocation_ff9d], a
+	or a
+	ret
+.set_carry
+	call SwapTurn
+	pop af
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, c
+	scf
+	ret
+; 0x170c9
 
 ; returns carry if the following conditions are met:
 ;	- arena card HP >= half max HP
