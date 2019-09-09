@@ -4986,7 +4986,7 @@ Func_16dcd: ; 16dcd (5:6dcd)
 	ret
 
 .asm_16ead: ; 16ead (5:6ead)
-	call Func_17057
+	call CheckIfAnyBasicPokemonInDeck
 	jr nc, .done
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -5209,8 +5209,37 @@ Func_17005: ; 17005 (5:7005)
 Func_17019 ; 17019 (5:7019)
 	INCROM $17019, $17057
 
-Func_17057 ; 17057 (5:7057)
-	INCROM $17057, $17080
+; returns carry if there are 
+; any basic Pokémon cards in deck.
+CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
+	ld e, 0
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	push de
+	ld a, e
+	call LoadCardDataToBuffer2_FromDeckIndex
+	pop de
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	jr nc, .next
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr z, .set_carry
+.next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x17080
 
 Func_17080 ; 17080 (5:7080)
 	INCROM $17080, $170c9
