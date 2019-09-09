@@ -3741,7 +3741,10 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 ; 0x16488
 
 Func_16488 ; 16488 (5:6488)
-	INCROM $16488, $164d3
+	INCROM $16488, $164a1
+
+Func_164a1 ; 164a1 (5:64a1)
+	INCROM $164a1, $164d3
 
 ; copies bench AI score to wcddd
 ; and loads in wAIscore value in wcde3
@@ -4830,11 +4833,352 @@ Func_16a86: ; 16a86 (5:6a86)
 	ret
 ; 0x16dcd
 
-Func_16dcd ; 16dcd (5:6dcd)
-	INCROM $16dcd, $17019
+Func_16dcd: ; 16dcd (5:6dcd)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+
+	cp NIDORANF
+	jr z, .asm_16e55
+	cp ODDISH
+	jr z, .asm_16e3e
+	cp BELLSPROUT
+	jr z, .asm_16e3e
+	cp EXEGGUTOR
+	jp z, .asm_16ec2
+	cp SCYTHER
+	jp z, .asm_16ecb
+	cp KRABBY
+	jr z, .asm_16e3e
+	cp VAPOREON1
+	jp z, .asm_16ecb
+	cp ELECTRODE2
+	jp z, .asm_16eea
+	cp MAROWAK1
+	jr z, .asm_16e77
+	cp MEW3
+	jp z, .asm_16f0f
+	cp JIGGLYPUFF2
+	jp z, .asm_16ead
+	cp PORYGON
+	jp z, .asm_16f18
+	cp MEWTWO3
+	jp z, .asm_16f41
+	cp MEWTWO2
+	jp z, .asm_16f41
+	cp NINETAILS2
+	jp z, .asm_16f4e
+	cp ZAPDOS3
+	jp z, .asm_16fb8
+	cp KANGASKHAN
+	jp z, .asm_16fbb
+	cp DUGTRIO
+	jp z, .asm_16fc8
+	cp ELECTRODE1
+	jp z, .asm_16ff2
+	cp GOLDUCK
+	jp z, Func_17005
+	cp DRAGONAIR
+	jp z, Func_17005
+
+.done
+	xor a
+	ret
+
+.asm_16e3e
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr nc, .done
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_BENCH_POKEMON
+	jr nc, .done
+	ld b, a
+	ld a, MAX_BENCH_POKEMON
+	sub b
+	add $80
+	ret
+
+.asm_16e55
+	ld e, NIDORANM
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr c, .asm_16e67
+	ld e, NIDORANF
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr nc, .done
+.asm_16e67
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .done
+	ld b, a
+	ld a, MAX_PLAY_AREA_POKEMON
+	sub b
+	add $80
+	ret
+
+.asm_16e77
+	ld e, GEODUDE
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr c, .asm_16e9d
+	ld e, ONIX
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr c, .asm_16e9d
+	ld e, CUBONE
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr c, .asm_16e9d
+	ld e, RHYHORN
+	ld a, CARD_LOCATION_DECK
+	call Func_157a3
+	jr c, .asm_16e9d
+	jr .done
+.asm_16e9d
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_BENCH_POKEMON
+	jr nc, .done
+	ld b, a
+	ld a, MAX_BENCH_POKEMON
+	sub b
+	add $80
+	ret
+
+.asm_16ead: ; 16ead (5:6ead)
+	call Func_17057
+	jr nc, .done
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .done
+	ld b, a
+	ld a, MAX_PLAY_AREA_POKEMON
+	sub b
+	add $80
+	ret
+
+.asm_16ec2: ; 16ec2 (5:6ec2)
+	call AIDecideWhetherToRetreat
+	jp nc, .done
+	ld a, $8a
+	ret
+
+.asm_16ecb: ; 16ecb (5:6ecb)
+	ld a, [wcdf0]
+	or a
+	jr nz, .asm_16ee7
+	ld a, $01 ; second move
+	ld [wSelectedMoveIndex], a
+	call CheckIfSelectedMoveIsUnusable
+	jr c, .asm_16ee7
+	ld a, $01 ; second move
+	call EstimateDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jp nz, .done
+.asm_16ee7
+	ld a, $85
+	ret
+
+.asm_16eea: ; 16eea (5:6eea)
+	call SwapTurn
+	call GetArenaCardColor
+	call SwapTurn
+	ld b, a
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+.asm_16ef9
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_16f0c
+	push bc
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop bc
+	cp b
+	jr nz, .asm_16ef9
+	jp .done
+.asm_16f0c
+	ld a, $82
+	ret
+
+.asm_16f0f: ; 16f0f (5:6f0f)
+	call Func_17080
+	jp nc, .done
+	ld a, $85
+	ret
+
+.asm_16f18: ; 16f18 (5:6f18)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp CONFUSED
+	jp z, .done
+	ld a, [wSelectedMoveIndex]
+	or a
+	jr nz, .asm_16f34
+	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
+	cp 2
+	jr c, .asm_16f3e
+	ld a, $82
+	ret
+.asm_16f34
+	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
+	cp 2
+	jr nc, .asm_16f3e
+	ld a, $82
+	ret
+.asm_16f3e
+	ld a, $81
+	ret
+
+.asm_16f41: ; 16f41 (5:6f41)
+	ld e, PSYCHIC_ENERGY
+	ld a, CARD_LOCATION_DISCARD_PILE
+	call Func_157a3
+	jp nc, .done
+	ld a, $82
+	ret
+
+.asm_16f4e: ; 16f4e (5:6f4e)
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetNonTurnDuelistVariable
+	or a
+	ret z
+	ld a, $03
+	call Random
+	or a
+	jr z, .asm_16fb5
+	dec a
+	ret z
+	call SwapTurn
+	call CreateHandCardList
+	call SwapTurn
+	or a
+	ret z
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 3
+	jr nc, .asm_16f9d
+
+	ld hl, wDuelTempList
+	ld b, 0
+.asm_16f78
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_16f98
+	push bc
+	call SwapTurn
+	call LoadCardDataToBuffer2_FromDeckIndex
+	call SwapTurn
+	pop bc
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	jr nc, .asm_16f78
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr nz, .asm_16f78
+	inc b
+	jr .asm_16f78
+.asm_16f98
+	ld a, b
+	cp 2
+	jr nc, .asm_16fb5
+.asm_16f9d
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+.asm_16fa2
+	ld a, [hli]
+	cp $ff
+	jp z, .done
+	push hl
+	call SwapTurn
+	call CheckForEvolutionInList
+	call SwapTurn
+	pop hl
+	jr nc, .asm_16fa2
+.asm_16fb5
+	ld a, $83
+	ret
+
+.asm_16fb8: ; 16fb8 (5:6fb8)
+	ld a, $83
+	ret
+
+.asm_16fbb: ; 16fbb (5:6fbb)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp 41
+	jp nc, .done
+	ld a, $80
+	ret
+
+.asm_16fc8: ; 16fc8 (5:6fc8)
+	ld a, DUELVARS_BENCH
+	call GetTurnDuelistVariable
+
+	lb de, 0, 0
+.asm_16fd0
+	inc e
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_16fe3
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	cp 20
+	jr nc, .asm_16fd0
+	inc d
+	jr .asm_16fd0
+
+.asm_16fe3
+	push de
+	call CountPrizes
+	pop de
+	cp d
+	jp c, .done
+	jp z, .done
+	ld a, $80
+	ret
+
+.asm_16ff2: ; 16ff2 (5:6ff2)
+	ld a, CARD_LOCATION_DECK
+	ld e, LIGHTNING_ENERGY
+	call Func_157a3
+	jp nc, .done
+	call Func_164a1
+	jp nc, .done
+	ld a, $83
+	ret
+
+Func_17005: ; 17005 (5:7005)
+	call SwapTurn
+	ld e, PLAY_AREA_ARENA
+	call CountNumberOfEnergyCardsAttached
+	call SwapTurn
+	or a
+	jr z, .asm_17016
+	ld a, $83
+	ret
+.asm_17016
+	ld a, $80
+	ret
+; 0x17019
 
 Func_17019 ; 17019 (5:7019)
-	INCROM $17019, $170c9
+	INCROM $17019, $17057
+
+Func_17057 ; 17057 (5:7057)
+	INCROM $17057, $17080
+
+Func_17080 ; 17080 (5:7080)
+	INCROM $17080, $170c9
 
 ; returns carry if the following conditions are met:
 ;	- arena card HP >= half max HP
@@ -4886,7 +5230,7 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove: ; 170c9 (5:70c9)
 ;	  is set but there's no evolution of card in hand/deck
 ;	- card can use second move
 ; Also outputs the number of Pokémon in bench
-; that meet these requirements in b
+; that meet these requirements in a
 CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld d, a
