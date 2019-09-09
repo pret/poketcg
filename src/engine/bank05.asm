@@ -4306,14 +4306,15 @@ Func_16a86: ; 16a86 (5:6a86)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfSelectedMoveIsUnusable
-	jr nc, .asm_16a9d
+	jr nc, .usable
 	
-.asm_16a96
+.unusable
 	xor a
 	ld [wAIScore], a
 	jp .done
 
-.asm_16a9d
+; load arena card IDs
+.usable
 	xor a
 	ld [wcdf0], a
 	ld a, DUELVARS_ARENA_CARD
@@ -4327,9 +4328,15 @@ Func_16a86: ; 16a86 (5:6a86)
 	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempNonTurnDuelistCardID], a
+
+; handle the case where the player has No Damage substatus.
+; in the case the player does, check if this move is
+; has a residual effect, or if it can damage the opposing bench.
+; If none of those are true, render the move unusable.
+; also if it's a PKMN power, consider it unusable as well.
 	bank1call HandleNoDamageOrEffectSubstatus
 	call SwapTurn
-	jr nc, .skip_no_damage_substatus
+	jr nc, .check_if_can_ko
 
 	; player is under No Damage substatus
 	ld a, $01
@@ -4338,14 +4345,16 @@ Func_16a86: ; 16a86 (5:6a86)
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jr z, .asm_16a96
-	and $80
-	jr nz, .skip_no_damage_substatus
+	jr z, .unusable
+	and RESIDUAL
+	jr nz, .check_if_can_ko
 	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16a96
+	jr nc, .unusable
 
-.skip_no_damage_substatus
+; calculate damage to player to check if move can KO.
+; encourage move if it's able to KO.
+.check_if_can_ko
 	ld a, [wSelectedMoveIndex]
 	call EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -4359,11 +4368,16 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 20
 	call AddToAIScore
 
+; raise AI score by the number of damage counters that this move deals.
+; if no damage is dealt, subtract AI score. in case wDamage is zero
+; but wMaxDamage is not, then encourage move afterwards.
+; otherwise, if wMaxDamage is also zero, check for damage against 
+; player's bench, and encourage move in case there is.
 .check_damage
 	xor a
 	ld [wce02], a
 	ld a, [wDamage]
-	ld [wCurCardPlayAreaLocation], a
+	ld [wCurMoveDamage], a
 	or a
 	jr z, .no_damage
 	call CalculateTensDigit
@@ -4375,27 +4389,29 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 	ld a, [wAIMaxDamage]
 	or a
-	jr z, .asm_16b27
-	ld a, $02
+	jr z, .no_max_damage
+	ld a, 2
 	call AddToAIScore
-	
 	xor a
 	ld [wce02], a
-.asm_16b27
+.no_max_damage
 	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
 	call CheckLoadedMoveFlag
 	jr nc, .check_recoil
-	ld a, $02
+	ld a, 2
 	call AddToAIScore
 
+; handle recoil moves (low and high recoil).
 .check_recoil
 	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL
 	call CheckLoadedMoveFlag
-	jr c, .asm_16b42
+	jr c, .is_recoil
 	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL
 	call CheckLoadedMoveFlag
 	jp nc, .check_defending_can_ko
-.asm_16b42
+.is_recoil
+	; sub from AI score number of damage counters
+	; that move deals to itself.
 	ld a, [wLoadedMoveUnknown1]
 	or a
 	jp z, .check_defending_can_ko
@@ -4411,14 +4427,14 @@ Func_16a86: ; 16a86 (5:6a86)
 	pop de
 	jr c, .high_recoil
 
-	; check if LOW_RECOIL KOs self
+	; if LOW_RECOIL KOs self, decrease AI score
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	cp e
 	jr c, .kos_self
 	jp nz, .check_defending_can_ko
 .kos_self
-	ld a, $0a
+	ld a, 10
 	call SubFromAIScore
 
 .high_recoil
@@ -4428,6 +4444,9 @@ Func_16a86: ; 16a86 (5:6a86)
 	cp 2
 	jr c, .dismiss_high_recoil_move
 	; has benched Pokémon
+
+; here the AI handles high recoil moves differently
+; depending on what deck it's playing.
 	ld a, [wOpponentDeckID]
 	cp ROCK_CRUSHER_DECK_ID
 	jr z, .rock_crusher_deck
@@ -4435,8 +4454,10 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr z, .zapping_selfdestruct_deck
 	cp BOOM_BOOM_SELFDESTRUCT_DECK_ID
 	jr z, .encourage_high_recoil_move
+	; Boom Boom Selfdestruct deck always encourages
 	cp POWER_GENERATOR_DECK_ID
-	jr nz, .asm_16be0
+	jr nz, .high_recoil_generic_checks
+	; Power Generator deck always dismisses
 
 .dismiss_high_recoil_move
 	xor a
@@ -4444,21 +4465,23 @@ Func_16a86: ; 16a86 (5:6a86)
 	jp .done
 
 .encourage_high_recoil_move
-	ld a, $14
+	ld a, 20
 	call AddToAIScore
 	jp .done
 
+; Zapping Selfdestruct deck only uses this move
+; if number of cards in deck >= 30 and
+; HP of active card is < half max HP.
 .zapping_selfdestruct_deck
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp 31
-	jr nc, .asm_16be0
+	jr nc, .high_recoil_generic_checks
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	sla a
 	cp c
-	jr c, .asm_16be0
-
+	jr c, .high_recoil_generic_checks
 	ld b, 0
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -4466,84 +4489,111 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, e
 	cp MAGNEMITE1
 	jr z, .magnemite1
-	ld b, 10
+	ld b, 10 ; bench damage
 .magnemite1
 	ld a, 10
 	add b
-	ld b, a
-	ld a, $01
-	call .asm_16c35
+	ld b, a ; 20 bench damage if not Magnemite1
+
+; if this move causes player to win the duel by
+; knocking out own Pokémon, dismiss move.
+	ld a, 1 ; count active Pokémon as KO'd
+	call .check_if_kos_bench
 	jr c, .dismiss_high_recoil_move
 	jr .encourage_high_recoil_move
 
+; Rock Crusher Deck only uses this move if
+; prize count is below 4 and move wins (or potentially draws) the duel,
+; (at least gets KOs equal to prize cards left).
 .rock_crusher_deck
 	call CountPrizes
 	cp 4
 	jr nc, .dismiss_high_recoil_move
 	; prize count < 4
-	ld b, $14
+	ld b, 20 ; damage dealt to bench
 	call SwapTurn
 	xor a
-	call .asm_16c35
+	call .check_if_kos_bench
 	call SwapTurn
 	jr c, .encourage_high_recoil_move
 
-.asm_16be0
+; generic checks for all other deck IDs.
+; encourage move if it wins (or potentially draws) the duel,
+; (at least gets KOs equal to prize cards left).
+; dismiss it if it causes the player to win.
+.high_recoil_generic_checks
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp CHANSEY
-	jr z, .asm_16bfd
+	jr z, .chansey
 	cp MAGNEMITE1
-	jr z, .asm_16bf9
+	jr z, .magnemite1_or_weezing
 	cp WEEZING
-	jr z, .asm_16bf9
+	jr z, .magnemite1_or_weezing
+	ld b, 20 ; bench damage
+	jr .check_bench_kos
+.magnemite1_or_weezing
+	ld b, 10 ; bench damage
+	jr .check_bench_kos
+.chansey
+	ld b, 0 ; no bench damage
 
-	ld b, 20
-	jr .asm_16bff
-.asm_16bf9
-	ld b, 10
-	jr .asm_16bff
-.asm_16bfd
-	ld b, 0
-.asm_16bff
+.check_bench_kos
 	push bc
 	call SwapTurn
 	xor a
-	call .asm_16c35
+	call .check_if_kos_bench
 	call SwapTurn
 	pop bc
-	jr c, .asm_16c1d
+	jr c, .wins_the_duel
 	push de
-	ld a, $01
-	call .asm_16c35
+	ld a, 1
+	call .check_if_kos_bench
 	pop bc
-	jr nc, .asm_16c25
+	jr nc, .count_own_ko_bench
 
+; move causes player to draw all prize cards
 	xor a
 	ld [wAIScore], a
 	jp .done
-.asm_16c1d
+
+; move causes CPU to draw all prize cards
+.wins_the_duel
 	ld a, 20
 	call AddToAIScore
 	jp .done
 
-.asm_16c25
+; subtract from AI score number of own benched Pokémon KO'd
+.count_own_ko_bench
 	push bc
 	ld a, d
 	or a
-	jr z, .asm_16c2e
+	jr z, .count_player_ko_bench
 	dec a
 	call SubFromAIScore
 
-.asm_16c2e
+; add to AI score number of player benched Pokémon KO'd
+.count_player_ko_bench
 	pop bc
 	ld a, b
 	call AddToAIScore
 	jr .check_defending_can_ko
 
-.asm_16c35
+; local function that gets called to determine damage to
+; benched Pokémoncaused by a HIGH_RECOIL move.
+; return carry if using move causes number of benched Pokémon KOs
+; equal to or larger than remaining prize cards.
+; this function is independent on duelist turn, so whatever
+; turn it is when this is called, it's that duelist's
+; bench/prize cards that get checked.
+; input:
+;	a = initial number of KO's beside benched Pokémon,
+;		so that if the active Pokémon is KO'd by the move,
+;		this counts towards the prize cards collected
+;	b = damage dealt to bench Pokémon
+.check_if_kos_bench
 	ld d, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
@@ -4552,33 +4602,36 @@ Func_16a86: ; 16a86 (5:6a86)
 	inc e
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_16c53
+	jr z, .exit_loop
 	ld a, e
 	add DUELVARS_ARENA_CARD_HP
 	push hl
 	call GetTurnDuelistVariable
 	pop hl
 	cp b
-	jr z, .asm_16c50
+	jr z, .increase_count
 	jr nc, .loop
-.asm_16c50
+	; increase d if damage dealt KOs
+.increase_count
 	inc d
 	jr .loop
-.asm_16c53
+.exit_loop
 	push de
 	call SwapTurn
 	call CountPrizes
 	call SwapTurn
 	pop de
 	cp d
-	jp c, .asm_16c67
-	jp z, .asm_16c67
+	jp c, .set_carry
+	jp z, .set_carry
 	or a
 	ret
-.asm_16c67
+.set_carry
 	scf
 	ret
 
+; if defending card can KO, encourage move
+; unless wce02 is non-zero.
 .check_defending_can_ko
 	ld a, [wSelectedMoveIndex]
 	push af
@@ -4595,6 +4648,8 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 5
 	call SubFromAIScore
 
+; subtract from AI score if this move requires
+; discarding any energy cards.
 .check_discard
 	ld a, [wSelectedMoveIndex]
 	ld e, a
@@ -4613,32 +4668,34 @@ Func_16a86: ; 16a86 (5:6a86)
 .asm_16ca6
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16cb3
+	jr nc, .check_nullify_flag
 	ld a, [wLoadedMoveUnknown1]
 	call AddToAIScore
 
-.asm_16cb3
+; encourage move if it has a nullify or weaken attack effect.
+.check_nullify_flag
 	ld a, MOVE_FLAG2_ADDRESS | NULLIFY_OR_WEAKEN_ATTACK
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16cbf
+	jr nc, .check_draw_flag
 	ld a, 1
 	call AddToAIScore
 
-.asm_16cbf
+; encourage move if it has an effect to draw a card.
+.check_draw_flag
 	ld a, MOVE_FLAG1_ADDRESS | DRAW_CARD
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16ccb
+	jr nc, .check_heal_flag
 	ld a, $01
 	call AddToAIScore
 
-.asm_16ccb
+.check_heal_flag
 	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16d09
+	jr nc, .check_status_effect
 	ld a, [wLoadedMoveUnknown1]
 	cp $01
 	jr z, .asm_16cf8
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wCurMoveDamage]
 	call CalculateTensDigit
 	ld b, a
 	ld a, [wLoadedMoveUnknown1]
@@ -4656,70 +4713,77 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, b
 .asm_16cf8
 	push af
-	ld e, $00
+	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	call CalculateTensDigit
 	pop bc
-	cp b
+	cp b ; wLoadedMoveUnknown1
 	jr c, .asm_16d06
 	ld a, b
 .asm_16d06
 	call AddToAIScore
 
-.asm_16d09
+.check_status_effect
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
+	; skip if player has Snorlax
 	cp SNORLAX
 	jp z, .asm_16db0
+
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	ld [wCurCardPlayAreaLocation], a
+
+; check poison
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16d4a
+	jr nc, .check_sleep
 	ld a, [wCurCardPlayAreaLocation]
 	and $c0
 	jr z, .asm_16d45
 	and $40
-	jr z, .asm_16d4a
+	jr z, .check_sleep
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16d4a
+	jr nc, .check_sleep
 	ld a, $02
 	call SubFromAIScore
-	jr .asm_16d4a
+	jr .check_sleep
 .asm_16d45
 	ld a, $02
 	call AddToAIScore
-.asm_16d4a
+
+.check_sleep
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16d5f
+	jr nc, .check_paralysis
 	ld a, [wCurCardPlayAreaLocation]
 	and $0f
 	cp $02
-	jr z, .asm_16d5f
+	jr z, .check_paralysis
 	ld a, $01
 	call AddToAIScore
-.asm_16d5f
+
+.check_paralysis
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16d7b
+	jr nc, .check_confusion
 	ld a, [wCurCardPlayAreaLocation]
 	and $0f
 	cp $02
 	jr z, .asm_16d76
 	ld a, $01
 	call AddToAIScore
-	jr .asm_16d7b
+	jr .check_confusion
 .asm_16d76
 	ld a, $01
 	call SubFromAIScore
-.asm_16d7b
+
+.check_confusion
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16da0
