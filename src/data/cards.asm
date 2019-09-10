@@ -253,7 +253,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db DAMAGE_NORMAL ; category
 	dw BulbasaurLeechSeedEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 89 ; animation
@@ -317,7 +317,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw IvysaurPoisonPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -369,7 +369,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db DAMAGE_NORMAL ; category
 	dw VenusaurMegaDrainEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 89 ; animation
@@ -456,7 +456,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw CaterpieStringShotEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -508,7 +508,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db RESIDUAL ; category
 	dw MetapodStiffenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -521,7 +521,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MetapodStunSporeEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -559,7 +559,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db DAMAGE_NORMAL ; category
 	dw ButterfreeWhirlwindEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 83 ; animation
@@ -573,7 +573,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db DAMAGE_NORMAL ; category
 	dw ButterfreeMegaDrainEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 89 ; animation
@@ -609,7 +609,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw WeedlePoisonStingEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -661,7 +661,7 @@ KakunaCard: ; 31030 (c:5030)
 	db RESIDUAL ; category
 	dw KakunaStiffenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -674,7 +674,7 @@ KakunaCard: ; 31030 (c:5030)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw KakunaPoisonPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -725,7 +725,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw BeedrillPoisonStingEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -762,7 +762,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw EkansSpitPoisonEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -776,7 +776,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw EkansWrapEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -814,7 +814,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db DAMAGE_NORMAL ; category
 	dw ArbokTerrorStrikeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 1 ; animation
@@ -827,7 +827,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ArbokPoisonFangEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -880,7 +880,7 @@ NidoranFCard: ; 31134 (c:5134)
 	dw NidoranFCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -915,7 +915,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw NidorinaSupersonicEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1119,7 +1119,7 @@ NidokingCard: ; 31279 (c:5279)
 	db 30 ; damage
 	db DAMAGE_PLUS ; category
 	dw NidokingThrashEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1133,8 +1133,8 @@ NidokingCard: ; 31279 (c:5279)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw NidokingToxicEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db INFLICT_POISON ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 71 ; animation
@@ -1170,7 +1170,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ZubatSupersonicEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1185,7 +1185,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db DAMAGE_NORMAL ; category
 	dw ZubatLeechLifeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 89 ; animation
@@ -1236,7 +1236,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db DAMAGE_NORMAL ; category
 	dw GolbatLeechLifeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 89 ; animation
@@ -1272,7 +1272,7 @@ OddishCard: ; 3133c (c:533c)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw OddishStunSporeEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1288,7 +1288,7 @@ OddishCard: ; 3133c (c:533c)
 	dw OddishSproutEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -1323,8 +1323,8 @@ GloomCard: ; 3137d (c:537d)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GloomPoisonPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db INFLICT_POISON ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 57 ; animation
@@ -1337,8 +1337,8 @@ GloomCard: ; 3137d (c:537d)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GloomFoulOdorEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
-	db FLAG_2_BIT_7_F ; flags 2
+	db INFLICT_CONFUSION ; flags 1
+	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 54 ; animation
@@ -1375,7 +1375,7 @@ VileplumeCard: ; 313be (c:53be)
 	db POKEMON_POWER ; category
 	dw VileplumeHealEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 94 ; animation
@@ -1439,7 +1439,7 @@ ParasCard: ; 313ff (c:53ff)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ParasSporeEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1476,7 +1476,7 @@ ParasectCard: ; 31440 (c:5440)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ParasectSporeEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1527,7 +1527,7 @@ VenonatCard: ; 31481 (c:5481)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw VenonatStunSporeEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1542,7 +1542,7 @@ VenonatCard: ; 31481 (c:5481)
 	db DAMAGE_NORMAL ; category
 	dw VenonatLeechLifeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 89 ; animation
@@ -1592,7 +1592,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw VenomothVenomPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F | INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_POISON | INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1645,7 +1645,7 @@ BellsproutCard: ; 31503 (c:5503)
 	dw BellsproutCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -1680,7 +1680,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw WeepinbellPoisonPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1732,7 +1732,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db RESIDUAL ; category
 	dw VictreebelLureEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 70 ; animation
@@ -1746,7 +1746,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db DAMAGE_NORMAL ; category
 	dw VictreebelAcidEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 61 ; animation
@@ -1782,7 +1782,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GrimerNastyGooEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1797,7 +1797,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db RESIDUAL ; category
 	dw GrimerMinimizeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 79 ; animation
@@ -1847,7 +1847,7 @@ MukCard: ; 31607 (c:5607)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MukSludgeEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1884,7 +1884,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ExeggcuteHypnosisEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -1899,7 +1899,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db DAMAGE_NORMAL ; category
 	dw ExeggcuteLeechSeedEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 89 ; animation
@@ -1937,7 +1937,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	dw ExeggutorTeleportEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -1950,7 +1950,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db DAMAGE_X ; category
 	dw ExeggutorBigEggsplosionEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 2 ; animation
@@ -1986,7 +1986,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw KoffingFoulGasEffectCommands ; effect commands
-	db INFLICT_POISON_F | INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_POISON | INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2037,7 +2037,7 @@ WeezingCard: ; 3170b (c:570b)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw WeezingSmogEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2051,7 +2051,7 @@ WeezingCard: ; 3170b (c:570b)
 	db 60 ; damage
 	db DAMAGE_NORMAL ; category
 	dw WeezingSelfdestructEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 60
@@ -2088,7 +2088,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TangelaBindEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2102,7 +2102,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TangelaPoisonPowderEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2139,7 +2139,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TangelaStunSporeEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2153,7 +2153,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TangelaPoisonWhipEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2192,7 +2192,7 @@ ScytherCard: ; 317ce (c:57ce)
 	dw ScytherSwordsDanceEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -2241,7 +2241,7 @@ PinsirCard: ; 3180f (c:580f)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw PinsirIronGripEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2307,7 +2307,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db DAMAGE_NORMAL ; category
 	dw CharmanderEmberEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 14 ; animation
@@ -2358,7 +2358,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db DAMAGE_NORMAL ; category
 	dw CharmeleonFlamethrowerEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 15 ; animation
@@ -2409,7 +2409,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db DAMAGE_NORMAL ; category
 	dw CharizardFireSpinEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 6
 	db 16 ; animation
@@ -2445,7 +2445,7 @@ VulpixCard: ; 31913 (c:5913)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw VulpixConfuseRayEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2497,7 +2497,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db RESIDUAL ; category
 	dw NinetailsLureEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 70 ; animation
@@ -2511,7 +2511,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db DAMAGE_NORMAL ; category
 	dw NinetailsFireBlastEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 16 ; animation
@@ -2549,7 +2549,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	dw NinetailsMixUpEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -2664,8 +2664,8 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db DAMAGE_PLUS ; category
 	dw ArcanineFlamesOfRageEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db DISCARD_ENERGY ; flags 2
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 6
 	db 16 ; animation
 
@@ -2701,7 +2701,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db DAMAGE_NORMAL ; category
 	dw ArcanineFlamethrowerEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 15 ; animation
@@ -2714,7 +2714,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ArcanineTakeDownEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 30
@@ -2817,7 +2817,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db DAMAGE_NORMAL ; category
 	dw RapidashAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F + $40 ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -2868,7 +2868,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db DAMAGE_NORMAL ; category
 	dw MagmarFlamethrowerEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 15 ; animation
@@ -2905,7 +2905,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db DAMAGE_NORMAL ; category
 	dw MagmarSmokescreenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 90 ; animation
@@ -2918,7 +2918,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MagmarSmogEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -2971,7 +2971,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	dw FlareonRageEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 1 ; animation
 
@@ -3021,7 +3021,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db DAMAGE_NORMAL ; category
 	dw FlareonFlamethrowerEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 15 ; animation
@@ -3058,7 +3058,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db RESIDUAL ; category
 	dw MoltresWildfireEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_5_F ; flags 2
+	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 91 ; animation
@@ -3159,7 +3159,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw SquirtleBubbleEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3174,7 +3174,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db RESIDUAL ; category
 	dw SquirtleWithdrawEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -3211,7 +3211,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db RESIDUAL ; category
 	dw WartortleWithdrawEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -3276,7 +3276,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db DAMAGE_PLUS ; category
 	dw BlastoiseHydroPumpEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 22 ; animation
@@ -3313,7 +3313,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db RESIDUAL ; category
 	dw PsyduckHeadacheEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 91 ; animation
@@ -3363,7 +3363,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GolduckPsyshockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3379,7 +3379,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	dw GolduckHyperBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 30 ; animation
 
@@ -3415,7 +3415,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db DAMAGE_PLUS ; category
 	dw PoliwagWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -3466,7 +3466,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db DAMAGE_NORMAL ; category
 	dw PoliwhirlAmnesiaEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 85 ; animation
@@ -3517,7 +3517,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db DAMAGE_PLUS ; category
 	dw PoliwrathWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -3531,7 +3531,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db DAMAGE_NORMAL ; category
 	dw PoliwrathWhirlpoolEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 20 ; animation
@@ -3568,7 +3568,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db POKEMON_POWER ; category
 	dw TentacoolCowardiceEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 94 ; animation
@@ -3618,7 +3618,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TentacruelSupersonicEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3632,7 +3632,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw TentacruelJellyfishStingEffectCommands ; effect commands
-	db INFLICT_POISON_F ; flags 1
+	db INFLICT_POISON ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3734,7 +3734,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw DewgongIceBeamEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3771,7 +3771,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ShellderSupersonicEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3786,7 +3786,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db RESIDUAL ; category
 	dw ShellderHideInShellEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -3822,7 +3822,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw CloysterClampEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -3875,7 +3875,7 @@ KrabbyCard: ; 3202f (c:602f)
 	dw KrabbyCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -3926,7 +3926,7 @@ KinglerCard: ; 32070 (c:6070)
 	dw KinglerFlailEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 2 ; animation
 
@@ -3976,7 +3976,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db DAMAGE_NORMAL ; category
 	dw HorseaSmokescreenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 90 ; animation
@@ -4027,7 +4027,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db DAMAGE_PLUS ; category
 	dw SeadraWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -4041,7 +4041,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db DAMAGE_NORMAL ; category
 	dw SeadraAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -4231,7 +4231,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db RESIDUAL ; category
 	dw StarmieRecoverEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 88 ; animation
@@ -4244,7 +4244,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw StarmieStarFreezeEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4297,7 +4297,7 @@ MagikarpCard: ; 32237 (c:6237)
 	dw MagikarpFlailEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 2 ; animation
 
@@ -4346,7 +4346,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GyaradosBubblebeamEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4384,7 +4384,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db DAMAGE_PLUS ; category
 	dw LaprasWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -4397,7 +4397,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw LaprasConfuseRayEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4436,7 +4436,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	dw VaporeonFocusEnergyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -4500,7 +4500,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db DAMAGE_PLUS ; category
 	dw VaporeonWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -4551,7 +4551,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db DAMAGE_PLUS ; category
 	dw OmanyteWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -4588,7 +4588,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db DAMAGE_PLUS ; category
 	dw OmastarWaterGunEffectCommands ; effect commands
 	db NONE ; flags 1
-	db ATTACHED_ENERGY_BOOST_F ; flags 2
+	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 19 ; animation
@@ -4638,7 +4638,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ArticunoFreezeDryEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4652,7 +4652,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 50 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ArticunoBlizzardEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
@@ -4703,8 +4703,8 @@ Articuno2Card: ; 3243f (c:643f)
 	db 0 ; damage
 	db RESIDUAL ; category
 	dw ArticunoIceBreathEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 99 ; animation
@@ -4754,7 +4754,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw PikachuThunderJoltEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4791,7 +4791,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw PikachuSparkEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
@@ -4843,7 +4843,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db DAMAGE_NORMAL ; category
 	dw Pikachu3GrowlEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
 	db 76 ; animation
@@ -4856,7 +4856,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw Pikachu3ThundershockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4894,7 +4894,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db DAMAGE_NORMAL ; category
 	dw Pikachu4GrowlEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
 	db 76 ; animation
@@ -4907,7 +4907,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw Pikachu4ThundershockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4944,7 +4944,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw FlyingPikachuThundershockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -4959,7 +4959,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db DAMAGE_NORMAL ; category
 	dw FlyingPikachuFlyEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -5098,7 +5098,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db DAMAGE_NORMAL ; category
 	dw RaichuAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -5148,7 +5148,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw RaichuGigashockEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
@@ -5199,7 +5199,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MagnemiteThunderWaveEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5213,7 +5213,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MagnemiteSelfdestructEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 40
@@ -5265,7 +5265,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db RESIDUAL ; category
 	dw MagnemiteMagneticStormEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_5_F ; flags 2
+	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 109 ; animation
@@ -5301,7 +5301,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MagnetonThunderWaveEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5315,7 +5315,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
 	dw Magneton1SelfdestructEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 80
@@ -5366,7 +5366,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db 100 ; damage
 	db DAMAGE_NORMAL ; category
 	dw Magneton2SelfdestructEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 100
@@ -5470,7 +5470,7 @@ Electrode1Card: ; 3280e (c:680e)
 	dw ElectrodeEnergySpikeEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -5521,7 +5521,7 @@ Electrode2Card: ; 3284f (c:684f)
 	dw ElectrodeChainLightningEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 13 ; animation
 
@@ -5557,7 +5557,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db RESIDUAL ; category
 	dw ElectabuzzLightScreenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 80 ; animation
@@ -5607,7 +5607,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ElectabuzzThundershockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5621,7 +5621,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 30 ; damage
 	db DAMAGE_PLUS ; category
 	dw ElectabuzzThunderpunchEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5672,7 +5672,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw JolteonStunNeedleEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5760,7 +5760,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ZapdosThunderstormEffectCommands ; effect commands
-	db LOW_RECOIL_F + DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db LOW_RECOIL | DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5811,7 +5811,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db 60 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ZapdosThunderEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5826,7 +5826,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db DAMAGE_NORMAL ; category
 	dw ZapdosThunderboltEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 9
 	db 8 ; animation
@@ -5862,7 +5862,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db 0 ; damage
 	db POKEMON_POWER ; category
 	dw ZapdosPealOfThunderEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -5878,7 +5878,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	dw ZapdosBigThunderEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 100 ; animation
 
@@ -5914,7 +5914,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db DAMAGE_NORMAL ; category
 	dw SandshrewSandAttackEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 90 ; animation
@@ -6082,7 +6082,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	dw DugtrioEarthquakeEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 1 ; animation
 
@@ -6118,7 +6118,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db POKEMON_POWER ; category
 	dw MankeyPeekEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_5_F ; flags 2
+	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 94 ; animation
@@ -6183,7 +6183,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db DAMAGE_NORMAL ; category
 	dw PrimeapeTantrumEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_7_F ; flags 2
+	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 43 ; animation
@@ -6271,7 +6271,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db DAMAGE_MINUS ; category
 	dw MachokeKarateChopEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_7_F ; flags 2
+	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 1 ; animation
@@ -6284,7 +6284,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db 60 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MachokeSubmissionEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 20
@@ -6424,7 +6424,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db RESIDUAL ; category
 	dw GravelerHardenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 79 ; animation
@@ -6488,7 +6488,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db 100 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GolemSelfdestructEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 100
@@ -6540,7 +6540,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db RESIDUAL ; category
 	dw OnixHardenEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 79 ; animation
@@ -6577,7 +6577,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db DAMAGE_NORMAL ; category
 	dw CuboneSnivelEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
 	db 84 ; animation
@@ -6592,7 +6592,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	dw CuboneRageEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 1 ; animation
 
@@ -6643,7 +6643,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	dw MarowakCallforFriendEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -6679,7 +6679,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db DAMAGE_NORMAL ; category
 	dw MarowakBoneAttackEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 46 ; animation
@@ -6694,7 +6694,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	dw MarowakWailEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 84 ; animation
 
@@ -6729,8 +6729,8 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db 0 ; damage
 	db RESIDUAL ; category
 	dw HitmonleeStretchKickEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 37 ; animation
@@ -6832,7 +6832,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db DAMAGE_NORMAL ; category
 	dw RhyhornLeerEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -6896,8 +6896,8 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db 50 ; damage
 	db DAMAGE_NORMAL ; category
 	dw RhydonRamEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db LOW_RECOIL ; flags 1
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 20
 	db 4 ; animation
@@ -6999,7 +6999,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db DAMAGE_NORMAL ; category
 	dw KabutopsAbsorbEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 89 ; animation
@@ -7086,7 +7086,7 @@ AbraCard: ; 3302e (c:702e)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw AbraPsyshockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7138,7 +7138,7 @@ KadabraCard: ; 3306f (c:706f)
 	db RESIDUAL ; category
 	dw KadabraRecoverEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 88 ; animation
@@ -7202,7 +7202,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw AlakazamConfuseRayEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7254,7 +7254,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db DAMAGE_NORMAL ; category
 	dw SlowpokeAmnesiaEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 85 ; animation
@@ -7291,7 +7291,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db RESIDUAL ; category
 	dw SlowpokeSpacingOutEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 0 ; animation
@@ -7305,7 +7305,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db RESIDUAL ; category
 	dw SlowpokeScavengeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db DISCARD_ENERGY_F ; flags 2
+	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 91 ; animation
@@ -7342,7 +7342,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db POKEMON_POWER ; category
 	dw SlowbroStrangeBehaviorEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 94 ; animation
@@ -7355,7 +7355,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db 20 ; damage
 	db DAMAGE_NORMAL ; category
 	dw SlowbroPsyshockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7392,7 +7392,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GastlySleepingGasEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7408,7 +7408,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	dw GastlyDestinyBondEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 3
 	db 91 ; animation
 
@@ -7443,7 +7443,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GastlyLickEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7459,7 +7459,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	dw GastlyEnergyConversionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 10
 	db 115 ; animation
 
@@ -7508,7 +7508,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw HaunterNightmareEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7545,7 +7545,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw HaunterHypnosisEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7610,7 +7610,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw GengarDarkMindEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
@@ -7661,7 +7661,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw DrowzeeConfuseRayEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7699,7 +7699,7 @@ HypnoCard: ; 3333a (c:733a)
 	db RESIDUAL ; category
 	dw HypnoProphecyEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_5_F ; flags 2
+	db FLAG_2_BIT_5 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 91 ; animation
@@ -7712,7 +7712,7 @@ HypnoCard: ; 3333a (c:733a)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw HypnoDarkMindEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 10
@@ -7866,7 +7866,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db RESIDUAL ; category
 	dw MewtwoBarrierEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F + DISCARD_ENERGY_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 80 ; animation
@@ -7904,7 +7904,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	dw Mewtwo2EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -7955,7 +7955,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	dw Mewtwo3EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -8018,7 +8018,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MewPsyshockEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -8122,7 +8122,7 @@ Mew3Card: ; 33542 (c:7542)
 	dw MewDevolutionBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 0 ; animation
 
@@ -8158,7 +8158,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db DAMAGE_NORMAL ; category
 	dw PidgeyWhirlwindEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 83 ; animation
@@ -8209,7 +8209,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db DAMAGE_NORMAL ; category
 	dw PidgeottoWhirlwindEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 83 ; animation
@@ -8223,7 +8223,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db DAMAGE_NORMAL ; category
 	dw PidgeottoMirrorMoveEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 92 ; animation
@@ -8259,8 +8259,8 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db 0 ; damage
 	db RESIDUAL ; category
 	dw PidgeotSlicingWindEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 99 ; animation
@@ -8274,7 +8274,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db DAMAGE_NORMAL ; category
 	dw PidgeotGaleEffectCommands ; effect commands
 	db NONE ; flags 1
-	db SWITCH_OPPONENT_POKEMON_F | FLAG_2_BIT_7_F ; flags 2
+	db SWITCH_OPPONENT_POKEMON | FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 91 ; animation
@@ -8325,7 +8325,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db DAMAGE_NORMAL ; category
 	dw PidgeotHurricaneEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_7_F ; flags 2
+	db FLAG_2_BIT_7 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 83 ; animation
@@ -8478,7 +8478,7 @@ SpearowCard: ; 33709 (c:7709)
 	db DAMAGE_NORMAL ; category
 	dw SpearowMirrorMoveEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 92 ; animation
@@ -8515,7 +8515,7 @@ FearowCard: ; 3374a (c:774a)
 	db DAMAGE_NORMAL ; category
 	dw FearowAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -8565,7 +8565,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ClefairySingEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -8580,7 +8580,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db RESIDUAL ; category
 	dw ClefairyMetronomeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -8617,7 +8617,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db RESIDUAL ; category
 	dw ClefableMetronomeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -8631,7 +8631,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db RESIDUAL ; category
 	dw ClefableMinimizeEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 20
 	db 79 ; animation
@@ -8668,7 +8668,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db RESIDUAL ; category
 	dw JigglypuffFirstAidEffectCommands ; effect commands
 	db NONE ; flags 1
-	db HEAL_USER_F ; flags 2
+	db HEAL_USER ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 88 ; animation
@@ -8681,7 +8681,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw JigglypuffDoubleEdgeEffectCommands ; effect commands
-	db LOW_RECOIL_F ; flags 1
+	db LOW_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 20
@@ -8720,7 +8720,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	dw JigglypuffFriendshipSongEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 0 ; animation
 
@@ -8733,7 +8733,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db DAMAGE_NORMAL ; category
 	dw JigglypuffExpandEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
 	db 136 ; animation
@@ -8769,7 +8769,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw JigglypuffLullabyEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -8820,7 +8820,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw WigglytuffLullabyEffectCommands ; effect commands
-	db INFLICT_SLEEP_F ; flags 1
+	db INFLICT_SLEEP ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -8871,8 +8871,8 @@ Meowth1Card: ; 33911 (c:7911)
 	db 0 ; damage
 	db RESIDUAL ; category
 	dw MeowthCatPunchEffectCommands ; effect commands
-	db DAMAGE_TO_OPPONENT_BENCH_F ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 108 ; animation
@@ -8922,7 +8922,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw MeowthPayDayEffectCommands ; effect commands
-	db DRAW_CARD_F ; flags 1
+	db DRAW_CARD ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -8988,7 +8988,7 @@ PersianCard: ; 33993 (c:7993)
 	db DAMAGE_NORMAL ; category
 	dw PersianPounceEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 10
 	db 1 ; animation
@@ -9142,7 +9142,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	dw DodrioRageEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 2 ; animation
 
@@ -9177,7 +9177,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db 10 ; damage
 	db DAMAGE_NORMAL ; category
 	dw LickitungTongueWrapEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -9191,7 +9191,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db 0 ; damage
 	db DAMAGE_NORMAL ; category
 	dw LickitungSupersonicEffectCommands ; effect commands
-	db INFLICT_CONFUSION_F ; flags 1
+	db INFLICT_CONFUSION ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -9229,7 +9229,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db RESIDUAL ; category
 	dw ChanseyScrunchEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -9242,7 +9242,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ChanseyDoubleEdgeEffectCommands ; effect commands
-	db HIGH_RECOIL_F ; flags 1
+	db HIGH_RECOIL ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 80
@@ -9279,9 +9279,9 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db 0 ; damage
 	db RESIDUAL ; category
 	dw KangaskhanFetchEffectCommands ; effect commands
-	db DRAW_CARD_F ; flags 1
+	db DRAW_CARD ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -9331,7 +9331,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db DAMAGE_PLUS ; category
 	dw TaurosStompEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 1
 	db 1 ; animation
@@ -9346,7 +9346,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	dw TaurosRampageEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db BOOST_IF_TAKEN_DAMAGE_F ; flags 3
+	db BOOST_IF_TAKEN_DAMAGE ; flags 3
 	db 0
 	db 43 ; animation
 
@@ -9396,7 +9396,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db RESIDUAL ; category
 	dw DittoMorphEffectCommands ; effect commands
 	db NONE ; flags 1
-	db FLAG_2_BIT_6_F ; flags 2
+	db FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 3
 	db 91 ; animation
@@ -9433,7 +9433,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db DAMAGE_NORMAL ; category
 	dw EeveeTailWagEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK_F ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 0 ; animation
@@ -9485,7 +9485,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	dw PorygonConversion1EffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -9499,7 +9499,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	dw PorygonConversion2EffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 91 ; animation
 
@@ -9548,7 +9548,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db 30 ; damage
 	db DAMAGE_NORMAL ; category
 	dw SnorlaxBodySlamEffectCommands ; effect commands
-	db INFLICT_PARALYSIS_F ; flags 1
+	db INFLICT_PARALYSIS ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -9652,7 +9652,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	dw DragonairHyperBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1_F ; flags 3
+	db FLAG_3_BIT_1 ; flags 3
 	db 0
 	db 30 ; animation
 

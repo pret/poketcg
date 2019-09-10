@@ -330,7 +330,7 @@ CheckIfSelectedMoveIsUnusable: ; 1424b (5:424b)
 .bench
 	call CheckEnergyNeededForAttack
 	ret c ; can't be used
-	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5_F
 	call CheckLoadedMoveFlag
 	ret
 ; 0x14279
@@ -4085,10 +4085,10 @@ Func_16695: ; 16695 (5:6695)
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	jp c, .asm_1671e
-	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
 	call CheckLoadedMoveFlag
 	jr c, .asm_166af
-	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
 	call CheckLoadedMoveFlag
 	jr c, .asm_16710
 	jp .check_evolution
@@ -4116,7 +4116,7 @@ Func_16695: ; 16695 (5:6695)
 ; check whether move has ATTACHED_ENERGY_BOOST flag
 ; and add to AI score if attaching another energy
 ; will KO defending Pokémon
-	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
 	call CheckLoadedMoveFlag
 	jp nc, .check_evolution
 	ld a, [wSelectedMoveIndex]
@@ -4156,7 +4156,7 @@ Func_16695: ; 16695 (5:6695)
 	jr .asm_166c5
 
 .asm_1671e
-	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5_F
 	call CheckLoadedMoveFlag
 	jr nc, .asm_1672a
 	ld a, 5
@@ -4219,7 +4219,7 @@ Func_16695: ; 16695 (5:6695)
 	ld [hl], b
 	call CheckEnergyNeededForAttack
 	jr nc, .done
-	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5_F
 	call CheckLoadedMoveFlag
 	jr c, .done
 	ld a, b
@@ -4314,7 +4314,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	ld [$cdb4], a
 	jr .asm_16a6d
 .asm_16a62
-	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH_F
 	call CheckLoadedMoveFlag
 	jr c, .asm_16a5c
 	ld hl, $cdb4
@@ -4386,7 +4386,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr z, .unusable
 	and RESIDUAL
 	jr nz, .check_if_can_ko
-	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH_F
 	call CheckLoadedMoveFlag
 	jr nc, .unusable
 
@@ -4433,7 +4433,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	xor a
 	ld [wce02], a
 .no_max_damage
-	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH
+	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_recoil
 	ld a, 2
@@ -4441,10 +4441,10 @@ Func_16a86: ; 16a86 (5:6a86)
 
 ; handle recoil moves (low and high recoil).
 .check_recoil
-	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL
+	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL_F
 	call CheckLoadedMoveFlag
 	jr c, .is_recoil
-	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
 	call CheckLoadedMoveFlag
 	jp nc, .check_defending_can_ko
 .is_recoil
@@ -4460,7 +4460,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 	
 	push de
-	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
 	call CheckLoadedMoveFlag
 	pop de
 	jr c, .high_recoil
@@ -4695,7 +4695,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call GetTurnDuelistVariable
 	ld d, a
 	call CopyMoveDataAndDamage_FromDeckIndex
-	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16ca6
 	ld a, 1
@@ -4704,7 +4704,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 
 .asm_16ca6
-	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_nullify_flag
 	ld a, [wLoadedMoveUnknown1]
@@ -4712,7 +4712,7 @@ Func_16a86: ; 16a86 (5:6a86)
 
 ; encourage move if it has a nullify or weaken attack effect.
 .check_nullify_flag
-	ld a, MOVE_FLAG2_ADDRESS | NULLIFY_OR_WEAKEN_ATTACK
+	ld a, MOVE_FLAG2_ADDRESS | NULLIFY_OR_WEAKEN_ATTACK_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_draw_flag
 	ld a, 1
@@ -4720,14 +4720,14 @@ Func_16a86: ; 16a86 (5:6a86)
 
 ; encourage move if it has an effect to draw a card.
 .check_draw_flag
-	ld a, MOVE_FLAG1_ADDRESS | DRAW_CARD
+	ld a, MOVE_FLAG1_ADDRESS | DRAW_CARD_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_heal_flag
 	ld a, $01
 	call AddToAIScore
 
 .check_heal_flag
-	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER
+	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_status_effect
 	ld a, [wLoadedMoveUnknown1]
@@ -4777,7 +4777,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld [wCurCardPlayAreaLocation], a
 
 ; check poison
-	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
 	ld a, [wCurCardPlayAreaLocation]
@@ -4785,7 +4785,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr z, .asm_16d45
 	and $40
 	jr z, .check_sleep
-	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6
+	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
 	ld a, $02
@@ -4796,7 +4796,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call AddToAIScore
 
 .check_sleep
-	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_paralysis
 	ld a, [wCurCardPlayAreaLocation]
@@ -4807,7 +4807,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call AddToAIScore
 
 .check_paralysis
-	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_confusion
 	ld a, [wCurCardPlayAreaLocation]
@@ -4822,7 +4822,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 
 .check_confusion
-	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION
+	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION_F
 	call CheckLoadedMoveFlag
 	jr nc, .asm_16da0
 	ld a, [wCurCardPlayAreaLocation]
@@ -4849,7 +4849,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	call SubFromAIScore
 
 .asm_16db0
-	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1
+	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1_F
 	call CheckLoadedMoveFlag
 	jr nc, .done
 	call Func_16dcd
