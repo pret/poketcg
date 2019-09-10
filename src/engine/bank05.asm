@@ -4723,7 +4723,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG1_ADDRESS | DRAW_CARD_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_heal_flag
-	ld a, $01
+	ld a, 1
 	call AddToAIScore
 
 .check_heal_flag
@@ -4731,13 +4731,13 @@ Func_16a86: ; 16a86 (5:6a86)
 	call CheckLoadedMoveFlag
 	jr nc, .check_status_effect
 	ld a, [wLoadedMoveUnknown1]
-	cp $01
-	jr z, .asm_16cf8
+	cp 1
+	jr z, .tally_heal_score
 	ld a, [wCurMoveDamage]
 	call CalculateTensDigit
 	ld b, a
 	ld a, [wLoadedMoveUnknown1]
-	cp $03
+	cp 3
 	jr z, .asm_16cec
 	srl b
 	jr nc, .asm_16cec
@@ -4747,18 +4747,18 @@ Func_16a86: ; 16a86 (5:6a86)
 	call GetTurnDuelistVariable
 	call CalculateTensDigit
 	cp b
-	jr c, .asm_16cf8
+	jr c, .tally_heal_score
 	ld a, b
-.asm_16cf8
+.tally_heal_score
 	push af
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	call CalculateTensDigit
 	pop bc
 	cp b ; wLoadedMoveUnknown1
-	jr c, .asm_16d06
+	jr c, .add_heal_score
 	ld a, b
-.asm_16d06
+.add_heal_score
 	call AddToAIScore
 
 .check_status_effect
@@ -4770,85 +4770,100 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, e
 	; skip if player has Snorlax
 	cp SNORLAX
-	jp z, .asm_16db0
+	jp z, .handle_flag3_bit1
 
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	ld [wCurCardPlayAreaLocation], a
 
+; encourage a poison inflicting move if opposing
+; Pokémon isn't (doubly) poisoned already.
+; if opposing Pokémon is only poisoned and not
+; double poisoned, and this move has FLAG_2_BIT_6 set,
+; discourage it (possibly to make Nidoking's Toxic attack
+; less likely to be chosen if the other Pokémon is poisoned.)
 ; check poison
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
 	ld a, [wCurCardPlayAreaLocation]
-	and $c0
-	jr z, .asm_16d45
-	and $40
+	and DOUBLE_POISONED
+	jr z, .add_poison_score
+	and $40 ; only double poisoned?
 	jr z, .check_sleep
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
-	ld a, $02
+	ld a, 2
 	call SubFromAIScore
 	jr .check_sleep
-.asm_16d45
-	ld a, $02
+.add_poison_score
+	ld a, 2
 	call AddToAIScore
 
+; encourage sleep-inducing move if other Pokémon isn't asleep.
 .check_sleep
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_paralysis
 	ld a, [wCurCardPlayAreaLocation]
-	and $0f
-	cp $02
+	and CNF_SLP_PRZ
+	cp ASLEEP
 	jr z, .check_paralysis
-	ld a, $01
+	ld a, 1
 	call AddToAIScore
 
+; encourage paralysis-inducing move if other Pokémon isn't asleep.
+; otherwise, if other Pokémon is asleep, discourage move.
 .check_paralysis
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_confusion
 	ld a, [wCurCardPlayAreaLocation]
-	and $0f
-	cp $02
-	jr z, .asm_16d76
-	ld a, $01
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	jr z, .sub_prz_score
+	ld a, 1
 	call AddToAIScore
 	jr .check_confusion
-.asm_16d76
-	ld a, $01
+.sub_prz_score
+	ld a, 1
 	call SubFromAIScore
 
+; encourage confuse-inducing move if other Pokémon
+; isn't asleep or confused already
+; otherwise, if other Pokémon is asleep or confused,
+; discourage move instead.
 .check_confusion
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION_F
 	call CheckLoadedMoveFlag
-	jr nc, .asm_16da0
+	jr nc, .check_if_confused
 	ld a, [wCurCardPlayAreaLocation]
-	and $0f
-	cp $02
-	jr z, .asm_16d9b
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	jr z, .sub_cnf_score
 	ld a, [wCurCardPlayAreaLocation]
-	and $0f
-	cp $01
-	jr z, .asm_16da0
-	ld a, $01
+	and CNF_SLP_PRZ
+	cp CONFUSED
+	jr z, .check_if_confused
+	ld a, 1
 	call AddToAIScore
-	jr .asm_16da0
-.asm_16d9b
-	ld a, $01
-	call SubFromAIScore
-.asm_16da0
-	ld a, $f0
-	call GetTurnDuelistVariable
-	and $0f
-	cp $01
-	jr nz, .asm_16db0
-	ld a, $01
+	jr .check_if_confused
+.sub_cnf_score
+	ld a, 1
 	call SubFromAIScore
 
-.asm_16db0
+; if Pokémon is confused, subtract from score.
+.check_if_confused
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp CONFUSED
+	jr nz, .handle_flag3_bit1
+	ld a, 1
+	call SubFromAIScore
+
+.handle_flag3_bit1
 	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1_F
 	call CheckLoadedMoveFlag
 	jr nc, .done
@@ -4858,12 +4873,12 @@ Func_16a86: ; 16a86 (5:6a86)
 	sub $80
 	call AddToAIScore
 	jr .done
-
 .asm_16dc5
 	ld b, a
 	ld a, $80
 	sub b
 	call SubFromAIScore
+	
 .done
 	ret
 ; 0x16dcd
