@@ -5241,6 +5241,7 @@ CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
 	ret
 ; 0x17080
 
+
 Func_17080: ; 17080 (5:7080)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
@@ -5254,9 +5255,11 @@ Func_17080: ; 17080 (5:7080)
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	push bc
-	bank1call Func_7045
+	bank1call GetCardOneStageBelow
 	pop bc
 	jr c, .next
+	; is not a basic card
+	; compare its HP with current damage
 	ld a, d
 	push bc
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -5283,6 +5286,7 @@ Func_17080: ; 17080 (5:7080)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	or a
 	ret
+	
 .set_carry
 	call SwapTurn
 	pop af

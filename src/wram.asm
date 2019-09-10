@@ -972,6 +972,8 @@ wccc8:: ; ccc8
 wGotHeadsFromConfusionCheck:: ; ccc9
 	ds $1
 
+; used to store card indices of all stages, in order, of a Play Area Pokémon
+wAllStagesIndices:: ; ccca
 	ds $3
 
 wEffectFunctionsFeedbackIndex:: ; cccd

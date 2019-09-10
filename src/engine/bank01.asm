@@ -7620,8 +7620,86 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 	ret
 ; 0x7045
 
-Func_7045: ; 7045 (1:7045)
-	INCROM $7045, $70aa
+; returns carry if card at hTempPlayAreaLocation_ff9d
+; is a basic card. 
+; otherwise, lists the card indices of all stages in
+; in that card location, and returns the card one
+; stage below.
+; input:
+;	hTempPlayAreaLocation_ff9d = play area location to check;
+; output:
+;	a = card index in hTempPlayAreaLocation_ff9d;
+;	d = card index of card one stage below;
+;	carry set if card is a basic card.
+GetCardOneStageBelow: ; 7045 (1:7045)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr nz, .not_basic
+	scf
+	ret
+
+.not_basic
+	ld hl, wAllStagesIndices
+	ld a, $ff
+	ld [hli], a
+	ld [hli], a
+	ld [hl], a
+
+; loads deck indices of the stages present in hTempPlayAreaLocation_ff9d.
+; the three stages are loaded consecutively in wAllStagesIndices.
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or CARD_LOCATION_ARENA
+	ld c, a
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop
+	ld a, [hl]
+	cp c
+	jr nz, .next
+	ld a, l
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	jr nc, .next
+	ld b, l
+	push hl
+	ld a, [wLoadedCard2Stage]
+	ld e, a
+	ld d, $00
+	ld hl, wAllStagesIndices
+	add hl, de
+	ld [hl], b
+	pop hl
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop
+
+; if card at hTempPlayAreaLocation_ff9d is a stage 1, load d with basic card.
+; otherwise if stage 2, load d with the stage 1 card.
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_STAGE
+	call GetTurnDuelistVariable
+	ld hl, wAllStagesIndices ; pointing to basic
+	cp STAGE1
+	jr z, .done
+	cp STAGE2 + 1 ; unnecessary check?
+	jr z, .done
+	inc hl ; pointing to stage 1
+.done
+	ld d, [hl]
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld e, a
+	or a
+	ret
+; 0x70aa
 
 ; initializes variables when a duel begins, such as zeroing wDuelFinished or wDuelTurns,
 ; and setting wDuelType based on wPlayerDuelistType and wOpponentDuelistType
