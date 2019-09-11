@@ -74,7 +74,7 @@ Func_14078: ; 14078 (5:4078)
 	call AIDecideBenchPokemonToSwitchTo
 	call AIChooseEnergyToDiscardForRetreatCost
 .asm_14091
-	call AIDecidePlayEnergyCard
+	call AIDecidePlayEnergyCardFromHand
 	call Func_169f8
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -3778,8 +3778,42 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 Func_16488 ; 16488 (5:6488)
 	INCROM $16488, $164a1
 
-Func_164a1 ; 164a1 (5:64a1)
-	INCROM $164a1, $164d3
+; copies wBenchAIScore to wcddd.
+; copies AIScore to wcde3.
+; decides which card to get energy card.
+Func_164a1: ; 164a1 (5:64a1)
+	ld a, $03
+	ld [wcdd8], a
+	ld de, wcddd
+	ld hl, wBenchAIScore
+	ld b, MAX_PLAY_AREA_POKEMON
+.loop_play_area
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop_play_area
+
+	ld a, [wAIScore]
+	ld [de], a
+	jr AIDecideWhichCardToAttachEnergy
+
+Func_164ba: ; 164ba (5:64ba)
+	ld a, $83
+	ld [wcdd8], a
+	ld de, wcddd
+	ld hl, wBenchAIScore
+	ld b, MAX_PLAY_AREA_POKEMON
+.asm_164c7
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .asm_164c7
+
+	ld a, [wAIScore]
+	ld [de], a
+	jr AIDecideWhichCardToAttachEnergy
 
 ; copies bench AI score to wcddd
 ; and loads in wAIscore value in wcde3
@@ -3800,24 +3834,22 @@ Func_164d3: ; 164d3 (5:64d3)
 	ret
 ; 0x164e8
 
-AIDecidePlayEnergyCard: ; 164e8 (5:64e8)
+AIDecidePlayEnergyCardFromHand: ; 164e8 (5:64e8)
 	xor a
 	ld [wcdd8], a
 	call CreateEnergyCardListFromHand
-	jr nc, .has_energy
+	jr nc, AIDecideWhichCardToAttachEnergy
 
 ; no energy
 	ld a, [wcdd8]
 	or a
 	jr z, .exit
-	; can this even be reached?
 	jp Func_164d3
 .exit
 	or a
 	ret
 
-; initialize wcde4 to $80
-.has_energy
+AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	ld a, $80
 	ld b, MAX_PLAY_AREA_POKEMON
 	ld hl, wcde4
