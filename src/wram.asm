@@ -1227,7 +1227,7 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
-wBenchAIScore:: ; cdbf
+wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
 	ds $0a
@@ -1297,11 +1297,8 @@ wcdea:: ; cdea
 wcdf0:: ; cdf0
 	ds $1
 	
-; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-; used by the AI to temporarily store card location
-wCurCardPlayAreaLocation:: ; cdf1
-; used by AI to store damage of move being considered
-wCurMoveDamage:: ; cdf1
+; used by AI to store variable information
+wTempAI:: ; cdf1
 	ds $1
 
 ; used for AI to store whether this card can use any attack

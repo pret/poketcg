@@ -123,7 +123,7 @@ FindHighestBenchScore: ; 140df (5:40df)
 	ld c, 0
 	ld e, c
 	ld d, c
-	ld hl, wBenchAIScore + 1
+	ld hl, wPlayAreaAIScore + 1
 	jp .next
 
 .loop
@@ -2382,7 +2382,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
 	ld b, $00
-	ld hl, wBenchAIScore
+	ld hl, wPlayAreaAIScore
 	add hl, bc
 	ld a, [wAIScore]
 	ld [hl], a
@@ -2799,10 +2799,10 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	push bc
 	jp c, .done_bench_pokemon
 
-; store this Play Area location in wCurCardPlayAreaLocation
+; store this Play Area location in wTempAI
 ; and initialize the AI score
 	ld a, b
-	ld [wCurCardPlayAreaLocation], a
+	ld [wTempAI], a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, 128
 	ld [wAIScore], a
@@ -2877,7 +2877,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	ld a, [wCurCardCanAttack]
 	or a
 	jr z, .check_defending_can_ko_evolution
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	or a
 	jr nz, .check_defending_can_ko_evolution
 	call CheckIfAnyMoveKnocksOutDefendingCard
@@ -2896,7 +2896,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 
 ; if defending Pokémon can KO evolution, lower AI score
 .check_defending_can_ko_evolution
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	or a
 	jr nz, .check_mr_mime
 	xor a
@@ -2908,7 +2908,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 
 ; if evolution can't damage player's Mr Mime, lower AI score
 .check_mr_mime
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	call CheckDamageToMrMime
 	jr c, .check_defending_can_ko
 	ld a, 20
@@ -2916,12 +2916,12 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 
 ; if defending Pokémon can KO current card, raise AI score
 .check_defending_can_ko
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	pop af
 	ld [hl], a
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	or a
 	jr nz, .check_2nd_stage_hand
 	xor a
@@ -2960,7 +2960,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 ; decrease AI score proportional to damage
 ; AI score -= floor(Damage / 40)
 .check_damage
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	ld e, a
 	call GetCardDamage
 	or a
@@ -2974,7 +2974,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 ; wLoadedCard1Unknown2 is set to $02,
 ; raise AI score
 .check_mysterious_fossil
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -3015,7 +3015,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	ld a, [wAIScore]
 	cp 133
 	jr c, .done_bench_pokemon
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, [wTempAIPokemonCard]
 	ldh [hTemp_ffa0], a
@@ -3778,14 +3778,14 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 Func_16488 ; 16488 (5:6488)
 	INCROM $16488, $164a1
 
-; copies wBenchAIScore to wcddd.
+; copies wPlayAreaAIScore to wcddd.
 ; copies AIScore to wcde3.
 ; decides which card to get energy card.
 Func_164a1: ; 164a1 (5:64a1)
 	ld a, $03
 	ld [wcdd8], a
 	ld de, wcddd
-	ld hl, wBenchAIScore
+	ld hl, wPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .loop_play_area
 	ld a, [hli]
@@ -3802,7 +3802,7 @@ Func_164ba: ; 164ba (5:64ba)
 	ld a, $83
 	ld [wcdd8], a
 	ld de, wcddd
-	ld hl, wBenchAIScore
+	ld hl, wPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .asm_164c7
 	ld a, [hli]
@@ -3819,7 +3819,7 @@ Func_164ba: ; 164ba (5:64ba)
 ; and loads in wAIscore value in wcde3
 Func_164d3: ; 164d3 (5:64d3)
 	push af
-	ld de, wBenchAIScore
+	ld de, wPlayAreaAIScore
 	ld hl, wcddd
 	ld b, MAX_PLAY_AREA_POKEMON
 .loop
@@ -3872,7 +3872,7 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	ld a, $80
 	ld [wAIScore], a
 	ld a, $ff
-	ld [wCurCardPlayAreaLocation], a
+	ld [wTempAI], a
 	ld a, [wcdd8]
 	and $02
 	jr nz, .check_venusaur
@@ -3892,7 +3892,7 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	ld a, [wCurCardCanAttack]
 	call CheckForEvolutionInList
 	jr nc, .no_evolution_in_hand
-	ld [wCurCardPlayAreaLocation], a
+	ld [wTempAI], a
 	ld a, 2
 	call AddToAIScore
 	jr .check_venusaur
@@ -4077,17 +4077,20 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 .skip_boss_deck
 	ld a, 1
 	call AddToAIScore
-	
+
+; add AI score for both moves,
+; according to their energy requirements.
 	xor a ; first move
-	call Func_16695
+	call DetermineAIScoreOfMoveEnergyRequirement
 	ld a, $01 ; second move
-	call Func_16695
+	call DetermineAIScoreOfMoveEnergyRequirement
 	
+; store bench score for this card.
 .store_score
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld c, a
 	ld b, $00
-	ld hl, wBenchAIScore
+	ld hl, wPlayAreaAIScore
 	add hl, bc
 	ld a, [wAIScore]
 	ld [hl], a
@@ -4096,6 +4099,8 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	dec c
 	jp nz, .loop_play_area
 
+; the Play Area loop is over and the score
+; for each card has been calculated.
 	call Func_167b5
 	jp nc, Func_1668a
 
@@ -4113,41 +4118,49 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 Func_1668a ; 1668a (5:668a)
 	INCROM $1668a, $16695
 
-Func_16695: ; 16695 (5:6695)
+; checks score related to selected move,
+; in order to determine whether to play energy card.
+; the AI score is increased/decreased accordingly.
+; input:
+;	[wSelectedMoveIndex] = move to check.
+DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
-	jp c, .asm_1671e
+	jp c, .not_enough_energy
 	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
 	call CheckLoadedMoveFlag
-	jr c, .asm_166af
+	jr c, .attached_energy_boost
 	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
 	call CheckLoadedMoveFlag
-	jr c, .asm_16710
+	jr c, .discard_energy
 	jp .check_evolution
 
-.asm_166af
+.attached_energy_boost
 	ld a, [wLoadedMoveUnknown1]
 	cp $02
-	jr z, .asm_166bc
+	jr z, .check_surplus_energy
 	call AddToAIScore
 	jp .check_evolution
 
-.asm_166bc
-	call Func_171fb
+.check_surplus_energy
+	call CheckIfNoSurplusEnergyForMove
 	jr c, .asm_166cd
-	cp 3
+	cp 3 ; check how much surplus energy
 	jr c, .asm_166cd
+
 .asm_166c5
 	ld a, 5
 	call SubFromAIScore
 	jp .check_evolution
+
 .asm_166cd
 	ld a, 2
 	call AddToAIScore
 
 ; check whether move has ATTACHED_ENERGY_BOOST flag
 ; and add to AI score if attaching another energy
-; will KO defending Pokémon
+; will KO defending Pokémon.
+; add more to score if this is currently active Pokémon.
 	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
 	call CheckLoadedMoveFlag
 	jp nc, .check_evolution
@@ -4165,9 +4178,10 @@ Func_16695: ; 16695 (5:6695)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
 	sub b
-	jr c, .asm_166ff
+	jr c, .attaching_kos_player
 	jr nz, .check_evolution
-.asm_166ff
+
+.attaching_kos_player
 	ld a, 20
 	call AddToAIScore
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -4177,41 +4191,47 @@ Func_16695: ; 16695 (5:6695)
 	call AddToAIScore
 	jr .check_evolution
 
-; FLAG_2_BIT_5 is set only for Pokémon Powers,
-; except for Magnemite2's Magnetic Storm attack
-.asm_16710
+; checks if there is surplus energy for move
+; that discards attached energy card.
+; if current card is Zapdos2, don't add to score.
+; if there is no surplus energy, encourage playing energy.
+.discard_energy
 	ld a, [wLoadedCard1ID]
 	cp ZAPDOS2
 	jr z, .check_evolution
-	call Func_171fb
+	call CheckIfNoSurplusEnergyForMove
 	jr c, .asm_166cd
 	jr .asm_166c5
 
-.asm_1671e
+.not_enough_energy
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5_F
 	call CheckLoadedMoveFlag
-	jr nc, .asm_1672a
+	jr nc, .check_color_needed
 	ld a, 5
 	call SubFromAIScore
 
-.asm_1672a
+; if the energy card color needed is in hand, increase AI score.
+; if a colorless card is needed, increase AI score.
+.check_color_needed
 	ld a, b
 	or a
-	jr z, .asm_1673b
+	jr z, .check_colorless_needed
 	ld a, e
 	call LookForCardIDInHand
-	jr c, .asm_1673b
+	jr c, .check_colorless_needed
 	ld a, 4
 	call AddToAIScore
-	jr .asm_16744
-.asm_1673b
+	jr .check_total_needed
+.check_colorless_needed
 	ld a, c
 	or a
 	jr z, .check_evolution
 	ld a, 3
 	call AddToAIScore
 
-.asm_16744
+; if only one energy card is needed for move,
+; encourage playing energy card.
+.check_total_needed
 	ld a, b
 	add c
 	dec a
@@ -4219,6 +4239,7 @@ Func_16695: ; 16695 (5:6695)
 	ld a, 3
 	call AddToAIScore
 
+; if the move KOs player and this is the active card, add to AI score.
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .check_evolution
@@ -4228,11 +4249,18 @@ Func_16695: ; 16695 (5:6695)
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
 	sub [hl]
-	jr z, .asm_16766
+	jr z, .move_kos_defending
 	jr nc, .check_evolution
-.asm_16766
+.move_kos_defending
 	ld a, 20
 	call AddToAIScore
+
+; this is possibly a bug.
+; this is an identical check as above to test whether this card is active.
+; in case it is active, the score gets added 10 more points,
+; in addition to the 20 points already added above.
+; what was probably intended was to add 20 points in case this card
+; is active and only 10 in case it is benched.
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	jr nz, .check_evolution
@@ -4240,15 +4268,22 @@ Func_16695: ; 16695 (5:6695)
 	call AddToAIScore
 
 .check_evolution
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI] ; evolution in hand
 	cp $ff
 	ret z
+
+; temporarily replace this card with evolution in hand.
 	ld b, a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
 	ld [hl], b
+
+; check for energy still needed for evolution to attack.
+; if FLAG_2_BIT_5 is not set, check what color is needed.
+; if the energy card color needed is in hand, increase AI score.
+; if a colorless card is needed, increase AI score.
 	call CheckEnergyNeededForAttack
 	jr nc, .done
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_5_F
@@ -4256,20 +4291,21 @@ Func_16695: ; 16695 (5:6695)
 	jr c, .done
 	ld a, b
 	or a
-	jr z, .asm_167a2
+	jr z, .check_colorless_needed_evo
 	ld a, e
 	call LookForCardIDInHand
-	jr c, .asm_167a2
+	jr c, .check_colorless_needed_evo
 	ld a, 2
 	call AddToAIScore
 	jr .done
-.asm_167a2
+.check_colorless_needed_evo
 	ld a, c
 	or a
 	jr z, .done
 	ld a, 1
 	call AddToAIScore
 
+; recover the original card in the Play Area location.
 .done
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
@@ -4305,11 +4341,11 @@ Func_169f8: ; 169f8 (5:69f8)
 	xor a
 	call Func_16a86
 	ld a, [wAIScore]
-	ld [wBenchAIScore], a
+	ld [wPlayAreaAIScore], a
 	ld a, $01
 	call Func_16a86
 	ld c, $01
-	ld a, [wBenchAIScore]
+	ld a, [wPlayAreaAIScore]
 	ld b, a
 	ld a, [wAIScore]
 	cp b
@@ -4447,7 +4483,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	xor a
 	ld [wce02], a
 	ld a, [wDamage]
-	ld [wCurMoveDamage], a
+	ld [wTempAI], a
 	or a
 	jr z, .no_damage
 	call CalculateTensDigit
@@ -4765,7 +4801,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, [wLoadedMoveUnknown1]
 	cp 1
 	jr z, .tally_heal_score
-	ld a, [wCurMoveDamage]
+	ld a, [wTempAI]
 	call CalculateTensDigit
 	ld b, a
 	ld a, [wLoadedMoveUnknown1]
@@ -4806,7 +4842,7 @@ Func_16a86: ; 16a86 (5:6a86)
 
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
-	ld [wCurCardPlayAreaLocation], a
+	ld [wTempAI], a
 
 ; encourage a poison inflicting move if opposing
 ; Pokémon isn't (doubly) poisoned already.
@@ -4818,7 +4854,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	and DOUBLE_POISONED
 	jr z, .add_poison_score
 	and $40 ; only double poisoned?
@@ -4838,7 +4874,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_SLEEP_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_paralysis
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	and CNF_SLP_PRZ
 	cp ASLEEP
 	jr z, .check_paralysis
@@ -4851,7 +4887,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_PARALYSIS_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_confusion
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	and CNF_SLP_PRZ
 	cp ASLEEP
 	jr z, .sub_prz_score
@@ -4870,11 +4906,11 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_CONFUSION_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_if_confused
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	and CNF_SLP_PRZ
 	cp ASLEEP
 	jr z, .sub_cnf_score
-	ld a, [wCurCardPlayAreaLocation]
+	ld a, [wTempAI]
 	and CNF_SLP_PRZ
 	cp CONFUSED
 	jr z, .check_if_confused
@@ -5383,13 +5419,13 @@ LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 	call LoadCardDataToBuffer2_FromDeckIndex
 	pop bc
 	ld a, [wLoadedCard2HP]
-	ld [wCurMoveDamage], a
+	ld [wTempAI], a
 	ld e, c
 	push bc
 	call GetCardDamage
 	pop bc
 	ld e, a
-	ld a, [wCurMoveDamage]
+	ld a, [wTempAI]
 	cp e
 	jr c, .set_carry
 	jr z, .set_carry
@@ -5546,7 +5582,9 @@ Func_17161 ; 17161 (5:7161)
 ; input:
 ;	[hTempPlayAreaLocation_ff9d] = play area location
 ;	[wSelectedMoveIndex]         = move index to check
-Func_171fb: ; 171fb (5:71fb)
+; output:
+;	a = number of extra energy cards attached
+CheckIfNoSurplusEnergyForMove: ; 171fb (5:71fb)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -5603,7 +5641,7 @@ Func_171fb: ; 171fb (5:71fb)
 	or a
 	ret nz ; return if surplus energy
 
-; exactly the amount of energy needed
+	; exactly the amount of energy needed
 	scf
 	ret
 ; 0x17258
