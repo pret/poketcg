@@ -4101,7 +4101,8 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 
 ; the Play Area loop is over and the score
 ; for each card has been calculated.
-	call Func_167b5
+; now to determine the highest score.
+	call FindPlayAreaCardWithHighestAIScore
 	jp nc, Func_1668a
 
 	ld a, [wcdd8]
@@ -4315,8 +4316,83 @@ DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
 	ret
 ; 0x167b5
 
-Func_167b5 ; 167b5 (5:67b5)
-	INCROM $167b5, $1689f
+; returns in hTempPlayAreaLocation_ff9d the Play Area location
+; of the card with the highest Play Area AI score, unless
+; the highest score is below $85.
+; if it succeeds in return a card location, set carry.
+FindPlayAreaCardWithHighestAIScore: ; 167b5 (5:67b5)
+	ld a, [wcdd8]
+	and $80
+	jr nz, .asm_167e1
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, 0 ; PLAY_AREA_ARENA
+	ld e, c
+	ld d, c
+	ld hl, wPlayAreaAIScore
+; find highest Play Area AI score.
+.loop_1
+	ld a, [hli]
+	cp e
+	jr c, .next_1
+	jr z, .next_1
+	ld e, a ; overwrite highest score found
+	ld d, c ; overwrite Play Area of highest score
+.next_1
+	inc c
+	dec b
+	jr nz, .loop_1
+
+; if highest AI score is below $85, return no carry.
+; else, store Play Area location and return carry.
+	ld a, e
+	cp $85
+	jr c, .not_enough_score
+	ld a, d
+	ldh [hTempPlayAreaLocation_ff9d], a
+	scf
+	ret
+.not_enough_score
+	or a
+	ret
+
+; same as above but only check bench Pokémon scores.
+.asm_167e1
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	jr z, .no_carry
+
+	ld b, a
+	ld e, 0
+	ld c, PLAY_AREA_BENCH_1
+	ld d, c
+	ld hl, wPlayAreaAIScore + 1
+.loop_2
+	ld a, [hli]
+	cp e
+	jr c, .next_2
+	jr z, .next_2
+	ld e, a ; overwrite highest score found
+	ld d, c ; overwrite Play Area of highest score
+.next_2
+	inc c
+	dec b
+	jr nz, .loop_2
+
+	ld a, d
+	ldh [hTempPlayAreaLocation_ff9d], a
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x16805
+
+Func_16805 ; 16805 (5:6805)
+	INCROM $16805, $1689f
 
 Func_1689f ; 1689f (5:689f)
 	INCROM $1689f, $169e3
