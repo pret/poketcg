@@ -4867,23 +4867,29 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1_F
 	call CheckLoadedMoveFlag
 	jr nc, .done
-	call Func_16dcd
+	call HandleSpecialAIMoves
 	cp $80
-	jr c, .asm_16dc5
+	jr c, .negative_score
 	sub $80
 	call AddToAIScore
 	jr .done
-.asm_16dc5
+.negative_score
 	ld b, a
 	ld a, $80
 	sub b
 	call SubFromAIScore
-	
+
 .done
 	ret
 ; 0x16dcd
 
-Func_16dcd: ; 16dcd (5:6dcd)
+; this function handles moves with the FLAG_3_BIT_1 set,
+; and makes specific checks in each of these moves
+; to either return a positive score (value above $80)
+; or a negative score (value below $80).
+; input:
+;	hTempPlayAreaLocation_ff9d = location of card with move.
+HandleSpecialAIMoves: ; 16dcd (5:6dcd)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -4891,238 +4897,281 @@ Func_16dcd: ; 16dcd (5:6dcd)
 	ld a, e
 
 	cp NIDORANF
-	jr z, .asm_16e55
+	jr z, HandleNidoranFCallForFamily
 	cp ODDISH
-	jr z, .asm_16e3e
+	jr z, HandleCallForFamily
 	cp BELLSPROUT
-	jr z, .asm_16e3e
+	jr z, HandleCallForFamily
 	cp EXEGGUTOR
-	jp z, .asm_16ec2
+	jp z, HandleExeggcutorTeleport
 	cp SCYTHER
-	jp z, .asm_16ecb
+	jp z, HandleSwordsDanceAndFocusEnergy
 	cp KRABBY
-	jr z, .asm_16e3e
+	jr z, HandleCallForFamily
 	cp VAPOREON1
-	jp z, .asm_16ecb
+	jp z, HandleSwordsDanceAndFocusEnergy
 	cp ELECTRODE2
-	jp z, .asm_16eea
+	jp z, HandleElectrode2ChainLightning
 	cp MAROWAK1
-	jr z, .asm_16e77
+	jr z, HandleMarowak1CallForFriend
 	cp MEW3
-	jp z, .asm_16f0f
+	jp z, HandleMew3DevolutionBeam
 	cp JIGGLYPUFF2
-	jp z, .asm_16ead
+	jp z, HandleJigglypuff2FriendshipSong
 	cp PORYGON
-	jp z, .asm_16f18
+	jp z, HandlePorygonConversion
 	cp MEWTWO3
-	jp z, .asm_16f41
+	jp z, HandleEnergyAbsorption
 	cp MEWTWO2
-	jp z, .asm_16f41
+	jp z, HandleEnergyAbsorption
 	cp NINETAILS2
-	jp z, .asm_16f4e
+	jp z, HandleNinetalesMixUp
 	cp ZAPDOS3
-	jp z, .asm_16fb8
+	jp z, HandleZapdos3BigThunder
 	cp KANGASKHAN
-	jp z, .asm_16fbb
+	jp z, HandleKangaskhanFetch
 	cp DUGTRIO
-	jp z, .asm_16fc8
+	jp z, HandleDugtrioEarthquake
 	cp ELECTRODE1
-	jp z, .asm_16ff2
+	jp z, HandleElectrode1EnergySpike
 	cp GOLDUCK
-	jp z, Func_17005
+	jp z, HandleHyperBeam
 	cp DRAGONAIR
-	jp z, Func_17005
+	jp z, HandleHyperBeam
 
-.done
+; return zero score.
+.zero
 	xor a
 	ret
 
-.asm_16e3e
+; if any of card ID in a is found in deck,
+; return a score of $80 + slots available in bench.
+HandleCallForFamily:
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_BENCH_POKEMON
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld b, a
 	ld a, MAX_BENCH_POKEMON
 	sub b
 	add $80
 	ret
 
-.asm_16e55
+; if any of NidoranM or NidoranF is found in deck,
+; return a score of $80 + slots available in bench.
+HandleNidoranFCallForFamily:
 	ld e, NIDORANM
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr c, .asm_16e67
+	jr c, .found
 	ld e, NIDORANF
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr nc, .done
-.asm_16e67
+	jr nc, HandleSpecialAIMoves.zero
+.found
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld b, a
 	ld a, MAX_PLAY_AREA_POKEMON
 	sub b
 	add $80
 	ret
 
-.asm_16e77
+; checks for certain card IDs of Fighting color in deck.
+; if any of them are found, return a score of
+; $80 + slots available in bench.
+HandleMarowak1CallForFriend
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr c, .asm_16e9d
+	jr c, .found
 	ld e, ONIX
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr c, .asm_16e9d
+	jr c, .found
 	ld e, CUBONE
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr c, .asm_16e9d
+	jr c, .found
 	ld e, RHYHORN
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
-	jr c, .asm_16e9d
-	jr .done
-.asm_16e9d
+	jr c, .found
+	jr HandleSpecialAIMoves.zero
+.found
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_BENCH_POKEMON
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld b, a
 	ld a, MAX_BENCH_POKEMON
 	sub b
 	add $80
 	ret
 
-.asm_16ead: ; 16ead (5:6ead)
+; if any basic cards are found in deck,
+; return a score of $80 + slots available in bench.
+HandleJigglypuff2FriendshipSong: ; 16ead (5:6ead)
 	call CheckIfAnyBasicPokemonInDeck
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	cp MAX_PLAY_AREA_POKEMON
-	jr nc, .done
+	jr nc, HandleSpecialAIMoves.zero
 	ld b, a
 	ld a, MAX_PLAY_AREA_POKEMON
 	sub b
 	add $80
 	ret
 
-.asm_16ec2: ; 16ec2 (5:6ec2)
+; if AI decides to retreat, return a score of $80 + 10.
+HandleExeggcutorTeleport: ; 16ec2 (5:6ec2)
 	call AIDecideWhetherToRetreat
-	jp nc, .done
+	jp nc, HandleSpecialAIMoves.zero
 	ld a, $8a
 	ret
 
-.asm_16ecb: ; 16ecb (5:6ecb)
+; tests for the following conditions:
+; - player is under No Damage substatus;
+; - second move is unusable;
+; - second move deals no damage;
+; if any are true, returns score of $80 + 5.
+HandleSwordsDanceAndFocusEnergy: ; 16ecb (5:6ecb)
 	ld a, [wcdf0]
 	or a
-	jr nz, .asm_16ee7
+	jr nz, .success
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	call CheckIfSelectedMoveIsUnusable
-	jr c, .asm_16ee7
+	jr c, .success
 	ld a, $01 ; second move
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
-	jp nz, .done
-.asm_16ee7
+	jp nz, HandleSpecialAIMoves.zero
+.success
 	ld a, $85
 	ret
 
-.asm_16eea: ; 16eea (5:6eea)
+; checks player's active card color, then
+; loops through bench looking for a Pokémon
+; with that same color.
+; if none are found, returns score of $80 + 2.
+HandleElectrode2ChainLightning: ; 16eea (5:6eea)
 	call SwapTurn
 	call GetArenaCardColor
 	call SwapTurn
 	ld b, a
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
-.asm_16ef9
+.loop
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_16f0c
+	jr z, .success
 	push bc
 	call GetCardIDFromDeckIndex
 	call GetCardType
 	pop bc
 	cp b
-	jr nz, .asm_16ef9
-	jp .done
-.asm_16f0c
+	jr nz, .loop
+	jp HandleSpecialAIMoves.zero
+.success
 	ld a, $82
 	ret
 
-.asm_16f0f: ; 16f0f (5:6f0f)
-	call Func_17080
-	jp nc, .done
+HandleMew3DevolutionBeam: ; 16f0f (5:6f0f)
+	call LookForCardThatIsKnockedOutOnDevolution
+	jp nc, HandleSpecialAIMoves.zero
 	ld a, $85
 	ret
 
-.asm_16f18: ; 16f18 (5:6f18)
+; first checks if card is confused, and if so return 0.
+; then checks number of Pokémon in bench that are viable to use:
+; - if that number is < 2  and this move is Conversion 1 OR
+; - if that number is >= 2 and this move is Conversion 2
+; then return score of $80 + 2.
+; otherwise return score of $80 + 1.
+HandlePorygonConversion: ; 16f18 (5:6f18)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
 	cp CONFUSED
-	jp z, .done
+	jp z, HandleSpecialAIMoves.zero
+
 	ld a, [wSelectedMoveIndex]
 	or a
-	jr nz, .asm_16f34
+	jr nz, .conversion_2
+
+; conversion 1
 	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
 	cp 2
-	jr c, .asm_16f3e
+	jr c, .low_score
 	ld a, $82
 	ret
-.asm_16f34
+
+.conversion_2
 	call CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove
 	cp 2
-	jr nc, .asm_16f3e
+	jr nc, .low_score
 	ld a, $82
 	ret
-.asm_16f3e
+
+.low_score
 	ld a, $81
 	ret
 
-.asm_16f41: ; 16f41 (5:6f41)
+; if any Psychic Energy is found in the Discard Pile,
+; return a score of $80 + 2.
+HandleEnergyAbsorption: ; 16f41 (5:6f41)
 	ld e, PSYCHIC_ENERGY
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call CheckIfAnyCardIDinLocation
-	jp nc, .done
+	jp nc, HandleSpecialAIMoves.zero
 	ld a, $82
 	ret
 
-.asm_16f4e: ; 16f4e (5:6f4e)
+; if player has cards in hand, AI calls Random:
+; - 1/3 chance to encourage move regardless;
+; - 1/3 chance to dismiss move regardless;
+; - 1/3 change to make some checks to player's hand.
+; AI tallies number of basic cards in hand, and if this
+; number is >= 2, encourage move.
+; otherwise, if it finds an evolution card in hand that
+; can evolve a card in player's deck, encourage.
+; if encouraged, returns a score of $80 + 3.
+HandleNinetalesMixUp: ; 16f4e (5:6f4e)
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetNonTurnDuelistVariable
 	or a
-	ret z
-	ld a, $03
+	ret z ; return if no hand cards
+
+	ld a, 3
 	call Random
 	or a
-	jr z, .asm_16fb5
+	jr z, .encourage ; if a = 0
 	dec a
-	ret z
+	ret z ; return if a = 1
 	call SwapTurn
 	call CreateHandCardList
 	call SwapTurn
 	or a
-	ret z
+	ret z ; return if no hand cards (again)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	cp 3
-	jr nc, .asm_16f9d
+	jr nc, .check_play_area
 
 	ld hl, wDuelTempList
 	ld b, 0
-.asm_16f78
+.loop_hand
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_16f98
+	jr z, .tally_basic_cards
 	push bc
 	call SwapTurn
 	call LoadCardDataToBuffer2_FromDeckIndex
@@ -5130,93 +5179,108 @@ Func_16dcd: ; 16dcd (5:6dcd)
 	pop bc
 	ld a, [wLoadedCard2Type]
 	cp TYPE_ENERGY
-	jr nc, .asm_16f78
+	jr nc, .loop_hand
 	ld a, [wLoadedCard2Stage]
 	or a
-	jr nz, .asm_16f78
-	inc b
-	jr .asm_16f78
-.asm_16f98
+	jr nz, .loop_hand
+	; is a basic Pokémon card
+	inc b 
+	jr .loop_hand
+.tally_basic_cards
 	ld a, b
 	cp 2
-	jr nc, .asm_16fb5
-.asm_16f9d
+	jr nc, .encourage
+
+; less than 2 basic cards in hand
+.check_play_area
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
-.asm_16fa2
+.loop_play_area
 	ld a, [hli]
 	cp $ff
-	jp z, .done
+	jp z, HandleSpecialAIMoves.zero
 	push hl
 	call SwapTurn
 	call CheckForEvolutionInList
 	call SwapTurn
 	pop hl
-	jr nc, .asm_16fa2
-.asm_16fb5
+	jr nc, .loop_play_area
+
+.encourage
 	ld a, $83
 	ret
 
-.asm_16fb8: ; 16fb8 (5:6fb8)
+; return score of $80 + 3.
+HandleZapdos3BigThunder: ; 16fb8 (5:6fb8)
 	ld a, $83
 	ret
 
-.asm_16fbb: ; 16fbb (5:6fbb)
+; dismiss move if cards in deck <= 20.
+; otherwise return a score of $80 + 0.
+HandleKangaskhanFetch: ; 16fbb (5:6fbb)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp 41
-	jp nc, .done
+	jp nc, HandleSpecialAIMoves.zero
 	ld a, $80
 	ret
 
-.asm_16fc8: ; 16fc8 (5:6fc8)
+; dismiss move if number of own benched cards which would
+; be KOd is greater than or equal to the number
+; of prize cards left for player.
+HandleDugtrioEarthquake: ; 16fc8 (5:6fc8)
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 
 	lb de, 0, 0
-.asm_16fd0
+.loop
 	inc e
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_16fe3
+	jr z, .count_prizes
 	ld a, e
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	cp 20
-	jr nc, .asm_16fd0
+	jr nc, .loop
 	inc d
-	jr .asm_16fd0
+	jr .loop
 
-.asm_16fe3
+.count_prizes
 	push de
 	call CountPrizes
 	pop de
 	cp d
-	jp c, .done
-	jp z, .done
+	jp c, HandleSpecialAIMoves.zero
+	jp z, HandleSpecialAIMoves.zero
 	ld a, $80
 	ret
 
-.asm_16ff2: ; 16ff2 (5:6ff2)
+; if there's any lightning energy cards in deck,
+; return a score of $80 + 3.
+HandleElectrode1EnergySpike: ; 16ff2 (5:6ff2)
 	ld a, CARD_LOCATION_DECK
 	ld e, LIGHTNING_ENERGY
 	call CheckIfAnyCardIDinLocation
-	jp nc, .done
+	jp nc, HandleSpecialAIMoves.zero
 	call Func_164a1
-	jp nc, .done
+	jp nc, HandleSpecialAIMoves.zero
 	ld a, $83
 	ret
 
-Func_17005: ; 17005 (5:7005)
+; only incentivize move if player's active card,
+; has any energy cards attached, and if so,
+; return a score of $80 + 3.
+HandleHyperBeam: ; 17005 (5:7005)
 	call SwapTurn
 	ld e, PLAY_AREA_ARENA
 	call CountNumberOfEnergyCardsAttached
 	call SwapTurn
 	or a
-	jr z, .asm_17016
+	jr z, .keep_score
 	ld a, $83
 	ret
-.asm_17016
+.keep_score
 	ld a, $80
 	ret
 ; 0x17019
@@ -5256,8 +5320,15 @@ CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
 	ret
 ; 0x17080
 
-
-Func_17080: ; 17080 (5:7080)
+; checks in other Play Area for non-basic cards.
+; afterwards, that card is checked for damage,
+; and if the damage counters it has is greater than or equal
+; to the max HP of the card stage below it,
+; return carry and that card's Play Area location in a.
+; output:
+;	a = card location of Pokémon card, if found;
+;	cerry set if such a card is found.
+LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	push af
 	call SwapTurn
