@@ -46,7 +46,7 @@ ENDM
 	const Func_d055_index                       ; $1d
 	const OWScript_MovePlayer_index             ; $1e
 	const Func_cee2_index                       ; $1f
-	const Func_d080_index                       ; $20
+	const OWScript_SetDialogName_index          ; $20
 	const Func_d088_index                       ; $21
 	const Func_d095_index                       ; $22
 	const Func_d0be_index                       ; $23

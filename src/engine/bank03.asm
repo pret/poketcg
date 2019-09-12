@@ -1207,6 +1207,7 @@ Func_c926: ; c926 (3:4926)
 	ld [wd3b6], a
 	farcall Func_1c768
 	pop bc
+;	fallthrough
 
 Func_c935: ; c935 (3:4935)
 	push hl
@@ -1567,7 +1568,7 @@ EventFlagMods: ; cb37 (3:4b37)
 
 Func_cc32: ; cc32 (3:4c32)
 	push hl
-	ld hl, wd0c8
+	ld hl, wCurrentNPCNameTx
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -2200,13 +2201,14 @@ Func_cfd4: ; cfd4 (3:4fd4)
 	dec l
 	pop bc
 	ld b, $0
-	ld hl, $5006
+	ld hl, Data_d006
 	add hl, bc
 	ld c, [hl]
 	call Func_ca8f
 	dec hl
 	jp IncreaseOWScriptPointerBy1
 
+Data_d006: ; d006 (3:5006)
 	INCROM $d006, $d00b
 
 Func_d00b: ; d00b (3:500b)
@@ -2277,9 +2279,9 @@ OWScript_MovePlayer: ; 505c (3:505c)
 	call SetScreenScroll
 	jp IncreaseOWScriptPointerBy3
 
-Func_d080: ; d080 (3:5080)
+OWScript_SetDialogName: ; d080 (3:5080)
 	ld a, c
-	farcall Func_11893
+	farcall SetNPCDialogName
 	jp IncreaseOWScriptPointerBy2
 
 Func_d088: ; d088 (3:5088)
@@ -2408,7 +2410,7 @@ Func_d135: ; d135 (3:5135)
 	INCROM $d153, $d16b
 
 Func_d16b: ; d16b (3:516b)
-	ld hl, wd0c8
+	ld hl, wCurrentNPCNameTx
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -2419,14 +2421,14 @@ Func_d16b: ; d16b (3:516b)
 	add hl, bc
 	push hl
 	ld a, [wd696]
-	farcall Func_11893
+	farcall SetNPCDialogName
 	pop hl
-	ld a, [wd0c8]
+	ld a, [wCurrentNPCNameTx]
 	ld [hli], a
-	ld a, [wd0c9]
+	ld a, [wCurrentNPCNameTx+1]
 	ld [hl], a
 	pop de
-	ld hl, wd0c8
+	ld hl, wCurrentNPCNameTx
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -2916,7 +2918,25 @@ asm_d4e6
 	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
-	INCROM $d4ec, $d753
+	INCROM $d4ec, $d52e
+
+OWSequence_d52e: ; d52e (3:552e)
+	start_script
+	run_script Func_d0ce
+	db $3c
+	run_script Func_d3e0
+	run_script Func_d0ce
+	db $78
+	run_script Func_d36d
+	db $02
+	db $01
+	db $0e
+	db $1a
+	db $00
+	run_script OWScript_EndScriptCloseText
+; 0xd53b
+
+	INCROM $d53b, $d753
 
 OWSequence_d753: ; d753 (3:5753)
 	start_script
@@ -2950,22 +2970,39 @@ OWSequence_d753: ; d753 (3:5753)
 	run_script OWScript_PrintTextString
 	tx Text05e3
 	run_script OWScript_CloseTextBox
-	run_script Func_d088
+	run_script Func_d088 ; run OWSequence with given npc (ID corresponds to a row in the wd34a table, i dont know why they correspond to what number though)
 	db $07
-	db $79
-	db $57
+	dw OWSequence_d779
 	run_script OWScript_EndScriptLoop1
 	ret
 
+OWSequence_d779: ; d779 (03:5779)
 	start_script
-	run_script Func_ce4a
+	run_script Func_ce4a ; handles some sort of npc movement, and rotation?
 	db $80
 	db $58
-	db $02
+	run_script OWScript_PrintTextString
+	tx Text05e4
+	run_script OWScript_SetDialogName
+	db DRMASON
+	run_script OWScript_PrintTextString
+	tx Text05e5
+	run_script Func_ce84
+	run_script Func_ce4a
+	db $82
+	db $58
+	run_script Func_cfc6
+	db $01
+	run_script Func_d055
+	db $03
+	run_script OWScript_CloseTextBox
+	run_script Func_d088
+	db $01
+	db $94
+	db $57
+	run_script OWScript_EndScriptLoop1
 
-	; there's more to this script but it hasn't been disassembled yet
-
-	INCROM $d77e, $e13f
+	INCROM $d793, $e13f
 
 WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
@@ -3200,9 +3237,9 @@ Func_fc2b: ; fc2b (3:7c2b)
 	inc hl
 	ld b, [hl]
 	ld a, $b0
-	ld [wd0c8], a
+	ld [wCurrentNPCNameTx], a
 	ld a, $3
-	ld [wd0c9], a
+	ld [wCurrentNPCNameTx+1], a
 	jp Func_c935
 
 PointerTable_fc4c: ; fc4c (3:7c4c)

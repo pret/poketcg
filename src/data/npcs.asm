@@ -124,8 +124,7 @@ Data_119dd:
 	db $26
 	db $00
 	dw $5727 ; Pointer to NPC Data
-	db $ac
-	db $03
+	tx Text03ac
 	db $00
 	db $00
 	db $00

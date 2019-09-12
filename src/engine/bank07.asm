@@ -224,7 +224,36 @@ Func_1c57b: ; 1c57b (7:457b)
 	ret
 
 Func_1c58e: ; 1c58e (7:458e)
-	INCROM $1c58e, $1c5e9
+	push hl
+	push bc
+	ld a, [wWhichSprite]
+	push af
+	ld a, [wd3aa]
+	call Func_39a7
+	ld a, [hli]
+	or a
+	jr z, .asm_1c5b2
+	ld a, [hl]
+	ld [wWhichSprite], a
+	ld bc, $5
+	add hl, bc
+	ld a, [hld]
+	bit 4, [hl]
+	jr nz, .asm_1c5ae
+	dec hl
+	add [hl]
+	inc hl
+.asm_1c5ae
+	farcall Func_12ab5
+.asm_1c5b2
+	pop af
+	ld [wWhichSprite], a
+	pop bc
+	pop hl
+	ret
+; 0x1c5b9
+
+	INCROM $1c5b9, $1c5e9
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
 	INCROM $1c5e9, $1c610

@@ -839,7 +839,7 @@ Func_115a3: ; 115a3 (4:55a3)
 INCLUDE "data/map_scripts.asm"
 
 ; loads a pointer into hl found on PointerTable_118f5
-Func_1184a: ; 1184a (4:584a)
+GetNPCDataPointer: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
 	add LOW(PointerTable_118f5)
@@ -855,7 +855,7 @@ Func_1184a: ; 1184a (4:584a)
 Func_11857: ; 11857 (4:5857)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCDataPointer
 	ld a, [hli]
 	ld [wd3ab], a
 	ld a, [hli]
@@ -880,30 +880,31 @@ Func_11857: ; 11857 (4:5857)
 ; this appears to find data about the NPC we're talking to
 Func_1187d: ; 1187d (4:587d)
 	push hl
-	call Func_1184a
-	ld bc, $5
+	call GetNPCDataPointer
+	ld bc, NPC_DATA_OWSEQUENCE_PTR
 	add hl, bc
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
 	inc hl
 	ld a, [hli]
-	ld [wd0c8], a
+	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wd0c9], a
+	ld [wCurrentNPCNameTx+1], a
 	pop hl
 	ret
 
-Func_11893: ; 11893 (4:5893)
+; Sets Dialog Box title to the name of the npc in 'a'
+SetNPCDialogName: ; 11893 (4:5893)
 	push hl
 	push bc
-	call Func_1184a
-	ld bc, $0007
+	call GetNPCDataPointer
+	ld bc, NPC_DATA_NAME_TEXT
 	add hl, bc
 	ld a, [hli]
-	ld [wd0c8], a
+	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wd0c9], a
+	ld [wCurrentNPCNameTx+1], a
 	pop bc
 	pop hl
 	ret
@@ -911,7 +912,7 @@ Func_11893: ; 11893 (4:5893)
 Func_118a7: ; 118a7 (4:58a7)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCDataPointer
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
@@ -927,7 +928,7 @@ Func_118a7: ; 118a7 (4:58a7)
 Func_118bf: ; 118bf (4:58bf)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCDataPointer
 	ld bc, $000a
 	add hl, bc
 	ld a, [hli]
@@ -942,7 +943,7 @@ Func_118d3: ; 118d3 (4:58d3)
 	push hl
 	push bc
 	push af
-	call Func_1184a
+	call GetNPCDataPointer
 	ld bc, $000c
 	add hl, bc
 	ld a, [hli]
@@ -999,7 +1000,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d055
 	dw OWScript_MovePlayer
 	dw Func_cee2
-	dw Func_d080
+	dw OWScript_SetDialogName
 	dw Func_d088
 	dw Func_d095
 	dw Func_d0be

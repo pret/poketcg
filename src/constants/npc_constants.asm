@@ -1,3 +1,20 @@
+; npc_struct constants
+	const_def
+	const NPC_TRAINER_ID
+	const NPC_DATA_FIELD_01
+	const NPC_DATA_FIELD_02
+	const NPC_DATA_FIELD_03
+	const NPC_DATA_FIELD_04
+	const NPC_DATA_OWSEQUENCE_PTR
+	const NPC_DATA_OWSEQUENCE_PTR_2
+	const NPC_DATA_NAME_TEXT
+	const NPC_DATA_NAME_TEXT_2
+	const NPC_DATA_BATTLE_PICTURE
+	const NPC_DATA_FIELD_0A
+	const NPC_DATA_FIELD_0B
+	const NPC_DATA_FIELD_0C
+NPC_DATA_LENGTH EQU const_value
+
 	const_def 1
 	const PLAYER_PIC    ; $01
 	const RONALD_PIC    ; $02
@@ -41,5 +58,6 @@
 	const STEPHANIE_PIC ; $28
 	const AARON_PIC     ; $29
 
+DRMASON  EQU $01
 SARA   EQU $1F
 AMANDA EQU $20

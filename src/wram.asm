@@ -1825,11 +1825,8 @@ wd0c6:: ; d0c6
 wd0c7:: ; d0c7
 	ds $1
 
-wd0c8:: ; d0c8
-	ds $1
-
-wd0c9:: ; d0c9
-	ds $1
+wCurrentNPCNameTx:: ; d0c8
+	ds $2
 
 wd0ca:: ; d0ca
 	ds $1
@@ -2068,6 +2065,7 @@ wd348:: ; d348
 wd349:: ; d349
 	ds $1
 
+; some kind of array with 8 sets of c data
 wd34a:: ; d34a
 	ds $60
 

@@ -11091,9 +11091,9 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	ld a, [hli]
 	ld [wd0cb], a
 	ld a, [hli]
-	ld [wd0c8], a
+	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wd0c9], a
+	ld [wCurrentNPCNameTx+1], a
 	pop hl
 	pop bc
 	pop af
