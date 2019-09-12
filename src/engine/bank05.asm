@@ -3815,8 +3815,8 @@ Func_164ba: ; 164ba (5:64ba)
 	ld [de], a
 	jr AIDecideWhichCardToAttachEnergy
 
-; copies bench AI score to wcddd
-; and loads in wAIscore value in wcde3
+; copies Play Area AI score to wcddd
+; and loads wAIscore with value in wcde3.
 Func_164d3: ; 164d3 (5:64d3)
 	push af
 	ld de, wPlayAreaAIScore
@@ -4116,8 +4116,15 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	jp Func_1689f
 ; 0x1668a
 
-Func_1668a ; 1668a (5:668a)
-	INCROM $1668a, $16695
+Func_1668a: ; 1668a (5:668a)
+	ld a, [wcdd8]
+	or a
+	jr z, .asm_16693
+	jp Func_164d3
+.asm_16693
+	or a
+	ret
+; 0x16695
 
 ; checks score related to selected move,
 ; in order to determine whether to play energy card.
@@ -4392,10 +4399,140 @@ FindPlayAreaCardWithHighestAIScore: ; 167b5 (5:67b5)
 ; 0x16805
 
 Func_16805 ; 16805 (5:6805)
-	INCROM $16805, $1689f
+	INCROM $16805, $1683b
 
-Func_1689f ; 1689f (5:689f)
-	INCROM $1689f, $169e3
+Func_1683b ; 1683b (5:683b)
+	INCROM $1683b, $1689f
+
+Func_1689f: ; 1689f (5:689f)
+	xor a
+	ld [wTempAI], a
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	jr nc, .second_move
+	ld a, b
+	or a
+	jr nz, .asm_16902
+	ld a, c
+	or a
+	jr nz, .asm_16902
+
+.second_move
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	jr nc, .asm_168c5
+	ld a, b
+	or a
+	jr nz, .asm_16902
+	ld a, c
+	or a
+	jr nz, .asm_16902
+
+.asm_168c5
+	ld a, $01
+	ld [wTempAI], a
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
+	call CheckLoadedMoveFlag
+	jr c, .energy_boost_or_discard_energy
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
+	call CheckLoadedMoveFlag
+	jr c, .energy_boost_or_discard_energy
+
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	call CheckEnergyNeededForAttack
+	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
+	call CheckLoadedMoveFlag
+	jr c, .energy_boost_or_discard_energy
+	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
+	call CheckLoadedMoveFlag
+	jr c, .energy_boost_or_discard_energy
+	call Func_16805
+	ret nc
+
+	call CreateEnergyCardListFromHand
+	jr .asm_16902
+
+.energy_boost_or_discard_energy
+	call Func_1683b
+	ret nc
+
+.asm_16902
+	call Func_1696e
+	jr c, .asm_16954
+	ld a, b
+	or a
+	jr z, .asm_16913
+	ld a, e
+	call LookForCardIDInHand
+	ldh [hTemp_ffa0], a
+	jr nc, .asm_16954
+.asm_16913
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .asm_16934
+	ld a, c
+	or a
+	jr z, .asm_1695f
+	cp $02
+	jr nz, .asm_16934
+	ld hl, wDuelTempList
+.asm_16923
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_16934
+	ldh [hTemp_ffa0], a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp DOUBLE_COLORLESS_ENERGY
+	jr nz, .asm_16923
+	jr .asm_16954
+.asm_16934
+	ld hl, wDuelTempList
+	call CountCardsInDuelTempList
+	call ShuffleCards
+.asm_1693d
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_1695f
+	call CheckIfOpponentHasBossDeckID
+	jr nc, .asm_16952
+	push af
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp DOUBLE_COLORLESS_ENERGY
+	pop bc
+	jr z, .asm_1693d
+	ld a, b
+.asm_16952
+	ldh [hTemp_ffa0], a
+.asm_16954
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, OPPACTION_PLAY_ENERGY
+	bank1call AIMakeDecision
+	scf
+	ret
+
+.asm_1695f
+	ld a, [wTempAI]
+	or a
+	jr z, .asm_16966
+	ret
+
+.asm_16966
+	ld a, [wSelectedMoveIndex]
+	or a
+	jp z, .second_move
+	ret
+; 0x1696e
+
+Func_1696e ; 1696e (5:696e)
+	INCROM $1696e, $169e3
 
 Func_169e3 ; 169e3 (5:69e3)
 	INCROM $169e3, $169f8
