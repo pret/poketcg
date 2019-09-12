@@ -4438,8 +4438,78 @@ CheckIfEvolutionNeedsEnergyForMove: ; 16805 (5:6805)
 	ret
 ; 0x1683b
 
-Func_1683b ; 1683b (5:683b)
-	INCROM $1683b, $1689f
+Func_1683b: ; 1683b (5:683b)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+
+	ld b, a
+	ld a, [wSelectedMoveIndex]
+	or a
+	jr z, .first_move
+
+; second move
+	ld a, b
+	cp ZAPDOS2
+	jr z, .zapdos2
+	cp CHARIZARD
+	jr z, .charizard_or_exeggcutor
+	cp EXEGGUTOR
+	jr z, .charizard_or_exeggcutor
+	ld hl, wLoadedCard2Move2EnergyCost
+	jr .asm_16861
+.first_move
+	ld hl, wLoadedCard2Move1EnergyCost
+
+.asm_16861
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .asm_1686b
+	ld e, $02
+	jr .set_carry
+.asm_1686b
+	ld a, b
+	and $0f
+	jr z, .asm_16874
+	ld e, $01
+	jr .set_carry
+.asm_16874
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .asm_1687e
+	ld e, $04
+	jr .set_carry
+.asm_1687e
+	ld a, b
+	and $0f
+	jr z, .asm_16887
+	ld e, $03
+	jr .set_carry
+.asm_16887
+	ld a, [hli]
+	ld b, a
+	and $f0
+	jr z, .asm_16891
+	ld e, $05
+	jr .set_carry
+.asm_16891
+	ld e, $06
+
+.set_carry
+	lb bc, $01, $00
+	scf
+	ret
+.zapdos2
+	or a
+	ret
+.charizard_or_exeggcutor
+	lb bc, $00, $01
+	scf
+	ret
+; 0x1689f
 
 Func_1689f: ; 1689f (5:689f)
 	xor a
