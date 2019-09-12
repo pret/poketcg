@@ -1230,10 +1230,7 @@ wAIScore:: ; cdbe
 wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
-wcdc0:: ; cdc0
-	ds MAX_PLAY_AREA_POKEMON
-
-	ds $4
+	ds $0a
 
 ; information about the defending Pokémon and
 ; the prize card count on both sides for AI:

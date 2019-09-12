@@ -4398,8 +4398,45 @@ FindPlayAreaCardWithHighestAIScore: ; 167b5 (5:67b5)
 	ret
 ; 0x16805
 
-Func_16805 ; 16805 (5:6805)
-	INCROM $16805, $1683b
+; returns carry if there's an evolution card
+; that can evolve card in hTempPlayAreaLocation_ff9d,
+; and that card needs energy to use wSelectedMove.
+CheckIfEvolutionNeedsEnergyForMove: ; 16805 (5:6805)
+	call CreateHandCardList
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call CheckCardEvolutionInHandOrDeck
+	jr c, .has_evolution
+	or a
+	ret
+
+.has_evolution
+	ld b, a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	push af
+	ld [hl], b
+	call CheckEnergyNeededForAttack
+	jr c, .not_enough_energy
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	or a
+	ret
+
+.not_enough_energy
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+	ld [hl], a
+	scf
+	ret
+; 0x1683b
 
 Func_1683b ; 1683b (5:683b)
 	INCROM $1683b, $1689f
@@ -4451,7 +4488,7 @@ Func_1689f: ; 1689f (5:689f)
 	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
 	call CheckLoadedMoveFlag
 	jr c, .energy_boost_or_discard_energy
-	call Func_16805
+	call CheckIfEvolutionNeedsEnergyForMove
 	ret nc
 
 	call CreateEnergyCardListFromHand
@@ -5894,16 +5931,19 @@ CalculateParticularAttachedEnergyNeeded: ; 17258 (5:7258)
 ; 0x17274
 
 ; return carry if there is a card that
-; can evolve a Pokémon in hand or deck
+; can evolve a Pokémon in hand or deck.
 ; input:
-;	a = deck index of card to check
+;	a = deck index of card to check;
+; output:
+;	a = deck index of evolution in hand, if found;
+;	carry set if there's a card in hand that can evolve.
 CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 	ld b, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	push af
 	ld [hl], b
-	ld e, $00
+	ld e, 0
 
 .loop
 	ld a, DUELVARS_CARD_LOCATIONS
