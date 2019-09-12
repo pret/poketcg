@@ -4569,7 +4569,7 @@ Func_1689f: ; 1689f (5:689f)
 	ret nc
 
 .asm_16902
-	call Func_1696e
+	call CheckSpecificDecksToAttachDoubleColorless
 	jr c, .asm_16954
 	ld a, b
 	or a
@@ -4638,8 +4638,95 @@ Func_1689f: ; 1689f (5:689f)
 	ret
 ; 0x1696e
 
-Func_1696e ; 1696e (5:696e)
-	INCROM $1696e, $169e3
+; check if playing certain decks so that AI can decide 
+; whether to play double colorless to some specific cards.
+; these are cards that do not need double colorless
+; to any of their moves but are required by their evolutions.
+; return carry if there's a double colorless in hand to attach
+; and it's one of the card IDs from these decks.
+; output:
+; 	[hTemp_ffa0] = card index of double colorless in hand;
+;	carry set if can play energy card.
+CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
+	push bc
+	push de
+	push hl
+
+; check if AI is playing any of the aplicable decks.
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_DRAGONITE_DECK_ID
+	jr z, .legendary_dragonite_deck
+	cp FIRE_CHARGE_DECK_ID
+	jr z, .fire_charge_deck
+	cp LEGENDARY_RONALD_DECK_ID
+	jr z, .legendary_ronald_deck
+
+.no_carry
+	pop hl
+	pop de
+	pop bc
+	or a
+	ret
+
+; if playing Legendary Dragonite deck,
+; check for Charmander and Dratini.
+.legendary_dragonite_deck
+	call .get_id
+	cp CHARMANDER
+	jr z, .check_colorless_attached
+	cp DRATINI
+	jr z, .check_colorless_attached
+	jr .no_carry
+
+; if playing Fire Charge deck,
+; check for Growlithe.
+.fire_charge_deck
+	call .get_id
+	cp GROWLITHE
+	jr z, .check_colorless_attached
+	jr .no_carry
+
+; if playing Legendary Ronald deck,
+; check for Dratini.
+.legendary_ronald_deck
+	call .get_id
+	cp DRATINI
+	jr z, .check_colorless_attached
+	jr .no_carry
+
+; check if card has any colorless energy cards attached,
+; and if there are any, return no carry.
+.check_colorless_attached
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + COLORLESS]
+	or a
+	jr nz, .no_carry
+
+; card has no colorless energy, so look for double colorless
+; in hand and if found, return carry and its card index.
+	ld a, DOUBLE_COLORLESS_ENERGY
+	call LookForCardIDInHand
+	jr c, .no_carry
+	ldh [hTemp_ffa0], a
+	pop hl
+	pop de
+	pop bc
+	scf
+	ret
+
+.get_id:
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ret
+; 0x169ca
+
+Func_169ca ; 169ca (5:69ca)
+	INCROM $169ca, $169e3
 
 Func_169e3 ; 169e3 (5:69e3)
 	INCROM $169e3, $169f8
