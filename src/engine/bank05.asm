@@ -341,8 +341,8 @@ CheckIfSelectedMoveIsUnusable: ; 1424b (5:424b)
 ;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
 ;	[wSelectedMoveIndex]         = selected move to examine
 ; output:
-;	b = colorless energy still needed
-;	c = basic energy still needed
+;	b = basic energy still needed
+;	c = colorless energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
 ;	carry set if no move 
 ;	       OR if it's a Pokémon Power
@@ -3372,12 +3372,12 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 	cp 1
 	jr z, .one_energy
 	cp 2
-	jr nz, .second_move
+	jr nz, .second_attack
 	ld a, c
 	cp 2
 	jr z, .two_colorless
 
-.second_move
+.second_attack
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
@@ -4113,7 +4113,7 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 
 .asm_16684
 	call CreateEnergyCardListFromHand
-	jp Func_1689f
+	jp AITryToPlayEnergyCard
 ; 0x1668a
 
 Func_1668a: ; 1668a (5:668a)
@@ -4438,18 +4438,30 @@ CheckIfEvolutionNeedsEnergyForMove: ; 16805 (5:6805)
 	ret
 ; 0x1683b
 
-Func_1683b: ; 1683b (5:683b)
+; returns in e the card ID of the energy required for
+; the Discard/Energy Boost attack loaded in wSelectedMoveIndex.
+; if it's Zapdos2's Thunderbolt attack, return no carry.
+; if it's Charizard's Fire Spin or Exeggutor's Big Eggplosion
+; attack, don't return energy card ID, but set carry.
+; output:
+;	b = 1 if needs color energy, 0 otherwise;
+;	c = 1 if only needs colorless energy, 0 otherwise;
+; 	carry set if not Zapdos2's Thunderbolt attack.
+GetEnergyCardForDiscardOrEnergyBoostAttack: ; 1683b (5:683b)
+; load card ID and check selected move index.
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
-
 	ld b, a
 	ld a, [wSelectedMoveIndex]
 	or a
-	jr z, .first_move
+	jr z, .first_attack
 
-; second move
+; check if second attack is Zapdos2's Thunderbolt,
+; Charizard's Fire Spin or Exeggcutor's Big Eggsplosion,
+; for these to be treated differently.
+; for both attacks, load its energy cost.
 	ld a, b
 	cp ZAPDOS2
 	jr z, .zapdos2
@@ -4458,87 +4470,108 @@ Func_1683b: ; 1683b (5:683b)
 	cp EXEGGUTOR
 	jr z, .charizard_or_exeggcutor
 	ld hl, wLoadedCard2Move2EnergyCost
-	jr .asm_16861
-.first_move
+	jr .fire
+.first_attack
 	ld hl, wLoadedCard2Move1EnergyCost
 
-.asm_16861
+; check which energy color the move requires,
+; and load in e the card ID of corresponding energy card,
+; then return carry flag set.
+.fire
 	ld a, [hli]
 	ld b, a
 	and $f0
-	jr z, .asm_1686b
-	ld e, $02
+	jr z, .grass
+	ld e, FIRE_ENERGY
 	jr .set_carry
-.asm_1686b
+.grass
 	ld a, b
 	and $0f
-	jr z, .asm_16874
-	ld e, $01
+	jr z, .lightning
+	ld e, GRASS_ENERGY
 	jr .set_carry
-.asm_16874
+.lightning
 	ld a, [hli]
 	ld b, a
 	and $f0
-	jr z, .asm_1687e
-	ld e, $04
+	jr z, .water
+	ld e, LIGHTNING_ENERGY
 	jr .set_carry
-.asm_1687e
+.water
 	ld a, b
 	and $0f
-	jr z, .asm_16887
-	ld e, $03
+	jr z, .fighting
+	ld e, WATER_ENERGY
 	jr .set_carry
-.asm_16887
+.fighting
 	ld a, [hli]
 	ld b, a
 	and $f0
-	jr z, .asm_16891
-	ld e, $05
+	jr z, .psychic
+	ld e, FIGHTING_ENERGY
 	jr .set_carry
-.asm_16891
-	ld e, $06
+.psychic
+	ld e, PSYCHIC_ENERGY
 
 .set_carry
 	lb bc, $01, $00
 	scf
 	ret
+
+; for Zapdos2's Thunderbolt attack, return with no carry.
 .zapdos2
 	or a
 	ret
+
+; Charizard's Fire Spin and Exeggcutor's Big Eggsplosion,
+; return carry.
 .charizard_or_exeggcutor
 	lb bc, $00, $01
 	scf
 	ret
 ; 0x1689f
 
-Func_1689f: ; 1689f (5:689f)
+; called after the AI has decided which card to attach
+; energy from hand. AI does checks to determine whether
+; this card needs more energy or not, and chooses the
+; right energy card to play. If the card is played,
+; return with carry flag set.
+AITryToPlayEnergyCard: ; 1689f (5:689f)
+; check if energy cards are still needed for attacks.
+; if first attack doesn't need, test for the second attack.
 	xor a
 	ld [wTempAI], a
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
-	jr nc, .second_move
+	jr nc, .second_attack
 	ld a, b
 	or a
-	jr nz, .asm_16902
+	jr nz, .check_deck
 	ld a, c
 	or a
-	jr nz, .asm_16902
+	jr nz, .check_deck
 
-.second_move
-	ld a, $01
+.second_attack
+	ld a, $01 ; second attack
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
-	jr nc, .asm_168c5
+	jr nc, .check_discard_or_energy_boost
 	ld a, b
 	or a
-	jr nz, .asm_16902
+	jr nz, .check_deck
 	ld a, c
 	or a
-	jr nz, .asm_16902
+	jr nz, .check_deck
 
-.asm_168c5
+; neither attack needs energy cards to be used.
+; check whether these attacks can be given
+; extra energy cards for their effects.
+.check_discard_or_energy_boost
 	ld a, $01
 	ld [wTempAI], a
+
+; for both attacks, check if it has the effect of
+; discarding energy cards or attached energy boost.
 	xor a ; first attack
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
@@ -4558,66 +4591,90 @@ Func_1689f: ; 1689f (5:689f)
 	ld a, MOVE_FLAG2_ADDRESS | DISCARD_ENERGY_F
 	call CheckLoadedMoveFlag
 	jr c, .energy_boost_or_discard_energy
+
+; if none of the attacks have those flags, do an additional
+; check to ascertain whether evolution card needs energy
+; to use second attack. Return if all these checks fail.
 	call CheckIfEvolutionNeedsEnergyForMove
 	ret nc
-
 	call CreateEnergyCardListFromHand
-	jr .asm_16902
+	jr .check_deck
 
+; for attacks that discard energy or get boost for
+; additional energy cards, get the energy card ID required by move.
+; if it's Zapdos2's Thunderbolt move, return.
 .energy_boost_or_discard_energy
-	call Func_1683b
+	call GetEnergyCardForDiscardOrEnergyBoostAttack
 	ret nc
 
-.asm_16902
+; some decks allow basic Pokémon to be given double colorless
+; in anticipation for evolution, so play card if that is the case.
+.check_deck
 	call CheckSpecificDecksToAttachDoubleColorless
-	jr c, .asm_16954
+	jr c, .play_energy_card
+
 	ld a, b
 	or a
-	jr z, .asm_16913
+	jr z, .colorless_energy
+
+; in this case, Pokémon needs a specific basic energy card.
+; look for basic energy card needed in hand and play it.
 	ld a, e
 	call LookForCardIDInHand
 	ldh [hTemp_ffa0], a
-	jr nc, .asm_16954
-.asm_16913
+	jr nc, .play_energy_card
+
+; in this case Pokémon just needs colorless (any basic energy card).
+; if active card, check if it needs 2 colorless.
+; if it does (and also doesn't additionally need a color energy),
+; look for double colorless card in hand and play it if found.
+.colorless_energy
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
-	jr nz, .asm_16934
+	jr nz, .look_for_any_energy
 	ld a, c
 	or a
-	jr z, .asm_1695f
-	cp $02
-	jr nz, .asm_16934
+	jr z, .check_if_done
+	cp 2
+	jr nz, .look_for_any_energy
+
+	; needs two colorless
 	ld hl, wDuelTempList
-.asm_16923
+.loop_1
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_16934
+	jr z, .look_for_any_energy
 	ldh [hTemp_ffa0], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp DOUBLE_COLORLESS_ENERGY
-	jr nz, .asm_16923
-	jr .asm_16954
-.asm_16934
+	jr nz, .loop_1
+	jr .play_energy_card
+
+; otherwise, look for any card and play it.
+; if it's a boss deck, only play double colorless in this situation.
+.look_for_any_energy
 	ld hl, wDuelTempList
 	call CountCardsInDuelTempList
 	call ShuffleCards
-.asm_1693d
+.loop_2
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_1695f
+	jr z, .check_if_done
 	call CheckIfOpponentHasBossDeckID
-	jr nc, .asm_16952
+	jr nc, .load_card
 	push af
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp DOUBLE_COLORLESS_ENERGY
 	pop bc
-	jr z, .asm_1693d
+	jr z, .loop_2
 	ld a, b
-.asm_16952
+.load_card
 	ldh [hTemp_ffa0], a
-.asm_16954
+
+; plays energy card loaded in hTemp_ffa0 and sets carry flag.
+.play_energy_card
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, OPPACTION_PLAY_ENERGY
@@ -4625,23 +4682,25 @@ Func_1689f: ; 1689f (5:689f)
 	scf
 	ret
 
-.asm_1695f
+; wTempAI is 1 if the attack had a Discard/Energy Boost effect,
+; and 0 otherwise. If 1, then return. If not one, check if
+; there is still a second attack to check.
+.check_if_done
 	ld a, [wTempAI]
 	or a
-	jr z, .asm_16966
+	jr z, .check_first_attack
 	ret
-
-.asm_16966
+.check_first_attack
 	ld a, [wSelectedMoveIndex]
 	or a
-	jp z, .second_move
+	jp z, .second_attack
 	ret
 ; 0x1696e
 
-; check if playing certain decks so that AI can decide 
-; whether to play double colorless to some specific cards.
-; these are cards that do not need double colorless
-; to any of their moves but are required by their evolutions.
+; check if playing certain decks so that AI can decide whether to play
+; double colorless to some specific cards.
+; these are cards that do not need double colorless to any of their moves
+; but are required by their evolutions.
 ; return carry if there's a double colorless in hand to attach
 ; and it's one of the card IDs from these decks.
 ; output:
@@ -5879,12 +5938,12 @@ CheckIfArenaCardIsAtHalfHPCanEvolveAndUseSecondMove: ; 170c9 (5:70c9)
 
 	ld a, [wLoadedCard1Unknown2]
 	and %00010000
-	jr z, .check_second_move
+	jr z, .check_second_attack
 	ld a, d
 	call CheckCardEvolutionInHandOrDeck
 	jr c, .no_carry
 
-.check_second_move
+.check_second_attack
 	xor a ; active card
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, $01 ; second move
@@ -5943,7 +6002,7 @@ CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 
 	ld a, [wLoadedCard1Unknown2]
 	and $10
-	jr z, .check_second_move
+	jr z, .check_second_attack
 
 	ld a, d
 	push bc
@@ -5951,7 +6010,7 @@ CheckIfBenchCardsAreAtHalfHPCanEvolveAndUseSecondMove: ; 17101 (5:7101)
 	pop bc
 	jr c, .next
 
-.check_second_move
+.check_second_attack
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, $01 ; second move
@@ -6152,14 +6211,14 @@ CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	xor a ; first move
 	ld [wSelectedMoveIndex], a
 	call CheckIfSelectedMoveIsUnusable
-	jr c, .second_move
+	jr c, .second_attack
 	xor a
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
 	jr nz, .set_carry
 
-.second_move
+.second_attack
 	ld a, $01 ; second move
 	ld [wSelectedMoveIndex], a
 	call CheckIfSelectedMoveIsUnusable
@@ -6193,11 +6252,11 @@ CheckIfDefendingPokemonCanKnockOut: ; 173b1 (5:73b1)
 	ld [wce00], a
 	ld [wce01], a
 	call CheckIfDefendingPokemonCanKnockOutWithMove
-	jr nc, .second_move
+	jr nc, .second_attack
 	ld a, [wDamage]
 	ld [wce00], a
 
-.second_move
+.second_attack
 	ld a, $01 ; second move
 	call CheckIfDefendingPokemonCanKnockOutWithMove
 	jr nc, .return_if_neither_kos
