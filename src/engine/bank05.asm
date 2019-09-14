@@ -3817,6 +3817,7 @@ Func_164ba: ; 164ba (5:64ba)
 
 ; copies Play Area AI score to wcddd
 ; and loads wAIscore with value in wcde3.
+; identical to Func_169e3.
 Func_164d3: ; 164d3 (5:64d3)
 	push af
 	ld de, wPlayAreaAIScore
@@ -4790,8 +4791,25 @@ CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
 Func_169ca ; 169ca (5:69ca)
 	INCROM $169ca, $169e3
 
-Func_169e3 ; 169e3 (5:69e3)
-	INCROM $169e3, $169f8
+; copies Play Area AI score to wcddd
+; and loads wAIscore with value in wcde3.
+; identical to Func_164d3.
+Func_169e3: ; 169e3 (5:69e3)
+	push af
+	ld de, wPlayAreaAIScore
+	ld hl, wcddd
+	ld b, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+	ld a, [hl]
+	ld [wAIScore], a
+	pop af
+	ret
+; 0x169f8
 
 Func_169f8: ; 169f8 (5:69f8)
 	xor a
@@ -4801,12 +4819,14 @@ Func_169f8: ; 169f8 (5:69f8)
 	jr z, .asm_16a0b
 	ld a, [wcdd6]
 	ld [wSelectedMoveIndex], a
-	jr .asm_16a3e
+	jr .first_attack
 	
 .asm_16a0b
 	ld a, [wcda7]
 	cp $80
 	jp z, .asm_16a77
+
+; determine AI score of both attacks.
 	xor a ; first attack
 	call GetAIScoreOfAttack
 	ld a, [wAIScore]
@@ -4819,18 +4839,23 @@ Func_169f8: ; 169f8 (5:69f8)
 	ld a, [wAIScore]
 	cp b
 	jr nc, .asm_16a30
+	; first attack is higher score
 	dec c
 	ld a, b
+
+; c holds the attack index chosen by AI,
+; and a holds its AI score.
+; first check if chosen attack has at least minimum score.
 .asm_16a30
-	cp $50
+	cp $50 ; minimum score to use attack
 	jr c, .asm_16a77
 	ld a, c
 	ld [wSelectedMoveIndex], a
 	or a
-	jr z, .asm_16a3e
-	call Func_17019
+	jr z, .first_attack
+	call CheckWhetherToSwitchToFirstAttack
 	
-.asm_16a3e
+.first_attack
 	ld a, [wcdd9]
 	or a
 	jr z, .asm_16a48
@@ -4874,7 +4899,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	ret
 ; 0x16a86
 
-; determines the AI score of attack in wSelectedMoveIndex.
+; determines the AI score of attack index in a.
 GetAIScoreOfAttack: ; 16a86 (5:6a86)
 ; initialize AI score.
 	ld [wSelectedMoveIndex], a
@@ -5827,8 +5852,56 @@ HandleHyperBeam: ; 17005 (5:7005)
 	ret
 ; 0x17019
 
-Func_17019 ; 17019 (5:7019)
-	INCROM $17019, $17057
+; called when second attack is determined by AI to have
+; more AI score than the first attack, so that it checks
+; whether the first attack is a better alternative.
+CheckWhetherToSwitchToFirstAttack: ; 17019 (5:7019)
+; this checks whether the first attack is also viable
+; (has more than minimum score to be used)
+	ld a, [wPlayAreaAIScore]
+	cp $50
+	jr c, .keep_second_attack
+
+; first attack has more than minimum score to be used.
+; check if second attack can KO.
+; in case it can't, the AI keeps it as the attack to be used.
+; (possibly due to the assumption that if the
+; second attack cannot KO, the first attack can't KO as well.)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call EstimateDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jr z, .check_flag
+	jr nc, .keep_second_attack
+
+; second attack can ko, check its flag.
+; in case its effect is to heal user or nullify/weaken damage
+; next turn, keep second move as the option.
+; otherwise switch to the first attack.
+.check_flag
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, $01 ; second attack
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER_F
+	call CheckLoadedMoveFlag
+	jr c, .keep_second_attack
+	ld a, MOVE_FLAG2_ADDRESS | NULLIFY_OR_WEAKEN_ATTACK_F
+	call CheckLoadedMoveFlag
+	jr c, .keep_second_attack
+; switch to first attack
+	xor a
+	ld [wSelectedMoveIndex], a
+	ret
+.keep_second_attack
+	ld a, $01
+	ld [wSelectedMoveIndex], a
+	ret
+; 0x17057
 
 ; returns carry if there are 
 ; any basic Pokémon cards in deck.
