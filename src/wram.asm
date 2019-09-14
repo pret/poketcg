@@ -1294,7 +1294,11 @@ wcde4:: ; cde4
 wcdea:: ; cdea
 	ds MAX_PLAY_AREA_POKEMON
 
-wcdf0:: ; cdf0
+; whether AI cannot inflict damage on player's active Pokémon
+; (due to No Damage or Effect substatus).
+;	$00 = can damage
+;	$01 = can't damage
+wAICannotDamage:: ; cdf0
 	ds $1
 	
 ; used by AI to store variable information
@@ -1332,7 +1336,11 @@ wce00:: ; ce00
 wce01:: ; ce01
 	ds $1
 
-wce02:: ; ce02
+; whether AI's move is a damaging move or not
+; (move that only damages bench is treated as non-damaging)
+; $00 = is a damaging move
+; $01 = is a non damaging move
+wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
 wce03:: ; ce03

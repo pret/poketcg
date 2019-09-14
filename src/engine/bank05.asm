@@ -3834,6 +3834,8 @@ Func_164d3: ; 164d3 (5:64d3)
 	ret
 ; 0x164e8
 
+; have AI decide whether to play energy card from hand 
+; and determine which card is best to attach it.
 AIDecidePlayEnergyCardFromHand: ; 164e8 (5:64e8)
 	xor a
 	ld [wcdd8], a
@@ -3849,6 +3851,8 @@ AIDecidePlayEnergyCardFromHand: ; 164e8 (5:64e8)
 	or a
 	ret
 
+; have AI decide whether to play energy card
+; and determine which card is best to attach it.
 AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 	ld a, $80
 	ld b, MAX_PLAY_AREA_POKEMON
@@ -4103,20 +4107,19 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 ; for each card has been calculated.
 ; now to determine the highest score.
 	call FindPlayAreaCardWithHighestAIScore
-	jp nc, Func_1668a
+	jp nc, .asm_1668a
 
 	ld a, [wcdd8]
 	or a
-	jr z, .asm_16684
+	jr z, .play_card
 	scf
 	jp Func_164d3
 
-.asm_16684
+.play_card
 	call CreateEnergyCardListFromHand
 	jp AITryToPlayEnergyCard
-; 0x1668a
 
-Func_1668a: ; 1668a (5:668a)
+.asm_1668a: ; 1668a (5:668a)
 	ld a, [wcdd8]
 	or a
 	jr z, .asm_16693
@@ -4804,12 +4807,12 @@ Func_169f8: ; 169f8 (5:69f8)
 	ld a, [wcda7]
 	cp $80
 	jp z, .asm_16a77
-	xor a
-	call Func_16a86
+	xor a ; first attack
+	call GetAIScoreOfAttack
 	ld a, [wAIScore]
 	ld [wPlayAreaAIScore], a
-	ld a, $01
-	call Func_16a86
+	ld a, $01 ; second attack
+	call GetAIScoreOfAttack
 	ld c, $01
 	ld a, [wPlayAreaAIScore]
 	ld b, a
@@ -4871,15 +4874,19 @@ Func_169f8: ; 169f8 (5:69f8)
 	ret
 ; 0x16a86
 
-Func_16a86: ; 16a86 (5:6a86)
+; determines the AI score of attack in wSelectedMoveIndex.
+GetAIScoreOfAttack: ; 16a86 (5:6a86)
+; initialize AI score.
 	ld [wSelectedMoveIndex], a
 	ld a, $50
 	ld [wAIScore], a
+
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CheckIfSelectedMoveIsUnusable
 	jr nc, .usable
-	
+
+; return zero AI score.
 .unusable
 	xor a
 	ld [wAIScore], a
@@ -4888,7 +4895,7 @@ Func_16a86: ; 16a86 (5:6a86)
 ; load arena card IDs
 .usable
 	xor a
-	ld [wcdf0], a
+	ld [wAICannotDamage], a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -4902,7 +4909,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld [wTempNonTurnDuelistCardID], a
 
 ; handle the case where the player has No Damage substatus.
-; in the case the player does, check if this move is
+; in the case the player does, check if this move
 ; has a residual effect, or if it can damage the opposing bench.
 ; If none of those are true, render the move unusable.
 ; also if it's a PKMN power, consider it unusable as well.
@@ -4912,7 +4919,7 @@ Func_16a86: ; 16a86 (5:6a86)
 
 	; player is under No Damage substatus
 	ld a, $01
-	ld [wcdf0], a
+	ld [wAICannotDamage], a
 	ld a, [wSelectedMoveIndex]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wLoadedMoveCategory]
@@ -4947,7 +4954,7 @@ Func_16a86: ; 16a86 (5:6a86)
 ; player's bench, and encourage move in case there is.
 .check_damage
 	xor a
-	ld [wce02], a
+	ld [wAIMoveIsNonDamaging], a
 	ld a, [wDamage]
 	ld [wTempAI], a
 	or a
@@ -4957,7 +4964,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr .check_recoil
 .no_damage
 	ld a, $01
-	ld [wce02], a
+	ld [wAIMoveIsNonDamaging], a
 	call SubFromAIScore
 	ld a, [wAIMaxDamage]
 	or a
@@ -4965,7 +4972,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 2
 	call AddToAIScore
 	xor a
-	ld [wce02], a
+	ld [wAIMoveIsNonDamaging], a
 .no_max_damage
 	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH_F
 	call CheckLoadedMoveFlag
@@ -5076,7 +5083,7 @@ Func_16a86: ; 16a86 (5:6a86)
 
 ; Rock Crusher Deck only uses this move if
 ; prize count is below 4 and move wins (or potentially draws) the duel,
-; (at least gets KOs equal to prize cards left).
+; (i.e. at least gets KOs equal to prize cards left).
 .rock_crusher_deck
 	call CountPrizes
 	cp 4
@@ -5091,7 +5098,7 @@ Func_16a86: ; 16a86 (5:6a86)
 
 ; generic checks for all other deck IDs.
 ; encourage move if it wins (or potentially draws) the duel,
-; (at least gets KOs equal to prize cards left).
+; (i.e. at least gets KOs equal to prize cards left).
 ; dismiss it if it causes the player to win.
 .high_recoil_generic_checks
 	ld a, DUELVARS_ARENA_CARD
@@ -5183,8 +5190,8 @@ Func_16a86: ; 16a86 (5:6a86)
 	cp b
 	jr z, .increase_count
 	jr nc, .loop
-	; increase d if damage dealt KOs
 .increase_count
+	; increase d if damage dealt KOs
 	inc d
 	jr .loop
 .exit_loop
@@ -5203,7 +5210,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ret
 
 ; if defending card can KO, encourage move
-; unless wce02 is non-zero.
+; unless move is non-damaging.
 .check_defending_can_ko
 	ld a, [wSelectedMoveIndex]
 	push af
@@ -5214,7 +5221,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	jr nc, .check_discard
 	ld a, 5
 	call AddToAIScore
-	ld a, [wce02]
+	ld a, [wAIMoveIsNonDamaging]
 	or a
 	jr z, .check_discard
 	ld a, 5
@@ -5310,13 +5317,12 @@ Func_16a86: ; 16a86 (5:6a86)
 	call GetNonTurnDuelistVariable
 	ld [wTempAI], a
 
-; encourage a poison inflicting move if opposing
-; Pokémon isn't (doubly) poisoned already.
-; if opposing Pokémon is only poisoned and not
-; double poisoned, and this move has FLAG_2_BIT_6 set,
-; discourage it (possibly to make Nidoking's Toxic attack
-; less likely to be chosen if the other Pokémon is poisoned.)
-; check poison
+; encourage a poison inflicting move if opposing Pokémon
+; isn't (doubly) poisoned already.
+; if opposing Pokémon is only poisoned and not double poisoned,
+; and this move has FLAG_2_BIT_6 set, discourage it
+; (possibly to make Nidoking's Toxic attack less likely to be chosen 
+; if the other Pokémon is poisoned.)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_sleep
@@ -5364,8 +5370,8 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 1
 	call SubFromAIScore
 
-; encourage confuse-inducing move if other Pokémon
-; isn't asleep or confused already
+; encourage confuse-inducing move if other Pokémon isn't asleep
+; or confused already.
 ; otherwise, if other Pokémon is asleep or confused,
 ; discourage move instead.
 .check_confusion
@@ -5387,7 +5393,7 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 1
 	call SubFromAIScore
 
-; if Pokémon is confused, subtract from score.
+; if this Pokémon is confused, subtract from score.
 .check_if_confused
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -5397,6 +5403,8 @@ Func_16a86: ; 16a86 (5:6a86)
 	ld a, 1
 	call SubFromAIScore
 
+; flag3_bit1 marks moves that the AI handles individually.
+; each move has its own checks and modifies AI score accordingly.
 .handle_flag3_bit1
 	ld a, MOVE_FLAG3_ADDRESS | FLAG_3_BIT_1_F
 	call CheckLoadedMoveFlag
@@ -5576,7 +5584,7 @@ HandleExeggcutorTeleport: ; 16ec2 (5:6ec2)
 ; - second move deals no damage;
 ; if any are true, returns score of $80 + 5.
 HandleSwordsDanceAndFocusEnergy: ; 16ecb (5:6ecb)
-	ld a, [wcdf0]
+	ld a, [wAICannotDamage]
 	or a
 	jr nz, .success
 	ld a, $01 ; second move
