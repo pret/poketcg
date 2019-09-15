@@ -1,80 +1,92 @@
+Data_20000: ; 20000 (8:4000)
 	INCROM $20000, $200e5
 
 ; 0 - e4 is a big set of data, seems to be one entry for each card
 
 Func_200e5: ; 200e5 (8:40e5)
 	ld [wce18], a
+; create hand list in wDuelTempList and wTempHandCardList.
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
 	call CopyBuffer
 	ld hl, wTempHandCardList
+
+.loop_hand
 	ld a, [hli]
 	ld [wce16], a
 	cp $ff
 	ret z
+
 	push hl
 	ld a, [wce18]
 	ld d, a
-	ld hl, $4000
-.asm_4106
+	ld hl, Data_20000
+.loop_data
 	xor a
 	ld [wce21], a
 	ld a, [hli]
 	cp $ff
-	jp z, $41b1
+	jp z, .pop_hl
+
+; compare input to first byte in data and continue if equal.
 	cp d
-	jp nz, .incHL5
+	jp nz, .inc_hl_by_5
 	ld a, [hli]
 	ld [wce17], a
 	ld a, [wce16]
 	call LoadCardDataToBuffer1_FromDeckIndex
-	cp $d2
-	jr nz, .asm_2012b
+	cp SWITCH
+	jr nz, .skip_switch_check
+
 	ld b, a
 	ld a, [wce20]
-	and $2
-	jr nz, .incHL4
+	and $02
+	jr nz, .inc_hl_by_4
 	ld a, b
 
-.asm_2012b
+.skip_switch_check
+; compare hand card to second byte in data and continue if equal.
 	ld b, a
 	ld a, [wce17]
 	cp b
-	jr nz, .incHL4
+	jr nz, .inc_hl_by_4
+
 	push hl
 	push de
 	ld a, [wce16]
 	ldh [hTempCardIndex_ff9f], a
 	bank1call CheckCantUseTrainerDueToHeadache
-	jp c, $41a8
+	jp c, .next_in_data
 	call LoadNonPokemonCardEffectCommands
-	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
+	ld a, OPPACTION_PLAY_BASIC_PKMN
 	call TryExecuteEffectCommandFunction
-	jp c, $41a8
-	farcall $5, $743b
-	jr c, .asm_201a8
+	jp c, .next_in_data
+	farcall Func_1743b
+	jr c, .next_in_data
 	pop de
 	pop hl
 	push hl
 	call CallIndirect
 	pop hl
-	jr nc, .incHL4
+	jr nc, .inc_hl_by_4
 	inc hl
 	inc hl
 	ld [wce19], a
+
 	push de
 	push hl
 	ld a, [wce16]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, $6
-	bank1call $67be
+	ld a, OPPACTION_PLAY_TRAINER
+	bank1call AIMakeDecision
 	pop hl
 	pop de
-	jr c, .incHL2
+	jr c, .inc_hl_by_2
 	push hl
 	call CallIndirect
 	pop hl
+
 	inc hl
 	inc hl
 	ld a, [wce20]
@@ -83,41 +95,45 @@ Func_200e5: ; 200e5 (8:40e5)
 	or b
 	ld [wce20], a
 	pop hl
-	and $8
-	jp z, $40f7
+	and $08
+	jp z, .loop_hand
+
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
-	call $697b
+	call CopyBuffer
 	ld hl, wTempHandCardList
 	ld a, [wce20]
 	and $f7
 	ld [wce20], a
-	jp $40f7
+	jp .loop_hand
 
-.incHL5
+.inc_hl_by_5
 	inc hl
+.inc_hl_by_4
+	inc hl
+	inc hl
+.inc_hl_by_2
+	inc hl
+	inc hl
+	jp .loop_data
 
-.incHL4
-	inc hl
-	inc hl
-
-.incHL2
-	inc hl
-	inc hl
-	jp .asm_4106
-
-.asm_201a8
+.next_in_data
 	pop de
 	pop hl
 	inc hl
 	inc hl
 	inc hl
 	inc hl
-	jp .asm_4106
-; 0x201b1
+	jp .loop_data
 
-	INCROM $201b1, $2297b
+.pop_hl
+	pop hl
+	jp .loop_hand
+; 0x201b5
+
+Func_201b5: ; 201b5 (8:41b5)
+	INCROM $201b5, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)

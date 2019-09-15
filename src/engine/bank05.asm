@@ -4846,6 +4846,8 @@ Func_169f8: ; 169f8 (5:69f8)
 ; c holds the attack index chosen by AI,
 ; and a holds its AI score.
 ; first check if chosen attack has at least minimum score.
+; then check if first attack is better than second attack
+; in case the second one was chosen.
 .asm_16a30
 	cp $50 ; minimum score to use attack
 	jr c, .asm_16a77
@@ -4861,6 +4863,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	jr z, .asm_16a48
 	scf
 	jp Func_169e3
+
 .asm_16a48
 	ld a, $0e
 	call Func_14663
