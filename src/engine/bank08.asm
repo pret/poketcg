@@ -215,7 +215,7 @@ CheckIfPotionAvoidsGettingKnockedOut: ; 201d1 (8:41d1)
 	ld h, a
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
-	cp 21 ; if damage <= 20
+	cp 20 + 1 ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20 ; amount of Potion HP healing
 
@@ -239,7 +239,97 @@ CheckIfPotionAvoidsGettingKnockedOut: ; 201d1 (8:41d1)
 ; 0x20204
 
 Func_20204: ; 20204 (8:4204)
-	INCROM $20204, $2297b
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .start_from_active
+; can KO
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld h, a
+	ld e, $00
+	call GetCardDamage
+	cp 20 + 1  ; if damage <= 20
+	jr c, .calculate_hp
+	ld a, 20
+.calculate_hp
+	ld l, a
+	ld a, h
+	add l
+	sub d
+	jr c, .count_prizes
+	jr z, .count_prizes
+	or a
+	ret
+
+.count_prizes
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	jr z, .start_from_active
+	ld e, PLAY_AREA_BENCH_1
+	jr .loop
+.start_from_active
+	ld e, PLAY_AREA_ARENA
+
+; find Play Area Pokémon with more than 10 damage.
+.loop
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	cp $ff
+	ret z
+	call Func_2027e
+	jr c, .asm_20250
+	call GetCardDamage
+	cp 20 ; if damage >= 20
+	jr nc, .found
+.asm_20250
+	inc e
+	jr .loop
+
+.found
+	ld a, e
+	or a
+	jr z, .active_card
+
+; not active card
+	push de
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	or a
+	jr z, .check_random
+	ld a, 10
+	call Random
+	cp 3
+; 7/10 chance of returning carry.
+.check_random
+	pop de
+	jr c, .no_carry
+	ld a, e
+	scf
+	ret
+
+; always return carry for active card.
+.active_card
+	push de
+	call Func_22bad
+	pop de
+	jr c, .no_carry
+	ld a, e
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x2027e
+
+Func_2027e: ; 2027e (8:427e)
+	INCROM $2027e, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)
