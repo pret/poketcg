@@ -6,7 +6,7 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 Func_201d1, $41b5
+	unknown_data_20000 $07, POTION,                 CheckIfPotionAvoidsGettingKnockedOut, AIPlayPotion
 	unknown_data_20000 $0a, POTION,                 $4204, $41b5
 	unknown_data_20000 $08, SUPER_POTION,           $42cc, $42a8
 	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
@@ -176,10 +176,30 @@ Func_200e5: ; 200e5 (8:40e5)
 	jp .loop_hand
 ; 0x201b5
 
-Func_201b5: ; 201b5 (8:41b5)
-	INCROM $201b5, $201d1
+; makes AI use potion card.
+AIPlayPotion: ; 201b5 (8:41b5)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld e, a
+	call GetCardDamage
+	cp 20
+	jr c, .play_card
+	ld a, 20
+.play_card
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x201d1
 
-Func_201d1: ; 201d1 (8:41d1)
+; if AI doesn't decide to retreat this card,
+; check if defending Pokémon can KO active card
+; next turn after using Potion.
+; if it cannot, return carry.
+; also take into account whether move is high recoil for this.
+CheckIfPotionAvoidsGettingKnockedOut: ; 201d1 (8:41d1)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -196,12 +216,12 @@ Func_201d1: ; 201d1 (8:41d1)
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	cp 21 ; if damage <= 20
-	jr c, .asm_201f7
+	jr c, .calculate_hp
 	ld a, 20 ; amount of Potion HP healing
 
 ; if damage done by defending Pokémon next turn will still
 ; KO this card after healing, return no carry.
-.asm_201f7
+.calculate_hp
 	ld l, a
 	ld a, h
 	add l
@@ -257,6 +277,7 @@ CountEnergyCardsInHand: ; 22990 (8:6990)
 Func_229a3 ; 229a3 (8:69a3)
 	INCROM $229a3, $22bad
 
+; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)
 	farcall Func_169ca
 	ret nc
