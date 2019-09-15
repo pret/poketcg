@@ -3778,13 +3778,13 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 Func_16488 ; 16488 (5:6488)
 	INCROM $16488, $164a1
 
-; copies wPlayAreaAIScore to wcddd.
+; copies wPlayAreaAIScore to wTempPlayAreaAIScore.
 ; copies AIScore to wcde3.
 ; decides which card to get energy card.
 Func_164a1: ; 164a1 (5:64a1)
 	ld a, $03
 	ld [wcdd8], a
-	ld de, wcddd
+	ld de, wTempPlayAreaAIScore
 	ld hl, wPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .loop_play_area
@@ -3801,7 +3801,7 @@ Func_164a1: ; 164a1 (5:64a1)
 Func_164ba: ; 164ba (5:64ba)
 	ld a, $83
 	ld [wcdd8], a
-	ld de, wcddd
+	ld de, wTempPlayAreaAIScore
 	ld hl, wPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .asm_164c7
@@ -3815,13 +3815,13 @@ Func_164ba: ; 164ba (5:64ba)
 	ld [de], a
 	jr AIDecideWhichCardToAttachEnergy
 
-; copies Play Area AI score to wcddd
+; copies Play Area AI score to wTempPlayAreaAIScore
 ; and loads wAIscore with value in wcde3.
 ; identical to Func_169e3.
 Func_164d3: ; 164d3 (5:64d3)
 	push af
 	ld de, wPlayAreaAIScore
-	ld hl, wcddd
+	ld hl, wTempPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .loop
 	ld a, [hli]
@@ -4788,16 +4788,33 @@ CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
 	ret
 ; 0x169ca
 
-Func_169ca ; 169ca (5:69ca)
-	INCROM $169ca, $169e3
+Func_169ca: ; 169ca (5:69ca)
+	ld a, $01
+	ld [wcdd9], a
 
-; copies Play Area AI score to wcddd
+; copy wPlayAreaAIScore to wTempPlayAreaAIScore.
+	ld de, wTempPlayAreaAIScore
+	ld hl, wPlayAreaAIScore
+	ld b, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+
+	ld a, [wAIScore]
+	ld [de], a
+	jr Func_169f8.asm_169fc
+
+; copies wPlayAreaAIScore to wTempPlayAreaAIScore
 ; and loads wAIscore with value in wcde3.
 ; identical to Func_164d3.
+; TODO: reconsider function structure here.
 Func_169e3: ; 169e3 (5:69e3)
 	push af
 	ld de, wPlayAreaAIScore
-	ld hl, wcddd
+	ld hl, wTempPlayAreaAIScore
 	ld b, MAX_PLAY_AREA_POKEMON
 .loop
 	ld a, [hli]
@@ -4814,6 +4831,7 @@ Func_169e3: ; 169e3 (5:69e3)
 Func_169f8: ; 169f8 (5:69f8)
 	xor a
 	ld [wcdd9], a
+.asm_169fc
 	ld a, [wce20]
 	and $01
 	jr z, .asm_16a0b
@@ -4839,7 +4857,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	ld a, [wAIScore]
 	cp b
 	jr nc, .asm_16a30
-	; first attack is higher score
+	; first attack has higher score
 	dec c
 	ld a, b
 

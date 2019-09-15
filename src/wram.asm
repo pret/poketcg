@@ -1282,7 +1282,7 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-wcddd:: ; cddd
+wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 
 wcde3:: ; cde3
