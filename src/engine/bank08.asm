@@ -1,7 +1,50 @@
-Data_20000: ; 20000 (8:4000)
-	INCROM $20000, $200e5
+; unknown byte / card ID / function pointer 1 / function pointer 2
+unknown_data_20000: MACRO
+	db \1, \2
+	dw \3
+	dw \4
+ENDM
 
-; 0 - e4 is a big set of data, seems to be one entry for each card
+Data_20000: ; 20000 (8:4000)
+	unknown_data_20000 $07, POTION,                 $41d1, $41b5
+	unknown_data_20000 $0a, POTION,                 $4204, $41b5
+	unknown_data_20000 $08, SUPER_POTION,           $42cc, $42a8
+	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
+	unknown_data_20000 $0d, DEFENDER,               $4406, $43f8
+	unknown_data_20000 $0e, DEFENDER,               $4486, $43f8
+	unknown_data_20000 $0d, PLUSPOWER,              $4501, $44e8
+	unknown_data_20000 $0e, PLUSPOWER,              $45a5, $44e8
+	unknown_data_20000 $09, SWITCH,                 $462e, $4612
+	unknown_data_20000 $07, GUST_OF_WIND,           $467e, $4666
+	unknown_data_20000 $0a, GUST_OF_WIND,           $467e, $4666
+	unknown_data_20000 $04, BILL,                   $4878, $486d
+	unknown_data_20000 $05, ENERGY_REMOVAL,         $4895, $4880
+	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   $49bc, $4994
+	unknown_data_20000 $07, POKEMON_BREEDER,        $4b1b, $4b06
+	unknown_data_20000 $0f, PROFESSOR_OAK,          $4cc1, $4cae
+	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       $4e6e, $4e44
+	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, $4fc1, $4f80
+	unknown_data_20000 $06, POKEMON_CENTER,         $50eb, $50e0
+	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, $517b, $5170
+	unknown_data_20000 $0c, ENERGY_SEARCH,          $51aa, $519a
+	unknown_data_20000 $03, POKEDEX,                $52dc, $52b4
+	unknown_data_20000 $07, FULL_HEAL,              $5428, $541d
+	unknown_data_20000 $0a, MR_FUJI,                $54a7, $5497
+	unknown_data_20000 $0a, SCOOP_UP,               $5506, $54f1
+	unknown_data_20000 $02, MAINTENANCE,            $562c, $560f
+	unknown_data_20000 $03, RECYCLE,                $56b8, $569a
+	unknown_data_20000 $0d, LASS,                   $5768, $5755
+	unknown_data_20000 $04, ITEM_FINDER,            $57b1, $578f
+	unknown_data_20000 $01, IMAKUNI_CARD,           $581e, $5813
+	unknown_data_20000 $01, GAMBLER,                $5875, $582d
+	unknown_data_20000 $05, REVIVE,                 $58a9, $5899
+	unknown_data_20000 $0d, POKEMON_FLUTE,          $58e8, $58d8
+	unknown_data_20000 $05, CLEFAIRY_DOLL,          $5982, $5977
+	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      $5982, $5977
+	unknown_data_20000 $02, POKE_BALL,              $59c6, $59a6
+	unknown_data_20000 $02, COMPUTER_SEARCH,        $5b34, $5b12
+	unknown_data_20000 $02, POKEMON_TRADER,         $5d8f, $5d7a
+	db $ff
 
 Func_200e5: ; 200e5 (8:40e5)
 	ld [wce18], a
