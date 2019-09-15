@@ -6,7 +6,7 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 $41d1, $41b5
+	unknown_data_20000 $07, POTION,                 Func_201d1, $41b5
 	unknown_data_20000 $0a, POTION,                 $4204, $41b5
 	unknown_data_20000 $08, SUPER_POTION,           $42cc, $42a8
 	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
@@ -177,7 +177,49 @@ Func_200e5: ; 200e5 (8:40e5)
 ; 0x201b5
 
 Func_201b5: ; 201b5 (8:41b5)
-	INCROM $201b5, $2297b
+	INCROM $201b5, $201d1
+
+Func_201d1: ; 201d1 (8:41d1)
+	farcall AIDecideWhetherToRetreat
+	jr c, .no_carry
+	call Func_22bad
+	jr c, .no_carry
+	xor a ; active card
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .no_carry
+	ld d, a
+
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld h, a
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	cp 21 ; if damage <= 20
+	jr c, .asm_201f7
+	ld a, 20 ; amount of Potion HP healing
+
+; if damage done by defending Pokémon next turn will still
+; KO this card after healing, return no carry.
+.asm_201f7
+	ld l, a
+	ld a, h
+	add l
+	sub d
+	jr c, .no_carry
+	jr z, .no_carry
+
+; return carry.
+	xor a
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x20204
+
+Func_20204: ; 20204 (8:4204)
+	INCROM $20204, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)
@@ -189,6 +231,7 @@ CopyBuffer: ; 2297b (8:697b)
 	jr CopyBuffer
 ; 0x22983
 
+Func_22983: ; 22983 (8:6983)
 	INCROM $22983, $22990
 
 ; counts number of energy cards found in hand
@@ -212,4 +255,22 @@ CountEnergyCardsInHand: ; 22990 (8:6990)
 ; 0x229a3
 
 Func_229a3 ; 229a3 (8:69a3)
-	INCROM $229a3, $24000
+	INCROM $229a3, $22bad
+
+Func_22bad: ; 22bad (8:6bad)
+	farcall Func_169ca
+	ret nc
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
+	call CheckLoadedMoveFlag
+	ccf
+	ret
+; 0x22bc6
+
+Func_22bc6 ; 22bc6 (8:6bc6)
+	INCROM $22bc6, $24000
