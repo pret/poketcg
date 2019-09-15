@@ -98,6 +98,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	and $08
 	jp z, .loop_hand
 
+.asm_20186 ; 20186 (8:4186)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
