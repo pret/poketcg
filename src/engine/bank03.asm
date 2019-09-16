@@ -128,9 +128,9 @@ Func_c10a: ; c10a (3:410a)
 
 ; closes dialogue window. seems to be for other things as well.
 CloseDialogueBox: ; c111 (3:4111)
-	ld a, [wd0c1]
+	ld a, [wd0c1] ; with 0 set i can't move cursors, can move around
 	bit 0, a
-	call nz, Func_c135
+	call nz, Func_c135 ; seems to actually close the dialog window
 	ld a, [wd0c1]
 	bit 1, a
 	jr z, .asm_c12a
@@ -144,10 +144,11 @@ CloseDialogueBox: ; c111 (3:4111)
 	ld [wd0bf], a
 	ret
 
+; this seems to legitimately close the dialogue box
 Func_c135: ; c135 (3:4135)
 	push hl
-	farcall Func_80028
-	ld hl, wd0c1
+	farcall Func_80028 ; Draw background of the current room, I think
+	ld hl, wd0c1 ; at this point, the background tiles are back to normal
 	res 0, [hl]
 	pop hl
 	ret
@@ -1236,7 +1237,7 @@ Func_c943: ; c943 (3:4943)
 	ld [wd4c6], a
 	ld de, wd3ab
 	ld bc, $0006
-	call Func_3bf5
+	call CopyBankedDataToDE
 	ld a, [wd3ab]
 	or a
 	jr z, .asm_c98f
@@ -2324,12 +2325,12 @@ Func_d0be: ; d0be (3:50be)
 	farcall Func_1c461
 	jp IncreaseOWScriptPointerBy3
 
-Func_d0ce: ; d0ce (3:50ce)
+OWScript_DoFrames: ; d0ce (3:50ce)
 	push bc
 	call DoFrameIfLCDEnabled
 	pop bc
 	dec c
-	jr nz, Func_d0ce
+	jr nz, OWScript_DoFrames
 	jp IncreaseOWScriptPointerBy2
 
 Func_d0d9: ; d0d9 (3:50d9)
@@ -2922,10 +2923,10 @@ asm_d4e6
 
 OWSequence_d52e: ; d52e (3:552e)
 	start_script
-	run_script Func_d0ce
+	run_script OWScript_DoFrames
 	db $3c
 	run_script Func_d3e0
-	run_script Func_d0ce
+	run_script OWScript_DoFrames
 	db $78
 	run_script Func_d36d
 	db $02

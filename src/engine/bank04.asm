@@ -1004,7 +1004,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d088
 	dw Func_d095
 	dw Func_d0be
-	dw Func_d0ce
+	dw OWScript_DoFrames
 	dw Func_d0d9
 	dw Func_d0f2
 	dw Func_ce4a
@@ -1331,7 +1331,7 @@ Func_12ae2: ; 12ae2 (4:6ae2)
 	ld [hli], a
 	push hl
 	ld l, $6
-	farcall Func_8020f
+	farcall GetMapDataPointer
 	farcall Func_80229
 	pop hl
 	ld a, [wd4c6]
@@ -1374,7 +1374,7 @@ Func_12b13: ; 12b13 (4:6b13)
 	ld [hl], a
 	ld de, wd23e
 	ld bc, $0004
-	call Func_3bf5
+	call CopyBankedDataToDE
 	pop hl
 	ld de, wd23e
 	ld a, [de]

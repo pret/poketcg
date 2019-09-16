@@ -50,7 +50,7 @@ ENDM
 	const Func_d088_index                       ; $21
 	const Func_d095_index                       ; $22
 	const Func_d0be_index                       ; $23
-	const Func_d0ce_index                       ; $24
+	const OWScript_DoFrames_index               ; $24
 	const Func_d0d9_index                       ; $25
 	const Func_d0f2_index                       ; $26
 	const Func_ce4a_index                       ; $27

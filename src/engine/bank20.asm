@@ -2,7 +2,7 @@ Func_80000: ; 80000 (20:4000)
 	INCROM $80000, $80028
 
 Func_80028: ; 80028 (20:4028)
-	call Func_801f1
+	call Func_801f1	; Clears the first x800 bytes of S1:a000
 	ld bc, $0000
 	call Func_80077
 	farcall $3, $49c7
@@ -13,6 +13,7 @@ Func_80028: ; 80028 (20:4028)
 
 	INCROM $8003d, $80077
 
+; loads the background it seems. Also includes background tile permissions?
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
 	ld [wd292], a
@@ -25,37 +26,187 @@ Func_80077: ; 80077 (20:4077)
 	push hl
 	push bc
 	push de
-	call BCCoordToBGMap0Address
+	call BCCoordToBGMap0Address ; de
 	ld hl, wd4c2
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	call $43b9
+	call Func_803b9 ; load more d4c* stuff from mapdatapointers
 	ld a, [wd4c6]
-	ld [wd23d], a
+	ld [wd23d], a ; copies the bank of the data we loaded to wd23d
 	ld de, wd23e
 	ld bc, $0006
-	call Func_3bf5
+	call CopyBankedDataToDE ; copies 6 bytes to wd23e+
 	ld l, e
-	ld h, d
+	ld h, d ; then copies that data into various other places?
 	ld a, [hli]
-	ld [wd12f], a
+	ld [wd12f], a ; just happens to correspond to size of room
 	ld a, [hli]
-	ld [wd130], a
+	ld [wd130], a ; hmmm
 	ld a, [hli]
-	ld [wd23a], a
+	ld [wd23a], a ; these 3 are before this data and after room collision
 	ld a, [hli]
 	ld [wd23b], a
 	ld a, [hli]
 	ld [wd23c], a
-	call $40bd
+	call Func_800bd ; moves the background data to some place vblank knows about
 	pop de
 	pop bc
 	pop hl
 	ret
-; 0x800bd
 
-	INCROM $800bd, $801a1
+Func_800bd: ; 800bd (20:40bd)
+	push hl
+	push bc
+	push de
+	ld a, [wd4c4] ; these are still the copy locations
+	add $05
+	ld e, a
+	ld a, [wd4c5]
+	adc $00
+	ld d, a ; de = [wd4c4/5] + 5
+	ld b, $c0 ; b = c0
+	call Func_08bf
+	ld a, [wd4c2]
+	ld e, a
+	ld a, [wd4c3] ; bg map coord from earlier
+	ld d, a
+	call Func_800e0
+	pop de
+	pop bc
+	pop hl
+	ret
+
+; de is a bg map coord
+Func_800e0: ; 800e0 (20:40e0)
+	push hl
+	ld hl, $d28e
+	ld a, [wd12f]
+	ld [hl], a
+	ld a, [wd23c]
+	or a
+	jr z, .asm_800f0
+	sla [hl] ; if wd23c is nonzero, double d28e
+.asm_800f0
+	ld c, $40
+	ld hl, wd23e
+	xor a
+.asm_800f6
+	ld [hli], a
+	dec c
+	jr nz, .asm_800f6 ; clear out wd23e-40+
+	ld a, [wd130]
+	ld c, a
+.asm_800fe
+	push bc ; push the height of this map
+	push de ; push the destination of this map
+	ld b, $00
+	ld a, [$d28e]
+	ld c, a ; bc is now the width
+	ld de, wd23e ; wd23e is the place we copied map data to (The 6 bytes) before
+	call Func_3be4
+	ld a, [wd12f]
+	ld b, a
+	pop de
+	push de
+	ld hl, wd23e
+	call Func_8016e
+	ld a, [wConsole]
+	cp $02
+	jr nz, .asm_8013b
+	call BankswitchVRAM1
+	ld a, [wd12f]
+	ld c, a
+	ld b, $00
+	ld hl, wd23e
+	add hl, bc
+	pop de
+	push de
+	ld a, [wd12f]
+	ld b, a
+	call Func_80148
+	call Func_8016e
+	call BankswitchVRAM0
+.asm_8013b
+	pop de
+	ld hl, $20
+	add hl, de
+	ld e, l
+	ld d, h
+	pop bc
+	dec c
+	jr nz, .asm_800fe
+	pop hl
+	ret
+; 0x80148
+
+Func_80148: ; 80148 (20:4148)
+	ld a, [$d291]
+	or a
+	ret z
+	ld a, [$d23c]
+	or a
+	jr z, .asm_80162
+	push hl
+	push bc
+.asm_80155
+	push bc
+	ld a, [$d291]
+	add [hl]
+	ld [hli], a
+	pop bc
+	dec b
+	jr nz, .asm_80155
+	pop bc
+	pop hl
+	ret
+.asm_80162
+	push hl
+	push bc
+	ld a, [$d291]
+.asm_80167
+	ld [hli], a
+	dec b
+	jr nz, .asm_80167
+	pop bc
+	pop hl
+	ret
+
+Func_8016e: ; 8016e (20:416e)
+	ld a, [wd292]
+	or a
+	jp z, SafeCopyDataHLtoDE
+	push hl
+	push bc
+	push de
+	ldh a, [hBankSRAM]
+	push af
+	ld a, $01
+	call BankswitchSRAM
+	push hl
+	ld hl, $800
+	ldh a, [hBankVRAM]
+	or a
+	jr z, .asm_8018c
+	ld hl, $c00
+.asm_8018c
+	add hl, de
+	ld e, l
+	ld d, h
+	pop hl
+.asm_80190
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .asm_80190
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_801a1: ; 801a1 (20:41a1)
 	push hl
@@ -108,6 +259,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
+; Clears the first x800 bytes of S1:a000
 Func_801f1: ; 801f1 (20:41f1)
 	push hl
 	push bc
@@ -118,7 +270,7 @@ Func_801f1: ; 801f1 (20:41f1)
 	ld hl, $a000
 	ld bc, $0800
 	xor a
-	call $3c10
+	call FillMemoryWithA
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -126,7 +278,7 @@ Func_801f1: ; 801f1 (20:41f1)
 	pop hl
 	ret
 
-Func_8020f: ; 8020f (20:420f)
+GetMapDataPointer: ; 8020f (20:420f)
 	push bc
 	push af
 	ld bc, MapDataPointers
@@ -135,17 +287,18 @@ Func_8020f: ; 8020f (20:420f)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	pop af
+	pop af ; bc = [MapDataPointers+l]
 	ld l, a
 	ld h, $0
 	sla l
 	rl h
 	sla l
 	rl h
-	add hl, bc
+	add hl, bc ; hl = [MapDataPointers+l] + 4*a
 	pop bc
 	ret
 
+; These vars are used as a copy source for something about drawing the background?
 Func_80229: ; 80229 (20:4229)
 	ld a, [hli]
 	ld [wd4c4], a
@@ -162,7 +315,7 @@ Func_80229: ; 80229 (20:4229)
 Func_8025b: ; 8025b (20:425b)
 	push hl
 	ld l, $4
-	call Func_8020f
+	call GetMapDataPointer
 	call Func_80229
 	ld a, [hl]
 	push af
@@ -234,7 +387,19 @@ Func_802bb: ; 802bb (20:42bb)
 	ret
 ; 0x802d4
 
-	INCROM $802d4, $80418
+	INCROM $802d4, $803b9
+
+Func_803b9: ; 803b9 (20:43b9)
+	ld l, $00
+	ld a, [wd131] ; current screen/state/almost room?
+	call GetMapDataPointer
+	call Func_80229 ; basically get pointer to background tilemap?
+	ld a, [hl]
+	ld [$d239], a ; the final value in mapDataPointer goes to this mystery
+	ret
+; 0x803c9
+
+	INCROM $803c9, $80418
 
 Func_80418: ; 80418 (20:4418)
 	INCROM $80418, $80480
@@ -332,5 +497,27 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 Unknown_80e5a: ; 80e5a (20:4e5a)
 	INCROM $80e5a, $80e5d
 
+; might be closer to "screen specific data" than map data
+; ex: one thing is reading from something that changes multipl times in loading
+; of screens, and changes in duels (4d131)
 MapDataPointers: ; 80e5d (20:4e5d)
-	INCROM $80e5d, $84000
+	dw MapDataPointers_80e67
+	dw MapDataPointers_8100f
+	dw MapDataPointers_8116b
+	dw MapDataPointers_81333
+	dw MapDataPointers_81697
+
+MapDataPointers_80e67: ; 80e67 (20:4e67)
+	INCROM $80e67, $8100f
+
+MapDataPointers_8100f: ; 8100f (20:500f)
+	INCROM $8100f, $8116b
+
+MapDataPointers_8116b: ; 8116b (20:516b)
+	INCROM $8116b, $81333
+
+MapDataPointers_81333: ; 81333 (20:5333)
+	INCROM $81333, $81697
+
+MapDataPointers_81697: ; 81697 (20:5697)
+	INCROM $81697, $84000

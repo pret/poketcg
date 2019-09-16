@@ -101,7 +101,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d088", "bbb", False),
 	("Func_d095", "bbb", False),
 	("Func_d0be", "bb", False),
-	("Func_d0ce", "b", False),
+	("OWScript_DoFrames", "b", False),
 	("Func_d0d9", "bbb", False), # jumps but still needs args
 	("Func_d0f2", "bbb", False), # jumps but still needs args
 	("Func_ce4a", "bb", False),

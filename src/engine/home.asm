@@ -1537,37 +1537,39 @@ UpdateRNGSources: ; 089b (0:089b)
 	pop hl
 	ret
 
+; ld d, a ; de = wd4c4/5 + 5
+; ld b, $c0 ; b = c0
 Func_08bf: ; 08bf (0:08bf)
 	ld hl, wcad6
 	ld [hl], e
 	inc hl
-	ld [hl], d
+	ld [hl], d ; load wcad6/7 with [wd4c4]+5
 	ld hl, wcad8
 	ld [hl], $1
-	inc hl
+	inc hl ; wcad8 is 1, a bunch of things after it are 0
 	xor a
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
-	ld [hl], b
+	ld [hl], b ; then wcad i think is set to c0
 	inc hl
-	ld [hli], a
-	ld [hl], $ef
+	ld [hli], a ; 0
+	ld [hl], $ef ; and ef
 	ld h, b
-	ld l, $0
+	ld l, $0 ; hl is now c000, first byte of wram, first card collection or no name
 	xor a
 .asm_8d9
-	ld [hl], a
-	inc l
+	ld [hl], a ; 0 out ff bytes
+	inc l ; inc the first ff bytes of wram (was an arg so could be other stuff)
 	jr nz, .asm_8d9
 	ret
 
 Func_08de: ; 08de (0:08de)
-	push hl
-	push de
+	push hl ; wd23e + 40 i think?
+	push de ; 6 mdp bytes
 .asm_8e0
-	push bc
+	push bc ; as of first run, bc is the width
 	call Func_08ef
 	ld [de], a
 	inc de
@@ -1584,7 +1586,7 @@ Func_08ef: ; 08ef (0:08ef)
 	ld hl, wcadc
 	ld a, [hl]
 	or a
-	jr z, .asm_902
+	jr z, .asm_902 ; for the purpose of this, we made it 0 earlier
 	dec [hl]
 	inc hl
 .asm_8f8
@@ -1603,9 +1605,9 @@ Func_08ef: ; 08ef (0:08ef)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	inc hl
-	dec [hl]
-	inc hl
+	inc hl ; get pointer from wcad6/7
+	dec [hl] ; dec wcad8 (was 1)
+	inc hl ; wcad9
 	jr nz, .asm_914
 	dec hl
 	ld [hl], $8
@@ -11329,7 +11331,8 @@ Func_3be4: ; 3be4 (0:3be4)
 	ret
 ; 0x3bf5
 
-Func_3bf5: ; 3bf5 (0:3bf5)
+; Copies bc bytes from [wd4c4] to de
+CopyBankedDataToDE: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]
 	push af
 	push hl

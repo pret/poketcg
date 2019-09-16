@@ -1900,6 +1900,7 @@ wd12f:: ; d12f
 wd130:: ; d130
 	ds $1
 
+; current screen, at least for some purpose -- changed multiple times on loads and changes when screen changes in battle?
 wd131:: ; d131
 	ds $1
 
@@ -2210,6 +2211,7 @@ wd4c2:: ; d4c2
 wd4c3:: ; d4c3
 	ds $1
 
+; these next 3 seem to be an address (bank @ end) for copying bg data
 wd4c4:: ; d4c4
 	ds $1
 
