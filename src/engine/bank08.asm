@@ -290,7 +290,7 @@ FindTargetCardForPotion: ; 20204 (8:4204)
 	call GetTurnDuelistVariable
 	cp $ff
 	ret z
-	call CheckIfEitherAttackHaveBoostIfTakenDamageEffect
+	call .check_boost_if_taken_damage	
 	jr c, .has_boost_damage
 	call GetCardDamage
 	cp 20 ; if damage >= 20
@@ -339,7 +339,7 @@ FindTargetCardForPotion: ; 20204 (8:4204)
 
 ; return carry if either of the attacks are usable
 ; and have the BOOST_IF_TAKEN_DAMAGE effect.
-CheckIfEitherAttackHaveBoostIfTakenDamageEffect: ; 2027e (8:427e)
+.check_boost_if_taken_damage ; 2027e (8:427e)
 	push de
 	xor a ; first attack
 	ld [wSelectedMoveIndex], a
@@ -352,11 +352,11 @@ CheckIfEitherAttackHaveBoostIfTakenDamageEffect: ; 2027e (8:427e)
 	ld a, $01 ; second attack
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .no_carry
+	jr c, .false
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
 	call CheckLoadedMoveFlag
 	jr c, .set_carry
-.no_carry
+.false
 	pop de
 	or a
 	ret
@@ -400,7 +400,7 @@ CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, a
-	call CheckIfHasAttachedEnergy
+	call .check_attached_energy
 	ret nc
 	farcall CheckIfDefendingPokemonCanKnockOut
 	jr nc, .no_carry
@@ -433,9 +433,7 @@ CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
 ; 0x20305
 
 ; returns carry if card has energies attached.
-; input:
-;	e = location to check, i.e. PLAY_AREA_*
-CheckIfHasAttachedEnergy: ; 20305 (8:4305)
+.check_attached_energy ; 20305 (8:4305)
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wTotalAttachedEnergies]
 	or a
@@ -497,16 +495,16 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	cp $ff
 	ret z
 	ld d, a
-	call Func_20394
-	jr nc, .asm_20366
-	call Func_2039e
-	jr c, .asm_20366
+	call .check_attached_energy
+	jr nc, .next
+	call .check_boost_if_taken_damage
+	jr c, .next
 	call Func_203c8
-	jr c, .asm_20366
+	jr c, .next
 	call GetCardDamage
 	cp 40 ; if damage >= 40
 	jr nc, .found
-.asm_20366
+.next
 	inc e
 	jr .loop
 
@@ -548,11 +546,44 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ret
 ; 0x20394
 
-Func_20394: ; 20394 (8:4394)
-	INCROM $20394, $2039e
+; returns carry if card has energies attached.
+.check_attached_energy ; 20394 (8:4394)
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	or a
+	ret z
+	scf
+	ret
+; 0x2039e
 
-Func_2039e: ; 2039e (8:439e)
-	INCROM $2039e, $203c8
+; return carry if either of the attacks are usable
+; and have the BOOST_IF_TAKEN_DAMAGE effect.
+.check_boost_if_taken_damage ; 2039e (8:439e)
+	push de
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .second_attack
+	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedMoveFlag
+	jr c, .set_carry
+.second_attack
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .false
+	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedMoveFlag
+	jr c, .set_carry
+.false
+	pop de
+	or a
+	ret
+.set_carry
+	pop de
+	scf
+	ret
+; 0x203c8
 
 Func_203c8: ; 203c8 (8:43c8)
 	INCROM $203c8, $2282e
