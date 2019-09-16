@@ -3815,7 +3815,7 @@ Func_164ba: ; 164ba (5:64ba)
 	ld [de], a
 	jr AIDecideWhichCardToAttachEnergy
 
-; copies Play Area AI score to wTempPlayAreaAIScore
+; copies wTempPlayAreaAIScore to wPlayAreaAIScore
 ; and loads wAIscore with value in wcde3.
 ; identical to Func_169e3.
 Func_164d3: ; 164d3 (5:64d3)
@@ -4807,7 +4807,7 @@ Func_169ca: ; 169ca (5:69ca)
 	ld [de], a
 	jr Func_169f8.asm_169fc
 
-; copies wPlayAreaAIScore to wTempPlayAreaAIScore
+; copies wTempPlayAreaAIScore to wPlayAreaAIScore
 ; and loads wAIscore with value in wcde3.
 ; identical to Func_164d3.
 ; TODO: reconsider function structure here.

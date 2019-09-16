@@ -6,8 +6,8 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 CheckIfPotionAvoidsGettingKnockedOut, AIPlayPotion
-	unknown_data_20000 $0a, POTION,                 $4204, $41b5
+	unknown_data_20000 $07, POTION,                 CheckIfPotionPreventsKnockOut, AIPlayPotion
+	unknown_data_20000 $0a, POTION,                 FindTargetCardForPotion, AIPlayPotion
 	unknown_data_20000 $08, SUPER_POTION,           $42cc, $42a8
 	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
 	unknown_data_20000 $0d, DEFENDER,               $4406, $43f8
@@ -102,7 +102,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, .next_in_data
 	call LoadNonPokemonCardEffectCommands
-	ld a, OPPACTION_PLAY_BASIC_PKMN
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, .next_in_data
 	farcall Func_1743b
@@ -198,8 +198,8 @@ AIPlayPotion: ; 201b5 (8:41b5)
 ; check if defending Pokémon can KO active card
 ; next turn after using Potion.
 ; if it cannot, return carry.
-; also take into account whether move is high recoil for this.
-CheckIfPotionAvoidsGettingKnockedOut: ; 201d1 (8:41d1)
+; also take into account whether move is high recoil.
+CheckIfPotionPreventsKnockOut: ; 201d1 (8:41d1)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -238,7 +238,11 @@ CheckIfPotionAvoidsGettingKnockedOut: ; 201d1 (8:41d1)
 	ret
 ; 0x20204
 
-Func_20204: ; 20204 (8:4204)
+; finds a card in Play Area to use Potion on.
+; output:
+;	a = card to use Potion on;
+;	carry set if Potion should be used.
+FindTargetCardForPotion: ; 20204 (8:4204)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -248,11 +252,12 @@ Func_20204: ; 20204 (8:4204)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld h, a
-	ld e, $00
+	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	cp 20 + 1  ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20
+; return if using potion prevents KO.
 .calculate_hp
 	ld l, a
 	ld a, h
@@ -263,6 +268,9 @@ Func_20204: ; 20204 (8:4204)
 	or a
 	ret
 
+; using Potion on active card does not prevent a KO.
+; if player is at last prize, start loop with active card.
+; otherwise start loop at first bench Pokémon.
 .count_prizes
 	call SwapTurn
 	call CountPrizes
@@ -271,22 +279,23 @@ Func_20204: ; 20204 (8:4204)
 	jr z, .start_from_active
 	ld e, PLAY_AREA_BENCH_1
 	jr .loop
-.start_from_active
-	ld e, PLAY_AREA_ARENA
 
 ; find Play Area Pokémon with more than 10 damage.
+; skip Pokémon if it has a BOOST_IF_TAKEN_DAMAGE attack.
+.start_from_active
+	ld e, PLAY_AREA_ARENA
 .loop
 	ld a, DUELVARS_ARENA_CARD
 	add e
 	call GetTurnDuelistVariable
 	cp $ff
 	ret z
-	call Func_2027e
-	jr c, .asm_20250
+	call CheckIfEitherAttackHaveBoostIfTakenDamageEffect
+	jr c, .has_boost_damage
 	call GetCardDamage
 	cp 20 ; if damage >= 20
 	jr nc, .found
-.asm_20250
+.has_boost_damage
 	inc e
 	jr .loop
 
@@ -295,7 +304,7 @@ Func_20204: ; 20204 (8:4204)
 	or a
 	jr z, .active_card
 
-; not active card
+; bench card
 	push de
 	call SwapTurn
 	call CountPrizes
@@ -328,8 +337,37 @@ Func_20204: ; 20204 (8:4204)
 	ret
 ; 0x2027e
 
-Func_2027e: ; 2027e (8:427e)
-	INCROM $2027e, $2297b
+; return carry if either of the attacks are usable
+; and have the BOOST_IF_TAKEN_DAMAGE effect.
+CheckIfEitherAttackHaveBoostIfTakenDamageEffect: ; 2027e (8:427e)
+	push de
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .second_attack
+	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedMoveFlag
+	jr c, .set_carry
+.second_attack
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .no_carry
+	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedMoveFlag
+	jr c, .set_carry
+.no_carry
+	pop de
+	or a
+	ret
+.set_carry
+	pop de
+	scf
+	ret
+; 0x202a8
+
+Func_202a8: ; 202a8 (8:42a8)
+	INCROM $202a8, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)
