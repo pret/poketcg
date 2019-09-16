@@ -1502,6 +1502,7 @@ Func_15649: ; 15649 (5:5649)
 	ret
 ; 0x156c3
 
+Func_156c3: ; 156c3 (5:56c3)
 	INCROM $156c3, $1575e
 
 ; zeroes a bytes starting at hl

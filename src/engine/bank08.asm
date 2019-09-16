@@ -499,7 +499,7 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	jr nc, .next
 	call .check_boost_if_taken_damage
 	jr c, .next
-	call Func_203c8
+	call .asm_203c8
 	jr c, .next
 	call GetCardDamage
 	cp 40 ; if damage >= 40
@@ -563,11 +563,11 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	xor a ; first attack
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .second_attack
+	jr c, .second_attack_1
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
 	call CheckLoadedMoveFlag
 	jr c, .set_carry
-.second_attack
+.second_attack_1
 	ld a, $01 ; second attack
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
@@ -585,8 +585,39 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ret
 ; 0x203c8
 
-Func_203c8: ; 203c8 (8:43c8)
-	INCROM $203c8, $2282e
+.asm_203c8 ; 203c8 (8:43c8)
+	push de
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckEnergyNeededForAttack
+	jr c, .second_attack_2
+	farcall Func_156c3
+	jr c, .asm_203f5
+.second_attack_2
+	pop de
+	push de
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckEnergyNeededForAttack
+	jr c, .asm_203f2
+	farcall Func_156c3
+	jr c, .asm_203f5
+.asm_203f2
+	pop de
+	or a
+	ret
+.asm_203f5
+	pop de
+	scf
+	ret
+; 0x203f8
+
+Func_203f8: ; 203f8 (8:43f8)
+	INCROM $203f8, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
