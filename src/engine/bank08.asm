@@ -372,7 +372,7 @@ AIPlaySuperPotion: ; 202a8 (8:42a8)
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce19]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	call Func_2282e
+	call GetEnergyCardToDiscard
 	ldh [hTemp_ffa0], a
 	ld a, [wce19]
 	ld e, a
@@ -447,8 +447,60 @@ CheckIfHasAttachedEnergy: ; 20305 (8:4305)
 Func_2030f: ; 2030f (8:430f)
 	INCROM $2030f, $2282e
 
-Func_2282e: ; 2282e (8:630f)
-	INCROM $2282e, $2297b
+; returns in a the card index of energy card
+; attached to Pokémon in Play Area location a,
+; that is to be discarded.
+GetEnergyCardToDiscard: ; 2282e (8:682e)
+; load Pokémon's attached energy cards.
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CreateArenaOrBenchEnergyCardList
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	or a
+	jr z, .no_energy
+
+; load card's ID and type.
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [wTempCardType], a
+
+; find a card that is not useful.
+; if none is found, just return the first energy card attached.
+	ld hl, wDuelTempList
+.loop
+	ld a, [hl]
+	cp $ff
+	jr z, .not_found
+	farcall CheckIfEnergyIsUseful
+	jr nc, .found
+	inc hl
+	jr .loop
+
+.found
+	ld a, [hl]
+	ret
+.not_found
+	ld hl, wDuelTempList
+	ld a, [hl]
+	ret
+.no_energy
+	ld a, $ff
+	ret
+; 0x22875
+
+Func_22875: ; 22875 (8:6875)
+	INCROM $22875, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)

@@ -203,7 +203,7 @@ Func_14145: ; 14145 (5:4145)
 
 ; return carry if any of the following is satisfied:
 ;	- deck index in a corresponds to a double colorless energy card;
-;	- card type in wTempCardType is double colorless energy;
+;	- card type in wTempCardType is colorless;
 ;	- card ID in wTempCardID is a Pokémon card that has
 ;	  moves that require energy other than its color and
 ;	  the deck index in a corresponds to that energy type;
