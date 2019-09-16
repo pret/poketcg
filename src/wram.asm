@@ -1227,6 +1227,8 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
+; used for AI decisions that involve
+; each card in the Play Area.
 wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
@@ -1282,6 +1284,8 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
+; used to compliment wPlayAreaAIScore,
+; to temporarily do calculations and store results.
 wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 

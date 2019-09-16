@@ -8,7 +8,7 @@ ENDM
 Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $07, POTION,                 CheckIfPotionPreventsKnockOut, AIPlayPotion
 	unknown_data_20000 $0a, POTION,                 FindTargetCardForPotion, AIPlayPotion
-	unknown_data_20000 $08, SUPER_POTION,           $42cc, $42a8
+	unknown_data_20000 $08, SUPER_POTION,           CheckIfSuperPotionPreventsKnockOut, $42a8
 	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
 	unknown_data_20000 $0d, DEFENDER,               $4406, $43f8
 	unknown_data_20000 $0e, DEFENDER,               $4486, $43f8
@@ -176,7 +176,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	jp .loop_hand
 ; 0x201b5
 
-; makes AI use potion card.
+; makes AI use Potion card.
 AIPlayPotion: ; 201b5 (8:41b5)
 	ld a, [wce16]
 	ldh [hTempCardIndex_ff9f], a
@@ -366,8 +366,89 @@ CheckIfEitherAttackHaveBoostIfTakenDamageEffect: ; 2027e (8:427e)
 	ret
 ; 0x202a8
 
-Func_202a8: ; 202a8 (8:42a8)
-	INCROM $202a8, $2297b
+; makes AI use Super Potion card.
+AIPlaySuperPotion: ; 202a8 (8:42a8)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	call Func_2282e
+	ldh [hTemp_ffa0], a
+	ld a, [wce19]
+	ld e, a
+	call GetCardDamage
+	cp 40
+	jr c, .play_card
+	ld a, 40
+.play_card
+	ldh [hTempRetreatCostCards], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x202cc
+
+; if AI doesn't decide to retreat this card and card has
+; any energy cards attached,  check if defending Pokémon can KO
+; active card next turn after using Super Potion.
+; if it cannot, return carry.
+; also take into account whether move is high recoil.
+CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
+	farcall AIDecideWhetherToRetreat
+	jr c, .no_carry
+	call Func_22bad
+	jr c, .no_carry
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld e, a
+	call CheckIfHasAttachedEnergy
+	ret nc
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .no_carry
+
+	ld d, a
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld h, a
+	ld e, $00
+	call GetCardDamage
+	cp 40 + 1 ; if damage >= 40
+	jr c, .calculate_hp
+	ld a, 40
+.calculate_hp
+	ld l, a
+	ld a, h
+	add l
+	sub d
+	jr c, .no_carry
+	jr z, .no_carry
+
+; return carry
+	ld a, e
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x20305
+
+; returns carry if card has energies attached.
+; input:
+;	e = location to check, i.e. PLAY_AREA_*
+CheckIfHasAttachedEnergy: ; 20305 (8:4305)
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	or a
+	ret z
+	scf
+	ret
+; 0x2030f
+
+Func_2030f: ; 2030f (8:430f)
+	INCROM $2030f, $2282e
+
+Func_2282e: ; 2282e (8:630f)
+	INCROM $2282e, $2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)
