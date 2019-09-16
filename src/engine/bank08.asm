@@ -8,8 +8,8 @@ ENDM
 Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $07, POTION,                 CheckIfPotionPreventsKnockOut, AIPlayPotion
 	unknown_data_20000 $0a, POTION,                 FindTargetCardForPotion, AIPlayPotion
-	unknown_data_20000 $08, SUPER_POTION,           CheckIfSuperPotionPreventsKnockOut, $42a8
-	unknown_data_20000 $0b, SUPER_POTION,           $430f, $42a8
+	unknown_data_20000 $08, SUPER_POTION,           CheckIfSuperPotionPreventsKnockOut, AIPlaySuperPotion
+	unknown_data_20000 $0b, SUPER_POTION,           FindTargetCardForSuperPotion, AIPlaySuperPotion
 	unknown_data_20000 $0d, DEFENDER,               $4406, $43f8
 	unknown_data_20000 $0e, DEFENDER,               $4486, $43f8
 	unknown_data_20000 $0d, PLUSPOWER,              $4501, $44e8
@@ -257,7 +257,7 @@ FindTargetCardForPotion: ; 20204 (8:4204)
 	cp 20 + 1  ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20
-; return if using potion prevents KO.
+; return if using healing prevents KO.
 .calculate_hp
 	ld l, a
 	ld a, h
@@ -323,7 +323,7 @@ FindTargetCardForPotion: ; 20204 (8:4204)
 	scf
 	ret
 
-; always return carry for active card.
+; return carry for active card if not Hgh Recoil.
 .active_card
 	push de
 	call Func_22bad
@@ -412,7 +412,7 @@ CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
 	ld h, a
 	ld e, $00
 	call GetCardDamage
-	cp 40 + 1 ; if damage >= 40
+	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
 	ld a, 40
 .calculate_hp
@@ -444,8 +444,118 @@ CheckIfHasAttachedEnergy: ; 20305 (8:4305)
 	ret
 ; 0x2030f
 
-Func_2030f: ; 2030f (8:430f)
-	INCROM $2030f, $2282e
+; finds a card in Play Area to use Super Potion on.
+; output:
+;	a = card to use Super Potion on;
+;	carry set if Super Potion should be used.
+FindTargetCardForSuperPotion: ; 2030f (8:430f)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .start_from_active
+; can KO
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld h, a
+	ld e, $00
+	call GetCardDamage
+	cp 40 + 1 ; if damage < 40
+	jr c, .calculate_hp
+	ld a, 40
+; return if using healing prevents KO.
+.calculate_hp
+	ld l, a
+	ld a, h
+	add l
+	sub d
+	jr c, .count_prizes
+	jr z, .count_prizes
+	or a
+	ret
+
+; using Super Potion on active card does not prevent a KO.
+; if player is at last prize, start loop with active card.
+; otherwise start loop at first bench Pokémon.
+.count_prizes
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	jr z, .start_from_active
+	ld e, PLAY_AREA_BENCH_1
+	jr .loop
+
+; find Play Area Pokémon with more than 10 damage.
+; skip Pokémon if it has a BOOST_IF_TAKEN_DAMAGE attack.
+.start_from_active
+	ld e, PLAY_AREA_ARENA
+.loop
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	cp $ff
+	ret z
+	ld d, a
+	call Func_20394
+	jr nc, .asm_20366
+	call Func_2039e
+	jr c, .asm_20366
+	call Func_203c8
+	jr c, .asm_20366
+	call GetCardDamage
+	cp 40 ; if damage >= 40
+	jr nc, .found
+.asm_20366
+	inc e
+	jr .loop
+
+.found
+	ld a, e
+	or a
+	jr z, .active_card
+
+; bench card
+	push de
+	call SwapTurn
+	call CountPrizes
+	call SwapTurn
+	dec a
+	or a
+	jr z, .check_random
+	ld a, 10
+	call Random
+	cp 3
+; 7/10 chance of returning carry.
+.check_random
+	pop de
+	jr c, .no_carry
+	ld a, e
+	scf
+	ret
+
+; return carry for active card if not Hgh Recoil.
+.active_card
+	push de
+	call Func_22bad
+	pop de
+	jr c, .no_carry
+	ld a, e
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x20394
+
+Func_20394: ; 20394 (8:4394)
+	INCROM $20394, $2039e
+
+Func_2039e: ; 2039e (8:439e)
+	INCROM $2039e, $203c8
+
+Func_203c8: ; 203c8 (8:43c8)
+	INCROM $203c8, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
