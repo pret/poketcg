@@ -593,7 +593,7 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
 	jr c, .second_attack_2
-	farcall Func_156c3
+	farcall CheckEnergyNeededForAttackAfterDiscard
 	jr c, .asm_203f5
 .second_attack_2
 	pop de
@@ -604,7 +604,7 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
 	jr c, .asm_203f2
-	farcall Func_156c3
+	farcall CheckEnergyNeededForAttackAfterDiscard
 	jr c, .asm_203f5
 .asm_203f2
 	pop de

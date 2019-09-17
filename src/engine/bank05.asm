@@ -358,17 +358,17 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ld hl, wLoadedMoveName
 	ld a, [hli]
 	or [hl]
-	jr z, .no_move
+	jr z, .no_attack
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jr nz, .is_move
-.no_move
+	jr nz, .is_attack
+.no_attack
 	lb bc, 0, 0
 	ld e, c
 	scf
 	ret
 	
-.is_move
+.is_attack
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	call GetPlayAreaCardAttachedEnergies
@@ -673,7 +673,7 @@ EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	call CopyMoveDataAndDamage_FromDeckIndex
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jr nz, .is_move
+	jr nz, .is_attack
 
 ; is a Pokémon Power
 ; set wDamage, wAIMinDamage and wAIMaxDamage to zero
@@ -687,7 +687,7 @@ EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	ld d, a
 	ret
 
-.is_move
+.is_attack
 ; set wAIMinDamage and wAIMaxDamage to damage of move
 ; these values take into account the range of damage
 ; that the move can span (e.g. min and max number of hits)
@@ -890,7 +890,7 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 	call SwapTurn
 	ld a, [wLoadedMoveCategory]
 	cp POKEMON_POWER
-	jr nz, .is_move
+	jr nz, .is_attack
 
 ; is a Pokémon Power
 ; set wDamage, wAIMinDamage and wAIMaxDamage to zero
@@ -904,7 +904,7 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 	ld d, a
 	ret
 
-.is_move
+.is_attack
 ; set wAIMinDamage and wAIMaxDamage to damage of move
 ; these values take into account the range of damage
 ; that the move can span (e.g. min and max number of hits)
@@ -1502,8 +1502,122 @@ Func_15649: ; 15649 (5:5649)
 	ret
 ; 0x156c3
 
-Func_156c3: ; 156c3 (5:56c3)
-	INCROM $156c3, $1575e
+; load selected move from Pokémon in hTempPlayAreaLocation_ff9d,
+; gets an energy card to discard and subsequently
+; check if there is enough energy to execute the selected move
+; after removing that attached energy card.
+; input:
+;	[hTempPlayAreaLocation_ff9d] = location of Pokémon card
+;	[wSelectedMoveIndex]         = selected move to examine
+; output:
+;	b = basic energy still needed
+;	c = colorless energy still needed
+;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
+;	carry set if no move 
+;	       OR if it's a Pokémon Power
+;	       OR if not enough energy for move
+CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld hl, wLoadedMoveName
+	ld a, [hli]
+	or [hl]
+	jr z, .no_attack
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	jr nz, .is_attack
+.no_attack
+	lb bc, 0, 0
+	ld e, c
+	scf
+	ret
+
+.is_attack
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	farcall GetEnergyCardToDiscard
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp DOUBLE_COLORLESS_ENERGY
+	jr z, .colorless
+
+; color energy
+; decrease respective attached energy by 1.
+	ld hl, wAttachedEnergies
+	dec a
+	ld c, a
+	ld b, $00
+	add hl, bc
+	dec [hl]
+	ld hl, wTotalAttachedEnergies
+	dec [hl]
+	jr .asm_1570c
+; decrease attached colorless by 2.
+.colorless
+	ld hl, wAttachedEnergies + COLORLESS
+	dec [hl]
+	dec [hl]
+	ld hl, wTotalAttachedEnergies
+	dec [hl]
+	dec [hl]
+
+.asm_1570c
+	bank1call HandleEnergyBurn
+	xor a
+	ld [wTempLoadedMoveEnergyCost], a
+	ld [wTempLoadedMoveEnergyNeededAmount], a
+	ld [wTempLoadedMoveEnergyNeededType], a
+	ld hl, wAttachedEnergies
+	ld de, wLoadedMoveEnergyCost
+	ld b, 0
+	ld c, (NUM_TYPES / 2) - 1
+.loop
+	; check all basic energy cards except colorless
+	ld a, [de]
+	swap a
+	call CheckIfEnoughParticularAttachedEnergy
+	ld a, [de]
+	call CheckIfEnoughParticularAttachedEnergy
+	inc de
+	dec c
+	jr nz, .loop
+
+	ld a, [de]
+	swap a
+	and $0f
+	ld b, a ; colorless energy still needed
+	ld a, [wTempLoadedMoveEnergyCost]
+	ld hl, wTempLoadedMoveEnergyNeededAmount
+	sub [hl]
+	ld c, a ; basic energy still needed
+	ld a, [wTotalAttachedEnergies]
+	sub c
+	sub b
+	jr c, .not_enough_energy
+
+	ld a, [wTempLoadedMoveEnergyNeededAmount]
+	or a
+	ret z
+
+; being here means the energy cost isn't satisfied,
+; including with colorless energy
+	xor a
+.not_enough_energy
+	cpl
+	inc a
+	ld c, a ; colorless energy still needed
+	ld a, [wTempLoadedMoveEnergyNeededAmount]
+	ld b, a ; basic energy still needed
+	ld a, [wTempLoadedMoveEnergyNeededType]
+	call ConvertColorToEnergyCardID
+	ld e, a
+	ld d, 0
+	scf
+	ret
+; 0x1575e
 
 ; zeroes a bytes starting at hl
 ZeroData: ; 1575e (5:575e)
