@@ -299,6 +299,7 @@ FindTargetCardForPotion: ; 20204 (8:4204)
 	inc e
 	jr .loop
 
+; a card was found, now to check if it's active or benched.
 .found
 	ld a, e
 	or a
@@ -484,8 +485,10 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ld e, PLAY_AREA_BENCH_1
 	jr .loop
 
-; find Play Area Pokémon with more than 10 damage.
-; skip Pokémon if it has a BOOST_IF_TAKEN_DAMAGE attack.
+; find Play Area Pokémon with more than 30 damage.
+; skip Pokémon if it doesn't have any energy attached,
+; has a BOOST_IF_TAKEN_DAMAGE attack,
+; or if discarding makes any attack of its attacks unusable.
 .start_from_active
 	ld e, PLAY_AREA_ARENA
 .loop
@@ -499,7 +502,7 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	jr nc, .next
 	call .check_boost_if_taken_damage
 	jr c, .next
-	call .asm_203c8
+	call .check_energy_cost
 	jr c, .next
 	call GetCardDamage
 	cp 40 ; if damage >= 40
@@ -508,6 +511,7 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	inc e
 	jr .loop
 
+; a card was found, now to check if it's active or benched.
 .found
 	ld a, e
 	or a
@@ -566,26 +570,28 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	jr c, .second_attack_1
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
 	call CheckLoadedMoveFlag
-	jr c, .set_carry
+	jr c, .true_1
 .second_attack_1
 	ld a, $01 ; second attack
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .false
+	jr c, .false_1
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
 	call CheckLoadedMoveFlag
-	jr c, .set_carry
-.false
+	jr c, .true_1
+.false_1
 	pop de
 	or a
 	ret
-.set_carry
+.true_1
 	pop de
 	scf
 	ret
 ; 0x203c8
 
-.asm_203c8 ; 203c8 (8:43c8)
+; returns carry if discarding energy card renders any attack unusable,
+; given that they have enough energy to be used before discarding.
+.check_energy_cost ; 203c8 (8:43c8)
 	push de
 	xor a ; first attack
 	ld [wSelectedMoveIndex], a
@@ -594,7 +600,8 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	farcall CheckEnergyNeededForAttack
 	jr c, .second_attack_2
 	farcall CheckEnergyNeededForAttackAfterDiscard
-	jr c, .asm_203f5
+	jr c, .true_2
+
 .second_attack_2
 	pop de
 	push de
@@ -603,14 +610,15 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
-	jr c, .asm_203f2
+	jr c, .false_2
 	farcall CheckEnergyNeededForAttackAfterDiscard
-	jr c, .asm_203f5
-.asm_203f2
+	jr c, .true_2
+
+.false_2
 	pop de
 	or a
 	ret
-.asm_203f5
+.true_2
 	pop de
 	scf
 	ret
