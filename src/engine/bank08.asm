@@ -10,8 +10,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0a, POTION,                 FindTargetCardForPotion, AIPlayPotion
 	unknown_data_20000 $08, SUPER_POTION,           CheckIfSuperPotionPreventsKnockOut, AIPlaySuperPotion
 	unknown_data_20000 $0b, SUPER_POTION,           FindTargetCardForSuperPotion, AIPlaySuperPotion
-	unknown_data_20000 $0d, DEFENDER,               $4406, $43f8
-	unknown_data_20000 $0e, DEFENDER,               $4486, $43f8
+	unknown_data_20000 $0d, DEFENDER,               CheckIfDefenderPreventsKnockOut, AIPlayDefender
+	unknown_data_20000 $0e, DEFENDER,               CheckIfDefenderPreventsRecoilKnockOut, AIPlayDefender
 	unknown_data_20000 $0d, PLUSPOWER,              $4501, $44e8
 	unknown_data_20000 $0e, PLUSPOWER,              $45a5, $44e8
 	unknown_data_20000 $09, SWITCH,                 $462e, $4612
@@ -624,8 +624,179 @@ FindTargetCardForSuperPotion: ; 2030f (8:430f)
 	ret
 ; 0x203f8
 
-Func_203f8: ; 203f8 (8:43f8)
-	INCROM $203f8, $2282e
+AIPlayDefender: ; 203f8 (8:43f8)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	xor a
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20406
+
+; returns carry if using Defender can prevent a KO
+; by the defending Pokémon.
+; this takes into account both attacks and whether they're useable.
+CheckIfDefenderPreventsKnockOut: ; 20406 (8:4406)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .asm_2041b
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry
+
+.asm_2041b
+; check if any of the defending Pokémon's attacks deal
+; damage exactly equal to current HP, and if so,
+; only continue if that move is useable.
+	farcall CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP
+	jr nc, .no_carry
+	call SwapTurn
+	farcall CheckIfSelectedMoveIsUnusable
+	call SwapTurn
+	jr c, .no_carry
+
+	ld a, [wSelectedMoveIndex]
+	farcall EstimateDamage_FromDefendingPokemon
+	ld a, [wDamage]
+	ld [wce06], a
+	ld d, a
+
+; load in a the attack that was not selected,
+; and check if it is useable.
+	ld a, [wSelectedMoveIndex]
+	ld b, a
+	ld a, $01
+	sub b
+	ld [wSelectedMoveIndex], a
+	push de
+	call SwapTurn
+	farcall CheckIfSelectedMoveIsUnusable
+	call SwapTurn
+	pop de
+	jr c, .switch_back
+
+; the other attack is useable.
+; compare its damage to the selected move.
+	ld a, [wSelectedMoveIndex]
+	push de
+	farcall EstimateDamage_FromDefendingPokemon
+	pop de
+	ld a, [wDamage]
+	cp d
+	jr nc, .subtract
+
+; in case the non-selected move is useable
+; and deals less damage than the selected move,
+; switch back to the other attack.
+.switch_back
+	ld a, [wSelectedMoveIndex]
+	ld b, a
+	ld a, $01
+	sub b
+	ld [wSelectedMoveIndex], a
+	ld a, [wce06]
+	ld [wDamage], a
+
+; now the selected attack is the one that deals
+; the most damage of the two (and is useable).
+; if subtracting damage by using Defender
+; still prevents a KO, return carry.
+.subtract
+	ld a, [wDamage]
+	sub 20
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub d
+	jr c, .no_carry
+	jr z, .no_carry
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x20486
+
+; return carry if using Defender prevents Pokémon
+; from being knocked out by an attack with recoil.
+CheckIfDefenderPreventsRecoilKnockOut: ; 20486 (8:4486)
+	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
+	call CheckLoadedMoveFlag
+	jr c, .recoil
+	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL_F
+	call CheckLoadedMoveFlag
+	jr c, .recoil
+	or a
+	ret
+
+.recoil
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wSelectedMoveIndex]
+	or a
+	jr nz, .second_attack
+; first attack
+	ld a, [wLoadedCard2Move1Unknown1]
+	jr .check_weak
+.second_attack
+	ld a, [wLoadedCard2Move2Unknown1]
+
+; double recoil damage if card is weak to its own color.
+.check_weak
+	ld d, a
+	push de
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	call GetArenaCardWeakness
+	and b
+	pop de
+	jr z, .check_resist
+	sla d
+
+; subtract 30 from recoil damage if card resists its own color.
+; if this yields a negative number, return no carry.
+.check_resist
+	push de
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	call GetArenaCardResistance
+	and b
+	pop de
+	jr z, .subtract
+	ld a, d
+	sub 30
+	jr c, .no_carry
+	ld d, a
+
+; subtract damage prevented by Defender.
+; if damage still knocks out card, return no carry.
+; if damage does not knock out, return carry.
+.subtract
+	ld a, d
+	or a
+	jr z, .no_carry
+	sub 20
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub d
+	jr c, .no_carry
+	jr z, .no_carry
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x204e8
+
+Func_204e8: ; 204e8 (8:44e8)
+	INCROM $204e8, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,

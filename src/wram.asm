@@ -1350,7 +1350,12 @@ wAIMoveIsNonDamaging:: ; ce02
 wce03:: ; ce03
 	ds $1
 
-	ds $12
+	ds $2
+
+wce06:: ; ce06
+	ds $1
+
+	ds $0f
 
 wce16:: ; ce16
 	ds $1

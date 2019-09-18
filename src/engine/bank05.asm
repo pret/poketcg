@@ -111,7 +111,29 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 	ret
 ; 0x140c5
 
-	INCROM $140c5, $140df
+; returns carry if any of the defending Pokémon's attacks
+; brings card at hTempPlayAreaLocation_ff9d down
+; to exactly 0 HP.
+; outputs that attack index in wSelectedMove.
+CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP: ; 140c5 (5:40c5)
+	xor a ; first attack
+	call .check_damage
+	ret c
+	ld a, $01 ; second attack
+
+.check_damage
+	call EstimateDamage_FromDefendingPokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	jr z, .true
+	ret
+.true
+	scf
+	ret
+; 0x140df
 
 ; checks AI scores for all benched Pokémon
 ; returns the location of the card with highest score
