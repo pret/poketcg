@@ -41,7 +41,7 @@ DuelCheckMenu_InPlayArea: ; 8039 (2:4039)
 
 ; opens the Glossary submenu
 DuelCheckMenu_Glossary: ; 8042 (2:4042)
-	farcall Func_184c8
+	farcall OpenGlossaryScreen
 	ret
 
 ; opens the Your Play Area submenu
@@ -1442,7 +1442,7 @@ Func_8764: ; 8764 (2:4764)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, Func_88c2
+	ld de, Func_8764_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1458,7 +1458,7 @@ Func_8764: ; 8764 (2:4764)
 .asm_87e7
 	cp $ff
 	jr nz, .asm_87f0
-	call Func_8aa1
+	call ZeroObjectPositionsWithCopyToggleOn
 	jr .swap
 .asm_87f0
 	ld hl, .asm_87f8
@@ -1590,7 +1590,7 @@ Func_8883: ; 8883 (2:4883)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, $48fa
+	ld de, Func_8883_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1601,8 +1601,25 @@ Func_8883: ; 8883 (2:4883)
 	ld [$ce56], a
 	jp Func_8764.loop_2
 
-Func_88c2: ; 88c2 (2:48c2)
-	INCROM $88c2, $8932
+Func_8764_TransitionTable: ; 88c2 (2:48c2)
+	cursor_transition $08, $28, $00, $04, $02, $01, $07
+	cursor_transition $30, $28, $20, $05, $03, $07, $00
+	cursor_transition $08, $38, $00, $00, $04, $03, $07
+	cursor_transition $30, $38, $20, $01, $05, $07, $02
+	cursor_transition $08, $48, $00, $02, $00, $05, $07
+	cursor_transition $30, $48, $20, $03, $01, $07, $04
+	cursor_transition $78, $50, $00, $07, $07, $00, $01
+	cursor_transition $78, $28, $00, $07, $07, $00, $01
+
+Func_8883_TransitionTable:
+	cursor_transition $a0, $60, $20, $02, $04, $07, $01
+	cursor_transition $78, $60, $00, $03, $05, $00, $07
+	cursor_transition $a0, $50, $20, $04, $00, $06, $03
+	cursor_transition $78, $50, $00, $05, $01, $02, $06
+	cursor_transition $a0, $40, $20, $00, $02, $06, $05
+	cursor_transition $78, $40, $00, $01, $03, $04, $06
+	cursor_transition $08, $38, $00, $07, $07, $05, $04
+	cursor_transition $08, $60, $00, $06, $06, $01, $00
 
 Func_8932: ; 8932 (2:4932)
 	INCROM $8932, $8992
@@ -1618,6 +1635,7 @@ LoadCursorTile: ; 8992 (2:4992)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
+; similar to OpenInPlayAreaScreen_HandleInput
 Func_89ae: ; 89ae (2:49ae)
 	xor a
 	ld [wcfe3], a
@@ -1628,7 +1646,7 @@ Func_89ae: ; 89ae (2:49ae)
 	ld d, [hl]
 
 	ld a, [wPrizeCardCursorPosition]
-	ld [wce61], a
+	ld [wPrizeCardCursorTemporaryPosition], a
 	ld l, a
 	ld h, 7
 	call HtimesL
@@ -1637,66 +1655,90 @@ Func_89ae: ; 89ae (2:49ae)
 
 	ldh a, [hDPadHeld]
 	or a
-	jp z, .asm_8a4f
+	jp z, .check_button
+	inc hl
+	inc hl
+	inc hl
 
-	inc hl
-	inc hl
-	inc hl
 	bit D_UP_F, a
-	jr z, .asm_89d5
-	ld a, [hl]
-	jr .asm_89eb
+	jr z, .else_if_down
 
-.asm_89d5
+	; up
+	ld a, [hl]
+	jr .process_dpad
+
+.else_if_down
 	inc hl
 	bit D_DOWN_F, a
-	jr z, .asm_89dd
+	jr z, .else_if_right
+
+	; down
 	ld a, [hl]
-	jr .asm_89eb
-.asm_89dd
+	jr .process_dpad
+
+.else_if_right
 	inc hl
 	bit D_RIGHT_F, a
-	jr z, .asm_89e5
+	jr z, .else_if_left
+
+	; right
 	ld a, [hl]
-	jr .asm_89eb
-.asm_89e5
+	jr .process_dpad
+
+.else_if_left
 	inc hl
 	bit D_LEFT_F, a
-	jr z, .asm_8a4f
+	jr z, .check_button
+
+	; left
 	ld a, [hl]
-.asm_89eb
+.process_dpad
 	ld [wPrizeCardCursorPosition], a
-	cp $08
-	jr nc, .asm_8a46
+	cp $08 ; if a >= 0x8
+	jr nc, .next
 	ld b, $01
-.asm_89f4
+
+; this loop equals to
+; b = (1 << a)
+.make_bitmask_loop
 	or a
-	jr z, .asm_89fc
+	jr z, .make_bitmask_done
 	sla b
 	dec a
-	jr .asm_89f4
-.asm_89fc
+	jr .make_bitmask_loop
+
+.make_bitmask_done
+; check if the moved cursor refers to an existing item.
+; it's always true when this function was called from the glossary procedure.
 	ld a, [wDuelInitialPrizesUpperBitsSet]
 	and b
-	jr nz, .asm_8a46
-	ld a, [wce61]
+	jr nz, .next
+
+; when no cards exist at the cursor,
+	ld a, [wPrizeCardCursorTemporaryPosition]
 	cp $06
 	jr nz, Func_89ae
+	; move once more in the direction (recursively) until it reaches an existing item.
+
+; check if one of the dpad, left or right, is pressed.
+; if not, just go back to the start.
 	ldh a, [hDPadHeld]
-	bit 4, a
-	jr nz, .asm_8a13
-	bit 5, a
+	bit D_RIGHT_F, a
+	jr nz, .left_or_right
+	bit D_LEFT_F, a
 	jr z, Func_89ae
-.asm_8a13
+
+.left_or_right
 	ld a, [wDuelInitialPrizes]
 	cp $05
-	jr nc, .asm_8a46
+	jr nc, .next
 	ld a, [wPrizeCardCursorPosition]
 	cp $05
 	jr nz, .asm_8a28
 	ld a, $03
 	ld [wPrizeCardCursorPosition], a
 	jr .asm_8a2d
+
 .asm_8a28
 	ld a, $02
 	ld [wPrizeCardCursorPosition], a
@@ -1709,50 +1751,53 @@ Func_89ae: ; 89ae (2:49ae)
 	ld [wPrizeCardCursorPosition], a
 .asm_8a3c
 	ld a, [wPrizeCardCursorPosition]
-	ld [wce61], a
+	ld [wPrizeCardCursorTemporaryPosition], a
 	ld b, $01
-	jr .asm_89f4
-.asm_8a46
+	jr .make_bitmask_loop
+
+.next
 	ld a, $01
 	ld [wcfe3], a
 
 ; reset cursor blink
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-
-.asm_8a4f
+.check_button
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_8a6d
+	jr z, .return
+
 	and A_BUTTON
-	jr nz, .asm_8a60
-	ld a, $ff ; cancel
+	jr nz, .a_button
+
+	ld a, -1 ; cancel
 	call PlaySFXConfirmOrCancel
 	scf
 	ret
 
-.asm_8a60
-	call Func_8a82
+.a_button
+	call .draw_cursor
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	ld a, [wPrizeCardCursorPosition]
 	scf
 	ret
-.asm_8a6d
+
+.return
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_8a76
+	jr z, .skip_sfx
 	call PlaySFX
-.asm_8a76
+.skip_sfx
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and (1 << 4) - 1
 	ret nz
 	bit 4, [hl]
-	jr nz, Func_8aa1
+	jr nz, ZeroObjectPositionsWithCopyToggleOn
 
-Func_8a82 ; 8a82 (2:4a82)
+.draw_cursor
 	call ZeroObjectPositions
 	ld hl, wce53
 	ld e, [hl]
@@ -1775,8 +1820,9 @@ Func_8a82 ; 8a82 (2:4a82)
 	or a
 	ret
 
-Func_8aa1: ; 8aa1 (2:4aa1)
+ZeroObjectPositionsWithCopyToggleOn: ; 8aa1 (2:4aa1)
 	call ZeroObjectPositions
+
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ret
@@ -1786,7 +1832,19 @@ Func_8aaa: ; 8aaa (2:4aaa)
 	INCROM $8aaa, $8b85
 
 Func_8b85: ; 8b85 (2:4b85)
-	INCROM $8b85, $8cd4
+	INCROM $8b85, $8c8e
+	
+OpenGlossaryScreen_TransitionTable:
+	cursor_transition $08, $28, $00, $04, $01, $05, $05
+	cursor_transition $08, $38, $00, $00, $02, $06, $06
+	cursor_transition $08, $48, $00, $01, $03, $07, $07
+	cursor_transition $08, $58, $00, $02, $04, $08, $08
+	cursor_transition $08, $68, $00, $03, $00, $09, $09
+	cursor_transition $58, $28, $00, $09, $06, $00, $00
+	cursor_transition $58, $38, $00, $05, $07, $01, $01
+	cursor_transition $58, $48, $00, $06, $08, $02, $02
+	cursor_transition $58, $58, $00, $07, $09, $03, $03
+	cursor_transition $58, $68, $00, $08, $05, $04, $04
 
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
