@@ -7623,7 +7623,7 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 ; returns carry if card at hTempPlayAreaLocation_ff9d
 ; is a basic card. 
 ; otherwise, lists the card indices of all stages in
-; in that card location, and returns the card one
+; that card location, and returns the card one
 ; stage below.
 ; input:
 ;	hTempPlayAreaLocation_ff9d = play area location to check;
