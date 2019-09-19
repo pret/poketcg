@@ -12,8 +12,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0b, SUPER_POTION,           FindTargetCardForSuperPotion, AIPlaySuperPotion
 	unknown_data_20000 $0d, DEFENDER,               CheckIfDefenderPreventsKnockOut, AIPlayDefender
 	unknown_data_20000 $0e, DEFENDER,               CheckIfDefenderPreventsRecoilKnockOut, AIPlayDefender
-	unknown_data_20000 $0d, PLUSPOWER,              $4501, AIPlayPluspower
-	unknown_data_20000 $0e, PLUSPOWER,              $45a5, AIPlayPluspower
+	unknown_data_20000 $0d, PLUSPOWER,              CheckIfPluspowerBoostCausesKnockOut, AIPlayPluspower
+	unknown_data_20000 $0e, PLUSPOWER,              CheckIfSelectedMoveCannotKnockOutWithoutPluspowerBoost, AIPlayPluspower
 	unknown_data_20000 $09, SWITCH,                 $462e, $4612
 	unknown_data_20000 $07, GUST_OF_WIND,           $467e, $4666
 	unknown_data_20000 $0a, GUST_OF_WIND,           $467e, $4666
@@ -808,7 +808,9 @@ AIPlayPluspower: ; 204e8 (8:44e8)
 	ret
 ; 0x20501
 
-Func_20501: ; 20501 (8:4501)
+; returns carry if using a Pluspower can KO defending Pokémon
+; if active card cannot KO without the boost.
+CheckIfPluspowerBoostCausesKnockOut: ; 20501 (8:4501)
 ; this is mistakenly duplicated
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -848,33 +850,41 @@ Func_20501: ; 20501 (8:4501)
 	call SwapTurn
 	jr c, .no_carry
 
+; check both attacks and decide which one
+; can KO with Pluspower boost.
+; if neither can KO, return no carry.
 	xor a ; first attack
 	ld [wSelectedMoveIndex], a
-	call .asm_20562
-	jr c, .asm_20551
+	call .check_ko_with_pluspower
+	jr c, .kos_with_pluspower_1
 	ld a, $01 ; second attack
 	ld [wSelectedMoveIndex], a
-	call .asm_20562
-	jr c, .asm_20559
+	call .check_ko_with_pluspower
+	jr c, .kos_with_pluspower_2
 
 .no_carry
 	or a
 	ret
-.asm_20551
-	call .asm_20589
+
+; first attack can KO with Pluspower.
+.kos_with_pluspower_1
+	call .check_mr_mime
 	jr nc, .no_carry
 	xor a ; first attack
 	scf
 	ret
-.asm_20559
-	call .asm_20589
+; second attack can KO with Pluspower.
+.kos_with_pluspower_2
+	call .check_mr_mime
 	jr nc, .no_carry
-	ld a, $01 ; first attack
+	ld a, $01 ; second attack
 	scf
 	ret
 ; 0x20562
 
-.asm_20562 ; 20562 (8:4562)
+; return carry if move is useable and KOs
+; defending Pokémon with Pluspower boost.
+.check_ko_with_pluspower ; 20562 (8:4562)
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .unusable
 	ld a, [wSelectedMoveIndex]
@@ -887,23 +897,25 @@ Func_20501: ; 20501 (8:4501)
 	jr c, .no_carry
 	jr z, .no_carry
 	ld a, [hl]
-	add 10
+	add 10 ; add Pluspower boost
 	ld c, a
 	ld a, b
 	sub c
-	ret c
-	ret nz
+	ret c ; return carry if damage > HP left
+	ret nz ; does not KO
 	scf
-	ret
+	ret ; KOs with Pluspower boost
 .unusable
 	or a
 	ret
 ; 0x20589
 
-.asm_20589 ; 20589 (8:4589)
+; returns carry if Pluspower boost does
+; not exceed 30 damage when facing Mr. Mime.
+.check_mr_mime ; 20589 (8:4589)
 	ld a, [wDamage]
-	add 10
-	cp 30
+	add 10 ; add Pluspower boost
+	cp 30 ; no danger in preventing damage
 	ret c
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
@@ -911,36 +923,92 @@ Func_20501: ; 20501 (8:4501)
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp $9b
+	cp MR_MIME
 	ret z
+; damage is >= 30 but not Mr. Mime
 	scf
 	ret
 ; 0x205a5
 
-Func_205a5: ; 205a5 (8:45a5)
+; returns carry 7/10 of the time
+; if selected move is useable, can't KO without Pluspower boost
+; can damage Mr. Mime even with Pluspower boost;
+; and has a minimum damage > 0.
+CheckIfSelectedMoveCannotKnockOutWithoutPluspowerBoost: ; 205a5 (8:45a5)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
-	call Func_205d7
-	jr nc, .asm_205b9
-	call Func_205f6
-	jr nc, .asm_205b9
-	call Func_205bb
-	jr nc, .asm_205b9
+	call .check_can_ko
+	jr nc, .no_carry
+	call .check_random
+	jr nc, .no_carry
+	call .check_mr_mime
+	jr nc, .no_carry
 	scf
 	ret
-.asm_205b9
+.no_carry
 	or a
 	ret
 ; 0x205bb
 
-Func_205bb: ; 205bb (8:45bb)
-	INCROM $205bb, $205d7
+; returns carry if Pluspower boost does
+; not exceed 30 damage when facing Mr. Mime.
+.check_mr_mime ; 205bb (8:45bb)
+	ld a, [wDamage]
+	add 10 ; add Pluspower boost
+	cp 30 ; no danger in preventing damage
+	ret c
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp MR_MIME
+	ret z
+; damage is >= 30 but not Mr. Mime
+	scf
+	ret
+; 0x205d7
 
-Func_205d7: ; 205d7 (8:45d7)
-	INCROM $205d7, $205f6
+; return carry if move is useable but cannot KO.
+.check_can_ko ; 205d7 (8:45d7)
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .unuseable
+	ld a, [wSelectedMoveIndex]
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld hl, wDamage
+	sub [hl]
+	jr c, .no_carry
+	jr z, .no_carry
+; can't KO.
+	scf
+	ret
+.unuseable
+	or a
+	ret
+; 0x205f6
 
-Func_205f6: ; 205f6 (8:45f6)
-	INCROM $205f6, $2282e
+; return carry 7/10 of the time if
+; move is useable and minimum damage > 0.
+.check_random ; 205f6 (8:45f6)
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .unuseable
+	ld a, [wSelectedMoveIndex]
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, [wAIMinDamage]
+	cp 10
+	jr c, .unuseable
+	ld a, 10
+	call Random
+	cp 3
+	ret
+; 0x20612
+
+Func_20612: ; 20612 (8:4612)
+	INCROM $20612, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
