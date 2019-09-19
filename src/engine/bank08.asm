@@ -12,8 +12,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0b, SUPER_POTION,           FindTargetCardForSuperPotion, AIPlaySuperPotion
 	unknown_data_20000 $0d, DEFENDER,               CheckIfDefenderPreventsKnockOut, AIPlayDefender
 	unknown_data_20000 $0e, DEFENDER,               CheckIfDefenderPreventsRecoilKnockOut, AIPlayDefender
-	unknown_data_20000 $0d, PLUSPOWER,              $4501, $44e8
-	unknown_data_20000 $0e, PLUSPOWER,              $45a5, $44e8
+	unknown_data_20000 $0d, PLUSPOWER,              $4501, AIPlayPluspower
+	unknown_data_20000 $0e, PLUSPOWER,              $45a5, AIPlayPluspower
 	unknown_data_20000 $09, SWITCH,                 $462e, $4612
 	unknown_data_20000 $07, GUST_OF_WIND,           $467e, $4666
 	unknown_data_20000 $0a, GUST_OF_WIND,           $467e, $4666
@@ -795,8 +795,152 @@ CheckIfDefenderPreventsRecoilKnockOut: ; 20486 (8:4486)
 	ret
 ; 0x204e8
 
-Func_204e8: ; 204e8 (8:44e8)
-	INCROM $204e8, $2282e
+AIPlayPluspower: ; 204e8 (8:44e8)
+	ld a, [wce21]
+	or $01
+	ld [wce21], a
+	ld a, [wce19]
+	ld [wcdd6], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20501
+
+Func_20501: ; 20501 (8:4501)
+; this is mistakenly duplicated
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+; continue if no attack can knock out.
+; if there's an attack that can, only continue
+; if it's unusable and there's no card in hand
+; to fulfill its energy cost.
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .cannot_ko
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry
+
+; cannot use an attack that knocks out.
+.cannot_ko
+; get active Pokémon's info.
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempTurnDuelistCardID], a
+
+; get defending Pokémon's info and check
+; its No Damage or Effect substatus.
+; if substatus is active, return.
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempNonTurnDuelistCardID], a
+	bank1call HandleNoDamageOrEffectSubstatus
+	call SwapTurn
+	jr c, .no_carry
+
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	call .asm_20562
+	jr c, .asm_20551
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	call .asm_20562
+	jr c, .asm_20559
+
+.no_carry
+	or a
+	ret
+.asm_20551
+	call .asm_20589
+	jr nc, .no_carry
+	xor a ; first attack
+	scf
+	ret
+.asm_20559
+	call .asm_20589
+	jr nc, .no_carry
+	ld a, $01 ; first attack
+	scf
+	ret
+; 0x20562
+
+.asm_20562 ; 20562 (8:4562)
+	farcall CheckIfSelectedMoveIsUnusable
+	jr c, .unusable
+	ld a, [wSelectedMoveIndex]
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld hl, wDamage
+	sub [hl]
+	jr c, .no_carry
+	jr z, .no_carry
+	ld a, [hl]
+	add 10
+	ld c, a
+	ld a, b
+	sub c
+	ret c
+	ret nz
+	scf
+	ret
+.unusable
+	or a
+	ret
+; 0x20589
+
+.asm_20589 ; 20589 (8:4589)
+	ld a, [wDamage]
+	add 10
+	cp 30
+	ret c
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp $9b
+	ret z
+	scf
+	ret
+; 0x205a5
+
+Func_205a5: ; 205a5 (8:45a5)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call Func_205d7
+	jr nc, .asm_205b9
+	call Func_205f6
+	jr nc, .asm_205b9
+	call Func_205bb
+	jr nc, .asm_205b9
+	scf
+	ret
+.asm_205b9
+	or a
+	ret
+; 0x205bb
+
+Func_205bb: ; 205bb (8:45bb)
+	INCROM $205bb, $205d7
+
+Func_205d7: ; 205d7 (8:45d7)
+	INCROM $205d7, $205f6
+
+Func_205f6: ; 205f6 (8:45f6)
+	INCROM $205f6, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
