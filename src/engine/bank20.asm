@@ -2,7 +2,7 @@ Func_80000: ; 80000 (20:4000)
 	INCROM $80000, $80028
 
 Func_80028: ; 80028 (20:4028)
-	call Func_801f1	; Clears the first x800 bytes of S1:a000
+	call Func_801f1
 	ld bc, $0000
 	call Func_80077
 	farcall $3, $49c7
@@ -13,7 +13,6 @@ Func_80028: ; 80028 (20:4028)
 
 	INCROM $8003d, $80077
 
-; loads the background it seems. Also includes background tile permissions?
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
 	ld [wd292], a
@@ -26,30 +25,30 @@ Func_80077: ; 80077 (20:4077)
 	push hl
 	push bc
 	push de
-	call BCCoordToBGMap0Address ; de
+	call BCCoordToBGMap0Address
 	ld hl, wd4c2
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	call Func_803b9 ; load more d4c* stuff from mapdatapointers
+	call Func_803b9
 	ld a, [wd4c6]
-	ld [wd23d], a ; copies the bank of the data we loaded to wd23d
+	ld [wd23d], a
 	ld de, wd23e
 	ld bc, $0006
-	call CopyBankedDataToDE ; copies 6 bytes to wd23e+
+	call CopyBankedDataToDE
 	ld l, e
-	ld h, d ; then copies that data into various other places?
+	ld h, d
 	ld a, [hli]
-	ld [wd12f], a ; just happens to correspond to size of room
+	ld [wd12f], a
 	ld a, [hli]
-	ld [wd130], a ; hmmm
+	ld [wd130], a
 	ld a, [hli]
-	ld [wd23a], a ; these 3 are before this data and after room collision
+	ld [wd23a], a
 	ld a, [hli]
 	ld [wd23b], a
 	ld a, [hli]
 	ld [wd23c], a
-	call Func_800bd ; moves the background data to some place vblank knows about
+	call Func_800bd
 	pop de
 	pop bc
 	pop hl
@@ -59,17 +58,17 @@ Func_800bd: ; 800bd (20:40bd)
 	push hl
 	push bc
 	push de
-	ld a, [wd4c4] ; these are still the copy locations
+	ld a, [wd4c4]
 	add $05
 	ld e, a
 	ld a, [wd4c5]
 	adc $00
-	ld d, a ; de = [wd4c4/5] + 5
-	ld b, $c0 ; b = c0
+	ld d, a
+	ld b, $c0
 	call Func_08bf
 	ld a, [wd4c2]
 	ld e, a
-	ld a, [wd4c3] ; bg map coord from earlier
+	ld a, [wd4c3]
 	ld d, a
 	call Func_800e0
 	pop de
@@ -77,7 +76,6 @@ Func_800bd: ; 800bd (20:40bd)
 	pop hl
 	ret
 
-; de is a bg map coord
 Func_800e0: ; 800e0 (20:40e0)
 	push hl
 	ld hl, $d28e
@@ -86,7 +84,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld a, [wd23c]
 	or a
 	jr z, .asm_800f0
-	sla [hl] ; if wd23c is nonzero, double d28e
+	sla [hl]
 .asm_800f0
 	ld c, $40
 	ld hl, wd23e
@@ -94,16 +92,16 @@ Func_800e0: ; 800e0 (20:40e0)
 .asm_800f6
 	ld [hli], a
 	dec c
-	jr nz, .asm_800f6 ; clear out wd23e-40+
+	jr nz, .asm_800f6
 	ld a, [wd130]
 	ld c, a
 .asm_800fe
-	push bc ; push the height of this map
-	push de ; push the destination of this map
+	push bc
+	push de
 	ld b, $00
 	ld a, [$d28e]
-	ld c, a ; bc is now the width
-	ld de, wd23e ; wd23e is the place we copied map data to (The 6 bytes) before
+	ld c, a
+	ld de, wd23e
 	call Func_3be4
 	ld a, [wd12f]
 	ld b, a
@@ -287,18 +285,17 @@ GetMapDataPointer: ; 8020f (20:420f)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	pop af ; bc = [MapDataPointers+l]
+	pop af
 	ld l, a
 	ld h, $0
 	sla l
 	rl h
 	sla l
 	rl h
-	add hl, bc ; hl = [MapDataPointers+l] + 4*a
+	add hl, bc
 	pop bc
 	ret
 
-; These vars are used as a copy source for something about drawing the background?
 Func_80229: ; 80229 (20:4229)
 	ld a, [hli]
 	ld [wd4c4], a
@@ -391,11 +388,11 @@ Func_802bb: ; 802bb (20:42bb)
 
 Func_803b9: ; 803b9 (20:43b9)
 	ld l, $00
-	ld a, [wd131] ; current screen/state/almost room?
+	ld a, [wd131]
 	call GetMapDataPointer
-	call Func_80229 ; basically get pointer to background tilemap?
+	call Func_80229
 	ld a, [hl]
-	ld [$d239], a ; the final value in mapDataPointer goes to this mystery
+	ld [$d239], a
 	ret
 ; 0x803c9
 
@@ -498,8 +495,6 @@ Unknown_80e5a: ; 80e5a (20:4e5a)
 	INCROM $80e5a, $80e5d
 
 ; might be closer to "screen specific data" than map data
-; ex: one thing is reading from something that changes multipl times in loading
-; of screens, and changes in duels (4d131)
 MapDataPointers: ; 80e5d (20:4e5d)
 	dw MapDataPointers_80e67
 	dw MapDataPointers_8100f

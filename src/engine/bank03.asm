@@ -2889,11 +2889,11 @@ OWScript_JumpIfFlagZero1: ; d460 (3:5460)
 	jr z, OWScript_JumpIfFlagZero1.passTryJump
 
 .fail
-	call SetScriptControlByteFail ; 0 out wScriptControlByte
+	call SetScriptControlByteFail
 	jp IncreaseOWScriptPointerBy4
 
 .passTryJump
-	call SetScriptControlBytePass ; ff wScriptControlByte
+	call SetScriptControlBytePass
 	call GetOWSArgs2AfterPointer
 	jr z, .noJumpTarget
 	jp SetOWScriptPointer

@@ -1898,7 +1898,6 @@ wd12f:: ; d12f
 wd130:: ; d130
 	ds $1
 
-; current screen, at least for some purpose -- changed multiple times on loads and changes when screen changes in battle?
 wd131:: ; d131
 	ds $1
 

@@ -1537,39 +1537,37 @@ UpdateRNGSources: ; 089b (0:089b)
 	pop hl
 	ret
 
-; ld d, a ; de = wd4c4/5 + 5
-; ld b, $c0 ; b = c0
 Func_08bf: ; 08bf (0:08bf)
 	ld hl, wcad6
 	ld [hl], e
 	inc hl
-	ld [hl], d ; load wcad6/7 with [wd4c4]+5
+	ld [hl], d
 	ld hl, wcad8
 	ld [hl], $1
-	inc hl ; wcad8 is 1, a bunch of things after it are 0
+	inc hl
 	xor a
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
-	ld [hl], b ; then wcad i think is set to c0
+	ld [hl], b
 	inc hl
 	ld [hli], a ; 0
-	ld [hl], $ef ; and ef
+	ld [hl], $ef
 	ld h, b
-	ld l, $0 ; hl is now c000, first byte of wram, first card collection or no name
+	ld l, $0
 	xor a
 .asm_8d9
-	ld [hl], a ; 0 out ff bytes
-	inc l ; inc the first ff bytes of wram (was an arg so could be other stuff)
+	ld [hl], a
+	inc l
 	jr nz, .asm_8d9
 	ret
 
 Func_08de: ; 08de (0:08de)
-	push hl ; wd23e + 40 i think?
-	push de ; 6 mdp bytes
+	push hl
+	push de
 .asm_8e0
-	push bc ; as of first run, bc is the width
+	push bc
 	call Func_08ef
 	ld [de], a
 	inc de
