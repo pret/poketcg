@@ -15,17 +15,17 @@ ENDM
 
 	const_def
 	const OWScript_EndScriptLoop1_index         ; $00
-	const OWScript_CloseTextBox_index           ; $01
+	const OWScript_CloseAdvancedTextBox_index   ; $01
 	const OWScript_PrintTextString_index        ; $02
 	const Func_ccdc_index                       ; $03
 	const OWScript_AskQuestionJump_index        ; $04
 	const OWScript_StartBattle_index            ; $05
-	const Func_cd83_index                       ; $06
+	const OWScript_PrintVariableText_index      ; $06
 	const Func_cda8_index                       ; $07
 	const OWScript_PrintTextCloseBox_index      ; $08
 	const Func_cdcb_index                       ; $09
 	const Func_ce26_index                       ; $0a
-	const Func_ce84_index                       ; $0b
+	const OWScript_CloseTextBox_index           ; $0b
 	const OWScript_GiveBoosterPacks_index       ; $0c
 	const Func_cf0c_index                       ; $0d
 	const Func_cf12_index                       ; $0e
@@ -41,7 +41,7 @@ ENDM
 	const Func_d025_index                       ; $18
 	const Func_d032_index                       ; $19
 	const Func_d03f_index                       ; $1a
-	const OWScript_ScriptJump_index             ; $1b
+	const OWScript_Jump_index                   ; $1b
 	const Func_d04f_index                       ; $1c
 	const Func_d055_index                       ; $1d
 	const OWScript_MovePlayer_index             ; $1e
@@ -80,7 +80,7 @@ ENDM
 	const Func_cd76_index                       ; $3f
 	const Func_d39d_index                       ; $40
 	const Func_d3b9_index                       ; $41
-	const Func_d3c9_index                       ; $42
+	const OWScript_GivePCPack_index             ; $42
 	const Func_d3d1_index                       ; $43
 	const Func_d3d4_index                       ; $44
 	const Func_d3e0_index                       ; $45
@@ -102,18 +102,18 @@ ENDM
 	const OWScript_EndScriptLoop4_index         ; $55
 	const OWScript_EndScriptLoop5_index         ; $56
 	const OWScript_EndScriptLoop6_index         ; $57
-	const OWScript_CustomModifyEventFlags_index ; $58
-	const Func_d460_index                       ; $59
-	const OWScript_JumpIfFlagSet_index          ; $5a
-	const Func_d484_index                       ; $5b
-	const Func_d49e_index                       ; $5c
-	const Func_d4a6_index                       ; $5d
-	const Func_d4ae_index                       ; $5e
-	const OWScript_SetEventFlags_index          ; $5f
-	const Func_d4c3_index                       ; $60
-	const Func_d4ca_index                       ; $61
-	const OWScript_JumpIfFlagNotSet_index       ; $62
-	const Func_d452_index                       ; $63
+	const OWScript_SetFlagValue_index           ; $58
+	const OWScript_JumpIfFlagZero1_index        ; $59
+	const OWScript_JumpIfFlagNonzero1_index     ; $5a
+	const OWScript_JumpIfFlagEqual_index        ; $5b
+	const OWScript_JumpIfFlagNotEqual_index     ; $5c
+	const OWScript_JumpIfFlagNotLessThan_index  ; $5d
+	const OWScript_JumpIfFlagLessThan_index     ; $5e
+	const OWScript_MaxOutFlagValue_index        ; $5f
+	const OWScript_ZeroOutFlagValue_index       ; $60
+	const OWScript_JumpIfFlagNonzero2_index     ; $61
+	const OWScript_JumpIfFlagZero2_index        ; $62
+	const OWScript_IncrementFlagValue_index     ; $63
 	const OWScript_EndScriptLoop7_index         ; $64
 	const OWScript_EndScriptLoop8_index         ; $65
 	const OWScript_EndScriptLoop9_index         ; $66

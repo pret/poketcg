@@ -1586,7 +1586,7 @@ Func_08ef: ; 08ef (0:08ef)
 	ld hl, wcadc
 	ld a, [hl]
 	or a
-	jr z, .asm_902 ; for the purpose of this, we made it 0 earlier
+	jr z, .asm_902
 	dec [hl]
 	inc hl
 .asm_8f8
@@ -1605,9 +1605,9 @@ Func_08ef: ; 08ef (0:08ef)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	inc hl ; get pointer from wcad6/7
-	dec [hl] ; dec wcad8 (was 1)
-	inc hl ; wcad9
+	inc hl
+	dec [hl]
+	inc hl
 	jr nz, .asm_914
 	dec hl
 	ld [hl], $8
@@ -10803,7 +10803,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 
 Func_3917: ; 3917 (0:3917)
 	ld a, $22
-	farcall CheckIfEventFlagSet
+	farcall GetEventFlagValue
 	call EnableSRAM
 	ld [s0a00a], a
 	call DisableSRAM

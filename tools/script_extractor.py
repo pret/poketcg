@@ -2,14 +2,8 @@
 
 import argparse
 
-#TODO:
-# - Add arguments to all functions (have fun lol)
-# - implement text
 # - (Possibly) add new type of word that looks for matches in the sym file
-# - enter to continually generate more lines of the script
-# - full script mode?
-# - Make pretty!!
-
+# - add new one for event flag
 def decodeLine(scriptList, game_data, loc, ignore_broken):
 	currLine = scriptList[game_data[loc]]
 	ret = "\trun_script " + currLine[0] + "\n"
@@ -20,7 +14,7 @@ def decodeLine(scriptList, game_data, loc, ignore_broken):
 			ret += "\tdb $" + format(game_data[loc],"02x") + "\n"
 			loc += 1
 		elif c == "w":
-			ret += "\tdb $" + format((game_data[loc] + (game_data[loc+1]<<8)),"04x") + "\n"
+			ret += "\tdw $" + format((game_data[loc] + (game_data[loc+1]<<8)),"04x") + "\n"
 			loc += 2
 		elif c == "t":
 			ret += "\ttx Text" + format((game_data[loc] + (game_data[loc+1]<<8)),"04x") + "\n"
@@ -29,15 +23,27 @@ def decodeLine(scriptList, game_data, loc, ignore_broken):
 			print("haven't updated data for this yet")
 			if not ignore_broken:
 				quit = True
+		else:
+			print("UNACCEPTED CHARACTER: " + c)
 	return (loc, ret, quit)
 			
+def main_2(): # temp
+	with open("tcg.gbc", "rb") as file:
+		game_data = file.read()
+	loc = 0xcb37
+	start = 0
+	end = 0x33 # inclusive
+	for i in range(start,end+1):
+		print("\tflag_def EVENT_FLAG_" + format(i,"02X") + ","+(" "*7)+"$"\
+		 + format(game_data[loc+2*i],"02x") + ", %" + format(game_data[loc+2*i + 1],"08b"))
+	print("; " + format(loc + 2*(end+1),"02x"))
 
 def main():
 	scriptList = createList()
 
 	with open("tcg.gbc", "rb") as file:
 	    game_data = file.read()
-	loc = 0xd52e
+	loc = 0xe2d1
 	auto = True
 	end = False
 	ignore_broken = True
@@ -66,48 +72,48 @@ def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
 	return [
 	("OWScript_EndScriptLoop1", "", True),
-	("OWScript_CloseTextBox", "", False),
+	("OWScript_CloseAdvancedTextBox", "", False),
 	("OWScript_PrintTextString", "t", False),
 	("Func_ccdc", "bb", False),
-	("OWScript_AskQuestionJump", "bbbb", False), # more complex behavior too (jumping)
+	("OWScript_AskQuestionJump", "tw", False), # more complex behavior too (jumping)
 	("OWScript_StartBattle", "bbb", False),
-	("Func_cd83", "bbbb", False),
+	("OWScript_PrintVariableText", "tt", False),
 	("Func_cda8", "bbbb", False),
 	("OWScript_PrintTextCloseBox", "t", False),
 	("Func_cdcb", "bb", False),
 	("Func_ce26", "bb", False),
-	("Func_ce84", "", False),
+	("OWScript_CloseTextBox", "", False),
 	("OWScript_GiveBoosterPacks", "bbb", False),
 	("Func_cf0c", "bbb", False), # more complex behavior too (jumping)
 	("Func_cf12", "bbb", False),
 	("Func_cf3f", "b", False),
 	("Func_cf4c", "b", False),
-	("Func_cf53", "d", False), # more complex behavior too (jumping)
+	("Func_cf53", "w", False), # more complex behavior too (jumping)
 	("Func_cf7b", "", False),
 	("Func_cf2d", "bbbb", False), # more complex behavior too (jumping + ??)
-	("Func_cf96", "d", False), # only jumps? still needs args to do that though
+	("Func_cf96", "w", False), # only jumps? still needs args to do that though
 	("Func_cfc6", "b", False),
 	("Func_cfd4", "", False),
 	("Func_d00b", "", False), # includes something with random and extra data
-	("Func_d025", "d", False), # possibly only jumps, still needs args
-	("Func_d032", "d", False), # see above
+	("Func_d025", "w", False), # possibly only jumps, still needs args
+	("Func_d032", "w", False), # see above
 	("Func_d03f", "", False),
-	("OWScript_ScriptJump", "d", False), # jumps to d
+	("OWScript_Jump", "w", True), # jumps to d
 	("Func_d04f", "", False),
 	("Func_d055", "b", False),
 	("OWScript_MovePlayer", "bb", False),
 	("Func_cee2", "b", False),
 	("OWScript_SetDialogName", "b", False),
-	("Func_d088", "bbb", False),
+	("Func_d088", "bw", False),
 	("Func_d095", "bbb", False),
 	("Func_d0be", "bb", False),
 	("OWScript_DoFrames", "b", False),
-	("Func_d0d9", "bbb", False), # jumps but still needs args
-	("Func_d0f2", "bbb", False), # jumps but still needs args
+	("Func_d0d9", "bbw", False), # jumps but still needs args
+	("Func_d0f2", "bbw", False), # jumps but still needs args
 	("Func_ce4a", "bb", False),
 	("Func_ceba", "q", False),
 	("Func_d103", "q", False),
-	("Func_d125", "q", False),
+	("Func_d125", "b", False),
 	("Func_d135", "q", False),
 	("Func_d16b", "q", False),
 	("Func_cd4f", "q", False),
@@ -116,7 +122,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_cdd8", "q", False),
 	("Func_cdf5", "q", False),
 	("Func_d195", "q", False),
-	("Func_d1ad", "q", False),
+	("Func_d1ad", "", False),
 	("Func_d1b3", "q", False),
 	("OWScript_EndScriptCloseText", "", True), # it calls inc twice but it ends anyway?
 	("Func_d244", "q", False),
@@ -124,14 +130,14 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_OpenDeckMachine", "q", False),
 	("Func_d271", "q", False),
 	("Func_d36d", "bbbbb", False),
-	("Func_ce6f", "q", False),
+	("Func_ce6f", "bbb", False),
 	("Func_d209", "q", False),
 	("Func_d38f", "q", False),
 	("Func_d396", "q", False),
 	("Func_cd76", "q", False),
 	("Func_d39d", "q", False),
 	("Func_d3b9", "q", False),
-	("Func_d3c9", "q", False),
+	("OWScript_GivePCPack", "b", False),
 	("Func_d3d1", "q", False),
 	("Func_d3d4", "q", False),
 	("Func_d3e0", "", False),
@@ -143,7 +149,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d429", "q", False),
 	("Func_d41d", "q", False),
 	("Func_d42f", "q", False),
-	("Func_d435", "q", False),
+	("Func_d435", "b", False),
 	("Func_cce4", "q", False),
 	("Func_d2f6", "q", False),
 	("Func_d317", "q", False),
@@ -153,18 +159,18 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_EndScriptLoop4", "q", True),
 	("OWScript_EndScriptLoop5", "q", True),
 	("OWScript_EndScriptLoop6", "q", True),
-	("OWScript_CustomModifyEventFlags", "q", False),
-	("Func_d460", "q", False),
-	("OWScript_JumpIfFlagSet", "q", False),
-	("Func_d484", "q", False),
-	("Func_d49e", "q", False),
-	("Func_d4a6", "q", False),
-	("Func_d4ae", "q", False),
-	("OWScript_SetEventFlags", "q", False),
-	("Func_d4c3", "q", False),
-	("Func_d4ca", "q", False),
-	("OWScript_JumpIfFlagNotSet", "q", False),
-	("Func_d452", "q", False),
+	("OWScript_SetFlagValue", "bb", False),
+	("OWScript_JumpIfFlagZero1", "q", False),
+	("OWScript_JumpIfFlagNonzero1", "q", False),
+	("OWScript_JumpIfFlagEqual", "bbw", False), # also capable of jumping
+	("OWScript_JumpIfFlagNotEqual", "bbw", False), # jumps
+	("OWScript_JumpIfFlagNotLessThan", "q", False),
+	("OWScript_JumpIfFlagLessThan", "q", False),
+	("OWScript_MaxOutFlagValue", "b", False),
+	("OWScript_ZeroOutFlagValue", "q", False),
+	("OWScript_JumpIfFlagNonzero2", "bw", False),
+	("OWScript_JumpIfFlagZero2", "q", False),
+	("OWScript_IncrementFlagValue", "b", False),
 	("OWScript_EndScriptLoop7", "q", True),
 	("OWScript_EndScriptLoop8", "q", True),
 	("OWScript_EndScriptLoop9", "q", True),

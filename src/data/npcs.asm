@@ -519,7 +519,7 @@ AmyData:
 	db $08
 	db $2e
 	db $10
-	dw $6304 ; Pointer to NPC Data
+	dw OWSequence_Amy ; Pointer to NPC Data
 	tx Text03bf
 	db AMY_PIC
 	db $12

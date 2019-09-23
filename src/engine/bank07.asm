@@ -256,7 +256,22 @@ Func_1c58e: ; 1c58e (7:458e)
 	INCROM $1c5b9, $1c5e9
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
-	INCROM $1c5e9, $1c610
+	push hl
+	push bc
+	ld a, [wd3aa]
+	ld l, $07
+	call Func_39ad
+	ld a, [hl]
+	ld bc, $fffd
+	add hl, bc
+	ld [hl], a
+	call Func_1c58e
+	pop bc
+	pop hl
+	ret
+; 0x1c5ff
+
+	INCROM $1c5ff, $1c610
 
 Func_1c610: ; 1c610 (7:4610)
 	INCROM $1c610, $1c6f8

@@ -1885,9 +1885,7 @@ wPCPackSelection:: ; d11d
 
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
-	ds $c
-
-	ds $3
+	ds $f
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
@@ -2122,7 +2120,8 @@ wd3bb:: ; d3bb
 wd3d0:: ; d3d0
 	ds $1
 
-wd3d1:: ; d3d1
+; the bits relevant to the currently worked on flag, obtained from EventFlagMods
+wLoadedFlagBits:: ; d3d1
 	ds $1
 
 wEventFlags::
@@ -2138,7 +2137,8 @@ wBreakOWScriptLoop:: ; d412
 wOWScriptPointer:: ; d413
 	ds $2
 
-wd415:: ; d415
+; generally set to ff when a flag check passes, 0 otherwise
+wScriptControlByte:: ; d415
 	ds $1
 
 wd416:: ; d416

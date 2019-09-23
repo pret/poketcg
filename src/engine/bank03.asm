@@ -127,10 +127,10 @@ Func_c10a: ; c10a (3:410a)
 	jp hl
 
 ; closes dialogue window. seems to be for other things as well.
-CloseDialogueBox: ; c111 (3:4111)
-	ld a, [wd0c1] ; with 0 set i can't move cursors, can move around
+CloseAdvancedDialogueBox: ; c111 (3:4111)
+	ld a, [wd0c1]
 	bit 0, a
-	call nz, Func_c135 ; seems to actually close the dialog window
+	call nz, CloseTextBox
 	ld a, [wd0c1]
 	bit 1, a
 	jr z, .asm_c12a
@@ -144,11 +144,11 @@ CloseDialogueBox: ; c111 (3:4111)
 	ld [wd0bf], a
 	ret
 
-; this seems to legitimately close the dialogue box
-Func_c135: ; c135 (3:4135)
+; redraws the background and removes textbox control
+CloseTextBox: ; c135 (3:4135)
 	push hl
-	farcall Func_80028 ; Draw background of the current room, I think
-	ld hl, wd0c1 ; at this point, the background tiles are back to normal
+	farcall Func_80028
+	ld hl, wd0c1
 	res 0, [hl]
 	pop hl
 	ret
@@ -971,7 +971,7 @@ Func_c74d: ; c74d (3:474d)
 	push bc
 	push de
 	call MainMenu_c75a
-	call CloseDialogueBox
+	call CloseAdvancedDialogueBox
 	pop de
 	pop bc
 	pop hl
@@ -1088,11 +1088,11 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_c32b
 	jr .asm_c801
 .asm_c82f
-	call Func_c135
+	call CloseTextBox
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOffText
 	call Func_c891
-	call CloseDialogueBox
+	call CloseAdvancedDialogueBox
 	xor a
 	ld [wd112], a
 	call Func_39fc
@@ -1109,7 +1109,7 @@ Func_c891: ; c891 (3:4891)
 	ld hl, wd3b9
 	ld a, [hli]
 	or [hl]
-	call nz, Func_c135
+	call nz, CloseTextBox
 
 .asm_c8a1
 	xor a
@@ -1142,7 +1142,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	jr z, .asm_c8d4
 
 .asm_c8d1
-	call Func_c135
+	call CloseTextBox
 
 .asm_c8d4
 	ld hl, wd3b9
@@ -1412,19 +1412,22 @@ Func_ca0e: ; ca0e (3:4a0e)
 
 Func_ca69: ; ca69 (3:4a69)
 	call Func_cab3
-CheckIfEventFlagSet: ; ca6c (3:4a6c)
+
+; returns the event flag's value in a
+; also ors it with itself before returning
+GetEventFlagValue: ; ca6c (3:4a6c)
 	push hl
 	push bc
-	call GetEventFlagMod
+	call GetEventFlag
 	ld c, [hl]
-	ld a, [wd3d1]
-.asm_ca75
+	ld a, [wLoadedFlagBits]
+.shiftLoop
 	bit 0, a
-	jr nz, .asm_ca7f
+	jr nz, .lsbReached
 	srl a
 	srl c
-	jr .asm_ca75
-.asm_ca7f
+	jr .shiftLoop
+.lsbReached
 	and c
 	pop bc
 	pop hl
@@ -1437,12 +1440,13 @@ CheckIfEventFlagSet: ; ca6c (3:4a6c)
 Func_ca8f: ; ca8f (3:4a8f)
 	call Func_cab3
 
-; a - pointer on table for cb1d, c - set or reset control bit
-ModifyEventFlags: ; ca92 (3:4a92)
+; a - flag
+; c - value - truncated to fit only the flag's bounds
+SetEventFlagValue: ; ca92 (3:4a92)
 	push hl
 	push bc
-	call GetEventFlagMod
-	ld a, [wd3d1]
+	call GetEventFlag
+	ld a, [wLoadedFlagBits]
 .asm_ca9a
 	bit 0, a
 	jr nz, .asm_caa4
@@ -1450,10 +1454,10 @@ ModifyEventFlags: ; ca92 (3:4a92)
 	sla c
 	jr .asm_ca9a
 .asm_caa4
-	ld a, [wd3d1]
+	ld a, [wLoadedFlagBits]
 	and c
 	ld c, a
-	ld a, [wd3d1]
+	ld a, [wLoadedFlagBits]
 	cpl
 	and [hl]
 	or c
@@ -1481,20 +1485,20 @@ Func_cab3: ; cab3 (3:4ab3)
 
 	INCROM $cac2, $cac5
 
-SetEventFlags: ; cac5 (3:4ac5)
+MaxOutEventFlag: ; cac5 (3:4ac5)
 	push bc
 	ld c, $ff
-	call ModifyEventFlags
+	call SetEventFlagValue
 	pop bc
 	ret
 ; 0xcacd
 
 	INCROM $cacd, $cad0
 
-Func_cad0: ; cad0 (3:4ad0)
+ZeroOutEventFlag: ; cad0 (3:4ad0)
 	push bc
 	ld c, $0
-	call ModifyEventFlags
+	call SetEventFlagValue
 	pop bc
 	ret
 
@@ -1505,7 +1509,7 @@ Func_cad8: ; cad8 (3:4ad8)
 	ld bc, $0008
 .asm_cae0
 	ld a, [hli]
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	jr z, .asm_cae7
 	inc b
 
@@ -1545,7 +1549,8 @@ Func_cad8: ; cad8 (3:4ad8)
 
 	INCROM $cb15, $cb1d
 
-GetEventFlagMod: ; cb1d (3:4b1d)
+; returns wEventFlags byte in hl, related bits in wLoadedFlagBits
+GetEventFlag: ; cb1d (3:4b1d)
 	push bc
 	ld c, a
 	ld b, $0
@@ -1556,7 +1561,7 @@ GetEventFlagMod: ; cb1d (3:4b1d)
 	ld a, [hli]
 	ld c, a
 	ld a, [hl]
-	ld [wd3d1], a
+	ld [wLoadedFlagBits], a
 	ld b, $0
 	ld hl, wEventFlags
 	add hl, bc
@@ -1565,7 +1570,61 @@ GetEventFlagMod: ; cb1d (3:4b1d)
 
 ; offset - bytes to set or reset
 EventFlagMods: ; cb37 (3:4b37)
-	INCROM $cb37, $cc32
+	const_def
+	flag_def EVENT_FLAG_00,           $3f, %10000000
+	flag_def EVENT_FLAG_01,           $3f, %01000000
+	flag_def EVENT_FLAG_02,           $3f, %00100000
+	flag_def EVENT_FLAG_03,           $3f, %00010000
+	flag_def EVENT_FLAG_04,           $3f, %00001000
+	flag_def EVENT_FLAG_05,           $3f, %00000100
+	flag_def EVENT_FLAG_06,           $3f, %00000010
+	flag_def EVENT_FLAG_07,           $3f, %00000001
+	flag_def EVENT_FLAG_08,           $00, %10000000
+	flag_def EVENT_FLAG_09,           $00, %01000000
+	flag_def EVENT_FLAG_0A,           $00, %00100000
+	flag_def EVENT_BEAT_AMY,          $00, %00010000
+	flag_def EVENT_FLAG_0C,           $00, %00001000
+	flag_def EVENT_FLAG_0D,           $00, %00000100
+	flag_def EVENT_FLAG_0E,           $00, %00000010
+	flag_def EVENT_FLAG_0F,           $00, %00000001
+	flag_def EVENT_FLAG_10,           $00, %11111111
+	flag_def EVENT_FLAG_11,           $01, %11110000
+	flag_def EVENT_FLAG_12,           $01, %00001111
+	flag_def EVENT_FLAG_13,           $02, %11000000
+	flag_def EVENT_FLAG_14,           $02, %00110000
+	flag_def EVENT_BEAT_SARA,         $02, %00001000
+	flag_def EVENT_BEAT_AMANDA,       $02, %00000100
+	flag_def EVENT_FLAG_17,           $03, %11110000
+	flag_def EVENT_FLAG_18,           $03, %00001111
+	flag_def EVENT_FLAG_19,           $04, %11110000
+	flag_def EVENT_FLAG_1A,           $04, %00001111
+	flag_def EVENT_FLAG_1B,           $05, %10000000
+	flag_def EVENT_FLAG_1C,           $05, %01000000
+	flag_def EVENT_FLAG_1D,           $05, %00100000
+	flag_def EVENT_FLAG_1E,           $05, %00010000
+	flag_def EVENT_FLAG_1F,           $05, %00001111
+	flag_def EVENT_FLAG_20,           $06, %11110000
+	flag_def EVENT_FLAG_21,           $06, %00001100
+	flag_def EVENT_FLAG_22,           $06, %00000010
+	flag_def EVENT_FLAG_23,           $06, %00000001
+	flag_def EVENT_FLAG_24,           $07, %11000000
+	flag_def EVENT_FLAG_25,           $07, %00100000
+	flag_def EVENT_FLAG_26,           $07, %00010000
+	flag_def EVENT_FLAG_27,           $07, %00001000
+	flag_def EVENT_FLAG_28,           $07, %00000100
+	flag_def EVENT_FLAG_29,           $07, %00000010
+	flag_def EVENT_FLAG_2A,           $07, %00000001
+	flag_def EVENT_FLAG_2B,           $08, %11111111
+	flag_def EVENT_FLAG_2C,           $09, %11100000
+	flag_def EVENT_FLAG_2D,           $09, %00011111
+	flag_def EVENT_FLAG_2E,           $0a, %11110000
+	flag_def EVENT_FLAG_2F,           $0a, %00001000
+	flag_def EVENT_FLAG_30,           $0a, %00000100
+	flag_def EVENT_FLAG_31,           $0a, %00000011
+	flag_def EVENT_FLAG_32,           $0b, %10000000
+	flag_def EVENT_JOSHUA_STATE,      $0b, %01110000
+
+	INCROM $cb9f, $cc32
 
 Func_cc32: ; cc32 (3:4c32)
 	push hl
@@ -1669,14 +1728,14 @@ GetOWSArgsAfterPointer: ; cca0 (3:4ca0)
 	or b
 	ret
 
-Func_ccb3: ; ccb3 (3:4cb3)
+SetScriptControlBytePass: ; ccb3 (3:4cb3)
 	ld a, $ff
-	ld [wd415], a
+	ld [wScriptControlByte], a
 	ret
 
-Func_ccb9: ; ccb9 (3:4cb9)
+SetScriptControlByteFail: ; ccb9 (3:4cb9)
 	xor a
-	ld [wd415], a
+	ld [wScriptControlByte], a
 	ret
 
 OWScript_EndScriptLoop1: ; ccbe (3:4cbe)
@@ -1693,12 +1752,12 @@ OWScript_EndScriptLoop10: ; ccbe (3:4cbe)
 	ld [wBreakOWScriptLoop], a
 	jp IncreaseOWScriptPointerBy1
 
-OWScript_CloseTextBox: ; ccc6 (3:4cc6)
-	call CloseDialogueBox
+OWScript_CloseAdvancedTextBox: ; ccc6 (3:4cc6)
+	call CloseAdvancedDialogueBox
 	jp IncreaseOWScriptPointerBy1
 
 OWScript_EndScriptCloseText: ; cccc (3:4ccc)
-	call OWScript_CloseTextBox
+	call OWScript_CloseAdvancedTextBox
 	call OWScript_EndScriptLoop1
 	pop hl
 	ret
@@ -1726,7 +1785,7 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld h, b
 	call Func_c8ed
 	ld a, [hCurMenuItem]
-	ld [wd415], a
+	ld [wScriptControlByte], a
 	jr c, .asm_ccfe
 	call GetOWSArgs3AfterPointer
 	jr z, .asm_ccfe
@@ -1802,12 +1861,13 @@ Func_cd76: ; cd76 (3:4d76)
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
 
-Func_cd83: ; cd83 (3:4d83)
-	ld a, [wd415]
+; prints text arg 1 or arg 2 depending on wScriptControlByte.
+OWScript_PrintVariableText: ; cd83 (3:4d83)
+	ld a, [wScriptControlByte]
 	or a
-	jr nz, .asm_cd8c
+	jr nz, .printText
 	call GetOWSArgs3AfterPointer
-.asm_cd8c
+.printText
 	ld l, c
 	ld h, b
 	call Func_cc32
@@ -1828,7 +1888,7 @@ Unknown_cd98:
 	jp IncreaseOWScriptPointerBy7
 
 Func_cda8: ; cda8 (3:4da8)
-	ld a, [wd415]
+	ld a, [wScriptControlByte]
 	or a
 	jr nz, .asm_cdb1
 	call GetOWSArgs3AfterPointer
@@ -1842,7 +1902,7 @@ OWScript_PrintTextCloseBox: ; cdb9 (3:4db9)
 	ld l, c
 	ld h, b
 	call Func_cc32
-	call CloseDialogueBox
+	call CloseAdvancedDialogueBox
 	ld a, $1
 	ld [wBreakOWScriptLoop], a
 	call IncreaseOWScriptPointerBy3
@@ -1950,8 +2010,8 @@ Func_ce6f: ; ce6f (3:4e6f)
 	pop af
 	jr asm_ce5d
 
-Func_ce84: ; ce84 (3:4e84)
-	call Func_c135
+OWScript_CloseTextBox: ; ce84 (3:4e84)
+	call CloseTextBox
 	jp IncreaseOWScriptPointerBy1
 
 ; args: booster pack index, booster pack index, booster pack index
@@ -2041,11 +2101,11 @@ asm_cf16
 	jr nz, asm_cf1f
 
 asm_cf19
-	call Func_ccb9
+	call SetScriptControlByteFail
 	jp IncreaseOWScriptPointerBy4
 
 asm_cf1f
-	call Func_ccb3
+	call SetScriptControlBytePass
 	call GetOWSArgs2AfterPointer
 	jr z, asm_cf2a
 	jp SetOWScriptPointer
@@ -2099,11 +2159,11 @@ Func_cf53: ; cf53 (3:4f53)
 	or a
 	jr nz, Func_cf6d
 Func_cf67: ; cf67 (3:4f67)
-	call Func_ccb9
+	call SetScriptControlByteFail
 	jp IncreaseOWScriptPointerBy3
 
 Func_cf6d: ; cf6d (3:4f6d)
-	call Func_ccb3
+	call SetScriptControlBytePass
 	call GetOWSArgs1AfterPointer
 	jr z, .asm_cf78
 	jp SetOWScriptPointer
@@ -2249,7 +2309,7 @@ Func_d03f: ; d03f (3:503f)
 	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy1
 
-OWScript_ScriptJump: ; d049 (3:5049)
+OWScript_Jump: ; d049 (3:5049)
 	call GetOWSArgs1AfterPointer
 	jp SetOWScriptPointer
 
@@ -2285,6 +2345,8 @@ OWScript_SetDialogName: ; d080 (3:5080)
 	farcall SetNPCDialogName
 	jp IncreaseOWScriptPointerBy2
 
+; Calls another OWSequence with a specified NPC
+; Not confident enough to give it a name yet
 Func_d088: ; d088 (3:5088)
 	ld a, c
 	ld [wd3ab], a
@@ -2341,20 +2403,20 @@ Func_d0d9: ; d0d9 (3:50d9)
 	farcall Func_1c477
 	ld a, e
 	cp c
-	jp nz, Func_d48a
+	jp nz, ScriptEventFailedNoJump
 	ld a, d
 	cp b
-	jp nz, Func_d48a
-	jp Func_d490
+	jp nz, ScriptEventFailedNoJump
+	jp ScriptEventPassedTryJump
 
 Func_d0f2: ; d0f2 (3:50f2)
 	ld a, [wPlayerXCoord]
 	cp c
-	jp nz, Func_d48a
+	jp nz, ScriptEventFailedNoJump
 	ld a, [wPlayerYCoord]
 	cp b
-	jp nz, Func_d48a
-	jp Func_d490
+	jp nz, ScriptEventFailedNoJump
+	jp ScriptEventPassedTryJump
 
 Func_d103: ; d103 (3:5103)
 	ld a, [wd3aa]
@@ -2507,7 +2569,7 @@ Func_d209: ; d209 (3:5209)
 	ld hl, $5240
 	add hl, bc
 	ld a, [hl]
-	call SetEventFlags
+	call MaxOutEventFlag
 	pop bc
 	ld hl, $5234
 	ld a, c
@@ -2726,9 +2788,9 @@ Func_d3b9: ; d3b9 (3:53b9)
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
 
-Func_d3c9: ; d3c9 (3:53c9)
+OWScript_GivePCPack: ; d3c9 (3:53c9)
 	ld a, c
-	farcall Func_10a70
+	farcall GivePCPack
 	jp IncreaseOWScriptPointerBy2
 
 Func_d3d1: ; d3d1 (3:53d1)
@@ -2803,119 +2865,126 @@ Func_d43d: ; d43d (3:543d)
 	set 6, [hl]
 	jp IncreaseOWScriptPointerBy1
 
-OWScript_CustomModifyEventFlags: ; d44a (3:544a)
+; sets the event flag in arg 1 to the value in arg 2
+OWScript_SetFlagValue: ; d44a (3:544a)
 	ld a, c
 	ld c, b
-	call ModifyEventFlags
+	call SetEventFlagValue
 	jp IncreaseOWScriptPointerBy3
 
-Func_d452: ; d452 (3:5452)
+OWScript_IncrementFlagValue: ; d452 (3:5452)
 	ld a, c
 	push af
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	inc a
 	ld c, a
 	pop af
-	call ModifyEventFlags
+	call SetEventFlagValue
 	jp IncreaseOWScriptPointerBy2
 
-Func_d460: ; d460 (3:5460)
+OWScript_JumpIfFlagZero1: ; d460 (3:5460)
 	ld a, c
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	or a
-	jr z, asm_d46d
-asm_d467
-	call Func_ccb9
+	jr z, OWScript_JumpIfFlagZero1.passTryJump
+
+.fail
+	call SetScriptControlByteFail ; 0 out wScriptControlByte
 	jp IncreaseOWScriptPointerBy4
 
-asm_d46d
-	call Func_ccb3
+.passTryJump
+	call SetScriptControlBytePass ; ff wScriptControlByte
 	call GetOWSArgs2AfterPointer
-	jr z, .asm_d478
+	jr z, .noJumpTarget
 	jp SetOWScriptPointer
 
-.asm_d478
+.noJumpTarget
 	jp IncreaseOWScriptPointerBy4
 
-OWScript_JumpIfFlagSet: ; d47b (3:547b)
+OWScript_JumpIfFlagNonzero1: ; d47b (3:547b)
 	ld a, c
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	or a
-	jr nz, asm_d46d
-	jr asm_d467
+	jr nz, OWScript_JumpIfFlagZero1.passTryJump
+	jr OWScript_JumpIfFlagZero1.fail
 
-Func_d484: ; d484 (3:5484)
-	call Func_d4b6
+; args - event flag, value, jump address
+OWScript_JumpIfFlagEqual: ; d484 (3:5484)
+	call GetEventFlagValueBC
 	cp c
-	jr z, Func_d490
+	jr z, ScriptEventPassedTryJump
 
-Func_d48a: ; d48a (3:548a)
-	call Func_ccb9
+ScriptEventFailedNoJump ; d48a (3:548a)
+	call SetScriptControlByteFail
 	jp IncreaseOWScriptPointerBy5
 
-Func_d490: ; d490 (3:5490)
-	call Func_ccb3
+ScriptEventPassedTryJump ; d490 (3:5490)
+	call SetScriptControlBytePass
 	call GetOWSArgs3AfterPointer
-	jr z, .asm_d49b
+	jr z, .noJumpAddress
 	jp SetOWScriptPointer
 
-.asm_d49b
+.noJumpAddress
 	jp IncreaseOWScriptPointerBy5
 
-Func_d49e: ; d49e (3:549e)
-	call Func_d4b6
+OWScript_JumpIfFlagNotEqual: ; d49e (3:549e)
+	call GetEventFlagValueBC
 	cp c
-	jr nz, Func_d490
-	jr Func_d48a
+	jr nz, ScriptEventPassedTryJump
+	jr ScriptEventFailedNoJump
 
-Func_d4a6: ; d4a6 (3:54a6)
-	call Func_d4b6
+OWScript_JumpIfFlagNotLessThan: ; d4a6 (3:54a6)
+	call GetEventFlagValueBC
 	cp c
-	jr nc, Func_d490
-	jr Func_d48a
+	jr nc, ScriptEventPassedTryJump
+	jr ScriptEventFailedNoJump
 
-Func_d4ae: ; d4ae (3:54ae)
-	call Func_d4b6
+OWScript_JumpIfFlagLessThan: ; d4ae (3:54ae)
+	call GetEventFlagValueBC
 	cp c
-	jr c, Func_d490 ; 0xd4b2 $dc
-	jr Func_d48a ; 0xd4b4 $d4
+	jr c, ScriptEventPassedTryJump
+	jr ScriptEventFailedNoJump
 
-Func_d4b6: ; d4b6 (3:54b6)
+; Gets event flag at c (OWScript defaults)
+; c takes on the value of b as a side effect
+GetEventFlagValueBC: ; d4b6 (3:54b6)
 	ld a, c
 	ld c, b
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	ret
 
-OWScript_SetEventFlags: ; d4bc (3:54bc)
+OWScript_MaxOutFlagValue: ; d4bc (3:54bc)
 	ld a, c
-	call SetEventFlags
+	call MaxOutEventFlag
 	jp IncreaseOWScriptPointerBy2
 
-Func_d4c3: ; d4c3 (3:54c3)
+OWScript_ZeroOutFlagValue: ; d4c3 (3:54c3)
 	ld a, c
-	call Func_cad0
+	call ZeroOutEventFlag
 	jp IncreaseOWScriptPointerBy2
 
-Func_d4ca: ; d4ca (3:54ca)
+OWScript_JumpIfFlagNonzero2: ; d4ca (3:54ca)
 	ld a, c
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	or a
-	jr z, asm_d4e6
-Func_d4d1:
-	call Func_ccb3
+	jr z, OWScript_JumpIfFlagZero2.fail
+
+.passTryJump:
+	call SetScriptControlBytePass
 	call GetOWSArgs2AfterPointer
-	jr z, .asm_d4dc
+	jr z, .noJumpArgs
 	jp SetOWScriptPointer
-.asm_d4dc
+.noJumpArgs
 	jp IncreaseOWScriptPointerBy4
 
-OWScript_JumpIfFlagNotSet:
+OWScript_JumpIfFlagZero2:
 	ld a, c
-	call CheckIfEventFlagSet
+	call GetEventFlagValue
 	or a
-	jr z, Func_d4d1
-asm_d4e6
-	call Func_ccb9
+	jr z, OWScript_JumpIfFlagNonzero2.passTryJump
+
+.fail
+	call SetScriptControlByteFail
 	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
@@ -2970,9 +3039,9 @@ OWSequence_d753: ; d753 (3:5753)
 	db $02
 	run_script OWScript_PrintTextString
 	tx Text05e3
-	run_script OWScript_CloseTextBox
-	run_script Func_d088 ; run OWSequence with given npc (ID corresponds to a row in the wd34a table, i dont know why they correspond to what number though)
-	db $07
+	run_script OWScript_CloseAdvancedTextBox
+	run_script Func_d088
+	db SAM
 	dw OWSequence_d779
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -2988,7 +3057,7 @@ OWSequence_d779: ; d779 (03:5779)
 	db DRMASON
 	run_script OWScript_PrintTextString
 	tx Text05e5
-	run_script Func_ce84
+	run_script OWScript_CloseTextBox
 	run_script Func_ce4a
 	db $82
 	db $58
@@ -2996,7 +3065,7 @@ OWSequence_d779: ; d779 (03:5779)
 	db $01
 	run_script Func_d055
 	db $03
-	run_script OWScript_CloseTextBox
+	run_script OWScript_CloseAdvancedTextBox
 	run_script Func_d088
 	db $01
 	db $94
@@ -3024,21 +3093,25 @@ WaterClubAfterDuel: ;e157 (3:6157)
 	ret
 
 .after_duel_table
-	dw $1f1f
+	db SARA
+	db SARA
 	dw OWSequence_BeatSara
 	dw OWSequence_LostToSara
 
-	dw $2020
+	db AMANDA
+	db AMANDA
 	dw OWSequence_BeatAmanda
 	dw OWSequence_LostToAmanda
 
-	dw $2121
-	dw $626c
-	dw $6260
+	db JOSHUA
+	db JOSHUA
+	dw OWSequence_BeatJoshua
+	dw OWSequence_LostToJoshua
 
-	dw $2222
-	dw $6322
-	dw $6344
+	db AMY
+	db AMY
+	dw OWSequence_BeatAmy
+	dw OWSequence_LostToAmy
 	db $00
 
 OWSequence_Sara: ; e177 (3:6177)
@@ -3055,14 +3128,14 @@ OWSequence_Sara: ; e177 (3:6177)
 	run_script OWScript_PrintTextString
 	tx Text042f
 	run_script OWScript_StartBattle
-	db 2
+	db PRIZES_2
 	db WATERFRONT_POKEMON_DECK_ID ; 6189
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatSara: ; e18c (3:618c)
 	start_script
-	run_script OWScript_SetEventFlags
+	run_script OWScript_MaxOutFlagValue
 	db EVENT_BEAT_SARA
 	run_script OWScript_PrintTextString
 	tx Text0430
@@ -3093,14 +3166,14 @@ OWSequence_Amanda: ; e19e (03:619e)
 	run_script OWScript_PrintTextString
 	tx Text0436
 	run_script OWScript_StartBattle
-	db 03
+	db PRIZES_3
 	db LONELY_FRIENDS_DECK_ID
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
-	run_script OWScript_SetEventFlags
+	run_script OWScript_MaxOutFlagValue
 	db EVENT_BEAT_AMANDA
 	run_script OWScript_PrintTextString
 	tx Text0437
@@ -3118,41 +3191,332 @@ OWSequence_LostToAmanda: ; e1c1 (03:61c1)
 	tx Text0439
 
 OWSequence_NotReadyToSeeAmy:
-	INCROM $e1c5, $e21c
+	start_script
+	run_script Func_d0f2
+	db $12
+	db $08
+	dw $61ec
+	run_script Func_d0f2
+	db $14
+	db $08
+	dw $61f2
+	run_script Func_d0f2
+	db $18
+	db $08
+	dw $61f8
+	run_script OWScript_MovePlayer
+	db $02
+	db $04
+	run_script Func_ce4a
+	db $13
+	db $62
+	run_script OWScript_PrintTextString
+	tx Text043a
+	run_script Func_d0f2
+	db $12
+	db $0a
+	dw $61fe
+	run_script Func_d0f2
+	db $14
+	db $0a
+	dw $6202
+	run_script Func_ce4a
+	db $15
+	db $62
+	run_script OWScript_EndScriptCloseText
+
+.ows_e1ec
+	run_script Func_ce4a
+	db $06
+	db $62
+	run_script OWScript_Jump
+	dw $61d5
+	run_script Func_ce4a
+	db $0b
+	db $62
+	run_script OWScript_Jump
+	dw $61d5
+	run_script Func_ce4a
+	db $0f
+	db $62
+	run_script OWScript_Jump
+	dw $61d5
+	run_script Func_ce4a
+	db $18
+	db $62
+	run_script OWScript_EndScriptCloseText
+; 0xe202
+
+	INCROM $e202, $e21c
 
 OWSequence_Joshua:
 	start_script
-	run_script OWScript_JumpIfFlagNotSet
+	run_script OWScript_JumpIfFlagZero2
 	db EVENT_BEAT_AMANDA
 	dw .sara_and_amanda_not_beaten
-	run_script OWScript_JumpIfFlagNotSet
+	run_script OWScript_JumpIfFlagZero2
 	db EVENT_BEAT_SARA
 	dw .sara_and_amanda_not_beaten
-	run_script OWScript_ScriptJump
+	run_script OWScript_Jump
 	dw .beat_sara_and_amanda
 .sara_and_amanda_not_beaten
-	run_script OWScript_CustomModifyEventFlags
-	db $33 ; offset on flagmod table
-	db $01 ; the control bit
+	run_script OWScript_SetFlagValue
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
 	run_script OWScript_PrintTextString
 	tx Text043b
 	run_script OWScript_EndScriptCloseText
+
 .beat_sara_and_amanda
-	run_script OWScript_JumpIfFlagSet
-	db $33
-	dw $623c
-	run_script OWScript_CustomModifyEventFlags
-	db $33
-	db $01
+	run_script OWScript_JumpIfFlagNonzero1
+	db EVENT_JOSHUA_STATE
+	dw .already_talked
+	run_script OWScript_SetFlagValue
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
 	run_script OWScript_PrintTextString
 	tx Text043b
 	run_script OWScript_PrintTextString
 	tx Text043c
-	run_script Func_d484
-	db $33
-	db $01
+.already_talked
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text043d
+	tx Text043e
+	run_script OWScript_AskQuestionJump
+	tx Text043f
+	dw .startDuel
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0440
+	tx Text0441
+	run_script OWScript_EndScriptCloseText
 
-	INCROM $e23f, $e52c
+.startDuel:
+	run_script OWScript_PrintTextString
+	tx Text0442
+	run_script OWScript_GivePCPack
+	db $04
+	run_script OWScript_StartBattle
+	db PRIZES_4
+	db SOUND_OF_THE_WAVES_DECK_ID
+	db MUSIC_DUEL_THEME_1
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_LostToJoshua: ; e260 (3:6260)
+	start_script
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0443
+	tx Text0444
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatJoshua: ; e26c (3:626c)
+	start_script
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0445
+	tx Text0446
+	run_script OWScript_GiveBoosterPacks
+	db BOOSTER_MYSTERY_WATER_COLORLESS
+	db BOOSTER_MYSTERY_WATER_COLORLESS
+	db NO_BOOSTER
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_TALKED
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0447
+	tx Text0448
+	run_script OWScript_JumpIfFlagNotEqual
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_BEATEN
+	dw .firstJoshuaWin
+	run_script OWScript_EndScriptCloseText
+
+.firstJoshuaWin:
+	run_script OWScript_SetFlagValue
+	db EVENT_JOSHUA_STATE
+	db JOSHUA_BEATEN
+	run_script OWScript_PrintTextString
+	tx Text0449
+	run_script OWScript_CloseTextBox
+	run_script Func_ce26
+	dw $62a1
+	run_script OWScript_PrintTextString
+	tx Text044a
+	run_script Func_cfc6
+	db $00
+	run_script OWScript_CloseAdvancedTextBox
+	run_script Func_d088
+	db AMY
+	dw OWSequence_MeetAmy
+	run_script OWScript_EndScriptLoop1
+; 0xe2a0
+
+	INCROM $e2a0, $e2d1
+
+OWSequence_MeetAmy: ; e2d1 (3:62d1)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text044b
+	run_script OWScript_SetDialogName
+	db JOSHUA
+	run_script OWScript_PrintTextString
+	tx Text044c
+	run_script OWScript_SetDialogName
+	db AMY
+	run_script OWScript_PrintTextString
+	tx Text044d
+	run_script OWScript_CloseTextBox
+	run_script Func_d095
+	db $09
+	db $2f
+	db $10
+	run_script OWScript_DoFrames
+	db $20
+	run_script Func_d095
+	db $04
+	db $0e
+	db $00
+	run_script Func_d0be
+	db $14
+	db $04
+	run_script Func_d055
+	db $03
+	run_script OWScript_MovePlayer
+	db $03
+	db $01
+	run_script Func_d055
+	db $00
+	run_script OWScript_MovePlayer
+	db $00
+	db $01
+	run_script OWScript_MovePlayer
+	db $00
+	db $01
+	run_script Func_ce6f
+	db $21
+	db $ab
+	db $62
+	run_script OWScript_PrintTextString
+	tx Text044e
+	run_script OWScript_Jump
+	dw OWSequence_Amy.askConfirmDuel
+
+OWSequence_Amy: ; e304 (3:6304)
+	start_script
+	run_script OWScript_JumpIfFlagNonzero2
+	db EVENT_BEAT_AMY
+	dw OWJump_TalkToAmyAgain
+	run_script OWScript_PrintTextString
+	tx Text044f
+.askConfirmDuel
+	run_script OWScript_AskQuestionJump
+	tx Text0450
+	dw .startDuel
+
+.denyDuel
+	run_script OWScript_PrintTextString
+	tx Text0451
+	run_script Func_d0d9
+	db $14
+	db $04
+	dw OWSequence_LostToAmy.ows_e34e
+	run_script OWScript_EndScriptCloseText
+
+.startDuel
+	run_script OWScript_PrintTextString
+	tx Text0452
+	run_script OWScript_StartBattle
+	db PRIZES_6
+	db GO_GO_RAIN_DANCE_DECK_ID
+	db MUSIC_DUEL_THEME_2
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatAmy: ; e322 (3:6322)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text0453
+	run_script OWScript_JumpIfFlagNonzero2
+	db EVENT_BEAT_AMY
+	dw .beatAmyCommon
+	run_script OWScript_PrintTextString
+	tx Text0454
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_BEAT_AMY
+	run_script Func_d04f
+	run_script Func_d125
+	db EVENT_BEAT_AMY
+	run_script Func_d435
+	db $03
+	run_script OWScript_PrintTextString
+	tx Text0455
+.beatAmyCommon
+	run_script OWScript_GiveBoosterPacks
+	db BOOSTER_LABORATORY_WATER
+	db BOOSTER_LABORATORY_WATER
+	db NO_BOOSTER
+	run_script OWScript_PrintTextString
+	tx Text0456
+	run_script Func_d0d9
+	db $14
+	db $04
+	dw OWSequence_LostToAmy.ows_e34e
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_LostToAmy: ; e344 (3:6344)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text0457
+	run_script Func_d0d9
+	db $14
+	db $04
+	dw .ows_e34e
+	run_script OWScript_EndScriptCloseText
+
+.ows_e34e
+	run_script Func_d095
+	db $08
+	db $2e
+	db $10
+	run_script Func_d0be
+	db $16
+	db $04
+	run_script OWScript_EndScriptCloseText
+
+OWJump_TalkToAmyAgain: ; e356 (3:6356)
+	run_script OWScript_PrintTextString
+	tx Text0458
+	run_script OWScript_AskQuestionJump
+	tx Text0450
+	dw .startDuel
+	run_script OWScript_Jump
+	dw OWSequence_Amy.denyDuel
+
+.startDuel
+	run_script OWScript_PrintTextString
+	tx Text0459
+	run_script OWScript_StartBattle
+	db PRIZES_6
+	db GO_GO_RAIN_DANCE_DECK_ID
+	db MUSIC_DUEL_THEME_2
+	run_script OWScript_EndScriptCloseText
+; 0xe369
+
+	INCROM $e369, $e52c
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0

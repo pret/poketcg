@@ -239,38 +239,39 @@ Func_10548: ; 10548 (4:4548)
 Func_10756: ; 10756 (4:4756)
 	INCROM $10756, $10a70
 
-Func_10a70: ; 10a70 (4:4a70)
+; gives the pc pack described in a
+GivePCPack: ; 10a70 (4:4a70)
 	push hl
 	push bc
 	push de
 	ld b, a
-	ld c, $f
+	ld c, $f ; number of packs possible
 	ld hl, wPCPacks
-.asm_10a79
+.searchLoop1
 	ld a, [hli]
 	and $7f
 	cp b
-	jr z, .asm_10a97
+	jr z, .quit
 	dec c
-	jr nz, .asm_10a79
+	jr nz, .searchLoop1
 	ld c, $f
 	ld hl, wPCPacks
-.asm_10a87
+.findFreeSlotLoop
 	ld a, [hl]
 	and $7f
-	jr z, .asm_10a93
+	jr z, .foundFreeSlot
 	inc hl
 	dec c
-	jr nz, .asm_10a87
+	jr nz, .findFreeSlotLoop
 	debug_ret
-	jr .asm_10a97
+	jr .quit
 
-.asm_10a93
+.foundFreeSlot
 	ld a, b
-	or $80
+	or $80 ; mark pack as unopened
 	ld [hl], a
 
-.asm_10a97
+.quit
 	pop de
 	pop bc
 	pop hl
@@ -332,7 +333,7 @@ Func_10dba: ; 10dba (4:4dba)
 	push af
 	ld hl, $4df0
 	call JumpToFunctionInTable
-	farcall Func_c135
+	farcall CloseTextBox
 	call DoFrameIfLCDEnabled
 	pop af
 	ret
@@ -457,7 +458,7 @@ Func_10f4a: ; 10f4a (4:4f4a)
 	jr nz, .asm_10f5f
 	ld c, a
 	ld a, $1e
-	farcall CheckIfEventFlagSet
+	farcall GetEventFlagValue
 	or a
 	ld a, c
 	jr nz, .asm_10f5f
@@ -530,7 +531,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33c], a
 	call Func_12ab5
 	ld a, $3e
-	farcall CheckIfEventFlagSet
+	farcall GetEventFlagValue
 	or a
 	jr nz, .asm_11015
 	ld c, SPRITE_ANIM_FIELD_0F
@@ -969,17 +970,17 @@ Func_11f4e: ; 11f4e (4:5f4e)
 
 OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_EndScriptLoop1
-	dw OWScript_CloseTextBox
+	dw OWScript_CloseAdvancedTextBox
 	dw OWScript_PrintTextString
 	dw Func_ccdc
 	dw OWScript_AskQuestionJump
 	dw OWScript_StartBattle
-	dw Func_cd83
+	dw OWScript_PrintVariableText
 	dw Func_cda8
 	dw OWScript_PrintTextCloseBox
 	dw Func_cdcb
 	dw Func_ce26
-	dw Func_ce84
+	dw OWScript_CloseTextBox
 	dw OWScript_GiveBoosterPacks
 	dw Func_cf0c
 	dw Func_cf12
@@ -995,7 +996,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d025
 	dw Func_d032
 	dw Func_d03f
-	dw OWScript_ScriptJump
+	dw OWScript_Jump
 	dw Func_d04f
 	dw Func_d055
 	dw OWScript_MovePlayer
@@ -1034,7 +1035,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_cd76
 	dw Func_d39d
 	dw Func_d3b9
-	dw Func_d3c9
+	dw OWScript_GivePCPack
 	dw Func_d3d1
 	dw Func_d3d4
 	dw Func_d3e0
@@ -1056,18 +1057,18 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_EndScriptLoop4
 	dw OWScript_EndScriptLoop5
 	dw OWScript_EndScriptLoop6
-	dw OWScript_CustomModifyEventFlags
-	dw Func_d460
-	dw OWScript_JumpIfFlagSet
-	dw Func_d484
-	dw Func_d49e
-	dw Func_d4a6
-	dw Func_d4ae
-	dw OWScript_SetEventFlags
-	dw Func_d4c3
-	dw Func_d4ca
-	dw OWScript_JumpIfFlagNotSet
-	dw Func_d452
+	dw OWScript_SetFlagValue
+	dw OWScript_JumpIfFlagZero1
+	dw OWScript_JumpIfFlagNonzero1
+	dw OWScript_JumpIfFlagEqual
+	dw OWScript_JumpIfFlagNotEqual
+	dw OWScript_JumpIfFlagNotLessThan
+	dw OWScript_JumpIfFlagLessThan
+	dw OWScript_MaxOutFlagValue
+	dw OWScript_ZeroOutFlagValue
+	dw OWScript_JumpIfFlagNonzero2
+	dw OWScript_JumpIfFlagZero2
+	dw OWScript_IncrementFlagValue
 	dw OWScript_EndScriptLoop7
 	dw OWScript_EndScriptLoop8
 	dw OWScript_EndScriptLoop9
