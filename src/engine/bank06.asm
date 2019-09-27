@@ -523,7 +523,7 @@ OpenInPlayAreaScreen_TransitionTable2:
 
 OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ld hl, wInPlayAreaInputTablePointer
 	ld e, [hl]
 	inc hl
@@ -655,7 +655,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ld [wInPlayAreaCurPosition], a
 .next
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
 .check_button
@@ -681,7 +681,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	ret
 
 .return
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .skip_sfx
 	call PlaySFX
@@ -947,7 +947,7 @@ GlossaryData2:
 
 Func_18661: ; 18661 (6:4661)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -978,7 +978,7 @@ Func_18661: ; 18661 (6:4661)
 	ld e, a
 .cursor_moved
 	ld a, $1
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	push de
 	call .draw_blank_cursor
 	pop de
@@ -1010,7 +1010,7 @@ Func_18661: ; 18661 (6:4661)
 	ret
 
 .check_cursor_moved
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .check_cursor_blink
 	call PlaySFX
@@ -2128,7 +2128,7 @@ endr
 ; if pressed, set the carry bit on.
 NamingScreen_CheckButtonState:
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .no_press
@@ -2277,7 +2277,7 @@ NamingScreen_CheckButtonState:
 	cp d
 	jp z, NamingScreen_CheckButtonState
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 .no_press
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
@@ -2293,7 +2293,7 @@ NamingScreen_CheckButtonState:
 	scf
 	ret
 .asm_69ef
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .asm_69f8
 	call PlaySFX
@@ -3001,7 +3001,7 @@ Func_1aec3: ; 1aec3 (6:6ec3)
 
 Func_1aefb: ; 1aefb (6:6efb)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_6f73
@@ -3075,7 +3075,7 @@ Func_1aefb: ; 1aefb (6:6efb)
 	cp d
 	jp z, Func_1aefb
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 .asm_6f73
 	ldh a, [hKeysPressed]
 	and $03
@@ -3091,7 +3091,7 @@ Func_1aefb: ; 1aefb (6:6efb)
 	scf
 	ret
 .asm_6f89
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .asm_6f92
 	call PlaySFX

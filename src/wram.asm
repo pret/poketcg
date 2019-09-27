@@ -1677,9 +1677,8 @@ wcfda:: ; cfda
 
 	ds $7
 
-; it's a flag variable being used in play-area view.
-; need analysis.
-wcfe3:: ; cfe3
+; a flag indicating whether sfx should be played.
+wPlaysSfx:: ; cfe3
 	ds $1
 
 wcfe4:: ; cfe4
