@@ -954,30 +954,33 @@ Func_18661: ; 18661 (6:4661)
 	ld e, a
 	ldh a, [hDPadHeld]
 	or a
-	jr z, .asm_46a2
+	jr z, .check_button
+; check input from dpad
 	bit D_LEFT_F, a
-	jr nz, .asm_467a
+	jr nz, .left_or_right
 	bit D_RIGHT_F, a
-	jr z, .asm_4680
-.asm_467a
+	jr z, .check_up_and_down
+.left_or_right
+; swap the lsb of x position value.
 	ld a, d
-	xor $01
+	xor $1
 	ld d, a
-	jr .asm_468c
-.asm_4680
+	jr .cursor_moved
+
+.check_up_and_down
 	bit D_UP_F, a
-	jr nz, .asm_4688
+	jr nz, .up_or_down
 	bit D_DOWN_F, a
-	jr z, .asm_46a2
-.asm_4688
+	jr z, .check_button
+.up_or_down
 	ld a, e
-	xor $01
+	xor $1
 	ld e, a
-.asm_468c
-	ld a, $01
+.cursor_moved
+	ld a, $1
 	ld [wcfe3], a
 	push de
-	call .asm_46d4
+	call .draw_blank_cursor
 	pop de
 	ld a, d
 	ld [wCheckMenuCursorXPosition], a
@@ -985,59 +988,68 @@ Func_18661: ; 18661 (6:4661)
 	ld [wCheckMenuCursorYPosition], a
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-.asm_46a2
+.check_button
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_46bd
+	jr z, .check_cursor_moved
 	and A_BUTTON
-	jr nz, .asm_46b3
-	ld a, $ff
+	jr nz, .a_button
+
+; b button
+	ld a, -1
 	call Func_190fb
 	scf
 	ret
-.asm_46b3
-	call .asm_46f3
-	ld a, $01
+
+; a button
+.a_button
+	call .draw_cursor
+	ld a, 1
 	call Func_190fb
 	scf
 	ret
-.asm_46bd
+
+.check_cursor_moved
 	ld a, [wcfe3]
 	or a
-	jr z, .asm_46c6
+	jr z, .check_cursor_blink
 	call PlaySFX
-.asm_46c6
+.check_cursor_blink
 	ld hl, wCheckMenuCursorBlinkCounter
 	ld a, [hl]
 	inc [hl]
-	and $0f
+	and %00001111
 	ret nz
-	ld a, $0f
+	ld a, SYM_CURSOR_R
 	bit D_RIGHT_F, [hl]
-	jr z, .asm_46d6
-.asm_46d4 ; 186d4 (6:46d4)
-	ld a, $00
-.asm_46d6
+	jr z, .draw_tile
+.draw_blank_cursor ; 186d4 (6:46d4)
+	ld a, SYM_SPACE
+.draw_tile
 	ld e, a
-	ld a, $0a
+	ld a, 10
 	ld l, a
 	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
-	call HtimesL
+	call HtimesL ; h = x_pos * 10
 	ld a, l
-	add $01
+	add 1 ; a = 10 + 1 = 11
 	ld b, a
 	ld a, [wCheckMenuCursorYPosition]
-	sla a
-	add $0e
+	sla a ; a = y_pos * 2
+	add 14 ; a = y_pos * 2 + 14
 	ld c, a
 	ld a, e
+	; b = 11
+	; c = y_pos * 2 + 14
+	; h = x_pos * 10
+	; l = 10
 	call WriteByteToBGMap0
 	or a
 	ret
-.asm_46f3: ; 186f3 (6:46f3)
-	ld a, $0f
-	jr .asm_46d6
+.draw_cursor ; 186f3 (6:46f3)
+	ld a, SYM_CURSOR_R
+	jr .draw_tile
 
 ; (6:46f7)
 INCLUDE "data/effect_commands.asm"
