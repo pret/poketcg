@@ -1,437 +1,914 @@
-MoveAnimation_52c6: ; (6:52c6)
-	db $02, $01, $03, $07, $01, $fa, $03, $09
+ani_end: MACRO
 	db $00
+ENDM
+ani_normal: MACRO
+	db $01, \1
+ENDM
+ani_player: MACRO
+	db $02, \1
+ENDM
+ani_opponent: MACRO
+	db $03, \1
+ENDM
+ani_unknown: MACRO
+	db $04, \1
+ENDM
+ani_unknown2: MACRO
+	db $05, \1
+ENDM
+ani_end2: MACRO
+	db $06
+ENDM
+
+PointerTable_MoveAnimation:
+	dw $0000
+	dw MoveAnimation_52c6
+	dw MoveAnimation_52cf
+	dw MoveAnimation_52c6
+	dw MoveAnimation_52c6
+	dw MoveAnimation_52c6
+	dw MoveAnimation_52d8
+	dw MoveAnimation_52d8
+	dw MoveAnimation_52e3
+	dw MoveAnimation_52d8
+	dw MoveAnimation_52f0
+	dw MoveAnimation_52f0
+	dw MoveAnimation_52f0
+	dw MoveAnimation_52f0
+	dw MoveAnimation_52fd
+	dw MoveAnimation_5308
+	dw MoveAnimation_5313
+	dw MoveAnimation_531e
+	dw MoveAnimation_5329
+	dw MoveAnimation_5334
+	dw MoveAnimation_533f
+	dw MoveAnimation_534a
+	dw MoveAnimation_5357
+	dw MoveAnimation_5362
+	dw MoveAnimation_5362
+	dw MoveAnimation_536d
+	dw MoveAnimation_536d
+	dw MoveAnimation_536d
+	dw MoveAnimation_5378
+	dw MoveAnimation_5383
+	dw MoveAnimation_538e
+	dw MoveAnimation_5383
+	dw MoveAnimation_5399
+	dw MoveAnimation_53a4
+	dw MoveAnimation_53af
+	dw MoveAnimation_53ba
+	dw MoveAnimation_53c5
+	dw MoveAnimation_53d0
+	dw MoveAnimation_53d5
+	dw MoveAnimation_53e0
+	dw MoveAnimation_53eb
+	dw MoveAnimation_53f6
+	dw MoveAnimation_53f6
+	dw MoveAnimation_53f6
+	dw MoveAnimation_5401
+	dw MoveAnimation_540c
+	dw MoveAnimation_5417
+	dw MoveAnimation_5422
+	dw MoveAnimation_542d
+	dw MoveAnimation_542d
+	dw MoveAnimation_5438
+	dw MoveAnimation_5438
+	dw MoveAnimation_5438
+	dw MoveAnimation_5438
+	dw MoveAnimation_5438
+	dw MoveAnimation_5443
+	dw MoveAnimation_5443
+	dw MoveAnimation_544e
+	dw MoveAnimation_5443
+	dw MoveAnimation_5443
+	dw MoveAnimation_5443
+	dw MoveAnimation_5453
+	dw MoveAnimation_5453
+	dw MoveAnimation_5460
+	dw MoveAnimation_5453
+	dw MoveAnimation_5467
+	dw MoveAnimation_5467
+	dw MoveAnimation_5472
+	dw MoveAnimation_5472
+	dw MoveAnimation_547d
+	dw MoveAnimation_5488
+	dw MoveAnimation_548f
+	dw MoveAnimation_549c
+	dw MoveAnimation_549c
+	dw MoveAnimation_54a9
+	dw MoveAnimation_54a9
+	dw MoveAnimation_54ae
+	dw MoveAnimation_54ae
+	dw MoveAnimation_54b3
+	dw MoveAnimation_54be
+	dw MoveAnimation_54c3
+	dw MoveAnimation_54c8
+	dw MoveAnimation_54d3
+	dw MoveAnimation_54e0
+	dw MoveAnimation_54eb
+	dw MoveAnimation_54f2
+	dw MoveAnimation_54f9
+	dw MoveAnimation_5504
+	dw MoveAnimation_5513
+	dw MoveAnimation_5516
+	dw MoveAnimation_5521
+	dw MoveAnimation_552e
+	dw MoveAnimation_5533
+	dw MoveAnimation_553a
+	dw MoveAnimation_5543
+	dw MoveAnimation_554a
+	dw MoveAnimation_5555
+	dw MoveAnimation_555e
+	dw MoveAnimation_556d
+	dw MoveAnimation_5574
+	dw MoveAnimation_557b
+	dw MoveAnimation_557e
+	dw MoveAnimation_5583
+	dw MoveAnimation_5583
+	dw MoveAnimation_5583
+	dw MoveAnimation_558c
+	dw MoveAnimation_5597
+	dw MoveAnimation_559c
+	dw MoveAnimation_55a1
+	dw MoveAnimation_55a4
+	dw MoveAnimation_55a9
+	dw MoveAnimation_55b4
+	dw MoveAnimation_55b4
+	dw MoveAnimation_55bf
+	dw MoveAnimation_55c4
+	dw MoveAnimation_55c9
+	dw MoveAnimation_55ce
+	dw MoveAnimation_55d5
+	dw MoveAnimation_55e0
+	dw MoveAnimation_55e5
+	dw MoveAnimation_55e6
+	dw MoveAnimation_55ed
+	dw MoveAnimation_55f2
+	dw MoveAnimation_55fb
+	dw MoveAnimation_55fe
+	dw MoveAnimation_5601
+	dw MoveAnimation_5604
+	dw MoveAnimation_5607
+	dw MoveAnimation_560a
+	dw MoveAnimation_560f
+	dw MoveAnimation_5612
+	dw MoveAnimation_561d
+	dw MoveAnimation_5628
+	dw MoveAnimation_562d
+	dw MoveAnimation_5632
+	dw MoveAnimation_5637
+	dw MoveAnimation_5644
+	dw MoveAnimation_564f
+	dw MoveAnimation_5654
+	dw MoveAnimation_5659
+	dw MoveAnimation_565e
+	dw MoveAnimation_5665
+	dw MoveAnimation_5668
+	dw MoveAnimation_5673
+	dw MoveAnimation_5673
+
+MoveAnimation_52c6:    ; (6:52c6)
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_52cf:
-	db $02, $01, $03, $08, $01, $fb, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $08
+	ani_normal 	 	   ANI_SHAKE2
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_52d8:
-	db $02, $01, $03, $0a, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       ANI_THUNDER_SHOCK
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_52e3:
-	db $02, $01, $03, $0b, $03, $0c, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $0b
+	ani_opponent       $0c
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_52f0:
-	db $02, $01, $01, $65, $01, $0d, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_normal 	 	   $65
+	ani_normal 	 	   $0d
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_52fd:
-	db $02, $01, $03, $0e, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $0e
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5308:
-	db $02, $01, $03, $0f, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $0f
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5313:
-	db $02, $01, $01, $10, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_normal 	 	   $10
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_531e:
-	db $02, $01, $03, $11, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $11
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5329:
-	db $02, $01, $01, $12, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_normal 	 	   $12
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5334:
-	db $02, $01, $03, $13, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $13
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_533f:
-	db $02, $01, $01, $14, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_normal 	 	   $14
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_534a:
-	db $02, $01, $03, $0b, $03, $13, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $0b
+	ani_opponent       $13
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5357:
-	db $02, $01, $03, $15, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $15
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5362:
-	db $02, $01, $01, $16, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_normal 	 	   $16
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_536d:
-	db $02, $01, $03, $17, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $17
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5378:
-	db $02, $01, $03, $18, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $18
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5383:
-	db $02, $01, $03, $19, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $19
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_538e:
-	db $02, $01, $03, $1a, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $1a
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5399:
-	db $02, $01, $03, $1b, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $1b
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53a4:
-	db $02, $01, $03, $1c, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $1c
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53af:
-	db $02, $01, $03, $1d, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $1d
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53ba:
-	db $02, $01, $03, $1e, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       $1e
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53c5:
-	db $02, $01, $03, $1f, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $1f
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53d0:
-	db $02, $01, $02, $20
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $20
+	ani_end
 
 MoveAnimation_53d5:
-	db $02, $01, $03, $21, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $21
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53e0:
-	db $02, $01, $03, $22, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $22
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53eb:
-	db $02, $01, $03, $23, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $23
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_53f6:
-	db $02, $01, $03, $24, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player 	 	   ANI_SPELL_MOVE
+	ani_opponent       ANI_FURY_SWEEPES
+	ani_opponent       ANI_GET_HIT
+	ani_normal 	 	   ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5401:
-	db $02, $01, $03, $25, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $25
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_540c:
-	db $02, $01, $03, $26, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $26
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5417:
-	db $02, $01, $03, $27, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $27
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5422:
-	db $02, $01, $03, $28, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $28
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_542d:
-	db $02, $01, $03, $29, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $29
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5438:
-	db $02, $01, $03, $2a, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2a
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5443:
-	db $02, $01, $03, $2b, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2b
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_544e:
-	db $02, $01, $03, $2b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2b
+	ani_end
 
 MoveAnimation_5453:
-	db $02, $01, $03, $2c, $01, $66, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2c
+	ani_normal         $66
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5460:
-	db $02, $01, $03, $2c, $01, $66
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2c
+	ani_normal         $66
+	ani_end
 
 MoveAnimation_5467:
-	db $02, $01, $03, $2d, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2d
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5472:
-	db $02, $01, $03, $2e, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2e
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_547d:
-	db $02, $01, $03, $2f, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2f
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5488:
-	db $02, $01, $02, $30, $01, $66
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $30
+	ani_normal         $66
+	ani_end
 
 MoveAnimation_548f:
-	db $02, $01, $01, $66, $03, $31, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $66
+	ani_opponent       $31
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_549c:
-	db $02, $01, $01, $65, $03, $32, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_opponent       $32
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_54a9:
-	db $02, $01, $03, $33
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $33
+	ani_end
 
 MoveAnimation_54ae:
-	db $02, $01, $03, $34
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $34
+	ani_end
 
 MoveAnimation_54b3:
-	db $02, $01, $01, $35, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $35
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_54be:
-	db $02, $01, $02, $36
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $36
+	ani_end
 
 MoveAnimation_54c3:
-	db $02, $01, $02, $37
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $37
+	ani_end
 
 MoveAnimation_54c8:
-	db $02, $01, $01, $38, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $38
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_54d3:
-	db $02, $01, $01, $38, $03, $07, $01, $fa, $03, $09, $02, $36
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $38
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_player         $36
+	ani_end
 
 MoveAnimation_54e0:
-	db $02, $01, $03, $39, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $39
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_54eb:
-	db $02, $01, $02, $3a, $01, $fa
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $3a
+	ani_normal         ANI_SHAKE1
+	ani_end
 
 MoveAnimation_54f2:
-	db $02, $01, $01, $fa, $03, $3b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         ANI_SHAKE1
+	ani_opponent       $3b
+	ani_end
 
 MoveAnimation_54f9:
-	db $02, $01, $02, $3c, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $3c
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5504:
-	db $02, $01, $02, $3d, $01, $65, $02, $41, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $3d
+	ani_normal         $65
+	ani_player         $41
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5513:
-	db $02, $01
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_end
 
 MoveAnimation_5516:
-	db $02, $01, $03, $3f, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $3f
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5521:
-	db $02, $01, $03, $40, $03, $07, $01, $fa, $03, $09, $03, $3b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $40
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_opponent       $3b
+	ani_end
 
 MoveAnimation_552e:
-	db $02, $01, $01, $65
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_end
 
 MoveAnimation_5533:
-	db $02, $01, $01, $65, $03, $01
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_opponent       $01
+	ani_end
 
 MoveAnimation_553a:
-	db $02, $01, $01, $65, $04, $04, $05, $46
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_end
 
 MoveAnimation_5543:
-	db $04, $04, $05, $46, $01, $65
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_normal         $65
+	ani_end
 
 MoveAnimation_554a:
-	db $04, $04, $05, $46, $01, $65, $05, $47, $05, $47
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_normal         $65
+	ani_unknown2       $47
+	ani_unknown2       $47
+	ani_end
 
 MoveAnimation_5555:
-	db $04, $04, $05, $46, $01, $45, $04, $01
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_normal         $45
+	ani_unknown        $01
+	ani_end
 
 MoveAnimation_555e:
-	db $04, $04, $05, $46, $05, $44, $04, $04, $05, $07, $01, $fa, $05, $09
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_unknown2       $44
+	ani_unknown        $04
+	ani_unknown2       $07
+	ani_normal         ANI_SHAKE1
+	ani_unknown2       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_556d:
-	db $04, $04, $05, $46, $05, $49
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_unknown2       $49
+	ani_end
 
 MoveAnimation_5574:
-	db $02, $01, $04, $04, $01, $4a
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_unknown        $04
+	ani_normal         $4a
+	ani_end
 
 MoveAnimation_557b:
-	db $02, $01
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_end
 
 MoveAnimation_557e:
-	db $02, $01, $01, $65
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_end
 
 MoveAnimation_5583:
-	db $02, $01, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_558c:
-	db $02, $01, $03, $29, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $29
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5597:
-	db $02, $01, $02, $33
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $33
+	ani_end
 
 MoveAnimation_559c:
-	db $02, $01, $02, $4b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $4b
+	ani_end
 
 MoveAnimation_55a1:
-	db $02, $01
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_end
 
 MoveAnimation_55a4:
-	db $02, $01, $02, $4d
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $4d
+	ani_end
 
 MoveAnimation_55a9:
-	db $02, $01, $03, $22, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $22
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55b4:
-	db $02, $01, $02, $4d, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $4d
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55bf:
-	db $02, $01, $03, $2b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2b
+	ani_end
 
 MoveAnimation_55c4:
-	db $02, $01, $03, $17
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $17
+	ani_end
 
 MoveAnimation_55c9:
-	db $02, $01, $01, $65
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $65
+	ani_end
 
 MoveAnimation_55ce:
-	db $02, $01, $03, $18, $03, $3b
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $18
+	ani_opponent       $3b
+	ani_end
 
 MoveAnimation_55d5:
-	db $02, $01, $02, $04, $02, $07, $01, $fc, $02, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $04
+	ani_player         $07
+	ani_normal         ANI_SHAKE3
+	ani_player         ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55e0:
-	db $02, $01, $01, $12
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_normal         $12
+	ani_end
 
 MoveAnimation_55e5:
-	db $00
+	ani_end
 
 MoveAnimation_55e6:
-	db $04, $04, $05, $06, $05, $09
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $06
+	ani_unknown2       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55ed:
-	db $02, $3e, $02, $09
-	db $00
+	ani_player         $3e
+	ani_player         ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55f2:
-	db $04, $01, $02, $07, $01, $fc, $02, $09
-	db $00
+	ani_unknown        $01
+	ani_player         $07
+	ani_normal         ANI_SHAKE3
+	ani_player         ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_55fb:
-	db $03, $05
-	db $00
+	ani_opponent       $05
+	ani_end
 
 MoveAnimation_55fe:
-	db $03, $04
-	db $00
+	ani_opponent       $04
+	ani_end
 
 MoveAnimation_5601:
-	db $03, $02
-	db $00
+	ani_opponent       $02
+	ani_end
 
 MoveAnimation_5604:
-	db $03, $03
-	db $00
+	ani_opponent       $03
+	ani_end
 
 MoveAnimation_5607:
-	db $02, $04
-	db $00
+	ani_player         $04
+	ani_end
 
 MoveAnimation_560a:
-	db $02, $01, $03, $2a
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2a
+	ani_end
 
 MoveAnimation_560f:
-	db $03, $3b
-	db $00
+	ani_opponent       $3b
+	ani_end
 
 MoveAnimation_5612:
-	db $04, $04, $05, $44, $05, $07, $01, $fa, $05, $09
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $44
+	ani_unknown2       $07
+	ani_normal         ANI_SHAKE1
+	ani_unknown2       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_561d:
-	db $04, $04, $05, $4c, $05, $07, $01, $fa, $05, $09
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $4c
+	ani_unknown2       $07
+	ani_normal         ANI_SHAKE1
+	ani_unknown2       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5628:
-	db $04, $04, $01, $4e
-	db $00
+	ani_unknown        $04
+	ani_normal         $4e
+	ani_end
 
 MoveAnimation_562d:
-	db $04, $04, $01, $4f
-	db $00
+	ani_unknown        $04
+	ani_normal         $4f
+	ani_end
 
 MoveAnimation_5632:
-	db $04, $04, $05, $09
-	db $00
+	ani_unknown        $04
+	ani_unknown2       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5637:
-	db $02, $01, $03, $39, $03, $07, $01, $fa, $03, $09, $01, $65
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $39
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_normal         $65
+	ani_end
 
 MoveAnimation_5644:
-	db $02, $01, $02, $4b, $03, $07, $01, $fa, $03, $09
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_player         $4b
+	ani_opponent       ANI_GET_HIT
+	ani_normal         ANI_SHAKE1
+	ani_opponent       ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_564f:
-	db $02, $05, $02, $09
-	db $00
+	ani_player         $05
+	ani_player         ANI_SHOW_DAMAGE
+	ani_end
 
 MoveAnimation_5654:
-	db $02, $3e, $01, $98
-	db $00
+	ani_player         $3e
+	ani_normal         $98
+	ani_end
 
 MoveAnimation_5659:
-	db $02, $03, $01, $98
-	db $00
+	ani_player         $03
+	ani_normal         $98
+	ani_end
 
 MoveAnimation_565e:
-	db $02, $01, $03, $2c, $01, $66
-	db $00
+	ani_player         ANI_SPELL_MOVE
+	ani_opponent       $2c
+	ani_normal         $66
+	ani_end
 
 MoveAnimation_5665:
-	db $03, $39
-	db $00
+	ani_opponent       $39
+	ani_end
 
 MoveAnimation_5668:
-	db $04, $04, $05, $46, $04, $01, $02, $3e, $03, $3e
-	db $00
+	ani_unknown        $04
+	ani_unknown2       $46
+	ani_unknown        $01
+	ani_player         $3e
+	ani_opponent       $3e
+	ani_end
 
 MoveAnimation_5673:
-	db $00
+	ani_end
