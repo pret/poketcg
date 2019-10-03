@@ -1623,8 +1623,82 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def EVENT_FLAG_31,           $0a, %00000011
 	flag_def EVENT_FLAG_32,           $0b, %10000000
 	flag_def EVENT_JOSHUA_STATE,      $0b, %01110000
+	flag_def EVENT_FLAG_34,           $0b, %00001100
+	flag_def EVENT_FLAG_35,           $0b, %00000011
+	flag_def EVENT_FLAG_36,           $0c, %11100000
+	flag_def EVENT_FLAG_37,           $0c, %00011100
+	flag_def EVENT_FLAG_38,           $0c, %00000010
+	flag_def EVENT_FLAG_39,           $0c, %00000001
+	flag_def EVENT_FLAG_3A,           $0d, %10000000
+	flag_def EVENT_FLAG_3B,           $0d, %01000000
+	flag_def EVENT_FLAG_3C,           $0d, %00100000
+	flag_def EVENT_FLAG_3D,           $0d, %00010000
+	flag_def EVENT_FLAG_3E,           $0d, %00001110
+	flag_def EVENT_FLAG_3F,           $0e, %11100000
+	flag_def EVENT_FLAG_40,           $0e, %00011100
+	flag_def EVENT_FLAG_41,           $0f, %11100000
+	flag_def EVENT_FLAG_42,           $10, %10000000
+	flag_def EVENT_FLAG_43,           $10, %01000000
+	flag_def EVENT_FLAG_44,           $10, %00110000
+	flag_def EVENT_FLAG_45,           $10, %00001100
+	flag_def EVENT_FLAG_46,           $10, %00000010
+	flag_def EVENT_FLAG_47,           $10, %00000001
+	flag_def EVENT_FLAG_48,           $11, %11100000
+	flag_def EVENT_FLAG_49,           $11, %00011100
+	flag_def EVENT_FLAG_4A,           $12, %11100000
+	flag_def EVENT_FLAG_4B,           $13, %10000000
+	flag_def EVENT_FLAG_4C,           $13, %01100000
+	flag_def EVENT_FLAG_4D,           $13, %00011000
+	flag_def EVENT_FLAG_4E,           $13, %00000100
+	flag_def EVENT_FLAG_4F,           $13, %00000010
+	flag_def EVENT_FLAG_50,           $14, %10000000
+	flag_def EVENT_FLAG_51,           $14, %01000000
+	flag_def EVENT_FLAG_52,           $14, %00100000
+	flag_def EVENT_FLAG_53,           $14, %00010000
+	flag_def EVENT_FLAG_54,           $14, %00001000
+	flag_def EVENT_FLAG_55,           $14, %00000100
+	flag_def EVENT_FLAG_56,           $14, %00000010
+	flag_def EVENT_FLAG_57,           $14, %00000001
+	flag_def EVENT_FLAG_58,           $15, %11110000
+	flag_def EVENT_FLAG_59,           $15, %00001000
+	flag_def EVENT_FLAG_5A,           $16, %10000000
+	flag_def EVENT_FLAG_5B,           $16, %01000000
+	flag_def EVENT_FLAG_5C,           $16, %00100000
+	flag_def EVENT_FLAG_5D,           $16, %00010000
+	flag_def EVENT_FLAG_5E,           $16, %00001000
+	flag_def EVENT_FLAG_5F,           $16, %00000100
+	flag_def EVENT_FLAG_60,           $16, %00000010
+	flag_def EVENT_FLAG_61,           $16, %00000001
+	flag_def EVENT_FLAG_62,           $16, %11111111
+	flag_def EVENT_FLAG_63,           $17, %10000000
+	flag_def EVENT_FLAG_64,           $17, %01000000
+	flag_def EVENT_FLAG_65,           $17, %00110000
+	flag_def EVENT_FLAG_66,           $17, %00001000
+	flag_def EVENT_FLAG_67,           $17, %00000100
+	flag_def EVENT_FLAG_68,           $18, %11000000
+	flag_def EVENT_FLAG_69,           $18, %00110000
+	flag_def EVENT_FLAG_6A,           $18, %00001100
+	flag_def EVENT_FLAG_6B,           $18, %00000011
+	flag_def EVENT_FLAG_6C,           $19, %11000000
+	flag_def EVENT_FLAG_6D,           $19, %00100000
+	flag_def EVENT_FLAG_6E,           $19, %00010000
+	flag_def EVENT_FLAG_6F,           $19, %00001000
+	flag_def EVENT_FLAG_70,           $19, %00000100
+	flag_def EVENT_FLAG_71,           $19, %00111100
+	flag_def EVENT_FLAG_72,           $1a, %11111100
+	flag_def EVENT_FLAG_73,           $1a, %00000011
+	flag_def EVENT_FLAG_74,           $1b, %11111111
+	flag_def EVENT_FLAG_75,           $1c, %11110000
+	flag_def EVENT_FLAG_76,           $1c, %00001111
 
-	INCROM $cb9f, $cc32
+Func_cc25: ; cc25 (3:4c25)
+	ld hl, wd0ca
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call Func_cc32
+	call CloseAdvancedDialogueBox
+	ret
 
 Func_cc32: ; cc32 (3:4c32)
 	push hl
@@ -3549,7 +3623,88 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	jp Func_c926
 ; 0xe553
 
-	INCROM $e553, $f580
+	INCROM $e553, $e5c4
+
+GrassClubLobbyAfterDuel: ; e5c4 (3:65cb)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+.after_duel_table
+	db BRITTANY
+	db BRITTANY
+	dw OWSequence_BeatBrittany
+	dw OWSequence_LostToBrittany
+	db $00
+
+OWSequence_Brittany: ; e5d2 (3:65d2)
+	start_script
+	run_script OWScript_JumpIfFlagLessThan
+	db EVENT_FLAG_35
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text06e0
+	tx Text06e1
+	run_script OWScript_AskQuestionJump
+	tx Text06e2
+	dw .wantToDuel
+	run_script OWScript_PrintTextString
+	tx Text06e3
+	run_script OWScript_EndScriptCloseText
+
+.wantToDuel
+	run_script OWScript_PrintTextString
+	tx Text06e4
+	run_script OWScript_StartBattle
+	db PRIZES_4
+	db ETCETERA_DECK_ID
+	db MUSIC_DUEL_THEME_1
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatBrittany: ; e5ee (3:65ee)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text06e5
+	run_script OWScript_GiveBoosterPacks
+	db BOOSTER_MYSTERY_GRASS_COLORLESS
+	db BOOSTER_MYSTERY_GRASS_COLORLESS
+	db NO_BOOSTER
+	run_script OWScript_JumpIfFlagLessThan
+	db EVENT_FLAG_35
+	db $02
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text06e6
+	tx Text06e7
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_3C
+	run_script OWScript_JumpIfFlagNotLessThan
+	db EVENT_FLAG_35
+	db $02
+	dw .ows_e617
+	run_script OWScript_JumpIfFlagZero2
+	db EVENT_FLAG_3A
+	dw .ows_e617
+	run_script OWScript_JumpIfFlagZero2
+	db EVENT_FLAG_3B
+	dw .ows_e617
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_35
+	db $01
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_1E
+	run_script OWScript_PrintTextString
+	tx Text06e8
+.ows_e617
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_LostToBrittany: ; e618 (3:6618)
+	start_script
+	run_script OWScript_PrintTextCloseBox
+	tx Text06e9
+; 0xe61c
+
+	INCROM $e61c, $f580
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69

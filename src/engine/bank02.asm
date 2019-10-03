@@ -2171,7 +2171,7 @@ Func_8f8a: ; 8f8a (2:4f8a)
 
 Func_8f9d: ; 8f9d (2:4f9d)
 	call EnableSRAM
-	ld a, [s0b700]
+	ld a, [sCurrentlySelectedDeck]
 	call DisableSRAM
 	ld h, $3
 	ld l, a
@@ -2185,7 +2185,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call FillRectangle
 	ld a, [wceb1]
 	call EnableSRAM
-	ld [s0b700], a
+	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
 	call Func_9326
 	call GetPointerToDeckName
@@ -2519,7 +2519,7 @@ Func_9168: ; 9168 (2:5168)
 	ld [wceb5], a
 .asm_9214
 	call EnableSRAM
-	ld a, [s0b700]
+	ld a, [sCurrentlySelectedDeck]
 	ld c, a
 	ld b, $0
 	ld d, $2
@@ -2539,7 +2539,7 @@ Func_9168: ; 9168 (2:5168)
 	jr .asm_921f
 .asm_9234
 	ld a, c
-	ld [s0b700], a
+	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
 	call Func_9326
 	call EnableLCD
@@ -2628,7 +2628,7 @@ Func_9314: ; 9314 (2:5314)
 
 Func_9326: ; 9326 (2:5326)
 	call EnableSRAM
-	ld a, [s0b700]
+	ld a, [sCurrentlySelectedDeck]
 	call DisableSRAM
 	ld h, 3
 	ld l, a
@@ -2643,7 +2643,32 @@ Func_9326: ; 9326 (2:5326)
 	ret
 
 Func_9345: ; 9345 (2:5345)
-	INCROM $9345, $9843
+	INCROM $9345, $9649
+
+; checks if selected deck has any basics
+Func_9649: ; 9649 (2:5649)
+	ld hl, wcf17
+.asm_964c
+	ld a, [hli]
+	ld e, a
+	or a
+	jr z, .asm_9665
+	call LoadCardDataToBuffer1_FromCardID
+	jr c, .asm_9665
+	ld a, [wLoadedCard1Type]
+	and $08
+	jr nz, .asm_964c
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .asm_964c
+	scf
+	ret
+.asm_9665
+	or a
+	ret
+; 0x9667
+
+	INCROM $9667, $9843
 
 Func_9843: ; 9843 (2:5843)
 	INCROM $9843, $98a6

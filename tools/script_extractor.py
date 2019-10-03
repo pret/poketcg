@@ -4,7 +4,7 @@ import argparse
 
 # - (Possibly) add new type of word that looks for matches in the sym file
 # - add new one for event flag
-def decodeLine(scriptList, game_data, loc, ignore_broken):
+def decodeLine(scriptList, game_data, loc, ignore_broken, branchList):
 	currLine = scriptList[game_data[loc]]
 	ret = "\trun_script " + currLine[0] + "\n"
 	loc+=1
@@ -15,6 +15,14 @@ def decodeLine(scriptList, game_data, loc, ignore_broken):
 			loc += 1
 		elif c == "w":
 			ret += "\tdw $" + format((game_data[loc] + (game_data[loc+1]<<8)),"04x") + "\n"
+			loc += 2
+		elif c == "j":
+			wordLoc = (game_data[loc] + (game_data[loc+1]<<8))
+			if wordLoc == 0000:
+				ret += "\tdw NO_JUMP\n"
+			else:
+				ret += "\tdw .ows_" + format(wordLoc+0x8000,"04x") + "\n"
+				branchList.append(wordLoc)
 			loc += 2
 		elif c == "t":
 			ret += "\ttx Text" + format((game_data[loc] + (game_data[loc+1]<<8)),"04x") + "\n"
@@ -27,14 +35,14 @@ def decodeLine(scriptList, game_data, loc, ignore_broken):
 			print("UNACCEPTED CHARACTER: " + c)
 	return (loc, ret, quit)
 			
-def main_2(): # temp
+def main2(): # temp
 	with open("tcg.gbc", "rb") as file:
 		game_data = file.read()
 	loc = 0xcb37
-	start = 0
-	end = 0x33 # inclusive
+	start = 0x36
+	end = 0x76 # inclusive
 	for i in range(start,end+1):
-		print("\tflag_def EVENT_FLAG_" + format(i,"02X") + ","+(" "*7)+"$"\
+		print("\tflag_def EVENT_FLAG_" + format(i,"02X") + ","+(" "*11)+"$"\
 		 + format(game_data[loc+2*i],"02x") + ", %" + format(game_data[loc+2*i + 1],"08b"))
 	print("; " + format(loc + 2*(end+1),"02x"))
 
@@ -43,13 +51,19 @@ def main():
 
 	with open("tcg.gbc", "rb") as file:
 	    game_data = file.read()
-	loc = 0xe2d1
 	auto = True
 	end = False
 	ignore_broken = True
+	branchList = [0x65ee] # all are bank 3 offsets
+	while (len(branchList) > 0):
+		loc = branchList.pop(0) + 0x8000
+		printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList)
+
+def printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList):
 	script = ""
 	if game_data[loc] != 0xe7:
-		print("Error: first byte was not start_script")
+		#print("Error: first byte was not start_script")
+		print(".ows_" + format(loc,"04x"))
 	else:
  		
 		# TODO this is hacky please don't do this 
@@ -59,7 +73,7 @@ def main():
 		loc += 1
 		print("\tstart_script")
 	while not end:
-		loc, outstr, end = decodeLine(scriptList,game_data,loc,ignore_broken)
+		loc, outstr, end = decodeLine(scriptList,game_data,loc,ignore_broken,branchList)
 		outstr = outstr[:-1] # [:-1] strips the newline at the end
 		if auto:
 			print(outstr)
@@ -75,11 +89,11 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_CloseAdvancedTextBox", "", False),
 	("OWScript_PrintTextString", "t", False),
 	("Func_ccdc", "bb", False),
-	("OWScript_AskQuestionJump", "tw", False), # more complex behavior too (jumping)
+	("OWScript_AskQuestionJump", "tj", False), # more complex behavior too (jumping)
 	("OWScript_StartBattle", "bbb", False),
 	("OWScript_PrintVariableText", "tt", False),
 	("Func_cda8", "bbbb", False),
-	("OWScript_PrintTextCloseBox", "t", False),
+	("OWScript_PrintTextCloseBox", "t", True),
 	("Func_cdcb", "bb", False),
 	("Func_ce26", "bb", False),
 	("OWScript_CloseTextBox", "", False),
@@ -162,14 +176,14 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_SetFlagValue", "bb", False),
 	("OWScript_JumpIfFlagZero1", "q", False),
 	("OWScript_JumpIfFlagNonzero1", "q", False),
-	("OWScript_JumpIfFlagEqual", "bbw", False), # also capable of jumping
-	("OWScript_JumpIfFlagNotEqual", "bbw", False), # jumps
-	("OWScript_JumpIfFlagNotLessThan", "q", False),
-	("OWScript_JumpIfFlagLessThan", "q", False),
+	("OWScript_JumpIfFlagEqual", "bbj", False), # also capable of jumping
+	("OWScript_JumpIfFlagNotEqual", "bbj", False), # jumps
+	("OWScript_JumpIfFlagNotLessThan", "bbj", False),
+	("OWScript_JumpIfFlagLessThan", "bbj", False),
 	("OWScript_MaxOutFlagValue", "b", False),
 	("OWScript_ZeroOutFlagValue", "q", False),
-	("OWScript_JumpIfFlagNonzero2", "bw", False),
-	("OWScript_JumpIfFlagZero2", "q", False),
+	("OWScript_JumpIfFlagNonzero2", "bj", False),
+	("OWScript_JumpIfFlagZero2", "bj", False),
 	("OWScript_IncrementFlagValue", "b", False),
 	("OWScript_EndScriptLoop7", "q", True),
 	("OWScript_EndScriptLoop8", "q", True),

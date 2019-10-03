@@ -579,7 +579,7 @@ BrittanyData:
 	db $04
 	db $0e
 	db $00
-	dw $65d2 ; Pointer to NPC Data
+	dw OWSequence_Brittany ; Pointer to NPC Data
 	tx Text03c4
 	db BRITTANY_PIC
 	db $28
