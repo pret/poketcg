@@ -1631,7 +1631,7 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def EVENT_FLAG_39,           $0c, %00000001
 	flag_def EVENT_FLAG_3A,           $0d, %10000000
 	flag_def EVENT_FLAG_3B,           $0d, %01000000
-	flag_def EVENT_FLAG_3C,           $0d, %00100000
+	flag_def FLAG_BEAT_BRITTANY,      $0d, %00100000
 	flag_def EVENT_FLAG_3D,           $0d, %00010000
 	flag_def EVENT_FLAG_3E,           $0d, %00001110
 	flag_def EVENT_FLAG_3F,           $0e, %11100000
@@ -1852,8 +1852,10 @@ Func_ccdc: ; ccdc (3:4cdc)
 Func_cce4: ; cce4 (3:4ce4)
 	ld a, $1
 	ld [wDefaultYesOrNo], a
+;	fallthrough
 
-; Asks the player a question then jumps if they answer yes
+; Asks the player a question then jumps if they answer yes. Seem to be able to
+; take a text of 0000 to overwrite last with (yes no) prompt at the bottom
 OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 	ld l, c
 	ld h, b
@@ -2202,17 +2204,18 @@ Func_cf2d: ; cf2d (3:4f2d)
 	jr nc, asm_cf1f
 	jr asm_cf19
 
-Func_cf3f: ; cf3f (3:4f3f)
+; Gives the first arg as a card. If that's 0 pulls from wd697
+OWScript_GiveCard: ; cf3f (3:4f3f)
 	ld a, c
 	or a
-	jr nz, .asm_cf46
+	jr nz, .giveCard
 	ld a, [wd697]
 
-.asm_cf46
+.giveCard
 	call AddCardToCollection
 	jp IncreaseOWScriptPointerBy2
 
-Func_cf4c: ; cf4c (3:4f4c)
+OWScript_TakeCard: ; cf4c (3:4f4c)
 	ld a, c
 	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy2
@@ -3590,7 +3593,12 @@ OWJump_TalkToAmyAgain: ; e356 (3:6356)
 	run_script OWScript_EndScriptCloseText
 ; 0xe369
 
-	INCROM $e369, $e52c
+	INCROM $e369, $e525
+
+GrassClubEntranceAfterDuel: ; e525 (3:6525)
+	ld hl, GrassClubEntranceAfterDuelTable
+	call FindEndOfBattleScript
+	ret
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
@@ -3623,12 +3631,30 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	jp Func_c926
 ; 0xe553
 
-	INCROM $e553, $e5c4
+GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
+	db MICHAEL
+	db MICHAEL
+	dw $6597
+	dw $65ab
 
-GrassClubLobbyAfterDuel: ; e5c4 (3:65cb)
+	db RONALD2
+	db RONALD2
+	dw OWSequence_BeatFirstRonaldFight
+	dw OWSequence_LostToFirstRonaldFight
+
+	db RONALD3
+	db RONALD3
+	dw OWSequence_BeatSecondRonaldFight
+	dw OWSequence_LostToSecondRonaldFight
+	db $00
+
+	INCROM $e566, $e5c4
+
+GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+
 .after_duel_table
 	db BRITTANY
 	db BRITTANY
@@ -3677,17 +3703,17 @@ OWSequence_BeatBrittany: ; e5ee (3:65ee)
 	tx Text06e6
 	tx Text06e7
 	run_script OWScript_MaxOutFlagValue
-	db EVENT_FLAG_3C
+	db FLAG_BEAT_BRITTANY
 	run_script OWScript_JumpIfFlagNotLessThan
 	db EVENT_FLAG_35
 	db $02
-	dw .ows_e617
+	dw .finishSequence
 	run_script OWScript_JumpIfFlagZero2
 	db EVENT_FLAG_3A
-	dw .ows_e617
+	dw .finishSequence
 	run_script OWScript_JumpIfFlagZero2
 	db EVENT_FLAG_3B
-	dw .ows_e617
+	dw .finishSequence
 	run_script OWScript_SetFlagValue
 	db EVENT_FLAG_35
 	db $01
@@ -3695,7 +3721,7 @@ OWSequence_BeatBrittany: ; e5ee (3:65ee)
 	db EVENT_FLAG_1E
 	run_script OWScript_PrintTextString
 	tx Text06e8
-.ows_e617
+.finishSequence
 	run_script OWScript_EndScriptCloseText
 
 OWSequence_LostToBrittany: ; e618 (3:6618)
@@ -3704,7 +3730,260 @@ OWSequence_LostToBrittany: ; e618 (3:6618)
 	tx Text06e9
 ; 0xe61c
 
-	INCROM $e61c, $f580
+	INCROM $e61c, $e7f6
+
+ClubEntranceAfterDuel: ; e7f6 (3:67f6)
+	ld hl, .after_duel_table
+	jp FindEndOfBattleScript
+
+.after_duel_table
+	db RONALD2
+	db RONALD2
+	dw OWSequence_BeatFirstRonaldFight
+	dw OWSequence_LostToFirstRonaldFight
+
+	db RONALD3
+	db RONALD3
+	dw OWSequence_BeatSecondRonaldFight
+	dw OWSequence_LostToSecondRonaldFight
+	db $00
+
+LoadClubEntrance: ; e809 (3:6809)
+	call TryFirstRonaldFight
+	call TrySecondRonaldFight
+	call TryFirstRonaldEncounter
+	ret
+
+TryFirstRonaldEncounter: ; e813 (3:6813)
+	ld a, RONALD1
+	ld [wd3ab], a
+	call Func_39c3
+	ret c
+	ld bc, OWSequence_FirstRonaldEncounter
+	jp Func_c926
+
+TryFirstRonaldFight: ; e822 (3:6822)
+	ld a, RONALD2
+	ld [$d3ab], a
+	call Func_39c3
+	ret c
+	call Func_ca69
+	ld c, h
+	or a
+	ret nz
+	ld bc, OWSequence_FirstRonaldFight
+	jp Func_c926
+
+TrySecondRonaldFight: ; e837 (3:6837)
+	ld a, RONALD3
+	ld [$d3ab], a
+	call Func_39c3
+	ret c
+	call Func_ca69
+	ld c, l
+	or a
+	ret nz
+	ld bc, OWSequenceSecondRonaldFight
+	jp Func_c926
+; 0xe84c
+
+	INCROM $e84c, $e862
+
+OWSequence_FirstRonaldEncounter: ; e862 (3:6862)
+	start_script
+	run_script OWScript_MaxOutFlagValue
+	db $4b
+	run_script Func_ce4a
+	db $94
+	db $68
+	run_script Func_d135
+	db $00
+	run_script OWScript_PrintTextString
+	tx Text0645
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MovePlayer
+	db $00
+	db $01
+	run_script OWScript_MovePlayer
+	db $00
+	db $01
+	run_script OWScript_PrintTextString
+	tx Text0646
+	run_script Func_cce4
+	dw 0000
+	dw .ows_e882
+	run_script OWScript_PrintTextString
+	tx Text0647
+	run_script OWScript_Jump
+	dw .ows_e885
+
+.ows_e882
+	run_script OWScript_PrintTextString
+	tx Text0648
+.ows_e885
+	run_script OWScript_PrintTextString
+	tx Text0649
+	run_script OWScript_CloseTextBox
+	run_script Func_d055
+	db $03
+	run_script OWScript_MovePlayer
+	db $01
+	db $04
+	run_script Func_ce4a
+	db $94
+	db $68
+	run_script Func_cdcb
+	run_script Func_d41d
+	run_script OWScript_EndScriptCloseText
+; 0xe894
+
+	INCROM $e894, $e8c0
+
+OWSequence_FirstRonaldFight: ; e8c0 (3:68c0)
+	start_script
+	run_script Func_ce4a
+	db $05
+	db $69
+	run_script OWScript_DoFrames
+	db $3c
+	run_script Func_ce4a
+	db $0d
+	db $69
+	run_script OWScript_PrintTextString
+	tx Text064a
+	run_script Func_d0f2
+	db $08
+	db $02
+	dw $68d6
+	run_script Func_d055
+	db $03
+	run_script OWScript_MovePlayer
+	db $03
+	db $01
+	run_script Func_d055
+	db $02
+	run_script OWScript_MovePlayer
+	db $02
+	db $01
+	run_script OWScript_MovePlayer
+	db $02
+	db $01
+	run_script OWScript_PrintTextString
+	tx Text064b
+	run_script OWScript_SetFlagValue
+	db $4c
+	db $01
+	run_script OWScript_StartBattle
+	db PRIZES_6
+	db IM_RONALD_DECK_ID
+	db MUSIC_RONALD
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatFirstRonaldFight: ; e8e9 (3:68e9)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text064c
+	run_script OWScript_GiveCard
+	db JIGGLYPUFF1
+	run_script Func_cee2
+	db JIGGLYPUFF1
+	run_script OWScript_PrintTextString
+	tx Text064d
+	run_script OWScript_Jump
+	dw OWJump_FinishedFirstRonaldFight
+
+OWSequence_LostToFirstRonaldFight: ; e8f7 (3:68f7)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text064e
+
+OWJump_FinishedFirstRonaldFight
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_4C
+	db $02
+	run_script OWScript_CloseTextBox
+	run_script Func_ce4a
+	db $0f
+	db $69
+	run_script Func_cdcb
+	run_script Func_d41d
+	run_script OWScript_EndScriptCloseText
+; 0xe905
+
+	INCROM $e905, $e91e
+
+OWSequenceSecondRonaldFight: ; e91e (3:691e)
+	start_script
+	run_script Func_ce4a
+	db $05
+	db $69
+	run_script OWScript_DoFrames
+	db $3c
+	run_script Func_ce4a
+	db $0d
+	db $69
+	run_script OWScript_PrintTextString
+	tx Text064f
+	run_script Func_d0f2
+	db $08
+	db $02
+	dw $6934
+	run_script Func_d055
+	db $03
+	run_script OWScript_MovePlayer
+	db $03
+	db $01
+	run_script Func_d055
+	db $02
+	run_script OWScript_MovePlayer
+	db $02
+	db $01
+	run_script OWScript_MovePlayer
+	db $02
+	db $01
+	run_script OWScript_PrintTextString
+	tx Text0650
+	run_script OWScript_SetFlagValue
+	db $4d
+	db $01
+	run_script OWScript_StartBattle
+	db PRIZES_6
+	db POWERFUL_RONALD_DECK_ID
+	db MUSIC_RONALD
+	run_script OWScript_EndScriptCloseText
+
+OWSequence_BeatSecondRonaldFight: ; e947 (3:6947)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text0651
+	run_script OWScript_GiveCard
+	db SUPER_ENERGY_RETRIEVAL
+	run_script Func_cee2
+	db SUPER_ENERGY_RETRIEVAL
+	run_script OWScript_PrintTextString
+	tx Text0652
+	run_script OWScript_Jump
+	dw OWJump_FinishedSecondRonaldFight
+
+OWSequence_LostToSecondRonaldFight: ; e955 (3:6955)
+	start_script
+	run_script OWScript_PrintTextString
+	tx Text0653
+
+OWJump_FinishedSecondRonaldFight ; e959 (3:6959)
+	run_script OWScript_SetFlagValue
+	db $4d
+	db $02
+	run_script OWScript_CloseTextBox
+	run_script Func_ce4a
+	db $0f
+	db $69
+	run_script Func_cdcb
+	run_script Func_d41d
+	run_script OWScript_EndScriptCloseText
+; 0xe963
+
+	INCROM $e963, $f580
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69

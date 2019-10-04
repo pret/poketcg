@@ -29,8 +29,8 @@ ENDM
 	const OWScript_GiveBoosterPacks_index       ; $0c
 	const Func_cf0c_index                       ; $0d
 	const Func_cf12_index                       ; $0e
-	const Func_cf3f_index                       ; $0f
-	const Func_cf4c_index                       ; $10
+	const OWScript_GiveCard_index                       ; $0f
+	const OWScript_TakeCard_index                       ; $10
 	const Func_cf53_index                       ; $11
 	const Func_cf7b_index                       ; $12
 	const Func_cf2d_index                       ; $13

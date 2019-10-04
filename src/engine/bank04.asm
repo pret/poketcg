@@ -984,8 +984,8 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_GiveBoosterPacks
 	dw Func_cf0c
 	dw Func_cf12
-	dw Func_cf3f
-	dw Func_cf4c
+	dw OWScript_GiveCard
+	dw OWScript_TakeCard
 	dw Func_cf53
 	dw Func_cf7b
 	dw Func_cf2d

@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
-
+###############################################################################
+###### Use: python3 tools/script_extractor --noauto --error location     ######
+###### --noauto  turns off automatic script parsing (enter to continue)  ######
+###### --error   stops execution if an error occurs                      ######
+###### location can be local to bank or global. This program assumes     ######
+###### every script is in bank 3, which seems to be the case.            ######
+######                                                                   ######
+###### Script list is a work in progress. The following arguments are    ######
+###### accepted and accounted for.                                       ######
+###### b - byte    w - word    j - jump (within script)    t - text (tx) ######
+###### q - Used when the script's arguments have not been determined yet ######
+###############################################################################
 import argparse
 
-# - (Possibly) add new type of word that looks for matches in the sym file
-# - add new one for event flag
 def decodeLine(scriptList, game_data, loc, ignore_broken, branchList):
 	currLine = scriptList[game_data[loc]]
 	ret = "\trun_script " + currLine[0] + "\n"
@@ -34,27 +43,27 @@ def decodeLine(scriptList, game_data, loc, ignore_broken, branchList):
 		else:
 			print("UNACCEPTED CHARACTER: " + c)
 	return (loc, ret, quit)
-			
-def main2(): # temp
-	with open("tcg.gbc", "rb") as file:
-		game_data = file.read()
-	loc = 0xcb37
-	start = 0x36
-	end = 0x76 # inclusive
-	for i in range(start,end+1):
-		print("\tflag_def EVENT_FLAG_" + format(i,"02X") + ","+(" "*11)+"$"\
-		 + format(game_data[loc+2*i],"02x") + ", %" + format(game_data[loc+2*i + 1],"08b"))
-	print("; " + format(loc + 2*(end+1),"02x"))
 
 def main():
 	scriptList = createList()
+	branchList = []
+
+	parser = argparse.ArgumentParser(description='Pokemon TCG Script Extractor')
+	parser.add_argument('--noauto', action='store_true', help='turns off automatic script parsing')
+	parser.add_argument('--error', action='store_true', help='stops execution if an error occurs')
+	parser.add_argument('location', help='location to extract from. May be local to bank or global.')
+	args = parser.parse_args()
+	loc = int(args.location,0)
+	if loc > 0x7fff:
+		# Must be a global location
+		loc -= 0x8000
+	branchList.append(loc)
 
 	with open("tcg.gbc", "rb") as file:
 	    game_data = file.read()
 	auto = True
 	end = False
 	ignore_broken = True
-	branchList = [0x65ee] # all are bank 3 offsets
 	while (len(branchList) > 0):
 		loc = branchList.pop(0) + 0x8000
 		printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList)
@@ -94,14 +103,14 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_PrintVariableText", "tt", False),
 	("Func_cda8", "bbbb", False),
 	("OWScript_PrintTextCloseBox", "t", True),
-	("Func_cdcb", "bb", False),
+	("Func_cdcb", "", False),
 	("Func_ce26", "bb", False),
 	("OWScript_CloseTextBox", "", False),
 	("OWScript_GiveBoosterPacks", "bbb", False),
 	("Func_cf0c", "bbb", False), # more complex behavior too (jumping)
 	("Func_cf12", "bbb", False),
-	("Func_cf3f", "b", False),
-	("Func_cf4c", "b", False),
+	("OWScript_GiveCard", "b", False),
+	("OWScript_TakeCard", "b", False),
 	("Func_cf53", "w", False), # more complex behavior too (jumping)
 	("Func_cf7b", "", False),
 	("Func_cf2d", "bbbb", False), # more complex behavior too (jumping + ??)
@@ -112,7 +121,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d025", "w", False), # possibly only jumps, still needs args
 	("Func_d032", "w", False), # see above
 	("Func_d03f", "", False),
-	("OWScript_Jump", "w", True), # jumps to d
+	("OWScript_Jump", "j", True), # jumps to d
 	("Func_d04f", "", False),
 	("Func_d055", "b", False),
 	("OWScript_MovePlayer", "bb", False),
@@ -128,7 +137,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_ceba", "q", False),
 	("Func_d103", "q", False),
 	("Func_d125", "b", False),
-	("Func_d135", "q", False),
+	("Func_d135", "b", False),
 	("Func_d16b", "q", False),
 	("Func_cd4f", "q", False),
 	("Func_cd94", "q", False),
@@ -161,10 +170,10 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d416", "q", False),
 	("Func_d423", "q", False),
 	("Func_d429", "q", False),
-	("Func_d41d", "q", False),
+	("Func_d41d", "", False),
 	("Func_d42f", "q", False),
 	("Func_d435", "b", False),
-	("Func_cce4", "q", False),
+	("Func_cce4", "tj", False),
 	("Func_d2f6", "q", False),
 	("Func_d317", "q", False),
 	("Func_d43d", "q", False),

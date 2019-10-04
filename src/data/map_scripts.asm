@@ -57,8 +57,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -87,8 +87,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -117,8 +117,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -147,8 +147,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -177,8 +177,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $6525
+	dw LoadClubEntrance
+	dw GrassClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -188,7 +188,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $7d4b
 	dw $0000
 	dw $0000
-	dw $65c4
+	dw GrassClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -207,8 +207,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -237,8 +237,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
@@ -267,8 +267,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6809
-	dw $67f6
+	dw LoadClubEntrance
+	dw ClubEntranceAfterDuel
 	dw $0000
 	dw $0000
 
