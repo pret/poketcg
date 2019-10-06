@@ -1,9 +1,9 @@
 ; npc_struct constants
 	const_def
 	const NPC_TRAINER_ID
-	const NPC_DATA_FIELD_01
-	const NPC_DATA_FIELD_02
-	const NPC_DATA_FIELD_03
+	const NPC_DATA_FIELD_01 ; Sprite
+	const NPC_DATA_FIELD_02 ; DMG/SGB pal
+	const NPC_DATA_FIELD_03 ; CGB pal
 	const NPC_DATA_FIELD_04
 	const NPC_DATA_OWSEQUENCE_PTR
 const_value = const_value+1

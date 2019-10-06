@@ -33,3 +33,17 @@
 	const POKEMON_DOME_ENTRANCE   ; $1F
 	const POKEMON_DOME            ; $20
 	const HALL_OF_HONOR           ; $21
+
+
+NPC_MAP_SIZE          EQU $06
+
+; Most of these aren't fully understood so the names aren't great
+MAP_SCRIPT_SIZE          EQU $0f
+MAP_SCRIPT_NPCS          EQU $00
+MAP_SCRIPT_POST_NPC      EQU $02
+MAP_SCRIPT_PRESSED_A_1   EQU $04
+MAP_SCRIPT_PRESSED_A_2   EQU $06
+MAP_SCRIPT_LOAD_MAP      EQU $08
+MAP_SCRIPT_AFTER_DUEL    EQU $0a
+MAP_SCRIPT_MOVED_PLAYER  EQU $0c
+MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e

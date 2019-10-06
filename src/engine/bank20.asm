@@ -31,7 +31,7 @@ Func_80077: ; 80077 (20:4077)
 	inc hl
 	ld [hl], d
 	call Func_803b9
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	ld [wd23d], a
 	ld de, wd23e
 	ld bc, $0006
@@ -58,10 +58,10 @@ Func_800bd: ; 800bd (20:40bd)
 	push hl
 	push bc
 	push de
-	ld a, [wd4c4]
+	ld a, [wTempPointer]
 	add $05
 	ld e, a
-	ld a, [wd4c5]
+	ld a, [wTempPointer + 1]
 	adc $00
 	ld d, a
 	ld b, $c0
@@ -298,12 +298,12 @@ GetMapDataPointer: ; 8020f (20:420f)
 
 Func_80229: ; 80229 (20:4229)
 	ld a, [hli]
-	ld [wd4c4], a
+	ld [wTempPointer], a
 	ld a, [hli]
-	ld [wd4c5], a
+	ld [wTempPointer + 1], a
 	ld a, [hli]
 	add $20
-	ld [wd4c6], a
+	ld [wTempPointerBank], a
 	ret
 ; 0x80238
 
@@ -342,7 +342,7 @@ asm_8027c
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld hl, wd4c4
+	ld hl, wTempPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a

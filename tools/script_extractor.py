@@ -59,16 +59,25 @@ def main():
 		loc -= 0x8000
 	branchList.append(loc)
 
-	with open("tcg.gbc", "rb") as file:
+	# this is a list of every start location we've read to avoid infinite loops
+	exploredList = []
+
+	with open("baserom.gbc", "rb") as file:
 	    game_data = file.read()
+
 	auto = True
 	end = False
 	ignore_broken = True
 	while (len(branchList) > 0):
 		loc = branchList.pop(0) + 0x8000
-		printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList)
+		printScript(game_data, loc, auto, end, ignore_broken, scriptList,\
+		branchList, exploredList)
 
-def printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList):
+def printScript(game_data, loc, auto, end, ignore_broken, scriptList, \
+				branchList, exploredList):
+	if loc in exploredList:
+		return
+	exploredList.append(loc)
 	script = ""
 	if game_data[loc] != 0xe7:
 		#print("Error: first byte was not start_script")
@@ -89,7 +98,7 @@ def printScript(game_data, loc, auto, end, ignore_broken, scriptList, branchList
 		else:
 			input(outstr)
 	print("; " + hex(loc))
-		
+
 
 def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
@@ -127,7 +136,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_MovePlayer", "bb", False),
 	("Func_cee2", "b", False),
 	("OWScript_SetDialogName", "b", False),
-	("Func_d088", "bw", False),
+	("Func_d088", "bj", False),
 	("Func_d095", "bbb", False),
 	("Func_d0be", "bb", False),
 	("OWScript_DoFrames", "b", False),
@@ -161,7 +170,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d39d", "q", False),
 	("Func_d3b9", "q", False),
 	("OWScript_GivePCPack", "b", False),
-	("Func_d3d1", "q", False),
+	("OWScript_nop", "", False),
 	("Func_d3d4", "q", False),
 	("Func_d3e0", "", False),
 	("Func_d3fe", "q", False),
@@ -175,7 +184,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d435", "b", False),
 	("Func_cce4", "tj", False),
 	("Func_d2f6", "q", False),
-	("Func_d317", "q", False),
+	("Func_d317", "", False),
 	("Func_d43d", "q", False),
 	("OWScript_EndScriptLoop2", "q", True),
 	("OWScript_EndScriptLoop3", "q", True),

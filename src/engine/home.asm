@@ -10865,7 +10865,7 @@ GetPermissionByteOfMapPosition: ; 3946 (0:3946)
 Func_395a: ; 395a (0:395a)
 	ldh a, [hBankROM]
 	push af
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	call BankswitchROM
 	call CopyGfxData
 	pop af
@@ -10934,6 +10934,9 @@ Func_39ad: ; 39ad (0:39ad)
 	pop bc
 	ret
 
+; Finds the index on wd34a table of the npc in wTempNPC
+; returns it in a and puts it into wd3aa
+; c flag set if no npc found
 Func_39c3: ; 39c3 (0:39c3)
 	push hl
 	push bc
@@ -10944,21 +10947,21 @@ Func_39c3: ; 39c3 (0:39c3)
 	ld c, $8
 	ld de, $000c
 	ld hl, wd34a
-	ld a, [wd3ab]
-.asm_39d6
+	ld a, [wTempNPC]
+.findNPCLoop
 	cp [hl]
-	jr z, .asm_39e1
+	jr z, .foundNPCMatch
 	add hl, de
 	inc b
 	dec c
-	jr nz, .asm_39d6
+	jr nz, .findNPCLoop
 	scf
-	jr z, .asm_39e6
-.asm_39e1
+	jr z, .exit
+.foundNPCMatch
 	ld a, b
 	ld [wd3aa], a
 	or a
-.asm_39e6
+.exit
 	pop de
 	pop bc
 	pop hl
@@ -11059,7 +11062,7 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
 	push af
 	ld l, $4
-	call Func_3abd
+	call GetMapScriptPointer
 	jr nc, .asm_3ab3
 	ld a, BANK(Func_c653)
 	call BankswitchROM
@@ -11113,7 +11116,10 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	call $49c2
 	ret
 
-Func_3abd: ; 3abd (0:3abd)
+; returns a map script pointer in hl given
+; current map in wCurMap and which sub-script in l
+; sets c if pointer is found
+GetMapScriptPointer: ; 3abd (0:3abd)
 	push bc
 	push hl
 	ld a, [wCurMap]
@@ -11321,7 +11327,7 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 Func_3be4: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	call BankswitchROM
 	call Func_08de
 	pop af
@@ -11329,16 +11335,16 @@ Func_3be4: ; 3be4 (0:3be4)
 	ret
 ; 0x3bf5
 
-; Copies bc bytes from [wd4c4] to de
+; Copies bc bytes from [wTempPointer] to de
 CopyBankedDataToDE: ; 3bf5 (0:3bf5)
 	ldh a, [hBankROM]
 	push af
 	push hl
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	call BankswitchROM
-	ld a, [wd4c4]
+	ld a, [wTempPointer]
 	ld l, a
-	ld a, [wd4c5]
+	ld a, [wTempPointer + 1]
 	ld h, a
 	call CopyDataHLtoDE_SaveRegisters
 	pop hl
@@ -11635,11 +11641,11 @@ Func_3d72: ; 3d72 (0:3d72)
 	xor a
 	jr .asm_3da1
 .asm_3d84
-	ld a, [wd4c4]
+	ld a, [wTempPointer]
 	ld l, a
-	ld a, [wd4c5]
+	ld a, [wTempPointer + 1]
 	ld h, a
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	call BankswitchROM
 	ld a, [hli]
 	push af
@@ -11670,7 +11676,7 @@ Func_3d72: ; 3d72 (0:3d72)
 	call BankswitchROM
 	ret
 
-Func_3db7: ; 3db7 (0:3db7)
+GetFirstSpriteAnimBufferProperty: ; 3db7 (0:3db7)
 	push bc
 	ld c, SPRITE_ANIM_FIELD_00
 	call GetSpriteAnimBufferProperty

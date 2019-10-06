@@ -495,7 +495,7 @@ INCLUDE "data/overworld_indexes.asm"
 
 Func_10fbc: ; 10fbc (4:4fbc)
 	ld a, $25
-	farcall Func_1299f
+	farcall CreateSpriteAndAnimBufferEntry
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
 	ld a, $80
@@ -518,7 +518,7 @@ Func_10fde: ; 10fde (4:4fde)
 	xor a
 	ld [wd33e], a
 	ld a, $25
-	call Func_1299f
+	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wd33b], a
 	ld b, $35
@@ -839,13 +839,13 @@ Func_115a3: ; 115a3 (4:55a3)
 
 INCLUDE "data/map_scripts.asm"
 
-; loads a pointer into hl found on PointerTable_118f5
+; loads a pointer into hl found on NPCDataTable
 GetNPCDataPointer: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
-	add LOW(PointerTable_118f5)
+	add LOW(NPCDataTable)
 	ld l, a
-	ld a, HIGH(PointerTable_118f5)
+	ld a, HIGH(NPCDataTable)
 	adc $00
 	ld h, a
 	ld a, [hli]
@@ -853,12 +853,12 @@ GetNPCDataPointer: ; 1184a (4:584a)
 	ld l, a
 	ret
 
-Func_11857: ; 11857 (4:5857)
+LoadNPCSpriteData: ; 11857 (4:5857)
 	push hl
 	push bc
 	call GetNPCDataPointer
 	ld a, [hli]
-	ld [wd3ab], a
+	ld [wTempNPC], a
 	ld a, [hli]
 	ld [wd3b3], a
 	ld a, [hli]
@@ -869,7 +869,7 @@ Func_11857: ; 11857 (4:5857)
 	ld [wd3b2], a
 	pop bc
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_1187a
 	ld a, b
 	ld [wd3b1], a
@@ -1036,7 +1036,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d39d
 	dw Func_d3b9
 	dw OWScript_GivePCPack
-	dw Func_d3d1
+	dw OWScript_nop
 	dw Func_d3d4
 	dw Func_d3e0
 	dw Func_d3fe
@@ -1231,14 +1231,15 @@ Unknown_128fb: ; 128fb
 Func_1296e: ; 1296e (4:696e)
 	INCROM $1296e, $1299f
 
-Func_1299f: ; 1299f (4:699f)
+; creates a new entry in SpriteAnimBuffer, Alse loads the sprite if need be
+CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	push af
 	ld a, [wd5d7]
 	or a
-	jr z, .asm_129a8
+	jr z, .continue
 	pop af
 	ret
-.asm_129a8
+.continue
 	pop af
 	push bc
 	push hl
@@ -1246,50 +1247,50 @@ Func_1299f: ; 1299f (4:699f)
 	ld [wd5d3], a
 	xor a
 	ld [wWhichSprite], a
-	call Func_3db7
-	ld bc, $0010
-.asm_129bb
+	call GetFirstSpriteAnimBufferProperty
+	ld bc, SPRITE_ANIM_LENGTH
+.findFirstEmptyAnimField
 	ld a, [hl]
 	or a
-	jr z, .asm_129cf
+	jr z, .foundEmptyAnimField
 	add hl, bc
 	ld a, [wWhichSprite]
 	inc a
 	ld [wWhichSprite], a
 	cp $10
-	jr nz, .asm_129bb
+	jr nz, .findFirstEmptyAnimField
 	debug_ret
 	scf
-	jr .asm_129d6
-.asm_129cf
+	jr .quit
+.foundEmptyAnimField
 	ld a, $1
 	ld [hl], a
-	call Func_129d9
+	call FillNewSpriteAnimBufferEntry
 	or a
-.asm_129d6
+.quit
 	pop hl
 	pop bc
 	ret
 
-Func_129d9: ; 129d9 (4:69d9)
+FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	push hl
 	push bc
 	push hl
 	inc hl
-	ld c, $f
+	ld c, SPRITE_ANIM_LENGTH - 1
 	xor a
-.asm_129e0
+.clearSpriteAnimBufferEntryLoop
 	ld [hli], a
 	dec c
-	jr nz, .asm_129e0
+	jr nz, .clearSpriteAnimBufferEntryLoop
 	pop hl
-	ld bc, $0004
+	ld bc, SPRITE_ANIM_FIELD_05 - 1
 	add hl, bc
 	ld a, [wd5d3]
 	ld [hli], a
 	ld a, $ff
 	ld [hl], a
-	ld bc, $0009
+	ld bc, SPRITE_ANIM_MOVEMENT_COUNTER - SPRITE_ANIM_FIELD_05
 	add hl, bc
 	ld a, $ff
 	ld [hl], a
@@ -1324,7 +1325,7 @@ Func_12ab5: ; 12ab5 (4:6ab5)
 Func_12ae2: ; 12ae2 (4:6ae2)
 	push bc
 	push af
-	call Func_3db7
+	call GetFirstSpriteAnimBufferProperty
 	pop af
 	push hl
 	ld bc, $0005
@@ -1335,12 +1336,12 @@ Func_12ae2: ; 12ae2 (4:6ae2)
 	farcall GetMapDataPointer
 	farcall Func_80229
 	pop hl
-	ld a, [wd4c6]
+	ld a, [wTempPointerBank]
 	ld [hli], a
-	ld a, [wd4c4]
+	ld a, [wTempPointer]
 	ld [hli], a
 	ld c, a
-	ld a, [wd4c5]
+	ld a, [wTempPointer + 1]
 	ld [hli], a
 	ld b, a
 	ld a, $3
@@ -1362,15 +1363,15 @@ Func_12b13: ; 12b13 (4:6b13)
 	ld bc, $0006
 	add hl, bc
 	ld a, [hli]
-	ld [wd4c6], a
+	ld [wTempPointerBank], a
 	inc hl
 	inc hl
 	ld a, [hl]
-	ld [wd4c4], a
+	ld [wTempPointer], a
 	add $4
 	ld [hli], a
 	ld a, [hl]
-	ld [wd4c5], a
+	ld [wTempPointer + 1], a
 	adc $0
 	ld [hl], a
 	ld de, wd23e
@@ -1423,11 +1424,11 @@ Func_12b6a: ; 12b6a (4:6b6a)
 	ld bc, $0006
 	add hl, bc
 	ld a, [hli]
-	ld [wd4c6], a
+	ld [wTempPointerBank], a
 	ld a, [hli]
-	ld [wd4c4], a
+	ld [wTempPointer], a
 	ld a, [hli]
-	ld [wd4c5], a
+	ld [wTempPointer + 1], a
 	pop hl
 	call Func_3d72
 	pop de
@@ -1467,6 +1468,8 @@ Func_12ba7: ; 12ba7 (4:6ba7)
 Func_12bcd: ; 12bcd (4:6bcd)
 	INCROM $12bcd, $12c05
 
+; gets some value based on the sprite in b and wd5d8
+; loads the sprites data if it doesn't already exist
 Func_12c05: ; 12c05 (4:6c05)
 	push hl
 	push bc
@@ -1477,23 +1480,24 @@ Func_12c05: ; 12c05 (4:6c05)
 	ld c, a
 	ld hl, wd5d8
 	or a
-	jr z, .asm_12c22
-.asm_12c15
+	jr z, .tryToAddSprite
+
+.findSpriteMatchLoop
 	inc hl
 	ld a, [hl]
 	cp b
-	jr z, .asm_12c3a
+	jr z, .foundSpriteMatch
 	inc hl
 	ld a, [hli]
 	add [hl]
 	ld d, a
 	inc hl
 	dec c
-	jr nz, .asm_12c15
-.asm_12c22
+	jr nz, .findSpriteMatchLoop
+.tryToAddSprite
 	ld a, [wd618]
 	cp $10
-	jr nc, .asm_12c48
+	jr nc, .quitFail
 	inc a
 	ld [wd618], a
 	inc hl
@@ -1507,7 +1511,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	pop af
 	ld [hl], a
 	pop hl
-.asm_12c3a
+.foundSpriteMatch
 	dec hl
 	inc [hl]
 	inc hl
@@ -1515,15 +1519,15 @@ Func_12c05: ; 12c05 (4:6c05)
 	ld a, [hli]
 	add [hl]
 	cp $81
-	jr nc, .asm_12c48
+	jr nc, .quitFail
 	ld a, d
 	or a
-	jr .asm_12c4b
-.asm_12c48
+	jr .quitSucceed
+.quitFail
 	debug_ret
 	xor a
 	scf
-.asm_12c4b
+.quitSucceed
 	pop de
 	pop bc
 	pop hl
@@ -1584,4 +1588,8 @@ Func_13485: ; 13485 (4:7485)
 	ret
 ; 0x134b1
 
-	INCROM $134b1, $14000
+	INCROM $134b1, $1372f
+
+INCLUDE "data/npc_map_data.asm"
+
+	INCROM $13b04, $14000

@@ -47,3 +47,8 @@ NUM_GAME_EVENTS EQU const_value
 
 ; Script constant
 NO_JUMP EQU $0000
+
+NORTH    EQU $00
+EAST     EQU $01
+SOUTH    EQU $02
+WEST     EQU $03

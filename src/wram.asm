@@ -2070,23 +2070,20 @@ wd34a:: ; d34a
 wd3aa:: ; d3aa
 	ds $1
 
-wd3ab:: ; d3ab
+wTempNPC:: ; d3ab
 	ds $1
 
-wd3ac:: ; d3ac
+wLoadNPCXPos:: ; d3ac
 	ds $1
 
-wd3ad:: ; d3ad
+wLoadNPCYPos:: ; d3ad
 	ds $1
 
-wd3ae:: ; d3ae
+wLoadNPCDirection:: ; d3ae
 	ds $1
 
-wd3af:: ; d3af
-	ds $1
-
-wd3b0:: ; d3b0
-	ds $1
+wLoadNPCFunction:: ; d3af
+	ds $2
 
 wd3b1:: ; d3b1
 	ds $1
@@ -2211,13 +2208,10 @@ wd4c3:: ; d4c3
 	ds $1
 
 ; these next 3 seem to be an address (bank @ end) for copying bg data
-wd4c4:: ; d4c4
-	ds $1
+wTempPointer:: ; d4c4
+	ds $2
 
-wd4c5:: ; d4c5
-	ds $1
-
-wd4c6:: ; d4c6
+wTempPointerBank:: ; d4c6
 	ds $1
 
 wd4c7:: ; d4c7
@@ -2286,6 +2280,7 @@ wd5d7:: ; d5d7
 wd5d8:: ; d5d8
 	ds $40
 
+; seems to be the amount of entries in wd5d8
 wd618:: ; d618
 	ds $1
 

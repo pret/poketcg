@@ -128,8 +128,83 @@ Func_1c477: ; 1c477 (7:4477)
 	pop hl
 	ret
 
+; Loads NPC Sprite Data
 Func_1c485: ; 1c485 (7:4485)
-	INCROM $1c485, $1c50a
+	push hl
+	push bc
+	push de
+	xor a
+	ld [wd3aa], a
+	ld b, a
+	ld c, $08
+	ld hl, wd34a
+	ld de, $c
+.findEmptyIndexLoop
+	ld a, [hl]
+	or a
+	jr z, .foundEmptyIndex
+	add hl, de
+	inc b
+	dec c
+	jr nz, .findEmptyIndexLoop
+	ld hl, wd34a
+	debug_ret
+	jr .exit
+.foundEmptyIndex
+	ld a, b
+	ld [wd3aa], a
+	ld a, [wd3b3]
+	farcall CreateSpriteAndAnimBufferEntry
+	jr c, .exit
+	ld a, [wd3aa]
+	call Func_39a7
+	push hl
+	ld a, [wTempNPC]
+	ld [hli], a
+	ld a, [wWhichSprite]
+	ld [hli], a
+	ld a, [wLoadNPCXPos]
+	ld [hli], a
+	ld a, [wLoadNPCYPos]
+	ld [hli], a
+	ld a, [wLoadNPCDirection]
+	ld [hli], a
+	ld a, [wd3b2]
+	ld [hli], a
+	ld a, [wd3b1]
+	ld [hli], a
+	ld a, [wLoadNPCDirection]
+	ld [hli], a
+	call Func_1c58e
+	call Func_1c5b9
+	ld hl, wd349
+	inc [hl]
+	pop hl
+	call Func_1c665
+	call Func_1c6e3
+	ld a, [wTempNPC]
+	call Func_1c4fa
+	jr nc, .exit
+	ld a, $01
+	ld [wd3b8], a
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_1c4fa: ; 1c4fa (7:44fa)
+	cp RONALD1
+	jr z, .asm_1c508
+	cp RONALD2
+	jr z, .asm_1c508
+	cp RONALD3
+	jr z, .asm_1c508
+	or a
+	ret
+.asm_1c508
+	scf
+	ret
 
 Func_1c50a: ; 1c50a (7:450a)
 	push hl
@@ -190,10 +265,10 @@ Func_1c557: ; 1c557 (7:4557)
 	ld c, a
 	ld a, [wd3aa]
 	push af
-	ld a, [wd3ab]
+	ld a, [wTempNPC]
 	push af
 	ld a, c
-	ld [wd3ab], a
+	ld [wTempNPC], a
 	ld c, $0
 	call Func_39c3
 	jr c, .asm_1c570
@@ -202,7 +277,7 @@ Func_1c557: ; 1c557 (7:4557)
 
 .asm_1c570
 	pop af
-	ld [wd3ab], a
+	ld [wTempNPC], a
 	pop af
 	ld [wd3aa], a
 	ld a, c
@@ -253,6 +328,7 @@ Func_1c58e: ; 1c58e (7:458e)
 	ret
 ; 0x1c5b9
 
+Func_1c5b9: ; 1c5b9 (7:45b9)
 	INCROM $1c5b9, $1c5e9
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
@@ -274,7 +350,25 @@ Func_1c5e9: ; 1c5e9 (7:45e9)
 	INCROM $1c5ff, $1c610
 
 Func_1c610: ; 1c610 (7:4610)
-	INCROM $1c610, $1c6f8
+	INCROM $1c610, $1c665
+
+Func_1c665: ; 1c665 (7:4665)
+	INCROM $1c665, $1c6e3
+
+Func_1c6e3: ; 1c6e3 (7:46e3)
+	push hl
+	push bc
+	ld a, [$d3aa]
+	ld l, $02
+	call Func_39ad
+	ld a, [hli]
+	ld b, a
+	ld c, [hl]
+	ld a, $40
+	call SetPermissionOfMapPosition
+	pop bc
+	pop hl
+	ret
 
 Func_1c6f8: ; 1c6f8 (7:46f8)
 	INCROM $1c6f8, $1c719
