@@ -2177,7 +2177,10 @@ wAnimationQueue:: ; d423
 wd42a:: ; d42a
 	ds $1
 
-	ds $81
+wd42b:: ; d42b
+	ds $1
+
+	ds $80
 
 wd4ac:: ; d4ac
 	ds $1
@@ -2199,6 +2202,7 @@ wd4b0:: ; d4b0
 wd4be:: ; d4be
 	ds $1
 
+wd4bf:: ; d4bf
 	ds $1
 
 wd4c0:: ; d4c0
