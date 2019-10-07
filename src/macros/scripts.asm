@@ -81,7 +81,7 @@ ENDM
 	const Func_d39d_index                       ; $40
 	const Func_d3b9_index                       ; $41
 	const OWScript_GivePCPack_index             ; $42
-	const Func_d3d1_index                       ; $43
+	const OWScript_nop_index                    ; $43
 	const Func_d3d4_index                       ; $44
 	const Func_d3e0_index                       ; $45
 	const Func_d3fe_index                       ; $46

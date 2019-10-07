@@ -109,18 +109,18 @@ Func_c0ed: ; c0ed (3:40ed)
 
 Func_c0f1: ; c0f1 (3:40f1)
 	ld a, [wd3b6]
-	ld [wd3aa], a
-	farcall Func_1c768
+	ld [wLoadedNPCTempIndex], a
+	farcall SetNewOWSequenceNPC
 	ld a, c
-	ld [wd0c6], a
+	ld [wNextOWSequence], a
 	ld a, b
-	ld [wd0c7], a
+	ld [wNextOWSequence+1], a
 	ld a, $3
 	ld [wd0bf], a
 	jr Func_c10a
 
 Func_c10a: ; c10a (3:410a)
-	ld hl, wd0c6
+	ld hl, wNextOWSequence
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -135,7 +135,7 @@ CloseAdvancedDialogueBox: ; c111 (3:4111)
 	bit 1, a
 	jr z, .asm_c12a
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	farcall Func_1c5e9
 .asm_c12a
 	xor a
@@ -177,11 +177,11 @@ Func_c158: ; c158 (3:4158)
 	ret nz
 	ld a, [wd0c4]
 	ld [wTempNPC], a
-	call Func_39c3
+	call FindLoadedNPC
 	jr c, .asm_c179
-	ld a, [wd3aa]
-	ld l, $4
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_DIRECTION
+	call GetItemInLoadedNPCIndex
 	ld a, [wd0c5]
 	ld [hl], a
 	farcall Func_1c58e
@@ -283,7 +283,7 @@ Func_c228: ; c228 (3:4228)
 	ld [wd0bc], a
 	ld a, [wPlayerYCoord]
 	ld [wd0bd], a
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 	ld [wd0be], a
 	ret
 
@@ -591,7 +591,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld b, a
 .asm_c4ee
 	ld a, b
-	ld [wd334], a
+	ld [wPlayerDirection], a
 	call Func_c5e9
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
@@ -716,7 +716,7 @@ Func_c5ac: ; c5ac (3:45ac)
 Func_c5cb: ; c5cb (3:45cb)
 	call Func_c5d5
 Func_c5ce: ; c5ce (3:45ce)
-	ld [wd334], a
+	ld [wPlayerDirection], a
 	call Func_c5e9
 	ret
 
@@ -744,7 +744,7 @@ Func_c5e9: ; c5e9 (3:45e9)
 	ld [wWhichSprite], a
 	ld a, [wd337]
 	ld b, a
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 	add b
 	farcall Func_12ab5
 	pop bc
@@ -802,7 +802,7 @@ AttemptScriptedMovement: ; c619 (3:4619)
 	ret
 
 Func_c653: ; c653 (3:4653)
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 
 FindScriptedMovementWithOffset: ; c656 (3:4656)
 	rlca
@@ -833,7 +833,7 @@ Func_c66c: ; c66c (3:466c)
 	jr c, .asm_c67e
 	inc c
 .asm_c67e
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 	call Func_c694
 	pop bc
 	pop hl
@@ -949,7 +949,7 @@ Func_c71e: ; c71e (3:471e)
 	jr z, .asm_c73d
 	farcall Func_1c72e
 	jr c, .asm_c73d
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	ld [wd3b6], a
 	ld a, $2
 	jr .asm_c748
@@ -1201,18 +1201,18 @@ Func_c915: ; c915 (3:4915)
 	pop bc
 	ret
 
-Func_c926: ; c926 (3:4926)
+SetNextNPCAndOWSequence: ; c926 (3:4926)
 	push bc
-	call Func_39c3
-	ld a, [wd3aa]
+	call FindLoadedNPC
+	ld a, [wLoadedNPCTempIndex]
 	ld [wd3b6], a
-	farcall Func_1c768
+	farcall SetNewOWSequenceNPC
 	pop bc
 ;	fallthrough
 
-Func_c935: ; c935 (3:4935)
+SetNextOWSequence: ; c935 (3:4935)
 	push hl
-	ld hl, wd0c6
+	ld hl, wNextOWSequence
 	ld [hl], c
 	inc hl
 	ld [hl], b
@@ -1332,8 +1332,7 @@ Func_c9dd: ; c9dd (3:49dd)
 
 Func_c9e8: ; c9e8 (3:49e8)
 	ld c, $0
-	call Func_ca69
-	db $13
+	get_flag_value EVENT_FLAG_13
 	cp $2
 	jr c, .asm_ca04
 .asm_c9f2
@@ -1348,8 +1347,7 @@ Func_c9e8: ; c9e8 (3:49e8)
 	jr z, .asm_c9f2
 .asm_ca04
 	ld a, c
-	call Func_ca8f
-	db $34
+	set_flag_value EVENT_FLAG_34
 	ret
 
 Unknown_ca0a: ; ca0a (3:4a04)
@@ -1359,12 +1357,10 @@ Func_ca0e: ; ca0e (3:4a0e)
 	ld a, [wd32e]
 	cp $b
 	jr z, .asm_ca68
-	call Func_ca69
-	db $22
+	get_flag_value EVENT_FLAG_22
 	or a
 	jr nz, .asm_ca4a
-	call Func_ca69
-	db $40
+	get_flag_value EVENT_FLAG_40
 	cp $7
 	jr z, .asm_ca68
 	or a
@@ -1372,12 +1368,10 @@ Func_ca0e: ; ca0e (3:4a0e)
 	cp $2
 	jr z, .asm_ca62
 	ld c, $1
-	call Func_ca8f
-	db $40
+	set_flag_value EVENT_FLAG_40
 	jr .asm_ca62
 .asm_ca33
-	call Func_ca69
-	db $3f
+	get_flag_value EVENT_FLAG_3F
 	cp $7
 	jr z, .asm_ca68
 	or a
@@ -1385,8 +1379,7 @@ Func_ca0e: ; ca0e (3:4a0e)
 	cp $2
 	jr z, .asm_ca68
 	ld c, $1
-	call Func_ca8f
-	db $3f
+	set_flag_value EVENT_FLAG_3F
 	jr .asm_ca68
 .asm_ca4a
 	call UpdateRNGSources
@@ -1396,22 +1389,20 @@ Func_ca0e: ; ca0e (3:4a0e)
 	jr z, .asm_ca56
 	ld c, $0
 .asm_ca56
-	call Func_ca8f
-	db $41
+	set_flag_value EVENT_FLAG_41
 	jr .asm_ca5c
 .asm_ca5c
 	ld c, $7
-	call Func_ca8f
-	db $40
+	set_flag_value EVENT_FLAG_40
 .asm_ca62
 	ld c, $7
-	call Func_ca8f
-	db $3f
+	set_flag_value EVENT_FLAG_3F
 .asm_ca68
 	ret
 
-Func_ca69: ; ca69 (3:4a69)
-	call Func_cab3
+GetStackFlagValue: ; ca69 (3:4a69)
+	call GetByteAfterCall
+;	fallthrough
 
 ; returns the event flag's value in a
 ; also ors it with itself before returning
@@ -1437,8 +1428,11 @@ GetEventFlagValue: ; ca6c (3:4a6c)
 
 	INCROM $ca84, $ca8f
 
-Func_ca8f: ; ca8f (3:4a8f)
-	call Func_cab3
+; Use macro set_flag_value. The byte db'd after this func is called
+; is used at the flag argument for SetEventFlagValue
+SetStackFlagValue: ; ca8f (3:4a8f)
+	call GetByteAfterCall
+;	fallthrough
 
 ; a - flag
 ; c - value - truncated to fit only the flag's bounds
@@ -1466,7 +1460,8 @@ SetEventFlagValue: ; ca92 (3:4a92)
 	pop hl
 	ret
 
-Func_cab3: ; cab3 (3:4ab3)
+; returns in a the byte db'd after the call to a function that calls this
+GetByteAfterCall: ; cab3 (3:4ab3)
 	push hl
 	ld hl, sp+$4
 	push bc
@@ -1493,8 +1488,8 @@ MaxOutEventFlag: ; cac5 (3:4ac5)
 	ret
 ; 0xcacd
 
-Func_cacd: ; cacd (3:4acd)
-	call Func_cab3
+ZeroStackFlagValue: ; cacd (3:4acd)
+	call GetByteAfterCall
 ;	fallthrough
 
 ZeroOutEventFlag: ; cad0 (3:4ad0)
@@ -1519,8 +1514,8 @@ Func_cad8: ; cad8 (3:4ad8)
 	dec c
 	jr nz, .asm_cae0
 	ld c, b
-	call Func_ca8f
-	ld l, $79
+	set_flag_value EVENT_FLAG_2E
+	ld a, c
 	push af
 	cp $8
 	jr nc, .asm_caff
@@ -1572,126 +1567,125 @@ GetEventFlag: ; cb1d (3:4b1d)
 
 ; offset - bytes to set or reset
 EventFlagMods: ; cb37 (3:4b37)
-	const_def
-	flag_def EVENT_FLAG_00,           $3f, %10000000
-	flag_def EVENT_FLAG_01,           $3f, %01000000
-	flag_def EVENT_FLAG_02,           $3f, %00100000
-	flag_def EVENT_FLAG_03,           $3f, %00010000
-	flag_def EVENT_FLAG_04,           $3f, %00001000
-	flag_def EVENT_FLAG_05,           $3f, %00000100
-	flag_def EVENT_FLAG_06,           $3f, %00000010
-	flag_def EVENT_FLAG_07,           $3f, %00000001
-	flag_def EVENT_FLAG_08,           $00, %10000000
-	flag_def EVENT_FLAG_09,           $00, %01000000
-	flag_def EVENT_FLAG_0A,           $00, %00100000
-	flag_def EVENT_BEAT_AMY,          $00, %00010000
-	flag_def EVENT_FLAG_0C,           $00, %00001000
-	flag_def EVENT_FLAG_0D,           $00, %00000100
-	flag_def EVENT_FLAG_0E,           $00, %00000010
-	flag_def EVENT_FLAG_0F,           $00, %00000001
-	flag_def EVENT_FLAG_10,           $00, %11111111
-	flag_def EVENT_FLAG_11,           $01, %11110000
-	flag_def EVENT_FLAG_12,           $01, %00001111
-	flag_def EVENT_FLAG_13,           $02, %11000000
-	flag_def EVENT_FLAG_14,           $02, %00110000
-	flag_def EVENT_BEAT_SARA,         $02, %00001000
-	flag_def EVENT_BEAT_AMANDA,       $02, %00000100
-	flag_def EVENT_FLAG_17,           $03, %11110000
-	flag_def EVENT_FLAG_18,           $03, %00001111
-	flag_def EVENT_FLAG_19,           $04, %11110000
-	flag_def EVENT_FLAG_1A,           $04, %00001111
-	flag_def EVENT_FLAG_1B,           $05, %10000000
-	flag_def EVENT_FLAG_1C,           $05, %01000000
-	flag_def EVENT_FLAG_1D,           $05, %00100000
-	flag_def EVENT_FLAG_1E,           $05, %00010000
-	flag_def EVENT_FLAG_1F,           $05, %00001111
-	flag_def EVENT_FLAG_20,           $06, %11110000
-	flag_def EVENT_FLAG_21,           $06, %00001100
-	flag_def EVENT_FLAG_22,           $06, %00000010
-	flag_def EVENT_FLAG_23,           $06, %00000001
-	flag_def EVENT_FLAG_24,           $07, %11000000
-	flag_def EVENT_FLAG_25,           $07, %00100000
-	flag_def EVENT_FLAG_26,           $07, %00010000
-	flag_def EVENT_FLAG_27,           $07, %00001000
-	flag_def EVENT_FLAG_28,           $07, %00000100
-	flag_def EVENT_FLAG_29,           $07, %00000010
-	flag_def EVENT_FLAG_2A,           $07, %00000001
-	flag_def EVENT_FLAG_2B,           $08, %11111111
-	flag_def EVENT_FLAG_2C,           $09, %11100000
-	flag_def EVENT_FLAG_2D,           $09, %00011111
-	flag_def EVENT_FLAG_2E,           $0a, %11110000
-	flag_def EVENT_FLAG_2F,           $0a, %00001000
-	flag_def EVENT_FLAG_30,           $0a, %00000100
-	flag_def EVENT_FLAG_31,           $0a, %00000011
-	flag_def EVENT_FLAG_32,           $0b, %10000000
-	flag_def EVENT_JOSHUA_STATE,      $0b, %01110000
-	flag_def EVENT_FLAG_34,           $0b, %00001100
-	flag_def EVENT_FLAG_35,           $0b, %00000011
-	flag_def EVENT_FLAG_36,           $0c, %11100000
-	flag_def EVENT_FLAG_37,           $0c, %00011100
-	flag_def EVENT_FLAG_38,           $0c, %00000010
-	flag_def EVENT_FLAG_39,           $0c, %00000001
-	flag_def EVENT_FLAG_3A,           $0d, %10000000
-	flag_def EVENT_FLAG_3B,           $0d, %01000000
-	flag_def FLAG_BEAT_BRITTANY,      $0d, %00100000
-	flag_def EVENT_FLAG_3D,           $0d, %00010000
-	flag_def EVENT_FLAG_3E,           $0d, %00001110
-	flag_def EVENT_FLAG_3F,           $0e, %11100000
-	flag_def EVENT_FLAG_40,           $0e, %00011100
-	flag_def EVENT_FLAG_41,           $0f, %11100000
-	flag_def EVENT_FLAG_42,           $10, %10000000
-	flag_def EVENT_FLAG_43,           $10, %01000000
-	flag_def EVENT_FLAG_44,           $10, %00110000
-	flag_def EVENT_FLAG_45,           $10, %00001100
-	flag_def EVENT_FLAG_46,           $10, %00000010
-	flag_def EVENT_FLAG_47,           $10, %00000001
-	flag_def EVENT_FLAG_48,           $11, %11100000
-	flag_def EVENT_FLAG_49,           $11, %00011100
-	flag_def EVENT_FLAG_4A,           $12, %11100000
-	flag_def EVENT_FLAG_4B,           $13, %10000000
-	flag_def EVENT_FLAG_4C,           $13, %01100000
-	flag_def EVENT_FLAG_4D,           $13, %00011000
-	flag_def EVENT_FLAG_4E,           $13, %00000100
-	flag_def EVENT_FLAG_4F,           $13, %00000010
-	flag_def EVENT_FLAG_50,           $14, %10000000
-	flag_def EVENT_FLAG_51,           $14, %01000000
-	flag_def EVENT_FLAG_52,           $14, %00100000
-	flag_def EVENT_FLAG_53,           $14, %00010000
-	flag_def EVENT_FLAG_54,           $14, %00001000
-	flag_def EVENT_FLAG_55,           $14, %00000100
-	flag_def EVENT_FLAG_56,           $14, %00000010
-	flag_def EVENT_FLAG_57,           $14, %00000001
-	flag_def EVENT_FLAG_58,           $15, %11110000
-	flag_def EVENT_FLAG_59,           $15, %00001000
-	flag_def EVENT_FLAG_5A,           $16, %10000000
-	flag_def EVENT_FLAG_5B,           $16, %01000000
-	flag_def EVENT_FLAG_5C,           $16, %00100000
-	flag_def EVENT_FLAG_5D,           $16, %00010000
-	flag_def EVENT_FLAG_5E,           $16, %00001000
-	flag_def EVENT_FLAG_5F,           $16, %00000100
-	flag_def EVENT_FLAG_60,           $16, %00000010
-	flag_def EVENT_FLAG_61,           $16, %00000001
-	flag_def EVENT_FLAG_62,           $16, %11111111
-	flag_def EVENT_FLAG_63,           $17, %10000000
-	flag_def EVENT_FLAG_64,           $17, %01000000
-	flag_def EVENT_FLAG_65,           $17, %00110000
-	flag_def EVENT_FLAG_66,           $17, %00001000
-	flag_def EVENT_FLAG_67,           $17, %00000100
-	flag_def EVENT_FLAG_68,           $18, %11000000
-	flag_def EVENT_FLAG_69,           $18, %00110000
-	flag_def EVENT_FLAG_6A,           $18, %00001100
-	flag_def EVENT_FLAG_6B,           $18, %00000011
-	flag_def EVENT_FLAG_6C,           $19, %11000000
-	flag_def EVENT_FLAG_6D,           $19, %00100000
-	flag_def EVENT_FLAG_6E,           $19, %00010000
-	flag_def EVENT_FLAG_6F,           $19, %00001000
-	flag_def EVENT_FLAG_70,           $19, %00000100
-	flag_def EVENT_FLAG_71,           $19, %00111100
-	flag_def EVENT_FLAG_72,           $1a, %11111100
-	flag_def EVENT_FLAG_73,           $1a, %00000011
-	flag_def EVENT_FLAG_74,           $1b, %11111111
-	flag_def EVENT_FLAG_75,           $1c, %11110000
-	flag_def EVENT_FLAG_76,           $1c, %00001111
+	flag_def $3f, %10000000 ; EVENT_FLAG_00
+	flag_def $3f, %01000000 ; EVENT_FLAG_01
+	flag_def $3f, %00100000 ; EVENT_FLAG_02
+	flag_def $3f, %00010000 ; EVENT_FLAG_03
+	flag_def $3f, %00001000 ; EVENT_FLAG_04
+	flag_def $3f, %00000100 ; EVENT_FLAG_05
+	flag_def $3f, %00000010 ; EVENT_FLAG_06
+	flag_def $3f, %00000001 ; EVENT_FLAG_07
+	flag_def $00, %10000000 ; EVENT_FLAG_08
+	flag_def $00, %01000000 ; EVENT_FLAG_09
+	flag_def $00, %00100000 ; EVENT_FLAG_0A
+	flag_def $00, %00010000 ; EVENT_BEAT_AMY
+	flag_def $00, %00001000 ; EVENT_FLAG_0C
+	flag_def $00, %00000100 ; EVENT_FLAG_0D
+	flag_def $00, %00000010 ; EVENT_FLAG_0E
+	flag_def $00, %00000001 ; EVENT_FLAG_0F
+	flag_def $00, %11111111 ; EVENT_FLAG_10
+	flag_def $01, %11110000 ; EVENT_FLAG_11
+	flag_def $01, %00001111 ; EVENT_FLAG_12
+	flag_def $02, %11000000 ; EVENT_FLAG_13
+	flag_def $02, %00110000 ; EVENT_FLAG_14
+	flag_def $02, %00001000 ; EVENT_BEAT_SARA
+	flag_def $02, %00000100 ; EVENT_BEAT_AMANDA
+	flag_def $03, %11110000 ; EVENT_FLAG_17
+	flag_def $03, %00001111 ; EVENT_FLAG_18
+	flag_def $04, %11110000 ; EVENT_FLAG_19
+	flag_def $04, %00001111 ; EVENT_FLAG_1A
+	flag_def $05, %10000000 ; EVENT_FLAG_1B
+	flag_def $05, %01000000 ; EVENT_FLAG_1C
+	flag_def $05, %00100000 ; EVENT_FLAG_1D
+	flag_def $05, %00010000 ; EVENT_FLAG_1E
+	flag_def $05, %00001111 ; EVENT_FLAG_1F
+	flag_def $06, %11110000 ; EVENT_FLAG_20
+	flag_def $06, %00001100 ; EVENT_FLAG_21
+	flag_def $06, %00000010 ; EVENT_FLAG_22
+	flag_def $06, %00000001 ; EVENT_FLAG_23
+	flag_def $07, %11000000 ; EVENT_FLAG_24
+	flag_def $07, %00100000 ; EVENT_FLAG_25
+	flag_def $07, %00010000 ; EVENT_FLAG_26
+	flag_def $07, %00001000 ; EVENT_FLAG_27
+	flag_def $07, %00000100 ; EVENT_FLAG_28
+	flag_def $07, %00000010 ; EVENT_FLAG_29
+	flag_def $07, %00000001 ; EVENT_FLAG_2A
+	flag_def $08, %11111111 ; EVENT_FLAG_2B
+	flag_def $09, %11100000 ; EVENT_FLAG_2C
+	flag_def $09, %00011111 ; EVENT_FLAG_2D
+	flag_def $0a, %11110000 ; EVENT_FLAG_2E
+	flag_def $0a, %00001000 ; EVENT_FLAG_2F
+	flag_def $0a, %00000100 ; EVENT_FLAG_30
+	flag_def $0a, %00000011 ; EVENT_FLAG_31
+	flag_def $0b, %10000000 ; EVENT_FLAG_32
+	flag_def $0b, %01110000 ; EVENT_JOSHUA_STATE
+	flag_def $0b, %00001100 ; EVENT_FLAG_34
+	flag_def $0b, %00000011 ; EVENT_FLAG_35
+	flag_def $0c, %11100000 ; EVENT_FLAG_36
+	flag_def $0c, %00011100 ; EVENT_FLAG_37
+	flag_def $0c, %00000010 ; EVENT_FLAG_38
+	flag_def $0c, %00000001 ; EVENT_FLAG_39
+	flag_def $0d, %10000000 ; EVENT_FLAG_3A
+	flag_def $0d, %01000000 ; EVENT_FLAG_3B
+	flag_def $0d, %00100000 ; FLAG_BEAT_BRITTANY
+	flag_def $0d, %00010000 ; EVENT_FLAG_3D
+	flag_def $0d, %00001110 ; EVENT_FLAG_3E
+	flag_def $0e, %11100000 ; EVENT_FLAG_3F
+	flag_def $0e, %00011100 ; EVENT_FLAG_40
+	flag_def $0f, %11100000 ; EVENT_FLAG_41
+	flag_def $10, %10000000 ; EVENT_FLAG_42
+	flag_def $10, %01000000 ; EVENT_FLAG_43
+	flag_def $10, %00110000 ; EVENT_FLAG_44
+	flag_def $10, %00001100 ; EVENT_FLAG_45
+	flag_def $10, %00000010 ; EVENT_FLAG_46
+	flag_def $10, %00000001 ; EVENT_FLAG_47
+	flag_def $11, %11100000 ; EVENT_FLAG_48
+	flag_def $11, %00011100 ; EVENT_FLAG_49
+	flag_def $12, %11100000 ; EVENT_FLAG_4A
+	flag_def $13, %10000000 ; EVENT_FLAG_4B
+	flag_def $13, %01100000 ; EVENT_FLAG_4C
+	flag_def $13, %00011000 ; EVENT_FLAG_4D
+	flag_def $13, %00000100 ; EVENT_FLAG_4E
+	flag_def $13, %00000010 ; EVENT_FLAG_4F
+	flag_def $14, %10000000 ; EVENT_FLAG_50
+	flag_def $14, %01000000 ; EVENT_FLAG_51
+	flag_def $14, %00100000 ; EVENT_FLAG_52
+	flag_def $14, %00010000 ; EVENT_FLAG_53
+	flag_def $14, %00001000 ; EVENT_FLAG_54
+	flag_def $14, %00000100 ; EVENT_FLAG_55
+	flag_def $14, %00000010 ; EVENT_FLAG_56
+	flag_def $14, %00000001 ; EVENT_FLAG_57
+	flag_def $15, %11110000 ; EVENT_FLAG_58
+	flag_def $15, %00001000 ; EVENT_FLAG_59
+	flag_def $16, %10000000 ; EVENT_FLAG_5A
+	flag_def $16, %01000000 ; EVENT_FLAG_5B
+	flag_def $16, %00100000 ; EVENT_FLAG_5C
+	flag_def $16, %00010000 ; EVENT_FLAG_5D
+	flag_def $16, %00001000 ; EVENT_FLAG_5E
+	flag_def $16, %00000100 ; EVENT_FLAG_5F
+	flag_def $16, %00000010 ; EVENT_FLAG_60
+	flag_def $16, %00000001 ; EVENT_FLAG_61
+	flag_def $16, %11111111 ; EVENT_FLAG_62
+	flag_def $17, %10000000 ; EVENT_FLAG_63
+	flag_def $17, %01000000 ; EVENT_FLAG_64
+	flag_def $17, %00110000 ; EVENT_FLAG_65
+	flag_def $17, %00001000 ; EVENT_FLAG_66
+	flag_def $17, %00000100 ; EVENT_FLAG_67
+	flag_def $18, %11000000 ; EVENT_FLAG_68
+	flag_def $18, %00110000 ; EVENT_FLAG_69
+	flag_def $18, %00001100 ; EVENT_FLAG_6A
+	flag_def $18, %00000011 ; EVENT_FLAG_6B
+	flag_def $19, %11000000 ; EVENT_FLAG_6C
+	flag_def $19, %00100000 ; EVENT_FLAG_6D
+	flag_def $19, %00010000 ; EVENT_FLAG_6E
+	flag_def $19, %00001000 ; EVENT_FLAG_6F
+	flag_def $19, %00000100 ; EVENT_FLAG_70
+	flag_def $19, %00111100 ; EVENT_FLAG_71
+	flag_def $1a, %11111100 ; EVENT_FLAG_72
+	flag_def $1a, %00000011 ; EVENT_FLAG_73
+	flag_def $1b, %11111111 ; EVENT_FLAG_74
+	flag_def $1c, %11110000 ; EVENT_FLAG_75
+	flag_def $1c, %00001111 ; EVENT_FLAG_76
 
 Func_cc25: ; cc25 (3:4c25)
 	ld hl, wd0ca
@@ -1877,8 +1871,8 @@ OWScript_AskQuestionJump: ; cce9 (3:4ce9)
 OWScript_StartBattle: ; cd01 (3:4d01)
 	call Func_cd66
 	ld a, [wd3b6]
-	ld l, $0
-	call Func_39ad
+	ld l, LOADED_NPC_ID
+	call GetItemInLoadedNPCIndex
 	ld a, [hl]
 	farcall Func_118d3
 	ld a, [wcc19]
@@ -1893,8 +1887,8 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld [wcc19], a
 .asm_cd26
 	ld a, [wd3b6]
-	ld l, $0
-	call Func_39ad
+	ld l, LOADED_NPC_ID
+	call GetItemInLoadedNPCIndex
 	ld a, [hl]
 asm_cd2f
 	ld [wd0c4], a
@@ -1952,8 +1946,7 @@ OWScript_PrintVariableText: ; cd83 (3:4d83)
 	jp IncreaseOWScriptPointerBy5
 
 Func_cd94: ; cd94 (3:4d94)
-	call Func_ca69
-	db $44
+	get_flag_value EVENT_FLAG_44
 Unknown_cd98:
 	dec a
 	and $3
@@ -1989,28 +1982,28 @@ OWScript_PrintTextCloseBox: ; cdb9 (3:4db9)
 
 Func_cdcb: ; cdcb (3:4dcb)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 Func_cdd1: ; cdd1 (3:4dd1)
 	farcall Func_1c50a
 	jp IncreaseOWScriptPointerBy1
 
 Func_cdd8: ; cdd8 (3:4dd8)
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
 	push af
 	ld a, [wd696]
 	ld [wTempNPC], a
-	call Func_39c3
+	call FindLoadedNPC
 	call Func_cdd1
 	pop af
 	ld [wTempNPC], a
 	pop af
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ret
 
 Func_cdf5: ; cdf5 (3:4df5)
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
 	push af
@@ -2028,12 +2021,12 @@ Func_cdf5: ; cdf5 (3:4df5)
 	pop af
 	ld [wTempNPC], a
 	pop af
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	jp IncreaseOWScriptPointerBy3
 
 Func_ce26: ; ce26 (3:4e26)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	farcall Func_1c455
 	rlca
 	add c
@@ -2055,27 +2048,27 @@ Func_ce3a: ; ce3a (3:4e3a)
 
 Func_ce4a: ; ce4a (3:4e4a)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	jr Func_ce3a
 
 Func_ce52: ; ce52 (3:4e52)
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
 	push af
 	ld a, [wd696]
 asm_ce5d
 	ld [wTempNPC], a
-	call Func_39c3
+	call FindLoadedNPC
 	call Func_ce3a
 	pop af
 	ld [wTempNPC], a
 	pop af
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ret
 
 Func_ce6f: ; ce6f (3:4e6f)
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
 	push af
@@ -2274,8 +2267,7 @@ Func_cf7b: ; cf7b (3:4f7b)
 
 Func_cf96: ; cf96 (3:4f96)
 	ld c, $0
-	call Func_ca69
-	db $11
+	get_flag_value EVENT_FLAG_11
 	or a
 	jr z, Func_cfc0
 	cp a, $08
@@ -2283,15 +2275,13 @@ Func_cf96: ; cf96 (3:4f96)
 	inc c
 
 .asm_cfa4
-	call Func_ca69
-	db $17
+	get_flag_value EVENT_FLAG_17
 	cp $8
 	jr c, .asm_cfad
 	inc c
 
 .asm_cfad
-	call Func_ca69
-	db $20
+	get_flag_value EVENT_FLAG_20
 	cp a, $08
 	jr c, .asm_cfb6
 	inc c
@@ -2308,14 +2298,13 @@ Func_cfc0: ; cfc0 (3:4fc0)
 
 Func_cfc6: ; cfc6 (3:4fc6)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ld a, c
 	farcall Func_1c52e
 	jp IncreaseOWScriptPointerBy2
 
 Func_cfd4: ; cfd4 (3:4fd4)
-	call Func_ca69
-	db $2d
+	get_flag_value EVENT_FLAG_2D
 	ld b, a
 .asm_cfd9
 	ld a, $5
@@ -2339,15 +2328,13 @@ Func_cfd4: ; cfd4 (3:4fd4)
 	or b
 	push bc
 	ld c, a
-	call Func_ca8f
-	dec l
+	set_flag_value EVENT_FLAG_2D
 	pop bc
 	ld b, $0
 	ld hl, Data_d006
 	add hl, bc
 	ld c, [hl]
-	call Func_ca8f
-	dec hl
+	set_flag_value EVENT_FLAG_2B
 	jp IncreaseOWScriptPointerBy1
 
 Data_d006: ; d006 (3:5006)
@@ -2359,8 +2346,7 @@ Func_d00b: ; d00b (3:500b)
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
-	call Func_ca69
-	db $2b
+	get_flag_value EVENT_FLAG_2B
 	ld e, a
 	ld d, $0
 	call GetCardName
@@ -2371,22 +2357,19 @@ Func_d00b: ; d00b (3:500b)
 	jp IncreaseOWScriptPointerBy2
 
 Func_d025: ; d025 (3:5025)
-	call Func_ca69
-	db $2b
+	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollectionAndDecks
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d032: ; d032 (3:5032)
-	call Func_ca69
-	db $2b
+	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollection
 	jp c, Func_cf67
 	jp Func_cf6d
 
 Func_d03f: ; d03f (3:503f)
-	call Func_ca69
-	db $2b
+	get_flag_value EVENT_FLAG_2B
 	call RemoveCardFromCollection
 	jp IncreaseOWScriptPointerBy1
 
@@ -2433,17 +2416,17 @@ Func_d088: ; d088 (3:5088)
 	ld a, c
 	ld [wTempNPC], a
 	call GetOWSArgs2AfterPointer
-	call Func_c926
+	call SetNextNPCAndOWSequence
 	jp IncreaseOWScriptPointerBy4
 
 Func_d095: ; d095 (3:5095)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	push bc
 	call GetOWSArgs3AfterPointer
 	ld a, [wd3b6]
-	ld l, $5
-	call Func_39ad
+	ld l, LOADED_NPC_FIELD_05
+	call GetItemInLoadedNPCIndex
 	res 4, [hl]
 	ld a, [hl]
 	or c
@@ -2462,7 +2445,7 @@ Func_d095: ; d095 (3:5095)
 
 Func_d0be: ; d0be (3:50be)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ld a, c
 	ld c, b
 	ld b, a
@@ -2479,7 +2462,7 @@ OWScript_DoFrames: ; d0ce (3:50ce)
 
 Func_d0d9: ; d0d9 (3:50d9)
 	ld a, [wd3b6]
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ld d, c
 	ld e, b
 	farcall Func_1c477
@@ -2501,13 +2484,13 @@ Func_d0f2: ; d0f2 (3:50f2)
 	jp ScriptEventPassedTryJump
 
 Func_d103: ; d103 (3:5103)
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
 	push af
 	ld a, c
 	ld [wTempNPC], a
-	call Func_39c3
+	call FindLoadedNPC
 	jr c, .asm_d119
 	call $54d1
 	jr .asm_d11c
@@ -2519,7 +2502,7 @@ Func_d103: ; d103 (3:5103)
 	pop af
 	ld [wTempNPC], a
 	pop af
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ret
 
 Func_d125: ; d125 (3:5125)
@@ -2582,12 +2565,10 @@ Func_d16b: ; d16b (3:516b)
 Func_d195: ; d195 (3:5195)
 	ld a, [wTempNPC]
 	push af
-	call Func_ca69
-	db $45
+	get_flag_value EVENT_FLAG_45
 	inc a
 	ld c, a
-	call Func_ca8f
-	ld b, l
+	set_flag_value EVENT_FLAG_45
 	call Func_f580
 	pop af
 	ld [wTempNPC], a
@@ -2598,8 +2579,7 @@ Func_d1ad: ; d1ad (3:51ad)
 	jp IncreaseOWScriptPointerBy1
 
 Func_d1b3: ; d1b3 (3:51b3)
-	call Func_ca69
-	db $44
+	get_flag_value EVENT_FLAG_44
 	dec a
 	cp $2
 	jr c, .asm_d1c3
@@ -2627,8 +2607,7 @@ asm_d1c6
 	INCROM $d1dc, $d209
 
 Func_d209: ; d209 (3:5209)
-	call Func_ca69
-	db $71
+	get_flag_value EVENT_FLAG_71
 	ld e, a
 .asm_d20e
 	call UpdateRNGSources
@@ -2670,8 +2649,7 @@ Func_d24c: ; d24c (3:524c)
 	call Func_d28c
 	ld a, [wd695]
 	ld c, a
-	call Func_ca8f
-	halt
+	set_flag_value EVENT_FLAG_76
 	jp IncreaseOWScriptPointerBy1
 
 	INCROM $d25e, $d271
@@ -2767,8 +2745,7 @@ Func_d2f6: ; d2f6 (3:52f6)
 	call Func_d28c
 	ld a, [wd694]
 	ld c, a
-	call Func_ca8f
-	ld [hl], l
+	set_flag_value EVENT_FLAG_75
 	xor a
 	ld [wd694], a
 	jp IncreaseOWScriptPointerBy1
@@ -2782,8 +2759,7 @@ Func_d317: ; d317 (3:5317)
 	call Func_d28c
 	ld a, [wd694]
 	ld c, a
-	call Func_ca8f
-	ld [hl], l
+	set_flag_value EVENT_FLAG_75
 	jp IncreaseOWScriptPointerBy1
 
 
@@ -2849,8 +2825,7 @@ Func_d39d: ; d39d (3:539d)
 	jr nz, .asm_d3ac
 	farcall Func_10dba
 	ld c, a
-	call Func_ca8f
-	ld [hl], d
+	set_flag_value EVENT_FLAG_72
 	jr .asm_d3b6
 
 .asm_d3ac
@@ -3072,41 +3047,34 @@ OWScript_JumpIfFlagZero2:
 
 LoadOverworld: ; d4ec (3:54ec)
 	call Func_d4fb
-	call Func_ca69
-	ld a, $b7
+	get_flag_value EVENT_FLAG_3E
+	or a
 	ret nz
 	ld bc, OWSequence_d52e
-	jp Func_c935
+	jp SetNextOWSequence
 
 Func_d4fb: ; d4fb (3:54fb)
-	call Func_cacd
-	ld e, c
+	zero_out_flag EVENT_FLAG_59
 	call Func_f602
-	call Func_ca69
-	db $3f
+	get_flag_value EVENT_FLAG_3F
 	cp $02
 	jr z, .asm_d527
-	call Func_ca69
-	db $40
+	get_flag_value EVENT_FLAG_40
 	cp $02
 	jr z, .asm_d521
-	call Func_ca69
-	db $41
+	get_flag_value EVENT_FLAG_41
 	cp $02
 	jr z, .asm_d51b
 	ret
 .asm_d51b
 	ld c, $07
-	call Func_ca8f
-	ld b, c
+	set_flag_value EVENT_FLAG_41
 .asm_d521
 	ld c, $07
-	call Func_ca8f
-	ld b, b
+	set_flag_value EVENT_FLAG_40
 .asm_d527
 	ld c, $07
-	call Func_ca8f
-	ccf
+	set_flag_value EVENT_FLAG_3F
 	ret
 
 OWSequence_d52e: ; d52e (3:552e)
@@ -3196,14 +3164,13 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
 	cp $8
 	ret nz
-	call Func_ca69
-	db $33
+	get_flag_value EVENT_JOSHUA_STATE
 	cp $2
 	ret nc
 	ld a, $21
 	ld [wTempNPC], a
 	ld bc, OWSequence_NotReadyToSeeAmy
-	jp Func_c926
+	jp SetNextNPCAndOWSequence
 
 WaterClubAfterDuel: ;e157 (3:6157)
 	ld hl, .after_duel_table
@@ -3669,7 +3636,7 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	jp Func_c926
+	jp SetNextNPCAndOWSequence
 ; 0xe553
 
 GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
@@ -3800,34 +3767,32 @@ LoadClubEntrance: ; e809 (3:6809)
 TryFirstRonaldEncounter: ; e813 (3:6813)
 	ld a, RONALD1
 	ld [wTempNPC], a
-	call Func_39c3
+	call FindLoadedNPC
 	ret c
 	ld bc, OWSequence_FirstRonaldEncounter
-	jp Func_c926
+	jp SetNextNPCAndOWSequence
 
 TryFirstRonaldFight: ; e822 (3:6822)
 	ld a, RONALD2
 	ld [$d3ab], a
-	call Func_39c3
+	call FindLoadedNPC
 	ret c
-	call Func_ca69
-	db $4c
+	get_flag_value EVENT_FLAG_4C
 	or a
 	ret nz
 	ld bc, OWSequence_FirstRonaldFight
-	jp Func_c926
+	jp SetNextNPCAndOWSequence
 
 TrySecondRonaldFight: ; e837 (3:6837)
 	ld a, RONALD3
 	ld [$d3ab], a
-	call Func_39c3
+	call FindLoadedNPC
 	ret c
-	call Func_ca69
-	db $4d
+	get_flag_value EVENT_FLAG_4D
 	or a
 	ret nz
 	ld bc, OWSequenceSecondRonaldFight
-	jp Func_c926
+	jp SetNextNPCAndOWSequence
 ; 0xe84c
 
 	INCROM $e84c, $e862
@@ -4029,12 +3994,10 @@ OWJump_FinishedSecondRonaldFight ; e959 (3:6959)
 	INCROM $e963, $f580
 
 Func_f580: ; f580 (3:7580)
-	call Func_ca69
-	db $44
+	get_flag_value EVENT_FLAG_44
 	cp $3
 	jr z, .asm_f596
-	call Func_ca69
-	db $45
+	get_flag_value EVENT_FLAG_45
 	cp $3
 	ld d, $18
 	jr nz, .asm_f598
@@ -4085,7 +4048,7 @@ Func_fc2b: ; fc2b (3:7c2b)
 	ld [wCurrentNPCNameTx], a
 	ld a, $3
 	ld [wCurrentNPCNameTx+1], a
-	jp Func_c935
+	jp SetNextOWSequence
 
 PointerTable_fc4c: ; fc4c (3:7c4c)
 	dw Unknown_fc64

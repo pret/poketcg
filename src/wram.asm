@@ -1819,11 +1819,9 @@ wd0c4:: ; d0c4
 wd0c5:: ; d0c5
 	ds $1
 
-wd0c6:: ; d0c6
-	ds $1
-
-wd0c7:: ; d0c7
-	ds $1
+; used to store the location of an overworld sequence, which is jumped to later
+wNextOWSequence:: ; d0c6
+	ds $2
 
 wCurrentNPCNameTx:: ; d0c8
 	ds $2
@@ -1998,7 +1996,7 @@ wd332:: ; d332
 wd333:: ; d333
 	ds $1
 
-wd334:: ; d334
+wPlayerDirection:: ; d334
 	ds $1
 
 wd335:: ; d335
@@ -2063,11 +2061,17 @@ wd348:: ; d348
 wd349:: ; d349
 	ds $1
 
-; some kind of array with 8 sets of c data
-wd34a:: ; d34a
-	ds $60
+wLoadedNPCs:: ; d34a
+	loaded_npc_struct wLoadedNPC1
+	loaded_npc_struct wLoadedNPC2
+	loaded_npc_struct wLoadedNPC3
+	loaded_npc_struct wLoadedNPC4
+	loaded_npc_struct wLoadedNPC5
+	loaded_npc_struct wLoadedNPC6
+	loaded_npc_struct wLoadedNPC7
+	loaded_npc_struct wLoadedNPC8
 
-wd3aa:: ; d3aa
+wLoadedNPCTempIndex:: ; d3aa
 	ds $1
 
 wTempNPC:: ; d3ab

@@ -1,3 +1,21 @@
+LOADED_NPC_MAX EQU $08
+
+; wLoadedNPCs structure
+	const_def
+	const LOADED_NPC_ID
+	const LOADED_NPC_SPRITE
+	const LOADED_NPC_COORD_X
+	const LOADED_NPC_COORD_Y
+	const LOADED_NPC_DIRECTION
+	const LOADED_NPC_FIELD_05
+	const LOADED_NPC_FIELD_06
+	const LOADED_NPC_FIELD_07
+	const LOADED_NPC_FIELD_08
+	const LOADED_NPC_FIELD_09
+	const LOADED_NPC_FIELD_0A
+	const LOADED_NPC_FIELD_0B
+LOADED_NPC_LENGTH EQU const_value
+
 ; npc_struct constants
 	const_def
 	const NPC_TRAINER_ID

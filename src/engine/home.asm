@@ -10908,15 +10908,16 @@ Func_3997: ; 3997 (0:3997)
 	call BankswitchROM
 	ret
 
-Func_39a7: ; 39a7 (0:39a7)
-	ld l, $0
-	call Func_39ad
+; returns in hl a pointer to the first element for the a'th NPC
+GetLoadedNPCID: ; 39a7 (0:39a7)
+	ld l, LOADED_NPC_ID
+	call GetItemInLoadedNPCIndex
 	ret
 
-; return hl = wd34a + a * $c + l, with a < $8
-Func_39ad: ; 39ad (0:39ad)
+; return in hl a pointer to the a'th items element l
+GetItemInLoadedNPCIndex: ; 39ad (0:39ad)
 	push bc
-	cp $8
+	cp LOADED_NPC_MAX
 	jr c, .asm_39b4
 	debug_ret
 	xor a
@@ -10929,24 +10930,24 @@ Func_39ad: ; 39ad (0:39ad)
 	add l
 	ld l, a
 	ld h, $0
-	ld bc, wd34a
+	ld bc, wLoadedNPCs
 	add hl, bc
 	pop bc
 	ret
 
-; Finds the index on wd34a table of the npc in wTempNPC
-; returns it in a and puts it into wd3aa
+; Finds the index on wLoadedNPCs table of the npc in wTempNPC
+; returns it in a and puts it into wLoadedNPCTempIndex
 ; c flag set if no npc found
-Func_39c3: ; 39c3 (0:39c3)
+FindLoadedNPC: ; 39c3 (0:39c3)
 	push hl
 	push bc
 	push de
 	xor a
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ld b, a
-	ld c, $8
-	ld de, $000c
-	ld hl, wd34a
+	ld c, LOADED_NPC_MAX
+	ld de, LOADED_NPC_LENGTH
+	ld hl, wLoadedNPCs
 	ld a, [wTempNPC]
 .findNPCLoop
 	cp [hl]
@@ -10959,7 +10960,7 @@ Func_39c3: ; 39c3 (0:39c3)
 	jr z, .exit
 .foundNPCMatch
 	ld a, b
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	or a
 .exit
 	pop de
@@ -11069,7 +11070,7 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	call Func_c653
 	ld a, $4
 	call BankswitchROM
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 	ld d, a
 .asm_3a79
 	ld a, [hli]
@@ -11086,9 +11087,9 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	cp c
 	jr nz, .asm_3aab
 	ld a, [hli]
-	ld [wd0c6], a
+	ld [wNextOWSequence], a
 	ld a, [hli]
-	ld [wd0c7], a
+	ld [wNextOWSequence+1], a
 	ld a, [hli]
 	ld [wd0ca], a
 	ld a, [hli]

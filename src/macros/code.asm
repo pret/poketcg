@@ -26,6 +26,24 @@ else
 endc
 ENDM
 
+; runs SetEventFlagValue with the next value as the flag, c as the new value
+set_flag_value: MACRO
+	call SetStackFlagValue
+	db \1
+ENDM
+
+; runs ZeroOutEventFlag with the next value as the flag
+zero_out_flag: MACRO
+	call ZeroStackFlagValue
+	db \1
+ENDM
+
+; runs GetEventFlagValue with the next value as the flag. returns value in a
+get_flag_value: MACRO
+	call GetStackFlagValue
+	db \1
+ENDM
+
 ; the rst $38 handler is a single ret instruction
 ; probably used for testing purposes during development
 debug_ret EQUS "rst $38"

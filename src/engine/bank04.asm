@@ -366,7 +366,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	and D_PAD
 	jr z, .asm_10e83
 	farcall Func_c5d5
-	ld [wd334], a
+	ld [wPlayerDirection], a
 	call Func_10e97
 	jr .asm_10e96
 .asm_10e83
@@ -388,7 +388,7 @@ Func_10e97: ; 10e97 (4:4e97)
 	rlca
 	rlca
 	ld c, a
-	ld a, [wd334]
+	ld a, [wPlayerDirection]
 	add c
 	ld c, a
 	ld b, $0
@@ -711,7 +711,7 @@ Func_11102: ; 11102 (4:5102)
 	jr z, .asm_1113a
 	ld a, $3
 .asm_1113a
-	ld [wd334], a
+	ld [wPlayerDirection], a
 	ret
 
 Func_1113e: ; 1113e (4:513e)
@@ -747,7 +747,7 @@ Func_1113e: ; 1113e (4:513e)
 	jr z, .asm_11175
 	ld a, $0
 .asm_11175
-	ld [wd334], a
+	ld [wPlayerDirection], a
 	ret
 
 Func_11179: ; 11179 (4:5179)
@@ -878,8 +878,8 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	pop hl
 	ret
 
-; this appears to find data about the NPC we're talking to
-Func_1187d: ; 1187d (4:587d)
+; Loads Name into wCurrentNPCNameTx and gets OWSequence ptr into bc
+GetNPCNameAndOWSequence: ; 1187d (4:587d)
 	push hl
 	call GetNPCDataPointer
 	ld bc, NPC_DATA_OWSEQUENCE_PTR
