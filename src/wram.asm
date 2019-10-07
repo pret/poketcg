@@ -2164,7 +2164,8 @@ wd420:: ; d420
 wd421:: ; d421
 	ds $1
 
-wd422:: ; d422
+; holds an animation to play
+wTempAnimation:: ; d422
 	ds $1
 
 ; holds a list of animations to play
