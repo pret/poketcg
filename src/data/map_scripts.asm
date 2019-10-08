@@ -23,17 +23,17 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; MASON_LABORATORY
-	dw NPCData_772f
+	dw MasonLabNPCS
 	dw $0000
 	dw $7b04
 	dw $5565
 	dw $5549
-	dw $553b
+	dw MasonLaboratoryAfterDuel
 	dw $0000
 	dw $555e
 
 ; DECK_MACHINE_ROOM
-	dw NPCData_775a
+	dw DeckMachineRoomNPCS
 	dw $0000
 	dw $7b4d
 	dw $0000
@@ -43,7 +43,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $58ad
 
 ; ISHIHARAS_HOUSE
-	dw NPCData_7773
+	dw IshiharasHouseNPCS
 	dw $0000
 	dw $7c02
 	dw $0000
@@ -53,7 +53,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; FIGHTING_CLUB_ENTRANCE
-	dw NPCData_7786
+	dw FightingClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -63,17 +63,17 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; FIGHTING_CLUB_LOBBY
-	dw NPCData_779f
+	dw FightingClubLobbyNPCS
 	dw $0000
 	dw $7c6f
 	dw $0000
 	dw $0000
-	dw $5c68
+	dw FightingClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
 ; FIGHTING_CLUB
-	dw NPCData_77ca
+	dw FightingClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -83,7 +83,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; ROCK_CLUB_ENTRANCE
-	dw NPCData_77e3
+	dw RockClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -93,7 +93,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; ROCK_CLUB_LOBBY
-	dw NPCData_77fc
+	dw RockClubLobbyNPCS
 	dw $0000
 	dw $7ca6
 	dw $0000
@@ -103,7 +103,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; ROCK_CLUB
-	dw NPCData_7827
+	dw RockClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -113,7 +113,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; WATER_CLUB_ENTRANCE
-	dw NPCData_783a
+	dw WaterClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -123,7 +123,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; WATER_CLUB_LOBBY
-	dw NPCData_7853
+	dw WaterClubLobbyNPCS
 	dw $0000
 	dw $7cdd
 	dw $0000
@@ -133,7 +133,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; WATER_CLUB
-	dw NPCData_787e
+	dw WaterClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -143,7 +143,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; LIGHTNING_CLUB_ENTRANCE
-	dw NPCData_7897
+	dw LightningClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -153,7 +153,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; LIGHTNING_CLUB_LOBBY
-	dw NPCData_78b0
+	dw LightningClubLobbyNPCS
 	dw $0000
 	dw $7d14
 	dw $0000
@@ -163,7 +163,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; LIGHTNING_CLUB
-	dw NPCData_78d5
+	dw LightningClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -173,7 +173,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; GRASS_CLUB_ENTRANCE
-	dw NPCData_78ee
+	dw GrassClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -183,7 +183,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; GRASS_CLUB_LOBBY
-	dw NPCData_790d
+	dw GrassClubLobbyNPCS
 	dw $0000
 	dw $7d4b
 	dw $0000
@@ -193,7 +193,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; GRASS_CLUB
-	dw NPCData_7932
+	dw GrassClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -203,7 +203,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; PSYCHIC_CLUB_ENTRANCE
-	dw NPCData_7945
+	dw PsychicClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -213,7 +213,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; PSYCHIC_CLUB_LOBBY
-	dw NPCData_7964
+	dw PsychicClubLobbyNPCS
 	dw $0000
 	dw $7d82
 	dw $0000
@@ -223,7 +223,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; PSYCHIC_CLUB
-	dw NPCData_798f
+	dw PsychicClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -233,7 +233,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; SCIENCE_CLUB_ENTRANCE
-	dw NPCData_79a8
+	dw ScienceClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -243,7 +243,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; SCIENCE_CLUB_LOBBY
-	dw NPCData_79c1
+	dw ScienceClubLobbyNPCS
 	dw $0000
 	dw $7db9
 	dw $0000
@@ -253,7 +253,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; SCIENCE_CLUB
-	dw NPCData_79ec
+	dw ScienceClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -263,7 +263,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; FIRE_CLUB_ENTRANCE
-	dw NPCData_7a05
+	dw FireClubEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -273,7 +273,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; FIRE_CLUB_LOBBY
-	dw NPCData_7a1e
+	dw FireClubLobbyNPCS
 	dw $0000
 	dw $7df0
 	dw $6d57
@@ -283,7 +283,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; FIRE_CLUB
-	dw NPCData_7a43
+	dw FireClubNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -293,7 +293,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; CHALLENGE_HALL_ENTRANCE
-	dw NPCData_7a5c
+	dw ChallengeHallEntranceNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -303,7 +303,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; CHALLENGE_HALL_LOBBY
-	dw NPCData_7a63
+	dw ChallengeHallLobbyNPCS
 	dw $0000
 	dw $7e27
 	dw $0000
@@ -313,7 +313,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; CHALLENGE_HALL
-	dw NPCData_7a9a
+	dw ChallengeHallNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -323,7 +323,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 
 ; POKEMON_DOME_ENTRANCE
-	dw NPCData_7ab9
+	dw PokemonDomeEntranceNPCS
 	dw $0000
 	dw $7e5e
 	dw $0000
@@ -333,7 +333,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $762a
 
 ; POKEMON_DOME
-	dw NPCData_7ac0
+	dw PokemonDomeNPCS
 	dw $0000
 	dw $0000
 	dw $0000
@@ -343,7 +343,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $7718
 
 ; HALL_OF_HONOR
-	dw NPCData_7adf
+	dw HallOfHonorNPCS
 	dw $0000
 	dw $7ec2
 	dw $0000

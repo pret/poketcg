@@ -1,7 +1,7 @@
 ; NPC Map data. Format:
 ; NPC, X position, Y Position, Direction,
 ; pre-load function. (Resets c flag if NPC should not be loaded)
-NPCData_772f: ; 772f (4:1372f)
+MasonLabNPCS: ; 772f (4:1372f)
 	db DRMASON, $0e, $06, SOUTH
 	dw $5710
 	db SAM, $04, $0e, EAST
@@ -18,7 +18,7 @@ NPCData_772f: ; 772f (4:1372f)
 	dw $55eb
 	db $00
 
-NPCData_775a: ; 775a (4:1375a)
+DeckMachineRoomNPCS: ; 775a (4:1375a)
 	db TECH6, $06, $08, SOUTH
 	dw $0000
 	db TECH7, $06, $16, WEST
@@ -29,7 +29,7 @@ NPCData_775a: ; 775a (4:1375a)
 	dw $0000
 	db $00
 
-NPCData_7773: ; 7773 (4:13773)
+IshiharasHouseNPCS: ; 7773 (4:13773)
 	db NIKKI, $04, $04, NORTH
 	dw $5add
 	db ISHIHARA, $08, $08, SOUTH
@@ -38,7 +38,7 @@ NPCData_7773: ; 7773 (4:13773)
 	dw $5c43
 	db $00
 
-NPCData_7786: ; 7786 (4:13786)
+FightingClubEntranceNPCS: ; 7786 (4:13786)
 	db CLERK1, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -49,7 +49,7 @@ NPCData_7786: ; 7786 (4:13786)
 	dw $6915
 	db $00
 
-NPCData_779f: ; 779f (4:1379f)
+FightingClubLobbyNPCS: ; 779f (4:1379f)
 	db MAN1, $0c, $0e, WEST
 	dw $0000
 	db IMAKUNI, $12, $02, NORTH
@@ -66,7 +66,7 @@ NPCData_779f: ; 779f (4:1379f)
 	dw $7c6c
 	db $00
 
-NPCData_77ca: ; 77ca (4:137ca)
+FightingClubNPCS: ; 77ca (4:137ca)
 	db CHRIS, $04, $08, SOUTH
 	dw $5e43
 	db MICHAEL, $0e, $0a, SOUTH
@@ -77,7 +77,7 @@ NPCData_77ca: ; 77ca (4:137ca)
 	dw $0000
 	db $00
 
-NPCData_77e3: ; 77e3 (4:137e3)
+RockClubEntranceNPCS: ; 77e3 (4:137e3)
 	db CLERK2, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -88,7 +88,7 @@ NPCData_77e3: ; 77e3 (4:137e3)
 	dw $6915
 	db $00
 
-NPCData_77fc: ; 77fc (4:137fc)
+RockClubLobbyNPCS: ; 77fc (4:137fc)
 	db CHRIS, $12, $08, WEST
 	dw $5ee9
 	db MATTHEW, $06, $0e, EAST
@@ -105,7 +105,7 @@ NPCData_77fc: ; 77fc (4:137fc)
 	dw $7c6c
 	db $00
 
-NPCData_7827: ; 7827 (4:13827)
+RockClubNPCS: ; 7827 (4:13827)
 	db RYAN, $14, $0e, EAST
 	dw $0000
 	db ANDREW, $06, $14, NORTH
@@ -114,7 +114,7 @@ NPCData_7827: ; 7827 (4:13827)
 	dw $0000
 	db $00
 
-NPCData_783a: ; 783a (4:1383a)
+WaterClubEntranceNPCS: ; 783a (4:1383a)
 	db CLERK3, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -125,7 +125,7 @@ NPCData_783a: ; 783a (4:1383a)
 	dw $6915
 	db $00
 
-NPCData_7853: ; 7853 (4:13853)
+WaterClubLobbyNPCS: ; 7853 (4:13853)
 	db GAL1, $06, $0e, SOUTH
 	dw $0000
 	db LASS1, $10, $0a, SOUTH
@@ -142,7 +142,7 @@ NPCData_7853: ; 7853 (4:13853)
 	dw $7c6c
 	db $00
 
-NPCData_787e: ; 787e (4:1387e)
+WaterClubNPCS: ; 787e (4:1387e)
 	db SARA, $06, $12, EAST
 	dw $0000
 	db AMANDA, $16, $14, WEST
@@ -153,7 +153,7 @@ NPCData_787e: ; 787e (4:1387e)
 	dw $62ad
 	db $00
 
-NPCData_7897: ; 7897 (4:13897)
+LightningClubEntranceNPCS: ; 7897 (4:13897)
 	db CLERK4, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -164,7 +164,7 @@ NPCData_7897: ; 7897 (4:13897)
 	dw $6915
 	db $00
 
-NPCData_78b0: ; 78b0 (4:138b0)
+LightningClubLobbyNPCS: ; 78b0 (4:138b0)
 	db CHAP2, $12, $10, WEST
 	dw $0000
 	db IMAKUNI, $12, $02, NORTH
@@ -179,7 +179,7 @@ NPCData_78b0: ; 78b0 (4:138b0)
 	dw $7c6c
 	db $00
 
-NPCData_78d5: ; 78d5 (4:138d5)
+LightningClubNPCS: ; 78d5 (4:138d5)
 	db JENNIFER, $0e, $12, SOUTH
 	dw $0000
 	db NICHOLAS, $06, $0a, SOUTH
@@ -190,7 +190,7 @@ NPCData_78d5: ; 78d5 (4:138d5)
 	dw $6494
 	db $00
 
-NPCData_78ee: ; 78ee (4:138ee)
+GrassClubEntranceNPCS: ; 78ee (4:138ee)
 	db CLERK5, $06, $02, SOUTH
 	dw $0000
 	db MICHAEL, $0e, $08, SOUTH
@@ -203,7 +203,7 @@ NPCData_78ee: ; 78ee (4:138ee)
 	dw $6915
 	db $00
 
-NPCData_790d: ; 790d (4:1390d)
+GrassClubLobbyNPCS: ; 790d (4:1390d)
 	db BRITTANY, $0c, $0e, WEST
 	dw $0000
 	db LASS2, $12, $08, SOUTH
@@ -218,7 +218,7 @@ NPCData_790d: ; 790d (4:1390d)
 	dw $7c6c
 	db $00
 
-NPCData_7932: ; 7932 (4:13932)
+GrassClubNPCS: ; 7932 (4:13932)
 	db KRISTIN, $04, $0a, EAST
 	dw $0000
 	db HEATHER, $0e, $10, SOUTH
@@ -227,7 +227,7 @@ NPCData_7932: ; 7932 (4:13932)
 	dw $6796
 	db $00
 
-NPCData_7945: ; 7945 (4:13945)
+PsychicClubEntranceNPCS: ; 7945 (4:13945)
 	db CLERK6, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -240,7 +240,7 @@ NPCData_7945: ; 7945 (4:13945)
 	dw $0000
 	db $00
 
-NPCData_7964: ; 7964 (4:13964)
+PsychicClubLobbyNPCS: ; 7964 (4:13964)
 	db ROBERT, $14, $08, NORTH
 	dw $0000
 	db PAPPY1, $04, $10, EAST
@@ -257,7 +257,7 @@ NPCData_7964: ; 7964 (4:13964)
 	dw $7c6c
 	db $00
 
-NPCData_798f: ; 798f (4:1398f)
+PsychicClubNPCS: ; 798f (4:1398f)
 	db DANIEL, $08, $08, NORTH
 	dw $0000
 	db STEPHANIE, $16, $0c, EAST
@@ -268,7 +268,7 @@ NPCData_798f: ; 798f (4:1398f)
 	dw $6ada
 	db $00
 
-NPCData_79a8: ; 79a8 (4:139a8)
+ScienceClubEntranceNPCS: ; 79a8 (4:139a8)
 	db CLERK7, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -279,7 +279,7 @@ NPCData_79a8: ; 79a8 (4:139a8)
 	dw $6915
 	db $00
 
-NPCData_79c1: ; 79c1 (4:139c1)
+ScienceClubLobbyNPCS: ; 79c1 (4:139c1)
 	db LAD1, $12, $12, NORTH
 	dw $0000
 	db IMAKUNI, $12, $02, NORTH
@@ -296,7 +296,7 @@ NPCData_79c1: ; 79c1 (4:139c1)
 	dw $7c6c
 	db $00
 
-NPCData_79ec: ; 79ec (4:139ec)
+ScienceClubNPCS: ; 79ec (4:139ec)
 	db JOSEPH, $08, $0a, SOUTH
 	dw $6cc4
 	db DAVID, $14, $04, NORTH
@@ -307,7 +307,7 @@ NPCData_79ec: ; 79ec (4:139ec)
 	dw $0000
 	db $00
 
-NPCData_7a05: ; 7a05 (4:13a05)
+FireClubEntranceNPCS: ; 7a05 (4:13a05)
 	db CLERK8, $06, $02, SOUTH
 	dw $0000
 	db RONALD1, $08, $fe, SOUTH
@@ -318,7 +318,7 @@ NPCData_7a05: ; 7a05 (4:13a05)
 	dw $6915
 	db $00
 
-NPCData_7a1e: ; 7a1e (4:13a1e)
+FireClubLobbyNPCS: ; 7a1e (4:13a1e)
 	db JESSICA, $0c, $0e, WEST
 	dw $6d8d
 	db LAD2, $12, $06, EAST
@@ -333,7 +333,7 @@ NPCData_7a1e: ; 7a1e (4:13a1e)
 	dw $7c6c
 	db $00
 
-NPCData_7a43: ; 7a43 (4:13a43)
+FireClubNPCS: ; 7a43 (4:13a43)
 	db JOHN, $0c, $12, SOUTH
 	dw $0000
 	db ADAM, $08, $0e, SOUTH
@@ -344,12 +344,12 @@ NPCData_7a43: ; 7a43 (4:13a43)
 	dw $0000
 	db $00
 
-NPCData_7a5c: ; 7a5c (4:13a5c)
+ChallengeHallEntranceNPCS: ; 7a5c (4:13a5c)
 	db CLERK9, $06, $02, SOUTH
 	dw $6f96
 	db $00
 
-NPCData_7a63: ; 7a63 (4:13a63)
+ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
 	db PAPPY3, $06, $0e, EAST
 	dw $707a
 	db CHAMP, $10, $12, WEST
@@ -370,7 +370,7 @@ NPCData_7a63: ; 7a63 (4:13a63)
 	dw $7c6c
 	db $00
 
-NPCData_7a9a: ; 7a9a (4:13a9a)
+ChallengeHallNPCS: ; 7a9a (4:13a9a)
 	db CLERK12, $0a, $12, SOUTH
 	dw $707a
 	db CLERK13, $14, $12, SOUTH
@@ -383,12 +383,12 @@ NPCData_7a9a: ; 7a9a (4:13a9a)
 	dw $7559
 	db $00
 
-NPCData_7ab9: ; 7ab9 (4:13ab9)
+PokemonDomeEntranceNPCS: ; 7ab9 (4:13ab9)
 	db RONALD1, $0e, $12, SOUTH
 	dw $0000
 	db $00
 
-NPCData_7ac0: ; 7ac0 (4:13ac0)
+PokemonDomeNPCS: ; 7ac0 (4:13ac0)
 	db COURTNEY, $12, $02, SOUTH
 	dw $774b
 	db STEVE, $16, $02, SOUTH
@@ -401,7 +401,7 @@ NPCData_7ac0: ; 7ac0 (4:13ac0)
 	dw $77d6
 	db $00
 
-NPCData_7adf: ; 7adf (4:13adf)
+HallOfHonorNPCS: ; 7adf (4:13adf)
 	db _11F1F, $0a, $08, SOUTH
 	dw $0000
 	db _11F26, $0c, $08, SOUTH

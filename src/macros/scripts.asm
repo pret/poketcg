@@ -43,18 +43,18 @@ ENDM
 	const Func_d03f_index                       ; $1a
 	const OWScript_Jump_index                   ; $1b
 	const Func_d04f_index                       ; $1c
-	const Func_d055_index                       ; $1d
+	const OWScript_SetPlayerDirection_index                       ; $1d
 	const OWScript_MovePlayer_index             ; $1e
-	const Func_cee2_index                       ; $1f
+	const OWScript_ShowCardReceivedScreen_index                       ; $1f
 	const OWScript_SetDialogName_index          ; $20
-	const Func_d088_index                       ; $21
+	const OWScript_SetNextNPCandOWSequence_index                       ; $21
 	const Func_d095_index                       ; $22
 	const Func_d0be_index                       ; $23
 	const OWScript_DoFrames_index               ; $24
 	const Func_d0d9_index                       ; $25
-	const Func_d0f2_index                       ; $26
+	const OWScript_JumpIfPlayerCoordMatches_index                       ; $26
 	const Func_ce4a_index                       ; $27
-	const Func_ceba_index                       ; $28
+	const OWScript_GiveOneOfEachTrainerBooster_index                       ; $28
 	const Func_d103_index                       ; $29
 	const Func_d125_index                       ; $2a
 	const Func_d135_index                       ; $2b
@@ -67,12 +67,12 @@ ENDM
 	const Func_d195_index                       ; $32
 	const Func_d1ad_index                       ; $33
 	const Func_d1b3_index                       ; $34
-	const OWScript_EndScriptCloseText_index     ; $35
+	const OWScript_QuitScriptFully_index     ; $35
 	const Func_d244_index                       ; $36
 	const Func_d24c_index                       ; $37
 	const OWScript_OpenDeckMachine_index        ; $38
 	const Func_d271_index                       ; $39
-	const Func_d36d_index                       ; $3a
+	const OWScript_EnterMap_index                       ; $3a
 	const Func_ce6f_index                       ; $3b
 	const Func_d209_index                       ; $3c
 	const Func_d38f_index                       ; $3d
@@ -93,7 +93,7 @@ ENDM
 	const Func_d41d_index                       ; $4c
 	const Func_d42f_index                       ; $4d
 	const Func_d435_index                       ; $4e
-	const Func_cce4_index                       ; $4f
+	const OWScript_AskQuestionJumpDefaultYes_index                       ; $4f
 	const Func_d2f6_index                       ; $50
 	const Func_d317_index                       ; $51
 	const Func_d43d_index                       ; $52

@@ -35,13 +35,13 @@ Func_1c056: ; 1c056 (7:4056)
 	inc hl
 	inc hl
 	ld a, [hli]
-	ld [wd0bb], a
+	ld [wTempMap], a
 	ld a, [hli]
-	ld [wd0bc], a
+	ld [wTempPlayerXCoord], a
 	ld a, [hli]
-	ld [wd0bd], a
+	ld [wTempPlayerYCoord], a
 	ld a, [wPlayerDirection]
-	ld [wd0be], a
+	ld [wTempPlayerDirection], a
 .asm_1c095
 	pop de
 	pop bc

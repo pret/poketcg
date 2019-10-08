@@ -183,7 +183,7 @@ ImakuniData:
 	db $00
 	db $0e
 	db $00
-	dw $5d0d ; Pointer to OWScript
+	dw OWSequence_Imakuni ; Pointer to OWScript
 	tx Text03af
 	db IMAKUNI_PIC
 	db $34

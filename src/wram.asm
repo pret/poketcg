@@ -1784,16 +1784,16 @@ wd0b9:: ; d0b9
 wd0ba:: ; d0ba
 	ds $1
 
-wd0bb:: ; d0bb
+wTempMap:: ; d0bb
 	ds $1
 
-wd0bc:: ; d0bc
+wTempPlayerXCoord:: ; d0bc
 	ds $1
 
-wd0bd:: ; d0bd
+wTempPlayerYCoord:: ; d0bd
 	ds $1
 
-wd0be:: ; d0be
+wTempPlayerDirection:: ; d0be
 	ds $1
 
 wd0bf:: ; d0bf
