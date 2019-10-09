@@ -7,7 +7,6 @@ import argparse
 # -- reportINCROMs --
 	# add in percentage
 # -- reportUnnamedSymbols --
-	# report funcs by bank
 
 # global vals
 banks = 0x40
