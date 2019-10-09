@@ -1,21 +1,42 @@
 #!/usr/bin/env python3#
 import subprocess
 import math
+import argparse
 
 # TODO - 
 # -- reportINCROMs --
-	# create switch
-	# create optional grep location
 	# add in percentage
 # -- reportUnnamedSymbols --
-	# create switch
-	# take sym file as an argument
+	# report funcs by bank
 
-# this is not the best way to do it, by any means
-def reportINCROMs():
-	grepProc = subprocess.Popen(['grep', '-r', 'INCROM', '..'], stdout=subprocess.PIPE)
+# global vals
+banks = 0x40
+
+def main():
+	parser = argparse.ArgumentParser(description='Progress checker for poketcg')
+	parser.add_argument('-i', '--incrom', action='store_true', help="Turns on incrom report")
+	parser.add_argument('-d', '--directory', default=".", help="Override incrom search directory. Ignores if incrom report is off")
+	parser.add_argument('-s', '--symfile', default=None, type=argparse.FileType('r'), help="Turns on Unnamed Symbol report using given sym file")
+	parser.add_argument('-f', '--function_source', action='store_true', help='Shows a breakdown of what bank each unnamed function comes from. Ignores if symfile report is off')
+	parser.add_argument('-o', '--other_unnamed', action='store_true', help='Shows all other unnamed symbols and a count of how many there are. Ignores if symfile report is off')
+	parser.add_argument('--list_funcs', nargs="+", default=None, help="Lists every unnamed function in the given banks. WILL BE LONG. ignores if symfile report is off")
+
+	args = parser.parse_args()
+
+	if args.incrom:
+		reportINCROMs(args.directory)
+		print("\n")
+
+	if args.symfile != None:
+		# parse the list command
+		listBankSet = set([])
+		if args.list_funcs != None:
+			listBankSet = parseBankList(args.list_funcs)
+		reportUnnamedSymbols(args.symfile,listBankSet, args.function_source, args.other_unnamed)
+
+def reportINCROMs(incromDir):
+	grepProc = subprocess.Popen(['grep', '-r', 'INCROM', incromDir], stdout=subprocess.PIPE)
 	targetLines = grepProc.communicate()[0].decode().split('\n')
-	banks = 0x40
 	incromBytes = [0]*banks
 	incromByteTotal = 0
 	for line in targetLines:
@@ -61,15 +82,15 @@ def reportINCROMs():
 
 
 # reads sym files and looks for instances of tcgdisasm's automatic symbols
-def reportUnnamedSymbols():
-	with open("../tcg.sym") as symfile:
-		data = symfile.read().split("\n")
+def reportUnnamedSymbols(symfile, listBankSet, showFunctionBanks, showOtherUnnamed):
+	data = symfile.read().split("\n")
 
 	# format [ [ "type" : number ], ... ]
 	typeCounts = []
 
 	# to cut back on for loops I'll manually list the super common ones, such as Func
-	funcCount = 0
+	funcCounts = [0]*banks
+	funcCount = 1
 	branchCount = 0
 	wramCount = 0
 	sramCount = 0
@@ -123,6 +144,9 @@ def reportUnnamedSymbols():
 
 			# take care of the common ones before looping
 			if labelType == "Func_":
+				if bank in listBankSet:
+					print("bank " + format(bank,'02x') + ":" + name)
+				funcCounts[bank] += 1
 				funcCount += 1
 				continue
 			elif labelType == "Branch_":
@@ -162,18 +186,41 @@ def reportUnnamedSymbols():
 	print("Named Labels: " + str(namedLabelTotal) + "/" + str(labelTotal) + " (" + str(namedLabelPercent) + "%)")
 	print("Named Local Labels: " + str(namedLocalLabelTotal) + "/" + str(localLabelTotal) + " (" + str(namedLocalLabelPercent) + "%)")
 	print()
-	print("Func count:   " + str(funcCount))
+	print("func count:   " + str(funcCount))
+	if showFunctionBanks:
+		for i in range(0,banks):
+			if funcCounts[i] == 0:
+				continue
+			bank = "bank" + format(i,"02x") + ":"
+			if i == 0:
+				bank = "home:  "
+			print("\t" + bank + " " + str(funcCounts[i]))
+
 	print("wram count:   " + str(wramCount))
 	print("sram count:   " + str(sramCount))
 	print("hram count:   " + str(hramCount))
-	print()
-	print("Additional types:")
+	if showOtherUnnamed:
+		print()
+		print("Additional types:")
 
-	for tc in typeCounts:
-		spaces = " " * (30 - len(tc[0]))
-		print(tc[0] + spaces + "x" + format(tc[1],"02"))
+		for tc in typeCounts:
+			spaces = " " * (30 - len(tc[0]))
+			if tc[1] == 1:
+				print(tc[0])
+				continue
+			print(tc[0] + spaces + "x" + format(tc[1],"02"))
 
-reportINCROMs()
-print()
-print()
-reportUnnamedSymbols()
+def parseBankList(strList):
+	retSet = set([])
+	for bankName in strList:
+		if bankName == "home":
+			retSet.add(0)
+		elif bankName.startswith("bank"):
+			retSet.add(int(bankName[4:],16))
+		else:
+			retSet.add(int(bankName,0))
+	return retSet
+
+
+if __name__ == '__main__':
+	main()

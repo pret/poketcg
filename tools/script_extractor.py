@@ -73,6 +73,7 @@ def main():
 	parser = argparse.ArgumentParser(description='Pokemon TCG Script Extractor')
 	parser.add_argument('--noauto', action='store_true', help='turns off automatic script parsing')
 	parser.add_argument('--error', action='store_true', help='stops execution if an error occurs')
+	parser.add_argument('-r', '--rom', default="baserom.gbc", help='rom file to extract script from')
 	parser.add_argument('location', help='location to extract from. May be local to bank or global.')
 	args = parser.parse_args()
 	loc = int(args.location,0)
@@ -84,12 +85,12 @@ def main():
 	# this is a list of every start location we've read to avoid infinite loops
 	exploredList = []
 
-	with open("baserom.gbc", "rb") as file:
+	with open(args.rom, "rb") as file:
 	    game_data = file.read()
 
-	auto = True
+	auto = not args.noauto
 	end = False
-	ignore_broken = True
+	ignore_broken = not args.error
 	while (len(branchList) > 0):
 		branchList.sort() # export parts in order somewhat
 		loc = branchList.pop(0) + 0x8000
