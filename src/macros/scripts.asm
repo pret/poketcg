@@ -22,7 +22,7 @@ ENDM
 	const OWScript_StartBattle_index            ; $05
 	const OWScript_PrintVariableText_index      ; $06
 	const Func_cda8_index                       ; $07
-	const OWScript_PrintTextCloseBox_index      ; $08
+	const OWScript_PrintTextQuitFully_index      ; $08
 	const Func_cdcb_index                       ; $09
 	const Func_ce26_index                       ; $0a
 	const OWScript_CloseTextBox_index           ; $0b
@@ -42,7 +42,7 @@ ENDM
 	const Func_d032_index                       ; $19
 	const Func_d03f_index                       ; $1a
 	const OWScript_Jump_index                   ; $1b
-	const Func_d04f_index                       ; $1c
+	const OWScript_TryGiveMedalPCPacks_index                       ; $1c
 	const OWScript_SetPlayerDirection_index                       ; $1d
 	const OWScript_MovePlayer_index             ; $1e
 	const OWScript_ShowCardReceivedScreen_index                       ; $1f
@@ -80,18 +80,18 @@ ENDM
 	const Func_cd76_index                       ; $3f
 	const Func_d39d_index                       ; $40
 	const Func_d3b9_index                       ; $41
-	const OWScript_GivePCPack_index             ; $42
+	const OWScript_TryGivePCPack_index             ; $42
 	const OWScript_nop_index                    ; $43
 	const Func_d3d4_index                       ; $44
 	const Func_d3e0_index                       ; $45
 	const Func_d3fe_index                       ; $46
 	const Func_d408_index                       ; $47
 	const Func_d40f_index                       ; $48
-	const Func_d416_index                       ; $49
-	const Func_d423_index                       ; $4a
-	const Func_d429_index                       ; $4b
+	const OWScript_PlaySFX_index                       ; $49
+	const OWScript_PauseSong_index                       ; $4a
+	const OWScript_ResumeSong_index                       ; $4b
 	const Func_d41d_index                       ; $4c
-	const Func_d42f_index                       ; $4d
+	const OWScript_WaitForSongToFinish_index                       ; $4d
 	const Func_d435_index                       ; $4e
 	const OWScript_AskQuestionJumpDefaultYes_index                       ; $4f
 	const Func_d2f6_index                       ; $50

@@ -10800,7 +10800,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 	ret
 
 Func_3917: ; 3917 (0:3917)
-	ld a, $22
+	ld a, EVENT_FLAG_22
 	farcall GetEventFlagValue
 	call EnableSRAM
 	ld [s0a00a], a
@@ -10875,8 +10875,8 @@ Func_395a: ; 395a (0:395a)
 Unknown_396b: ; 396b (0:396b)
 	db $00, -$01, $01, $00, $00, $01, -$01, $00
 
-; Movement offsets for scripted movements
-ScriptedMovementOffsetTable: ; 3973 (0:3973)
+; Movement offsets for player movements
+PlayerMovementOffsetTable: ; 3973 (0:3973)
 	db  0, -2 ; move 2 tiles up
 	db  2,  0 ; move 2 tiles right
 	db  0,  2 ; move 2 tiles down
@@ -11062,30 +11062,30 @@ Func_3a4f: ; 3a4f (0:3a4f)
 Func_3a5e: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
 	push af
-	ld l, $4
+	ld l, MAP_SCRIPT_PRESSED_A_1
 	call GetMapScriptPointer
-	jr nc, .asm_3ab3
-	ld a, BANK(Func_c653)
+	jr nc, .handleSecondAPressScript
+	ld a, BANK(FindPlayerMovementFromDirection)
 	call BankswitchROM
-	call Func_c653
+	call FindPlayerMovementFromDirection
 	ld a, $4
 	call BankswitchROM
 	ld a, [wPlayerDirection]
 	ld d, a
-.asm_3a79
+.findAPressMatchLoop
 	ld a, [hli]
 	bit 7, a
-	jr nz, .asm_3ab3
+	jr nz, .handleSecondAPressScript
 	push bc
 	push hl
 	cp d
-	jr nz, .asm_3aab
+	jr nz, .noMatch
 	ld a, [hli]
 	cp b
-	jr nz, .asm_3aab
+	jr nz, .noMatch
 	ld a, [hli]
 	cp c
-	jr nz, .asm_3aab
+	jr nz, .noMatch
 	ld a, [hli]
 	ld [wNextOWSequence], a
 	ld a, [hli]
@@ -11104,17 +11104,17 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	call BankswitchROM
 	scf
 	ret
-.asm_3aab
+.noMatch
 	pop hl
 	ld bc, $0008
 	add hl, bc
 	pop bc
-	jr .asm_3a79
-.asm_3ab3
+	jr .findAPressMatchLoop
+.handleSecondAPressScript
 	pop af
 	call BankswitchROM
-	ld l, $6
-	call $49c2
+	ld l, MAP_SCRIPT_PRESSED_A_2
+	call CallMapScriptPointerIfExists
 	ret
 
 ; returns a map script pointer in hl given
@@ -11415,9 +11415,8 @@ CallHL2: ; 3c45 (0:3c45)
 	jp hl
 ; 0x3c46
 
-PushBC_Ret: ; 3c46 (0:3c46)
-	push bc
-	ret
+CallBC: ; 3c46 (0:3c46)
+	retbc
 ; 0x3c48
 
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
@@ -11468,7 +11467,7 @@ DivideBCbyDE: ; 3c5a (0:3c5a)
 	jr nz, .asm_3c63
 	ret
 
-Func_3c83: ; 3c83 (0:3c83)
+CallPlaySong: ; 3c83 (0:3c83)
 	call PlaySong
 	ret
 ; 0x3c87
@@ -11478,18 +11477,19 @@ Func_3c87: ; 3c87 (0:3c87)
 	call PauseSong
 	pop af
 	call PlaySong
-	call Func_3c96
+	call WaitForSongToFinish
 	call ResumeSong
 	ret
 ; 0x3c96
 
-Func_3c96: ; 3c96 (0:3c96)
+WaitForSongToFinish: ; 3c96 (0:3c96)
 	call DoFrameIfLCDEnabled
 	call AssertSongFinished
 	or a
-	jr nz, Func_3c96
+	jr nz, WaitForSongToFinish
 	ret
 
+; clear [SOMETHING] - something relating to animations
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [wd5d7], a

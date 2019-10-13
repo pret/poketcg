@@ -388,8 +388,55 @@ Func_1c719: ; 1c719 (7:4719)
 	pop hl
 	ret
 
-Func_1c72e: ; 1c72e (7:472e)
-	INCROM $1c72e, $1c768
+; Find NPC at coords b (x) c (y)
+FindNPCAtLocation: ; 1c72e (7:472e)
+	push hl
+	push bc
+	push de
+	ld d, $00
+	ld e, LOADED_NPC_MAX
+	ld hl, wLoadedNPC1CoordX
+.findValidNPCLoop
+	ld a, [hli]
+	cp b
+	jr nz, .noValidNPCHere
+	ld a, [hl]
+	cp c
+	jr nz, .noValidNPCHere
+	push hl
+	inc hl
+	inc hl
+	bit 6, [hl]
+	pop hl
+	jr nz, .noValidNPCHere
+	push hl
+	dec hl
+	dec hl
+	ld a, [hl]
+	or a
+	pop hl
+	jr nz, .foundNPCExit
+.noValidNPCHere
+	ld a, LOADED_NPC_LENGTH - 1
+	add l
+	ld l, a
+	ld a, h
+	adc $00
+	ld h, a
+	inc d
+	dec e
+	jr nz, .findValidNPCLoop
+	scf
+	jr .exit
+.foundNPCExit
+	ld a, d
+	ld [wLoadedNPCTempIndex], a
+	or a
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
 
 ; Probably needs a new name. Loads data for NPC that the next OWSequence is for
 ; Sets direction, Loads Image data for it, loads name, and more
@@ -731,7 +778,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, [wd633]
 	cp $ff
 	jr nz, .asm_1d6c8
-	call Func_3c96
+	call WaitForSongToFinish
 	ld a, $8
 	farcall $4, $6863
 	ld a, MUSIC_STOP

@@ -1999,10 +1999,11 @@ wd333:: ; d333
 wPlayerDirection:: ; d334
 	ds $1
 
-wd335:: ; d335
+; seems to be 1 if moving 0 otherwise
+wPlayerCurrentlyMoving:: ; d335
 	ds $1
 
-wd336:: ; d336
+wPlayerSpriteIndex:: ; d336
 	ds $1
 
 wd337:: ; d337
@@ -2100,7 +2101,8 @@ wd3b3:: ; d3b3
 
 	ds $2
 
-wd3b6:: ; d3b6
+; ID of the NPC being interacted with in OWScript
+wScriptNPC:: ; d3b6
 	ds $1
 
 wc3b7:: ; d3b7
@@ -2125,10 +2127,7 @@ wLoadedFlagBits:: ; d3d1
 	ds $1
 
 wEventFlags::
-	ds $3f
-
-wd411:: ; d411
-	ds $1
+	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
 wBreakOWScriptLoop:: ; d412

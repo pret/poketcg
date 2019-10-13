@@ -61,7 +61,7 @@ NPCDataTable:
 	dw JackData
 	dw RodData
 	dw Clerk10Data
-	dw Clerk11Data
+	dw GiftCenterClerkData
 	dw Man1Data
 	dw Woman1Data
 	dw Chap1Data
@@ -135,7 +135,7 @@ Ronald1Data:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to OWScript
+	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
 	db $1a
@@ -147,7 +147,7 @@ Ronald2Data:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to OWScript
+	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
 	db $1a
@@ -159,7 +159,7 @@ Ronald3Data:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to OWScript
+	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
 	db $1a
@@ -171,7 +171,7 @@ IshiharaData:
 	db $04
 	db $22
 	db $00
-	dw $5b4a ; Pointer to OWScript
+	dw OWSequence_Ishihara ; Pointer to OWScript
 	tx Text03ae
 	db $00
 	db $00
@@ -279,7 +279,7 @@ Clerk1Data:
 	db $0a
 	db $30
 	db $00
-	dw $5c64 ; Pointer to OWScript
+	dw OWSequence_Clerk1 ; Pointer to OWScript
 	tx Text03b3
 	db $00
 	db $00
@@ -837,8 +837,8 @@ Clerk10Data:
 	db $00
 	db $00
 	db $00
-Clerk11Data:
-	db CLERK11
+GiftCenterClerkData:
+	db GIFT_CENTER_CLERK
 	db $21
 	db $0a
 	db $30
@@ -891,7 +891,7 @@ Gal1Data:
 	db $00
 	db $16
 	db $00
-	dw $60cf ; Pointer to OWScript
+	dw OWSequence_Gal1 ; Pointer to OWScript
 	tx Text03db
 	db $00
 	db $00
@@ -903,7 +903,7 @@ Lass1Data:
 	db $00
 	db $1e
 	db $00
-	dw $6111 ; Pointer to OWScript
+	dw OWSequence_Lass1 ; Pointer to OWScript
 	tx Text03dc
 	db $00
 	db $00
@@ -1071,7 +1071,7 @@ Man2Data:
 	db $00
 	db $16
 	db $00
-	dw $6137 ; Pointer to OWScript
+	dw OWSequence_Man2 ; Pointer to OWScript
 	tx Text03d8
 	db $00
 	db $00
@@ -1083,7 +1083,7 @@ Pappy2Data:
 	db $00
 	db $22
 	db $00
-	dw $613b ; Pointer to OWScript
+	dw OWSequence_Pappy2 ; Pointer to OWScript
 	tx Text03dd
 	db $00
 	db $00

@@ -304,7 +304,7 @@ bit_ops_table = [
 	"set 7, b",  "set 7, c",  "set 7, d",  "set 7, e",  "set 7, h",  "set 7, l",  "set 7, [hl]",  "set 7, a"     # $f8 - $ff
 ]
 
-unconditional_returns = [0xc9, 0xd9]
+unconditional_returns = [0xc9, 0xd9, 0xe7] # e7 begins a script, which is not handled by tcgdisasm
 absolute_jumps = [0xc3, 0xc2, 0xca, 0xd2, 0xda]
 call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc, 0xdf, 0xef]
 relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
@@ -765,7 +765,6 @@ class Disassembler(object):
 					found_flag_macro = False
 					for flag_macro in flag_macros:
 						if flag_macro[0] == target_offset:
-							print "hi"
 							found_flag_macro = True
 							current_flag_macro = flag_macro
 							event_flag = "EVENT_FLAG_" + format(opcode_arg_3, "02X")

@@ -92,7 +92,7 @@ Medal_1029e: ; 1029e (4:429e)
 	jr nz, .asm_102e2
 	ldtx hl, WonTheMedalText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_3c96
+	call WaitForSongToFinish
 	call ResumeSong
 	pop af
 	ld [wd291], a
@@ -149,7 +149,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ldtx hl, AndAnotherBoosterPackText
 .asm_10373
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_3c96
+	call WaitForSongToFinish
 	call ResumeSong
 	ldtx hl, CheckedCardsInBoosterPackText
 	call PrintScrollableText_NoTextBoxLabel
@@ -224,7 +224,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
 	call WaitForButtonAorB
-	call Func_3c96
+	call WaitForSongToFinish
 	call Func_10ab4 ; fade out
 	pop af
 	ld [wd291], a
@@ -240,7 +240,7 @@ Func_10756: ; 10756 (4:4756)
 	INCROM $10756, $10a70
 
 ; gives the pc pack described in a
-GivePCPack: ; 10a70 (4:4a70)
+TryGivePCPack: ; 10a70 (4:4a70)
 	push hl
 	push bc
 	push de
@@ -345,7 +345,7 @@ Func_10e28: ; 10e28 (4:4e28)
 	INCROM $10e28, $10e55
 
 Func_10e55: ; 10e55 (4:4e55)
-	ld a, [wd336]
+	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld a, [wd33e]
 	or a
@@ -365,7 +365,7 @@ Func_10e71: ; 10e71 (4:4e71)
 	ldh a, [hKeysPressed]
 	and D_PAD
 	jr z, .asm_10e83
-	farcall Func_c5d5
+	farcall GetDirectionFromDPad
 	ld [wPlayerDirection], a
 	call Func_10e97
 	jr .asm_10e96
@@ -551,7 +551,7 @@ Func_11016: ; 11016 (4:5016)
 Func_11024: ; 11024 (4:5024)
 	ld a, SFX_57
 	call PlaySFX
-	ld a, [wd336]
+	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld c, SPRITE_ANIM_FIELD_0F
 	call GetSpriteAnimBufferProperty
@@ -583,7 +583,7 @@ Func_11024: ; 11024 (4:5024)
 	ret
 
 Func_11060: ; 11060 (4:5060)
-	ld a, [wd336]
+	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld a, [wd341]
 	or a
@@ -673,7 +673,7 @@ Func_110a6: ; 110a6 (4:50a6)
 	xor a
 	ld [wd347], a
 	ld [wd348], a
-	farcall Func_c5e9
+	farcall UpdatePlayerSprite
 	pop hl
 	ret
 
@@ -977,7 +977,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_StartBattle
 	dw OWScript_PrintVariableText
 	dw Func_cda8
-	dw OWScript_PrintTextCloseBox
+	dw OWScript_PrintTextQuitFully
 	dw Func_cdcb
 	dw Func_ce26
 	dw OWScript_CloseTextBox
@@ -997,7 +997,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d032
 	dw Func_d03f
 	dw OWScript_Jump
-	dw Func_d04f
+	dw OWScript_TryGiveMedalPCPacks
 	dw OWScript_SetPlayerDirection
 	dw OWScript_MovePlayer
 	dw OWScript_ShowCardReceivedScreen
@@ -1035,18 +1035,18 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_cd76
 	dw Func_d39d
 	dw Func_d3b9
-	dw OWScript_GivePCPack
+	dw OWScript_TryGivePCPack
 	dw OWScript_nop
 	dw Func_d3d4
 	dw Func_d3e0
 	dw Func_d3fe
 	dw Func_d408
 	dw Func_d40f
-	dw Func_d416
-	dw Func_d423
-	dw Func_d429
+	dw OWScript_PlaySFX
+	dw OWScript_PauseSong
+	dw OWScript_ResumeSong
 	dw Func_d41d
-	dw Func_d42f
+	dw OWScript_WaitForSongToFinish
 	dw Func_d435
 	dw OWScript_AskQuestionJumpDefaultYes
 	dw Func_d2f6
@@ -1561,7 +1561,7 @@ Func_1344d: ; 1344d (4:744d)
 	call PlaySong
 	ldtx hl, DefeatedFiveOpponentsText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_3c96
+	call WaitForSongToFinish
 	call ResumeSong
 	ret
 ; 0x13462
@@ -1583,7 +1583,7 @@ Func_13485: ; 13485 (4:7485)
 	call PlaySong
 	ldtx hl, ConsecutiveWinRecordIncreasedText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_3c96
+	call WaitForSongToFinish
 	call ResumeSong
 	ret
 ; 0x134b1
@@ -1591,5 +1591,8 @@ Func_13485: ; 13485 (4:7485)
 	INCROM $134b1, $1372f
 
 INCLUDE "data/npc_map_data.asm"
+INCLUDE "data/level_objects.asm"
 
-	INCROM $13b04, $14000
+rept $119
+	db $ff
+endr

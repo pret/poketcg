@@ -47,3 +47,9 @@ ENDM
 ; the rst $38 handler is a single ret instruction
 ; probably used for testing purposes during development
 debug_ret EQUS "rst $38"
+
+; Returns to the pointer in bc instead of where the stack was.
+retbc: MACRO
+	push bc
+	ret
+ENDM

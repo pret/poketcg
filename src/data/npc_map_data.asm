@@ -31,11 +31,11 @@ DeckMachineRoomNPCS: ; 775a (4:1375a)
 
 IshiharasHouseNPCS: ; 7773 (4:13773)
 	db NIKKI, $04, $04, NORTH
-	dw $5add
+	dw Preload_NikkiInIshiharasHouse
 	db ISHIHARA, $08, $08, SOUTH
-	dw $5b3d
+	dw Preload_IshiharaInIshiharasHouse
 	db RONALD1, $02, $04, WEST
-	dw $5c43
+	dw Preload_Ronald1InIshiharasHouse
 	db $00
 
 FightingClubEntranceNPCS: ; 7786 (4:13786)
@@ -62,8 +62,8 @@ FightingClubLobbyNPCS: ; 779f (4:1379f)
 	dw $5d98
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 FightingClubNPCS: ; 77ca (4:137ca)
@@ -101,8 +101,8 @@ RockClubLobbyNPCS: ; 77fc (4:137fc)
 	dw $5fcb
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 RockClubNPCS: ; 7827 (4:13827)
@@ -131,15 +131,15 @@ WaterClubLobbyNPCS: ; 7853 (4:13853)
 	db LASS1, $10, $0a, SOUTH
 	dw $0000
 	db IMAKUNI, $12, $02, NORTH
-	dw $60b0
+	dw Preload_ImakuniInWaterClubLobby
 	db MAN2, $04, $12, EAST
-	dw $6130
+	dw Preload_Man2InWaterClubLobby
 	db PAPPY2, $16, $10, NORTH
 	dw $0000
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 WaterClubNPCS: ; 787e (4:1387e)
@@ -175,8 +175,8 @@ LightningClubLobbyNPCS: ; 78b0 (4:138b0)
 	dw $0000
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 LightningClubNPCS: ; 78d5 (4:138d5)
@@ -214,8 +214,8 @@ GrassClubLobbyNPCS: ; 790d (4:1390d)
 	dw $66dc
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 GrassClubNPCS: ; 7932 (4:13932)
@@ -253,8 +253,8 @@ PsychicClubLobbyNPCS: ; 7964 (4:13964)
 	dw $0000
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 PsychicClubNPCS: ; 798f (4:1398f)
@@ -292,8 +292,8 @@ ScienceClubLobbyNPCS: ; 79c1 (4:139c1)
 	dw $0000
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 ScienceClubNPCS: ; 79ec (4:139ec)
@@ -329,8 +329,8 @@ FireClubLobbyNPCS: ; 7a1e (4:13a1e)
 	dw $0000
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 FireClubNPCS: ; 7a43 (4:13a43)
@@ -366,8 +366,8 @@ ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
 	dw $70b4
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
-	db CLERK11, $0a, $04, SOUTH
-	dw $7c6c
+	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
+	dw Preload_GiftCenterClerk
 	db $00
 
 ChallengeHallNPCS: ; 7a9a (4:13a9a)
@@ -402,17 +402,17 @@ PokemonDomeNPCS: ; 7ac0 (4:13ac0)
 	db $00
 
 HallOfHonorNPCS: ; 7adf (4:13adf)
-	db _11F1F, $0a, $08, SOUTH
+	db LEGEND_CARDS_TOP_LEFT, $0a, $08, SOUTH
 	dw $0000
-	db _11F26, $0c, $08, SOUTH
+	db LEGEND_CARDS_TOP_RIGHT, $0c, $08, SOUTH
 	dw $0000
-	db _11F2D, $08, $0a, SOUTH
+	db LEGEND_CARDS_LEFT_SPARK, $08, $0a, SOUTH
 	dw $0000
-	db _11F34, $0a, $0a, SOUTH
+	db LEGEND_CARDS_BOTTOM_LEFT, $0a, $0a, SOUTH
 	dw $0000
-	db _11F3B, $0c, $0a, SOUTH
+	db LEGEND_CARDS_BOTTOM_RIGHT, $0c, $0a, SOUTH
 	dw $0000
-	db _11F42, $0e, $0a, SOUTH
+	db LEGEND_CARDS_RIGHT_SPARK, $0e, $0a, SOUTH
 	dw $0000
 	db $00
 

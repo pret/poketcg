@@ -89,20 +89,21 @@ def main():
 	    game_data = file.read()
 
 	auto = not args.noauto
-	end = False
+	end = DO_NOT_QUIT
 	ignore_broken = not args.error
-	while (len(branchList) > 0):
+	while (len(branchList) > 0 and end != QUIT_DEBUG):
 		branchList.sort() # export parts in order somewhat
 		loc = branchList.pop(0) + 0x8000
-		printScript(game_data, loc, auto, end, ignore_broken, scriptList,\
+		end = printScript(game_data, loc, auto, ignore_broken, scriptList,\
 		branchList, exploredList)
 
-def printScript(game_data, loc, auto, end, ignore_broken, scriptList, \
+def printScript(game_data, loc, auto, ignore_broken, scriptList, \
 				branchList, exploredList):
 	if loc in exploredList:
 		return
 	exploredList.append(loc)
 	script = ""
+	end = DO_NOT_QUIT
 	if game_data[loc] != 0xe7:
 		#print("Error: first byte was not start_script")
 		print(".ows_" + format(loc,"04x"))
@@ -124,9 +125,14 @@ def printScript(game_data, loc, auto, end, ignore_broken, scriptList, \
 	warning = ""
 	if end == QUIT_CONTINUE_CODE:
 		warning = " WARNING: There is probably regular assembly here"
-	#elif end == QUIT_SPECIAL:
-	#	warning = "\nWARNING: This will return to the place that began this Sequence"
+
 	print("; " + hex(loc) + warning)
+
+	# if the next byte is a ret, print it for the continue_code case
+	if game_data[loc] == 0xc9:
+		print("\tret")
+
+	return end
 
 def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
@@ -134,18 +140,18 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_EndScriptLoop1", "", QUIT_CONTINUE_CODE),
 	("OWScript_CloseAdvancedTextBox", "", DO_NOT_QUIT),
 	("OWScript_PrintTextString", "t", DO_NOT_QUIT),
-	("Func_ccdc", "bb", DO_NOT_QUIT),
+	("Func_ccdc", "t", DO_NOT_QUIT),
 	("OWScript_AskQuestionJump", "tj", DO_NOT_QUIT), # more complex behavior too (jumping)
 	("OWScript_StartBattle", "bbb", DO_NOT_QUIT),
 	("OWScript_PrintVariableText", "tt", DO_NOT_QUIT),
 	("Func_cda8", "bbbb", DO_NOT_QUIT),
-	("OWScript_PrintTextCloseBox", "t", QUIT_CONTINUE_CODE),
+	("OWScript_PrintTextQuitFully", "t", QUIT_SPECIAL),
 	("Func_cdcb", "", DO_NOT_QUIT),
 	("Func_ce26", "bb", DO_NOT_QUIT),
 	("OWScript_CloseTextBox", "", DO_NOT_QUIT),
 	("OWScript_GiveBoosterPacks", "bbb", DO_NOT_QUIT),
-	("Func_cf0c", "bbb", DO_NOT_QUIT), # more complex behavior too (jumping)
-	("Func_cf12", "bbb", DO_NOT_QUIT),
+	("Func_cf0c", "bj", DO_NOT_QUIT), # more complex behavior too (jumping)
+	("Func_cf12", "bj", DO_NOT_QUIT),
 	("OWScript_GiveCard", "b", DO_NOT_QUIT),
 	("OWScript_TakeCard", "b", DO_NOT_QUIT),
 	("Func_cf53", "w", DO_NOT_QUIT), # more complex behavior too (jumping)
@@ -159,12 +165,12 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d032", "w", DO_NOT_QUIT), # see above
 	("Func_d03f", "", DO_NOT_QUIT),
 	("OWScript_Jump", "j", QUIT_JUMP), # jumps to d
-	("Func_d04f", "", DO_NOT_QUIT),
+	("OWScript_TryGiveMedalPCPacks", "", DO_NOT_QUIT),
 	("OWScript_SetPlayerDirection", "d", DO_NOT_QUIT),
 	("OWScript_MovePlayer", "db", DO_NOT_QUIT),
 	("OWScript_ShowCardReceivedScreen", "b", DO_NOT_QUIT),
 	("OWScript_SetDialogName", "b", DO_NOT_QUIT),
-	("OWScript_SetNextNPCandOWSequence", "bj", DO_NOT_QUIT),
+	("OWScript_SetNextNPCandOWSequence", "bw", DO_NOT_QUIT),
 	("Func_d095", "bbb", DO_NOT_QUIT),
 	("Func_d0be", "bb", DO_NOT_QUIT),
 	("OWScript_DoFrames", "b", DO_NOT_QUIT),
@@ -184,31 +190,31 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d195", "q", DO_NOT_QUIT),
 	("Func_d1ad", "", DO_NOT_QUIT),
 	("Func_d1b3", "q", DO_NOT_QUIT),
-	("OWScript_QuitScriptFully", "", QUIT_SPECIAL), # it calls inc twice but it ends anyway?
+	("OWScript_QuitScriptFully", "", QUIT_SPECIAL),
 	("Func_d244", "q", DO_NOT_QUIT),
 	("Func_d24c", "q", DO_NOT_QUIT),
-	("OWScript_OpenDeckMachine", "q", DO_NOT_QUIT),
+	("OWScript_OpenDeckMachine", "b", DO_NOT_QUIT),
 	("Func_d271", "q", DO_NOT_QUIT),
 	("OWScript_EnterMap", "bbood", DO_NOT_QUIT),
-	("Func_ce6f", "bbb", DO_NOT_QUIT),
+	("Func_ce6f", "bd", DO_NOT_QUIT),
 	("Func_d209", "q", DO_NOT_QUIT),
 	("Func_d38f", "q", DO_NOT_QUIT),
-	("Func_d396", "q", DO_NOT_QUIT),
-	("Func_cd76", "q", DO_NOT_QUIT),
-	("Func_d39d", "q", DO_NOT_QUIT),
+	("Func_d396", "b", DO_NOT_QUIT),
+	("Func_cd76", "", DO_NOT_QUIT),
+	("Func_d39d", "b", DO_NOT_QUIT),
 	("Func_d3b9", "q", DO_NOT_QUIT),
-	("OWScript_GivePCPack", "b", DO_NOT_QUIT),
+	("OWScript_TryGivePCPack", "b", DO_NOT_QUIT),
 	("OWScript_nop", "", DO_NOT_QUIT),
 	("Func_d3d4", "q", DO_NOT_QUIT),
 	("Func_d3e0", "", DO_NOT_QUIT),
 	("Func_d3fe", "q", DO_NOT_QUIT),
 	("Func_d408", "b", DO_NOT_QUIT),
 	("Func_d40f", "q", DO_NOT_QUIT),
-	("Func_d416", "q", DO_NOT_QUIT),
-	("Func_d423", "q", DO_NOT_QUIT),
-	("Func_d429", "q", DO_NOT_QUIT),
+	("OWScript_PlaySFX", "b", DO_NOT_QUIT),
+	("OWScript_PauseSong", "q", DO_NOT_QUIT),
+	("OWScript_ResumeSong", "q", DO_NOT_QUIT),
 	("Func_d41d", "", DO_NOT_QUIT),
-	("Func_d42f", "q", DO_NOT_QUIT),
+	("OWScript_WaitForSongToFinish", "q", DO_NOT_QUIT),
 	("Func_d435", "b", DO_NOT_QUIT),
 	("OWScript_AskQuestionJumpDefaultYes", "tj", DO_NOT_QUIT),
 	("Func_d2f6", "q", DO_NOT_QUIT),
@@ -227,7 +233,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_JumpIfFlagNotLessThan", "fbj", DO_NOT_QUIT),
 	("OWScript_JumpIfFlagLessThan", "fbj", DO_NOT_QUIT),
 	("OWScript_MaxOutFlagValue", "f", DO_NOT_QUIT),
-	("OWScript_ZeroOutFlagValue", "q", DO_NOT_QUIT),
+	("OWScript_ZeroOutFlagValue", "f", DO_NOT_QUIT),
 	("OWScript_JumpIfFlagNonzero2", "fj", DO_NOT_QUIT),
 	("OWScript_JumpIfFlagZero2", "fj", DO_NOT_QUIT),
 	("OWScript_IncrementFlagValue", "f", DO_NOT_QUIT),
