@@ -1,4 +1,10 @@
-LevelObjects_13b04: ; 13b04 (3:7b04)
+; Objects around maps that can be interacted with but are not represented
+; by NPCs. Things like Deck Machines and the PCs.
+; Format:
+; Direction you need to face, X coord, Y coord
+; Routine that gets called when you hit A in front of it
+; Object Name, and Object default Text
+MasonLabObjects: ; 13b04 (3:7b04)
 	db NORTH, 18, 2
 	dw PrintInteractableObjectText
 	tx Text04a0
@@ -42,7 +48,7 @@ LevelObjects_13b04: ; 13b04 (3:7b04)
 	db $ff
 
  
-LevelObjects_13b4d: ; 13b4d (3:7b4d)
+DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 	db NORTH, 2, 2
 	dw OWSequence_d932
 	tx Text041b
@@ -146,7 +152,7 @@ LevelObjects_13b4d: ; 13b4d (3:7b4d)
 	db $ff
 
  
-LevelObjects_13c02: ; 13c02 (3:7c02)
+IshiharasHouseObjects: ; 13c02 (3:7c02)
 	db NORTH, 6, 2
 	dw PrintInteractableObjectText
 	tx Text04ae
@@ -210,7 +216,7 @@ LevelObjects_13c02: ; 13c02 (3:7c02)
 	db $ff
 
  
-LevelObjects_13c6f: ; 13c6f (3:7c6f)
+FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04c6
@@ -244,7 +250,7 @@ LevelObjects_13c6f: ; 13c6f (3:7c6f)
 	db $ff
 
  
-LevelObjects_13ca6: ; 13ca6 (3:7ca6)
+RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04cc
@@ -278,7 +284,7 @@ LevelObjects_13ca6: ; 13ca6 (3:7ca6)
 	db $ff
 
  
-LevelObjects_13cdd: ; 13cdd (3:7cdd)
+WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04d2
@@ -312,7 +318,7 @@ LevelObjects_13cdd: ; 13cdd (3:7cdd)
 	db $ff
 
  
-LevelObjects_13d14: ; 13d14 (3:7d14)
+LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04d8
@@ -346,7 +352,7 @@ LevelObjects_13d14: ; 13d14 (3:7d14)
 	db $ff
 
  
-LevelObjects_13d4b: ; 13d4b (3:7d4b)
+GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04de
@@ -380,7 +386,7 @@ LevelObjects_13d4b: ; 13d4b (3:7d4b)
 	db $ff
 
  
-LevelObjects_13d82: ; 13d82 (3:7d82)
+PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04e4
@@ -414,7 +420,7 @@ LevelObjects_13d82: ; 13d82 (3:7d82)
 	db $ff
 
  
-LevelObjects_13db9: ; 13db9 (3:7db9)
+ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04ea
@@ -448,7 +454,7 @@ LevelObjects_13db9: ; 13db9 (3:7db9)
 	db $ff
 
  
-LevelObjects_13df0: ; 13df0 (3:7df0)
+FireClubLobbyObjects: ; 13df0 (3:7df0)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04f0
@@ -482,7 +488,7 @@ LevelObjects_13df0: ; 13df0 (3:7df0)
 	db $ff
 
  
-LevelObjects_13e27: ; 13e27 (3:7e27)
+ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
 	tx Text04f6
@@ -516,7 +522,7 @@ LevelObjects_13e27: ; 13e27 (3:7e27)
 	db $ff
 
  
-LevelObjects_13e5e: ; 13e5e (3:7e5e)
+PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	db NORTH, 2, 2
 	dw PrintInteractableObjectText
 	tx Text04fc
@@ -576,14 +582,16 @@ LevelObjects_13e5e: ; 13e5e (3:7e5e)
 	db $ff
 
  
-LevelObjects_13ec2: ; 13ec2 (3:7ec2)
+HallOfHonorObjects: ; 13ec2 (3:7ec2)
+	; Legendary Cards
 	db NORTH, 10, 10
-	dw $7bf1
+	dw OWSequence_fbf1
 	dw $0000
 	dw $0000
 
+	; Legendary Cards
 	db NORTH, 12, 10
-	dw $7bf1
+	dw OWSequence_fbf1
 	dw $0000
 	dw $0000
 

@@ -1796,7 +1796,8 @@ wTempPlayerYCoord:: ; d0bd
 wTempPlayerDirection:: ; d0be
 	ds $1
 
-wd0bf:: ; d0bf
+; See constants/misc_constants.asm for OWMODE's
+wOverworldMode:: ; d0bf
 	ds $1
 
 wd0c0:: ; d0c0
@@ -1826,11 +1827,8 @@ wNextOWSequence:: ; d0c6
 wCurrentNPCNameTx:: ; d0c8
 	ds $2
 
-wd0ca:: ; d0ca
-	ds $1
-
-wd0cb:: ; d0cb
-	ds $1
+wDefaultObjectText:: ; d0ca
+	ds $2
 
 wd0cc:: ; d0cc
 	ds 8 palettes

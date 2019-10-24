@@ -33,7 +33,7 @@
 	const EVENT_FLAG_1F                         ; $1f
 	const EVENT_FLAG_20                         ; $20
 	const EVENT_FLAG_21                         ; $21
-	const EVENT_FLAG_22                         ; $22
+	const EVENT_RECEIVED_LEGEND_CARDS           ; $22
 	const EVENT_FLAG_23                         ; $23
 	const EVENT_FLAG_24                         ; $24
 	const EVENT_FLAG_25                         ; $25
@@ -144,3 +144,4 @@ NORTH    EQU $00
 EAST     EQU $01
 SOUTH    EQU $02
 WEST     EQU $03
+NO_MOVE  EQU %10000000 ; For rotations without movement

@@ -10800,7 +10800,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 	ret
 
 Func_3917: ; 3917 (0:3917)
-	ld a, EVENT_FLAG_22
+	ld a, EVENT_RECEIVED_LEGEND_CARDS
 	farcall GetEventFlagValue
 	call EnableSRAM
 	ld [s0a00a], a
@@ -11059,16 +11059,16 @@ Func_3a4f: ; 3a4f (0:3a4f)
 	ret
 ; 0x3a5e
 
-Func_3a5e: ; 3a5e (0:3a5e)
+HandleMoveModeAPress: ; 3a5e (0:3a5e)
 	ldh a, [hBankROM]
 	push af
-	ld l, MAP_SCRIPT_PRESSED_A_1
+	ld l, MAP_SCRIPT_OBJECTS
 	call GetMapScriptPointer
 	jr nc, .handleSecondAPressScript
 	ld a, BANK(FindPlayerMovementFromDirection)
 	call BankswitchROM
 	call FindPlayerMovementFromDirection
-	ld a, $4
+	ld a, BANK(MapScripts)
 	call BankswitchROM
 	ld a, [wPlayerDirection]
 	ld d, a
@@ -11091,9 +11091,9 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	ld a, [hli]
 	ld [wNextOWSequence+1], a
 	ld a, [hli]
-	ld [wd0ca], a
+	ld [wDefaultObjectText], a
 	ld a, [hli]
-	ld [wd0cb], a
+	ld [wDefaultObjectText+1], a
 	ld a, [hli]
 	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
@@ -11106,14 +11106,14 @@ Func_3a5e: ; 3a5e (0:3a5e)
 	ret
 .noMatch
 	pop hl
-	ld bc, $0008
+	ld bc, LEVEL_OBJECT_SIZE - 1
 	add hl, bc
 	pop bc
 	jr .findAPressMatchLoop
 .handleSecondAPressScript
 	pop af
 	call BankswitchROM
-	ld l, MAP_SCRIPT_PRESSED_A_2
+	ld l, MAP_SCRIPT_PRESSED_A
 	call CallMapScriptPointerIfExists
 	ret
 

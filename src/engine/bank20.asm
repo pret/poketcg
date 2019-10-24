@@ -408,13 +408,37 @@ Func_804d8: ; 804d8 (20:44d8)
 	INCROM $804d8, $80b7a
 
 Func_80b7a: ; 80b7a (20:4b7a)
-	INCROM $80b7a, $80ba4
+	INCROM $80b7a, $80b89
+
+Func_80b89: ; 80b89 (20:4b89)
+	push hl
+	push bc
+	push af
+	ld c, a
+	ld a, $01
+	ld [$d292], a
+	ld b, $00
+	ld hl, $d323
+	add hl, bc
+	ld a, [hl]
+	or a
+	jr z, .asm_80ba0
+	ld a, c
+	call Func_80baa
+.asm_80ba0
+	pop af
+	pop bc
+	pop hl
+	ret
 
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
 	ld [wd292], a
 	pop af
+;	Fallthrough
+
+Func_80baa: ; 80baa (20:4baa)
 	push hl
 	push bc
 	push de

@@ -53,7 +53,7 @@ ENDM
 	const OWScript_DoFrames_index               ; $24
 	const Func_d0d9_index                       ; $25
 	const OWScript_JumpIfPlayerCoordMatches_index                       ; $26
-	const Func_ce4a_index                       ; $27
+	const OWScript_MoveActiveNPC_index                       ; $27
 	const OWScript_GiveOneOfEachTrainerBooster_index                       ; $28
 	const Func_d103_index                       ; $29
 	const Func_d125_index                       ; $2a

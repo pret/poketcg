@@ -1008,7 +1008,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_DoFrames
 	dw Func_d0d9
 	dw OWScript_JumpIfPlayerCoordMatches
-	dw Func_ce4a
+	dw OWScript_MoveActiveNPC
 	dw OWScript_GiveOneOfEachTrainerBooster
 	dw Func_d103
 	dw Func_d125

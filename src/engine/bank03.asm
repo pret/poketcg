@@ -54,7 +54,7 @@ LoadMap: ; c000 (3:4000)
 .asm_c092
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
-	call Func_c0ce
+	call HandleOverworldMode
 	ld hl, wd0b4
 	ld a, [hl]
 	and $d0
@@ -79,13 +79,13 @@ LoadMap: ; c000 (3:4000)
 	call Func_c280
 	ret
 
-Func_c0ce: ; c0ce (3:40ce)
-	ld a, [wd0bf]
+HandleOverworldMode: ; c0ce (3:40ce)
+	ld a, [wOverworldMode]
 	res 7, a
 	rlca
-	add LOW(PointerTable_c0e0)
+	add LOW(OverworldModePointers)
 	ld l, a
-	ld a, HIGH(PointerTable_c0e0)
+	ld a, HIGH(OverworldModePointers)
 	adc $0
 	ld h, a
 	ld a, [hli]
@@ -93,18 +93,18 @@ Func_c0ce: ; c0ce (3:40ce)
 	ld l, a
 	jp hl
 
-PointerTable_c0e0: ; c0e0 (3:40e0)
+OverworldModePointers: ; c0e0 (3:40e0)
 	dw Func_c0e8         ; on map
-	dw Func_c0ed         ; walking around
-	dw SetOWSequenceData ; beginning ows
-	dw EnterOWSequence   ; mid-ows
+	dw CallHandlePlayerMoveMode
+	dw SetOWSequenceData
+	dw EnterOWSequence
 
 Func_c0e8: ; c0e8 (3:40e8)
 	farcall Func_10e55
 	ret
 
-Func_c0ed: ; c0ed (3:40ed)
-	call Func_c510
+CallHandlePlayerMoveMode: ; c0ed (3:40ed)
+	call HandlePlayerMoveMode
 	ret
 
 SetOWSequenceData: ; c0f1 (3:40f1)
@@ -116,7 +116,7 @@ SetOWSequenceData: ; c0f1 (3:40f1)
 	ld a, b
 	ld [wNextOWSequence+1], a
 	ld a, $3
-	ld [wd0bf], a
+	ld [wOverworldMode], a
 	jr EnterOWSequence
 
 EnterOWSequence: ; c10a (3:410a)
@@ -141,7 +141,7 @@ CloseAdvancedDialogueBox: ; c111 (3:4111)
 	xor a
 	ld [wd0c1], a
 	ld a, [wd0c0]
-	ld [wd0bf], a
+	ld [wOverworldMode], a
 	ret
 
 ; redraws the background and removes textbox control
@@ -189,7 +189,7 @@ Func_c158: ; c158 (3:4158)
 	ret
 
 Func_c17a: ; c17a (3:417a)
-	ld a, [wd0bf]
+	ld a, [wOverworldMode]
 	cp $3
 	ret z
 	call Func_c9b8
@@ -204,7 +204,7 @@ Func_c184: ; c184 (3:4184)
 	ld c, $0
 .asm_c190
 	ld a, c
-	ld [wd0bf], a
+	ld [wOverworldMode], a
 	ld [wd0c0], a
 	pop bc
 	ret
@@ -606,24 +606,24 @@ Func_c4b9: ; c4b9 (3:44b9)
 .asm_c50f
 	ret
 
-Func_c510: ; c510 (3:4510)
+HandlePlayerMoveMode: ; c510 (3:4510)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld a, [wPlayerCurrentlyMoving]
 	bit 4, a
 	ret nz
 	bit 0, a
-	call z, Func_c5ac
+	call z, HandlePlayerMoveModeInput
 	ld a, [wPlayerCurrentlyMoving]
 	or a
-	jr z, .asm_c535
+	jr z, .notMoving
 	bit 0, a
 	call nz, Func_c66c
 	ld a, [wPlayerCurrentlyMoving]
 	bit 1, a
 	call nz, Func_c6dc
 	ret
-.asm_c535
+.notMoving
 	ldh a, [hKeysPressed]
 	and START
 	call nz, OpenStartMenu
@@ -695,7 +695,7 @@ Func_c58b: ; c58b (3:458b)
 	pop hl
 	ret
 
-Func_c5ac: ; c5ac (3:45ac)
+HandlePlayerMoveModeInput: ; c5ac (3:45ac)
 	ldh a, [hKeysHeld]
 	and D_PAD
 	jr z, .skipMoving
@@ -708,7 +708,7 @@ Func_c5ac: ; c5ac (3:45ac)
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .done
-	call Func_c71e
+	call FindNPCOrObject
 	jr .done
 .done
 	ret
@@ -911,7 +911,7 @@ Func_c6dc: ; c6dc (3:46dc)
 	call Func_c6f7
 	call Func_3997
 	call Func_c70d
-	ld a, [wd0bf]
+	ld a, [wOverworldMode]
 	cp $1
 	call z, Func_c9c0
 	pop hl
@@ -942,7 +942,7 @@ Func_c70d: ; c70d (3:470d)
 	ret
 
 ; Arrives here if A button is pressed when not moving + in map move state
-Func_c71e: ; c71e (3:471e)
+FindNPCOrObject: ; c71e (3:471e)
 	ld a, $ff
 	ld [wScriptNPC], a
 	call FindPlayerMovementFromDirection
@@ -953,19 +953,19 @@ Func_c71e: ; c71e (3:471e)
 	jr c, .noNPC
 	ld a, [wLoadedNPCTempIndex]
 	ld [wScriptNPC], a
-	ld a, $2 ; start OWScript
-	jr .asm_c748
+	ld a, OWMODE_START_SCRIPT
+	jr .changeStateExit
 
 .noNPC
-	call Func_3a5e
-	jr nc, .asm_c746
-	ld a, $3
-	jr .asm_c748
-.asm_c746
+	call HandleMoveModeAPress
+	jr nc, .exit
+	ld a, OWMODE_SCRIPT
+	jr .changeStateExit
+.exit
 	or a
 	ret
-.asm_c748
-	ld [wd0bf], a
+.changeStateExit
+	ld [wOverworldMode], a
 	scf
 	ret
 
@@ -1220,7 +1220,7 @@ SetNextOWSequence: ; c935 (3:4935)
 	inc hl
 	ld [hl], b
 	ld a, $3
-	ld [wd0bf], a
+	ld [wOverworldMode], a
 	pop hl
 	ret
 
@@ -1366,7 +1366,7 @@ Func_ca0e: ; ca0e (3:4a0e)
 	ld a, [wd32e]
 	cp $b
 	jr z, .asm_ca68
-	get_flag_value EVENT_FLAG_22
+	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
 	or a
 	jr nz, .asm_ca4a
 	get_flag_value EVENT_FLAG_40
@@ -1618,7 +1618,7 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def $05, %00001111 ; EVENT_FLAG_1F
 	flag_def $06, %11110000 ; EVENT_FLAG_20
 	flag_def $06, %00001100 ; EVENT_FLAG_21
-	flag_def $06, %00000010 ; EVENT_FLAG_22
+	flag_def $06, %00000010 ; EVENT_RECEIVED_LEGEND_CARDS
 	flag_def $06, %00000001 ; EVENT_FLAG_23
 	flag_def $07, %11000000 ; EVENT_FLAG_24
 	flag_def $07, %00100000 ; EVENT_FLAG_25
@@ -1706,7 +1706,7 @@ EventFlagMods: ; cb37 (3:4b37)
 
 ; Used for basic level objects that just print text and quit
 PrintInteractableObjectText: ; cc25 (3:4c25)
-	ld hl, wd0ca
+	ld hl, wDefaultObjectText
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2059,7 +2059,9 @@ Func_ce26: ; ce26 (3:4e26)
 	inc hl
 	ld b, [hl]
 
-Func_ce3a: ; ce3a (3:4e3a)
+; Moves an NPC given the list of directions pointed to by bc
+; set bit 7 to only rotate the NPC
+ExecuteNPCMovement: ; ce3a (3:4e3a)
 	farcall Func_1c78d
 .asm_ce3e
 	call DoFrameIfLCDEnabled
@@ -2067,11 +2069,15 @@ Func_ce3a: ; ce3a (3:4e3a)
 	jr nz, .asm_ce3e
 	jp IncreaseOWScriptPointerBy3
 
-Func_ce4a: ; ce4a (3:4e4a)
+; Begin a series of NPC movements on the currently talking NPC
+; based on the series of directions pointed to by bc
+OWScript_MoveActiveNPC: ; ce4a (3:4e4a)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
-	jr Func_ce3a
+	jr ExecuteNPCMovement
 
+; Begin a series of NPC movements on an arbitrary NPC
+; based on the series of directions pointed to by bc
 Func_ce52: ; ce52 (3:4e52)
 	ld a, [wLoadedNPCTempIndex]
 	push af
@@ -2081,7 +2087,7 @@ Func_ce52: ; ce52 (3:4e52)
 asm_ce5d
 	ld [wTempNPC], a
 	call FindLoadedNPC
-	call Func_ce3a
+	call ExecuteNPCMovement
 	pop af
 	ld [wTempNPC], a
 	pop af
@@ -2652,16 +2658,30 @@ Func_d209: ; d209 (3:5209)
 	jr nz, .asm_d20e
 	push bc
 	ld b, $0
-	ld hl, $5240
+	ld hl, Flags_d240
 	add hl, bc
 	ld a, [hl]
 	call MaxOutEventFlag
 	pop bc
-	ld hl, $5234
+	ld hl, LegendCards
 	ld a, c
 	jr asm_d1c6
 
-	INCROM $d234, $d244
+LegendCards: ; d234 (3:5234)
+	db ZAPDOS3
+	tx Text03f0
+	db MOLTRES2
+	tx Text03f1
+	db ARTICUNO2
+	tx Text03f2
+	db DRAGONITE1
+	tx Text03f3
+
+Flags_d240: ; d240 (3:5240)
+	db EVENT_FLAG_6D
+	db EVENT_FLAG_6E
+	db EVENT_FLAG_6F
+	db EVENT_FLAG_70
 
 Func_d244: ; d244 (3:5244)
 	ld a, c
@@ -3130,9 +3150,41 @@ MasonLaboratoryAfterDuel: ; d53b (3:553b)
 	dw $569f
 	db $00
 
-	INCROM $d549, $d753
+MasonLabLoadMap: ; d549 (3:5549)
+	get_flag_value EVENT_FLAG_3E
+	cp $03
+	ret nc
+	ld a, DRMASON
+	ld [wTempNPC], a
+	call FindLoadedNPC
+	ld bc, OWSequence_EnterLabFirstTime
+	jp SetNextNPCAndOWSequence
 
-OWSequence_d753: ; d753 (3:5753)
+MasonLabCloseTextBox: ; d55e (3:555e)
+	ld a, $0a
+	farcall Func_80b89
+	ret
+
+; Lets you access the Challenge Machine if available
+MasonLabPressedA: ; d565 (3:5565)
+	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	or a
+	ret z
+	ld hl, ChallengeMachineObjectTable
+	call FindExtraInteractableObjects
+	ret
+
+ChallengeMachineObjectTable: ; d572 (3:5572)
+	db 10, 4, NORTH
+	dw OWSequence_d57d
+	db 12, 4, NORTH
+	dw OWSequence_d57d
+	db $00
+
+OWSequence_d57d: ; d57d (3:557d)
+	INCROM $d57d, $d753
+
+OWSequence_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
 	run_script OWScript_MovePlayer
 	db NORTH
@@ -3172,9 +3224,8 @@ OWSequence_d753: ; d753 (3:5753)
 
 OWSequence_d779: ; d779 (03:5779)
 	start_script
-	run_script Func_ce4a ; handles some sort of npc movement, and rotation?
-	db $80
-	db $58
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_d880
 	run_script OWScript_PrintTextString
 	tx Text05e4
 	run_script OWScript_SetDialogName
@@ -3182,9 +3233,8 @@ OWSequence_d779: ; d779 (03:5779)
 	run_script OWScript_PrintTextString
 	tx Text05e5
 	run_script OWScript_CloseTextBox
-	run_script Func_ce4a
-	db $82
-	db $58
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_d882
 	run_script Func_cfc6
 	db $01
 	run_script OWScript_SetPlayerDirection
@@ -3198,11 +3248,10 @@ OWSequence_d779: ; d779 (03:5779)
 
 OWSequence_d794: ; d794 (3:5794)
 	start_script
-	run_script Func_ce4a
-	db $8b
-	db $58
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_d88b
 	run_script OWScript_DoFrames
-	db $28
+	db 40
 	run_script OWScript_PrintTextString
 	tx Text05e6
 	run_script OWScript_CloseTextBox
@@ -3225,9 +3274,8 @@ OWSequence_d794: ; d794 (3:5794)
 	db $01
 	run_script OWScript_SetPlayerDirection
 	db WEST
-	run_script Func_ce4a
-	db $94
-	db $58
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_d894
 	run_script OWScript_PrintTextString
 	tx Text05e7
 	run_script OWScript_SetDialogName
@@ -3342,7 +3390,39 @@ OWSequence_d827: ; d827 (3:5827)
 	run_script OWScript_QuitScriptFully
 ; 0xd82d
 
-	INCROM $d82d, $d932
+	INCROM $d82d, $d880
+
+NPCMovement_d880: ; d880 (3:5880)
+	db EAST
+	db $ff
+
+NPCMovement_d882: ; d882 (3:5882)
+	db SOUTH
+	db SOUTH
+	db WEST
+	db WEST
+	db WEST
+	db WEST
+	db SOUTH
+	db EAST | NO_MOVE
+	db $ff
+
+NPCMovement_d88b: ; d88b (3:588b)
+	db WEST
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db WEST
+	db WEST
+	db WEST
+	db EAST | NO_MOVE
+	db $ff
+
+NPCMovement_d894: ; d894 (4:5894)
+	db SOUTH | NO_MOVE
+	db $ff
+
+	INCROM $d896, $d932
 
 OWSequence_d932: ; d932 (3:5932)
 	start_script
@@ -3394,7 +3474,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	db EVENT_FLAG_39
 	dw .ows_db5a
 	run_script OWScript_JumpIfFlagNonzero2
-	db EVENT_FLAG_22
+	db EVENT_RECEIVED_LEGEND_CARDS
 	dw .ows_dc3e
 .ows_db5a
 	run_script OWScript_JumpIfFlagNonzero2
@@ -3436,7 +3516,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	run_script OWScript_ZeroOutFlagValue
 	db EVENT_FLAG_38
 	run_script OWScript_JumpIfFlagZero2
-	db EVENT_FLAG_22
+	db EVENT_RECEIVED_LEGEND_CARDS
 	dw .ows_db8d
 	run_script OWScript_MaxOutFlagValue
 	db EVENT_FLAG_39
@@ -3611,7 +3691,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	tx Text073e
 
 Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
-	get_flag_value EVENT_FLAG_22
+	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
 	cp $01
 	ccf
 	ret
@@ -3759,9 +3839,8 @@ OWJump_ImakuniCommon: ; dd60 (3:5d60)
 	db $01
 
 .ows_dd6e
-	run_script Func_ce4a
-	db $78
-	db $5d
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_dd78
 	run_script Func_cdcb
 	run_script OWScript_MaxOutFlagValue
 	db EVENT_TEMP_BATTLED_IMAKUNI
@@ -3771,7 +3850,19 @@ OWJump_ImakuniCommon: ; dd60 (3:5d60)
 	run_script OWScript_QuitScriptFully
 ; 0xdd78
 
-	INCROM $dd78, $e0b0
+NPCMovement_dd78 ; dd78 (3:5d78)
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db $ff
+
+	INCROM $dd82, $e0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4014,66 +4105,103 @@ OWSequence_LostToAmanda: ; e1c1 (03:61c1)
 	run_script OWScript_PrintTextQuitFully
 	tx Text0439
 
-OWSequence_NotReadyToSeeAmy: ; e15c (03:6153)
+OWSequence_NotReadyToSeeAmy: ; e1c5 (03:61c5)
 	start_script
 	run_script OWScript_JumpIfPlayerCoordMatches
 	db $12
 	db $08
-	dw $61ec
+	dw .ows_e1ec
 	run_script OWScript_JumpIfPlayerCoordMatches
 	db $14
 	db $08
-	dw $61f2
+	dw .ows_e1f2
 	run_script OWScript_JumpIfPlayerCoordMatches
 	db $18
 	db $08
-	dw $61f8
+	dw .ows_e1f8
+.ows_e1d5
 	run_script OWScript_MovePlayer
 	db SOUTH
 	db $04
-	run_script Func_ce4a
-	db $13
-	db $62
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e213
 	run_script OWScript_PrintTextString
 	tx Text043a
 	run_script OWScript_JumpIfPlayerCoordMatches
 	db $12
 	db $0a
-	dw $61fe
+	dw .ows_e1fe
 	run_script OWScript_JumpIfPlayerCoordMatches
 	db $14
 	db $0a
-	dw $6202
-	run_script Func_ce4a
-	db $15
-	db $62
+	dw .ows_e202
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e215
 	run_script OWScript_QuitScriptFully
 
 .ows_e1ec
-	run_script Func_ce4a
-	db $06
-	db $62
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e206
 	run_script OWScript_Jump
-	dw $61d5
-	run_script Func_ce4a
-	db $0b
-	db $62
+	dw .ows_e1d5
+.ows_e1f2
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e20b
 	run_script OWScript_Jump
-	dw $61d5
-	run_script Func_ce4a
-	db $0f
-	db $62
+	dw .ows_e1d5
+.ows_e1f8
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e20f
 	run_script OWScript_Jump
-	dw $61d5
-	run_script Func_ce4a
-	db $18
-	db $62
+	dw .ows_e1d5
+.ows_e1fe
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e218
 	run_script OWScript_QuitScriptFully
-; 0xe202
 
-	INCROM $e202, $e21c
+.ows_e202
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e219
+	run_script OWScript_QuitScriptFully
 
-OWSequence_Joshua:
+NPCMovement_e206: ; e206 (3:6206)
+	db NORTH
+	db WEST
+	db WEST
+	db SOUTH | NO_MOVE
+	db $ff
+
+NPCMovement_e20b: ; e20b (3:620b)
+	db NORTH
+	db WEST
+	db SOUTH | NO_MOVE
+	db $ff
+
+NPCMovement_e20f: ; e20f (3:620f)
+	db NORTH
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+
+NPCMovement_e213: ; e213 (3:6213)
+	db SOUTH
+	db $ff
+
+NPCMovement_e215: ; e215 (3:6215)
+	db WEST
+	db SOUTH | NO_MOVE
+	db $ff
+
+NPCMovement_e218: ; e218 (3:6218)
+	db EAST
+;	fallthrough
+
+NPCMovement_e219: ; e219 (3:6219)
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+
+OWSequence_Joshua: ; e21c (3:621c)
 	start_script
 	run_script OWScript_JumpIfFlagZero2
 	db EVENT_BEAT_AMANDA
@@ -4539,9 +4667,8 @@ OWSequence_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
 	run_script OWScript_MaxOutFlagValue
 	db EVENT_FLAG_4B
-	run_script Func_ce4a
-	db $94
-	db $68
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e894
 	run_script Func_d135
 	db $00
 	run_script OWScript_PrintTextString
@@ -4575,26 +4702,31 @@ OWSequence_FirstRonaldEncounter: ; e862 (3:6862)
 	run_script OWScript_MovePlayer
 	db EAST
 	db $04
-	run_script Func_ce4a
-	db $94
-	db $68
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e894
 	run_script Func_cdcb
 	run_script Func_d41d
 	run_script OWScript_QuitScriptFully
-; 0xe894
 
-	INCROM $e894, $e8c0
+NPCMovement_e894: ; e894 (3:6894)
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db $ff
+; e89a
+
+	INCROM $e89a, $e8c0
 
 OWSequence_FirstRonaldFight: ; e8c0 (3:68c0)
 	start_script
-	run_script Func_ce4a
-	db $05
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e905
 	run_script OWScript_DoFrames
 	db $3c
-	run_script Func_ce4a
-	db $0d
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e90d
 	run_script OWScript_PrintTextString
 	tx Text064a
 	run_script OWScript_JumpIfPlayerCoordMatches
@@ -4602,12 +4734,12 @@ OWSequence_FirstRonaldFight: ; e8c0 (3:68c0)
 	db $02
 	dw $68d6
 	run_script OWScript_SetPlayerDirection
-	db $03
+	db WEST
 	run_script OWScript_MovePlayer
 	db WEST
 	db $01
 	run_script OWScript_SetPlayerDirection
-	db $02
+	db SOUTH
 	run_script OWScript_MovePlayer
 	db SOUTH
 	db $01
@@ -4648,26 +4780,45 @@ OWJump_FinishedFirstRonaldFight
 	db EVENT_FLAG_4C
 	db $02
 	run_script OWScript_CloseTextBox
-	run_script Func_ce4a
-	db $0f
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e90f
 	run_script Func_cdcb
 	run_script Func_d41d
 	run_script OWScript_QuitScriptFully
-; 0xe905
 
-	INCROM $e905, $e91e
+NPCMovement_e905: ; e905 (3:6905)
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db SOUTH
+	db NORTH | NO_MOVE
+	db $ff
+
+NPCMovement_e90d: ; e90d (3:690d)
+	db NORTH
+	db $ff
+
+NPCMovement_e90f: ; e90f (3:690f)
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db $ff
+; e915
+
+	INCROM $e915, $e91e
 
 OWSequenceSecondRonaldFight: ; e91e (3:691e)
 	start_script
-	run_script Func_ce4a
-	db $05
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e905
 	run_script OWScript_DoFrames
 	db 60
-	run_script Func_ce4a
-	db $0d
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e90d
 	run_script OWScript_PrintTextString
 	tx Text064f
 	run_script OWScript_JumpIfPlayerCoordMatches
@@ -4675,13 +4826,13 @@ OWSequenceSecondRonaldFight: ; e91e (3:691e)
 	db $02
 	dw .ows_6934
 	run_script OWScript_SetPlayerDirection
-	db $03
+	db WEST
 	run_script OWScript_MovePlayer
 	db WEST
 	db $01
 .ows_6934
 	run_script OWScript_SetPlayerDirection
-	db $02
+	db SOUTH
 	run_script OWScript_MovePlayer
 	db SOUTH
 	db $01
@@ -4722,15 +4873,85 @@ OWJump_FinishedSecondRonaldFight ; e959 (3:6959)
 	db EVENT_FLAG_4D
 	db $02
 	run_script OWScript_CloseTextBox
-	run_script Func_ce4a
-	db $0f
-	db $69
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_e90f
 	run_script Func_cdcb
 	run_script Func_d41d
 	run_script OWScript_QuitScriptFully
 ; 0xe963
 
-	INCROM $e963, $f580
+	INCROM $e963, $ed57
+
+FireClubPressedA: ; ed57 (3:6d57)
+	ld hl, SlowpokePaintingObjectTable
+	call FindExtraInteractableObjects
+	ret
+
+SlowpokePaintingObjectTable: ; ed5e (3:6d5e)
+	db 16, 2, NORTH
+	dw OWSequence_ee76
+	db $00
+
+; Given a table with data of the form:
+;	X, Y, Dir, OWSequence
+; Searches to try to find a match, and starts an OWSequence if possible
+FindExtraInteractableObjects: ; ed64 (3:6d64)
+	ld de, $5
+.findObjectMatchLoop
+	ld a, [hl]
+	or a
+	ret z
+	push hl
+	ld a, [wPlayerXCoord]
+	cp [hl]
+	jr nz, .didNotMatch
+	inc hl
+	ld a, [wPlayerYCoord]
+	cp [hl]
+	jr nz, .didNotMatch
+	inc hl
+	ld a, [wPlayerDirection]
+	cp [hl]
+	jr z, .foundObject
+.didNotMatch
+	pop hl
+	add hl, de
+	jr .findObjectMatchLoop
+.foundObject
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	pop hl
+	call SetNextOWSequence
+	scf
+	ret
+; 0xed8d
+
+	INCROM $ed8d, $ee76
+
+OWSequence_ee76: ; ee76 (3:6e76)
+	start_script
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_21
+	db $01
+	dw .ows_ee7d
+	run_script OWScript_QuitScriptFully
+
+.ows_ee7d
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_21
+	db $02
+	run_script Func_ccdc
+	tx Text06a2
+	run_script OWScript_GiveCard
+	db SLOWPOKE1
+	run_script OWScript_ShowCardReceivedScreen
+	db SLOWPOKE1
+	run_script OWScript_QuitScriptFully
+; 0xee88
+
+	INCROM $ee88, $f580
 
 Func_f580: ; f580 (3:7580)
 	get_flag_value EVENT_FLAG_44
@@ -4782,7 +5003,72 @@ OWSequence_f631: ; f631 (3:7631)
 	ret
 ; 0xf63c
 
-	INCROM $f63c, $fc2b
+	INCROM $f63c, $fbdb
+
+HallOfHonorLoadMap: ; fbdb (3:7bdb)
+	ld a, SFX_10
+	call PlaySFX
+	ret
+; 0xfbe1
+
+	INCROM $fbe1, $fbf1
+
+OWSequence_fbf1: ; fbf1 (3:7bf1)
+	start_script
+	run_script OWScript_JumpIfFlagNonzero2
+	db EVENT_RECEIVED_LEGEND_CARDS
+	dw .ows_fc10
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_RECEIVED_LEGEND_CARDS
+	run_script Func_ccdc
+	tx Text05b8
+	run_script OWScript_GiveCard
+	db ZAPDOS3
+	run_script OWScript_GiveCard
+	db MOLTRES2
+	run_script OWScript_GiveCard
+	db ARTICUNO2
+	run_script OWScript_GiveCard
+	db DRAGONITE1
+	run_script OWScript_ShowCardReceivedScreen
+	db $ff
+.ows_fc05
+	run_script Func_d38f
+	db $00
+	run_script Func_ccdc
+	tx Text05b9
+.ows_fc0a
+	run_script Func_d38f
+	db $01
+	run_script Func_d396
+	db $01
+	run_script Func_d3b9
+	run_script OWScript_QuitScriptFully
+
+.ows_fc10
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_71
+	db $0f
+	dw .ows_fc20
+	run_script Func_d209
+	run_script Func_ccdc
+	tx Text05ba
+	run_script OWScript_GiveCard
+	db $00
+	run_script OWScript_ShowCardReceivedScreen
+	db $00
+	run_script OWScript_Jump
+	dw .ows_fc05
+
+.ows_fc20
+	run_script Func_ccdc
+	tx Text05bb
+	run_script Func_d38f
+	db $00
+	run_script Func_ccdc
+	tx Text05bc
+	run_script OWScript_Jump
+	dw .ows_fc0a
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [wDuelResult]
