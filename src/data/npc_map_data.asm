@@ -1,4 +1,5 @@
-; NPC Map data. Format:
+; NPC Map data. Note: pre-load functions also run after battles
+; Format:
 ; NPC, X position, Y Position, Direction,
 ; pre-load function. (Resets c flag if NPC should not be loaded)
 MasonLabNPCS: ; 772f (4:1372f)
@@ -150,7 +151,7 @@ WaterClubNPCS: ; 787e (4:1387e)
 	db JOSHUA, $16, $08, SOUTH
 	dw $0000
 	db AMY, $16, $04, SOUTH
-	dw $62ad
+	dw Preload_Amy
 	db $00
 
 LightningClubEntranceNPCS: ; 7897 (4:13897)

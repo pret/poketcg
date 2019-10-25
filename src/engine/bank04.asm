@@ -979,7 +979,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_cda8
 	dw OWScript_PrintTextQuitFully
 	dw Func_cdcb
-	dw Func_ce26
+	dw OWScript_MoveActiveNPCByDirection
 	dw OWScript_CloseTextBox
 	dw OWScript_GiveBoosterPacks
 	dw Func_cf0c
@@ -1028,7 +1028,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw OWScript_OpenDeckMachine
 	dw Func_d271
 	dw OWScript_EnterMap
-	dw Func_ce6f
+	dw OWScript_MoveArbitraryNPC
 	dw Func_d209
 	dw Func_d38f
 	dw Func_d396

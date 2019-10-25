@@ -185,7 +185,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_cda8", "bbbb", DO_NOT_QUIT),
 	("OWScript_PrintTextQuitFully", "t", QUIT_SPECIAL),
 	("Func_cdcb", "", DO_NOT_QUIT),
-	("Func_ce26", "bb", DO_NOT_QUIT),
+	("OWScript_MoveActiveNPCByDirection", "bb", DO_NOT_QUIT),
 	("OWScript_CloseTextBox", "", DO_NOT_QUIT),
 	("OWScript_GiveBoosterPacks", "bbb", DO_NOT_QUIT),
 	("Func_cf0c", "bj", DO_NOT_QUIT), # more complex behavior too (jumping)
@@ -234,7 +234,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_OpenDeckMachine", "b", DO_NOT_QUIT),
 	("Func_d271", "q", DO_NOT_QUIT),
 	("OWScript_EnterMap", "bbood", DO_NOT_QUIT),
-	("Func_ce6f", "bd", DO_NOT_QUIT),
+	("OWScript_MoveArbitraryNPC", "bd", DO_NOT_QUIT),
 	("Func_d209", "", DO_NOT_QUIT),
 	("Func_d38f", "b", DO_NOT_QUIT),
 	("Func_d396", "b", DO_NOT_QUIT),

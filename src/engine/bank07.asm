@@ -93,7 +93,7 @@ INCLUDE "data/map_headers.asm"
 Func_1c440: ; 1c440 (7:4440)
 	INCROM $1c440, $1c455
 
-Func_1c455: ; 1c455 (7:4455)
+GetNPCDirection: ; 1c455 (7:4455)
 	push hl
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_DIRECTION

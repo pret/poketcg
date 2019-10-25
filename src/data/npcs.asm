@@ -1,5 +1,6 @@
 ; When you press the A button in front of something it will find a data entry somewhere on this list
 ; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
+; The Deck IDs are used for the challenge hall
 NPCDataTable:
 	dw DrMasonData
 	dw DrMasonData
@@ -138,7 +139,7 @@ Ronald1Data:
 	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
-	db $1a
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
 	db $16
 Ronald2Data:
@@ -150,7 +151,7 @@ Ronald2Data:
 	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
-	db $1a
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
 	db $16
 Ronald3Data:
@@ -162,7 +163,7 @@ Ronald3Data:
 	dw OWSequence_Ronald ; Pointer to OWScript
 	tx Text03ad
 	db RONALD_PIC
-	db $1a
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
 	db $16
 IshiharaData:
@@ -186,7 +187,7 @@ ImakuniData:
 	dw OWSequence_Imakuni ; Pointer to OWScript
 	tx Text03af
 	db IMAKUNI_PIC
-	db $34
+	db IMAKUNI_DECK_ID
 	db $10
 	db $15
 SamData:
@@ -198,7 +199,7 @@ SamData:
 	dw $561d ; Pointer to OWScript
 	tx Text03b1
 	db SAM_PIC
-	db $02
+	db SAMS_NORMAL_DECK_ID
 	db $02
 	db $15
 Tech1Data:
@@ -390,7 +391,7 @@ ChrisData:
 	dw $5ef2 ; Pointer to OWScript
 	tx Text03b4
 	db CHRIS_PIC
-	db $1c
+	db MUSCLES_FOR_BRAINS_DECK_ID
 	db $03
 	db $15
 MichaelData:
@@ -402,7 +403,7 @@ MichaelData:
 	dw $6573 ; Pointer to OWScript
 	tx Text03b5
 	db MICHAEL_PIC
-	db $1d
+	db HEATED_BATTLE_DECK_ID
 	db $03
 	db $15
 JessicaData:
@@ -414,7 +415,7 @@ JessicaData:
 	dw $6d96 ; Pointer to OWScript
 	tx Text03b6
 	db JESSICA_PIC
-	db $1e
+	db LOVE_TO_BATTLE_DECK_ID
 	db $03
 	db $15
 MitchData:
@@ -426,7 +427,7 @@ MitchData:
 	dw $5dc3 ; Pointer to OWScript
 	tx Text03b7
 	db MITCH_PIC
-	db $10
+	db FIRST_STRIKE_DECK_ID
 	db $03
 	db $16
 MatthewData:
@@ -438,7 +439,7 @@ MatthewData:
 	dw $5f39 ; Pointer to OWScript
 	tx Text03b8
 	db MATTHEW_PIC
-	db $21
+	db HARD_POKEMON_DECK_ID
 	db $03
 	db $15
 RyanData:
@@ -450,7 +451,7 @@ RyanData:
 	dw $5ff0 ; Pointer to OWScript
 	tx Text03b9
 	db RYAN_PIC
-	db $1f
+	db EXCAVATION_DECK_ID
 	db $03
 	db $15
 AndrewData:
@@ -462,7 +463,7 @@ AndrewData:
 	dw $6017 ; Pointer to OWScript
 	tx Text03ba
 	db ANDREW_PIC
-	db $20
+	db BLISTERING_POKEMON_DECK_ID
 	db $03
 	db $15
 GeneData:
@@ -474,7 +475,7 @@ GeneData:
 	dw $603e ; Pointer to OWScript
 	tx Text03bb
 	db GENE_PIC
-	db $11
+	db ROCK_CRUSHER_DECK_ID
 	db $03
 	db $16
 SaraData:
@@ -486,7 +487,7 @@ SaraData:
 	dw OWSequence_Sara ; Pointer to OWScript
 	tx Text03bc
 	db SARA_PIC
-	db $22
+	db WATERFRONT_POKEMON_DECK_ID
 	db $03
 	db $15
 AmandaData:
@@ -498,7 +499,7 @@ AmandaData:
 	dw OWSequence_Amanda ; Pointer to OWScript
 	tx Text03bd
 	db AMANDA_PIC ; battle profile picture
-	db $23
+	db LONELY_FRIENDS_DECK_ID
 	db $03
 	db $15
 JoshuaData:
@@ -510,7 +511,7 @@ JoshuaData:
 	dw OWSequence_Joshua ; Pointer to OWScript
 	tx Text03be
 	db JOSHUA_PIC
-	db $24
+	db SOUND_OF_THE_WAVES_DECK_ID
 	db $03
 	db $15
 AmyData:
@@ -522,7 +523,7 @@ AmyData:
 	dw OWSequence_Amy ; Pointer to OWScript
 	tx Text03bf
 	db AMY_PIC
-	db $12
+	db GO_GO_RAIN_DANCE_DECK_ID
 	db $03
 	db $16
 JenniferData:
@@ -534,7 +535,7 @@ JenniferData:
 	dw $6408 ; Pointer to OWScript
 	tx Text03c0
 	db JENNIFER_PIC
-	db $25
+	db PIKACHU_DECK_ID
 	db $03
 	db $15
 NicholasData:
@@ -546,7 +547,7 @@ NicholasData:
 	dw $642f ; Pointer to OWScript
 	tx Text03c1
 	db NICHOLAS_PIC
-	db $26
+	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
 	db $03
 	db $15
 BrandonData:
@@ -558,7 +559,7 @@ BrandonData:
 	dw $6456 ; Pointer to OWScript
 	tx Text03c2
 	db BRANDON_PIC
-	db $27
+	db POWER_GENERATOR_DECK_ID
 	db $03
 	db $15
 IsaacData:
@@ -570,7 +571,7 @@ IsaacData:
 	dw $64ad ; Pointer to OWScript
 	tx Text03c3
 	db ISAAC_PIC
-	db $13
+	db ZAPPING_SELFDESTRUCT_DECK_ID
 	db $03
 	db $16
 BrittanyData:
@@ -582,7 +583,7 @@ BrittanyData:
 	dw OWSequence_Brittany ; Pointer to OWScript
 	tx Text03c4
 	db BRITTANY_PIC
-	db $28
+	db ETCETERA_DECK_ID
 	db $03
 	db $15
 KristinData:
@@ -594,7 +595,7 @@ KristinData:
 	dw $6701 ; Pointer to OWScript
 	tx Text03c5
 	db KRISTIN_PIC
-	db $29
+	db FLOWER_GARDEN_DECK_ID
 	db $03
 	db $15
 HeatherData:
@@ -606,7 +607,7 @@ HeatherData:
 	dw $6745 ; Pointer to OWScript
 	tx Text03c6
 	db HEATHER_PIC
-	db $2a
+	db KALEIDOSCOPE_DECK_ID
 	db $03
 	db $15
 NikkiData:
@@ -618,7 +619,7 @@ NikkiData:
 	dw $679e ; Pointer to OWScript
 	tx Text03c7
 	db NIKKI_PIC
-	db $14
+	db FLOWER_POWER_DECK_ID
 	db $03
 	db $16
 RobertData:
@@ -630,7 +631,7 @@ RobertData:
 	dw $6980 ; Pointer to OWScript
 	tx Text03c8
 	db ROBERT_PIC
-	db $2b
+	db GHOST_DECK_ID
 	db $03
 	db $15
 DanielData:
@@ -642,7 +643,7 @@ DanielData:
 	dw $6a60 ; Pointer to OWScript
 	tx Text03c9
 	db DANIEL_PIC
-	db $2c
+	db NAP_TIME_DECK_ID
 	db $03
 	db $15
 StephanieData:
@@ -654,7 +655,7 @@ StephanieData:
 	dw $6aa2 ; Pointer to OWScript
 	tx Text03ca
 	db STEPHANIE_PIC
-	db $2d
+	db STRANGE_POWER_DECK_ID
 	db $03
 	db $15
 Murray1Data:
@@ -666,7 +667,7 @@ Murray1Data:
 	dw $6adf ; Pointer to OWScript
 	tx Text03cb
 	db MURRAY_PIC
-	db $15
+	db STRANGE_PSYSHOCK_DECK_ID
 	db $03
 	db $16
 Murray2Data:
@@ -678,7 +679,7 @@ Murray2Data:
 	dw $6adf ; Pointer to OWScript
 	tx Text03cb
 	db MURRAY_PIC
-	db $15
+	db STRANGE_PSYSHOCK_DECK_ID
 	db $03
 	db $16
 JosephData:
@@ -690,7 +691,7 @@ JosephData:
 	dw $6cdb ; Pointer to OWScript
 	tx Text03cc
 	db JOSEPH_PIC
-	db $2e
+	db FLYIN_POKEMON_DECK_ID
 	db $03
 	db $15
 DavidData:
@@ -702,7 +703,7 @@ DavidData:
 	dw $6c11 ; Pointer to OWScript
 	tx Text03cd
 	db DAVID_PIC
-	db $2f
+	db LOVELY_NIDORAN_DECK_ID
 	db $03
 	db $15
 ErikData:
@@ -714,7 +715,7 @@ ErikData:
 	dw $6c42 ; Pointer to OWScript
 	tx Text03ce
 	db ERIK_PIC
-	db $30
+	db POISON_DECK_ID
 	db $03
 	db $15
 RickData:
@@ -726,7 +727,7 @@ RickData:
 	dw $6c67 ; Pointer to OWScript
 	tx Text03cf
 	db RICK_PIC
-	db $16
+	db WONDERS_OF_SCIENCE_DECK_ID
 	db $03
 	db $16
 JohnData:
@@ -738,7 +739,7 @@ JohnData:
 	dw $6eb3 ; Pointer to OWScript
 	tx Text03d0
 	db JOHN_PIC
-	db $31
+	db ANGER_DECK_ID
 	db $03
 	db $15
 AdamData:
@@ -750,7 +751,7 @@ AdamData:
 	dw $6ed8 ; Pointer to OWScript
 	tx Text03d1
 	db ADAM_PIC
-	db $32
+	db FLAMETHROWER_DECK_ID
 	db $03
 	db $15
 JonathanData:
@@ -762,7 +763,7 @@ JonathanData:
 	dw $6efd ; Pointer to OWScript
 	tx Text03d2
 	db JONATHAN_PIC
-	db $33
+	db RESHUFFLE_DECK_ID
 	db $03
 	db $15
 KenData:
@@ -774,7 +775,7 @@ KenData:
 	dw $6f22 ; Pointer to OWScript
 	tx Text03d3
 	db KEN_PIC
-	db $17
+	db FIRE_CHARGE_DECK_ID
 	db $03
 	db $16
 CourtneyData:
@@ -786,7 +787,7 @@ CourtneyData:
 	dw $771f ; Pointer to OWScript
 	tx Text03d4
 	db COURTNEY_PIC
-	db $0c
+	db LEGENDARY_MOLTRES_DECK_ID
 	db $04
 	db $17
 SteveData:
@@ -798,7 +799,7 @@ SteveData:
 	dw $772a ; Pointer to OWScript
 	tx Text03d5
 	db STEVE_PIC
-	db $0d
+	db LEGENDARY_ZAPDOS_DECK_ID
 	db $04
 	db $17
 JackData:
@@ -810,7 +811,7 @@ JackData:
 	dw $7735 ; Pointer to OWScript
 	tx Text03d6
 	db JACK_PIC
-	db $0e
+	db LEGENDARY_ARTICUNO_DECK_ID
 	db $04
 	db $17
 RodData:
@@ -822,7 +823,7 @@ RodData:
 	dw $7740 ; Pointer to OWScript
 	tx Text03d7
 	db ROD_PIC
-	db $0f
+	db LEGENDARY_DRAGONITE_DECK_ID
 	db $04
 	db $17
 Clerk10Data:
@@ -1314,7 +1315,7 @@ AaronData:
 	dw $58dd ; Pointer to OWScript
 	tx Text03e7
 	db AARON_PIC
-	db $09
+	db LIGHTNING_AND_FIRE_DECK_ID
 	db $02
 	db $15
 GuideData:

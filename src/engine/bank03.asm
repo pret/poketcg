@@ -1901,7 +1901,7 @@ OWScript_StartBattle: ; cd01 (3:4d01)
 	ld a, [wd695]
 	ld c, a
 	ld b, $0
-	ld hl, $4d63
+	ld hl, AaronDeckIDs
 	add hl, bc
 	ld a, [hl]
 	ld [wcc19], a
@@ -1933,8 +1933,10 @@ Func_cd4f: ; cd4f (3:4d4f)
 	ld a, [wd696]
 	jr asm_cd2f
 
-Unknown_dd63: ; cd4f (3:4d4f)
-	INCROM $cd63, $cd66
+AaronDeckIDs: ; cd63 (3:4d63)
+	db LIGHTNING_AND_FIRE_DECK_ID
+	db WATER_AND_FIGHTING_DECK_ID
+	db GRASS_AND_PSYCHIC_DECK_ID
 
 Func_cd66: ; cd66 (3:4d66)
 	ld a, c
@@ -2045,10 +2047,12 @@ Func_cdf5: ; cdf5 (3:4df5)
 	ld [wLoadedNPCTempIndex], a
 	jp IncreaseOWScriptPointerBy3
 
-Func_ce26: ; ce26 (3:4e26)
+; Finds and executes an NPCMovement script in the table provided in bc
+; based on the active NPC's current direction
+OWScript_MoveActiveNPCByDirection: ; ce26 (3:4e26)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
-	farcall Func_1c455
+	farcall GetNPCDirection
 	rlca
 	add c
 	ld l, a
@@ -2058,6 +2062,7 @@ Func_ce26: ; ce26 (3:4e26)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
+;	fallthrough
 
 ; Moves an NPC given the list of directions pointed to by bc
 ; set bit 7 to only rotate the NPC
@@ -2084,7 +2089,11 @@ Func_ce52: ; ce52 (3:4e52)
 	ld a, [wTempNPC]
 	push af
 	ld a, [wd696]
-asm_ce5d
+;	fallthrough
+
+; Executes movement on an arbitrary NPC using values in a and on the stack
+; Changes and fixes Temp NPC using stack values
+ExecuteArbitraryNPCMovementFromStack
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call ExecuteNPCMovement
@@ -2094,7 +2103,7 @@ asm_ce5d
 	ld [wLoadedNPCTempIndex], a
 	ret
 
-Func_ce6f: ; ce6f (3:4e6f)
+OWScript_MoveArbitraryNPC: ; ce6f (3:4e6f)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -2106,7 +2115,7 @@ Func_ce6f: ; ce6f (3:4e6f)
 	call IncreaseOWScriptPointerBy1
 	pop bc
 	pop af
-	jr asm_ce5d
+	jr ExecuteArbitraryNPCMovementFromStack
 
 OWScript_CloseTextBox: ; ce84 (3:4e84)
 	call CloseTextBox
@@ -4044,7 +4053,7 @@ OWSequence_Sara: ; e177 (3:6177)
 	tx Text042f
 	run_script OWScript_StartBattle
 	db PRIZES_2
-	db WATERFRONT_POKEMON_DECK_ID ; 6189
+	db WATERFRONT_POKEMON_DECK_ID
 	db MUSIC_DUEL_THEME_1
 	run_script OWScript_QuitScriptFully
 
@@ -4305,8 +4314,8 @@ OWSequence_BeatJoshua: ; e26c (3:626c)
 	run_script OWScript_PrintTextString
 	tx Text0449
 	run_script OWScript_CloseTextBox
-	run_script Func_ce26
-	dw $62a1
+	run_script OWScript_MoveActiveNPCByDirection
+	dw NPCMovementTable_e2a1
 	run_script OWScript_PrintTextString
 	tx Text044a
 	run_script Func_cfc6
@@ -4318,7 +4327,39 @@ OWSequence_BeatJoshua: ; e26c (3:626c)
 	run_script OWScript_EndScriptLoop1
 	ret
 
-	INCROM $e2a1, $e2d1
+NPCMovementTable_e2a1: ; e2a1 (3:62a1)
+	dw NPCMovement_e2a9
+	dw NPCMovement_e2a9
+	dw NPCMovement_e2a9
+	dw NPCMovement_e2a9
+
+NPCMovement_e2a9: ; e2a9 (3:62a9)
+	db NORTH
+	db $ff
+
+NPCMovement_e2ab: ; e2ab (3:62ab)
+	db SOUTH
+	db $ff
+
+Preload_Amy: ; e2ad (3:62ad)
+	xor a
+	ld [wd3d0], a
+	ld a, [wd0c2]
+	or a
+	jr z, .asm_e2cf
+	ld a, [wPlayerXCoord]
+	cp $14
+	jr nz, .asm_e2cf
+	ld a, [wPlayerYCoord]
+	cp $06
+	jr nz, .asm_e2cf
+	ld a, $14
+	ld [wLoadNPCXPos], a
+	ld a, $01
+	ld [wd3d0], a
+.asm_e2cf
+	scf
+	ret
 
 OWSequence_MeetAmy: ; e2d1 (3:62d1)
 	start_script
@@ -4359,9 +4400,9 @@ OWSequence_MeetAmy: ; e2d1 (3:62d1)
 	run_script OWScript_MovePlayer
 	db NORTH
 	db $01
-	run_script Func_ce6f
-	db $21
-	dw $62ab
+	run_script OWScript_MoveArbitraryNPC
+	db JOSHUA
+	dw NPCMovement_e2ab
 	run_script OWScript_PrintTextString
 	tx Text044e
 	run_script OWScript_Jump
@@ -5211,21 +5252,24 @@ Func_fcad: ; fcad (3:7cad)
 	tx Text06d5
 
 .ows_fcd5
-	run_script Func_ce6f
-	db $3c
-	dw Unknown_fce1
+	run_script OWScript_MoveArbitraryNPC
+	db GIFT_CENTER_CLERK
+	dw NPCMovement_fce1
 	run_script OWScript_PrintTextString
 	tx Text06d6
-	run_script Func_ce6f
-	db $3c
-	dw Unknown_fce3
+	run_script OWScript_MoveArbitraryNPC
+	db GIFT_CENTER_CLERK
+	dw NPCMovement_fce3
 	run_script OWScript_QuitScriptFully
 
-Unknown_fce1: ; fce1 (3:7ce1)
-	db $82, $ff
+NPCMovement_fce1: ; fce1 (3:7ce1)
+	db SOUTH | NO_MOVE
+	db $ff
 
-Unknown_fce3: ; fce3 (3:7ce3)
-	db $80, $ff
+NPCMovement_fce3: ; fce3 (3:7ce3)
+	db NORTH | NO_MOVE
+	db $ff
+; fce5
 
 rept $31b
 	db $ff

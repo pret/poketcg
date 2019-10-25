@@ -24,7 +24,7 @@ ENDM
 	const Func_cda8_index                       ; $07
 	const OWScript_PrintTextQuitFully_index      ; $08
 	const Func_cdcb_index                       ; $09
-	const Func_ce26_index                       ; $0a
+	const OWScript_MoveActiveNPCByDirection_index                       ; $0a
 	const OWScript_CloseTextBox_index           ; $0b
 	const OWScript_GiveBoosterPacks_index       ; $0c
 	const Func_cf0c_index                       ; $0d
@@ -73,7 +73,7 @@ ENDM
 	const OWScript_OpenDeckMachine_index        ; $38
 	const Func_d271_index                       ; $39
 	const OWScript_EnterMap_index                       ; $3a
-	const Func_ce6f_index                       ; $3b
+	const OWScript_MoveArbitraryNPC_index                       ; $3b
 	const Func_d209_index                       ; $3c
 	const Func_d38f_index                       ; $3d
 	const Func_d396_index                       ; $3e
