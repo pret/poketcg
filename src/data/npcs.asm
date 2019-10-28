@@ -928,7 +928,7 @@ Lass2Data:
 	db $00
 	db $1e
 	db $00
-	dw $661f ; Pointer to OWScript
+	dw OWSequence_e61f ; Pointer to OWScript
 	tx Text03dc
 	db $00
 	db $00
@@ -1000,7 +1000,7 @@ Clerk13Data:
 	db $00
 	db $16
 	db $00
-	dw $726c ; Pointer to OWScript
+	dw OWSequence_Clerk13 ; Pointer to OWScript
 	tx Text03b3
 	db $00
 	db $00

@@ -61,7 +61,7 @@ ENDM
 	const Func_d16b_index                       ; $2c
 	const Func_cd4f_index                       ; $2d
 	const Func_cd94_index                       ; $2e
-	const Func_ce52_index                       ; $2f
+	const OWScript_MoveWramNPC_index                       ; $2f
 	const Func_cdd8_index                       ; $30
 	const Func_cdf5_index                       ; $31
 	const Func_d195_index                       ; $32

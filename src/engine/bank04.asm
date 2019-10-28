@@ -1016,7 +1016,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d16b
 	dw Func_cd4f
 	dw Func_cd94
-	dw Func_ce52
+	dw OWScript_MoveWramNPC
 	dw Func_cdd8
 	dw Func_cdf5
 	dw Func_d195

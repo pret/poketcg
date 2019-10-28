@@ -377,7 +377,7 @@ ChallengeHallNPCS: ; 7a9a (4:13a9a)
 	db CLERK13, $14, $12, SOUTH
 	dw $707a
 	db GUIDE, $0e, $14, SOUTH
-	dw $7270
+	dw Preload_Guide
 	db HOST, $0e, $04, SOUTH
 	dw $707a
 	db $ff, $12, $08, WEST ; pre-load function chooses NPC to load

@@ -2083,7 +2083,7 @@ OWScript_MoveActiveNPC: ; ce4a (3:4e4a)
 
 ; Begin a series of NPC movements on an arbitrary NPC
 ; based on the series of directions pointed to by bc
-Func_ce52: ; ce52 (3:4e52)
+OWScript_MoveWramNPC: ; ce52 (3:4e52)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -2626,6 +2626,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 	ld a, $d
 	call Random
 	add $2
+;	fallthrough
 
 .asm_d1c3
 	ld hl, $51dc
@@ -4645,7 +4646,178 @@ OWSequence_LostToBrittany: ; e618 (3:6618)
 	tx Text06e9
 ; 0xe61c
 
-	INCROM $e61c, $e7f6
+OWSequence_e61c: ; e61c (3:661c)
+	run_script OWScript_PrintTextQuitFully
+	tx Text06ea
+
+OWSequence_e61f: ; e61f (3:661f)
+	start_script
+	run_script OWScript_JumpIfFlagNonzero2
+	db EVENT_FLAG_04
+	dw OWSequence_e61c
+	run_script OWScript_JumpIfFlagNotLessThan
+	db EVENT_FLAG_37
+	db $06
+	dw OWSequence_e61c
+	run_script OWScript_JumpIfFlagNotLessThan
+	db EVENT_FLAG_37
+	db $04
+	dw .ows_e6a1
+	run_script OWScript_JumpIfFlagNotLessThan
+	db EVENT_FLAG_37
+	db $02
+	dw .ows_e66a
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_37
+	db $00
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text06eb
+	tx Text06ec
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $01
+	run_script OWScript_AskQuestionJump
+	tx Text06ed
+	dw .ows_e648
+	run_script OWScript_PrintTextQuitFully
+	tx Text06ee
+
+.ows_e648
+	run_script Func_cf0c
+	db $1c
+	dw .ows_e64f
+	run_script OWScript_PrintTextQuitFully
+	tx Text06ef
+
+.ows_e64f
+	run_script Func_cf12
+	db $1c
+	dw .ows_e656
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f0
+
+.ows_e656
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_04
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $02
+	run_script OWScript_PrintTextString
+	tx Text06f1
+	run_script Func_ccdc
+	tx Text06f2
+	run_script OWScript_TakeCard
+	db ODDISH
+	run_script OWScript_GiveCard
+	db VILEPLUME
+	run_script OWScript_ShowCardReceivedScreen
+	db VILEPLUME
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f3
+
+.ows_e66a
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_37
+	db $02
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text06f4
+	tx Text06f5
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $03
+	run_script OWScript_AskQuestionJump
+	tx Text06ed
+	dw .ows_e67f
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f6
+
+.ows_e67f
+	run_script Func_cf0c
+	db $ab
+	dw .ows_e686
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f7
+
+.ows_e686
+	run_script Func_cf12
+	db $ab
+	dw .ows_e68d
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f8
+
+.ows_e68d
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_04
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $04
+	run_script OWScript_PrintTextString
+	tx Text06f9
+	run_script Func_ccdc
+	tx Text06fa
+	run_script OWScript_TakeCard
+	db CLEFAIRY
+	run_script OWScript_GiveCard
+	db PIKACHU3
+	run_script OWScript_ShowCardReceivedScreen
+	db PIKACHU3
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f3
+
+.ows_e6a1
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_37
+	db $04
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text06fb
+	tx Text06fc
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $05
+	run_script OWScript_AskQuestionJump
+	tx Text06ed
+	dw .ows_e6b6
+	run_script OWScript_PrintTextQuitFully
+	tx Text06fd
+
+.ows_e6b6
+	run_script Func_cf0c
+	db $32
+	dw .ows_e6bd
+	run_script OWScript_PrintTextQuitFully
+	tx Text06fe
+
+.ows_e6bd
+	run_script Func_cf12
+	db $32
+	dw .ows_e6c4
+	run_script OWScript_PrintTextQuitFully
+	tx Text06ff
+
+.ows_e6c4
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_04
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_37
+	db $06
+	run_script OWScript_PrintTextString
+	tx Text0700
+	run_script Func_ccdc
+	tx Text0701
+	run_script OWScript_TakeCard
+	db CHARIZARD
+	run_script OWScript_GiveCard
+	db BLASTOISE
+	run_script OWScript_ShowCardReceivedScreen
+	db BLASTOISE
+	run_script OWScript_PrintTextQuitFully
+	tx Text06f3
+; 0xe6d8
+
+	INCROM $e6d8, $e7f6
 
 ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	ld hl, .after_duel_table
@@ -4992,7 +5164,513 @@ OWSequence_ee76: ; ee76 (3:6e76)
 	run_script OWScript_QuitScriptFully
 ; 0xee88
 
-	INCROM $ee88, $f580
+	INCROM $ee88, $f239
+
+ChallengeHallAfterDuel: ; f239 (3:7239)
+	ld c, $00
+	ld a, [wDuelResult]
+	or a
+	jr z, .won
+	ld c, $02
+.won
+	ld b, $00
+	ld hl, ChallengeHallAfterDuelTable
+	add hl, bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	ld a, HOST
+	ld [wTempNPC], a
+	jp SetNextNPCAndOWSequence
+
+ChallengeHallAfterDuelTable:
+	dw WonAtChallengeHall
+	dw LostAtChallengeHall
+
+ChallengeHallLoadMap: ; f258 (3:7258)
+	get_flag_value EVENT_FLAG_47
+	or a
+	ret z
+	ld a, HOST
+	ld [wTempNPC], a
+	call FindLoadedNPC
+	ld bc, OWSequence_f433
+	jp SetNextNPCAndOWSequence
+
+OWSequence_Clerk13: ; f26c (3:726c)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0525
+
+Preload_Guide: ; f270 (3:7270)
+	get_flag_value EVENT_FLAG_42
+	or a
+	jr z, .asm_f281
+	ld a, $1c
+	ld [wLoadNPCXPos], a
+	ld a, $02
+	ld [wLoadNPCYPos], a
+.asm_f281
+	scf
+	ret
+; 0xf283
+
+	INCROM $f283, $f34c
+
+NPCMovement_f34c: ; f34c (3:734c)
+	db WEST | NO_MOVE
+	db $ff
+; f34e
+
+	INCROM $f34e, $f37d
+
+NPCMovement_f37d: ; f37d (3:737d)
+	db EAST | NO_MOVE
+	db $ff
+
+NPCMovement_f37f: ; f37f (3:737f)
+	db EAST
+	db EAST
+	db SOUTH
+	db $ff
+
+NPCMovement_f383: ; f383 (3:7383)
+	db NORTH
+	db WEST
+	db WEST
+	db SOUTH | NO_MOVE
+	db $ff
+; f388
+
+	INCROM $f388, $f38b
+
+NPCMovement_f38b: ; f38b (3:738b)
+	db WEST
+	db SOUTH
+	db $ff
+
+NPCMovement_f38e: ; f38e (3:738e)
+	db NORTH
+	db EAST
+;	fallthrough
+
+NPCMovement_f390: ; f390 (3:7390)
+	db SOUTH | NO_MOVE
+	db $ff
+
+LostAtChallengeHall: ; f392 (3:7392)
+	start_script
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37d
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f390
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $02
+	dw OWJump_f410
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $03
+	dw OWJump_f410.ows_f41a
+	run_script Func_d16b
+	db $00
+	run_script Func_d16b
+	db $01
+	run_script OWScript_PrintTextString
+	tx Text0536
+.ows_f3ae
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f38b
+	run_script OWScript_PrintTextString
+	tx Text0537
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f38e
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $02
+	dw .ows_f3ce
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f3d9
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_3F
+	db $03
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_48
+	db $03
+	run_script OWScript_ZeroOutFlagValue
+	db EVENT_FLAG_51
+	run_script OWScript_Jump
+	dw .ows_f3e2
+.ows_f3ce
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_40
+	db $03
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_49
+	db $03
+	run_script OWScript_ZeroOutFlagValue
+	db EVENT_FLAG_55
+	run_script OWScript_Jump
+	dw .ows_f3e2
+.ows_f3d9
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_41
+	db $03
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_4A
+	db $03
+	run_script OWScript_Jump
+	dw .ows_f3e2
+.ows_f3e2
+	run_script OWScript_CloseAdvancedTextBox
+	run_script OWScript_SetNextNPCandOWSequence
+	db CLERK12
+	dw OWSequence_f3e9
+	run_script OWScript_EndScriptLoop1
+	ret
+
+OWSequence_f3e9: ; f3e9 (3:73e9)
+	start_script
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f40a
+	run_script OWScript_SetPlayerDirection
+	db WEST
+	run_script OWScript_MovePlayer
+	db WEST
+	db $01
+	run_script OWScript_SetPlayerDirection
+	db SOUTH
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f40d
+	run_script OWScript_QuitScriptFully
+
+NPCMovement_f40a: ; f40a (3:740a)
+	db WEST
+	db EAST | NO_MOVE
+	db $ff
+
+NPCMovement_f40d: ; f40d (3:740d)
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+
+OWJump_f410: ; f410 (4:7410)
+	run_script Func_d16b
+	db $00
+	run_script Func_d16b
+	db $01
+	run_script OWScript_PrintTextString
+	tx Text0538
+	run_script OWScript_Jump
+	dw LostAtChallengeHall.ows_f3ae
+
+.ows_f41a
+	run_script OWScript_PrintTextString
+	tx Text0539
+	run_script OWScript_SetDialogName
+	db RONALD1
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f42e
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text053a
+	tx Text053b
+.ows_f42e
+	run_script OWScript_SetDialogName
+	db HOST
+	run_script OWScript_Jump
+	dw LostAtChallengeHall.ows_f3ae
+
+OWSequence_f433: ; f433 (3:7433)
+	start_script
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37d
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f390
+	run_script OWScript_Jump
+	dw WonAtChallengeHall.ows_f4a4
+
+WonAtChallengeHall; f441 (3:7441)
+	start_script
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37d
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f390
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $03
+	dw OWJump_f4db
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $02
+	dw .ows_f456
+.ows_f456
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text053c
+	tx Text053d
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37f
+	run_script Func_d16b
+	db $00
+	run_script OWScript_PrintTextString
+	tx Text053e
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f4c8
+	run_script Func_cdd8
+	run_script OWScript_PrintTextString
+	tx Text053f
+	run_script OWScript_CloseTextBox
+	run_script Func_d195
+	run_script Func_cdf5
+	db $14
+	db $14
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f4d0
+	run_script Func_d16b
+	db $00
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $02
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0540
+	tx Text0541
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f383
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $02
+	dw .ows_f4a4
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f4a1
+	run_script OWScript_CloseTextBox
+	run_script OWScript_SetDialogName
+	db $02
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0542
+	tx Text0543
+	run_script OWScript_SetDialogName
+	db HOST
+	run_script OWScript_CloseTextBox
+.ows_f4a1
+	run_script OWScript_PrintTextString
+	tx Text0544
+.ows_f4a4
+	run_script OWScript_ZeroOutFlagValue
+	db EVENT_FLAG_47
+	run_script OWScript_PrintTextString
+	tx Text0545
+	run_script OWScript_AskQuestionJumpDefaultYes
+	tx Text0546
+	dw .ows_f4bd
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_45
+	db $02
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text0547
+	tx Text0548
+	run_script Func_cd4f
+	db $04
+	db $00
+	db $00
+	run_script OWScript_QuitScriptFully
+.ows_f4bd
+	run_script OWScript_PrintTextString
+	tx Text0549
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_47
+	run_script Func_d1ad
+	run_script OWScript_CloseTextBox
+	run_script OWScript_Jump
+	dw .ows_f4a4
+
+NPCMovement_f4c8: ; f4c8 (3:74c8)
+	db EAST
+NPCMovement_f4c9: ; f4c9 (3:74c9)
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db SOUTH
+	db $ff
+
+NPCMovement_f4d0: ; f4d0 (3:74d0)
+	db NORTH
+	db NORTH
+	db NORTH
+	db NORTH
+	db NORTH
+	db NORTH
+	db WEST
+	db $ff
+
+NPCMovement_f4d8: ; f4d8 (3:74d8)
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+
+OWJump_f4db: ; f4db (3:74db)
+	run_script OWScript_PrintTextString
+	tx Text054a
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37f
+	run_script Func_d16b
+	db $00
+	run_script OWScript_PrintTextString
+	tx Text054b
+	run_script OWScript_CloseTextBox
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f513
+	run_script OWScript_SetDialogName
+	db $02
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text054c
+	tx Text054d
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f4d8
+	run_script OWScript_DoFrames
+	db 40
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f34c
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $01
+	dw NO_JUMP
+	run_script OWScript_PrintVariableText
+	tx Text054e
+	tx Text054f
+	run_script OWScript_SetDialogName
+	db HOST
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f4c9
+	run_script OWScript_Jump
+	dw .ows_f516
+.ows_f513
+	run_script OWScript_MoveWramNPC
+	dw NPCMovement_f4c8
+.ows_f516
+	run_script Func_cdd8
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f383
+	run_script OWScript_PrintTextString
+	tx Text0550
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f38b
+	run_script Func_d1b3
+	run_script OWScript_PrintTextString
+	tx Text0551
+	run_script OWScript_GiveCard
+	db $00
+	run_script OWScript_ShowCardReceivedScreen
+	db $00
+	run_script OWScript_PrintTextString
+	tx Text0552
+	run_script OWScript_CloseTextBox
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $02
+	dw .ows_f540
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f549
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_3F
+	db $02
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_48
+	db $02
+	run_script OWScript_Jump
+	dw .ows_f552
+.ows_f540
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_40
+	db $02
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_49
+	db $02
+	run_script OWScript_Jump
+	dw .ows_f552
+.ows_f549
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_41
+	db $02
+	run_script OWScript_SetFlagValue
+	db EVENT_FLAG_4A
+	db $02
+	run_script OWScript_Jump
+	dw .ows_f552
+.ows_f552
+	run_script OWScript_CloseAdvancedTextBox
+	run_script OWScript_SetNextNPCandOWSequence
+	db CLERK12
+	dw OWSequence_f3e9
+	run_script OWScript_EndScriptLoop1
+	ret
+; f559
+
+	INCROM $f559, $f580
 
 Func_f580: ; f580 (3:7580)
 	get_flag_value EVENT_FLAG_44

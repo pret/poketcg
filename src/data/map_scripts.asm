@@ -317,8 +317,8 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $7258
-	dw $7239
+	dw ChallengeHallLoadMap
+	dw ChallengeHallAfterDuel
 	dw $0000
 	dw $0000
 
