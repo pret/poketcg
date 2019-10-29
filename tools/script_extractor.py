@@ -264,7 +264,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_EndScriptLoop5", "q", QUIT_CONTINUE_CODE),
 	("OWScript_EndScriptLoop6", "q", QUIT_CONTINUE_CODE),
 	("OWScript_SetFlagValue", "fb", DO_NOT_QUIT),
-	("OWScript_JumpIfFlagZero1", "q", DO_NOT_QUIT),
+	("OWScript_JumpIfFlagZero1", "fj", DO_NOT_QUIT),
 	("OWScript_JumpIfFlagNonzero1", "q", DO_NOT_QUIT),
 	("OWScript_JumpIfFlagEqual", "fbj", DO_NOT_QUIT), # also capable of jumping
 	("OWScript_JumpIfFlagNotEqual", "fbj", DO_NOT_QUIT), # jumps

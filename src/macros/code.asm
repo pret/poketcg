@@ -33,8 +33,20 @@ set_flag_value: MACRO
 ENDM
 
 ; runs ZeroOutEventFlag with the next value as the flag
-zero_out_flag: MACRO
+zero_flag_value: MACRO
 	call ZeroStackFlagValue
+	db \1
+ENDM
+
+; a second version of the above with no real differences
+zero_flag_value2: MACRO
+	call ZeroStackFlagValue2
+	db \1
+ENDM
+
+; runs MaxOutEventFlag with the next value as the flag
+max_flag_value: MACRO
+	call MaxStackFlagValue
 	db \1
 ENDM
 

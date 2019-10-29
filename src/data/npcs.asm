@@ -376,7 +376,7 @@ Clerk9Data:
 	db $0a
 	db $30
 	db $00
-	dw $7025 ; Pointer to OWScript
+	dw OWSequence_Clerk9 ; Pointer to OWScript
 	tx Text03b3
 	db $00
 	db $00
@@ -832,7 +832,7 @@ Clerk10Data:
 	db $0a
 	db $30
 	db $00
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 	tx Text03b0
 	db $00
 	db $00
@@ -844,7 +844,7 @@ GiftCenterClerkData:
 	db $0a
 	db $30
 	db $00
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 	tx Text03b0
 	db $00
 	db $00
@@ -988,7 +988,7 @@ Clerk12Data:
 	db $00
 	db $16
 	db $00
-	dw $7295 ; Pointer to OWScript
+	dw OWSequence_Clerk12 ; Pointer to OWScript
 	tx Text03b3
 	db $00
 	db $00
@@ -1012,7 +1012,7 @@ HostData:
 	db $00
 	db $16
 	db $00
-	dw $7352 ; Pointer to OWScript
+	dw OWSequence_HostStubbed ; Pointer to OWScript
 	tx Text03df
 	db $00
 	db $00
@@ -1216,7 +1216,7 @@ Woman2Data:
 	db $04
 	db $1e
 	db $00
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 	tx Text03d9
 	db $00
 	db $00
@@ -1240,7 +1240,7 @@ Pappy3Data:
 	db $00
 	db $22
 	db $00
-	dw $709c ; Pointer to OWScript
+	dw OWSequence_Pappy3 ; Pointer to OWScript
 	tx Text03dd
 	db $00
 	db $00
@@ -1252,7 +1252,7 @@ Gal4Data:
 	db $00
 	db $16
 	db $00
-	dw $70a0 ; Pointer to OWScript
+	dw OWSequence_Gal4 ; Pointer to OWScript
 	tx Text03db
 	db $00
 	db $00
@@ -1264,7 +1264,7 @@ ChampData:
 	db $00
 	db $26
 	db $00
-	dw $70a4 ; Pointer to OWScript
+	dw OWSequence_Champ ; Pointer to OWScript
 	tx Text03e3
 	db $00
 	db $00
@@ -1276,7 +1276,7 @@ Hood2Data:
 	db $04
 	db $1e
 	db $00
-	dw $70a8 ; Pointer to OWScript
+	dw OWSequence_Hood2 ; Pointer to OWScript
 	tx Text03e2
 	db $00
 	db $00
@@ -1288,7 +1288,7 @@ Lass5Data:
 	db $04
 	db $1a
 	db $00
-	dw $70ac ; Pointer to OWScript
+	dw OWSequence_Lass5 ; Pointer to OWScript
 	tx Text03dc
 	db $00
 	db $00
@@ -1300,7 +1300,7 @@ Chap5Data:
 	db $00
 	db $1a
 	db $00
-	dw $70b0 ; Pointer to OWScript
+	dw OWSequence_Chap5 ; Pointer to OWScript
 	tx Text03da
 	db $00
 	db $00
@@ -1324,7 +1324,7 @@ GuideData:
 	db $00
 	db $16
 	db $00
-	dw $7283 ; Pointer to OWScript
+	dw OWSequence_Guide ; Pointer to OWScript
 	tx Text03e6
 	db $00
 	db $00
@@ -1360,49 +1360,49 @@ Data_11f18:
 	db $3a
 	db $3a
 	db $10
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f1f:
 	db $68
 	db $27
 	db $3b
 	db $41
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f26:
 	db $69
 	db $27
 	db $3c
 	db $42
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f2d:
 	db $6a
 	db $27
 	db $3d
 	db $43
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f34:
 	db $6b
 	db $27
 	db $3e
 	db $44
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f3b:
 	db $6c
 	db $27
 	db $3f
 	db $45
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f42:
 	db $6d
 	db $27
 	db $40
 	db $46
 	db $50
-	dw $4c3e ; Pointer to OWScript
+	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f49:
 	db $00
 	db $00

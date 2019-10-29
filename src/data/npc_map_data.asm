@@ -347,24 +347,24 @@ FireClubNPCS: ; 7a43 (4:13a43)
 
 ChallengeHallEntranceNPCS: ; 7a5c (4:13a5c)
 	db CLERK9, $06, $02, SOUTH
-	dw $6f96
+	dw Preload_Clerk9
 	db $00
 
 ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
 	db PAPPY3, $06, $0e, EAST
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db CHAMP, $10, $12, WEST
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db HOOD2, $14, $08, SOUTH
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db LASS5, $16, $10, WEST
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db GAL4, $0c, $0e, EAST
-	dw $7075
+	dw Preload_ChallengeHallNPCs2
 	db CHAP5, $10, $08, WEST
-	dw $7075
+	dw Preload_ChallengeHallNPCs2
 	db RONALD1, $08, $0c, SOUTH
-	dw $70b4
+	dw Preload_ChallengeHallLobbyRonald1
 	db CLERK10, $06, $04, SOUTH
 	dw $0000
 	db GIFT_CENTER_CLERK, $0a, $04, SOUTH
@@ -373,15 +373,15 @@ ChallengeHallLobbyNPCS: ; 7a63 (4:13a63)
 
 ChallengeHallNPCS: ; 7a9a (4:13a9a)
 	db CLERK12, $0a, $12, SOUTH
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db CLERK13, $14, $12, SOUTH
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db GUIDE, $0e, $14, SOUTH
 	dw Preload_Guide
 	db HOST, $0e, $04, SOUTH
-	dw $707a
+	dw Preload_ChallengeHallNPCs1
 	db $ff, $12, $08, WEST ; pre-load function chooses NPC to load
-	dw $7559
+	dw Preload_ChallengeHallOpponent
 	db $00
 
 PokemonDomeEntranceNPCS: ; 7ab9 (4:13ab9)

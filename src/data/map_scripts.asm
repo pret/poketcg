@@ -307,7 +307,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw ChallengeHallLobbyObjects
 	dw $0000
-	dw $7088
+	dw ChallengeHallLobbyLoadMap
 	dw $0000
 	dw $0000
 	dw $0000

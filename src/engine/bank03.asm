@@ -1435,7 +1435,13 @@ GetEventFlagValue: ; ca6c (3:4a6c)
 	ret
 ; 0xca84
 
-	INCROM $ca84, $ca8f
+ZeroStackFlagValue2: ; ca84 (3:4a84)
+	call GetByteAfterCall
+	push bc
+	ld c, $00
+	call SetEventFlagValue
+	pop bc
+	ret
 
 ; Use macro set_flag_value. The byte db'd after this func is called
 ; is used at the flag argument for SetEventFlagValue
@@ -1487,7 +1493,9 @@ GetByteAfterCall: ; cab3 (3:4ab3)
 	ret
 ; 0xcac2
 
-	INCROM $cac2, $cac5
+MaxStackFlagValue: ; cac2 (3:4ac2)
+	call GetByteAfterCall
+;	fallthrough
 
 MaxOutEventFlag: ; cac5 (3:4ac5)
 	push bc
@@ -1724,7 +1732,9 @@ Func_cc32: ; cc32 (3:4c32)
 	call Func_c8ba
 	ret
 
-Func_cc3e: ; cc3e (3:4c3e)
+; Used for things that are represented as NPCs but don't have an OWSequence
+; EX: Clerks and legendary cards that interact through Level Objects
+NoOverworldSequence: ; cc3e (3:4c3e)
 	call CloseAdvancedDialogueBox
 	ret
 
@@ -3110,7 +3120,7 @@ LoadOverworld: ; d4ec (3:54ec)
 	jp SetNextOWSequence
 
 Func_d4fb: ; d4fb (3:54fb)
-	zero_out_flag EVENT_FLAG_59
+	zero_flag_value EVENT_FLAG_59
 	call Func_f602
 	get_flag_value EVENT_FLAG_3F
 	cp $02
@@ -5164,7 +5174,296 @@ OWSequence_ee76: ; ee76 (3:6e76)
 	run_script OWScript_QuitScriptFully
 ; 0xee88
 
-	INCROM $ee88, $f239
+	INCROM $ee88, $ef96
+
+Preload_Clerk9: ; ef96 (3:6f96)
+	call TryGiveMedalPCPacks
+	get_flag_value EVENT_MEDAL_COUNT
+	ld hl, .jumpTable
+	cp $09
+	jp c, JumpToFunctionInTable
+	debug_ret
+	jr .asm_efe4
+
+.jumpTable
+	dw .asm_efe4
+	dw .asm_efe4
+	dw .asm_efe4
+	dw .asm_efba
+	dw .asm_efde
+	dw .asm_efc9
+	dw .asm_efd8
+	dw .asm_efd8
+	dw .asm_efd8
+
+.asm_efba
+	get_flag_value EVENT_FLAG_3F
+	or a
+	jr nz, .asm_efe4
+	ld c, $01
+	set_flag_value EVENT_FLAG_3F
+	jr .asm_efe4
+
+.asm_efc9
+	get_flag_value EVENT_FLAG_40
+	or a
+	jr nz, .asm_efde
+	ld c, $01
+	set_flag_value EVENT_FLAG_40
+	jr .asm_efde
+
+.asm_efd8
+	ld c, $07
+	set_flag_value EVENT_FLAG_40
+.asm_efde
+	ld c, $07
+	set_flag_value EVENT_FLAG_3F
+.asm_efe4
+	zero_flag_value EVENT_FLAG_42
+	get_flag_value EVENT_FLAG_3F
+	cp $00
+	jr z, .asm_eff8
+	cp $07
+	jr z, .asm_eff8
+	ld c, $01
+	jr .asm_f016
+
+.asm_eff8
+	get_flag_value EVENT_FLAG_40
+	cp $00
+	jr z, .asm_f008
+	cp $07
+	jr z, .asm_f008
+	ld c, $02
+	jr .asm_f016
+
+.asm_f008
+	get_flag_value EVENT_FLAG_41
+	cp $00
+	jr z, .asm_f023
+	cp $07
+	jr z, .asm_f023
+	ld c, $03
+.asm_f016
+	set_flag_value EVENT_FLAG_44
+	max_flag_value EVENT_FLAG_42
+	ld a, $0b
+	ld [wd111], a
+.asm_f023
+	scf
+	ret
+
+OWSequence_Clerk9: ; f025 (3:7025)
+	start_script
+	run_script OWScript_JumpIfFlagZero1
+	db EVENT_FLAG_3F
+	dw .ows_f066
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $07
+	dw .ows_f069
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $03
+	dw .ows_f06f
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $02
+	dw .ows_f072
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $01
+	dw .ows_f06c
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $07
+	dw .ows_f069
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $03
+	dw .ows_f06f
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $02
+	dw .ows_f072
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $01
+	dw .ows_f06c
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $07
+	dw .ows_f069
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $03
+	dw .ows_f06f
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $02
+	dw .ows_f072
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $01
+	dw .ows_f06c
+.ows_f066
+	run_script OWScript_PrintTextQuitFully
+	tx Text050a
+
+.ows_f069
+	run_script OWScript_PrintTextQuitFully
+	tx Text050b
+
+.ows_f06c
+	run_script OWScript_PrintTextQuitFully
+	tx Text050c
+
+.ows_f06f
+	run_script OWScript_PrintTextQuitFully
+	tx Text050d
+
+.ows_f072
+	run_script OWScript_PrintTextQuitFully
+	tx Text050e
+
+Preload_ChallengeHallNPCs2: ; f075 (3:7075)
+	call Preload_ChallengeHallNPCs1
+	ccf
+	ret
+
+Preload_ChallengeHallNPCs1: ; f07a (3:707a)
+	get_flag_value EVENT_FLAG_42
+	or a
+	jr z, .quit
+	ld a, $0b
+	ld [wd111], a
+	scf
+.quit
+	ret
+
+ChallengeHallLobbyLoadMap: ; f088 (3:7088)
+	get_flag_value EVENT_FLAG_58
+	or a
+	ret z
+	ld a, $02
+	ld [wTempNPC], a
+	call FindLoadedNPC
+	ld bc, $7166
+	jp SetNextNPCAndOWSequence
+
+OWSequence_Pappy3: ; f09c (3:709c)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text050f
+
+OWSequence_Gal4: ; f0a0 (3:70a0)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0510
+
+OWSequence_Champ: ; f0a4 (3:70a4)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0511
+
+OWSequence_Hood2: ; f0a8 (3:70a8)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0512
+
+OWSequence_Lass5: ; f0ac (3:70ac)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0513
+
+OWSequence_Chap5: ; f0b0 (3:70b0)
+	start_script
+	run_script OWScript_PrintTextQuitFully
+	tx Text0514
+
+Preload_ChallengeHallLobbyRonald1: ; f0b4 (3:70b4)
+	zero_flag_value2 EVENT_FLAG_58
+	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	or a
+	jr nz, .asm_f0ff
+	get_flag_value EVENT_FLAG_59
+	or a
+	jr nz, .asm_f11f
+	get_flag_value EVENT_FLAG_40
+	cp $00
+	jr z, .asm_f0e5
+	call .asm_710f
+	get_flag_value EVENT_FLAG_40
+	ld e, a
+	get_flag_value EVENT_FLAG_49
+	ld d, a
+	ld hl, Unknown_f156
+	call Func_f121
+	jr nc, .asm_f11f
+	jr .asm_f0f7
+.asm_f0e5
+	get_flag_value EVENT_FLAG_3F
+	ld e, a
+	get_flag_value EVENT_FLAG_48
+	ld d, a
+	ld hl, Unknown_f146
+	call Func_f121
+	jr nc, .asm_f11f
+.asm_f0f7
+	ld a, [wPlayerYCoord]
+	ld [wLoadNPCYPos], a
+	scf
+	ret
+.asm_f0ff
+	max_flag_value EVENT_FLAG_54
+	max_flag_value EVENT_FLAG_55
+	max_flag_value EVENT_FLAG_56
+	max_flag_value EVENT_FLAG_57
+.asm_710f
+	max_flag_value EVENT_FLAG_50
+	max_flag_value EVENT_FLAG_51
+	max_flag_value EVENT_FLAG_52
+	max_flag_value EVENT_FLAG_53
+.asm_f11f
+	or a
+	ret
+
+Func_f121: ; f121 (3:7121)
+	ld c, $04
+.asm_f123
+	ld a, [hli]
+	cp e
+	jr nz, .asm_f13e
+	ld a, [hli]
+	cp d
+	jr nz, .asm_f13f
+	ld a, [hl]
+	call GetEventFlagValue
+	or a
+	jr nz, .asm_f13f
+	ld a, [hl]
+	call MaxOutEventFlag
+	inc hl
+	ld c, [hl]
+	set_flag_value EVENT_FLAG_58
+	scf
+	ret
+.asm_f13e
+	inc hl
+.asm_f13f
+	inc hl
+	inc hl
+	dec c
+	jr nz, .asm_f123
+	or a
+	ret
+; 0xf146
+
+Unknown_f146: ; f146 (3:7146)
+	INCROM $f146, $f156
+
+Unknown_f156: ; f156 (3:7156)
+	INCROM $f156, $f239
 
 ChallengeHallAfterDuel: ; f239 (3:7239)
 	ld c, $00
@@ -5215,14 +5514,251 @@ Preload_Guide: ; f270 (3:7270)
 	ret
 ; 0xf283
 
-	INCROM $f283, $f34c
+OWSequence_Guide: ; f283 (3:7283)
+	start_script
+	run_script OWScript_JumpIfFlagZero2
+	db EVENT_FLAG_42
+	dw .ows_f28b
+	run_script OWScript_PrintTextQuitFully
+	tx Text0526
+
+.ows_f28b
+	run_script OWScript_JumpIfFlagZero1
+	db $3f
+	dw .ows_f292
+	run_script OWScript_PrintTextQuitFully
+	tx Text0527
+
+.ows_f292
+	run_script OWScript_PrintTextQuitFully
+	tx Text0528
+
+OWSequence_Clerk12: ; f295 (3:7295)
+	start_script
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $03
+	dw .ows_f2c4
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_41
+	db $02
+	dw .ows_f2c1
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $03
+	dw .ows_f2c4
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_40
+	db $02
+	dw .ows_f2c1
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $03
+	dw .ows_f2c4
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_3F
+	db $02
+	dw .ows_f2c1
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $02
+	dw .ows_f2cd
+	run_script OWScript_JumpIfFlagEqual
+	db EVENT_FLAG_44
+	db $03
+	dw .ows_f2d3
+	run_script OWScript_Jump
+	dw .ows_f2c7
+
+.ows_f2c1
+	run_script OWScript_PrintTextQuitFully
+	tx Text0529
+
+.ows_f2c4
+	run_script OWScript_PrintTextQuitFully
+	tx Text052a
+
+.ows_f2c7
+	run_script OWScript_PrintTextString
+	tx Text052b
+	run_script OWScript_Jump
+	dw .ows_f2d6
+
+.ows_f2cd
+	run_script OWScript_PrintTextString
+	tx Text052c
+	run_script OWScript_Jump
+	dw .ows_f2d6
+
+.ows_f2d3
+	run_script OWScript_PrintTextString
+	tx Text052d
+.ows_f2d6
+	run_script OWScript_PrintTextString
+	tx Text052e
+	run_script OWScript_AskQuestionJump
+	tx Text052f
+	dw .ows_f2e1
+	run_script OWScript_PrintTextQuitFully
+	tx Text0530
+
+.ows_f2e1
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_59
+	run_script OWScript_PrintTextString
+	tx Text0531
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f349
+	run_script OWScript_JumpIfPlayerCoordMatches
+	db 8
+	db 18
+	dw .ows_f2fa
+	run_script OWScript_JumpIfPlayerCoordMatches
+	db 12
+	db 18
+	dw .ows_f302
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $02
+	run_script OWScript_Jump
+	dw .ows_f307
+
+.ows_f2fa
+	run_script OWScript_SetPlayerDirection
+	db EAST
+	run_script OWScript_MovePlayer
+	db EAST
+	db $02
+	run_script OWScript_Jump
+	dw .ows_f307
+
+.ows_f302
+	run_script OWScript_SetPlayerDirection
+	db WEST
+	run_script OWScript_MovePlayer
+	db WEST
+	db $02
+.ows_f307
+	run_script OWScript_SetPlayerDirection
+	db NORTH
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_JumpIfFlagNonzero2
+	db EVENT_FLAG_43
+	dw .ows_f33a
+	run_script OWScript_MaxOutFlagValue
+	db EVENT_FLAG_43
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_MovePlayer
+	db NORTH
+	db $01
+	run_script OWScript_SetPlayerDirection
+	db EAST
+	run_script OWScript_DoFrames
+	db 30
+	run_script OWScript_SetPlayerDirection
+	db SOUTH
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_SetPlayerDirection
+	db EAST
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_SetPlayerDirection
+	db SOUTH
+	run_script OWScript_DoFrames
+	db 30
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+	run_script OWScript_MovePlayer
+	db SOUTH
+	db $01
+.ows_f33a
+	run_script OWScript_SetPlayerDirection
+	db EAST
+	run_script OWScript_MovePlayer
+	db EAST
+	db $01
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f34e
+	run_script OWScript_CloseAdvancedTextBox
+	run_script OWScript_SetNextNPCandOWSequence
+	db $4a
+	dw OWSequence_f353
+	run_script OWScript_EndScriptLoop1
+	ret
+; f349
+
+NPCMovement_f349: ; f349 (3:7349)
+	db NORTH
+	db NORTH
+	db EAST
+;	fallthrough
 
 NPCMovement_f34c: ; f34c (3:734c)
 	db WEST | NO_MOVE
 	db $ff
-; f34e
 
-	INCROM $f34e, $f37d
+NPCMovement_f34e: ; f34e (3:734e)
+	db WEST
+	db SOUTH
+	db SOUTH
+	db $ff
+
+OWSequence_HostStubbed: ; f352 (3:7352)
+	ret
+
+OWSequence_f353: ; f353 (3:7353)
+	start_script
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37d
+	run_script OWScript_DoFrames
+	db 20
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f390
+	run_script Func_d16b
+	db $00
+	run_script OWScript_PrintTextString
+	tx Text0532
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f37f
+	run_script OWScript_PrintTextString
+	tx Text0533
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f388
+	run_script OWScript_PrintTextString
+	tx Text0534
+	run_script OWScript_CloseTextBox
+	run_script OWScript_MoveActiveNPC
+	dw NPCMovement_f38e
+	run_script OWScript_PrintTextString
+	tx Text0535
+	run_script Func_cd4f
+	db $04
+	db $00
+	db $00
+	run_script OWScript_QuitScriptFully
 
 NPCMovement_f37d: ; f37d (3:737d)
 	db EAST | NO_MOVE
@@ -5240,9 +5776,12 @@ NPCMovement_f383: ; f383 (3:7383)
 	db WEST
 	db SOUTH | NO_MOVE
 	db $ff
-; f388
 
-	INCROM $f388, $f38b
+NPCMovement_f388: ; f388 (3:7388)
+	db NORTH
+	db WEST
+	db WEST
+;	fallthrough
 
 NPCMovement_f38b: ; f38b (3:738b)
 	db WEST
@@ -5670,7 +6209,26 @@ OWJump_f4db: ; f4db (3:74db)
 	ret
 ; f559
 
-	INCROM $f559, $f580
+; Loads the NPC to fight at the challenge hall
+Preload_ChallengeHallOpponent: ; f559 (3:7559)
+	get_flag_value EVENT_FLAG_42
+	or a
+	ret z
+	get_flag_value EVENT_FLAG_46
+	or a
+	jr z, .asm_f56e
+	ld a, [wd696]
+	ld [wTempNPC], a
+	scf
+	ret
+.asm_f56e
+	call Func_f5db
+	ld c, $01
+	set_flag_value EVENT_FLAG_45
+	call Func_f580
+	max_flag_value EVENT_FLAG_46
+	scf
+	ret
 
 Func_f580: ; f580 (3:7580)
 	get_flag_value EVENT_FLAG_44
@@ -5704,7 +6262,18 @@ Func_f580: ; f580 (3:7580)
 	ret
 ; 0xf5b3
 
-	INCROM $f5b3, $f602
+	INCROM $f5b3, $f5db
+
+Func_f5db: ; f5db (3:75db)
+	xor a
+	ld [$d698], a
+	ld [$d699], a
+	ld [$d69a], a
+	ld [$d69b], a
+	ret
+; 0xf5e9
+
+	INCROM $f5e9, $f602
 
 Func_f602: ; f602 (3:7602)
 	INCROM $f602, $f631
