@@ -311,7 +311,7 @@ relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
 unconditional_jumps = [0xc3, 0x18]
 
 # the flag macros found in bank 3. They db a byte after calling so need to be treated specially
-flag_macros = [(0xca8f,"set_flag_value {}"),(0xcacd,"zero_flag_value {}"), (0xca69,"get_flag_value {}")]
+flag_macros = [(0xca8f,"set_flag_value {}"),(0xcacd,"zero_flag_value {}"),(0xca84,"zero_flag_value2 {}"), (0xcac2,"max_flag_value {}"), (0xca69,"get_flag_value {}")]
 
 def asm_label(address):
 	"""
