@@ -2817,7 +2817,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db DAMAGE_NORMAL ; category
 	dw RapidashAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK + $40 ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -5760,7 +5760,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ZapdosThunderstormEffectCommands ; effect commands
-	db LOW_RECOIL + DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db LOW_RECOIL | DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7866,7 +7866,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db RESIDUAL ; category
 	dw MewtwoBarrierEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK + DISCARD_ENERGY ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 80 ; animation
