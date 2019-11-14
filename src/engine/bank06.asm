@@ -1031,19 +1031,17 @@ Func_18661: ; 18661 (6:4661)
 	ld l, a
 	ld a, [wCheckMenuCursorXPosition]
 	ld h, a
-	call HtimesL ; h = x_pos * 10
+	call HtimesL
 	ld a, l
-	add 1 ; a = 10 + 1 = 11
+	add 1
 	ld b, a
 	ld a, [wCheckMenuCursorYPosition]
-	sla a ; a = y_pos * 2
-	add 14 ; a = y_pos * 2 + 14
+	sla a
+	add 14
 	ld c, a
 	ld a, e
-	; b = 11
-	; c = y_pos * 2 + 14
-	; h = x_pos * 10
-	; l = 10
+	; b = 11, c = y_pos * 2 + 14
+	; h = x_pos * 10, l = 10
 	call WriteByteToBGMap0
 	or a
 	ret
