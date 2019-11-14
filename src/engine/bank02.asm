@@ -1215,7 +1215,7 @@ DrawPlayArea_HandText: ; 8676 (2:4676)
 ; returns a = $ff if B pressed
 HandleCheckMenuInput_YourOrOppPlayArea: ; 86ac (2:46ac)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -1283,7 +1283,7 @@ HandleCheckMenuInput_YourOrOppPlayArea: ; 86ac (2:46ac)
 
 .erase
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	push de
 	call EraseCheckMenuCursor_YourOrOppPlayArea
 	pop de
@@ -1319,7 +1319,7 @@ HandleCheckMenuInput_YourOrOppPlayArea: ; 86ac (2:46ac)
 	ret
 
 .sfx
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .draw_cursor
 	call PlaySFX
@@ -1638,7 +1638,7 @@ LoadCursorTile: ; 8992 (2:4992)
 ; similar to OpenInPlayAreaScreen_HandleInput
 Func_89ae: ; 89ae (2:49ae)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 
 	ld hl, wce53
 	ld e, [hl]
@@ -1757,7 +1757,7 @@ Func_89ae: ; 89ae (2:49ae)
 
 .next
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 
 ; reset cursor blink
 	xor a
@@ -1784,7 +1784,7 @@ Func_89ae: ; 89ae (2:49ae)
 	ret
 
 .return
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .skip_sfx
 	call PlaySFX
@@ -2267,7 +2267,7 @@ ResetCheckMenuCursorPositionAndBlink: ; 905a (2:505a)
 ; returns a = $ff if B pressed
 HandleCheckMenuInput: ; 9065 (2:5065)
 	xor a
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	ld a, [wCheckMenuCursorXPosition]
 	ld d, a
 	ld a, [wCheckMenuCursorYPosition]
@@ -2304,7 +2304,7 @@ HandleCheckMenuInput: ; 9065 (2:5065)
 
 .okay
 	ld a, $01
-	ld [wcfe3], a
+	ld [wPlaysSfx], a
 	push de
 	call EraseCheckMenuCursor
 	pop de
@@ -2337,7 +2337,7 @@ HandleCheckMenuInput: ; 9065 (2:5065)
 	ret
 
 .no_input
-	ld a, [wcfe3]
+	ld a, [wPlaysSfx]
 	or a
 	jr z, .check_blink
 	call PlaySFX

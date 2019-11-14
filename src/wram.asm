@@ -1697,9 +1697,8 @@ wcfda:: ; cfda
 
 	ds $7
 
-; it's a flag variable being used in play-area view.
-; need analysis.
-wcfe3:: ; cfe3
+; a flag indicating whether sfx should be played.
+wPlaysSfx:: ; cfe3
 	ds $1
 
 wcfe4:: ; cfe4
@@ -2185,7 +2184,8 @@ wd420:: ; d420
 wd421:: ; d421
 	ds $1
 
-wd422:: ; d422
+; holds an animation to play
+wTempAnimation:: ; d422
 	ds $1
 
 ; holds a list of animations to play
@@ -2197,7 +2197,10 @@ wAnimationQueue:: ; d423
 wd42a:: ; d42a
 	ds $1
 
-	ds $81
+wd42b:: ; d42b
+	ds $1
+
+	ds $80
 
 wd4ac:: ; d4ac
 	ds $1
@@ -2219,6 +2222,7 @@ wd4b0:: ; d4b0
 wd4be:: ; d4be
 	ds $1
 
+wd4bf:: ; d4bf
 	ds $1
 
 wd4c0:: ; d4c0
