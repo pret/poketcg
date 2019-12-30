@@ -11241,7 +11241,7 @@ CheckAnyAnimationPlaying: ; 3b52 (0:3b52)
 	ret
 
 Func_3b6a: ; 3b6a (0:3b6a)
-	ld [wd422], a
+	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
 	ld [wd4be], a
@@ -11250,7 +11250,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	push de
 	ld a, $07
 	call BankswitchROM
-	ld a, [wd422]
+	ld a, [wTempAnimation]
 	cp $61
 	jr nc, .asm_3b90
 	ld hl, wd4ad
