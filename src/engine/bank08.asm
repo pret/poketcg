@@ -13,8 +13,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0d, DEFENDER,               CheckIfDefenderPreventsKnockOut, AIPlayDefender
 	unknown_data_20000 $0e, DEFENDER,               CheckIfDefenderPreventsRecoilKnockOut, AIPlayDefender
 	unknown_data_20000 $0d, PLUSPOWER,              CheckIfPluspowerBoostCausesKnockOut, AIPlayPluspower
-	unknown_data_20000 $0e, PLUSPOWER,              CheckIfSelectedMoveCannotKnockOutWithoutPluspowerBoost, AIPlayPluspower
-	unknown_data_20000 $09, SWITCH,                 $462e, $4612
+	unknown_data_20000 $0e, PLUSPOWER,              CheckIfMoveNeedsPluspowerBoostToKnockOut, AIPlayPluspower
+	unknown_data_20000 $09, SWITCH,                 CheckIfActiveCardCanSwitch, AIPlaySwitch
 	unknown_data_20000 $07, GUST_OF_WIND,           $467e, $4666
 	unknown_data_20000 $0a, GUST_OF_WIND,           $467e, $4666
 	unknown_data_20000 $04, BILL,                   $4878, $486d
@@ -932,9 +932,9 @@ CheckIfPluspowerBoostCausesKnockOut: ; 20501 (8:4501)
 
 ; returns carry 7/10 of the time
 ; if selected move is useable, can't KO without Pluspower boost
-; can damage Mr. Mime even with Pluspower boost;
+; can damage Mr. Mime even with Pluspower boost
 ; and has a minimum damage > 0.
-CheckIfSelectedMoveCannotKnockOutWithoutPluspowerBoost: ; 205a5 (8:45a5)
+CheckIfMoveNeedsPluspowerBoostToKnockOut: ; 205a5 (8:45a5)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
@@ -1022,13 +1022,17 @@ AIPlaySwitch: ; 20612 (8:4612)
 	ret
 ; 0x2062e
 
-Func_2062e: ; 2062e (8:462e)
-; check if card already has no retreat cost
+; returns carry if the active card has less energy cards
+; than the retreat cost and if AI can't play an energy
+; card from the hand to fulfill the cost
+CheckIfActiveCardCanSwitch: ; 2062e (8:462e)
+; check if AI can already play an energy card from hand to retreat
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
-	jr z, .asm_2064a
+	jr z, .check_cost_amount
 
-; compare number of energy cards attached to retreat cost.
+; can't play energy card from hand to retreat
+; compare number of energy cards attached to retreat cost
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
@@ -1039,29 +1043,30 @@ Func_2062e: ; 2062e (8:462e)
 	pop af
 	sub b
 	; jump if cards attached > retreat cost
-	jr c, .asm_2064a
+	jr c, .check_cost_amount
 	cp 2
 	; jump if retreat cost is 2 more energy cards
 	; than the number of cards attached
-	jr nc, .asm_20660
+	jr nc, .switch
 
-.asm_2064a
+.check_cost_amount
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call GetPlayAreaCardRetreatCost
 	cp 3
 	; jump if retreat cost >= 3
-	jr nc, .asm_20660
+	jr nc, .switch
 
 	push af
 	ld e, PLAY_AREA_ARENA
 	farcall CountNumberOfEnergyCardsAttached
 	pop bc
 	cp b
-	; jump if
-	jr c, .asm_20660
+	; jump if energy cards attached < retreat cost
+	jr c, .switch
 	ret
-.asm_20660
+
+.switch
 	farcall AIDecideBenchPokemonToSwitchTo
 	ccf
 	ret
