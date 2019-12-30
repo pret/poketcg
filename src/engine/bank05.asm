@@ -5344,7 +5344,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	jr .check_defending_can_ko
 
 ; local function that gets called to determine damage to
-; benched Pokémoncaused by a HIGH_RECOIL move.
+; benched Pokémon caused by a HIGH_RECOIL move.
 ; return carry if using move causes number of benched Pokémon KOs
 ; equal to or larger than remaining prize cards.
 ; this function is independent on duelist turn, so whatever
@@ -5873,14 +5873,14 @@ HandleNinetalesMixUp: ; 16f4e (5:6f4e)
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetNonTurnDuelistVariable
 	or a
-	ret z ; return if no hand cards
+	ret z
 
 	ld a, 3
 	call Random
 	or a
-	jr z, .encourage ; if a = 0
+	jr z, .encourage
 	dec a
-	ret z ; return if a = 1
+	ret z
 	call SwapTurn
 	call CreateHandCardList
 	call SwapTurn
