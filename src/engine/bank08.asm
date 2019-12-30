@@ -17,7 +17,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $09, SWITCH,                 CheckIfActiveCardCanSwitch, AIPlaySwitch
 	unknown_data_20000 $07, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
 	unknown_data_20000 $0a, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
-	unknown_data_20000 $04, BILL,                   $4878, $486d
+	unknown_data_20000 $04, BILL,                   CheckDeckCardsAmount, AIPlayBill
 	unknown_data_20000 $05, ENERGY_REMOVAL,         $4895, $4880
 	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   $49bc, $4994
 	unknown_data_20000 $07, POKEMON_BREEDER,        $4b1b, $4b06
@@ -1080,7 +1080,7 @@ AIPlayGustOfWind: ; 20666 (8:4666)
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce19]
 	ldh [hTemp_ffa0], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x2067e
@@ -1457,8 +1457,24 @@ CheckWhetherToUseGustOfWind: ; 2067e (8:467e)
 	ret
 ; 0x2086d
 
-Func_2086d: ; 2086d (8:486d)
-	INCROM $2086d, $2282e
+AIPlayBill: ; 2086d (8:486d)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20878
+
+; return carry if cards not in deck < 51
+CheckDeckCardsAmount: ; 20878 (8:4878)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp 51
+	ret
+; 0x20880
+
+Func_20880: ; 20880 (8:4880)
+	INCROM $20880, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
