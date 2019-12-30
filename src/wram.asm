@@ -1201,6 +1201,7 @@ wcdb2:: ; cdb2
 wcdb3:: ; cdb3
 	ds $1
 
+wcdb4:: ; cdb4
 	ds $1
 
 ; information about various properties of

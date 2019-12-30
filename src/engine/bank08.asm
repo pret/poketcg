@@ -1007,8 +1007,68 @@ CheckIfSelectedMoveCannotKnockOutWithoutPluspowerBoost: ; 205a5 (8:45a5)
 	ret
 ; 0x20612
 
-Func_20612: ; 20612 (8:4612)
-	INCROM $20612, $2282e
+AIPlaySwitch: ; 20612 (8:4612)
+	ld a, [wce21]
+	or $02
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	xor a
+	ld [wcdb4], a
+	ret
+; 0x2062e
+
+Func_2062e: ; 2062e (8:462e)
+; check if card already has no retreat cost
+	ld a, [wAIPlayEnergyCardForRetreat]
+	or a
+	jr z, .asm_2064a
+
+; compare number of energy cards attached to retreat cost.
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	push af
+	ld e, PLAY_AREA_ARENA
+	farcall CountNumberOfEnergyCardsAttached
+	ld b, a
+	pop af
+	sub b
+	; jump if cards attached > retreat cost
+	jr c, .asm_2064a
+	cp 2
+	; jump if retreat cost is 2 more energy cards
+	; than the number of cards attached
+	jr nc, .asm_20660
+
+.asm_2064a
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	cp 3
+	; jump if retreat cost >= 3
+	jr nc, .asm_20660
+
+	push af
+	ld e, PLAY_AREA_ARENA
+	farcall CountNumberOfEnergyCardsAttached
+	pop bc
+	cp b
+	; jump if
+	jr c, .asm_20660
+	ret
+.asm_20660
+	farcall AIDecideBenchPokemonToSwitchTo
+	ccf
+	ret
+; 0x20666
+
+Func_20666: ; 20666 (8:4666)
+	INCROM $20666, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,

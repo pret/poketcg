@@ -1779,7 +1779,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	call LoadDefendingPokemonColorWRAndPrizeCards
 	ld a, 128 ; initial retreat score
 	ld [wAIScore], a
-	ld a, [$cdb4]
+	ld a, [wcdb4]
 	or a
 	jr z, .check_status
 	srl a
@@ -2530,7 +2530,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 
 ; done
 	xor a
-	ld [$cdb4], a
+	ld [wcdb4], a
 	jp FindHighestBenchScore
 ; 0x15d4f
 
@@ -5031,13 +5031,13 @@ Func_169f8: ; 169f8 (5:69f8)
 	jr z, .asm_16a62
 .asm_16a5c
 	xor a
-	ld [$cdb4], a
+	ld [wcdb4], a
 	jr .asm_16a6d
 .asm_16a62
 	ld a, MOVE_FLAG1_ADDRESS | DAMAGE_TO_OPPONENT_BENCH_F
 	call CheckLoadedMoveFlag
 	jr c, .asm_16a5c
-	ld hl, $cdb4
+	ld hl, wcdb4
 	inc [hl]
 .asm_16a6d
 	ld a, $01
@@ -5051,7 +5051,7 @@ Func_169f8: ; 169f8 (5:69f8)
 	jr z, .asm_16a80
 	jp Func_169e3
 .asm_16a80
-	ld hl, $cdb4
+	ld hl, wcdb4
 	inc [hl]
 	or a
 	ret
