@@ -15,8 +15,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0d, PLUSPOWER,              CheckIfPluspowerBoostCausesKnockOut, AIPlayPluspower
 	unknown_data_20000 $0e, PLUSPOWER,              CheckIfMoveNeedsPluspowerBoostToKnockOut, AIPlayPluspower
 	unknown_data_20000 $09, SWITCH,                 CheckIfActiveCardCanSwitch, AIPlaySwitch
-	unknown_data_20000 $07, GUST_OF_WIND,           $467e, $4666
-	unknown_data_20000 $0a, GUST_OF_WIND,           $467e, $4666
+	unknown_data_20000 $07, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
+	unknown_data_20000 $0a, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
 	unknown_data_20000 $04, BILL,                   $4878, $486d
 	unknown_data_20000 $05, ENERGY_REMOVAL,         $4895, $4880
 	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   $49bc, $4994
@@ -1072,8 +1072,393 @@ CheckIfActiveCardCanSwitch: ; 2062e (8:462e)
 	ret
 ; 0x20666
 
-Func_20666: ; 20666 (8:4666)
-	INCROM $20666, $2282e
+AIPlayGustOfWind: ; 20666 (8:4666)
+	ld a, [wce21]
+	or $10
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x2067e
+
+CheckWhetherToUseGustOfWind: ; 2067e (8:467e)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	dec a
+	or a
+	ret z ; no bench cards
+	ld a, [wce20]
+	and $10
+	ret nz
+	farcall CheckIfActivePokemonCanUseAnyNonResidualMove
+	ret nc ; no non-residual move can be used
+
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .check_id ; if can't KO
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry ; if KO move is useable
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry ; if energy card is in hand
+
+.check_id
+	; skip if current active card is MEW3 or MEWTWO1
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp MEW3
+	jr z, .no_carry
+	cp MEWTWO1
+	jr z, .no_carry
+
+	call .FindBenchCardToKnockOut
+	ret c
+
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call .CheckIfNoAttackDealsDamage
+	jr c, .check_bench_energy
+
+	; skip if current arena card's color is
+	; the defending card's weakness
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	call SwapTurn
+	call GetArenaCardWeakness
+	call SwapTurn
+	and b
+	jr nz, .no_carry
+
+; check weakness
+	call .FindBenchCardWithWeakness
+	ret nc ; no bench card weak to arena card
+	scf
+	ret ; found bench card weak to arena card
+
+.no_carry
+	or a
+	ret
+
+; being here means AI's arena card cannot damage player's arena card
+
+; first check if there is a card in player's bench that
+; has no attached energy cards and that the AI can damage
+.check_bench_energy
+	; return carry if there's a bench card with weakness
+	call .FindBenchCardWithWeakness
+	ret c
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+; loop through bench and check attached energy cards
+.loop_1
+	inc e
+	dec d
+	jr z, .check_bench_hp
+	call SwapTurn
+	call GetPlayAreaCardAttachedEnergies
+	call SwapTurn
+	ld a, [wTotalAttachedEnergies]
+	or a
+	jr nz, .loop_1 ; skip if has energy attached
+	call .CheckIfCanDamageBenchedCard
+	jr nc, .loop_1
+	ld a, e
+	scf
+	ret
+
+.check_bench_hp
+	ld a, $ff
+	ld [wce06], a
+	xor a
+	ld [wce08], a
+	ld e, a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ld d, a
+
+; find bench card with least amount of available HP
+.loop_2
+	inc e
+	dec d
+	jr z, .check_found
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld a, [wce06]
+	inc b
+	cp b
+	jr c, .loop_2
+	call .CheckIfCanDamageBenchedCard
+	jr nc, .loop_2
+	dec b
+	ld a, b
+	ld [wce06], a
+	ld a, e
+	ld [wce08], a
+	jr .loop_2
+
+.check_found
+	ld a, [wce08]
+	or a
+	jr z, .no_carry
+; a card was found
+
+.set_carry
+	scf
+	ret
+
+.check_can_damage
+	push bc
+	push hl
+	xor a ; PLAY_AREA_ARENA
+	farcall CheckIfCanDamageDefendingPokemon
+	pop hl
+	pop bc
+	jr nc, .loop_3
+	ld a, c
+	scf
+	ret
+
+; returns carry if any of the player's
+; benched cards is weak to color in b
+; and has a way to damage it
+.FindBenchCardWithWeakness ; 2074d (8:474d)
+	ld a, DUELVARS_BENCH
+	call GetNonTurnDuelistVariable
+	ld c, PLAY_AREA_ARENA
+.loop_3
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	call SwapTurn
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call SwapTurn
+	ld a, [wLoadedCard1Weakness]
+	and b
+	jr nz, .check_can_damage
+	jr .loop_3
+
+; returns carry if neither attack can deal damage
+.CheckIfNoAttackDealsDamage ; 2076b (8:476b)
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	call .CheckIfAttackDealsNoDamage
+	jr c, .second_attack
+	ret
+.second_attack
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	call .CheckIfAttackDealsNoDamage
+	jr c, .asm_20780
+	ret
+.asm_20780
+	scf
+	ret
+
+; returns carry if attack is Pokemon Power
+; or otherwise doesn't deal any damage
+.CheckIfAttackDealsNoDamage ; 20782 (8:4782)
+	ld a, [wSelectedMoveIndex]
+	ld e, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, a
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, [wLoadedMoveCategory]
+
+	; skip if move is a Power or has 0 damage
+	cp POKEMON_POWER
+	jr z, .no_damage
+	ld a, [wDamage]
+	or a
+	ret z
+
+	; check damage against defending card
+	ld a, [wSelectedMoveIndex]
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, [wAIMaxDamage]
+	or a
+	ret nz
+
+.no_damage
+	scf
+	ret
+
+; returns carry if there is a player's bench card that
+; the opponent's current active card can KO
+.FindBenchCardToKnockOut ; 207a9 (8:47a9)
+	ld a, DUELVARS_BENCH
+	call GetNonTurnDuelistVariable
+	ld e, PLAY_AREA_BENCH_1
+
+.loop_4
+	ld a, [hli]
+	cp $ff
+	ret z
+
+; overwrite the player's active card and its HP
+; with the current bench card that is being checked
+	push hl
+	push de
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	push af
+	ld [hl], b
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	push af
+	ld [hl], b
+
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call .CheckIfAnyMoveKnocksOut
+	jr nc, .next
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .found
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .found
+
+; the following two local routines can be condensed into one
+; since they both revert the player's arena card
+.next
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	pop de
+	inc e
+	pop hl
+	jr .loop_4
+
+; revert player's arena card and set carry
+.found
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	pop de
+	ld a, e
+	pop hl
+	scf
+	ret
+
+; returns carry if any of arena card's attacks
+; KOs player card in location stored in e
+.CheckIfAnyMoveKnocksOut ; 20806 (8:4806)
+	xor a ; first attack
+	call .asm_2080d
+	ret c
+	ld a, $01 ; second attack
+
+; returns carry if attack KOs player card
+; in location stored in e
+.asm_2080d
+	push de
+	farcall EstimateDamage_VersusDefendingCard
+	pop de
+	ld a, DUELVARS_ARENA_CARD_HP
+	add e
+	call GetNonTurnDuelistVariable
+	ld hl, wDamage
+	sub [hl]
+	ret c
+	ret nz
+	scf
+	ret
+
+; returns carry if opponent's arena card can damage
+; this benched card if it were switched with
+; the player's arena card
+.CheckIfCanDamageBenchedCard ; 20821 (8:4821)
+	push bc
+	push de
+	push hl
+
+	; overwrite arena card data
+	ld a, e
+	add DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	push af
+	ld [hl], b
+
+	; overwrite arena card HP
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	push af
+	ld [hl], b
+
+	xor a ; PLAY_AREA_ARENA
+	farcall CheckIfCanDamageDefendingPokemon
+	jr c, .can_damage
+
+; the following two local routines can be condensed into one
+; since they both revert the player's arena card
+
+; can't damage
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	pop hl
+	pop de
+	pop bc
+	or a
+	ret
+
+.can_damage
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	pop af
+	ld [hl], a
+	pop hl
+	pop de
+	pop bc
+	scf
+	ret
+; 0x2086d
+
+Func_2086d: ; 2086d (8:486d)
+	INCROM $2086d, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
