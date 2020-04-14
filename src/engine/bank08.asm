@@ -19,7 +19,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0a, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
 	unknown_data_20000 $04, BILL,                   CheckDeckCardsAmount, AIPlayBill
 	unknown_data_20000 $05, ENERGY_REMOVAL,         CheckEnergyCardToRemoveInPlayArea, AIPlayEnergyRemoval
-	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   $49bc, $4994
+	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   CheckTwoEnergyCardsToRemoveInPlayArea, AIPlaySuperEnergyRemoval
 	unknown_data_20000 $07, POKEMON_BREEDER,        $4b1b, $4b06
 	unknown_data_20000 $0f, PROFESSOR_OAK,          $4cc1, $4cae
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       $4e6e, $4e44
@@ -1504,7 +1504,6 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	ld a, PLAY_AREA_BENCH_1
 	ld [wce0f], a
 	jr .check_bench_energy
-
 .cannot_ko
 	; start checking from the arena card
 	xor a ; PLAY_AREA_ARENA
@@ -1522,6 +1521,7 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .default
+
 	ld d, a
 	call .CheckIfCardHasEnergyAttached
 	jr nc, .next_1
@@ -1568,6 +1568,7 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .found_damage
+
 	ld d, a
 	call .CheckIfCardHasEnergyAttached
 	jr nc, .next_2
@@ -1642,6 +1643,7 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	push de
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
+
 	xor a ; first attack
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
@@ -1657,6 +1659,7 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	ld a, e
 	ld [wce08], a ; store this location
 	jr .second_attack
+
 .skip_1
 	pop de
 
@@ -1664,6 +1667,7 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	push de
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
+
 	ld a, $01 ; second attack
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
@@ -1684,7 +1688,296 @@ CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
 	ret
 ; 0x20994
 
-	INCROM $20994, $2282e
+AIPlaySuperEnergyRemoval: ; 20994 (8:4994)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1a]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce1b]
+	ldh [hTempRetreatCostCards], a
+	ld a, [wce1c]
+	ldh [hTempRetreatCostCards + 1], a
+	ld a, [wce1d]
+	ldh [hTempRetreatCostCards + 2], a
+	ld a, $ff
+	ldh [hTempRetreatCostCards + 3], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x209bc
+
+; picks two energy cards in the player's Play Area to remove
+CheckTwoEnergyCardsToRemoveInPlayArea: ; 209bc (8:49bc)
+	ld e, PLAY_AREA_BENCH_1
+.loop_1
+; first find an Arena card with a color energy card
+; to discard for card effect
+; return immediately if no Arena cards
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	cp $ff
+	jr z, .exit
+	
+	ld d, a
+	push de
+	call .LookForNonDoubleColorless
+	pop de
+	jr c, .not_double_colorless
+	inc e
+	jr .loop_1
+
+; returns carry if an energy card other than double colorless
+; is found attached to the card in play area location e
+.LookForNonDoubleColorless
+	ld a, e
+	call CreateArenaOrBenchEnergyCardList
+	ld hl, wDuelTempList
+.loop_2
+	ld a, [hli]
+	cp $ff
+	ret z
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp DOUBLE_COLORLESS_ENERGY
+	; any non-double colorless energy card
+	; will set carry flag here
+	jr nc, .loop_2
+	ret
+
+.exit
+	or a
+	ret
+
+; card in Play Area location e was found with
+; a non-double colorless energy card
+.not_double_colorless
+	ld a, e
+	ld [wce0f], a
+
+; check if the current active card can KO player's card
+; if it's possible to KO, then do not consider the player's
+; active card to remove its attached energy
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .cannot_ko
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .can_ko
+	farcall LookForEnergyNeededForMoveInHand
+	jr nc, .cannot_ko
+
+.can_ko
+	; start checking from the bench
+	call SwapTurn
+	ld e, PLAY_AREA_BENCH_1
+	jr .loop_3
+.cannot_ko
+	; start checking from the arena card
+	call SwapTurn
+	ld e, PLAY_AREA_ARENA
+
+; loop each card and check if it has enough energy to use any attack
+; if it does, then proceed to pick energy cards to remove
+.loop_3
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	cp $ff
+	jr z, .no_carry
+
+	ld d, a
+	call .CheckIfFewerThanTwoEnergyCards
+	jr c, .next_1
+	call .CheckIfNotEnoughEnergyToAttack
+	jr nc, .found_card ; jump if enough energy to attack
+.next_1
+	inc e
+	jr .loop_3
+
+.found_card
+; a play area card was picked to remove energy
+; if this is not the Arena Card, then check
+; entire bench to pick the highest damage
+	ld a, e
+	or a
+	jr nz, .check_bench_damage
+
+; store the picked energy card to remove in wce1a
+; and set carry
+.pick_energy
+	ld [wce1b], a
+	call PickTwoAttachedEnergyCards
+	ld [wce1c], a
+	ld a, b
+	ld [wce1d], a
+	call SwapTurn
+	ld a, [wce0f]
+	push af
+	call GetEnergyCardToDiscard
+	ld [wce1a], a
+	pop af
+	scf
+	ret
+
+; check what attack on player's Play Area is highest damaging
+; and pick an energy card attached to that Pokemon to remove
+.check_bench_damage
+	xor a
+	ld [wce06], a
+	ld [wce08], a
+
+	ld e, PLAY_AREA_BENCH_1
+.loop_4
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	call GetTurnDuelistVariable
+	cp $ff
+	jr z, .found_damage
+
+	ld d, a
+	call .CheckIfFewerThanTwoEnergyCards
+	jr c, .next_2
+	call .CheckIfNotEnoughEnergyToAttack
+	jr c, .next_2
+	call .FindHighestDamagingAttack
+.next_2
+	inc e
+	jr .loop_4
+
+.found_damage
+	ld a, [wce08]
+	or a
+	jr z, .no_carry
+	jr .pick_energy
+.no_carry
+	call SwapTurn
+	or a
+	ret
+
+; returns carry if the number of energy cards attached
+; is fewer than 2, or if all energy combined yields
+; fewer than 2 energy
+.CheckIfFewerThanTwoEnergyCards ; 20a77 (8:4a77)
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	cp 2
+	ret c ; return if fewer than 2 attached cards
+
+; count all energy attached
+; i.e. colored energy card = 1
+; and double colorless energy card = 2
+	xor a
+	ld b, NUM_COLORED_TYPES
+	ld hl, wAttachedEnergies
+.loop_5
+	add [hl]
+	inc hl
+	dec b
+	jr nz, .loop_5
+	ld b, [hl]
+	srl b
+	add b
+	cp 2
+	ret
+
+; returns carry if this card does not
+; have enough energy for either of its attacks
+.CheckIfNotEnoughEnergyToAttack ; 20a92 (8:4a92)
+	push de
+	xor a ; first attack
+	ld [wSelectedMoveIndex], a
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckEnergyNeededForAttack
+	jr nc, .enough_energy
+	pop de
+
+	push de
+	ld a, $01 ; second attack
+	ld [wSelectedMoveIndex], a
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckEnergyNeededForAttack
+	jr nc, .check_surplus
+	pop de
+
+; neither attack has enough energy
+	scf
+	ret
+
+.enough_energy
+	pop de
+	or a
+	ret
+
+; first attack doesn't have enough energy (or is just a Pokemon Power)
+; but second attack has enough energy to be used
+; check if there's surplus energy for attack and, if so,
+; return carry if this surplus energy is at least 2
+.check_surplus
+	farcall CheckIfNoSurplusEnergyForMove
+	cp 2
+	jr c, .enough_energy
+	pop de
+	scf
+	ret
+; 0x20ac1
+
+; stores in wce06 the highest damaging attack
+; for the card in play area location in e
+; and stores this card's location in wce08
+.FindHighestDamagingAttack ; 20ac1 (8:4ac1)
+	push de
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+	xor a ; first attack
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr z, .skip_1
+	ld e, a
+	ld a, [wce06]
+	cp e
+	jr nc, .skip_1
+	ld a, e
+	ld [wce06], a ; store this damage value
+	pop de
+	ld a, e
+	ld [wce08], a ; store this location
+	jr .second_attack
+
+.skip_1
+	pop de
+
+.second_attack
+	push de
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+	ld a, $01 ; second attack
+	farcall EstimateDamage_VersusDefendingCard
+	ld a, [wDamage]
+	or a
+	jr z, .skip_2
+	ld e, a
+	ld a, [wce06]
+	cp e
+	jr nc, .skip_2
+	ld a, e
+	ld [wce06], a ; store this damage value
+	pop de
+	ld a, e
+	ld [wce08], a ; store this location
+	ret
+.skip_2
+	pop de
+	ret
+; 0x20b06
+
+	INCROM $20b06, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
@@ -1738,12 +2031,16 @@ GetEnergyCardToDiscard: ; 2282e (8:682e)
 	ret
 ; 0x22875
 
-; returns in a the deck index of the energy card
-; attached to card in hTempPlayAreaLocation_ff9d.
-; prioritises double colorless energy, then any
-; useful energy, then defaults to the first energy
-; card attached if neither of those are found.
-; returns $ff if there are no energy cards attached.
+; returns in a the deck index of an energy card attached to card
+; in Play Area location a..
+; prioritises double colorless energy, then any useful energy,
+; then defaults to the first energy card attached if neither
+; of those are found.
+; returns $ff in a if there are no energy cards attached.
+; input:
+;   a = Play Area location to check
+; output:
+;   a = deck index of attached energy card
 PickAttachedEnergyCard: ; 22875 (8:6875)
 ; construct energy list and check if there are any energy cards attached
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1814,8 +2111,126 @@ PickAttachedEnergyCard: ; 22875 (8:6875)
 	ret
 ; 0x228d1
 
-Func_228d1: ; 228d1 (8:68d1)
-	INCROM $228d1, $2297b
+; stores in wTempAI and wCurCardCanAttack the deck indices
+; of energy cards attached to card in Play Area location a.
+; prioritises double colorless energy, then any useful energy,
+; then defaults to the first two energy cards attached if neither
+; of those are found.
+; returns $ff in a if there are no energy cards attached.
+; input:
+;   a = Play Area location to check
+; output:
+;   [wTempAI] = deck index of attached energy card
+;   [wCurCardCanAttack] = deck index of attached energy card
+PickTwoAttachedEnergyCards: ; 228d1 (8:68d1)
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call CreateArenaOrBenchEnergyCardList
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	farcall CountNumberOfEnergyCardsAttached
+	cp 2
+	jp c, .not_enough
+
+; load card data and store its type
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [wTempCardType], a
+	ld a, $ff
+	ld [wTempAI], a
+	ld [wCurCardCanAttack], a
+
+; first look for any double colorless energy
+	ld hl, wDuelTempList
+.loop_1
+	ld a, [hl]
+	cp $ff
+	jr z, .check_useful
+	push hl
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp DOUBLE_COLORLESS_ENERGY
+	pop hl
+	jr z, .found_double_colorless
+	inc hl
+	jr .loop_1
+.found_double_colorless
+	ld a, [wTempAI]
+	cp $ff
+	jr nz, .already_chosen_1
+	ld a, [hli]
+	ld [wTempAI], a
+	jr .loop_1
+.already_chosen_1
+	ld a, [hl]
+	ld [wCurCardCanAttack], a
+	jr .done
+
+; then look for any energy cards that are useful
+.check_useful
+	ld hl, wDuelTempList
+.loop_2
+	ld a, [hl]
+	cp $ff
+	jr z, .default
+	farcall CheckIfEnergyIsUseful
+	jr c, .found_useful
+	inc hl
+	jr .loop_2
+.found_useful
+	ld a, [wTempAI]
+	cp $ff
+	jr nz, .already_chosen_2
+	ld a, [hli]
+	ld [wTempAI], a
+	jr .loop_2
+.already_chosen_2
+	ld a, [hl]
+	ld [wCurCardCanAttack], a
+	jr .done
+
+; if none were found with the above criteria,
+; just return the first 2 options
+.default
+	ld hl, wDuelTempList
+	ld a, [wTempAI]
+	cp $ff
+	jr nz, .pick_one_card
+
+; pick 2 cards
+	ld a, [hli]
+	ld [wTempAI], a
+	ld a, [hl]
+	ld [wCurCardCanAttack], a
+	jr .done
+.pick_one_card
+	ld a, [wTempAI]
+	ld b, a
+.loop_3
+	ld a, [hli]
+	cp b
+	jr z, .loop_3 ; already picked
+	ld [wCurCardCanAttack], a
+
+.done
+	ld a, [wCurCardCanAttack]
+	ld b, a
+	ld a, [wTempAI]
+	ret
+
+; return $ff if no energy cards attached
+.not_enough
+	ld a, $ff
+	ret
+; 0x2297b
 
 ; copies $ff terminated buffer from hl to de
 CopyBuffer: ; 2297b (8:697b)

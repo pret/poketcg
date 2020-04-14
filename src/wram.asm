@@ -1383,7 +1383,16 @@ wce19:: ; ce19
 wce1a:: ; ce1a
 	ds $1
 
-	ds $5
+wce1b:: ; ce1b
+	ds $1
+
+wce1c:: ; ce1c
+	ds $1
+
+wce1d:: ; ce1d
+	ds $1
+
+	ds $2
 
 wce20:: ; ce20
 	ds $1
