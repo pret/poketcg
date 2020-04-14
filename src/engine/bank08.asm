@@ -20,7 +20,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $04, BILL,                   CheckDeckCardsAmount, AIPlayBill
 	unknown_data_20000 $05, ENERGY_REMOVAL,         CheckEnergyCardToRemoveInPlayArea, AIPlayEnergyRemoval
 	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   CheckTwoEnergyCardsToRemoveInPlayArea, AIPlaySuperEnergyRemoval
-	unknown_data_20000 $07, POKEMON_BREEDER,        $4b1b, $4b06
+	unknown_data_20000 $07, POKEMON_BREEDER,        CheckIfCanEvolve2StageFromHand, AIPlayPokemonBreeder
 	unknown_data_20000 $0f, PROFESSOR_OAK,          $4cc1, $4cae
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       $4e6e, $4e44
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, $4fc1, $4f80
@@ -1977,7 +1977,363 @@ CheckTwoEnergyCardsToRemoveInPlayArea: ; 209bc (8:49bc)
 	ret
 ; 0x20b06
 
-	INCROM $20b06, $2282e
+AIPlayPokemonBreeder: ; 20b06 (8:4b06)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce1a]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20b1b
+
+CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
+	call IsPrehistoricPowerActive
+	jp c, .done
+
+	ld a, 7
+	ld hl, wce08
+	call ZeroData_Bank8
+
+	xor a
+	ld [wce06], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+
+.loop_hand_1
+	ld a, [hli]
+	cp $ff
+	jr z, .not_found_in_hand
+
+; check if card in hand is any of the following
+; stage 2 Pokemon cards
+	ld d, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp VENUSAUR1
+	jr z, .found
+	cp VENUSAUR2
+	jr z, .found
+	cp BLASTOISE
+	jr z, .found
+	cp VILEPLUME
+	jr z, .found
+	cp ALAKAZAM
+	jr z, .found
+	cp GENGAR
+	jr nz, .loop_hand_1
+
+.found
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	push hl
+	call GetTurnDuelistVariable
+	pop hl
+	ld c, a
+	ld e, PLAY_AREA_ARENA
+
+; check Play Area for card that can evolve into
+; the picked stage 2 Pokemon
+.loop_play_area_1
+	push hl
+	push bc
+	push de
+	call CheckIfCanEvolveInto_BasicToStage2
+	pop de
+	call nc, .can_evolve
+	pop bc
+	pop hl
+	inc e
+	dec c
+	jr nz, .loop_play_area_1
+	jr .loop_hand_1
+
+.can_evolve
+	ld a, DUELVARS_ARENA_CARD_HP
+	add e
+	call GetTurnDuelistVariable
+	call ConvertHPToCounters
+	swap a
+	ld b, a
+
+; count number of energy cards attached and keep
+; the lowest 4 bits (capped at $0f)
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	cp $10
+	jr c, .not_maxed_out
+	ld a, %00001111
+.not_maxed_out
+	or b
+
+; 4 high bits of a = HP counters Pokemon still has
+; 4 low  bits of a = number of energy cards attached
+
+; store this score in wce08 + PLAY_AREA*
+	ld hl, wce08
+	ld c, e
+	ld b, $00
+	add hl, bc
+	ld [hl], a
+
+; store the deck index of stage 2 Pokemon in wce0f + PLAY_AREA*
+	ld hl, wce0f
+	add hl, bc
+	ld [hl], d
+
+; increase wce06 by one
+	ld hl, wce06
+	inc [hl]
+	ret
+
+.not_found_in_hand
+	ld a, [wce06]
+	or a
+	jr z, .check_evolution_and_dragonite
+
+; an evolution has been found before
+	xor a
+	ld [wce06], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld e, $00
+	ld d, $00
+
+; find highest score in wce08
+.loop_score_1
+	ld hl, wce08
+	add hl, de
+	ld a, [wce06]
+	cp [hl]
+	jr nc, .not_higher
+
+; store this score to wce06
+	ld a, [hl]
+	ld [wce06], a
+; store this PLay Area location to wce07
+	ld a, e
+	ld [wce07], a
+
+.not_higher
+	inc e
+	dec c
+	jr nz, .loop_score_1
+
+; store the deck index of the stage 2 card
+; that has been decided in wce1a,
+; return the Play Area location of card
+; to evolve in a and return carry
+	ld a, [wce07]
+	ld e, a
+	ld hl, wce0f
+	add hl, de
+	ld a, [hl]
+	ld [wce1a], a
+	ld a, [wce07]
+	scf
+	ret
+
+.check_evolution_and_dragonite
+	ld a, 7
+	ld hl, wce08
+	call ZeroData_Bank8
+
+	xor a
+	ld [wce06], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	push hl
+
+.loop_hand_2
+	pop hl
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_20c0c
+
+	push hl
+	ld d, a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area_2
+; check if evolution is possible
+	push bc
+	push de
+	call CheckIfCanEvolveInto_BasicToStage2
+	pop de
+	call nc, .HandleDragonite1Evolution
+	call nc, .can_evolve
+
+; not possible to evolve or returned carry
+; when handling Dragonite1 evolution
+	pop bc
+	inc e
+	dec c
+	jr nz, .loop_play_area_2
+	jr .loop_hand_2
+
+.asm_20c0c
+	ld a, [wce06]
+	or a
+	jr nz, .asm_20c14
+; no evolution was found before
+	or a
+	ret
+
+.asm_20c14
+	xor a
+	ld [wce06], a
+	ld a, $ff
+	ld [wce07], a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld e, $00
+	ld d, $00
+
+; find highest score in wce08 with at least
+; 2 energy cards attached
+.loop_score_2
+	ld hl, wce08
+	add hl, de
+	ld a, [wce06]
+	cp [hl]
+	jr nc, .next_score
+
+; take the lower 4 bits (total energy cards)
+; and skip if less than 2
+	ld a, [hl]
+	ld b, a
+	and %00001111
+	cp 2
+	jr c, .next_score
+
+; has at least 2 energy cards
+; store the score in wce06
+	ld a, b
+	ld [wce06], a
+; store this PLay Area location to wce07
+	ld a, e
+	ld [wce07], a
+
+.next_score
+	inc e
+	dec c
+	jr nz, .loop_score_2
+
+	ld a, [wce07]
+	cp $ff
+	jr z, .done
+
+; a card to evolve was found
+; store the deck index of the stage 2 card
+; that has been decided in wce1a,
+; return the Play Area location of card
+; to evolve in a and return carry
+	ld e, a
+	ld hl, wce0f
+	add hl, de
+	ld a, [hl]
+	ld [wce1a], a
+	ld a, [wce07]
+	scf
+	ret
+
+.done
+	or a
+	ret
+
+; return carry if card is evolving to Dragonite1 and if
+; - the card that is evolving is not Arena card and
+;   number of damage counters in Play Area is under 8;
+; - the card that is evolving is Arena card and has under 5
+;   damage counters or has less than 3 energy cards attached.
+.HandleDragonite1Evolution ; 20c5c (8:4c5c)
+	push af
+	push bc
+	push de
+	push hl
+	push de
+
+; check card ID
+	ld a, d
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp DRAGONITE1
+	jr nz, .no_carry
+
+; check card Play Area location
+	ld a, e
+	or a
+	jr z, .active_card_dragonite
+
+; the card that is evolving is not active card
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, 0
+
+; count damage counters in Play Area
+.loop_play_area_damage
+	dec b
+	ld e, b
+	push bc
+	call GetCardDamage
+	pop bc
+	call ConvertHPToCounters
+	add c
+	ld c, a
+
+	ld a, b
+	or a
+	jr nz, .loop_play_area_damage
+
+; compare number of total damage counters
+; with 7, if less or equal to that, set carry
+	ld a, 7
+	cp c
+	jr c, .no_carry
+	jr .set_carry
+
+.active_card_dragonite
+; the card that is evolving is active card
+; compare number of this card's damage counters
+; with 5, if less than that, set carry
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	cp 5
+	jr c, .set_carry
+
+; compare number of this card's attached energy cards
+; with 3, if less than that, set carry
+	ld e, PLAY_AREA_ARENA
+	farcall CountNumberOfEnergyCardsAttached
+	cp 3
+	jr c, .set_carry
+	jr .no_carry
+
+.no_carry
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
+.set_carry
+	pop hl
+	pop de
+	pop bc
+	pop af
+	scf
+	ret
+; 0x20cae
+
+	INCROM $20cae, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
@@ -2242,8 +2598,22 @@ CopyBuffer: ; 2297b (8:697b)
 	jr CopyBuffer
 ; 0x22983
 
-Func_22983: ; 22983 (8:6983)
-	INCROM $22983, $22990
+; zeroes a bytes starting at hl
+ZeroData_Bank8: ; 22983 (8:6983)
+	push af
+	push bc
+	push hl
+	ld b, a
+	xor a
+.loop
+	ld [hli], a
+	dec b
+	jr nz, .loop
+	pop hl
+	pop bc
+	pop af
+	ret
+; 0x22990
 
 ; counts number of energy cards found in hand
 ; and outputs result in a
@@ -2265,8 +2635,27 @@ CountEnergyCardsInHand: ; 22990 (8:6990)
 	ret
 ; 0x229a3
 
-Func_229a3 ; 229a3 (8:69a3)
-	INCROM $229a3, $22bad
+; converts HP in a to number of equivalent damage counters
+; input:
+; 	a = HP
+; output:
+; 	a = number of damage counters
+ConvertHPToCounters: ; 229a3 (8:69a3)
+	push bc
+	ld c, 0
+.loop
+	sub 10
+	jr c, .carry
+	inc c
+	jr .loop
+.carry
+	ld a, c
+	pop bc
+	ret
+; 0x229b0
+
+Func_229b0 ; 229b0 (8:69b0)
+	INCROM $229b0, $22bad
 
 ; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)

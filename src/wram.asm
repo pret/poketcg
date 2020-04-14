@@ -1356,17 +1356,14 @@ wce03:: ; ce03
 wce06:: ; ce06
 	ds $1
 
+wce07:: ; ce07
 	ds $1
 
 wce08:: ; ce08
-	ds $1
-
-	ds $06
+	ds $7
 
 wce0f:: ; ce0f
-	ds $1
-
-	ds $06
+	ds $7
 
 wce16:: ; ce16
 	ds $1

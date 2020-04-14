@@ -1450,7 +1450,7 @@ Func_15612: ; 15612 (5:5612)
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
 	ld hl, wcda5
-	call ZeroData
+	call ZeroData_Bank5
 	ld a, $5
 	ld [wcda6], a
 	ld a, $ff
@@ -1642,7 +1642,7 @@ CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
 ; 0x1575e
 
 ; zeroes a bytes starting at hl
-ZeroData: ; 1575e (5:575e)
+ZeroData_Bank5: ; 1575e (5:575e)
 	push af
 	push bc
 	push hl
@@ -6752,7 +6752,7 @@ RaiseAIScoreToAllMatchingIDsInBench: ; 174cd (5:74cd)
 Func_174f2: ; 174f2 (5:74f2)
 	ld a, MAX_PLAY_AREA_POKEMON
 	ld hl, wcdfa
-	call ZeroData
+	call ZeroData_Bank5
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, 0
@@ -6761,7 +6761,7 @@ Func_174f2: ; 174f2 (5:74f2)
 	push hl
 	ld a, MAX_PLAY_AREA_POKEMON
 	ld hl, wcdea
-	call ZeroData
+	call ZeroData_Bank5
 	pop hl
 	inc e
 	ld a, [hli]
