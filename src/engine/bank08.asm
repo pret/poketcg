@@ -29,7 +29,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0c, ENERGY_SEARCH,          CheckIfEnergySearchCanBePlayed, AIPlayEnergySearch
 	unknown_data_20000 $03, POKEDEX,                CheckWhetherToPlayPokedex, AIPlayPokedex
 	unknown_data_20000 $07, FULL_HEAL,              CheckWhetherToPlayFullHeal, AIPlayFullHeal
-	unknown_data_20000 $0a, MR_FUJI,                $54a7, $5497
+	unknown_data_20000 $0a, MR_FUJI,                CheckWetherToPlayMrFuji, AIPlayMrFuji
 	unknown_data_20000 $0a, SCOOP_UP,               $5506, $54f1
 	unknown_data_20000 $02, MAINTENANCE,            $562c, $560f
 	unknown_data_20000 $03, RECYCLE,                $56b8, $569a
@@ -3944,7 +3944,81 @@ CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
 	jr .no_carry
 ; 0x21497
 
-	INCROM $21497, $21506
+AIPlayMrFuji: ; 21497 (8:5497)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x214a7
+
+; AI logic for playing Mr Fuji
+CheckWetherToPlayMrFuji: ; 214a7 (8:54a7)
+	ld a, $ff
+	ld [wce06], a
+	ld [wce08], a
+
+; if just one Pokemon in Play Area, skip.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 1
+	ret z
+
+	dec a
+	ld d, a
+	ld e, PLAY_AREA_BENCH_1
+
+; find a Pokemon in the bench that has damage counters.
+.loop_bench
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop de
+
+	ld a, [wLoadedCard1HP]
+	ld b, a
+
+	; skip if zero damage counters
+	call GetCardDamage
+	call ConvertHPToCounters
+	or a
+	jr z, .next
+
+; a = damage counters
+; b = hp left
+	call CalculateBDividedByA_Bank8
+	cp 20
+	jr nc, .next
+
+; here, HP left in counters is less than twice
+; the number of damage counters, that is:
+; HP < 1/3 max HP
+
+; if value is less than the one found before, store this one.
+	ld hl, wce08
+	cp [hl]
+	jr nc, .next
+	ld [hl], a
+	ld a, e
+	ld [wce06], a
+.next
+	inc e
+	dec d
+	jr nz, .loop_bench
+
+	ld a, [wce06]
+	cp $ff
+	ret z
+
+	scf
+	ret
+; 0x214f1
+
+	INCROM $214f1, $21506
 
 Func_21506: ; 21506 (8:5506)
 	INCROM $21506, $227f6
@@ -4348,8 +4422,25 @@ CalculateWordTensDigit: ; 229b0 (8:69b0)
 	ret
 ; 0x229c1
 
-Func_229c1 ; 229c1 (8:69c1)
-	INCROM $229c1, $229f3
+CalculateBDividedByA_Bank8: ; 229c1 (8:69c1)
+	push bc
+	ld c, a
+	ld a, b
+	ld b, c
+	ld c, 0
+.loop
+	sub b
+	jr c, .done
+	inc c
+	jr .loop
+.done
+	ld a, c
+	pop bc
+	ret
+; 0x229d0
+
+Func_229d0 ; 229d0 (8:69d0)
+	INCROM $229d0, $229f3
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card

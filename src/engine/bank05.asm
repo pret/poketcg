@@ -1678,7 +1678,7 @@ CalculateByteTensDigit: ; 1576b (5:576b)
 ; input:
 ; 	a = divisor
 ; 	b = dividend
-CalculateBDividedByA: ; 15778 (5:5778)
+CalculateBDividedByA_Bank5: ; 15778 (5:5778)
 	push bc
 	ld c, a
 	ld a, b
@@ -2495,7 +2495,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 .add_hp_score
 	ld b, a
 	ld a, 4
-	call CalculateBDividedByA
+	call CalculateBDividedByA_Bank5
 	call CalculateByteTensDigit
 	call AddToAIScore
 
