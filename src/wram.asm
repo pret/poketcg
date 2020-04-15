@@ -1389,7 +1389,11 @@ wce1c:: ; ce1c
 wce1d:: ; ce1d
 	ds $1
 
-	ds $2
+wce1e:: ; ce1e
+	ds $1
+
+wce1f:: ; ce1f
+	ds $1
 
 wce20:: ; ce20
 	ds $1

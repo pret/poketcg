@@ -23,7 +23,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $07, POKEMON_BREEDER,        CheckIfCanEvolve2StageFromHand, AIPlayPokemonBreeder
 	unknown_data_20000 $0f, PROFESSOR_OAK,          CheckIfCanPlayProfessorOak, AIPlayProfessorOak
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       CheckEnergyRetrievalCardsToPick, AIPlayEnergyRetrieval
-	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, $4fc1, $4f80
+	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, CheckSuperEnergyRetrievalCardsToPick, AIPlaySuperEnergyRetrieval
 	unknown_data_20000 $06, POKEMON_CENTER,         $50eb, $50e0
 	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, $517b, $5170
 	unknown_data_20000 $0c, ENERGY_SEARCH,          $51aa, $519a
@@ -2709,9 +2709,10 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 	jp nc, .no_carry
 
 .start
+; find duplicate cards in hand
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	call .CheckDuplicatePokemonAndNonPokemonCards
+	call CheckDuplicatePokemonAndNonPokemonCards
 	jp c, .no_carry
 
 	ld [wce06], a
@@ -2773,7 +2774,7 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 ; first energy card found
 	ld a, b
 	ld [wce1a], a
-	call .RemoveEnergyCardFromList
+	call RemoveCardFromList
 	jr .next_play_area
 .second_energy_1
 	ld a, b
@@ -2799,7 +2800,7 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 	jr nz, .second_energy_2
 	ld a, b
 	ld [wce1a], a
-	call .RemoveEnergyCardFromList
+	call RemoveCardFromList
 	jr .loop_energy_cards_2
 
 .second_energy_2
@@ -2822,9 +2823,11 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 	ret
 ; 0x20f27
 
-; function to remove an element from the list
-; and shorten it accordingly
-.RemoveEnergyCardFromList: ; 20f27 (8:4f27)
+; remove an element from the list
+; and shortens it accordingly
+; input:
+;   hl = pointer to element to remove
+RemoveCardFromList: ; 20f27 (8:4f27)
 	push de
 	ld d, h
 	ld e, l
@@ -2843,9 +2846,13 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 	ret
 ; 0x20f38
 
-; returns carry if duplicate cards with found for
+; returns carry if duplicate cards are found for
 ; at least one Pokemon card and at least one Non-Pokemon card
-.CheckDuplicatePokemonAndNonPokemonCards ; 20f38 (8:4f38)
+; input:
+;   hl = list to look in
+; output:
+;   a = deck index of duplicate non-Pokemon card
+CheckDuplicatePokemonAndNonPokemonCards: ; 20f38 (8:4f38)
 	ld a, $ff
 	ld [wce0f], a
 	ld [wce0f + 1], a
@@ -2896,24 +2903,251 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 .check_found
 	ld a, [wce0f]
 	cp $ff
-	jr nz, .no_carry_duplicate
+	jr nz, .no_carry
 	ld a, [wce0f + 1]
 	cp $ff
-	jr nz, .no_carry_duplicate
+	jr nz, .no_carry
 
 ; only set carry if duplicate cards were found
 ; for both Pokemon and Non-Pokemon cards
 	scf
 	ret
 
-.no_carry_duplicate
+.no_carry
 ; two cards with the same ID were not found
 ; of either Pokemon and Non-Pokemon cards
 	or a
 	ret
 ; 0x20f80
 
-	INCROM $20f80, $227f6
+AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1a]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce1b]
+	ldh [hTempRetreatCostCards], a
+	ld a, [wce1c]
+	ldh [$ffa3], a
+	cp $ff
+	jr z, .asm_20fbb
+	ld a, [wce1d]
+	ldh [$ffa4], a
+	cp $ff
+	jr z, .asm_20fbb
+	ld a, [wce1e]
+	ldh [$ffa5], a
+	cp $ff
+	jr z, .asm_20fbb
+	ld a, $ff
+	ldh [$ffa6], a
+.asm_20fbb
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x20fc1
+
+CheckSuperEnergyRetrievalCardsToPick: ; 20fc1 (8:4fc1)
+; return no carry if no cards in hand
+	farcall CreateEnergyCardListFromHand
+	jp nc, .no_carry
+
+; handle Go Go Rain Dance deck
+; return no carry if there's no Muk card in play and
+; if there's no Blastoise card in Play Area
+; if there's a Muk in play, continue as normal
+	ld a, [wOpponentDeckID]
+	cp GO_GO_RAIN_DANCE_DECK_ID
+	jr nz, .start
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .start
+	ld a, BLASTOISE
+	call CountPokemonIDInPlayArea
+	jp nc, .no_carry
+
+.start
+; find duplicate cards in hand
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	call CheckDuplicatePokemonAndNonPokemonCards
+	jp c, .no_carry
+
+; remove the duplicate non-Pokemon card in hand
+; and run the hand check again
+	ld [wce06], a
+	ld hl, wDuelTempList
+	call .RemoveDuplicateCardFromHandList
+	call CheckDuplicatePokemonAndNonPokemonCards
+	jp c, .no_carry
+
+	ld [wce08], a
+	ld a, CARD_LOCATION_DISCARD_PILE
+	call FindBasicEnergyCardsInLocation
+	jp c, .no_carry
+
+; some basic energy cards were found in Discard Pile
+	ld a, $ff
+	ld [wce1b], a
+	ld [wce1c], a
+	ld [wce1d], a
+	ld [wce1e], a
+	ld [wce1f], a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+; first check if there are useful energy cards in the list
+; and choose them for retrieval first
+.loop_play_area
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+
+; load this card's ID in wTempCardID
+; and this card's Type in wTempCardType
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	pop de
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [wTempCardType], a
+
+; loop the energy cards in the Discard Pile
+; and check if they are useful for this Pokemon
+	ld hl, wDuelTempList
+.loop_energy_cards_1
+	ld a, [hli]
+	cp $ff
+	jr z, .next_play_area
+
+	ld b, a
+	push hl
+	farcall CheckIfEnergyIsUseful
+	pop hl
+	jr nc, .loop_energy_cards_1
+
+; first energy
+	ld a, [wce1b]
+	cp $ff
+	jr nz, .second_energy_1
+	ld a, b
+	ld [wce1b], a
+	call RemoveCardFromList
+	jr .next_play_area
+
+.second_energy_1
+	ld a, [wce1c]
+	cp $ff
+	jr nz, .third_energy_1
+	ld a, b
+	ld [wce1c], a
+	call RemoveCardFromList
+	jr .next_play_area
+
+.third_energy_1
+	ld a, [wce1d]
+	cp $ff
+	jr nz, .fourth_energy_1
+	ld a, b
+	ld [wce1d], a
+	call RemoveCardFromList
+	jr .next_play_area
+
+.fourth_energy_1
+	ld a, b
+	ld [wce1e], a
+	jr .set_carry
+
+.next_play_area
+	inc e
+	dec d
+	jr nz, .loop_play_area
+
+; next, if there are still energy cards left to choose,
+; loop through the energy cards again and select
+; them in order.
+	ld hl, wDuelTempList
+.loop_energy_cards_2
+	ld a, [hli]
+	cp $ff
+	jr z, .check_chosen
+	ld b, a
+	ld a, [wce1b]
+	cp $ff
+	jr nz, .second_energy_2
+	ld a, b
+
+; first energy
+	ld [wce1b], a
+	call RemoveCardFromList
+	jr .loop_energy_cards_2
+
+.second_energy_2
+	ld a, [wce1c]
+	cp $ff
+	jr nz, .third_energy_2
+	ld a, b
+	ld [wce1c], a
+	call RemoveCardFromList
+	jr .loop_energy_cards_2
+
+.third_energy_2
+	ld a, [wce1d]
+	cp $ff
+	jr nz, .fourth_energy
+	ld a, b
+	ld [wce1d], a
+	call RemoveCardFromList
+	jr .loop_energy_cards_2
+
+.fourth_energy
+	ld a, b
+	ld [wce1e], a
+	jr .set_carry
+
+; will set carry if at least one has been chosen
+.check_chosen
+	ld a, [wce1b]
+	cp $ff
+	jr nz, .set_carry
+
+.no_carry
+	or a
+	ret
+.set_carry
+	ld a, [wce08]
+	ld [wce1a], a
+	ld a, [wce06]
+	scf
+	ret
+; 0x210d5
+
+; finds the energy card that was found to be a duplicate
+; and removes it from the hand card list.
+.RemoveDuplicateCardFromHandList ; 210d5 (8:50d5)
+	push hl
+	ld b, a
+.loop_duplicate
+	ld a, [hli]
+	cp b
+	jr nz, .loop_duplicate
+	call RemoveCardFromList
+	pop hl
+	ret
+; 0x210e0
+
+	INCROM $210e0, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
