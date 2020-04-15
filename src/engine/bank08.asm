@@ -25,7 +25,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       CheckEnergyRetrievalCardsToPick, AIPlayEnergyRetrieval
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, CheckSuperEnergyRetrievalCardsToPick, AIPlaySuperEnergyRetrieval
 	unknown_data_20000 $06, POKEMON_CENTER,         CheckIfCanPlayPokemonCenter, AIPlayPokemonCenter
-	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, $517b, $5170
+	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, CheckWhetherToPlayImposterProfessorOak, AIPlayImposterProfessorOak
 	unknown_data_20000 $0c, ENERGY_SEARCH,          $51aa, $519a
 	unknown_data_20000 $03, POKEDEX,                $52dc, $52b4
 	unknown_data_20000 $07, FULL_HEAL,              $5428, $541d
@@ -1465,11 +1465,11 @@ AIPlayBill: ; 2086d (8:486d)
 	ret
 ; 0x20878
 
-; return carry if cards not in deck < 51
+; return carry if cards in deck > 9
 CheckDeckCardsAmount: ; 20878 (8:4878)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
-	cp 51
+	cp DECK_SIZE - 9
 	ret
 ; 0x20880
 
@@ -2347,10 +2347,10 @@ AIPlayProfessorOak: ; 20cae (8:4cae)
 ; sets carry if AI determines a score of playing
 ; Professor Oak is over a certain threshold.
 CheckIfCanPlayProfessorOak: ; 20cc1 (8:4cc1)
-; return if cards in deck is less than 7
+; return if cards in deck <= 6
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
-	cp 54
+	cp DECK_SIZE - 6
 	ret nc
 
 	ld a, [wOpponentDeckID]
@@ -2361,10 +2361,10 @@ CheckIfCanPlayProfessorOak: ; 20cc1 (8:4cc1)
 	cp WONDERS_OF_SCIENCE_DECK_ID
 	jp z, .HandleWondersOfScienceDeck
 
-; return if cards in deck is less than 15
+; return if cards in deck <= 14
 .check_cards_deck
 	ld a, [hl]
-	cp 46
+	cp DECK_SIZE - 14
 	ret nc
 
 ; initialize score
@@ -3248,7 +3248,45 @@ CheckIfCanPlayPokemonCenter: ; 210eb (8:50eb)
 	ret
 ; 0x21170
 
-	INCROM $21170, $227f6
+AIPlayImposterProfessorOak: ; 21170 (8:5170)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x2117b
+
+; sets carry depending on player's number of cards
+; in deck in in hand.
+CheckWhetherToPlayImposterProfessorOak: ; 2117b (8:517b)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetNonTurnDuelistVariable
+	cp DECK_SIZE - 14
+	jr c, .more_than_14_cards
+
+; if player has less than 14 cards in deck, only
+; set carry if number of cards in their hands < 6
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetNonTurnDuelistVariable
+	cp 6
+	jr c, .set_carry
+.no_carry
+	or a
+	ret
+
+; if player has more than 14 cards in deck, only
+; set carry if number of cards in their hands >= 9
+.more_than_14_cards
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetNonTurnDuelistVariable
+	cp 9
+	jr c, .no_carry
+.set_carry
+	scf
+	ret
+; 0x2119a
+
+	INCROM $2119a, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
