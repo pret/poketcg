@@ -24,7 +24,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0f, PROFESSOR_OAK,          CheckIfCanPlayProfessorOak, AIPlayProfessorOak
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       CheckEnergyRetrievalCardsToPick, AIPlayEnergyRetrieval
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, CheckSuperEnergyRetrievalCardsToPick, AIPlaySuperEnergyRetrieval
-	unknown_data_20000 $06, POKEMON_CENTER,         $50eb, $50e0
+	unknown_data_20000 $06, POKEMON_CENTER,         CheckIfCanPlayPokemonCenter, AIPlayPokemonCenter
 	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, $517b, $5170
 	unknown_data_20000 $0c, ENERGY_SEARCH,          $51aa, $519a
 	unknown_data_20000 $03, POKEDEX,                $52dc, $52b4
@@ -3147,7 +3147,108 @@ CheckSuperEnergyRetrievalCardsToPick: ; 20fc1 (8:4fc1)
 	ret
 ; 0x210e0
 
-	INCROM $210e0, $227f6
+AIPlayPokemonCenter: ; 210e0 (8:50e0)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x210eb
+
+CheckIfCanPlayPokemonCenter: ; 210eb (8:50eb)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+; return if active Pokemon can KO player's card.
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .start
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry
+
+.start
+	xor a
+	ld [wce06], a
+	ld [wce08], a
+	ld [wce0f], a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, e
+	pop de
+
+; get this Pokemon's current HP in number of counters
+; and add it to the total.
+	ld a, [wLoadedCard1HP]
+	call ConvertHPToCounters
+	ld b, a
+	ld a, [wce06]
+	add b
+	ld [wce06], a
+
+; get this Pokemon's current damage counters
+; and add it to the total.
+	call GetCardDamage
+	call ConvertHPToCounters
+	ld b, a
+	ld a, [wce08]
+	add b
+	ld [wce08], a
+
+; get this Pokemon's number of attached energy cards
+; and add it to the total.
+; if there's overflow, return no carry.
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wTotalAttachedEnergies]
+	ld b, a
+	ld a, [wce0f]
+	add b
+	jr c, .no_carry
+	ld [wce0f], a
+
+	inc e
+	dec d
+	jr nz, .loop_play_area
+
+; if (number of damage counters / 2) < (total energy cards attached)
+; return no carry.
+	ld a, [wce08]
+	srl a
+	ld hl, wce0f
+	cp [hl]
+	jr c, .no_carry
+
+; if (number of HP counters * 6 / 10) >= (number of damage counters)
+; return no carry.
+	ld a, [wce06]
+	ld l, a
+	ld h, 6
+	call HtimesL
+	call CalculateWordTensDigit
+	ld a, l
+	ld hl, wce08
+	cp [hl]
+	jr nc, .no_carry
+
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+; 0x21170
+
+	INCROM $21170, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
@@ -3531,8 +3632,25 @@ ConvertHPToCounters: ; 229a3 (8:69a3)
 	ret
 ; 0x229b0
 
-Func_229b0 ; 229b0 (8:69b0)
-	INCROM $229b0, $229f3
+; calculates floor(hl / 10)
+CalculateWordTensDigit: ; 229b0 (8:69b0)
+	push bc
+	push de
+	lb bc, $ff, -10
+	lb de, $ff, -1
+.asm_229b8
+	inc de
+	add hl, bc
+	jr c, .asm_229b8
+	ld h, d
+	ld l, e
+	pop de
+	pop bc
+	ret
+; 0x229c1
+
+Func_229c1 ; 229c1 (8:69c1)
+	INCROM $229c1, $229f3
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card

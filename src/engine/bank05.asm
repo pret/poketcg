@@ -1659,7 +1659,7 @@ ClearMemory_Bank5: ; 1575e (5:575e)
 ; 0x1576b
 
 ; returns in a the tens digit of value in a
-CalculateTensDigit: ; 1576b (5:576b)
+CalculateByteTensDigit: ; 1576b (5:576b)
 	push bc
 	ld c, 0
 .loop
@@ -2354,7 +2354,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	ld a, [wSelectedMoveIndex]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	inc a
 	call AddToAIScore
 	ret
@@ -2368,7 +2368,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	ld a, [wSelectedMoveIndex]
 	call EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	srl a
 	call AddToAIScore
 
@@ -2496,7 +2496,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	ld b, a
 	ld a, 4
 	call CalculateBDividedByA
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	call AddToAIScore
 
 ; raise AI score if
@@ -3159,7 +3159,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	jr z, .check_mysterious_fossil
 	srl a
 	srl a
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	call SubFromAIScore
 
 ; if is Mysterious Fossil or 
@@ -4135,7 +4135,7 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	cp 3
 	jr nc, .check_defending_can_ko
 ; hp < 30
@@ -4179,7 +4179,7 @@ AIDecideWhichCardToAttachEnergy: ; 164fc (5:64fc)
 .bench
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	cp 3
 	jr nc, .asm_165e1
 ; hp < 30
@@ -5197,7 +5197,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	ld [wTempAI], a
 	or a
 	jr z, .no_damage
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	call AddToAIScore
 	jr .check_recoil
 .no_damage
@@ -5235,7 +5235,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	ld [wDamage], a
 	call ApplyDamageModifiers_DamageToSelf
 	ld a, e
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	call SubFromAIScore
 	
 	push de
@@ -5513,7 +5513,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	cp 1
 	jr z, .tally_heal_score
 	ld a, [wTempAI]
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	ld b, a
 	ld a, [wLoadedMoveUnknown1]
 	cp 3
@@ -5524,7 +5524,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 .asm_16cec
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	cp b
 	jr c, .tally_heal_score
 	ld a, b
@@ -5532,7 +5532,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	push af
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	pop bc
 	cp b ; wLoadedMoveUnknown1
 	jr c, .add_heal_score
@@ -6930,7 +6930,7 @@ Func_17583: ; 17583 (5:7583)
 	push hl
 	push de
 	call GetCardDamage
-	call CalculateTensDigit
+	call CalculateByteTensDigit
 	ld b, a
 	push bc
 	call CountNumberOfEnergyCardsAttached
