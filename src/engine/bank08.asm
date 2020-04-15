@@ -27,8 +27,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $06, POKEMON_CENTER,         CheckIfCanPlayPokemonCenter, AIPlayPokemonCenter
 	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, CheckWhetherToPlayImposterProfessorOak, AIPlayImposterProfessorOak
 	unknown_data_20000 $0c, ENERGY_SEARCH,          CheckIfEnergySearchCanBePlayed, AIPlayEnergySearch
-	unknown_data_20000 $03, POKEDEX,                $52dc, $52b4
-	unknown_data_20000 $07, FULL_HEAL,              $5428, $541d
+	unknown_data_20000 $03, POKEDEX,                CheckWhetherToPlayPokedex, AIPlayPokedex
+	unknown_data_20000 $07, FULL_HEAL,              CheckWhetherToPlayFullHeal, AIPlayFullHeal
 	unknown_data_20000 $0a, MR_FUJI,                $54a7, $5497
 	unknown_data_20000 $0a, SCOOP_UP,               $5506, $54f1
 	unknown_data_20000 $02, MAINTENANCE,            $562c, $560f
@@ -3554,7 +3554,7 @@ AIPlayPokedex: ; 212b4 (8:52b4)
 	ret
 ; 0x212dc
 
-Func_212dc: ; 212dc (8:52dc)
+CheckWhetherToPlayPokedex: ; 212dc (8:52dc)
 	ld a, [wcda6]
 	cp $06
 	jr c, .no_carry
@@ -3849,9 +3849,105 @@ PickPokedexCards: ; 2138e (8:538e)
 	ret
 ; 0x2141d
 
-	INCROM $2141d, $227f6
+AIPlayFullHeal: ; 2141d (8:541d)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x21428
 
+CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
 
+; skip if no status on arena card
+	or a ; NO_STATUS
+	jr z, .no_carry
+
+	and CNF_SLP_PRZ
+	cp PARALYZED
+	jr z, .paralyzed
+	cp ASLEEP
+	jr z, .asleep
+	cp CONFUSED
+	jr z, .confused
+	; if either PSN or DBLPSN, fallthrough
+
+.set_carry
+	scf
+	ret
+
+.asleep
+; set carry if any of the following
+; cards are in the Play Area.
+	ld a, GASTLY1
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+	ld a, GASTLY2
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+	ld a, HAUNTER2
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .set_carry
+
+; otherwise fallthrough
+
+.paralyzed
+; if Scoop Up is in hand and decided to be played, skip.
+	ld a, SCOOP_UP
+	call LookForCardIDInHandList_Bank8
+	jr nc, .no_scoop_up_prz
+	call Func_21506
+	jr c, .no_carry
+
+.no_scoop_up_prz
+; if card can damage defending Pokemon...
+	xor a ; PLAY_AREA_ARENA
+	farcall CheckIfCanDamageDefendingPokemon
+	jr nc, .no_carry
+; ...and can play an energy card to retreat, set carry.
+	ld a, [wAIPlayEnergyCardForRetreat]
+	or a
+	jr nz, .set_carry
+
+; if not, check whether it's a card it would rather retreat,
+; and if it isn't, set carry.
+	farcall AIDecideWhetherToRetreat
+	jr nc, .set_carry
+
+.no_carry
+	or a
+	ret
+
+.confused
+; if Scoop Up is in hand and decided to be played, skip.
+	ld a, SCOOP_UP
+	call LookForCardIDInHandList_Bank8
+	jr nc, .no_scoop_up_cnf
+	call Func_21506
+	jr c, .no_carry
+
+.no_scoop_up_cnf
+; if card can damage defending Pokemon...
+	xor a ; PLAY_AREA_ARENA
+	farcall CheckIfCanDamageDefendingPokemon
+	jr nc, .no_carry
+; ...and can play an energy card to retreat, set carry.
+	ld a, [wAIPlayEnergyCardForRetreat]
+	or a
+	jr nz, .set_carry
+; if not, return no carry.
+	jr .no_carry
+; 0x21497
+
+	INCROM $21497, $21506
+
+Func_21506: ; 21506 (8:5506)
+	INCROM $21506, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
