@@ -26,7 +26,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, CheckSuperEnergyRetrievalCardsToPick, AIPlaySuperEnergyRetrieval
 	unknown_data_20000 $06, POKEMON_CENTER,         CheckIfCanPlayPokemonCenter, AIPlayPokemonCenter
 	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, CheckWhetherToPlayImposterProfessorOak, AIPlayImposterProfessorOak
-	unknown_data_20000 $0c, ENERGY_SEARCH,          $51aa, $519a
+	unknown_data_20000 $0c, ENERGY_SEARCH,          CheckIfEnergySearchCanBePlayed, AIPlayEnergySearch
 	unknown_data_20000 $03, POKEDEX,                $52dc, $52b4
 	unknown_data_20000 $07, FULL_HEAL,              $5428, $541d
 	unknown_data_20000 $0a, MR_FUJI,                $54a7, $5497
@@ -3286,7 +3286,255 @@ CheckWhetherToPlayImposterProfessorOak: ; 2117b (8:517b)
 	ret
 ; 0x2119a
 
-	INCROM $2119a, $227f6
+AIPlayEnergySearch: ; 2119a (8:519a)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x211aa
+
+; AI checks for playing Energy Search
+CheckIfEnergySearchCanBePlayed: ; 211aa (8:51aa)
+	farcall CreateEnergyCardListFromHand
+	jr c, .start
+	call .CheckForUsefulEnergyCards
+	jr c, .start
+
+; there are energy cards in hand and at least
+; one of them is useful to a card in Play Area
+.no_carry
+	or a
+	ret
+
+.start
+	ld a, [wOpponentDeckID]
+	cp HEATED_BATTLE_DECK_ID
+	jr z, .heated_battle
+	cp WONDERS_OF_SCIENCE_DECK_ID
+	jr z, .wonders_of_science
+
+; if no energy cards in deck, return no carry
+	ld a, CARD_LOCATION_DECK
+	call FindBasicEnergyCardsInLocation
+	jr c, .no_carry
+
+; if any of the energy cards in deck is useful
+; return carry right away...
+	call .CheckForUsefulEnergyCards
+	jr c, .no_useful
+	scf
+	ret
+
+; ...otherwise save the list in a before return carry.
+.no_useful
+	ld a, [wDuelTempList]
+	scf
+	ret
+
+; Heated Battle deck only searches for Fire and Lightning
+; if they are found to be useful to some card in Play Area
+.heated_battle
+	ld a, CARD_LOCATION_DECK
+	call FindBasicEnergyCardsInLocation
+	jr c, .no_carry
+	call .CheckUsefulFireOrLightningEnergy
+	jr c, .no_carry
+	scf
+	ret
+
+; this subroutine has a bug.
+; it was supposed to use the .CheckUsefulGrassEnergy subroutine
+; but uses .CheckUsefulFireOrLightningEnergy instead.
+.wonders_of_science
+	ld a, CARD_LOCATION_DECK
+	call FindBasicEnergyCardsInLocation
+	jr c, .no_carry
+	call .CheckUsefulFireOrLightningEnergy
+	jr c, .no_carry
+	scf
+	ret
+; 0x211f1
+
+; return carry if cards in wDuelTempList are not
+; useful to any of the Play Area Pokemon
+.CheckForUsefulEnergyCards ; 211f1 (8:51f1)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area_1
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+	call GetTurnDuelistVariable
+
+; store ID and type of card
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	pop de
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [wTempCardType], a
+
+; look in list for a useful energy,
+; is any is found return no carry.
+	ld hl, wDuelTempList
+.loop_energy_1
+	ld a, [hli]
+	cp $ff
+	jr z, .none_found
+	ld b, a
+	push hl
+	farcall CheckIfEnergyIsUseful
+	pop hl
+	jr nc, .loop_energy_1
+
+	ld a, b
+	or a
+	ret
+
+.none_found
+	inc e
+	ld a, e
+	cp d
+	jr nz, .loop_play_area_1
+
+	scf
+	ret
+; 0x2122e
+
+; checks whether there are useful energies
+; only for Fire and Lightning type Pokemon cards
+; in Play Area. If none found, return carry.
+.CheckUsefulFireOrLightningEnergy ; 2122e (8:522e)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area_2
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+	call GetTurnDuelistVariable
+
+; get card's ID and Type
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	pop de
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+
+; only do check if the Pokemon's type
+; is either Fire or Lightning
+	cp TYPE_ENERGY_FIRE
+	jr z, .fire_or_lightning
+	cp TYPE_ENERGY_LIGHTNING
+	jr nz, .next_play_area
+
+; loop each energy card in list
+.fire_or_lightning
+	ld [wTempCardType], a
+	ld hl, wDuelTempList
+.loop_energy_2
+	ld a, [hli]
+	cp $ff
+	jr z, .next_play_area
+
+; if this energy card is useful,
+; return no carry.
+	ld b, a
+	push hl
+	farcall CheckIfEnergyIsUseful
+	pop hl
+	jr nc, .loop_energy_2
+
+	ld a, b
+	or a
+	ret
+
+.next_play_area
+	inc e
+	ld a, e
+	cp d
+	jr nz, .loop_play_area_2
+
+; no card was found to be useful
+; for Fire/Lightning type Pokemon card.
+	scf
+	ret
+; 0x21273
+
+; checks whether there are useful energies
+; only for Grass type Pokemon cards
+; in Play Area. If none found, return carry.
+.CheckUsefulGrassEnergy ; 21273 (8:5273)
+; unreferenced
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area_3
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+	call GetTurnDuelistVariable
+
+; get card's ID and Type
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	pop de
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+
+; only do check if the Pokemon's type is Grass
+	cp TYPE_ENERGY_GRASS
+	jr nz, .next_play_area_3
+
+; loop each energy card in list
+	ld [wTempCardType], a
+	ld hl, wDuelTempList
+.loop_energy_3
+	ld a, [hli]
+	cp $ff
+	jr z, .next_play_area_3
+
+; if this energy card is useful,
+; return no carry.
+	ld b, a
+	push hl
+	farcall CheckIfEnergyIsUseful
+	pop hl
+	jr nc, .loop_energy_3
+
+	ld a, b
+	or a
+	ret
+
+.next_play_area_3
+	inc e
+	ld a, e
+	cp d
+	jr nz, .loop_play_area_3
+
+; no card was found to be useful
+; for Grass type Pokemon card.
+	scf
+	ret
+; 0x212b4
+
+	INCROM $212b4, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
