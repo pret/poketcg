@@ -3534,7 +3534,324 @@ CheckIfEnergySearchCanBePlayed: ; 211aa (8:51aa)
 	ret
 ; 0x212b4
 
-	INCROM $212b4, $227f6
+AIPlayPokedex: ; 212b4 (8:52b4)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce1a]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1b]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce1c]
+	ldh [hTempRetreatCostCards], a
+	ld a, [wce1d]
+	ldh [$ffa3], a
+	ld a, [wce1e]
+	ldh [$ffa4], a
+	ld a, $ff
+	ldh [$ffa5], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x212dc
+
+Func_212dc: ; 212dc (8:52dc)
+	ld a, [wcda6]
+	cp $06
+	jr c, .no_carry
+
+; return no carry if number of cards in deck <= 4
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE - 4
+	jr nc, .no_carry
+
+; has a 3 in 10 chance of actually playing card
+	ld a, 10
+	call Random
+	cp 3
+	jr c, .pick_cards
+
+.no_carry
+	or a
+	ret
+
+.pick_cards
+; the following comparison is disregarded
+; the Wonders of Science deck was probably intended
+; to use PickPokedexCards_Unreferenced instead
+	ld a, [wOpponentDeckID]
+	cp WONDERS_OF_SCIENCE_DECK_ID
+	jp PickPokedexCards ; bug, should be jp nz
+; 0x212ff
+
+; picks order of the cards in deck from the effects of Pokedex.
+; prioritises Pokemon cards, then Trainer cards, then energy cards.
+; stores the resulting order in wce1a.
+PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
+; unreferenced
+	xor a
+	ld [wcda6], a
+
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	add DUELVARS_DECK_CARDS
+	ld l, a
+	lb de, $00, $00
+	ld b, 5
+
+; run through 5 of the remaining cards in deck
+.next_card
+	ld a, [hli]
+	ld c, a
+	call .GetCardType
+
+; load this card's deck index and type in memory
+; wce08 = card types
+; wce0f = card deck indices
+	push hl
+	ld hl, wce08
+	add hl, de
+	ld [hl], a
+	ld hl, wce0f
+	add hl, de
+	ld [hl], c
+	pop hl
+
+	inc e
+	dec b
+	jr nz, .next_card
+
+; terminate the wce08 list
+	ld a, $ff
+	ld [wce08 + 5], a
+
+	ld de, wce1a
+
+; find Pokemon
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+; run through the stored cards
+; and look for any Pokemon cards.
+.loop_pokemon
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .find_trainers
+	cp TYPE_ENERGY
+	jr nc, .loop_pokemon
+; found a Pokemon card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_pokemon
+
+; run through the stored cards
+; and look for any Trainer cards.
+.find_trainers
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+.loop_trainers
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .find_energy
+	cp TYPE_TRAINER
+	jr nz, .loop_trainers
+; found a Trainer card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_trainers
+
+.find_energy
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+; run through the stored cards
+; and look for any energy cards.
+.loop_energy
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	and TYPE_ENERGY
+	jr z, .loop_energy
+; found an energy card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_energy
+
+.done
+	scf
+	ret
+; 0x21383
+
+.GetCardType ; 21383 (8:5383)
+	push bc
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	pop bc
+	ret
+; 0x2138e
+
+; picks order of the cards in deck from the effects of Pokedex.
+; prioritises energy cards, then Pokemon cards, then Trainer cards.
+; stores the resulting order in wce1a.
+PickPokedexCards: ; 2138e (8:538e)
+	xor a
+	ld [wcda6], a
+
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	add DUELVARS_DECK_CARDS
+	ld l, a
+	lb de, $00, $00
+	ld b, 5
+
+; run through 5 of the remaining cards in deck
+.next_card
+	ld a, [hli]
+	ld c, a
+	call .GetCardType
+
+; load this card's deck index and type in memory
+; wce08 = card types
+; wce0f = card deck indices
+	push hl
+	ld hl, wce08
+	add hl, de
+	ld [hl], a
+	ld hl, wce0f
+	add hl, de
+	ld [hl], c
+	pop hl
+
+	inc e
+	dec b
+	jr nz, .next_card
+
+; terminate the wce08 list
+	ld a, $ff
+	ld [wce08 + 5], a
+
+	ld de, wce1a
+
+; find energy
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+; run through the stored cards
+; and look for any energy cards.
+.loop_energy
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .find_pokemon
+	and TYPE_ENERGY
+	jr z, .loop_energy
+; found an energy card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_energy
+
+.find_pokemon
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+; run through the stored cards
+; and look for any Pokemon cards.
+.loop_pokemon
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .find_trainers
+	cp TYPE_ENERGY
+	jr nc, .loop_pokemon
+; found a Pokemon card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_pokemon
+
+; run through the stored cards
+; and look for any Trainer cards.
+.find_trainers
+	ld hl, wce08
+	ld c, -1
+	ld b, $00
+
+.loop_trainers
+	inc c
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	cp TYPE_TRAINER
+	jr nz, .loop_trainers
+; found a Trainer card
+; store it in wce1a list
+	push hl
+	ld hl, wce0f
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [de], a
+	inc de
+	jr .loop_trainers
+
+.done
+	scf
+	ret
+; 0x21412
+
+.GetCardType ; 21412 (8:5412)
+	push bc
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	pop bc
+	ret
+; 0x2141d
+
+	INCROM $2141d, $227f6
+
+
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
