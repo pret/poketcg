@@ -21,7 +21,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $05, ENERGY_REMOVAL,         CheckEnergyCardToRemoveInPlayArea, AIPlayEnergyRemoval
 	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   CheckTwoEnergyCardsToRemoveInPlayArea, AIPlaySuperEnergyRemoval
 	unknown_data_20000 $07, POKEMON_BREEDER,        CheckIfCanEvolve2StageFromHand, AIPlayPokemonBreeder
-	unknown_data_20000 $0f, PROFESSOR_OAK,          $4cc1, $4cae
+	unknown_data_20000 $0f, PROFESSOR_OAK,          CheckIfCanPlayProfessorOak, AIPlayProfessorOak
 	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       $4e6e, $4e44
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, $4fc1, $4f80
 	unknown_data_20000 $06, POKEMON_CENTER,         $50eb, $50e0
@@ -1995,7 +1995,7 @@ CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
 
 	ld a, 7
 	ld hl, wce08
-	call ZeroData_Bank8
+	call ClearMemory_Bank8
 
 	xor a
 	ld [wce06], a
@@ -2137,7 +2137,7 @@ CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
 .check_evolution_and_dragonite
 	ld a, 7
 	ld hl, wce08
-	call ZeroData_Bank8
+	call ClearMemory_Bank8
 
 	xor a
 	ld [wce06], a
@@ -2149,7 +2149,7 @@ CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
 	pop hl
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_20c0c
+	jr z, .check_evolution_found
 
 	push hl
 	ld d, a
@@ -2175,15 +2175,15 @@ CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
 	jr nz, .loop_play_area_2
 	jr .loop_hand_2
 
-.asm_20c0c
+.check_evolution_found
 	ld a, [wce06]
 	or a
-	jr nz, .asm_20c14
+	jr nz, .evolution_was_found
 ; no evolution was found before
 	or a
 	ret
 
-.asm_20c14
+.evolution_was_found
 	xor a
 	ld [wce06], a
 	ld a, $ff
@@ -2333,7 +2333,338 @@ CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
 	ret
 ; 0x20cae
 
-	INCROM $20cae, $2282e
+AIPlayProfessorOak: ; 20cae (8:4cae)
+	ld a, [wce21]
+	or $0c
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20cc1
+
+; sets carry if AI determines a score of playing
+; Professor Oak is over a certain threshold.
+CheckIfCanPlayProfessorOak: ; 20cc1 (8:4cc1)
+; return if cards in deck is less than 7
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp 54
+	ret nc
+
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_ARTICUNO_DECK_ID
+	jp z, .HandleLegendaryArticunoDeck
+	cp EXCAVATION_DECK_ID
+	jp z, .HandleExcavationDeck
+	cp WONDERS_OF_SCIENCE_DECK_ID
+	jp z, .HandleWondersOfScienceDeck
+
+; return if cards in deck is less than 15
+.check_cards_deck
+	ld a, [hl]
+	cp 46
+	ret nc
+
+; initialize score
+	ld a, $1e
+	ld [wce06], a
+
+; check number of cards in hand
+.check_cards_hand
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 4
+	jr nc, .more_than_3_cards
+
+; less than 4 cards in hand
+	ld a, [wce06]
+	add $32
+	ld [wce06], a
+	jr .check_energy_cards
+
+.more_than_3_cards
+	cp 9
+	jr c, .check_energy_cards
+
+; more than 8 cards
+	ld a, [wce06]
+	sub $1e
+	ld [wce06], a
+
+.check_energy_cards
+	farcall CreateEnergyCardListFromHand
+	jr nc, .handle_blastoise
+
+; no energy cards in hand
+	ld a, [wce06]
+	add $28
+	ld [wce06], a
+
+.handle_blastoise
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .check_hand
+
+; no Muk in Play Area
+	ld a, BLASTOISE
+	call CountPokemonIDInPlayArea
+	jr nc, .check_hand
+
+; at least one Blastoise in AI Play Area
+	ld a, WATER_ENERGY
+	farcall LookForCardIDInHand
+	jr nc, .check_hand
+
+; no Water energy in hand
+	ld a, [wce06]
+	add $0a
+	ld [wce06], a
+
+; this part seems buggy
+; the AI loops through all the cards in hand and checks
+; if any of them is not a Pokemon card and has Basic stage.
+; it seems like the intention was that if there was
+; any Basic Pokemon still in hand, the AI would add to the score.
+.check_hand
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.loop_hand
+	ld a, [hli]
+	cp $ff
+	jr z, .check_evolution
+
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr c, .loop_hand ; bug, should be jr nc
+
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .loop_hand
+
+	ld a, [wce06]
+	add $0a
+	ld [wce06], a
+
+.check_evolution
+	xor a
+	ld [wce0f], a
+	ld [wce0f + 1], a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+.loop_play_area
+	push de
+	call .LookForEvolution
+	pop de
+	jr nc, .not_in_hand
+
+; there's a card in hand that can evolve
+	ld a, $01
+	ld [wce0f], a
+
+.not_in_hand
+; check if a card that can evolve was found at all
+; if not, go to the next card in the Play Area
+	ld a, [wce08]
+	cp $01
+	jr nz, .next_play_area
+
+; if it was found, set wce0f + 1 to $01
+	ld a, $01
+	ld [wce0f + 1], a
+
+.next_play_area
+	inc e
+	dec d
+	jr nz, .loop_play_area
+
+; if a card was found that evolves...
+	ld a, [wce0f + 1]
+	or a
+	jr z, .check_score
+
+; ...but that card is not in the hand...
+	ld a, [wce0f]
+	or a
+	jr nz, .check_score
+
+; ...add to the score
+	ld a, [wce06]
+	add $0a
+	ld [wce06], a
+
+; only return carry if score >  $3c
+.check_score
+	ld a, [wce06]
+	ld b, $3c
+	cp b
+	jr nc, .set_carry
+	or a
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x20d9d
+
+; return carry if there's a card in the hand that
+; can evolve the card in Play Area location in e.
+; sets wce08 to $01 if any card is found that can
+; evolve regardless of card location.
+.LookForEvolution ; 20d9d (8:4d9d)
+	xor a
+	ld [wce08], a
+	ld d, 0
+
+; loop through the whole deck to check if there's
+; a card that can evolve this Pokemon.
+.loop_deck_evolution
+	push de
+	call CheckIfCanEvolveInto
+	pop de
+	jr nc, .can_evolve
+.evolution_not_in_hand
+	inc d
+	ld a, DECK_SIZE
+	cp d
+	jr nz, .loop_deck_evolution
+
+	or a
+	ret
+
+; a card was found that can evolve, set wce08 to $01
+; and if the card is in the hand, return carry.
+; otherwise resume looping through deck.
+.can_evolve
+	ld a, $01
+	ld [wce08], a
+	ld a, DUELVARS_CARD_LOCATIONS
+	add d
+	call GetTurnDuelistVariable
+	cp CARD_LOCATION_HAND
+	jr nz, .evolution_not_in_hand
+
+	scf
+	ret
+; 0x20dc3
+
+; handles Legendary Articuno Deck AI logic.
+.HandleLegendaryArticunoDeck ; 20dc3 (8:4dc3)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 3
+	jr nc, .check_playable_cards
+
+; has less than 3 Pokemon in Play Area.
+	push af
+	call CreateHandCardList
+	pop af
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+; if no cards in hand evolve cards in Play Area,
+; returns carry.
+.loop_play_area_articuno
+	ld a, DUELVARS_ARENA_CARD
+	add e
+
+	push de
+	call GetTurnDuelistVariable
+	farcall CheckForEvolutionInList
+	pop de
+	jr c, .check_playable_cards
+
+	inc e
+	ld a, d
+	cp e
+	jr nz, .loop_play_area_articuno
+
+.set_carry_articuno
+	scf
+	ret
+
+; if there are more than 3 energy cards in hand,
+; return no carry, otherwise check for playable cards.
+.check_playable_cards
+	call CountEnergyCardsInHand
+	cp 4
+	jr nc, .no_carry_articuno
+
+; remove both Professor Oak cards from list
+; before checking for playable cards
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld e, PROFESSOR_OAK
+	farcall RemoveCardIDInList
+	ld e, PROFESSOR_OAK
+	farcall RemoveCardIDInList
+
+; look in hand for cards that can be played.
+; if a card that cannot be played is found, return no carry.
+; otherwise return carry.
+.loop_hand_articuno
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry_articuno
+	push hl
+	farcall CheckIfCardCanBePlayed
+	pop hl
+	jr c, .loop_hand_articuno
+
+.no_carry_articuno
+	or a
+	ret
+; 0x20e11
+
+; handles Excavation deck AI logic.
+; sets score depending on whether there's no
+; Mysterious Fossil in play and in hand.
+.HandleExcavationDeck ; 20e11 (8:4e11)
+; return no carry if cards in deck < 15
+	ld a, [hl]
+	cp 46
+	ret nc
+
+; look for Mysterious Fossil
+	ld a, MYSTERIOUS_FOSSIL
+	call LookForCardIDInHandAndPlayArea
+	jr c, .found_mysterious_fossil
+	ld a, $50
+	ld [wce06], a
+	jp .check_cards_hand
+.found_mysterious_fossil
+	ld a, $1e
+	ld [wce06], a
+	jp .check_cards_hand
+; 0x20e2c
+
+; handles Wonders of Science AI logic.
+; if there's either Grimer or Muk in hand,
+; do not play Professor Oak.
+.HandleWondersOfScienceDeck ; 20e2c (8:4e2c)
+	ld a, GRIMER
+	call LookForCardIDInHandList_Bank8
+	jr c, .found_grimer_or_muk
+	ld a, MUK
+	call LookForCardIDInHandList_Bank8
+	jr c, .found_grimer_or_muk
+
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	jp .check_cards_deck
+
+.found_grimer_or_muk
+	or a
+	ret
+; 0x20e44
+
+	INCROM $20e44, $2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
@@ -2599,7 +2930,7 @@ CopyBuffer: ; 2297b (8:697b)
 ; 0x22983
 
 ; zeroes a bytes starting at hl
-ZeroData_Bank8: ; 22983 (8:6983)
+ClearMemory_Bank8: ; 22983 (8:6983)
 	push af
 	push bc
 	push hl
@@ -2655,7 +2986,102 @@ ConvertHPToCounters: ; 229a3 (8:69a3)
 ; 0x229b0
 
 Func_229b0 ; 229b0 (8:69b0)
-	INCROM $229b0, $22bad
+	INCROM $229b0, $229f3
+
+; return carry if card ID loaded in a is found in hand
+; and outputs in a the deck index of that card
+; input:
+;	a = card ID
+; output:
+; 	a = card deck index, if found
+;	carry set if found
+LookForCardIDInHandList_Bank8: ; 229f3 (8:69f3)
+	ld [wTempCardIDToLook], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+
+	ldh [hTempCardIndex_ff98], a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld b, a
+	ld a, [wTempCardIDToLook]
+	cp b
+	jr nz, .loop
+
+	ldh a, [hTempCardIndex_ff98]
+	scf
+	ret
+; 0x22a10
+
+Func_22a10 ; 22a10 (8:6a10)
+	INCROM $22a10, $22a39
+
+; returns carry if card ID in a
+; is found in Play Area or in hand
+; input:
+;	a = card ID
+LookForCardIDInHandAndPlayArea: ; 22a39 (8:6a39)
+	ld b, a
+	push bc
+	call LookForCardIDInHandList_Bank8
+	pop bc
+	ret c
+
+	ld a, b
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank8
+	ret c
+	or a
+	ret
+; 0x22a49
+
+Func_22a49 ; 22a49 (8:6a49)
+	INCROM $22a49, $22a72
+
+; returns carry if card ID in a
+; is found in Play Area, starting with
+; location in b
+; input:
+;	a = card ID
+;	b = PLAY_AREA_* to start with
+; ouput:
+;	a = PLAY_AREA_* of found card
+;	carry set if found
+LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
+	ld [wTempCardIDToLook], a
+.loop
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	cp $ff
+	ret z
+
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld c, a
+	ld a, [wTempCardIDToLook]
+	cp c
+	jr z, .is_same
+
+	inc b
+	ld a, MAX_PLAY_AREA_POKEMON
+	cp b
+	jr nz, .loop
+	ld b, $ff
+	or a
+	ret
+
+.is_same
+	ld a, b
+	scf
+	ret
+; 0x22a95
+
+Func_22a95 ; 22a95 (8:6a95)
+	INCROM $22a95, $22bad
 
 ; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)

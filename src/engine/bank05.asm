@@ -634,7 +634,7 @@ CreateEnergyCardListFromHand: ; 1438c (5:438c)
 
 ; looks for card ID in hand and
 ; sets carry if a card wasn't found
-; as opposed to LookForCardIDInHandList
+; as opposed to LookForCardIDInHandList_Bank5
 ; this function doesn't create a list
 ; and preserves hl, de and bc
 ; input:
@@ -1317,7 +1317,7 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 .lapras
 	ld a, LAPRAS
 	ld b, PLAY_AREA_BENCH_1
-	call LookForCardIDInBench
+	call LookForCardIDInPlayArea_Bank5
 	jr nc, .articuno
 	ld e, a
 	call CountNumberOfEnergyCardsAttached
@@ -1330,7 +1330,7 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 .articuno
 	ld a, ARTICUNO1
 	ld b, PLAY_AREA_BENCH_1
-	call LookForCardIDInBench
+	call LookForCardIDInPlayArea_Bank5
 	jr nc, .dewgong
 	ld a, ARTICUNO1
 	call RaiseAIScoreToAllMatchingIDsInBench
@@ -1339,7 +1339,7 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 .dewgong
 	ld a, DEWGONG
 	ld b, PLAY_AREA_BENCH_1
-	call LookForCardIDInBench
+	call LookForCardIDInPlayArea_Bank5
 	jr nc, .seel
 	ld a, DEWGONG
 	call RaiseAIScoreToAllMatchingIDsInBench
@@ -1348,7 +1348,7 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 .seel
 	ld a, SEEL
 	ld b, PLAY_AREA_BENCH_1
-	call LookForCardIDInBench
+	call LookForCardIDInPlayArea_Bank5
 	ret nc
 	ld a, SEEL
 	call RaiseAIScoreToAllMatchingIDsInBench
@@ -1386,7 +1386,7 @@ Data_1514f: ; 1514f (5:514f)
 ; output:
 ; 	a = card deck index, if found
 ;	carry set if found
-LookForCardIDInHandList: ; 155d2 (5:55d2)
+LookForCardIDInHandList_Bank5: ; 155d2 (5:55d2)
 	ld [wTempCardIDToLook], a
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -1408,7 +1408,7 @@ LookForCardIDInHandList: ; 155d2 (5:55d2)
 ; 0x155ef
 
 ; returns carry if card ID in a
-; is found in bench, starting with
+; is found in Play Area, starting with
 ; location in b
 ; input:
 ;	a = card ID
@@ -1416,7 +1416,7 @@ LookForCardIDInHandList: ; 155d2 (5:55d2)
 ; ouput:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
-LookForCardIDInBench: ; 155ef (5:55ef)
+LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
 	ld [wTempCardIDToLook], a
 
 .loop
@@ -1450,7 +1450,7 @@ Func_15612: ; 15612 (5:5612)
 Func_15636: ; 15636 (5:5636)
 	ld a, $10
 	ld hl, wcda5
-	call ZeroData_Bank5
+	call ClearMemory_Bank5
 	ld a, $5
 	ld [wcda6], a
 	ld a, $ff
@@ -1642,7 +1642,7 @@ CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
 ; 0x1575e
 
 ; zeroes a bytes starting at hl
-ZeroData_Bank5: ; 1575e (5:575e)
+ClearMemory_Bank5: ; 1575e (5:575e)
 	push af
 	push bc
 	push hl
@@ -1766,7 +1766,62 @@ CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
 ; 0x157c6
 
 Func_157c6: ; 157c6 (5:57c6)
-	INCROM $157c6, $158b2
+	INCROM $157c6, $157f3
+
+; returns carry if any card with ID in e is found
+; in the list that is pointed by hl.
+; if one is found, it is removed from the list.
+; input:
+;   e  = card ID to look for.
+;   hl = list to look in
+RemoveCardIDInList: ; 157f3 (5:57f3)
+	push hl
+	push de
+	push bc
+	ld c, e
+
+.loop_1
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+
+	ldh [hTempCardIndex_ff98], a
+	call GetCardIDFromDeckIndex
+	ld a, c
+	cp e
+	jr nz, .loop_1
+
+; found
+	ld d, h
+	ld e, l
+	dec hl
+
+; remove this index from the list
+; and reposition the rest of the list ahead.
+.loop_2
+	ld a, [de]
+	inc de
+	ld [hli], a
+	cp $ff
+	jr nz, .loop_2
+
+	ldh a, [hTempCardIndex_ff98]
+	pop bc
+	pop de
+	pop hl
+	scf
+	ret
+
+.no_carry
+	pop bc
+	pop de
+	pop hl
+	or a
+	ret
+; 0x1581b
+
+Func_1581b: ; 1581b (5:581b)
+	INCROM $1581b, $158b2
 
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
@@ -3536,7 +3591,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 	or a
 	jr z, .one_colorless
 	ld a, e
-	call LookForCardIDInHandList
+	call LookForCardIDInHandList_Bank5
 	ret c
 	jr .no_carry
 
@@ -3548,7 +3603,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 
 .two_colorless
 	ld a, DOUBLE_COLORLESS_ENERGY
-	call LookForCardIDInHandList
+	call LookForCardIDInHandList_Bank5
 	ret c
 	jr .no_carry
 ; 0x16311
@@ -3583,7 +3638,7 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 	or a
 	jr z, .one_colorless
 	ld a, e
-	call LookForCardIDInHandList
+	call LookForCardIDInHandList_Bank5
 	ret c
 	jr .done
 
@@ -3595,7 +3650,7 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 
 .two_colorless
 	ld a, DOUBLE_COLORLESS_ENERGY
-	call LookForCardIDInHandList
+	call LookForCardIDInHandList_Bank5
 	ret c
 	jr .done
 ; 0x1633f
@@ -6752,7 +6807,7 @@ RaiseAIScoreToAllMatchingIDsInBench: ; 174cd (5:74cd)
 Func_174f2: ; 174f2 (5:74f2)
 	ld a, MAX_PLAY_AREA_POKEMON
 	ld hl, wcdfa
-	call ZeroData_Bank5
+	call ClearMemory_Bank5
 	ld a, DUELVARS_BENCH
 	call GetTurnDuelistVariable
 	ld e, 0
@@ -6761,7 +6816,7 @@ Func_174f2: ; 174f2 (5:74f2)
 	push hl
 	ld a, MAX_PLAY_AREA_POKEMON
 	ld hl, wcdea
-	call ZeroData_Bank5
+	call ClearMemory_Bank5
 	pop hl
 	inc e
 	ld a, [hli]
