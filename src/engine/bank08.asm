@@ -22,7 +22,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   CheckTwoEnergyCardsToRemoveInPlayArea, AIPlaySuperEnergyRemoval
 	unknown_data_20000 $07, POKEMON_BREEDER,        CheckIfCanEvolve2StageFromHand, AIPlayPokemonBreeder
 	unknown_data_20000 $0f, PROFESSOR_OAK,          CheckIfCanPlayProfessorOak, AIPlayProfessorOak
-	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       $4e6e, $4e44
+	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       CheckEnergyRetrievalCardsToPick, AIPlayEnergyRetrieval
 	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, $4fc1, $4f80
 	unknown_data_20000 $06, POKEMON_CENTER,         $50eb, $50e0
 	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, $517b, $5170
@@ -1741,7 +1741,7 @@ CheckTwoEnergyCardsToRemoveInPlayArea: ; 209bc (8:49bc)
 	ret z
 	call LoadCardDataToBuffer1_FromDeckIndex
 	cp DOUBLE_COLORLESS_ENERGY
-	; any non-double colorless energy card
+	; any basic energy card
 	; will set carry flag here
 	jr nc, .loop_2
 	ret
@@ -1751,7 +1751,7 @@ CheckTwoEnergyCardsToRemoveInPlayArea: ; 209bc (8:49bc)
 	ret
 
 ; card in Play Area location e was found with
-; a non-double colorless energy card
+; a basic energy card
 .not_double_colorless
 	ld a, e
 	ld [wce0f], a
@@ -2664,7 +2664,319 @@ CheckIfCanPlayProfessorOak: ; 20cc1 (8:4cc1)
 	ret
 ; 0x20e44
 
-	INCROM $20e44, $2282e
+AIPlayEnergyRetrieval: ; 20e44 (8:4e44)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1a]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce1b]
+	ldh [hTempRetreatCostCards], a
+	cp $ff
+	jr z, .asm_20e68
+	ld a, $ff
+	ldh [$ffa3], a
+.asm_20e68
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x20e6e
+
+; checks whether AI can play Energy Retrieval and
+; picks the energy cards from the discard pile,
+; and duplicate cards in hand to discard.
+CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
+; return no carry if no cards in hand
+	farcall CreateEnergyCardListFromHand
+	jp nc, .no_carry
+
+; handle Go Go Rain Dance deck
+; return no carry if there's no Muk card in play and
+; if there's no Blastoise card in Play Area
+; if there's a Muk in play, continue as normal
+	ld a, [wOpponentDeckID]
+	cp GO_GO_RAIN_DANCE_DECK_ID
+	jr nz, .start
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .start
+	ld a, BLASTOISE
+	call CountPokemonIDInPlayArea
+	jp nc, .no_carry
+
+.start
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	call .CheckDuplicatePokemonAndNonPokemonCards
+	jp c, .no_carry
+
+	ld [wce06], a
+	ld a, CARD_LOCATION_DISCARD_PILE
+	call FindBasicEnergyCardsInLocation
+	jp c, .no_carry
+
+; some basic energy cards were found in Discard Pile
+	ld a, $ff
+	ld [wce1a], a
+	ld [wce1b], a
+	ld [wce1c], a
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+
+; first check if there are useful energy cards in the list
+; and choose them for retrieval first
+.loop_play_area
+	ld a, DUELVARS_ARENA_CARD
+	add e
+	push de
+
+; load this card's ID in wTempCardID
+; and this card's Type in wTempCardType
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	ld [wTempCardID], a
+	call LoadCardDataToBuffer1_FromCardID
+	pop de
+	ld a, [wLoadedCard1Type]
+	or TYPE_ENERGY
+	ld [wTempCardType], a
+
+; loop the energy cards in the Discard Pile
+; and check if they are useful for this Pokemon
+	ld hl, wDuelTempList
+.loop_energy_cards_1
+	ld a, [hli]
+	cp $ff
+	jr z, .next_play_area
+
+	ld b, a
+	push hl
+	farcall CheckIfEnergyIsUseful
+	pop hl
+	jr nc, .loop_energy_cards_1
+
+	ld a, [wce1a]
+	cp $ff
+	jr nz, .second_energy_1
+
+; check if there were already chosen cards,
+; if this is the second chosen card, return carry
+
+; first energy card found
+	ld a, b
+	ld [wce1a], a
+	call .RemoveEnergyCardFromList
+	jr .next_play_area
+.second_energy_1
+	ld a, b
+	ld [wce1b], a
+	jr .set_carry
+
+.next_play_area
+	inc e
+	dec d
+	jr nz, .loop_play_area
+
+; next, if there are still energy cards left to choose,
+; loop through the energy cards again and select
+; them in order.
+	ld hl, wDuelTempList
+.loop_energy_cards_2
+	ld a, [hli]
+	cp $ff
+	jr z, .check_chosen
+	ld b, a
+	ld a, [wce1a]
+	cp $ff
+	jr nz, .second_energy_2
+	ld a, b
+	ld [wce1a], a
+	call .RemoveEnergyCardFromList
+	jr .loop_energy_cards_2
+
+.second_energy_2
+	ld a, b
+	ld [wce1b], a
+	jr .set_carry
+
+; will set carry if at least one has been chosen
+.check_chosen
+	ld a, [wce1a]
+	cp $ff
+	jr nz, .set_carry
+.no_carry
+	or a
+	ret
+
+.set_carry
+	ld a, [wce06]
+	scf
+	ret
+; 0x20f27
+
+; function to remove an element from the list
+; and shorten it accordingly
+.RemoveEnergyCardFromList: ; 20f27 (8:4f27)
+	push de
+	ld d, h
+	ld e, l
+	dec hl
+	push hl
+.loop_remove
+	ld a, [de]
+	ld [hli], a
+	cp $ff
+	jr z, .done_remove
+	inc de
+	jr .loop_remove
+.done_remove
+	pop hl
+	pop de
+	ret
+; 0x20f38
+
+; returns carry if duplicate cards with found for
+; at least one Pokemon card and at least one Non-Pokemon card
+.CheckDuplicatePokemonAndNonPokemonCards ; 20f38 (8:4f38)
+	ld a, $ff
+	ld [wce0f], a
+	ld [wce0f + 1], a
+	push hl
+
+.loop_outer
+; get ID of current card
+	pop hl
+	ld a, [hli]
+	cp $ff
+	jr z, .check_found
+	call GetCardIDFromDeckIndex
+	ld b, e
+	push hl
+
+; loop the rest of the list to find
+; another card with the same ID
+.loop_inner
+	ld a, [hli]
+	cp $ff
+	jr z, .loop_outer
+	ld c, a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp b
+	jr nz, .loop_inner
+
+; found two cards with same ID
+	push bc
+	call GetCardType
+	pop bc
+	cp TYPE_ENERGY
+	jr c, .not_energy
+
+; they are energy or trainer cards
+; loads wce0f+1 with this card deck index
+	ld a, c
+	ld [wce0f + 1], a
+	jr .loop_outer
+
+.not_energy
+; they are Pokemon cards
+; loads wce0f with this card deck index
+	ld a, c
+	ld [wce0f], a
+	jr .loop_outer
+
+.check_found
+	ld a, [wce0f]
+	cp $ff
+	jr nz, .no_carry_duplicate
+	ld a, [wce0f + 1]
+	cp $ff
+	jr nz, .no_carry_duplicate
+
+; only set carry if duplicate cards were found
+; for both Pokemon and Non-Pokemon cards
+	scf
+	ret
+
+.no_carry_duplicate
+; two cards with the same ID were not found
+; of either Pokemon and Non-Pokemon cards
+	or a
+	ret
+; 0x20f80
+
+	INCROM $20f80, $227f6
+
+; lists in wDuelTempList all the basic energy cards
+; is card location of a.
+; returns carry if none were found.
+; input:
+;   a = CARD_LOCATION_* to look
+FindBasicEnergyCardsInLocation: ; 227f6 (8:67f6)
+	ld [wTempAI], a
+	lb de, 0, 0
+	ld hl, wDuelTempList
+
+; d = number of basic energy cards found
+; e = current card in deck
+; loop entire deck
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	push hl
+	call GetTurnDuelistVariable
+	ld hl, wTempAI
+	cp [hl]
+	pop hl
+	jr nz, .next_card
+
+; is in the card location we're looking for
+	ld a, e
+	push de
+	push hl
+	call GetCardIDFromDeckIndex
+	pop hl
+	ld a, e
+	pop de
+	cp DOUBLE_COLORLESS_ENERGY
+	; only basic energy cards
+	; will set carry here
+	jr nc, .next_card
+
+; is a basic energy card
+; add this card to the TempList
+	ld a, e
+	ld [hli], a
+	inc d
+.next_card
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop
+
+; check if any were found
+	ld a, d
+	or a
+	jr z, .set_carry
+
+; some were found, add the termination byte on TempList
+	ld a, $ff
+	ld [hl], a
+	ld a, d
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x2282e
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
