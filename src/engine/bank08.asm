@@ -31,8 +31,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $07, FULL_HEAL,              CheckWhetherToPlayFullHeal, AIPlayFullHeal
 	unknown_data_20000 $0a, MR_FUJI,                CheckWhetherToPlayMrFuji, AIPlayMrFuji
 	unknown_data_20000 $0a, SCOOP_UP,               CheckWhetherToPlayScoopUp, AIPlayScoopUp
-	unknown_data_20000 $02, MAINTENANCE,            $562c, $560f
-	unknown_data_20000 $03, RECYCLE,                $56b8, $569a
+	unknown_data_20000 $02, MAINTENANCE,            CheckWhetherToPlayMaintencance, AIPlayMaintenance
+	unknown_data_20000 $03, RECYCLE,                CheckWhetherToPlayRecycle, AIPlayRecycle
 	unknown_data_20000 $0d, LASS,                   $5768, $5755
 	unknown_data_20000 $04, ITEM_FINDER,            $57b1, $578f
 	unknown_data_20000 $01, IMAKUNI_CARD,           $581e, $5813
@@ -2712,7 +2712,7 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 ; find duplicate cards in hand
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	call CheckDuplicatePokemonAndNonPokemonCards
+	call FindDuplicateCards
 	jp c, .no_carry
 
 	ld [wce06], a
@@ -2846,13 +2846,17 @@ RemoveCardFromList: ; 20f27 (8:4f27)
 	ret
 ; 0x20f38
 
-; returns carry if duplicate cards are found for
-; at least one Pokemon card and at least one Non-Pokemon card
+; finds duplicates in card list in hl.
+; if a duplicate of Pokemon cards are found, return in
+; a the deck index of the second one.
+; otherwise, if a duplicate of non-Pokemon cards are found
+; return in a the deck index of the second one.
+; if no duplicates found, return carry.
 ; input:
 ;   hl = list to look in
 ; output:
-;   a = deck index of duplicate non-Pokemon card
-CheckDuplicatePokemonAndNonPokemonCards: ; 20f38 (8:4f38)
+;   a = deck index of duplicate card
+FindDuplicateCards: ; 20f38 (8:4f38)
 	ld a, $ff
 	ld [wce0f], a
 	ld [wce0f + 1], a
@@ -2908,14 +2912,13 @@ CheckDuplicatePokemonAndNonPokemonCards: ; 20f38 (8:4f38)
 	cp $ff
 	jr nz, .no_carry
 
-; only set carry if duplicate cards were found
-; for both Pokemon and Non-Pokemon cards
+; only set carry if duplicate cards were not found
 	scf
 	ret
 
 .no_carry
-; two cards with the same ID were not found
-; of either Pokemon and Non-Pokemon cards
+; two cards with the same ID were found
+; of either Pokemon or Non-Pokemon cards
 	or a
 	ret
 ; 0x20f80
@@ -2975,15 +2978,15 @@ CheckSuperEnergyRetrievalCardsToPick: ; 20fc1 (8:4fc1)
 ; find duplicate cards in hand
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	call CheckDuplicatePokemonAndNonPokemonCards
+	call FindDuplicateCards
 	jp c, .no_carry
 
-; remove the duplicate non-Pokemon card in hand
+; remove the duplicate card in hand
 ; and run the hand check again
 	ld [wce06], a
 	ld hl, wDuelTempList
-	call .RemoveDuplicateCardFromHandList
-	call CheckDuplicatePokemonAndNonPokemonCards
+	call FindAndRemoveCardFromList
+	call FindDuplicateCards
 	jp c, .no_carry
 
 	ld [wce08], a
@@ -3133,9 +3136,14 @@ CheckSuperEnergyRetrievalCardsToPick: ; 20fc1 (8:4fc1)
 	ret
 ; 0x210d5
 
-; finds the energy card that was found to be a duplicate
-; and removes it from the hand card list.
-.RemoveDuplicateCardFromHandList ; 210d5 (8:50d5)
+; finds the card with deck index a in list hl,
+; and removes it from the list.
+; the card HAS to exist in the list, since this
+; routine does not check for the terminating byte $ff!
+; input:
+;   a  = card deck index to look
+;   hl = pointer to list of cards
+FindAndRemoveCardFromList: ; 210d5 (8:50d5)
 	push hl
 	ld b, a
 .loop_duplicate
@@ -3184,7 +3192,7 @@ CheckIfCanPlayPokemonCenter: ; 210eb (8:50eb)
 	push de
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld a, e
+	ld a, e ; useless instruction
 	pop de
 
 ; get this Pokemon's current HP in number of counters
@@ -4228,8 +4236,248 @@ CheckWhetherToPlayScoopUp: ; 21506 (8:5506)
 	jp .no_carry
 ; 0x2160f
 
-Func_2160f: ; 2160f (8:560f)
-	INCROM $2160f, $227f6
+AIPlayMaintenance: ; 2160f (8:560f)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce1a]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1b]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x2162c
+
+; AI logic for playing Maintenance
+CheckWhetherToPlayMaintencance: ; 2162c (8:562c)
+; Imakuni? has his own thing
+	ld a, [wOpponentDeckID]
+	cp IMAKUNI_DECK_ID
+	jr z, .imakuni
+
+; skip if number of cars in hand < 4.
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 4
+	jr c, .no_carry
+
+; list out all the hand cards and remove
+; the card in wce16. Then find any duplicate cards.
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld a, [wce16]
+	call FindAndRemoveCardFromList
+; if duplicates are not found, return no carry.
+	call FindDuplicateCards
+	jp c, .no_carry
+
+; store the first duplicate card and remove it from the list.
+; run duplicate check again.
+	ld [wce1a], a
+	ld hl, wDuelTempList
+	call FindAndRemoveCardFromList
+; if duplicates are not found, return no carry.
+	call FindDuplicateCards
+	jp c, .no_carry
+
+; store the second duplicate card and return carry.
+	ld [wce1b], a
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+
+.imakuni
+; has a 2 in 10 chance of not skipping.
+	ld a, 10
+	call Random
+	cp 2
+	jr nc, .no_carry
+
+; skip if number of cards in hand < 3.
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 3
+	jr c, .no_carry
+
+; shuffle hand cards
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	call CountCardsInDuelTempList
+	call ShuffleCards
+
+; go through each card and find
+; cards that are different from wce16.
+; if found, add those cards to wce1a and wce1a+1.
+	ld a, [wce16]
+	ld b, a
+	ld c, 2
+	ld de, wce1a
+
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	cp b
+	jr z, .loop
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+
+; two cards were found, return carry.
+	scf
+	ret
+; 0x2169a
+
+AIPlayRecycle: ; 2169a (8:569a)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld de, $ef
+	bank1call TossCoin
+	jr nc, .asm_216ae
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	jr .asm_216b2
+.asm_216ae
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+.asm_216b2
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x216b8
+
+; lists cards to look for in the Discard Pile.
+; has priorities for Ghost Deck, and a "default" priority list
+; (which is the Fire Charge deck, since it's the only other
+; deck that runs a Recycle card in it.)
+CheckWhetherToPlayRecycle: ; 216b8 (8:56b8)
+; no use checking if no cards in Discard Pile
+	call CreateDiscardPileCardList
+	jr c, .no_carry
+
+	ld a, $ff
+	ld [wce08], a
+	ld [wce08 + 1], a
+	ld [wce08 + 2], a
+	ld [wce08 + 3], a
+	ld [wce08 + 4], a
+
+; handle Ghost deck differently
+	ld hl, wDuelTempList
+	ld a, [wOpponentDeckID]
+	cp GHOST_DECK_ID
+	jr z, .loop_2
+
+; priority list for Fire Charge deck
+.loop_1
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; double colorless
+	cp DOUBLE_COLORLESS_ENERGY
+	jr nz, .chansey
+	ld a, b
+	ld [wce08], a
+	jr .loop_1
+
+.chansey
+	cp CHANSEY
+	jr nz, .tauros
+	ld a, b
+	ld [wce08 + 1], a
+	jr .loop_1
+
+.tauros
+	cp TAUROS
+	jr nz, .jigglypuff
+	ld a, b
+	ld [wce08 + 2], a
+	jr .loop_1
+
+.jigglypuff
+	cp JIGGLYPUFF1
+	jr nz, .loop_1
+	ld a, b
+	ld [wce08 + 3], a
+	jr .loop_1
+
+; loop through wce08 and set carry
+; on the first that was found in Discard Pile.
+; if none were found, return no carry.
+.done
+	ld hl, wce08
+	ld b, 5
+.loop_found
+	ld a, [hli]
+	cp $ff
+	jr nz, .set_carry
+	dec b
+	jr nz, .loop_found
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+
+; priority list for Ghost deck
+.loop_2
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; gastly2
+	cp GASTLY2
+	jr nz, .gastly1
+	ld a, b
+	ld [wce08], a
+	jr .loop_2
+
+.gastly1
+	cp GASTLY1
+	jr nz, .zubat
+	ld a, b
+	ld [wce08 + 1], a
+	jr .loop_2
+
+.zubat
+	cp ZUBAT
+	jr nz, .ditto
+	ld a, b
+	ld [wce08 + 2], a
+	jr .loop_2
+
+.ditto
+	cp DITTO
+	jr nz, .meowth
+	ld a, b
+	ld [wce08 + 3], a
+	jr .loop_2
+
+.meowth
+	cp MEOWTH2
+	jr nz, .loop_2
+	ld a, b
+	ld [wce08 + 4], a
+	jr .loop_2
+; 0x21755
+
+Func_21755: ; 21755 (8:5755)
+	INCROM $21755, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
