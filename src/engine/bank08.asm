@@ -35,13 +35,13 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $03, RECYCLE,                CheckWhetherToPlayRecycle, AIPlayRecycle
 	unknown_data_20000 $0d, LASS,                   CheckWhetherToPlayLass, AIPlayLass
 	unknown_data_20000 $04, ITEM_FINDER,            CheckWhetherToPlayItemFinder, AIPlayItemFinder
-	unknown_data_20000 $01, IMAKUNI_CARD,           $581e, $5813
-	unknown_data_20000 $01, GAMBLER,                $5875, $582d
-	unknown_data_20000 $05, REVIVE,                 $58a9, $5899
-	unknown_data_20000 $0d, POKEMON_FLUTE,          $58e8, $58d8
-	unknown_data_20000 $05, CLEFAIRY_DOLL,          $5982, $5977
-	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      $5982, $5977
-	unknown_data_20000 $02, POKE_BALL,              $59c6, $59a6
+	unknown_data_20000 $01, IMAKUNI_CARD,           CheckWhetherToPlayImakuni, AIPlayImakuni
+	unknown_data_20000 $01, GAMBLER,                CheckWhetherToPlayGambler, AIPlayGambler
+	unknown_data_20000 $05, REVIVE,                 CheckWhetherToPlayRevive, AIPlayRevive
+	unknown_data_20000 $0d, POKEMON_FLUTE,          CheckWhetherToPlayPokemonFlute, AIPlayPokemonFlute
+	unknown_data_20000 $05, CLEFAIRY_DOLL,          CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
+	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
+	unknown_data_20000 $02, POKE_BALL,              CheckWhetherToPlayPokeball, AIPlayPokeball
 	unknown_data_20000 $02, COMPUTER_SEARCH,        $5b34, $5b12
 	unknown_data_20000 $02, POKEMON_TRADER,         $5d8f, $5d7a
 	db $ff
@@ -4530,7 +4530,7 @@ AIPlayItemFinder: ; 2178f (8:578f)
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, [wce19]
 	ldh [hTempRetreatCostCards], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x217b1
@@ -4611,8 +4611,527 @@ CheckWhetherToPlayItemFinder: ; 217b1 (8:57b1)
 	ret
 ; 0x21813
 
-Func_21813: ; 21813 (8:5813)
-	INCROM $21813, $227f6
+AIPlayImakuni: ; 21813 (8:5813)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x2181e
+
+; only sets carry if Active card is not confused.
+CheckWhetherToPlayImakuni: ; 2181e (8:581e)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp CONFUSED
+	jr z, .confused
+	scf
+	ret
+.confused
+	or a
+	ret
+; 0x2182d
+
+AIPlayGambler: ; 2182d (8:582d)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wOpponentDeckID]
+	cp IMAKUNI_DECK_ID
+	jr z, .asm_2186a
+	ld hl, wRNG1
+	ld a, [hli]
+	ld [wce06], a
+	ld a, [hli]
+	ld [wce08], a
+	ld a, [hl]
+	ld [wce0f], a
+	ld a, $50
+	ld [hld], a
+	ld [hld], a
+	ld [hl], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ld hl, wRNG1
+	ld a, [wce06]
+	ld [hli], a
+	ld a, [wce08]
+	ld [hli], a
+	ld a, [wce0f]
+	ld [hl], a
+	ret
+.asm_2186a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x21875
+
+; checks whether to play Gambler.
+; aside from Imakuni, all other opponents only
+; play if there's less than 4 cards in the deck.
+CheckWhetherToPlayGambler: ; 21875 (8:5875)
+; Imakuni? has his own routine
+	ld a, [wOpponentDeckID]
+	cp IMAKUNI_DECK_ID
+	jr z, .imakuni
+
+	ld a, [wcda7]
+	and $80
+	jr z, .no_carry
+
+; set carry if number of cards in deck <= 4
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE - 4
+	jr nc, .set_carry
+.no_carry
+	or a
+	ret
+
+.imakuni
+; has a 2 in 10 chance of returning carry
+	ld a, 10
+	call Random
+	cp 2
+	jr nc, .no_carry
+.set_carry
+	scf
+	ret
+; 0x21899
+
+AIPlayRevive: ; 21899 (8:5899)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x218a9
+
+; checks certain cards in Discard Pile to use Revive on.
+; suitable for Muscle For Brains deck only.
+CheckWhetherToPlayRevive: ; 218a9 (8:58a9)
+; skip if no cards in Discard Pile
+	call CreateDiscardPileCardList
+	jr c, .no_carry
+
+; skip if number of Pokemon cards in Play Area >= 4
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 4
+	jr nc, .no_carry
+
+; look in Discard Pile for specific cards.
+	ld hl, wDuelTempList
+.loop_discard_pile
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; these checks have a bug.
+; it works fine for Hitmonchan and Hitmonlee,
+; but in case it's a Tauros card, the routine will fallthrough
+; into the Kangaskhan check. since it will never be equal to Kangaskhan,
+; it will fallthrough into the set carry branch.
+; in case it's a Kangaskhan card, the check will fail in the Tauros check
+; and jump back into the loop. so just by accident the Tauros check works,
+; but Kangaskhan will never be correctly checked because of this.
+	cp HITMONCHAN
+	jr z, .set_carry
+	cp HITMONLEE
+	jr z, .set_carry
+	cp TAUROS
+	jr nz, .loop_discard_pile ; bug, these two lines should be swapped
+	cp KANGASKHAN
+	jr z, .set_carry ; bug, these two lines should be swapped
+
+.set_carry
+	ld a, b
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x218d8
+
+AIPlayPokemonFlute: ; 218d8 (8:58d8)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x218e8
+
+CheckWhetherToPlayPokemonFlute: ; 218e8 (8:58e8)
+; if player has no Discard Pile, skip.
+	call SwapTurn
+	call CreateDiscardPileCardList
+	call SwapTurn
+	jr c, .no_carry
+
+; if player's Play Area is already full, skip.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .no_carry
+
+	ld a, [wOpponentDeckID]
+	cp IMAKUNI_DECK_ID
+	jr z, .imakuni
+
+	ld a, $ff
+	ld [wce06], a
+	ld [wce08], a
+
+; find Basic stage Pokemon with lowest HP in Discard Pile
+	ld hl, wDuelTempList
+.loop_1
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+
+	ld b, a
+	call SwapTurn
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call SwapTurn
+; skip this card if it's not Pokemon card
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .loop_1
+; skip this card if it's not Basic Stage
+	ld a, [wLoadedCard1Stage]
+	or a ; BASIC
+	jr nz, .loop_1
+
+; compare this HP with one stored
+	ld a, [wLoadedCard1HP]
+	push hl
+	ld hl, wce06
+	cp [hl]
+	pop hl
+	jr nc, .loop_1
+; if lower, store this one
+	ld [wce06], a
+	ld a, b
+	ld [wce08], a
+	jr .loop_1
+
+.done
+; if lowest HP found >= 50, return no carry
+	ld a, [wce06]
+	cp 50
+	jr nc, .no_carry
+; otherwise output its deck index in a and set carry.
+	ld a, [wce08]
+	scf
+	ret
+.no_carry
+	or a
+	ret
+
+.imakuni
+; has 2 in 10 chance of not skipping
+	ld a, 10
+	call Random
+	cp 2
+	jr nc, .no_carry
+
+; look for any Basic Pokemon card
+	ld hl, wDuelTempList
+.loop_2
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	ld b, a
+	call SwapTurn
+	call LoadCardDataToBuffer1_FromDeckIndex
+	call SwapTurn
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .loop_2
+	ld a, [wLoadedCard1Stage]
+	or a ; BASIC
+	jr nz, .loop_2
+
+; a Basic stage Pokemon was found, return carry
+	ld a, b
+	scf
+	ret
+; 0x21977
+
+AIPlayClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x21982
+
+; AI logic for playing Clefairy Doll
+CheckWhetherToPlayClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
+; if has max number of Play Area Pokemon, skip
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .no_carry
+
+; store number of Play Area Pokemon cards
+	ld [wce06], a
+
+; if the Arena card is Wigglytuff, return carry
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp WIGGLYTUFF
+	jr z, .set_carry
+
+; if number of Play Area Pokemon >= 4, return no carry
+	ld a, [wce06]
+	cp 4
+	jr nc, .no_carry
+
+.set_carry
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x219a6
+
+AIPlayPokeball: ; 219a6 (8:59a6)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld de, $ef
+	bank1call TossCoin
+	ldh [hTemp_ffa0], a
+	jr nc, .asm_219bc
+	ld a, [wce19]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	jr .asm_219c0
+.asm_219bc
+	ld a, $ff
+	ldh [hTempPlayAreaLocation_ffa1], a
+.asm_219c0
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x219c6
+
+CheckWhetherToPlayPokeball: ; 219c6 (8:59c6)
+; go to the routines associated with deck ID
+	ld a, [wOpponentDeckID]
+	cp FIRE_CHARGE_DECK_ID
+	jr z, .fire_charge
+	cp HARD_POKEMON_DECK_ID
+	jr z, .hard_pokemon
+	cp PIKACHU_DECK_ID
+	jr z, .pikachu
+	cp ETCETERA_DECK_ID
+	jr z, .etcetera
+	cp LOVELY_NIDORAN_DECK_ID
+	jp z, .lovely_nidoran
+	or a
+	ret
+
+; this deck runs a deck check for specific
+; card IDs in order of decreasing priority
+.fire_charge
+	ld e, CHANSEY
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, TAUROS
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, JIGGLYPUFF1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ret
+
+; this deck runs a deck check for specific
+; card IDs in order of decreasing priority
+.hard_pokemon
+	ld e, RHYHORN
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, RHYDON
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, ONIX
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ret
+
+; this deck runs a deck check for specific
+; card IDs in order of decreasing priority
+.pikachu
+	ld e, PIKACHU2
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, PIKACHU3
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, PIKACHU4
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, PIKACHU1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, FLYING_PIKACHU
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ret
+
+; this deck runs a deck check for specific
+; card IDs in order of decreasing priority
+; given a specific energy card in hand.
+; also it avoids redundancy, so if it already
+; has that card ID in the hand, it is skipped.
+.etcetera
+; fire
+	ld a, FIRE_ENERGY
+	call LookForCardIDInHandList_Bank8
+	jr nc, .lightning
+	ld a, CHARMANDER
+	call LookForCardIDInHandList_Bank8
+	jr c, .lightning
+	ld a, MAGMAR2
+	call LookForCardIDInHandList_Bank8
+	jr c, .lightning
+	ld e, CHARMANDER
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, MAGMAR2
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+
+.lightning
+	ld a, LIGHTNING_ENERGY
+	call LookForCardIDInHandList_Bank8
+	jr nc, .fighting
+	ld a, PIKACHU1
+	call LookForCardIDInHandList_Bank8
+	jr c, .fighting
+	ld a, MAGNEMITE1
+	call LookForCardIDInHandList_Bank8
+	jr c, .fighting
+	ld e, PIKACHU1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, MAGNEMITE1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+
+.fighting
+	ld a, FIGHTING_ENERGY
+	call LookForCardIDInHandList_Bank8
+	jr nc, .psychic
+	ld a, DIGLETT
+	call LookForCardIDInHandList_Bank8
+	jr c, .psychic
+	ld a, MACHOP
+	call LookForCardIDInHandList_Bank8
+	jr c, .psychic
+	ld e, DIGLETT
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, MACHOP
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+
+.psychic
+	ld a, PSYCHIC_ENERGY
+	call LookForCardIDInHandList_Bank8
+	jr nc, .done_etcetera
+	ld a, GASTLY1
+	call LookForCardIDInHandList_Bank8
+	jr c, .done_etcetera
+	ld a, JYNX
+	call LookForCardIDInHandList_Bank8
+	jr c, .done_etcetera
+	ld e, GASTLY1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+	ld e, JYNX
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret c
+.done_etcetera
+	or a
+	ret
+
+; this deck looks for card evolutions if
+; its pre-evolution is in hand or in Play Area.
+; if none of these are found, it looks for pre-evolutions
+; of cards it has in hand.
+; it does this for both the NidoranM (first)
+; and NidoranF (second) families.
+.lovely_nidoran
+	ld b, NIDORANM
+	ld a, NIDORINO
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	ret c
+	ld b, NIDORINO
+	ld a, NIDOKING
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	ret c
+	ld a, NIDORANM
+	ld b, NIDORINO
+	call LookForCardIDInDeck_GivenCardIDInHand
+	ret c
+	ld a, NIDORINO
+	ld b, NIDOKING
+	call LookForCardIDInDeck_GivenCardIDInHand
+	ret c
+	ld b, NIDORANF
+	ld a, NIDORINA
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	ret c
+	ld b, NIDORINA
+	ld a, NIDOQUEEN
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	ret c
+	ld a, NIDORANF
+	ld b, NIDORINA
+	call LookForCardIDInDeck_GivenCardIDInHand
+	ret c
+	ld a, NIDORINA
+	ld b, NIDOQUEEN
+	call LookForCardIDInDeck_GivenCardIDInHand
+	ret c
+	ret
+; 0x21b12
+
+Func_21b12: ; 21b12 (8:5b12)
+	INCROM $21b12, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
@@ -5030,8 +5549,44 @@ CalculateBDividedByA_Bank8: ; 229c1 (8:69c1)
 	ret
 ; 0x229d0
 
-Func_229d0 ; 229d0 (8:69d0)
-	INCROM $229d0, $229f3
+; returns in a the deck index of the first
+; instance of card with ID equal to the ID in e
+; in card location a.
+; returns carry if found.
+; input:
+;   a = CARD_LOCATION_*
+;   e = card ID to look for
+LookForCardIDInLocation: ; 229d0 (8:69d0)
+	ld b, a
+	ld c, e
+	lb de, $00, 0 ; d is never used
+.loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp b
+	jr nz, .next
+	ld a, e
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp c
+	jr z, .found
+.next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop
+
+; not found
+	or a
+	ret
+.found
+	ld a, e
+	scf
+	ret
+; 0x229f3
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
@@ -5062,8 +5617,55 @@ LookForCardIDInHandList_Bank8: ; 229f3 (8:69f3)
 	ret
 ; 0x22a10
 
-Func_22a10 ; 22a10 (8:6a10)
-	INCROM $22a10, $22a39
+; searches in deck for card ID 1 in a, and
+; if found, searches in Hand/Play Area for card ID 2 in b, and
+; if found, searches for card ID 1 in Hand/Play Area, and
+; if none found, return carry and output deck index
+; of the card ID 1 in deck.
+; input:
+;   a = card ID 1
+;   b = card ID 2
+; output:
+;   a = index of card ID 1 in deck
+LookForCardIDInDeck_GivenCardIDInHandAndPlayArea: ; 22a10 (8:6a10)
+; store a in wCurCardCanAttack
+; and b in wTempAI
+	ld c, a
+	ld a, b
+	ld [wTempAI], a
+	ld a, c
+	ld [wCurCardCanAttack], a
+
+; look for the card ID 1 in deck
+	ld e, a
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret nc
+
+; was found, store its deck index in memory
+	ld [wTempAIPokemonCard], a
+
+; look for the card ID 2
+; in Hand and Play Area, return if not found.
+	ld a, [wTempAI]
+	call LookForCardIDInHandAndPlayArea
+	ret nc
+
+; look for the card ID 1 in the Hand and Play Area
+; if any card is found, return no carry.
+	ld a, [wCurCardCanAttack]
+	call LookForCardIDInHandAndPlayArea
+	jr c, .no_carry
+; none found
+
+	ld a, [wTempAIPokemonCard]
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+; 0x22a39
 
 ; returns carry if card ID in a
 ; is found in Play Area or in hand
@@ -5084,8 +5686,54 @@ LookForCardIDInHandAndPlayArea: ; 22a39 (8:6a39)
 	ret
 ; 0x22a49
 
-Func_22a49 ; 22a49 (8:6a49)
-	INCROM $22a49, $22a72
+; searches in deck for card ID 1 in a, and
+; if found, searches in Hand Area for card ID 2 in b, and
+; if found, searches for card ID 1 in Hand/Play Area, and
+; if none found, return carry and output deck index
+; of the card ID 1 in deck.
+; input:
+;   a = card ID 1
+;   b = card ID 2
+; output:
+;   a = index of card ID 1 in deck
+LookForCardIDInDeck_GivenCardIDInHand: ; 22a49 (8:6a49)
+; store a in wCurCardCanAttack
+; and b in wTempAI
+	ld c, a
+	ld a, b
+	ld [wTempAI], a
+	ld a, c
+	ld [wCurCardCanAttack], a
+
+; look for the card ID 1 in deck
+	ld e, a
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	ret nc
+
+; was found, store its deck index in memory
+	ld [wTempAIPokemonCard], a
+
+; look for the card ID 2 in hand, return if not found.
+	ld a, [wTempAI]
+	call LookForCardIDInHandList_Bank8
+	ret nc
+
+; look for the card ID 1 in the Hand and Play Area
+; if any card is found, return no carry.
+	ld a, [wCurCardCanAttack]
+	call LookForCardIDInHandAndPlayArea
+	jr c, .no_carry
+; none found
+
+	ld a, [wTempAIPokemonCard]
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+; 0x22a72
 
 ; returns carry if card ID in a
 ; is found in Play Area, starting with
