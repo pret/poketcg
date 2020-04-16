@@ -33,8 +33,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0a, SCOOP_UP,               CheckWhetherToPlayScoopUp, AIPlayScoopUp
 	unknown_data_20000 $02, MAINTENANCE,            CheckWhetherToPlayMaintencance, AIPlayMaintenance
 	unknown_data_20000 $03, RECYCLE,                CheckWhetherToPlayRecycle, AIPlayRecycle
-	unknown_data_20000 $0d, LASS,                   $5768, $5755
-	unknown_data_20000 $04, ITEM_FINDER,            $57b1, $578f
+	unknown_data_20000 $0d, LASS,                   CheckWhetherToPlayLass, AIPlayLass
+	unknown_data_20000 $04, ITEM_FINDER,            CheckWhetherToPlayItemFinder, AIPlayItemFinder
 	unknown_data_20000 $01, IMAKUNI_CARD,           $581e, $5813
 	unknown_data_20000 $01, GAMBLER,                $5875, $582d
 	unknown_data_20000 $05, REVIVE,                 $58a9, $5899
@@ -2826,7 +2826,7 @@ CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
 ; remove an element from the list
 ; and shortens it accordingly
 ; input:
-;   hl = pointer to element to remove
+;   hl = pointer to element after the one to remove
 RemoveCardFromList: ; 20f27 (8:4f27)
 	push de
 	ld d, h
@@ -2950,7 +2950,7 @@ AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
 	ld a, $ff
 	ldh [$ffa6], a
 .asm_20fbb
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x20fc1
@@ -3299,7 +3299,7 @@ AIPlayEnergySearch: ; 2119a (8:519a)
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce19]
 	ldh [hTemp_ffa0], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x211aa
@@ -3557,7 +3557,7 @@ AIPlayPokedex: ; 212b4 (8:52b4)
 	ldh [$ffa4], a
 	ld a, $ff
 	ldh [$ffa5], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x212dc
@@ -4348,7 +4348,7 @@ AIPlayRecycle: ; 2169a (8:569a)
 	ld a, $ff
 	ldh [hTemp_ffa0], a
 .asm_216b2
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x216b8
@@ -4476,8 +4476,143 @@ CheckWhetherToPlayRecycle: ; 216b8 (8:56b8)
 	jr .loop_2
 ; 0x21755
 
-Func_21755: ; 21755 (8:5755)
-	INCROM $21755, $227f6
+AIPlayLass: ; 21755 (8:5755)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x21768
+
+CheckWhetherToPlayLass: ; 21768 (8:5768)
+; skip if player has less than 7 cards in hand
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetNonTurnDuelistVariable
+	cp 7
+	jr c, .no_carry
+
+; look for Trainer cards in hand (except for Lass)
+; if any is found, return no carry.
+; otherwise, return carry.
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp LASS
+	jr z, .loop
+	ld a, [wLoadedCard1Type]
+	cp TYPE_TRAINER
+	jr nz, .loop
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x2178f
+
+AIPlayItemFinder: ; 2178f (8:578f)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce1a]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1b]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wce19]
+	ldh [hTempRetreatCostCards], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x217b1
+
+; checks whether there's Energy Removal in Discard Pile.
+; if so, find duplicate cards in hand to discard
+; that are not Mr Mime and Pokemon Trader cards.
+; this logic is suitable only for Strange Psyshock deck.
+CheckWhetherToPlayItemFinder: ; 217b1 (8:57b1)
+; skip if no Discard Pile.
+	call CreateDiscardPileCardList
+	jr c, .no_carry
+
+; look for Energy Removal in Discard Pile
+	ld hl, wDuelTempList
+.loop_discard_pile
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp ENERGY_REMOVAL
+	jr nz, .loop_discard_pile
+; found, store this deck index
+	ld a, b
+	ld [wce06], a
+
+; before looking for cards to discard in hand,
+; remove any Mr Mime and Pokemon Trader cards.
+; this way these are guaranteed to not be discarded.
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.loop_hand
+	ld a, [hli]
+	cp $ff
+	jr z, .asm_217eb
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp MR_MIME
+	jr nz, .pkmn_trader
+	call RemoveCardFromList
+	jr .loop_hand
+.pkmn_trader
+	cp POKEMON_TRADER
+	jr nz, .loop_hand
+	call RemoveCardFromList
+	jr .loop_hand
+
+; choose cards to discard from hand.
+.asm_217eb
+	ld hl, wDuelTempList
+
+; do not discard card in wce16
+	ld a, [wce16]
+	call FindAndRemoveCardFromList
+; find any duplicates, if not found, return no carry.
+	call FindDuplicateCards
+	jp c, .no_carry
+
+; store the duplicate found in wce1a and
+; remove it from the hand list.
+	ld [wce1a], a
+	ld hl, wDuelTempList
+	call FindAndRemoveCardFromList
+; find duplicates again, if not found, return no carry.
+	call FindDuplicateCards
+	jp c, .no_carry
+
+; store the duplicate found in wce1b.
+; output the card to be recovered from the Discard Pile.
+	ld [wce1b], a
+	ld a, [wce06]
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+; 0x21813
+
+Func_21813: ; 21813 (8:5813)
+	INCROM $21813, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
