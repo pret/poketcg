@@ -29,8 +29,8 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $0c, ENERGY_SEARCH,          CheckIfEnergySearchCanBePlayed, AIPlayEnergySearch
 	unknown_data_20000 $03, POKEDEX,                CheckWhetherToPlayPokedex, AIPlayPokedex
 	unknown_data_20000 $07, FULL_HEAL,              CheckWhetherToPlayFullHeal, AIPlayFullHeal
-	unknown_data_20000 $0a, MR_FUJI,                CheckWetherToPlayMrFuji, AIPlayMrFuji
-	unknown_data_20000 $0a, SCOOP_UP,               $5506, $54f1
+	unknown_data_20000 $0a, MR_FUJI,                CheckWhetherToPlayMrFuji, AIPlayMrFuji
+	unknown_data_20000 $0a, SCOOP_UP,               CheckWhetherToPlayScoopUp, AIPlayScoopUp
 	unknown_data_20000 $02, MAINTENANCE,            $562c, $560f
 	unknown_data_20000 $03, RECYCLE,                $56b8, $569a
 	unknown_data_20000 $0d, LASS,                   $5768, $5755
@@ -3901,7 +3901,7 @@ CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_prz
-	call Func_21506
+	call CheckWhetherToPlayScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_prz
@@ -3928,7 +3928,7 @@ CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_cnf
-	call Func_21506
+	call CheckWhetherToPlayScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_cnf
@@ -3955,7 +3955,7 @@ AIPlayMrFuji: ; 21497 (8:5497)
 ; 0x214a7
 
 ; AI logic for playing Mr Fuji
-CheckWetherToPlayMrFuji: ; 214a7 (8:54a7)
+CheckWhetherToPlayMrFuji: ; 214a7 (8:54a7)
 	ld a, $ff
 	ld [wce06], a
 	ld [wce08], a
@@ -4018,10 +4018,218 @@ CheckWetherToPlayMrFuji: ; 214a7 (8:54a7)
 	ret
 ; 0x214f1
 
-	INCROM $214f1, $21506
+AIPlayScoopUp: ; 214f1 (8:54f1)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1a]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
+	bank1call AIMakeDecision
+	ret
+; 0x21506
 
-Func_21506: ; 21506 (8:5506)
-	INCROM $21506, $227f6
+CheckWhetherToPlayScoopUp: ; 21506 (8:5506)
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+; if only one Pokemon in Play Area, skip.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 2
+	jr c, .no_carry
+
+; handle some decks differently
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_ARTICUNO_DECK_ID
+	jr z, .HandleLegendaryArticuno
+	cp LEGENDARY_RONALD_DECK_ID
+	jp z, .HandleLegendaryRonald
+
+; if can't KO defending Pokemon, check if defending Pokemon
+; can KO this card. If so, then continue.
+; If not, return no carry.
+
+; if it can KO the defending Pokemon this turn,
+; return no carry.
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .cannot_ko
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry
+
+.cannot_ko
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp PARALYZED
+	jr z, .cannot_retreat
+	cp ASLEEP
+	jr z, .cannot_retreat
+
+; doesn't have a status that prevents retreat.
+; so check if it has enough energy to retreat.
+; if not, return no carry.
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	ld b, a
+	ld e, PLAY_AREA_ARENA
+	farcall CountNumberOfEnergyCardsAttached
+	cp b
+	jr c, .cannot_retreat
+
+.no_carry
+	or a
+	ret
+
+.cannot_retreat
+; store damage and total HP left
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, [wLoadedCard1HP]
+	call ConvertHPToCounters
+	ld d, a
+
+; skip if card has no damage counters.
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	or a
+	jr z, .no_carry
+
+; if (total damage / total HP counters) < 7
+; return carry.
+; (this corresponds to damage counters
+; being under 70% of the max HP)
+	ld b, a
+	ld a, d
+	call CalculateBDividedByA_Bank8
+	cp 7
+	jr c, .no_carry
+
+; store Pokemon to switch to in wce1a and set carry.
+.decide_switch
+	farcall AIDecideBenchPokemonToSwitchTo
+	jr c, .no_carry
+	ld [wce1a], a
+	xor a
+	scf
+	ret
+
+; this deck will use Scoop Up on a benched Articuno2.
+; it checks if the defending Pokemon is a Snorlax,
+; but interestingly does not check for Muk in both Play Areas.
+; will also use Scoop Up on 
+.HandleLegendaryArticuno
+; if less than 3 Play Area Pokemon cards, skip.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 3
+	jr c, .no_carry
+
+; look for Articuno2 in bench
+	ld a, ARTICUNO2
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .articuno_bench
+
+; check Arena card
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp ARTICUNO2
+	jr z, .articuno_or_chansey
+	cp CHANSEY
+	jr nz, .no_carry
+
+; here either Articuno2 or Chansey
+; is the Arena Card.
+.articuno_or_chansey
+; if can't KO defending Pokemon, check if defending Pokemon
+; can KO this card. If so, then continue.
+; If not, return no carry.
+
+; if it can KO the defending Pokemon this turn,
+; return no carry.
+	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	jr nc, .check_ko
+	farcall CheckIfSelectedMoveIsUnusable
+	jr nc, .no_carry
+	farcall LookForEnergyNeededForMoveInHand
+	jr c, .no_carry
+.check_ko
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .no_carry
+	jr .decide_switch
+
+.articuno_bench
+; skip if the defending card is Snorlax
+	push af
+	ld a, DUELVARS_ARENA_CARD
+	call GetNonTurnDuelistVariable
+	call SwapTurn
+	call GetCardIDFromDeckIndex
+	call SwapTurn
+	ld a, e
+	cp SNORLAX
+	pop bc
+	jr z, .no_carry
+
+; check attached energy cards.
+; if it has any, return no carry.
+	ld a, b
+.check_attached_energy
+	ld e, a
+	push af
+	farcall CountNumberOfEnergyCardsAttached
+	or a
+	pop bc
+	ld a, b
+	jr z, .no_energy
+	jp .no_carry
+
+.no_energy
+; has decided to Scoop Up benched card,
+; store $ff as the Pokemon card to switch to
+; because there's no need to switch.
+	push af
+	ld a, $ff
+	ld [wce1a], a
+	pop af
+	scf
+	ret
+; 0x215e7
+
+; this deck will use Scoop Up on a benched Articuno2, Zapdos3 or Molres2.
+; interestingly, does not check for Muk in both Play Areas.
+.HandleLegendaryRonald ; 215e7 (8:55e7)
+; if less than 3 Play Area Pokemon cards, skip.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 3
+	jp c, .no_carry
+
+	ld a, ARTICUNO2
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .articuno_bench
+	ld a, ZAPDOS3
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .check_attached_energy
+	ld a, MOLTRES2
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank8
+	jr c, .check_attached_energy
+	jp .no_carry
+; 0x2160f
+
+Func_2160f: ; 2160f (8:560f)
+	INCROM $2160f, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
