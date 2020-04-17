@@ -43,7 +43,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
 	unknown_data_20000 $02, POKE_BALL,              CheckWhetherToPlayPokeball, AIPlayPokeball
 	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecideComputerSearch, AIPlayComputerSearch
-	unknown_data_20000 $02, POKEMON_TRADER,         $5d8f, $5d7a
+	unknown_data_20000 $02, POKEMON_TRADER,         AIDecidePokemonTrader, AIPlayPokemonTrader
 	db $ff
 
 Func_200e5: ; 200e5 (8:40e5)
@@ -5483,9 +5483,9 @@ AIDecideComputerSearch_FireCharge: ; 21cbb (8:5cbb)
 AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
-; Play Area or in the hand. If there is, search for card.
+; Play Area or in the hand. If there is, choose it as target.
 ; otherwise, check if the evolution card is in
-; hand and if so, search for it instead.
+; hand and if so, choose it as target instead.
 	ld b, RATTATA
 	ld a, RATICATE
 	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
@@ -5539,8 +5539,653 @@ AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
 	ret
 ; 0x21d7a
 
-Func_21d7a: ; 21d7a (8:5d7a)
-	INCROM $21d7a, $227f6
+AIPlayPokemonTrader: ; 21d7a (8:5d7a)
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1a]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x21d8f
+
+AIDecidePokemonTrader: ; 21d8f (8:5d8f)
+; each deck has their own routine for picking
+; what Pokemon to look for.
+	ld a, [wOpponentDeckID]
+	cp LEGENDARY_MOLTRES_DECK_ID
+	jr z, AIDecidePokemonTrader_LegendaryMoltres
+	cp LEGENDARY_ARTICUNO_DECK_ID
+	jr z, AIDecidePokemonTrader_LegendaryArticuno
+	cp LEGENDARY_DRAGONITE_DECK_ID
+	jp z, AIDecidePokemonTrader_LegendaryDragonite
+	cp LEGENDARY_RONALD_DECK_ID
+	jp z, AIDecidePokemonTrader_LegendaryRonald
+	cp BLISTERING_POKEMON_DECK_ID
+	jp z, AIDecidePokemonTrader_BlisteringPokemon
+	cp SOUND_OF_THE_WAVES_DECK_ID
+	jp z, AIDecidePokemonTrader_SoundOfTheWaves
+	cp POWER_GENERATOR_DECK_ID
+	jp z, AIDecidePokemonTrader_PowerGenerator
+	cp FLOWER_GARDEN_DECK_ID
+	jp z, AIDecidePokemonTrader_FlowerGarden
+	cp STRANGE_POWER_DECK_ID
+	jp z, AIDecidePokemonTrader_StrangePower
+	cp FLAMETHROWER_DECK_ID
+	jp z, AIDecidePokemonTrader_Flamethrower
+	or a
+	ret
+
+AIDecidePokemonTrader_LegendaryMoltres: ; 21dc4 (8:5dc4)
+; look for Moltres2 card in deck to trade with a
+; card in hand different from Moltres1.
+	ld a, MOLTRES2
+	ld e, MOLTRES1
+	call LookForCardIDToTradeWithDifferentHandCard
+	jr nc, .no_carry
+; success
+	ld [wce1a], a
+	ld a, e
+	scf
+	ret
+.no_carry
+	or a
+	ret
+
+AIDecidePokemonTrader_LegendaryArticuno: ; 21dd5 (8:5dd5)
+; if has none of these cards in Hand or Play Area, proceed
+	ld a, ARTICUNO1
+	call LookForCardIDInHandAndPlayArea
+	jr c, .no_carry
+	ld a, LAPRAS
+	call LookForCardIDInHandAndPlayArea
+	jr c, .no_carry
+
+; if doesn't have Seel in Hand or Play Area,
+; look for it in the deck.
+; otherwise, look for Dewgong instead.
+	ld a, SEEL
+	call LookForCardIDInHandAndPlayArea
+	jr c, .dewgong
+
+	ld e, SEEL
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .dewgong
+	ld [wce1a], a
+	jr .check_hand
+
+.dewgong
+	ld a, DEWGONG
+	call LookForCardIDInHandAndPlayArea
+	jr c, .no_carry
+	ld e, DEWGONG
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .no_carry
+	ld [wce1a], a
+
+; a Seel or Dewgong was found in deck,
+; check hand for card to trade for
+.check_hand
+	ld a, CHANSEY
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, DITTO
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, ARTICUNO2
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	; doesn't have any of the cards in hand
+
+.no_carry
+	or a
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x21e24
+
+AIDecidePokemonTrader_LegendaryDragonite: ; 21e24 (8:5e24)
+; if has less than 5 cards of energy
+; and of Pokemon in hand/Play Area,
+; target a Kangaskhan in deck.
+	farcall CountEnergyCardsInHandAndAttached
+	cp 5
+	jr c, .kangaskhan
+	call CountPokemonCardsInHandAndInPlayArea
+	cp 5
+	jr c, .kangaskhan
+	; total number of energy cards >= 5
+	; total number of Pokemon cards >= 5
+
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, MAGIKARP
+	ld a, GYARADOS
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, MAGIKARP
+	ld b, GYARADOS
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, DRATINI
+	ld a, DRAGONAIR
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld b, DRAGONAIR
+	ld a, DRAGONITE1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, DRATINI
+	ld b, DRAGONAIR
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld a, DRAGONAIR
+	ld b, DRAGONITE1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, CHARMANDER
+	ld a, CHARMELEON
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld b, CHARMELEON
+	ld a, CHARIZARD
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, CHARMANDER
+	ld b, CHARMELEON
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld a, CHARMELEON
+	ld b, CHARIZARD
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	jr .no_carry
+
+.kangaskhan
+	ld e, KANGASKHAN
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .no_carry
+
+; card was found as target in deck,
+; look for card in hand to trade with
+.choose_hand
+	ld [wce1a], a
+	ld a, DRAGONAIR
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, CHARMELEON
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, GYARADOS
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, MAGIKARP
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, CHARMANDER
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, DRATINI
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	; non found
+
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x21ec9
+
+AIDecidePokemonTrader_LegendaryRonald: ; 21ec9 (8:5ec9)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, EEVEE
+	ld a, FLAREON1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld b, EEVEE
+	ld a, VAPOREON1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld b, EEVEE
+	ld a, JOLTEON1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, EEVEE
+	ld b, FLAREON1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld a, EEVEE
+	ld b, VAPOREON1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld a, EEVEE
+	ld b, JOLTEON1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, DRATINI
+	ld a, DRAGONAIR
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld b, DRAGONAIR
+	ld a, DRAGONITE1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, DRATINI
+	ld b, DRAGONAIR
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld a, DRAGONAIR
+	ld b, DRAGONITE1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	jr .no_carry
+
+; card was found as target in deck,
+; look for card in hand to trade with
+.choose_hand
+	ld [wce1a], a
+	ld a, ZAPDOS3
+	call LookForCardIDInHandList_Bank8
+	jr c, .set_carry
+	ld a, ARTICUNO2
+	call LookForCardIDInHandList_Bank8
+	jr c, .set_carry
+	ld a, MOLTRES2
+	call LookForCardIDInHandList_Bank8
+	jr c, .set_carry
+	; none found
+
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x21f41
+
+AIDecidePokemonTrader_BlisteringPokemon: ; 21f41 (8:5f41)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, RHYHORN
+	ld a, RHYDON
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, RHYHORN
+	ld b, RHYDON
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, CUBONE
+	ld a, MAROWAK1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, CUBONE
+	ld b, MAROWAK1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, PONYTA
+	ld a, RAPIDASH
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, PONYTA
+	ld b, RAPIDASH
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	jr .no_carry
+
+; a card in deck was found to look for,
+; check if there are duplicates in hand to trade with.
+.find_duplicates
+	ld [wce1a], a
+	call FindDuplicatePokemonCards
+	jr c, .set_carry
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x21f85
+
+AIDecidePokemonTrader_SoundOfTheWaves: ; 21f85 (8:5f85)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, SEEL
+	ld a, DEWGONG
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, SEEL
+	ld b, DEWGONG
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, KRABBY
+	ld a, KINGLER
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, KRABBY
+	ld b, KINGLER
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, SHELLDER
+	ld a, CLOYSTER
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, SHELLDER
+	ld b, CLOYSTER
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, HORSEA
+	ld a, SEADRA
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, HORSEA
+	ld b, SEADRA
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	ld b, TENTACOOL
+	ld a, TENTACRUEL
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .choose_hand
+	ld a, TENTACOOL
+	ld b, TENTACRUEL
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .choose_hand
+	jr .no_carry
+
+; card was found as target in deck,
+; look for card in hand to trade with
+.choose_hand
+	ld [wce1a], a
+	ld a, SEEL
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, KRABBY
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, HORSEA
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, SHELLDER
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	ld a, TENTACOOL
+	call CheckIfHasCardIDInHand
+	jr c, .set_carry
+	; none found
+
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x2200b
+
+AIDecidePokemonTrader_PowerGenerator: ; 2200b (8:600b)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, PIKACHU2
+	ld a, RAICHU1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jp c, .find_duplicates
+	ld b, PIKACHU1
+	ld a, RAICHU1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, PIKACHU2
+	ld b, RAICHU1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, PIKACHU1
+	ld b, RAICHU1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, VOLTORB
+	ld a, ELECTRODE2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, VOLTORB
+	ld a, ELECTRODE1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, VOLTORB
+	ld b, ELECTRODE2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, VOLTORB
+	ld b, ELECTRODE1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, MAGNEMITE1
+	ld a, MAGNETON2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, MAGNEMITE2
+	ld a, MAGNETON2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, MAGNEMITE1
+	ld a, MAGNETON1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, MAGNEMITE2
+	ld a, MAGNETON1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, MAGNEMITE2
+	ld b, MAGNETON2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, MAGNEMITE1
+	ld b, MAGNETON2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, MAGNEMITE2
+	ld b, MAGNETON1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, MAGNEMITE1
+	ld b, MAGNETON1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	; bug, missing jr .no_carry
+
+; since this last check falls through regardless of result,
+; register a might hold an invalid deck index,
+; which might lead to hilarious results like Brandon
+; trading a Pikachu with a Grass Energy from the deck.
+; however, since it's deep in a tower of conditionals,
+; reaching here is extremely unlikely.
+
+; a card in deck was found to look for,
+; check if there are duplicates in hand to trade with.
+.find_duplicates
+	ld [wce1a], a
+	call FindDuplicatePokemonCards
+	jr c, .set_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x220a8
+
+AIDecidePokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, BULBASAUR
+	ld a, IVYSAUR
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, IVYSAUR
+	ld a, VENUSAUR2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, BULBASAUR
+	ld b, IVYSAUR
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, IVYSAUR
+	ld b, VENUSAUR2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, BELLSPROUT
+	ld a, WEEPINBELL
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, WEEPINBELL
+	ld a, VICTREEBEL
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, BELLSPROUT
+	ld b, WEEPINBELL
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, WEEPINBELL
+	ld b, VICTREEBEL
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, ODDISH
+	ld a, GLOOM
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, GLOOM
+	ld a, VILEPLUME
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, ODDISH
+	ld b, GLOOM
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, GLOOM
+	ld b, VILEPLUME
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	jr .no_carry
+
+; a card in deck was found to look for,
+; check if there are duplicates in hand to trade with.
+.find_duplicates
+	ld [wce1a], a
+	call FindDuplicatePokemonCards
+	jr c, .asm_22120
+.no_carry
+	or a
+	ret
+.asm_22120
+	scf
+	ret
+; 0x22122
+
+AIDecidePokemonTrader_StrangePower: ; 22122 (8:6122)
+; looks for a Pokemon in hand to trade with Mr Mime in deck.
+; inputing Mr Mime in register e for the function is redundant
+; since it already checks whether a Mr Mime exists in the hand.
+	ld a, MR_MIME
+	ld e, MR_MIME
+	call LookForCardIDToTradeWithDifferentHandCard
+	jr nc, .no_carry
+; found
+	ld [wce1a], a
+	ld a, e
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x22133
+
+AIDecidePokemonTrader_Flamethrower: ; 22133 (8:6133)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, choose it as target.
+; otherwise, check if the evolution card is in
+; hand and if so, choose it as target instead.
+	ld b, CHARMANDER
+	ld a, CHARMELEON
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld b, CHARMELEON
+	ld a, CHARIZARD
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, CHARMANDER
+	ld b, CHARMELEON
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld a, CHARMELEON
+	ld b, CHARIZARD
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, VULPIX
+	ld a, NINETAILS1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, VULPIX
+	ld b, NINETAILS1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, GROWLITHE
+	ld a, ARCANINE2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, GROWLITHE
+	ld b, ARCANINE2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	ld b, EEVEE
+	ld a, FLAREON2
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_duplicates
+	ld a, EEVEE
+	ld b, FLAREON2
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_duplicates
+	jr .no_carry
+
+; a card in deck was found to look for,
+; check if there are duplicates in hand to trade with.
+.find_duplicates
+	ld [wce1a], a
+	call FindDuplicatePokemonCards
+	jr c, .set_carry
+.no_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x2219b
+
+Func_2219b: ; 2219b (8:219b)
+	INCROM $2219b, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
@@ -6263,8 +6908,179 @@ RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
 	ret
 ; 0x22ae0
 
-Func_22ae0 ; 22ae0 (8:6ae0)
-	INCROM $22ae0, $22bad
+; used in Pokemon Trader checks to look for a specific
+; card in the deck to trade with a card in hand that
+; has a card ID different from e.
+; returns carry if successful.
+; input:
+;   a = card ID 1
+;   e = card ID 2
+; output:
+;   a = deck index of card ID 1 found in deck
+;   e = deck index of Pokemon card in hand dfferent than card ID 2
+LookForCardIDToTradeWithDifferentHandCard: ; 22ae0 (8:6ae0)
+	ld hl, wCurCardCanAttack
+	ld [hl], e
+	ld [wTempAI], a
+
+; if card ID 1 is in hand, return no carry.
+	call LookForCardIDInHandList_Bank8
+	jr c, .no_carry
+
+; if card ID 1 is not in deck, return no carry.
+	ld a, [wTempAI]
+	ld e, a
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .no_carry
+
+; store its deck index
+	ld [wTempAI], a
+
+; look in hand for Pokemon card ID that
+; is different from card ID 2.
+	ld a, [wCurCardCanAttack]
+	ld c, a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+
+.loop_hand
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	ld b, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp c
+	jr z, .loop_hand
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .loop_hand
+
+; found, output deck index of card ID 1 in deck
+; and deck index of card found in hand, and set carry
+	ld e, b
+	ld a, [wTempAI]
+	scf
+	ret
+
+.no_carry
+	or a
+	ret
+; 0x22b1f
+
+; returns carry if at least one card in the hand
+; has the card ID of input. Outputs its index.
+; input:
+;   a = card ID to look for
+; output:
+;   a = deck index of card in hand found
+CheckIfHasCardIDInHand: ; 22b1f (8:6b1f)
+	ld [wTempCardIDToLook], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld c, 0
+
+.loop_hand
+	ld a, [hli]
+	cp $ff
+	ret z
+	ldh [hTempCardIndex_ff98], a
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld b, a
+	ld a, [wTempCardIDToLook]
+	cp b
+	jr nz, .loop_hand
+	ld a, c
+	or a
+	jr nz, .set_carry
+	inc c
+	jr nz, .loop_hand
+
+.set_carry
+	ldh a, [hTempCardIndex_ff98]
+	scf
+	ret
+; 0x22b45
+
+; outputs in a total number of Pokemon cards in hand
+; plus Pokemon in Turn Duelist's Play Area.
+CountPokemonCardsInHandAndInPlayArea: ; 22b45 (8:6b45)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld [wTempAI], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.loop_hand
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	cp TYPE_ENERGY
+	jr nc, .loop_hand
+	ld a, [wTempAI]
+	inc a
+	ld [wTempAI], a
+	jr .loop_hand
+.done
+	ld a, [wTempAI]
+	ret
+; 0x22b6f
+
+; returns carry if a duplicate Pokemon card is found in hand.
+; outputs in a the deck index of one of them.
+FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
+	ld a, $ff
+	ld [wTempAI], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	push hl
+
+.loop_hand_outer
+	pop hl
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	call GetCardIDFromDeckIndex
+	ld b, e
+	push hl
+
+.loop_hand_inner
+	ld a, [hli]
+	cp $ff
+	jr z, .loop_hand_outer
+	ld c, a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp b
+	jr nz, .loop_hand_inner
+
+; found two cards with same ID,
+; if they are Pokemon cards, store its deck index.
+	push bc
+	call GetCardType
+	pop bc
+	cp TYPE_ENERGY
+	jr nc, .loop_hand_outer
+	ld a, c
+	ld [wTempAI], a
+	; for some reason loop still continues
+	; even though if some other duplicate
+	; cards are found, it overwrites the result.
+	jr .loop_hand_outer
+
+.done
+	ld a, [wTempAI]
+	cp $ff
+	jr z, .no_carry
+
+; found
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x22bad
 
 ; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)

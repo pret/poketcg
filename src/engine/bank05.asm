@@ -1765,8 +1765,42 @@ CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
 	ret
 ; 0x157c6
 
-Func_157c6: ; 157c6 (5:57c6)
-	INCROM $157c6, $157f3
+; outputs in a total number of energy cards in hand
+; plus all the cards attached in Turn Duelist's Play Area.
+CountEnergyCardsInHandAndAttached: ; 157c6 (5:57c6)
+	xor a
+	ld [wTempAI], a
+	call CreateEnergyCardListFromHand
+	jr c, .attached
+
+; counts number of energy cards in hand
+	ld b, -1
+	ld hl, wDuelTempList
+.loop_hand
+	inc b
+	ld a, [hli]
+	cp $ff
+	jr nz, .loop_hand
+	ld a, b
+	ld [wTempAI], a
+
+; counts number of energy cards
+; that are attached in Play Area
+.attached
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+.loop_play_area
+	call CountNumberOfEnergyCardsAttached
+	ld hl, wTempAI
+	add [hl]
+	ld [hl], a
+	inc e
+	dec d
+	jr nz, .loop_play_area
+	ret
+; 0x157f3
 
 ; returns carry if any card with ID in e is found
 ; in the list that is pointed by hl.
