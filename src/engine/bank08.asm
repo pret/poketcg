@@ -6,44 +6,44 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 CheckIfPotionPreventsKnockOut, AIPlayPotion
-	unknown_data_20000 $0a, POTION,                 FindTargetCardForPotion, AIPlayPotion
-	unknown_data_20000 $08, SUPER_POTION,           CheckIfSuperPotionPreventsKnockOut, AIPlaySuperPotion
-	unknown_data_20000 $0b, SUPER_POTION,           FindTargetCardForSuperPotion, AIPlaySuperPotion
-	unknown_data_20000 $0d, DEFENDER,               CheckIfDefenderPreventsKnockOut, AIPlayDefender
-	unknown_data_20000 $0e, DEFENDER,               CheckIfDefenderPreventsRecoilKnockOut, AIPlayDefender
-	unknown_data_20000 $0d, PLUSPOWER,              CheckIfPluspowerBoostCausesKnockOut, AIPlayPluspower
-	unknown_data_20000 $0e, PLUSPOWER,              CheckIfMoveNeedsPluspowerBoostToKnockOut, AIPlayPluspower
-	unknown_data_20000 $09, SWITCH,                 CheckIfActiveCardCanSwitch, AIPlaySwitch
-	unknown_data_20000 $07, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
-	unknown_data_20000 $0a, GUST_OF_WIND,           CheckWhetherToUseGustOfWind, AIPlayGustOfWind
-	unknown_data_20000 $04, BILL,                   CheckDeckCardsAmount, AIPlayBill
-	unknown_data_20000 $05, ENERGY_REMOVAL,         CheckEnergyCardToRemoveInPlayArea, AIPlayEnergyRemoval
-	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   CheckTwoEnergyCardsToRemoveInPlayArea, AIPlaySuperEnergyRemoval
-	unknown_data_20000 $07, POKEMON_BREEDER,        CheckIfCanEvolve2StageFromHand, AIPlayPokemonBreeder
-	unknown_data_20000 $0f, PROFESSOR_OAK,          CheckIfCanPlayProfessorOak, AIPlayProfessorOak
-	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       CheckEnergyRetrievalCardsToPick, AIPlayEnergyRetrieval
-	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, CheckSuperEnergyRetrievalCardsToPick, AIPlaySuperEnergyRetrieval
-	unknown_data_20000 $06, POKEMON_CENTER,         CheckIfCanPlayPokemonCenter, AIPlayPokemonCenter
-	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, CheckWhetherToPlayImposterProfessorOak, AIPlayImposterProfessorOak
-	unknown_data_20000 $0c, ENERGY_SEARCH,          CheckIfEnergySearchCanBePlayed, AIPlayEnergySearch
-	unknown_data_20000 $03, POKEDEX,                CheckWhetherToPlayPokedex, AIPlayPokedex
-	unknown_data_20000 $07, FULL_HEAL,              CheckWhetherToPlayFullHeal, AIPlayFullHeal
-	unknown_data_20000 $0a, MR_FUJI,                CheckWhetherToPlayMrFuji, AIPlayMrFuji
-	unknown_data_20000 $0a, SCOOP_UP,               CheckWhetherToPlayScoopUp, AIPlayScoopUp
-	unknown_data_20000 $02, MAINTENANCE,            CheckWhetherToPlayMaintencance, AIPlayMaintenance
-	unknown_data_20000 $03, RECYCLE,                CheckWhetherToPlayRecycle, AIPlayRecycle
-	unknown_data_20000 $0d, LASS,                   CheckWhetherToPlayLass, AIPlayLass
-	unknown_data_20000 $04, ITEM_FINDER,            CheckWhetherToPlayItemFinder, AIPlayItemFinder
-	unknown_data_20000 $01, IMAKUNI_CARD,           CheckWhetherToPlayImakuni, AIPlayImakuni
-	unknown_data_20000 $01, GAMBLER,                CheckWhetherToPlayGambler, AIPlayGambler
-	unknown_data_20000 $05, REVIVE,                 CheckWhetherToPlayRevive, AIPlayRevive
-	unknown_data_20000 $0d, POKEMON_FLUTE,          CheckWhetherToPlayPokemonFlute, AIPlayPokemonFlute
-	unknown_data_20000 $05, CLEFAIRY_DOLL,          CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
-	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
-	unknown_data_20000 $02, POKE_BALL,              CheckWhetherToPlayPokeball, AIPlayPokeball
-	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecideComputerSearch, AIPlayComputerSearch
-	unknown_data_20000 $02, POKEMON_TRADER,         AIDecidePokemonTrader, AIPlayPokemonTrader
+	unknown_data_20000 $07, POTION,                 AIDecidePotion1,                        AIPlayPotion
+	unknown_data_20000 $0a, POTION,                 AIDecidePotion2,                        AIPlayPotion
+	unknown_data_20000 $08, SUPER_POTION,           AIDecideSuperPotion1,                   AIPlaySuperPotion
+	unknown_data_20000 $0b, SUPER_POTION,           AIDecideSuperPotion2,                   AIPlaySuperPotion
+	unknown_data_20000 $0d, DEFENDER,               AIDecideDefender1,                      AIPlayDefender
+	unknown_data_20000 $0e, DEFENDER,               AIDecideDefender2,                      AIPlayDefender
+	unknown_data_20000 $0d, PLUSPOWER,              AIDecidePluspower1,                     AIPlayPluspower
+	unknown_data_20000 $0e, PLUSPOWER,              AIDecidePluspower2,                     AIPlayPluspower
+	unknown_data_20000 $09, SWITCH,                 AIDecideSwitch,                         AIPlaySwitch
+	unknown_data_20000 $07, GUST_OF_WIND,           AIDecideGustOfWind,                     AIPlayGustOfWind
+	unknown_data_20000 $0a, GUST_OF_WIND,           AIDecideGustOfWind,                     AIPlayGustOfWind
+	unknown_data_20000 $04, BILL,                   AIDecideBill,                           AIPlayBill
+	unknown_data_20000 $05, ENERGY_REMOVAL,         AIDecideEnergyRemoval,                  AIPlayEnergyRemoval
+	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   AIDecideSuperEnergyRemoval,             AIPlaySuperEnergyRemoval
+	unknown_data_20000 $07, POKEMON_BREEDER,        AIDecidePokemonBreeder,                 AIPlayPokemonBreeder
+	unknown_data_20000 $0f, PROFESSOR_OAK,          AIDecideProfessorOak,                   AIPlayProfessorOak
+	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       AIDecideEnergyRetrieval,                AIPlayEnergyRetrieval
+	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, AIDecideSuperEnergyRetrieval,           AIPlaySuperEnergyRetrieval
+	unknown_data_20000 $06, POKEMON_CENTER,         AIDecidePokemonCenter,                  AIPlayPokemonCenter
+	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, AIDecideImposterProfessorOak,           AIPlayImposterProfessorOak
+	unknown_data_20000 $0c, ENERGY_SEARCH,          AIDecideEnergySearch,                   AIPlayEnergySearch
+	unknown_data_20000 $03, POKEDEX,                AIDecidePokedex,                        AIPlayPokedex
+	unknown_data_20000 $07, FULL_HEAL,              AIDecideFullHeal,                       AIPlayFullHeal
+	unknown_data_20000 $0a, MR_FUJI,                AIDecideMrFuji,                         AIPlayMrFuji
+	unknown_data_20000 $0a, SCOOP_UP,               AIDecideScoopUp,                        AIPlayScoopUp
+	unknown_data_20000 $02, MAINTENANCE,            AIDecideMaintenance,                    AIPlayMaintenance
+	unknown_data_20000 $03, RECYCLE,                AIDecideRecycle,                        AIPlayRecycle
+	unknown_data_20000 $0d, LASS,                   AIDecideLass,                           AIPlayLass
+	unknown_data_20000 $04, ITEM_FINDER,            AIDecideItemFinder,                     AIPlayItemFinder
+	unknown_data_20000 $01, IMAKUNI_CARD,           AIDecideImakuni,                        AIPlayImakuni
+	unknown_data_20000 $01, GAMBLER,                AIDecideGambler,                        AIPlayGambler
+	unknown_data_20000 $05, REVIVE,                 AIDecideRevive,                         AIPlayRevive
+	unknown_data_20000 $0d, POKEMON_FLUTE,          AIDecidePokemonFlute,                   AIPlayPokemonFlute
+	unknown_data_20000 $05, CLEFAIRY_DOLL,          AIDecideClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
+	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      AIDecideClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
+	unknown_data_20000 $02, POKE_BALL,              AIDecidePokeball,                       AIPlayPokeball
+	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecideComputerSearch,                 AIPlayComputerSearch
+	unknown_data_20000 $02, POKEMON_TRADER,         AIDecidePokemonTrader,                  AIPlayPokemonTrader
 	db $ff
 
 Func_200e5: ; 200e5 (8:40e5)
@@ -199,7 +199,7 @@ AIPlayPotion: ; 201b5 (8:41b5)
 ; next turn after using Potion.
 ; if it cannot, return carry.
 ; also take into account whether move is high recoil.
-CheckIfPotionPreventsKnockOut: ; 201d1 (8:41d1)
+AIDecidePotion1: ; 201d1 (8:41d1)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -242,7 +242,7 @@ CheckIfPotionPreventsKnockOut: ; 201d1 (8:41d1)
 ; output:
 ;	a = card to use Potion on;
 ;	carry set if Potion should be used.
-FindTargetCardForPotion: ; 20204 (8:4204)
+AIDecidePotion2: ; 20204 (8:4204)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -393,7 +393,7 @@ AIPlaySuperPotion: ; 202a8 (8:42a8)
 ; active card next turn after using Super Potion.
 ; if it cannot, return carry.
 ; also take into account whether move is high recoil.
-CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
+AIDecideSuperPotion1: ; 202cc (8:42cc)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -447,7 +447,7 @@ CheckIfSuperPotionPreventsKnockOut: ; 202cc (8:42cc)
 ; output:
 ;	a = card to use Super Potion on;
 ;	carry set if Super Potion should be used.
-FindTargetCardForSuperPotion: ; 2030f (8:430f)
+AIDecideSuperPotion2: ; 2030f (8:430f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -637,7 +637,7 @@ AIPlayDefender: ; 203f8 (8:43f8)
 ; returns carry if using Defender can prevent a KO
 ; by the defending Pokémon.
 ; this takes into account both attacks and whether they're useable.
-CheckIfDefenderPreventsKnockOut: ; 20406 (8:4406)
+AIDecideDefender1: ; 20406 (8:4406)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfAnyMoveKnocksOutDefendingCard
@@ -722,7 +722,7 @@ CheckIfDefenderPreventsKnockOut: ; 20406 (8:4406)
 
 ; return carry if using Defender prevents Pokémon
 ; from being knocked out by an attack with recoil.
-CheckIfDefenderPreventsRecoilKnockOut: ; 20486 (8:4486)
+AIDecideDefender2: ; 20486 (8:4486)
 	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
 	call CheckLoadedMoveFlag
 	jr c, .recoil
@@ -810,7 +810,7 @@ AIPlayPluspower: ; 204e8 (8:44e8)
 
 ; returns carry if using a Pluspower can KO defending Pokémon
 ; if active card cannot KO without the boost.
-CheckIfPluspowerBoostCausesKnockOut: ; 20501 (8:4501)
+AIDecidePluspower1: ; 20501 (8:4501)
 ; this is mistakenly duplicated
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -934,7 +934,7 @@ CheckIfPluspowerBoostCausesKnockOut: ; 20501 (8:4501)
 ; if selected move is useable, can't KO without Pluspower boost
 ; can damage Mr. Mime even with Pluspower boost
 ; and has a minimum damage > 0.
-CheckIfMoveNeedsPluspowerBoostToKnockOut: ; 205a5 (8:45a5)
+AIDecidePluspower2: ; 205a5 (8:45a5)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
@@ -1025,7 +1025,7 @@ AIPlaySwitch: ; 20612 (8:4612)
 ; returns carry if the active card has less energy cards
 ; than the retreat cost and if AI can't play an energy
 ; card from the hand to fulfill the cost
-CheckIfActiveCardCanSwitch: ; 2062e (8:462e)
+AIDecideSwitch: ; 2062e (8:462e)
 ; check if AI can already play an energy card from hand to retreat
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
@@ -1085,7 +1085,7 @@ AIPlayGustOfWind: ; 20666 (8:4666)
 	ret
 ; 0x2067e
 
-CheckWhetherToUseGustOfWind: ; 2067e (8:467e)
+AIDecideGustOfWind: ; 2067e (8:467e)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
@@ -1466,7 +1466,7 @@ AIPlayBill: ; 2086d (8:486d)
 ; 0x20878
 
 ; return carry if cards in deck > 9
-CheckDeckCardsAmount: ; 20878 (8:4878)
+AIDecideBill: ; 20878 (8:4878)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE - 9
@@ -1486,7 +1486,7 @@ AIPlayEnergyRemoval: ; 20880 (8:4880)
 ; 0x20895
 
 ; picks an energy card in the player's Play Area to remove
-CheckEnergyCardToRemoveInPlayArea: ; 20895 (8:4895)
+AIDecideEnergyRemoval: ; 20895 (8:4895)
 ; check if the current active card can KO player's card
 ; if it's possible to KO, then do not consider the player's
 ; active card to remove its attached energy
@@ -1709,7 +1709,7 @@ AIPlaySuperEnergyRemoval: ; 20994 (8:4994)
 ; 0x209bc
 
 ; picks two energy cards in the player's Play Area to remove
-CheckTwoEnergyCardsToRemoveInPlayArea: ; 209bc (8:49bc)
+AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 	ld e, PLAY_AREA_BENCH_1
 .loop_1
 ; first find an Arena card with a color energy card
@@ -1989,7 +1989,7 @@ AIPlayPokemonBreeder: ; 20b06 (8:4b06)
 	ret
 ; 0x20b1b
 
-CheckIfCanEvolve2StageFromHand: ; 20b1b (8:4b1b)
+AIDecidePokemonBreeder: ; 20b1b (8:4b1b)
 	call IsPrehistoricPowerActive
 	jp c, .done
 
@@ -2346,7 +2346,7 @@ AIPlayProfessorOak: ; 20cae (8:4cae)
 
 ; sets carry if AI determines a score of playing
 ; Professor Oak is over a certain threshold.
-CheckIfCanPlayProfessorOak: ; 20cc1 (8:4cc1)
+AIDecideProfessorOak: ; 20cc1 (8:4cc1)
 ; return if cards in deck <= 6
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -2689,7 +2689,7 @@ AIPlayEnergyRetrieval: ; 20e44 (8:4e44)
 ; checks whether AI can play Energy Retrieval and
 ; picks the energy cards from the discard pile,
 ; and duplicate cards in hand to discard.
-CheckEnergyRetrievalCardsToPick: ; 20e6e (8:4e6e)
+AIDecideEnergyRetrieval: ; 20e6e (8:4e6e)
 ; return no carry if no cards in hand
 	farcall CreateEnergyCardListFromHand
 	jp nc, .no_carry
@@ -2955,7 +2955,7 @@ AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
 	ret
 ; 0x20fc1
 
-CheckSuperEnergyRetrievalCardsToPick: ; 20fc1 (8:4fc1)
+AIDecideSuperEnergyRetrieval: ; 20fc1 (8:4fc1)
 ; return no carry if no cards in hand
 	farcall CreateEnergyCardListFromHand
 	jp nc, .no_carry
@@ -3163,7 +3163,7 @@ AIPlayPokemonCenter: ; 210e0 (8:50e0)
 	ret
 ; 0x210eb
 
-CheckIfCanPlayPokemonCenter: ; 210eb (8:50eb)
+AIDecidePokemonCenter: ; 210eb (8:50eb)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 
@@ -3266,7 +3266,7 @@ AIPlayImposterProfessorOak: ; 21170 (8:5170)
 
 ; sets carry depending on player's number of cards
 ; in deck in in hand.
-CheckWhetherToPlayImposterProfessorOak: ; 2117b (8:517b)
+AIDecideImposterProfessorOak: ; 2117b (8:517b)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetNonTurnDuelistVariable
 	cp DECK_SIZE - 14
@@ -3305,7 +3305,7 @@ AIPlayEnergySearch: ; 2119a (8:519a)
 ; 0x211aa
 
 ; AI checks for playing Energy Search
-CheckIfEnergySearchCanBePlayed: ; 211aa (8:51aa)
+AIDecideEnergySearch: ; 211aa (8:51aa)
 	farcall CreateEnergyCardListFromHand
 	jr c, .start
 	call .CheckForUsefulEnergyCards
@@ -3562,7 +3562,7 @@ AIPlayPokedex: ; 212b4 (8:52b4)
 	ret
 ; 0x212dc
 
-CheckWhetherToPlayPokedex: ; 212dc (8:52dc)
+AIDecidePokedex: ; 212dc (8:52dc)
 	ld a, [wcda6]
 	cp $06
 	jr c, .no_carry
@@ -3865,7 +3865,7 @@ AIPlayFullHeal: ; 2141d (8:541d)
 	ret
 ; 0x21428
 
-CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
+AIDecideFullHeal: ; 21428 (8:5428)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 
@@ -3909,7 +3909,7 @@ CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_prz
-	call CheckWhetherToPlayScoopUp
+	call AIDecideScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_prz
@@ -3936,7 +3936,7 @@ CheckWhetherToPlayFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_cnf
-	call CheckWhetherToPlayScoopUp
+	call AIDecideScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_cnf
@@ -3963,7 +3963,7 @@ AIPlayMrFuji: ; 21497 (8:5497)
 ; 0x214a7
 
 ; AI logic for playing Mr Fuji
-CheckWhetherToPlayMrFuji: ; 214a7 (8:54a7)
+AIDecideMrFuji: ; 214a7 (8:54a7)
 	ld a, $ff
 	ld [wce06], a
 	ld [wce08], a
@@ -4038,7 +4038,7 @@ AIPlayScoopUp: ; 214f1 (8:54f1)
 	ret
 ; 0x21506
 
-CheckWhetherToPlayScoopUp: ; 21506 (8:5506)
+AIDecideScoopUp: ; 21506 (8:5506)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 
@@ -4252,7 +4252,7 @@ AIPlayMaintenance: ; 2160f (8:560f)
 ; 0x2162c
 
 ; AI logic for playing Maintenance
-CheckWhetherToPlayMaintencance: ; 2162c (8:562c)
+AIDecideMaintenance: ; 2162c (8:562c)
 ; Imakuni? has his own thing
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
@@ -4357,7 +4357,7 @@ AIPlayRecycle: ; 2169a (8:569a)
 ; has priorities for Ghost Deck, and a "default" priority list
 ; (which is the Fire Charge deck, since it's the only other
 ; deck that runs a Recycle card in it.)
-CheckWhetherToPlayRecycle: ; 216b8 (8:56b8)
+AIDecideRecycle: ; 216b8 (8:56b8)
 ; no use checking if no cards in Discard Pile
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4487,7 +4487,7 @@ AIPlayLass: ; 21755 (8:5755)
 	ret
 ; 0x21768
 
-CheckWhetherToPlayLass: ; 21768 (8:5768)
+AIDecideLass: ; 21768 (8:5768)
 ; skip if player has less than 7 cards in hand
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetNonTurnDuelistVariable
@@ -4539,7 +4539,7 @@ AIPlayItemFinder: ; 2178f (8:578f)
 ; if so, find duplicate cards in hand to discard
 ; that are not Mr Mime and Pokemon Trader cards.
 ; this logic is suitable only for Strange Psyshock deck.
-CheckWhetherToPlayItemFinder: ; 217b1 (8:57b1)
+AIDecideItemFinder: ; 217b1 (8:57b1)
 ; skip if no Discard Pile.
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4620,7 +4620,7 @@ AIPlayImakuni: ; 21813 (8:5813)
 ; 0x2181e
 
 ; only sets carry if Active card is not confused.
-CheckWhetherToPlayImakuni: ; 2181e (8:581e)
+AIDecideImakuni: ; 2181e (8:581e)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
@@ -4674,7 +4674,7 @@ AIPlayGambler: ; 2182d (8:582d)
 ; checks whether to play Gambler.
 ; aside from Imakuni, all other opponents only
 ; play if there's less than 4 cards in the deck.
-CheckWhetherToPlayGambler: ; 21875 (8:5875)
+AIDecideGambler: ; 21875 (8:5875)
 ; Imakuni? has his own routine
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
@@ -4716,7 +4716,7 @@ AIPlayRevive: ; 21899 (8:5899)
 
 ; checks certain cards in Discard Pile to use Revive on.
 ; suitable for Muscle For Brains deck only.
-CheckWhetherToPlayRevive: ; 218a9 (8:58a9)
+AIDecideRevive: ; 218a9 (8:58a9)
 ; skip if no cards in Discard Pile
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4772,7 +4772,7 @@ AIPlayPokemonFlute: ; 218d8 (8:58d8)
 	ret
 ; 0x218e8
 
-CheckWhetherToPlayPokemonFlute: ; 218e8 (8:58e8)
+AIDecidePokemonFlute: ; 218e8 (8:58e8)
 ; if player has no Discard Pile, skip.
 	call SwapTurn
 	call CreateDiscardPileCardList
@@ -4878,7 +4878,7 @@ AIPlayClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
 ; 0x21982
 
 ; AI logic for playing Clefairy Doll
-CheckWhetherToPlayClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
+AIDecideClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
 ; if has max number of Play Area Pokemon, skip
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -4928,7 +4928,7 @@ AIPlayPokeball: ; 219a6 (8:59a6)
 	ret
 ; 0x219c6
 
-CheckWhetherToPlayPokeball: ; 219c6 (8:59c6)
+AIDecidePokeball: ; 219c6 (8:59c6)
 ; go to the routines associated with deck ID
 	ld a, [wOpponentDeckID]
 	cp FIRE_CHARGE_DECK_ID
