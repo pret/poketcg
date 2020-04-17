@@ -42,7 +42,7 @@ Data_20000: ; 20000 (8:4000)
 	unknown_data_20000 $05, CLEFAIRY_DOLL,          CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
 	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      CheckWhetherToPlayClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
 	unknown_data_20000 $02, POKE_BALL,              CheckWhetherToPlayPokeball, AIPlayPokeball
-	unknown_data_20000 $02, COMPUTER_SEARCH,        $5b34, $5b12
+	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecideComputerSearch, AIPlayComputerSearch
 	unknown_data_20000 $02, POKEMON_TRADER,         $5d8f, $5d7a
 	db $ff
 
@@ -5130,8 +5130,417 @@ CheckWhetherToPlayPokeball: ; 219c6 (8:59c6)
 	ret
 ; 0x21b12
 
-Func_21b12: ; 21b12 (8:5b12)
-	INCROM $21b12, $227f6
+AIPlayComputerSearch: ; 21b12 (8:5b12)
+	ld a, [wce21]
+	or $08
+	ld [wce21], a
+	ld a, [wce16]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce19]
+	ldh [hTempRetreatCostCards], a
+	ld a, [wce1a]
+	ldh [hTemp_ffa0], a
+	ld a, [wce1b]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, $07
+	bank1call AIMakeDecision
+	ret
+; 0x21b34
+
+; checks what Deck ID AI is playing and handle
+; them in their own routine.
+AIDecideComputerSearch: ; 21b34 (8:5b34)
+; skip if number of cards in hand < 3
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 3
+	jr c, .no_carry
+
+	ld a, [wOpponentDeckID]
+	cp ROCK_CRUSHER_DECK_ID
+	jr z, AIDecideComputerSearch_RockCrusher
+	cp WONDERS_OF_SCIENCE_DECK_ID
+	jp z, AIDecideComputerSearch_WondersOfScience
+	cp FIRE_CHARGE_DECK_ID
+	jp z, AIDecideComputerSearch_FireCharge
+	cp ANGER_DECK_ID
+	jp z, AIDecideComputerSearch_Anger
+
+.no_carry
+	or a
+	ret
+
+AIDecideComputerSearch_RockCrusher: ; 21b55 (8:5b55)
+; if number of cards in hand is equal to 3,
+; target Professor Oak in deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 3
+	jr nz, .graveler
+
+	ld e, PROFESSOR_OAK
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr c, .find_discard_cards_1
+	; no Professor Oak in deck, fallthrough
+
+.no_carry
+	or a
+	ret
+
+.find_discard_cards_1
+	ld [wce06], a
+	ld a, $ff
+	ld [wce1a], a
+	ld [wce1b], a
+
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld de, wce1a
+.loop_hand_1
+	ld a, [hli]
+	cp $ff
+	jr z, .check_discard_cards
+
+	ld c, a
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; if any of the following cards are in the hand,
+; return no carry.
+	cp PROFESSOR_OAK
+	jr z, .no_carry
+	cp FIGHTING_ENERGY
+	jr z, .no_carry
+	cp DOUBLE_COLORLESS_ENERGY
+	jr z, .no_carry
+	cp DIGLETT
+	jr z, .no_carry
+	cp GEODUDE
+	jr z, .no_carry
+	cp ONIX
+	jr z, .no_carry
+	cp RHYHORN
+	jr z, .no_carry
+
+; if it's same as card in wce16, skip this card.
+	ld a, [wce16]
+	ld b, a
+	ld a, c
+	cp b
+	jr z, .loop_hand_1
+
+; store this card index in memory
+	ld [de], a
+	inc de
+	jr .loop_hand_1
+
+.check_discard_cards
+; check if two cards were found
+; if so, output in a the deck index
+; of Professor Oak card found in deck and set carry.
+	ld a, [wce1b]
+	cp $ff
+	jr z, .no_carry
+	ld a, [wce06]
+	scf
+	ret
+
+; more than 3 cards in hand, so look for
+; specific evolution cards.
+
+; checks if there is a Graveler card in the deck to target.
+; if so, check if there's Geodude in hand or Play Area,
+; and if there's no Graveler card in hand, proceed.
+; also removes Geodude from hand list so that it is not discarded.
+.graveler
+	ld e, GRAVELER
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .golem
+	ld [wce06], a
+	ld a, GEODUDE
+	call LookForCardIDInHandAndPlayArea
+	jr nc, .golem
+	ld a, GRAVELER
+	call LookForCardIDInHandList_Bank8
+	jr c, .golem
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld e, GEODUDE
+	farcall RemoveCardIDInList
+	jr .find_discard_cards_2
+
+; checks if there is a Golem card in the deck to target.
+; if so, check if there's Graveler in Play Area,
+; and if there's no Golem card in hand, proceed.
+.golem
+	ld e, GOLEM
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jr nc, .dugtrio
+	ld [wce06], a
+	ld a, GRAVELER
+	call LookForCardIDInPlayArea_Bank8
+	jr nc, .dugtrio
+	ld a, GOLEM
+	call LookForCardIDInHandList_Bank8
+	jr c, .dugtrio
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	jr .find_discard_cards_2
+
+; checks if there is a Dugtrio card in the deck to target.
+; if so, check if there's Diglett in Play Area,
+; and if there's no Dugtrio card in hand, proceed.
+.dugtrio
+	ld e, DUGTRIO
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry
+	ld [wce06], a
+	ld a, DIGLETT
+	call LookForCardIDInPlayArea_Bank8
+	jp nc, .no_carry
+	ld a, DUGTRIO
+	call LookForCardIDInHandList_Bank8
+	jp c, .no_carry
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	jr .find_discard_cards_2
+
+.find_discard_cards_2
+	ld a, $ff
+	ld [wce1a], a
+	ld [wce1b], a
+
+	ld bc, wce1a
+	ld d, $00 ; start considering Trainer cards only
+	ld a, [wce16]
+	ld e, a
+
+; this loop will store in wce1a cards to discard from hand.
+; at the start it will only consider Trainer cards,
+; then if there are still needed to discard,
+; move on to Pokemon cards, and finally to Energy cards.
+.loop_hand_2
+	call RemoveFromListDifferentCardOfGivenType
+	jr c, .found
+	inc d ; move on to next type (Pokemon, then Energy)
+	ld a, $03
+	cp d
+	jp z, .no_carry ; no more types to look
+	jr .loop_hand_2
+.found
+; store this card in memory,
+; and if there's still one more card to search for,
+; jump back into the loop.
+	ld [bc], a
+	inc bc
+	ld a, [wce1b]
+	cp $ff
+	jr z, .loop_hand_2
+
+; output in a Computer Search target and set carry.
+	ld a, [wce06]
+	scf
+	ret
+
+AIDecideComputerSearch_WondersOfScience: ; 21c56 (8:5c56)
+; if number of cards in hand < 5, target Professor Oak in deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	cp 5
+	jr nc, .look_in_hand
+
+; target Professor Oak for Computer Search
+	ld e, PROFESSOR_OAK
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .look_in_hand ; can be a jr
+	ld [wce06], a
+	jr .find_discard_cards
+
+; Professor Oak not in deck, move on to
+; look for other cards instead.
+; if Grimer or Muk are not in hand,
+; check whether to use Computer Search on them.
+.look_in_hand
+	ld a, GRIMER
+	call LookForCardIDInHandList_Bank8
+	jr nc, .target_grimer
+	ld a, MUK
+	call LookForCardIDInHandList_Bank8
+	jr nc, .target_muk
+
+.no_carry
+	or a
+	ret
+
+; first check Grimer
+; if in deck, check cards to discard.
+.target_grimer
+	ld e, GRIMER
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry ; can be a jr
+	ld [wce06], a
+	jr .find_discard_cards
+
+; first check Muk
+; if in deck, check cards to discard.
+.target_muk
+	ld e, MUK
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry ; can be a jr
+	ld [wce06], a
+
+; only discard Trainer cards from hand.
+; if there are less than 2 Trainer cards to discard,
+; then return with no carry.
+; else, store the cards to discard and the
+; target card deck index, and return carry.
+.find_discard_cards
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld d, $00 ; first consider Trainer cards
+	ld a, [wce16]
+	ld e, a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1a], a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1b], a
+	ld a, [wce06]
+	scf
+	ret
+
+AIDecideComputerSearch_FireCharge: ; 21cbb (8:5cbb)
+; pick target card in deck from highest to lowest priority.
+; if not found in hand, go to corresponding branch.
+	ld a, CHANSEY
+	call LookForCardIDInHandList_Bank8
+	jr nc, .chansey
+	ld a, TAUROS
+	call LookForCardIDInHandList_Bank8
+	jr nc, .tauros
+	ld a, JIGGLYPUFF1
+	call LookForCardIDInHandList_Bank8
+	jr nc, .jigglypuff
+	; fallthrough
+
+.no_carry
+	or a
+	ret
+
+; for each card targeted, check if it's in deck and,
+; if not, then return no carry.
+; else, look for cards to discard.
+.chansey
+	ld e, CHANSEY
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry
+	ld [wce06], a
+	jr .find_discard_cards
+.tauros
+	ld e, TAUROS
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry
+	ld [wce06], a
+	jr .find_discard_cards
+.jigglypuff
+	ld e, JIGGLYPUFF1
+	ld a, CARD_LOCATION_DECK
+	call LookForCardIDInLocation
+	jp nc, .no_carry
+	ld [wce06], a
+
+; only discard Trainer cards from hand.
+; if there are less than 2 Trainer cards to discard,
+; then return with no carry.
+; else, store the cards to discard and the
+; target card deck index, and return carry.
+.find_discard_cards
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld d, $00 ; first consider Trainer cards
+	ld a, [wce16]
+	ld e, a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1a], a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1b], a
+	ld a, [wce06]
+	scf
+	ret
+; 0x21d1e
+
+AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
+; for each of the following cards,
+; first run a check if there's a pre-evolution in
+; Play Area or in the hand. If there is, search for card.
+; otherwise, check if the evolution card is in
+; hand and if so, search for it instead.
+	ld b, RATTATA
+	ld a, RATICATE
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_discard_cards
+	ld a, RATTATA
+	ld b, RATICATE
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_discard_cards
+	ld b, GROWLITHE
+	ld a, ARCANINE1
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_discard_cards
+	ld a, GROWLITHE
+	ld b, ARCANINE1
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_discard_cards
+	ld b, DODUO
+	ld a, DODRIO
+	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
+	jr c, .find_discard_cards
+	ld a, DODUO
+	ld b, DODRIO
+	call LookForCardIDInDeck_GivenCardIDInHand
+	jr c, .find_discard_cards
+	; fallthrough
+
+.no_carry
+	or a
+	ret
+
+; only discard Trainer cards from hand.
+; if there are less than 2 Trainer cards to discard,
+; then return with no carry.
+; else, store the cards to discard and the
+; target card deck index, and return carry.
+.find_discard_cards
+	ld [wce06], a
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld d, $00 ; first consider Trainer cards
+	ld a, [wce16]
+	ld e, a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1a], a
+	call RemoveFromListDifferentCardOfGivenType
+	jr nc, .no_carry
+	ld [wce1b], a
+	ld a, [wce06]
+	scf
+	ret
+; 0x21d7a
+
+Func_21d7a: ; 21d7a (8:5d7a)
+	INCROM $21d7a, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; is card location of a.
@@ -5773,8 +6182,89 @@ LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
 	ret
 ; 0x22a95
 
-Func_22a95 ; 22a95 (8:6a95)
-	INCROM $22a95, $22bad
+; runs through list avoiding card in e.
+; removes first card in list not equal to e
+; and that has a type allowed to be removed, in d.
+; returns carry if successful in finding a card.
+; input:
+;   d = type of card allowed to be removed
+;       ($00 = Trainer, $01 = Pokemon, $02 = Energy)
+;   e = card deck index to avoid removing
+; output:
+;   a = card index of removed card
+RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
+	push hl
+	push de
+	push bc
+	call CountCardsInDuelTempList
+	call ShuffleCards
+
+; loop list until a card with
+; deck index different from e is found.
+.loop_list
+	ld a, [hli]
+	cp $ff
+	jr z, .no_carry
+	cp e
+	jr z, .loop_list
+
+; get this card's type
+	ldh [hTempCardIndex_ff98], a
+	push de
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	cp TYPE_ENERGY
+	jr c, .pkmn_card
+	cp TYPE_TRAINER
+	jr nz, .energy
+
+; only remove from list specific type.
+
+; trainer
+	ld a, d
+	or a
+	jr nz, .loop_list
+	jr .remove_card
+.energy
+	ld a, d
+	cp $02
+	jr nz, .loop_list
+	jr .remove_card
+.pkmn_card
+	ld a, d
+	cp $01
+	jr nz, .loop_list
+	; fallthrough
+
+.remove_card
+	ld d, h
+	ld e, l
+	dec hl
+.loop_remove
+	ld a, [de]
+	inc de
+	ld [hli], a
+	cp $ff
+	jr nz, .loop_remove
+
+; success
+	ldh a, [hTempCardIndex_ff98]
+	pop bc
+	pop de
+	pop hl
+	scf
+	ret
+.no_carry
+	pop bc
+	pop de
+	pop hl
+	or a
+	ret
+; 0x22ae0
+
+Func_22ae0 ; 22ae0 (8:6ae0)
+	INCROM $22ae0, $22bad
 
 ; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)
