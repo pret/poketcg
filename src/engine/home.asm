@@ -5259,7 +5259,7 @@ MoveCardToDiscardPileIfInArena: ; 1c13 (0:1c13)
 	ret
 ; 0x1c35
 
-; calculate damage of card at CARD_LOCATION_PLAY_AREA + e
+; calculate damage of card at CARD_LOCATION_* in e
 ; return the result in a
 GetCardDamage: ; 1c35 (0:1c35)
 	push hl

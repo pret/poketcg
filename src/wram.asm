@@ -1365,7 +1365,9 @@ wce08:: ; ce08
 wce0f:: ; ce0f
 	ds $7
 
-wce16:: ; ce16
+; stores the deck index (0-59) of the Trainer card
+; the AI intends to play from hand.
+wAITrainerCardToPlay:: ; ce16
 	ds $1
 
 wce17:: ; ce17
@@ -1374,7 +1376,9 @@ wce17:: ; ce17
 wce18:: ; ce18
 	ds $1
 
-wce19:: ; ce19
+; paramaters output by AI Trainer card logic routines
+; (e.g. what Pokemon in Play Area to use card on, etc)
+wAITrainerCardParameter:: ; ce19
 	ds $1
 
 wce1a:: ; ce1a
@@ -1395,10 +1399,11 @@ wce1e:: ; ce1e
 wce1f:: ; ce1f
 	ds $1
 
-wce20:: ; ce20
+; used to store previous/current flags of AI actions
+; see AI_FLAG_* constants
+wPreviousAIFlags:: ; ce20
 	ds $1
-
-wce21:: ; ce21
+wCurrentAIFlags:: ; ce21
 	ds $1
 
 ; During a duel, this is always $b after the first attack.

@@ -57,7 +57,7 @@ Func_200e5: ; 200e5 (8:40e5)
 
 .loop_hand
 	ld a, [hli]
-	ld [wce16], a
+	ld [wAITrainerCardToPlay], a
 	cp $ff
 	ret z
 
@@ -67,7 +67,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ld hl, Data_20000
 .loop_data
 	xor a
-	ld [wce21], a
+	ld [wCurrentAIFlags], a
 	ld a, [hli]
 	cp $ff
 	jp z, .pop_hl
@@ -75,16 +75,18 @@ Func_200e5: ; 200e5 (8:40e5)
 ; compare input to first byte in data and continue if equal.
 	cp d
 	jp nz, .inc_hl_by_5
+
 	ld a, [hli]
 	ld [wce17], a
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	call LoadCardDataToBuffer1_FromDeckIndex
+
 	cp SWITCH
 	jr nz, .skip_switch_check
 
 	ld b, a
-	ld a, [wce20]
-	and $02
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_SWITCH
 	jr nz, .inc_hl_by_4
 	ld a, b
 
@@ -95,61 +97,79 @@ Func_200e5: ; 200e5 (8:40e5)
 	cp b
 	jr nz, .inc_hl_by_4
 
+; found Trainer card
 	push hl
 	push de
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
+
+; if Headache effects prevent playing card
+; move on to the next ite, in list.
 	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, .next_in_data
+
 	call LoadNonPokemonCardEffectCommands
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jp c, .next_in_data
-	farcall Func_1743b
+
+; AI can randomly choose not to play card.
+	farcall ChooseRandomlyNotToPlayTrainerCard
 	jr c, .next_in_data
+
+; call routine to decide whether to play Trainer card
 	pop de
 	pop hl
 	push hl
 	call CallIndirect
 	pop hl
 	jr nc, .inc_hl_by_4
-	inc hl
-	inc hl
-	ld [wce19], a
 
+; routine returned carry, which means
+; this card should be played.
+	inc hl
+	inc hl
+	ld [wAITrainerCardParameter], a
+
+; show Play Trainer Card screen
 	push de
 	push hl
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_PLAY_TRAINER
 	bank1call AIMakeDecision
 	pop hl
 	pop de
 	jr c, .inc_hl_by_2
+
+; execute the effects of the Trainer card
 	push hl
 	call CallIndirect
 	pop hl
 
 	inc hl
 	inc hl
-	ld a, [wce20]
+	ld a, [wPreviousAIFlags]
 	ld b, a
-	ld a, [wce21]
+	ld a, [wCurrentAIFlags]
 	or b
-	ld [wce20], a
+	ld [wPreviousAIFlags], a
 	pop hl
-	and $08
+	and AI_FLAG_MODIFIED_HAND
 	jp z, .loop_hand
 
-.asm_20186 ; 20186 (8:4186)
+; the hand was modified during the Trainer effect
+; so it needs to be re-listed again and
+; looped from the top.
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld de, wTempHandCardList
 	call CopyBuffer
 	ld hl, wTempHandCardList
-	ld a, [wce20]
-	and $f7
-	ld [wce20], a
+; clear the AI_FLAG_MODIFIED_HAND flag
+	ld a, [wPreviousAIFlags]
+	and ~AI_FLAG_MODIFIED_HAND
+	ld [wPreviousAIFlags], a
 	jp .loop_hand
 
 .inc_hl_by_5
@@ -178,9 +198,9 @@ Func_200e5: ; 200e5 (8:40e5)
 
 ; makes AI use Potion card.
 AIPlayPotion: ; 201b5 (8:41b5)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld e, a
 	call GetCardDamage
@@ -342,7 +362,7 @@ AIDecidePotion2: ; 20204 (8:4204)
 ; and have the BOOST_IF_TAKEN_DAMAGE effect.
 .check_boost_if_taken_damage ; 2027e (8:427e)
 	push de
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .second_attack
@@ -350,7 +370,7 @@ AIDecidePotion2: ; 20204 (8:4204)
 	call CheckLoadedMoveFlag
 	jr c, .set_carry
 .second_attack
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .false
@@ -369,13 +389,13 @@ AIDecidePotion2: ; 20204 (8:4204)
 
 ; makes AI use Super Potion card.
 AIPlaySuperPotion: ; 202a8 (8:42a8)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	call GetEnergyCardToDiscard
 	ldh [hTemp_ffa0], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ld e, a
 	call GetCardDamage
 	cp 40
@@ -411,7 +431,7 @@ AIDecideSuperPotion1: ; 202cc (8:42cc)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld h, a
-	ld e, $00
+	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
@@ -457,7 +477,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	ld h, a
-	ld e, $00
+	ld e, PLAY_AREA_ARENA
 	call GetCardDamage
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
@@ -564,7 +584,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 ; and have the BOOST_IF_TAKEN_DAMAGE effect.
 .check_boost_if_taken_damage ; 2039e (8:439e)
 	push de
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .second_attack_1
@@ -572,7 +592,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 	call CheckLoadedMoveFlag
 	jr c, .true_1
 .second_attack_1
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .false_1
@@ -593,7 +613,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 ; given that they have enough energy to be used before discarding.
 .check_energy_cost ; 203c8 (8:43c8)
 	push de
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -605,7 +625,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 .second_attack_2
 	pop de
 	push de
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -625,7 +645,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 ; 0x203f8
 
 AIPlayDefender: ; 203f8 (8:43f8)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	xor a
 	ldh [hTemp_ffa0], a
@@ -638,7 +658,7 @@ AIPlayDefender: ; 203f8 (8:43f8)
 ; by the defending Pokémon.
 ; this takes into account both attacks and whether they're useable.
 AIDecideDefender1: ; 20406 (8:4406)
-	xor a
+	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfAnyMoveKnocksOutDefendingCard
 	jr nc, .cannot_ko
@@ -740,10 +760,10 @@ AIDecideDefender2: ; 20486 (8:4486)
 	or a
 	jr nz, .second_attack
 ; first attack
-	ld a, [wLoadedCard2Move1Unknown1]
+	ld a, [wLoadedCard2Move1EffectParam]
 	jr .check_weak
 .second_attack
-	ld a, [wLoadedCard2Move2Unknown1]
+	ld a, [wLoadedCard2Move2EffectParam]
 
 ; double recoil damage if card is weak to its own color.
 .check_weak
@@ -796,12 +816,12 @@ AIDecideDefender2: ; 20486 (8:4486)
 ; 0x204e8
 
 AIPlayPluspower: ; 204e8 (8:44e8)
-	ld a, [wce21]
-	or $01
-	ld [wce21], a
-	ld a, [wce19]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_USED_PLUSPOWER
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardParameter]
 	ld [wcdd6], a
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -853,11 +873,11 @@ AIDecidePluspower1: ; 20501 (8:4501)
 ; check both attacks and decide which one
 ; can KO with Pluspower boost.
 ; if neither can KO, return no carry.
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	call .check_ko_with_pluspower
 	jr c, .kos_with_pluspower_1
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	call .check_ko_with_pluspower
 	jr c, .kos_with_pluspower_2
@@ -870,14 +890,14 @@ AIDecidePluspower1: ; 20501 (8:4501)
 .kos_with_pluspower_1
 	call .check_mr_mime
 	jr nc, .no_carry
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	scf
 	ret
 ; second attack can KO with Pluspower.
 .kos_with_pluspower_2
 	call .check_mr_mime
 	jr nc, .no_carry
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	scf
 	ret
 ; 0x20562
@@ -1008,12 +1028,12 @@ AIDecidePluspower2: ; 205a5 (8:45a5)
 ; 0x20612
 
 AIPlaySwitch: ; 20612 (8:4612)
-	ld a, [wce21]
-	or $02
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_USED_SWITCH
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -1073,12 +1093,12 @@ AIDecideSwitch: ; 2062e (8:462e)
 ; 0x20666
 
 AIPlayGustOfWind: ; 20666 (8:4666)
-	ld a, [wce21]
-	or $10
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_USED_GUST_OF_WIND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -1091,9 +1111,13 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 	dec a
 	or a
 	ret z ; no bench cards
-	ld a, [wce20]
-	and $10
+
+; if used Gust Of Wind already,
+; do not use it again.
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_GUST_OF_WIND
 	ret nz
+
 	farcall CheckIfActivePokemonCanUseAnyNonResidualMove
 	ret nc ; no non-residual move can be used
 
@@ -1252,13 +1276,13 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 
 ; returns carry if neither attack can deal damage
 .CheckIfNoAttackDealsDamage ; 2076b (8:476b)
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	call .CheckIfAttackDealsNoDamage
 	jr c, .second_attack
 	ret
 .second_attack
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	call .CheckIfAttackDealsNoDamage
 	jr c, .true
@@ -1370,10 +1394,10 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 ; returns carry if any of arena card's attacks
 ; KOs player card in location stored in e
 .CheckIfAnyAttackKnocksOut ; 20806 (8:4806)
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call .CheckIfAttackKnocksOut
 	ret c
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 
 ; returns carry if attack KOs player card
 ; in location stored in e
@@ -1458,7 +1482,7 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 ; 0x2086d
 
 AIPlayBill: ; 2086d (8:486d)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -1474,9 +1498,9 @@ AIDecideBill: ; 20878 (8:4878)
 ; 0x20880
 
 AIPlayEnergyRemoval: ; 20880 (8:4880)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -1601,7 +1625,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 ; have enough energy for either of its attacks
 .CheckIfNotEnoughEnergyToAttack ; 20924 (8:4924)
 	push de
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1610,7 +1634,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 	pop de
 
 	push de
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1644,7 +1668,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -1668,7 +1692,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -1689,9 +1713,9 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 ; 0x20994
 
 AIPlaySuperEnergyRemoval: ; 20994 (8:4994)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -1886,7 +1910,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 ; have enough energy for either of its attacks
 .CheckIfNotEnoughEnergyToAttack ; 20a92 (8:4a92)
 	push de
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1895,7 +1919,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 	pop de
 
 	push de
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -1933,7 +1957,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -1957,7 +1981,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wDamage]
 	or a
@@ -1978,9 +2002,9 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 ; 0x20b06
 
 AIPlayPokemonBreeder: ; 20b06 (8:4b06)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ld a, [wce1a]
 	ldh [hTemp_ffa0], a
@@ -2334,10 +2358,10 @@ AIDecidePokemonBreeder: ; 20b1b (8:4b1b)
 ; 0x20cae
 
 AIPlayProfessorOak: ; 20cae (8:4cae)
-	ld a, [wce21]
-	or $0c
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_USED_PROFESSOR_OAK | AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -2665,12 +2689,12 @@ AIDecideProfessorOak: ; 20cc1 (8:4cc1)
 ; 0x20e44
 
 AIPlayEnergyRetrieval: ; 20e44 (8:4e44)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -2924,12 +2948,12 @@ FindDuplicateCards: ; 20f38 (8:4f38)
 ; 0x20f80
 
 AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -3156,7 +3180,7 @@ FindAndRemoveCardFromList: ; 210d5 (8:50d5)
 ; 0x210e0
 
 AIPlayPokemonCenter: ; 210e0 (8:50e0)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -3257,7 +3281,7 @@ AIDecidePokemonCenter: ; 210eb (8:50eb)
 ; 0x21170
 
 AIPlayImposterProfessorOak: ; 21170 (8:5170)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -3295,9 +3319,9 @@ AIDecideImposterProfessorOak: ; 2117b (8:517b)
 ; 0x2119a
 
 AIPlayEnergySearch: ; 2119a (8:519a)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -3543,7 +3567,7 @@ AIDecideEnergySearch: ; 211aa (8:51aa)
 ; 0x212b4
 
 AIPlayPokedex: ; 212b4 (8:52b4)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce1a]
 	ldh [hTemp_ffa0], a
@@ -3858,7 +3882,7 @@ PickPokedexCards: ; 2138e (8:538e)
 ; 0x2141d
 
 AIPlayFullHeal: ; 2141d (8:541d)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -3953,9 +3977,9 @@ AIDecideFullHeal: ; 21428 (8:5428)
 ; 0x21497
 
 AIPlayMrFuji: ; 21497 (8:5497)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4027,9 +4051,9 @@ AIDecideMrFuji: ; 214a7 (8:54a7)
 ; 0x214f1
 
 AIPlayScoopUp: ; 214f1 (8:54f1)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -4237,10 +4261,10 @@ AIDecideScoopUp: ; 21506 (8:5506)
 ; 0x2160f
 
 AIPlayMaintenance: ; 2160f (8:560f)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce1a]
 	ldh [hTemp_ffa0], a
@@ -4265,10 +4289,10 @@ AIDecideMaintenance: ; 2162c (8:562c)
 	jr c, .no_carry
 
 ; list out all the hand cards and remove
-; the card in wce16. Then find any duplicate cards.
+; wAITrainerCardToPlay from list.Then find any duplicate cards.
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	call FindAndRemoveCardFromList
 ; if duplicates are not found, return no carry.
 	call FindDuplicateCards
@@ -4312,9 +4336,9 @@ AIDecideMaintenance: ; 2162c (8:562c)
 	call ShuffleCards
 
 ; go through each card and find
-; cards that are different from wce16.
+; cards that are different from wAITrainerCardToPlay.
 ; if found, add those cards to wce1a and wce1a+1.
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ld b, a
 	ld c, 2
 	ld de, wce1a
@@ -4336,12 +4360,12 @@ AIDecideMaintenance: ; 2162c (8:562c)
 ; 0x2169a
 
 AIPlayRecycle: ; 2169a (8:569a)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld de, $ef
+	ldtx de, TrainerCardSuccessCheckText
 	bank1call TossCoin
 	jr nc, .asm_216ae
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	jr .asm_216b2
 .asm_216ae
@@ -4477,10 +4501,10 @@ AIDecideRecycle: ; 216b8 (8:56b8)
 ; 0x21755
 
 AIPlayLass: ; 21755 (8:5755)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4519,16 +4543,16 @@ AIDecideLass: ; 21768 (8:5768)
 ; 0x2178f
 
 AIPlayItemFinder: ; 2178f (8:578f)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce1a]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1b]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTempRetreatCostCards], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4566,7 +4590,7 @@ AIDecideItemFinder: ; 217b1 (8:57b1)
 .loop_hand
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_217eb
+	jr z, .choose_discard
 	ld b, a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	cp MR_MIME
@@ -4580,11 +4604,11 @@ AIDecideItemFinder: ; 217b1 (8:57b1)
 	jr .loop_hand
 
 ; choose cards to discard from hand.
-.asm_217eb
+.choose_discard
 	ld hl, wDuelTempList
 
-; do not discard card in wce16
-	ld a, [wce16]
+; do not discard wAITrainerCardToPlay
+	ld a, [wAITrainerCardToPlay]
 	call FindAndRemoveCardFromList
 ; find any duplicates, if not found, return no carry.
 	call FindDuplicateCards
@@ -4612,7 +4636,7 @@ AIDecideItemFinder: ; 217b1 (8:57b1)
 ; 0x21813
 
 AIPlayImakuni: ; 21813 (8:5813)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4634,9 +4658,9 @@ AIDecideImakuni: ; 2181e (8:581e)
 ; 0x2182d
 
 AIPlayGambler: ; 2182d (8:582d)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
 	jr z, .asm_2186a
@@ -4651,7 +4675,7 @@ AIPlayGambler: ; 2182d (8:582d)
 	ld [hld], a
 	ld [hld], a
 	ld [hl], a
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4664,7 +4688,7 @@ AIPlayGambler: ; 2182d (8:582d)
 	ld [hl], a
 	ret
 .asm_2186a
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
@@ -4705,11 +4729,11 @@ AIDecideGambler: ; 21875 (8:5875)
 ; 0x21899
 
 AIPlayRevive: ; 21899 (8:5899)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x218a9
@@ -4763,11 +4787,11 @@ AIDecideRevive: ; 218a9 (8:58a9)
 ; 0x218d8
 
 AIPlayPokemonFlute: ; 218d8 (8:58d8)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x218e8
@@ -4870,9 +4894,9 @@ AIDecidePokemonFlute: ; 218e8 (8:58e8)
 ; 0x21977
 
 AIPlayClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x21982
@@ -4910,20 +4934,20 @@ AIDecideClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
 ; 0x219a6
 
 AIPlayPokeball: ; 219a6 (8:59a6)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld de, $ef
+	ldtx de, TrainerCardSuccessCheckText
 	bank1call TossCoin
 	ldh [hTemp_ffa0], a
 	jr nc, .asm_219bc
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	jr .asm_219c0
 .asm_219bc
 	ld a, $ff
 	ldh [hTempPlayAreaLocation_ffa1], a
 .asm_219c0
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x219c6
@@ -5131,18 +5155,18 @@ AIDecidePokeball: ; 219c6 (8:59c6)
 ; 0x21b12
 
 AIPlayComputerSearch: ; 21b12 (8:5b12)
-	ld a, [wce21]
-	or $08
-	ld [wce21], a
-	ld a, [wce16]
+	ld a, [wCurrentAIFlags]
+	or AI_FLAG_MODIFIED_HAND
+	ld [wCurrentAIFlags], a
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTempRetreatCostCards], a
 	ld a, [wce1a]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1b]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x21b34
@@ -5222,8 +5246,8 @@ AIDecideComputerSearch_RockCrusher: ; 21b55 (8:5b55)
 	cp RHYHORN
 	jr z, .no_carry
 
-; if it's same as card in wce16, skip this card.
-	ld a, [wce16]
+; if it's same as wAITrainerCardToPlay, skip this card.
+	ld a, [wAITrainerCardToPlay]
 	ld b, a
 	ld a, c
 	cp b
@@ -5315,7 +5339,10 @@ AIDecideComputerSearch_RockCrusher: ; 21b55 (8:5b55)
 
 	ld bc, wce1a
 	ld d, $00 ; start considering Trainer cards only
-	ld a, [wce16]
+
+; stores wAITrainerCardToPlay in e so that
+; all routines ignore it for the discard effects.
+	ld a, [wAITrainerCardToPlay]
 	ld e, a
 
 ; this loop will store in wce1a cards to discard from hand.
@@ -5404,7 +5431,9 @@ AIDecideComputerSearch_WondersOfScience: ; 21c56 (8:5c56)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld d, $00 ; first consider Trainer cards
-	ld a, [wce16]
+
+; ignore wAITrainerCardToPlay for the discard effects.
+	ld a, [wAITrainerCardToPlay]
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
@@ -5467,7 +5496,9 @@ AIDecideComputerSearch_FireCharge: ; 21cbb (8:5cbb)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld d, $00 ; first consider Trainer cards
-	ld a, [wce16]
+
+; ignore wAITrainerCardToPlay for the discard effects.
+	ld a, [wAITrainerCardToPlay]
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
@@ -5526,7 +5557,9 @@ AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 	ld d, $00 ; first consider Trainer cards
-	ld a, [wce16]
+
+; ignore wAITrainerCardToPlay for the discard effects.
+	ld a, [wAITrainerCardToPlay]
 	ld e, a
 	call RemoveFromListDifferentCardOfGivenType
 	jr nc, .no_carry
@@ -5540,13 +5573,13 @@ AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
 ; 0x21d7a
 
 AIPlayPokemonTrader: ; 21d7a (8:5d7a)
-	ld a, [wce16]
+	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wce19]
+	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld a, [wce1a]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	ld a, $07
+	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
 	bank1call AIMakeDecision
 	ret
 ; 0x21d8f

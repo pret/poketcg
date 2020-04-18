@@ -116,10 +116,10 @@ CheckIfMoveKnocksOutDefendingCard: ; 140b5 (5:40b5)
 ; to exactly 0 HP.
 ; outputs that attack index in wSelectedMove.
 CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP: ; 140c5 (5:40c5)
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call .check_damage
 	ret c
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 
 .check_damage
 	call EstimateDamage_FromDefendingPokemon
@@ -1223,8 +1223,8 @@ Func_1468b: ; 1468b (5:468b)
 	call Func_14663
 	ld a, $f
 	call Func_14663
-	ld a, [wce20]
-	and $4
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PROFESSOR_OAK
 	jr z, .asm_14776
 	ld a, $1
 	call Func_14663
@@ -1462,7 +1462,7 @@ Func_15649: ; 15649 (5:5649)
 	inc a
 	ld [wcda6], a
 	xor a
-	ld [wce20], a
+	ld [wPreviousAIFlags], a
 	ld [wcddb], a
 	ld [wcddc], a
 	ld [wce03], a
@@ -4374,7 +4374,7 @@ DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
 	jp .check_evolution
 
 .attached_energy_boost
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	cp $02
 	jr z, .check_surplus_energy
 	call AddToAIScore
@@ -4782,7 +4782,7 @@ AITryToPlayEnergyCard: ; 1689f (5:689f)
 	jr nz, .check_deck
 
 .second_attack
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	jr nc, .check_discard_or_energy_boost
@@ -4802,7 +4802,7 @@ AITryToPlayEnergyCard: ; 1689f (5:689f)
 
 ; for both attacks, check if it has the effect of
 ; discarding energy cards or attached energy boost.
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
@@ -4812,7 +4812,7 @@ AITryToPlayEnergyCard: ; 1689f (5:689f)
 	call CheckLoadedMoveFlag
 	jr c, .energy_boost_or_discard_energy
 
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	ld [wSelectedMoveIndex], a
 	call CheckEnergyNeededForAttack
 	ld a, MOVE_FLAG2_ADDRESS | ATTACHED_ENERGY_BOOST_F
@@ -5058,8 +5058,8 @@ Func_169f8: ; 169f8 (5:69f8)
 	xor a
 	ld [wcdd9], a
 .asm_169fc
-	ld a, [wce20]
-	and $01
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PLUSPOWER
 	jr z, .asm_16a0b
 	ld a, [wcdd6]
 	ld [wSelectedMoveIndex], a
@@ -5071,11 +5071,11 @@ Func_169f8: ; 169f8 (5:69f8)
 	jp z, .asm_16a77
 
 ; determine AI score of both attacks.
-	xor a ; first attack
+	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	call GetAIScoreOfAttack
 	ld a, [wAIScore]
 	ld [wPlayAreaAIScore], a
-	ld a, $01 ; second attack
+	ld a, SECOND_ATTACK
 	call GetAIScoreOfAttack
 	ld c, $01
 	ld a, [wPlayAreaAIScore]
@@ -5263,7 +5263,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 .is_recoil
 	; sub from AI score number of damage counters
 	; that move deals to itself.
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	or a
 	jp z, .check_defending_can_ko
 	ld [wDamage], a
@@ -5513,14 +5513,14 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	jr nc, .asm_16ca6
 	ld a, 1
 	call SubFromAIScore
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	call SubFromAIScore
 
 .asm_16ca6
 	ld a, MOVE_FLAG2_ADDRESS | FLAG_2_BIT_6_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_nullify_flag
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	call AddToAIScore
 
 ; encourage move if it has a nullify or weaken attack effect.
@@ -5543,13 +5543,13 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	ld a, MOVE_FLAG2_ADDRESS | HEAL_USER_F
 	call CheckLoadedMoveFlag
 	jr nc, .check_status_effect
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	cp 1
 	jr z, .tally_heal_score
 	ld a, [wTempAI]
 	call CalculateByteTensDigit
 	ld b, a
-	ld a, [wLoadedMoveUnknown1]
+	ld a, [wLoadedMoveEffectParam]
 	cp 3
 	jr z, .asm_16cec
 	srl b
@@ -5568,7 +5568,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	call GetCardDamage
 	call CalculateByteTensDigit
 	pop bc
-	cp b ; wLoadedMoveUnknown1
+	cp b ; wLoadedMoveEffectParam
 	jr c, .add_heal_score
 	ld a, b
 .add_heal_score
@@ -6690,8 +6690,12 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 
 ; probability to return carry:
 ; - 50% if deck AI is playing is on the list;
-; - 25% for all other decks.
-Func_1743b: ; 1743b (5:743b)
+; - 25% for all other decks;
+; - 0% for boss decks.
+; used for certain decks to randomly choose
+; not to play Trainer card in hand.
+ChooseRandomlyNotToPlayTrainerCard: ; 1743b (5:743b)
+; boss decks always use Trainer cards.
 	push hl
 	push de
 	call CheckIfNotABossDeckID
