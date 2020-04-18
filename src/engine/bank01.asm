@@ -3055,7 +3055,7 @@ PracticeDuelVerify_Turn2: ; 5438 (1:5438)
 	ld a, [wTempCardID_ccc2]
 	cp SEAKING
 	jp nz, ReturnWrongAction
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	cp 1
 	jp nz, ReturnWrongAction
 	ld e, PLAY_AREA_ARENA
@@ -3090,7 +3090,7 @@ PracticeDuelVerify_Turn4: ; 5467 (1:5467)
 	ld a, [wTempCardID_ccc2]
 	cp SEAKING
 	jr nz, ReturnWrongAction
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	cp 1
 	jr nz, ReturnWrongAction
 	ret
@@ -3127,7 +3127,7 @@ PracticeDuelVerify_Turn7Or8: ; 54b7 (1:54b7)
 	ld a, [wTempCardID_ccc2]
 	cp STARMIE
 	jr nz, ReturnWrongAction
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	cp 1
 	jr nz, ReturnWrongAction
 	ret
@@ -6041,7 +6041,7 @@ DisplayOpponentUsedMoveScreen: ; 6635 (1:6635)
 	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
 	ld hl, wLoadedCard1Move1Name
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	or a
 	jr z, .first_move
 	ld hl, wLoadedCard1Move2Name
@@ -6886,7 +6886,7 @@ OppAction_6b3e: ; 6b3e (1:6b3e)
 	call SwapTurn
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wPlayerAttackingCardIndex], a
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld [wPlayerAttackingMoveIndex], a
 	ld a, [wTempCardID_ccc2]
 	ld [wPlayerAttackingCardID], a

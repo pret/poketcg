@@ -4376,7 +4376,7 @@ Func_161e: ; 161e (0:161e)
 ; 0x16ad
 
 ; copies, given a card identified by register a (card ID):
-; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
+; - e into wSelectedAttack and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
@@ -4384,7 +4384,7 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	push de
 	push af
 	ld a, e
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
 	pop af
@@ -4395,13 +4395,13 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	jr CopyMoveDataAndDamage
 
 ; copies, given a card identified by register d (0-59 deck index):
-; - e into wSelectedMoveIndex and d into hTempCardIndex_ff9f
+; - e into wSelectedAttack and d into hTempCardIndex_ff9f
 ; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
 ; - Also from that move, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
 CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, e
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, d
 	ldh [hTempCardIndex_ff9f], a
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -4465,7 +4465,7 @@ Func_16f6: ; 16f6 (0:16f6)
 
 ; Use an attack (from DuelMenu_Attack) or a Pokemon Power (from DuelMenu_PkmnPower)
 UseAttackOrPokemonPower: ; 1730 (0:1730)
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld [wPlayerAttackingMoveIndex], a
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wPlayerAttackingCardIndex], a
@@ -9858,7 +9858,7 @@ HandleCantAttackSubstatus: ; 33c1 (0:33c1)
 	ret
 
 ; return carry if the turn holder's arena Pokemon cannot use
-; selected move at wSelectedMoveIndex due to amnesia
+; selected move at wSelectedAttack due to amnesia
 HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
@@ -9874,7 +9874,7 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 .affected_by_amnesia
 	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
 	call GetTurnDuelistVariable
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	cp [hl]
 	jr nz, .not_the_disabled_move
 	ldtx hl, UnableToUseAttackDueToAmnesiaText

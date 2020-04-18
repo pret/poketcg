@@ -227,6 +227,6 @@ FLAG_3_BIT_1             EQU $1 << FLAG_3_BIT_1_F
 ; special CARD_DATA_RETREAT_COST values
 UNABLE_RETREAT EQU $64
 
-; attack number constants
+; attack index constants
 FIRST_ATTACK_OR_PKMN_POWER EQU $0
 SECOND_ATTACK              EQU $1

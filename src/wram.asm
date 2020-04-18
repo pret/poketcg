@@ -955,8 +955,8 @@ wTempNonTurnDuelistCardID:: ; ccc4
 wccc5:: ; ccc5
 	ds $1
 
-; may contain 0 or 1 depending on which move was selected
-wSelectedMoveIndex:: ; ccc6
+; *_ATTACK constants for selected attack
+wSelectedAttack:: ; ccc6
 	ds $1
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
@@ -1260,7 +1260,9 @@ wTempCardIDToLook:: ; cdd4
 wcdd5:: ; cdd5
 	ds $1
 
-wcdd6:: ; cdd6
+; the index of attack chosen by AI
+; to use with Pluspower.
+wAIPluspowerAttack:: ; cdd6
 	ds $1
 
 ; whether AI is allowed to play an energy card
@@ -1705,7 +1707,7 @@ wcf17:: ; cf17
 
 	ds $15
 
-; used by Func_200e5, AI related
+; used by _AIProcessHandTrainerCards, AI related
 wTempHandCardList:: ; cf68
 	ds DECK_SIZE
 

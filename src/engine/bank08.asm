@@ -6,47 +6,47 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 AIDecidePotion1,                        AIPlayPotion
-	unknown_data_20000 $0a, POTION,                 AIDecidePotion2,                        AIPlayPotion
-	unknown_data_20000 $08, SUPER_POTION,           AIDecideSuperPotion1,                   AIPlaySuperPotion
-	unknown_data_20000 $0b, SUPER_POTION,           AIDecideSuperPotion2,                   AIPlaySuperPotion
-	unknown_data_20000 $0d, DEFENDER,               AIDecideDefender1,                      AIPlayDefender
-	unknown_data_20000 $0e, DEFENDER,               AIDecideDefender2,                      AIPlayDefender
-	unknown_data_20000 $0d, PLUSPOWER,              AIDecidePluspower1,                     AIPlayPluspower
-	unknown_data_20000 $0e, PLUSPOWER,              AIDecidePluspower2,                     AIPlayPluspower
-	unknown_data_20000 $09, SWITCH,                 AIDecideSwitch,                         AIPlaySwitch
-	unknown_data_20000 $07, GUST_OF_WIND,           AIDecideGustOfWind,                     AIPlayGustOfWind
-	unknown_data_20000 $0a, GUST_OF_WIND,           AIDecideGustOfWind,                     AIPlayGustOfWind
-	unknown_data_20000 $04, BILL,                   AIDecideBill,                           AIPlayBill
-	unknown_data_20000 $05, ENERGY_REMOVAL,         AIDecideEnergyRemoval,                  AIPlayEnergyRemoval
-	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   AIDecideSuperEnergyRemoval,             AIPlaySuperEnergyRemoval
-	unknown_data_20000 $07, POKEMON_BREEDER,        AIDecidePokemonBreeder,                 AIPlayPokemonBreeder
-	unknown_data_20000 $0f, PROFESSOR_OAK,          AIDecideProfessorOak,                   AIPlayProfessorOak
-	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       AIDecideEnergyRetrieval,                AIPlayEnergyRetrieval
-	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, AIDecideSuperEnergyRetrieval,           AIPlaySuperEnergyRetrieval
-	unknown_data_20000 $06, POKEMON_CENTER,         AIDecidePokemonCenter,                  AIPlayPokemonCenter
-	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, AIDecideImposterProfessorOak,           AIPlayImposterProfessorOak
-	unknown_data_20000 $0c, ENERGY_SEARCH,          AIDecideEnergySearch,                   AIPlayEnergySearch
-	unknown_data_20000 $03, POKEDEX,                AIDecidePokedex,                        AIPlayPokedex
-	unknown_data_20000 $07, FULL_HEAL,              AIDecideFullHeal,                       AIPlayFullHeal
-	unknown_data_20000 $0a, MR_FUJI,                AIDecideMrFuji,                         AIPlayMrFuji
-	unknown_data_20000 $0a, SCOOP_UP,               AIDecideScoopUp,                        AIPlayScoopUp
-	unknown_data_20000 $02, MAINTENANCE,            AIDecideMaintenance,                    AIPlayMaintenance
-	unknown_data_20000 $03, RECYCLE,                AIDecideRecycle,                        AIPlayRecycle
-	unknown_data_20000 $0d, LASS,                   AIDecideLass,                           AIPlayLass
-	unknown_data_20000 $04, ITEM_FINDER,            AIDecideItemFinder,                     AIPlayItemFinder
-	unknown_data_20000 $01, IMAKUNI_CARD,           AIDecideImakuni,                        AIPlayImakuni
-	unknown_data_20000 $01, GAMBLER,                AIDecideGambler,                        AIPlayGambler
-	unknown_data_20000 $05, REVIVE,                 AIDecideRevive,                         AIPlayRevive
-	unknown_data_20000 $0d, POKEMON_FLUTE,          AIDecidePokemonFlute,                   AIPlayPokemonFlute
-	unknown_data_20000 $05, CLEFAIRY_DOLL,          AIDecideClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
-	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      AIDecideClefairyDollOrMysteriousFossil, AIPlayClefairyDollOrMysteriousFossil
-	unknown_data_20000 $02, POKE_BALL,              AIDecidePokeball,                       AIPlayPokeball
-	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecideComputerSearch,                 AIPlayComputerSearch
-	unknown_data_20000 $02, POKEMON_TRADER,         AIDecidePokemonTrader,                  AIPlayPokemonTrader
+	unknown_data_20000 $07, POTION,                 AIDecide_Potion1,                        AIPlay_Potion
+	unknown_data_20000 $0a, POTION,                 AIDecide_Potion2,                        AIPlay_Potion
+	unknown_data_20000 $08, SUPER_POTION,           AIDecide_SuperPotion1,                   AIPlay_SuperPotion
+	unknown_data_20000 $0b, SUPER_POTION,           AIDecide_SuperPotion2,                   AIPlay_SuperPotion
+	unknown_data_20000 $0d, DEFENDER,               AIDecide_Defender1,                      AIPlay_Defender
+	unknown_data_20000 $0e, DEFENDER,               AIDecide_Defender2,                      AIPlay_Defender
+	unknown_data_20000 $0d, PLUSPOWER,              AIDecide_Pluspower1,                     AIPlay_Pluspower
+	unknown_data_20000 $0e, PLUSPOWER,              AIDecide_Pluspower2,                     AIPlay_Pluspower
+	unknown_data_20000 $09, SWITCH,                 AIDecide_Switch,                         AIPlay_Switch
+	unknown_data_20000 $07, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
+	unknown_data_20000 $0a, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
+	unknown_data_20000 $04, BILL,                   AIDecide_Bill,                           AIPlay_Bill
+	unknown_data_20000 $05, ENERGY_REMOVAL,         AIDecide_EnergyRemoval,                  AIPlay_EnergyRemoval
+	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   AIDecide_SuperEnergyRemoval,             AIPlay_SuperEnergyRemoval
+	unknown_data_20000 $07, POKEMON_BREEDER,        AIDecide_PokemonBreeder,                 AIPlay_PokemonBreeder
+	unknown_data_20000 $0f, PROFESSOR_OAK,          AIDecide_ProfessorOak,                   AIPlay_ProfessorOak
+	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       AIDecide_EnergyRetrieval,                AIPlay_EnergyRetrieval
+	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, AIDecide_SuperEnergyRetrieval,           AIPlay_SuperEnergyRetrieval
+	unknown_data_20000 $06, POKEMON_CENTER,         AIDecide_PokemonCenter,                  AIPlay_PokemonCenter
+	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, AIDecide_ImposterProfessorOak,           AIPlay_ImposterProfessorOak
+	unknown_data_20000 $0c, ENERGY_SEARCH,          AIDecide_EnergySearch,                   AIPlay_EnergySearch
+	unknown_data_20000 $03, POKEDEX,                AIDecide_Pokedex,                        AIPlay_Pokedex
+	unknown_data_20000 $07, FULL_HEAL,              AIDecide_FullHeal,                       AIPlay_FullHeal
+	unknown_data_20000 $0a, MR_FUJI,                AIDecide_MrFuji,                         AIPlay_MrFuji
+	unknown_data_20000 $0a, SCOOP_UP,               AIDecide_ScoopUp,                        AIPlay_ScoopUp
+	unknown_data_20000 $02, MAINTENANCE,            AIDecide_Maintenance,                    AIPlay_Maintenance
+	unknown_data_20000 $03, RECYCLE,                AIDecide_Recycle,                        AIPlay_Recycle
+	unknown_data_20000 $0d, LASS,                   AIDecide_Lass,                           AIPlay_Lass
+	unknown_data_20000 $04, ITEM_FINDER,            AIDecide_ItemFinder,                     AIPlay_ItemFinder
+	unknown_data_20000 $01, IMAKUNI_CARD,           AIDecide_Imakuni,                        AIPlay_Imakuni
+	unknown_data_20000 $01, GAMBLER,                AIDecide_Gambler,                        AIPlay_Gambler
+	unknown_data_20000 $05, REVIVE,                 AIDecide_Revive,                         AIPlay_Revive
+	unknown_data_20000 $0d, POKEMON_FLUTE,          AIDecide_PokemonFlute,                   AIPlay_PokemonFlute
+	unknown_data_20000 $05, CLEFAIRY_DOLL,          AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
+	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
+	unknown_data_20000 $02, POKE_BALL,              AIDecide_Pokeball,                       AIPlay_Pokeball
+	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecide_ComputerSearch,                 AIPlay_ComputerSearch
+	unknown_data_20000 $02, POKEMON_TRADER,         AIDecide_PokemonTrader,                  AIPlay_PokemonTrader
 	db $ff
 
-Func_200e5: ; 200e5 (8:40e5)
+_AIProcessHandTrainerCards: ; 200e5 (8:40e5)
 	ld [wce18], a
 ; create hand list in wDuelTempList and wTempHandCardList.
 	call CreateHandCardList
@@ -104,7 +104,7 @@ Func_200e5: ; 200e5 (8:40e5)
 	ldh [hTempCardIndex_ff9f], a
 
 ; if Headache effects prevent playing card
-; move on to the next ite, in list.
+; move on to the next item in list.
 	bank1call CheckCantUseTrainerDueToHeadache
 	jp c, .next_in_data
 
@@ -197,7 +197,7 @@ Func_200e5: ; 200e5 (8:40e5)
 ; 0x201b5
 
 ; makes AI use Potion card.
-AIPlayPotion: ; 201b5 (8:41b5)
+AIPlay_Potion: ; 201b5 (8:41b5)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -219,7 +219,7 @@ AIPlayPotion: ; 201b5 (8:41b5)
 ; next turn after using Potion.
 ; if it cannot, return carry.
 ; also take into account whether move is high recoil.
-AIDecidePotion1: ; 201d1 (8:41d1)
+AIDecide_Potion1: ; 201d1 (8:41d1)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -262,7 +262,7 @@ AIDecidePotion1: ; 201d1 (8:41d1)
 ; output:
 ;	a = card to use Potion on;
 ;	carry set if Potion should be used.
-AIDecidePotion2: ; 20204 (8:4204)
+AIDecide_Potion2: ; 20204 (8:4204)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -363,7 +363,7 @@ AIDecidePotion2: ; 20204 (8:4204)
 .check_boost_if_taken_damage ; 2027e (8:427e)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .second_attack
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
@@ -371,7 +371,7 @@ AIDecidePotion2: ; 20204 (8:4204)
 	jr c, .set_carry
 .second_attack
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .false
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
@@ -388,7 +388,7 @@ AIDecidePotion2: ; 20204 (8:4204)
 ; 0x202a8
 
 ; makes AI use Super Potion card.
-AIPlaySuperPotion: ; 202a8 (8:42a8)
+AIPlay_SuperPotion: ; 202a8 (8:42a8)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -413,7 +413,7 @@ AIPlaySuperPotion: ; 202a8 (8:42a8)
 ; active card next turn after using Super Potion.
 ; if it cannot, return carry.
 ; also take into account whether move is high recoil.
-AIDecideSuperPotion1: ; 202cc (8:42cc)
+AIDecide_SuperPotion1: ; 202cc (8:42cc)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
 	call Func_22bad
@@ -467,7 +467,7 @@ AIDecideSuperPotion1: ; 202cc (8:42cc)
 ; output:
 ;	a = card to use Super Potion on;
 ;	carry set if Super Potion should be used.
-AIDecideSuperPotion2: ; 2030f (8:430f)
+AIDecide_SuperPotion2: ; 2030f (8:430f)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -585,7 +585,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 .check_boost_if_taken_damage ; 2039e (8:439e)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .second_attack_1
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
@@ -593,7 +593,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 	jr c, .true_1
 .second_attack_1
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .false_1
 	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
@@ -614,7 +614,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 .check_energy_cost ; 203c8 (8:43c8)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -626,7 +626,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 	pop de
 	push de
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -644,7 +644,7 @@ AIDecideSuperPotion2: ; 2030f (8:430f)
 	ret
 ; 0x203f8
 
-AIPlayDefender: ; 203f8 (8:43f8)
+AIPlay_Defender: ; 203f8 (8:43f8)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	xor a
@@ -657,7 +657,7 @@ AIPlayDefender: ; 203f8 (8:43f8)
 ; returns carry if using Defender can prevent a KO
 ; by the defending Pokémon.
 ; this takes into account both attacks and whether they're useable.
-AIDecideDefender1: ; 20406 (8:4406)
+AIDecide_Defender1: ; 20406 (8:4406)
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfAnyMoveKnocksOutDefendingCard
@@ -678,7 +678,7 @@ AIDecideDefender1: ; 20406 (8:4406)
 	call SwapTurn
 	jr c, .no_carry
 
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	farcall EstimateDamage_FromDefendingPokemon
 	ld a, [wDamage]
 	ld [wce06], a
@@ -686,11 +686,11 @@ AIDecideDefender1: ; 20406 (8:4406)
 
 ; load in a the attack that was not selected,
 ; and check if it is useable.
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld b, a
 	ld a, $01
 	sub b
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	push de
 	call SwapTurn
 	farcall CheckIfSelectedMoveIsUnusable
@@ -700,7 +700,7 @@ AIDecideDefender1: ; 20406 (8:4406)
 
 ; the other attack is useable.
 ; compare its damage to the selected move.
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	push de
 	farcall EstimateDamage_FromDefendingPokemon
 	pop de
@@ -712,11 +712,11 @@ AIDecideDefender1: ; 20406 (8:4406)
 ; and deals less damage than the selected move,
 ; switch back to the other attack.
 .switch_back
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld b, a
 	ld a, $01
 	sub b
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, [wce06]
 	ld [wDamage], a
 
@@ -742,7 +742,7 @@ AIDecideDefender1: ; 20406 (8:4406)
 
 ; return carry if using Defender prevents Pokémon
 ; from being knocked out by an attack with recoil.
-AIDecideDefender2: ; 20486 (8:4486)
+AIDecide_Defender2: ; 20486 (8:4486)
 	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
 	call CheckLoadedMoveFlag
 	jr c, .recoil
@@ -756,7 +756,7 @@ AIDecideDefender2: ; 20486 (8:4486)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	or a
 	jr nz, .second_attack
 ; first attack
@@ -815,12 +815,12 @@ AIDecideDefender2: ; 20486 (8:4486)
 	ret
 ; 0x204e8
 
-AIPlayPluspower: ; 204e8 (8:44e8)
+AIPlay_Pluspower: ; 204e8 (8:44e8)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_PLUSPOWER
 	ld [wCurrentAIFlags], a
 	ld a, [wAITrainerCardParameter]
-	ld [wcdd6], a
+	ld [wAIPluspowerAttack], a
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -830,7 +830,8 @@ AIPlayPluspower: ; 204e8 (8:44e8)
 
 ; returns carry if using a Pluspower can KO defending Pokémon
 ; if active card cannot KO without the boost.
-AIDecidePluspower1: ; 20501 (8:4501)
+; outputs in a the attack to use.
+AIDecide_Pluspower1: ; 20501 (8:4501)
 ; this is mistakenly duplicated
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
@@ -874,11 +875,11 @@ AIDecidePluspower1: ; 20501 (8:4501)
 ; can KO with Pluspower boost.
 ; if neither can KO, return no carry.
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	call .check_ko_with_pluspower
 	jr c, .kos_with_pluspower_1
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	call .check_ko_with_pluspower
 	jr c, .kos_with_pluspower_2
 
@@ -907,7 +908,7 @@ AIDecidePluspower1: ; 20501 (8:4501)
 .check_ko_with_pluspower ; 20562 (8:4562)
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .unusable
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -954,7 +955,8 @@ AIDecidePluspower1: ; 20501 (8:4501)
 ; if selected move is useable, can't KO without Pluspower boost
 ; can damage Mr. Mime even with Pluspower boost
 ; and has a minimum damage > 0.
-AIDecidePluspower2: ; 205a5 (8:45a5)
+; outputs in a the attack to use.
+AIDecide_Pluspower2: ; 205a5 (8:45a5)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .check_can_ko
@@ -994,7 +996,7 @@ AIDecidePluspower2: ; 205a5 (8:45a5)
 .check_can_ko ; 205d7 (8:45d7)
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .unuseable
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetNonTurnDuelistVariable
@@ -1016,7 +1018,7 @@ AIDecidePluspower2: ; 205a5 (8:45a5)
 .check_random ; 205f6 (8:45f6)
 	farcall CheckIfSelectedMoveIsUnusable
 	jr c, .unuseable
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wAIMinDamage]
 	cp 10
@@ -1027,7 +1029,7 @@ AIDecidePluspower2: ; 205a5 (8:45a5)
 	ret
 ; 0x20612
 
-AIPlaySwitch: ; 20612 (8:4612)
+AIPlay_Switch: ; 20612 (8:4612)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_SWITCH
 	ld [wCurrentAIFlags], a
@@ -1045,7 +1047,7 @@ AIPlaySwitch: ; 20612 (8:4612)
 ; returns carry if the active card has less energy cards
 ; than the retreat cost and if AI can't play an energy
 ; card from the hand to fulfill the cost
-AIDecideSwitch: ; 2062e (8:462e)
+AIDecide_Switch: ; 2062e (8:462e)
 ; check if AI can already play an energy card from hand to retreat
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
@@ -1092,7 +1094,7 @@ AIDecideSwitch: ; 2062e (8:462e)
 	ret
 ; 0x20666
 
-AIPlayGustOfWind: ; 20666 (8:4666)
+AIPlay_GustOfWind: ; 20666 (8:4666)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_GUST_OF_WIND
 	ld [wCurrentAIFlags], a
@@ -1105,7 +1107,7 @@ AIPlayGustOfWind: ; 20666 (8:4666)
 	ret
 ; 0x2067e
 
-AIDecideGustOfWind: ; 2067e (8:467e)
+AIDecide_GustOfWind: ; 2067e (8:467e)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	dec a
@@ -1277,13 +1279,13 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 ; returns carry if neither attack can deal damage
 .CheckIfNoAttackDealsDamage ; 2076b (8:476b)
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	call .CheckIfAttackDealsNoDamage
 	jr c, .second_attack
 	ret
 .second_attack
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	call .CheckIfAttackDealsNoDamage
 	jr c, .true
 	ret
@@ -1294,7 +1296,7 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 ; returns carry if attack is Pokemon Power
 ; or otherwise doesn't deal any damage
 .CheckIfAttackDealsNoDamage ; 20782 (8:4782)
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld e, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1310,7 +1312,7 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 	ret z
 
 	; check damage against defending card
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wAIMaxDamage]
 	or a
@@ -1481,7 +1483,7 @@ AIDecideGustOfWind: ; 2067e (8:467e)
 	ret
 ; 0x2086d
 
-AIPlayBill: ; 2086d (8:486d)
+AIPlay_Bill: ; 2086d (8:486d)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -1490,14 +1492,14 @@ AIPlayBill: ; 2086d (8:486d)
 ; 0x20878
 
 ; return carry if cards in deck > 9
-AIDecideBill: ; 20878 (8:4878)
+AIDecide_Bill: ; 20878 (8:4878)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE - 9
 	ret
 ; 0x20880
 
-AIPlayEnergyRemoval: ; 20880 (8:4880)
+AIPlay_EnergyRemoval: ; 20880 (8:4880)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -1510,7 +1512,7 @@ AIPlayEnergyRemoval: ; 20880 (8:4880)
 ; 0x20895
 
 ; picks an energy card in the player's Play Area to remove
-AIDecideEnergyRemoval: ; 20895 (8:4895)
+AIDecide_EnergyRemoval: ; 20895 (8:4895)
 ; check if the current active card can KO player's card
 ; if it's possible to KO, then do not consider the player's
 ; active card to remove its attached energy
@@ -1626,7 +1628,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 .CheckIfNotEnoughEnergyToAttack ; 20924 (8:4924)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -1635,7 +1637,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 
 	push de
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -1712,7 +1714,7 @@ AIDecideEnergyRemoval: ; 20895 (8:4895)
 	ret
 ; 0x20994
 
-AIPlaySuperEnergyRemoval: ; 20994 (8:4994)
+AIPlay_SuperEnergyRemoval: ; 20994 (8:4994)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -1733,7 +1735,7 @@ AIPlaySuperEnergyRemoval: ; 20994 (8:4994)
 ; 0x209bc
 
 ; picks two energy cards in the player's Play Area to remove
-AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
+AIDecide_SuperEnergyRemoval: ; 209bc (8:49bc)
 	ld e, PLAY_AREA_BENCH_1
 .loop_1
 ; first find an Arena card with a color energy card
@@ -1911,7 +1913,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 .CheckIfNotEnoughEnergyToAttack ; 20a92 (8:4a92)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -1920,7 +1922,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 
 	push de
 	ld a, SECOND_ATTACK
-	ld [wSelectedMoveIndex], a
+	ld [wSelectedAttack], a
 	ld a, e
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckEnergyNeededForAttack
@@ -2001,7 +2003,7 @@ AIDecideSuperEnergyRemoval: ; 209bc (8:49bc)
 	ret
 ; 0x20b06
 
-AIPlayPokemonBreeder: ; 20b06 (8:4b06)
+AIPlay_PokemonBreeder: ; 20b06 (8:4b06)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -2013,7 +2015,7 @@ AIPlayPokemonBreeder: ; 20b06 (8:4b06)
 	ret
 ; 0x20b1b
 
-AIDecidePokemonBreeder: ; 20b1b (8:4b1b)
+AIDecide_PokemonBreeder: ; 20b1b (8:4b1b)
 	call IsPrehistoricPowerActive
 	jp c, .done
 
@@ -2357,7 +2359,7 @@ AIDecidePokemonBreeder: ; 20b1b (8:4b1b)
 	ret
 ; 0x20cae
 
-AIPlayProfessorOak: ; 20cae (8:4cae)
+AIPlay_ProfessorOak: ; 20cae (8:4cae)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_USED_PROFESSOR_OAK | AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -2370,7 +2372,7 @@ AIPlayProfessorOak: ; 20cae (8:4cae)
 
 ; sets carry if AI determines a score of playing
 ; Professor Oak is over a certain threshold.
-AIDecideProfessorOak: ; 20cc1 (8:4cc1)
+AIDecide_ProfessorOak: ; 20cc1 (8:4cc1)
 ; return if cards in deck <= 6
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -2688,7 +2690,7 @@ AIDecideProfessorOak: ; 20cc1 (8:4cc1)
 	ret
 ; 0x20e44
 
-AIPlayEnergyRetrieval: ; 20e44 (8:4e44)
+AIPlay_EnergyRetrieval: ; 20e44 (8:4e44)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -2713,7 +2715,7 @@ AIPlayEnergyRetrieval: ; 20e44 (8:4e44)
 ; checks whether AI can play Energy Retrieval and
 ; picks the energy cards from the discard pile,
 ; and duplicate cards in hand to discard.
-AIDecideEnergyRetrieval: ; 20e6e (8:4e6e)
+AIDecide_EnergyRetrieval: ; 20e6e (8:4e6e)
 ; return no carry if no cards in hand
 	farcall CreateEnergyCardListFromHand
 	jp nc, .no_carry
@@ -2947,7 +2949,7 @@ FindDuplicateCards: ; 20f38 (8:4f38)
 	ret
 ; 0x20f80
 
-AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
+AIPlay_SuperEnergyRetrieval: ; 20f80 (8:4f80)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -2979,7 +2981,7 @@ AIPlaySuperEnergyRetrieval: ; 20f80 (8:4f80)
 	ret
 ; 0x20fc1
 
-AIDecideSuperEnergyRetrieval: ; 20fc1 (8:4fc1)
+AIDecide_SuperEnergyRetrieval: ; 20fc1 (8:4fc1)
 ; return no carry if no cards in hand
 	farcall CreateEnergyCardListFromHand
 	jp nc, .no_carry
@@ -3179,7 +3181,7 @@ FindAndRemoveCardFromList: ; 210d5 (8:50d5)
 	ret
 ; 0x210e0
 
-AIPlayPokemonCenter: ; 210e0 (8:50e0)
+AIPlay_PokemonCenter: ; 210e0 (8:50e0)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -3187,7 +3189,7 @@ AIPlayPokemonCenter: ; 210e0 (8:50e0)
 	ret
 ; 0x210eb
 
-AIDecidePokemonCenter: ; 210eb (8:50eb)
+AIDecide_PokemonCenter: ; 210eb (8:50eb)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 
@@ -3280,7 +3282,7 @@ AIDecidePokemonCenter: ; 210eb (8:50eb)
 	ret
 ; 0x21170
 
-AIPlayImposterProfessorOak: ; 21170 (8:5170)
+AIPlay_ImposterProfessorOak: ; 21170 (8:5170)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -3290,7 +3292,7 @@ AIPlayImposterProfessorOak: ; 21170 (8:5170)
 
 ; sets carry depending on player's number of cards
 ; in deck in in hand.
-AIDecideImposterProfessorOak: ; 2117b (8:517b)
+AIDecide_ImposterProfessorOak: ; 2117b (8:517b)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetNonTurnDuelistVariable
 	cp DECK_SIZE - 14
@@ -3318,7 +3320,7 @@ AIDecideImposterProfessorOak: ; 2117b (8:517b)
 	ret
 ; 0x2119a
 
-AIPlayEnergySearch: ; 2119a (8:519a)
+AIPlay_EnergySearch: ; 2119a (8:519a)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -3329,7 +3331,7 @@ AIPlayEnergySearch: ; 2119a (8:519a)
 ; 0x211aa
 
 ; AI checks for playing Energy Search
-AIDecideEnergySearch: ; 211aa (8:51aa)
+AIDecide_EnergySearch: ; 211aa (8:51aa)
 	farcall CreateEnergyCardListFromHand
 	jr c, .start
 	call .CheckForUsefulEnergyCards
@@ -3566,7 +3568,7 @@ AIDecideEnergySearch: ; 211aa (8:51aa)
 	ret
 ; 0x212b4
 
-AIPlayPokedex: ; 212b4 (8:52b4)
+AIPlay_Pokedex: ; 212b4 (8:52b4)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wce1a]
@@ -3586,7 +3588,7 @@ AIPlayPokedex: ; 212b4 (8:52b4)
 	ret
 ; 0x212dc
 
-AIDecidePokedex: ; 212dc (8:52dc)
+AIDecide_Pokedex: ; 212dc (8:52dc)
 	ld a, [wcda6]
 	cp $06
 	jr c, .no_carry
@@ -3881,7 +3883,7 @@ PickPokedexCards: ; 2138e (8:538e)
 	ret
 ; 0x2141d
 
-AIPlayFullHeal: ; 2141d (8:541d)
+AIPlay_FullHeal: ; 2141d (8:541d)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -3889,7 +3891,7 @@ AIPlayFullHeal: ; 2141d (8:541d)
 	ret
 ; 0x21428
 
-AIDecideFullHeal: ; 21428 (8:5428)
+AIDecide_FullHeal: ; 21428 (8:5428)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 
@@ -3933,7 +3935,7 @@ AIDecideFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_prz
-	call AIDecideScoopUp
+	call AIDecide_ScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_prz
@@ -3960,7 +3962,7 @@ AIDecideFullHeal: ; 21428 (8:5428)
 	ld a, SCOOP_UP
 	call LookForCardIDInHandList_Bank8
 	jr nc, .no_scoop_up_cnf
-	call AIDecideScoopUp
+	call AIDecide_ScoopUp
 	jr c, .no_carry
 
 .no_scoop_up_cnf
@@ -3976,7 +3978,7 @@ AIDecideFullHeal: ; 21428 (8:5428)
 	jr .no_carry
 ; 0x21497
 
-AIPlayMrFuji: ; 21497 (8:5497)
+AIPlay_MrFuji: ; 21497 (8:5497)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -3987,7 +3989,7 @@ AIPlayMrFuji: ; 21497 (8:5497)
 ; 0x214a7
 
 ; AI logic for playing Mr Fuji
-AIDecideMrFuji: ; 214a7 (8:54a7)
+AIDecide_MrFuji: ; 214a7 (8:54a7)
 	ld a, $ff
 	ld [wce06], a
 	ld [wce08], a
@@ -4050,7 +4052,7 @@ AIDecideMrFuji: ; 214a7 (8:54a7)
 	ret
 ; 0x214f1
 
-AIPlayScoopUp: ; 214f1 (8:54f1)
+AIPlay_ScoopUp: ; 214f1 (8:54f1)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -4062,7 +4064,7 @@ AIPlayScoopUp: ; 214f1 (8:54f1)
 	ret
 ; 0x21506
 
-AIDecideScoopUp: ; 21506 (8:5506)
+AIDecide_ScoopUp: ; 21506 (8:5506)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 
@@ -4260,7 +4262,7 @@ AIDecideScoopUp: ; 21506 (8:5506)
 	jp .no_carry
 ; 0x2160f
 
-AIPlayMaintenance: ; 2160f (8:560f)
+AIPlay_Maintenance: ; 2160f (8:560f)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -4276,7 +4278,7 @@ AIPlayMaintenance: ; 2160f (8:560f)
 ; 0x2162c
 
 ; AI logic for playing Maintenance
-AIDecideMaintenance: ; 2162c (8:562c)
+AIDecide_Maintenance: ; 2162c (8:562c)
 ; Imakuni? has his own thing
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
@@ -4359,7 +4361,7 @@ AIDecideMaintenance: ; 2162c (8:562c)
 	ret
 ; 0x2169a
 
-AIPlayRecycle: ; 2169a (8:569a)
+AIPlay_Recycle: ; 2169a (8:569a)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ldtx de, TrainerCardSuccessCheckText
@@ -4381,7 +4383,7 @@ AIPlayRecycle: ; 2169a (8:569a)
 ; has priorities for Ghost Deck, and a "default" priority list
 ; (which is the Fire Charge deck, since it's the only other
 ; deck that runs a Recycle card in it.)
-AIDecideRecycle: ; 216b8 (8:56b8)
+AIDecide_Recycle: ; 216b8 (8:56b8)
 ; no use checking if no cards in Discard Pile
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4500,7 +4502,7 @@ AIDecideRecycle: ; 216b8 (8:56b8)
 	jr .loop_2
 ; 0x21755
 
-AIPlayLass: ; 21755 (8:5755)
+AIPlay_Lass: ; 21755 (8:5755)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -4511,7 +4513,7 @@ AIPlayLass: ; 21755 (8:5755)
 	ret
 ; 0x21768
 
-AIDecideLass: ; 21768 (8:5768)
+AIDecide_Lass: ; 21768 (8:5768)
 ; skip if player has less than 7 cards in hand
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetNonTurnDuelistVariable
@@ -4542,7 +4544,7 @@ AIDecideLass: ; 21768 (8:5768)
 	ret
 ; 0x2178f
 
-AIPlayItemFinder: ; 2178f (8:578f)
+AIPlay_ItemFinder: ; 2178f (8:578f)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -4563,7 +4565,7 @@ AIPlayItemFinder: ; 2178f (8:578f)
 ; if so, find duplicate cards in hand to discard
 ; that are not Mr Mime and Pokemon Trader cards.
 ; this logic is suitable only for Strange Psyshock deck.
-AIDecideItemFinder: ; 217b1 (8:57b1)
+AIDecide_ItemFinder: ; 217b1 (8:57b1)
 ; skip if no Discard Pile.
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4635,7 +4637,7 @@ AIDecideItemFinder: ; 217b1 (8:57b1)
 	ret
 ; 0x21813
 
-AIPlayImakuni: ; 21813 (8:5813)
+AIPlay_Imakuni: ; 21813 (8:5813)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -4644,7 +4646,7 @@ AIPlayImakuni: ; 21813 (8:5813)
 ; 0x2181e
 
 ; only sets carry if Active card is not confused.
-AIDecideImakuni: ; 2181e (8:581e)
+AIDecide_Imakuni: ; 2181e (8:581e)
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
 	and CNF_SLP_PRZ
@@ -4657,7 +4659,7 @@ AIDecideImakuni: ; 2181e (8:581e)
 	ret
 ; 0x2182d
 
-AIPlayGambler: ; 2182d (8:582d)
+AIPlay_Gambler: ; 2182d (8:582d)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -4698,7 +4700,7 @@ AIPlayGambler: ; 2182d (8:582d)
 ; checks whether to play Gambler.
 ; aside from Imakuni, all other opponents only
 ; play if there's less than 4 cards in the deck.
-AIDecideGambler: ; 21875 (8:5875)
+AIDecide_Gambler: ; 21875 (8:5875)
 ; Imakuni? has his own routine
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
@@ -4728,7 +4730,7 @@ AIDecideGambler: ; 21875 (8:5875)
 	ret
 ; 0x21899
 
-AIPlayRevive: ; 21899 (8:5899)
+AIPlay_Revive: ; 21899 (8:5899)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -4740,7 +4742,7 @@ AIPlayRevive: ; 21899 (8:5899)
 
 ; checks certain cards in Discard Pile to use Revive on.
 ; suitable for Muscle For Brains deck only.
-AIDecideRevive: ; 218a9 (8:58a9)
+AIDecide_Revive: ; 218a9 (8:58a9)
 ; skip if no cards in Discard Pile
 	call CreateDiscardPileCardList
 	jr c, .no_carry
@@ -4786,7 +4788,7 @@ AIDecideRevive: ; 218a9 (8:58a9)
 	ret
 ; 0x218d8
 
-AIPlayPokemonFlute: ; 218d8 (8:58d8)
+AIPlay_PokemonFlute: ; 218d8 (8:58d8)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -4796,7 +4798,7 @@ AIPlayPokemonFlute: ; 218d8 (8:58d8)
 	ret
 ; 0x218e8
 
-AIDecidePokemonFlute: ; 218e8 (8:58e8)
+AIDecide_PokemonFlute: ; 218e8 (8:58e8)
 ; if player has no Discard Pile, skip.
 	call SwapTurn
 	call CreateDiscardPileCardList
@@ -4893,7 +4895,7 @@ AIDecidePokemonFlute: ; 218e8 (8:58e8)
 	ret
 ; 0x21977
 
-AIPlayClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
+AIPlay_ClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, OPPACTION_EXECUTE_TRAINER_EFFECTS
@@ -4902,7 +4904,7 @@ AIPlayClefairyDollOrMysteriousFossil: ; 21977 (8:5977)
 ; 0x21982
 
 ; AI logic for playing Clefairy Doll
-AIDecideClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
+AIDecide_ClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
 ; if has max number of Play Area Pokemon, skip
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -4933,7 +4935,7 @@ AIDecideClefairyDollOrMysteriousFossil: ; 21982 (8:5982)
 	ret
 ; 0x219a6
 
-AIPlayPokeball: ; 219a6 (8:59a6)
+AIPlay_Pokeball: ; 219a6 (8:59a6)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ldtx de, TrainerCardSuccessCheckText
@@ -4952,7 +4954,7 @@ AIPlayPokeball: ; 219a6 (8:59a6)
 	ret
 ; 0x219c6
 
-AIDecidePokeball: ; 219c6 (8:59c6)
+AIDecide_Pokeball: ; 219c6 (8:59c6)
 ; go to the routines associated with deck ID
 	ld a, [wOpponentDeckID]
 	cp FIRE_CHARGE_DECK_ID
@@ -5154,7 +5156,7 @@ AIDecidePokeball: ; 219c6 (8:59c6)
 	ret
 ; 0x21b12
 
-AIPlayComputerSearch: ; 21b12 (8:5b12)
+AIPlay_ComputerSearch: ; 21b12 (8:5b12)
 	ld a, [wCurrentAIFlags]
 	or AI_FLAG_MODIFIED_HAND
 	ld [wCurrentAIFlags], a
@@ -5173,7 +5175,7 @@ AIPlayComputerSearch: ; 21b12 (8:5b12)
 
 ; checks what Deck ID AI is playing and handle
 ; them in their own routine.
-AIDecideComputerSearch: ; 21b34 (8:5b34)
+AIDecide_ComputerSearch: ; 21b34 (8:5b34)
 ; skip if number of cards in hand < 3
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
@@ -5182,19 +5184,19 @@ AIDecideComputerSearch: ; 21b34 (8:5b34)
 
 	ld a, [wOpponentDeckID]
 	cp ROCK_CRUSHER_DECK_ID
-	jr z, AIDecideComputerSearch_RockCrusher
+	jr z, AIDecide_ComputerSearch_RockCrusher
 	cp WONDERS_OF_SCIENCE_DECK_ID
-	jp z, AIDecideComputerSearch_WondersOfScience
+	jp z, AIDecide_ComputerSearch_WondersOfScience
 	cp FIRE_CHARGE_DECK_ID
-	jp z, AIDecideComputerSearch_FireCharge
+	jp z, AIDecide_ComputerSearch_FireCharge
 	cp ANGER_DECK_ID
-	jp z, AIDecideComputerSearch_Anger
+	jp z, AIDecide_ComputerSearch_Anger
 
 .no_carry
 	or a
 	ret
 
-AIDecideComputerSearch_RockCrusher: ; 21b55 (8:5b55)
+AIDecide_ComputerSearch_RockCrusher: ; 21b55 (8:5b55)
 ; if number of cards in hand is equal to 3,
 ; target Professor Oak in deck
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
@@ -5372,7 +5374,7 @@ AIDecideComputerSearch_RockCrusher: ; 21b55 (8:5b55)
 	scf
 	ret
 
-AIDecideComputerSearch_WondersOfScience: ; 21c56 (8:5c56)
+AIDecide_ComputerSearch_WondersOfScience: ; 21c56 (8:5c56)
 ; if number of cards in hand < 5, target Professor Oak in deck
 	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
 	call GetTurnDuelistVariable
@@ -5445,7 +5447,7 @@ AIDecideComputerSearch_WondersOfScience: ; 21c56 (8:5c56)
 	scf
 	ret
 
-AIDecideComputerSearch_FireCharge: ; 21cbb (8:5cbb)
+AIDecide_ComputerSearch_FireCharge: ; 21cbb (8:5cbb)
 ; pick target card in deck from highest to lowest priority.
 ; if not found in hand, go to corresponding branch.
 	ld a, CHANSEY
@@ -5511,7 +5513,7 @@ AIDecideComputerSearch_FireCharge: ; 21cbb (8:5cbb)
 	ret
 ; 0x21d1e
 
-AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
+AIDecide_ComputerSearch_Anger: ; 21d1e (8:5d1e)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -5572,7 +5574,7 @@ AIDecideComputerSearch_Anger: ; 21d1e (8:5d1e)
 	ret
 ; 0x21d7a
 
-AIPlayPokemonTrader: ; 21d7a (8:5d7a)
+AIPlay_PokemonTrader: ; 21d7a (8:5d7a)
 	ld a, [wAITrainerCardToPlay]
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
@@ -5584,34 +5586,34 @@ AIPlayPokemonTrader: ; 21d7a (8:5d7a)
 	ret
 ; 0x21d8f
 
-AIDecidePokemonTrader: ; 21d8f (8:5d8f)
+AIDecide_PokemonTrader: ; 21d8f (8:5d8f)
 ; each deck has their own routine for picking
 ; what Pokemon to look for.
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_MOLTRES_DECK_ID
-	jr z, AIDecidePokemonTrader_LegendaryMoltres
+	jr z, AIDecide_PokemonTrader_LegendaryMoltres
 	cp LEGENDARY_ARTICUNO_DECK_ID
-	jr z, AIDecidePokemonTrader_LegendaryArticuno
+	jr z, AIDecide_PokemonTrader_LegendaryArticuno
 	cp LEGENDARY_DRAGONITE_DECK_ID
-	jp z, AIDecidePokemonTrader_LegendaryDragonite
+	jp z, AIDecide_PokemonTrader_LegendaryDragonite
 	cp LEGENDARY_RONALD_DECK_ID
-	jp z, AIDecidePokemonTrader_LegendaryRonald
+	jp z, AIDecide_PokemonTrader_LegendaryRonald
 	cp BLISTERING_POKEMON_DECK_ID
-	jp z, AIDecidePokemonTrader_BlisteringPokemon
+	jp z, AIDecide_PokemonTrader_BlisteringPokemon
 	cp SOUND_OF_THE_WAVES_DECK_ID
-	jp z, AIDecidePokemonTrader_SoundOfTheWaves
+	jp z, AIDecide_PokemonTrader_SoundOfTheWaves
 	cp POWER_GENERATOR_DECK_ID
-	jp z, AIDecidePokemonTrader_PowerGenerator
+	jp z, AIDecide_PokemonTrader_PowerGenerator
 	cp FLOWER_GARDEN_DECK_ID
-	jp z, AIDecidePokemonTrader_FlowerGarden
+	jp z, AIDecide_PokemonTrader_FlowerGarden
 	cp STRANGE_POWER_DECK_ID
-	jp z, AIDecidePokemonTrader_StrangePower
+	jp z, AIDecide_PokemonTrader_StrangePower
 	cp FLAMETHROWER_DECK_ID
-	jp z, AIDecidePokemonTrader_Flamethrower
+	jp z, AIDecide_PokemonTrader_Flamethrower
 	or a
 	ret
 
-AIDecidePokemonTrader_LegendaryMoltres: ; 21dc4 (8:5dc4)
+AIDecide_PokemonTrader_LegendaryMoltres: ; 21dc4 (8:5dc4)
 ; look for Moltres2 card in deck to trade with a
 ; card in hand different from Moltres1.
 	ld a, MOLTRES2
@@ -5627,7 +5629,7 @@ AIDecidePokemonTrader_LegendaryMoltres: ; 21dc4 (8:5dc4)
 	or a
 	ret
 
-AIDecidePokemonTrader_LegendaryArticuno: ; 21dd5 (8:5dd5)
+AIDecide_PokemonTrader_LegendaryArticuno: ; 21dd5 (8:5dd5)
 ; if has none of these cards in Hand or Play Area, proceed
 	ld a, ARTICUNO1
 	call LookForCardIDInHandAndPlayArea
@@ -5683,7 +5685,7 @@ AIDecidePokemonTrader_LegendaryArticuno: ; 21dd5 (8:5dd5)
 	ret
 ; 0x21e24
 
-AIDecidePokemonTrader_LegendaryDragonite: ; 21e24 (8:5e24)
+AIDecide_PokemonTrader_LegendaryDragonite: ; 21e24 (8:5e24)
 ; if has less than 5 cards of energy
 ; and of Pokemon in hand/Play Area,
 ; target a Kangaskhan in deck.
@@ -5781,7 +5783,7 @@ AIDecidePokemonTrader_LegendaryDragonite: ; 21e24 (8:5e24)
 	ret
 ; 0x21ec9
 
-AIDecidePokemonTrader_LegendaryRonald: ; 21ec9 (8:5ec9)
+AIDecide_PokemonTrader_LegendaryRonald: ; 21ec9 (8:5ec9)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -5852,7 +5854,7 @@ AIDecidePokemonTrader_LegendaryRonald: ; 21ec9 (8:5ec9)
 	ret
 ; 0x21f41
 
-AIDecidePokemonTrader_BlisteringPokemon: ; 21f41 (8:5f41)
+AIDecide_PokemonTrader_BlisteringPokemon: ; 21f41 (8:5f41)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -5898,7 +5900,7 @@ AIDecidePokemonTrader_BlisteringPokemon: ; 21f41 (8:5f41)
 	ret
 ; 0x21f85
 
-AIDecidePokemonTrader_SoundOfTheWaves: ; 21f85 (8:5f85)
+AIDecide_PokemonTrader_SoundOfTheWaves: ; 21f85 (8:5f85)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -5975,7 +5977,7 @@ AIDecidePokemonTrader_SoundOfTheWaves: ; 21f85 (8:5f85)
 	ret
 ; 0x2200b
 
-AIDecidePokemonTrader_PowerGenerator: ; 2200b (8:600b)
+AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -6067,7 +6069,7 @@ AIDecidePokemonTrader_PowerGenerator: ; 2200b (8:600b)
 	ret
 ; 0x220a8
 
-AIDecidePokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
+AIDecide_PokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -6137,7 +6139,7 @@ AIDecidePokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
 	ret
 ; 0x22122
 
-AIDecidePokemonTrader_StrangePower: ; 22122 (8:6122)
+AIDecide_PokemonTrader_StrangePower: ; 22122 (8:6122)
 ; looks for a Pokemon in hand to trade with Mr Mime in deck.
 ; inputing Mr Mime in register e for the function is redundant
 ; since it already checks whether a Mr Mime exists in the hand.
@@ -6155,7 +6157,7 @@ AIDecidePokemonTrader_StrangePower: ; 22122 (8:6122)
 	ret
 ; 0x22133
 
-AIDecidePokemonTrader_Flamethrower: ; 22133 (8:6133)
+AIDecide_PokemonTrader_Flamethrower: ; 22133 (8:6133)
 ; for each of the following cards,
 ; first run a check if there's a pre-evolution in
 ; Play Area or in the hand. If there is, choose it as target.
@@ -7119,7 +7121,7 @@ FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
 Func_22bad: ; 22bad (8:6bad)
 	farcall Func_169ca
 	ret nc
-	ld a, [wSelectedMoveIndex]
+	ld a, [wSelectedAttack]
 	ld e, a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
