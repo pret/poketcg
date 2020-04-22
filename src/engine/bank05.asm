@@ -1561,7 +1561,7 @@ CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
 
 .is_attack
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	farcall GetEnergyCardToDiscard
+	farcall AIPickEnergyCardToDiscard
 	call LoadCardDataToBuffer1_FromDeckIndex
 	cp DOUBLE_COLORLESS_ENERGY
 	jr z, .colorless
@@ -1765,9 +1765,11 @@ CheckIfAnyCardIDinLocation: ; 157a3 (5:57a3)
 	ret
 ; 0x157c6
 
-; outputs in a total number of energy cards in hand
+; counts total number of energy cards in opponent's hand
 ; plus all the cards attached in Turn Duelist's Play Area.
-CountEnergyCardsInHandAndAttached: ; 157c6 (5:57c6)
+; output:
+;	a and wTempAI = total number of energy cards.
+CountOppEnergyCardsInHandAndAttached: ; 157c6 (5:57c6)
 	xor a
 	ld [wTempAI], a
 	call CreateEnergyCardListFromHand
@@ -3295,7 +3297,7 @@ Func_16120: ; 16120 (5:6120)
 	cp 3
 	jr c, .not_enough_energy
 	push af
-	farcall CountEnergyCardsInHand
+	farcall CountOppEnergyCardsInHand
 	pop bc
 	add b
 	cp 6

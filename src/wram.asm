@@ -956,6 +956,8 @@ wccc5:: ; ccc5
 	ds $1
 
 ; *_ATTACK constants for selected attack
+; 0 for the first attack (or PKMN Power)
+; 1 for the second attack
 wSelectedAttack:: ; ccc6
 	ds $1
 

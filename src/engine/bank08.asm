@@ -393,7 +393,7 @@ AIPlay_SuperPotion: ; 202a8 (8:42a8)
 	ldh [hTempCardIndex_ff9f], a
 	ld a, [wAITrainerCardParameter]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	call GetEnergyCardToDiscard
+	call AIPickEnergyCardToDiscard
 	ldh [hTemp_ffa0], a
 	ld a, [wAITrainerCardParameter]
 	ld e, a
@@ -1563,7 +1563,7 @@ AIDecide_EnergyRemoval: ; 20895 (8:4895)
 ; and set carry
 	ld a, e
 	push af
-	call PickAttachedEnergyCard
+	call PickAttachedEnergyCardToRemove
 	ld [wce1a], a
 	pop af
 	call SwapTurn
@@ -1841,7 +1841,7 @@ AIDecide_SuperEnergyRemoval: ; 209bc (8:49bc)
 	call SwapTurn
 	ld a, [wce0f]
 	push af
-	call GetEnergyCardToDiscard
+	call AIPickEnergyCardToDiscard
 	ld [wce1a], a
 	pop af
 	scf
@@ -2618,7 +2618,7 @@ AIDecide_ProfessorOak: ; 20cc1 (8:4cc1)
 ; if there are more than 3 energy cards in hand,
 ; return no carry, otherwise check for playable cards.
 .check_playable_cards
-	call CountEnergyCardsInHand
+	call CountOppEnergyCardsInHand
 	cp 4
 	jr nc, .no_carry_articuno
 
@@ -5689,7 +5689,7 @@ AIDecide_PokemonTrader_LegendaryDragonite: ; 21e24 (8:5e24)
 ; if has less than 5 cards of energy
 ; and of Pokemon in hand/Play Area,
 ; target a Kangaskhan in deck.
-	farcall CountEnergyCardsInHandAndAttached
+	farcall CountOppEnergyCardsInHandAndAttached
 	cp 5
 	jr c, .kangaskhan
 	call CountPokemonCardsInHandAndInPlayArea
@@ -6130,11 +6130,11 @@ AIDecide_PokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
 .find_duplicates
 	ld [wce1a], a
 	call FindDuplicatePokemonCards
-	jr c, .asm_22120
+	jr c, .found
 .no_carry
 	or a
 	ret
-.asm_22120
+.found
 	scf
 	ret
 ; 0x22122
@@ -6223,10 +6223,13 @@ Func_2219b: ; 2219b (8:219b)
 	INCROM $2219b, $227f6
 
 ; lists in wDuelTempList all the basic energy cards
-; is card location of a.
+; in card location of a.
+; outputs in a number of cards found.
 ; returns carry if none were found.
 ; input:
 ;   a = CARD_LOCATION_* to look
+; output:
+;   a = number of cards found
 FindBasicEnergyCardsInLocation: ; 227f6 (8:67f6)
 	ld [wTempAI], a
 	lb de, 0, 0
@@ -6287,8 +6290,13 @@ FindBasicEnergyCardsInLocation: ; 227f6 (8:67f6)
 
 ; returns in a the card index of energy card
 ; attached to Pokémon in Play Area location a,
-; that is to be discarded.
-GetEnergyCardToDiscard: ; 2282e (8:682e)
+; that is to be discarded by the AI for an effect.
+; outputs $ff is none was found.
+; input:
+;	a = PLAY_AREA_* constant of card
+; output:
+;	a = deck index of attached energy card chosen
+AIPickEnergyCardToDiscard: ; 2282e (8:682e)
 ; load Pokémon's attached energy cards.
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CreateArenaOrBenchEnergyCardList
@@ -6338,7 +6346,7 @@ GetEnergyCardToDiscard: ; 2282e (8:682e)
 ; 0x22875
 
 ; returns in a the deck index of an energy card attached to card
-; in Play Area location a..
+; in player's Play Area location a to remove.
 ; prioritises double colorless energy, then any useful energy,
 ; then defaults to the first energy card attached if neither
 ; of those are found.
@@ -6347,7 +6355,7 @@ GetEnergyCardToDiscard: ; 2282e (8:682e)
 ;   a = Play Area location to check
 ; output:
 ;   a = deck index of attached energy card
-PickAttachedEnergyCard: ; 22875 (8:6875)
+PickAttachedEnergyCardToRemove: ; 22875 (8:6875)
 ; construct energy list and check if there are any energy cards attached
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call CreateArenaOrBenchEnergyCardList
@@ -6570,7 +6578,7 @@ ClearMemory_Bank8: ; 22983 (8:6983)
 ; sets carry if none are found
 ; output:
 ; 	a = number of energy cards found
-CountEnergyCardsInHand: ; 22990 (8:6990)
+CountOppEnergyCardsInHand: ; 22990 (8:6990)
 	farcall CreateEnergyCardListFromHand
 	ret c
 	ld b, -1
@@ -6621,6 +6629,7 @@ CalculateWordTensDigit: ; 229b0 (8:69b0)
 	ret
 ; 0x229c1
 
+; returns in a division of b by a
 CalculateBDividedByA_Bank8: ; 229c1 (8:69c1)
 	push bc
 	ld c, a
