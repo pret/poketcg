@@ -230,3 +230,8 @@ UNABLE_RETREAT EQU $64
 ; attack index constants
 FIRST_ATTACK_OR_PKMN_POWER EQU $0
 SECOND_ATTACK              EQU $1
+
+; whether move with the ATTACHED_ENERGY_BOOST flag
+; has limit on attached energy cards boost.
+MAX_ENERGY_BOOST_IS_LIMITED     EQU $2
+MAX_ENERGY_BOOST_IS_NOT_LIMITED EQU $3

@@ -1378,7 +1378,7 @@ wce17:: ; ce17
 wce18:: ; ce18
 	ds $1
 
-; paramaters output by AI Trainer card logic routines
+; parameters output by AI Trainer card logic routines
 ; (e.g. what Pokemon in Play Area to use card on, etc)
 wAITrainerCardParameter:: ; ce19
 	ds $1

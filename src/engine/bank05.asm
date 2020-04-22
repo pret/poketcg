@@ -4375,8 +4375,11 @@ DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
 
 .attached_energy_boost
 	ld a, [wLoadedMoveEffectParam]
-	cp $02
+	cp MAX_ENERGY_BOOST_IS_LIMITED
 	jr z, .check_surplus_energy
+
+	; is MAX_ENERGY_BOOST_IS_NOT_LIMITED,
+	; which is equal to 3, add to score.
 	call AddToAIScore
 	jp .check_evolution
 

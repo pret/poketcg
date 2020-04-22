@@ -6,44 +6,44 @@ unknown_data_20000: MACRO
 ENDM
 
 Data_20000: ; 20000 (8:4000)
-	unknown_data_20000 $07, POTION,                 AIDecide_Potion1,                        AIPlay_Potion
-	unknown_data_20000 $0a, POTION,                 AIDecide_Potion2,                        AIPlay_Potion
-	unknown_data_20000 $08, SUPER_POTION,           AIDecide_SuperPotion1,                   AIPlay_SuperPotion
-	unknown_data_20000 $0b, SUPER_POTION,           AIDecide_SuperPotion2,                   AIPlay_SuperPotion
-	unknown_data_20000 $0d, DEFENDER,               AIDecide_Defender1,                      AIPlay_Defender
-	unknown_data_20000 $0e, DEFENDER,               AIDecide_Defender2,                      AIPlay_Defender
-	unknown_data_20000 $0d, PLUSPOWER,              AIDecide_Pluspower1,                     AIPlay_Pluspower
-	unknown_data_20000 $0e, PLUSPOWER,              AIDecide_Pluspower2,                     AIPlay_Pluspower
-	unknown_data_20000 $09, SWITCH,                 AIDecide_Switch,                         AIPlay_Switch
-	unknown_data_20000 $07, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
-	unknown_data_20000 $0a, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
-	unknown_data_20000 $04, BILL,                   AIDecide_Bill,                           AIPlay_Bill
-	unknown_data_20000 $05, ENERGY_REMOVAL,         AIDecide_EnergyRemoval,                  AIPlay_EnergyRemoval
-	unknown_data_20000 $05, SUPER_ENERGY_REMOVAL,   AIDecide_SuperEnergyRemoval,             AIPlay_SuperEnergyRemoval
-	unknown_data_20000 $07, POKEMON_BREEDER,        AIDecide_PokemonBreeder,                 AIPlay_PokemonBreeder
-	unknown_data_20000 $0f, PROFESSOR_OAK,          AIDecide_ProfessorOak,                   AIPlay_ProfessorOak
-	unknown_data_20000 $0a, ENERGY_RETRIEVAL,       AIDecide_EnergyRetrieval,                AIPlay_EnergyRetrieval
-	unknown_data_20000 $0b, SUPER_ENERGY_RETRIEVAL, AIDecide_SuperEnergyRetrieval,           AIPlay_SuperEnergyRetrieval
-	unknown_data_20000 $06, POKEMON_CENTER,         AIDecide_PokemonCenter,                  AIPlay_PokemonCenter
-	unknown_data_20000 $07, IMPOSTER_PROFESSOR_OAK, AIDecide_ImposterProfessorOak,           AIPlay_ImposterProfessorOak
-	unknown_data_20000 $0c, ENERGY_SEARCH,          AIDecide_EnergySearch,                   AIPlay_EnergySearch
-	unknown_data_20000 $03, POKEDEX,                AIDecide_Pokedex,                        AIPlay_Pokedex
-	unknown_data_20000 $07, FULL_HEAL,              AIDecide_FullHeal,                       AIPlay_FullHeal
-	unknown_data_20000 $0a, MR_FUJI,                AIDecide_MrFuji,                         AIPlay_MrFuji
-	unknown_data_20000 $0a, SCOOP_UP,               AIDecide_ScoopUp,                        AIPlay_ScoopUp
-	unknown_data_20000 $02, MAINTENANCE,            AIDecide_Maintenance,                    AIPlay_Maintenance
-	unknown_data_20000 $03, RECYCLE,                AIDecide_Recycle,                        AIPlay_Recycle
-	unknown_data_20000 $0d, LASS,                   AIDecide_Lass,                           AIPlay_Lass
-	unknown_data_20000 $04, ITEM_FINDER,            AIDecide_ItemFinder,                     AIPlay_ItemFinder
-	unknown_data_20000 $01, IMAKUNI_CARD,           AIDecide_Imakuni,                        AIPlay_Imakuni
-	unknown_data_20000 $01, GAMBLER,                AIDecide_Gambler,                        AIPlay_Gambler
-	unknown_data_20000 $05, REVIVE,                 AIDecide_Revive,                         AIPlay_Revive
-	unknown_data_20000 $0d, POKEMON_FLUTE,          AIDecide_PokemonFlute,                   AIPlay_PokemonFlute
-	unknown_data_20000 $05, CLEFAIRY_DOLL,          AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
-	unknown_data_20000 $05, MYSTERIOUS_FOSSIL,      AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
-	unknown_data_20000 $02, POKE_BALL,              AIDecide_Pokeball,                       AIPlay_Pokeball
-	unknown_data_20000 $02, COMPUTER_SEARCH,        AIDecide_ComputerSearch,                 AIPlay_ComputerSearch
-	unknown_data_20000 $02, POKEMON_TRADER,         AIDecide_PokemonTrader,                  AIPlay_PokemonTrader
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_07, POTION,                 AIDecide_Potion1,                        AIPlay_Potion
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_10, POTION,                 AIDecide_Potion2,                        AIPlay_Potion
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_08, SUPER_POTION,           AIDecide_SuperPotion1,                   AIPlay_SuperPotion
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_11, SUPER_POTION,           AIDecide_SuperPotion2,                   AIPlay_SuperPotion
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_13, DEFENDER,               AIDecide_Defender1,                      AIPlay_Defender
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_14, DEFENDER,               AIDecide_Defender2,                      AIPlay_Defender
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_13, PLUSPOWER,              AIDecide_Pluspower1,                     AIPlay_Pluspower
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_14, PLUSPOWER,              AIDecide_Pluspower2,                     AIPlay_Pluspower
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_09, SWITCH,                 AIDecide_Switch,                         AIPlay_Switch
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_07, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_10, GUST_OF_WIND,           AIDecide_GustOfWind,                     AIPlay_GustOfWind
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_04, BILL,                   AIDecide_Bill,                           AIPlay_Bill
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_05, ENERGY_REMOVAL,         AIDecide_EnergyRemoval,                  AIPlay_EnergyRemoval
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_05, SUPER_ENERGY_REMOVAL,   AIDecide_SuperEnergyRemoval,             AIPlay_SuperEnergyRemoval
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_07, POKEMON_BREEDER,        AIDecide_PokemonBreeder,                 AIPlay_PokemonBreeder
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_15, PROFESSOR_OAK,          AIDecide_ProfessorOak,                   AIPlay_ProfessorOak
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_10, ENERGY_RETRIEVAL,       AIDecide_EnergyRetrieval,                AIPlay_EnergyRetrieval
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_11, SUPER_ENERGY_RETRIEVAL, AIDecide_SuperEnergyRetrieval,           AIPlay_SuperEnergyRetrieval
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_06, POKEMON_CENTER,         AIDecide_PokemonCenter,                  AIPlay_PokemonCenter
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_07, IMPOSTER_PROFESSOR_OAK, AIDecide_ImposterProfessorOak,           AIPlay_ImposterProfessorOak
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_12, ENERGY_SEARCH,          AIDecide_EnergySearch,                   AIPlay_EnergySearch
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_03, POKEDEX,                AIDecide_Pokedex,                        AIPlay_Pokedex
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_07, FULL_HEAL,              AIDecide_FullHeal,                       AIPlay_FullHeal
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_10, MR_FUJI,                AIDecide_MrFuji,                         AIPlay_MrFuji
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_10, SCOOP_UP,               AIDecide_ScoopUp,                        AIPlay_ScoopUp
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_02, MAINTENANCE,            AIDecide_Maintenance,                    AIPlay_Maintenance
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_03, RECYCLE,                AIDecide_Recycle,                        AIPlay_Recycle
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_13, LASS,                   AIDecide_Lass,                           AIPlay_Lass
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_04, ITEM_FINDER,            AIDecide_ItemFinder,                     AIPlay_ItemFinder
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_01, IMAKUNI_CARD,           AIDecide_Imakuni,                        AIPlay_Imakuni
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_01, GAMBLER,                AIDecide_Gambler,                        AIPlay_Gambler
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_05, REVIVE,                 AIDecide_Revive,                         AIPlay_Revive
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_13, POKEMON_FLUTE,          AIDecide_PokemonFlute,                   AIPlay_PokemonFlute
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_05, CLEFAIRY_DOLL,          AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_05, MYSTERIOUS_FOSSIL,      AIDecide_ClefairyDollOrMysteriousFossil, AIPlay_ClefairyDollOrMysteriousFossil
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_02, POKE_BALL,              AIDecide_Pokeball,                       AIPlay_Pokeball
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_02, COMPUTER_SEARCH,        AIDecide_ComputerSearch,                 AIPlay_ComputerSearch
+	unknown_data_20000 AI_TRAINER_CARD_PHASE_02, POKEMON_TRADER,         AIDecide_PokemonTrader,                  AIPlay_PokemonTrader
 	db $ff
 
 _AIProcessHandTrainerCards: ; 200e5 (8:40e5)
@@ -7133,5 +7133,6 @@ Func_22bad: ; 22bad (8:6bad)
 	ret
 ; 0x22bc6
 
-Func_22bc6 ; 22bc6 (8:6bc6)
-	INCROM $22bc6, $24000
+rept $143a
+	db $ff
+endr

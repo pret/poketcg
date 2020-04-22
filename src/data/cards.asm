@@ -1952,7 +1952,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 3
+	db MAX_ENERGY_BOOST_IS_NOT_LIMITED
 	db 2 ; animation
 
 	db 3 ; retreat cost
@@ -3278,7 +3278,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 22 ; animation
 
 	db 3 ; retreat cost
@@ -3417,7 +3417,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -3519,7 +3519,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4029,7 +4029,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4386,7 +4386,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4502,7 +4502,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	db 1 ; retreat cost
@@ -4553,7 +4553,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	db 1 ; retreat cost
@@ -4590,7 +4590,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
