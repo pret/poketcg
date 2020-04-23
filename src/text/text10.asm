@@ -207,7 +207,7 @@ ThrashName: ; 58719 (16:4719)
 	text "Thrash"
 	done
 
-ThrashDescriptipn: ; 58721 (16:4721)
+ThrashDescription: ; 58721 (16:4721)
 	text "Flip a coin. If heads, this attack"
 	line "does 30 damage plus 10 more damage;"
 	line "if tails, this attack does 30 damage"

@@ -1114,7 +1114,7 @@ NidokingCard: ; 31279 (c:5279)
 	; move 1
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx ThrashName ; name
-	tx ThrashDescriptipn ; description
+	tx ThrashDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
 	db DAMAGE_PLUS ; category

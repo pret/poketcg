@@ -16,24 +16,24 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer LengthText                               ; 0x000c
 	textpointer WeightText                               ; 0x000d
 	textpointer PokemonText                              ; 0x000e
-	textpointer Text000f                                 ; 0x000f
+	textpointer MetresText                                ; 0x000f
 	textpointer LbsText                                  ; 0x0010
 	textpointer PromostarRarityText                                 ; 0x0011
 	textpointer CircleRarityText                                 ; 0x0012
 	textpointer DiamondRarityText                                 ; 0x0013
 	textpointer StarRarityText                                 ; 0x0014
-	textpointer Text0015                                 ; 0x0015
-	textpointer Text0016                                 ; 0x0016
-	textpointer Text0017                                 ; 0x0017
-	textpointer Text0018                                 ; 0x0018
-	textpointer Text0019                                 ; 0x0019
-	textpointer Text001a                                 ; 0x001a
-	textpointer Text001b                                 ; 0x001b
-	textpointer Text001c                                 ; 0x001c
-	textpointer Text001d                                 ; 0x001d
-	textpointer Text001e                                 ; 0x001e
-	textpointer Text001f                                 ; 0x001f
-	textpointer Text0020                                 ; 0x0020
+	textpointer AllCardsOwnedText                                 ; 0x0015
+	textpointer TotalNumberOfCardsText                                 ; 0x0016
+	textpointer TypesOfCardsText                                 ; 0x0017
+	textpointer TypeGrassPokemonText                                 ; 0x0018
+	textpointer TypeFirePokemonText                                 ; 0x0019
+	textpointer TypeWaterPokemonText                                 ; 0x001a
+	textpointer TypeLightningPokemonText                                 ; 0x001b
+	textpointer TypeFightingPokemonText                                 ; 0x001c
+	textpointer TypePsychicPokemonText                                 ; 0x001d
+	textpointer TypeColorlessPokemonText                                 ; 0x001e
+	textpointer TypeTrainerCardText                                 ; 0x001f
+	textpointer TypeEnergyCardText                                 ; 0x0020
 	textpointer Text0021                                 ; 0x0021
 	textpointer Text0022                                 ; 0x0022
 	textpointer NoPokemonOnTheBenchText                  ; 0x0023
@@ -45,27 +45,27 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IsCuredOfSleepText                       ; 0x0029
 	textpointer IsCuredOfParalysisText                   ; 0x002a
 	textpointer BetweenTurnsText                         ; 0x002b
-	textpointer Text002c                                 ; 0x002c
-	textpointer Text002d                                 ; 0x002d
-	textpointer Text002e                                 ; 0x002e
+	textpointer UnableToUseItText                                 ; 0x002c
+	textpointer NoEnergyCardsText                                 ; 0x002d
+	textpointer IsThisOKText                                 ; 0x002e
 	textpointer YesOrNoText                              ; 0x002f
 	textpointer DiscardName                              ; 0x0030
-	textpointer Text0031                                 ; 0x0031
+	textpointer IncompleteText                                 ; 0x0031
 	textpointer Text0032                                 ; 0x0032
 	textpointer UsedText                                 ; 0x0033
 	textpointer Text0034                                 ; 0x0034
 	textpointer PokemonsAttackText                       ; 0x0035
-	textpointer Text0036                                 ; 0x0036
+	textpointer ResistanceLessDamageText                                 ; 0x0036
 	textpointer Text0037                                 ; 0x0037
 	textpointer Text0038                                 ; 0x0038
-	textpointer Text0039                                 ; 0x0039
-	textpointer Text003a                                 ; 0x003a
-	textpointer Text003b                                 ; 0x003b
+	textpointer ResistanceNoDamageText                                 ; 0x0039
+	textpointer AttackDamageText                                 ; 0x003a
+	textpointer NoDamageText                                 ; 0x003b
 	textpointer NoSelectableAttackText                   ; 0x003c
 	textpointer UnableToRetreatText                      ; 0x003d
 	textpointer MayOnlyAttachOneEnergyCardText           ; 0x003e
-	textpointer Text003f                                 ; 0x003f
-	textpointer Text0040                                 ; 0x0040
+	textpointer UsePkMnPowerQuestionText                                 ; 0x003f
+	textpointer PkMnPowerSelectNotRequiredText                                 ; 0x0040
 	textpointer DiscardDescription                       ; 0x0041
 	textpointer WillDrawNPrizesText                                 ; 0x0042
 	textpointer DrewNPrizesText                                 ; 0x0043
@@ -82,8 +82,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer KnockOutText                             ; 0x004e
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
 	textpointer ChooseEnergyCardToDiscardText            ; 0x0050
-	textpointer Text0051                                 ; 0x0051
-	textpointer Text0052                                 ; 0x0052
+	textpointer ChooseNextActivePokemonText                                 ; 0x0051
+	textpointer PressSTARTWhenReadyText                                 ; 0x0052
 	textpointer YouPlayFirstText                         ; 0x0053
 	textpointer YouPlaySecondText                        ; 0x0054
 	textpointer TransmissionErrorText                    ; 0x0055
@@ -139,7 +139,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0087                                 ; 0x0087
 	textpointer DuelistIsThinkingText                    ; 0x0088
 	textpointer Text0089                                 ; 0x0089
-	textpointer Text008a                                 ; 0x008a
+	textpointer SelectCpuOpponentText                                 ; 0x008a
 	textpointer Text008b                                 ; 0x008b
 	textpointer Text008c                                 ; 0x008c
 	textpointer Text008d                                 ; 0x008d
@@ -167,15 +167,15 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00a3                                 ; 0x00a3
 	textpointer NoCardsInHandText                        ; 0x00a4
 	textpointer TheDiscardPileHasNoCardsText             ; 0x00a5
-	textpointer Text00a6                                 ; 0x00a6
+	textpointer PlayerDiscardPileText                                 ; 0x00a6
 	textpointer DuelistHandText                          ; 0x00a7
 	textpointer DuelistPlayAreaText                      ; 0x00a8
 	textpointer DuelistDeckText                          ; 0x00a9
 	textpointer PleaseSelectHandText                     ; 0x00aa
-	textpointer Text00ab                                 ; 0x00ab
-	textpointer Text00ac                                 ; 0x00ac
-	textpointer Text00ad                                 ; 0x00ad
-	textpointer Text00ae                                 ; 0x00ae
+	textpointer PleaseSelectCardText                                 ; 0x00ab
+	textpointer NoPokemonWithDamageCountersText                                 ; 0x00ac
+	textpointer NoDamageCountersText                                 ; 0x00ad
+	textpointer NoEnergyAttachedToOpponentsActiveText                                 ; 0x00ae
 	textpointer Text00af                                 ; 0x00af
 	textpointer Text00b0                                 ; 0x00b0
 	textpointer Text00b1                                 ; 0x00b1
@@ -832,19 +832,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text033c                                 ; 0x033c
 	textpointer Text033d                                 ; 0x033d
 	textpointer Text033e                                 ; 0x033e
-	textpointer Text033f                                 ; 0x033f
-	textpointer Text0340                                 ; 0x0340
-	textpointer Text0341                                 ; 0x0341
-	textpointer Text0342                                 ; 0x0342
-	textpointer Text0343                                 ; 0x0343
-	textpointer Text0344                                 ; 0x0344
-	textpointer Text0345                                 ; 0x0345
-	textpointer Text0346                                 ; 0x0346
-	textpointer Text0347                                 ; 0x0347
-	textpointer Text0348                                 ; 0x0348
-	textpointer Text0349                                 ; 0x0349
-	textpointer Text034a                                 ; 0x034a
-	textpointer Text034b                                 ; 0x034b
+	textpointer PlayerStatusNameText                                 ; 0x033f
+	textpointer PlayerStatusAlbumText                                 ; 0x0340
+	textpointer PlayerStatusPlayTimeText                                 ; 0x0341
+	textpointer PlayerDiaryTitleText                                 ; 0x0342
+	textpointer PlayerDiaryMedalsWonText                                 ; 0x0343
+	textpointer PlayerDiarySaveQuestionText                                 ; 0x0344
+	textpointer PlayerDiarySaveConfirmText                                 ; 0x0345
+	textpointer PlayerDiarySaveCancelText                                 ; 0x0346
+	textpointer PlayerStatusMedalsTitleText                                 ; 0x0347
+	textpointer ConfigMenuTitleText                                 ; 0x0348
+	textpointer ConfigMenuMessageSpeedText                                 ; 0x0349
+	textpointer ConfigMenuDuelAnimationText                                 ; 0x034a
+	textpointer ConfigMenuExitText                                 ; 0x034b
 	textpointer Text034c                                 ; 0x034c
 	textpointer Text034d                                 ; 0x034d
 	textpointer Text034e                                 ; 0x034e
@@ -2150,7 +2150,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NidorinoDescription                      ; 0x0862
 	textpointer NidokingName                             ; 0x0863
 	textpointer ThrashName                               ; 0x0864
-	textpointer ThrashDescriptipn                        ; 0x0865
+	textpointer ThrashDescription                        ; 0x0865
 	textpointer ToxicName                                ; 0x0866
 	textpointer ToxicDescription                         ; 0x0867
 	textpointer NidokingDescription                      ; 0x0868
