@@ -25,15 +25,15 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer AllCardsOwnedText                                 ; 0x0015
 	textpointer TotalNumberOfCardsText                                 ; 0x0016
 	textpointer TypesOfCardsText                                 ; 0x0017
-	textpointer TypeGrassPokemonText                                 ; 0x0018
-	textpointer TypeFirePokemonText                                 ; 0x0019
-	textpointer TypeWaterPokemonText                                 ; 0x001a
-	textpointer TypeLightningPokemonText                                 ; 0x001b
-	textpointer TypeFightingPokemonText                                 ; 0x001c
-	textpointer TypePsychicPokemonText                                 ; 0x001d
-	textpointer TypeColorlessPokemonText                                 ; 0x001e
-	textpointer TypeTrainerCardText                                 ; 0x001f
-	textpointer TypeEnergyCardText                                 ; 0x0020
+	textpointer GrassPokemonText                                 ; 0x0018
+	textpointer FirePokemonText                                 ; 0x0019
+	textpointer WaterPokemonText                                 ; 0x001a
+	textpointer LightningPokemonText                                 ; 0x001b
+	textpointer FightingPokemonText                                 ; 0x001c
+	textpointer PsychicPokemonText                                 ; 0x001d
+	textpointer ColorlessPokemonText                                 ; 0x001e
+	textpointer TrainerCardText                                 ; 0x001f
+	textpointer EnergyCardText                                 ; 0x0020
 	textpointer Text0021                                 ; 0x0021
 	textpointer Text0022                                 ; 0x0022
 	textpointer NoPokemonOnTheBenchText                  ; 0x0023
@@ -64,8 +64,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoSelectableAttackText                   ; 0x003c
 	textpointer UnableToRetreatText                      ; 0x003d
 	textpointer MayOnlyAttachOneEnergyCardText           ; 0x003e
-	textpointer UsePkMnPowerQuestionText                                 ; 0x003f
-	textpointer PkMnPowerSelectNotRequiredText                                 ; 0x0040
+	textpointer UseThisPokemonPowerText                                 ; 0x003f
+	textpointer PokemonPowerSelectNotRequiredText                                 ; 0x0040
 	textpointer DiscardDescription                       ; 0x0041
 	textpointer WillDrawNPrizesText                                 ; 0x0042
 	textpointer DrewNPrizesText                                 ; 0x0043
@@ -83,7 +83,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DamageToSelfDueToConfusionText           ; 0x004f
 	textpointer ChooseEnergyCardToDiscardText            ; 0x0050
 	textpointer ChooseNextActivePokemonText                                 ; 0x0051
-	textpointer PressSTARTWhenReadyText                                 ; 0x0052
+	textpointer PressStartWhenReadyText                                 ; 0x0052
 	textpointer YouPlayFirstText                         ; 0x0053
 	textpointer YouPlaySecondText                        ; 0x0054
 	textpointer TransmissionErrorText                    ; 0x0055
@@ -139,7 +139,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0087                                 ; 0x0087
 	textpointer DuelistIsThinkingText                    ; 0x0088
 	textpointer Text0089                                 ; 0x0089
-	textpointer SelectCpuOpponentText                                 ; 0x008a
+	textpointer SelectComputerOpponentText                                 ; 0x008a
 	textpointer Text008b                                 ; 0x008b
 	textpointer Text008c                                 ; 0x008c
 	textpointer Text008d                                 ; 0x008d
