@@ -955,8 +955,10 @@ wTempNonTurnDuelistCardID:: ; ccc4
 wccc5:: ; ccc5
 	ds $1
 
-; may contain 0 or 1 depending on which move was selected
-wSelectedMoveIndex:: ; ccc6
+; *_ATTACK constants for selected attack
+; 0 for the first attack (or PKMN Power)
+; 1 for the second attack
+wSelectedAttack:: ; ccc6
 	ds $1
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
@@ -1201,6 +1203,7 @@ wcdb2:: ; cdb2
 wcdb3:: ; cdb3
 	ds $1
 
+wcdb4:: ; cdb4
 	ds $1
 
 ; information about various properties of
@@ -1259,7 +1262,9 @@ wTempCardIDToLook:: ; cdd4
 wcdd5:: ; cdd5
 	ds $1
 
-wcdd6:: ; cdd6
+; the index of attack chosen by AI
+; to use with Pluspower.
+wAIPluspowerAttack:: ; cdd6
 	ds $1
 
 ; whether AI is allowed to play an energy card
@@ -1355,9 +1360,18 @@ wce03:: ; ce03
 wce06:: ; ce06
 	ds $1
 
-	ds $0f
+wce07:: ; ce07
+	ds $1
 
-wce16:: ; ce16
+wce08:: ; ce08
+	ds $7
+
+wce0f:: ; ce0f
+	ds $7
+
+; stores the deck index (0-59) of the Trainer card
+; the AI intends to play from hand.
+wAITrainerCardToPlay:: ; ce16
 	ds $1
 
 wce17:: ; ce17
@@ -1366,15 +1380,34 @@ wce17:: ; ce17
 wce18:: ; ce18
 	ds $1
 
-wce19:: ; ce19
+; parameters output by AI Trainer card logic routines
+; (e.g. what Pokemon in Play Area to use card on, etc)
+wAITrainerCardParameter:: ; ce19
 	ds $1
 
-	ds $6
-
-wce20:: ; ce20
+wce1a:: ; ce1a
 	ds $1
 
-wce21:: ; ce21
+wce1b:: ; ce1b
+	ds $1
+
+wce1c:: ; ce1c
+	ds $1
+
+wce1d:: ; ce1d
+	ds $1
+
+wce1e:: ; ce1e
+	ds $1
+
+wce1f:: ; ce1f
+	ds $1
+
+; used to store previous/current flags of AI actions
+; see AI_FLAG_* constants
+wPreviousAIFlags:: ; ce20
+	ds $1
+wCurrentAIFlags:: ; ce21
 	ds $1
 
 ; During a duel, this is always $b after the first attack.
@@ -1676,7 +1709,7 @@ wcf17:: ; cf17
 
 	ds $15
 
-; used by Func_200e5, AI related
+; used by _AIProcessHandTrainerCards, AI related
 wTempHandCardList:: ; cf68
 	ds DECK_SIZE
 

@@ -35,7 +35,7 @@ move_data_struct: MACRO
 \1Flag1::          ds 1
 \1Flag2::          ds 1
 \1Flag3::          ds 1
-\1Unknown1::       ds 1
+\1EffectParam::    ds 1
 \1Animation::      ds 1
 ENDM
 
