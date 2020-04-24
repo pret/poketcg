@@ -1065,65 +1065,65 @@ Text033e: ; 3e834 (f:6834)
 	line "Close"
 	done
 
-Text033f: ; 3e85f (f:685f)
+PlayerStatusNameText: ; 3e85f (f:685f)
 	text "Name <RAMNAME>"
 	done
 
-Text0340: ; 3e867 (f:6867)
+PlayerStatusAlbumText: ; 3e867 (f:6867)
 	text "Album           "
 	half2full
 	textfw0 "/"
 	done
 
-Text0341: ; 3e87b (f:687b)
+PlayerStatusPlayTimeText: ; 3e87b (f:687b)
 	text "Play time         "
 	half2full
 	textfw3 ":"
 	done
 
-Text0342: ; 3e892 (f:6892)
+PlayerDiaryTitleText: ; 3e892 (f:6892)
 	text "<RAMNAME>'s diary"
 	done
 
-Text0343: ; 3e89d (f:689d)
+PlayerDiaryMedalsWonText: ; 3e89d (f:689d)
 	text "Master Medals Won "
 	done
 
-Text0344: ; 3e8b1 (f:68b1)
+PlayerDiarySaveQuestionText: ; 3e8b1 (f:68b1)
 	text "Would you like to keep a diary?"
 	done
 
-Text0345: ; 3e8d2 (f:68d2)
+PlayerDiarySaveConfirmText: ; 3e8d2 (f:68d2)
 	text "<RAMNAME>"
 	line "wrote in the diary."
 	done
 
-Text0346: ; 3e8e9 (f:68e9)
+PlayerDiarySaveCancelText: ; 3e8e9 (f:68e9)
 	text "Nothing was recorded "
 	line "in the diary."
 	done
 
-Text0347: ; 3e90e (f:690e)
+PlayerStatusMedalsTitleText: ; 3e90e (f:690e)
 	text "Master Medals"
 	done
 
-Text0348: ; 3e91d (f:691d)
+ConfigMenuTitleText: ; 3e91d (f:691d)
 	text "           Change Settings"
 	done
 
-Text0349: ; 3e939 (f:6939)
+ConfigMenuMessageSpeedText: ; 3e939 (f:6939)
 	text "Message Speed"
 	line ""
 	line "   Slow   1   2   3   4   5   Fast"
 	done
 
-Text034a: ; 3e96c (f:696c)
+ConfigMenuDuelAnimationText: ; 3e96c (f:696c)
 	text "Duel Animation"
 	line ""
 	line "  Show All    Skip Some       None"
 	done
 
-Text034b: ; 3e9a0 (f:69a0)
+ConfigMenuExitText: ; 3e9a0 (f:69a0)
 	text "   Exit Settings"
 	done
 
