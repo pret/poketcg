@@ -1103,7 +1103,7 @@ Text00ea: ; 37e03 (d:7e03)
 	line "Heads, damage to yours if Tails."
 	done
 
-Text00eb: ; 37e46 (d:7e46)
+IfHeadsChangeOpponentsActivePokemonText: ; 37e46 (d:7e46)
 	text "If Heads, change opponent's"
 	line "Active Pokémon."
 	done

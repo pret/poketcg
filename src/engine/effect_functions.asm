@@ -301,7 +301,111 @@ Func_2c166: ; 2c166 (b:4166)
 	ret
 ; 0x2c174
 
-	INCROM $2c174, $2c6f0
+	INCROM $2c174, $2c1ec
+
+HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
+	ld e, a
+	cp $ff
+	ret z
+
+; check Defending Pokemon's HP
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	or a
+	jr nz, .switch
+
+; if 0, handle Destiny Bond first
+	push de
+	bank1call HandleDestinyBondSubstatus
+	pop de
+
+.switch
+	call .HandleNoDamageOrEffect
+	ret c
+
+; attack was successful, switch Defending Pokemon
+	call SwapTurn
+	call SwapArenaWithBenchPokemon
+	call SwapTurn
+
+	xor a
+	ld [wccc5], a
+	ld [wDuelDisplayedScreen], a
+	inc a
+	ld [wccef], a
+	ret
+; 0x2c216
+
+; returns carry if Defending has No Damage or Effect
+; if so, print its appropriate text.
+.HandleNoDamageOrEffect: ; 2c216 (b:4216)
+	call CheckNoDamageOrEffect
+	ret nc
+	ld a, l
+	or h
+	call nz, DrawWideTextBox_PrintText
+	scf
+	ret
+; 0x2c221
+
+	INCROM $2c221, $2c487
+
+; handles the selection of a forced switch
+; by link/AI opponent or by the player.
+; outputs the Play Area location of the chosen
+; bench card in hTempPlayAreaLocation_ff9d.
+DuelistSelectForcedSwitch: ; 2c487 (b:4487)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetNonTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opp
+
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+
+; AI opponent
+	call SwapTurn
+	bank1call Func_2bc7
+	call SwapTurn
+
+	ld a, [wPlayerAttackingMoveIndex]
+	ld e, a
+	ld a, [wPlayerAttackingCardIndex]
+	ld d, a
+	ld a, [wPlayerAttackingCardID]
+	call CopyMoveDataAndDamage_FromCardID
+	call Func_16f6
+	ret
+
+.player
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+	ld a, $01
+	ld [wcbd4], a
+.asm_2c4c0
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .asm_2c4c0
+	call SwapTurn
+	ret
+
+.link_opp
+; get selection from link opponent
+	ld a, OPPACTION_FORCE_SWITCH_ACTIVE
+	call SetOppAction_SerialSendDuelData
+.loop
+	call SerialRecvByte
+	jr nc, .received
+	halt
+	nop
+	jr .loop
+.received
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ret
+; 0x2c4da
+
+	INCROM $2c4da, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
@@ -320,7 +424,44 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	ret
 ; 0x2c70a
 
-	INCROM $2c70a, $2c730
+; outputs in hTemp_ffa0 the result of the coin toss
+; (0 = tails, 1 = heads) and, in case it was heads,
+; stores in hTempPlayAreaLocation_ffa1 the location
+; of the Bench Pokemon that was selected for switch.
+TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
+	xor a
+	ldh [hTemp_ffa0], a
+
+; return failure if no Pokemon to switch to
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c
+
+; toss coin and store whether it was tails (0)
+; or heads (1) in hTemp_ffa0
+; return if it was tails.
+	ldtx de, IfHeadsChangeOpponentsActivePokemonText
+	call Func_2c08a
+	ldh [hTemp_ffa0], a
+	ret nc
+
+	call DuelistSelectForcedSwitch
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+; 0x2c726
+
+; if coin toss was heads and it's possible,
+; switch Defending Pokemon
+TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
+	ldh a, [hTemp_ffa0]
+	or a
+	ret z
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	call HandleSwitchDefendingPokemonEffect
+	ret
+; 0x2c730
 
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, 10

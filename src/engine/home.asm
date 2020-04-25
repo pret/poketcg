@@ -8301,34 +8301,44 @@ Func_2bcf: ; 2bcf (0:2bcf)
 
 Func_2bd7: ; 2bd7 (0:2bd7)
 	ld a, $5
-	jr Func_2bdb
+	jr Func_2bdb ; this line is not needed
 
 Func_2bdb: ; 2bdb (0:2bdb)
 	ld c, a
+
+; load bank for Opponent Deck pointer table
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(PointerTable_14000)
 	call BankswitchROM
+
+; load hl with the corresponding pointer
 	ld a, [wOpponentDeckID]
 	ld l, a
 	ld h, $0
-	add hl, hl
+	add hl, hl ; two bytes per deck
 	ld de, PointerTable_14000
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+
 	ld a, c
 	or a
-	jr nz, .asm_2bfe
+	jr nz, .not_zero
+
+; if input was 0, copy deck data of turn player
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	call CopyDeckData
-	jr .asm_2c01
-.asm_2bfe
+	jr .done
+
+; jump to corresponding AI routine related to input
+.not_zero
 	call JumpToFunctionInTable
-.asm_2c01
+
+.done
 	ld c, a
 	pop af
 	call BankswitchROM
