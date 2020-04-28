@@ -6219,8 +6219,449 @@ AIDecide_PokemonTrader_Flamethrower: ; 22133 (8:6133)
 	ret
 ; 0x2219b
 
-Func_2219b: ; 2219b (8:219b)
-	INCROM $2219b, $227f6
+; handle AI routines for Energy Trans.
+; depending on input, AI can use Energy Trans to
+; give Arena or Bench cards some Grass energy cards,
+; depending whether it's for attack, retreat, etc.
+HandleAIEnergyTrans: ; 2219b (8:619b)
+	ld [wce06], a
+
+; choose to randomly return
+	farcall ChooseRandomlyNotToPlayTrainerCard
+	ret c
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	ret z ; return if no Bench cards
+
+	ld a, VENUSAUR2
+	call CountPokemonIDInPlayArea
+	ret nc ; return if no Venusaur2 found in own Play Area
+
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c ; return if Muk found in any Play Area
+
+	ld a, [wce06]
+	cp $09
+	jr z, .check_retreat
+
+	cp $0e
+	jp z, .TransferEnergyToBench
+
+	call .CheckEnoughGrassEnergyCardsForAttack
+	ret nc
+	jr .TransferEnergyToArena
+
+.check_retreat
+	call .CheckEnoughGrassEnergyCardsForRetreatCost
+	ret nc
+
+; use Energy Trans to transfer number of Grass energy cards
+; equal to input a from the Bench to the Arena card.
+.TransferEnergyToArena
+	ld [wAINumberOfEnergyTransCards], a
+
+; look for Venusaur2 in Play Area
+; so that its PKMN Power can be used.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	ld b, a
+.loop_play_area_1
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	ldh [hTempCardIndex_ff9f], a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp VENUSAUR2
+	jr z, .use_pkmn_power_1
+
+	ld a, b
+	or a
+	ret z ; return when finished Play Area loop
+
+	dec b
+	jr .loop_play_area_1
+
+; use Energy Trans Pkmn Power
+.use_pkmn_power_1
+	ld a, b
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+
+	xor a ; PLAY_AREA_ARENA
+	ldh [hAIEnergyTransPlayAreaLocation], a
+	ld a, [wAINumberOfEnergyTransCards]
+	ld d, a
+
+; look for Grass energy cards that
+; are currently attached to a Bench card.
+	ld e, 0
+.loop_deck_locations_1
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	and %00011111
+	cp CARD_LOCATION_BENCH_1
+	jr c, .next_card_1
+
+	and %00001111
+	ldh [hTempPlayAreaLocation_ffa1], a
+
+	ld a, e
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp GRASS_ENERGY
+	jr nz, .next_card_1
+
+	; store the deck index of energy card
+	ld a, e
+	ldh [hAIEnergyTransEnergyCard], a
+
+	push de
+	ld d, 30
+.small_delay_1
+	call DoFrame
+	dec d
+	jr nz, .small_delay_1
+
+	ld a, OPPACTION_6B15
+	bank1call AIMakeDecision
+	pop de
+	dec d
+	jr z, .done_transfer_1
+
+.next_card_1
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop_deck_locations_1
+
+; transfer is done, perform delay
+; and return to main scene.
+.done_transfer_1
+	ld d, 60
+.big_delay_1
+	call DoFrame
+	dec d
+	jr nz, .big_delay_1
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x22246
+
+; checks if the Arena card has not enough energy for second attack,
+; and if not, return carry if transferring Grass energy from Bench
+; would be enough to use it and outputs number of energy cards needed in a.
+.CheckEnoughGrassEnergyCardsForAttack ; 22246 (8:6246)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp EXEGGUTOR
+	jr z, .is_exeggutor
+
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld a, SECOND_ATTACK
+	ld [wSelectedAttack], a
+	farcall CheckEnergyNeededForAttack
+	jr nc, .attack_false ; return if no energy needed
+
+; check if colorless energy is needed...
+	ld a, c
+	or a
+	jr nz, .count_if_enough
+
+; ...otherwise check if basic energy card is needed
+; and it's grass energy.
+	ld a, b
+	or a
+	jr z, .attack_false
+	ld a, e
+	cp GRASS_ENERGY
+	jr nz, .attack_false
+	ld c, b
+	jr .count_if_enough
+
+.attack_false
+	or a
+	ret
+
+.count_if_enough
+; if there's enough Grass energy cards in Bench
+; to satisfy the attack energy cost, return carry.
+	push bc
+	call .CountGrassEnergyInBench
+	pop bc
+	cp c
+	jr c, .attack_false
+	ld a, c
+	scf
+	ret
+
+.is_exeggutor
+; in case it's Exeggutor in Arena, return carry
+; if there are any Grass energy cards in Bench.
+	call .CountGrassEnergyInBench
+	or a
+	jr z, .attack_false
+
+	scf
+	ret
+; 0x22286
+
+; outputs in a the number of Grass energy cards
+; currently attached to Bench cards.
+.CountGrassEnergyInBench ; 22286 (8:6286)
+	lb de, 0, 0
+.count_loop
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	and %00011111
+	cp CARD_LOCATION_BENCH_1
+	jr c, .count_next
+
+; is in bench
+	ld a, e
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp GRASS_ENERGY
+	jr nz, .count_next
+	inc d
+.count_next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .count_loop
+	ld a, d
+	ret
+; 0x222a9
+
+; returns carry if there are enough Grass energy cards in Bench
+; to satisfy the retreat cost of the Arena card.
+; if so, output the number of energy cards still needed in a.
+.CheckEnoughGrassEnergyCardsForRetreatCost ; 222a9 (8:62a9)
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call GetPlayAreaCardRetreatCost
+	ld b, a
+	ld e, PLAY_AREA_ARENA
+	farcall CountNumberOfEnergyCardsAttached
+	cp b
+	jr nc, .retreat_false ; return if enough to retreat
+
+; see if there's enough Grass energy cards
+; in the Bench to satisfy retreat cost
+	ld c, a
+	ld a, b
+	sub c
+	ld c, a
+	push bc
+	call .CountGrassEnergyInBench
+	pop bc
+	cp c
+	jr c, .retreat_false ; return if less cards than needed
+
+; output number of cards needed to retreat
+	ld a, c
+	scf
+	ret
+.retreat_false
+	or a
+	ret
+; 0x222ca
+
+; AI logic to determine whether to use Energy Trans Pkmn Power
+; to transfer energy cards attached from the Arena Pokemon to
+; some card in the Bench.
+.TransferEnergyToBench ; 222ca (8:62ca)
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfDefendingPokemonCanKnockOut
+	ret nc ; return if Defending can't KO
+
+; processes attacks and see if any attack would be used by AI.
+; if so, return.
+	farcall AIProcessButDontUseAttack
+	ret c
+
+; return if Arena card has no Grass energy cards attached.
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + GRASS]
+	or a
+	ret z
+
+; if no energy card attachment is needed, return.
+	farcall AIProcessButDontPlayEnergy_SkipEvolutionAndArena
+	ret nc
+
+; AI decided that an energy card is needed
+; so look for Venusaur2 in Play Area
+; so that its PKMN Power can be used.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	ld b, a
+.loop_play_area_2
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	ldh [hTempCardIndex_ff9f], a
+	ld [wAIVenusaur2DeckIndex], a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp VENUSAUR2
+	jr z, .use_pkmn_power_2
+
+	ld a, b
+	or a
+	ret z ; return when Play Area loop is ended
+
+	dec b
+	jr .loop_play_area_2
+
+; use Energy Trans Pkmn Power
+.use_pkmn_power_2
+	ld a, b
+	ldh [hTemp_ffa0], a
+	ld [wAIVenusaur2PlayAreaLocation], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+
+; loop for each energy cards that are going to be transferred.
+.loop_energy
+	xor a
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, [wAIVenusaur2PlayAreaLocation]
+	ldh [hTemp_ffa0], a
+
+	; returns when Arena card has no Grass energy cards attached.
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + GRASS]
+	or a
+	jr z, .done_transfer_2
+
+; look for Grass energy cards that
+; are currently attached to Arena card.
+	ld e, 0
+.loop_deck_locations_2
+	ld a, DUELVARS_CARD_LOCATIONS
+	add e
+	call GetTurnDuelistVariable
+	cp CARD_LOCATION_ARENA
+	jr nz, .next_card_2
+
+	ld a, e
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp GRASS_ENERGY
+	jr nz, .next_card_2
+
+	; store the deck index of energy card
+	ld a, e
+	ldh [hAIEnergyTransEnergyCard], a
+	jr .transfer
+
+.next_card_2
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop_deck_locations_2
+	jr .done_transfer_2
+
+.transfer
+; get the Bench card location to transfer Grass energy card to.
+	farcall AIProcessButDontPlayEnergy_SkipEvolutionAndArena
+	jr nc, .done_transfer_2
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hAIEnergyTransPlayAreaLocation], a
+
+	ld d, 30
+.small_delay_2
+	call DoFrame
+	dec d
+	jr nz, .small_delay_2
+
+	ld a, [wAIVenusaur2DeckIndex]
+	ldh [hTempCardIndex_ff9f], a
+	ld d, a
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, OPPACTION_6B15
+	bank1call AIMakeDecision
+	jr .loop_energy
+
+; transfer is done, perform delay
+; and return to main scene.
+.done_transfer_2
+	ld d, 60
+.big_delay_2
+	call DoFrame
+	dec d
+	jr nz, .big_delay_2
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x2237f
+
+Func_2237f: ; 2237f (8:237f)
+	INCROM $2237f, $2262d
+
+Func_2262d: ; 2262d (8:262d)
+	INCROM $2262d, $226a3
+
+Func_226a3: ; 226a3 (8:26a3)
+	INCROM $226a3, $22790
+
+Func_22790: ; 22790 (8:2790)
+	INCROM $22790, $227d3
+
+; checks wcda7 and Pokemon in Play Area that are set up.
+; if there's at least 4, goes to AI_TRAINER_CARD_PHASE_05.
+; else, returns carry.
+Func_227d3: ; 227d3 (8:67d3)
+	ld a, [wcda7]
+	bit 7, a
+	jr z, .set_carry
+	cp %10000010
+	jr c, .asm_227e4
+
+	xor a
+	ld [wcda7], a
+	jr .set_carry
+
+.asm_227e4
+	farcall CountNumberOfSetUpBenchPokemon
+	cp 4
+	jr c, .set_carry
+
+	ld a, AI_TRAINER_CARD_PHASE_05
+	farcall AIProcessHandTrainerCards
+	or a
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x227f6
 
 ; lists in wDuelTempList all the basic energy cards
 ; in card location of a.
@@ -7128,7 +7569,7 @@ FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
 
 ; return carry flag if move is not high recoil.
 Func_22bad: ; 22bad (8:6bad)
-	farcall Func_169ca
+	farcall AIProcessButDontUseAttack
 	ret nc
 	ld a, [wSelectedAttack]
 	ld e, a

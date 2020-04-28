@@ -6835,6 +6835,7 @@ OppAction_ExecutePokemonPowerEffect: ; 6b07 (1:6b07)
 	ret
 ; 0x6b15
 
+; execute the EFFECTCMDTYPE_AFTER_DAMAGE command of the used Pokemon Power
 OppAction_6b15: ; 6b15 (1:6b15)
 	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction

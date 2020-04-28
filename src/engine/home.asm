@@ -5218,7 +5218,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ret
 ; 0x1c05
 
-; return in a the retreat cost of the turn holder's arena or benchx Pokemon
+; return in a the retreat cost of the turn holder's arena or bench Pokemon
 ; given the PLAY_AREA_* value in hTempPlayAreaLocation_ff9d
 GetPlayAreaCardRetreatCost: ; 1c05 (0:1c05)
 	ldh a, [hTempPlayAreaLocation_ff9d]

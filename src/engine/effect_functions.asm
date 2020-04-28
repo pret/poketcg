@@ -292,7 +292,9 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	ret
 ; 0x2c166
 
-Func_2c166: ; 2c166 (b:4166)
+; overwrites in wDamage, wAIMinDamage and wAIMaxDamage
+; with the value in a.
+StoreDamageInfo: ; 2c166 (b:4166)
 	ld [wDamage], a
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -348,7 +350,77 @@ HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
 	ret
 ; 0x2c221
 
-	INCROM $2c221, $2c487
+	INCROM $2c221, $2c2a4
+
+; makes a list in wDuelTempList with the deck indices
+; of all the energy cards found in opponent's Discard Pile.
+; if (c == 0), all energy cards are allowed;
+; if (c != 0), double colorless energy cards are not counted.
+; returns carry if no energy cards were found.
+CreateEnergyCardListFromOpponentDiscardPile: ; 2c2a4 (b:42a4)
+	ld c, $00
+
+; get number of cards in Discard Pile
+; and have hl point to the end of the
+; Discard Pile list in wOpponentDeckCards.
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	call GetTurnDuelistVariable
+	ld b, a
+	add DUELVARS_DECK_CARDS
+	ld l, a
+
+	ld de, wDuelTempList
+	inc b
+	jr .next_card
+
+.check_energy
+	ld a, [hl]
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	and TYPE_ENERGY
+	jr z, .next_card
+
+; if (c != $00), then we dismiss Double Colorless
+; energy cards found.
+	ld a, c
+	or a
+	jr z, .copy
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr nc, .next_card
+
+.copy
+	ld a, [hl]
+	ld [de], a
+	inc de
+
+; goes through Discard Pile list
+; in wOpponentDeckCards in descending order.
+.next_card
+	dec l
+	dec b
+	jr nz, .check_energy
+
+; terminating byte on wDuelTempList
+	ld a, $ff
+	ld [de], a
+
+; check if any energy card was found
+; by checking whether the first byte
+; in wDuelTempList is $ff.
+; if none were found, return carry.
+	ld a, [wDuelTempList]
+	cp $ff
+	jr z, .set_carry
+	or a
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x2c2e0
+
+	INCROM $2c2e0, $2c487
 
 ; handles the selection of a forced switch
 ; by link/AI opponent or by the player.
@@ -558,7 +630,7 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 	add a
 	add e
 	call ATimes10
-	call Func_2c166
+	call StoreDamageInfo
 	ret
 ; 0x2c80d
 
@@ -679,4 +751,16 @@ Toxic_DoublePoisonEffect: ; 2c994 (b:4994)
 	ret
 ; 0x2c998
 
-	INCROM $2c998, $30000
+	INCROM $2c998, $2cbfb
+
+Func_2cbfb: ; 2cbfb (b:4bfb)
+	ldh a, [hAIEnergyTransPlayAreaLocation]
+	ld e, a
+	ldh a, [hAIEnergyTransEnergyCard]
+	call AddCardToHand
+	call PutHandCardInPlayArea
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ret
+; 0x2cc0a
+
+	INCROM $2cc0a, $30000

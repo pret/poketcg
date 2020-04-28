@@ -85,9 +85,23 @@ hTemp_ffa0:: ; ffa0
 hTempPlayAreaLocation_ffa1:: ; ffa1
 	ds $1
 
+UNION
+
 ; $ff-terminated list of cards to be discarded upon retreat
 hTempRetreatCostCards:: ; ffa2
 	ds $6
+
+NEXTU
+
+; parameters chosen by AI in Energy Trans routine.
+; the deck index (0-59) of the energy card to transfer
+; and the Play Area location (PLAY_AREA_*) of card to receive that energy card.
+hAIEnergyTransEnergyCard:: ; ffa2
+	ds $1
+hAIEnergyTransPlayAreaLocation:: ; ffa3
+	ds $1
+
+ENDU
 
 ; hffa8 through hffb0 belong to the text engine
 hffa8:: ; ffa8

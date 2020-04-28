@@ -1230,10 +1230,20 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
+UNION
+
 ; used for AI decisions that involve
 ; each card in the Play Area.
 wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
+
+NEXTU
+
+; stores the score determined by AI for first attack
+wFirstAttackAIScore:: ; cdbf
+	ds $1
+
+ENDU
 
 	ds $0a
 
@@ -1274,10 +1284,16 @@ wAIPluspowerAttack:: ; cdd6
 wAIPlayEnergyCardForRetreat:: ; cdd7
 	ds $1
 
-wcdd8:: ; cdd8
+; flags defined by AI_ENERGY_FLAG_* constants
+; used as input for AIProcessEnergyCards
+; to determine what to check in the routine.
+wAIEnergyAttachLogicFlags:: ; cdd8
 	ds $1
 
-wcdd9:: ; cdd9
+; used as input to AIProcessAttacks.
+; if 0, execute the attack chosen by the AI.
+; if not 0, return without executing attack.
+wAIExecuteProcessedAttack:: ; cdd9
 	ds $1
 
 wcdda:: ; cdda
@@ -1289,15 +1305,17 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-; used to compliment wPlayAreaAIScore,
-; to temporarily do calculations and store results.
+; used to temporarily backup wPlayAreaAIScore values.
 wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 
-wcde3:: ; cde3
+wTempAIScore:: ; cde3
 	ds $1
 
-wcde4:: ; cde4
+; used for AI decisions that involve
+; each card in the Play Area involving
+; attaching Energy cards.
+wPlayAreaEnergyAIScore:: ; cde4
 	ds MAX_PLAY_AREA_POKEMON
 
 wcdea:: ; cdea
@@ -1355,8 +1373,15 @@ wAIMoveIsNonDamaging:: ; ce02
 wce03:: ; ce03
 	ds $1
 
-	ds $2
+; used by AI to store information of Venusaur2
+; while handling Energy Trans logic.
+wAIVenusaur2DeckIndex:: ; ce04
+	ds $1
+wAIVenusaur2PlayAreaLocation:: ; ce05
+	ds $1
 
+; number of cards to be transferred by AI using Energy Trans.
+wAINumberOfEnergyTransCards::
 wce06:: ; ce06
 	ds $1
 
