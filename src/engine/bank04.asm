@@ -951,9 +951,9 @@ Func_118d3: ; 118d3 (4:58d3)
 	cp $2
 	jr nz, .asm_118f2
 	ld a, [wCurMap]
-	cp $20
+	cp POKEMON_DOME
 	jr nz, .asm_118f2
-	ld a, $17
+	ld a, MUSIC_MATCH_START_3
 	ld [wMatchStartTheme], a
 
 .asm_118f2

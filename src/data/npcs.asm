@@ -3,12 +3,12 @@
 PointerTable_118f5:
 	dw Data_119dd
 	dw Data_119dd
-	dw Data_119ea
+	dw RonaldData
 	dw Data_11a11
-	dw Data_11a1e
+	dw ImakuniData
 	dw Data_119dd
 	dw Data_119dd
-	dw Data_11a2b
+	dw SamData
 	dw Data_11a38
 	dw Data_11a45
 	dw Data_11a52
@@ -24,42 +24,42 @@ PointerTable_118f5:
 	dw Data_11ad4
 	dw Data_11ae1
 	dw Data_11aee
-	dw Data_11afb
-	dw Data_11b08
-	dw Data_11b15
-	dw Data_11b22
-	dw Data_11b2f
-	dw Data_11b3c
-	dw Data_11b49
-	dw Data_11b56
+	dw ChrisData
+	dw MichaelData
+	dw JessicaData
+	dw MitchData
+	dw MatthewData
+	dw RyanData
+	dw AndrewData
+	dw GeneData
 	dw SaraData
 	dw AmandaData
-	dw Data_11b7d
-	dw Data_11b8a
-	dw Data_11b97
-	dw Data_11ba4
-	dw Data_11bb1
-	dw Data_11bbe
-	dw Data_11bcb
-	dw Data_11bd8
-	dw Data_11be5
-	dw Data_11bf2
-	dw Data_11bff
-	dw Data_11c0c
-	dw Data_11c19
-	dw Data_11c26
-	dw Data_11c40
-	dw Data_11c4d
-	dw Data_11c5a
-	dw Data_11c67
-	dw Data_11c74
-	dw Data_11c81
-	dw Data_11c8e
-	dw Data_11c9b
-	dw Data_11ca8
-	dw Data_11cb5
-	dw Data_11cc2
-	dw Data_11ccf
+	dw JoshuaData
+	dw AmyData
+	dw JenniferData
+	dw NicholasData
+	dw BrandonData
+	dw IsaacData
+	dw BrittanyData
+	dw KristinData
+	dw HeatherData
+	dw NikkiData
+	dw RobertData
+	dw DanielData
+	dw StephanieData
+	dw MurrayData
+	dw JosephData
+	dw DavidData
+	dw ErikData
+	dw RickData
+	dw JohnData
+	dw AdamData
+	dw JonathanData
+	dw KenData
+	dw CourtneyData
+	dw SteveData
+	dw JackData
+	dw RodData
 	dw Data_11cdc
 	dw Data_11ce9
 	dw Data_11cf6
@@ -100,7 +100,7 @@ PointerTable_118f5:
 	dw Data_11ebd
 	dw Data_11eca
 	dw Data_11ed7
-	dw Data_11ee4
+	dw AaronData
 	dw Data_11ef1
 	dw Data_11efe
 	dw Data_11f0b
@@ -113,9 +113,9 @@ PointerTable_118f5:
 	dw Data_11f42
 	dw Data_11f49
 	dw Data_11f49
-	dw Data_11c33
-	dw Data_119f7
-	dw Data_11a04
+	dw Murray2Data
+	dw Ronald2Data
+	dw Ronald3Data
 	dw Data_11f49
 Data_119dd:
 	db $01
@@ -130,45 +130,42 @@ Data_119dd:
 	db $00
 	db $00
 	db $00
-Data_119ea:
-	db $02
+RonaldData:
+	db RONALD
 	db $01
 	db $04
 	db $0e
 	db $00
 	dw $5c4b ; Pointer to NPC Data
-	db $ad
-	db $03
-	db $02
-	db $1a
+	tx RonaldNPCName
+	db RONALD_PIC
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
-	db $16
-Data_119f7:
-	db $71
+	db MUSIC_MATCH_START_2
+Ronald2Data:
+	db RONALD2
 	db $01
 	db $04
 	db $0e
 	db $00
 	dw $5c4b ; Pointer to NPC Data
-	db $ad
-	db $03
-	db $02
-	db $1a
+	tx RonaldNPCName
+	db RONALD_PIC
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
-	db $16
-Data_11a04:
-	db $72
+	db MUSIC_MATCH_START_2
+Ronald3Data:
+	db RONALD3
 	db $01
 	db $04
 	db $0e
 	db $00
 	dw $5c4b ; Pointer to NPC Data
-	db $ad
-	db $03
-	db $02
-	db $1a
+	tx RonaldNPCName
+	db RONALD_PIC
+	db INVINCIBLE_RONALD_DECK_ID
 	db $0f
-	db $16
+	db MUSIC_MATCH_START_2
 Data_11a11:
 	db $03
 	db $03
@@ -182,32 +179,30 @@ Data_11a11:
 	db $00
 	db $00
 	db $00
-Data_11a1e:
-	db $04
+ImakuniData:
+	db IMAKUNI
 	db $04
 	db $00
 	db $0e
 	db $00
 	dw $5d0d ; Pointer to NPC Data
-	db $af
-	db $03
-	db $04
-	db $34
+	tx ImakuniNPCName
+	db IMAKUNI_PIC
+	db IMAKUNI_DECK_ID
 	db $10
-	db $15
-Data_11a2b:
-	db $07
-	db $18
+	db MUSIC_MATCH_START_1
+SamData:
+	db SAM
+	db $18 ; sprite ID
 	db $00
 	db $0e
 	db $00
 	dw $561d ; Pointer to NPC Data
-	db $b1
-	db $03
-	db $03
+	tx SamNPCName
+	db SAM_PIC
+	db SAMS_NORMAL_DECK_ID
 	db $02
-	db $02
-	db $15
+	db MUSIC_MATCH_START_1
 Data_11a38:
 	db $08
 	db $18
@@ -403,123 +398,114 @@ Data_11aee:
 	db $00
 	db $00
 	db $00
-Data_11afb:
-	db $17
+ChrisData:
+	db CHRIS
 	db $15
 	db $00
 	db $26
 	db $00
 	dw $5ef2 ; Pointer to NPC Data
-	db $b4
+	tx ChrisNPCName
+	db CHRIS_PIC
+	db MUSCLES_FOR_BRAINS_DECK_ID
 	db $03
-	db $1d
-	db $1c
-	db $03
-	db $15
-Data_11b08:
-	db $18
+	db MUSIC_MATCH_START_1
+MichaelData:
+	db MICHAEL
 	db $15
 	db $00
 	db $26
 	db $00
 	dw $6573 ; Pointer to NPC Data
-	db $b5
+	tx MichaelNPCName
+	db MICHAEL_PIC
+	db HEATED_BATTLE_DECK_ID
 	db $03
-	db $1e
-	db $1d
-	db $03
-	db $15
-Data_11b15:
-	db $19
+	db MUSIC_MATCH_START_1
+JessicaData:
+	db JESSICA
 	db $1f
 	db $04
 	db $1a
 	db $00
 	dw $6d96 ; Pointer to NPC Data
-	db $b6
+	tx JessicaNPCName
+	db JESSICA_PIC
+	db LOVE_TO_BATTLE_DECK_ID
 	db $03
-	db $27
-	db $1e
-	db $03
-	db $15
-Data_11b22:
-	db $1a
+	db MUSIC_MATCH_START_1
+MitchData:
+	db MITCH
 	db $0a
 	db $00
 	db $0e
 	db $00
 	dw $5dc3 ; Pointer to NPC Data
-	db $b7
+	tx MitchNPCName
+	db MITCH_PIC
+	db FIRST_STRIKE_DECK_ID
 	db $03
-	db $0a
-	db $10
-	db $03
-	db $16
-Data_11b2f:
-	db $1b
+	db MUSIC_MATCH_START_2
+MatthewData:
+	db MATTHEW
 	db $15
 	db $00
 	db $16
 	db $00
 	dw $5f39 ; Pointer to NPC Data
-	db $b8
+	tx MatthewNPCName
+	db MATTHEW_PIC
+	db HARD_POKEMON_DECK_ID
 	db $03
-	db $1a
-	db $21
-	db $03
-	db $15
-Data_11b3c:
-	db $1c
+	db MUSIC_MATCH_START_1
+RyanData:
+	db RYAN
 	db $11
 	db $00
 	db $26
 	db $00
 	dw $5ff0 ; Pointer to NPC Data
-	db $b9
+	tx RyanNPCName
+	db RYAN_PIC
+	db EXCAVATION_DECK_ID
 	db $03
-	db $1b
-	db $1f
-	db $03
-	db $15
-Data_11b49:
-	db $1d
+	db MUSIC_MATCH_START_1
+AndrewData:
+	db ANDREW
 	db $1a
 	db $00
 	db $16
 	db $00
 	dw $6017 ; Pointer to NPC Data
-	db $ba
+	tx AndrewNPCName
+	db ANDREW_PIC
+	db BLISTERING_POKEMON_DECK_ID
 	db $03
-	db $1c
-	db $20
-	db $03
-	db $15
-Data_11b56:
-	db $1e
+	db MUSIC_MATCH_START_1
+GeneData:
+	db GENE
 	db $0b
 	db $04
 	db $1e
 	db $00
 	dw $603e ; Pointer to NPC Data
-	db $bb
+	tx GeneNPCName
+	db GENE_PIC
+	db ROCK_CRUSHER_DECK_ID
 	db $03
-	db $0b
-	db $11
-	db $03
-	db $16
+	db MUSIC_MATCH_START_2
 SaraData:
-	db SARA ; trainer id
+	db SARA
 	db $20
 	db $00
 	db $0e
 	db $00
 	dw OWSequence_Sara ; Pointer to NPC Data
-	db $bc
+	tx SaraNPCName
+	db SARA_PIC
+	db WATERFRONT_POKEMON_DECK_ID
 	db $03
-	db SARA_PIC ; battle profile picture
-	db $22
-	db $03
-	db $15
+	db MUSIC_MATCH_START_1
 AmandaData:
 	db AMANDA
 	db $20
@@ -527,363 +513,335 @@ AmandaData:
 	db $16
 	db $00
 	dw OWSequence_Amanda ; Pointer to NPC Data
-	db $bd
+	tx AmandaNPCName
+	db AMANDA_PIC
+	db LONELY_FRIENDS_DECK_ID
 	db $03
-	db AMANDA_PIC ; battle profile picture
-	db $23
-	db $03
-	db $15
-Data_11b7d:
-	db $21
+	db MUSIC_MATCH_START_1
+JoshuaData:
+	db JOSHUA
 	db $16
 	db $00
 	db $26
 	db $00
 	dw OWSequence_Joshua ; Pointer to NPC Data
-	db $be
+	tx JoshuaNPCName
+	db JOSHUA_PIC
+	db SOUND_OF_THE_WAVES_DECK_ID
 	db $03
-	db $17
-	db $24
-	db $03
-	db $15
-Data_11b8a:
-	db $22
+	db MUSIC_MATCH_START_1
+AmyData:
+	db AMY
 	db $08
 	db $08
 	db $2e
 	db $10
 	dw $6304 ; Pointer to NPC Data
-	db $bf
+	tx AmyNPCName
+	db AMY_PIC
+	db GO_GO_RAIN_DANCE_DECK_ID
 	db $03
-	db $08
-	db $12
-	db $03
-	db $16
-Data_11b97:
-	db $23
+	db MUSIC_MATCH_START_2
+JenniferData:
+	db JENNIFER
 	db $1c
 	db $04
 	db $0e
 	db $00
 	dw $6408 ; Pointer to NPC Data
-	db $c0
+	tx JenniferNPCName
+	db JENNIFER_PIC
+	db PIKACHU_DECK_ID
 	db $03
-	db $26
-	db $25
-	db $03
-	db $15
-Data_11ba4:
-	db $24
+	db MUSIC_MATCH_START_1
+NicholasData:
+	db NICHOLAS
 	db $17
 	db $04
 	db $1e
 	db $00
 	dw $642f ; Pointer to NPC Data
-	db $c1
+	tx NicholasNPCName
+	db NICHOLAS_PIC
+	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
 	db $03
-	db $18
-	db $26
-	db $03
-	db $15
-Data_11bb1:
-	db $25
+	db MUSIC_MATCH_START_1
+BrandonData:
+	db BRANDON
 	db $17
 	db $04
 	db $1e
 	db $00
 	dw $6456 ; Pointer to NPC Data
-	db $c2
+	tx BrandonNPCName
+	db BRANDON_PIC
+	db POWER_GENERATOR_DECK_ID
 	db $03
-	db $19
-	db $27
-	db $03
-	db $15
-Data_11bbe:
-	db $26
+	db MUSIC_MATCH_START_1
+IsaacData:
+	db ISAAC
 	db $09
 	db $00
 	db $16
 	db $00
 	dw $64ad ; Pointer to NPC Data
-	db $c3
+	tx IsaacNPCName
+	db ISAAC_PIC
+	db ZAPPING_SELFDESTRUCT_DECK_ID
 	db $03
-	db $09
-	db $13
-	db $03
-	db $16
-Data_11bcb:
-	db $27
+	db MUSIC_MATCH_START_2
+BrittanyData:
+	db BRITTANY
 	db $1c
 	db $04
 	db $0e
 	db $00
 	dw $65d2 ; Pointer to NPC Data
-	db $c4
+	tx BrittanyNPCName
+	db BRITTANY_PIC
+	db ETCETERA_DECK_ID
 	db $03
-	db $21
-	db $28
-	db $03
-	db $15
-Data_11bd8:
-	db $28
+	db MUSIC_MATCH_START_1
+KristinData:
+	db KRISTIN
 	db $1e
 	db $00
 	db $1e
 	db $00
 	dw $6701 ; Pointer to NPC Data
-	db $c5
+	tx KristinNPCName
+	db KRISTIN_PIC
+	db FLOWER_GARDEN_DECK_ID
 	db $03
-	db $22
-	db $29
-	db $03
-	db $15
-Data_11be5:
-	db $29
+	db MUSIC_MATCH_START_1
+HeatherData:
+	db HEATHER
 	db $1d
 	db $04
 	db $22
 	db $00
 	dw $6745 ; Pointer to NPC Data
-	db $c6
+	tx HeatherNPCName
+	db HEATHER_PIC
+	db KALEIDOSCOPE_DECK_ID
 	db $03
-	db $23
-	db $2a
-	db $03
-	db $15
-Data_11bf2:
-	db $2a
+	db MUSIC_MATCH_START_1
+NikkiData:
+	db NIKKI
 	db $05
 	db $00
 	db $1a
 	db $00
 	dw $679e ; Pointer to NPC Data
-	db $c7
+	tx NikkiNPCName
+	db NIKKI_PIC
+	db FLOWER_POWER_DECK_ID
 	db $03
-	db $05
-	db $14
-	db $03
-	db $16
-Data_11bff:
-	db $2b
+	db MUSIC_MATCH_START_2
+RobertData:
+	db ROBERT
 	db $11
 	db $04
 	db $16
 	db $00
 	dw $6980 ; Pointer to NPC Data
-	db $c8
+	tx RobertNPCName
+	db ROBERT_PIC
+	db GHOST_DECK_ID
 	db $03
-	db $20
-	db $2b
-	db $03
-	db $15
-Data_11c0c:
-	db $2c
+	db MUSIC_MATCH_START_1
+DanielData:
+	db DANIEL
 	db $12
 	db $04
 	db $1a
 	db $00
 	dw $6a60 ; Pointer to NPC Data
-	db $c9
+	tx DanielNPCName
+	db DANIEL_PIC
+	db NAP_TIME_DECK_ID
 	db $03
-	db $1f
-	db $2c
-	db $03
-	db $15
-Data_11c19:
-	db $2d
+	db MUSIC_MATCH_START_1
+StephanieData:
+	db STEPHANIE
 	db $1c
 	db $04
 	db $0e
 	db $00
 	dw $6aa2 ; Pointer to NPC Data
-	db $ca
+	tx StephanieNPCName
+	db STEPHANIE_PIC
+	db STRANGE_POWER_DECK_ID
 	db $03
-	db $28
-	db $2d
-	db $03
-	db $15
-Data_11c26:
-	db $2e
+	db MUSIC_MATCH_START_1
+MurrayData:
+	db MURRAY
 	db $0c
 	db $00
 	db $12
 	db $00
 	dw $6adf ; Pointer to NPC Data
-	db $cb
+	tx MurrayNPCName
+	db MURRAY_PIC
+	db STRANGE_PSYSHOCK_DECK_ID
 	db $03
-	db $0c
-	db $15
-	db $03
-	db $16
-Data_11c33:
-	db $70
+	db MUSIC_MATCH_START_2
+Murray2Data:
+	db MURRAY2
 	db $0c
 	db $03
 	db $15
 	db $10
 	dw $6adf ; Pointer to NPC Data
-	db $cb
+	tx MurrayNPCName
+	db MURRAY_PIC
+	db STRANGE_PSYSHOCK_DECK_ID
 	db $03
-	db $0c
-	db $15
-	db $03
-	db $16
-Data_11c40:
-	db $2f
+	db MUSIC_MATCH_START_2
+JosephData:
+	db JOSEPH
 	db $18
 	db $00
 	db $0e
 	db $00
 	dw $6cdb ; Pointer to NPC Data
-	db $cc
+	tx JosephNPCName
+	db JOSEPH_PIC
+	db FLYIN_POKEMON_DECK_ID
 	db $03
-	db $11
-	db $2e
-	db $03
-	db $15
-Data_11c4d:
-	db $30
+	db MUSIC_MATCH_START_1
+DavidData:
+	db DAVID
 	db $18
 	db $00
 	db $0e
 	db $00
 	dw $6c11 ; Pointer to NPC Data
-	db $cd
+	tx DavidNPCName
+	db DAVID_PIC
+	db LOVELY_NIDORAN_DECK_ID
 	db $03
-	db $12
-	db $2f
-	db $03
-	db $15
-Data_11c5a:
-	db $31
+	db MUSIC_MATCH_START_1
+ErikData:
+	db ERIK
 	db $18
 	db $00
 	db $0e
 	db $00
 	dw $6c42 ; Pointer to NPC Data
-	db $ce
+	tx ErikNPCName
+	db ERIK_PIC
+	db POISON_DECK_ID
 	db $03
-	db $13
-	db $30
-	db $03
-	db $15
-Data_11c67:
-	db $32
+	db MUSIC_MATCH_START_1
+RickData:
+	db RICK
 	db $06
 	db $00
 	db $0e
 	db $00
 	dw $6c67 ; Pointer to NPC Data
-	db $cf
+	tx RickNPCName
+	db RICK_PIC
+	db WONDERS_OF_SCIENCE_DECK_ID
 	db $03
-	db $06
-	db $16
-	db $03
-	db $16
-Data_11c74:
-	db $33
+	db MUSIC_MATCH_START_2
+JohnData:
+	db JOHN
 	db $12
 	db $04
 	db $1a
 	db $00
 	dw $6eb3 ; Pointer to NPC Data
-	db $d0
+	tx JohnNPCName
+	db JOHN_PIC
+	db ANGER_DECK_ID
 	db $03
-	db $14
-	db $31
-	db $03
-	db $15
-Data_11c81:
-	db $34
+	db MUSIC_MATCH_START_1
+AdamData:
+	db ADAM
 	db $13
 	db $00
 	db $22
 	db $00
 	dw $6ed8 ; Pointer to NPC Data
-	db $d1
+	tx AdamNPCName
+	db ADAM_PIC
+	db FLAMETHROWER_DECK_ID
 	db $03
-	db $15
-	db $32
-	db $03
-	db $15
-Data_11c8e:
-	db $35
+	db MUSIC_MATCH_START_1
+JonathanData:
+	db JONATHAN
 	db $11
 	db $04
 	db $16
 	db $00
 	dw $6efd ; Pointer to NPC Data
-	db $d2
+	tx JonathanNPCName
+	db JONATHAN_PIC
+	db RESHUFFLE_DECK_ID
 	db $03
-	db $16
-	db $33
-	db $03
-	db $15
-Data_11c9b:
-	db $36
+	db MUSIC_MATCH_START_1
+KenData:
+	db KEN
 	db $07
 	db $04
 	db $1e
 	db $00
 	dw $6f22 ; Pointer to NPC Data
-	db $d3
+	tx KenNPCName
+	db KEN_PIC
+	db FIRE_CHARGE_DECK_ID
 	db $03
-	db $07
-	db $17
-	db $03
-	db $16
-Data_11ca8:
-	db $37
+	db MUSIC_MATCH_START_2
+CourtneyData:
+	db COURTNEY
 	db $0d
 	db $00
 	db $12
 	db $00
 	dw $771f ; Pointer to NPC Data
-	db $d4
-	db $03
-	db $0d
-	db $0c
+	tx CourtneyNPCName
+	db COURTNEY_PIC
+	db LEGENDARY_MOLTRES_DECK_ID
 	db $04
-	db $17
-Data_11cb5:
-	db $38
+	db MUSIC_MATCH_START_3
+SteveData:
+	db STEVE
 	db $0e
 	db $00
 	db $2a
 	db $00
 	dw $772a ; Pointer to NPC Data
-	db $d5
-	db $03
-	db $0e
-	db $0d
+	tx SteveNPCName
+	db STEVE_PIC
+	db LEGENDARY_ZAPDOS_DECK_ID
 	db $04
-	db $17
-Data_11cc2:
-	db $39
+	db MUSIC_MATCH_START_3
+JackData:
+	db JACK
 	db $0f
 	db $00
 	db $26
 	db $00
 	dw $7735 ; Pointer to NPC Data
-	db $d6
-	db $03
-	db $0f
-	db $0e
+	tx JackNPCName
+	db JACK_PIC
+	db LEGENDARY_ARTICUNO_DECK_ID
 	db $04
-	db $17
-Data_11ccf:
-	db $3a
+	db MUSIC_MATCH_START_3
+RodData:
+	db ROD
 	db $10
 	db $00
 	db $0e
 	db $00
 	dw $7740 ; Pointer to NPC Data
-	db $d7
-	db $03
-	db $10
-	db $0f
+	tx RodNPCName
+	db ROD_PIC
+	db LEGENDARY_DRAGONITE_DECK_ID
 	db $04
-	db $17
+	db MUSIC_MATCH_START_3
 Data_11cdc:
 	db $3b
 	db $21
@@ -1404,19 +1362,18 @@ Data_11ed7:
 	db $00
 	db $00
 	db $00
-Data_11ee4:
-	db $63
+AaronData:
+	db AARON
 	db $18
 	db $00
 	db $0e
 	db $00
 	dw $58dd ; Pointer to NPC Data
-	db $e7
-	db $03
-	db $29
-	db $09
+	tx AaronNPCName
+	db AARON_PIC
+	db LIGHTNING_AND_FIRE_DECK_ID
 	db $02
-	db $15
+	db MUSIC_MATCH_START_1
 Data_11ef1:
 	db $64
 	db $1a

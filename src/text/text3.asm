@@ -1624,7 +1624,7 @@ Text03ac: ; 3f66f (f:766f)
 	text "Dr. Mason"
 	done
 
-Text03ad: ; 3f67a (f:767a)
+RonaldNPCName: ; 3f67a (f:767a)
 	text "Ronald"
 	done
 
@@ -1632,7 +1632,7 @@ Text03ae: ; 3f682 (f:7682)
 	text "ISHIHARA"
 	done
 
-Text03af: ; 3f68c (f:768c)
+ImakuniNPCName: ; 3f68c (f:768c)
 	text "Imakuni?"
 	done
 
@@ -1640,7 +1640,7 @@ Text03b0: ; 3f696 (f:7696)
 	text "CLERK"
 	done
 
-Text03b1: ; 3f69d (f:769d)
+SamNPCName: ; 3f69d (f:769d)
 	text "Sam"
 	done
 
@@ -1652,147 +1652,147 @@ Text03b3: ; 3f6a8 (f:76a8)
 	text "CLERK"
 	done
 
-Text03b4: ; 3f6af (f:76af)
+ChrisNPCName: ; 3f6af (f:76af)
 	text "Chris"
 	done
 
-Text03b5: ; 3f6b6 (f:76b6)
+MichaelNPCName: ; 3f6b6 (f:76b6)
 	text "Michael"
 	done
 
-Text03b6: ; 3f6bf (f:76bf)
+JessicaNPCName: ; 3f6bf (f:76bf)
 	text "Jessica"
 	done
 
-Text03b7: ; 3f6c8 (f:76c8)
+MitchNPCName: ; 3f6c8 (f:76c8)
 	text "Mitch"
 	done
 
-Text03b8: ; 3f6cf (f:76cf)
+MatthewNPCName: ; 3f6cf (f:76cf)
 	text "Matthew"
 	done
 
-Text03b9: ; 3f6d8 (f:76d8)
+RyanNPCName: ; 3f6d8 (f:76d8)
 	text "Ryan"
 	done
 
-Text03ba: ; 3f6de (f:76de)
+AndrewNPCName: ; 3f6de (f:76de)
 	text "Andrew"
 	done
 
-Text03bb: ; 3f6e6 (f:76e6)
+GeneNPCName: ; 3f6e6 (f:76e6)
 	text "Gene"
 	done
 
-Text03bc: ; 3f6ec (f:76ec)
+SaraNPCName: ; 3f6ec (f:76ec)
 	text "Sara"
 	done
 
-Text03bd: ; 3f6f2 (f:76f2)
+AmandaNPCName: ; 3f6f2 (f:76f2)
 	text "Amanda"
 	done
 
-Text03be: ; 3f6fa (f:76fa)
+JoshuaNPCName: ; 3f6fa (f:76fa)
 	text "Joshua"
 	done
 
-Text03bf: ; 3f702 (f:7702)
+AmyNPCName: ; 3f702 (f:7702)
 	text "Amy"
 	done
 
-Text03c0: ; 3f707 (f:7707)
+JenniferNPCName: ; 3f707 (f:7707)
 	text "Jennifer"
 	done
 
-Text03c1: ; 3f711 (f:7711)
+NicholasNPCName: ; 3f711 (f:7711)
 	text "Nicholas"
 	done
 
-Text03c2: ; 3f71b (f:771b)
+BrandonNPCName: ; 3f71b (f:771b)
 	text "Brandon"
 	done
 
-Text03c3: ; 3f724 (f:7724)
+IsaacNPCName: ; 3f724 (f:7724)
 	text "Isaac"
 	done
 
-Text03c4: ; 3f72b (f:772b)
+BrittanyNPCName: ; 3f72b (f:772b)
 	text "Brittany"
 	done
 
-Text03c5: ; 3f735 (f:7735)
+KristinNPCName: ; 3f735 (f:7735)
 	text "Kristin"
 	done
 
-Text03c6: ; 3f73e (f:773e)
+HeatherNPCName: ; 3f73e (f:773e)
 	text "Heather"
 	done
 
-Text03c7: ; 3f747 (f:7747)
+NikkiNPCName: ; 3f747 (f:7747)
 	text "Nikki"
 	done
 
-Text03c8: ; 3f74e (f:774e)
+RobertNPCName: ; 3f74e (f:774e)
 	text "Robert"
 	done
 
-Text03c9: ; 3f756 (f:7756)
+DanielNPCName: ; 3f756 (f:7756)
 	text "Daniel"
 	done
 
-Text03ca: ; 3f75e (f:775e)
+StephanieNPCName: ; 3f75e (f:775e)
 	text "Stephanie"
 	done
 
-Text03cb: ; 3f769 (f:7769)
+MurrayNPCName: ; 3f769 (f:7769)
 	text "Murray"
 	done
 
-Text03cc: ; 3f771 (f:7771)
+JosephNPCName: ; 3f771 (f:7771)
 	text "Joseph"
 	done
 
-Text03cd: ; 3f779 (f:7779)
+DavidNPCName: ; 3f779 (f:7779)
 	text "David"
 	done
 
-Text03ce: ; 3f780 (f:7780)
+ErikNPCName: ; 3f780 (f:7780)
 	text "Erik"
 	done
 
-Text03cf: ; 3f786 (f:7786)
+RickNPCName: ; 3f786 (f:7786)
 	text "Rick"
 	done
 
-Text03d0: ; 3f78c (f:778c)
+JohnNPCName: ; 3f78c (f:778c)
 	text "John"
 	done
 
-Text03d1: ; 3f792 (f:7792)
+AdamNPCName: ; 3f792 (f:7792)
 	text "Adam"
 	done
 
-Text03d2: ; 3f798 (f:7798)
+JonathanNPCName: ; 3f798 (f:7798)
 	text "Jonathan"
 	done
 
-Text03d3: ; 3f7a2 (f:77a2)
+KenNPCName: ; 3f7a2 (f:77a2)
 	text "Ken"
 	done
 
-Text03d4: ; 3f7a7 (f:77a7)
+CourtneyNPCName: ; 3f7a7 (f:77a7)
 	text "COURTNEY"
 	done
 
-Text03d5: ; 3f7b1 (f:77b1)
+SteveNPCName: ; 3f7b1 (f:77b1)
 	text "Steve"
 	done
 
-Text03d6: ; 3f7b8 (f:77b8)
+JackNPCName: ; 3f7b8 (f:77b8)
 	text "Jack"
 	done
 
-Text03d7: ; 3f7be (f:77be)
+RodNPCName: ; 3f7be (f:77be)
 	text "Rod"
 	done
 
@@ -1856,7 +1856,7 @@ Text03e6: ; 3f81c (f:781c)
 	text "Guide"
 	done
 
-Text03e7: ; 3f823 (f:7823)
+AaronNPCName: ; 3f823 (f:7823)
 	text "Aaron"
 	done
 
