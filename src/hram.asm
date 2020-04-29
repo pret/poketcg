@@ -83,6 +83,8 @@ hTemp_ffa0:: ; ffa0
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocation_ffa1:: ; ffa1
+; parameter to be used by the AI's Pkmn Power effect
+hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
 
 UNION
@@ -99,6 +101,13 @@ NEXTU
 hAIEnergyTransEnergyCard:: ; ffa2
 	ds $1
 hAIEnergyTransPlayAreaLocation:: ; ffa3
+	ds $1
+
+NEXTU
+
+; Play Area location (PLAY_AREA_*) of card
+; chosen by AI to use Heal Pkmn Power on.
+hAIHealCard:: ; ffa2
 	ds $1
 
 ENDU

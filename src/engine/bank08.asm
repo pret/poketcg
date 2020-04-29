@@ -6622,7 +6622,14 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ret
 ; 0x2237f
 
-Func_2237f: ; 2237f (8:637f)
+; handles AI logic for using some Pkmn Powers.
+; Pkmn Powers handled here are:
+;	- Heal;
+;	- Shift;
+;	- Peek;
+;	- Strange Behavior;
+;	- Curse.
+HandleAIPkmnPowers: ; 2237f (8:637f)
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	ccf
@@ -6676,27 +6683,27 @@ Func_2237f: ; 2237f (8:637f)
 ; check heal
 	cp VILEPLUME
 	jr nz, .check_shift
-	call Func_22402
+	call HandleAIHeal
 	jr .next_1
 .check_shift
 	cp VENOMOTH
 	jr nz, .check_peek
-	call Func_22476
+	call HandleAIShift
 	jr .next_1
 .check_peek
 	cp MANKEY
 	jr nz, .check_strange_behavior
-	call Func_224e6
+	call HandleAIPeek
 	jr .next_1
 .check_strange_behavior
 	cp SLOWBRO
 	jr nz, .check_curse
-	call Func_2255d
+	call HandleAIStrangeBehavior
 	jr .next_1
 .check_curse
 	cp GENGAR
 	jr nz, .next_1
-	call z, Func_225b5
+	call z, HandleAICurse
 	jr c, .done
 
 .next_1
@@ -6717,20 +6724,450 @@ Func_2237f: ; 2237f (8:637f)
 	ret
 ; 0x22402
 
-Func_22402: ; 22402 (8:6402)
-	INCROM $22402, $22476
+; checks whether AI uses Heal on Pokemon in Play Area.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Vileplume.
+HandleAIHeal: ; 22402 (8:6402)
+	ld a, c
+	ldh [hTemp_ffa0], a
+	call .CheckHealTarget
+	ret nc ; return if no target to heal
+	push af
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	pop af
+	ldh [hAIHealCard], a
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x22422
 
-Func_22476: ; 22476 (8:6476)
-	INCROM $22476, $224e6
+; finds a target suitable for AI to use Heal on.
+; only heals Arena card if the Defending Pokemon
+; cannot KO it after Heal is used.
+; returns carry if target was found and outputs
+; in a the Play Area location of that card.
+.CheckHealTarget ; 22422 (8:6422)
+; check if Arena card has any damage counters,
+; if not, check Bench instead.
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	or a
+	jr z, .check_bench
 
-Func_224e6: ; 224e6 (8:64e6)
-	INCROM $224e6, $2255d
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	farcall CheckIfDefendingPokemonCanKnockOut
+	jr nc, .set_carry ; return carry if can't KO
+	ld d, a
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld h, a
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	; this seems useless since it was already
+	; checked that Arena card has damage,
+	; so card damage is at least 10.
+	cp 10 + 1
+	jr c, .check_remaining
+	ld a, 10
+	; a = min(10, CardDamage)
 
-Func_2255d: ; 2255d (8:655d)
-	INCROM $2255d, $225b5
+; checks if Defending Pokemon can still KO
+; if Heal is used on this card.
+; if Heal prevents KO, return carry.
+.check_remaining
+	ld l, a
+	ld a, h ; load remaining HP
+	add l ; add 1 counter to account for heal
+	sub d ; subtract damage of strongest opponent attack
+	jr c, .check_bench
+	jr z, .check_bench
 
-Func_225b5: ; 225b5 (8:65b5)
-	INCROM $225b5, $2262d
+.set_carry
+	xor a ; PLAY_AREA_ARENA
+	scf
+	ret
+
+; check Bench for Pokemon with damage counters
+; and find the one with the most damage.
+.check_bench
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	lb bc, 0, 0
+	ld e, PLAY_AREA_BENCH_1
+.loop_bench
+	ld a, e
+	cp d
+	jr z, .done
+	push bc
+	call GetCardDamage
+	pop bc
+	cp b
+	jr c, .next_bench
+	jr z, .next_bench
+	ld b, a ; store this damage
+	ld c, e ; store this Play Area location
+.next_bench
+	inc e
+	jr .loop_bench
+
+; check if a Pokemon with damage counters was found
+; in the Bench and, if so, return carry.
+.done
+	ld a, c
+	or a
+	jr z, .not_found
+; found
+	scf
+	ret
+.not_found
+	or a
+	ret
+; 0x22476
+
+; checks whether AI uses Shift.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Venomoth
+HandleAIShift: ; 22476 (8:6476)
+	ld a, c
+	or a
+	ret nz ; return if Venomoth is not Arena card
+
+	ldh [hTemp_ffa0], a
+	call GetArenaCardColor
+	call TranslateColorToWR
+	ld b, a
+	call SwapTurn
+	call GetArenaCardWeakness
+	ld [wAIDefendingPokemonWeakness], a
+	call SwapTurn
+	or a
+	ret z ; return if Defending Pokemon has no weakness
+	and b
+	ret nz ; return if Venomoth is already Defending card's weakness type
+
+; check whether there's a card in play with
+; the same color as the Player's card weakness
+	call .CheckWhetherTurnDuelistHasColor
+	jr c, .found
+	call SwapTurn
+	call .CheckWhetherTurnDuelistHasColor
+	call SwapTurn
+	ret nc ; return if no color found
+
+.found
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+
+; converts WR_* to apropriate color
+	ld a, [wAIDefendingPokemonWeakness]
+	ld b, 0
+.loop_color
+	bit 7, a
+	jr nz, .done
+	inc b
+	rlca
+	jr .loop_color
+
+; use Pkmn Power effect
+.done
+	ld a, b
+	ldh [hAIPkmnPowerEffectParam], a
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x224c6
+
+; returns carry if turn Duelist has a Pokemon
+; with same color as wAIDefendingPokemonWeakness.
+.CheckWhetherTurnDuelistHasColor ; 224c6 (8:64c6)
+	ld a, [wAIDefendingPokemonWeakness]
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+.loop_play_area
+	ld a, [hli]
+	cp $ff
+	jr z, .false
+	push bc
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	call TranslateColorToWR
+	pop bc
+	and b
+	jr z, .loop_play_area
+; true
+	scf
+	ret
+.false
+	or a
+	ret
+; 0x224e6
+
+; checks whether AI uses Peek.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Mankey.
+HandleAIPeek: ; 224e6 (8:64e6)
+	ld a, c
+	ldh [hTemp_ffa0], a
+	ld a, 50
+	call Random
+	cp 3
+	ret nc ; return 47 out of 50 times
+
+; check what to use Peek on at random
+	ld a, 3
+	call Random
+	or a
+	jr z, .check_player_prizes
+	cp 2
+	jr c, .check_player_hand
+
+; check Player's Deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetNonTurnDuelistVariable
+	cp DECK_SIZE - 1
+	ret nc ; return if Player has one or no cards in Deck
+	ld a, $ff
+	jr .use_peek
+
+.check_player_prizes
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	ld hl, wcda5
+	and [hl]
+	ld [hl], a
+	or a
+	ret z ; return if no prizes (should never happen)
+
+	ld c, a
+	ld b, $1
+	ld d, 0
+.loop_prizes
+	ld a, c
+	and b
+	jr nz, .found_prize
+	sla b
+	inc d
+	jr .loop_prizes
+.found_prize
+; remove this prize's flag from the prize list
+; and use Peek on first one in list (lowest bit set)
+	ld a, c
+	sub b
+	ld [hl], a
+	ld a, $40
+	add d
+	jr .use_peek
+
+.check_player_hand
+	call SwapTurn
+	call CreateHandCardList
+	call SwapTurn
+	or a
+	ret z ; return if no cards in Hand
+; shuffle list and pick the first entry to Peek
+	ld hl, wDuelTempList
+	call CountCardsInDuelTempList
+	call ShuffleCards
+	ld a, [wDuelTempList]
+	or $80
+
+.use_peek
+	push af
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	pop af
+	ldh [hAIPkmnPowerEffectParam], a
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x2255d
+
+; checks whether AI uses Strange Behavior.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Slowbro.
+HandleAIStrangeBehavior: ; 2255d (8:655d)
+	ld a, c
+	or a
+	ret z ; return if Slowbro is Arena card
+
+	ldh [hTemp_ffa0], a
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	or a
+	ret z ; return if Arena card has no damage counters
+
+	ld [wce06], a
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub 10
+	ret z ; return if Slowbro has only 10 HP remaining
+
+; if Slowbro can't receive all damage counters,
+; only transfer remaining HP - 10 damage
+	ld hl, wce06
+	cp [hl]
+	jr c, .use_strange_behavior
+	ld a, [hl] ; can receive all damage counters
+
+.use_strange_behavior
+	push af
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	xor a
+	ldh [hAIPkmnPowerEffectParam], a
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	pop af
+
+; loop counters chosen to transfer and use Pkmn Power
+	call ConvertHPToCounters
+	ld e, a
+.loop_counters
+	ld d, 30
+.small_delay_loop
+	call DoFrame
+	dec d
+	jr nz, .small_delay_loop
+	push de
+	ld a, OPPACTION_6B15
+	bank1call AIMakeDecision
+	pop de
+	dec e
+	jr nz, .loop_counters
+
+; return to main scene
+	ld d, 60
+.big_delay_loop
+	call DoFrame
+	dec d
+	jr nz, .big_delay_loop
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x225b5
+
+; checks whether AI uses Curse.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Gengar.
+HandleAICurse: ; 225b5 (8:65b5)
+	ld a, c
+	ldh [hTemp_ffa0], a
+
+; loop Player's Play Area and checks their damage.
+; finds the card with lowest remaining HP and
+; stores its HP and its Play Area location
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+	lb bc, 0, $ff
+	ld h, PLAY_AREA_ARENA
+	call SwapTurn
+.loop_play_area_1
+	push bc
+	call GetCardDamage
+	pop bc
+	or a
+	jr z, .next_1
+
+	inc b
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	push hl
+	call GetTurnDuelistVariable
+	pop hl
+	cp c
+	jr nc, .next_1
+	; lower HP than one stored
+	ld c, a ; store this HP
+	ld h, e ; store this Play Area location
+
+.next_1
+	inc e
+	ld a, e
+	cp d
+	jr nz, .loop_play_area_1 ; reached end of Play Area
+
+	ld a, 1
+	cp b
+	jr nc, .failed ; return if less than 2 cards with damage
+
+; card in Play Area with lowest HP remaining was found.
+; look for another card to take damage counter from.
+	ld a, h
+	ldh [hTempRetreatCostCards], a
+	ld b, a
+	ld a, 10
+	cp c
+	jr z, .hp_10_remaining
+	; if has more than 10 HP remaining,
+	; skip Arena card in choosing which
+	; card to take damage counter from.
+	ld e, PLAY_AREA_BENCH_1
+	jr .second_card
+
+.hp_10_remaining
+	; if Curse can KO, then include
+	; Player's Arena card to take
+	; damage counter from.
+	ld e, PLAY_AREA_ARENA
+
+.second_card
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+.loop_play_area_2
+	ld a, e
+	cp b
+	jr z, .next_2 ; skip same Pokemon card
+	push bc
+	call GetCardDamage
+	pop bc
+	jr nz, .use_curse ; has damage counters, choose this card
+.next_2
+	inc e
+	ld a, e
+	cp d
+	jr nz, .loop_play_area_2
+
+.failed
+	call SwapTurn
+	or a
+	ret
+
+.use_curse
+	ld a, e
+	ldh [hAIPkmnPowerEffectParam], a
+	call SwapTurn
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+; 0x2262d
 
 Func_2262d: ; 2262d (8:662d)
 	INCROM $2262d, $226a3
@@ -6815,7 +7252,7 @@ HandleAIDamageSwap: ; 226a3 (8:66a3)
 
 	ldh [hTempRetreatCostCards], a
 	xor a ; PLAY_AREA_ARENA
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hAIPkmnPowerEffectParam], a
 	ld a, OPPACTION_6B15
 	bank1call AIMakeDecision
 	pop de
@@ -6823,6 +7260,7 @@ HandleAIDamageSwap: ; 226a3 (8:66a3)
 	jr nz, .loop_damage
 
 .done
+; return to main scene
 	ld d, 60
 .big_delay_loop
 	call DoFrame

@@ -1383,6 +1383,9 @@ wAIVenusaur2PlayAreaLocation:: ; ce05
 wce06:: ; ce06
 ; number of cards to be transferred by AI using Energy Trans.
 wAINumberOfEnergyTransCards::
+; used for storing weakness of Player's Arena card
+; in AI routine dealing with Shift Pkmn Power.
+wAIDefendingPokemonWeakness::
 	ds $1
 
 wce07:: ; ce07

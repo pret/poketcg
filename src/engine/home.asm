@@ -3419,6 +3419,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 
 ; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in hand
+; and outputs in a number of cards.
 CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
 	inc b

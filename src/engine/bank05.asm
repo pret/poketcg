@@ -1218,7 +1218,7 @@ Func_1468b: ; 1468b (5:468b)
 
 	farcall HandleAIGoGoRainDanceEnergy
 	farcall HandleAIDamageSwap
-	farcall Func_2237f
+	farcall HandleAIPkmnPowers
 	ret c
 
 	farcall Func_2262d
@@ -1254,7 +1254,7 @@ Func_1468b: ; 1468b (5:468b)
 .asm_146ed
 	call AIDecidePlayPokemonCard
 	farcall HandleAIDamageSwap
-	farcall Func_2237f
+	farcall HandleAIPkmnPowers
 	ret c
 	farcall HandleAIGoGoRainDanceEnergy
 	ld a, $0d
@@ -1298,7 +1298,7 @@ Func_1468b: ; 1468b (5:468b)
 .asm_1475b
 	call AIDecidePlayPokemonCard
 	farcall HandleAIDamageSwap
-	farcall Func_2237f
+	farcall HandleAIPkmnPowers
 	ret c
 	farcall HandleAIGoGoRainDanceEnergy
 	ld a, $0d
