@@ -1194,6 +1194,7 @@ wcda7:: ; cda7
 wcdae:: ; cdae
 	ds $2
 
+wcdb0:: ; cdb0
 	ds $2
 
 ; these seem to hold pointer to some kind of

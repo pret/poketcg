@@ -6629,6 +6629,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ;	- Peek;
 ;	- Strange Behavior;
 ;	- Curse.
+; returns carry if turn ended.
 HandleAIPkmnPowers: ; 2237f (8:637f)
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
@@ -7169,8 +7170,94 @@ HandleAICurse: ; 225b5 (8:65b5)
 	ret
 ; 0x2262d
 
-Func_2262d: ; 2262d (8:662d)
-	INCROM $2262d, $226a3
+; handles AI logic for Cowardice
+HandleAICowardice: ; 2262d (8:662d)
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c ; return if there's Muk in play
+
+	farcall AIChooseRandomlyNotToDoAction
+	ret c ; randomly return
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 1
+	ret z ; return if only one Pokemon in Play Area
+
+	ld b, a
+	ld c, PLAY_AREA_ARENA
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	jr nz, .next
+.loop
+	ld a, DUELVARS_ARENA_CARD
+	add c
+	call GetTurnDuelistVariable
+	ld [wce08], a
+	call GetCardIDFromDeckIndex
+	ld a, e
+	push bc
+	cp TENTACOOL
+	call z, .CheckWhetherToUseCowardice
+	pop bc
+	jr nc, .next
+
+	dec b ; subtract 1 from number of Pokemon in Play Area
+	ld a, 1
+	cp b
+	ret z ; return if no longer has Bench Pokemon
+	ld c, PLAY_AREA_ARENA ; reset back to Arena
+	jr .loop
+
+.next
+	inc c
+	ld a, c
+	cp b
+	jr nz, .loop
+	ret
+; 0x22671
+
+; checks whether AI uses Cowardice.
+; return carry if Pkmn Power was used.
+; input:
+;	c = Play Area location (PLAY_AREA_*) of Tentacool.
+.CheckWhetherToUseCowardice ; 22671 (8:6671)
+	ld a, c
+	ldh [hTemp_ffa0], a
+	ld e, a
+	call GetCardDamage
+.asm_22678
+	or a
+	ret z ; return if has no damage counters
+
+	ldh a, [hTemp_ffa0]
+	or a
+	jr nz, .is_benched
+	farcall AIDecideBenchPokemonToSwitchTo
+; in case this routine is called with no Bench Pokemon,
+; this introduces a bug.
+; since it's only called in HandleAICowardice in case
+; there's more than 1 Pokemon in Play Area, this never sets carry.
+	jr c, .asm_22678 
+	jr .use_cowardice
+.is_benched
+	ld a, $ff
+.use_cowardice
+	push af
+	ld a, [wce08]
+	ldh [hTempCardIndex_ff9f], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	pop af
+	ldh [hAIPkmnPowerEffectParam], a
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	scf
+	ret
+; 0x226a3
 
 ; AI logic for Damage Swap to transfer damage from Arena card
 ; to a card in Bench with more than 10 HP remaining

@@ -137,7 +137,7 @@ CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP: ; 140c5 (5:40c5)
 
 ; checks AI scores for all benched Pokémon
 ; returns the location of the card with highest score
-; in hTempPlayAreaLocation_ff9d
+; in a and [hTempPlayAreaLocation_ff9d]
 FindHighestBenchScore: ; 140df (5:40df)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -1214,14 +1214,14 @@ Func_1468b: ; 1468b (5:468b)
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	farcall Func_227d3
-	jp nc, .asm_14776
+	jp nc, .try_attack
 
 	farcall HandleAIGoGoRainDanceEnergy
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
 	ret c
 
-	farcall Func_2262d
+	farcall HandleAICowardice
 
 	ld a, AI_TRAINER_CARD_PHASE_02
 	call AIProcessHandTrainerCards
@@ -1247,25 +1247,32 @@ Func_1468b: ; 1468b (5:468b)
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_12
 	call AIProcessHandTrainerCards
+
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .asm_146ed
+	jr nz, .already_played_energy_1
 	call AIProcessAndTryToPlayEnergy
-.asm_146ed
+
+.already_played_energy_1
 	call AIDecidePlayPokemonCard
+
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
 	ret c
 	farcall HandleAIGoGoRainDanceEnergy
-	ld a, $0d
+	ld a, $0d ; attack
 	farcall HandleAIEnergyTrans
+
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_15
 	call AIProcessHandTrainerCards
+
 	ld a, [wPreviousAIFlags]
-	and $04
-	jr z, .asm_14776
+	and AI_FLAG_USED_PROFESSOR_OAK
+	jr z, .try_attack
+
+; used Professor Oak
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -1276,6 +1283,7 @@ Func_1468b: ; 1468b (5:468b)
 	call AIProcessHandTrainerCards
 	call AIDecidePlayPokemonCard
 	ret c
+
 	ld a, AI_TRAINER_CARD_PHASE_05
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_06
@@ -1290,34 +1298,72 @@ Func_1468b: ; 1468b (5:468b)
 	ld a, AI_TRAINER_CARD_PHASE_11
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_12
+
 	call AIProcessHandTrainerCards
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .asm_1475b
+	jr nz, .already_played_energy_2
 	call AIProcessAndTryToPlayEnergy
-.asm_1475b
+.already_played_energy_2
 	call AIDecidePlayPokemonCard
+
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
 	ret c
 	farcall HandleAIGoGoRainDanceEnergy
-	ld a, $0d
+	ld a, $0d ; attack
 	farcall HandleAIEnergyTrans
+
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
 
-.asm_14776
+.try_attack
 	ld a, $0e
 	farcall HandleAIEnergyTrans
+
 	call AIProcessAndTryToUseAttack
-	ret c
+	ret c ; return if AI attacked
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
 ; 0x14786
 
+; handles retreating
 Func_14786: ; 14786 (5:4786)
-	INCROM $14786, $14c91
+	ld a, [wce03]
+	or a
+	ret nz
+
+	call AIDecideWhetherToRetreat
+	ret nc ; return if not retreating
+
+	call AIDecideBenchPokemonToSwitchTo
+	ret c ; return if no Bench Pokemon
+
+	ld [wcdd5], a
+	ld a, $01
+	ld [wce03], a
+
+	ld a, AI_TRAINER_CARD_PHASE_09
+	call AIProcessHandTrainerCards
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_SWITCH
+	jr nz, .used_switch
+	ld a, [wcdd5]
+	call AIChooseEnergyToDiscardForRetreatCost
+	ret
+
+.used_switch
+	ld a, [wPreviousAIFlags]
+	and ~AI_FLAG_USED_SWITCH ; clear Switch flag
+	ld [wPreviousAIFlags], a
+	ld a, $09 ; retreat
+	farcall HandleAIEnergyTrans
+	ret
+; 0x147bd
+
+Func_147bd: ; 147bd (5:47bd)
+	INCROM $147bd, $14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
@@ -2370,7 +2416,7 @@ Func_15b54: ; 15b54 (5:5b54)
 ; 0x15b72
 
 ; calculates AI score for bench Pokémon
-; returns in hTempPlayAreaLocation_ff9d the
+; returns in a and [hTempPlayAreaLocation_ff9d] the
 ; Play Area location of best card to switch to.
 ; returns carry if no Bench Pokemon.
 AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
@@ -2626,11 +2672,11 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 
 .asm_15d0c
 	ld b, a
-	ld a, [$cdb1]
+	ld a, [wcdb0 + 1]
 	or a
 	jr z, .store_score
 	ld h, a
-	ld a, [$cdb0]
+	ld a, [wcdb0]
 	ld l, a
 
 .loop
@@ -2675,7 +2721,12 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 
 ; handles AI action of retreating Arena Pokémon
 ; and chooses which energy cards to discard
-; if card can't discard, return carry
+; if card can't discard, return carry.
+; in case it's Clefairy Doll or Mysterious Fossil,
+; handle its effect to discard itself instead of retreating.
+; input:
+;	- a = Play Area location (PLAY_AREA_*) of card to retreat to
+;	      in case Clefairy Doll/Mysterious Fossil effect is used.
 AIChooseEnergyToDiscardForRetreatCost: ; 15d4f (5:5d4f)
 	push af
 	ld a, [wAIPlayEnergyCardForRetreat]
@@ -2907,7 +2958,7 @@ AIChooseEnergyToDiscardForRetreatCost: ; 15d4f (5:5d4f)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hAIPkmnPowerEffectParam], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
