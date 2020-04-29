@@ -1380,9 +1380,9 @@ wAIVenusaur2DeckIndex:: ; ce04
 wAIVenusaur2PlayAreaLocation:: ; ce05
 	ds $1
 
+wce06:: ; ce06
 ; number of cards to be transferred by AI using Energy Trans.
 wAINumberOfEnergyTransCards::
-wce06:: ; ce06
 	ds $1
 
 wce07:: ; ce07

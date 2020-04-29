@@ -1216,8 +1216,8 @@ Func_1468b: ; 1468b (5:468b)
 	farcall Func_227d3
 	jp nc, .asm_14776
 
-	farcall Func_22790
-	farcall Func_226a3
+	farcall HandleAIGoGoRainDanceEnergy
+	farcall HandleAIDamageSwap
 	farcall Func_2237f
 	ret c
 
@@ -1253,10 +1253,10 @@ Func_1468b: ; 1468b (5:468b)
 	call AIProcessAndTryToPlayEnergy
 .asm_146ed
 	call AIDecidePlayPokemonCard
-	farcall Func_226a3
+	farcall HandleAIDamageSwap
 	farcall Func_2237f
 	ret c
-	farcall Func_22790
+	farcall HandleAIGoGoRainDanceEnergy
 	ld a, $0d
 	farcall HandleAIEnergyTrans
 	ld a, AI_TRAINER_CARD_PHASE_13
@@ -1297,10 +1297,10 @@ Func_1468b: ; 1468b (5:468b)
 	call AIProcessAndTryToPlayEnergy
 .asm_1475b
 	call AIDecidePlayPokemonCard
-	farcall Func_226a3
+	farcall HandleAIDamageSwap
 	farcall Func_2237f
 	ret c
-	farcall Func_22790
+	farcall HandleAIGoGoRainDanceEnergy
 	ld a, $0d
 	farcall HandleAIEnergyTrans
 	ld a, AI_TRAINER_CARD_PHASE_13
@@ -1496,15 +1496,19 @@ Func_15636: ; 15636 (5:5636)
 	ld [wcda5], a
 	ret
 
+; initializes some variables and
+; sets value of wcda7.
 Func_15649: ; 15649 (5:5649)
 	ld a, [wcda6]
 	inc a
 	ld [wcda6], a
+
 	xor a
 	ld [wPreviousAIFlags], a
 	ld [wcddb], a
 	ld [wcddc], a
 	ld [wce03], a
+
 	ld a, [wPlayerAttackingMoveIndex]
 	cp $ff
 	jr z, .asm_156b1
@@ -1513,19 +1517,22 @@ Func_15649: ; 15649 (5:5649)
 	ld a, [wPlayerAttackingCardIndex]
 	cp $ff
 	jr z, .asm_156b1
+
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
-	cp MEWTWO1 ; I believe this is a check for Mewtwo1's Barrier move
+	cp MEWTWO1
 	jr nz, .asm_156b1
+
+; handle Mewtwo1-only deck
 	ld a, [wcda7]
 	bit 7, a
 	jr nz, .asm_156aa
 	inc a
 	ld [wcda7], a
-	cp $3
-	jr c, .asm_156c2
+	cp $03
+	jr c, .done
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
@@ -1534,18 +1541,17 @@ Func_15649: ; 15649 (5:5649)
 	ld a, e
 	cp MEWTWO1
 	jr nz, .asm_156a4
-	farcall $8, $67a9
+	farcall CheckIfPlayerHasPokemonOtherThanMewtwo1
 	jr nc, .asm_156aa
-
 .asm_156a4
+; reset wcda7
 	xor a
 	ld [wcda7], a
-	jr .asm_156c2
-
+	jr .done
 .asm_156aa
 	ld a, $80
 	ld [wcda7], a
-	jr .asm_156c2
+	jr .done
 
 .asm_156b1
 	ld a, [wcda7]
@@ -1553,13 +1559,13 @@ Func_15649: ; 15649 (5:5649)
 	jr z, .asm_156be
 	inc a
 	ld [wcda7], a
-	jr .asm_156c2
+	jr .done
 
 .asm_156be
+; reset wcda7
 	xor a
 	ld [wcda7], a
-
-.asm_156c2
+.done
 	ret
 ; 0x156c3
 
@@ -4214,12 +4220,14 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 ; arena
 	ld a, [wcda7]
 	bit 7, a
-	jr z, .skip_subtracting_score
+	jr z, .add_to_score
+
+; subtract from score
 	ld a, 5
 	call SubFromAIScore
 	jr .check_defending_can_ko
 
-.skip_subtracting_score
+.add_to_score
 	ld a, 4
 	call AddToAIScore
 
@@ -6937,8 +6945,8 @@ CheckIfNotABossDeckID: ; 17426 (5:7426)
 ; - 25% for all other decks;
 ; - 0% for boss decks.
 ; used for certain decks to randomly choose
-; not to play Trainer card in hand.
-ChooseRandomlyNotToPlayTrainerCard: ; 1743b (5:743b)
+; not to play Trainer card or use PKMN Power
+AIChooseRandomlyNotToDoAction: ; 1743b (5:743b)
 ; boss decks always use Trainer cards.
 	push hl
 	push de

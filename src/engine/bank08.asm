@@ -114,7 +114,7 @@ _AIProcessHandTrainerCards: ; 200e5 (8:40e5)
 	jp c, .next_in_data
 
 ; AI can randomly choose not to play card.
-	farcall ChooseRandomlyNotToPlayTrainerCard
+	farcall AIChooseRandomlyNotToDoAction
 	jr c, .next_in_data
 
 ; call routine to decide whether to play Trainer card
@@ -6227,7 +6227,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ld [wce06], a
 
 ; choose to randomly return
-	farcall ChooseRandomlyNotToPlayTrainerCard
+	farcall AIChooseRandomlyNotToDoAction
 	ret c
 
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -6328,10 +6328,10 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 
 	push de
 	ld d, 30
-.small_delay_1
+.small_delay_loop_1
 	call DoFrame
 	dec d
-	jr nz, .small_delay_1
+	jr nz, .small_delay_loop_1
 
 	ld a, OPPACTION_6B15
 	bank1call AIMakeDecision
@@ -6349,10 +6349,10 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ; and return to main scene.
 .done_transfer_1
 	ld d, 60
-.big_delay_1
+.big_delay_loop_1
 	call DoFrame
 	dec d
-	jr nz, .big_delay_1
+	jr nz, .big_delay_loop_1
 	ld a, OPPACTION_DUEL_MAIN_SCENE
 	bank1call AIMakeDecision
 	ret
@@ -6595,10 +6595,10 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ldh [hAIEnergyTransPlayAreaLocation], a
 
 	ld d, 30
-.small_delay_2
+.small_delay_loop_2
 	call DoFrame
 	dec d
-	jr nz, .small_delay_2
+	jr nz, .small_delay_loop_2
 
 	ld a, [wAIVenusaur2DeckIndex]
 	ldh [hTempCardIndex_ff9f], a
@@ -6613,26 +6613,354 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ; and return to main scene.
 .done_transfer_2
 	ld d, 60
-.big_delay_2
+.big_delay_loop_2
 	call DoFrame
 	dec d
-	jr nz, .big_delay_2
+	jr nz, .big_delay_loop_2
 	ld a, OPPACTION_DUEL_MAIN_SCENE
 	bank1call AIMakeDecision
 	ret
 ; 0x2237f
 
-Func_2237f: ; 2237f (8:237f)
-	INCROM $2237f, $2262d
+Func_2237f: ; 2237f (8:637f)
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ccf
+	ret nc ; return no carry if Muk is in play
 
-Func_2262d: ; 2262d (8:262d)
+	farcall AIChooseRandomlyNotToDoAction
+	ccf
+	ret nc ; return no carry if AI randomly decides to
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, PLAY_AREA_ARENA
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	and CNF_SLP_PRZ
+	jr nz, .next_2
+
+.loop_play_area
+	ld a, DUELVARS_ARENA_CARD
+	add c
+	call GetTurnDuelistVariable
+	ld [wce08], a
+
+	push af
+	push bc
+	ld d, a
+	ld a, c
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld e, FIRST_ATTACK_OR_PKMN_POWER
+	call CopyMoveDataAndDamage_FromDeckIndex
+	ld a, [wLoadedMoveCategory]
+	cp POKEMON_POWER
+	jr z, .execute_effect
+	pop bc
+	jr .next_3
+
+.execute_effect
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
+	bank1call TryExecuteEffectCommandFunction
+	pop bc
+	jr c, .next_3
+
+; TryExecuteEffectCommandFunction was successful,
+; so check what Pkmn Power this is through card's ID.
+	pop af
+	call GetCardIDFromDeckIndex
+	ld a, e
+	push bc
+
+; check heal
+	cp VILEPLUME
+	jr nz, .check_shift
+	call Func_22402
+	jr .next_1
+.check_shift
+	cp VENOMOTH
+	jr nz, .check_peek
+	call Func_22476
+	jr .next_1
+.check_peek
+	cp MANKEY
+	jr nz, .check_strange_behavior
+	call Func_224e6
+	jr .next_1
+.check_strange_behavior
+	cp SLOWBRO
+	jr nz, .check_curse
+	call Func_2255d
+	jr .next_1
+.check_curse
+	cp GENGAR
+	jr nz, .next_1
+	call z, Func_225b5
+	jr c, .done
+
+.next_1
+	pop bc
+.next_2
+	inc c
+	ld a, c
+	cp b
+	jr nz, .loop_play_area
+	ret
+
+.next_3
+	pop af
+	jr .next_2
+
+.done
+	pop bc
+	ret
+; 0x22402
+
+Func_22402: ; 22402 (8:6402)
+	INCROM $22402, $22476
+
+Func_22476: ; 22476 (8:6476)
+	INCROM $22476, $224e6
+
+Func_224e6: ; 224e6 (8:64e6)
+	INCROM $224e6, $2255d
+
+Func_2255d: ; 2255d (8:655d)
+	INCROM $2255d, $225b5
+
+Func_225b5: ; 225b5 (8:65b5)
+	INCROM $225b5, $2262d
+
+Func_2262d: ; 2262d (8:662d)
 	INCROM $2262d, $226a3
 
-Func_226a3: ; 226a3 (8:26a3)
-	INCROM $226a3, $22790
+; AI logic for Damage Swap to transfer damage from Arena card
+; to a card in Bench with more than 10 HP remaining
+; and with no energy cards attached.
+HandleAIDamageSwap: ; 226a3 (8:66a3)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	ret z ; return if no Bench Pokemon
 
-Func_22790: ; 22790 (8:2790)
-	INCROM $22790, $227d3
+	farcall AIChooseRandomlyNotToDoAction
+	ret c
+
+	ld a, ALAKAZAM
+	call CountPokemonIDInPlayArea
+	ret nc ; return if no Alakazam
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c ; return if there's Muk in play
+
+; only take damage off certain cards in Arena
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp ALAKAZAM
+	jr z, .ok
+	cp KADABRA
+	jr z, .ok
+	cp ABRA
+	jr z, .ok
+	cp MR_MIME
+	ret nz
+
+.ok
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamage
+	or a
+	ret z ; return if no damage
+
+	call ConvertHPToCounters
+	ld [wce06], a
+	ld a, ALAKAZAM
+	ld b, PLAY_AREA_BENCH_1
+	farcall LookForCardIDInPlayArea_Bank5
+	jr c, .is_in_bench
+
+; Alakazam is Arena card
+	xor a
+.is_in_bench
+	ld [wce08], a
+	call .CheckForDamageSwapTargetInBench
+	ret c ; return if not found
+
+; use Damage Swap
+	ld a, [wce08]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ldh [hTempCardIndex_ff9f], a
+	ld a, [wce08]
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_USE_PKMN_POWER
+	bank1call AIMakeDecision
+	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
+	bank1call AIMakeDecision
+
+	ld a, [wce06]
+	ld e, a
+.loop_damage
+	ld d, 30
+.small_delay_loop
+	call DoFrame
+	dec d
+	jr nz, .small_delay_loop
+
+	push de
+	call .CheckForDamageSwapTargetInBench
+	jr c, .no_more_target
+
+	ldh [hTempRetreatCostCards], a
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, OPPACTION_6B15
+	bank1call AIMakeDecision
+	pop de
+	dec e
+	jr nz, .loop_damage
+
+.done
+	ld d, 60
+.big_delay_loop
+	call DoFrame
+	dec d
+	jr nz, .big_delay_loop
+	ld a, OPPACTION_DUEL_MAIN_SCENE
+	bank1call AIMakeDecision
+	ret
+
+.no_more_target
+	pop de
+	jr .done
+; 0x2273c
+
+; looks for a target in the bench to receive damage counters.
+; returns carry if one is found, and outputs remaining HP in a.
+.CheckForDamageSwapTargetInBench ; 2273c (8:673c)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld c, PLAY_AREA_BENCH_1
+	lb de, $ff, $ff
+
+; look for candidates in bench to get the damage counters
+; only target specific card IDs.
+.loop_bench
+	ld a, c
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp CHANSEY
+	jr z, .found_candidate
+	cp KANGASKHAN
+	jr z, .found_candidate
+	cp SNORLAX
+	jr z, .found_candidate
+	cp MR_MIME
+	jr z, .found_candidate
+
+.next_play_area
+	inc c
+	ld a, c
+	cp b
+	jr nz, .loop_bench
+
+; done
+	ld a, e
+	cp $ff
+	jr nz, .no_carry
+	ld a, d
+	cp $ff
+	jr z, .set_carry
+.no_carry
+	or a
+	ret
+
+.found_candidate
+; found a potential candidate to receive damage counters
+	ld a, DUELVARS_ARENA_CARD_HP
+	add c
+	call GetTurnDuelistVariable
+	cp 20
+	jr c, .next_play_area ; ignore cards with only 10 HP left
+
+	ld d, c ; store damage
+	push de
+	push bc
+	ld e, c
+	farcall CountNumberOfEnergyCardsAttached
+	pop bc
+	pop de
+	or a
+	jr nz, .next_play_area ; ignore cards with attached energy
+	ld e, c ; store deck index
+	jr .next_play_area
+
+.set_carry
+	scf
+	ret
+; 0x22790
+
+; handles AI logic for attaching energy cards
+; in Go Go Rain Dance deck.
+HandleAIGoGoRainDanceEnergy: ; 22790 (8:6790)
+	ld a, [wOpponentDeckID]
+	cp GO_GO_RAIN_DANCE_DECK_ID
+	ret nz ; return if not Go Go Rain Dance deck
+
+	ld a, BLASTOISE
+	call CountPokemonIDInPlayArea
+	ret nc ; return if no Blastoise
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	ret c ; return if there's Muk in play
+
+; play all the energy cards that is needed.
+.loop
+	farcall AIProcessAndTryToPlayEnergy
+	jr c, .loop
+	ret
+; 0x227a9
+
+; runs through Player's whole deck and
+; sets carry if there's any Pokemon other
+; than Mewtwo1.
+CheckIfPlayerHasPokemonOtherThanMewtwo1: ; 227a9 (8:67a9)
+	call SwapTurn
+	ld e, 0
+.loop_deck
+	ld a, e
+	push de
+	call LoadCardDataToBuffer2_FromDeckIndex
+	pop de
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	jp nc, .next ; can be a jr
+	ld a, [wLoadedCard2ID]
+	cp MEWTWO1
+	jr nz, .not_mewtwo1
+.next
+	inc e
+	ld a, DECK_SIZE
+	cp e
+	jr nz, .loop_deck
+
+; no carry
+	call SwapTurn
+	or a
+	ret
+
+.not_mewtwo1
+	call SwapTurn
+	scf
+	ret
+; 0x227d3
 
 ; checks wcda7 and Pokemon in Play Area that are set up.
 ; if there's at least 4, goes to AI_TRAINER_CARD_PHASE_05.
@@ -6644,6 +6972,7 @@ Func_227d3: ; 227d3 (8:67d3)
 	cp %10000010
 	jr c, .asm_227e4
 
+; reset wcda7
 	xor a
 	ld [wcda7], a
 	jr .set_carry
