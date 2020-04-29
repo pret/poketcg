@@ -967,7 +967,7 @@ wNoDamageOrEffect:: ; ccc7
 
 ; used by CountKnockedOutPokemon and Func_5805 to store the amount
 ; of prizes to take (equal to the number of Pokemon knocked out)
-wccc8:: ; ccc8
+wNumberPrizeCardsToTake:: ; ccc8
 	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
@@ -1182,7 +1182,14 @@ wcd9f:: ; cd9f
 wcda5:: ; cda5
 	ds $1
 
-wcda6:: ; cda6
+; this is used by AI in order to determine whether
+; it should use Pokedex Trainer card.
+; duel starts at 5 and counts up by one every turn.
+; only when it's higher than 5 is AI allowed to use Pokedex,
+; in which case it set the counter to 0.
+; this stops the AI from using Pokedex right after using another one
+; while still drawing cards that were ordered.
+wAIPokedexCounter:: ; cda6
 	ds $1
 
 wcda7:: ; cda7

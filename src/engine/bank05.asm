@@ -333,24 +333,90 @@ CheckIfEnergyIsUseful: ; 14184 (5:4184)
 ; 0x141da
 
 Func_141da: ; 141da (5:41da)
-	INCROM $141da, $14226
+	INCROM $141da, $141e5
 
-Func_14226: ; 14226 (5:4226)
+_AIPickPrizeCards: ; 141e5 (5:41e5)
+	ld a, [wNumberPrizeCardsToTake]
+	ld b, a
+.loop
+	call .PickPrizeCard
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	or a
+	jr z, .done
+	dec b
+	jr nz, .loop
+.done
+	ret
+; 0x141f8
+
+; picks a prize card at random
+; and adds it to the hand.
+.PickPrizeCard: ; 141f8 (5:41f8)
+	ld a, DUELVARS_PRIZES
+	call GetTurnDuelistVariable
+	push hl
+	ld c, a
+
+; choose a random prize card until
+; one is found that isn't taken already.
+.loop_pick_prize
+	ld a, 6
+	call Random
+	ld e, a
+	ld d, $00
+	ld hl, .prize_flags
+	add hl, de
+	ld a, [hl]
+	and c
+	jr z, .loop_pick_prize ; no prize
+
+; prize card was found
+; remove this prize from wOpponentPrizes
+	ld a, [hl]
+	pop hl
+	cpl
+	and [hl]
+	ld [hl], a
+
+; add this prize card to the hand
+	ld a, e
+	add DUELVARS_PRIZE_CARDS
+	call GetTurnDuelistVariable
+	call AddCardToHand
+	ret
+
+.prize_flags ; 1421e (5:421e)
+	db $1 << 0
+	db $1 << 1
+	db $1 << 2
+	db $1 << 3
+	db $1 << 4
+	db $1 << 5
+	db $1 << 6
+	db $1 << 7
+; 0x14226
+
+; routine for AI to play all Basic cards from its hand
+; in the beginning of the Duel.
+AIPlayInitialBasicCards: ; 14226 (5:4226)
 	call CreateHandCardList
 	ld hl, wDuelTempList
 .check_for_next_card
 	ld a, [hli]
 	ldh [hTempCardIndex_ff98], a
 	cp $ff
-	ret z
+	ret z ; return when done
 
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
-	jr nc, .check_for_next_card
+	jr nc, .check_for_next_card ; skip if not Pokemon card
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .check_for_next_card
+	jr nz, .check_for_next_card ; skip if not Basic Stage
+
+; play Basic card from hand
 	push hl
 	ldh a, [hTempCardIndex_ff98]
 	call PutHandPokemonCardInPlayArea
@@ -1178,24 +1244,23 @@ AIProcessHandTrainerCards: ; 14663 (5:4663)
 ; GENERAL DECK POINTER LIST - Not sure on all of these.
 ; This is an example of an AI pointer table, there's one for each AI type.
 PointerTable_14668: ; 14668 (05:4668)
-	dw Func_14674 ; not used
-	dw Func_14674 ; general AI for battles
-	dw Func_14678 ; basic pokemon placement / cheater shuffling on better AI
-	dw Func_1467f ; deciding which Bench Pokemon to switch to
+	dw AIMainTurnLogic ; not used
+	dw AIMainTurnLogic ; general AI for battles
+	dw AIDuelStart     ; basic pokemon placement / cheater shuffling on better AI
+	dw AIRetreatLogic  ; deciding which Bench Pokemon to switch to
 	dw Func_14683
-	dw Func_14687
+	dw AIPickPrizeCards
 
-; when battle AI gets called
-Func_14674: ; 14674 (5:4674)
-	call Func_1468b
+AIMainTurnLogic: ; 14674 (5:4674)
+	call _AIMainTurnLogic
 	ret
 
-Func_14678: ; 14678 (5:4678)
-	call Func_15636
-	call $4226
+AIDuelStart: ; 14678 (5:4678)
+	call InitAIDuelVars
+	call AIPlayInitialBasicCards
 	ret
 
-Func_1467f: ; 1467f (5:467f)
+AIRetreatLogic: ; 1467f (5:467f)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
@@ -1203,13 +1268,13 @@ Func_14683: ; 14683 (5:4683)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-Func_14687: ; 14687 (5:4687)
-	call $41e5
+AIPickPrizeCards: ; 14687 (5:4687)
+	call _AIPickPrizeCards
 	ret
 
-; AI for general decks i think
-Func_1468b: ; 1468b (5:468b)
-	call Func_15649
+; handle AI routines for a whole turn
+_AIMainTurnLogic: ; 1468b (5:468b)
+	call InitAITurnVars
 
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
@@ -1532,22 +1597,23 @@ LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
 Func_15612: ; 15612 (5:5612)
 	INCROM $15612, $15636
 
-Func_15636: ; 15636 (5:5636)
+InitAIDuelVars: ; 15636 (5:5636)
 	ld a, $10
 	ld hl, wcda5
 	call ClearMemory_Bank5
-	ld a, $5
-	ld [wcda6], a
+	ld a, 5
+	ld [wAIPokedexCounter], a
 	ld a, $ff
 	ld [wcda5], a
 	ret
 
 ; initializes some variables and
 ; sets value of wcda7.
-Func_15649: ; 15649 (5:5649)
-	ld a, [wcda6]
+InitAITurnVars: ; 15649 (5:5649)
+; increase Pokedex counter by one
+	ld a, [wAIPokedexCounter]
 	inc a
-	ld [wcda6], a
+	ld [wAIPokedexCounter], a
 
 	xor a
 	ld [wPreviousAIFlags], a

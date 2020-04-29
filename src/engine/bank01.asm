@@ -3720,7 +3720,7 @@ Func_57df: ; 57df (1:57df)
 
 Func_5805: ; 5805 (1:5805)
 	call Func_3b31
-	ld a, [wccc8]
+	ld a, [wNumberPrizeCardsToTake]
 	ld l, a
 	ld h, $00
 	call LoadTxRam3
@@ -3731,7 +3731,7 @@ Func_5805: ; 5805 (1:5805)
 
 	ldtx hl, WillDrawNPrizesText
 	call DrawWideTextBox_WaitForInput
-	ld a, [wccc8]
+	ld a, [wNumberPrizeCardsToTake]
 	call Func_310a
 	ld hl, hTemp_ffa0
 	ld d, [hl]
@@ -3775,7 +3775,7 @@ Func_5805: ; 5805 (1:5805)
 	call nz, AddCardToHand
 .asm_586f
 	ld a, [wcbfc]
-	ld hl, wccc8
+	ld hl, wNumberPrizeCardsToTake
 	cp [hl]
 	jr nc, .asm_587e
 	ld l, a
@@ -7525,7 +7525,7 @@ Func_6fa5: ; 6fa5 (1:6fa5)
 	ret
 ; 0x6fc7
 
-; return in wccc8 the amount of Pokemon in the turn holder's
+; return in wNumberPrizeCardsToTake the amount of Pokemon in the turn holder's
 ; play area that are still there despite having 0 HP.
 ; that is, the number of Pokemon that have just been knocked out.
 ; Clefairy Doll and Mysterious Fossil don't count.
@@ -7558,7 +7558,7 @@ CountKnockedOutPokemon: ; 6fc7 (1:6fc7)
 	dec c
 	jr nz, .loop
 	ld a, b
-	ld [wccc8], a
+	ld [wNumberPrizeCardsToTake], a
 	or a
 	ret z
 	scf

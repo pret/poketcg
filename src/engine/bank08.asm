@@ -3589,9 +3589,9 @@ AIPlay_Pokedex: ; 212b4 (8:52b4)
 ; 0x212dc
 
 AIDecide_Pokedex: ; 212dc (8:52dc)
-	ld a, [wcda6]
-	cp $06
-	jr c, .no_carry
+	ld a, [wAIPokedexCounter]
+	cp 5 + 1
+	jr c, .no_carry ; return if counter hasn't reached 6 yet
 
 ; return no carry if number of cards in deck <= 4
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3624,7 +3624,7 @@ AIDecide_Pokedex: ; 212dc (8:52dc)
 PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 ; unreferenced
 	xor a
-	ld [wcda6], a
+	ld [wAIPokedexCounter], a ; reset counter
 
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -3756,7 +3756,7 @@ PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 ; stores the resulting order in wce1a.
 PickPokedexCards: ; 2138e (8:538e)
 	xor a
-	ld [wcda6], a
+	ld [wAIPokedexCounter], a ; reset counter ; reset counter
 
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -6949,7 +6949,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	and [hl]
 	ld [hl], a
 	or a
-	ret z ; return if no prizes (should never happen)
+	ret z ; return if no prizes
 
 	ld c, a
 	ld b, $1
