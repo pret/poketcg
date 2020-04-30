@@ -13,7 +13,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_14668 ; GRASS_AND_PSYCHIC_DECK
 	dw PointerTable_149e8 ; LEGENDARY_MOLTRES_DECK
 	dw PointerTable_14b0f ; LEGENDARY_ZAPDOS_DECK
-	dw $4c0b ; LEGENDARY_ARTICUNO_DECK
+	dw PointerTable_14c0b ; LEGENDARY_ARTICUNO_DECK
 	dw $4d60 ; LEGENDARY_DRAGONITE_DECK
 	dw $4e89 ; FIRST_STRIKE_DECK
 	dw $4f0e ; ROCK_CRUSHER_DECK
@@ -2034,7 +2034,139 @@ Func_14b6c: ; 14b6c (5:4b6c)
 ; 0x14b9a
 
 Func_14b9a: ; 14b9a (5:4b9a)
-	INCROM $14b9a, $14c91
+	INCROM $14b9a, $14c0b
+
+PointerTable_14c0b: ; 14c0b (5:4c0b)
+	dw Func_14c17
+	dw Func_14c17
+	dw Func_14c1b
+	dw Func_14c2c
+	dw Func_14c30
+	dw Func_14c34
+
+Func_14c17: ; 14c17 (5:4c17)
+	INCROM $14c17, $14c1b
+
+Func_14c1b: ; 14c1b (5:4c1b)
+	call InitAIDuelVars
+	call Func_14c63
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x14c2c
+
+Func_14c2c: ; 14c2c (5:4c2c)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14c30
+
+Func_14c30: ; 14c30 (5:4c30)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14c34
+
+Func_14c34: ; 14c34 (5:4c34)
+	call _AIPickPrizeCards
+	ret
+; 0x14c38
+
+Data_14c38: ; 14c38 (5:4c38)
+	db CHANSEY
+	db LAPRAS
+	db DITTO
+	db SEEL
+	db ARTICUNO1
+	db ARTICUNO2
+	db $00
+
+Data_14c3f: ; 14c3f (5:4c3f)
+	db ARTICUNO1
+	db SEEL
+	db LAPRAS
+	db CHANSEY
+	db DITTO
+	db $00
+
+Data_14c45: ; 14c45 (5:4c45)
+	db SEEL
+	db $80 - 3
+	db DITTO
+	db $80 - 3
+	db $00
+
+Data_14c4a: ; 14c4a (5:4c4a)
+	db SEEL
+	db 3
+	db $80 + 1
+
+	db DEWGONG
+	db 4
+	db $80 + 0
+
+	db LAPRAS
+	db 3
+	db $80 + 0
+
+	db ARTICUNO1
+	db 4
+	db $80 + 1
+
+	db ARTICUNO2
+	db 3
+	db $80 + 0
+
+	db CHANSEY
+	db 0
+	db $80 - 8
+
+	db DITTO
+	db 3
+	db $80 + 0
+
+	db $00
+
+Data_14c60: ; 14c60 (5:4c60)
+	db GAMBLER
+	db ARTICUNO2
+	db $00
+
+Func_14c63: ; 14c63 (5:4c63)
+	ld hl, wcda8
+	ld de, Data_14c60
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_14c38
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_14c3f
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_14c3f
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+; missing wcdb0
+
+	ld hl, wcdb2
+	ld de, Data_14c4a
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
