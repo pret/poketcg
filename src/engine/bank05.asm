@@ -12,7 +12,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_14668 ; WATER_AND_FIGHTING_DECK
 	dw PointerTable_14668 ; GRASS_AND_PSYCHIC_DECK
 	dw PointerTable_149e8 ; LEGENDARY_MOLTRES_DECK
-	dw $4b0f ; LEGENDARY_ZAPDOS_DECK
+	dw PointerTable_14b0f ; LEGENDARY_ZAPDOS_DECK
 	dw $4c0b ; LEGENDARY_ARTICUNO_DECK
 	dw $4d60 ; LEGENDARY_DRAGONITE_DECK
 	dw $4e89 ; FIRST_STRIKE_DECK
@@ -1895,8 +1895,146 @@ Func_14a81: ; 14a81 (5:4a81)
 	ret
 ; 0x14b0f
 
-Func_14b0f: ; 14b0f (5:4b0f)
-	INCROM $14b0f, $14c91
+PointerTable_14b0f: ; 14b0f (05:4b0f)
+	dw Func_14b1b
+	dw Func_14b1b
+	dw Func_14b1f
+	dw Func_14b30
+	dw Func_14b34
+	dw Func_14b38
+
+Func_14b1b: ; 14b1b (5:4b1b)
+	INCROM $14b1b, $14b1f
+
+Func_14b1f: ; 14b1f (5:4b1f)
+	call InitAIDuelVars
+	call Func_14b6c
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x14b30
+
+Func_14b30: ; 14b30 (5:4b30)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14b34
+
+Func_14b34: ; 14b34 (5:4b34)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14b38
+
+Func_14b38: ; 14b38 (5:4b38)
+	call _AIPickPrizeCards
+	ret
+; 0x14b3c
+
+Data_14b3c: ; 14b3c (5:4b3c)
+	db ELECTABUZZ2
+	db VOLTORB
+	db EEVEE
+	db ZAPDOS1
+	db ZAPDOS2
+	db ZAPDOS3
+	db $00
+
+Data_14b43:  ; 14b43 (5:4b43)
+	db ZAPDOS2
+	db ZAPDOS1
+	db EEVEE
+	db VOLTORB
+	db ELECTABUZZ2
+	db $00
+
+Data_14b49:  ; 14b49 (5:4b49)
+	db EEVEE
+	db $80 - 5
+	db VOLTORB
+	db $80 - 5
+	db ELECTABUZZ2
+	db $80 - 5
+	db $00
+
+Data_14b50:  ; 14b50 (5:4b50)
+	db VOLTORB
+	db 1
+	db $80 - 1
+
+	db ELECTRODE1
+	db 3
+	db $80 + 0
+
+	db ELECTABUZZ2
+	db 2
+	db $80 - 1
+
+	db JOLTEON2
+	db 3
+	db $80 + 1
+
+	db ZAPDOS1
+	db 4
+	db $80 + 2
+
+	db ZAPDOS2
+	db 4
+	db $80 + 2
+
+	db ZAPDOS3
+	db 3
+	db $80 + 1
+
+	db EEVEE
+	db 3
+	db $80 + 0
+
+	db $00
+
+Data_14b69:  ; 14b69 (5:4b69)
+	db GAMBLER
+	db ZAPDOS3
+	db $00
+
+Func_14b6c: ; 14b6c (5:4b6c)
+	ld hl, wcda8
+	ld de, Data_14b69
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_14b3c
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_14b43
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_14b43
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+; missing wcdb0
+
+	ld hl, wcdb2
+	ld de, Data_14b50
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x14b9a
+
+Func_14b9a: ; 14b9a (5:4b9a)
+	INCROM $14b9a, $14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
@@ -2002,7 +2140,7 @@ Data_1514f: ; 1514f (5:514f)
 ; input:
 ;	a = card ID
 ; output:
-; 	a = card deck index, if found
+;	a = card deck index, if found
 ;	carry set if found
 LookForCardIDInHandList_Bank5: ; 155d2 (5:55d2)
 	ld [wTempCardIDToLook], a
