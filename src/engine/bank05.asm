@@ -22,7 +22,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_1509b ; FLOWER_POWER_DECK
 	dw PointerTable_15122 ; STRANGE_PSYSHOCK_DECK
 	dw PointerTable_151ad ; WONDERS_OF_SCIENCE_DECK
-	dw $5232 ; FIRE_CHARGE_DECK
+	dw PointerTable_15232 ; FIRE_CHARGE_DECK
 	dw $52bd ; IM_RONALD_DECK
 	dw $534b ; POWERFUL_RONALD_DECK
 	dw $53e8 ; INVINCIBLE_RONALD_DECK
@@ -3313,8 +3313,144 @@ Func_15204: ; 15204 (5:5204)
 	ret
 ; 0x15232
 
-Func_15232: ; 15232 (5:5232)
-	INCROM $15232, $155d2
+PointerTable_15232: ; 15232 (5:5232)
+	dw Func_1523e
+	dw Func_1523e
+	dw Func_15242
+	dw Func_15253
+	dw Func_15257
+	dw Func_1525b
+
+Func_1523e: ; 1523e (5:523e)
+	INCROM $1523e, $15242
+
+Func_15242: ; 15242 (5:5242)
+	call InitAIDuelVars
+	call Func_1528f
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x15253
+
+Func_15253: ; 15253 (5:5253)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15257
+
+Func_15257: ; 15257 (5:5257)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x1525b
+
+Func_1525b: ; 1525b (5:525b)
+	call _AIPickPrizeCards
+	ret
+; 0x1525f
+
+Data_1525f: ; 1525f (5:525f)
+	db JIGGLYPUFF3
+	db CHANSEY
+	db TAUROS
+	db MAGMAR1
+	db JIGGLYPUFF1
+	db GROWLITHE
+	db $00
+
+Data_15266: ; 15266 (5:5266)
+	db JIGGLYPUFF3
+	db CHANSEY
+	db GROWLITHE
+	db MAGMAR1
+	db JIGGLYPUFF1
+	db TAUROS
+	db $00
+
+Data_1526e: ; 1526e (5:526e)
+	db JIGGLYPUFF1
+	db $80 - 1
+	db CHANSEY
+	db $80 - 1
+	db GROWLITHE
+	db $80 - 1
+	db $00
+
+Data_15274: ; 15274 (5:5274)
+	db GROWLITHE
+	db 3
+	db $80 + 0
+
+	db ARCANINE2
+	db 4
+	db $80 + 0
+
+	db MAGMAR1
+	db 3
+	db $80 + 0
+
+	db JIGGLYPUFF1
+	db 3
+	db $80 + 0
+
+	db JIGGLYPUFF3
+	db 2
+	db $80 + 0
+
+	db WIGGLYTUFF
+	db 3
+	db $80 + 0
+
+	db CHANSEY
+	db 4
+	db $80 + 0
+
+	db TAUROS
+	db 3
+	db $80 + 0
+
+	db $00
+
+Data_1528d: ; 1528d (5:528d)
+	db GAMBLER
+	db $00
+
+Func_1528f: ; 1528f (5:528f)
+	ld hl, wcda8
+	ld de, Data_1528d
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_1525f
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_15266
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_15266
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_15274
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x152bd
+
+Func_152bd: ; 152bd (5:52bd)
+	INCROM $152bd, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
