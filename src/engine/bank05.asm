@@ -11,7 +11,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_14668 ; LIGHTNING_AND_FIRE_DECK
 	dw PointerTable_14668 ; WATER_AND_FIGHTING_DECK
 	dw PointerTable_14668 ; GRASS_AND_PSYCHIC_DECK
-	dw $49e8 ; LEGENDARY_MOLTRES_DECK
+	dw PointerTable_149e8 ; LEGENDARY_MOLTRES_DECK
 	dw $4b0f ; LEGENDARY_ZAPDOS_DECK
 	dw $4c0b ; LEGENDARY_ARTICUNO_DECK
 	dw $4d60 ; LEGENDARY_DRAGONITE_DECK
@@ -1658,7 +1658,245 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 ; 0x148dc
 
 Func_148dc: ; 148dc (5:48dc)
-	INCROM $148dc, $14c91
+	INCROM $148dc, $149e8
+
+PointerTable_149e8: ; 149e8 (05:49e8)
+	dw Func_149f4
+	dw Func_149f4
+	dw Func_149f8
+	dw Func_14a09
+	dw Func_14a0d
+	dw Func_14a11
+
+Func_149f4: ; 149f4 (5:49f4)
+	call Func_14a81
+	ret
+; 0x149f8
+
+Func_149f8: ; 149f8 (5:49f8)
+	call InitAIDuelVars
+	call Func_14a4a
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc ; Play Area set up was successful
+	call AIPlayInitialBasicCards
+	ret
+; 0x14a09
+
+Func_14a09: ; 14a09 (5:4a09)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14a0d
+
+Func_14a0d: ; 14a0d (5:4a0d)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14a11
+
+Func_14a11: ; 14a11 (5:4a11)
+	call _AIPickPrizeCards
+	ret
+; 0x14a15
+
+Data_14a15: ; 14a15 (5:4a15)
+	db MAGMAR2
+	db GROWLITHE
+	db VULPIX
+	db MAGMAR1
+	db MOLTRES1
+	db MOLTRES2
+	db $00
+
+Data_14a1c: ; 14a1c (5:4a1c)
+	db MOLTRES1
+	db VULPIX
+	db GROWLITHE
+	db MAGMAR2
+	db MAGMAR1
+	db $00
+
+Data_14a22: ; 14a22 (5:4a22)
+	db MOLTRES2
+	db MOLTRES1
+	db VULPIX
+	db GROWLITHE
+	db MAGMAR2
+	db MAGMAR1
+	db $00
+
+Data_14a29: ; 14a29 (5:4a29)
+	db GROWLITHE
+	db $80 - 5
+	db VULPIX
+	db $80 - 5
+	db $00
+
+Data_14a2e: ; 14a2e (5:4a2e)
+	db VULPIX
+	db 3
+	db $80 + 0
+
+	db NINETAILS2
+	db 3
+	db $80 + 1
+
+	db GROWLITHE
+	db 3
+	db $80 + 1
+
+	db ARCANINE2
+	db 4
+	db $80 + 1
+
+	db MAGMAR1
+	db 4
+	db $80 - 1
+
+	db MAGMAR2
+	db 1
+	db $80 - 1
+
+	db MOLTRES2
+	db 3
+	db $80 + 2
+
+	db MOLTRES1
+	db 4
+	db $80 + 2
+
+	db $00
+
+Data_14a47: ; 14a47 (5:4a47)
+	db ENERGY_REMOVAL
+	db MOLTRES2
+	db $00
+
+Func_14a4a: ; 14a4a (5:4a4a)
+	ld hl, wcda8
+	ld de, Data_14a47
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_14a15
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_14a1c
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_14a22
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb0
+	ld de, Data_14a29
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_14a2e
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x14a81
+
+Func_14a81: ; 14a81 (5:4a81)
+	call InitAITurnVars
+	farcall Func_227d3
+	jp nc, .try_attack
+
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+
+; check if AI can play Moltres2 from hand
+; if so, play it.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .skip_moltres ; skip if bench is full
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE - 9
+	jr nc, .skip_moltres ; skip if cards in deck <= 9
+	ld a, MUK
+	call CountPokemonIDInBothPlayAreas
+	jr c, .skip_moltres ; skip if Muk in play
+	ld a, MOLTRES2
+	call LookForCardIDInHandList_Bank5
+	jr nc, .skip_moltres ; skip if no Moltres2 in hand
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_PLAY_BASIC_PKMN
+	bank1call AIMakeDecision
+
+.skip_moltres
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_05
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_11
+	call AIProcessHandTrainerCards
+
+; handle attaching energy from hand
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .skip_attach_energy
+
+; if Magmar2 is the Arena card and has no energy attached,
+; try attaching an energy card to it from the hand.
+; otherwise, run normal AI energy attach routine.
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, MAGMAR2
+	cp e
+	jr nz, .attach_normally
+	; Magmar2 is the Arena card
+	call CreateEnergyCardListFromHand
+	jr c, .skip_attach_energy
+	ld e, PLAY_AREA_ARENA
+	call CountNumberOfEnergyCardsAttached
+	or a
+	jr nz, .attach_normally
+	xor a ; PLAY_AREA_ARENA
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call AITryToPlayEnergyCard
+	jr c, .skip_attach_energy
+
+.attach_normally
+	call AIProcessAndTryToPlayEnergy
+
+.skip_attach_energy
+; try playing Pokemon cards from hand again
+	call AIDecidePlayPokemonCard
+	ld a, AI_TRAINER_CARD_PHASE_13
+	call AIProcessHandTrainerCards
+
+.try_attack
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x14b0f
+
+Func_14b0f: ; 14b0f (5:4b0f)
+	INCROM $14b0f, $14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
@@ -2279,8 +2517,82 @@ RemoveCardIDInList: ; 157f3 (5:57f3)
 	ret
 ; 0x1581b
 
-Func_1581b: ; 1581b (5:581b)
-	INCROM $1581b, $158b2
+; play Pokemon cards from the hand to set the starting
+; Play Area of Boss decks.
+; each Boss deck has two ID lists in order of preference.
+; one list is for the Arena card is the other is for the Bench cards.
+; if Arena card could not be set (due to hand not having any card in its list)
+; or if list is null, return carry and do not play any cards.
+TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
+	ld de, wcdaa
+	ld a, d
+	or a
+	jr z, .set_carry ; return if null
+
+; pick Arena card
+	call CreateHandCardList
+	ld hl, wDuelTempList
+	ld de, wcdaa
+	call .PlayPokemonCardInOrder
+	ret c
+
+; play Pokemon cards to Bench until there are
+; a maximum of 3 cards in Play Area.
+.loop
+	ld de, wcdac
+	call .PlayPokemonCardInOrder
+	jr c, .done
+	cp 3
+	jr c, .loop
+
+.done
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x1583f
+
+; runs through input card ID list in de.
+; plays to Play Area first card that is found in hand.
+; returns carry if none of the cards in the list are found.
+; returns number of Pokemon in Play Area in a.
+.PlayPokemonCardInOrder ; 1583f (5:583f)
+	ld a, [de]
+	ld c, a
+	inc de
+	ld a, [de]
+	ld d, a
+	ld e, c
+
+; go in order of the list in de and
+; add first card that matches ID.
+; returns carry if hand doesn't have any card in list.
+.loop_id_list
+	ld a, [de]
+	inc de
+	or a
+	jr z, .not_found
+	push de
+	ld e, a
+	call RemoveCardIDInList
+	pop de
+	jr nc, .loop_id_list
+
+	; play this card to Play Area and return
+	push hl
+	call PutHandPokemonCardInPlayArea
+	pop hl
+	or a
+	ret
+
+.not_found
+	scf
+	ret
+; 0x1585b
+
+Func_1585b: ; 1585b (5:585b)
+	INCROM $1585b, $158b2
 
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
@@ -3009,26 +3321,26 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	ld a, [wcdb0]
 	ld l, a
 
-.loop
+.loop_ids
 	ld a, [hli]
 	or a
-	jr z, .store_score
+	jr z, .store_score ; list is over
 	cp b
-	jr nz, .asm_15d32
+	jr nz, .next_id
 	ld a, [hl]
 	cp $80
 	jr c, .asm_15d2b
 	sub $80
 	call AddToAIScore
-	jr .asm_15d32
+	jr .next_id
 .asm_15d2b
 	ld c, a
 	ld a, $80
 	sub c
 	call SubFromAIScore
-.asm_15d32
+.next_id
 	inc hl
-	jr .loop
+	jr .loop_ids
 
 .store_score
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -4126,19 +4438,19 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 SortTempHandByIDList: ; 1633f (5:633f)
 	ld a, [wcdae+1]
 	or a
-	ret z
+	ret z ; return if list is empty
 
 ; start going down the ID list
 	ld d, a
 	ld a, [wcdae]
 	ld e, a
 	ld c, 0
-.next_list_id
+.loop_list_id
 ; get this item's ID
 ; if $00, list has ended
 	ld a, [de]
 	or a
-	ret z
+	ret z ; return when list is over
 	inc de
 	ld hl, wDuelTempList
 	ld b, 0
@@ -4150,7 +4462,7 @@ SortTempHandByIDList: ; 1633f (5:633f)
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
 	cp -1
-	jr z, .next_list_id
+	jr z, .loop_list_id
 	push bc
 	push de
 	call GetCardIDFromDeckIndex
@@ -4703,6 +5015,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	pop de
 	cp d
 	jr c, .check_id_score
+	; already reached target number of energy cards
 	ld a, 10
 	call SubFromAIScore
 	jr .store_score
@@ -7159,8 +7472,176 @@ CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 	ret
 ; 0x172af
 
-Func_172af ; 172af (5:72af)
-	INCROM $172af, $17383
+; sets up the inital hand of boss deck.
+; always draws at least 2 Basic Pokemon cards and 2 Energy cards.
+; also sets up so that the next cards to be drawn have
+; some minimum number of Basic Pokemon and Energy cards
+; and avoids deck-specific list of cards.
+SetUpBossStartingHandAndDeck: ; 172af (5:72af)
+; shuffle all hand cards in deck
+	ld a, DUELVARS_HAND
+	call GetTurnDuelistVariable
+	ld b, STARTING_HAND_SIZE
+.asm_172b6
+	ld a, [hl]
+	call RemoveCardFromHand
+	call ReturnCardToDeck
+	dec b
+	jr nz, .asm_172b6
+	jr .count_energy_basic
+
+.shuffle_deck
+	call ShuffleDeck
+
+; count number of Energy and basic Pokemon cards
+; in the first STARTING_HAND_SIZE in deck.
+.count_energy_basic
+	xor a
+	ld [wce06], a
+	ld [wce08], a
+
+	ld a, DUELVARS_DECK_CARDS
+	call GetTurnDuelistVariable
+	ld b, STARTING_HAND_SIZE
+.loop_deck_1
+	ld a, [hli]
+	push bc
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop bc
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr c, .pokemon_card_1
+	cp TYPE_TRAINER
+	jr z, .next_card_deck_1
+
+; energy card
+	ld a, [wce08]
+	inc a
+	ld [wce08], a
+	jr .next_card_deck_1
+
+.pokemon_card_1
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .next_card_deck_1 ; not basic
+	ld a, [wce06]
+	inc a
+	ld [wce06], a
+
+.next_card_deck_1
+	dec b
+	jr nz, .loop_deck_1
+
+; tally the number of Energy and basic Pokemon cards
+; and if any of them is smaller than 2, re-shuffle deck.
+	ld a, [wce06]
+	cp 2
+	jr c, .shuffle_deck
+	ld a, [wce08]
+	cp 2
+	jr c, .shuffle_deck
+
+; now check the following 6 cards.
+; re-shuffle deck if any of these cards is listed in wcda8.
+	ld b, 6
+.check_card_ids
+	ld a, [hli]
+	push bc
+	call .CheckIfIDIsInList
+	pop bc
+	jr c, .shuffle_deck
+	dec b
+	jr nz, .check_card_ids
+
+; finally, check 6 cards after that.
+; if Energy or Basic Pokemon counter is below 4
+; (counting with the ones found in the initial hand)
+; then re-shuffle deck.
+	ld b, 6
+.loop_deck_2
+	ld a, [hli]
+	push bc
+	call LoadCardDataToBuffer1_FromDeckIndex
+	pop bc
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr c, .pokemon_card_2
+	cp TYPE_TRAINER
+	jr z, .next_card_deck_2
+
+; energy card
+	ld a, [wce08]
+	inc a
+	ld [wce08], a
+	jr .next_card_deck_2
+
+.pokemon_card_2
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr nz, .next_card_deck_2
+	ld a, [wce06]
+	inc a
+	ld [wce06], a
+
+.next_card_deck_2
+	dec b
+	jr nz, .loop_deck_2
+
+	ld a, [wce06]
+	cp 4
+	jp c, .shuffle_deck
+	ld a, [wce08]
+	cp 4
+	jp c, .shuffle_deck
+
+; draw new set of hand cards
+	ld a, DUELVARS_DECK_CARDS
+	call GetTurnDuelistVariable
+	ld b, STARTING_HAND_SIZE
+.draw_loop
+	ld a, [hli]
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	dec b
+	jr nz, .draw_loop
+	ret
+; 0x17366
+
+; expectation: return carry if card ID corresponding
+; to the input deck index is listed in wcda8;
+; reality: always returns no carry because when checking terminating
+; byte in wcda8 ($00), it wrongfully uses 'cp a' instead of 'or a',
+; so it always ends up returning in the first item in list.
+; input:
+;	- a = deck index of card to check
+.CheckIfIDIsInList ; 17366 (5:7366)
+	ld b, a
+	ld a, [wcda8 + 1]
+	or a
+	ret z ; null
+	push hl
+	ld h, a
+	ld a, [wcda8]
+	ld l, a
+
+	ld a, b
+	call GetCardIDFromDeckIndex
+.loop_id_list
+	ld a, [hli]
+	cp a ; bug, should be 'or a'
+	jr z, .false
+	cp e
+	jr nz, .loop_id_list
+
+; true
+	pop hl
+	scf
+	ret
+.false
+	pop hl
+	or a
+	ret
+; 0x17383
 
 ; returns carry if Pokemon at PLAY_AREA* in a
 ; can damage defending Pokémon with any of its moves

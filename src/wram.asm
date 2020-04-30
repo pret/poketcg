@@ -1195,7 +1195,14 @@ wAIPokedexCounter:: ; cda6
 wcda7:: ; cda7
 	ds $1
 
-	ds $6
+wcda8:: ; cda8
+	ds $2
+
+wcdaa:: ; cdaa
+	ds $2
+
+wcdac:: ; cdac
+	ds $2
 
 ; pointer to a list of card IDs for sorting AI hand
 wcdae:: ; cdae
