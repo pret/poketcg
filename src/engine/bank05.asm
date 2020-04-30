@@ -27,7 +27,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_1534b ; POWERFUL_RONALD_DECK
 	dw PointerTable_153e8 ; INVINCIBLE_RONALD_DECK
 	dw PointerTable_1546f ; LEGENDARY_RONALD_DECK
-	dw $48dc ; MUSCLES_FOR_BRAINS_DECK
+	dw PointerTable_148dc ; MUSCLES_FOR_BRAINS_DECK
 	dw PointerTable_14668 ; HEATED_BATTLE_DECK
 	dw PointerTable_14668 ; LOVE_TO_BATTLE_DECK
 	dw PointerTable_14668 ; EXCAVATION_DECK
@@ -1657,8 +1657,40 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	ret
 ; 0x148dc
 
-Func_148dc: ; 148dc (5:48dc)
-	INCROM $148dc, $149e8
+PointerTable_148dc: ; 148dc (5:48dc)
+	dw Func_148e8
+	dw Func_148e8
+	dw Func_148ec
+	dw Func_148f3
+	dw Func_148f7
+	dw Func_148fb
+
+Func_148e8: ; 148e8 (5:48e8)
+	INCROM $148e8, $148ec
+
+Func_148ec: ; 148ec (5:48ec)
+	call InitAIDuelVars
+	call AIPlayInitialBasicCards
+	ret
+; 0x148f3
+
+Func_148f3: ; 148f3 (5:48f3)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x148f7
+
+Func_148f7: ; 148f7 (5:48f7)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x148fb
+
+Func_148fb: ; 148fb (5:48fb)
+	call _AIPickPrizeCards
+	ret
+; 0x148ff
+
+Func_148ff: ; 148ff (5:48ff)
+	INCROM $148ff, $149e8
 
 PointerTable_149e8: ; 149e8 (05:49e8)
 	dw Func_149f4
