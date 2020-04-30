@@ -24,7 +24,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_151ad ; WONDERS_OF_SCIENCE_DECK
 	dw PointerTable_15232 ; FIRE_CHARGE_DECK
 	dw PointerTable_152bd ; IM_RONALD_DECK
-	dw $534b ; POWERFUL_RONALD_DECK
+	dw PointerTable_1534b ; POWERFUL_RONALD_DECK
 	dw $53e8 ; INVINCIBLE_RONALD_DECK
 	dw $546f ; LEGENDARY_RONALD_DECK
 	dw $48dc ; MUSCLES_FOR_BRAINS_DECK
@@ -3449,7 +3449,6 @@ Func_1528f: ; 1528f (5:528f)
 	ret
 ; 0x152bd
 
-
 PointerTable_152bd: ; 152bd (5:52bd)
 	dw Func_152c9
 	dw Func_152c9
@@ -3592,8 +3591,165 @@ Func_1531d: ; 1531d (5:531d)
 	ret
 ; 0x1534b
 
-Func_1534b: ; 1534b (5:534b)
-	INCROM $1534b, $155d2
+PointerTable_1534b: ; 1534b (5:534b)
+	dw Func_15357
+	dw Func_15357
+	dw Func_1535b
+	dw Func_1536c
+	dw Func_15370
+	dw Func_15374
+
+Func_15357: ; 15357 (5:5357)
+	INCROM $15357, $1535b
+
+Func_1535b: ; 1535b (5:535b)
+	call InitAIDuelVars
+	call Func_153ba
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x1536c
+
+Func_1536c: ; 1536c (5:536c)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15370
+
+Func_15370: ; 15370 (5:5370)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15374
+
+Func_15374: ; 15374 (5:5374)
+	call _AIPickPrizeCards
+	ret
+; 0x15378
+
+Data_15378: ; 15378 (5:5378)
+	db KANGASKHAN
+	db ELECTABUZZ2
+	db HITMONCHAN
+	db MR_MIME
+	db LICKITUNG
+	db HITMONLEE
+	db TAUROS
+	db JYNX
+	db MEWTWO1
+	db DODUO
+	db $00
+
+Data_15383: ; 15383 (5:5383)
+	db KANGASKHAN
+	db HITMONLEE
+	db HITMONCHAN
+	db TAUROS
+	db DODUO
+	db JYNX
+	db MEWTWO1
+	db ELECTABUZZ2
+	db MR_MIME
+	db LICKITUNG
+	db $00
+
+Data_1538e: ; 1538e (5:538e)
+	db KANGASKHAN
+	db $80 - 1
+	db DODUO
+	db $80 - 1
+	db DODRIO
+	db $80 - 1
+	db $00
+
+Data_15395: ; 15395 (5:5395)
+	db ELECTABUZZ2
+	db 2
+	db $80 + 1
+
+	db HITMONLEE
+	db 3
+	db $80 + 1
+
+	db HITMONCHAN
+	db 3
+	db $80 + 1
+
+	db MR_MIME
+	db 2
+	db $80 + 0
+
+	db JYNX
+	db 3
+	db $80 + 0
+
+	db MEWTWO1
+	db 2
+	db $80 + 0
+
+	db DODUO
+	db 3
+	db $80 - 1
+
+	db DODRIO
+	db 3
+	db $80 - 1
+
+	db LICKITUNG
+	db 2
+	db $80 + 0
+
+	db KANGASKHAN
+	db 4
+	db $80 - 1
+
+	db TAUROS
+	db 3
+	db $80 + 0
+
+	db $00
+
+Data_153b7: ; 153b7 (5:53b7)
+	db GAMBLER
+	db ENERGY_REMOVAL
+	db $00
+
+Func_153ba: ; 153ba (5:53ba)
+	ld hl, wcda8
+	ld de, Data_153b7
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_15378
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_15383
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_15383
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_15395
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x153e8
+
+Func_153e8: ; 153e8 (5:53e8)
+	INCROM $153e8, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
