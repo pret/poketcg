@@ -15,7 +15,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_14b0f ; LEGENDARY_ZAPDOS_DECK
 	dw PointerTable_14c0b ; LEGENDARY_ARTICUNO_DECK
 	dw PointerTable_14d60 ; LEGENDARY_DRAGONITE_DECK
-	dw $4e89 ; FIRST_STRIKE_DECK
+	dw PointerTable_14e89 ; FIRST_STRIKE_DECK
 	dw $4f0e ; ROCK_CRUSHER_DECK
 	dw $4f8f ; GO_GO_RAIN_DANCE_DECK
 	dw $5019 ; ZAPPING_SELFDESTRUCT_DECK
@@ -2391,7 +2391,141 @@ Func_14dc1: ; 14dc1 (5:4dc1)
 ; 0x14def
 
 Func_14def: ; 14def (5:4def)
-	INCROM $14def, $1514f
+	INCROM $14def, $14e89
+
+PointerTable_14e89: ; 14e89 (5:4e89)
+	dw Func_14e95
+	dw Func_14e95
+	dw Func_14e99
+	dw Func_14eaa
+	dw Func_14eae
+	dw Func_14eb2
+
+Func_14e95: ; 14e95 (5:4e95)
+	INCROM $14e95, $14e99
+
+Func_14e99: ; 14e99 (5:4e99)
+	call InitAIDuelVars
+	call Func_14ee0
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x14eaa
+
+Func_14eaa: ; 14eaa (5:4eaa)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14eae
+
+Func_14eae: ; 14eae (5:4eae)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x14eb2
+
+Func_14eb2: ; 14eb2 (5:4eb2)
+	call _AIPickPrizeCards
+	ret
+; 0x14eb6
+
+Data_14eb6: ; 14eb6 (5:1eb6)
+	db HITMONCHAN
+	db MACHOP
+	db HITMONLEE
+	db MANKEY
+	db $00
+
+Data_14ebb: ; 14ebb (5:1ebb)
+	db MACHOP
+	db HITMONLEE
+	db HITMONCHAN
+	db MANKEY
+	db $00
+
+Data_14ec0: ; 14ec0 (5:1ec0)
+	db MACHOP
+	db $80 - 1
+	db MACHOKE
+	db $80 - 1
+	db MANKEY
+	db $80 - 2
+	db $00
+
+Data_14ec7: ; 14ec7 (5:1ec7)
+	db MACHOP
+	db 3
+	db $80
+
+	db MACHOKE
+	db 4
+	db $80
+
+	db MACHAMP
+	db 4
+	db $80 - 1
+
+	db HITMONCHAN
+	db 3
+	db $80
+
+	db HITMONLEE
+	db 3
+	db $80
+
+	db MANKEY
+	db 2
+	db $80 - 1
+
+	db PRIMEAPE
+	db 3
+	db $80 - 1
+
+	db $00
+
+Data_14edd: ; 14edd (5:1edd)
+	db HITMONLEE
+	db HITMONCHAN
+	db $00
+
+Func_14ee0: ; 14ee0 (5:4ee0)
+	ld hl, wcda8
+	ld de, Data_14edd
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_14eb6
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_14ebb
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_14ebb
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+; missing wcdb0
+
+	ld hl, wcdb2
+	ld de, Data_14ec7
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x14f0e
+
+Func_14f0e: ; 14f0e (5:4f0e)
+	INCROM $14f0e, $1514f
 
 ; these seem to be lists of card IDs
 ; for the AI to look up in their hand
