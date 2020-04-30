@@ -1,5 +1,5 @@
 PointerTable_14000: ; 14000 (05:4000)
-	dw $47bd ; SAMS_PRACTICE_DECK
+	dw PointerTable_147bd ; SAMS_PRACTICE_DECK
 	dw PointerTable_14668 ; PRACTICE_PLAYER_DECK
 	dw PointerTable_14668 ; SAMS_NORMAL_DECK
 	dw PointerTable_14668 ; CHARMANDER_AND_FRIENDS_DECK
@@ -332,8 +332,17 @@ CheckIfEnergyIsUseful: ; 14184 (5:4184)
 	ret
 ; 0x141da
 
-Func_141da: ; 141da (5:41da)
-	INCROM $141da, $141e5
+; pick a random Pokemon in the bench.
+; output:
+;	- a = PLAY_AREA_* of Bench Pokemon picked.
+PickRandomBenchPokemon: ; 141da (5:41da)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	call Random
+	inc a
+	ret
+; 0x141e5
 
 _AIPickPrizeCards: ; 141e5 (5:41e5)
 	ld a, [wNumberPrizeCardsToTake]
@@ -1427,8 +1436,229 @@ Func_14786: ; 14786 (5:4786)
 	ret
 ; 0x147bd
 
-Func_147bd: ; 147bd (5:47bd)
-	INCROM $147bd, $14c91
+PointerTable_147bd: ; 147bd (05:47bd)
+	dw Func_147c9
+	dw Func_147c9
+	dw Func_147d6
+	dw Func_147da
+	dw Func_147e7
+	dw Func_147f4
+
+Func_147c9: ; 147c9 (5:47c9)
+	call IsAIPracticeScriptedTurn
+	jr nc, .scripted
+; not scripted, use AI main turn logic
+	call _AIMainTurnLogic
+	ret
+.scripted ; use scripted actions instead
+	call AIPerformSciptedTurn
+	ret
+; 0x147d6
+
+Func_147d6: ; 147d6 (5:47d6)
+	call Func_14801
+	ret
+; 0x147da
+
+Func_147da: ; 147da (5:47da)
+	call IsAIPracticeScriptedTurn
+	jr nc, .scripted
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+.scripted
+	call PickRandomBenchPokemon
+	ret
+; 0x147e7
+
+Func_147e7: ; 147e7 (5:47e7)
+	call IsAIPracticeScriptedTurn
+	jr nc, .scripted
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+.scripted
+	call GetPlayAreaLocationOfRaticateOrRattata
+	ret
+; 0x147f4
+
+Func_147f4: ; 147f4 (5:47f4)
+	call _AIPickPrizeCards
+	ret
+; 0x147f8
+
+; returns carry if number of turns
+; the AI has taken >= 7.
+; used to know whether AI Sam is still
+; doing scripted turns.
+IsAIPracticeScriptedTurn: ; 147f8 (5:47f8)
+	ld a, [wDuelTurns]
+	srl a
+	cp 7
+	ccf
+	ret
+; 0x14801
+
+; places one Machop from the hand to the Play Area
+; and sets the number of prizes to 2.
+Func_14801: ; 14801 (5:4801)
+	call CreateHandCardList
+	ld hl, wDuelTempList
+.loop_hand
+	ld a, [hli]
+	ldh [hTempCardIndex_ff98], a
+	cp $ff
+	ret z
+	call LoadCardDataToBuffer1_FromDeckIndex
+	cp MACHOP
+	jr nz, .loop_hand
+	ldh a, [hTempCardIndex_ff98]
+	call PutHandPokemonCardInPlayArea
+	ld a, 2
+	ld [wDuelInitialPrizes], a
+	ret
+; 0x1481f
+
+; outputs in a Play Area location of Raticate or Rattata
+; in the Bench. If neither is found, just output PLAY_AREA_BENCH_1.
+GetPlayAreaLocationOfRaticateOrRattata: ; 1481f (5:481f)
+	ld a, RATICATE
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank5
+	cp $ff
+	jr nz, .found
+	ld a, RATTATA
+	ld b, PLAY_AREA_BENCH_1
+	call LookForCardIDInPlayArea_Bank5
+	cp $ff
+	jr nz, .found
+	ld a, PLAY_AREA_BENCH_1
+.found
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ret
+; 0x1483a
+
+; has AI execute some scripted actions depending on Duel turn.
+AIPerformSciptedTurn: ; 1483a (5:483a)
+	ld a, [wDuelTurns]
+	srl a
+	ld hl, .scripted_actions_list
+	call JumpToFunctionInTable
+
+; always attack with Arena card's first attack.
+; if it's unusable end turn without attacking.
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld [wSelectedAttack], a
+	call CheckIfSelectedMoveIsUnusable
+	jr c, .unusable
+	call AITryUseAttack
+	ret
+
+.unusable
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x1485a
+
+.scripted_actions_list ; 1485a (05:485a)
+	dw .turn_1
+	dw .turn_2
+	dw .turn_3
+	dw .turn_4
+	dw .turn_5
+	dw .turn_6
+	dw .turn_7
+; 0x14868
+
+.turn_1 ; 14868 (5:4868)
+	ld d, MACHOP
+	ld e, FIGHTING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x14870
+
+.turn_2 ; 14870 (5:4870)
+	ld a, RATTATA
+	call LookForCardIDInHandList_Bank5
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_PLAY_BASIC_PKMN
+	bank1call AIMakeDecision
+	ld d, RATTATA
+	ld e, FIGHTING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x14884
+
+.turn_3 ; 14884 (5:4884)
+	ld a, RATTATA
+	ld b, PLAY_AREA_ARENA
+	call LookForCardIDInPlayArea_Bank5
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, RATICATE
+	call LookForCardIDInHandList_Bank5
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_EVOLVE_PKMN
+	bank1call AIMakeDecision
+	ld d, RATICATE
+	ld e, LIGHTNING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x148a1
+
+.turn_4 ; 148a1 (5:48a1)
+	ld d, RATICATE
+	ld e, LIGHTNING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x148a9
+
+.turn_5 ; 148a9 (5:48a9)
+	ld a, MACHOP
+	call LookForCardIDInHandList_Bank5
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_PLAY_BASIC_PKMN
+	bank1call AIMakeDecision
+	ld d, MACHOP
+	ld e, FIGHTING_ENERGY
+	call AIAttachEnergyInHandToCardInBench
+
+; this is a bug, it's attempting to compare a card ID with a deck index.
+; the intention was to change the card to switch to depending on whether
+; the first Machop was KO'd at this point in the Duel or not.
+; because of the buggy comparison, this will always jump the
+; 'inc a' instruction and switch to PLAY_AREA_BENCH_1.
+; in a normal Practice Duel following Dr. Mason's instructions,
+; this will always lead to the AI correctly switching Raticate with Machop,
+; but in case of a "Free" Duel where the first Machop is not KO'd,
+; the intention was to switch to PLAY_AREA_BENCH_2 instead.
+; but due to 'inc a' always being skipped, it will switch to Raticate.
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	cp MACHOP ; wrong
+	ld a, PLAY_AREA_BENCH_1
+	jr nz, .retreat
+	inc a ; PLAY_AREA_BENCH_2
+
+.retreat
+	call AIChooseEnergyToDiscardForRetreatCost
+	ret
+; 0x148cc
+
+.turn_6 ; 148cc (5:48cc)
+	ld d, MACHOP
+	ld e, FIGHTING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x148d4
+
+.turn_7 ; 148d4 (5:48d4)
+	ld d, MACHOP
+	ld e, FIGHTING_ENERGY
+	call AIAttachEnergyInHandToCardInPlayArea
+	ret
+; 0x148dc
+
+Func_148dc: ; 148dc (5:48dc)
+	INCROM $148dc, $14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
@@ -1594,8 +1824,42 @@ LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
 	ret
 ; 0x15612
 
-Func_15612: ; 15612 (5:5612)
-	INCROM $15612, $15636
+; check if energy card ID in e is in AI hand and,
+; if so, attaches it to card ID in d in Play Area.
+; input:
+;	e = Energy card ID
+;	d = Pokemon card ID
+AIAttachEnergyInHandToCardInPlayArea: ; 15612 (5:5612)
+	ld a, e
+	push de
+	call LookForCardIDInHandList_Bank5
+	pop de
+	ret nc ; not in hand
+	ld b, PLAY_AREA_ARENA
+
+.attach
+	ld e, a
+	ld a, d
+	call LookForCardIDInPlayArea_Bank5
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld a, e
+	ldh [hTemp_ffa0], a
+	ld a, OPPACTION_PLAY_ENERGY
+	bank1call AIMakeDecision
+	ret
+; 0x1562b
+
+; same as AIAttachEnergyInHandToCardInPlayArea but
+; only look for card ID in the Bench.
+AIAttachEnergyInHandToCardInBench: ; 1562b (5:562b)
+	ld a, e
+	push de
+	call LookForCardIDInHandList_Bank5
+	pop de
+	ret nc
+	ld b, PLAY_AREA_BENCH_1
+	jr AIAttachEnergyInHandToCardInPlayArea.attach
+; 0x15636
 
 InitAIDuelVars: ; 15636 (5:5636)
 	ld a, $10
@@ -2786,13 +3050,12 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 ; 0x15d4f
 
 ; handles AI action of retreating Arena Pokémon
-; and chooses which energy cards to discard
+; and chooses which energy cards to discard.
 ; if card can't discard, return carry.
 ; in case it's Clefairy Doll or Mysterious Fossil,
 ; handle its effect to discard itself instead of retreating.
 ; input:
-;	- a = Play Area location (PLAY_AREA_*) of card to retreat to
-;	      in case Clefairy Doll/Mysterious Fossil effect is used.
+;	- a = Play Area location (PLAY_AREA_*) of card to retreat to.
 AIChooseEnergyToDiscardForRetreatCost: ; 15d4f (5:5d4f)
 	push af
 	ld a, [wAIPlayEnergyCardForRetreat]
