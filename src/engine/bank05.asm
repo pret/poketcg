@@ -21,7 +21,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_15019 ; ZAPPING_SELFDESTRUCT_DECK
 	dw PointerTable_1509b ; FLOWER_POWER_DECK
 	dw PointerTable_15122 ; STRANGE_PSYSHOCK_DECK
-	dw $51ad ; WONDERS_OF_SCIENCE_DECK
+	dw PointerTable_151ad ; WONDERS_OF_SCIENCE_DECK
 	dw $5232 ; FIRE_CHARGE_DECK
 	dw $52bd ; IM_RONALD_DECK
 	dw $534b ; POWERFUL_RONALD_DECK
@@ -3183,8 +3183,138 @@ Func_1517f: ; 1517f (5:517f)
 	ret
 ; 0x151ad
 
-Func_151ad: ; 151ad (5:51ad)
-	INCROM $151ad, $155d2
+PointerTable_151ad: ; 151ad (5:51ad)
+	dw Func_151b9
+	dw Func_151b9
+	dw Func_151bd
+	dw Func_151ce
+	dw Func_151d2
+	dw Func_151d6
+
+Func_151b9: ; 151b9 (5:51b9)
+	INCROM $151b9, $151bd
+
+Func_151bd: ; 151bd (5:51bd)
+	call InitAIDuelVars
+	call Func_15204
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x151ce
+
+Func_151ce: ; 151ce (5:51ce)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x151d2
+
+Func_151d2: ; 151d2 (5:51d2)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x151d6
+
+Func_151d6: ; 151d6 (5:51d6)
+	call _AIPickPrizeCards
+	ret
+; 0x151da
+
+Data_151da: ; 151da (5:51da)
+	db MEWTWO1
+	db MEWTWO3
+	db MEWTWO2
+	db GRIMER
+	db KOFFING
+	db PORYGON
+	db $00
+
+Data_151e1: ; 151e1 (5:51e1)
+	db GRIMER
+	db KOFFING
+	db MEWTWO3
+	db MEWTWO2
+	db MEWTWO1
+	db PORYGON
+	db $00
+
+Data_151e8: ; 151e8 (5:51e8)
+	db $00
+
+Data_151e9: ; 151e9 (5:51e9)
+	db GRIMER
+	db 3
+	db $80 + 0
+
+	db MUK
+	db 4
+	db $80 + 0
+
+	db KOFFING
+	db 2
+	db $80 + 0
+
+	db WEEZING
+	db 3
+	db $80 + 0
+
+	db MEWTWO1
+	db 2
+	db $80 - 1
+
+	db MEWTWO3
+	db 2
+	db $80 - 1
+
+	db MEWTWO2
+	db 2
+	db $80 - 1
+
+	db PORYGON
+	db 2
+	db $80 - 1
+
+	db $00
+
+Data_15202: ; 15202 (5:5202)
+	db MUK
+	db $00
+
+Func_15204: ; 15204 (5:5204)
+	ld hl, wcda8
+	ld de, Data_15202
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_151da
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_151e1
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_151e1
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_151e9
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x15232
+
+Func_15232: ; 15232 (5:5232)
+	INCROM $15232, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
