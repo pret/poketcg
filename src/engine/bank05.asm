@@ -20,7 +20,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_14f8f ; GO_GO_RAIN_DANCE_DECK
 	dw PointerTable_15019 ; ZAPPING_SELFDESTRUCT_DECK
 	dw PointerTable_1509b ; FLOWER_POWER_DECK
-	dw $5122 ; STRANGE_PSYSHOCK_DECK
+	dw PointerTable_15122 ; STRANGE_PSYSHOCK_DECK
 	dw $51ad ; WONDERS_OF_SCIENCE_DECK
 	dw $5232 ; FIRE_CHARGE_DECK
 	dw $52bd ; IM_RONALD_DECK
@@ -3048,11 +3048,42 @@ Func_150f4: ; 150f4 (5:50f4)
 	ret
 ; 0x15122
 
-Func_15122: ; 15122 (5:5122)
-	INCROM $15122, $1514f
+PointerTable_15122: ; 15122 (5:5122)
+	dw Func_1512e
+	dw Func_1512e
+	dw Func_15132
+	dw Func_15143
+	dw Func_15147
+	dw Func_1514b
 
-; these seem to be lists of card IDs
-; for the AI to look up in their hand
+Func_1512e: ; 1512e (5:512e)
+	INCROM $1512e, $15132
+
+Func_15132: ; 15132 (5:5132)
+	call InitAIDuelVars
+	call Func_1517f
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x15143
+
+Func_15143: ; 15143 (5:5143)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15147
+
+Func_15147: ; 15147 (5:5147)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x1514b
+
+Func_1514b: ; 1514b (5:514b)
+	call _AIPickPrizeCards
+	ret
+; 0x1514f
+
 Data_1514f: ; 1514f (5:514f)
 	db KANGASKHAN
 	db CHANSEY
@@ -3061,6 +3092,7 @@ Data_1514f: ; 1514f (5:514f)
 	db ABRA
 	db $00
 
+Data_15155: ; 15155 (5:5155)
 	db ABRA
 	db MR_MIME
 	db KANGASKHAN
@@ -3068,7 +3100,91 @@ Data_1514f: ; 1514f (5:514f)
 	db CHANSEY
 	db $00
 
-	INCROM $1515b, $155d2
+Data_1515b: ; 1515b (5:515b)
+	db ABRA
+	db $80 - 3
+	db SNORLAX
+	db $80 - 3
+	db KANGASKHAN
+	db $80 - 1
+	db CHANSEY
+	db $80 - 1
+	db $00
+
+Data_15164 ; 15164 (5:5164)
+	db ABRA
+	db 3
+	db $80 + 1
+
+	db KADABRA
+	db 3
+	db $80 + 0
+
+	db ALAKAZAM
+	db 3
+	db $80 + 0
+
+	db MR_MIME
+	db 2
+	db $80 + 0
+
+	db CHANSEY
+	db 2
+	db $80 - 2
+
+	db KANGASKHAN
+	db 4
+	db $80 - 2
+
+	db SNORLAX
+	db 0
+	db $80 - 8
+
+	db $00
+
+Data_1517a ; 1517a (5:517a)
+	db GAMBLER
+	db MR_MIME
+	db ALAKAZAM
+	db SWITCH
+	db $00
+
+Func_1517f: ; 1517f (5:517f)
+	ld hl, wcda8
+	ld de, Data_1517a
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_1514f
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_15155
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_15155
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_15164
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x151ad
+
+Func_151ad: ; 151ad (5:51ad)
+	INCROM $151ad, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
