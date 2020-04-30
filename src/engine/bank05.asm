@@ -26,7 +26,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_152bd ; IM_RONALD_DECK
 	dw PointerTable_1534b ; POWERFUL_RONALD_DECK
 	dw PointerTable_153e8 ; INVINCIBLE_RONALD_DECK
-	dw $546f ; LEGENDARY_RONALD_DECK
+	dw PointerTable_1546f ; LEGENDARY_RONALD_DECK
 	dw $48dc ; MUSCLES_FOR_BRAINS_DECK
 	dw PointerTable_14668 ; HEATED_BATTLE_DECK
 	dw PointerTable_14668 ; LOVE_TO_BATTLE_DECK
@@ -3880,8 +3880,162 @@ Func_15441: ; 15441 (5:5441)
 	ret
 ; 0x1546f
 
-Func_1546f: ; 1546f (5:546f)
-	INCROM $1546f, $155d2
+PointerTable_1546f: ; 1546f (5:546f)
+	dw Func_1547b
+	dw Func_1547b
+	dw Func_1547f
+	dw Func_15490
+	dw Func_15494
+	dw Func_15498
+
+Func_1547b: ; 1547b (5:547b)
+	INCROM $1547b, $1547f
+
+Func_1547f: ; 1547f (5:547f)
+	call InitAIDuelVars
+	call Func_154d9
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x15490
+
+Func_15490: ; 15490 (5:5490)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15494
+
+Func_15494: ; 15494 (5:5494)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x15498
+
+Func_15498: ; 15498 (5:5498)
+	call _AIPickPrizeCards
+	ret
+; 0x1549c
+
+Data_1549c: ; 1549c (5:549c)
+	db KANGASKHAN
+	db DRATINI
+	db EEVEE
+	db ZAPDOS3
+	db ARTICUNO2
+	db MOLTRES2
+	db $00
+
+Data_154a3: ; 154a3 (5:54a3)
+	db KANGASKHAN
+	db DRATINI
+	db EEVEE
+	db $00
+
+Data_154a7: ; 154a7 (5:54a7)
+	db MOLTRES2
+	db ZAPDOS3
+	db KANGASKHAN
+	db DRATINI
+	db EEVEE
+	db ARTICUNO2
+	db $00
+
+Data_154ae: ; 154ae (5:54ae)
+	db EEVEE
+	db $80 - 2
+	db $00
+
+Data_154b1: ; 154b1 (5:54b1)
+	db FLAREON1
+	db 3
+	db $80
+
+	db MOLTRES2
+	db 3
+	db $80
+
+	db VAPOREON1
+	db 3
+	db $80
+
+	db ARTICUNO2
+	db 0
+	db $78
+
+	db JOLTEON1
+	db 4
+	db $80
+
+	db ZAPDOS3
+	db 0
+	db $78
+
+	db KANGASKHAN
+	db 4
+	db $7f
+
+	db EEVEE
+	db 3
+	db $80
+
+	db DRATINI
+	db 3
+	db $80
+
+	db DRAGONAIR
+	db 4
+	db $80
+
+	db DRAGONITE1
+	db 3
+	db $80
+
+	db $00
+
+Data_154d3: ; 154d3 (5:54d3)
+	db MOLTRES2
+	db ARTICUNO2
+	db ZAPDOS3
+	db DRAGONITE1
+	db GAMBLER
+	db $00
+
+Func_154d9: ; 154d9 (5:54d9)
+	ld hl, wcda8
+	ld de, Data_154d3
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_1549c
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_154a3
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_154a7
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_154b1
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x15507
+
+Func_15507: ; 15507 (5:5507)
+	INCROM $15507, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
