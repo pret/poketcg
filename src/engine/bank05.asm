@@ -23,7 +23,7 @@ PointerTable_14000: ; 14000 (05:4000)
 	dw PointerTable_15122 ; STRANGE_PSYSHOCK_DECK
 	dw PointerTable_151ad ; WONDERS_OF_SCIENCE_DECK
 	dw PointerTable_15232 ; FIRE_CHARGE_DECK
-	dw $52bd ; IM_RONALD_DECK
+	dw PointerTable_152bd ; IM_RONALD_DECK
 	dw $534b ; POWERFUL_RONALD_DECK
 	dw $53e8 ; INVINCIBLE_RONALD_DECK
 	dw $546f ; LEGENDARY_RONALD_DECK
@@ -3313,7 +3313,7 @@ Func_15204: ; 15204 (5:5204)
 	ret
 ; 0x15232
 
-PointerTable_15232: ; 15232 (5:5232)
+PointerTable_15232: ; 15232 (5:52PointerTable_12)
 	dw Func_1523e
 	dw Func_1523e
 	dw Func_15242
@@ -3449,8 +3449,151 @@ Func_1528f: ; 1528f (5:528f)
 	ret
 ; 0x152bd
 
-Func_152bd: ; 152bd (5:52bd)
-	INCROM $152bd, $155d2
+
+PointerTable_152bd: ; 152bd (5:52bd)
+	dw Func_152c9
+	dw Func_152c9
+	dw Func_152cd
+	dw Func_152de
+	dw Func_152e2
+	dw Func_152e6
+
+Func_152c9: ; 152c9 (5:52c9)
+	INCROM $152c9, $152cd
+
+Func_152cd: ; 152cd (5:52cd)
+	call InitAIDuelVars
+	call Func_1531d
+	call SetUpBossStartingHandAndDeck
+	call TrySetUpBossStartingPlayArea
+	ret nc
+	call AIPlayInitialBasicCards
+	ret
+; 0x152de
+
+Func_152de: ; 152de (5:52de)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x152e2
+
+Func_152e2: ; 152e2 (5:52e2)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x152e6
+
+Func_152e6: ; 152e6 (5:52e6)
+	call _AIPickPrizeCards
+	ret
+; 0x152ea
+
+Data_152ea: ; 152ea (5:52ea)
+	db LAPRAS
+	db SEEL
+	db CHARMANDER
+	db CUBONE
+	db SQUIRTLE
+	db GROWLITHE
+	db $00
+
+Data_152f1: ; 152f1 (5:52f1)
+	db CHARMANDER
+	db SQUIRTLE
+	db SEEL
+	db CUBONE
+	db GROWLITHE
+	db LAPRAS
+	db $00
+
+Data_152f8: ; 152f8 (5:52f8)
+	db $00
+
+Data_152f9: ; 152f9 (5:52f9)
+	db CHARMANDER
+	db 3
+	db $80 + 0
+
+	db CHARMELEON
+	db 5
+	db $80 + 0
+
+	db GROWLITHE
+	db 2
+	db $80 + 0
+
+	db ARCANINE2
+	db 4
+	db $80 + 0
+
+	db SQUIRTLE
+	db 2
+	db $80 + 0
+
+	db WARTORTLE
+	db 3
+	db $80 + 0
+
+	db SEEL
+	db 3
+	db $80 + 0
+
+	db DEWGONG
+	db 4
+	db $80 + 0
+
+	db LAPRAS
+	db 3
+	db $80 + 0
+
+	db CUBONE
+	db 3
+	db $80 + 0
+
+	db MAROWAK1
+	db 3
+	db $80 + 0
+
+	db $00
+
+Data_1531b: ; 1531b (5:531b)
+	db LAPRAS
+	db $00
+
+Func_1531d: ; 1531d (5:531d)
+	ld hl, wcda8
+	ld de, Data_1531b
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdaa
+	ld de, Data_152ea
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdac
+	ld de, Data_152f1
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdae
+	ld de, Data_152f1
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ld hl, wcdb2
+	ld de, Data_152f9
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+	ret
+; 0x1534b
+
+Func_1534b: ; 1534b (5:534b)
+	INCROM $1534b, $155d2
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
