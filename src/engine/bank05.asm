@@ -1605,9 +1605,6 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 
 INCLUDE "engine/deck_ai.asm"
 
-Func_15507: ; 15507 (5:5507)
-	INCROM $15507, $155d2
-
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
 ; as opposed to LookForCardIDInHand, this function

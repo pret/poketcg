@@ -29,7 +29,9 @@ PointerTable_148dc: ; 148dc (5:48dc)
 	dw Func_148fb
 
 Func_148e8: ; 148e8 (5:48e8)
-	INCROM $148e8, $148ec
+	call Func_148ff
+	ret
+; 0x148ec
 
 Func_148ec: ; 148ec (5:48ec)
 	call InitAIDuelVars
@@ -53,7 +55,100 @@ Func_148fb: ; 148fb (5:48fb)
 ; 0x148ff
 
 Func_148ff: ; 148ff (5:48ff)
-	INCROM $148ff, $149e8
+	call InitAITurnVars
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	farcall Func_227d3
+	jp nc, .asm_149de
+	farcall HandleAIGoGoRainDanceEnergy
+	farcall HandleAIDamageSwap
+	farcall HandleAIPkmnPowers
+	ret c
+	farcall HandleAICowardice
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_03
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_05
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_06
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_08
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_11
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_12
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_1495e
+	call AIProcessAndTryToPlayEnergy
+.asm_1495e
+	call AIDecidePlayPokemonCard
+	farcall HandleAIDamageSwap
+	farcall HandleAIPkmnPowers
+	ret c
+	farcall HandleAIGoGoRainDanceEnergy
+	ld a, $0d
+	farcall HandleAIEnergyTrans
+	ld a, AI_TRAINER_CARD_PHASE_13
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_15
+	call AIProcessHandTrainerCards
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PROFESSOR_OAK
+	jr z, .asm_149de
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_03
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_05
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_06
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_08
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_11
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_12
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_149c9
+	call AIProcessAndTryToPlayEnergy
+.asm_149c9
+	call AIDecidePlayPokemonCard
+	farcall HandleAIDamageSwap
+	farcall HandleAIPkmnPowers
+	ret c
+	farcall HandleAIGoGoRainDanceEnergy
+	ld a, AI_TRAINER_CARD_PHASE_13
+	call AIProcessHandTrainerCards
+.asm_149de
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x149e8
 
 PointerTable_149e8: ; 149e8 (05:49e8)
 	dw Func_149f4
@@ -273,7 +368,9 @@ PointerTable_14b0f: ; 14b0f (05:4b0f)
 	dw Func_14b38
 
 Func_14b1b: ; 14b1b (5:4b1b)
-	INCROM $14b1b, $14b1f
+	call Func_14b9a
+	ret
+; 0x14b1f
 
 Func_14b1f: ; 14b1f (5:4b1f)
 	call InitAIDuelVars
@@ -376,7 +473,62 @@ Func_14b6c: ; 14b6c (5:4b6c)
 ; 0x14b9a
 
 Func_14b9a: ; 14b9a (5:4b9a)
-	INCROM $14b9a, $14c0b
+	call InitAITurnVars
+	farcall Func_227d3
+	jp nc, .asm_14c01
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_14bf8
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, $6d
+	cp e
+	jr nz, .asm_14bdb
+	ld a, $6e
+	call LookForCardIDInHandList_Bank5
+	jr nc, .asm_14bf5
+	jr .asm_14be0
+.asm_14bdb
+	ld a, $71
+	cp e
+	jr nz, .asm_14bf5
+.asm_14be0
+	call CreateEnergyCardListFromHand
+	jr c, .asm_14bf8
+	ld e, $00
+	call CountNumberOfEnergyCardsAttached
+	or a
+	jr nz, .asm_14bf5
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call AITryToPlayEnergyCard
+	jr c, .asm_14bf8
+.asm_14bf5
+	call AIProcessAndTryToPlayEnergy
+.asm_14bf8
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_13
+	call AIProcessHandTrainerCards
+.asm_14c01
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x14c0b
 
 PointerTable_14c0b: ; 14c0b (5:4c0b)
 	dw Func_14c17
@@ -387,7 +539,9 @@ PointerTable_14c0b: ; 14c0b (5:4c0b)
 	dw Func_14c34
 
 Func_14c17: ; 14c17 (5:4c17)
-	INCROM $14c17, $14c1b
+	call Func_14cf7
+	ret
+; 0x14c1b
 
 Func_14c1b: ; 14c1b (5:4c1b)
 	call InitAIDuelVars
@@ -563,7 +717,53 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 ; 0x14cf7
 
 Func_14cf7: ; 14cf7 (5:4cf7)
-	INCROM $14cf7, $14d60
+	call InitAITurnVars
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	farcall Func_227d3
+	jp nc, .asm_14d56
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_14d20
+	call AIProcessAndTryToPlayEnergy
+.asm_14d20
+	call AIDecidePlayPokemonCard
+	ld a, AI_TRAINER_CARD_PHASE_13
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_15
+	call AIProcessHandTrainerCards
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PROFESSOR_OAK
+	jr z, .asm_14d56
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_14d53
+	call AIProcessAndTryToPlayEnergy
+.asm_14d53
+	call AIDecidePlayPokemonCard
+.asm_14d56
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x14d60
 
 PointerTable_14d60: ; 14d60 (05:4d60)
 	dw Func_14d6c
@@ -574,7 +774,9 @@ PointerTable_14d60: ; 14d60 (05:4d60)
 	dw Func_14d89
 
 Func_14d6c: ; 14d6c (5:4d6c)
-	INCROM $14d6c, $14d70
+	call Func_14def
+	ret
+; 0x14d70
 
 Func_14d70: ; 14d70 (5:4d70)
 	call InitAIDuelVars
@@ -678,7 +880,76 @@ Func_14dc1: ; 14dc1 (5:4dc1)
 ; 0x14def
 
 Func_14def: ; 14def (5:4def)
-	INCROM $14def, $14e89
+	call InitAITurnVars
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	farcall Func_227d3
+	jp nc, .asm_14e7f
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_11
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_14e44
+	ld a, $bb
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, $b9
+	cp e
+	jr nz, .asm_14e41
+	call CreateEnergyCardListFromHand
+	jr c, .asm_14e44
+	ld e, $00
+	call CountNumberOfEnergyCardsAttached
+	or a
+	jr nz, .asm_14e41
+	xor a
+	ldh [hTempPlayAreaLocation_ff9d], a
+	call AITryToPlayEnergyCard
+	jr c, .asm_14e44
+.asm_14e41
+	call AIProcessAndTryToPlayEnergy
+.asm_14e44
+	call AIDecidePlayPokemonCard
+	ld a, AI_TRAINER_CARD_PHASE_15
+	call AIProcessHandTrainerCards
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PROFESSOR_OAK
+	jr z, .asm_14e7f
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_11
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_14e7c
+	call AIProcessAndTryToPlayEnergy
+.asm_14e7c
+	call AIDecidePlayPokemonCard
+.asm_14e7f
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x14e89
 
 PointerTable_14e89: ; 14e89 (5:4e89)
 	dw Func_14e95
@@ -689,7 +960,9 @@ PointerTable_14e89: ; 14e89 (5:4e89)
 	dw Func_14eb2
 
 Func_14e95: ; 14e95 (5:4e95)
-	INCROM $14e95, $14e99
+	call _AIMainTurnLogic
+	ret
+; 0x14e99
 
 Func_14e99: ; 14e99 (5:4e99)
 	call InitAIDuelVars
@@ -796,7 +1069,9 @@ PointerTable_14f0e: ; 14f0e (5:4f0e)
 	dw Func_14f37
 
 Func_14f1a: ; 14f1a (5:4f1a)
-	INCROM $14f1a, $14f1e
+	call _AIMainTurnLogic
+	ret
+; 0x14f1e
 
 Func_14f1e: ; 14f1e (5:4f1e)
 	call InitAIDuelVars
@@ -901,7 +1176,9 @@ PointerTable_14f8f: ; 14f8f (5:4f8f)
 	dw Func_14fb8
 
 Func_14f9b: ; 14f9b (5:4f9b)
-	INCROM $14f9b, $14f9f
+	call _AIMainTurnLogic
+	ret
+; 0x14f9f
 
 Func_14f9f: ; 14f9f (5:4f9f)
 	call InitAIDuelVars
@@ -1011,7 +1288,9 @@ PointerTable_15019: ; 15019 (5:5019)
 	dw Func_15042
 
 Func_15025: ; 15025 (5:5025)
-	INCROM $15025, $15029
+	call _AIMainTurnLogic
+	ret
+; 0x15029
 
 Func_15029: ; 15029 (5:5029)
 	call InitAIDuelVars
@@ -1117,7 +1396,9 @@ PointerTable_1509b: ; 1509b (5:509b)
 	dw Func_150c4
 
 Func_150a7: ; 150a7 (5:50a7)
-	INCROM $150a7, $150ab
+	call _AIMainTurnLogic
+	ret
+; 0x150ab
 
 Func_150ab: ; 150ab (5:50ab)
 	call InitAIDuelVars
@@ -1223,7 +1504,9 @@ PointerTable_15122: ; 15122 (5:5122)
 	dw Func_1514b
 
 Func_1512e: ; 1512e (5:512e)
-	INCROM $1512e, $15132
+	call _AIMainTurnLogic
+	ret
+; 0x15132
 
 Func_15132: ; 15132 (5:5132)
 	call InitAIDuelVars
@@ -1335,7 +1618,9 @@ PointerTable_151ad: ; 151ad (5:51ad)
 	dw Func_151d6
 
 Func_151b9: ; 151b9 (5:51b9)
-	INCROM $151b9, $151bd
+	call _AIMainTurnLogic
+	ret
+; 0x151bd
 
 Func_151bd: ; 151bd (5:51bd)
 	call InitAIDuelVars
@@ -1443,7 +1728,9 @@ PointerTable_15232: ; 15232 (5:52PointerTable_12)
 	dw Func_1525b
 
 Func_1523e: ; 1523e (5:523e)
-	INCROM $1523e, $15242
+	call _AIMainTurnLogic
+	ret
+; 0x15242
 
 Func_15242: ; 15242 (5:5242)
 	call InitAIDuelVars
@@ -1554,7 +1841,9 @@ PointerTable_152bd: ; 152bd (5:52bd)
 	dw Func_152e6
 
 Func_152c9: ; 152c9 (5:52c9)
-	INCROM $152c9, $152cd
+	call _AIMainTurnLogic
+	ret
+; 0x152cd
 
 Func_152cd: ; 152cd (5:52cd)
 	call InitAIDuelVars
@@ -1665,7 +1954,9 @@ PointerTable_1534b: ; 1534b (5:534b)
 	dw Func_15374
 
 Func_15357: ; 15357 (5:5357)
-	INCROM $15357, $1535b
+	call _AIMainTurnLogic
+	ret
+; 0x1535b
 
 Func_1535b: ; 1535b (5:535b)
 	call InitAIDuelVars
@@ -1788,7 +2079,9 @@ PointerTable_153e8: ; 153e8 (5:53e8)
 	dw Func_15411
 
 Func_153f4: ; 153f4 (5:53f4)
-	INCROM $153f4, $153f8
+	call _AIMainTurnLogic
+	ret
+; 0x153f8
 
 Func_153f8: ; 153f8 (5:53f8)
 	call InitAIDuelVars
@@ -1897,7 +2190,9 @@ PointerTable_1546f: ; 1546f (5:546f)
 	dw Func_15498
 
 Func_1547b: ; 1547b (5:547b)
-	INCROM $1547b, $1547f
+	call Func_15507
+	ret
+; 0x1547f
 
 Func_1547f: ; 1547f (5:547f)
 	call InitAIDuelVars
@@ -2009,3 +2304,98 @@ Func_154d9: ; 154d9 (5:54d9)
 
 	ret
 ; 0x15507
+
+Func_15507: ; 15507 (5:5507)
+	call InitAITurnVars
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $06
+	jr nc, .asm_15540
+	ld a, $ba
+	call GetTurnDuelistVariable
+	cp $33
+	jr nc, .asm_15540
+	ld a, $27
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_15540
+	ld a, $40
+	call LookForCardIDInHandList_Bank5
+	jr nc, .asm_15540
+	ldh [hTemp_ffa0], a
+	ld a, $01
+	bank1call AIMakeDecision
+.asm_15540
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_05
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_1555f
+	call AIProcessAndTryToPlayEnergy
+.asm_1555f
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_15
+	call AIProcessHandTrainerCards
+	ld a, [wPreviousAIFlags]
+	and AI_FLAG_USED_PROFESSOR_OAK
+	jr z, .asm_155c8
+	ld a, AI_TRAINER_CARD_PHASE_01
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_02
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_04
+	call AIProcessHandTrainerCards
+	ld a, $ef
+	call GetTurnDuelistVariable
+	cp $06
+	jr nc, .asm_155a5
+	ld a, $ba
+	call GetTurnDuelistVariable
+	cp $33
+	jr nc, .asm_155a5
+	ld a, $27
+	call CountPokemonIDInBothPlayAreas
+	jr c, .asm_155a5
+	ld a, $40
+	call LookForCardIDInHandList_Bank5
+	jr nc, .asm_155a5
+	ldh [hTemp_ffa0], a
+	ld a, $01
+	bank1call AIMakeDecision
+.asm_155a5
+	call AIDecidePlayPokemonCard
+	ret c
+	ld a, AI_TRAINER_CARD_PHASE_05
+	call AIProcessHandTrainerCards
+	ld a, AI_TRAINER_CARD_PHASE_07
+	call AIProcessHandTrainerCards
+	call Func_14786
+	ld a, AI_TRAINER_CARD_PHASE_10
+	call AIProcessHandTrainerCards
+	ld a, [wAlreadyPlayedEnergy]
+	or a
+	jr nz, .asm_155c4
+	call AIProcessAndTryToPlayEnergy
+.asm_155c4
+	call AIDecidePlayPokemonCard
+	ret c
+.asm_155c8
+	call AIProcessAndTryToUseAttack
+	ret c
+	ld a, OPPACTION_FINISH_NO_ATTACK
+	bank1call AIMakeDecision
+	ret
+; 0x155d2
