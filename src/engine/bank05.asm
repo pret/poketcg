@@ -1233,7 +1233,7 @@ _AIMainTurnLogic: ; 1468b (5:468b)
 
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
-	farcall Func_227d3
+	farcall HandleAIAntiMewtwoDeckStrategy
 	jp nc, .try_attack
 
 	farcall HandleAIGoGoRainDanceEnergy
@@ -1719,10 +1719,11 @@ InitAIDuelVars: ; 15636 (5:5636)
 	ld [wcda5], a
 	ret
 
-; initializes some variables and
-; sets value of wcda7.
+; initializes some variables and sets value of wAIBarrierFlagCounter.
+; if Player uses Barrier 3 times in a row, AI checks if Player's deck
+; has only Mewtwo1 Pokemon cards (running a Mewtwo1 mill deck).
 InitAITurnVars: ; 15649 (5:5649)
-; increase Pokedex counter by one
+; increase Pokedex counter by 1
 	ld a, [wAIPokedexCounter]
 	inc a
 	ld [wAIPokedexCounter], a
@@ -1733,30 +1734,43 @@ InitAITurnVars: ; 15649 (5:5649)
 	ld [wcddc], a
 	ld [wce03], a
 
+; checks if the Player used an attack last turn
+; and if it was the second attack of their card.
 	ld a, [wPlayerAttackingMoveIndex]
 	cp $ff
-	jr z, .asm_156b1
+	jr z, .check_flag
 	or a
-	jr z, .asm_156b1
+	jr z, .check_flag
 	ld a, [wPlayerAttackingCardIndex]
 	cp $ff
-	jr z, .asm_156b1
+	jr z, .check_flag
 
+; if the card is Mewtwo1, it means the Player
+; used its second attack, Barrier.
 	call SwapTurn
 	call GetCardIDFromDeckIndex
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1
-	jr nz, .asm_156b1
+	jr nz, .check_flag
+	; Player used Barrier last turn
 
-; handle Mewtwo1-only deck
-	ld a, [wcda7]
+; check if flag was already set, if so,
+; reset wAIBarrierFlagCounter to $80.
+	ld a, [wAIBarrierFlagCounter]
 	bit 7, a
-	jr nz, .asm_156aa
+	jr nz, .set_flag
+
+; if not, increase it by 1 and check if it exceeds 2.
 	inc a
-	ld [wcda7], a
-	cp $03
+	ld [wAIBarrierFlagCounter], a
+	cp 3
 	jr c, .done
+
+; this means that the Player used Barrier
+; at least 3 turns in a row.
+; check if Player is running Mewtwo1-only deck,
+; if so, set wAIBarrierFlagCounter flag.
 	ld a, DUELVARS_ARENA_CARD
 	call GetNonTurnDuelistVariable
 	call SwapTurn
@@ -1764,31 +1778,33 @@ InitAITurnVars: ; 15649 (5:5649)
 	call SwapTurn
 	ld a, e
 	cp MEWTWO1
-	jr nz, .asm_156a4
+	jr nz, .reset_1
 	farcall CheckIfPlayerHasPokemonOtherThanMewtwo1
-	jr nc, .asm_156aa
-.asm_156a4
-; reset wcda7
+	jr nc, .set_flag
+.reset_1
+; reset wAIBarrierFlagCounter
 	xor a
-	ld [wcda7], a
-	jr .done
-.asm_156aa
-	ld a, $80
-	ld [wcda7], a
+	ld [wAIBarrierFlagCounter], a
 	jr .done
 
-.asm_156b1
-	ld a, [wcda7]
+.set_flag
+	ld a, AI_FLAG_MEWTWO_MILL + 0
+	ld [wAIBarrierFlagCounter], a
+	jr .done
+
+.check_flag
+; increase counter by 1 if flag is set
+	ld a, [wAIBarrierFlagCounter]
 	bit 7, a
-	jr z, .asm_156be
+	jr z, .reset_2
 	inc a
-	ld [wcda7], a
+	ld [wAIBarrierFlagCounter], a
 	jr .done
 
-.asm_156be
-; reset wcda7
+.reset_2
+; reset wAIBarrierFlagCounter
 	xor a
-	ld [wcda7], a
+	ld [wAIBarrierFlagCounter], a
 .done
 	ret
 ; 0x156c3
@@ -4520,11 +4536,12 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	jr nz, .bench
 
 ; arena
-	ld a, [wcda7]
+	ld a, [wAIBarrierFlagCounter]
 	bit 7, a
 	jr z, .add_to_score
 
-; subtract from score
+; subtract from score instead
+; if Player is running Mewtwo1 mill deck.
 	ld a, 5
 	call SubFromAIScore
 	jr .check_defending_can_ko
@@ -5455,8 +5472,10 @@ AIProcessAttacks: ; 169fc (5:69fc)
 	jr .attack_chosen
 
 .no_pluspower
-	ld a, [wcda7]
-	cp $80
+; if Player is running Mewtwo1 mill deck,
+; skip attack if Barrier counter is 0.
+	ld a, [wAIBarrierFlagCounter]
+	cp AI_FLAG_MEWTWO_MILL + 0
 	jp z, .dont_attack
 
 ; determine AI score of both attacks.

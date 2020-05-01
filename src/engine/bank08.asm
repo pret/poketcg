@@ -4698,19 +4698,22 @@ AIPlay_Gambler: ; 2182d (8:582d)
 ; 0x21875
 
 ; checks whether to play Gambler.
-; aside from Imakuni, all other opponents only
-; play if there's less than 4 cards in the deck.
+; aside from Imakuni?, all other opponents only
+; play this card if Player is running Mewtwo1-only deck.
 AIDecide_Gambler: ; 21875 (8:5875)
 ; Imakuni? has his own routine
 	ld a, [wOpponentDeckID]
 	cp IMAKUNI_DECK_ID
 	jr z, .imakuni
 
-	ld a, [wcda7]
-	and $80
+; check if flag is set for Player using Mewtwo1 only deck
+	ld a, [wAIBarrierFlagCounter]
+	and AI_FLAG_MEWTWO_MILL
 	jr z, .no_carry
 
-; set carry if number of cards in deck <= 4
+; set carry if number of cards in deck <= 4.
+; this is done to counteract the deck out strategy
+; of Mewtwo1 deck, by replenishing the deck with hand cards.
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	cp DECK_SIZE - 4
@@ -7487,26 +7490,37 @@ CheckIfPlayerHasPokemonOtherThanMewtwo1: ; 227a9 (8:67a9)
 	ret
 ; 0x227d3
 
-; checks wcda7 and Pokemon in Play Area that are set up.
-; if there's at least 4, goes to AI_TRAINER_CARD_PHASE_05.
-; else, returns carry.
-Func_227d3: ; 227d3 (8:67d3)
-	ld a, [wcda7]
+; returns no carry if, given the Player is using a Mewtwo1 mill deck,
+; the AI already has a Bench fully set up, in which case it
+; will process some Trainer cards in hand (namely Energy Removals).
+; this is used to check whether to skip some normal AI routines
+; this turn and jump right to the attacking phase.
+HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
+; return carry if Player is not playing Mewtwo1 mill deck
+	ld a, [wAIBarrierFlagCounter]
 	bit 7, a
 	jr z, .set_carry
-	cp %10000010
-	jr c, .asm_227e4
 
-; reset wcda7
+; else, check if there's been less than 2 turns
+; without the Player using Barrier.
+	cp AI_FLAG_MEWTWO_MILL + 2
+	jr c, .count_bench
+
+; if there has been, reset wAIBarrierFlagCounter
+; and return carry.
 	xor a
-	ld [wcda7], a
+	ld [wAIBarrierFlagCounter], a
 	jr .set_carry
 
-.asm_227e4
+; else, check number of Pokemon that are set up in Bench
+; if less than 4, return carry.
+.count_bench
 	farcall CountNumberOfSetUpBenchPokemon
 	cp 4
 	jr c, .set_carry
 
+; if there's at least 4 Pokemon in the Bench set up,
+; process Trainer hand cards of AI_TRAINER_CARD_PHASE_05
 	ld a, AI_TRAINER_CARD_PHASE_05
 	farcall AIProcessHandTrainerCards
 	or a

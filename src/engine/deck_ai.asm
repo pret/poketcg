@@ -58,8 +58,8 @@ Func_148ff: ; 148ff (5:48ff)
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
-	farcall Func_227d3
-	jp nc, .asm_149de
+	farcall HandleAIAntiMewtwoDeckStrategy
+	jp nc, .try_attack
 	farcall HandleAIGoGoRainDanceEnergy
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
@@ -105,7 +105,7 @@ Func_148ff: ; 148ff (5:48ff)
 	call AIProcessHandTrainerCards
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PROFESSOR_OAK
-	jr z, .asm_149de
+	jr z, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -142,7 +142,7 @@ Func_148ff: ; 148ff (5:48ff)
 	farcall HandleAIGoGoRainDanceEnergy
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
-.asm_149de
+.try_attack
 	call AIProcessAndTryToUseAttack
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -277,7 +277,7 @@ Func_14a4a: ; 14a4a (5:4a4a)
 
 Func_14a81: ; 14a81 (5:4a81)
 	call InitAITurnVars
-	farcall Func_227d3
+	farcall HandleAIAntiMewtwoDeckStrategy
 	jp nc, .try_attack
 
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -474,8 +474,8 @@ Func_14b6c: ; 14b6c (5:4b6c)
 
 Func_14b9a: ; 14b9a (5:4b9a)
 	call InitAITurnVars
-	farcall Func_227d3
-	jp nc, .asm_14c01
+	farcall HandleAIAntiMewtwoDeckStrategy
+	jp nc, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_04
@@ -522,7 +522,7 @@ Func_14b9a: ; 14b9a (5:4b9a)
 	ret c
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
-.asm_14c01
+.try_attack
 	call AIProcessAndTryToUseAttack
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -720,8 +720,8 @@ Func_14cf7: ; 14cf7 (5:4cf7)
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
-	farcall Func_227d3
-	jp nc, .asm_14d56
+	farcall HandleAIAntiMewtwoDeckStrategy
+	jp nc, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_02
 	call AIProcessHandTrainerCards
 	call AIDecidePlayPokemonCard
@@ -741,7 +741,7 @@ Func_14cf7: ; 14cf7 (5:4cf7)
 	call AIProcessHandTrainerCards
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PROFESSOR_OAK
-	jr z, .asm_14d56
+	jr z, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -757,7 +757,7 @@ Func_14cf7: ; 14cf7 (5:4cf7)
 	call AIProcessAndTryToPlayEnergy
 .asm_14d53
 	call AIDecidePlayPokemonCard
-.asm_14d56
+.try_attack
 	call AIProcessAndTryToUseAttack
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -883,8 +883,8 @@ Func_14def: ; 14def (5:4def)
 	call InitAITurnVars
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
-	farcall Func_227d3
-	jp nc, .asm_14e7f
+	farcall HandleAIAntiMewtwoDeckStrategy
+	jp nc, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_02
 	call AIProcessHandTrainerCards
 	call AIDecidePlayPokemonCard
@@ -923,7 +923,7 @@ Func_14def: ; 14def (5:4def)
 	call AIProcessHandTrainerCards
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PROFESSOR_OAK
-	jr z, .asm_14e7f
+	jr z, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -943,7 +943,7 @@ Func_14def: ; 14def (5:4def)
 	call AIProcessAndTryToPlayEnergy
 .asm_14e7c
 	call AIDecidePlayPokemonCard
-.asm_14e7f
+.try_attack
 	call AIProcessAndTryToUseAttack
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -2328,7 +2328,7 @@ Func_15507: ; 15507 (5:5507)
 	call LookForCardIDInHandList_Bank5
 	jr nc, .asm_15540
 	ldh [hTemp_ffa0], a
-	ld a, $01
+	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
 .asm_15540
 	call AIDecidePlayPokemonCard
@@ -2351,7 +2351,7 @@ Func_15507: ; 15507 (5:5507)
 	call AIProcessHandTrainerCards
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PROFESSOR_OAK
-	jr z, .asm_155c8
+	jr z, .try_attack
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -2373,7 +2373,7 @@ Func_15507: ; 15507 (5:5507)
 	call LookForCardIDInHandList_Bank5
 	jr nc, .asm_155a5
 	ldh [hTemp_ffa0], a
-	ld a, $01
+	ld a, OPPACTION_PLAY_BASIC_PKMN
 	bank1call AIMakeDecision
 .asm_155a5
 	call AIDecidePlayPokemonCard
@@ -2392,7 +2392,7 @@ Func_15507: ; 15507 (5:5507)
 .asm_155c4
 	call AIDecidePlayPokemonCard
 	ret c
-.asm_155c8
+.try_attack
 	call AIProcessAndTryToUseAttack
 	ret c
 	ld a, OPPACTION_FINISH_NO_ATTACK

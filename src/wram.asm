@@ -1192,7 +1192,13 @@ wcda5:: ; cda5
 wAIPokedexCounter:: ; cda6
 	ds $1
 
-wcda7:: ; cda7
+; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
+; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
+; 	- when flag is not set, this counts how many turns in a row
+;	  Player used Mewtwo1's Barrier attack;
+; 	- when flag is set, this counts how many turns in a row
+;	  Player has NOT used Barrier attack.
+wAIBarrierFlagCounter:: ; cda7
 	ds $1
 
 wcda8:: ; cda8
