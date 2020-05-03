@@ -124,7 +124,7 @@ DrMasonNPCHeader:
 	db $00
 	db $26 ; palette and animation
 	db $00
-	dw $5727 ; Pointer to NPC Data
+	dw DrMasonNPCScript
 	tx DrMasonNPCName
 	db $00
 	db $00
@@ -137,7 +137,7 @@ RonaldNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to NPC Data
+	dw RonaldNPCScript
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -150,7 +150,7 @@ Ronald2NPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to NPC Data
+	dw Ronald2NPCScript
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -163,7 +163,7 @@ Ronald3NPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $5c4b ; Pointer to NPC Data
+	dw Ronald3NPCScript
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -176,7 +176,7 @@ IshiharaNPCHeader:
 	db $04
 	db $22
 	db $00
-	dw $5b4a ; Pointer to NPC Data
+	dw IshiharaNPCScript
 	tx IshiharaNPCName
 	db $00
 	db $00
@@ -189,7 +189,7 @@ ImakuniNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $5d0d ; Pointer to NPC Data
+	dw ImakuniNPCScript
 	tx ImakuniNPCName
 	db IMAKUNI_PIC
 	db IMAKUNI_DECK_ID
@@ -202,7 +202,7 @@ SamNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $561d ; Pointer to NPC Data
+	dw SamNPCScript
 	tx SamNPCName
 	db SAM_PIC
 	db SAMS_NORMAL_DECK_ID
@@ -215,7 +215,7 @@ Tech1NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $5583 ; Pointer to NPC Data
+	dw Tech1NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -228,7 +228,7 @@ Tech2NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $55ca ; Pointer to NPC Data
+	dw Tech2NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -241,7 +241,7 @@ Tech3NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $55d5 ; Pointer to NPC Data
+	dw Tech3NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -254,7 +254,7 @@ Tech4NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $55e0 ; Pointer to NPC Data
+	dw Tech4NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -267,7 +267,7 @@ Tech5NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $55f9 ; Pointer to NPC Data
+	dw Tech5NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -280,7 +280,7 @@ Tech6NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $58bb ; Pointer to NPC Data
+	dw Tech6NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -293,7 +293,7 @@ Clerk1NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $5c64 ; Pointer to NPC Data
+	dw Clerk1NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -306,7 +306,7 @@ Clerk2NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $5ed1 ; Pointer to NPC Data
+	dw Clerk2NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -319,7 +319,7 @@ Clerk3NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $609e ; Pointer to NPC Data
+	dw Clerk3NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -332,7 +332,7 @@ Clerk4NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $6369 ; Pointer to NPC Data
+	dw Clerk4NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -345,7 +345,7 @@ Clerk5NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $6566 ; Pointer to NPC Data
+	dw Clerk5NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -358,7 +358,7 @@ Clerk6NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $684c ; Pointer to NPC Data
+	dw Clerk6NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -371,7 +371,7 @@ Clerk7NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $6b53 ; Pointer to NPC Data
+	dw Clerk7NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -384,7 +384,7 @@ Clerk8NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $6d45 ; Pointer to NPC Data
+	dw Clerk8NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -397,7 +397,7 @@ Clerk9NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $7025 ; Pointer to NPC Data
+	dw Clerk9NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -410,7 +410,7 @@ ChrisNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $5ef2 ; Pointer to NPC Data
+	dw ChrisNPCScript
 	tx ChrisNPCName
 	db CHRIS_PIC
 	db MUSCLES_FOR_BRAINS_DECK_ID
@@ -423,7 +423,7 @@ MichaelNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $6573 ; Pointer to NPC Data
+	dw MichaelNPCScript
 	tx MichaelNPCName
 	db MICHAEL_PIC
 	db HEATED_BATTLE_DECK_ID
@@ -436,7 +436,7 @@ JessicaNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $6d96 ; Pointer to NPC Data
+	dw JessicaNPCScript
 	tx JessicaNPCName
 	db JESSICA_PIC
 	db LOVE_TO_BATTLE_DECK_ID
@@ -449,7 +449,7 @@ MitchNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $5dc3 ; Pointer to NPC Data
+	dw MitchNPCScript
 	tx MitchNPCName
 	db MITCH_PIC
 	db FIRST_STRIKE_DECK_ID
@@ -462,7 +462,7 @@ MatthewNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $5f39 ; Pointer to NPC Data
+	dw MatthewNPCScript
 	tx MatthewNPCName
 	db MATTHEW_PIC
 	db HARD_POKEMON_DECK_ID
@@ -475,7 +475,7 @@ RyanNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $5ff0 ; Pointer to NPC Data
+	dw RyanNPCScript
 	tx RyanNPCName
 	db RYAN_PIC
 	db EXCAVATION_DECK_ID
@@ -488,7 +488,7 @@ AndrewNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $6017 ; Pointer to NPC Data
+	dw AndrewNPCScript
 	tx AndrewNPCName
 	db ANDREW_PIC
 	db BLISTERING_POKEMON_DECK_ID
@@ -501,7 +501,7 @@ GeneNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $603e ; Pointer to NPC Data
+	dw GeneNPCScript
 	tx GeneNPCName
 	db GENE_PIC
 	db ROCK_CRUSHER_DECK_ID
@@ -514,7 +514,7 @@ SaraNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw OWSequence_Sara ; Pointer to NPC Data
+	dw SaraNPCScript
 	tx SaraNPCName
 	db SARA_PIC
 	db WATERFRONT_POKEMON_DECK_ID
@@ -527,7 +527,7 @@ AmandaNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw OWSequence_Amanda ; Pointer to NPC Data
+	dw AmandaNPCScript
 	tx AmandaNPCName
 	db AMANDA_PIC
 	db LONELY_FRIENDS_DECK_ID
@@ -540,7 +540,7 @@ JoshuaNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw OWSequence_Joshua ; Pointer to NPC Data
+	dw JoshuaNPCScript
 	tx JoshuaNPCName
 	db JOSHUA_PIC
 	db SOUND_OF_THE_WAVES_DECK_ID
@@ -553,7 +553,7 @@ AmyNPCHeader:
 	db $08
 	db $2e
 	db $10
-	dw $6304 ; Pointer to NPC Data
+	dw AmyNPCScript
 	tx AmyNPCName
 	db AMY_PIC
 	db GO_GO_RAIN_DANCE_DECK_ID
@@ -566,7 +566,7 @@ JenniferNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $6408 ; Pointer to NPC Data
+	dw JenniferNPCScript
 	tx JenniferNPCName
 	db JENNIFER_PIC
 	db PIKACHU_DECK_ID
@@ -579,7 +579,7 @@ NicholasNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $642f ; Pointer to NPC Data
+	dw NicholasNPCScript
 	tx NicholasNPCName
 	db NICHOLAS_PIC
 	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
@@ -592,7 +592,7 @@ BrandonNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $6456 ; Pointer to NPC Data
+	dw BrandonNPCScript
 	tx BrandonNPCName
 	db BRANDON_PIC
 	db POWER_GENERATOR_DECK_ID
@@ -605,7 +605,7 @@ IsaacNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $64ad ; Pointer to NPC Data
+	dw IsaacNPCScript
 	tx IsaacNPCName
 	db ISAAC_PIC
 	db ZAPPING_SELFDESTRUCT_DECK_ID
@@ -618,7 +618,7 @@ BrittanyNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $65d2 ; Pointer to NPC Data
+	dw BrittanyNPCScript
 	tx BrittanyNPCName
 	db BRITTANY_PIC
 	db ETCETERA_DECK_ID
@@ -631,7 +631,7 @@ KristinNPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw $6701 ; Pointer to NPC Data
+	dw KristinNPCScript
 	tx KristinNPCName
 	db KRISTIN_PIC
 	db FLOWER_GARDEN_DECK_ID
@@ -644,7 +644,7 @@ HeatherNPCHeader:
 	db $04
 	db $22
 	db $00
-	dw $6745 ; Pointer to NPC Data
+	dw HeatherNPCScript
 	tx HeatherNPCName
 	db HEATHER_PIC
 	db KALEIDOSCOPE_DECK_ID
@@ -657,7 +657,7 @@ NikkiNPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $679e ; Pointer to NPC Data
+	dw NikkiNPCScript
 	tx NikkiNPCName
 	db NIKKI_PIC
 	db FLOWER_POWER_DECK_ID
@@ -670,7 +670,7 @@ RobertNPCHeader:
 	db $04
 	db $16
 	db $00
-	dw $6980 ; Pointer to NPC Data
+	dw RobertNPCScript
 	tx RobertNPCName
 	db ROBERT_PIC
 	db GHOST_DECK_ID
@@ -683,7 +683,7 @@ DanielNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $6a60 ; Pointer to NPC Data
+	dw DanielNPCScript
 	tx DanielNPCName
 	db DANIEL_PIC
 	db NAP_TIME_DECK_ID
@@ -696,7 +696,7 @@ StephanieNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw $6aa2 ; Pointer to NPC Data
+	dw StephanieNPCScript
 	tx StephanieNPCName
 	db STEPHANIE_PIC
 	db STRANGE_POWER_DECK_ID
@@ -709,7 +709,7 @@ MurrayNPCHeader:
 	db $00
 	db $12
 	db $00
-	dw $6adf ; Pointer to NPC Data
+	dw MurrayNPCScript
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
@@ -722,7 +722,7 @@ Murray2NPCHeader:
 	db $03
 	db $15
 	db $10
-	dw $6adf ; Pointer to NPC Data
+	dw Murray2NPCScript
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
@@ -735,7 +735,7 @@ JosephNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $6cdb ; Pointer to NPC Data
+	dw JosephNPCScript
 	tx JosephNPCName
 	db JOSEPH_PIC
 	db FLYIN_POKEMON_DECK_ID
@@ -748,7 +748,7 @@ DavidNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $6c11 ; Pointer to NPC Data
+	dw DavidNPCScript
 	tx DavidNPCName
 	db DAVID_PIC
 	db LOVELY_NIDORAN_DECK_ID
@@ -761,7 +761,7 @@ ErikNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $6c42 ; Pointer to NPC Data
+	dw ErikNPCScript
 	tx ErikNPCName
 	db ERIK_PIC
 	db POISON_DECK_ID
@@ -774,7 +774,7 @@ RickNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $6c67 ; Pointer to NPC Data
+	dw RickNPCScript
 	tx RickNPCName
 	db RICK_PIC
 	db WONDERS_OF_SCIENCE_DECK_ID
@@ -787,7 +787,7 @@ JohnNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $6eb3 ; Pointer to NPC Data
+	dw JohnNPCScript
 	tx JohnNPCName
 	db JOHN_PIC
 	db ANGER_DECK_ID
@@ -800,7 +800,7 @@ AdamNPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $6ed8 ; Pointer to NPC Data
+	dw AdamNPCScript
 	tx AdamNPCName
 	db ADAM_PIC
 	db FLAMETHROWER_DECK_ID
@@ -813,7 +813,7 @@ JonathanNPCHeader:
 	db $04
 	db $16
 	db $00
-	dw $6efd ; Pointer to NPC Data
+	dw JonathanNPCScript
 	tx JonathanNPCName
 	db JONATHAN_PIC
 	db RESHUFFLE_DECK_ID
@@ -826,7 +826,7 @@ KenNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $6f22 ; Pointer to NPC Data
+	dw KenNPCScript
 	tx KenNPCName
 	db KEN_PIC
 	db FIRE_CHARGE_DECK_ID
@@ -839,7 +839,7 @@ CourtneyNPCHeader:
 	db $00
 	db $12
 	db $00
-	dw $771f ; Pointer to NPC Data
+	dw CourtneyNPCScript
 	tx CourtneyNPCName
 	db COURTNEY_PIC
 	db LEGENDARY_MOLTRES_DECK_ID
@@ -852,7 +852,7 @@ SteveNPCHeader:
 	db $00
 	db $2a
 	db $00
-	dw $772a ; Pointer to NPC Data
+	dw SteveNPCScript
 	tx SteveNPCName
 	db STEVE_PIC
 	db LEGENDARY_ZAPDOS_DECK_ID
@@ -865,7 +865,7 @@ JackNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $7735 ; Pointer to NPC Data
+	dw JackNPCScript
 	tx JackNPCName
 	db JACK_PIC
 	db LEGENDARY_ARTICUNO_DECK_ID
@@ -878,7 +878,7 @@ RodNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $7740 ; Pointer to NPC Data
+	dw RodNPCScript
 	tx RodNPCName
 	db ROD_PIC
 	db LEGENDARY_DRAGONITE_DECK_ID
@@ -891,7 +891,7 @@ Clerk10NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $4c3e ; Pointer to NPC Data
+	dw Clerk10NPCScript
 	tx ClerkNPCName
 	db $00
 	db $00
@@ -904,7 +904,7 @@ Clerk11NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw $4c3e ; Pointer to NPC Data
+	dw Clerk11NPCScript
 	tx ClerkNPCName
 	db $00
 	db $00
@@ -917,7 +917,7 @@ Man1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $5c76 ; Pointer to NPC Data
+	dw Man1NPCScript
 	tx ManNPCName
 	db $00
 	db $00
@@ -930,7 +930,7 @@ Woman1NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $5f83 ; Pointer to NPC Data
+	dw Woman1NPCScript
 	tx WomanNPCName
 	db $00
 	db $00
@@ -943,7 +943,7 @@ Chap1NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $5fc0 ; Pointer to NPC Data
+	dw Chap1NPCScript
 	tx ChapNPCName
 	db $00
 	db $00
@@ -956,7 +956,7 @@ Gal1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $60cf ; Pointer to NPC Data
+	dw Gal1NPCScript
 	tx GalNPCName
 	db $00
 	db $00
@@ -969,7 +969,7 @@ Lass1NPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw $6111 ; Pointer to NPC Data
+	dw Lass1NPCScript
 	tx LassNPCName
 	db $00
 	db $00
@@ -982,7 +982,7 @@ Chap2NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $639a ; Pointer to NPC Data
+	dw Chap2NPCScript
 	tx ChapNPCName
 	db $00
 	db $00
@@ -995,7 +995,7 @@ Lass2NPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw $661f ; Pointer to NPC Data
+	dw Lass2NPCScript
 	tx LassNPCName
 	db $00
 	db $00
@@ -1008,7 +1008,7 @@ Pappy1NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $69a5 ; Pointer to NPC Data
+	dw Pappy1NPCScript
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1021,7 +1021,7 @@ Lad1NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $6b84 ; Pointer to NPC Data
+	dw Lad1NPCScript
 	tx LadNPCName
 	db $00
 	db $00
@@ -1034,7 +1034,7 @@ Lad2NPCHeader:
 	db $04
 	db $16
 	db $00
-	dw $6e2c ; Pointer to NPC Data
+	dw Lad2NPCScript
 	tx LadNPCName
 	db $00
 	db $00
@@ -1047,7 +1047,7 @@ Chap3NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $6de8 ; Pointer to NPC Data
+	dw Chap3NPCScript
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1060,7 +1060,7 @@ Clerk12NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $7295 ; Pointer to NPC Data
+	dw Clerk12NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -1073,7 +1073,7 @@ Clerk13NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $726c ; Pointer to NPC Data
+	dw Clerk13NPCScript
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -1086,7 +1086,7 @@ HostNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $7352 ; Pointer to NPC Data
+	dw HostNPCScript
 	tx HostNPCName
 	db $00
 	db $00
@@ -1099,7 +1099,7 @@ Specs1NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $5d82 ; Pointer to NPC Data
+	dw Specs1NPCScript
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1112,7 +1112,7 @@ ButchNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $5d8d ; Pointer to NPC Data
+	dw ButchNPCScript
 	tx ButchNPCName
 	db $00
 	db $00
@@ -1125,7 +1125,7 @@ Granny1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $5d9f ; Pointer to NPC Data
+	dw Granny1NPCScript
 	tx GrannyNPCName
 	db $00
 	db $00
@@ -1138,7 +1138,7 @@ Lass3NPCHeader:
 	db $04
 	db $22
 	db $00
-	dw $5fd2 ; Pointer to NPC Data
+	dw Lass3NPCScript
 	tx LassNPCName
 	db $00
 	db $00
@@ -1151,7 +1151,7 @@ Man2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $6137 ; Pointer to NPC Data
+	dw Man2NPCScript
 	tx ManNPCName
 	db $00
 	db $00
@@ -1164,7 +1164,7 @@ Pappy2NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $613b ; Pointer to NPC Data
+	dw Pappy2NPCScript
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1177,7 +1177,7 @@ Lass4NPCHeader:
 	db $04
 	db $22
 	db $00
-	dw $63d9 ; Pointer to NPC Data
+	dw Lass4NPCScript
 	tx LassNPCName
 	db $00
 	db $00
@@ -1190,7 +1190,7 @@ Hood1NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $63dd ; Pointer to NPC Data
+	dw Hood1NPCScript
 	tx HoodNPCName
 	db $00
 	db $00
@@ -1203,7 +1203,7 @@ Granny2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $66d8 ; Pointer to NPC Data
+	dw Granny2NPCScript
 	tx GrannyNPCName
 	db $00
 	db $00
@@ -1216,7 +1216,7 @@ Gal2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $66e3 ; Pointer to NPC Data
+	dw Gal2NPCScript
 	tx GalNPCName
 	db $00
 	db $00
@@ -1229,7 +1229,7 @@ Lad3NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $6850 ; Pointer to NPC Data
+	dw Lad3NPCScript
 	tx LadNPCName
 	db $00
 	db $00
@@ -1242,7 +1242,7 @@ Gal3NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $6a30 ; Pointer to NPC Data
+	dw Gal3NPCScript
 	tx GalNPCName
 	db $00
 	db $00
@@ -1255,7 +1255,7 @@ Chap4NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $6a3b ; Pointer to NPC Data
+	dw Chap4NPCScript
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1268,7 +1268,7 @@ Man3NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $6bc1 ; Pointer to NPC Data
+	dw Man3NPCScript
 	tx ManNPCName
 	db $00
 	db $00
@@ -1281,7 +1281,7 @@ Specs2NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $6bc5 ; Pointer to NPC Data
+	dw Specs2NPCScript
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1294,7 +1294,7 @@ Specs3NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $6bed ; Pointer to NPC Data
+	dw Specs3NPCScript
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1307,7 +1307,7 @@ Woman2NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $4c3e ; Pointer to NPC Data
+	dw Woman2NPCScript
 	tx WomanNPCName
 	db $00
 	db $00
@@ -1320,7 +1320,7 @@ ManiaNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $6e88 ; Pointer to NPC Data
+	dw ManiaNPCScript
 	tx ManiaNPCName
 	db $00
 	db $00
@@ -1333,7 +1333,7 @@ Pappy3NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw $709c ; Pointer to NPC Data
+	dw Pappy3NPCScript
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1346,7 +1346,7 @@ Gal4NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $70a0 ; Pointer to NPC Data
+	dw Gal4NPCScript
 	tx GalNPCName
 	db $00
 	db $00
@@ -1359,7 +1359,7 @@ ChampNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw $70a4 ; Pointer to NPC Data
+	dw ChampNPCScript
 	tx ChampNPCName
 	db $00
 	db $00
@@ -1372,7 +1372,7 @@ Hood2NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw $70a8 ; Pointer to NPC Data
+	dw Hood2NPCScript
 	tx HoodNPCName
 	db $00
 	db $00
@@ -1385,7 +1385,7 @@ Lass5NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw $70ac ; Pointer to NPC Data
+	dw Lass5NPCScript
 	tx LassNPCName
 	db $00
 	db $00
@@ -1398,7 +1398,7 @@ Chap5NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw $70b0 ; Pointer to NPC Data
+	dw Chap5NPCScript
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1411,7 +1411,7 @@ AaronNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $58dd ; Pointer to NPC Data
+	dw AaronNPCScript
 	tx AaronNPCName
 	db AARON_PIC
 	db LIGHTNING_AND_FIRE_DECK_ID
@@ -1424,7 +1424,7 @@ GuideNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw $7283 ; Pointer to NPC Data
+	dw GuideNPCScript
 	tx GuideNPCName
 	db $00
 	db $00
@@ -1437,7 +1437,7 @@ Tech7NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $58c6 ; Pointer to NPC Data
+	dw Tech7NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -1450,7 +1450,7 @@ Tech8NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw $58d1 ; Pointer to NPC Data
+	dw Tech8NPCScript
 	tx TechNPCName
 	db $00
 	db $00
@@ -1463,7 +1463,7 @@ TorchNPCHeader:
 	db $3a
 	db $3a
 	db $10
-	dw $4c3e ; Pointer to NPC Data
+	dw TorchNPCScript
 
 LegendaryCardTopLeftNPCHeader:
 	db NPC_LEGENDARY_CARD_TOP_LEFT
@@ -1471,7 +1471,7 @@ LegendaryCardTopLeftNPCHeader:
 	db $3b
 	db $41
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardTopLeftNPCScript
 
 LegendaryCardTopRightNPCHeader:
 	db NPC_LEGENDARY_CARD_TOP_RIGHT
@@ -1479,7 +1479,7 @@ LegendaryCardTopRightNPCHeader:
 	db $3c
 	db $42
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardTopRightNPCScript
 
 LegendaryCardBottomLeftNPCHeader:
 	db NPC_LEGENDARY_CARD_BOTTOM_LEFT
@@ -1487,7 +1487,7 @@ LegendaryCardBottomLeftNPCHeader:
 	db $3d
 	db $43
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardBottomLeftNPCScript
 
 LegendaryCardBottomCenterLeftNPCHeader:
 	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_LEFT
@@ -1495,7 +1495,7 @@ LegendaryCardBottomCenterLeftNPCHeader:
 	db $3e
 	db $44
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardBottomCenterLeftNPCScript
 
 LegendaryCardBottomCenterRightNPCHeader:
 	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_RIGHT
@@ -1503,7 +1503,7 @@ LegendaryCardBottomCenterRightNPCHeader:
 	db $3f
 	db $45
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardBottomCenterRightNPCScript
 
 LegendaryCardBottomRightNPCHeader:
 	db NPC_LEGENDARY_CARD_BOTTOM_RIGHT
@@ -1511,7 +1511,7 @@ LegendaryCardBottomRightNPCHeader:
 	db $40
 	db $46
 	db $50
-	dw $4c3e ; Pointer to NPC Data
+	dw LegendaryCardBottomRightNPCScript
 
 DummyNPCHeader:
 	db $00

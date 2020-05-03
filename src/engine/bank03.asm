@@ -1574,9 +1574,19 @@ Func_cc32: ; cc32 (3:4c32)
 	pop hl
 	call Func_c8ba
 	ret
-; 0xcc3e
 
-	INCROM $cc3e, $cc42
+Clerk10NPCScript: ; cc3e (3:4c3e)
+Clerk11NPCScript: ; cc3e (3:4c3e)
+Woman2NPCScript: ; cc3e (3:4c3e)
+TorchNPCScript: ; cc3e (3:4c3e)
+LegendaryCardTopLeftNPCScript: ; cc3e (3:4c3e)
+LegendaryCardTopRightNPCScript: ; cc3e (3:4c3e)
+LegendaryCardBottomLeftNPCScript: ; cc3e (3:4c3e)
+LegendaryCardBottomCenterLeftNPCScript: ; cc3e (3:4c3e)
+LegendaryCardBottomCenterRightNPCScript: ; cc3e (3:4c3e)
+LegendaryCardBottomRightNPCScript: ; cc3e (3:4c3e)
+	call CloseDialogueBox
+	ret
 
 ; called when pressing a in front of an object. creates a pointer to the data right after an RST20
 ; was called, then runs RunOverworldScript to handle that data
@@ -2916,7 +2926,28 @@ asm_d4e6
 	jp IncreaseOWScriptPointerBy4
 ; 0xd4ec
 
-	INCROM $d4ec, $d753
+	INCROM $d4ec, $d583
+
+Tech1NPCScript: ; d583 (3:5583)
+	INCROM $d583, $d5ca
+
+Tech2NPCScript: ; d5ca (3:55ca)
+	INCROM $d5ca, $d5d5
+
+Tech3NPCScript: ; d5d5 (3:55d5)
+	INCROM $d5d5, $d5e0
+
+Tech4NPCScript: ; d5e0 (3:55e0)
+	INCROM $d5e0, $d5f9
+
+Tech5NPCScript: ; d5f9 (3:55f9)
+	INCROM $d5f9, $d61d
+
+SamNPCScript: ; d61d (3:561d)
+	INCROM $d61d, $d727
+
+DrMasonNPCScript: ; d727 (3:5727)
+	INCROM $d727, $d753
 
 OWSequence_d753: ; d753 (3:5753)
 	start_script
@@ -2965,7 +2996,94 @@ OWSequence_d753: ; d753 (3:5753)
 
 	; there's more to this script but it hasn't been disassembled yet
 
-	INCROM $d77e, $e13f
+	INCROM $d77e, $d8bb
+
+Tech6NPCScript: ; d8bb (3:58bb)
+	INCROM $d8bb, $d8c6
+
+Tech7NPCScript: ; d8c6 (3:58c6)
+	INCROM $d8c6, $d8d1
+
+Tech8NPCScript: ; d8d1 (3:58d1)
+	INCROM $d8d1, $d8dd
+
+AaronNPCScript: ; d8dd (3:58dd)
+	INCROM $d8dd, $db4a
+
+IshiharaNPCScript: ; db4a (3:5b4a)
+	INCROM $db4a, $dc4b
+
+Ronald2NPCScript: ; dc4b (3:5c4b)
+	INCROM $dc4b, $dc4b
+
+Ronald3NPCScript: ; dc4b (3:5c4b)
+	INCROM $dc4b, $dc4b
+
+RonaldNPCScript: ; dc4b (3:5c4b)
+	INCROM $dc4b, $dc64
+
+Clerk1NPCScript: ; dc64 (3:5c64)
+	INCROM $dc64, $dc76
+
+Man1NPCScript: ; dc76 (3:5c76)
+	INCROM $dc76, $dd0d
+
+ImakuniNPCScript: ; dd0d (3:5d0d)
+	INCROM $dd0d, $dd82
+
+Specs1NPCScript: ; dd82 (3:5d82)
+	INCROM $dd82, $dd8d
+
+ButchNPCScript: ; dd8d (3:5d8d)
+	INCROM $dd8d, $dd9f
+
+Granny1NPCScript: ; dd9f (3:5d9f)
+	INCROM $dd9f, $ddc3
+
+MitchNPCScript: ; ddc3 (3:5dc3)
+	INCROM $ddc3, $ded1
+
+Clerk2NPCScript: ; ded1 (3:5ed1)
+	INCROM $ded1, $def2
+
+ChrisNPCScript: ; def2 (3:5ef2)
+	INCROM $def2, $df39
+
+MatthewNPCScript: ; df39 (3:5f39)
+	INCROM $df39, $df83
+
+Woman1NPCScript: ; df83 (3:5f83)
+	INCROM $df83, $dfc0
+
+Chap1NPCScript: ; dfc0 (3:5fc0)
+	INCROM $dfc0, $dfd2
+
+Lass3NPCScript: ; dfd2 (3:5fd2)
+	INCROM $dfd2, $dff0
+
+RyanNPCScript: ; dff0 (3:5ff0)
+	INCROM $dff0, $e017
+
+AndrewNPCScript: ; e017 (3:6017)
+	INCROM $e017, $e03e
+
+GeneNPCScript: ; e03e (3:603e)
+	INCROM $e03e, $e09e
+
+Clerk3NPCScript: ; e09e (3:609e)
+	INCROM $e09e, $e0cf
+
+Gal1NPCScript: ; e0cf (3:60cf)
+	INCROM $e0cf, $e111
+
+Lass1NPCScript: ; e111 (3:6111)
+	INCROM $e111, $e137
+
+Man2NPCScript: ; e137 (3:6137)
+	INCROM $e137, $e13b
+
+Pappy2NPCScript: ; e13b (3:613b)
+	INCROM $e13b, $e13f
 
 WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
@@ -3003,7 +3121,7 @@ WaterClubAfterDuel: ;e157 (3:6157)
 	dw $6344
 	db $00
 
-OWSequence_Sara: ; e177 (3:6177)
+SaraNPCScript: ; e177 (3:6177)
 	start_script
 	run_script OWScript_PrintTextString
 	tx Text042c
@@ -3041,7 +3159,7 @@ OWSequence_LostToSara: ; e19a (03:619a)
 	run_script OWScript_PrintTextCloseBox
 	tx Text0432
 
-OWSequence_Amanda: ; e19e (03:619e)
+AmandaNPCScript: ; e19e (03:619e)
 	start_script
 	run_script OWScript_PrintTextString
 	tx Text0433
@@ -3082,7 +3200,7 @@ OWSequence_LostToAmanda: ; e1c1 (03:61c1)
 OWSequence_NotReadyToSeeAmy:
 	INCROM $e1c5, $e21c
 
-OWSequence_Joshua:
+JoshuaNPCScript: ; e21c (3:621c)
 	start_script
 	run_script OWScript_JumpIfFlagNotSet
 	db EVENT_BEAT_AMANDA
@@ -3114,7 +3232,34 @@ OWSequence_Joshua:
 	db $33
 	db $01
 
-	INCROM $e23f, $e52c
+	INCROM $e23f, $e304
+
+AmyNPCScript: ; e304 (3:6304)
+	INCROM $e304, $e369
+
+Clerk4NPCScript: ; e369 (3:6369)
+	INCROM $e369, $e39a
+
+Chap2NPCScript: ; e39a (3:639a)
+	INCROM $e39a, $e3d9
+
+Lass4NPCScript: ; e3d9 (3:63d9)
+	INCROM $e3d9, $e3dd
+
+Hood1NPCScript: ; e3dd (3:63dd)
+	INCROM $e3dd, $e408
+
+JenniferNPCScript: ; e408 (3:6408)
+	INCROM $e408, $e42f
+
+NicholasNPCScript: ; e42f (3:642f)
+	INCROM $e42f, $e456
+
+BrandonNPCScript: ; e456 (3:6456)
+	INCROM $e456, $e4ad
+
+IsaacNPCScript: ; e4ad (3:64ad)
+	INCROM $e4ad, $e52c
 
 FindEndOfBattleScript: ; e52c (3:652c)
 	ld c, $0
@@ -3147,7 +3292,151 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	jp Func_c926
 ; 0xe553
 
-	INCROM $e553, $f580
+	INCROM $e553, $e566
+
+Clerk5NPCScript: ; e566 (3:6566)
+	INCROM $e566, $e573
+
+MichaelNPCScript: ; e573 (3:6573)
+	INCROM $e573, $e5d2
+
+BrittanyNPCScript: ; e5d2 (3:65d2)
+	INCROM $e5d2, $e61f
+
+Lass2NPCScript: ; e61f (3:661f)
+	INCROM $e61f, $e6d8
+
+Granny2NPCScript: ; e6d8 (3:66d8)
+	INCROM $e6d8, $e6e3
+
+Gal2NPCScript: ; e6e3 (3:66e3)
+	INCROM $e6e3, $e701
+
+KristinNPCScript: ; e701 (3:6701)
+	INCROM $e701, $e745
+
+HeatherNPCScript: ; e745 (3:6745)
+	INCROM $e745, $e79e
+
+NikkiNPCScript: ; e79e (3:679e)
+	INCROM $e79e, $e84c
+
+Clerk6NPCScript: ; e84c (3:684c)
+	INCROM $e84c, $e850
+
+Lad3NPCScript: ; e850 (3:6850)
+	INCROM $e850, $e980
+
+RobertNPCScript: ; e980 (3:6980)
+	INCROM $e980, $e9a5
+
+Pappy1NPCScript: ; e9a5 (3:69a5)
+	INCROM $e9a5, $ea30
+
+Gal3NPCScript: ; ea30 (3:6a30)
+	INCROM $ea30, $ea3b
+
+Chap4NPCScript: ; ea3b (3:6a3b)
+	INCROM $ea3b, $ea60
+
+DanielNPCScript: ; ea60 (3:6a60)
+	INCROM $ea60, $eaa2
+
+StephanieNPCScript: ; eaa2 (3:6aa2)
+	INCROM $eaa2, $eadf
+
+Murray2NPCScript: ; eadf (3:6adf)
+	INCROM $eadf, $eadf
+
+MurrayNPCScript: ; eadf (3:6adf)
+	INCROM $eadf, $eb53
+
+Clerk7NPCScript: ; eb53 (3:6b53)
+	INCROM $eb53, $eb84
+
+Lad1NPCScript: ; eb84 (3:6b84)
+	INCROM $eb84, $ebc1
+
+Man3NPCScript: ; ebc1 (3:6bc1)
+	INCROM $ebc1, $ebc5
+
+Specs2NPCScript: ; ebc5 (3:6bc5)
+	INCROM $ebc5, $ebed
+
+Specs3NPCScript: ; ebed (3:6bed)
+	INCROM $ebed, $ec11
+
+DavidNPCScript: ; ec11 (3:6c11)
+	INCROM $ec11, $ec42
+
+ErikNPCScript: ; ec42 (3:6c42)
+	INCROM $ec42, $ec67
+
+RickNPCScript: ; ec67 (3:6c67)
+	INCROM $ec67, $ecdb
+
+JosephNPCScript: ; ecdb (3:6cdb)
+	INCROM $ecdb, $ed45
+
+Clerk8NPCScript: ; ed45 (3:6d45)
+	INCROM $ed45, $ed96
+
+JessicaNPCScript: ; ed96 (3:6d96)
+	INCROM $ed96, $ede8
+
+Chap3NPCScript: ; ede8 (3:6de8)
+	INCROM $ede8, $ee2c
+
+Lad2NPCScript: ; ee2c (3:6e2c)
+	INCROM $ee2c, $ee88
+
+ManiaNPCScript: ; ee88 (3:6e88)
+	INCROM $ee88, $eeb3
+
+JohnNPCScript: ; eeb3 (3:6eb3)
+	INCROM $eeb3, $eed8
+
+AdamNPCScript: ; eed8 (3:6ed8)
+	INCROM $eed8, $eefd
+
+JonathanNPCScript: ; eefd (3:6efd)
+	INCROM $eefd, $ef22
+
+KenNPCScript: ; ef22 (3:6f22)
+	INCROM $ef22, $f025
+
+Clerk9NPCScript: ; f025 (3:7025)
+	INCROM $f025, $f09c
+
+Pappy3NPCScript: ; f09c (3:709c)
+	INCROM $f09c, $f0a0
+
+Gal4NPCScript: ; f0a0 (3:70a0)
+	INCROM $f0a0, $f0a4
+
+ChampNPCScript: ; f0a4 (3:70a4)
+	INCROM $f0a4, $f0a8
+
+Hood2NPCScript: ; f0a8 (3:70a8)
+	INCROM $f0a8, $f0ac
+
+Lass5NPCScript: ; f0ac (3:70ac)
+	INCROM $f0ac, $f0b0
+
+Chap5NPCScript: ; f0b0 (3:70b0)
+	INCROM $f0b0, $f26c
+
+Clerk13NPCScript: ; f26c (3:726c)
+	INCROM $f26c, $f283
+
+GuideNPCScript: ; f283 (3:7283)
+	INCROM $f283, $f295
+
+Clerk12NPCScript: ; f295 (3:7295)
+	INCROM $f295, $f352
+
+HostNPCScript: ; f352 (3:7352)
+	INCROM $f352, $f580
 
 Func_f580: ; f580 (3:7580)
 	call Func_ca69
@@ -3183,7 +3472,19 @@ Func_f580: ; f580 (3:7580)
 	ret
 ; 0xf5b3
 
-	INCROM $f5b3, $fc2b
+	INCROM $f5b3, $f71f
+
+CourtneyNPCScript: ; f71f (3:771f)
+	INCROM $f71f, $f72a
+
+SteveNPCScript: ; f72a (3:772a)
+	INCROM $f72a, $f735
+
+JackNPCScript: ; f735 (3:7735)
+	INCROM $f735, $f740
+
+RodNPCScript: ; f740 (3:7740)
+	INCROM $f740, $fc2b
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [wDuelResult]
