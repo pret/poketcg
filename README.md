@@ -34,5 +34,5 @@ This will output a file named "tcg.gbc".
 [pokeruby]: https://github.com/pret/pokeruby
 [pokefirered]: https://github.com/pret/pokefirered
 [pokeemerald]: https://github.com/pret/pokeemerald
-[Discord]: https://discord.gg/6EuWgX9
+[Discord]: https://discord.gg/d5dubZ3
 [irc]: https://kiwiirc.com/client/irc.freenode.net/?#pret

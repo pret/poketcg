@@ -554,7 +554,303 @@ Func_1c83d: ; 1c83d (7:483d)
 	ret
 ; 0x1c858
 
-	INCROM $1c858, $1cb18
+	INCROM $1c858, $1c8ef
+
+Func_1c8ef: ; 1c8ef (7:48ef)
+	ld a, [wDoFrameFunction + 0]
+	cp LOW(Func_3ba2)
+	jr nz, .error
+	ld a, [wDoFrameFunction + 1]
+	cp HIGH(Func_3ba2)
+	jr z, .okay
+.error
+	debug_ret
+	ret
+
+.okay
+	ld a, [wTempAnimation]
+	ld [wd4bf], a
+	cp $61
+	jp nc, $4b5e ; asm_007_4b5e
+	push hl
+	push bc
+	push de
+	call Func_1cab3
+; hl: pointer
+	ld a, [wd421]
+	or a
+	jr z, .check_to_play_sfx
+	
+	push hl
+	ld bc, $0003
+	add hl, bc
+	ld a, [hl]
+	and %10000000
+	pop hl
+
+	jr z, .return
+.check_to_play_sfx
+	push hl
+	ld bc, $0004
+	add hl, bc
+	ld a, [hl]
+	pop hl
+
+	or a
+	jr z, .calc_addr
+	call PlaySFX
+.calc_addr
+	push hl
+	ld bc, $0005
+	add hl, bc
+	ld a, [hl]
+	rlca
+	add $48
+	ld l, a ; LO
+	ld a, HIGH(.address) ; $49
+	adc 0
+	ld h, a ; HI
+; hl: pointer
+	ld a, [hli]
+	ld b, [hl]
+	ld c, a
+	pop hl
+
+	call CallBC
+.return
+	pop de
+	pop bc
+	pop hl
+	ret
+
+.address
+	dw Func_1c94a
+
+Func_1c94a:
+	ld e, l
+	ld d, h
+	ld c, 3
+.loop
+	ld a, [de]
+	or a
+	jr z, .return_with_carry
+	inc de
+	dec c
+	jr nz, .loop
+	ld a, [hli]
+	farcall CreateSpriteAndAnimBufferEntry
+	ld a, [wWhichSprite]
+	ld [wAnimationQueue], a ; push an animation to the queue
+	xor a
+	ld [wd4ca], a
+	ld [wd4cb], a
+	ld a, [hli]
+	farcall $20, $4418
+	ld a, [hli]
+
+	push af
+	ld a, [hli]
+	ld [wd42b], a
+	call Func_1c980
+	pop af
+	
+	farcall Func_12ab5
+	or a
+	jr .return
+
+.return_with_carry
+	scf
+.return
+	ret
+
+Func_1c980: ; 1c980 (7:4980)
+	push hl
+	push bc
+	ld a, [wAnimationQueue]
+	ld c, SPRITE_ANIM_FIELD_01
+	call GetSpriteAnimBufferProperty_SpriteInA
+	call Func_1c9a2
+
+	push af
+	and %01100000
+	or [hl]
+	ld [hli], a
+	ld a, b
+	ld [hli], a
+	ld [hl], c
+	pop af
+	
+	ld bc, $000c
+	add hl, bc
+	ld c, a
+	and %00000011
+	or [hl]
+	ld [hl], a
+	pop bc
+	pop hl
+	ret
+
+Func_1c9a2: ; 1c9a2 (7:49a2)
+	push hl
+	ld c, 0
+	ld a, [wd42b]
+	and %00000100
+	jr nz, .calc_addr
+
+	ld a, [wd4ae]
+	add a
+	ld c, a
+	add a
+	add c
+	add a
+	ld c, a
+	ld a, [wd4af]
+	cp PLAYER_TURN
+	jr z, .player_turn
+
+	ld a, $06
+	add c
+	ld c, a
+.player_turn
+	ld a, [wd4b0]
+	add c ; a = [wd4b0] + c
+	ld c, a
+	ld b, 0
+	ld hl, Data_1c9e0
+	add hl, bc
+	ld c, [hl]
+.calc_addr
+	ld a, c
+	add a ; a = c * 2
+	add c ; a = c * 3
+	ld c, a
+	ld b, 0
+	ld hl, Data_1ca04
+	add hl, bc
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	ld a, [wd42b]
+	and [hl]
+	pop hl
+	ret
+
+Data_1c9e0:
+	db $01
+	db $01
+	db $01
+	db $01
+	db $01
+	db $01
+	db $02
+	db $02
+	db $02
+	db $02
+	db $02
+	db $02
+	db $03
+	db $04
+	db $05
+	db $06
+	db $07
+	db $08
+	db $03
+	db $04
+	db $05
+	db $06
+	db $07
+	db $08
+	db $09
+	db $0a
+	db $0b
+	db $0c
+	db $0d
+	db $0e
+	db $09
+	db $0a
+	db $0b
+	db $0c
+	db $0d
+	db $0e
+
+macro_1ca04: MACRO
+	dw \1
+	db \2
+ENDM
+Data_1ca04:
+; value(2), flag(1)
+	macro_1ca04 $5858, $08
+	macro_1ca04 $5028, $00
+	macro_1ca04 $3088, $63
+	macro_1ca04 $4858, $00
+	macro_1ca04 $6018, $00
+	macro_1ca04 $6038, $00
+	macro_1ca04 $6058, $00
+	macro_1ca04 $6078, $00
+	macro_1ca04 $6098, $00
+	macro_1ca04 $5058, $00
+	macro_1ca04 $2898, $00
+	macro_1ca04 $2878, $00
+	macro_1ca04 $2858, $00
+	macro_1ca04 $2838, $00
+	macro_1ca04 $2818, $00
+
+Func_1ca31:
+	push hl
+	push bc
+	ld a, [wd4ac]
+	ld b, a
+	ld hl, wd4ad
+	ld a, [hl]
+	ld c, a
+	add %00001000
+	and %01111111
+	cp b
+	jp z, .asm_007_4a6b
+	ld [hl], a
+	ld b, 0
+	ld hl, $d42c
+	add hl, bc
+	ld a, [wTempAnimation]
+	ld [hli], a
+	ld a, [wd4ae]
+	ld [hli], a
+	ld a, [wd4af]
+	ld [hli], a
+	ld a, [wd4b0]
+	ld [hli], a
+	ld a, [$d4b1]
+	ld [hli], a
+	ld a, [$d4b2]
+	ld [hli], a
+	ld a, [$d4b3]
+	ld [hli], a
+	ld a, [wd4be]
+	ld [hl], a
+.asm_007_4a6b
+	pop bc
+	pop hl
+	ret
+
+	INCROM $1ca6e, $1cab3
+
+Func_1cab3: ; 1cab3 (7:4ab3)
+	push bc
+	ld a, [wTempAnimation]
+	ld l, a
+	ld h, 0
+	add hl, hl ; hl = anim * 2
+	ld b, h
+	ld c, l
+	add hl, hl ; hl = anim * 4
+	add hl, bc ; hl = anim * 6
+	ld bc, $4e32
+	add hl, bc
+	pop bc
+	ret
+
+	INCROM $1cac5, $1cb18
 
 Func_1cb18: ; 1cb18 (7:4b18)
 	push hl

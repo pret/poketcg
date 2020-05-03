@@ -955,8 +955,10 @@ wTempNonTurnDuelistCardID:: ; ccc4
 wccc5:: ; ccc5
 	ds $1
 
-; may contain 0 or 1 depending on which move was selected
-wSelectedMoveIndex:: ; ccc6
+; *_ATTACK constants for selected attack
+; 0 for the first attack (or PKMN Power)
+; 1 for the second attack
+wSelectedAttack:: ; ccc6
 	ds $1
 
 ; if affected by a no damage or effect substatus, this flag indicates what the cause was
@@ -972,6 +974,8 @@ wccc8:: ; ccc8
 wGotHeadsFromConfusionCheck:: ; ccc9
 	ds $1
 
+; used to store card indices of all stages, in order, of a Play Area Pokémon
+wAllStagesIndices:: ; ccca
 	ds $3
 
 wEffectFunctionsFeedbackIndex:: ; cccd
@@ -1199,6 +1203,7 @@ wcdb2:: ; cdb2
 wcdb3:: ; cdb3
 	ds $1
 
+wcdb4:: ; cdb4
 	ds $1
 
 ; information about various properties of
@@ -1225,7 +1230,9 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
-wBenchAIScore:: ; cdbf
+; used for AI decisions that involve
+; each card in the Play Area.
+wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
 	ds $0a
@@ -1255,7 +1262,9 @@ wTempCardIDToLook:: ; cdd4
 wcdd5:: ; cdd5
 	ds $1
 
-wcdd6:: ; cdd6
+; the index of attack chosen by AI
+; to use with Pluspower.
+wAIPluspowerAttack:: ; cdd6
 	ds $1
 
 ; whether AI is allowed to play an energy card
@@ -1280,7 +1289,9 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-wcddd:: ; cddd
+; used to compliment wPlayAreaAIScore,
+; to temporarily do calculations and store results.
+wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 
 wcde3:: ; cde3
@@ -1292,11 +1303,15 @@ wcde4:: ; cde4
 wcdea:: ; cdea
 	ds MAX_PLAY_AREA_POKEMON
 
+; whether AI cannot inflict damage on player's active Pokémon
+; (due to No Damage or Effect substatus).
+;	$00 = can damage
+;	$01 = can't damage
+wAICannotDamage:: ; cdf0
 	ds $1
 	
-; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
-; used by the AI to temporarily store card location
-wCurCardPlayAreaLocation:: ; cdf1
+; used by AI to store variable information
+wTempAI:: ; cdf1
 	ds $1
 
 ; used for AI to store whether this card can use any attack
@@ -1330,14 +1345,33 @@ wce00:: ; ce00
 wce01:: ; ce01
 	ds $1
 
+; whether AI's move is a damaging move or not
+; (move that only damages bench is treated as non-damaging)
+; $00 = is a damaging move
+; $01 = is a non damaging move
+wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
 wce03:: ; ce03
 	ds $1
 
-	ds $12
+	ds $2
 
-wce16:: ; ce16
+wce06:: ; ce06
+	ds $1
+
+wce07:: ; ce07
+	ds $1
+
+wce08:: ; ce08
+	ds $7
+
+wce0f:: ; ce0f
+	ds $7
+
+; stores the deck index (0-59) of the Trainer card
+; the AI intends to play from hand.
+wAITrainerCardToPlay:: ; ce16
 	ds $1
 
 wce17:: ; ce17
@@ -1346,15 +1380,34 @@ wce17:: ; ce17
 wce18:: ; ce18
 	ds $1
 
-wce19:: ; ce19
+; parameters output by AI Trainer card logic routines
+; (e.g. what Pokemon in Play Area to use card on, etc)
+wAITrainerCardParameter:: ; ce19
 	ds $1
 
-	ds $6
-
-wce20:: ; ce20
+wce1a:: ; ce1a
 	ds $1
 
-wce21:: ; ce21
+wce1b:: ; ce1b
+	ds $1
+
+wce1c:: ; ce1c
+	ds $1
+
+wce1d:: ; ce1d
+	ds $1
+
+wce1e:: ; ce1e
+	ds $1
+
+wce1f:: ; ce1f
+	ds $1
+
+; used to store previous/current flags of AI actions
+; see AI_FLAG_* constants
+wPreviousAIFlags:: ; ce20
+	ds $1
+wCurrentAIFlags:: ; ce21
 	ds $1
 
 ; During a duel, this is always $b after the first attack.
@@ -1656,7 +1709,7 @@ wcf17:: ; cf17
 
 	ds $15
 
-; used by Func_200e5, AI related
+; used by _AIProcessHandTrainerCards, AI related
 wTempHandCardList:: ; cf68
 	ds DECK_SIZE
 
@@ -1677,9 +1730,8 @@ wcfda:: ; cfda
 
 	ds $7
 
-; it's a flag variable being used in play-area view.
-; need analysis.
-wcfe3:: ; cfe3
+; a flag indicating whether sfx should be played.
+wPlaysSfx:: ; cfe3
 	ds $1
 
 wcfe4:: ; cfe4
@@ -2161,7 +2213,8 @@ wd420:: ; d420
 wd421:: ; d421
 	ds $1
 
-wd422:: ; d422
+; holds an animation to play
+wTempAnimation:: ; d422
 	ds $1
 
 ; holds a list of animations to play
@@ -2173,7 +2226,10 @@ wAnimationQueue:: ; d423
 wd42a:: ; d42a
 	ds $1
 
-	ds $81
+wd42b:: ; d42b
+	ds $1
+
+	ds $80
 
 wd4ac:: ; d4ac
 	ds $1
@@ -2195,6 +2251,7 @@ wd4b0:: ; d4b0
 wd4be:: ; d4be
 	ds $1
 
+wd4bf:: ; d4bf
 	ds $1
 
 wd4c0:: ; d4c0

@@ -1114,7 +1114,7 @@ NidokingCard: ; 31279 (c:5279)
 	; move 1
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx ThrashName ; name
-	tx ThrashDescriptipn ; description
+	tx ThrashDescription ; description
 	dw NONE ; description (cont)
 	db 30 ; damage
 	db DAMAGE_PLUS ; category
@@ -1952,7 +1952,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 3
+	db MAX_ENERGY_BOOST_IS_NOT_LIMITED
 	db 2 ; animation
 
 	db 3 ; retreat cost
@@ -2817,7 +2817,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db DAMAGE_NORMAL ; category
 	dw RapidashAgilityEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK + $40 ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | FLAG_2_BIT_6 ; flags 2
 	db NONE ; flags 3
 	db 0
 	db 81 ; animation
@@ -3278,7 +3278,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 22 ; animation
 
 	db 3 ; retreat cost
@@ -3417,7 +3417,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -3519,7 +3519,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4029,7 +4029,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4386,7 +4386,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -4502,7 +4502,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	db 1 ; retreat cost
@@ -4553,7 +4553,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	db 1 ; retreat cost
@@ -4590,7 +4590,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db NONE ; flags 1
 	db ATTACHED_ENERGY_BOOST ; flags 2
 	db NONE ; flags 3
-	db 2
+	db MAX_ENERGY_BOOST_IS_LIMITED
 	db 19 ; animation
 
 	; move 2
@@ -5760,7 +5760,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 40 ; damage
 	db DAMAGE_NORMAL ; category
 	dw ZapdosThunderstormEffectCommands ; effect commands
-	db LOW_RECOIL + DAMAGE_TO_OPPONENT_BENCH ; flags 1
+	db LOW_RECOIL | DAMAGE_TO_OPPONENT_BENCH ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
 	db 0
@@ -7866,7 +7866,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db RESIDUAL ; category
 	dw MewtwoBarrierEffectCommands ; effect commands
 	db NONE ; flags 1
-	db NULLIFY_OR_WEAKEN_ATTACK + DISCARD_ENERGY ; flags 2
+	db NULLIFY_OR_WEAKEN_ATTACK | DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
 	db 2
 	db 80 ; animation
