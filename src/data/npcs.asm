@@ -1,138 +1,139 @@
 ; When you press the A button in front of something it will find a data entry somewhere on this list
 ; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
-PointerTable_118f5:
-	dw Data_119dd
-	dw Data_119dd
-	dw RonaldData
-	dw Data_11a11
-	dw ImakuniData
-	dw Data_119dd
-	dw Data_119dd
-	dw SamData
-	dw Data_11a38
-	dw Data_11a45
-	dw Data_11a52
-	dw Data_11a5f
-	dw Data_11a6c
-	dw Data_11a79
-	dw Data_11a86
-	dw Data_11a93
-	dw Data_11aa0
-	dw Data_11aad
-	dw Data_11aba
-	dw Data_11ac7
-	dw Data_11ad4
-	dw Data_11ae1
-	dw Data_11aee
-	dw ChrisData
-	dw MichaelData
-	dw JessicaData
-	dw MitchData
-	dw MatthewData
-	dw RyanData
-	dw AndrewData
-	dw GeneData
-	dw SaraData
-	dw AmandaData
-	dw JoshuaData
-	dw AmyData
-	dw JenniferData
-	dw NicholasData
-	dw BrandonData
-	dw IsaacData
-	dw BrittanyData
-	dw KristinData
-	dw HeatherData
-	dw NikkiData
-	dw RobertData
-	dw DanielData
-	dw StephanieData
-	dw MurrayData
-	dw JosephData
-	dw DavidData
-	dw ErikData
-	dw RickData
-	dw JohnData
-	dw AdamData
-	dw JonathanData
-	dw KenData
-	dw CourtneyData
-	dw SteveData
-	dw JackData
-	dw RodData
-	dw Data_11cdc
-	dw Data_11ce9
-	dw Data_11cf6
-	dw Data_11d03
-	dw Data_11d10
-	dw Data_11d1d
-	dw Data_11d2a
-	dw Data_11d37
-	dw Data_11d44
-	dw Data_11d51
-	dw Data_11d5e
-	dw Data_11d6b
-	dw Data_11d78
-	dw Data_11d85
-	dw Data_11d92
-	dw Data_11d9f
-	dw Data_11dac
-	dw Data_11db9
-	dw Data_11dc6
-	dw Data_11dd3
-	dw Data_11de0
-	dw Data_11ded
-	dw Data_11dfa
-	dw Data_11e07
-	dw Data_11e14
-	dw Data_11e21
-	dw Data_11e2e
-	dw Data_11e3b
-	dw Data_11e48
-	dw Data_11e55
-	dw Data_11e62
-	dw Data_11e6f
-	dw Data_11e7c
-	dw Data_11e89
-	dw Data_11e96
-	dw Data_11ea3
-	dw Data_11eb0
-	dw Data_11ebd
-	dw Data_11eca
-	dw Data_11ed7
-	dw AaronData
-	dw Data_11ef1
-	dw Data_11efe
-	dw Data_11f0b
-	dw Data_11f18
-	dw Data_11f1f
-	dw Data_11f26
-	dw Data_11f2d
-	dw Data_11f34
-	dw Data_11f3b
-	dw Data_11f42
-	dw Data_11f49
-	dw Data_11f49
-	dw Murray2Data
-	dw Ronald2Data
-	dw Ronald3Data
-	dw Data_11f49
-Data_119dd:
-	db $01
-	db $02
+NPCHeaderPointers:
+	dw DrMasonNPCHeader
+	dw DrMasonNPCHeader
+	dw RonaldNPCHeader
+	dw IshiharaNPCHeader
+	dw ImakuniNPCHeader
+	dw DrMasonNPCHeader
+	dw DrMasonNPCHeader
+	dw SamNPCHeader
+	dw Tech1NPCHeader
+	dw Tech2NPCHeader
+	dw Tech3NPCHeader
+	dw Tech4NPCHeader
+	dw Tech5NPCHeader
+	dw Tech6NPCHeader
+	dw Clerk1NPCHeader
+	dw Clerk2NPCHeader
+	dw Clerk3NPCHeader
+	dw Clerk4NPCHeader
+	dw Clerk5NPCHeader
+	dw Clerk6NPCHeader
+	dw Clerk7NPCHeader
+	dw Clerk8NPCHeader
+	dw Clerk9NPCHeader
+	dw ChrisNPCHeader
+	dw MichaelNPCHeader
+	dw JessicaNPCHeader
+	dw MitchNPCHeader
+	dw MatthewNPCHeader
+	dw RyanNPCHeader
+	dw AndrewNPCHeader
+	dw GeneNPCHeader
+	dw SaraNPCHeader
+	dw AmandaNPCHeader
+	dw JoshuaNPCHeader
+	dw AmyNPCHeader
+	dw JenniferNPCHeader
+	dw NicholasNPCHeader
+	dw BrandonNPCHeader
+	dw IsaacNPCHeader
+	dw BrittanyNPCHeader
+	dw KristinNPCHeader
+	dw HeatherNPCHeader
+	dw NikkiNPCHeader
+	dw RobertNPCHeader
+	dw DanielNPCHeader
+	dw StephanieNPCHeader
+	dw MurrayNPCHeader
+	dw JosephNPCHeader
+	dw DavidNPCHeader
+	dw ErikNPCHeader
+	dw RickNPCHeader
+	dw JohnNPCHeader
+	dw AdamNPCHeader
+	dw JonathanNPCHeader
+	dw KenNPCHeader
+	dw CourtneyNPCHeader
+	dw SteveNPCHeader
+	dw JackNPCHeader
+	dw RodNPCHeader
+	dw Clerk10NPCHeader
+	dw Clerk11NPCHeader
+	dw Man1NPCHeader
+	dw Woman1NPCHeader
+	dw Chap1NPCHeader
+	dw Gal1NPCHeader
+	dw Lass1NPCHeader
+	dw Chap2NPCHeader
+	dw Lass2NPCHeader
+	dw Pappy1NPCHeader
+	dw Lad1NPCHeader
+	dw Lad2NPCHeader
+	dw Chap3NPCHeader
+	dw Clerk12NPCHeader
+	dw Clerk13NPCHeader
+	dw HostNPCHeader
+	dw Specs1NPCHeader
+	dw ButchNPCHeader
+	dw Granny1NPCHeader
+	dw Lass3NPCHeader
+	dw Man2NPCHeader
+	dw Pappy2NPCHeader
+	dw Lass4NPCHeader
+	dw Hood1NPCHeader
+	dw Granny2NPCHeader
+	dw Gal2NPCHeader
+	dw Lad3NPCHeader
+	dw Gal3NPCHeader
+	dw Chap4NPCHeader
+	dw Man3NPCHeader
+	dw Specs2NPCHeader
+	dw Specs3NPCHeader
+	dw Woman2NPCHeader
+	dw ManiaNPCHeader
+	dw Pappy3NPCHeader
+	dw Gal4NPCHeader
+	dw ChampNPCHeader
+	dw Hood2NPCHeader
+	dw Lass5NPCHeader
+	dw Chap5NPCHeader
+	dw AaronNPCHeader
+	dw GuideNPCHeader
+	dw Tech7NPCHeader
+	dw Tech8NPCHeader
+	dw TorchNPCHeader
+	dw LegendaryCardTopLeftNPCHeader
+	dw LegendaryCardTopRightNPCHeader
+	dw LegendaryCardBottomLeftNPCHeader
+	dw LegendaryCardBottomCenterLeftNPCHeader
+	dw LegendaryCardBottomCenterRightNPCHeader
+	dw LegendaryCardBottomRightNPCHeader
+	dw DummyNPCHeader
+	dw DummyNPCHeader
+	dw Murray2NPCHeader
+	dw Ronald2NPCHeader
+	dw Ronald3NPCHeader
+	dw DummyNPCHeader
+
+DrMasonNPCHeader:
+	db NPC_DRMASON
+	db SPRITE_DRMASON
 	db $00
-	db $26
+	db $26 ; palette and animation
 	db $00
 	dw $5727 ; Pointer to NPC Data
-	db $ac
-	db $03
+	tx DrMasonNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-RonaldData:
-	db RONALD
-	db $01
+
+RonaldNPCHeader:
+	db NPC_RONALD
+	db SPRITE_RONALD
 	db $04
 	db $0e
 	db $00
@@ -140,11 +141,12 @@ RonaldData:
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
-	db $0f
+	db MUSIC_RONALD
 	db MUSIC_MATCH_START_2
-Ronald2Data:
-	db RONALD2
-	db $01
+
+Ronald2NPCHeader:
+	db NPC_RONALD2
+	db SPRITE_RONALD
 	db $04
 	db $0e
 	db $00
@@ -152,11 +154,12 @@ Ronald2Data:
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
-	db $0f
+	db MUSIC_RONALD
 	db MUSIC_MATCH_START_2
-Ronald3Data:
-	db RONALD3
-	db $01
+
+Ronald3NPCHeader:
+	db NPC_RONALD3
+	db SPRITE_RONALD
 	db $04
 	db $0e
 	db $00
@@ -164,24 +167,25 @@ Ronald3Data:
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
-	db $0f
+	db MUSIC_RONALD
 	db MUSIC_MATCH_START_2
-Data_11a11:
-	db $03
-	db $03
+
+IshiharaNPCHeader:
+	db NPC_ISHIHARA
+	db SPRITE_ISHIHARA
 	db $04
 	db $22
 	db $00
 	dw $5b4a ; Pointer to NPC Data
-	db $ae
-	db $03
+	tx IshiharaNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-ImakuniData:
-	db IMAKUNI
-	db $04
+
+ImakuniNPCHeader:
+	db NPC_IMAKUNI
+	db SPRITE_IMAKUNI
 	db $00
 	db $0e
 	db $00
@@ -189,11 +193,12 @@ ImakuniData:
 	tx ImakuniNPCName
 	db IMAKUNI_PIC
 	db IMAKUNI_DECK_ID
-	db $10
+	db MUSIC_IMAKUNI
 	db MUSIC_MATCH_START_1
-SamData:
-	db SAM
-	db $18 ; sprite ID
+
+SamNPCHeader:
+	db NPC_SAM
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
@@ -201,206 +206,207 @@ SamData:
 	tx SamNPCName
 	db SAM_PIC
 	db SAMS_NORMAL_DECK_ID
-	db $02
+	db MUSIC_DUEL_THEME_1
 	db MUSIC_MATCH_START_1
-Data_11a38:
-	db $08
-	db $18
+
+Tech1NPCHeader:
+	db NPC_TECH1
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $5583 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a45:
-	db $09
-	db $18
+
+Tech2NPCHeader:
+	db NPC_TECH2
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $55ca ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a52:
-	db $0a
-	db $18
+
+Tech3NPCHeader:
+	db NPC_TECH3
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $55d5 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a5f:
-	db $0b
-	db $18
+
+Tech4NPCHeader:
+	db NPC_TECH4
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $55e0 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a6c:
-	db $0c
-	db $18
+
+Tech5NPCHeader:
+	db NPC_TECH5
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $55f9 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a79:
-	db $0d
-	db $18
+
+Tech6NPCHeader:
+	db NPC_TECH6
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $58bb ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a86:
-	db $0e
-	db $21
+
+Clerk1NPCHeader:
+	db NPC_CLERK1
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $5c64 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11a93:
-	db $0f
-	db $21
+
+Clerk2NPCHeader:
+	db NPC_CLERK2
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $5ed1 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11aa0:
-	db $10
-	db $21
+
+Clerk3NPCHeader:
+	db NPC_CLERK3
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $609e ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11aad:
-	db $11
-	db $21
+
+Clerk4NPCHeader:
+	db NPC_CLERK4
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $6369 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11aba:
-	db $12
-	db $21
+
+Clerk5NPCHeader:
+	db NPC_CLERK5
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $6566 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ac7:
-	db $13
-	db $21
+
+Clerk6NPCHeader:
+	db NPC_CLERK6
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $684c ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ad4:
-	db $14
-	db $21
+
+Clerk7NPCHeader:
+	db NPC_CLERK7
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $6b53 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ae1:
-	db $15
-	db $21
+
+Clerk8NPCHeader:
+	db NPC_CLERK8
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $6d45 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11aee:
-	db $16
-	db $21
+
+Clerk9NPCHeader:
+	db NPC_CLERK9
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $7025 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-ChrisData:
-	db CHRIS
-	db $15
+
+ChrisNPCHeader:
+	db NPC_CHRIS
+	db SPRITE_BOY4
 	db $00
 	db $26
 	db $00
@@ -408,11 +414,12 @@ ChrisData:
 	tx ChrisNPCName
 	db CHRIS_PIC
 	db MUSCLES_FOR_BRAINS_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-MichaelData:
-	db MICHAEL
-	db $15
+
+MichaelNPCHeader:
+	db NPC_MICHAEL
+	db SPRITE_BOY4
 	db $00
 	db $26
 	db $00
@@ -420,11 +427,12 @@ MichaelData:
 	tx MichaelNPCName
 	db MICHAEL_PIC
 	db HEATED_BATTLE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-JessicaData:
-	db JESSICA
-	db $1f
+
+JessicaNPCHeader:
+	db NPC_JESSICA
+	db SPRITE_GIRL4
 	db $04
 	db $1a
 	db $00
@@ -432,11 +440,12 @@ JessicaData:
 	tx JessicaNPCName
 	db JESSICA_PIC
 	db LOVE_TO_BATTLE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-MitchData:
-	db MITCH
-	db $0a
+
+MitchNPCHeader:
+	db NPC_MITCH
+	db SPRITE_MITCH
 	db $00
 	db $0e
 	db $00
@@ -444,11 +453,12 @@ MitchData:
 	tx MitchNPCName
 	db MITCH_PIC
 	db FIRST_STRIKE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-MatthewData:
-	db MATTHEW
-	db $15
+
+MatthewNPCHeader:
+	db NPC_MATTHEW
+	db SPRITE_BOY4
 	db $00
 	db $16
 	db $00
@@ -456,11 +466,12 @@ MatthewData:
 	tx MatthewNPCName
 	db MATTHEW_PIC
 	db HARD_POKEMON_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-RyanData:
-	db RYAN
-	db $11
+
+RyanNPCHeader:
+	db NPC_RYAN
+	db SPRITE_BOY1
 	db $00
 	db $26
 	db $00
@@ -468,11 +479,12 @@ RyanData:
 	tx RyanNPCName
 	db RYAN_PIC
 	db EXCAVATION_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-AndrewData:
-	db ANDREW
-	db $1a
+
+AndrewNPCHeader:
+	db NPC_ANDREW
+	db SPRITE_GUIDE
 	db $00
 	db $16
 	db $00
@@ -480,11 +492,12 @@ AndrewData:
 	tx AndrewNPCName
 	db ANDREW_PIC
 	db BLISTERING_POKEMON_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-GeneData:
-	db GENE
-	db $0b
+
+GeneNPCHeader:
+	db NPC_GENE
+	db SPRITE_GENE
 	db $04
 	db $1e
 	db $00
@@ -492,11 +505,12 @@ GeneData:
 	tx GeneNPCName
 	db GENE_PIC
 	db ROCK_CRUSHER_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-SaraData:
-	db SARA
-	db $20
+
+SaraNPCHeader:
+	db NPC_SARA
+	db SPRITE_GIRL5
 	db $00
 	db $0e
 	db $00
@@ -504,11 +518,12 @@ SaraData:
 	tx SaraNPCName
 	db SARA_PIC
 	db WATERFRONT_POKEMON_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-AmandaData:
-	db AMANDA
-	db $20
+
+AmandaNPCHeader:
+	db NPC_AMANDA
+	db SPRITE_GIRL5
 	db $00
 	db $16
 	db $00
@@ -516,11 +531,12 @@ AmandaData:
 	tx AmandaNPCName
 	db AMANDA_PIC
 	db LONELY_FRIENDS_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-JoshuaData:
-	db JOSHUA
-	db $16
+
+JoshuaNPCHeader:
+	db NPC_JOSHUA
+	db SPRITE_JOSHUA
 	db $00
 	db $26
 	db $00
@@ -528,11 +544,12 @@ JoshuaData:
 	tx JoshuaNPCName
 	db JOSHUA_PIC
 	db SOUND_OF_THE_WAVES_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-AmyData:
-	db AMY
-	db $08
+
+AmyNPCHeader:
+	db NPC_AMY
+	db SPRITE_AMY
 	db $08
 	db $2e
 	db $10
@@ -540,11 +557,12 @@ AmyData:
 	tx AmyNPCName
 	db AMY_PIC
 	db GO_GO_RAIN_DANCE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-JenniferData:
-	db JENNIFER
-	db $1c
+
+JenniferNPCHeader:
+	db NPC_JENNIFER
+	db SPRITE_GIRL1
 	db $04
 	db $0e
 	db $00
@@ -552,11 +570,12 @@ JenniferData:
 	tx JenniferNPCName
 	db JENNIFER_PIC
 	db PIKACHU_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-NicholasData:
-	db NICHOLAS
-	db $17
+
+NicholasNPCHeader:
+	db NPC_NICHOLAS
+	db SPRITE_BOY5
 	db $04
 	db $1e
 	db $00
@@ -564,11 +583,12 @@ NicholasData:
 	tx NicholasNPCName
 	db NICHOLAS_PIC
 	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-BrandonData:
-	db BRANDON
-	db $17
+
+BrandonNPCHeader:
+	db NPC_BRANDON
+	db SPRITE_BOY5
 	db $04
 	db $1e
 	db $00
@@ -576,11 +596,12 @@ BrandonData:
 	tx BrandonNPCName
 	db BRANDON_PIC
 	db POWER_GENERATOR_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-IsaacData:
-	db ISAAC
-	db $09
+
+IsaacNPCHeader:
+	db NPC_ISAAC
+	db SPRITE_ISAAC
 	db $00
 	db $16
 	db $00
@@ -588,11 +609,12 @@ IsaacData:
 	tx IsaacNPCName
 	db ISAAC_PIC
 	db ZAPPING_SELFDESTRUCT_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-BrittanyData:
-	db BRITTANY
-	db $1c
+
+BrittanyNPCHeader:
+	db NPC_BRITTANY
+	db SPRITE_GIRL1
 	db $04
 	db $0e
 	db $00
@@ -600,11 +622,12 @@ BrittanyData:
 	tx BrittanyNPCName
 	db BRITTANY_PIC
 	db ETCETERA_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-KristinData:
-	db KRISTIN
-	db $1e
+
+KristinNPCHeader:
+	db NPC_KRISTIN
+	db SPRITE_GIRL3
 	db $00
 	db $1e
 	db $00
@@ -612,11 +635,12 @@ KristinData:
 	tx KristinNPCName
 	db KRISTIN_PIC
 	db FLOWER_GARDEN_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-HeatherData:
-	db HEATHER
-	db $1d
+
+HeatherNPCHeader:
+	db NPC_HEATHER
+	db SPRITE_GIRL2
 	db $04
 	db $22
 	db $00
@@ -624,11 +648,12 @@ HeatherData:
 	tx HeatherNPCName
 	db HEATHER_PIC
 	db KALEIDOSCOPE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-NikkiData:
-	db NIKKI
-	db $05
+
+NikkiNPCHeader:
+	db NPC_NIKKI
+	db SPRITE_NIKKI
 	db $00
 	db $1a
 	db $00
@@ -636,11 +661,12 @@ NikkiData:
 	tx NikkiNPCName
 	db NIKKI_PIC
 	db FLOWER_POWER_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-RobertData:
-	db ROBERT
-	db $11
+
+RobertNPCHeader:
+	db NPC_ROBERT
+	db SPRITE_BOY1
 	db $04
 	db $16
 	db $00
@@ -648,11 +674,12 @@ RobertData:
 	tx RobertNPCName
 	db ROBERT_PIC
 	db GHOST_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-DanielData:
-	db DANIEL
-	db $12
+
+DanielNPCHeader:
+	db NPC_DANIEL
+	db SPRITE_BOY2
 	db $04
 	db $1a
 	db $00
@@ -660,11 +687,12 @@ DanielData:
 	tx DanielNPCName
 	db DANIEL_PIC
 	db NAP_TIME_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-StephanieData:
-	db STEPHANIE
-	db $1c
+
+StephanieNPCHeader:
+	db NPC_STEPHANIE
+	db SPRITE_GIRL1
 	db $04
 	db $0e
 	db $00
@@ -672,11 +700,12 @@ StephanieData:
 	tx StephanieNPCName
 	db STEPHANIE_PIC
 	db STRANGE_POWER_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-MurrayData:
-	db MURRAY
-	db $0c
+
+MurrayNPCHeader:
+	db NPC_MURRAY
+	db SPRITE_MURRAY
 	db $00
 	db $12
 	db $00
@@ -684,11 +713,12 @@ MurrayData:
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-Murray2Data:
-	db MURRAY2
-	db $0c
+
+Murray2NPCHeader:
+	db NPC_MURRAY2
+	db SPRITE_MURRAY
 	db $03
 	db $15
 	db $10
@@ -696,11 +726,12 @@ Murray2Data:
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-JosephData:
-	db JOSEPH
-	db $18
+
+JosephNPCHeader:
+	db NPC_JOSEPH
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
@@ -708,11 +739,12 @@ JosephData:
 	tx JosephNPCName
 	db JOSEPH_PIC
 	db FLYIN_POKEMON_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-DavidData:
-	db DAVID
-	db $18
+
+DavidNPCHeader:
+	db NPC_DAVID
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
@@ -720,11 +752,12 @@ DavidData:
 	tx DavidNPCName
 	db DAVID_PIC
 	db LOVELY_NIDORAN_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-ErikData:
-	db ERIK
-	db $18
+
+ErikNPCHeader:
+	db NPC_ERIK
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
@@ -732,11 +765,12 @@ ErikData:
 	tx ErikNPCName
 	db ERIK_PIC
 	db POISON_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-RickData:
-	db RICK
-	db $06
+
+RickNPCHeader:
+	db NPC_RICK
+	db SPRITE_RICK
 	db $00
 	db $0e
 	db $00
@@ -744,11 +778,12 @@ RickData:
 	tx RickNPCName
 	db RICK_PIC
 	db WONDERS_OF_SCIENCE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-JohnData:
-	db JOHN
-	db $12
+
+JohnNPCHeader:
+	db NPC_JOHN
+	db SPRITE_BOY2
 	db $04
 	db $1a
 	db $00
@@ -756,11 +791,12 @@ JohnData:
 	tx JohnNPCName
 	db JOHN_PIC
 	db ANGER_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-AdamData:
-	db ADAM
-	db $13
+
+AdamNPCHeader:
+	db NPC_ADAM
+	db SPRITE_BOY3
 	db $00
 	db $22
 	db $00
@@ -768,11 +804,12 @@ AdamData:
 	tx AdamNPCName
 	db ADAM_PIC
 	db FLAMETHROWER_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-JonathanData:
-	db JONATHAN
-	db $11
+
+JonathanNPCHeader:
+	db NPC_JONATHAN
+	db SPRITE_BOY1
 	db $04
 	db $16
 	db $00
@@ -780,11 +817,12 @@ JonathanData:
 	tx JonathanNPCName
 	db JONATHAN_PIC
 	db RESHUFFLE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
-KenData:
-	db KEN
-	db $07
+
+KenNPCHeader:
+	db NPC_KEN
+	db SPRITE_KEN
 	db $04
 	db $1e
 	db $00
@@ -792,11 +830,12 @@ KenData:
 	tx KenNPCName
 	db KEN_PIC
 	db FIRE_CHARGE_DECK_ID
-	db $03
+	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_2
-CourtneyData:
-	db COURTNEY
-	db $0d
+
+CourtneyNPCHeader:
+	db NPC_COURTNEY
+	db SPRITE_COURTNEY
 	db $00
 	db $12
 	db $00
@@ -804,11 +843,12 @@ CourtneyData:
 	tx CourtneyNPCName
 	db COURTNEY_PIC
 	db LEGENDARY_MOLTRES_DECK_ID
-	db $04
+	db MUSIC_DUEL_THEME_3
 	db MUSIC_MATCH_START_3
-SteveData:
-	db STEVE
-	db $0e
+
+SteveNPCHeader:
+	db NPC_STEVE
+	db SPRITE_STEVE
 	db $00
 	db $2a
 	db $00
@@ -816,11 +856,12 @@ SteveData:
 	tx SteveNPCName
 	db STEVE_PIC
 	db LEGENDARY_ZAPDOS_DECK_ID
-	db $04
+	db MUSIC_DUEL_THEME_3
 	db MUSIC_MATCH_START_3
-JackData:
-	db JACK
-	db $0f
+
+JackNPCHeader:
+	db NPC_JACK
+	db SPRITE_JACK
 	db $00
 	db $26
 	db $00
@@ -828,11 +869,12 @@ JackData:
 	tx JackNPCName
 	db JACK_PIC
 	db LEGENDARY_ARTICUNO_DECK_ID
-	db $04
+	db MUSIC_DUEL_THEME_3
 	db MUSIC_MATCH_START_3
-RodData:
-	db ROD
-	db $10
+
+RodNPCHeader:
+	db NPC_ROD
+	db SPRITE_ROD
 	db $00
 	db $0e
 	db $00
@@ -840,531 +882,532 @@ RodData:
 	tx RodNPCName
 	db ROD_PIC
 	db LEGENDARY_DRAGONITE_DECK_ID
-	db $04
+	db MUSIC_DUEL_THEME_3
 	db MUSIC_MATCH_START_3
-Data_11cdc:
-	db $3b
-	db $21
+
+Clerk10NPCHeader:
+	db NPC_CLERK10
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $4c3e ; Pointer to NPC Data
-	db $b0
-	db $03
+	tx ClerkNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ce9:
-	db $3c
-	db $21
+
+Clerk11NPCHeader:
+	db NPC_CLERK11
+	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
 	dw $4c3e ; Pointer to NPC Data
-	db $b0
-	db $03
+	tx ClerkNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11cf6:
-	db $3d
-	db $1a
+
+Man1NPCHeader:
+	db NPC_MAN1
+	db SPRITE_GUIDE
 	db $00
 	db $16
 	db $00
 	dw $5c76 ; Pointer to NPC Data
-	db $d8
-	db $03
+	tx ManNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d03:
-	db $3e
-	db $23
+
+Woman1NPCHeader:
+	db NPC_WOMAN1
+	db SPRITE_WOMAN
 	db $04
 	db $1e
 	db $00
 	dw $5f83 ; Pointer to NPC Data
-	db $d9
-	db $03
+	tx WomanNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d10:
-	db $3f
-	db $19
+
+Chap1NPCHeader:
+	db NPC_CHAP1
+	db SPRITE_CHAP
 	db $00
 	db $1a
 	db $00
 	dw $5fc0 ; Pointer to NPC Data
-	db $da
-	db $03
+	tx ChapNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d1d:
-	db $40
-	db $22
+
+Gal1NPCHeader:
+	db NPC_GAL1
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $60cf ; Pointer to NPC Data
-	db $db
-	db $03
+	tx GalNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d2a:
-	db $41
-	db $1e
+
+Lass1NPCHeader:
+	db NPC_LASS1
+	db SPRITE_GIRL3
 	db $00
 	db $1e
 	db $00
 	dw $6111 ; Pointer to NPC Data
-	db $dc
-	db $03
+	tx LassNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d37:
-	db $42
-	db $19
+
+Chap2NPCHeader:
+	db NPC_CHAP2
+	db SPRITE_CHAP
 	db $00
 	db $1a
 	db $00
 	dw $639a ; Pointer to NPC Data
-	db $da
-	db $03
+	tx ChapNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d44:
-	db $43
-	db $1e
+
+Lass2NPCHeader:
+	db NPC_LASS2
+	db SPRITE_GIRL3
 	db $00
 	db $1e
 	db $00
 	dw $661f ; Pointer to NPC Data
-	db $dc
-	db $03
+	tx LassNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d51:
-	db $44
-	db $1b
+
+Pappy1NPCHeader:
+	db NPC_PAPPY1
+	db SPRITE_PAPPY
 	db $00
 	db $22
 	db $00
 	dw $69a5 ; Pointer to NPC Data
-	db $dd
-	db $03
+	tx PappyNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d5e:
-	db $45
-	db $12
+
+Lad1NPCHeader:
+	db NPC_LAD1
+	db SPRITE_BOY2
 	db $04
 	db $1a
 	db $00
 	dw $6b84 ; Pointer to NPC Data
-	db $de
-	db $03
+	tx LadNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d6b:
-	db $46
-	db $11
+
+Lad2NPCHeader:
+	db NPC_LAD2
+	db SPRITE_BOY1
 	db $04
 	db $16
 	db $00
 	dw $6e2c ; Pointer to NPC Data
-	db $de
-	db $03
+	tx LadNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d78:
-	db $47
-	db $19
+
+Chap3NPCHeader:
+	db NPC_CHAP3
+	db SPRITE_CHAP
 	db $00
 	db $1a
 	db $00
 	dw $6de8 ; Pointer to NPC Data
-	db $da
-	db $03
+	tx ChapNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d85:
-	db $48
-	db $22
+
+Clerk12NPCHeader:
+	db NPC_CLERK12
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $7295 ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d92:
-	db $49
-	db $22
+
+Clerk13NPCHeader:
+	db NPC_CLERK13
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $726c ; Pointer to NPC Data
-	db $b3
-	db $03
+	tx ClerkNPCName2
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11d9f:
-	db $4a
-	db $22
+
+HostNPCHeader:
+	db NPC_HOST
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $7352 ; Pointer to NPC Data
-	db $df
-	db $03
+	tx HostNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11dac:
-	db $4b
-	db $13
+
+Specs1NPCHeader:
+	db NPC_SPECS1
+	db SPRITE_BOY3
 	db $00
 	db $22
 	db $00
 	dw $5d82 ; Pointer to NPC Data
-	db $e0
-	db $03
+	tx SpecsNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11db9:
-	db $4c
-	db $14
+
+ButchNPCHeader:
+	db NPC_BUTCH
+	db SPRITE_BUTCH
 	db $00
 	db $16
 	db $00
 	dw $5d8d ; Pointer to NPC Data
-	db $e1
-	db $03
+	tx ButchNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11dc6:
-	db $4d
-	db $24
+
+Granny1NPCHeader:
+	db NPC_GRANNY1
+	db SPRITE_GRANNY
 	db $00
 	db $16
 	db $00
 	dw $5d9f ; Pointer to NPC Data
-	db $e5
-	db $03
+	tx GrannyNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11dd3:
-	db $4e
-	db $1d
+
+Lass3NPCHeader:
+	db NPC_LASS3
+	db SPRITE_GIRL2
 	db $04
 	db $22
 	db $00
 	dw $5fd2 ; Pointer to NPC Data
-	db $dc
-	db $03
+	tx LassNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11de0:
-	db $4f
-	db $1a
+
+Man2NPCHeader:
+	db NPC_MAN2
+	db SPRITE_GUIDE
 	db $00
 	db $16
 	db $00
 	dw $6137 ; Pointer to NPC Data
-	db $d8
-	db $03
+	tx ManNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ded:
-	db $50
-	db $1b
+
+Pappy2NPCHeader:
+	db NPC_PAPPY2
+	db SPRITE_PAPPY
 	db $00
 	db $22
 	db $00
 	dw $613b ; Pointer to NPC Data
-	db $dd
-	db $03
+	tx PappyNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11dfa:
-	db $51
-	db $1d
+
+Lass4NPCHeader:
+	db NPC_LASS4
+	db SPRITE_GIRL2
 	db $04
 	db $22
 	db $00
 	dw $63d9 ; Pointer to NPC Data
-	db $dc
-	db $03
+	tx LassNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e07:
-	db $52
-	db $17
+
+Hood1NPCHeader:
+	db NPC_HOOD1
+	db SPRITE_BOY5
 	db $04
 	db $1e
 	db $00
 	dw $63dd ; Pointer to NPC Data
-	db $e2
-	db $03
+	tx HoodNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e14:
-	db $53
-	db $24
+
+Granny2NPCHeader:
+	db NPC_GRANNY2
+	db SPRITE_GRANNY
 	db $00
 	db $16
 	db $00
 	dw $66d8 ; Pointer to NPC Data
-	db $e5
-	db $03
+	tx GrannyNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e21:
-	db $54
-	db $22
+
+Gal2NPCHeader:
+	db NPC_GAL2
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $66e3 ; Pointer to NPC Data
-	db $db
-	db $03
+	tx GalNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e2e:
-	db $55
-	db $12
+
+Lad3NPCHeader:
+	db NPC_LAD3
+	db SPRITE_BOY2
 	db $04
 	db $1a
 	db $00
 	dw $6850 ; Pointer to NPC Data
-	db $de
-	db $03
+	tx LadNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e3b:
-	db $56
-	db $22
+
+Gal3NPCHeader:
+	db NPC_GAL3
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $6a30 ; Pointer to NPC Data
-	db $db
-	db $03
+	tx GalNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e48:
-	db $57
-	db $19
+
+Chap4NPCHeader:
+	db NPC_CHAP4
+	db SPRITE_CHAP
 	db $00
 	db $1a
 	db $00
 	dw $6a3b ; Pointer to NPC Data
-	db $da
-	db $03
+	tx ChapNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e55:
-	db $58
-	db $1a
+
+Man3NPCHeader:
+	db NPC_MAN3
+	db SPRITE_GUIDE
 	db $00
 	db $16
 	db $00
 	dw $6bc1 ; Pointer to NPC Data
-	db $d8
-	db $03
+	tx ManNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e62:
-	db $59
-	db $18
+
+Specs2NPCHeader:
+	db NPC_SPECS2
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $6bc5 ; Pointer to NPC Data
-	db $e0
-	db $03
+	tx SpecsNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e6f:
-	db $5a
-	db $13
+
+Specs3NPCHeader:
+	db NPC_SPECS3
+	db SPRITE_BOY3
 	db $00
 	db $22
 	db $00
 	dw $6bed ; Pointer to NPC Data
-	db $e0
-	db $03
+	tx SpecsNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e7c:
-	db $5b
-	db $23
+
+Woman2NPCHeader:
+	db NPC_WOMAN2
+	db SPRITE_WOMAN
 	db $04
 	db $1e
 	db $00
 	dw $4c3e ; Pointer to NPC Data
-	db $d9
-	db $03
+	tx WomanNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e89:
-	db $5c
-	db $15
+
+ManiaNPCHeader:
+	db NPC_MANIA
+	db SPRITE_BOY4
 	db $00
 	db $26
 	db $00
 	dw $6e88 ; Pointer to NPC Data
-	db $e4
-	db $03
+	tx ManiaNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11e96:
-	db $5d
-	db $1b
+
+Pappy3NPCHeader:
+	db NPC_PAPPY3
+	db SPRITE_PAPPY
 	db $00
 	db $22
 	db $00
 	dw $709c ; Pointer to NPC Data
-	db $dd
-	db $03
+	tx PappyNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ea3:
-	db $5e
-	db $22
+
+Gal4NPCHeader:
+	db NPC_GAL4
+	db SPRITE_HOST
 	db $00
 	db $16
 	db $00
 	dw $70a0 ; Pointer to NPC Data
-	db $db
-	db $03
+	tx GalNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11eb0:
-	db $5f
-	db $15
+
+ChampNPCHeader:
+	db NPC_CHAMP
+	db SPRITE_BOY4
 	db $00
 	db $26
 	db $00
 	dw $70a4 ; Pointer to NPC Data
-	db $e3
-	db $03
+	tx ChampNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ebd:
-	db $60
-	db $17
+
+Hood2NPCHeader:
+	db NPC_HOOD2
+	db SPRITE_BOY5
 	db $04
 	db $1e
 	db $00
 	dw $70a8 ; Pointer to NPC Data
-	db $e2
-	db $03
+	tx HoodNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11eca:
-	db $61
-	db $1f
+
+Lass5NPCHeader:
+	db NPC_LASS5
+	db SPRITE_GIRL4
 	db $04
 	db $1a
 	db $00
 	dw $70ac ; Pointer to NPC Data
-	db $dc
-	db $03
+	tx LassNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11ed7:
-	db $62
-	db $19
+
+Chap5NPCHeader:
+	db NPC_CHAP5
+	db SPRITE_CHAP
 	db $00
 	db $1a
 	db $00
 	dw $70b0 ; Pointer to NPC Data
-	db $da
-	db $03
+	tx ChapNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-AaronData:
-	db AARON
-	db $18
+
+AaronNPCHeader:
+	db NPC_AARON
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
@@ -1372,97 +1415,105 @@ AaronData:
 	tx AaronNPCName
 	db AARON_PIC
 	db LIGHTNING_AND_FIRE_DECK_ID
-	db $02
+	db MUSIC_DUEL_THEME_1
 	db MUSIC_MATCH_START_1
-Data_11ef1:
-	db $64
-	db $1a
+
+GuideNPCHeader:
+	db NPC_GUIDE
+	db SPRITE_GUIDE
 	db $00
 	db $16
 	db $00
 	dw $7283 ; Pointer to NPC Data
-	db $e6
-	db $03
+	tx GuideNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11efe:
-	db $65
-	db $18
+
+Tech7NPCHeader:
+	db NPC_TECH7
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $58c6 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11f0b:
-	db $66
-	db $18
+
+Tech8NPCHeader:
+	db NPC_TECH8
+	db SPRITE_TECH
 	db $00
 	db $0e
 	db $00
 	dw $58d1 ; Pointer to NPC Data
-	db $b2
-	db $03
+	tx TechNPCName
 	db $00
 	db $00
 	db $00
 	db $00
-Data_11f18:
-	db $67
+
+TorchNPCHeader:
+	db NPC_TORCH
 	db $26
 	db $3a
 	db $3a
 	db $10
 	dw $4c3e ; Pointer to NPC Data
-Data_11f1f:
-	db $68
+
+LegendaryCardTopLeftNPCHeader:
+	db NPC_LEGENDARY_CARD_TOP_LEFT
 	db $27
 	db $3b
 	db $41
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f26:
-	db $69
+
+LegendaryCardTopRightNPCHeader:
+	db NPC_LEGENDARY_CARD_TOP_RIGHT
 	db $27
 	db $3c
 	db $42
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f2d:
-	db $6a
+
+LegendaryCardBottomLeftNPCHeader:
+	db NPC_LEGENDARY_CARD_BOTTOM_LEFT
 	db $27
 	db $3d
 	db $43
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f34:
-	db $6b
+
+LegendaryCardBottomCenterLeftNPCHeader:
+	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_LEFT
 	db $27
 	db $3e
 	db $44
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f3b:
-	db $6c
+
+LegendaryCardBottomCenterRightNPCHeader:
+	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_RIGHT
 	db $27
 	db $3f
 	db $45
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f42:
-	db $6d
+
+LegendaryCardBottomRightNPCHeader:
+	db NPC_LEGENDARY_CARD_BOTTOM_RIGHT
 	db $27
 	db $40
 	db $46
 	db $50
 	dw $4c3e ; Pointer to NPC Data
-Data_11f49:
+
+DummyNPCHeader:
 	db $00
 	db $00
 	db $00

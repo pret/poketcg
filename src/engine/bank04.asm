@@ -838,13 +838,13 @@ Func_115a3: ; 115a3 (4:55a3)
 
 INCLUDE "data/map_scripts.asm"
 
-; loads a pointer into hl found on PointerTable_118f5
-Func_1184a: ; 1184a (4:584a)
+; loads a pointer into hl found on NPCHeaderPointers
+GetNPCHeaderPointer: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
-	add LOW(PointerTable_118f5)
+	add LOW(NPCHeaderPointers)
 	ld l, a
-	ld a, HIGH(PointerTable_118f5)
+	ld a, HIGH(NPCHeaderPointers)
 	adc $00
 	ld h, a
 	ld a, [hli]
@@ -855,7 +855,7 @@ Func_1184a: ; 1184a (4:584a)
 Func_11857: ; 11857 (4:5857)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld a, [hli]
 	ld [wd3ab], a
 	ld a, [hli]
@@ -880,7 +880,7 @@ Func_11857: ; 11857 (4:5857)
 ; this appears to find data about the NPC we're talking to
 Func_1187d: ; 1187d (4:587d)
 	push hl
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld bc, $5
 	add hl, bc
 	ld c, [hl]
@@ -897,7 +897,7 @@ Func_1187d: ; 1187d (4:587d)
 Func_11893: ; 11893 (4:5893)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
@@ -911,7 +911,7 @@ Func_11893: ; 11893 (4:5893)
 Func_118a7: ; 118a7 (4:58a7)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
@@ -927,7 +927,7 @@ Func_118a7: ; 118a7 (4:58a7)
 Func_118bf: ; 118bf (4:58bf)
 	push hl
 	push bc
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld bc, $000a
 	add hl, bc
 	ld a, [hli]
@@ -942,7 +942,7 @@ Func_118d3: ; 118d3 (4:58d3)
 	push hl
 	push bc
 	push af
-	call Func_1184a
+	call GetNPCHeaderPointer
 	ld bc, $000c
 	add hl, bc
 	ld a, [hli]

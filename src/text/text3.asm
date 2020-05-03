@@ -1620,7 +1620,7 @@ Text03ab: ; 3f663 (f:7663)
 	text "LABORATORY"
 	done
 
-Text03ac: ; 3f66f (f:766f)
+DrMasonNPCName: ; 3f66f (f:766f)
 	text "Dr. Mason"
 	done
 
@@ -1628,7 +1628,7 @@ RonaldNPCName: ; 3f67a (f:767a)
 	text "Ronald"
 	done
 
-Text03ae: ; 3f682 (f:7682)
+IshiharaNPCName: ; 3f682 (f:7682)
 	text "ISHIHARA"
 	done
 
@@ -1636,7 +1636,7 @@ ImakuniNPCName: ; 3f68c (f:768c)
 	text "Imakuni?"
 	done
 
-Text03b0: ; 3f696 (f:7696)
+ClerkNPCName: ; 3f696 (f:7696)
 	text "CLERK"
 	done
 
@@ -1644,11 +1644,11 @@ SamNPCName: ; 3f69d (f:769d)
 	text "Sam"
 	done
 
-Text03b2: ; 3f6a2 (f:76a2)
+TechNPCName: ; 3f6a2 (f:76a2)
 	text "TECH"
 	done
 
-Text03b3: ; 3f6a8 (f:76a8)
+ClerkNPCName2: ; 3f6a8 (f:76a8)
 	text "CLERK"
 	done
 
@@ -1796,63 +1796,63 @@ RodNPCName: ; 3f7be (f:77be)
 	text "Rod"
 	done
 
-Text03d8: ; 3f7c3 (f:77c3)
+ManNPCName: ; 3f7c3 (f:77c3)
 	text "Man"
 	done
 
-Text03d9: ; 3f7c8 (f:77c8)
+WomanNPCName: ; 3f7c8 (f:77c8)
 	text "Woman"
 	done
 
-Text03da: ; 3f7cf (f:77cf)
+ChapNPCName: ; 3f7cf (f:77cf)
 	text "CHAP"
 	done
 
-Text03db: ; 3f7d5 (f:77d5)
+GalNPCName: ; 3f7d5 (f:77d5)
 	text "GAL"
 	done
 
-Text03dc: ; 3f7da (f:77da)
+LassNPCName: ; 3f7da (f:77da)
 	text "Lass"
 	done
 
-Text03dd: ; 3f7e0 (f:77e0)
+PappyNPCName: ; 3f7e0 (f:77e0)
 	text "Pappy"
 	done
 
-Text03de: ; 3f7e7 (f:77e7)
+LadNPCName: ; 3f7e7 (f:77e7)
 	text "Lad"
 	done
 
-Text03df: ; 3f7ec (f:77ec)
+HostNPCName: ; 3f7ec (f:77ec)
 	text "HOST"
 	done
 
-Text03e0: ; 3f7f2 (f:77f2)
+SpecsNPCName: ; 3f7f2 (f:77f2)
 	text "Specs"
 	done
 
-Text03e1: ; 3f7f9 (f:77f9)
+ButchNPCName: ; 3f7f9 (f:77f9)
 	text "Butch"
 	done
 
-Text03e2: ; 3f800 (f:7800)
+HoodNPCName: ; 3f800 (f:7800)
 	text "Hood"
 	done
 
-Text03e3: ; 3f806 (f:7806)
+ChampNPCName: ; 3f806 (f:7806)
 	text "Champ"
 	done
 
-Text03e4: ; 3f80d (f:780d)
+ManiaNPCName: ; 3f80d (f:780d)
 	text "Mania"
 	done
 
-Text03e5: ; 3f814 (f:7814)
+GrannyNPCName: ; 3f814 (f:7814)
 	text "Granny"
 	done
 
-Text03e6: ; 3f81c (f:781c)
+GuideNPCName: ; 3f81c (f:781c)
 	text "Guide"
 	done
 

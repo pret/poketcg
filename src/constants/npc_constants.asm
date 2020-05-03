@@ -41,46 +41,118 @@
 	const STEPHANIE_PIC ; $28
 	const AARON_PIC     ; $29
 
-RONALD    EQU $02
-IMAKUNI   EQU $04
-SAM       EQU $07
-CHRIS     EQU $17
-MICHAEL   EQU $18
-JESSICA   EQU $19
-MITCH     EQU $1A
-MATTHEW   EQU $1B
-RYAN      EQU $1C
-ANDREW    EQU $1D
-GENE      EQU $1E
-SARA      EQU $1F
-AMANDA    EQU $20
-JOSHUA    EQU $21
-AMY       EQU $22
-JENNIFER  EQU $23
-NICHOLAS  EQU $24
-BRANDON   EQU $25
-ISAAC     EQU $26
-BRITTANY  EQU $27
-KRISTIN   EQU $28
-HEATHER   EQU $29
-NIKKI     EQU $2A
-ROBERT    EQU $2B
-DANIEL    EQU $2C
-STEPHANIE EQU $2D
-MURRAY    EQU $2E
-JOSEPH    EQU $2F
-DAVID     EQU $30
-ERIK      EQU $31
-RICK      EQU $32
-JOHN      EQU $33
-ADAM      EQU $34
-JONATHAN  EQU $35
-KEN       EQU $36
-COURTNEY  EQU $37
-STEVE     EQU $38
-JACK      EQU $39
-ROD       EQU $3A
-AARON     EQU $63
-MURRAY2   EQU $70
-RONALD2   EQU $71
-RONALD3   EQU $72
+	const_def 1
+	const NPC_DRMASON   ; $01
+	const NPC_RONALD    ; $02
+	const NPC_ISHIHARA  ; $03
+	const NPC_IMAKUNI   ; $04
+	const NPC_05        ; $05 (unused)
+	const NPC_06        ; $06 (unused)
+	const NPC_SAM       ; $07
+	const NPC_TECH1     ; $08
+	const NPC_TECH2     ; $09
+	const NPC_TECH3     ; $0A
+	const NPC_TECH4     ; $0B
+	const NPC_TECH5     ; $0C
+	const NPC_TECH6     ; $0D
+	const NPC_CLERK1    ; $0E
+	const NPC_CLERK2    ; $0F
+	const NPC_CLERK3    ; $10
+	const NPC_CLERK4    ; $11
+	const NPC_CLERK5    ; $12
+	const NPC_CLERK6    ; $13
+	const NPC_CLERK7    ; $14
+	const NPC_CLERK8    ; $15
+	const NPC_CLERK9    ; $16
+	const NPC_CHRIS     ; $17
+	const NPC_MICHAEL   ; $18
+	const NPC_JESSICA   ; $19
+	const NPC_MITCH     ; $1A
+	const NPC_MATTHEW   ; $1B
+	const NPC_RYAN      ; $1C
+	const NPC_ANDREW    ; $1D
+	const NPC_GENE      ; $1E
+	const NPC_SARA      ; $1F
+	const NPC_AMANDA    ; $20
+	const NPC_JOSHUA    ; $21
+	const NPC_AMY       ; $22
+	const NPC_JENNIFER  ; $23
+	const NPC_NICHOLAS  ; $24
+	const NPC_BRANDON   ; $25
+	const NPC_ISAAC     ; $26
+	const NPC_BRITTANY  ; $27
+	const NPC_KRISTIN   ; $28
+	const NPC_HEATHER   ; $29
+	const NPC_NIKKI     ; $2A
+	const NPC_ROBERT    ; $2B
+	const NPC_DANIEL    ; $2C
+	const NPC_STEPHANIE ; $2D
+	const NPC_MURRAY    ; $2E
+	const NPC_JOSEPH    ; $2F
+	const NPC_DAVID     ; $30
+	const NPC_ERIK      ; $31
+	const NPC_RICK      ; $32
+	const NPC_JOHN      ; $33
+	const NPC_ADAM      ; $34
+	const NPC_JONATHAN  ; $35
+	const NPC_KEN       ; $36
+	const NPC_COURTNEY  ; $37
+	const NPC_STEVE     ; $38
+	const NPC_JACK      ; $39
+	const NPC_ROD       ; $3A
+	const NPC_CLERK10   ; $3B
+	const NPC_CLERK11   ; $3C
+	const NPC_MAN1      ; $3D
+	const NPC_WOMAN1    ; $3E
+	const NPC_CHAP1     ; $3F
+	const NPC_GAL1      ; $40
+	const NPC_LASS1     ; $41
+	const NPC_CHAP2     ; $42
+	const NPC_LASS2     ; $43
+	const NPC_PAPPY1    ; $44
+	const NPC_LAD1      ; $45
+	const NPC_LAD2      ; $46
+	const NPC_CHAP3     ; $47
+	const NPC_CLERK12   ; $48
+	const NPC_CLERK13   ; $49
+	const NPC_HOST      ; $4A
+	const NPC_SPECS1    ; $4B
+	const NPC_BUTCH     ; $4C
+	const NPC_GRANNY1   ; $4D
+	const NPC_LASS3     ; $4E
+	const NPC_MAN2      ; $4F
+	const NPC_PAPPY2    ; $50
+	const NPC_LASS4     ; $51
+	const NPC_HOOD1     ; $52
+	const NPC_GRANNY2   ; $53
+	const NPC_GAL2      ; $54
+	const NPC_LAD3      ; $55
+	const NPC_GAL3      ; $56
+	const NPC_CHAP4     ; $57
+	const NPC_MAN3      ; $58
+	const NPC_SPECS2    ; $59
+	const NPC_SPECS3    ; $5A
+	const NPC_WOMAN2    ; $5B
+	const NPC_MANIA     ; $5C
+	const NPC_PAPPY3    ; $5D
+	const NPC_GAL4      ; $5E
+	const NPC_CHAMP     ; $5F
+	const NPC_HOOD2     ; $60
+	const NPC_LASS5     ; $61
+	const NPC_CHAP5     ; $62
+	const NPC_AARON     ; $63
+	const NPC_GUIDE     ; $64
+	const NPC_TECH7     ; $65
+	const NPC_TECH8     ; $66
+	const NPC_TORCH     ; $67
+	const NPC_LEGENDARY_CARD_TOP_LEFT            ; $68
+	const NPC_LEGENDARY_CARD_TOP_RIGHT           ; $69
+	const NPC_LEGENDARY_CARD_BOTTOM_LEFT         ; $6A
+	const NPC_LEGENDARY_CARD_BOTTOM_CENTER_LEFT  ; $6B
+	const NPC_LEGENDARY_CARD_BOTTOM_CENTER_RIGHT ; $6C
+	const NPC_LEGENDARY_CARD_BOTTOM_RIGHT        ; $6D
+	const NPC_6E        ; $6E (unused)
+	const NPC_6F        ; $6F (unused)
+	const NPC_MURRAY2   ; $70
+	const NPC_RONALD2   ; $71
+	const NPC_RONALD3   ; $72

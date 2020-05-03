@@ -941,14 +941,14 @@ TextOffsets::                                                      ; 34000 (d:40
 	textpointer Text03a9                                           ; 0x03a9
 	textpointer Text03aa                                           ; 0x03aa
 	textpointer Text03ab                                           ; 0x03ab
-	textpointer Text03ac                                           ; 0x03ac
+	textpointer DrMasonNPCName                                     ; 0x03ac
 	textpointer RonaldNPCName                                      ; 0x03ad
-	textpointer Text03ae                                           ; 0x03ae
+	textpointer IshiharaNPCName                                    ; 0x03ae
 	textpointer ImakuniNPCName                                     ; 0x03af
-	textpointer Text03b0                                           ; 0x03b0
+	textpointer ClerkNPCName                                       ; 0x03b0
 	textpointer SamNPCName                                         ; 0x03b1
-	textpointer Text03b2                                           ; 0x03b2
-	textpointer Text03b3                                           ; 0x03b3
+	textpointer TechNPCName                                        ; 0x03b2
+	textpointer ClerkNPCName2                                      ; 0x03b3
 	textpointer ChrisNPCName                                       ; 0x03b4
 	textpointer MichaelNPCName                                     ; 0x03b5
 	textpointer JessicaNPCName                                     ; 0x03b6
@@ -985,21 +985,21 @@ TextOffsets::                                                      ; 34000 (d:40
 	textpointer SteveNPCName                                       ; 0x03d5
 	textpointer JackNPCName                                        ; 0x03d6
 	textpointer RodNPCName                                         ; 0x03d7
-	textpointer Text03d8                                           ; 0x03d8
-	textpointer Text03d9                                           ; 0x03d9
-	textpointer Text03da                                           ; 0x03da
-	textpointer Text03db                                           ; 0x03db
-	textpointer Text03dc                                           ; 0x03dc
-	textpointer Text03dd                                           ; 0x03dd
-	textpointer Text03de                                           ; 0x03de
-	textpointer Text03df                                           ; 0x03df
-	textpointer Text03e0                                           ; 0x03e0
-	textpointer Text03e1                                           ; 0x03e1
-	textpointer Text03e2                                           ; 0x03e2
-	textpointer Text03e3                                           ; 0x03e3
-	textpointer Text03e4                                           ; 0x03e4
-	textpointer Text03e5                                           ; 0x03e5
-	textpointer Text03e6                                           ; 0x03e6
+	textpointer ManNPCName                                         ; 0x03d8
+	textpointer WomanNPCName                                       ; 0x03d9
+	textpointer ChapNPCName                                        ; 0x03da
+	textpointer GalNPCName                                         ; 0x03db
+	textpointer LassNPCName                                        ; 0x03dc
+	textpointer PappyNPCName                                       ; 0x03dd
+	textpointer LadNPCName                                         ; 0x03de
+	textpointer HostNPCName                                        ; 0x03df
+	textpointer SpecsNPCName                                       ; 0x03e0
+	textpointer ButchNPCName                                       ; 0x03e1
+	textpointer HoodNPCName                                        ; 0x03e2
+	textpointer ChampNPCName                                       ; 0x03e3
+	textpointer ManiaNPCName                                       ; 0x03e4
+	textpointer GrannyNPCName                                      ; 0x03e5
+	textpointer GuideNPCName                                       ; 0x03e6
 	textpointer AaronNPCName                                       ; 0x03e7
 	textpointer Text03e8                                           ; 0x03e8
 	textpointer Text03e9                                           ; 0x03e9
