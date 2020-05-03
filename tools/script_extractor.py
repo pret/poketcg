@@ -257,7 +257,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("OWScript_AskQuestionJumpDefaultYes", "tj", DO_NOT_QUIT),
 	("Func_d2f6", "q", DO_NOT_QUIT),
 	("Func_d317", "", DO_NOT_QUIT),
-	("Func_d43d", "q", DO_NOT_QUIT),
+	("Func_d43d", "", DO_NOT_QUIT),
 	("OWScript_EndScriptLoop2", "q", QUIT_CONTINUE_CODE),
 	("OWScript_EndScriptLoop3", "q", QUIT_CONTINUE_CODE),
 	("OWScript_EndScriptLoop4", "q", QUIT_CONTINUE_CODE),

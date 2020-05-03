@@ -3196,13 +3196,19 @@ MasonLabPressedA: ; d565 (3:5565)
 
 ChallengeMachineObjectTable: ; d572 (3:5572)
 	db 10, 4, NORTH
-	dw OWSequence_d57d
+	dw OWSequence_ChallengeMachine
 	db 12, 4, NORTH
-	dw OWSequence_d57d
+	dw OWSequence_ChallengeMachine
 	db $00
 
-OWSequence_d57d: ; d57d (3:557d)
-	INCROM $d57d, $d753
+OWSequence_ChallengeMachine: ; d57d (3:557d)
+	start_script
+	run_script Func_ccdc
+	tx Text05bd
+	run_script Func_d43d
+	run_script OWScript_QuitScriptFully
+
+	INCROM $d583, $d753
 
 OWSequence_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
