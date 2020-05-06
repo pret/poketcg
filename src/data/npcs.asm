@@ -1355,7 +1355,7 @@ Tech8Data:
 	db $00
 	db $00
 Data_11f18:
-	db NPC_11F18
+	db NPC_TORCH
 	db $26
 	db $3a
 	db $3a

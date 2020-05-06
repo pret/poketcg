@@ -179,7 +179,7 @@ const_value = const_value+1 ; DRMASON duplicate
 	const NPC_GUIDE                       ; $64
 	const NPC_TECH7                       ; $65
 	const NPC_TECH8                       ; $66
-	const NPC_11F18                       ; $67
+	const NPC_TORCH                       ; $67
 	const NPC_LEGEND_CARDS_TOP_LEFT       ; $68
 	const NPC_LEGEND_CARDS_TOP_RIGHT      ; $69
 	const NPC_LEGEND_CARDS_LEFT_SPARK     ; $6a
