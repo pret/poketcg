@@ -10800,7 +10800,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 	ret
 
 Func_3917: ; 3917 (0:3917)
-	ld a, EVENT_RECEIVED_LEGEND_CARDS
+	ld a, EVENT_RECEIVED_LEGENDARY_CARD
 	farcall GetEventFlagValue
 	call EnableSRAM
 	ld [s0a00a], a

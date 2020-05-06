@@ -180,12 +180,12 @@ const_value = const_value+1 ; DRMASON duplicate
 	const NPC_TECH7                       ; $65
 	const NPC_TECH8                       ; $66
 	const NPC_TORCH                       ; $67
-	const NPC_LEGEND_CARDS_TOP_LEFT       ; $68
-	const NPC_LEGEND_CARDS_TOP_RIGHT      ; $69
-	const NPC_LEGEND_CARDS_LEFT_SPARK     ; $6a
-	const NPC_LEGEND_CARDS_BOTTOM_LEFT    ; $6b
-	const NPC_LEGEND_CARDS_BOTTOM_RIGHT   ; $6c
-	const NPC_LEGEND_CARDS_RIGHT_SPARK    ; $6d
+	const NPC_LEGENDARY_CARD_TOP_LEFT     ; $68
+	const NPC_LEGENDARY_CARD_TOP_RIGHT    ; $69
+	const NPC_LEGENDARY_CARD_LEFT_SPARK   ; $6a
+	const NPC_LEGENDARY_CARD_BOTTOM_LEFT  ; $6b
+	const NPC_LEGENDARY_CARD_BOTTOM_RIGHT ; $6c
+	const NPC_LEGENDARY_CARD_RIGHT_SPARK  ; $6d
 	const NPC_11F49                       ; $6e
 const_value = const_value+1 ; NPC_11F49 duplicate
 	const NPC_MURRAY2                     ; $70

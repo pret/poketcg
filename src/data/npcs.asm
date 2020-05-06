@@ -1362,42 +1362,42 @@ Data_11f18:
 	db $10
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f1f:
-	db NPC_LEGEND_CARDS_TOP_LEFT
+	db NPC_LEGENDARY_CARD_TOP_LEFT
 	db $27
 	db $3b
 	db $41
 	db $50
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f26:
-	db NPC_LEGEND_CARDS_TOP_RIGHT
+	db NPC_LEGENDARY_CARD_TOP_RIGHT
 	db $27
 	db $3c
 	db $42
 	db $50
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f2d:
-	db NPC_LEGEND_CARDS_LEFT_SPARK
+	db NPC_LEGENDARY_CARD_LEFT_SPARK
 	db $27
 	db $3d
 	db $43
 	db $50
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f34:
-	db NPC_LEGEND_CARDS_BOTTOM_LEFT
+	db NPC_LEGENDARY_CARD_BOTTOM_LEFT
 	db $27
 	db $3e
 	db $44
 	db $50
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f3b:
-	db NPC_LEGEND_CARDS_BOTTOM_RIGHT
+	db NPC_LEGENDARY_CARD_BOTTOM_RIGHT
 	db $27
 	db $3f
 	db $45
 	db $50
 	dw NoOverworldSequence ; Pointer to OWScript
 Data_11f42:
-	db NPC_LEGEND_CARDS_RIGHT_SPARK
+	db NPC_LEGENDARY_CARD_RIGHT_SPARK
 	db $27
 	db $40
 	db $46

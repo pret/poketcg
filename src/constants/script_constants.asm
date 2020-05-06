@@ -33,7 +33,7 @@
 	const EVENT_FLAG_1F                         ; $1f
 	const EVENT_FLAG_20                         ; $20
 	const EVENT_FLAG_21                         ; $21
-	const EVENT_RECEIVED_LEGEND_CARDS           ; $22
+	const EVENT_RECEIVED_LEGENDARY_CARD         ; $22
 	const EVENT_FLAG_23                         ; $23
 	const EVENT_FLAG_24                         ; $24
 	const EVENT_FLAG_25                         ; $25

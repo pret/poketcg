@@ -1366,7 +1366,7 @@ Func_ca0e: ; ca0e (3:4a0e)
 	ld a, [wd32e]
 	cp $b
 	jr z, .asm_ca68
-	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	or a
 	jr nz, .asm_ca4a
 	get_flag_value EVENT_FLAG_40
@@ -1626,7 +1626,7 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def $05, %00001111 ; EVENT_FLAG_1F
 	flag_def $06, %11110000 ; EVENT_FLAG_20
 	flag_def $06, %00001100 ; EVENT_FLAG_21
-	flag_def $06, %00000010 ; EVENT_RECEIVED_LEGEND_CARDS
+	flag_def $06, %00000010 ; EVENT_RECEIVED_LEGENDARY_CARD
 	flag_def $06, %00000001 ; EVENT_FLAG_23
 	flag_def $07, %11000000 ; EVENT_FLAG_24
 	flag_def $07, %00100000 ; EVENT_FLAG_25
@@ -2683,11 +2683,11 @@ Func_d209: ; d209 (3:5209)
 	ld a, [hl]
 	call MaxOutEventFlag
 	pop bc
-	ld hl, LegendCards
+	ld hl, LegendaryCards
 	ld a, c
 	jr asm_d1c6
 
-LegendCards: ; d234 (3:5234)
+LegendaryCards: ; d234 (3:5234)
 	db ZAPDOS3
 	tx Text03f0
 	db MOLTRES2
@@ -3187,7 +3187,7 @@ MasonLabCloseTextBox: ; d55e (3:555e)
 
 ; Lets you access the Challenge Machine if available
 MasonLabPressedA: ; d565 (3:5565)
-	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	or a
 	ret z
 	ld hl, ChallengeMachineObjectTable
@@ -3500,7 +3500,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	db EVENT_FLAG_39
 	dw .ows_db5a
 	run_script OWScript_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGEND_CARDS
+	db EVENT_RECEIVED_LEGENDARY_CARD
 	dw .ows_dc3e
 .ows_db5a
 	run_script OWScript_JumpIfFlagNonzero2
@@ -3542,7 +3542,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	run_script OWScript_ZeroOutFlagValue
 	db EVENT_FLAG_38
 	run_script OWScript_JumpIfFlagZero2
-	db EVENT_RECEIVED_LEGEND_CARDS
+	db EVENT_RECEIVED_LEGENDARY_CARD
 	dw .ows_db8d
 	run_script OWScript_MaxOutFlagValue
 	db EVENT_FLAG_39
@@ -3717,7 +3717,7 @@ OWSequence_Ishihara: ; db4a (3:5b4a)
 	tx Text073e
 
 Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
-	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	cp $01
 	ccf
 	ret
@@ -5389,7 +5389,7 @@ OWSequence_Chap5: ; f0b0 (3:70b0)
 
 Preload_ChallengeHallLobbyRonald1: ; f0b4 (3:70b4)
 	zero_flag_value2 EVENT_FLAG_58
-	get_flag_value EVENT_RECEIVED_LEGEND_CARDS
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	or a
 	jr nz, .asm_f0ff
 	get_flag_value EVENT_FLAG_59
@@ -6310,10 +6310,10 @@ HallOfHonorLoadMap: ; fbdb (3:7bdb)
 OWSequence_fbf1: ; fbf1 (3:7bf1)
 	start_script
 	run_script OWScript_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGEND_CARDS
+	db EVENT_RECEIVED_LEGENDARY_CARD
 	dw .ows_fc10
 	run_script OWScript_MaxOutFlagValue
-	db EVENT_RECEIVED_LEGEND_CARDS
+	db EVENT_RECEIVED_LEGENDARY_CARD
 	run_script Func_ccdc
 	tx Text05b8
 	run_script OWScript_GiveCard
