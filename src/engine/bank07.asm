@@ -194,11 +194,11 @@ Func_1c485: ; 1c485 (7:4485)
 	ret
 
 Func_1c4fa: ; 1c4fa (7:44fa)
-	cp RONALD1
+	cp NPC_RONALD1
 	jr z, .asm_1c508
-	cp RONALD2
+	cp NPC_RONALD2
 	jr z, .asm_1c508
-	cp RONALD3
+	cp NPC_RONALD3
 	jr z, .asm_1c508
 	or a
 	ret

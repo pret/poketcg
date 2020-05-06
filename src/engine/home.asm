@@ -11106,7 +11106,7 @@ HandleMoveModeAPress: ; 3a5e (0:3a5e)
 	ret
 .noMatch
 	pop hl
-	ld bc, LEVEL_OBJECT_SIZE - 1
+	ld bc, MAP_OBJECT_SIZE - 1
 	add hl, bc
 	pop bc
 	jr .findAPressMatchLoop

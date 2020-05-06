@@ -3164,8 +3164,8 @@ MasonLaboratoryAfterDuel: ; d53b (3:553b)
 	ret
 
 .after_duel_table
-	db SAM
-	db SAM
+	db NPC_SAM
+	db NPC_SAM
 	dw $568a
 	dw $569f
 	db $00
@@ -3174,7 +3174,7 @@ MasonLabLoadMap: ; d549 (3:5549)
 	get_flag_value EVENT_FLAG_3E
 	cp $03
 	ret nc
-	ld a, DRMASON
+	ld a, NPC_DRMASON
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	ld bc, OWSequence_EnterLabFirstTime
@@ -3243,7 +3243,7 @@ OWSequence_EnterLabFirstTime: ; d753 (3:5753)
 	tx Text05e3
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db SAM
+	db NPC_SAM
 	dw OWSequence_d779
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -3255,7 +3255,7 @@ OWSequence_d779: ; d779 (03:5779)
 	run_script OWScript_PrintTextString
 	tx Text05e4
 	run_script OWScript_SetDialogName
-	db DRMASON
+	db NPC_DRMASON
 	run_script OWScript_PrintTextString
 	tx Text05e5
 	run_script OWScript_CloseTextBox
@@ -3267,7 +3267,7 @@ OWSequence_d779: ; d779 (03:5779)
 	db $03
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db DRMASON
+	db NPC_DRMASON
 	dw OWSequence_d794
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -3402,7 +3402,7 @@ OWSequence_d794: ; d794 (3:5794)
 	db $01
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db SAM
+	db NPC_SAM
 	dw OWSequence_d827
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -3760,8 +3760,8 @@ FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	call FindEndOfBattleScript
 	ret
 .after_duel_table
-	db IMAKUNI
-	db IMAKUNI
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
 	dw OWSequence_BeatImakuni
 	dw OWSequence_LostToImakuni
 	db $00
@@ -4023,7 +4023,7 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	get_flag_value EVENT_JOSHUA_STATE
 	cp $2
 	ret nc
-	ld a, JOSHUA
+	ld a, NPC_JOSHUA
 	ld [wTempNPC], a
 	ld bc, OWSequence_NotReadyToSeeAmy
 	jp SetNextNPCAndOWSequence
@@ -4034,23 +4034,23 @@ WaterClubAfterDuel: ;e157 (3:6157)
 	ret
 
 .after_duel_table
-	db SARA
-	db SARA
+	db NPC_SARA
+	db NPC_SARA
 	dw OWSequence_BeatSara
 	dw OWSequence_LostToSara
 
-	db AMANDA
-	db AMANDA
+	db NPC_AMANDA
+	db NPC_AMANDA
 	dw OWSequence_BeatAmanda
 	dw OWSequence_LostToAmanda
 
-	db JOSHUA
-	db JOSHUA
+	db NPC_JOSHUA
+	db NPC_JOSHUA
 	dw OWSequence_BeatJoshua
 	dw OWSequence_LostToJoshua
 
-	db AMY
-	db AMY
+	db NPC_AMY
+	db NPC_AMY
 	dw OWSequence_BeatAmy
 	dw OWSequence_LostToAmy
 	db $00
@@ -4339,7 +4339,7 @@ OWSequence_BeatJoshua: ; e26c (3:626c)
 	db $00
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db AMY
+	db NPC_AMY
 	dw OWSequence_MeetAmy
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -4383,11 +4383,11 @@ OWSequence_MeetAmy: ; e2d1 (3:62d1)
 	run_script OWScript_PrintTextString
 	tx Text044b
 	run_script OWScript_SetDialogName
-	db JOSHUA
+	db NPC_JOSHUA
 	run_script OWScript_PrintTextString
 	tx Text044c
 	run_script OWScript_SetDialogName
-	db AMY
+	db NPC_AMY
 	run_script OWScript_PrintTextString
 	tx Text044d
 	run_script OWScript_CloseTextBox
@@ -4418,7 +4418,7 @@ OWSequence_MeetAmy: ; e2d1 (3:62d1)
 	db NORTH
 	db $01
 	run_script OWScript_MoveArbitraryNPC
-	db JOSHUA
+	db NPC_JOSHUA
 	dw NPCMovement_e2ab
 	run_script OWScript_PrintTextString
 	tx Text044e
@@ -4564,18 +4564,18 @@ FindEndOfBattleScript: ; e52c (3:652c)
 ; 0xe553
 
 GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
-	db MICHAEL
-	db MICHAEL
+	db NPC_MICHAEL
+	db NPC_MICHAEL
 	dw $6597
 	dw $65ab
 
-	db RONALD2
-	db RONALD2
+	db NPC_RONALD2
+	db NPC_RONALD2
 	dw OWSequence_BeatFirstRonaldFight
 	dw OWSequence_LostToFirstRonaldFight
 
-	db RONALD3
-	db RONALD3
+	db NPC_RONALD3
+	db NPC_RONALD3
 	dw OWSequence_BeatSecondRonaldFight
 	dw OWSequence_LostToSecondRonaldFight
 	db $00
@@ -4588,8 +4588,8 @@ GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 	ret
 
 .after_duel_table
-	db BRITTANY
-	db BRITTANY
+	db NPC_BRITTANY
+	db NPC_BRITTANY
 	dw OWSequence_BeatBrittany
 	dw OWSequence_LostToBrittany
 	db $00
@@ -4840,13 +4840,13 @@ ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	jp FindEndOfBattleScript
 
 .after_duel_table
-	db RONALD2
-	db RONALD2
+	db NPC_RONALD2
+	db NPC_RONALD2
 	dw OWSequence_BeatFirstRonaldFight
 	dw OWSequence_LostToFirstRonaldFight
 
-	db RONALD3
-	db RONALD3
+	db NPC_RONALD3
+	db NPC_RONALD3
 	dw OWSequence_BeatSecondRonaldFight
 	dw OWSequence_LostToSecondRonaldFight
 	db $00
@@ -4860,7 +4860,7 @@ LoadClubEntrance: ; e809 (3:6809)
 	ret
 
 TryFirstRonaldEncounter: ; e813 (3:6813)
-	ld a, RONALD1
+	ld a, NPC_RONALD1
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	ret c
@@ -4868,7 +4868,7 @@ TryFirstRonaldEncounter: ; e813 (3:6813)
 	jp SetNextNPCAndOWSequence
 
 TryFirstRonaldFight: ; e822 (3:6822)
-	ld a, RONALD2
+	ld a, NPC_RONALD2
 	ld [$d3ab], a
 	call FindLoadedNPC
 	ret c
@@ -4879,7 +4879,7 @@ TryFirstRonaldFight: ; e822 (3:6822)
 	jp SetNextNPCAndOWSequence
 
 TrySecondRonaldFight: ; e837 (3:6837)
-	ld a, RONALD3
+	ld a, NPC_RONALD3
 	ld [$d3ab], a
 	call FindLoadedNPC
 	ret c
@@ -5484,7 +5484,7 @@ ChallengeHallAfterDuel: ; f239 (3:7239)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	ld a, HOST
+	ld a, NPC_HOST
 	ld [wTempNPC], a
 	jp SetNextNPCAndOWSequence
 
@@ -5496,7 +5496,7 @@ ChallengeHallLoadMap: ; f258 (3:7258)
 	get_flag_value EVENT_FLAG_47
 	or a
 	ret z
-	ld a, HOST
+	ld a, NPC_HOST
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	ld bc, OWSequence_f433
@@ -5877,7 +5877,7 @@ LostAtChallengeHall: ; f392 (3:7392)
 .ows_f3e2
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db CLERK12
+	db NPC_CLERK12
 	dw OWSequence_f3e9
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -5939,7 +5939,7 @@ OWJump_f410: ; f410 (4:7410)
 	run_script OWScript_PrintTextString
 	tx Text0539
 	run_script OWScript_SetDialogName
-	db RONALD1
+	db NPC_RONALD1
 	run_script OWScript_JumpIfFlagEqual
 	db EVENT_FLAG_44
 	db $03
@@ -5953,7 +5953,7 @@ OWJump_f410: ; f410 (4:7410)
 	tx Text053b
 .ows_f42e
 	run_script OWScript_SetDialogName
-	db HOST
+	db NPC_HOST
 	run_script OWScript_Jump
 	dw LostAtChallengeHall.ows_f3ae
 
@@ -6045,7 +6045,7 @@ WonAtChallengeHall; f441 (3:7441)
 	tx Text0542
 	tx Text0543
 	run_script OWScript_SetDialogName
-	db HOST
+	db NPC_HOST
 	run_script OWScript_CloseTextBox
 .ows_f4a1
 	run_script OWScript_PrintTextString
@@ -6144,7 +6144,7 @@ OWJump_f4db: ; f4db (3:74db)
 	tx Text054e
 	tx Text054f
 	run_script OWScript_SetDialogName
-	db HOST
+	db NPC_HOST
 	run_script OWScript_CloseTextBox
 	run_script OWScript_MoveWramNPC
 	dw NPCMovement_f4c9
@@ -6209,7 +6209,7 @@ OWJump_f4db: ; f4db (3:74db)
 .ows_f552
 	run_script OWScript_CloseAdvancedTextBox
 	run_script OWScript_SetNextNPCandOWSequence
-	db CLERK12
+	db NPC_CLERK12
 	dw OWSequence_f3e9
 	run_script OWScript_EndScriptLoop1
 	ret
@@ -6506,12 +6506,12 @@ Func_fcad: ; fcad (3:7cad)
 
 .ows_fcd5
 	run_script OWScript_MoveArbitraryNPC
-	db GIFT_CENTER_CLERK
+	db NPC_GIFT_CENTER_CLERK
 	dw NPCMovement_fce1
 	run_script OWScript_PrintTextString
 	tx Text06d6
 	run_script OWScript_MoveArbitraryNPC
-	db GIFT_CENTER_CLERK
+	db NPC_GIFT_CENTER_CLERK
 	dw NPCMovement_fce3
 	run_script OWScript_QuitScriptFully
 

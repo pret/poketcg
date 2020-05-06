@@ -35,10 +35,10 @@
 	const HALL_OF_HONOR           ; $21
 
 
-; Size of map data. See data/npc_map_data.asm and data/level_objects.asm
+; Size of map data. See data/npc_map_data.asm and data/map_objects.asm
 ; for more info on what these represent
 NPC_MAP_SIZE          EQU $06
-LEVEL_OBJECT_SIZE     EQU $09
+MAP_OBJECT_SIZE       EQU $09
 
 ; Most of these aren't fully understood so the names aren't great
 MAP_SCRIPT_SIZE          EQU $0f

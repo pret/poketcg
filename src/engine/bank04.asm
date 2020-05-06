@@ -1591,7 +1591,7 @@ Func_13485: ; 13485 (4:7485)
 	INCROM $134b1, $1372f
 
 INCLUDE "data/npc_map_data.asm"
-INCLUDE "data/level_objects.asm"
+INCLUDE "data/map_objects.asm"
 
 rept $119
 	db $ff
