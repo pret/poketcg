@@ -1,25 +1,25 @@
 INCLUDE "data/deck_ai_pointers.asm"
 
-PointerTable_1406a: ; 1406a (5:406a)
+AIActionTable_Unreferenced: ; 1406a (5:406a)
 	dw $406c
-	dw Func_14078
-	dw Func_14078
-	dw Func_1409e
-	dw $40a2
-	dw $40a6
-	dw $40aa
+	dw .do_turn
+	dw .do_turn
+	dw .star_duel
+	dw .forced_switch
+	dw .ko_switch
+	dw .take_prize
 
-Func_14078: ; 14078 (5:4078)
+.do_turn ; 14078 (5:4078)
 	call AIDecidePlayPokemonCard
 	call AIDecideWhetherToRetreat
-	jr nc, .asm_14091
+	jr nc, .try_attack
 	call AIDecideBenchPokemonToSwitchTo
-	call AIChooseEnergyToDiscardForRetreatCost
+	call AITryToRetreat
 	call AIDecideWhetherToRetreat
-	jr nc, .asm_14091
+	jr nc, .try_attack
 	call AIDecideBenchPokemonToSwitchTo
-	call AIChooseEnergyToDiscardForRetreatCost
-.asm_14091
+	call AITryToRetreat
+.try_attack
 	call AIProcessAndTryToPlayEnergy
 	call AIProcessAndTryToUseAttack
 	ret c
@@ -28,8 +28,25 @@ Func_14078: ; 14078 (5:4078)
 	ret
 ; 0x1409e
 
-Func_1409e: ; 1409e (5:409e)
-	INCROM $1409e, $140ae
+.star_duel ; 1409e (5:409e)
+	call AIPlayInitialBasicCards
+	ret
+; 0x140a2
+
+.forced_switch ; 140a2 (5:40a2)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x140a6
+
+.ko_switch ; 140a6 (5:40a6)
+	call AIDecideBenchPokemonToSwitchTo
+	ret
+; 0x140aa
+
+.take_prize ; 140aa (5:40aa)
+	call AIPickPrizeCards
+	ret
+; 0x140ae
 
 ; returns carry if damage dealt from any of
 ; a card's moves KOs defending Pokémon
@@ -290,7 +307,7 @@ PickRandomBenchPokemon: ; 141da (5:41da)
 	ret
 ; 0x141e5
 
-_AIPickPrizeCards: ; 141e5 (5:41e5)
+AIPickPrizeCards: ; 141e5 (5:41e5)
 	ld a, [wNumberPrizeCardsToTake]
 	ld b, a
 .loop
@@ -578,7 +595,7 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	db FIGHTING_ENERGY
 	db PSYCHIC_ENERGY
 	db DOUBLE_COLORLESS_ENERGY
-	
+
 Func_14323: ; 14323 (5:4323)
 	INCROM $14323, $1433d
 
@@ -1060,13 +1077,13 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 ;								 damage as the receiver
 CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
 	ld hl, wAIMinDamage
-	call _CalculateDamage_FromDefendingPokemon
+	call .CalculateDamage
 	ld hl, wAIMaxDamage
-	call _CalculateDamage_FromDefendingPokemon
+	call .CalculateDamage
 	ld hl, wDamage
-;	fallthrough
+	; fallthrough
 
-_CalculateDamage_FromDefendingPokemon: ; 1459b (5:459b)
+.CalculateDamage ; 1459b (5:459b)
 	ld e, [hl]
 	ld d, $00
 	push hl
@@ -1196,62 +1213,62 @@ AIProcessHandTrainerCards: ; 14663 (5:4663)
 	farcall _AIProcessHandTrainerCards
 	ret
 
-; GENERAL DECK POINTER LIST - Not sure on all of these.
-; This is an example of an AI pointer table, there's one for each AI type.
-PointerTable_14668: ; 14668 (05:4668)
-	dw AIMainTurnLogic ; not used
-	dw AIMainTurnLogic ; general AI for battles
-	dw AIDuelStart     ; basic pokemon placement / cheater shuffling on better AI
-	dw AIRetreatLogic  ; deciding which Bench Pokemon to switch to
-	dw Func_14683
-	dw AIPickPrizeCards
+AIActionTable_GeneralDecks: ; 14668 (05:4668)
+	dw .do_turn ; unused
+	dw .do_turn
+	dw .start_duel
+	dw .forced_switch
+	dw .ko_switch
+	dw .take_prize
 
-AIMainTurnLogic: ; 14674 (5:4674)
-	call _AIMainTurnLogic
+.do_turn ; 14674 (5:4674)
+	call AIMainTurnLogic
 	ret
 
-AIDuelStart: ; 14678 (5:4678)
+.start_duel ; 14678 (5:4678)
 	call InitAIDuelVars
 	call AIPlayInitialBasicCards
 	ret
 
-AIRetreatLogic: ; 1467f (5:467f)
+.forced_switch ; 1467f (5:467f)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-Func_14683: ; 14683 (5:4683)
+.ko_switch ; 14683 (5:4683)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
 
-AIPickPrizeCards: ; 14687 (5:4687)
-	call _AIPickPrizeCards
+.take_prize: ; 14687 (5:4687)
+	call AIPickPrizeCards
 	ret
 
 ; handle AI routines for a whole turn
-_AIMainTurnLogic: ; 1468b (5:468b)
+AIMainTurnLogic: ; 1468b (5:468b)
+; initialize variables
 	call InitAITurnVars
-
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	farcall HandleAIAntiMewtwoDeckStrategy
 	jp nc, .try_attack
-
+; handle Pkmn Powers
 	farcall HandleAIGoGoRainDanceEnergy
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
-	ret c
-
+	ret c ; return if turn ended
 	farcall HandleAICowardice
-
+; process Trainer cards
+; phase 2 through 4.
 	ld a, AI_TRAINER_CARD_PHASE_02
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_03
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
+; play Pokemon from hand
 	call AIDecidePlayPokemonCard
-	ret c
-
+	ret c ; return if turn ended
+; process Trainer cards
+; phase 5 through 12.
 	ld a, AI_TRAINER_CARD_PHASE_05
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_06
@@ -1260,39 +1277,38 @@ _AIMainTurnLogic: ; 1468b (5:468b)
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_08
 	call AIProcessHandTrainerCards
-	call Func_14786
+	call AIProcessRetreat
 	ld a, AI_TRAINER_CARD_PHASE_10
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_11
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_12
 	call AIProcessHandTrainerCards
-
+; play Energy card if possible
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .already_played_energy_1
+	jr nz, .skip_energy_attach_1
 	call AIProcessAndTryToPlayEnergy
-
-.already_played_energy_1
+.skip_energy_attach_1
+; play Pokemon from hand again
 	call AIDecidePlayPokemonCard
-
+; handle Pkmn Powers again
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
-	ret c
+	ret c ; return if turn ended
 	farcall HandleAIGoGoRainDanceEnergy
-	ld a, $0d ; attack
+	ld a, AI_ENERGY_TRANS_ATTACK
 	farcall HandleAIEnergyTrans
-
+; process Trainer cards phases 13 and 15
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_15
 	call AIProcessHandTrainerCards
-
+; if used Professor Oak, process new hand
+; if not, then proceed to attack.
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_PROFESSOR_OAK
 	jr z, .try_attack
-
-; used Professor Oak
 	ld a, AI_TRAINER_CARD_PHASE_01
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_02
@@ -1302,8 +1318,7 @@ _AIMainTurnLogic: ; 1468b (5:468b)
 	ld a, AI_TRAINER_CARD_PHASE_04
 	call AIProcessHandTrainerCards
 	call AIDecidePlayPokemonCard
-	ret c
-
+	ret c ; return if turn ended
 	ld a, AI_TRAINER_CARD_PHASE_05
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_06
@@ -1312,35 +1327,33 @@ _AIMainTurnLogic: ; 1468b (5:468b)
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_08
 	call AIProcessHandTrainerCards
-	call Func_14786
+	call AIProcessRetreat
 	ld a, AI_TRAINER_CARD_PHASE_10
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_11
 	call AIProcessHandTrainerCards
 	ld a, AI_TRAINER_CARD_PHASE_12
-
 	call AIProcessHandTrainerCards
 	ld a, [wAlreadyPlayedEnergy]
 	or a
-	jr nz, .already_played_energy_2
+	jr nz, .skip_energy_attach_2
 	call AIProcessAndTryToPlayEnergy
-.already_played_energy_2
+.skip_energy_attach_2
 	call AIDecidePlayPokemonCard
-
 	farcall HandleAIDamageSwap
 	farcall HandleAIPkmnPowers
-	ret c
+	ret c ; return if turn ended
 	farcall HandleAIGoGoRainDanceEnergy
-	ld a, $0d ; attack
+	ld a, AI_ENERGY_TRANS_ATTACK
 	farcall HandleAIEnergyTrans
-
 	ld a, AI_TRAINER_CARD_PHASE_13
 	call AIProcessHandTrainerCards
-
+	; skip AI_TRAINER_CARD_PHASE_15
 .try_attack
-	ld a, $0e
+	ld a, AI_ENERGY_TRANS_TO_BENCH
 	farcall HandleAIEnergyTrans
-
+; attack if possible, if not,
+; finish turn without attacking.
 	call AIProcessAndTryToUseAttack
 	ret c ; return if AI attacked
 	ld a, OPPACTION_FINISH_NO_ATTACK
@@ -1348,11 +1361,11 @@ _AIMainTurnLogic: ; 1468b (5:468b)
 	ret
 ; 0x14786
 
-; handles retreating
-Func_14786: ; 14786 (5:4786)
-	ld a, [wce03]
+; handles AI retreating logic
+AIProcessRetreat: ; 14786 (5:4786)
+	ld a, [wAIRetreatedThisTurn]
 	or a
-	ret nz
+	ret nz ; return, already retreated this turn
 
 	call AIDecideWhetherToRetreat
 	ret nc ; return if not retreating
@@ -1360,74 +1373,88 @@ Func_14786: ; 14786 (5:4786)
 	call AIDecideBenchPokemonToSwitchTo
 	ret c ; return if no Bench Pokemon
 
-	ld [wcdd5], a
+; store Play Area to retreat to and
+; set wAIRetreatedThisTurn to true
+	ld [wAIPlayAreaCardToSwitch], a
 	ld a, $01
-	ld [wce03], a
+	ld [wAIRetreatedThisTurn], a
 
+; if AI can use Switch from hand, use it instead...
 	ld a, AI_TRAINER_CARD_PHASE_09
 	call AIProcessHandTrainerCards
 	ld a, [wPreviousAIFlags]
 	and AI_FLAG_USED_SWITCH
 	jr nz, .used_switch
-	ld a, [wcdd5]
-	call AIChooseEnergyToDiscardForRetreatCost
+; ... else try retreating normally.
+	ld a, [wAIPlayAreaCardToSwitch]
+	call AITryToRetreat
 	ret
 
 .used_switch
+; if AI used switch, unset its AI flag
 	ld a, [wPreviousAIFlags]
 	and ~AI_FLAG_USED_SWITCH ; clear Switch flag
 	ld [wPreviousAIFlags], a
-	ld a, $09 ; retreat
+
+; bug, this doesn't make sense being here, since at this point
+; Switch Trainer card was already used to retreat the Pokemon.
+; what the routine will do is just transfer Energy cards to
+; the Arena Pokemon for the purpose of retreating, and
+; then not actually retreat, resulting in unusual behaviour.
+; this would only work placed right after the AI checks whether
+; they have Switch card in hand to use and doesn't have one.
+; (and probably that was the original intention.)
+	ld a, AI_ENERGY_TRANS_RETREAT ; retreat
 	farcall HandleAIEnergyTrans
 	ret
 ; 0x147bd
 
-PointerTable_147bd: ; 147bd (05:47bd)
-	dw Func_147c9
-	dw Func_147c9
-	dw Func_147d6
-	dw Func_147da
-	dw Func_147e7
-	dw Func_147f4
+AIActionTable_SamPractice: ; 147bd (05:47bd)
+	dw .do_turn ; unused
+	dw .do_turn
+	dw .start_duel
+	dw .forced_switch
+	dw .ko_switch
+	dw .take_prize
 
-Func_147c9: ; 147c9 (5:47c9)
+.do_turn ; 147c9 (5:47c9)
 	call IsAIPracticeScriptedTurn
-	jr nc, .scripted
+	jr nc, .scripted_1
 ; not scripted, use AI main turn logic
-	call _AIMainTurnLogic
+	call AIMainTurnLogic
 	ret
-.scripted ; use scripted actions instead
+.scripted_1 ; use scripted actions instead
 	call AIPerformSciptedTurn
 	ret
 ; 0x147d6
 
-Func_147d6: ; 147d6 (5:47d6)
+.start_duel ; 147d6 (5:47d6)
 	call Func_14801
 	ret
 ; 0x147da
 
-Func_147da: ; 147da (5:47da)
+.forced_switch ; 147da (5:47da)
 	call IsAIPracticeScriptedTurn
-	jr nc, .scripted
+	jr nc, .scripted_2
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-.scripted
+.scripted_2
 	call PickRandomBenchPokemon
 	ret
 ; 0x147e7
 
-Func_147e7: ; 147e7 (5:47e7)
+.ko_switch: ; 147e7 (5:47e7)
 	call IsAIPracticeScriptedTurn
-	jr nc, .scripted
+	jr nc, .scripted_3
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-.scripted
+.scripted_3
 	call GetPlayAreaLocationOfRaticateOrRattata
 	ret
 ; 0x147f4
 
-Func_147f4: ; 147f4 (5:47f4)
-	call _AIPickPrizeCards
+.take_prize: ; 147f4 (5:47f4)
+	call AIPickPrizeCards
 	ret
 ; 0x147f8
 
@@ -1585,7 +1612,7 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	inc a ; PLAY_AREA_BENCH_2
 
 .retreat
-	call AIChooseEnergyToDiscardForRetreatCost
+	call AITryToRetreat
 	ret
 ; 0x148cc
 
@@ -1732,7 +1759,7 @@ InitAITurnVars: ; 15649 (5:5649)
 	ld [wPreviousAIFlags], a
 	ld [wcddb], a
 	ld [wcddc], a
-	ld [wce03], a
+	ld [wAIRetreatedThisTurn], a
 
 ; checks if the Player used an attack last turn
 ; and if it was the second attack of their card.
@@ -2994,7 +3021,7 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 ; handle its effect to discard itself instead of retreating.
 ; input:
 ;	- a = Play Area location (PLAY_AREA_*) of card to retreat to.
-AIChooseEnergyToDiscardForRetreatCost: ; 15d4f (5:5d4f)
+AITryToRetreat: ; 15d4f (5:5d4f)
 	push af
 	ld a, [wAIPlayEnergyCardForRetreat]
 	or a
@@ -7104,8 +7131,7 @@ CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 ; sets up the inital hand of boss deck.
 ; always draws at least 2 Basic Pokemon cards and 2 Energy cards.
 ; also sets up so that the next cards to be drawn have
-; some minimum number of Basic Pokemon and Energy cards
-; and avoids deck-specific list of cards.
+; some minimum number of Basic Pokemon and Energy cards.
 SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 ; shuffle all hand cards in deck
 	ld a, DUELVARS_HAND
@@ -7170,7 +7196,7 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	cp 2
 	jr c, .shuffle_deck
 
-; now check the following 6 cards.
+; now check the following 6 cards (prize cards).
 ; re-shuffle deck if any of these cards is listed in wcda8.
 	ld b, 6
 .check_card_ids

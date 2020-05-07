@@ -6223,9 +6223,13 @@ AIDecide_PokemonTrader_Flamethrower: ; 22133 (8:6133)
 ; 0x2219b
 
 ; handle AI routines for Energy Trans.
-; depending on input, AI can use Energy Trans to
-; give Arena or Bench cards some Grass energy cards,
-; depending whether it's for attack, retreat, etc.
+; uses AI_ENERGY_TRANS_* constants as input:
+;	- AI_ENERGY_TRANS_RETREAT: transfers enough Grass Energy cards to
+;	Arena Pokemon for it to be able to pay the Retreat Cost;
+;	- AI_ENERGY_TRANS_ATTACK: transfers enough Grass Energy cards to
+;	Arena Pokemon for it to be able to use its second attack;
+;	- AI_ENERGY_TRANS_TO_BENCH: transfers all Grass Energy cards from
+;	Arena Pokemon to Bench in case Arena card will be KO'd.
 HandleAIEnergyTrans: ; 2219b (8:619b)
 	ld [wce06], a
 
@@ -6247,12 +6251,13 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ret c ; return if Muk found in any Play Area
 
 	ld a, [wce06]
-	cp $09
+	cp AI_ENERGY_TRANS_RETREAT
 	jr z, .check_retreat
 
-	cp $0e
+	cp AI_ENERGY_TRANS_TO_BENCH
 	jp z, .TransferEnergyToBench
 
+	; AI_ENERGY_TRANS_ATTACK
 	call .CheckEnoughGrassEnergyCardsForAttack
 	ret nc
 	jr .TransferEnergyToArena

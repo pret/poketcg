@@ -246,7 +246,11 @@ AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in det
 
 ; used to determine which Trainer cards for AI
 ; to process in AIProcessHandTrainerCards.
-; aside from a few exceptions, these go in chronological order.
+; these go in chronological order, except for
+; AI_TRAINER_CARD_PHASE_14 which happens just before AI attacks.
+; AI_TRAINER_CARD_PHASE_15 is reserved for Professor Oak card.
+; if Professor Oak is played, all other Trainer card phases
+; are processed again except AI_TRAINER_CARD_PHASE_15.
 	const_def 1
 	const AI_TRAINER_CARD_PHASE_01 ; $1
 	const AI_TRAINER_CARD_PHASE_02 ; $2
@@ -261,10 +265,17 @@ AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in det
 	const AI_TRAINER_CARD_PHASE_11 ; $b
 	const AI_TRAINER_CARD_PHASE_12 ; $c
 	const AI_TRAINER_CARD_PHASE_13 ; $d
-	const AI_TRAINER_CARD_PHASE_14 ; $e
-	const AI_TRAINER_CARD_PHASE_15 ; $f
+	const AI_TRAINER_CARD_PHASE_14 ; $e, just before attack
+	const AI_TRAINER_CARD_PHASE_15 ; $f, for Professor Oak
 
 ; used by wAIBarrierFlagCounter to determine
 ; whether Player is running Mewtwo1 mill deck.
 ; flag set means true, flag not set means false.
 AI_FLAG_MEWTWO_MILL EQU 1 << 7
+
+; defines the behaviour of HandleAIEnergyTrans, for determining
+; whether to move energy cards from the Bench to the Arena or vice-versa
+; and the number of energy cards needed for achieving that.
+AI_ENERGY_TRANS_RETREAT  EQU $9 ; moves energy cards needed for Retreat Cost
+AI_ENERGY_TRANS_ATTACK   EQU $d ; moves energy cards needed for second attack
+AI_ENERGY_TRANS_TO_BENCH EQU $e ; moves energy cards away from Arena card

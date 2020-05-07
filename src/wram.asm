@@ -1290,7 +1290,9 @@ wAIOpponentPrizeCount:: ; cdd3
 wTempCardIDToLook:: ; cdd4
 	ds $1
 
-wcdd5:: ; cdd5
+; when AI decides which Bench Pokemon to switch to
+; it stores it Play Area location here.
+wAIPlayAreaCardToSwitch:: ; cdd5
 	ds $1
 
 ; the index of attack chosen by AI
@@ -1391,7 +1393,10 @@ wce01:: ; ce01
 wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
-wce03:: ; ce03
+; whether AI already retreated this turn or not.
+; 	- $0 has not retreated;
+; 	- $1 has retreated.
+wAIRetreatedThisTurn:: ; ce03
 	ds $1
 
 ; used by AI to store information of Venusaur2
