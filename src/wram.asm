@@ -1184,9 +1184,9 @@ wcda5:: ; cda5
 
 ; this is used by AI in order to determine whether
 ; it should use Pokedex Trainer card.
-; duel starts at 5 and counts up by one every turn.
+; starts with 5 when Duel starts and counts up by 1 every turn.
 ; only when it's higher than 5 is AI allowed to use Pokedex,
-; in which case it set the counter to 0.
+; in which case it sets the counter to 0.
 ; this stops the AI from using Pokedex right after using another one
 ; while still drawing cards that were ordered.
 wAIPokedexCounter:: ; cda6
@@ -1201,28 +1201,47 @@ wAIPokedexCounter:: ; cda6
 wAIBarrierFlagCounter:: ; cda7
 	ds $1
 
-wcda8:: ; cda8
+; pointer to $00-terminated list of card IDs
+; to avoid being placed as prize cards
+; when setting up AI duelist's cards at duel start.
+; (see SetUpBossStartingHandAndDeck)
+wAICardListAvoidPrize:: ; cda8
 	ds $2
 
-wcdaa:: ; cdaa
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Arena
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListArenaPriority:: ; cdaa
 	ds $2
 
-wcdac:: ; cdac
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Bench
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListBenchPriority:: ; cdac
 	ds $2
 
-; pointer to a list of card IDs for sorting AI hand
-wcdae:: ; cdae
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI playing it from Hand
+; to the Bench (see AIDecidePlayPokemonCard)
+wAICardListPlayFromHandPriority:: ; cdae
 	ds $2
 
-wcdb0:: ; cdb0
+; pointer to $00-terminated list of card IDs and AI scores.
+; these are for giving certain cards more or less
+; likelihood of being picked by AI to switch to.
+; (see AIDecideBenchPokemonToSwitchTo)
+wAICardListRetreatBonus:: ; cdb0
 	ds $2
 
-; these seem to hold pointer to some kind of
-; card ID list with attached energy and score
-wcdb2:: ; cdb2
-	ds $1
-wcdb3:: ; cdb3
-	ds $1
+; pointer to $00-terminated list of card IDs,
+; number of energy cards and AI score.
+; these are for giving certain cards more or less
+; likelihood of being picked for AI to attach energy.
+; also has the maximum number of energy cards that
+; the AI is willing to provide for it.
+; (see AIProcessEnergyCards)
+wAICardListEnergyBonus:: ; cdb2
+	ds $2
 
 wcdb4:: ; cdb4
 	ds $1
@@ -1266,7 +1285,7 @@ wFirstAttackAIScore:: ; cdbf
 
 ENDU
 
-	ds $0a
+	ds $a
 
 ; information about the defending Pokémon and
 ; the prize card count on both sides for AI:

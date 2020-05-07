@@ -262,12 +262,12 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	db $00
 
 .store_list_pointers ; 14a4a (5:4a4a)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_play_hand
-	store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_play_hand
+	store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14a81
 
@@ -438,12 +438,12 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	db $00
 
 .store_list_pointers ; 14b6c (5:4b6c)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14b9a
 
@@ -597,12 +597,12 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	db $00
 
 .store_list_pointers ; 14c63 (5:4c63)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14c91
 
@@ -818,12 +818,12 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	db $00
 
 .store_list_pointers ; 14dc1 (5:4dc1)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14def
 
@@ -987,12 +987,12 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	db $00
 
 .store_list_pointers ; 14ee0 (5:4ee0)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14f0e
 
@@ -1068,12 +1068,12 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	db $00
 
 .store_list_pointers ; 14f61 (5:4f61)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x14f8f
 
@@ -1154,12 +1154,12 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 	db $00
 
 .store_list_pointers ; 14feb (5:4feb)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x15019
 
@@ -1236,12 +1236,12 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	db $00
 
 .store_list_pointers ; 1506d (5:506d)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x1509b
 
@@ -1318,12 +1318,12 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	db $00
 
 .store_list_pointers ; 150f4 (5:50f4)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x15122
 
@@ -1406,12 +1406,12 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	db $00
 
 .store_list_pointers ; 1517f (5:517f)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x151ad
 
@@ -1490,12 +1490,12 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	db $00
 
 .store_list_pointers ; 15204 (5:5204)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x15232
 
@@ -1577,12 +1577,12 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	db $00
 
 .store_list_pointers ; 1528f (5:528f)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x152bd
 
@@ -1664,12 +1664,12 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	db $00
 
 .store_list_pointers ; 1531d (5:531d)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x1534b
 
@@ -1763,12 +1763,12 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	db $00
 
 .store_list_pointers ; 153ba (5:53ba)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x153e8
 
@@ -1848,12 +1848,12 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	db $00
 
 .store_list_pointers ; 15441 (5:5441)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_bench
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x1546f
 
@@ -1946,12 +1946,12 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	db $00
 
 .store_list_pointers ; 154d9 (5:54d9)
-	store_list_pointer wcda8, .list_prize
-	store_list_pointer wcdaa, .list_arena
-	store_list_pointer wcdac, .list_bench
-	store_list_pointer wcdae, .list_play_hand
-	; missing store_list_pointer wcdb0, .list_retreat
-	store_list_pointer wcdb2, .list_energy
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_play_hand
+	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ; 0x15507
 

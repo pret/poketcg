@@ -2177,7 +2177,7 @@ RemoveCardIDInList: ; 157f3 (5:57f3)
 ; if Arena card could not be set (due to hand not having any card in its list)
 ; or if list is null, return carry and do not play any cards.
 TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
-	ld de, wcdaa
+	ld de, wAICardListArenaPriority
 	ld a, d
 	or a
 	jr z, .set_carry ; return if null
@@ -2185,14 +2185,14 @@ TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
 ; pick Arena card
 	call CreateHandCardList
 	ld hl, wDuelTempList
-	ld de, wcdaa
+	ld de, wAICardListArenaPriority
 	call .PlayPokemonCardInOrder
 	ret c
 
 ; play Pokemon cards to Bench until there are
 ; a maximum of 3 cards in Play Area.
 .loop
-	ld de, wcdac
+	ld de, wAICardListBenchPriority
 	call .PlayPokemonCardInOrder
 	jr c, .done
 	cp 3
@@ -2960,18 +2960,18 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	cp MYSTERIOUS_FOSSIL
 	jr z, .lower_score_2
 	cp CLEFAIRY_DOLL
-	jr nz, .asm_15d0c
+	jr nz, .ai_score_bonus
 .lower_score_2
 	ld a, 10
 	call SubFromAIScore
 
-.asm_15d0c
+.ai_score_bonus
 	ld b, a
-	ld a, [wcdb0 + 1]
+	ld a, [wAICardListRetreatBonus + 1]
 	or a
 	jr z, .store_score
 	ld h, a
-	ld a, [wcdb0]
+	ld a, [wAICardListRetreatBonus]
 	ld l, a
 
 .loop_ids
@@ -2982,11 +2982,11 @@ AIDecideBenchPokemonToSwitchTo: ; 15b72 (5:5b72)
 	jr nz, .next_id
 	ld a, [hl]
 	cp $80
-	jr c, .asm_15d2b
+	jr c, .subtract_score
 	sub $80
 	call AddToAIScore
 	jr .next_id
-.asm_15d2b
+.subtract_score
 	ld c, a
 	ld a, $80
 	sub c
@@ -4085,17 +4085,17 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 ; 0x1633f
 
 ; goes through $00 terminated list pointed 
-; by wcdae and compares it to each card in hand.
+; by wAICardListPlayFromHandPriority and compares it to each card in hand.
 ; Sorts the hand in wDuelTempList so that the found card IDs
 ; are in the same order as the list pointed by de.
 SortTempHandByIDList: ; 1633f (5:633f)
-	ld a, [wcdae+1]
+	ld a, [wAICardListPlayFromHandPriority+1]
 	or a
 	ret z ; return if list is empty
 
 ; start going down the ID list
 	ld d, a
-	ld a, [wcdae]
+	ld a, [wAICardListPlayFromHandPriority]
 	ld e, a
 	ld c, 0
 .loop_list_id
@@ -4605,7 +4605,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	jr .check_bench
 .check_defending_can_ko
 	call CheckIfDefendingPokemonCanKnockOut
-	jr nc, .asm_165e1
+	jr nc, .ai_score_bonus
 	ld a, 10
 	call SubFromAIScore
 
@@ -4616,10 +4616,10 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	dec a
-	jr nz, .asm_165e1
+	jr nz, .ai_score_bonus
 	ld a, 6
 	call AddToAIScore
-	jr .asm_165e1
+	jr .ai_score_bonus
 
 ; lower AI score by 3 - (bench HP)/10
 ; if bench HP < 30
@@ -4628,20 +4628,20 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	call GetTurnDuelistVariable
 	call CalculateByteTensDigit
 	cp 3
-	jr nc, .asm_165e1
+	jr nc, .ai_score_bonus
 ; hp < 30
 	ld b, a
 	ld a, 3
 	sub b
 	call SubFromAIScore
 
-; check list in wcdb2
-.asm_165e1
-	ld a, [wcdb3]
+; check list in wAICardListEnergyBonus
+.ai_score_bonus
+	ld a, [wAICardListEnergyBonus + 1]
 	or a
-	jr z, .check_boss_deck
+	jr z, .check_boss_deck ; is null
 	ld h, a
-	ld a, [wcdb2]
+	ld a, [wAICardListEnergyBonus]
 	ld l, a
 
 	push hl
@@ -7137,12 +7137,12 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	ld a, DUELVARS_HAND
 	call GetTurnDuelistVariable
 	ld b, STARTING_HAND_SIZE
-.asm_172b6
+.loop_hand
 	ld a, [hl]
 	call RemoveCardFromHand
 	call ReturnCardToDeck
 	dec b
-	jr nz, .asm_172b6
+	jr nz, .loop_hand
 	jr .count_energy_basic
 
 .shuffle_deck
@@ -7197,7 +7197,7 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 	jr c, .shuffle_deck
 
 ; now check the following 6 cards (prize cards).
-; re-shuffle deck if any of these cards is listed in wcda8.
+; re-shuffle deck if any of these cards is listed in wAICardListAvoidPrize.
 	ld b, 6
 .check_card_ids
 	ld a, [hli]
@@ -7263,20 +7263,20 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 ; 0x17366
 
 ; expectation: return carry if card ID corresponding
-; to the input deck index is listed in wcda8;
+; to the input deck index is listed in wAICardListAvoidPrize;
 ; reality: always returns no carry because when checking terminating
-; byte in wcda8 ($00), it wrongfully uses 'cp a' instead of 'or a',
+; byte in wAICardListAvoidPrize ($00), it wrongfully uses 'cp a' instead of 'or a',
 ; so it always ends up returning in the first item in list.
 ; input:
 ;	- a = deck index of card to check
 .CheckIfIDIsInList ; 17366 (5:7366)
 	ld b, a
-	ld a, [wcda8 + 1]
+	ld a, [wAICardListAvoidPrize + 1]
 	or a
 	ret z ; null
 	push hl
 	ld h, a
-	ld a, [wcda8]
+	ld a, [wAICardListAvoidPrize]
 	ld l, a
 
 	ld a, b
