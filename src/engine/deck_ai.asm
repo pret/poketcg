@@ -30,6 +30,36 @@ store_list_pointer: MACRO
 	ld [hl], d
 ENDM
 
+; deck AIs are specialized to work on a given deck ID.
+; they decide what happens during a turn, what Pokemon cards
+; to pick during the start of the duel, etc.
+; each of these have a pointer table with the following structure:
+; dw .do_turn       : never called;
+;
+; dw .do_turn       : called to handle the main turn logic, from the beginning
+;                     of the turn up to the attack (or lack thereof);
+;
+; dw .start_duel    : called at the start of the duel to initialize some
+;                     variables and optionally set up CPU hand and deck;
+;
+; dw .forced_switch : logic to determine what Pokemon to pick when there's
+;                     an effect that forces AI to switch to Bench card;
+;
+; dw .ko_switch     : logic for picking which card to use after a KO;
+;
+; dw .take_prize    : logic to decide which prize card to pick.
+
+; optionally, decks can also declare card lists that will add
+; more specialized logic during various generic AI routines,
+; and read during the .start_duel routines.
+; the pointers to these lists are stored in memory:
+; wAICardListAvoidPrize    : list of cards to avoid being placed as prize;
+; wAICardListArenaPriority : priority list of Arena card at duel start;
+; wAICardListBenchPriority : priority list of Bench cards at duel start;
+; wAICardListPlayFromHandPriority : priority list of cards to play from hand;
+; wAICardListRetreatBonus  : scores given to certain cards for retreat;
+; wAICardListEnergyBonus   : max number of energy cards and card scores.
+
 AIActionTable_GeneralNoRetreat: ; 148dc (5:48dc)
 	dw .do_turn ; unused
 	dw .do_turn
