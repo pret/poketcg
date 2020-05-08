@@ -6255,7 +6255,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	jr z, .check_retreat
 
 	cp AI_ENERGY_TRANS_TO_BENCH
-	jp z, .TransferEnergyToBench
+	jp z, AIEnergyTransTransferEnergyToBench
 
 	; AI_ENERGY_TRANS_ATTACK
 	call .CheckEnoughGrassEnergyCardsForAttack
@@ -6277,7 +6277,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	call GetTurnDuelistVariable
 	dec a
 	ld b, a
-.loop_play_area_1
+.loop_play_area
 	ld a, DUELVARS_ARENA_CARD
 	add b
 	call GetTurnDuelistVariable
@@ -6285,17 +6285,17 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp VENUSAUR2
-	jr z, .use_pkmn_power_1
+	jr z, .use_pkmn_power
 
 	ld a, b
 	or a
 	ret z ; return when finished Play Area loop
 
 	dec b
-	jr .loop_play_area_1
+	jr .loop_play_area
 
 ; use Energy Trans Pkmn Power
-.use_pkmn_power_1
+.use_pkmn_power
 	ld a, b
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_USE_PKMN_POWER
@@ -6311,13 +6311,13 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ; look for Grass energy cards that
 ; are currently attached to a Bench card.
 	ld e, 0
-.loop_deck_locations_1
+.loop_deck_locations
 	ld a, DUELVARS_CARD_LOCATIONS
 	add e
 	call GetTurnDuelistVariable
 	and %00011111
 	cp CARD_LOCATION_BENCH_1
-	jr c, .next_card_1
+	jr c, .next_card
 
 	and %00001111
 	ldh [hTempPlayAreaLocation_ffa1], a
@@ -6328,7 +6328,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ld a, e
 	pop de
 	cp GRASS_ENERGY
-	jr nz, .next_card_1
+	jr nz, .next_card
 
 	; store the deck index of energy card
 	ld a, e
@@ -6336,39 +6336,39 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 
 	push de
 	ld d, 30
-.small_delay_loop_1
+.small_delay_loop
 	call DoFrame
 	dec d
-	jr nz, .small_delay_loop_1
+	jr nz, .small_delay_loop
 
 	ld a, OPPACTION_6B15
 	bank1call AIMakeDecision
 	pop de
 	dec d
-	jr z, .done_transfer_1
+	jr z, .done_transfer
 
-.next_card_1
+.next_card
 	inc e
 	ld a, DECK_SIZE
 	cp e
-	jr nz, .loop_deck_locations_1
+	jr nz, .loop_deck_locations
 
 ; transfer is done, perform delay
 ; and return to main scene.
-.done_transfer_1
+.done_transfer
 	ld d, 60
-.big_delay_loop_1
+.big_delay_loop
 	call DoFrame
 	dec d
-	jr nz, .big_delay_loop_1
+	jr nz, .big_delay_loop
 	ld a, OPPACTION_DUEL_MAIN_SCENE
 	bank1call AIMakeDecision
 	ret
 ; 0x22246
 
-; checks if the Arena card has not enough energy for second attack,
-; and if not, return carry if transferring Grass energy from Bench
-; would be enough to use it and outputs number of energy cards needed in a.
+; checks if the Arena card needs energy for its second attack,
+; and if it does, return carry if transferring Grass energy from Bench
+; would be enough to use it. Outputs number of energy cards needed in a.
 .CheckEnoughGrassEnergyCardsForAttack ; 22246 (8:6246)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -6494,7 +6494,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 ; AI logic to determine whether to use Energy Trans Pkmn Power
 ; to transfer energy cards attached from the Arena Pokemon to
 ; some card in the Bench.
-.TransferEnergyToBench ; 222ca (8:62ca)
+AIEnergyTransTransferEnergyToBench: ; 222ca (8:62ca)
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -6523,7 +6523,7 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	call GetTurnDuelistVariable
 	dec a
 	ld b, a
-.loop_play_area_2
+.loop_play_area
 	ld a, DUELVARS_ARENA_CARD
 	add b
 	call GetTurnDuelistVariable
@@ -6532,17 +6532,17 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	call GetCardIDFromDeckIndex
 	ld a, e
 	cp VENUSAUR2
-	jr z, .use_pkmn_power_2
+	jr z, .use_pkmn_power
 
 	ld a, b
 	or a
 	ret z ; return when Play Area loop is ended
 
 	dec b
-	jr .loop_play_area_2
+	jr .loop_play_area
 
 ; use Energy Trans Pkmn Power
-.use_pkmn_power_2
+.use_pkmn_power
 	ld a, b
 	ldh [hTemp_ffa0], a
 	ld [wAIVenusaur2PlayAreaLocation], a
@@ -6563,17 +6563,17 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	call GetPlayAreaCardAttachedEnergies
 	ld a, [wAttachedEnergies + GRASS]
 	or a
-	jr z, .done_transfer_2
+	jr z, .done_transfer
 
 ; look for Grass energy cards that
 ; are currently attached to Arena card.
 	ld e, 0
-.loop_deck_locations_2
+.loop_deck_locations
 	ld a, DUELVARS_CARD_LOCATIONS
 	add e
 	call GetTurnDuelistVariable
 	cp CARD_LOCATION_ARENA
-	jr nz, .next_card_2
+	jr nz, .next_card
 
 	ld a, e
 	push de
@@ -6581,32 +6581,32 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 	ld a, e
 	pop de
 	cp GRASS_ENERGY
-	jr nz, .next_card_2
+	jr nz, .next_card
 
 	; store the deck index of energy card
 	ld a, e
 	ldh [hAIEnergyTransEnergyCard], a
 	jr .transfer
 
-.next_card_2
+.next_card
 	inc e
 	ld a, DECK_SIZE
 	cp e
-	jr nz, .loop_deck_locations_2
-	jr .done_transfer_2
+	jr nz, .loop_deck_locations
+	jr .done_transfer
 
 .transfer
 ; get the Bench card location to transfer Grass energy card to.
 	farcall AIProcessButDontPlayEnergy_SkipEvolutionAndArena
-	jr nc, .done_transfer_2
+	jr nc, .done_transfer
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hAIEnergyTransPlayAreaLocation], a
 
 	ld d, 30
-.small_delay_loop_2
+.small_delay_loop
 	call DoFrame
 	dec d
-	jr nz, .small_delay_loop_2
+	jr nz, .small_delay_loop
 
 	ld a, [wAIVenusaur2DeckIndex]
 	ldh [hTempCardIndex_ff9f], a
@@ -6619,12 +6619,12 @@ HandleAIEnergyTrans: ; 2219b (8:619b)
 
 ; transfer is done, perform delay
 ; and return to main scene.
-.done_transfer_2
+.done_transfer
 	ld d, 60
-.big_delay_loop_2
+.big_delay_loop
 	call DoFrame
 	dec d
-	jr nz, .big_delay_loop_2
+	jr nz, .big_delay_loop
 	ld a, OPPACTION_DUEL_MAIN_SCENE
 	bank1call AIMakeDecision
 	ret
@@ -6934,7 +6934,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	cp 3
 	ret nc ; return 47 out of 50 times
 
-; check what to use Peek on at random
+; choose what to use Peek on at random
 	ld a, 3
 	call Random
 	or a
@@ -7242,12 +7242,12 @@ HandleAICowardice: ; 2262d (8:662d)
 	ldh a, [hTemp_ffa0]
 	or a
 	jr nz, .is_benched
+
+	; this part is buggy if AIDecideBenchPokemonToSwitchTo returns carry
+	; but since this was already checked beforehand, this never happens.
+	; so jr c, .asm_22678 can be safely removed.
 	farcall AIDecideBenchPokemonToSwitchTo
-; in case this routine is called with no Bench Pokemon,
-; this introduces a bug.
-; since it's only called in HandleAICowardice in case
-; there's more than 1 Pokemon in Play Area, this never sets carry.
-	jr c, .asm_22678 
+	jr c, .asm_22678 ; bug, this jumps in the middle of damage checking
 	jr .use_cowardice
 .is_benched
 	ld a, $ff

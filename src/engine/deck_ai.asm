@@ -996,9 +996,9 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	db $00
 
 .list_retreat ; 14ec0 (5:1ec0)
-	ai_retreat MACHOP,  - 1
-	ai_retreat MACHOKE, - 1
-	ai_retreat MANKEY,  - 2
+	ai_retreat MACHOP,  -1
+	ai_retreat MACHOKE, -1
+	ai_retreat MANKEY,  -2
 	db $00
 
 .list_energy ; 14ec7 (5:1ec7)
