@@ -1909,19 +1909,20 @@ wd0b9:: ; d0b9
 wd0ba:: ; d0ba
 	ds $1
 
-wd0bb:: ; d0bb
+wTempMap:: ; d0bb
 	ds $1
 
-wd0bc:: ; d0bc
+wTempPlayerXCoord:: ; d0bc
 	ds $1
 
-wd0bd:: ; d0bd
+wTempPlayerYCoord:: ; d0bd
 	ds $1
 
-wd0be:: ; d0be
+wTempPlayerDirection:: ; d0be
 	ds $1
 
-wd0bf:: ; d0bf
+; See constants/misc_constants.asm for OWMODE's
+wOverworldMode:: ; d0bf
 	ds $1
 
 wd0c0:: ; d0c0
@@ -1944,23 +1945,15 @@ wd0c4:: ; d0c4
 wd0c5:: ; d0c5
 	ds $1
 
-wd0c6:: ; d0c6
-	ds $1
+; used to store the location of an overworld sequence, which is jumped to later
+wNextScript:: ; d0c6
+	ds $2
 
-wd0c7:: ; d0c7
-	ds $1
+wCurrentNPCNameTx:: ; d0c8
+	ds $2
 
-wd0c8:: ; d0c8
-	ds $1
-
-wd0c9:: ; d0c9
-	ds $1
-
-wd0ca:: ; d0ca
-	ds $1
-
-wd0cb:: ; d0cb
-	ds $1
+wDefaultObjectText:: ; d0ca
+	ds $2
 
 wd0cc:: ; d0cc
 	ds 8 palettes
@@ -2013,9 +2006,7 @@ wPCPackSelection:: ; d11d
 
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
-	ds $c
-
-	ds $3
+	ds $f
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
@@ -2128,13 +2119,14 @@ wd332:: ; d332
 wd333:: ; d333
 	ds $1
 
-wd334:: ; d334
+wPlayerDirection:: ; d334
 	ds $1
 
-wd335:: ; d335
+; seems to be 1 if moving 0 otherwise
+wPlayerCurrentlyMoving:: ; d335
 	ds $1
 
-wd336:: ; d336
+wPlayerSpriteIndex:: ; d336
 	ds $1
 
 wd337:: ; d337
@@ -2193,29 +2185,33 @@ wd348:: ; d348
 wd349:: ; d349
 	ds $1
 
-wd34a:: ; d34a
-	ds $60
+wLoadedNPCs:: ; d34a
+	loaded_npc_struct wLoadedNPC1
+	loaded_npc_struct wLoadedNPC2
+	loaded_npc_struct wLoadedNPC3
+	loaded_npc_struct wLoadedNPC4
+	loaded_npc_struct wLoadedNPC5
+	loaded_npc_struct wLoadedNPC6
+	loaded_npc_struct wLoadedNPC7
+	loaded_npc_struct wLoadedNPC8
 
-wd3aa:: ; d3aa
+wLoadedNPCTempIndex:: ; d3aa
 	ds $1
 
-wd3ab:: ; d3ab
+wTempNPC:: ; d3ab
 	ds $1
 
-wd3ac:: ; d3ac
+wLoadNPCXPos:: ; d3ac
 	ds $1
 
-wd3ad:: ; d3ad
+wLoadNPCYPos:: ; d3ad
 	ds $1
 
-wd3ae:: ; d3ae
+wLoadNPCDirection:: ; d3ae
 	ds $1
 
-wd3af:: ; d3af
-	ds $1
-
-wd3b0:: ; d3b0
-	ds $1
+wLoadNPCFunction:: ; d3af
+	ds $2
 
 wd3b1:: ; d3b1
 	ds $1
@@ -2228,7 +2224,8 @@ wd3b3:: ; d3b3
 
 	ds $2
 
-wd3b6:: ; d3b6
+; ID of the NPC being interacted with in Script
+wScriptNPC:: ; d3b6
 	ds $1
 
 wc3b7:: ; d3b7
@@ -2248,23 +2245,22 @@ wd3bb:: ; d3bb
 wd3d0:: ; d3d0
 	ds $1
 
-wd3d1:: ; d3d1
+; the bits relevant to the currently worked on flag, obtained from EventFlagMods
+wLoadedFlagBits:: ; d3d1
 	ds $1
 
 wEventFlags::
-	ds $3f
-
-wd411:: ; d411
-	ds $1
+	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
-wBreakOWScriptLoop:: ; d412
+wBreakScriptLoop:: ; d412
 	ds $1
 
-wOWScriptPointer:: ; d413
+wScriptPointer:: ; d413
 	ds $2
 
-wd415:: ; d415
+; generally set to ff when a flag check passes, 0 otherwise
+wScriptControlByte:: ; d415
 	ds $1
 
 wd416:: ; d416
@@ -2342,13 +2338,11 @@ wd4c2:: ; d4c2
 wd4c3:: ; d4c3
 	ds $1
 
-wd4c4:: ; d4c4
-	ds $1
+; these next 3 seem to be an address (bank @ end) for copying bg data
+wTempPointer:: ; d4c4
+	ds $2
 
-wd4c5:: ; d4c5
-	ds $1
-
-wd4c6:: ; d4c6
+wTempPointerBank:: ; d4c6
 	ds $1
 
 wd4c7:: ; d4c7
@@ -2417,6 +2411,7 @@ wd5d7:: ; d5d7
 wd5d8:: ; d5d8
 	ds $40
 
+; seems to be the amount of entries in wd5d8
 wd618:: ; d618
 	ds $1
 

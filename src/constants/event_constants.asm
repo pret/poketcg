@@ -1,3 +1,0 @@
-; Event Flags
-EVENT_BEAT_SARA      EQU $15
-EVENT_BEAT_AMANDA    EQU $16
