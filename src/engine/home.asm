@@ -11087,9 +11087,9 @@ HandleMoveModeAPress: ; 3a5e (0:3a5e)
 	cp c
 	jr nz, .noMatch
 	ld a, [hli]
-	ld [wNextOWSequence], a
+	ld [wNextScript], a
 	ld a, [hli]
-	ld [wNextOWSequence+1], a
+	ld [wNextScript+1], a
 	ld a, [hli]
 	ld [wDefaultObjectText], a
 	ld a, [hli]
@@ -11159,9 +11159,9 @@ Func_3ae8: ; 3ae8 (0:3ae8)
 	ret
 ; 0x3aed
 
-; finds an OWScript from the first byte and puts the next two bytes (usually arguments?) into cb
+; finds a Script from the first byte and puts the next two bytes (usually arguments?) into cb
 RunOverworldScript: ; 3aed (0:3aed)
-	ld hl, wOWScriptPointer
+	ld hl, wScriptPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a

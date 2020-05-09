@@ -878,8 +878,8 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	pop hl
 	ret
 
-; Loads Name into wCurrentNPCNameTx and gets OWSequence ptr into bc
-GetNPCNameAndOWSequence: ; 1187d (4:587d)
+; Loads Name into wCurrentNPCNameTx and gets Script ptr into bc
+GetNPCNameAndScript: ; 1187d (4:587d)
 	push hl
 	call GetNPCDataPointer
 	ld bc, NPC_DATA_OWSEQUENCE_PTR
@@ -969,23 +969,23 @@ Func_11f4e: ; 11f4e (4:5f4e)
 	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
-	dw OWScript_EndScriptLoop1
-	dw OWScript_CloseAdvancedTextBox
-	dw OWScript_PrintTextString
+	dw ScriptCommand_EndScriptLoop1
+	dw ScriptCommand_CloseAdvancedTextBox
+	dw ScriptCommand_PrintTextString
 	dw Func_ccdc
-	dw OWScript_AskQuestionJump
-	dw OWScript_StartBattle
-	dw OWScript_PrintVariableText
+	dw ScriptCommand_AskQuestionJump
+	dw ScriptCommand_StartBattle
+	dw ScriptCommand_PrintVariableText
 	dw Func_cda8
-	dw OWScript_PrintTextQuitFully
+	dw ScriptCommand_PrintTextQuitFully
 	dw Func_cdcb
-	dw OWScript_MoveActiveNPCByDirection
-	dw OWScript_CloseTextBox
-	dw OWScript_GiveBoosterPacks
+	dw ScriptCommand_MoveActiveNPCByDirection
+	dw ScriptCommand_CloseTextBox
+	dw ScriptCommand_GiveBoosterPacks
 	dw Func_cf0c
 	dw Func_cf12
-	dw OWScript_GiveCard
-	dw OWScript_TakeCard
+	dw ScriptCommand_GiveCard
+	dw ScriptCommand_TakeCard
 	dw Func_cf53
 	dw Func_cf7b
 	dw Func_cf2d
@@ -996,83 +996,83 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d025
 	dw Func_d032
 	dw Func_d03f
-	dw OWScript_Jump
-	dw OWScript_TryGiveMedalPCPacks
-	dw OWScript_SetPlayerDirection
-	dw OWScript_MovePlayer
-	dw OWScript_ShowCardReceivedScreen
-	dw OWScript_SetDialogName
-	dw OWScript_SetNextNPCandOWSequence
+	dw ScriptCommand_Jump
+	dw ScriptCommand_TryGiveMedalPCPacks
+	dw ScriptCommand_SetPlayerDirection
+	dw ScriptCommand_MovePlayer
+	dw ScriptCommand_ShowCardReceivedScreen
+	dw ScriptCommand_SetDialogName
+	dw ScriptCommand_SetNextNPCandScript
 	dw Func_d095
 	dw Func_d0be
-	dw OWScript_DoFrames
+	dw ScriptCommand_DoFrames
 	dw Func_d0d9
-	dw OWScript_JumpIfPlayerCoordMatches
-	dw OWScript_MoveActiveNPC
-	dw OWScript_GiveOneOfEachTrainerBooster
+	dw ScriptCommand_JumpIfPlayerCoordMatches
+	dw ScriptCommand_MoveActiveNPC
+	dw ScriptCommand_GiveOneOfEachTrainerBooster
 	dw Func_d103
 	dw Func_d125
 	dw Func_d135
 	dw Func_d16b
 	dw Func_cd4f
 	dw Func_cd94
-	dw OWScript_MoveWramNPC
+	dw ScriptCommand_MoveWramNPC
 	dw Func_cdd8
 	dw Func_cdf5
 	dw Func_d195
 	dw Func_d1ad
 	dw Func_d1b3
-	dw OWScript_QuitScriptFully
+	dw ScriptCommand_QuitScriptFully
 	dw Func_d244
 	dw Func_d24c
-	dw OWScript_OpenDeckMachine
+	dw ScriptCommand_OpenDeckMachine
 	dw Func_d271
-	dw OWScript_EnterMap
-	dw OWScript_MoveArbitraryNPC
+	dw ScriptCommand_EnterMap
+	dw ScriptCommand_MoveArbitraryNPC
 	dw Func_d209
 	dw Func_d38f
 	dw Func_d396
 	dw Func_cd76
 	dw Func_d39d
 	dw Func_d3b9
-	dw OWScript_TryGivePCPack
-	dw OWScript_nop
+	dw ScriptCommand_TryGivePCPack
+	dw ScriptCommand_nop
 	dw Func_d3d4
 	dw Func_d3e0
 	dw Func_d3fe
 	dw Func_d408
 	dw Func_d40f
-	dw OWScript_PlaySFX
-	dw OWScript_PauseSong
-	dw OWScript_ResumeSong
+	dw ScriptCommand_PlaySFX
+	dw ScriptCommand_PauseSong
+	dw ScriptCommand_ResumeSong
 	dw Func_d41d
-	dw OWScript_WaitForSongToFinish
+	dw ScriptCommand_WaitForSongToFinish
 	dw Func_d435
-	dw OWScript_AskQuestionJumpDefaultYes
+	dw ScriptCommand_AskQuestionJumpDefaultYes
 	dw Func_d2f6
 	dw Func_d317
 	dw Func_d43d
-	dw OWScript_EndScriptLoop2
-	dw OWScript_EndScriptLoop3
-	dw OWScript_EndScriptLoop4
-	dw OWScript_EndScriptLoop5
-	dw OWScript_EndScriptLoop6
-	dw OWScript_SetFlagValue
-	dw OWScript_JumpIfFlagZero1
-	dw OWScript_JumpIfFlagNonzero1
-	dw OWScript_JumpIfFlagEqual
-	dw OWScript_JumpIfFlagNotEqual
-	dw OWScript_JumpIfFlagNotLessThan
-	dw OWScript_JumpIfFlagLessThan
-	dw OWScript_MaxOutFlagValue
-	dw OWScript_ZeroOutFlagValue
-	dw OWScript_JumpIfFlagNonzero2
-	dw OWScript_JumpIfFlagZero2
-	dw OWScript_IncrementFlagValue
-	dw OWScript_EndScriptLoop7
-	dw OWScript_EndScriptLoop8
-	dw OWScript_EndScriptLoop9
-	dw OWScript_EndScriptLoop10
+	dw ScriptCommand_EndScriptLoop2
+	dw ScriptCommand_EndScriptLoop3
+	dw ScriptCommand_EndScriptLoop4
+	dw ScriptCommand_EndScriptLoop5
+	dw ScriptCommand_EndScriptLoop6
+	dw ScriptCommand_SetFlagValue
+	dw ScriptCommand_JumpIfFlagZero1
+	dw ScriptCommand_JumpIfFlagNonzero1
+	dw ScriptCommand_JumpIfFlagEqual
+	dw ScriptCommand_JumpIfFlagNotEqual
+	dw ScriptCommand_JumpIfFlagNotLessThan
+	dw ScriptCommand_JumpIfFlagLessThan
+	dw ScriptCommand_MaxOutFlagValue
+	dw ScriptCommand_ZeroOutFlagValue
+	dw ScriptCommand_JumpIfFlagNonzero2
+	dw ScriptCommand_JumpIfFlagZero2
+	dw ScriptCommand_IncrementFlagValue
+	dw ScriptCommand_EndScriptLoop7
+	dw ScriptCommand_EndScriptLoop8
+	dw ScriptCommand_EndScriptLoop9
+	dw ScriptCommand_EndScriptLoop10
 
 	INCROM $1224b, $1229f
 

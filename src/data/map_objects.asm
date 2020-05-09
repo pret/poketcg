@@ -50,12 +50,12 @@ MasonLabObjects: ; 13b04 (3:7b04)
  
 DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 	db NORTH, 2, 2
-	dw OWSequence_d932
+	dw Script_d932
 	tx Text041b
 	tx Text041a
 
 	db NORTH, 4, 2
-	dw OWSequence_d932
+	dw Script_d932
 	tx Text041b
 	tx Text041a
 
@@ -238,7 +238,7 @@ FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -272,7 +272,7 @@ RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -306,7 +306,7 @@ WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -340,7 +340,7 @@ LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -374,7 +374,7 @@ GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -408,7 +408,7 @@ PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -442,7 +442,7 @@ ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -476,7 +476,7 @@ FireClubLobbyObjects: ; 13df0 (3:7df0)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -510,7 +510,7 @@ ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	tx Text041a
 
 	db NORTH, 6, 6
-	dw OWSequence_fc52
+	dw Script_fc52
 	tx Text041b
 	tx Text03b0
 
@@ -555,12 +555,12 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	tx Text0505
 
 	db NORTH, 18, 0
-	dw OWSequence_f631
+	dw Script_f631
 	tx Text0508
 	tx Text0507
 
 	db NORTH, 20, 0
-	dw OWSequence_f631
+	dw Script_f631
 	tx Text0508
 	tx Text0507
 
@@ -585,13 +585,13 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 HallOfHonorObjects: ; 13ec2 (3:7ec2)
 	; Legendary Cards
 	db NORTH, 10, 10
-	dw OWSequence_fbf1
+	dw Script_fbf1
 	dw $0000
 	dw $0000
 
 	; Legendary Cards
 	db NORTH, 12, 10
-	dw OWSequence_fbf1
+	dw Script_fbf1
 	dw $0000
 	dw $0000
 

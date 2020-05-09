@@ -438,9 +438,9 @@ FindNPCAtLocation: ; 1c72e (7:472e)
 	pop hl
 	ret
 
-; Probably needs a new name. Loads data for NPC that the next OWSequence is for
+; Probably needs a new name. Loads data for NPC that the next Script is for
 ; Sets direction, Loads Image data for it, loads name, and more
-SetNewOWSequenceNPC: ; 1c768 (7:4768)
+SetNewScriptNPC: ; 1c768 (7:4768)
 	push hl
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_DIRECTION
@@ -454,7 +454,7 @@ SetNewOWSequenceNPC: ; 1c768 (7:4768)
 	ld a, [wLoadedNPCTempIndex]
 	call GetLoadedNPCID
 	ld a, [hl]
-	farcall GetNPCNameAndOWSequence
+	farcall GetNPCNameAndScript
 	pop hl
 	ret
 

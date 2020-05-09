@@ -1873,7 +1873,7 @@ wd0c5:: ; d0c5
 	ds $1
 
 ; used to store the location of an overworld sequence, which is jumped to later
-wNextOWSequence:: ; d0c6
+wNextScript:: ; d0c6
 	ds $2
 
 wCurrentNPCNameTx:: ; d0c8
@@ -2151,7 +2151,7 @@ wd3b3:: ; d3b3
 
 	ds $2
 
-; ID of the NPC being interacted with in OWScript
+; ID of the NPC being interacted with in Script
 wScriptNPC:: ; d3b6
 	ds $1
 
@@ -2180,10 +2180,10 @@ wEventFlags::
 	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
-wBreakOWScriptLoop:: ; d412
+wBreakScriptLoop:: ; d412
 	ds $1
 
-wOWScriptPointer:: ; d413
+wScriptPointer:: ; d413
 	ds $2
 
 ; generally set to ff when a flag check passes, 0 otherwise
