@@ -30,12 +30,12 @@ Func_80077: ; 80077 (20:4077)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	call $43b9
-	ld a, [wd4c6]
+	call Func_803b9
+	ld a, [wTempPointerBank]
 	ld [wd23d], a
 	ld de, wd23e
 	ld bc, $0006
-	call Func_3bf5
+	call CopyBankedDataToDE
 	ld l, e
 	ld h, d
 	ld a, [hli]
@@ -48,14 +48,163 @@ Func_80077: ; 80077 (20:4077)
 	ld [wd23b], a
 	ld a, [hli]
 	ld [wd23c], a
-	call $40bd
+	call Func_800bd
 	pop de
 	pop bc
 	pop hl
 	ret
-; 0x800bd
 
-	INCROM $800bd, $801a1
+Func_800bd: ; 800bd (20:40bd)
+	push hl
+	push bc
+	push de
+	ld a, [wTempPointer]
+	add $05
+	ld e, a
+	ld a, [wTempPointer + 1]
+	adc $00
+	ld d, a
+	ld b, $c0
+	call Func_08bf
+	ld a, [wd4c2]
+	ld e, a
+	ld a, [wd4c3]
+	ld d, a
+	call Func_800e0
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_800e0: ; 800e0 (20:40e0)
+	push hl
+	ld hl, $d28e
+	ld a, [wd12f]
+	ld [hl], a
+	ld a, [wd23c]
+	or a
+	jr z, .asm_800f0
+	sla [hl]
+.asm_800f0
+	ld c, $40
+	ld hl, wd23e
+	xor a
+.asm_800f6
+	ld [hli], a
+	dec c
+	jr nz, .asm_800f6
+	ld a, [wd130]
+	ld c, a
+.asm_800fe
+	push bc
+	push de
+	ld b, $00
+	ld a, [$d28e]
+	ld c, a
+	ld de, wd23e
+	call Func_3be4
+	ld a, [wd12f]
+	ld b, a
+	pop de
+	push de
+	ld hl, wd23e
+	call Func_8016e
+	ld a, [wConsole]
+	cp $02
+	jr nz, .asm_8013b
+	call BankswitchVRAM1
+	ld a, [wd12f]
+	ld c, a
+	ld b, $00
+	ld hl, wd23e
+	add hl, bc
+	pop de
+	push de
+	ld a, [wd12f]
+	ld b, a
+	call Func_80148
+	call Func_8016e
+	call BankswitchVRAM0
+.asm_8013b
+	pop de
+	ld hl, $20
+	add hl, de
+	ld e, l
+	ld d, h
+	pop bc
+	dec c
+	jr nz, .asm_800fe
+	pop hl
+	ret
+; 0x80148
+
+Func_80148: ; 80148 (20:4148)
+	ld a, [$d291]
+	or a
+	ret z
+	ld a, [$d23c]
+	or a
+	jr z, .asm_80162
+	push hl
+	push bc
+.asm_80155
+	push bc
+	ld a, [$d291]
+	add [hl]
+	ld [hli], a
+	pop bc
+	dec b
+	jr nz, .asm_80155
+	pop bc
+	pop hl
+	ret
+.asm_80162
+	push hl
+	push bc
+	ld a, [$d291]
+.asm_80167
+	ld [hli], a
+	dec b
+	jr nz, .asm_80167
+	pop bc
+	pop hl
+	ret
+
+Func_8016e: ; 8016e (20:416e)
+	ld a, [wd292]
+	or a
+	jp z, SafeCopyDataHLtoDE
+	push hl
+	push bc
+	push de
+	ldh a, [hBankSRAM]
+	push af
+	ld a, $01
+	call BankswitchSRAM
+	push hl
+	ld hl, $800
+	ldh a, [hBankVRAM]
+	or a
+	jr z, .asm_8018c
+	ld hl, $c00
+.asm_8018c
+	add hl, de
+	ld e, l
+	ld d, h
+	pop hl
+.asm_80190
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .asm_80190
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_801a1: ; 801a1 (20:41a1)
 	push hl
@@ -108,6 +257,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
+; Clears the first x800 bytes of S1:a000
 Func_801f1: ; 801f1 (20:41f1)
 	push hl
 	push bc
@@ -118,7 +268,7 @@ Func_801f1: ; 801f1 (20:41f1)
 	ld hl, $a000
 	ld bc, $0800
 	xor a
-	call $3c10
+	call FillMemoryWithA
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -126,7 +276,7 @@ Func_801f1: ; 801f1 (20:41f1)
 	pop hl
 	ret
 
-Func_8020f: ; 8020f (20:420f)
+GetMapDataPointer: ; 8020f (20:420f)
 	push bc
 	push af
 	ld bc, MapDataPointers
@@ -148,12 +298,12 @@ Func_8020f: ; 8020f (20:420f)
 
 Func_80229: ; 80229 (20:4229)
 	ld a, [hli]
-	ld [wd4c4], a
+	ld [wTempPointer], a
 	ld a, [hli]
-	ld [wd4c5], a
+	ld [wTempPointer + 1], a
 	ld a, [hli]
 	add $20
-	ld [wd4c6], a
+	ld [wTempPointerBank], a
 	ret
 ; 0x80238
 
@@ -162,7 +312,7 @@ Func_80229: ; 80229 (20:4229)
 Func_8025b: ; 8025b (20:425b)
 	push hl
 	ld l, $4
-	call Func_8020f
+	call GetMapDataPointer
 	call Func_80229
 	ld a, [hl]
 	push af
@@ -192,7 +342,7 @@ asm_8027c
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld hl, wd4c4
+	ld hl, wTempPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -234,7 +384,19 @@ Func_802bb: ; 802bb (20:42bb)
 	ret
 ; 0x802d4
 
-	INCROM $802d4, $80418
+	INCROM $802d4, $803b9
+
+Func_803b9: ; 803b9 (20:43b9)
+	ld l, $00
+	ld a, [wd131]
+	call GetMapDataPointer
+	call Func_80229
+	ld a, [hl]
+	ld [$d239], a
+	ret
+; 0x803c9
+
+	INCROM $803c9, $80418
 
 Func_80418: ; 80418 (20:4418)
 	INCROM $80418, $80480
@@ -246,13 +408,37 @@ Func_804d8: ; 804d8 (20:44d8)
 	INCROM $804d8, $80b7a
 
 Func_80b7a: ; 80b7a (20:4b7a)
-	INCROM $80b7a, $80ba4
+	INCROM $80b7a, $80b89
+
+Func_80b89: ; 80b89 (20:4b89)
+	push hl
+	push bc
+	push af
+	ld c, a
+	ld a, $01
+	ld [$d292], a
+	ld b, $00
+	ld hl, $d323
+	add hl, bc
+	ld a, [hl]
+	or a
+	jr z, .asm_80ba0
+	ld a, c
+	call Func_80baa
+.asm_80ba0
+	pop af
+	pop bc
+	pop hl
+	ret
 
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
 	ld [wd292], a
 	pop af
+;	Fallthrough
+
+Func_80baa: ; 80baa (20:4baa)
 	push hl
 	push bc
 	push de
@@ -332,5 +518,25 @@ Func_80ba4: ; 80ba4 (20:4ba4)
 Unknown_80e5a: ; 80e5a (20:4e5a)
 	INCROM $80e5a, $80e5d
 
+; might be closer to "screen specific data" than map data
 MapDataPointers: ; 80e5d (20:4e5d)
-	INCROM $80e5d, $84000
+	dw MapDataPointers_80e67
+	dw MapDataPointers_8100f
+	dw MapDataPointers_8116b
+	dw MapDataPointers_81333
+	dw MapDataPointers_81697
+
+MapDataPointers_80e67: ; 80e67 (20:4e67)
+	INCROM $80e67, $8100f
+
+MapDataPointers_8100f: ; 8100f (20:500f)
+	INCROM $8100f, $8116b
+
+MapDataPointers_8116b: ; 8116b (20:516b)
+	INCROM $8116b, $81333
+
+MapDataPointers_81333: ; 81333 (20:5333)
+	INCROM $81333, $81697
+
+MapDataPointers_81697: ; 81697 (20:5697)
+	INCROM $81697, $84000

@@ -304,12 +304,14 @@ bit_ops_table = [
 	"set 7, b",  "set 7, c",  "set 7, d",  "set 7, e",  "set 7, h",  "set 7, l",  "set 7, [hl]",  "set 7, a"     # $f8 - $ff
 ]
 
-unconditional_returns = [0xc9, 0xd9]
+unconditional_returns = [0xc9, 0xd9, 0xe7] # e7 begins a script, which is not handled by tcgdisasm
 absolute_jumps = [0xc3, 0xc2, 0xca, 0xd2, 0xda]
 call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc, 0xdf, 0xef]
 relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
 unconditional_jumps = [0xc3, 0x18]
 
+# the flag macros found in bank 3. They db a byte after calling so need to be treated specially
+flag_macros = [(0xca8f,"set_flag_value {}"),(0xcacd,"zero_flag_value {}"),(0xca84,"zero_flag_value2 {}"), (0xcac2,"max_flag_value {}"), (0xca69,"get_flag_value {}")]
 
 def asm_label(address):
 	"""
@@ -740,11 +742,17 @@ class Disassembler(object):
 						opcode_output_str = bit_ops_table[opcode_arg_1]
 
 				elif opcode_nargs == 2:
+
+					# define opcode_output_str as None so we can substitute our own if a macro appears
+					opcode_output_str = None
+
 				# opcodes with a pointer as an argument
 					# format the two arguments into a little endian 16-bit pointer
 					local_target_offset = opcode_arg_2 << 8 | opcode_arg_1
+
 					# get the global offset of the pointer
 					target_offset = get_global_address(local_target_offset, bank_id)
+
 					# attempt to look for a matching label
 					if opcode_byte == 0xdf:
 					# bank1call
@@ -753,7 +761,22 @@ class Disassembler(object):
 					# regular call or jump instructions
 						target_label = self.find_label(local_target_offset, bank_id)
 
-					if opcode_byte in call_commands + absolute_jumps:
+					# handle the special flag macros
+					found_flag_macro = False
+					for flag_macro in flag_macros:
+						if flag_macro[0] == target_offset:
+							found_flag_macro = True
+							current_flag_macro = flag_macro
+							event_flag = "EVENT_FLAG_" + format(opcode_arg_3, "02X")
+							opcode_output_str = flag_macro[1].format(event_flag)
+
+							# we need to skip a byte since this macro takes one extra
+							opcode_nargs+=1
+							break
+
+
+					if not found_flag_macro and opcode_byte in call_commands + absolute_jumps:
+
 						if target_label is None:
 						# if this is a call or jump opcode and the target label is not defined, create an undocumented label descriptor
 							target_label = "Func_%x" % target_offset
@@ -793,7 +816,8 @@ class Disassembler(object):
 								data_tables[local_target_offset]["definition"] = False
 
 					# format the label that was created into the opcode string
-					opcode_output_str = opcode_str.format(target_label)
+					if opcode_output_str is None:
+						opcode_output_str = opcode_str.format(target_label)
 
 				elif opcode_nargs == 3:
 				# macros with bank and pointer as an argument

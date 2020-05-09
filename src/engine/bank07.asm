@@ -35,13 +35,13 @@ Func_1c056: ; 1c056 (7:4056)
 	inc hl
 	inc hl
 	ld a, [hli]
-	ld [wd0bb], a
+	ld [wTempMap], a
 	ld a, [hli]
-	ld [wd0bc], a
+	ld [wTempPlayerXCoord], a
 	ld a, [hli]
-	ld [wd0bd], a
-	ld a, [wd334]
-	ld [wd0be], a
+	ld [wTempPlayerYCoord], a
+	ld a, [wPlayerDirection]
+	ld [wTempPlayerDirection], a
 .asm_1c095
 	pop de
 	pop bc
@@ -93,11 +93,11 @@ INCLUDE "data/map_headers.asm"
 Func_1c440: ; 1c440 (7:4440)
 	INCROM $1c440, $1c455
 
-Func_1c455: ; 1c455 (7:4455)
+GetNPCDirection: ; 1c455 (7:4455)
 	push hl
-	ld a, [wd3aa]
-	ld l, $4
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_DIRECTION
+	call GetItemInLoadedNPCIndex
 	ld a, [hl]
 	pop hl
 	ret
@@ -106,9 +106,9 @@ Func_1c461: ; 1c461 (7:4461)
 	push hl
 	push bc
 	call Func_1c719
-	ld a, [wd3aa]
-	ld l, $2
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_COORD_X
+	call GetItemInLoadedNPCIndex
 	ld a, b
 	ld [hli], a
 	ld [hl], c
@@ -119,23 +119,98 @@ Func_1c461: ; 1c461 (7:4461)
 
 Func_1c477: ; 1c477 (7:4477)
 	push hl
-	ld a, [wd3aa]
-	ld l, $2
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_COORD_X
+	call GetItemInLoadedNPCIndex
 	ld a, [hli]
 	ld b, a
 	ld c, [hl]
 	pop hl
 	ret
 
+; Loads NPC Sprite Data
 Func_1c485: ; 1c485 (7:4485)
-	INCROM $1c485, $1c50a
+	push hl
+	push bc
+	push de
+	xor a
+	ld [wLoadedNPCTempIndex], a
+	ld b, a
+	ld c, LOADED_NPC_MAX
+	ld hl, wLoadedNPCs
+	ld de, LOADED_NPC_LENGTH
+.findEmptyIndexLoop
+	ld a, [hl]
+	or a
+	jr z, .foundEmptyIndex
+	add hl, de
+	inc b
+	dec c
+	jr nz, .findEmptyIndexLoop
+	ld hl, wLoadedNPCs
+	debug_ret
+	jr .exit
+.foundEmptyIndex
+	ld a, b
+	ld [wLoadedNPCTempIndex], a
+	ld a, [wd3b3]
+	farcall CreateSpriteAndAnimBufferEntry
+	jr c, .exit
+	ld a, [wLoadedNPCTempIndex]
+	call GetLoadedNPCID
+	push hl
+	ld a, [wTempNPC]
+	ld [hli], a
+	ld a, [wWhichSprite]
+	ld [hli], a
+	ld a, [wLoadNPCXPos]
+	ld [hli], a
+	ld a, [wLoadNPCYPos]
+	ld [hli], a
+	ld a, [wLoadNPCDirection]
+	ld [hli], a
+	ld a, [wd3b2]
+	ld [hli], a
+	ld a, [wd3b1]
+	ld [hli], a
+	ld a, [wLoadNPCDirection]
+	ld [hli], a
+	call Func_1c58e
+	call Func_1c5b9
+	ld hl, wd349
+	inc [hl]
+	pop hl
+	call Func_1c665
+	call Func_1c6e3
+	ld a, [wTempNPC]
+	call Func_1c4fa
+	jr nc, .exit
+	ld a, $01
+	ld [wd3b8], a
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_1c4fa: ; 1c4fa (7:44fa)
+	cp NPC_RONALD1
+	jr z, .asm_1c508
+	cp NPC_RONALD2
+	jr z, .asm_1c508
+	cp NPC_RONALD3
+	jr z, .asm_1c508
+	or a
+	ret
+.asm_1c508
+	scf
+	ret
 
 Func_1c50a: ; 1c50a (7:450a)
 	push hl
 	call Func_1c719
-	ld a, [wd3aa]
-	call Func_39a7
+	ld a, [wLoadedNPCTempIndex]
+	call GetLoadedNPCID
 	ld a, [hl]
 	or a
 	jr z, .asm_1c52c
@@ -159,9 +234,9 @@ Func_1c50a: ; 1c50a (7:450a)
 Func_1c52e: ; 1c52e (7:452e)
 	push hl
 	push af
-	ld a, [wd3aa]
-	ld l, $7
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_07
+	call GetItemInLoadedNPCIndex
 	pop af
 	ld [hl], a
 	call Func_1c5e9
@@ -171,9 +246,9 @@ Func_1c52e: ; 1c52e (7:452e)
 Func_1c53f: ; 1c53f (7:453f)
 	push hl
 	push bc
-	ld a, [wd3aa]
-	ld l, $4
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_DIRECTION
+	call GetItemInLoadedNPCIndex
 	ld a, [hl]
 	ld bc, $0003
 	add hl, bc
@@ -188,23 +263,23 @@ Func_1c53f: ; 1c53f (7:453f)
 Func_1c557: ; 1c557 (7:4557)
 	push bc
 	ld c, a
-	ld a, [wd3aa]
+	ld a, [wLoadedNPCTempIndex]
 	push af
-	ld a, [wd3ab]
+	ld a, [wTempNPC]
 	push af
 	ld a, c
-	ld [wd3ab], a
+	ld [wTempNPC], a
 	ld c, $0
-	call Func_39c3
+	call FindLoadedNPC
 	jr c, .asm_1c570
 	call Func_1c53f
 	ld c, a
 
 .asm_1c570
 	pop af
-	ld [wd3ab], a
+	ld [wTempNPC], a
 	pop af
-	ld [wd3aa], a
+	ld [wLoadedNPCTempIndex], a
 	ld a, c
 	pop bc
 	ret
@@ -213,9 +288,9 @@ Func_1c57b: ; 1c57b (7:457b)
 	push hl
 	push bc
 	push af
-	ld a, [wd3aa]
-	ld l, $6
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_06
+	call GetItemInLoadedNPCIndex
 	pop af
 	ld [hl], a
 	call Func_1c58e
@@ -224,13 +299,76 @@ Func_1c57b: ; 1c57b (7:457b)
 	ret
 
 Func_1c58e: ; 1c58e (7:458e)
-	INCROM $1c58e, $1c5e9
+	push hl
+	push bc
+	ld a, [wWhichSprite]
+	push af
+	ld a, [wLoadedNPCTempIndex]
+	call GetLoadedNPCID
+	ld a, [hli]
+	or a
+	jr z, .quit
+	ld a, [hl]
+	ld [wWhichSprite], a
+	ld bc, LOADED_NPC_FIELD_06 - LOADED_NPC_SPRITE
+	add hl, bc
+	ld a, [hld]
+	bit 4, [hl]
+	jr nz, .asm_1c5ae
+	dec hl
+	add [hl]
+	inc hl
+.asm_1c5ae
+	farcall Func_12ab5
+.quit
+	pop af
+	ld [wWhichSprite], a
+	pop bc
+	pop hl
+	ret
+; 0x1c5b9
+
+Func_1c5b9: ; 1c5b9 (7:45b9)
+	INCROM $1c5b9, $1c5e9
 
 Func_1c5e9: ; 1c5e9 (7:45e9)
-	INCROM $1c5e9, $1c610
+	push hl
+	push bc
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_07
+	call GetItemInLoadedNPCIndex
+	ld a, [hl]
+	ld bc, $fffd
+	add hl, bc
+	ld [hl], a
+	call Func_1c58e
+	pop bc
+	pop hl
+	ret
+; 0x1c5ff
+
+	INCROM $1c5ff, $1c610
 
 Func_1c610: ; 1c610 (7:4610)
-	INCROM $1c610, $1c6f8
+	INCROM $1c610, $1c665
+
+Func_1c665: ; 1c665 (7:4665)
+	INCROM $1c665, $1c6e3
+
+Func_1c6e3: ; 1c6e3 (7:46e3)
+	push hl
+	push bc
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_COORD_X
+	call GetItemInLoadedNPCIndex
+	ld a, [hli]
+	ld b, a
+	ld c, [hl]
+	ld a, $40
+	call SetPermissionOfMapPosition
+	pop bc
+	pop hl
+	ret
 
 Func_1c6f8: ; 1c6f8 (7:46f8)
 	INCROM $1c6f8, $1c719
@@ -238,9 +376,9 @@ Func_1c6f8: ; 1c6f8 (7:46f8)
 Func_1c719: ; 1c719 (7:4719)
 	push hl
 	push bc
-	ld a, [wd3aa]
-	ld l, $2
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_COORD_X
+	call GetItemInLoadedNPCIndex
 	ld a, [hli]
 	ld b, a
 	ld c, [hl]
@@ -250,36 +388,85 @@ Func_1c719: ; 1c719 (7:4719)
 	pop hl
 	ret
 
-Func_1c72e: ; 1c72e (7:472e)
-	INCROM $1c72e, $1c768
-
-Func_1c768: ; 1c768 (7:4768)
+; Find NPC at coords b (x) c (y)
+FindNPCAtLocation: ; 1c72e (7:472e)
 	push hl
-	ld a, [wd3aa]
-	ld l, $04
-	call Func_39ad
-	ld a, [wd334]
+	push bc
+	push de
+	ld d, $00
+	ld e, LOADED_NPC_MAX
+	ld hl, wLoadedNPC1CoordX
+.findValidNPCLoop
+	ld a, [hli]
+	cp b
+	jr nz, .noValidNPCHere
+	ld a, [hl]
+	cp c
+	jr nz, .noValidNPCHere
+	push hl
+	inc hl
+	inc hl
+	bit 6, [hl]
+	pop hl
+	jr nz, .noValidNPCHere
+	push hl
+	dec hl
+	dec hl
+	ld a, [hl]
+	or a
+	pop hl
+	jr nz, .foundNPCExit
+.noValidNPCHere
+	ld a, LOADED_NPC_LENGTH - 1
+	add l
+	ld l, a
+	ld a, h
+	adc $00
+	ld h, a
+	inc d
+	dec e
+	jr nz, .findValidNPCLoop
+	scf
+	jr .exit
+.foundNPCExit
+	ld a, d
+	ld [wLoadedNPCTempIndex], a
+	or a
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
+
+; Probably needs a new name. Loads data for NPC that the next Script is for
+; Sets direction, Loads Image data for it, loads name, and more
+SetNewScriptNPC: ; 1c768 (7:4768)
+	push hl
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_DIRECTION
+	call GetItemInLoadedNPCIndex
+	ld a, [wPlayerDirection]
 	xor $02
 	ld [hl], a
 	call Func_1c58e
 	ld a, $02
 	farcall Func_c29b
-	ld a, [wd3aa]
-	call Func_39a7
+	ld a, [wLoadedNPCTempIndex]
+	call GetLoadedNPCID
 	ld a, [hl]
-	farcall Func_1187d
+	farcall GetNPCNameAndScript
 	pop hl
 	ret
 
 Func_1c78d: ; 1c78d (7:478d)
 	push hl
-	ld a, [wd3aa]
-	ld l, $5
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_05
+	call GetItemInLoadedNPCIndex
 	set 5, [hl]
-	ld a, [wd3aa]
-	ld l, $8
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_08
+	call GetItemInLoadedNPCIndex
 	xor a
 	ld [hli], a
 .asm_1c7a2
@@ -319,9 +506,9 @@ Func_1c78d: ; 1c78d (7:478d)
 	jr .asm_1c7a2
 
 .asm_1c7d2
-	ld a, [wd3aa]
-	ld l, $5
-	call Func_39ad
+	ld a, [wLoadedNPCTempIndex]
+	ld l, LOADED_NPC_FIELD_05
+	call GetItemInLoadedNPCIndex
 	res 5, [hl]
 
 .asm_1c7dc
@@ -429,7 +616,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld c, a
 	pop hl
 
-	call PushBC_Ret ; call bc
+	call CallBC
 .return
 	pop de
 	pop bc
@@ -451,7 +638,7 @@ Func_1c94a:
 	dec c
 	jr nz, .loop
 	ld a, [hli]
-	farcall Func_1299f
+	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wAnimationQueue], a ; push an animation to the queue
 	xor a
@@ -887,7 +1074,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, [wd633]
 	cp $ff
 	jr nz, .asm_1d6c8
-	call Func_3c96
+	call WaitForSongToFinish
 	ld a, $8
 	farcall $4, $6863
 	ld a, MUSIC_STOP
