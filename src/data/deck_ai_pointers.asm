@@ -1,4 +1,4 @@
-PointerTable_14000: ; 14000 (05:4000)
+DeckAIPointerTable: ; 14000 (05:4000)
 	dw AIActionTable_SamPractice         ; SAMS_PRACTICE_DECK
 	dw AIActionTable_GeneralDecks        ; PRACTICE_PLAYER_DECK
 	dw AIActionTable_GeneralDecks        ; SAMS_NORMAL_DECK

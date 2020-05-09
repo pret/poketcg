@@ -353,7 +353,7 @@ DuelMainInterface: ; 426d (1:426d)
 	ld [wSkipDuelistIsThinkingDelay], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
-	call Func_2bbf
+	call AIDoAction_Turn
 	ld a, $ff
 	ld [wPlayerAttackingCardIndex], a
 	ld [wPlayerAttackingMoveIndex], a
@@ -1967,7 +1967,7 @@ ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 ; AI opponent's turn
 	push af
 	push hl
-	call Func_2bc3
+	call AIDoAction_StartDuel
 	pop hl
 	pop af
 	ld [hl], a
@@ -3757,7 +3757,7 @@ Func_5805: ; 5805 (1:5805)
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
-	call Func_2bd7
+	call AIDoAction_TakePrize
 	ld c, DECK_SIZE
 .asm_5858
 	call DoFrame
@@ -7492,7 +7492,7 @@ ReplaceKnockedOutPokemon: ; 6f23 (1:6f23)
 .opponent
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
-	call Func_2bcf
+	call AIDoAction_KOSwitch
 	ldh a, [hTemp_ffa0]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	jr .replace_pokemon

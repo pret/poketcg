@@ -33,6 +33,7 @@ ENDM
 ; deck AIs are specialized to work on a given deck ID.
 ; they decide what happens during a turn, what Pokemon cards
 ; to pick during the start of the duel, etc.
+; the different scenarios these are used are listed in AIACTION_* constants.
 ; each of these have a pointer table with the following structure:
 ; dw .do_turn       : never called;
 ;
