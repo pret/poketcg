@@ -1,6 +1,6 @@
 start_script EQUS "rst $20"
 
-run_script: MACRO
+run_command: MACRO
 	db \1_index
 ENDM
 
