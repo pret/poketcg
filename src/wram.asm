@@ -967,7 +967,7 @@ wNoDamageOrEffect:: ; ccc7
 
 ; used by CountKnockedOutPokemon and Func_5805 to store the amount
 ; of prizes to take (equal to the number of Pokemon knocked out)
-wccc8:: ; ccc8
+wNumberPrizeCardsToTake:: ; ccc8
 	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
@@ -1182,26 +1182,66 @@ wcd9f:: ; cd9f
 wcda5:: ; cda5
 	ds $1
 
-wcda6:: ; cda6
+; this is used by AI in order to determine whether
+; it should use Pokedex Trainer card.
+; starts with 5 when Duel starts and counts up by 1 every turn.
+; only when it's higher than 5 is AI allowed to use Pokedex,
+; in which case it sets the counter to 0.
+; this stops the AI from using Pokedex right after using another one
+; while still drawing cards that were ordered.
+wAIPokedexCounter:: ; cda6
 	ds $1
 
-wcda7:: ; cda7
+; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
+; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
+; 	- when flag is not set, this counts how many turns in a row
+;	  Player used Mewtwo1's Barrier attack;
+; 	- when flag is set, this counts how many turns in a row
+;	  Player has NOT used Barrier attack.
+wAIBarrierFlagCounter:: ; cda7
 	ds $1
 
-	ds $6
-
-; pointer to a list of card IDs for sorting AI hand
-wcdae:: ; cdae
+; pointer to $00-terminated list of card IDs
+; to avoid being placed as prize cards
+; when setting up AI duelist's cards at duel start.
+; (see SetUpBossStartingHandAndDeck)
+wAICardListAvoidPrize:: ; cda8
 	ds $2
 
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Arena
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListArenaPriority:: ; cdaa
 	ds $2
 
-; these seem to hold pointer to some kind of
-; card ID list with attached energy and score
-wcdb2:: ; cdb2
-	ds $1
-wcdb3:: ; cdb3
-	ds $1
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Bench
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListBenchPriority:: ; cdac
+	ds $2
+
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI playing it from Hand
+; to the Bench (see AIDecidePlayPokemonCard)
+wAICardListPlayFromHandPriority:: ; cdae
+	ds $2
+
+; pointer to $00-terminated list of card IDs and AI scores.
+; these are for giving certain cards more or less
+; likelihood of being picked by AI to switch to.
+; (see AIDecideBenchPokemonToSwitchTo)
+wAICardListRetreatBonus:: ; cdb0
+	ds $2
+
+; pointer to $00-terminated list of card IDs,
+; number of energy cards and AI score.
+; these are for giving certain cards more or less
+; likelihood of being picked for AI to attach energy.
+; also has the maximum number of energy cards that
+; the AI is willing to provide for it.
+; (see AIProcessEnergyCards)
+wAICardListEnergyBonus:: ; cdb2
+	ds $2
 
 wcdb4:: ; cdb4
 	ds $1
@@ -1230,12 +1270,22 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
+UNION
+
 ; used for AI decisions that involve
 ; each card in the Play Area.
 wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
-	ds $0a
+NEXTU
+
+; stores the score determined by AI for first attack
+wFirstAttackAIScore:: ; cdbf
+	ds $1
+
+ENDU
+
+	ds $a
 
 ; information about the defending Pokémon and
 ; the prize card count on both sides for AI:
@@ -1259,7 +1309,9 @@ wAIOpponentPrizeCount:: ; cdd3
 wTempCardIDToLook:: ; cdd4
 	ds $1
 
-wcdd5:: ; cdd5
+; when AI decides which Bench Pokemon to switch to
+; it stores it Play Area location here.
+wAIPlayAreaCardToSwitch:: ; cdd5
 	ds $1
 
 ; the index of attack chosen by AI
@@ -1274,10 +1326,16 @@ wAIPluspowerAttack:: ; cdd6
 wAIPlayEnergyCardForRetreat:: ; cdd7
 	ds $1
 
-wcdd8:: ; cdd8
+; flags defined by AI_ENERGY_FLAG_* constants
+; used as input for AIProcessEnergyCards
+; to determine what to check in the routine.
+wAIEnergyAttachLogicFlags:: ; cdd8
 	ds $1
 
-wcdd9:: ; cdd9
+; used as input to AIProcessAttacks.
+; if 0, execute the attack chosen by the AI.
+; if not 0, return without executing attack.
+wAIExecuteProcessedAttack:: ; cdd9
 	ds $1
 
 wcdda:: ; cdda
@@ -1289,15 +1347,17 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-; used to compliment wPlayAreaAIScore,
-; to temporarily do calculations and store results.
+; used to temporarily backup wPlayAreaAIScore values.
 wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 
-wcde3:: ; cde3
+wTempAIScore:: ; cde3
 	ds $1
 
-wcde4:: ; cde4
+; used for AI decisions that involve
+; each card in the Play Area involving
+; attaching Energy cards.
+wPlayAreaEnergyAIScore:: ; cde4
 	ds MAX_PLAY_AREA_POKEMON
 
 wcdea:: ; cdea
@@ -1352,12 +1412,25 @@ wce01:: ; ce01
 wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
-wce03:: ; ce03
+; whether AI already retreated this turn or not.
+; 	- $0 has not retreated;
+; 	- $1 has retreated.
+wAIRetreatedThisTurn:: ; ce03
 	ds $1
 
-	ds $2
+; used by AI to store information of Venusaur2
+; while handling Energy Trans logic.
+wAIVenusaur2DeckIndex:: ; ce04
+	ds $1
+wAIVenusaur2PlayAreaLocation:: ; ce05
+	ds $1
 
 wce06:: ; ce06
+; number of cards to be transferred by AI using Energy Trans.
+wAINumberOfEnergyTransCards::
+; used for storing weakness of Player's Arena card
+; in AI routine dealing with Shift Pkmn Power.
+wAIDefendingPokemonWeakness::
 	ds $1
 
 wce07:: ; ce07
@@ -1836,19 +1909,20 @@ wd0b9:: ; d0b9
 wd0ba:: ; d0ba
 	ds $1
 
-wd0bb:: ; d0bb
+wTempMap:: ; d0bb
 	ds $1
 
-wd0bc:: ; d0bc
+wTempPlayerXCoord:: ; d0bc
 	ds $1
 
-wd0bd:: ; d0bd
+wTempPlayerYCoord:: ; d0bd
 	ds $1
 
-wd0be:: ; d0be
+wTempPlayerDirection:: ; d0be
 	ds $1
 
-wd0bf:: ; d0bf
+; See constants/misc_constants.asm for OWMODE's
+wOverworldMode:: ; d0bf
 	ds $1
 
 wd0c0:: ; d0c0
@@ -1871,23 +1945,15 @@ wd0c4:: ; d0c4
 wd0c5:: ; d0c5
 	ds $1
 
-wd0c6:: ; d0c6
-	ds $1
+; used to store the location of an overworld script, which is jumped to later
+wNextScript:: ; d0c6
+	ds $2
 
-wd0c7:: ; d0c7
-	ds $1
+wCurrentNPCNameTx:: ; d0c8
+	ds $2
 
-wd0c8:: ; d0c8
-	ds $1
-
-wd0c9:: ; d0c9
-	ds $1
-
-wd0ca:: ; d0ca
-	ds $1
-
-wd0cb:: ; d0cb
-	ds $1
+wDefaultObjectText:: ; d0ca
+	ds $2
 
 wd0cc:: ; d0cc
 	ds 8 palettes
@@ -1940,9 +2006,7 @@ wPCPackSelection:: ; d11d
 
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
-	ds $c
-
-	ds $3
+	ds $f
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
@@ -2055,13 +2119,14 @@ wd332:: ; d332
 wd333:: ; d333
 	ds $1
 
-wd334:: ; d334
+wPlayerDirection:: ; d334
 	ds $1
 
-wd335:: ; d335
+; seems to be 1 if moving 0 otherwise
+wPlayerCurrentlyMoving:: ; d335
 	ds $1
 
-wd336:: ; d336
+wPlayerSpriteIndex:: ; d336
 	ds $1
 
 wd337:: ; d337
@@ -2120,29 +2185,33 @@ wd348:: ; d348
 wd349:: ; d349
 	ds $1
 
-wd34a:: ; d34a
-	ds $60
+wLoadedNPCs:: ; d34a
+	loaded_npc_struct wLoadedNPC1
+	loaded_npc_struct wLoadedNPC2
+	loaded_npc_struct wLoadedNPC3
+	loaded_npc_struct wLoadedNPC4
+	loaded_npc_struct wLoadedNPC5
+	loaded_npc_struct wLoadedNPC6
+	loaded_npc_struct wLoadedNPC7
+	loaded_npc_struct wLoadedNPC8
 
-wd3aa:: ; d3aa
+wLoadedNPCTempIndex:: ; d3aa
 	ds $1
 
-wd3ab:: ; d3ab
+wTempNPC:: ; d3ab
 	ds $1
 
-wd3ac:: ; d3ac
+wLoadNPCXPos:: ; d3ac
 	ds $1
 
-wd3ad:: ; d3ad
+wLoadNPCYPos:: ; d3ad
 	ds $1
 
-wd3ae:: ; d3ae
+wLoadNPCDirection:: ; d3ae
 	ds $1
 
-wd3af:: ; d3af
-	ds $1
-
-wd3b0:: ; d3b0
-	ds $1
+wLoadNPCFunction:: ; d3af
+	ds $2
 
 wd3b1:: ; d3b1
 	ds $1
@@ -2155,7 +2224,8 @@ wd3b3:: ; d3b3
 
 	ds $2
 
-wd3b6:: ; d3b6
+; ID of the NPC being interacted with in Script
+wScriptNPC:: ; d3b6
 	ds $1
 
 wc3b7:: ; d3b7
@@ -2175,23 +2245,22 @@ wd3bb:: ; d3bb
 wd3d0:: ; d3d0
 	ds $1
 
-wd3d1:: ; d3d1
+; the bits relevant to the currently worked on flag, obtained from EventFlagMods
+wLoadedFlagBits:: ; d3d1
 	ds $1
 
 wEventFlags::
-	ds $3f
-
-wd411:: ; d411
-	ds $1
+	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
-wBreakOWScriptLoop:: ; d412
+wBreakScriptLoop:: ; d412
 	ds $1
 
-wOWScriptPointer:: ; d413
+wScriptPointer:: ; d413
 	ds $2
 
-wd415:: ; d415
+; generally set to ff when a flag check passes, 0 otherwise
+wScriptControlByte:: ; d415
 	ds $1
 
 wd416:: ; d416
@@ -2269,13 +2338,11 @@ wd4c2:: ; d4c2
 wd4c3:: ; d4c3
 	ds $1
 
-wd4c4:: ; d4c4
-	ds $1
+; these next 3 seem to be an address (bank @ end) for copying bg data
+wTempPointer:: ; d4c4
+	ds $2
 
-wd4c5:: ; d4c5
-	ds $1
-
-wd4c6:: ; d4c6
+wTempPointerBank:: ; d4c6
 	ds $1
 
 wd4c7:: ; d4c7
@@ -2344,6 +2411,7 @@ wd5d7:: ; d5d7
 wd5d8:: ; d5d8
 	ds $40
 
+; seems to be the amount of entries in wd5d8
 wd618:: ; d618
 	ds $1
 

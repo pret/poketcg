@@ -292,7 +292,9 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 	ret
 ; 0x2c166
 
-Func_2c166: ; 2c166 (b:4166)
+; overwrites in wDamage, wAIMinDamage and wAIMaxDamage
+; with the value in a.
+StoreDamageInfo: ; 2c166 (b:4166)
 	ld [wDamage], a
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -301,7 +303,181 @@ Func_2c166: ; 2c166 (b:4166)
 	ret
 ; 0x2c174
 
-	INCROM $2c174, $2c6f0
+	INCROM $2c174, $2c1ec
+
+HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
+	ld e, a
+	cp $ff
+	ret z
+
+; check Defending Pokemon's HP
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetNonTurnDuelistVariable
+	or a
+	jr nz, .switch
+
+; if 0, handle Destiny Bond first
+	push de
+	bank1call HandleDestinyBondSubstatus
+	pop de
+
+.switch
+	call .HandleNoDamageOrEffect
+	ret c
+
+; attack was successful, switch Defending Pokemon
+	call SwapTurn
+	call SwapArenaWithBenchPokemon
+	call SwapTurn
+
+	xor a
+	ld [wccc5], a
+	ld [wDuelDisplayedScreen], a
+	inc a
+	ld [wccef], a
+	ret
+; 0x2c216
+
+; returns carry if Defending has No Damage or Effect
+; if so, print its appropriate text.
+.HandleNoDamageOrEffect: ; 2c216 (b:4216)
+	call CheckNoDamageOrEffect
+	ret nc
+	ld a, l
+	or h
+	call nz, DrawWideTextBox_PrintText
+	scf
+	ret
+; 0x2c221
+
+	INCROM $2c221, $2c2a4
+
+; makes a list in wDuelTempList with the deck indices
+; of all the energy cards found in opponent's Discard Pile.
+; if (c == 0), all energy cards are allowed;
+; if (c != 0), double colorless energy cards are not counted.
+; returns carry if no energy cards were found.
+CreateEnergyCardListFromOpponentDiscardPile: ; 2c2a4 (b:42a4)
+	ld c, $00
+
+; get number of cards in Discard Pile
+; and have hl point to the end of the
+; Discard Pile list in wOpponentDeckCards.
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	call GetTurnDuelistVariable
+	ld b, a
+	add DUELVARS_DECK_CARDS
+	ld l, a
+
+	ld de, wDuelTempList
+	inc b
+	jr .next_card
+
+.check_energy
+	ld a, [hl]
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	and TYPE_ENERGY
+	jr z, .next_card
+
+; if (c != $00), then we dismiss Double Colorless
+; energy cards found.
+	ld a, c
+	or a
+	jr z, .copy
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr nc, .next_card
+
+.copy
+	ld a, [hl]
+	ld [de], a
+	inc de
+
+; goes through Discard Pile list
+; in wOpponentDeckCards in descending order.
+.next_card
+	dec l
+	dec b
+	jr nz, .check_energy
+
+; terminating byte on wDuelTempList
+	ld a, $ff
+	ld [de], a
+
+; check if any energy card was found
+; by checking whether the first byte
+; in wDuelTempList is $ff.
+; if none were found, return carry.
+	ld a, [wDuelTempList]
+	cp $ff
+	jr z, .set_carry
+	or a
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x2c2e0
+
+	INCROM $2c2e0, $2c487
+
+; handles the selection of a forced switch
+; by link/AI opponent or by the player.
+; outputs the Play Area location of the chosen
+; bench card in hTempPlayAreaLocation_ff9d.
+DuelistSelectForcedSwitch: ; 2c487 (b:4487)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetNonTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opp
+
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+
+; AI opponent
+	call SwapTurn
+	bank1call AIDoAction_ForcedSwitch
+	call SwapTurn
+
+	ld a, [wPlayerAttackingMoveIndex]
+	ld e, a
+	ld a, [wPlayerAttackingCardIndex]
+	ld d, a
+	ld a, [wPlayerAttackingCardID]
+	call CopyMoveDataAndDamage_FromCardID
+	call Func_16f6
+	ret
+
+.player
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+	ld a, $01
+	ld [wcbd4], a
+.asm_2c4c0
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .asm_2c4c0
+	call SwapTurn
+	ret
+
+.link_opp
+; get selection from link opponent
+	ld a, OPPACTION_FORCE_SWITCH_ACTIVE
+	call SetOppAction_SerialSendDuelData
+.loop
+	call SerialRecvByte
+	jr nc, .received
+	halt
+	nop
+	jr .loop
+.received
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ret
+; 0x2c4da
+
+	INCROM $2c4da, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
@@ -320,7 +496,44 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	ret
 ; 0x2c70a
 
-	INCROM $2c70a, $2c730
+; outputs in hTemp_ffa0 the result of the coin toss
+; (0 = tails, 1 = heads) and, in case it was heads,
+; stores in hTempPlayAreaLocation_ffa1 the location
+; of the Bench Pokemon that was selected for switch.
+TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
+	xor a
+	ldh [hTemp_ffa0], a
+
+; return failure if no Pokemon to switch to
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c
+
+; toss coin and store whether it was tails (0)
+; or heads (1) in hTemp_ffa0
+; return if it was tails.
+	ldtx de, IfHeadsChangeOpponentsActivePokemonText
+	call Func_2c08a
+	ldh [hTemp_ffa0], a
+	ret nc
+
+	call DuelistSelectForcedSwitch
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+; 0x2c726
+
+; if coin toss was heads and it's possible,
+; switch Defending Pokemon
+TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
+	ldh a, [hTemp_ffa0]
+	or a
+	ret z
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	call HandleSwitchDefendingPokemonEffect
+	ret
+; 0x2c730
 
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, 10
@@ -417,7 +630,7 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 	add a
 	add e
 	call ATimes10
-	call Func_2c166
+	call StoreDamageInfo
 	ret
 ; 0x2c80d
 
@@ -538,4 +751,16 @@ Toxic_DoublePoisonEffect: ; 2c994 (b:4994)
 	ret
 ; 0x2c998
 
-	INCROM $2c998, $30000
+	INCROM $2c998, $2cbfb
+
+Func_2cbfb: ; 2cbfb (b:4bfb)
+	ldh a, [hAIEnergyTransPlayAreaLocation]
+	ld e, a
+	ldh a, [hAIEnergyTransEnergyCard]
+	call AddCardToHand
+	call PutHandCardInPlayArea
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ret
+; 0x2cc0a
+
+	INCROM $2cc0a, $30000

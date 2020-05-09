@@ -63,7 +63,7 @@ s0a3f8:: ; a3f8
 
 	ds $12b4
 
-s0b700:: ; b700
+sCurrentlySelectedDeck:: ; b700
 	ds $1
 
 SECTION "SRAM1", SRAM

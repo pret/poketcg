@@ -353,7 +353,7 @@ DuelMainInterface: ; 426d (1:426d)
 	ld [wSkipDuelistIsThinkingDelay], a
 	ldtx hl, DuelistIsThinkingText
 	call DrawWideTextBox_PrintTextNoDelay
-	call Func_2bbf
+	call AIDoAction_Turn
 	ld a, $ff
 	ld [wPlayerAttackingCardIndex], a
 	ld [wPlayerAttackingMoveIndex], a
@@ -1967,7 +1967,7 @@ ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 ; AI opponent's turn
 	push af
 	push hl
-	call Func_2bc3
+	call AIDoAction_StartDuel
 	pop hl
 	pop af
 	ld [hl], a
@@ -3720,7 +3720,7 @@ Func_57df: ; 57df (1:57df)
 
 Func_5805: ; 5805 (1:5805)
 	call Func_3b31
-	ld a, [wccc8]
+	ld a, [wNumberPrizeCardsToTake]
 	ld l, a
 	ld h, $00
 	call LoadTxRam3
@@ -3731,7 +3731,7 @@ Func_5805: ; 5805 (1:5805)
 
 	ldtx hl, WillDrawNPrizesText
 	call DrawWideTextBox_WaitForInput
-	ld a, [wccc8]
+	ld a, [wNumberPrizeCardsToTake]
 	call Func_310a
 	ld hl, hTemp_ffa0
 	ld d, [hl]
@@ -3757,7 +3757,7 @@ Func_5805: ; 5805 (1:5805)
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
-	call Func_2bd7
+	call AIDoAction_TakePrize
 	ld c, DECK_SIZE
 .asm_5858
 	call DoFrame
@@ -3775,7 +3775,7 @@ Func_5805: ; 5805 (1:5805)
 	call nz, AddCardToHand
 .asm_586f
 	ld a, [wcbfc]
-	ld hl, wccc8
+	ld hl, wNumberPrizeCardsToTake
 	cp [hl]
 	jr nc, .asm_587e
 	ld l, a
@@ -6288,10 +6288,10 @@ DiscardSavedDuelData: ; 6785 (1:6785)
 ; 0x6793
 
 ; loads a player deck (sDeck*Cards) from SRAM to wPlayerDeck
-; s0b700 determines which sDeck*Cards source (0-3)
+; sCurrentlySelectedDeck determines which sDeck*Cards source (0-3)
 LoadPlayerDeck: ; 6793 (1:6793)
 	call EnableSRAM
-	ld a, [s0b700]
+	ld a, [sCurrentlySelectedDeck]
 	ld l, a
 	ld h, sDeck2Cards - sDeck1Cards
 	call HtimesL
@@ -6835,6 +6835,7 @@ OppAction_ExecutePokemonPowerEffect: ; 6b07 (1:6b07)
 	ret
 ; 0x6b15
 
+; execute the EFFECTCMDTYPE_AFTER_DAMAGE command of the used Pokemon Power
 OppAction_6b15: ; 6b15 (1:6b15)
 	ld a, EFFECTCMDTYPE_AFTER_DAMAGE
 	call TryExecuteEffectCommandFunction
@@ -7491,7 +7492,7 @@ ReplaceKnockedOutPokemon: ; 6f23 (1:6f23)
 .opponent
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
-	call Func_2bcf
+	call AIDoAction_KOSwitch
 	ldh a, [hTemp_ffa0]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	jr .replace_pokemon
@@ -7524,7 +7525,7 @@ Func_6fa5: ; 6fa5 (1:6fa5)
 	ret
 ; 0x6fc7
 
-; return in wccc8 the amount of Pokemon in the turn holder's
+; return in wNumberPrizeCardsToTake the amount of Pokemon in the turn holder's
 ; play area that are still there despite having 0 HP.
 ; that is, the number of Pokemon that have just been knocked out.
 ; Clefairy Doll and Mysterious Fossil don't count.
@@ -7557,7 +7558,7 @@ CountKnockedOutPokemon: ; 6fc7 (1:6fc7)
 	dec c
 	jr nz, .loop
 	ld a, b
-	ld [wccc8], a
+	ld [wNumberPrizeCardsToTake], a
 	or a
 	ret z
 	scf

@@ -1,9 +1,10 @@
 ; When you press the A button in front of something it will find a data entry somewhere on this list
 ; it will then jump to the pointer in the data item. All jumps lead to an RST20 operation.
+; The Deck IDs are used for the challenge hall
 NPCHeaderPointers:
 	dw DrMasonNPCHeader
 	dw DrMasonNPCHeader
-	dw RonaldNPCHeader
+	dw Ronald1NPCHeader
 	dw IshiharaNPCHeader
 	dw ImakuniNPCHeader
 	dw DrMasonNPCHeader
@@ -47,7 +48,7 @@ NPCHeaderPointers:
 	dw RobertNPCHeader
 	dw DanielNPCHeader
 	dw StephanieNPCHeader
-	dw MurrayNPCHeader
+	dw Murray1NPCHeader
 	dw JosephNPCHeader
 	dw DavidNPCHeader
 	dw ErikNPCHeader
@@ -61,7 +62,7 @@ NPCHeaderPointers:
 	dw JackNPCHeader
 	dw RodNPCHeader
 	dw Clerk10NPCHeader
-	dw Clerk11NPCHeader
+	dw GiftCenterClerkNPCHeader
 	dw Man1NPCHeader
 	dw Woman1NPCHeader
 	dw Chap1NPCHeader
@@ -107,10 +108,10 @@ NPCHeaderPointers:
 	dw TorchNPCHeader
 	dw LegendaryCardTopLeftNPCHeader
 	dw LegendaryCardTopRightNPCHeader
+	dw LegendaryCardLeftSparkNPCHeader
 	dw LegendaryCardBottomLeftNPCHeader
-	dw LegendaryCardBottomCenterLeftNPCHeader
-	dw LegendaryCardBottomCenterRightNPCHeader
 	dw LegendaryCardBottomRightNPCHeader
+	dw LegendaryCardRightSparkNPCHeader
 	dw DummyNPCHeader
 	dw DummyNPCHeader
 	dw Murray2NPCHeader
@@ -124,20 +125,20 @@ DrMasonNPCHeader:
 	db $00
 	db $26 ; palette and animation
 	db $00
-	dw DrMasonNPCScript
+	dw Script_DrMason
 	tx DrMasonNPCName
 	db $00
 	db $00
 	db $00
 	db $00
 
-RonaldNPCHeader:
-	db NPC_RONALD
+Ronald1NPCHeader:
+	db NPC_RONALD1
 	db SPRITE_RONALD
 	db $04
 	db $0e
 	db $00
-	dw RonaldNPCScript
+	dw Script_Ronald
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -150,7 +151,7 @@ Ronald2NPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw Ronald2NPCScript
+	dw Script_Ronald
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -163,7 +164,7 @@ Ronald3NPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw Ronald3NPCScript
+	dw Script_Ronald
 	tx RonaldNPCName
 	db RONALD_PIC
 	db INVINCIBLE_RONALD_DECK_ID
@@ -176,7 +177,7 @@ IshiharaNPCHeader:
 	db $04
 	db $22
 	db $00
-	dw IshiharaNPCScript
+	dw Script_Ishihara
 	tx IshiharaNPCName
 	db $00
 	db $00
@@ -189,7 +190,7 @@ ImakuniNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw ImakuniNPCScript
+	dw Script_Imakuni
 	tx ImakuniNPCName
 	db IMAKUNI_PIC
 	db IMAKUNI_DECK_ID
@@ -202,7 +203,7 @@ SamNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw SamNPCScript
+	dw Script_Sam
 	tx SamNPCName
 	db SAM_PIC
 	db SAMS_NORMAL_DECK_ID
@@ -215,7 +216,7 @@ Tech1NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech1NPCScript
+	dw Script_Tech1
 	tx TechNPCName
 	db $00
 	db $00
@@ -228,7 +229,7 @@ Tech2NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech2NPCScript
+	dw Script_Tech2
 	tx TechNPCName
 	db $00
 	db $00
@@ -241,7 +242,7 @@ Tech3NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech3NPCScript
+	dw Script_Tech3
 	tx TechNPCName
 	db $00
 	db $00
@@ -254,7 +255,7 @@ Tech4NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech4NPCScript
+	dw Script_Tech4
 	tx TechNPCName
 	db $00
 	db $00
@@ -267,7 +268,7 @@ Tech5NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech5NPCScript
+	dw Script_Tech5
 	tx TechNPCName
 	db $00
 	db $00
@@ -280,7 +281,7 @@ Tech6NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech6NPCScript
+	dw Script_Tech6
 	tx TechNPCName
 	db $00
 	db $00
@@ -293,7 +294,7 @@ Clerk1NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk1NPCScript
+	dw Script_Clerk1
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -306,7 +307,7 @@ Clerk2NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk2NPCScript
+	dw Script_Clerk2
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -319,7 +320,7 @@ Clerk3NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk3NPCScript
+	dw Script_Clerk3
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -332,7 +333,7 @@ Clerk4NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk4NPCScript
+	dw Script_Clerk4
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -345,7 +346,7 @@ Clerk5NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk5NPCScript
+	dw Script_Clerk5
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -358,7 +359,7 @@ Clerk6NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk6NPCScript
+	dw Script_Clerk6
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -371,7 +372,7 @@ Clerk7NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk7NPCScript
+	dw Script_Clerk7
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -384,7 +385,7 @@ Clerk8NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk8NPCScript
+	dw Script_Clerk8
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -397,7 +398,7 @@ Clerk9NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk9NPCScript
+	dw Script_Clerk9
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -410,7 +411,7 @@ ChrisNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw ChrisNPCScript
+	dw Script_Chris
 	tx ChrisNPCName
 	db CHRIS_PIC
 	db MUSCLES_FOR_BRAINS_DECK_ID
@@ -423,7 +424,7 @@ MichaelNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw MichaelNPCScript
+	dw Script_Michael
 	tx MichaelNPCName
 	db MICHAEL_PIC
 	db HEATED_BATTLE_DECK_ID
@@ -436,7 +437,7 @@ JessicaNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw JessicaNPCScript
+	dw Script_Jessica
 	tx JessicaNPCName
 	db JESSICA_PIC
 	db LOVE_TO_BATTLE_DECK_ID
@@ -449,7 +450,7 @@ MitchNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw MitchNPCScript
+	dw Script_Mitch
 	tx MitchNPCName
 	db MITCH_PIC
 	db FIRST_STRIKE_DECK_ID
@@ -462,7 +463,7 @@ MatthewNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw MatthewNPCScript
+	dw Script_Matthew
 	tx MatthewNPCName
 	db MATTHEW_PIC
 	db HARD_POKEMON_DECK_ID
@@ -475,7 +476,7 @@ RyanNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw RyanNPCScript
+	dw Script_Ryan
 	tx RyanNPCName
 	db RYAN_PIC
 	db EXCAVATION_DECK_ID
@@ -488,7 +489,7 @@ AndrewNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw AndrewNPCScript
+	dw Script_Andrew
 	tx AndrewNPCName
 	db ANDREW_PIC
 	db BLISTERING_POKEMON_DECK_ID
@@ -501,7 +502,7 @@ GeneNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw GeneNPCScript
+	dw Script_Gene
 	tx GeneNPCName
 	db GENE_PIC
 	db ROCK_CRUSHER_DECK_ID
@@ -514,7 +515,7 @@ SaraNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw SaraNPCScript
+	dw Script_Sara
 	tx SaraNPCName
 	db SARA_PIC
 	db WATERFRONT_POKEMON_DECK_ID
@@ -527,7 +528,7 @@ AmandaNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw AmandaNPCScript
+	dw Script_Amanda
 	tx AmandaNPCName
 	db AMANDA_PIC
 	db LONELY_FRIENDS_DECK_ID
@@ -540,7 +541,7 @@ JoshuaNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw JoshuaNPCScript
+	dw Script_Joshua
 	tx JoshuaNPCName
 	db JOSHUA_PIC
 	db SOUND_OF_THE_WAVES_DECK_ID
@@ -553,7 +554,7 @@ AmyNPCHeader:
 	db $08
 	db $2e
 	db $10
-	dw AmyNPCScript
+	dw Script_Amy
 	tx AmyNPCName
 	db AMY_PIC
 	db GO_GO_RAIN_DANCE_DECK_ID
@@ -566,7 +567,7 @@ JenniferNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw JenniferNPCScript
+	dw Script_Jennifer
 	tx JenniferNPCName
 	db JENNIFER_PIC
 	db PIKACHU_DECK_ID
@@ -579,7 +580,7 @@ NicholasNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw NicholasNPCScript
+	dw Script_Nicholas
 	tx NicholasNPCName
 	db NICHOLAS_PIC
 	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
@@ -592,7 +593,7 @@ BrandonNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw BrandonNPCScript
+	dw Script_Brandon
 	tx BrandonNPCName
 	db BRANDON_PIC
 	db POWER_GENERATOR_DECK_ID
@@ -605,7 +606,7 @@ IsaacNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw IsaacNPCScript
+	dw Script_Isaac
 	tx IsaacNPCName
 	db ISAAC_PIC
 	db ZAPPING_SELFDESTRUCT_DECK_ID
@@ -618,7 +619,7 @@ BrittanyNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw BrittanyNPCScript
+	dw Script_Brittany
 	tx BrittanyNPCName
 	db BRITTANY_PIC
 	db ETCETERA_DECK_ID
@@ -631,7 +632,7 @@ KristinNPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw KristinNPCScript
+	dw Script_Kristin
 	tx KristinNPCName
 	db KRISTIN_PIC
 	db FLOWER_GARDEN_DECK_ID
@@ -644,7 +645,7 @@ HeatherNPCHeader:
 	db $04
 	db $22
 	db $00
-	dw HeatherNPCScript
+	dw Script_Heather
 	tx HeatherNPCName
 	db HEATHER_PIC
 	db KALEIDOSCOPE_DECK_ID
@@ -657,7 +658,7 @@ NikkiNPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw NikkiNPCScript
+	dw Script_Nikki
 	tx NikkiNPCName
 	db NIKKI_PIC
 	db FLOWER_POWER_DECK_ID
@@ -670,7 +671,7 @@ RobertNPCHeader:
 	db $04
 	db $16
 	db $00
-	dw RobertNPCScript
+	dw Script_Robert
 	tx RobertNPCName
 	db ROBERT_PIC
 	db GHOST_DECK_ID
@@ -683,7 +684,7 @@ DanielNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw DanielNPCScript
+	dw Script_Daniel
 	tx DanielNPCName
 	db DANIEL_PIC
 	db NAP_TIME_DECK_ID
@@ -696,20 +697,20 @@ StephanieNPCHeader:
 	db $04
 	db $0e
 	db $00
-	dw StephanieNPCScript
+	dw Script_Stephanie
 	tx StephanieNPCName
 	db STEPHANIE_PIC
 	db STRANGE_POWER_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	db MUSIC_MATCH_START_1
 
-MurrayNPCHeader:
-	db NPC_MURRAY
+Murray1NPCHeader:
+	db NPC_MURRAY1
 	db SPRITE_MURRAY
 	db $00
 	db $12
 	db $00
-	dw MurrayNPCScript
+	dw Script_Murray1
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
@@ -722,7 +723,7 @@ Murray2NPCHeader:
 	db $03
 	db $15
 	db $10
-	dw Murray2NPCScript
+	dw Script_Murray2
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
@@ -735,7 +736,7 @@ JosephNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw JosephNPCScript
+	dw Script_Joseph
 	tx JosephNPCName
 	db JOSEPH_PIC
 	db FLYIN_POKEMON_DECK_ID
@@ -748,7 +749,7 @@ DavidNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw DavidNPCScript
+	dw Script_David
 	tx DavidNPCName
 	db DAVID_PIC
 	db LOVELY_NIDORAN_DECK_ID
@@ -761,7 +762,7 @@ ErikNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw ErikNPCScript
+	dw Script_Erik
 	tx ErikNPCName
 	db ERIK_PIC
 	db POISON_DECK_ID
@@ -774,7 +775,7 @@ RickNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw RickNPCScript
+	dw Script_Rick
 	tx RickNPCName
 	db RICK_PIC
 	db WONDERS_OF_SCIENCE_DECK_ID
@@ -787,7 +788,7 @@ JohnNPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw JohnNPCScript
+	dw Script_John
 	tx JohnNPCName
 	db JOHN_PIC
 	db ANGER_DECK_ID
@@ -800,7 +801,7 @@ AdamNPCHeader:
 	db $00
 	db $22
 	db $00
-	dw AdamNPCScript
+	dw Script_Adam
 	tx AdamNPCName
 	db ADAM_PIC
 	db FLAMETHROWER_DECK_ID
@@ -813,7 +814,7 @@ JonathanNPCHeader:
 	db $04
 	db $16
 	db $00
-	dw JonathanNPCScript
+	dw Script_Jonathan
 	tx JonathanNPCName
 	db JONATHAN_PIC
 	db RESHUFFLE_DECK_ID
@@ -826,7 +827,7 @@ KenNPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw KenNPCScript
+	dw Script_Ken
 	tx KenNPCName
 	db KEN_PIC
 	db FIRE_CHARGE_DECK_ID
@@ -839,7 +840,7 @@ CourtneyNPCHeader:
 	db $00
 	db $12
 	db $00
-	dw CourtneyNPCScript
+	dw Script_Courtney
 	tx CourtneyNPCName
 	db COURTNEY_PIC
 	db LEGENDARY_MOLTRES_DECK_ID
@@ -852,7 +853,7 @@ SteveNPCHeader:
 	db $00
 	db $2a
 	db $00
-	dw SteveNPCScript
+	dw Script_Steve
 	tx SteveNPCName
 	db STEVE_PIC
 	db LEGENDARY_ZAPDOS_DECK_ID
@@ -865,7 +866,7 @@ JackNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw JackNPCScript
+	dw Script_Jack
 	tx JackNPCName
 	db JACK_PIC
 	db LEGENDARY_ARTICUNO_DECK_ID
@@ -878,7 +879,7 @@ RodNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw RodNPCScript
+	dw Script_Rod
 	tx RodNPCName
 	db ROD_PIC
 	db LEGENDARY_DRAGONITE_DECK_ID
@@ -891,20 +892,20 @@ Clerk10NPCHeader:
 	db $0a
 	db $30
 	db $00
-	dw Clerk10NPCScript
+	dw Script_Clerk10
 	tx ClerkNPCName
 	db $00
 	db $00
 	db $00
 	db $00
 
-Clerk11NPCHeader:
-	db NPC_CLERK11
+GiftCenterClerkNPCHeader:
+	db NPC_GIFT_CENTER_CLERK
 	db SPRITE_CLERK
 	db $0a
 	db $30
 	db $00
-	dw Clerk11NPCScript
+	dw Script_GiftCenterClerk
 	tx ClerkNPCName
 	db $00
 	db $00
@@ -917,7 +918,7 @@ Man1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Man1NPCScript
+	dw Script_Man1
 	tx ManNPCName
 	db $00
 	db $00
@@ -930,7 +931,7 @@ Woman1NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw Woman1NPCScript
+	dw Script_Woman1
 	tx WomanNPCName
 	db $00
 	db $00
@@ -943,7 +944,7 @@ Chap1NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw Chap1NPCScript
+	dw Script_Chap1
 	tx ChapNPCName
 	db $00
 	db $00
@@ -956,7 +957,7 @@ Gal1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Gal1NPCScript
+	dw Script_Gal1
 	tx GalNPCName
 	db $00
 	db $00
@@ -969,7 +970,7 @@ Lass1NPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw Lass1NPCScript
+	dw Script_Lass1
 	tx LassNPCName
 	db $00
 	db $00
@@ -982,7 +983,7 @@ Chap2NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw Chap2NPCScript
+	dw Script_Chap2
 	tx ChapNPCName
 	db $00
 	db $00
@@ -995,7 +996,7 @@ Lass2NPCHeader:
 	db $00
 	db $1e
 	db $00
-	dw Lass2NPCScript
+	dw Script_Lass2
 	tx LassNPCName
 	db $00
 	db $00
@@ -1008,7 +1009,7 @@ Pappy1NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw Pappy1NPCScript
+	dw Script_Pappy1
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1021,7 +1022,7 @@ Lad1NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw Lad1NPCScript
+	dw Script_Lad1
 	tx LadNPCName
 	db $00
 	db $00
@@ -1034,7 +1035,7 @@ Lad2NPCHeader:
 	db $04
 	db $16
 	db $00
-	dw Lad2NPCScript
+	dw Script_Lad2
 	tx LadNPCName
 	db $00
 	db $00
@@ -1047,7 +1048,7 @@ Chap3NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw Chap3NPCScript
+	dw Script_Chap3
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1060,7 +1061,7 @@ Clerk12NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Clerk12NPCScript
+	dw Script_Clerk12
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -1073,7 +1074,7 @@ Clerk13NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Clerk13NPCScript
+	dw Script_Clerk13
 	tx ClerkNPCName2
 	db $00
 	db $00
@@ -1086,7 +1087,7 @@ HostNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw HostNPCScript
+	dw Script_Host
 	tx HostNPCName
 	db $00
 	db $00
@@ -1099,7 +1100,7 @@ Specs1NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw Specs1NPCScript
+	dw Script_Specs1
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1112,7 +1113,7 @@ ButchNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw ButchNPCScript
+	dw Script_Butch
 	tx ButchNPCName
 	db $00
 	db $00
@@ -1125,7 +1126,7 @@ Granny1NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Granny1NPCScript
+	dw Script_Granny1
 	tx GrannyNPCName
 	db $00
 	db $00
@@ -1138,7 +1139,7 @@ Lass3NPCHeader:
 	db $04
 	db $22
 	db $00
-	dw Lass3NPCScript
+	dw Script_Lass3
 	tx LassNPCName
 	db $00
 	db $00
@@ -1151,7 +1152,7 @@ Man2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Man2NPCScript
+	dw Script_Man2
 	tx ManNPCName
 	db $00
 	db $00
@@ -1164,7 +1165,7 @@ Pappy2NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw Pappy2NPCScript
+	dw Script_Pappy2
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1177,7 +1178,7 @@ Lass4NPCHeader:
 	db $04
 	db $22
 	db $00
-	dw Lass4NPCScript
+	dw Script_Lass4
 	tx LassNPCName
 	db $00
 	db $00
@@ -1190,7 +1191,7 @@ Hood1NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw Hood1NPCScript
+	dw Script_Hood1
 	tx HoodNPCName
 	db $00
 	db $00
@@ -1203,7 +1204,7 @@ Granny2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Granny2NPCScript
+	dw Script_Granny2
 	tx GrannyNPCName
 	db $00
 	db $00
@@ -1216,7 +1217,7 @@ Gal2NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Gal2NPCScript
+	dw Script_Gal2
 	tx GalNPCName
 	db $00
 	db $00
@@ -1229,7 +1230,7 @@ Lad3NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw Lad3NPCScript
+	dw Script_Lad3
 	tx LadNPCName
 	db $00
 	db $00
@@ -1242,7 +1243,7 @@ Gal3NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Gal3NPCScript
+	dw Script_Gal3
 	tx GalNPCName
 	db $00
 	db $00
@@ -1255,7 +1256,7 @@ Chap4NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw Chap4NPCScript
+	dw Script_Chap4
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1268,7 +1269,7 @@ Man3NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Man3NPCScript
+	dw Script_Man3
 	tx ManNPCName
 	db $00
 	db $00
@@ -1281,7 +1282,7 @@ Specs2NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Specs2NPCScript
+	dw Script_Specs2
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1294,7 +1295,7 @@ Specs3NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw Specs3NPCScript
+	dw Script_Specs3
 	tx SpecsNPCName
 	db $00
 	db $00
@@ -1307,7 +1308,7 @@ Woman2NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw Woman2NPCScript
+	dw Script_Woman2
 	tx WomanNPCName
 	db $00
 	db $00
@@ -1320,7 +1321,7 @@ ManiaNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw ManiaNPCScript
+	dw Script_Mania
 	tx ManiaNPCName
 	db $00
 	db $00
@@ -1333,7 +1334,7 @@ Pappy3NPCHeader:
 	db $00
 	db $22
 	db $00
-	dw Pappy3NPCScript
+	dw Script_Pappy3
 	tx PappyNPCName
 	db $00
 	db $00
@@ -1346,7 +1347,7 @@ Gal4NPCHeader:
 	db $00
 	db $16
 	db $00
-	dw Gal4NPCScript
+	dw Script_Gal4
 	tx GalNPCName
 	db $00
 	db $00
@@ -1359,7 +1360,7 @@ ChampNPCHeader:
 	db $00
 	db $26
 	db $00
-	dw ChampNPCScript
+	dw Script_Champ
 	tx ChampNPCName
 	db $00
 	db $00
@@ -1372,7 +1373,7 @@ Hood2NPCHeader:
 	db $04
 	db $1e
 	db $00
-	dw Hood2NPCScript
+	dw Script_Hood2
 	tx HoodNPCName
 	db $00
 	db $00
@@ -1385,7 +1386,7 @@ Lass5NPCHeader:
 	db $04
 	db $1a
 	db $00
-	dw Lass5NPCScript
+	dw Script_Lass5
 	tx LassNPCName
 	db $00
 	db $00
@@ -1398,7 +1399,7 @@ Chap5NPCHeader:
 	db $00
 	db $1a
 	db $00
-	dw Chap5NPCScript
+	dw Script_Chap5
 	tx ChapNPCName
 	db $00
 	db $00
@@ -1411,7 +1412,7 @@ AaronNPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw AaronNPCScript
+	dw Script_Aaron
 	tx AaronNPCName
 	db AARON_PIC
 	db LIGHTNING_AND_FIRE_DECK_ID
@@ -1424,7 +1425,7 @@ GuideNPCHeader:
 	db $00
 	db $16
 	db $00
-	dw GuideNPCScript
+	dw Script_Guide
 	tx GuideNPCName
 	db $00
 	db $00
@@ -1437,7 +1438,7 @@ Tech7NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech7NPCScript
+	dw Script_Tech7
 	tx TechNPCName
 	db $00
 	db $00
@@ -1450,7 +1451,7 @@ Tech8NPCHeader:
 	db $00
 	db $0e
 	db $00
-	dw Tech8NPCScript
+	dw Script_Tech8
 	tx TechNPCName
 	db $00
 	db $00
@@ -1463,7 +1464,7 @@ TorchNPCHeader:
 	db $3a
 	db $3a
 	db $10
-	dw TorchNPCScript
+	dw Script_Torch
 
 LegendaryCardTopLeftNPCHeader:
 	db NPC_LEGENDARY_CARD_TOP_LEFT
@@ -1471,7 +1472,7 @@ LegendaryCardTopLeftNPCHeader:
 	db $3b
 	db $41
 	db $50
-	dw LegendaryCardTopLeftNPCScript
+	dw Script_LegendaryCardTopLeft
 
 LegendaryCardTopRightNPCHeader:
 	db NPC_LEGENDARY_CARD_TOP_RIGHT
@@ -1479,39 +1480,39 @@ LegendaryCardTopRightNPCHeader:
 	db $3c
 	db $42
 	db $50
-	dw LegendaryCardTopRightNPCScript
+	dw Script_LegendaryCardTopRight
 
-LegendaryCardBottomLeftNPCHeader:
-	db NPC_LEGENDARY_CARD_BOTTOM_LEFT
+LegendaryCardLeftSparkNPCHeader:
+	db NPC_LEGENDARY_CARD_LEFT_SPARK
 	db $27
 	db $3d
 	db $43
 	db $50
-	dw LegendaryCardBottomLeftNPCScript
+	dw Script_LegendaryCardLeftSpark
 
-LegendaryCardBottomCenterLeftNPCHeader:
-	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_LEFT
+LegendaryCardBottomLeftNPCHeader:
+	db NPC_LEGENDARY_CARD_BOTTOM_LEFT
 	db $27
 	db $3e
 	db $44
 	db $50
-	dw LegendaryCardBottomCenterLeftNPCScript
-
-LegendaryCardBottomCenterRightNPCHeader:
-	db NPC_LEGENDARY_CARD_BOTTOM_CENTER_RIGHT
-	db $27
-	db $3f
-	db $45
-	db $50
-	dw LegendaryCardBottomCenterRightNPCScript
+	dw Script_LegendaryCardBottomLeft
 
 LegendaryCardBottomRightNPCHeader:
 	db NPC_LEGENDARY_CARD_BOTTOM_RIGHT
 	db $27
+	db $3f
+	db $45
+	db $50
+	dw Script_LegendaryCardBottomRight
+
+LegendaryCardRightSparkNPCHeader:
+	db NPC_LEGENDARY_CARD_RIGHT_SPARK
+	db $27
 	db $40
 	db $46
 	db $50
-	dw LegendaryCardBottomRightNPCScript
+	dw Script_LegendaryCardRightSpark
 
 DummyNPCHeader:
 	db $00
