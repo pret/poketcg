@@ -967,7 +967,7 @@ wNoDamageOrEffect:: ; ccc7
 
 ; used by CountKnockedOutPokemon and Func_5805 to store the amount
 ; of prizes to take (equal to the number of Pokemon knocked out)
-wccc8:: ; ccc8
+wNumberPrizeCardsToTake:: ; ccc8
 	ds $1
 
 ; set to 1 if the coin toss in the confusion check is heads (CheckSelfConfusionDamage)
@@ -1182,26 +1182,66 @@ wcd9f:: ; cd9f
 wcda5:: ; cda5
 	ds $1
 
-wcda6:: ; cda6
+; this is used by AI in order to determine whether
+; it should use Pokedex Trainer card.
+; starts with 5 when Duel starts and counts up by 1 every turn.
+; only when it's higher than 5 is AI allowed to use Pokedex,
+; in which case it sets the counter to 0.
+; this stops the AI from using Pokedex right after using another one
+; while still drawing cards that were ordered.
+wAIPokedexCounter:: ; cda6
 	ds $1
 
-wcda7:: ; cda7
+; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
+; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
+; 	- when flag is not set, this counts how many turns in a row
+;	  Player used Mewtwo1's Barrier attack;
+; 	- when flag is set, this counts how many turns in a row
+;	  Player has NOT used Barrier attack.
+wAIBarrierFlagCounter:: ; cda7
 	ds $1
 
-	ds $6
-
-; pointer to a list of card IDs for sorting AI hand
-wcdae:: ; cdae
+; pointer to $00-terminated list of card IDs
+; to avoid being placed as prize cards
+; when setting up AI duelist's cards at duel start.
+; (see SetUpBossStartingHandAndDeck)
+wAICardListAvoidPrize:: ; cda8
 	ds $2
 
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Arena
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListArenaPriority:: ; cdaa
 	ds $2
 
-; these seem to hold pointer to some kind of
-; card ID list with attached energy and score
-wcdb2:: ; cdb2
-	ds $1
-wcdb3:: ; cdb3
-	ds $1
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI placing in the Bench
+; at duel start (see TrySetUpBossStartingPlayArea)
+wAICardListBenchPriority:: ; cdac
+	ds $2
+
+; pointer to $00-terminated list of card IDs
+; sorted by priority of AI playing it from Hand
+; to the Bench (see AIDecidePlayPokemonCard)
+wAICardListPlayFromHandPriority:: ; cdae
+	ds $2
+
+; pointer to $00-terminated list of card IDs and AI scores.
+; these are for giving certain cards more or less
+; likelihood of being picked by AI to switch to.
+; (see AIDecideBenchPokemonToSwitchTo)
+wAICardListRetreatBonus:: ; cdb0
+	ds $2
+
+; pointer to $00-terminated list of card IDs,
+; number of energy cards and AI score.
+; these are for giving certain cards more or less
+; likelihood of being picked for AI to attach energy.
+; also has the maximum number of energy cards that
+; the AI is willing to provide for it.
+; (see AIProcessEnergyCards)
+wAICardListEnergyBonus:: ; cdb2
+	ds $2
 
 wcdb4:: ; cdb4
 	ds $1
@@ -1230,12 +1270,22 @@ wTempCardType:: ; cdba
 wAIScore:: ; cdbe
 	ds $1
 
+UNION
+
 ; used for AI decisions that involve
 ; each card in the Play Area.
 wPlayAreaAIScore:: ; cdbf
 	ds MAX_PLAY_AREA_POKEMON
 
-	ds $0a
+NEXTU
+
+; stores the score determined by AI for first attack
+wFirstAttackAIScore:: ; cdbf
+	ds $1
+
+ENDU
+
+	ds $a
 
 ; information about the defending Pokémon and
 ; the prize card count on both sides for AI:
@@ -1259,7 +1309,9 @@ wAIOpponentPrizeCount:: ; cdd3
 wTempCardIDToLook:: ; cdd4
 	ds $1
 
-wcdd5:: ; cdd5
+; when AI decides which Bench Pokemon to switch to
+; it stores it Play Area location here.
+wAIPlayAreaCardToSwitch:: ; cdd5
 	ds $1
 
 ; the index of attack chosen by AI
@@ -1274,10 +1326,16 @@ wAIPluspowerAttack:: ; cdd6
 wAIPlayEnergyCardForRetreat:: ; cdd7
 	ds $1
 
-wcdd8:: ; cdd8
+; flags defined by AI_ENERGY_FLAG_* constants
+; used as input for AIProcessEnergyCards
+; to determine what to check in the routine.
+wAIEnergyAttachLogicFlags:: ; cdd8
 	ds $1
 
-wcdd9:: ; cdd9
+; used as input to AIProcessAttacks.
+; if 0, execute the attack chosen by the AI.
+; if not 0, return without executing attack.
+wAIExecuteProcessedAttack:: ; cdd9
 	ds $1
 
 wcdda:: ; cdda
@@ -1289,15 +1347,17 @@ wcddb:: ; cddb
 wcddc:: ; cddc
 	ds $1
 
-; used to compliment wPlayAreaAIScore,
-; to temporarily do calculations and store results.
+; used to temporarily backup wPlayAreaAIScore values.
 wTempPlayAreaAIScore:: ; cddd
 	ds MAX_PLAY_AREA_POKEMON
 
-wcde3:: ; cde3
+wTempAIScore:: ; cde3
 	ds $1
 
-wcde4:: ; cde4
+; used for AI decisions that involve
+; each card in the Play Area involving
+; attaching Energy cards.
+wPlayAreaEnergyAIScore:: ; cde4
 	ds MAX_PLAY_AREA_POKEMON
 
 wcdea:: ; cdea
@@ -1352,12 +1412,25 @@ wce01:: ; ce01
 wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
-wce03:: ; ce03
+; whether AI already retreated this turn or not.
+; 	- $0 has not retreated;
+; 	- $1 has retreated.
+wAIRetreatedThisTurn:: ; ce03
 	ds $1
 
-	ds $2
+; used by AI to store information of Venusaur2
+; while handling Energy Trans logic.
+wAIVenusaur2DeckIndex:: ; ce04
+	ds $1
+wAIVenusaur2PlayAreaLocation:: ; ce05
+	ds $1
 
 wce06:: ; ce06
+; number of cards to be transferred by AI using Energy Trans.
+wAINumberOfEnergyTransCards::
+; used for storing weakness of Player's Arena card
+; in AI routine dealing with Shift Pkmn Power.
+wAIDefendingPokemonWeakness::
 	ds $1
 
 wce07:: ; ce07

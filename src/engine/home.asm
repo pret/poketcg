@@ -3419,6 +3419,7 @@ CreateArenaOrBenchEnergyCardList: ; 120a (0:120a)
 
 ; fill wDuelTempList with the turn holder's hand cards (their 0-59 deck indexes)
 ; return carry if the turn holder has no cards in hand
+; and outputs in a number of cards.
 CreateHandCardList: ; 123b (0:123b)
 	call FindLastCardInHand
 	inc b
@@ -5218,7 +5219,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ret
 ; 0x1c05
 
-; return in a the retreat cost of the turn holder's arena or benchx Pokemon
+; return in a the retreat cost of the turn holder's arena or bench Pokemon
 ; given the PLAY_AREA_* value in hTempPlayAreaLocation_ff9d
 GetPlayAreaCardRetreatCost: ; 1c05 (0:1c05)
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -8279,56 +8280,70 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [hl], a
 	ret
 
-Func_2bbf: ; 2bbf (0:2bbf)
-	ld a, $1
-	jr Func_2bdb
+AIDoAction_Turn: ; 2bbf (0:2bbf)
+	ld a, AIACTION_DO_TURN
+	jr AIDoAction
 
-Func_2bc3: ; 2bc3 (0:2bc3)
-	ld a, $2
-	jr Func_2bdb
+AIDoAction_StartDuel: ; 2bc3 (0:2bc3)
+	ld a, AIACTION_START_DUEL
+	jr AIDoAction
 
-Func_2bc7: ; 2bc7 (0:2bc7)
-	ld a, $3
-	call Func_2bdb
+AIDoAction_ForcedSwitch: ; 2bc7 (0:2bc7)
+	ld a, AIACTION_FORCED_SWITCH
+	call AIDoAction
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ret
 
-Func_2bcf: ; 2bcf (0:2bcf)
-	ld a, $4
-	call Func_2bdb
+AIDoAction_KOSwitch: ; 2bcf (0:2bcf)
+	ld a, AIACTION_KO_SWITCH
+	call AIDoAction
 	ldh [hTemp_ffa0], a
 	ret
 
-Func_2bd7: ; 2bd7 (0:2bd7)
-	ld a, $5
-	jr Func_2bdb
+AIDoAction_TakePrize: ; 2bd7 (0:2bd7)
+	ld a, AIACTION_TAKE_PRIZE
+	jr AIDoAction ; this line is not needed
 
-Func_2bdb: ; 2bdb (0:2bdb)
+; calls the appropriate AI routine to handle action,
+; depending on the deck ID (see engine/deck_ai/deck_ai.asm)
+; input:
+;	- a = AIACTION_* constant
+AIDoAction: ; 2bdb (0:2bdb)
 	ld c, a
+
+; load bank for Opponent Deck pointer table
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(PointerTable_14000)
+	ld a, BANK(DeckAIPointerTable)
 	call BankswitchROM
+
+; load hl with the corresponding pointer
 	ld a, [wOpponentDeckID]
 	ld l, a
 	ld h, $0
-	add hl, hl
-	ld de, PointerTable_14000
+	add hl, hl ; two bytes per deck
+	ld de, DeckAIPointerTable
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+
 	ld a, c
 	or a
-	jr nz, .asm_2bfe
+	jr nz, .not_zero
+
+; if input was 0, copy deck data of turn player
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	call CopyDeckData
-	jr .asm_2c01
-.asm_2bfe
+	jr .done
+
+; jump to corresponding AI routine related to input
+.not_zero
 	call JumpToFunctionInTable
-.asm_2c01
+
+.done
 	ld c, a
 	pop af
 	call BankswitchROM
