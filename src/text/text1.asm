@@ -981,7 +981,7 @@ Text00d1: ; 379ae (d:79ae)
 	text "Can only be used on the Bench."
 	done
 
-Text00d2: ; 379ce (d:79ce)
+ThereAreNoPokemonOnBenchText: ; 379ce (d:79ce)
 	text "There are no Pokémon on the Bench."
 	done
 

@@ -211,7 +211,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00cf                                           ; 0x00cf
 	textpointer Text00d0                                           ; 0x00d0
 	textpointer Text00d1                                           ; 0x00d1
-	textpointer Text00d2                                           ; 0x00d2
+	textpointer ThereAreNoPokemonOnBenchText                       ; 0x00d2
 	textpointer Text00d3                                           ; 0x00d3
 	textpointer UnableDueToToxicGasText                            ; 0x00d4
 	textpointer Text00d5                                           ; 0x00d5

@@ -1056,7 +1056,45 @@ SproutEffect_PutInPlayArea: ; 2c8cc (b:48cc)
 	ret
 ; 0x2c8ec
 
-	INCROM $2c8ec, $2c925
+; returns carry if no Pokemon on Bench
+TeleportEffect_CheckBench: ; 2c8ec (b:48ec)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ldtx hl, ThereAreNoPokemonOnBenchText
+	cp 2
+	ret
+; 0x2c8f7
+
+TeleportEffect_PlayerSelect: ; 2c8f7 (b:48f7)
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	bank1call HasAlivePokemonInBench
+	ld a, $01
+	ld [wcbd4], a
+.loop
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2c90f
+
+TeleportEffect_AISelect: ; 2c90f (b:490f)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	call Random
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2c91a
+
+TeleportEffect_SwitchEffect: ; 2c91a (b:491a)
+	ldh a, [hTemp_ffa0]
+	ld e, a
+	call SwapArenaWithBenchPokemon
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
+; 0x2c925
 
 BigEggsplosion_AIEffect: ; 2c925 (b:4925)
 	ldh a, [hTempPlayAreaLocation_ff9d]

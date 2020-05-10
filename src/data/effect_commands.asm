@@ -161,10 +161,10 @@ OddishSproutEffectCommands:
 	db  $00
 
 ExeggutorTeleportEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $48ec
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $491a
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $48f7
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $490f
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, TeleportEffect_CheckBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, TeleportEffect_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, TeleportEffect_PlayerSelect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, TeleportEffect_AISelect
 	db  $00
 
 ExeggutorBigEggsplosionEffectCommands:
