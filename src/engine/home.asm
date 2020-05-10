@@ -5172,9 +5172,13 @@ MoveCardToDiscardPileIfInArena: ; 1c13 (0:1c13)
 	jr c, .next_card
 	ret
 
-; calculate damage of card at CARD_LOCATION_* in e
-; return the result in a
-GetCardDamage: ; 1c35 (0:1c35)
+; calculate damage an max HP of card at PLAY_AREA_* in e.
+; input:
+;	e = PLAY_AREA_* of card;
+; output:
+;	a = damage;
+;	c = max HP.
+GetCardDamageAndMaxHP: ; 1c35 (0:1c35)
 	push hl
 	push de
 	ld a, DUELVARS_ARENA_CARD

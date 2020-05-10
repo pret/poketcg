@@ -931,6 +931,7 @@ wAIMinDamage:: ; ccbb
 wAIMaxDamage:: ; ccbc
 	ds $1
 
+wccbd:: ; ccbd
 	ds $2
 
 ; damage dealt by an attack to a target

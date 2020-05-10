@@ -332,7 +332,61 @@ HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
 	ret
 ; 0x2c221
 
-	INCROM $2c221, $2c2a4
+; applies HP recovery on Pokemon after HP drain attack
+; and handles its animation.
+; input:
+;	d = damage effectiveness
+;	e = damage dealt
+ApplyAndAnimateHPDrain: ; 2c221 (b:4221)
+	push de
+	ld hl, wccbd
+	ld [hl], e
+	inc hl
+	ld [hl], d
+
+; get Arena card's damage
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	pop de
+	or a
+	ret z ; return if no damage
+
+; load correct animation
+	push de
+	ld a, $79
+	ld [wLoadedMoveAnimation], a
+	ld bc, $01 ; arrow
+	bank1call PlayMoveAnimation
+
+; compare HP to be restores with max HP
+; if HP to be restored would cause HP to
+; be larger than max HP, cap it accordingly
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	ld b, $00
+	pop de
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	add e
+	ld e, a
+	ld a, 0
+	adc d
+	ld d, a 
+	; de = damage dealt + current HP
+	; bc = max HP of card
+	call CompareDEtoBC
+	jr c, .skip_cap
+	; cap de to value in bc
+	ld e, c
+	ld d, b
+
+.skip_cap
+	ld [hl], e ; apply new HP to arena card
+	bank1call WaitMoveAnimation
+	ret
+; 0x2c25b
+
+	INCROM $2c25b, $2c2a4
 
 ; makes a list in wDuelTempList with the deck indices
 ; of all the energy cards found in opponent's Discard Pile.
@@ -637,7 +691,23 @@ KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	jp Func_2c0d4
 ; 0x2c7bc
 
-	INCROM $2c7bc, $2c7d0
+GolbatLeechLifeEffect: ; 2c7bc (b:47bc)
+	ld hl, wDealtDamage
+	ld e, [hl]
+	inc hl ; wDamageEffectiveness
+	ld d, [hl]
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2c7c6
+
+VenonatLeechLifeEffect: ; 2c7c6 (b:47c6)
+	ld hl, wDealtDamage
+	ld e, [hl]
+	inc hl ; wDamageEffectiveness
+	ld d, [hl]
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2c7d0
 
 ; During your next turn, double damage
 SwordsDanceEffect: ; 2c7d0 (b:47d0)
@@ -655,7 +725,16 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 	ret
 ; 0x2c7e3
 
-	INCROM $2c7e3, $2c7ed
+ZubatLeechLifeEffect: ; 2c7e3 (b:47e3)
+	ld hl, wDealtDamage
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2c7ed
+
+	INCROM $2c7ed, $2c7ed
 
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
 	ld a, 30

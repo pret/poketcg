@@ -95,7 +95,7 @@ KakunaPoisonPowderEffectCommands:
 	db  $00
 
 GolbatLeechLifeEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $47bc
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, GolbatLeechLifeEffect
 	db  $00
 
 VenonatStunSporeEffectCommands:
@@ -103,7 +103,7 @@ VenonatStunSporeEffectCommands:
 	db  $00
 
 VenonatLeechLifeEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $47c6
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VenonatLeechLifeEffect
 	db  $00
 
 ScytherSwordsDanceEffectCommands:
@@ -115,7 +115,7 @@ ZubatSupersonicEffectCommands:
 	db  $00
 
 ZubatLeechLifeEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $47e3
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ZubatLeechLifeEffect
 	db  $00
 
 BeedrillTwineedleEffectCommands:

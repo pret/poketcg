@@ -202,7 +202,7 @@ AIPlay_Potion: ; 201b5 (8:41b5)
 	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20
 	jr c, .play_card
 	ld a, 20
@@ -232,7 +232,7 @@ AIDecide_Potion1: ; 201d1 (8:41d1)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 + 1 ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20 ; amount of Potion HP healing
@@ -270,7 +270,7 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 + 1  ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20
@@ -309,7 +309,7 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	ret z
 	call .check_boost_if_taken_damage
 	jr c, .has_boost_damage
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 ; if damage >= 20
 	jr nc, .found
 .has_boost_damage
@@ -392,7 +392,7 @@ AIPlay_SuperPotion: ; 202a8 (8:42a8)
 	ldh [hTemp_ffa0], a
 	ld a, [wAITrainerCardParameter]
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40
 	jr c, .play_card
 	ld a, 40
@@ -426,7 +426,7 @@ AIDecide_SuperPotion1: ; 202cc (8:42cc)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
 	ld a, 40
@@ -470,7 +470,7 @@ AIDecide_SuperPotion2: ; 2030f (8:430f)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
 	ld a, 40
@@ -516,7 +516,7 @@ AIDecide_SuperPotion2: ; 2030f (8:430f)
 	jr c, .next
 	call .check_energy_cost
 	jr c, .next
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 ; if damage >= 40
 	jr nc, .found
 .next
@@ -2274,7 +2274,7 @@ AIDecide_PokemonBreeder: ; 20b1b (8:4b1b)
 	dec b
 	ld e, b
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	call ConvertHPToCounters
 	add c
@@ -2296,7 +2296,7 @@ AIDecide_PokemonBreeder: ; 20b1b (8:4b1b)
 ; compare number of this card's damage counters
 ; with 5, if less than that, set carry
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 5
 	jr c, .set_carry
 
@@ -3182,7 +3182,7 @@ AIDecide_PokemonCenter: ; 210eb (8:50eb)
 
 ; get this Pokemon's current damage counters
 ; and add it to the total.
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call ConvertHPToCounters
 	ld b, a
 	ld a, [wce08]
@@ -3950,7 +3950,7 @@ AIDecide_MrFuji: ; 214a7 (8:54a7)
 	ld b, a
 
 	; skip if zero damage counters
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call ConvertHPToCounters
 	or a
 	jr z, .next
@@ -4061,7 +4061,7 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 
 ; skip if card has no damage counters.
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .no_carry
 
@@ -6653,7 +6653,7 @@ HandleAIHeal: ; 22402 (8:6402)
 ; check if Arena card has any damage counters,
 ; if not, check Bench instead.
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .check_bench
 
@@ -6666,7 +6666,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	; this seems useless since it was already
 	; checked that Arena card has damage,
 	; so card damage is at least 10.
@@ -6704,7 +6704,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	cp d
 	jr z, .done
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	cp b
 	jr c, .next_bench
@@ -6902,7 +6902,7 @@ HandleAIStrangeBehavior: ; 2255d (8:655d)
 
 	ldh [hTemp_ffa0], a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if Arena card has no damage counters
 
@@ -6977,7 +6977,7 @@ HandleAICurse: ; 225b5 (8:65b5)
 	call SwapTurn
 .loop_play_area_1
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	or a
 	jr z, .next_1
@@ -7033,7 +7033,7 @@ HandleAICurse: ; 225b5 (8:65b5)
 	cp b
 	jr z, .next_2 ; skip same Pokemon card
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	jr nz, .use_curse ; has damage counters, choose this card
 .next_2
@@ -7116,7 +7116,7 @@ HandleAICowardice: ; 2262d (8:662d)
 	ld a, c
 	ldh [hTemp_ffa0], a
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 .asm_22678
 	or a
 	ret z ; return if has no damage counters
@@ -7183,7 +7183,7 @@ HandleAIDamageSwap: ; 226a3 (8:66a3)
 
 .ok
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if no damage
 

@@ -3122,7 +3122,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 .check_damage
 	ld a, [wTempAI]
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .check_mysterious_fossil
 	srl a
@@ -3294,7 +3294,7 @@ Func_16120: ; 16120 (5:6120)
 	dec b
 	ld e, b
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	add c
 	ld c, a
@@ -3324,7 +3324,7 @@ Func_16120: ; 16120 (5:6120)
 ; check if there's a Muk in any duelist's Play Area
 .is_active
 	ld e, 0
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 50
 	jr c, .lower_score
 	ld e, PLAY_AREA_ARENA
@@ -5308,7 +5308,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	cp 31
 	jr nc, .high_recoil_generic_checks
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	sla a
 	cp c
 	jr c, .high_recoil_generic_checks
@@ -5544,7 +5544,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 .tally_heal_score
 	push af
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call CalculateByteTensDigit
 	pop bc
 	cp b ; wLoadedMoveEffectParam
@@ -6191,7 +6191,7 @@ LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 	ld [wTempAI], a
 	ld e, c
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	ld e, a
 	ld a, [wTempAI]
@@ -7229,7 +7229,7 @@ Func_174f2: ; 174f2 (5:74f2)
 Func_17583: ; 17583 (5:7583)
 	push hl
 	push de
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call CalculateByteTensDigit
 	ld b, a
 	push bc
