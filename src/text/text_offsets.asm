@@ -184,7 +184,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer CantEvolvePokemonInSameTurnItsPlacedText           ; 0x00b4
 	textpointer Text00b5                                           ; 0x00b5
 	textpointer Text00b6                                           ; 0x00b6
-	textpointer Text00b7                                           ; 0x00b7
+	textpointer LureNoPokemonOnTheBenchText                        ; 0x00b7
 	textpointer Text00b8                                           ; 0x00b8
 	textpointer Text00b9                                           ; 0x00b9
 	textpointer Text00ba                                           ; 0x00ba

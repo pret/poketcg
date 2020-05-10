@@ -459,7 +459,41 @@ DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 	ret
 ; 0x2c4da
 
-	INCROM $2c4da, $2c6f0
+	INCROM $2c4da, $2c564
+
+; outputs in a the Play Area location (PLAY_AREA_* constant)
+; of lowest HP card in non-duelist's Bench.
+AIFindBenchWithLowestHP: ; 2c564 (b:4564)
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	lb de, PLAY_AREA_ARENA, $ff
+	ld b, d
+	ld a, DUELVARS_BENCH1_CARD_HP
+	call GetTurnDuelistVariable
+	jr .start
+; find Play Area location with least amount of HP
+.loop_bench
+	ld a, e
+	cp [hl]
+	jr c, .next ; skip if HP is higher
+	ld e, [hl]
+	ld d, b
+
+.next
+	inc hl
+.start
+	inc b
+	dec c
+	jr nz, .loop_bench
+
+	ld a, d
+	call SwapTurn
+	ret
+; 0x2c588
+
+	INCROM $2c588, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
@@ -524,7 +558,45 @@ WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	jp Func_2c0d4
 ; 0x2c740
 
-	INCROM $2c740, $2c77e
+; returns carry if non-duelist has no Bench Pokemon
+VictreebelLure_CheckBenchPokemon: ; 2c740 (b:4740)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ldtx hl, LureNoPokemonOnTheBenchText
+	cp 2
+	ret
+; 0x2c74b
+
+VictreebelLure_PlayerSelectBenchPokemon: ; 2c74b (b:474b)
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.loop_selection
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_selection
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2c764
+
+VictreebelLure_AISelectBenchPokemon: ; 2c764 (b:4764)
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2c76a
+
+VictreebelLure_SwitchDefendingPokemon: ; 2c76a (b:476a)
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld e, a
+	call HandleNShieldAndTransparency
+	call nc, SwapArenaWithBenchPokemon
+	call SwapTurn
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
 
 ; If heads, defending Pokemon can't retreat next turn
 AcidEffect: ; 2c77e (b:477e)

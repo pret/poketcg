@@ -858,7 +858,7 @@ Text00b6: ; 375bc (d:75bc)
 	text "Not enough cards in Hand."
 	done
 
-Text00b7: ; 375d7 (d:75d7)
+LureNoPokemonOnTheBenchText: ; 375d7 (d:75d7)
 	text "No Pokémon on the Bench."
 	done
 

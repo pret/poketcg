@@ -58,10 +58,10 @@ WeepinbellPoisonPowderEffectCommands:
 	db  $00
 
 VictreebelLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4740
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $476a
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $474b
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4764
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBenchPokemon
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchDefendingPokemon
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelectBenchPokemon
+	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelectBenchPokemon
 	db  $00
 
 VictreebelAcidEffectCommands:
