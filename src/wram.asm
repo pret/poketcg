@@ -2325,8 +2325,16 @@ wd4b1:: ; d4b1
 	
 wd4b2:: ; d4b2
 	ds $1
-	
-	ds $b
+
+wd4b3:: ; d4b3
+	ds $1
+
+	ds $5
+
+wd4b9:: ; d4b9
+	ds $1
+
+	ds $4
 
 wd4be:: ; d4be
 	ds $1

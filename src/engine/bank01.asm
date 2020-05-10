@@ -2268,11 +2268,11 @@ Func_4e98: ; 4e98 (1:4e98)
 Func_4f2d: ; 4f2d (1:4f2d)
 	ld a, [wDuelDisplayedScreen]
 	cp SHUFFLE_DECK
-	jr z, .asm_4f3d
+	jr z, .skip_draw_scene
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call DrawDuelistPortraitsAndNames
-.asm_4f3d
+.skip_draw_scene
 	ld a, SHUFFLE_DECK
 	ld [wDuelDisplayedScreen], a
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK

@@ -60,8 +60,8 @@ WeepinbellPoisonPowderEffectCommands:
 VictreebelLureEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBenchPokemon
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchDefendingPokemon
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelectBenchPokemon
-	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelectBenchPokemon
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelect
 	db  $00
 
 VictreebelAcidEffectCommands:
@@ -125,7 +125,7 @@ BeedrillTwineedleEffectCommands:
 
 BeedrillPoisonStingEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Poison50PercentEffect
-	dbw EFFECTCMDTYPE_AI, $480d
+	dbw EFFECTCMDTYPE_AI, BeedrillPoisonSting_AIEffect
 	db  $00
 
 ExeggcuteHypnosisEffectCommands:
@@ -133,7 +133,7 @@ ExeggcuteHypnosisEffectCommands:
 	db  $00
 
 ExeggcuteLeechSeedEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4815
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ExeggcuteLeechSeedEffect
 	db  $00
 
 KoffingFoulGasEffectCommands:
@@ -154,10 +154,10 @@ OddishStunSporeEffectCommands:
 	db  $00
 
 OddishSproutEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $484a
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $48cc
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $485a
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $48b7
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, SproutEffect_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, SproutEffect_PutInPlayArea
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, SproutEffect_SelectFromDeck
+	dbw EFFECTCMDTYPE_UNKNOWN_08, SproutEffect_AISelect
 	db  $00
 
 ExeggutorTeleportEffectCommands:

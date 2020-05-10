@@ -143,7 +143,8 @@ Func_2c0bd: ; 2c0bd (b:40bd)
 	call ShuffleDeck
 	ret
 
-Func_2c0c7: ; 2c0c7 (b:40c7)
+; return carry if Turn Duelist is the Player
+CheckIfTurnDuelistIsPlayer: ; 2c0c7 (b:40c7)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
@@ -336,7 +337,7 @@ HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
 ; and handles its animation.
 ; input:
 ;	d = damage effectiveness
-;	e = damage dealt
+;	e = HP amount to recover
 ApplyAndAnimateHPDrain: ; 2c221 (b:4221)
 	push de
 	ld hl, wccbd
@@ -456,7 +457,158 @@ CreateEnergyCardListFromOpponentDiscardPile: ; 2c2a4 (b:42a4)
 	ret
 ; 0x2c2e0
 
-	INCROM $2c2e0, $2c487
+; returns carry if Deck is empty
+CheckIfDeckIsEmpty: ; 2c2e0 (b:42e0)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ldtx hl, NoCardsLeftInTheDeckText
+	cp DECK_SIZE
+	ccf
+	ret
+; 0x2c2ec
+
+; searches through Deck in wDuelTempList looking for
+; a certain card or cards, and prints text depending
+; on whether at least one was found.
+; if none were found, asks the Player whether to look
+; in the Deck anyway, and returns carry if No is selected.
+; uses SEARCHEFFECT_* as input which determines what to search for:
+;	SEARCHEFFECT_CARD_ID = search for card ID in e
+;	SEARCHEFFECT_NIDORAN = search for either NidoranM or NidoranF
+;	SEARCHEFFECT_BASIC_FIGHTING = search for any Basic Fighting Pokemon
+;	SEARCHEFFECT_BASIC_ENERGY = search for any Basic Energy
+;	SEARCHEFFECT_POKEMON = search for any Pokemon card
+; input:
+;	d = SEARCHEFFECT_* constant
+;	e = (optional) card ID to search for in deck
+;	hl = text to print if Deck has card(s)
+; output:
+;	carry set if refuse to look at deck
+LookForCardInDeck: ; 2c2ec (b:42ec)
+	push hl
+	push bc
+	ld a, [wDuelTempList]
+	cp $ff
+	jr z, .none_in_deck
+	ld a, d
+	ld hl, .search_table
+	call JumpToFunctionInTable
+	jr c, .none_in_deck
+	pop bc
+	pop hl
+	call DrawWideTextBox_WaitForInput
+	or a
+	ret
+
+.none_in_deck
+	pop hl
+	call LoadTxRam2
+	pop hl
+	ldtx hl, ThereIsNoInTheDeckText
+	call DrawWideTextBox_WaitForInput
+	ldtx hl, WouldYouLikeToCheckTheDeckText
+	call YesOrNoMenuWithText_SetCursorToYes
+	ret
+; 0x2c317
+
+.search_table
+	dw .SearchDeckForE
+	dw .SearchDeckForNidoran
+	dw .SearchDeckForBasicFighting
+	dw .SearchDeckForBasicEnergy
+	dw .SearchDeckForPokemon
+
+.set_carry ; 2c321 (b:4321)
+	scf
+	ret
+; 0x2c323
+
+; returns carry if no card with
+; same card ID as e is found in Deck
+.SearchDeckForE ; 2c323 (b:4323)
+	ld hl, wDuelTempList
+.loop_deck_e
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	push de
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp e
+	jr nz, .loop_deck_e
+	or a
+	ret
+; 0x2c336
+
+; returns carry if no NidoranM or NidoranF card is found in Deck
+.SearchDeckForNidoran ; 2c336 (b:4336)
+	ld hl, wDuelTempList
+.loop_deck_nidoran
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp NIDORANF
+	jr z, .found_nidoran
+	cp NIDORANM
+	jr nz, .loop_deck_nidoran
+.found_nidoran
+	or a
+	ret
+; 0x2c34c
+
+; returns carry if no Basic Fighting Pokemon is found in Deck
+.SearchDeckForBasicFighting ; 2c34c (b:434c)
+	ld hl, wDuelTempList
+.loop_deck_fighting
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp TYPE_PKMN_FIGHTING
+	jr nz, .loop_deck_fighting
+	ld a, [wLoadedCard2Stage]
+	or a ; BASIC
+	jr nz, .loop_deck_fighting
+	ret
+; 0x2c365
+
+; returns carry if no Basic Energy cards are found in Deck
+.SearchDeckForBasicEnergy ; 2c365 (b:4365)
+	ld hl, wDuelTempList
+.loop_deck_energy
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr z, .loop_deck_energy
+	and TYPE_ENERGY
+	jr z, .loop_deck_energy
+	or a
+	ret
+; 0x2c37d
+
+; returns carry if no Pokemon cards are found in Deck
+.SearchDeckForPokemon ; 2c37d (b:437d)
+	ld hl, wDuelTempList
+.loop_deck_pkmn
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	cp TYPE_ENERGY
+	jr nc, .loop_deck_pkmn
+	or a
+	ret
+; 0x2c391
+
+	INCROM $2c391, $2c487
 
 ; handles the selection of a forced switch
 ; by link/AI opponent or by the player.
@@ -621,7 +773,7 @@ VictreebelLure_CheckBenchPokemon: ; 2c740 (b:4740)
 	ret
 ; 0x2c74b
 
-VictreebelLure_PlayerSelectBenchPokemon: ; 2c74b (b:474b)
+VictreebelLure_PlayerSelect: ; 2c74b (b:474b)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
@@ -635,7 +787,7 @@ VictreebelLure_PlayerSelectBenchPokemon: ; 2c74b (b:474b)
 	ret
 ; 0x2c764
 
-VictreebelLure_AISelectBenchPokemon: ; 2c764 (b:4764)
+VictreebelLure_AISelect: ; 2c764 (b:4764)
 	call AIFindBenchWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
@@ -734,8 +886,6 @@ ZubatLeechLifeEffect: ; 2c7e3 (b:47e3)
 	ret
 ; 0x2c7ed
 
-	INCROM $2c7ed, $2c7ed
-
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
 	ld a, 30
 	lb de, 0, 60
@@ -756,7 +906,21 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 	ret
 ; 0x2c80d
 
-	INCROM $2c80d, $2c822
+BeedrillPoisonSting_AIEffect: ; 2c80d (b:480d)
+	ld a, 5
+	lb de, 0, 10
+	jp Func_2c0d4
+; 0x2c815
+
+ExeggcuteLeechSeedEffect: ; 2c815 (b:4815)
+	ld hl, wDealtDamage
+	ld a, [hli]
+	or a
+	ret z ; return if no damage dealt
+	ld de, 10
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2c822
 
 FoulGas_AIEffect: ; 2c822 (b:4822)
 	ld a, 5
@@ -783,7 +947,116 @@ MetapodStiffenEffect: ; 2c836 (b:4836)
 	ret
 ; 0x2c84a
 
-	INCROM $2c84a, $2c925
+; returns carry if no cards in Deck or if
+; Play Area is full already.
+SproutEffect_CheckDeckAndPlayArea: ; 2c84a (b:484a)
+	call CheckIfDeckIsEmpty
+	ret c ; return if no cards in deck
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ldtx hl, NoSpaceOnTheBenchText
+	cp MAX_PLAY_AREA_POKEMON
+	ccf
+	ret
+; 0x2c85a
+
+SproutEffect_SelectFromDeck: ; 2c85a (b:485a)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+
+	call CreateDeckCardList
+	ldtx hl, ChooseAnOddishFromTheDeckText
+	ldtx bc, OddishText
+	lb de, SEARCHEFFECT_CARD_ID, ODDISH
+	call LookForCardInDeck
+	ret c
+
+; draw Deck list interface and print text
+	bank1call Func_5591
+	ldtx hl, ChooseAnOddishText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+
+.loop
+	bank1call DisplayCardList
+	jr c, .pressed_b
+	call GetCardIDFromDeckIndex
+	ld bc, ODDISH
+	call CompareDEtoBC
+	jr nz, .play_sfx
+
+; Oddish was selected
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+
+.play_sfx
+	; play SFX and loop back
+	call Func_3794
+	jr .loop
+
+.pressed_b
+; figure if Player can exit the screen without selecting,
+; that is, if the Deck has no Oddish card.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_b_press
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	ld a, l
+	call GetCardIDFromDeckIndex
+	ld bc, ODDISH
+	call CompareDEtoBC
+	jr z, .play_sfx ; found Oddish, go back to top loop
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_b_press
+
+; no Oddish in Deck, can safely exit screen
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+; 0x2c8b7
+
+SproutEffect_AISelect: ; 2c8b7 (b:48b7)
+	call CreateDeckCardList
+	ld hl, wDuelTempList
+.loop_deck
+	ld a, [hli]
+	ldh [hTemp_ffa0], a
+	cp $ff
+	ret z ; no Oddish
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp ODDISH
+	jr nz, .loop_deck
+	ret ; Oddish found
+; 0x2c8cc
+
+SproutEffect_PutInPlayArea: ; 2c8cc (b:48cc)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	jr z, .shuffle
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	call PutHandPokemonCardInPlayArea
+	call CheckIfTurnDuelistIsPlayer
+	jr c, .shuffle
+	; display card on screen
+	ldh a, [hTemp_ffa0]
+	ldtx hl, PlacedOnTheBenchText
+	bank1call DisplayCardDetailScreen
+.shuffle
+	call Func_2c0bd
+	ret
+; 0x2c8ec
+
+	INCROM $2c8ec, $2c925
 
 BigEggsplosion_AIEffect: ; 2c925 (b:4925)
 	ldh a, [hTempPlayAreaLocation_ff9d]

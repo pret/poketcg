@@ -242,12 +242,12 @@ Text0125: ; 3899f (e:499f)
 	line "from the Deck."
 	done
 
-Text0126: ; 389cf (e:49cf)
+ChooseAnOddishFromTheDeckText: ; 389cf (e:49cf)
 	text "Choose an Oddish"
 	line "from the Deck."
 	done
 
-Text0127: ; 389f0 (e:49f0)
+ChooseAnOddishText: ; 389f0 (e:49f0)
 	text "Choose an Oddish"
 	done
 
@@ -406,12 +406,12 @@ Text013a: ; 391dc (e:51dc)
 	line "to be used with Metronome."
 	done
 
-Text013b: ; 39215 (e:5215)
+ThereIsNoInTheDeckText: ; 39215 (e:5215)
 	text "There is no <RAMTEXT>"
 	line "in the Deck."
 	done
 
-Text013c: ; 39231 (e:5231)
+WouldYouLikeToCheckTheDeckText: ; 39231 (e:5231)
 	text "Would you like to check the Deck?"
 	done
 
@@ -429,7 +429,7 @@ Text013f: ; 392c9 (e:52c9)
 	text "Nidoran♂ Nidoran♀"
 	done
 
-Text0140: ; 392dc (e:52dc)
+OddishText: ; 392dc (e:52dc)
 	text "Oddish"
 	done
 

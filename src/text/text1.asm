@@ -831,7 +831,7 @@ Text00b0: ; 3749e (d:749e)
 	line "in the Discard Pile."
 	done
 
-Text00b1: ; 374d4 (d:74d4)
+NoCardsLeftInTheDeckText: ; 374d4 (d:74d4)
 	text "There are no cards left in the Deck."
 	done
 

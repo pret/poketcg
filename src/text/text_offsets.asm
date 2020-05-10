@@ -178,7 +178,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoEnergyAttachedToOpponentsActiveText              ; 0x00ae
 	textpointer Text00af                                           ; 0x00af
 	textpointer Text00b0                                           ; 0x00b0
-	textpointer Text00b1                                           ; 0x00b1
+	textpointer NoCardsLeftInTheDeckText                           ; 0x00b1
 	textpointer NoSpaceOnTheBenchText                              ; 0x00b2
 	textpointer NoPokemonCapableOfEvolvingText                     ; 0x00b3
 	textpointer CantEvolvePokemonInSameTurnItsPlacedText           ; 0x00b4
@@ -295,8 +295,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0123                                           ; 0x0123
 	textpointer Text0124                                           ; 0x0124
 	textpointer Text0125                                           ; 0x0125
-	textpointer Text0126                                           ; 0x0126
-	textpointer Text0127                                           ; 0x0127
+	textpointer ChooseAnOddishFromTheDeckText                      ; 0x0126
+	textpointer ChooseAnOddishText                                 ; 0x0127
 	textpointer Text0128                                           ; 0x0128
 	textpointer Text0129                                           ; 0x0129
 	textpointer Text012a                                           ; 0x012a
@@ -316,12 +316,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0138                                           ; 0x0138
 	textpointer Text0139                                           ; 0x0139
 	textpointer Text013a                                           ; 0x013a
-	textpointer Text013b                                           ; 0x013b
-	textpointer Text013c                                           ; 0x013c
+	textpointer ThereIsNoInTheDeckText                             ; 0x013b
+	textpointer WouldYouLikeToCheckTheDeckText                     ; 0x013c
 	textpointer Text013d                                           ; 0x013d
 	textpointer Text013e                                           ; 0x013e
 	textpointer Text013f                                           ; 0x013f
-	textpointer Text0140                                           ; 0x0140
+	textpointer OddishText                                         ; 0x0140
 	textpointer Text0141                                           ; 0x0141
 	textpointer Text0142                                           ; 0x0142
 	textpointer Text0143                                           ; 0x0143

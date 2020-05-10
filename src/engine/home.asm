@@ -11051,9 +11051,10 @@ Func_3b11: ; 3b11 (0:3b11)
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
 	push af
-	ld a, $07
+	ld a, BANK(Func_1c8bc)
 	call BankswitchROM
-	call $48bc
+	call Func_1c8bc
+	
 	pop af
 	call BankswitchROM
 	ret
