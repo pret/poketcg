@@ -59,9 +59,9 @@ WeepinbellPoisonPowderEffectCommands:
 
 VictreebelLureEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBenchPokemon
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchDefendingPokemon
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelect
-	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelectEffect
 	db  $00
 
 VictreebelAcidEffectCommands:
@@ -154,17 +154,17 @@ OddishStunSporeEffectCommands:
 	db  $00
 
 OddishSproutEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, SproutEffect_CheckDeckAndPlayArea
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, SproutEffect_PutInPlayArea
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, SproutEffect_SelectFromDeck
-	dbw EFFECTCMDTYPE_UNKNOWN_08, SproutEffect_AISelect
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Sprout_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Sprout_PutInPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Sprout_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, Sprout_AISelectEffect
 	db  $00
 
 ExeggutorTeleportEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, TeleportEffect_CheckBench
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, TeleportEffect_SwitchEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, TeleportEffect_PlayerSelect
-	dbw EFFECTCMDTYPE_UNKNOWN_08, TeleportEffect_AISelect
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Teleport_CheckBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Teleport_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Teleport_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, Teleport_AISelectEffect
 	db  $00
 
 ExeggutorBigEggsplosionEffectCommands:
@@ -184,19 +184,19 @@ NidokingToxicEffectCommands:
 	db  $00
 
 NidoqueenBoyfriendsEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4998
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, BoyfriendsEffect
 	db  $00
 
-NidoranFFurySweepesEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $49c6
-	dbw EFFECTCMDTYPE_AI, $49be
+NidoranFFurySwipesEffectCommands:
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, NidoranFFurySwipes_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, NidoranFFurySwipes_AIEffect
 	db  $00
 
 NidoranFCallForFamilyEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $49db
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4a6e
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $49eb
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4a55
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, NidoranFCallForFamily_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, NidoranFCallForFamily_PutInPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, NidoranFCallForFamily_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, NidoranFCallForFamily_AISelectEffect
 	db  $00
 
 NidoranMHornHazardEffectCommands:
@@ -395,7 +395,7 @@ PsyduckHeadacheEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $500e
 	db  $00
 
-PsyduckFurySweepesEffectCommands:
+PsyduckFurySwipesEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $501e
 	dbw EFFECTCMDTYPE_AI, $5016
 	db  $00
@@ -894,7 +894,7 @@ OnixHardenEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6075
 	db  $00
 
-PrimeapeFurySweepesEffectCommands:
+PrimeapeFurySwipesEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6083
 	dbw EFFECTCMDTYPE_AI, $607b
 	db  $00
@@ -974,7 +974,7 @@ SandshrewSandAttackEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $626b
 	db  $00
 
-SandslashFurySweepesEffectCommands:
+SandslashFurySwipesEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6279
 	dbw EFFECTCMDTYPE_AI, $6271
 	db  $00

@@ -191,11 +191,11 @@ Func_2c0e9: ; 2c0e9 (b:40e9)
 	ld [hl], a
 	ret
 
-; Sets some flags for AI use
-; [wDamage]      <- a
-; [wAIMinDamage] <- d
-; [wAIMaxDamage] <- e
-Func_2c0fb: ; 2c0fb (b:40fb)
+; Stores information about the attack damage for AI purposes
+; [wDamage]      <- a (average amount of damage)
+; [wAIMinDamage] <- d (minimum)
+; [wAIMaxDamage] <- e (maximum)
+StoreAIDamageInfo: ; 2c0fb (b:40fb)
 	ld [wDamage], a
 	xor a
 	ld [wDamage + 1], a
@@ -704,7 +704,8 @@ AIFindBenchWithLowestHP: ; 2c564 (b:4564)
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0fb
+	jp StoreAIDamageInfo
+; 0x2c6f8
 
 ; If heads, defending Pokemon becomes poisoned
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
@@ -773,7 +774,7 @@ VictreebelLure_CheckBenchPokemon: ; 2c740 (b:4740)
 	ret
 ; 0x2c74b
 
-VictreebelLure_PlayerSelect: ; 2c74b (b:474b)
+VictreebelLure_PlayerSelectEffect: ; 2c74b (b:474b)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
@@ -787,13 +788,13 @@ VictreebelLure_PlayerSelect: ; 2c74b (b:474b)
 	ret
 ; 0x2c764
 
-VictreebelLure_AISelect: ; 2c764 (b:4764)
+VictreebelLure_AISelectEffect: ; 2c764 (b:4764)
 	call AIFindBenchWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2c76a
 
-VictreebelLure_SwitchDefendingPokemon: ; 2c76a (b:476a)
+VictreebelLure_SwitchEffect: ; 2c76a (b:476a)
 	call SwapTurn
 	ldh a, [hTemp_ffa0]
 	ld e, a
@@ -889,7 +890,8 @@ ZubatLeechLifeEffect: ; 2c7e3 (b:47e3)
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
 	ld a, 30
 	lb de, 0, 60
-	jp Func_2c0fb
+	jp StoreAIDamageInfo
+; 0x2c7f5
 
 ; Flip 2 coins; deal 30x number of heads
 Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
@@ -949,7 +951,7 @@ MetapodStiffenEffect: ; 2c836 (b:4836)
 
 ; returns carry if no cards in Deck or if
 ; Play Area is full already.
-SproutEffect_CheckDeckAndPlayArea: ; 2c84a (b:484a)
+Sprout_CheckDeckAndPlayArea: ; 2c84a (b:484a)
 	call CheckIfDeckIsEmpty
 	ret c ; return if no cards in deck
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -960,7 +962,7 @@ SproutEffect_CheckDeckAndPlayArea: ; 2c84a (b:484a)
 	ret
 ; 0x2c85a
 
-SproutEffect_SelectFromDeck: ; 2c85a (b:485a)
+Sprout_PlayerSelectEffect: ; 2c85a (b:485a)
 	ld a, $ff
 	ldh [hTemp_ffa0], a
 
@@ -1023,7 +1025,7 @@ SproutEffect_SelectFromDeck: ; 2c85a (b:485a)
 	ret
 ; 0x2c8b7
 
-SproutEffect_AISelect: ; 2c8b7 (b:48b7)
+Sprout_AISelectEffect: ; 2c8b7 (b:48b7)
 	call CreateDeckCardList
 	ld hl, wDuelTempList
 .loop_deck
@@ -1038,7 +1040,7 @@ SproutEffect_AISelect: ; 2c8b7 (b:48b7)
 	ret ; Oddish found
 ; 0x2c8cc
 
-SproutEffect_PutInPlayArea: ; 2c8cc (b:48cc)
+Sprout_PutInPlayAreaEffect: ; 2c8cc (b:48cc)
 	ldh a, [hTemp_ffa0]
 	cp $ff
 	jr z, .shuffle
@@ -1057,7 +1059,7 @@ SproutEffect_PutInPlayArea: ; 2c8cc (b:48cc)
 ; 0x2c8ec
 
 ; returns carry if no Pokemon on Bench
-TeleportEffect_CheckBench: ; 2c8ec (b:48ec)
+Teleport_CheckBench: ; 2c8ec (b:48ec)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ldtx hl, ThereAreNoPokemonOnBenchText
@@ -1065,7 +1067,7 @@ TeleportEffect_CheckBench: ; 2c8ec (b:48ec)
 	ret
 ; 0x2c8f7
 
-TeleportEffect_PlayerSelect: ; 2c8f7 (b:48f7)
+Teleport_PlayerSelectEffect: ; 2c8f7 (b:48f7)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	bank1call HasAlivePokemonInBench
@@ -1079,7 +1081,7 @@ TeleportEffect_PlayerSelect: ; 2c8f7 (b:48f7)
 	ret
 ; 0x2c90f
 
-TeleportEffect_AISelect: ; 2c90f (b:490f)
+Teleport_AISelectEffect: ; 2c90f (b:490f)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	call Random
@@ -1087,7 +1089,7 @@ TeleportEffect_AISelect: ; 2c90f (b:490f)
 	ret
 ; 0x2c91a
 
-TeleportEffect_SwitchEffect: ; 2c91a (b:491a)
+Teleport_SwitchEffect: ; 2c91a (b:491a)
 	ldh a, [hTemp_ffa0]
 	ld e, a
 	call SwapArenaWithBenchPokemon
@@ -1145,7 +1147,8 @@ SetDamageToATimes20: ; 2c958 (b:4958)
 Thrash_AIEffect: ; 2c96b (b:496b)
 	ld a, 35
 	lb de, 30, 40
-	jp Func_2c0fb
+	jp StoreAIDamageInfo
+; 0x2c973
 
 ; If heads 10 more damage; if tails, 10 damage to itself
 Thrash_ModifierEffect: ; 2c973 (b:4973)
@@ -1176,7 +1179,167 @@ Toxic_DoublePoisonEffect: ; 2c994 (b:4994)
 	ret
 ; 0x2c998
 
-	INCROM $2c998, $2cbfb
+BoyfriendsEffect: ; 2c998 (b:4998)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld c, PLAY_AREA_ARENA
+.loop
+	ld a, [hl]
+	cp $ff
+	jr z, .done
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp NIDOKING
+	jr nz, .next
+	ld a, d
+	cp $00 ; why check d? Card IDs are only 1 byte long
+	jr nz, .next
+	inc c
+.next
+	inc hl
+	jr .loop
+.done
+; c holds number of Nidoking found in Play Area
+	ld a, c
+	add a
+	call ATimes10
+	call AddToDamage ; adds 2 * 10 * c
+	ret
+; 0x2c9be
+
+NidoranFFurySwipes_AIEffect: ; 2c9be (b:49be)
+	ld a, 15
+	lb de, 0, 30
+	jp StoreAIDamageInfo
+; 0x2c9c6
+
+NidoranFFurySwipes_MultiplierEffect: ; 2c9c6 (b:49c6)
+	ld hl, 10
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 3
+	call TossCoinATimes_BankB
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2c9db
+
+NidoranFCallForFamily_CheckDeckAndPlayArea: ; 2c9db (b:49db)
+	call CheckIfDeckIsEmpty
+	ret c ; return if no cards in deck
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ldtx hl, NoSpaceOnTheBenchText
+	cp MAX_PLAY_AREA_POKEMON
+	ccf
+	ret
+; 0x2c9eb
+
+NidoranFCallForFamily_PlayerSelectEffect: ; 2c9eb (b:49eb)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+
+	call CreateDeckCardList
+	ldtx hl, ChooseNidoranFromDeckText
+	ldtx bc, NidoranMNidoranFText
+	lb de, SEARCHEFFECT_NIDORAN, $00
+	call LookForCardInDeck
+	ret c
+
+; draw Deck list interface and print text
+	bank1call Func_5591
+	ldtx hl, ChooseNidoranText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+
+.loop
+	bank1call DisplayCardList
+	jr c, .pressed_b
+	call GetCardIDFromDeckIndex
+	ld bc, NIDORANF
+	call CompareDEtoBC
+	jr z, .selected_nidoran
+	ld bc, NIDORANM
+	call CompareDEtoBC
+	jr nz, .loop ; .play_sfx would be more appropriate here
+
+.selected_nidoran
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+
+.play_sfx
+	; play SFX and loop back
+	call Func_3794
+	jr .loop
+
+.pressed_b
+; figure if Player can exit the screen without selecting,
+; that is, if the Deck has no NidoranF or NidoranM card.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_b_press
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	ld a, l
+	call GetCardIDFromDeckIndex
+	ld bc, NIDORANF
+	call CompareDEtoBC
+	jr z, .play_sfx ; found, go back to top loop
+	ld bc, NIDORANM
+	jr z, .play_sfx ; found, go back to top loop
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_b_press
+
+; no Nidoran in Deck, can safely exit screen
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+; 0x2ca55
+
+NidoranFCallForFamily_AISelectEffect: ; 2ca55 (b:4a55)
+	call CreateDeckCardList
+	ld hl, wDuelTempList
+.loop_deck
+	ld a, [hli]
+	ldh [hTemp_ffa0], a
+	cp $ff
+	ret z ; none found
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp NIDORANF
+	jr z, .found
+	cp NIDORANM
+	jr nz, .loop_deck
+.found
+	ret
+; 0x2ca6e
+
+NidoranFCallForFamily_PutInPlayAreaEffect: ; 2ca6e (b:4a6e)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	jr z, .shuffle
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	call PutHandPokemonCardInPlayArea
+	call CheckIfTurnDuelistIsPlayer
+	jr c, .shuffle
+	; display card on screen
+	ldh a, [hTemp_ffa0]
+	ldtx hl, PlacedOnTheBenchText
+	bank1call DisplayCardDetailScreen
+.shuffle
+	call Func_2c0bd
+	ret
+; 0x2ca8e
+
+	INCROM $2ca8e, $2cbfb
 
 Func_2cbfb: ; 2cbfb (b:4bfb)
 	ldh a, [hAIEnergyTransPlayAreaLocation]

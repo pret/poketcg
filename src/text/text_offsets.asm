@@ -299,8 +299,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChooseAnOddishText                                 ; 0x0127
 	textpointer Text0128                                           ; 0x0128
 	textpointer Text0129                                           ; 0x0129
-	textpointer Text012a                                           ; 0x012a
-	textpointer Text012b                                           ; 0x012b
+	textpointer ChooseNidoranFromDeckText                          ; 0x012a
+	textpointer ChooseNidoranText                                  ; 0x012b
 	textpointer Text012c                                           ; 0x012c
 	textpointer Text012d                                           ; 0x012d
 	textpointer Text012e                                           ; 0x012e
@@ -320,7 +320,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WouldYouLikeToCheckTheDeckText                     ; 0x013c
 	textpointer Text013d                                           ; 0x013d
 	textpointer Text013e                                           ; 0x013e
-	textpointer Text013f                                           ; 0x013f
+	textpointer NidoranMNidoranFText                               ; 0x013f
 	textpointer OddishText                                         ; 0x0140
 	textpointer Text0141                                           ; 0x0141
 	textpointer Text0142                                           ; 0x0142
@@ -2124,7 +2124,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer CobraName                                          ; 0x0848
 	textpointer ArbokDescription                                   ; 0x0849
 	textpointer NidoranFName                                       ; 0x084a
-	textpointer FurySweepesName                                    ; 0x084b
+	textpointer FurySwipesName                                    ; 0x084b
 	textpointer TripleAttackX10Description                         ; 0x084c
 	textpointer CallForFamilyName                                  ; 0x084d
 	textpointer NidoranFsCallForFamilyDescription                  ; 0x084e

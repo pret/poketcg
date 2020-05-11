@@ -85,7 +85,7 @@ NidoranFName: ; 582e5 (16:42e5)
 	text "Nidoran♀"
 	done
 
-FurySweepesName: ; 582ef (16:42ef)
+FurySwipesName: ; 582ef (16:42ef)
 	text "Fury Swipes"
 	done
 

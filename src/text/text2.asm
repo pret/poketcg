@@ -260,12 +260,12 @@ Text0129: ; 38a14 (e:4a14)
 	line "Energy card."
 	done
 
-Text012a: ; 38a31 (e:4a31)
+ChooseNidoranFromDeckText: ; 38a31 (e:4a31)
 	text "Choose a Nidoran♀ or a"
 	line "Nidoran♂ from the Deck."
 	done
 
-Text012b: ; 38a61 (e:4a61)
+ChooseNidoranText: ; 38a61 (e:4a61)
 	text "Choose a Nidoran♀"
 	line "or a Nidoran♂."
 	done
@@ -425,7 +425,7 @@ Text013e: ; 3928c (e:528c)
 	line "            Yours   Opponent's"
 	done
 
-Text013f: ; 392c9 (e:52c9)
+NidoranMNidoranFText: ; 392c9 (e:52c9)
 	text "Nidoran♂ Nidoran♀"
 	done
 
