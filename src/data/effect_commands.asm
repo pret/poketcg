@@ -205,17 +205,17 @@ NidoranMHornHazardEffectCommands:
 	db  $00
 
 NidorinaSupersonicEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4aac
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, NidorinaSupersonicEffect
 	db  $00
 
 NidorinaDoubleKickEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4abb
-	dbw EFFECTCMDTYPE_AI, $4ab3
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, NidorinaDoubleKick_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, NidorinaDoubleKick_AIEffect
 	db  $00
 
 NidorinoDoubleKickEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4adb
-	dbw EFFECTCMDTYPE_AI, $4ad3
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, NidorinoDoubleKick_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, NidorinoDoubleKick_AIEffect
 	db  $00
 
 ButterfreeWhirlwindEffectCommands:

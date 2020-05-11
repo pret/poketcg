@@ -1359,7 +1359,53 @@ HornHazard_Failure50PercentEffect: ; 2ca96 (b:4a96)
 	ret
 ; 0x2caac
 
-	INCROM $2caac, $2cbfb
+NidorinaSupersonicEffect: ; 2caac (b:4aac)
+	call Confusion50PercentEffect
+	call nc, SetNoEffectFromStatus
+	ret
+; 0x2cab3
+
+NidorinaDoubleKick_AIEffect: ; 2cab3 (b:4ab3)
+	ld a, 30
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2cabb
+
+NidorinaDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
+	ld hl, 30
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 2
+	call TossCoinATimes_BankB
+	ld e, a
+	add a
+	add e
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2cad3
+
+NidorinoDoubleKick_AIEffect: ; 2cad3 (b:4ad3)
+	ld a, 30
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2cadb
+
+NidorinoDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
+	ld hl, 30
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 2
+	call TossCoinATimes_BankB
+	ld e, a
+	add a
+	add e
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2caf3
+
+	INCROM $2caf3, $2cbfb
 
 Func_2cbfb: ; 2cbfb (b:4bfb)
 	ldh a, [hAIEnergyTransPlayAreaLocation]
