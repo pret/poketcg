@@ -200,8 +200,8 @@ NidoranFCallForFamilyEffectCommands:
 	db  $00
 
 NidoranMHornHazardEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4a96
-	dbw EFFECTCMDTYPE_AI, $4a8e
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HornHazard_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_AI, HornHazard_AIEffect
 	db  $00
 
 NidorinaSupersonicEffectCommands:

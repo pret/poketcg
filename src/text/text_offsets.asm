@@ -231,7 +231,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ConfusionCheckText                                 ; 0x00e3
 	textpointer VenomPowderCheckText                               ; 0x00e4
 	textpointer Text00e5                                           ; 0x00e5
-	textpointer Text00e6                                           ; 0x00e6
+	textpointer DamageCheckIfTailsNoDamageText                     ; 0x00e6
 	textpointer Text00e7                                           ; 0x00e7
 	textpointer Text00e8                                           ; 0x00e8
 	textpointer IfHeadPlus10IfTails10ToYourselfText                ; 0x00e9

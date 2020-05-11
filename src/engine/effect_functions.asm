@@ -1339,7 +1339,27 @@ NidoranFCallForFamily_PutInPlayAreaEffect: ; 2ca6e (b:4a6e)
 	ret
 ; 0x2ca8e
 
-	INCROM $2ca8e, $2cbfb
+HornHazard_AIEffect: ; 2ca8e (b:4a8e)
+	ld a, 15
+	lb de, 0, 30
+	jp StoreAIDamageInfo
+; 0x2ca96
+
+HornHazard_Failure50PercentEffect: ; 2ca96 (b:4a96)
+	ldtx de, DamageCheckIfTailsNoDamageText
+	call TossCoin_BankB
+	jr c, .heads
+	xor a
+	call StoreDamageInfo
+	call SetWasUnsuccessful
+	ret
+.heads
+	ld a, $01
+	ld [wLoadedMoveAnimation], a
+	ret
+; 0x2caac
+
+	INCROM $2caac, $2cbfb
 
 Func_2cbfb: ; 2cbfb (b:4bfb)
 	ldh a, [hAIEnergyTransPlayAreaLocation]

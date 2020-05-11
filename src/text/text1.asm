@@ -1078,7 +1078,7 @@ Text00e5: ; 37d1f (d:7d1f)
 	line "becomes Confused."
 	done
 
-Text00e6: ; 37d4a (d:7d4a)
+DamageCheckIfTailsNoDamageText: ; 37d4a (d:7d4a)
 	text "Damage check!"
 	line "If Tails, no damage!!!"
 	done
