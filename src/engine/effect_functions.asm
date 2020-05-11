@@ -766,7 +766,7 @@ WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 ; 0x2c740
 
 ; returns carry if non-duelist has no Bench Pokemon
-VictreebelLure_CheckBenchPokemon: ; 2c740 (b:4740)
+VictreebelLure_CheckBench: ; 2c740 (b:4740)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	ldtx hl, LureNoPokemonOnTheBenchText
@@ -1405,7 +1405,48 @@ NidorinoDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
 	ret
 ; 0x2caf3
 
-	INCROM $2caf3, $2cbfb
+ButterfreeWhirlwind_CheckBench: ; 2caf3 (b:4af3)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	jr nc, .has_bench
+	; no bench, do not do effect
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+.has_bench
+	call DuelistSelectForcedSwitch
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2cb09
+
+ButterfreeWhirlwind_SwitchEffect: ; 2cb09 (b:4b09)
+	ldh a, [hTemp_ffa0]
+	call HandleSwitchDefendingPokemonEffect
+	ret
+; 0x2cb0f
+
+ButterfreeMegaDrainEffect: ; 2cb0f (b:4b0f)
+	ld hl, wDealtDamage
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	srl h
+	rr l
+	bit 0, l
+	jr z, .rounded
+	; round up to nearest 10
+	ld de, 10 / 2
+	add hl, de
+.rounded
+	ld e, l
+	ld d, h
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2cb27
+
+	INCROM $2cb27, $2cbfb
 
 Func_2cbfb: ; 2cbfb (b:4bfb)
 	ldh a, [hAIEnergyTransPlayAreaLocation]

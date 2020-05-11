@@ -58,7 +58,7 @@ WeepinbellPoisonPowderEffectCommands:
 	db  $00
 
 VictreebelLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBenchPokemon
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBench
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelectEffect
 	dbw EFFECTCMDTYPE_UNKNOWN_08, VictreebelLure_AISelectEffect
@@ -219,13 +219,13 @@ NidorinoDoubleKickEffectCommands:
 	db  $00
 
 ButterfreeWhirlwindEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4b09
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4af3
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $4af3
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ButterfreeWhirlwind_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, ButterfreeWhirlwind_CheckBench
+	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, ButterfreeWhirlwind_CheckBench
 	db  $00
 
 ButterfreeMegaDrainEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4b0f
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ButterfreeMegaDrainEffect
 	db  $00
 
 ParasSporeEffectCommands:
