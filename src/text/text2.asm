@@ -146,7 +146,7 @@ Text0112: ; 3860a (e:460a)
 	line "to change with Conversion 2."
 	done
 
-Text0113: ; 38647 (e:4647)
+ChoosePokemonWishToColorChangeText: ; 38647 (e:4647)
 	text "Choose the Pokémon whose color you"
 	line "wish to change with Color change."
 	done
@@ -163,7 +163,7 @@ Text0115: ; 386af (e:46af)
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0116: ; 386d3 (e:46d3)
+ChangedTheColorOfText: ; 386d3 (e:46d3)
 	text "Changed the color of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
@@ -242,7 +242,7 @@ Text0125: ; 3899f (e:499f)
 	line "from the Deck."
 	done
 
-ChooseAnOddishFromTheDeckText: ; 389cf (e:49cf)
+ChooseAnOddishFromDeckText: ; 389cf (e:49cf)
 	text "Choose an Oddish"
 	line "from the Deck."
 	done
@@ -275,7 +275,7 @@ Text012c: ; 38a83 (e:4a83)
 	line "Fighting Pokémon"
 	done
 
-Text012d: ; 38aa4 (e:4aa4)
+ProcedureForEnergyTransferText: ; 38aa4 (e:4aa4)
 	text "Procedure for Energy Transfer:"
 	line ""
 	line "1. Choose the Pokémon to move Grass"
@@ -289,12 +289,12 @@ Text012d: ; 38aa4 (e:4aa4)
 	line "4. Press the B Button to end."
 	done
 
-Text012e: ; 38b8f (e:4b8f)
+ChooseABellsproutFromDeckText: ; 38b8f (e:4b8f)
 	text "Choose a Bellsprout"
 	line "from the Deck."
 	done
 
-Text012f: ; 38bb3 (e:4bb3)
+ChooseABellsproutText: ; 38bb3 (e:4bb3)
 	text "Choose a Bellsprout."
 	done
 
@@ -433,7 +433,7 @@ OddishText: ; 392dc (e:52dc)
 	text "Oddish"
 	done
 
-Text0141: ; 392e4 (e:52e4)
+BellsproutText: ; 392e4 (e:52e4)
 	text "Bellsprout"
 	done
 

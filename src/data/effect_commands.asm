@@ -238,23 +238,23 @@ ParasectSporeEffectCommands:
 
 WeedlePoisonStingEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Poison50PercentEffect
-	dbw EFFECTCMDTYPE_AI, $4b27
+	dbw EFFECTCMDTYPE_AI, WeedlePoisonSting_AIEffect
 	db  $00
 
 IvysaurPoisonPowderEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoisonEffect
-	dbw EFFECTCMDTYPE_AI, $4b2f
+	dbw EFFECTCMDTYPE_AI, IvysaurPoisonPowder_AIEffect
 	db  $00
 
 BulbasaurLeechSeedEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4b37
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, BulbasaurLeechSeedEffect
 	db  $00
 
 VenusaurEnergyTransEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $4b44
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4b77
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4bfb
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4b6f
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, EnergyTrans_CheckPlayArea
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, EnergyTrans_TransferEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, EnergyTrans_AIEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, EnergyTrans_PrintProcedure
 	db  $00
 
 GrimerNastyGooEffectCommands:
@@ -262,38 +262,38 @@ GrimerNastyGooEffectCommands:
 	db  $00
 
 GrimerMinimizeEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4c30
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, GrimerMinimizeEffect
 	db  $00
 
 MukToxicGasEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4c36
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, ToxicGasEffect
 	db  $00
 
 MukSludgeEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Poison50PercentEffect
-	dbw EFFECTCMDTYPE_AI, $4c38
+	dbw EFFECTCMDTYPE_AI, Sludge_AIEffect
 	db  $00
 
 BellsproutCallForFamilyEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4c40
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4cc2
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4c50
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4cad
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, BellsproutCallForFamily_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, BellsproutCallForFamily_PutInPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, BellsproutCallForFamily_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, BellsproutCallForFamily_AISelectEffect
 	db  $00
 
 WeezingSmogEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Poison50PercentEffect
-	dbw EFFECTCMDTYPE_AI, $4ce2
+	dbw EFFECTCMDTYPE_AI, WeezingSmog_AIEffect
 	db  $00
 
 WeezingSelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4cea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, WeezingSelfdestructEffect
 	db  $00
 
 VenomothShiftEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $4d09
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4d5d
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4d21
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Shift_OncePerTurnCheck
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Shift_ChangeColorEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Shift_PlayerSelectEffect
 	db  $00
 
 VenomothVenomPowderEffectCommands:

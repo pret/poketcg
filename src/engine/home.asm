@@ -3742,7 +3742,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld l, a
 	ld [hl], $00
 	ld a, e
-	add DUELVARS_ARENA_CARD_CHANGED_TYPE
+	add DUELVARS_ARENA_CARD_CHANGED_COLOR
 	ld l, a
 	ld [hl], $00
 	ld a, e
@@ -3908,7 +3908,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	add e
 	ld l, a
 	ld [hl], $0
-	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	ld a, DUELVARS_ARENA_CARD_CHANGED_COLOR
 	add e
 	ld l, a
 	ld [hl], $0
@@ -3988,7 +3988,7 @@ EmptyPlayAreaSlot: ; 14f8 (0:14f8)
 	call .init_duelvar
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call .init_duelvar
-	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	ld a, DUELVARS_ARENA_CARD_CHANGED_COLOR
 	call .init_duelvar
 	ld a, DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	call .init_duelvar
@@ -4055,7 +4055,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call .swap_duelvar
-	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	ld a, DUELVARS_ARENA_CARD_CHANGED_COLOR
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_ATTACHED_PLUSPOWER
 	call .swap_duelvar
@@ -10278,7 +10278,7 @@ ClearChangedTypesIfMuk: ; 36d9 (0:36d9)
 	call .zero_changed_types
 	call SwapTurn
 .zero_changed_types
-	ld a, DUELVARS_ARENA_CARD_CHANGED_TYPE
+	ld a, DUELVARS_ARENA_CARD_CHANGED_COLOR
 	call GetTurnDuelistVariable
 	ld c, MAX_PLAY_AREA_POKEMON
 .zero_changed_types_loop
@@ -10299,9 +10299,9 @@ GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	push hl
 	push de
 	ld e, a
-	add DUELVARS_ARENA_CARD_CHANGED_TYPE
+	add DUELVARS_ARENA_CARD_CHANGED_COLOR
 	call GetTurnDuelistVariable
-	bit 7, a
+	bit HAS_CHANGED_COLOR_F, a
 	jr nz, .has_changed_color
 .regular_color
 	ld a, e
@@ -10321,7 +10321,7 @@ GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
 	jr c, .regular_color ; jump if can't use Shift
 	ld a, e
-	add DUELVARS_ARENA_CARD_CHANGED_TYPE
+	add DUELVARS_ARENA_CARD_CHANGED_COLOR
 	call GetTurnDuelistVariable
 	pop de
 	pop hl

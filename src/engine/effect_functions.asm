@@ -155,15 +155,16 @@ CheckIfTurnDuelistIsPlayer: ; 2c0c7 (b:40c7)
 	scf
 	ret
 
-; Sets some flags for AI use
+; Stores information about the attack damage for AI purposes
+; taking into account poison damage between turns.
 ; if target poisoned
 ;	[wAIMinDamage] <- [wDamage]
 ;	[wAIMaxDamage] <- [wDamage]
 ; else
-;	[wAIMinDamage] <- [wDamage] + d
-;	[wAIMaxDamage] <- [wDamage] + e
-;	[wDamage]      <- [wDamage] + a
-Func_2c0d4: ; 2c0d4 (b:40d4)
+; 	[wAIMinDamage] <- [wDamage] + d
+; 	[wAIMaxDamage] <- [wDamage] + e
+; 	[wDamage]      <- [wDamage] + a
+StoreAIPoisonDamageInfo: ; 2c0d4 (b:40d4)
 	push af
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
@@ -699,7 +700,249 @@ AIFindBenchWithLowestHP: ; 2c564 (b:4564)
 	ret
 ; 0x2c588
 
-	INCROM $2c588, $2c6f0
+; handles drawing the Shift Screen and its input.
+; outputs in a the color that was selected or,
+; if B was pressed, returns carry.
+; input:
+;	a  = Play Area location (PLAY_AREA_*), with bit 7 set or unset
+;	hl = text to be printed in the bottom box
+; output:
+;	a = color that was selected
+HandleShiftScreen: ; 2c588 (b:4588)
+	or a
+	call z, SwapTurn
+	push af
+	call .DrawScreen
+	pop af
+	call z, SwapTurn
+
+	ld hl, .menu_params
+	xor a
+	call InitializeMenuParameters
+	call EnableLCD
+
+.loop_input
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input
+	cp -1 ; b pressed?
+	jr z, .set_carry
+	ld e, a
+	ld d, $00
+	ld hl, ShiftListItemToColor
+	add hl, de
+	ld a, [hl]
+	or a
+	ret
+.set_carry
+	scf
+	ret
+
+.menu_params
+	db 1, 1 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db MAX_PLAY_AREA_POKEMON ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
+; 0x2c5be
+
+.DrawScreen: ; 2c5be (b:45be)
+	push hl
+	push af
+	call EmptyScreen
+	call ZeroObjectPositions
+	call LoadDuelCardSymbolTiles
+
+; load card data
+	pop af
+	and $7f
+	ld [wTempPlayAreaLocation_cceb], a
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; draw card gfx
+	ld de, v0Tiles1 + $20 tiles ; destination offset of loaded gfx
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	lb bc, $30, TILE_SIZE
+	call LoadCardGfx
+	bank1call SetBGP6OrSGB3ToCardPalette
+	bank1call FlushAllPalettesOrSendPal23Packet
+	ld a, $a0
+	lb hl, 6, 1
+	lb de, 9, 2
+	lb bc, 8, 6
+	call FillRectangle
+	bank1call ApplyBGP6OrSGB3ToCardImage
+
+; print card name and level at the top
+	ld a, 16
+	call CopyCardNameAndLevel
+	ld [hl], $00
+	lb de, 7, 0
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+
+; list all the colors
+	ld hl, ShiftMenuData
+	call PlaceTextItems
+
+; print card's color, resistance and weakness
+	ld a, [wTempPlayAreaLocation_cceb]
+	call GetPlayAreaCardColor
+	inc a
+	lb bc, 15, 9
+	call WriteByteToBGMap0
+	ld a, [wTempPlayAreaLocation_cceb]
+	call GetPlayAreaCardWeakness
+	lb bc, 15, 10
+	bank1call PrintCardPageWeaknessesOrResistances
+	ld a, [wTempPlayAreaLocation_cceb]
+	call GetPlayAreaCardResistance
+	lb bc, 15, 11
+	bank1call PrintCardPageWeaknessesOrResistances
+
+	call DrawWideTextBox
+
+; print list of color names on all list items
+	lb de, 4, 1
+	ldtx hl, ColorListText
+	call InitTextPrinting_ProcessTextFromID
+
+; print input hl to text box
+	lb de, 1, 14
+	pop hl
+	call InitTextPrinting_ProcessTextFromID
+
+; draw and apply palette to color icons
+	ld hl, ColorTileAndBGP
+	lb de, 2, 0
+	ld c, NUM_COLORED_TYPES
+.loop_colors
+	ld a, [hli]
+	push de
+	push bc
+	push hl
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
+
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .skip_vram1
+	pop hl  ; unnecessary
+	push hl ; unnecessary
+	call BankswitchVRAM1
+	ld a, [hl]
+	lb hl, 0, 0
+	lb bc, 2, 2
+	call FillRectangle
+	call BankswitchVRAM0
+
+.skip_vram1
+	pop hl
+	pop bc
+	pop de
+	inc hl
+	inc e
+	inc e
+	dec c
+	jr nz, .loop_colors
+	ret
+; 0x2c686
+
+; loads wTxRam2 and wTxRam2_b:
+; [wTxRam2]   <- wLoadedCard1Name
+; [wTxRam2_b] <- input color as text symbol
+; input:
+;	a = type (color) constant
+LoadCardNameAndInputColor: ; 2c686 (b:4686)
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, ColorToTextSymbol
+	add hl, de
+
+; load wTxRam2 with card's name
+	ld de, wTxRam2
+	ld a, [wLoadedCard1Name]
+	ld [de], a
+	inc de
+	ld a, [wLoadedCard1Name + 1]
+	ld [de], a
+
+; load wTxRam2_b with ColorToTextSymbol
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	ret
+; 0x2c6a1
+
+ShiftMenuData: ; 2c6a1 (b:46a1)
+	; x, y, text id
+	textitem 10,  9, TypeText
+	textitem 10, 10, WeaknessText
+	textitem 10, 11, ResistanceText
+	db $ff
+
+ColorTileAndBGP: ; 2c6ae (b:46ae)
+	; tile, BG
+	db $E4, $02
+	db $E0, $01
+	db $EC, $02
+	db $E8, $01
+	db $F0, $03
+	db $F4, $03
+
+ShiftListItemToColor: ; 2c6ba (b:46ba)
+	db GRASS
+	db FIRE
+	db WATER
+	db LIGHTNING
+	db FIGHTING
+	db PSYCHIC
+
+ColorToTextSymbol:  ; 2c6c0 (b:46c0)
+	tx FireSymbolText
+	tx GrassSymbolText
+	tx LightningSymbolText
+	tx WaterSymbolText
+	tx FightingSymbolText
+	tx PsychicSymbolText
+
+DrawSymbolOnPlayAreaCursor: ; 2c6cc (b:46cc)
+	ld c, a
+	add a
+	add c
+	add 2
+	; a = 3*a + 2
+	ld c, a
+	ld a, b
+	ld b, 0
+	call WriteByteToBGMap0
+	ret
+; 0x2c6d9
+
+	INCROM $2c6d9, $2c6e0
+
+PlayAreaSelectionMenuParameters: ; 2c6e0 (b:46e0)
+	db 0, 0 ; cursor x, cursor y
+	db 3 ; y displacement between items
+	db MAX_PLAY_AREA_POKEMON ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
+; 0x2c6e8
+
+	INCROM $2c6e8, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
@@ -757,12 +1000,13 @@ TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, 10
 	lb de, 10, 10
-	jp Func_2c0d4
+	jp StoreAIPoisonDamageInfo
+; 0x2c738
 
 WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0d4
+	jp StoreAIPoisonDamageInfo
 ; 0x2c740
 
 ; returns carry if non-duelist has no Bench Pokemon
@@ -817,7 +1061,8 @@ AcidEffect: ; 2c77e (b:477e)
 GloomPoisonPowder_AIEffect: ; 2c78b (b:478b)
 	ld a, 10
 	lb de, 10, 10
-	jp Func_2c0d4
+	jp StoreAIPoisonDamageInfo
+; 0x2c793
 
 ; Defending Pokemon and user become confused
 FoulOdorEffect: ; 2c793 (b:4793)
@@ -841,7 +1086,7 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0d4
+	jp StoreAIPoisonDamageInfo
 ; 0x2c7bc
 
 GolbatLeechLifeEffect: ; 2c7bc (b:47bc)
@@ -911,7 +1156,7 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 BeedrillPoisonSting_AIEffect: ; 2c80d (b:480d)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0d4
+	jp StoreAIPoisonDamageInfo
 ; 0x2c815
 
 ExeggcuteLeechSeedEffect: ; 2c815 (b:4815)
@@ -967,7 +1212,7 @@ Sprout_PlayerSelectEffect: ; 2c85a (b:485a)
 	ldh [hTemp_ffa0], a
 
 	call CreateDeckCardList
-	ldtx hl, ChooseAnOddishFromTheDeckText
+	ldtx hl, ChooseAnOddishFromDeckText
 	ldtx bc, OddishText
 	lb de, SEARCHEFFECT_CARD_ID, ODDISH
 	call LookForCardInDeck
@@ -1446,9 +1691,156 @@ ButterfreeMegaDrainEffect: ; 2cb0f (b:4b0f)
 	ret
 ; 0x2cb27
 
-	INCROM $2cb27, $2cbfb
+WeedlePoisonSting_AIEffect: ; 2cb27 (b:4b27)
+	ld a, 5
+	lb de, 0, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2cb2f
 
-Func_2cbfb: ; 2cbfb (b:4bfb)
+IvysaurPoisonPowder_AIEffect: ; 2cb2f (b:4b2f)
+	ld a, 10
+	lb de, 10, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2cb37
+
+BulbasaurLeechSeedEffect: ; 2cb37 (b:4b37)
+	ld hl, wDealtDamage
+	ld a, [hli]
+	or [hl]
+	ret z ; return if no damage dealt
+	lb de, 0, 10
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2cb44
+
+; returns carry if no Grass Energy in Play Area
+EnergyTrans_CheckPlayArea: ; 2cb44 (b:4b44)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret c ; cannot use Pkmn Power
+
+; search in Play Area for at least 1 Grass Energy type
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_deck
+	ld a, [hl]
+	and CARD_LOCATION_PLAY_AREA
+	jr z, .next
+	push hl
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop hl
+	cp TYPE_ENERGY_GRASS
+	ret z
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_deck
+
+; none found
+	ldtx hl, NoGrassEnergyText
+	scf
+	ret
+; 0x2cb6f
+
+EnergyTrans_PrintProcedure: ; 2cb6f (b:4b6f)
+	ldtx hl, ProcedureForEnergyTransferText
+	bank1call Func_57df
+	or a
+	ret
+; 0x2cb77
+
+EnergyTrans_TransferEffect: ; 2cb77 (b:4b77)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+; not player
+	bank1call Func_61a1
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ret
+
+.player
+	xor a
+	ldh [hCurPlayAreaItem], a
+	bank1call Func_61a1
+
+.draw_play_area
+	bank1call PrintPlayAreaCardList_EnableLCD
+	push af
+	ldh a, [hCurPlayAreaItem]
+	ld hl, PlayAreaSelectionMenuParameters
+	call InitializeMenuParameters
+	pop af
+	ld [wNumMenuItems], a
+
+; handle the action of taking a Grass Energy card
+.loop_input_take
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_take
+	cp -1 ; b press?
+	ret z
+
+; a press
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hCurPlayAreaItem], a
+	call CheckIfCardHasGrassEnergyAttached
+	jr c, .play_sfx ; no Grass attached
+
+	ldh [hAIEnergyTransEnergyCard], a
+	ldh a, [hAIEnergyTransEnergyCard] ; useless
+	; temporarily take card away to draw Play Area
+	call AddCardToHand
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld e, a
+	ldh a, [hAIEnergyTransEnergyCard]
+	; give card back
+	call PutHandCardInPlayArea
+
+	; draw Grass symbol near cursor
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_GRASS
+	call DrawSymbolOnPlayAreaCursor
+
+; handle the action of placing a Grass Energy card
+.loop_input_put
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_put
+	cp -1 ; b press?
+	jr z, .remove_symbol
+
+; a press
+	ldh [hCurPlayAreaItem], a
+	ldh [hAIEnergyTransPlayAreaLocation], a
+	ld a, OPPACTION_6B15
+	call SetOppAction_SerialSendDuelData
+	ldh a, [hAIEnergyTransPlayAreaLocation]
+	ld e, a
+	ldh a, [hAIEnergyTransEnergyCard]
+	; give card being held to this Pokemon
+	call AddCardToHand
+	call PutHandCardInPlayArea
+
+.remove_symbol
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_SPACE
+	call DrawSymbolOnPlayAreaCursor
+	call EraseCursor
+	jr .draw_play_area
+
+.play_sfx
+	call Func_3794
+	jr .loop_input_take
+; 0x2cbfb
+
+EnergyTrans_AIEffect: ; 2cbfb (b:4bfb)
 	ldh a, [hAIEnergyTransPlayAreaLocation]
 	ld e, a
 	ldh a, [hAIEnergyTransEnergyCard]
@@ -1458,7 +1850,275 @@ Func_2cbfb: ; 2cbfb (b:4bfb)
 	ret
 ; 0x2cc0a
 
-	INCROM $2cc0a, $2f4e1
+; returns carry if no Grass Energy cards
+; attached to card in Play Area location of a.
+; input:
+;	a = PLAY_AREA_* of location to check
+CheckIfCardHasGrassEnergyAttached: ; 2cc0a (b:4c0a)
+	or CARD_LOCATION_PLAY_AREA
+	ld e, a
+
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop
+	ld a, [hl]
+	cp e
+	jr nz, .next
+	push de
+	push hl
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop hl
+	pop de
+	cp TYPE_ENERGY_GRASS
+	jr z, .no_carry
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop
+	scf
+	ret
+.no_carry
+	ld a, l
+	or a
+	ret
+; 0x2cc30
+
+GrimerMinimizeEffect: ; 2cc30 (b:4c30)
+	ld a, SUBSTATUS1_REDUCE_BY_20
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2cc36
+
+ToxicGasEffect: ; 2cc36 (b:4c36)
+	scf
+	ret
+; 0x2cc38
+
+Sludge_AIEffect: ; 2cc38 (b:4c38)
+	ld a, 5
+	lb de, 0, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2cc40
+
+; returns carry if no cards in Deck or if
+; Play Area is full already.
+BellsproutCallForFamily_CheckDeckAndPlayArea: ; 2cc40 (b:4c40)
+	call CheckIfDeckIsEmpty
+	ret c ; return if no cards in deck
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ldtx hl, NoSpaceOnTheBenchText
+	cp MAX_PLAY_AREA_POKEMON
+	ccf
+	ret
+; 0x2cc50
+
+BellsproutCallForFamily_PlayerSelectEffect: ; 2cc50 (b:4c50)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+
+	call CreateDeckCardList
+	ldtx hl, ChooseABellsproutFromDeckText
+	ldtx bc, BellsproutText
+	lb de, SEARCHEFFECT_CARD_ID, BELLSPROUT
+	call LookForCardInDeck
+	ret c
+
+; draw Deck list interface and print text
+	bank1call Func_5591
+	ldtx hl, ChooseABellsproutText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+
+.loop
+	bank1call DisplayCardList
+	jr c, .pressed_b
+	call GetCardIDFromDeckIndex
+	ld bc, BELLSPROUT
+	call CompareDEtoBC
+	jr nz, .play_sfx
+
+; Bellsprout was selected
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+
+.play_sfx
+	; play SFX and loop back
+	call Func_3794
+	jr .loop
+
+.pressed_b
+; figure if Player can exit the screen without selecting,
+; that is, if the Deck has no Bellsprout card.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_b_press
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	ld a, l
+	call GetCardIDFromDeckIndex
+	ld bc, BELLSPROUT
+	call CompareDEtoBC
+	jr z, .play_sfx ; found Bellsprout, go back to top loop
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_b_press
+
+; no Bellsprout in Deck, can safely exit screen
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+; 0x2ccad
+
+BellsproutCallForFamily_AISelectEffect: ; 2ccad (b:4cad)
+	call CreateDeckCardList
+	ld hl, wDuelTempList
+.loop_deck
+	ld a, [hli]
+	ldh [hTemp_ffa0], a
+	cp $ff
+	ret z ; no Bellsprout
+	call GetCardIDFromDeckIndex
+	ld a, e
+	cp BELLSPROUT
+	jr nz, .loop_deck
+	ret ; Bellsprout found
+; 0x2ccc2
+
+BellsproutCallForFamily_PutInPlayAreaEffect: ; 2ccc2 (b:4cc2)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	jr z, .shuffle
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	call PutHandPokemonCardInPlayArea
+	call CheckIfTurnDuelistIsPlayer
+	jr c, .shuffle
+	ldh a, [hTemp_ffa0]
+	ldtx hl, PlacedOnTheBenchText
+	bank1call DisplayCardDetailScreen
+.shuffle
+	call Func_2c0bd
+	ret
+; 0x2cce2
+
+WeezingSmog_AIEffect: ; 2cce2 (b:4ce2)
+	ld a, 5
+	lb de, 0, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2ccea
+
+WeezingSelfdestructEffect: ; 2ccea (b:4cea)
+	ld a, 60
+	call Func_1955
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 10
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	xor a
+	ld [wIsDamageToSelf], a
+	ld a, 10
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	ret
+; 0x2cd09
+
+Shift_OncePerTurnCheck: ; 2cd09 (b:4d09)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	and USED_PKMN_POWER_THIS_TURN
+	jr nz, .already_used
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+.already_used
+	ldtx hl, OnlyOncePerTurnText
+	scf
+	ret
+; 0x2cd21
+
+Shift_PlayerSelectEffect: ; 2cd21 (b:4d21)
+	ldtx hl, ChoosePokemonWishToColorChangeText
+	ldh a, [hTemp_ffa0]
+	or $80
+	call HandleShiftScreen
+	ldh [hAIPkmnPowerEffectParam], a
+	ret c ; cancelled
+
+; check whether the color selected is valid
+	; look in Turn Duelist's Play Area
+	call .CheckColorInPlayArea
+	ret nc
+	; look in NonTurn Duelist's Play Area
+	call SwapTurn
+	call .CheckColorInPlayArea
+	call SwapTurn
+	ret nc
+	; not found in either Duelist's Play Area
+	ldtx hl, UnableToSelectText
+	call DrawWideTextBox_WaitForInput
+	jr Shift_PlayerSelectEffect ; loop back to start
+; 0x2cd44
+
+; checks in input color in a exists in Turn Duelist's Play Area
+; returns carry if not found.
+.CheckColorInPlayArea: ; 2cd44 (b:4d44)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, PLAY_AREA_ARENA
+.loop_play_area
+	push bc
+	ld a, b
+	call GetPlayAreaCardColor
+	pop bc
+	ld hl, hAIPkmnPowerEffectParam
+	cp [hl]
+	ret z ; found
+	inc b
+	dec c
+	jr nz, .loop_play_area
+	; not found
+	scf
+	ret
+; 0x2cd5d
+
+Shift_ChangeColorEffect: ; 2cd5d (b:4d5d)
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	set USED_PKMN_POWER_THIS_TURN_F, [hl]
+
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_CHANGED_COLOR
+	ld l, a
+	ldh a, [hAIPkmnPowerEffectParam]
+	or HAS_CHANGED_COLOR
+	ld [hl], a
+	call LoadCardNameAndInputColor
+	ldtx hl, ChangedTheColorOfText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x2cd84
+
+	INCROM $2cd84, $2f4e1
 	
 ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         call SwapTurn
@@ -1488,5 +2148,5 @@ ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         ret
 ; 0x2f513
 
-
 	INCROM $2f513, $30000
+

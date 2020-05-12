@@ -290,11 +290,11 @@ DuelistPlacedACardText: ; 367f9 (d:67f9)
 	line "a <RAMTEXT>."
 	done
 
-Text0045: ; 36808 (d:6808)
+UnableToSelectText: ; 36808 (d:6808)
 	text "Unable to select."
 	done
 
-Text0046: ; 3681b (d:681b)
+ColorListText: ; 3681b (d:681b)
 	text "Grass"
 	line "Fire"
 	line "Water"
@@ -303,27 +303,27 @@ Text0046: ; 3681b (d:681b)
 	line "Psychic"
 	done
 
-Text0047: ; 36848 (d:6848)
+GrassSymbolText: ; 36848 (d:6848)
 	textfw0 "<GRASS>"
 	done
 
-Text0048: ; 3684b (d:684b)
+FireSymbolText: ; 3684b (d:684b)
 	textfw0 "<FIRE>"
 	done
 
-Text0049: ; 3684e (d:684e)
+WaterSymbolText: ; 3684e (d:684e)
 	textfw0 "<WATER>"
 	done
 
-Text004a: ; 36851 (d:6851)
+LightningSymbolText: ; 36851 (d:6851)
 	textfw0 "<LIGHTNING>"
 	done
 
-Text004b: ; 36854 (d:6854)
+FightingSymbolText: ; 36854 (d:6854)
 	textfw0 "<FIGHTING>"
 	done
 
-Text004c: ; 36857 (d:6857)
+PsychicSymbolText: ; 36857 (d:6857)
 	textfw0 "<PSYCHIC>"
 	done
 
@@ -945,7 +945,7 @@ Text00c9: ; 37897 (d:7897)
 	text "No Resistance."
 	done
 
-Text00ca: ; 378a7 (d:78a7)
+OnlyOncePerTurnText: ; 378a7 (d:78a7)
 	text "Only once per turn."
 	done
 
@@ -963,7 +963,7 @@ Text00cd: ; 37923 (d:7923)
 	text "There is no Energy card attached."
 	done
 
-Text00ce: ; 37946 (d:7946)
+NoGrassEnergyText: ; 37946 (d:7946)
 	text "No Grass Energy."
 	done
 

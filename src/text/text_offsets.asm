@@ -70,14 +70,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WillDrawNPrizesText                                ; 0x0042
 	textpointer DrewNPrizesText                                    ; 0x0043
 	textpointer DuelistPlacedACardText                             ; 0x0044
-	textpointer Text0045                                           ; 0x0045
-	textpointer Text0046                                           ; 0x0046
-	textpointer Text0047                                           ; 0x0047
-	textpointer Text0048                                           ; 0x0048
-	textpointer Text0049                                           ; 0x0049
-	textpointer Text004a                                           ; 0x004a
-	textpointer Text004b                                           ; 0x004b
-	textpointer Text004c                                           ; 0x004c
+	textpointer UnableToSelectText                                 ; 0x0045
+	textpointer ColorListText                                      ; 0x0046
+	textpointer GrassSymbolText                                    ; 0x0047
+	textpointer FireSymbolText                                     ; 0x0048
+	textpointer WaterSymbolText                                    ; 0x0049
+	textpointer LightningSymbolText                                ; 0x004a
+	textpointer FightingSymbolText                                 ; 0x004b
+	textpointer PsychicSymbolText                                  ; 0x004c
 	textpointer Text004d                                           ; 0x004d
 	textpointer KnockOutText                                       ; 0x004e
 	textpointer DamageToSelfDueToConfusionText                     ; 0x004f
@@ -203,11 +203,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00c7                                           ; 0x00c7
 	textpointer Text00c8                                           ; 0x00c8
 	textpointer Text00c9                                           ; 0x00c9
-	textpointer Text00ca                                           ; 0x00ca
+	textpointer OnlyOncePerTurnText                                ; 0x00ca
 	textpointer CannotUseDueToStatusText                           ; 0x00cb
 	textpointer Text00cc                                           ; 0x00cc
 	textpointer Text00cd                                           ; 0x00cd
-	textpointer Text00ce                                           ; 0x00ce
+	textpointer NoGrassEnergyText                                  ; 0x00ce
 	textpointer Text00cf                                           ; 0x00cf
 	textpointer Text00d0                                           ; 0x00d0
 	textpointer Text00d1                                           ; 0x00d1
@@ -276,10 +276,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DuelistIsSelectingPokemonToPlaceInArenaText        ; 0x0110
 	textpointer Text0111                                           ; 0x0111
 	textpointer Text0112                                           ; 0x0112
-	textpointer Text0113                                           ; 0x0113
+	textpointer ChoosePokemonWishToColorChangeText                 ; 0x0113
 	textpointer Text0114                                           ; 0x0114
 	textpointer Text0115                                           ; 0x0115
-	textpointer Text0116                                           ; 0x0116
+	textpointer ChangedTheColorOfText                              ; 0x0116
 	textpointer Text0117                                           ; 0x0117
 	textpointer DrawCardsFromTheDeckText                           ; 0x0118
 	textpointer CannotDrawCardBecauseNoCardsInDeckText             ; 0x0119
@@ -295,16 +295,16 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0123                                           ; 0x0123
 	textpointer Text0124                                           ; 0x0124
 	textpointer Text0125                                           ; 0x0125
-	textpointer ChooseAnOddishFromTheDeckText                      ; 0x0126
+	textpointer ChooseAnOddishFromDeckText                         ; 0x0126
 	textpointer ChooseAnOddishText                                 ; 0x0127
 	textpointer Text0128                                           ; 0x0128
 	textpointer Text0129                                           ; 0x0129
 	textpointer ChooseNidoranFromDeckText                          ; 0x012a
 	textpointer ChooseNidoranText                                  ; 0x012b
 	textpointer Text012c                                           ; 0x012c
-	textpointer Text012d                                           ; 0x012d
-	textpointer Text012e                                           ; 0x012e
-	textpointer Text012f                                           ; 0x012f
+	textpointer ProcedureForEnergyTransferText                     ; 0x012d
+	textpointer ChooseABellsproutFromDeckText                      ; 0x012e
+	textpointer ChooseABellsproutText                              ; 0x012f
 	textpointer Text0130                                           ; 0x0130
 	textpointer Text0131                                           ; 0x0131
 	textpointer Text0132                                           ; 0x0132
@@ -322,7 +322,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text013e                                           ; 0x013e
 	textpointer NidoranMNidoranFText                               ; 0x013f
 	textpointer OddishText                                         ; 0x0140
-	textpointer Text0141                                           ; 0x0141
+	textpointer BellsproutText                                     ; 0x0141
 	textpointer Text0142                                           ; 0x0142
 	textpointer Text0143                                           ; 0x0143
 	textpointer Text0144                                           ; 0x0144

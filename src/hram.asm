@@ -153,7 +153,11 @@ hffb0:: ; ffb0
 hCurMenuItem:: ; ffb1
 	ds $1
 
-	ds $3
+; stores the item number in the Play Area selection menu
+hCurPlayAreaItem:: ; ffb2
+	ds $1
+
+	ds $2
 
 hffb5:: ; ffb5
 	ds $1
