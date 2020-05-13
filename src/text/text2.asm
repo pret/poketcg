@@ -298,7 +298,7 @@ ChooseABellsproutText: ; 38bb3 (e:4bb3)
 	text "Choose a Bellsprout."
 	done
 
-Text0130: ; 38bc9 (e:4bc9)
+ChoosePkmnToRemoveDamageCounterText: ; 38bc9 (e:4bc9)
 	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done

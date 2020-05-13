@@ -297,8 +297,8 @@ VenomothShiftEffectCommands:
 	db  $00
 
 VenomothVenomPowderEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4d8c
-	dbw EFFECTCMDTYPE_AI, $4d84
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, VenomPowder_PoisonConfusion50PercentEffect
+	dbw EFFECTCMDTYPE_AI, VenomPowder_AIEffect
 	db  $00
 
 TangelaBindEffectCommands:
@@ -307,17 +307,17 @@ TangelaBindEffectCommands:
 
 TangelaPoisonPowderEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoisonEffect
-	dbw EFFECTCMDTYPE_AI, $4da0
+	dbw EFFECTCMDTYPE_AI, TangelaPoisonPowder_AIEffect
 	db  $00
 
 VileplumeHealEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $4da8
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4dc7
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Heal_OncePerTurnCheck
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Heal_RemoveDamageEffect
 	db  $00
 
 VileplumePetalDanceEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4e2b
-	dbw EFFECTCMDTYPE_AI, $4e23
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PetalDance_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, PetalDance_AIEffect
 	db  $00
 
 TangelaStunSporeEffectCommands:
@@ -326,30 +326,30 @@ TangelaStunSporeEffectCommands:
 
 TangelaPoisonWhipEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoisonEffect
-	dbw EFFECTCMDTYPE_AI, $4e4b
+	dbw EFFECTCMDTYPE_AI, PoisonWhip_AIEffect
 	db  $00
 
 VenusaurSolarPowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $4e53
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4e82
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, SolarPower_CheckUse
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SolarPower_RemoveStatusEffect
 	db  $00
 
 VenusaurMegaDrainEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4eb0
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VenusaurMegaDrainEffect
 	db  $00
 
 OmastarWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f05
-	dbw EFFECTCMDTYPE_AI, $4f05
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, OmastarWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, OmastarWaterGunEffect
 	db  $00
 
 OmastarSpikeCannonEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f12
-	dbw EFFECTCMDTYPE_AI, $4f0a
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, OmastarSpikeCannon_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, OmastarSpikeCannon_AIEffect
 	db  $00
 
 OmanyteClairvoyanceEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4f2a
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, ClairvoyanceEffect
 	db  $00
 
 OmanyteWaterGunEffectCommands:

@@ -849,7 +849,7 @@ CantEvolvePokemonInSameTurnItsPlacedText: ; 37546 (d:7546)
 	line "in the same turn it was placed."
 	done
 
-Text00b5: ; 37583 (d:7583)
+NotAffectedByPoisonSleepParalysisOrConfusionText: ; 37583 (d:7583)
 	text "Not affected by Poison,"
 	line "Sleep, Paralysis, or Confusion."
 	done
@@ -1108,7 +1108,7 @@ IfHeadsChangeOpponentsActivePokemonText: ; 37e46 (d:7e46)
 	line "Active Pokémon."
 	done
 
-Text00ec: ; 37e73 (d:7e73)
+IfHeadsHealIsSuccessfulText: ; 37e73 (d:7e73)
 	text "If Heads,"
 	line "Heal is successful."
 	done

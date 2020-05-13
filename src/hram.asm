@@ -99,6 +99,8 @@ NEXTU
 ; the deck index (0-59) of the energy card to transfer
 ; and the Play Area location (PLAY_AREA_*) of card to receive that energy card.
 hAIEnergyTransEnergyCard:: ; ffa2
+; PLAY_AREA_* constant of Pokemon to be affected by Heal PKMN Power
+hHealPlayAreaLocationTarget:: ; ffa2
 	ds $1
 hAIEnergyTransPlayAreaLocation:: ; ffa3
 	ds $1

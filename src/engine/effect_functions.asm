@@ -388,7 +388,25 @@ ApplyAndAnimateHPDrain: ; 2c221 (b:4221)
 	ret
 ; 0x2c25b
 
-	INCROM $2c25b, $2c2a4
+; returns carry if Play Area has no damage counters.
+CheckIfPlayAreaHasAnyDamage: ; 2c25b (b:425b)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld d, a
+	ld e, PLAY_AREA_ARENA
+.loop_play_area
+	call GetCardDamageAndMaxHP
+	or a
+	ret nz ; found damage
+	inc e
+	dec d
+	jr nz, .loop_play_area
+	; no damage found
+	scf
+	ret
+; 0x2c26e
+
+	INCROM $2c26e, $2c2a4
 
 ; makes a list in wDuelTempList with the deck indices
 ; of all the energy cards found in opponent's Discard Pile.
@@ -2118,7 +2136,308 @@ Shift_ChangeColorEffect: ; 2cd5d (b:4d5d)
 	ret
 ; 0x2cd84
 
-	INCROM $2cd84, $2f4e1
+VenomPowder_AIEffect: ; 2cd84 (b:4d84)
+	ld a, 5
+	lb de, 0, 10
+	jp Func_2c0e9
+; 0x2cd8c
+
+VenomPowder_PoisonConfusion50PercentEffect: ; 2cd8c (b:4d8c)
+	ldtx de, VenomPowderCheckText
+	call TossCoin_BankB
+	ret nc ; return if tails
+
+; heads
+	call PoisonEffect
+	call ConfusionEffect
+	ret c
+	ld a, CONFUSED | POISONED
+	ld [wNoEffectFromStatus], a
+	ret
+; 0x2cda0
+
+TangelaPoisonPowder_AIEffect: ; 2cda0 (b:4da0)
+	ld a, 5
+	lb de, 0, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2cda8
+
+Heal_OncePerTurnCheck: ; 2cda8 (b:4da8)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	and USED_PKMN_POWER_THIS_TURN
+	jr nz, .already_used
+
+	call CheckIfPlayAreaHasAnyDamage
+	ldtx hl, NoPokemonWithDamageCountersText
+	ret c ; no damage counters to heal
+
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+
+.already_used
+	ldtx hl, OnlyOncePerTurnText
+	scf
+	ret
+; 0x2cdc7
+
+Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
+	ldtx de, IfHeadsHealIsSuccessfulText
+	call TossCoin_BankB
+	ldh [hTempPlayAreaLocation_ffa1], a
+	jr nc, .done
+
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opp
+	and DUELIST_TYPE_AI_OPP
+	jr nz, .done
+
+; player
+	ldtx hl, ChoosePkmnToRemoveDamageCounterText
+	call DrawWideTextBox_WaitForInput
+	bank1call HasAlivePokemonInPlayArea
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hHealPlayAreaLocationTarget], a
+	ld e, a
+	call GetCardDamageAndMaxHP
+	or a
+	jr z, .loop_input ; has no damage counters
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call SerialSend8Bytes
+	jr .done
+
+.link_opp
+	call SerialRecv8Bytes
+	ldh [hHealPlayAreaLocationTarget], a
+	; fallthrough
+
+.done
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	set USED_PKMN_POWER_THIS_TURN_F, [hl]
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	or a
+	ret z
+
+	ldh a, [hHealPlayAreaLocationTarget]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	add 10 ; remove 1 damage counter
+	ld [hl], a
+	ldh a, [hHealPlayAreaLocationTarget]
+	call Func_2c10b
+	call ExchangeRNG
+	ret
+; 0x2ce23
+
+PetalDance_AIEffect: ; 2ce23 (b:4e23)
+	ld a, 60
+	lb de, 0, 120
+	jp StoreAIDamageInfo
+; 0x2ce2b
+
+PetalDance_MultiplierEffect: ; 2ce2b (b:4e2b)
+	ld hl, 40
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 3
+	call TossCoinATimes_BankB
+	add a
+	add a
+	call ATimes10
+	; a = 4 * 10 * heads
+	call StoreDamageInfo
+	call SwapTurn
+	call ConfusionEffect
+	call SwapTurn
+	ret
+; 0x2ce4b
+
+PoisonWhip_AIEffect: ; 2ce4b (b:4e4b)
+	ld a, 10
+	lb de, 10, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2ce53
+
+SolarPower_CheckUse: ; 2ce53 (b:4e53)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	and USED_PKMN_POWER_THIS_TURN
+	jr nz, .already_used
+
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret c ; can't use PKMN due to status or Toxic Gas
+
+; return carry if none of the Arena cards have status conditions
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetTurnDuelistVariable
+	or a
+	jr nz, .has_status
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	or a
+	jr z, .no_status
+.has_status
+	or a
+	ret
+.already_used
+	ldtx hl, OnlyOncePerTurnText
+	scf
+	ret
+.no_status
+	ldtx hl, NotAffectedByPoisonSleepParalysisOrConfusionText
+	scf
+	ret
+; 0x2ce82
+
+SolarPower_RemoveStatusEffect: ; 2ce82 (b:4e82)
+	ld a, $8e
+	ld [wLoadedMoveAnimation], a
+	bank1call Func_7415
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld b, a
+	ld c, $00
+	ldh a, [hWhoseTurn]
+	ld h, a
+	bank1call PlayMoveAnimation
+	bank1call WaitMoveAnimation
+
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	set USED_PKMN_POWER_THIS_TURN_F, [hl]
+	ld l, DUELVARS_ARENA_CARD_STATUS
+	ld [hl], NO_STATUS
+
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	ld [hl], NO_STATUS
+	bank1call DrawDuelHUDs
+	ret
+; 0x2ceb0
+
+VenusaurMegaDrainEffect: ; 2ceb0 (b:4eb0)
+	ld hl, wDealtDamage
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	srl h
+	rr l
+	bit 0, l
+	jr z, .rounded
+	; round up to nearest 10
+	ld de, 10 / 2
+	add hl, de
+.rounded
+	ld e, l
+	ld d, h
+	call ApplyAndAnimateHPDrain
+	ret
+; 0x2cec8
+
+; applies the damage bonus for attacks that get bonus
+; from extra Water energy cards.
+; this bonus is always 10 more damage for each extra Water energy
+; and is always capped at a maximum of 20 damage.
+; input:
+;	b = number of Water energy cards needed for paying Energy Cost
+;	c = number of colorless energy cards needed for paying Energy Cost
+ApplyExtraWaterEnergyDamageBonus: ; 2cec8 (b:4ec8)
+	ld a, [wccf0]
+	or a
+	jr z, .asm_2ced1
+	ld c, a
+	ld b, 0
+
+.asm_2ced1
+	push bc
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetPlayAreaCardAttachedEnergies
+	pop bc
+
+	ld hl, wAttachedEnergies + WATER
+	ld a, c
+	or a
+	jr z, .check_bonus ; is Energy cost all water energy?
+
+	; it's not, so we need to remove the
+	; Water energy cards from calculations
+	; if they pay for colorless instead.
+	ld a, [wTotalAttachedEnergies]
+	cp [hl]
+	jr nz, .check_bonus ; skip if at least 1 non-Water energy attached
+
+	; Water is the only energy color attached
+	ld a, c
+	add b
+	ld b, a
+	; b += c
+
+.check_bonus
+	ld a, [hl]
+	sub b
+	jr c, .skip_bonus ; is water energy <  b?
+	jr z, .skip_bonus ; is water energy == b?
+
+; a holds number of water energy not payed for energy cost
+	cp 3
+	jr c, .less_than_3
+	ld a, 2 ; cap this to 2 for bonus effect
+.less_than_3
+	call ATimes10
+	call AddToDamage ; add 10 * a to damage
+
+.skip_bonus
+	ld a, [wDamage]
+	ld [wAIMinDamage], a
+	ld [wAIMaxDamage], a
+	ret
+; 0x2cf05
+
+OmastarWaterGunEffect: ; 2cf05 (b:4f05)
+	lb bc, 1, 1
+	jr ApplyExtraWaterEnergyDamageBonus
+; 0x2cf0a
+
+OmastarSpikeCannon_AIEffect: ; 2cf0a (b:4f0a)
+	ld a, 30
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2cf12
+
+OmastarSpikeCannon_MultiplierEffect: ; 2cf12 (b:4f12)
+	ld hl, 30
+	call LoadTxRam3
+	ld a, 2
+	ldtx de, DamageCheckIfHeadsXDamageText
+	call TossCoinATimes_BankB
+	ld e, a
+	add a
+	add e
+	call ATimes10
+	call StoreDamageInfo ; 3 * 10 * heads
+	ret
+; 0x2cf2a
+
+ClairvoyanceEffect: ; 2cf2a (b:4f2a)
+	scf
+	ret
+; 0x2cf2c
+
+	INCROM $2cf2c, $2f4e1
 	
 ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         call SwapTurn
@@ -2149,4 +2468,3 @@ ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
 ; 0x2f513
 
 	INCROM $2f513, $30000
-

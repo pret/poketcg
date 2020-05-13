@@ -45,12 +45,12 @@ DUELVARS_BENCH2_CARD_STAGE               EQUS "LOW(wPlayerBench2CardStage)"     
 DUELVARS_BENCH3_CARD_STAGE               EQUS "LOW(wPlayerBench3CardStage)"             ; d1
 DUELVARS_BENCH4_CARD_STAGE               EQUS "LOW(wPlayerBench4CardStage)"             ; d2
 DUELVARS_BENCH5_CARD_STAGE               EQUS "LOW(wPlayerBench5CardStage)"             ; d3
-DUELVARS_ARENA_CARD_CHANGED_COLOR        EQUS "LOW(wPlayerArenaCardChangedColor)"        ; d4
-DUELVARS_BENCH1_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench1CardChangedColor)"       ; d5
-DUELVARS_BENCH2_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench2CardChangedColor)"       ; d6
-DUELVARS_BENCH3_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench3CardChangedColor)"       ; d7
-DUELVARS_BENCH4_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench4CardChangedColor)"       ; d8
-DUELVARS_BENCH5_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench5CardChangedColor)"       ; d9
+DUELVARS_ARENA_CARD_CHANGED_COLOR        EQUS "LOW(wPlayerArenaCardChangedColor)"       ; d4
+DUELVARS_BENCH1_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench1CardChangedColor)"      ; d5
+DUELVARS_BENCH2_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench2CardChangedColor)"      ; d6
+DUELVARS_BENCH3_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench3CardChangedColor)"      ; d7
+DUELVARS_BENCH4_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench4CardChangedColor)"      ; d8
+DUELVARS_BENCH5_CARD_CHANGED_COLOR       EQUS "LOW(wPlayerBench5CardChangedColor)"      ; d9
 DUELVARS_ARENA_CARD_ATTACHED_DEFENDER    EQUS "LOW(wPlayerArenaCardAttachedDefender)"   ; da
 DUELVARS_BENCH1_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench1CardAttachedDefender)"  ; db
 DUELVARS_BENCH2_CARD_ATTACHED_DEFENDER   EQUS "LOW(wPlayerBench2CardAttachedDefender)"  ; dc
@@ -163,6 +163,7 @@ SUBSTATUS3_HEADACHE                EQU 1
 ; DUELVARS_ARENA_CARD_FLAGS_C2 constants
 USED_PKMN_POWER_THIS_TURN_F EQU 5
 CAN_EVOLVE_THIS_TURN_F      EQU 7
+
 USED_PKMN_POWER_THIS_TURN   EQU 1 << USED_PKMN_POWER_THIS_TURN_F
 CAN_EVOLVE_THIS_TURN        EQU 1 << CAN_EVOLVE_THIS_TURN_F
 

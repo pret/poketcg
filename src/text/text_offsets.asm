@@ -182,7 +182,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoSpaceOnTheBenchText                              ; 0x00b2
 	textpointer NoPokemonCapableOfEvolvingText                     ; 0x00b3
 	textpointer CantEvolvePokemonInSameTurnItsPlacedText           ; 0x00b4
-	textpointer Text00b5                                           ; 0x00b5
+	textpointer NotAffectedByPoisonSleepParalysisOrConfusionText   ; 0x00b5
 	textpointer Text00b6                                           ; 0x00b6
 	textpointer LureNoPokemonOnTheBenchText                        ; 0x00b7
 	textpointer Text00b8                                           ; 0x00b8
@@ -237,7 +237,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer IfHeadPlus10IfTails10ToYourselfText                ; 0x00e9
 	textpointer Text00ea                                           ; 0x00ea
 	textpointer IfHeadsChangeOpponentsActivePokemonText            ; 0x00eb
-	textpointer Text00ec                                           ; 0x00ec
+	textpointer IfHeadsHealIsSuccessfulText                        ; 0x00ec
 	textpointer Text00ed                                           ; 0x00ed
 	textpointer Text00ee                                           ; 0x00ee
 	textpointer TrainerCardSuccessCheckText                        ; 0x00ef
@@ -305,7 +305,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ProcedureForEnergyTransferText                     ; 0x012d
 	textpointer ChooseABellsproutFromDeckText                      ; 0x012e
 	textpointer ChooseABellsproutText                              ; 0x012f
-	textpointer Text0130                                           ; 0x0130
+	textpointer ChoosePkmnToRemoveDamageCounterText                ; 0x0130
 	textpointer Text0131                                           ; 0x0131
 	textpointer Text0132                                           ; 0x0132
 	textpointer Text0133                                           ; 0x0133
