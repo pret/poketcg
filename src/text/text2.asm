@@ -27,7 +27,7 @@ PoisonedIfHeadsConfusedIfTailsText: ; 380ed (e:40ed)
 	line "and Confused if Tails."
 	done
 
-Text00fb: ; 38124 (e:4124)
+IfHeadsDoNotReceiveDamageOrEffectText: ; 38124 (e:4124)
 	text "If Heads, do not receive damage"
 	line "or effect of opponent's next Attack!"
 	done
@@ -222,17 +222,17 @@ Text0121: ; 388ca (e:48ca)
 	line "2 Energy cards."
 	done
 
-Text0122: ; 388ee (e:48ee)
+ChooseAKrabbyFromDeckText: ; 388ee (e:48ee)
 	text "Choose a Krabby"
 	line "from the Deck."
 	done
 
-Text0123: ; 3890e (e:490e)
+ChooseDiscardEnergyCardFromOpponentText: ; 3890e (e:490e)
 	text "Choose and Discard an Energy card"
 	line "from the opponent's Active Pokémon."
 	done
 
-Text0124: ; 38955 (e:4955)
+ChooseAttackOpponentWillNotBeAbleToUseText: ; 38955 (e:4955)
 	text "Choose the Attack the opponent will"
 	line "not be able to use on the next turn."
 	done
@@ -251,7 +251,7 @@ ChooseAnOddishText: ; 389f0 (e:49f0)
 	text "Choose an Oddish"
 	done
 
-Text0128: ; 38a02 (e:4a02)
+ChooseAKrabbyText: ; 38a02 (e:4a02)
 	text "Choose a Krabby."
 	done
 
@@ -437,7 +437,7 @@ BellsproutText: ; 392e4 (e:52e4)
 	text "Bellsprout"
 	done
 
-Text0142: ; 392f0 (e:52f0)
+KrabbyText: ; 392f0 (e:52f0)
 	text "Krabby"
 	done
 
@@ -463,7 +463,7 @@ Text0147: ; 3935d (e:535d)
 	line "cards were returned to the Hand."
 	done
 
-Text0148: ; 39392 (e:5392)
+WasChosenForTheEffectOfAmnesiaText: ; 39392 (e:5392)
 	text "<RAMTEXT> was chosen"
 	line "for the effect of Amnesia."
 	done

@@ -353,21 +353,21 @@ OmanyteClairvoyanceEffectCommands:
 	db  $00
 
 OmanyteWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f2c
-	dbw EFFECTCMDTYPE_AI, $4f2c
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, OmanyteWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, OmanyteWaterGunEffect
 	db  $00
 
 WartortleWithdrawEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f32
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, WartortleWithdrawEffect
 	db  $00
 
 BlastoiseRainDanceEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4f46
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, RainDanceEffect
 	db  $00
 
 BlastoiseHydroPumpEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f48
-	dbw EFFECTCMDTYPE_AI, $4f48
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HydroPumpEffect
+	dbw EFFECTCMDTYPE_AI, HydroPumpEffect
 	db  $00
 
 GyaradosBubblebeamEffectCommands:
@@ -375,29 +375,29 @@ GyaradosBubblebeamEffectCommands:
 	db  $00
 
 KinglerFlailEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $4f54
-	dbw EFFECTCMDTYPE_AI, $4f4e
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, KinglerFlail_HPCheck
+	dbw EFFECTCMDTYPE_AI, KinglerFlail_AIEffect
 	db  $00
 
 KrabbyCallForFamilyEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4f5d
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4fdf
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4f6d
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4fca
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, KrabbyCallForFamily_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, KrabbyCallForFamily_PutInPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, KrabbyCallForFamily_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, KrabbyCallForFamily_AISelectEffect
 	db  $00
 
 MagikarpFlailEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5005
-	dbw EFFECTCMDTYPE_AI, $4fff
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, MagikarpFlail_HPCheck
+	dbw EFFECTCMDTYPE_AI, MagikarpFlail_AIEffect
 	db  $00
 
 PsyduckHeadacheEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $500e
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HeadacheEffect
 	db  $00
 
 PsyduckFurySwipesEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $501e
-	dbw EFFECTCMDTYPE_AI, $5016
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PsyduckFurySwipes_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, PsyduckFurySwipes_AIEffect
 	db  $00
 
 GolduckPsyshockEffectCommands:
@@ -405,36 +405,36 @@ GolduckPsyshockEffectCommands:
 	db  $00
 
 GolduckHyperBeamEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $506b
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5033
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5065
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, GolduckHyperBeam_DiscardEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, GolduckHyperBeam_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, GolduckHyperBeam_AISelectEffect
 	db  $00
 
 SeadraWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5085
-	dbw EFFECTCMDTYPE_AI, $5085
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SeadraWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, SeadraWaterGunEffect
 	db  $00
 
 SeadraAgilityEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $508b
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SeadraAgilityEffect
 	db  $00
 
 ShellderSupersonicEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $509d
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ShellderSupersonicEffect
 	db  $00
 
 ShellderHideInShellEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $50a4
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HideInShellEffect
 	db  $00
 
 VaporeonQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $50c0
-	dbw EFFECTCMDTYPE_AI, $50b8
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, VaporeonQuickAttack_BoostEffect
+	dbw EFFECTCMDTYPE_AI, VaporeonQuickAttack_AIEffect
 	db  $00
 
 VaporeonWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $50d3
-	dbw EFFECTCMDTYPE_AI, $50d3
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, VaporeonWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, VaporeonWaterGunEffect
 	db  $00
 
 DewgongIceBeamEffectCommands:
@@ -442,11 +442,11 @@ DewgongIceBeamEffectCommands:
 	db  $00
 
 StarmieRecoverEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $50d9
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $50f0
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5114
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $510e
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5103
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, StarmieRecover_CheckEnergyHP
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, StarmieRecover_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, StarmieRecover_HPRecoveryEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, StarmieRecover_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, StarmieRecover_AISelectEffect
 	db  $00
 
 StarmieStarFreezeEffectCommands:
@@ -458,57 +458,57 @@ SquirtleBubbleEffectCommands:
 	db  $00
 
 SquirtleWithdrawEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5120
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SquirtleWithdrawEffect
 	db  $00
 
 HorseaSmokescreenEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5134
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HorseaSmokescreenEffect
 	db  $00
 
 TentacruelSupersonicEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $513a
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, TentacruelSupersonicEffect
 	db  $00
 
 TentacruelJellyfishStingEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoisonEffect
-	dbw EFFECTCMDTYPE_AI, $5141
+	dbw EFFECTCMDTYPE_AI, JellyfishSting_AIEffect
 	db  $00
 
 PoliwhirlAmnesiaEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5149
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $516f
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5179
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5173
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, PoliwhirlAmnesia_CheckAttacks
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, PoliwhirlAmnesia_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoliwhirlAmnesia_DisableEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, PoliwhirlAmnesia_AISelectEffect
 	db  $00
 
 PoliwhirlDoubleslapEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $51c8
-	dbw EFFECTCMDTYPE_AI, $51c0
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoliwhirlDoubleslap_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, PoliwhirlDoubleslap_AIEffect
 	db  $00
 
 PoliwrathWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $51e0
-	dbw EFFECTCMDTYPE_AI, $51e0
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoliwrathWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, PoliwrathWaterGunEffect
 	db  $00
 
 PoliwrathWhirlpoolEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5214
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $51e6
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $520e
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Whirlpool_DiscardEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Whirlpool_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, Whirlpool_AISelectEffect
 	db  $00
 
 PoliwagWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5227
-	dbw EFFECTCMDTYPE_AI, $5227
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PoliwagWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, PoliwagWaterGunEffect
 	db  $00
 
 CloysterClampEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $522d
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ClampEffect
 	db  $00
 
 CloysterSpikeCannonEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $524e
-	dbw EFFECTCMDTYPE_AI, $5246
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, CloysterSpikeCannon_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, CloysterSpikeCannon_AIEffect
 	db  $00
 
 ArticunoFreezeDryEffectCommands:
@@ -516,19 +516,19 @@ ArticunoFreezeDryEffectCommands:
 	db  $00
 
 ArticunoBlizzardEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5266
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $526f
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Blizzard_BenchDamage50PercentEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Blizzard_BenchDamageEffect
 	db  $00
 
 TentacoolCowardiceEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $528b
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $52c3
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $52ae
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Cowardice_Check
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Cowardice_RemoveFromPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Cowardice_PlayerSelectEffect
 	db  $00
 
 LaprasWaterGunEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $52eb
-	dbw EFFECTCMDTYPE_AI, $52eb
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, LaprasWaterGunEffect
+	dbw EFFECTCMDTYPE_AI, LaprasWaterGunEffect
 	db  $00
 
 LaprasConfuseRayEffectCommands:
@@ -536,17 +536,17 @@ LaprasConfuseRayEffectCommands:
 	db  $00
 
 ArticunoQuickfreezeEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $52f1
-	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, $52f3
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Quickfreeze_InitialEffect
+	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, Quickfreeze_Paralysis50PercentEffect
 	db  $00
 
 ArticunoIceBreathEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5329
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $532e
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, IceBreath_ZeroDamage
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, IceBreath_RandomPokemonDamageEffect
 	db  $00
 
 VaporeonFocusEnergyEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $533f
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FocusEnergyEffect
 	db  $00
 
 ArcanineFlamethrowerEffectCommands:

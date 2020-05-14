@@ -155,8 +155,8 @@ hffb0:: ; ffb0
 hCurMenuItem:: ; ffb1
 	ds $1
 
-; stores the item number in the Play Area selection menu
-hCurPlayAreaItem:: ; ffb2
+; stores the item number in the selection menu of various effects
+hEffectItemSelection:: ; ffb2
 	ds $1
 
 	ds $2

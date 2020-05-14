@@ -196,7 +196,14 @@ wPlayerArenaCardLastTurnDamage:: ; c2f3
 wPlayerArenaCardLastTurnStatus:: ; c2f5
 	ds $1
 
-	ds $a
+	ds $2
+
+; stores an effect that was used on the Arena card last turn.
+; see LAST_TURN_EFFECT_* constants.
+wPlayerArenaCardLastTurnEffect:: ; c2f8
+	ds $1
+
+	ds $7
 
 wOpponentDuelVariables:: ; c300
 
@@ -336,7 +343,13 @@ wOpponentArenaCardLastTurnDamage:: ; c3f3
 wOpponentArenaCardLastTurnStatus:: ; c3f5
 	ds $1
 
-	ds $a
+	ds $2
+
+; whether any attached energy card was discarded last turn (0 if not)
+wOpponentArenaCardLastTurnEffect:: ; c2f8
+	ds $1
+
+	ds $7
 
 UNION
 

@@ -858,7 +858,7 @@ Text00b6: ; 375bc (d:75bc)
 	text "Not enough cards in Hand."
 	done
 
-LureNoPokemonOnTheBenchText: ; 375d7 (d:75d7)
+EffectNoPokemonOnTheBenchText: ; 375d7 (d:75d7)
 	text "No Pokémon on the Bench."
 	done
 
@@ -914,7 +914,7 @@ Text00c2: ; 377b4 (d:77b4)
 	text "Not enough Psychic Energy."
 	done
 
-Text00c3: ; 377d0 (d:77d0)
+NotEnoughWaterEnergyText: ; 377d0 (d:77d0)
 	text "Not enough Water Energy."
 	done
 
@@ -923,7 +923,7 @@ Text00c4: ; 377ea (d:77ea)
 	line "in the Discard Pile."
 	done
 
-Text00c5: ; 3781b (d:781b)
+NoAttackMayBeChoosenText: ; 3781b (d:781b)
 	text "No Attacks may be choosen."
 	done
 
@@ -954,7 +954,7 @@ CannotUseDueToStatusText: ; 378bc (d:78bc)
 	line "or Confusion."
 	done
 
-Text00cc: ; 378ef (d:78ef)
+CannotBeUsedInTurnWhichWasPlayedText: ; 378ef (d:78ef)
 	text "Cannot be used in the turn in"
 	line "which it was played."
 	done
@@ -1098,7 +1098,7 @@ IfHeadPlus10IfTails10ToYourselfText: ; 37dc9 (d:7dc9)
 	line "If Tails, +10 damage to yourself!"
 	done
 
-Text00ea: ; 37e03 (d:7e03)
+DamageToOppBenchIfHeadsDamageToYoursIfTailsText: ; 37e03 (d:7e03)
 	text "10 damage to opponent's Bench if"
 	line "Heads, damage to yours if Tails."
 	done
@@ -1118,7 +1118,7 @@ Text00ed: ; 37e92 (d:7e92)
 	line "to yourself, too."
 	done
 
-Text00ee: ; 37eb8 (d:7eb8)
+SuccessCheckIfHeadsAttackIsSuccessfulText: ; 37eb8 (d:7eb8)
 	text "Success check!!!"
 	line "If Heads, Attack is successful!"
 	done
