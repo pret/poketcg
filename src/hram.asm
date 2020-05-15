@@ -77,6 +77,14 @@ hOppActionTableIndex:: ; ff9e
 hTempCardIndex_ff9f:: ; ff9f
 	ds $1
 
+UNION
+
+; list of cards chosen to be discarded for attack effect
+hTempDiscardEnergyCards:: ; ffa0
+	ds $2
+
+NEXTU
+
 ; multipurpose temp storage (card's deck index, selected move index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
@@ -86,6 +94,8 @@ hTempPlayAreaLocation_ffa1:: ; ffa1
 ; parameter to be used by the AI's Pkmn Power effect
 hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
+
+ENDU
 
 UNION
 

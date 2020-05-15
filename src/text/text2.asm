@@ -207,17 +207,17 @@ Text011e: ; 3882e (e:482e)
 	line "1 Fire Energy card."
 	done
 
-Text011f: ; 38856 (e:4856)
+ChooseAndDiscard2FireEnergyCardsText: ; 38856 (e:4856)
 	text "Choose and Discard"
 	line "2 Fire Energy cards."
 	done
 
-Text0120: ; 3887f (e:487f)
+DiscardOppDeckAsManyFireEnergyCardsText: ; 3887f (e:487f)
 	text "Discard from opponent's Deck as many"
 	line "Fire Energy cards as were discarded."
 	done
 
-Text0121: ; 388ca (e:48ca)
+ChooseAndDiscard2EnergyCardsText: ; 388ca (e:48ca)
 	text "Choose and Discard"
 	line "2 Energy cards."
 	done
@@ -488,12 +488,12 @@ Text014c: ; 3941c (e:541c)
 	line "Play Area was moved."
 	done
 
-Text014d: ; 3944b (e:544b)
+DrewFireEnergyFromTheHandText: ; 3944b (e:544b)
 	text "<RAMNAME> drew"
 	line "<RAMNUM> Fire Energy from the Hand."
 	done
 
-Text014e: ; 39470 (e:5470)
+ThePkmnCardsInHandAndDeckWereShuffledText: ; 39470 (e:5470)
 	text "The Pokémon cards in <RAMNAME>'s"
 	line "Hand and Deck were shuffled"
 	done
@@ -679,7 +679,7 @@ Text0173: ; 39a9c (e:5a9c)
 	line "to Discard."
 	done
 
-Text0174: ; 39ab9 (e:5ab9)
+DiscardedCardsFromDeckText: ; 39ab9 (e:5ab9)
 	text "Discarded <RAMNUM> cards"
 	line "from <RAMNAME>'s Deck."
 	done
@@ -713,7 +713,7 @@ Text017a: ; 39b46 (e:5b46)
 	line "to <RAMTEXT>!"
 	done
 
-Text017b: ; 39b58 (e:5b58)
+ThereWasNoFireEnergyText: ; 39b58 (e:5b58)
 	text "There was no Fire Energy."
 	done
 

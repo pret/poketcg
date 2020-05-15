@@ -428,7 +428,7 @@ ShellderHideInShellEffectCommands:
 	db  $00
 
 VaporeonQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, VaporeonQuickAttack_BoostEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, VaporeonQuickAttack_DamageBoostEffect
 	dbw EFFECTCMDTYPE_AI, VaporeonQuickAttack_AIEffect
 	db  $00
 
@@ -550,117 +550,117 @@ VaporeonFocusEnergyEffectCommands:
 	db  $00
 
 ArcanineFlamethrowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5363
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5371
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5379
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5375
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, ArcanineFlamethrower_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, ArcanineFlamethrower_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, ArcanineFlamethrower_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, ArcanineFlamethrower_AISelectEffect
 	db  $00
 
 ArcanineTakeDownEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $537f
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, TakeDownEffect
 	db  $00
 
 ArcanineQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $538d
-	dbw EFFECTCMDTYPE_AI, $5385
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ArcanineQuickAttack_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, ArcanineQuickAttack_AIEffect
 	db  $00
 
 ArcanineFlamesOfRageEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $53a0
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $53ae
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $53ef
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $53de
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $53d5
-	dbw EFFECTCMDTYPE_AI, $53e9
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, FlamesOfRage_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, FlamesOfRage_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FlamesOfRage_DamageBoostEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, FlamesOfRage_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, FlamesOfRage_AISelectEffect
+	dbw EFFECTCMDTYPE_AI, FlamesOfRage_AIEffect
 	db  $00
 
 RapidashStompEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5400
-	dbw EFFECTCMDTYPE_AI, $53f8
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, RapidashStomp_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, RapidashStomp_AIEffect
 	db  $00
 
 RapidashAgilityEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5413
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, RapidashAgilityEffect
 	db  $00
 
 NinetailsLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5425
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $544f
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5430
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5449
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, NinetailsLure_CheckBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, NinetailsLure_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, NinetailsLure_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, NinetailsLure_AISelectEffect
 	db  $00
 
 NinetailsFireBlastEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5463
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5471
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5479
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5475
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, FireBlast_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, FireBlast_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, FireBlast_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, FireBlast_AISelectEffect
 	db  $00
 
 CharmanderEmberEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $547f
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $548d
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5495
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5491
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Ember_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Ember_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, Ember_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, Ember_AISelectEffect
 	db  $00
 
 MoltresWildfireEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $549b
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $54a9
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $54f4
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $54e1
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $54dd
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Wildfire_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Wildfire_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Wildfire_DiscardDeckEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, Wildfire_DiscardEnergyEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, Wildfire_AISelectEffect
 	db  $00
 
 Moltres1DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $552b
-	dbw EFFECTCMDTYPE_AI, $5523
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres1DiveBomb_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_AI, Moltres1DiveBomb_AIEffect
 	db  $00
 
 FlareonQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5549
-	dbw EFFECTCMDTYPE_AI, $5541
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FlareonQuickAttack_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, FlareonQuickAttack_AIEffect
 	db  $00
 
 FlareonFlamethrowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $555c
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $556a
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5572
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $556e
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, FlareonFlamethrower_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, FlareonFlamethrower_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, FlareonFlamethrower_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, FlareonFlamethrower_AISelectEffect
 	db  $00
 
 MagmarFlamethrowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5578
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5586
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $558e
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $558a
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MagmarFlamethrower_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, MagmarFlamethrower_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, MagmarFlamethrower_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, MagmarFlamethrower_AISelectEffect
 	db  $00
 
 MagmarSmokescreenEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5594
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, MagmarSmokescreenEffect
 	db  $00
 
 MagmarSmogEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Poison50PercentEffect
-	dbw EFFECTCMDTYPE_AI, $559a
+	dbw EFFECTCMDTYPE_AI, MagmarSmog_AIEffect
 	db  $00
 
 CharmeleonFlamethrowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $55a2
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $55b0
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $55b8
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $55b4
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, CharmeleonFlamethrower_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, CharmeleonFlamethrower_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, CharmeleonFlamethrower_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, CharmeleonFlamethrower_AISelectEffect
 	db  $00
 
 CharizardEnergyBurnEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $55be
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, EnergyBurnEffect
 	db  $00
 
 CharizardFireSpinEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $55c0
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $55cd
-	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5614
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5606
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, FireSpin_CheckEnergy
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, FireSpin_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_DISCARD_ENERGY, FireSpin_DiscardEffect
+	dbw EFFECTCMDTYPE_UNKNOWN_08, FireSpin_AISelectEffect
 	db  $00
 
 VulpixConfuseRayEffectCommands:
@@ -668,27 +668,27 @@ VulpixConfuseRayEffectCommands:
 	db  $00
 
 FlareonRageEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $563e
-	dbw EFFECTCMDTYPE_AI, $5638
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FlareonRage_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, FlareonRage_AIEffect
 	db  $00
 
 NinetailsMixUpEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5647
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MixUpEffect
 	db  $00
 
 NinetailsDancingEmbersEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $56ab
-	dbw EFFECTCMDTYPE_AI, $56a3
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, DancingEmbers_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, DancingEmbers_AIEffect
 	db  $00
 
 MoltresFiregiverEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $56c0
-	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, $56c2
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Firegiver_InitialEffect
+	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, Firegiver_AddToHandEffect
 	db  $00
 
 Moltres2DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5776
-	dbw EFFECTCMDTYPE_AI, $576e
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres2DiveBomb_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_AI, Moltres2DiveBomb_AIEffect
 	db  $00
 
 AbraPsyshockEffectCommands:

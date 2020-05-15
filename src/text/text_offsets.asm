@@ -194,7 +194,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text00be                                           ; 0x00be
 	textpointer EnergyCardsRequiredToRetreatText                   ; 0x00bf
 	textpointer NotEnoughEnergyCardsText                           ; 0x00c0
-	textpointer Text00c1                                           ; 0x00c1
+	textpointer NotEnoughFireEnergyText                            ; 0x00c1
 	textpointer Text00c2                                           ; 0x00c2
 	textpointer NotEnoughWaterEnergyText                           ; 0x00c3
 	textpointer Text00c4                                           ; 0x00c4
@@ -288,9 +288,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text011c                                           ; 0x011c
 	textpointer Text011d                                           ; 0x011d
 	textpointer Text011e                                           ; 0x011e
-	textpointer Text011f                                           ; 0x011f
-	textpointer Text0120                                           ; 0x0120
-	textpointer Text0121                                           ; 0x0121
+	textpointer ChooseAndDiscard2FireEnergyCardsText               ; 0x011f
+	textpointer DiscardOppDeckAsManyFireEnergyCardsText            ; 0x0120
+	textpointer ChooseAndDiscard2EnergyCardsText                   ; 0x0121
 	textpointer ChooseAKrabbyFromDeckText                          ; 0x0122
 	textpointer ChooseDiscardEnergyCardFromOpponentText            ; 0x0123
 	textpointer ChooseAttackOpponentWillNotBeAbleToUseText         ; 0x0124
@@ -334,8 +334,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WasUnsuccessfulText                                ; 0x014a
 	textpointer ThereWasNoEffectFromTxRam2Text                     ; 0x014b
 	textpointer Text014c                                           ; 0x014c
-	textpointer Text014d                                           ; 0x014d
-	textpointer Text014e                                           ; 0x014e
+	textpointer DrewFireEnergyFromTheHandText                      ; 0x014d
+	textpointer ThePkmnCardsInHandAndDeckWereShuffledText          ; 0x014e
 	textpointer Text014f                                           ; 0x014f
 	textpointer Text0150                                           ; 0x0150
 	textpointer Text0151                                           ; 0x0151
@@ -373,14 +373,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YouReceivedTheseCardsText                          ; 0x0171
 	textpointer Text0172                                           ; 0x0172
 	textpointer Text0173                                           ; 0x0173
-	textpointer Text0174                                           ; 0x0174
+	textpointer DiscardedCardsFromDeckText                         ; 0x0174
 	textpointer Text0175                                           ; 0x0175
 	textpointer Text0176                                           ; 0x0176
 	textpointer Text0177                                           ; 0x0177
 	textpointer Text0178                                           ; 0x0178
 	textpointer Text0179                                           ; 0x0179
 	textpointer Text017a                                           ; 0x017a
-	textpointer Text017b                                           ; 0x017b
+	textpointer ThereWasNoFireEnergyText                           ; 0x017b
 	textpointer Text017c                                           ; 0x017c
 	textpointer Text017d                                           ; 0x017d
 	textpointer ThereWasNoEffectFromToxicText                      ; 0x017e

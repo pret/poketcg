@@ -309,18 +309,38 @@ PickRandomPlayAreaCard: ; 2c17e (b:417e)
 	ret
 ; 0x2c188
 
-	INCROM $2c188, $2c199
+; outputs in hl the current position
+; in the hTempDiscardEnergyCards list
+; to place a new card.
+GetPositionInDiscardList: ; 2c188 (b:4188)
+	push de
+	ld hl, hEffectItemSelection
+	ld a, [hl]
+	inc [hl]
+	ld e, a
+	ld d, $00
+	ld hl, hTempDiscardEnergyCards
+	add hl, de
+	pop de
+	ret
+; 0x2c197
+
+; creates in wDuelTempList list of attached Fire Energy cards
+; that are attached to the Turn Duelist's Arena card.
+CreateListOfFireEnergyAttachedToArena: ; 2c197 (b:4197)
+	ld a, TYPE_ENERGY_FIRE
+	; fallthrough
 
 ; creates in wDuelTempList a list of cards that
 ; are in the Arena that are the same type as input a.
 ; used to list are Energy cards of a specific type
 ; that are attached to the Arena Pokemon.
 ; input:
-;	a = CARD_DATA_TYPE constant
+;	a = TYPE_ENERGY_* constant
 ; output:
 ;	a = number of cards in list;
 ;	wDuelTempList filled with cards, terminated by $ff
-CreateListOfEnergyAttachedToArenaOfType: ; 2c199 (b:4199)
+CreateListOfEnergyAttachedToArena: ; 2c199 (b:4199)
 	ld b, a
 	ld c, 0
 	ld de, wDuelTempList
@@ -1220,7 +1240,7 @@ PlayAreaSelectionMenuParameters: ; 2c6e0 (b:46e0)
 	INCROM $2c6e8, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
-	ld a, 5
+	ld a, 10 / 2
 	lb de, 0, 10
 	jp StoreAIDamageInfo
 ; 0x2c6f8
@@ -1235,7 +1255,7 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	call SetNoEffectFromStatus
 	ret
 
-; outputs in hTemp_ffa0 the result of the coin toss
+; outputs in [hTemp_ffa0] the result of the coin toss
 ; (0 = tails, 1 = heads) and, in case it was heads,
 ; stores in hTempPlayAreaLocation_ffa1 the location
 ; of the Bench Pokemon that was selected for switch.
@@ -1408,7 +1428,7 @@ ZubatLeechLifeEffect: ; 2c7e3 (b:47e3)
 ; 0x2c7ed
 
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2c7f5
@@ -1665,7 +1685,7 @@ SetDamageToATimes20: ; 2c958 (b:4958)
 	ret
 
 Thrash_AIEffect: ; 2c96b (b:496b)
-	ld a, 35
+	ld a, (30 + 40) / 2
 	lb de, 30, 40
 	jp StoreAIDamageInfo
 ; 0x2c973
@@ -1728,7 +1748,7 @@ BoyfriendsEffect: ; 2c998 (b:4998)
 ; 0x2c9be
 
 NidoranFFurySwipes_AIEffect: ; 2c9be (b:49be)
-	ld a, 15
+	ld a, 30 / 2
 	lb de, 0, 30
 	jp StoreAIDamageInfo
 ; 0x2c9c6
@@ -1860,7 +1880,7 @@ NidoranFCallForFamily_PutInPlayAreaEffect: ; 2ca6e (b:4a6e)
 ; 0x2ca8e
 
 HornHazard_AIEffect: ; 2ca8e (b:4a8e)
-	ld a, 15
+	ld a, 30 / 2
 	lb de, 0, 30
 	jp StoreAIDamageInfo
 ; 0x2ca96
@@ -1886,7 +1906,7 @@ NidorinaSupersonicEffect: ; 2caac (b:4aac)
 ; 0x2cab3
 
 NidorinaDoubleKick_AIEffect: ; 2cab3 (b:4ab3)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2cabb
@@ -1906,7 +1926,7 @@ NidorinaDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
 ; 0x2cad3
 
 NidorinoDoubleKick_AIEffect: ; 2cad3 (b:4ad3)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2cadb
@@ -2062,7 +2082,7 @@ EnergyTrans_TransferEffect: ; 2cb77 (b:4b77)
 	ret z
 
 ; a press
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hAIPkmnPowerEffectParam], a
 	ldh [hEffectItemSelection], a
 	call CheckIfCardHasGrassEnergyAttached
 	jr c, .play_sfx ; no Grass attached
@@ -2072,14 +2092,14 @@ EnergyTrans_TransferEffect: ; 2cb77 (b:4b77)
 	; temporarily take card away to draw Play Area
 	call AddCardToHand
 	bank1call PrintPlayAreaCardList_EnableLCD
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hAIPkmnPowerEffectParam]
 	ld e, a
 	ldh a, [hAIEnergyTransEnergyCard]
 	; give card back
 	call PutHandCardInPlayArea
 
 	; draw Grass symbol near cursor
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hAIPkmnPowerEffectParam]
 	ld b, SYM_GRASS
 	call DrawSymbolOnPlayAreaCursor
 
@@ -2104,7 +2124,7 @@ EnergyTrans_TransferEffect: ; 2cb77 (b:4b77)
 	call PutHandCardInPlayArea
 
 .remove_symbol
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hAIPkmnPowerEffectParam]
 	ld b, SYM_SPACE
 	call DrawSymbolOnPlayAreaCursor
 	call EraseCursor
@@ -2444,7 +2464,7 @@ Heal_OncePerTurnCheck: ; 2cda8 (b:4da8)
 Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 	ldtx de, IfHeadsHealIsSuccessfulText
 	call TossCoin_BankB
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hAIPkmnPowerEffectParam], a
 	jr nc, .done
 
 	ld a, DUELVARS_DUELIST_TYPE
@@ -2477,13 +2497,14 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 	; fallthrough
 
 .done
+; flag Pkmn Power as being used regardless of coin outcome
 	ldh a, [hTemp_ffa0]
 	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hAIPkmnPowerEffectParam]
 	or a
-	ret z
+	ret z ; return if coin was tails
 
 	ldh a, [hHealPlayAreaLocationTarget]
 	add DUELVARS_ARENA_CARD_HP
@@ -2497,7 +2518,7 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 ; 0x2ce23
 
 PetalDance_AIEffect: ; 2ce23 (b:4e23)
-	ld a, 60
+	ld a, 120 / 2
 	lb de, 0, 120
 	jp StoreAIDamageInfo
 ; 0x2ce2b
@@ -2670,7 +2691,7 @@ OmastarWaterGunEffect: ; 2cf05 (b:4f05)
 ; 0x2cf0a
 
 OmastarSpikeCannon_AIEffect: ; 2cf0a (b:4f0a)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2cf12
@@ -2860,7 +2881,7 @@ HeadacheEffect: ; 2d00e (b:500e)
 ; 0x2d016
 
 PsyduckFurySwipes_AIEffect: ; 2d016 (b:5016)
-	ld a, 15
+	ld a, 30 / 2
 	lb de, 0, 30
 	jp StoreAIDamageInfo
 ; 0x2d01e
@@ -2968,12 +2989,12 @@ HideInShellEffect: ; 2d0a4 (b:50a4)
 ; 0x2d0b8
 
 VaporeonQuickAttack_AIEffect: ; 2d0b8 (b:50b8)
-	ld a, 20
+	ld a, (10 + 30) / 2
 	lb de, 10, 30
 	jp StoreAIDamageInfo
 ; 0x2d0c0
 
-VaporeonQuickAttack_BoostEffect: ; 2d0c0 (b:50c0)
+VaporeonQuickAttack_DamageBoostEffect: ; 2d0c0 (b:50c0)
 	ld hl, 20
 	call LoadTxRam3
 	ldtx de, DamageCheckIfHeadsPlusDamageText
@@ -3006,7 +3027,7 @@ StarmieRecover_CheckEnergyHP: ; 2d0d9 (b:50d9)
 
 StarmieRecover_PlayerSelectEffect: ; 2d0f0 (b:50f0)
 	ld a, TYPE_ENERGY_WATER
-	call CreateListOfEnergyAttachedToArenaOfType
+	call CreateListOfEnergyAttachedToArena
 	xor a ; PLAY_AREA_ARENA
 	bank1call DisplayEnergyDiscardScreen
 .loop_input
@@ -3019,7 +3040,7 @@ StarmieRecover_PlayerSelectEffect: ; 2d0f0 (b:50f0)
 
 StarmieRecover_AISelectEffect: ; 2d103 (b:5103)
 	ld a, TYPE_ENERGY_WATER
-	call CreateListOfEnergyAttachedToArenaOfType
+	call CreateListOfEnergyAttachedToArena
 	ld a, [wDuelTempList] ; pick first card
 	ldh [hTemp_ffa0], a
 	ret
@@ -3156,7 +3177,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 ; 0x2d1c0
 
 PoliwhirlDoubleslap_AIEffect: ; 2d1c0 (b:51c0)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2d1c8
@@ -3250,7 +3271,7 @@ ClampEffect: ; 2d22d (b:522d)
 ; 0x2d246
 
 CloysterSpikeCannon_AIEffect: ; 2d246 (b:5246)
-	ld a, 30
+	ld a, 60 / 2
 	lb de, 0, 60
 	jp StoreAIDamageInfo
 ; 0x2d24e
@@ -3330,7 +3351,7 @@ Cowardice_PlayerSelectEffect: ; 2d2ae (b:52ae)
 	bank1call HasAlivePokemonInBench
 	bank1call OpenPlayAreaScreenForSelection
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hAIPkmnPowerEffectParam], a
 	ret
 ; 0x2d2c3
 
@@ -3351,7 +3372,7 @@ Cowardice_RemoveFromPlayAreaEffect: ; 2d2c3 (b:52c3)
 	ldh a, [hTemp_ffa0]
 	or a
 	jr nz, .skip_switch
-	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh a, [hAIPkmnPowerEffectParam]
 	ld e, a
 	call SwapArenaWithBenchPokemon
 
@@ -3432,4 +3453,828 @@ FocusEnergyEffect: ; 2d33f (b:533f)
 	ret
 ; 0x2d34b
 
-	INCROM $2d34b, $30000
+PlayerPickFireEnergyCardToDiscard: ; 2d34b (b:534b)
+	call CreateListOfFireEnergyAttachedToArena
+	xor a
+	bank1call DisplayEnergyDiscardScreen
+	bank1call HandleEnergyDiscardMenuInput
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTempDiscardEnergyCards], a
+	ret
+; 0x2d35a
+
+AIPickFireEnergyCardToDiscard: ; 2d35a (b:535a)
+	call CreateListOfFireEnergyAttachedToArena
+	ld a, [wDuelTempList]
+	ldh [hTempDiscardEnergyCards], a ; pick first in list
+	ret
+; 0x2d363
+
+; returns carry if Arena card has no Fire Energy cards
+ArcanineFlamethrower_CheckEnergy: ; 2d363 (b:5363)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies]
+	ldtx hl, NotEnoughFireEnergyText
+	cp 1
+	ret
+; 0x2d371
+
+ArcanineFlamethrower_PlayerSelectEffect: ; 2d371 (b:5371)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d375
+
+ArcanineFlamethrower_AISelectEffect: ; 2d375 (b:5375)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d379
+
+ArcanineFlamethrower_DiscardEffect: ; 2d379 (b:5379)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d37f
+
+TakeDownEffect: ; 2d37f (b:537f)
+	ld a, 30
+	call Func_1955
+	ret
+; 0x2d385
+
+ArcanineQuickAttack_AIEffect: ; 2d385 (b:5385)
+	ld a, (10 + 30) / 2
+	lb de, 10, 30
+	jp StoreAIDamageInfo
+; 0x2d38d
+
+ArcanineQuickAttack_DamageBoostEffect: ; 2d38d (b:538d)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsPlusDamageText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, 20
+	call AddToDamage
+	ret
+; 0x2d3a0
+
+; return carry if has less than 2 Fire Energy cards
+FlamesOfRage_CheckEnergy: ; 2d3a0 (b:53a0)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies]
+	ldtx hl, NotEnoughFireEnergyText
+	cp 2
+	ret
+; 0x2d3ae
+
+FlamesOfRage_PlayerSelectEffect: ; 2d3ae (b:53ae)
+	ldtx hl, ChooseAndDiscard2FireEnergyCardsText
+	call DrawWideTextBox_WaitForInput
+
+	xor a
+	ldh [hEffectItemSelection], a
+	call CreateListOfFireEnergyAttachedToArena
+	xor a
+	bank1call DisplayEnergyDiscardScreen
+.loop_input
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	call GetPositionInDiscardList
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a
+	call RemoveCardFromDuelTempList
+	ldh a, [hEffectItemSelection]
+	cp 2
+	ret nc ; return when 2 have been chosen
+	bank1call DisplayEnergyDiscardMenu
+	jr .loop_input
+; 0x2d3d5
+
+FlamesOfRage_AISelectEffect: ; 2d3d5 (b:53d5)
+	call AIPickFireEnergyCardToDiscard
+	ld a, [wDuelTempList + 1]
+	ldh [hTempDiscardEnergyCards + 1], a
+	ret
+; 0x2d3de
+
+FlamesOfRage_DiscardEffect: ; 2d3de (b:53de)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ldh a, [hTempDiscardEnergyCards + 1]
+	call PutCardInDiscardPile
+	ret
+; 0x2d3e9
+
+FlamesOfRage_AIEffect: ; 2d3e9 (b:53e9)
+	call FlamesOfRage_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2d3ef
+
+FlamesOfRage_DamageBoostEffect: ; 2d3ef (b:53ef)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	call AddToDamage
+	ret
+; 0x2d3f8
+
+RapidashStomp_AIEffect: ; 2d3f8 (b:53f8)
+	ld a, (20 + 30) / 2
+	lb de, 20, 30
+	jp StoreAIDamageInfo
+; 0x2d400
+
+RapidashStomp_DamageBoostEffect: ; 2d400 (b:5400)
+	ld hl, 10
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsPlusDamageText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, 10
+	call AddToDamage
+	ret
+; 0x2d413
+
+RapidashAgilityEffect: ; 2d413 (b:5413)
+	ldtx de, IfHeadsDoNotReceiveDamageOrEffectText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, $52
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS1_AGILITY
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2d425
+
+; returns carry if Opponent has no Pokemon in bench
+NinetailsLure_CheckBench: ; 2d425 (b:5425)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ldtx hl, EffectNoPokemonOnTheBenchText
+	cp 2
+	ret
+; 0x2d430
+
+NinetailsLure_PlayerSelectEffect: ; 2d430 (b:5430)
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2d449
+
+NinetailsLure_AISelectEffect: ; 2d449 (b:5449)
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2d44f
+
+NinetailsLure_SwitchEffect: ; 2d44f (b:544f)
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld e, a
+	call HandleNShieldAndTransparency
+	call nc, SwapArenaWithBenchPokemon
+	call SwapTurn
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
+; 0x2d463
+
+; return carry if no Fire energy cards
+FireBlast_CheckEnergy: ; 2d463 (b:5463)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d471
+
+FireBlast_PlayerSelectEffect: ; 2d471 (b:5471)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d475
+
+FireBlast_AISelectEffect: ; 2d475 (b:5475)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d479
+
+FireBlast_DiscardEffect: ; 2d479 (b:5479)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d47f
+
+; return carry if no Fire energy cards
+Ember_CheckEnergy: ; 2d47f (b:547f)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d48d
+
+Ember_PlayerSelectEffect: ; 2d48d (b:548d)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d491
+
+Ember_AISelectEffect: ; 2d491 (b:5491)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d495
+
+Ember_DiscardEffect: ; 2d495 (b:5495)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d49b
+
+; return carry if no Fire energy cards
+Wildfire_CheckEnergy: ; 2d49b (b:549b)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d4a9
+
+Wildfire_PlayerSelectEffect: ; 2d4a9 (b:54a9)
+	ldtx hl, DiscardOppDeckAsManyFireEnergyCardsText
+	call DrawWideTextBox_WaitForInput
+
+	xor a
+	ldh [hEffectItemSelection], a
+	call CreateListOfFireEnergyAttachedToArena
+	xor a
+	bank1call DisplayEnergyDiscardScreen
+
+; show list to Player and for each card selected to discard,
+; just increase a counter and store it.
+; this will be the output used by Wildfire_DiscardEnergyEffect.
+	xor a
+	ld [wcbfa], a
+.loop
+	ldh a, [hEffectItemSelection]
+	ld [wcbfb], a
+	bank1call HandleEnergyDiscardMenuInput
+	jr c, .done
+	ld hl, hEffectItemSelection
+	inc [hl]
+	call RemoveCardFromDuelTempList
+	jr c, .done
+	bank1call DisplayEnergyDiscardMenu
+	jr .loop
+
+.done
+; return carry if no cards were discarded
+; output the result in hTemp_ffa0
+	ldh a, [hEffectItemSelection]
+	ldh [hTemp_ffa0], a
+	or a
+	ret nz
+	scf
+	ret
+; 0x2d4dd
+
+Wildfire_AISelectEffect: ; 2d4dd (b:54dd)
+; AI always chooses 0 cards to discard
+	xor a
+	ldh [hTempDiscardEnergyCards], a
+	ret
+; 0x2d4e1
+
+Wildfire_DiscardEnergyEffect: ; 2d4e1 (b:54e1)
+	call CreateListOfFireEnergyAttachedToArena
+	ldh a, [hTemp_ffa0]
+	or a
+	ret z ; no cards to discard
+
+; discard cards from wDuelTempList equal to the number
+; of cards that were input in hTemp_ffa0.
+; these are all the Fire Energy cards attached to Arena card
+; so it will discard the cards in order, regardless
+; of the actual order that was selected by Player.
+	ld c, a
+	ld hl, wDuelTempList
+.loop_discard
+	ld a, [hli]
+	call PutCardInDiscardPile
+	dec c
+	jr nz, .loop_discard
+	ret
+; 0x2d4f4
+
+Wildfire_DiscardDeckEffect: ; 2d4f4 (b:54f4)
+	ldh a, [hTemp_ffa0]
+	ld c, a
+	ld b, $00
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld a, DECK_SIZE
+	sub [hl]
+	cp c
+	jr nc, .start_discard
+	; only discard number of cards that are left in deck
+	ld c, a
+
+.start_discard
+	push bc
+	inc c
+	jr .check_remaining
+
+.loop
+	; discard top card from deck
+	call DrawCardFromDeck
+	call nc, PutCardInDiscardPile
+.check_remaining
+	dec c
+	jr nz, .loop
+
+	pop hl
+	call LoadTxRam3
+	ldtx hl, DiscardedCardsFromDeckText
+	call DrawWideTextBox_PrintText
+	call SwapTurn
+	ret
+; 0x2d523
+
+Moltres1DiveBomb_AIEffect: ; 2d523 (b:5523)
+	ld a, 80 / 2
+	lb de, 0, 80
+	jp StoreAIDamageInfo
+; 0x2d52b
+
+Moltres1DiveBomb_Failure50PercentEffect: ; 2d52b (b:552b)
+	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
+	call TossCoin_BankB
+	jr c, .heads
+; tails
+	xor a
+	call StoreDamageInfo
+	call SetWasUnsuccessful
+	ret
+.heads
+	ld a, $11
+	ld [wLoadedMoveAnimation], a
+	ret
+; 0x2d541
+
+FlareonQuickAttack_AIEffect: ; 2d541 (b:5541)
+	ld a, (10 + 30) / 2
+	lb de, 10, 30
+	jp StoreAIDamageInfo
+; 0x2d549
+
+FlareonQuickAttack_DamageBoostEffect: ; 2d549 (b:5549)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsPlusDamageText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, 20
+	call AddToDamage
+	ret
+; 0x2d55c
+
+; return carry if no Fire Energy attached
+FlareonFlamethrower_CheckEnergy: ; 2d55c (b:555c)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d56a
+
+FlareonFlamethrower_PlayerSelectEffect: ; 2d56a (b:556a)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d56e
+
+FlareonFlamethrower_AISelectEffect: ; 2d56e (b:556e)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d572
+
+FlareonFlamethrower_DiscardEffect: ; 2d572 (b:5572)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d578
+
+; return carry if no Fire Energy attached
+MagmarFlamethrower_CheckEnergy: ; 2d578 (b:5578)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d586
+
+MagmarFlamethrower_PlayerSelectEffect: ; 2d586 (b:5586)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d58a
+
+MagmarFlamethrower_AISelectEffect: ; 2d58a (b:558a)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d58e
+
+MagmarFlamethrower_DiscardEffect: ; 2d58e (b:558e)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d594
+
+MagmarSmokescreenEffect: ; 2d594 (b:5594)
+	ld a, SUBSTATUS2_SMOKESCREEN
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2d59a
+
+MagmarSmog_AIEffect: ; 2d59a (b:559a)
+	ld a, 5
+	lb de, 0, 10
+	jp StoreAIPoisonDamageInfo
+; 0x2d5a2
+
+; return carry if no Fire Energy attached
+CharmeleonFlamethrower_CheckEnergy: ; 2d5a2 (b:55a2)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ldtx hl, NotEnoughFireEnergyText
+	ld a, [wAttachedEnergies]
+	cp 1
+	ret
+; 0x2d5b0
+
+CharmeleonFlamethrower_PlayerSelectEffect: ; 2d5b0 (b:55b0)
+	call PlayerPickFireEnergyCardToDiscard
+	ret
+; 0x2d5b4
+
+CharmeleonFlamethrower_AISelectEffect: ; 2d5b4 (b:55b4)
+	call AIPickFireEnergyCardToDiscard
+	ret
+; 0x2d5b8
+
+CharmeleonFlamethrower_DiscardEffect: ; 2d5b8 (b:55b8)
+	ldh a, [hTempDiscardEnergyCards]
+	call PutCardInDiscardPile
+	ret
+; 0x2d5be
+
+EnergyBurnEffect: ; 2d5be (b:55be)
+	scf
+	ret
+; 0x2d5c0
+
+; return carry if has less than 2 Fire Energy cards
+FireSpin_CheckEnergy: ; 2d5c0 (b:55c0)
+	xor a ; PLAY_AREA_ARENA
+	call CreateArenaOrBenchEnergyCardList
+	call CountCardsInDuelTempList
+	ldtx hl, NotEnoughEnergyCardsText
+	cp 2
+	ret
+; 0x2d5cd
+
+FireSpin_PlayerSelectEffect: ; 2d5cd (b:55cd)
+	ldtx hl, ChooseAndDiscard2EnergyCardsText
+	call DrawWideTextBox_WaitForInput
+
+	xor a
+	ldh [hEffectItemSelection], a
+	xor a
+	call CreateArenaOrBenchEnergyCardList
+	call SortCardsInDuelTempListByID
+	xor a
+	bank1call DisplayEnergyDiscardScreen
+
+	ld a, 2
+	ld [wcbfa], a
+.loop_input
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	call GetPositionInDiscardList
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a
+	ld hl, wcbfb
+	inc [hl]
+	ldh a, [hEffectItemSelection]
+	cp 2
+	jr nc, .done
+	ldh a, [hTempCardIndex_ff98]
+	call RemoveCardFromDuelTempList
+	bank1call DisplayEnergyDiscardMenu
+	jr .loop_input
+.done
+; return when 2 have been chosen
+	or a
+	ret
+; 0x2d606
+
+FireSpin_AISelectEffect: ; 2d606 (b:5606)
+	xor a ; PLAY_AREA_ARENA
+	call CreateArenaOrBenchEnergyCardList
+	ld hl, wDuelTempList
+	ld a, [hli]
+	ldh [hTempDiscardEnergyCards], a
+	ld a, [hl]
+	ldh [hTempDiscardEnergyCards + 1], a
+	ret
+; 0x2d614
+
+FireSpin_DiscardEffect: ; 2d614 (b:5614)
+	ld hl, hTempDiscardEnergyCards
+	ld a, [hli]
+	call PutCardInDiscardPile
+	ld a, [hli]
+	call PutCardInDiscardPile
+	ret
+; 0x2d620
+
+; returns carry if Pkmn Power cannot be used
+; or if Arena card is not Charizard.
+; this is unused.
+EnergyBurnCheck_Unreferenced: ; 2d620 (b:5620)
+	xor a
+	bank1call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret c
+	ld a, DUELVARS_ARENA_CARD
+	push de
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	ld a, e
+	pop de
+	cp CHARIZARD
+	jr nz, .not_charizard
+	or a
+	ret
+.not_charizard
+	scf
+	ret
+; 0x2d638
+
+FlareonRage_AIEffect: ; 2d638 (b:5638)
+	call FlareonRage_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2d63e
+
+FlareonRage_DamageBoostEffect: ; 2d63e (b:563e)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	call AddToDamage
+	ret
+; 0x2d647
+
+MixUpEffect: ; 2d647 (b:5647)
+	call SwapTurn
+	call CreateHandCardList
+	call SortCardsInDuelTempListByID
+
+; first go through Hand to place
+; all Pkmn cards in it in the Deck.
+	ld hl, wDuelTempList
+	ld c, 0
+.loop_hand
+	ld a, [hl]
+	cp $ff
+	jr z, .done_hand
+	call .CheckIfCardIsPkmnCard
+	jr nc, .next_hand
+	; found Pkmn card, place in deck
+	inc c
+	ld a, [hl]
+	call RemoveCardFromHand
+	call ReturnCardToDeck
+.next_hand
+	inc hl
+	jr .loop_hand
+
+.done_hand
+	ld a, c
+	ldh [hEffectItemSelection], a
+	push bc
+	ldtx hl, ThePkmnCardsInHandAndDeckWereShuffledText
+	call DrawWideTextBox_WaitForInput
+
+	call Func_2c0bd
+	call CreateDeckCardList
+	pop bc
+	ldh a, [hEffectItemSelection]
+	or a
+	jr z, .done ; if no cards were removed from Hand, return
+
+; c holds the number of cards that were placed in the Deck.
+; now pick Pkmn cards from the Deck to place in Hand.
+	ld hl, wDuelTempList
+.loop_deck
+	ld a, [hl]
+	call .CheckIfCardIsPkmnCard
+	jr nc, .next_deck
+	dec c
+	ld a, [hl]
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+.next_deck
+	inc hl
+	ld a, c
+	or a
+	jr nz, .loop_deck
+.done
+	call SwapTurn
+	ret
+; 0x2d69a
+
+; returns carry if card index in a is Pkmn card
+.CheckIfCardIsPkmnCard: ; 2d69a (b:569a)
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	ret
+; 0x2d6a3
+
+DancingEmbers_AIEffect: ; 2d6a3 (b:56a3)
+	ld a, 80 / 2
+	lb de, 0, 80
+	jp StoreAIDamageInfo
+; 0x2d6ab
+
+DancingEmbers_MultiplierEffect: ; 2d6ab (b:56ab)
+	ld hl, 10
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 8
+	call TossCoinATimes_BankB
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2d6c0
+
+Firegiver_InitialEffect: ; 2d6c0 (b:56c0)
+	scf
+	ret
+; 0x2d6c2
+
+Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
+; fill wDuelTempList with all Fire Energy card
+; deck indices that are in the Deck.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+	ld de, wDuelTempList
+	ld c, 0
+.loop_cards
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	push hl
+	push de
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop de
+	pop hl
+	cp TYPE_ENERGY_FIRE
+	jr nz, .next
+	ld a, l
+	ld [de], a
+	inc de
+	inc c
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_cards
+	ld a, $ff
+	ld [de], a
+
+; check how many were found
+	ld a, c
+	or a
+	jr nz, .found
+	; return if none found
+	ldtx hl, ThereWasNoFireEnergyText
+	call DrawWideTextBox_WaitForInput
+	call Func_2c0bd
+	ret
+
+.found
+; pick a random number between 1 and 4,
+; up to the maximum number of Fire Energy
+; cards that were found.
+	ld a, 4
+	call Random
+	inc a
+	cp c
+	jr c, .ok
+	ld a, c
+
+.ok
+	ldh [hEffectItemSelection], a
+; load correct Move animation depending
+; on what side the effect is from.
+	ld d, $84
+	ld a, [wDuelistType]
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player_1
+; non-player
+	ld d, $85
+.player_1
+	ld a, d
+	ld [wLoadedMoveAnimation], a
+
+; start loop for adding Energy cards to hand
+	ldh a, [hEffectItemSelection]
+	ld c, a
+	ld hl, wDuelTempList
+.loop_energy
+	push hl
+	push bc
+	ld bc, $0
+	ldh a, [hWhoseTurn]
+	ld h, a
+	bank1call PlayMoveAnimation
+	bank1call WaitMoveAnimation
+
+; load correct coordinates to update the number of cards
+; in hand and deck during animation.
+	lb bc, 18, 7 ; x, y for hand number
+	ld e, 3 ; y for deck number
+	ld a, [wLoadedMoveAnimation]
+	cp $84
+	jr z, .player_2
+	lb bc, 4, 5 ; x, y for hand number
+	ld e, 10 ; y for deck number
+
+.player_2
+; update and print number of cards in hand
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	inc a
+	bank1call WriteTwoDigitNumberInTxSymbolFormat
+; update and print number of cards in deck
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld a, DECK_SIZE - 1
+	sub [hl]
+	ld c, e
+	bank1call WriteTwoDigitNumberInTxSymbolFormat
+
+; load Fire Energy card index and add to hand
+	pop bc
+	pop hl
+	ld a, [hli]
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	dec c
+	jr nz, .loop_energy
+
+; load the number of cards added to hand and print text
+	ldh a, [hEffectItemSelection]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ldtx hl, DrewFireEnergyFromTheHandText
+	call DrawWideTextBox_WaitForInput
+	call Func_2c0bd
+	ret
+; 0x2d76e
+
+Moltres2DiveBomb_AIEffect: ; 2d76e (b:576e)
+	ld a, 70 / 2
+	lb de, 0, 70
+	jp StoreAIDamageInfo
+; 0x2d776
+
+Moltres2DiveBomb_Failure50PercentEffect: ; 2d776 (b:5776)
+	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
+	call TossCoin_BankB
+	jr c, .heads
+; tails
+	xor a
+	call StoreDamageInfo
+	call SetWasUnsuccessful
+	ret
+.heads
+	ld a, $11
+	ld [wLoadedMoveAnimation], a
+	ret
+; 0x2d78c
+
+	INCROM $2d78c, $30000

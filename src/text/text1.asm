@@ -906,7 +906,7 @@ NotEnoughEnergyCardsText: ; 37781 (d:7781)
 	text "Not enough Energy cards."
 	done
 
-Text00c1: ; 3779b (d:779b)
+NotEnoughFireEnergyText: ; 3779b (d:779b)
 	text "Not enough Fire Energy."
 	done
 
