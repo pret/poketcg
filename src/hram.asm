@@ -79,21 +79,22 @@ hTempCardIndex_ff9f:: ; ff9f
 
 UNION
 
-; list of cards chosen to be discarded for attack effect
-hTempDiscardEnergyCards:: ; ffa0
-	ds $2
-
-NEXTU
-
 ; multipurpose temp storage (card's deck index, selected move index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocation_ffa1:: ; ffa1
+
 ; parameter to be used by the AI's Pkmn Power effect
 hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
+
+NEXTU
+
+; list of cards selected for various effects
+hTempCardList:: ; ffa0
+	ds $2
 
 ENDU
 
@@ -109,9 +110,12 @@ NEXTU
 ; the deck index (0-59) of the energy card to transfer
 ; and the Play Area location (PLAY_AREA_*) of card to receive that energy card.
 hAIEnergyTransEnergyCard:: ; ffa2
-; PLAY_AREA_* constant of Pokemon to be affected by Heal PKMN Power
-hHealPlayAreaLocationTarget:: ; ffa2
+
+; PLAY_AREA_*  of target selected for some Pkmn Powers,
+; like the targets chosen for Curse or Damage Swap.
+hPkmnPowerPlayAreaTarget:: ; ffa2
 	ds $1
+
 hAIEnergyTransPlayAreaLocation:: ; ffa3
 	ds $1
 

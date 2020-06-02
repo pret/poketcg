@@ -717,11 +717,10 @@ wNoItemSelectionMenuKeys:: ; cbd6
 wCardPageExitKeys:: ; cbd7
 	ds $1
 
+; used to store function pointer for printing card order
+; in card list reordering screen.
 wcbd8:: ; cbd8
-	ds $1
-
-wcbd9:: ; cbd9
-	ds $1
+	ds $2
 
 ; in the hand or discard pile card screen, id of the text printed in the bottom-left box
 wCardListInfoBoxText:: ; cbda
@@ -1685,7 +1684,13 @@ wce70:: ; ce70
 wce71:: ; ce71
 	ds $1
 
-	ds $a
+	ds $3
+
+; stores the amount of cards that are being ordered.
+wNumberOfCardsToOrder:: ; ce75
+	ds $1
+
+	ds $6
 
 ; used in CountPokemonIDInPlayArea
 wTempPokemonID_ce7c:: ; ce7c

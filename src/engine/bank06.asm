@@ -1677,7 +1677,7 @@ Func_1a6cd: ; 1a6cd (6:66cd)
 	lb de, $38, $9f
 	call SetupText
 	ld hl, $00a3
-	bank1call Func_57df
+	bank1call DrawWholeScreenTextBox
 	ld a, $0a
 	ld [$0000], a
 	xor a

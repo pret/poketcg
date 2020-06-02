@@ -29,6 +29,7 @@ ConfusionEffect: ; 2c024 (b:4024)
 	lb bc, PSN_DBLPSN, CONFUSED
 	jr ApplyStatusEffect
 
+Sleep50PercentEffect: ; 2c029 (b:4029)
 	ldtx de, SleepCheckText
 	call TossCoin_BankB
 	ret nc
@@ -310,16 +311,15 @@ PickRandomPlayAreaCard: ; 2c17e (b:417e)
 ; 0x2c188
 
 ; outputs in hl the current position
-; in the hTempDiscardEnergyCards list
-; to place a new card.
-GetPositionInDiscardList: ; 2c188 (b:4188)
+; in hTempCardList list to place a new card.
+GetCurPositionInTempList: ; 2c188 (b:4188)
 	push de
 	ld hl, hEffectItemSelection
 	ld a, [hl]
 	inc [hl]
 	ld e, a
 	ld d, $00
-	ld hl, hTempDiscardEnergyCards
+	ld hl, hTempCardList
 	add hl, de
 	pop de
 	ret
@@ -373,7 +373,39 @@ CreateListOfEnergyAttachedToArena: ; 2c199 (b:4199)
 	ret
 ; 0x2c1c4
 
-	INCROM $2c1c4, $2c1ec
+; prints the text "<X> devolved to <Y>!" with
+; the proper card names and levels.
+; input:
+;	d = deck index of the lower stage card
+;	e = deck index of card that was devolved
+PrintDevolvedCardNameAndLevelText: ; 2c1c4 (b:41c4)
+	push de
+	ld a, e
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld bc, wTxRam2
+	ld hl, wLoadedCard1Name
+	ld a, [hli]
+	ld [bc], a
+	inc bc
+	ld a, [hl]
+	ld [bc], a
+
+	inc bc ; wTxRam2_b
+	xor a
+	ld [bc], a
+	inc bc
+	ld [bc], a
+
+	ld a, d
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld a, 18
+	call CopyCardNameAndLevel
+	ld [hl], $00
+	ldtx hl, PokemonDevolvedToText
+	call DrawWideTextBox_WaitForInput
+	pop de
+	ret
+; 0x2c1ec
 
 HandleSwitchDefendingPokemonEffect: ; 2c1ec (b:41ec)
 	ld e, a
@@ -491,16 +523,72 @@ CheckIfPlayAreaHasAnyDamage: ; 2c25b (b:425b)
 	ret
 ; 0x2c26e
 
-	INCROM $2c26e, $2c2a4
+; makes a list in wDuelTempList with the deck indices
+; of Trainer cards found in Turn Duelist's Discard Pile.
+; returns carry set if no Trainer cars found, and loads
+; corresponding text to notify this.
+CreateTrainerCardListFromDiscardPile: ; 2c26e (b:426e)
+; get number of cards in Discard Pile
+; and have hl point to the end of the
+; Discard Pile list in wOpponentDeckCards.
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_DISCARD_PILE
+	call GetTurnDuelistVariable
+	ld b, a
+	add DUELVARS_DECK_CARDS
+	ld l, a
+
+	ld de, wDuelTempList
+	inc b
+	jr .next_card
+
+.check_trainer
+	ld a, [hl]
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp TYPE_TRAINER
+	jr nz, .next_card
+
+	ld a, [hl]
+	ld [de], a
+	inc de
+
+.next_card
+	dec l
+	dec b
+	jr nz, .check_trainer
+
+	ld a, $ff ; terminating byte
+	ld [de], a
+	ld a, [wDuelTempList]
+	cp $ff
+	jr z, .no_trainers
+	or a
+	ret
+.no_trainers
+	ldtx hl, ThereAreNoTrainerCardsInDiscardPileText
+	scf
+	ret
+; 0x2c2a0
 
 ; makes a list in wDuelTempList with the deck indices
-; of all the energy cards found in opponent's Discard Pile.
-; if (c == 0), all energy cards are allowed;
-; if (c != 0), double colorless energy cards are not counted.
-; returns carry if no energy cards were found.
-CreateEnergyCardListFromOpponentDiscardPile: ; 2c2a4 (b:42a4)
-	ld c, $00
+; of all energy cards (including Double Colorless)
+; found in Turn Duelist's Discard Pile.
+CreateEnergyCardListFromDiscardPile_IncludeDoubleColorless: ; 2c2a0 (b:42a0)
+	ld c, $01
+	jr CreateEnergyCardListFromDiscardPile
 
+; makes a list in wDuelTempList with the deck indices
+; of all basic energy cards found in Turn Duelist's Discard Pile.
+CreateEnergyCardListFromDiscardPile_OnlyBasic: ; 2c2a4 (b:42a4)
+	ld c, $00
+;	fallthrough
+
+; makes a list in wDuelTempList with the deck indices
+; of energy cards found in Turn Duelist's Discard Pile.
+; if (c == 0), all energy cards are allowed;
+; if (c != 0), double colorless energy cards are not included.
+; returns carry if no energy cards were found.
+CreateEnergyCardListFromDiscardPile: ; 2c2a6 (b:42a6)
 ; get number of cards in Discard Pile
 ; and have hl point to the end of the
 ; Discard Pile list in wOpponentDeckCards.
@@ -783,8 +871,10 @@ HandleAmnesiaScreen: ; 2c391 (b:4391)
 	dw $0000 ; function pointer if non-0
 ; 0x2c3fc
 
-; loads in hl the pointer to input attack's name
-; (0 = first attack, 1 = second attack)
+; loads in hl the pointer to attack's name.
+; input:
+;	d = deck index of card
+; 	e = attack index (0 = first attack, 1 = second attack)
 GetAttackName: ; 2c3fc (b:43fc)
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -800,7 +890,109 @@ GetAttackName: ; 2c3fc (b:43fc)
 	ret
 ; 0x2c40e
 
-	INCROM $2c40e, $2c487
+; returns carry if Defending Pokemon
+; doesn't have an attack.
+CheckIfDefendingPokemonHasAnyAttack: ; 2c40e (b:440e)
+	call SwapTurn
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Move1Category]
+	cp POKEMON_POWER
+	jr nz, .has_attack
+	ld hl, wLoadedCard2Move2Name
+	ld a, [hli]
+	or [hl]
+	jr nz, .has_attack
+	call SwapTurn
+	scf
+	ret
+.has_attack
+	call SwapTurn
+	or a
+	ret
+; 0x2c431
+
+; overwrites HP and Stage data of the card that was
+; devolved in the Play Area to the values of new card.
+; if the damage exceeds HP of pre-evolution,
+; then HP is set to zero.
+; input:
+;	a = card index of pre-evolved card
+UpdateDevolvedCardHPAndStage: ; 2c431 (b:4431)
+	push bc
+	push de
+	push af
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld e, a
+	call GetCardDamageAndMaxHP
+	ld b, a ; store damage
+	ld a, e
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	pop af
+
+	ld [hl], a
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, e
+	add DUELVARS_ARENA_CARD_HP
+	ld l, a
+	ld a, [wLoadedCard2HP]
+	sub b ; subtract damage from new HP
+	jr nc, .got_hp
+	; damage exceeds HP
+	xor a ; 0 HP
+.got_hp
+	ld [hl], a
+	ld a, e
+; overwrite card stage
+	add DUELVARS_ARENA_CARD_STAGE
+	ld l, a
+	ld a, [wLoadedCard2Stage]
+	ld [hl], a
+	pop de
+	pop bc
+	ret
+; 0x2c45d
+
+; reset various status after devolving card.
+ResetDevolvedCardStatus: ; 2c45d (b:445d)
+; if it's Arena card, clear status conditions
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .skip_clear_status
+	call ClearAllStatusConditions
+.skip_clear_status
+; reset changed color status
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_CHANGED_COLOR
+	call GetTurnDuelistVariable
+	ld [hl], $00
+; reset C2 flags
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	ld l, a
+	ld [hl], $00
+	ret
+; 0x2c476
+
+; prompts the Player with a Yes/No question
+; whether to quit the screen, even though
+; they can select more cards from list.
+; [hEffectItemSelection] holds number of cards
+; that were already selected by the Player.
+; input:
+;	- a = total number of cards that can be selected
+AskWhetherToQuitSelectingCards: ; 2c476 (b:4476)
+	ld hl, hEffectItemSelection
+	sub [hl]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ldtx hl, YouCanSelectMoreCardsQuitText
+	call YesOrNoMenuWithText
+	ret
+; 0x2c487
 
 ; handles the selection of a forced switch
 ; by link/AI opponent or by the player.
@@ -1705,7 +1897,7 @@ Func_2c982: ; 2c982 (b:4982)
 	or a
 	ret nz
 	ld a, 10
-	call Func_1955
+	call DealRecoilDamageToSelf
 	ret
 
 Toxic_AIEffect: ; 2c98c (b:498c)
@@ -2044,7 +2236,7 @@ EnergyTrans_CheckPlayArea: ; 2cb44 (b:4b44)
 
 EnergyTrans_PrintProcedure: ; 2cb6f (b:4b6f)
 	ldtx hl, ProcedureForEnergyTransferText
-	bank1call Func_57df
+	bank1call DrawWholeScreenTextBox
 	or a
 	ret
 ; 0x2cb77
@@ -2314,7 +2506,7 @@ WeezingSmog_AIEffect: ; 2cce2 (b:4ce2)
 
 WeezingSelfdestructEffect: ; 2ccea (b:4cea)
 	ld a, 60
-	call Func_1955
+	call DealRecoilDamageToSelf
 	ld a, $01
 	ld [wIsDamageToSelf], a
 	ld a, 10
@@ -2482,7 +2674,7 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 	bank1call OpenPlayAreaScreenForSelection
 	jr c, .loop_input
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	ldh [hHealPlayAreaLocationTarget], a
+	ldh [hPkmnPowerPlayAreaTarget], a
 	ld e, a
 	call GetCardDamageAndMaxHP
 	or a
@@ -2493,7 +2685,7 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 
 .link_opp
 	call SerialRecv8Bytes
-	ldh [hHealPlayAreaLocationTarget], a
+	ldh [hPkmnPowerPlayAreaTarget], a
 	; fallthrough
 
 .done
@@ -2506,12 +2698,12 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 	or a
 	ret z ; return if coin was tails
 
-	ldh a, [hHealPlayAreaLocationTarget]
+	ldh a, [hPkmnPowerPlayAreaTarget]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	add 10 ; remove 1 damage counter
 	ld [hl], a
-	ldh a, [hHealPlayAreaLocationTarget]
+	ldh a, [hPkmnPowerPlayAreaTarget]
 	call Func_2c10b
 	call ExchangeRNG
 	ret
@@ -3160,7 +3352,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 	call CheckIfTurnDuelistIsPlayer
 	ret c ; return if Player
 
-; the rest of the routine if for non-Player
+; the rest of the routine if for Opponent
 ; to announce which move was used for Amnesia.
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
@@ -3459,14 +3651,14 @@ PlayerPickFireEnergyCardToDiscard: ; 2d34b (b:534b)
 	bank1call DisplayEnergyDiscardScreen
 	bank1call HandleEnergyDiscardMenuInput
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hTempDiscardEnergyCards], a
+	ldh [hTempCardList], a
 	ret
 ; 0x2d35a
 
 AIPickFireEnergyCardToDiscard: ; 2d35a (b:535a)
 	call CreateListOfFireEnergyAttachedToArena
 	ld a, [wDuelTempList]
-	ldh [hTempDiscardEnergyCards], a ; pick first in list
+	ldh [hTempCardList], a ; pick first in list
 	ret
 ; 0x2d363
 
@@ -3491,14 +3683,14 @@ ArcanineFlamethrower_AISelectEffect: ; 2d375 (b:5375)
 ; 0x2d379
 
 ArcanineFlamethrower_DiscardEffect: ; 2d379 (b:5379)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d37f
 
 TakeDownEffect: ; 2d37f (b:537f)
 	ld a, 30
-	call Func_1955
+	call DealRecoilDamageToSelf
 	ret
 ; 0x2d385
 
@@ -3541,7 +3733,7 @@ FlamesOfRage_PlayerSelectEffect: ; 2d3ae (b:53ae)
 .loop_input
 	bank1call HandleEnergyDiscardMenuInput
 	ret c
-	call GetPositionInDiscardList
+	call GetCurPositionInTempList
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
 	call RemoveCardFromDuelTempList
@@ -3555,14 +3747,14 @@ FlamesOfRage_PlayerSelectEffect: ; 2d3ae (b:53ae)
 FlamesOfRage_AISelectEffect: ; 2d3d5 (b:53d5)
 	call AIPickFireEnergyCardToDiscard
 	ld a, [wDuelTempList + 1]
-	ldh [hTempDiscardEnergyCards + 1], a
+	ldh [hTempCardList + 1], a
 	ret
 ; 0x2d3de
 
 FlamesOfRage_DiscardEffect: ; 2d3de (b:53de)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
-	ldh a, [hTempDiscardEnergyCards + 1]
+	ldh a, [hTempCardList + 1]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d3e9
@@ -3669,7 +3861,7 @@ FireBlast_AISelectEffect: ; 2d475 (b:5475)
 ; 0x2d479
 
 FireBlast_DiscardEffect: ; 2d479 (b:5479)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d47f
@@ -3695,7 +3887,7 @@ Ember_AISelectEffect: ; 2d491 (b:5491)
 ; 0x2d495
 
 Ember_DiscardEffect: ; 2d495 (b:5495)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d49b
@@ -3751,7 +3943,7 @@ Wildfire_PlayerSelectEffect: ; 2d4a9 (b:54a9)
 Wildfire_AISelectEffect: ; 2d4dd (b:54dd)
 ; AI always chooses 0 cards to discard
 	xor a
-	ldh [hTempDiscardEnergyCards], a
+	ldh [hTempCardList], a
 	ret
 ; 0x2d4e1
 
@@ -3870,7 +4062,7 @@ FlareonFlamethrower_AISelectEffect: ; 2d56e (b:556e)
 ; 0x2d572
 
 FlareonFlamethrower_DiscardEffect: ; 2d572 (b:5572)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d578
@@ -3896,7 +4088,7 @@ MagmarFlamethrower_AISelectEffect: ; 2d58a (b:558a)
 ; 0x2d58e
 
 MagmarFlamethrower_DiscardEffect: ; 2d58e (b:558e)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d594
@@ -3934,7 +4126,7 @@ CharmeleonFlamethrower_AISelectEffect: ; 2d5b4 (b:55b4)
 ; 0x2d5b8
 
 CharmeleonFlamethrower_DiscardEffect: ; 2d5b8 (b:55b8)
-	ldh a, [hTempDiscardEnergyCards]
+	ldh a, [hTempCardList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d5be
@@ -3971,7 +4163,7 @@ FireSpin_PlayerSelectEffect: ; 2d5cd (b:55cd)
 .loop_input
 	bank1call HandleEnergyDiscardMenuInput
 	ret c
-	call GetPositionInDiscardList
+	call GetCurPositionInTempList
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
 	ld hl, wcbfb
@@ -3994,14 +4186,14 @@ FireSpin_AISelectEffect: ; 2d606 (b:5606)
 	call CreateArenaOrBenchEnergyCardList
 	ld hl, wDuelTempList
 	ld a, [hli]
-	ldh [hTempDiscardEnergyCards], a
+	ldh [hTempCardList], a
 	ld a, [hl]
-	ldh [hTempDiscardEnergyCards + 1], a
+	ldh [hTempCardList + 1], a
 	ret
 ; 0x2d614
 
 FireSpin_DiscardEffect: ; 2d614 (b:5614)
-	ld hl, hTempDiscardEnergyCards
+	ld hl, hTempCardList
 	ld a, [hli]
 	call PutCardInDiscardPile
 	ld a, [hli]
@@ -4193,7 +4385,7 @@ Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
 	ld a, [wDuelistType]
 	cp DUELIST_TYPE_PLAYER
 	jr z, .player_1
-; non-player
+; opponent
 	ld d, $85
 .player_1
 	ld a, d
@@ -4277,4 +4469,1683 @@ Moltres2DiveBomb_Failure50PercentEffect: ; 2d776 (b:5776)
 	ret
 ; 0x2d78c
 
-	INCROM $2d78c, $30000
+; output in de the number of energy cards
+; attached to the Defending Pokemon times 10.
+; used for attacks that deal 10x number of energy
+; cards attached to the Defending card.
+GetEnergyAttachedMultiplierDamage: ; 2d78c (b:578c)
+	call SwapTurn
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+
+	ld c, 0
+.loop
+	ld a, [hl]
+	cp CARD_LOCATION_ARENA
+	jr nz, .next
+	; is in Arena
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	and TYPE_ENERGY
+	jr z, .next
+	; is Energy attached to Arena card
+	inc c
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop
+
+	call SwapTurn
+	ld l, c
+	ld h, $00
+	ld b, $00
+	add hl, hl ; hl =  2 * c
+	add hl, hl ; hl =  4 * c
+	add hl, bc ; hl =  5 * c
+	add hl, hl ; hl = 10 * c
+	ld e, l
+	ld d, h
+	ret
+; 0x2d7bc
+
+; draws list of Energy Cards in Discard Pile
+; for Player to select from.
+; the Player can select up to 2 cards from the list.
+; these cards are given in $ff-terminated list
+; in hTempCardList.
+HandleEnergyCardsInDiscardPileSelection: ; 2d7bc (b:57bc)
+	push hl
+	xor a
+	ldh [hEffectItemSelection], a
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	pop hl
+	jr c, .finish
+
+	call DrawWideTextBox_WaitForInput
+.loop
+; draws Discard Pile screen and textbox,
+; and handles Player input
+	bank1call InitAndDrawCardListScreenLayout
+	ldtx hl, ChooseAnEnergyCardText
+	ldtx de, PlayerDiscardPileText
+	bank1call SetCardListHeaderText
+	bank1call DisplayCardList
+	jr nc, .selected
+
+; Player is trying to exit screen,
+; but can select up to 2 cards total.
+; prompt Player to confirm exiting screen.
+	ld a, 2
+	call AskWhetherToQuitSelectingCards
+	jr c, .loop
+	jr .finish
+
+.selected
+; a card was selected, so add it to list
+	call GetCurPositionInTempList
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a
+	call RemoveCardFromDuelTempList
+	or a
+	jr z, .finish ; no more cards?
+	ldh a, [hEffectItemSelection]
+	cp 2
+	jr c, .loop ; already selected 2 cards?
+
+.finish
+; place terminating byte on list
+	call GetCurPositionInTempList
+	ld [hl], $ff
+	or a
+	ret
+; 0x2d7fc
+
+; returns carry if Pkmn Power cannot be used, and
+; sets the correct text in hl for failure.
+Curse_CheckDamageAndBench: ; 2d7fc (b:57fc)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+
+; fail if Pkmn Power has already been used
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	ldtx hl, OnlyOncePerTurnText
+	and USED_PKMN_POWER_THIS_TURN
+	jr nz, .set_carry
+
+; fail if Opponent only has 1 Pokemon in Play Area
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	call SwapTurn
+	ldtx hl, CannotUseSinceTheresOnly1PkmnText
+	cp 2
+	jr c, .set_carry
+
+; fail if Opponent has no damage counters
+	call SwapTurn
+	call CheckIfPlayAreaHasAnyDamage
+	call SwapTurn
+	ldtx hl, NoPokemonWithDamageCountersText
+	jr c, .set_carry
+
+; return carry if Pkmn Power cannot be used due
+; to Toxic Gas or status.
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x2d834
+
+Curse_PlayerSelectEffect: ; 2d834 (b:5834)
+	ldtx hl, ProcedureForCurseText
+	bank1call DrawWholeScreenTextBox
+	call SwapTurn
+	xor a
+	ldh [hEffectItemSelection], a
+	bank1call Func_61a1
+.start
+	bank1call PrintPlayAreaCardList_EnableLCD
+	push af
+	ldh a, [hEffectItemSelection]
+	ld hl, PlayAreaSelectionMenuParameters
+	call InitializeMenuParameters
+	pop af
+	ld [wNumMenuItems], a
+
+; first pick a target to take 1 damage counter from.
+.loop_input_first
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_first
+	cp $ff
+	jr z, .cancel
+	ldh [hEffectItemSelection], a
+	ldh [hTempPlayAreaLocation_ffa1], a
+	call GetCardDamageAndMaxHP
+	or a
+	jr nz, .picked_first ; test if has damage
+	; play sfx
+	call Func_3794
+	jr .loop_input_first
+
+.picked_first
+; give 10 HP to card selected, draw the scene,
+; then immediately revert this.
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	push af
+	push hl
+	add 10
+	ld [hl], a
+	bank1call PrintPlayAreaCardList_EnableLCD
+	pop hl
+	pop af
+	ld [hl], a
+
+; draw damage counter on cursor
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_HP_NOK
+	call DrawSymbolOnPlayAreaCursor
+
+; handle input to pick the target to receive the damage counter.
+.loop_input_second
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_second
+	ldh [hPkmnPowerPlayAreaTarget], a
+	cp $ff
+	jr nz, .a_press ; was a pressed?
+
+; b press
+; erase the damage counter symbol
+; and loop back up again.
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_SPACE
+	call DrawSymbolOnPlayAreaCursor
+	call EraseCursor
+	jr .start
+
+.a_press
+	ld hl, hTempPlayAreaLocation_ffa1
+	cp [hl]
+	jr z, .loop_input_second ; same as first?
+; a different Pokemon was picked,
+; so store this Play Area location
+; and erase the damage counter in the cursor.
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_SPACE
+	call DrawSymbolOnPlayAreaCursor
+	call EraseCursor
+	call SwapTurn
+	or a
+	ret
+
+.cancel
+; return carry if operation was cancelled.
+	call SwapTurn
+	scf
+	ret
+; 0x2d8bb
+
+Curse_TransferDamageEffect: ; 2d8bb (b:58bb)
+; set Pkmn Power as used
+	ldh a, [hTempCardList]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	set USED_PKMN_POWER_THIS_TURN_F, [hl]
+
+; figure out the type of duelist that used Curse.
+; if it was the player, no need to draw the Play Area screen.
+	call SwapTurn
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetNonTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .vs_player
+
+; vs. oppponent
+	bank1call Func_61a1
+.vs_player
+; transfer the damage counter to the targets that were selected.
+	ldh a, [hPkmnPowerPlayAreaTarget]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub 10
+	ld [hl], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD_HP
+	ld l, a
+	ld a, 10
+	add [hl]
+	ld [hl], a
+
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetNonTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .done
+; vs. opponent
+	ldh a, [hPkmnPowerPlayAreaTarget]
+	ldh [hTempPlayAreaLocation_ff9d], a
+	bank1call Func_6194
+
+.done
+	call SwapTurn
+	call ExchangeRNG
+	bank1call Func_6e49
+	ret
+; 0x2d903
+
+GengarDarkMind_PlayerSelectEffect: ; 2d903 (b:5903)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	jr nc, .has_bench
+; no bench Pokemon to damage.
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+
+.has_bench
+; opens Play Area screen to select Bench Pokemon
+; to damage, and store it before returning.
+	ldtx hl, ChoosePkmnInTheBenchToGiveDamageText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2d92a
+
+GengarDarkMind_AISelectEffect: ; 2d92a (b:592a)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c ; return if no Bench Pokemon
+; just pick Pokemon with lowest remaining HP.
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2d93c
+
+GengarDarkMind_DamageBenchEffect: ; 2d93c (b:593c)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	ret z ; no target chosen
+	call SwapTurn
+	ld b, a
+	ld de, 10
+	call DealDamageToPlayAreaPokemon
+	call SwapTurn
+	ret
+; 0x2d94f
+
+SleepingGasEffect: ; 2d94f (b:594f)
+	call Sleep50PercentEffect
+	call nc, SetNoEffectFromStatus
+	ret
+; 0x2d956
+
+DestinyBond_CheckEnergy: ; 2d956 (b:5956)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	ldtx hl, NotEnoughPsychicEnergyText
+	cp 1
+	ret
+; 0x2d964
+
+DestinyBond_PlayerSelectEffect: ; 2d964 (b:5964)
+; handle input and display of Energy card list
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	xor a
+	bank1call DisplayEnergyDiscardScreen
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTempCardList], a
+	ret
+; 0x2d976
+
+DestinyBond_AISelectEffect: ; 2d976 (b:5976)
+; pick first card in list
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	ld a, [wDuelTempList]
+	ldh [hTempCardList], a
+	ret
+; 0x2d981
+
+DestinyBond_DiscardEffect: ; 2d981 (b:5981)
+	ldh a, [hTempCardList]
+	call PutCardInDiscardPile
+	ret
+; 0x2d987
+
+DestinyBond_DestinyBondEffect: ; 2d987 (b:5987)
+	ld a, SUBSTATUS1_DESTINY_BOND
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2d98d
+
+; returns carry if no Energy cards in Discard Pile.
+EnergyConversion_CheckEnergy: ; 2d98d (b:598d)
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ldtx hl, ThereAreNoEnergyCardsInDiscardPileText
+	ret
+; 0x2d994
+
+EnergyConversion_PlayerSelectEffect: ; 2d994 (b:5994)
+	ldtx hl, Choose2EnergyCardsFromDiscardPileForHandText
+	call HandleEnergyCardsInDiscardPileSelection
+	ret
+; 0x2d99b
+
+EnergyConversion_AISelectEffect: ; 2d99b (b:599b)
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ld hl, wDuelTempList
+	ld de, hTempCardList
+	ld c, 2
+; select the first two energy cards found in Discard Pile
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+.done
+	ld a, $ff
+	ld [de], a
+	ret
+; 0x2d9b4
+
+EnergyConversion_AddToHandEffect: ; 2d9b4 (b:59b4)
+; damage itself
+	ld a, 10
+	call DealRecoilDamageToSelf
+
+; loop cards that were chosen
+; until $ff is reached,
+; and move them to the hand.
+	ld hl, hTempCardList
+	ld de, wDuelTempList
+.loop_cards
+	ld a, [hli]
+	ld [de], a
+	inc de
+	cp $ff
+	jr z, .done
+	call MoveDiscardPileCardToHand
+	call AddCardToHand
+	jr .loop_cards
+
+.done
+	call CheckIfTurnDuelistIsPlayer
+	ret c
+	bank1call Func_4b38
+	ret
+; 0x2d9d6
+
+; return carry if Defending Pokemon is not asleep
+DreamEaterEffect: ; 2d9d6 (b:59d6)
+	ld a, DUELVARS_ARENA_CARD_STATUS
+	call GetNonTurnDuelistVariable
+	and CNF_SLP_PRZ
+	cp ASLEEP
+	ret z ; return if asleep
+; not asleep, set carry and load text
+	ldtx hl, OpponentIsNotAsleepText
+	scf
+	ret
+; 0x2d9e5
+
+TransparencyEffect: ; 2d9e5 (b:59e5)
+	scf
+	ret
+; 0x2d9e7
+
+; returns carry if neither the Turn Duelist or
+; the non-Turn Duelist have any deck cards.
+Prophecy_CheckDeck: ; 2d9e7 (b:59e7)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE
+	jr c, .no_carry
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetNonTurnDuelistVariable
+	cp DECK_SIZE
+	jr c, .no_carry
+	ldtx hl, NoCardsLeftInTheDeckText
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x2da00
+
+Prophecy_PlayerSelectEffect: ; 2da00 (b:5a00)
+	ldtx hl, ProcedureForProphecyText
+	bank1call DrawWholeScreenTextBox
+.select_deck
+	bank1call DrawDuelMainScene
+	ldtx hl, PleaseSelectTheDeckText
+	call TwoItemHorizontalMenu
+	ldh a, [hKeysHeld]
+	and B_BUTTON
+	jr nz, Prophecy_PlayerSelectEffect ; loop back to start
+
+	ldh a, [hCurMenuItem]
+	ldh [hTempCardList], a ; store selection in first position in list
+	or a
+	jr z, .turn_duelist
+
+; non-turn duelist
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetNonTurnDuelistVariable
+	cp DECK_SIZE
+	jr nc, .select_deck ; no cards, go back to deck selection
+	call SwapTurn
+	call HandleProphecyScreen
+	call SwapTurn
+	ret
+
+.turn_duelist
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	cp DECK_SIZE
+	jr nc, .select_deck ; no cards, go back to deck selection
+	call HandleProphecyScreen
+	ret
+; 0x2da3c
+
+Prophecy_AISelectEffect: ; 2da3c (b:5a3c)
+; AI doesn't ever choose this attack
+; so this it does no sorting.
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2da41
+
+Prophecy_ReorderDeckEffect: ; 2da41 (b:5a41)
+	ld hl, hTempCardList
+	ld a, [hli]
+	or a
+	jr z, .ReorderCards ; turn duelist's deck
+	cp $ff
+	ret z
+
+	; non-turn duelist's deck
+	call SwapTurn
+	call .ReorderCards
+	call SwapTurn
+	ret
+
+.ReorderCards
+	ld c, 0
+; add selected cards to hand in the specified order
+.loop_add_hand
+	ld a, [hli]
+	cp $ff
+	jr z, .dec_hl
+	call SearchCardInDeckAndAddToHand
+	inc c
+	jr .loop_add_hand
+
+.dec_hl
+; go to last card that was in the list
+	dec hl
+	dec hl
+
+.loop_return_deck
+; return the cards to the top of the deck
+	ld a, [hld]
+	call ReturnCardToDeck
+	dec c
+	jr nz, .loop_return_deck
+	call CheckIfTurnDuelistIsPlayer
+	ret c
+	; print text in case it was the opponent
+	ldtx hl, ExchangedCardsInDuelistsHandText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x2da76
+
+; draw and handle Player selection for reordering
+; the top 3 cards of Deck.
+; the resulting list is output in order in hTempCardList.
+HandleProphecyScreen: ; 2da76 (b:5a76)
+	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
+	call GetTurnDuelistVariable
+	ld b, a
+	ld a, DECK_SIZE
+	sub [hl] ; a = number of cards in deck
+
+; store in c the number of cards that will be reordered.
+; this number is 3, unless the deck as fewer cards than
+; that in which case it will be the number of cards remaining.
+	ld c, 3
+	cp c
+	jr nc, .got_number_cards
+	ld c, a ; store number of remaining cards in c
+.got_number_cards
+	ld a, c
+	inc a
+	ld [wNumberOfCardsToOrder], a
+
+; store in wDuelTempList the cards
+; at top of Deck to be reordered.
+	ld a, b
+	add DUELVARS_DECK_CARDS
+	ld l, a
+	ld de, wDuelTempList
+.loop_top_cards
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop_top_cards
+	ld a, $ff ; terminating byte
+	ld [de], a
+
+.start
+	call CountCardsInDuelTempList
+	ld b, a
+	ld a, 1 ; start at 1
+	ldh [hEffectItemSelection], a
+
+; initialize buffer ahead in wDuelTempList.
+	ld hl, wDuelTempList + 10
+	xor a
+.loop_init_buffer
+	ld [hli], a
+	dec b
+	jr nz, .loop_init_buffer
+	ld [hl], $ff
+
+	bank1call InitAndDrawCardListScreenLayout
+	ldtx hl, ChooseTheOrderOfTheCardsText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+	bank1call Func_5735
+
+.loop_selection
+	bank1call DisplayCardList
+	jr c, .clear
+
+; first check if this card was already selected
+	ldh a, [hCurMenuItem]
+	ld e, a
+	ld d, $00
+	ld hl, wDuelTempList + 10
+	add hl, de
+	ld a, [hl]
+	or a
+	jr nz, .loop_selection ; already chosen
+
+; being here means card hasn't been selected yet,
+; so add its order number to buffer and increment
+; the sort number for the next card.
+	ldh a, [hEffectItemSelection]
+	ld [hl], a
+	inc a
+	ldh [hEffectItemSelection], a
+	bank1call Func_5744
+	ldh a, [hEffectItemSelection]
+	ld hl, wNumberOfCardsToOrder
+	cp [hl]
+	jr c, .loop_selection ; still more cards
+
+; confirm that the ordering has been completed
+	call EraseCursor
+	ldtx hl, IsThisOKText
+	call YesOrNoMenuWithText_LeftAligned
+	jr c, .start ; if not, return back to beginning of selection
+
+; write in hTempCardList the card list
+; in order that was selected.
+	ld hl, wDuelTempList + 10
+	ld de, wDuelTempList
+	ld c, 0
+.loop_order
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	push hl
+	push bc
+	ld c, a
+	ld b, $00
+	ld hl, hTempCardList
+	add hl, bc
+	ld a, [de]
+	ld [hl], a
+	pop bc
+	pop hl
+	inc de
+	inc c
+	jr .loop_order
+; now hTempCardList has the list of card deck indices
+; in the order selected to be place on top of the deck.
+
+.done
+	ld b, $00
+	ld hl, hTempCardList + 1
+	add hl, bc
+	ld [hl], $ff ; terminating byte
+	or a
+	ret
+
+.clear
+; check if any reordering was done.
+	ld hl, hEffectItemSelection
+	ld a, [hl]
+	cp 1
+	jr z, .loop_selection ; none done, go back
+; clear the order that was selected thus far.
+	dec a
+	ld [hl], a
+	ld c, a
+	ld hl, wDuelTempList + 10
+.loop_clear
+	ld a, [hli]
+	cp c
+	jr nz, .loop_clear
+	; clear this byte
+	dec hl
+	ld [hl], $00
+	bank1call Func_5744
+	jr .loop_selection
+; 0x2db2b
+
+HypnoDarkMind_PlayerSelectEffect: ; 2db2b (b:5b2b)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	jr nc, .has_bench
+; no bench Pokemon to damage.
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+
+.has_bench
+; opens Play Area screen to select Bench Pokemon
+; to damage, and store it before returning.
+	ldtx hl, ChoosePkmnInTheBenchToGiveDamageText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2db52
+
+HypnoDarkMind_AISelectEffect: ; 2db52 (b:5b52)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c ; return if no Bench Pokemon
+; just pick Pokemon with lowest remaining HP.
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2db64
+
+HypnoDarkMind_DamageBenchEffect: ; 2db64 (b:5b64)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	ret z ; no target chosen
+	call SwapTurn
+	ld b, a
+	ld de, 10
+	call DealDamageToPlayAreaPokemon
+	call SwapTurn
+	ret
+; 0x2db77
+
+InvisibleWallEffect: ; 2db77 (b:5b77)
+	scf
+	ret
+; 0x2db79
+
+MrMimeMeditate_AIEffect: ; 2db79 (b:5b79)
+	call MrMimeMeditate_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2db7f
+
+MrMimeMeditate_DamageBoostEffect: ; 2db7f (b:5b7f)
+; add damage counters of Defending card to damage
+	call SwapTurn
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	call SwapTurn
+	call AddToDamage
+	ret
+; 0x2db8e
+
+; returns carry if Damage Swap cannot be used.
+DamageSwap_CheckDamage: ; 2db8e (b:5b8e)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call CheckIfPlayAreaHasAnyDamage
+	jr c, .no_damage
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+.no_damage
+	ldtx hl, NoPokemonWithDamageCountersText
+	scf
+	ret
+; 0x2dba2
+
+DamageSwap_SelectAndSwapEffect: ; 2dba2 (b:5ba2)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+; non-player
+	bank1call Func_61a1
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ret
+
+.player
+	ldtx hl, ProcedureForDamageSwapText
+	bank1call DrawWholeScreenTextBox
+	xor a
+	ldh [hEffectItemSelection], a
+	bank1call Func_61a1
+
+.start
+	bank1call PrintPlayAreaCardList_EnableLCD
+	push af
+	ldh a, [hEffectItemSelection]
+	ld hl, PlayAreaSelectionMenuParameters
+	call InitializeMenuParameters
+	pop af
+	ld [wNumMenuItems], a
+
+; handle selection of Pokemon to take damage from
+.loop_input_first
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_first
+	cp $ff
+	ret z ; quit when B button is pressed
+
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ldh [hEffectItemSelection], a
+
+; if card has no damage, play sfx and return to start
+	call GetCardDamageAndMaxHP
+	or a
+	jr z, .no_damage
+
+; take damage away temporarily to draw UI.
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	push af
+	push hl
+	add 10
+	ld [hl], a
+	bank1call PrintPlayAreaCardList_EnableLCD
+	pop hl
+	pop af
+	ld [hl], a
+
+; draw damage counter in cursor
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_HP_NOK
+	call DrawSymbolOnPlayAreaCursor
+
+; handle selection of Pokemon to give damage to
+.loop_input_second
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input_second
+	; if B is pressed, return damage counter
+	; to card that it was taken from
+	cp $ff
+	jr z, .update_ui
+
+; try to give the card selected the damage counter
+; if it would KO, ignore it.
+	ldh [hPkmnPowerPlayAreaTarget], a
+	ldh [hEffectItemSelection], a
+	call TryGiveDamageCounter_DamageSwap
+	jr c, .loop_input_second
+
+	ld a, OPPACTION_6B15
+	call SetOppAction_SerialSendDuelData
+
+.update_ui
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, SYM_SPACE
+	call DrawSymbolOnPlayAreaCursor
+	call EraseCursor
+	jr .start
+
+.no_damage
+	call Func_3794
+	jr .loop_input_first
+; 0x2dc27
+
+; tries to give damage counter to hPkmnPowerPlayAreaTarget,
+; and if successful updates UI screen.
+DamageSwap_SwapEffect: ; 2dc27 (b:5c27)
+	call TryGiveDamageCounter_DamageSwap
+	ret c
+	bank1call PrintPlayAreaCardList_EnableLCD
+	or a
+	ret
+; 0x2dc30
+
+; tries to give the damage counter to the target
+; chosen by the Player (hPkmnPowerPlayAreaTarget).
+; if the damage counter would KO card, then do
+; not give the damage counter and return carry.
+TryGiveDamageCounter_DamageSwap: ; 2dc30 (b:5c30)
+	ldh a, [hPkmnPowerPlayAreaTarget]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub 10
+	jr z, .set_carry ; would bring HP to zero?
+; has enough HP to receive a damage counter
+	ld [hl], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD_HP
+	ld l, a
+	ld a, 10
+	add [hl]
+	ld [hl], a
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x2dc49
+
+PsywaveEffect: ; 2dc49 (b:5c49)
+	call GetEnergyAttachedMultiplierDamage
+	ld hl, wDamage
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ret
+; 0x2dc53
+
+; returns carry if neither Duelist has evolved Pokemon.
+DevolutionBeam_CheckPlayArea: ; 2dc53 (b:5c53)
+	call CheckIfTurnDuelistHasEvolvedCards
+	ret nc
+	call SwapTurn
+	call CheckIfTurnDuelistHasEvolvedCards
+	call SwapTurn
+	ldtx hl, ThereAreNoStage1PokemonText
+	ret
+; 0x2dc64
+
+; returns carry of Player cancelled selection.
+; otherwise, output in hTemp_ffa0 which Play Area
+; was selected ($0 = own Play Area, $1 = opp. Play Area)
+; and in hTempPlayAreaLocation_ffa1 selected card.
+DevolutionBeam_PlayerSelectEffect: ; 2dc64 (b:5c64)
+	ldtx hl, ProcedureForDevolutionBeamText
+	bank1call DrawWholeScreenTextBox
+
+.start
+	bank1call DrawDuelMainScene
+	ldtx hl, PleaseSelectThePlayAreaText
+	call TwoItemHorizontalMenu
+	ldh a, [hKeysHeld]
+	and B_BUTTON
+	jr nz, .set_carry
+
+; a Play Area was selected
+	ldh a, [hCurMenuItem]
+	or a
+	jr nz, .opp_chosen
+
+; player chosen
+	call HandleEvolvedCardSelection
+	jr c, .start
+
+	xor a
+.store_selection
+	ld hl, hTemp_ffa0
+	ld [hli], a ; store which Duelist Play Area selected
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ld [hl], a ; store which card selected
+	or a
+	ret
+
+.opp_chosen
+	call SwapTurn
+	call HandleEvolvedCardSelection
+	call SwapTurn
+	jr c, .start
+	ld a, $01
+	jr .store_selection
+
+.set_carry
+	scf
+	ret
+; 0x2dc9e
+
+DevolutionBeam_AISelectEffect: ; 2dc9e (b:5c9e)
+	ld a, $01
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	call FindFirstNonBasicCardInPlayArea
+	call SwapTurn
+	jr c, .found
+	xor a
+	ldh [hTemp_ffa0], a
+	call FindFirstNonBasicCardInPlayArea
+.found
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+; 0x2dcb6
+
+DevolutionBeam_LoadAnimation: ; 2dcb6 (b:5cb6)
+	xor a
+	ld [wLoadedMoveAnimation], a
+	ret
+; 0x2dcbb
+
+DevolutionBeam_DevolveEffect: ; 2dcbb (b:5cbb)
+	ldh a, [hTemp_ffa0]
+	or a
+	jr z, .DevolvePokemon
+	cp $ff
+	ret z
+
+; opponent's Play Area
+	call SwapTurn
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	jr nz, .skip_handle_no_damage_effect
+	call HandleNoDamageOrEffect
+	jr c, .unaffected
+.skip_handle_no_damage_effect
+	call .DevolvePokemon
+.unaffected
+	call SwapTurn
+	ret
+
+.DevolvePokemon
+	ld a, $5d
+	ld [wLoadedMoveAnimation], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld b, a
+	ld c, $00
+	ldh a, [hWhoseTurn]
+	ld h, a
+	bank1call PlayMoveAnimation
+	bank1call WaitMoveAnimation
+
+; load selected card's data
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld [wTempPlayAreaLocation_cceb], a
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+
+; check if car is affected
+	ld a, [wLoadedCard1ID]
+	ld [wTempNonTurnDuelistCardID], a
+	ld de, $0
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	or a
+	jr nz, .skip_substatus_check
+	call HandleNoDamageOrEffectSubstatus
+	jr c, .check_no_damage_effect
+.skip_substatus_check
+	call HandleDamageReductionOrNoDamageFromPkmnPowerEffects
+.check_no_damage_effect
+	call CheckNoDamageOrEffect
+	jr nc, .devolve
+	call DrawWideTextBox_WaitForInput
+	ret
+
+.devolve
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldh [hTempPlayAreaLocation_ff9d], a
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	bank1call GetCardOneStageBelow
+	call PrintDevolvedCardNameAndLevelText
+
+	ld a, d
+	call UpdateDevolvedCardHPAndStage
+	call ResetDevolvedCardStatus
+
+; add the evolved card to the hand
+	ld a, e
+	call AddCardToHand
+
+; check if this devolution KO's card
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	call PrintPlayAreaCardKnockedOutIfNoHP
+
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
+; 0x2dd3b
+
+; returns carry if Turn Duelist
+; has no Stage1 or Stage2 cards in Play Area.
+CheckIfTurnDuelistHasEvolvedCards: ; 2dd3b (b:5d3b)
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	ld d, h
+	ld e, DUELVARS_ARENA_CARD_STAGE
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .set_carry
+	ld a, [de]
+	inc de
+	or a
+	jr z, .loop ; is Basic Stage
+	ret
+.set_carry
+	scf
+	ret
+; 0x2dd50
+
+; handles Player selection of an evolved card in Play Area.
+; returns carry if Player cancelled operation.
+HandleEvolvedCardSelection: ; 2dd50 (b:5d50)
+	bank1call HasAlivePokemonInPlayArea
+.loop
+	bank1call OpenPlayAreaScreenForSelection
+	ret c
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_STAGE
+	call GetTurnDuelistVariable
+	or a
+	jr z, .loop ; if Basic, loop
+	ret
+; 0x2dd62
+
+; finds first occurence in Play Area
+; of Stage 1 or 2 card, and outputs its
+; Play Area location in a, with carry set.
+; if none found, don't return carry set.
+FindFirstNonBasicCardInPlayArea: ; 2dd62 (b:5d62)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+
+	ld b, PLAY_AREA_ARENA
+	ld l, DUELVARS_ARENA_CARD_STAGE
+.loop
+	ld a, [hli]
+	or a
+	jr nz, .not_basic
+	inc b
+	dec c
+	jr nz, .loop
+	or a
+	ret
+.not_basic
+	ld a, b
+	scf
+	ret
+; 0x2dd79
+
+NeutralizingShieldEffect: ; 2dd79 (b:5d79)
+	scf
+	ret
+; 0x2dd7b
+
+Psychic_AIEffect: ; 2dd7b (b:5d7b)
+	call Psychic_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2dd81
+
+Psychic_DamageBoostEffect: ; 2dd81 (b:5d81)
+	call GetEnergyAttachedMultiplierDamage
+	ld hl, wDamage
+	ld a, e
+	add [hl]
+	ld [hli], a
+	ld a, d
+	adc [hl]
+	ld [hl], a
+	ret
+; 0x2dd8e
+
+; return carry if no Psychic Energy attached
+Barrier_CheckEnergy: ; 2dd8e (b:5d8e)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	ldtx hl, NotEnoughPsychicEnergyText
+	cp 1
+	ret
+; 0x2dd9c
+
+Barrier_PlayerSelectEffect: ; 2dd9c (b:5d9c)
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	xor a ; PLAY_AREA_ARENA
+	bank1call DisplayEnergyDiscardScreen
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2ddae
+
+Barrier_AISelectEffect: ; 2ddae (b:5dae)
+; AI picks the first energy in list
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	ld a, [wDuelTempList]
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2ddb9
+
+Barrier_DiscardEffect: ; 2ddb9 (b:5db9)
+	ldh a, [hTemp_ffa0]
+	call PutCardInDiscardPile
+	ret
+; 0x2ddbf
+
+Barrier_BarrierEffect: ; 2ddbf (b:5dbf)
+	ld a, SUBSTATUS1_BARRIER
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2ddc5
+
+Mewtwo3EnergyAbsorption_CheckDiscardPile: ; 2ddc5 (b:5dc5)
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ldtx hl, ThereAreNoEnergyCardsInDiscardPileText
+	ret
+; 0x2ddcc
+
+Mewtwo3EnergyAbsorption_PlayerSelectEffect: ; 2ddcc (b:5dcc)
+	ldtx hl, Choose2EnergyCardsFromDiscardPileToAttachText
+	call HandleEnergyCardsInDiscardPileSelection
+	ret
+; 0x2ddd3
+
+Mewtwo3EnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
+; AI picks first 2 energy cards
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ld hl, wDuelTempList
+	ld de, hTempCardList
+	ld c, 2
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+.done
+	ld a, $ff ; terminating byte
+	ld [de], a
+	ret
+; 0x2ddec
+
+Mewtwo3EnergyAbsorption_AddToHandEffect: ; 2ddec (b:5dec)
+	ld hl, hTempCardList
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	push hl
+	call MoveDiscardPileCardToHand
+	call GetTurnDuelistVariable
+	ld [hl], CARD_LOCATION_ARENA
+	pop hl
+	jr .loop
+; 0x2ddff
+
+Mewtwo2EnergyAbsorption_CheckDiscardPile: ; 2ddff (b:5dff)
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ldtx hl, ThereAreNoEnergyCardsInDiscardPileText
+	ret
+; 0x2de06
+
+Mewtwo2EnergyAbsorption_PlayerSelectEffect: ; 2de06 (b:5e06)
+	ldtx hl, Choose2EnergyCardsFromDiscardPileToAttachText
+	call HandleEnergyCardsInDiscardPileSelection
+	ret
+; 0x2de0d
+
+Mewtwo2EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
+; AI picks first 2 energy cards
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ld hl, wDuelTempList
+	ld de, hTempCardList
+	ld c, 2
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+.done
+	ld a, $ff ; terminating byte
+	ld [de], a
+	ret
+; 0x2de26
+
+Mewtwo2EnergyAbsorption_AddToHandEffect: ; 2de26 (b:5e26)
+	ld hl, hTempCardList
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	push hl
+	call MoveDiscardPileCardToHand
+	call GetTurnDuelistVariable
+	ld [hl], CARD_LOCATION_ARENA
+	pop hl
+	jr .loop
+; 0x2de39
+
+; returns carry if Strange Behavior cannot be used.
+StrangeBehavior_CheckDamage: ; 2de39 (b:5e39)
+; does Play Area have any damage counters?
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call CheckIfPlayAreaHasAnyDamage
+	ldtx hl, NoPokemonWithDamageCountersText
+	jr c, .set_carry
+; can Slowbro receive any damage counters without KOing?
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ldtx hl, CannotUseBecauseItWillBeKnockedOutText
+	cp 10 + 10
+	jr c, .set_carry
+; can Pkmn Power be used?
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+
+.set_carry
+	scf
+	ret
+; 0x2de5b
+
+StrangeBehavior_SelectAndSwapEffect: ; 2de5b (b:5e5b)
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_PLAYER
+	jr z, .player
+
+; not player
+	bank1call Func_61a1
+	bank1call PrintPlayAreaCardList_EnableLCD
+	ret
+
+.player
+	ldtx hl, ProcedureForStrangeBehaviorText
+	bank1call DrawWholeScreenTextBox
+
+	xor a
+	ldh [hEffectItemSelection], a
+	bank1call Func_61a1
+.start
+	bank1call PrintPlayAreaCardList_EnableLCD
+	push af
+	ldh a, [hEffectItemSelection]
+	ld hl, PlayAreaSelectionMenuParameters
+	call InitializeMenuParameters
+	pop af
+
+	ld [wNumMenuItems], a
+.loop_input
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input
+	cp -1
+	ret z ; return when B button is pressed
+
+	ldh [hEffectItemSelection], a
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ld hl, hTemp_ffa0
+	cp [hl]
+	jr z, .play_sfx ; can't select Slowbro itself
+
+	call GetCardDamageAndMaxHP
+	or a
+	jr z, .play_sfx ; can't select card without damage
+
+	call TryGiveDamageCounter_StrangeBehavior
+	jr c, .play_sfx
+	ld a, OPPACTION_6B15
+	call SetOppAction_SerialSendDuelData
+	jr .start
+
+.play_sfx
+	call Func_3794
+	jr .loop_input
+; 0x2deb3
+
+StrangeBehavior_SwapEffect: ; 2deb3 (b:5eb3)
+	call TryGiveDamageCounter_StrangeBehavior
+	ret c
+	bank1call PrintPlayAreaCardList_EnableLCD
+	or a
+	ret
+; 0x2debc
+
+; tries to give the damage counter to the target
+; chosen by the Player (hTemp_ffa0).
+; if the damage counter would KO card, then do
+; not give the damage counter and return carry.
+TryGiveDamageCounter_StrangeBehavior: ; 2debc (b:5ebc)
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	sub 10
+	jr z, .set_carry  ; would bring HP to zero?
+; has enough HP to receive a damage counter
+	ld [hl], a
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD_HP
+	ld l, a
+	ld a, 10
+	add [hl]
+	ld [hl], a
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x2ded5
+
+; returns carry if has no damage counters.
+SpacingOut_CheckDamage: ; 2ded5 (b:5ed5)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	ldtx hl, NoDamageCountersText
+	cp 10
+	ret
+; 0x2dee0
+
+SpacingOut_Failure50PercentEffect: ; 2dee0 (b:5ee0)
+	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
+	call TossCoin_BankB
+	ldh [hTemp_ffa0], a
+	jp nc, SetWasUnsuccessful
+	ld a, $58
+	ld [wLoadedMoveAnimation], a
+	ret
+; 0x2def1
+
+SpacingOut_HealEffect: ; 2def1 (b:5ef1)
+	ldh a, [hTemp_ffa0]
+	or a
+	ret z ; coin toss was tails
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	or a
+	ret z ; no damage counters
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	add 10
+	ld [hl], a
+	ret
+; 0x2df05
+
+; sets carry if no Trainer cards in the Discard Pile.
+Scavenge_CheckDiscardPile: ; 2df05 (b:5f05)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	ldtx hl, NotEnoughPsychicEnergyText
+	cp 1
+	ret c ; return if no Psychic energy attached
+	call CreateTrainerCardListFromDiscardPile
+	ldtx hl, ThereAreNoTrainerCardsInDiscardPileText ; this is redundant
+	ret
+; 0x2df1a
+
+Scavenge_PlayerSelectEnergyEffect: ; 2df1a (b:5f1a)
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	xor a ; PLAY_AREA_ARENA
+	bank1call DisplayEnergyDiscardScreen
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+; 0x2df2d
+
+Scavenge_AISelectEffect: ; 2df2d (b:5f2d)
+; AI picks first Energy card in list
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	ld a, [wDuelTempList]
+	ldh [hTemp_ffa0], a
+; AI picks first Trainer card in list
+	call CreateTrainerCardListFromDiscardPile
+	ld a, [wDuelTempList]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+; 0x2df40
+
+Scavenge_DiscardEffect: ; 2df40 (b:5f40)
+	ldh a, [hTemp_ffa0]
+	call PutCardInDiscardPile
+	ret
+; 0x2df46
+
+Scavenge_PlayerSelectTrainerEffect: ; 2df46 (b:5f46)
+	call CreateTrainerCardListFromDiscardPile
+	bank1call Func_5591
+	ldtx hl, PleaseSelectCardText
+	ldtx de, PlayerDiscardPileText
+	bank1call SetCardListHeaderText
+.loop_input
+	bank1call DisplayCardList
+	jr c, .loop_input
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+; 0x2df5f
+
+Scavenge_AddToHandEffect: ; 2df5f (b:5f5f)
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	call MoveDiscardPileCardToHand
+	call AddCardToHand
+	call CheckIfTurnDuelistIsPlayer
+	ret c
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ldtx hl, WasPlacedInTheHandText
+	bank1call DisplayCardDetailScreen
+	ret
+; 0x2df74
+
+; returns carry if Defending Pokemon has no attacks
+SlowpokeAmnesia_CheckAttacks: ; 2df74 (b:5f74)
+	call CheckIfDefendingPokemonHasAnyAttack
+	ldtx hl, NoAttackMayBeChoosenText
+	ret
+; 0x2df7b
+
+SlowpokeAmnesia_PlayerSelectEffect: ; 2df7b (b:5f7b)
+	call PlayerPickAttackForAmnesia
+	ret
+; 0x2df7f
+
+SlowpokeAmnesia_AISelectEffect: ; 2df7f (b:5f7f)
+	call AIPickAttackForAmnesia
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2df85
+
+SlowpokeAmnesia_DisableEffect: ; 2df85 (b:5f85)
+	call ApplyAmnesiaToAttack
+	ret
+; 0x2df89
+
+; returns carry if Arena card has no Psychic Energy attached
+; or if it doesn't have any damage counters.
+KadabraRecover_CheckEnergyHP: ; 2df89 (b:5f89)
+	ld e, PLAY_AREA_ARENA
+	call GetPlayAreaCardAttachedEnergies
+	ld a, [wAttachedEnergies + PSYCHIC]
+	ldtx hl, NotEnoughPsychicEnergyText
+	cp 1
+	ret c ; return if not enough energy
+	call GetCardDamageAndMaxHP
+	ldtx hl, NoDamageCountersText
+	cp 10
+	ret ; return carry if no damage
+; 0x2dfa0
+
+KadabraRecover_PlayerSelectEffect: ; 2dfa0 (b:5fa0)
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	xor a ; PLAY_AREA_ARENA
+	bank1call DisplayEnergyDiscardScreen
+	bank1call HandleEnergyDiscardMenuInput
+	ret c
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a ; store card chosen
+	ret
+; 0x2dfb2
+
+KadabraRecover_AISelectEffect: ; 2dfb2 (b:5fb2)
+	ld a, TYPE_ENERGY_PSYCHIC
+	call CreateListOfEnergyAttachedToArena
+	ld a, [wDuelTempList] ; pick first card
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2dfbd
+
+KadabraRecover_DiscardEffect: ; 2dfbd (b:5fbd)
+	ldh a, [hTemp_ffa0]
+	call PutCardInDiscardPile
+	ret
+; 0x2dfc3
+
+KadabraRecover_HPRecoveryEffect: ; 2dfc3 (b:5fc3)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	ld e, a ; all damage for recovery
+	ld d, 0
+	call ApplyAndAnimateHPRecovery
+	ret
+; 0x2dfd7
+
+JynxDoubleslap_AIEffect: ; 2dfd7 (b:5fd7)
+	ld a, 20 / 2
+	lb de, 0, 20
+	jp StoreAIDamageInfo
+; 0x2dfcf
+
+JynxDoubleslap_MultiplierEffect: ; 2dfcf (b:5fcf)
+	ld hl, 10
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 2
+	call TossCoinATimes_BankB
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2dff2
+
+JynxMeditate_AIEffect: ; 2dff2 (b:5ff2)
+	call JynxMeditate_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2dfec
+
+JynxMeditate_DamageBoostEffect: ; 2dfec (b:5fec)
+; add damage counters of Defending card to damage
+	call SwapTurn
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	call SwapTurn
+	call AddToDamage
+	ret
+; 0x2e001
+
+MysteryAttack_AIEffect: ; 2e001 (b:6001)
+	ld a, 10
+	lb de, 0, 20
+	jp StoreAIDamageInfo
+; 0x2e009
+
+MysteryAttack_RandomEffect: ; 2e009 (b:6009)
+	ld a, 10
+	call StoreDamageInfo
+
+; chooses a random effect from 8 possible options.
+	call UpdateRNGSources
+	and %111
+	ldh [hTemp_ffa0], a
+	ld hl, .random_effect
+	jp JumpToFunctionInTable
+
+.random_effect
+	dw ParalysisEffect
+	dw PoisonEffect
+	dw SleepEffect
+	dw ConfusionEffect
+	dw .no_effect ; this will actually activate recovery effect afterwards
+	dw .no_effect
+	dw .more_damage
+	dw .no_damage
+
+.more_damage
+	ld a, 20
+	call StoreDamageInfo
+	ret
+
+.no_damage
+	ld a, $5b
+	ld [wLoadedMoveAnimation], a
+	xor a
+	call StoreDamageInfo
+	call SetNoEffectFromStatus
+.no_effect
+	ret
+; 0x2e03e
+
+MysteryAttack_RecoverEffect: ; 2e03e (b:603e)
+; in case the 5th option was chosen for random effect,
+; trigger recovery effect for 10 HP.
+	ldh a, [hTemp_ffa0]
+	cp 4
+	ret nz
+	lb de, 0, 10
+	call ApplyAndAnimateHPRecovery
+	ret
+; 0x2e04a
+
+	INCROM $2e04a, $30000

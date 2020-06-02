@@ -3481,7 +3481,7 @@ CardListFunction: ; 5719 (1:5719)
 
 Func_5735: ; 5735 (1:5735)
 	ld hl, wcbd8
-	ld de, Func_574a
+	ld de, PrintSortNumberInCardList
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -3493,7 +3493,11 @@ Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
 	jp CallIndirect
 
-Func_574a: ; 574a (1:574a)
+; goes through list in wDuelTempList + 10
+; and prints the number stored in each entry
+; beside the corresponding card in screen.
+; used in lists for reordering cards in the Deck.
+PrintSortNumberInCardList: ; 574a (1:574a)
 	lb bc, 1, 2
 	ld hl, wDuelTempList + 10
 .next
@@ -3502,7 +3506,7 @@ Func_574a: ; 574a (1:574a)
 	jr z, .done
 	or a ; SYM_SPACE
 	jr z, .space
-	add SYM_0
+	add SYM_0 ; load number symbol
 .space
 	call WriteByteToBGMap0
 	; move two lines down
@@ -3606,7 +3610,10 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	call c, DisplayCardPage
 	ret
 
-Func_57df: ; 57df (1:57df)
+; draws text box that covers the whole screen
+; and prints the text ID in hl, then
+; waits for Player input.
+DrawWholeScreenTextBox: ; 57df (1:57df)
 	push hl
 	call EmptyScreen
 	lb de, 0, 0

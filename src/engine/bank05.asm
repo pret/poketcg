@@ -6414,7 +6414,7 @@ AISelectSpecialAttackParameters: ; 17161 (5:7161)
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call CheckIfAnyCardIDinLocation
 	ldh [hTemp_ffa0], a
-	farcall CreateEnergyCardListFromOpponentDiscardPile
+	farcall CreateEnergyCardListFromDiscardPile_OnlyBasic
 
 ; find any energy card different from
 ; the one found by CheckIfAnyCardIDinLocation.

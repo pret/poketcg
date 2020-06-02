@@ -4690,7 +4690,10 @@ LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ld [de], a
 	ret
 
-Func_1955: ; 1955 (0:1955)
+; inflict recoil damage to self
+; input:
+;	a = damage to deal
+DealRecoilDamageToSelf: ; 1955 (0:1955)
 	push af
 	ld a, $7a
 	ld [wLoadedMoveAnimation], a

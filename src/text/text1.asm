@@ -821,7 +821,7 @@ NoEnergyAttachedToOpponentsActiveText: ; 3742a (d:742a)
 	line "the opponent's Active Pokémon."
 	done
 
-Text00af: ; 3746a (d:746a)
+ThereAreNoEnergyCardsInDiscardPileText: ; 3746a (d:746a)
 	text "There are no Energy cards"
 	line "in the the Discard Pile."
 	done
@@ -882,7 +882,7 @@ Text00bb: ; 37680 (d:7680)
 	line "Discard Pile."
 	done
 
-Text00bc: ; 376a9 (d:76a9)
+ThereAreNoStage1PokemonText: ; 376a9 (d:76a9)
 	text "There are no Stage 1 Pokémon"
 	line "in the Play Area."
 	done
@@ -910,7 +910,7 @@ NotEnoughFireEnergyText: ; 3779b (d:779b)
 	text "Not enough Fire Energy."
 	done
 
-Text00c2: ; 377b4 (d:77b4)
+NotEnoughPsychicEnergyText: ; 377b4 (d:77b4)
 	text "Not enough Psychic Energy."
 	done
 
@@ -918,7 +918,7 @@ NotEnoughWaterEnergyText: ; 377d0 (d:77d0)
 	text "Not enough Water Energy."
 	done
 
-Text00c4: ; 377ea (d:77ea)
+ThereAreNoTrainerCardsInDiscardPileText: ; 377ea (d:77ea)
 	text "There are no Trainer Cards"
 	line "in the Discard Pile."
 	done
@@ -967,12 +967,12 @@ NoGrassEnergyText: ; 37946 (d:7946)
 	text "No Grass Energy."
 	done
 
-Text00cf: ; 37958 (d:7958)
+CannotUseSinceTheresOnly1PkmnText: ; 37958 (d:7958)
 	text "Cannot use since there's only"
 	line "1 Pokémon."
 	done
 
-Text00d0: ; 37982 (d:7982)
+CannotUseBecauseItWillBeKnockedOutText: ; 37982 (d:7982)
 	text "Cannot use because"
 	line "it will be Knocked Out."
 	done
@@ -985,7 +985,7 @@ ThereAreNoPokemonOnBenchText: ; 379ce (d:79ce)
 	text "There are no Pokémon on the Bench."
 	done
 
-Text00d3: ; 379f2 (d:79f2)
+OpponentIsNotAsleepText: ; 379f2 (d:79f2)
 	text "Opponent is not Asleep"
 	done
 

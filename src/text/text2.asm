@@ -182,7 +182,7 @@ CannotDrawCardBecauseNoCardsInDeckText: ; 3872d (e:472d)
 	line "there are no cards in the Deck."
 	done
 
-Text011a: ; 38769 (e:4769)
+ChoosePkmnInTheBenchToGiveDamageText: ; 38769 (e:4769)
 	text "Choose a Pokémon on the Bench"
 	line "to give damage to."
 	done
@@ -303,7 +303,7 @@ ChoosePkmnToRemoveDamageCounterText: ; 38bc9 (e:4bc9)
 	line "the Damage counter from."
 	done
 
-Text0131: ; 38bfe (e:4bfe)
+ProcedureForCurseText: ; 38bfe (e:4bfe)
 	text "Procedure for Curse:"
 	line ""
 	line "1. Choose a Pokémon to move the"
@@ -317,22 +317,22 @@ Text0131: ; 38bfe (e:4bfe)
 	line "3. Press the B Button to cancel."
 	done
 
-Text0132: ; 38cda (e:4cda)
+Choose2EnergyCardsFromDiscardPileToAttachText: ; 38cda (e:4cda)
 	text "Choose 2 Energy cards from the"
 	line "Discard Pileto attach to a Pokémon."
 	done
 
-Text0133: ; 38d1e (e:4d1e)
+Choose2EnergyCardsFromDiscardPileForHandText: ; 38d1e (e:4d1e)
 	text "Choose 2 Energy cards from the"
 	line "Discard Pile for your Hand."
 	done
 
-Text0134: ; 38d5a (e:4d5a)
+ChooseAnEnergyCardText: ; 38d5a (e:4d5a)
 	text "Choose an Energy"
 	line "card."
 	done
 
-Text0135: ; 38d72 (e:4d72)
+ProcedureForProphecyText: ; 38d72 (e:4d72)
 	text "Procedure for Prophecy:"
 	line ""
 	line "1. Choose either your Deck"
@@ -348,12 +348,12 @@ Text0135: ; 38d72 (e:4d72)
 	line "4. Press the B Button to cancel."
 	done
 
-Text0136: ; 38e70 (e:4e70)
+ChooseTheOrderOfTheCardsText: ; 38e70 (e:4e70)
 	text "Choose the order"
 	line "of the cards."
 	done
 
-Text0137: ; 38e90 (e:4e90)
+ProcedureForDamageSwapText: ; 38e90 (e:4e90)
 	text "Procedure for Damage Swap:"
 	line ""
 	line "1. Choose a Pokémon to move a"
@@ -372,7 +372,7 @@ Text0137: ; 38e90 (e:4e90)
 	line "   it will Knock Out the Pokémon."
 	done
 
-Text0138: ; 38fcc (e:4fcc)
+ProcedureForDevolutionBeamText: ; 38fcc (e:4fcc)
 	text "Procedure for Devolution Beam."
 	line ""
 	line "1. Choose either a Pokémon in your"
@@ -385,7 +385,7 @@ Text0138: ; 38fcc (e:4fcc)
 	line "3. Press the B Button to cancel."
 	done
 
-Text0139: ; 390b4 (e:50b4)
+ProcedureForStrangeBehaviorText: ; 390b4 (e:50b4)
 	text "Procedure for Strange Behavior:"
 	line ""
 	line "1. Choose the Pokémon with the"
@@ -415,12 +415,12 @@ WouldYouLikeToCheckTheDeckText: ; 39231 (e:5231)
 	text "Would you like to check the Deck?"
 	done
 
-Text013d: ; 39254 (e:5254)
+PleaseSelectTheDeckText: ; 39254 (e:5254)
 	text "Please select the Deck:"
 	line "            Yours   Opponent's"
 	done
 
-Text013e: ; 3928c (e:528c)
+PleaseSelectThePlayAreaText: ; 3928c (e:528c)
 	text "Please select the Play Area:"
 	line "            Yours   Opponent's"
 	done
@@ -656,7 +656,7 @@ Text016e: ; 39a14 (e:5a14)
 	line "to the Deck."
 	done
 
-Text016f: ; 39a31 (e:5a31)
+WasPlacedInTheHandText: ; 39a31 (e:5a31)
 	text "<RAMTEXT> was placed"
 	line "in the Hand."
 	done
@@ -708,7 +708,7 @@ Text0179: ; 39b32 (e:5b32)
 	line "<RAMNUM> damage!"
 	done
 
-Text017a: ; 39b46 (e:5b46)
+PokemonDevolvedToText: ; 39b46 (e:5b46)
 	text "<RAMTEXT> devolved"
 	line "to <RAMTEXT>!"
 	done
@@ -717,7 +717,7 @@ ThereWasNoFireEnergyText: ; 39b58 (e:5b58)
 	text "There was no Fire Energy."
 	done
 
-Text017c: ; 39b73 (e:5b73)
+YouCanSelectMoreCardsQuitText: ; 39b73 (e:5b73)
 	text "You can select <RAMNUM> more cards. Quit?"
 	done
 
@@ -755,7 +755,7 @@ ThereWasNoEffectFromPoisonConfusionText: ; 39c5a (e:5c5a)
 	line "from Poison, Confusion."
 	done
 
-Text0184: ; 39c86 (e:5c86)
+ExchangedCardsInDuelistsHandText: ; 39c86 (e:5c86)
 	text "Exchanged the cards"
 	line "in <RAMNAME>'s Hand."
 	done
