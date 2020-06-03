@@ -174,7 +174,7 @@ ExeggutorBigEggsplosionEffectCommands:
 
 NidokingThrashEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Thrash_ModifierEffect
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Func_2c982
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_RecoilEffect
 	dbw EFFECTCMDTYPE_AI, Thrash_AIEffect
 	db  $00
 
@@ -886,119 +886,119 @@ MewMysteryAttackEffectCommands:
 	db  $00
 
 GeodudeStoneBarrageEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6052
-	dbw EFFECTCMDTYPE_AI, $604a
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, StoneBarrage_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, StoneBarrage_AIEffect
 	db  $00
 
 OnixHardenEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6075
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, OnixHardenEffect
 	db  $00
 
 PrimeapeFurySwipesEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6083
-	dbw EFFECTCMDTYPE_AI, $607b
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PrimeapeFurySwipes_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, PrimeapeFurySwipes_AIEffect
 	db  $00
 
 PrimeapeTantrumEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6099
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, TantrumEffect
 	db  $00
 
 MachampStrikesBackEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $60af
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, StrikesBackEffect
 	db  $00
 
 KabutoKabutoArmorEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $60b1
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, KabutoArmorEffect
 	db  $00
 
 KabutopsAbsorbEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $60b3
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, AbsorbEffect
 	db  $00
 
 CuboneSnivelEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $60cb
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SnivelEffect
 	db  $00
 
 CuboneRageEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $60d7
-	dbw EFFECTCMDTYPE_AI, $60d1
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, CuboneRage_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, CuboneRage_AIEffect
 	db  $00
 
 MarowakBonemerangEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $60e8
-	dbw EFFECTCMDTYPE_AI, $60e0
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Bonemerang_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, Bonemerang_AIEffect
 	db  $00
 
 MarowakCallforFriendEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6100
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6194
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6110
-	dbw EFFECTCMDTYPE_AI_SELECTION, $6177
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, MarowakCallForFamily_CheckDeckAndPlayArea
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MarowakCallForFamily_PutInPlayAreaEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, MarowakCallForFamily_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, MarowakCallForFamily_AISelectEffect
 	db  $00
 
 MachokeKarateChopEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $61ba
-	dbw EFFECTCMDTYPE_AI, $61b4
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, KarateChop_DamageSubtractionEffect
+	dbw EFFECTCMDTYPE_AI, KarateChop_AIEffect
 	db  $00
 
 MachokeSubmissionEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $61d1
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, SubmissionEffect
 	db  $00
 
 GolemSelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $61d7
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, GolemSelfdestructEffect
 	db  $00
 
 GravelerHardenEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $61f6
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, GravelerHardenEffect
 	db  $00
 
 RhydonRamEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6212
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $61fc
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $61fc
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Ram_RecoilSwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Ram_SelectSwitchEffect
+	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, Ram_SelectSwitchEffect
 	db  $00
 
 RhyhornLeerEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $621d
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, LeerEffect
 	db  $00
 
 HitmonleeStretchKickEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6231
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $625b
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $623c
-	dbw EFFECTCMDTYPE_AI_SELECTION, $6255
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, StretchKick_CheckBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, StretchKick_BenchDamageEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, StretchKick_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, StretchKick_AISelectEffect
 	db  $00
 
 SandshrewSandAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $626b
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SandAttackEffect
 	db  $00
 
 SandslashFurySwipesEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6279
-	dbw EFFECTCMDTYPE_AI, $6271
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SandslashFurySwipes_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, SandslashFurySwipes_AIEffect
 	db  $00
 
 DugtrioEarthquakeEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $628f
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, EarthquakeEffect
 	db  $00
 
 AerodactylPrehistoricPowerEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $629a
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, PrehistoricPowerEffect
 	db  $00
 
 MankeyPeekEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $629c
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $62b4
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, Peek_OncePerTurnCheck
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Peek_SelectEffect
 	db  $00
 
 MarowakBoneAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $630f
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, BoneAttackEffect
 	db  $00
 
 MarowakWailEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $631c
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6335
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Wail_BenchCheck
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Wail_FillBenchEffect
 	db  $00
 
 ElectabuzzThundershockEffectCommands:

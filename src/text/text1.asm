@@ -1073,7 +1073,7 @@ VenomPowderCheckText: ; 37cdf (d:7cdf)
 	line "opponent is Poisoned & Confused."
 	done
 
-Text00e5: ; 37d1f (d:7d1f)
+IfTailsYourPokemonBecomesConfusedText: ; 37d1f (d:7d1f)
 	text "If Tails,  your Pokémon"
 	line "becomes Confused."
 	done
@@ -1088,7 +1088,7 @@ Text00e7: ; 37d70 (d:7d70)
 	line "Draw 1 card from Deck!"
 	done
 
-Text00e8: ; 37d92 (d:7d92)
+FlipUntilFailAppears10DamageForEachHeadsText: ; 37d92 (d:7d92)
 	text "Flip until Tails appears."
 	line "10 damage for each Heads!!!"
 	done

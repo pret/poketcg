@@ -32,7 +32,7 @@ IfHeadsDoNotReceiveDamageOrEffectText: ; 38124 (e:4124)
 	line "or effect of opponent's next Attack!"
 	done
 
-Text00fc: ; 3816a (e:416a)
+IfHeadsOpponentCannotAttackText: ; 3816a (e:416a)
 	text "If Heads, opponent cannot Attack"
 	line "next turn!"
 	done
@@ -237,7 +237,7 @@ ChooseAttackOpponentWillNotBeAbleToUseText: ; 38955 (e:4955)
 	line "not be able to use on the next turn."
 	done
 
-Text0125: ; 3899f (e:499f)
+ChooseBasicFightingPokemonFromDeckText: ; 3899f (e:499f)
 	text "Choose a Basic Fighting Pokémon"
 	line "from the Deck."
 	done
@@ -270,7 +270,7 @@ ChooseNidoranText: ; 38a61 (e:4a61)
 	line "or a Nidoran♂."
 	done
 
-Text012c: ; 38a83 (e:4a83)
+ChooseBasicFightingPokemonText: ; 38a83 (e:4a83)
 	text "Choose a Basic"
 	line "Fighting Pokémon"
 	done
@@ -441,7 +441,7 @@ KrabbyText: ; 392f0 (e:52f0)
 	text "Krabby"
 	done
 
-Text0143: ; 392f8 (e:52f8)
+FightingPokemonDeckText: ; 392f8 (e:52f8)
 	text "Fighting Pokémon"
 	done
 
@@ -449,12 +449,12 @@ Text0144: ; 3930a (e:530a)
 	text "Basic Energy"
 	done
 
-Text0145: ; 39318 (e:5318)
+PeekWasUsedToLookInYourHandText: ; 39318 (e:5318)
 	text "Peek was used to look at the"
 	line "<RAMTEXT> in your Hand."
 	done
 
-Text0146: ; 39346 (e:5346)
+CardPeekWasUsedOnText: ; 39346 (e:5346)
 	text "Card Peek was used on"
 	done
 
@@ -468,7 +468,7 @@ WasChosenForTheEffectOfAmnesiaText: ; 39392 (e:5392)
 	line "for the effect of Amnesia."
 	done
 
-Text0149: ; 393bb (e:53bb)
+BasicPokemonWasPlacedOnEachBenchText: ; 393bb (e:53bb)
 	text "A Basic Pokémon was placed"
 	line "on each Bench."
 	done

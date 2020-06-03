@@ -1892,7 +1892,7 @@ Thrash_ModifierEffect: ; 2c973 (b:4973)
 	call AddToDamage
 	ret
 
-Func_2c982: ; 2c982 (b:4982)
+Thrash_RecoilEffect: ; 2c982 (b:4982)
 	ldh a, [hTemp_ffa0]
 	or a
 	ret nz
@@ -6148,4 +6148,587 @@ MysteryAttack_RecoverEffect: ; 2e03e (b:603e)
 	ret
 ; 0x2e04a
 
-	INCROM $2e04a, $30000
+StoneBarrage_AIEffect: ; 2e04a (b:604a)
+	ld a, 10
+	lb de, 0, 100
+	jp StoreAIDamageInfo
+; 0x2e052
+
+StoneBarrage_MultiplierEffect: ; 2e052 (b:6052)
+	xor a
+	ldh [hTemp_ffa0], a
+.loop_coin_toss
+	ldtx de, FlipUntilFailAppears10DamageForEachHeadsText
+	xor a
+	call TossCoinATimes_BankB
+	jr nc, .tails
+	ld hl, hTemp_ffa0
+	inc [hl] ; increase heads count
+	jr .loop_coin_toss
+
+.tails
+; store resulting damage
+	ldh a, [hTemp_ffa0]
+	ld l, a
+	ld h, 10
+	call HtimesL
+	ld de, wDamage
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	ret
+; 0x2e075
+
+OnixHardenEffect: ; 2e075 (b:6075)
+	ld a, SUBSTATUS1_HARDEN
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2e07b
+
+PrimeapeFurySwipes_AIEffect: ; 2e07b (b:607b)
+	ld a, 60 / 2
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2e083
+
+PrimeapeFurySwipes_MultiplierEffect: ; 2e083 (b:6083)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 3
+	call TossCoinATimes_BankB
+	add a
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2e099
+
+TantrumEffect: ; 2e099 (b:6099)
+	ldtx de, IfTailsYourPokemonBecomesConfusedText
+	call TossCoin_BankB
+	ret c ; return if heads
+; confuse Pokemon
+	ld a, $29
+	ld [wLoadedMoveAnimation], a
+	call SwapTurn
+	call ConfusionEffect
+	call SwapTurn
+	ret
+; 0x2e0af
+
+StrikesBackEffect: ; 2e0af (b:60af)
+	scf
+	ret
+; 0x2e0b1
+
+KabutoArmorEffect: ; 2e0b1 (b:60b1)
+	scf
+	ret
+; 0x2e0b3
+
+AbsorbEffect: ; 2e0b3 (b:60b3)
+	ld hl, wDealtDamage
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	srl h
+	rr l
+	bit 0, l
+	jr z, .rounded
+	; round up to nearest 10
+	ld de, 5
+	add hl, de
+.rounded
+	ld e, l
+	ld d, h
+	call ApplyAndAnimateHPRecovery
+	ret
+; 0x2e0cb
+
+SnivelEffect: ; 2e0cb (b:60cb)
+	ld a, SUBSTATUS2_REDUCE_BY_20
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e0d1
+
+CuboneRage_AIEffect: ; 2e0d1 (b:60d1)
+	call CuboneRage_DamageBoostEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2e0d7
+
+CuboneRage_DamageBoostEffect: ; 2e0d7 (b:60d7)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	call AddToDamage
+	ret
+; 0x2e0e0
+
+Bonemerang_AIEffect: ; 2e0e0 (b:60e0)
+	ld a, 60 / 2
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2e0e8
+
+Bonemerang_MultiplierEffect: ; 2e0e8 (b:60e8)
+	ld hl, 30
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 2
+	call TossCoinATimes_BankB
+	ld e, a
+	add a ; a = 2 * heads
+	add e ; a = 3 * heads
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2e100
+
+; returns carry if can't add Pokemon from deck
+MarowakCallForFamily_CheckDeckAndPlayArea: ; 2e100 (b:6100)
+	call CheckIfDeckIsEmpty
+	ret c ; no cards in deck
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ldtx hl, NoSpaceOnTheBenchText
+	cp MAX_PLAY_AREA_POKEMON
+	ccf
+	ret
+; 0x2e110
+
+MarowakCallForFamily_PlayerSelectEffect: ; 2e110 (b:6110)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+
+	call CreateDeckCardList
+	ldtx hl, ChooseBasicFightingPokemonFromDeckText
+	ldtx bc, FightingPokemonDeckText
+	lb de, SEARCHEFFECT_BASIC_FIGHTING, $00
+	call LookForCardInDeck
+	ret c
+
+; draw Deck list interface and print text
+	bank1call Func_5591
+	ldtx hl, ChooseBasicFightingPokemonText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+
+.loop
+	bank1call DisplayCardList
+	jr c, .pressed_b
+
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp FIGHTING
+	jr nz, .play_sfx ; is Fighting?
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr nz, .play_sfx ; is Basic?
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+
+.play_sfx
+	; play SFX and loop back
+	call Func_3794
+	jr .loop
+
+.pressed_b
+; figure if Player can exit the screen without selecting,
+; that is, if the Deck has no Basic Fighting Pokemon.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_b_press
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next
+	ld a, l
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard1Type]
+	cp FIGHTING
+	jr nz, .next ; found, go back to top loop
+	ld a, [wLoadedCard1Stage]
+	or a
+	jr z, .play_sfx ; found, go back to top loop
+.next
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_b_press
+
+; no valid card in Deck, can safely exit screen
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+; 0x2e177
+
+MarowakCallForFamily_AISelectEffect: ; 2e177 (b:6177)
+	call CreateDeckCardList
+	ld hl, wDuelTempList
+.loop_deck
+	ld a, [hli]
+	ldh [hTemp_ffa0], a
+	cp $ff
+	ret z ; none found
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp FIGHTING
+	jr nz, .loop_deck
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr nz, .loop_deck
+; found
+	ret
+; 0x2e194
+
+MarowakCallForFamily_PutInPlayAreaEffect: ; 2e194 (b:6194)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	jr z, .shuffle
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	call PutHandPokemonCardInPlayArea
+	call CheckIfTurnDuelistIsPlayer
+	jr c, .shuffle
+	; display card on screen
+	ldh a, [hTemp_ffa0]
+	ldtx hl, PlacedOnTheBenchText
+	bank1call DisplayCardDetailScreen
+.shuffle
+	call Func_2c0bd
+	ret
+; 0x2c1b4
+
+KarateChop_AIEffect: ; 2e1b4 (b:61b4)
+	call KarateChop_DamageSubtractionEffect
+	jp SetMinMaxDamageSameAsDamage
+; 0x2e1ba
+
+KarateChop_DamageSubtractionEffect: ; 2e1ba (b:61ba)
+	ld e, PLAY_AREA_ARENA
+	call GetCardDamageAndMaxHP
+	ld e, a
+	ld hl, wDamage
+	ld a, [hl]
+	sub e
+	ld [hli], a
+	ld a, [hl]
+	sbc 0
+	ld [hl], a
+	rla
+	ret nc
+; cap it to 0 damage
+	xor a
+	call StoreDamageInfo
+	ret
+; 0x2e1d1
+
+SubmissionEffect: ; 2e1d1 (b:61d1)
+	ld a, 20
+	call DealRecoilDamageToSelf
+	ret
+; 0x2e1d7
+
+GolemSelfdestructEffect: ; 2e1d7 (b:61d7)
+	ld a, 100
+	call DealRecoilDamageToSelf
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	xor a
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	ret
+; 0x2e1f6
+
+GravelerHardenEffect: ; 2e1f6 (b:61f6)
+	ld a, SUBSTATUS1_HARDEN
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2e1fc
+
+Ram_SelectSwitchEffect: ; 2e1fc (b:61fc)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	jr c, .no_bench
+	call DuelistSelectForcedSwitch
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	ret
+.no_bench
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e212
+
+Ram_RecoilSwitchEffect: ; 2e212 (b:6212)
+	ld a, 20
+	call DealRecoilDamageToSelf
+	ldh a, [hTemp_ffa0]
+	call HandleSwitchDefendingPokemonEffect
+	ret
+; 0x2e21d
+
+LeerEffect: ; 2e21d (b:621d)
+	ldtx de, IfHeadsOpponentCannotAttackText
+	call TossCoin_BankB
+	jp nc, SetWasUnsuccessful
+	ld a, $74
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS2_LEER
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e231
+
+; return carry if opponent has no Bench Pokemon.
+StretchKick_CheckBench: ; 2e231 (b:6231)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ldtx hl, EffectNoPokemonOnTheBenchText
+	cp 2
+	ret
+; 0x2e23c
+
+StretchKick_PlayerSelectEffect: ; 2e23c (b:623c)
+	ldtx hl, ChoosePkmnInTheBenchToGiveDamageText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2e255
+
+StretchKick_AISelectEffect: ; 2e255 (b:6255)
+; chooses Bench Pokemon with least amount of remaining HP
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e25b
+
+StretchKick_BenchDamageEffect: ; 2e25b (b:625b)
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld b, a
+	ld de, 20
+	call DealDamageToPlayAreaPokemon
+	call SwapTurn
+	ret
+; 0x2e26b
+
+SandAttackEffect: ; 2e26b (b:626b)
+	ld a, SUBSTATUS2_SAND_ATTACK
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e271
+
+SandslashFurySwipes_AIEffect: ; 2e271 (b:6271)
+	ld a, 60 / 2
+	lb de, 0, 60
+	jp StoreAIDamageInfo
+; 0x2e279
+
+SandslashFurySwipes_MultiplierEffect: ; 2e279 (b:6279)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 3
+	call TossCoinATimes_BankB
+	add a
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2e28f
+
+EarthquakeEffect: ; 2e28f (b:628f)
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 10
+	call DealDamageToAllBenchedPokemon
+	ret
+; 0x2e29a
+
+PrehistoricPowerEffect: ; 2e29a (b:629a)
+	scf
+	ret
+; 0x2e29c
+
+; returns carry if Pkmn Power can't be used.
+Peek_OncePerTurnCheck: ; 2e29c (b:629c)
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	and USED_PKMN_POWER_THIS_TURN
+	jr nz, .already_used
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	call CheckCannotUseDueToStatus_OnlyToxicGasIfANon0
+	ret
+.already_used
+	ldtx hl, OnlyOncePerTurnText
+	scf
+	ret
+; 0x2e2b4
+
+Peek_SelectEffect: ; 2e2b4 (b:62b4)
+; set Pkmn Power used flag
+	ldh a, [hTemp_ffa0]
+	add DUELVARS_ARENA_CARD_FLAGS_C2
+	call GetTurnDuelistVariable
+	set USED_PKMN_POWER_THIS_TURN_F, [hl]
+
+	ld a, DUELVARS_DUELIST_TYPE
+	call GetTurnDuelistVariable
+	cp DUELIST_TYPE_LINK_OPP
+	jr z, .link_opp
+	and DUELIST_TYPE_AI_OPP
+	jr nz, .ai_opp
+
+; player
+	call Func_3b31
+	call Func_30e7
+	ldh [hAIPkmnPowerEffectParam], a
+	call SerialSend8Bytes
+	ret
+
+.link_opp
+	call SerialRecv8Bytes
+	ldh [hAIPkmnPowerEffectParam], a
+
+.ai_opp
+	ldh a, [hAIPkmnPowerEffectParam]
+	bit AI_PEEK_TARGET_HAND_F, a
+	jr z, .prize_or_deck
+	and ~AI_PEEK_TARGET_HAND ; unset bit to get deck index
+; if masked value is higher than $40, then it means
+; that AI chose to look at Player's deck.
+; all deck indices will be smaller than $40.
+	cp $40
+	jr c, .hand
+	ldh a, [hAIPkmnPowerEffectParam]
+	jr .prize_or_deck
+
+.hand
+; AI chose to look at random card in hand,
+; so display it to the Player on screen.
+	call SwapTurn
+	ldtx hl, PeekWasUsedToLookInYourHandText
+	bank1call DisplayCardDetailScreen
+	call SwapTurn
+	ret
+
+.prize_or_deck
+; AI chose either a prize card or Player's top deck card,
+; so show Play Area and draw cursor appropriately.
+	call Func_3b31
+	call SwapTurn
+	ldh a, [hAIPkmnPowerEffectParam]
+	xor $80
+	call Func_30f9
+	call SwapTurn
+	ldtx hl, CardPeekWasUsedOnText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x2e30f
+
+BoneAttackEffect: ; 2e30f (b:630f)
+	ldtx de, IfHeadsOpponentCannotAttackText
+	call TossCoin_BankB
+	ret nc
+	ld a, SUBSTATUS2_BONE_ATTACK
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e31c
+
+; return carry if neither Play Area
+; has room for more Bench Pokemon.
+Wail_BenchCheck: ; 2e31c (b:631c)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr c, .no_carry
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON
+	jr c, .no_carry
+	ldtx hl, NoSpaceOnTheBenchText
+	scf
+	ret
+.no_carry
+	or a
+	ret
+; 0x2e335
+
+Wail_FillBenchEffect: ; 2e335 (b:6335)
+	call SwapTurn
+	call .FillBench
+	call SwapTurn
+	call .FillBench
+
+; display both Play Areas
+	ldtx hl, BasicPokemonWasPlacedOnEachBenchText
+	call DrawWideTextBox_WaitForInput
+	bank1call HasAlivePokemonInPlayArea
+	bank1call OpenPlayAreaScreenForSelection
+	call SwapTurn
+	bank1call HasAlivePokemonInPlayArea
+	bank1call OpenPlayAreaScreenForSelection
+	call SwapTurn
+	ret
+
+.FillBench ; 2e35a (b:635a)
+	call CreateDeckCardList
+	ret c
+	ld hl, wDuelTempList
+	call ShuffleCards
+
+; if no more space in the Bench, then return.
+.check_bench
+	push hl
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	pop hl
+	cp MAX_PLAY_AREA_POKEMON
+	jr nc, .done
+
+; there's still space, so look for the next
+; Basic Pokemon card to put in the Bench.
+.loop
+	ld a, [hli]
+	ldh [hTempCardIndex_ff98], a
+	cp $ff
+	jr z, .done
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld a, [wLoadedCard2Type]
+	cp TYPE_ENERGY
+	jr nc, .loop ; is Pokemon card?
+	ld a, [wLoadedCard2Stage]
+	or a
+	jr nz, .loop ; is Basic?
+; place card in Bench
+	push hl
+	ldh a, [hTempCardIndex_ff98]
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	call PutHandPokemonCardInPlayArea
+	pop hl
+	jr .check_bench
+
+.done
+	call Func_2c0bd
+	ret
+; 0x2e399
+
+	INCROM $2e399, $30000

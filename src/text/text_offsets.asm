@@ -230,10 +230,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PoisonCheckText                                    ; 0x00e2
 	textpointer ConfusionCheckText                                 ; 0x00e3
 	textpointer VenomPowderCheckText                               ; 0x00e4
-	textpointer Text00e5                                           ; 0x00e5
+	textpointer IfTailsYourPokemonBecomesConfusedText              ; 0x00e5
 	textpointer DamageCheckIfTailsNoDamageText                     ; 0x00e6
 	textpointer Text00e7                                           ; 0x00e7
-	textpointer Text00e8                                           ; 0x00e8
+	textpointer FlipUntilFailAppears10DamageForEachHeadsText       ; 0x00e8
 	textpointer IfHeadPlus10IfTails10ToYourselfText                ; 0x00e9
 	textpointer DamageToOppBenchIfHeadsDamageToYoursIfTailsText    ; 0x00ea
 	textpointer IfHeadsChangeOpponentsActivePokemonText            ; 0x00eb
@@ -253,7 +253,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PokemonsSleepCheckText                             ; 0x00f9
 	textpointer PoisonedIfHeadsConfusedIfTailsText                 ; 0x00fa
 	textpointer IfHeadsDoNotReceiveDamageOrEffectText              ; 0x00fb
-	textpointer Text00fc                                           ; 0x00fc
+	textpointer IfHeadsOpponentCannotAttackText                    ; 0x00fc
 	textpointer AttackUnsuccessfulText                             ; 0x00fd
 	textpointer UnableToRetreatDueToAcidText                       ; 0x00fe
 	textpointer UnableToUseTrainerDueToHeadacheText                ; 0x00ff
@@ -294,14 +294,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChooseAKrabbyFromDeckText                          ; 0x0122
 	textpointer ChooseDiscardEnergyCardFromOpponentText            ; 0x0123
 	textpointer ChooseAttackOpponentWillNotBeAbleToUseText         ; 0x0124
-	textpointer Text0125                                           ; 0x0125
+	textpointer ChooseBasicFightingPokemonFromDeckText             ; 0x0125
 	textpointer ChooseAnOddishFromDeckText                         ; 0x0126
 	textpointer ChooseAnOddishText                                 ; 0x0127
 	textpointer ChooseAKrabbyText                                  ; 0x0128
 	textpointer Text0129                                           ; 0x0129
 	textpointer ChooseNidoranFromDeckText                          ; 0x012a
 	textpointer ChooseNidoranText                                  ; 0x012b
-	textpointer Text012c                                           ; 0x012c
+	textpointer ChooseBasicFightingPokemonText                     ; 0x012c
 	textpointer ProcedureForEnergyTransferText                     ; 0x012d
 	textpointer ChooseABellsproutFromDeckText                      ; 0x012e
 	textpointer ChooseABellsproutText                              ; 0x012f
@@ -324,13 +324,13 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer OddishText                                         ; 0x0140
 	textpointer BellsproutText                                     ; 0x0141
 	textpointer KrabbyText                                         ; 0x0142
-	textpointer Text0143                                           ; 0x0143
+	textpointer FightingPokemonDeckText                            ; 0x0143
 	textpointer Text0144                                           ; 0x0144
-	textpointer Text0145                                           ; 0x0145
-	textpointer Text0146                                           ; 0x0146
+	textpointer PeekWasUsedToLookInYourHandText                    ; 0x0145
+	textpointer CardPeekWasUsedOnText                              ; 0x0146
 	textpointer Text0147                                           ; 0x0147
 	textpointer WasChosenForTheEffectOfAmnesiaText                 ; 0x0148
-	textpointer Text0149                                           ; 0x0149
+	textpointer BasicPokemonWasPlacedOnEachBenchText               ; 0x0149
 	textpointer WasUnsuccessfulText                                ; 0x014a
 	textpointer ThereWasNoEffectFromTxRam2Text                     ; 0x014b
 	textpointer Text014c                                           ; 0x014c

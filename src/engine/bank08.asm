@@ -6824,7 +6824,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	ld a, 3
 	call Random
 	or a
-	jr z, .check_player_prizes
+	jr z, .check_ai_prizes
 	cp 2
 	jr c, .check_player_hand
 
@@ -6833,10 +6833,10 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	call GetNonTurnDuelistVariable
 	cp DECK_SIZE - 1
 	ret nc ; return if Player has one or no cards in Deck
-	ld a, $ff
+	ld a, AI_PEEK_TARGET_DECK
 	jr .use_peek
 
-.check_player_prizes
+.check_ai_prizes
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	ld hl, wcda5
@@ -6861,7 +6861,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	ld a, c
 	sub b
 	ld [hl], a
-	ld a, $40
+	ld a, AI_PEEK_TARGET_PRIZE
 	add d
 	jr .use_peek
 
@@ -6876,7 +6876,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	call CountCardsInDuelTempList
 	call ShuffleCards
 	ld a, [wDuelTempList]
-	or $80
+	or AI_PEEK_TARGET_HAND
 
 .use_peek
 	push af
