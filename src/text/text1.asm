@@ -327,7 +327,7 @@ PsychicSymbolText: ; 36857 (d:6857)
 	textfw0 "<PSYCHIC>"
 	done
 
-Text004d: ; 3685a (d:685a)
+BenchText: ; 3685a (d:685a)
 	text "Bench"
 	done
 
@@ -1113,7 +1113,7 @@ IfHeadsHealIsSuccessfulText: ; 37e73 (d:7e73)
 	line "Heal is successful."
 	done
 
-Text00ed: ; 37e92 (d:7e92)
+IfTailsDamageToYourselfTooText: ; 37e92 (d:7e92)
 	text "If Tails, <RAMNUM> damage"
 	line "to yourself, too."
 	done

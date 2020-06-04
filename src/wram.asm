@@ -931,6 +931,7 @@ wLoadedMove:: ; cca6
 ; the damage field of an used move is loaded here
 ; doubles as "wAIAverageDamage" when complementing wAIMinDamage and wAIMaxDamage
 ; little-endian
+; second byte may have UNAFFECTED_BY_WEAKNESS_RESISTANCE_F set/unset
 wDamage:: ; ccb9
 	ds $2
 
@@ -1207,8 +1208,8 @@ wAIPokedexCounter:: ; cda6
 	ds $1
 
 ; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
-; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
-;	- when flag is not set, this counts how many turns in a row
+; AI_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
+; 	- when flag is not set, this counts how many turns in a row
 ;	  Player used Mewtwo1's Barrier attack;
 ;	- when flag is set, this counts how many turns in a row
 ;	  Player has NOT used Barrier attack.
@@ -1684,7 +1685,10 @@ wce70:: ; ce70
 wce71:: ; ce71
 	ds $1
 
-	ds $3
+wce72:: ; ce72
+	ds $1
+
+	ds $2
 
 ; stores the amount of cards that are being ordered.
 wNumberOfCardsToOrder:: ; ce75

@@ -4626,7 +4626,7 @@ AIDecide_Gambler: ; 21875 (8:5875)
 
 ; check if flag is set for Player using Mewtwo1 only deck
 	ld a, [wAIBarrierFlagCounter]
-	and AI_FLAG_MEWTWO_MILL
+	and AI_MEWTWO_MILL
 	jr z, .no_carry
 
 ; set carry if number of cards in deck <= 4.
@@ -6637,7 +6637,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIHealCard], a
+	ldh [hPkmnPowerPlayAreaTarget], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -7380,12 +7380,12 @@ CheckIfPlayerHasPokemonOtherThanMewtwo1: ; 227a9 (8:67a9)
 HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
 ; return carry if Player is not playing Mewtwo1 mill deck
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .set_carry
 
 ; else, check if there's been less than 2 turns
 ; without the Player using Barrier.
-	cp AI_FLAG_MEWTWO_MILL + 2
+	cp AI_MEWTWO_MILL + 2
 	jr c, .count_bench
 
 ; if there has been, reset wAIBarrierFlagCounter

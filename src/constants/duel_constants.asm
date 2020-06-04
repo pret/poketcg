@@ -178,6 +178,10 @@ CAN_EVOLVE_THIS_TURN        EQU 1 << CAN_EVOLVE_THIS_TURN_F
 HAS_CHANGED_COLOR_F EQU 7
 HAS_CHANGED_COLOR   EQU 1 << HAS_CHANGED_COLOR_F
 
+; flag in wDamage + 1 that indicates
+; whether damage is unaffected by Weakness/Resistance
+UNAFFECTED_BY_WEAKNESS_RESISTANCE_F EQU 7
+
 ; effect command constants (TryExecuteEffectCommandFunction)
 ; ordered by (roughly) execution time
 EFFECTCMDTYPE_INITIAL_EFFECT_1      EQU $01

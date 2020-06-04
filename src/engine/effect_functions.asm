@@ -228,7 +228,7 @@ DealDamageToAllBenchedPokemon: ; 2c117 (b:4117)
 	jr .skip_to_bench
 .loop
 	push bc
-	call DealDamageToPlayAreaPokemon
+	call DealDamageToPlayAreaPokemon_RegularAnim
 	pop bc
 .skip_to_bench
 	inc b
@@ -311,7 +311,7 @@ PickRandomPlayAreaCard: ; 2c17e (b:417e)
 ; 0x2c188
 
 ; outputs in hl the current position
-; in hTempCardList list to place a new card.
+; in hTempList list to place a new card.
 GetCurPositionInTempList: ; 2c188 (b:4188)
 	push de
 	ld hl, hEffectItemSelection
@@ -319,7 +319,7 @@ GetCurPositionInTempList: ; 2c188 (b:4188)
 	inc [hl]
 	ld e, a
 	ld d, $00
-	ld hl, hTempCardList
+	ld hl, hTempList
 	add hl, de
 	pop de
 	ret
@@ -1429,7 +1429,14 @@ PlayAreaSelectionMenuParameters: ; 2c6e0 (b:46e0)
 	dw $0000 ; function pointer if non-0
 ; 0x2c6e8
 
-	INCROM $2c6e8, $2c6f0
+BenchSelectionMenuParameters: ; 2c6e8 (b:46e8)
+	db 0, 3 ; cursor x, cursor y
+	db 3 ; y displacement between items
+	db MAX_PLAY_AREA_POKEMON ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw $0000 ; function pointer if non-0
+; 0x2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 10 / 2
@@ -2077,7 +2084,7 @@ HornHazard_AIEffect: ; 2ca8e (b:4a8e)
 	jp StoreAIDamageInfo
 ; 0x2ca96
 
-HornHazard_Failure50PercentEffect: ; 2ca96 (b:4a96)
+HornHazard_Success50PercentEffect: ; 2ca96 (b:4a96)
 	ldtx de, DamageCheckIfTailsNoDamageText
 	call TossCoin_BankB
 	jr c, .heads
@@ -3631,7 +3638,7 @@ IceBreath_RandomPokemonDamageEffect: ; 2d32e (b:532e)
 	call PickRandomPlayAreaCard
 	ld b, a
 	ld de, 40
-	call DealDamageToPlayAreaPokemon
+	call DealDamageToPlayAreaPokemon_RegularAnim
 	call SwapTurn
 	ret
 ; 0x2d33f
@@ -3651,14 +3658,14 @@ PlayerPickFireEnergyCardToDiscard: ; 2d34b (b:534b)
 	bank1call DisplayEnergyDiscardScreen
 	bank1call HandleEnergyDiscardMenuInput
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hTempCardList], a
+	ldh [hTempList], a
 	ret
 ; 0x2d35a
 
 AIPickFireEnergyCardToDiscard: ; 2d35a (b:535a)
 	call CreateListOfFireEnergyAttachedToArena
 	ld a, [wDuelTempList]
-	ldh [hTempCardList], a ; pick first in list
+	ldh [hTempList], a ; pick first in list
 	ret
 ; 0x2d363
 
@@ -3683,7 +3690,7 @@ ArcanineFlamethrower_AISelectEffect: ; 2d375 (b:5375)
 ; 0x2d379
 
 ArcanineFlamethrower_DiscardEffect: ; 2d379 (b:5379)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d37f
@@ -3747,14 +3754,14 @@ FlamesOfRage_PlayerSelectEffect: ; 2d3ae (b:53ae)
 FlamesOfRage_AISelectEffect: ; 2d3d5 (b:53d5)
 	call AIPickFireEnergyCardToDiscard
 	ld a, [wDuelTempList + 1]
-	ldh [hTempCardList + 1], a
+	ldh [hTempList + 1], a
 	ret
 ; 0x2d3de
 
 FlamesOfRage_DiscardEffect: ; 2d3de (b:53de)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
-	ldh a, [hTempCardList + 1]
+	ldh a, [hTempList + 1]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d3e9
@@ -3861,7 +3868,7 @@ FireBlast_AISelectEffect: ; 2d475 (b:5475)
 ; 0x2d479
 
 FireBlast_DiscardEffect: ; 2d479 (b:5479)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d47f
@@ -3887,7 +3894,7 @@ Ember_AISelectEffect: ; 2d491 (b:5491)
 ; 0x2d495
 
 Ember_DiscardEffect: ; 2d495 (b:5495)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d49b
@@ -3943,7 +3950,7 @@ Wildfire_PlayerSelectEffect: ; 2d4a9 (b:54a9)
 Wildfire_AISelectEffect: ; 2d4dd (b:54dd)
 ; AI always chooses 0 cards to discard
 	xor a
-	ldh [hTempCardList], a
+	ldh [hTempList], a
 	ret
 ; 0x2d4e1
 
@@ -4009,7 +4016,7 @@ Moltres1DiveBomb_AIEffect: ; 2d523 (b:5523)
 	jp StoreAIDamageInfo
 ; 0x2d52b
 
-Moltres1DiveBomb_Failure50PercentEffect: ; 2d52b (b:552b)
+Moltres1DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	jr c, .heads
@@ -4062,7 +4069,7 @@ FlareonFlamethrower_AISelectEffect: ; 2d56e (b:556e)
 ; 0x2d572
 
 FlareonFlamethrower_DiscardEffect: ; 2d572 (b:5572)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d578
@@ -4088,7 +4095,7 @@ MagmarFlamethrower_AISelectEffect: ; 2d58a (b:558a)
 ; 0x2d58e
 
 MagmarFlamethrower_DiscardEffect: ; 2d58e (b:558e)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d594
@@ -4126,7 +4133,7 @@ CharmeleonFlamethrower_AISelectEffect: ; 2d5b4 (b:55b4)
 ; 0x2d5b8
 
 CharmeleonFlamethrower_DiscardEffect: ; 2d5b8 (b:55b8)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d5be
@@ -4186,14 +4193,14 @@ FireSpin_AISelectEffect: ; 2d606 (b:5606)
 	call CreateArenaOrBenchEnergyCardList
 	ld hl, wDuelTempList
 	ld a, [hli]
-	ldh [hTempCardList], a
+	ldh [hTempList], a
 	ld a, [hl]
-	ldh [hTempCardList + 1], a
+	ldh [hTempList + 1], a
 	ret
 ; 0x2d614
 
 FireSpin_DiscardEffect: ; 2d614 (b:5614)
-	ld hl, hTempCardList
+	ld hl, hTempList
 	ld a, [hli]
 	call PutCardInDiscardPile
 	ld a, [hli]
@@ -4454,7 +4461,7 @@ Moltres2DiveBomb_AIEffect: ; 2d76e (b:576e)
 	jp StoreAIDamageInfo
 ; 0x2d776
 
-Moltres2DiveBomb_Failure50PercentEffect: ; 2d776 (b:5776)
+Moltres2DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	jr c, .heads
@@ -4514,7 +4521,7 @@ GetEnergyAttachedMultiplierDamage: ; 2d78c (b:578c)
 ; for Player to select from.
 ; the Player can select up to 2 cards from the list.
 ; these cards are given in $ff-terminated list
-; in hTempCardList.
+; in hTempList.
 HandleEnergyCardsInDiscardPileSelection: ; 2d7bc (b:57bc)
 	push hl
 	xor a
@@ -4696,7 +4703,7 @@ Curse_PlayerSelectEffect: ; 2d834 (b:5834)
 
 Curse_TransferDamageEffect: ; 2d8bb (b:58bb)
 ; set Pkmn Power as used
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	add DUELVARS_ARENA_CARD_FLAGS_C2
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
@@ -4788,7 +4795,7 @@ GengarDarkMind_DamageBenchEffect: ; 2d93c (b:593c)
 	call SwapTurn
 	ld b, a
 	ld de, 10
-	call DealDamageToPlayAreaPokemon
+	call DealDamageToPlayAreaPokemon_RegularAnim
 	call SwapTurn
 	ret
 ; 0x2d94f
@@ -4817,7 +4824,7 @@ DestinyBond_PlayerSelectEffect: ; 2d964 (b:5964)
 	bank1call HandleEnergyDiscardMenuInput
 	ret c
 	ldh a, [hTempCardIndex_ff98]
-	ldh [hTempCardList], a
+	ldh [hTempList], a
 	ret
 ; 0x2d976
 
@@ -4826,12 +4833,12 @@ DestinyBond_AISelectEffect: ; 2d976 (b:5976)
 	ld a, TYPE_ENERGY_PSYCHIC
 	call CreateListOfEnergyAttachedToArena
 	ld a, [wDuelTempList]
-	ldh [hTempCardList], a
+	ldh [hTempList], a
 	ret
 ; 0x2d981
 
 DestinyBond_DiscardEffect: ; 2d981 (b:5981)
-	ldh a, [hTempCardList]
+	ldh a, [hTempList]
 	call PutCardInDiscardPile
 	ret
 ; 0x2d987
@@ -4858,7 +4865,7 @@ EnergyConversion_PlayerSelectEffect: ; 2d994 (b:5994)
 EnergyConversion_AISelectEffect: ; 2d99b (b:599b)
 	call CreateEnergyCardListFromDiscardPile_OnlyBasic
 	ld hl, wDuelTempList
-	ld de, hTempCardList
+	ld de, hTempList
 	ld c, 2
 ; select the first two energy cards found in Discard Pile
 .loop
@@ -4883,7 +4890,7 @@ EnergyConversion_AddToHandEffect: ; 2d9b4 (b:59b4)
 ; loop cards that were chosen
 ; until $ff is reached,
 ; and move them to the hand.
-	ld hl, hTempCardList
+	ld hl, hTempList
 	ld de, wDuelTempList
 .loop_cards
 	ld a, [hli]
@@ -4951,7 +4958,7 @@ Prophecy_PlayerSelectEffect: ; 2da00 (b:5a00)
 	jr nz, Prophecy_PlayerSelectEffect ; loop back to start
 
 	ldh a, [hCurMenuItem]
-	ldh [hTempCardList], a ; store selection in first position in list
+	ldh [hTempList], a ; store selection in first position in list
 	or a
 	jr z, .turn_duelist
 
@@ -4983,7 +4990,7 @@ Prophecy_AISelectEffect: ; 2da3c (b:5a3c)
 ; 0x2da41
 
 Prophecy_ReorderDeckEffect: ; 2da41 (b:5a41)
-	ld hl, hTempCardList
+	ld hl, hTempList
 	ld a, [hli]
 	or a
 	jr z, .ReorderCards ; turn duelist's deck
@@ -5028,7 +5035,7 @@ Prophecy_ReorderDeckEffect: ; 2da41 (b:5a41)
 
 ; draw and handle Player selection for reordering
 ; the top 3 cards of Deck.
-; the resulting list is output in order in hTempCardList.
+; the resulting list is output in order in hTempList.
 HandleProphecyScreen: ; 2da76 (b:5a76)
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
@@ -5117,7 +5124,7 @@ HandleProphecyScreen: ; 2da76 (b:5a76)
 	call YesOrNoMenuWithText_LeftAligned
 	jr c, .start ; if not, return back to beginning of selection
 
-; write in hTempCardList the card list
+; write in hTempList the card list
 ; in order that was selected.
 	ld hl, wDuelTempList + 10
 	ld de, wDuelTempList
@@ -5130,7 +5137,7 @@ HandleProphecyScreen: ; 2da76 (b:5a76)
 	push bc
 	ld c, a
 	ld b, $00
-	ld hl, hTempCardList
+	ld hl, hTempList
 	add hl, bc
 	ld a, [de]
 	ld [hl], a
@@ -5139,12 +5146,12 @@ HandleProphecyScreen: ; 2da76 (b:5a76)
 	inc de
 	inc c
 	jr .loop_order
-; now hTempCardList has the list of card deck indices
+; now hTempList has the list of card deck indices
 ; in the order selected to be place on top of the deck.
 
 .done
 	ld b, $00
-	ld hl, hTempCardList + 1
+	ld hl, hTempList + 1
 	add hl, bc
 	ld [hl], $ff ; terminating byte
 	or a
@@ -5218,7 +5225,7 @@ HypnoDarkMind_DamageBenchEffect: ; 2db64 (b:5b64)
 	call SwapTurn
 	ld b, a
 	ld de, 10
-	call DealDamageToPlayAreaPokemon
+	call DealDamageToPlayAreaPokemon_RegularAnim
 	call SwapTurn
 	ret
 ; 0x2db77
@@ -5696,7 +5703,7 @@ Mewtwo3EnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
 ; AI picks first 2 energy cards
 	call CreateEnergyCardListFromDiscardPile_OnlyBasic
 	ld hl, wDuelTempList
-	ld de, hTempCardList
+	ld de, hTempList
 	ld c, 2
 .loop
 	ld a, [hli]
@@ -5713,7 +5720,7 @@ Mewtwo3EnergyAbsorption_AISelectEffect: ; 2ddd3 (b:5dd3)
 ; 0x2ddec
 
 Mewtwo3EnergyAbsorption_AddToHandEffect: ; 2ddec (b:5dec)
-	ld hl, hTempCardList
+	ld hl, hTempList
 .loop
 	ld a, [hli]
 	cp $ff
@@ -5742,7 +5749,7 @@ Mewtwo2EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
 ; AI picks first 2 energy cards
 	call CreateEnergyCardListFromDiscardPile_OnlyBasic
 	ld hl, wDuelTempList
-	ld de, hTempCardList
+	ld de, hTempList
 	ld c, 2
 .loop
 	ld a, [hli]
@@ -5759,7 +5766,7 @@ Mewtwo2EnergyAbsorption_AISelectEffect: ; 2de0d (b:5e0d)
 ; 0x2de26
 
 Mewtwo2EnergyAbsorption_AddToHandEffect: ; 2de26 (b:5e26)
-	ld hl, hTempCardList
+	ld hl, hTempList
 .loop
 	ld a, [hli]
 	cp $ff
@@ -5894,7 +5901,7 @@ SpacingOut_CheckDamage: ; 2ded5 (b:5ed5)
 	ret
 ; 0x2dee0
 
-SpacingOut_Failure50PercentEffect: ; 2dee0 (b:5ee0)
+SpacingOut_Success50PercentEffect: ; 2dee0 (b:5ee0)
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	ldh [hTemp_ffa0], a
@@ -6523,7 +6530,7 @@ StretchKick_BenchDamageEffect: ; 2e25b (b:625b)
 	ldh a, [hTemp_ffa0]
 	ld b, a
 	ld de, 20
-	call DealDamageToPlayAreaPokemon
+	call DealDamageToPlayAreaPokemon_RegularAnim
 	call SwapTurn
 	ret
 ; 0x2e26b
@@ -6611,7 +6618,7 @@ Peek_SelectEffect: ; 2e2b4 (b:62b4)
 	ldh a, [hAIPkmnPowerEffectParam]
 	bit AI_PEEK_TARGET_HAND_F, a
 	jr z, .prize_or_deck
-	and ~AI_PEEK_TARGET_HAND ; unset bit to get deck index
+	and (~AI_PEEK_TARGET_HAND & $ff) ; unset bit to get deck index
 ; if masked value is higher than $40, then it means
 ; that AI chose to look at Player's deck.
 ; all deck indices will be smaller than $40.
@@ -6731,4 +6738,1063 @@ Wail_FillBenchEffect: ; 2e335 (b:6335)
 	ret
 ; 0x2e399
 
-	INCROM $2e399, $30000
+Thunderpunch_AIEffect: ; 2e399 (b:6399)
+	ld a, (30 + 40) / 2
+	lb de, 30, 40
+	jp StoreAIDamageInfo
+; 0x2e3a1
+
+Thunderpunch_ModifierEffect: ; 2e3a1 (b:63a1)
+	ldtx de, IfHeadPlus10IfTails10ToYourselfText
+	call TossCoin_BankB
+	ldh [hTemp_ffa0], a
+	ret nc ; return if got tails
+	ld a, 10
+	call AddToDamage
+	ret
+; 0x2e3b0
+
+Thunderpunch_RecoilEffect: ; 2e3b0 (b:63b0)
+	ldh a, [hTemp_ffa0]
+	or a
+	ret nz ; return if got heads
+	ld a, 10
+	call DealRecoilDamageToSelf
+	ret
+; 0x2e3ba
+
+LightScreenEffect: ; 2e3ba (b:63ba)
+	ld a, SUBSTATUS1_HALVE_DAMAGE
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2e3c0
+
+ElectabuzzQuickAttack_AIEffect: ; 2e3c0 (b:63c0)
+	ld a, (10 + 30) / 2
+	lb de, 10, 30
+	jp StoreAIDamageInfo
+; 0x2e3c8
+
+ElectabuzzQuickAttack_DamageBoostEffect: ; 2e3c8 (b:63c8)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsPlusDamageText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, 20
+	call AddToDamage
+	ret
+; 0x2e3db
+
+MagnemiteSelfdestructEffect: ; 2e3db (b:63db)
+	ld a, 40
+	call DealRecoilDamageToSelf
+
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 10
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+
+	xor a
+	ld [wIsDamageToSelf], a
+	ld a, 10
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	ret
+; 0x2e3fa
+
+ZapdosThunder_Recoil50PercentEffect: ; 2e3fa (b:63fa)
+	ld hl, 30
+	call LoadTxRam3
+	ldtx de, IfTailsDamageToYourselfTooText
+	call TossCoin_BankB
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e409
+
+ZapdosThunder_RecoilEffect: ; 2e409 (b:6409)
+	ld hl, 30
+	call LoadTxRam3
+	ldh a, [hTemp_ffa0]
+	or a
+	ret nz ; return if got heads
+	ld a, 30
+	call DealRecoilDamageToSelf
+	ret
+; 0x2e419
+
+ThunderboltEffect: ; 2e419 (b:6419)
+	xor a
+	call CreateArenaOrBenchEnergyCardList
+	ld hl, wDuelTempList
+; put all energy cards in Discard Pile
+.loop
+	ld a, [hli]
+	cp $ff
+	ret z
+	call PutCardInDiscardPile
+	jr .loop
+; 0x2e429
+
+ThunderstormEffect: ; 2e429 (b:6429)
+	ld a, 1
+	ldh [hEffectItemSelection], a
+
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, 0
+	ld e, b
+	jr .next_pkmn
+
+.check_damage
+	push de
+	push bc
+	call .DisplayText
+	ld de, $0
+	call SwapTurn
+	call TossCoin_BankB
+	call SwapTurn
+	push af
+	call GetCurPositionInTempList
+	pop af
+	ld [hl], a ; store result in list
+	pop bc
+	pop de
+	jr c, .next_pkmn
+	inc b ; increase number of tails
+
+.next_pkmn
+	inc e
+	dec c
+	jr nz, .check_damage
+
+; all coins were tossed for each Benched Pokemon
+	call GetCurPositionInTempList
+	ld [hl], $ff
+	ld a, b
+	ldh [hTemp_ffa0], a
+	call Func_3b21
+	call SwapTurn
+
+; tally recoil damage
+	ldh a, [hTemp_ffa0]
+	or a
+	jr z, .skip_recoil
+	; deal number of tails times 10 to self
+	call ATimes10
+	call DealRecoilDamageToSelf
+.skip_recoil
+
+; deal damage for Bench Pokemon that got heads
+	call SwapTurn
+	ld hl, hTempPlayAreaLocation_ffa1
+	ld b, PLAY_AREA_BENCH_1
+.loop_bench
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	or a
+	jr z, .skip_damage ; skip if tails
+	ld de, 20
+	call DealDamageToPlayAreaPokemon_RegularAnim
+.skip_damage
+	inc b
+	jr .loop_bench
+
+.done
+	call SwapTurn
+	ret
+; 0x2e491
+
+; displays text for current Bench Pokemon,
+; printing its Bench number and name.
+.DisplayText ; 2e491 (b:6491)
+	ld b, e
+	ldtx hl, BenchText
+	ld de, wDefaultText
+	call CopyText
+	ld a, $30 ; 0 FW character
+	add b
+	ld [de], a
+	inc de
+	ld a, $20 ; space FW character
+	ld [de], a
+	inc de
+
+	ld a, DUELVARS_ARENA_CARD
+	add b
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer2_FromDeckIndex
+	ld hl, wLoadedCard2Name
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CopyText
+
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
+; 0x2e4bb
+
+JolteonQuickAttack_AIEffect: ; 2e4bb (b:64bb)
+	ld a, (10 + 30) / 2
+	lb de, 10, 30
+	jp StoreAIDamageInfo
+; 0x2e4c3
+
+JolteonQuickAttack_DamageBoostEffect: ; 2e4c3 (b:64c3)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsPlusDamageText
+	call TossCoin_BankB
+	ret nc ; return if tails
+	ld a, 20
+	call AddToDamage
+	ret
+; 0x2e3d6
+
+PinMissile_AIEffect: ; 2e4d6 (b:64d6)
+	ld a, (20 * 4) / 2
+	lb de, 0, 80
+	jp StoreAIDamageInfo
+; 0x2e4de
+
+PinMissile_MultiplierEffect: ; 2e4de (b:64de)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 4
+	call TossCoinATimes_BankB
+	add a ; a = 2 * heads
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2e4f4
+
+Fly_AIEffect: ; 2e4f4 (b:64f4)
+	ld a, 30 / 2
+	lb de, 0, 30
+	jp StoreAIDamageInfo
+; 0x2e4fc
+
+Fly_Success50PercentEffect: ; 2e4fc (b:64fc)
+	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
+	call TossCoin_BankB
+	jr c, .heads
+	xor a
+	ld [wLoadedMoveAnimation], a
+	call StoreDamageInfo
+	call SetWasUnsuccessful
+	ret
+.heads
+	ld a, $52
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS1_FLY
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2e51a
+
+ThunderJolt_Recoil50PercentEffect: ; 2e51a (b:651a)
+	ld hl, 10
+	call LoadTxRam3
+	ldtx de, IfTailsDamageToYourselfTooText
+	call TossCoin_BankB
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e529
+
+ThunderJolt_RecoilEffect: ; 2e529 (b:6529)
+	ld hl, 10
+	call LoadTxRam3
+	ldh a, [hTemp_ffa0]
+	or a
+	ret nz ; return if was heads
+	ld a, 10
+	call DealRecoilDamageToSelf
+	ret
+; 0x2e539
+
+Spark_PlayerSelectEffect: ; 2e539 (b:6539)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c ; has no Bench Pokemon
+
+	ldtx hl, ChoosePkmnInTheBenchToGiveDamageText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+
+	; the following two instructions can be removed
+	; since Player selection will overwrite it.
+	ld a, PLAY_AREA_BENCH_1
+	ldh [hTempPlayAreaLocation_ff9d], a
+
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2e562
+
+Spark_AISelectEffect: ; 2e562 (b:6562)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp 2
+	ret c ; has no Bench Pokemon
+; AI always picks Pokemon with lowest HP remaining
+	call AIFindBenchWithLowestHP
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e574
+
+Spark_BenchDamageEffect: ; 2e574 (b:6574)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	ret z
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld b, a
+	ld de, 10
+	call DealDamageToPlayAreaPokemon_RegularAnim
+	call SwapTurn
+	ret
+; 0x2e589
+
+Pikachu3GrowlEffect: ; 2e589 (b:6589)
+	ld a, SUBSTATUS2_GROWL
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e58f
+
+Pikachu4GrowlEffect: ; 2e58f (b:658f)
+	ld a, SUBSTATUS2_GROWL
+	call ApplySubstatus2ToDefendingCard
+	ret
+; 0x2e595
+
+ChainLightningEffect: ; 2e595 (b:6595)
+	ld a, 10
+	call StoreDamageInfo
+	call SwapTurn
+	call GetArenaCardColor
+	call SwapTurn
+	ldh [hEffectItemSelection], a
+	cp COLORLESS
+	ret z ; don't damage if colorless
+
+; opponent's Bench
+	call SwapTurn
+	call .DamageSameColorBench
+	call SwapTurn
+
+; own Bench
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	call .DamageSameColorBench
+	ret
+; 0x2e5ba
+
+.DamageSameColorBench ; 2e5ba (b:65ba)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld e, a
+	ld d, PLAY_AREA_ARENA
+	jr .next_bench
+
+.check_damage
+	ld a, d
+	call GetPlayAreaCardColor
+	ld c, a
+	ldh a, [hEffectItemSelection]
+	cp c
+	jr nz, .next_bench ; skip if not same color
+; apply damage to this Bench card
+	push de
+	ld b, d
+	ld de, 10
+	call DealDamageToPlayAreaPokemon_RegularAnim
+	pop de
+
+.next_bench
+	inc d
+	dec e
+	jr nz, .check_damage
+	ret
+; 0x2e5dc
+
+RaichuAgilityEffect: ; 2e5dc (b:65dc)
+	ldtx de, IfHeadsDoNotReceiveDamageOrEffectText
+	call TossCoin_BankB
+	ret nc ; skip if got tails
+	ld a, $52
+	ld [wLoadedMoveAnimation], a
+	ld a, SUBSTATUS1_AGILITY
+	call ApplySubstatus1ToDefendingCard
+	ret
+; 0x2e5ee
+
+RaichuThunder_Recoil50PercentEffect: ; 2e5ee (b:65ee)
+	ld hl, 30
+	call LoadTxRam3
+	ldtx de, IfTailsDamageToYourselfTooText
+	call TossCoin_BankB
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e5fd
+
+RaichuThunder_RecoilEffect: ; 2e5fd (b:65fd)
+	ld hl, 30
+	call LoadTxRam3
+	ldh a, [hTemp_ffa0]
+	or a
+	ret nz ; return if got heads
+	ld a, 30
+	call DealRecoilDamageToSelf
+	ret
+; 0x2e60d
+
+Gigashock_PlayerSelectEffect: ; 2e60d (b:660d)
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	cp 2
+	jr nc, .has_bench
+	call SwapTurn
+	ld a, $ff
+	ldh [hTempList], a
+	ret
+
+.has_bench
+	ldtx hl, ChooseUpTo3PkmnOnBenchToGiveDamageText
+	call DrawWideTextBox_WaitForInput
+
+; init number of items in list and cursor position
+	xor a
+	ldh [hEffectItemSelection], a
+	ld [wce72], a
+	bank1call Func_61a1
+.start
+	bank1call PrintPlayAreaCardList_EnableLCD
+	push af
+	ld a, [wce72]
+	ld hl, BenchSelectionMenuParameters
+	call InitializeMenuParameters
+	pop af
+
+; exclude Arena Pokemon from number of items
+	dec a
+	ld [wNumMenuItems], a
+
+.loop_input
+	call DoFrame
+	call HandleMenuInput
+	jr nc, .loop_input
+	cp -1
+	jr z, .try_cancel
+
+	ld [wce72], a
+	call .CheckIfChosenAlready
+	jr nc, .not_chosen
+	; play SFX
+	call Func_3794
+	jr .loop_input
+
+.not_chosen
+; mark this Play Area location
+	ldh a, [hCurMenuItem]
+	inc a
+	ld b, SYM_LIGHTNING
+	call DrawSymbolOnPlayAreaCursor
+; store it in the list of chosen Bench Pokemon
+	call GetCurPositionInTempList
+	ldh a, [hCurMenuItem]
+	inc a
+	ld [hl], a
+
+; check if 3 were chosen already
+	ldh a, [hEffectItemSelection]
+	ld c, a
+	cp 3
+	jr nc, .chosen ; check if already chose 3
+
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	dec a
+	cp c
+	jr nz, .start ; if sill more options available, loop back
+	; fallthrough if no other options available to choose
+
+.chosen
+	ldh a, [hCurMenuItem]
+	inc a
+	call Func_2c10b
+	ldh a, [hKeysPressed]
+	and B_BUTTON
+	jr nz, .try_cancel
+	call SwapTurn
+	call GetCurPositionInTempList
+	ld [hl], $ff ; terminating byte
+	ret
+
+.try_cancel
+	ldh a, [hEffectItemSelection]
+	or a
+	jr z, .start ; none selected, can safely loop back to start
+
+; undo last selection made
+	dec a
+	ldh [hEffectItemSelection], a
+	ld e, a
+	ld d, $00
+	ld hl, hTempList
+	add hl, de
+	ld a, [hl]
+
+	push af
+	ld b, SYM_SPACE
+	call DrawSymbolOnPlayAreaCursor
+	call EraseCursor
+	pop af
+
+	dec a
+	ld [wce72], a
+	jr .start
+; 0x2e6af
+
+; returns carry if Bench Pokemon
+; in register a was already chosen.
+.CheckIfChosenAlready: ; 2e6af (b:66af)
+	inc a
+	ld c, a
+	ldh a, [hEffectItemSelection]
+	ld b, a
+	ld hl, hTempList
+	inc b
+	jr .next_check
+.check_chosen
+	ld a, [hli]
+	cp c
+	scf
+	ret z ; return if chosen already
+.next_check
+	dec b
+	jr nz, .check_chosen
+	or a
+	ret
+; 0x2e6c3
+
+Gigashock_AISelectEffect: ; 2e6c3 (b:66c3)
+; if Bench has 3 Pokemon or less, no need for selection,
+; since AI will choose them all.
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	cp MAX_PLAY_AREA_POKEMON - 1
+	jr nc, .start_selection
+
+; select them all
+	ld hl, hTempList
+	ld b, PLAY_AREA_ARENA
+	jr .next_bench
+.select_bench
+	ld [hl], b
+	inc hl
+.next_bench
+	inc b
+	dec a
+	jr nz, .select_bench
+	ld [hl], $ff ; terminating byte
+	ret
+
+.start_selection
+; has more than 3 Bench cards,proceed to sort them
+; by lowest remaining HP to highest, and pick first 3.
+	call SwapTurn
+	dec a
+	ld c, a
+	ld b, PLAY_AREA_BENCH_1
+
+; first select all of the Bench Pokemon and write to list
+	ld hl, hTempList
+.loop_all
+	ld [hl], b
+	inc hl
+	inc b
+	dec c
+	jr nz, .loop_all
+	ld [hl], $00 ; end list with $00
+
+; then check each of the Bench Pokemon HP
+; sort them from lowest remaining HP to highest.
+	ld de, hTempList
+.loop_outer
+	ld a, [de]
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, e
+	ld h, d
+	inc hl
+
+.loop_inner
+	ld a, [hli]
+	or a
+	jr z, .next ; reaching $00 means it's end of list
+
+	push hl
+	add DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	pop hl
+	cp c
+	jr c, .loop_inner
+	; a Bench Pokemon was found with less HP
+	ld c, a ; store its HP
+
+; switch the two
+	dec hl
+	ld b, [hl]
+	ld a, [de]
+	ld [hli], a
+	ld a, b
+	ld [de], a
+	jr .loop_inner
+
+.next
+	inc de
+	ld a, [de]
+	or a
+	jr nz, .loop_outer
+
+; done
+	ld a, $ff ; terminating byte
+	ldh [hTempList + 3], a
+	call SwapTurn
+	ret
+; 0x2e71f
+
+Gigashock_BenchDamageEffect: ; 2e71f (b:671f)
+	call SwapTurn
+	ld hl, hTempList
+.loop_selection
+	ld a, [hli]
+	cp $ff
+	jr z, .done
+	push hl
+	ld b, a
+	ld de, 10
+	call DealDamageToPlayAreaPokemon_RegularAnim
+	pop hl
+	jr .loop_selection
+.done
+	call SwapTurn
+	ret
+; 0x2e739
+
+Magneton1SelfdestructEffect: ; 2e739 (b:6739)
+	ld a, 80
+	call DealRecoilDamageToSelf
+
+; own bench
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+
+; opponent's bench
+	call SwapTurn
+	xor a
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	ret
+; 0x2e758
+
+MagnetonSonicboom_UnaffectedByColorEffect: ; 2e758 (b:6758)
+	ld hl, wDamage + 1
+	set UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, [hl]
+	ret
+; 0x2e75e
+
+MagnetonSonicboom_NullEffect: ; 2e75e (b:675e)
+	ret
+; 0x2e75f
+
+Magneton2SelfdestructEffect: ; 2e75f (b:675f)
+	ld a, 100
+	call DealRecoilDamageToSelf
+
+; own bench
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+
+; opponent's bench
+	call SwapTurn
+	xor a
+	ld [wIsDamageToSelf], a
+	ld a, 20
+	call DealDamageToAllBenchedPokemon
+	call SwapTurn
+	ret
+; 0x2e77e
+
+PealOfThunder_InitialEffect: ; 2e77e (b:677e)
+	scf
+	ret
+; 0x2e780
+
+PealOfThunder_RandomlyDamageEffect: ; 2e780 (b:6780)
+	call ExchangeRNG
+	ld de, 30 ; damage to inflict
+	call RandomlyDamagePlayAreaPokemon
+	bank1call Func_6e49
+	ret
+; 0x2e78d
+
+; randomly damages a Pokemon in play, except
+; card that is in [hTempPlayAreaLocation_ff9d].
+; plays thunder animation when Play Area is shown.
+; input:
+;	de = amount of damage to deal
+RandomlyDamagePlayAreaPokemon: ; 2e78d (b:678d)
+	xor a
+	ld [wNoDamageOrEffect], a
+
+; choose randomly which Play Area to attack
+	call UpdateRNGSources
+	and 1
+	jr nz, .opp_play_area
+
+; own Play Area
+	ld a, $01
+	ld [wIsDamageToSelf], a
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	call Random
+	ld b, a
+	; can't select Zapdos
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	cp b
+	jr z, RandomlyDamagePlayAreaPokemon ; re-roll Pokemon to attack
+
+.damage
+	ld a, $82
+	ld [wLoadedMoveAnimation], a
+	call DealDamageToPlayAreaPokemon
+	ret
+
+.opp_play_area
+	xor a
+	ld [wIsDamageToSelf], a
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	call Random
+	ld b, a
+	call .damage
+	call SwapTurn
+	ret
+; 0x2e7cb
+
+BigThunderEffect: ; 2e7cb (b:67cb)
+	call ExchangeRNG
+	ld de, 70 ; damage to inflict
+	call RandomlyDamagePlayAreaPokemon
+	ret
+; 0x2e7d5
+
+MagneticStormEffect: ; 2e7d5 (b:67d5)
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+
+; writes in wDuelTempList all deck indices
+; of Energy cards attached to Pokemon
+; in the Turn Duelist's Play Area.
+	ld de, wDuelTempList
+	ld c, 0
+.loop_card_locations
+	ld a, [hl]
+	and CARD_LOCATION_PLAY_AREA
+	jr z, .next_card_location
+
+; is a card that is in the Play Area
+	push hl
+	push de
+	push bc
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	pop bc
+	pop de
+	pop hl
+	and TYPE_ENERGY
+	jr z, .next_card_location
+; is an Energy card attached to Pokemon in Play Area
+	ld a, l
+	ld [de], a
+	inc de
+	inc c
+.next_card_location
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_card_locations
+	ld a, $ff ; terminating byte
+	ld [de], a
+
+; divide number of energy cards
+; by number of Pokemon in Play Area
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld b, a
+	ld a, c
+	ld c, -1
+.loop_division
+	inc c
+	sub b
+	jr nc, .loop_division
+	; c = floor(a / b)
+
+; evenly divides the Energy cards randomly
+; to every Pokemon in the Play Area.
+	push bc
+	ld hl, wDuelTempList
+	call CountCardsInDuelTempList
+	call ShuffleCards
+	ld d, c
+	ld e, PLAY_AREA_ARENA
+.start_attach
+	ld c, d
+	inc c
+	jr .check_done
+.attach_energy
+	ld a, [hli]
+	push hl
+	push de
+	push bc
+	call AddCardToHand
+	call PutHandCardInPlayArea
+	pop bc
+	pop de
+	pop hl
+.check_done
+	dec c
+	jr nz, .attach_energy
+; go to next Pokemon in Play Area
+	inc e ; next in Play Area
+	dec b
+	jr nz, .start_attach
+	pop bc
+
+	push hl
+	ld hl, hTempList
+
+; fill hTempList with PLAY_AREA_* locations
+; that have Pokemon in them.
+	push hl
+	xor a
+.loop_init
+	ld [hli], a
+	inc a
+	cp b
+	jr nz, .loop_init
+	pop hl
+
+; shuffle them and distribute
+; the remaining cards in random order.
+	ld a, b
+	call ShuffleCards
+	pop hl
+	ld de, hTempList
+.next_random_pokemon
+	ld a, [hl]
+	cp $ff
+	jr z, .done
+	push hl
+	push de
+	ld a, [de]
+	ld e, a
+	ld a, [hl]
+	call AddCardToHand
+	call PutHandCardInPlayArea
+	pop de
+	pop hl
+	inc hl
+	inc de
+	jr .next_random_pokemon
+
+.done
+	bank1call DrawDuelMainScene
+	bank1call DrawDuelHUDs
+	ldtx hl, TheEnergyCardFromPlayAreaWasMovedText
+	call DrawWideTextBox_WaitForInput
+	xor a
+	call Func_2c10b
+	ret
+; 0x2e870
+
+ElectrodeSonicboom_UnaffectedByColorEffect: ; 2e870 (b:6870)
+	ld hl, wDamage + 1
+	set UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, [hl]
+	ret
+; 0x2e876
+
+ElectrodeSonicboom_NullEffect: ; 2e876 (b:6876)
+	ret
+; 0x2e877
+
+; return carry if no cards in Deck
+EnergySpike_DeckCheck: ; 2e877 (b:6877)
+	call CheckIfDeckIsEmpty
+	ret
+; 0x2e87b
+
+EnergySpike_PlayerSelectEffect: ; 2e87b (b:687b)
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+
+; search cards in Deck
+	call CreateDeckCardList
+	ldtx hl, Choose1BasicEnergyCardFromDeckText
+	ldtx bc, BasicEnergyText
+	lb de, SEARCHEFFECT_BASIC_ENERGY, 0
+	call LookForCardInDeck
+	ret c
+
+	bank1call Func_5591
+	ldtx hl, ChooseBasicEnergyCardText
+	ldtx de, DuelistDeckText
+	bank1call SetCardListHeaderText
+.select_card
+	bank1call DisplayCardList
+	jr c, .try_cancel
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr nc, .select_card ; not a Basic Energy card
+	and TYPE_ENERGY
+	jr z, .select_card ; not a Basic Energy card
+	; Energy card selected
+
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	call EmptyScreen
+	ldtx hl, ChoosePokemonToAttachEnergyCardText
+	call DrawWideTextBox_WaitForInput
+
+; choose a Pokemon in Play Area to attach card
+	bank1call HasAlivePokemonInPlayArea
+.loop_input
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .loop_input
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTempPlayAreaLocation_ffa1], a
+	ret
+
+.play_sfx
+	call Func_3794
+	jr .select_card
+
+.try_cancel
+; Player tried exiting screen, if there are
+; any Basic Energy cards, Player is forced to select them.
+; otherwise, they can safely exit.
+	ld a, DUELVARS_CARD_LOCATIONS
+	call GetTurnDuelistVariable
+.loop_deck
+	ld a, [hl]
+	cp CARD_LOCATION_DECK
+	jr nz, .next_card
+	ld a, l
+	call GetCardIDFromDeckIndex
+	call GetCardType
+	and TYPE_ENERGY
+	jr z, .next_card
+	cp TYPE_ENERGY_DOUBLE_COLORLESS
+	jr c, .play_sfx
+.next_card
+	inc l
+	ld a, l
+	cp DECK_SIZE
+	jr c, .loop_deck
+	; can exit
+
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e8f1
+
+EnergySpike_AISelectEffect: ; 2e8f1 (b:68f1)
+; AI doesn't select any card
+	ld a, $ff
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2e8f6
+
+EnergySpike_AttachEnergyEffect: ; 2e8f6 (b:68f6)
+	ldh a, [hTemp_ffa0]
+	cp $ff
+	jr z, .done
+
+; add card to hand and attach it to the selected Pokemon
+	call SearchCardInDeckAndAddToHand
+	call AddCardToHand
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	ld e, a
+	ldh a, [hTemp_ffa0]
+	call PutHandCardInPlayArea
+	call CheckIfTurnDuelistIsPlayer
+	jr c, .done
+
+; not Player, so show detail screen
+; and which Pokemon was chosen to attach Energy.
+	ldh a, [hTempPlayAreaLocation_ffa1]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call LoadCardDataToBuffer1_FromDeckIndex
+	ld hl, wLoadedCard1Name
+	ld de, wTxRam2_b
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	ldh a, [hTemp_ffa0]
+	ldtx hl, AttachedEnergyToPokemonText
+	bank1call DisplayCardDetailScreen
+
+.done
+	call Func_2c0bd
+	ret
+; 0x2e930
+
+JolteonDoubleKick_AIEffect: ; 2e930 (b:6930)
+	ld a, 40 / 2
+	lb de, 0, 40
+	jp StoreAIDamageInfo
+; 0x2e938
+
+JolteonDoubleKick_MultiplierEffect: ; 2e938 (b:6938)
+	ld hl, 20
+	call LoadTxRam3
+	ldtx de, DamageCheckIfHeadsXDamageText
+	ld a, 2
+	call TossCoinATimes_BankB
+	add a ; a = 2 * heads
+	call ATimes10
+	call StoreDamageInfo
+	ret
+; 0x2e94e
+
+	INCROM $2e94e, $30000

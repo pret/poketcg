@@ -90,14 +90,6 @@ hTempPlayAreaLocation_ffa1:: ; ffa1
 hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
 
-NEXTU
-
-; list of cards selected for various effects
-hTempCardList:: ; ffa0
-	ds $2
-
-ENDU
-
 UNION
 
 ; $ff-terminated list of cards to be discarded upon retreat
@@ -119,12 +111,15 @@ hPkmnPowerPlayAreaTarget:: ; ffa2
 hAIEnergyTransPlayAreaLocation:: ; ffa3
 	ds $1
 
+ENDU
+
 NEXTU
 
-; Play Area location (PLAY_AREA_*) of card
-; chosen by AI to use Heal Pkmn Power on.
-hAIHealCard:: ; ffa2
-	ds $1
+; list of various items, such as
+; cards selected for various effects,
+; Play Area locations, etc.
+hTempList:: ; ffa0
+	ds $8
 
 ENDU
 

@@ -42,7 +42,8 @@ AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in det
 ; used by wAIBarrierFlagCounter to determine
 ; whether Player is running Mewtwo1 mill deck.
 ; flag set means true, flag not set means false.
-AI_FLAG_MEWTWO_MILL EQU 1 << 7
+AI_MEWTWO_MILL_F EQU 7
+AI_MEWTWO_MILL   EQU 1 << AI_MEWTWO_MILL_F
 
 ; defines the behaviour of HandleAIEnergyTrans, for determining
 ; whether to move energy cards from the Bench to the Arena or vice-versa

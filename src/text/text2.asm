@@ -187,17 +187,17 @@ ChoosePkmnInTheBenchToGiveDamageText: ; 38769 (e:4769)
 	line "to give damage to."
 	done
 
-Text011b: ; 3879b (e:479b)
+ChooseUpTo3PkmnOnBenchToGiveDamageText: ; 3879b (e:479b)
 	text "Choose up to 3 Pokémon on the"
 	line "Bench to give damage to."
 	done
 
-Text011c: ; 387d3 (e:47d3)
+Choose1BasicEnergyCardFromDeckText: ; 387d3 (e:47d3)
 	text "Choose 1 Basic Energy card"
 	line "from the Deck."
 	done
 
-Text011d: ; 387fe (e:47fe)
+ChoosePokemonToAttachEnergyCardText: ; 387fe (e:47fe)
 	text "Choose a Pokémon to attach"
 	line "the Energy card to."
 	done
@@ -255,7 +255,7 @@ ChooseAKrabbyText: ; 38a02 (e:4a02)
 	text "Choose a Krabby."
 	done
 
-Text0129: ; 38a14 (e:4a14)
+ChooseBasicEnergyCardText: ; 38a14 (e:4a14)
 	text "Choose a Basic"
 	line "Energy card."
 	done
@@ -445,7 +445,7 @@ FightingPokemonDeckText: ; 392f8 (e:52f8)
 	text "Fighting Pokémon"
 	done
 
-Text0144: ; 3930a (e:530a)
+BasicEnergyText: ; 3930a (e:530a)
 	text "Basic Energy"
 	done
 
@@ -483,7 +483,7 @@ ThereWasNoEffectFromTxRam2Text: ; 393ff (e:53ff)
 	line "from <RAMTEXT>."
 	done
 
-Text014c: ; 3941c (e:541c)
+TheEnergyCardFromPlayAreaWasMovedText: ; 3941c (e:541c)
 	text "The Energy card from <RAMNAME>'s"
 	line "Play Area was moved."
 	done

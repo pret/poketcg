@@ -78,7 +78,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer LightningSymbolText                                ; 0x004a
 	textpointer FightingSymbolText                                 ; 0x004b
 	textpointer PsychicSymbolText                                  ; 0x004c
-	textpointer Text004d                                           ; 0x004d
+	textpointer BenchText                                          ; 0x004d
 	textpointer KnockOutText                                       ; 0x004e
 	textpointer DamageToSelfDueToConfusionText                     ; 0x004f
 	textpointer ChooseEnergyCardToDiscardText                      ; 0x0050
@@ -238,7 +238,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DamageToOppBenchIfHeadsDamageToYoursIfTailsText    ; 0x00ea
 	textpointer IfHeadsChangeOpponentsActivePokemonText            ; 0x00eb
 	textpointer IfHeadsHealIsSuccessfulText                        ; 0x00ec
-	textpointer Text00ed                                           ; 0x00ed
+	textpointer IfTailsDamageToYourselfTooText                     ; 0x00ed
 	textpointer SuccessCheckIfHeadsAttackIsSuccessfulText          ; 0x00ee
 	textpointer TrainerCardSuccessCheckText                        ; 0x00ef
 	textpointer Text00f0                                           ; 0x00f0
@@ -284,9 +284,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DrawCardsFromTheDeckText                           ; 0x0118
 	textpointer CannotDrawCardBecauseNoCardsInDeckText             ; 0x0119
 	textpointer ChoosePkmnInTheBenchToGiveDamageText               ; 0x011a
-	textpointer Text011b                                           ; 0x011b
-	textpointer Text011c                                           ; 0x011c
-	textpointer Text011d                                           ; 0x011d
+	textpointer ChooseUpTo3PkmnOnBenchToGiveDamageText             ; 0x011b
+	textpointer Choose1BasicEnergyCardFromDeckText                 ; 0x011c
+	textpointer ChoosePokemonToAttachEnergyCardText                ; 0x011d
 	textpointer Text011e                                           ; 0x011e
 	textpointer ChooseAndDiscard2FireEnergyCardsText               ; 0x011f
 	textpointer DiscardOppDeckAsManyFireEnergyCardsText            ; 0x0120
@@ -298,7 +298,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChooseAnOddishFromDeckText                         ; 0x0126
 	textpointer ChooseAnOddishText                                 ; 0x0127
 	textpointer ChooseAKrabbyText                                  ; 0x0128
-	textpointer Text0129                                           ; 0x0129
+	textpointer ChooseBasicEnergyCardText                          ; 0x0129
 	textpointer ChooseNidoranFromDeckText                          ; 0x012a
 	textpointer ChooseNidoranText                                  ; 0x012b
 	textpointer ChooseBasicFightingPokemonText                     ; 0x012c
@@ -325,7 +325,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer BellsproutText                                     ; 0x0141
 	textpointer KrabbyText                                         ; 0x0142
 	textpointer FightingPokemonDeckText                            ; 0x0143
-	textpointer Text0144                                           ; 0x0144
+	textpointer BasicEnergyText                                    ; 0x0144
 	textpointer PeekWasUsedToLookInYourHandText                    ; 0x0145
 	textpointer CardPeekWasUsedOnText                              ; 0x0146
 	textpointer Text0147                                           ; 0x0147
@@ -333,7 +333,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer BasicPokemonWasPlacedOnEachBenchText               ; 0x0149
 	textpointer WasUnsuccessfulText                                ; 0x014a
 	textpointer ThereWasNoEffectFromTxRam2Text                     ; 0x014b
-	textpointer Text014c                                           ; 0x014c
+	textpointer TheEnergyCardFromPlayAreaWasMovedText              ; 0x014c
 	textpointer DrewFireEnergyFromTheHandText                      ; 0x014d
 	textpointer ThePkmnCardsInHandAndDeckWereShuffledText          ; 0x014e
 	textpointer Text014f                                           ; 0x014f

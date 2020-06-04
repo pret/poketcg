@@ -866,11 +866,9 @@ _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	call z, HandleDoubleDamageSubstatus
-	; skips the weak/res checks if bit 7 is set
-	; I guess to avoid overflowing?
-	; should probably just have skipped weakness test instead?
-	bit 7, d
-	res 7, d
+	; skips the weak/res checks if unaffected.
+	bit UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
+	res UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
 	jr nz, .not_resistant
 
 ; handle weakness
@@ -1083,8 +1081,8 @@ CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
 
 	call SwapTurn
 	call HandleDoubleDamageSubstatus
-	bit 7, d
-	res 7, d
+	bit UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
+	res UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
 	jr nz, .not_resistant
 
 ; handle weakness
@@ -1339,7 +1337,7 @@ InitAITurnVars: ; 15649 (5:5649)
 ; check if flag was already set, if so,
 ; reset wAIBarrierFlagCounter to $80.
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr nz, .set_flag
 
 ; if not, increase it by 1 and check if it exceeds 2.
@@ -1369,14 +1367,14 @@ InitAITurnVars: ; 15649 (5:5649)
 	jr .done
 
 .set_flag
-	ld a, AI_FLAG_MEWTWO_MILL + 0
+	ld a, AI_MEWTWO_MILL
 	ld [wAIBarrierFlagCounter], a
 	jr .done
 
 .check_flag
 ; increase counter by 1 if flag is set
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .reset_2
 	inc a
 	ld [wAIBarrierFlagCounter], a
@@ -4089,7 +4087,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 
 ; arena
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .add_to_score
 
 ; subtract from score instead
@@ -5019,7 +5017,7 @@ AIProcessAttacks: ; 169fc (5:69fc)
 ; if Player is running Mewtwo1 mill deck,
 ; skip attack if Barrier counter is 0.
 	ld a, [wAIBarrierFlagCounter]
-	cp AI_FLAG_MEWTWO_MILL + 0
+	cp AI_MEWTWO_MILL + 0
 	jp z, .dont_attack
 
 ; determine AI score of both attacks.

@@ -200,7 +200,7 @@ NidoranFCallForFamilyEffectCommands:
 	db  $00
 
 NidoranMHornHazardEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HornHazard_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, HornHazard_Success50PercentEffect
 	dbw EFFECTCMDTYPE_AI, HornHazard_AIEffect
 	db  $00
 
@@ -613,7 +613,7 @@ MoltresWildfireEffectCommands:
 	db  $00
 
 Moltres1DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres1DiveBomb_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres1DiveBomb_Success50PercentEffect
 	dbw EFFECTCMDTYPE_AI, Moltres1DiveBomb_AIEffect
 	db  $00
 
@@ -687,7 +687,7 @@ MoltresFiregiverEffectCommands:
 	db  $00
 
 Moltres2DiveBombEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres2DiveBomb_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Moltres2DiveBomb_Success50PercentEffect
 	dbw EFFECTCMDTYPE_AI, Moltres2DiveBomb_AIEffect
 	db  $00
 
@@ -841,7 +841,7 @@ SlowbroPsyshockEffectCommands:
 
 SlowpokeSpacingOutEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, SpacingOut_CheckDamage
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SpacingOut_Failure50PercentEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SpacingOut_Success50PercentEffect
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, SpacingOut_HealEffect
 	db  $00
 
@@ -1006,18 +1006,18 @@ ElectabuzzThundershockEffectCommands:
 	db  $00
 
 ElectabuzzThunderpunchEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $63a1
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $63b0
-	dbw EFFECTCMDTYPE_AI, $6399
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Thunderpunch_ModifierEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thunderpunch_RecoilEffect
+	dbw EFFECTCMDTYPE_AI, Thunderpunch_AIEffect
 	db  $00
 
 ElectabuzzLightScreenEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $63ba
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, LightScreenEffect
 	db  $00
 
 ElectabuzzQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $63c8
-	dbw EFFECTCMDTYPE_AI, $63c0
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ElectabuzzQuickAttack_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, ElectabuzzQuickAttack_AIEffect
 	db  $00
 
 MagnemiteThunderWaveEffectCommands:
@@ -1025,30 +1025,30 @@ MagnemiteThunderWaveEffectCommands:
 	db  $00
 
 MagnemiteSelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $63db
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MagnemiteSelfdestructEffect
 	db  $00
 
 ZapdosThunderEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $63fa
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6409
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ZapdosThunder_Recoil50PercentEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ZapdosThunder_RecoilEffect
 	db  $00
 
 ZapdosThunderboltEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6419
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ThunderboltEffect
 	db  $00
 
 ZapdosThunderstormEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6429
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ThunderstormEffect
 	db  $00
 
 JolteonQuickAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $64c3
-	dbw EFFECTCMDTYPE_AI, $64bb
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, JolteonQuickAttack_DamageBoostEffect
+	dbw EFFECTCMDTYPE_AI, JolteonQuickAttack_AIEffect
 	db  $00
 
 JolteonPinMissileEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $64de
-	dbw EFFECTCMDTYPE_AI, $64d6
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, PinMissile_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, PinMissile_AIEffect
 	db  $00
 
 FlyingPikachuThundershockEffectCommands:
@@ -1056,23 +1056,23 @@ FlyingPikachuThundershockEffectCommands:
 	db  $00
 
 FlyingPikachuFlyEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $64fc
-	dbw EFFECTCMDTYPE_AI, $64f4
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Fly_Success50PercentEffect
+	dbw EFFECTCMDTYPE_AI, Fly_AIEffect
 	db  $00
 
 PikachuThunderJoltEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $651a
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6529
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ThunderJolt_Recoil50PercentEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ThunderJolt_RecoilEffect
 	db  $00
 
 PikachuSparkEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6574
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6539
-	dbw EFFECTCMDTYPE_AI_SELECTION, $6562
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Spark_BenchDamageEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Spark_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, Spark_AISelectEffect
 	db  $00
 
 Pikachu3GrowlEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6589
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu3GrowlEffect
 	db  $00
 
 Pikachu3ThundershockEffectCommands:
@@ -1080,7 +1080,7 @@ Pikachu3ThundershockEffectCommands:
 	db  $00
 
 Pikachu4GrowlEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $658f
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Pikachu4GrowlEffect
 	db  $00
 
 Pikachu4ThundershockEffectCommands:
@@ -1088,22 +1088,22 @@ Pikachu4ThundershockEffectCommands:
 	db  $00
 
 ElectrodeChainLightningEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6595
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ChainLightningEffect
 	db  $00
 
 RaichuAgilityEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $65dc
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, RaichuAgilityEffect
 	db  $00
 
 RaichuThunderEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $65ee
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $65fd
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, RaichuThunder_Recoil50PercentEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, RaichuThunder_RecoilEffect
 	db  $00
 
 RaichuGigashockEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $671f
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $660d
-	dbw EFFECTCMDTYPE_AI_SELECTION, $66c3
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Gigashock_BenchDamageEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Gigashock_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, Gigashock_AISelectEffect
 	db  $00
 
 MagnetonThunderWaveEffectCommands:
@@ -1111,48 +1111,48 @@ MagnetonThunderWaveEffectCommands:
 	db  $00
 
 Magneton1SelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6739
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton1SelfdestructEffect
 	db  $00
 
 MagnetonSonicboomEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6758
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $675e
-	dbw EFFECTCMDTYPE_AI, $6758
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, MagnetonSonicboom_UnaffectedByColorEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MagnetonSonicboom_NullEffect
+	dbw EFFECTCMDTYPE_AI, MagnetonSonicboom_UnaffectedByColorEffect
 	db  $00
 
 Magneton2SelfdestructEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $675f
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Magneton2SelfdestructEffect
 	db  $00
 
 ZapdosPealOfThunderEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $677e
-	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, $6780
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, PealOfThunder_InitialEffect
+	dbw EFFECTCMDTYPE_PKMN_POWER_TRIGGER, PealOfThunder_RandomlyDamageEffect
 	db  $00
 
 ZapdosBigThunderEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $67cb
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, BigThunderEffect
 	db  $00
 
 MagnemiteMagneticStormEffectCommands:
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $67d5
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MagneticStormEffect
 	db  $00
 
 ElectrodeSonicboomEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6870
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6876
-	dbw EFFECTCMDTYPE_AI, $6870
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ElectrodeSonicboom_UnaffectedByColorEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ElectrodeSonicboom_NullEffect
+	dbw EFFECTCMDTYPE_AI, ElectrodeSonicboom_UnaffectedByColorEffect
 	db  $00
 
 ElectrodeEnergySpikeEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6877
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $68f6
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $687b
-	dbw EFFECTCMDTYPE_AI_SELECTION, $68f1
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, EnergySpike_DeckCheck
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, EnergySpike_AttachEnergyEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, EnergySpike_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, EnergySpike_AISelectEffect
 	db  $00
 
 JolteonDoubleKickEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6938
-	dbw EFFECTCMDTYPE_AI, $6930
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, JolteonDoubleKick_MultiplierEffect
+	dbw EFFECTCMDTYPE_AI, JolteonDoubleKick_AIEffect
 	db  $00
 
 JolteonStunNeedleEffectCommands:

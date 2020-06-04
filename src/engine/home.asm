@@ -4968,10 +4968,18 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 ; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
 ; damage to deal is given in de.
 ; shows the defending player's play area screen when dealing the damage
-; instead of the main duel interface, and has a fixed move animation.
-DealDamageToPlayAreaPokemon: ; 1af3 (0:1af3)
+; instead of the main duel interface with regular attack animation.
+DealDamageToPlayAreaPokemon_RegularAnim: ; 1af3 (0:1af3)
 	ld a, $78
 	ld [wLoadedMoveAnimation], a
+;	fallthrough
+
+; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
+; damage to deal is given in de.
+; shows the defending player's play area screen when dealing the damage
+; instead of the main duel interface.
+; plays animation that is loaded in wLoadedMoveAnimation.
+DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 	ld a, b
 	ld [wTempPlayAreaLocation_cceb], a
 	or a ; cp PLAY_AREA_ARENA
