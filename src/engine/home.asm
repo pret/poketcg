@@ -11522,141 +11522,145 @@ Func_3ca4: ; 3ca4 (0:3ca4)
 Func_3cb4: ; 3cb4 (0:3cb4)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_12a21)
+	ld a, BANK(HandleAllSpriteAnimations)
 	call BankswitchROM
-	call Func_12a21
+	call HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
 ; 0x3cc4
 
-; refresh sprites?
-Func_3cc4: ; 3cc4 (0:3cc4)
+; hl - pointer to animation frame
+; wd5d6 - bank of animation frame
+DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd5d6]
 	call BankswitchROM
-	ld a, [wd5d1]
+	ld a, [wCurrSpriteXPos]
 	cp $f0
-	ld a, $00
-	jr c, .asm_3cd7
+	ld a, 0
+	jr c, .notNearRight
 	dec a
-.asm_3cd7
-	ld [wd5d4], a
-	ld a, [wd5d2]
+.notNearRight
+	ld [wCurrSpriteRightEdgeCheck], a
+	ld a, [wCurrSpriteYPos]
 	cp $f0
-	ld a, $00
-	jr c, .asm_3ce4
+	ld a, 0
+	jr c, .setBottomEdgeCheck
 	dec a
-.asm_3ce4
-	ld [wd5d5], a
+.setBottomEdgeCheck
+	ld [wCurrSpriteBottomEdgeCheck], a
 	ld a, [hli]
 	or a
 	jp z, .done
 	ld c, a
-.asm_3ced
+.loop
 	push bc
 	push hl
-	ld b, $00
+	ld b, 0
 	bit 7, [hl]
-	jr z, .asm_3cf6
+	jr z, .beginY
 	dec b
-.asm_3cf6
-	ld a, [wd5d0]
-	bit 6, a
-	jr z, .asm_3d10
+.beginY
+	ld a, [wCurrSpriteAttributes]
+	bit OAM_Y_FLIP, a
+	jr z, .unflippedY
 	ld a, [hl]
-	add $08
+	add 8 ; size of a tile
 	ld c, a
-	ld a, $00
+	ld a, 0
 	adc b
 	ld b, a
-	ld a, [wd5d2]
+	ld a, [wCurrSpriteYPos]
 	sub c
 	ld e, a
-	ld a, [wd5d5]
+	ld a, [wCurrSpriteBottomEdgeCheck]
 	sbc b
-	jr .asm_3d19
-.asm_3d10
-	ld a, [wd5d2]
+	jr .finishYPosition
+.unflippedY
+	ld a, [wCurrSpriteYPos]
 	add [hl]
 	ld e, a
-	ld a, [wd5d5]
+	ld a, [wCurrSpriteBottomEdgeCheck]
 	adc b
-.asm_3d19
+.finishYPosition
 	or a
-	jr nz, .asm_3d64
+	jr nz, .endCurrentIteration
 	inc hl
-	ld b, $00
+	ld b, 0
 	bit 7, [hl]
-	jr z, .asm_3d24
+	jr z, .beginX
 	dec b
-.asm_3d24
-	ld a, [wd5d0]
-	bit 5, a
-	jr z, .asm_3d3e
+.beginX
+	ld a, [wCurrSpriteAttributes]
+	bit OAM_X_FLIP, a
+	jr z, .unflippedX
 	ld a, [hl]
-	add $08
+	add 8 ; size of a tile
 	ld c, a
-	ld a, $00
+	ld a, 0
 	adc b
 	ld b, a
-	ld a, [wd5d1]
+	ld a, [wCurrSpriteXPos]
 	sub c
 	ld d, a
-	ld a, [wd5d4]
+	ld a, [wCurrSpriteRightEdgeCheck]
 	sbc b
-	jr .asm_3d47
-.asm_3d3e
-	ld a, [wd5d1]
+	jr .finishXPosition
+.unflippedX
+	ld a, [wCurrSpriteXPos]
 	add [hl]
 	ld d, a
-	ld a, [wd5d4]
+	ld a, [wCurrSpriteRightEdgeCheck]
 	adc b
-.asm_3d47
+.finishXPosition
 	or a
-	jr nz, .asm_3d64
+	jr nz, .endCurrentIteration
 	inc hl
-	ld a, [wd5d3]
+	ld a, [wCurrSpriteTileID]
 	add [hl]
 	ld c, a
 	inc hl
-	ld a, [wd5d0]
+	ld a, [wCurrSpriteAttributes]
 	add [hl]
-	and $17
+	and OAM_PALETTE | (1 << OAM_OBP_NUM)
 	ld b, a
-	ld a, [wd5d0]
+	ld a, [wCurrSpriteAttributes]
 	xor [hl]
-	and $e0
+	and (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP) | (1 << OAM_PRIORITY)
 	or b
 	ld b, a
 	inc hl
 	call SetOneObjectAttributes
-.asm_3d64
+.endCurrentIteration
 	pop hl
-	ld bc, $4
+	ld bc, 4 ; size of info for one sub tile
 	add hl, bc
 	pop bc
 	dec c
-	jr nz, .asm_3ced
+	jr nz, .loop
 .done
 	pop af
 	call BankswitchROM
 	ret
-; 0x3d72
 
-Func_3d72: ; 3d72 (0:3d72)
+; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using 
+; the current frame's offset
+; [wd4ca] - current frame offset
+; wTempPointer* - Pointer to current Animation
+GetAnimationFramePointer: ; 3d72 (0:3d72)
 	ldh a, [hBankROM]
 	push af
 	push hl
 	push hl
 	ld a, [wd4ca]
 	cp $ff
-	jr nz, .asm_3d84
-	ld de, Unknown_80e5a
+	jr nz, .useLoadedOffset
+	ld de, SpriteNullAnimationPointer
 	xor a
-	jr .asm_3da1
-.asm_3d84
+	jr .loadPointer
+.useLoadedOffset
 	ld a, [wTempPointer]
 	ld l, a
 	ld a, [wTempPointer + 1]
@@ -11672,13 +11676,13 @@ Func_3d72: ; 3d72 (0:3d72)
 	ld e, a
 	inc hl
 	ld a, [hl]
-	adc $0
+	adc 0
 	ld d, a
 	pop af
-.asm_3da1
-	add BANK(Unknown_80e5a)
+.loadPointer
+	add BANK(SpriteNullAnimationPointer)
 	pop hl
-	ld bc, $000b
+	ld bc, SPRITE_ANIM_FRAME_BANK
 	add hl, bc
 	ld [hli], a
 	call BankswitchROM
@@ -11694,7 +11698,7 @@ Func_3d72: ; 3d72 (0:3d72)
 
 GetFirstSpriteAnimBufferProperty: ; 3db7 (0:3db7)
 	push bc
-	ld c, SPRITE_ANIM_FIELD_00
+	ld c, SPRITE_ANIM_ENABLED
 	call GetSpriteAnimBufferProperty
 	pop bc
 	ret
@@ -11729,7 +11733,7 @@ GetSpriteAnimBufferProperty_SpriteInA:
 Func_3ddb: ; 3ddb (0:3ddb)
 	push hl
 	push bc
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty_SpriteInA
 	res 2, [hl]
 	pop bc
@@ -11740,7 +11744,7 @@ Func_3ddb: ; 3ddb (0:3ddb)
 Func_3de7: ; 3de7 (0:3de7)
 	push hl
 	push bc
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty_SpriteInA
 	set 2, [hl]
 	pop bc

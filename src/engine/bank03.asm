@@ -681,7 +681,7 @@ Func_c58b: ; c58b (3:458b)
 	call GetPermissionOfMapPosition
 	and $10
 	push af
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	pop af
 	ld a, [hl]
@@ -747,7 +747,7 @@ UpdatePlayerSprite: ; c5e9 (3:45e9)
 	ld b, a
 	ld a, [wPlayerDirection]
 	add b
-	farcall Func_12ab5
+	farcall StartNewSpriteAnimation
 	pop bc
 	ret
 
@@ -790,10 +790,10 @@ AttemptPlayerMovement: ; c619 (3:4619)
 	ld [wPlayerCurrentlyMoving], a
 	ld a, $10
 	ld [wd338], a
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	set 2, [hl]
-	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $4
 	ld [hl], a
@@ -920,10 +920,10 @@ Func_c6dc: ; c6dc (3:46dc)
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	res 2, [hl]
-	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $ff
 	ld [hl], a
