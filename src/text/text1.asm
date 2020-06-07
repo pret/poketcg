@@ -927,21 +927,21 @@ NoAttackMayBeChoosenText: ; 3781b (d:781b)
 	text "No Attacks may be choosen."
 	done
 
-Text00c6: ; 37837 (d:7837)
+YouDidNotReceiveAnAttackToMirrorMoveText: ; 37837 (d:7837)
 	text "You did not receive an Attack"
 	line "to Mirror Move."
 	done
 
-Text00c7: ; 37866 (d:7866)
+ThisAttackCannotBeUsedTwiceText: ; 37866 (d:7866)
 	text "This attack cannot"
 	line "be used twice."
 	done
 
-Text00c8: ; 37889 (d:7889)
+NoWeaknessText: ; 37889 (d:7889)
 	text "No Weakness."
 	done
 
-Text00c9: ; 37897 (d:7897)
+NoResistanceText: ; 37897 (d:7897)
 	text "No Resistance."
 	done
 
@@ -977,7 +977,7 @@ CannotUseBecauseItWillBeKnockedOutText: ; 37982 (d:7982)
 	line "it will be Knocked Out."
 	done
 
-Text00d1: ; 379ae (d:79ae)
+CanOnlyBeUsedOnTheBenchText: ; 379ae (d:79ae)
 	text "Can only be used on the Bench."
 	done
 
@@ -1083,7 +1083,7 @@ DamageCheckIfTailsNoDamageText: ; 37d4a (d:7d4a)
 	line "If Tails, no damage!!!"
 	done
 
-Text00e7: ; 37d70 (d:7d70)
+IfHeadsDraw1CardFromDeckText: ; 37d70 (d:7d70)
 	text "If Heads,"
 	line "Draw 1 card from Deck!"
 	done

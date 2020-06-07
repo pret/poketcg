@@ -116,7 +116,7 @@ NoDamageOrEffectDueToTransparencyText: ; 384d8 (e:44d8)
 	line "due to the effects of Transparency"
 	done
 
-Text010d: ; 3851f (e:451f)
+MetamorphsToText: ; 3851f (e:451f)
 	text "<RAMTEXT>"
 	line "metamorphs to <RAMTEXT>."
 	done
@@ -136,12 +136,12 @@ DuelistIsSelectingPokemonToPlaceInArenaText: ; 3859e (e:459e)
 	line "to place in the Arena."
 	done
 
-Text0111: ; 385cf (e:45cf)
+ChooseWeaknessYouWishToChangeText: ; 385cf (e:45cf)
 	text "Choose the Weakness you wish"
 	line "to change with Conversion 1."
 	done
 
-Text0112: ; 3860a (e:460a)
+ChooseResistanceYouWishToChangeText: ; 3860a (e:460a)
 	text "Choose the Resistance you wish"
 	line "to change with Conversion 2."
 	done
@@ -151,13 +151,13 @@ ChoosePokemonWishToColorChangeText: ; 38647 (e:4647)
 	line "wish to change with Color change."
 	done
 
-Text0114: ; 3868d (e:468d)
+ChangedTheWeaknessOfPokemonToColorText: ; 3868d (e:468d)
 	text "Changed the Weakness of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0115: ; 386af (e:46af)
+ChangedTheResistanceOfPokemonToColorText: ; 386af (e:46af)
 	text "Changed the Resistance of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
@@ -169,7 +169,7 @@ ChangedTheColorOfText: ; 386d3 (e:46d3)
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0117: ; 386f2 (e:46f2)
+Draw1CardFromTheDeckText: ; 386f2 (e:46f2)
 	text "Draw 1 card from the Deck."
 	done
 
@@ -401,7 +401,7 @@ ProcedureForStrangeBehaviorText: ; 390b4 (e:50b4)
 	line "   Slowbro will be Knocked Out."
 	done
 
-Text013a: ; 391dc (e:51dc)
+ChooseOppAttackToBeUsedWithMetronomeText: ; 391dc (e:51dc)
 	text "Choose the opponent's Attack"
 	line "to be used with Metronome."
 	done
@@ -458,7 +458,7 @@ CardPeekWasUsedOnText: ; 39346 (e:5346)
 	text "Card Peek was used on"
 	done
 
-Text0147: ; 3935d (e:535d)
+PokemonAndAllAttachedCardsReturnedToHandText: ; 3935d (e:535d)
 	text "<RAMTEXT> and all attached"
 	line "cards were returned to the Hand."
 	done
@@ -689,11 +689,11 @@ Text0175: ; 39adb (e:5adb)
 	line "from the Hand."
 	done
 
-Text0176: ; 39af7 (e:5af7)
+NoneCameText: ; 39af7 (e:5af7)
 	text "None came!"
 	done
 
-Text0177: ; 39b03 (e:5b03)
+CameToTheBenchText: ; 39b03 (e:5b03)
 	text "<RAMTEXT>"
 	line "came to the Bench!"
 	done

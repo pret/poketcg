@@ -6411,7 +6411,7 @@ OppActionTable: ; 695e (1:695e)
 	dw OppAction_TossCoinATimes
 	dw OppAction_6b30
 	dw OppAction_NoAction
-	dw OppAction_6b3e
+	dw OppAction_UseMetronomeAttack
 	dw OppAction_6b15
 	dw OppAction_DrawDuelMainScene
 
@@ -6663,7 +6663,7 @@ OppAction_6b30: ; 6b30 (1:6b30)
 	ldh [hWhoseTurn], a
 	ret
 
-OppAction_6b3e: ; 6b3e (1:6b3e)
+OppAction_UseMetronomeAttack: ; 6b3e (1:6b3e)
 	call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -6689,7 +6689,7 @@ OppAction_6b3e: ; 6b3e (1:6b3e)
 	call Func_16f6
 	pop bc
 	ld a, c
-	ld [wccf0], a
+	ld [wMetronomeEnergyCost], a
 	ret
 
 OppAction_NoAction: ; 6b7d (1:6b7d)

@@ -196,7 +196,14 @@ wPlayerArenaCardLastTurnDamage:: ; c2f3
 wPlayerArenaCardLastTurnStatus:: ; c2f5
 	ds $1
 
-	ds $2
+; substatus2 that the opponent card got last turn
+wPlayerArenaCardLastTurnSubstatus2:: ; c2f6
+	ds $1
+
+; indicates color of weakness that was changed
+; for this card last turn
+wPlayerArenaCardLastTurnChangeWeak:: ; c2f7
+	ds $1
 
 ; stores an effect that was used on the Arena card last turn.
 ; see LAST_TURN_EFFECT_* constants.
@@ -343,10 +350,17 @@ wOpponentArenaCardLastTurnDamage:: ; c3f3
 wOpponentArenaCardLastTurnStatus:: ; c3f5
 	ds $1
 
-	ds $2
+; substatus2 that the player card got last turn
+wOpponentArenaCardLastTurnSubstatus2:: ; c3f6
+	ds $1
+
+; indicates color of weakness that was changed
+; for this card last turn
+wOpponentArenaCardLastTurnChangeWeak:: ; c3f7
+	ds $1
 
 ; whether any attached energy card was discarded last turn (0 if not)
-wOpponentArenaCardLastTurnEffect:: ; c2f8
+wOpponentArenaCardLastTurnEffect:: ; c3f8
 	ds $1
 
 	ds $7
@@ -1035,7 +1049,11 @@ wccee:: ; ccee
 wccef:: ; ccef
 	ds $1
 
-wccf0:: ; ccf0
+; stores the energy cost of the Metronome attack being used.
+; it's used to know how many attached Energy cards are being used
+; to pay for the attack for damage calculation.
+; if equal to 0, then the attack wasn't invoked by Metronome.
+wMetronomeEnergyCost:: ; ccf0
 	ds $1
 
 ; effect functions return a status condition constant here when it had no effect
@@ -1688,13 +1706,17 @@ wce71:: ; ce71
 wce72:: ; ce72
 	ds $1
 
+; card index and its attack index chosen
+; to be used by Metronome.
+wMetronomeSelectedAttack:: ; ce73
 	ds $2
 
 ; stores the amount of cards that are being ordered.
 wNumberOfCardsToOrder:: ; ce75
 	ds $1
 
-	ds $6
+wce76:: ; ce76
+	ds MAX_PLAY_AREA_POKEMON
 
 ; used in CountPokemonIDInPlayArea
 wTempPokemonID_ce7c:: ; ce7c

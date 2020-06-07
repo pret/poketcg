@@ -199,10 +199,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NotEnoughWaterEnergyText                           ; 0x00c3
 	textpointer ThereAreNoTrainerCardsInDiscardPileText            ; 0x00c4
 	textpointer NoAttackMayBeChoosenText                           ; 0x00c5
-	textpointer Text00c6                                           ; 0x00c6
-	textpointer Text00c7                                           ; 0x00c7
-	textpointer Text00c8                                           ; 0x00c8
-	textpointer Text00c9                                           ; 0x00c9
+	textpointer YouDidNotReceiveAnAttackToMirrorMoveText           ; 0x00c6
+	textpointer ThisAttackCannotBeUsedTwiceText                    ; 0x00c7
+	textpointer NoWeaknessText                                     ; 0x00c8
+	textpointer NoResistanceText                                   ; 0x00c9
 	textpointer OnlyOncePerTurnText                                ; 0x00ca
 	textpointer CannotUseDueToStatusText                           ; 0x00cb
 	textpointer CannotBeUsedInTurnWhichWasPlayedText               ; 0x00cc
@@ -210,7 +210,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer NoGrassEnergyText                                  ; 0x00ce
 	textpointer CannotUseSinceTheresOnly1PkmnText                  ; 0x00cf
 	textpointer CannotUseBecauseItWillBeKnockedOutText             ; 0x00d0
-	textpointer Text00d1                                           ; 0x00d1
+	textpointer CanOnlyBeUsedOnTheBenchText                        ; 0x00d1
 	textpointer ThereAreNoPokemonOnBenchText                       ; 0x00d2
 	textpointer OpponentIsNotAsleepText                            ; 0x00d3
 	textpointer UnableDueToToxicGasText                            ; 0x00d4
@@ -232,7 +232,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer VenomPowderCheckText                               ; 0x00e4
 	textpointer IfTailsYourPokemonBecomesConfusedText              ; 0x00e5
 	textpointer DamageCheckIfTailsNoDamageText                     ; 0x00e6
-	textpointer Text00e7                                           ; 0x00e7
+	textpointer IfHeadsDraw1CardFromDeckText                       ; 0x00e7
 	textpointer FlipUntilFailAppears10DamageForEachHeadsText       ; 0x00e8
 	textpointer IfHeadPlus10IfTails10ToYourselfText                ; 0x00e9
 	textpointer DamageToOppBenchIfHeadsDamageToYoursIfTailsText    ; 0x00ea
@@ -270,17 +270,17 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer UnableToUseAttackDueToNShieldText                  ; 0x010a
 	textpointer NoDamageOrEffectDueToNShieldText                   ; 0x010b
 	textpointer NoDamageOrEffectDueToTransparencyText              ; 0x010c
-	textpointer Text010d                                           ; 0x010d
+	textpointer MetamorphsToText                                   ; 0x010d
 	textpointer SelectPkmnOnBenchToSwitchWithActiveText            ; 0x010e
 	textpointer SelectPokemonToPlaceInTheArenaText                 ; 0x010f
 	textpointer DuelistIsSelectingPokemonToPlaceInArenaText        ; 0x0110
-	textpointer Text0111                                           ; 0x0111
-	textpointer Text0112                                           ; 0x0112
+	textpointer ChooseWeaknessYouWishToChangeText                  ; 0x0111
+	textpointer ChooseResistanceYouWishToChangeText                ; 0x0112
 	textpointer ChoosePokemonWishToColorChangeText                 ; 0x0113
-	textpointer Text0114                                           ; 0x0114
-	textpointer Text0115                                           ; 0x0115
+	textpointer ChangedTheWeaknessOfPokemonToColorText             ; 0x0114
+	textpointer ChangedTheResistanceOfPokemonToColorText           ; 0x0115
 	textpointer ChangedTheColorOfText                              ; 0x0116
-	textpointer Text0117                                           ; 0x0117
+	textpointer Draw1CardFromTheDeckText                           ; 0x0117
 	textpointer DrawCardsFromTheDeckText                           ; 0x0118
 	textpointer CannotDrawCardBecauseNoCardsInDeckText             ; 0x0119
 	textpointer ChoosePkmnInTheBenchToGiveDamageText               ; 0x011a
@@ -315,7 +315,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ProcedureForDamageSwapText                         ; 0x0137
 	textpointer ProcedureForDevolutionBeamText                     ; 0x0138
 	textpointer ProcedureForStrangeBehaviorText                    ; 0x0139
-	textpointer Text013a                                           ; 0x013a
+	textpointer ChooseOppAttackToBeUsedWithMetronomeText           ; 0x013a
 	textpointer ThereIsNoInTheDeckText                             ; 0x013b
 	textpointer WouldYouLikeToCheckTheDeckText                     ; 0x013c
 	textpointer PleaseSelectTheDeckText                            ; 0x013d
@@ -328,7 +328,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer BasicEnergyText                                    ; 0x0144
 	textpointer PeekWasUsedToLookInYourHandText                    ; 0x0145
 	textpointer CardPeekWasUsedOnText                              ; 0x0146
-	textpointer Text0147                                           ; 0x0147
+	textpointer PokemonAndAllAttachedCardsReturnedToHandText       ; 0x0147
 	textpointer WasChosenForTheEffectOfAmnesiaText                 ; 0x0148
 	textpointer BasicPokemonWasPlacedOnEachBenchText               ; 0x0149
 	textpointer WasUnsuccessfulText                                ; 0x014a
@@ -375,8 +375,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0173                                           ; 0x0173
 	textpointer DiscardedCardsFromDeckText                         ; 0x0174
 	textpointer Text0175                                           ; 0x0175
-	textpointer Text0176                                           ; 0x0176
-	textpointer Text0177                                           ; 0x0177
+	textpointer NoneCameText                                       ; 0x0176
+	textpointer CameToTheBenchText                                 ; 0x0177
 	textpointer Text0178                                           ; 0x0178
 	textpointer Text0179                                           ; 0x0179
 	textpointer PokemonDevolvedToText                              ; 0x017a
