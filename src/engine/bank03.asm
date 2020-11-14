@@ -309,7 +309,7 @@ Func_c258: ; c258 (3:4258)
 	ldh a, [hffb0]
 	push af
 	ld a, $2
-asm_c25d
+asm_c25d:
 	ldh [hffb0], a
 	push hl
 	call Func_c268
@@ -847,7 +847,7 @@ Func_c687: ; c687 (3:4687)
 	ld a, [wd339]
 	call Func_c694
 	pop bc
-    ret
+	ret
 
 Func_c694: ; c694 (3:4694)
 	push hl
@@ -1920,7 +1920,7 @@ ScriptCommand_StartBattle: ; cd01 (3:4d01)
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-asm_cd2f
+asm_cd2f:
 	ld [wd0c4], a
 	ld [wcc14], a
 	push af
@@ -2103,7 +2103,7 @@ ScriptCommand_MoveWramNPC: ; ce52 (3:4e52)
 
 ; Executes movement on an arbitrary NPC using values in a and on the stack
 ; Changes and fixes Temp NPC using stack values
-ExecuteArbitraryNPCMovementFromStack
+ExecuteArbitraryNPCMovementFromStack:
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call ExecuteNPCMovement
@@ -2219,21 +2219,21 @@ Func_cf12: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
-asm_cf16
+asm_cf16:
 	or a
 	jr nz, asm_cf1f
 
-asm_cf19
+asm_cf19:
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
 
-asm_cf1f
+asm_cf1f:
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
 	jr z, asm_cf2a
 	jp SetScriptPointer
 
-asm_cf2a
+asm_cf2a:
 	jp IncreaseScriptPointerBy4
 
 Func_cf2d: ; cf2d (3:4f2d)
@@ -2640,7 +2640,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 
 .asm_d1c3
 	ld hl, $51dc
-asm_d1c6
+asm_d1c6:
 	ld e, a
 	add a
 	add e
@@ -2917,7 +2917,7 @@ ScriptCommand_TryGivePCPack: ; d3c9 (3:53c9)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_nop: ; d3d1 (3:53d1)
-    jp IncreaseScriptPointerBy1
+	jp IncreaseScriptPointerBy1
 
 Func_d3d4: ; d3d4 (3:53d4)
 	ld a, [wd693]
@@ -3037,11 +3037,11 @@ ScriptCommand_JumpIfFlagEqual: ; d484 (3:5484)
 	cp c
 	jr z, ScriptEventPassedTryJump
 
-ScriptEventFailedNoJump ; d48a (3:548a)
+ScriptEventFailedNoJump: ; d48a (3:548a)
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy5
 
-ScriptEventPassedTryJump ; d490 (3:5490)
+ScriptEventPassedTryJump: ; d490 (3:5490)
 	call SetScriptControlBytePass
 	call GetScriptArgs3AfterPointer
 	jr z, .noJumpAddress
@@ -3876,7 +3876,7 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xdd78
 
-NPCMovement_dd78 ; dd78 (3:5d78)
+NPCMovement_dd78: ; dd78 (3:5d78)
 	db SOUTH
 	db SOUTH
 	db SOUTH
@@ -5004,7 +5004,7 @@ Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	run_command ScriptCommand_PrintTextString
 	tx Text064e
 
-ScriptJump_FinishedFirstRonaldFight
+ScriptJump_FinishedFirstRonaldFight:
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_4C
 	db $02
@@ -5097,7 +5097,7 @@ Script_LostToSecondRonaldFight: ; e955 (3:6955)
 	run_command ScriptCommand_PrintTextString
 	tx Text0653
 
-ScriptJump_FinishedSecondRonaldFight ; e959 (3:6959)
+ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_4D
 	db $02
@@ -5970,7 +5970,7 @@ Script_f433: ; f433 (3:7433)
 	run_command ScriptCommand_Jump
 	dw WonAtChallengeHall.ows_f4a4
 
-WonAtChallengeHall; f441 (3:7441)
+WonAtChallengeHall: ; f441 (3:7441)
 	start_script
 	run_command ScriptCommand_DoFrames
 	db 20

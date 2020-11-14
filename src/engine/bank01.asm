@@ -130,7 +130,7 @@ StartDuel: ; 409f (1:409f)
 ;	fallthrough
 
 ; the loop returns here after every turn switch
-MainDuelLoop ; 40ee (1:40ee)
+MainDuelLoop: ; 40ee (1:40ee)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call UpdateSubstatusConditions_StartOfTurn

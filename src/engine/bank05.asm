@@ -3979,7 +3979,7 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 	ret
 ; 0x16488
 
-Func_16488 ; 16488 (5:6488)
+Func_16488: ; 16488 (5:6488)
 	INCROM $16488, $164a1
 
 ; have AI choose an energy card to play, but do not play it.
@@ -5845,7 +5845,7 @@ HandleNidoranFCallForFamily:
 ; checks for certain card IDs of Fighting color in deck.
 ; if any of them are found, return a score of
 ; $80 + slots available in bench.
-HandleMarowak1CallForFriend
+HandleMarowak1CallForFriend:
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
@@ -7375,5 +7375,5 @@ HandleLegendaryArticunoEnergyScoring: ; 175bd (5:75bd)
 	ret
 ; 0x175c9
 
-Func_175c9 ; 175c9 (5:75c9)
+Func_175c9: ; 175c9 (5:75c9)
 	INCROM $175c9, $18000

@@ -330,7 +330,7 @@ Func_80274: ; 80274 (20:4274)
 
 Func_80279: ; 80279 (20:4279)
 	call Func_802bb
-asm_8027c
+asm_8027c:
 	push hl
 	push bc
 	push de

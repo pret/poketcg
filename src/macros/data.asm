@@ -56,7 +56,7 @@ textpointer: MACRO
 	dw ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) & $ffff
 	db ((\1 + ($4000 * (BANK(\1) - 1))) - (TextOffsets + ($4000 * (BANK(TextOffsets) - 1)))) >> 16
 	const \1_
-GLOBAL \1_
+EXPORT \1_
 ENDM
 
 energy: MACRO
