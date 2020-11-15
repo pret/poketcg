@@ -2566,8 +2566,8 @@ KeyboardData_Player: ; (6:6baf)
 	kbitem $04, $12, $37, $00, TX_FULLWIDTH3,   "I"
 	kbitem $06, $12, $38, $00, TX_FULLWIDTH3,   "R"
 	kbitem $08, $12, $39, $00,                  "n"
-	kbitem $0a, $12, $3a, $00,	                "c"
-	kbitem $0c, $12, $3b, $00,	                "p"
+	kbitem $0a, $12, $3a, $00,                  "c"
+	kbitem $0c, $12, $3b, $00,                  "p"
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
 

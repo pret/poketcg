@@ -310,7 +310,7 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	call GetTurnDuelistVariable
 	cp $ff
 	ret z
-	call .check_boost_if_taken_damage	
+	call .check_boost_if_taken_damage
 	jr c, .has_boost_damage
 	call GetCardDamage
 	cp 20 ; if damage >= 20
@@ -1746,7 +1746,7 @@ AIDecide_SuperEnergyRemoval: ; 209bc (8:49bc)
 	call GetTurnDuelistVariable
 	cp $ff
 	jr z, .exit
-	
+
 	ld d, a
 	push de
 	call .LookForNonDoubleColorless
@@ -4156,7 +4156,7 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 ; this deck will use Scoop Up on a benched Articuno2.
 ; it checks if the defending Pokemon is a Snorlax,
 ; but interestingly does not check for Muk in both Play Areas.
-; will also use Scoop Up on 
+; will also use Scoop Up on
 .HandleLegendaryArticuno
 ; if less than 3 Play Area Pokemon cards, skip.
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -7891,7 +7891,7 @@ ClearMemory_Bank8: ; 22983 (8:6983)
 ; and outputs result in a
 ; sets carry if none are found
 ; output:
-; 	a = number of energy cards found
+;	a = number of energy cards found
 CountOppEnergyCardsInHand: ; 22990 (8:6990)
 	farcall CreateEnergyCardListFromHand
 	ret c
@@ -7909,9 +7909,9 @@ CountOppEnergyCardsInHand: ; 22990 (8:6990)
 
 ; converts HP in a to number of equivalent damage counters
 ; input:
-; 	a = HP
+;	a = HP
 ; output:
-; 	a = number of damage counters
+;	a = number of damage counters
 ConvertHPToCounters: ; 229a3 (8:69a3)
 	push bc
 	ld c, 0
@@ -8005,7 +8005,7 @@ LookForCardIDInLocation: ; 229d0 (8:69d0)
 ; input:
 ;	a = card ID
 ; output:
-; 	a = card deck index, if found
+;	a = card deck index, if found
 ;	carry set if found
 LookForCardIDInHandList_Bank8: ; 229f3 (8:69f3)
 	ld [wTempCardIDToLook], a

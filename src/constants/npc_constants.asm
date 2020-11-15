@@ -192,4 +192,3 @@ const_value = const_value+1 ; NPC_11F49 duplicate
 	const NPC_RONALD2                     ; $71
 	const NPC_RONALD3                     ; $72
 const_value = const_value+1 ; NPC_11f49 duplicate
-

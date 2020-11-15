@@ -1833,7 +1833,7 @@ Func_8aaa: ; 8aaa (2:4aaa)
 
 Func_8b85: ; 8b85 (2:4b85)
 	INCROM $8b85, $8c8e
-	
+
 OpenGlossaryScreen_TransitionTable:
 	cursor_transition $08, $28, $00, $04, $01, $05, $05
 	cursor_transition $08, $38, $00, $00, $02, $06, $06

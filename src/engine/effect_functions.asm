@@ -166,12 +166,12 @@ Func_2c0c7: ; 2c0c7 (b:40c7)
 
 ; Sets some flags for AI use
 ; if target poisoned
-; 	[wAIMinDamage] <- [wDamage]
-; 	[wAIMaxDamage] <- [wDamage]
+;	[wAIMinDamage] <- [wDamage]
+;	[wAIMaxDamage] <- [wDamage]
 ; else
-; 	[wAIMinDamage] <- [wDamage] + d
-; 	[wAIMaxDamage] <- [wDamage] + e
-; 	[wDamage]      <- [wDamage] + a
+;	[wAIMinDamage] <- [wDamage] + d
+;	[wAIMaxDamage] <- [wDamage] + e
+;	[wDamage]      <- [wDamage] + a
 Func_2c0d4: ; 2c0d4 (b:40d4)
 	push af
 	ld a, DUELVARS_ARENA_CARD_STATUS

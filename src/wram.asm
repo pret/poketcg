@@ -937,7 +937,7 @@ wAIMaxDamage:: ; ccbc
 wDealtDamage:: ; ccbf
 	ds $2
 
-; WEAKNESS and RESISTANCE flags	for a damaging attack
+; WEAKNESS and RESISTANCE flags for a damaging attack
 wDamageEffectiveness:: ; ccc1
 	ds $1
 
@@ -1194,9 +1194,9 @@ wAIPokedexCounter:: ; cda6
 
 ; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
 ; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
-; 	- when flag is not set, this counts how many turns in a row
+;	- when flag is not set, this counts how many turns in a row
 ;	  Player used Mewtwo1's Barrier attack;
-; 	- when flag is set, this counts how many turns in a row
+;	- when flag is set, this counts how many turns in a row
 ;	  Player has NOT used Barrier attack.
 wAIBarrierFlagCounter:: ; cda7
 	ds $1
@@ -1369,7 +1369,7 @@ wcdea:: ; cdea
 ;	$01 = can't damage
 wAICannotDamage:: ; cdf0
 	ds $1
-	
+
 ; used by AI to store variable information
 wTempAI:: ; cdf1
 	ds $1
@@ -1413,8 +1413,8 @@ wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
 ; whether AI already retreated this turn or not.
-; 	- $0 has not retreated;
-; 	- $1 has retreated.
+;	- $0 has not retreated;
+;	- $1 has retreated.
 wAIRetreatedThisTurn:: ; ce03
 	ds $1
 

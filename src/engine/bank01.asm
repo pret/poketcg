@@ -4372,7 +4372,7 @@ CGBDefaultPalettes: ; 5b44 (1:5b44)
 	rgb 0, 0, 0
 ; BGP3
 	rgb 28, 28, 24
-	rgb 22, 0 ,22
+	rgb 22, 0, 22
 	rgb 27, 7, 3
 	rgb 0, 0, 0
 ; BGP4
@@ -7221,16 +7221,16 @@ ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
 	ret
 
 .trainer_to_pkmn_data
-    db 10                 ; CARD_DATA_HP
-    ds $07                ; CARD_DATA_MOVE1_NAME - (CARD_DATA_HP + 1)
-    tx DiscardName        ; CARD_DATA_MOVE1_NAME
-    tx DiscardDescription ; CARD_DATA_MOVE1_DESCRIPTION
-    ds $03                ; CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_DESCRIPTION + 2)
-    db POKEMON_POWER      ; CARD_DATA_MOVE1_CATEGORY
-    dw TrainerCardAsPokemonEffectCommands ; CARD_DATA_MOVE1_EFFECT_COMMANDS
-    ds $18                ; CARD_DATA_RETREAT_COST - (CARD_DATA_MOVE1_EFFECT_COMMANDS + 2)
-    db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
-    ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
+	db 10                 ; CARD_DATA_HP
+	ds $07                ; CARD_DATA_MOVE1_NAME - (CARD_DATA_HP + 1)
+	tx DiscardName        ; CARD_DATA_MOVE1_NAME
+	tx DiscardDescription ; CARD_DATA_MOVE1_DESCRIPTION
+	ds $03                ; CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_DESCRIPTION + 2)
+	db POKEMON_POWER      ; CARD_DATA_MOVE1_CATEGORY
+	dw TrainerCardAsPokemonEffectCommands ; CARD_DATA_MOVE1_EFFECT_COMMANDS
+	ds $18                ; CARD_DATA_RETREAT_COST - (CARD_DATA_MOVE1_EFFECT_COMMANDS + 2)
+	db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
+	ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
 ; this function applies status conditions to the defending Pokemon,
 ; returned by the effect functions in wEffectFunctionsFeedback
@@ -7622,7 +7622,7 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 ; 0x7045
 
 ; returns carry if card at hTempPlayAreaLocation_ff9d
-; is a basic card. 
+; is a basic card.
 ; otherwise, lists the card indices of all stages in
 ; that card location, and returns the card one
 ; stage below.

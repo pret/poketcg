@@ -1,6 +1,6 @@
 	const_def 1
 
-TextOffsets::                                                      ; 34000 (d:4000)
+TextOffsets:: ; 34000 (d:4000)
 	dwb $0000, $00                                                 ; 0x0000
 	textpointer HandText                                           ; 0x0001
 	textpointer CheckText                                          ; 0x0002

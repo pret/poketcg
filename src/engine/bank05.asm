@@ -52,9 +52,9 @@ AIActionTable_Unreferenced: ; 1406a (5:406a)
 ; a card's moves KOs defending Pokémon
 ; outputs index of the move that KOs
 ; input:
-; 	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
+;	[hTempPlayAreaLocation_ff9d] = location of attacking card to consider
 ; output:
-; 	[wSelectedAttack] = move index that KOs
+;	[wSelectedAttack] = move index that KOs
 CheckIfAnyMoveKnocksOutDefendingCard: ; 140ae (5:40ae)
 	xor a ; first move
 	call CheckIfMoveKnocksOutDefendingCard
@@ -131,7 +131,7 @@ FindHighestBenchScore: ; 140df (5:40df)
 ; adds a to wAIScore
 ; if there's overflow, it's capped at $ff
 ; output:
-; 	a = a + wAIScore (capped at $ff)
+;	a = a + wAIScore (capped at $ff)
 AddToAIScore: ; 140fe (5:40fe)
 	push hl
 	ld hl, wAIScore
@@ -284,7 +284,7 @@ CheckIfEnergyIsUseful: ; 14184 (5:4184)
 	pop de
 	or a
 	ret
-	
+
 .check_energy
 	ld a, d
 	cp e
@@ -422,7 +422,7 @@ CheckIfSelectedMoveIsUnusable: ; 1424b (5:424b)
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	ret c
-	
+
 .bench
 	call CheckEnergyNeededForAttack
 	ret c ; can't be used
@@ -440,7 +440,7 @@ CheckIfSelectedMoveIsUnusable: ; 1424b (5:424b)
 ;	b = basic energy still needed
 ;	c = colorless energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
-;	carry set if no move 
+;	carry set if no move
 ;	       OR if it's a Pokémon Power
 ;	       OR if not enough energy for move
 CheckEnergyNeededForAttack: ; 14279 (5:4279)
@@ -463,7 +463,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ld e, c
 	scf
 	ret
-	
+
 .is_attack
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
@@ -479,7 +479,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ld de, wLoadedMoveEnergyCost
 	ld b, 0
 	ld c, (NUM_TYPES / 2) - 1
-	
+
 .loop
 	; check all basic energy cards except colorless
 	ld a, [de]
@@ -498,7 +498,7 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 ; will always just return the result for one type of basic energy,
 ; while all others will necessarily have an energy cost of 0
 ; if moves are added to the game with energy requirements of
-; two different basic energy types, then this routine only accounts 
+; two different basic energy types, then this routine only accounts
 ; for the type with the highest index
 
 	; colorless
@@ -536,14 +536,14 @@ CheckEnergyNeededForAttack: ; 14279 (5:4279)
 	ret
 ; 0x142f4
 
-; takes as input the energy cost of a move for a 
+; takes as input the energy cost of a move for a
 ; particular energy, stored in the lower nibble of a
 ; if the move costs some amount of this energy, the lower nibble of a != 0,
 ; and this amount is stored in wTempLoadedMoveEnergyCost
 ; sets carry flag if not enough energy of this type attached
 ; input:
-; 	a    = this energy cost of move (lower nibble)
-; 	[hl] = attached energy
+;	a    = this energy cost of move (lower nibble)
+;	[hl] = attached energy
 ; output:
 ;	carry set if not enough of this energy type attached
 CheckIfEnoughParticularAttachedEnergy: ; 142f4 (5:42f4)
@@ -799,7 +799,7 @@ EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
-	
+
 .calculation
 ; if temp. location is active, damage calculation can be done directly...
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -1070,9 +1070,9 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 ; and poison damage for two turns
 ; and outputs the result capped at a max of $ff
 ; input:
-; 	[wAIMinDamage] = base damage
-; 	[wAIMaxDamage] = base damage
-; 	[wDamage]      = base damage
+;	[wAIMinDamage] = base damage
+;	[wAIMaxDamage] = base damage
+;	[wDamage]      = base damage
 ;	[hTempPlayAreaLocation_ff9d] = location of card to calculate
 ;								 damage as the receiver
 CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
@@ -1430,7 +1430,7 @@ InitAITurnVars: ; 15649 (5:5649)
 ;	b = basic energy still needed
 ;	c = colorless energy still needed
 ;	e = output of ConvertColorToEnergyCardID, or $0 if not a move
-;	carry set if no move 
+;	carry set if no move
 ;	       OR if it's a Pokémon Power
 ;	       OR if not enough energy for move
 CheckEnergyNeededForAttackAfterDiscard: ; 156c3 (5:56c3)
@@ -1571,8 +1571,8 @@ CalculateByteTensDigit: ; 1576b (5:576b)
 ; returns in a the result of
 ; dividing b by a, rounded down
 ; input:
-; 	a = divisor
-; 	b = dividend
+;	a = divisor
+;	b = dividend
 CalculateBDividedByA_Bank5: ; 15778 (5:5778)
 	push bc
 	ld c, a
@@ -1603,7 +1603,7 @@ CountNumberOfEnergyCardsAttached: ; 15787 (5:5787)
 	ld a, [wTotalAttachedEnergies]
 	or a
 	ret z
-	
+
 	xor a
 	push hl
 	push bc
@@ -1884,7 +1884,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	jr nc, .active_cant_ko_1
 	ld a, 35
 	call SubFromAIScore
-	
+
 .active_cant_ko_1
 	call CheckIfDefendingPokemonCanKnockOut
 	jr nc, .defending_cant_ko
@@ -2755,7 +2755,7 @@ AITryToRetreat: ; 15d4f (5:5d4f)
 
 ; second, shuffle attached cards and discard energy cards
 ; that are not of the same type as the Pokémon
-; the exception for this are cards that are needed for 
+; the exception for this are cards that are needed for
 ; some attacks but are not of the same color as the Pokémon
 ; (i.e. Psyduck's Headache attack)
 ; and energy cards attached to Eevee corresponding to a
@@ -3174,7 +3174,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 	call CalculateByteTensDigit
 	call SubFromAIScore
 
-; if is Mysterious Fossil or 
+; if is Mysterious Fossil or
 ; wLoadedCard1Unknown2 is set to $02,
 ; raise AI score
 .check_mysterious_fossil
@@ -3363,7 +3363,7 @@ Func_16120: ; 16120 (5:6120)
 	ret
 
 ; if Dragonair is active, check its damage in HP
-; if this result is >= 50, 
+; if this result is >= 50,
 ; and if at least 3 energy cards attached,
 ; check if there's a Muk in any duelist's Play Area
 .is_active
@@ -3416,7 +3416,7 @@ Func_161d5: ; 161d5 (5:61d5)
 	jr nc, .subtract
 	call AIDecideWhetherToRetreat
 	jr c, .subtract
-	
+
 	; checks for player's active card status
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
@@ -3521,7 +3521,7 @@ CheckIfActiveCardCanKnockOut: ; 1628f (5:628f)
 	jp c, .fail
 	scf
 	ret
-	
+
 .fail
 	or a
 	ret
@@ -3560,7 +3560,7 @@ CheckIfActivePokemonCanUseAnyNonResidualMove: ; 162a1 (5:62a1)
 
 ; looks for energy card(s) in hand depending on
 ; what is needed for selected card, for both moves
-; 	- if one basic energy is required, look for that energy;
+;	- if one basic energy is required, look for that energy;
 ;	- if one colorless is required, create a list at wDuelTempList
 ;	  of all energy cards;
 ;	- if two colorless are required, look for double colorless;
@@ -3622,7 +3622,7 @@ LookForEnergyNeededInHand: ; 162c8 (5:62c8)
 
 ; looks for energy card(s) in hand depending on
 ; what is needed for selected card and move
-; 	- if one basic energy is required, look for that energy;
+;	- if one basic energy is required, look for that energy;
 ;	- if one colorless is required, create a list at wDuelTempList
 ;	  of all energy cards;
 ;	- if two colorless are required, look for double colorless;
@@ -3667,7 +3667,7 @@ LookForEnergyNeededForMoveInHand: ; 16311 (5:6311)
 	jr .done
 ; 0x1633f
 
-; goes through $00 terminated list pointed 
+; goes through $00 terminated list pointed
 ; by wAICardListPlayFromHandPriority and compares it to each card in hand.
 ; Sorts the hand in wDuelTempList so that the found card IDs
 ; are in the same order as the list pointed by de.
@@ -3732,7 +3732,7 @@ SortTempHandByIDList: ; 1633f (5:633f)
 ; depending on energy flags set in a
 ; return carry if successful in finding card
 ; input:
-; 	a = energy flags needed
+;	a = energy flags needed
 CheckEnergyFlagsNeededInList: ; 1637b (5:637b)
 	ld e, a
 	ld hl, wDuelTempList
@@ -4050,7 +4050,7 @@ RetrievePlayAreaAIScoreFromBackup1: ; 164d3 (5:64d3)
 	ret
 ; 0x164e8
 
-; have AI decide whether to play energy card from hand 
+; have AI decide whether to play energy card from hand
 ; and determine which card is best to attach it.
 AIProcessAndTryToPlayEnergy: ; 164e8 (5:64e8)
 	xor a
@@ -4302,7 +4302,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	ld a, $80
 	sub b
 	call SubFromAIScore
-	
+
 .skip_boss_deck
 	ld a, 1
 	call AddToAIScore
@@ -4313,7 +4313,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 	call DetermineAIScoreOfMoveEnergyRequirement
 	ld a, $01 ; second move
 	call DetermineAIScoreOfMoveEnergyRequirement
-	
+
 ; store bench score for this card.
 .store_score
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -4680,7 +4680,7 @@ CheckIfEvolutionNeedsEnergyForMove: ; 16805 (5:6805)
 ; output:
 ;	b = 1 if needs color energy, 0 otherwise;
 ;	c = 1 if only needs colorless energy, 0 otherwise;
-; 	carry set if not Zapdos2's Thunderbolt attack.
+;	carry set if not Zapdos2's Thunderbolt attack.
 GetEnergyCardForDiscardOrEnergyBoostAttack: ; 1683b (5:683b)
 ; load card ID and check selected move index.
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -4938,7 +4938,7 @@ AITryToPlayEnergyCard: ; 1689f (5:689f)
 ; return carry if there's a double colorless in hand to attach
 ; and it's one of the card IDs from these decks.
 ; output:
-; 	[hTemp_ffa0] = card index of double colorless in hand;
+;	[hTemp_ffa0] = card index of double colorless in hand;
 ;	carry set if can play energy card.
 CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
 	push bc
@@ -5122,7 +5122,7 @@ AIProcessAttacks: ; 169fc (5:69fc)
 	or a
 	jr z, .attack_chosen
 	call CheckWhetherToSwitchToFirstAttack
-	
+
 .attack_chosen
 ; check whether to execute the attack chosen
 	ld a, [wAIExecuteProcessedAttack]
@@ -5268,7 +5268,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 ; raise AI score by the number of damage counters that this move deals.
 ; if no damage is dealt, subtract AI score. in case wDamage is zero
 ; but wMaxDamage is not, then encourage move afterwards.
-; otherwise, if wMaxDamage is also zero, check for damage against 
+; otherwise, if wMaxDamage is also zero, check for damage against
 ; player's bench, and encourage move in case there is.
 .check_damage
 	xor a
@@ -5317,7 +5317,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	ld a, e
 	call CalculateByteTensDigit
 	call SubFromAIScore
-	
+
 	push de
 	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
 	call CheckLoadedMoveFlag
@@ -5639,7 +5639,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 ; isn't (doubly) poisoned already.
 ; if opposing Pokémon is only poisoned and not double poisoned,
 ; and this move has FLAG_2_BIT_6 set, discourage it
-; (possibly to make Nidoking's Toxic attack less likely to be chosen 
+; (possibly to make Nidoking's Toxic attack less likely to be chosen
 ; if the other Pokémon is poisoned.)
 	ld a, MOVE_FLAG1_ADDRESS | INFLICT_POISON_F
 	call CheckLoadedMoveFlag
@@ -6044,7 +6044,7 @@ HandleNinetalesMixUp: ; 16f4e (5:6f4e)
 	or a
 	jr nz, .loop_hand
 	; is a basic Pokémon card
-	inc b 
+	inc b
 	jr .loop_hand
 .tally_basic_cards
 	ld a, b
@@ -6196,7 +6196,7 @@ CheckWhetherToSwitchToFirstAttack: ; 17019 (5:7019)
 	ret
 ; 0x17057
 
-; returns carry if there are 
+; returns carry if there are
 ; any basic Pokémon cards in deck.
 CheckIfAnyBasicPokemonInDeck: ; 17057 (5:7057)
 	ld e, 0
@@ -6280,7 +6280,7 @@ LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	or a
 	ret
-	
+
 .set_carry
 	call SwapTurn
 	pop af
@@ -6604,7 +6604,7 @@ CheckIfNoSurplusEnergyForMove: ; 171fb (5:71fb)
 	inc de
 	dec c
 	jr nz, .loop
-	
+
 	; colorless
 	ld a, [de]
 	swap a
@@ -6624,15 +6624,15 @@ CheckIfNoSurplusEnergyForMove: ; 171fb (5:71fb)
 	ret
 ; 0x17258
 
-; takes as input the energy cost of a move for a 
+; takes as input the energy cost of a move for a
 ; particular energy, stored in the lower nibble of a
 ; if the move costs some amount of this energy, the lower nibble of a != 0,
 ; and this amount is stored in wTempLoadedMoveEnergyCost
 ; also adds the amount of energy still needed
 ; to wTempLoadedMoveEnergyNeededAmount
 ; input:
-; 	a    = this energy cost of move (lower nibble)
-; 	[hl] = attached energy
+;	a    = this energy cost of move (lower nibble)
+;	[hl] = attached energy
 ; output:
 ;	carry set if not enough of this energy type attached
 CalculateParticularAttachedEnergyNeeded: ; 17258 (5:7258)
@@ -6884,7 +6884,7 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 ; returns carry if Pokemon at PLAY_AREA* in a
 ; can damage defending Pokémon with any of its moves
 ; input:
-; 	a = location of card to check
+;	a = location of card to check
 CheckIfCanDamageDefendingPokemon: ; 17383 (5:7383)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	xor a ; first move
@@ -7132,7 +7132,7 @@ CheckForBenchIDAtHalfHPAndCanUseSecondMove: ; 17474 (5:7474)
 	ld hl, wcdf9
 	cp [hl]
 	jr nz, .loop
-	
+
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld a, $01 ; second move
@@ -7291,7 +7291,7 @@ Func_174f2: ; 174f2 (5:74f2)
 	ld a, [de]
 	or a
 	jr z, .check_next
-; decrease score	
+; decrease score
 	dec [hl]
 	jr .check_next
 .card_with_highest

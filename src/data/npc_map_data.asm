@@ -416,4 +416,3 @@ HallOfHonorNPCS: ; 7adf (4:13adf)
 	db NPC_LEGENDARY_CARD_RIGHT_SPARK, $0e, $0a, SOUTH
 	dw $0000
 	db $00
-

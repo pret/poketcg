@@ -414,10 +414,10 @@ SetupPalettes: ; 036a (0:036a)
 	ret
 
 InitialPalette: ; 0399 (0:0399)
-	rgb 28,28,24
-	rgb 21,21,16
-	rgb 10,10,08
-	rgb 00,00,00
+	rgb 28, 28, 24
+	rgb 21, 21, 16
+	rgb 10, 10, 08
+	rgb 00, 00, 00
 
 ; clear VRAM tile data ([wTileMapFill] should be an empty tile)
 SetupVRAM: ; 03a1 (0:03a1)
