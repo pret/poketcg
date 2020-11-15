@@ -10,28 +10,23 @@ AIActionTable_GeneralNoRetreat: ; 148dc (5:48dc)
 .do_turn ; 148e8 (5:48e8)
 	call AIDoTurn_GeneralNoRetreat
 	ret
-; 0x148ec
 
 .start_duel ; 148ec (5:48ec)
 	call InitAIDuelVars
 	call AIPlayInitialBasicCards
 	ret
-; 0x148f3
 
 .forced_switch ; 148f3 (5:48f3)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x148f7
 
 .ko_switch ; 148f7 (5:48f7)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x148fb
 
 .take_prize ; 148fb (5:48fb)
 	call AIPickPrizeCards
 	ret
-; 0x148ff
 
 AIDoTurn_GeneralNoRetreat: ; 148ff (5:48ff)
 ; initialize variables

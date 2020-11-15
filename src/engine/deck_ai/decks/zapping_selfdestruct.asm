@@ -9,7 +9,6 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 .do_turn ; 15025 (5:5025)
 	call AIMainTurnLogic
 	ret
-; 0x15029
 
 .start_duel ; 15029 (5:5029)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x1503a
 
 .forced_switch ; 1503a (5:503a)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x1503e
 
 .ko_switch ; 1503e (5:503e)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15042
 
 .take_prize ; 15042 (5:5042)
 	call AIPickPrizeCards
 	ret
-; 0x15046
 
 .list_arena ; 15046 (5:5046)
 	db KANGASKHAN

@@ -150,7 +150,6 @@ _CopyCardNameAndLevel_HalfwidthText:
 	pop de
 	pop bc
 	ret
-; 0x180d5
 
 ; this function is called when the player is shown the "In Play Area" screen.
 ; it can be called with either the select button (DuelMenuShortcut_BothActivePokemon),
@@ -1582,7 +1581,6 @@ Func_1a61f: ; 1a61f (6:661f)
 	call ResumeSong
 	bank1call OpenCardPage_FromHand
 	ret
-; 0x1a68d
 
 Func_1a68d: ; 1a68d (6:668d)
 	ld a, $c2 ; player's turn

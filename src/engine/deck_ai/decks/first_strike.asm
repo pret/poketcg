@@ -9,7 +9,6 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 .do_turn ; 14e95 (5:4e95)
 	call AIMainTurnLogic
 	ret
-; 0x14e99
 
 .start_duel ; 14e99 (5:4e99)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14eaa
 
 .forced_switch ; 14eaa (5:4eaa)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14eae
 
 .ko_switch ; 14eae (5:4eae)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14eb2
 
 .take_prize ; 14eb2 (5:4eb2)
 	call AIPickPrizeCards
 	ret
-; 0x14eb6
 
 .list_arena ; 14eb6 (5:1eb6)
 	db HITMONCHAN

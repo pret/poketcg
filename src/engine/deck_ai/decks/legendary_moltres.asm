@@ -9,7 +9,6 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 .do_turn ; 149f4 (5:49f4)
 	call AIDoTurn_LegendaryMoltres
 	ret
-; 0x149f8
 
 .start_duel ; 149f8 (5:49f8)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	ret nc ; Play Area set up was successful
 	call AIPlayInitialBasicCards
 	ret
-; 0x14a09
 
 .forced_switch ; 14a09 (5:4a09)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14a0d
 
 .ko_switch ; 14a0d (5:4a0d)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14a11
 
 .take_prize ; 14a11 (5:4a11)
 	call AIPickPrizeCards
 	ret
-; 0x14a15
 
 .list_arena ; 14a15 (5:4a15)
 	db MAGMAR2
@@ -91,7 +86,6 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 	store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14a81
 
 AIDoTurn_LegendaryMoltres: ; 14a81 (5:4a81)
 ; initialize variables

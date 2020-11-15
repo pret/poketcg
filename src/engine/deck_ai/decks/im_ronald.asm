@@ -9,7 +9,6 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 .do_turn ; 152c9 (5:52c9)
 	call AIMainTurnLogic
 	ret
-; 0x152cd
 
 .start_duel ; 152cd (5:52cd)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_ImRonald: ; 152bd (5:52bd)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x152de
 
 .forced_switch ; 152de (5:52de)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x152e2
 
 .ko_switch ; 152e2 (5:52e2)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x152e6
 
 .take_prize ; 152e6 (5:52e6)
 	call AIPickPrizeCards
 	ret
-; 0x152ea
 
 .list_arena ; 152ea (5:52ea)
 	db LAPRAS

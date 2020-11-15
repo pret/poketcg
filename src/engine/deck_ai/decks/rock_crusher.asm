@@ -9,7 +9,6 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 .do_turn ; 14f1a (5:4f1a)
 	call AIMainTurnLogic
 	ret
-; 0x14f1e
 
 .start_duel ; 14f1e (5:4f1e)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14f2f
 
 .forced_switch ; 14f2f (5:4f2f)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14f33
 
 .ko_switch ; 14f33 (5:4f33)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14f37
 
 .take_prize ; 14f37 (5:4f37)
 	call AIPickPrizeCards
 	ret
-; 0x14f3b
 
 .list_arena ; 14f3b (5:4f3b)
 	db RHYHORN

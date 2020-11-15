@@ -326,7 +326,6 @@ Func_1c58e: ; 1c58e (7:458e)
 	pop bc
 	pop hl
 	ret
-; 0x1c5b9
 
 Func_1c5b9: ; 1c5b9 (7:45b9)
 	INCROM $1c5b9, $1c5e9

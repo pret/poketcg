@@ -9,7 +9,6 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 .do_turn ; 14b1b (5:4b1b)
 	call AIDoTurn_LegendaryZapdos
 	ret
-; 0x14b1f
 
 .start_duel ; 14b1f (5:4b1f)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14b30
 
 .forced_switch ; 14b30 (5:4b30)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14b34
 
 .ko_switch ; 14b34 (5:4b34)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14b38
 
 .take_prize ; 14b38 (5:4b38)
 	call AIPickPrizeCards
 	ret
-; 0x14b3c
 
 .list_arena ; 14b3c (5:4b3c)
 	db ELECTABUZZ2
@@ -83,7 +78,6 @@ AIActionTable_LegendaryZapdos: ; 14b0f (05:4b0f)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14b9a
 
 AIDoTurn_LegendaryZapdos: ; 14b9a (5:4b9a)
 ; initialize variables

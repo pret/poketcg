@@ -1160,7 +1160,6 @@ Func_c8ba: ; c8ba (3:48ba)
 	call DoFrameIfLCDEnabled
 	call $2c62
 	ret
-; 0xc8ed
 
 Func_c8ed: ; c8ed (3:48ed)
 	push hl
@@ -1433,7 +1432,6 @@ GetEventFlagValue: ; ca6c (3:4a6c)
 	pop hl
 	or a
 	ret
-; 0xca84
 
 ZeroStackFlagValue2: ; ca84 (3:4a84)
 	call GetByteAfterCall
@@ -1491,7 +1489,6 @@ GetByteAfterCall: ; cab3 (3:4ab3)
 	pop bc
 	pop hl
 	ret
-; 0xcac2
 
 MaxStackFlagValue: ; cac2 (3:4ac2)
 	call GetByteAfterCall
@@ -1503,7 +1500,6 @@ MaxOutEventFlag: ; cac5 (3:4ac5)
 	call SetEventFlagValue
 	pop bc
 	ret
-; 0xcacd
 
 ZeroStackFlagValue: ; cacd (3:4acd)
 	call GetByteAfterCall
@@ -1559,7 +1555,6 @@ TryGiveMedalPCPacks: ; cad8 (3:4ad8)
 	pop bc
 	pop hl
 	ret
-; 0xcb15
 
 MedalEventFlags: ; cb15 (3:4b15)
 	db EVENT_FLAG_08
@@ -3109,7 +3104,6 @@ ScriptCommand_JumpIfFlagZero2:
 .fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
-; 0xd4ec
 
 LoadOverworld: ; d4ec (3:54ec)
 	call Func_d4fb
@@ -3744,7 +3738,6 @@ Script_Ronald: ; dc4b (3:5c4b)
 .ows_dc60
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0743
-; 0xdc63
 
 	; could be a commented function, or could be placed by mistake from
 	; someone thinking that the Ronald script ended with more code execution
@@ -3796,7 +3789,6 @@ Script_Imakuni: ; dd0d (3:5d0d)
 	db IMAKUNI_DECK_ID
 	db MUSIC_IMAKUNI
 	run_command ScriptCommand_QuitScriptFully
-; 0xdd2d
 
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
@@ -3874,7 +3866,6 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 	db $09
 	run_command Func_d41d
 	run_command ScriptCommand_QuitScriptFully
-; 0xdd78
 
 NPCMovement_dd78: ; dd78 (3:5d78)
 	db SOUTH
@@ -3907,7 +3898,6 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	ld [wd111], a
 	scf
 	ret
-; 0xe0cf
 
 Script_Gal1: ; e0cf (3:60cf)
 	start_script
@@ -4561,7 +4551,6 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	inc hl
 	ld b, [hl]
 	jp SetNextNPCAndScript
-; 0xe553
 
 GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
 	db NPC_MICHAEL
@@ -4660,7 +4649,6 @@ Script_LostToBrittany: ; e618 (3:6618)
 	start_script
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06e9
-; 0xe61c
 
 Script_e61c: ; e61c (3:661c)
 	run_command ScriptCommand_PrintTextQuitFully
@@ -5463,7 +5451,6 @@ Func_f121: ; f121 (3:7121)
 	jr nz, .asm_f123
 	or a
 	ret
-; 0xf146
 
 Unknown_f146: ; f146 (3:7146)
 	INCROM $f146, $f156
@@ -5518,7 +5505,6 @@ Preload_Guide: ; f270 (3:7270)
 .asm_f281
 	scf
 	ret
-; 0xf283
 
 Script_Guide: ; f283 (3:7283)
 	start_script

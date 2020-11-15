@@ -9,7 +9,6 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 .do_turn ; 14c17 (5:4c17)
 	call AIDoTurn_LegendaryArticuno
 	ret
-; 0x14c1b
 
 .start_duel ; 14c1b (5:4c1b)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14c2c
 
 .forced_switch ; 14c2c (5:4c2c)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14c30
 
 .ko_switch ; 14c30 (5:4c30)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14c34
 
 .take_prize ; 14c34 (5:4c34)
 	call AIPickPrizeCards
 	ret
-; 0x14c38
 
 .list_arena ; 14c38 (5:4c38)
 	db CHANSEY
@@ -81,7 +76,6 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14c91
 
 ; this routine handles how Legendary Articuno
 ; prioritises playing energy cards to each Pokémon.
@@ -156,7 +150,6 @@ ScoreLegendaryArticunoCards: ; 14c91 (5:4c91)
 	ld a, SEEL
 	call RaiseAIScoreToAllMatchingIDsInBench
 	ret
-; 0x14cf7
 
 AIDoTurn_LegendaryArticuno: ; 14cf7 (5:4cf7)
 ; initialize variables

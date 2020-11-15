@@ -9,7 +9,6 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 .do_turn ; 150a7 (5:50a7)
 	call AIMainTurnLogic
 	ret
-; 0x150ab
 
 .start_duel ; 150ab (5:50ab)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x150bc
 
 .forced_switch ; 150bc (5:50bc)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x150c0
 
 .ko_switch ; 150c0 (5:50c0)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x150c4
 
 .take_prize ; 150c4 (5:50c4)
 	call AIPickPrizeCards
 	ret
-; 0x150c8
 
 .list_arena ; 150c8 (5:50c8)
 	db ODDISH
