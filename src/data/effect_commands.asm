@@ -1491,7 +1491,7 @@ FullHealEffectCommands:
 	db  $00
 
 ImposterProfessorOakEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $74e1
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ImposterProssorOakEffect
 	db  $00
 
 ComputerSearchEffectCommands:
