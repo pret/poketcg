@@ -3416,7 +3416,50 @@ Script_d827: ; d827 (3:5827)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xd82d
 
-	INCROM $d82d, $d880
+	INCROM $d82d, $d834
+	
+AfterTutorialBattleScript: ; d834 (3:5834)
+        start_script
+        run_command ScriptCommand_PrintTextString
+        tx Text05eb
+        run_command ScriptCommand_PrintTextString
+        tx Text05ef
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_MoveActiveNPC
+        dw $5896
+        run_command ScriptCommand_SetPlayerDirection
+        db NORTH
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_SetPlayerDirection
+        db EAST
+        run_command ScriptCommand_MovePlayer
+        db EAST
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db EAST
+        db $01
+        run_command ScriptCommand_SetPlayerDirection
+        db NORTH
+        run_command ScriptCommand_PrintTextString
+        tx Text05f0
+        run_command ScriptCommand_CloseTextBox
+        run_command Func_ccdc
+        tx Text05f1
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_PrintTextString
+        tx Text05f2
+        run_command Func_d271
+; 0xd860
+	
+	INCROM $d860, $d880
 
 NPCMovement_d880: ; d880 (3:5880)
 	db EAST
