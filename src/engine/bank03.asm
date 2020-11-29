@@ -3426,7 +3426,7 @@ AfterTutorialBattleScript: ; d834 (3:5834)
         tx Text05ef
         run_command ScriptCommand_CloseTextBox
         run_command ScriptCommand_MoveActiveNPC
-        dw $5896
+        dw NPCMovement_d896
         run_command ScriptCommand_SetPlayerDirection
         db NORTH
         run_command ScriptCommand_MovePlayer
@@ -3490,8 +3490,20 @@ NPCMovement_d88b: ; d88b (3:588b)
 NPCMovement_d894: ; d894 (4:5894)
 	db SOUTH | NO_MOVE
 	db $ff
+	
+NPCMovement_d896: ; d896 (3:5896)
+	db NORTH
+	db NORTH
+	db NORTH
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+; 0xd89f
 
-	INCROM $d896, $d932
+	INCROM $d89f, $d932
 
 Script_d932: ; d932 (3:5932)
 	start_script

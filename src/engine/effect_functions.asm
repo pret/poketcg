@@ -765,7 +765,7 @@ Func_2cbfb: ; 2cbfb (b:4bfb)
 
 	INCROM $2cc0a, $2f4e1
 	
-ImpostorProfessorOakEffect: ; 2f4e1 (b:74e1)
+ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         call SwapTurn
         call CreateHandCardList
         call SortCardsInDuelTempListByID
