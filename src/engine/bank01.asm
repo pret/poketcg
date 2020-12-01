@@ -7179,11 +7179,11 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	push hl
 	bit DOUBLE_POISONED_F, [hl]
 	ld a, PSN_DAMAGE
-	ldtx hl, Received10DamageDueToPoisonText    ; copies from the byte of the damage due to poison by 10
-	jr z, .Damage_Dealt_From_Poison
+	ldtx hl, Received10DamageDueToPoisonText
+	jr z, .not_double_poisoned
 	ld a, $14
-	ldtx hl, Received20DamageDueToPoisonText     ; copies from the byte of the damage due to poison by 20
-.Damage_Dealt_From_Poison
+	ldtx hl, Received20DamageDueToPoisonText
+.not_double_poisoned
 	push af
 	ld [wd4b1], a
 	xor a
@@ -8304,9 +8304,7 @@ Func_7576: ; 7576 (1:7576)
 	INCROM $757b, $758f
 
 Func_758f: ; 758f (1:758f)
-	rst $28
-	ld b, $cf
-	ld h, h
+	farcall Func_1a4cf
 	ret
 ; 0x7594
 
