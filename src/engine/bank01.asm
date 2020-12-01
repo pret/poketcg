@@ -8292,9 +8292,7 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	INCROM $74dc, $7571
 
 Func_7571: ; 7571 (1:7571)
-	rst $28
-	ld b, $20
-	ld e, h
+	farcall Func_19c20
 	ret
 ; 0x7576
 

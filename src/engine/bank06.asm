@@ -1523,7 +1523,10 @@ Func_19a12: ; 19a12 (6:5a12)
 	ret
 ; 0x19a1f
 
-	INCROM $19a1f, $1a61f
+	INCROM $19a1f, $19c20
+	
+Func_19c20: ; 19c20 (6:5c20)
+    INCROM $19c20, $1a61f
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
