@@ -7180,10 +7180,10 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	bit 6, [hl]
 	ld a, $0a
 	ld hl, $26
-	jr z, .BoosterPack_RandomEnergies
+	jr z, .asm_6d52
 	ld a, $14
 	ld hl, $27
-.BoosterPack_RandomEnergies
+.asm_6d52
 	push af
 	ld [$d4b1], a
 	xor a
