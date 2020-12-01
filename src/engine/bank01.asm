@@ -7179,10 +7179,10 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	push hl
 	bit 6, [hl]
 	ld a, $0a
-	ld hl, $26
+	ld hl, $26      ; copies from the byte of the damage due to poison by 10
 	jr z, .asm_6d52
 	ld a, $14
-	ld hl, $27
+	ld hl, $27      ; copies from the byte of the damage due to poison by 20
 .asm_6d52
 	push af
 	ld [wd4b1], a
