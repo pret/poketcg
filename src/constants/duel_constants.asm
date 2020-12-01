@@ -126,7 +126,7 @@ POISONED_F        EQU 7
 CNF_SLP_PRZ   EQU $0f ; confused, asleep or paralyzed
 PSN_DBLPSN    EQU $f0 ; poisoned or double poisoned
 PSN_DAMAGE    EQU 10
-DBLPSN_DAMAGE EQU $14
+DBLPSN_DAMAGE EQU 20
 
 ; substatus conditions (DUELVARS_ARENA_CARD_SUBSTATUS*)
 
