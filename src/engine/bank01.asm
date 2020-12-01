@@ -7174,16 +7174,16 @@ Func_6cfa: ; 6cfa (1:6cfa)
 
 Func_6d3f: ; 6d3f (1:6d3f)
 	or a
-	bit 7, [hl]
+	bit POISONED_F , [hl]
 	ret z
 	push hl
-	bit 6, [hl]
-	ld a, $0a
-	ld hl, $26      ; copies from the byte of the damage due to poison by 10
-	jr z, .asm_6d52
+	bit DOUBLE_POISONED_F, [hl]
+	ld a, PSN_DAMAGE
+	ldtx hl, Received10DamageDueToPoisonText    ; copies from the byte of the damage due to poison by 10
+	jr z, .Damage_Dealt_From_Poison
 	ld a, $14
-	ld hl, $27      ; copies from the byte of the damage due to poison by 20
-.asm_6d52
+	ldtx hl, Received20DamageDueToPoisonText     ; copies from the byte of the damage due to poison by 20
+.Damage_Dealt_From_Poison
 	push af
 	ld [wd4b1], a
 	xor a
