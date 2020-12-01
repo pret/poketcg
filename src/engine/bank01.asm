@@ -7181,7 +7181,7 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	ld a, PSN_DAMAGE
 	ldtx hl, Received10DamageDueToPoisonText
 	jr z, .not_double_poisoned
-	ld a, $14
+	ld a, DBLPSN_DAMAGE
 	ldtx hl, Received20DamageDueToPoisonText
 .not_double_poisoned
 	push af
