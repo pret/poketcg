@@ -8292,7 +8292,11 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	INCROM $74dc, $7571
 
 Func_7571: ; 7571 (1:7571)
-	INCROM $7571, $7576
+	rst $28
+	ld b, $20
+	ld e, h
+	ret
+; 0x7576
 
 Func_7576: ; 7576 (1:7576)
 	farcall Func_1991f
@@ -8302,7 +8306,11 @@ Func_7576: ; 7576 (1:7576)
 	INCROM $757b, $758f
 
 Func_758f: ; 758f (1:758f)
-	INCROM $758f, $7594
+	rst $28
+	ld b, $cf
+	ld h, h
+	ret
+; 0x7594
 
 Func_7594: ; 7594 (1:7594)
 	farcall Func_1a61f
