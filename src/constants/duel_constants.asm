@@ -118,8 +118,10 @@ PARALYZED       EQU $03
 POISONED        EQU $80
 DOUBLE_POISONED EQU $c0
 
+
+
 DOUBLE_POISONED_F EQU 6
-POISONED_F      EQU 7
+POISONED_F        EQU 7
 
 
 CNF_SLP_PRZ  EQU $0f ; confused, asleep or paralyzed
