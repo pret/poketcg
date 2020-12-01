@@ -6973,7 +6973,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld a, [hl]
 	or a
 	jr z, .asm_6c1a
-	call $6d3f
+	call Func_6d3f
 	jr c, .asm_6c1a
 	call Func_6cfa
 	ld a, [hl]
@@ -7001,7 +7001,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld a, [hl]
 	or a
 	jr z, .asm_6c3a
-	call $6d3f
+	call Func_6d3f
 	jr c, .asm_6c3a
 	call Func_6cfa
 .asm_6c3a
@@ -7172,7 +7172,45 @@ Func_6cfa: ; 6cfa (1:6cfa)
 	ret
 ; 0x6d3f
 
-	INCROM $6d3f, $6d84
+Func_6d3f: ; 6d3f (1:6d3f)
+	or a
+	bit 7, [hl]
+	ret z
+	push hl
+	bit 6, [hl]
+	ld a, $0a
+	ld hl, $26
+	jr z, .BoosterPack_RandomEnergies
+	ld a, $14
+	ld hl, $27
+.BoosterPack_RandomEnergies
+	push af
+	ld [$d4b1], a
+	xor a
+	ld [$d4b2], a
+	push hl
+	call Func_6c7e
+	pop hl
+	call Func_6ce4
+	ld a, $05
+	call Func_6cab
+	pop af
+	ld e, a
+	ld d, $00
+	ld a, $c8
+	call GetTurnDuelistVariable
+	call SubstractHP
+	push hl
+	ld a, $8c
+	call Func_6cab
+	pop hl
+	call PrintKnockedOutIfHLZero
+	push af
+	call WaitForWideTextBoxInput
+	pop af
+	pop hl
+	ret
+; 0x6d84
 
 ; given the deck index of a turn holder's card in register a,
 ; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
