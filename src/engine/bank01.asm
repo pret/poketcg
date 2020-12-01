@@ -7185,9 +7185,9 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	ld hl, $27
 .asm_6d52
 	push af
-	ld [$d4b1], a
+	ld [wd4b1], a
 	xor a
-	ld [$d4b2], a
+	ld [wd4b2], a
 	push hl
 	call Func_6c7e
 	pop hl
@@ -7197,7 +7197,7 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	pop af
 	ld e, a
 	ld d, $00
-	ld a, $c8
+	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
 	call SubstractHP
 	push hl
