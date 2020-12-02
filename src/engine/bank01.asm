@@ -8142,7 +8142,59 @@ _TossCoin: ; 71ad (1:71ad)
 	ret
 ; 0x72ff
 
-	INCROM $72ff, $7354
+Func_72ff: ; 72ff (1:72ff)
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp $01
+	ret nz
+	ldh a, [hff96]
+	call SerialSendByte
+	call Func_7344
+	ret
+; 0x7310
+
+Func_7310: ; 7310 (1:7310)
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp $01
+	jr z, .asm_7338
+.asm_7319
+	call DoFrame
+	call CheckAnyAnimationPlaying
+	jr c, .asm_7319
+	ldh a, [hff96]
+	ret
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp $01
+	jr z, .asm_7338
+	ld a, $1e
+.asm_732f
+	call DoFrame
+	dec a
+	jr nz, .asm_732f
+	ldh a, [hff96]
+	ret
+.asm_7338
+	call DoFrame
+	call SerialRecvByte
+	jr c, .asm_7338
+	call Func_7344
+	ret
+; 0x7344
+
+Func_7344: ; 7344 (1:7344)
+    push af
+    ld a, [wSerialFlags]
+    or a
+    jr nz, .asm_734d
+    pop af
+    ret
+.asm_734d
+    call Func_3b31
+    call DuelTransmissionError
+    ret
+; 0x7354
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36", TX_END
