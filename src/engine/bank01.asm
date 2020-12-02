@@ -8289,20 +8289,7 @@ Func_73d8: ; 73d8 (1:73d8)
 	ret
 ; 0x7408
 
-Func_7408: ; 7408 (1:7408)
-	ld a, [bc]
-	nop
-	adc c
-	nop
-	ld a, [bc]
-	ld a, [bc]
-	adc e
-	nop
-	inc bc
-	ld c, $8a
-	nop
-	debug_ret
-; 0x7415
+	INCROM $7408, $7415
 
 Func_7415: ; 7415 (1:7415)
 	xor a
