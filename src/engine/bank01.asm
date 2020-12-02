@@ -8166,7 +8166,7 @@ Func_7310: ; 7310 (1:7310)
 	ret
 	ldh [hff96], a
 	ld a, [wDuelType]
-	cp CONFUSED
+	cp DUELTYPE_LINK
 	jr z, .asm_7338
 	ld a, $1e
 .asm_732f
