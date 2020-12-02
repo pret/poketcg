@@ -8145,7 +8145,7 @@ _TossCoin: ; 71ad (1:71ad)
 Func_72ff: ; 72ff (1:72ff)
 	ldh [hff96], a
 	ld a, [wDuelType]
-	cp $01
+	cp DUELTYPE_LINK
 	ret nz
 	ldh a, [hff96]
 	call SerialSendByte
