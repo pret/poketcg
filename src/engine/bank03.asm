@@ -5235,7 +5235,80 @@ Script_ee76: ; ee76 (3:6e76)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xee88
 
-	INCROM $ee88, $ef96
+	INCROM $ee88, $ef22
+
+ScriptKen: ; ef22 (3:6f22)
+        start_script
+        run_command ScriptCommand_TryGivePCPack
+        db $09
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_23
+        dw .ows_ef3b
+        run_command Func_cf2d
+        db $2c
+        db $01
+        db $3b
+        db $6f
+        run_command ScriptCommand_JumpIfFlagZero1
+        db EVENT_FLAG_24
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06ba
+        tx Text06bb
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_24
+        db $01
+        run_command ScriptCommand_QuitScriptFully
+; 0xef3b
+.ows_ef3b
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_23
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0A
+        dw .ows_ef83
+        run_command ScriptCommand_JumpIfFlagZero1
+        db EVENT_FLAG_24
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06bc
+        tx Text06bd
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_24
+        db $01
+        run_command ScriptCommand_AskQuestionJump
+        tx Text06be
+        dw .ows_ef56
+        run_command ScriptCommand_PrintTextString
+        tx Text06bf
+        run_command ScriptCommand_QuitScriptFully
+; 0xef56
+.ows_ef56
+        run_command ScriptCommand_PrintTextString
+        tx Text06c0
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRE_CHARGE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xef5e
+.ows_ef83
+        run_command ScriptCommand_PrintTextString
+        tx Text06c6
+        run_command ScriptCommand_AskQuestionJump
+        tx Text06be
+        dw .ows_ef8e
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text06bf
+; 0xef8e
+.ows_ef8e
+        run_command ScriptCommand_PrintTextString
+        tx Text06c7
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRE_CHARGE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks
