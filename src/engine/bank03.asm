@@ -2236,7 +2236,7 @@ asm_cf1f
 asm_cf2a
 	jp IncreaseScriptPointerBy4
 
-Func_cf2d: ; cf2d (3:4f2d)
+ScriptCommand_CheckRawAmountOfCardsOwned: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseScriptPointerBy1
 	pop bc
@@ -5235,7 +5235,38 @@ Script_ee76: ; ee76 (3:6e76)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xee88
 
-	INCROM $ee88, $ef22
+		INCROM $ee88, $ee93
+
+FireClubAfterDuel: ; ee93 (3:6e93)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_JOHN
+	db NPC_JOHN
+	dw $6ec8 
+	dw $6ed4
+ 
+	db NPC_ADAM
+	db NPC_ADAM
+	dw $6eed 
+	dw $6ef9 
+
+	db NPC_JONATHAN
+	db NPC_JONATHAN
+	dw $6f12 
+	dw $6f1e 
+
+	db NPC_KEN
+	db NPC_KEN
+	dw Script_BeatKen
+	dw Script_LoseToKen
+
+	db $00
+; 0xeeb3
+
+	INCROM $eeb3, $ef22
 
 Script_Ken: ; ef22 (3:6f22)
         start_script
@@ -5243,12 +5274,10 @@ Script_Ken: ; ef22 (3:6f22)
         db $09
         run_command ScriptCommand_JumpIfFlagNonzero2
         db EVENT_FLAG_23
-        dw .ows_ef3b
-        run_command Func_cf2d
-        db $2c
-        db $01
-        db $3b
-        db $6f
+        dw .have_300_cards
+        run_command ScriptCommand_CheckRawAmountOfCardsOwned
+        dw $012c ;	300 cards required
+        dw .have_300_cards
         run_command ScriptCommand_JumpIfFlagZero1
         db EVENT_FLAG_24
         dw NO_JUMP
@@ -5259,13 +5288,12 @@ Script_Ken: ; ef22 (3:6f22)
         db EVENT_FLAG_24
         db $01
         run_command ScriptCommand_QuitScriptFully
-; 0xef3b
-.ows_ef3b
+.have_300_cards
         run_command ScriptCommand_MaxOutFlagValue
         db EVENT_FLAG_23
         run_command ScriptCommand_JumpIfFlagNonzero2
         db EVENT_FLAG_0A
-        dw .ows_ef83
+        dw Script_KenBattle_AlreadyHaveMedal
         run_command ScriptCommand_JumpIfFlagZero1
         db EVENT_FLAG_24
         dw NO_JUMP
@@ -5277,12 +5305,11 @@ Script_Ken: ; ef22 (3:6f22)
         db $01
         run_command ScriptCommand_AskQuestionJump
         tx Text06be
-        dw .ows_ef56
+        dw .do_battle
         run_command ScriptCommand_PrintTextString
         tx Text06bf
         run_command ScriptCommand_QuitScriptFully
-; 0xef56
-.ows_ef56
+.do_battle
         run_command ScriptCommand_PrintTextString
         tx Text06c0
         run_command ScriptCommand_StartBattle
@@ -5291,16 +5318,55 @@ Script_Ken: ; ef22 (3:6f22)
         db MUSIC_DUEL_THEME_2
         run_command ScriptCommand_QuitScriptFully
 ; 0xef5e
-.ows_ef83
+
+Script_BeatKen: ; ef5e (3:6f5e)
+        start_script
+        run_command ScriptCommand_PrintTextString
+        tx Text06c1
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0A
+        dw .give_booster_packs
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_0A
+        run_command ScriptCommand_TryGiveMedalPCPacks
+        run_command Func_d125
+        db $0a
+        run_command Func_d435
+        db $08
+        run_command ScriptCommand_PrintTextString
+        tx Text06c2
+.give_booster_packs
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_MYSTERY_NEUTRAL
+        db BOOSTER_MYSTERY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text06c3
+        run_command ScriptCommand_QuitScriptFully
+; 0xef78
+
+
+
+Script_LoseToKen: ; ef78 (3:6f78)
+        start_script
+        run_command ScriptCommand_JumpIfFlagZero2
+        db EVENT_FLAG_0A
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06c4
+        tx Text06c5
+        run_command ScriptCommand_QuitScriptFully
+; 0xef83
+
+Script_KenBattle_AlreadyHaveMedal; ef83 (3:6f83)
         run_command ScriptCommand_PrintTextString
         tx Text06c6
         run_command ScriptCommand_AskQuestionJump
         tx Text06be
-        dw .ows_ef8e
+        dw .do_battle
         run_command ScriptCommand_PrintTextQuitFully
         tx Text06bf
-; 0xef8e
-.ows_ef8e
+.do_battle
         run_command ScriptCommand_PrintTextString
         tx Text06c7
         run_command ScriptCommand_StartBattle
