@@ -27,8 +27,8 @@ ENDM
 	const ScriptCommand_MoveActiveNPCByDirection_index                       ; $0a
 	const ScriptCommand_CloseTextBox_index           ; $0b
 	const ScriptCommand_GiveBoosterPacks_index       ; $0c
-	const Func_cf0c_index                       ; $0d
-	const Func_cf12_index                       ; $0e
+	const ScriptCommand_CheckIfCardInCollectionOrDecks_index                       ; $0d
+	const ScriptCommand_CheckIfCardInCollection_index                       ; $0e
 	const ScriptCommand_GiveCard_index                       ; $0f
 	const ScriptCommand_TakeCard_index                       ; $10
 	const Func_cf53_index                       ; $11

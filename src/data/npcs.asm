@@ -772,7 +772,7 @@ KenData:
 	db $04
 	db $1e
 	db $00
-	dw ScriptKen ; Pointer to Script
+	dw Script_Ken ; Pointer to Script
 	tx Text03d3
 	db KEN_PIC
 	db FIRE_CHARGE_DECK_ID

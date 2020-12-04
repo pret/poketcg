@@ -188,8 +188,8 @@ def createList(): # this is a func just so all this can go at the bottom
 	("ScriptCommand_MoveActiveNPCByDirection", "w", DO_NOT_QUIT),
 	("ScriptCommand_CloseTextBox", "", DO_NOT_QUIT),
 	("ScriptCommand_GiveBoosterPacks", "bbb", DO_NOT_QUIT),
-	("Func_cf0c", "bj", DO_NOT_QUIT), # more complex behavior too (jumping)
-	("Func_cf12", "bj", DO_NOT_QUIT),
+	("ScriptCommand_CheckIfCardInCollectionOrDecks", "bj", DO_NOT_QUIT), # more complex behavior too (jumping)
+	("ScriptCommand_CheckIfCardInCollection", "bj", DO_NOT_QUIT),
 	("ScriptCommand_GiveCard", "b", DO_NOT_QUIT),
 	("ScriptCommand_TakeCard", "b", DO_NOT_QUIT),
 	("Func_cf53", "w", DO_NOT_QUIT), # more complex behavior too (jumping)

@@ -2210,12 +2210,12 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	xor a
 	jr .asm_cef0
 
-Func_cf0c: ; cf0c (3:4f0c)
+ScriptCommand_CheckIfCardInCollectionOrDecks: ; cf0c (3:4f0c)
 	ld a, c
 	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
-Func_cf12: ; cf12 (3:4f12)
+ScriptCommand_CheckIfCardInCollection: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
@@ -3627,14 +3627,14 @@ Script_Ishihara: ; db4a (3:5b4a)
 	tx Text072c
 
 .ows_dba8
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $ac
 	dw .ows_dbaf
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072d
 
 .ows_dbaf
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $ac
 	dw .ows_dbb6
 	run_command ScriptCommand_PrintTextQuitFully
@@ -3679,14 +3679,14 @@ Script_Ishihara: ; db4a (3:5b4a)
 	tx Text072c
 
 .ows_dbe1
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $bb
 	dw .ows_dbe8
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0734
 
 .ows_dbe8
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $bb
 	dw .ows_dbef
 	run_command ScriptCommand_PrintTextQuitFully
@@ -3731,14 +3731,14 @@ Script_Ishihara: ; db4a (3:5b4a)
 	tx Text072c
 
 .ows_dc1a
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $b8
 	dw .ows_dc21
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073a
 
 .ows_dc21
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $b8
 	dw .ows_dc28
 	run_command ScriptCommand_PrintTextQuitFully
@@ -3988,7 +3988,7 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0eb
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $59
 	dw .ows_e0f3
 	run_command ScriptCommand_PrintTextString
@@ -3996,7 +3996,7 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0f3
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $59
 	dw .ows_e0fb
 	run_command ScriptCommand_PrintTextString
@@ -4755,14 +4755,14 @@ Script_e61f: ; e61f (3:661f)
 	tx Text06ee
 
 .ows_e648
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $1c
 	dw .ows_e64f
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06ef
 
 .ows_e64f
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $1c
 	dw .ows_e656
 	run_command ScriptCommand_PrintTextQuitFully
@@ -4805,14 +4805,14 @@ Script_e61f: ; e61f (3:661f)
 	tx Text06f6
 
 .ows_e67f
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $ab
 	dw .ows_e686
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06f7
 
 .ows_e686
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $ab
 	dw .ows_e68d
 	run_command ScriptCommand_PrintTextQuitFully
@@ -4855,14 +4855,14 @@ Script_e61f: ; e61f (3:661f)
 	tx Text06fd
 
 .ows_e6b6
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $32
 	dw .ows_e6bd
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06fe
 
 .ows_e6bd
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $32
 	dw .ows_e6c4
 	run_command ScriptCommand_PrintTextQuitFully
@@ -5237,7 +5237,7 @@ Script_ee76: ; ee76 (3:6e76)
 
 	INCROM $ee88, $ef22
 
-ScriptKen: ; ef22 (3:6f22)
+Script_Ken: ; ef22 (3:6f22)
         start_script
         run_command ScriptCommand_TryGivePCPack
         db $09

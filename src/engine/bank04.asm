@@ -982,8 +982,8 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_MoveActiveNPCByDirection
 	dw ScriptCommand_CloseTextBox
 	dw ScriptCommand_GiveBoosterPacks
-	dw Func_cf0c
-	dw Func_cf12
+	dw ScriptCommand_CheckIfCardInCollectionOrDecks
+	dw ScriptCommand_CheckIfCardInCollection
 	dw ScriptCommand_GiveCard
 	dw ScriptCommand_TakeCard
 	dw Func_cf53
