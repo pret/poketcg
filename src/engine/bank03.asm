@@ -5235,7 +5235,7 @@ Script_ee76: ; ee76 (3:6e76)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xee88
 
-		INCROM $ee88, $ee93
+	INCROM $ee88, $ee93
 
 FireClubAfterDuel: ; ee93 (3:6e93)
 	ld hl, .after_duel_table
