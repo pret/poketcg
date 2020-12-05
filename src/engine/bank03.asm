@@ -3943,7 +3943,169 @@ NPCMovement_dd78 ; dd78 (3:5d78)
 	db EAST
 	db $ff
 
-	INCROM $dd82, $e0b0
+	INCROM $dd82, $dda3
+
+FightingClubAfterDuel: ; dda3 (3:5da3)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xddaa
+
+.after_duel_table
+	db NPC_CHRIS
+	db NPC_CHRIS
+	dw $5e69
+	dw $5e75
+
+	db NPC_MICHAEL
+	db NPC_MICHAEL
+	dw $5e95
+	dw $5ea1
+
+	db NPC_JESSICA
+	db NPC_JESSICA
+	dw $c15e
+	dw $cd5e
+
+	db NPC_MITCH
+	db NPC_MITCH
+	dw Script_BeatMitch
+	dw Script_LoseToMitch
+
+	db $00
+; ddc3
+
+Script_Mitch: ; ddc3 (3:5dc3)
+        start_script
+        run_command ScriptCommand_TryGivePCPack
+        db $02
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_AlreadyHaveMedal
+        run_command Func_cf96
+        dw .first_interaction
+        dw .three_pupils_remaining
+        dw .two_pupils_remaining
+        dw .one_pupil_remaining
+        dw .all_pupils_defeated
+.first_interaction
+        run_command ScriptCommand_PrintTextString
+        tx Text0477
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_11
+        db $01
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_17
+        db $01
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_20
+        db $01
+        run_command ScriptCommand_QuitScriptFully
+; 0xdde2
+.three_pupils_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0478
+; 0xdde5
+.two_pupils_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0479
+; 0xdde8
+.one_pupil_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text047a
+; 0xddeb
+.all_pupils_defeated
+        run_command ScriptCommand_PrintTextString
+        tx Text047b
+        run_command ScriptCommand_AskQuestionJump
+        tx Text047c
+        dw .do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text047d
+        run_command ScriptCommand_QuitScriptFully
+; 0xddf7
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text047e
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRST_STRIKE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xddff
+
+Script_BeatMitch: ; ddff (3:5dff)
+        start_script
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_GiveBoosters
+        run_command ScriptCommand_PrintTextString
+        tx Text047f
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_0F
+        run_command ScriptCommand_TryGiveMedalPCPacks
+        run_command Func_d125
+        db $0f
+        run_command Func_d435
+        db $01
+        run_command ScriptCommand_PrintTextString
+        tx Text0480
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_LABORATORY_NEUTRAL
+        db BOOSTER_LABORATORY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text0481
+        run_command ScriptCommand_QuitScriptFully
+; 0xde19
+
+Script_LoseToMitch: ; de19 (3:5e19)
+        start_script
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_PrintTrainHarderText
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0482
+; 0xde21
+
+Script_Mitch_AlreadyHaveMedal; 0xde21
+        run_command ScriptCommand_PrintTextString
+        tx Text0483
+        run_command ScriptCommand_AskQuestionJump
+        tx Text047c
+        dw .do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text0484
+        run_command ScriptCommand_QuitScriptFully
+; 0xde2d
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text0485
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRST_STRIKE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xde35
+
+Script_Mitch_GiveBoosters
+        run_command ScriptCommand_PrintTextString
+        tx Text0486
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_LABORATORY_NEUTRAL
+        db BOOSTER_LABORATORY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text0487
+        run_command ScriptCommand_QuitScriptFully
+; 0xde40
+
+Script_Mitch_PrintTrainHarderText
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0488
+; 0xde43
+
+	INCROM $de43, $e0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE

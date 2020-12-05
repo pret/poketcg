@@ -424,7 +424,7 @@ MitchData:
 	db $00
 	db $0e
 	db $00
-	dw $5dc3 ; Pointer to Script
+	dw Script_Mitch ; Pointer to Script
 	tx Text03b7
 	db MITCH_PIC
 	db FIRST_STRIKE_DECK_ID
@@ -772,7 +772,7 @@ KenData:
 	db $04
 	db $1e
 	db $00
-	dw Script_Ken ; Pointer to Script
+	dw ScriptCommand_CheckIfCardInCollection ; Pointer to Script
 	tx Text03d3
 	db KEN_PIC
 	db FIRE_CHARGE_DECK_ID

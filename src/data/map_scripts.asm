@@ -78,7 +78,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $5da3
+	dw FightingClubAfterDuel
 	dw $0000
 	dw $0000
 

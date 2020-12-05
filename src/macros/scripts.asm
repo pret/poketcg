@@ -33,7 +33,7 @@ ENDM
 	const ScriptCommand_TakeCard_index                       ; $10
 	const Func_cf53_index                       ; $11
 	const Func_cf7b_index                       ; $12
-	const Func_cf2d_index                       ; $13
+	const ScriptCommand_CheckRawAmountOfCardsOwned_index                       ; $13
 	const Func_cf96_index                       ; $14
 	const Func_cfc6_index                       ; $15
 	const Func_cfd4_index                       ; $16
