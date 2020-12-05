@@ -288,7 +288,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6e93
+	dw FireClubAfterDuel
 	dw $0000
 	dw $0000
 
