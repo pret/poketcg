@@ -8156,7 +8156,7 @@ Func_72ff: ; 72ff (1:72ff)
 Func_7310: ; 7310 (1:7310)
 	ldh [hff96], a
 	ld a, [wDuelType]
-	cp $01
+	cp DUELTYPE_LINK
 	jr z, .asm_7338
 .asm_7319
 	call DoFrame
@@ -8205,7 +8205,7 @@ Func_7364: ; 7364 (1:7364)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
-	ld de, $389f
+	lb de, $38, $9f
 	call SetupText
 	call DrawWideTextBox
 	call EnableLCD
@@ -8250,7 +8250,7 @@ Func_7364: ; 7364 (1:7364)
 	jr z, .asm_73c3
 	sub $0a
 	jr nc, .asm_73c3
-	ld a, $34
+	ld a, FLAMETHROWER_DECK
 .asm_73c3
 	ld [wOpponentDeckID], a
 	call Func_73d8
@@ -8281,10 +8281,10 @@ Func_73d8: ; 73d8 (1:73d8)
 	call PlaceTextItems
 	call DrawDuelistPortraitsAndNames
 	ld a, [wOpponentDeckID]
-	ld bc, $510
+	lb bc, 5, 16
 	call WriteTwoByteNumberInTxSymbolFormat
 	ld a, [wcc18]
-	ld bc, $f0a
+	lb bc, 15, 10
 	call WriteTwoByteNumberInTxSymbolFormat
 	ret
 ; 0x7408
