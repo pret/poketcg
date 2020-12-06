@@ -2319,7 +2319,13 @@ wd4af:: ; d4af
 wd4b0:: ; d4b0
 	ds $1
 
-	ds $d
+wd4b1:: ; d4b1
+	ds $1
+	
+wd4b2:: ; d4b2
+	ds $1
+	
+	ds $b
 
 wd4be:: ; d4be
 	ds $1
