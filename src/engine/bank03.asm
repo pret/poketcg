@@ -4105,7 +4105,45 @@ Script_Mitch_PrintTrainHarderText
         tx Text0488
 ; 0xde43
 
-	INCROM $de43, $e0b0
+	INCROM $de43, $ded5
+
+
+RockClubLobbyAfterDuel; ded5 (3:5ed5)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xdedc
+
+.after_duel_table
+
+	db NPC_CHRIS
+	db NPC_CHRIS
+	dw $5f0c
+	dw $5f20
+	db $00
+
+	db NPC_MATTHEW
+	db NPC_MATTHEW
+	dw $5f63
+	dw $5f78
+	db $00
+; 0xdee9
+
+	INCROM $dee9, $e0a2
+
+WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe0a9
+
+.after_duel_table
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xe0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4742,7 +4780,23 @@ ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe369
 
-	INCROM $e369, $e525
+	INCROM $e369, $e36d
+
+LightningClubLobbyAfterDuel: ; e36d (3:636d)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe374
+
+.after_duel_table
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xe37B
+
+	INCROM $e37B, $e525
 
 GrassClubEntranceAfterDuel: ; e525 (3:6525)
 	ld hl, GrassClubEntranceAfterDuelTable
@@ -5326,7 +5380,38 @@ ScriptJump_FinishedSecondRonaldFight ; e959 (3:6959)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe963
 
-	INCROM $e963, $ed49
+PsychicClubLobbyAfterDuel: ; e963 (3:6963)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe96a
+
+.after_duel_table
+
+	db NPC_ROBERT
+	db NPC_ROBERT
+	dw $6995
+	dw $69a1
+	db $00
+
+	INCROM $e971, $eb57
+
+ScienceClubLobbyAfterDuel; eb57 (3:6b57)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xeb5e
+
+.after_duel_table
+	
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xeb65
+
+	INCROM $eb65, $ed49
 
 FireClubLobbyAfterDuel: ; ed49 (3:6d49)
         ld hl, .after_duel_table
