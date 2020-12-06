@@ -5326,7 +5326,23 @@ ScriptJump_FinishedSecondRonaldFight ; e959 (3:6959)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe963
 
-	INCROM $e963, $ed57
+	INCROM $e963, $ed49
+
+FireClubLobbbyAfterDuel: ; ed49 (3:6d49)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xed50
+
+.after_duel_table
+	db NPC_JESSICA
+	db NPC_JESSICA
+	dw $6dba
+	dw $6dce
+	db $00
+
+; 0xed57
+
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
