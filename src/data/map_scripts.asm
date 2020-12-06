@@ -278,7 +278,7 @@ MapScripts: ; 1162a (4:562a)
 	dw FireClubLobbyObjects
 	dw FireClubPressedA
 	dw $0000
-	dw FireClubLobbbyAfterDuel
+	dw FireClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 

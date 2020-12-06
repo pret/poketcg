@@ -5328,7 +5328,7 @@ ScriptJump_FinishedSecondRonaldFight ; e959 (3:6959)
 
 	INCROM $e963, $ed49
 
-FireClubLobbbyAfterDuel: ; ed49 (3:6d49)
+FireClubLobbyAfterDuel: ; ed49 (3:6d49)
         ld hl, .after_duel_table
         call FindEndOfBattleScript
         ret
