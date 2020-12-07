@@ -240,12 +240,12 @@ FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -274,12 +274,12 @@ RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -308,12 +308,12 @@ WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -342,12 +342,12 @@ LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -376,12 +376,12 @@ GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -410,12 +410,12 @@ PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -444,12 +444,12 @@ ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -478,12 +478,12 @@ FireClubLobbyObjects: ; 13df0 (3:7df0)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
@@ -512,12 +512,12 @@ ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 

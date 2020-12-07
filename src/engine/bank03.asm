@@ -1729,7 +1729,16 @@ Func_cc32: ; cc32 (3:4c32)
 
 ; Used for things that are represented as NPCs but don't have a Script
 ; EX: Clerks and legendary cards that interact through Level Objects
-NoOverworldSequence: ; cc3e (3:4c3e)
+Script_Clerk10: ; cc3e (3:4c3e)
+Script_GiftCenterClerk: ; cc3e (3:4c3e)
+Script_Woman2: ; cc3e (3:4c3e)
+Script_Torch: ; cc3e (3:4c3e)
+Script_LegendaryCardTopLeft: ; cc3e (3:4c3e)
+Script_LegendaryCardTopRight: ; cc3e (3:4c3e)
+Script_LegendaryCardLeftSpark: ; cc3e (3:4c3e)
+Script_LegendaryCardBottomLeft: ; cc3e (3:4c3e)
+Script_LegendaryCardBottomRight: ; cc3e (3:4c3e)
+Script_LegendaryCardRightSpark: ; cc3e (3:4c3e)
 	call CloseAdvancedDialogueBox
 	ret
 
@@ -3202,7 +3211,26 @@ Script_ChallengeMachine: ; d57d (3:557d)
 	run_command Func_d43d
 	run_command ScriptCommand_QuitScriptFully
 
-	INCROM $d583, $d753
+Script_Tech1: ; d583 (3:5583)
+	INCROM $d583, $d5ca
+
+Script_Tech2: ; d5ca (3:55ca)
+	INCROM $d5ca, $d5d5
+
+Script_Tech3: ; d5d5 (3:55d5)
+	INCROM $d5d5, $d5e0
+
+Script_Tech4: ; d5e0 (3:55e0)
+	INCROM $d5e0, $d5f9
+
+Script_Tech5: ; d5f9 (3:55f9)
+	INCROM $d5f9, $d61d
+
+Script_Sam: ; d61d (3:561d)
+	INCROM $d61d, $d727
+
+Script_DrMason: ; d727 (3:5727)
+	INCROM $d727, $d753
 
 Script_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
@@ -3497,7 +3525,19 @@ NPCMovement_d896: ; d896 (3:5896)
 	db $ff
 ; 0xd89f
 
-	INCROM $d89f, $d932
+	INCROM $d89f, $d8bb
+
+Script_Tech6: ; d8bb (3:58bb)
+	INCROM $d8bb, $d8c6
+
+Script_Tech7: ; d8c6 (3:58c6)
+	INCROM $d8c6, $d8d1
+
+Script_Tech8: ; d8d1 (3:58d1)
+	INCROM $d8d1, $d8dd
+
+Script_Aaron: ; d8dd (3:58dd)
+	INCROM $d8dd, $d932
 
 Script_d932: ; d932 (3:5932)
 	start_script
@@ -3814,6 +3854,7 @@ FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	dw Script_LostToImakuni
 	db $00
 
+Script_Man1: ; dc76 (3:5c76)
 	INCROM $dc76, $dd0d
 
 Script_Imakuni: ; dd0d (3:5d0d)
@@ -3934,7 +3975,47 @@ NPCMovement_dd78: ; dd78 (3:5d78)
 	db EAST
 	db $ff
 
-	INCROM $dd82, $e0b0
+Script_Specs1: ; dd82 (3:5d82)
+	INCROM $dd82, $dd8d
+
+Script_Butch: ; dd8d (3:5d8d)
+	INCROM $dd8d, $dd9f
+
+Script_Granny1: ; dd9f (3:5d9f)
+	INCROM $dd9f, $ddc3
+
+Script_Mitch: ; ddc3 (3:5dc3)
+	INCROM $ddc3, $ded1
+
+Script_Clerk2: ; ded1 (3:5ed1)
+	INCROM $ded1, $def2
+
+Script_Chris: ; def2 (3:5ef2)
+	INCROM $def2, $df39
+
+Script_Matthew: ; df39 (3:5f39)
+	INCROM $df39, $df83
+
+Script_Woman1: ; df83 (3:5f83)
+	INCROM $df83, $dfc0
+
+Script_Chap1: ; dfc0 (3:5fc0)
+	INCROM $dfc0, $dfd2
+
+Script_Lass3: ; dfd2 (3:5fd2)
+	INCROM $dfd2, $dff0
+
+Script_Ryan: ; dff0 (3:5ff0)
+	INCROM $dff0, $e017
+
+Script_Andrew: ; e017 (3:6017)
+	INCROM $e017, $e03e
+
+Script_Gene: ; e03e (3:603e)
+	INCROM $e03e, $e09e
+
+Script_Clerk3: ; e09e (3:609e)
+	INCROM $e09e, $e0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4570,7 +4651,29 @@ ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe369
 
-	INCROM $e369, $e525
+Script_Clerk4: ; e369 (3:6369)
+	INCROM $e369, $e39a
+
+Script_Chap2: ; e39a (3:639a)
+	INCROM $e39a, $e3d9
+
+Script_Lass4: ; e3d9 (3:63d9)
+	INCROM $e3d9, $e3dd
+
+Script_Hood1: ; e3dd (3:63dd)
+	INCROM $e3dd, $e408
+
+Script_Jennifer: ; e408 (3:6408)
+	INCROM $e408, $e42f
+
+Script_Nicholas: ; e42f (3:642f)
+	INCROM $e42f, $e456
+
+Script_Brandon: ; e456 (3:6456)
+	INCROM $e456, $e4ad
+
+Script_Isaac: ; e4ad (3:64ad)
+	INCROM $e4ad, $e525
 
 GrassClubEntranceAfterDuel: ; e525 (3:6525)
 	ld hl, GrassClubEntranceAfterDuelTable
@@ -4624,7 +4727,11 @@ GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
 	dw Script_LostToSecondRonaldFight
 	db $00
 
-	INCROM $e566, $e5c4
+Script_Clerk5: ; e566 (3:6566)
+	INCROM $e566, $e573
+
+Script_Michael: ; e573 (3:6573)
+	INCROM $e573, $e5c4
 
 GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 	ld hl, .after_duel_table
@@ -4683,13 +4790,13 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	run_command ScriptCommand_JumpIfFlagNotLessThan
 	db EVENT_FLAG_35
 	db $02
-	dw .finishSequence
+	dw .finishScript
 	run_command ScriptCommand_JumpIfFlagZero2
 	db EVENT_FLAG_3A
-	dw .finishSequence
+	dw .finishScript
 	run_command ScriptCommand_JumpIfFlagZero2
 	db EVENT_FLAG_3B
-	dw .finishSequence
+	dw .finishScript
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_35
 	db $01
@@ -4697,7 +4804,7 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	db EVENT_FLAG_1E
 	run_command ScriptCommand_PrintTextString
 	tx Text06e8
-.finishSequence
+.finishScript
 	run_command ScriptCommand_QuitScriptFully
 
 Script_LostToBrittany: ; e618 (3:6618)
@@ -4709,7 +4816,7 @@ Script_e61c: ; e61c (3:661c)
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06ea
 
-Script_e61f: ; e61f (3:661f)
+Script_Lass2: ; e61f (3:661f)
 	start_script
 	run_command ScriptCommand_JumpIfFlagNonzero2
 	db EVENT_FLAG_04
@@ -4876,7 +4983,20 @@ Script_e61f: ; e61f (3:661f)
 	tx Text06f3
 ; 0xe6d8
 
-	INCROM $e6d8, $e7f6
+Script_Granny2: ; e6d8 (3:66d8)
+	INCROM $e6d8, $e6e3
+
+Script_Gal2: ; e6e3 (3:66e3)
+	INCROM $e6e3, $e701
+
+Script_Kristin: ; e701 (3:6701)
+	INCROM $e701, $e745
+
+Script_Heather: ; e745 (3:6745)
+	INCROM $e745, $e79e
+
+Script_Nikki: ; e79e (3:679e)
+	INCROM $e79e, $e7f6
 
 ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	ld hl, .after_duel_table
@@ -4895,7 +5015,7 @@ ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	db $00
 
 ; A Ronald is already loaded or not loaded depending on Pre-Load scripts
-; in data/npc_map_data.asm. This just starts a sequence if possible.
+; in data/npc_map_data.asm. This just starts a script if possible.
 LoadClubEntrance: ; e809 (3:6809)
 	call TryFirstRonaldFight
 	call TrySecondRonaldFight
@@ -4933,7 +5053,11 @@ TrySecondRonaldFight: ; e837 (3:6837)
 	jp SetNextNPCAndScript
 ; 0xe84c
 
-	INCROM $e84c, $e862
+Script_Clerk6: ; e84c (3:684c)
+	INCROM $e84c, $e850
+
+Script_Lad3: ; e850 (3:6850)
+	INCROM $e850, $e862
 
 Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
@@ -5152,7 +5276,61 @@ ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe963
 
-	INCROM $e963, $ed57
+	INCROM $e963, $e980
+
+Script_Robert: ; e980 (3:6980)
+	INCROM $e980, $e9a5
+
+Script_Pappy1: ; e9a5 (3:69a5)
+	INCROM $e9a5, $ea30
+
+Script_Gal3: ; ea30 (3:6a30)
+	INCROM $ea30, $ea3b
+
+Script_Chap4: ; ea3b (3:6a3b)
+	INCROM $ea3b, $ea60
+
+Script_Daniel: ; ea60 (3:6a60)
+	INCROM $ea60, $eaa2
+
+Script_Stephanie: ; eaa2 (3:6aa2)
+	INCROM $eaa2, $eadf
+
+Script_Murray2: ; eadf (3:6adf)
+	INCROM $eadf, $eadf
+
+Script_Murray1: ; eadf (3:6adf)
+	INCROM $eadf, $eb53
+
+Script_Clerk7: ; eb53 (3:6b53)
+	INCROM $eb53, $eb84
+
+Script_Lad1: ; eb84 (3:6b84)
+	INCROM $eb84, $ebc1
+
+Script_Man3: ; ebc1 (3:6bc1)
+	INCROM $ebc1, $ebc5
+
+Script_Specs2: ; ebc5 (3:6bc5)
+	INCROM $ebc5, $ebed
+
+Script_Specs3: ; ebed (3:6bed)
+	INCROM $ebed, $ec11
+
+Script_David: ; ec11 (3:6c11)
+	INCROM $ec11, $ec42
+
+Script_Erik: ; ec42 (3:6c42)
+	INCROM $ec42, $ec67
+
+Script_Rick: ; ec67 (3:6c67)
+	INCROM $ec67, $ecdb
+
+Script_Joseph: ; ecdb (3:6cdb)
+	INCROM $ecdb, $ed45
+
+Script_Clerk8: ; ed45 (3:6d45)
+	INCROM $ed45, $ed57
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
@@ -5200,7 +5378,16 @@ FindExtraInteractableObjects: ; ed64 (3:6d64)
 	ret
 ; 0xed8d
 
-	INCROM $ed8d, $ee76
+	INCROM $ed8d, $ed96
+
+Script_Jessica: ; ed96 (3:6d96)
+	INCROM $ed96, $ede8
+
+Script_Chap3: ; ede8 (3:6de8)
+	INCROM $ede8, $ee2c
+
+Script_Lad2: ; ee2c (3:6e2c)
+	INCROM $ee2c, $ee76
 
 Script_ee76: ; ee76 (3:6e76)
 	start_script
@@ -5223,7 +5410,20 @@ Script_ee76: ; ee76 (3:6e76)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xee88
 
-	INCROM $ee88, $ef96
+Script_Mania: ; ee88 (3:6e88)
+	INCROM $ee88, $eeb3
+
+Script_John: ; eeb3 (3:6eb3)
+	INCROM $eeb3, $eed8
+
+Script_Adam: ; eed8 (3:6ed8)
+	INCROM $eed8, $eefd
+
+Script_Jonathan: ; eefd (3:6efd)
+	INCROM $eefd, $ef22
+
+Script_Ken: ; ef22 (3:6f22)
+	INCROM $ef22, $ef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks
@@ -5769,7 +5969,7 @@ NPCMovement_f34e: ; f34e (3:734e)
 	db SOUTH
 	db $ff
 
-Script_HostStubbed: ; f352 (3:7352)
+Script_Host: ; f352 (3:7352)
 	ret
 
 Script_f353: ; f353 (3:7353)
@@ -6338,7 +6538,19 @@ Script_f631: ; f631 (3:7631)
 	ret
 ; 0xf63c
 
-	INCROM $f63c, $fbdb
+	INCROM $f63c, $f71f
+
+Script_Courtney: ; f71f (3:771f)
+	INCROM $f71f, $f72a
+
+Script_Steve: ; f72a (3:772a)
+	INCROM $f72a, $f735
+
+Script_Jack: ; f735 (3:7735)
+	INCROM $f735, $f740
+
+Script_Rod: ; f740 (3:7740)
+	INCROM $f740, $fbdb
 
 HallOfHonorLoadMap: ; fbdb (3:7bdb)
 	ld a, SFX_10
