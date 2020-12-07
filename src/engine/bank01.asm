@@ -8168,7 +8168,7 @@ Func_7310: ; 7310 (1:7310)
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, .asm_7338
-	ld a, $1e
+	ld a, 30
 .asm_732f
 	call DoFrame
 	dec a
@@ -8218,39 +8218,39 @@ Func_7364: ; 7364 (1:7364)
 	or a
 	jr z, .asm_7384
 	ld b, a
-	and $09
+	and A_BUTTON | START
 	jr nz, .asm_73cd
-	bit 1, b
+	bit B_BUTTON_F, b
 	jr nz, .asm_73cb
 	ld a, [wOpponentDeckID]
-	bit 4, b
+	bit D_RIGHT_F, b
 	jr z, .asm_73a2
 	inc a
-	cp $35
+	cp DECK_IDS_END
 	jr c, .asm_73a2
 	xor a
 .asm_73a2
-	bit 5, b
+	bit D_LEFT_F, b
 	jr z, .asm_73ae
 	or a
 	jr nz, .asm_73ad
-	ld a, $34
+	ld a, IMAKUNI_DECK_ID
 	jr .asm_73ae
 .asm_73ad
 	dec a
 .asm_73ae
-	bit 6, b
+	bit D_UP_F, b
 	jr z, .asm_73b9
 	add $0a
 	cp $35
 	jr c, .asm_73b9
 	xor a
 .asm_73b9
-	bit 7, b
+	bit D_DOWN_F, b
 	jr z, .asm_73c3
 	sub $0a
 	jr nc, .asm_73c3
-	ld a, FLAMETHROWER_DECK_ID
+	ld a, FLAMETHROWER_DECK
 .asm_73c3
 	ld [wOpponentDeckID], a
 	call Func_73d8
