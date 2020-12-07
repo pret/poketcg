@@ -95,4 +95,3 @@
 	const SFX_5D   ; $5d
 	const SFX_5E   ; $5e
 	const SFX_5F   ; $5f
-

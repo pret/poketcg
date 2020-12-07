@@ -9,7 +9,6 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 .do_turn ; 14d6c (5:4d6c)
 	call AIDoTurn_LegendaryDragonite
 	ret
-; 0x14d70
 
 .start_duel ; 14d70 (5:4d70)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14d81
 
 .forced_switch ; 14d81 (5:4d81)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14d85
 
 .ko_switch ; 14d85 (5:4d85)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14d89
 
 .take_prize ; 14d89 (5:4d89)
 	call AIPickPrizeCards
 	ret
-; 0x14d8d
 
 .list_arena ; 14d8d (5:4d8d)
 	db KANGASKHAN
@@ -84,7 +79,6 @@ AIActionTable_LegendaryDragonite: ; 14d60 (05:4d60)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14def
 
 AIDoTurn_LegendaryDragonite: ; 14def (5:4def)
 ; initialize variables

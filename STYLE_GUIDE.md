@@ -221,7 +221,7 @@ When naming WRAM addresses that belong to the same context or feature, try to ma
 wLoadedCard1:: ; cc24
 	card_data_struct wLoadedCard1
 wLoadedCard2:: ; cc65
-	card_data_struct wLoadedCard2	
+	card_data_struct wLoadedCard2
 ```
 
 Lastly, adding some line of commentary to the memory address is helpful when just the name itself doesn't quite tell the whole story. Usually, this is done to clarify where the memory address is used, or to explain which kind of different values it may hold and perhaps what each of them means (or just to mention the support of specific values, such as $00 or $ff). If the RAM address is supposed to hold a value that maps directly to some group of already defined constants, this is the perfect place to indicate it. Adding commentary to an address that contains a bit field is also particularly useful to describe what each bit means, since that's not doable with just the address name.

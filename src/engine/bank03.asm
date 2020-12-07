@@ -309,7 +309,7 @@ Func_c258: ; c258 (3:4258)
 	ldh a, [hffb0]
 	push af
 	ld a, $2
-asm_c25d
+asm_c25d:
 	ldh [hffb0], a
 	push hl
 	call Func_c268
@@ -847,7 +847,7 @@ Func_c687: ; c687 (3:4687)
 	ld a, [wd339]
 	call Func_c694
 	pop bc
-    ret
+	ret
 
 Func_c694: ; c694 (3:4694)
 	push hl
@@ -1160,7 +1160,6 @@ Func_c8ba: ; c8ba (3:48ba)
 	call DoFrameIfLCDEnabled
 	call $2c62
 	ret
-; 0xc8ed
 
 Func_c8ed: ; c8ed (3:48ed)
 	push hl
@@ -1433,7 +1432,6 @@ GetEventFlagValue: ; ca6c (3:4a6c)
 	pop hl
 	or a
 	ret
-; 0xca84
 
 ZeroStackFlagValue2: ; ca84 (3:4a84)
 	call GetByteAfterCall
@@ -1491,7 +1489,6 @@ GetByteAfterCall: ; cab3 (3:4ab3)
 	pop bc
 	pop hl
 	ret
-; 0xcac2
 
 MaxStackFlagValue: ; cac2 (3:4ac2)
 	call GetByteAfterCall
@@ -1503,7 +1500,6 @@ MaxOutEventFlag: ; cac5 (3:4ac5)
 	call SetEventFlagValue
 	pop bc
 	ret
-; 0xcacd
 
 ZeroStackFlagValue: ; cacd (3:4acd)
 	call GetByteAfterCall
@@ -1559,7 +1555,6 @@ TryGiveMedalPCPacks: ; cad8 (3:4ad8)
 	pop bc
 	pop hl
 	ret
-; 0xcb15
 
 MedalEventFlags: ; cb15 (3:4b15)
 	db EVENT_FLAG_08
@@ -1929,7 +1924,7 @@ ScriptCommand_StartBattle: ; cd01 (3:4d01)
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-asm_cd2f
+asm_cd2f:
 	ld [wd0c4], a
 	ld [wcc14], a
 	push af
@@ -2112,7 +2107,7 @@ ScriptCommand_MoveWramNPC: ; ce52 (3:4e52)
 
 ; Executes movement on an arbitrary NPC using values in a and on the stack
 ; Changes and fixes Temp NPC using stack values
-ExecuteArbitraryNPCMovementFromStack
+ExecuteArbitraryNPCMovementFromStack:
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call ExecuteNPCMovement
@@ -2228,21 +2223,21 @@ Func_cf12: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
-asm_cf16
+asm_cf16:
 	or a
 	jr nz, asm_cf1f
 
-asm_cf19
+asm_cf19:
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
 
-asm_cf1f
+asm_cf1f:
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
 	jr z, asm_cf2a
 	jp SetScriptPointer
 
-asm_cf2a
+asm_cf2a:
 	jp IncreaseScriptPointerBy4
 
 Func_cf2d: ; cf2d (3:4f2d)
@@ -2649,7 +2644,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 
 .asm_d1c3
 	ld hl, $51dc
-asm_d1c6
+asm_d1c6:
 	ld e, a
 	add a
 	add e
@@ -2926,7 +2921,7 @@ ScriptCommand_TryGivePCPack: ; d3c9 (3:53c9)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_nop: ; d3d1 (3:53d1)
-    jp IncreaseScriptPointerBy1
+	jp IncreaseScriptPointerBy1
 
 Func_d3d4: ; d3d4 (3:53d4)
 	ld a, [wd693]
@@ -3046,11 +3041,11 @@ ScriptCommand_JumpIfFlagEqual: ; d484 (3:5484)
 	cp c
 	jr z, ScriptEventPassedTryJump
 
-ScriptEventFailedNoJump ; d48a (3:548a)
+ScriptEventFailedNoJump: ; d48a (3:548a)
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy5
 
-ScriptEventPassedTryJump ; d490 (3:5490)
+ScriptEventPassedTryJump: ; d490 (3:5490)
 	call SetScriptControlBytePass
 	call GetScriptArgs3AfterPointer
 	jr z, .noJumpAddress
@@ -3118,7 +3113,6 @@ ScriptCommand_JumpIfFlagZero2:
 .fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
-; 0xd4ec
 
 LoadOverworld: ; d4ec (3:54ec)
 	call Func_d4fb
@@ -3839,7 +3833,6 @@ Script_Ronald: ; dc4b (3:5c4b)
 .ows_dc60
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0743
-; 0xdc63
 
 	; could be a commented function, or could be placed by mistake from
 	; someone thinking that the Ronald script ended with more code execution
@@ -3892,7 +3885,6 @@ Script_Imakuni: ; dd0d (3:5d0d)
 	db IMAKUNI_DECK_ID
 	db MUSIC_IMAKUNI
 	run_command ScriptCommand_QuitScriptFully
-; 0xdd2d
 
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
@@ -3970,9 +3962,8 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 	db $09
 	run_command Func_d41d
 	run_command ScriptCommand_QuitScriptFully
-; 0xdd78
 
-NPCMovement_dd78 ; dd78 (3:5d78)
+NPCMovement_dd78: ; dd78 (3:5d78)
 	db SOUTH
 	db SOUTH
 	db SOUTH
@@ -4043,7 +4034,6 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	ld [wd111], a
 	scf
 	ret
-; 0xe0cf
 
 Script_Gal1: ; e0cf (3:60cf)
 	start_script
@@ -4719,7 +4709,6 @@ FindEndOfBattleScript: ; e52c (3:652c)
 	inc hl
 	ld b, [hl]
 	jp SetNextNPCAndScript
-; 0xe553
 
 GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
 	db NPC_MICHAEL
@@ -4822,7 +4811,6 @@ Script_LostToBrittany: ; e618 (3:6618)
 	start_script
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06e9
-; 0xe61c
 
 Script_e61c: ; e61c (3:661c)
 	run_command ScriptCommand_PrintTextQuitFully
@@ -5183,7 +5171,7 @@ Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	run_command ScriptCommand_PrintTextString
 	tx Text064e
 
-ScriptJump_FinishedFirstRonaldFight
+ScriptJump_FinishedFirstRonaldFight:
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_4C
 	db $02
@@ -5276,7 +5264,7 @@ Script_LostToSecondRonaldFight: ; e955 (3:6955)
 	run_command ScriptCommand_PrintTextString
 	tx Text0653
 
-ScriptJump_FinishedSecondRonaldFight ; e959 (3:6959)
+ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_4D
 	db $02
@@ -5718,7 +5706,6 @@ Func_f121: ; f121 (3:7121)
 	jr nz, .asm_f123
 	or a
 	ret
-; 0xf146
 
 Unknown_f146: ; f146 (3:7146)
 	INCROM $f146, $f156
@@ -5773,7 +5760,6 @@ Preload_Guide: ; f270 (3:7270)
 .asm_f281
 	scf
 	ret
-; 0xf283
 
 Script_Guide: ; f283 (3:7283)
 	start_script
@@ -6225,7 +6211,7 @@ Script_f433: ; f433 (3:7433)
 	run_command ScriptCommand_Jump
 	dw WonAtChallengeHall.ows_f4a4
 
-WonAtChallengeHall; f441 (3:7441)
+WonAtChallengeHall: ; f441 (3:7441)
 	start_script
 	run_command ScriptCommand_DoFrames
 	db 20

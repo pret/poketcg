@@ -9,7 +9,6 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 .do_turn ; 1547b (5:547b)
 	call AIDoTurn_LegendaryRonald
 	ret
-; 0x1547f
 
 .start_duel ; 1547f (5:547f)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x15490
 
 .forced_switch ; 15490 (5:5490)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15494
 
 .ko_switch ; 15494 (5:5494)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15498
 
 .take_prize ; 15498 (5:5498)
 	call AIPickPrizeCards
 	ret
-; 0x1549c
 
 .list_arena ; 1549c (5:549c)
 	db KANGASKHAN
@@ -94,7 +89,6 @@ AIActionTable_LegendaryRonald: ; 1546f (5:546f)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x15507
 
 AIDoTurn_LegendaryRonald: ; 15507 (5:5507)
 ; initialize variables

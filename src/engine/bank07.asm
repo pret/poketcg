@@ -326,7 +326,6 @@ Func_1c58e: ; 1c58e (7:458e)
 	pop bc
 	pop hl
 	ret
-; 0x1c5b9
 
 Func_1c5b9: ; 1c5b9 (7:45b9)
 	INCROM $1c5b9, $1c5e9
@@ -518,7 +517,7 @@ Func_1c78d: ; 1c78d (7:478d)
 Func_1c7de: ; 1c7de (7:47de)
 	ld a, [wc3b7]
 	and $20
-    ret
+	ret
 ; 0x1c7e4
 
 	INCROM $1c7e4, $1c82e
@@ -580,7 +579,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld a, [wd421]
 	or a
 	jr z, .check_to_play_sfx
-	
+
 	push hl
 	ld bc, $0003
 	add hl, bc
@@ -653,7 +652,7 @@ Func_1c94a:
 	ld [wd42b], a
 	call Func_1c980
 	pop af
-	
+
 	farcall StartNewSpriteAnimation
 	or a
 	jr .return
@@ -679,7 +678,7 @@ Func_1c980: ; 1c980 (7:4980)
 	ld [hli], a
 	ld [hl], c
 	pop af
-	
+
 	ld bc, $000c
 	add hl, bc
 	ld c, a

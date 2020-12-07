@@ -20,7 +20,6 @@ Func_70018: ; 70018 (1c:4018)
 	ld a, $0
 	call Func_70044
 	ret
-; 0x70024
 
 AtrcEnPacket_Disable: ; 70024 (1c:4024)
 	sgb ATRC_EN, 1 ; sgb_command, length

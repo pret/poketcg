@@ -136,7 +136,6 @@ Func_800e0: ; 800e0 (20:40e0)
 	jr nz, .asm_800fe
 	pop hl
 	ret
-; 0x80148
 
 Func_80148: ; 80148 (20:4148)
 	ld a, [$d291]
@@ -333,7 +332,7 @@ Func_80274: ; 80274 (20:4274)
 
 Func_80279: ; 80279 (20:4279)
 	call Func_802bb
-asm_8027c
+asm_8027c:
 	push hl
 	push bc
 	push de

@@ -17,12 +17,10 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 .scripted_1 ; use scripted actions instead
 	call AIPerformSciptedTurn
 	ret
-; 0x147d6
 
 .start_duel ; 147d6 (5:47d6)
 	call SetSamsStartingPlayArea
 	ret
-; 0x147da
 
 .forced_switch ; 147da (5:47da)
 	call IsAIPracticeScriptedTurn
@@ -32,7 +30,6 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 .scripted_2
 	call PickRandomBenchPokemon
 	ret
-; 0x147e7
 
 .ko_switch: ; 147e7 (5:47e7)
 	call IsAIPracticeScriptedTurn
@@ -42,12 +39,10 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 .scripted_3
 	call GetPlayAreaLocationOfRaticateOrRattata
 	ret
-; 0x147f4
 
 .take_prize: ; 147f4 (5:47f4)
 	call AIPickPrizeCards
 	ret
-; 0x147f8
 
 ; returns carry if number of turns
 ; the AI has taken >= 7.
@@ -59,7 +54,6 @@ IsAIPracticeScriptedTurn: ; 147f8 (5:47f8)
 	cp 7
 	ccf
 	ret
-; 0x14801
 
 ; places one Machop from the hand to the Play Area
 ; and sets the number of prizes to 2.
@@ -79,7 +73,6 @@ SetSamsStartingPlayArea: ; 14801 (5:4801)
 	ld a, 2
 	ld [wDuelInitialPrizes], a
 	ret
-; 0x1481f
 
 ; outputs in a Play Area location of Raticate or Rattata
 ; in the Bench. If neither is found, just output PLAY_AREA_BENCH_1.
@@ -98,7 +91,6 @@ GetPlayAreaLocationOfRaticateOrRattata: ; 1481f (5:481f)
 .found
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ret
-; 0x1483a
 
 ; has AI execute some scripted actions depending on Duel turn.
 AIPerformSciptedTurn: ; 1483a (5:483a)
@@ -121,7 +113,6 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x1485a
 
 .scripted_actions_list ; 1485a (05:485a)
 	dw .turn_1
@@ -131,14 +122,12 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	dw .turn_5
 	dw .turn_6
 	dw .turn_7
-; 0x14868
 
 .turn_1 ; 14868 (5:4868)
 	ld d, MACHOP
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x14870
 
 .turn_2 ; 14870 (5:4870)
 	ld a, RATTATA
@@ -150,7 +139,6 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x14884
 
 .turn_3 ; 14884 (5:4884)
 	ld a, RATTATA
@@ -166,14 +154,12 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 	ld e, LIGHTNING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x148a1
 
 .turn_4 ; 148a1 (5:48a1)
 	ld d, RATICATE
 	ld e, LIGHTNING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x148a9
 
 .turn_5 ; 148a9 (5:48a9)
 	ld a, MACHOP
@@ -205,14 +191,12 @@ AIPerformSciptedTurn: ; 1483a (5:483a)
 .retreat
 	call AITryToRetreat
 	ret
-; 0x148cc
 
 .turn_6 ; 148cc (5:48cc)
 	ld d, MACHOP
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x148d4
 
 .turn_7 ; 148d4 (5:48d4)
 	ld d, MACHOP
