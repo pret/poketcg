@@ -652,6 +652,7 @@ Func_1c94a:
 	ld [wd42b], a
 	call Func_1c980
 	pop af
+
 	farcall StartNewSpriteAnimation
 	or a
 	jr .return
