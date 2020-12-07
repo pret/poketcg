@@ -46,24 +46,20 @@ text_header: MACRO
 \1RomBank::     ds 1
 ENDM
 
-; TODO: Figure out what the rest are for
 sprite_anim_struct: MACRO
-\1Field0x00::  ds 1
-\1Field0x01::  ds 1 ; movement handling / palette
-\1CoordX::     ds 1
-\1CoordY::     ds 1
-\1TileID::     ds 1
-\1Field0x05::  ds 1
-\1Field0x06::  ds 1
-\1Field0x07::  ds 1
-\1Field0x08::  ds 1
-\1Field0x09::  ds 1
-\1Field0x0a::  ds 1
-\1Field0x0b::  ds 1
-\1Field0x0c::  ds 1
-\1Field0x0d::  ds 1
-\1MovementCounter::  ds 1
-\1Field0x0f::  ds 1
+\1Enabled::             ds 1
+\1Attributes::          ds 1
+\1CoordX::              ds 1
+\1CoordY::              ds 1
+\1TileID::              ds 1
+\1ID::                  ds 1
+\1Bank::                ds 1
+\1Pointer::             ds 2
+\1FrameOffsetPointer::  ds 2
+\1FrameBank::           ds 1
+\1FrameDataPointer::    ds 2
+\1Counter::             ds 1
+\1Flags::               ds 1
 ENDM
 
 loaded_npc_struct: MACRO

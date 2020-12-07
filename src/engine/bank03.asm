@@ -681,7 +681,7 @@ Func_c58b: ; c58b (3:458b)
 	call GetPermissionOfMapPosition
 	and $10
 	push af
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	pop af
 	ld a, [hl]
@@ -747,7 +747,7 @@ UpdatePlayerSprite: ; c5e9 (3:45e9)
 	ld b, a
 	ld a, [wPlayerDirection]
 	add b
-	farcall Func_12ab5
+	farcall StartNewSpriteAnimation
 	pop bc
 	ret
 
@@ -790,10 +790,10 @@ AttemptPlayerMovement: ; c619 (3:4619)
 	ld [wPlayerCurrentlyMoving], a
 	ld a, $10
 	ld [wd338], a
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	set 2, [hl]
-	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $4
 	ld [hl], a
@@ -920,10 +920,10 @@ Func_c6dc: ; c6dc (3:46dc)
 Func_c6f7: ; c6f7 (3:46f7)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	res 2, [hl]
-	ld c, SPRITE_ANIM_MOVEMENT_COUNTER
+	ld c, SPRITE_ANIM_COUNTER
 	call GetSpriteAnimBufferProperty
 	ld a, $ff
 	ld [hl], a
@@ -3410,7 +3410,50 @@ Script_d827: ; d827 (3:5827)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xd82d
 
-	INCROM $d82d, $d880
+	INCROM $d82d, $d834
+	
+AfterTutorialBattleScript: ; d834 (3:5834)
+        start_script
+        run_command ScriptCommand_PrintTextString
+        tx Text05eb
+        run_command ScriptCommand_PrintTextString
+        tx Text05ef
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_MoveActiveNPC
+        dw NPCMovement_d896
+        run_command ScriptCommand_SetPlayerDirection
+        db NORTH
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db NORTH
+        db $01
+        run_command ScriptCommand_SetPlayerDirection
+        db EAST
+        run_command ScriptCommand_MovePlayer
+        db EAST
+        db $01
+        run_command ScriptCommand_MovePlayer
+        db EAST
+        db $01
+        run_command ScriptCommand_SetPlayerDirection
+        db NORTH
+        run_command ScriptCommand_PrintTextString
+        tx Text05f0
+        run_command ScriptCommand_CloseTextBox
+        run_command Func_ccdc
+        tx Text05f1
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_PrintTextString
+        tx Text05f2
+        run_command Func_d271
+; 0xd860
+	
+	INCROM $d860, $d880
 
 NPCMovement_d880: ; d880 (3:5880)
 	db EAST
@@ -3441,8 +3484,20 @@ NPCMovement_d88b: ; d88b (3:588b)
 NPCMovement_d894: ; d894 (4:5894)
 	db SOUTH | NO_MOVE
 	db $ff
+	
+NPCMovement_d896: ; d896 (3:5896)
+	db NORTH
+	db NORTH
+	db NORTH
+	db EAST
+	db EAST
+	db EAST
+	db EAST
+	db SOUTH | NO_MOVE
+	db $ff
+; 0xd89f
 
-	INCROM $d896, $d932
+	INCROM $d89f, $d932
 
 Script_d932: ; d932 (3:5932)
 	start_script

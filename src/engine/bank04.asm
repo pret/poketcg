@@ -509,7 +509,7 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld b, $37
 .asm_10fd8
 	ld a, b
-	farcall Func_12ab5
+	farcall StartNewSpriteAnimation
 	ret
 
 Func_10fde: ; 10fde (4:4fde)
@@ -529,12 +529,12 @@ Func_10fde: ; 10fde (4:4fde)
 .asm_10ffe
 	ld a, b
 	ld [wd33c], a
-	call Func_12ab5
+	call StartNewSpriteAnimation
 	ld a, $3e
 	farcall GetEventFlagValue
 	or a
 	jr nz, .asm_11015
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	set 7, [hl]
 .asm_11015
@@ -545,7 +545,7 @@ Func_11016: ; 11016 (4:5016)
 	ld [wWhichSprite], a
 	ld a, [wd33c]
 	inc a
-	call Func_12ab5
+	call StartNewSpriteAnimation
 	ret
 
 Func_11024: ; 11024 (4:5024)
@@ -553,7 +553,7 @@ Func_11024: ; 11024 (4:5024)
 	call PlaySFX
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld c, SPRITE_ANIM_FIELD_0F
+	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
 	set 2, [hl]
 	ld hl, Unknown_1229f
@@ -1243,7 +1243,7 @@ CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	push bc
 	push hl
 	call Func_12c05
-	ld [wd5d3], a
+	ld [wCurrSpriteTileID], a
 	xor a
 	ld [wWhichSprite], a
 	call GetFirstSpriteAnimBufferProperty
@@ -1283,13 +1283,13 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	dec c
 	jr nz, .clearSpriteAnimBufferEntryLoop
 	pop hl
-	ld bc, SPRITE_ANIM_FIELD_05 - 1
+	ld bc, SPRITE_ANIM_ID - 1
 	add hl, bc
-	ld a, [wd5d3]
+	ld a, [wCurrSpriteTileID]
 	ld [hli], a
 	ld a, $ff
 	ld [hl], a
-	ld bc, SPRITE_ANIM_MOVEMENT_COUNTER - SPRITE_ANIM_FIELD_05
+	ld bc, SPRITE_ANIM_COUNTER - SPRITE_ANIM_ID
 	add hl, bc
 	ld a, $ff
 	ld [hl], a
@@ -1300,41 +1300,145 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 
 	INCROM $129fa, $12a21
 
-Func_12a21: ; 12a21 (4:6a21)
-	INCROM $12a21, $12ab5
+HandleAllSpriteAnimations: ; 12a21 (4:6a21)
+	push af
+	ld a, [wd5d7] ; skip animating this frame if enabled
+	or a
+	jr z, .continue
+	pop af
+	ret
+.continue
+	pop af
+	push af
+	push bc
+	push de
+	push hl
+	call ZeroObjectPositions
+	xor a
+	ld [wWhichSprite], a
+	call GetFirstSpriteAnimBufferProperty
+.spriteLoop
+	ld a, [hl]
+	or a
+	jr z, .nextSprite ; skip if SPRITE_ANIM_ENABLED is 0
+	call TryHandleSpriteAnimationFrame
+	call LoadSpriteDataForAnimationFrame
+.nextSprite
+	ld bc, SPRITE_ANIM_LENGTH
+	add hl, bc
+	ld a, [wWhichSprite]
+	inc a
+	ld [wWhichSprite], a
+	cp SPRITE_ANIM_BUFFER_CAPACITY
+	jr nz, .spriteLoop
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
 
-Func_12ab5: ; 12ab5 (4:6ab5)
+LoadSpriteDataForAnimationFrame: ; 12a5b (4:6a5b)
+	push hl
+	push bc
+	inc hl
+	ld a, [hli]
+	ld [wCurrSpriteAttributes], a
+	ld a, [hli]
+	ld [wCurrSpriteXPos], a
+	ld a, [hli]
+	ld [wCurrSpriteYPos], a
+	ld a, [hl]
+	ld [wCurrSpriteTileID], a
+	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_TILE_ID
+	add hl, bc
+	ld a, [hl]
+	and 1 << SPRITE_ANIM_FLAG_SKIP_DRAW
+	jr nz, .quit
+	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
+	add hl, bc
+	ld a, [hli]
+	ld [wd5d6], a
+	or a
+	jr z, .quit
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call DrawSpriteAnimationFrame
+.quit
+	pop bc
+	pop hl
+	ret
+
+; decrements the given sprite's movement counter (2x if SPRITE_ANIM_FLAG_SPEED is set)
+; moves to the next animation frame if necessary
+TryHandleSpriteAnimationFrame: ; 12a8b (4:6a8b)
+	push hl
+	push bc
+	push de
+	push hl
+	ld d, 1
+	ld bc, SPRITE_ANIM_FLAGS
+	add hl, bc
+	bit SPRITE_ANIM_FLAG_SPEED, [hl]
+	jr z, .skipSpeedIncrease
+	inc d
+.skipSpeedIncrease
+	pop hl
+	ld bc, SPRITE_ANIM_COUNTER
+	add hl, bc
+	ld a, [hl]
+	cp $ff
+	jr z, .exit
+	sub d
+	ld [hl], a
+	jr z, .doNextAnimationFrame
+	jr nc, .exit
+.doNextAnimationFrame
+	ld bc, SPRITE_ANIM_ENABLED - SPRITE_ANIM_COUNTER
+	add hl, bc
+	call HandleAnimationFrame
+.exit
+	pop de
+	pop bc
+	pop hl
+	ret
+
+StartNewSpriteAnimation: ; 12ab5 (4:6ab5)
 	push hl
 	push af
-	ld c, SPRITE_ANIM_FIELD_05
+	ld c, SPRITE_ANIM_ID
 	call GetSpriteAnimBufferProperty
 	pop af
 	cp [hl]
 	pop hl
 	ret z
 	push hl
-	call Func_12ae2
-	call Func_12b13
+	call LoadSpriteAnimPointers
+	call HandleAnimationFrame
 	pop hl
 	ret
 ; 0x12ac9
 
 	INCROM $12ac9, $12ae2
 
-Func_12ae2: ; 12ae2 (4:6ae2)
+; Given an animation ID, fills the current sprite's Animation Pointer and Frame Offset Pointer
+; a - Animation ID for current sprite
+LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	push bc
 	push af
 	call GetFirstSpriteAnimBufferProperty
 	pop af
 	push hl
-	ld bc, $0005
+	ld bc, SPRITE_ANIM_ID
 	add hl, bc
 	ld [hli], a
 	push hl
-	ld l, $6
+	ld l, 6 ; 4th entry in MapDataPointers
 	farcall GetMapDataPointer
-	farcall Func_80229
-	pop hl
+	farcall LoadGraphicsPointerFromHL
+	pop hl ; hl is animation bank
 	ld a, [wTempPointerBank]
 	ld [hli], a
 	ld a, [wTempPointer]
@@ -1353,60 +1457,63 @@ Func_12ae2: ; 12ae2 (4:6ae2)
 	pop bc
 	ret
 
-Func_12b13: ; 12b13 (4:6b13)
+; hl - beginning of current sprite_anim_buffer
+; Handles a full animation frame using all values in animation structure
+; (frame data offset, anim counter, X Mov, Y Mov)
+HandleAnimationFrame: ; 12b13 (4:6b13)
 	push bc
 	push de
 	push hl
-.asm_12b16
+.tryHandlingFrame
 	push hl
-	ld bc, $0006
+	ld bc, SPRITE_ANIM_BANK
 	add hl, bc
 	ld a, [hli]
 	ld [wTempPointerBank], a
 	inc hl
 	inc hl
-	ld a, [hl]
+	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
 	ld [wTempPointer], a
-	add $4
+	add SPRITE_FRAME_OFFSET_SIZE ; advance FRAME_OFFSET_POINTER by 1 frame, 4 bytes
 	ld [hli], a
 	ld a, [hl]
 	ld [wTempPointer + 1], a
-	adc $0
+	adc 0
 	ld [hl], a
 	ld de, wd23e
-	ld bc, $0004
+	ld bc, SPRITE_FRAME_OFFSET_SIZE
 	call CopyBankedDataToDE
-	pop hl
+	pop hl ; beginning of current sprite_anim_buffer
 	ld de, wd23e
 	ld a, [de]
-	call Func_12b6a
+	call GetAnimFramePointerFromOffset
 	inc de
 	ld a, [de]
-	call Func_12b89
-	jr c, .asm_12b16
+	call SetAimationCounterAndLoop
+	jr c, .tryHandlingFrame
 	inc de
-	ld bc, $0002
+	ld bc, SPRITE_ANIM_COORD_X
 	add hl, bc
 	push hl
-	ld bc, $000d
+	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_X
 	add hl, bc
 	ld b, [hl]
 	pop hl
 	ld a, [de]
-	bit 0, b
-	jr z, .asm_12b5a
+	bit SPRITE_ANIM_FLAG_X_SUBTRACT, b
+	jr z, .addXOffset
 	cpl
 	inc a
-.asm_12b5a
+.addXOffset
 	add [hl]
 	ld [hli], a
 	inc de
 	ld a, [de]
-	bit 1, b
-	jr z, .asm_12b64
+	bit SPRITE_ANIM_FLAG_Y_SUBTRACT, b
+	jr z, .addYOffset
 	cpl
 	inc a
-.asm_12b64
+.addYOffset
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -1414,13 +1521,16 @@ Func_12b13: ; 12b13 (4:6b13)
 	pop bc
 	ret
 
-Func_12b6a: ; 12b6a (4:6b6a)
+; Calls GetAnimationFramePointer after setting up wTempPointerBank and wd4ca
+; a - frame offset from Animation Data
+; hl - beginning of Sprite Anim Buffer
+GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
 	ld [wd4ca], a
 	push hl
 	push bc
 	push de
 	push hl
-	ld bc, $0006
+	ld bc, SPRITE_ANIM_BANK
 	add hl, bc
 	ld a, [hli]
 	ld [wTempPointerBank], a
@@ -1429,34 +1539,36 @@ Func_12b6a: ; 12b6a (4:6b6a)
 	ld a, [hli]
 	ld [wTempPointer + 1], a
 	pop hl
-	call Func_3d72
+	call GetAnimationFramePointer ; calls with the original map data script pointer/bank
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_12b89: ; 12b89 (4:6b89)
+; Sets the animation counter for the current sprite. If the value is zero, loop the animation
+; a - new animation counter
+SetAimationCounterAndLoop: ; 12b89 (4:6b89)
 	push hl
 	push bc
-	ld bc, $000e
+	ld bc, SPRITE_ANIM_COUNTER
 	add hl, bc
 	ld [hl], a
 	or a
-	jr nz, .asm_12ba4
-	ld bc, $fff9
+	jr nz, .exit
+	ld bc, SPRITE_ANIM_POINTER - SPRITE_ANIM_COUNTER
 	add hl, bc
 	ld a, [hli]
-	add $3
+	add 3 ; skip base bank/pointer at beginning of data structure
 	ld c, a
 	ld a, [hli]
-	adc $0
+	adc 0
 	ld b, a
 	ld a, c
 	ld [hli], a
 	ld a, b
 	ld [hl], a
 	scf
-.asm_12ba4
+.exit
 	pop bc
 	pop hl
 	ret

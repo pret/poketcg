@@ -319,7 +319,7 @@ Func_1c58e: ; 1c58e (7:458e)
 	add [hl]
 	inc hl
 .asm_1c5ae
-	farcall Func_12ab5
+	farcall StartNewSpriteAnimation
 .quit
 	pop af
 	ld [wWhichSprite], a
@@ -652,8 +652,7 @@ Func_1c94a:
 	ld [wd42b], a
 	call Func_1c980
 	pop af
-
-	farcall Func_12ab5
+	farcall StartNewSpriteAnimation
 	or a
 	jr .return
 
@@ -666,7 +665,7 @@ Func_1c980: ; 1c980 (7:4980)
 	push hl
 	push bc
 	ld a, [wAnimationQueue]
-	ld c, SPRITE_ANIM_FIELD_01
+	ld c, SPRITE_ANIM_ATTRIBUTES
 	call GetSpriteAnimBufferProperty_SpriteInA
 	call Func_1c9a2
 

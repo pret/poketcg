@@ -2319,7 +2319,13 @@ wd4af:: ; d4af
 wd4b0:: ; d4b0
 	ds $1
 
-	ds $d
+wd4b1:: ; d4b1
+	ds $1
+	
+wd4b2:: ; d4b2
+	ds $1
+	
+	ds $b
 
 wd4be:: ; d4be
 	ds $1
@@ -2384,22 +2390,22 @@ wSpriteAnimBuffer:: ; d4d0
 	sprite_anim_struct wSprite15
 	sprite_anim_struct wSprite16
 
-wd5d0:: ; d5d0
+wCurrSpriteAttributes:: ; d5d0
 	ds $1
 
-wd5d1:: ; d5d1
+wCurrSpriteXPos:: ; d5d1
 	ds $1
 
-wd5d2:: ; d5d2
+wCurrSpriteYPos:: ; d5d2
 	ds $1
 
-wd5d3:: ; d5d3
+wCurrSpriteTileID:: ; d5d3
 	ds $1
 
-wd5d4:: ; d5d4
+wCurrSpriteRightEdgeCheck:: ; d5d4
 	ds $1
 
-wd5d5:: ; d5d5
+wCurrSpriteBottomEdgeCheck:: ; d5d5
 	ds $1
 
 wd5d6:: ; d5d6

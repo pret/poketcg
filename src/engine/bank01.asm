@@ -6755,7 +6755,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld a, [hl]
 	or a
 	jr z, .asm_6c1a
-	call $6d3f
+	call Func_6d3f
 	jr c, .asm_6c1a
 	call Func_6cfa
 	ld a, [hl]
@@ -6783,7 +6783,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld a, [hl]
 	or a
 	jr z, .asm_6c3a
-	call $6d3f
+	call Func_6d3f
 	jr c, .asm_6c3a
 	call Func_6cfa
 .asm_6c3a
@@ -6947,7 +6947,45 @@ Func_6cfa: ; 6cfa (1:6cfa)
 	ret
 ; 0x6d3f
 
-	INCROM $6d3f, $6d84
+Func_6d3f: ; 6d3f (1:6d3f)
+	or a
+	bit POISONED_F , [hl]
+	ret z
+	push hl
+	bit DOUBLE_POISONED_F, [hl]
+	ld a, PSN_DAMAGE
+	ldtx hl, Received10DamageDueToPoisonText
+	jr z, .not_double_poisoned
+	ld a, DBLPSN_DAMAGE
+	ldtx hl, Received20DamageDueToPoisonText
+.not_double_poisoned
+	push af
+	ld [wd4b1], a
+	xor a
+	ld [wd4b2], a
+	push hl
+	call Func_6c7e
+	pop hl
+	call Func_6ce4
+	ld a, $05
+	call Func_6cab
+	pop af
+	ld e, a
+	ld d, $00
+	ld a, DUELVARS_ARENA_CARD_HP
+	call GetTurnDuelistVariable
+	call SubstractHP
+	push hl
+	ld a, $8c
+	call Func_6cab
+	pop hl
+	call PrintKnockedOutIfHLZero
+	push af
+	call WaitForWideTextBoxInput
+	pop af
+	pop hl
+	ret
+; 0x6d84
 
 ; given the deck index of a turn holder's card in register a,
 ; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
@@ -8002,7 +8040,9 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	INCROM $74dc, $7571
 
 Func_7571: ; 7571 (1:7571)
-	INCROM $7571, $7576
+	farcall Func_19c20
+	ret
+; 0x7576
 
 Func_7576: ; 7576 (1:7576)
 	farcall Func_1991f
@@ -8012,7 +8052,9 @@ Func_7576: ; 7576 (1:7576)
 	INCROM $757b, $758f
 
 Func_758f: ; 758f (1:758f)
-	INCROM $758f, $7594
+	farcall Func_1a4cf
+	ret
+; 0x7594
 
 Func_7594: ; 7594 (1:7594)
 	farcall Func_1a61f
