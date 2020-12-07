@@ -1945,7 +1945,7 @@ wd0c4:: ; d0c4
 wd0c5:: ; d0c5
 	ds $1
 
-; used to store the location of an overworld sequence, which is jumped to later
+; used to store the location of an overworld script, which is jumped to later
 wNextScript:: ; d0c6
 	ds $2
 

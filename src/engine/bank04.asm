@@ -839,13 +839,13 @@ Func_115a3: ; 115a3 (4:55a3)
 
 INCLUDE "data/map_scripts.asm"
 
-; loads a pointer into hl found on NPCDataTable
-GetNPCDataPointer: ; 1184a (4:584a)
+; loads a pointer into hl found on NPCHeaderPointers
+GetNPCHeaderPointer: ; 1184a (4:584a)
 	; this may have been a macro
 	rlca
-	add LOW(NPCDataTable)
+	add LOW(NPCHeaderPointers)
 	ld l, a
-	ld a, HIGH(NPCDataTable)
+	ld a, HIGH(NPCHeaderPointers)
 	adc $00
 	ld h, a
 	ld a, [hli]
@@ -856,7 +856,7 @@ GetNPCDataPointer: ; 1184a (4:584a)
 LoadNPCSpriteData: ; 11857 (4:5857)
 	push hl
 	push bc
-	call GetNPCDataPointer
+	call GetNPCHeaderPointer
 	ld a, [hli]
 	ld [wTempNPC], a
 	ld a, [hli]
@@ -881,8 +881,8 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 ; Loads Name into wCurrentNPCNameTx and gets Script ptr into bc
 GetNPCNameAndScript: ; 1187d (4:587d)
 	push hl
-	call GetNPCDataPointer
-	ld bc, NPC_DATA_OWSEQUENCE_PTR
+	call GetNPCHeaderPointer
+	ld bc, NPC_DATA_SCRIPT_PTR
 	add hl, bc
 	ld c, [hl]
 	inc hl
@@ -899,7 +899,7 @@ GetNPCNameAndScript: ; 1187d (4:587d)
 SetNPCDialogName: ; 11893 (4:5893)
 	push hl
 	push bc
-	call GetNPCDataPointer
+	call GetNPCHeaderPointer
 	ld bc, NPC_DATA_NAME_TEXT
 	add hl, bc
 	ld a, [hli]
@@ -913,7 +913,7 @@ SetNPCDialogName: ; 11893 (4:5893)
 Func_118a7: ; 118a7 (4:58a7)
 	push hl
 	push bc
-	call GetNPCDataPointer
+	call GetNPCHeaderPointer
 	ld bc, $0007
 	add hl, bc
 	ld a, [hli]
@@ -929,7 +929,7 @@ Func_118a7: ; 118a7 (4:58a7)
 Func_118bf: ; 118bf (4:58bf)
 	push hl
 	push bc
-	call GetNPCDataPointer
+	call GetNPCHeaderPointer
 	ld bc, $000a
 	add hl, bc
 	ld a, [hli]
@@ -944,7 +944,7 @@ Func_118d3: ; 118d3 (4:58d3)
 	push hl
 	push bc
 	push af
-	call GetNPCDataPointer
+	call GetNPCHeaderPointer
 	ld bc, $000c
 	add hl, bc
 	ld a, [hli]
@@ -953,9 +953,9 @@ Func_118d3: ; 118d3 (4:58d3)
 	cp $2
 	jr nz, .asm_118f2
 	ld a, [wCurMap]
-	cp $20
+	cp POKEMON_DOME
 	jr nz, .asm_118f2
-	ld a, $17
+	ld a, MUSIC_MATCH_START_3
 	ld [wMatchStartTheme], a
 
 .asm_118f2
