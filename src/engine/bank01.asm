@@ -8250,7 +8250,7 @@ Func_7364: ; 7364 (1:7364)
 	jr z, .asm_73c3
 	sub $0a
 	jr nc, .asm_73c3
-	ld a, FLAMETHROWER_DECK
+	ld a, FLAMETHROWER_DECK_ID
 .asm_73c3
 	ld [wOpponentDeckID], a
 	call Func_73d8
