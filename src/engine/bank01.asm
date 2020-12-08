@@ -8226,7 +8226,7 @@ Func_7364: ; 7364 (1:7364)
 	bit D_RIGHT_F, b
 	jr z, .asm_73a2
 	inc a
-	cp DECK_IDS_END
+	cp $35
 	jr c, .asm_73a2
 	xor a
 .asm_73a2
@@ -8250,7 +8250,7 @@ Func_7364: ; 7364 (1:7364)
 	jr z, .asm_73c3
 	sub $0a
 	jr nc, .asm_73c3
-	ld a, FLAMETHROWER_DECK
+	ld a, IMAKUNI_DECK_ID
 .asm_73c3
 	ld [wOpponentDeckID], a
 	call Func_73d8
