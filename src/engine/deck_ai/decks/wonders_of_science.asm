@@ -9,7 +9,6 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 .do_turn ; 151b9 (5:51b9)
 	call AIMainTurnLogic
 	ret
-; 0x151bd
 
 .start_duel ; 151bd (5:51bd)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x151ce
 
 .forced_switch ; 151ce (5:51ce)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x151d2
 
 .ko_switch ; 151d2 (5:51d2)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x151d6
 
 .take_prize ; 151d6 (5:51d6)
 	call AIPickPrizeCards
 	ret
-; 0x151da
 
 .list_arena ; 151da (5:51da)
 	db MEWTWO1

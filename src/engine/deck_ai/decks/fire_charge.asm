@@ -9,7 +9,6 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 .do_turn ; 1523e (5:523e)
 	call AIMainTurnLogic
 	ret
-; 0x15242
 
 .start_duel ; 15242 (5:5242)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x15253
 
 .forced_switch ; 15253 (5:5253)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15257
 
 .ko_switch ; 15257 (5:5257)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x1525b
 
 .take_prize ; 1525b (5:525b)
 	call AIPickPrizeCards
 	ret
-; 0x1525f
 
 .list_arena ; 1525f (5:525f)
 	db JIGGLYPUFF3

@@ -13,7 +13,7 @@ ENDM
 ; a Pokemon to attach an energy card, it looks up in this list and if
 ; a card ID matches, skips this card if the maximum number of energy
 ; cards attached has been reached. If it hasn't been reached, additionally
-; applies a positive (or negative) AI score to attach energy to this card. 
+; applies a positive (or negative) AI score to attach energy to this card.
 ai_energy: MACRO
 	db \1       ; card ID
 	db \2       ; maximum number of attached cards

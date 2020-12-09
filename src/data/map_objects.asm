@@ -47,7 +47,7 @@ MasonLabObjects: ; 13b04 (3:7b04)
 
 	db $ff
 
- 
+
 DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 	db NORTH, 2, 2
 	dw Script_d932
@@ -151,7 +151,7 @@ DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 
 	db $ff
 
- 
+
 IshiharasHouseObjects: ; 13c02 (3:7c02)
 	db NORTH, 6, 2
 	dw PrintInteractableObjectText
@@ -215,7 +215,7 @@ IshiharasHouseObjects: ; 13c02 (3:7c02)
 
 	db $ff
 
- 
+
 FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -240,16 +240,16 @@ FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -274,16 +274,16 @@ RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -308,16 +308,16 @@ WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -342,16 +342,16 @@ LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -376,16 +376,16 @@ GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -410,16 +410,16 @@ PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -444,16 +444,16 @@ ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 FireClubLobbyObjects: ; 13df0 (3:7df0)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -478,16 +478,16 @@ FireClubLobbyObjects: ; 13df0 (3:7df0)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	db NORTH, 20, 2
 	dw PrintInteractableObjectText
@@ -512,16 +512,16 @@ ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	db NORTH, 6, 6
 	dw Script_fc52
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db NORTH, 10, 6
 	dw Func_fc7a
 	tx Text041b
-	tx Text03b0
+	tx ClerkNPCName
 
 	db $ff
 
- 
+
 PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	db NORTH, 2, 2
 	dw PrintInteractableObjectText
@@ -581,7 +581,7 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 
 	db $ff
 
- 
+
 HallOfHonorObjects: ; 13ec2 (3:7ec2)
 	; Legendary Cards
 	db NORTH, 10, 10
@@ -606,5 +606,3 @@ HallOfHonorObjects: ; 13ec2 (3:7ec2)
 	tx Text041a
 
 	db $ff
-
- 

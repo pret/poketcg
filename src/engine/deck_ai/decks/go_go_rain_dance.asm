@@ -9,7 +9,6 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 .do_turn ; 14f9b (5:4f9b)
 	call AIMainTurnLogic
 	ret
-; 0x14f9f
 
 .start_duel ; 14f9f (5:4f9f)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_GoGoRainDance: ; 14f8f (5:4f8f)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x14fb0
 
 .forced_switch ; 14fb0 (5:4fb0)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14fb4
 
 .ko_switch ; 14fb4 (5:4fb4)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x14fb8
 
 .take_prize ; 14fb8 (5:4fb8)
 	call AIPickPrizeCards
 	ret
-; 0x14fbc
 
 .list_arena ; 14fbc (5:4fbc)
 	db LAPRAS

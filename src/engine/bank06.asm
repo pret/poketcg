@@ -150,7 +150,6 @@ _CopyCardNameAndLevel_HalfwidthText:
 	pop de
 	pop bc
 	ret
-; 0x180d5
 
 ; this function is called when the player is shown the "In Play Area" screen.
 ; it can be called with either the select button (DuelMenuShortcut_BothActivePokemon),
@@ -717,7 +716,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	or a
 	ret
 
-ZeroObjectPositionsAndToggleOAMCopy_Bank6 ; 184bf (6:44bf)
+ZeroObjectPositionsAndToggleOAMCopy_Bank6: ; 184bf (6:44bf)
 	call ZeroObjectPositions
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -1523,7 +1522,13 @@ Func_19a12: ; 19a12 (6:5a12)
 	ret
 ; 0x19a1f
 
-	INCROM $19a1f, $1a61f
+	INCROM $19a1f, $19c20
+	
+Func_19c20: ; 19c20 (6:5c20)
+    INCROM $19c20, $1a4cf
+	
+Func_1a4cf: ; 1a4cf (6:64cf)
+	INCROM $1a4cf, $1a61f
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
@@ -1582,7 +1587,6 @@ Func_1a61f: ; 1a61f (6:661f)
 	call ResumeSong
 	bank1call OpenCardPage_FromHand
 	ret
-; 0x1a68d
 
 Func_1a68d: ; 1a68d (6:668d)
 	ld a, $c2 ; player's turn
@@ -1613,14 +1617,14 @@ Func_1a68d: ; 1a68d (6:668d)
 	ld [de], a
 	lb de, $38, $9f
 	call SetupText
-    bank1call InitAndDrawCardListScreenLayout
+	bank1call InitAndDrawCardListScreenLayout
 	ldtx hl, ChooseTheCardYouWishToExamineText
 	ldtx de, Text0196
 	bank1call SetCardListHeaderText
 	ld a, A_BUTTON | START
 	ld [wNoItemSelectionMenuKeys], a
-    bank1call DisplayCardList
-    ret
+	bank1call DisplayCardList
+	ret
 
 CommentedOut_1a6cc: ; 1a6cc (6:66cc)
 	ret
@@ -1975,7 +1979,7 @@ PrintPlayerNameFromInput:
 rept 10
 	textfw3 "_"
 endr
-    done
+	done
 
 ; check if button pressed.
 ; if pressed, set the carry bit on.
@@ -2566,8 +2570,8 @@ KeyboardData_Player: ; (6:6baf)
 	kbitem $04, $12, $37, $00, TX_FULLWIDTH3,   "I"
 	kbitem $06, $12, $38, $00, TX_FULLWIDTH3,   "R"
 	kbitem $08, $12, $39, $00,                  "n"
-	kbitem $0a, $12, $3a, $00,	                "c"
-	kbitem $0c, $12, $3b, $00,	                "p"
+	kbitem $0a, $12, $3a, $00,                  "c"
+	kbitem $0c, $12, $3b, $00,                  "p"
 	kbitem $10, $0f, $01, $09, $0000
 	kbitem $00, $00, $00, $00, $0000
 
@@ -2749,7 +2753,7 @@ LoadHalfWidthTextCursorTile:
 
 .data
 rept TILE_SIZE
-    db $f0
+	db $f0
 endr
 
 ; it's only for naming the deck.

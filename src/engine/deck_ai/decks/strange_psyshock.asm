@@ -9,7 +9,6 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 .do_turn ; 1512e (5:512e)
 	call AIMainTurnLogic
 	ret
-; 0x15132
 
 .start_duel ; 15132 (5:5132)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x15143
 
 .forced_switch ; 15143 (5:5143)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15147
 
 .ko_switch ; 15147 (5:5147)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x1514b
 
 .take_prize ; 1514b (5:514b)
 	call AIPickPrizeCards
 	ret
-; 0x1514f
 
 .list_arena ; 1514f (5:514f)
 	db KANGASKHAN

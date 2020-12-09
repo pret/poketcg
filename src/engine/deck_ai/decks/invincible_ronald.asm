@@ -9,7 +9,6 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 .do_turn ; 153f4 (5:53f4)
 	call AIMainTurnLogic
 	ret
-; 0x153f8
 
 .start_duel ; 153f8 (5:53f8)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_InvincibleRonald: ; 153e8 (5:53e8)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x15409
 
 .forced_switch ; 15409 (5:5409)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x1540d
 
 .ko_switch ; 1540d (5:540d)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15411
 
 .take_prize ; 15411 (5:5411)
 	call AIPickPrizeCards
 	ret
-; 0x15415
 
 .list_arena ; 15415 (5:5415)
 	db KANGASKHAN

@@ -509,7 +509,7 @@ InitBoosterData: ; 1e430 (7:6430)
 	call FindBoosterDataPointer
 	ld de, wBoosterData_Set
 	ld bc, wBoosterData_TypeChances - wBoosterData_Set + NUM_BOOSTER_CARD_TYPES ; Pack2 - Pack1
-	call CopyDataHLtoDE	; load booster pack data to wram
+	call CopyDataHLtoDE ; load booster pack data to wram
 	call LoadRarityAmountsToWram
 	ld bc, $0
 	ld d, NUM_BOOSTER_CARD_TYPES

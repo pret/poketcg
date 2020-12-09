@@ -145,7 +145,6 @@ AIMainTurnLogic: ; 1468b (5:468b)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x14786
 
 ; handles AI retreating logic
 AIProcessRetreat: ; 14786 (5:4786)

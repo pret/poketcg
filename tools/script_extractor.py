@@ -148,7 +148,7 @@ def printScript(game_data, loc, auto, ignore_broken, scriptList, \
 		#print("Error: first byte was not start_script")
 		print(".ows_" + format(loc,"04x"))
 	else:
- 		
+		
 		# TODO this is hacky please don't do this 
 		printHeader(loc, "Script_")
 		loc += 1

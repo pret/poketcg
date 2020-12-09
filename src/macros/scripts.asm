@@ -118,4 +118,3 @@ ENDM
 	const ScriptCommand_EndScriptLoop8_index         ; $65
 	const ScriptCommand_EndScriptLoop9_index         ; $66
 	const ScriptCommand_EndScriptLoop10_index        ; $67
-

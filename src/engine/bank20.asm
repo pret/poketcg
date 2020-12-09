@@ -136,7 +136,6 @@ Func_800e0: ; 800e0 (20:40e0)
 	jr nz, .asm_800fe
 	pop hl
 	ret
-; 0x80148
 
 Func_80148: ; 80148 (20:4148)
 	ld a, [$d291]
@@ -276,6 +275,8 @@ Func_801f1: ; 801f1 (20:41f1)
 	pop hl
 	ret
 
+; l - map data offset (0,2,4,6,8 for banks 0,1,2,3,4)
+; a - map index (inside of the given bank)
 GetMapDataPointer: ; 8020f (20:420f)
 	push bc
 	push af
@@ -296,13 +297,14 @@ GetMapDataPointer: ; 8020f (20:420f)
 	pop bc
 	ret
 
-Func_80229: ; 80229 (20:4229)
+; Loads a pointer from [hl] to wTempPointer. Adds the graphics bank offset ($20)
+LoadGraphicsPointerFromHL: ; 80229 (20:4229)
 	ld a, [hli]
 	ld [wTempPointer], a
 	ld a, [hli]
 	ld [wTempPointer + 1], a
 	ld a, [hli]
-	add $20
+	add BANK(MapDataPointers)
 	ld [wTempPointerBank], a
 	ret
 ; 0x80238
@@ -313,7 +315,7 @@ Func_8025b: ; 8025b (20:425b)
 	push hl
 	ld l, $4
 	call GetMapDataPointer
-	call Func_80229
+	call LoadGraphicsPointerFromHL
 	ld a, [hl]
 	push af
 	ld [wd4c8], a
@@ -330,7 +332,7 @@ Func_80274: ; 80274 (20:4274)
 
 Func_80279: ; 80279 (20:4279)
 	call Func_802bb
-asm_8027c
+asm_8027c:
 	push hl
 	push bc
 	push de
@@ -390,7 +392,7 @@ Func_803b9: ; 803b9 (20:43b9)
 	ld l, $00
 	ld a, [wd131]
 	call GetMapDataPointer
-	call Func_80229
+	call LoadGraphicsPointerFromHL
 	ld a, [hl]
 	ld [$d239], a
 	ret
@@ -515,15 +517,19 @@ Func_80baa: ; 80baa (20:4baa)
 
 	INCROM $80c21, $80e5a
 
-Unknown_80e5a: ; 80e5a (20:4e5a)
-	INCROM $80e5a, $80e5d
+SpriteNullAnimationPointer: ; 80e5a (20:4e5a)
+	dw SpriteNullAnimationFrame
+
+SpriteNullAnimationFrame:
+	db 0
 
 ; might be closer to "screen specific data" than map data
+; data in each section is 4 bytes long.
 MapDataPointers: ; 80e5d (20:4e5d)
 	dw MapDataPointers_80e67
 	dw MapDataPointers_8100f
 	dw MapDataPointers_8116b
-	dw MapDataPointers_81333
+	dw SpriteAnimationPointers
 	dw MapDataPointers_81697
 
 MapDataPointers_80e67: ; 80e67 (20:4e67)
@@ -535,7 +541,8 @@ MapDataPointers_8100f: ; 8100f (20:500f)
 MapDataPointers_8116b: ; 8116b (20:516b)
 	INCROM $8116b, $81333
 
-MapDataPointers_81333: ; 81333 (20:5333)
+; pointer low, pointer high, bank (minus $20), unknown
+SpriteAnimationPointers: ; 81333 (20:5333)
 	INCROM $81333, $81697
 
 MapDataPointers_81697: ; 81697 (20:5697)

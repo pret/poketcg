@@ -794,7 +794,7 @@ DrawPlayArea_PrizeCards: ; 8464 (2:4464)
 	pop af
 	ret
 
-PrizeCardsCoordinateData_YourOrOppPlayArea: ; 0x84b4 (2:44b4)
+PrizeCardsCoordinateData_YourOrOppPlayArea: ; 84b4 (2:44b4)
 ; x and y coordinates for player prize cards
 .player
 	db 2, 1
@@ -813,7 +813,7 @@ PrizeCardsCoordinateData_YourOrOppPlayArea: ; 0x84b4 (2:44b4)
 	db 5, 15
 
 ; used by Func_833c
-PrizeCardsCoordinateData_2: ; 0x84cc (2:44cc)
+PrizeCardsCoordinateData_2: ; 84cc (2:44cc)
 ; x and y coordinates for player prize cards
 .player
 	db  6, 0
@@ -831,7 +831,7 @@ PrizeCardsCoordinateData_2: ; 0x84cc (2:44cc)
 	db 0, 18
 	db 0, 16
 
-PrizeCardsCoordinateData_InPlayArea: ; 0x84e4 (2:44e4)
+PrizeCardsCoordinateData_InPlayArea: ; 84e4 (2:44e4)
 ; x and y coordinates for player prize cards
 .player
 	db  9, 1
@@ -1826,14 +1826,13 @@ ZeroObjectPositionsWithCopyToggleOn: ; 8aa1 (2:4aa1)
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ret
-; 0x8aaa
 
 Func_8aaa: ; 8aaa (2:4aaa)
 	INCROM $8aaa, $8b85
 
 Func_8b85: ; 8b85 (2:4b85)
 	INCROM $8b85, $8c8e
-	
+
 OpenGlossaryScreen_TransitionTable:
 	cursor_transition $08, $28, $00, $04, $01, $05, $05
 	cursor_transition $08, $38, $00, $00, $02, $06, $06

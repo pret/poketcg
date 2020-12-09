@@ -1150,7 +1150,7 @@ Music1_SetChannelStackPointer: ; f4705 (3d:4705)
 	ld [hl], d
 	ret
 
-Music1_PlayNextNote_pop ; f4710 (3d:4710)
+Music1_PlayNextNote_pop: ; f4710 (3d:4710)
 	pop hl
 	jp Music1_PlayNextNote
 
@@ -1321,7 +1321,7 @@ Func_f480a: ; f480a (3d:480a)
 	ld [de], a
 .asm_f4829
 	ret
-asm_f482a
+asm_f482a:
 	xor a
 	ld [wddef], a
 	ld hl, rNR42

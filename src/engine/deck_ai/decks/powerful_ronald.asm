@@ -9,7 +9,6 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 .do_turn ; 15357 (5:5357)
 	call AIMainTurnLogic
 	ret
-; 0x1535b
 
 .start_duel ; 1535b (5:535b)
 	call InitAIDuelVars
@@ -19,22 +18,18 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	ret nc
 	call AIPlayInitialBasicCards
 	ret
-; 0x1536c
 
 .forced_switch ; 1536c (5:536c)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15370
 
 .ko_switch ; 15370 (5:5370)
 	call AIDecideBenchPokemonToSwitchTo
 	ret
-; 0x15374
 
 .take_prize ; 15374 (5:5374)
 	call AIPickPrizeCards
 	ret
-; 0x15378
 
 .list_arena ; 15378 (5:5378)
 	db KANGASKHAN

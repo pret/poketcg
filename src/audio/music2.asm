@@ -1321,7 +1321,7 @@ Func_f880a: ; f880a (3e:480a)
 	ld [de], a
 .asm_f8829
 	ret
-asm_f882a
+asm_f882a:
 	xor a
 	ld [wddef], a
 	ld hl, rNR42

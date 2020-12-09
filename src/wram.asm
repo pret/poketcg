@@ -937,7 +937,7 @@ wAIMaxDamage:: ; ccbc
 wDealtDamage:: ; ccbf
 	ds $2
 
-; WEAKNESS and RESISTANCE flags	for a damaging attack
+; WEAKNESS and RESISTANCE flags for a damaging attack
 wDamageEffectiveness:: ; ccc1
 	ds $1
 
@@ -1194,9 +1194,9 @@ wAIPokedexCounter:: ; cda6
 
 ; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
 ; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
-; 	- when flag is not set, this counts how many turns in a row
+;	- when flag is not set, this counts how many turns in a row
 ;	  Player used Mewtwo1's Barrier attack;
-; 	- when flag is set, this counts how many turns in a row
+;	- when flag is set, this counts how many turns in a row
 ;	  Player has NOT used Barrier attack.
 wAIBarrierFlagCounter:: ; cda7
 	ds $1
@@ -1369,7 +1369,7 @@ wcdea:: ; cdea
 ;	$01 = can't damage
 wAICannotDamage:: ; cdf0
 	ds $1
-	
+
 ; used by AI to store variable information
 wTempAI:: ; cdf1
 	ds $1
@@ -1413,8 +1413,8 @@ wAIMoveIsNonDamaging:: ; ce02
 	ds $1
 
 ; whether AI already retreated this turn or not.
-; 	- $0 has not retreated;
-; 	- $1 has retreated.
+;	- $0 has not retreated;
+;	- $1 has retreated.
 wAIRetreatedThisTurn:: ; ce03
 	ds $1
 
@@ -1945,7 +1945,7 @@ wd0c4:: ; d0c4
 wd0c5:: ; d0c5
 	ds $1
 
-; used to store the location of an overworld sequence, which is jumped to later
+; used to store the location of an overworld script, which is jumped to later
 wNextScript:: ; d0c6
 	ds $2
 
@@ -2319,7 +2319,13 @@ wd4af:: ; d4af
 wd4b0:: ; d4b0
 	ds $1
 
-	ds $d
+wd4b1:: ; d4b1
+	ds $1
+	
+wd4b2:: ; d4b2
+	ds $1
+	
+	ds $b
 
 wd4be:: ; d4be
 	ds $1
@@ -2384,22 +2390,22 @@ wSpriteAnimBuffer:: ; d4d0
 	sprite_anim_struct wSprite15
 	sprite_anim_struct wSprite16
 
-wd5d0:: ; d5d0
+wCurrSpriteAttributes:: ; d5d0
 	ds $1
 
-wd5d1:: ; d5d1
+wCurrSpriteXPos:: ; d5d1
 	ds $1
 
-wd5d2:: ; d5d2
+wCurrSpriteYPos:: ; d5d2
 	ds $1
 
-wd5d3:: ; d5d3
+wCurrSpriteTileID:: ; d5d3
 	ds $1
 
-wd5d4:: ; d5d4
+wCurrSpriteRightEdgeCheck:: ; d5d4
 	ds $1
 
-wd5d5:: ; d5d5
+wCurrSpriteBottomEdgeCheck:: ; d5d5
 	ds $1
 
 wd5d6:: ; d5d6
