@@ -3662,14 +3662,14 @@ Script_Ishihara: ; db4a (3:5b4a)
 
 .ows_dba8
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $ac
+	db CLEFABLE
 	dw .ows_dbaf
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072d
 
 .ows_dbaf
 	run_command ScriptCommand_CheckIfCardInCollection
-	db $ac
+	db CLEFABLE
 	dw .ows_dbb6
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072e
@@ -3714,14 +3714,14 @@ Script_Ishihara: ; db4a (3:5b4a)
 
 .ows_dbe1
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $bb
+	db DITTO
 	dw .ows_dbe8
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0734
 
 .ows_dbe8
 	run_command ScriptCommand_CheckIfCardInCollection
-	db $bb
+	db DITTO
 	dw .ows_dbef
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0735
@@ -5725,7 +5725,7 @@ Script_Ken: ; ef22 (3:6f22)
         db EVENT_FLAG_23
         dw .have_300_cards
         run_command ScriptCommand_CheckRawAmountOfCardsOwned
-        dw $012c ;	300 cards required
+        dw 300;
         dw .have_300_cards
         run_command ScriptCommand_JumpIfFlagZero1
         db EVENT_FLAG_24
