@@ -4005,8 +4005,8 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 
 	db NPC_JESSICA
 	db NPC_JESSICA
-	dw $c15e
-	dw $cd5e
+	dw $5ec1
+	dw $5ecd
 
 	db NPC_MITCH
 	db NPC_MITCH
@@ -4164,16 +4164,15 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	db NPC_CHRIS
 	dw $5f0c
 	dw $5f20
-	db $00
 
 	db NPC_MATTHEW
 	db NPC_MATTHEW
 	dw $5f63
 	dw $5f78
 	db $00
-; 0xdeea
+; 0xdee9
 
-	INCROM $deea, $def2
+	INCROM $dee9, $def2
   
 Script_Chris: ; def2 (3:5ef2)
 	INCROM $def2, $df39
