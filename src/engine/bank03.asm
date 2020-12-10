@@ -2321,7 +2321,7 @@ Func_cf7b: ; cf7b (3:4f7b)
 	jr c, .asm_cf7d
 	jp IncreaseScriptPointerBy1
 
-Func_cf96: ; cf96 (3:4f96)
+ScriptCommand_JumpBasedOnFightingClubPupilStatus: ; cf96 (3:4f96)
 	ld c, $0
 	get_flag_value EVENT_FLAG_11
 	or a
@@ -3656,25 +3656,25 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $02
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dba8
+	dw .check_ifhave_clefable_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dba8
+.check_ifhave_clefable_incollectionordecks
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db CLEFABLE
-	dw .ows_dbaf
+	dw .check_ifhave_clefable_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072d
 
-.ows_dbaf
+.check_ifhave_clefable_incollectiononly
 	run_command ScriptCommand_CheckIfCardInCollection
 	db CLEFABLE
-	dw .ows_dbb6
+	dw .do_clefable_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072e
 
-.ows_dbb6
+.do_clefable_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -3712,21 +3712,21 @@ Script_Ishihara: ; db4a (3:5b4a)
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dbe1
+.check_ifhave_clefable_incollectionordecks
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db DITTO
 	dw .ows_dbe8
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0734
 
-.ows_dbe8
+.check_ifhave_ditto_incollectiononly
 	run_command ScriptCommand_CheckIfCardInCollection
 	db DITTO
 	dw .ows_dbef
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0735
 
-.ows_dbef
+.do_ditto_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -3760,25 +3760,25 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $06
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dc1a
+	dw .check_ifhave_chansey_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dc1a
+.check_ifhave_chansey_incollectionordecks
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $b8
-	dw .ows_dc21
+	db CHANSEY
+	dw .check_ifhave_chansey_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073a
 
-.ows_dc21
+.check_ifhave_chansey_incollectiononly
 	run_command ScriptCommand_CheckIfCardInCollection
-	db $b8
+	db CHANSEY
 	dw .ows_dc28
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073b
 
-.ows_dc28
+.do_chansey_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -4015,7 +4015,7 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 
 	db $00
 ; ddc3
-
+;ScriptCommand_JumpBasedOnFightingClubPupilStatus
 Script_Mitch: ; ddc3 (3:5dc3)
         start_script
         run_command ScriptCommand_TryGivePCPack
@@ -4023,7 +4023,7 @@ Script_Mitch: ; ddc3 (3:5dc3)
         run_command ScriptCommand_JumpIfFlagNonzero2
         db EVENT_FLAG_0F
         dw Script_Mitch_AlreadyHaveMedal
-        run_command Func_cf96
+        run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
         dw .first_interaction
         dw .three_pupils_remaining
         dw .two_pupils_remaining
@@ -4109,7 +4109,7 @@ Script_LoseToMitch: ; de19 (3:5e19)
         tx Text0482
 ; 0xde21
 
-Script_Mitch_AlreadyHaveMedal; 0xde21
+Script_Mitch_AlreadyHaveMedal: ; 0xde21
         run_command ScriptCommand_PrintTextString
         tx Text0483
         run_command ScriptCommand_AskQuestionJump
@@ -4129,7 +4129,7 @@ Script_Mitch_AlreadyHaveMedal; 0xde21
         run_command ScriptCommand_QuitScriptFully
 ; 0xde35
 
-Script_Mitch_GiveBoosters
+Script_Mitch_GiveBoosters:
         run_command ScriptCommand_PrintTextString
         tx Text0486
         run_command ScriptCommand_GiveBoosterPacks
@@ -4141,7 +4141,7 @@ Script_Mitch_GiveBoosters
         run_command ScriptCommand_QuitScriptFully
 ; 0xde40
 
-Script_Mitch_PrintTrainHarderText
+Script_Mitch_PrintTrainHarderText:
         run_command ScriptCommand_PrintTextQuitFully
         tx Text0488
 ; 0xde43
@@ -4152,7 +4152,7 @@ Script_Clerk2: ; ded1 (3:5ed1)
 	INCROM $ded1, $ded5
 
 
-RockClubLobbyAfterDuel; ded5 (3:5ed5)
+RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
         ld hl, .after_duel_table
         call FindEndOfBattleScript
         ret

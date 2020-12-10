@@ -195,7 +195,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_cf53", "w", DO_NOT_QUIT), # more complex behavior too (jumping)
 	("Func_cf7b", "", DO_NOT_QUIT),
 	("ScriptCommand_CheckRawAmountOfCardsOwned", "bbbb", DO_NOT_QUIT), # more complex behavior too (jumping + ??)
-	("Func_cf96", "w", DO_NOT_QUIT), # only jumps? still needs args to do that though
+	("ScriptCommand_JumpBasedOnFightingClubPupilStatus", "w", DO_NOT_QUIT), # only jumps? still needs args to do that though
 	("Func_cfc6", "b", DO_NOT_QUIT),
 	("Func_cfd4", "", DO_NOT_QUIT),
 	("Func_d00b", "", DO_NOT_QUIT), # includes something with random and extra data

@@ -34,7 +34,7 @@ ENDM
 	const Func_cf53_index                       ; $11
 	const Func_cf7b_index                       ; $12
 	const ScriptCommand_CheckRawAmountOfCardsOwned_index                       ; $13
-	const Func_cf96_index                       ; $14
+	const ScriptCommand_JumpBasedOnFightingClubPupilStatus_index                       ; $14
 	const Func_cfc6_index                       ; $15
 	const Func_cfd4_index                       ; $16
 	const Func_d00b_index                       ; $17

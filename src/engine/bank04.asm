@@ -988,7 +988,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_cf53
 	dw Func_cf7b
 	dw ScriptCommand_CheckRawAmountOfCardsOwned
-	dw Func_cf96
+	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
 	dw Func_cfc6
 	dw Func_cfd4
 	dw Func_d00b
