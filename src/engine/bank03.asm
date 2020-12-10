@@ -3712,7 +3712,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.check_ifhave_clefable_incollectionordecks
+.check_ifhave_ditto_incollectionordecks
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db DITTO
 	dw .ows_dbe8
@@ -3982,7 +3982,7 @@ Script_Butch: ; dd8d (3:5d8d)
 	INCROM $dd8d, $dd9f
 
 Script_Granny1: ; dd9f (3:5d9f)
-	INCROM $dd9f, $ddc3
+	INCROM $dd9f, $dda3
 
 
 
