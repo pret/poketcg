@@ -2214,12 +2214,12 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	xor a
 	jr .asm_cef0
 
-Func_cf0c: ; cf0c (3:4f0c)
+ScriptCommand_CheckIfCardInCollectionOrDecks: ; cf0c (3:4f0c)
 	ld a, c
 	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
-Func_cf12: ; cf12 (3:4f12)
+ScriptCommand_CheckIfCardInCollection: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
@@ -2240,7 +2240,7 @@ asm_cf1f:
 asm_cf2a:
 	jp IncreaseScriptPointerBy4
 
-Func_cf2d: ; cf2d (3:4f2d)
+ScriptCommand_CheckRawAmountOfCardsOwned: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseScriptPointerBy1
 	pop bc
@@ -2321,7 +2321,7 @@ Func_cf7b: ; cf7b (3:4f7b)
 	jr c, .asm_cf7d
 	jp IncreaseScriptPointerBy1
 
-Func_cf96: ; cf96 (3:4f96)
+ScriptCommand_JumpBasedOnFightingClubPupilStatus: ; cf96 (3:4f96)
 	ld c, $0
 	get_flag_value EVENT_FLAG_11
 	or a
@@ -3656,25 +3656,25 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $02
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dba8
+	dw .check_ifhave_clefable_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dba8
-	run_command Func_cf0c
-	db $ac
-	dw .ows_dbaf
+.check_ifhave_clefable_incollectionordecks
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
+	db CLEFABLE
+	dw .check_ifhave_clefable_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072d
 
-.ows_dbaf
-	run_command Func_cf12
-	db $ac
-	dw .ows_dbb6
+.check_ifhave_clefable_incollectiononly
+	run_command ScriptCommand_CheckIfCardInCollection
+	db CLEFABLE
+	dw .do_clefable_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072e
 
-.ows_dbb6
+.do_clefable_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -3708,25 +3708,25 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $04
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dbe1
+	dw .check_ifhave_ditto_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dbe1
-	run_command Func_cf0c
-	db $bb
-	dw .ows_dbe8
+.check_ifhave_ditto_incollectionordecks
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
+	db DITTO
+	dw .check_ifhave_ditto_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0734
 
-.ows_dbe8
-	run_command Func_cf12
-	db $bb
-	dw .ows_dbef
+.check_ifhave_ditto_incollectiononly
+	run_command ScriptCommand_CheckIfCardInCollection
+	db DITTO
+	dw .do_ditto_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0735
 
-.ows_dbef
+.do_ditto_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -3760,25 +3760,25 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $06
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dc1a
+	dw .check_ifhave_chansey_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
-.ows_dc1a
-	run_command Func_cf0c
-	db $b8
-	dw .ows_dc21
+.check_ifhave_chansey_incollectionordecks
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
+	db CHANSEY
+	dw .check_ifhave_chansey_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073a
 
-.ows_dc21
-	run_command Func_cf12
-	db $b8
-	dw .ows_dc28
+.check_ifhave_chansey_incollectiononly
+	run_command ScriptCommand_CheckIfCardInCollection
+	db CHANSEY
+	dw .do_chansey_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073b
 
-.ows_dc28
+.do_chansey_trade
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_00
 	run_command ScriptCommand_SetFlagValue
@@ -3982,14 +3982,198 @@ Script_Butch: ; dd8d (3:5d8d)
 	INCROM $dd8d, $dd9f
 
 Script_Granny1: ; dd9f (3:5d9f)
-	INCROM $dd9f, $ddc3
+	INCROM $dd9f, $dda3
+
+
+
+FightingClubAfterDuel: ; dda3 (3:5da3)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xddaa
+
+.after_duel_table
+	db NPC_CHRIS
+	db NPC_CHRIS
+	dw $5e69
+	dw $5e75
+
+	db NPC_MICHAEL
+	db NPC_MICHAEL
+	dw $5e95
+	dw $5ea1
+
+	db NPC_JESSICA
+	db NPC_JESSICA
+	dw $5ec1
+	dw $5ecd
+
+	db NPC_MITCH
+	db NPC_MITCH
+	dw Script_BeatMitch
+	dw Script_LoseToMitch
+
+	db $00
+; ddc3
 
 Script_Mitch: ; ddc3 (3:5dc3)
-	INCROM $ddc3, $ded1
+        start_script
+        run_command ScriptCommand_TryGivePCPack
+        db $02
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_AlreadyHaveMedal
+        run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
+        dw .first_interaction
+        dw .three_pupils_remaining
+        dw .two_pupils_remaining
+        dw .one_pupil_remaining
+        dw .all_pupils_defeated
+.first_interaction
+        run_command ScriptCommand_PrintTextString
+        tx Text0477
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_11
+        db $01
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_17
+        db $01
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_20
+        db $01
+        run_command ScriptCommand_QuitScriptFully
+; 0xdde2
+.three_pupils_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0478
+; 0xdde5
+.two_pupils_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0479
+; 0xdde8
+.one_pupil_remaining
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text047a
+; 0xddeb
+.all_pupils_defeated
+        run_command ScriptCommand_PrintTextString
+        tx Text047b
+        run_command ScriptCommand_AskQuestionJump
+        tx Text047c
+        dw .do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text047d
+        run_command ScriptCommand_QuitScriptFully
+; 0xddf7
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text047e
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRST_STRIKE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xddff
 
+Script_BeatMitch: ; ddff (3:5dff)
+        start_script
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_GiveBoosters
+        run_command ScriptCommand_PrintTextString
+        tx Text047f
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_0F
+        run_command ScriptCommand_TryGiveMedalPCPacks
+        run_command Func_d125
+        db $0f
+        run_command Func_d435
+        db $01
+        run_command ScriptCommand_PrintTextString
+        tx Text0480
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_LABORATORY_NEUTRAL
+        db BOOSTER_LABORATORY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text0481
+        run_command ScriptCommand_QuitScriptFully
+; 0xde19
+
+Script_LoseToMitch: ; de19 (3:5e19)
+        start_script
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0F
+        dw Script_Mitch_PrintTrainHarderText
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0482
+; 0xde21
+
+Script_Mitch_AlreadyHaveMedal: ; 0xde21
+        run_command ScriptCommand_PrintTextString
+        tx Text0483
+        run_command ScriptCommand_AskQuestionJump
+        tx Text047c
+        dw .do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text0484
+        run_command ScriptCommand_QuitScriptFully
+; 0xde2d
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text0485
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRST_STRIKE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xde35
+
+Script_Mitch_GiveBoosters:
+        run_command ScriptCommand_PrintTextString
+        tx Text0486
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_LABORATORY_NEUTRAL
+        db BOOSTER_LABORATORY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text0487
+        run_command ScriptCommand_QuitScriptFully
+; 0xde40
+
+Script_Mitch_PrintTrainHarderText:
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text0488
+; 0xde43
+
+	INCROM $de43, $ded1
+  
 Script_Clerk2: ; ded1 (3:5ed1)
-	INCROM $ded1, $def2
+	INCROM $ded1, $ded5
 
+
+RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xdedc
+
+.after_duel_table
+
+	db NPC_CHRIS
+	db NPC_CHRIS
+	dw $5f0c
+	dw $5f20
+
+	db NPC_MATTHEW
+	db NPC_MATTHEW
+	dw $5f63
+	dw $5f78
+	db $00
+; 0xdee9
+
+	INCROM $dee9, $def2
+  
 Script_Chris: ; def2 (3:5ef2)
 	INCROM $def2, $df39
 
@@ -4015,7 +4199,23 @@ Script_Gene: ; e03e (3:603e)
 	INCROM $e03e, $e09e
 
 Script_Clerk3: ; e09e (3:609e)
-	INCROM $e09e, $e0b0
+	INCROM $e09e, $e0a2
+
+  
+WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe0a9
+
+.after_duel_table
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xe0b0
+
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4059,7 +4259,7 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0eb
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $59
 	dw .ows_e0f3
 	run_command ScriptCommand_PrintTextString
@@ -4067,7 +4267,7 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0f3
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $59
 	dw .ows_e0fb
 	run_command ScriptCommand_PrintTextString
@@ -4652,7 +4852,23 @@ ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
 ; 0xe369
 
 Script_Clerk4: ; e369 (3:6369)
-	INCROM $e369, $e39a
+	INCROM $e369, $e36d
+
+LightningClubLobbyAfterDuel: ; e36d (3:636d)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe374
+
+.after_duel_table
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xe37B
+
+	INCROM $e37B, $e39a
 
 Script_Chap2: ; e39a (3:639a)
 	INCROM $e39a, $e3d9
@@ -4850,14 +5066,14 @@ Script_Lass2: ; e61f (3:661f)
 	tx Text06ee
 
 .ows_e648
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $1c
 	dw .ows_e64f
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06ef
 
 .ows_e64f
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $1c
 	dw .ows_e656
 	run_command ScriptCommand_PrintTextQuitFully
@@ -4900,14 +5116,14 @@ Script_Lass2: ; e61f (3:661f)
 	tx Text06f6
 
 .ows_e67f
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $ab
 	dw .ows_e686
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06f7
 
 .ows_e686
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $ab
 	dw .ows_e68d
 	run_command ScriptCommand_PrintTextQuitFully
@@ -4950,14 +5166,14 @@ Script_Lass2: ; e61f (3:661f)
 	tx Text06fd
 
 .ows_e6b6
-	run_command Func_cf0c
+	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db $32
 	dw .ows_e6bd
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06fe
 
 .ows_e6bd
-	run_command Func_cf12
+	run_command ScriptCommand_CheckIfCardInCollection
 	db $32
 	dw .ows_e6c4
 	run_command ScriptCommand_PrintTextQuitFully
@@ -5276,17 +5492,32 @@ ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command ScriptCommand_QuitScriptFully
 ; 0xe963
 
-	INCROM $e963, $e980
 
+PsychicClubLobbyAfterDuel: ; e963 (3:6963)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xe96a
+
+.after_duel_table
+
+	db NPC_ROBERT
+	db NPC_ROBERT
+	dw $6995
+	dw $69a1
+	db $00
+
+	INCROM $e971, $e980
+  
 Script_Robert: ; e980 (3:6980)
 	INCROM $e980, $e9a5
-
+  
 Script_Pappy1: ; e9a5 (3:69a5)
 	INCROM $e9a5, $ea30
 
 Script_Gal3: ; ea30 (3:6a30)
 	INCROM $ea30, $ea3b
-
+  
 Script_Chap4: ; ea3b (3:6a3b)
 	INCROM $ea3b, $ea60
 
@@ -5295,16 +5526,34 @@ Script_Daniel: ; ea60 (3:6a60)
 
 Script_Stephanie: ; eaa2 (3:6aa2)
 	INCROM $eaa2, $eadf
-
+  
 Script_Murray2: ; eadf (3:6adf)
 	INCROM $eadf, $eadf
 
 Script_Murray1: ; eadf (3:6adf)
 	INCROM $eadf, $eb53
-
+  
 Script_Clerk7: ; eb53 (3:6b53)
-	INCROM $eb53, $eb84
+	INCROM $eb53, $eb57
 
+
+ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xeb5e
+
+.after_duel_table
+	
+	db NPC_IMAKUNI
+	db NPC_IMAKUNI
+	dw Script_BeatImakuni
+	dw Script_LostToImakuni
+	db $00
+; 0xeb65
+
+	INCROM $eb65, $eb84
+  
 Script_Lad1: ; eb84 (3:6b84)
 	INCROM $eb84, $ebc1
 
@@ -5330,7 +5579,22 @@ Script_Joseph: ; ecdb (3:6cdb)
 	INCROM $ecdb, $ed45
 
 Script_Clerk8: ; ed45 (3:6d45)
-	INCROM $ed45, $ed57
+	INCROM $ed45, $ed49
+
+FireClubLobbyAfterDuel: ; ed49 (3:6d49)
+        ld hl, .after_duel_table
+        call FindEndOfBattleScript
+        ret
+; 0xed50
+
+.after_duel_table
+	db NPC_JESSICA
+	db NPC_JESSICA
+	dw $6dba
+	dw $6dce
+	db $00
+
+; 0xed57
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
@@ -5411,7 +5675,37 @@ Script_ee76: ; ee76 (3:6e76)
 ; 0xee88
 
 Script_Mania: ; ee88 (3:6e88)
-	INCROM $ee88, $eeb3
+	INCROM $ee88, $ee93
+
+
+FireClubAfterDuel: ;ee93  (3:6e93)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_JOHN
+	db NPC_JOHN
+	dw $6ec8 
+	dw $6ed4
+ 
+	db NPC_ADAM
+	db NPC_ADAM
+	dw $6eed 
+	dw $6ef9 
+
+	db NPC_JONATHAN
+	db NPC_JONATHAN
+	dw $6f12 
+	dw $6f1e 
+
+	db NPC_KEN
+	db NPC_KEN
+	dw Script_BeatKen
+	dw Script_LoseToKen
+
+	db $00
+; 0xeeb3
 
 Script_John: ; eeb3 (3:6eb3)
 	INCROM $eeb3, $eed8
@@ -5423,7 +5717,112 @@ Script_Jonathan: ; eefd (3:6efd)
 	INCROM $eefd, $ef22
 
 Script_Ken: ; ef22 (3:6f22)
-	INCROM $ef22, $ef96
+        start_script
+        run_command ScriptCommand_TryGivePCPack
+        db $09
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_23
+        dw .have_300_cards
+        run_command ScriptCommand_CheckRawAmountOfCardsOwned
+        dw 300
+        dw .have_300_cards
+        run_command ScriptCommand_JumpIfFlagZero1
+        db EVENT_FLAG_24
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06ba
+        tx Text06bb
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_24
+        db $01
+        run_command ScriptCommand_QuitScriptFully
+.have_300_cards
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_23
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0A
+        dw Script_KenBattle_AlreadyHaveMedal
+        run_command ScriptCommand_JumpIfFlagZero1
+        db EVENT_FLAG_24
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06bc
+        tx Text06bd
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_24
+        db $01
+        run_command ScriptCommand_AskQuestionJump
+        tx Text06be
+        dw .do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text06bf
+        run_command ScriptCommand_QuitScriptFully
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text06c0
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRE_CHARGE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xef5e
+
+Script_BeatKen: ; ef5e (3:6f5e)
+        start_script
+        run_command ScriptCommand_PrintTextString
+        tx Text06c1
+        run_command ScriptCommand_JumpIfFlagNonzero2
+        db EVENT_FLAG_0A
+        dw .give_booster_packs
+        run_command ScriptCommand_MaxOutFlagValue
+        db EVENT_FLAG_0A
+        run_command ScriptCommand_TryGiveMedalPCPacks
+        run_command Func_d125
+        db $0a
+        run_command Func_d435
+        db $08
+        run_command ScriptCommand_PrintTextString
+        tx Text06c2
+.give_booster_packs
+        run_command ScriptCommand_GiveBoosterPacks
+        db BOOSTER_MYSTERY_NEUTRAL
+        db BOOSTER_MYSTERY_NEUTRAL
+        db NO_BOOSTER
+        run_command ScriptCommand_PrintTextString
+        tx Text06c3
+        run_command ScriptCommand_QuitScriptFully
+; 0xef78
+
+
+
+Script_LoseToKen: ; ef78 (3:6f78)
+        start_script
+        run_command ScriptCommand_JumpIfFlagZero2
+        db EVENT_FLAG_0A
+        dw NO_JUMP
+        run_command ScriptCommand_PrintVariableText
+        tx Text06c4
+        tx Text06c5
+        run_command ScriptCommand_QuitScriptFully
+; 0xef83
+
+Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
+        run_command ScriptCommand_PrintTextString
+        tx Text06c6
+        run_command ScriptCommand_AskQuestionJump
+        tx Text06be
+        dw .do_battle
+        run_command ScriptCommand_PrintTextQuitFully
+        tx Text06bf
+.do_battle
+        run_command ScriptCommand_PrintTextString
+        tx Text06c7
+        run_command ScriptCommand_StartBattle
+        db PRIZES_6
+        db FIRE_CHARGE_DECK_ID
+        db MUSIC_DUEL_THEME_2
+        run_command ScriptCommand_QuitScriptFully
+; 0xef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks

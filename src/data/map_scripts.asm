@@ -78,7 +78,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $5da3
+	dw FightingClubAfterDuel
 	dw $0000
 	dw $0000
 
@@ -98,7 +98,7 @@ MapScripts: ; 1162a (4:562a)
 	dw RockClubLobbyObjects
 	dw $0000
 	dw $0000
-	dw $5ed5
+	dw RockClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -128,7 +128,7 @@ MapScripts: ; 1162a (4:562a)
 	dw WaterClubLobbyObjects
 	dw $0000
 	dw $0000
-	dw $60a2
+	dw WaterClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -158,7 +158,7 @@ MapScripts: ; 1162a (4:562a)
 	dw LightningClubLobbyObjects
 	dw $0000
 	dw $0000
-	dw $636d
+	dw LightningClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -218,7 +218,7 @@ MapScripts: ; 1162a (4:562a)
 	dw PsychicClubLobbyObjects
 	dw $0000
 	dw $6971
-	dw $6963
+	dw PsychicClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -248,7 +248,7 @@ MapScripts: ; 1162a (4:562a)
 	dw ScienceClubLobbyObjects
 	dw $0000
 	dw $0000
-	dw $6b57
+	dw ScienceClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -278,7 +278,7 @@ MapScripts: ; 1162a (4:562a)
 	dw FireClubLobbyObjects
 	dw FireClubPressedA
 	dw $0000
-	dw $6d49
+	dw FireClubLobbyAfterDuel
 	dw $0000
 	dw $0000
 
@@ -288,7 +288,7 @@ MapScripts: ; 1162a (4:562a)
 	dw $0000
 	dw $0000
 	dw $0000
-	dw $6e93
+	dw FireClubAfterDuel
 	dw $0000
 	dw $0000
 
