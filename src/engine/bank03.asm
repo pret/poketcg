@@ -3708,21 +3708,21 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db $04
 	run_command ScriptCommand_AskQuestionJump
 	tx Text072b
-	dw .ows_dbe1
+	dw .check_ifhave_ditto_incollectionordecks
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text072c
 
 .check_ifhave_ditto_incollectionordecks
 	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
 	db DITTO
-	dw .ows_dbe8
+	dw .check_ifhave_ditto_incollectiononly
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0734
 
 .check_ifhave_ditto_incollectiononly
 	run_command ScriptCommand_CheckIfCardInCollection
 	db DITTO
-	dw .ows_dbef
+	dw .do_ditto_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0735
 
@@ -3774,7 +3774,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 .check_ifhave_chansey_incollectiononly
 	run_command ScriptCommand_CheckIfCardInCollection
 	db CHANSEY
-	dw .ows_dc28
+	dw .do_chansey_trade
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text073b
 
@@ -4171,9 +4171,9 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	dw $5f63
 	dw $5f78
 	db $00
-; 0xdee9
+; 0xdeea
 
-	INCROM $dee9, $def2
+	INCROM $deea, $def2
   
 Script_Chris: ; def2 (3:5ef2)
 	INCROM $def2, $df39
