@@ -4015,7 +4015,7 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 
 	db $00
 ; ddc3
-;ScriptCommand_JumpBasedOnFightingClubPupilStatus
+
 Script_Mitch: ; ddc3 (3:5dc3)
         start_script
         run_command ScriptCommand_TryGivePCPack
@@ -5538,7 +5538,7 @@ Script_Clerk7: ; eb53 (3:6b53)
 	INCROM $eb53, $eb57
 
 
-ScienceClubLobbyAfterDuel; eb57 (3:6b57)
+ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
         ld hl, .after_duel_table
         call FindEndOfBattleScript
         ret
@@ -5725,7 +5725,7 @@ Script_Ken: ; ef22 (3:6f22)
         db EVENT_FLAG_23
         dw .have_300_cards
         run_command ScriptCommand_CheckRawAmountOfCardsOwned
-        dw 300;
+        dw 300
         dw .have_300_cards
         run_command ScriptCommand_JumpIfFlagZero1
         db EVENT_FLAG_24
@@ -5807,7 +5807,7 @@ Script_LoseToKen: ; ef78 (3:6f78)
         run_command ScriptCommand_QuitScriptFully
 ; 0xef83
 
-Script_KenBattle_AlreadyHaveMedal; ef83 (3:6f83)
+Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
         run_command ScriptCommand_PrintTextString
         tx Text06c6
         run_command ScriptCommand_AskQuestionJump
