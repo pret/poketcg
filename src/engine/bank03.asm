@@ -2712,27 +2712,62 @@ Func_d244: ; d244 (3:5244)
 	farcall Func_80ba4
 	jp IncreaseScriptPointerBy2
 
-Func_d24c: ; d24c (3:524c)
-	ld hl, $525e
+Show_ChooseDeckToDuelAgainst_MultichoiceTextbox: ; d24c (3:524c)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
+	call ShowMultichoiceTextbox
 	ld a, [wd695]
 	ld c, a
 	set_flag_value EVENT_FLAG_76
 	jp IncreaseScriptPointerBy1
 
-	INCROM $d25e, $d271
+.multichoice_menu_args ;d25e
+	dw $0000 ;NPC title for textbox under menu
+	tx Text03f9 ;text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ;location of table configuration in bank 4
+	db $03 ;the value to return when b is pressed
+	dw $d695 ;ram location to return result into
+	dw .text_entries ;location of table containing text entries
 
-Func_d271: ; d271 (3:5271)
-	ld hl, $527b
+.text_entries ;d269
+	tx Text03f6
+	tx Text03f7
+	tx Text03f8
+
+	INCROM $d26f, $d271
+
+
+Show_ChooseStarterDeck_MultichoiceTextbox: ; d271 (3:5271)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
+	call ShowMultichoiceTextbox
 	jp IncreaseScriptPointerBy1
 ; 0xd27b
 
-	INCROM $d27b, $d28c
+.multichoice_menu_args ;d27b
+	dw $0000 ;NPC title for textbox under menu
+	tx Text03fd ;text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ;location of table configuration in bank 4
+	db $00 ;the value to return when b is pressed
+	dw $d693 ;ram location to return result into
+	dw .text_entries ;location of table containing text entries
 
-Func_d28c: ; d28c (3:528c)
+.text_entries
+	tx Text03fa
+	tx Text03fb
+	tx Text03fc
+
+
+;displays a textbox with multiple choices and a cursor.
+;takes as an argument in h1 a pointer to a table
+; 	dw text id for NPC title for textbox under menu
+; 	dw text id for textbox under menu
+; 	dw location of table configuration in bank 4
+; 	db the value to return when b is pressed
+; 	dw ram location to return result into
+; 	dw location of table containing text entries (optional
+
+ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld [wd416], a
 	push hl
 	call Func_c241
@@ -2808,10 +2843,10 @@ Func_d28c: ; d28c (3:528c)
 .asm_d2f5
 	ret
 
-Func_d2f6: ; d2f6 (3:52f6)
-	ld hl, $530c
+ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
+	call ShowMultichoiceTextbox
 	ld a, [wd694]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
@@ -2820,19 +2855,32 @@ Func_d2f6: ; d2f6 (3:52f6)
 	jp IncreaseScriptPointerBy1
 ; 0xd30c
 
-	INCROM $d30c, $d317
+.multichoice_menu_args ;d30c
+	tx SamNPCName ;NPC title for textbox under menu
+	tx Text03fe ;text for textbox under menu
+	dw SamNormalMultichoice_ConfigurationTable ;location of table configuration in bank 4
+	db $03 ;the value to return when b is pressed
+	dw $d694 ;ram location to return result into
+	dw $0000 ;location of table containing text entries
 
-Func_d317: ; d317 (3:5317)
-	ld hl, $532b
+
+ScriptCommand_ShowSamTutorialMultichoice: ; d317 (s)
+	ld hl, .multichoice_menu_args
 	ld a, [wd694]
-	call Func_d28c
+	call ShowMultichoiceTextbox
 	ld a, [wd694]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
 	jp IncreaseScriptPointerBy1
 
-Unknown_d32b: ; d32b (3:532b)
-	INCROM $d32b, $d336
+.multichoice_menu_args ;d32b
+	dw $0000 ;NPC title for textbox under menu
+	dw $0000 ;text for textbox under menu
+	dw SamTutorialMultichoice_ConfigurationTable ;location of table configuration in bank 4
+	db $07 ;the value to return when b is pressed
+	dw $d694 ;ram location to return result into
+	dw $0000 ;location of table containing text entries
+
 
 ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	push bc
@@ -3333,7 +3381,7 @@ Script_d794: ; d794 (3:5794)
 
 .ows_d7bc
 	run_command ScriptCommand_CloseTextBox
-	run_command Func_d317
+	run_command ScriptCommand_ShowSamTutorialMultichoice
 	run_command ScriptCommand_CloseTextBox
 	run_command ScriptCommand_JumpIfFlagEqual
 	db EVENT_FLAG_75
@@ -3478,7 +3526,7 @@ AfterTutorialBattleScript: ; d834 (3:5834)
         run_command ScriptCommand_CloseTextBox
         run_command ScriptCommand_PrintTextString
         tx Text05f2
-        run_command Func_d271
+        run_command Show_ChooseStarterDeck_MultichoiceTextbox
 ; 0xd860
 	
 	INCROM $d860, $d880
