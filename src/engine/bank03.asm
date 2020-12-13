@@ -2712,7 +2712,7 @@ Func_d244: ; d244 (3:5244)
 	farcall Func_80ba4
 	jp IncreaseScriptPointerBy2
 
-Show_ChooseDeckToDuelAgainst_MultichoiceTextbox: ; d24c (3:524c)
+ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst: ; d24c (3:524c)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
@@ -2737,7 +2737,7 @@ Show_ChooseDeckToDuelAgainst_MultichoiceTextbox: ; d24c (3:524c)
 	INCROM $d26f, $d271
 
 
-Show_ChooseStarterDeck_MultichoiceTextbox: ; d271 (3:5271)
+ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck: ; d271 (3:5271)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
@@ -3526,7 +3526,7 @@ AfterTutorialBattleScript: ; d834 (3:5834)
         run_command ScriptCommand_CloseTextBox
         run_command ScriptCommand_PrintTextString
         tx Text05f2
-        run_command Show_ChooseStarterDeck_MultichoiceTextbox
+        run_command ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
 ; 0xd860
 	
 	INCROM $d860, $d880

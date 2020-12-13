@@ -1023,9 +1023,9 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d1b3
 	dw ScriptCommand_QuitScriptFully
 	dw Func_d244
-	dw Show_ChooseDeckToDuelAgainst_MultichoiceTextbox
+	dw ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst
 	dw ScriptCommand_OpenDeckMachine
-	dw Show_ChooseStarterDeck_MultichoiceTextbox
+	dw ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
 	dw ScriptCommand_EnterMap
 	dw ScriptCommand_MoveArbitraryNPC
 	dw Func_d209
