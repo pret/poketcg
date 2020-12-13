@@ -13,8 +13,8 @@ Func_10000: ; 10000 (4:4000)
 	bit LCDC_ENABLE_F, a
 	jr nz, .asm_10025
 	xor a
-	ld [rSCX], a
-	ld [rSCY], a
+	ldh [rSCX], a
+	ldh [rSCY], a
 
 .asm_10025
 	call Func_1288c
