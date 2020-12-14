@@ -32,8 +32,8 @@ RGBLINK ?= $(RGBDS)rgblink
 .SECONDARY:
 .PHONY: all tcg clean tidy compare tools
 
-all: $(rom)
-tcg: $(rom)
+all: $(rom) compare
+tcg: $(rom) compare
 
 clean: tidy
 	find src/gfx \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -delete
