@@ -35,7 +35,7 @@ SleepEffect: ; 2c030 (b:4030)
 	lb bc, PSN_DBLPSN, ASLEEP
 	jr ApplyStatusEffect
 
-ApplyStatusEffect:
+ApplyStatusEffect: ; 2c035 (b:4035)
 	ldh a, [hWhoseTurn]
 	ld hl, wWhoseTurn
 	cp [hl]
@@ -102,7 +102,7 @@ Func_2c087: ; 2c087 (b:4087)
 Func_2c08a: ; 2c08a (b:408a)
 	ld a, $1
 
-Func_2c08c:
+Func_2c08c: ; 2c08c (b:408c)
 	push de
 	push af
 	ld a, OPPACTION_TOSS_COIN_A_TIMES

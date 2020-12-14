@@ -505,11 +505,11 @@ SetBGP: ; 040c (0:040c)
 ;	fallthrough
 
 ; Flush non-CGB palettes and the first CGB palette
-FlushPalette0:
+FlushPalette0: ; 040f (0:040f)
 	ld a, FLUSH_ONE_PAL
 ;	fallthrough
 
-FlushPalettes:
+FlushPalettes: ; 0411 (0:0411)
 	ld [wFlushPaletteFlags], a
 	ld a, [wLCDC]
 	rla
@@ -722,7 +722,7 @@ Reset: ; 051b (0:051b)
 	di
 	jp Start
 
-SaveButtonsHeld:
+SaveButtonsHeld: ; 0522 (0:0522)
 	ld a, c
 	ldh [hKeysHeld], a
 	ld a, JOY_BTNS_SELECT | JOY_DPAD_SELECT
@@ -939,7 +939,7 @@ WriteBCDNumberInTextFormat: ; 0614 (0:0614)
 
 ; given a BCD digit in the (lower nybble) of register a, write it in text (ascii)
 ;  format to hl. numbers above 9 end up converted to half-width font tiles.
-WriteBCDDigitInTextFormat:
+WriteBCDDigitInTextFormat: ; 061b (0:061b)
 	and $0f
 	add "0"
 	cp "9" + 1
@@ -4328,7 +4328,7 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	call LoadCardDataToBuffer1_FromDeckIndex
 ;	fallthrough
 
-CopyMoveDataAndDamage:
+CopyMoveDataAndDamage: ; 16ca (0:16ca)
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Move1
@@ -5669,7 +5669,7 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 
 ; continue drawing a labeled or regular textbox on DMG or SGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxDMGorSGB:
+ContinueDrawingTextBoxDMGorSGB: ; 1e93 (0:1e93)
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -5720,7 +5720,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	ret
 
 ; DrawRegularTextBox branches here on CGB console
-DrawRegularTextBoxCGB:
+DrawRegularTextBoxCGB: ; 1ec9 (0:1ec9)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -5730,7 +5730,7 @@ DrawRegularTextBoxCGB:
 
 ; continue drawing a labeled or regular textbox on CGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxCGB:
+ContinueDrawingTextBoxCGB: ; 1ed4 (0:1ed4)
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -5764,7 +5764,7 @@ CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 	pop hl
 ;	fallthrough
 
-CopyCurrentLineAttrCGB:
+CopyCurrentLineAttrCGB: ; 1f00 (0:1f00)
 	call BankswitchVRAM1
 	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
@@ -5785,7 +5785,7 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	ret z
 ;	fallthrough
 
-ColorizeTextBoxSGB:
+ColorizeTextBoxSGB: ; 1f1b (0:1f1b)
 	push bc
 	push de
 	ld hl, wTempSGBPacket
@@ -7465,7 +7465,7 @@ PrintCardListItems: ; 2799 (0:2799)
 
 ; like PrintCardListItems, except more parameters are already initialized
 ; called instead of PrintCardListItems to reload the list after moving up or down
-ReloadCardListItems:
+ReloadCardListItems: ; 27af (0:27af)
 	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
@@ -8042,7 +8042,7 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 	lb de, 2, 16 ; x, y
 ;	fallthrough
 
-HandleYesOrNoMenu:
+HandleYesOrNoMenu: ; 2b0a (0:2b0a)
 	ld a, d
 	ld [wLeftmostItemCursorX], a
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
@@ -10343,7 +10343,7 @@ GetArenaCardWeakness: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardWeakness:
+GetCardWeakness: ; 3739 (0:3739)
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Weakness]
@@ -10368,7 +10368,7 @@ GetArenaCardResistance: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardResistance:
+GetCardResistance: ; 3753 (0:3753)
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Resistance]
@@ -11525,7 +11525,7 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
 ;	fallthrough
 
-GetSpriteAnimBufferProperty_SpriteInA:
+GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_ret

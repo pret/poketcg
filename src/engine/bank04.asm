@@ -1103,7 +1103,7 @@ _GameLoop: ; 126d1 (4:66d1)
 	scf
 	ret
 
-MainMenuFunctionTable:
+MainMenuFunctionTable: ; 126fc (4:66fc)
 	dw MainMenu_CardPop
 	dw MainMenu_ContinueFromDiary
 	dw MainMenu_NewGame

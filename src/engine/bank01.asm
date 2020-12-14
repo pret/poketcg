@@ -1019,7 +1019,7 @@ HandleEnergyDiscardMenuInput: ; 46b7 (1:46b7)
 	scf
 	ret
 
-EnergyDiscardCardListParameters:
+EnergyDiscardCardListParameters: ; 46f3 (1:46f3)
 	db 1, 5 ; cursor x, cursor y
 	db 4 ; item x
 	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
@@ -1161,7 +1161,7 @@ OpenMovePage: ; 478b (1:478b)
 	jr z, .loop
 	ret
 
-AttackMenuParameters:
+AttackMenuParameters: ; 47e4 (1:47e4)
 	db 1, 13 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
@@ -1554,7 +1554,7 @@ PrintNumberOfHandAndDeckCards: ; 49ed (1:49ed)
 	jr nz, PrintOpponentNumberOfHandAndDeckCards
 ;	fallthrough
 
-PrintPlayerNumberOfHandAndDeckCards:
+PrintPlayerNumberOfHandAndDeckCards: ; 49f3 (1:49f3)
 	ld a, [wPlayerNumberOfCardsInHand]
 	ld hl, wNumCardsBeingDrawn
 	add [hl]
@@ -1572,7 +1572,7 @@ PrintPlayerNumberOfHandAndDeckCards:
 	lb bc, 10, 10
 	jp WriteTwoDigitNumberInTxSymbolFormat
 
-PrintOpponentNumberOfHandAndDeckCards:
+PrintOpponentNumberOfHandAndDeckCards: ; 4a14 (1:4a14)
 	ld a, [wOpponentNumberOfCardsInHand]
 	ld hl, wNumCardsBeingDrawn
 	add [hl]
@@ -1590,7 +1590,7 @@ PrintOpponentNumberOfHandAndDeckCards:
 	lb bc, 11, 3
 	jp WriteTwoDigitNumberInTxSymbolFormat
 
-DeckAndHandIconsTileData:
+DeckAndHandIconsTileData: ; 4a35 (1:4a35)
 ; x, y, tiles[], 0
 	db  4,  3, SYM_CROSS, 0 ; x for opponent's hand
 	db 10,  3, SYM_CROSS, 0 ; x for opponent's deck
@@ -1606,7 +1606,7 @@ DeckAndHandIconsTileData:
 	db 13, 10, $fa, $fb,  0 ; player's hand icon
 	db $ff
 
-DeckAndHandIconsCGBPalData:
+DeckAndHandIconsCGBPalData: ; 4a6e (1:4a6e)
 ; x, y, pals[], 0
 	db  8,  2, $02, $02, 0
 	db  8,  3, $02, $02, 0
@@ -2134,7 +2134,7 @@ DisplayNoBasicPokemonInHandScreen: ; 4e06 (1:4e06)
 	call WaitForWideTextBoxInput
 	ret
 
-NoBasicPokemonCardListParameters:
+NoBasicPokemonCardListParameters: ; 4e37 (1:4e37)
 	db 1, 3 ; cursor x, cursor y
 	db 4 ; item x
 	db 14 ; maximum length, in tiles, occupied by the name and level string of each card in the list
@@ -3061,7 +3061,7 @@ PracticeDuelVerify_Turn7Or8: ; 54b7 (1:54b7)
 	jr nz, ReturnWrongAction
 	ret
 
-ReturnWrongAction:
+ReturnWrongAction: ; 54c6 (1:54c6)
 	scf
 	ret
 
@@ -3230,7 +3230,7 @@ InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 
 ; same as InitAndDrawCardListScreenLayout, except that variables like wSelectedDuelSubMenuItem,
 ; wNoItemSelectionMenuKeys, wCardListInfoBoxText, wCardListHeaderText, etc already set by caller.
-DrawCardListScreenLayout:
+DrawCardListScreenLayout: ; 55be (1:55be)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadSymbolsFont
@@ -5170,7 +5170,7 @@ Func_6137: ; 6137 (1:6137)
 	call EraseCursor
 ;	fallthrough
 
-Func_615c:
+Func_615c: ; 615c (1:615c)
 	ld a, [wCurrentDuelMenuItem]
 	ld d, a
 	add a
@@ -5194,7 +5194,7 @@ Func_616e: ; 616e (1:616e)
 	call EnableLCD
 ;	fallthrough
 
-Func_6186:
+Func_6186: ; 6186 (1:6186)
 	ld hl, wCurPlayAreaSlot
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld [hli], a
@@ -6945,7 +6945,6 @@ Func_6cfa: ; 6cfa (1:6cfa)
 	pop hl
 	call WaitForWideTextBoxInput
 	ret
-; 0x6d3f
 
 Func_6d3f: ; 6d3f (1:6d3f)
 	or a
@@ -6985,7 +6984,6 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	pop af
 	pop hl
 	ret
-; 0x6d84
 
 ; given the deck index of a turn holder's card in register a,
 ; and a pointer in hl to the wLoadedCard* buffer where the card data is loaded,
@@ -8042,7 +8040,6 @@ PlayMoveAnimation: ; 7494 (1:7494)
 Func_7571: ; 7571 (1:7571)
 	farcall Func_19c20
 	ret
-; 0x7576
 
 Func_7576: ; 7576 (1:7576)
 	farcall Func_1991f
@@ -8054,7 +8051,6 @@ Func_7576: ; 7576 (1:7576)
 Func_758f: ; 758f (1:758f)
 	farcall Func_1a4cf
 	ret
-; 0x7594
 
 Func_7594: ; 7594 (1:7594)
 	farcall Func_1a61f

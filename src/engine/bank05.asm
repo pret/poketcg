@@ -5738,7 +5738,7 @@ HandleSpecialAIMoves: ; 16dcd (5:6dcd)
 
 ; if any of card ID in a is found in deck,
 ; return a score of $80 + slots available in bench.
-HandleCallForFamily:
+HandleCallForFamily: ; 16e3e (5:6e3e)
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
 	jr nc, HandleSpecialAIMoves.zero
@@ -5754,7 +5754,7 @@ HandleCallForFamily:
 
 ; if any of NidoranM or NidoranF is found in deck,
 ; return a score of $80 + slots available in bench.
-HandleNidoranFCallForFamily:
+HandleNidoranFCallForFamily: ; 16e55 (5:6e55)
 	ld e, NIDORANM
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation
@@ -5777,7 +5777,7 @@ HandleNidoranFCallForFamily:
 ; checks for certain card IDs of Fighting color in deck.
 ; if any of them are found, return a score of
 ; $80 + slots available in bench.
-HandleMarowak1CallForFriend:
+HandleMarowak1CallForFriend: ; 16e77 (5:6e77)
 	ld e, GEODUDE
 	ld a, CARD_LOCATION_DECK
 	call CheckIfAnyCardIDinLocation

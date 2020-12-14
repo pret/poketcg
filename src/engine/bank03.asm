@@ -2107,7 +2107,7 @@ ScriptCommand_MoveWramNPC: ; ce52 (3:4e52)
 
 ; Executes movement on an arbitrary NPC using values in a and on the stack
 ; Changes and fixes Temp NPC using stack values
-ExecuteArbitraryNPCMovementFromStack:
+ExecuteArbitraryNPCMovementFromStack: ; ce5d (3:4e5d)
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call ExecuteNPCMovement
@@ -3104,7 +3104,7 @@ ScriptCommand_JumpIfFlagNonzero2: ; d4ca (3:54ca)
 .noJumpArgs
 	jp IncreaseScriptPointerBy4
 
-ScriptCommand_JumpIfFlagZero2:
+ScriptCommand_JumpIfFlagZero2: ; d4df (3:54df)
 	ld a, c
 	call GetEventFlagValue
 	or a
@@ -3989,7 +3989,6 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xddaa
 
 .after_duel_table
 	db NPC_CHRIS
@@ -4041,19 +4040,15 @@ Script_Mitch: ; ddc3 (3:5dc3)
 	db EVENT_FLAG_20
 	db $01
 	run_command ScriptCommand_QuitScriptFully
-; 0xdde2
 .three_pupils_remaining
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0478
-; 0xdde5
 .two_pupils_remaining
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0479
-; 0xdde8
 .one_pupil_remaining
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text047a
-; 0xddeb
 .all_pupils_defeated
 	run_command ScriptCommand_PrintTextString
 	tx Text047b
@@ -4063,7 +4058,6 @@ Script_Mitch: ; ddc3 (3:5dc3)
 	run_command ScriptCommand_PrintTextString
 	tx Text047d
 	run_command ScriptCommand_QuitScriptFully
-; 0xddf7
 .do_battle
 	run_command ScriptCommand_PrintTextString
 	tx Text047e
@@ -4072,7 +4066,6 @@ Script_Mitch: ; ddc3 (3:5dc3)
 	db FIRST_STRIKE_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	run_command ScriptCommand_QuitScriptFully
-; 0xddff
 
 Script_BeatMitch: ; ddff (3:5dff)
 	start_script
@@ -4097,7 +4090,6 @@ Script_BeatMitch: ; ddff (3:5dff)
 	run_command ScriptCommand_PrintTextString
 	tx Text0481
 	run_command ScriptCommand_QuitScriptFully
-; 0xde19
 
 Script_LoseToMitch: ; de19 (3:5e19)
 	start_script
@@ -4106,7 +4098,6 @@ Script_LoseToMitch: ; de19 (3:5e19)
 	dw Script_Mitch_PrintTrainHarderText
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text0482
-; 0xde21
 
 Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
 	run_command ScriptCommand_PrintTextString
@@ -4117,7 +4108,6 @@ Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
 	run_command ScriptCommand_PrintTextString
 	tx Text0484
 	run_command ScriptCommand_QuitScriptFully
-; 0xde2d
 .do_battle
 	run_command ScriptCommand_PrintTextString
 	tx Text0485
@@ -4126,7 +4116,6 @@ Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
 	db FIRST_STRIKE_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	run_command ScriptCommand_QuitScriptFully
-; 0xde35
 
 Script_Mitch_GiveBoosters: ; de35 (3:5e35)
 	run_command ScriptCommand_PrintTextString
@@ -4138,7 +4127,6 @@ Script_Mitch_GiveBoosters: ; de35 (3:5e35)
 	run_command ScriptCommand_PrintTextString
 	tx Text0487
 	run_command ScriptCommand_QuitScriptFully
-; 0xde40
 
 Script_Mitch_PrintTrainHarderText: ; de40 (3:5e40)
 	run_command ScriptCommand_PrintTextQuitFully
@@ -4154,7 +4142,6 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xdedc
 
 .after_duel_table
 	db NPC_CHRIS
@@ -4202,7 +4189,6 @@ WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe0a9
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -4210,7 +4196,6 @@ WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	dw Script_BeatImakuni
 	dw Script_LostToImakuni
 	db $00
-; 0xe0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4349,7 +4334,7 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	ld bc, Script_NotReadyToSeeAmy
 	jp SetNextNPCAndScript
 
-WaterClubAfterDuel: ;e157 (3:6157)
+WaterClubAfterDuel: ; e157 (3:6157)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
@@ -4844,7 +4829,6 @@ ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
 	db GO_GO_RAIN_DANCE_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	run_command ScriptCommand_QuitScriptFully
-; 0xe369
 
 Script_Clerk4: ; e369 (3:6369)
 	INCROM $e369, $e36d
@@ -4853,7 +4837,6 @@ LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe374
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -5192,7 +5175,6 @@ Script_Lass2: ; e61f (3:661f)
 	db BLASTOISE
 	run_command ScriptCommand_PrintTextQuitFully
 	tx Text06f3
-; 0xe6d8
 
 Script_Granny2: ; e6d8 (3:66d8)
 	INCROM $e6d8, $e6e3
@@ -5262,7 +5244,6 @@ TrySecondRonaldFight: ; e837 (3:6837)
 	ret nz
 	ld bc, ScriptSecondRonaldFight
 	jp SetNextNPCAndScript
-; 0xe84c
 
 Script_Clerk6: ; e84c (3:684c)
 	INCROM $e84c, $e850
@@ -5382,7 +5363,7 @@ Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	run_command ScriptCommand_PrintTextString
 	tx Text064e
 
-ScriptJump_FinishedFirstRonaldFight:
+ScriptJump_FinishedFirstRonaldFight: ; e8fb (3:68fb)
 	run_command ScriptCommand_SetFlagValue
 	db EVENT_FLAG_4C
 	db $02
@@ -5485,13 +5466,11 @@ ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command Func_cdcb
 	run_command Func_d41d
 	run_command ScriptCommand_QuitScriptFully
-; 0xe963
 
 PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe96a
 
 .after_duel_table
 	db NPC_ROBERT
@@ -5529,11 +5508,10 @@ Script_Murray1: ; eadf (3:6adf)
 Script_Clerk7: ; eb53 (3:6b53)
 	INCROM $eb53, $eb57
 
-ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
+ScienceClubLobbyAfterDuel: ; eb57 (3:6b57)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xeb5e
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -5576,7 +5554,6 @@ FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xed50
 
 .after_duel_table
 	db NPC_JESSICA
@@ -5584,8 +5561,6 @@ FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	dw $6dba
 	dw $6dce
 	db $00
-
-; 0xed57
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
@@ -5663,7 +5638,6 @@ Script_ee76: ; ee76 (3:6e76)
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db SLOWPOKE1
 	run_command ScriptCommand_QuitScriptFully
-; 0xee88
 
 Script_Mania: ; ee88 (3:6e88)
 	INCROM $ee88, $ee93
@@ -5695,7 +5669,6 @@ FireClubAfterDuel: ; ee93  (3:6e93)
 	dw Script_LoseToKen
 
 	db $00
-; 0xeeb3
 
 Script_John: ; eeb3 (3:6eb3)
 	INCROM $eeb3, $eed8
@@ -5755,7 +5728,6 @@ Script_Ken: ; ef22 (3:6f22)
 	db FIRE_CHARGE_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	run_command ScriptCommand_QuitScriptFully
-; 0xef5e
 
 Script_BeatKen: ; ef5e (3:6f5e)
 	start_script
@@ -5781,7 +5753,6 @@ Script_BeatKen: ; ef5e (3:6f5e)
 	run_command ScriptCommand_PrintTextString
 	tx Text06c3
 	run_command ScriptCommand_QuitScriptFully
-; 0xef78
 
 Script_LoseToKen: ; ef78 (3:6f78)
 	start_script
@@ -5792,7 +5763,6 @@ Script_LoseToKen: ; ef78 (3:6f78)
 	tx Text06c4
 	tx Text06c5
 	run_command ScriptCommand_QuitScriptFully
-; 0xef83
 
 Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
 	run_command ScriptCommand_PrintTextString
@@ -5810,7 +5780,6 @@ Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
 	db FIRE_CHARGE_DECK_ID
 	db MUSIC_DUEL_THEME_2
 	run_command ScriptCommand_QuitScriptFully
-; 0xef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks

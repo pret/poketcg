@@ -388,7 +388,7 @@ GenerateTwoTypesEnergyBooster:  ; 1e3ab (7:63ab)
 	jr nz, .add_two_energies_to_booster_loop
 ;	fallthrough
 
-ZeroBoosterRarityData:
+ZeroBoosterRarityData: ; 1e3be (7:63be)
 	xor a
 	ld [wBoosterData_CommonAmount], a
 	ld [wBoosterData_UncommonAmount], a
@@ -453,7 +453,7 @@ PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
 	ret
 
 ; add the final cards drawn from the booster pack to the player's colection (sCardCollection)
-AddBoosterCardsToCollection:; 1e40a (7:640a)
+AddBoosterCardsToCollection: ; 1e40a (7:640a)
 	push hl
 	ld hl, wBoosterCardsDrawn
 .add_cards_loop
