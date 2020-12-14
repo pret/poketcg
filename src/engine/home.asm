@@ -653,7 +653,7 @@ EmptyScreen: ; 04a2 (0:04a2)
 AttrBlkPacket_EmptyScreen: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 0 << 0 + 0 << 2, 0, 0, 19, 17 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -1928,7 +1928,7 @@ Pal23Packet_0b00: ; 0b00 (0:0b00)
 AttrBlkPacket_0b10: ; 0b10 (0:0b10)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 1 << 0 + 2 << 2, 5, 5, 10, 10 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -5830,7 +5830,7 @@ ColorizeTextBoxSGB: ; 1f1b (0:1f1b)
 AttrBlkPacket_TextBox: ; 1f4f (0:1f4f)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 0 << 0 + 1 << 2, 0, 0, 0, 0 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -6182,7 +6182,7 @@ LoadSymbolsFont: ; 2119 (0:2119)
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -6240,7 +6240,7 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 ; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.1bpp
 LoadFullWidthFontTiles: ; 2189 (0:2189)
 	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	push hl
 	ld e, l
@@ -6999,7 +6999,7 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 ; create, at wTextTileBuffer, a full-width font tile given its
 ; within the full-width font graphics (FullWidthFonts) in hl
 CreateFullWidthFontTile: ; 252e (0:252e)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld de, wTextTileBuffer
 	push de
@@ -8977,7 +8977,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
