@@ -3249,7 +3249,7 @@ Script_EnterLabFirstTime: ; d753 (3:5753)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_SAM
 	dw Script_d779
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 
 Script_d779: ; d779 (03:5779)
@@ -3273,7 +3273,7 @@ Script_d779: ; d779 (03:5779)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_DRMASON
 	dw Script_d794
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 
 Script_d794: ; d794 (3:5794)
@@ -3398,7 +3398,7 @@ Script_d794: ; d794 (3:5794)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_SAM
 	dw Script_d827
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 
 Script_d827: ; d827 (3:5827)
@@ -4625,7 +4625,7 @@ Script_BeatJoshua: ; e26c (3:626c)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_AMY
 	dw Script_MeetAmy
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 
 NPCMovementTable_e2a1: ; e2a1 (3:62a1)
@@ -6256,7 +6256,7 @@ Script_Clerk12: ; f295 (3:7295)
 	run_command ScriptCommand_SetNextNPCandScript
 	db $4a
 	dw Script_f353
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 ; f349
 
@@ -6427,7 +6427,7 @@ LostAtChallengeHall: ; f392 (3:7392)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_CLERK12
 	dw Script_f3e9
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 
 Script_f3e9: ; f3e9 (3:73e9)
@@ -6745,7 +6745,7 @@ ScriptJump_f4db: ; f4db (3:74db)
 	run_command ScriptCommand_SetNextNPCandScript
 	db NPC_CLERK12
 	dw Script_f3e9
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 	ret
 ; f559
 
@@ -6826,7 +6826,7 @@ Script_f631: ; f631 (3:7631)
 	run_command ScriptCommand_SetNextNPCandScript
 	db $02
 	dw $763c
-	run_command ScriptCommand_EndScriptLoop1
+	end_script_loop
 
 	ret
 ; 0xf63c

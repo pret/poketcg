@@ -111,9 +111,42 @@ ENDM
 	const ScriptCommand_EndScriptLoop10_index                        ; $67
 
 ; Script Macros
+end_script_loop: MACRO
+	run_command ScriptCommand_EndScriptLoop1
+ENDM
 
 move_player: MACRO
 	run_command ScriptCommand_MovePlayer
 	db \1
 	db \2
 ENDM
+
+end_script_loop_2: MACRO
+	run_command ScriptCommand_EndScriptLoop2
+ENDM
+end_script_loop_3: MACRO
+	run_command ScriptCommand_EndScriptLoop3
+ENDM
+end_script_loop_4: MACRO
+	run_command ScriptCommand_EndScriptLoop4
+ENDM
+end_script_loop_5: MACRO
+	run_command ScriptCommand_EndScriptLoop5
+ENDM
+end_script_loop_6: MACRO
+	run_command ScriptCommand_EndScriptLoop6
+ENDM
+
+end_script_loop_7: MACRO
+	run_command ScriptCommand_EndScriptLoop7
+ENDM
+end_script_loop_8: MACRO
+	run_command ScriptCommand_EndScriptLoop8
+ENDM
+end_script_loop_9: MACRO
+	run_command ScriptCommand_EndScriptLoop9
+ENDM
+end_script_loop_10: MACRO
+	run_command ScriptCommand_EndScriptLoop10
+ENDM
+

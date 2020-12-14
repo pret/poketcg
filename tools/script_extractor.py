@@ -213,8 +213,8 @@ def printScript(game_data, loc, auto, ignore_broken, scriptList, \
 def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
 	return [
-	("ScriptCommand_EndScriptLoop1", "", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_CloseAdvancedTextBox", "", DO_NOT_QUIT,""),
+	("ScriptCommand_EndScriptLoop1", "", QUIT_CONTINUE_CODE,"end_script_loop"),
+	("ScriptCommand_CloseAdvancedTextBo", "", DO_NOT_QUIT,""),
 	("ScriptCommand_PrintTextString", "t", DO_NOT_QUIT,""),
 	("Func_ccdc", "t", DO_NOT_QUIT,""),
 	("ScriptCommand_AskQuestionJump", "tj", DO_NOT_QUIT,""), # more complex behavior too (jumping)
@@ -296,11 +296,11 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d2f6", "q", DO_NOT_QUIT,""),
 	("Func_d317", "", DO_NOT_QUIT,""),
 	("Func_d43d", "", DO_NOT_QUIT,""),
-	("ScriptCommand_EndScriptLoop2", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop3", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop4", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop5", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop6", "q", QUIT_CONTINUE_CODE,""),
+	("ScriptCommand_EndScriptLoop2", "q", QUIT_CONTINUE_CODE,"end_script_loop_2"),
+	("ScriptCommand_EndScriptLoop3", "q", QUIT_CONTINUE_CODE,"end_script_loop_3"),
+	("ScriptCommand_EndScriptLoop4", "q", QUIT_CONTINUE_CODE,"end_script_loop_4"),
+	("ScriptCommand_EndScriptLoop5", "q", QUIT_CONTINUE_CODE,"end_script_loop_5"),
+	("ScriptCommand_EndScriptLoop6", "q", QUIT_CONTINUE_CODE,"end_script_loop_6"),
 	("ScriptCommand_SetFlagValue", "fb", DO_NOT_QUIT,""),
 	("ScriptCommand_JumpIfFlagZero1", "fj", DO_NOT_QUIT,""),
 	("ScriptCommand_JumpIfFlagNonzero1", "q", DO_NOT_QUIT,""),
@@ -313,10 +313,10 @@ def createList(): # this is a func just so all this can go at the bottom
 	("ScriptCommand_JumpIfFlagNonzero2", "fj", DO_NOT_QUIT,""),
 	("ScriptCommand_JumpIfFlagZero2", "fj", DO_NOT_QUIT,""),
 	("ScriptCommand_IncrementFlagValue", "f", DO_NOT_QUIT,""),
-	("ScriptCommand_EndScriptLoop7", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop8", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop9", "q", QUIT_CONTINUE_CODE,""),
-	("ScriptCommand_EndScriptLoop10", "q", QUIT_CONTINUE_CODE,"")
+	("ScriptCommand_EndScriptLoop7", "q", QUIT_CONTINUE_CODE,"end_script_loop_7"),
+	("ScriptCommand_EndScriptLoop8", "q", QUIT_CONTINUE_CODE,"end_script_loop_8"),
+	("ScriptCommand_EndScriptLoop9", "q", QUIT_CONTINUE_CODE,"end_script_loop_9"),
+	("ScriptCommand_EndScriptLoop10", "q", QUIT_CONTINUE_CODE,"end_script_loop_10")
 	]
 
 main()
