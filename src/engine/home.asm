@@ -11461,7 +11461,7 @@ DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 	call BankswitchROM
 	ret
 
-; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using 
+; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using
 ; the current frame's offset
 ; [wd4ca] - current frame offset
 ; wTempPointer* - Pointer to current Animation

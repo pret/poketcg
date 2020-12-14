@@ -727,34 +727,33 @@ Func_2cbfb: ; 2cbfb (b:4bfb)
 ; 0x2cc0a
 
 	INCROM $2cc0a, $2f4e1
-	
-ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
-        call SwapTurn
-        call CreateHandCardList
-        call SortCardsInDuelTempListByID
-        ld hl, wDuelTempList
-.return_hand_to_deck_loop
-        ld a, [hli]
-        cp $ff
-        jr z, .shuffle
-        call RemoveCardFromHand
-        call ReturnCardToDeck
-        jr .return_hand_to_deck_loop
-.shuffle
-        call Func_2c0bd
-        ld a, $07
-        bank1call $4935
-        ld c, $07
-.draw_loop
-        call DrawCardFromDeck
-        jr c, .revert_turn_to_user
-        call AddCardToHand
-        dec c
-        jr nz, .draw_loop
-.revert_turn_to_user
-        call SwapTurn
-        ret
-; 0x2f513
 
+ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
+	call SwapTurn
+	call CreateHandCardList
+	call SortCardsInDuelTempListByID
+	ld hl, wDuelTempList
+.return_hand_to_deck_loop
+	ld a, [hli]
+	cp $ff
+	jr z, .shuffle
+	call RemoveCardFromHand
+	call ReturnCardToDeck
+	jr .return_hand_to_deck_loop
+.shuffle
+	call Func_2c0bd
+	ld a, $07
+	bank1call $4935
+	ld c, $07
+.draw_loop
+	call DrawCardFromDeck
+	jr c, .revert_turn_to_user
+	call AddCardToHand
+	dec c
+	jr nz, .draw_loop
+.revert_turn_to_user
+	call SwapTurn
+	ret
+; 0x2f513
 
 	INCROM $2f513, $30000

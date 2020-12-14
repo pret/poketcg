@@ -191,7 +191,6 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DrawYourOrOppPlayArea_DrawArrows
 	call DrawWideTextBox
 
-
 ; reset cursor blink
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
