@@ -3235,30 +3235,14 @@ Script_DrMason: ; d727 (3:5727)
 Script_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
 	move_player NORTH, 2
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
 	run_command ScriptCommand_PrintTextString
 	tx Text05e3
 	run_command ScriptCommand_CloseAdvancedTextBox
@@ -3301,23 +3285,13 @@ Script_d794: ; d794 (3:5794)
 	run_command ScriptCommand_PrintTextString
 	tx Text05e6
 	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
+	move_player WEST, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db WEST
 	run_command ScriptCommand_MoveActiveNPC
@@ -3449,23 +3423,13 @@ AfterTutorialBattleScript: ; d834 (3:5834)
         dw NPCMovement_d896
         run_command ScriptCommand_SetPlayerDirection
         db NORTH
-        run_command ScriptCommand_MovePlayer
-        db NORTH
-        db $01
-        run_command ScriptCommand_MovePlayer
-        db NORTH
-        db $01
-        run_command ScriptCommand_MovePlayer
-        db NORTH
-        db $01
+		move_player NORTH, 1
+		move_player NORTH, 1
+		move_player NORTH, 1
         run_command ScriptCommand_SetPlayerDirection
         db EAST
-        run_command ScriptCommand_MovePlayer
-        db EAST
-        db $01
-        run_command ScriptCommand_MovePlayer
-        db EAST
-        db $01
+		move_player EAST, 1
+		move_player EAST, 1
         run_command ScriptCommand_SetPlayerDirection
         db NORTH
         run_command ScriptCommand_PrintTextString
@@ -3946,9 +3910,7 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 .ows_dd69
 	run_command ScriptCommand_SetPlayerDirection
 	db EAST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
 
 .ows_dd6e
 	run_command ScriptCommand_MoveActiveNPC
@@ -4470,9 +4432,7 @@ Script_NotReadyToSeeAmy: ; e1c5 (03:61c5)
 	db $08
 	dw .ows_e1f8
 .ows_e1d5
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $04
+	move_player SOUTH, 4
 	run_command ScriptCommand_MoveActiveNPC
 	dw NPCMovement_e213
 	run_command ScriptCommand_PrintTextString
@@ -4730,17 +4690,11 @@ Script_MeetAmy: ; e2d1 (3:62d1)
 	db $04
 	run_command ScriptCommand_SetPlayerDirection
 	db $03
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db $00
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
+	move_player NORTH, 1
+	move_player NORTH, 1
 	run_command ScriptCommand_MoveArbitraryNPC
 	db NPC_JOSHUA
 	dw NPCMovement_e2ab
@@ -5284,12 +5238,8 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	run_command ScriptCommand_PrintTextString
 	tx Text0645
 	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
+	move_player NORTH, 1
+	move_player NORTH, 1
 	run_command ScriptCommand_PrintTextString
 	tx Text0646
 	run_command ScriptCommand_AskQuestionJumpDefaultYes
@@ -5309,9 +5259,7 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	run_command ScriptCommand_CloseTextBox
 	run_command ScriptCommand_SetPlayerDirection
 	db $03
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $04
+	move_player EAST, 4
 	run_command ScriptCommand_MoveActiveNPC
 	dw NPCMovement_e894
 	run_command Func_cdcb
@@ -5345,17 +5293,11 @@ Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	dw $68d6
 	run_command ScriptCommand_SetPlayerDirection
 	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 	run_command ScriptCommand_PrintTextString
 	tx Text064b
 	run_command ScriptCommand_SetFlagValue
@@ -5437,18 +5379,12 @@ ScriptSecondRonaldFight: ; e91e (3:691e)
 	dw .ows_6934
 	run_command ScriptCommand_SetPlayerDirection
 	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
 .ows_6934
 	run_command ScriptCommand_SetPlayerDirection
 	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 	run_command ScriptCommand_PrintTextString
 	tx Text0650
 	run_command ScriptCommand_SetFlagValue
@@ -6262,56 +6198,36 @@ Script_Clerk12: ; f295 (3:7295)
 	db 12
 	db 18
 	dw .ows_f302
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
+	move_player NORTH, 2
 	run_command ScriptCommand_Jump
 	dw .ows_f307
 
 .ows_f2fa
 	run_command ScriptCommand_SetPlayerDirection
 	db EAST
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $02
+	move_player EAST, 2
 	run_command ScriptCommand_Jump
 	dw .ows_f307
 
 .ows_f302
 	run_command ScriptCommand_SetPlayerDirection
 	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $02
+	move_player WEST, 2
 .ows_f307
 	run_command ScriptCommand_SetPlayerDirection
 	db NORTH
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
 	run_command ScriptCommand_JumpIfFlagNonzero2
 	db EVENT_FLAG_43
 	dw .ows_f33a
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_43
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
+	move_player NORTH, 1
+	move_player NORTH, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db EAST
 	run_command ScriptCommand_DoFrames
@@ -6328,18 +6244,12 @@ Script_Clerk12: ; f295 (3:7295)
 	db SOUTH
 	run_command ScriptCommand_DoFrames
 	db 30
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 .ows_f33a
 	run_command ScriptCommand_SetPlayerDirection
 	db EAST
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $01
+	move_player EAST, 1
 	run_command ScriptCommand_MoveActiveNPC
 	dw NPCMovement_f34e
 	run_command ScriptCommand_CloseAdvancedTextBox
@@ -6526,29 +6436,15 @@ Script_f3e9: ; f3e9 (3:73e9)
 	dw NPCMovement_f40a
 	run_command ScriptCommand_SetPlayerDirection
 	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_player WEST, 1
 	run_command ScriptCommand_SetPlayerDirection
 	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 	run_command ScriptCommand_MoveActiveNPC
 	dw NPCMovement_f40d
 	run_command ScriptCommand_QuitScriptFully
