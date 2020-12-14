@@ -20,6 +20,7 @@
 # converted image/palette data
 *.1bpp
 *.2bpp
+*.pal
 
 # *disasm.py output file
 *disasm_output.asm

@@ -6237,7 +6237,7 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	jp FillRectangle
 
 ; load the tiles for the latin, katakana, and hiragana fonts into VRAM
-; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.t3.1bpp
+; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.1bpp
 LoadFullWidthFontTiles: ; 2189 (0:2189)
 	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
 	ld a, BANK(Fonts); BANK(DuelGraphics)

@@ -36,7 +36,7 @@ all: $(rom)
 tcg: $(rom)
 
 clean: tidy
-	find src/gfx \( -iname '*.1bpp' -o -iname '*.2bpp' \) -delete
+	find src/gfx \( -iname '*.1bpp' -o -iname '*.2bpp' -o -iname '*.pal' \) -delete
 
 tidy:
 	rm -f $(rom) $(rom_obj) $(rom:.gbc=.map) $(rom:.gbc=.sym) src/rgbdscheck.o
@@ -94,6 +94,8 @@ $(rom): $(rom_obj) src/layout.link
 ### Catch-all graphics rules
 
 %.png: ;
+
+%.pal: ;
 
 %.2bpp: %.png
 	$(RGBGFX) $(rgbgfx) -o $@ $<
