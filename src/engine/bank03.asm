@@ -3234,9 +3234,7 @@ Script_DrMason: ; d727 (3:5727)
 
 Script_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
+	move_player NORTH, 2
 	run_command ScriptCommand_MovePlayer
 	db NORTH
 	db $02
