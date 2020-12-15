@@ -778,7 +778,7 @@ PlayPokemonCard: ; 44db (1:44db)
 	ldh [hTemp_ffa0], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	call EvolvePokemonCard
+	call EvolvePokemonCardIfPossible
 	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
 	ld a, OPPACTION_EVOLVE_PKMN
 	call SetOppAction_SerialSendDuelData
@@ -1442,6 +1442,13 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 ; if there isn't any card left in the deck, let the player know with a text message
 DisplayDrawOneCardScreen: ; 4933 (1:4933)
 	ld a, 1
+;	fallthrough
+
+; display the animation of the turn duelist drawing number of cards that is in a.
+; if there isn't any card left in the deck, let the player know with a text message.
+; input:
+;	- a = number of cards to draw
+DisplayDrawNCardsScreen: ; 4935 (1:4935)
 	push hl
 	push de
 	push bc
@@ -6454,7 +6461,7 @@ OppAction_EvolvePokemonCard: ; 69c5 (1:69c5)
 	ldh [hTempCardIndex_ff98], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
-	call EvolvePokemonCard
+	call EvolvePokemonCardIfPossible
 	call PrintPokemonEvolvedIntoPokemon
 	call Func_161e
 	call DrawDuelMainScene
@@ -7497,7 +7504,8 @@ GetCardOneStageBelow: ; 7045 (1:7045)
 	ld hl, wAllStagesIndices ; pointing to basic
 	cp STAGE1
 	jr z, .done
-	cp STAGE2 + 1 ; unnecessary check?
+	; if stage1 was skipped, hl should point to Basic stage card
+	cp STAGE2_WITHOUT_STAGE1
 	jr z, .done
 	inc hl ; pointing to stage 1
 .done

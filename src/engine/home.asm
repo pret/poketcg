@@ -3604,6 +3604,7 @@ GetCardIDFromDeckIndex: ; 1324 (0:1324)
 	ret
 
 ; remove card c from wDuelTempList (it contains a $ff-terminated list of deck indexes)
+; returns carry if no matches were found.
 RemoveCardFromDuelTempList: ; 132f (0:132f)
 	push hl
 	push de
@@ -3703,9 +3704,9 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	ret
 
 ; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
-; into another turn holder's Pokemon card identifier by it's deck index (0-59) in hTempCardIndex_ff98.
-; return nc if evolution was succesful.
-EvolvePokemonCard: ; 13a2 (0:13a2)
+; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
+; return nc if evolution was successful.
+EvolvePokemonCardIfPossible: ; 13a2 (0:13a2)
 	; first make sure the attempted evolution is viable
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
@@ -3713,7 +3714,12 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld e, a
 	call CheckIfCanEvolveInto
 	ret c ; return if it's not capable of evolving into the selected Pokemon
-	; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
+;	fallthrough
+
+; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
+; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
+EvolvePokemonCard: ; 13ac (0:13ac)
+; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	add DUELVARS_ARENA_CARD

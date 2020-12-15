@@ -826,7 +826,7 @@ ThereAreNoEnergyCardsInDiscardPileText: ; 3746a (d:746a)
 	line "in the the Discard Pile."
 	done
 
-Text00b0: ; 3749e (d:749e)
+ThereAreNoBasicEnergyCardsInDiscardPileText: ; 3749e (d:749e)
 	text "There are no Basic Energy cards"
 	line "in the Discard Pile."
 	done
@@ -854,7 +854,7 @@ NotAffectedByPoisonSleepParalysisOrConfusionText: ; 37583 (d:7583)
 	line "Sleep, Paralysis, or Confusion."
 	done
 
-Text00b6: ; 375bc (d:75bc)
+NotEnoughCardsInHandText: ; 375bc (d:75bc)
 	text "Not enough cards in Hand."
 	done
 
@@ -862,22 +862,22 @@ EffectNoPokemonOnTheBenchText: ; 375d7 (d:75d7)
 	text "No Pokémon on the Bench."
 	done
 
-Text00b8: ; 375f1 (d:75f1)
+ThereAreNoPokemonInDiscardPileText: ; 375f1 (d:75f1)
 	text "There are no Pokémon"
 	line "in the Discard Pile."
 	done
 
-Text00b9: ; 3761c (d:761c)
+ConditionsForEvolvingToStage2NotFulfilledText: ; 3761c (d:761c)
 	text "Conditions for evolving to"
 	line "Stage 2 not fulfilled."
 	done
 
-Text00ba: ; 3764f (d:764f)
+ThereAreNoCardsInHandThatYouCanChangeText: ; 3764f (d:764f)
 	text "There are no cards in Hand"
 	line "that you can change."
 	done
 
-Text00bb: ; 37680 (d:7680)
+ThereAreNoCardsInTheDiscardPileText: ; 37680 (d:7680)
 	text "There are no cards in the"
 	line "Discard Pile."
 	done
@@ -887,12 +887,12 @@ ThereAreNoStage1PokemonText: ; 376a9 (d:76a9)
 	line "in the Play Area."
 	done
 
-Text00bd: ; 376d9 (d:76d9)
+NoEnergyCardsAttachedToPokemonInYourPlayAreaText: ; 376d9 (d:76d9)
 	text "No Energy cards are attached to"
 	line "Pokémon in your Play Area."
 	done
 
-Text00be: ; 37715 (d:7715)
+NoEnergyCardsAttachedToPokemonInOppPlayAreaText: ; 37715 (d:7715)
 	text "No Energy cards attached to Pokémon"
 	line "in your opponent's Play Area."
 	done
@@ -959,7 +959,7 @@ CannotBeUsedInTurnWhichWasPlayedText: ; 378ef (d:78ef)
 	line "which it was played."
 	done
 
-Text00cd: ; 37923 (d:7923)
+ThereIsNoEnergyCardAttachedText: ; 37923 (d:7923)
 	text "There is no Energy card attached."
 	done
 
@@ -1128,7 +1128,7 @@ TrainerCardSuccessCheckText: ; 37eea (d:7eea)
 	line "If Heads, you're successful!"
 	done
 
-Text00f0: ; 37f24 (d:7f24)
+CardCheckIfHeads8CardsIfTails1CardText: ; 37f24 (d:7f24)
 	text "Card check!"
 	line "If Heads, 8 cards! If Tails, 1 card!"
 	done

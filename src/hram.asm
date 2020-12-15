@@ -104,8 +104,8 @@ NEXTU
 hAIEnergyTransEnergyCard:: ; ffa2
 
 ; PLAY_AREA_*  of target selected for some Pkmn Powers,
-; like the targets chosen for Curse or Damage Swap.
-hPkmnPowerPlayAreaTarget:: ; ffa2
+; (e.g. Curse, Damage Swap) and for trainer card effect.
+hPlayAreaEffectTarget:: ; ffa2
 	ds $1
 
 hAIEnergyTransPlayAreaLocation:: ; ffa3
@@ -165,7 +165,7 @@ hCurMenuItem:: ; ffb1
 	ds $1
 
 ; stores the item number in the selection menu of various effects
-hEffectItemSelection:: ; ffb2
+hCurSelectionItem:: ; ffb2
 	ds $1
 
 	ds $2

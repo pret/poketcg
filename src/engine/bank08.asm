@@ -6637,7 +6637,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hPkmnPowerPlayAreaTarget], a
+	ldh [hPlayAreaEffectTarget], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE

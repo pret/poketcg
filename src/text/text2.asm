@@ -503,22 +503,22 @@ Text014f: ; 394a6 (e:54a6)
 	line "A Button is pressed. B Button quits."
 	done
 
-Text0150: ; 394f0 (e:54f0)
+ChoosePokemonToRemoveDamageCounterFromText: ; 394f0 (e:54f0)
 	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done
 
-Text0151: ; 39525 (e:5525)
+ChooseCardToDiscardFromHandText: ; 39525 (e:5525)
 	text "Choose the card to Discard"
 	line "from the Hand."
 	done
 
-Text0152: ; 39550 (e:5550)
+ChoosePokemonToRemoveEnergyFromText: ; 39550 (e:5550)
 	text "Choose a Pokémon to remove"
 	line "Energy from and choose the Energy."
 	done
 
-Text0153: ; 3958f (e:558f)
+Choose2BasicEnergyCardsFromDiscardPileText: ; 3958f (e:558f)
 	text "Choose 2 Basic Energy cards"
 	line "from the Discard Pile."
 	done
@@ -528,22 +528,22 @@ Text0154: ; 395c3 (e:55c3)
 	line "Button to remove Damage counters."
 	done
 
-Text0155: ; 39607 (e:5607)
+Choose2CardsFromHandToDiscardText: ; 39607 (e:5607)
 	text "Choose 2 cards from the Hand"
 	line "to Discard."
 	done
 
-Text0156: ; 39631 (e:5631)
+Choose2HandCardsFromHandToReturnToDeckText: ; 39631 (e:5631)
 	text "Choose 2 cards from the Hand"
 	line "to return to the Deck."
 	done
 
-Text0157: ; 39666 (e:5666)
+ChooseCardToPlaceInHandText: ; 39666 (e:5666)
 	text "Choose a card to"
 	line "place in the Hand."
 	done
 
-Text0158: ; 3968b (e:568b)
+ChoosePokemonToAttachDefenderToText: ; 3968b (e:568b)
 	text "Choose a Pokémon to"
 	line "attach Defender to."
 	done
@@ -553,75 +553,75 @@ Text0159: ; 396b4 (e:56b4)
 	line "A to Draw, B to End."
 	done
 
-Text015a: ; 396e6 (e:56e6)
+ChoosePokemonToReturnToTheDeckText: ; 396e6 (e:56e6)
 	text "Choose a Pokémon to"
 	line "return to the Deck."
 	done
 
-Text015b: ; 3970f (e:570f)
+ChoosePokemonToPlaceInPlayText: ; 3970f (e:570f)
 	text "Choose a Pokémon to"
 	line "place in play."
 	done
 
-Text015c: ; 39733 (e:5733)
+ChooseBasicPokemonToEvolveText: ; 39733 (e:5733)
 	text "Choose a Basic Pokémon"
 	line "to Evolve."
 	done
 
-Text015d: ; 39756 (e:5756)
+ChoosePokemonToScoopUpText: ; 39756 (e:5756)
 	text "Choose a Pokémon to"
 	line "Scoop Up."
 	done
 
-Text015e: ; 39775 (e:5775)
+ChooseCardFromYourHandToSwitchText: ; 39775 (e:5775)
 	text "Choose a card from your"
 	line "Hand to Switch."
 	done
 
-Text015f: ; 3979e (e:579e)
+ChooseCardToSwitchText: ; 3979e (e:579e)
 	text "Choose a card to"
 	line "Switch."
 	done
 
-Text0160: ; 397b8 (e:57b8)
+ChooseBasicOrEvolutionPokemonCardFromDeckText: ; 397b8 (e:57b8)
 	text "Choose a Basic or Evolution"
 	line "Pokémon card from the Deck."
 	done
 
-Text0161: ; 397f1 (e:57f1)
+ChoosePokemonCardText: ; 397f1 (e:57f1)
 	text "Choose"
 	line "a Pokémon card."
 	done
 
-Text0162: ; 39809 (e:5809)
+RearrangeThe5CardsAtTopOfDeckText: ; 39809 (e:5809)
 	text "Rearrange the 5 cards at"
 	line "the top of the Deck."
 	done
 
-Text0163: ; 39838 (e:5838)
+PleaseCheckTheOpponentsHandText: ; 39838 (e:5838)
 	text "Please check the opponent's"
 	line "Hand."
 	done
 
-Text0164: ; 3985b (e:585b)
+EvolutionCardText: ; 3985b (e:585b)
 	text "Evolution card"
 	done
 
-Text0165: ; 3986b (e:586b)
+CardWasChosenText: ; 3986b (e:586b)
 	text "<RAMTEXT> was chosen."
 	done
 
-Text0166: ; 3987a (e:587a)
+ChooseBasicPokemonToPlaceOnBenchText: ; 3987a (e:587a)
 	text "Choose a Basic Pokémon"
 	line "to place on the Bench."
 	done
 
-Text0167: ; 398a9 (e:58a9)
+ChooseEvolutionCardAndPressAButtonToDevolveText: ; 398a9 (e:58a9)
 	text "Choose an Evolution card and"
 	line "press the A Button to Devolve 1."
 	done
 
-Text0168: ; 398e8 (e:58e8)
+ChoosePokemonInYourAreaThenPokemonInYourOppText: ; 398e8 (e:58e8)
 	text "Choose a Pokémon in your Area, then"
 	line "a Pokémon in your opponent's."
 	done
@@ -636,22 +636,22 @@ Text016a: ; 39952 (e:5952)
 	line "with the Active Pokémon."
 	done
 
-Text016b: ; 39987 (e:5987)
+PokemonAndAllAttachedCardsWereReturnedToDeckText: ; 39987 (e:5987)
 	text "<RAMTEXT> and all attached"
 	line "cards were returned to the Deck."
 	done
 
-Text016c: ; 399bc (e:59bc)
+PokemonWasReturnedFromArenaToHandText: ; 399bc (e:59bc)
 	text "<RAMTEXT> was returned"
 	line "from the Arena to the Hand."
 	done
 
-Text016d: ; 399e8 (e:59e8)
+PokemonWasReturnedFromBenchToHandText: ; 399e8 (e:59e8)
 	text "<RAMTEXT> was returned"
 	line "from the Bench to the Hand."
 	done
 
-Text016e: ; 39a14 (e:5a14)
+PokemonWasReturnedToDeckText: ; 39a14 (e:5a14)
 	text "<RAMTEXT> was returned"
 	line "to the Deck."
 	done
@@ -669,12 +669,12 @@ YouReceivedTheseCardsText: ; 39a63 (e:5a63)
 	text "You received these cards:"
 	done
 
-Text0172: ; 39a7e (e:5a7e)
+ChooseTheCardToPutBackText: ; 39a7e (e:5a7e)
 	text "Choose the card"
 	line "to put back."
 	done
 
-Text0173: ; 39a9c (e:5a9c)
+ChooseTheCardToDiscardText: ; 39a9c (e:5a9c)
 	text "Choose the card"
 	line "to Discard."
 	done
@@ -698,12 +698,12 @@ CameToTheBenchText: ; 39b03 (e:5b03)
 	line "came to the Bench!"
 	done
 
-Text0178: ; 39b19 (e:5b19)
+DuelistHasNoCardsInHandText: ; 39b19 (e:5b19)
 	text "<RAMNAME> has"
 	line "no cards in Hand!"
 	done
 
-Text0179: ; 39b32 (e:5b32)
+PokemonHealedDamageText: ; 39b32 (e:5b32)
 	text "<RAMTEXT> healed"
 	line "<RAMNUM> damage!"
 	done
@@ -721,7 +721,7 @@ YouCanSelectMoreCardsQuitText: ; 39b73 (e:5b73)
 	text "You can select <RAMNUM> more cards. Quit?"
 	done
 
-Text017d: ; 39b97 (e:5b97)
+ThereWasNoEffectText: ; 39b97 (e:5b97)
 	text "There was no effect!"
 	done
 
