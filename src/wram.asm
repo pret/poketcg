@@ -1025,7 +1025,7 @@ wccf0:: ; ccf0
 
 ; effect functions return a status condition constant here when it had no effect
 ; on the target, in order to print one of the ThereWasNoEffectFrom* texts
-wNoEffectFromStatus:: ; ccf1
+wNoEffectFromWhichStatus:: ; ccf1
 	ds $1
 
 ; when non-0, allows the player to skip some delays during a duel by pressing B.

@@ -57,7 +57,7 @@ ApplyStatusEffect:
 
 .cant_induce_status
 	ld a, c
-	ld [wNoEffectFromStatus], a
+	ld [wNoEffectFromWhichStatus], a
 	call SetNoEffectFromStatus
 	or a
 	ret
@@ -154,7 +154,7 @@ Func_2c0c7: ; 2c0c7 (b:40c7)
 	scf
 	ret
 
-; Sets some flags for AI use
+; Sets some variables for AI use
 ; if target poisoned
 ;	[wAIMinDamage] <- [wDamage]
 ;	[wAIMaxDamage] <- [wDamage]
@@ -162,19 +162,23 @@ Func_2c0c7: ; 2c0c7 (b:40c7)
 ;	[wAIMinDamage] <- [wDamage] + d
 ;	[wAIMaxDamage] <- [wDamage] + e
 ;	[wDamage]      <- [wDamage] + a
-Func_2c0d4: ; 2c0d4 (b:40d4)
+UpdateExpectedAIDamage_AccountForPoison: ; 2c0d4 (b:40d4)
 	push af
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	and POISONED | DOUBLE_POISONED
-	jr z, Func_2c0e9.skip_push_af
+	jr z, UpdateExpectedAIDamage.skip_push_af
 	pop af
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
 	ret
 
-Func_2c0e9: ; 2c0e9 (b:40e9)
+; Sets some variables for AI use
+;	[wAIMinDamage] <- [wDamage] + d
+;	[wAIMaxDamage] <- [wDamage] + e
+;	[wDamage]      <- [wDamage] + a
+UpdateExpectedAIDamage: ; 2c0e9 (b:40e9)
 	push af
 
 .skip_push_af
@@ -190,11 +194,11 @@ Func_2c0e9: ; 2c0e9 (b:40e9)
 	ld [hl], a
 	ret
 
-; Sets some flags for AI use
+; Sets some variables for AI use
 ; [wDamage]      <- a
 ; [wAIMinDamage] <- d
 ; [wAIMaxDamage] <- e
-Func_2c0fb: ; 2c0fb (b:40fb)
+SetExpectedAIDamage: ; 2c0fb (b:40fb)
 	ld [wDamage], a
 	xor a
 	ld [wDamage + 1], a
@@ -268,7 +272,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 .no_damage_orEffect
 	pop af
 	push hl
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	pop hl
 	ld a, l
 	or h
@@ -277,7 +281,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 
 ; overwrites in wDamage, wAIMinDamage and wAIMaxDamage
 ; with the value in a.
-StoreDamageInfo: ; 2c166 (b:4166)
+SetDefiniteDamage: ; 2c166 (b:4166)
 	ld [wDamage], a
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -404,10 +408,8 @@ CreateEnergyCardListFromOpponentDiscardPile: ; 2c2a4 (b:42a4)
 
 	INCROM $2c2e0, $2c487
 
-; handles the selection of a forced switch
-; by link/AI opponent or by the player.
-; outputs the Play Area location of the chosen
-; bench card in hTempPlayAreaLocation_ff9d.
+; handles the selection of a forced switch by link/AI opponent or by the player.
+; outputs the Play Area location of the chosen bench card in hTempPlayAreaLocation_ff9d.
 DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
@@ -459,12 +461,43 @@ DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 	ret
 ; 0x2c4da
 
-	INCROM $2c4da, $2c6f0
+	INCROM $2c4da, $2c564
+
+; Return in a the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest HP
+; if multiple cards are tied for the lowest HP, the one with the highest PLAY_AREA_* is returned.
+Func_2c564: ; 2c564 (b:4564)
+	call SwapTurn
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	lb de, 0, -1
+	ld b, d
+	ld a, DUELVARS_BENCH1_CARD_HP
+	call GetTurnDuelistVariable
+	jr .begin
+.loop
+	ld a, e
+	cp [hl]
+	jr c, .next
+	ld e, [hl]
+	ld d, b
+.next
+	inc hl
+.begin
+	inc b
+	dec c
+	jr nz, .loop
+	ld a, d
+	call SwapTurn
+	ret
+; 0x2c588
+
+	INCROM $2c588, $2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0fb
+	jp SetExpectedAIDamage
 
 ; If heads, defending Pokemon becomes poisoned
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
@@ -476,10 +509,9 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	call SetNoEffectFromStatus
 	ret
 
-; outputs in hTemp_ffa0 the result of the coin toss
-; (0 = tails, 1 = heads) and, in case it was heads,
-; stores in hTempPlayAreaLocation_ffa1 the location
-; of the Bench Pokemon that was selected for switch.
+; outputs in hTemp_ffa0 the result of the coin toss (0 = tails, 1 = heads).
+; in case it was heads, stores in hTempPlayAreaLocation_ffa1
+; the PLAY_AREA_* location of the Bench Pokemon that was selected for switch.
 TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	xor a
 	ldh [hTemp_ffa0], a
@@ -490,8 +522,7 @@ TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	cp 2
 	ret c
 
-; toss coin and store whether it was tails (0)
-; or heads (1) in hTemp_ffa0
+; toss coin and store whether it was tails (0) or heads (1) in hTemp_ffa0.
 ; return if it was tails.
 	ldtx de, IfHeadsChangeOpponentsActivePokemonText
 	call Func_2c08a
@@ -503,8 +534,8 @@ TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ret
 
-; if coin toss was heads and it's possible,
-; switch Defending Pokemon
+; if coin toss at hTemp_ffa0 was heads and it's possible,
+; switch the Defending Pokemon
 TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
 	ldh a, [hTemp_ffa0]
 	or a
@@ -516,15 +547,57 @@ TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, 10
 	lb de, 10, 10
-	jp Func_2c0d4
+	jp UpdateExpectedAIDamage_AccountForPoison
 
 WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0d4
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2c740
 
-	INCROM $2c740, $2c77e
+; return carry if there are no Pokemon cards in the non-turn holder's bench
+Lure_AssertPokemonInBench: ; 2c740 (b:4740)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ldtx hl, NoPokemonOnTheBenchText_2
+	cp 2
+	ret
+; 0x2c74b
+
+; return in hTempPlayAreaLocation_ffa1 the PLAY_AREA_* location
+; of the Bench Pokemon that was selected for switch
+Lure_SelectSwitchPokemon: ; 2c74b (b:474b)
+	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+.select_pokemon
+	bank1call OpenPlayAreaScreenForSelection
+	jr c, .select_pokemon
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2c764
+
+Func_2c764: ; 2c764 (b:4764)
+	call Func_2c564
+	ldh [hTemp_ffa0], a
+	ret
+; 0x2c76a
+
+; Defending Pokemon is swapped out for the one with the PLAY_AREA_* at hTemp_ffa0
+; unless Mew's Neutralizing Shield or Haunter's Transparency prevents it.
+Lure_SwitchDefendingPokemon: ; 2c76a (b:476a)
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld e, a
+	call HandleNShieldAndTransparency
+	call nc, SwapArenaWithBenchPokemon
+	call SwapTurn
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
 
 ; If heads, defending Pokemon can't retreat next turn
 AcidEffect: ; 2c77e (b:477e)
@@ -538,7 +611,7 @@ AcidEffect: ; 2c77e (b:477e)
 GloomPoisonPowder_AIEffect: ; 2c78b (b:478b)
 	ld a, 10
 	lb de, 10, 10
-	jp Func_2c0d4
+	jp UpdateExpectedAIDamage_AccountForPoison
 
 ; Defending Pokemon and user become confused
 FoulOdorEffect: ; 2c793 (b:4793)
@@ -562,7 +635,7 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0d4
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2c7bc
 
 	INCROM $2c7bc, $2c7d0
@@ -588,7 +661,7 @@ ZubatSupersonicEffect: ; 2c7dc (b:47dc)
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
 	ld a, 30
 	lb de, 0, 60
-	jp Func_2c0fb
+	jp SetExpectedAIDamage
 
 ; Flip 2 coins; deal 30x number of heads
 Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
@@ -601,7 +674,7 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2c80d
 
@@ -610,7 +683,7 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 FoulGas_AIEffect: ; 2c822 (b:4822)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0e9
+	jp UpdateExpectedAIDamage
 
 ; If heads, defending Pokemon becomes poisoned. If tails, defending Pokemon becomes confused
 FoulGas_PoisonOrConfusionEffect: ; 2c82a (b:482a)
@@ -683,7 +756,7 @@ SetDamageToATimes20: ; 2c958 (b:4958)
 Thrash_AIEffect: ; 2c96b (b:496b)
 	ld a, 35
 	lb de, 30, 40
-	jp Func_2c0fb
+	jp SetExpectedAIDamage
 
 ; If heads 10 more damage; if tails, 10 damage to itself
 Thrash_ModifierEffect: ; 2c973 (b:4973)
@@ -695,20 +768,20 @@ Thrash_ModifierEffect: ; 2c973 (b:4973)
 	call AddToDamage
 	ret
 
-Func_2c982: ; 2c982 (b:4982)
+Thrash_LowRecoilEffect: ; 2c982 (b:4982)
 	ldh a, [hTemp_ffa0]
 	or a
 	ret nz
 	ld a, 10
-	call Func_1955
+	call DealRecoilDamageToSelf
 	ret
 
 Toxic_AIEffect: ; 2c98c (b:498c)
 	ld a, 20
 	lb de, 20, 20
-	jp Func_2c0e9
+	jp UpdateExpectedAIDamage
 
-; Defending Pokémon becomes poisoned, but takes 20 damage (double poisoned)
+; Defending Pokémon becomes double poisoned (takes 20 damage per turn rather than 10)
 Toxic_DoublePoisonEffect: ; 2c994 (b:4994)
 	call DoublePoisonEffect
 	ret
@@ -727,7 +800,7 @@ Func_2cbfb: ; 2cbfb (b:4bfb)
 ; 0x2cc0a
 
 	INCROM $2cc0a, $2f4e1
-	
+
 ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         call SwapTurn
         call CreateHandCardList
@@ -742,9 +815,9 @@ ImposterProfessorOakEffect: ; 2f4e1 (b:74e1)
         jr .return_hand_to_deck_loop
 .shuffle
         call Func_2c0bd
-        ld a, $07
-        bank1call $4935
-        ld c, $07
+        ld a, 7
+        bank1call DisplayDrawACardsScreen
+        ld c, 7
 .draw_loop
         call DrawCardFromDeck
         jr c, .revert_turn_to_user

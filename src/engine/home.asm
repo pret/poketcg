@@ -2778,7 +2778,7 @@ ExchangeRNG: ; 0f58 (0:0f58)
 ; send 10 bytes of data to the other game from hOppActionTableIndex, hTempCardIndex_ff9f,
 ; hTemp_ffa0, and hTempPlayAreaLocation_ffa1, and hTempRetreatCostCards.
 ; finally exchange RNG data.
-; the receiving side will use this data to read the OPP_ACTION_* value in
+; the receiving side will use this data to read the OPPACTION_* value in
 ; [hOppActionTableIndex] and match it by calling the correspoding OppAction* function
 SetOppAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	push hl
@@ -4380,7 +4380,7 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld [wIsDamageToSelf], a
 	ld [wccef], a
 	ld [wccf0], a
-	ld [wNoEffectFromStatus], a
+	ld [wNoEffectFromWhichStatus], a
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
 
@@ -4516,7 +4516,7 @@ ClearNonTurnTemporaryDuelvars_ResetCarry: ; 1823 (0:1823)
 	ret
 
 ; called when attacker deals damage to itself due to confusion
-; display the corresponding animation and deal damage to self
+; display the corresponding animation and deal 20 damage to self
 HandleConfusionDamageToSelf: ; 1828 (0:1828)
 	bank1call DrawDuelMainScene
 	ld a, 1
@@ -4690,13 +4690,17 @@ LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ld [de], a
 	ret
 
-Func_1955: ; 1955 (0:1955)
+; Make turn holder deal A damage to self due to recoil (e.g. Thrash, Selfdestruct)
+; display recoil animation
+DealRecoilDamageToSelf: ; 1955 (0:1955)
 	push af
 	ld a, $7a
 	ld [wLoadedMoveAnimation], a
 	pop af
 ;	fallthrough
 
+; Make turn holder deal A damage to self due to confusion
+; display animation at wLoadedMoveAnimation
 DealConfusionDamageToSelf: ; 195c (0:195c)
 	ld hl, wDamage
 	ld [hli], a
@@ -11461,7 +11465,7 @@ DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 	call BankswitchROM
 	ret
 
-; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using 
+; Loads a pointer to the current animation frame into SPRITE_ANIM_FRAME_DATA_POINTER using
 ; the current frame's offset
 ; [wd4ca] - current frame offset
 ; wTempPointer* - Pointer to current Animation

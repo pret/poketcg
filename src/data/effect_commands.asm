@@ -13,11 +13,14 @@ EffectCommands: ; 186f7 (6:46f7)
 ; - EFFECTCMDTYPE_DISCARD_ENERGY: For moves or trainer cards that require putting one or more attached energy cards into the discard pile.
 ; - EFFECTCMDTYPE_REQUIRE_SELECTION: For moves, Pokemon Powers, or trainer cards requring the user to select a card (from e.g. play area screen or card list).
 ; - EFFECTCMDTYPE_BEFORE_DAMAGE: Effect command of a move executed prior to the damage step. For trainer card or Pokemon Power, usually the main effect.
-; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step
-; - EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out
-; - EFFECTCMDTYPE_PKMN_POWER_TRIGGER: Pokemon Power effects that trigger the moment the Pokemon card is played
-; - EFFECTCMDTYPE_AI: Used for AI scoring
-; - EFFECTCMDTYPE_UNKNOWN_08: Unknown
+; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step.
+; - EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out. Called only for AI-executed moves.
+; - EFFECTCMDTYPE_PKMN_POWER_TRIGGER: Pokemon Power effects that trigger the moment the Pokemon card is played.
+; - EFFECTCMDTYPE_AI: Used for AI scoring.
+; - EFFECTCMDTYPE_AI_SELECTION: When AI is required to select a card
+
+; Moves that have an EFFECTCMDTYPE_REQUIRE_SELECTION also must have either an EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN or an
+; EFFECTCMDTYPE_AI_SELECTION (for anything not involving switching the defending Pokemon), to handle selections involving the AI.
 
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
@@ -44,7 +47,7 @@ EkansWrapEffectCommands:
 ArbokTerrorStrikeEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, TerrorStrike_SwitchDefendingPokemon
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, TerrorStrike_50PercentSelectSwitchPokemon
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, TerrorStrike_50PercentSelectSwitchPokemon
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, TerrorStrike_50PercentSelectSwitchPokemon
 	db  $00
 
 ArbokPoisonFangEffectCommands:
@@ -58,10 +61,10 @@ WeepinbellPoisonPowderEffectCommands:
 	db  $00
 
 VictreebelLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4740
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $476a
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $474b
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4764
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Lure_AssertPokemonInBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Lure_SwitchDefendingPokemon
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Lure_SelectSwitchPokemon
+	dbw EFFECTCMDTYPE_AI_SELECTION, Func_2c764
 	db  $00
 
 VictreebelAcidEffectCommands:
@@ -157,14 +160,14 @@ OddishSproutEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $484a
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $48cc
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $485a
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $48b7
+	dbw EFFECTCMDTYPE_AI_SELECTION, $48b7
 	db  $00
 
 ExeggutorTeleportEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $48ec
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $491a
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $48f7
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $490f
+	dbw EFFECTCMDTYPE_AI_SELECTION, $490f
 	db  $00
 
 ExeggutorBigEggsplosionEffectCommands:
@@ -174,7 +177,7 @@ ExeggutorBigEggsplosionEffectCommands:
 
 NidokingThrashEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Thrash_ModifierEffect
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Func_2c982
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_LowRecoilEffect
 	dbw EFFECTCMDTYPE_AI, Thrash_AIEffect
 	db  $00
 
@@ -196,7 +199,7 @@ NidoranFCallForFamilyEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $49db
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4a6e
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $49eb
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4a55
+	dbw EFFECTCMDTYPE_AI_SELECTION, $4a55
 	db  $00
 
 NidoranMHornHazardEffectCommands:
@@ -221,7 +224,7 @@ NidorinoDoubleKickEffectCommands:
 ButterfreeWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4b09
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4af3
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $4af3
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, $4af3
 	db  $00
 
 ButterfreeMegaDrainEffectCommands:
@@ -278,7 +281,7 @@ BellsproutCallForFamilyEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4c40
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4cc2
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4c50
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4cad
+	dbw EFFECTCMDTYPE_AI_SELECTION, $4cad
 	db  $00
 
 WeezingSmogEffectCommands:
@@ -383,7 +386,7 @@ KrabbyCallForFamilyEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $4f5d
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $4fdf
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $4f6d
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $4fca
+	dbw EFFECTCMDTYPE_AI_SELECTION, $4fca
 	db  $00
 
 MagikarpFlailEffectCommands:
@@ -407,7 +410,7 @@ GolduckPsyshockEffectCommands:
 GolduckHyperBeamEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $506b
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5033
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5065
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5065
 	db  $00
 
 SeadraWaterGunEffectCommands:
@@ -446,7 +449,7 @@ StarmieRecoverEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $50f0
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5114
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $510e
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5103
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5103
 	db  $00
 
 StarmieStarFreezeEffectCommands:
@@ -478,7 +481,7 @@ PoliwhirlAmnesiaEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5149
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $516f
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5179
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5173
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5173
 	db  $00
 
 PoliwhirlDoubleslapEffectCommands:
@@ -494,7 +497,7 @@ PoliwrathWaterGunEffectCommands:
 PoliwrathWhirlpoolEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5214
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $51e6
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $520e
+	dbw EFFECTCMDTYPE_AI_SELECTION, $520e
 	db  $00
 
 PoliwagWaterGunEffectCommands:
@@ -553,7 +556,7 @@ ArcanineFlamethrowerEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5363
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5371
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5379
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5375
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5375
 	db  $00
 
 ArcanineTakeDownEffectCommands:
@@ -570,7 +573,7 @@ ArcanineFlamesOfRageEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $53ae
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $53ef
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $53de
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $53d5
+	dbw EFFECTCMDTYPE_AI_SELECTION, $53d5
 	dbw EFFECTCMDTYPE_AI, $53e9
 	db  $00
 
@@ -587,21 +590,21 @@ NinetailsLureEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5425
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $544f
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5430
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5449
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5449
 	db  $00
 
 NinetailsFireBlastEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5463
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5471
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5479
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5475
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5475
 	db  $00
 
 CharmanderEmberEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $547f
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $548d
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5495
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5491
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5491
 	db  $00
 
 MoltresWildfireEffectCommands:
@@ -609,7 +612,7 @@ MoltresWildfireEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $54a9
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $54f4
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $54e1
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $54dd
+	dbw EFFECTCMDTYPE_AI_SELECTION, $54dd
 	db  $00
 
 Moltres1DiveBombEffectCommands:
@@ -626,14 +629,14 @@ FlareonFlamethrowerEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $555c
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $556a
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5572
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $556e
+	dbw EFFECTCMDTYPE_AI_SELECTION, $556e
 	db  $00
 
 MagmarFlamethrowerEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5578
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5586
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $558e
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $558a
+	dbw EFFECTCMDTYPE_AI_SELECTION, $558a
 	db  $00
 
 MagmarSmokescreenEffectCommands:
@@ -649,7 +652,7 @@ CharmeleonFlamethrowerEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $55a2
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $55b0
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $55b8
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $55b4
+	dbw EFFECTCMDTYPE_AI_SELECTION, $55b4
 	db  $00
 
 CharizardEnergyBurnEffectCommands:
@@ -660,7 +663,7 @@ CharizardFireSpinEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $55c0
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $55cd
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5614
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5606
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5606
 	db  $00
 
 VulpixConfuseRayEffectCommands:
@@ -704,7 +707,7 @@ GengarCurseEffectCommands:
 GengarDarkMindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $593c
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5903
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $592a
+	dbw EFFECTCMDTYPE_AI_SELECTION, $592a
 	db  $00
 
 GastlySleepingGasEffectCommands:
@@ -716,7 +719,7 @@ GastlyDestinyBondEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5964
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5987
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5981
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5976
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5976
 	db  $00
 
 GastlyLickEffectCommands:
@@ -727,7 +730,7 @@ GastlyEnergyConversionEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $598d
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $59b4
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5994
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $599b
+	dbw EFFECTCMDTYPE_AI_SELECTION, $599b
 	db  $00
 
 HaunterHypnosisEffectCommands:
@@ -750,13 +753,13 @@ HypnoProphecyEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $59e7
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5a41
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5a00
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5a3c
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5a3c
 	db  $00
 
 HypnoDarkMindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5b64
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5b2b
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5b52
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5b52
 	db  $00
 
 DrowzeeConfuseRayEffectCommands:
@@ -791,7 +794,7 @@ MewDevolutionBeamEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5c64
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5cb6
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5cbb
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5c9e
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5c9e
 	db  $00
 
 MewNeutralizingShieldEffectCommands:
@@ -812,21 +815,21 @@ MewtwoBarrierEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5d9c
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5dbf
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5db9
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5dae
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5dae
 	db  $00
 
 Mewtwo3EnergyAbsorptionEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5dc5
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5dec
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5dcc
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5dd3
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5dd3
 	db  $00
 
 Mewtwo2EnergyAbsorptionEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5dff
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5e26
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5e06
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5e0d
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5e0d
 	db  $00
 
 SlowbroStrangeBehaviorEffectCommands:
@@ -851,14 +854,14 @@ SlowpokeScavengeEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5f5f
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $5f46
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5f40
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5f2d
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5f2d
 	db  $00
 
 SlowpokeAmnesiaEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $5f74
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5f7b
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $5f85
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5f7f
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5f7f
 	db  $00
 
 KadabraRecoverEffectCommands:
@@ -866,7 +869,7 @@ KadabraRecoverEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $5fa0
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $5fc3
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, $5fbd
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $5fb2
+	dbw EFFECTCMDTYPE_AI_SELECTION, $5fb2
 	db  $00
 
 JynxDoubleslapEffectCommands:
@@ -933,7 +936,7 @@ MarowakCallforFriendEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6100
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6194
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6110
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6177
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6177
 	db  $00
 
 MachokeKarateChopEffectCommands:
@@ -956,7 +959,7 @@ GravelerHardenEffectCommands:
 RhydonRamEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6212
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $61fc
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $61fc
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, $61fc
 	db  $00
 
 RhyhornLeerEffectCommands:
@@ -967,7 +970,7 @@ HitmonleeStretchKickEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6231
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $625b
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $623c
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6255
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6255
 	db  $00
 
 SandshrewSandAttackEffectCommands:
@@ -1068,7 +1071,7 @@ PikachuThunderJoltEffectCommands:
 PikachuSparkEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6574
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6539
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6562
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6562
 	db  $00
 
 Pikachu3GrowlEffectCommands:
@@ -1103,7 +1106,7 @@ RaichuThunderEffectCommands:
 RaichuGigashockEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $671f
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $660d
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $66c3
+	dbw EFFECTCMDTYPE_AI_SELECTION, $66c3
 	db  $00
 
 MagnetonThunderWaveEffectCommands:
@@ -1147,7 +1150,7 @@ ElectrodeEnergySpikeEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6877
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $68f6
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $687b
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $68f1
+	dbw EFFECTCMDTYPE_AI_SELECTION, $68f1
 	db  $00
 
 JolteonDoubleKickEffectCommands:
@@ -1174,7 +1177,7 @@ SpearowMirrorMoveEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6987
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6989
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6983
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6985
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6985
 	dbw EFFECTCMDTYPE_AI, $697d
 	db  $00
 
@@ -1252,13 +1255,13 @@ DragonairSlamEffectCommands:
 DragonairHyperBeamEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6c35
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6c2c
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6c2f
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6c2f
 	db  $00
 
 ClefableMetronomeEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6c77
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $6c82
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6c7e
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6c7e
 	db  $00
 
 ClefableMinimizeEffectCommands:
@@ -1272,7 +1275,7 @@ PidgeotHurricaneEffectCommands:
 PidgeottoWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6ce9
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6cd3
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $6cd3
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, $6cd3
 	db  $00
 
 PidgeottoMirrorMoveEffectCommands:
@@ -1281,7 +1284,7 @@ PidgeottoMirrorMoveEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $6cfe
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6d01
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6cf8
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6cfb
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6cfb
 	dbw EFFECTCMDTYPE_AI, $6cef
 	db  $00
 
@@ -1292,7 +1295,7 @@ ClefairySingEffectCommands:
 ClefairyMetronomeEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6d0b
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $6d16
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6d12
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6d12
 	db  $00
 
 WigglytuffLullabyEffectCommands:
@@ -1332,21 +1335,21 @@ LickitungSupersonicEffectCommands:
 PidgeyWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6dcf
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $6db9
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, $6db9
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, $6db9
 	db  $00
 
 PorygonConversion1EffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6dd5
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $6ded
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6dfb
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6df7
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6df7
 	db  $00
 
 PorygonConversion2EffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $6e1f
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $6e31
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, $6e5e
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $6e3c
+	dbw EFFECTCMDTYPE_AI_SELECTION, $6e3c
 	db  $00
 
 ChanseyScrunchEffectCommands:
@@ -1439,7 +1442,7 @@ EnergyRemovalEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $7252
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $725f
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $7273
-	dbw EFFECTCMDTYPE_UNKNOWN_08, $726f
+	dbw EFFECTCMDTYPE_AI_SELECTION, $726f
 	db  $00
 
 EnergyRetrievalEffectCommands:
