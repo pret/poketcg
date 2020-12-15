@@ -1912,7 +1912,7 @@ ScriptCommand_StartBattle: ; cd01 (3:4d01)
 	ld a, [wcc19]
 	cp $ff
 	jr nz, .asm_cd26
-	ld a, [wd695]
+	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
 	ld c, a
 	ld b, $0
 	ld hl, AaronDeckIDs
@@ -2716,18 +2716,18 @@ ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst: ; d24c (3:524c)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
-	ld a, [wd695]
+	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
 	ld c, a
 	set_flag_value EVENT_FLAG_76
 	jp IncreaseScriptPointerBy1
 
 .multichoice_menu_args ;d25e
-	dw $0000 ;NPC title for textbox under menu
-	tx Text03f9 ;text for textbox under menu
-	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ;location of table configuration in bank 4
-	db $03 ;the value to return when b is pressed
-	dw $d695 ;ram location to return result into
-	dw .text_entries ;location of table containing text entries
+	dw $0000 ; NPC title for textbox under menu
+	tx Text03f9 ; text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ; location of table configuration in bank 4
+	db $03 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst ; ram location to return result into
+	dw .text_entries ; location of table containing text entries
 
 .text_entries ;d269
 	tx Text03f6
@@ -2745,12 +2745,12 @@ ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck: ; d271 (3:5271)
 ; 0xd27b
 
 .multichoice_menu_args ;d27b
-	dw $0000 ;NPC title for textbox under menu
-	tx Text03fd ;text for textbox under menu
-	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ;location of table configuration in bank 4
-	db $00 ;the value to return when b is pressed
-	dw $d693 ;ram location to return result into
-	dw .text_entries ;location of table containing text entries
+	dw $0000 ; NPC title for textbox under menu
+	tx Text03fd ; text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
+	db $00 ; the value to return when b is pressed
+	dw $d693 ; ram location to return result into
+	dw .text_entries ; location of table containing text entries
 
 .text_entries
 	tx Text03fa
@@ -2765,7 +2765,7 @@ ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck: ; d271 (3:5271)
 ; 	dw location of table configuration in bank 4
 ; 	db the value to return when b is pressed
 ; 	dw ram location to return result into
-; 	dw location of table containing text entries (optional
+; 	dw location of table containing text entries (optional)
 
 ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld [wd416], a
@@ -2847,39 +2847,39 @@ ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
-	ld a, [wd694]
+	ld a, [wMultichoiceTextboxResult_Sam]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
 	xor a
-	ld [wd694], a
+	ld [wMultichoiceTextboxResult_Sam], a
 	jp IncreaseScriptPointerBy1
 ; 0xd30c
 
 .multichoice_menu_args ;d30c
-	tx SamNPCName ;NPC title for textbox under menu
-	tx Text03fe ;text for textbox under menu
-	dw SamNormalMultichoice_ConfigurationTable ;location of table configuration in bank 4
-	db $03 ;the value to return when b is pressed
-	dw $d694 ;ram location to return result into
-	dw $0000 ;location of table containing text entries
+	tx SamNPCName ; NPC title for textbox under menu
+	tx Text03fe ; text for textbox under menu
+	dw SamNormalMultichoice_ConfigurationTable ; location of table configuration in bank 4
+	db $03 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
+	dw $0000 ; location of table containing text entries
 
 
 ScriptCommand_ShowSamTutorialMultichoice: ; d317 (s)
 	ld hl, .multichoice_menu_args
-	ld a, [wd694]
+	ld a, [wMultichoiceTextboxResult_Sam]
 	call ShowMultichoiceTextbox
-	ld a, [wd694]
+	ld a, [wMultichoiceTextboxResult_Sam]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
 	jp IncreaseScriptPointerBy1
 
 .multichoice_menu_args ;d32b
-	dw $0000 ;NPC title for textbox under menu
-	dw $0000 ;text for textbox under menu
-	dw SamTutorialMultichoice_ConfigurationTable ;location of table configuration in bank 4
-	db $07 ;the value to return when b is pressed
-	dw $d694 ;ram location to return result into
-	dw $0000 ;location of table containing text entries
+	dw $0000 ; NPC title for textbox under menu
+	dw $0000 ; text for textbox under menu
+	dw SamTutorialMultichoice_ConfigurationTable ; location of table configuration in bank 4
+	db $07 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
+	dw $0000 ; location of table containing text entries
 
 
 ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
@@ -2977,6 +2977,7 @@ Func_d3d4: ; d3d4 (3:53d4)
 	jp IncreaseScriptPointerBy1
 
 	INCROM $d3dd, $d3e0
+
 
 Func_d3e0: ; d3e0 (3:53e0)
 	ld a, $1
@@ -3526,10 +3527,38 @@ AfterTutorialBattleScript: ; d834 (3:5834)
         run_command ScriptCommand_CloseTextBox
         run_command ScriptCommand_PrintTextString
         tx Text05f2
+.ows_d85f
         run_command ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
-; 0xd860
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_AskQuestionJump
+        tx Text05f3
+        dw .ows_d869
+        run_command ScriptCommand_Jump
+        dw .ows_d85f
+; 0xd869
+.ows_d869
+        run_command ScriptCommand_PrintTextString
+        tx Text05f4
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_PauseSong
+        run_command Func_d40f
+        run_command ScriptCommand_TryGiveMedalPCPacks
+        run_command Func_ccdc
+        tx Text05f5
+        run_command ScriptCommand_WaitForSongToFinish
+        run_command ScriptCommand_ResumeSong
+        run_command ScriptCommand_CloseTextBox
+        run_command ScriptCommand_SetFlagValue
+        db EVENT_FLAG_3E
+        db $03
+        run_command Func_d3d4
+        run_command ScriptCommand_PrintTextString
+        tx Text05f6
+        run_command Func_d396
+        db $00
+        run_command ScriptCommand_QuitScriptFully
+; 0xd880
 	
-	INCROM $d860, $d880
 
 NPCMovement_d880: ; d880 (3:5880)
 	db EAST

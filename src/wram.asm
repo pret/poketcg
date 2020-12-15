@@ -2556,10 +2556,10 @@ wBoosterData_TypeChances:: ; d689
 wd693:: ; d693
 	ds $1
 
-wd694:: ; d694
+wMultichoiceTextboxResult_Sam:: ; d694
 	ds $1
 
-wd695:: ; d695
+wMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; d695
 	ds $1
 
 wd696:: ; d696
