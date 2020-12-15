@@ -64,7 +64,7 @@ VictreebelLureEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, Lure_AssertPokemonInBench
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Lure_SwitchDefendingPokemon
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Lure_SelectSwitchPokemon
-	dbw EFFECTCMDTYPE_AI_SELECTION, Func_2c764
+	dbw EFFECTCMDTYPE_AI_SELECTION, Lure_GetBenchPokemonWithLowestHP
 	db  $00
 
 VictreebelAcidEffectCommands:

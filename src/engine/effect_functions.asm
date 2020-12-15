@@ -463,9 +463,9 @@ DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 
 	INCROM $2c4da, $2c564
 
-; Return in a the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest HP
+; Return in a the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest (remaining) HP.
 ; if multiple cards are tied for the lowest HP, the one with the highest PLAY_AREA_* is returned.
-Func_2c564: ; 2c564 (b:4564)
+GetBenchPokemonWithLowestHP: ; 2c564 (b:4564)
 	call SwapTurn
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -580,8 +580,10 @@ Lure_SelectSwitchPokemon: ; 2c74b (b:474b)
 	ret
 ; 0x2c764
 
-Func_2c764: ; 2c764 (b:4764)
-	call Func_2c564
+; Return in hTemp_ffa0 the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest (remaining) HP.
+; if multiple cards are tied for the lowest HP, the one with the highest PLAY_AREA_* is returned.
+Lure_GetBenchPokemonWithLowestHP: ; 2c764 (b:4764)
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2c76a
