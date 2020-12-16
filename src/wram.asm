@@ -2558,9 +2558,20 @@ wd693:: ; d693
 
 wMultichoiceTextboxResult_Sam:: ; d694
 	ds $1
+	
+UNION
 
 wMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; d695
 	ds $1
+
+NEXTU
+
+wd695:: ; d695
+	ds $1
+
+ENDU
+
+
 
 wd696:: ; d696
 	ds $1

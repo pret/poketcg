@@ -1912,7 +1912,7 @@ ScriptCommand_StartBattle: ; cd01 (3:4d01)
 	ld a, [wcc19]
 	cp $ff
 	jr nz, .asm_cd26
-	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
+	ld a, [wd695]
 	ld c, a
 	ld b, $0
 	ld hl, AaronDeckIDs
@@ -2864,7 +2864,7 @@ ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
 	dw $0000 ; location of table containing text entries
 
 
-ScriptCommand_ShowSamTutorialMultichoice: ; d317 (s)
+ScriptCommand_ShowSamTutorialMultichoice: ; d317 (3:5317)
 	ld hl, .multichoice_menu_args
 	ld a, [wMultichoiceTextboxResult_Sam]
 	call ShowMultichoiceTextbox
