@@ -559,9 +559,9 @@ Func_1c8bc: ; 1c8bc (7:48bc)
 	push hl
 	push bc
 	call Set_OBJ_8x8
-	ld a, $a2
+	ld a, LOW(Func_3ba2)
 	ld [wDoFrameFunction], a
-	ld a, $3b
+	ld a, HIGH(Func_3ba2)
 	ld [wDoFrameFunction + 1], a
 	ld a, $ff
 	ld hl, wAnimationQueue
@@ -934,9 +934,9 @@ Func_1ccbc: ; 1ccbc (7:4cbc)
 	ldh [rSCX], a
 	ldh [hSCY], a
 	ld hl, wd4b9
-	ld [hl], $bc
+	ld [hl], LOW(Func_1ccbc)
 	inc hl
-	ld [hl], $4c
+	ld [hl], HIGH(Func_1ccbc)
 	ret
 ; 0x1ccd4
 

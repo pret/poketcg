@@ -9668,7 +9668,7 @@ EnergySearch_AddToHandEffect: ; 2f372 (b:7372)
 
 ; check if card index in a is a Basic Energy card.
 ; returns carry in case it's not.
-CheckIfCardIsBasicEnergy ; 2f38f (b:738f)
+CheckIfCardIsBasicEnergy: ; 2f38f (b:738f)
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Type]
 	cp TYPE_ENERGY
