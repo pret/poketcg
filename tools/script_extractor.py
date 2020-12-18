@@ -214,7 +214,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
 	return [
 	("ScriptCommand_EndScriptLoop1", "", QUIT_CONTINUE_CODE,"end_script_loop"),
-	("ScriptCommand_CloseAdvancedTextBo", "", DO_NOT_QUIT,""),
+	("ScriptCommand_CloseAdvancedTextBox", "", DO_NOT_QUIT,""),
 	("ScriptCommand_PrintTextString", "t", DO_NOT_QUIT,""),
 	("Func_ccdc", "t", DO_NOT_QUIT,""),
 	("ScriptCommand_AskQuestionJump", "tj", DO_NOT_QUIT,""), # more complex behavior too (jumping)
