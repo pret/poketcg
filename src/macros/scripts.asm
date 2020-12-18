@@ -114,6 +114,34 @@ ENDM
 end_script_loop: MACRO
 	run_command ScriptCommand_EndScriptLoop1
 ENDM
+close_advanced_text_box: MACRO
+	run_command ScriptCommand_CloseAdvancedTextBox
+ENDM
+print_text_string: MACRO
+	run_command ScriptCommand_PrintTextString
+	tx \1
+ENDM
+
+ask_question_jump: MACRO
+	run_command ScriptCommand_AskQuestionJump
+	tx \1
+	dw \2
+ENDM
+start_battle: MACRO
+	run_command ScriptCommand_StartBattle
+	db \1
+	db \2
+	db \3
+ENDM
+print_variable_text: MACRO
+	run_command ScriptCommand_PrintVariableText
+	tx \1
+	tx \2
+ENDM
+
+close_text_box: MACRO
+	run_command ScriptCommand_CloseTextBox
+ENDM
 
 move_player: MACRO
 	run_command ScriptCommand_MovePlayer

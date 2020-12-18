@@ -135,8 +135,8 @@ def decodeLine(scriptList, game_data, loc, ignore_broken, locList):
 		else:
 			print("UNACCEPTED CHARACTER: " + c)
 	# if in macro mode, remove the extra `, ` from the end
-	if macroMode:
-		ret = ret[:-1]
+	if ret[-2:] == ", ":
+	    ret = ret[:-1]
 	return (loc, ret, quit)
 
 def main():
@@ -214,17 +214,17 @@ def createList(): # this is a func just so all this can go at the bottom
 	# name, arg list, is an ender
 	return [
 	("ScriptCommand_EndScriptLoop1", "", QUIT_CONTINUE_CODE,"end_script_loop"),
-	("ScriptCommand_CloseAdvancedTextBox", "", DO_NOT_QUIT,""),
-	("ScriptCommand_PrintTextString", "t", DO_NOT_QUIT,""),
+	("ScriptCommand_CloseAdvancedTextBox", "", DO_NOT_QUIT,"close_advanced_text_box"),
+	("ScriptCommand_PrintTextString", "t", DO_NOT_QUIT,"print_text_string"),
 	("Func_ccdc", "t", DO_NOT_QUIT,""),
-	("ScriptCommand_AskQuestionJump", "tj", DO_NOT_QUIT,""), # more complex behavior too (jumping)
-	("ScriptCommand_StartBattle", "bbb", DO_NOT_QUIT,""),
-	("ScriptCommand_PrintVariableText", "tt", DO_NOT_QUIT,""),
+	("ScriptCommand_AskQuestionJump", "tj", DO_NOT_QUIT,"ask_question_jump"), # more complex behavior too (jumping)
+	("ScriptCommand_StartBattle", "bbb", DO_NOT_QUIT,"start_battle"),
+	("ScriptCommand_PrintVariableText", "tt", DO_NOT_QUIT,"print_variable_text"),
 	("Func_cda8", "bbbb", DO_NOT_QUIT,""),
 	("ScriptCommand_PrintTextQuitFully", "t", QUIT_SPECIAL,""),
 	("Func_cdcb", "", DO_NOT_QUIT,""),
 	("ScriptCommand_MoveActiveNPCByDirection", "w", DO_NOT_QUIT,""),
-	("ScriptCommand_CloseTextBox", "", DO_NOT_QUIT,""),
+	("ScriptCommand_CloseTextBox", "", DO_NOT_QUIT,"close_text_box"),
 	("ScriptCommand_GiveBoosterPacks", "bbb", DO_NOT_QUIT,""),
 	("ScriptCommand_CheckIfCardInCollectionOrDecks", "bj", DO_NOT_QUIT,""), # more complex behavior too (jumping)
 	("ScriptCommand_CheckIfCardInCollection", "bj", DO_NOT_QUIT,""),
