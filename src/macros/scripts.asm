@@ -18,13 +18,13 @@ ENDM
 	const ScriptCommand_MoveActiveNPCByDirection_index               ; $0a
 	const ScriptCommand_CloseTextBox_index                           ; $0b
 	const ScriptCommand_GiveBoosterPacks_index                       ; $0c
-	const ScriptCommand_CheckIfCardInCollectionOrDecks_index         ; $0d
-	const ScriptCommand_CheckIfCardInCollection_index                ; $0e
+	const ScriptCommand_JumpIfCardOwned_index                        ; $0d
+	const ScriptCommand_JumpIfCardInCollection_index                 ; $0e
 	const ScriptCommand_GiveCard_index                               ; $0f
 	const ScriptCommand_TakeCard_index                               ; $10
 	const Func_cf53_index                                            ; $11
 	const Func_cf7b_index                                            ; $12
-	const ScriptCommand_CheckRawAmountOfCardsOwned_index             ; $13
+	const ScriptCommand_CheckAmountOfCardsOwned_index                ; $13
 	const ScriptCommand_JumpBasedOnFightingClubPupilStatus_index     ; $14
 	const Func_cfc6_index                                            ; $15
 	const Func_cfd4_index                                            ; $16
@@ -139,8 +139,33 @@ print_variable_text: MACRO
 	tx \2
 ENDM
 
+print_text_quit_fully: MACRO
+	run_command ScriptCommand_PrintTextQuitFully
+	tx \1
+ENDM
+
+move_active_npc_by_direction: MACRO
+	run_command ScriptCommand_MoveActiveNPCByDirection
+	dw \1
+ENDM
 close_text_box: MACRO
 	run_command ScriptCommand_CloseTextBox
+ENDM
+give_booster_packs: MACRO
+	run_command ScriptCommand_GiveBoosterPacks
+	db \1
+	db \2
+	db \3
+ENDM
+jump_if_cardowned: MACRO
+	run_command ScriptCommand_JumpIfCardOwned
+	db \1
+	dw \2
+ENDM
+jump_if_card_in_collection: MACRO
+	run_command ScriptCommand_JumpIfCardInCollection
+	db \1
+	dw \2
 ENDM
 
 move_player: MACRO

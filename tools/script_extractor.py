@@ -221,18 +221,18 @@ def createList(): # this is a func just so all this can go at the bottom
 	("ScriptCommand_StartBattle", "bbb", DO_NOT_QUIT,"start_battle"),
 	("ScriptCommand_PrintVariableText", "tt", DO_NOT_QUIT,"print_variable_text"),
 	("Func_cda8", "bbbb", DO_NOT_QUIT,""),
-	("ScriptCommand_PrintTextQuitFully", "t", QUIT_SPECIAL,""),
+	("ScriptCommand_PrintTextQuitFully", "t", QUIT_SPECIAL,"print_text_quit_fully"),
 	("Func_cdcb", "", DO_NOT_QUIT,""),
-	("ScriptCommand_MoveActiveNPCByDirection", "w", DO_NOT_QUIT,""),
+	("ScriptCommand_MoveActiveNPCByDirection", "w", DO_NOT_QUIT,"move_active_npc_by_direction"),
 	("ScriptCommand_CloseTextBox", "", DO_NOT_QUIT,"close_text_box"),
-	("ScriptCommand_GiveBoosterPacks", "bbb", DO_NOT_QUIT,""),
-	("ScriptCommand_CheckIfCardInCollectionOrDecks", "bj", DO_NOT_QUIT,""), # more complex behavior too (jumping)
-	("ScriptCommand_CheckIfCardInCollection", "bj", DO_NOT_QUIT,""),
+	("ScriptCommand_GiveBoosterPacks", "bbb", DO_NOT_QUIT,"give_booster_packs"),
+	("ScriptCommand_JumpIfCardOwned", "bj", DO_NOT_QUIT,"jump_if_card_owned"), # more complex behavior too (jumping)
+	("ScriptCommand_JumpIfCardInCollection", "bj", DO_NOT_QUIT,"jump_if_card_in_collection"),
 	("ScriptCommand_GiveCard", "b", DO_NOT_QUIT,""),
 	("ScriptCommand_TakeCard", "b", DO_NOT_QUIT,""),
 	("Func_cf53", "w", DO_NOT_QUIT,""), # more complex behavior too (jumping)
 	("Func_cf7b", "", DO_NOT_QUIT,""),
-	("ScriptCommand_CheckRawAmountOfCardsOwned", "bbbb", DO_NOT_QUIT,""), # more complex behavior too (jumping + ??)
+	("ScriptCommand_CheckAmountOfCardsOwned", "bbbb", DO_NOT_QUIT,""), # more complex behavior too (jumping + ??)
 	("ScriptCommand_JumpBasedOnFightingClubPupilStatus", "w", DO_NOT_QUIT,""), # only jumps? still needs args to do that though
 	("Func_cfc6", "b", DO_NOT_QUIT,""),
 	("Func_cfd4", "", DO_NOT_QUIT,""),

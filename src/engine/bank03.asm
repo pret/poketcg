@@ -2214,12 +2214,12 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	xor a
 	jr .asm_cef0
 
-ScriptCommand_CheckIfCardInCollectionOrDecks: ; cf0c (3:4f0c)
+ScriptCommand_JumpIfCardOwned: ; cf0c (3:4f0c)
 	ld a, c
 	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
-ScriptCommand_CheckIfCardInCollection: ; cf12 (3:4f12)
+ScriptCommand_JumpIfCardInCollection: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
@@ -2240,11 +2240,11 @@ asm_cf1f:
 asm_cf2a:
 	jp IncreaseScriptPointerBy4
 
-ScriptCommand_CheckRawAmountOfCardsOwned: ; cf2d (3:4f2d)
+ScriptCommand_CheckAmountOfCardsOwned: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseScriptPointerBy1
 	pop bc
-	call GetRawAmountOfCardsOwned
+	call GetAmountOfCardsOwned
 	ld a, h
 	cp b
 	jr nz, .asm_cf3b
@@ -3580,12 +3580,10 @@ Script_Ishihara: ; db4a (3:5b4a)
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_39
 .ows_db8d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0727
+	print_text_quit_fully Text0727
 
 .ows_db90
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0728
+	print_text_quit_fully Text0728
 
 .ows_db93
 	run_command ScriptCommand_JumpIfFlagEqual
@@ -3597,22 +3595,15 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db EVENT_FLAG_1F
 	db $02
 	ask_question_jump Text072b, .check_ifhave_clefable_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	print_text_quit_fully Text072c
 
 .check_ifhave_clefable_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db CLEFABLE
-	dw .check_ifhave_clefable_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072d
+	jump_if_cardowned CLEFABLE, .check_ifhave_clefable_incollectiononly
+	print_text_quit_fully Text072d
 
 .check_ifhave_clefable_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db CLEFABLE
-	dw .do_clefable_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072e
+	jump_if_card_in_collection CLEFABLE, .do_clefable_trade
+	print_text_quit_fully Text072e
 
 .do_clefable_trade
 	run_command ScriptCommand_MaxOutFlagValue
@@ -3631,8 +3622,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db SURFING_PIKACHU1
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db SURFING_PIKACHU1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0731
+	print_text_quit_fully Text0731
 
 .ows_dbcc
 	run_command ScriptCommand_JumpIfFlagEqual
@@ -3644,22 +3634,15 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db EVENT_FLAG_1F
 	db $04
 	ask_question_jump Text072b, .check_ifhave_ditto_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	print_text_quit_fully Text072c
 
 .check_ifhave_ditto_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db DITTO
-	dw .check_ifhave_ditto_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0734
+	jump_if_cardowned DITTO, .check_ifhave_ditto_incollectiononly
+	print_text_quit_fully Text0734
 
 .check_ifhave_ditto_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db DITTO
-	dw .do_ditto_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0735
+	jump_if_card_in_collection DITTO, .do_ditto_trade
+	print_text_quit_fully Text0735
 
 .do_ditto_trade
 	run_command ScriptCommand_MaxOutFlagValue
@@ -3678,8 +3661,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db FLYING_PIKACHU
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db FLYING_PIKACHU
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0737
+	print_text_quit_fully Text0737
 
 .ows_dc05
 	run_command ScriptCommand_JumpIfFlagEqual
@@ -3691,22 +3673,15 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db EVENT_FLAG_1F
 	db $06
 	ask_question_jump Text072b, .check_ifhave_chansey_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	print_text_quit_fully Text072c
 
 .check_ifhave_chansey_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db CHANSEY
-	dw .check_ifhave_chansey_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073a
+	jump_if_cardowned CHANSEY, .check_ifhave_chansey_incollectiononly
+	print_text_quit_fully Text073a
 
 .check_ifhave_chansey_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db CHANSEY
-	dw .do_chansey_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073b
+	jump_if_card_in_collection CHANSEY, .do_chansey_trade
+	print_text_quit_fully Text073b
 
 .do_chansey_trade
 	run_command ScriptCommand_MaxOutFlagValue
@@ -3725,14 +3700,12 @@ Script_Ishihara: ; db4a (3:5b4a)
 	db SURFING_PIKACHU2
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db SURFING_PIKACHU2
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073d
+	print_text_quit_fully Text073d
 
 .ows_dc3e
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_39
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073e
+	print_text_quit_fully Text073e
 
 Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
 	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
@@ -3747,18 +3720,15 @@ Script_Ronald: ; dc4b (3:5c4b)
 	dw .ows_dc55
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_FLAG_4E
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073f
+	print_text_quit_fully Text073f
 
 .ows_dc55
 	print_text_string Text0740
 	ask_question_jump Text0741, .ows_dc60
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0742
+	print_text_quit_fully Text0742
 
 .ows_dc60
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0743
+	print_text_quit_fully Text0743
 
 	; could be a commented function, or could be placed by mistake from
 	; someone thinking that the Ronald script ended with more code execution
@@ -3766,8 +3736,7 @@ Script_Ronald: ; dc4b (3:5c4b)
 
 Script_Clerk1: ; dc64 (3:5c64)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text045a
+	print_text_quit_fully Text045a
 
 FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	ld hl, .after_duel_table
@@ -4163,16 +4132,12 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0eb
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $59
-	dw .ows_e0f3
+	jump_if_cardowned $59, .ows_e0f3
 	print_text_string Text0421
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e0f3
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $59
-	dw .ows_e0fb
+	jump_if_card_in_collection $59, .ows_e0fb
 	print_text_string Text0422
 	run_command ScriptCommand_QuitScriptFully
 
@@ -4193,8 +4158,7 @@ Script_Gal1: ; e0cf (3:60cf)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_e10e
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0426
+	print_text_quit_fully Text0426
 
 Script_Lass1: ; e111 (3:6111)
 	start_script
@@ -4219,12 +4183,10 @@ Script_Lass1: ; e111 (3:6111)
 	run_command ScriptCommand_JumpIfFlagNonzero2
 	db EVENT_TEMP_BATTLED_IMAKUNI
 	dw .ows_e12d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0428
+	print_text_quit_fully Text0428
 
 .ows_e12d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0429
+	print_text_quit_fully Text0429
 
 Preload_Man2InWaterClubLobby: ; e130 (3:6130)
 	get_flag_value EVENT_JOSHUA_STATE
@@ -4233,13 +4195,11 @@ Preload_Man2InWaterClubLobby: ; e130 (3:6130)
 
 Script_Man2: ; e137 (3:6137)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text042a
+	print_text_quit_fully Text042a
 
 Script_Pappy2: ; e13b (3:613b)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text042b
+	print_text_quit_fully Text042b
 
 WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
@@ -4296,17 +4256,13 @@ Script_BeatSara: ; e18c (3:618c)
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_BEAT_SARA
 	print_text_string Text0430
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_COLOSSEUM_WATER
-	db BOOSTER_COLOSSEUM_WATER
-	db NO_BOOSTER
+	give_booster_packs BOOSTER_COLOSSEUM_WATER, BOOSTER_COLOSSEUM_WATER, NO_BOOSTER
 	print_text_string Text0431
 	run_command ScriptCommand_QuitScriptFully
 
 Script_LostToSara: ; e19a (03:619a)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0432
+	print_text_quit_fully Text0432
 
 Script_Amanda: ; e19e (03:619e)
 	start_script
@@ -4324,17 +4280,13 @@ Script_BeatAmanda: ; e1b3 (03:61b3)
 	run_command ScriptCommand_MaxOutFlagValue
 	db EVENT_BEAT_AMANDA
 	print_text_string Text0437
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
-	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
-	db NO_BOOSTER
+	give_booster_packs BOOSTER_MYSTERY_LIGHTNING_COLORLESS, BOOSTER_MYSTERY_LIGHTNING_COLORLESS, NO_BOOSTER
 	print_text_string Text0438
 	run_command ScriptCommand_QuitScriptFully
 
 Script_LostToAmanda: ; e1c1 (03:61c1)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0439
+	print_text_quit_fully Text0439
 
 Script_NotReadyToSeeAmy: ; e1c5 (03:61c5)
 	start_script
@@ -4492,10 +4444,7 @@ Script_BeatJoshua: ; e26c (3:626c)
 	db JOSHUA_TALKED
 	dw NO_JUMP
 	print_variable_text Text0445, Text0446
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_WATER_COLORLESS
-	db BOOSTER_MYSTERY_WATER_COLORLESS
-	db NO_BOOSTER
+	give_booster_packs BOOSTER_MYSTERY_WATER_COLORLESS, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
 	run_command ScriptCommand_JumpIfFlagEqual
 	db EVENT_JOSHUA_STATE
 	db JOSHUA_TALKED
@@ -4513,8 +4462,7 @@ Script_BeatJoshua: ; e26c (3:626c)
 	db JOSHUA_BEATEN
 	print_text_string Text0449
 	close_text_box
-	run_command ScriptCommand_MoveActiveNPCByDirection
-	dw NPCMovementTable_e2a1
+	move_active_npc_by_direction NPCMovementTable_e2a1
 	print_text_string Text044a
 	run_command Func_cfc6
 	db $00
@@ -4634,10 +4582,7 @@ Script_BeatAmy: ; e322 (3:6322)
 	db $03
 	print_text_string Text0455
 .beatAmyCommon
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_WATER
-	db BOOSTER_LABORATORY_WATER
-	db NO_BOOSTER
+	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
 	print_text_string Text0456
 	run_command Func_d0d9
 	db $14
@@ -4805,10 +4750,7 @@ Script_Brittany: ; e5d2 (3:65d2)
 Script_BeatBrittany: ; e5ee (3:65ee)
 	start_script
 	print_text_string Text06e5
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_GRASS_COLORLESS
-	db BOOSTER_MYSTERY_GRASS_COLORLESS
-	db NO_BOOSTER
+	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
 	run_command ScriptCommand_JumpIfFlagLessThan
 	db EVENT_FLAG_35
 	db $02
@@ -4837,12 +4779,10 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 
 Script_LostToBrittany: ; e618 (3:6618)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06e9
+	print_text_quit_fully Text06e9
 
 Script_e61c: ; e61c (3:661c)
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ea
+	print_text_quit_fully Text06ea
 
 Script_Lass2: ; e61f (3:661f)
 	start_script
@@ -4870,22 +4810,15 @@ Script_Lass2: ; e61f (3:661f)
 	db EVENT_FLAG_37
 	db $01
 	ask_question_jump Text06ed, .ows_e648
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ee
+	print_text_quit_fully Text06ee
 
 .ows_e648
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $1c
-	dw .ows_e64f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ef
+	jump_if_cardowned $1c, .ows_e64f
+	print_text_quit_fully Text06ef
 
 .ows_e64f
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $1c
-	dw .ows_e656
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f0
+	jump_if_card_in_collection $1c, .ows_e656
+	print_text_quit_fully Text06f0
 
 .ows_e656
 	run_command ScriptCommand_MaxOutFlagValue
@@ -4902,8 +4835,7 @@ Script_Lass2: ; e61f (3:661f)
 	db VILEPLUME
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db VILEPLUME
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	print_text_quit_fully Text06f3
 
 .ows_e66a
 	run_command ScriptCommand_JumpIfFlagEqual
@@ -4915,22 +4847,15 @@ Script_Lass2: ; e61f (3:661f)
 	db EVENT_FLAG_37
 	db $03
 	ask_question_jump Text06ed, .ows_e67f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f6
+	print_text_quit_fully Text06f6
 
 .ows_e67f
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $ab
-	dw .ows_e686
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f7
+	jump_if_cardowned $ab, .ows_e686
+	print_text_quit_fully Text06f7
 
 .ows_e686
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $ab
-	dw .ows_e68d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f8
+	jump_if_card_in_collection $ab, .ows_e68d
+	print_text_quit_fully Text06f8
 
 .ows_e68d
 	run_command ScriptCommand_MaxOutFlagValue
@@ -4947,8 +4872,7 @@ Script_Lass2: ; e61f (3:661f)
 	db PIKACHU3
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db PIKACHU3
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	print_text_quit_fully Text06f3
 
 .ows_e6a1
 	run_command ScriptCommand_JumpIfFlagEqual
@@ -4960,22 +4884,15 @@ Script_Lass2: ; e61f (3:661f)
 	db EVENT_FLAG_37
 	db $05
 	ask_question_jump Text06ed, .ows_e6b6
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06fd
+	print_text_quit_fully Text06fd
 
 .ows_e6b6
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $32
-	dw .ows_e6bd
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06fe
+	jump_if_cardowned CHARIZARD, .ows_e6bd
+	print_text_quit_fully Text06fe
 
 .ows_e6bd
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $32
-	dw .ows_e6c4
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ff
+	jump_if_card_in_collection CHARIZARD, .ows_e6c4
+	print_text_quit_fully Text06ff
 
 .ows_e6c4
 	run_command ScriptCommand_MaxOutFlagValue
@@ -4992,8 +4909,7 @@ Script_Lass2: ; e61f (3:661f)
 	db BLASTOISE
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db BLASTOISE
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	print_text_quit_fully Text06f3
 ; 0xe6d8
 
 Script_Granny2: ; e6d8 (3:66d8)
@@ -5481,7 +5397,7 @@ Script_Ken: ; ef22 (3:6f22)
         run_command ScriptCommand_JumpIfFlagNonzero2
         db EVENT_FLAG_23
         dw .have_300_cards
-        run_command ScriptCommand_CheckRawAmountOfCardsOwned
+        run_command ScriptCommand_CheckAmountOfCardsOwned
         dw 300
         dw .have_300_cards
         run_command ScriptCommand_JumpIfFlagZero1
@@ -5713,24 +5629,19 @@ Script_Clerk9: ; f025 (3:7025)
 	db $01
 	dw .ows_f06c
 .ows_f066
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050a
+	print_text_quit_fully Text050a
 
 .ows_f069
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050b
+	print_text_quit_fully Text050b
 
 .ows_f06c
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050c
+	print_text_quit_fully Text050c
 
 .ows_f06f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050d
+	print_text_quit_fully Text050d
 
 .ows_f072
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050e
+	print_text_quit_fully Text050e
 
 Preload_ChallengeHallNPCs2: ; f075 (3:7075)
 	call Preload_ChallengeHallNPCs1
@@ -5759,33 +5670,27 @@ ChallengeHallLobbyLoadMap: ; f088 (3:7088)
 
 Script_Pappy3: ; f09c (3:709c)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050f
+	print_text_quit_fully Text050f
 
 Script_Gal4: ; f0a0 (3:70a0)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0510
+	print_text_quit_fully Text0510
 
 Script_Champ: ; f0a4 (3:70a4)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0511
+	print_text_quit_fully Text0511
 
 Script_Hood2: ; f0a8 (3:70a8)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0512
+	print_text_quit_fully Text0512
 
 Script_Lass5: ; f0ac (3:70ac)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0513
+	print_text_quit_fully Text0513
 
 Script_Chap5: ; f0b0 (3:70b0)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0514
+	print_text_quit_fully Text0514
 
 Preload_ChallengeHallLobbyRonald1: ; f0b4 (3:70b4)
 	zero_flag_value2 EVENT_FLAG_58
@@ -5903,8 +5808,7 @@ ChallengeHallLoadMap: ; f258 (3:7258)
 
 Script_Clerk13: ; f26c (3:726c)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0525
+	print_text_quit_fully Text0525
 
 Preload_Guide: ; f270 (3:7270)
 	get_flag_value EVENT_FLAG_42
@@ -5923,19 +5827,16 @@ Script_Guide: ; f283 (3:7283)
 	run_command ScriptCommand_JumpIfFlagZero2
 	db EVENT_FLAG_42
 	dw .ows_f28b
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0526
+	print_text_quit_fully Text0526
 
 .ows_f28b
 	run_command ScriptCommand_JumpIfFlagZero1
 	db $3f
 	dw .ows_f292
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0527
+	print_text_quit_fully Text0527
 
 .ows_f292
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0528
+	print_text_quit_fully Text0528
 
 Script_Clerk12: ; f295 (3:7295)
 	start_script
@@ -5975,12 +5876,10 @@ Script_Clerk12: ; f295 (3:7295)
 	dw .ows_f2c7
 
 .ows_f2c1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0529
+	print_text_quit_fully Text0529
 
 .ows_f2c4
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text052a
+	print_text_quit_fully Text052a
 
 .ows_f2c7
 	print_text_string Text052b
@@ -5997,8 +5896,7 @@ Script_Clerk12: ; f295 (3:7295)
 .ows_f2d6
 	print_text_string Text052e
 	ask_question_jump Text052f, .ows_f2e1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0530
+	print_text_quit_fully Text0530
 
 .ows_f2e1
 	run_command ScriptCommand_MaxOutFlagValue
@@ -6725,8 +6623,7 @@ Script_fc52: ; fc52 (3:7c52)
 	run_command ScriptCommand_AskQuestionJumpDefaultYes
 	dw $0000
 	dw .ows_fc5e
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06c9
+	print_text_quit_fully Text06c9
 
 .ows_fc5e
 	run_command Func_cd76
@@ -6790,8 +6687,7 @@ Func_fc7a: ; fc7a (3:7c7a)
 	run_command ScriptCommand_QuitScriptFully
 
 .ows_fcaa
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d2
+	print_text_quit_fully Text06d2
 
 Func_fcad: ; fcad (3:7cad)
 	ld a, [wd10e]
@@ -6819,16 +6715,13 @@ Func_fcad: ; fcad (3:7cad)
 	dw Func_fc7a.ows_fcaa
 
 .ows_fccc
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d3
+	print_text_quit_fully Text06d3
 
 .ows_fccf
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d4
+	print_text_quit_fully Text06d4
 
 .ows_fcd2
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d5
+	print_text_quit_fully Text06d5
 
 .ows_fcd5
 	run_command ScriptCommand_MoveArbitraryNPC
