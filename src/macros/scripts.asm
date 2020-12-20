@@ -181,6 +181,14 @@ jump_if_enough_cards_owned: MACRO
 	dw \1
 	dw \2
 ENDM
+fight_club_pupil_jump: MACRO
+	run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
+	dw \1
+	dw \2
+	dw \3
+	dw \4
+	dw \5
+ENDM
 
 script_jump: MACRO
 	run_command ScriptCommand_Jump
@@ -284,8 +292,8 @@ ENDM
 
 ask_question_jump_default_yes: MACRO
 	run_command ScriptCommand_AskQuestionJumpDefaultYes
-IF \1 == 0
-	dw 0000
+IF ISCONST(\1)
+	dw \1
 ELSE
 	tx \1
 ENDC
@@ -339,6 +347,34 @@ jump_if_flag_not_less_than: MACRO
 	db \1
 	db \2
 	dw \3
+ENDM
+jump_if_flag_less_than: MACRO
+	run_command ScriptCommand_JumpIfFlagLessThan
+	db \1
+	db \2
+	dw \3
+ENDM
+max_out_flag_value: MACRO
+	run_command ScriptCommand_MaxOutFlagValue
+	db \1
+ENDM
+zero_out_flag_value: MACRO
+	run_command ScriptCommand_ZeroOutFlagValue
+	db \1
+ENDM
+jump_if_flag_zero_2: MACRO
+	run_command ScriptCommand_JumpIfFlagZero2
+	db \1
+	dw \2
+ENDM
+jump_if_flag_nonzero_2: MACRO
+	run_command ScriptCommand_JumpIfFlagNonzero2
+	db \1
+	dw \2
+ENDM
+script_increment_flag_value: MACRO
+	run_command ScriptCommand_IncrementFlagValue
+	db \1
 ENDM
 
 

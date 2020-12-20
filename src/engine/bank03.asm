@@ -3339,10 +3339,8 @@ Script_d827: ; d827 (3:5827)
 	
 AfterTutorialBattleScript: ; d834 (3:5834)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text05eb
-	run_command ScriptCommand_PrintTextString
-	tx Text05ef
+	print_text_string Text05eb
+	print_text_string Text05ef
 	close_text_box
 	move_active_npc NPCMovement_d896
 	set_player_direction NORTH
@@ -3353,14 +3351,12 @@ AfterTutorialBattleScript: ; d834 (3:5834)
 	move_player EAST, 1
 	move_player EAST, 1
 	set_player_direction NORTH
-	run_command ScriptCommand_PrintTextString
-	tx Text05f0
+	print_text_string Text05f0
 	close_text_box
 	run_command Func_ccdc
 	tx Text05f1
 	close_text_box
-	run_command ScriptCommand_PrintTextString
-	tx Text05f2
+	print_text_string Text05f2
 	run_command Func_d271
 ; 0xd860
 	
@@ -3426,9 +3422,7 @@ Script_d932: ; d932 (3:5932)
 	start_script
 	run_command Func_ccdc
 	tx Text0605
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text0606
-	dw .ows_d93c
+	ask_question_jump_default_yes Text0606, .ows_d93c
 	quit_script_fully
 
 .ows_d93c
@@ -3461,22 +3455,13 @@ Preload_IshiharaInIshiharasHouse: ; db3d (3:5b3d)
 
 Script_Ishihara: ; db4a (3:5b4a)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_1D
+	max_out_flag_value EVENT_FLAG_1D
 	jump_if_flag_equal EVENT_FLAG_1F, $00, .ows_db80
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_39
-	dw .ows_db5a
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_dc3e
+	jump_if_flag_nonzero_2 EVENT_FLAG_39, .ows_db5a
+	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_dc3e
 .ows_db5a
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_00
-	dw .ows_db90
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_38
-	dw .ows_db90
+	jump_if_flag_nonzero_2 EVENT_FLAG_00, .ows_db90
+	jump_if_flag_zero_2 EVENT_FLAG_38, .ows_db90
 	jump_if_flag_equal EVENT_FLAG_1F, $01, .ows_db93
 	jump_if_flag_equal EVENT_FLAG_1F, $02, .ows_db93
 	jump_if_flag_equal EVENT_FLAG_1F, $03, .ows_dbcc
@@ -3484,16 +3469,11 @@ Script_Ishihara: ; db4a (3:5b4a)
 	jump_if_flag_equal EVENT_FLAG_1F, $05, .ows_dc05
 	jump_if_flag_equal EVENT_FLAG_1F, $06, .ows_dc05
 .ows_db80
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
+	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $01
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_db8d
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_39
+	zero_out_flag_value EVENT_FLAG_38
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_db8d
+	max_out_flag_value EVENT_FLAG_39
 .ows_db8d
 	print_text_quit_fully Text0727
 
@@ -3516,11 +3496,9 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text072e
 
 .do_clefable_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
+	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
+	zero_out_flag_value EVENT_FLAG_38
 	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text0730
@@ -3545,11 +3523,9 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text0735
 
 .do_ditto_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
+	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $05
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
+	zero_out_flag_value EVENT_FLAG_38
 	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text0736
@@ -3574,11 +3550,9 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text073b
 
 .do_chansey_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
+	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $07
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
+	zero_out_flag_value EVENT_FLAG_38
 	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text073c
@@ -3588,8 +3562,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text073d
 
 .ows_dc3e
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_39
+	max_out_flag_value EVENT_FLAG_39
 	print_text_quit_fully Text073e
 
 Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
@@ -3600,11 +3573,8 @@ Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
 
 Script_Ronald: ; dc4b (3:5c4b)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_4E
-	dw .ows_dc55
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_4E
+	jump_if_flag_nonzero_2 EVENT_FLAG_4E, .ows_dc55
+	max_out_flag_value EVENT_FLAG_4E
 	print_text_quit_fully Text073f
 
 .ows_dc55
@@ -3640,12 +3610,9 @@ Script_Man1: ; dc76 (3:5c76)
 Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
 	script_set_flag_value EVENT_IMAKUNI_STATE, IMAKUNI_TALKED
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_TEMP_TALKED_TO_IMAKUNI
-	dw NO_JUMP
+	jump_if_flag_zero_2 EVENT_TEMP_TALKED_TO_IMAKUNI, NO_JUMP
 	print_variable_text Text0467, Text0468
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_TEMP_TALKED_TO_IMAKUNI
+	max_out_flag_value EVENT_TEMP_TALKED_TO_IMAKUNI
 	ask_question_jump Text0469, .declineDuel
 	print_text_string Text046a
 	quit_script_fully
@@ -3658,8 +3625,7 @@ Script_Imakuni: ; dd0d (3:5d0d)
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $07, .giveBoosters
-	run_command ScriptCommand_IncrementFlagValue
-	db EVENT_IMAKUNI_WIN_COUNT
+	script_increment_flag_value EVENT_IMAKUNI_WIN_COUNT
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $03, .threeWins
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $06, .sixWins
 .giveBoosters
@@ -3697,8 +3663,7 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 .ows_dd6e
 	move_active_npc NPCMovement_dd78
 	run_command Func_cdcb
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_TEMP_BATTLED_IMAKUNI
+	max_out_flag_value EVENT_TEMP_BATTLED_IMAKUNI
 	run_command Func_d408
 	db $09
 	run_command Func_d41d
@@ -3760,124 +3725,80 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 Script_Mitch: ; ddc3 (3:5dc3)
 	start_script
 	try_give_pc_pack $02
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_AlreadyHaveMedal
-	run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
-	dw .first_interaction
-	dw .three_pupils_remaining
-	dw .two_pupils_remaining
-	dw .one_pupil_remaining
-	dw .all_pupils_defeated
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_AlreadyHaveMedal
+	fight_club_pupil_jump .first_interaction, .three_pupils_remaining, \
+		.two_pupils_remaining, .one_pupil_remaining, .all_pupils_defeated
 .first_interaction
-	run_command ScriptCommand_PrintTextString
-	tx Text0477
+	print_text_string Text0477
 	script_set_flag_value EVENT_FLAG_11, $01
 	script_set_flag_value EVENT_FLAG_17, $01
 	script_set_flag_value EVENT_FLAG_20, $01
 	quit_script_fully
 ; 0xdde2
 .three_pupils_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0478
+	print_text_quit_fully Text0478
 ; 0xdde5
 .two_pupils_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0479
+	print_text_quit_fully Text0479
 ; 0xdde8
 .one_pupil_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text047a
+	print_text_quit_fully Text047a
 ; 0xddeb
 .all_pupils_defeated
-	run_command ScriptCommand_PrintTextString
-	tx Text047b
-	run_command ScriptCommand_AskQuestionJump
-	tx Text047c
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text047d
+	print_text_string Text047b
+	ask_question_jump Text047c, .do_battle
+	print_text_string Text047d
 	quit_script_fully
 ; 0xddf7
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text047e
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRST_STRIKE_DECK_ID
-	db MUSIC_DUEL_THEME_2
+	print_text_string Text047e
+	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 ; 0xddff
 
 Script_BeatMitch: ; ddff (3:5dff)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_GiveBoosters
-	run_command ScriptCommand_PrintTextString
-	tx Text047f
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_0F
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_GiveBoosters
+	print_text_string Text047f
+	max_out_flag_value EVENT_FLAG_0F
 	try_give_medal_pc_packs
 	run_command Func_d125
 	db $0f
 	run_command Func_d435
 	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0480
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_NEUTRAL
-	db BOOSTER_LABORATORY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0481
+	print_text_string Text0480
+	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
+	print_text_string Text0481
 	quit_script_fully
 ; 0xde19
 
 Script_LoseToMitch: ; de19 (3:5e19)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_PrintTrainHarderText
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0482
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_PrintTrainHarderText
+	print_text_quit_fully Text0482
 ; 0xde21
 
 Script_Mitch_AlreadyHaveMedal: ; 0xde21
-	run_command ScriptCommand_PrintTextString
-	tx Text0483
-	run_command ScriptCommand_AskQuestionJump
-	tx Text047c
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text0484
+	print_text_string Text0483
+	ask_question_jump Text047c, .do_battle
+	print_text_string Text0484
 	quit_script_fully
 ; 0xde2d
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text0485
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRST_STRIKE_DECK_ID
-	db MUSIC_DUEL_THEME_2
+	print_text_string Text0485
+	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 ; 0xde35
 
 Script_Mitch_GiveBoosters:
-	run_command ScriptCommand_PrintTextString
-	tx Text0486
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_NEUTRAL
-	db BOOSTER_LABORATORY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0487
+	print_text_string Text0486
+	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
+	print_text_string Text0487
 	quit_script_fully
 ; 0xde40
 
 Script_Mitch_PrintTrainHarderText:
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0488
+	print_text_quit_fully Text0488
 ; 0xde43
 
 	INCROM $de43, $ded1
@@ -4013,9 +3934,7 @@ Script_Lass1: ; e111 (3:6111)
 
 .ows_e121
 	jump_if_flag_not_equal EVENT_IMAKUNI_ROOM, IMAKUNI_WATER_CLUB, .ows_e12d
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_TEMP_BATTLED_IMAKUNI
-	dw .ows_e12d
+	jump_if_flag_nonzero_2 EVENT_TEMP_BATTLED_IMAKUNI, .ows_e12d
 	print_text_quit_fully Text0428
 
 .ows_e12d
@@ -4086,8 +4005,7 @@ Script_Sara: ; e177 (3:6177)
 
 Script_BeatSara: ; e18c (3:618c)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_SARA
+	max_out_flag_value EVENT_BEAT_SARA
 	print_text_string Text0430
 	give_booster_packs BOOSTER_COLOSSEUM_WATER, BOOSTER_COLOSSEUM_WATER, NO_BOOSTER
 	print_text_string Text0431
@@ -4110,8 +4028,7 @@ Script_Amanda: ; e19e (03:619e)
 
 Script_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_AMANDA
+	max_out_flag_value EVENT_BEAT_AMANDA
 	print_text_string Text0437
 	give_booster_packs BOOSTER_MYSTERY_LIGHTNING_COLORLESS, BOOSTER_MYSTERY_LIGHTNING_COLORLESS, NO_BOOSTER
 	print_text_string Text0438
@@ -4191,12 +4108,8 @@ NPCMovement_e219: ; e219 (3:6219)
 
 Script_Joshua: ; e21c (3:621c)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_BEAT_AMANDA
-	dw .sara_and_amanda_not_beaten
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_BEAT_SARA
-	dw .sara_and_amanda_not_beaten
+	jump_if_flag_zero_2 EVENT_BEAT_AMANDA, .sara_and_amanda_not_beaten
+	jump_if_flag_zero_2 EVENT_BEAT_SARA, .sara_and_amanda_not_beaten
 	script_jump .beat_sara_and_amanda
 .sara_and_amanda_not_beaten
 	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_TALKED
@@ -4316,9 +4229,7 @@ Script_MeetAmy: ; e2d1 (3:62d1)
 
 Script_Amy: ; e304 (3:6304)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_BEAT_AMY
-	dw ScriptJump_TalkToAmyAgain
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, ScriptJump_TalkToAmyAgain
 	print_text_string Text044f
 .askConfirmDuel
 	ask_question_jump Text0450, .startDuel
@@ -4339,12 +4250,9 @@ Script_Amy: ; e304 (3:6304)
 Script_BeatAmy: ; e322 (3:6322)
 	start_script
 	print_text_string Text0453
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_BEAT_AMY
-	dw .beatAmyCommon
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, .beatAmyCommon
 	print_text_string Text0454
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_AMY
+	max_out_flag_value EVENT_BEAT_AMY
 	try_give_medal_pc_packs
 	run_command Func_d125
 	db EVENT_BEAT_AMY
@@ -4502,10 +4410,7 @@ GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 
 Script_Brittany: ; e5d2 (3:65d2)
 	start_script
-	run_command ScriptCommand_JumpIfFlagLessThan
-	db EVENT_FLAG_35
-	db $01
-	dw NO_JUMP
+	jump_if_flag_less_than EVENT_FLAG_35, $01, NO_JUMP
 	print_variable_text Text06e0, Text06e1
 	ask_question_jump Text06e2, .wantToDuel
 	print_text_string Text06e3
@@ -4520,23 +4425,14 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	start_script
 	print_text_string Text06e5
 	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
-	run_command ScriptCommand_JumpIfFlagLessThan
-	db EVENT_FLAG_35
-	db $02
-	dw NO_JUMP
+	jump_if_flag_less_than EVENT_FLAG_35, $02, NO_JUMP
 	print_variable_text Text06e6, Text06e7
-	run_command ScriptCommand_MaxOutFlagValue
-	db FLAG_BEAT_BRITTANY
+	max_out_flag_value FLAG_BEAT_BRITTANY
 	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .finishScript
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_3A
-	dw .finishScript
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_3B
-	dw .finishScript
+	jump_if_flag_zero_2 EVENT_FLAG_3A, .finishScript
+	jump_if_flag_zero_2 EVENT_FLAG_3B, .finishScript
 	script_set_flag_value EVENT_FLAG_35, $01
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_1E
+	max_out_flag_value EVENT_FLAG_1E
 	print_text_string Text06e8
 .finishScript
 	quit_script_fully
@@ -4550,9 +4446,7 @@ Script_e61c: ; e61c (3:661c)
 
 Script_Lass2: ; e61f (3:661f)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_04
-	dw Script_e61c
+	jump_if_flag_nonzero_2 EVENT_FLAG_04, Script_e61c
 	jump_if_flag_not_less_than EVENT_FLAG_37, $06, Script_e61c
 	jump_if_flag_not_less_than EVENT_FLAG_37, $04, .ows_e6a1
 	jump_if_flag_not_less_than EVENT_FLAG_37, $02, .ows_e66a
@@ -4571,8 +4465,7 @@ Script_Lass2: ; e61f (3:661f)
 	print_text_quit_fully Text06f0
 
 .ows_e656
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
+	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $02
 	print_text_string Text06f1
 	run_command Func_ccdc
@@ -4598,8 +4491,7 @@ Script_Lass2: ; e61f (3:661f)
 	print_text_quit_fully Text06f8
 
 .ows_e68d
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
+	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $04
 	print_text_string Text06f9
 	run_command Func_ccdc
@@ -4625,8 +4517,7 @@ Script_Lass2: ; e61f (3:661f)
 	print_text_quit_fully Text06ff
 
 .ows_e6c4
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
+	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $06
 	print_text_string Text0700
 	run_command Func_ccdc
@@ -4715,8 +4606,7 @@ Script_Lad3: ; e850 (3:6850)
 
 Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_4B
+	max_out_flag_value EVENT_FLAG_4B
 	move_active_npc NPCMovement_e894
 	run_command Func_d135
 	db $00
@@ -5073,66 +4963,41 @@ Script_Jonathan: ; eefd (3:6efd)
 Script_Ken: ; ef22 (3:6f22)
 	start_script
 	try_give_pc_pack $09
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_23
-	dw .have_300_cards
+	jump_if_flag_nonzero_2 EVENT_FLAG_23, .have_300_cards
 	jump_if_enough_cards_owned 300, .have_300_cards
 	jump_if_flag_zero_1 EVENT_FLAG_24, NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06ba
-	tx Text06bb
+	print_variable_text Text06ba, Text06bb
 	script_set_flag_value EVENT_FLAG_24, $01
 	quit_script_fully
 .have_300_cards
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_23
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0A
-	dw Script_KenBattle_AlreadyHaveMedal
+	max_out_flag_value EVENT_FLAG_23
+	jump_if_flag_nonzero_2 EVENT_FLAG_0A, Script_KenBattle_AlreadyHaveMedal
 	jump_if_flag_zero_1 EVENT_FLAG_24, NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06bc
-	tx Text06bd
+	print_variable_text Text06bc, Text06bd
 	script_set_flag_value EVENT_FLAG_24, $01
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06be
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06bf
+	ask_question_jump Text06be, .do_battle
+	print_text_string Text06bf
 	quit_script_fully
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06c0
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRE_CHARGE_DECK_ID
-	db MUSIC_DUEL_THEME_2
+	print_text_string Text06c0
+	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 ; 0xef5e
 
 Script_BeatKen: ; ef5e (3:6f5e)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text06c1
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0A
-	dw .give_booster_packs
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_0A
+	print_text_string Text06c1
+	jump_if_flag_nonzero_2 EVENT_FLAG_0A, .give_booster_packs
+	max_out_flag_value EVENT_FLAG_0A
 	try_give_medal_pc_packs
 	run_command Func_d125
 	db $0a
 	run_command Func_d435
 	db $08
-	run_command ScriptCommand_PrintTextString
-	tx Text06c2
+	print_text_string Text06c2
 .give_booster_packs
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_NEUTRAL
-	db BOOSTER_MYSTERY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text06c3
+	give_booster_packs BOOSTER_MYSTERY_NEUTRAL, BOOSTER_MYSTERY_NEUTRAL, NO_BOOSTER
+	print_text_string Text06c3
 	quit_script_fully
 ; 0xef78
 
@@ -5140,30 +5005,18 @@ Script_BeatKen: ; ef5e (3:6f5e)
 
 Script_LoseToKen: ; ef78 (3:6f78)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_0A
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06c4
-	tx Text06c5
+	jump_if_flag_zero_2 EVENT_FLAG_0A, NO_JUMP
+	print_variable_text Text06c4, Text06c5
 	quit_script_fully
 ; 0xef83
 
 Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
-	run_command ScriptCommand_PrintTextString
-	tx Text06c6
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06be
-	dw .do_battle
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06bf
+	print_text_string Text06c6
+	ask_question_jump Text06be, .do_battle
+	print_text_quit_fully Text06bf
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06c7
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRE_CHARGE_DECK_ID
-	db MUSIC_DUEL_THEME_2
+	print_text_string Text06c7
+	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 ; 0xef96
 
@@ -5455,9 +5308,7 @@ Preload_Guide: ; f270 (3:7270)
 
 Script_Guide: ; f283 (3:7283)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_42
-	dw .ows_f28b
+	jump_if_flag_zero_2 EVENT_FLAG_42, .ows_f28b
 	print_text_quit_fully Text0526
 
 .ows_f28b
@@ -5501,8 +5352,7 @@ Script_Clerk12: ; f295 (3:7295)
 	print_text_quit_fully Text0530
 
 .ows_f2e1
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_59
+	max_out_flag_value EVENT_FLAG_59
 	print_text_string Text0531
 	close_text_box
 	move_active_npc NPCMovement_f349
@@ -5526,11 +5376,8 @@ Script_Clerk12: ; f295 (3:7295)
 	move_player NORTH, 1
 	move_player NORTH, 1
 	move_player NORTH, 1
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_43
-	dw .ows_f33a
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_43
+	jump_if_flag_nonzero_2 EVENT_FLAG_43, .ows_f33a
+	max_out_flag_value EVENT_FLAG_43
 	move_player NORTH, 1
 	move_player NORTH, 1
 	set_player_direction EAST
@@ -5656,14 +5503,12 @@ LostAtChallengeHall: ; f392 (3:7392)
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f3d9
 	script_set_flag_value EVENT_FLAG_3F, $03
 	script_set_flag_value EVENT_FLAG_48, $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_51
+	zero_out_flag_value EVENT_FLAG_51
 	script_jump .ows_f3e2
 .ows_f3ce
 	script_set_flag_value EVENT_FLAG_40, $03
 	script_set_flag_value EVENT_FLAG_49, $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_55
+	zero_out_flag_value EVENT_FLAG_55
 	script_jump .ows_f3e2
 .ows_f3d9
 	script_set_flag_value EVENT_FLAG_41, $03
@@ -5767,12 +5612,9 @@ WonAtChallengeHall: ; f441 (3:7441)
 .ows_f4a1
 	print_text_string Text0544
 .ows_f4a4
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_47
+	zero_out_flag_value EVENT_FLAG_47
 	print_text_string Text0545
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text0546
-	dw .ows_f4bd
+	ask_question_jump_default_yes Text0546, .ows_f4bd
 	jump_if_flag_equal EVENT_FLAG_45, $02, NO_JUMP
 	print_variable_text Text0547, Text0548
 	run_command Func_cd4f
@@ -5783,8 +5625,7 @@ WonAtChallengeHall: ; f441 (3:7441)
 .ows_f4bd
 	print_text_string Text0549
 	close_text_box
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_47
+	max_out_flag_value EVENT_FLAG_47
 	run_command Func_d1ad
 	close_text_box
 	script_jump .ows_f4a4
@@ -5972,11 +5813,8 @@ HallOfHonorLoadMap: ; fbdb (3:7bdb)
 
 Script_fbf1: ; fbf1 (3:7bf1)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_fc10
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_RECEIVED_LEGENDARY_CARD
+	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_fc10
+	max_out_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	run_command Func_ccdc
 	tx Text05b8
 	give_card ZAPDOS3
@@ -6083,9 +5921,7 @@ Func_fc7a: ; fc7a (3:7c7a)
 	db $00
 	jump_if_flag_not_less_than EVENT_FLAG_72, $04, Func_fc7a.ows_fcaa
 	print_text_string Text06ce
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text06cf
-	dw .ows_fca0
+	ask_question_jump_default_yes Text06cf, .ows_fca0
 	print_text_string Text06d0
 	script_jump Func_fc7a.ows_fcaa
 
