@@ -62,7 +62,7 @@ ENDM
 	const Func_d244_index                                                    ; $36
 	const ScriptCommand_ChooseDeckToDuelAgainstMultichoice_index             ; $37
 	const ScriptCommand_OpenDeckMachine_index                                ; $38
-	const ScriptCommand_ChooseStarterDeckMultichoice_index       ; $39
+	const ScriptCommand_ChooseStarterDeckMultichoice_index                   ; $39
 	const ScriptCommand_EnterMap_index                                       ; $3a
 	const ScriptCommand_MoveArbitraryNPC_index                               ; $3b
 	const Func_d209_index                                                    ; $3c

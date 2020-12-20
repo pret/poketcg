@@ -2107,7 +2107,7 @@ ScriptCommand_MoveWramNPC: ; ce52 (3:4e52)
 
 ; Executes movement on an arbitrary NPC using values in a and on the stack
 ; Changes and fixes Temp NPC using stack values
-ExecuteArbitraryNPCMovementFromStack:
+ExecuteArbitraryNPCMovementFromStack: ; ce5d (3:4e5d)
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call ExecuteNPCMovement
@@ -2871,13 +2871,13 @@ ScriptCommand_ShowSamTutorialMultichoice: ; d317 (3:5317)
 	set_flag_value EVENT_FLAG_75
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args: ; d32b (3:532b)
+.multichoice_menu_args ; d32b (3:532b)
 	dw $0000 ; NPC title for textbox under menu
 	dw $0000 ; text for textbox under menu
 	dw SamTutorialMultichoice_ConfigurationTable ; location of table configuration in bank 4
 	db $07 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
-	dw $0000
+	dw $0000 ; location of table containing text entries
 
 ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	push bc
@@ -3149,7 +3149,7 @@ ScriptCommand_JumpIfFlagNonzero2: ; d4ca (3:54ca)
 .noJumpArgs
 	jp IncreaseScriptPointerBy4
 
-ScriptCommand_JumpIfFlagZero2:
+ScriptCommand_JumpIfFlagZero2: ; d4df (3:54df)
 	ld a, c
 	call GetEventFlagValue
 	or a
@@ -3381,7 +3381,7 @@ Script_d827: ; d827 (3:5827)
 ; 0xd82d
 
 	INCROM $d82d, $d834
-	
+
 AfterTutorialBattleScript: ; d834 (3:5834)
 	start_script
 	print_text_string Text05eb
@@ -3454,7 +3454,7 @@ NPCMovement_d88b: ; d88b (3:588b)
 NPCMovement_d894: ; d894 (4:5894)
 	db SOUTH | NO_MOVE
 	db $ff
-	
+
 NPCMovement_d896: ; d896 (3:5896)
 	db NORTH
 	db NORTH
@@ -3660,6 +3660,7 @@ FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+
 .after_duel_table
 	db NPC_IMAKUNI
 	db NPC_IMAKUNI
@@ -3752,7 +3753,6 @@ Script_Butch: ; dd8d (3:5d8d)
 
 Script_Granny1: ; dd9f (3:5d9f)
 	INCROM $dd9f, $dda3
-
 
 
 FightingClubAfterDuel: ; dda3 (3:5da3)
@@ -3865,10 +3865,9 @@ Script_Mitch_PrintTrainHarderText:
 ; 0xde43
 
 	INCROM $de43, $ded1
-  
+
 Script_Clerk2: ; ded1 (3:5ed1)
 	INCROM $ded1, $ded5
-
 
 RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	ld hl, .after_duel_table
@@ -3877,7 +3876,6 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 ; 0xdedc
 
 .after_duel_table
-
 	db NPC_CHRIS
 	db NPC_CHRIS
 	dw $5f0c
@@ -3891,7 +3889,7 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 ; 0xdee9
 
 	INCROM $dee9, $def2
-  
+
 Script_Chris: ; def2 (3:5ef2)
 	INCROM $def2, $df39
 
@@ -3919,7 +3917,7 @@ Script_Gene: ; e03e (3:603e)
 Script_Clerk3: ; e09e (3:609e)
 	INCROM $e09e, $e0a2
 
-  
+
 WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
@@ -3933,7 +3931,6 @@ WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	dw Script_LostToImakuni
 	db $00
 ; 0xe0b0
-
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4822,16 +4819,16 @@ PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	db $00
 
 	INCROM $e971, $e980
-  
+
 Script_Robert: ; e980 (3:6980)
 	INCROM $e980, $e9a5
-  
+
 Script_Pappy1: ; e9a5 (3:69a5)
 	INCROM $e9a5, $ea30
 
 Script_Gal3: ; ea30 (3:6a30)
 	INCROM $ea30, $ea3b
-  
+
 Script_Chap4: ; ea3b (3:6a3b)
 	INCROM $ea3b, $ea60
 
@@ -4840,13 +4837,13 @@ Script_Daniel: ; ea60 (3:6a60)
 
 Script_Stephanie: ; eaa2 (3:6aa2)
 	INCROM $eaa2, $eadf
-  
+
 Script_Murray2: ; eadf (3:6adf)
 	INCROM $eadf, $eadf
 
 Script_Murray1: ; eadf (3:6adf)
 	INCROM $eadf, $eb53
-  
+
 Script_Clerk7: ; eb53 (3:6b53)
 	INCROM $eb53, $eb57
 
@@ -4858,7 +4855,6 @@ ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 ; 0xeb5e
 
 .after_duel_table
-	
 	db NPC_IMAKUNI
 	db NPC_IMAKUNI
 	dw Script_BeatImakuni
@@ -4867,7 +4863,7 @@ ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 ; 0xeb65
 
 	INCROM $eb65, $eb84
-  
+
 Script_Lad1: ; eb84 (3:6b84)
 	INCROM $eb84, $ebc1
 
@@ -4993,18 +4989,18 @@ FireClubAfterDuel: ;ee93  (3:6e93)
 .after_duel_table
 	db NPC_JOHN
 	db NPC_JOHN
-	dw $6ec8 
+	dw $6ec8
 	dw $6ed4
- 
+
 	db NPC_ADAM
 	db NPC_ADAM
-	dw $6eed 
-	dw $6ef9 
+	dw $6eed
+	dw $6ef9
 
 	db NPC_JONATHAN
 	db NPC_JONATHAN
-	dw $6f12 
-	dw $6f1e 
+	dw $6f12
+	dw $6f1e
 
 	db NPC_KEN
 	db NPC_KEN
