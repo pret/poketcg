@@ -858,12 +858,12 @@ NidoranFCard: ; 31134 (c:5134)
 
 	; move 1
 	energy GRASS, 1 ; energies
-	tx FurySweepesName ; name
+	tx FurySwipesName ; name
 	tx TripleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_X ; category
-	dw NidoranFFurySweepesEffectCommands ; effect commands
+	dw NidoranFFurySwipesEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -3320,12 +3320,12 @@ PsyduckCard: ; 31d64 (c:5d64)
 
 	; move 2
 	energy WATER, 1 ; energies
-	tx FurySweepesName ; name
+	tx FurySwipesName ; name
 	tx TripleAttackX10Description ; description
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_X ; category
-	dw PsyduckFurySweepesEffectCommands ; effect commands
+	dw PsyduckFurySwipesEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -5972,12 +5972,12 @@ SandslashCard: ; 32a98 (c:6a98)
 
 	; move 2
 	energy FIGHTING, 2 ; energies
-	tx FurySweepesName ; name
+	tx FurySwipesName ; name
 	tx TripleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_X ; category
-	dw SandslashFurySweepesEffectCommands ; effect commands
+	dw SandslashFurySwipesEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -6162,12 +6162,12 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 
 	; move 1
 	energy FIGHTING, 2 ; energies
-	tx FurySweepesName ; name
+	tx FurySwipesName ; name
 	tx TripleAttackX20Description ; description
 	dw NONE ; description (cont)
 	db 20 ; damage
 	db DAMAGE_X ; category
-	dw PrimeapeFurySweepesEffectCommands ; effect commands
+	dw PrimeapeFurySwipesEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3

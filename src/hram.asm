@@ -77,12 +77,15 @@ hOppActionTableIndex:: ; ff9e
 hTempCardIndex_ff9f:: ; ff9f
 	ds $1
 
+UNION
+
 ; multipurpose temp storage (card's deck index, selected move index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
 hTempPlayAreaLocation_ffa1:: ; ffa1
+
 ; parameter to be used by the AI's Pkmn Power effect
 hAIPkmnPowerEffectParam:: ; ffa1
 	ds $1
@@ -99,16 +102,24 @@ NEXTU
 ; the deck index (0-59) of the energy card to transfer
 ; and the Play Area location (PLAY_AREA_*) of card to receive that energy card.
 hAIEnergyTransEnergyCard:: ; ffa2
+
+; PLAY_AREA_*  of target selected for some Pkmn Powers,
+; (e.g. Curse, Damage Swap) and for trainer card effect.
+hPlayAreaEffectTarget:: ; ffa2
 	ds $1
+
 hAIEnergyTransPlayAreaLocation:: ; ffa3
 	ds $1
 
+ENDU
+
 NEXTU
 
-; Play Area location (PLAY_AREA_*) of card
-; chosen by AI to use Heal Pkmn Power on.
-hAIHealCard:: ; ffa2
-	ds $1
+; list of various items, such as
+; cards selected for various effects,
+; Play Area locations, etc.
+hTempList:: ; ffa0
+	ds $8
 
 ENDU
 
@@ -153,7 +164,11 @@ hffb0:: ; ffb0
 hCurMenuItem:: ; ffb1
 	ds $1
 
-	ds $3
+; stores the item number in the selection menu of various effects
+hCurSelectionItem:: ; ffb2
+	ds $1
+
+	ds $2
 
 hffb5:: ; ffb5
 	ds $1

@@ -3604,6 +3604,7 @@ GetCardIDFromDeckIndex: ; 1324 (0:1324)
 	ret
 
 ; remove card c from wDuelTempList (it contains a $ff-terminated list of deck indexes)
+; returns carry if no matches were found.
 RemoveCardFromDuelTempList: ; 132f (0:132f)
 	push hl
 	push de
@@ -3703,9 +3704,9 @@ LoadCardDataToBuffer2_FromDeckIndex: ; 138c (0:138c)
 	ret
 
 ; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
-; into another turn holder's Pokemon card identifier by it's deck index (0-59) in hTempCardIndex_ff98.
-; return nc if evolution was succesful.
-EvolvePokemonCard: ; 13a2 (0:13a2)
+; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
+; return nc if evolution was successful.
+EvolvePokemonCardIfPossible: ; 13a2 (0:13a2)
 	; first make sure the attempted evolution is viable
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
@@ -3713,7 +3714,12 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld e, a
 	call CheckIfCanEvolveInto
 	ret c ; return if it's not capable of evolving into the selected Pokemon
-	; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
+;	fallthrough
+
+; evolve a turn holder's Pokemon card in the play area slot determined by hTempPlayAreaLocation_ff9d
+; into another turn holder's Pokemon card identifier by its deck index (0-59) in hTempCardIndex_ff98.
+EvolvePokemonCard: ; 13ac (0:13ac)
+; place the evolved Pokemon card in the play area location of the pre-evolved Pokemon card
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld e, a
 	add DUELVARS_ARENA_CARD
@@ -3738,7 +3744,7 @@ EvolvePokemonCard: ; 13a2 (0:13a2)
 	ld [hl], a
 	; reset status (if in arena) and set the flag that prevents it from evolving again this turn
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	ld l, a
 	ld [hl], $00
 	ld a, e
@@ -3785,7 +3791,7 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	jr nz, .cant_evolve ; jump if they are incompatible to evolve
 	pop de
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and CAN_EVOLVE_THIS_TURN
 	jr nz, .can_evolve
@@ -3810,7 +3816,7 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 ; return carry if not basic to stage 2 evolution, or if evolution not possible this turn.
 CheckIfCanEvolveInto_BasicToStage2: ; 142b (0:142b)
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and CAN_EVOLVE_THIS_TURN
 	jr nz, .can_evolve
@@ -3904,7 +3910,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld l, a
 	ld a, [wLoadedCard2HP]
 	ld [hl], a ; set card's HP
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	add e
 	ld l, a
 	ld [hl], $0
@@ -4051,7 +4057,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_HP
 	call .swap_duelvar
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call .swap_duelvar
@@ -4379,7 +4385,7 @@ Func_16f6: ; 16f6 (0:16f6)
 	ld [wEffectFailed], a
 	ld [wIsDamageToSelf], a
 	ld [wccef], a
-	ld [wccf0], a
+	ld [wMetronomeEnergyCost], a
 	ld [wNoEffectFromStatus], a
 	bank1call ClearNonTurnTemporaryDuelvars_CopyStatus
 	ret
@@ -4690,7 +4696,10 @@ LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ld [de], a
 	ret
 
-Func_1955: ; 1955 (0:1955)
+; inflict recoil damage to self
+; input:
+;	a = damage to deal
+DealRecoilDamageToSelf: ; 1955 (0:1955)
 	push af
 	ld a, $7a
 	ld [wLoadedMoveAnimation], a
@@ -4965,10 +4974,18 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 ; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
 ; damage to deal is given in de.
 ; shows the defending player's play area screen when dealing the damage
-; instead of the main duel interface, and has a fixed move animation.
-DealDamageToPlayAreaPokemon: ; 1af3 (0:1af3)
+; instead of the main duel interface with regular attack animation.
+DealDamageToPlayAreaPokemon_RegularAnim: ; 1af3 (0:1af3)
 	ld a, $78
 	ld [wLoadedMoveAnimation], a
+;	fallthrough
+
+; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
+; damage to deal is given in de.
+; shows the defending player's play area screen when dealing the damage
+; instead of the main duel interface.
+; plays animation that is loaded in wLoadedMoveAnimation.
+DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 	ld a, b
 	ld [wTempPlayAreaLocation_cceb], a
 	or a ; cp PLAY_AREA_ARENA
@@ -5172,9 +5189,13 @@ MoveCardToDiscardPileIfInArena: ; 1c13 (0:1c13)
 	jr c, .next_card
 	ret
 
-; calculate damage of card at CARD_LOCATION_* in e
-; return the result in a
-GetCardDamage: ; 1c35 (0:1c35)
+; calculate damage and max HP of card at PLAY_AREA_* in e.
+; input:
+;	e = PLAY_AREA_* of card;
+; output:
+;	a = damage;
+;	c = max HP.
+GetCardDamageAndMaxHP: ; 1c35 (0:1c35)
 	push hl
 	push de
 	ld a, DUELVARS_ARENA_CARD
@@ -10297,7 +10318,7 @@ GetPlayAreaCardColor: ; 36f7 (0:36f7)
 	ld e, a
 	add DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call GetTurnDuelistVariable
-	bit 7, a
+	bit HAS_CHANGED_COLOR_F, a
 	jr nz, .has_changed_color
 .regular_color
 	ld a, e
@@ -11047,9 +11068,10 @@ Func_3b11: ; 3b11 (0:3b11)
 Func_3b21: ; 3b21 (0:3b21)
 	ldh a, [hBankROM]
 	push af
-	ld a, $07
+	ld a, BANK(Func_1c8bc)
 	call BankswitchROM
-	call $48bc
+	call Func_1c8bc
+	
 	pop af
 	call BankswitchROM
 	ret

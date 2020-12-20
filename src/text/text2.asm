@@ -27,12 +27,12 @@ PoisonedIfHeadsConfusedIfTailsText: ; 380ed (e:40ed)
 	line "and Confused if Tails."
 	done
 
-Text00fb: ; 38124 (e:4124)
+IfHeadsDoNotReceiveDamageOrEffectText: ; 38124 (e:4124)
 	text "If Heads, do not receive damage"
 	line "or effect of opponent's next Attack!"
 	done
 
-Text00fc: ; 3816a (e:416a)
+IfHeadsOpponentCannotAttackText: ; 3816a (e:416a)
 	text "If Heads, opponent cannot Attack"
 	line "next turn!"
 	done
@@ -116,7 +116,7 @@ NoDamageOrEffectDueToTransparencyText: ; 384d8 (e:44d8)
 	line "due to the effects of Transparency"
 	done
 
-Text010d: ; 3851f (e:451f)
+MetamorphsToText: ; 3851f (e:451f)
 	text "<RAMTEXT>"
 	line "metamorphs to <RAMTEXT>."
 	done
@@ -136,40 +136,40 @@ DuelistIsSelectingPokemonToPlaceInArenaText: ; 3859e (e:459e)
 	line "to place in the Arena."
 	done
 
-Text0111: ; 385cf (e:45cf)
+ChooseWeaknessYouWishToChangeText: ; 385cf (e:45cf)
 	text "Choose the Weakness you wish"
 	line "to change with Conversion 1."
 	done
 
-Text0112: ; 3860a (e:460a)
+ChooseResistanceYouWishToChangeText: ; 3860a (e:460a)
 	text "Choose the Resistance you wish"
 	line "to change with Conversion 2."
 	done
 
-Text0113: ; 38647 (e:4647)
+ChoosePokemonWishToColorChangeText: ; 38647 (e:4647)
 	text "Choose the Pokémon whose color you"
 	line "wish to change with Color change."
 	done
 
-Text0114: ; 3868d (e:468d)
+ChangedTheWeaknessOfPokemonToColorText: ; 3868d (e:468d)
 	text "Changed the Weakness of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0115: ; 386af (e:46af)
+ChangedTheResistanceOfPokemonToColorText: ; 386af (e:46af)
 	text "Changed the Resistance of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0116: ; 386d3 (e:46d3)
+ChangedTheColorOfText: ; 386d3 (e:46d3)
 	text "Changed the color of"
 	line ""
 	text "<RAMTEXT> to <RAMTEXT>."
 	done
 
-Text0117: ; 386f2 (e:46f2)
+Draw1CardFromTheDeckText: ; 386f2 (e:46f2)
 	text "Draw 1 card from the Deck."
 	done
 
@@ -182,22 +182,22 @@ CannotDrawCardBecauseNoCardsInDeckText: ; 3872d (e:472d)
 	line "there are no cards in the Deck."
 	done
 
-Text011a: ; 38769 (e:4769)
+ChoosePkmnInTheBenchToGiveDamageText: ; 38769 (e:4769)
 	text "Choose a Pokémon on the Bench"
 	line "to give damage to."
 	done
 
-Text011b: ; 3879b (e:479b)
+ChooseUpTo3PkmnOnBenchToGiveDamageText: ; 3879b (e:479b)
 	text "Choose up to 3 Pokémon on the"
 	line "Bench to give damage to."
 	done
 
-Text011c: ; 387d3 (e:47d3)
+Choose1BasicEnergyCardFromDeckText: ; 387d3 (e:47d3)
 	text "Choose 1 Basic Energy card"
 	line "from the Deck."
 	done
 
-Text011d: ; 387fe (e:47fe)
+ChoosePokemonToAttachEnergyCardText: ; 387fe (e:47fe)
 	text "Choose a Pokémon to attach"
 	line "the Energy card to."
 	done
@@ -207,75 +207,75 @@ Text011e: ; 3882e (e:482e)
 	line "1 Fire Energy card."
 	done
 
-Text011f: ; 38856 (e:4856)
+ChooseAndDiscard2FireEnergyCardsText: ; 38856 (e:4856)
 	text "Choose and Discard"
 	line "2 Fire Energy cards."
 	done
 
-Text0120: ; 3887f (e:487f)
+DiscardOppDeckAsManyFireEnergyCardsText: ; 3887f (e:487f)
 	text "Discard from opponent's Deck as many"
 	line "Fire Energy cards as were discarded."
 	done
 
-Text0121: ; 388ca (e:48ca)
+ChooseAndDiscard2EnergyCardsText: ; 388ca (e:48ca)
 	text "Choose and Discard"
 	line "2 Energy cards."
 	done
 
-Text0122: ; 388ee (e:48ee)
+ChooseAKrabbyFromDeckText: ; 388ee (e:48ee)
 	text "Choose a Krabby"
 	line "from the Deck."
 	done
 
-Text0123: ; 3890e (e:490e)
+ChooseDiscardEnergyCardFromOpponentText: ; 3890e (e:490e)
 	text "Choose and Discard an Energy card"
 	line "from the opponent's Active Pokémon."
 	done
 
-Text0124: ; 38955 (e:4955)
+ChooseAttackOpponentWillNotBeAbleToUseText: ; 38955 (e:4955)
 	text "Choose the Attack the opponent will"
 	line "not be able to use on the next turn."
 	done
 
-Text0125: ; 3899f (e:499f)
+ChooseBasicFightingPokemonFromDeckText: ; 3899f (e:499f)
 	text "Choose a Basic Fighting Pokémon"
 	line "from the Deck."
 	done
 
-Text0126: ; 389cf (e:49cf)
+ChooseAnOddishFromDeckText: ; 389cf (e:49cf)
 	text "Choose an Oddish"
 	line "from the Deck."
 	done
 
-Text0127: ; 389f0 (e:49f0)
+ChooseAnOddishText: ; 389f0 (e:49f0)
 	text "Choose an Oddish"
 	done
 
-Text0128: ; 38a02 (e:4a02)
+ChooseAKrabbyText: ; 38a02 (e:4a02)
 	text "Choose a Krabby."
 	done
 
-Text0129: ; 38a14 (e:4a14)
+ChooseBasicEnergyCardText: ; 38a14 (e:4a14)
 	text "Choose a Basic"
 	line "Energy card."
 	done
 
-Text012a: ; 38a31 (e:4a31)
+ChooseNidoranFromDeckText: ; 38a31 (e:4a31)
 	text "Choose a Nidoran♀ or a"
 	line "Nidoran♂ from the Deck."
 	done
 
-Text012b: ; 38a61 (e:4a61)
+ChooseNidoranText: ; 38a61 (e:4a61)
 	text "Choose a Nidoran♀"
 	line "or a Nidoran♂."
 	done
 
-Text012c: ; 38a83 (e:4a83)
+ChooseBasicFightingPokemonText: ; 38a83 (e:4a83)
 	text "Choose a Basic"
 	line "Fighting Pokémon"
 	done
 
-Text012d: ; 38aa4 (e:4aa4)
+ProcedureForEnergyTransferText: ; 38aa4 (e:4aa4)
 	text "Procedure for Energy Transfer:"
 	line ""
 	line "1. Choose the Pokémon to move Grass"
@@ -289,21 +289,21 @@ Text012d: ; 38aa4 (e:4aa4)
 	line "4. Press the B Button to end."
 	done
 
-Text012e: ; 38b8f (e:4b8f)
+ChooseABellsproutFromDeckText: ; 38b8f (e:4b8f)
 	text "Choose a Bellsprout"
 	line "from the Deck."
 	done
 
-Text012f: ; 38bb3 (e:4bb3)
+ChooseABellsproutText: ; 38bb3 (e:4bb3)
 	text "Choose a Bellsprout."
 	done
 
-Text0130: ; 38bc9 (e:4bc9)
+ChoosePkmnToRemoveDamageCounterText: ; 38bc9 (e:4bc9)
 	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done
 
-Text0131: ; 38bfe (e:4bfe)
+ProcedureForCurseText: ; 38bfe (e:4bfe)
 	text "Procedure for Curse:"
 	line ""
 	line "1. Choose a Pokémon to move the"
@@ -317,22 +317,22 @@ Text0131: ; 38bfe (e:4bfe)
 	line "3. Press the B Button to cancel."
 	done
 
-Text0132: ; 38cda (e:4cda)
+Choose2EnergyCardsFromDiscardPileToAttachText: ; 38cda (e:4cda)
 	text "Choose 2 Energy cards from the"
 	line "Discard Pileto attach to a Pokémon."
 	done
 
-Text0133: ; 38d1e (e:4d1e)
+Choose2EnergyCardsFromDiscardPileForHandText: ; 38d1e (e:4d1e)
 	text "Choose 2 Energy cards from the"
 	line "Discard Pile for your Hand."
 	done
 
-Text0134: ; 38d5a (e:4d5a)
+ChooseAnEnergyCardText: ; 38d5a (e:4d5a)
 	text "Choose an Energy"
 	line "card."
 	done
 
-Text0135: ; 38d72 (e:4d72)
+ProcedureForProphecyText: ; 38d72 (e:4d72)
 	text "Procedure for Prophecy:"
 	line ""
 	line "1. Choose either your Deck"
@@ -348,12 +348,12 @@ Text0135: ; 38d72 (e:4d72)
 	line "4. Press the B Button to cancel."
 	done
 
-Text0136: ; 38e70 (e:4e70)
+ChooseTheOrderOfTheCardsText: ; 38e70 (e:4e70)
 	text "Choose the order"
 	line "of the cards."
 	done
 
-Text0137: ; 38e90 (e:4e90)
+ProcedureForDamageSwapText: ; 38e90 (e:4e90)
 	text "Procedure for Damage Swap:"
 	line ""
 	line "1. Choose a Pokémon to move a"
@@ -372,7 +372,7 @@ Text0137: ; 38e90 (e:4e90)
 	line "   it will Knock Out the Pokémon."
 	done
 
-Text0138: ; 38fcc (e:4fcc)
+ProcedureForDevolutionBeamText: ; 38fcc (e:4fcc)
 	text "Procedure for Devolution Beam."
 	line ""
 	line "1. Choose either a Pokémon in your"
@@ -385,7 +385,7 @@ Text0138: ; 38fcc (e:4fcc)
 	line "3. Press the B Button to cancel."
 	done
 
-Text0139: ; 390b4 (e:50b4)
+ProcedureForStrangeBehaviorText: ; 390b4 (e:50b4)
 	text "Procedure for Strange Behavior:"
 	line ""
 	line "1. Choose the Pokémon with the"
@@ -401,74 +401,74 @@ Text0139: ; 390b4 (e:50b4)
 	line "   Slowbro will be Knocked Out."
 	done
 
-Text013a: ; 391dc (e:51dc)
+ChooseOppAttackToBeUsedWithMetronomeText: ; 391dc (e:51dc)
 	text "Choose the opponent's Attack"
 	line "to be used with Metronome."
 	done
 
-Text013b: ; 39215 (e:5215)
+ThereIsNoInTheDeckText: ; 39215 (e:5215)
 	text "There is no <RAMTEXT>"
 	line "in the Deck."
 	done
 
-Text013c: ; 39231 (e:5231)
+WouldYouLikeToCheckTheDeckText: ; 39231 (e:5231)
 	text "Would you like to check the Deck?"
 	done
 
-Text013d: ; 39254 (e:5254)
+PleaseSelectTheDeckText: ; 39254 (e:5254)
 	text "Please select the Deck:"
 	line "            Yours   Opponent's"
 	done
 
-Text013e: ; 3928c (e:528c)
+PleaseSelectThePlayAreaText: ; 3928c (e:528c)
 	text "Please select the Play Area:"
 	line "            Yours   Opponent's"
 	done
 
-Text013f: ; 392c9 (e:52c9)
+NidoranMNidoranFText: ; 392c9 (e:52c9)
 	text "Nidoran♂ Nidoran♀"
 	done
 
-Text0140: ; 392dc (e:52dc)
+OddishText: ; 392dc (e:52dc)
 	text "Oddish"
 	done
 
-Text0141: ; 392e4 (e:52e4)
+BellsproutText: ; 392e4 (e:52e4)
 	text "Bellsprout"
 	done
 
-Text0142: ; 392f0 (e:52f0)
+KrabbyText: ; 392f0 (e:52f0)
 	text "Krabby"
 	done
 
-Text0143: ; 392f8 (e:52f8)
+FightingPokemonDeckText: ; 392f8 (e:52f8)
 	text "Fighting Pokémon"
 	done
 
-Text0144: ; 3930a (e:530a)
+BasicEnergyText: ; 3930a (e:530a)
 	text "Basic Energy"
 	done
 
-Text0145: ; 39318 (e:5318)
+PeekWasUsedToLookInYourHandText: ; 39318 (e:5318)
 	text "Peek was used to look at the"
 	line "<RAMTEXT> in your Hand."
 	done
 
-Text0146: ; 39346 (e:5346)
+CardPeekWasUsedOnText: ; 39346 (e:5346)
 	text "Card Peek was used on"
 	done
 
-Text0147: ; 3935d (e:535d)
+PokemonAndAllAttachedCardsReturnedToHandText: ; 3935d (e:535d)
 	text "<RAMTEXT> and all attached"
 	line "cards were returned to the Hand."
 	done
 
-Text0148: ; 39392 (e:5392)
+WasChosenForTheEffectOfAmnesiaText: ; 39392 (e:5392)
 	text "<RAMTEXT> was chosen"
 	line "for the effect of Amnesia."
 	done
 
-Text0149: ; 393bb (e:53bb)
+BasicPokemonWasPlacedOnEachBenchText: ; 393bb (e:53bb)
 	text "A Basic Pokémon was placed"
 	line "on each Bench."
 	done
@@ -483,17 +483,17 @@ ThereWasNoEffectFromTxRam2Text: ; 393ff (e:53ff)
 	line "from <RAMTEXT>."
 	done
 
-Text014c: ; 3941c (e:541c)
+TheEnergyCardFromPlayAreaWasMovedText: ; 3941c (e:541c)
 	text "The Energy card from <RAMNAME>'s"
 	line "Play Area was moved."
 	done
 
-Text014d: ; 3944b (e:544b)
+DrewFireEnergyFromTheHandText: ; 3944b (e:544b)
 	text "<RAMNAME> drew"
 	line "<RAMNUM> Fire Energy from the Hand."
 	done
 
-Text014e: ; 39470 (e:5470)
+ThePkmnCardsInHandAndDeckWereShuffledText: ; 39470 (e:5470)
 	text "The Pokémon cards in <RAMNAME>'s"
 	line "Hand and Deck were shuffled"
 	done
@@ -503,22 +503,22 @@ Text014f: ; 394a6 (e:54a6)
 	line "A Button is pressed. B Button quits."
 	done
 
-Text0150: ; 394f0 (e:54f0)
+ChoosePokemonToRemoveDamageCounterFromText: ; 394f0 (e:54f0)
 	text "Choose a Pokémon to remove"
 	line "the Damage counter from."
 	done
 
-Text0151: ; 39525 (e:5525)
+ChooseCardToDiscardFromHandText: ; 39525 (e:5525)
 	text "Choose the card to Discard"
 	line "from the Hand."
 	done
 
-Text0152: ; 39550 (e:5550)
+ChoosePokemonToRemoveEnergyFromText: ; 39550 (e:5550)
 	text "Choose a Pokémon to remove"
 	line "Energy from and choose the Energy."
 	done
 
-Text0153: ; 3958f (e:558f)
+Choose2BasicEnergyCardsFromDiscardPileText: ; 3958f (e:558f)
 	text "Choose 2 Basic Energy cards"
 	line "from the Discard Pile."
 	done
@@ -528,22 +528,22 @@ Text0154: ; 395c3 (e:55c3)
 	line "Button to remove Damage counters."
 	done
 
-Text0155: ; 39607 (e:5607)
+Choose2CardsFromHandToDiscardText: ; 39607 (e:5607)
 	text "Choose 2 cards from the Hand"
 	line "to Discard."
 	done
 
-Text0156: ; 39631 (e:5631)
+Choose2HandCardsFromHandToReturnToDeckText: ; 39631 (e:5631)
 	text "Choose 2 cards from the Hand"
 	line "to return to the Deck."
 	done
 
-Text0157: ; 39666 (e:5666)
+ChooseCardToPlaceInHandText: ; 39666 (e:5666)
 	text "Choose a card to"
 	line "place in the Hand."
 	done
 
-Text0158: ; 3968b (e:568b)
+ChoosePokemonToAttachDefenderToText: ; 3968b (e:568b)
 	text "Choose a Pokémon to"
 	line "attach Defender to."
 	done
@@ -553,75 +553,75 @@ Text0159: ; 396b4 (e:56b4)
 	line "A to Draw, B to End."
 	done
 
-Text015a: ; 396e6 (e:56e6)
+ChoosePokemonToReturnToTheDeckText: ; 396e6 (e:56e6)
 	text "Choose a Pokémon to"
 	line "return to the Deck."
 	done
 
-Text015b: ; 3970f (e:570f)
+ChoosePokemonToPlaceInPlayText: ; 3970f (e:570f)
 	text "Choose a Pokémon to"
 	line "place in play."
 	done
 
-Text015c: ; 39733 (e:5733)
+ChooseBasicPokemonToEvolveText: ; 39733 (e:5733)
 	text "Choose a Basic Pokémon"
 	line "to Evolve."
 	done
 
-Text015d: ; 39756 (e:5756)
+ChoosePokemonToScoopUpText: ; 39756 (e:5756)
 	text "Choose a Pokémon to"
 	line "Scoop Up."
 	done
 
-Text015e: ; 39775 (e:5775)
+ChooseCardFromYourHandToSwitchText: ; 39775 (e:5775)
 	text "Choose a card from your"
 	line "Hand to Switch."
 	done
 
-Text015f: ; 3979e (e:579e)
+ChooseCardToSwitchText: ; 3979e (e:579e)
 	text "Choose a card to"
 	line "Switch."
 	done
 
-Text0160: ; 397b8 (e:57b8)
+ChooseBasicOrEvolutionPokemonCardFromDeckText: ; 397b8 (e:57b8)
 	text "Choose a Basic or Evolution"
 	line "Pokémon card from the Deck."
 	done
 
-Text0161: ; 397f1 (e:57f1)
+ChoosePokemonCardText: ; 397f1 (e:57f1)
 	text "Choose"
 	line "a Pokémon card."
 	done
 
-Text0162: ; 39809 (e:5809)
+RearrangeThe5CardsAtTopOfDeckText: ; 39809 (e:5809)
 	text "Rearrange the 5 cards at"
 	line "the top of the Deck."
 	done
 
-Text0163: ; 39838 (e:5838)
+PleaseCheckTheOpponentsHandText: ; 39838 (e:5838)
 	text "Please check the opponent's"
 	line "Hand."
 	done
 
-Text0164: ; 3985b (e:585b)
+EvolutionCardText: ; 3985b (e:585b)
 	text "Evolution card"
 	done
 
-Text0165: ; 3986b (e:586b)
+CardWasChosenText: ; 3986b (e:586b)
 	text "<RAMTEXT> was chosen."
 	done
 
-Text0166: ; 3987a (e:587a)
+ChooseBasicPokemonToPlaceOnBenchText: ; 3987a (e:587a)
 	text "Choose a Basic Pokémon"
 	line "to place on the Bench."
 	done
 
-Text0167: ; 398a9 (e:58a9)
+ChooseEvolutionCardAndPressAButtonToDevolveText: ; 398a9 (e:58a9)
 	text "Choose an Evolution card and"
 	line "press the A Button to Devolve 1."
 	done
 
-Text0168: ; 398e8 (e:58e8)
+ChoosePokemonInYourAreaThenPokemonInYourOppText: ; 398e8 (e:58e8)
 	text "Choose a Pokémon in your Area, then"
 	line "a Pokémon in your opponent's."
 	done
@@ -636,27 +636,27 @@ Text016a: ; 39952 (e:5952)
 	line "with the Active Pokémon."
 	done
 
-Text016b: ; 39987 (e:5987)
+PokemonAndAllAttachedCardsWereReturnedToDeckText: ; 39987 (e:5987)
 	text "<RAMTEXT> and all attached"
 	line "cards were returned to the Deck."
 	done
 
-Text016c: ; 399bc (e:59bc)
+PokemonWasReturnedFromArenaToHandText: ; 399bc (e:59bc)
 	text "<RAMTEXT> was returned"
 	line "from the Arena to the Hand."
 	done
 
-Text016d: ; 399e8 (e:59e8)
+PokemonWasReturnedFromBenchToHandText: ; 399e8 (e:59e8)
 	text "<RAMTEXT> was returned"
 	line "from the Bench to the Hand."
 	done
 
-Text016e: ; 39a14 (e:5a14)
+PokemonWasReturnedToDeckText: ; 39a14 (e:5a14)
 	text "<RAMTEXT> was returned"
 	line "to the Deck."
 	done
 
-Text016f: ; 39a31 (e:5a31)
+WasPlacedInTheHandText: ; 39a31 (e:5a31)
 	text "<RAMTEXT> was placed"
 	line "in the Hand."
 	done
@@ -669,17 +669,17 @@ YouReceivedTheseCardsText: ; 39a63 (e:5a63)
 	text "You received these cards:"
 	done
 
-Text0172: ; 39a7e (e:5a7e)
+ChooseTheCardToPutBackText: ; 39a7e (e:5a7e)
 	text "Choose the card"
 	line "to put back."
 	done
 
-Text0173: ; 39a9c (e:5a9c)
+ChooseTheCardToDiscardText: ; 39a9c (e:5a9c)
 	text "Choose the card"
 	line "to Discard."
 	done
 
-Text0174: ; 39ab9 (e:5ab9)
+DiscardedCardsFromDeckText: ; 39ab9 (e:5ab9)
 	text "Discarded <RAMNUM> cards"
 	line "from <RAMNAME>'s Deck."
 	done
@@ -689,39 +689,39 @@ Text0175: ; 39adb (e:5adb)
 	line "from the Hand."
 	done
 
-Text0176: ; 39af7 (e:5af7)
+NoneCameText: ; 39af7 (e:5af7)
 	text "None came!"
 	done
 
-Text0177: ; 39b03 (e:5b03)
+CameToTheBenchText: ; 39b03 (e:5b03)
 	text "<RAMTEXT>"
 	line "came to the Bench!"
 	done
 
-Text0178: ; 39b19 (e:5b19)
+DuelistHasNoCardsInHandText: ; 39b19 (e:5b19)
 	text "<RAMNAME> has"
 	line "no cards in Hand!"
 	done
 
-Text0179: ; 39b32 (e:5b32)
+PokemonHealedDamageText: ; 39b32 (e:5b32)
 	text "<RAMTEXT> healed"
 	line "<RAMNUM> damage!"
 	done
 
-Text017a: ; 39b46 (e:5b46)
+PokemonDevolvedToText: ; 39b46 (e:5b46)
 	text "<RAMTEXT> devolved"
 	line "to <RAMTEXT>!"
 	done
 
-Text017b: ; 39b58 (e:5b58)
+ThereWasNoFireEnergyText: ; 39b58 (e:5b58)
 	text "There was no Fire Energy."
 	done
 
-Text017c: ; 39b73 (e:5b73)
+YouCanSelectMoreCardsQuitText: ; 39b73 (e:5b73)
 	text "You can select <RAMNUM> more cards. Quit?"
 	done
 
-Text017d: ; 39b97 (e:5b97)
+ThereWasNoEffectText: ; 39b97 (e:5b97)
 	text "There was no effect!"
 	done
 
@@ -755,7 +755,7 @@ ThereWasNoEffectFromPoisonConfusionText: ; 39c5a (e:5c5a)
 	line "from Poison, Confusion."
 	done
 
-Text0184: ; 39c86 (e:5c86)
+ExchangedCardsInDuelistsHandText: ; 39c86 (e:5c86)
 	text "Exchanged the cards"
 	line "in <RAMNAME>'s Hand."
 	done
