@@ -116,7 +116,7 @@ TYPE_ENERGY EQU const_value
 	const TYPE_ENERGY_UNUSED           ; $0f
 	const TYPE_TRAINER                 ; $10
 	const TYPE_TRAINER_UNUSED          ; $11
-NUM_CARD_TYPES EQU const_value + -1
+NUM_CARD_TYPES EQU const_value - 1
 
 TYPE_PKMN      EQU %111
 TYPE_ENERGY_F  EQU 3

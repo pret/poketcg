@@ -317,7 +317,7 @@ FW_SPACE EQU $70
 
 txsymbol: MACRO
 	const SYM_\1
-	charmap "\1>", const_value + -1
+	charmap "\1>", const_value - 1
 ENDM
 
 ; TX_SYMBOL
