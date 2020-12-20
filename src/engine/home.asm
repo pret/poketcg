@@ -5189,7 +5189,7 @@ MoveCardToDiscardPileIfInArena: ; 1c13 (0:1c13)
 	jr c, .next_card
 	ret
 
-; calculate damage an max HP of card at PLAY_AREA_* in e.
+; calculate damage and max HP of card at PLAY_AREA_* in e.
 ; input:
 ;	e = PLAY_AREA_* of card;
 ; output:

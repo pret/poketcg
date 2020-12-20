@@ -146,8 +146,8 @@ Func_2c0bd: ; 2c0bd (b:40bd)
 	call ShuffleDeck
 	ret
 
-; return carry if Turn Duelist is the Player
-CheckIfTurnDuelistIsPlayer: ; 2c0c7 (b:40c7)
+; return carry if Player is the Turn Duelist
+IsPlayerTurn: ; 2c0c7 (b:40c7)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_PLAYER
@@ -300,8 +300,8 @@ SetMinMaxDamageSameAsDamage: ; 2c174 (b:4174)
 	ret
 ; 0x2c17e
 
-; returns in a a random Play Area location
-; of card in Turn Duelist's Play Area.
+; returns in a some random occupied Play Area location
+; in Turn Duelist's Play Area.
 PickRandomPlayAreaCard: ; 2c17e (b:417e)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -333,8 +333,8 @@ CreateListOfFireEnergyAttachedToArena: ; 2c197 (b:4197)
 	; fallthrough
 
 ; creates in wDuelTempList a list of cards that
-; are in the Arena that are the same type as input a.
-; used to list are Energy cards of a specific type
+; are in the Arena of the same type as input a.
+; this is called to list Energy cards of a specific type
 ; that are attached to the Arena Pokemon.
 ; input:
 ;	a = TYPE_ENERGY_* constant
@@ -478,7 +478,7 @@ ApplyAndAnimateHPRecovery: ; 2c221 (b:4221)
 	ld bc, $01 ; arrow
 	bank1call PlayMoveAnimation
 
-; compare HP to be restores with max HP
+; compare HP to be restored with max HP
 ; if HP to be restored would cause HP to
 ; be larger than max HP, cap it accordingly
 	ld e, PLAY_AREA_ARENA
@@ -526,7 +526,7 @@ CheckIfPlayAreaHasAnyDamage: ; 2c25b (b:425b)
 
 ; makes a list in wDuelTempList with the deck indices
 ; of Trainer cards found in Turn Duelist's Discard Pile.
-; returns carry set if no Trainer cars found, and loads
+; returns carry set if no Trainer cards found, and loads
 ; corresponding text to notify this.
 CreateTrainerCardListFromDiscardPile: ; 2c26e (b:426e)
 ; get number of cards in Discard Pile
@@ -705,7 +705,7 @@ LookForCardsInDeck: ; 2c2ec (b:42ec)
 ; 0x2c317
 
 .search_table
-	dw .SearchDeckForE
+	dw .SearchDeckForCardID
 	dw .SearchDeckForNidoran
 	dw .SearchDeckForBasicFighting
 	dw .SearchDeckForBasicEnergy
@@ -718,7 +718,7 @@ LookForCardsInDeck: ; 2c2ec (b:42ec)
 
 ; returns carry if no card with
 ; same card ID as e is found in Deck
-.SearchDeckForE ; 2c323 (b:4323)
+.SearchDeckForCardID ; 2c323 (b:4323)
 	ld hl, wDuelTempList
 .loop_deck_e
 	ld a, [hli]
@@ -1797,7 +1797,7 @@ Sprout_PutInPlayAreaEffect: ; 2c8cc (b:48cc)
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shuffle
 	; display card on screen
 	ldh a, [hTemp_ffa0]
@@ -2078,7 +2078,7 @@ NidoranFCallForFamily_PutInPlayAreaEffect: ; 2ca6e (b:4a6e)
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shuffle
 	; display card on screen
 	ldh a, [hTemp_ffa0]
@@ -2506,7 +2506,7 @@ BellsproutCallForFamily_PutInPlayAreaEffect: ; 2ccc2 (b:4cc2)
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shuffle
 	ldh a, [hTemp_ffa0]
 	ldtx hl, PlacedOnTheBenchText
@@ -3061,7 +3061,7 @@ KrabbyCallForFamily_PutInPlayAreaEffect: ; 2cfca (b:4fca)
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shuffle
 	ldh a, [hTemp_ffa0]
 	ldtx hl, PlacedOnTheBenchText
@@ -3367,7 +3367,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 	ld l, DUELVARS_ARENA_CARD_LAST_TURN_EFFECT
 	ld [hl], LAST_TURN_EFFECT_AMNESIA
 
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c ; return if Player
 
 ; the rest of the routine if for Opponent
@@ -4914,7 +4914,7 @@ EnergyConversion_AddToHandEffect: ; 2d9b4 (b:59b4)
 	jr .loop_cards
 
 .done
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	bank1call Func_4b38
 	ret
@@ -5036,7 +5036,7 @@ Prophecy_ReorderDeckEffect: ; 2da41 (b:5a41)
 	call ReturnCardToDeck
 	dec c
 	jr nz, .loop_return_deck
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	; print text in case it was the opponent
 	ldtx hl, ExchangedCardsInDuelistsHandText
@@ -6000,7 +6000,7 @@ Scavenge_AddToHandEffect: ; 2df5f (b:5f5f)
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	call MoveDiscardPileCardToHand
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	ldtx hl, WasPlacedInTheHandText
@@ -6409,7 +6409,7 @@ MarowakCallForFamily_PutInPlayAreaEffect: ; 2e194 (b:6194)
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
 	call PutHandPokemonCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shuffle
 	; display card on screen
 	ldh a, [hTemp_ffa0]
@@ -7765,7 +7765,7 @@ EnergySpike_AttachEnergyEffect: ; 2e8f6 (b:68f6)
 	ld e, a
 	ldh a, [hTemp_ffa0]
 	call PutHandCardInPlayArea
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .done
 
 ; not Player, so show detail screen
@@ -9499,7 +9499,7 @@ EnergyRemoval_DiscardEffect: ; 2f273 (b:7273)
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	call PutCardInDiscardPile
 	call SwapTurn
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 
 ; show Player which Pokemon was affected
@@ -9589,7 +9589,7 @@ EnergyRetrieval_DiscardAndAddToHandEffect: ; 2f2f8 (b:72f8)
 	call AddCardToHand
 	jr .loop
 .done
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	bank1call Func_4b38
 	ret
@@ -9656,7 +9656,7 @@ EnergySearch_AddToHandEffect: ; 2f372 (b:7372)
 ; add to hand
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .done ; done if Player played card
 ; display card in screen
 	ldh a, [hTemp_ffa0]
@@ -9833,7 +9833,7 @@ ItemFinder_DiscardAddToHandEffect: ; 2f463 (b:7463)
 	ld a, [hl]
 	call MoveDiscardPileCardToHand
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 ; display card in screen
 	ldh a, [hTempList + 2]
@@ -9864,7 +9864,7 @@ Defender_AttachDefenderEffect: ; 2f499 (b:7499)
 	add DUELVARS_ARENA_CARD_ATTACHED_DEFENDER
 	call GetTurnDuelistVariable
 	inc [hl]
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 
 	ldh a, [hTemp_ffa0]
@@ -10069,7 +10069,7 @@ MrFuji_ReturnToDeckEffect: ; 2f58f (b:758f)
 
 ; if Trainer card wasn't played by the Player,
 ; print the selected Pokemon's name and show card on screen.
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .done
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -10231,7 +10231,7 @@ PokemonFlute_PlaceInPlayAreaText: ; 2f68f (b:768f)
 
 ; unless it was the Player who played the card,
 ; display the Pokemon card on screen.
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	call SwapTurn
 	ldh a, [hTemp_ffa0]
@@ -10498,7 +10498,7 @@ ScoopUp_ReturnToHandEffect: ; 2f7c3 (b:77c3)
 
 ; if card was not played by Player, show detail screen
 ; and print corresponding text.
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .shift_or_switch
 	ldtx hl, PokemonWasReturnedFromArenaToHandText
 	ldh a, [hTemp_ffa0]
@@ -10606,7 +10606,7 @@ PokemonTrader_TradeCardsEffect: ; 2f88d (b:788d)
 	call AddCardToHand
 
 ; display cards if the Pokemon Trader wasn't played by Player
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .done
 	ldh a, [hTemp_ffa0]
 	ldtx hl, PokemonWasReturnedToDeckText
@@ -10848,7 +10848,7 @@ BillEffect: ; 2f9c4 (b:79c4)
 	jr c, .done
 	ldh [hTempCardIndex_ff98], a
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr nc, .skip_display_screen
 	push bc
 	bank1call DisplayPlayerDrawCardScreen
@@ -10982,7 +10982,7 @@ Maintenance_ReturnToDeckAndDrawEffect: ; 2fa85 (b:7a85)
 	call DrawCardFromDeck
 	ldh [hTempCardIndex_ff98], a
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret nc
 	; show card on screen if played by Player
 	bank1call DisplayPlayerDrawCardScreen
@@ -11068,7 +11068,7 @@ PokeBall_AddToHandEffect: ; 2fb15 (b:7b15)
 ; it wasn't the Player who played the Trainer card.
 	call SearchCardInDeckAndAddToHand
 	call AddCardToHand
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	jr c, .done
 	ldh a, [hTempList + 1]
 	ldtx hl, WasPlacedInTheHandText
@@ -11122,7 +11122,7 @@ Recycle_AddToHandEffect: ; 2fb68 (b:7b68)
 ; it wasn't the Player who played the Trainer card.
 	call MoveDiscardPileCardToHand
 	call ReturnCardToDeck
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c
 	ldh a, [hTempList]
 	ldtx hl, CardWasChosenText
@@ -11179,7 +11179,7 @@ Revive_PlaceInPlayAreaEffect: ; 2fbb0 (b:7bb0)
 	add 5 ; round up HP to nearest 10
 .rounded
 	ld [hl], a
-	call CheckIfTurnDuelistIsPlayer
+	call IsPlayerTurn
 	ret c ; done if Player played Revive
 
 ; display card
@@ -11236,7 +11236,7 @@ CreateBasicPokemonCardListFromDiscardPile: ; 2fbd6 (b:7bd6)
 	ret
 ; 0x2fc0b
 
-; return carry if Turn Duelist has not Evolution cards in Play Area
+; return carry if Turn Duelist has no Evolution cards in Play Area
 DevolutionSpray_PlayAreaEvolutionCheck: ; 2fc0b (b:7c0b)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
