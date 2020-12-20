@@ -43,7 +43,7 @@ ENDM
 	const Func_d0be_index                                            ; $23
 	const ScriptCommand_DoFrames_index                               ; $24
 	const Func_d0d9_index                                            ; $25
-	const ScriptCommand_JumpIfPlayerCoordMatches_index               ; $26
+	const ScriptCommand_JumpIfPlayerCoordsMatch_index               ; $26
 	const ScriptCommand_MoveActiveNPC_index                          ; $27
 	const ScriptCommand_GiveOneOfEachTrainerBooster_index            ; $28
 	const Func_d103_index                                            ; $29
@@ -217,6 +217,81 @@ do_frames: MACRO
 	db \1
 ENDM
 
+jump_if_player_coords_match: MACRO
+	run_command ScriptCommand_JumpIfPlayerCoordsMatch
+	db \1
+	db \2
+	dw \3
+ENDM
+move_active_npc: MACRO
+	run_command ScriptCommand_MoveActiveNPC
+	dw \1
+ENDM
+give_one_of_each_trainer_booster: MACRO
+	run_command ScriptCommand_GiveOneOfEachTrainerBooster
+ENDM
+
+move_wram_npc: MACRO
+	run_command ScriptCommand_MoveWramNPC
+	dw \1
+ENDM
+
+quit_script_fully: MACRO
+	run_command ScriptCommand_QuitScriptFully
+ENDM
+
+open_deck_machine: MACRO
+	run_command ScriptCommand_OpenDeckMachine
+	db \1
+ENDM
+
+enter_map: MACRO
+	run_command ScriptCommand_EnterMap
+	db \1
+	db \2
+	db \3
+	db \4
+	db \5
+ENDM
+move_arbitrary_npc: MACRO
+	run_command ScriptCommand_MoveArbitraryNPC
+	db \1
+	dw \2
+ENDM
+
+try_give_pc_pack: MACRO
+	run_command ScriptCommand_TryGivePCPack
+	db \1
+ENDM
+script_nop: MACRO
+	run_command ScriptCommand_nop
+ENDM
+
+play_sfx: MACRO
+	run_command ScriptCommand_PlaySFX
+	db \1
+ENDM
+pause_song: MACRO
+	run_command ScriptCommand_PauseSong
+ENDM
+resume_song: MACRO
+	run_command ScriptCommand_ResumeSong
+ENDM
+
+wait_for_song_to_finish: MACRO
+	run_command ScriptCommand_WaitForSongToFinish
+ENDM
+
+ask_question_jump_default_yes: MACRO
+	run_command ScriptCommand_AskQuestionJumpDefaultYes
+IF \1 == 0
+	dw 0000
+ELSE
+	tx \1
+ENDC
+	dw \2
+ENDM
+
 end_script_loop_2: MACRO
 	run_command ScriptCommand_EndScriptLoop2
 ENDM
@@ -232,6 +307,41 @@ ENDM
 end_script_loop_6: MACRO
 	run_command ScriptCommand_EndScriptLoop6
 ENDM
+script_set_flag_value: MACRO
+	run_command ScriptCommand_SetFlagValue
+	db \1
+	db \2
+ENDM
+jump_if_flag_zero_1: MACRO
+	run_command ScriptCommand_JumpIfFlagZero1
+	db \1
+	dw \2
+ENDM
+jump_if_flag_nonzero_1: MACRO
+	run_command ScriptCommand_JumpIfFlagNonzero1
+	db \1
+	dw \2
+ENDM
+jump_if_flag_equal: MACRO
+	run_command ScriptCommand_JumpIfFlagEqual
+	db \1
+	db \2
+	dw \3
+ENDM
+jump_if_flag_not_equal: MACRO
+	run_command ScriptCommand_JumpIfFlagNotEqual
+	db \1
+	db \2
+	dw \3
+ENDM
+jump_if_flag_not_less_than: MACRO
+	run_command ScriptCommand_JumpIfFlagNotLessThan
+	db \1
+	db \2
+	dw \3
+ENDM
+
+
 
 end_script_loop_7: MACRO
 	run_command ScriptCommand_EndScriptLoop7
