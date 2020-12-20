@@ -226,30 +226,30 @@ def createList(): # this is a func just so all this can go at the bottom
 	("ScriptCommand_MoveActiveNPCByDirection", "w", DO_NOT_QUIT,"move_active_npc_by_direction"),
 	("ScriptCommand_CloseTextBox", "", DO_NOT_QUIT,"close_text_box"),
 	("ScriptCommand_GiveBoosterPacks", "bbb", DO_NOT_QUIT,"give_booster_packs"),
-	("ScriptCommand_JumpIfCardOwned", "bj", DO_NOT_QUIT,"jump_if_card_owned"), # more complex behavior too (jumping)
+	("ScriptCommand_JumpIfCardOwned", "bj", DO_NOT_QUIT,"jump_if_card_owned"),
 	("ScriptCommand_JumpIfCardInCollection", "bj", DO_NOT_QUIT,"jump_if_card_in_collection"),
-	("ScriptCommand_GiveCard", "b", DO_NOT_QUIT,""),
-	("ScriptCommand_TakeCard", "b", DO_NOT_QUIT,""),
+	("ScriptCommand_GiveCard", "b", DO_NOT_QUIT,"give_card"),
+	("ScriptCommand_TakeCard", "b", DO_NOT_QUIT,"take_card"),
 	("Func_cf53", "w", DO_NOT_QUIT,""), # more complex behavior too (jumping)
 	("Func_cf7b", "", DO_NOT_QUIT,""),
-	("ScriptCommand_CheckAmountOfCardsOwned", "bbbb", DO_NOT_QUIT,""), # more complex behavior too (jumping + ??)
-	("ScriptCommand_JumpBasedOnFightingClubPupilStatus", "w", DO_NOT_QUIT,""), # only jumps? still needs args to do that though
+	("ScriptCommand_JumpIfEnoughCardsOwned", "wj", DO_NOT_QUIT,"jump_if_enough_cards_owned"), 
+	("ScriptCommand_JumpBasedOnFightingClubPupilStatus", "jjjj", DO_NOT_QUIT,""),
 	("Func_cfc6", "b", DO_NOT_QUIT,""),
 	("Func_cfd4", "", DO_NOT_QUIT,""),
 	("Func_d00b", "", DO_NOT_QUIT,""), # includes something with random and extra data
 	("Func_d025", "w", DO_NOT_QUIT,""), # possibly only jumps, still needs args
 	("Func_d032", "w", DO_NOT_QUIT,""), # see above
 	("Func_d03f", "", DO_NOT_QUIT,""),
-	("ScriptCommand_Jump", "j", QUIT_JUMP,""), # jumps to d
-	("ScriptCommand_TryGiveMedalPCPacks", "", DO_NOT_QUIT,""),
-	("ScriptCommand_SetPlayerDirection", "d", DO_NOT_QUIT,""),
+	("ScriptCommand_Jump", "j", QUIT_JUMP,"script_jump"),
+	("ScriptCommand_TryGiveMedalPCPacks", "", DO_NOT_QUIT,"try_give_medal_pc_packs"),
+	("ScriptCommand_SetPlayerDirection", "d", DO_NOT_QUIT,"set_player_direction"),
 	("ScriptCommand_MovePlayer", "di", DO_NOT_QUIT,"move_player"),
-	("ScriptCommand_ShowCardReceivedScreen", "b", DO_NOT_QUIT,""),
-	("ScriptCommand_SetDialogName", "b", DO_NOT_QUIT,""),
-	("ScriptCommand_SetNextNPCandScript", "bj", DO_NOT_QUIT,""),
+	("ScriptCommand_ShowCardReceivedScreen", "b", DO_NOT_QUIT,"show_card_received_screen"),
+	("ScriptCommand_SetDialogNPC", "b", DO_NOT_QUIT,"set_dialog_npc"),
+	("ScriptCommand_SetNextNPCAndScript", "bj", DO_NOT_QUIT,"set_next_npc_and_script"),
 	("Func_d095", "bbb", DO_NOT_QUIT,""),
 	("Func_d0be", "bb", DO_NOT_QUIT,""),
-	("ScriptCommand_DoFrames", "i", DO_NOT_QUIT,""),
+	("ScriptCommand_DoFrames", "i", DO_NOT_QUIT,"do_frames"),
 	("Func_d0d9", "bbw", DO_NOT_QUIT,""), # jumps but still needs args
 	("ScriptCommand_JumpIfPlayerCoordMatches", "iij", DO_NOT_QUIT,""), # jumps but still needs args
 	("ScriptCommand_MoveActiveNPC", "m", DO_NOT_QUIT,""),

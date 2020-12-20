@@ -987,7 +987,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_TakeCard
 	dw Func_cf53
 	dw Func_cf7b
-	dw ScriptCommand_CheckAmountOfCardsOwned
+	dw ScriptCommand_JumpIfEnoughCardsOwned
 	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
 	dw Func_cfc6
 	dw Func_cfd4
@@ -1000,8 +1000,8 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_SetPlayerDirection
 	dw ScriptCommand_MovePlayer
 	dw ScriptCommand_ShowCardReceivedScreen
-	dw ScriptCommand_SetDialogName
-	dw ScriptCommand_SetNextNPCandScript
+	dw ScriptCommand_SetDialogNPC
+	dw ScriptCommand_SetNextNPCAndScript
 	dw Func_d095
 	dw Func_d0be
 	dw ScriptCommand_DoFrames

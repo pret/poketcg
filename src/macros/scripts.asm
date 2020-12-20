@@ -24,7 +24,7 @@ ENDM
 	const ScriptCommand_TakeCard_index                               ; $10
 	const Func_cf53_index                                            ; $11
 	const Func_cf7b_index                                            ; $12
-	const ScriptCommand_CheckAmountOfCardsOwned_index                ; $13
+	const ScriptCommand_JumpIfEnoughCardsOwned_index                 ; $13
 	const ScriptCommand_JumpBasedOnFightingClubPupilStatus_index     ; $14
 	const Func_cfc6_index                                            ; $15
 	const Func_cfd4_index                                            ; $16
@@ -37,8 +37,8 @@ ENDM
 	const ScriptCommand_SetPlayerDirection_index                     ; $1d
 	const ScriptCommand_MovePlayer_index                             ; $1e
 	const ScriptCommand_ShowCardReceivedScreen_index                 ; $1f
-	const ScriptCommand_SetDialogName_index                          ; $20
-	const ScriptCommand_SetNextNPCandScript_index                    ; $21
+	const ScriptCommand_SetDialogNPC_index                           ; $20
+	const ScriptCommand_SetNextNPCAndScript_index                    ; $21
 	const Func_d095_index                                            ; $22
 	const Func_d0be_index                                            ; $23
 	const ScriptCommand_DoFrames_index                               ; $24
@@ -167,11 +167,54 @@ jump_if_card_in_collection: MACRO
 	db \1
 	dw \2
 ENDM
+give_card: MACRO
+	run_command ScriptCommand_GiveCard
+	db \1
+ENDM
+take_card: MACRO
+	run_command ScriptCommand_TakeCard
+	db \1
+ENDM
 
+jump_if_enough_cards_owned: MACRO
+	run_command ScriptCommand_JumpIfEnoughCardsOwned
+	dw \1
+	dw \2
+ENDM
+
+script_jump: MACRO
+	run_command ScriptCommand_Jump
+	dw \1
+ENDM
+try_give_medal_pc_packs: MACRO
+	run_command ScriptCommand_TryGiveMedalPCPacks
+ENDM
+set_player_direction: MACRO
+	run_command ScriptCommand_SetPlayerDirection
+	db \1
+ENDM
 move_player: MACRO
 	run_command ScriptCommand_MovePlayer
 	db \1
 	db \2
+ENDM
+show_card_received_screen: MACRO
+	run_command ScriptCommand_ShowCardReceivedScreen
+	db \1
+ENDM
+set_dialog_npc: MACRO
+	run_command ScriptCommand_SetDialogNPC
+	db \1
+ENDM
+set_next_npc_and_script: MACRO
+	run_command ScriptCommand_SetNextNPCAndScript
+	db \1
+	dw \2
+ENDM
+
+do_frames: MACRO
+	run_command ScriptCommand_DoFrames
+	db \1
 ENDM
 
 end_script_loop_2: MACRO
