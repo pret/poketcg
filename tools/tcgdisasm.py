@@ -763,16 +763,17 @@ class Disassembler(object):
 
 					# handle the special flag macros
 					found_flag_macro = False
-					for flag_macro in flag_macros:
-						if flag_macro[0] == target_offset:
-							found_flag_macro = True
-							current_flag_macro = flag_macro
-							event_flag = "EVENT_FLAG_" + format(opcode_arg_3, "02X")
-							opcode_output_str = flag_macro[1].format(event_flag)
+					if opcode_byte == 0xcd:
+						for flag_macro in flag_macros:
+							if flag_macro[0] == target_offset:
+								found_flag_macro = True
+								current_flag_macro = flag_macro
+								event_flag = "EVENT_FLAG_" + format(opcode_arg_3, "02X")
+								opcode_output_str = flag_macro[1].format(event_flag)
 
-							# we need to skip a byte since this macro takes one extra
-							opcode_nargs+=1
-							break
+								# we need to skip a byte since this macro takes one extra
+								opcode_nargs+=1
+								break
 
 
 					if not found_flag_macro and opcode_byte in call_commands + absolute_jumps:

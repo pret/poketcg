@@ -94,6 +94,7 @@ ENDM
 	fwcharmap 3, "＼", $98
 	fwcharmap 3, "┐", $99
 	fwcharmap 3, "|", $9a
+	fwcharmap 3, " ", $9c
 	fwcharmap 3, "!", $9d
 	fwcharmap 3, "#", $9f
 	fwcharmap 3, "$", $a0

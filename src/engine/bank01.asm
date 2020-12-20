@@ -778,7 +778,7 @@ PlayPokemonCard: ; 44db (1:44db)
 	ldh [hTemp_ffa0], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTempPlayAreaLocation_ffa1], a
-	call EvolvePokemonCard
+	call EvolvePokemonCardIfPossible
 	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
 	ld a, OPPACTION_EVOLVE_PKMN
 	call SetOppAction_SerialSendDuelData
@@ -1438,10 +1438,17 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	scf
 	ret
 
-; display the animation of the turn duelist drawing a card at the beginning of the turn
+; display the animation of the turn duelist drawing one card at the beginning of the turn
 ; if there isn't any card left in the deck, let the player know with a text message
 DisplayDrawOneCardScreen: ; 4933 (1:4933)
 	ld a, 1
+;	fallthrough
+
+; display the animation of the turn duelist drawing number of cards that is in a.
+; if there isn't any card left in the deck, let the player know with a text message.
+; input:
+;	- a = number of cards to draw
+DisplayDrawNCardsScreen: ; 4935 (1:4935)
 	push hl
 	push de
 	push bc
@@ -2268,11 +2275,11 @@ Func_4e98: ; 4e98 (1:4e98)
 Func_4f2d: ; 4f2d (1:4f2d)
 	ld a, [wDuelDisplayedScreen]
 	cp SHUFFLE_DECK
-	jr z, .asm_4f3d
+	jr z, .skip_draw_scene
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call DrawDuelistPortraitsAndNames
-.asm_4f3d
+.skip_draw_scene
 	ld a, SHUFFLE_DECK
 	ld [wDuelDisplayedScreen], a
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
@@ -3481,7 +3488,7 @@ CardListFunction: ; 5719 (1:5719)
 
 Func_5735: ; 5735 (1:5735)
 	ld hl, wcbd8
-	ld de, Func_574a
+	ld de, PrintSortNumberInCardList
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -3493,7 +3500,11 @@ Func_5744: ; 5744 (1:5744)
 	ld hl, wcbd8
 	jp CallIndirect
 
-Func_574a: ; 574a (1:574a)
+; goes through list in wDuelTempList + 10
+; and prints the number stored in each entry
+; beside the corresponding card in screen.
+; used in lists for reordering cards in the Deck.
+PrintSortNumberInCardList: ; 574a (1:574a)
 	lb bc, 1, 2
 	ld hl, wDuelTempList + 10
 .next
@@ -3502,7 +3513,7 @@ Func_574a: ; 574a (1:574a)
 	jr z, .done
 	or a ; SYM_SPACE
 	jr z, .space
-	add SYM_0
+	add SYM_0 ; load number symbol
 .space
 	call WriteByteToBGMap0
 	; move two lines down
@@ -3606,7 +3617,10 @@ DisplayCardPageOnLeftOrRightPressed: ; 57cd (1:57cd)
 	call c, DisplayCardPage
 	ret
 
-Func_57df: ; 57df (1:57df)
+; draws text box that covers the whole screen
+; and prints the text ID in hl, then
+; waits for Player input.
+DrawWholeScreenTextBox: ; 57df (1:57df)
 	push hl
 	call EmptyScreen
 	lb de, 0, 0
@@ -6404,7 +6418,7 @@ OppActionTable: ; 695e (1:695e)
 	dw OppAction_TossCoinATimes
 	dw OppAction_6b30
 	dw OppAction_NoAction
-	dw OppAction_6b3e
+	dw OppAction_UseMetronomeAttack
 	dw OppAction_6b15
 	dw OppAction_DrawDuelMainScene
 
@@ -6447,7 +6461,7 @@ OppAction_EvolvePokemonCard: ; 69c5 (1:69c5)
 	ldh [hTempCardIndex_ff98], a
 	call LoadCardDataToBuffer1_FromDeckIndex
 	call DrawLargePictureOfCard
-	call EvolvePokemonCard
+	call EvolvePokemonCardIfPossible
 	call PrintPokemonEvolvedIntoPokemon
 	call Func_161e
 	call DrawDuelMainScene
@@ -6656,7 +6670,7 @@ OppAction_6b30: ; 6b30 (1:6b30)
 	ldh [hWhoseTurn], a
 	ret
 
-OppAction_6b3e: ; 6b3e (1:6b3e)
+OppAction_UseMetronomeAttack: ; 6b3e (1:6b3e)
 	call DrawDuelMainScene
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetTurnDuelistVariable
@@ -6682,7 +6696,7 @@ OppAction_6b3e: ; 6b3e (1:6b3e)
 	call Func_16f6
 	pop bc
 	ld a, c
-	ld [wccf0], a
+	ld [wMetronomeEnergyCost], a
 	ret
 
 OppAction_NoAction: ; 6b7d (1:6b7d)
@@ -7384,9 +7398,9 @@ Func_6ff7: ; 6ff7 (1:6ff7)
 	ret
 
 ; print one of the "There was no effect from" texts depending
-; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
+; on the value at wNoEffectFromWhichStatus (NO_STATUS or a status condition constant)
 PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
-	ld a, [wNoEffectFromStatus]
+	ld a, [wNoEffectFromWhichStatus]
 	or a
 	jr nz, .status
 	ld hl, wLoadedMoveName
@@ -7488,7 +7502,8 @@ GetCardOneStageBelow: ; 7045 (1:7045)
 	ld hl, wAllStagesIndices ; pointing to basic
 	cp STAGE1
 	jr z, .done
-	cp STAGE2 + 1 ; unnecessary check?
+	; if stage1 was skipped, hl should point to Basic stage card
+	cp STAGE2_WITHOUT_STAGE1
 	jr z, .done
 	inc hl ; pointing to stage 1
 .done
@@ -7546,7 +7561,7 @@ SetAllPlayAreaPokemonCanEvolve: ; 70f6 (1:70f6)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
-	ld l, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld l, DUELVARS_ARENA_CARD_FLAGS
 .next_pkmn_loop
 	res 5, [hl]
 	set CAN_EVOLVE_THIS_TURN_F, [hl]
@@ -7892,12 +7907,154 @@ _TossCoin: ; 71ad (1:71ad)
 	ret
 ; 0x72ff
 
-	INCROM $72ff, $7354
+Func_72ff: ; 72ff (1:72ff)
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp DUELTYPE_LINK
+	ret nz
+	ldh a, [hff96]
+	call SerialSendByte
+	call Func_7344
+	ret
+; 0x7310
+
+Func_7310: ; 7310 (1:7310)
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp DUELTYPE_LINK
+	jr z, .asm_7338
+.asm_7319
+	call DoFrame
+	call CheckAnyAnimationPlaying
+	jr c, .asm_7319
+	ldh a, [hff96]
+	ret
+	ldh [hff96], a
+	ld a, [wDuelType]
+	cp DUELTYPE_LINK
+	jr z, .asm_7338
+	ld a, 30
+.asm_732f
+	call DoFrame
+	dec a
+	jr nz, .asm_732f
+	ldh a, [hff96]
+	ret
+.asm_7338
+	call DoFrame
+	call SerialRecvByte
+	jr c, .asm_7338
+	call Func_7344
+	ret
+; 0x7344
+
+Func_7344: ; 7344 (1:7344)
+    push af
+    ld a, [wSerialFlags]
+    or a
+    jr nz, .asm_734d
+    pop af
+    ret
+.asm_734d
+    call Func_3b31
+    call DuelTransmissionError
+    ret
+; 0x7354
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36", TX_END
 
-	INCROM $7364, $7415
+Func_7364: ; 7364 (1:7364)
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	call LoadSymbolsFont
+	lb de, $38, $9f
+	call SetupText
+	call DrawWideTextBox
+	call EnableLCD
+	xor a
+	ld [wOpponentDeckID], a
+	call Func_73d8
+.asm_7384
+	call DoFrame
+	ldh a, [hDPadHeld]
+	or a
+	jr z, .asm_7384
+	ld b, a
+	and A_BUTTON | START
+	jr nz, .asm_73cd
+	bit B_BUTTON_F, b
+	jr nz, .asm_73cb
+	ld a, [wOpponentDeckID]
+	bit D_RIGHT_F, b
+	jr z, .asm_73a2
+	inc a
+	cp $35
+	jr c, .asm_73a2
+	xor a
+.asm_73a2
+	bit D_LEFT_F, b
+	jr z, .asm_73ae
+	or a
+	jr nz, .asm_73ad
+	ld a, IMAKUNI_DECK_ID
+	jr .asm_73ae
+.asm_73ad
+	dec a
+.asm_73ae
+	bit D_UP_F, b
+	jr z, .asm_73b9
+	add $0a
+	cp $35
+	jr c, .asm_73b9
+	xor a
+.asm_73b9
+	bit D_DOWN_F, b
+	jr z, .asm_73c3
+	sub $0a
+	jr nc, .asm_73c3
+	ld a, IMAKUNI_DECK_ID
+.asm_73c3
+	ld [wOpponentDeckID], a
+	call Func_73d8
+	jr .asm_7384
+.asm_73cb
+	scf
+	ret
+.asm_73cd
+	ld a, [wOpponentDeckID]
+	ld [wcc19], a
+	call Func_3ae8
+	or a
+	ret
+; 0x73d8
+
+Func_73d8: ; 73d8 (1:73d8)
+	ld a, [wOpponentDeckID]
+	ld [wcc19], a
+	call Func_3ae8
+	jr c, .asm_73ec
+	xor a
+	ld [wOpponentPortrait], a
+	ld hl, wOpponentName
+	ld [hli], a
+	ld [hl], a
+.asm_73ec
+	ld hl, $7408
+	call PlaceTextItems
+	call DrawDuelistPortraitsAndNames
+	ld a, [wOpponentDeckID]
+	lb bc, 5, 16
+	call WriteTwoByteNumberInTxSymbolFormat
+	ld a, [wcc18]
+	lb bc, 15, 10
+	call WriteTwoByteNumberInTxSymbolFormat
+	ret
+; 0x7408
+
+	INCROM $7408, $7415
 
 Func_7415: ; 7415 (1:7415)
 	xor a

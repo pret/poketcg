@@ -1023,9 +1023,9 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d1b3
 	dw ScriptCommand_QuitScriptFully
 	dw Func_d244
-	dw Func_d24c
+	dw ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst
 	dw ScriptCommand_OpenDeckMachine
-	dw Func_d271
+	dw ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
 	dw ScriptCommand_EnterMap
 	dw ScriptCommand_MoveArbitraryNPC
 	dw Func_d209
@@ -1048,8 +1048,8 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_WaitForSongToFinish
 	dw Func_d435
 	dw ScriptCommand_AskQuestionJumpDefaultYes
-	dw Func_d2f6
-	dw Func_d317
+	dw ScriptCommand_ShowSamNormalMultichoice
+	dw ScriptCommand_ShowSamTutorialMultichoice
 	dw Func_d43d
 	dw ScriptCommand_EndScriptLoop2
 	dw ScriptCommand_EndScriptLoop3
@@ -1073,7 +1073,68 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScriptLoop9
 	dw ScriptCommand_EndScriptLoop10
 
-	INCROM $1224b, $1229f
+
+MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
+	db $04, $00     ; x, y to start drawing box
+	db $10, $08     ; width, height of box
+	db $06, $02     ; x, y coordinate to start printing next text
+	tx Text03f6     ; text id to print next
+	db $06, $04     ; x, y coordinate to start printing next text
+	tx Text03f7     ; text id to print next
+	db $06, $06     ; x, y coordinate to start printing next text
+	tx Text03f8     ; text id to print next 
+	db $ff          ; marker byte -- end text entries
+	db $05, $02     ; cursor starting x, y
+	db $02          ; number of tiles the cursor moves per toggle
+	db $03          ; cursor max index
+	db $0f          ; curor image
+
+	db $00, $00, $00 ; marker bytes -- end of config table
+
+MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
+	db $04, $00     ; x, y to start drawing box
+	db $10, $08     ; width, height of box
+	db $06, $02     ; x, y coordinate to start printing next text
+	tx Text03fa     ; text id to print next
+	db $06, $04     ; x, y coordinate to start printing next text
+	tx Text03fb     ; text id to print next
+	db $06, $06     ; x, y coordinate to start printing next text
+	tx Text03fc     ; text id to print next
+	db $ff          ; marker byte -- end text entries
+	db $05, $02     ; cursor starting x, y
+	db $02          ; number of tiles the cursor moves per toggle
+	db $03          ; cursor max index
+	db $0f          ; curor image
+
+	db $00, $00, $00 ; marker bytes -- end of config table
+
+SamNormalMultichoice_ConfigurationTable: ;1227d
+	db $0A, $00     ; x, y to start drawing box
+	db $0A, $0A     ;  width, height of box
+	db $0C, $02     ; x, y coordinate to start printing next text
+	tx Text03ff     ; text id to print next
+	db $ff          ; marker byte -- end text entries
+	db $0b, $02     ; cursor starting x, y
+	db $02          ; number of tiles the cursor moves per toggle 
+	db $04          ; cursor max index
+	db $0f          ; curor image
+
+	db $00, $00, $00 ; marker bytes -- end of config table
+
+SamTutorialMultichoice_ConfigurationTable: ;1228e
+	db $06, $00     ; x, y to start drawing box
+	db $0E, $12     ; width, height of box
+	db $08, $02     ; x coordinate to start printing text
+	tx Text0400     ; text id to print next
+	db $ff          ; marker byte -- end text entries
+	db $07, $02     ; cursor starting x, y
+	db $02          ; number of tiles the cursor moves per toggle
+	db $08          ; cursor max index
+	db $0f          ; curor image
+
+	db $00, $00, $00 ; marker bytes -- end of config table
+
+
 
 Unknown_1229f: ; 1229f (4:629f)
 	INCROM $1229f, $126d1

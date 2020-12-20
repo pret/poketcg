@@ -190,7 +190,7 @@ AITryUseAttack: ; 14145 (5:4145)
 
 	call AISelectSpecialAttackParameters
 	jr c, .use_attack
-	ld a, OPPACTION_BEGIN_ATTACK
+	ld a, EFFECTCMDTYPE_AI_SELECTION
 	call TryExecuteEffectCommandFunction
 
 .use_attack
@@ -204,7 +204,7 @@ AITryUseAttack: ; 14145 (5:4145)
 	bank1call AIMakeDecision
 	ret c
 
-	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
+	ld a, EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN
 	call TryExecuteEffectCommandFunction
 	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
 	bank1call AIMakeDecision
@@ -866,11 +866,9 @@ _CalculateDamage_VersusDefendingPokemon: ; 14462 (5:4462)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	or a
 	call z, HandleDoubleDamageSubstatus
-	; skips the weak/res checks if bit 7 is set
-	; I guess to avoid overflowing?
-	; should probably just have skipped weakness test instead?
-	bit 7, d
-	res 7, d
+	; skips the weak/res checks if unaffected.
+	bit UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
+	res UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
 	jr nz, .not_resistant
 
 ; handle weakness
@@ -1083,8 +1081,8 @@ CalculateDamage_FromDefendingPokemon: ; 1458c (5:458c)
 
 	call SwapTurn
 	call HandleDoubleDamageSubstatus
-	bit 7, d
-	res 7, d
+	bit UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
+	res UNAFFECTED_BY_WEAKNESS_RESISTANCE_F, d
 	jr nz, .not_resistant
 
 ; handle weakness
@@ -1339,7 +1337,7 @@ InitAITurnVars: ; 15649 (5:5649)
 ; check if flag was already set, if so,
 ; reset wAIBarrierFlagCounter to $80.
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr nz, .set_flag
 
 ; if not, increase it by 1 and check if it exceeds 2.
@@ -1369,14 +1367,14 @@ InitAITurnVars: ; 15649 (5:5649)
 	jr .done
 
 .set_flag
-	ld a, AI_FLAG_MEWTWO_MILL + 0
+	ld a, AI_MEWTWO_MILL
 	ld [wAIBarrierFlagCounter], a
 	jr .done
 
 .check_flag
 ; increase counter by 1 if flag is set
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .reset_2
 	inc a
 	ld [wAIBarrierFlagCounter], a
@@ -3122,7 +3120,7 @@ AIDecideEvolution: ; 15f4c (5:5f4c)
 .check_damage
 	ld a, [wTempAI]
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .check_mysterious_fossil
 	srl a
@@ -3294,7 +3292,7 @@ Func_16120: ; 16120 (5:6120)
 	dec b
 	ld e, b
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	add c
 	ld c, a
@@ -3324,7 +3322,7 @@ Func_16120: ; 16120 (5:6120)
 ; check if there's a Muk in any duelist's Play Area
 .is_active
 	ld e, 0
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 50
 	jr c, .lower_score
 	ld e, PLAY_AREA_ARENA
@@ -4089,7 +4087,7 @@ AIProcessEnergyCards: ; 164fc (5:64fc)
 
 ; arena
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .add_to_score
 
 ; subtract from score instead
@@ -5019,7 +5017,7 @@ AIProcessAttacks: ; 169fc (5:69fc)
 ; if Player is running Mewtwo1 mill deck,
 ; skip attack if Barrier counter is 0.
 	ld a, [wAIBarrierFlagCounter]
-	cp AI_FLAG_MEWTWO_MILL + 0
+	cp AI_MEWTWO_MILL + 0
 	jp z, .dont_attack
 
 ; determine AI score of both attacks.
@@ -5308,7 +5306,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 	cp 31
 	jr nc, .high_recoil_generic_checks
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	sla a
 	cp c
 	jr c, .high_recoil_generic_checks
@@ -5544,7 +5542,7 @@ GetAIScoreOfAttack: ; 16a86 (5:6a86)
 .tally_heal_score
 	push af
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call CalculateByteTensDigit
 	pop bc
 	cp b ; wLoadedMoveEffectParam
@@ -6191,7 +6189,7 @@ LookForCardThatIsKnockedOutOnDevolution: ; 17080 (5:7080)
 	ld [wTempAI], a
 	ld e, c
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	ld e, a
 	ld a, [wTempAI]
@@ -6414,7 +6412,7 @@ AISelectSpecialAttackParameters: ; 17161 (5:7161)
 	ld a, CARD_LOCATION_DISCARD_PILE
 	call CheckIfAnyCardIDinLocation
 	ldh [hTemp_ffa0], a
-	farcall CreateEnergyCardListFromOpponentDiscardPile
+	farcall CreateEnergyCardListFromDiscardPile_AllEnergy
 
 ; find any energy card different from
 ; the one found by CheckIfAnyCardIDinLocation.
@@ -7229,7 +7227,7 @@ Func_174f2: ; 174f2 (5:74f2)
 Func_17583: ; 17583 (5:7583)
 	push hl
 	push de
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call CalculateByteTensDigit
 	ld b, a
 	push bc
