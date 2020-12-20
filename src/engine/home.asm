@@ -3744,7 +3744,7 @@ EvolvePokemonCard: ; 13ac (0:13ac)
 	ld [hl], a
 	; reset status (if in arena) and set the flag that prevents it from evolving again this turn
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	ld l, a
 	ld [hl], $00
 	ld a, e
@@ -3791,7 +3791,7 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 	jr nz, .cant_evolve ; jump if they are incompatible to evolve
 	pop de
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and CAN_EVOLVE_THIS_TURN
 	jr nz, .can_evolve
@@ -3816,7 +3816,7 @@ CheckIfCanEvolveInto: ; 13f7 (0:13f7)
 ; return carry if not basic to stage 2 evolution, or if evolution not possible this turn.
 CheckIfCanEvolveInto_BasicToStage2: ; 142b (0:142b)
 	ld a, e
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and CAN_EVOLVE_THIS_TURN
 	jr nz, .can_evolve
@@ -3910,7 +3910,7 @@ PutHandPokemonCardInPlayArea: ; 1485 (0:1485)
 	ld l, a
 	ld a, [wLoadedCard2HP]
 	ld [hl], a ; set card's HP
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	add e
 	ld l, a
 	ld [hl], $0
@@ -4057,7 +4057,7 @@ SwapPlayAreaPokemon: ; 1548 (0:1548)
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_HP
 	call .swap_duelvar
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	call .swap_duelvar
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call .swap_duelvar

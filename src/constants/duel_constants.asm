@@ -32,7 +32,7 @@ DUELVARS_DECK_CARDS                       EQUS "LOW(wPlayerDeckCards)"          
 DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK      EQUS "LOW(wPlayerNumberOfCardsNotInDeck)"      ; ba
 DUELVARS_ARENA_CARD                       EQUS "LOW(wPlayerArenaCard)"                   ; bb
 DUELVARS_BENCH                            EQUS "LOW(wPlayerBench)"                       ; bc
-DUELVARS_ARENA_CARD_FLAGS_C2              EQU                                             $c2
+DUELVARS_ARENA_CARD_FLAGS              EQUS "LOW(wPlayerArenaCardFlags)"              ; c2
 DUELVARS_ARENA_CARD_HP                    EQUS "LOW(wPlayerArenaCardHP)"                 ; c8
 DUELVARS_BENCH1_CARD_HP                   EQUS "LOW(wPlayerBench1CardHP)"                ; c9
 DUELVARS_BENCH2_CARD_HP                   EQUS "LOW(wPlayerBench2CardHP)"                ; ca
@@ -164,7 +164,7 @@ SUBSTATUS2_GROWL          EQU $12
 SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE EQU 0
 SUBSTATUS3_HEADACHE                EQU 1
 
-; DUELVARS_ARENA_CARD_FLAGS_C2 constants
+; DUELVARS_ARENA_CARD_FLAGS constants
 USED_PKMN_POWER_THIS_TURN_F EQU 5
 USED_LEEK_SLAP_THIS_DUEL_F  EQU 6
 CAN_EVOLVE_THIS_TURN_F      EQU 7

@@ -975,7 +975,7 @@ ResetDevolvedCardStatus: ; 2c45d (b:445d)
 	ld [hl], $00
 ; reset C2 flags
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	ld l, a
 	ld [hl], $00
 	ret
@@ -2541,7 +2541,7 @@ WeezingSelfdestructEffect: ; 2ccea (b:4cea)
 Shift_OncePerTurnCheck: ; 2cd09 (b:4d09)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
@@ -2607,7 +2607,7 @@ Shift_ChangeColorEffect: ; 2cd5d (b:4d5d)
 	call LoadCardDataToBuffer1_FromDeckIndex
 
 	ldh a, [hTemp_ffa0]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 
@@ -2652,7 +2652,7 @@ TangelaPoisonPowder_AIEffect: ; 2cda0 (b:4da0)
 Heal_OncePerTurnCheck: ; 2cda8 (b:4da8)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
@@ -2709,7 +2709,7 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 .done
 ; flag Pkmn Power as being used regardless of coin outcome
 	ldh a, [hTemp_ffa0]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 	ldh a, [hAIPkmnPowerEffectParam]
@@ -2759,7 +2759,7 @@ PoisonWhip_AIEffect: ; 2ce4b (b:4e4b)
 SolarPower_CheckUse: ; 2ce53 (b:4e53)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
@@ -2803,7 +2803,7 @@ SolarPower_RemoveStatusEffect: ; 2ce82 (b:4e82)
 	bank1call WaitMoveAnimation
 
 	ldh a, [hTemp_ffa0]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 	ld l, DUELVARS_ARENA_CARD_STATUS
@@ -3541,7 +3541,7 @@ Cowardice_Check: ; 2d28b (b:528b)
 	ret c ; return if no bench
 
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	ldtx hl, CannotBeUsedInTurnWhichWasPlayedText
 	and CAN_EVOLVE_THIS_TURN
@@ -4587,7 +4587,7 @@ Curse_CheckDamageAndBench: ; 2d7fc (b:57fc)
 	ldh [hTemp_ffa0], a
 
 ; fail if Pkmn Power has already been used
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	ldtx hl, OnlyOncePerTurnText
 	and USED_PKMN_POWER_THIS_TURN
@@ -4715,7 +4715,7 @@ Curse_PlayerSelectEffect: ; 2d834 (b:5834)
 Curse_TransferDamageEffect: ; 2d8bb (b:58bb)
 ; set Pkmn Power as used
 	ldh a, [hTempList]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 
@@ -6587,7 +6587,7 @@ PrehistoricPowerEffect: ; 2e29a (b:629a)
 Peek_OncePerTurnCheck: ; 2e29c (b:629c)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and USED_PKMN_POWER_THIS_TURN
 	jr nz, .already_used
@@ -6603,7 +6603,7 @@ Peek_OncePerTurnCheck: ; 2e29c (b:629c)
 Peek_SelectEffect: ; 2e2b4 (b:62b4)
 ; set Pkmn Power used flag
 	ldh a, [hTemp_ffa0]
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 
@@ -8103,7 +8103,7 @@ StepIn_BenchCheck: ; 2eaca (b:6aca)
 	or a
 	jr z, .set_carry
 
-	add DUELVARS_ARENA_CARD_FLAGS_C2
+	add DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	ldtx hl, OnlyOncePerTurnText
 	and USED_PKMN_POWER_THIS_TURN
@@ -8122,7 +8122,7 @@ StepIn_SwitchEffect: ; 2eae8 (b:6ae8)
 	ldh a, [hTemp_ffa0]
 	ld e, a
 	call SwapArenaWithBenchPokemon
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 	ret
@@ -8161,7 +8161,7 @@ LeekSlap_AIEffect: ; 2eb17 (b:6b17)
 ; return carry if already used attack in this duel
 LeekSlap_OncePerDuelCheck: ; 2eb1f (b:6b1f)
 ; can only use attack if it was never used before this duel
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	and USED_LEEK_SLAP_THIS_DUEL
 	ret z
@@ -8171,7 +8171,7 @@ LeekSlap_OncePerDuelCheck: ; 2eb1f (b:6b1f)
 ; 0x2eb2c
 
 LeekSlap_SetUsedThisDuelFlag: ; 2eb2c (b:6b2c)
-	ld a, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld a, DUELVARS_ARENA_CARD_FLAGS
 	call GetTurnDuelistVariable
 	set USED_LEEK_SLAP_THIS_DUEL_F, [hl]
 	ret

@@ -7563,7 +7563,7 @@ SetAllPlayAreaPokemonCanEvolve: ; 70f6 (1:70f6)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
-	ld l, DUELVARS_ARENA_CARD_FLAGS_C2
+	ld l, DUELVARS_ARENA_CARD_FLAGS
 .next_pkmn_loop
 	res 5, [hl]
 	set CAN_EVOLVE_THIS_TURN_F, [hl]

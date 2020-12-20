@@ -73,7 +73,10 @@ wPlayerArenaCard:: ; c2bb
 wPlayerBench:: ; c2bc
 	ds MAX_BENCH_POKEMON + 1
 
-	ds $6
+wPlayerArenaCardFlags:: ; c2c2
+	ds $1
+
+	ds $5
 
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
@@ -235,7 +238,10 @@ wOpponentArenaCard:: ; c3bb
 wOpponentBench:: ; c3bc
 	ds MAX_BENCH_POKEMON + 1
 
-	ds $6
+wOpponentArenaCardFlags:: ; c3c2
+	ds $1
+
+	ds $5
 
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
