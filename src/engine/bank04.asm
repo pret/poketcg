@@ -1087,7 +1087,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $03          ; cursor max index
-	db $0f          ; curor image
+	db $0f          ; cursor image
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
@@ -1104,7 +1104,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $03          ; cursor max index
-	db $0f          ; curor image
+	db $0f          ; cursor image
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
@@ -1117,7 +1117,7 @@ SamNormalMultichoice_ConfigurationTable: ;1227d
 	db $0b, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle 
 	db $04          ; cursor max index
-	db $0f          ; curor image
+	db $0f          ; cursor image
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
@@ -1130,7 +1130,7 @@ SamTutorialMultichoice_ConfigurationTable: ;1228e
 	db $07, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $08          ; cursor max index
-	db $0f          ; curor image
+	db $0f          ; cursor image
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
@@ -1291,7 +1291,7 @@ Unknown_128fb: ; 128fb
 Func_1296e: ; 1296e (4:696e)
 	INCROM $1296e, $1299f
 
-; creates a new entry in SpriteAnimBuffer, Alse loads the sprite if need be
+; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
 CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	push af
 	ld a, [wd5d7]
@@ -1550,7 +1550,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	call GetAnimFramePointerFromOffset
 	inc de
 	ld a, [de]
-	call SetAimationCounterAndLoop
+	call SetAnimationCounterAndLoop
 	jr c, .tryHandlingFrame
 	inc de
 	ld bc, SPRITE_ANIM_COORD_X
@@ -1608,7 +1608,7 @@ GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
 
 ; Sets the animation counter for the current sprite. If the value is zero, loop the animation
 ; a - new animation counter
-SetAimationCounterAndLoop: ; 12b89 (4:6b89)
+SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
 	push hl
 	push bc
 	ld bc, SPRITE_ANIM_COUNTER

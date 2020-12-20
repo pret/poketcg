@@ -391,7 +391,7 @@ MoveAnimation_53eb:
 
 MoveAnimation_53f6:
 	anim_player         ANIM_SPELL_MOVE
-	anim_opponent       ANIM_FURY_SWEEPES
+	anim_opponent       ANIM_FURY_SWIPES
 	anim_opponent       ANIM_GET_HIT
 	anim_normal         ANIM_SHAKE1
 	anim_opponent       ANIM_SHOW_DAMAGE

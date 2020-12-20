@@ -974,7 +974,7 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; return carry if move is useable but cannot KO.
 .check_can_ko ; 205d7 (8:45d7)
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -987,7 +987,7 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; can't KO.
 	scf
 	ret
-.unuseable
+.unusable
 	or a
 	ret
 
@@ -995,12 +995,12 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; move is useable and minimum damage > 0.
 .check_random ; 205f6 (8:45f6)
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wAIMinDamage]
 	cp 10
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, 10
 	call Random
 	cp 3
@@ -3559,7 +3559,7 @@ AIDecide_Pokedex: ; 212dc (8:52dc)
 	jp PickPokedexCards ; bug, should be jp nz
 
 ; picks order of the cards in deck from the effects of Pokedex.
-; prioritises Pokemon cards, then Trainer cards, then energy cards.
+; prioritizes Pokemon cards, then Trainer cards, then energy cards.
 ; stores the resulting order in wce1a.
 PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 ; unreferenced
@@ -3690,7 +3690,7 @@ PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 	ret
 
 ; picks order of the cards in deck from the effects of Pokedex.
-; prioritises energy cards, then Pokemon cards, then Trainer cards.
+; prioritizes energy cards, then Pokemon cards, then Trainer cards.
 ; stores the resulting order in wce1a.
 PickPokedexCards: ; 2138e (8:538e)
 	xor a
@@ -4168,7 +4168,7 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 	scf
 	ret
 
-; this deck will use Scoop Up on a benched Articuno2, Zapdos3 or Molres2.
+; this deck will use Scoop Up on a benched Articuno2, Zapdos3 or Moltres2.
 ; interestingly, does not check for Muk in both Play Areas.
 .HandleLegendaryRonald ; 215e7 (8:55e7)
 ; if less than 3 Play Area Pokemon cards, skip.
@@ -6042,7 +6042,7 @@ AIDecide_PokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
 
 AIDecide_PokemonTrader_StrangePower: ; 22122 (8:6122)
 ; looks for a Pokemon in hand to trade with Mr Mime in deck.
-; inputing Mr Mime in register e for the function is redundant
+; inputting Mr Mime in register e for the function is redundant
 ; since it already checks whether a Mr Mime exists in the hand.
 	ld a, MR_MIME
 	ld e, MR_MIME
@@ -6764,7 +6764,7 @@ HandleAIShift: ; 22476 (8:6476)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 
-; converts WR_* to apropriate color
+; converts WR_* to appropriate color
 	ld a, [wAIDefendingPokemonWeakness]
 	ld b, 0
 .loop_color
@@ -7535,7 +7535,7 @@ AIPickEnergyCardToDiscard: ; 2282e (8:682e)
 
 ; returns in a the deck index of an energy card attached to card
 ; in player's Play Area location a to remove.
-; prioritises double colorless energy, then any useful energy,
+; prioritizes double colorless energy, then any useful energy,
 ; then defaults to the first energy card attached if neither
 ; of those are found.
 ; returns $ff in a if there are no energy cards attached.
@@ -7614,7 +7614,7 @@ PickAttachedEnergyCardToRemove: ; 22875 (8:6875)
 
 ; stores in wTempAI and wCurCardCanAttack the deck indices
 ; of energy cards attached to card in Play Area location a.
-; prioritises double colorless energy, then any useful energy,
+; prioritizes double colorless energy, then any useful energy,
 ; then defaults to the first two energy cards attached if neither
 ; of those are found.
 ; returns $ff in a if there are no energy cards attached.
@@ -8014,7 +8014,7 @@ LookForCardIDInDeck_GivenCardIDInHand: ; 22a49 (8:6a49)
 ; input:
 ;	a = card ID
 ;	b = PLAY_AREA_* to start with
-; ouput:
+; output:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
 LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
@@ -8134,7 +8134,7 @@ RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
 ;   e = card ID 2
 ; output:
 ;   a = deck index of card ID 1 found in deck
-;   e = deck index of Pokemon card in hand dfferent than card ID 2
+;   e = deck index of Pokemon card in hand different than card ID 2
 LookForCardIDToTradeWithDifferentHandCard: ; 22ae0 (8:6ae0)
 	ld hl, wCurCardCanAttack
 	ld [hl], e

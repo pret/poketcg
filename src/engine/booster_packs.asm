@@ -452,7 +452,7 @@ PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
 	pop hl
 	ret
 
-; add the final cards drawn from the booster pack to the player's colection (sCardCollection)
+; add the final cards drawn from the booster pack to the player's collection (sCardCollection)
 AddBoosterCardsToCollection: ; 1e40a (7:640a)
 	push hl
 	ld hl, wBoosterCardsDrawn

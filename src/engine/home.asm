@@ -579,7 +579,7 @@ FlushAllCGBPalettes: ; 0458 (0:0458)
 	jr FlushPalettesIfRequested.done
 
 ; copy b bytes of CGB palette data starting at
-; (wBackgroundPalettesCGB + a palettes) into rBGPD or rOGPD.
+; (wBackgroundPalettesCGB + a palettes) into rBGPD or rOBPD.
 CopyCGBPalettes: ; 0467 (0:0467)
 	add a
 	add a
@@ -1007,10 +1007,10 @@ TwoByteNumberToText: ; 0663 (0:0663)
 	ret
 .get_digit
 	ld a, "0" - 1
-.substract_loop
+.subtract_loop
 	inc a
 	add hl, bc
-	jr c, .substract_loop
+	jr c, .subtract_loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -1175,7 +1175,7 @@ CopyGfxData: ; 070c (0:070c)
 	jr nz, .next_tile
 	ret
 
-; copy bc bytes from hl to de. preserves all regsters except af
+; copy bc bytes from hl to de. preserves all registers except af
 CopyDataHLtoDE_SaveRegisters: ; 0732 (0:0732)
 	push hl
 	push de
@@ -2036,10 +2036,10 @@ MltReq2Packet: ; 0bbb (0:0bbb)
 Func_0bcb: ; 0bcb (0:0bcb)
 	di
 	push de
-.wait_vbalnk
+.wait_vblank
 	ldh a, [rLY]
 	cp LY_VBLANK + 3
-	jr nz, .wait_vbalnk
+	jr nz, .wait_vblank
 	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00
 	ldh [rLCDC], a
 	ld a, %11100100
@@ -2779,7 +2779,7 @@ ExchangeRNG: ; 0f58 (0:0f58)
 ; hTemp_ffa0, and hTempPlayAreaLocation_ffa1, and hTempRetreatCostCards.
 ; finally exchange RNG data.
 ; the receiving side will use this data to read the OPPACTION_* value in
-; [hOppActionTableIndex] and match it by calling the correspoding OppAction* function
+; [hOppActionTableIndex] and match it by calling the corresponding OppAction* function
 SetOppAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 	push hl
 	push bc
@@ -3031,7 +3031,7 @@ ShuffleDeck: ; 10bc (0:10bc)
 	ret
 
 ; draw a card from the turn holder's deck, saving its location as CARD_LOCATION_JUST_DRAWN.
-; returns carry if deck is empty, nc if a card was succesfully drawn.
+; returns carry if deck is empty, nc if a card was successfully drawn.
 ; AddCardToHand is meant to be called next (unless this function returned carry).
 DrawCardFromDeck: ; 10cf (0:10cf)
 	push hl
@@ -4466,7 +4466,7 @@ PlayAttackAnimation_DealAttackDamage: ; 179a (0:179a)
 	call WaitMoveAnimation
 	pop hl
 	pop de
-	call SubstractHP
+	call SubtractHP
 	ld a, [wDuelDisplayedScreen]
 	cp DUEL_MAIN_SCENE
 	jr nz, .skip_draw_huds
@@ -4899,10 +4899,10 @@ ApplyAttachedDefender: ; 1a7e (0:1a7e)
 	ld d, a
 	ret
 
-; hl: address to substract HP from
-; de: how much HP to substract (damage to deal)
+; hl: address to subtract HP from
+; de: how much HP to subtract (damage to deal)
 ; returns carry if the HP does not become 0 as a result
-SubstractHP: ; 1a96 (0:1a96)
+SubtractHP: ; 1a96 (0:1a96)
 	push hl
 	push de
 	ld a, [hl]
@@ -6146,7 +6146,7 @@ LoadDuelCardSymbolTiles2: ; 20c4 (0:20c4)
 	ld b, $c
 	jr CopyFontsOrDuelGraphicsTiles
 
-; load the face down basic / stage1 / stage2 card images shown in the ckeck Pokemon screens
+; load the face down basic / stage1 / stage2 card images shown in the check Pokemon screens
 LoadDuelFaceDownCardTiles: ; 20d8 (0:20d8)
 	ld b, $10
 	jr LoadDuelCheckPokemonScreenTiles.got_num_tiles
@@ -6239,7 +6239,7 @@ Func_212f: ; 212f (0:212f)
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
-; load the graphics and draw the duel box message given a BOXMSC_* constant in a
+; load the graphics and draw the duel box message given a BOXMSG_* constant in a
 DrawDuelBoxMessage: ; 2167 (0:2167)
 	ld l, a
 	ld h, 40 tiles / 4 ; boxes are 10x4 tiles
@@ -6888,10 +6888,10 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	ld [de], a
 	inc de
 	ld a, SYM_0 - 1
-.substract_loop
+.subtract_loop
 	inc a
 	add hl, bc
-	jr c, .substract_loop
+	jr c, .subtract_loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -7978,7 +7978,7 @@ DrawNarrowTextBox_WaitForInput: ; 2a7c (0:2a7c)
 	ret
 
 NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
-	db 10, 17 ; corsor x, cursor y
+	db 10, 17 ; cursor x, cursor y
 	db 1 ; y displacement between items
 	db 1 ; number of items
 	db SYM_CURSOR_D ; cursor tile number
@@ -9138,7 +9138,7 @@ AddToDamage: ; 3055 (0:3055)
 	ret
 
 ; [wDamage] -= a
-SubstractFromDamage: ; 3061 (0:3061)
+SubtractFromDamage: ; 3061 (0:3061)
 	push de
 	push hl
 	ld e, a
@@ -9662,7 +9662,7 @@ HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
 .in_bench
 	push hl
 	push de
-	; substract 10 HP from attacking Pokemon (turn holder's arena Pokemon)
+	; subtract 10 HP from attacking Pokemon (turn holder's arena Pokemon)
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -9672,7 +9672,7 @@ HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
 	push af
 	push hl
 	ld de, 10
-	call SubstractHP
+	call SubtractHP
 	ld a, [wLoadedCard2ID]
 	ld [wTempNonTurnDuelistCardID], a
 	ld hl, 10
@@ -10271,7 +10271,7 @@ ApplyStrikesBack_AgainstResidualMove: ; 36a2 (0:36a2)
 	pop de
 	push af
 	push hl
-	call SubstractHP
+	call SubtractHP
 	ldtx hl, ReceivesDamageDueToStrikesBackText
 	call DrawWideTextBox_PrintText
 	pop hl

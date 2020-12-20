@@ -88,7 +88,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer YouPlaySecondText                                  ; 0x0054
 	textpointer TransmissionErrorText                              ; 0x0055
 	textpointer ChooseTheCardYouWishToExamineText                  ; 0x0056
-	textpointer TransmitingDataText                                ; 0x0057
+	textpointer TransmittingDataText                               ; 0x0057
 	textpointer WaitingHandExamineText                             ; 0x0058
 	textpointer SelectingBenchPokemonHandExamineBackText           ; 0x0059
 	textpointer RetreatedToTheBenchText                            ; 0x005a

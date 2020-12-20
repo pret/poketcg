@@ -11,7 +11,7 @@ EffectCommands: ; 186f7 (6:46f7)
 ; - EFFECTCMDTYPE_INITIAL_EFFECT_1: Executed right after move or trainer card is used. Bypasses Smokescreen and Sand Attack effects.
 ; - EFFECTCMDTYPE_INITIAL_EFFECT_2: Executed right after move, Pokemon Power, or trainer card is used.
 ; - EFFECTCMDTYPE_DISCARD_ENERGY: For moves or trainer cards that require putting one or more attached energy cards into the discard pile.
-; - EFFECTCMDTYPE_REQUIRE_SELECTION: For moves, Pokemon Powers, or trainer cards requring the user to select a card (from e.g. play area screen or card list).
+; - EFFECTCMDTYPE_REQUIRE_SELECTION: For moves, Pokemon Powers, or trainer cards requiring the user to select a card (from e.g. play area screen or card list).
 ; - EFFECTCMDTYPE_BEFORE_DAMAGE: Effect command of a move executed prior to the damage step. For trainer card or Pokemon Power, usually the main effect.
 ; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step.
 ; - EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out. Called only for AI-executed moves.
@@ -1215,7 +1215,7 @@ KangaskhanFetchEffectCommands:
 	db  $00
 
 KangaskhanCometPunchEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, CometPunch_MultiplerEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, CometPunch_MultiplierEffect
 	dbw EFFECTCMDTYPE_AI, CometPunch_AIEffect
 	db  $00
 
@@ -1230,7 +1230,7 @@ TaurosRampageEffectCommands:
 	db  $00
 
 DoduoFuryAttackEffectCommands:
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FuryAttack_MultiplerEffect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, FuryAttack_MultiplierEffect
 	dbw EFFECTCMDTYPE_AI, FuryAttack_AIEffect
 	db  $00
 
@@ -1500,7 +1500,7 @@ ImposterProfessorOakEffectCommands:
 ComputerSearchEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, ComputerSearch_HandDeckCheck
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, ComputerSearch_PlayerDiscardHandSelection
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ComputerSearch_DiscardAddToHandEfect
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, ComputerSearch_DiscardAddToHandEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, ComputerSearch_PlayerDeckSelection
 	db  $00
 

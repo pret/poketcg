@@ -372,7 +372,7 @@ ChooseTheCardYouWishToExamineText: ; 3697c (d:697c)
 	line "you wish to examine."
 	done
 
-TransmitingDataText: ; 369a2 (d:69a2)
+TransmittingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 

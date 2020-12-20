@@ -733,7 +733,7 @@ wNoItemSelectionMenuKeys:: ; cbd6
 	ds $1
 
 ; when viewing a card page, which keys (among B_BUTTON, D_UP, and D_DOWN) will exit the page,
-; either to go back to the previous menu orlist, or to load the card page of the card above/below it
+; either to go back to the previous menu or list, or to load the card page of the card above/below it
 wCardPageExitKeys:: ; cbd7
 	ds $1
 
@@ -2085,10 +2085,10 @@ wBoosterViableCardList:: ; d133
 
 NEXTU
 
-; permission map of the current room with unpassable objects (walls, NPCs, etc).
+; permission map of the current room with impassable objects (walls, NPCs, etc).
 ; $00: passable (floor)
-; $40: unpassable and talkable (NPC or talkable wall)
-; $80: unpassable and untalkable (wall)
+; $40: impassable and talkable (NPC or talkable wall)
+; $80: impassable and untalkable (wall)
 wPermissionMap:: ; d133
 	ds $100
 

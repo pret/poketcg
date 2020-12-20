@@ -12,7 +12,7 @@ booster_set: MACRO
 ENDM
 
 ; For the energy or energy generation function, there are three options:
-; - Ponter to a function that generates energies (some generate one, some generate a full pack)
+; - Pointer to a function that generates energies (some generate one, some generate a full pack)
 ; - A single energy of a specific type
 ; - $0000 if no card in the pack is an energy
 

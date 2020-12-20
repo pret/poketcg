@@ -915,7 +915,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 
 ; unit: 5 bytes.
 ; [structure]
-; horizonal align (1) / title text id (2) / desc. text id (2)
+; horizontal align (1) / title text id (2) / desc. text id (2)
 glossary_entry: MACRO
 	db \1
 	tx \2

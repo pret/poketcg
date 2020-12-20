@@ -187,7 +187,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	cp TURN_PLAYER_WON
 	jr z, .active_duelist_won_battle
 	cp TURN_PLAYER_LOST
-	jr z, .active_duelist_lost_batte
+	jr z, .active_duelist_lost_battle
 	ld a, $5f
 	ld c, MUSIC_DARK_DIDDLY
 	ldtx hl, DuelWasADrawText
@@ -205,7 +205,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	ldtx hl, WonDuelText
 	jr .handle_duel_finished
 
-.active_duelist_lost_batte
+.active_duelist_lost_battle
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr nz, .player_won_battle
@@ -779,7 +779,7 @@ PlayPokemonCard: ; 44db (1:44db)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTempPlayAreaLocation_ffa1], a
 	call EvolvePokemonCardIfPossible
-	jr c, .try_evolve_loop ; jump if evolution wasn't successsful somehow
+	jr c, .try_evolve_loop ; jump if evolution wasn't successful somehow
 	ld a, OPPACTION_EVOLVE_PKMN
 	call SetOppAction_SerialSendDuelData
 	call PrintPlayAreaCardList_EnableLCD
@@ -1554,7 +1554,7 @@ PrintDeckAndHandIconsAndNumberOfCards: ; 49ca (1:49ca)
 ; prints, for each duelist, the number of cards in the hand, and the number
 ; of cards in the deck, according to their placement in the draw card(s) screen.
 ; input: wNumCardsBeingDrawn = number of cards being drawn (in order to add
-; them to the hand cards and substract them from the deck cards).
+; them to the hand cards and subtract them from the deck cards).
 PrintNumberOfHandAndDeckCards: ; 49ed (1:49ed)
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
@@ -1948,7 +1948,7 @@ ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 
 ; link opponent's turn
 .exchange_duelvars
-	ldtx hl, TransmitingDataText
+	ldtx hl, TransmittingDataText
 	call DrawWideTextBox_PrintText
 	call ExchangeRNG
 	ld hl, wPlayerDuelVariables
@@ -2580,7 +2580,7 @@ DrawDuelHUD: ; 5093 (1:5093)
 .done
 	ret
 
-; draws an horizonal line that separates the arena side of each duelist
+; draws an horizontal line that separates the arena side of each duelist
 ; also colorizes the line on CGB
 DrawDuelHorizontalSeparator: ; 516f (1:516f)
 	ld hl, DuelHorizontalSeparatorTileData
@@ -3211,7 +3211,7 @@ Func_5591: ; 5591 (1:5591)
 ; Discard Pile card list, including a bottom-right image of the current card.
 ; since this loads the text for the Hand card list screen, SetDiscardPileScreenTexts
 ; is called after this if the screen corresponds to a Discard Pile list.
-; the dimensions of text box where the card list is printed are 20x13, in order to accomodate
+; the dimensions of text box where the card list is printed are 20x13, in order to accommodate
 ; another text box below it (wCardListInfoBoxText) as well as the image of the selected card.
 InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 	xor a
@@ -3446,7 +3446,7 @@ CardListItemSelectionMenu: ; 56c2 (1:56c2)
 	ret
 
 ItemSelectionMenuParameters: ; 5708 (1:5708)
-	db 1, 14 ; corsor x, cursor y
+	db 1, 14 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
@@ -3792,7 +3792,7 @@ GoToFirstOrNextCardPage: ; 58e2 (1:58e2)
 	; stay in this page if it exists, or skip to previous page if it doesn't
 	or a
 	ret nz
-	; non-existant page: skip to next
+	; non-existent page: skip to next
 	jr .advance_page
 .set_card_page
 	ld [wCardPageNumber], a
@@ -3809,7 +3809,7 @@ GoToPreviousCardPage: ; 5911 (1:5911)
 	; stay in this page if it exists, or skip to previous page if it doesn't
 	or a
 	ret nz
-	; non-existant page: skip to previous
+	; non-existent page: skip to previous
 	jr GoToPreviousCardPage
 .set_card_page
 	ld [wCardPageNumber], a
@@ -3828,7 +3828,7 @@ GoToPreviousCardPage: ; 5911 (1:5911)
 ; return with the equivalent to one of these three actions:
    ; stay in card page trying to switch to (nc, nz)
    ; change to card page returned in a if D_LEFT/D_RIGHT pressed, or exit if A_BUTTON/START pressed (c)
-   ; non-existant page, so skip to next/previous (nc, z)
+   ; non-existent page, so skip to next/previous (nc, z)
 SwitchCardPage: ; 5930 (1:5930)
 	ld hl, CardPageSwitchPointerTable
 	jp JumpToFunctionInTable
@@ -5827,10 +5827,10 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros_Bank1: ; 65d1 (1:65d1)
 
 .get_digit
 	ld a, SYM_0 - 1
-.substract_loop
+.subtract_loop
 	inc a
 	add hl, bc
-	jr c, .substract_loop
+	jr c, .subtract_loop
 	ld [de], a
 	inc de
 	ld a, l
@@ -6987,7 +6987,7 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	ld d, $00
 	ld a, DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
-	call SubstractHP
+	call SubtractHP
 	push hl
 	ld a, $8c
 	call Func_6cab
@@ -8120,7 +8120,7 @@ PlayAttackAnimation_DealAttackDamageSimple: ; 7469 (1:7469)
 	call WaitMoveAnimation
 	pop de
 	pop hl
-	call SubstractHP
+	call SubtractHP
 	ld a, [wDuelDisplayedScreen]
 	cp DUEL_MAIN_SCENE
 	ret nz

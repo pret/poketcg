@@ -4728,7 +4728,7 @@ Curse_TransferDamageEffect: ; 2d8bb (b:58bb)
 	cp DUELIST_TYPE_PLAYER
 	jr z, .vs_player
 
-; vs. oppponent
+; vs. opponent
 	bank1call Func_61a1
 .vs_player
 ; transfer the damage counter to the targets that were selected.
@@ -5608,7 +5608,7 @@ HandleEvolvedCardSelection: ; 2dd50 (b:5d50)
 	ret
 ; 0x2dd62
 
-; finds first occurence in Play Area
+; finds first occurrence in Play Area
 ; of Stage 1 or 2 card, and outputs its
 ; Play Area location in a, with carry set.
 ; if none found, don't return carry set.
@@ -5799,7 +5799,7 @@ StrangeBehavior_CheckDamage: ; 2de39 (b:5e39)
 	call CheckIfPlayAreaHasAnyDamage
 	ldtx hl, NoPokemonWithDamageCountersText
 	jr c, .set_carry
-; can Slowbro receive any damage counters without KOing?
+; can Slowbro receive any damage counters without KO-ing?
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	add DUELVARS_ARENA_CARD_HP
 	call GetTurnDuelistVariable
@@ -7925,12 +7925,12 @@ MirrorMoveEffects: ; 2e98c (b:698c)
 	or a
 	ret z ; no effect
 	cp LAST_TURN_EFFECT_DISCARD_ENERGY
-	jr z, .dicard_energy
+	jr z, .discard_energy
 	cp LAST_TURN_EFFECT_AMNESIA
 	jr z, .pick_amnesia_attack
 	ret
 
-.dicard_energy
+.discard_energy
 	call AIPickEnergyCardToDiscardFromDefendingPokemon
 	ldh [hTemp_ffa0], a
 	ret
@@ -8209,7 +8209,7 @@ CometPunch_AIEffect: ; 2eb5d (b:6b5d)
 	jp SetExpectedAIDamage
 ; 0x2eb65
 
-CometPunch_MultiplerEffect: ; 2eb65 (b:6b65)
+CometPunch_MultiplierEffect: ; 2eb65 (b:6b65)
 	ld hl, 20
 	call LoadTxRam3
 	ldtx de, DamageCheckIfHeadsXDamageText
@@ -8264,7 +8264,7 @@ FuryAttack_AIEffect: ; 2ebba (b:6bba)
 	jp SetExpectedAIDamage
 ; 0x2ebc2
 
-FuryAttack_MultiplerEffect: ; 2ebc2 (b:6bc2)
+FuryAttack_MultiplierEffect: ; 2ebc2 (b:6bc2)
 	ld hl, 10
 	call LoadTxRam3
 	ld a, 2
@@ -9976,7 +9976,7 @@ ComputerSearch_PlayerDeckSelection: ; 2f52e (b:752e)
 	ret
 ; 0x2f545
 
-ComputerSearch_DiscardAddToHandEfect: ; 2f545 (b:7545)
+ComputerSearch_DiscardAddToHandEffect: ; 2f545 (b:7545)
 ; discard cards from hand
 	ld hl, hTempList
 	ld a, [hli]
@@ -11215,7 +11215,7 @@ CreateBasicPokemonCardListFromDiscardPile: ; 2fbd6 (b:7bd6)
 	or a
 	jr nz, .next_discard_pile_card ; if not Basic stage, skip
 
-; write this card'sindex to wDuelTempList
+; write this card's index to wDuelTempList
 	ld a, [hl]
 	ld [de], a
 	inc de

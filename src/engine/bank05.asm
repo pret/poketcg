@@ -1223,7 +1223,7 @@ LookForCardIDInHandList_Bank5: ; 155d2 (5:55d2)
 ; input:
 ;	a = card ID
 ;	b = PLAY_AREA_* to start with
-; ouput:
+; output:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
 LookForCardIDInPlayArea_Bank5: ; 155ef (5:55ef)
@@ -3972,7 +3972,7 @@ AIProcessButDontPlayEnergy_SkipEvolutionAndArena: ; 164ba (5:64ba)
 	jr AIProcessEnergyCards
 
 ; copies wTempPlayAreaAIScore to wPlayAreaAIScore
-; and loads wAIscore with value in wTempAIScore.
+; and loads wAIScore with value in wTempAIScore.
 ; identical to RetrievePlayAreaAIScoreFromBackup2.
 RetrievePlayAreaAIScoreFromBackup1: ; 164d3 (5:64d3)
 	push af
@@ -4611,7 +4611,7 @@ CheckIfEvolutionNeedsEnergyForMove: ; 16805 (5:6805)
 ; returns in e the card ID of the energy required for
 ; the Discard/Energy Boost attack loaded in wSelectedAttack.
 ; if it's Zapdos2's Thunderbolt attack, return no carry.
-; if it's Charizard's Fire Spin or Exeggutor's Big Eggplosion
+; if it's Charizard's Fire Spin or Exeggutor's Big Eggsplosion
 ; attack, don't return energy card ID, but set carry.
 ; output:
 ;	b = 1 if needs color energy, 0 otherwise;
@@ -4879,7 +4879,7 @@ CheckSpecificDecksToAttachDoubleColorless: ; 1696e (5:696e)
 	push de
 	push hl
 
-; check if AI is playing any of the aplicable decks.
+; check if AI is playing any of the applicable decks.
 	ld a, [wOpponentDeckID]
 	cp LEGENDARY_DRAGONITE_DECK_ID
 	jr z, .legendary_dragonite_deck
@@ -4974,7 +4974,7 @@ AIProcessButDontUseAttack: ; 169ca (5:69ca)
 	jr AIProcessAttacks
 
 ; copies wTempPlayAreaAIScore to wPlayAreaAIScore
-; and loads wAIscore with value in wTempAIScore.
+; and loads wAIScore with value in wTempAIScore.
 ; identical to RetrievePlayAreaAIScoreFromBackup1.
 RetrievePlayAreaAIScoreFromBackup2: ; 169e3 (5:69e3)
 	push af
@@ -6630,7 +6630,7 @@ CheckCardEvolutionInHandOrDeck: ; 17274 (5:7274)
 	scf
 	ret
 
-; sets up the inital hand of boss deck.
+; sets up the initial hand of boss deck.
 ; always draws at least 2 Basic Pokemon cards and 2 Energy cards.
 ; also sets up so that the next cards to be drawn have
 ; some minimum number of Basic Pokemon and Energy cards.
@@ -7221,7 +7221,7 @@ Func_174f2: ; 174f2 (5:74f2)
 	jp .loop_play_area
 
 ; loads wcdea + play area location in e
-; with nenergy  * 2 + $80 - floor(dam / 10)
+; with energy  * 2 + $80 - floor(dam / 10)
 ; loads wcdfa + play area location in e
 ; with $01
 Func_17583: ; 17583 (5:7583)
