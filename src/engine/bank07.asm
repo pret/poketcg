@@ -653,7 +653,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 .address
 	dw Func_1c94a
 
-Func_1c94a:
+Func_1c94a: ; 1c94a (7:494a)
 	ld e, l
 	ld d, h
 	ld c, 3
@@ -805,6 +805,7 @@ macro_1ca04: MACRO
 	dw \1
 	db \2
 ENDM
+
 Data_1ca04:
 ; value(2), flag(1)
 	macro_1ca04 $5858, $08
@@ -823,7 +824,7 @@ Data_1ca04:
 	macro_1ca04 $2838, $00
 	macro_1ca04 $2818, $00
 
-Func_1ca31:
+Func_1ca31: ; 1ca31 (7:4a6b)
 	push hl
 	push bc
 	ld a, [wd4ac]

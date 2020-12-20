@@ -379,7 +379,7 @@ wBoosterTempNonEnergiesDrawn:: ; c400
 	ds $b
 wBoosterTempEnergiesDrawn:: ; c40b
 	ds $b
-wBoosterCardsDrawnEnd::
+wBoosterCardsDrawnEnd:: ; c416
 	ds $6a
 
 NEXTU
@@ -1466,10 +1466,10 @@ wAIVenusaur2PlayAreaLocation:: ; ce05
 
 wce06:: ; ce06
 ; number of cards to be transferred by AI using Energy Trans.
-wAINumberOfEnergyTransCards::
+wAINumberOfEnergyTransCards:: ; ce06
 ; used for storing weakness of Player's Arena card
 ; in AI routine dealing with Shift Pkmn Power.
-wAIDefendingPokemonWeakness::
+wAIDefendingPokemonWeakness:: ; ce06
 	ds $1
 
 wce07:: ; ce07
@@ -1591,7 +1591,7 @@ wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
 ; set to PLAYER_TURN in the "Your Play Area" screen
-; set to OPPONENT_TURN in the  "Opp Play Area" screen
+; set to OPPONENT_TURN in the "Opp Play Area" screen
 ; alternates when drawing the "In Play Area" screen
 wCheckMenuPlayAreaWhichDuelist:: ; ce50
 	ds $1
@@ -2089,7 +2089,7 @@ NEXTU
 ; $00: passable (floor)
 ; $40: unpassable and talkable (NPC or talkable wall)
 ; $80: unpassable and untalkable (wall)
-wPermissionMap::
+wPermissionMap:: ; d133
 	ds $100
 
 ENDU
@@ -2301,7 +2301,7 @@ wd3d0:: ; d3d0
 wLoadedFlagBits:: ; d3d1
 	ds $1
 
-wEventFlags::
+wEventFlags:: ; d3d2
 	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
@@ -2373,7 +2373,7 @@ wd4b0:: ; d4b0
 
 wd4b1:: ; d4b1
 	ds $1
-	
+
 wd4b2:: ; d4b2
 	ds $1
 

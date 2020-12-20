@@ -39,8 +39,8 @@ Start: ; 0150 (0:0150)
 	ld sp, $fffe
 	push af
 	xor a
-	ld [rIF], a
-	ld [rIE], a
+	ldh [rIF], a
+	ldh [rIE], a
 	call ZeroRAM
 	ld a, $1
 	call BankswitchROM
@@ -87,16 +87,16 @@ VBlankHandler: ; 019b (0:019b)
 .no_oam_copy
 	; flush scaling/windowing parameters
 	ldh a, [hSCX]
-	ld [rSCX], a
+	ldh [rSCX], a
 	ldh a, [hSCY]
-	ld [rSCY], a
+	ldh [rSCY], a
 	ldh a, [hWX]
-	ld [rWX], a
+	ldh [rWX], a
 	ldh a, [hWY]
-	ld [rWY], a
+	ldh [rWY], a
 	; flush LCDC
 	ld a, [wLCDC]
-	ld [rLCDC], a
+	ldh [rLCDC], a
 	ei
 	call wVBlankFunctionTrampoline
 	call FlushPalettesIfRequested
@@ -186,17 +186,17 @@ SetupTimer: ; 0241 (0:0241)
 	ld b, -68 ; Value for Normal Speed
 	call CheckForCGB
 	jr c, .set_timer
-	ld a, [rKEY1]
+	ldh a, [rKEY1]
 	and $80
 	jr z, .set_timer
 	ld b, $100 - 2 * 68 ; Value for CGB Double Speed
 .set_timer
 	ld a, b
-	ld [rTMA], a
+	ldh [rTMA], a
 	ld a, TAC_16384_HZ
-	ld [rTAC], a
+	ldh [rTAC], a
 	ld a, TAC_START | TAC_16384_HZ
-	ld [rTAC], a
+	ldh [rTAC], a
 	ret
 
 ; return carry if not CGB
@@ -231,36 +231,36 @@ EnableLCD: ; 0277 (0:0277)
 	ret nz               ; assert that LCD is off
 	or LCDC_ON           ;
 	ld [wLCDC], a        ;
-	ld [rLCDC], a        ; turn LCD on
+	ldh [rLCDC], a       ; turn LCD on
 	ld a, FLUSH_ALL_PALS
 	ld [wFlushPaletteFlags], a
 	ret
 
 ; wait for vblank, then turn LCD off
 DisableLCD: ; 028a (0:028a)
-	ld a, [rLCDC]        ;
+	ldh a, [rLCDC]       ;
 	bit LCDC_ENABLE_F, a ;
 	ret z                ; assert that LCD is on
-	ld a, [rIE]
+	ldh a, [rIE]
 	ld [wIE], a
 	res INT_VBLANK, a    ;
-	ld [rIE], a          ; disable vblank interrupt
+	ldh [rIE], a         ; disable vblank interrupt
 .wait_vblank
-	ld a, [rLY]          ;
+	ldh a, [rLY]         ;
 	cp LY_VBLANK         ;
 	jr nz, .wait_vblank  ; wait for vblank
-	ld a, [rLCDC]        ;
+	ldh a, [rLCDC]       ;
 	and LCDC_OFF         ;
-	ld [rLCDC], a        ;
+	ldh [rLCDC], a       ;
 	ld a, [wLCDC]        ;
 	and LCDC_OFF         ;
 	ld [wLCDC], a        ; turn LCD off
 	xor a
-	ld [rBGP], a
-	ld [rOBP0], a
-	ld [rOBP1], a
+	ldh [rBGP], a
+	ldh [rOBP0], a
+	ldh [rOBP1], a
 	ld a, [wIE]
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; set OBJ size: 8x8
@@ -293,50 +293,50 @@ Set_WD_off: ; 02d4 (0:02d4)
 
 ; enable timer interrupt
 EnableInt_Timer: ; 02dd (0:02dd)
-	ld a, [rIE]
+	ldh a, [rIE]
 	or 1 << INT_TIMER
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; enable vblank interrupt
 EnableInt_VBlank: ; 02e4 (0:02e4)
-	ld a, [rIE]
+	ldh a, [rIE]
 	or 1 << INT_VBLANK
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; enable lcdc interrupt on hblank mode
 EnableInt_HBlank: ; 02eb (0:02eb)
-	ld a, [rSTAT]
+	ldh a, [rSTAT]
 	or 1 << STAT_MODE_HBLANK
-	ld [rSTAT], a
+	ldh [rSTAT], a
 	xor a
-	ld [rIF], a
-	ld a, [rIE]
+	ldh [rIF], a
+	ldh a, [rIE]
 	or 1 << INT_LCD_STAT
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; disable lcdc interrupt and the hblank mode trigger
 DisableInt_HBlank: ; 02fb (0:02fb)
-	ld a, [rSTAT]
+	ldh a, [rSTAT]
 	and ~(1 << STAT_MODE_HBLANK)
-	ld [rSTAT], a
+	ldh [rSTAT], a
 	xor a
-	ld [rIF], a
-	ld a, [rIE]
+	ldh [rIF], a
+	ldh a, [rIE]
 	and ~(1 << INT_LCD_STAT)
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; initialize scroll, window, and lcdc registers, set trampoline functions
 ; for the lcdc and vblank interrupts, latch clock data, and enable SRAM/RTC
 SetupRegisters: ; 030b (0:030b)
 	xor a
-	ld [rSCY], a
-	ld [rSCX], a
-	ld [rWY], a
-	ld [rWX], a
+	ldh [rSCY], a
+	ldh [rSCX], a
+	ldh [rWY], a
+	ldh [rWX], a
 	ld [wcab0], a
 	ld [wcab1], a
 	ld [wcab2], a
@@ -378,7 +378,7 @@ DetectConsole: ; 0349 (0:0349)
 	cp CONSOLE_CGB
 	ret nz
 	ld a, $01
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call SwitchToCGBDoubleSpeed
 	ret
 
@@ -386,10 +386,10 @@ DetectConsole: ; 0349 (0:0349)
 SetupPalettes: ; 036a (0:036a)
 	ld hl, wBGP
 	ld a, %11100100
-	ld [rBGP], a
+	ldh [rBGP], a
 	ld [hli], a ; wBGP
-	ld [rOBP0], a
-	ld [rOBP1], a
+	ldh [rOBP0], a
+	ldh [rOBP1], a
 	ld [hli], a ; wOBP0
 	ld [hl], a ; wOBP1
 	xor a
@@ -505,11 +505,11 @@ SetBGP: ; 040c (0:040c)
 ;	fallthrough
 
 ; Flush non-CGB palettes and the first CGB palette
-FlushPalette0:
+FlushPalette0: ; 040f (0:040f)
 	ld a, FLUSH_ONE_PAL
 ;	fallthrough
 
-FlushPalettes:
+FlushPalettes: ; 0411 (0:0411)
 	ld [wFlushPaletteFlags], a
 	ld a, [wLCDC]
 	rla
@@ -545,11 +545,11 @@ FlushPalettesIfRequested: ; 042d (0:042d)
 	; flush grayscale (non-CGB) palettes
 	ld hl, wBGP
 	ld a, [hli]
-	ld [rBGP], a
+	ldh [rBGP], a
 	ld a, [hli]
-	ld [rOBP0], a
+	ldh [rOBP0], a
 	ld a, [hl]
-	ld [rOBP1], a
+	ldh [rOBP1], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr z, .CGB
@@ -600,7 +600,7 @@ CopyCGBPalettes: ; 0467 (0:0467)
 	ld [$ff00+c], a
 	inc c
 .wait
-	ld a, [rSTAT]
+	ldh a, [rSTAT]
 	and 1 << STAT_BUSY ; wait until hblank or vblank
 	jr nz, .wait
 	ld a, [hl]
@@ -653,7 +653,7 @@ EmptyScreen: ; 04a2 (0:04a2)
 AttrBlkPacket_EmptyScreen: ; 04bf (0:04bf)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 0 << 0 + 0 << 2, 0, 0, 19, 17 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -679,21 +679,21 @@ BCCoordToBGMap0Address: ; 04cf (0:04cf)
 ; the A + B + Start + Select combination resets the game
 ReadJoypad: ; 04de (0:04de)
 	ld a, JOY_BTNS_SELECT
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
+	ldh [rJOYP], a
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
 	cpl
 	and JOY_INPUT_MASK
 	swap a
 	ld b, a ; buttons data
 	ld a, JOY_DPAD_SELECT
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
+	ldh [rJOYP], a
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
 	cpl
 	and JOY_INPUT_MASK
 	or b
@@ -722,11 +722,11 @@ Reset: ; 051b (0:051b)
 	di
 	jp Start
 
-SaveButtonsHeld:
+SaveButtonsHeld: ; 0522 (0:0522)
 	ld a, c
 	ldh [hKeysHeld], a
 	ld a, JOY_BTNS_SELECT | JOY_DPAD_SELECT
-	ld [rJOYP], a
+	ldh [rJOYP], a
 	ret
 
 ; clear joypad hmem data
@@ -824,7 +824,7 @@ CopyDMAFunction: ; 0593 (0:0593)
 ; CopyDMAFunction copies this function to hDMAFunction ($ff83)
 DMA: ; 05a1 (0:05a1)
 	ld a, HIGH(wOAM)
-	ld [rDMA], a
+	ldh [rDMA], a
 	ld a, $28
 .wait
 	dec a
@@ -939,7 +939,7 @@ WriteBCDNumberInTextFormat: ; 0614 (0:0614)
 
 ; given a BCD digit in the (lower nybble) of register a, write it in text (ascii)
 ;  format to hl. numbers above 9 end up converted to half-width font tiles.
-WriteBCDDigitInTextFormat:
+WriteBCDDigitInTextFormat: ; 061b (0:061b)
 	and $0f
 	add "0"
 	cp "9" + 1
@@ -1322,7 +1322,7 @@ BankswitchVRAM0: ; 07c5 (0:07c5)
 	push af
 	xor a
 	ldh [hBankVRAM], a
-	ld [rVBK], a
+	ldh [rVBK], a
 	pop af
 	ret
 
@@ -1331,14 +1331,14 @@ BankswitchVRAM1: ; 07cd (0:07cd)
 	push af
 	ld a, $1
 	ldh [hBankVRAM], a
-	ld [rVBK], a
+	ldh [rVBK], a
 	pop af
 	ret
 
 ; set current dest VRAM bank to a
 BankswitchVRAM: ; 07d6 (0:07d6)
 	ldh [hBankVRAM], a
-	ld [rVBK], a
+	ldh [rVBK], a
 	ret
 
 ; switch to CGB Normal Speed Mode if playing on CGB and current mode is Double Speed Mode
@@ -1361,20 +1361,20 @@ SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 
 ; switch between CGB Double Speed Mode and Normal Speed Mode
 CGBSpeedSwitch: ; 07f1 (0:07f1)
-	ld a, [rIE]
+	ldh a, [rIE]
 	push af
 	xor a
-	ld [rIE], a
+	ldh [rIE], a
 	set 0, [hl]
 	xor a
-	ld [rIF], a
-	ld [rIE], a
+	ldh [rIF], a
+	ldh [rIE], a
 	ld a, $30
-	ld [rJOYP], a
+	ldh [rJOYP], a
 	stop
 	call SetupTimer
 	pop af
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; validate the saved data in SRAM
@@ -1928,7 +1928,7 @@ Pal23Packet_0b00: ; 0b00 (0:0b00)
 AttrBlkPacket_0b10: ; 0b10 (0:0b10)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 1 << 0 + 2 << 2, 5, 5, 10, 10 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -1983,30 +1983,30 @@ DetectSGB: ; 0b59 (0:0b59)
 	call Wait
 	ld hl, MltReq2Packet
 	call SendSGB
-	ld a, [rJOYP]
+	ldh a, [rJOYP]
 	and %11
 	cp SNES_JOYPAD1
 	jr nz, .sgb
 	ld a, P15
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
+	ldh [rJOYP], a
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
 	ld a, P15 | P14
-	ld [rJOYP], a
+	ldh [rJOYP], a
 	ld a, P14
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
+	ldh [rJOYP], a
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
 	ld a, P15 | P14
-	ld [rJOYP], a
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
-	ld a, [rJOYP]
+	ldh [rJOYP], a
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
+	ldh a, [rJOYP]
 	and %11
 	cp SNES_JOYPAD1
 	jr nz, .sgb
@@ -2037,13 +2037,13 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	di
 	push de
 .wait_vbalnk
-	ld a, [rLY]
+	ldh a, [rLY]
 	cp LY_VBLANK + 3
 	jr nz, .wait_vbalnk
 	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00
-	ld [rLCDC], a
+	ldh [rLCDC], a
 	ld a, %11100100
-	ld [rBGP], a
+	ldh [rBGP], a
 	ld de, v0Tiles1
 	ld bc, v0BGMap0 - v0Tiles1
 .tiles_loop
@@ -2069,7 +2069,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	dec c
 	jr nz, .bgmap_outer_loop
 	ld a, LCDC_BGON | LCDC_OBJON | LCDC_WIN9C00 | LCDC_ON
-	ld [rLCDC], a
+	ldh [rLCDC], a
 	pop hl
 	call SendSGB
 	ei
@@ -2098,12 +2098,12 @@ HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 .loop
 	ei
 	di
-	ld a, [rSTAT]        ;
+	ldh a, [rSTAT]       ;
 	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert hblank
 	ld a, [hl]
 	ld [de], a
-	ld a, [rSTAT]        ;
+	ldh a, [rSTAT]       ;
 	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert still in hblank
 	ei
@@ -2120,12 +2120,12 @@ HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
 .loop
 	ei
 	di
-	ld a, [rSTAT]        ;
+	ldh a, [rSTAT]       ;
 	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert hblank
 	ld a, [de]
 	ld [hl], a
-	ld a, [rSTAT]        ;
+	ldh a, [rSTAT]       ;
 	and STAT_LCDC_STATUS ;
 	jr nz, .loop         ; assert still in hblank
 	ei
@@ -2228,13 +2228,13 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	jr z, .check_for_timeout
 	ret
 .begin_transfer
-	ld a, [rSC]          ;
+	ldh a, [rSC]         ;
 	add a                ; make sure that no serial transfer is active
 	ret c                ;
 	ld a, SC_INTERNAL
-	ld [rSC], a          ; use internal clock
+	ldh [rSC], a         ; use internal clock
 	ld a, SC_START | SC_INTERNAL
-	ld [rSC], a          ; use internal clock, set transfer start flag
+	ldh [rSC], a         ; use internal clock, set transfer start flag
 	ret
 .check_for_timeout
 	; sets bit7 of [wSerialFlags] if the serial interrupt hasn't triggered
@@ -2273,11 +2273,11 @@ Func_0cc5: ; 0cc5 (0:0cc5)
 	ret
 .asm_cdc
 	ld a, $29
-	ld [rSB], a
+	ldh [rSB], a
 	ld a, SC_INTERNAL
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, SC_START | SC_INTERNAL
-	ld [rSC], a
+	ldh [rSC], a
 .asm_ce8
 	ld a, [hl]
 	or a
@@ -2330,17 +2330,17 @@ SerialHandler: ; 0d26 (0:0d26)
 	or a                 ;
 	jr z, .asm_d55       ; skip ahead if [wSerialOp] zero
 	; send/receive a byte
-	ld a, [rSB]
+	ldh a, [rSB]
 	call SerialHandleRecv
 	call SerialHandleSend ; returns byte to actually send
 	push af
 .wait_for_completion
-	ld a, [rSC]
+	ldh a, [rSC]
 	add a
 	jr c, .wait_for_completion
 	pop af
 	; end send/receive
-	ld [rSB], a          ; prepare sending byte (from Func_0dc8?)
+	ldh [rSB], a         ; prepare sending byte (from Func_0dc8?)
 	ld a, [wSerialOp]
 	cp $29
 	jr z, .done          ; if [wSerialOp] != $29, use external clock
@@ -2348,16 +2348,16 @@ SerialHandler: ; 0d26 (0:0d26)
 .asm_d55
 	ld a, $1
 	ld [wSerialRecvCounter], a
-	ld a, [rSB]
+	ldh a, [rSB]
 	ld [wSerialRecvBuf], a
 	ld a, $ac
-	ld [rSB], a
+	ldh [rSB], a
 	ld a, [wSerialRecvBuf]
 	cp $12               ; if [wSerialRecvBuf] != $12, use external clock
 	jr z, .done          ; and prepare for next byte. either way, return
 .asm_d6a
 	ld a, SC_START | SC_EXTERNAL
-	ld [rSC], a          ; transfer start, use external clock
+	ldh [rSC], a         ; transfer start, use external clock
 .done
 	ld hl, wSerialCounter
 	inc [hl]
@@ -2592,25 +2592,25 @@ SerialExchangeBytes: ; 0e63 (0:0e63)
 Func_0e8e: ; 0e8e (0:0e8e)
 	call ClearSerialData
 	ld a, $12
-	ld [rSB], a          ; send $12
+	ldh [rSB], a         ; send $12
 	ld a, SC_START | SC_EXTERNAL
-	ld [rSC], a          ; use external clock, set transfer start flag
-	ld a, [rIF]
+	ldh [rSC], a         ; use external clock, set transfer start flag
+	ldh a, [rIF]
 	and ~(1 << INT_SERIAL)
-	ld [rIF], a          ; clear serial interrupt flag
-	ld a, [rIE]
+	ldh [rIF], a         ; clear serial interrupt flag
+	ldh a, [rIE]
 	or 1 << INT_SERIAL   ; enable serial interrupt
-	ld [rIE], a
+	ldh [rIE], a
 	ret
 
 ; disable serial interrupt, and clear rSB, rSC, and serial registers in WRAM
 ResetSerial: ; 0ea6 (0:0ea6)
-	ld a, [rIE]
+	ldh a, [rIE]
 	and ~(1 << INT_SERIAL)
-	ld [rIE], a
+	ldh [rIE], a
 	xor a
-	ld [rSB], a
-	ld [rSC], a
+	ldh [rSB], a
+	ldh [rSC], a
 ;	fallthrough
 
 ; zero serial registers in WRAM
@@ -4334,7 +4334,7 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	call LoadCardDataToBuffer1_FromDeckIndex
 ;	fallthrough
 
-CopyMoveDataAndDamage:
+CopyMoveDataAndDamage: ; 16ca (0:16ca)
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
 	ld hl, wLoadedCard1Move1
@@ -5691,7 +5691,7 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 
 ; continue drawing a labeled or regular textbox on DMG or SGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxDMGorSGB:
+ContinueDrawingTextBoxDMGorSGB: ; 1e93 (0:1e93)
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -5742,7 +5742,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	ret
 
 ; DrawRegularTextBox branches here on CGB console
-DrawRegularTextBoxCGB:
+DrawRegularTextBoxCGB: ; 1ec9 (0:1ec9)
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -5752,7 +5752,7 @@ DrawRegularTextBoxCGB:
 
 ; continue drawing a labeled or regular textbox on CGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxCGB:
+ContinueDrawingTextBoxCGB: ; 1ed4 (0:1ed4)
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -5786,7 +5786,7 @@ CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
 	pop hl
 ;	fallthrough
 
-CopyCurrentLineAttrCGB:
+CopyCurrentLineAttrCGB: ; 1f00 (0:1f00)
 	call BankswitchVRAM1
 	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
@@ -5807,7 +5807,7 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	ret z
 ;	fallthrough
 
-ColorizeTextBoxSGB:
+ColorizeTextBoxSGB: ; 1f1b (0:1f1b)
 	push bc
 	push de
 	ld hl, wTempSGBPacket
@@ -5852,7 +5852,7 @@ ColorizeTextBoxSGB:
 AttrBlkPacket_TextBox: ; 1f4f (0:1f4f)
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
-	; Control Code,  Color Palette Designation, X1, Y1, X2, Y2
+	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
 	db ATTR_BLK_CTRL_INSIDE + ATTR_BLK_CTRL_LINE, 0 << 0 + 1 << 2, 0, 0, 0, 0 ; data set 1
 	ds 6 ; data set 2
 	ds 2 ; data set 3
@@ -6204,7 +6204,7 @@ LoadSymbolsFont: ; 2119 (0:2119)
 ; if $4000 ≤ hl ≤ $7fff
 ;   copy b tiles from Gfx2:hl to de
 CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -6259,10 +6259,10 @@ DrawDuelBoxMessage: ; 2167 (0:2167)
 	jp FillRectangle
 
 ; load the tiles for the latin, katakana, and hiragana fonts into VRAM
-; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.t3.1bpp
+; from gfx/fonts/full_width/3.1bpp and gfx/fonts/full_width/4.1bpp
 LoadFullWidthFontTiles: ; 2189 (0:2189)
 	ld hl, FullWidthFonts + $3cc tiles_1bpp - $4000
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	push hl
 	ld e, l
@@ -7021,7 +7021,7 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 ; create, at wTextTileBuffer, a full-width font tile given its
 ; within the full-width font graphics (FullWidthFonts) in hl
 CreateFullWidthFontTile: ; 252e (0:252e)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld de, wTextTileBuffer
 	push de
@@ -7487,7 +7487,7 @@ PrintCardListItems: ; 2799 (0:2799)
 
 ; like PrintCardListItems, except more parameters are already initialized
 ; called instead of PrintCardListItems to reload the list after moving up or down
-ReloadCardListItems:
+ReloadCardListItems: ; 27af (0:27af)
 	ld e, SYM_SPACE
 	ld a, [wListScrollOffset]
 	or a
@@ -8064,7 +8064,7 @@ YesOrNoMenuWithText_LeftAligned: ; 2afe (0:2afe)
 	lb de, 2, 16 ; x, y
 ;	fallthrough
 
-HandleYesOrNoMenu:
+HandleYesOrNoMenu: ; 2b0a (0:2b0a)
 	ld a, d
 	ld [wLeftmostItemCursorX], a
 	lb bc, SYM_CURSOR_R, SYM_SPACE ; cursor tile, tile behind cursor
@@ -8999,7 +8999,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 
 ; identical to CopyFontsOrDuelGraphicsTiles
 CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
-	ld a, BANK(Fonts); BANK(DuelGraphics)
+	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE
 	call CopyGfxData
@@ -9422,14 +9422,14 @@ Func_31e5: ; 31e5 (0:31e5)
 	jr Func_31e0
 
 Func_31ea: ; 31ea (0:31ea)
-	ld a, [rSB]
+	ldh a, [rSB]
 	ld [wce6e], a
 Func_31ef: ; 31ef (0:31ef)
 	xor a
 	jr Func_31e0
 
 Func_31f2: ; 31f2 (0:31f2)
-	ld a, [rSB]
+	ldh a, [rSB]
 	ld [wce6f], a
 	xor a
 	ld [wce63], a
@@ -9456,11 +9456,11 @@ Func_31fc: ; 31fc (0:31fc)
 ;	fallthrough
 
 Func_3212: ; 3212 (0:3212)
-	ld [rSB], a
+	ldh [rSB], a
 	ld a, SC_INTERNAL
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, SC_START | SC_INTERNAL
-	ld [rSC], a
+	ldh [rSC], a
 	ret
 
 ; doubles the damage at de if swords dance or focus energy was used
@@ -10365,7 +10365,7 @@ GetArenaCardWeakness: ; 3730 (0:3730)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardWeakness:
+GetCardWeakness: ; 3739 (0:3739)
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Weakness]
@@ -10390,7 +10390,7 @@ GetArenaCardResistance: ; 374a (0:374a)
 	ld a, DUELVARS_ARENA_CARD
 ;	fallthrough
 
-GetCardResistance:
+GetCardResistance: ; 3753 (0:3753)
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ld a, [wLoadedCard2Resistance]
@@ -11278,7 +11278,7 @@ CallBC: ; 3c46 (0:3c46)
 
 DoFrameIfLCDEnabled: ; 3c48 (0:3c48)
 	push af
-	ld a, [rLCDC]
+	ldh a, [rLCDC]
 	bit LCDC_ENABLE_F, a
 	jr z, .done
 	push bc
@@ -11548,7 +11548,7 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 	ld a, [wWhichSprite]
 ;	fallthrough
 
-GetSpriteAnimBufferProperty_SpriteInA:
+GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_ret

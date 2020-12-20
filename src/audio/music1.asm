@@ -106,13 +106,13 @@ Func_f406f: ; f406f (3d:406f)
 
 Music1_Init: ; f407d (3d:407d)
 	xor a
-	ld [rNR52], a
+	ldh [rNR52], a
 	ld a, $80
-	ld [rNR52], a
+	ldh [rNR52], a
 	ld a, $77
-	ld [rNR50], a
+	ldh [rNR50], a
 	ld a, $ff
-	ld [rNR51], a
+	ldh [rNR51], a
 	ld a, $3d
 	ld [wCurSongBank], a
 	ld a, $80
@@ -216,34 +216,34 @@ Music1_StopAllChannels: ; f414b (3d:414b)
 	bit 0, d
 	jr nz, .stop_channel_2
 	ld a, $8
-	ld [rNR12], a
+	ldh [rNR12], a
 	swap a
-	ld [rNR14], a
+	ldh [rNR14], a
 .stop_channel_2
 	xor a
 	ld [wMusicIsPlaying + 1], a
 	bit 1, d
 	jr nz, .stop_channel_4
 	ld a, $8
-	ld [rNR22], a
+	ldh [rNR22], a
 	swap a
-	ld [rNR24], a
+	ldh [rNR24], a
 .stop_channel_4
 	xor a
 	ld [wMusicIsPlaying + 3], a
 	bit 3, d
 	jr nz, .stop_channel_3
 	ld a, $8
-	ld [rNR42], a
+	ldh [rNR42], a
 	swap a
-	ld [rNR44], a
+	ldh [rNR44], a
 .stop_channel_3
 	xor a
 	ld [wMusicIsPlaying + 2], a
 	bit 2, d
 	jr nz, .done
 	ld a, $0
-	ld [rNR32], a
+	ldh [rNR32], a
 .done
 	ret
 
@@ -429,9 +429,9 @@ Music1_UpdateChannel1: ; f42a5 (3d:42a5)
 	bit 0, a
 	jr nz, .asm_f4309
 	ld a, $8
-	ld [rNR12], a
+	ldh [rNR12], a
 	swap a
-	ld [rNR14], a
+	ldh [rNR14], a
 .asm_f4309
 	ret
 
@@ -482,9 +482,9 @@ Music1_UpdateChannel2: ; f430a (3d:430a)
 	bit 1, a
 	jr nz, .asm_f436e
 	ld a, $8
-	ld [rNR22], a
+	ldh [rNR22], a
 	swap a
-	ld [rNR24], a
+	ldh [rNR24], a
 .asm_f436e
 	ret
 
@@ -506,7 +506,7 @@ Music1_UpdateChannel3: ; f436f (3d:436f)
 	cp $1
 	jr z, .asm_f4398
 	ld a, [wMusicE9 + 2]
-	ld [rNR32], a
+	ldh [rNR32], a
 .asm_f4398
 	ld a, [wddbb + 2]
 	dec a
@@ -531,9 +531,9 @@ Music1_UpdateChannel3: ; f436f (3d:436f)
 	bit 2, a
 	jr nz, .asm_f43cd
 	ld a, $0
-	ld [rNR32], a
+	ldh [rNR32], a
 	ld a, $80
-	ld [rNR34], a
+	ldh [rNR34], a
 .asm_f43cd
 	ret
 
@@ -569,9 +569,9 @@ Music1_UpdateChannel4: ; f43ce (3d:43ce)
 	xor a
 	ld [wddef], a
 	ld a, $8
-	ld [rNR42], a
+	ldh [rNR42], a
 	swap a
-	ld [rNR44], a
+	ldh [rNR44], a
 .asm_f4413
 	ret
 
@@ -1167,19 +1167,19 @@ Func_f4714: ; f4714 (3d:4714)
 	cp $80
 	jr z, .asm_f4733
 	ld a, [wMusicVolume]
-	ld [rNR12], a
+	ldh [rNR12], a
 	ld d, $80
 .asm_f4733
 	ld [hl], $2
 	ld a, $8
-	ld [rNR10], a
+	ldh [rNR10], a
 	ld a, [wMusicDuty1]
-	ld [rNR11], a
+	ldh [rNR11], a
 	ld a, [wMusicCh1CurPitch]
-	ld [rNR13], a
+	ldh [rNR13], a
 	ld a, [wMusicCh1CurOctave]
 	or d
-	ld [rNR14], a
+	ldh [rNR14], a
 .asm_f4749
 	ret
 .asm_f474a
@@ -1206,17 +1206,17 @@ Func_f475a: ; f475a (3d:475a)
 	cp $80
 	jr z, .asm_f4779
 	ld a, [wMusicVolume + 1]
-	ld [rNR22], a
+	ldh [rNR22], a
 	ld d, $80
 .asm_f4779
 	ld [hl], $2
 	ld a, [wMusicDuty2]
-	ld [rNR21], a
+	ldh [rNR21], a
 	ld a, [wMusicCh2CurPitch]
-	ld [rNR23], a
+	ldh [rNR23], a
 	ld a, [wMusicCh2CurOctave]
 	or d
-	ld [rNR24], a
+	ldh [rNR24], a
 .asm_f478b
 	ret
 .asm_f478c
@@ -1239,7 +1239,7 @@ Func_f479c: ; f479c (3d:479c)
 	or a
 	jr z, .no_wave_change
 	xor a
-	ld [rNR30], a
+	ldh [rNR30], a
 	call Music1_LoadWaveInstrument
 	ld d, $80
 .no_wave_change
@@ -1251,28 +1251,28 @@ Func_f479c: ; f479c (3d:479c)
 	cp $80
 	jr z, .asm_f47cc
 	ld a, [wMusicVolume + 2]
-	ld [rNR32], a
+	ldh [rNR32], a
 	xor a
-	ld [rNR30], a
+	ldh [rNR30], a
 	ld d, $80
 .asm_f47cc
 	ld [hl], $2
 	xor a
-	ld [rNR31], a
+	ldh [rNR31], a
 	ld a, [wMusicCh3CurPitch]
-	ld [rNR33], a
+	ldh [rNR33], a
 	ld a, $80
-	ld [rNR30], a
+	ldh [rNR30], a
 	ld a, [wMusicCh3CurOctave]
 	or d
-	ld [rNR34], a
+	ldh [rNR34], a
 .asm_f47e0
 	ret
 .asm_f47e1
 	ld hl, wMusicTie
 	ld [hl], $0
 	xor a
-	ld [rNR30], a
+	ldh [rNR30], a
 	ret
 
 Music1_LoadWaveInstrument: ; f479c (3d:47ea)
@@ -1349,7 +1349,7 @@ Func_f4839: ; f4839 (3d:4839)
 	jr nz, .asm_f4853
 	jr asm_f482a
 .asm_f4853
-	ld [rNR43], a
+	ldh [rNR43], a
 	inc de
 	ld a, d
 	ld [hld], a
@@ -1368,7 +1368,7 @@ Func_f485a: ; f485a (3d:485a)
 
 Func_f4866: ; f4866 (3d:4866)
 	ld a, [wMusicPanning]
-	ld [rNR50], a
+	ldh [rNR50], a
 	ld a, [wdd8c]
 	or a
 	ld hl, wMusicDC
@@ -1397,7 +1397,7 @@ Func_f4866: ; f4866 (3d:4866)
 	swap e
 	or e
 	and d
-	ld [rNR51], a
+	ldh [rNR51], a
 	ret
 
 Music1_UpdateVibrato: ; f4898 (3d:4898)
@@ -1495,13 +1495,13 @@ Func_f490b: ; f490b (3d:490b)
 	bit 0, a
 	jr nz, .done
 	ld a, e
-	ld [rNR13], a
-	ld a, [rNR11]
+	ldh [rNR13], a
+	ldh a, [rNR11]
 	and $c0
-	ld [rNR11], a
+	ldh [rNR11], a
 	ld a, d
 	and $3f
-	ld [rNR14], a
+	ldh [rNR14], a
 	ret
 .not_channel_1
 	cp $1
@@ -1513,12 +1513,12 @@ Func_f490b: ; f490b (3d:490b)
 	bit 1, a
 	jr nz, .done
 	ld a, e
-	ld [rNR23], a
-	ld a, [rNR21]
+	ldh [rNR23], a
+	ldh a, [rNR21]
 	and $c0
-	ld [rNR21], a
+	ldh [rNR21], a
 	ld a, d
-	ld [rNR24], a
+	ldh [rNR24], a
 	ret
 .not_channel_2
 	cp $2
@@ -1530,11 +1530,11 @@ Func_f490b: ; f490b (3d:490b)
 	bit 2, a
 	jr nz, .done
 	ld a, e
-	ld [rNR33], a
+	ldh [rNR33], a
 	xor a
-	ld [rNR31], a
+	ldh [rNR31], a
 	ld a, d
-	ld [rNR34], a
+	ldh [rNR34], a
 .done
 	ret
 
@@ -1567,28 +1567,28 @@ Func_f4980: ; f4980 (3d:4980)
 	bit 0, d
 	jr nz, .asm_f4990
 	ld a, $8
-	ld [rNR12], a
+	ldh [rNR12], a
 	swap a
-	ld [rNR14], a
+	ldh [rNR14], a
 .asm_f4990
 	bit 1, d
 	jr nz, .asm_f499c
 	swap a
-	ld [rNR22], a
+	ldh [rNR22], a
 	swap a
-	ld [rNR24], a
+	ldh [rNR24], a
 .asm_f499c
 	bit 3, d
 	jr nz, .asm_f49a8
 	swap a
-	ld [rNR42], a
+	ldh [rNR42], a
 	swap a
-	ld [rNR44], a
+	ldh [rNR44], a
 .asm_f49a8
 	bit 2, d
 	jr nz, .asm_f49b0
 	ld a, $0
-	ld [rNR32], a
+	ldh [rNR32], a
 .asm_f49b0
 	ret
 

@@ -538,7 +538,6 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	tx Text0500
 	tx Text04ff
 
-
 	db NORTH, 2, 8
 	dw PrintInteractableObjectText
 	tx Text0502

@@ -37,7 +37,7 @@ BoosterPack_ColosseumNeutral:: ; 1e4e4 (7:64e4)
 
 BoosterPack_ColosseumGrass:: ; 1e4f0 (7:64f0)
 	booster_set COLOSSEUM ; booster pack set
-	dw GRASS_ENERGY  ; energy or energy generation function
+	dw GRASS_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db 48 ; Grass Type Chance
@@ -52,7 +52,7 @@ BoosterPack_ColosseumGrass:: ; 1e4f0 (7:64f0)
 
 BoosterPack_ColosseumFire:: ; 1e4fc (7:64fc)
 	booster_set COLOSSEUM ; booster pack set
-	dw FIRE_ENERGY  ; energy or energy generation function
+	dw FIRE_ENERGY ; energy or energy generation function
 
 ; Card Type Chances
 	db 16 ; Grass Type Chance

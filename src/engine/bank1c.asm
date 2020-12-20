@@ -176,13 +176,13 @@ Func_70136: ; 70136 (1c:4136)
 	or LCDC_BGON
 	ld [wLCDC], a
 	ld a, %11100100
-	ld [rBGP], a
+	ldh [rBGP], a
 	call SetBGP
 	xor a
 	ldh [hSCX], a
-	ld [rSCX], a
+	ldh [rSCX], a
 	ldh [hSCY], a
-	ld [rSCY], a
+	ldh [rSCY], a
 	pop de
 	pop bc
 	pop hl
