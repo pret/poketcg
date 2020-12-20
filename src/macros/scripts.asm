@@ -69,9 +69,9 @@ ENDM
 	const Func_d1b3_index                       ; $34
 	const ScriptCommand_QuitScriptFully_index     ; $35
 	const Func_d244_index                       ; $36
-	const Func_d24c_index                       ; $37
+	const ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst_index                       ; $37
 	const ScriptCommand_OpenDeckMachine_index        ; $38
-	const Func_d271_index                       ; $39
+	const ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck_index                       ; $39
 	const ScriptCommand_EnterMap_index                       ; $3a
 	const ScriptCommand_MoveArbitraryNPC_index                       ; $3b
 	const Func_d209_index                       ; $3c
@@ -94,8 +94,8 @@ ENDM
 	const ScriptCommand_WaitForSongToFinish_index                       ; $4d
 	const Func_d435_index                       ; $4e
 	const ScriptCommand_AskQuestionJumpDefaultYes_index                       ; $4f
-	const Func_d2f6_index                       ; $50
-	const Func_d317_index                       ; $51
+	const ScriptCommand_ShowSamNormalMultichoice_index                       ; $50
+	const ScriptCommand_ShowSamTutorialMultichoice_index                       ; $51
 	const Func_d43d_index                       ; $52
 	const ScriptCommand_EndScriptLoop2_index         ; $53
 	const ScriptCommand_EndScriptLoop3_index         ; $54
