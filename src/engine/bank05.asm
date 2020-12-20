@@ -190,7 +190,7 @@ AITryUseAttack: ; 14145 (5:4145)
 
 	call AISelectSpecialAttackParameters
 	jr c, .use_attack
-	ld a, OPPACTION_BEGIN_ATTACK
+	ld a, EFFECTCMDTYPE_AI_SELECTION
 	call TryExecuteEffectCommandFunction
 
 .use_attack
@@ -204,7 +204,7 @@ AITryUseAttack: ; 14145 (5:4145)
 	bank1call AIMakeDecision
 	ret c
 
-	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
+	ld a, EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN
 	call TryExecuteEffectCommandFunction
 	ld a, OPPACTION_ATTACK_ANIM_AND_DAMAGE
 	bank1call AIMakeDecision

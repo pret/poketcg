@@ -1438,7 +1438,7 @@ CheckIfActiveCardParalyzedOrAsleep: ; 4918 (1:4918)
 	scf
 	ret
 
-; display the animation of the turn duelist drawing a card at the beginning of the turn
+; display the animation of the turn duelist drawing one card at the beginning of the turn
 ; if there isn't any card left in the deck, let the player know with a text message
 DisplayDrawOneCardScreen: ; 4933 (1:4933)
 	ld a, 1
@@ -7400,9 +7400,9 @@ Func_6ff7: ; 6ff7 (1:6ff7)
 	ret
 
 ; print one of the "There was no effect from" texts depending
-; on the value at wNoEffectFromStatus (NO_STATUS or a status condition constant)
+; on the value at wNoEffectFromWhichStatus (NO_STATUS or a status condition constant)
 PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
-	ld a, [wNoEffectFromStatus]
+	ld a, [wNoEffectFromWhichStatus]
 	or a
 	jr nz, .status
 	ld hl, wLoadedMoveName

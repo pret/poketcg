@@ -13,11 +13,14 @@ EffectCommands: ; 186f7 (6:46f7)
 ; - EFFECTCMDTYPE_DISCARD_ENERGY: For moves or trainer cards that require putting one or more attached energy cards into the discard pile.
 ; - EFFECTCMDTYPE_REQUIRE_SELECTION: For moves, Pokemon Powers, or trainer cards requring the user to select a card (from e.g. play area screen or card list).
 ; - EFFECTCMDTYPE_BEFORE_DAMAGE: Effect command of a move executed prior to the damage step. For trainer card or Pokemon Power, usually the main effect.
-; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step
-; - EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out
-; - EFFECTCMDTYPE_PKMN_POWER_TRIGGER: Pokemon Power effects that trigger the moment the Pokemon card is played
-; - EFFECTCMDTYPE_AI: Used for AI scoring
-; - EFFECTCMDTYPE_AI_SELECTION: Routines for determining AI selection that are required
+; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step.
+; - EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out. Called only for AI-executed moves.
+; - EFFECTCMDTYPE_PKMN_POWER_TRIGGER: Pokemon Power effects that trigger the moment the Pokemon card is played.
+; - EFFECTCMDTYPE_AI: Used for AI scoring.
+; - EFFECTCMDTYPE_AI_SELECTION: When AI is required to select a card
+
+; Moves that have an EFFECTCMDTYPE_REQUIRE_SELECTION also must have either an EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN or an
+; EFFECTCMDTYPE_AI_SELECTION (for anything not involving switching the defending Pokemon), to handle selections involving the AI.
 
 ; Similar move effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
@@ -44,7 +47,7 @@ EkansWrapEffectCommands:
 ArbokTerrorStrikeEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, TerrorStrike_SwitchDefendingPokemon
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, TerrorStrike_50PercentSelectSwitchPokemon
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, TerrorStrike_50PercentSelectSwitchPokemon
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, TerrorStrike_50PercentSelectSwitchPokemon
 	db  $00
 
 ArbokPoisonFangEffectCommands:
@@ -58,10 +61,10 @@ WeepinbellPoisonPowderEffectCommands:
 	db  $00
 
 VictreebelLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_CheckBench
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, VictreebelLure_AISelectEffect
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, VictreebelLure_AssertPokemonInBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, VictreebelLure_SwitchDefendingPokemon
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, VictreebelLure_SelectSwitchPokemon
+	dbw EFFECTCMDTYPE_AI_SELECTION, VictreebelLure_GetBenchPokemonWithLowestHP
 	db  $00
 
 VictreebelAcidEffectCommands:
@@ -174,7 +177,7 @@ ExeggutorBigEggsplosionEffectCommands:
 
 NidokingThrashEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Thrash_ModifierEffect
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_RecoilEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_LowRecoilEffect
 	dbw EFFECTCMDTYPE_AI, Thrash_AIEffect
 	db  $00
 
@@ -221,7 +224,7 @@ NidorinoDoubleKickEffectCommands:
 ButterfreeWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, ButterfreeWhirlwind_SwitchEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, ButterfreeWhirlwind_CheckBench
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, ButterfreeWhirlwind_CheckBench
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, ButterfreeWhirlwind_CheckBench
 	db  $00
 
 ButterfreeMegaDrainEffectCommands:
@@ -956,7 +959,7 @@ GravelerHardenEffectCommands:
 RhydonRamEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Ram_RecoilSwitchEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, Ram_SelectSwitchEffect
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, Ram_SelectSwitchEffect
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, Ram_SelectSwitchEffect
 	db  $00
 
 RhyhornLeerEffectCommands:
@@ -1272,7 +1275,7 @@ PidgeotHurricaneEffectCommands:
 PidgeottoWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, PidgeottoWhirlwind_SwitchEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, PidgeottoWhirlwind_SelectEffect
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, PidgeottoWhirlwind_SelectEffect
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, PidgeottoWhirlwind_SelectEffect
 	db  $00
 
 PidgeottoMirrorMoveEffectCommands:
@@ -1332,7 +1335,7 @@ LickitungSupersonicEffectCommands:
 PidgeyWhirlwindEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, PidgeyWhirlwind_SwitchEffect
 	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, PidgeyWhirlwind_SelectEffect
-	dbw EFFECTCMDTYPE_SWITCH_DEFENDING_PKMN, PidgeyWhirlwind_SelectEffect
+	dbw EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN, PidgeyWhirlwind_SelectEffect
 	db  $00
 
 PorygonConversion1EffectCommands:

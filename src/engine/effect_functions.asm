@@ -60,7 +60,7 @@ ApplyStatusEffect:
 
 .cant_induce_status
 	ld a, c
-	ld [wNoEffectFromStatus], a
+	ld [wNoEffectFromWhichStatus], a
 	call SetNoEffectFromStatus
 	or a
 	ret
@@ -164,22 +164,26 @@ IsPlayerTurn: ; 2c0c7 (b:40c7)
 ;	[wAIMinDamage] <- [wDamage]
 ;	[wAIMaxDamage] <- [wDamage]
 ; else
-; 	[wAIMinDamage] <- [wDamage] + d
-; 	[wAIMaxDamage] <- [wDamage] + e
-; 	[wDamage]      <- [wDamage] + a
-StoreAIPoisonDamageInfo: ; 2c0d4 (b:40d4)
+;	[wAIMinDamage] <- [wDamage] + d
+;	[wAIMaxDamage] <- [wDamage] + e
+;	[wDamage]      <- [wDamage] + a
+UpdateExpectedAIDamage_AccountForPoison: ; 2c0d4 (b:40d4)
 	push af
 	ld a, DUELVARS_ARENA_CARD_STATUS
 	call GetNonTurnDuelistVariable
 	and POISONED | DOUBLE_POISONED
-	jr z, Func_2c0e9.skip_push_af
+	jr z, UpdateExpectedAIDamage.skip_push_af
 	pop af
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
 	ret
 
-Func_2c0e9: ; 2c0e9 (b:40e9)
+; Sets some variables for AI use
+;	[wAIMinDamage] <- [wDamage] + d
+;	[wAIMaxDamage] <- [wDamage] + e
+;	[wDamage]      <- [wDamage] + a
+UpdateExpectedAIDamage: ; 2c0e9 (b:40e9)
 	push af
 
 .skip_push_af
@@ -199,7 +203,7 @@ Func_2c0e9: ; 2c0e9 (b:40e9)
 ; [wDamage]      <- a (average amount of damage)
 ; [wAIMinDamage] <- d (minimum)
 ; [wAIMaxDamage] <- e (maximum)
-StoreAIDamageInfo: ; 2c0fb (b:40fb)
+SetExpectedAIDamage: ; 2c0fb (b:40fb)
 	ld [wDamage], a
 	xor a
 	ld [wDamage + 1], a
@@ -273,7 +277,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 .no_damage_orEffect
 	pop af
 	push hl
-	bank1call $4f9d
+	bank1call DrawDuelMainScene
 	pop hl
 	ld a, l
 	or h
@@ -282,7 +286,7 @@ ApplySubstatus2ToDefendingCard: ; 2c149 (b:4149)
 
 ; overwrites in wDamage, wAIMinDamage and wAIMaxDamage
 ; with the value in a.
-StoreDamageInfo: ; 2c166 (b:4166)
+SetDefiniteDamage: ; 2c166 (b:4166)
 	ld [wDamage], a
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -1001,10 +1005,8 @@ AskWhetherToQuitSelectingCards: ; 2c476 (b:4476)
 	ret
 ; 0x2c487
 
-; handles the selection of a forced switch
-; by link/AI opponent or by the player.
-; outputs the Play Area location of the chosen
-; bench card in hTempPlayAreaLocation_ff9d.
+; handles the selection of a forced switch by link/AI opponent or by the player.
+; outputs the Play Area location of the chosen bench card in hTempPlayAreaLocation_ff9d.
 DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetNonTurnDuelistVariable
@@ -1162,9 +1164,9 @@ AIPickAttackForAmnesia: ; 2c532 (b:4532)
 	ret
 ; 0x2c564
 
-; outputs in a the Play Area location (PLAY_AREA_* constant)
-; of lowest HP card in non-duelist's Bench.
-AIFindBenchWithLowestHP: ; 2c564 (b:4564)
+; Return in a the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest (remaining) HP.
+; if multiple cards are tied for the lowest HP, the one with the highest PLAY_AREA_* is returned.
+GetBenchPokemonWithLowestHP: ; 2c564 (b:4564)
 	call SwapTurn
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
@@ -1452,8 +1454,7 @@ BenchSelectionMenuParameters: ; 2c6e8 (b:46e8)
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
 	ld a, 10 / 2
 	lb de, 0, 10
-	jp StoreAIDamageInfo
-; 0x2c6f8
+	jp SetExpectedAIDamage
 
 ; If heads, defending Pokemon becomes poisoned
 SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
@@ -1465,10 +1466,9 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	call SetNoEffectFromStatus
 	ret
 
-; outputs in [hTemp_ffa0] the result of the coin toss
-; (0 = tails, 1 = heads) and, in case it was heads,
-; stores in hTempPlayAreaLocation_ffa1 the location
-; of the Bench Pokemon that was selected for switch.
+; outputs in hTemp_ffa0 the result of the coin toss (0 = tails, 1 = heads).
+; in case it was heads, stores in hTempPlayAreaLocation_ffa1
+; the PLAY_AREA_* location of the Bench Pokemon that was selected for switch.
 TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	xor a
 	ldh [hTemp_ffa0], a
@@ -1479,8 +1479,7 @@ TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	cp 2
 	ret c
 
-; toss coin and store whether it was tails (0)
-; or heads (1) in hTemp_ffa0
+; toss coin and store whether it was tails (0) or heads (1) in hTemp_ffa0.
 ; return if it was tails.
 	ldtx de, IfHeadsChangeOpponentsActivePokemonText
 	call Func_2c08a
@@ -1492,8 +1491,8 @@ TerrorStrike_50PercentSelectSwitchPokemon: ; 2c70a (b:470a)
 	ldh [hTempPlayAreaLocation_ffa1], a
 	ret
 
-; if coin toss was heads and it's possible,
-; switch Defending Pokemon
+; if coin toss at hTemp_ffa0 was heads and it's possible,
+; switch the Defending Pokemon
 TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
 	ldh a, [hTemp_ffa0]
 	or a
@@ -1505,17 +1504,16 @@ TerrorStrike_SwitchDefendingPokemon: ; 2c726 (b:4726)
 PoisonFang_AIEffect: ; 2c730 (b:4730)
 	ld a, 10
 	lb de, 10, 10
-	jp StoreAIPoisonDamageInfo
-; 0x2c738
+	jp UpdateExpectedAIDamage_AccountForPoison
 
 WeepinbellPoisonPowder_AIEffect: ; 2c738 (b:4738)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2c740
 
-; returns carry if non-duelist has no Bench Pokemon
-VictreebelLure_CheckBench: ; 2c740 (b:4740)
+; return carry if there are no Pokemon cards in the non-turn holder's bench
+VictreebelLure_AssertPokemonInBench: ; 2c740 (b:4740)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	ldtx hl, EffectNoPokemonOnTheBenchText
@@ -1523,27 +1521,33 @@ VictreebelLure_CheckBench: ; 2c740 (b:4740)
 	ret
 ; 0x2c74b
 
-VictreebelLure_PlayerSelectEffect: ; 2c74b (b:474b)
+; return in hTempPlayAreaLocation_ffa1 the PLAY_AREA_* location
+; of the Bench Pokemon that was selected for switch
+VictreebelLure_SelectSwitchPokemon: ; 2c74b (b:474b)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
 	bank1call HasAlivePokemonInBench
-.loop_selection
+.select_pokemon
 	bank1call OpenPlayAreaScreenForSelection
-	jr c, .loop_selection
+	jr c, .select_pokemon
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hTemp_ffa0], a
 	call SwapTurn
 	ret
 ; 0x2c764
 
-VictreebelLure_AISelectEffect: ; 2c764 (b:4764)
-	call AIFindBenchWithLowestHP
+; Return in hTemp_ffa0 the PLAY_AREA_* of the non-turn holder's Pokemon card in bench with the lowest (remaining) HP.
+; if multiple cards are tied for the lowest HP, the one with the highest PLAY_AREA_* is returned.
+VictreebelLure_GetBenchPokemonWithLowestHP: ; 2c764 (b:4764)
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2c76a
 
-VictreebelLure_SwitchEffect: ; 2c76a (b:476a)
+; Defending Pokemon is swapped out for the one with the PLAY_AREA_* at hTemp_ffa0
+; unless Mew's Neutralizing Shield or Haunter's Transparency prevents it.
+VictreebelLure_SwitchDefendingPokemon: ; 2c76a (b:476a)
 	call SwapTurn
 	ldh a, [hTemp_ffa0]
 	ld e, a
@@ -1566,8 +1570,7 @@ AcidEffect: ; 2c77e (b:477e)
 GloomPoisonPowder_AIEffect: ; 2c78b (b:478b)
 	ld a, 10
 	lb de, 10, 10
-	jp StoreAIPoisonDamageInfo
-; 0x2c793
+	jp UpdateExpectedAIDamage_AccountForPoison
 
 ; Defending Pokemon and user become confused
 FoulOdorEffect: ; 2c793 (b:4793)
@@ -1591,7 +1594,7 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 KakunaPoisonPowder_AIEffect: ; 2c7b4 (b:47b4)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2c7bc
 
 GolbatLeechLifeEffect: ; 2c7bc (b:47bc)
@@ -1640,8 +1643,7 @@ ZubatLeechLifeEffect: ; 2c7e3 (b:47e3)
 Twineedle_AIEffect: ; 2c7ed (b:47ed)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
-; 0x2c7f5
+	jp SetExpectedAIDamage
 
 ; Flip 2 coins; deal 30x number of heads
 Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
@@ -1654,14 +1656,14 @@ Twineedle_MultiplierEffect: ; 2c7f5 (b:47f5)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2c80d
 
 BeedrillPoisonSting_AIEffect: ; 2c80d (b:480d)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2c815
 
 ExeggcuteLeechSeedEffect: ; 2c815 (b:4815)
@@ -1677,7 +1679,7 @@ ExeggcuteLeechSeedEffect: ; 2c815 (b:4815)
 FoulGas_AIEffect: ; 2c822 (b:4822)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0e9
+	jp UpdateExpectedAIDamage
 
 ; If heads, defending Pokemon becomes poisoned. If tails, defending Pokemon becomes confused
 FoulGas_PoisonOrConfusionEffect: ; 2c82a (b:482a)
@@ -1897,8 +1899,7 @@ SetDamageToATimes20: ; 2c958 (b:4958)
 Thrash_AIEffect: ; 2c96b (b:496b)
 	ld a, (30 + 40) / 2
 	lb de, 30, 40
-	jp StoreAIDamageInfo
-; 0x2c973
+	jp SetExpectedAIDamage
 
 ; If heads 10 more damage; if tails, 10 damage to itself
 Thrash_ModifierEffect: ; 2c973 (b:4973)
@@ -1910,7 +1911,7 @@ Thrash_ModifierEffect: ; 2c973 (b:4973)
 	call AddToDamage
 	ret
 
-Thrash_RecoilEffect: ; 2c982 (b:4982)
+Thrash_LowRecoilEffect: ; 2c982 (b:4982)
 	ldh a, [hTemp_ffa0]
 	or a
 	ret nz
@@ -1921,9 +1922,9 @@ Thrash_RecoilEffect: ; 2c982 (b:4982)
 Toxic_AIEffect: ; 2c98c (b:498c)
 	ld a, 20
 	lb de, 20, 20
-	jp Func_2c0e9
+	jp UpdateExpectedAIDamage
 
-; Defending Pokémon becomes poisoned, but takes 20 damage (double poisoned)
+; Defending Pokémon becomes double poisoned (takes 20 damage per turn rather than 10)
 Toxic_DoublePoisonEffect: ; 2c994 (b:4994)
 	call DoublePoisonEffect
 	ret
@@ -1960,7 +1961,7 @@ BoyfriendsEffect: ; 2c998 (b:4998)
 NidoranFFurySwipes_AIEffect: ; 2c9be (b:49be)
 	ld a, 30 / 2
 	lb de, 0, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2c9c6
 
 NidoranFFurySwipes_MultiplierEffect: ; 2c9c6 (b:49c6)
@@ -1970,7 +1971,7 @@ NidoranFFurySwipes_MultiplierEffect: ; 2c9c6 (b:49c6)
 	ld a, 3
 	call TossCoinATimes_BankB
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2c9db
 
@@ -2092,7 +2093,7 @@ NidoranFCallForFamily_PutInPlayAreaEffect: ; 2ca6e (b:4a6e)
 HornHazard_AIEffect: ; 2ca8e (b:4a8e)
 	ld a, 30 / 2
 	lb de, 0, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2ca96
 
 HornHazard_NoDamage50PercentEffect: ; 2ca96 (b:4a96)
@@ -2100,7 +2101,7 @@ HornHazard_NoDamage50PercentEffect: ; 2ca96 (b:4a96)
 	call TossCoin_BankB
 	jr c, .heads
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 .heads
@@ -2118,7 +2119,7 @@ NidorinaSupersonicEffect: ; 2caac (b:4aac)
 NidorinaDoubleKick_AIEffect: ; 2cab3 (b:4ab3)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2cabb
 
 NidorinaDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
@@ -2131,14 +2132,14 @@ NidorinaDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2cad3
 
 NidorinoDoubleKick_AIEffect: ; 2cad3 (b:4ad3)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2cadb
 
 NidorinoDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
@@ -2151,7 +2152,7 @@ NidorinoDoubleKick_MultiplierEffect: ; 2cabb (b:4abb)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2caf3
 
@@ -2199,13 +2200,13 @@ ButterfreeMegaDrainEffect: ; 2cb0f (b:4b0f)
 WeedlePoisonSting_AIEffect: ; 2cb27 (b:4b27)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2cb2f
 
 IvysaurPoisonPowder_AIEffect: ; 2cb2f (b:4b2f)
 	ld a, 10
 	lb de, 10, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2cb37
 
 BulbasaurLeechSeedEffect: ; 2cb37 (b:4b37)
@@ -2405,7 +2406,7 @@ ToxicGasEffect: ; 2cc36 (b:4c36)
 Sludge_AIEffect: ; 2cc38 (b:4c38)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2cc40
 
 ; returns carry if no cards in Deck
@@ -2519,7 +2520,7 @@ BellsproutCallForFamily_PutInPlayAreaEffect: ; 2ccc2 (b:4cc2)
 WeezingSmog_AIEffect: ; 2cce2 (b:4ce2)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2ccea
 
 WeezingSelfdestructEffect: ; 2ccea (b:4cea)
@@ -2626,7 +2627,7 @@ Shift_ChangeColorEffect: ; 2cd5d (b:4d5d)
 VenomPowder_AIEffect: ; 2cd84 (b:4d84)
 	ld a, 5
 	lb de, 0, 10
-	jp Func_2c0e9
+	jp UpdateExpectedAIDamage
 ; 0x2cd8c
 
 VenomPowder_PoisonConfusion50PercentEffect: ; 2cd8c (b:4d8c)
@@ -2639,14 +2640,14 @@ VenomPowder_PoisonConfusion50PercentEffect: ; 2cd8c (b:4d8c)
 	call ConfusionEffect
 	ret c
 	ld a, CONFUSED | POISONED
-	ld [wNoEffectFromStatus], a
+	ld [wNoEffectFromWhichStatus], a
 	ret
 ; 0x2cda0
 
 TangelaPoisonPowder_AIEffect: ; 2cda0 (b:4da0)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2cda8
 
 Heal_OncePerTurnCheck: ; 2cda8 (b:4da8)
@@ -2730,7 +2731,7 @@ Heal_RemoveDamageEffect: ; 2cdc7 (b:4dc7)
 PetalDance_AIEffect: ; 2ce23 (b:4e23)
 	ld a, 120 / 2
 	lb de, 0, 120
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2ce2b
 
 PetalDance_MultiplierEffect: ; 2ce2b (b:4e2b)
@@ -2743,7 +2744,7 @@ PetalDance_MultiplierEffect: ; 2ce2b (b:4e2b)
 	add a
 	call ATimes10
 	; a = 4 * 10 * heads
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SwapTurn
 	call ConfusionEffect
 	call SwapTurn
@@ -2753,7 +2754,7 @@ PetalDance_MultiplierEffect: ; 2ce2b (b:4e2b)
 PoisonWhip_AIEffect: ; 2ce4b (b:4e4b)
 	ld a, 10
 	lb de, 10, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2ce53
 
 SolarPower_CheckUse: ; 2ce53 (b:4e53)
@@ -2903,7 +2904,7 @@ OmastarWaterGunEffect: ; 2cf05 (b:4f05)
 OmastarSpikeCannon_AIEffect: ; 2cf0a (b:4f0a)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2cf12
 
 OmastarSpikeCannon_MultiplierEffect: ; 2cf12 (b:4f12)
@@ -2916,7 +2917,7 @@ OmastarSpikeCannon_MultiplierEffect: ; 2cf12 (b:4f12)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo ; 3 * 10 * heads
+	call SetDefiniteDamage ; 3 * 10 * heads
 	ret
 ; 0x2cf2a
 
@@ -2959,7 +2960,7 @@ KinglerFlail_AIEffect: ; 2cf4e (b:4f4e)
 KinglerFlail_HPCheck: ; 2cf54 (b:4f54)
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamageAndMaxHP
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2cf5d
 
@@ -3079,7 +3080,7 @@ MagikarpFlail_AIEffect: ; 2cfff (b:4fff)
 MagikarpFlail_HPCheck: ; 2d005 (b:5005)
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamageAndMaxHP
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d00e
 
@@ -3093,7 +3094,7 @@ HeadacheEffect: ; 2d00e (b:500e)
 PsyduckFurySwipes_AIEffect: ; 2d016 (b:5016)
 	ld a, 30 / 2
 	lb de, 0, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d01e
 
 PsyduckFurySwipes_MultiplierEffect: ; 2d01e (b:501e)
@@ -3103,7 +3104,7 @@ PsyduckFurySwipes_MultiplierEffect: ; 2d01e (b:501e)
 	ld a, 3
 	call TossCoinATimes_BankB
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d033
 
@@ -3201,7 +3202,7 @@ HideInShellEffect: ; 2d0a4 (b:50a4)
 VaporeonQuickAttack_AIEffect: ; 2d0b8 (b:50b8)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d0c0
 
 VaporeonQuickAttack_DamageBoostEffect: ; 2d0c0 (b:50c0)
@@ -3297,7 +3298,7 @@ TentacruelSupersonicEffect: ; 2d13a (b:513a)
 JellyfishSting_AIEffect: ; 2d141 (b:5141)
 	ld a, 10
 	lb de, 10, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2d149
 
 ; returns carry if Defending Pokemon has no attacks
@@ -3389,7 +3390,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 PoliwhirlDoubleslap_AIEffect: ; 2d1c0 (b:51c0)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d1c8
 
 PoliwhirlDoubleslap_MultiplierEffect: ; 2d1c8 (b:51c8)
@@ -3402,7 +3403,7 @@ PoliwhirlDoubleslap_MultiplierEffect: ; 2d1c8 (b:51c8)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d1e0
 
@@ -3475,7 +3476,7 @@ ClampEffect: ; 2d22d (b:522d)
 ; unsuccessful
 	xor a
 	ld [wLoadedMoveAnimation], a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 ; 0x2d246
@@ -3483,7 +3484,7 @@ ClampEffect: ; 2d22d (b:522d)
 CloysterSpikeCannon_AIEffect: ; 2d246 (b:5246)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d24e
 
 CloysterSpikeCannon_MultiplierEffect: ; 2d24e (b:524e)
@@ -3496,7 +3497,7 @@ CloysterSpikeCannon_MultiplierEffect: ; 2d24e (b:524e)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d266
 
@@ -3640,7 +3641,7 @@ Quickfreeze_Paralysis50PercentEffect: ; 2d2f3 (b:52f3)
 
 IceBreath_ZeroDamage: ; 2d329 (b:5329)
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d32e
 
@@ -3715,7 +3716,7 @@ TakeDownEffect: ; 2d37f (b:537f)
 ArcanineQuickAttack_AIEffect: ; 2d385 (b:5385)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d38d
 
 ArcanineQuickAttack_DamageBoostEffect: ; 2d38d (b:538d)
@@ -3792,7 +3793,7 @@ FlamesOfRage_DamageBoostEffect: ; 2d3ef (b:53ef)
 RapidashStomp_AIEffect: ; 2d3f8 (b:53f8)
 	ld a, (20 + 30) / 2
 	lb de, 20, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d400
 
 RapidashStomp_DamageBoostEffect: ; 2d400 (b:5400)
@@ -3841,7 +3842,7 @@ NinetailsLure_PlayerSelectEffect: ; 2d430 (b:5430)
 ; 0x2d449
 
 NinetailsLure_AISelectEffect: ; 2d449 (b:5449)
-	call AIFindBenchWithLowestHP
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2d44f
@@ -4024,7 +4025,7 @@ Wildfire_DiscardDeckEffect: ; 2d4f4 (b:54f4)
 Moltres1DiveBomb_AIEffect: ; 2d523 (b:5523)
 	ld a, 80 / 2
 	lb de, 0, 80
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d52b
 
 Moltres1DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
@@ -4033,7 +4034,7 @@ Moltres1DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
 	jr c, .heads
 ; tails
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 .heads
@@ -4045,7 +4046,7 @@ Moltres1DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
 FlareonQuickAttack_AIEffect: ; 2d541 (b:5541)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d549
 
 FlareonQuickAttack_DamageBoostEffect: ; 2d549 (b:5549)
@@ -4120,7 +4121,7 @@ MagmarSmokescreenEffect: ; 2d594 (b:5594)
 MagmarSmog_AIEffect: ; 2d59a (b:559a)
 	ld a, 5
 	lb de, 0, 10
-	jp StoreAIPoisonDamageInfo
+	jp UpdateExpectedAIDamage_AccountForPoison
 ; 0x2d5a2
 
 ; return carry if no Fire Energy attached
@@ -4323,7 +4324,7 @@ MixUpEffect: ; 2d647 (b:5647)
 DancingEmbers_AIEffect: ; 2d6a3 (b:56a3)
 	ld a, 80 / 2
 	lb de, 0, 80
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d6ab
 
 DancingEmbers_MultiplierEffect: ; 2d6ab (b:56ab)
@@ -4333,7 +4334,7 @@ DancingEmbers_MultiplierEffect: ; 2d6ab (b:56ab)
 	ld a, 8
 	call TossCoinATimes_BankB
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2d6c0
 
@@ -4469,7 +4470,7 @@ Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
 Moltres2DiveBomb_AIEffect: ; 2d76e (b:576e)
 	ld a, 70 / 2
 	lb de, 0, 70
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2d776
 
 Moltres2DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
@@ -4478,7 +4479,7 @@ Moltres2DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
 	jr c, .heads
 ; tails
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 .heads
@@ -4794,7 +4795,7 @@ GengarDarkMind_AISelectEffect: ; 2d92a (b:592a)
 	cp 2
 	ret c ; return if no Bench Pokemon
 ; just pick Pokemon with lowest remaining HP.
-	call AIFindBenchWithLowestHP
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2d93c
@@ -5224,7 +5225,7 @@ HypnoDarkMind_AISelectEffect: ; 2db52 (b:5b52)
 	cp 2
 	ret c ; return if no Bench Pokemon
 ; just pick Pokemon with lowest remaining HP.
-	call AIFindBenchWithLowestHP
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2db64
@@ -6084,7 +6085,7 @@ KadabraRecover_HealEffect: ; 2dfc3 (b:5fc3)
 JynxDoubleslap_AIEffect: ; 2dfd7 (b:5fd7)
 	ld a, 20 / 2
 	lb de, 0, 20
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2dfcf
 
 JynxDoubleslap_MultiplierEffect: ; 2dfcf (b:5fcf)
@@ -6094,7 +6095,7 @@ JynxDoubleslap_MultiplierEffect: ; 2dfcf (b:5fcf)
 	ld a, 2
 	call TossCoinATimes_BankB
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2dff2
 
@@ -6116,12 +6117,12 @@ JynxMeditate_DamageBoostEffect: ; 2dfec (b:5fec)
 MysteryAttack_AIEffect: ; 2e001 (b:6001)
 	ld a, 10
 	lb de, 0, 20
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e009
 
 MysteryAttack_RandomEffect: ; 2e009 (b:6009)
 	ld a, 10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 
 ; chooses a random effect from 8 possible options.
 	call UpdateRNGSources
@@ -6142,14 +6143,14 @@ MysteryAttack_RandomEffect: ; 2e009 (b:6009)
 
 .more_damage
 	ld a, 20
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 
 .no_damage
 	ld a, $5b
 	ld [wLoadedMoveAnimation], a
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetNoEffectFromStatus
 .no_effect
 	ret
@@ -6169,7 +6170,7 @@ MysteryAttack_RecoverEffect: ; 2e03e (b:603e)
 StoneBarrage_AIEffect: ; 2e04a (b:604a)
 	ld a, 10
 	lb de, 0, 100
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e052
 
 StoneBarrage_MultiplierEffect: ; 2e052 (b:6052)
@@ -6208,7 +6209,7 @@ OnixHardenEffect: ; 2e075 (b:6075)
 PrimeapeFurySwipes_AIEffect: ; 2e07b (b:607b)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e083
 
 PrimeapeFurySwipes_MultiplierEffect: ; 2e083 (b:6083)
@@ -6219,7 +6220,7 @@ PrimeapeFurySwipes_MultiplierEffect: ; 2e083 (b:6083)
 	call TossCoinATimes_BankB
 	add a
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e099
 
@@ -6286,7 +6287,7 @@ CuboneRage_DamageBoostEffect: ; 2e0d7 (b:60d7)
 Bonemerang_AIEffect: ; 2e0e0 (b:60e0)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e0e8
 
 Bonemerang_MultiplierEffect: ; 2e0e8 (b:60e8)
@@ -6299,7 +6300,7 @@ Bonemerang_MultiplierEffect: ; 2e0e8 (b:60e8)
 	add a ; a = 2 * heads
 	add e ; a = 3 * heads
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e100
 
@@ -6440,7 +6441,7 @@ KarateChop_DamageSubtractionEffect: ; 2e1ba (b:61ba)
 	ret nc
 ; cap it to 0 damage
 	xor a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e1d1
 
@@ -6531,7 +6532,7 @@ StretchKick_PlayerSelectEffect: ; 2e23c (b:623c)
 
 StretchKick_AISelectEffect: ; 2e255 (b:6255)
 ; chooses Bench Pokemon with least amount of remaining HP
-	call AIFindBenchWithLowestHP
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2e25b
@@ -6555,7 +6556,7 @@ SandAttackEffect: ; 2e26b (b:626b)
 SandslashFurySwipes_AIEffect: ; 2e271 (b:6271)
 	ld a, 60 / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e279
 
 SandslashFurySwipes_MultiplierEffect: ; 2e279 (b:6279)
@@ -6566,7 +6567,7 @@ SandslashFurySwipes_MultiplierEffect: ; 2e279 (b:6279)
 	call TossCoinATimes_BankB
 	add a
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e28f
 
@@ -6752,7 +6753,7 @@ Wail_FillBenchEffect: ; 2e335 (b:6335)
 Thunderpunch_AIEffect: ; 2e399 (b:6399)
 	ld a, (30 + 40) / 2
 	lb de, 30, 40
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e3a1
 
 Thunderpunch_ModifierEffect: ; 2e3a1 (b:63a1)
@@ -6783,7 +6784,7 @@ LightScreenEffect: ; 2e3ba (b:63ba)
 ElectabuzzQuickAttack_AIEffect: ; 2e3c0 (b:63c0)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e3c8
 
 ElectabuzzQuickAttack_DamageBoostEffect: ; 2e3c8 (b:63c8)
@@ -6953,7 +6954,7 @@ ThunderstormEffect: ; 2e429 (b:6429)
 JolteonQuickAttack_AIEffect: ; 2e4bb (b:64bb)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e4c3
 
 JolteonQuickAttack_DamageBoostEffect: ; 2e4c3 (b:64c3)
@@ -6970,7 +6971,7 @@ JolteonQuickAttack_DamageBoostEffect: ; 2e4c3 (b:64c3)
 PinMissile_AIEffect: ; 2e4d6 (b:64d6)
 	ld a, (20 * 4) / 2
 	lb de, 0, 80
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e4de
 
 PinMissile_MultiplierEffect: ; 2e4de (b:64de)
@@ -6981,14 +6982,14 @@ PinMissile_MultiplierEffect: ; 2e4de (b:64de)
 	call TossCoinATimes_BankB
 	add a ; a = 2 * heads
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e4f4
 
 Fly_AIEffect: ; 2e4f4 (b:64f4)
 	ld a, 30 / 2
 	lb de, 0, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e4fc
 
 Fly_Success50PercentEffect: ; 2e4fc (b:64fc)
@@ -6997,7 +6998,7 @@ Fly_Success50PercentEffect: ; 2e4fc (b:64fc)
 	jr c, .heads
 	xor a
 	ld [wLoadedMoveAnimation], a
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 .heads
@@ -7063,7 +7064,7 @@ Spark_AISelectEffect: ; 2e562 (b:6562)
 	cp 2
 	ret c ; has no Bench Pokemon
 ; AI always picks Pokemon with lowest HP remaining
-	call AIFindBenchWithLowestHP
+	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 ; 0x2e574
@@ -7095,7 +7096,7 @@ Pikachu4GrowlEffect: ; 2e58f (b:658f)
 
 ChainLightningEffect: ; 2e595 (b:6595)
 	ld a, 10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	call SwapTurn
 	call GetArenaCardColor
 	call SwapTurn
@@ -7793,7 +7794,7 @@ EnergySpike_AttachEnergyEffect: ; 2e8f6 (b:68f6)
 JolteonDoubleKick_AIEffect: ; 2e930 (b:6930)
 	ld a, 40 / 2
 	lb de, 0, 40
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e938
 
 JolteonDoubleKick_MultiplierEffect: ; 2e938 (b:6938)
@@ -7804,7 +7805,7 @@ JolteonDoubleKick_MultiplierEffect: ; 2e938 (b:6938)
 	call TossCoinATimes_BankB
 	add a ; a = 2 * heads
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2e94e
 
@@ -7822,7 +7823,7 @@ TailWagEffect: ; 2e94e (b:694e)
 EeveeQuickAttack_AIEffect: ; 2e962 (b:5962)
 	ld a, (10 + 30) / 2
 	lb de, 10, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2e96a
 
 EeveeQuickAttack_DamageBoostEffect: ; 2e96a (b:596a)
@@ -8131,7 +8132,7 @@ StepIn_SwitchEffect: ; 2eae8 (b:6ae8)
 Dragonite2Slam_AIEffect: ; 2eaf6 (b:6af6)
 	ld a, (40 * 2) / 2
 	lb de, 0, 80
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2eafe
 
 Dragonite2Slam_MultiplierEffect: ; 2eafe (b:6afe)
@@ -8143,7 +8144,7 @@ Dragonite2Slam_MultiplierEffect: ; 2eafe (b:6afe)
 	add a
 	add a
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2eb15
 
@@ -8155,7 +8156,7 @@ ThickSkinnedEffect: ; 2eb15 (b:6b15)
 LeekSlap_AIEffect: ; 2eb17 (b:6b17)
 	ld a, 30 / 2
 	lb de, 0, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2eb1f
 
 ; return carry if already used attack in this duel
@@ -8182,7 +8183,7 @@ LeekSlap_NoDamage50PercentEffect: ; 2eb34 (b:6b34)
 	call TossCoin_BankB
 	ret c
 	xor a ; 0 damage
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2eb40
 
@@ -8205,7 +8206,7 @@ FetchEffect: ; 2eb40 (b:6b40)
 CometPunch_AIEffect: ; 2eb5d (b:6b5d)
 	ld a, (20 * 4) / 2
 	lb de, 0, 80
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2eb65
 
 CometPunch_MultiplerEffect: ; 2eb65 (b:6b65)
@@ -8216,14 +8217,14 @@ CometPunch_MultiplerEffect: ; 2eb65 (b:6b65)
 	call TossCoinATimes_BankB
 	add a
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2eb7b
 
 TaurosStomp_AIEffect: ; 2eb7b (b:6b7b)
 	ld a, (20 + 30) / 2
 	lb de, 20, 30
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2eb83
 
 TaurosStomp_DamageBoostEffect: ; 2eb83 (b:6b83)
@@ -8260,7 +8261,7 @@ Rampage_Confusion50PercentEffect: ; 2eba1 (b:6ba1)
 FuryAttack_AIEffect: ; 2ebba (b:6bba)
 	ld a, (10 * 2) / 2
 	lb de, 0, 20
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2ebc2
 
 FuryAttack_MultiplerEffect: ; 2ebc2 (b:6bc2)
@@ -8270,7 +8271,7 @@ FuryAttack_MultiplerEffect: ; 2ebc2 (b:6bc2)
 	ldtx de, DamageCheckIfHeadsXDamageText
 	call TossCoinATimes_BankB
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2ebd7
 
@@ -8313,7 +8314,7 @@ PayDayEffect: ; 2ebe8 (b:6be8)
 DragonairSlam_AIEffect: ; 2ec0c (b:6c0c)
 	ld a, (30 * 2) / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2ec14
 
 DragonairSlam_MultiplierEffect: ; 2ec14 (b:6c14)
@@ -8326,7 +8327,7 @@ DragonairSlam_MultiplierEffect: ; 2ec14 (b:6c14)
 	add a
 	add e
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2ec2c
 
@@ -8911,7 +8912,7 @@ SuperFang_HalfHPEffect: ; 2ef07 (b:6f07)
 	; round up
 	add 5
 .rounded
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2ef18
 
@@ -9019,7 +9020,7 @@ HealingWind_PlayAreaHealEffect: ; 2ef53 (b:6f53)
 Dragonite1Slam_AIEffect: ; 2ef9c (b:6f9c)
 	ld a, (30 * 2) / 2
 	lb de, 0, 60
-	jp StoreAIDamageInfo
+	jp SetExpectedAIDamage
 ; 0x2efa4
 
 Dragonite1Slam_MultiplierEffect: ; 2efa4 (b:6fa4)
@@ -9032,7 +9033,7 @@ Dragonite1Slam_MultiplierEffect: ; 2efa4 (b:6fa4)
 	add a
 	add c
 	call ATimes10
-	call StoreDamageInfo
+	call SetDefiniteDamage
 	ret
 ; 0x2efbc
 
