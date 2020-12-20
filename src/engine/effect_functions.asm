@@ -970,7 +970,7 @@ ResetDevolvedCardStatus: ; 2c45d (b:445d)
 .skip_clear_status
 ; reset changed color status
 	ldh a, [hTempPlayAreaLocation_ff9d]
-	add DUELVARS_ARENA_CARD_CHANGED_COLOR
+	add DUELVARS_ARENA_CARD_CHANGED_TYPE
 	call GetTurnDuelistVariable
 	ld [hl], $00
 ; reset C2 flags
@@ -2612,7 +2612,7 @@ Shift_ChangeColorEffect: ; 2cd5d (b:4d5d)
 	set USED_PKMN_POWER_THIS_TURN_F, [hl]
 
 	ldh a, [hTemp_ffa0]
-	add DUELVARS_ARENA_CARD_CHANGED_COLOR
+	add DUELVARS_ARENA_CARD_CHANGED_TYPE
 	ld l, a
 	ldh a, [hAIPkmnPowerEffectParam]
 	or HAS_CHANGED_COLOR
@@ -9094,7 +9094,7 @@ MorphEffect: ; 2eff6 (b:6ff6)
 	ld [hl], c
 
 ; clear changed color and status
-	ld l, DUELVARS_ARENA_CARD_CHANGED_COLOR
+	ld l, DUELVARS_ARENA_CARD_CHANGED_TYPE
 	ld [hl], $00
 	call ClearAllStatusConditions
 

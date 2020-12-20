@@ -106,17 +106,17 @@ wPlayerBench5CardStage:: ; c2d3
 
 ; changed type from Venomoth's Shift Pokemon Power
 ; if bit 7 == 1, then bits 0-3 override the Pokemon's actual color
-wPlayerArenaCardChangedColor:: ; c2d4
+wPlayerArenaCardChangedType:: ; c2d4
 	ds $1
-wPlayerBench1CardChangedColor:: ; c2d5
+wPlayerBench1CardChangedType:: ; c2d5
 	ds $1
-wPlayerBench2CardChangedColor:: ; c2d6
+wPlayerBench2CardChangedType:: ; c2d6
 	ds $1
-wPlayerBench3CardChangedColor:: ; c2d7
+wPlayerBench3CardChangedType:: ; c2d7
 	ds $1
-wPlayerBench4CardChangedColor:: ; c2d8
+wPlayerBench4CardChangedType:: ; c2d8
 	ds $1
-wPlayerBench5CardChangedColor:: ; c2d9
+wPlayerBench5CardChangedType:: ; c2d9
 	ds $1
 
 wPlayerArenaCardAttachedDefender:: ; c2da
@@ -269,17 +269,17 @@ wOpponentBench4CardStage:: ; c3d2
 wOpponentBench5CardStage:: ; c3d3
 	ds $1
 
-wOpponentArenaCardChangedColor:: ; c3d4
+wOpponentArenaCardChangedType:: ; c3d4
 	ds $1
-wOpponentBench1CardChangedColor:: ; c3d5
+wOpponentBench1CardChangedType:: ; c3d5
 	ds $1
-wOpponentBench2CardChangedColor:: ; c3d6
+wOpponentBench2CardChangedType:: ; c3d6
 	ds $1
-wOpponentBench3CardChangedColor:: ; c3d7
+wOpponentBench3CardChangedType:: ; c3d7
 	ds $1
-wOpponentBench4CardChangedColor:: ; c3d8
+wOpponentBench4CardChangedType:: ; c3d8
 	ds $1
-wOpponentBench5CardChangedColor:: ; c3d9
+wOpponentBench5CardChangedType:: ; c3d9
 	ds $1
 
 wOpponentArenaCardAttachedDefender:: ; c3da
