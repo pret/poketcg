@@ -42,7 +42,8 @@ AI_ENERGY_FLAG_SKIP_ARENA_CARD EQU 1 << 7 ; whether to include Arena card in det
 ; used by wAIBarrierFlagCounter to determine
 ; whether Player is running Mewtwo1 mill deck.
 ; flag set means true, flag not set means false.
-AI_FLAG_MEWTWO_MILL EQU 1 << 7
+AI_MEWTWO_MILL_F EQU 7
+AI_MEWTWO_MILL   EQU 1 << AI_MEWTWO_MILL_F
 
 ; defines the behaviour of HandleAIEnergyTrans, for determining
 ; whether to move energy cards from the Bench to the Arena or vice-versa
@@ -59,3 +60,19 @@ AI_ENERGY_TRANS_TO_BENCH EQU $e ; moves energy cards away from Arena card
 	const AIACTION_FORCED_SWITCH ; $3
 	const AIACTION_KO_SWITCH     ; $4
 	const AIACTION_TAKE_PRIZE    ; $5
+
+; this bit is set when the AI decides to use Peek on their Prize cards,
+; with the following bits deciding which one to Peek. That is:
+;	%10'0000 = first prize card
+;	%10'0001 = second prize card
+;	%10'0010 = third prize card
+;	etc...
+AI_PEEK_TARGET_PRIZE_F EQU 6
+AI_PEEK_TARGET_PRIZE   EQU 1 << AI_PEEK_TARGET_PRIZE_F
+; this bit is set when the AI decides to use Peek on Player hand card,
+; with the following bits deciding which one to Peek. That is:
+;	%1XXX XXXX, where XXX XXXX is the deck index of card chosen
+AI_PEEK_TARGET_HAND_F EQU 7
+AI_PEEK_TARGET_HAND   EQU 1 << AI_PEEK_TARGET_HAND_F
+; all bits set means AI chose to look at Player's top deck card
+AI_PEEK_TARGET_DECK EQU $ff

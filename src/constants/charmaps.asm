@@ -94,6 +94,7 @@ ENDM
 	fwcharmap 3, "＼", $98
 	fwcharmap 3, "┐", $99
 	fwcharmap 3, "|", $9a
+	fwcharmap 3, " ", $9c
 	fwcharmap 3, "!", $9d
 	fwcharmap 3, "#", $9f
 	fwcharmap 3, "$", $a0
@@ -279,11 +280,11 @@ ENDM
 	fwcharmap 0, "ぷ", $54
 	fwcharmap 0, "ぺ", $55
 	fwcharmap 0, "ぽ", $56
-	fwcharmap 0, "あ", $57
-	fwcharmap 0, "い", $58
-	fwcharmap 0, "う", $59
-	fwcharmap 0, "え", $5a
-	fwcharmap 0, "お", $5b
+	fwcharmap 0, "あ(2)", $57
+	fwcharmap 0, "い(2)", $58
+	fwcharmap 0, "う(2)", $59
+	fwcharmap 0, "え(2)", $5a
+	fwcharmap 0, "お(2)", $5b
 	fwcharmap 0, "ゃ", $5c
 	fwcharmap 0, "ゅ", $5d
 	fwcharmap 0, "ょ", $5e
@@ -316,7 +317,7 @@ FW_SPACE EQU $70
 
 txsymbol: MACRO
 	const SYM_\1
-	charmap "\1>", const_value + -1
+	charmap "\1>", const_value - 1
 ENDM
 
 ; TX_SYMBOL

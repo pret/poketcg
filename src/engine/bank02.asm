@@ -105,7 +105,7 @@ OpenYourOrOppPlayAreaScreen_TurnHolderPlayArea: ; 809e (2:409e)
 	ldh [hWhoseTurn], a
 	ret
 
-OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea: ; 80a8 (2:40a8)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderPlayAreaScreen
@@ -113,7 +113,7 @@ OpenYourOrOppPlayAreaScreen_NonTurnHolderPlayArea:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenYourOrOppPlayAreaScreen_TurnHolderHand:
+OpenYourOrOppPlayAreaScreen_TurnHolderHand: ; 80b2 (2:40b2)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -121,7 +121,7 @@ OpenYourOrOppPlayAreaScreen_TurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenYourOrOppPlayAreaScreen_NonTurnHolderHand:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderHand: ; 80bc (2:40bc)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -129,7 +129,7 @@ OpenYourOrOppPlayAreaScreen_NonTurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile:
+OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile: ; 80c6 (2:40c6)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -137,7 +137,7 @@ OpenYourOrOppPlayAreaScreen_TurnHolderDiscardPile:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile:
+OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile: ; 80d0 (2:40d0)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -191,7 +191,6 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	call DrawYourOrOppPlayArea_DrawArrows
 	call DrawWideTextBox
 
-
 ; reset cursor blink
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
@@ -234,25 +233,25 @@ DuelCheckMenu_OppPlayArea: ; 80da (2:40da)
 	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderHand
 	dw OpenYourOrOppPlayAreaScreen_NonTurnHolderDiscardPile
 
-CheckMenuData: ; (2:4158)
+CheckMenuData: ; 8158 (2:4158)
 	textitem  2, 14, InPlayAreaText
 	textitem  2, 16, YourPlayAreaText
 	textitem 12, 14, GlossaryText
 	textitem 12, 16, OppPlayAreaText
 	db $ff
 
-YourPlayAreaMenuData: ; (2:4169)
+YourPlayAreaMenuData: ; 8169 (2:4169)
 	textitem  2, 14, YourPokemonText
 	textitem 12, 14, YourHandText
 	textitem  2, 16, YourDiscardPileText2
 	db $ff
 
-OppPlayAreaMenuData: ; (2:4176)
+OppPlayAreaMenuData: ; 8176 (2:4176)
 	textitem  2, 14, OpponentsPokemonText
 	textitem  2, 16, OpponentsDiscardPileText2
 	db $ff
 
-OppPlayAreaMenuData_WithClairvoyance: ; (2:4176)
+OppPlayAreaMenuData_WithClairvoyance: ; 8176 (2:4176)
 	textitem  2, 14, OpponentsPokemonText
 	textitem 12, 14, OpponentsHandText
 	textitem  2, 16, OpponentsDiscardPileText2
@@ -1288,7 +1287,7 @@ HandleCheckMenuInput_YourOrOppPlayArea: ; 86ac (2:46ac)
 	call EraseCheckMenuCursor_YourOrOppPlayArea
 	pop de
 
-;update x and y cursor positions
+; update x and y cursor positions
 	ld a, d
 	ld [wCheckMenuCursorXPosition], a
 	ld a, e
@@ -1513,7 +1512,7 @@ Func_8819: ; 8819 (2:4819)
 	call GetTurnDuelistVariable
 	jr Func_8855
 
-Func_883c:
+Func_883c: ; 883c (2:483c)
 	call CreateHandCardList
 	ret c
 	ld hl, wDuelTempList
@@ -1521,7 +1520,7 @@ Func_883c:
 	ld a, [hl]
 	jr Func_8855
 
-Func_8849:
+Func_8849: ; 8849 (2:4849)
 	call CreateDeckCardList
 	ret c
 	ld a, %01111111
@@ -1534,7 +1533,7 @@ Func_8849:
 ; output:
 ; a = ce5c
 ; with upper bit set if turn was swapped
-Func_8855:
+Func_8855: ; 8855 (2:4855)
 	ld b, a
 	ld a, [$ce5c]
 	or a
@@ -2308,7 +2307,7 @@ HandleCheckMenuInput: ; 9065 (2:5065)
 	call EraseCheckMenuCursor
 	pop de
 
-;update x and y cursor positions
+; update x and y cursor positions
 	ld a, d
 	ld [wCheckMenuCursorXPosition], a
 	ld a, e
@@ -2360,7 +2359,7 @@ EraseCheckMenuCursor: ; 90d8 (2:50d8)
 ; draws in the cursor position
 ; input:
 ; a = tile byte to draw
-DrawCheckMenuCursor:
+DrawCheckMenuCursor: ; 90da (2:50da)
 	ld e, a
 	ld a, 10
 	ld l, a

@@ -1,6 +1,6 @@
 deck_const: MACRO
 if const_value >= 2
-\1_ID EQU const_value + -2
+\1_ID EQU const_value - 2
 endc
 	const \1
 ENDM
@@ -65,4 +65,6 @@ ENDM
 	deck_const FLAMETHROWER_DECK           ; $34
 	deck_const RESHUFFLE_DECK              ; $35
 	deck_const IMAKUNI_DECK                ; $36
-DECKS_END EQU const_value + -1
+DECKS_END EQU const_value - 1
+DECK_IDS_END EQU DECKS_END - 2
+

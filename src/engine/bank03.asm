@@ -2712,27 +2712,61 @@ Func_d244: ; d244 (3:5244)
 	farcall Func_80ba4
 	jp IncreaseScriptPointerBy2
 
-Func_d24c: ; d24c (3:524c)
-	ld hl, $525e
+ScriptCommand_ChooseDeckToDuelAgainstMultichoice: ; d24c (3:524c)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
-	ld a, [wd695]
+	call ShowMultichoiceTextbox
+	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
 	ld c, a
 	set_flag_value EVENT_FLAG_76
 	jp IncreaseScriptPointerBy1
 
-	INCROM $d25e, $d271
+.multichoice_menu_args ; d25e
+	dw $0000 ; NPC title for textbox under menu
+	tx Text03f9 ; text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ; location of table configuration in bank 4
+	db $03 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst ; ram location to return result into
+	dw .text_entries ; location of table containing text entries
 
-Func_d271: ; d271 (3:5271)
-	ld hl, $527b
+.text_entries ; d269
+	tx Text03f6
+	tx Text03f7
+	tx Text03f8
+
+	INCROM $d26f, $d271
+
+ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
+	call ShowMultichoiceTextbox
 	jp IncreaseScriptPointerBy1
 ; 0xd27b
 
-	INCROM $d27b, $d28c
+.multichoice_menu_args ; d27b
+	dw $0000 ; NPC title for textbox under menu
+	tx Text03fd ; text for textbox under menu
+	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
+	db $00 ; the value to return when b is pressed
+	dw $d693 ; ram location to return result into
+	dw .text_entries ; location of table containing text entries
 
-Func_d28c: ; d28c (3:528c)
+.text_entries
+	tx Text03fa
+	tx Text03fb
+	tx Text03fc
+
+
+; displays a textbox with multiple choices and a cursor.
+; takes as an argument in h1 a pointer to a table
+;	dw text id for NPC title for textbox under menu
+;	dw text id for textbox under menu
+;	dw location of table configuration in bank 4
+;	db the value to return when b is pressed
+;	dw ram location to return result into
+;	dw location of table containing text entries (optional)
+
+ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld [wd416], a
 	push hl
 	call Func_c241
@@ -2808,31 +2842,42 @@ Func_d28c: ; d28c (3:528c)
 .asm_d2f5
 	ret
 
-Func_d2f6: ; d2f6 (3:52f6)
-	ld hl, $530c
+ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
+	ld hl, .multichoice_menu_args
 	xor a
-	call Func_d28c
-	ld a, [wd694]
+	call ShowMultichoiceTextbox
+	ld a, [wMultichoiceTextboxResult_Sam]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
 	xor a
-	ld [wd694], a
+	ld [wMultichoiceTextboxResult_Sam], a
 	jp IncreaseScriptPointerBy1
 ; 0xd30c
 
-	INCROM $d30c, $d317
+.multichoice_menu_args ; d30c
+	tx SamNPCName ; NPC title for textbox under menu
+	tx Text03fe ; text for textbox under menu
+	dw SamNormalMultichoice_ConfigurationTable ; location of table configuration in bank 4
+	db $03 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
+	dw $0000 ; location of table containing text entries
 
-Func_d317: ; d317 (3:5317)
-	ld hl, $532b
-	ld a, [wd694]
-	call Func_d28c
-	ld a, [wd694]
+ScriptCommand_ShowSamTutorialMultichoice: ; d317 (3:5317)
+	ld hl, .multichoice_menu_args
+	ld a, [wMultichoiceTextboxResult_Sam]
+	call ShowMultichoiceTextbox
+	ld a, [wMultichoiceTextboxResult_Sam]
 	ld c, a
 	set_flag_value EVENT_FLAG_75
 	jp IncreaseScriptPointerBy1
 
-Unknown_d32b: ; d32b (3:532b)
-	INCROM $d32b, $d336
+.multichoice_menu_args: ; d32b (3:532b)
+	dw $0000 ; NPC title for textbox under menu
+	dw $0000 ; text for textbox under menu
+	dw SamTutorialMultichoice_ConfigurationTable ; location of table configuration in bank 4
+	db $07 ; the value to return when b is pressed
+	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
+	dw $0000
 
 ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	push bc
@@ -3278,7 +3323,7 @@ Script_d794: ; d794 (3:5794)
 
 .ows_d7bc
 	close_text_box
-	run_command Func_d317
+	show_sam_tutorial_multichoice
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_75, $07, .ows_d80c
 	jump_if_flag_equal EVENT_FLAG_75, $01, .ows_d7e8
@@ -3357,10 +3402,28 @@ AfterTutorialBattleScript: ; d834 (3:5834)
 	tx Text05f1
 	close_text_box
 	print_text_string Text05f2
-	run_command Func_d271
-; 0xd860
-	
-	INCROM $d860, $d880
+.ows_d85f
+	choose_starter_deck_multichoice
+	close_text_box
+	ask_question_jump Text05f3, .ows_d869
+	script_jump .ows_d85f
+.ows_d869
+	print_text_string Text05f4
+	close_text_box
+	pause_song
+	run_command Func_d40f
+	try_give_medal_pc_packs
+	run_command Func_ccdc
+	tx Text05f5
+	wait_for_song_to_finish
+	resume_song
+	close_text_box
+	script_set_flag_value EVENT_FLAG_3E, $03
+	run_command Func_d3d4
+	print_text_string Text05f6
+	run_command Func_d396
+	db $00
+	quit_script_fully
 
 NPCMovement_d880: ; d880 (3:5880)
 	db EAST

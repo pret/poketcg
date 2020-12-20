@@ -15,7 +15,7 @@ AIActionTable_SamPractice: ; 147bd (05:47bd)
 	call AIMainTurnLogic
 	ret
 .scripted_1 ; use scripted actions instead
-	call AIPerformSciptedTurn
+	call AIPerformScriptedTurn
 	ret
 
 .start_duel ; 147d6 (5:47d6)
@@ -93,7 +93,7 @@ GetPlayAreaLocationOfRaticateOrRattata: ; 1481f (5:481f)
 	ret
 
 ; has AI execute some scripted actions depending on Duel turn.
-AIPerformSciptedTurn: ; 1483a (5:483a)
+AIPerformScriptedTurn: ; 1483a (5:483a)
 	ld a, [wDuelTurns]
 	srl a
 	ld hl, .scripted_actions_list

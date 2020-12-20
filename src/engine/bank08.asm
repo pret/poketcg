@@ -202,7 +202,7 @@ AIPlay_Potion: ; 201b5 (8:41b5)
 	ld a, [wAITrainerCardParameter]
 	ldh [hTemp_ffa0], a
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20
 	jr c, .play_card
 	ld a, 20
@@ -232,7 +232,7 @@ AIDecide_Potion1: ; 201d1 (8:41d1)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 + 1 ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20 ; amount of Potion HP healing
@@ -270,7 +270,7 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 + 1  ; if damage <= 20
 	jr c, .calculate_hp
 	ld a, 20
@@ -309,7 +309,7 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	ret z
 	call .check_boost_if_taken_damage
 	jr c, .has_boost_damage
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 20 ; if damage >= 20
 	jr nc, .found
 .has_boost_damage
@@ -392,7 +392,7 @@ AIPlay_SuperPotion: ; 202a8 (8:42a8)
 	ldh [hTemp_ffa0], a
 	ld a, [wAITrainerCardParameter]
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40
 	jr c, .play_card
 	ld a, 40
@@ -426,7 +426,7 @@ AIDecide_SuperPotion1: ; 202cc (8:42cc)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
 	ld a, 40
@@ -470,7 +470,7 @@ AIDecide_SuperPotion2: ; 2030f (8:430f)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 + 1 ; if damage < 40
 	jr c, .calculate_hp
 	ld a, 40
@@ -516,7 +516,7 @@ AIDecide_SuperPotion2: ; 2030f (8:430f)
 	jr c, .next
 	call .check_energy_cost
 	jr c, .next
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 40 ; if damage >= 40
 	jr nc, .found
 .next
@@ -974,7 +974,7 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; return carry if move is useable but cannot KO.
 .check_can_ko ; 205d7 (8:45d7)
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -987,7 +987,7 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; can't KO.
 	scf
 	ret
-.unuseable
+.unusable
 	or a
 	ret
 
@@ -995,12 +995,12 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 ; move is useable and minimum damage > 0.
 .check_random ; 205f6 (8:45f6)
 	farcall CheckIfSelectedMoveIsUnusable
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
 	ld a, [wAIMinDamage]
 	cp 10
-	jr c, .unuseable
+	jr c, .unusable
 	ld a, 10
 	call Random
 	cp 3
@@ -2274,7 +2274,7 @@ AIDecide_PokemonBreeder: ; 20b1b (8:4b1b)
 	dec b
 	ld e, b
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	call ConvertHPToCounters
 	add c
@@ -2296,7 +2296,7 @@ AIDecide_PokemonBreeder: ; 20b1b (8:4b1b)
 ; compare number of this card's damage counters
 ; with 5, if less than that, set carry
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	cp 5
 	jr c, .set_carry
 
@@ -3182,7 +3182,7 @@ AIDecide_PokemonCenter: ; 210eb (8:50eb)
 
 ; get this Pokemon's current damage counters
 ; and add it to the total.
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call ConvertHPToCounters
 	ld b, a
 	ld a, [wce08]
@@ -3559,7 +3559,7 @@ AIDecide_Pokedex: ; 212dc (8:52dc)
 	jp PickPokedexCards ; bug, should be jp nz
 
 ; picks order of the cards in deck from the effects of Pokedex.
-; prioritises Pokemon cards, then Trainer cards, then energy cards.
+; prioritizes Pokemon cards, then Trainer cards, then energy cards.
 ; stores the resulting order in wce1a.
 PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 ; unreferenced
@@ -3690,7 +3690,7 @@ PickPokedexCards_Unreferenced: ; 212ff (8:52ff)
 	ret
 
 ; picks order of the cards in deck from the effects of Pokedex.
-; prioritises energy cards, then Pokemon cards, then Trainer cards.
+; prioritizes energy cards, then Pokemon cards, then Trainer cards.
 ; stores the resulting order in wce1a.
 PickPokedexCards: ; 2138e (8:538e)
 	xor a
@@ -3950,7 +3950,7 @@ AIDecide_MrFuji: ; 214a7 (8:54a7)
 	ld b, a
 
 	; skip if zero damage counters
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	call ConvertHPToCounters
 	or a
 	jr z, .next
@@ -4061,7 +4061,7 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 
 ; skip if card has no damage counters.
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .no_carry
 
@@ -4168,7 +4168,7 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 	scf
 	ret
 
-; this deck will use Scoop Up on a benched Articuno2, Zapdos3 or Molres2.
+; this deck will use Scoop Up on a benched Articuno2, Zapdos3 or Moltres2.
 ; interestingly, does not check for Muk in both Play Areas.
 .HandleLegendaryRonald ; 215e7 (8:55e7)
 ; if less than 3 Play Area Pokemon cards, skip.
@@ -4626,7 +4626,7 @@ AIDecide_Gambler: ; 21875 (8:5875)
 
 ; check if flag is set for Player using Mewtwo1 only deck
 	ld a, [wAIBarrierFlagCounter]
-	and AI_FLAG_MEWTWO_MILL
+	and AI_MEWTWO_MILL
 	jr z, .no_carry
 
 ; set carry if number of cards in deck <= 4.
@@ -6042,7 +6042,7 @@ AIDecide_PokemonTrader_FlowerGarden: ; 220a8 (8:60a8)
 
 AIDecide_PokemonTrader_StrangePower: ; 22122 (8:6122)
 ; looks for a Pokemon in hand to trade with Mr Mime in deck.
-; inputing Mr Mime in register e for the function is redundant
+; inputting Mr Mime in register e for the function is redundant
 ; since it already checks whether a Mr Mime exists in the hand.
 	ld a, MR_MIME
 	ld e, MR_MIME
@@ -6637,7 +6637,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 	pop af
-	ldh [hAIHealCard], a
+	ldh [hPlayAreaEffectTarget], a
 	ld a, OPPACTION_EXECUTE_PKMN_POWER_EFFECT
 	bank1call AIMakeDecision
 	ld a, OPPACTION_DUEL_MAIN_SCENE
@@ -6653,7 +6653,7 @@ HandleAIHeal: ; 22402 (8:6402)
 ; check if Arena card has any damage counters,
 ; if not, check Bench instead.
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	jr z, .check_bench
 
@@ -6666,7 +6666,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	call GetTurnDuelistVariable
 	ld h, a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	; this seems useless since it was already
 	; checked that Arena card has damage,
 	; so card damage is at least 10.
@@ -6704,7 +6704,7 @@ HandleAIHeal: ; 22402 (8:6402)
 	cp d
 	jr z, .done
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	cp b
 	jr c, .next_bench
@@ -6764,7 +6764,7 @@ HandleAIShift: ; 22476 (8:6476)
 	ld a, OPPACTION_USE_PKMN_POWER
 	bank1call AIMakeDecision
 
-; converts WR_* to apropriate color
+; converts WR_* to appropriate color
 	ld a, [wAIDefendingPokemonWeakness]
 	ld b, 0
 .loop_color
@@ -6824,7 +6824,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	ld a, 3
 	call Random
 	or a
-	jr z, .check_player_prizes
+	jr z, .check_ai_prizes
 	cp 2
 	jr c, .check_player_hand
 
@@ -6833,10 +6833,10 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	call GetNonTurnDuelistVariable
 	cp DECK_SIZE - 1
 	ret nc ; return if Player has one or no cards in Deck
-	ld a, $ff
+	ld a, AI_PEEK_TARGET_DECK
 	jr .use_peek
 
-.check_player_prizes
+.check_ai_prizes
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	ld hl, wcda5
@@ -6861,7 +6861,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	ld a, c
 	sub b
 	ld [hl], a
-	ld a, $40
+	ld a, AI_PEEK_TARGET_PRIZE
 	add d
 	jr .use_peek
 
@@ -6876,7 +6876,7 @@ HandleAIPeek: ; 224e6 (8:64e6)
 	call CountCardsInDuelTempList
 	call ShuffleCards
 	ld a, [wDuelTempList]
-	or $80
+	or AI_PEEK_TARGET_HAND
 
 .use_peek
 	push af
@@ -6902,7 +6902,7 @@ HandleAIStrangeBehavior: ; 2255d (8:655d)
 
 	ldh [hTemp_ffa0], a
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if Arena card has no damage counters
 
@@ -6977,7 +6977,7 @@ HandleAICurse: ; 225b5 (8:65b5)
 	call SwapTurn
 .loop_play_area_1
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	or a
 	jr z, .next_1
@@ -7033,7 +7033,7 @@ HandleAICurse: ; 225b5 (8:65b5)
 	cp b
 	jr z, .next_2 ; skip same Pokemon card
 	push bc
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	pop bc
 	jr nz, .use_curse ; has damage counters, choose this card
 .next_2
@@ -7116,7 +7116,7 @@ HandleAICowardice: ; 2262d (8:662d)
 	ld a, c
 	ldh [hTemp_ffa0], a
 	ld e, a
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 .asm_22678
 	or a
 	ret z ; return if has no damage counters
@@ -7183,7 +7183,7 @@ HandleAIDamageSwap: ; 226a3 (8:66a3)
 
 .ok
 	ld e, PLAY_AREA_ARENA
-	call GetCardDamage
+	call GetCardDamageAndMaxHP
 	or a
 	ret z ; return if no damage
 
@@ -7380,12 +7380,12 @@ CheckIfPlayerHasPokemonOtherThanMewtwo1: ; 227a9 (8:67a9)
 HandleAIAntiMewtwoDeckStrategy: ; 227d3 (8:67d3)
 ; return carry if Player is not playing Mewtwo1 mill deck
 	ld a, [wAIBarrierFlagCounter]
-	bit 7, a
+	bit AI_MEWTWO_MILL_F, a
 	jr z, .set_carry
 
 ; else, check if there's been less than 2 turns
 ; without the Player using Barrier.
-	cp AI_FLAG_MEWTWO_MILL + 2
+	cp AI_MEWTWO_MILL + 2
 	jr c, .count_bench
 
 ; if there has been, reset wAIBarrierFlagCounter
@@ -7535,7 +7535,7 @@ AIPickEnergyCardToDiscard: ; 2282e (8:682e)
 
 ; returns in a the deck index of an energy card attached to card
 ; in player's Play Area location a to remove.
-; prioritises double colorless energy, then any useful energy,
+; prioritizes double colorless energy, then any useful energy,
 ; then defaults to the first energy card attached if neither
 ; of those are found.
 ; returns $ff in a if there are no energy cards attached.
@@ -7614,7 +7614,7 @@ PickAttachedEnergyCardToRemove: ; 22875 (8:6875)
 
 ; stores in wTempAI and wCurCardCanAttack the deck indices
 ; of energy cards attached to card in Play Area location a.
-; prioritises double colorless energy, then any useful energy,
+; prioritizes double colorless energy, then any useful energy,
 ; then defaults to the first two energy cards attached if neither
 ; of those are found.
 ; returns $ff in a if there are no energy cards attached.
@@ -8014,7 +8014,7 @@ LookForCardIDInDeck_GivenCardIDInHand: ; 22a49 (8:6a49)
 ; input:
 ;	a = card ID
 ;	b = PLAY_AREA_* to start with
-; ouput:
+; output:
 ;	a = PLAY_AREA_* of found card
 ;	carry set if found
 LookForCardIDInPlayArea_Bank8: ; 22a72 (8:6a72)
@@ -8134,7 +8134,7 @@ RemoveFromListDifferentCardOfGivenType: ; 22a95 (8:6a95)
 ;   e = card ID 2
 ; output:
 ;   a = deck index of card ID 1 found in deck
-;   e = deck index of Pokemon card in hand dfferent than card ID 2
+;   e = deck index of Pokemon card in hand different than card ID 2
 LookForCardIDToTradeWithDifferentHandCard: ; 22ae0 (8:6ae0)
 	ld hl, wCurCardCanAttack
 	ld [hl], e

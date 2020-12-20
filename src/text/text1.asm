@@ -290,11 +290,11 @@ DuelistPlacedACardText: ; 367f9 (d:67f9)
 	line "a <RAMTEXT>."
 	done
 
-Text0045: ; 36808 (d:6808)
+UnableToSelectText: ; 36808 (d:6808)
 	text "Unable to select."
 	done
 
-Text0046: ; 3681b (d:681b)
+ColorListText: ; 3681b (d:681b)
 	text "Grass"
 	line "Fire"
 	line "Water"
@@ -303,31 +303,31 @@ Text0046: ; 3681b (d:681b)
 	line "Psychic"
 	done
 
-Text0047: ; 36848 (d:6848)
+GrassSymbolText: ; 36848 (d:6848)
 	textfw0 "<GRASS>"
 	done
 
-Text0048: ; 3684b (d:684b)
+FireSymbolText: ; 3684b (d:684b)
 	textfw0 "<FIRE>"
 	done
 
-Text0049: ; 3684e (d:684e)
+WaterSymbolText: ; 3684e (d:684e)
 	textfw0 "<WATER>"
 	done
 
-Text004a: ; 36851 (d:6851)
+LightningSymbolText: ; 36851 (d:6851)
 	textfw0 "<LIGHTNING>"
 	done
 
-Text004b: ; 36854 (d:6854)
+FightingSymbolText: ; 36854 (d:6854)
 	textfw0 "<FIGHTING>"
 	done
 
-Text004c: ; 36857 (d:6857)
+PsychicSymbolText: ; 36857 (d:6857)
 	textfw0 "<PSYCHIC>"
 	done
 
-Text004d: ; 3685a (d:685a)
+BenchText: ; 3685a (d:685a)
 	text "Bench"
 	done
 
@@ -372,7 +372,7 @@ ChooseTheCardYouWishToExamineText: ; 3697c (d:697c)
 	line "you wish to examine."
 	done
 
-TransmitingDataText: ; 369a2 (d:69a2)
+TransmittingDataText: ; 369a2 (d:69a2)
 	text "Transmitting data..."
 	done
 
@@ -821,17 +821,17 @@ NoEnergyAttachedToOpponentsActiveText: ; 3742a (d:742a)
 	line "the opponent's Active Pokémon."
 	done
 
-Text00af: ; 3746a (d:746a)
+ThereAreNoEnergyCardsInDiscardPileText: ; 3746a (d:746a)
 	text "There are no Energy cards"
 	line "in the the Discard Pile."
 	done
 
-Text00b0: ; 3749e (d:749e)
+ThereAreNoBasicEnergyCardsInDiscardPileText: ; 3749e (d:749e)
 	text "There are no Basic Energy cards"
 	line "in the Discard Pile."
 	done
 
-Text00b1: ; 374d4 (d:74d4)
+NoCardsLeftInTheDeckText: ; 374d4 (d:74d4)
 	text "There are no cards left in the Deck."
 	done
 
@@ -849,50 +849,50 @@ CantEvolvePokemonInSameTurnItsPlacedText: ; 37546 (d:7546)
 	line "in the same turn it was placed."
 	done
 
-Text00b5: ; 37583 (d:7583)
+NotAffectedByPoisonSleepParalysisOrConfusionText: ; 37583 (d:7583)
 	text "Not affected by Poison,"
 	line "Sleep, Paralysis, or Confusion."
 	done
 
-Text00b6: ; 375bc (d:75bc)
+NotEnoughCardsInHandText: ; 375bc (d:75bc)
 	text "Not enough cards in Hand."
 	done
 
-Text00b7: ; 375d7 (d:75d7)
+EffectNoPokemonOnTheBenchText: ; 375d7 (d:75d7)
 	text "No Pokémon on the Bench."
 	done
 
-Text00b8: ; 375f1 (d:75f1)
+ThereAreNoPokemonInDiscardPileText: ; 375f1 (d:75f1)
 	text "There are no Pokémon"
 	line "in the Discard Pile."
 	done
 
-Text00b9: ; 3761c (d:761c)
+ConditionsForEvolvingToStage2NotFulfilledText: ; 3761c (d:761c)
 	text "Conditions for evolving to"
 	line "Stage 2 not fulfilled."
 	done
 
-Text00ba: ; 3764f (d:764f)
+ThereAreNoCardsInHandThatYouCanChangeText: ; 3764f (d:764f)
 	text "There are no cards in Hand"
 	line "that you can change."
 	done
 
-Text00bb: ; 37680 (d:7680)
+ThereAreNoCardsInTheDiscardPileText: ; 37680 (d:7680)
 	text "There are no cards in the"
 	line "Discard Pile."
 	done
 
-Text00bc: ; 376a9 (d:76a9)
+ThereAreNoStage1PokemonText: ; 376a9 (d:76a9)
 	text "There are no Stage 1 Pokémon"
 	line "in the Play Area."
 	done
 
-Text00bd: ; 376d9 (d:76d9)
+NoEnergyCardsAttachedToPokemonInYourPlayAreaText: ; 376d9 (d:76d9)
 	text "No Energy cards are attached to"
 	line "Pokémon in your Play Area."
 	done
 
-Text00be: ; 37715 (d:7715)
+NoEnergyCardsAttachedToPokemonInOppPlayAreaText: ; 37715 (d:7715)
 	text "No Energy cards attached to Pokémon"
 	line "in your opponent's Play Area."
 	done
@@ -906,46 +906,46 @@ NotEnoughEnergyCardsText: ; 37781 (d:7781)
 	text "Not enough Energy cards."
 	done
 
-Text00c1: ; 3779b (d:779b)
+NotEnoughFireEnergyText: ; 3779b (d:779b)
 	text "Not enough Fire Energy."
 	done
 
-Text00c2: ; 377b4 (d:77b4)
+NotEnoughPsychicEnergyText: ; 377b4 (d:77b4)
 	text "Not enough Psychic Energy."
 	done
 
-Text00c3: ; 377d0 (d:77d0)
+NotEnoughWaterEnergyText: ; 377d0 (d:77d0)
 	text "Not enough Water Energy."
 	done
 
-Text00c4: ; 377ea (d:77ea)
+ThereAreNoTrainerCardsInDiscardPileText: ; 377ea (d:77ea)
 	text "There are no Trainer Cards"
 	line "in the Discard Pile."
 	done
 
-Text00c5: ; 3781b (d:781b)
+NoAttackMayBeChoosenText: ; 3781b (d:781b)
 	text "No Attacks may be choosen."
 	done
 
-Text00c6: ; 37837 (d:7837)
+YouDidNotReceiveAnAttackToMirrorMoveText: ; 37837 (d:7837)
 	text "You did not receive an Attack"
 	line "to Mirror Move."
 	done
 
-Text00c7: ; 37866 (d:7866)
+ThisAttackCannotBeUsedTwiceText: ; 37866 (d:7866)
 	text "This attack cannot"
 	line "be used twice."
 	done
 
-Text00c8: ; 37889 (d:7889)
+NoWeaknessText: ; 37889 (d:7889)
 	text "No Weakness."
 	done
 
-Text00c9: ; 37897 (d:7897)
+NoResistanceText: ; 37897 (d:7897)
 	text "No Resistance."
 	done
 
-Text00ca: ; 378a7 (d:78a7)
+OnlyOncePerTurnText: ; 378a7 (d:78a7)
 	text "Only once per turn."
 	done
 
@@ -954,38 +954,38 @@ CannotUseDueToStatusText: ; 378bc (d:78bc)
 	line "or Confusion."
 	done
 
-Text00cc: ; 378ef (d:78ef)
+CannotBeUsedInTurnWhichWasPlayedText: ; 378ef (d:78ef)
 	text "Cannot be used in the turn in"
 	line "which it was played."
 	done
 
-Text00cd: ; 37923 (d:7923)
+ThereIsNoEnergyCardAttachedText: ; 37923 (d:7923)
 	text "There is no Energy card attached."
 	done
 
-Text00ce: ; 37946 (d:7946)
+NoGrassEnergyText: ; 37946 (d:7946)
 	text "No Grass Energy."
 	done
 
-Text00cf: ; 37958 (d:7958)
+CannotUseSinceTheresOnly1PkmnText: ; 37958 (d:7958)
 	text "Cannot use since there's only"
 	line "1 Pokémon."
 	done
 
-Text00d0: ; 37982 (d:7982)
+CannotUseBecauseItWillBeKnockedOutText: ; 37982 (d:7982)
 	text "Cannot use because"
 	line "it will be Knocked Out."
 	done
 
-Text00d1: ; 379ae (d:79ae)
+CanOnlyBeUsedOnTheBenchText: ; 379ae (d:79ae)
 	text "Can only be used on the Bench."
 	done
 
-Text00d2: ; 379ce (d:79ce)
+ThereAreNoPokemonOnBenchText: ; 379ce (d:79ce)
 	text "There are no Pokémon on the Bench."
 	done
 
-Text00d3: ; 379f2 (d:79f2)
+OpponentIsNotAsleepText: ; 379f2 (d:79f2)
 	text "Opponent is not Asleep"
 	done
 
@@ -1073,22 +1073,22 @@ VenomPowderCheckText: ; 37cdf (d:7cdf)
 	line "opponent is Poisoned & Confused."
 	done
 
-Text00e5: ; 37d1f (d:7d1f)
+IfTailsYourPokemonBecomesConfusedText: ; 37d1f (d:7d1f)
 	text "If Tails,  your Pokémon"
 	line "becomes Confused."
 	done
 
-Text00e6: ; 37d4a (d:7d4a)
+DamageCheckIfTailsNoDamageText: ; 37d4a (d:7d4a)
 	text "Damage check!"
 	line "If Tails, no damage!!!"
 	done
 
-Text00e7: ; 37d70 (d:7d70)
+IfHeadsDraw1CardFromDeckText: ; 37d70 (d:7d70)
 	text "If Heads,"
 	line "Draw 1 card from Deck!"
 	done
 
-Text00e8: ; 37d92 (d:7d92)
+FlipUntilFailAppears10DamageForEachHeadsText: ; 37d92 (d:7d92)
 	text "Flip until Tails appears."
 	line "10 damage for each Heads!!!"
 	done
@@ -1098,7 +1098,7 @@ IfHeadPlus10IfTails10ToYourselfText: ; 37dc9 (d:7dc9)
 	line "If Tails, +10 damage to yourself!"
 	done
 
-Text00ea: ; 37e03 (d:7e03)
+DamageToOppBenchIfHeadsDamageToYoursIfTailsText: ; 37e03 (d:7e03)
 	text "10 damage to opponent's Bench if"
 	line "Heads, damage to yours if Tails."
 	done
@@ -1108,17 +1108,17 @@ IfHeadsChangeOpponentsActivePokemonText: ; 37e46 (d:7e46)
 	line "Active Pokémon."
 	done
 
-Text00ec: ; 37e73 (d:7e73)
+IfHeadsHealIsSuccessfulText: ; 37e73 (d:7e73)
 	text "If Heads,"
 	line "Heal is successful."
 	done
 
-Text00ed: ; 37e92 (d:7e92)
+IfTailsDamageToYourselfTooText: ; 37e92 (d:7e92)
 	text "If Tails, <RAMNUM> damage"
 	line "to yourself, too."
 	done
 
-Text00ee: ; 37eb8 (d:7eb8)
+SuccessCheckIfHeadsAttackIsSuccessfulText: ; 37eb8 (d:7eb8)
 	text "Success check!!!"
 	line "If Heads, Attack is successful!"
 	done
@@ -1128,7 +1128,7 @@ TrainerCardSuccessCheckText: ; 37eea (d:7eea)
 	line "If Heads, you're successful!"
 	done
 
-Text00f0: ; 37f24 (d:7f24)
+CardCheckIfHeads8CardsIfTails1CardText: ; 37f24 (d:7f24)
 	text "Card check!"
 	line "If Heads, 8 cards! If Tails, 1 card!"
 	done

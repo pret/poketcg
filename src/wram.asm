@@ -73,7 +73,10 @@ wPlayerArenaCard:: ; c2bb
 wPlayerBench:: ; c2bc
 	ds MAX_BENCH_POKEMON + 1
 
-	ds $6
+wPlayerArenaCardFlags:: ; c2c2
+	ds $1
+
+	ds $5
 
 wPlayerArenaCardHP:: ; c2c8
 	ds $1
@@ -102,7 +105,7 @@ wPlayerBench5CardStage:: ; c2d3
 	ds $1
 
 ; changed type from Venomoth's Shift Pokemon Power
-; if bit 7 == 1, then bits 0-3 override the Pokemon's actual type
+; if bit 7 == 1, then bits 0-3 override the Pokemon's actual color
 wPlayerArenaCardChangedType:: ; c2d4
 	ds $1
 wPlayerBench1CardChangedType:: ; c2d5
@@ -196,7 +199,21 @@ wPlayerArenaCardLastTurnDamage:: ; c2f3
 wPlayerArenaCardLastTurnStatus:: ; c2f5
 	ds $1
 
-	ds $a
+; substatus2 that the opponent card got last turn
+wPlayerArenaCardLastTurnSubstatus2:: ; c2f6
+	ds $1
+
+; indicates color of weakness that was changed
+; for this card last turn
+wPlayerArenaCardLastTurnChangeWeak:: ; c2f7
+	ds $1
+
+; stores an effect that was used on the Arena card last turn.
+; see LAST_TURN_EFFECT_* constants.
+wPlayerArenaCardLastTurnEffect:: ; c2f8
+	ds $1
+
+	ds $7
 
 wOpponentDuelVariables:: ; c300
 
@@ -221,7 +238,10 @@ wOpponentArenaCard:: ; c3bb
 wOpponentBench:: ; c3bc
 	ds MAX_BENCH_POKEMON + 1
 
-	ds $6
+wOpponentArenaCardFlags:: ; c3c2
+	ds $1
+
+	ds $5
 
 wOpponentArenaCardHP:: ; c3c8
 	ds $1
@@ -336,7 +356,20 @@ wOpponentArenaCardLastTurnDamage:: ; c3f3
 wOpponentArenaCardLastTurnStatus:: ; c3f5
 	ds $1
 
-	ds $a
+; substatus2 that the player card got last turn
+wOpponentArenaCardLastTurnSubstatus2:: ; c3f6
+	ds $1
+
+; indicates color of weakness that was changed
+; for this card last turn
+wOpponentArenaCardLastTurnChangeWeak:: ; c3f7
+	ds $1
+
+; whether any attached energy card was discarded last turn (0 if not)
+wOpponentArenaCardLastTurnEffect:: ; c3f8
+	ds $1
+
+	ds $7
 
 UNION
 
@@ -346,7 +379,7 @@ wBoosterTempNonEnergiesDrawn:: ; c400
 	ds $b
 wBoosterTempEnergiesDrawn:: ; c40b
 	ds $b
-wBoosterCardsDrawnEnd::
+wBoosterCardsDrawnEnd:: ; c416
 	ds $6a
 
 NEXTU
@@ -700,15 +733,14 @@ wNoItemSelectionMenuKeys:: ; cbd6
 	ds $1
 
 ; when viewing a card page, which keys (among B_BUTTON, D_UP, and D_DOWN) will exit the page,
-; either to go back to the previous menu orlist, or to load the card page of the card above/below it
+; either to go back to the previous menu or list, or to load the card page of the card above/below it
 wCardPageExitKeys:: ; cbd7
 	ds $1
 
+; used to store function pointer for printing card order
+; in card list reordering screen.
 wcbd8:: ; cbd8
-	ds $1
-
-wcbd9:: ; cbd9
-	ds $1
+	ds $2
 
 ; in the hand or discard pile card screen, id of the text printed in the bottom-left box
 wCardListInfoBoxText:: ; cbda
@@ -919,6 +951,7 @@ wLoadedMove:: ; cca6
 ; the damage field of an used move is loaded here
 ; doubles as "wAIAverageDamage" when complementing wAIMinDamage and wAIMaxDamage
 ; little-endian
+; second byte may have UNAFFECTED_BY_WEAKNESS_RESISTANCE_F set/unset
 wDamage:: ; ccb9
 	ds $2
 
@@ -931,6 +964,7 @@ wAIMinDamage:: ; ccbb
 wAIMaxDamage:: ; ccbc
 	ds $1
 
+wccbd:: ; ccbd
 	ds $2
 
 ; damage dealt by an attack to a target
@@ -987,6 +1021,7 @@ wEffectFunctionsFeedback:: ; ccce
 	ds $18
 
 ; this is 1 (non-0) if dealing damage to self due to confusion
+; or a self-destruct type attack
 wIsDamageToSelf:: ; cce6
 	ds $1
 
@@ -1020,12 +1055,16 @@ wccee:: ; ccee
 wccef:: ; ccef
 	ds $1
 
-wccf0:: ; ccf0
+; stores the energy cost of the Metronome attack being used.
+; it's used to know how many attached Energy cards are being used
+; to pay for the attack for damage calculation.
+; if equal to 0, then the attack wasn't invoked by Metronome.
+wMetronomeEnergyCost:: ; ccf0
 	ds $1
 
 ; effect functions return a status condition constant here when it had no effect
 ; on the target, in order to print one of the ThereWasNoEffectFrom* texts
-wNoEffectFromStatus:: ; ccf1
+wNoEffectFromWhichStatus:: ; ccf1
 	ds $1
 
 ; when non-0, allows the player to skip some delays during a duel by pressing B.
@@ -1193,8 +1232,8 @@ wAIPokedexCounter:: ; cda6
 	ds $1
 
 ; variable to keep track of Mewtwo1's Barrier usage during Player' turn.
-; AI_FLAG_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
-;	- when flag is not set, this counts how many turns in a row
+; AI_MEWTWO_MILL set means Player is running Mewtwo1 mill deck.
+; 	- when flag is not set, this counts how many turns in a row
 ;	  Player used Mewtwo1's Barrier attack;
 ;	- when flag is set, this counts how many turns in a row
 ;	  Player has NOT used Barrier attack.
@@ -1427,10 +1466,10 @@ wAIVenusaur2PlayAreaLocation:: ; ce05
 
 wce06:: ; ce06
 ; number of cards to be transferred by AI using Energy Trans.
-wAINumberOfEnergyTransCards::
+wAINumberOfEnergyTransCards:: ; ce06
 ; used for storing weakness of Player's Arena card
 ; in AI routine dealing with Shift Pkmn Power.
-wAIDefendingPokemonWeakness::
+wAIDefendingPokemonWeakness:: ; ce06
 	ds $1
 
 wce07:: ; ce07
@@ -1552,7 +1591,7 @@ wCoinTossScreenTextID:: ; ce4e
 	ds $2
 
 ; set to PLAYER_TURN in the "Your Play Area" screen
-; set to OPPONENT_TURN in the  "Opp Play Area" screen
+; set to OPPONENT_TURN in the "Opp Play Area" screen
 ; alternates when drawing the "In Play Area" screen
 wCheckMenuPlayAreaWhichDuelist:: ; ce50
 	ds $1
@@ -1670,7 +1709,20 @@ wce70:: ; ce70
 wce71:: ; ce71
 	ds $1
 
-	ds $a
+wce72:: ; ce72
+	ds $1
+
+; card index and its attack index chosen
+; to be used by Metronome.
+wMetronomeSelectedAttack:: ; ce73
+	ds $2
+
+; stores the amount of cards that are being ordered.
+wNumberOfCardsToOrder:: ; ce75
+	ds $1
+
+wce76:: ; ce76
+	ds MAX_PLAY_AREA_POKEMON
 
 ; used in CountPokemonIDInPlayArea
 wTempPokemonID_ce7c:: ; ce7c
@@ -2033,11 +2085,11 @@ wBoosterViableCardList:: ; d133
 
 NEXTU
 
-; permission map of the current room with unpassable objects (walls, NPCs, etc).
+; permission map of the current room with impassable objects (walls, NPCs, etc).
 ; $00: passable (floor)
-; $40: unpassable and talkable (NPC or talkable wall)
-; $80: unpassable and untalkable (wall)
-wPermissionMap::
+; $40: impassable and talkable (NPC or talkable wall)
+; $80: impassable and untalkable (wall)
+wPermissionMap:: ; d133
 	ds $100
 
 ENDU
@@ -2249,7 +2301,7 @@ wd3d0:: ; d3d0
 wLoadedFlagBits:: ; d3d1
 	ds $1
 
-wEventFlags::
+wEventFlags:: ; d3d2
 	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
@@ -2321,11 +2373,19 @@ wd4b0:: ; d4b0
 
 wd4b1:: ; d4b1
 	ds $1
-	
+
 wd4b2:: ; d4b2
 	ds $1
-	
-	ds $b
+
+wd4b3:: ; d4b3
+	ds $1
+
+	ds $5
+
+wd4b9:: ; d4b9
+	ds $1
+
+	ds $4
 
 wd4be:: ; d4be
 	ds $1
@@ -2556,11 +2616,22 @@ wBoosterData_TypeChances:: ; d689
 wd693:: ; d693
 	ds $1
 
-wd694:: ; d694
+wMultichoiceTextboxResult_Sam:: ; d694
 	ds $1
+	
+UNION
+
+wMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; d695
+	ds $1
+
+NEXTU
 
 wd695:: ; d695
 	ds $1
+
+ENDU
+
+
 
 wd696:: ; d696
 	ds $1

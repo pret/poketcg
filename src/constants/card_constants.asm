@@ -227,4 +227,4 @@
 	const POKEMON_FLUTE           ; $e2
 	const GAMBLER                 ; $e3
 	const RECYCLE                 ; $e4
-NUM_CARDS EQU const_value + -1
+NUM_CARDS EQU const_value - 1

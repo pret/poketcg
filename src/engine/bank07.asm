@@ -553,7 +553,35 @@ Func_1c83d: ; 1c83d (7:483d)
 	ret
 ; 0x1c858
 
-	INCROM $1c858, $1c8ef
+	INCROM $1c858, $1c8bc
+
+Func_1c8bc: ; 1c8bc (7:48bc)
+	push hl
+	push bc
+	call Set_OBJ_8x8
+	ld a, LOW(Func_3ba2)
+	ld [wDoFrameFunction], a
+	ld a, HIGH(Func_3ba2)
+	ld [wDoFrameFunction + 1], a
+	ld a, $ff
+	ld hl, wAnimationQueue
+	ld c, ANIMATION_QUEUE_LENGTH
+.fill_queue
+	ld [hli], a
+	dec c
+	jr nz, .fill_queue
+	ld [wd42a], a
+	ld [wd4c0], a
+	xor a
+	ld [wd4ac], a
+	ld [wd4ad], a
+	ld [wd4b3], a
+	call Func_1ccbc
+	call Func_3ca0
+	pop bc
+	pop hl
+	ret
+; 0x1c8ef
 
 Func_1c8ef: ; 1c8ef (7:48ef)
 	ld a, [wDoFrameFunction + 0]
@@ -625,7 +653,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 .address
 	dw Func_1c94a
 
-Func_1c94a:
+Func_1c94a: ; 1c94a (7:494a)
 	ld e, l
 	ld d, h
 	ld c, 3
@@ -777,6 +805,7 @@ macro_1ca04: MACRO
 	dw \1
 	db \2
 ENDM
+
 Data_1ca04:
 ; value(2), flag(1)
 	macro_1ca04 $5858, $08
@@ -795,7 +824,7 @@ Data_1ca04:
 	macro_1ca04 $2838, $00
 	macro_1ca04 $2818, $00
 
-Func_1ca31:
+Func_1ca31: ; 1ca31 (7:4a6b)
 	push hl
 	push bc
 	ld a, [wd4ac]
@@ -895,7 +924,24 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	jr .asm_1cb57
 ; 0x1cb5e
 
-	INCROM $1cb5e, $1d078
+	INCROM $1cb5e, $1ccbc
+
+Func_1ccbc: ; 1ccbc (7:4cbc)
+	ld a, $ff
+	ld [wd42a], a
+	call DisableInt_LYCoincidence
+	xor a
+	ldh [hSCX], a
+	ldh [rSCX], a
+	ldh [hSCY], a
+	ld hl, wd4b9
+	ld [hl], LOW(Func_1ccbc)
+	inc hl
+	ld [hl], HIGH(Func_1ccbc)
+	ret
+; 0x1ccd4
+
+	INCROM $1ccd4, $1d078
 
 Func_1d078: ; 1d078 (7:5078)
 	ld a, [wd627]

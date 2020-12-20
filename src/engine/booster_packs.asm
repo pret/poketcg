@@ -164,7 +164,7 @@ GetBoosterCardType: ; 1e2a0 (7:62a0)
 	pop hl
 	ret
 
-CardTypeTable:  ; 1e2b1 (7:62b1)
+CardTypeTable: ; 1e2b1 (7:62b1)
 	db BOOSTER_CARD_TYPE_FIRE      ; TYPE_PKMN_FIRE
 	db BOOSTER_CARD_TYPE_GRASS     ; TYPE_PKMN_GRASS
 	db BOOSTER_CARD_TYPE_LIGHTNING ; TYPE_PKMN_LIGHTNING
@@ -344,7 +344,7 @@ GenerateRandomEnergy: ; 1e387 (7:6387)
 	jr AddBoosterEnergyToDrawnEnergies
 
 ; generates a booster with 10 random energies
-GenerateRandomEnergyBooster:  ; 1e390 (7:6390)
+GenerateRandomEnergyBooster: ; 1e390 (7:6390)
 	ld a, NUM_CARDS_IN_BOOSTER
 .generate_energy_loop
 	push af
@@ -355,22 +355,22 @@ GenerateRandomEnergyBooster:  ; 1e390 (7:6390)
 	jr ZeroBoosterRarityData
 
 ; generates a booster with 5 Lightning energies and 5 Fire energies
-GenerateEnergyBoosterLightningFire:  ; 1e39c (7:639c)
+GenerateEnergyBoosterLightningFire: ; 1e39c (7:639c)
 	ld hl, EnergyBoosterLightningFireData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 Water energies and 5 Fighting energies
-GenerateEnergyBoosterWaterFighting:  ; 1e3a1 (7:63a1)
+GenerateEnergyBoosterWaterFighting: ; 1e3a1 (7:63a1)
 	ld hl, EnergyBoosterWaterFightingData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 Grass energies and 5 Psychic energies
-GenerateEnergyBoosterGrassPsychic:  ; 1e3a6 (7:63a6)
+GenerateEnergyBoosterGrassPsychic: ; 1e3a6 (7:63a6)
 	ld hl, EnergyBoosterGrassPsychicData
 	jr GenerateTwoTypesEnergyBooster
 
 ; generates a booster with 5 energies of 2 different types each
-GenerateTwoTypesEnergyBooster:  ; 1e3ab (7:63ab)
+GenerateTwoTypesEnergyBooster: ; 1e3ab (7:63ab)
 	ld b, $02
 .add_two_energies_to_booster_loop
 	ld c, NUM_CARDS_IN_BOOSTER / 2
@@ -388,7 +388,7 @@ GenerateTwoTypesEnergyBooster:  ; 1e3ab (7:63ab)
 	jr nz, .add_two_energies_to_booster_loop
 ;	fallthrough
 
-ZeroBoosterRarityData:
+ZeroBoosterRarityData: ; 1e3be (7:63be)
 	xor a
 	ld [wBoosterData_CommonAmount], a
 	ld [wBoosterData_UncommonAmount], a
@@ -452,8 +452,8 @@ PutEnergiesAndNonEnergiesTogether: ; 1e3f3 (7:63f3)
 	pop hl
 	ret
 
-; add the final cards drawn from the booster pack to the player's colection (sCardCollection)
-AddBoosterCardsToCollection:; 1e40a (7:640a)
+; add the final cards drawn from the booster pack to the player's collection (sCardCollection)
+AddBoosterCardsToCollection: ; 1e40a (7:640a)
 	push hl
 	ld hl, wBoosterCardsDrawn
 .add_cards_loop

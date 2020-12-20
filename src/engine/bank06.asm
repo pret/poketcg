@@ -90,7 +90,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 	ret
 
 ; the name starts with TX_HALFWIDTH
-_CopyCardNameAndLevel_HalfwidthText:
+_CopyCardNameAndLevel_HalfwidthText: ; 18086 (6:4086)
 	ld a, [wcd9b]
 	inc a
 	add a
@@ -382,7 +382,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0e: INPLAYAREA_OPP_BENCH_4
 	dw OpenInPlayAreaScreen_NonTurnHolderPlayArea    ; 0x0f: INPLAYAREA_OPP_BENCH_5
 
-OpenInPlayAreaScreen_TurnHolderPlayArea:
+OpenInPlayAreaScreen_TurnHolderPlayArea: ; 18248 (6:4248)
 	; wInPlayAreaCurPosition constants conveniently map to (PLAY_AREA_* constants - 1)
 	; for bench locations. this mapping is taken for granted in the following code.
 	ld a, [wInPlayAreaCurPosition]
@@ -403,7 +403,7 @@ OpenInPlayAreaScreen_TurnHolderPlayArea:
 	bank1call OpenCardPage_FromCheckPlayArea
 	ret
 
-OpenInPlayAreaScreen_NonTurnHolderPlayArea:
+OpenInPlayAreaScreen_NonTurnHolderPlayArea: ; 1826a (6:426a)
 	ld a, [wInPlayAreaCurPosition]
 	sub INPLAYAREA_OPP_ACTIVE
 	or a
@@ -425,7 +425,7 @@ OpenInPlayAreaScreen_NonTurnHolderPlayArea:
 	call SwapTurn
 	ret
 
-OpenInPlayAreaScreen_TurnHolderHand:
+OpenInPlayAreaScreen_TurnHolderHand: ; 18293 (6:4293)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderHandScreen_Simple
@@ -433,7 +433,7 @@ OpenInPlayAreaScreen_TurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_NonTurnHolderHand:
+OpenInPlayAreaScreen_NonTurnHolderHand: ; 1829d (6:429d)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderHandScreen_Simple
@@ -441,7 +441,7 @@ OpenInPlayAreaScreen_NonTurnHolderHand:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_TurnHolderDiscardPile:
+OpenInPlayAreaScreen_TurnHolderDiscardPile: ; 182a7 (6:42a7)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenTurnHolderDiscardPileScreen
@@ -449,7 +449,7 @@ OpenInPlayAreaScreen_TurnHolderDiscardPile:
 	ldh [hWhoseTurn], a
 	ret
 
-OpenInPlayAreaScreen_NonTurnHolderDiscardPile:
+OpenInPlayAreaScreen_NonTurnHolderDiscardPile: ; 182b1 (6:42b1)
 	ldh a, [hWhoseTurn]
 	push af
 	bank1call OpenNonTurnHolderDiscardPileScreen
@@ -915,7 +915,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 
 ; unit: 5 bytes.
 ; [structure]
-; horizonal align (1) / title text id (2) / desc. text id (2)
+; horizontal align (1) / title text id (2) / desc. text id (2)
 glossary_entry: MACRO
 	db \1
 	tx \2
@@ -1197,7 +1197,7 @@ Func_19079: ; 19079 (6:5079)
 	call Func_3b6a
 	jp Func_18f9c.asm_4fd4
 
-PointerTable_006_508f: ; (6:508f)
+PointerTable_006_508f: ; 1908f (6:508f)
 	dw Func_18fdc
 	dw Func_19014
 	dw Func_18fdd
@@ -1523,10 +1523,10 @@ Func_19a12: ; 19a12 (6:5a12)
 ; 0x19a1f
 
 	INCROM $19a1f, $19c20
-	
+
 Func_19c20: ; 19c20 (6:5c20)
-    INCROM $19c20, $1a4cf
-	
+	INCROM $19c20, $1a4cf
+
 Func_1a4cf: ; 1a4cf (6:64cf)
 	INCROM $1a4cf, $1a61f
 
@@ -1677,7 +1677,7 @@ Func_1a6cd: ; 1a6cd (6:66cd)
 	lb de, $38, $9f
 	call SetupText
 	ld hl, $00a3
-	bank1call Func_57df
+	bank1call DrawWholeScreenTextBox
 	ld a, $0a
 	ld [$0000], a
 	xor a
@@ -1715,32 +1715,32 @@ Func_1a73a: ; 1a73a (6:673a)
 	pop hl
 	ret
 
-WhatIsYourNameData: ; (6:675e)
+WhatIsYourNameData: ; 1a75e (6:675e)
 	textitem 1, 1, WhatIsYourNameText
 	db $ff
 ; [Deck1Data ~ Deck4Data]
 ; These are directed from around (2:4f05),
 ; without any bank description.
 ; That is, the developers hard-coded it. -_-;;
-Deck1Data: ; (6:6763)
+Deck1Data: ; 1a763 (6:6763)
 	textitem 2, 1, Text022b
 	textitem 14, 1, Text0219
 	db $ff
-Deck2Data: ; (6:676c)
+Deck2Data: ; 1a76c (6:676c)
 	textitem 2, 1, Text022c
 	textitem 14, 1, Text0219
 	db $ff
-Deck3Data: ; (6:6775)
+Deck3Data: ; 1a775 (6:6775)
 	textitem 2, 1, Text022d
 	textitem 14, 1, Text0219
 	db $ff
-Deck4Data: ; (6:677e)
+Deck4Data: ; 1a77e (6:677e)
 	textitem 2, 1, Text022e
 	textitem 14, 1, Text0219
 	db $ff
 
 ; set each byte zero from hl for b bytes.
-ClearMemory: ; (6:6787)
+ClearMemory: ; 1a787 (6:6787)
 	push af
 	push bc
 	push hl
@@ -1758,7 +1758,7 @@ ClearMemory: ; (6:6787)
 ; play different sfx by a.
 ; if a is 0xff play SFX_03 (usually following a B press),
 ; else play SFX_02 (usually following an A press).
-PlayAcceptOrDeclineSFX: ; (6:6794)
+PlayAcceptOrDeclineSFX: ; 1a794 (6:6794)
 	push af
 	inc a
 	jr z, .sfx_decline
@@ -1773,7 +1773,7 @@ PlayAcceptOrDeclineSFX: ; (6:6794)
 
 ; get player name from the user
 ; into hl
-InputPlayerName: ; (6:67a3)
+InputPlayerName: ; 1a7a3 (6:67a3)
 	ld e, l
 	ld d, h
 	ld a, MAX_PLAYER_NAME_LENGTH
@@ -1858,7 +1858,7 @@ InputPlayerName: ; (6:67a3)
 ; bc: position of name.
 ; de: dest. pointer.
 ; hl: pointer to text item of the question.
-InitializeInputName:
+InitializeInputName: ; 1a846 (6:6846)
 	ld [wNamingScreenBufferMaxLength], a
 	push hl
 	ld hl, wNamingScreenNamePosition
@@ -1900,7 +1900,7 @@ InitializeInputName:
 	ld [wNamingScreenBufferLength], a
 	ret
 
-FinalizeInputName:
+FinalizeInputName: ; 1a880 (6:6880)
 	ld hl, wNamingScreenDestPointer
 	ld e, [hl]
 	inc hl
@@ -1915,7 +1915,7 @@ FinalizeInputName:
 
 ; draws the keyboard frame
 ; and the question if it exists.
-DrawNamingScreenBG:
+DrawNamingScreenBG: ; 1a892 (6:6892)
 	call DrawTextboxForKeyboard
 	call PrintPlayerNameFromInput
 	ld hl, wNamingScreenQuestionPointer
@@ -1943,13 +1943,13 @@ DrawNamingScreenBG:
 	textitem $0f, $10, EndText ; "End"
 	db $ff
 
-DrawTextboxForKeyboard:
+DrawTextboxForKeyboard: ; 1a8c1 (6:68c1)
 	lb de, 0, 3 ; x, y
 	lb bc, 20, 15 ; w, h
 	call DrawRegularTextBox
 	ret
 
-PrintPlayerNameFromInput:
+PrintPlayerNameFromInput: ; 1a8cb (6:68cb)
 	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
 	inc hl
@@ -1983,7 +1983,7 @@ endr
 
 ; check if button pressed.
 ; if pressed, set the carry bit on.
-NamingScreen_CheckButtonState:
+NamingScreen_CheckButtonState: ; 1a908 (6:6908)
 	xor a
 	ld [wPlaysSfx], a
 	ldh a, [hDPadHeld]
@@ -2232,7 +2232,7 @@ Func_1aa28: ; 1aa28 (6:6a28)
 ; load, to the first tile of v0Tiles0, the graphics for the
 ; blinking black square used in name input screens.
 ; for inputting full width text.
-LoadTextCursorTile:
+LoadTextCursorTile: ; 1aa65 (6:6a65)
 	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
 	ld b, 0
@@ -2253,7 +2253,7 @@ endr
 
 ; set the carry bit on,
 ; if "End" was selected.
-NamingScreen_ProcessInput:
+NamingScreen_ProcessInput: ; 1aa87 (6:6a87)
 	ld a, [wNamingScreenCursorX]
 	ld h, a
 	ld a, [wNamingScreenCursorY]
@@ -2416,7 +2416,7 @@ NamingScreen_ProcessInput:
 ; it seems to have been deprecated as the game was translated into english.
 ; but it can still be applied to english, such as upper-lower case transition.
 ; hl: info. pointer.
-TransformCharacter:
+TransformCharacter: ; 1ab61 (6:6b61)
 	ld a, [wNamingScreenBufferLength]
 	or a
 	jr z, .return ; if the length is zero, just return.
@@ -2468,7 +2468,7 @@ TransformCharacter:
 ; it returns the pointer to the proper information.
 ; h: position x.
 ; l: position y.
-GetCharInfoFromPos_Player:
+GetCharInfoFromPos_Player: ; 1ab93 (6:6b93)
 	push de
 	; (information index) = (x) * (height) + (y)
 	; (height) = 0x05(Deck) or 0x06(Player)
@@ -2510,7 +2510,7 @@ else
 endc
 ENDM
 
-KeyboardData_Player: ; (6:6baf)
+KeyboardData_Player: ; 1abaf (6:6baf)
 	kbitem $04, $02, $11, $00, TX_FULLWIDTH3,   "A"
 	kbitem $06, $02, $12, $00, TX_FULLWIDTH3,   "J"
 	kbitem $08, $02, $13, $00, TX_FULLWIDTH3,   "S"
@@ -2737,7 +2737,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 ; load, to the first tile of v0Tiles0, the graphics for the
 ; blinking black square used in name input screens.
 ; for inputting half width text.
-LoadHalfWidthTextCursorTile:
+LoadHalfWidthTextCursorTile: ; 1ae37 (6:6e37)
 	ld hl, v0Tiles0 + $00 tiles
 	ld de, .data
 	ld b, 0
@@ -2757,7 +2757,7 @@ rept TILE_SIZE
 endr
 
 ; it's only for naming the deck.
-ProcessTextWithUnderbar:
+ProcessTextWithUnderbar: ; 1ae59 (6:6e59)
 	ld hl, wNamingScreenNamePosition
 	ld d, [hl]
 	inc hl
@@ -3036,7 +3036,7 @@ Func_1afc2: ; 1afc2 (6:6fc2)
 ; its unit size is 3, and player's is 6.
 ; h: x
 ; l: y
-GetCharInfoFromPos_Deck:
+GetCharInfoFromPos_Deck: ; 1b000 (6:7000)
 	push de
 	ld e, l
 	ld d, h
@@ -3058,7 +3058,7 @@ GetCharInfoFromPos_Deck:
 	jr nz, .loop
 	ret
 
-KeyboardData_Deck: ; (6:7019)
+KeyboardData_Deck: ; 1b019 (6:7019)
 	db $04, $02, "A"
 	db $06, $02, "J"
 	db $08, $02, "S"

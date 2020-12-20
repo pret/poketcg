@@ -78,7 +78,7 @@ AIActionTable_LegendaryArticuno: ; 14c0b (5:4c0b)
 	ret
 
 ; this routine handles how Legendary Articuno
-; prioritises playing energy cards to each Pokémon.
+; prioritizes playing energy cards to each Pokémon.
 ; first, it makes sure that all Lapras have at least
 ; 3 energy cards before moving on to Articuno,
 ; and then to Dewgong and Seel

@@ -1,6 +1,6 @@
-text   EQUS "db TX_HALFWIDTH, "
-line   EQUS "db TX_LINE, "
-done   EQUS "db TX_END"
+text EQUS "db TX_HALFWIDTH, "
+line EQUS "db TX_LINE, "
+done EQUS "db TX_END"
 
 half2full EQUS "db TX_HALF2FULL"
 
