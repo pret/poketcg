@@ -24,6 +24,7 @@ Fixes are written in the `diff` format.
 - [AI Pokemon Trader may result in unintended effects](#ai-pokemon-trader-may-result-in-unintended-effects)
 - [AI never uses Energy Trans in order to retreat Arena card](#ai-never-uses-energy-trans-in-order-to-retreat-arena-card)
 - [Sam's practice deck does wrong card ID check](#sams-practice-deck-does-wrong-card-id-check)
+- [AI does not account for Mysterious Fossil or Clefairy Doll when using Shift Pkmn Power](#ai-does-not-account-for-mysterious-fossil-or-clefairy-doll-when-using-shift-pkmn-power)
 
 ## AI wrongfully adds score twice for attaching energy to Arena card
 
@@ -353,6 +354,50 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 
 .retreat
 	call AITryToRetreat
+	ret
+ 	...
+```
+
+## AI does not account for Mysterious Fossil or Clefairy Doll when using Shift Pkmn Power
+
+**Fix:** Edit `HandleAIShift` in [src/engine/bank08.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank08.asm):
+```diff
+HandleAIShift: ; 22476 (8:6476)
+ 	...
+.CheckWhetherTurnDuelistHasColor ; 224c6 (8:64c6)
+	ld a, [wAIDefendingPokemonWeakness]
+	ld b, a
+	ld a, DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+.loop_play_area
+	ld a, [hli]
+	cp $ff
+	jr z, .false
+	push bc
+	call GetCardIDFromDeckIndex
+	call GetCardType
+-	; in case this is a Mysterious Fossil or Clefairy Doll card,
+-	; AI might read the type of the card incorrectly here.
+-	; uncomment the following lines to account for this
+-	; cp TYPE_TRAINER
+-	; jr nz, .not_trainer
+-	; pop bc
+-	; jr .loop_play_area
+-; .not_trainer
++	cp TYPE_TRAINER
++	jr nz, .not_trainer
++	pop bc
++	jr .loop_play_area
++.not_trainer
+	call TranslateColorToWR
+	pop bc
+	and b
+	jr z, .loop_play_area
+; true
+	scf
+	ret
+.false
+	or a
 	ret
  	...
 ```
