@@ -10,10 +10,13 @@ Fixes are written in the `diff` format.
 +add green + lines
 ```
 
+**Disclaimer regarding the fixes:** since the project is still in the process of being disassembled, applying code modifications that result in a different number of bytes in the instructions will lead to lots of pointer invalidation, which will potentially lead to crashes.
+
 ## Contents
 
 - [AI wrongfully adds score twice for attaching energy to Arena card](#ai-wrongfully-adds-score-twice-for-attaching-energy-to-arena-card)
 - [Cards in AI decks that are not supposed to be placed as Prize cards are ignored](#cards-in-ai-decks-that-are-not-supposed-to-be-placed-as-prize-cards-are-ignored)
+- [AI score modifiers for retreating are never used](#ai-score-modifiers-for-retreating-are-never-used)
 - [AI handles Basic Pokémon cards in hand wrong when scoring the use of Professor Oak](#ai-handles-basic-pokémon-cards-in-hand-wrong-when-scoring-the-use-of-professor-oak)
 - [Rick never plays Energy Search](#rick-never-plays-energy-search)
 - [Rick uses wrong Pokédex AI subroutine](#rick-uses-wrong-pokédex-ai-subroutine)
@@ -115,6 +118,31 @@ SetUpBossStartingHandAndDeck: ; 172af (5:72af)
 .false
 	pop hl
 	or a
+	ret
+```
+
+## AI score modifiers for retreating are never used
+
+Each deck AI lists some Pokémon card IDs that have an associated score for retreating. That way, the game can fine-tune the likelihood that the AI duelist will retreat to a given Pokémon from the bench. For example, the Legendary Dragonite deck has the following list of retreat score modifiers:
+```
+.list_retreat ; 14d99 (5:4d99)
+	ai_retreat CHARMANDER, -1
+	ai_retreat MAGIKARP,   -5
+	db $00
+```
+
+However, the game never actually stores the pointer to these lists (a notable expection being the Legendary Moltres deck), so the AI cannot access these score modifiers.
+
+**Fix:** Edit all applicable decks in `src/engine/deck_ai/decks/`, uncommenting the following line:
+```diff
+.store_list_pointers
+	store_list_pointer wAICardListAvoidPrize, .list_prize
+	store_list_pointer wAICardListArenaPriority, .list_arena
+	store_list_pointer wAICardListBenchPriority, .list_bench
+	store_list_pointer wAICardListPlayFromHandPriority, .list_bench
+-	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
++	store_list_pointer wAICardListRetreatBonus, .list_retreat
+	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
 ```
 
