@@ -64,11 +64,11 @@ PlayerGfx: ; 87d7e (21:7d7e)
 	dw $24
 	INCBIN "gfx/duelists/player.2bpp"
 
-Duel55Gfx: ; 87fc0 (21:7fc0)
+Duel55Gfx:: ; 87fc0 (21:7fc0)
 	dw $2
 	INCBIN "gfx/duel/anims/55.2bpp"
 
-Duel56Gfx: ; 87fe2 (21:7fe2)
+Duel56Gfx:: ; 87fe2 (21:7fe2)
 	dw $1
 	INCBIN "gfx/duel/anims/56.2bpp"
 
@@ -108,11 +108,11 @@ GrassClubTilesetGfx: ; 8b91e (22:791e)
 	dw $57
 	INCBIN "gfx/tilesets/grassclub.2bpp"
 
-OWSpritePlayer: ; 8be90 (22:7e90)
+OWSpritePlayer:: ; 8be90 (22:7e90)
 	dw $14
 	INCBIN "gfx/overworld_sprites/player.2bpp"
 
-Duel57Gfx: ; 8bfd2 (22:7fd2)
+Duel57Gfx:: ; 8bfd2 (22:7fd2)
 	dw $1
 	INCBIN "gfx/duel/anims/57.2bpp"
 
@@ -184,7 +184,7 @@ NintendoGfx: ; 8fe22 (23:7e22)
 	dw $18
 	INCBIN "gfx/nintendo.2bpp"
 
-Duel58Gfx: ; 8ffa4 (23:7fa4)
+Duel58Gfx:: ; 8ffa4 (23:7fa4)
 	dw $4
 	INCBIN "gfx/duel/anims/58.2bpp"
 
@@ -236,15 +236,15 @@ CopyrightGfx: ; 93ce4 (24:7ce4)
 	dw $24
 	INCBIN "gfx/copyright.2bpp"
 
-HelpDeskLadyGfx: ; 93f26 (24:7f26)
+HelpDeskLadyGfx:: ; 93f26 (24:7f26)
 	dw $8
 	INCBIN "gfx/overworld_sprites/help_desk_lady.2bpp"
 
-Duel59Gfx: ; 93fa8 (24:7fa8)
+Duel59Gfx:: ; 93fa8 (24:7fa8)
 	dw $3
 	INCBIN "gfx/duel/anims/59.2bpp"
 
-Duel60Gfx: ; 93fda (24:7fda)
+Duel60Gfx:: ; 93fda (24:7fda)
 	dw $2
 	INCBIN "gfx/duel/anims/60.2bpp"
 
@@ -298,7 +298,7 @@ CompaniesGfx: ; 97b94 (25:7b94)
 	dw $31
 	INCBIN "gfx/companies.2bpp"
 
-RonaldOWGfx: ; 97ea6 (25:7ea6)
+RonaldOWGfx:: ; 97ea6 (25:7ea6)
 	dw $14
 	INCBIN "gfx/overworld_sprites/ronald.2bpp"
 
@@ -322,19 +322,19 @@ Titlescreen6Gfx: ; 9b0b6 (26:70b6)
 	dw $d4
 	INCBIN "gfx/titlescreen/titlescreen6.2bpp"
 
-DoctorMasonOWGfx: ; 9bdf8 (26:7df8)
+DoctorMasonOWGfx:: ; 9bdf8 (26:7df8)
 	dw $14
 	INCBIN "gfx/overworld_sprites/doctormason.2bpp"
 
-OverworldMapOAMGfx: ; 9bf3a (26:7f3a)
+OverworldMapOAMGfx:: ; 9bf3a (26:7f3a)
 	dw $8
 	INCBIN "gfx/overworld_map_oam.2bpp"
 
-Duel61Gfx: ; 9bfbc (26:7fbc)
+Duel61Gfx:: ; 9bfbc (26:7fbc)
 	dw $3
 	INCBIN "gfx/duel/anims/61.2bpp"
 
-Duel62Gfx: ; 9bfee (26:7fee)
+Duel62Gfx:: ; 9bfee (26:7fee)
 	dw $1
 	INCBIN "gfx/duel/anims/62.2bpp"
 
@@ -452,11 +452,11 @@ MichaelGfx: ; 9fcf6 (27:7cf6)
 	dw $24
 	INCBIN "gfx/duelists/michael.2bpp"
 
-Duel63Gfx: ; 9ff38 (27:7f38)
+Duel63Gfx:: ; 9ff38 (27:7f38)
 	dw $a
 	INCBIN "gfx/duel/anims/63.2bpp"
 
-Duel64Gfx: ; 9ffda (27:7fda)
+Duel64Gfx:: ; 9ffda (27:7fda)
 	dw $2
 	INCBIN "gfx/duel/anims/64.2bpp"
 
@@ -510,131 +510,131 @@ AaronGfx: ; a1694 (28:5694)
 	dw $24
 	INCBIN "gfx/duelists/aaron.2bpp"
 
-OWSprite0: ; a18d6 (28:58d6)
+OWSprite0:: ; a18d6 (28:58d6)
 	dw $14
 	INCBIN "gfx/overworld_sprites/0.2bpp"
 
-OWSprite1: ; a1a18 (28:5a18)
+OWSprite1:: ; a1a18 (28:5a18)
 	dw $14
 	INCBIN "gfx/overworld_sprites/1.2bpp"
 
-OWSprite2: ; a1b5a (28:5b5a)
+OWSprite2:: ; a1b5a (28:5b5a)
 	dw $14
 	INCBIN "gfx/overworld_sprites/2.2bpp"
 
-OWSprite3: ; a1c9c (28:5c9c)
+OWSprite3:: ; a1c9c (28:5c9c)
 	dw $14
 	INCBIN "gfx/overworld_sprites/3.2bpp"
 
-OWSprite4: ; a1dde (28:5dde)
+OWSprite4:: ; a1dde (28:5dde)
 	dw $14
 	INCBIN "gfx/overworld_sprites/4.2bpp"
 
-OWSprite5: ; a1f20 (28:5f20)
+OWSprite5:: ; a1f20 (28:5f20)
 	dw $1b
 	INCBIN "gfx/overworld_sprites/5.2bpp"
 
-OWSprite6: ; a20d2 (28:60d2)
+OWSprite6:: ; a20d2 (28:60d2)
 	dw $14
 	INCBIN "gfx/overworld_sprites/6.2bpp"
 
-OWSprite7: ; a2214 (28:6214)
+OWSprite7:: ; a2214 (28:6214)
 	dw $14
 	INCBIN "gfx/overworld_sprites/7.2bpp"
 
-OWSprite8: ; a2356 (28:6356)
+OWSprite8:: ; a2356 (28:6356)
 	dw $14
 	INCBIN "gfx/overworld_sprites/8.2bpp"
 
-OWSprite9: ; a2498 (28:6498)
+OWSprite9:: ; a2498 (28:6498)
 	dw $14
 	INCBIN "gfx/overworld_sprites/9.2bpp"
 
-OWSprite10: ; a25da (28:65da)
+OWSprite10:: ; a25da (28:65da)
 	dw $14
 	INCBIN "gfx/overworld_sprites/10.2bpp"
 
-OWSprite11: ; a271c (28:671c)
+OWSprite11:: ; a271c (28:671c)
 	dw $14
 	INCBIN "gfx/overworld_sprites/11.2bpp"
 
-OWSprite12: ; a285e (28:685e)
+OWSprite12:: ; a285e (28:685e)
 	dw $14
 	INCBIN "gfx/overworld_sprites/12.2bpp"
 
-OWSprite13: ; a29a0 (28:69a0)
+OWSprite13:: ; a29a0 (28:69a0)
 	dw $14
 	INCBIN "gfx/overworld_sprites/13.2bpp"
 
-OWSprite14: ; a2ae2 (28:6ae2)
+OWSprite14:: ; a2ae2 (28:6ae2)
 	dw $14
 	INCBIN "gfx/overworld_sprites/14.2bpp"
 
-OWSprite15: ; a2c24 (28:6c24)
+OWSprite15:: ; a2c24 (28:6c24)
 	dw $14
 	INCBIN "gfx/overworld_sprites/15.2bpp"
 
-OWSprite16: ; a2d66 (28:6d66)
+OWSprite16:: ; a2d66 (28:6d66)
 	dw $14
 	INCBIN "gfx/overworld_sprites/16.2bpp"
 
-OWSprite17: ; a2ea8 (28:6ea8)
+OWSprite17:: ; a2ea8 (28:6ea8)
 	dw $14
 	INCBIN "gfx/overworld_sprites/17.2bpp"
 
-OWSprite18: ; a2fea (28:6fea)
+OWSprite18:: ; a2fea (28:6fea)
 	dw $14
 	INCBIN "gfx/overworld_sprites/18.2bpp"
 
-OWSprite19: ; a312c (28:712c)
+OWSprite19:: ; a312c (28:712c)
 	dw $14
 	INCBIN "gfx/overworld_sprites/19.2bpp"
 
-OWSprite20: ; a326e (28:726e)
+OWSprite20:: ; a326e (28:726e)
 	dw $14
 	INCBIN "gfx/overworld_sprites/20.2bpp"
 
-OWSprite21: ; a33b0 (28:73b0)
+OWSprite21:: ; a33b0 (28:73b0)
 	dw $14
 	INCBIN "gfx/overworld_sprites/21.2bpp"
 
-OWSprite22: ; a34f2 (28:74f2)
+OWSprite22:: ; a34f2 (28:74f2)
 	dw $14
 	INCBIN "gfx/overworld_sprites/22.2bpp"
 
-OWSprite23: ; a3634 (28:7634)
+OWSprite23:: ; a3634 (28:7634)
 	dw $14
 	INCBIN "gfx/overworld_sprites/23.2bpp"
 
-OWSprite24: ; a3776 (28:7776)
+OWSprite24:: ; a3776 (28:7776)
 	dw $14
 	INCBIN "gfx/overworld_sprites/24.2bpp"
 
-OWSprite25: ; a38b8 (28:78b8)
+OWSprite25:: ; a38b8 (28:78b8)
 	dw $14
 	INCBIN "gfx/overworld_sprites/25.2bpp"
 
-OWSprite26: ; a39fa (28:79fa)
+OWSprite26:: ; a39fa (28:79fa)
 	dw $14
 	INCBIN "gfx/overworld_sprites/26.2bpp"
 
-OWSprite27: ; a3b3c (28:7b3c)
+OWSprite27:: ; a3b3c (28:7b3c)
 	dw $14
 	INCBIN "gfx/overworld_sprites/27.2bpp"
 
-OWSprite28: ; a3c7e (28:7c7e)
+OWSprite28:: ; a3c7e (28:7c7e)
 	dw $14
 	INCBIN "gfx/overworld_sprites/28.2bpp"
 
-OWSprite29: ; a3dc0 (28:7dc0)
+OWSprite29:: ; a3dc0 (28:7dc0)
 	dw $14
 	INCBIN "gfx/overworld_sprites/29.2bpp"
 
-Duel65Gfx: ; a3f02 (28:7f02)
+Duel65Gfx:: ; a3f02 (28:7f02)
 	dw $b
 	INCBIN "gfx/duel/anims/65.2bpp"
 
-Duel66Gfx: ; a3fb4 (28:7fb4)
+Duel66Gfx:: ; a3fb4 (28:7fb4)
 	dw $4
 	INCBIN "gfx/duel/anims/66.2bpp"
 
@@ -644,199 +644,199 @@ Palette117:: ; a3ff6 (28:7ff6)
 
 SECTION "Gfx 11", ROMX
 
-OWSprite30: ; a4000 (29:4000)
+OWSprite30:: ; a4000 (29:4000)
 	dw $14
 	INCBIN "gfx/overworld_sprites/30.2bpp"
 
-OWSprite31: ; a4142 (29:4142)
+OWSprite31:: ; a4142 (29:4142)
 	dw $14
 	INCBIN "gfx/overworld_sprites/31.2bpp"
 
-OWSprite32: ; a4284 (29:4284)
+OWSprite32:: ; a4284 (29:4284)
 	dw $14
 	INCBIN "gfx/overworld_sprites/32.2bpp"
 
-Duel0Gfx: ; a43c6 (29:43c6)
+Duel0Gfx:: ; a43c6 (29:43c6)
 	dw $16
 	INCBIN "gfx/duel/anims/0.2bpp"
 
-Duel1Gfx: ; a4528 (29:4528)
+Duel1Gfx:: ; a4528 (29:4528)
 	dw $06
 	INCBIN "gfx/duel/anims/1.2bpp"
 
-Duel2Gfx: ; a458a (29:458a)
+Duel2Gfx:: ; a458a (29:458a)
 	dw $08
 	INCBIN "gfx/duel/anims/2.2bpp"
 
-Duel3Gfx: ; a460c (29:460c)
+Duel3Gfx:: ; a460c (29:460c)
 	dw $09
 	INCBIN "gfx/duel/anims/3.2bpp"
 
-Duel4Gfx: ; a469e (29:469e)
+Duel4Gfx:: ; a469e (29:469e)
 	dw $12
 	INCBIN "gfx/duel/anims/4.2bpp"
 
-Duel5Gfx: ; a47c0 (29:47c0)
+Duel5Gfx:: ; a47c0 (29:47c0)
 	dw $09
 	INCBIN "gfx/duel/anims/5.2bpp"
 
-Duel6Gfx: ; a4852 (29:4852)
+Duel6Gfx:: ; a4852 (29:4852)
 	dw $11
 	INCBIN "gfx/duel/anims/6.2bpp"
 
-Duel7Gfx: ; a4964 (29:4964)
+Duel7Gfx:: ; a4964 (29:4964)
 	dw $2d
 	INCBIN "gfx/duel/anims/7.2bpp"
 
-Duel8Gfx: ; a4c36 (29:4c36)
+Duel8Gfx:: ; a4c36 (29:4c36)
 	dw $0d
 	INCBIN "gfx/duel/anims/8.2bpp"
 
-Duel9Gfx: ; a4d08 (29:4d08)
+Duel9Gfx:: ; a4d08 (29:4d08)
 	dw $1c
 	INCBIN "gfx/duel/anims/9.2bpp"
 
-Duel10Gfx: ; a4eca (29:4eca)
+Duel10Gfx:: ; a4eca (29:4eca)
 	dw $4c
 	INCBIN "gfx/duel/anims/10.2bpp"
 
-Duel11Gfx: ; a538c (29:538c)
+Duel11Gfx:: ; a538c (29:538c)
 	dw $1b
 	INCBIN "gfx/duel/anims/11.2bpp"
 
-Duel12Gfx: ; a553e (29:553e)
+Duel12Gfx:: ; a553e (29:553e)
 	dw $07
 	INCBIN "gfx/duel/anims/12.2bpp"
 
-Duel13Gfx: ; a55b0 (29:55b0)
+Duel13Gfx:: ; a55b0 (29:55b0)
 	dw $0c
 	INCBIN "gfx/duel/anims/13.2bpp"
 
-Duel14Gfx: ; a5672 (29:5672)
+Duel14Gfx:: ; a5672 (29:5672)
 	dw $22
 	INCBIN "gfx/duel/anims/14.2bpp"
 
-Duel15Gfx: ; a5894 (29:5894)
+Duel15Gfx:: ; a5894 (29:5894)
 	dw $20
 	INCBIN "gfx/duel/anims/15.2bpp"
 
-Duel16Gfx: ; a5a96 (29:5a96)
+Duel16Gfx:: ; a5a96 (29:5a96)
 	dw $0a
 	INCBIN "gfx/duel/anims/16.2bpp"
 
-Duel17Gfx: ; a5b38 (29:5b38)
+Duel17Gfx:: ; a5b38 (29:5b38)
 	dw $25
 	INCBIN "gfx/duel/anims/17.2bpp"
 
-Duel18Gfx: ; a5d8a (29:5d8a)
+Duel18Gfx:: ; a5d8a (29:5d8a)
 	dw $18
 	INCBIN "gfx/duel/anims/18.2bpp"
 
-Duel19Gfx: ; a5f0c (29:5f0c)
+Duel19Gfx:: ; a5f0c (29:5f0c)
 	dw $1b
 	INCBIN "gfx/duel/anims/19.2bpp"
 
-Duel20Gfx: ; a60be (29:60be)
+Duel20Gfx:: ; a60be (29:60be)
 	dw $08
 	INCBIN "gfx/duel/anims/20.2bpp"
 
-Duel21Gfx: ; a6140 (29:6140)
+Duel21Gfx:: ; a6140 (29:6140)
 	dw $0d
 	INCBIN "gfx/duel/anims/21.2bpp"
 
-Duel22Gfx: ; a6212 (29:6212)
+Duel22Gfx:: ; a6212 (29:6212)
 	dw $22
 	INCBIN "gfx/duel/anims/22.2bpp"
 
-Duel23Gfx: ; a6434 (29:6434)
+Duel23Gfx:: ; a6434 (29:6434)
 	dw $0c
 	INCBIN "gfx/duel/anims/23.2bpp"
 
-Duel24Gfx: ; a64f6 (29:64f6)
+Duel24Gfx:: ; a64f6 (29:64f6)
 	dw $25
 	INCBIN "gfx/duel/anims/24.2bpp"
 
-Duel25Gfx: ; a6748 (29:6748)
+Duel25Gfx:: ; a6748 (29:6748)
 	dw $22
 	INCBIN "gfx/duel/anims/25.2bpp"
 
-Duel26Gfx: ; a696a (29:696a)
+Duel26Gfx:: ; a696a (29:696a)
 	dw $0c
 	INCBIN "gfx/duel/anims/26.2bpp"
 
-Duel27Gfx: ; a6a2c (29:6a2c)
+Duel27Gfx:: ; a6a2c (29:6a2c)
 	dw $4c
 	INCBIN "gfx/duel/anims/27.2bpp"
 
-Duel28Gfx: ; a6eee (29:6eee)
+Duel28Gfx:: ; a6eee (29:6eee)
 	dw $08
 	INCBIN "gfx/duel/anims/28.2bpp"
 
-Duel29Gfx: ; a6f70 (29:6f70)
+Duel29Gfx:: ; a6f70 (29:6f70)
 	dw $07
 	INCBIN "gfx/duel/anims/29.2bpp"
 
-Duel30Gfx: ; a6fe2 (29:6fe2)
+Duel30Gfx:: ; a6fe2 (29:6fe2)
 	dw $1a
 	INCBIN "gfx/duel/anims/30.2bpp"
 
-Duel31Gfx: ; a7184 (29:7184)
+Duel31Gfx:: ; a7184 (29:7184)
 	dw $0a
 	INCBIN "gfx/duel/anims/31.2bpp"
 
-Duel32Gfx: ; a7226 (29:7226)
+Duel32Gfx:: ; a7226 (29:7226)
 	dw $2e
 	INCBIN "gfx/duel/anims/32.2bpp"
 
-Duel33Gfx: ; a7508 (29:7508)
+Duel33Gfx:: ; a7508 (29:7508)
 	dw $08
 	INCBIN "gfx/duel/anims/33.2bpp"
 
-Duel34Gfx: ; a758a (29:758a)
+Duel34Gfx:: ; a758a (29:758a)
 	dw $07
 	INCBIN "gfx/duel/anims/34.2bpp"
 
-Duel35Gfx: ; a75fc (29:75fc)
+Duel35Gfx:: ; a75fc (29:75fc)
 	dw $1c
 	INCBIN "gfx/duel/anims/35.2bpp"
 
-Duel36Gfx: ; a77be (29:77be)
+Duel36Gfx:: ; a77be (29:77be)
 	dw $08
 	INCBIN "gfx/duel/anims/36.2bpp"
 
-Duel37Gfx: ; a7840 (29:7840)
+Duel37Gfx:: ; a7840 (29:7840)
 	dw $0b
 	INCBIN "gfx/duel/anims/37.2bpp"
 
-Duel38Gfx: ; a78f2 (29:78f2)
+Duel38Gfx:: ; a78f2 (29:78f2)
 	dw $1c
 	INCBIN "gfx/duel/anims/38.2bpp"
 
-Duel39Gfx: ; a7ab4 (29:7ab4)
+Duel39Gfx:: ; a7ab4 (29:7ab4)
 	dw $16
 	INCBIN "gfx/duel/anims/39.2bpp"
 
-Duel40Gfx: ; a7c16 (29:7c16)
+Duel40Gfx:: ; a7c16 (29:7c16)
 	dw $10
 	INCBIN "gfx/duel/anims/40.2bpp"
 
-Duel41Gfx: ; a7d18 (29:7d18)
+Duel41Gfx:: ; a7d18 (29:7d18)
 	dw $0f
 	INCBIN "gfx/duel/anims/41.2bpp"
 
-Duel42Gfx: ; a7e0a (29:7e0a)
+Duel42Gfx:: ; a7e0a (29:7e0a)
 	dw $07
 	INCBIN "gfx/duel/anims/42.2bpp"
 
-Duel43Gfx: ; a7e7c (29:7e7c)
+Duel43Gfx:: ; a7e7c (29:7e7c)
 	dw $0a
 	INCBIN "gfx/duel/anims/43.2bpp"
 
-Duel44Gfx: ; a7f1e (29:7f1e)
+Duel44Gfx:: ; a7f1e (29:7f1e)
 	dw $09
 	INCBIN "gfx/duel/anims/44.2bpp"
 
-Duel45Gfx: ; a7fb0 (29:7fb0)
+Duel45Gfx:: ; a7fb0 (29:7fb0)
 	dw $03
 	INCBIN "gfx/duel/anims/45.2bpp"
 
@@ -844,75 +844,75 @@ Duel45Gfx: ; a7fb0 (29:7fb0)
 
 SECTION "Gfx 12", ROMX
 
-Duel46Gfx: ; a8000 (2a:4000)
+Duel46Gfx:: ; a8000 (2a:4000)
 	dw $08
 	INCBIN "gfx/duel/anims/46.2bpp"
 
-Duel47Gfx: ; a8082 (2a:4082)
+Duel47Gfx:: ; a8082 (2a:4082)
 	dw $0f
 	INCBIN "gfx/duel/anims/47.2bpp"
 
-Duel48Gfx: ; a8174 (2a:4174)
+Duel48Gfx:: ; a8174 (2a:4174)
 	dw $03
 	INCBIN "gfx/duel/anims/48.2bpp"
 
-Duel49Gfx: ; a81a6 (2a:41a6)
+Duel49Gfx:: ; a81a6 (2a:41a6)
 	dw $05
 	INCBIN "gfx/duel/anims/49.2bpp"
 
-Duel50Gfx: ; a81f8 (2a:41f8)
+Duel50Gfx:: ; a81f8 (2a:41f8)
 	dw $17
 	INCBIN "gfx/duel/anims/50.2bpp"
 
-Duel51Gfx: ; a836a (2a:436a)
+Duel51Gfx:: ; a836a (2a:436a)
 	dw $36
 	INCBIN "gfx/duel/anims/51.2bpp"
 
-Duel52Gfx: ; a86cc (2a:46cc)
+Duel52Gfx:: ; a86cc (2a:46cc)
 	dw $0b
 	INCBIN "gfx/duel/anims/52.2bpp"
 
-Duel53Gfx: ; a877e (2a:477e)
+Duel53Gfx:: ; a877e (2a:477e)
 	dw $06
 	INCBIN "gfx/duel/anims/53.2bpp"
 
-Duel54Gfx: ; a87e0 (2a:47e0)
+Duel54Gfx:: ; a87e0 (2a:47e0)
 	dw $16
 	INCBIN "gfx/duel/anims/54.2bpp"
 
-BoosterPackOAMGfx: ; a8942 (2a:4942)
+BoosterPackOAMGfx:: ; a8942 (2a:4942)
 	dw $20
 	INCBIN "gfx/booster_packs/oam.2bpp"
 
-PressStartGfx: ; a8b44 (2a:4b44)
+PressStartGfx:: ; a8b44 (2a:4b44)
 	dw $14
 	INCBIN "gfx/titlescreen/press_start.2bpp"
 
-GrassGfx: ; a8c86 (2a:4c86)
+GrassGfx:: ; a8c86 (2a:4c86)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/grass.2bpp"
 
-FireGfx: ; a8cc8 (2a:4cc8)
+FireGfx:: ; a8cc8 (2a:4cc8)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/fire.2bpp"
 
-WaterGfx: ; a8d0a (2a:4d0a)
+WaterGfx:: ; a8d0a (2a:4d0a)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/water.2bpp"
 
-ColorlessGfx: ; a8d4c (2a:4d4c)
+ColorlessGfx:: ; a8d4c (2a:4d4c)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/colorless.2bpp"
 
-LightningGfx: ; a8d8e (2a:4d8e)
+LightningGfx:: ; a8d8e (2a:4d8e)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/lightning.2bpp"
 
-PsychicGfx: ; a8dd0 (2a:4dd0)
+PsychicGfx:: ; a8dd0 (2a:4dd0)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/psychic.2bpp"
 
-FightingGfx: ; a8e12 (2a:4e12)
+FightingGfx:: ; a8e12 (2a:4e12)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/fighting.2bpp"
 

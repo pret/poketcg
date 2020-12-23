@@ -321,7 +321,7 @@ Func_8025b: ; 8025b (20:425b)
 	ld l, $4
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
-	ld a, [hl] ; tile size
+	ld a, [hl] ; sprite number of tiles
 	push af
 	ld [wCurSpriteNumTiles], a
 	ld a, TILE_SIZE
@@ -880,121 +880,128 @@ MapDataPointers_8100f: ; 8100f (20:500f)
 	db $52, $54, $08, $24
 	db $94, $56, $08, $24
 
+; \1 = gfx pointer
+; \2 = number of tiles
+gfx_pointer: MACRO
+	dwb \1, BANK(\1) - BANK(MapDataPointers_8116b)
+	db \2
+ENDM
+
 MapDataPointers_8116b: ; 8116b (20:516b)
-	db $90, $7e, $02, $14
-	db $a6, $7e, $05, $14
-	db $f8, $7d, $06, $14
-	db $d6, $58, $08, $14
-	db $18, $5a, $08, $14
-	db $5a, $5b, $08, $14
-	db $9c, $5c, $08, $14
-	db $de, $5d, $08, $14
-	db $20, $5f, $08, $1b
-	db $d2, $60, $08, $14
-	db $14, $62, $08, $14
-	db $56, $63, $08, $14
-	db $98, $64, $08, $14
-	db $da, $65, $08, $14
-	db $1c, $67, $08, $14
-	db $5e, $68, $08, $14
-	db $a0, $69, $08, $14
-	db $e2, $6a, $08, $14
-	db $24, $6c, $08, $14
-	db $66, $6d, $08, $14
-	db $a8, $6e, $08, $14
-	db $ea, $6f, $08, $14
-	db $2c, $71, $08, $14
-	db $6e, $72, $08, $14
-	db $b0, $73, $08, $14
-	db $f2, $74, $08, $14
-	db $34, $76, $08, $14
-	db $76, $77, $08, $14
-	db $b8, $78, $08, $14
-	db $fa, $79, $08, $14
-	db $3c, $7b, $08, $14
-	db $7e, $7c, $08, $14
-	db $c0, $7d, $08, $14
-	db $26, $7f, $04, $08
-	db $00, $40, $09, $14
-	db $42, $41, $09, $14
-	db $84, $42, $09, $14
-	db $3a, $7f, $06, $08
-	db $c6, $43, $09, $16
-	db $38, $7f, $07, $0a
-	db $02, $7f, $08, $0b
-	db $28, $45, $09, $06
-	db $8a, $45, $09, $08
-	db $c0, $7f, $01, $02
-	db $a4, $7f, $03, $04
-	db $0c, $46, $09, $09
-	db $9e, $46, $09, $12
-	db $c0, $47, $09, $09
-	db $52, $48, $09, $11
-	db $a8, $7f, $04, $03
-	db $64, $49, $09, $2d
-	db $36, $4c, $09, $0d
-	db $08, $4d, $09, $1c
-	db $ca, $4e, $09, $4c
-	db $bc, $7f, $06, $03
-	db $8c, $53, $09, $1b
-	db $3e, $55, $09, $07
-	db $b0, $55, $09, $0c
-	db $ee, $7f, $06, $01
-	db $72, $56, $09, $22
-	db $94, $58, $09, $20
-	db $96, $5a, $09, $0a
-	db $38, $5b, $09, $25
-	db $8a, $5d, $09, $18
-	db $0c, $5f, $09, $1b
-	db $be, $60, $09, $08
-	db $40, $61, $09, $0d
-	db $12, $62, $09, $22
-	db $34, $64, $09, $0c
-	db $f6, $64, $09, $25
-	db $48, $67, $09, $22
-	db $6a, $69, $09, $0c
-	db $2c, $6a, $09, $4c
-	db $ee, $6e, $09, $08
-	db $70, $6f, $09, $07
-	db $e2, $7f, $01, $01
-	db $e2, $6f, $09, $1a
-	db $84, $71, $09, $0a
-	db $26, $72, $09, $2e
-	db $08, $75, $09, $08
-	db $8a, $75, $09, $07
-	db $fc, $75, $09, $1c
-	db $b4, $7f, $08, $04
-	db $be, $77, $09, $08
-	db $40, $78, $09, $0b
-	db $d2, $7f, $02, $01
-	db $f2, $78, $09, $1c
-	db $b4, $7a, $09, $16
-	db $16, $7c, $09, $10
-	db $18, $7d, $09, $0f
-	db $0a, $7e, $09, $07
-	db $7c, $7e, $09, $0a
-	db $1e, $7f, $09, $09
-	db $da, $7f, $04, $02
-	db $da, $7f, $07, $02
-	db $b0, $7f, $09, $03
-	db $00, $40, $0a, $08
-	db $82, $40, $0a, $0f
-	db $74, $41, $0a, $03
-	db $a6, $41, $0a, $05
-	db $f8, $41, $0a, $17
-	db $6a, $43, $0a, $36
-	db $cc, $46, $0a, $0b
-	db $7e, $47, $0a, $06
-	db $e0, $47, $0a, $16
-	db $42, $49, $0a, $20
-	db $44, $4b, $0a, $14
-	db $86, $4c, $0a, $04
-	db $c8, $4c, $0a, $04
-	db $0a, $4d, $0a, $04
-	db $4c, $4d, $0a, $04
-	db $8e, $4d, $0a, $04
-	db $d0, $4d, $0a, $04
-	db $12, $4e, $0a, $04
+	gfx_pointer OWSpritePlayer,     $14 ; $00
+	gfx_pointer RonaldOWGfx,        $14 ; $01
+	gfx_pointer DoctorMasonOWGfx,   $14 ; $02
+	gfx_pointer OWSprite0,          $14 ; $03
+	gfx_pointer OWSprite1,          $14 ; $04
+	gfx_pointer OWSprite2,          $14 ; $05
+	gfx_pointer OWSprite3,          $14 ; $06
+	gfx_pointer OWSprite4,          $14 ; $07
+	gfx_pointer OWSprite5,          $1b ; $08
+	gfx_pointer OWSprite6,          $14 ; $09
+	gfx_pointer OWSprite7,          $14 ; $0a
+	gfx_pointer OWSprite8,          $14 ; $0b
+	gfx_pointer OWSprite9,          $14 ; $0c
+	gfx_pointer OWSprite10,         $14 ; $0d
+	gfx_pointer OWSprite11,         $14 ; $0e
+	gfx_pointer OWSprite12,         $14 ; $0f
+	gfx_pointer OWSprite13,         $14 ; $10
+	gfx_pointer OWSprite14,         $14 ; $11
+	gfx_pointer OWSprite15,         $14 ; $12
+	gfx_pointer OWSprite16,         $14 ; $13
+	gfx_pointer OWSprite17,         $14 ; $14
+	gfx_pointer OWSprite18,         $14 ; $15
+	gfx_pointer OWSprite19,         $14 ; $16
+	gfx_pointer OWSprite20,         $14 ; $17
+	gfx_pointer OWSprite21,         $14 ; $18
+	gfx_pointer OWSprite22,         $14 ; $19
+	gfx_pointer OWSprite23,         $14 ; $1a
+	gfx_pointer OWSprite24,         $14 ; $1b
+	gfx_pointer OWSprite25,         $14 ; $1c
+	gfx_pointer OWSprite26,         $14 ; $1d
+	gfx_pointer OWSprite27,         $14 ; $1e
+	gfx_pointer OWSprite28,         $14 ; $1f
+	gfx_pointer OWSprite29,         $14 ; $20
+	gfx_pointer HelpDeskLadyGfx,    $08 ; $21
+	gfx_pointer OWSprite30,         $14 ; $22
+	gfx_pointer OWSprite31,         $14 ; $23
+	gfx_pointer OWSprite32,         $14 ; $24
+	gfx_pointer OverworldMapOAMGfx, $08 ; $25
+	gfx_pointer Duel0Gfx,           $16 ; $26
+	gfx_pointer Duel63Gfx,          $0a ; $27
+	gfx_pointer Duel65Gfx,          $0b ; $28
+	gfx_pointer Duel1Gfx,           $06 ; $29
+	gfx_pointer Duel2Gfx,           $08 ; $2a
+	gfx_pointer Duel55Gfx,          $02 ; $2b
+	gfx_pointer Duel58Gfx,          $04 ; $2c
+	gfx_pointer Duel3Gfx,           $09 ; $2d
+	gfx_pointer Duel4Gfx,           $12 ; $2e
+	gfx_pointer Duel5Gfx,           $09 ; $2f
+	gfx_pointer Duel6Gfx,           $11 ; $30
+	gfx_pointer Duel59Gfx,          $03 ; $31
+	gfx_pointer Duel7Gfx,           $2d ; $32
+	gfx_pointer Duel8Gfx,           $0d ; $33
+	gfx_pointer Duel9Gfx,           $1c ; $34
+	gfx_pointer Duel10Gfx,          $4c ; $35
+	gfx_pointer Duel61Gfx,          $03 ; $36
+	gfx_pointer Duel11Gfx,          $1b ; $37
+	gfx_pointer Duel12Gfx,          $07 ; $38
+	gfx_pointer Duel13Gfx,          $0c ; $39
+	gfx_pointer Duel62Gfx,          $01 ; $3a
+	gfx_pointer Duel14Gfx,          $22 ; $3b
+	gfx_pointer Duel15Gfx,          $20 ; $3c
+	gfx_pointer Duel16Gfx,          $0a ; $3d
+	gfx_pointer Duel17Gfx,          $25 ; $3e
+	gfx_pointer Duel18Gfx,          $18 ; $3f
+	gfx_pointer Duel19Gfx,          $1b ; $40
+	gfx_pointer Duel20Gfx,          $08 ; $41
+	gfx_pointer Duel21Gfx,          $0d ; $42
+	gfx_pointer Duel22Gfx,          $22 ; $43
+	gfx_pointer Duel23Gfx,          $0c ; $44
+	gfx_pointer Duel24Gfx,          $25 ; $45
+	gfx_pointer Duel25Gfx,          $22 ; $46
+	gfx_pointer Duel26Gfx,          $0c ; $47
+	gfx_pointer Duel27Gfx,          $4c ; $48
+	gfx_pointer Duel28Gfx,          $08 ; $49
+	gfx_pointer Duel29Gfx,          $07 ; $4a
+	gfx_pointer Duel56Gfx,          $01 ; $4b
+	gfx_pointer Duel30Gfx,          $1a ; $4c
+	gfx_pointer Duel31Gfx,          $0a ; $4d
+	gfx_pointer Duel32Gfx,          $2e ; $4e
+	gfx_pointer Duel33Gfx,          $08 ; $4f
+	gfx_pointer Duel34Gfx,          $07 ; $50
+	gfx_pointer Duel35Gfx,          $1c ; $51
+	gfx_pointer Duel66Gfx,          $04 ; $52
+	gfx_pointer Duel36Gfx,          $08 ; $53
+	gfx_pointer Duel37Gfx,          $0b ; $54
+	gfx_pointer Duel57Gfx,          $01 ; $55
+	gfx_pointer Duel38Gfx,          $1c ; $56
+	gfx_pointer Duel39Gfx,          $16 ; $57
+	gfx_pointer Duel40Gfx,          $10 ; $58
+	gfx_pointer Duel41Gfx,          $0f ; $59
+	gfx_pointer Duel42Gfx,          $07 ; $5a
+	gfx_pointer Duel43Gfx,          $0a ; $5b
+	gfx_pointer Duel44Gfx,          $09 ; $5c
+	gfx_pointer Duel60Gfx,          $02 ; $5d
+	gfx_pointer Duel64Gfx,          $02 ; $5e
+	gfx_pointer Duel45Gfx,          $03 ; $5f
+	gfx_pointer Duel46Gfx,          $08 ; $60
+	gfx_pointer Duel47Gfx,          $0f ; $61
+	gfx_pointer Duel48Gfx,          $03 ; $62
+	gfx_pointer Duel49Gfx,          $05 ; $63
+	gfx_pointer Duel50Gfx,          $17 ; $64
+	gfx_pointer Duel51Gfx,          $36 ; $65
+	gfx_pointer Duel52Gfx,          $0b ; $66
+	gfx_pointer Duel53Gfx,          $06 ; $67
+	gfx_pointer Duel54Gfx,          $16 ; $68
+	gfx_pointer BoosterPackOAMGfx,  $20 ; $69
+	gfx_pointer PressStartGfx,      $14 ; $6a
+	gfx_pointer GrassGfx,           $04 ; $6b
+	gfx_pointer FireGfx,            $04 ; $6c
+	gfx_pointer WaterGfx,           $04 ; $6d
+	gfx_pointer ColorlessGfx,       $04 ; $6e
+	gfx_pointer LightningGfx,       $04 ; $6f
+	gfx_pointer PsychicGfx,         $04 ; $70
+	gfx_pointer FightingGfx,        $04 ; $71
 
 ; pointer low, pointer high, bank (minus $20), unknown
 SpriteAnimationPointers: ; 81333 (20:5333)
@@ -1220,173 +1227,172 @@ SpriteAnimationPointers: ; 81333 (20:5333)
 ; \2 = number of palettes
 ; \3 = number of OBJ colors
 palette_pointer: MACRO
-	dw \1
-	db BANK(\1) - BANK(MapDataPointers_81697)
+	dwb \1, BANK(\1) - BANK(MapDataPointers_81697)
 	db (\2 << 4) + \3
 ENDM
 
 MapDataPointers_81697: ; 81697 (20:5697)
-	palette_pointer Palette0,   8, 1
-	palette_pointer Palette1,   8, 0
-	palette_pointer Palette2,   8, 0
-	palette_pointer Palette3,   8, 0
-	palette_pointer Palette4,   8, 0
-	palette_pointer Palette5,   8, 0
-	palette_pointer Palette6,   8, 0
-	palette_pointer Palette7,   8, 0
-	palette_pointer Palette8,   8, 0
-	palette_pointer Palette9,   8, 0
-	palette_pointer Palette10,  8, 0
-	palette_pointer Palette11,  8, 0
-	palette_pointer Palette12,  8, 0
-	palette_pointer Palette13,  8, 0
-	palette_pointer Palette14,  8, 0
-	palette_pointer Palette15,  8, 0
-	palette_pointer Palette16,  8, 0
-	palette_pointer Palette17,  8, 0
-	palette_pointer Palette18,  8, 0
-	palette_pointer Palette19,  8, 0
-	palette_pointer Palette20,  8, 0
-	palette_pointer Palette21,  8, 0
-	palette_pointer Palette22,  8, 0
-	palette_pointer Palette23,  8, 0
-	palette_pointer Palette24,  8, 0
-	palette_pointer Palette25,  8, 0
-	palette_pointer Palette26,  8, 0
-	palette_pointer Palette27,  8, 0
-	palette_pointer Palette28,  8, 0
-	palette_pointer Palette29,  8, 2
-	palette_pointer Palette30,  8, 2
-	palette_pointer Palette31,  1, 1
-	palette_pointer Palette32,  1, 1
-	palette_pointer Palette33,  1, 1
-	palette_pointer Palette34,  1, 1
-	palette_pointer Palette35,  1, 1
-	palette_pointer Palette36,  1, 1
-	palette_pointer Palette37,  1, 1
-	palette_pointer Palette38,  1, 1
-	palette_pointer Palette39,  1, 1
-	palette_pointer Palette40,  1, 1
-	palette_pointer Palette41,  1, 1
-	palette_pointer Palette42,  1, 1
-	palette_pointer Palette43,  1, 1
-	palette_pointer Palette44,  1, 1
-	palette_pointer Palette45,  1, 1
-	palette_pointer Palette46,  1, 1
-	palette_pointer Palette47,  1, 1
-	palette_pointer Palette48,  1, 1
-	palette_pointer Palette49,  1, 1
-	palette_pointer Palette50,  1, 1
-	palette_pointer Palette51,  1, 1
-	palette_pointer Palette52,  1, 1
-	palette_pointer Palette53,  1, 1
-	palette_pointer Palette54,  1, 1
-	palette_pointer Palette55,  1, 1
-	palette_pointer Palette56,  1, 1
-	palette_pointer Palette57,  1, 1
-	palette_pointer Palette58,  1, 1
-	palette_pointer Palette59,  1, 1
-	palette_pointer Palette60,  1, 1
-	palette_pointer Palette61,  1, 1
-	palette_pointer Palette62,  1, 1
-	palette_pointer Palette63,  1, 1
-	palette_pointer Palette64,  1, 1
-	palette_pointer Palette65,  1, 1
-	palette_pointer Palette66,  1, 1
-	palette_pointer Palette67,  1, 1
-	palette_pointer Palette68,  1, 1
-	palette_pointer Palette69,  1, 1
-	palette_pointer Palette70,  1, 1
-	palette_pointer Palette71,  1, 1
-	palette_pointer Palette72,  1, 1
-	palette_pointer Palette73,  1, 1
-	palette_pointer Palette74,  1, 1
-	palette_pointer Palette75,  1, 1
-	palette_pointer Palette76,  1, 1
-	palette_pointer Palette77,  1, 1
-	palette_pointer Palette78,  1, 1
-	palette_pointer Palette79,  1, 1
-	palette_pointer Palette80,  1, 1
-	palette_pointer Palette81,  1, 1
-	palette_pointer Palette82,  1, 1
-	palette_pointer Palette83,  1, 1
-	palette_pointer Palette84,  1, 1
-	palette_pointer Palette85,  1, 1
-	palette_pointer Palette86,  1, 1
-	palette_pointer Palette87,  1, 1
-	palette_pointer Palette88,  1, 1
-	palette_pointer Palette89,  1, 1
-	palette_pointer Palette90,  1, 1
-	palette_pointer Palette91,  1, 1
-	palette_pointer Palette92,  1, 1
-	palette_pointer Palette93,  1, 1
-	palette_pointer Palette94,  8, 0
-	palette_pointer Palette95,  8, 0
-	palette_pointer Palette96,  8, 0
-	palette_pointer Palette97,  8, 0
-	palette_pointer Palette98,  8, 0
-	palette_pointer Palette99,  8, 0
-	palette_pointer Palette100, 8, 0
-	palette_pointer Palette101, 7, 0
-	palette_pointer Palette102, 7, 0
-	palette_pointer Palette103, 7, 0
-	palette_pointer Palette104, 7, 0
-	palette_pointer Palette105, 7, 0
-	palette_pointer Palette106, 7, 0
-	palette_pointer Palette107, 7, 0
-	palette_pointer Palette108, 0, 1
-	palette_pointer Palette109, 0, 1
-	palette_pointer Palette110, 0, 0
-	palette_pointer Palette111, 8, 1
-	palette_pointer Palette112, 8, 1
-	palette_pointer Palette113, 8, 1
-	palette_pointer Palette114, 4, 2
-	palette_pointer Palette115, 4, 2
-	palette_pointer Palette116, 4, 2
-	palette_pointer Palette117, 1, 0
-	palette_pointer Palette118, 6, 0
-	palette_pointer Palette119, 1, 0
-	palette_pointer Palette120, 1, 0
-	palette_pointer Palette121, 1, 0
-	palette_pointer Palette122, 1, 0
-	palette_pointer Palette123, 1, 0
-	palette_pointer Palette124, 1, 0
-	palette_pointer Palette125, 1, 0
-	palette_pointer Palette126, 1, 0
-	palette_pointer Palette127, 1, 0
-	palette_pointer Palette128, 1, 0
-	palette_pointer Palette129, 1, 0
-	palette_pointer Palette130, 1, 0
-	palette_pointer Palette131, 1, 0
-	palette_pointer Palette132, 1, 0
-	palette_pointer Palette133, 1, 0
-	palette_pointer Palette134, 1, 0
-	palette_pointer Palette135, 1, 0
-	palette_pointer Palette136, 1, 0
-	palette_pointer Palette137, 1, 0
-	palette_pointer Palette138, 1, 0
-	palette_pointer Palette139, 1, 0
-	palette_pointer Palette140, 1, 0
-	palette_pointer Palette141, 1, 0
-	palette_pointer Palette142, 1, 0
-	palette_pointer Palette143, 1, 0
-	palette_pointer Palette144, 1, 0
-	palette_pointer Palette145, 1, 0
-	palette_pointer Palette146, 1, 0
-	palette_pointer Palette147, 1, 0
-	palette_pointer Palette148, 1, 0
-	palette_pointer Palette149, 1, 0
-	palette_pointer Palette150, 1, 0
-	palette_pointer Palette151, 1, 0
-	palette_pointer Palette152, 1, 0
-	palette_pointer Palette153, 1, 0
-	palette_pointer Palette154, 1, 0
-	palette_pointer Palette155, 1, 0
-	palette_pointer Palette156, 1, 0
-	palette_pointer Palette157, 1, 0
-	palette_pointer Palette158, 1, 0
-	palette_pointer Palette159, 1, 0
-	palette_pointer Palette160, 1, 0
+	palette_pointer Palette0,   8, 1 ; $00
+	palette_pointer Palette1,   8, 0 ; $01
+	palette_pointer Palette2,   8, 0 ; $02
+	palette_pointer Palette3,   8, 0 ; $03
+	palette_pointer Palette4,   8, 0 ; $04
+	palette_pointer Palette5,   8, 0 ; $05
+	palette_pointer Palette6,   8, 0 ; $06
+	palette_pointer Palette7,   8, 0 ; $07
+	palette_pointer Palette8,   8, 0 ; $08
+	palette_pointer Palette9,   8, 0 ; $09
+	palette_pointer Palette10,  8, 0 ; $0a
+	palette_pointer Palette11,  8, 0 ; $0b
+	palette_pointer Palette12,  8, 0 ; $0c
+	palette_pointer Palette13,  8, 0 ; $0d
+	palette_pointer Palette14,  8, 0 ; $0e
+	palette_pointer Palette15,  8, 0 ; $0f
+	palette_pointer Palette16,  8, 0 ; $10
+	palette_pointer Palette17,  8, 0 ; $11
+	palette_pointer Palette18,  8, 0 ; $12
+	palette_pointer Palette19,  8, 0 ; $13
+	palette_pointer Palette20,  8, 0 ; $14
+	palette_pointer Palette21,  8, 0 ; $15
+	palette_pointer Palette22,  8, 0 ; $16
+	palette_pointer Palette23,  8, 0 ; $17
+	palette_pointer Palette24,  8, 0 ; $18
+	palette_pointer Palette25,  8, 0 ; $19
+	palette_pointer Palette26,  8, 0 ; $1a
+	palette_pointer Palette27,  8, 0 ; $1b
+	palette_pointer Palette28,  8, 0 ; $1c
+	palette_pointer Palette29,  8, 2 ; $1d
+	palette_pointer Palette30,  8, 2 ; $1e
+	palette_pointer Palette31,  1, 1 ; $1f
+	palette_pointer Palette32,  1, 1 ; $20
+	palette_pointer Palette33,  1, 1 ; $21
+	palette_pointer Palette34,  1, 1 ; $22
+	palette_pointer Palette35,  1, 1 ; $23
+	palette_pointer Palette36,  1, 1 ; $24
+	palette_pointer Palette37,  1, 1 ; $25
+	palette_pointer Palette38,  1, 1 ; $26
+	palette_pointer Palette39,  1, 1 ; $27
+	palette_pointer Palette40,  1, 1 ; $28
+	palette_pointer Palette41,  1, 1 ; $29
+	palette_pointer Palette42,  1, 1 ; $2a
+	palette_pointer Palette43,  1, 1 ; $2b
+	palette_pointer Palette44,  1, 1 ; $2c
+	palette_pointer Palette45,  1, 1 ; $2d
+	palette_pointer Palette46,  1, 1 ; $2e
+	palette_pointer Palette47,  1, 1 ; $2f
+	palette_pointer Palette48,  1, 1 ; $30
+	palette_pointer Palette49,  1, 1 ; $31
+	palette_pointer Palette50,  1, 1 ; $32
+	palette_pointer Palette51,  1, 1 ; $33
+	palette_pointer Palette52,  1, 1 ; $34
+	palette_pointer Palette53,  1, 1 ; $35
+	palette_pointer Palette54,  1, 1 ; $36
+	palette_pointer Palette55,  1, 1 ; $37
+	palette_pointer Palette56,  1, 1 ; $38
+	palette_pointer Palette57,  1, 1 ; $39
+	palette_pointer Palette58,  1, 1 ; $3a
+	palette_pointer Palette59,  1, 1 ; $3b
+	palette_pointer Palette60,  1, 1 ; $3c
+	palette_pointer Palette61,  1, 1 ; $3d
+	palette_pointer Palette62,  1, 1 ; $3e
+	palette_pointer Palette63,  1, 1 ; $3f
+	palette_pointer Palette64,  1, 1 ; $40
+	palette_pointer Palette65,  1, 1 ; $41
+	palette_pointer Palette66,  1, 1 ; $42
+	palette_pointer Palette67,  1, 1 ; $43
+	palette_pointer Palette68,  1, 1 ; $44
+	palette_pointer Palette69,  1, 1 ; $45
+	palette_pointer Palette70,  1, 1 ; $46
+	palette_pointer Palette71,  1, 1 ; $47
+	palette_pointer Palette72,  1, 1 ; $48
+	palette_pointer Palette73,  1, 1 ; $49
+	palette_pointer Palette74,  1, 1 ; $4a
+	palette_pointer Palette75,  1, 1 ; $4b
+	palette_pointer Palette76,  1, 1 ; $4c
+	palette_pointer Palette77,  1, 1 ; $4d
+	palette_pointer Palette78,  1, 1 ; $4e
+	palette_pointer Palette79,  1, 1 ; $4f
+	palette_pointer Palette80,  1, 1 ; $50
+	palette_pointer Palette81,  1, 1 ; $51
+	palette_pointer Palette82,  1, 1 ; $52
+	palette_pointer Palette83,  1, 1 ; $53
+	palette_pointer Palette84,  1, 1 ; $54
+	palette_pointer Palette85,  1, 1 ; $55
+	palette_pointer Palette86,  1, 1 ; $56
+	palette_pointer Palette87,  1, 1 ; $57
+	palette_pointer Palette88,  1, 1 ; $58
+	palette_pointer Palette89,  1, 1 ; $59
+	palette_pointer Palette90,  1, 1 ; $a5
+	palette_pointer Palette91,  1, 1 ; $5b
+	palette_pointer Palette92,  1, 1 ; $5c
+	palette_pointer Palette93,  1, 1 ; $5d
+	palette_pointer Palette94,  8, 0 ; $5e
+	palette_pointer Palette95,  8, 0 ; $5f
+	palette_pointer Palette96,  8, 0 ; $60
+	palette_pointer Palette97,  8, 0 ; $61
+	palette_pointer Palette98,  8, 0 ; $62
+	palette_pointer Palette99,  8, 0 ; $63
+	palette_pointer Palette100, 8, 0 ; $64
+	palette_pointer Palette101, 7, 0 ; $65
+	palette_pointer Palette102, 7, 0 ; $66
+	palette_pointer Palette103, 7, 0 ; $67
+	palette_pointer Palette104, 7, 0 ; $68
+	palette_pointer Palette105, 7, 0 ; $69
+	palette_pointer Palette106, 7, 0 ; $6a
+	palette_pointer Palette107, 7, 0 ; $6b
+	palette_pointer Palette108, 0, 1 ; $6c
+	palette_pointer Palette109, 0, 1 ; $6d
+	palette_pointer Palette110, 0, 0 ; $6e
+	palette_pointer Palette111, 8, 1 ; $6f
+	palette_pointer Palette112, 8, 1 ; $70
+	palette_pointer Palette113, 8, 1 ; $71
+	palette_pointer Palette114, 4, 2 ; $72
+	palette_pointer Palette115, 4, 2 ; $73
+	palette_pointer Palette116, 4, 2 ; $74
+	palette_pointer Palette117, 1, 0 ; $75
+	palette_pointer Palette118, 6, 0 ; $76
+	palette_pointer Palette119, 1, 0 ; $77
+	palette_pointer Palette120, 1, 0 ; $78
+	palette_pointer Palette121, 1, 0 ; $79
+	palette_pointer Palette122, 1, 0 ; $7a
+	palette_pointer Palette123, 1, 0 ; $7b
+	palette_pointer Palette124, 1, 0 ; $7c
+	palette_pointer Palette125, 1, 0 ; $7d
+	palette_pointer Palette126, 1, 0 ; $7e
+	palette_pointer Palette127, 1, 0 ; $7f
+	palette_pointer Palette128, 1, 0 ; $80
+	palette_pointer Palette129, 1, 0 ; $81
+	palette_pointer Palette130, 1, 0 ; $82
+	palette_pointer Palette131, 1, 0 ; $83
+	palette_pointer Palette132, 1, 0 ; $84
+	palette_pointer Palette133, 1, 0 ; $85
+	palette_pointer Palette134, 1, 0 ; $86
+	palette_pointer Palette135, 1, 0 ; $87
+	palette_pointer Palette136, 1, 0 ; $88
+	palette_pointer Palette137, 1, 0 ; $89
+	palette_pointer Palette138, 1, 0 ; $8a
+	palette_pointer Palette139, 1, 0 ; $8b
+	palette_pointer Palette140, 1, 0 ; $8c
+	palette_pointer Palette141, 1, 0 ; $8d
+	palette_pointer Palette142, 1, 0 ; $8e
+	palette_pointer Palette143, 1, 0 ; $8f
+	palette_pointer Palette144, 1, 0 ; $90
+	palette_pointer Palette145, 1, 0 ; $91
+	palette_pointer Palette146, 1, 0 ; $92
+	palette_pointer Palette147, 1, 0 ; $93
+	palette_pointer Palette148, 1, 0 ; $94
+	palette_pointer Palette149, 1, 0 ; $95
+	palette_pointer Palette150, 1, 0 ; $96
+	palette_pointer Palette151, 1, 0 ; $97
+	palette_pointer Palette152, 1, 0 ; $98
+	palette_pointer Palette153, 1, 0 ; $99
+	palette_pointer Palette154, 1, 0 ; $9a
+	palette_pointer Palette155, 1, 0 ; $9b
+	palette_pointer Palette156, 1, 0 ; $9c
+	palette_pointer Palette157, 1, 0 ; $9d
+	palette_pointer Palette158, 1, 0 ; $9e
+	palette_pointer Palette159, 1, 0 ; $9f
+	palette_pointer Palette160, 1, 0 ; $a0
 
 	INCROM $8191b, $83c5b
 
