@@ -26,7 +26,7 @@ Func_80077: ; 80077 (20:4077)
 	push bc
 	push de
 	call BCCoordToBGMap0Address
-	ld hl, wd4c2
+	ld hl, wVRAMPointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -66,9 +66,9 @@ Func_800bd: ; 800bd (20:40bd)
 	ld d, a
 	ld b, $c0
 	call Func_08bf
-	ld a, [wd4c2]
+	ld a, [wVRAMPointer]
 	ld e, a
-	ld a, [wd4c3]
+	ld a, [wVRAMPointer + 1]
 	ld d, a
 	call Func_800e0
 	pop de
@@ -311,36 +311,46 @@ LoadGraphicsPointerFromHL: ; 80229 (20:4229)
 
 	INCROM $80238, $8025b
 
+; loads graphics data from third map data pointers
+; input:
+; a = sprite index within the data map
+; output:
+; a = number of tiles in sprite
 Func_8025b: ; 8025b (20:425b)
 	push hl
 	ld l, $4
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
-	ld a, [hl]
+	ld a, [hl] ; tile size
 	push af
-	ld [wd4c8], a
-	ld a, $10
-	ld [wd4c7], a
-	call Func_80274
+	ld [wCurSpriteNumTiles], a
+	ld a, TILE_SIZE
+	ld [wCurSpriteTileSize], a
+	call LoadGfxDataFromTempPointerToVRAMBank
 	pop af
 	pop hl
 	ret
 
-Func_80274: ; 80274 (20:4274)
-	call Func_8029f
-	jr asm_8027c
+; loads graphics data pointed by wTempPointer in wTempPointerBank
+; to the VRAM bank according to wd4cb, in address pointed by wVRAMPointer
+LoadGfxDataFromTempPointerToVRAMBank: ; 80274 (20:4274)
+	call GetTileOffsetPointerAndSwitchVRAM
+	jr LoadGfxDataFromTempPointer
 
 Func_80279: ; 80279 (20:4279)
 	call Func_802bb
-asm_8027c:
+
+; loads graphics data pointed by wTempPointer in wTempPointerBank
+; to wVRAMPointer
+LoadGfxDataFromTempPointer:
 	push hl
 	push bc
 	push de
-	ld a, [wd4c8]
+	ld a, [wCurSpriteNumTiles]
 	ld b, a
-	ld a, [wd4c7]
+	ld a, [wCurSpriteTileSize]
 	ld c, a
-	ld hl, wd4c2
+	ld hl, wVRAMPointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -350,23 +360,30 @@ asm_8027c:
 	ld l, a
 	inc hl
 	inc hl
-	call Func_395a
+	call CopyGfxDataFromTempBank
 	call BankswitchVRAM0
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_8029f: ; 8029f (20:429f)
-	ld a, [wd4ca]
+; convert wVRAMTileOffset to address in VRAM
+; and stores it in wVRAMPointer
+; switches VRAM according to wd4cb
+GetTileOffsetPointerAndSwitchVRAM: ; 8029f (20:429f)
+; address of the tile offset is wVRAMTileOffset * $10 + $8000
+	ld a, [wVRAMTileOffset]
 	swap a
 	push af
 	and $f0
-	ld [wd4c2], a
+	ld [wVRAMPointer], a
 	pop af
 	and $f
-	add $80
-	ld [wd4c3], a
+	add HIGH(v0Tiles0) ; $80
+	ld [wVRAMPointer + 1], a
+
+; if bottom bit in wd4cb is not set = VRAM0
+; if bottom bit in wd4cb is set     = VRAM1
 	ld a, [wd4cb]
 	and $1
 	call BankswitchVRAM
@@ -377,10 +394,10 @@ Func_802bb: ; 802bb (20:42bb)
 	push af
 	xor $80
 	ld [wd4ca], a
-	call Func_8029f
-	ld a, [wd4c3]
+	call GetTileOffsetPointerAndSwitchVRAM
+	ld a, [wVRAMPointer + 1]
 	add $8
-	ld [wd4c3], a
+	ld [wVRAMPointer + 1], a
 	pop af
 	ld [wd4ca], a
 	ret
@@ -398,10 +415,145 @@ Func_803b9: ; 803b9 (20:43b9)
 	ret
 ; 0x803c9
 
-	INCROM $803c9, $80418
+	INCROM $803c9, $803ec
+
+; copies from palette data in hl c bytes to palette index b
+; in WRAM, starting from wBackgroundPalettesCGB
+; b = palette index
+; c = palette size
+; hl = palette data to copy
+LoadPaletteData: ; 803ec (20:43ec)
+	push hl
+	push bc
+	push de
+	ld a, b
+	cp NUM_BACKGROUND_PALETTES + NUM_OBJECT_PALETTES ; total palettes available
+	jr nc, .fail_return
+
+	add a ; 2 * index
+	add a ; 4 * index
+	add a ; 8 * index
+	add LOW(wBackgroundPalettesCGB)
+	ld e, a
+	ld a, HIGH(wBackgroundPalettesCGB)
+	adc 0
+	ld d, a
+
+	ld a, c
+	cp $09
+	jr nc, .fail_return
+
+	add a ; 2 * size
+	add a ; 4 * size
+	add a ; 8 * size
+	ld c, a
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+	call FlushAllPalettes
+	jr .success_return
+
+.fail_return
+	debug_ret
+
+.success_return
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x80418
 
 Func_80418: ; 80418 (20:4418)
-	INCROM $80418, $80480
+	push hl
+	push bc
+	push de
+	call CopyPaletteDataToBuffer
+
+	ld hl, wd23e
+	ld a, [hli] ; number palettes
+	ld c, a
+	or a
+	jr z, .check_palette_size
+
+	ld a, [wd4ca]
+	cp $01
+	jr z, .obp1
+
+	ld a, [hli] ; pallete for OBP0
+	push hl
+	push bc
+	call SetOBP0
+	pop bc
+	pop hl
+	dec c
+	jr z, .check_palette_size
+
+.obp1
+	ld a, [hli]
+	push hl
+	push bc
+	call SetOBP1 ; pallete for OBP1
+	pop bc
+	pop hl
+	dec c
+	jr z, .check_palette_size
+	inc hl
+
+.check_palette_size
+	ld a, [hli]
+	or a
+	jr z, .done
+
+; non-zero size, so load it from data
+	ld c, a
+	ld a, [wd4cb]
+	; ensure it's a palette index starting from wObjectPalettesCGB
+	or NUM_BACKGROUND_PALETTES
+	ld b, a
+	call LoadPaletteData
+
+.done
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x80456
+
+; copies palette data of index in a to wd23e
+CopyPaletteDataToBuffer: ; 80456 (20:4456)
+	push hl
+	push bc
+	push de
+	ld l, $08
+	call GetMapDataPointer
+	call LoadGraphicsPointerFromHL
+
+; size parameter
+	ld a, [hl]
+	ld b, a
+	and $0f
+	inc a
+	ld c, a
+	ld a, b
+	and $f0
+	srl a
+	inc a
+	add c
+	ld c, a
+	ld b, $00
+
+	ld de, wd23e
+	call CopyBankedDataToDE
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x8047b
+
+	INCROM $8047b, $80480
 
 Func_80480: ; 80480 (20:4480)
 	INCROM $80480, $804d8
@@ -524,7 +676,6 @@ SpriteNullAnimationFrame:
 	db 0
 
 ; might be closer to "screen specific data" than map data
-; data in each section is 4 bytes long.
 MapDataPointers: ; 80e5d (20:4e5d)
 	dw MapDataPointers_80e67
 	dw MapDataPointers_8100f
@@ -533,17 +684,699 @@ MapDataPointers: ; 80e5d (20:4e5d)
 	dw MapDataPointers_81697
 
 MapDataPointers_80e67: ; 80e67 (20:4e67)
-	INCROM $80e67, $8100f
+	db $1b, $59, $00, $00
+	db $22, $5a, $00, $00
+	db $13, $5c, $00, $01
+	db $2e, $5d, $00, $01
+	db $d1, $5e, $00, $01
+	db $f5, $5e, $00, $01
+	db $26, $5f, $00, $01
+	db $eb, $5f, $00, $01
+	db $43, $61, $00, $01
+	db $50, $61, $00, $01
+	db $60, $61, $00, $02
+	db $22, $62, $00, $02
+	db $36, $63, $00, $03
+	db $00, $64, $00, $03
+	db $1d, $65, $00, $03
+	db $e7, $65, $00, $03
+	db $04, $67, $00, $03
+	db $ce, $67, $00, $03
+	db $eb, $68, $00, $03
+	db $b5, $69, $00, $03
+	db $d2, $6a, $00, $03
+	db $9c, $6b, $00, $03
+	db $b9, $6c, $00, $03
+	db $83, $6d, $00, $03
+	db $a0, $6e, $00, $03
+	db $6a, $6f, $00, $03
+	db $87, $70, $00, $03
+	db $51, $71, $00, $03
+	db $6e, $72, $00, $03
+	db $21, $73, $00, $03
+	db $24, $74, $00, $04
+	db $45, $75, $00, $04
+	db $db, $76, $00, $05
+	db $8c, $77, $00, $05
+	db $8d, $78, $00, $06
+	db $d6, $79, $00, $06
+	db $00, $40, $01, $07
+	db $88, $41, $01, $07
+	db $bb, $43, $01, $08
+	db $33, $45, $01, $08
+	db $2e, $47, $01, $09
+	db $d8, $48, $01, $09
+	db $73, $4b, $01, $0a
+	db $6f, $4c, $01, $0a
+	db $fe, $4d, $01, $0b
+	db $1d, $4f, $01, $0b
+	db $b6, $50, $01, $0c
+	db $91, $51, $01, $0c
+	db $15, $53, $01, $0d
+	db $b3, $54, $01, $0d
+	db $0a, $57, $01, $0e
+	db $ce, $57, $01, $0e
+	db $f1, $7b, $00, $0e
+	db $03, $7c, $00, $0e
+	db $ef, $58, $01, $0f
+	db $79, $5a, $01, $0f
+	db $1a, $7c, $00, $0f
+	db $26, $7c, $00, $0f
+	db $e2, $5c, $01, $10
+	db $f4, $5d, $01, $10
+	db $7c, $5f, $01, $11
+	db $7f, $60, $01, $11
+	db $36, $7c, $00, $12
+	db $7d, $61, $01, $12
+	db $93, $61, $01, $12
+	db $a9, $61, $01, $12
+	db $bf, $61, $01, $12
+	db $d5, $61, $01, $12
+	db $eb, $61, $01, $12
+	db $01, $62, $01, $12
+	db $17, $62, $01, $13
+	db $da, $62, $01, $13
+	db $64, $63, $01, $13
+	db $43, $64, $01, $13
+	db $df, $64, $01, $14
+	db $b5, $65, $01, $14
+	db $47, $66, $01, $15
+	db $b8, $66, $01, $16
+	db $3e, $67, $01, $17
+	db $af, $67, $01, $18
+	db $33, $68, $01, $19
+	db $a4, $68, $01, $1a
+	db $25, $69, $01, $1b
+	db $96, $69, $01, $1c
+	db $14, $6a, $01, $1d
+	db $85, $6a, $01, $1e
+	db $28, $6b, $01, $1f
+	db $99, $6b, $01, $20
+	db $34, $6c, $01, $21
+	db $a5, $6c, $01, $22
+	db $37, $6d, $01, $23
+	db $cc, $6d, $01, $24
+	db $8a, $6e, $01, $25
+	db $18, $6f, $01, $25
+	db $c0, $6f, $01, $25
+	db $4f, $70, $01, $26
+	db $a5, $71, $01, $27
+	db $97, $73, $01, $28
+	db $b7, $73, $01, $29
+	db $e5, $73, $01, $2a
+	db $13, $74, $01, $2b
+	db $38, $75, $01, $2c
+	db $9f, $76, $01, $2d
+	db $f6, $76, $01, $2d
+	db $7c, $77, $01, $2e
+	db $c4, $77, $01, $2f
 
 MapDataPointers_8100f: ; 8100f (20:500f)
-	INCROM $8100f, $8116b
+	db $00, $40, $02, $c1
+	db $12, $4c, $02, $97
+	db $28, $78, $01, $4d
+	db $84, $55, $02, $81
+	db $96, $5d, $02, $78
+	db $18, $65, $02, $63
+	db $4a, $6b, $02, $3c
+	db $0c, $6f, $02, $a1
+	db $00, $40, $03, $83
+	db $1e, $79, $02, $57
+	db $32, $48, $03, $3a
+	db $d4, $4b, $03, $52
+	db $f6, $50, $03, $57
+	db $68, $56, $03, $9d
+	db $3a, $60, $03, $4e
+	db $1c, $65, $03, $cf
+	db $0e, $72, $03, $79
+	db $00, $40, $04, $bd
+	db $a0, $79, $03, $48
+	db $d2, $4b, $04, $6d
+	db $a4, $52, $04, $5d
+	db $76, $58, $04, $60
+	db $78, $5e, $04, $56
+	db $da, $63, $04, $60
+	db $dc, $69, $04, $56
+	db $3e, $6f, $04, $60
+	db $40, $75, $04, $56
+	db $00, $40, $05, $60
+	db $02, $46, $05, $56
+	db $64, $4b, $05, $60
+	db $66, $51, $05, $60
+	db $68, $57, $05, $60
+	db $6a, $5d, $05, $60
+	db $6c, $63, $05, $60
+	db $6e, $69, $05, $60
+	db $70, $6f, $05, $61
+	db $82, $75, $05, $61
+	db $fa, $7c, $01, $04
+	db $00, $40, $06, $f4
+	db $42, $4f, $06, $3b
+	db $3c, $7d, $01, $04
+	db $7e, $7d, $01, $24
+	db $a2, $7a, $04, $24
+	db $f4, $62, $06, $dc
+	db $b6, $70, $06, $d4
+	db $e4, $7c, $04, $24
+	db $22, $7e, $03, $18
+	db $94, $7b, $05, $31
+	db $00, $40, $07, $24
+	db $42, $42, $07, $24
+	db $84, $44, $07, $24
+	db $c6, $46, $07, $24
+	db $08, $49, $07, $24
+	db $4a, $4b, $07, $24
+	db $8c, $4d, $07, $24
+	db $ce, $4f, $07, $24
+	db $10, $52, $07, $24
+	db $52, $54, $07, $24
+	db $94, $56, $07, $24
+	db $d6, $58, $07, $24
+	db $18, $5b, $07, $24
+	db $5a, $5d, $07, $24
+	db $9c, $5f, $07, $24
+	db $de, $61, $07, $24
+	db $20, $64, $07, $24
+	db $62, $66, $07, $24
+	db $a4, $68, $07, $24
+	db $e6, $6a, $07, $24
+	db $28, $6d, $07, $24
+	db $6a, $6f, $07, $24
+	db $ac, $71, $07, $24
+	db $ee, $73, $07, $24
+	db $30, $76, $07, $24
+	db $72, $78, $07, $24
+	db $b4, $7a, $07, $24
+	db $f6, $7c, $07, $24
+	db $00, $40, $08, $24
+	db $42, $42, $08, $24
+	db $84, $44, $08, $24
+	db $c6, $46, $08, $24
+	db $08, $49, $08, $24
+	db $4a, $4b, $08, $24
+	db $8c, $4d, $08, $24
+	db $ce, $4f, $08, $24
+	db $10, $52, $08, $24
+	db $52, $54, $08, $24
+	db $94, $56, $08, $24
 
 MapDataPointers_8116b: ; 8116b (20:516b)
-	INCROM $8116b, $81333
+	db $90, $7e, $02, $14
+	db $a6, $7e, $05, $14
+	db $f8, $7d, $06, $14
+	db $d6, $58, $08, $14
+	db $18, $5a, $08, $14
+	db $5a, $5b, $08, $14
+	db $9c, $5c, $08, $14
+	db $de, $5d, $08, $14
+	db $20, $5f, $08, $1b
+	db $d2, $60, $08, $14
+	db $14, $62, $08, $14
+	db $56, $63, $08, $14
+	db $98, $64, $08, $14
+	db $da, $65, $08, $14
+	db $1c, $67, $08, $14
+	db $5e, $68, $08, $14
+	db $a0, $69, $08, $14
+	db $e2, $6a, $08, $14
+	db $24, $6c, $08, $14
+	db $66, $6d, $08, $14
+	db $a8, $6e, $08, $14
+	db $ea, $6f, $08, $14
+	db $2c, $71, $08, $14
+	db $6e, $72, $08, $14
+	db $b0, $73, $08, $14
+	db $f2, $74, $08, $14
+	db $34, $76, $08, $14
+	db $76, $77, $08, $14
+	db $b8, $78, $08, $14
+	db $fa, $79, $08, $14
+	db $3c, $7b, $08, $14
+	db $7e, $7c, $08, $14
+	db $c0, $7d, $08, $14
+	db $26, $7f, $04, $08
+	db $00, $40, $09, $14
+	db $42, $41, $09, $14
+	db $84, $42, $09, $14
+	db $3a, $7f, $06, $08
+	db $c6, $43, $09, $16
+	db $38, $7f, $07, $0a
+	db $02, $7f, $08, $0b
+	db $28, $45, $09, $06
+	db $8a, $45, $09, $08
+	db $c0, $7f, $01, $02
+	db $a4, $7f, $03, $04
+	db $0c, $46, $09, $09
+	db $9e, $46, $09, $12
+	db $c0, $47, $09, $09
+	db $52, $48, $09, $11
+	db $a8, $7f, $04, $03
+	db $64, $49, $09, $2d
+	db $36, $4c, $09, $0d
+	db $08, $4d, $09, $1c
+	db $ca, $4e, $09, $4c
+	db $bc, $7f, $06, $03
+	db $8c, $53, $09, $1b
+	db $3e, $55, $09, $07
+	db $b0, $55, $09, $0c
+	db $ee, $7f, $06, $01
+	db $72, $56, $09, $22
+	db $94, $58, $09, $20
+	db $96, $5a, $09, $0a
+	db $38, $5b, $09, $25
+	db $8a, $5d, $09, $18
+	db $0c, $5f, $09, $1b
+	db $be, $60, $09, $08
+	db $40, $61, $09, $0d
+	db $12, $62, $09, $22
+	db $34, $64, $09, $0c
+	db $f6, $64, $09, $25
+	db $48, $67, $09, $22
+	db $6a, $69, $09, $0c
+	db $2c, $6a, $09, $4c
+	db $ee, $6e, $09, $08
+	db $70, $6f, $09, $07
+	db $e2, $7f, $01, $01
+	db $e2, $6f, $09, $1a
+	db $84, $71, $09, $0a
+	db $26, $72, $09, $2e
+	db $08, $75, $09, $08
+	db $8a, $75, $09, $07
+	db $fc, $75, $09, $1c
+	db $b4, $7f, $08, $04
+	db $be, $77, $09, $08
+	db $40, $78, $09, $0b
+	db $d2, $7f, $02, $01
+	db $f2, $78, $09, $1c
+	db $b4, $7a, $09, $16
+	db $16, $7c, $09, $10
+	db $18, $7d, $09, $0f
+	db $0a, $7e, $09, $07
+	db $7c, $7e, $09, $0a
+	db $1e, $7f, $09, $09
+	db $da, $7f, $04, $02
+	db $da, $7f, $07, $02
+	db $b0, $7f, $09, $03
+	db $00, $40, $0a, $08
+	db $82, $40, $0a, $0f
+	db $74, $41, $0a, $03
+	db $a6, $41, $0a, $05
+	db $f8, $41, $0a, $17
+	db $6a, $43, $0a, $36
+	db $cc, $46, $0a, $0b
+	db $7e, $47, $0a, $06
+	db $e0, $47, $0a, $16
+	db $42, $49, $0a, $20
+	db $44, $4b, $0a, $14
+	db $86, $4c, $0a, $04
+	db $c8, $4c, $0a, $04
+	db $0a, $4d, $0a, $04
+	db $4c, $4d, $0a, $04
+	db $8e, $4d, $0a, $04
+	db $d0, $4d, $0a, $04
+	db $12, $4e, $0a, $04
 
 ; pointer low, pointer high, bank (minus $20), unknown
 SpriteAnimationPointers: ; 81333 (20:5333)
-	INCROM $81333, $81697
+	db $54, $4e, $0a, $00
+	db $4c, $7c, $00, $00
+	db $e4, $7f, $02, $00
+	db $e6, $7f, $03, $00
+	db $29, $4f, $0a, $00
+	db $e8, $7f, $05, $00
+	db $e2, $7f, $09, $00
+	db $fe, $4f, $0a, $00
+	db $0d, $50, $0a, $00
+	db $64, $50, $0a, $00
+	db $7b, $50, $0a, $00
+	db $f5, $7f, $03, $00
+	db $f4, $7f, $01, $00
+	db $d2, $50, $0a, $00
+	db $dd, $50, $0a, $00
+	db $b2, $51, $0a, $00
+	db $c1, $51, $0a, $00
+	db $d8, $51, $0a, $00
+	db $e7, $51, $0a, $00
+	db $bc, $52, $0a, $00
+	db $cb, $52, $0a, $00
+	db $e2, $52, $0a, $00
+	db $f1, $52, $0a, $00
+	db $c6, $53, $0a, $00
+	db $d5, $53, $0a, $00
+	db $ec, $53, $0a, $00
+	db $fb, $53, $0a, $00
+	db $d0, $54, $0a, $00
+	db $df, $54, $0a, $00
+	db $f6, $54, $0a, $00
+	db $05, $55, $0a, $00
+	db $da, $55, $0a, $00
+	db $e9, $55, $0a, $00
+	db $00, $56, $0a, $00
+	db $0f, $56, $0a, $00
+	db $e4, $56, $0a, $00
+	db $f3, $56, $0a, $00
+	db $0a, $57, $0a, $00
+	db $19, $57, $0a, $00
+	db $ee, $57, $0a, $00
+	db $fd, $57, $0a, $00
+	db $14, $58, $0a, $00
+	db $23, $58, $0a, $00
+	db $f8, $58, $0a, $00
+	db $07, $59, $0a, $00
+	db $1e, $59, $0a, $00
+	db $2d, $59, $0a, $00
+	db $84, $59, $0a, $00
+	db $9b, $59, $0a, $00
+	db $f2, $59, $0a, $00
+	db $fd, $59, $0a, $00
+	db $08, $5a, $0a, $00
+	db $13, $5a, $0a, $00
+	db $71, $5a, $0a, $00
+	db $80, $5a, $0a, $00
+	db $8f, $5a, $0a, $00
+	db $ed, $5a, $0a, $00
+	db $fc, $5a, $0a, $00
+	db $0b, $5b, $0a, $00
+	db $6e, $5b, $0a, $00
+	db $13, $5d, $0a, $00
+	db $6a, $5d, $0a, $00
+	db $c1, $5d, $0a, $00
+	db $18, $5e, $0a, $00
+	db $6f, $5e, $0a, $00
+	db $c6, $5e, $0a, $00
+	db $6b, $60, $0a, $00
+	db $c2, $60, $0a, $00
+	db $19, $61, $0a, $00
+	db $70, $61, $0a, $00
+	db $c7, $61, $0a, $00
+	db $1e, $62, $0a, $00
+	db $06, $63, $0a, $00
+	db $e7, $63, $0a, $00
+	db $d5, $64, $0a, $00
+	db $18, $66, $0a, $00
+	db $0f, $67, $0a, $00
+	db $9b, $68, $0a, $00
+	db $ba, $68, $0a, $00
+	db $e1, $68, $0a, $00
+	db $d7, $69, $0a, $00
+	db $5e, $6a, $0a, $00
+	db $e5, $6a, $0a, $00
+	db $6c, $6b, $0a, $00
+	db $f3, $6b, $0a, $00
+	db $7a, $6c, $0a, $00
+	db $01, $6d, $0a, $00
+	db $88, $6d, $0a, $00
+	db $0f, $6e, $0a, $00
+	db $96, $6e, $0a, $00
+	db $1d, $6f, $0a, $00
+	db $a4, $6f, $0a, $00
+	db $2b, $70, $0a, $00
+	db $fb, $70, $0a, $00
+	db $06, $71, $0a, $00
+	db $bb, $72, $0a, $00
+	db $05, $74, $0a, $00
+	db $6e, $76, $0a, $00
+	db $c1, $79, $0a, $00
+	db $0c, $7a, $0a, $00
+	db $00, $40, $0b, $00
+	db $cf, $7b, $0a, $00
+	db $fe, $7b, $0a, $00
+	db $11, $7c, $0a, $00
+	db $78, $7c, $0a, $00
+	db $eb, $7c, $0a, $00
+	db $a6, $7e, $0a, $00
+	db $03, $48, $0b, $00
+	db $16, $4a, $0b, $00
+	db $4c, $4b, $0b, $00
+	db $b6, $50, $0b, $00
+	db $64, $53, $0b, $00
+	db $c1, $54, $0b, $00
+	db $29, $58, $0b, $00
+	db $eb, $5a, $0b, $00
+	db $c5, $5d, $0b, $00
+	db $0c, $5e, $0b, $00
+	db $ee, $5f, $0b, $00
+	db $59, $60, $0b, $00
+	db $d4, $60, $0b, $00
+	db $bb, $62, $0b, $00
+	db $86, $65, $0b, $00
+	db $d9, $65, $0b, $00
+	db $7f, $67, $0b, $00
+	db $db, $6d, $0b, $00
+	db $f0, $6f, $0b, $00
+	db $1b, $71, $0b, $00
+	db $36, $73, $0b, $00
+	db $29, $78, $0b, $00
+	db $9f, $79, $0b, $00
+	db $8e, $7e, $0b, $00
+	db $00, $40, $0c, $00
+	db $b4, $41, $0c, $00
+	db $b6, $45, $0c, $00
+	db $d5, $49, $0c, $00
+	db $7b, $4c, $0c, $00
+	db $c6, $4d, $0c, $00
+	db $fd, $4e, $0c, $00
+	db $e2, $4f, $0c, $00
+	db $45, $51, $0c, $00
+	db $21, $54, $0c, $00
+	db $01, $57, $0c, $00
+	db $a0, $5a, $0c, $00
+	db $bc, $5c, $0c, $00
+	db $b1, $5d, $0c, $00
+	db $51, $5e, $0c, $00
+	db $d4, $5e, $0c, $00
+	db $7c, $60, $0c, $00
+	db $e3, $62, $0c, $00
+	db $ec, $7f, $0a, $00
+	db $c1, $7f, $0b, $00
+	db $d2, $64, $0c, $00
+	db $f4, $65, $0c, $00
+	db $63, $66, $0c, $00
+	db $17, $67, $0c, $00
+	db $7f, $67, $0c, $00
+	db $63, $69, $0c, $00
+	db $ea, $69, $0c, $00
+	db $e7, $6d, $0c, $00
+	db $f3, $73, $0c, $00
+	db $1e, $74, $0c, $00
+	db $49, $74, $0c, $00
+	db $dc, $7f, $0b, $00
+	db $74, $74, $0c, $00
+	db $97, $74, $0c, $00
+	db $ba, $74, $0c, $00
+	db $f3, $7f, $0b, $00
+	db $dd, $74, $0c, $00
+	db $cd, $75, $0c, $00
+	db $5c, $76, $0c, $00
+	db $eb, $76, $0c, $00
+	db $f6, $76, $0c, $00
+	db $01, $77, $0c, $00
+	db $e9, $78, $0c, $00
+	db $f8, $78, $0c, $00
+	db $07, $79, $0c, $00
+	db $34, $7d, $0c, $00
+	db $c3, $7d, $0c, $00
+	db $00, $40, $0d, $00
+	db $d2, $7d, $0c, $00
+	db $61, $7e, $0c, $00
+	db $2d, $44, $0d, $00
+	db $70, $7e, $0c, $00
+	db $41, $4a, $0d, $00
+	db $7f, $7e, $0c, $00
+	db $55, $50, $0d, $00
+	db $8e, $7e, $0c, $00
+	db $6f, $52, $0d, $00
+	db $9d, $7e, $0c, $00
+	db $ac, $7e, $0c, $00
+	db $3e, $7f, $0c, $00
+	db $89, $54, $0d, $00
+	db $eb, $54, $0d, $00
+	db $69, $56, $0d, $00
+	db $d4, $57, $0d, $00
+	db $ca, $59, $0d, $00
+	db $a0, $7f, $0c, $00
+	db $91, $5a, $0d, $00
+	db $cf, $5c, $0d, $00
+	db $d2, $5d, $0d, $00
+	db $f5, $5d, $0d, $00
+	db $0b, $60, $0d, $00
+	db $d2, $60, $0d, $00
+	db $1d, $61, $0d, $00
+	db $ab, $62, $0d, $00
+	db $d6, $63, $0d, $00
+	db $09, $64, $0d, $00
+	db $b7, $65, $0d, $00
+	db $e2, $66, $0d, $00
+	db $15, $67, $0d, $00
+	db $33, $69, $0d, $00
+	db $36, $6a, $0d, $00
+	db $59, $6a, $0d, $00
+	db $e7, $6b, $0d, $00
+	db $ae, $6c, $0d, $00
+	db $31, $6d, $0d, $00
+	db $67, $70, $0d, $00
 
 MapDataPointers_81697: ; 81697 (20:5697)
-	INCROM $81697, $84000
+	db $8a, $73, $0d, $81
+	db $cd, $73, $0d, $80
+	db $0f, $74, $0d, $80
+	db $51, $74, $0d, $80
+	db $93, $74, $0d, $80
+	db $d5, $74, $0d, $80
+	db $17, $75, $0d, $80
+	db $59, $75, $0d, $80
+	db $9b, $75, $0d, $80
+	db $dd, $75, $0d, $80
+	db $1f, $76, $0d, $80
+	db $61, $76, $0d, $80
+	db $a3, $76, $0d, $80
+	db $e5, $76, $0d, $80
+	db $27, $77, $0d, $80
+	db $69, $77, $0d, $80
+	db $ab, $77, $0d, $80
+	db $ed, $77, $0d, $80
+	db $2f, $78, $0d, $80
+	db $71, $78, $0d, $80
+	db $b3, $78, $0d, $80
+	db $f5, $78, $0d, $80
+	db $37, $79, $0d, $80
+	db $79, $79, $0d, $80
+	db $bb, $79, $0d, $80
+	db $fd, $79, $0d, $80
+	db $3f, $7a, $0d, $80
+	db $81, $7a, $0d, $80
+	db $c3, $7a, $0d, $80
+	db $05, $7b, $0d, $82
+	db $49, $7b, $0d, $82
+	db $eb, $7f, $0c, $11
+	db $8d, $7b, $0d, $11
+	db $98, $7b, $0d, $11
+	db $a3, $7b, $0d, $11
+	db $ae, $7b, $0d, $11
+	db $b9, $7b, $0d, $11
+	db $c4, $7b, $0d, $11
+	db $cf, $7b, $0d, $11
+	db $da, $7b, $0d, $11
+	db $e5, $7b, $0d, $11
+	db $f0, $7b, $0d, $11
+	db $fb, $7b, $0d, $11
+	db $06, $7c, $0d, $11
+	db $11, $7c, $0d, $11
+	db $1c, $7c, $0d, $11
+	db $27, $7c, $0d, $11
+	db $32, $7c, $0d, $11
+	db $3d, $7c, $0d, $11
+	db $48, $7c, $0d, $11
+	db $53, $7c, $0d, $11
+	db $5e, $7c, $0d, $11
+	db $69, $7c, $0d, $11
+	db $74, $7c, $0d, $11
+	db $7f, $7c, $0d, $11
+	db $8a, $7c, $0d, $11
+	db $95, $7c, $0d, $11
+	db $a0, $7c, $0d, $11
+	db $ab, $7c, $0d, $11
+	db $b6, $7c, $0d, $11
+	db $c1, $7c, $0d, $11
+	db $cc, $7c, $0d, $11
+	db $d7, $7c, $0d, $11
+	db $e2, $7c, $0d, $11
+	db $ed, $7c, $0d, $11
+	db $f8, $7c, $0d, $11
+	db $03, $7d, $0d, $11
+	db $0e, $7d, $0d, $11
+	db $19, $7d, $0d, $11
+	db $24, $7d, $0d, $11
+	db $2f, $7d, $0d, $11
+	db $3a, $7d, $0d, $11
+	db $45, $7d, $0d, $11
+	db $50, $7d, $0d, $11
+	db $5b, $7d, $0d, $11
+	db $66, $7d, $0d, $11
+	db $71, $7d, $0d, $11
+	db $7c, $7d, $0d, $11
+	db $87, $7d, $0d, $11
+	db $92, $7d, $0d, $11
+	db $9d, $7d, $0d, $11
+	db $a8, $7d, $0d, $11
+	db $b3, $7d, $0d, $11
+	db $be, $7d, $0d, $11
+	db $c9, $7d, $0d, $11
+	db $d4, $7d, $0d, $11
+	db $df, $7d, $0d, $11
+	db $ea, $7d, $0d, $11
+	db $f5, $7d, $0d, $11
+	db $00, $7e, $0d, $11
+	db $0b, $7e, $0d, $11
+	db $16, $7e, $0d, $11
+	db $21, $7e, $0d, $11
+	db $2c, $7e, $0d, $11
+	db $37, $7e, $0d, $80
+	db $79, $7e, $0d, $80
+	db $bb, $7e, $0d, $80
+	db $fd, $7e, $0d, $80
+	db $3f, $7f, $0d, $80
+	db $81, $7f, $0d, $80
+	db $00, $40, $0e, $80
+	db $c3, $7f, $0d, $70
+	db $42, $40, $0e, $70
+	db $7c, $40, $0e, $70
+	db $b6, $40, $0e, $70
+	db $f0, $40, $0e, $70
+	db $2a, $41, $0e, $70
+	db $64, $41, $0e, $70
+	db $fd, $7f, $0d, $01
+	db $fb, $7f, $02, $01
+	db $5b, $7c, $00, $00
+	db $9e, $41, $0e, $81
+	db $e1, $41, $0e, $81
+	db $24, $42, $0e, $81
+	db $67, $42, $0e, $42
+	db $8b, $42, $0e, $42
+	db $af, $42, $0e, $42
+	db $f6, $7f, $08, $10
+	db $d3, $42, $0e, $60
+	db $f6, $7f, $0c, $10
+	db $05, $43, $0e, $10
+	db $0f, $43, $0e, $10
+	db $19, $43, $0e, $10
+	db $23, $43, $0e, $10
+	db $2d, $43, $0e, $10
+	db $37, $43, $0e, $10
+	db $41, $43, $0e, $10
+	db $4b, $43, $0e, $10
+	db $55, $43, $0e, $10
+	db $5f, $43, $0e, $10
+	db $69, $43, $0e, $10
+	db $73, $43, $0e, $10
+	db $7d, $43, $0e, $10
+	db $87, $43, $0e, $10
+	db $91, $43, $0e, $10
+	db $9b, $43, $0e, $10
+	db $a5, $43, $0e, $10
+	db $af, $43, $0e, $10
+	db $b9, $43, $0e, $10
+	db $c3, $43, $0e, $10
+	db $cd, $43, $0e, $10
+	db $d7, $43, $0e, $10
+	db $e1, $43, $0e, $10
+	db $eb, $43, $0e, $10
+	db $f5, $43, $0e, $10
+	db $ff, $43, $0e, $10
+	db $09, $44, $0e, $10
+	db $13, $44, $0e, $10
+	db $1d, $44, $0e, $10
+	db $27, $44, $0e, $10
+	db $31, $44, $0e, $10
+	db $3b, $44, $0e, $10
+	db $45, $44, $0e, $10
+	db $4f, $44, $0e, $10
+	db $59, $44, $0e, $10
+	db $63, $44, $0e, $10
+	db $6d, $44, $0e, $10
+	db $77, $44, $0e, $10
+	db $81, $44, $0e, $10
+	db $8b, $44, $0e, $10
+	db $95, $44, $0e, $10
+
+	INCROM $8191b, $84000

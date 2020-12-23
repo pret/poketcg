@@ -76,3 +76,10 @@ loaded_npc_struct: MACRO
 \1Field0x0a::  ds 1
 \1Field0x0b::  ds 1
 ENDM
+
+sprite_vram_struct: MACRO
+\1Valid::      ds 1
+\1ID::         ds 1
+\1TileOffset:: ds 1
+\1TileSize::   ds 1
+ENDM

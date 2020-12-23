@@ -7714,19 +7714,20 @@ Func_7195: ; 7195 (1:7195)
 	ret
 
 _TossCoin: ; 71ad (1:71ad)
-	ld [wcd9c], a
+	ld [wCoinTossTotalNum], a
 	ld a, [wDuelDisplayedScreen]
 	cp COIN_TOSS
-	jr z, .asm_71c1
+	jr z, .print_text
 	xor a
-	ld [wcd9f], a
+	ld [wCoinTossNumTossed], a
 	call EmptyScreen
 	call LoadDuelCoinTossResultTiles
 
-.asm_71c1
-	ld a, [wcd9f]
+.print_text
+; no need to print text if this is not the first coin toss
+	ld a, [wCoinTossNumTossed]
 	or a
-	jr nz, .asm_71ec
+	jr nz, .clear_text_pointer
 	ld a, COIN_TOSS
 	ld [wDuelDisplayedScreen], a
 	lb de, 0, 12
@@ -7743,47 +7744,53 @@ _TossCoin: ; 71ad (1:71ad)
 	ld l, a
 	call PrintText
 
-.asm_71ec
+.clear_text_pointer
 	ld hl, wCoinTossScreenTextID
 	xor a
 	ld [hli], a
 	ld [hl], a
+
+; store duelist type and reset number of heads
 	call EnableLCD
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
-	ld [wcd9e], a
+	ld [wCoinTossDuelistType], a
 	call ExchangeRNG
 	xor a
 	ld [wCoinTossNumHeads], a
 
-.asm_7204
-	ld a, [wcd9c]
-	cp $2
+.print_coin_tally
+; skip printing text if it's only one coin toss
+	ld a, [wCoinTossTotalNum]
+	cp 2
 	jr c, .asm_7223
+
+; write "#coin/#total coins"
 	lb bc, 15, 11
-	ld a, [wcd9f]
-	inc a
+	ld a, [wCoinTossNumTossed]
+	inc a ; current coin number is wCoinTossNumTossed + 1
 	call WriteTwoDigitNumberInTxSymbolFormat
 	ld b, 17
 	ld a, SYM_SLASH
 	call WriteByteToBGMap0
 	inc b
-	ld a, [wcd9c]
+	ld a, [wCoinTossTotalNum]
 	call WriteTwoDigitNumberInTxSymbolFormat
 
 .asm_7223
 	call Func_3b21
 	ld a, $58
 	call Func_3b6a
-	ld a, [wcd9e]
+
+	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .asm_7236
-	call $7324
+	call Func_7324
 	jr .asm_723c
 
 .asm_7236
 	call WaitForWideTextBoxInput
-	call $72ff
+	call Func_72ff
 
 .asm_723c
 	call Func_3b21
@@ -7798,11 +7805,11 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_724d
 	ld a, d
 	call Func_3b6a
-	ld a, [wcd9e]
+	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .asm_725e
 	ld a, e
-	call $7310
+	call Func_7310
 	ld e, a
 	jr .asm_726c
 
@@ -7813,7 +7820,7 @@ _TossCoin: ; 71ad (1:71ad)
 	pop de
 	jr c, .asm_725e
 	ld a, e
-	call $72ff
+	call Func_72ff
 
 .asm_726c
 	ld b, $5c
@@ -7829,7 +7836,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_727c
 	ld a, b
 	call Func_3b6a
-	ld a, [wcd9e]
+	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .asm_728a
 	ld a, $1
@@ -7846,13 +7853,13 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_7292
 	ld a, d
 	call PlaySFX
-	ld a, [wcd9c]
+	ld a, [wCoinTossTotalNum]
 	dec a
 	jr z, .asm_72b9
 	ld a, c
 	push af
 	ld e, $0
-	ld a, [wcd9f]
+	ld a, [wCoinTossNumTossed]
 .asm_72a3
 	cp $a
 	jr c, .asm_72ad
@@ -7870,17 +7877,17 @@ _TossCoin: ; 71ad (1:71ad)
 	call FillRectangle
 
 .asm_72b9
-	ld hl, wcd9f
+	ld hl, wCoinTossNumTossed
 	inc [hl]
-	ld a, [wcd9e]
+	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .asm_72dc
 	ld a, [hl]
-	ld hl, wcd9c
+	ld hl, wCoinTossTotalNum
 	cp [hl]
 	call z, WaitForWideTextBoxInput
-	call $7324
-	ld a, [wcd9c]
+	call Func_7324
+	ld a, [wCoinTossTotalNum]
 	ld hl, wCoinTossNumHeads
 	or [hl]
 	jr nz, .asm_72e2
@@ -7889,14 +7896,14 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_72dc
 	call WaitForWideTextBoxInput
-	call $72ff
+	call Func_72ff
 
 .asm_72e2
 	call Func_3b31
-	ld a, [wcd9f]
-	ld hl, wcd9c
+	ld a, [wCoinTossNumTossed]
+	ld hl, wCoinTossTotalNum
 	cp [hl]
-	jp c, .asm_7204
+	jp c, .print_coin_tally
 	call ExchangeRNG
 	call Func_3b31
 	call Func_3b21
@@ -7922,17 +7929,19 @@ Func_7310: ; 7310 (1:7310)
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, .asm_7338
+	jr z, Func_7338
 .asm_7319
 	call DoFrame
 	call CheckAnyAnimationPlaying
 	jr c, .asm_7319
 	ldh a, [hff96]
 	ret
+
+Func_7324: ; 7324 (1:7324)
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, .asm_7338
+	jr z, Func_7338
 	ld a, 30
 .asm_732f
 	call DoFrame
@@ -7940,10 +7949,11 @@ Func_7310: ; 7310 (1:7310)
 	jr nz, .asm_732f
 	ldh a, [hff96]
 	ret
-.asm_7338
+
+Func_7338: ; 7338 (1:7338)
 	call DoFrame
 	call SerialRecvByte
-	jr c, .asm_7338
+	jr c, Func_7338
 	call Func_7344
 	ret
 ; 0x7344

@@ -598,7 +598,8 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld a, [wTempAnimation]
 	ld [wd4bf], a
 	cp $61
-	jp nc, $4b5e ; asm_007_4b5e
+	jp nc, Func_1cb5e
+
 	push hl
 	push bc
 	push de
@@ -632,7 +633,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	add hl, bc
 	ld a, [hl]
 	rlca
-	add $48
+	add LOW(.address) ; $48
 	ld l, a ; LO
 	ld a, HIGH(.address) ; $49
 	adc 0
@@ -654,6 +655,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	dw Func_1c94a
 
 Func_1c94a: ; 1c94a (7:494a)
+; if any of the first 3 bytes is $00, return carry
 	ld e, l
 	ld d, h
 	ld c, 3
@@ -664,23 +666,25 @@ Func_1c94a: ; 1c94a (7:494a)
 	inc de
 	dec c
 	jr nz, .loop
+
 	ld a, [hli]
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wAnimationQueue], a ; push an animation to the queue
-	xor a
-	ld [wd4ca], a
-	ld [wd4cb], a
-	ld a, [hli]
-	farcall $20, $4418
-	ld a, [hli]
 
+	xor a
+	ld [wVRAMTileOffset], a
+	ld [wd4cb], a
+
+	ld a, [hli]
+	farcall Func_80418
+
+	ld a, [hli]
 	push af
 	ld a, [hli]
 	ld [wd42b], a
 	call Func_1c980
 	pop af
-
 	farcall StartNewSpriteAnimation
 	or a
 	jr .return
@@ -703,11 +707,11 @@ Func_1c980: ; 1c980 (7:4980)
 	or [hl]
 	ld [hli], a
 	ld a, b
-	ld [hli], a
-	ld [hl], c
+	ld [hli], a ; SPRITE_ANIM_COORD_X
+	ld [hl], c ; SPRITE_ANIM_COORD_Y
 	pop af
 
-	ld bc, $000c
+	lb bc, 0, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_Y
 	add hl, bc
 	ld c, a
 	and %00000011
@@ -717,6 +721,10 @@ Func_1c980: ; 1c980 (7:4980)
 	pop hl
 	ret
 
+; output:
+; a = anim flags
+; b = x coordinate
+; c = y coordinate
 Func_1c9a2: ; 1c9a2 (7:49a2)
 	push hl
 	ld c, 0
@@ -725,17 +733,18 @@ Func_1c9a2: ; 1c9a2 (7:49a2)
 	jr nz, .calc_addr
 
 	ld a, [wd4ae]
-	add a
+	add a ; 2 * [wd4ae]
 	ld c, a
-	add a
-	add c
-	add a
+	add a ; 4 * [wd4ae]
+	add c ; 6 * [wd4ae]
+	add a ; 12 * [wd4ae]
 	ld c, a
+
 	ld a, [wd4af]
 	cp PLAYER_TURN
 	jr z, .player_turn
 
-	ld a, $06
+	ld a, 6
 	add c
 	ld c, a
 .player_turn
@@ -746,6 +755,7 @@ Func_1c9a2: ; 1c9a2 (7:49a2)
 	ld hl, Data_1c9e0
 	add hl, bc
 	ld c, [hl]
+
 .calc_addr
 	ld a, c
 	add a ; a = c * 2
@@ -802,29 +812,30 @@ Data_1c9e0:
 	db $0e
 
 macro_1ca04: MACRO
-	dw \1
+	db \1
 	db \2
+	db \3
 ENDM
 
 Data_1ca04:
-; value(2), flag(1)
-	macro_1ca04 $5858, $08
-	macro_1ca04 $5028, $00
-	macro_1ca04 $3088, $63
-	macro_1ca04 $4858, $00
-	macro_1ca04 $6018, $00
-	macro_1ca04 $6038, $00
-	macro_1ca04 $6058, $00
-	macro_1ca04 $6078, $00
-	macro_1ca04 $6098, $00
-	macro_1ca04 $5058, $00
-	macro_1ca04 $2898, $00
-	macro_1ca04 $2878, $00
-	macro_1ca04 $2858, $00
-	macro_1ca04 $2838, $00
-	macro_1ca04 $2818, $00
+; x coord, y coord, animation flags
+	macro_1ca04 $58, $58, %00001000
+	macro_1ca04 $28, $50, %00000000
+	macro_1ca04 $88, $30, %01100011
+	macro_1ca04 $58, $48, %00000000
+	macro_1ca04 $18, $60, %00000000
+	macro_1ca04 $38, $60, %00000000
+	macro_1ca04 $58, $60, %00000000
+	macro_1ca04 $78, $60, %00000000
+	macro_1ca04 $98, $60, %00000000
+	macro_1ca04 $58, $50, %00000000
+	macro_1ca04 $98, $28, %00000000
+	macro_1ca04 $78, $28, %00000000
+	macro_1ca04 $58, $28, %00000000
+	macro_1ca04 $38, $28, %00000000
+	macro_1ca04 $18, $28, %00000000
 
-Func_1ca31: ; 1ca31 (7:4a6b)
+Func_1ca31: ; 1ca31 (7:4a31)
 	push hl
 	push bc
 	ld a, [wd4ac]
@@ -837,8 +848,9 @@ Func_1ca31: ; 1ca31 (7:4a6b)
 	cp b
 	jp z, .asm_007_4a6b
 	ld [hl], a
-	ld b, 0
-	ld hl, $d42c
+
+	ld b, $00
+	ld hl, wd42c
 	add hl, bc
 	ld a, [wTempAnimation]
 	ld [hli], a
@@ -848,20 +860,64 @@ Func_1ca31: ; 1ca31 (7:4a6b)
 	ld [hli], a
 	ld a, [wd4b0]
 	ld [hli], a
-	ld a, [$d4b1]
+	ld a, [wd4b1]
 	ld [hli], a
-	ld a, [$d4b2]
+	ld a, [wd4b2]
 	ld [hli], a
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	ld [hli], a
 	ld a, [wd4be]
 	ld [hl], a
+
 .asm_007_4a6b
 	pop bc
 	pop hl
 	ret
 
-	INCROM $1ca6e, $1cab3
+Func_1ca6e: ; 1ca6e (7:4a6e)
+	push hl
+	push bc
+.asm_1ca70
+	ld a, [wd4ad]
+	ld b, a
+	ld a, [wd4ac]
+	cp b
+	jr z, .asm_1cab0
+
+	ld c, a
+	add $08
+	and $7f
+	ld [wd4ac], a
+
+	ld b, $00
+	ld hl, wd42c
+	add hl, bc
+	ld a, [hli]
+	ld [wTempAnimation], a
+	ld a, [hli]
+	ld [wd4ae], a
+	ld a, [hli]
+	ld [wd4af], a
+	ld a, [hli]
+	ld [wd4b0], a
+	ld a, [hli]
+	ld [wd4b1], a
+	ld a, [hli]
+	ld [wd4b2], a
+	ld a, [hli]
+	ld [wd4b3], a
+	ld a, [hl]
+	ld [wd4be], a
+
+	call Func_1c8ef
+	call CheckAnyAnimationPlaying
+	jr nc, .asm_1ca70
+
+.asm_1cab0
+	pop bc
+	pop hl
+	ret
+; 0x1cab3
 
 Func_1cab3: ; 1cab3 (7:4ab3)
 	push bc
@@ -873,12 +929,64 @@ Func_1cab3: ; 1cab3 (7:4ab3)
 	ld c, l
 	add hl, hl ; hl = anim * 4
 	add hl, bc ; hl = anim * 6
-	ld bc, $4e32
+	ld bc, Data_1ce32
 	add hl, bc
 	pop bc
 	ret
 
-	INCROM $1cac5, $1cb18
+Func_1cac5: ; 1cac5 (7:4ac5)
+	ld a, [wd42a]
+	cp $ff
+	jr nz, .asm_1cb03
+
+	ld a, [wd4c0]
+	or a
+	jr z, .asm_1cafb
+	cp $80
+	jr z, .asm_1cb11
+	ld hl, wAnimationQueue
+	ld c, $07
+.asm_1cadb
+	push af
+	push bc
+	ld a, [hl]
+	cp $ff
+	jr z, .asm_1caf4
+	ld [wWhichSprite], a
+	farcall Func_12a13
+	cp $ff
+	jr nz, .asm_1caf4
+	farcall Func_129fa
+	ld a, $ff
+	ld [hl], a
+.asm_1caf4
+	pop bc
+	pop af
+	and [hl]
+	inc hl
+	dec c
+	jr nz, .asm_1cadb
+.asm_1cafb
+	cp $ff
+	jr nz, .asm_1cb02
+	call Func_1ca6e
+.asm_1cb02
+	ret
+
+.asm_1cb03
+	ld hl, wd4b9
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CallHL2
+	ld a, [wd42a]
+	jr .asm_1cafb
+
+.asm_1cb11
+	ld a, $ff
+	ld [wd4c0], a
+	jr .asm_1cafb
+; 0x1cb18
 
 Func_1cb18: ; 1cb18 (7:4b18)
 	push hl
@@ -924,7 +1032,236 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	jr .asm_1cb57
 ; 0x1cb5e
 
-	INCROM $1cb5e, $1ccbc
+Func_1cb5e: ; 1cb5e (7:4b5e)
+	cp $96
+	jp nc, Func_1ce03
+	cp $8c
+	jp nz, Func_1cc76
+	jr .asm_1cb6a ; redundant
+.asm_1cb6a
+	ld a, [wd4b2]
+	cp $03
+	jr nz, .asm_1cb76
+	ld a, [wd4b1]
+	cp $e8
+.asm_1cb76
+	ret nc
+
+	xor a
+	ld [wd4b8], a
+	ld [wVRAMTileOffset], a
+	ld [wd4cb], a
+
+	ld a, $25
+	farcall Func_80418
+	call Func_1cba6
+
+	ld hl, wd4b3
+	bit 0, [hl]
+	call nz, Func_1cc3e
+
+	ld a, $12
+	ld [wd4b8], a
+	bit 1, [hl]
+	call nz, Func_1cc4e
+
+	bit 2, [hl]
+	call nz, Func_1cc66
+
+	xor a
+	ld [wd4b3], a
+	ret
+; 0x1cba6
+
+Func_1cba6: ; 1cba6 (7:4ba6)
+	call Func_1cc03
+	xor a
+	ld [wd4b7], a
+
+	ld hl, wd4b4
+	ld de, wAnimationQueue + 1
+.asm_1cbb3
+	push hl
+	push de
+	ld a, [hl]
+	or a
+	jr z, .asm_1cbbc
+	call Func_1cbcc
+
+.asm_1cbbc
+	pop de
+	pop hl
+	inc hl
+	inc de
+	ld a, [wd4b7]
+	inc a
+	ld [wd4b7], a
+	cp $03
+	jr c, .asm_1cbb3
+	ret
+; 0x1cbcc
+
+Func_1cbcc: ; 1cbcc (7:4bcc)
+	push af
+	ld a, $2e
+	farcall CreateSpriteAndAnimBufferEntry
+	ld a, [wWhichSprite]
+	ld [de], a
+	ld a, $80
+	ld [wd42b], a
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	call Func_1c9a2
+
+	ld a, [wd4b7]
+	add $fd
+	ld e, a
+	ld a, $4b
+	adc 0
+	ld d, a
+	ld a, [de]
+	add b
+
+	ld [hli], a ; SPRITE_ANIM_COORD_X
+	ld [hl], c ; SPRITE_ANIM_COORD_Y
+
+	ld a, [wd4b8]
+	ld c, a
+	pop af
+	farcall Func_12ac9
+	ret
+; 0x1cbfd
+
+	INCROM $1cbfd, $1cc03
+
+Func_1cc03: ; 1cc03 (7:4c03)
+	ld a, [wd4b1]
+	ld l, a
+	ld a, [wd4b2]
+	ld h, a
+
+	ld de, wd4b4
+	ld bc, -100
+	call .Func_1cc2f
+	ld bc, -10
+	call .Func_1cc2f
+
+	ld a, l
+	add $4f
+	ld [de], a
+	ld hl, wd4b4
+	ld c, 2
+.asm_1cc23
+	ld a, [hl]
+	cp $4f
+	jr nz, .asm_1cc2e
+	ld [hl], $00
+	inc hl
+	dec c
+	jr nz, .asm_1cc23
+.asm_1cc2e
+	ret
+; 0x1cc2f
+
+.Func_1cc2f 
+	ld a, $4e
+.loop
+	inc a
+	add hl, bc
+	jr c, .loop
+
+	ld [de], a
+	inc de
+	ld a, l
+	sub c
+	ld l, a
+	ld a, h
+	sbc b
+	ld h, a
+	ret
+; 0x1cc3e
+
+Func_1cc3e: ; 1cc3e (7:4c3e)
+	push hl
+	ld a, $03
+	ld [wd4b7], a
+	ld de, wAnimationQueue + 4
+	ld a, $5b
+	call Func_1cbcc
+	pop hl
+	ret
+; 0x1cc4e
+
+Func_1cc4e: ; 1cc4e (7:4c4e)
+	push hl
+	ld a, $04
+	ld [wd4b7], a
+	ld de, wAnimationQueue + 5
+	ld a, $5a
+	call Func_1cbcc
+	ld a, [wd4b8]
+	add $12
+	ld [wd4b8], a
+	pop hl
+	ret
+; 0x1cc66
+
+Func_1cc66: ; 1cc66 (7:4c66)
+	push hl
+	ld a, $05
+	ld [wd4b7], a
+	ld de, wAnimationQueue + 6
+	ld a, $59
+	call Func_1cbcc
+	pop hl
+	ret
+; 0x1cc76
+
+Func_1cc76: ; 1cc76 (7:4c76)
+	ld a, [wd421]
+	or a
+	jr nz, .asm_1cc9e
+	ld a, [wTempAnimation]
+	ld [wd42a], a
+	sub $61
+	add a
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, Data_1cc9f
+	add hl, bc
+	ld a, [hli]
+	ld [wd4b9], a
+	ld c, a
+	ld a, [hli]
+	ld [wd4b9 + 1], a
+	ld b, a
+	ld a, [hl]
+	ld [wd4bb], a
+	call CallBC
+.asm_1cc9e
+	ret
+; 0x1cc9f
+
+macro_1cc9f: MACRO
+	dw \1
+	db \2
+	db \3
+ENDM
+
+Data_1cc9f: ; 1cc9f (7:4c9f)
+	macro_1cc9f Func_1cce4, $18, $00
+	macro_1cc9f Func_1cce9, $20, $00
+	macro_1cc9f Func_1cd10, $18, $00
+	macro_1cc9f Func_1cd15, $20, $00
+	macro_1cc9f Func_1cd76, $08, $00
+	macro_1cc9f Func_1cdc3, $3f, $00
+
+Func_1ccb7: ; 1ccb7 (7:4cb7)
+	ld a, [wd4bb]
+	or a
+	ret nz
+	; fallthrough
 
 Func_1ccbc: ; 1ccbc (7:4cbc)
 	ld a, $ff
@@ -941,7 +1278,289 @@ Func_1ccbc: ; 1ccbc (7:4cbc)
 	ret
 ; 0x1ccd4
 
-	INCROM $1ccd4, $1d078
+	INCROM $1ccd4, $1cce4
+
+Func_1cce4: ; 1cce4 (7:4ce4)
+	ld hl, $4d55
+	jr Func_1ccee
+
+Func_1cce9: ; 1cce9 (7:4ce9)
+	ld hl, $4d61
+	jr Func_1ccee
+
+Func_1ccee: ; 1ccee (7:4cee)
+	ld a, l
+	ld [wd4bc], a
+	ld a, h
+	ld [wd4bc + 1], a
+
+	ld hl, wd4b9
+	ld [hl], LOW(.asm_1ccff)
+	inc hl
+	ld [hl], HIGH(.asm_1ccff)
+	ret
+
+.asm_1ccff
+	call Func_1cd71
+	call Func_1cd3c
+	jp nc, Func_1ccb7
+	ldh a, [hSCX]
+	add [hl]
+	ldh [hSCX], a
+	jp Func_1ccb7
+; 0x1cd10
+
+Func_1cd10: ; 1cd10 (7:4d10)
+	ld hl, $4d55
+	jr Func_1cd1a
+
+Func_1cd15: ; 1cd15 (7:4d15)
+	ld hl, $4d61
+	jr Func_1cd1a
+
+Func_1cd1a: ; 1cd1a (7:4d1a)
+	ld a, l
+	ld [wd4bc], a
+	ld a, h
+	ld [wd4bc + 1], a
+	ld hl, wd4b9
+	ld [hl], LOW(.asm_1cd2b)
+	inc hl
+	ld [hl], HIGH(.asm_1cd2b)
+	ret
+
+.asm_1cd2b
+	call Func_1cd71
+	call Func_1cd3c
+	jp nc, Func_1ccb7
+	ldh a, [hSCY]
+	add [hl]
+	ldh [hSCY], a
+	jp Func_1ccb7
+; 0x1cd3c
+
+Func_1cd3c: ; 1cd3c (7:4d3c)
+	ld hl, wd4bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [wd4bb]
+	cp [hl]
+	ret nc
+	inc hl
+	push hl
+	inc hl
+	ld a, l
+	ld [wd4bc], a
+	ld a, h
+	ld [wd4bc + 1], a
+	pop hl
+	scf
+	ret
+; 0x1cd55
+
+	INCROM $1cd55, $1cd71
+
+Func_1cd71: ; 1cd71 (7:4d71)
+	ld hl, wd4bb
+	dec [hl]
+	ret
+; 0x1cd76
+
+Func_1cd76: ; 1cd76 (7:4d76)
+	ld hl, wd4b9
+	ld [hl], $a3
+	inc hl
+	ld [hl], $4d
+	ld a, [wBGP]
+	ld [wd4bc], a
+	ld hl, wBackgroundPalettesCGB
+	ld de, wd297
+	ld bc, 8 palettes
+	call CopyDataHLtoDE_SaveRegisters
+	ld de, $7fff
+	ld hl, wBackgroundPalettesCGB
+	ld bc, $20
+	call FillMemoryWithDE
+	xor a
+	call SetBGP
+	call FlushAllPalettes
+	call Func_1cd71
+	ld a, [wd4bb]
+	or a
+	ret nz
+	ld hl, wd297
+	ld de, wBackgroundPalettesCGB
+	ld bc, 8 palettes
+	call CopyDataHLtoDE_SaveRegisters
+	ld a, [wd4bc]
+	call SetBGP
+	call FlushAllPalettes
+	jp Func_1ccbc
+; 0x1cdc3
+
+Func_1cdc3: ; 1cdc3 (7:4dc3)
+	ld hl, wd4b9
+	ld [hl], $df
+	inc hl
+	ld [hl], $4d
+	xor a
+	ld [wApplyBGScroll], a
+	ld hl, $cace
+	ld [hl], $a6
+	inc hl
+	ld [hl], $3e
+	ld a, $01
+	ld [wBGScrollMod], a
+	call EnableInt_LYCoincidence
+	ld a, [$d4bb]
+	srl a
+	srl a
+	srl a
+	and $07
+	ld c, a
+	ld b, $00
+	ld hl, $4dfb
+	add hl, bc
+	ld a, [hl]
+	ld [wBGScrollMod], a
+	call Func_1cd71
+	jp Func_1ccb7
+; 0x1cdfb
+
+	INCROM $1cdfb, $1ce03
+
+Func_1ce03: ; 1ce03 (7:4e03)
+	cp $9e
+	jr z, .asm_1ce17
+	sub $96
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, $4e22
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	jp Func_3bb5
+.asm_1ce17
+	ld a, [wd4b1]
+	ld l, a
+	ld a, [wd4b2]
+	ld h, a
+	jp Func_3bb5
+; 0x1ce22
+
+	INCROM $1ce22, $1ce32
+
+macro_1ce32: MACRO
+	db \1
+	db \2
+	db \3
+	db \4
+	db \5
+	db \6
+ENDM
+
+Data_1ce32: ; 1ce32 (7:4e32)
+	macro_1ce32 $00, $00, $00, $00,                               $00, $00
+	macro_1ce32 $28, $1f, $47, %10000000,                         $11, $00
+	macro_1ce32 $29, $20, $48, %10000000,                         $12, $00
+	macro_1ce32 $2a, $21, $49, %10000000,                         $13, $00
+	macro_1ce32 $2b, $22, $4a, %10000000,                         $14, $00
+	macro_1ce32 $2c, $23, $4b, %10000000,                         $15, $00
+	macro_1ce32 $2d, $24, $4c, %10000000,                         $16, $00
+	macro_1ce32 $2d, $24, $4d, %10000000,                         $16, $00
+	macro_1ce32 $2d, $24, $4e, %10000000,                         $17, $00
+	macro_1ce32 $2e, $25, $00, $00,                               $00, $00
+	macro_1ce32 $2f, $26, $5c, $00,                               $18, $00
+	macro_1ce32 $30, $27, $5e, $00,                               $19, $00
+	macro_1ce32 $31, $28, $5f, $00,                               $1a, $00
+	macro_1ce32 $32, $29, $60, %00000100,                         $1b, $00
+	macro_1ce32 $33, $2a, $61, $00,                               $1c, $00
+	macro_1ce32 $33, $2a, $62, $00,                               $1d, $00
+	macro_1ce32 $34, $2b, $63, %00000100,                         $1e, $00
+	macro_1ce32 $35, $2c, $64, $00,                               $1f, $00
+	macro_1ce32 $36, $2d, $69, %00000100,                         $20, $00
+	macro_1ce32 $37, $2e, $6a, $00,                               $21, $00
+	macro_1ce32 $38, $2f, $6b, %00000100,                         $22, $00
+	macro_1ce32 $39, $30, $6c, $00,                               $23, $00
+	macro_1ce32 $3a, $31, $6d, %00000100,                         $24, $00
+	macro_1ce32 $3b, $32, $6e, $00,                               $25, $00
+	macro_1ce32 $3c, $33, $6f, $00,                               $26, $00
+	macro_1ce32 $3d, $34, $70, %01000000 | %00000010,             $27, $00
+	macro_1ce32 $3e, $35, $71, %01000000 | %00000010,             $28, $00
+	macro_1ce32 $3f, $36, $72, $00,                               $29, $00
+	macro_1ce32 $3f, $36, $73, $00,                               $2a, $00
+	macro_1ce32 $40, $37, $74, $00,                               $2b, $00
+	macro_1ce32 $40, $37, $75, $00,                               $52, $00
+	macro_1ce32 $40, $37, $76, $00,                               $53, $00
+	macro_1ce32 $41, $38, $77, %00100000 | %00000001,             $2c, $00
+	macro_1ce32 $42, $39, $78, $00,                               $2d, $00
+	macro_1ce32 $43, $3a, $7a, $00,                               $2d, $00
+	macro_1ce32 $44, $3b, $7b, $00,                               $2e, $00
+	macro_1ce32 $42, $39, $79, $00,                               $2f, $00
+	macro_1ce32 $45, $3c, $7c, %00100000 | %00000001,             $30, $00
+	macro_1ce32 $46, $3d, $7d, $00,                               $31, $00
+	macro_1ce32 $47, $3e, $7e, $00,                               $32, $00
+	macro_1ce32 $48, $3f, $7f, $00,                               $33, $00
+	macro_1ce32 $49, $40, $80, $00,                               $34, $00
+	macro_1ce32 $4a, $41, $81, $00,                               $35, $00
+	macro_1ce32 $4b, $42, $82, $00,                               $36, $00
+	macro_1ce32 $4c, $43, $83, $00,                               $37, $00
+	macro_1ce32 $4d, $44, $84, $00,                               $38, $00
+	macro_1ce32 $4e, $45, $85, $00,                               $39, $00
+	macro_1ce32 $4f, $46, $86, $00,                               $3a, $00
+	macro_1ce32 $50, $47, $87, %00100000 | %00000001,             $3b, $00
+	macro_1ce32 $51, $48, $88, $00,                               $3c, $00
+	macro_1ce32 $52, $49, $89, $00,                               $3d, $00
+	macro_1ce32 $53, $4a, $8a, $00,                               $3e, $00
+	macro_1ce32 $54, $4b, $8b, $00,                               $3f, $00
+	macro_1ce32 $55, $4c, $8c, %00000100,                         $40, $00
+	macro_1ce32 $56, $4d, $8d, $00,                               $41, $00
+	macro_1ce32 $57, $4e, $8e, $00,                               $42, $00
+	macro_1ce32 $58, $4f, $8f, %00000100,                         $43, $00
+	macro_1ce32 $59, $50, $90, $00,                               $44, $00
+	macro_1ce32 $5a, $51, $92, $00,                               $45, $00
+	macro_1ce32 $5b, $52, $93, $00,                               $46, $00
+	macro_1ce32 $5c, $53, $94, $00,                               $47, $00
+	macro_1ce32 $5c, $53, $95, $00,                               $48, $00
+	macro_1ce32 $5d, $54, $97, $00,                               $49, $00
+	macro_1ce32 $5e, $55, $99, $00,                               $4a, $00
+	macro_1ce32 $4a, $56, $81, $00,                               $4b, $00
+	macro_1ce32 $5c, $53, $96, $00,                               $47, $00
+	macro_1ce32 $2d, $24, $4d, %10000000,                         $16, $00
+	macro_1ce32 $2d, $24, $4e, %10000000,                         $17, $00
+	macro_1ce32 $2f, $26, $5c, $00,                               $18, $00
+	macro_1ce32 $3a, $31, $6d, %00000100,                         $24, $00
+	macro_1ce32 $5f, $57, $9a, %10000000,                         $11, $00
+	macro_1ce32 $35, $2c, $65, %00000100,                         $5c, $00
+	macro_1ce32 $35, $2c, $66, %00000100,                         $00, $00
+	macro_1ce32 $5d, $54, $98, %00000100,                         $4c, $00
+	macro_1ce32 $59, $50, $91, %00000100,                         $4d, $00
+	macro_1ce32 $60, $58, $9b, $00,                               $4e, $00
+	macro_1ce32 $61, $59, $9c, $00,                               $4f, $00
+	macro_1ce32 $62, $5a, $9d, $00,                               $50, $00
+	macro_1ce32 $35, $2c, $67, %0000100,                          $51, $00
+	macro_1ce32 $35, $2c, $68, %0000100,                          $51, $00
+	macro_1ce32 $63, $5b, $9e, %10000000 | %00001000 | %00000100, $00, $00
+	macro_1ce32 $63, $5b, $9f, %10000000 | %00001000 | %00000100, $07, $00
+	macro_1ce32 $63, $5b, $a0, %10000000 | %00001000 | %00000100, $07, $00
+	macro_1ce32 $63, $5b, $a1, %10000000 | %00001000 | %00000100, $07, $00
+	macro_1ce32 $63, $5b, $a2, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $63, $5b, $a3, %10000000 | %00001000 | %00000100, $00, $00
+	macro_1ce32 $63, $5b, $a4, %10000000 | %00001000 | %00000100, $00, $00
+	macro_1ce32 $63, $5b, $a5, %10000000 | %00001000 | %00000100, $00, $00
+	macro_1ce32 $64, $5c, $a7, %10000000 | %00001000 | %00000100, $00, $00
+	macro_1ce32 $64, $5c, $a8, %10000000 | %00001000 | %00000100, $0b, $00
+	macro_1ce32 $64, $5c, $a9, %10000000 | %00001000 | %00000100, $0b, $00
+	macro_1ce32 $64, $5c, $aa, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $64, $5c, $ab, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $65, $5d, $ac, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $65, $5d, $ad, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $65, $5d, $ae, %10000000 | %00000100,             $00, $00
+	macro_1ce32 $63, $5b, $a6, %10000000 | %00000100,             $00, $00
+; 0x1d078
 
 Func_1d078: ; 1d078 (7:5078)
 	ld a, [wd627]

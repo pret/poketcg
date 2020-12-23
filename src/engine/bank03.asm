@@ -567,7 +567,7 @@ Func_c49c: ; c49c (3:449c)
 
 Func_c4b9: ; c4b9 (3:44b9)
 	xor a
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
 	ld a, $1d
 	farcall Func_80418

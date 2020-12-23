@@ -571,11 +571,11 @@ wTempSGBPacket:: ; cae0
 
 ; temporary CGB palette data buffer to eventually save into BGPD registers.
 wBackgroundPalettesCGB:: ; caf0
-	ds 8 palettes
+	ds NUM_BACKGROUND_PALETTES palettes
 
 ; temporary CGB palette data buffer to eventually save into OBPD registers.
 wObjectPalettesCGB:: ; cb30
-	ds 8 palettes
+	ds NUM_OBJECT_PALETTES palettes
 
 	ds $2
 
@@ -1203,17 +1203,20 @@ wDefaultYesOrNo:: ; cd9a
 wcd9b:: ; cd9b
 	ds $1
 
-wcd9c:: ; cd9c
+; stores the total number of coins to flip
+wCoinTossTotalNum:: ; cd9c
 	ds $1
 
 ; this stores the result from a coin toss (number of heads)
 wCoinTossNumHeads:: ; cd9d
 	ds $1
 
-wcd9e:: ; cd9e
+; stores type of the duelist that is tossing coins
+wCoinTossDuelistType:: ; cd9e
 	ds $1
 
-wcd9f:: ; cd9f
+; holds the number of coins that have already been tossed
+wCoinTossNumTossed:: ; cd9f
 	ds $1
 
 	ds $5
@@ -2143,7 +2146,12 @@ wd291:: ; d291
 wd292:: ; d292
 	ds $1
 
-	ds $90
+	ds $4
+
+wd297:: ; d297
+	ds 8 palettes
+
+	ds $4c
 
 wd323:: ; d323
 	ds $1
@@ -2354,6 +2362,7 @@ wd42a:: ; d42a
 wd42b:: ; d42b
 	ds $1
 
+wd42c:: ; d42c
 	ds $80
 
 wd4ac:: ; d4ac
@@ -2380,12 +2389,25 @@ wd4b2:: ; d4b2
 wd4b3:: ; d4b3
 	ds $1
 
-	ds $5
-
-wd4b9:: ; d4b9
+wd4b4:: ; d4b4
 	ds $1
 
-	ds $4
+	ds $2
+
+wd4b7:: ; d4b7
+	ds $1
+
+wd4b8:: ; d4b8
+	ds $1
+
+wd4b9:: ; d4b9
+	ds $2
+
+wd4bb:: ; d4bb
+	ds $1
+
+wd4bc:: ; d4bc
+	ds $2
 
 wd4be:: ; d4be
 	ds $1
@@ -2398,11 +2420,9 @@ wd4c0:: ; d4c0
 
 	ds $1
 
-wd4c2:: ; d4c2
-	ds $1
-
-wd4c3:: ; d4c3
-	ds $1
+; pointer to address in VRAM
+wVRAMPointer:: ; d4c2
+	ds $2
 
 ; these next 3 seem to be an address (bank @ end) for copying bg data
 wTempPointer:: ; d4c4
@@ -2411,13 +2431,18 @@ wTempPointer:: ; d4c4
 wTempPointerBank:: ; d4c6
 	ds $1
 
-wd4c7:: ; d4c7
+; stores number of bytes per tile for current sprite
+wCurSpriteTileSize:: ; d4c7
 	ds $1
 
-wd4c8:: ; d4c8
+; stores number of tiles that current sprite has
+wCurSpriteNumTiles:: ; d4c8
 	ds $1
 
 	ds $1
+
+; stores tile offset in VRAM
+wVRAMTileOffset:: ; d4ca
 
 wd4ca:: ; d4ca
 	ds $1
@@ -2474,11 +2499,26 @@ wd5d6:: ; d5d6
 wd5d7:: ; d5d7
 	ds $1
 
-wd5d8:: ; d5d8
-	ds $40
+wSpriteVRAMBuffer:: ; d5d8
+	sprite_vram_struct wSpriteVRAM1
+	sprite_vram_struct wSpriteVRAM2
+	sprite_vram_struct wSpriteVRAM3
+	sprite_vram_struct wSpriteVRAM4
+	sprite_vram_struct wSpriteVRAM5
+	sprite_vram_struct wSpriteVRAM6
+	sprite_vram_struct wSpriteVRAM7
+	sprite_vram_struct wSpriteVRAM8
+	sprite_vram_struct wSpriteVRAM9
+	sprite_vram_struct wSpriteVRAM10
+	sprite_vram_struct wSpriteVRAM11
+	sprite_vram_struct wSpriteVRAM12
+	sprite_vram_struct wSpriteVRAM13
+	sprite_vram_struct wSpriteVRAM14
+	sprite_vram_struct wSpriteVRAM15
+	sprite_vram_struct wSpriteVRAM16
 
-; seems to be the amount of entries in wd5d8
-wd618:: ; d618
+; seems to be the amount of entries in wSpriteVRAMBuffer
+wSpriteVRAMBufferSize:: ; d618
 	ds $1
 
 	ds $2
