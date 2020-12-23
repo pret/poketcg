@@ -417,7 +417,7 @@ Func_803b9: ; 803b9 (20:43b9)
 
 	INCROM $803c9, $803ec
 
-; copies from palette data in hl c bytes to palette index b
+; copies from palette data in hl c*8 bytes to palette index b
 ; in WRAM, starting from wBackgroundPalettesCGB
 ; b = palette index
 ; c = palette size
@@ -1216,167 +1216,181 @@ SpriteAnimationPointers: ; 81333 (20:5333)
 	db $31, $6d, $0d, $00
 	db $67, $70, $0d, $00
 
-MapDataPointers_81697: ; 81697 (20:5697)
-	db $8a, $73, $0d, $81
-	db $cd, $73, $0d, $80
-	db $0f, $74, $0d, $80
-	db $51, $74, $0d, $80
-	db $93, $74, $0d, $80
-	db $d5, $74, $0d, $80
-	db $17, $75, $0d, $80
-	db $59, $75, $0d, $80
-	db $9b, $75, $0d, $80
-	db $dd, $75, $0d, $80
-	db $1f, $76, $0d, $80
-	db $61, $76, $0d, $80
-	db $a3, $76, $0d, $80
-	db $e5, $76, $0d, $80
-	db $27, $77, $0d, $80
-	db $69, $77, $0d, $80
-	db $ab, $77, $0d, $80
-	db $ed, $77, $0d, $80
-	db $2f, $78, $0d, $80
-	db $71, $78, $0d, $80
-	db $b3, $78, $0d, $80
-	db $f5, $78, $0d, $80
-	db $37, $79, $0d, $80
-	db $79, $79, $0d, $80
-	db $bb, $79, $0d, $80
-	db $fd, $79, $0d, $80
-	db $3f, $7a, $0d, $80
-	db $81, $7a, $0d, $80
-	db $c3, $7a, $0d, $80
-	db $05, $7b, $0d, $82
-	db $49, $7b, $0d, $82
-	db $eb, $7f, $0c, $11
-	db $8d, $7b, $0d, $11
-	db $98, $7b, $0d, $11
-	db $a3, $7b, $0d, $11
-	db $ae, $7b, $0d, $11
-	db $b9, $7b, $0d, $11
-	db $c4, $7b, $0d, $11
-	db $cf, $7b, $0d, $11
-	db $da, $7b, $0d, $11
-	db $e5, $7b, $0d, $11
-	db $f0, $7b, $0d, $11
-	db $fb, $7b, $0d, $11
-	db $06, $7c, $0d, $11
-	db $11, $7c, $0d, $11
-	db $1c, $7c, $0d, $11
-	db $27, $7c, $0d, $11
-	db $32, $7c, $0d, $11
-	db $3d, $7c, $0d, $11
-	db $48, $7c, $0d, $11
-	db $53, $7c, $0d, $11
-	db $5e, $7c, $0d, $11
-	db $69, $7c, $0d, $11
-	db $74, $7c, $0d, $11
-	db $7f, $7c, $0d, $11
-	db $8a, $7c, $0d, $11
-	db $95, $7c, $0d, $11
-	db $a0, $7c, $0d, $11
-	db $ab, $7c, $0d, $11
-	db $b6, $7c, $0d, $11
-	db $c1, $7c, $0d, $11
-	db $cc, $7c, $0d, $11
-	db $d7, $7c, $0d, $11
-	db $e2, $7c, $0d, $11
-	db $ed, $7c, $0d, $11
-	db $f8, $7c, $0d, $11
-	db $03, $7d, $0d, $11
-	db $0e, $7d, $0d, $11
-	db $19, $7d, $0d, $11
-	db $24, $7d, $0d, $11
-	db $2f, $7d, $0d, $11
-	db $3a, $7d, $0d, $11
-	db $45, $7d, $0d, $11
-	db $50, $7d, $0d, $11
-	db $5b, $7d, $0d, $11
-	db $66, $7d, $0d, $11
-	db $71, $7d, $0d, $11
-	db $7c, $7d, $0d, $11
-	db $87, $7d, $0d, $11
-	db $92, $7d, $0d, $11
-	db $9d, $7d, $0d, $11
-	db $a8, $7d, $0d, $11
-	db $b3, $7d, $0d, $11
-	db $be, $7d, $0d, $11
-	db $c9, $7d, $0d, $11
-	db $d4, $7d, $0d, $11
-	db $df, $7d, $0d, $11
-	db $ea, $7d, $0d, $11
-	db $f5, $7d, $0d, $11
-	db $00, $7e, $0d, $11
-	db $0b, $7e, $0d, $11
-	db $16, $7e, $0d, $11
-	db $21, $7e, $0d, $11
-	db $2c, $7e, $0d, $11
-	db $37, $7e, $0d, $80
-	db $79, $7e, $0d, $80
-	db $bb, $7e, $0d, $80
-	db $fd, $7e, $0d, $80
-	db $3f, $7f, $0d, $80
-	db $81, $7f, $0d, $80
-	db $00, $40, $0e, $80
-	db $c3, $7f, $0d, $70
-	db $42, $40, $0e, $70
-	db $7c, $40, $0e, $70
-	db $b6, $40, $0e, $70
-	db $f0, $40, $0e, $70
-	db $2a, $41, $0e, $70
-	db $64, $41, $0e, $70
-	db $fd, $7f, $0d, $01
-	db $fb, $7f, $02, $01
-	db $5b, $7c, $00, $00
-	db $9e, $41, $0e, $81
-	db $e1, $41, $0e, $81
-	db $24, $42, $0e, $81
-	db $67, $42, $0e, $42
-	db $8b, $42, $0e, $42
-	db $af, $42, $0e, $42
-	db $f6, $7f, $08, $10
-	db $d3, $42, $0e, $60
-	db $f6, $7f, $0c, $10
-	db $05, $43, $0e, $10
-	db $0f, $43, $0e, $10
-	db $19, $43, $0e, $10
-	db $23, $43, $0e, $10
-	db $2d, $43, $0e, $10
-	db $37, $43, $0e, $10
-	db $41, $43, $0e, $10
-	db $4b, $43, $0e, $10
-	db $55, $43, $0e, $10
-	db $5f, $43, $0e, $10
-	db $69, $43, $0e, $10
-	db $73, $43, $0e, $10
-	db $7d, $43, $0e, $10
-	db $87, $43, $0e, $10
-	db $91, $43, $0e, $10
-	db $9b, $43, $0e, $10
-	db $a5, $43, $0e, $10
-	db $af, $43, $0e, $10
-	db $b9, $43, $0e, $10
-	db $c3, $43, $0e, $10
-	db $cd, $43, $0e, $10
-	db $d7, $43, $0e, $10
-	db $e1, $43, $0e, $10
-	db $eb, $43, $0e, $10
-	db $f5, $43, $0e, $10
-	db $ff, $43, $0e, $10
-	db $09, $44, $0e, $10
-	db $13, $44, $0e, $10
-	db $1d, $44, $0e, $10
-	db $27, $44, $0e, $10
-	db $31, $44, $0e, $10
-	db $3b, $44, $0e, $10
-	db $45, $44, $0e, $10
-	db $4f, $44, $0e, $10
-	db $59, $44, $0e, $10
-	db $63, $44, $0e, $10
-	db $6d, $44, $0e, $10
-	db $77, $44, $0e, $10
-	db $81, $44, $0e, $10
-	db $8b, $44, $0e, $10
-	db $95, $44, $0e, $10
+; \1 = palette pointer
+; \2 = number of palettes
+; \3 = number of OBJ colors
+palette_pointer: MACRO
+	dw \1
+	db BANK(\1) - BANK(MapDataPointers_81697)
+	db (\2 << 4) + \3
+ENDM
 
-	INCROM $8191b, $84000
+MapDataPointers_81697: ; 81697 (20:5697)
+	palette_pointer Palette0,   8, 1
+	palette_pointer Palette1,   8, 0
+	palette_pointer Palette2,   8, 0
+	palette_pointer Palette3,   8, 0
+	palette_pointer Palette4,   8, 0
+	palette_pointer Palette5,   8, 0
+	palette_pointer Palette6,   8, 0
+	palette_pointer Palette7,   8, 0
+	palette_pointer Palette8,   8, 0
+	palette_pointer Palette9,   8, 0
+	palette_pointer Palette10,  8, 0
+	palette_pointer Palette11,  8, 0
+	palette_pointer Palette12,  8, 0
+	palette_pointer Palette13,  8, 0
+	palette_pointer Palette14,  8, 0
+	palette_pointer Palette15,  8, 0
+	palette_pointer Palette16,  8, 0
+	palette_pointer Palette17,  8, 0
+	palette_pointer Palette18,  8, 0
+	palette_pointer Palette19,  8, 0
+	palette_pointer Palette20,  8, 0
+	palette_pointer Palette21,  8, 0
+	palette_pointer Palette22,  8, 0
+	palette_pointer Palette23,  8, 0
+	palette_pointer Palette24,  8, 0
+	palette_pointer Palette25,  8, 0
+	palette_pointer Palette26,  8, 0
+	palette_pointer Palette27,  8, 0
+	palette_pointer Palette28,  8, 0
+	palette_pointer Palette29,  8, 2
+	palette_pointer Palette30,  8, 2
+	palette_pointer Palette31,  1, 1
+	palette_pointer Palette32,  1, 1
+	palette_pointer Palette33,  1, 1
+	palette_pointer Palette34,  1, 1
+	palette_pointer Palette35,  1, 1
+	palette_pointer Palette36,  1, 1
+	palette_pointer Palette37,  1, 1
+	palette_pointer Palette38,  1, 1
+	palette_pointer Palette39,  1, 1
+	palette_pointer Palette40,  1, 1
+	palette_pointer Palette41,  1, 1
+	palette_pointer Palette42,  1, 1
+	palette_pointer Palette43,  1, 1
+	palette_pointer Palette44,  1, 1
+	palette_pointer Palette45,  1, 1
+	palette_pointer Palette46,  1, 1
+	palette_pointer Palette47,  1, 1
+	palette_pointer Palette48,  1, 1
+	palette_pointer Palette49,  1, 1
+	palette_pointer Palette50,  1, 1
+	palette_pointer Palette51,  1, 1
+	palette_pointer Palette52,  1, 1
+	palette_pointer Palette53,  1, 1
+	palette_pointer Palette54,  1, 1
+	palette_pointer Palette55,  1, 1
+	palette_pointer Palette56,  1, 1
+	palette_pointer Palette57,  1, 1
+	palette_pointer Palette58,  1, 1
+	palette_pointer Palette59,  1, 1
+	palette_pointer Palette60,  1, 1
+	palette_pointer Palette61,  1, 1
+	palette_pointer Palette62,  1, 1
+	palette_pointer Palette63,  1, 1
+	palette_pointer Palette64,  1, 1
+	palette_pointer Palette65,  1, 1
+	palette_pointer Palette66,  1, 1
+	palette_pointer Palette67,  1, 1
+	palette_pointer Palette68,  1, 1
+	palette_pointer Palette69,  1, 1
+	palette_pointer Palette70,  1, 1
+	palette_pointer Palette71,  1, 1
+	palette_pointer Palette72,  1, 1
+	palette_pointer Palette73,  1, 1
+	palette_pointer Palette74,  1, 1
+	palette_pointer Palette75,  1, 1
+	palette_pointer Palette76,  1, 1
+	palette_pointer Palette77,  1, 1
+	palette_pointer Palette78,  1, 1
+	palette_pointer Palette79,  1, 1
+	palette_pointer Palette80,  1, 1
+	palette_pointer Palette81,  1, 1
+	palette_pointer Palette82,  1, 1
+	palette_pointer Palette83,  1, 1
+	palette_pointer Palette84,  1, 1
+	palette_pointer Palette85,  1, 1
+	palette_pointer Palette86,  1, 1
+	palette_pointer Palette87,  1, 1
+	palette_pointer Palette88,  1, 1
+	palette_pointer Palette89,  1, 1
+	palette_pointer Palette90,  1, 1
+	palette_pointer Palette91,  1, 1
+	palette_pointer Palette92,  1, 1
+	palette_pointer Palette93,  1, 1
+	palette_pointer Palette94,  8, 0
+	palette_pointer Palette95,  8, 0
+	palette_pointer Palette96,  8, 0
+	palette_pointer Palette97,  8, 0
+	palette_pointer Palette98,  8, 0
+	palette_pointer Palette99,  8, 0
+	palette_pointer Palette100, 8, 0
+	palette_pointer Palette101, 7, 0
+	palette_pointer Palette102, 7, 0
+	palette_pointer Palette103, 7, 0
+	palette_pointer Palette104, 7, 0
+	palette_pointer Palette105, 7, 0
+	palette_pointer Palette106, 7, 0
+	palette_pointer Palette107, 7, 0
+	palette_pointer Palette108, 0, 1
+	palette_pointer Palette109, 0, 1
+	palette_pointer Palette110, 0, 0
+	palette_pointer Palette111, 8, 1
+	palette_pointer Palette112, 8, 1
+	palette_pointer Palette113, 8, 1
+	palette_pointer Palette114, 4, 2
+	palette_pointer Palette115, 4, 2
+	palette_pointer Palette116, 4, 2
+	palette_pointer Palette117, 1, 0
+	palette_pointer Palette118, 6, 0
+	palette_pointer Palette119, 1, 0
+	palette_pointer Palette120, 1, 0
+	palette_pointer Palette121, 1, 0
+	palette_pointer Palette122, 1, 0
+	palette_pointer Palette123, 1, 0
+	palette_pointer Palette124, 1, 0
+	palette_pointer Palette125, 1, 0
+	palette_pointer Palette126, 1, 0
+	palette_pointer Palette127, 1, 0
+	palette_pointer Palette128, 1, 0
+	palette_pointer Palette129, 1, 0
+	palette_pointer Palette130, 1, 0
+	palette_pointer Palette131, 1, 0
+	palette_pointer Palette132, 1, 0
+	palette_pointer Palette133, 1, 0
+	palette_pointer Palette134, 1, 0
+	palette_pointer Palette135, 1, 0
+	palette_pointer Palette136, 1, 0
+	palette_pointer Palette137, 1, 0
+	palette_pointer Palette138, 1, 0
+	palette_pointer Palette139, 1, 0
+	palette_pointer Palette140, 1, 0
+	palette_pointer Palette141, 1, 0
+	palette_pointer Palette142, 1, 0
+	palette_pointer Palette143, 1, 0
+	palette_pointer Palette144, 1, 0
+	palette_pointer Palette145, 1, 0
+	palette_pointer Palette146, 1, 0
+	palette_pointer Palette147, 1, 0
+	palette_pointer Palette148, 1, 0
+	palette_pointer Palette149, 1, 0
+	palette_pointer Palette150, 1, 0
+	palette_pointer Palette151, 1, 0
+	palette_pointer Palette152, 1, 0
+	palette_pointer Palette153, 1, 0
+	palette_pointer Palette154, 1, 0
+	palette_pointer Palette155, 1, 0
+	palette_pointer Palette156, 1, 0
+	palette_pointer Palette157, 1, 0
+	palette_pointer Palette158, 1, 0
+	palette_pointer Palette159, 1, 0
+	palette_pointer Palette160, 1, 0
+
+	INCROM $8191b, $83c5b
+
+Palette110:: ; 83c5b (20:3c5b)
+	db $00, $00
+
+	INCROM $83c5d, $84000

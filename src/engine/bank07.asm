@@ -1281,11 +1281,11 @@ Func_1ccbc: ; 1ccbc (7:4cbc)
 	INCROM $1ccd4, $1cce4
 
 Func_1cce4: ; 1cce4 (7:4ce4)
-	ld hl, $4d55
+	ld hl, Data_1cd55
 	jr Func_1ccee
 
 Func_1cce9: ; 1cce9 (7:4ce9)
-	ld hl, $4d61
+	ld hl, Data_1cd61
 	jr Func_1ccee
 
 Func_1ccee: ; 1ccee (7:4cee)
@@ -1311,11 +1311,11 @@ Func_1ccee: ; 1ccee (7:4cee)
 ; 0x1cd10
 
 Func_1cd10: ; 1cd10 (7:4d10)
-	ld hl, $4d55
+	ld hl, Data_1cd55
 	jr Func_1cd1a
 
 Func_1cd15: ; 1cd15 (7:4d15)
-	ld hl, $4d61
+	ld hl, Data_1cd61
 	jr Func_1cd1a
 
 Func_1cd1a: ; 1cd1a (7:4d1a)
@@ -1359,7 +1359,11 @@ Func_1cd3c: ; 1cd3c (7:4d3c)
 	ret
 ; 0x1cd55
 
-	INCROM $1cd55, $1cd71
+Data_1cd55: ; 1cd55 (7:4d55)
+	db $15, $02, $11, $fe, $0d, $02, $09, $fe, $05, $01, $01, $ff
+
+Data_1cd61: ; 1cd61 (7:4d61)
+	db $1d, $04, $19, $fc, $15, $04, $11, $fc, $0d, $03, $09, $fd, $05, $02, $01, $fe
 
 Func_1cd71: ; 1cd71 (7:4d71)
 	ld hl, wd4bb

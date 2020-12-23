@@ -116,7 +116,14 @@ Duel57Gfx: ; 8bfd2 (22:7fd2)
 	dw $1
 	INCBIN "gfx/duel/anims/57.2bpp"
 
-	INCROM $8bfe4, $8c000
+	INCROM $8bfe4, $8bffb
+
+Palette109:: ; 8bffb (22:7ffb)
+	db 1, $e4, 0
+
+rept $2
+	db $ff
+endr
 
 SECTION "Gfx 5", ROMX
 
@@ -631,7 +638,9 @@ Duel66Gfx: ; a3fb4 (28:7fb4)
 	dw $4
 	INCBIN "gfx/duel/anims/66.2bpp"
 
-	INCROM $a3ff6, $a4000
+Palette117:: ; a3ff6 (28:7ff6)
+	db 0, 1
+	db $7b, $63, $ff, $03, $1f, $00, $00, $4d
 
 SECTION "Gfx 11", ROMX
 
@@ -913,13 +922,28 @@ SECTION "Gfx 13", ROMX
 	INCROM $ac000, $b0000
 
 SECTION "Gfx 14", ROMX
-	INCROM $b0000, $b4000
+	INCROM $b0000, $b3feb
+
+Palette31:: ; b3feb (2c:7feb)
+	db 1, $d2, 1
+	db $00, $00, $ff, $1f, $1f, $1b, $6b, $00
+
+Palette119:: ; b3ff6 (2c:7ff6)
+	db 0, 1
+	db $9c, $63, $1c, $32, $9c, $20, $00, $20
 
 SECTION "Gfx 15", ROMX
-	INCROM $b4000, $b8000
+	INCROM $b4000, $b738a
 
-SECTION "Gfx 16", ROMX
-	INCROM $b8000, $bc000
+SECTION "Palettes1", ROMX
+	INCLUDE "data/palettes1.asm"
+
+SECTION "Palettes2", ROMX
+	INCLUDE "data/palettes2.asm"
+
+rept $3b61
+	db $ff
+endr
 
 SECTION "Card Gfx 1", ROMX
 
