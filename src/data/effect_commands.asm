@@ -1600,20 +1600,20 @@ DevolutionSprayEffectCommands:
 	db  $00
 
 SuperEnergyRemovalEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $7cd0
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $7ce4
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $7d73
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, SuperEnergyRemoval_EnergyCheck
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, SuperEnergyRemoval_PlayerSelection
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SuperEnergyRemoval_DiscardEffect
 	db  $00
 
 SuperEnergyRetrievalEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $7da4
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $7db6
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $7dfa
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, $7dba
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, SuperEnergyRetrieval_HandEnergyCheck
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, SuperEnergyRetrieval_PlayerHandSelection
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, SuperEnergyRetrieval_DiscardAndAddToHandEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, SuperEnergyRetrieval_PlayerDiscardPileSelection
 	db  $00
 
 GustOfWindEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, $7e6e
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, $7e79
-	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, $7e90
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, GustOfWind_BenchCheck
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, GustOfWind_PlayerSelection
+	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, GustOfWind_SwitchEffect
 	db  $00

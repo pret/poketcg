@@ -362,8 +362,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChooseBasicPokemonToPlaceOnBenchText               ; 0x0166
 	textpointer ChooseEvolutionCardAndPressAButtonToDevolveText    ; 0x0167
 	textpointer ChoosePokemonInYourAreaThenPokemonInYourOppText    ; 0x0168
-	textpointer Text0169                                           ; 0x0169
-	textpointer Text016a                                           ; 0x016a
+	textpointer ChooseUpTo4FromDiscardPileText                     ; 0x0169
+	textpointer ChooseAPokemonToSwitchWithActivePokemonText        ; 0x016a
 	textpointer PokemonAndAllAttachedCardsWereReturnedToDeckText   ; 0x016b
 	textpointer PokemonWasReturnedFromArenaToHandText              ; 0x016c
 	textpointer PokemonWasReturnedFromBenchToHandText              ; 0x016d
