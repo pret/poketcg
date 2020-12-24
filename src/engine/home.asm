@@ -11477,7 +11477,7 @@ DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 	and (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP) | (1 << OAM_PRIORITY)
 	or b
 	ld b, a
-	inc hl
+	inc hl ; unnecessary
 	call SetOneObjectAttributes
 .endCurrentIteration
 	pop hl
@@ -11514,6 +11514,7 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 	ld a, [wTempPointerBank]
 	call BankswitchROM
 	ld a, [hli]
+
 	push af
 	ld a, [wd4ca]
 	rlca
@@ -11525,6 +11526,7 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 	adc 0
 	ld d, a
 	pop af
+
 .loadPointer
 	add BANK(SpriteNullAnimationPointer)
 	pop hl

@@ -1,4 +1,5 @@
 INCLUDE "macros.asm"
+INCLUDE "constants.asm"
 
 SECTION "Gfx 1", ROMX
 
@@ -72,7 +73,12 @@ Duel56Gfx:: ; 87fe2 (21:7fe2)
 	dw $1
 	INCBIN "gfx/duel/anims/56.2bpp"
 
-	INCROM $87ff4, $88000
+AnimData12:: ; 87ff4 (21:7ff4)
+	frame_table AnimFrameTable3
+	frame_data 2, 8, 0, 0
+	frame_data 0, 0, 0, 0
+
+	db $ff
 
 SECTION "Gfx 4", ROMX
 
@@ -116,7 +122,13 @@ Duel57Gfx:: ; 8bfd2 (22:7fd2)
 	dw $1
 	INCBIN "gfx/duel/anims/57.2bpp"
 
-	INCROM $8bfe4, $8bffb
+AnimData2:: ; 8bfe4 (22:7fe4)
+	frame_table AnimFrameTable0
+	frame_data 5, 16, 0, 0
+	frame_data 6, 16, 0, 0
+	frame_data 7, 16, 0, 0
+	frame_data 6, 16, 0, 0
+	frame_data 0, 0, 0, 0
 
 Palette109:: ; 8bffb (22:7ffb)
 	db 1, $e4, 0
@@ -188,7 +200,16 @@ Duel58Gfx:: ; 8ffa4 (23:7fa4)
 	dw $4
 	INCBIN "gfx/duel/anims/58.2bpp"
 
-	INCROM $8ffe6, $90000
+AnimData3:: ; 8ffe6 (23:7fe6)
+	frame_table AnimFrameTable0
+	frame_data 8, 16, 0, 0
+	frame_data 9, 16, 0, 0
+	frame_data 0, 0, 0, 0
+
+AnimData11:: ; 8fff5 (23:7ff5)
+	frame_table AnimFrameTable3
+	frame_data 1, 8, 0, 0
+	frame_data 0, 0, 0, 0
 
 SECTION "Gfx 6", ROMX
 
@@ -302,7 +323,15 @@ RonaldOWGfx:: ; 97ea6 (25:7ea6)
 	dw $14
 	INCBIN "gfx/overworld_sprites/ronald.2bpp"
 
-	INCROM $97fe8, $98000
+AnimData5:: ; 97fe8 (25:7fe8)
+	frame_table AnimFrameTable1
+	frame_data 3, 16, 0, 0
+	frame_data 4, 16, 0, 0
+	frame_data 0, 0, 0, 0
+
+rept $9
+	db $ff
+endr
 
 SECTION "Gfx 8", ROMX
 
@@ -840,7 +869,17 @@ Duel45Gfx:: ; a7fb0 (29:7fb0)
 	dw $03
 	INCBIN "gfx/duel/anims/45.2bpp"
 
-	INCROM $a7fe2, $a8000
+AnimData6:: ; a7fe2 (29:7fe2)
+	frame_table AnimFrameTable1
+	frame_data 5, 16, 0, 0
+	frame_data 6, 16, 0, 0
+	frame_data 7, 16, 0, 0
+	frame_data 6, 16, 0, 0
+	frame_data 0, 0, 0, 0
+
+rept $7
+	db $ff
+endr
 
 SECTION "Gfx 12", ROMX
 
@@ -916,13 +955,20 @@ FightingGfx:: ; a8e12 (2a:4e12)
 	dw $04
 	INCBIN "gfx/titlescreen/energies/fighting.2bpp"
 
-	INCROM $a8e54, $ac000
+SECTION "Anims 1", ROMX
+	INCLUDE "data/anims1.asm"
 
-SECTION "Gfx 13", ROMX
-	INCROM $ac000, $b0000
+	db $ff
 
-SECTION "Gfx 14", ROMX
-	INCROM $b0000, $b3feb
+SECTION "Anims 2", ROMX
+	INCLUDE "data/anims2.asm"
+
+rept $2
+	db $ff
+endr
+
+SECTION "Anims 3", ROMX
+	INCLUDE "data/anims3.asm"
 
 Palette31:: ; b3feb (2c:7feb)
 	db 1, $d2, 1
@@ -932,8 +978,8 @@ Palette119:: ; b3ff6 (2c:7ff6)
 	db 0, 1
 	db $9c, $63, $1c, $32, $9c, $20, $00, $20
 
-SECTION "Gfx 15", ROMX
-	INCROM $b4000, $b738a
+SECTION "Anims 4", ROMX
+	INCLUDE "data/anims4.asm"
 
 SECTION "Palettes1", ROMX
 	INCLUDE "data/palettes1.asm"

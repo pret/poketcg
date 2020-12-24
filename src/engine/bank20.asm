@@ -1003,225 +1003,230 @@ MapDataPointers_8116b: ; 8116b (20:516b)
 	gfx_pointer PsychicGfx,         $04 ; $70
 	gfx_pointer FightingGfx,        $04 ; $71
 
-; pointer low, pointer high, bank (minus $20), unknown
+; \1 = anim data pointer
+anim_data_pointer: MACRO
+	dwb \1, BANK(\1) - BANK(SpriteAnimationPointers)
+	db $00 ; unused (padding?)
+ENDM
+
 SpriteAnimationPointers: ; 81333 (20:5333)
-	db $54, $4e, $0a, $00
-	db $4c, $7c, $00, $00
-	db $e4, $7f, $02, $00
-	db $e6, $7f, $03, $00
-	db $29, $4f, $0a, $00
-	db $e8, $7f, $05, $00
-	db $e2, $7f, $09, $00
-	db $fe, $4f, $0a, $00
-	db $0d, $50, $0a, $00
-	db $64, $50, $0a, $00
-	db $7b, $50, $0a, $00
-	db $f5, $7f, $03, $00
-	db $f4, $7f, $01, $00
-	db $d2, $50, $0a, $00
-	db $dd, $50, $0a, $00
-	db $b2, $51, $0a, $00
-	db $c1, $51, $0a, $00
-	db $d8, $51, $0a, $00
-	db $e7, $51, $0a, $00
-	db $bc, $52, $0a, $00
-	db $cb, $52, $0a, $00
-	db $e2, $52, $0a, $00
-	db $f1, $52, $0a, $00
-	db $c6, $53, $0a, $00
-	db $d5, $53, $0a, $00
-	db $ec, $53, $0a, $00
-	db $fb, $53, $0a, $00
-	db $d0, $54, $0a, $00
-	db $df, $54, $0a, $00
-	db $f6, $54, $0a, $00
-	db $05, $55, $0a, $00
-	db $da, $55, $0a, $00
-	db $e9, $55, $0a, $00
-	db $00, $56, $0a, $00
-	db $0f, $56, $0a, $00
-	db $e4, $56, $0a, $00
-	db $f3, $56, $0a, $00
-	db $0a, $57, $0a, $00
-	db $19, $57, $0a, $00
-	db $ee, $57, $0a, $00
-	db $fd, $57, $0a, $00
-	db $14, $58, $0a, $00
-	db $23, $58, $0a, $00
-	db $f8, $58, $0a, $00
-	db $07, $59, $0a, $00
-	db $1e, $59, $0a, $00
-	db $2d, $59, $0a, $00
-	db $84, $59, $0a, $00
-	db $9b, $59, $0a, $00
-	db $f2, $59, $0a, $00
-	db $fd, $59, $0a, $00
-	db $08, $5a, $0a, $00
-	db $13, $5a, $0a, $00
-	db $71, $5a, $0a, $00
-	db $80, $5a, $0a, $00
-	db $8f, $5a, $0a, $00
-	db $ed, $5a, $0a, $00
-	db $fc, $5a, $0a, $00
-	db $0b, $5b, $0a, $00
-	db $6e, $5b, $0a, $00
-	db $13, $5d, $0a, $00
-	db $6a, $5d, $0a, $00
-	db $c1, $5d, $0a, $00
-	db $18, $5e, $0a, $00
-	db $6f, $5e, $0a, $00
-	db $c6, $5e, $0a, $00
-	db $6b, $60, $0a, $00
-	db $c2, $60, $0a, $00
-	db $19, $61, $0a, $00
-	db $70, $61, $0a, $00
-	db $c7, $61, $0a, $00
-	db $1e, $62, $0a, $00
-	db $06, $63, $0a, $00
-	db $e7, $63, $0a, $00
-	db $d5, $64, $0a, $00
-	db $18, $66, $0a, $00
-	db $0f, $67, $0a, $00
-	db $9b, $68, $0a, $00
-	db $ba, $68, $0a, $00
-	db $e1, $68, $0a, $00
-	db $d7, $69, $0a, $00
-	db $5e, $6a, $0a, $00
-	db $e5, $6a, $0a, $00
-	db $6c, $6b, $0a, $00
-	db $f3, $6b, $0a, $00
-	db $7a, $6c, $0a, $00
-	db $01, $6d, $0a, $00
-	db $88, $6d, $0a, $00
-	db $0f, $6e, $0a, $00
-	db $96, $6e, $0a, $00
-	db $1d, $6f, $0a, $00
-	db $a4, $6f, $0a, $00
-	db $2b, $70, $0a, $00
-	db $fb, $70, $0a, $00
-	db $06, $71, $0a, $00
-	db $bb, $72, $0a, $00
-	db $05, $74, $0a, $00
-	db $6e, $76, $0a, $00
-	db $c1, $79, $0a, $00
-	db $0c, $7a, $0a, $00
-	db $00, $40, $0b, $00
-	db $cf, $7b, $0a, $00
-	db $fe, $7b, $0a, $00
-	db $11, $7c, $0a, $00
-	db $78, $7c, $0a, $00
-	db $eb, $7c, $0a, $00
-	db $a6, $7e, $0a, $00
-	db $03, $48, $0b, $00
-	db $16, $4a, $0b, $00
-	db $4c, $4b, $0b, $00
-	db $b6, $50, $0b, $00
-	db $64, $53, $0b, $00
-	db $c1, $54, $0b, $00
-	db $29, $58, $0b, $00
-	db $eb, $5a, $0b, $00
-	db $c5, $5d, $0b, $00
-	db $0c, $5e, $0b, $00
-	db $ee, $5f, $0b, $00
-	db $59, $60, $0b, $00
-	db $d4, $60, $0b, $00
-	db $bb, $62, $0b, $00
-	db $86, $65, $0b, $00
-	db $d9, $65, $0b, $00
-	db $7f, $67, $0b, $00
-	db $db, $6d, $0b, $00
-	db $f0, $6f, $0b, $00
-	db $1b, $71, $0b, $00
-	db $36, $73, $0b, $00
-	db $29, $78, $0b, $00
-	db $9f, $79, $0b, $00
-	db $8e, $7e, $0b, $00
-	db $00, $40, $0c, $00
-	db $b4, $41, $0c, $00
-	db $b6, $45, $0c, $00
-	db $d5, $49, $0c, $00
-	db $7b, $4c, $0c, $00
-	db $c6, $4d, $0c, $00
-	db $fd, $4e, $0c, $00
-	db $e2, $4f, $0c, $00
-	db $45, $51, $0c, $00
-	db $21, $54, $0c, $00
-	db $01, $57, $0c, $00
-	db $a0, $5a, $0c, $00
-	db $bc, $5c, $0c, $00
-	db $b1, $5d, $0c, $00
-	db $51, $5e, $0c, $00
-	db $d4, $5e, $0c, $00
-	db $7c, $60, $0c, $00
-	db $e3, $62, $0c, $00
-	db $ec, $7f, $0a, $00
-	db $c1, $7f, $0b, $00
-	db $d2, $64, $0c, $00
-	db $f4, $65, $0c, $00
-	db $63, $66, $0c, $00
-	db $17, $67, $0c, $00
-	db $7f, $67, $0c, $00
-	db $63, $69, $0c, $00
-	db $ea, $69, $0c, $00
-	db $e7, $6d, $0c, $00
-	db $f3, $73, $0c, $00
-	db $1e, $74, $0c, $00
-	db $49, $74, $0c, $00
-	db $dc, $7f, $0b, $00
-	db $74, $74, $0c, $00
-	db $97, $74, $0c, $00
-	db $ba, $74, $0c, $00
-	db $f3, $7f, $0b, $00
-	db $dd, $74, $0c, $00
-	db $cd, $75, $0c, $00
-	db $5c, $76, $0c, $00
-	db $eb, $76, $0c, $00
-	db $f6, $76, $0c, $00
-	db $01, $77, $0c, $00
-	db $e9, $78, $0c, $00
-	db $f8, $78, $0c, $00
-	db $07, $79, $0c, $00
-	db $34, $7d, $0c, $00
-	db $c3, $7d, $0c, $00
-	db $00, $40, $0d, $00
-	db $d2, $7d, $0c, $00
-	db $61, $7e, $0c, $00
-	db $2d, $44, $0d, $00
-	db $70, $7e, $0c, $00
-	db $41, $4a, $0d, $00
-	db $7f, $7e, $0c, $00
-	db $55, $50, $0d, $00
-	db $8e, $7e, $0c, $00
-	db $6f, $52, $0d, $00
-	db $9d, $7e, $0c, $00
-	db $ac, $7e, $0c, $00
-	db $3e, $7f, $0c, $00
-	db $89, $54, $0d, $00
-	db $eb, $54, $0d, $00
-	db $69, $56, $0d, $00
-	db $d4, $57, $0d, $00
-	db $ca, $59, $0d, $00
-	db $a0, $7f, $0c, $00
-	db $91, $5a, $0d, $00
-	db $cf, $5c, $0d, $00
-	db $d2, $5d, $0d, $00
-	db $f5, $5d, $0d, $00
-	db $0b, $60, $0d, $00
-	db $d2, $60, $0d, $00
-	db $1d, $61, $0d, $00
-	db $ab, $62, $0d, $00
-	db $d6, $63, $0d, $00
-	db $09, $64, $0d, $00
-	db $b7, $65, $0d, $00
-	db $e2, $66, $0d, $00
-	db $15, $67, $0d, $00
-	db $33, $69, $0d, $00
-	db $36, $6a, $0d, $00
-	db $59, $6a, $0d, $00
-	db $e7, $6b, $0d, $00
-	db $ae, $6c, $0d, $00
-	db $31, $6d, $0d, $00
-	db $67, $70, $0d, $00
+	anim_data_pointer AnimData0   ; $00
+	anim_data_pointer AnimData1   ; $01
+	anim_data_pointer AnimData2   ; $02
+	anim_data_pointer AnimData3   ; $03
+	anim_data_pointer AnimData4   ; $04
+	anim_data_pointer AnimData5   ; $05
+	anim_data_pointer AnimData6   ; $06
+	anim_data_pointer AnimData7   ; $07
+	anim_data_pointer AnimData8   ; $08
+	anim_data_pointer AnimData9   ; $09
+	anim_data_pointer AnimData10  ; $0a
+	anim_data_pointer AnimData11  ; $0b
+	anim_data_pointer AnimData12  ; $0c
+	anim_data_pointer AnimData13  ; $0d
+	anim_data_pointer AnimData14  ; $0e
+	anim_data_pointer AnimData15  ; $0f
+	anim_data_pointer AnimData16  ; $10
+	anim_data_pointer AnimData17  ; $11
+	anim_data_pointer AnimData18  ; $12
+	anim_data_pointer AnimData19  ; $13
+	anim_data_pointer AnimData20  ; $14
+	anim_data_pointer AnimData21  ; $15
+	anim_data_pointer AnimData22  ; $16
+	anim_data_pointer AnimData23  ; $17
+	anim_data_pointer AnimData24  ; $18
+	anim_data_pointer AnimData25  ; $19
+	anim_data_pointer AnimData26  ; $1a
+	anim_data_pointer AnimData27  ; $1b
+	anim_data_pointer AnimData28  ; $1c
+	anim_data_pointer AnimData29  ; $1d
+	anim_data_pointer AnimData30  ; $1e
+	anim_data_pointer AnimData31  ; $1f
+	anim_data_pointer AnimData32  ; $20
+	anim_data_pointer AnimData33  ; $21
+	anim_data_pointer AnimData34  ; $22
+	anim_data_pointer AnimData35  ; $23
+	anim_data_pointer AnimData36  ; $24
+	anim_data_pointer AnimData37  ; $25
+	anim_data_pointer AnimData38  ; $26
+	anim_data_pointer AnimData39  ; $27
+	anim_data_pointer AnimData40  ; $28
+	anim_data_pointer AnimData41  ; $29
+	anim_data_pointer AnimData42  ; $2a
+	anim_data_pointer AnimData43  ; $2b
+	anim_data_pointer AnimData44  ; $2c
+	anim_data_pointer AnimData45  ; $2d
+	anim_data_pointer AnimData46  ; $2e
+	anim_data_pointer AnimData47  ; $2f
+	anim_data_pointer AnimData48  ; $30
+	anim_data_pointer AnimData49  ; $31
+	anim_data_pointer AnimData50  ; $32
+	anim_data_pointer AnimData51  ; $33
+	anim_data_pointer AnimData52  ; $34
+	anim_data_pointer AnimData53  ; $35
+	anim_data_pointer AnimData54  ; $36
+	anim_data_pointer AnimData55  ; $37
+	anim_data_pointer AnimData56  ; $38
+	anim_data_pointer AnimData57  ; $39
+	anim_data_pointer AnimData58  ; $3a
+	anim_data_pointer AnimData59  ; $3b
+	anim_data_pointer AnimData60  ; $3c
+	anim_data_pointer AnimData61  ; $3d
+	anim_data_pointer AnimData62  ; $3e
+	anim_data_pointer AnimData63  ; $3f
+	anim_data_pointer AnimData64  ; $40
+	anim_data_pointer AnimData65  ; $41
+	anim_data_pointer AnimData66  ; $42
+	anim_data_pointer AnimData67  ; $43
+	anim_data_pointer AnimData68  ; $44
+	anim_data_pointer AnimData69  ; $45
+	anim_data_pointer AnimData70  ; $46
+	anim_data_pointer AnimData71  ; $47
+	anim_data_pointer AnimData72  ; $48
+	anim_data_pointer AnimData73  ; $49
+	anim_data_pointer AnimData74  ; $4a
+	anim_data_pointer AnimData75  ; $4b
+	anim_data_pointer AnimData76  ; $4c
+	anim_data_pointer AnimData77  ; $4d
+	anim_data_pointer AnimData78  ; $4e
+	anim_data_pointer AnimData79  ; $4f
+	anim_data_pointer AnimData80  ; $50
+	anim_data_pointer AnimData81  ; $51
+	anim_data_pointer AnimData82  ; $52
+	anim_data_pointer AnimData83  ; $53
+	anim_data_pointer AnimData84  ; $54
+	anim_data_pointer AnimData85  ; $55
+	anim_data_pointer AnimData86  ; $56
+	anim_data_pointer AnimData87  ; $57
+	anim_data_pointer AnimData88  ; $58
+	anim_data_pointer AnimData89  ; $59
+	anim_data_pointer AnimData90  ; $5a
+	anim_data_pointer AnimData91  ; $5b
+	anim_data_pointer AnimData92  ; $5c
+	anim_data_pointer AnimData93  ; $5d
+	anim_data_pointer AnimData94  ; $5e
+	anim_data_pointer AnimData95  ; $5f
+	anim_data_pointer AnimData96  ; $60
+	anim_data_pointer AnimData97  ; $61
+	anim_data_pointer AnimData98  ; $62
+	anim_data_pointer AnimData99  ; $63
+	anim_data_pointer AnimData100 ; $64
+	anim_data_pointer AnimData101 ; $65
+	anim_data_pointer AnimData102 ; $66
+	anim_data_pointer AnimData103 ; $67
+	anim_data_pointer AnimData104 ; $68
+	anim_data_pointer AnimData105 ; $69
+	anim_data_pointer AnimData106 ; $6a
+	anim_data_pointer AnimData107 ; $6b
+	anim_data_pointer AnimData108 ; $6c
+	anim_data_pointer AnimData109 ; $6d
+	anim_data_pointer AnimData110 ; $6e
+	anim_data_pointer AnimData111 ; $6f
+	anim_data_pointer AnimData112 ; $70
+	anim_data_pointer AnimData113 ; $71
+	anim_data_pointer AnimData114 ; $72
+	anim_data_pointer AnimData115 ; $73
+	anim_data_pointer AnimData116 ; $74
+	anim_data_pointer AnimData117 ; $75
+	anim_data_pointer AnimData118 ; $76
+	anim_data_pointer AnimData119 ; $77
+	anim_data_pointer AnimData120 ; $78
+	anim_data_pointer AnimData121 ; $79
+	anim_data_pointer AnimData122 ; $7a
+	anim_data_pointer AnimData123 ; $7b
+	anim_data_pointer AnimData124 ; $7c
+	anim_data_pointer AnimData125 ; $7d
+	anim_data_pointer AnimData126 ; $7e
+	anim_data_pointer AnimData127 ; $7f
+	anim_data_pointer AnimData128 ; $80
+	anim_data_pointer AnimData129 ; $81
+	anim_data_pointer AnimData130 ; $82
+	anim_data_pointer AnimData131 ; $83
+	anim_data_pointer AnimData132 ; $84
+	anim_data_pointer AnimData133 ; $85
+	anim_data_pointer AnimData134 ; $86
+	anim_data_pointer AnimData135 ; $87
+	anim_data_pointer AnimData136 ; $88
+	anim_data_pointer AnimData137 ; $89
+	anim_data_pointer AnimData138 ; $8a
+	anim_data_pointer AnimData139 ; $8b
+	anim_data_pointer AnimData140 ; $8c
+	anim_data_pointer AnimData141 ; $8d
+	anim_data_pointer AnimData142 ; $8e
+	anim_data_pointer AnimData143 ; $8f
+	anim_data_pointer AnimData144 ; $90
+	anim_data_pointer AnimData145 ; $91
+	anim_data_pointer AnimData146 ; $92
+	anim_data_pointer AnimData147 ; $93
+	anim_data_pointer AnimData148 ; $94
+	anim_data_pointer AnimData149 ; $95
+	anim_data_pointer AnimData150 ; $96
+	anim_data_pointer AnimData151 ; $97
+	anim_data_pointer AnimData152 ; $98
+	anim_data_pointer AnimData153 ; $99
+	anim_data_pointer AnimData154 ; $9a
+	anim_data_pointer AnimData155 ; $9b
+	anim_data_pointer AnimData156 ; $9c
+	anim_data_pointer AnimData157 ; $9d
+	anim_data_pointer AnimData158 ; $9e
+	anim_data_pointer AnimData159 ; $9f
+	anim_data_pointer AnimData160 ; $a0
+	anim_data_pointer AnimData161 ; $a1
+	anim_data_pointer AnimData162 ; $a2
+	anim_data_pointer AnimData163 ; $a3
+	anim_data_pointer AnimData164 ; $a4
+	anim_data_pointer AnimData165 ; $a5
+	anim_data_pointer AnimData166 ; $a6
+	anim_data_pointer AnimData167 ; $a7
+	anim_data_pointer AnimData168 ; $a8
+	anim_data_pointer AnimData169 ; $a9
+	anim_data_pointer AnimData170 ; $aa
+	anim_data_pointer AnimData171 ; $ab
+	anim_data_pointer AnimData172 ; $ac
+	anim_data_pointer AnimData173 ; $ad
+	anim_data_pointer AnimData174 ; $ae
+	anim_data_pointer AnimData175 ; $af
+	anim_data_pointer AnimData176 ; $b0
+	anim_data_pointer AnimData177 ; $b1
+	anim_data_pointer AnimData178 ; $b2
+	anim_data_pointer AnimData179 ; $b3
+	anim_data_pointer AnimData180 ; $b4
+	anim_data_pointer AnimData181 ; $b5
+	anim_data_pointer AnimData182 ; $b6
+	anim_data_pointer AnimData183 ; $b7
+	anim_data_pointer AnimData184 ; $b8
+	anim_data_pointer AnimData185 ; $b9
+	anim_data_pointer AnimData186 ; $ba
+	anim_data_pointer AnimData187 ; $bb
+	anim_data_pointer AnimData188 ; $bc
+	anim_data_pointer AnimData189 ; $bd
+	anim_data_pointer AnimData190 ; $be
+	anim_data_pointer AnimData191 ; $bf
+	anim_data_pointer AnimData192 ; $c0
+	anim_data_pointer AnimData193 ; $c1
+	anim_data_pointer AnimData194 ; $c2
+	anim_data_pointer AnimData195 ; $c3
+	anim_data_pointer AnimData196 ; $c4
+	anim_data_pointer AnimData197 ; $c5
+	anim_data_pointer AnimData198 ; $c6
+	anim_data_pointer AnimData199 ; $c7
+	anim_data_pointer AnimData200 ; $c8
+	anim_data_pointer AnimData201 ; $c9
+	anim_data_pointer AnimData202 ; $ca
+	anim_data_pointer AnimData203 ; $cb
+	anim_data_pointer AnimData204 ; $cc
+	anim_data_pointer AnimData205 ; $cd
+	anim_data_pointer AnimData206 ; $ce
+	anim_data_pointer AnimData207 ; $cf
+	anim_data_pointer AnimData208 ; $d0
+	anim_data_pointer AnimData209 ; $d1
+	anim_data_pointer AnimData210 ; $d2
+	anim_data_pointer AnimData211 ; $d3
+	anim_data_pointer AnimData212 ; $d4
+	anim_data_pointer AnimData213 ; $d5
+	anim_data_pointer AnimData214 ; $d6
+	anim_data_pointer AnimData215 ; $d7
+	anim_data_pointer AnimData216 ; $d8
 
 ; \1 = palette pointer
 ; \2 = number of palettes
@@ -1394,9 +1399,15 @@ MapDataPointers_81697: ; 81697 (20:5697)
 	palette_pointer Palette159, 1, 0 ; $9f
 	palette_pointer Palette160, 1, 0 ; $a0
 
-	INCROM $8191b, $83c5b
+	INCROM $8191b, $83c4c
 
-Palette110:: ; 83c5b (20:3c5b)
+AnimData1:: ; 83c4c (20:7c4c)
+	frame_table AnimFrameTable0
+	frame_data 3, 16, 0, 0
+	frame_data 4, 16, 0, 0
+	frame_data 0, 0, 0, 0
+
+Palette110:: ; 83c5b (20:7c5b)
 	db $00, $00
 
 	INCROM $83c5d, $84000

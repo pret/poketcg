@@ -610,26 +610,26 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	jr z, .check_to_play_sfx
 
 	push hl
-	ld bc, $0003
+	lb bc, 0, $03
 	add hl, bc
 	ld a, [hl]
 	and %10000000
 	pop hl
-
 	jr z, .return
+
 .check_to_play_sfx
 	push hl
-	ld bc, $0004
+	lb bc, 0, $04
 	add hl, bc
 	ld a, [hl]
 	pop hl
-
 	or a
 	jr z, .calc_addr
 	call PlaySFX
+
 .calc_addr
 	push hl
-	ld bc, $0005
+	lb bc, 0, $05
 	add hl, bc
 	ld a, [hl]
 	rlca
@@ -652,9 +652,9 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ret
 
 .address
-	dw Func_1c94a
+	dw .asm_1c94a
 
-Func_1c94a: ; 1c94a (7:494a)
+.asm_1c94a ; 1c94a (7:494a)
 ; if any of the first 3 bytes is $00, return carry
 	ld e, l
 	ld d, h
@@ -687,11 +687,11 @@ Func_1c94a: ; 1c94a (7:494a)
 	pop af
 	farcall StartNewSpriteAnimation
 	or a
-	jr .return
+	jr .done
 
 .return_with_carry
 	scf
-.return
+.done
 	ret
 
 Func_1c980: ; 1c980 (7:4980)
@@ -1467,7 +1467,7 @@ macro_1ce32: MACRO
 ENDM
 
 Data_1ce32: ; 1ce32 (7:4e32)
-; sprite id, ?, ?, anim flags, ?, ?
+; sprite ID, palette ID, anim ID, anim flags, sound fx ID, ?
 	macro_1ce32 $00, $00, $00, $00,                               $00, $00 ; $00
 	macro_1ce32 $28, $1f, $47, %10000000,                         $11, $00 ; $01
 	macro_1ce32 $29, $20, $48, %10000000,                         $12, $00 ; $02

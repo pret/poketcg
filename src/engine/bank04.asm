@@ -1596,6 +1596,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	ld a, [wTempPointer + 1]
 	ld [hli], a
 	ld b, a
+	; offset pointer = pointer + $3
 	ld a, $3
 	add c
 	ld [hli], a
@@ -1619,6 +1620,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	add hl, bc
 	ld a, [hli]
 	ld [wTempPointerBank], a
+
 	inc hl
 	inc hl
 	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
@@ -1629,6 +1631,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	ld [wTempPointer + 1], a
 	adc 0
 	ld [hl], a
+
 	ld de, wd23e
 	ld bc, SPRITE_FRAME_OFFSET_SIZE
 	call CopyBankedDataToDE
@@ -1708,7 +1711,7 @@ SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
 	ld bc, SPRITE_ANIM_POINTER - SPRITE_ANIM_COUNTER
 	add hl, bc
 	ld a, [hli]
-	add 3 ; skip base bank/pointer at beginning of data structure
+	add $3 ; skip base bank/pointer at beginning of data structure
 	ld c, a
 	ld a, [hli]
 	adc 0
