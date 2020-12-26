@@ -158,3 +158,9 @@ SPRITE_FRAME_OFFSET_SIZE EQU 4
 	const ANIM_SPRITE_ANIM_FLAGS
 	const ANIM_SOUND_FX_ID
 	const ANIM_HANDLER_FUNCTION
+
+; Animation duel screen constants (see wDuelAnimationScreen)
+	const_def
+	const DUEL_ANIM_SCREEN_MAIN_SCENE
+	const DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
+	const DUEL_ANIM_SCREEN_OPP_PLAY_AREA

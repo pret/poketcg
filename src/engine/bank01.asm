@@ -6894,8 +6894,8 @@ Func_6cab: ; 6cab (1:6cab)
 .asm_6ccb
 	xor a
 	ld [wd4b0], a
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	pop af
 	call Func_3b6a
 .asm_6cd8

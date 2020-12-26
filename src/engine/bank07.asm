@@ -153,7 +153,7 @@ Func_1c485: ; 1c485 (7:4485)
 .foundEmptyIndex
 	ld a, b
 	ld [wLoadedNPCTempIndex], a
-	ld a, [wd3b3]
+	ld a, [wNPCSpriteID]
 	farcall CreateSpriteAndAnimBufferEntry
 	jr c, .exit
 	ld a, [wLoadedNPCTempIndex]
@@ -690,7 +690,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	push af
 	ld a, [hli] ; ANIM_SPRITE_ANIM_FLAGS
 	ld [wAnimFlags], a
-	call Func_1c980
+	call LoadAnimCoordsAndFlags
 	pop af
 
 	farcall StartNewSpriteAnimation
@@ -702,13 +702,15 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 .done
 	ret
 
-Func_1c980: ; 1c980 (7:4980)
+; loads the correct coordinates/flags for
+; sprite animation in wAnimationQueue
+LoadAnimCoordsAndFlags: ; 1c980 (7:4980)
 	push hl
 	push bc
 	ld a, [wAnimationQueue]
 	ld c, SPRITE_ANIM_ATTRIBUTES
 	call GetSpriteAnimBufferProperty_SpriteInA
-	call Func_1c9a2
+	call GetAnimCoordsAndFlags
 
 	push af
 	and (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5)
@@ -721,7 +723,7 @@ Func_1c980: ; 1c980 (7:4980)
 
 	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_Y
 	add hl, bc
-	ld c, a
+	ld c, a ; useless
 	and (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
 	or [hl]
 	ld [hl], a
@@ -729,38 +731,42 @@ Func_1c980: ; 1c980 (7:4980)
 	pop hl
 	ret
 
+; outputs x and y coordinates for the sprite animation
+; taking into account who the turn duelist is.
+; also returns in a the allowed animation flags of
+; the configuration that is selected.
 ; output:
 ; a = anim flags
 ; b = x coordinate
 ; c = y coordinate
-Func_1c9a2: ; 1c9a2 (7:49a2)
+GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
 	push hl
 	ld c, 0
 	ld a, [wAnimFlags]
 	and (1 << SPRITE_ANIM_FLAG_SPEED)
 	jr nz, .calc_addr
 
-	ld a, [wd4ae]
-	add a ; 2 * [wd4ae]
+	ld a, [wDuelAnimationScreen]
+	add a ; 2 * [wDuelAnimationScreen]
 	ld c, a
-	add a ; 4 * [wd4ae]
-	add c ; 6 * [wd4ae]
-	add a ; 12 * [wd4ae]
+	add a ; 4 * [wDuelAnimationScreen]
+	add c ; 6 * [wDuelAnimationScreen]
+	add a ; 12 * [wDuelAnimationScreen]
 	ld c, a
 
 	ld a, [wd4af]
 	cp PLAYER_TURN
-	jr z, .player_turn
-
+	jr z, .player_side
+; opponent side
 	ld a, 6
 	add c
 	ld c, a
-.player_turn
+.player_side
 	ld a, [wd4b0]
 	add c ; a = [wd4b0] + c
 	ld c, a
 	ld b, 0
-	ld hl, Data_1c9e0
+	ld hl, AnimationCoordinatesIndex
 	add hl, bc
 	ld c, [hl]
 
@@ -770,50 +776,59 @@ Func_1c9a2: ; 1c9a2 (7:49a2)
 	add c ; a = c * 3
 	ld c, a
 	ld b, 0
-	ld hl, Data_1ca04
+	ld hl, AnimationCoordinates
 	add hl, bc
-	ld b, [hl]
+	ld b, [hl] ; x coord
 	inc hl
-	ld c, [hl]
+	ld c, [hl] ; y coord
 	inc hl
 	ld a, [wAnimFlags]
-	and [hl]
+	and [hl] ; flags
 	pop hl
 	ret
 
-Data_1c9e0:
+AnimationCoordinatesIndex:
+; animations in the Duel Main Scene
 	db $01, $01, $01, $01, $01, $01 ; player
 	db $02, $02, $02, $02, $02, $02 ; opponent
 
+; animations in the Player's Play Area, for each Play Area Pokemon
 	db $03, $04, $05, $06, $07, $08 ; player
 	db $03, $04, $05, $06, $07, $08 ; opponent
 
+; animations in the Opponent's Play Area, for each Play Area Pokemon
 	db $09, $0a, $0b, $0c, $0d, $0e ; player
 	db $09, $0a, $0b, $0c, $0d, $0e ; opponent
 
-macro_1ca04: MACRO
+anim_coords: MACRO
 	db \1
 	db \2
 	db \3
 ENDM
 
-Data_1ca04:
+AnimationCoordinates:
 ; x coord, y coord, animation flags
-	macro_1ca04 $58, $58, (1 << SPRITE_ANIM_FLAG_3)
-	macro_1ca04 $28, $50, $00
-	macro_1ca04 $88, $30, (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
-	macro_1ca04 $58, $48, $00
-	macro_1ca04 $18, $60, $00
-	macro_1ca04 $38, $60, $00
-	macro_1ca04 $58, $60, $00
-	macro_1ca04 $78, $60, $00
-	macro_1ca04 $98, $60, $00
-	macro_1ca04 $58, $50, $00
-	macro_1ca04 $98, $28, $00
-	macro_1ca04 $78, $28, $00
-	macro_1ca04 $58, $28, $00
-	macro_1ca04 $38, $28, $00
-	macro_1ca04 $18, $28, $00
+	anim_coords 88,  88, (1 << SPRITE_ANIM_FLAG_3)
+
+; animations in the Duel Main Scene
+	anim_coords 40,  80, $00
+	anim_coords 136, 48, (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
+
+; animations in the Player's Play Area, for each Play Area Pokemon
+	anim_coords 88,  72, $00
+	anim_coords 24,  96, $00
+	anim_coords 56,  96, $00
+	anim_coords 88,  96, $00
+	anim_coords 120, 96, $00
+	anim_coords 152, 96, $00
+
+; animations in the Opponent's Play Area, for each Play Area Pokemon
+	anim_coords 88,  80, $00
+	anim_coords 152, 40, $00
+	anim_coords 120, 40, $00
+	anim_coords 88,  40, $00
+	anim_coords 56,  40, $00
+	anim_coords 24,  40, $00
 
 Func_1ca31: ; 1ca31 (7:4a31)
 	push hl
@@ -834,7 +849,7 @@ Func_1ca31: ; 1ca31 (7:4a31)
 	add hl, bc
 	ld a, [wTempAnimation]
 	ld [hli], a
-	ld a, [wd4ae]
+	ld a, [wDuelAnimationScreen]
 	ld [hli], a
 	ld a, [wd4af]
 	ld [hli], a
@@ -875,7 +890,7 @@ Func_1ca6e: ; 1ca6e (7:4a6e)
 	ld a, [hli]
 	ld [wTempAnimation], a
 	ld a, [hli]
-	ld [wd4ae], a
+	ld [wDuelAnimationScreen], a
 	ld a, [hli]
 	ld [wd4af], a
 	ld a, [hli]
@@ -1084,7 +1099,7 @@ Func_1cba6: ; 1cba6 (7:4ba6)
 
 Func_1cbcc: ; 1cbcc (7:4bcc)
 	push af
-	ld a, $2e
+	ld a, SPRITE_DUEL_4
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [de], a
@@ -1092,7 +1107,7 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	ld [wAnimFlags], a
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
-	call Func_1c9a2
+	call GetAnimCoordsAndFlags
 
 	ld a, [wd4b7]
 	add $fd
@@ -1442,780 +1457,779 @@ Func_1ce03: ; 1ce03 (7:4e03)
 Animations: ; 1ce32 (7:4e32)
 	; $00
 	db $00 ; sprite ID
-	db $00 ; paletteID
+	db $00 ; palette ID
 	db $00 ; anim ID
 	db $00 ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $01
-	db $28 ; sprite ID
-	db $1f ; paletteID
+	db SPRITE_DUEL_GLOW ; sprite ID
+	db $1f ; palette ID
 	db $47 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $11 ; sound FX ID
 	db $00 ; handler function
 
 	; $02
-	db $29 ; sprite ID
-	db $20 ; paletteID
+	db SPRITE_DUEL_1 ; sprite ID
+	db $20 ; palette ID
 	db $48 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $12 ; sound FX ID
 	db $00 ; handler function
 
 	; $03
-	db $2a ; sprite ID
-	db $21 ; paletteID
+	db SPRITE_DUEL_2 ; sprite ID
+	db $21 ; palette ID
 	db $49 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $13 ; sound FX ID
 	db $00 ; handler function
 
 	; $04
-	db $2b ; sprite ID
-	db $22 ; paletteID
+	db SPRITE_DUEL_55 ; sprite ID
+	db $22 ; palette ID
 	db $4a ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $14 ; sound FX ID
 	db $00 ; handler function
 
 	; $05
-	db $2c ; sprite ID
-	db $23 ; paletteID
+	db SPRITE_DUEL_58 ; sprite ID
+	db $23 ; palette ID
 	db $4b ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $15 ; sound FX ID
 	db $00 ; handler function
 
 	; $06
-	db $2d ; sprite ID
-	db $24 ; paletteID
+	db SPRITE_DUEL_3 ; sprite ID
+	db $24 ; palette ID
 	db $4c ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $16 ; sound FX ID
 	db $00 ; handler function
 
 	; $07
-	db $2d ; sprite ID
-	db $24 ; paletteID
+	db SPRITE_DUEL_3 ; sprite ID
+	db $24 ; palette ID
 	db $4d ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $16 ; sound FX ID
 	db $00 ; handler function
 
 	; $08
-	db $2d ; sprite ID
-	db $24 ; paletteID
+	db SPRITE_DUEL_3 ; sprite ID
+	db $24 ; palette ID
 	db $4e ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $17 ; sound FX ID
 	db $00 ; handler function
 
 	; $09
-	db $2e ; sprite ID
-	db $25 ; paletteID
+	db SPRITE_DUEL_4 ; sprite ID
+	db $25 ; palette ID
 	db $00 ; anim ID
 	db $00 ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $0a
-	db $2f ; sprite ID
-	db $26 ; paletteID
+	db SPRITE_DUEL_5 ; sprite ID
+	db $26 ; palette ID
 	db $5c ; anim ID
 	db $00 ; anim flags
 	db $18 ; sound FX ID
 	db $00 ; handler function
 
 	; $0b
-	db $30 ; sprite ID
-	db $27 ; paletteID
+	db SPRITE_DUEL_6 ; sprite ID
+	db $27 ; palette ID
 	db $5e ; anim ID
 	db $00 ; anim flags
 	db $19 ; sound FX ID
 	db $00 ; handler function
 
 	; $0c
-	db $31 ; sprite ID
-	db $28 ; paletteID
+	db SPRITE_DUEL_59 ; sprite ID
+	db $28 ; palette ID
 	db $5f ; anim ID
 	db $00 ; anim flags
 	db $1a ; sound FX ID
 	db $00 ; handler function
 
 	; $0d
-	db $32 ; sprite ID
-	db $29 ; paletteID
+	db SPRITE_DUEL_7 ; sprite ID
+	db $29 ; palette ID
 	db $60 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $1b ; sound FX ID
 	db $00 ; handler function
 
 	; $0e
-	db $33 ; sprite ID
-	db $2a ; paletteID
+	db SPRITE_DUEL_8 ; sprite ID
+	db $2a ; palette ID
 	db $61 ; anim ID
 	db $00 ; anim flags
 	db $1c ; sound FX ID
 	db $00 ; handler function
 
 	; $0f
-	db $33 ; sprite ID
-	db $2a ; paletteID
+	db SPRITE_DUEL_8 ; sprite ID
+	db $2a ; palette ID
 	db $62 ; anim ID
 	db $00 ; anim flags
 	db $1d ; sound FX ID
 	db $00 ; handler function
 
 	; $10
-	db $34 ; sprite ID
-	db $2b ; paletteID
+	db SPRITE_DUEL_9 ; sprite ID
+	db $2b ; palette ID
 	db $63 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $1e ; sound FX ID
 	db $00 ; handler function
 
 	; $11
-	db $35 ; sprite ID
-	db $2c ; paletteID
+	db SPRITE_DUEL_10 ; sprite ID
+	db $2c ; palette ID
 	db $64 ; anim ID
 	db $00 ; anim flags
 	db $1f ; sound FX ID
 	db $00 ; handler function
 
 	; $12
-	db $36 ; sprite ID
-	db $2d ; paletteID
+	db SPRITE_DUEL_61 ; sprite ID
+	db $2d ; palette ID
 	db $69 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $20 ; sound FX ID
 	db $00 ; handler function
 
 	; $13
-	db $37 ; sprite ID
-	db $2e ; paletteID
+	db SPRITE_DUEL_11 ; sprite ID
+	db $2e ; palette ID
 	db $6a ; anim ID
 	db $00 ; anim flags
 	db $21 ; sound FX ID
 	db $00 ; handler function
 
 	; $14
-	db $38 ; sprite ID
-	db $2f ; paletteID
+	db SPRITE_DUEL_12 ; sprite ID
+	db $2f ; palette ID
 	db $6b ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $22 ; sound FX ID
 	db $00 ; handler function
 
 	; $15
-	db $39 ; sprite ID
-	db $30 ; paletteID
+	db SPRITE_DUEL_13 ; sprite ID
+	db $30 ; palette ID
 	db $6c ; anim ID
 	db $00 ; anim flags
 	db $23 ; sound FX ID
 	db $00 ; handler function
 
 	; $16
-	db $3a ; sprite ID
-	db $31 ; paletteID
+	db SPRITE_DUEL_62 ; sprite ID
+	db $31 ; palette ID
 	db $6d ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $24 ; sound FX ID
 	db $00 ; handler function
 
 	; $17
-	db $3b ; sprite ID
-	db $32 ; paletteID
+	db SPRITE_DUEL_14 ; sprite ID
+	db $32 ; palette ID
 	db $6e ; anim ID
 	db $00 ; anim flags
 	db $25 ; sound FX ID
 	db $00 ; handler function
 
 	; $18
-	db $3c ; sprite ID
-	db $33 ; paletteID
+	db SPRITE_DUEL_15 ; sprite ID
+	db $33 ; palette ID
 	db $6f ; anim ID
 	db $00 ; anim flags
 	db $26 ; sound FX ID
 	db $00 ; handler function
 
 	; $19
-	db $3d ; sprite ID
-	db $34 ; paletteID
+	db SPRITE_DUEL_16 ; sprite ID
+	db $34 ; palette ID
 	db $70 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) ; anim flags
 	db $27 ; sound FX ID
 	db $00 ; handler function
 
 	; $1a
-	db $3e ; sprite ID
-	db $35 ; paletteID
+	db SPRITE_DUEL_17 ; sprite ID
+	db $35 ; palette ID
 	db $71 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) ; anim flags
 	db $28 ; sound FX ID
 	db $00 ; handler function
 
 	; $1b
-	db $3f ; sprite ID
-	db $36 ; paletteID
+	db SPRITE_DUEL_18 ; sprite ID
+	db $36 ; palette ID
 	db $72 ; anim ID
 	db $00 ; anim flags
 	db $29 ; sound FX ID
 	db $00 ; handler function
 
 	; $1c
-	db $3f ; sprite ID
-	db $36 ; paletteID
+	db SPRITE_DUEL_18 ; sprite ID
+	db $36 ; palette ID
 	db $73 ; anim ID
 	db $00 ; anim flags
 	db $2a ; sound FX ID
 	db $00 ; handler function
 
 	; $1d
-	db $40 ; sprite ID
-	db $37 ; paletteID
+	db SPRITE_DUEL_19 ; sprite ID
+	db $37 ; palette ID
 	db $74 ; anim ID
 	db $00 ; anim flags
 	db $2b ; sound FX ID
 	db $00 ; handler function
 
 	; $1e
-	db $40 ; sprite ID
-	db $37 ; paletteID
+	db SPRITE_DUEL_19 ; sprite ID
+	db $37 ; palette ID
 	db $75 ; anim ID
 	db $00 ; anim flags
 	db $52 ; sound FX ID
 	db $00 ; handler function
 
 	; $1f
-	db $40 ; sprite ID
-	db $37 ; paletteID
+	db SPRITE_DUEL_19 ; sprite ID
+	db $37 ; palette ID
 	db $76 ; anim ID
 	db $00 ; anim flags
 	db $53 ; sound FX ID
 	db $00 ; handler function
 
 	; $20
-	db $41 ; sprite ID
-	db $38 ; paletteID
+	db SPRITE_DUEL_20 ; sprite ID
+	db $38 ; palette ID
 	db $77 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
 	db $2c ; sound FX ID
 	db $00 ; handler function
 
 	; $21
-	db $42 ; sprite ID
-	db $39 ; paletteID
+	db SPRITE_DUEL_21 ; sprite ID
+	db $39 ; palette ID
 	db $78 ; anim ID
 	db $00 ; anim flags
 	db $2d ; sound FX ID
 	db $00 ; handler function
 
 	; $22
-	db $43 ; sprite ID
-	db $3a ; paletteID
+	db SPRITE_DUEL_22 ; sprite ID
+	db $3a ; palette ID
 	db $7a ; anim ID
 	db $00 ; anim flags
 	db $2d ; sound FX ID
 	db $00 ; handler function
 
 	; $23
-	db $44 ; sprite ID
-	db $3b ; paletteID
+	db SPRITE_DUEL_23 ; sprite ID
+	db $3b ; palette ID
 	db $7b ; anim ID
 	db $00 ; anim flags
 	db $2e ; sound FX ID
 	db $00 ; handler function
 
 	; $24
-	db $42 ; sprite ID
-	db $39 ; paletteID
+	db SPRITE_DUEL_21 ; sprite ID
+	db $39 ; palette ID
 	db $79 ; anim ID
 	db $00 ; anim flags
 	db $2f ; sound FX ID
 	db $00 ; handler function
 
 	; $25
-	db $45 ; sprite ID
-	db $3c ; paletteID
+	db SPRITE_DUEL_24 ; sprite ID
+	db $3c ; palette ID
 	db $7c ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
 	db $30 ; sound FX ID
 	db $00 ; handler function
 
 	; $26
-	db $46 ; sprite ID
-	db $3d ; paletteID
+	db SPRITE_DUEL_25 ; sprite ID
+	db $3d ; palette ID
 	db $7d ; anim ID
 	db $00 ; anim flags
 	db $31 ; sound FX ID
 	db $00 ; handler function
 
 	; $27
-	db $47 ; sprite ID
-	db $3e ; paletteID
+	db SPRITE_DUEL_26 ; sprite ID
+	db $3e ; palette ID
 	db $7e ; anim ID
 	db $00 ; anim flags
 	db $32 ; sound FX ID
 	db $00 ; handler function
 
 	; $28
-	db $48 ; sprite ID
-	db $3f ; paletteID
+	db SPRITE_DUEL_27 ; sprite ID
+	db $3f ; palette ID
 	db $7f ; anim ID
 	db $00 ; anim flags
 	db $33 ; sound FX ID
 	db $00 ; handler function
 
 	; $29
-	db $49 ; sprite ID
-	db $40 ; paletteID
+	db SPRITE_DUEL_28 ; sprite ID
+	db $40 ; palette ID
 	db $80 ; anim ID
 	db $00 ; anim flags
 	db $34 ; sound FX ID
 	db $00 ; handler function
 
 	; $2a
-	db $4a ; sprite ID
-	db $41 ; paletteID
+	db SPRITE_DUEL_29 ; sprite ID
+	db $41 ; palette ID
 	db $81 ; anim ID
 	db $00 ; anim flags
 	db $35 ; sound FX ID
 	db $00 ; handler function
 
 	; $2b
-	db $4b ; sprite ID
-	db $42 ; paletteID
+	db SPRITE_DUEL_56 ; sprite ID
+	db $42 ; palette ID
 	db $82 ; anim ID
 	db $00 ; anim flags
 	db $36 ; sound FX ID
 	db $00 ; handler function
 
 	; $2c
-	db $4c ; sprite ID
-	db $43 ; paletteID
+	db SPRITE_DUEL_30 ; sprite ID
+	db $43 ; palette ID
 	db $83 ; anim ID
 	db $00 ; anim flags
 	db $37 ; sound FX ID
 	db $00 ; handler function
 
 	; $2d
-	db $4d ; sprite ID
-	db $44 ; paletteID
+	db SPRITE_DUEL_31 ; sprite ID
+	db $44 ; palette ID
 	db $84 ; anim ID
 	db $00 ; anim flags
 	db $38 ; sound FX ID
 	db $00 ; handler function
 
 	; $2e
-	db $4e ; sprite ID
-	db $45 ; paletteID
+	db SPRITE_DUEL_32 ; sprite ID
+	db $45 ; palette ID
 	db $85 ; anim ID
 	db $00 ; anim flags
 	db $39 ; sound FX ID
 	db $00 ; handler function
 
 	; $2f
-	db $4f ; sprite ID
-	db $46 ; paletteID
+	db SPRITE_DUEL_33 ; sprite ID
+	db $46 ; palette ID
 	db $86 ; anim ID
 	db $00 ; anim flags
 	db $3a ; sound FX ID
 	db $00 ; handler function
 
 	; $30
-	db $50 ; sprite ID
-	db $47 ; paletteID
+	db SPRITE_DUEL_34 ; sprite ID
+	db $47 ; palette ID
 	db $87 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
 	db $3b ; sound FX ID
 	db $00 ; handler function
 
 	; $31
-	db $51 ; sprite ID
-	db $48 ; paletteID
+	db SPRITE_DUEL_35 ; sprite ID
+	db $48 ; palette ID
 	db $88 ; anim ID
 	db $00 ; anim flags
 	db $3c ; sound FX ID
 	db $00 ; handler function
 
 	; $32
-	db $52 ; sprite ID
-	db $49 ; paletteID
+	db SPRITE_DUEL_66 ; sprite ID
+	db $49 ; palette ID
 	db $89 ; anim ID
 	db $00 ; anim flags
 	db $3d ; sound FX ID
 	db $00 ; handler function
 
 	; $33
-	db $53 ; sprite ID
-	db $4a ; paletteID
+	db SPRITE_DUEL_36 ; sprite ID
+	db $4a ; palette ID
 	db $8a ; anim ID
 	db $00 ; anim flags
 	db $3e ; sound FX ID
 	db $00 ; handler function
 
 	; $34
-	db $54 ; sprite ID
-	db $4b ; paletteID
+	db SPRITE_DUEL_37 ; sprite ID
+	db $4b ; palette ID
 	db $8b ; anim ID
 	db $00 ; anim flags
 	db $3f ; sound FX ID
 	db $00 ; handler function
 
 	; $35
-	db $55 ; sprite ID
-	db $4c ; paletteID
+	db SPRITE_DUEL_57 ; sprite ID
+	db $4c ; palette ID
 	db $8c ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $40 ; sound FX ID
 	db $00 ; handler function
 
 	; $36
-	db $56 ; sprite ID
-	db $4d ; paletteID
+	db SPRITE_DUEL_38 ; sprite ID
+	db $4d ; palette ID
 	db $8d ; anim ID
 	db $00 ; anim flags
 	db $41 ; sound FX ID
 	db $00 ; handler function
 
 	; $37
-	db $57 ; sprite ID
-	db $4e ; paletteID
+	db SPRITE_DUEL_39 ; sprite ID
+	db $4e ; palette ID
 	db $8e ; anim ID
 	db $00 ; anim flags
 	db $42 ; sound FX ID
 	db $00 ; handler function
 
 	; $38
-	db $58 ; sprite ID
-	db $4f ; paletteID
+	db SPRITE_DUEL_40 ; sprite ID
+	db $4f ; palette ID
 	db $8f ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $43 ; sound FX ID
 	db $00 ; handler function
 
 	; $39
-	db $59 ; sprite ID
-	db $50 ; paletteID
+	db SPRITE_DUEL_41 ; sprite ID
+	db $50 ; palette ID
 	db $90 ; anim ID
 	db $00 ; anim flags
 	db $44 ; sound FX ID
 	db $00 ; handler function
 
 	; $3a
-	db $5a ; sprite ID
-	db $51 ; paletteID
+	db SPRITE_DUEL_42 ; sprite ID
+	db $51 ; palette ID
 	db $92 ; anim ID
 	db $00 ; anim flags
 	db $45 ; sound FX ID
 	db $00 ; handler function
 
 	; $3b
-	db $5b ; sprite ID
-	db $52 ; paletteID
+	db SPRITE_DUEL_43 ; sprite ID
+	db $52 ; palette ID
 	db $93 ; anim ID
 	db $00 ; anim flags
 	db $46 ; sound FX ID
 	db $00 ; handler function
 
 	; $3c
-	db $5c ; sprite ID
-	db $53 ; paletteID
+	db SPRITE_DUEL_44 ; sprite ID
+	db $53 ; palette ID
 	db $94 ; anim ID
 	db $00 ; anim flags
 	db $47 ; sound FX ID
 	db $00 ; handler function
 
 	; $3d
-	db $5c ; sprite ID
-	db $53 ; paletteID
+	db SPRITE_DUEL_44 ; sprite ID
+	db $53 ; palette ID
 	db $95 ; anim ID
 	db $00 ; anim flags
 	db $48 ; sound FX ID
 	db $00 ; handler function
 
 	; $3e
-	db $5d ; sprite ID
-	db $54 ; paletteID
+	db SPRITE_DUEL_60 ; sprite ID
+	db $54 ; palette ID
 	db $97 ; anim ID
 	db $00 ; anim flags
 	db $49 ; sound FX ID
 	db $00 ; handler function
 
 	; $3f
-	db $5e ; sprite ID
-	db $55 ; paletteID
+	db SPRITE_DUEL_64 ; sprite ID
+	db $55 ; palette ID
 	db $99 ; anim ID
 	db $00 ; anim flags
 	db $4a ; sound FX ID
 	db $00 ; handler function
 
 	; $40
-	db $4a ; sprite ID
-	db $56 ; paletteID
+	db SPRITE_DUEL_29 ; sprite ID
+	db $56 ; palette ID
 	db $81 ; anim ID
 	db $00 ; anim flags
 	db $4b ; sound FX ID
 	db $00 ; handler function
 
 	; $41
-	db $5c ; sprite ID
-	db $53 ; paletteID
+	db SPRITE_DUEL_44 ; sprite ID
+	db $53 ; palette ID
 	db $96 ; anim ID
 	db $00 ; anim flags
 	db $47 ; sound FX ID
 	db $00 ; handler function
 
 	; $42
-	db $2d ; sprite ID
-	db $24 ; paletteID
+	db SPRITE_DUEL_3 ; sprite ID
+	db $24 ; palette ID
 	db $4d ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $16 ; sound FX ID
 	db $00 ; handler function
 
 	; $43
-	db $2d ; sprite ID
-	db $24 ; paletteID
+	db SPRITE_DUEL_3 ; sprite ID
+	db $24 ; palette ID
 	db $4e ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $17 ; sound FX ID
 	db $00 ; handler function
 
 	; $44
-	db $2f ; sprite ID
-	db $26 ; paletteID
+	db SPRITE_DUEL_5 ; sprite ID
+	db $26 ; palette ID
 	db $5c ; anim ID
 	db $00 ; anim flags
 	db $18 ; sound FX ID
 	db $00 ; handler function
 
 	; $45
-	db $3a ; sprite ID
-	db $31 ; paletteID
+	db SPRITE_DUEL_62 ; sprite ID
+	db $31 ; palette ID
 	db $6d ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $24 ; sound FX ID
 	db $00 ; handler function
 
 	; $46
-	db $5f ; sprite ID
-	db $57 ; paletteID
+	db SPRITE_DUEL_45 ; sprite ID
+	db $57 ; palette ID
 	db $9a ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
 	db $11 ; sound FX ID
 	db $00 ; handler function
 
 	; $47
-	db $35 ; sprite ID
-	db $2c ; paletteID
+	db SPRITE_DUEL_10 ; sprite ID
+	db $2c ; palette ID
 	db $65 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $5c ; sound FX ID
 	db $00 ; handler function
 
 	; $48
-	db $35 ; sprite ID
-	db $2c ; paletteID
+	db SPRITE_DUEL_10 ; sprite ID
+	db $2c ; palette ID
 	db $66 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $49
-	db $5d ; sprite ID
-	db $54 ; paletteID
+	db SPRITE_DUEL_60 ; sprite ID
+	db $54 ; palette ID
 	db $98 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $4c ; sound FX ID
 	db $00 ; handler function
 
 	; $4a
-	db $59 ; sprite ID
-	db $50 ; paletteID
+	db SPRITE_DUEL_41 ; sprite ID
+	db $50 ; palette ID
 	db $91 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $4d ; sound FX ID
 	db $00 ; handler function
 
 	; $4b
-	db $60 ; sprite ID
-	db $58 ; paletteID
+	db SPRITE_DUEL_46 ; sprite ID
+	db $58 ; palette ID
 	db $9b ; anim ID
 	db $00 ; anim flags
 	db $4e ; sound FX ID
 	db $00 ; handler function
 
 	; $4c
-	db $61 ; sprite ID
-	db $59 ; paletteID
+	db SPRITE_DUEL_47 ; sprite ID
+	db $59 ; palette ID
 	db $9c ; anim ID
 	db $00 ; anim flags
 	db $4f ; sound FX ID
 	db $00 ; handler function
 
 	; $4d
-	db $62 ; sprite ID
-	db $5a ; paletteID
+	db SPRITE_DUEL_48 ; sprite ID
+	db $5a ; palette ID
 	db $9d ; anim ID
 	db $00 ; anim flags
 	db $50 ; sound FX ID
 	db $00 ; handler function
 
 	; $4e
-	db $35 ; sprite ID
-	db $2c ; paletteID
+	db SPRITE_DUEL_10 ; sprite ID
+	db $2c ; palette ID
 	db $67 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $51 ; sound FX ID
 	db $00 ; handler function
 
 	; $4f
-	db $35 ; sprite ID
-	db $2c ; paletteID
+	db SPRITE_DUEL_10 ; sprite ID
+	db $2c ; palette ID
 	db $68 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $51 ; sound FX ID
 	db $00 ; handler function
 
 	; $50
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $9e ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $51
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $9f ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $07 ; sound FX ID
 	db $00 ; handler function
 
 	; $52
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a0 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $07 ; sound FX ID
 	db $00 ; handler function
 
 	; $53
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a1 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $07 ; sound FX ID
 	db $00 ; handler function
 
 	; $54
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a2 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $55
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a3 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $56
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a4 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $57
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a5 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $58
-	db $64 ; sprite ID
-	db $5c ; paletteID
+	db SPRITE_DUEL_50 ; sprite ID
+	db $5c ; palette ID
 	db $a7 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $59
-	db $64 ; sprite ID
-	db $5c ; paletteID
+	db SPRITE_DUEL_50 ; sprite ID
+	db $5c ; palette ID
 	db $a8 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $0b ; sound FX ID
 	db $00 ; handler function
 
 	; $5a
-	db $64 ; sprite ID
-	db $5c ; paletteID
+	db SPRITE_DUEL_50 ; sprite ID
+	db $5c ; palette ID
 	db $a9 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $0b ; sound FX ID
 	db $00 ; handler function
 
 	; $5b
-	db $64 ; sprite ID
-	db $5c ; paletteID
+	db SPRITE_DUEL_50 ; sprite ID
+	db $5c ; palette ID
 	db $aa ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $5c
-	db $64 ; sprite ID
-	db $5c ; paletteID
+	db SPRITE_DUEL_50 ; sprite ID
+	db $5c ; palette ID
 	db $ab ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $5d
-	db $65 ; sprite ID
-	db $5d ; paletteID
+	db SPRITE_DUEL_51 ; sprite ID
+	db $5d ; palette ID
 	db $ac ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $5e
-	db $65 ; sprite ID
-	db $5d ; paletteID
+	db SPRITE_DUEL_51 ; sprite ID
+	db $5d ; palette ID
 	db $ad ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $5f
-	db $65 ; sprite ID
-	db $5d ; paletteID
+	db SPRITE_DUEL_51 ; sprite ID
+	db $5d ; palette ID
 	db $ae ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
 	; $60
-	db $63 ; sprite ID
-	db $5b ; paletteID
+	db SPRITE_DUEL_49 ; sprite ID
+	db $5b ; palette ID
 	db $a6 ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db $00 ; sound FX ID
 	db $00 ; handler function
-
 ; 0x1d078
 
 Func_1d078: ; 1d078 (7:5078)

@@ -2279,7 +2279,8 @@ wd3b1:: ; d3b1
 wd3b2:: ; d3b2
 	ds $1
 
-wd3b3:: ; d3b3
+; sprite ID of the NPC to load
+wNPCSpriteID:: ; d3b3
 	ds $1
 
 	ds $2
@@ -2373,7 +2374,12 @@ wd4ac:: ; d4ac
 wd4ad:: ; d4ad
 	ds $1
 
-wd4ae:: ; d4ae
+; used to know what coordinate offsets to use to place animations
+; for use in GetAnimCoordsAndFlags
+; DUEL_ANIM_SCREEN_MAIN_SCENE       = main scene
+; DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA = Player's Play Area screen
+; DUEL_ANIM_SCREEN_OPP_PLAY_AREA    = Opponent's Play Area screen
+wDuelAnimationScreen:: ; d4ae
 	ds $1
 
 wd4af:: ; d4af

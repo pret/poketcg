@@ -1073,8 +1073,8 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	call Func_3b21
 	pop de
 	push de
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ld a, $01
 	ld [$d4b3], a
 	xor a
@@ -1212,8 +1212,8 @@ Func_1909d: ; 1909d (6:509d)
 	jr z, .asm_50ad
 	cp $01
 	ret nz
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ret
 .asm_50ad
 	ld a, [wd4b0]
@@ -1239,24 +1239,24 @@ Func_1909d: ; 1909d (6:509d)
 .asm_50d2
 	ld l, $04
 	ld h, $c2
-	ld a, $01
+	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50da
 	ld l, $04
 	ld h, $c3
-	ld a, $01
+	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50e2
 	ld l, $05
 	ld h, $c3
-	ld a, $02
+	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 	jr .asm_50f0
 .asm_50ea
 	ld l, $05
 	ld h, $c2
-	ld a, $02
+	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 .asm_50f0:
-	ld [wd4ae], a
+	ld [wDuelAnimationScreen], a
 	ret
 
 ; this part is not perfectly analyzed.
@@ -1267,8 +1267,8 @@ Func_1909d: ; 1909d (6:509d)
 Func_190fb: ; 190fb (6:50fb)
 	cp $01
 	jr nz, .asm_510e
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ld a, [wDuelDisplayedScreen]
 	cp $01
 	jr z, .asm_510e

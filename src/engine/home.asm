@@ -11355,6 +11355,7 @@ WaitForSongToFinish: ; 3c96 (0:3c96)
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [wd5d7], a
+	; fallthrough
 
 Func_3ca4: ; 3ca4 (0:3ca4)
 	ldh a, [hBankROM]

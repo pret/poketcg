@@ -494,7 +494,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 INCLUDE "data/overworld_indexes.asm"
 
 Func_10fbc: ; 10fbc (4:4fbc)
-	ld a, $25
+	ld a, SPRITE_OW_MAP_OAM
 	farcall CreateSpriteAndAnimBufferEntry
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
@@ -517,7 +517,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33d], a
 	xor a
 	ld [wd33e], a
-	ld a, $25
+	ld a, SPRITE_OW_MAP_OAM
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wd33b], a
@@ -859,7 +859,7 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wTempNPC], a
 	ld a, [hli]
-	ld [wd3b3], a
+	ld [wNPCSpriteID], a
 	ld a, [hli]
 	ld [wd3b1], a
 	ld a, [hli]
