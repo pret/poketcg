@@ -605,21 +605,23 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	push de
 	call Func_1cab3
 ; hl: pointer
-	ld a, [wd421]
+
+	ld a, [wAnimationsDisabled]
 	or a
 	jr z, .check_to_play_sfx
-
+	; animations are disabled
 	push hl
-	lb bc, 0, $03
+	ld bc, ANIM_SPRITE_ANIM_FLAGS
 	add hl, bc
 	ld a, [hl]
-	and %10000000
+	; if flag is set, play animation anyway
+	and (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE)
 	pop hl
 	jr z, .return
 
 .check_to_play_sfx
 	push hl
-	lb bc, 0, $04
+	ld bc, ANIM_SOUND_FX_ID
 	add hl, bc
 	ld a, [hl]
 	pop hl
@@ -628,8 +630,12 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	call PlaySFX
 
 .calc_addr
+; this data field is always $00,
+; so this calculation is unnecessary
+; seems like there was supposed to be
+; more than 1 function to handle animation
 	push hl
-	lb bc, 0, $05
+	ld bc, ANIM_HANDLER_FUNCTION
 	add hl, bc
 	ld a, [hl]
 	rlca
@@ -652,13 +658,14 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ret
 
 .address
-	dw .asm_1c94a
+	dw .handler_func
 
-.asm_1c94a ; 1c94a (7:494a)
-; if any of the first 3 bytes is $00, return carry
+.handler_func ; 1c94a (7:494a)
+; if any of ANIM_SPRITE_ID, ANIM_PALETTE_ID and ANIM_SPRITE_ANIM_ID
+; are 0, then return
 	ld e, l
 	ld d, h
-	ld c, 3
+	ld c, ANIM_SPRITE_ANIM_ID + 1
 .loop
 	ld a, [de]
 	or a
@@ -667,7 +674,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	dec c
 	jr nz, .loop
 
-	ld a, [hli]
+	ld a, [hli] ; ANIM_SPRITE_ID
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wAnimationQueue], a ; push an animation to the queue
@@ -676,15 +683,16 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
 
-	ld a, [hli]
+	ld a, [hli] ; ANIM_PALETTE_ID
 	farcall Func_80418
+	ld a, [hli] ; ANIM_SPRITE_ANIM_ID
 
-	ld a, [hli]
 	push af
-	ld a, [hli]
-	ld [wd42b], a
+	ld a, [hli] ; ANIM_SPRITE_ANIM_FLAGS
+	ld [wAnimFlags], a
 	call Func_1c980
 	pop af
+
 	farcall StartNewSpriteAnimation
 	or a
 	jr .done
@@ -703,7 +711,7 @@ Func_1c980: ; 1c980 (7:4980)
 	call Func_1c9a2
 
 	push af
-	and %01100000
+	and (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5)
 	or [hl]
 	ld [hli], a
 	ld a, b
@@ -711,10 +719,10 @@ Func_1c980: ; 1c980 (7:4980)
 	ld [hl], c ; SPRITE_ANIM_COORD_Y
 	pop af
 
-	lb bc, 0, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_Y
+	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_COORD_Y
 	add hl, bc
 	ld c, a
-	and %00000011
+	and (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
 	or [hl]
 	ld [hl], a
 	pop bc
@@ -728,8 +736,8 @@ Func_1c980: ; 1c980 (7:4980)
 Func_1c9a2: ; 1c9a2 (7:49a2)
 	push hl
 	ld c, 0
-	ld a, [wd42b]
-	and %00000100
+	ld a, [wAnimFlags]
+	and (1 << SPRITE_ANIM_FLAG_SPEED)
 	jr nz, .calc_addr
 
 	ld a, [wd4ae]
@@ -768,48 +776,20 @@ Func_1c9a2: ; 1c9a2 (7:49a2)
 	inc hl
 	ld c, [hl]
 	inc hl
-	ld a, [wd42b]
+	ld a, [wAnimFlags]
 	and [hl]
 	pop hl
 	ret
 
 Data_1c9e0:
-	db $01
-	db $01
-	db $01
-	db $01
-	db $01
-	db $01
-	db $02
-	db $02
-	db $02
-	db $02
-	db $02
-	db $02
-	db $03
-	db $04
-	db $05
-	db $06
-	db $07
-	db $08
-	db $03
-	db $04
-	db $05
-	db $06
-	db $07
-	db $08
-	db $09
-	db $0a
-	db $0b
-	db $0c
-	db $0d
-	db $0e
-	db $09
-	db $0a
-	db $0b
-	db $0c
-	db $0d
-	db $0e
+	db $01, $01, $01, $01, $01, $01 ; player
+	db $02, $02, $02, $02, $02, $02 ; opponent
+
+	db $03, $04, $05, $06, $07, $08 ; player
+	db $03, $04, $05, $06, $07, $08 ; opponent
+
+	db $09, $0a, $0b, $0c, $0d, $0e ; player
+	db $09, $0a, $0b, $0c, $0d, $0e ; opponent
 
 macro_1ca04: MACRO
 	db \1
@@ -819,21 +799,21 @@ ENDM
 
 Data_1ca04:
 ; x coord, y coord, animation flags
-	macro_1ca04 $58, $58, %00001000
-	macro_1ca04 $28, $50, %00000000
-	macro_1ca04 $88, $30, %01100011
-	macro_1ca04 $58, $48, %00000000
-	macro_1ca04 $18, $60, %00000000
-	macro_1ca04 $38, $60, %00000000
-	macro_1ca04 $58, $60, %00000000
-	macro_1ca04 $78, $60, %00000000
-	macro_1ca04 $98, $60, %00000000
-	macro_1ca04 $58, $50, %00000000
-	macro_1ca04 $98, $28, %00000000
-	macro_1ca04 $78, $28, %00000000
-	macro_1ca04 $58, $28, %00000000
-	macro_1ca04 $38, $28, %00000000
-	macro_1ca04 $18, $28, %00000000
+	macro_1ca04 $58, $58, (1 << SPRITE_ANIM_FLAG_3)
+	macro_1ca04 $28, $50, $00
+	macro_1ca04 $88, $30, (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
+	macro_1ca04 $58, $48, $00
+	macro_1ca04 $18, $60, $00
+	macro_1ca04 $38, $60, $00
+	macro_1ca04 $58, $60, $00
+	macro_1ca04 $78, $60, $00
+	macro_1ca04 $98, $60, $00
+	macro_1ca04 $58, $50, $00
+	macro_1ca04 $98, $28, $00
+	macro_1ca04 $78, $28, $00
+	macro_1ca04 $58, $28, $00
+	macro_1ca04 $38, $28, $00
+	macro_1ca04 $18, $28, $00
 
 Func_1ca31: ; 1ca31 (7:4a31)
 	push hl
@@ -919,6 +899,7 @@ Func_1ca6e: ; 1ca6e (7:4a6e)
 	ret
 ; 0x1cab3
 
+; gets data from Animations for anim ID in a
 Func_1cab3: ; 1cab3 (7:4ab3)
 	push bc
 	ld a, [wTempAnimation]
@@ -929,7 +910,7 @@ Func_1cab3: ; 1cab3 (7:4ab3)
 	ld c, l
 	add hl, hl ; hl = anim * 4
 	add hl, bc ; hl = anim * 6
-	ld bc, Data_1ce32
+	ld bc, Animations
 	add hl, bc
 	pop bc
 	ret
@@ -1107,8 +1088,8 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [de], a
-	ld a, $80
-	ld [wd42b], a
+	ld a, (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE)
+	ld [wAnimFlags], a
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
 	call Func_1c9a2
@@ -1218,7 +1199,7 @@ Func_1cc66: ; 1cc66 (7:4c66)
 ; 0x1cc76
 
 Func_1cc76: ; 1cc76 (7:4c76)
-	ld a, [wd421]
+	ld a, [wAnimationsDisabled]
 	or a
 	jr nz, .asm_1cc9e
 	ld a, [wTempAnimation]
@@ -1457,114 +1438,784 @@ Func_1ce03: ; 1ce03 (7:4e03)
 
 	INCROM $1ce22, $1ce32
 
-macro_1ce32: MACRO
-	db \1
-	db \2
-	db \3
-	db \4
-	db \5
-	db \6
-ENDM
+; data for each animation ID (see src/constants/sprite_constants.asm)
+Animations: ; 1ce32 (7:4e32)
+	; $00
+	db $00 ; sprite ID
+	db $00 ; paletteID
+	db $00 ; anim ID
+	db $00 ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
 
-Data_1ce32: ; 1ce32 (7:4e32)
-; sprite ID, palette ID, anim ID, anim flags, sound fx ID, ?
-	macro_1ce32 $00, $00, $00, $00,                               $00, $00 ; $00
-	macro_1ce32 $28, $1f, $47, %10000000,                         $11, $00 ; $01
-	macro_1ce32 $29, $20, $48, %10000000,                         $12, $00 ; $02
-	macro_1ce32 $2a, $21, $49, %10000000,                         $13, $00 ; $03
-	macro_1ce32 $2b, $22, $4a, %10000000,                         $14, $00 ; $04
-	macro_1ce32 $2c, $23, $4b, %10000000,                         $15, $00 ; $05
-	macro_1ce32 $2d, $24, $4c, %10000000,                         $16, $00 ; $06
-	macro_1ce32 $2d, $24, $4d, %10000000,                         $16, $00 ; $07
-	macro_1ce32 $2d, $24, $4e, %10000000,                         $17, $00 ; $08
-	macro_1ce32 $2e, $25, $00, $00,                               $00, $00 ; $09
-	macro_1ce32 $2f, $26, $5c, $00,                               $18, $00 ; $0a
-	macro_1ce32 $30, $27, $5e, $00,                               $19, $00 ; $0b
-	macro_1ce32 $31, $28, $5f, $00,                               $1a, $00 ; $0c
-	macro_1ce32 $32, $29, $60, %00000100,                         $1b, $00 ; $0d
-	macro_1ce32 $33, $2a, $61, $00,                               $1c, $00 ; $0e
-	macro_1ce32 $33, $2a, $62, $00,                               $1d, $00 ; $0f
-	macro_1ce32 $34, $2b, $63, %00000100,                         $1e, $00 ; $10
-	macro_1ce32 $35, $2c, $64, $00,                               $1f, $00 ; $11
-	macro_1ce32 $36, $2d, $69, %00000100,                         $20, $00 ; $12
-	macro_1ce32 $37, $2e, $6a, $00,                               $21, $00 ; $13
-	macro_1ce32 $38, $2f, $6b, %00000100,                         $22, $00 ; $14
-	macro_1ce32 $39, $30, $6c, $00,                               $23, $00 ; $15
-	macro_1ce32 $3a, $31, $6d, %00000100,                         $24, $00 ; $16
-	macro_1ce32 $3b, $32, $6e, $00,                               $25, $00 ; $17
-	macro_1ce32 $3c, $33, $6f, $00,                               $26, $00 ; $18
-	macro_1ce32 $3d, $34, $70, %01000000 | %00000010,             $27, $00 ; $19
-	macro_1ce32 $3e, $35, $71, %01000000 | %00000010,             $28, $00 ; $1a
-	macro_1ce32 $3f, $36, $72, $00,                               $29, $00 ; $1b
-	macro_1ce32 $3f, $36, $73, $00,                               $2a, $00 ; $1c
-	macro_1ce32 $40, $37, $74, $00,                               $2b, $00 ; $1d
-	macro_1ce32 $40, $37, $75, $00,                               $52, $00 ; $1e
-	macro_1ce32 $40, $37, $76, $00,                               $53, $00 ; $1f
-	macro_1ce32 $41, $38, $77, %00100000 | %00000001,             $2c, $00 ; $20
-	macro_1ce32 $42, $39, $78, $00,                               $2d, $00 ; $21
-	macro_1ce32 $43, $3a, $7a, $00,                               $2d, $00 ; $22
-	macro_1ce32 $44, $3b, $7b, $00,                               $2e, $00 ; $23
-	macro_1ce32 $42, $39, $79, $00,                               $2f, $00 ; $24
-	macro_1ce32 $45, $3c, $7c, %00100000 | %00000001,             $30, $00 ; $25
-	macro_1ce32 $46, $3d, $7d, $00,                               $31, $00 ; $26
-	macro_1ce32 $47, $3e, $7e, $00,                               $32, $00 ; $27
-	macro_1ce32 $48, $3f, $7f, $00,                               $33, $00 ; $28
-	macro_1ce32 $49, $40, $80, $00,                               $34, $00 ; $29
-	macro_1ce32 $4a, $41, $81, $00,                               $35, $00 ; $2a
-	macro_1ce32 $4b, $42, $82, $00,                               $36, $00 ; $2b
-	macro_1ce32 $4c, $43, $83, $00,                               $37, $00 ; $2c
-	macro_1ce32 $4d, $44, $84, $00,                               $38, $00 ; $2d
-	macro_1ce32 $4e, $45, $85, $00,                               $39, $00 ; $2e
-	macro_1ce32 $4f, $46, $86, $00,                               $3a, $00 ; $2f
-	macro_1ce32 $50, $47, $87, %00100000 | %00000001,             $3b, $00 ; $30
-	macro_1ce32 $51, $48, $88, $00,                               $3c, $00 ; $31
-	macro_1ce32 $52, $49, $89, $00,                               $3d, $00 ; $32
-	macro_1ce32 $53, $4a, $8a, $00,                               $3e, $00 ; $33
-	macro_1ce32 $54, $4b, $8b, $00,                               $3f, $00 ; $34
-	macro_1ce32 $55, $4c, $8c, %00000100,                         $40, $00 ; $35
-	macro_1ce32 $56, $4d, $8d, $00,                               $41, $00 ; $36
-	macro_1ce32 $57, $4e, $8e, $00,                               $42, $00 ; $37
-	macro_1ce32 $58, $4f, $8f, %00000100,                         $43, $00 ; $38
-	macro_1ce32 $59, $50, $90, $00,                               $44, $00 ; $39
-	macro_1ce32 $5a, $51, $92, $00,                               $45, $00 ; $3a
-	macro_1ce32 $5b, $52, $93, $00,                               $46, $00 ; $3b
-	macro_1ce32 $5c, $53, $94, $00,                               $47, $00 ; $3c
-	macro_1ce32 $5c, $53, $95, $00,                               $48, $00 ; $3d
-	macro_1ce32 $5d, $54, $97, $00,                               $49, $00 ; $3e
-	macro_1ce32 $5e, $55, $99, $00,                               $4a, $00 ; $3f
-	macro_1ce32 $4a, $56, $81, $00,                               $4b, $00 ; $40
-	macro_1ce32 $5c, $53, $96, $00,                               $47, $00 ; $41
-	macro_1ce32 $2d, $24, $4d, %10000000,                         $16, $00 ; $42
-	macro_1ce32 $2d, $24, $4e, %10000000,                         $17, $00 ; $43
-	macro_1ce32 $2f, $26, $5c, $00,                               $18, $00 ; $44
-	macro_1ce32 $3a, $31, $6d, %00000100,                         $24, $00 ; $45
-	macro_1ce32 $5f, $57, $9a, %10000000,                         $11, $00 ; $46
-	macro_1ce32 $35, $2c, $65, %00000100,                         $5c, $00 ; $47
-	macro_1ce32 $35, $2c, $66, %00000100,                         $00, $00 ; $48
-	macro_1ce32 $5d, $54, $98, %00000100,                         $4c, $00 ; $49
-	macro_1ce32 $59, $50, $91, %00000100,                         $4d, $00 ; $4a
-	macro_1ce32 $60, $58, $9b, $00,                               $4e, $00 ; $4b
-	macro_1ce32 $61, $59, $9c, $00,                               $4f, $00 ; $4c
-	macro_1ce32 $62, $5a, $9d, $00,                               $50, $00 ; $4d
-	macro_1ce32 $35, $2c, $67, %0000100,                          $51, $00 ; $4e
-	macro_1ce32 $35, $2c, $68, %0000100,                          $51, $00 ; $4f
-	macro_1ce32 $63, $5b, $9e, %10000000 | %00001000 | %00000100, $00, $00 ; $50
-	macro_1ce32 $63, $5b, $9f, %10000000 | %00001000 | %00000100, $07, $00 ; $51
-	macro_1ce32 $63, $5b, $a0, %10000000 | %00001000 | %00000100, $07, $00 ; $52
-	macro_1ce32 $63, $5b, $a1, %10000000 | %00001000 | %00000100, $07, $00 ; $53
-	macro_1ce32 $63, $5b, $a2, %10000000 | %00000100,             $00, $00 ; $54
-	macro_1ce32 $63, $5b, $a3, %10000000 | %00001000 | %00000100, $00, $00 ; $55
-	macro_1ce32 $63, $5b, $a4, %10000000 | %00001000 | %00000100, $00, $00 ; $56
-	macro_1ce32 $63, $5b, $a5, %10000000 | %00001000 | %00000100, $00, $00 ; $57
-	macro_1ce32 $64, $5c, $a7, %10000000 | %00001000 | %00000100, $00, $00 ; $58
-	macro_1ce32 $64, $5c, $a8, %10000000 | %00001000 | %00000100, $0b, $00 ; $59
-	macro_1ce32 $64, $5c, $a9, %10000000 | %00001000 | %00000100, $0b, $00 ; $5a
-	macro_1ce32 $64, $5c, $aa, %10000000 | %00000100,             $00, $00 ; $5b
-	macro_1ce32 $64, $5c, $ab, %10000000 | %00000100,             $00, $00 ; $5c
-	macro_1ce32 $65, $5d, $ac, %10000000 | %00000100,             $00, $00 ; $5d
-	macro_1ce32 $65, $5d, $ad, %10000000 | %00000100,             $00, $00 ; $5e
-	macro_1ce32 $65, $5d, $ae, %10000000 | %00000100,             $00, $00 ; $5f
-	macro_1ce32 $63, $5b, $a6, %10000000 | %00000100,             $00, $00 ; $60
+	; $01
+	db $28 ; sprite ID
+	db $1f ; paletteID
+	db $47 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $11 ; sound FX ID
+	db $00 ; handler function
+
+	; $02
+	db $29 ; sprite ID
+	db $20 ; paletteID
+	db $48 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $12 ; sound FX ID
+	db $00 ; handler function
+
+	; $03
+	db $2a ; sprite ID
+	db $21 ; paletteID
+	db $49 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $13 ; sound FX ID
+	db $00 ; handler function
+
+	; $04
+	db $2b ; sprite ID
+	db $22 ; paletteID
+	db $4a ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $14 ; sound FX ID
+	db $00 ; handler function
+
+	; $05
+	db $2c ; sprite ID
+	db $23 ; paletteID
+	db $4b ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $15 ; sound FX ID
+	db $00 ; handler function
+
+	; $06
+	db $2d ; sprite ID
+	db $24 ; paletteID
+	db $4c ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $16 ; sound FX ID
+	db $00 ; handler function
+
+	; $07
+	db $2d ; sprite ID
+	db $24 ; paletteID
+	db $4d ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $16 ; sound FX ID
+	db $00 ; handler function
+
+	; $08
+	db $2d ; sprite ID
+	db $24 ; paletteID
+	db $4e ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $17 ; sound FX ID
+	db $00 ; handler function
+
+	; $09
+	db $2e ; sprite ID
+	db $25 ; paletteID
+	db $00 ; anim ID
+	db $00 ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $0a
+	db $2f ; sprite ID
+	db $26 ; paletteID
+	db $5c ; anim ID
+	db $00 ; anim flags
+	db $18 ; sound FX ID
+	db $00 ; handler function
+
+	; $0b
+	db $30 ; sprite ID
+	db $27 ; paletteID
+	db $5e ; anim ID
+	db $00 ; anim flags
+	db $19 ; sound FX ID
+	db $00 ; handler function
+
+	; $0c
+	db $31 ; sprite ID
+	db $28 ; paletteID
+	db $5f ; anim ID
+	db $00 ; anim flags
+	db $1a ; sound FX ID
+	db $00 ; handler function
+
+	; $0d
+	db $32 ; sprite ID
+	db $29 ; paletteID
+	db $60 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $1b ; sound FX ID
+	db $00 ; handler function
+
+	; $0e
+	db $33 ; sprite ID
+	db $2a ; paletteID
+	db $61 ; anim ID
+	db $00 ; anim flags
+	db $1c ; sound FX ID
+	db $00 ; handler function
+
+	; $0f
+	db $33 ; sprite ID
+	db $2a ; paletteID
+	db $62 ; anim ID
+	db $00 ; anim flags
+	db $1d ; sound FX ID
+	db $00 ; handler function
+
+	; $10
+	db $34 ; sprite ID
+	db $2b ; paletteID
+	db $63 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $1e ; sound FX ID
+	db $00 ; handler function
+
+	; $11
+	db $35 ; sprite ID
+	db $2c ; paletteID
+	db $64 ; anim ID
+	db $00 ; anim flags
+	db $1f ; sound FX ID
+	db $00 ; handler function
+
+	; $12
+	db $36 ; sprite ID
+	db $2d ; paletteID
+	db $69 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $20 ; sound FX ID
+	db $00 ; handler function
+
+	; $13
+	db $37 ; sprite ID
+	db $2e ; paletteID
+	db $6a ; anim ID
+	db $00 ; anim flags
+	db $21 ; sound FX ID
+	db $00 ; handler function
+
+	; $14
+	db $38 ; sprite ID
+	db $2f ; paletteID
+	db $6b ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $22 ; sound FX ID
+	db $00 ; handler function
+
+	; $15
+	db $39 ; sprite ID
+	db $30 ; paletteID
+	db $6c ; anim ID
+	db $00 ; anim flags
+	db $23 ; sound FX ID
+	db $00 ; handler function
+
+	; $16
+	db $3a ; sprite ID
+	db $31 ; paletteID
+	db $6d ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $24 ; sound FX ID
+	db $00 ; handler function
+
+	; $17
+	db $3b ; sprite ID
+	db $32 ; paletteID
+	db $6e ; anim ID
+	db $00 ; anim flags
+	db $25 ; sound FX ID
+	db $00 ; handler function
+
+	; $18
+	db $3c ; sprite ID
+	db $33 ; paletteID
+	db $6f ; anim ID
+	db $00 ; anim flags
+	db $26 ; sound FX ID
+	db $00 ; handler function
+
+	; $19
+	db $3d ; sprite ID
+	db $34 ; paletteID
+	db $70 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) ; anim flags
+	db $27 ; sound FX ID
+	db $00 ; handler function
+
+	; $1a
+	db $3e ; sprite ID
+	db $35 ; paletteID
+	db $71 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_6) | (1 << SPRITE_ANIM_FLAG_Y_SUBTRACT) ; anim flags
+	db $28 ; sound FX ID
+	db $00 ; handler function
+
+	; $1b
+	db $3f ; sprite ID
+	db $36 ; paletteID
+	db $72 ; anim ID
+	db $00 ; anim flags
+	db $29 ; sound FX ID
+	db $00 ; handler function
+
+	; $1c
+	db $3f ; sprite ID
+	db $36 ; paletteID
+	db $73 ; anim ID
+	db $00 ; anim flags
+	db $2a ; sound FX ID
+	db $00 ; handler function
+
+	; $1d
+	db $40 ; sprite ID
+	db $37 ; paletteID
+	db $74 ; anim ID
+	db $00 ; anim flags
+	db $2b ; sound FX ID
+	db $00 ; handler function
+
+	; $1e
+	db $40 ; sprite ID
+	db $37 ; paletteID
+	db $75 ; anim ID
+	db $00 ; anim flags
+	db $52 ; sound FX ID
+	db $00 ; handler function
+
+	; $1f
+	db $40 ; sprite ID
+	db $37 ; paletteID
+	db $76 ; anim ID
+	db $00 ; anim flags
+	db $53 ; sound FX ID
+	db $00 ; handler function
+
+	; $20
+	db $41 ; sprite ID
+	db $38 ; paletteID
+	db $77 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
+	db $2c ; sound FX ID
+	db $00 ; handler function
+
+	; $21
+	db $42 ; sprite ID
+	db $39 ; paletteID
+	db $78 ; anim ID
+	db $00 ; anim flags
+	db $2d ; sound FX ID
+	db $00 ; handler function
+
+	; $22
+	db $43 ; sprite ID
+	db $3a ; paletteID
+	db $7a ; anim ID
+	db $00 ; anim flags
+	db $2d ; sound FX ID
+	db $00 ; handler function
+
+	; $23
+	db $44 ; sprite ID
+	db $3b ; paletteID
+	db $7b ; anim ID
+	db $00 ; anim flags
+	db $2e ; sound FX ID
+	db $00 ; handler function
+
+	; $24
+	db $42 ; sprite ID
+	db $39 ; paletteID
+	db $79 ; anim ID
+	db $00 ; anim flags
+	db $2f ; sound FX ID
+	db $00 ; handler function
+
+	; $25
+	db $45 ; sprite ID
+	db $3c ; paletteID
+	db $7c ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
+	db $30 ; sound FX ID
+	db $00 ; handler function
+
+	; $26
+	db $46 ; sprite ID
+	db $3d ; paletteID
+	db $7d ; anim ID
+	db $00 ; anim flags
+	db $31 ; sound FX ID
+	db $00 ; handler function
+
+	; $27
+	db $47 ; sprite ID
+	db $3e ; paletteID
+	db $7e ; anim ID
+	db $00 ; anim flags
+	db $32 ; sound FX ID
+	db $00 ; handler function
+
+	; $28
+	db $48 ; sprite ID
+	db $3f ; paletteID
+	db $7f ; anim ID
+	db $00 ; anim flags
+	db $33 ; sound FX ID
+	db $00 ; handler function
+
+	; $29
+	db $49 ; sprite ID
+	db $40 ; paletteID
+	db $80 ; anim ID
+	db $00 ; anim flags
+	db $34 ; sound FX ID
+	db $00 ; handler function
+
+	; $2a
+	db $4a ; sprite ID
+	db $41 ; paletteID
+	db $81 ; anim ID
+	db $00 ; anim flags
+	db $35 ; sound FX ID
+	db $00 ; handler function
+
+	; $2b
+	db $4b ; sprite ID
+	db $42 ; paletteID
+	db $82 ; anim ID
+	db $00 ; anim flags
+	db $36 ; sound FX ID
+	db $00 ; handler function
+
+	; $2c
+	db $4c ; sprite ID
+	db $43 ; paletteID
+	db $83 ; anim ID
+	db $00 ; anim flags
+	db $37 ; sound FX ID
+	db $00 ; handler function
+
+	; $2d
+	db $4d ; sprite ID
+	db $44 ; paletteID
+	db $84 ; anim ID
+	db $00 ; anim flags
+	db $38 ; sound FX ID
+	db $00 ; handler function
+
+	; $2e
+	db $4e ; sprite ID
+	db $45 ; paletteID
+	db $85 ; anim ID
+	db $00 ; anim flags
+	db $39 ; sound FX ID
+	db $00 ; handler function
+
+	; $2f
+	db $4f ; sprite ID
+	db $46 ; paletteID
+	db $86 ; anim ID
+	db $00 ; anim flags
+	db $3a ; sound FX ID
+	db $00 ; handler function
+
+	; $30
+	db $50 ; sprite ID
+	db $47 ; paletteID
+	db $87 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_5) | (1 << SPRITE_ANIM_FLAG_X_SUBTRACT) ; anim flags
+	db $3b ; sound FX ID
+	db $00 ; handler function
+
+	; $31
+	db $51 ; sprite ID
+	db $48 ; paletteID
+	db $88 ; anim ID
+	db $00 ; anim flags
+	db $3c ; sound FX ID
+	db $00 ; handler function
+
+	; $32
+	db $52 ; sprite ID
+	db $49 ; paletteID
+	db $89 ; anim ID
+	db $00 ; anim flags
+	db $3d ; sound FX ID
+	db $00 ; handler function
+
+	; $33
+	db $53 ; sprite ID
+	db $4a ; paletteID
+	db $8a ; anim ID
+	db $00 ; anim flags
+	db $3e ; sound FX ID
+	db $00 ; handler function
+
+	; $34
+	db $54 ; sprite ID
+	db $4b ; paletteID
+	db $8b ; anim ID
+	db $00 ; anim flags
+	db $3f ; sound FX ID
+	db $00 ; handler function
+
+	; $35
+	db $55 ; sprite ID
+	db $4c ; paletteID
+	db $8c ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $40 ; sound FX ID
+	db $00 ; handler function
+
+	; $36
+	db $56 ; sprite ID
+	db $4d ; paletteID
+	db $8d ; anim ID
+	db $00 ; anim flags
+	db $41 ; sound FX ID
+	db $00 ; handler function
+
+	; $37
+	db $57 ; sprite ID
+	db $4e ; paletteID
+	db $8e ; anim ID
+	db $00 ; anim flags
+	db $42 ; sound FX ID
+	db $00 ; handler function
+
+	; $38
+	db $58 ; sprite ID
+	db $4f ; paletteID
+	db $8f ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $43 ; sound FX ID
+	db $00 ; handler function
+
+	; $39
+	db $59 ; sprite ID
+	db $50 ; paletteID
+	db $90 ; anim ID
+	db $00 ; anim flags
+	db $44 ; sound FX ID
+	db $00 ; handler function
+
+	; $3a
+	db $5a ; sprite ID
+	db $51 ; paletteID
+	db $92 ; anim ID
+	db $00 ; anim flags
+	db $45 ; sound FX ID
+	db $00 ; handler function
+
+	; $3b
+	db $5b ; sprite ID
+	db $52 ; paletteID
+	db $93 ; anim ID
+	db $00 ; anim flags
+	db $46 ; sound FX ID
+	db $00 ; handler function
+
+	; $3c
+	db $5c ; sprite ID
+	db $53 ; paletteID
+	db $94 ; anim ID
+	db $00 ; anim flags
+	db $47 ; sound FX ID
+	db $00 ; handler function
+
+	; $3d
+	db $5c ; sprite ID
+	db $53 ; paletteID
+	db $95 ; anim ID
+	db $00 ; anim flags
+	db $48 ; sound FX ID
+	db $00 ; handler function
+
+	; $3e
+	db $5d ; sprite ID
+	db $54 ; paletteID
+	db $97 ; anim ID
+	db $00 ; anim flags
+	db $49 ; sound FX ID
+	db $00 ; handler function
+
+	; $3f
+	db $5e ; sprite ID
+	db $55 ; paletteID
+	db $99 ; anim ID
+	db $00 ; anim flags
+	db $4a ; sound FX ID
+	db $00 ; handler function
+
+	; $40
+	db $4a ; sprite ID
+	db $56 ; paletteID
+	db $81 ; anim ID
+	db $00 ; anim flags
+	db $4b ; sound FX ID
+	db $00 ; handler function
+
+	; $41
+	db $5c ; sprite ID
+	db $53 ; paletteID
+	db $96 ; anim ID
+	db $00 ; anim flags
+	db $47 ; sound FX ID
+	db $00 ; handler function
+
+	; $42
+	db $2d ; sprite ID
+	db $24 ; paletteID
+	db $4d ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $16 ; sound FX ID
+	db $00 ; handler function
+
+	; $43
+	db $2d ; sprite ID
+	db $24 ; paletteID
+	db $4e ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $17 ; sound FX ID
+	db $00 ; handler function
+
+	; $44
+	db $2f ; sprite ID
+	db $26 ; paletteID
+	db $5c ; anim ID
+	db $00 ; anim flags
+	db $18 ; sound FX ID
+	db $00 ; handler function
+
+	; $45
+	db $3a ; sprite ID
+	db $31 ; paletteID
+	db $6d ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $24 ; sound FX ID
+	db $00 ; handler function
+
+	; $46
+	db $5f ; sprite ID
+	db $57 ; paletteID
+	db $9a ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) ; anim flags
+	db $11 ; sound FX ID
+	db $00 ; handler function
+
+	; $47
+	db $35 ; sprite ID
+	db $2c ; paletteID
+	db $65 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $5c ; sound FX ID
+	db $00 ; handler function
+
+	; $48
+	db $35 ; sprite ID
+	db $2c ; paletteID
+	db $66 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $49
+	db $5d ; sprite ID
+	db $54 ; paletteID
+	db $98 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $4c ; sound FX ID
+	db $00 ; handler function
+
+	; $4a
+	db $59 ; sprite ID
+	db $50 ; paletteID
+	db $91 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $4d ; sound FX ID
+	db $00 ; handler function
+
+	; $4b
+	db $60 ; sprite ID
+	db $58 ; paletteID
+	db $9b ; anim ID
+	db $00 ; anim flags
+	db $4e ; sound FX ID
+	db $00 ; handler function
+
+	; $4c
+	db $61 ; sprite ID
+	db $59 ; paletteID
+	db $9c ; anim ID
+	db $00 ; anim flags
+	db $4f ; sound FX ID
+	db $00 ; handler function
+
+	; $4d
+	db $62 ; sprite ID
+	db $5a ; paletteID
+	db $9d ; anim ID
+	db $00 ; anim flags
+	db $50 ; sound FX ID
+	db $00 ; handler function
+
+	; $4e
+	db $35 ; sprite ID
+	db $2c ; paletteID
+	db $67 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $51 ; sound FX ID
+	db $00 ; handler function
+
+	; $4f
+	db $35 ; sprite ID
+	db $2c ; paletteID
+	db $68 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $51 ; sound FX ID
+	db $00 ; handler function
+
+	; $50
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $9e ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $51
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $9f ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $07 ; sound FX ID
+	db $00 ; handler function
+
+	; $52
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a0 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $07 ; sound FX ID
+	db $00 ; handler function
+
+	; $53
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a1 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $07 ; sound FX ID
+	db $00 ; handler function
+
+	; $54
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a2 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $55
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a3 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $56
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a4 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $57
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a5 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $58
+	db $64 ; sprite ID
+	db $5c ; paletteID
+	db $a7 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $59
+	db $64 ; sprite ID
+	db $5c ; paletteID
+	db $a8 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $0b ; sound FX ID
+	db $00 ; handler function
+
+	; $5a
+	db $64 ; sprite ID
+	db $5c ; paletteID
+	db $a9 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_3) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $0b ; sound FX ID
+	db $00 ; handler function
+
+	; $5b
+	db $64 ; sprite ID
+	db $5c ; paletteID
+	db $aa ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $5c
+	db $64 ; sprite ID
+	db $5c ; paletteID
+	db $ab ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $5d
+	db $65 ; sprite ID
+	db $5d ; paletteID
+	db $ac ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $5e
+	db $65 ; sprite ID
+	db $5d ; paletteID
+	db $ad ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $5f
+	db $65 ; sprite ID
+	db $5d ; paletteID
+	db $ae ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
+	; $60
+	db $63 ; sprite ID
+	db $5b ; paletteID
+	db $a6 ; anim ID
+	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
+	db $00 ; sound FX ID
+	db $00 ; handler function
+
 ; 0x1d078
 
 Func_1d078: ; 1d078 (7:5078)

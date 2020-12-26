@@ -268,8 +268,8 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd112], a
 	ld [wd3b8], a
 	call EnableSRAM
-	ld a, [s0a007]
-	ld [wd421], a
+	ld a, [sAnimationsDisabled]
+	ld [wAnimationsDisabled], a
 	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
@@ -579,10 +579,13 @@ Func_c4b9: ; c4b9 (3:44b9)
 .asm_c4d1
 	ld a, b
 	ld [wd337], a
-	ld a, $0
+
+	; load Player's sprite for overworld
+	ld a, SPRITE_OW_PLAYER
 	farcall CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wPlayerSpriteIndex], a
+
 	ld b, $2
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP

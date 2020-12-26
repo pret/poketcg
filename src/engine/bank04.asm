@@ -1175,8 +1175,8 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call DisplayPlayerNamingScreen
 	farcall Func_1996e
 	call EnableSRAM
-	ld a, [s0a007]
-	ld [wd421], a
+	ld a, [sAnimationsDisabled]
+	ld [wAnimationsDisabled], a
 	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
@@ -1481,7 +1481,7 @@ LoadSpriteDataForAnimationFrame: ; 12a5b (4:6a5b)
 	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_TILE_ID
 	add hl, bc
 	ld a, [hl]
-	and 1 << SPRITE_ANIM_FLAG_SKIP_DRAW
+	and 1 << SPRITE_ANIM_FLAG_UNSKIPPABLE
 	jr nz, .quit
 	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
 	add hl, bc

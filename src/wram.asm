@@ -2343,7 +2343,9 @@ wd41f:: ; d41f
 wd420:: ; d420
 	ds $1
 
-wd421:: ; d421
+; store settings for animation enabled/disabled
+; 0 means enabled, 1 means disabled
+wAnimationsDisabled:: ; d421
 	ds $1
 
 ; holds an animation to play
@@ -2359,7 +2361,7 @@ wAnimationQueue:: ; d423
 wd42a:: ; d42a
 	ds $1
 
-wd42b:: ; d42b
+wAnimFlags:: ; d42b
 	ds $1
 
 wd42c:: ; d42c

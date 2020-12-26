@@ -121,7 +121,7 @@ NPCHeaderPointers:
 
 DrMasonNPCHeader:
 	db NPC_DRMASON
-	db SPRITE_DRMASON
+	db SPRITE_OW_DRMASON
 	db $00
 	db $26 ; palette and animation
 	db $00
@@ -134,7 +134,7 @@ DrMasonNPCHeader:
 
 Ronald1NPCHeader:
 	db NPC_RONALD1
-	db SPRITE_RONALD
+	db SPRITE_OW_RONALD
 	db $04
 	db $0e
 	db $00
@@ -147,7 +147,7 @@ Ronald1NPCHeader:
 
 Ronald2NPCHeader:
 	db NPC_RONALD2
-	db SPRITE_RONALD
+	db SPRITE_OW_RONALD
 	db $04
 	db $0e
 	db $00
@@ -160,7 +160,7 @@ Ronald2NPCHeader:
 
 Ronald3NPCHeader:
 	db NPC_RONALD3
-	db SPRITE_RONALD
+	db SPRITE_OW_RONALD
 	db $04
 	db $0e
 	db $00
@@ -173,7 +173,7 @@ Ronald3NPCHeader:
 
 IshiharaNPCHeader:
 	db NPC_ISHIHARA
-	db SPRITE_ISHIHARA
+	db SPRITE_OW_ISHIHARA
 	db $04
 	db $22
 	db $00
@@ -186,7 +186,7 @@ IshiharaNPCHeader:
 
 ImakuniNPCHeader:
 	db NPC_IMAKUNI
-	db SPRITE_IMAKUNI
+	db SPRITE_OW_IMAKUNI
 	db $00
 	db $0e
 	db $00
@@ -199,7 +199,7 @@ ImakuniNPCHeader:
 
 SamNPCHeader:
 	db NPC_SAM
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -212,7 +212,7 @@ SamNPCHeader:
 
 Tech1NPCHeader:
 	db NPC_TECH1
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -225,7 +225,7 @@ Tech1NPCHeader:
 
 Tech2NPCHeader:
 	db NPC_TECH2
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -238,7 +238,7 @@ Tech2NPCHeader:
 
 Tech3NPCHeader:
 	db NPC_TECH3
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -251,7 +251,7 @@ Tech3NPCHeader:
 
 Tech4NPCHeader:
 	db NPC_TECH4
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -264,7 +264,7 @@ Tech4NPCHeader:
 
 Tech5NPCHeader:
 	db NPC_TECH5
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -277,7 +277,7 @@ Tech5NPCHeader:
 
 Tech6NPCHeader:
 	db NPC_TECH6
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -290,7 +290,7 @@ Tech6NPCHeader:
 
 Clerk1NPCHeader:
 	db NPC_CLERK1
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -303,7 +303,7 @@ Clerk1NPCHeader:
 
 Clerk2NPCHeader:
 	db NPC_CLERK2
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -316,7 +316,7 @@ Clerk2NPCHeader:
 
 Clerk3NPCHeader:
 	db NPC_CLERK3
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -329,7 +329,7 @@ Clerk3NPCHeader:
 
 Clerk4NPCHeader:
 	db NPC_CLERK4
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -342,7 +342,7 @@ Clerk4NPCHeader:
 
 Clerk5NPCHeader:
 	db NPC_CLERK5
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -355,7 +355,7 @@ Clerk5NPCHeader:
 
 Clerk6NPCHeader:
 	db NPC_CLERK6
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -368,7 +368,7 @@ Clerk6NPCHeader:
 
 Clerk7NPCHeader:
 	db NPC_CLERK7
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -381,7 +381,7 @@ Clerk7NPCHeader:
 
 Clerk8NPCHeader:
 	db NPC_CLERK8
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -394,7 +394,7 @@ Clerk8NPCHeader:
 
 Clerk9NPCHeader:
 	db NPC_CLERK9
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -407,7 +407,7 @@ Clerk9NPCHeader:
 
 ChrisNPCHeader:
 	db NPC_CHRIS
-	db SPRITE_BOY4
+	db SPRITE_OW_MANIA
 	db $00
 	db $26
 	db $00
@@ -420,7 +420,7 @@ ChrisNPCHeader:
 
 MichaelNPCHeader:
 	db NPC_MICHAEL
-	db SPRITE_BOY4
+	db SPRITE_OW_MANIA
 	db $00
 	db $26
 	db $00
@@ -433,7 +433,7 @@ MichaelNPCHeader:
 
 JessicaNPCHeader:
 	db NPC_JESSICA
-	db SPRITE_GIRL4
+	db SPRITE_OW_LASS3
 	db $04
 	db $1a
 	db $00
@@ -446,7 +446,7 @@ JessicaNPCHeader:
 
 MitchNPCHeader:
 	db NPC_MITCH
-	db SPRITE_MITCH
+	db SPRITE_OW_MITCH
 	db $00
 	db $0e
 	db $00
@@ -459,7 +459,7 @@ MitchNPCHeader:
 
 MatthewNPCHeader:
 	db NPC_MATTHEW
-	db SPRITE_BOY4
+	db SPRITE_OW_MANIA
 	db $00
 	db $16
 	db $00
@@ -472,7 +472,7 @@ MatthewNPCHeader:
 
 RyanNPCHeader:
 	db NPC_RYAN
-	db SPRITE_BOY1
+	db SPRITE_OW_BOY
 	db $00
 	db $26
 	db $00
@@ -485,7 +485,7 @@ RyanNPCHeader:
 
 AndrewNPCHeader:
 	db NPC_ANDREW
-	db SPRITE_GUIDE
+	db SPRITE_OW_MAN
 	db $00
 	db $16
 	db $00
@@ -498,7 +498,7 @@ AndrewNPCHeader:
 
 GeneNPCHeader:
 	db NPC_GENE
-	db SPRITE_GENE
+	db SPRITE_OW_GENE
 	db $04
 	db $1e
 	db $00
@@ -511,7 +511,7 @@ GeneNPCHeader:
 
 SaraNPCHeader:
 	db NPC_SARA
-	db SPRITE_GIRL5
+	db SPRITE_OW_SWIMMER
 	db $00
 	db $0e
 	db $00
@@ -524,7 +524,7 @@ SaraNPCHeader:
 
 AmandaNPCHeader:
 	db NPC_AMANDA
-	db SPRITE_GIRL5
+	db SPRITE_OW_SWIMMER
 	db $00
 	db $16
 	db $00
@@ -537,7 +537,7 @@ AmandaNPCHeader:
 
 JoshuaNPCHeader:
 	db NPC_JOSHUA
-	db SPRITE_JOSHUA
+	db SPRITE_OW_JOSHUA
 	db $00
 	db $26
 	db $00
@@ -550,7 +550,7 @@ JoshuaNPCHeader:
 
 AmyNPCHeader:
 	db NPC_AMY
-	db SPRITE_AMY
+	db SPRITE_OW_AMY
 	db $08
 	db $2e
 	db $10
@@ -563,7 +563,7 @@ AmyNPCHeader:
 
 JenniferNPCHeader:
 	db NPC_JENNIFER
-	db SPRITE_GIRL1
+	db SPRITE_OW_GIRL
 	db $04
 	db $0e
 	db $00
@@ -576,7 +576,7 @@ JenniferNPCHeader:
 
 NicholasNPCHeader:
 	db NPC_NICHOLAS
-	db SPRITE_BOY5
+	db SPRITE_OW_HOOD
 	db $04
 	db $1e
 	db $00
@@ -589,7 +589,7 @@ NicholasNPCHeader:
 
 BrandonNPCHeader:
 	db NPC_BRANDON
-	db SPRITE_BOY5
+	db SPRITE_OW_HOOD
 	db $04
 	db $1e
 	db $00
@@ -602,7 +602,7 @@ BrandonNPCHeader:
 
 IsaacNPCHeader:
 	db NPC_ISAAC
-	db SPRITE_ISAAC
+	db SPRITE_OW_ISAAC
 	db $00
 	db $16
 	db $00
@@ -615,7 +615,7 @@ IsaacNPCHeader:
 
 BrittanyNPCHeader:
 	db NPC_BRITTANY
-	db SPRITE_GIRL1
+	db SPRITE_OW_GIRL
 	db $04
 	db $0e
 	db $00
@@ -628,7 +628,7 @@ BrittanyNPCHeader:
 
 KristinNPCHeader:
 	db NPC_KRISTIN
-	db SPRITE_GIRL3
+	db SPRITE_OW_LASS2
 	db $00
 	db $1e
 	db $00
@@ -641,7 +641,7 @@ KristinNPCHeader:
 
 HeatherNPCHeader:
 	db NPC_HEATHER
-	db SPRITE_GIRL2
+	db SPRITE_OW_LASS1
 	db $04
 	db $22
 	db $00
@@ -654,7 +654,7 @@ HeatherNPCHeader:
 
 NikkiNPCHeader:
 	db NPC_NIKKI
-	db SPRITE_NIKKI
+	db SPRITE_OW_NIKKI
 	db $00
 	db $1a
 	db $00
@@ -667,7 +667,7 @@ NikkiNPCHeader:
 
 RobertNPCHeader:
 	db NPC_ROBERT
-	db SPRITE_BOY1
+	db SPRITE_OW_BOY
 	db $04
 	db $16
 	db $00
@@ -680,7 +680,7 @@ RobertNPCHeader:
 
 DanielNPCHeader:
 	db NPC_DANIEL
-	db SPRITE_BOY2
+	db SPRITE_OW_LAD
 	db $04
 	db $1a
 	db $00
@@ -693,7 +693,7 @@ DanielNPCHeader:
 
 StephanieNPCHeader:
 	db NPC_STEPHANIE
-	db SPRITE_GIRL1
+	db SPRITE_OW_GIRL
 	db $04
 	db $0e
 	db $00
@@ -706,7 +706,7 @@ StephanieNPCHeader:
 
 Murray1NPCHeader:
 	db NPC_MURRAY1
-	db SPRITE_MURRAY
+	db SPRITE_OW_MURRAY
 	db $00
 	db $12
 	db $00
@@ -719,7 +719,7 @@ Murray1NPCHeader:
 
 Murray2NPCHeader:
 	db NPC_MURRAY2
-	db SPRITE_MURRAY
+	db SPRITE_OW_MURRAY
 	db $03
 	db $15
 	db $10
@@ -732,7 +732,7 @@ Murray2NPCHeader:
 
 JosephNPCHeader:
 	db NPC_JOSEPH
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -745,7 +745,7 @@ JosephNPCHeader:
 
 DavidNPCHeader:
 	db NPC_DAVID
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -758,7 +758,7 @@ DavidNPCHeader:
 
 ErikNPCHeader:
 	db NPC_ERIK
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -771,7 +771,7 @@ ErikNPCHeader:
 
 RickNPCHeader:
 	db NPC_RICK
-	db SPRITE_RICK
+	db SPRITE_OW_RICK
 	db $00
 	db $0e
 	db $00
@@ -784,7 +784,7 @@ RickNPCHeader:
 
 JohnNPCHeader:
 	db NPC_JOHN
-	db SPRITE_BOY2
+	db SPRITE_OW_LAD
 	db $04
 	db $1a
 	db $00
@@ -797,7 +797,7 @@ JohnNPCHeader:
 
 AdamNPCHeader:
 	db NPC_ADAM
-	db SPRITE_BOY3
+	db SPRITE_OW_SPECS
 	db $00
 	db $22
 	db $00
@@ -810,7 +810,7 @@ AdamNPCHeader:
 
 JonathanNPCHeader:
 	db NPC_JONATHAN
-	db SPRITE_BOY1
+	db SPRITE_OW_BOY
 	db $04
 	db $16
 	db $00
@@ -823,7 +823,7 @@ JonathanNPCHeader:
 
 KenNPCHeader:
 	db NPC_KEN
-	db SPRITE_KEN
+	db SPRITE_OW_KEN
 	db $04
 	db $1e
 	db $00
@@ -836,7 +836,7 @@ KenNPCHeader:
 
 CourtneyNPCHeader:
 	db NPC_COURTNEY
-	db SPRITE_COURTNEY
+	db SPRITE_OW_COURTNEY
 	db $00
 	db $12
 	db $00
@@ -849,7 +849,7 @@ CourtneyNPCHeader:
 
 SteveNPCHeader:
 	db NPC_STEVE
-	db SPRITE_STEVE
+	db SPRITE_OW_STEVE
 	db $00
 	db $2a
 	db $00
@@ -862,7 +862,7 @@ SteveNPCHeader:
 
 JackNPCHeader:
 	db NPC_JACK
-	db SPRITE_JACK
+	db SPRITE_OW_JACK
 	db $00
 	db $26
 	db $00
@@ -875,7 +875,7 @@ JackNPCHeader:
 
 RodNPCHeader:
 	db NPC_ROD
-	db SPRITE_ROD
+	db SPRITE_OW_ROD
 	db $00
 	db $0e
 	db $00
@@ -888,7 +888,7 @@ RodNPCHeader:
 
 Clerk10NPCHeader:
 	db NPC_CLERK10
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -901,7 +901,7 @@ Clerk10NPCHeader:
 
 GiftCenterClerkNPCHeader:
 	db NPC_GIFT_CENTER_CLERK
-	db SPRITE_CLERK
+	db SPRITE_OW_CLERK
 	db $0a
 	db $30
 	db $00
@@ -914,7 +914,7 @@ GiftCenterClerkNPCHeader:
 
 Man1NPCHeader:
 	db NPC_MAN1
-	db SPRITE_GUIDE
+	db SPRITE_OW_MAN
 	db $00
 	db $16
 	db $00
@@ -927,7 +927,7 @@ Man1NPCHeader:
 
 Woman1NPCHeader:
 	db NPC_WOMAN1
-	db SPRITE_WOMAN
+	db SPRITE_OW_WOMAN
 	db $04
 	db $1e
 	db $00
@@ -940,7 +940,7 @@ Woman1NPCHeader:
 
 Chap1NPCHeader:
 	db NPC_CHAP1
-	db SPRITE_CHAP
+	db SPRITE_OW_CHAP
 	db $00
 	db $1a
 	db $00
@@ -953,7 +953,7 @@ Chap1NPCHeader:
 
 Gal1NPCHeader:
 	db NPC_GAL1
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -966,7 +966,7 @@ Gal1NPCHeader:
 
 Lass1NPCHeader:
 	db NPC_LASS1
-	db SPRITE_GIRL3
+	db SPRITE_OW_LASS2
 	db $00
 	db $1e
 	db $00
@@ -979,7 +979,7 @@ Lass1NPCHeader:
 
 Chap2NPCHeader:
 	db NPC_CHAP2
-	db SPRITE_CHAP
+	db SPRITE_OW_CHAP
 	db $00
 	db $1a
 	db $00
@@ -992,7 +992,7 @@ Chap2NPCHeader:
 
 Lass2NPCHeader:
 	db NPC_LASS2
-	db SPRITE_GIRL3
+	db SPRITE_OW_LASS2
 	db $00
 	db $1e
 	db $00
@@ -1005,7 +1005,7 @@ Lass2NPCHeader:
 
 Pappy1NPCHeader:
 	db NPC_PAPPY1
-	db SPRITE_PAPPY
+	db SPRITE_OW_PAPPY
 	db $00
 	db $22
 	db $00
@@ -1018,7 +1018,7 @@ Pappy1NPCHeader:
 
 Lad1NPCHeader:
 	db NPC_LAD1
-	db SPRITE_BOY2
+	db SPRITE_OW_LAD
 	db $04
 	db $1a
 	db $00
@@ -1031,7 +1031,7 @@ Lad1NPCHeader:
 
 Lad2NPCHeader:
 	db NPC_LAD2
-	db SPRITE_BOY1
+	db SPRITE_OW_BOY
 	db $04
 	db $16
 	db $00
@@ -1044,7 +1044,7 @@ Lad2NPCHeader:
 
 Chap3NPCHeader:
 	db NPC_CHAP3
-	db SPRITE_CHAP
+	db SPRITE_OW_CHAP
 	db $00
 	db $1a
 	db $00
@@ -1057,7 +1057,7 @@ Chap3NPCHeader:
 
 Clerk12NPCHeader:
 	db NPC_CLERK12
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1070,7 +1070,7 @@ Clerk12NPCHeader:
 
 Clerk13NPCHeader:
 	db NPC_CLERK13
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1083,7 +1083,7 @@ Clerk13NPCHeader:
 
 HostNPCHeader:
 	db NPC_HOST
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1096,7 +1096,7 @@ HostNPCHeader:
 
 Specs1NPCHeader:
 	db NPC_SPECS1
-	db SPRITE_BOY3
+	db SPRITE_OW_SPECS
 	db $00
 	db $22
 	db $00
@@ -1109,7 +1109,7 @@ Specs1NPCHeader:
 
 ButchNPCHeader:
 	db NPC_BUTCH
-	db SPRITE_BUTCH
+	db SPRITE_OW_BUTCH
 	db $00
 	db $16
 	db $00
@@ -1122,7 +1122,7 @@ ButchNPCHeader:
 
 Granny1NPCHeader:
 	db NPC_GRANNY1
-	db SPRITE_GRANNY
+	db SPRITE_OW_GRANNY
 	db $00
 	db $16
 	db $00
@@ -1135,7 +1135,7 @@ Granny1NPCHeader:
 
 Lass3NPCHeader:
 	db NPC_LASS3
-	db SPRITE_GIRL2
+	db SPRITE_OW_LASS1
 	db $04
 	db $22
 	db $00
@@ -1148,7 +1148,7 @@ Lass3NPCHeader:
 
 Man2NPCHeader:
 	db NPC_MAN2
-	db SPRITE_GUIDE
+	db SPRITE_OW_MAN
 	db $00
 	db $16
 	db $00
@@ -1161,7 +1161,7 @@ Man2NPCHeader:
 
 Pappy2NPCHeader:
 	db NPC_PAPPY2
-	db SPRITE_PAPPY
+	db SPRITE_OW_PAPPY
 	db $00
 	db $22
 	db $00
@@ -1174,7 +1174,7 @@ Pappy2NPCHeader:
 
 Lass4NPCHeader:
 	db NPC_LASS4
-	db SPRITE_GIRL2
+	db SPRITE_OW_LASS1
 	db $04
 	db $22
 	db $00
@@ -1187,7 +1187,7 @@ Lass4NPCHeader:
 
 Hood1NPCHeader:
 	db NPC_HOOD1
-	db SPRITE_BOY5
+	db SPRITE_OW_HOOD
 	db $04
 	db $1e
 	db $00
@@ -1200,7 +1200,7 @@ Hood1NPCHeader:
 
 Granny2NPCHeader:
 	db NPC_GRANNY2
-	db SPRITE_GRANNY
+	db SPRITE_OW_GRANNY
 	db $00
 	db $16
 	db $00
@@ -1213,7 +1213,7 @@ Granny2NPCHeader:
 
 Gal2NPCHeader:
 	db NPC_GAL2
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1226,7 +1226,7 @@ Gal2NPCHeader:
 
 Lad3NPCHeader:
 	db NPC_LAD3
-	db SPRITE_BOY2
+	db SPRITE_OW_LAD
 	db $04
 	db $1a
 	db $00
@@ -1239,7 +1239,7 @@ Lad3NPCHeader:
 
 Gal3NPCHeader:
 	db NPC_GAL3
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1252,7 +1252,7 @@ Gal3NPCHeader:
 
 Chap4NPCHeader:
 	db NPC_CHAP4
-	db SPRITE_CHAP
+	db SPRITE_OW_CHAP
 	db $00
 	db $1a
 	db $00
@@ -1265,7 +1265,7 @@ Chap4NPCHeader:
 
 Man3NPCHeader:
 	db NPC_MAN3
-	db SPRITE_GUIDE
+	db SPRITE_OW_MAN
 	db $00
 	db $16
 	db $00
@@ -1278,7 +1278,7 @@ Man3NPCHeader:
 
 Specs2NPCHeader:
 	db NPC_SPECS2
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -1291,7 +1291,7 @@ Specs2NPCHeader:
 
 Specs3NPCHeader:
 	db NPC_SPECS3
-	db SPRITE_BOY3
+	db SPRITE_OW_SPECS
 	db $00
 	db $22
 	db $00
@@ -1304,7 +1304,7 @@ Specs3NPCHeader:
 
 Woman2NPCHeader:
 	db NPC_WOMAN2
-	db SPRITE_WOMAN
+	db SPRITE_OW_WOMAN
 	db $04
 	db $1e
 	db $00
@@ -1317,7 +1317,7 @@ Woman2NPCHeader:
 
 ManiaNPCHeader:
 	db NPC_MANIA
-	db SPRITE_BOY4
+	db SPRITE_OW_MANIA
 	db $00
 	db $26
 	db $00
@@ -1330,7 +1330,7 @@ ManiaNPCHeader:
 
 Pappy3NPCHeader:
 	db NPC_PAPPY3
-	db SPRITE_PAPPY
+	db SPRITE_OW_PAPPY
 	db $00
 	db $22
 	db $00
@@ -1343,7 +1343,7 @@ Pappy3NPCHeader:
 
 Gal4NPCHeader:
 	db NPC_GAL4
-	db SPRITE_HOST
+	db SPRITE_OW_GAL
 	db $00
 	db $16
 	db $00
@@ -1356,7 +1356,7 @@ Gal4NPCHeader:
 
 ChampNPCHeader:
 	db NPC_CHAMP
-	db SPRITE_BOY4
+	db SPRITE_OW_MANIA
 	db $00
 	db $26
 	db $00
@@ -1369,7 +1369,7 @@ ChampNPCHeader:
 
 Hood2NPCHeader:
 	db NPC_HOOD2
-	db SPRITE_BOY5
+	db SPRITE_OW_HOOD
 	db $04
 	db $1e
 	db $00
@@ -1382,7 +1382,7 @@ Hood2NPCHeader:
 
 Lass5NPCHeader:
 	db NPC_LASS5
-	db SPRITE_GIRL4
+	db SPRITE_OW_LASS3
 	db $04
 	db $1a
 	db $00
@@ -1395,7 +1395,7 @@ Lass5NPCHeader:
 
 Chap5NPCHeader:
 	db NPC_CHAP5
-	db SPRITE_CHAP
+	db SPRITE_OW_CHAP
 	db $00
 	db $1a
 	db $00
@@ -1408,7 +1408,7 @@ Chap5NPCHeader:
 
 AaronNPCHeader:
 	db NPC_AARON
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -1421,7 +1421,7 @@ AaronNPCHeader:
 
 GuideNPCHeader:
 	db NPC_GUIDE
-	db SPRITE_GUIDE
+	db SPRITE_OW_MAN
 	db $00
 	db $16
 	db $00
@@ -1434,7 +1434,7 @@ GuideNPCHeader:
 
 Tech7NPCHeader:
 	db NPC_TECH7
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00
@@ -1447,7 +1447,7 @@ Tech7NPCHeader:
 
 Tech8NPCHeader:
 	db NPC_TECH8
-	db SPRITE_TECH
+	db SPRITE_OW_TECH
 	db $00
 	db $0e
 	db $00

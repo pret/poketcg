@@ -114,7 +114,7 @@ GrassClubTilesetGfx: ; 8b91e (22:791e)
 	dw $57
 	INCBIN "gfx/tilesets/grassclub.2bpp"
 
-OWSpritePlayer:: ; 8be90 (22:7e90)
+OWPlayerGfx:: ; 8be90 (22:7e90)
 	dw $14
 	INCBIN "gfx/overworld_sprites/player.2bpp"
 
@@ -257,9 +257,9 @@ CopyrightGfx: ; 93ce4 (24:7ce4)
 	dw $24
 	INCBIN "gfx/copyright.2bpp"
 
-HelpDeskLadyGfx:: ; 93f26 (24:7f26)
+OWClerkGfx:: ; 93f26 (24:7f26)
 	dw $8
-	INCBIN "gfx/overworld_sprites/help_desk_lady.2bpp"
+	INCBIN "gfx/overworld_sprites/clerk.2bpp"
 
 Duel59Gfx:: ; 93fa8 (24:7fa8)
 	dw $3
@@ -319,7 +319,7 @@ CompaniesGfx: ; 97b94 (25:7b94)
 	dw $31
 	INCBIN "gfx/companies.2bpp"
 
-RonaldOWGfx:: ; 97ea6 (25:7ea6)
+OWRonaldGfx:: ; 97ea6 (25:7ea6)
 	dw $14
 	INCBIN "gfx/overworld_sprites/ronald.2bpp"
 
@@ -351,7 +351,7 @@ Titlescreen6Gfx: ; 9b0b6 (26:70b6)
 	dw $d4
 	INCBIN "gfx/titlescreen/titlescreen6.2bpp"
 
-DoctorMasonOWGfx:: ; 9bdf8 (26:7df8)
+OWDrMasonGfx:: ; 9bdf8 (26:7df8)
 	dw $14
 	INCBIN "gfx/overworld_sprites/doctormason.2bpp"
 
@@ -539,129 +539,129 @@ AaronGfx: ; a1694 (28:5694)
 	dw $24
 	INCBIN "gfx/duelists/aaron.2bpp"
 
-OWSprite0:: ; a18d6 (28:58d6)
+OWIshiharaGfx:: ; a18d6 (28:58d6)
 	dw $14
-	INCBIN "gfx/overworld_sprites/0.2bpp"
+	INCBIN "gfx/overworld_sprites/ishihara.2bpp"
 
-OWSprite1:: ; a1a18 (28:5a18)
+OWImakuniGfx:: ; a1a18 (28:5a18)
 	dw $14
-	INCBIN "gfx/overworld_sprites/1.2bpp"
+	INCBIN "gfx/overworld_sprites/imakuni.2bpp"
 
-OWSprite2:: ; a1b5a (28:5b5a)
+OWNikkiGfx:: ; a1b5a (28:5b5a)
 	dw $14
-	INCBIN "gfx/overworld_sprites/2.2bpp"
+	INCBIN "gfx/overworld_sprites/nikki.2bpp"
 
-OWSprite3:: ; a1c9c (28:5c9c)
+OWRickGfx:: ; a1c9c (28:5c9c)
 	dw $14
-	INCBIN "gfx/overworld_sprites/3.2bpp"
+	INCBIN "gfx/overworld_sprites/rick.2bpp"
 
-OWSprite4:: ; a1dde (28:5dde)
+OWKenGfx:: ; a1dde (28:5dde)
 	dw $14
-	INCBIN "gfx/overworld_sprites/4.2bpp"
+	INCBIN "gfx/overworld_sprites/ken.2bpp"
 
-OWSprite5:: ; a1f20 (28:5f20)
+OWAmyGfx:: ; a1f20 (28:5f20)
 	dw $1b
-	INCBIN "gfx/overworld_sprites/5.2bpp"
+	INCBIN "gfx/overworld_sprites/amy.2bpp"
 
-OWSprite6:: ; a20d2 (28:60d2)
+OWIsaacGfx:: ; a20d2 (28:60d2)
 	dw $14
-	INCBIN "gfx/overworld_sprites/6.2bpp"
+	INCBIN "gfx/overworld_sprites/isaac.2bpp"
 
-OWSprite7:: ; a2214 (28:6214)
+OWMitchGfx:: ; a2214 (28:6214)
 	dw $14
-	INCBIN "gfx/overworld_sprites/7.2bpp"
+	INCBIN "gfx/overworld_sprites/mitch.2bpp"
 
-OWSprite8:: ; a2356 (28:6356)
+OWGeneGfx:: ; a2356 (28:6356)
 	dw $14
-	INCBIN "gfx/overworld_sprites/8.2bpp"
+	INCBIN "gfx/overworld_sprites/gene.2bpp"
 
-OWSprite9:: ; a2498 (28:6498)
+OWMurrayGfx:: ; a2498 (28:6498)
 	dw $14
-	INCBIN "gfx/overworld_sprites/9.2bpp"
+	INCBIN "gfx/overworld_sprites/murray.2bpp"
 
-OWSprite10:: ; a25da (28:65da)
+OWCourtneyGfx:: ; a25da (28:65da)
 	dw $14
-	INCBIN "gfx/overworld_sprites/10.2bpp"
+	INCBIN "gfx/overworld_sprites/courtney.2bpp"
 
-OWSprite11:: ; a271c (28:671c)
+OWSteveGfx:: ; a271c (28:671c)
 	dw $14
-	INCBIN "gfx/overworld_sprites/11.2bpp"
+	INCBIN "gfx/overworld_sprites/steve.2bpp"
 
-OWSprite12:: ; a285e (28:685e)
+OWJackGfx:: ; a285e (28:685e)
 	dw $14
-	INCBIN "gfx/overworld_sprites/12.2bpp"
+	INCBIN "gfx/overworld_sprites/jack.2bpp"
 
-OWSprite13:: ; a29a0 (28:69a0)
+OWRodGfx:: ; a29a0 (28:69a0)
 	dw $14
-	INCBIN "gfx/overworld_sprites/13.2bpp"
+	INCBIN "gfx/overworld_sprites/rod.2bpp"
 
-OWSprite14:: ; a2ae2 (28:6ae2)
+OWBoyGfx:: ; a2ae2 (28:6ae2)
 	dw $14
-	INCBIN "gfx/overworld_sprites/14.2bpp"
+	INCBIN "gfx/overworld_sprites/youngster.2bpp"
 
-OWSprite15:: ; a2c24 (28:6c24)
+OWLadGfx:: ; a2c24 (28:6c24)
 	dw $14
-	INCBIN "gfx/overworld_sprites/15.2bpp"
+	INCBIN "gfx/overworld_sprites/lad.2bpp"
 
-OWSprite16:: ; a2d66 (28:6d66)
+OWSpecsGfx:: ; a2d66 (28:6d66)
 	dw $14
-	INCBIN "gfx/overworld_sprites/16.2bpp"
+	INCBIN "gfx/overworld_sprites/specs.2bpp"
 
-OWSprite17:: ; a2ea8 (28:6ea8)
+OWButchGfx:: ; a2ea8 (28:6ea8)
 	dw $14
-	INCBIN "gfx/overworld_sprites/17.2bpp"
+	INCBIN "gfx/overworld_sprites/butch.2bpp"
 
-OWSprite18:: ; a2fea (28:6fea)
+OWManiaGfx:: ; a2fea (28:6fea)
 	dw $14
-	INCBIN "gfx/overworld_sprites/18.2bpp"
+	INCBIN "gfx/overworld_sprites/mania.2bpp"
 
-OWSprite19:: ; a312c (28:712c)
+OWJoshuaGfx:: ; a312c (28:712c)
 	dw $14
-	INCBIN "gfx/overworld_sprites/19.2bpp"
+	INCBIN "gfx/overworld_sprites/joshua.2bpp"
 
-OWSprite20:: ; a326e (28:726e)
+OWHoodGfx:: ; a326e (28:726e)
 	dw $14
-	INCBIN "gfx/overworld_sprites/20.2bpp"
+	INCBIN "gfx/overworld_sprites/hood.2bpp"
 
-OWSprite21:: ; a33b0 (28:73b0)
+OWTechGfx:: ; a33b0 (28:73b0)
 	dw $14
-	INCBIN "gfx/overworld_sprites/21.2bpp"
+	INCBIN "gfx/overworld_sprites/tech.2bpp"
 
-OWSprite22:: ; a34f2 (28:74f2)
+OWChapGfx:: ; a34f2 (28:74f2)
 	dw $14
-	INCBIN "gfx/overworld_sprites/22.2bpp"
+	INCBIN "gfx/overworld_sprites/chap.2bpp"
 
-OWSprite23:: ; a3634 (28:7634)
+OWManGfx:: ; a3634 (28:7634)
 	dw $14
-	INCBIN "gfx/overworld_sprites/23.2bpp"
+	INCBIN "gfx/overworld_sprites/man.2bpp"
 
-OWSprite24:: ; a3776 (28:7776)
+OWPappyGfx:: ; a3776 (28:7776)
 	dw $14
-	INCBIN "gfx/overworld_sprites/24.2bpp"
+	INCBIN "gfx/overworld_sprites/pappy.2bpp"
 
-OWSprite25:: ; a38b8 (28:78b8)
+OWGirlGfx:: ; a38b8 (28:78b8)
 	dw $14
-	INCBIN "gfx/overworld_sprites/25.2bpp"
+	INCBIN "gfx/overworld_sprites/girl.2bpp"
 
-OWSprite26:: ; a39fa (28:79fa)
+OWLass1Gfx:: ; a39fa (28:79fa)
 	dw $14
-	INCBIN "gfx/overworld_sprites/26.2bpp"
+	INCBIN "gfx/overworld_sprites/lass1.2bpp"
 
-OWSprite27:: ; a3b3c (28:7b3c)
+OWLass2Gfx:: ; a3b3c (28:7b3c)
 	dw $14
-	INCBIN "gfx/overworld_sprites/27.2bpp"
+	INCBIN "gfx/overworld_sprites/lass2.2bpp"
 
-OWSprite28:: ; a3c7e (28:7c7e)
+OWLass3Gfx:: ; a3c7e (28:7c7e)
 	dw $14
-	INCBIN "gfx/overworld_sprites/28.2bpp"
+	INCBIN "gfx/overworld_sprites/lass3.2bpp"
 
-OWSprite29:: ; a3dc0 (28:7dc0)
+OWSwimmerGfx:: ; a3dc0 (28:7dc0)
 	dw $14
-	INCBIN "gfx/overworld_sprites/29.2bpp"
+	INCBIN "gfx/overworld_sprites/swimmer.2bpp"
 
-Duel65Gfx:: ; a3f02 (28:7f02)
+DuelGlowGfx:: ; a3f02 (28:7f02)
 	dw $b
-	INCBIN "gfx/duel/anims/65.2bpp"
+	INCBIN "gfx/duel/anims/glow.2bpp"
 
 Duel66Gfx:: ; a3fb4 (28:7fb4)
 	dw $4
@@ -673,17 +673,17 @@ Palette117:: ; a3ff6 (28:7ff6)
 
 SECTION "Gfx 11", ROMX
 
-OWSprite30:: ; a4000 (29:4000)
+OWGalGfx:: ; a4000 (29:4000)
 	dw $14
-	INCBIN "gfx/overworld_sprites/30.2bpp"
+	INCBIN "gfx/overworld_sprites/gal.2bpp"
 
-OWSprite31:: ; a4142 (29:4142)
+OWWomanGfx:: ; a4142 (29:4142)
 	dw $14
-	INCBIN "gfx/overworld_sprites/31.2bpp"
+	INCBIN "gfx/overworld_sprites/woman.2bpp"
 
-OWSprite32:: ; a4284 (29:4284)
+OWGrannyGfx:: ; a4284 (29:4284)
 	dw $14
-	INCBIN "gfx/overworld_sprites/32.2bpp"
+	INCBIN "gfx/overworld_sprites/granny.2bpp"
 
 Duel0Gfx:: ; a43c6 (29:43c6)
 	dw $16

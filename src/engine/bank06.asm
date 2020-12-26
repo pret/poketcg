@@ -1466,7 +1466,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [s0a006], a
 	ld [wTextSpeed], a
 	xor a
-	ld [s0a007], a
+	ld [sAnimationsDisabled], a
 	ld [s0a009], a
 	ld [s0a004], a
 	ld [s0a005], a
