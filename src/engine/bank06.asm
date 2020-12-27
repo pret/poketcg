@@ -1058,7 +1058,7 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld l, a
 	ld h, 0
 	add hl, hl
-	ld de, PointerTable_MoveAnimation
+	ld de, PointerTable_AttackAnimation
 .asm_4fa8
 	add hl, de
 	ld e, [hl]
@@ -1366,7 +1366,7 @@ Func_19168: ; 19168 (6:5168)
 
 	ret
 
-INCLUDE "data/move_animations.asm"
+INCLUDE "data/attack_animations.asm"
 
 	INCROM $19674, $1991f
 

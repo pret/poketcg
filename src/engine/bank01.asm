@@ -188,7 +188,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	jr z, .active_duelist_won_battle
 	cp TURN_PLAYER_LOST
 	jr z, .active_duelist_lost_battle
-	ld a, $5f
+	ld a, DUEL_ANIM_DRAW
 	ld c, MUSIC_DARK_DIDDLY
 	ldtx hl, DuelWasADrawText
 	jr .handle_duel_finished
@@ -200,7 +200,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 .player_won_battle
 	xor a ; DUEL_WIN
 	ld [wDuelResult], a
-	ld a, $5d
+	ld a, DUEL_ANIM_WIN
 	ld c, MUSIC_MATCH_VICTORY
 	ldtx hl, WonDuelText
 	jr .handle_duel_finished
@@ -212,7 +212,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 .opponent_won_battle
 	ld a, DUEL_LOSS
 	ld [wDuelResult], a
-	ld a, $5e
+	ld a, DUEL_ANIM_LOSS
 	ld c, MUSIC_MATCH_LOSS
 	ldtx hl, LostDuelText
 
