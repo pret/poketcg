@@ -136,7 +136,7 @@ SPRITE_FRAME_OFFSET_SIZE EQU 4
 	const SPRITE_DUEL_48          ; $62
 	const SPRITE_DUEL_49          ; $63
 	const SPRITE_DUEL_50          ; $64
-	const SPRITE_DUEL_51          ; $65
+	const SPRITE_DUEL_WON_LOST_DRAW          ; $65
 	const SPRITE_DUEL_52          ; $66
 	const SPRITE_DUEL_53          ; $67
 	const SPRITE_DUEL_54          ; $68

@@ -2200,7 +2200,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; handler function
 
 	; $5d
-	db SPRITE_DUEL_51 ; sprite ID
+	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ac ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
@@ -2208,7 +2208,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; handler function
 
 	; $5e
-	db SPRITE_DUEL_51 ; sprite ID
+	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ad ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
@@ -2216,7 +2216,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; handler function
 
 	; $5f
-	db SPRITE_DUEL_51 ; sprite ID
+	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ae ; anim ID
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags

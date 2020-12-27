@@ -989,7 +989,7 @@ MapDataPointers_8116b: ; 8116b (20:516b)
 	gfx_pointer Duel48Gfx,          $03 ; SPRITE_DUEL_48
 	gfx_pointer Duel49Gfx,          $05 ; SPRITE_DUEL_49
 	gfx_pointer Duel50Gfx,          $17 ; SPRITE_DUEL_50
-	gfx_pointer Duel51Gfx,          $36 ; SPRITE_DUEL_51
+	gfx_pointer Duel51Gfx,          $36 ; SPRITE_DUEL_WON_LOST_DRAW
 	gfx_pointer Duel52Gfx,          $0b ; SPRITE_DUEL_52
 	gfx_pointer Duel53Gfx,          $06 ; SPRITE_DUEL_53
 	gfx_pointer Duel54Gfx,          $16 ; SPRITE_DUEL_54

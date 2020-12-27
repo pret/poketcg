@@ -1522,13 +1522,15 @@ Func_49a8: ; 49a8 (1:49a8)
 .asm_49b5
 	ld a, e
 	call Func_3b6a
-.asm_49b9
+
+.loop_anim
 	call DoFrame
 	call CheckSkipDelayAllowed
-	jr c, .asm_49c6
+	jr c, .done_anim
 	call CheckAnyAnimationPlaying
-	jr c, .asm_49b9
-.asm_49c6
+	jr c, .loop_anim
+
+.done_anim
 	call Func_3b31
 	ret
 
@@ -1749,7 +1751,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call SwapTurn
 	call InitializeDuelVariables
 	call SwapTurn
-	call Func_4e84
+	call PlayShuffleAndDrawCardsAnimation_BothDuelists
 	call ShuffleDeckAndDrawSevenCards
 	ldh [hTemp_ffa0], a
 	call SwapTurn
@@ -1771,7 +1773,7 @@ Func_4b60: ; 4b60 (1:4b60)
 .ensure_player_basic_pkmn_loop
 	call DisplayNoBasicPokemonInHandScreenAndText
 	call InitializeDuelVariables
-	call Func_4e6e
+	call PlayShuffleAndDrawCardsAnimation_SingleDuelist
 	call ShuffleDeckAndDrawSevenCards
 	jr c, .ensure_player_basic_pkmn_loop
 	jr .hand_cards_ok
@@ -1781,7 +1783,7 @@ Func_4b60: ; 4b60 (1:4b60)
 .ensure_opp_basic_pkmn_loop
 	call DisplayNoBasicPokemonInHandScreenAndText
 	call InitializeDuelVariables
-	call Func_4e6e
+	call PlayShuffleAndDrawCardsAnimation_SingleDuelist
 	call ShuffleDeckAndDrawSevenCards
 	jr c, .ensure_opp_basic_pkmn_loop
 	call SwapTurn
@@ -2170,31 +2172,37 @@ DisplayPracticeDuelPlayerHandScreen: ; 4e40 (1:4e40)
 	call EnableLCD
 	ret
 
-Func_4e6e: ; 4e6e (1:4e6e)
+PlayShuffleAndDrawCardsAnimation_SingleDuelist: ; 4e6e (1:4e6e)
 	ld b, $51
 	ld c, $56
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_4e7c
+	jr z, .play_anim
 	ld b, $52
 	ld c, $57
-.asm_4e7c
+.play_anim
 	ldtx hl, ShufflesTheDeckText
 	ldtx de, Drew7CardsText
-	jr Func_4e98
+	jr PlayShuffleAndDrawCardsAnimation
 
-Func_4e84: ; 4e84 (1:4e84)
+PlayShuffleAndDrawCardsAnimation_BothDuelists: ; 4e84 (1:4e84)
 	ld b, $53
 	ld c, $55
 	ldtx hl, EachPlayerShuffleOpponentsDeckText
 	ldtx de, EachPlayerDraw7CardsText
 	ld a, [wDuelType]
 	cp DUELTYPE_PRACTICE
-	jr nz, Func_4e98
+	jr nz, PlayShuffleAndDrawCardsAnimation
 	ldtx hl, ThisIsJustPracticeDoNotShuffleText
 ;	fallthrough
 
-Func_4e98: ; 4e98 (1:4e98)
+; animate the shuffle and drawing screen
+; input:
+;	b = shuffling animation index
+;	c = drawing animation index
+;	hl = text to print while shuffling
+;	de = text to print while drawing
+PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 	push bc
 	push de
 	push hl
@@ -2211,41 +2219,48 @@ Func_4e98: ; 4e98 (1:4e98)
 	cp DUELTYPE_PRACTICE
 	jr nz, .not_practice
 	call WaitForWideTextBoxInput
-	jr .asm_4ee0
+	jr .print_deck_info
+
 .not_practice
 	call Func_3b21
 	ld hl, sp+$03
+
+; play animation 3 times
 	ld a, [hl]
 	call Func_3b6a
 	ld a, [hl]
 	call Func_3b6a
 	ld a, [hl]
 	call Func_3b6a
-.asm_4ed0
+
+.loop_shuffle_anim
 	call DoFrame
 	call CheckSkipDelayAllowed
 	jr c, .asm_4edd
 	call CheckAnyAnimationPlaying
-	jr c, .asm_4ed0
+	jr c, .loop_shuffle_anim
 .asm_4edd
 	call Func_3b31
-.asm_4ee0
+
+.print_deck_info
 	xor a
 	ld [wNumCardsBeingDrawn], a
 	call PrintDeckAndHandIconsAndNumberOfCards
 	call Func_3b21
 	pop hl
 	call DrawWideTextBox_PrintText
-.asm_4eee
+.draw_card
 	ld hl, sp+$00
 	ld a, [hl]
 	call Func_3b6a
-.asm_4ef4
+
+.loop_drawing_anim
 	call DoFrame
 	call CheckSkipDelayAllowed
-	jr c, .asm_4f28
+	jr c, .done
 	call CheckAnyAnimationPlaying
-	jr c, .asm_4ef4
+	jr c, .loop_drawing_anim
+
 	ld hl, wNumCardsBeingDrawn
 	inc [hl]
 	ld hl, sp+$00
@@ -2253,21 +2268,24 @@ Func_4e98: ; 4e98 (1:4e98)
 	cp $55
 	jr nz, .asm_4f11
 	call PrintDeckAndHandIconsAndNumberOfCards.not_cgb
-	jr .asm_4f14
+	jr .check_num_cards
 .asm_4f11
 	call PrintNumberOfHandAndDeckCards
-.asm_4f14
+
+.check_num_cards
 	ld a, [wNumCardsBeingDrawn]
 	cp 7
-	jr c, .asm_4eee
+	jr c, .draw_card
+
 	ld c, 30
 .wait_loop
 	call DoFrame
 	call CheckSkipDelayAllowed
-	jr c, .asm_4f28
+	jr c, .done
 	dec c
 	jr nz, .wait_loop
-.asm_4f28
+
+.done
 	call Func_3b31
 	pop bc
 	ret
@@ -2282,50 +2300,61 @@ Func_4f2d: ; 4f2d (1:4f2d)
 .skip_draw_scene
 	ld a, SHUFFLE_DECK
 	ld [wDuelDisplayedScreen], a
+
+; if duelist has only one card in deck,
+; skip shuffling animation
 	ld a, DUELVARS_NUMBER_OF_CARDS_NOT_IN_DECK
 	call GetTurnDuelistVariable
 	ld a, DECK_SIZE
 	sub [hl]
 	cp 2
 	jr c, .one_card_in_deck
+
 	ldtx hl, ShufflesTheDeckText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 	call Func_3b21
+
+; load correct animation depending on turn duelist
 	ld e, $51
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_4f64
+	jr z, .load_anim
 	ld e, $52
-.asm_4f64
+.load_anim
+; play animation 3 times
 	ld a, e
 	call Func_3b6a
 	ld a, e
 	call Func_3b6a
 	ld a, e
 	call Func_3b6a
-.asm_4f70
+
+.loop_anim
 	call DoFrame
 	call CheckSkipDelayAllowed
-	jr c, .asm_4f7d
+	jr c, .done_anim
 	call CheckAnyAnimationPlaying
-	jr c, .asm_4f70
-.asm_4f7d
+	jr c, .loop_anim
+
+.done_anim
 	call Func_3b31
 	ld a, $01
 	ret
+
 .one_card_in_deck
+; no animation, just print text and delay
 	ld l, a
 	ld h, $00
 	call LoadTxRam3
 	ldtx hl, DeckHasXCardsText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-	ld a, $3c
-.asm_4f94
+	ld a, 60
+.loop_wait
 	call DoFrame
 	dec a
-	jr nz, .asm_4f94
+	jr nz, .loop_wait
 	ld a, $01
 	ret
 
