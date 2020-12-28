@@ -1055,6 +1055,7 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
+
 	ld l, a
 	ld h, 0
 	add hl, hl
@@ -1129,17 +1130,19 @@ Func_19013: ; 19013 (6:5013)
 Func_19014: ; 19014 (6:5014)
 	ld a, [de]
 	inc de
-	cp $09
+	cp DUEL_ANIM_SHOW_DAMAGE
 	jr z, .asm_502b
-	cp $fa
+	cp DUEL_ANIM_SHAKE1
 	jr z, .asm_5057
-	cp $fb
+	cp DUEL_ANIM_SHAKE2
 	jr z, .asm_505d
-	cp $fc
+	cp DUEL_ANIM_SHAKE3
 	jr z, .asm_5063
-.asm_5026
+
+.play_anim
 	call Func_3b6a
 	jr Func_18f9c.asm_4fd4
+
 .asm_502b
 	ld a, $97
 	call Func_3b6a
@@ -1178,13 +1181,13 @@ Func_19014: ; 19014 (6:5014)
 	ldh a, [hWhoseTurn]
 	cp $c2
 	ld a, c
-	jr z, .asm_5026
+	jr z, .play_anim
 	ld a, [wDuelType]
 	cp $00
 	ld a, c
-	jr z, .asm_5026
+	jr z, .play_anim
 	ld a, b
-	jr .asm_5026
+	jr .play_anim
 
 Func_19079: ; 19079 (6:5079)
 	ld a, [de]

@@ -789,7 +789,7 @@ AttackAnimation_55e6:
 	anim_end
 
 AttackAnimation_55ed:
-	anim_player         DUEL_ANIM_62
+	anim_player         DUEL_ANIM_HEAL
 	anim_player         DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
@@ -801,7 +801,7 @@ AttackAnimation_55f2:
 	anim_end
 
 AttackAnimation_55fb:
-	anim_opponent       DUEL_ANIM_5
+	anim_opponent       DUEL_ANIM_POISON
 	anim_end
 
 AttackAnimation_55fe:
@@ -813,7 +813,7 @@ AttackAnimation_5601:
 	anim_end
 
 AttackAnimation_5604:
-	anim_opponent       DUEL_ANIM_3
+	anim_opponent       DUEL_ANIM_SLEEP
 	anim_end
 
 AttackAnimation_5607:
@@ -878,17 +878,17 @@ AttackAnimation_5644:
 	anim_end
 
 AttackAnimation_564f:
-	anim_player         DUEL_ANIM_5
+	anim_player         DUEL_ANIM_POISON
 	anim_player         DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
 AttackAnimation_5654:
-	anim_player         DUEL_ANIM_62
+	anim_player         DUEL_ANIM_HEAL
 	anim_normal         $98
 	anim_end
 
 AttackAnimation_5659:
-	anim_player         DUEL_ANIM_3
+	anim_player         DUEL_ANIM_SLEEP
 	anim_normal         $98
 	anim_end
 
@@ -906,8 +906,8 @@ AttackAnimation_5668:
 	anim_unknown        DUEL_ANIM_4
 	anim_unknown2       DUEL_ANIM_70
 	anim_unknown        DUEL_ANIM_GLOW
-	anim_player         DUEL_ANIM_62
-	anim_opponent       DUEL_ANIM_62
+	anim_player         DUEL_ANIM_HEAL
+	anim_opponent       DUEL_ANIM_HEAL
 	anim_end
 
 AttackAnimation_5673:

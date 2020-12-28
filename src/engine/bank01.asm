@@ -183,16 +183,18 @@ MainDuelLoop: ; 40ee (1:40ee)
 	pop af
 	ldh [hWhoseTurn], a
 	call Func_3b21
+
+; animate the duel result screen
+; load the correct music and animation depending on result
 	ld a, [wDuelFinished]
 	cp TURN_PLAYER_WON
 	jr z, .active_duelist_won_battle
 	cp TURN_PLAYER_LOST
 	jr z, .active_duelist_lost_battle
-	ld a, DUEL_ANIM_DRAW
+	ld a, DUEL_ANIM_DUEL_DRAW
 	ld c, MUSIC_DARK_DIDDLY
 	ldtx hl, DuelWasADrawText
 	jr .handle_duel_finished
-
 .active_duelist_won_battle
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
@@ -200,11 +202,10 @@ MainDuelLoop: ; 40ee (1:40ee)
 .player_won_battle
 	xor a ; DUEL_WIN
 	ld [wDuelResult], a
-	ld a, DUEL_ANIM_WIN
+	ld a, DUEL_ANIM_DUEL_WIN
 	ld c, MUSIC_MATCH_VICTORY
 	ldtx hl, WonDuelText
 	jr .handle_duel_finished
-
 .active_duelist_lost_battle
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
@@ -212,7 +213,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 .opponent_won_battle
 	ld a, DUEL_LOSS
 	ld [wDuelResult], a
-	ld a, DUEL_ANIM_LOSS
+	ld a, DUEL_ANIM_DUEL_LOSS
 	ld c, MUSIC_MATCH_LOSS
 	ldtx hl, LostDuelText
 
@@ -1491,7 +1492,7 @@ DisplayDrawNCardsScreen: ; 4935 (1:4935)
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 .anim_drawing_cards_loop
-	call Func_49a8
+	call PlayTurnDuelistDrawAnimation
 	ld hl, wNumCardsBeingDrawn
 	inc [hl]
 	call PrintNumberOfHandAndDeckCards
@@ -1512,14 +1513,15 @@ DisplayDrawNCardsScreen: ; 4935 (1:4935)
 	pop hl
 	ret
 
-Func_49a8: ; 49a8 (1:49a8)
+; animates the screen for Turn Duelist drawing a card
+PlayTurnDuelistDrawAnimation: ; 49a8 (1:49a8)
 	call Func_3b21
-	ld e, $56
+	ld e, DUEL_ANIM_PLAYER_DRAW
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_49b5
-	ld e, $57
-.asm_49b5
+	jr z, .got_duelist
+	ld e, DUEL_ANIM_OPP_DRAW
+.got_duelist
 	ld a, e
 	call Func_3b6a
 
@@ -1773,7 +1775,7 @@ Func_4b60: ; 4b60 (1:4b60)
 .ensure_player_basic_pkmn_loop
 	call DisplayNoBasicPokemonInHandScreenAndText
 	call InitializeDuelVariables
-	call PlayShuffleAndDrawCardsAnimation_SingleDuelist
+	call PlayShuffleAndDrawCardsAnimation_TurnDuelist
 	call ShuffleDeckAndDrawSevenCards
 	jr c, .ensure_player_basic_pkmn_loop
 	jr .hand_cards_ok
@@ -1783,7 +1785,7 @@ Func_4b60: ; 4b60 (1:4b60)
 .ensure_opp_basic_pkmn_loop
 	call DisplayNoBasicPokemonInHandScreenAndText
 	call InitializeDuelVariables
-	call PlayShuffleAndDrawCardsAnimation_SingleDuelist
+	call PlayShuffleAndDrawCardsAnimation_TurnDuelist
 	call ShuffleDeckAndDrawSevenCards
 	jr c, .ensure_opp_basic_pkmn_loop
 	call SwapTurn
@@ -2172,22 +2174,22 @@ DisplayPracticeDuelPlayerHandScreen: ; 4e40 (1:4e40)
 	call EnableLCD
 	ret
 
-PlayShuffleAndDrawCardsAnimation_SingleDuelist: ; 4e6e (1:4e6e)
-	ld b, $51
-	ld c, $56
+PlayShuffleAndDrawCardsAnimation_TurnDuelist: ; 4e6e (1:4e6e)
+	ld b, DUEL_ANIM_PLAYER_SHUFFLE
+	ld c, DUEL_ANIM_PLAYER_DRAW
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr z, .play_anim
-	ld b, $52
-	ld c, $57
+	ld b, DUEL_ANIM_OPP_SHUFFLE
+	ld c, DUEL_ANIM_OPP_DRAW
 .play_anim
 	ldtx hl, ShufflesTheDeckText
 	ldtx de, Drew7CardsText
 	jr PlayShuffleAndDrawCardsAnimation
 
 PlayShuffleAndDrawCardsAnimation_BothDuelists: ; 4e84 (1:4e84)
-	ld b, $53
-	ld c, $55
+	ld b, DUEL_ANIM_BOTH_SHUFFLE
+	ld c, DUEL_ANIM_BOTH_DRAW
 	ldtx hl, EachPlayerShuffleOpponentsDeckText
 	ldtx de, EachPlayerDraw7CardsText
 	ld a, [wDuelType]
@@ -2222,10 +2224,10 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 	jr .print_deck_info
 
 .not_practice
+; get the shuffling animation from input value of b
 	call Func_3b21
 	ld hl, sp+$03
-
-; play animation 3 times
+	; play animation 3 times
 	ld a, [hl]
 	call Func_3b6a
 	ld a, [hl]
@@ -2236,10 +2238,10 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 .loop_shuffle_anim
 	call DoFrame
 	call CheckSkipDelayAllowed
-	jr c, .asm_4edd
+	jr c, .done_shuffle
 	call CheckAnyAnimationPlaying
 	jr c, .loop_shuffle_anim
-.asm_4edd
+.done_shuffle
 	call Func_3b31
 
 .print_deck_info
@@ -2250,6 +2252,7 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 	pop hl
 	call DrawWideTextBox_PrintText
 .draw_card
+; get the draw animation from input value of c
 	ld hl, sp+$00
 	ld a, [hl]
 	call Func_3b6a
@@ -2265,11 +2268,12 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 	inc [hl]
 	ld hl, sp+$00
 	ld a, [hl]
-	cp $55
-	jr nz, .asm_4f11
+	cp DUEL_ANIM_BOTH_DRAW
+	jr nz, .one_duelist_shuffled
+	; if both duelists shuffled
 	call PrintDeckAndHandIconsAndNumberOfCards.not_cgb
 	jr .check_num_cards
-.asm_4f11
+.one_duelist_shuffled
 	call PrintNumberOfHandAndDeckCards
 
 .check_num_cards
@@ -2316,11 +2320,11 @@ Func_4f2d: ; 4f2d (1:4f2d)
 	call Func_3b21
 
 ; load correct animation depending on turn duelist
-	ld e, $51
+	ld e, DUEL_ANIM_PLAYER_SHUFFLE
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
 	jr z, .load_anim
-	ld e, $52
+	ld e, DUEL_ANIM_OPP_SHUFFLE
 .load_anim
 ; play animation 3 times
 	ld a, e
@@ -6778,6 +6782,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	call DiscardAttachedDefenders
 	call SwapTurn
 	ret
+
 .something_to_handle
 	; either:
 	; 1. turn holder's arena Pokemon is paralyzed, asleep, poisoned or double poisoned
@@ -6789,6 +6794,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	call DrawDuelBoxMessage
 	ldtx hl, BetweenTurnsText
 	call DrawWideTextBox_WaitForInput
+
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
@@ -6797,24 +6803,27 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld l, DUELVARS_ARENA_CARD_STATUS
 	ld a, [hl]
 	or a
-	jr z, .asm_6c1a
-	call Func_6d3f
-	jr c, .asm_6c1a
-	call Func_6cfa
+	jr z, .discard_pluspower
+	; has status condition
+	call HandlePoisonDamage
+	jr c, .discard_pluspower
+	call HandleSleepCheck
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp PARALYZED
-	jr nz, .asm_6c1a
+	jr nz, .discard_pluspower
+	; heal paralysis
 	ld a, DOUBLE_POISONED
 	and [hl]
 	ld [hl], a
 	call Func_6c7e
 	ldtx hl, IsCuredOfParalysisText
 	call Func_6ce4
-	ld a, $3e
+	ld a, DUEL_ANIM_HEAL
 	call Func_6cab
 	call WaitForWideTextBoxInput
-.asm_6c1a
+
+.discard_pluspower
 	call DiscardAttachedPluspowers
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
@@ -6826,13 +6835,13 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 	ld a, [hl]
 	or a
 	jr z, .asm_6c3a
-	call Func_6d3f
+	call HandlePoisonDamage
 	jr c, .asm_6c3a
-	call Func_6cfa
+	call HandleSleepCheck
 .asm_6c3a
 	call DiscardAttachedDefenders
 	call SwapTurn
-	call $6e4c
+	call Func_6e4c
 	ret
 
 ; discard any PLUSPOWER attached to the turn holder's arena and/or bench Pokemon
@@ -6894,6 +6903,7 @@ Func_6c7e: ; 6c7e (1:6c7e)
 	call DrawDuelMainScene
 	call SwapTurn
 	ret
+
 .asm_6c98
 	ld hl, wWhoseTurn
 	ldh a, [hWhoseTurn]
@@ -6904,33 +6914,39 @@ Func_6c7e: ; 6c7e (1:6c7e)
 	call SwapTurn
 	ret
 
+; input:
+;	a = animation ID
 Func_6cab: ; 6cab (1:6cab)
 	push af
 	ld a, [wDuelType]
 	or a
-	jr nz, .asm_6cc6
+	jr nz, .store_duelist_turn
 	ld a, [wWhoseTurn]
 	cp PLAYER_TURN
-	jr z, .asm_6cc6
+	jr z, .store_duelist_turn
 	call SwapTurn
 	ldh a, [hWhoseTurn]
 	ld [wd4af], a
 	call SwapTurn
 	jr .asm_6ccb
-.asm_6cc6
+
+.store_duelist_turn
 	ldh a, [hWhoseTurn]
 	ld [wd4af], a
+
 .asm_6ccb
 	xor a
 	ld [wd4b0], a
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	pop af
+
+; play animation
 	call Func_3b6a
-.asm_6cd8
+.loop_anim
 	call DoFrame
 	call CheckAnyAnimationPlaying
-	jr c, .asm_6cd8
+	jr c, .loop_anim
 	call Func_6c7e.asm_6c98
 	ret
 
@@ -6949,11 +6965,15 @@ Func_6ce4: ; 6ce4 (1:6ce4)
 	call DrawWideTextBox_PrintText
 	ret
 
-Func_6cfa: ; 6cfa (1:6cfa)
+; handles the sleep check for the NonTurn Duelist
+; heals sleep status if coin is heads, else
+; it plays sleeping animation
+HandleSleepCheck: ; 6cfa (1:6cfa)
 	ld a, [hl]
 	and CNF_SLP_PRZ
 	cp ASLEEP
-	ret nz
+	ret nz ; quit if not asleep
+
 	push hl
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
@@ -6967,17 +6987,20 @@ Func_6cfa: ; 6cfa (1:6cfa)
 	ld [hl], a
 	ldtx de, PokemonsSleepCheckText
 	call TossCoin
-	ld a, $03
+	ld a, DUEL_ANIM_SLEEP
 	ldtx hl, IsStillAsleepText
-	jr nc, .asm_6d2d
+	jr nc, .tails
+
+; coin toss was heads, cure sleep status
 	pop hl
 	push hl
 	ld a, DOUBLE_POISONED
 	and [hl]
 	ld [hl], a
-	ld a, $3e
+	ld a, DUEL_ANIM_HEAL
 	ldtx hl, IsCuredOfSleepText
-.asm_6d2d
+
+.tails
 	push af
 	push hl
 	call Func_6c7e
@@ -6989,10 +7012,12 @@ Func_6cfa: ; 6cfa (1:6cfa)
 	call WaitForWideTextBoxInput
 	ret
 
-Func_6d3f: ; 6d3f (1:6d3f)
+HandlePoisonDamage: ; 6d3f (1:6d3f)
 	or a
 	bit POISONED_F , [hl]
-	ret z
+	ret z ; quit if not poisoned
+
+; load damage and text according to normal/double poison
 	push hl
 	bit DOUBLE_POISONED_F, [hl]
 	ld a, PSN_DAMAGE
@@ -7000,18 +7025,24 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	jr z, .not_double_poisoned
 	ld a, DBLPSN_DAMAGE
 	ldtx hl, Received20DamageDueToPoisonText
+
 .not_double_poisoned
 	push af
 	ld [wd4b1], a
 	xor a
 	ld [wd4b2], a
+
 	push hl
 	call Func_6c7e
 	pop hl
 	call Func_6ce4
-	ld a, $05
+
+; play animation
+	ld a, DUEL_ANIM_POISON
 	call Func_6cab
 	pop af
+
+; deal poison damage
 	ld e, a
 	ld d, $00
 	ld a, DUELVARS_ARENA_CARD_HP
@@ -7021,6 +7052,7 @@ Func_6d3f: ; 6d3f (1:6d3f)
 	ld a, $8c
 	call Func_6cab
 	pop hl
+
 	call PrintKnockedOutIfHLZero
 	push af
 	call WaitForWideTextBoxInput
@@ -7157,6 +7189,9 @@ ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
 
 Func_6e49: ; 6e49 (1:6e49)
 	call HandleDestinyBondSubstatus
+	; fallthrough
+
+Func_6e4c: ; 6e4c (1:6e4c)
 	call ClearDamageReductionSubstatus2OfKnockedOutPokemon
 	xor a
 	ld [wcce8], a
@@ -7808,7 +7843,7 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_7223
 	call Func_3b21
-	ld a, $58
+	ld a, DUEL_ANIM_COIN_SPIN
 	call Func_3b6a
 
 	ld a, [wCoinTossDuelistType]
@@ -7823,81 +7858,94 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_723c
 	call Func_3b21
-	ld d, $5a
-	ld e, $0
+	ld d, DUEL_ANIM_COIN_TOSS2
+	ld e, $0 ; heads
 	call UpdateRNGSources
 	rra
-	jr c, .asm_724d
-	ld d, $59
-	ld e, $1
+	jr c, .got_result
+	ld d, DUEL_ANIM_COIN_TOSS1
+	ld e, $1 ; tails
 
-.asm_724d
+.got_result
+; already decided on coin toss result,
+; load the correct tossing animation
+; and wait for it to finish
 	ld a, d
 	call Func_3b6a
 	ld a, [wCoinTossDuelistType]
 	or a
-	jr z, .asm_725e
+	jr z, .wait_anim
 	ld a, e
 	call Func_7310
 	ld e, a
-	jr .asm_726c
-
-.asm_725e
+	jr .done_toss_anim
+.wait_anim
 	push de
 	call DoFrame
 	call CheckAnyAnimationPlaying
 	pop de
-	jr c, .asm_725e
+	jr c, .wait_anim
 	ld a, e
 	call Func_72ff
 
-.asm_726c
-	ld b, $5c
-	ld c, $34
+.done_toss_anim
+	ld b, DUEL_ANIM_COIN_HEADS
+	ld c, $34 ; tile for circle
 	ld a, e
 	or a
-	jr z, .asm_727c
-	ld b, $5b
-	ld c, $30
+	jr z, .show_result
+	ld b, DUEL_ANIM_COIN_TAILS
+	ld c, $30 ; tile for cross
 	ld hl, wCoinTossNumHeads
 	inc [hl]
 
-.asm_727c
+.show_result
 	ld a, b
 	call Func_3b6a
+
+; load correct sound effect
+; the sound of the coin toss result
+; is dependant on whether it was the Player
+; or the Opponent to get heads/tails
 	ld a, [wCoinTossDuelistType]
 	or a
-	jr z, .asm_728a
+	jr z, .check_sfx
 	ld a, $1
-	xor e
+	xor e ; invert result in case it's not Player
 	ld e, a
-
-.asm_728a
+.check_sfx
 	ld d, SFX_54
 	ld a, e
 	or a
-	jr nz, .asm_7292
+	jr nz, .got_sfx
 	ld d, SFX_55
-
-.asm_7292
+.got_sfx
 	ld a, d
 	call PlaySFX
+
+; in case it's a multiple coin toss scenario,
+; then the result needs to be registered on screen
+; with a circle (o) or a cross (x)
 	ld a, [wCoinTossTotalNum]
 	dec a
-	jr z, .asm_72b9
+	jr z, .incr_num_coin_tossed ; skip if not more than 1 coin toss
 	ld a, c
 	push af
-	ld e, $0
+	ld e, 0
 	ld a, [wCoinTossNumTossed]
+; calculate the offset to draw the circle/cross
 .asm_72a3
-	cp $a
-	jr c, .asm_72ad
+	; if < 10, then the offset is simply calculated
+	; from wCoinTossNumTossed * 2...
+	cp 10
+	jr c, .got_offset
+	; ...else the y-offset is added for each multiple of 10
 	inc e
 	inc e
-	sub $a
+	sub 10
 	jr .asm_72a3
 
-.asm_72ad
+.got_offset
 	add a
 	ld d, a
 	lb bc, 2, 2
@@ -7905,9 +7953,10 @@ _TossCoin: ; 71ad (1:71ad)
 	pop af
 	call FillRectangle
 
-.asm_72b9
+.incr_num_coin_tossed
 	ld hl, wCoinTossNumTossed
 	inc [hl]
+
 	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .asm_72dc
@@ -7936,6 +7985,8 @@ _TossCoin: ; 71ad (1:71ad)
 	call ExchangeRNG
 	call Func_3b31
 	call Func_3b21
+
+; return carry if at least 1 heads
 	ld a, [wCoinTossNumHeads]
 	or a
 	ret z
@@ -7959,10 +8010,10 @@ Func_7310: ; 7310 (1:7310)
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, Func_7338
-.asm_7319
+.loop_anim
 	call DoFrame
 	call CheckAnyAnimationPlaying
-	jr c, .asm_7319
+	jr c, .loop_anim
 	ldh a, [hff96]
 	ret
 
@@ -7971,6 +8022,8 @@ Func_7324: ; 7324 (1:7324)
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, Func_7338
+
+; delay coin flip for AI opponent
 	ld a, 30
 .asm_732f
 	call DoFrame

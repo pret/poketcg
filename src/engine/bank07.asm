@@ -1479,7 +1479,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $12 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_3
+	; DUEL_ANIM_SLEEP
 	db SPRITE_DUEL_2 ; sprite ID
 	db $21 ; palette ID
 	db $49 ; anim ID
@@ -1495,7 +1495,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $14 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_5
+	; DUEL_ANIM_POISON
 	db SPRITE_DUEL_58 ; sprite ID
 	db $23 ; palette ID
 	db $4b ; anim ID
@@ -1951,7 +1951,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $48 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_62
+	; DUEL_ANIM_HEAL
 	db SPRITE_DUEL_60 ; sprite ID
 	db $54 ; palette ID
 	db $97 ; anim ID
@@ -2103,7 +2103,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_81
+	; DUEL_ANIM_PLAYER_SHUFFLE
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $9f ; anim ID
@@ -2111,7 +2111,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $07 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_82
+	; DUEL_ANIM_OPP_SHUFFLE
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $a0 ; anim ID
@@ -2119,7 +2119,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $07 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_83
+	; DUEL_ANIM_BOTH_SHUFFLE
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $a1 ; anim ID
@@ -2135,7 +2135,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_85
+	; DUEL_ANIM_BOTH_DRAW
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $a3 ; anim ID
@@ -2143,7 +2143,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_86
+	; DUEL_ANIM_PLAYER_DRAW
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $a4 ; anim ID
@@ -2151,7 +2151,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_87
+	; DUEL_ANIM_OPP_DRAW
 	db SPRITE_DUEL_49 ; sprite ID
 	db $5b ; palette ID
 	db $a5 ; anim ID
@@ -2159,7 +2159,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_88
+	; DUEL_ANIM_COIN_SPIN
 	db SPRITE_DUEL_50 ; sprite ID
 	db $5c ; palette ID
 	db $a7 ; anim ID
@@ -2167,7 +2167,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_89
+	; DUEL_ANIM_COIN_TOSS1
 	db SPRITE_DUEL_50 ; sprite ID
 	db $5c ; palette ID
 	db $a8 ; anim ID
@@ -2175,7 +2175,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $0b ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_90
+	; DUEL_ANIM_COIN_TOSS2
 	db SPRITE_DUEL_50 ; sprite ID
 	db $5c ; palette ID
 	db $a9 ; anim ID
@@ -2183,7 +2183,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $0b ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_91
+	; DUEL_ANIM_COIN_TAILS
 	db SPRITE_DUEL_50 ; sprite ID
 	db $5c ; palette ID
 	db $aa ; anim ID
@@ -2191,7 +2191,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_92
+	; DUEL_ANIM_COIN_HEADS
 	db SPRITE_DUEL_50 ; sprite ID
 	db $5c ; palette ID
 	db $ab ; anim ID
@@ -2199,7 +2199,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_WIN
+	; DUEL_ANIM_DUEL_WIN
 	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ac ; anim ID
@@ -2207,7 +2207,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_LOSS
+	; DUEL_ANIM_DUEL_LOSS
 	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ad ; anim ID
@@ -2215,7 +2215,7 @@ Animations: ; 1ce32 (7:4e32)
 	db $00 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_DRAW
+	; DUEL_ANIM_DUEL_DRAW
 	db SPRITE_DUEL_WON_LOST_DRAW ; sprite ID
 	db $5d ; palette ID
 	db $ae ; anim ID

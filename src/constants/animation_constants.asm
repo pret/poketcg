@@ -18,9 +18,9 @@
     const DUEL_ANIM_NONE            ; $00
     const DUEL_ANIM_GLOW            ; $01
     const DUEL_ANIM_2               ; $02
-    const DUEL_ANIM_3               ; $03
+    const DUEL_ANIM_SLEEP           ; $03
     const DUEL_ANIM_4               ; $04
-    const DUEL_ANIM_5               ; $05
+    const DUEL_ANIM_POISON          ; $05
     const DUEL_ANIM_6               ; $06
     const DUEL_ANIM_HIT             ; $07
     const DUEL_ANIM_8               ; $08
@@ -77,7 +77,7 @@
     const DUEL_ANIM_59              ; $3b
     const DUEL_ANIM_60              ; $3c
     const DUEL_ANIM_61              ; $3d
-    const DUEL_ANIM_62              ; $3e
+    const DUEL_ANIM_HEAL            ; $3e
     const DUEL_ANIM_63              ; $3f
     const DUEL_ANIM_64              ; $40
     const DUEL_ANIM_65              ; $41
@@ -96,21 +96,21 @@
     const DUEL_ANIM_78              ; $4e
     const DUEL_ANIM_79              ; $4f
     const DUEL_ANIM_80              ; $50
-    const DUEL_ANIM_81              ; $51
-    const DUEL_ANIM_82              ; $52
-    const DUEL_ANIM_83              ; $53
+    const DUEL_ANIM_PLAYER_SHUFFLE  ; $51
+    const DUEL_ANIM_OPP_SHUFFLE     ; $52
+    const DUEL_ANIM_BOTH_SHUFFLE    ; $53
     const DUEL_ANIM_84              ; $54
-    const DUEL_ANIM_85              ; $55
-    const DUEL_ANIM_86              ; $56
-    const DUEL_ANIM_87              ; $57
-    const DUEL_ANIM_88              ; $58
-    const DUEL_ANIM_89              ; $59
-    const DUEL_ANIM_90              ; $5a
-    const DUEL_ANIM_91              ; $5b
-    const DUEL_ANIM_92              ; $5c
-    const DUEL_ANIM_WIN             ; $5d
-    const DUEL_ANIM_LOSS            ; $5e
-    const DUEL_ANIM_DRAW            ; $5f
+    const DUEL_ANIM_BOTH_DRAW       ; $55
+    const DUEL_ANIM_PLAYER_DRAW     ; $56
+    const DUEL_ANIM_OPP_DRAW        ; $57
+    const DUEL_ANIM_COIN_SPIN       ; $58
+    const DUEL_ANIM_COIN_TOSS1      ; $59
+    const DUEL_ANIM_COIN_TOSS2      ; $5a
+    const DUEL_ANIM_COIN_TAILS      ; $5b
+    const DUEL_ANIM_COIN_HEADS      ; $5c
+    const DUEL_ANIM_DUEL_WIN        ; $5d
+    const DUEL_ANIM_DUEL_LOSS       ; $5e
+    const DUEL_ANIM_DUEL_DRAW       ; $5f
     const DUEL_ANIM_96              ; $60
 
     ; Special animations
