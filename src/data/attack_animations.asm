@@ -21,151 +21,151 @@ anim_end2: MACRO
 ENDM
 
 PointerTable_AttackAnimation:
-	dw $0000
-	dw AttackAnimation_52c6
-	dw AttackAnimation_52cf
-	dw AttackAnimation_52c6
-	dw AttackAnimation_52c6
-	dw AttackAnimation_52c6
-	dw AttackAnimation_52d8
-	dw AttackAnimation_52d8
-	dw AttackAnimation_52e3
-	dw AttackAnimation_52d8
-	dw AttackAnimation_52f0
-	dw AttackAnimation_52f0
-	dw AttackAnimation_52f0
-	dw AttackAnimation_52f0
-	dw AttackAnimation_52fd
-	dw AttackAnimation_5308
-	dw AttackAnimation_5313
-	dw AttackAnimation_531e
-	dw AttackAnimation_5329
-	dw AttackAnimation_5334
-	dw AttackAnimation_533f
-	dw AttackAnimation_534a
-	dw AttackAnimation_5357
-	dw AttackAnimation_5362
-	dw AttackAnimation_5362
-	dw AttackAnimation_536d
-	dw AttackAnimation_536d
-	dw AttackAnimation_536d
-	dw AttackAnimation_5378
-	dw AttackAnimation_5383
-	dw AttackAnimation_538e
-	dw AttackAnimation_5383
-	dw AttackAnimation_5399
-	dw AttackAnimation_53a4
-	dw AttackAnimation_53af
-	dw AttackAnimation_53ba
-	dw AttackAnimation_53c5
-	dw AttackAnimation_53d0
-	dw AttackAnimation_53d5
-	dw AttackAnimation_53e0
-	dw AttackAnimation_53eb
-	dw AttackAnimation_53f6
-	dw AttackAnimation_53f6
-	dw AttackAnimation_53f6
-	dw AttackAnimation_5401
-	dw AttackAnimation_540c
-	dw AttackAnimation_5417
-	dw AttackAnimation_5422
-	dw AttackAnimation_542d
-	dw AttackAnimation_542d
-	dw AttackAnimation_5438
-	dw AttackAnimation_5438
-	dw AttackAnimation_5438
-	dw AttackAnimation_5438
-	dw AttackAnimation_5438
-	dw AttackAnimation_5443
-	dw AttackAnimation_5443
-	dw AttackAnimation_544e
-	dw AttackAnimation_5443
-	dw AttackAnimation_5443
-	dw AttackAnimation_5443
-	dw AttackAnimation_5453
-	dw AttackAnimation_5453
-	dw AttackAnimation_5460
-	dw AttackAnimation_5453
-	dw AttackAnimation_5467
-	dw AttackAnimation_5467
-	dw AttackAnimation_5472
-	dw AttackAnimation_5472
-	dw AttackAnimation_547d
-	dw AttackAnimation_5488
-	dw AttackAnimation_548f
-	dw AttackAnimation_549c
-	dw AttackAnimation_549c
-	dw AttackAnimation_54a9
-	dw AttackAnimation_54a9
-	dw AttackAnimation_54ae
-	dw AttackAnimation_54ae
-	dw AttackAnimation_54b3
-	dw AttackAnimation_54be
-	dw AttackAnimation_54c3
-	dw AttackAnimation_54c8
-	dw AttackAnimation_54d3
-	dw AttackAnimation_54e0
-	dw AttackAnimation_54eb
-	dw AttackAnimation_54f2
-	dw AttackAnimation_54f9
-	dw AttackAnimation_5504
-	dw AttackAnimation_5513
-	dw AttackAnimation_5516
-	dw AttackAnimation_5521
-	dw AttackAnimation_552e
-	dw AttackAnimation_5533
-	dw AttackAnimation_553a
-	dw AttackAnimation_5543
-	dw AttackAnimation_554a
-	dw AttackAnimation_5555
-	dw AttackAnimation_555e
-	dw AttackAnimation_556d
-	dw AttackAnimation_5574
-	dw AttackAnimation_557b
-	dw AttackAnimation_557e
-	dw AttackAnimation_5583
-	dw AttackAnimation_5583
-	dw AttackAnimation_5583
-	dw AttackAnimation_558c
-	dw AttackAnimation_5597
-	dw AttackAnimation_559c
-	dw AttackAnimation_55a1
-	dw AttackAnimation_55a4
-	dw AttackAnimation_55a9
-	dw AttackAnimation_55b4
-	dw AttackAnimation_55b4
-	dw AttackAnimation_55bf
-	dw AttackAnimation_55c4
-	dw AttackAnimation_55c9
-	dw AttackAnimation_55ce
-	dw AttackAnimation_55d5
-	dw AttackAnimation_55e0
-	dw AttackAnimation_55e5
-	dw AttackAnimation_55e6
-	dw AttackAnimation_55ed
-	dw AttackAnimation_55f2
-	dw AttackAnimation_55fb
-	dw AttackAnimation_55fe
-	dw AttackAnimation_5601
-	dw AttackAnimation_5604
-	dw AttackAnimation_5607
-	dw AttackAnimation_560a
-	dw AttackAnimation_560f
-	dw AttackAnimation_5612
-	dw AttackAnimation_561d
-	dw AttackAnimation_5628
-	dw AttackAnimation_562d
-	dw AttackAnimation_5632
-	dw AttackAnimation_5637
-	dw AttackAnimation_5644
-	dw AttackAnimation_564f
-	dw AttackAnimation_5654
-	dw AttackAnimation_5659
-	dw AttackAnimation_565e
-	dw AttackAnimation_5665
-	dw AttackAnimation_5668
-	dw AttackAnimation_5673
-	dw AttackAnimation_5673
+	dw $0000                ; ATK_ANIM_NONE
+	dw AttackAnimation_52c6 ; ATK_ANIM_1
+	dw AttackAnimation_52cf ; ATK_ANIM_2
+	dw AttackAnimation_52c6 ; ATK_ANIM_3
+	dw AttackAnimation_52c6 ; ATK_ANIM_4
+	dw AttackAnimation_52c6 ; ATK_ANIM_5
+	dw AttackAnimation_52d8 ; ATK_ANIM_6
+	dw AttackAnimation_52d8 ; ATK_ANIM_7
+	dw AttackAnimation_52e3 ; ATK_ANIM_8
+	dw AttackAnimation_52d8 ; ATK_ANIM_9
+	dw AttackAnimation_52f0 ; ATK_ANIM_10
+	dw AttackAnimation_52f0 ; ATK_ANIM_11
+	dw AttackAnimation_52f0 ; ATK_ANIM_12
+	dw AttackAnimation_52f0 ; ATK_ANIM_13
+	dw AttackAnimation_52fd ; ATK_ANIM_14
+	dw AttackAnimation_5308 ; ATK_ANIM_15
+	dw AttackAnimation_5313 ; ATK_ANIM_16
+	dw AttackAnimation_531e ; ATK_ANIM_17
+	dw AttackAnimation_5329 ; ATK_ANIM_18
+	dw AttackAnimation_5334 ; ATK_ANIM_19
+	dw AttackAnimation_533f ; ATK_ANIM_20
+	dw AttackAnimation_534a ; ATK_ANIM_21
+	dw AttackAnimation_5357 ; ATK_ANIM_22
+	dw AttackAnimation_5362 ; ATK_ANIM_23
+	dw AttackAnimation_5362 ; ATK_ANIM_24
+	dw AttackAnimation_536d ; ATK_ANIM_25
+	dw AttackAnimation_536d ; ATK_ANIM_26
+	dw AttackAnimation_536d ; ATK_ANIM_27
+	dw AttackAnimation_5378 ; ATK_ANIM_28
+	dw AttackAnimation_5383 ; ATK_ANIM_29
+	dw AttackAnimation_538e ; ATK_ANIM_30
+	dw AttackAnimation_5383 ; ATK_ANIM_31
+	dw AttackAnimation_5399 ; ATK_ANIM_32
+	dw AttackAnimation_53a4 ; ATK_ANIM_33
+	dw AttackAnimation_53af ; ATK_ANIM_34
+	dw AttackAnimation_53ba ; ATK_ANIM_35
+	dw AttackAnimation_53c5 ; ATK_ANIM_36
+	dw AttackAnimation_53d0 ; ATK_ANIM_37
+	dw AttackAnimation_53d5 ; ATK_ANIM_38
+	dw AttackAnimation_53e0 ; ATK_ANIM_39
+	dw AttackAnimation_53eb ; ATK_ANIM_40
+	dw AttackAnimation_53f6 ; ATK_ANIM_41
+	dw AttackAnimation_53f6 ; ATK_ANIM_42
+	dw AttackAnimation_53f6 ; ATK_ANIM_43
+	dw AttackAnimation_5401 ; ATK_ANIM_44
+	dw AttackAnimation_540c ; ATK_ANIM_45
+	dw AttackAnimation_5417 ; ATK_ANIM_46
+	dw AttackAnimation_5422 ; ATK_ANIM_47
+	dw AttackAnimation_542d ; ATK_ANIM_48
+	dw AttackAnimation_542d ; ATK_ANIM_49
+	dw AttackAnimation_5438 ; ATK_ANIM_50
+	dw AttackAnimation_5438 ; ATK_ANIM_51
+	dw AttackAnimation_5438 ; ATK_ANIM_52
+	dw AttackAnimation_5438 ; ATK_ANIM_53
+	dw AttackAnimation_5438 ; ATK_ANIM_54
+	dw AttackAnimation_5443 ; ATK_ANIM_55
+	dw AttackAnimation_5443 ; ATK_ANIM_56
+	dw AttackAnimation_544e ; ATK_ANIM_57
+	dw AttackAnimation_5443 ; ATK_ANIM_58
+	dw AttackAnimation_5443 ; ATK_ANIM_59
+	dw AttackAnimation_5443 ; ATK_ANIM_60
+	dw AttackAnimation_5453 ; ATK_ANIM_61
+	dw AttackAnimation_5453 ; ATK_ANIM_62
+	dw AttackAnimation_5460 ; ATK_ANIM_63
+	dw AttackAnimation_5453 ; ATK_ANIM_64
+	dw AttackAnimation_5467 ; ATK_ANIM_65
+	dw AttackAnimation_5467 ; ATK_ANIM_66
+	dw AttackAnimation_5472 ; ATK_ANIM_67
+	dw AttackAnimation_5472 ; ATK_ANIM_68
+	dw AttackAnimation_547d ; ATK_ANIM_69
+	dw AttackAnimation_5488 ; ATK_ANIM_70
+	dw AttackAnimation_548f ; ATK_ANIM_71
+	dw AttackAnimation_549c ; ATK_ANIM_72
+	dw AttackAnimation_549c ; ATK_ANIM_73
+	dw AttackAnimation_54a9 ; ATK_ANIM_74
+	dw AttackAnimation_54a9 ; ATK_ANIM_75
+	dw AttackAnimation_54ae ; ATK_ANIM_76
+	dw AttackAnimation_54ae ; ATK_ANIM_77
+	dw AttackAnimation_54b3 ; ATK_ANIM_78
+	dw AttackAnimation_54be ; ATK_ANIM_79
+	dw AttackAnimation_54c3 ; ATK_ANIM_80
+	dw AttackAnimation_54c8 ; ATK_ANIM_81
+	dw AttackAnimation_54d3 ; ATK_ANIM_82
+	dw AttackAnimation_54e0 ; ATK_ANIM_83
+	dw AttackAnimation_54eb ; ATK_ANIM_84
+	dw AttackAnimation_54f2 ; ATK_ANIM_85
+	dw AttackAnimation_54f9 ; ATK_ANIM_86
+	dw AttackAnimation_5504 ; ATK_ANIM_87
+	dw AttackAnimation_5513 ; ATK_ANIM_88
+	dw AttackAnimation_5516 ; ATK_ANIM_89
+	dw AttackAnimation_5521 ; ATK_ANIM_90
+	dw AttackAnimation_552e ; ATK_ANIM_91
+	dw AttackAnimation_5533 ; ATK_ANIM_92
+	dw AttackAnimation_553a ; ATK_ANIM_93
+	dw AttackAnimation_5543 ; ATK_ANIM_94
+	dw AttackAnimation_554a ; ATK_ANIM_95
+	dw AttackAnimation_5555 ; ATK_ANIM_96
+	dw AttackAnimation_555e ; ATK_ANIM_97
+	dw AttackAnimation_556d ; ATK_ANIM_98
+	dw AttackAnimation_5574 ; ATK_ANIM_99
+	dw AttackAnimation_557b ; ATK_ANIM_100
+	dw AttackAnimation_557e ; ATK_ANIM_101
+	dw AttackAnimation_5583 ; ATK_ANIM_102
+	dw AttackAnimation_5583 ; ATK_ANIM_103
+	dw AttackAnimation_5583 ; ATK_ANIM_104
+	dw AttackAnimation_558c ; ATK_ANIM_105
+	dw AttackAnimation_5597 ; ATK_ANIM_106
+	dw AttackAnimation_559c ; ATK_ANIM_107
+	dw AttackAnimation_55a1 ; ATK_ANIM_108
+	dw AttackAnimation_55a4 ; ATK_ANIM_109
+	dw AttackAnimation_55a9 ; ATK_ANIM_110
+	dw AttackAnimation_55b4 ; ATK_ANIM_111
+	dw AttackAnimation_55b4 ; ATK_ANIM_112
+	dw AttackAnimation_55bf ; ATK_ANIM_113
+	dw AttackAnimation_55c4 ; ATK_ANIM_114
+	dw AttackAnimation_55c9 ; ATK_ANIM_115
+	dw AttackAnimation_55ce ; ATK_ANIM_116
+	dw AttackAnimation_55d5 ; ATK_ANIM_117
+	dw AttackAnimation_55e0 ; ATK_ANIM_118
+	dw AttackAnimation_55e5 ; ATK_ANIM_119
+	dw AttackAnimation_55e6 ; ATK_ANIM_120
+	dw AttackAnimation_55ed ; ATK_ANIM_121
+	dw AttackAnimation_55f2 ; ATK_ANIM_122
+	dw AttackAnimation_55fb ; ATK_ANIM_123
+	dw AttackAnimation_55fe ; ATK_ANIM_124
+	dw AttackAnimation_5601 ; ATK_ANIM_125
+	dw AttackAnimation_5604 ; ATK_ANIM_126
+	dw AttackAnimation_5607 ; ATK_ANIM_127
+	dw AttackAnimation_560a ; ATK_ANIM_128
+	dw AttackAnimation_560f ; ATK_ANIM_129
+	dw AttackAnimation_5612 ; ATK_ANIM_130
+	dw AttackAnimation_561d ; ATK_ANIM_131
+	dw AttackAnimation_5628 ; ATK_ANIM_132
+	dw AttackAnimation_562d ; ATK_ANIM_133
+	dw AttackAnimation_5632 ; ATK_ANIM_134
+	dw AttackAnimation_5637 ; ATK_ANIM_135
+	dw AttackAnimation_5644 ; ATK_ANIM_136
+	dw AttackAnimation_564f ; ATK_ANIM_137
+	dw AttackAnimation_5654 ; ATK_ANIM_138
+	dw AttackAnimation_5659 ; ATK_ANIM_139
+	dw AttackAnimation_565e ; ATK_ANIM_140
+	dw AttackAnimation_5665 ; ATK_ANIM_141
+	dw AttackAnimation_5668 ; ATK_ANIM_142
+	dw AttackAnimation_5673 ; ATK_ANIM_143
+	dw AttackAnimation_5673 ; ATK_ANIM_144
 
 AttackAnimation_52c6: ; (6:52c6)
 	anim_player         DUEL_ANIM_GLOW
