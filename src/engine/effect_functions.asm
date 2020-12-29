@@ -1431,7 +1431,12 @@ DrawSymbolOnPlayAreaCursor: ; 2c6cc (b:46cc)
 	ret
 ; 0x2c6d9
 
-	INCROM $2c6d9, $2c6e0
+; possibly unreferenced
+Func_2c6d9: ; 2c6d9 (b:46d9)
+	ldtx hl, IncompleteText
+	call DrawWideTextBox_WaitForInput
+	ret
+; 0x2c6e0
 
 PlayAreaSelectionMenuParameters: ; 2c6e0 (b:46e0)
 	db 0, 0 ; cursor x, cursor y
@@ -9037,7 +9042,37 @@ Dragonite1Slam_MultiplierEffect: ; 2efa4 (b:6fa4)
 	ret
 ; 0x2efbc
 
-	INCROM $2efbc, $2efe0
+; possibly unreferenced
+Func_2efbc: ; 2efbc (b:6fbc)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, DUELVARS_ARENA_CARD_HP
+	ld de, wce76
+.asm_2efc7
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .asm_2efc7
+	ret
+; 0x2efce
+
+; possibly unreferenced
+Func_2efce: ; 2efce (b:6fce)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld l, DUELVARS_ARENA_CARD_HP
+	ld de, wce76
+.asm_2efd9
+	ld a, [de]
+	inc de
+	ld [hli], a
+	dec c
+	jr nz, .asm_2efd9
+	ret
+; 0x2efe0
 
 CatPunchEffect: ; 2efe0 (b:6fe0)
 	call SwapTurn
@@ -11388,7 +11423,8 @@ DevolutionSpray_DevolutionEffect: ; 2fc99 (b:7c99)
 	ret
 ; 0x2fcd0
 
-Func_2fcd0: ; 2fcd0 (b:7cd0)
+; returns carry if neither duelist has any energy cards attached
+SuperEnergyRemoval_EnergyCheck: ; 2fcd0 (b:7cd0)
 	call CheckIfThereAreAnyEnergyCardsAttached
 	ldtx hl, NoEnergyCardsAttachedToPokemonInYourPlayAreaText
 	ret c
@@ -11399,7 +11435,7 @@ Func_2fcd0: ; 2fcd0 (b:7cd0)
 	ret
 ; 0x2fce4
 
-Func_2fce4: ; 2fce4 (b:7ce4)
+SuperEnergyRemoval_PlayerSelection: ; 2fce4 (b:7ce4)
 ; handle selection of Energy to discard in own Play Area
 	ldtx hl, ChoosePokemonInYourAreaThenPokemonInYourOppText
 	call DrawWideTextBox_WaitForInput
@@ -11434,18 +11470,21 @@ Func_2fce4: ; 2fce4 (b:7ce4)
 ; store this Pokemon's Play Area location
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ldh [hPlayAreaEffectTarget], a
-
+; store which energy card to discard from it
 	bank1call CreateArenaOrBenchEnergyCardList
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	bank1call DisplayEnergyDiscardScreen
 	ld a, 2
 	ld [wcbfa], a
-.asm_2fd2a
+
+.loop_discard_energy_selection
 	bank1call HandleEnergyDiscardMenuInput
-	jr nc, .asm_2fd4a
+	jr nc, .energy_selected
+	; B pressed
 	ld a, 5
 	call AskWhetherToQuitSelectingCards
-	jr nc, .asm_2fd69
+	jr nc, .done ; finish operation
+	; player selected to continue selection
 	ld a, [wcbfb]
 	push af
 	ldh a, [hTempPlayAreaLocation_ff9d]
@@ -11454,8 +11493,10 @@ Func_2fce4: ; 2fce4 (b:7ce4)
 	ld [wcbfa], a
 	pop af
 	ld [wcbfb], a
-	jr .asm_2fd2a
-.asm_2fd4a
+	jr .loop_discard_energy_selection
+
+.energy_selected
+; store energy cards to discard from opponent
 	call GetNextPositionInTempList_TrainerEffects
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
@@ -11463,14 +11504,15 @@ Func_2fce4: ; 2fce4 (b:7ce4)
 	ld hl, wcbfb
 	inc [hl]
 	ldh a, [hCurSelectionItem]
-	cp $05
-	jr nc, .asm_2fd69
+	cp 5
+	jr nc, .done ; no more energy cards to select
 	ld a, [wDuelTempList]
 	cp $ff
-	jr z, .asm_2fd69
+	jr z, .done ; no more energy cards to select
 	bank1call DisplayEnergyDiscardMenu
-	jr .asm_2fd2a
-.asm_2fd69
+	jr .loop_discard_energy_selection
+
+.done
 	call GetNextPositionInTempList_TrainerEffects
 	ld [hl], $ff
 	call SwapTurn
@@ -11478,7 +11520,130 @@ Func_2fce4: ; 2fce4 (b:7ce4)
 	ret
 ; 0x2fd73
 
-	INCROM $2fd73, $2fe25
+SuperEnergyRemoval_DiscardEffect: ; 2fd73 (b:7d73)
+	ld hl, hTempList + 1
+
+; discard energy card of own Play Area
+	ld a, [hli]
+	call PutCardInDiscardPile
+
+; iterate and discard opponent's energy cards
+	inc hl
+	call SwapTurn
+.loop
+	ld a, [hli]
+	cp $ff
+	jr z, .done_discard
+	call PutCardInDiscardPile
+	jr .loop
+
+.done_discard
+; if it's Player's turn, return...
+	call SwapTurn
+	call IsPlayerTurn
+	ret c
+; ...otherwise show Play Area of affected Pokemon
+; in opponent's Play Area
+	ldh a, [hTemp_ffa0]
+	call Func_2c10b
+; in player's Play Area
+	xor a
+	ld [wDuelDisplayedScreen], a
+	call SwapTurn
+	ldh a, [hPlayAreaEffectTarget]
+	call Func_2c10b
+	call SwapTurn
+	ret
+; 0x2fda4
+
+; return carry if not enough cards in hand to
+; discard for Super Energy Retrieval effect
+; or if the Discard Pile has no basic Energy cards
+SuperEnergyRetrieval_HandEnergyCheck: ; 2fda4 (b:7da4)
+	ld a, DUELVARS_NUMBER_OF_CARDS_IN_HAND
+	call GetTurnDuelistVariable
+	ldtx hl, NotEnoughCardsInHandText
+	cp 3
+	ret c
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+	ldtx hl, ThereAreNoBasicEnergyCardsInDiscardPileText
+	ret
+; 0x2fdb6
+
+SuperEnergyRetrieval_PlayerHandSelection: ; 2fdb6 (b:7db6)
+	call HandlePlayerSelection2HandCardsToDiscard
+	ret
+; 0x2fdba
+
+SuperEnergyRetrieval_PlayerDiscardPileSelection: ; 2fdba (b:7dba)
+	ldtx hl, ChooseUpTo4FromDiscardPileText
+	call DrawWideTextBox_WaitForInput
+	call CreateEnergyCardListFromDiscardPile_OnlyBasic
+
+.loop_discard_pile_selection
+	bank1call InitAndDrawCardListScreenLayout
+	ldtx hl, PleaseSelectCardText
+	ldtx de, PlayerDiscardPileText
+	bank1call SetCardListHeaderText
+	bank1call DisplayCardList
+	jr nc, .store_selected_card
+	; B pressed
+	ld a, 6
+	call AskWhetherToQuitSelectingCards
+	jr c, .loop_discard_pile_selection ; player selected to continue
+	jr .done
+
+.store_selected_card
+	ldh a, [hTempCardIndex_ff98]
+	call GetTurnDuelistVariable
+	call GetNextPositionInTempList_TrainerEffects
+	ldh a, [hTempCardIndex_ff98]
+	ld [hl], a ; store selected energy card
+	call RemoveCardFromDuelTempList
+	jr c, .done
+	; this shouldn't happen
+	ldh a, [hCurSelectionItem]
+	cp 6
+	jr c, .loop_discard_pile_selection
+
+.done
+; insert terminating byte
+	call GetNextPositionInTempList_TrainerEffects
+	ld [hl], $ff
+	or a
+	ret
+; 0x2fdfa
+
+SuperEnergyRetrieval_DiscardAndAddToHandEffect: ; 2fdfa (b:7dfa)
+; discard 2 cards selected from the hand
+	ld hl, hTemp_ffa0
+	ld a, [hli]
+	call RemoveCardFromHand
+	call PutCardInDiscardPile
+	ld a, [hli]
+	call RemoveCardFromHand
+	call PutCardInDiscardPile
+
+; put selected cards in hand
+	ld de, wDuelTempList
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	cp $ff
+	jr z, .done
+	call MoveDiscardPileCardToHand
+	call AddCardToHand
+	jr .loop
+
+.done
+; if Player played the card, exit
+	call IsPlayerTurn
+	ret c
+; if not, show card list selected by Opponent
+	bank1call Func_4b38
+	ret
+; 0x2fe25
 
 ; outputs in hl the next position
 ; in hTempList to place a new card,
@@ -11551,7 +11716,43 @@ HandlePlayerSelection2HandCards: ; 2fe3a (b:7e3a)
 	ret
 ; 0x2fe6e
 
-	INCROM $2fe6e, $2fea9
+; return carry if non-turn duelist has no benched Pokemon
+GustOfWind_BenchCheck: ; 2fe6e (b:7e6e)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetNonTurnDuelistVariable
+	ldtx hl, EffectNoPokemonOnTheBenchText
+	cp 2
+	ret
+; 0x2fe79
+
+GustOfWind_PlayerSelection: ; 2fe79 (b:7e79)
+	ldtx hl, ChooseAPokemonToSwitchWithActivePokemonText
+	call DrawWideTextBox_WaitForInput
+	call SwapTurn
+	bank1call HasAlivePokemonInBench
+	bank1call OpenPlayAreaScreenForSelection
+	ldh a, [hTempPlayAreaLocation_ff9d]
+	ldh [hTemp_ffa0], a
+	call SwapTurn
+	ret
+; 0x2fe90
+
+GustOfWind_SwitchEffect: ; 2fe90 (b:7e90)
+; play whirlwind animation
+	ld a, $8d
+	call Func_2fea9
+
+; switch Arena card
+	call SwapTurn
+	ldh a, [hTemp_ffa0]
+	ld e, a
+	call SwapArenaWithBenchPokemon
+	call SwapTurn
+	call ClearDamageReductionSubstatus2
+	xor a
+	ld [wDuelDisplayedScreen], a
+	ret
+; 0x2fea9
 
 ; input:
 ;	a = move animation to play

@@ -626,12 +626,12 @@ ChoosePokemonInYourAreaThenPokemonInYourOppText: ; 398e8 (e:58e8)
 	line "a Pokémon in your opponent's."
 	done
 
-Text0169: ; 3992b (e:592b)
+ChooseUpTo4FromDiscardPileText: ; 3992b (e:592b)
 	text "Choose up to 4"
 	line "from the Discard Pile."
 	done
 
-Text016a: ; 39952 (e:5952)
+ChooseAPokemonToSwitchWithActivePokemonText: ; 39952 (e:5952)
 	text "Choose a Pokémon to switch"
 	line "with the Active Pokémon."
 	done
