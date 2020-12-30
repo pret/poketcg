@@ -114,9 +114,11 @@ ENDM
 end_script_loop: MACRO
 	run_command ScriptCommand_EndScriptLoop1
 ENDM
+
 close_advanced_text_box: MACRO
 	run_command ScriptCommand_CloseAdvancedTextBox
 ENDM
+
 print_text_string: MACRO
 	run_command ScriptCommand_PrintTextString
 	tx \1
@@ -127,12 +129,14 @@ ask_question_jump: MACRO
 	tx \1
 	dw \2
 ENDM
+
 start_battle: MACRO
 	run_command ScriptCommand_StartBattle
 	db \1
 	db \2
 	db \3
 ENDM
+
 print_variable_text: MACRO
 	run_command ScriptCommand_PrintVariableText
 	tx \1
@@ -148,29 +152,35 @@ move_active_npc_by_direction: MACRO
 	run_command ScriptCommand_MoveActiveNPCByDirection
 	dw \1
 ENDM
+
 close_text_box: MACRO
 	run_command ScriptCommand_CloseTextBox
 ENDM
+
 give_booster_packs: MACRO
 	run_command ScriptCommand_GiveBoosterPacks
 	db \1
 	db \2
 	db \3
 ENDM
-jump_if_cardowned: MACRO
+
+jump_if_card_owned: MACRO
 	run_command ScriptCommand_JumpIfCardOwned
 	db \1
 	dw \2
 ENDM
+
 jump_if_card_in_collection: MACRO
 	run_command ScriptCommand_JumpIfCardInCollection
 	db \1
 	dw \2
 ENDM
+
 give_card: MACRO
 	run_command ScriptCommand_GiveCard
 	db \1
 ENDM
+
 take_card: MACRO
 	run_command ScriptCommand_TakeCard
 	db \1
@@ -181,6 +191,7 @@ jump_if_enough_cards_owned: MACRO
 	dw \1
 	dw \2
 ENDM
+
 fight_club_pupil_jump: MACRO
 	run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
 	dw \1
@@ -194,26 +205,32 @@ script_jump: MACRO
 	run_command ScriptCommand_Jump
 	dw \1
 ENDM
+
 try_give_medal_pc_packs: MACRO
 	run_command ScriptCommand_TryGiveMedalPCPacks
 ENDM
+
 set_player_direction: MACRO
 	run_command ScriptCommand_SetPlayerDirection
 	db \1
 ENDM
+
 move_player: MACRO
 	run_command ScriptCommand_MovePlayer
 	db \1
 	db \2
 ENDM
+
 show_card_received_screen: MACRO
 	run_command ScriptCommand_ShowCardReceivedScreen
 	db \1
 ENDM
+
 set_dialog_npc: MACRO
 	run_command ScriptCommand_SetDialogNPC
 	db \1
 ENDM
+
 set_next_npc_and_script: MACRO
 	run_command ScriptCommand_SetNextNPCAndScript
 	db \1
@@ -231,10 +248,12 @@ jump_if_player_coords_match: MACRO
 	db \2
 	dw \3
 ENDM
+
 move_active_npc: MACRO
 	run_command ScriptCommand_MoveActiveNPC
 	dw \1
 ENDM
+
 give_one_of_each_trainer_booster: MACRO
 	run_command ScriptCommand_GiveOneOfEachTrainerBooster
 ENDM
@@ -251,13 +270,16 @@ ENDM
 choose_deck_to_duel_against_multichoice: MACRO
 	run_command ScriptCommand_ChooseDeckToDuelAgainstMultichoice
 ENDM
+
 open_deck_machine: MACRO
 	run_command ScriptCommand_OpenDeckMachine
 	db \1
 ENDM
+
 choose_starter_deck_multichoice: MACRO
 	run_command ScriptCommand_ChooseStarterDeckMultichoice
 ENDM
+
 enter_map: MACRO
 	run_command ScriptCommand_EnterMap
 	db \1
@@ -266,6 +288,7 @@ enter_map: MACRO
 	db \4
 	db \5
 ENDM
+
 move_arbitrary_npc: MACRO
 	run_command ScriptCommand_MoveArbitraryNPC
 	db \1
@@ -276,6 +299,7 @@ try_give_pc_pack: MACRO
 	run_command ScriptCommand_TryGivePCPack
 	db \1
 ENDM
+
 script_nop: MACRO
 	run_command ScriptCommand_nop
 ENDM
@@ -284,9 +308,11 @@ play_sfx: MACRO
 	run_command ScriptCommand_PlaySFX
 	db \1
 ENDM
+
 pause_song: MACRO
 	run_command ScriptCommand_PauseSong
 ENDM
+
 resume_song: MACRO
 	run_command ScriptCommand_ResumeSong
 ENDM
@@ -304,9 +330,11 @@ ELSE
 ENDC
 	dw \2
 ENDM
+
 show_sam_normal_multichoice: MACRO
 	run_command ScriptCommand_ShowSamNormalMultichoice
 ENDM
+
 show_sam_tutorial_multichoice: MACRO
 	run_command ScriptCommand_ShowSamTutorialMultichoice
 ENDM
@@ -314,92 +342,110 @@ ENDM
 end_script_loop_2: MACRO
 	run_command ScriptCommand_EndScriptLoop2
 ENDM
+
 end_script_loop_3: MACRO
 	run_command ScriptCommand_EndScriptLoop3
 ENDM
+
 end_script_loop_4: MACRO
 	run_command ScriptCommand_EndScriptLoop4
 ENDM
+
 end_script_loop_5: MACRO
 	run_command ScriptCommand_EndScriptLoop5
 ENDM
+
 end_script_loop_6: MACRO
 	run_command ScriptCommand_EndScriptLoop6
 ENDM
+
 script_set_flag_value: MACRO
 	run_command ScriptCommand_SetFlagValue
 	db \1
 	db \2
 ENDM
+
 jump_if_flag_zero_1: MACRO
 	run_command ScriptCommand_JumpIfFlagZero1
 	db \1
 	dw \2
 ENDM
+
 jump_if_flag_nonzero_1: MACRO
 	run_command ScriptCommand_JumpIfFlagNonzero1
 	db \1
 	dw \2
 ENDM
+
 jump_if_flag_equal: MACRO
 	run_command ScriptCommand_JumpIfFlagEqual
 	db \1
 	db \2
 	dw \3
 ENDM
+
 jump_if_flag_not_equal: MACRO
 	run_command ScriptCommand_JumpIfFlagNotEqual
 	db \1
 	db \2
 	dw \3
 ENDM
+
 jump_if_flag_not_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagNotLessThan
 	db \1
 	db \2
 	dw \3
 ENDM
+
 jump_if_flag_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagLessThan
 	db \1
 	db \2
 	dw \3
 ENDM
+
 max_out_flag_value: MACRO
 	run_command ScriptCommand_MaxOutFlagValue
 	db \1
 ENDM
+
 zero_out_flag_value: MACRO
 	run_command ScriptCommand_ZeroOutFlagValue
 	db \1
 ENDM
+
 jump_if_flag_zero_2: MACRO
 	run_command ScriptCommand_JumpIfFlagZero2
 	db \1
 	dw \2
 ENDM
+
 jump_if_flag_nonzero_2: MACRO
 	run_command ScriptCommand_JumpIfFlagNonzero2
 	db \1
 	dw \2
 ENDM
+
 script_increment_flag_value: MACRO
 	run_command ScriptCommand_IncrementFlagValue
 	db \1
 ENDM
 
-
-
 end_script_loop_7: MACRO
 	run_command ScriptCommand_EndScriptLoop7
 ENDM
+
 end_script_loop_8: MACRO
 	run_command ScriptCommand_EndScriptLoop8
 ENDM
+
 end_script_loop_9: MACRO
 	run_command ScriptCommand_EndScriptLoop9
 ENDM
+
 end_script_loop_10: MACRO
 	run_command ScriptCommand_EndScriptLoop10
 ENDM
+
 
