@@ -28,7 +28,7 @@ SongBanks2: ; f8ee6 (3e:4ee6)
 	db BANK(Music_MatchStart3)
 	db BANK(Music_MatchVictory)
 	db BANK(Music_MatchLoss)
-	db BANK(Music_DarkDiddly)
+	db BANK(Music_MatchDraw)
 	db BANK(Music_Unused1b)
 	db BANK(Music_BoosterPack)
 	db BANK(Music_Medal)
@@ -245,7 +245,7 @@ Music_Credits: ; f8fdd (3e:4fdd)
 	dw $0000
 	dw $0000
 
-;Music_DarkDiddly
+;Music_MatchDraw
 	db %0000
 	dw $0000
 	dw $0000

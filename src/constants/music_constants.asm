@@ -25,7 +25,7 @@
 	const MUSIC_MATCH_START_3  ; $17
 	const MUSIC_MATCH_VICTORY  ; $18
 	const MUSIC_MATCH_LOSS     ; $19
-	const MUSIC_DARK_DIDDLY    ; $1a
+	const MUSIC_MATCH_DRAW     ; $1a
 	const MUSIC_UNUSED_1B      ; $1b
 	const MUSIC_BOOSTER_PACK   ; $1c
 	const MUSIC_MEDAL          ; $1d

@@ -1,4 +1,4 @@
-Music_DarkDiddly_Ch1: ; f7cdf (3d:7cdf)
+Music_MatchDraw_Ch1: ; f7cdf (3d:7cdf)
 	speed 3
 	musicdc 17
 	musice8 8
@@ -45,7 +45,7 @@ Music_DarkDiddly_Ch1: ; f7cdf (3d:7cdf)
 	music_end
 
 
-Music_DarkDiddly_Ch2: ; f7d17 (3d:7d17)
+Music_MatchDraw_Ch2: ; f7d17 (3d:7d17)
 	speed 3
 	musicdc 17
 	musice8 8
@@ -84,7 +84,7 @@ Music_DarkDiddly_Ch2: ; f7d17 (3d:7d17)
 	music_end
 
 
-Music_DarkDiddly_Ch3: ; f7d47 (3d:7d47)
+Music_MatchDraw_Ch3: ; f7d47 (3d:7d47)
 	speed 6
 	musicdc 17
 	wave 1

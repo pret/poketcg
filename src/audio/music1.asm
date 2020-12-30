@@ -1885,7 +1885,7 @@ INCLUDE "audio/music/matchstart2.asm"
 INCLUDE "audio/music/matchstart3.asm"
 INCLUDE "audio/music/matchvictory.asm"
 INCLUDE "audio/music/matchloss.asm"
-INCLUDE "audio/music/darkdiddly.asm"
+INCLUDE "audio/music/matchdraw.asm"
 INCLUDE "audio/music/boosterpack.asm"
 INCLUDE "audio/music/medal.asm"
 
