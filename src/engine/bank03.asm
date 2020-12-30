@@ -758,7 +758,7 @@ AttemptPlayerMovementFromDirection: ; c5fe (3:45fe)
 	pop bc
 	ret
 
-StartScript_dMovement: ; c607 (3:4607)
+StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
@@ -1885,7 +1885,7 @@ ScriptCommand_AskQuestionJumpDefaultYes: ; cce4 (3:4ce4)
 ;	fallthrough
 
 ; Asks the player a question then jumps if they answer yes. Seem to be able to
-; take a text of 0000 to overwrite last with (yes no) prompt at the bottom
+; take a text of 0000 (NULL) to overwrite last with (yes no) prompt at the bottom
 ScriptCommand_AskQuestionJump: ; cce9 (3:4ce9)
 	ld l, c
 	ld h, b
@@ -2449,7 +2449,7 @@ ScriptCommand_MovePlayer: ; 505c (3:505c)
 	ld [wd339], a
 	ld a, b
 	ld [wd33a], a
-	call StartScript_dMovement
+	call StartScriptedMovement
 .asm_d067
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
@@ -3361,7 +3361,7 @@ Script_d794: ; d794 (3:5794)
 
 .ows_d80c
 	print_text_string Text05e9
-	ask_question_jump_default_yes 0000, .ows_d817
+	ask_question_jump_default_yes NULL, .ows_d817
 	script_jump .ows_d7bc
 
 .ows_d817
@@ -3677,11 +3677,11 @@ Script_Imakuni: ; dd0d (3:5d0d)
 	jump_if_flag_zero_2 EVENT_TEMP_TALKED_TO_IMAKUNI, NULL
 	print_variable_text Text0467, Text0468
 	max_out_flag_value EVENT_TEMP_TALKED_TO_IMAKUNI
-	ask_question_jump Text0469, .declineDuel
+	ask_question_jump Text0469, .acceptDuel
 	print_text_string Text046a
 	quit_script_fully
 
-.declineDuel
+.acceptDuel
 	print_text_string Text046b
 	start_battle PRIZES_6, IMAKUNI_DECK_ID, MUSIC_IMAKUNI
 	quit_script_fully
@@ -3961,12 +3961,12 @@ Script_Gal1: ; e0cf (3:60cf)
 	quit_script_fully
 
 .ows_e0eb
-	jump_if_card_owned $59, .ows_e0f3
+	jump_if_card_owned LAPRAS, .ows_e0f3
 	print_text_string Text0421
 	quit_script_fully
 
 .ows_e0f3
-	jump_if_card_in_collection $59, .ows_e0fb
+	jump_if_card_in_collection LAPRAS, .ows_e0fb
 	print_text_string Text0422
 	quit_script_fully
 
@@ -4675,7 +4675,7 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	move_player NORTH, 1
 	move_player NORTH, 1
 	print_text_string Text0646
-	ask_question_jump_default_yes 0000, .ows_e882
+	ask_question_jump_default_yes NULL, .ows_e882
 	print_text_string Text0647
 	script_jump .ows_e885
 
@@ -5987,7 +5987,7 @@ Func_fc7a: ; fc7a (3:7c7a)
 .ows_fca0
 	run_command Func_d396
 	db $00
-	play_sfx $56
+	play_sfx SFX_56
 	run_command Func_ccdc
 	tx Text06d1
 	run_command Func_d39d
@@ -6003,7 +6003,7 @@ Func_fcad: ; fcad (3:7cad)
 	set_flag_value EVENT_FLAG_72
 
 	start_script
-	play_sfx $56
+	play_sfx SFX_56
 	run_command Func_d396
 	db $00
 	jump_if_flag_equal EVENT_FLAG_72, $00, .ows_fccc
