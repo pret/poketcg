@@ -297,7 +297,7 @@ SetDefiniteDamage: ; 2c166 (b:4166)
 
 ; overwrites wAIMinDamage and wAIMaxDamage
 ; with value in wDamage.
-SetMinMaxDamageSameAsDamage: ; 2c174 (b:4174)
+SetDefiniteAIDamage: ; 2c174 (b:4174)
 	ld a, [wDamage]
 	ld [wAIMinDamage], a
 	ld [wAIMaxDamage], a
@@ -1916,7 +1916,7 @@ Thrash_ModifierEffect: ; 2c973 (b:4973)
 	call AddToDamage
 	ret
 
-Thrash_LowRecoilEffect: ; 2c982 (b:4982)
+Thrash_RecoilEffect: ; 2c982 (b:4982)
 	ldh a, [hTemp_ffa0]
 	or a
 	ret nz
@@ -2959,7 +2959,7 @@ HydroPumpEffect: ; 2cf48 (b:4f48)
 
 KinglerFlail_AIEffect: ; 2cf4e (b:4f4e)
 	call KinglerFlail_HPCheck
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2cf54
 
 KinglerFlail_HPCheck: ; 2cf54 (b:4f54)
@@ -3079,7 +3079,7 @@ KrabbyCallForFamily_PutInPlayAreaEffect: ; 2cfca (b:4fca)
 
 MagikarpFlail_AIEffect: ; 2cfff (b:4fff)
 	call MagikarpFlail_HPCheck
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2d005
 
 MagikarpFlail_HPCheck: ; 2d005 (b:5005)
@@ -3785,7 +3785,7 @@ FlamesOfRage_DiscardEffect: ; 2d3de (b:53de)
 
 FlamesOfRage_AIEffect: ; 2d3e9 (b:53e9)
 	call FlamesOfRage_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2d3ef
 
 FlamesOfRage_DamageBoostEffect: ; 2d3ef (b:53ef)
@@ -4249,7 +4249,7 @@ EnergyBurnCheck_Unreferenced: ; 2d620 (b:5620)
 
 FlareonRage_AIEffect: ; 2d638 (b:5638)
 	call FlareonRage_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2d63e
 
 FlareonRage_DamageBoostEffect: ; 2d63e (b:563e)
@@ -5254,7 +5254,7 @@ InvisibleWallEffect: ; 2db77 (b:5b77)
 
 MrMimeMeditate_AIEffect: ; 2db79 (b:5b79)
 	call MrMimeMeditate_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2db7f
 
 MrMimeMeditate_DamageBoostEffect: ; 2db7f (b:5b7f)
@@ -5646,7 +5646,7 @@ NeutralizingShieldEffect: ; 2dd79 (b:5d79)
 
 Psychic_AIEffect: ; 2dd7b (b:5d7b)
 	call Psychic_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2dd81
 
 Psychic_DamageBoostEffect: ; 2dd81 (b:5d81)
@@ -6106,7 +6106,7 @@ JynxDoubleslap_MultiplierEffect: ; 2dfcf (b:5fcf)
 
 JynxMeditate_AIEffect: ; 2dff2 (b:5ff2)
 	call JynxMeditate_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2dfec
 
 JynxMeditate_DamageBoostEffect: ; 2dfec (b:5fec)
@@ -6279,7 +6279,7 @@ SnivelEffect: ; 2e0cb (b:60cb)
 
 CuboneRage_AIEffect: ; 2e0d1 (b:60d1)
 	call CuboneRage_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2e0d7
 
 CuboneRage_DamageBoostEffect: ; 2e0d7 (b:60d7)
@@ -6428,7 +6428,7 @@ MarowakCallForFamily_PutInPlayAreaEffect: ; 2e194 (b:6194)
 
 KarateChop_AIEffect: ; 2e1b4 (b:61b4)
 	call KarateChop_DamageSubtractionEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2e1ba
 
 KarateChop_DamageSubtractionEffect: ; 2e1ba (b:61ba)
@@ -8247,7 +8247,7 @@ Rampage_AIEffect: ; 2eb96 (b:6b96)
 	ld e, PLAY_AREA_ARENA
 	call GetCardDamageAndMaxHP
 	call AddToDamage
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2eba1
 
 Rampage_Confusion50PercentEffect: ; 2eba1 (b:6ba1)
@@ -8287,7 +8287,7 @@ RetreatAidEffect: ; 2ebd7 (b:6bd7)
 
 DodrioRage_AIEffect: ; 2ebd9 (b:6bd9)
 	call DodrioRage_DamageBoostEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2ebdf
 
 DodrioRage_DamageBoostEffect: ; 2ebdf (b:6bdf)
@@ -8905,7 +8905,7 @@ ChanseyDoubleEdgeEffect: ; 2eefb (b:6efb)
 
 SuperFang_AIEffect: ; 2ef01 (b:6f01)
 	call SuperFang_HalfHPEffect
-	jp SetMinMaxDamageSameAsDamage
+	jp SetDefiniteAIDamage
 ; 0x2ef07
 
 SuperFang_HalfHPEffect: ; 2ef07 (b:6f07)
