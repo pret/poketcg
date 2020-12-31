@@ -138,10 +138,12 @@ IMAKUNI_SCIENCE_CLUB      EQU 1
 IMAKUNI_LIGHTNING_CLUB    EQU 2
 IMAKUNI_WATER_CLUB        EQU 3
 
-NO_JUMP EQU $0000
+NULL EQU $0000
 
 NORTH    EQU $00
 EAST     EQU $01
 SOUTH    EQU $02
 WEST     EQU $03
 NO_MOVE  EQU %10000000 ; For rotations without movement
+
+VARIABLE_CARD	EQU 0 ; use the card located in wd697 instead of using the script's argument

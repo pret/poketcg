@@ -758,7 +758,7 @@ AttemptPlayerMovementFromDirection: ; c5fe (3:45fe)
 	pop bc
 	ret
 
-StartScript_dMovement: ; c607 (3:4607)
+StartScriptedMovement: ; c607 (3:4607)
 	push bc
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
@@ -1885,7 +1885,7 @@ ScriptCommand_AskQuestionJumpDefaultYes: ; cce4 (3:4ce4)
 ;	fallthrough
 
 ; Asks the player a question then jumps if they answer yes. Seem to be able to
-; take a text of 0000 to overwrite last with (yes no) prompt at the bottom
+; take a text of 0000 (NULL) to overwrite last with (yes no) prompt at the bottom
 ScriptCommand_AskQuestionJump: ; cce9 (3:4ce9)
 	ld l, c
 	ld h, b
@@ -2214,12 +2214,12 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	xor a
 	jr .asm_cef0
 
-ScriptCommand_CheckIfCardInCollectionOrDecks: ; cf0c (3:4f0c)
+ScriptCommand_JumpIfCardOwned: ; cf0c (3:4f0c)
 	ld a, c
 	call GetCardCountInCollectionAndDecks
 	jr asm_cf16
 
-ScriptCommand_CheckIfCardInCollection: ; cf12 (3:4f12)
+ScriptCommand_JumpIfCardInCollection: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
@@ -2240,11 +2240,11 @@ asm_cf1f:
 asm_cf2a:
 	jp IncreaseScriptPointerBy4
 
-ScriptCommand_CheckRawAmountOfCardsOwned: ; cf2d (3:4f2d)
+ScriptCommand_JumpIfEnoughCardsOwned: ; cf2d (3:4f2d)
 	push bc
 	call IncreaseScriptPointerBy1
 	pop bc
-	call GetRawAmountOfCardsOwned
+	call GetAmountOfCardsOwned
 	ld a, h
 	cp b
 	jr nz, .asm_cf3b
@@ -2449,7 +2449,7 @@ ScriptCommand_MovePlayer: ; 505c (3:505c)
 	ld [wd339], a
 	ld a, b
 	ld [wd33a], a
-	call StartScript_dMovement
+	call StartScriptedMovement
 .asm_d067
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
@@ -2461,12 +2461,12 @@ ScriptCommand_MovePlayer: ; 505c (3:505c)
 	call SetScreenScroll
 	jp IncreaseScriptPointerBy3
 
-ScriptCommand_SetDialogName: ; d080 (3:5080)
+ScriptCommand_SetDialogNPC: ; d080 (3:5080)
 	ld a, c
 	farcall SetNPCDialogName
 	jp IncreaseScriptPointerBy2
 
-ScriptCommand_SetNextNPCandScript: ; d088 (3:5088)
+ScriptCommand_SetNextNPCAndScript: ; d088 (3:5088)
 	ld a, c
 	ld [wTempNPC], a
 	call GetScriptArgs2AfterPointer
@@ -2528,7 +2528,7 @@ Func_d0d9: ; d0d9 (3:50d9)
 	jp nz, ScriptEventFailedNoJump
 	jp ScriptEventPassedTryJump
 
-ScriptCommand_JumpIfPlayerCoordMatches: ; d0f2 (3:50f2)
+ScriptCommand_JumpIfPlayerCoordsMatch: ; d0f2 (3:50f2)
 	ld a, [wPlayerXCoord]
 	cp c
 	jp nz, ScriptEventFailedNoJump
@@ -2712,7 +2712,7 @@ Func_d244: ; d244 (3:5244)
 	farcall Func_80ba4
 	jp IncreaseScriptPointerBy2
 
-ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst: ; d24c (3:524c)
+ScriptCommand_ChooseDeckToDuelAgainstMultichoice: ; d24c (3:524c)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
@@ -2721,31 +2721,30 @@ ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst: ; d24c (3:524c)
 	set_flag_value EVENT_FLAG_76
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args ;d25e
-	dw $0000 ; NPC title for textbox under menu
+.multichoice_menu_args ; d25e
+	dw NULL ; NPC title for textbox under menu
 	tx Text03f9 ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ; location of table configuration in bank 4
 	db $03 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
-.text_entries ;d269
+.text_entries ; d269
 	tx Text03f6
 	tx Text03f7
 	tx Text03f8
 
 	INCROM $d26f, $d271
 
-
-ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck: ; d271 (3:5271)
+ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	ld hl, .multichoice_menu_args
 	xor a
 	call ShowMultichoiceTextbox
 	jp IncreaseScriptPointerBy1
 ; 0xd27b
 
-.multichoice_menu_args ;d27b
-	dw $0000 ; NPC title for textbox under menu
+.multichoice_menu_args ; d27b
+	dw NULL ; NPC title for textbox under menu
 	tx Text03fd ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
 	db $00 ; the value to return when b is pressed
@@ -2758,14 +2757,14 @@ ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck: ; d271 (3:5271)
 	tx Text03fc
 
 
-;displays a textbox with multiple choices and a cursor.
-;takes as an argument in h1 a pointer to a table
-; 	dw text id for NPC title for textbox under menu
-; 	dw text id for textbox under menu
-; 	dw location of table configuration in bank 4
-; 	db the value to return when b is pressed
-; 	dw ram location to return result into
-; 	dw location of table containing text entries (optional)
+; displays a textbox with multiple choices and a cursor.
+; takes as an argument in h1 a pointer to a table
+;	dw text id for NPC title for textbox under menu
+;	dw text id for textbox under menu
+;	dw location of table configuration in bank 4
+;	db the value to return when b is pressed
+;	dw ram location to return result into
+;	dw location of table containing text entries (optional)
 
 ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld [wd416], a
@@ -2855,14 +2854,13 @@ ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
 	jp IncreaseScriptPointerBy1
 ; 0xd30c
 
-.multichoice_menu_args ;d30c
+.multichoice_menu_args ; d30c
 	tx SamNPCName ; NPC title for textbox under menu
 	tx Text03fe ; text for textbox under menu
 	dw SamNormalMultichoice_ConfigurationTable ; location of table configuration in bank 4
 	db $03 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
-	dw $0000 ; location of table containing text entries
-
+	dw NULL ; location of table containing text entries
 
 ScriptCommand_ShowSamTutorialMultichoice: ; d317 (3:5317)
 	ld hl, .multichoice_menu_args
@@ -2873,14 +2871,13 @@ ScriptCommand_ShowSamTutorialMultichoice: ; d317 (3:5317)
 	set_flag_value EVENT_FLAG_75
 	jp IncreaseScriptPointerBy1
 
-.multichoice_menu_args ;d32b
-	dw $0000 ; NPC title for textbox under menu
-	dw $0000 ; text for textbox under menu
+.multichoice_menu_args ; d32b (3:532b)
+	dw NULL ; NPC title for textbox under menu
+	dw NULL ; text for textbox under menu
 	dw SamTutorialMultichoice_ConfigurationTable ; location of table configuration in bank 4
 	db $07 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
-	dw $0000 ; location of table containing text entries
-
+	dw NULL ; location of table containing text entries
 
 ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	push bc
@@ -2977,7 +2974,6 @@ Func_d3d4: ; d3d4 (3:53d4)
 	jp IncreaseScriptPointerBy1
 
 	INCROM $d3dd, $d3e0
-
 
 Func_d3e0: ; d3e0 (3:53e0)
 	ld a, $1
@@ -3197,18 +3193,11 @@ Func_d4fb: ; d4fb (3:54fb)
 
 Script_BeginGame: ; d52e (3:552e)
 	start_script
-	run_command ScriptCommand_DoFrames
-	db $3c
+	do_frames 60
 	run_command Func_d3e0
-	run_command ScriptCommand_DoFrames
-	db $78
-	run_command ScriptCommand_EnterMap
-	db $02
-	db MASON_LABORATORY
-	db 14
-	db 26
-	db NORTH
-	run_command ScriptCommand_QuitScriptFully
+	do_frames 120
+	enter_map $02, MASON_LABORATORY, 14, 26, NORTH
+	quit_script_fully
 
 MasonLaboratoryAfterDuel: ; d53b (3:553b)
 	ld hl, .after_duel_table
@@ -3258,7 +3247,7 @@ Script_ChallengeMachine: ; d57d (3:557d)
 	run_command Func_ccdc
 	tx Text05bd
 	run_command Func_d43d
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 Script_Tech1: ; d583 (3:5583)
 	INCROM $d583, $d5ca
@@ -3283,279 +3272,158 @@ Script_DrMason: ; d727 (3:5727)
 
 Script_EnterLabFirstTime: ; d753 (3:5753)
 	start_script
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_PrintTextString
-	tx Text05e3
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_SAM
-	dw Script_d779
-	run_command ScriptCommand_EndScriptLoop1
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	move_player NORTH, 2
+	print_text_string Text05e3
+	close_advanced_text_box
+	set_next_npc_and_script NPC_SAM, Script_d779
+	end_script_loop
 	ret
 
 Script_d779: ; d779 (03:5779)
 	start_script
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_d880
-	run_command ScriptCommand_PrintTextString
-	tx Text05e4
-	run_command ScriptCommand_SetDialogName
-	db NPC_DRMASON
-	run_command ScriptCommand_PrintTextString
-	tx Text05e5
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_d882
+	move_active_npc NPCMovement_d880
+	print_text_string Text05e4
+	set_dialog_npc NPC_DRMASON
+	print_text_string Text05e5
+	close_text_box
+	move_active_npc NPCMovement_d882
 	run_command Func_cfc6
 	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db $03
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_DRMASON
-	dw Script_d794
-	run_command ScriptCommand_EndScriptLoop1
+	set_player_direction WEST
+	close_advanced_text_box
+	set_next_npc_and_script NPC_DRMASON, Script_d794
+	end_script_loop
 	ret
 
 Script_d794: ; d794 (3:5794)
 	start_script
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_d88b
-	run_command ScriptCommand_DoFrames
-	db 40
-	run_command ScriptCommand_PrintTextString
-	tx Text05e6
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db WEST
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_d894
-	run_command ScriptCommand_PrintTextString
-	tx Text05e7
-	run_command ScriptCommand_SetDialogName
-	db $07
-	run_command ScriptCommand_PrintTextString
-	tx Text05e8
+	move_active_npc NPCMovement_d88b
+	do_frames 40
+	print_text_string Text05e6
+	close_text_box
+	move_player WEST, 1
+	move_player WEST, 1
+	set_player_direction SOUTH
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	set_player_direction WEST
+	move_active_npc NPCMovement_d894
+	print_text_string Text05e7
+	set_dialog_npc $07
+	print_text_string Text05e8
 
 .ows_d7bc
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_ShowSamTutorialMultichoice
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $07
-	dw .ows_d80c
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $01
-	dw .ows_d7e8
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $02
-	dw .ows_d7ee
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $03
-	dw .ows_d7f4
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $04
-	dw .ows_d7fa
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $05
-	dw .ows_d800
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_75
-	db $06
-	dw .ows_d806
-	run_command ScriptCommand_PrintTextString
-	tx Text05d6
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	close_text_box
+	show_sam_tutorial_multichoice
+	close_text_box
+	jump_if_flag_equal EVENT_FLAG_75, $07, .ows_d80c
+	jump_if_flag_equal EVENT_FLAG_75, $01, .ows_d7e8
+	jump_if_flag_equal EVENT_FLAG_75, $02, .ows_d7ee
+	jump_if_flag_equal EVENT_FLAG_75, $03, .ows_d7f4
+	jump_if_flag_equal EVENT_FLAG_75, $04, .ows_d7fa
+	jump_if_flag_equal EVENT_FLAG_75, $05, .ows_d800
+	jump_if_flag_equal EVENT_FLAG_75, $06, .ows_d806
+	print_text_string Text05d6
+	script_jump .ows_d7bc
 
 .ows_d7e8
-	run_command ScriptCommand_PrintTextString
-	tx Text05d7
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05d7
+	script_jump .ows_d7bc
 
 .ows_d7ee
-	run_command ScriptCommand_PrintTextString
-	tx Text05d8
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05d8
+	script_jump .ows_d7bc
 
 .ows_d7f4
-	run_command ScriptCommand_PrintTextString
-	tx Text05d9
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05d9
+	script_jump .ows_d7bc
 
 .ows_d7fa
-	run_command ScriptCommand_PrintTextString
-	tx Text05da
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05da
+	script_jump .ows_d7bc
 
 .ows_d800
-	run_command ScriptCommand_PrintTextString
-	tx Text05db
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05db
+	script_jump .ows_d7bc
 
 .ows_d806
-	run_command ScriptCommand_PrintTextString
-	tx Text05dc
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05dc
+	script_jump .ows_d7bc
 
 .ows_d80c
-	run_command ScriptCommand_PrintTextString
-	tx Text05e9
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	dw 0000
-	dw .ows_d817
-	run_command ScriptCommand_Jump
-	dw .ows_d7bc
+	print_text_string Text05e9
+	ask_question_jump_default_yes NULL, .ows_d817
+	script_jump .ows_d7bc
 
 .ows_d817
-	run_command ScriptCommand_SetDialogName
-	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text05ea
-	run_command ScriptCommand_nop
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_3E
-	db $01
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_SAM
-	dw Script_d827
-	run_command ScriptCommand_EndScriptLoop1
+	set_dialog_npc $01
+	print_text_string Text05ea
+	script_nop
+	script_set_flag_value EVENT_FLAG_3E, $01
+	close_advanced_text_box
+	set_next_npc_and_script NPC_SAM, Script_d827
+	end_script_loop
 	ret
 
 Script_d827: ; d827 (3:5827)
 	start_script
-	run_command ScriptCommand_StartBattle
-	db PRIZES_2
-	db SAMS_PRACTICE_DECK_ID
-	db MUSIC_DUEL_THEME_1
-	run_command ScriptCommand_QuitScriptFully
+	start_battle PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 ; 0xd82d
 
 	INCROM $d82d, $d834
 
 AfterTutorialBattleScript: ; d834 (3:5834)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text05eb
-	run_command ScriptCommand_PrintTextString
-	tx Text05ef
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_d896
-	run_command ScriptCommand_SetPlayerDirection
-	db NORTH
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db NORTH
-	run_command ScriptCommand_PrintTextString
-	tx Text05f0
-	run_command ScriptCommand_CloseTextBox
+	print_text_string Text05eb
+	print_text_string Text05ef
+	close_text_box
+	move_active_npc NPCMovement_d896
+	set_player_direction NORTH
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	set_player_direction EAST
+	move_player EAST, 1
+	move_player EAST, 1
+	set_player_direction NORTH
+	print_text_string Text05f0
+	close_text_box
 	run_command Func_ccdc
 	tx Text05f1
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_PrintTextString
-	tx Text05f2
+	close_text_box
+	print_text_string Text05f2
 .ows_d85f
-	run_command ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_AskQuestionJump
-	tx Text05f3
-	dw .ows_d869
-	run_command ScriptCommand_Jump
-	dw .ows_d85f
+	choose_starter_deck_multichoice
+	close_text_box
+	ask_question_jump Text05f3, .ows_d869
+	script_jump .ows_d85f
 .ows_d869
-	run_command ScriptCommand_PrintTextString
-	tx Text05f4
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_PauseSong
+	print_text_string Text05f4
+	close_text_box
+	pause_song
 	run_command Func_d40f
-	run_command ScriptCommand_TryGiveMedalPCPacks
+	try_give_medal_pc_packs
 	run_command Func_ccdc
 	tx Text05f5
-	run_command ScriptCommand_WaitForSongToFinish
-	run_command ScriptCommand_ResumeSong
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_3E
-	db $03
+	wait_for_song_to_finish
+	resume_song
+	close_text_box
+	script_set_flag_value EVENT_FLAG_3E, $03
 	run_command Func_d3d4
-	run_command ScriptCommand_PrintTextString
-	tx Text05f6
+	print_text_string Text05f6
 	run_command Func_d396
 	db $00
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 NPCMovement_d880: ; d880 (3:5880)
 	db EAST
@@ -3617,15 +3485,12 @@ Script_d932: ; d932 (3:5932)
 	start_script
 	run_command Func_ccdc
 	tx Text0605
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text0606
-	dw .ows_d93c
-	run_command ScriptCommand_QuitScriptFully
+	ask_question_jump_default_yes Text0606, .ows_d93c
+	quit_script_fully
 
 .ows_d93c
-	run_command ScriptCommand_OpenDeckMachine
-	db $09
-	run_command ScriptCommand_QuitScriptFully
+	open_deck_machine $09
+	quit_script_fully
 ; 0xd93f
 
 	INCROM $d93f, $dadd
@@ -3653,231 +3518,115 @@ Preload_IshiharaInIshiharasHouse: ; db3d (3:5b3d)
 
 Script_Ishihara: ; db4a (3:5b4a)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_1D
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $00
-	dw .ows_db80
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_39
-	dw .ows_db5a
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_dc3e
+	max_out_flag_value EVENT_FLAG_1D
+	jump_if_flag_equal EVENT_FLAG_1F, $00, .ows_db80
+	jump_if_flag_nonzero_2 EVENT_FLAG_39, .ows_db5a
+	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_dc3e
 .ows_db5a
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_00
-	dw .ows_db90
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_38
-	dw .ows_db90
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $01
-	dw .ows_db93
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $02
-	dw .ows_db93
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $03
-	dw .ows_dbcc
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $04
-	dw .ows_dbcc
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $05
-	dw .ows_dc05
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $06
-	dw .ows_dc05
+	jump_if_flag_nonzero_2 EVENT_FLAG_00, .ows_db90
+	jump_if_flag_zero_2 EVENT_FLAG_38, .ows_db90
+	jump_if_flag_equal EVENT_FLAG_1F, $01, .ows_db93
+	jump_if_flag_equal EVENT_FLAG_1F, $02, .ows_db93
+	jump_if_flag_equal EVENT_FLAG_1F, $03, .ows_dbcc
+	jump_if_flag_equal EVENT_FLAG_1F, $04, .ows_dbcc
+	jump_if_flag_equal EVENT_FLAG_1F, $05, .ows_dc05
+	jump_if_flag_equal EVENT_FLAG_1F, $06, .ows_dc05
 .ows_db80
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $01
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_db8d
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_39
+	max_out_flag_value EVENT_FLAG_00
+	script_set_flag_value EVENT_FLAG_1F, $01
+	zero_out_flag_value EVENT_FLAG_38
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_db8d
+	max_out_flag_value EVENT_FLAG_39
 .ows_db8d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0727
+	print_text_quit_fully Text0727
 
 .ows_db90
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0728
+	print_text_quit_fully Text0728
 
 .ows_db93
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0729
-	tx Text072a
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $02
-	run_command ScriptCommand_AskQuestionJump
-	tx Text072b
-	dw .check_ifhave_clefable_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	jump_if_flag_equal EVENT_FLAG_1F, $01, NULL
+	print_variable_text Text0729, Text072a
+	script_set_flag_value EVENT_FLAG_1F, $02
+	ask_question_jump Text072b, .check_ifhave_clefable_incollectionordecks
+	print_text_quit_fully Text072c
 
 .check_ifhave_clefable_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db CLEFABLE
-	dw .check_ifhave_clefable_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072d
+	jump_if_card_owned CLEFABLE, .check_ifhave_clefable_incollectiononly
+	print_text_quit_fully Text072d
 
 .check_ifhave_clefable_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db CLEFABLE
-	dw .do_clefable_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072e
+	jump_if_card_in_collection CLEFABLE, .do_clefable_trade
+	print_text_quit_fully Text072e
 
 .do_clefable_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
-	run_command ScriptCommand_PrintTextString
-	tx Text072f
+	max_out_flag_value EVENT_FLAG_00
+	script_set_flag_value EVENT_FLAG_1F, $03
+	zero_out_flag_value EVENT_FLAG_38
+	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text0730
-	run_command ScriptCommand_TakeCard
-	db CLEFABLE
-	run_command ScriptCommand_GiveCard
-	db SURFING_PIKACHU1
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db SURFING_PIKACHU1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0731
+	take_card CLEFABLE
+	give_card SURFING_PIKACHU1
+	show_card_received_screen SURFING_PIKACHU1
+	print_text_quit_fully Text0731
 
 .ows_dbcc
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $03
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0732
-	tx Text0733
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $04
-	run_command ScriptCommand_AskQuestionJump
-	tx Text072b
-	dw .check_ifhave_ditto_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	jump_if_flag_equal EVENT_FLAG_1F, $03, NULL
+	print_variable_text Text0732, Text0733
+	script_set_flag_value EVENT_FLAG_1F, $04
+	ask_question_jump Text072b, .check_ifhave_ditto_incollectionordecks
+	print_text_quit_fully Text072c
 
 .check_ifhave_ditto_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db DITTO
-	dw .check_ifhave_ditto_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0734
+	jump_if_card_owned DITTO, .check_ifhave_ditto_incollectiononly
+	print_text_quit_fully Text0734
 
 .check_ifhave_ditto_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db DITTO
-	dw .do_ditto_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0735
+	jump_if_card_in_collection DITTO, .do_ditto_trade
+	print_text_quit_fully Text0735
 
 .do_ditto_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $05
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
-	run_command ScriptCommand_PrintTextString
-	tx Text072f
+	max_out_flag_value EVENT_FLAG_00
+	script_set_flag_value EVENT_FLAG_1F, $05
+	zero_out_flag_value EVENT_FLAG_38
+	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text0736
-	run_command ScriptCommand_TakeCard
-	db DITTO
-	run_command ScriptCommand_GiveCard
-	db FLYING_PIKACHU
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db FLYING_PIKACHU
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0737
+	take_card DITTO
+	give_card FLYING_PIKACHU
+	show_card_received_screen FLYING_PIKACHU
+	print_text_quit_fully Text0737
 
 .ows_dc05
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_1F
-	db $05
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0738
-	tx Text0739
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $06
-	run_command ScriptCommand_AskQuestionJump
-	tx Text072b
-	dw .check_ifhave_chansey_incollectionordecks
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text072c
+	jump_if_flag_equal EVENT_FLAG_1F, $05, NULL
+	print_variable_text Text0738, Text0739
+	script_set_flag_value EVENT_FLAG_1F, $06
+	ask_question_jump Text072b, .check_ifhave_chansey_incollectionordecks
+	print_text_quit_fully Text072c
 
 .check_ifhave_chansey_incollectionordecks
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db CHANSEY
-	dw .check_ifhave_chansey_incollectiononly
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073a
+	jump_if_card_owned CHANSEY, .check_ifhave_chansey_incollectiononly
+	print_text_quit_fully Text073a
 
 .check_ifhave_chansey_incollectiononly
-	run_command ScriptCommand_CheckIfCardInCollection
-	db CHANSEY
-	dw .do_chansey_trade
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073b
+	jump_if_card_in_collection CHANSEY, .do_chansey_trade
+	print_text_quit_fully Text073b
 
 .do_chansey_trade
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_00
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_1F
-	db $07
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_38
-	run_command ScriptCommand_PrintTextString
-	tx Text072f
+	max_out_flag_value EVENT_FLAG_00
+	script_set_flag_value EVENT_FLAG_1F, $07
+	zero_out_flag_value EVENT_FLAG_38
+	print_text_string Text072f
 	run_command Func_ccdc
 	tx Text073c
-	run_command ScriptCommand_TakeCard
-	db CHANSEY
-	run_command ScriptCommand_GiveCard
-	db SURFING_PIKACHU2
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db SURFING_PIKACHU2
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073d
+	take_card CHANSEY
+	give_card SURFING_PIKACHU2
+	show_card_received_screen SURFING_PIKACHU2
+	print_text_quit_fully Text073d
 
 .ows_dc3e
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_39
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073e
+	max_out_flag_value EVENT_FLAG_39
+	print_text_quit_fully Text073e
 
 Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
 	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
@@ -3887,26 +3636,17 @@ Preload_Ronald1InIshiharasHouse: ; dc43 (3:5c43)
 
 Script_Ronald: ; dc4b (3:5c4b)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_4E
-	dw .ows_dc55
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_4E
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text073f
+	jump_if_flag_nonzero_2 EVENT_FLAG_4E, .ows_dc55
+	max_out_flag_value EVENT_FLAG_4E
+	print_text_quit_fully Text073f
 
 .ows_dc55
-	run_command ScriptCommand_PrintTextString
-	tx Text0740
-	run_command ScriptCommand_AskQuestionJump
-	tx Text0741
-	dw .ows_dc60
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0742
+	print_text_string Text0740
+	ask_question_jump Text0741, .ows_dc60
+	print_text_quit_fully Text0742
 
 .ows_dc60
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0743
+	print_text_quit_fully Text0743
 
 	; could be a commented function, or could be placed by mistake from
 	; someone thinking that the Ronald script ended with more code execution
@@ -3914,8 +3654,7 @@ Script_Ronald: ; dc4b (3:5c4b)
 
 Script_Clerk1: ; dc64 (3:5c64)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text045a
+	print_text_quit_fully Text045a
 
 FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	ld hl, .after_duel_table
@@ -3934,109 +3673,65 @@ Script_Man1: ; dc76 (3:5c76)
 
 Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_IMAKUNI_STATE
-	db IMAKUNI_TALKED
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_TEMP_TALKED_TO_IMAKUNI
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0467
-	tx Text0468
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_TEMP_TALKED_TO_IMAKUNI
-	run_command ScriptCommand_AskQuestionJump
-	tx Text0469
-	dw .declineDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text046a
-	run_command ScriptCommand_QuitScriptFully
+	script_set_flag_value EVENT_IMAKUNI_STATE, IMAKUNI_TALKED
+	jump_if_flag_zero_2 EVENT_TEMP_TALKED_TO_IMAKUNI, NULL
+	print_variable_text Text0467, Text0468
+	max_out_flag_value EVENT_TEMP_TALKED_TO_IMAKUNI
+	ask_question_jump Text0469, .acceptDuel
+	print_text_string Text046a
+	quit_script_fully
 
-.declineDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text046b
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db IMAKUNI_DECK_ID
-	db MUSIC_IMAKUNI
-	run_command ScriptCommand_QuitScriptFully
+.acceptDuel
+	print_text_string Text046b
+	start_battle PRIZES_6, IMAKUNI_DECK_ID, MUSIC_IMAKUNI
+	quit_script_fully
 
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_IMAKUNI_WIN_COUNT
-	db $07
-	dw .giveBoosters
-	run_command ScriptCommand_IncrementFlagValue
-	db EVENT_IMAKUNI_WIN_COUNT
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_IMAKUNI_WIN_COUNT
-	db $03
-	dw .threeWins
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_IMAKUNI_WIN_COUNT
-	db $06
-	dw .sixWins
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $07, .giveBoosters
+	script_increment_flag_value EVENT_IMAKUNI_WIN_COUNT
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $03, .threeWins
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $06, .sixWins
 .giveBoosters
-	run_command ScriptCommand_PrintTextString
-	tx Text046c
-	run_command ScriptCommand_GiveOneOfEachTrainerBooster
-	run_command ScriptCommand_Jump
-	dw .done
+	print_text_string Text046c
+	give_one_of_each_trainer_booster
+	script_jump .done
 
 .threeWins
-	run_command ScriptCommand_PrintTextString
-	tx Text046d
-	run_command ScriptCommand_Jump
-	dw .giveImakuniCard
+	print_text_string Text046d
+	script_jump .giveImakuniCard
 
 .sixWins
-	run_command ScriptCommand_PrintTextString
-	tx Text046e
+	print_text_string Text046e
 .giveImakuniCard
-	run_command ScriptCommand_PrintTextString
-	tx Text046f
-	run_command ScriptCommand_GiveCard
-	db IMAKUNI_CARD
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db IMAKUNI_CARD
+	print_text_string Text046f
+	give_card IMAKUNI_CARD
+	show_card_received_screen IMAKUNI_CARD
 .done
-	run_command ScriptCommand_PrintTextString
-	tx Text0470
-	run_command ScriptCommand_Jump
-	dw ScriptJump_ImakuniCommon
+	print_text_string Text0470
+	script_jump ScriptJump_ImakuniCommon
 
 Script_LostToImakuni: ; dd5c (3:5d5c)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0471
+	print_text_string Text0471
 
 ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db 18
-	db 4
-	dw .ows_dd69
-	run_command ScriptCommand_Jump
-	dw .ows_dd6e
+	close_text_box
+	jump_if_player_coords_match 18, 4, .ows_dd69
+	script_jump .ows_dd6e
 
 .ows_dd69
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	set_player_direction EAST
+	move_player WEST, 1
 
 .ows_dd6e
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_dd78
+	move_active_npc NPCMovement_dd78
 	run_command Func_cdcb
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_TEMP_BATTLED_IMAKUNI
+	max_out_flag_value EVENT_TEMP_BATTLED_IMAKUNI
 	run_command Func_d408
 	db $09
 	run_command Func_d41d
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 NPCMovement_dd78: ; dd78 (3:5d78)
 	db SOUTH
@@ -4059,10 +3754,12 @@ Script_Butch: ; dd8d (3:5d8d)
 Script_Granny1: ; dd9f (3:5d9f)
 	INCROM $dd9f, $dda3
 
+
 FightingClubAfterDuel: ; dda3 (3:5da3)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xddaa
 
 .after_duel_table
 	db NPC_CHRIS
@@ -4090,121 +3787,81 @@ FightingClubAfterDuel: ; dda3 (3:5da3)
 
 Script_Mitch: ; ddc3 (3:5dc3)
 	start_script
-	run_command ScriptCommand_TryGivePCPack
-	db $02
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_AlreadyHaveMedal
-	run_command ScriptCommand_JumpBasedOnFightingClubPupilStatus
-	dw .first_interaction
-	dw .three_pupils_remaining
-	dw .two_pupils_remaining
-	dw .one_pupil_remaining
-	dw .all_pupils_defeated
+	try_give_pc_pack $02
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_AlreadyHaveMedal
+	fight_club_pupil_jump .first_interaction, .three_pupils_remaining, \
+		.two_pupils_remaining, .one_pupil_remaining, .all_pupils_defeated
 .first_interaction
-	run_command ScriptCommand_PrintTextString
-	tx Text0477
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_11
-	db $01
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_17
-	db $01
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_20
-	db $01
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0477
+	script_set_flag_value EVENT_FLAG_11, $01
+	script_set_flag_value EVENT_FLAG_17, $01
+	script_set_flag_value EVENT_FLAG_20, $01
+	quit_script_fully
+; 0xdde2
 .three_pupils_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0478
+	print_text_quit_fully Text0478
+; 0xdde5
 .two_pupils_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0479
+	print_text_quit_fully Text0479
+; 0xdde8
 .one_pupil_remaining
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text047a
+	print_text_quit_fully Text047a
+; 0xddeb
 .all_pupils_defeated
-	run_command ScriptCommand_PrintTextString
-	tx Text047b
-	run_command ScriptCommand_AskQuestionJump
-	tx Text047c
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text047d
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text047b
+	ask_question_jump Text047c, .do_battle
+	print_text_string Text047d
+	quit_script_fully
+; 0xddf7
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text047e
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRST_STRIKE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text047e
+	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
+; 0xddff
 
 Script_BeatMitch: ; ddff (3:5dff)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_GiveBoosters
-	run_command ScriptCommand_PrintTextString
-	tx Text047f
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_0F
-	run_command ScriptCommand_TryGiveMedalPCPacks
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_GiveBoosters
+	print_text_string Text047f
+	max_out_flag_value EVENT_FLAG_0F
+	try_give_medal_pc_packs
 	run_command Func_d125
 	db $0f
 	run_command Func_d435
 	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0480
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_NEUTRAL
-	db BOOSTER_LABORATORY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0481
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0480
+	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
+	print_text_string Text0481
+	quit_script_fully
+; 0xde19
 
 Script_LoseToMitch: ; de19 (3:5e19)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0F
-	dw Script_Mitch_PrintTrainHarderText
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0482
+	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_PrintTrainHarderText
+	print_text_quit_fully Text0482
+; 0xde21
 
-Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
-	run_command ScriptCommand_PrintTextString
-	tx Text0483
-	run_command ScriptCommand_AskQuestionJump
-	tx Text047c
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text0484
-	run_command ScriptCommand_QuitScriptFully
+Script_Mitch_AlreadyHaveMedal: ; 0xde21
+	print_text_string Text0483
+	ask_question_jump Text047c, .do_battle
+	print_text_string Text0484
+	quit_script_fully
+; 0xde2d
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text0485
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRST_STRIKE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0485
+	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
+; 0xde35
 
-Script_Mitch_GiveBoosters: ; de35 (3:5e35)
-	run_command ScriptCommand_PrintTextString
-	tx Text0486
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_NEUTRAL
-	db BOOSTER_LABORATORY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0487
-	run_command ScriptCommand_QuitScriptFully
+Script_Mitch_GiveBoosters:
+	print_text_string Text0486
+	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
+	print_text_string Text0487
+	quit_script_fully
+; 0xde40
 
-Script_Mitch_PrintTrainHarderText: ; de40 (3:5e40)
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0488
+Script_Mitch_PrintTrainHarderText:
+	print_text_quit_fully Text0488
 ; 0xde43
 
 	INCROM $de43, $ded1
@@ -4216,6 +3873,7 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xdedc
 
 .after_duel_table
 	db NPC_CHRIS
@@ -4259,10 +3917,12 @@ Script_Gene: ; e03e (3:603e)
 Script_Clerk3: ; e09e (3:609e)
 	INCROM $e09e, $e0a2
 
+
 WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xe0a9
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -4270,6 +3930,7 @@ WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	dw Script_BeatImakuni
 	dw Script_LostToImakuni
 	db $00
+; 0xe0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4291,95 +3952,53 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 
 Script_Gal1: ; e0cf (3:60cf)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_12
-	db $02
-	dw .ows_e10e
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_12
-	db $00
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text041d
-	tx Text041e
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_12
-	db $01
-	run_command ScriptCommand_AskQuestionJump
-	tx Text041f
-	dw .ows_e0eb
-	run_command ScriptCommand_PrintTextString
-	tx Text0420
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_FLAG_12, $02, .ows_e10e
+	jump_if_flag_equal EVENT_FLAG_12, $00, NULL
+	print_variable_text Text041d, Text041e
+	script_set_flag_value EVENT_FLAG_12, $01
+	ask_question_jump Text041f, .ows_e0eb
+	print_text_string Text0420
+	quit_script_fully
 
 .ows_e0eb
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $59
-	dw .ows_e0f3
-	run_command ScriptCommand_PrintTextString
-	tx Text0421
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_card_owned LAPRAS, .ows_e0f3
+	print_text_string Text0421
+	quit_script_fully
 
 .ows_e0f3
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $59
-	dw .ows_e0fb
-	run_command ScriptCommand_PrintTextString
-	tx Text0422
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_card_in_collection LAPRAS, .ows_e0fb
+	print_text_string Text0422
+	quit_script_fully
 
 .ows_e0fb
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_12
-	db $02
-	run_command ScriptCommand_PrintTextString
-	tx Text0423
+	script_set_flag_value EVENT_FLAG_12, $02
+	print_text_string Text0423
 	run_command Func_ccdc
 	tx Text0424
-	run_command ScriptCommand_TakeCard
-	db LAPRAS
-	run_command ScriptCommand_GiveCard
-	db ARCANINE1
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db ARCANINE1
-	run_command ScriptCommand_PrintTextString
-	tx Text0425
-	run_command ScriptCommand_QuitScriptFully
+	take_card LAPRAS
+	give_card ARCANINE1
+	show_card_received_screen ARCANINE1
+	print_text_string Text0425
+	quit_script_fully
 
 .ows_e10e
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0426
+	print_text_quit_fully Text0426
 
 Script_Lass1: ; e111 (3:6111)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_14
-	db $01
-	dw .ows_e121
-	run_command ScriptCommand_PrintTextString
-	tx Text0427
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_14
-	db $01
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_IMAKUNI_STATE
-	db IMAKUNI_MENTIONED
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_FLAG_14, $01, .ows_e121
+	print_text_string Text0427
+	script_set_flag_value EVENT_FLAG_14, $01
+	script_set_flag_value EVENT_IMAKUNI_STATE, IMAKUNI_MENTIONED
+	quit_script_fully
 
 .ows_e121
-	run_command ScriptCommand_JumpIfFlagNotEqual
-	db EVENT_IMAKUNI_ROOM
-	db IMAKUNI_WATER_CLUB
-	dw .ows_e12d
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_TEMP_BATTLED_IMAKUNI
-	dw .ows_e12d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0428
+	jump_if_flag_not_equal EVENT_IMAKUNI_ROOM, IMAKUNI_WATER_CLUB, .ows_e12d
+	jump_if_flag_nonzero_2 EVENT_TEMP_BATTLED_IMAKUNI, .ows_e12d
+	print_text_quit_fully Text0428
 
 .ows_e12d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0429
+	print_text_quit_fully Text0429
 
 Preload_Man2InWaterClubLobby: ; e130 (3:6130)
 	get_flag_value EVENT_JOSHUA_STATE
@@ -4388,13 +4007,11 @@ Preload_Man2InWaterClubLobby: ; e130 (3:6130)
 
 Script_Man2: ; e137 (3:6137)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text042a
+	print_text_quit_fully Text042a
 
 Script_Pappy2: ; e13b (3:613b)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text042b
+	print_text_quit_fully Text042b
 
 WaterClubMovePlayer: ; e13f (3:613f)
 	ld a, [wPlayerYCoord]
@@ -4408,7 +4025,7 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	ld bc, Script_NotReadyToSeeAmy
 	jp SetNextNPCAndScript
 
-WaterClubAfterDuel: ; e157 (3:6157)
+WaterClubAfterDuel: ;e157 (3:6157)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
@@ -4437,138 +4054,80 @@ WaterClubAfterDuel: ; e157 (3:6157)
 
 Script_Sara: ; e177 (3:6177)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text042c
-	run_command ScriptCommand_AskQuestionJump
-	tx Text042d
-	dw .yes_duel
-	run_command ScriptCommand_PrintTextString
-	tx Text042e
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text042c
+	ask_question_jump Text042d, .yes_duel
+	print_text_string Text042e
+	quit_script_fully
 .yes_duel
-	run_command ScriptCommand_PrintTextString
-	tx Text042f
-	run_command ScriptCommand_StartBattle
-	db PRIZES_2
-	db WATERFRONT_POKEMON_DECK_ID
-	db MUSIC_DUEL_THEME_1
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text042f
+	start_battle PRIZES_2, WATERFRONT_POKEMON_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 
 Script_BeatSara: ; e18c (3:618c)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_SARA
-	run_command ScriptCommand_PrintTextString
-	tx Text0430
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_COLOSSEUM_WATER
-	db BOOSTER_COLOSSEUM_WATER
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0431
-	run_command ScriptCommand_QuitScriptFully
+	max_out_flag_value EVENT_BEAT_SARA
+	print_text_string Text0430
+	give_booster_packs BOOSTER_COLOSSEUM_WATER, BOOSTER_COLOSSEUM_WATER, NO_BOOSTER
+	print_text_string Text0431
+	quit_script_fully
 
 Script_LostToSara: ; e19a (03:619a)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0432
+	print_text_quit_fully Text0432
 
 Script_Amanda: ; e19e (03:619e)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0433
-	run_command ScriptCommand_AskQuestionJump
-	tx Text0434
-	dw .yes_duel
-	run_command ScriptCommand_PrintTextString
-	tx Text0435
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0433
+	ask_question_jump Text0434, .yes_duel
+	print_text_string Text0435
+	quit_script_fully
 .yes_duel
-	run_command ScriptCommand_PrintTextString
-	tx Text0436
-	run_command ScriptCommand_StartBattle
-	db PRIZES_3
-	db LONELY_FRIENDS_DECK_ID
-	db MUSIC_DUEL_THEME_1
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0436
+	start_battle PRIZES_3, LONELY_FRIENDS_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 
 Script_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_AMANDA
-	run_command ScriptCommand_PrintTextString
-	tx Text0437
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
-	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0438
-	run_command ScriptCommand_QuitScriptFully
+	max_out_flag_value EVENT_BEAT_AMANDA
+	print_text_string Text0437
+	give_booster_packs BOOSTER_MYSTERY_LIGHTNING_COLORLESS, BOOSTER_MYSTERY_LIGHTNING_COLORLESS, NO_BOOSTER
+	print_text_string Text0438
+	quit_script_fully
 
 Script_LostToAmanda: ; e1c1 (03:61c1)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0439
+	print_text_quit_fully Text0439
 
 Script_NotReadyToSeeAmy: ; e1c5 (03:61c5)
 	start_script
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $12
-	db $08
-	dw .ows_e1ec
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $14
-	db $08
-	dw .ows_e1f2
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $18
-	db $08
-	dw .ows_e1f8
+	jump_if_player_coords_match $12, $08, .ows_e1ec
+	jump_if_player_coords_match $14, $08, .ows_e1f2
+	jump_if_player_coords_match $18, $08, .ows_e1f8
 .ows_e1d5
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $04
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e213
-	run_command ScriptCommand_PrintTextString
-	tx Text043a
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $12
-	db $0a
-	dw .ows_e1fe
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $14
-	db $0a
-	dw .ows_e202
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e215
-	run_command ScriptCommand_QuitScriptFully
+	move_player SOUTH, 4
+	move_active_npc NPCMovement_e213
+	print_text_string Text043a
+	jump_if_player_coords_match $12, $0a, .ows_e1fe
+	jump_if_player_coords_match $14, $0a, .ows_e202
+	move_active_npc NPCMovement_e215
+	quit_script_fully
 
 .ows_e1ec
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e206
-	run_command ScriptCommand_Jump
-	dw .ows_e1d5
+	move_active_npc NPCMovement_e206
+	script_jump .ows_e1d5
 .ows_e1f2
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e20b
-	run_command ScriptCommand_Jump
-	dw .ows_e1d5
+	move_active_npc NPCMovement_e20b
+	script_jump .ows_e1d5
 .ows_e1f8
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e20f
-	run_command ScriptCommand_Jump
-	dw .ows_e1d5
+	move_active_npc NPCMovement_e20f
+	script_jump .ows_e1d5
 .ows_e1fe
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e218
-	run_command ScriptCommand_QuitScriptFully
+	move_active_npc NPCMovement_e218
+	quit_script_fully
 
 .ows_e202
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e219
-	run_command ScriptCommand_QuitScriptFully
+	move_active_npc NPCMovement_e219
+	quit_script_fully
 
 NPCMovement_e206: ; e206 (3:6206)
 	db NORTH
@@ -4609,119 +4168,60 @@ NPCMovement_e219: ; e219 (3:6219)
 
 Script_Joshua: ; e21c (3:621c)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_BEAT_AMANDA
-	dw .sara_and_amanda_not_beaten
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_BEAT_SARA
-	dw .sara_and_amanda_not_beaten
-	run_command ScriptCommand_Jump
-	dw .beat_sara_and_amanda
+	jump_if_flag_zero_2 EVENT_BEAT_AMANDA, .sara_and_amanda_not_beaten
+	jump_if_flag_zero_2 EVENT_BEAT_SARA, .sara_and_amanda_not_beaten
+	script_jump .beat_sara_and_amanda
 .sara_and_amanda_not_beaten
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	run_command ScriptCommand_PrintTextString
-	tx Text043b
-	run_command ScriptCommand_QuitScriptFully
+	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_TALKED
+	print_text_string Text043b
+	quit_script_fully
 
 .beat_sara_and_amanda
-	run_command ScriptCommand_JumpIfFlagNonzero1
-	db EVENT_JOSHUA_STATE
-	dw .already_talked
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	run_command ScriptCommand_PrintTextString
-	tx Text043b
-	run_command ScriptCommand_PrintTextString
-	tx Text043c
+	jump_if_flag_nonzero_1 EVENT_JOSHUA_STATE, .already_talked
+	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_TALKED
+	print_text_string Text043b
+	print_text_string Text043c
 .already_talked
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text043d
-	tx Text043e
-	run_command ScriptCommand_AskQuestionJump
-	tx Text043f
-	dw .startDuel
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0440
-	tx Text0441
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	print_variable_text Text043d, Text043e
+	ask_question_jump Text043f, .startDuel
+	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	print_variable_text Text0440, Text0441
+	quit_script_fully
 
 .startDuel:
-	run_command ScriptCommand_PrintTextString
-	tx Text0442
-	run_command ScriptCommand_TryGivePCPack
-	db $04
-	run_command ScriptCommand_StartBattle
-	db PRIZES_4
-	db SOUND_OF_THE_WAVES_DECK_ID
-	db MUSIC_DUEL_THEME_1
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0442
+	try_give_pc_pack $04
+	start_battle PRIZES_4, SOUND_OF_THE_WAVES_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 
 Script_LostToJoshua: ; e260 (3:6260)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0443
-	tx Text0444
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	print_variable_text Text0443, Text0444
+	quit_script_fully
 
 Script_BeatJoshua: ; e26c (3:626c)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0445
-	tx Text0446
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_WATER_COLORLESS
-	db BOOSTER_MYSTERY_WATER_COLORLESS
-	db NO_BOOSTER
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_TALKED
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0447
-	tx Text0448
-	run_command ScriptCommand_JumpIfFlagNotEqual
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_BEATEN
-	dw .firstJoshuaWin
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	print_variable_text Text0445, Text0446
+	give_booster_packs BOOSTER_MYSTERY_WATER_COLORLESS, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
+	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	print_variable_text Text0447, Text0448
+	jump_if_flag_not_equal EVENT_JOSHUA_STATE, JOSHUA_BEATEN, .firstJoshuaWin
+	quit_script_fully
 
 .firstJoshuaWin:
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_JOSHUA_STATE
-	db JOSHUA_BEATEN
-	run_command ScriptCommand_PrintTextString
-	tx Text0449
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPCByDirection
-	dw NPCMovementTable_e2a1
-	run_command ScriptCommand_PrintTextString
-	tx Text044a
+	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_BEATEN
+	print_text_string Text0449
+	close_text_box
+	move_active_npc_by_direction NPCMovementTable_e2a1
+	print_text_string Text044a
 	run_command Func_cfc6
 	db $00
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_AMY
-	dw Script_MeetAmy
-	run_command ScriptCommand_EndScriptLoop1
+	close_advanced_text_box
+	set_next_npc_and_script NPC_AMY, Script_MeetAmy
+	end_script_loop
 	ret
 
 NPCMovementTable_e2a1: ; e2a1 (3:62a1)
@@ -4760,23 +4260,17 @@ Preload_Amy: ; e2ad (3:62ad)
 
 Script_MeetAmy: ; e2d1 (3:62d1)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text044b
-	run_command ScriptCommand_SetDialogName
-	db NPC_JOSHUA
-	run_command ScriptCommand_PrintTextString
-	tx Text044c
-	run_command ScriptCommand_SetDialogName
-	db NPC_AMY
-	run_command ScriptCommand_PrintTextString
-	tx Text044d
-	run_command ScriptCommand_CloseTextBox
+	print_text_string Text044b
+	set_dialog_npc NPC_JOSHUA
+	print_text_string Text044c
+	set_dialog_npc NPC_AMY
+	print_text_string Text044d
+	close_text_box
 	run_command Func_d095
 	db $09
 	db $2f
 	db $10
-	run_command ScriptCommand_DoFrames
-	db $20
+	do_frames $20
 	run_command Func_d095
 	db $04
 	db $0e
@@ -4784,97 +4278,64 @@ Script_MeetAmy: ; e2d1 (3:62d1)
 	run_command Func_d0be
 	db $14
 	db $04
-	run_command ScriptCommand_SetPlayerDirection
-	db $03
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db $00
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MoveArbitraryNPC
-	db NPC_JOSHUA
-	dw NPCMovement_e2ab
-	run_command ScriptCommand_PrintTextString
-	tx Text044e
-	run_command ScriptCommand_Jump
-	dw Script_Amy.askConfirmDuel
+	set_player_direction WEST
+	move_player WEST, 1
+	set_player_direction NORTH
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_arbitrary_npc NPC_JOSHUA, NPCMovement_e2ab
+	print_text_string Text044e
+	script_jump Script_Amy.askConfirmDuel
 
 Script_Amy: ; e304 (3:6304)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_BEAT_AMY
-	dw ScriptJump_TalkToAmyAgain
-	run_command ScriptCommand_PrintTextString
-	tx Text044f
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, ScriptJump_TalkToAmyAgain
+	print_text_string Text044f
 .askConfirmDuel
-	run_command ScriptCommand_AskQuestionJump
-	tx Text0450
-	dw .startDuel
+	ask_question_jump Text0450, .startDuel
 
 .denyDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text0451
+	print_text_string Text0451
 	run_command Func_d0d9
 	db $14
 	db $04
 	dw Script_LostToAmy.ows_e34e
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 .startDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text0452
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db GO_GO_RAIN_DANCE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0452
+	start_battle PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
 
 Script_BeatAmy: ; e322 (3:6322)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0453
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_BEAT_AMY
-	dw .beatAmyCommon
-	run_command ScriptCommand_PrintTextString
-	tx Text0454
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_BEAT_AMY
-	run_command ScriptCommand_TryGiveMedalPCPacks
+	print_text_string Text0453
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, .beatAmyCommon
+	print_text_string Text0454
+	max_out_flag_value EVENT_BEAT_AMY
+	try_give_medal_pc_packs
 	run_command Func_d125
 	db EVENT_BEAT_AMY
 	run_command Func_d435
 	db $03
-	run_command ScriptCommand_PrintTextString
-	tx Text0455
+	print_text_string Text0455
 .beatAmyCommon
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_LABORATORY_WATER
-	db BOOSTER_LABORATORY_WATER
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text0456
+	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
+	print_text_string Text0456
 	run_command Func_d0d9
 	db $14
 	db $04
 	dw Script_LostToAmy.ows_e34e
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 Script_LostToAmy: ; e344 (3:6344)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0457
+	print_text_string Text0457
 	run_command Func_d0d9
 	db $14
 	db $04
 	dw .ows_e34e
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 .ows_e34e
 	run_command Func_d095
@@ -4884,25 +4345,18 @@ Script_LostToAmy: ; e344 (3:6344)
 	run_command Func_d0be
 	db $16
 	db $04
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
-	run_command ScriptCommand_PrintTextString
-	tx Text0458
-	run_command ScriptCommand_AskQuestionJump
-	tx Text0450
-	dw .startDuel
-	run_command ScriptCommand_Jump
-	dw Script_Amy.denyDuel
+	print_text_string Text0458
+	ask_question_jump Text0450, .startDuel
+	script_jump Script_Amy.denyDuel
 
 .startDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text0459
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db GO_GO_RAIN_DANCE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text0459
+	start_battle PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
+; 0xe369
 
 Script_Clerk4: ; e369 (3:6369)
 	INCROM $e369, $e36d
@@ -4911,6 +4365,7 @@ LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xe374
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -5015,240 +4470,123 @@ GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 
 Script_Brittany: ; e5d2 (3:65d2)
 	start_script
-	run_command ScriptCommand_JumpIfFlagLessThan
-	db EVENT_FLAG_35
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06e0
-	tx Text06e1
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06e2
-	dw .wantToDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text06e3
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_less_than EVENT_FLAG_35, $01, NULL
+	print_variable_text Text06e0, Text06e1
+	ask_question_jump Text06e2, .wantToDuel
+	print_text_string Text06e3
+	quit_script_fully
 
 .wantToDuel
-	run_command ScriptCommand_PrintTextString
-	tx Text06e4
-	run_command ScriptCommand_StartBattle
-	db PRIZES_4
-	db ETCETERA_DECK_ID
-	db MUSIC_DUEL_THEME_1
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text06e4
+	start_battle PRIZES_4, ETCETERA_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 
 Script_BeatBrittany: ; e5ee (3:65ee)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text06e5
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_GRASS_COLORLESS
-	db BOOSTER_MYSTERY_GRASS_COLORLESS
-	db NO_BOOSTER
-	run_command ScriptCommand_JumpIfFlagLessThan
-	db EVENT_FLAG_35
-	db $02
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06e6
-	tx Text06e7
-	run_command ScriptCommand_MaxOutFlagValue
-	db FLAG_BEAT_BRITTANY
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db EVENT_FLAG_35
-	db $02
-	dw .finishScript
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_3A
-	dw .finishScript
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_3B
-	dw .finishScript
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_35
-	db $01
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_1E
-	run_command ScriptCommand_PrintTextString
-	tx Text06e8
+	print_text_string Text06e5
+	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
+	jump_if_flag_less_than EVENT_FLAG_35, $02, NULL
+	print_variable_text Text06e6, Text06e7
+	max_out_flag_value FLAG_BEAT_BRITTANY
+	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .finishScript
+	jump_if_flag_zero_2 EVENT_FLAG_3A, .finishScript
+	jump_if_flag_zero_2 EVENT_FLAG_3B, .finishScript
+	script_set_flag_value EVENT_FLAG_35, $01
+	max_out_flag_value EVENT_FLAG_1E
+	print_text_string Text06e8
 .finishScript
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 Script_LostToBrittany: ; e618 (3:6618)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06e9
+	print_text_quit_fully Text06e9
 
 Script_e61c: ; e61c (3:661c)
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ea
+	print_text_quit_fully Text06ea
 
 Script_Lass2: ; e61f (3:661f)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_04
-	dw Script_e61c
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db EVENT_FLAG_37
-	db $06
-	dw Script_e61c
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db EVENT_FLAG_37
-	db $04
-	dw .ows_e6a1
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db EVENT_FLAG_37
-	db $02
-	dw .ows_e66a
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_37
-	db $00
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06eb
-	tx Text06ec
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $01
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06ed
-	dw .ows_e648
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ee
+	jump_if_flag_nonzero_2 EVENT_FLAG_04, Script_e61c
+	jump_if_flag_not_less_than EVENT_FLAG_37, $06, Script_e61c
+	jump_if_flag_not_less_than EVENT_FLAG_37, $04, .ows_e6a1
+	jump_if_flag_not_less_than EVENT_FLAG_37, $02, .ows_e66a
+	jump_if_flag_equal EVENT_FLAG_37, $00, NULL
+	print_variable_text Text06eb, Text06ec
+	script_set_flag_value EVENT_FLAG_37, $01
+	ask_question_jump Text06ed, .ows_e648
+	print_text_quit_fully Text06ee
 
 .ows_e648
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $1c
-	dw .ows_e64f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ef
+	jump_if_card_owned $1c, .ows_e64f
+	print_text_quit_fully Text06ef
 
 .ows_e64f
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $1c
-	dw .ows_e656
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f0
+	jump_if_card_in_collection $1c, .ows_e656
+	print_text_quit_fully Text06f0
 
 .ows_e656
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $02
-	run_command ScriptCommand_PrintTextString
-	tx Text06f1
+	max_out_flag_value EVENT_FLAG_04
+	script_set_flag_value EVENT_FLAG_37, $02
+	print_text_string Text06f1
 	run_command Func_ccdc
 	tx Text06f2
-	run_command ScriptCommand_TakeCard
-	db ODDISH
-	run_command ScriptCommand_GiveCard
-	db VILEPLUME
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db VILEPLUME
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	take_card ODDISH
+	give_card VILEPLUME
+	show_card_received_screen VILEPLUME
+	print_text_quit_fully Text06f3
 
 .ows_e66a
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_37
-	db $02
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06f4
-	tx Text06f5
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $03
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06ed
-	dw .ows_e67f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f6
+	jump_if_flag_equal EVENT_FLAG_37, $02, NULL
+	print_variable_text Text06f4, Text06f5
+	script_set_flag_value EVENT_FLAG_37, $03
+	ask_question_jump Text06ed, .ows_e67f
+	print_text_quit_fully Text06f6
 
 .ows_e67f
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $ab
-	dw .ows_e686
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f7
+	jump_if_card_owned $ab, .ows_e686
+	print_text_quit_fully Text06f7
 
 .ows_e686
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $ab
-	dw .ows_e68d
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f8
+	jump_if_card_in_collection $ab, .ows_e68d
+	print_text_quit_fully Text06f8
 
 .ows_e68d
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $04
-	run_command ScriptCommand_PrintTextString
-	tx Text06f9
+	max_out_flag_value EVENT_FLAG_04
+	script_set_flag_value EVENT_FLAG_37, $04
+	print_text_string Text06f9
 	run_command Func_ccdc
 	tx Text06fa
-	run_command ScriptCommand_TakeCard
-	db CLEFAIRY
-	run_command ScriptCommand_GiveCard
-	db PIKACHU3
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db PIKACHU3
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	take_card CLEFAIRY
+	give_card PIKACHU3
+	show_card_received_screen PIKACHU3
+	print_text_quit_fully Text06f3
 
 .ows_e6a1
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_37
-	db $04
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06fb
-	tx Text06fc
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $05
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06ed
-	dw .ows_e6b6
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06fd
+	jump_if_flag_equal EVENT_FLAG_37, $04, NULL
+	print_variable_text Text06fb, Text06fc
+	script_set_flag_value EVENT_FLAG_37, $05
+	ask_question_jump Text06ed, .ows_e6b6
+	print_text_quit_fully Text06fd
 
 .ows_e6b6
-	run_command ScriptCommand_CheckIfCardInCollectionOrDecks
-	db $32
-	dw .ows_e6bd
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06fe
+	jump_if_card_owned CHARIZARD, .ows_e6bd
+	print_text_quit_fully Text06fe
 
 .ows_e6bd
-	run_command ScriptCommand_CheckIfCardInCollection
-	db $32
-	dw .ows_e6c4
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06ff
+	jump_if_card_in_collection CHARIZARD, .ows_e6c4
+	print_text_quit_fully Text06ff
 
 .ows_e6c4
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_04
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_37
-	db $06
-	run_command ScriptCommand_PrintTextString
-	tx Text0700
+	max_out_flag_value EVENT_FLAG_04
+	script_set_flag_value EVENT_FLAG_37, $06
+	print_text_string Text0700
 	run_command Func_ccdc
 	tx Text0701
-	run_command ScriptCommand_TakeCard
-	db CHARIZARD
-	run_command ScriptCommand_GiveCard
-	db BLASTOISE
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db BLASTOISE
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06f3
+	take_card CHARIZARD
+	give_card BLASTOISE
+	show_card_received_screen BLASTOISE
+	print_text_quit_fully Text06f3
+; 0xe6d8
 
 Script_Granny2: ; e6d8 (3:66d8)
 	INCROM $e6d8, $e6e3
@@ -5318,6 +4656,7 @@ TrySecondRonaldFight: ; e837 (3:6837)
 	ret nz
 	ld bc, ScriptSecondRonaldFight
 	jp SetNextNPCAndScript
+; 0xe84c
 
 Script_Clerk6: ; e84c (3:684c)
 	INCROM $e84c, $e850
@@ -5327,48 +4666,30 @@ Script_Lad3: ; e850 (3:6850)
 
 Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_4B
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e894
+	max_out_flag_value EVENT_FLAG_4B
+	move_active_npc NPCMovement_e894
 	run_command Func_d135
 	db $00
-	run_command ScriptCommand_PrintTextString
-	tx Text0645
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0646
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	dw 0000
-	dw .ows_e882
-	run_command ScriptCommand_PrintTextString
-	tx Text0647
-	run_command ScriptCommand_Jump
-	dw .ows_e885
+	print_text_string Text0645
+	close_text_box
+	move_player NORTH, 1
+	move_player NORTH, 1
+	print_text_string Text0646
+	ask_question_jump_default_yes NULL, .ows_e882
+	print_text_string Text0647
+	script_jump .ows_e885
 
 .ows_e882
-	run_command ScriptCommand_PrintTextString
-	tx Text0648
+	print_text_string Text0648
 .ows_e885
-	run_command ScriptCommand_PrintTextString
-	tx Text0649
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_SetPlayerDirection
-	db $03
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $04
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e894
+	print_text_string Text0649
+	close_text_box
+	set_player_direction WEST
+	move_player EAST, 4
+	move_active_npc NPCMovement_e894
 	run_command Func_cdcb
 	run_command Func_d41d
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 NPCMovement_e894: ; e894 (3:6894)
 	db SOUTH
@@ -5383,70 +4704,40 @@ NPCMovement_e894: ; e894 (3:6894)
 
 Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	start_script
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e905
-	run_command ScriptCommand_DoFrames
-	db $3c
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e90d
-	run_command ScriptCommand_PrintTextString
-	tx Text064a
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $08
-	db $02
-	dw $68d6
-	run_command ScriptCommand_SetPlayerDirection
-	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text064b
-	run_command ScriptCommand_SetFlagValue
-	db $4c
-	db $01
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db IM_RONALD_DECK_ID
-	db MUSIC_RONALD
-	run_command ScriptCommand_QuitScriptFully
+	move_active_npc NPCMovement_e905
+	do_frames $3c
+	move_active_npc NPCMovement_e90d
+	print_text_string Text064a
+	jump_if_player_coords_match $08, $02, $68d6
+	set_player_direction WEST
+	move_player WEST, 1
+	set_player_direction SOUTH
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	print_text_string Text064b
+	script_set_flag_value $4c, $01
+	start_battle PRIZES_6, IM_RONALD_DECK_ID, MUSIC_RONALD
+	quit_script_fully
 
 Script_BeatFirstRonaldFight: ; e8e9 (3:68e9)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text064c
-	run_command ScriptCommand_GiveCard
-	db JIGGLYPUFF1
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db JIGGLYPUFF1
-	run_command ScriptCommand_PrintTextString
-	tx Text064d
-	run_command ScriptCommand_Jump
-	dw ScriptJump_FinishedFirstRonaldFight
+	print_text_string Text064c
+	give_card JIGGLYPUFF1
+	show_card_received_screen JIGGLYPUFF1
+	print_text_string Text064d
+	script_jump ScriptJump_FinishedFirstRonaldFight
 
 Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text064e
+	print_text_string Text064e
 
-ScriptJump_FinishedFirstRonaldFight: ; e8fb (3:68fb)
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_4C
-	db $02
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e90f
+ScriptJump_FinishedFirstRonaldFight:
+	script_set_flag_value EVENT_FLAG_4C, $02
+	close_text_box
+	move_active_npc NPCMovement_e90f
 	run_command Func_cdcb
 	run_command Func_d41d
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 NPCMovement_e905: ; e905 (3:6905)
 	db EAST
@@ -5475,78 +4766,52 @@ NPCMovement_e90f: ; e90f (3:690f)
 
 ScriptSecondRonaldFight: ; e91e (3:691e)
 	start_script
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e905
-	run_command ScriptCommand_DoFrames
-	db 60
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e90d
-	run_command ScriptCommand_PrintTextString
-	tx Text064f
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db $08
-	db $02
-	dw .ows_6934
-	run_command ScriptCommand_SetPlayerDirection
-	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
+	move_active_npc NPCMovement_e905
+	do_frames 60
+	move_active_npc NPCMovement_e90d
+	print_text_string Text064f
+	jump_if_player_coords_match $08, $02, .ows_6934
+	set_player_direction WEST
+	move_player WEST, 1
 .ows_6934
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0650
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_4D
-	db $01
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db POWERFUL_RONALD_DECK_ID
-	db MUSIC_RONALD
-	run_command ScriptCommand_QuitScriptFully
+	set_player_direction SOUTH
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	print_text_string Text0650
+	script_set_flag_value EVENT_FLAG_4D, $01
+	start_battle PRIZES_6, POWERFUL_RONALD_DECK_ID, MUSIC_RONALD
+	quit_script_fully
 
 Script_BeatSecondRonaldFight: ; e947 (3:6947)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0651
-	run_command ScriptCommand_GiveCard
-	db SUPER_ENERGY_RETRIEVAL
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db SUPER_ENERGY_RETRIEVAL
-	run_command ScriptCommand_PrintTextString
-	tx Text0652
-	run_command ScriptCommand_Jump
-	dw ScriptJump_FinishedSecondRonaldFight
+	print_text_string Text0651
+	give_card SUPER_ENERGY_RETRIEVAL
+	show_card_received_screen SUPER_ENERGY_RETRIEVAL
+	print_text_string Text0652
+	script_jump ScriptJump_FinishedSecondRonaldFight
 
 Script_LostToSecondRonaldFight: ; e955 (3:6955)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0653
+	print_text_string Text0653
 
 ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_4D
-	db $02
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_e90f
+	script_set_flag_value EVENT_FLAG_4D, $02
+	close_text_box
+	move_active_npc NPCMovement_e90f
 	run_command Func_cdcb
 	run_command Func_d41d
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
+; 0xe963
+
 
 PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xe96a
 
 .after_duel_table
+
 	db NPC_ROBERT
 	db NPC_ROBERT
 	dw $6995
@@ -5582,10 +4847,12 @@ Script_Murray1: ; eadf (3:6adf)
 Script_Clerk7: ; eb53 (3:6b53)
 	INCROM $eb53, $eb57
 
-ScienceClubLobbyAfterDuel: ; eb57 (3:6b57)
+
+ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xeb5e
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -5628,6 +4895,7 @@ FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
+; 0xed50
 
 .after_duel_table
 	db NPC_JESSICA
@@ -5635,6 +4903,8 @@ FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	dw $6dba
 	dw $6dce
 	db $00
+
+; 0xed57
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
@@ -5695,28 +4965,23 @@ Script_Lad2: ; ee2c (3:6e2c)
 
 Script_ee76: ; ee76 (3:6e76)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_21
-	db $01
-	dw .ows_ee7d
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_equal EVENT_FLAG_21, $01, .ows_ee7d
+	quit_script_fully
 
 .ows_ee7d
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_21
-	db $02
+	script_set_flag_value EVENT_FLAG_21, $02
 	run_command Func_ccdc
 	tx Text06a2
-	run_command ScriptCommand_GiveCard
-	db SLOWPOKE1
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db SLOWPOKE1
-	run_command ScriptCommand_QuitScriptFully
+	give_card SLOWPOKE1
+	show_card_received_screen SLOWPOKE1
+	quit_script_fully
+; 0xee88
 
 Script_Mania: ; ee88 (3:6e88)
 	INCROM $ee88, $ee93
 
-FireClubAfterDuel: ; ee93  (3:6e93)
+
+FireClubAfterDuel: ;ee93  (3:6e93)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
@@ -5743,6 +5008,7 @@ FireClubAfterDuel: ; ee93  (3:6e93)
 	dw Script_LoseToKen
 
 	db $00
+; 0xeeb3
 
 Script_John: ; eeb3 (3:6eb3)
 	INCROM $eeb3, $eed8
@@ -5755,105 +5021,63 @@ Script_Jonathan: ; eefd (3:6efd)
 
 Script_Ken: ; ef22 (3:6f22)
 	start_script
-	run_command ScriptCommand_TryGivePCPack
-	db $09
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_23
-	dw .have_300_cards
-	run_command ScriptCommand_CheckRawAmountOfCardsOwned
-	dw 300
-	dw .have_300_cards
-	run_command ScriptCommand_JumpIfFlagZero1
-	db EVENT_FLAG_24
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06ba
-	tx Text06bb
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_24
-	db $01
-	run_command ScriptCommand_QuitScriptFully
+	try_give_pc_pack $09
+	jump_if_flag_nonzero_2 EVENT_FLAG_23, .have_300_cards
+	jump_if_enough_cards_owned 300, .have_300_cards
+	jump_if_flag_zero_1 EVENT_FLAG_24, NULL
+	print_variable_text Text06ba, Text06bb
+	script_set_flag_value EVENT_FLAG_24, $01
+	quit_script_fully
 .have_300_cards
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_23
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0A
-	dw Script_KenBattle_AlreadyHaveMedal
-	run_command ScriptCommand_JumpIfFlagZero1
-	db EVENT_FLAG_24
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06bc
-	tx Text06bd
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_24
-	db $01
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06be
-	dw .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06bf
-	run_command ScriptCommand_QuitScriptFully
+	max_out_flag_value EVENT_FLAG_23
+	jump_if_flag_nonzero_2 EVENT_FLAG_0A, Script_KenBattle_AlreadyHaveMedal
+	jump_if_flag_zero_1 EVENT_FLAG_24, NULL
+	print_variable_text Text06bc, Text06bd
+	script_set_flag_value EVENT_FLAG_24, $01
+	ask_question_jump Text06be, .do_battle
+	print_text_string Text06bf
+	quit_script_fully
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06c0
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRE_CHARGE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text06c0
+	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
+; 0xef5e
 
 Script_BeatKen: ; ef5e (3:6f5e)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text06c1
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_0A
-	dw .give_booster_packs
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_0A
-	run_command ScriptCommand_TryGiveMedalPCPacks
+	print_text_string Text06c1
+	jump_if_flag_nonzero_2 EVENT_FLAG_0A, .give_booster_packs
+	max_out_flag_value EVENT_FLAG_0A
+	try_give_medal_pc_packs
 	run_command Func_d125
 	db $0a
 	run_command Func_d435
 	db $08
-	run_command ScriptCommand_PrintTextString
-	tx Text06c2
+	print_text_string Text06c2
 .give_booster_packs
-	run_command ScriptCommand_GiveBoosterPacks
-	db BOOSTER_MYSTERY_NEUTRAL
-	db BOOSTER_MYSTERY_NEUTRAL
-	db NO_BOOSTER
-	run_command ScriptCommand_PrintTextString
-	tx Text06c3
-	run_command ScriptCommand_QuitScriptFully
+	give_booster_packs BOOSTER_MYSTERY_NEUTRAL, BOOSTER_MYSTERY_NEUTRAL, NO_BOOSTER
+	print_text_string Text06c3
+	quit_script_fully
+; 0xef78
+
+
 
 Script_LoseToKen: ; ef78 (3:6f78)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_0A
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text06c4
-	tx Text06c5
-	run_command ScriptCommand_QuitScriptFully
+	jump_if_flag_zero_2 EVENT_FLAG_0A, NULL
+	print_variable_text Text06c4, Text06c5
+	quit_script_fully
+; 0xef83
 
 Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
-	run_command ScriptCommand_PrintTextString
-	tx Text06c6
-	run_command ScriptCommand_AskQuestionJump
-	tx Text06be
-	dw .do_battle
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06bf
+	print_text_string Text06c6
+	ask_question_jump Text06be, .do_battle
+	print_text_quit_fully Text06bf
 .do_battle
-	run_command ScriptCommand_PrintTextString
-	tx Text06c7
-	run_command ScriptCommand_StartBattle
-	db PRIZES_6
-	db FIRE_CHARGE_DECK_ID
-	db MUSIC_DUEL_THEME_2
-	run_command ScriptCommand_QuitScriptFully
+	print_text_string Text06c7
+	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
+	quit_script_fully
+; 0xef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks
@@ -5934,76 +5158,33 @@ Preload_Clerk9: ; ef96 (3:6f96)
 
 Script_Clerk9: ; f025 (3:7025)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero1
-	db EVENT_FLAG_3F
-	dw .ows_f066
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $07
-	dw .ows_f069
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $03
-	dw .ows_f06f
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $02
-	dw .ows_f072
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $01
-	dw .ows_f06c
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $07
-	dw .ows_f069
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $03
-	dw .ows_f06f
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $02
-	dw .ows_f072
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $01
-	dw .ows_f06c
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $07
-	dw .ows_f069
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $03
-	dw .ows_f06f
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $02
-	dw .ows_f072
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $01
-	dw .ows_f06c
+	jump_if_flag_zero_1 EVENT_FLAG_3F, .ows_f066
+	jump_if_flag_equal EVENT_FLAG_41, $07, .ows_f069
+	jump_if_flag_equal EVENT_FLAG_41, $03, .ows_f06f
+	jump_if_flag_equal EVENT_FLAG_41, $02, .ows_f072
+	jump_if_flag_equal EVENT_FLAG_41, $01, .ows_f06c
+	jump_if_flag_equal EVENT_FLAG_40, $07, .ows_f069
+	jump_if_flag_equal EVENT_FLAG_40, $03, .ows_f06f
+	jump_if_flag_equal EVENT_FLAG_40, $02, .ows_f072
+	jump_if_flag_equal EVENT_FLAG_40, $01, .ows_f06c
+	jump_if_flag_equal EVENT_FLAG_3F, $07, .ows_f069
+	jump_if_flag_equal EVENT_FLAG_3F, $03, .ows_f06f
+	jump_if_flag_equal EVENT_FLAG_3F, $02, .ows_f072
+	jump_if_flag_equal EVENT_FLAG_3F, $01, .ows_f06c
 .ows_f066
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050a
+	print_text_quit_fully Text050a
 
 .ows_f069
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050b
+	print_text_quit_fully Text050b
 
 .ows_f06c
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050c
+	print_text_quit_fully Text050c
 
 .ows_f06f
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050d
+	print_text_quit_fully Text050d
 
 .ows_f072
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050e
+	print_text_quit_fully Text050e
 
 Preload_ChallengeHallNPCs2: ; f075 (3:7075)
 	call Preload_ChallengeHallNPCs1
@@ -6032,33 +5213,27 @@ ChallengeHallLobbyLoadMap: ; f088 (3:7088)
 
 Script_Pappy3: ; f09c (3:709c)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text050f
+	print_text_quit_fully Text050f
 
 Script_Gal4: ; f0a0 (3:70a0)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0510
+	print_text_quit_fully Text0510
 
 Script_Champ: ; f0a4 (3:70a4)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0511
+	print_text_quit_fully Text0511
 
 Script_Hood2: ; f0a8 (3:70a8)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0512
+	print_text_quit_fully Text0512
 
 Script_Lass5: ; f0ac (3:70ac)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0513
+	print_text_quit_fully Text0513
 
 Script_Chap5: ; f0b0 (3:70b0)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0514
+	print_text_quit_fully Text0514
 
 Preload_ChallengeHallLobbyRonald1: ; f0b4 (3:70b4)
 	zero_flag_value2 EVENT_FLAG_58
@@ -6176,8 +5351,7 @@ ChallengeHallLoadMap: ; f258 (3:7258)
 
 Script_Clerk13: ; f26c (3:726c)
 	start_script
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0525
+	print_text_quit_fully Text0525
 
 Preload_Guide: ; f270 (3:7270)
 	get_flag_value EVENT_FLAG_42
@@ -6193,193 +5367,95 @@ Preload_Guide: ; f270 (3:7270)
 
 Script_Guide: ; f283 (3:7283)
 	start_script
-	run_command ScriptCommand_JumpIfFlagZero2
-	db EVENT_FLAG_42
-	dw .ows_f28b
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0526
+	jump_if_flag_zero_2 EVENT_FLAG_42, .ows_f28b
+	print_text_quit_fully Text0526
 
 .ows_f28b
-	run_command ScriptCommand_JumpIfFlagZero1
-	db $3f
-	dw .ows_f292
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0527
+	jump_if_flag_zero_1 EVENT_FLAG_3F, .ows_f292
+	print_text_quit_fully Text0527
 
 .ows_f292
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0528
+	print_text_quit_fully Text0528
 
 Script_Clerk12: ; f295 (3:7295)
 	start_script
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $03
-	dw .ows_f2c4
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_41
-	db $02
-	dw .ows_f2c1
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $03
-	dw .ows_f2c4
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_40
-	db $02
-	dw .ows_f2c1
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $03
-	dw .ows_f2c4
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_3F
-	db $02
-	dw .ows_f2c1
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $02
-	dw .ows_f2cd
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f2d3
-	run_command ScriptCommand_Jump
-	dw .ows_f2c7
+	jump_if_flag_equal EVENT_FLAG_41, $03, .ows_f2c4
+	jump_if_flag_equal EVENT_FLAG_41, $02, .ows_f2c1
+	jump_if_flag_equal EVENT_FLAG_40, $03, .ows_f2c4
+	jump_if_flag_equal EVENT_FLAG_40, $02, .ows_f2c1
+	jump_if_flag_equal EVENT_FLAG_3F, $03, .ows_f2c4
+	jump_if_flag_equal EVENT_FLAG_3F, $02, .ows_f2c1
+	jump_if_flag_equal EVENT_FLAG_44, $02, .ows_f2cd
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f2d3
+	script_jump .ows_f2c7
 
 .ows_f2c1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0529
+	print_text_quit_fully Text0529
 
 .ows_f2c4
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text052a
+	print_text_quit_fully Text052a
 
 .ows_f2c7
-	run_command ScriptCommand_PrintTextString
-	tx Text052b
-	run_command ScriptCommand_Jump
-	dw .ows_f2d6
+	print_text_string Text052b
+	script_jump .ows_f2d6
 
 .ows_f2cd
-	run_command ScriptCommand_PrintTextString
-	tx Text052c
-	run_command ScriptCommand_Jump
-	dw .ows_f2d6
+	print_text_string Text052c
+	script_jump .ows_f2d6
 
 .ows_f2d3
-	run_command ScriptCommand_PrintTextString
-	tx Text052d
+	print_text_string Text052d
 .ows_f2d6
-	run_command ScriptCommand_PrintTextString
-	tx Text052e
-	run_command ScriptCommand_AskQuestionJump
-	tx Text052f
-	dw .ows_f2e1
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text0530
+	print_text_string Text052e
+	ask_question_jump Text052f, .ows_f2e1
+	print_text_quit_fully Text0530
 
 .ows_f2e1
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_59
-	run_command ScriptCommand_PrintTextString
-	tx Text0531
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f349
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db 8
-	db 18
-	dw .ows_f2fa
-	run_command ScriptCommand_JumpIfPlayerCoordMatches
-	db 12
-	db 18
-	dw .ows_f302
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $02
-	run_command ScriptCommand_Jump
-	dw .ows_f307
+	max_out_flag_value EVENT_FLAG_59
+	print_text_string Text0531
+	close_text_box
+	move_active_npc NPCMovement_f349
+	jump_if_player_coords_match 8, 18, .ows_f2fa
+	jump_if_player_coords_match 12, 18, .ows_f302
+	move_player NORTH, 2
+	script_jump .ows_f307
 
 .ows_f2fa
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $02
-	run_command ScriptCommand_Jump
-	dw .ows_f307
+	set_player_direction EAST
+	move_player EAST, 2
+	script_jump .ows_f307
 
 .ows_f302
-	run_command ScriptCommand_SetPlayerDirection
-	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $02
+	set_player_direction WEST
+	move_player WEST, 2
 .ows_f307
-	run_command ScriptCommand_SetPlayerDirection
-	db NORTH
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_FLAG_43
-	dw .ows_f33a
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_43
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db NORTH
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_DoFrames
-	db 30
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_DoFrames
-	db 30
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
+	set_player_direction NORTH
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	move_player NORTH, 1
+	jump_if_flag_nonzero_2 EVENT_FLAG_43, .ows_f33a
+	max_out_flag_value EVENT_FLAG_43
+	move_player NORTH, 1
+	move_player NORTH, 1
+	set_player_direction EAST
+	do_frames 30
+	set_player_direction SOUTH
+	do_frames 20
+	set_player_direction EAST
+	do_frames 20
+	set_player_direction SOUTH
+	do_frames 30
+	move_player SOUTH, 1
+	move_player SOUTH, 1
 .ows_f33a
-	run_command ScriptCommand_SetPlayerDirection
-	db EAST
-	run_command ScriptCommand_MovePlayer
-	db EAST
-	db $01
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f34e
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db $4a
-	dw Script_f353
-	run_command ScriptCommand_EndScriptLoop1
+	set_player_direction EAST
+	move_player EAST, 1
+	move_active_npc NPCMovement_f34e
+	close_advanced_text_box
+	set_next_npc_and_script $4a, Script_f353
+	end_script_loop
 	ret
 ; f349
 
@@ -6404,38 +5480,27 @@ Script_Host: ; f352 (3:7352)
 
 Script_f353: ; f353 (3:7353)
 	start_script
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37d
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f390
+	do_frames 20
+	move_active_npc NPCMovement_f37d
+	do_frames 20
+	move_active_npc NPCMovement_f390
 	run_command Func_d16b
 	db $00
-	run_command ScriptCommand_PrintTextString
-	tx Text0532
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37f
-	run_command ScriptCommand_PrintTextString
-	tx Text0533
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f388
-	run_command ScriptCommand_PrintTextString
-	tx Text0534
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f38e
-	run_command ScriptCommand_PrintTextString
-	tx Text0535
+	print_text_string Text0532
+	close_text_box
+	move_active_npc NPCMovement_f37f
+	print_text_string Text0533
+	close_text_box
+	move_active_npc NPCMovement_f388
+	print_text_string Text0534
+	close_text_box
+	move_active_npc NPCMovement_f38e
+	print_text_string Text0535
 	run_command Func_cd4f
 	db $04
 	db $00
 	db $00
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 NPCMovement_f37d: ; f37d (3:737d)
 	db EAST | NO_MOVE
@@ -6476,115 +5541,58 @@ NPCMovement_f390: ; f390 (3:7390)
 
 LostAtChallengeHall: ; f392 (3:7392)
 	start_script
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37d
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f390
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $02
-	dw ScriptJump_f410
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $03
-	dw ScriptJump_f410.ows_f41a
+	do_frames 20
+	move_active_npc NPCMovement_f37d
+	do_frames 20
+	move_active_npc NPCMovement_f390
+	jump_if_flag_equal EVENT_FLAG_45, $02, ScriptJump_f410
+	jump_if_flag_equal EVENT_FLAG_45, $03, ScriptJump_f410.ows_f41a
 	run_command Func_d16b
 	db $00
 	run_command Func_d16b
 	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0536
+	print_text_string Text0536
 .ows_f3ae
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f38b
-	run_command ScriptCommand_PrintTextString
-	tx Text0537
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f38e
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $02
-	dw .ows_f3ce
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f3d9
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_3F
-	db $03
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_48
-	db $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_51
-	run_command ScriptCommand_Jump
-	dw .ows_f3e2
+	close_text_box
+	move_active_npc NPCMovement_f38b
+	print_text_string Text0537
+	close_text_box
+	move_active_npc NPCMovement_f38e
+	jump_if_flag_equal EVENT_FLAG_44, $02, .ows_f3ce
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f3d9
+	script_set_flag_value EVENT_FLAG_3F, $03
+	script_set_flag_value EVENT_FLAG_48, $03
+	zero_out_flag_value EVENT_FLAG_51
+	script_jump .ows_f3e2
 .ows_f3ce
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_40
-	db $03
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_49
-	db $03
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_55
-	run_command ScriptCommand_Jump
-	dw .ows_f3e2
+	script_set_flag_value EVENT_FLAG_40, $03
+	script_set_flag_value EVENT_FLAG_49, $03
+	zero_out_flag_value EVENT_FLAG_55
+	script_jump .ows_f3e2
 .ows_f3d9
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_41
-	db $03
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_4A
-	db $03
-	run_command ScriptCommand_Jump
-	dw .ows_f3e2
+	script_set_flag_value EVENT_FLAG_41, $03
+	script_set_flag_value EVENT_FLAG_4A, $03
+	script_jump .ows_f3e2
 .ows_f3e2
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_CLERK12
-	dw Script_f3e9
-	run_command ScriptCommand_EndScriptLoop1
+	close_advanced_text_box
+	set_next_npc_and_script NPC_CLERK12, Script_f3e9
+	end_script_loop
 	ret
 
 Script_f3e9: ; f3e9 (3:73e9)
 	start_script
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f40a
-	run_command ScriptCommand_SetPlayerDirection
-	db WEST
-	run_command ScriptCommand_MovePlayer
-	db WEST
-	db $01
-	run_command ScriptCommand_SetPlayerDirection
-	db SOUTH
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MovePlayer
-	db SOUTH
-	db $01
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f40d
-	run_command ScriptCommand_QuitScriptFully
+	move_active_npc NPCMovement_f40a
+	set_player_direction WEST
+	move_player WEST, 1
+	set_player_direction SOUTH
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_player SOUTH, 1
+	move_active_npc NPCMovement_f40d
+	quit_script_fully
 
 NPCMovement_f40a: ; f40a (3:740a)
 	db WEST
@@ -6601,156 +5609,85 @@ ScriptJump_f410: ; f410 (4:7410)
 	db $00
 	run_command Func_d16b
 	db $01
-	run_command ScriptCommand_PrintTextString
-	tx Text0538
-	run_command ScriptCommand_Jump
-	dw LostAtChallengeHall.ows_f3ae
+	print_text_string Text0538
+	script_jump LostAtChallengeHall.ows_f3ae
 
 .ows_f41a
-	run_command ScriptCommand_PrintTextString
-	tx Text0539
-	run_command ScriptCommand_SetDialogName
-	db NPC_RONALD1
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f42e
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text053a
-	tx Text053b
+	print_text_string Text0539
+	set_dialog_npc NPC_RONALD1
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f42e
+	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
+	print_variable_text Text053a, Text053b
 .ows_f42e
-	run_command ScriptCommand_SetDialogName
-	db NPC_HOST
-	run_command ScriptCommand_Jump
-	dw LostAtChallengeHall.ows_f3ae
+	set_dialog_npc NPC_HOST
+	script_jump LostAtChallengeHall.ows_f3ae
 
 Script_f433: ; f433 (3:7433)
 	start_script
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37d
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f390
-	run_command ScriptCommand_Jump
-	dw WonAtChallengeHall.ows_f4a4
+	do_frames 20
+	move_active_npc NPCMovement_f37d
+	do_frames 20
+	move_active_npc NPCMovement_f390
+	script_jump WonAtChallengeHall.ows_f4a4
 
 WonAtChallengeHall: ; f441 (3:7441)
 	start_script
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37d
-	run_command ScriptCommand_DoFrames
-	db 20
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f390
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $03
-	dw ScriptJump_f4db
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $02
-	dw .ows_f456
+	do_frames 20
+	move_active_npc NPCMovement_f37d
+	do_frames 20
+	move_active_npc NPCMovement_f390
+	jump_if_flag_equal EVENT_FLAG_45, $03, ScriptJump_f4db
+	jump_if_flag_equal EVENT_FLAG_45, $02, .ows_f456
 .ows_f456
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text053c
-	tx Text053d
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37f
+	jump_if_flag_equal EVENT_FLAG_45, $01, NULL
+	print_variable_text Text053c, Text053d
+	move_active_npc NPCMovement_f37f
 	run_command Func_d16b
 	db $00
-	run_command ScriptCommand_PrintTextString
-	tx Text053e
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f4c8
+	print_text_string Text053e
+	close_text_box
+	move_wram_npc NPCMovement_f4c8
 	run_command Func_cdd8
-	run_command ScriptCommand_PrintTextString
-	tx Text053f
-	run_command ScriptCommand_CloseTextBox
+	print_text_string Text053f
+	close_text_box
 	run_command Func_d195
 	run_command Func_cdf5
 	db $14
 	db $14
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f4d0
+	move_wram_npc NPCMovement_f4d0
 	run_command Func_d16b
 	db $00
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $02
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0540
-	tx Text0541
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f383
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $02
-	dw .ows_f4a4
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f4a1
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_SetDialogName
-	db $02
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0542
-	tx Text0543
-	run_command ScriptCommand_SetDialogName
-	db NPC_HOST
-	run_command ScriptCommand_CloseTextBox
+	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
+	print_variable_text Text0540, Text0541
+	move_active_npc NPCMovement_f383
+	jump_if_flag_equal EVENT_FLAG_45, $02, .ows_f4a4
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f4a1
+	close_text_box
+	set_dialog_npc $02
+	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
+	print_variable_text Text0542, Text0543
+	set_dialog_npc NPC_HOST
+	close_text_box
 .ows_f4a1
-	run_command ScriptCommand_PrintTextString
-	tx Text0544
+	print_text_string Text0544
 .ows_f4a4
-	run_command ScriptCommand_ZeroOutFlagValue
-	db EVENT_FLAG_47
-	run_command ScriptCommand_PrintTextString
-	tx Text0545
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text0546
-	dw .ows_f4bd
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_45
-	db $02
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text0547
-	tx Text0548
+	zero_out_flag_value EVENT_FLAG_47
+	print_text_string Text0545
+	ask_question_jump_default_yes Text0546, .ows_f4bd
+	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
+	print_variable_text Text0547, Text0548
 	run_command Func_cd4f
 	db $04
 	db $00
 	db $00
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 .ows_f4bd
-	run_command ScriptCommand_PrintTextString
-	tx Text0549
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_FLAG_47
+	print_text_string Text0549
+	close_text_box
+	max_out_flag_value EVENT_FLAG_47
 	run_command Func_d1ad
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_Jump
-	dw .ows_f4a4
+	close_text_box
+	script_jump .ows_f4a4
 
 NPCMovement_f4c8: ; f4c8 (3:74c8)
 	db EAST
@@ -6779,110 +5716,56 @@ NPCMovement_f4d8: ; f4d8 (3:74d8)
 	db $ff
 
 ScriptJump_f4db: ; f4db (3:74db)
-	run_command ScriptCommand_PrintTextString
-	tx Text054a
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f37f
+	print_text_string Text054a
+	move_active_npc NPCMovement_f37f
 	run_command Func_d16b
 	db $00
-	run_command ScriptCommand_PrintTextString
-	tx Text054b
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f513
-	run_command ScriptCommand_SetDialogName
-	db $02
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text054c
-	tx Text054d
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f4d8
-	run_command ScriptCommand_DoFrames
-	db 40
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f34c
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $01
-	dw NO_JUMP
-	run_command ScriptCommand_PrintVariableText
-	tx Text054e
-	tx Text054f
-	run_command ScriptCommand_SetDialogName
-	db NPC_HOST
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f4c9
-	run_command ScriptCommand_Jump
-	dw .ows_f516
+	print_text_string Text054b
+	close_text_box
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f513
+	set_dialog_npc $02
+	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
+	print_variable_text Text054c, Text054d
+	move_wram_npc NPCMovement_f4d8
+	do_frames 40
+	move_wram_npc NPCMovement_f34c
+	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
+	print_variable_text Text054e, Text054f
+	set_dialog_npc NPC_HOST
+	close_text_box
+	move_wram_npc NPCMovement_f4c9
+	script_jump .ows_f516
 .ows_f513
-	run_command ScriptCommand_MoveWramNPC
-	dw NPCMovement_f4c8
+	move_wram_npc NPCMovement_f4c8
 .ows_f516
 	run_command Func_cdd8
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f383
-	run_command ScriptCommand_PrintTextString
-	tx Text0550
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_MoveActiveNPC
-	dw NPCMovement_f38b
+	move_active_npc NPCMovement_f383
+	print_text_string Text0550
+	close_text_box
+	move_active_npc NPCMovement_f38b
 	run_command Func_d1b3
-	run_command ScriptCommand_PrintTextString
-	tx Text0551
-	run_command ScriptCommand_GiveCard
-	db $00
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db $00
-	run_command ScriptCommand_PrintTextString
-	tx Text0552
-	run_command ScriptCommand_CloseTextBox
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $02
-	dw .ows_f540
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_44
-	db $03
-	dw .ows_f549
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_3F
-	db $02
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_48
-	db $02
-	run_command ScriptCommand_Jump
-	dw .ows_f552
+	print_text_string Text0551
+	give_card VARIABLE_CARD
+	show_card_received_screen $00
+	print_text_string Text0552
+	close_text_box
+	jump_if_flag_equal EVENT_FLAG_44, $02, .ows_f540
+	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f549
+	script_set_flag_value EVENT_FLAG_3F, $02
+	script_set_flag_value EVENT_FLAG_48, $02
+	script_jump .ows_f552
 .ows_f540
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_40
-	db $02
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_49
-	db $02
-	run_command ScriptCommand_Jump
-	dw .ows_f552
+	script_set_flag_value EVENT_FLAG_40, $02
+	script_set_flag_value EVENT_FLAG_49, $02
+	script_jump .ows_f552
 .ows_f549
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_41
-	db $02
-	run_command ScriptCommand_SetFlagValue
-	db EVENT_FLAG_4A
-	db $02
-	run_command ScriptCommand_Jump
-	dw .ows_f552
+	script_set_flag_value EVENT_FLAG_41, $02
+	script_set_flag_value EVENT_FLAG_4A, $02
+	script_jump .ows_f552
 .ows_f552
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db NPC_CLERK12
-	dw Script_f3e9
-	run_command ScriptCommand_EndScriptLoop1
+	close_advanced_text_box
+	set_next_npc_and_script NPC_CLERK12, Script_f3e9
+	end_script_loop
 	ret
 ; f559
 
@@ -6957,17 +5840,14 @@ Func_f602: ; f602 (3:7602)
 
 Script_f631: ; f631 (3:7631)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text0508
-	run_command ScriptCommand_CloseAdvancedTextBox
-	run_command ScriptCommand_SetNextNPCandScript
-	db $02
-	dw $763c
-	run_command ScriptCommand_EndScriptLoop1
+	print_text_string Text0508
+	close_advanced_text_box
+	set_next_npc_and_script NPC_RONALD1, .ows_f63c
+	end_script_loop
 
 	ret
-; 0xf63c
 
+.ows_f63c
 	INCROM $f63c, $f71f
 
 Script_Courtney: ; f71f (3:771f)
@@ -6992,23 +5872,15 @@ HallOfHonorLoadMap: ; fbdb (3:7bdb)
 
 Script_fbf1: ; fbf1 (3:7bf1)
 	start_script
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db EVENT_RECEIVED_LEGENDARY_CARD
-	dw .ows_fc10
-	run_command ScriptCommand_MaxOutFlagValue
-	db EVENT_RECEIVED_LEGENDARY_CARD
+	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_fc10
+	max_out_flag_value EVENT_RECEIVED_LEGENDARY_CARD
 	run_command Func_ccdc
 	tx Text05b8
-	run_command ScriptCommand_GiveCard
-	db ZAPDOS3
-	run_command ScriptCommand_GiveCard
-	db MOLTRES2
-	run_command ScriptCommand_GiveCard
-	db ARTICUNO2
-	run_command ScriptCommand_GiveCard
-	db DRAGONITE1
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db $ff
+	give_card ZAPDOS3
+	give_card MOLTRES2
+	give_card ARTICUNO2
+	give_card DRAGONITE1
+	show_card_received_screen $ff
 .ows_fc05
 	run_command Func_d38f
 	db $00
@@ -7020,22 +5892,16 @@ Script_fbf1: ; fbf1 (3:7bf1)
 	run_command Func_d396
 	db $01
 	run_command Func_d3b9
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 .ows_fc10
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_71
-	db $0f
-	dw .ows_fc20
+	jump_if_flag_equal EVENT_FLAG_71, $0f, .ows_fc20
 	run_command Func_d209
 	run_command Func_ccdc
 	tx Text05ba
-	run_command ScriptCommand_GiveCard
-	db $00
-	run_command ScriptCommand_ShowCardReceivedScreen
-	db $00
-	run_command ScriptCommand_Jump
-	dw .ows_fc05
+	give_card VARIABLE_CARD
+	show_card_received_screen VARIABLE_CARD
+	script_jump .ows_fc05
 
 .ows_fc20
 	run_command Func_ccdc
@@ -7044,8 +5910,7 @@ Script_fbf1: ; fbf1 (3:7bf1)
 	db $00
 	run_command Func_ccdc
 	tx Text05bc
-	run_command ScriptCommand_Jump
-	dw .ows_fc0a
+	script_jump .ows_fc0a
 
 Func_fc2b: ; fc2b (3:7c2b)
 	ld a, [wDuelResult]
@@ -7074,17 +5939,13 @@ PointerTable_fc4c: ; fc4c (3:7c4c)
 
 Script_fc52: ; fc52 (3:7c52)
 	start_script
-	run_command ScriptCommand_PrintTextString
-	tx Text06c8
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	dw $0000
-	dw .ows_fc5e
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06c9
+	print_text_string Text06c8
+	ask_question_jump_default_yes NULL, .ows_fc5e
+	print_text_quit_fully Text06c9
 
 .ows_fc5e
 	run_command Func_cd76
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 Unknown_fc60: ; fc60 (3:7c60)
 	INCROM $fc60, $fc64
@@ -7113,42 +5974,28 @@ Func_fc7a: ; fc7a (3:7c7a)
 	set_flag_value EVENT_FLAG_74
 
 	start_script
-	run_command ScriptCommand_JumpIfFlagNotEqual
-	db EVENT_FLAG_74
-	db $02
-	dw Func_fcad.ows_fcd5
-	run_command ScriptCommand_PrintTextString
-	tx Text06cd
+	jump_if_flag_not_equal EVENT_FLAG_74, $02, Func_fcad.ows_fcd5
+	print_text_string Text06cd
 	run_command Func_d39d
 	db $00
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db EVENT_FLAG_72
-	db $04
-	dw Func_fc7a.ows_fcaa
-	run_command ScriptCommand_PrintTextString
-	tx Text06ce
-	run_command ScriptCommand_AskQuestionJumpDefaultYes
-	tx Text06cf
-	dw .ows_fca0
-	run_command ScriptCommand_PrintTextString
-	tx Text06d0
-	run_command ScriptCommand_Jump
-	dw Func_fc7a.ows_fcaa
+	jump_if_flag_not_less_than EVENT_FLAG_72, $04, Func_fc7a.ows_fcaa
+	print_text_string Text06ce
+	ask_question_jump_default_yes Text06cf, .ows_fca0
+	print_text_string Text06d0
+	script_jump Func_fc7a.ows_fcaa
 
 .ows_fca0
 	run_command Func_d396
 	db $00
-	run_command ScriptCommand_PlaySFX
-	db $56
+	play_sfx SFX_56
 	run_command Func_ccdc
 	tx Text06d1
 	run_command Func_d39d
 	db $01
-	run_command ScriptCommand_QuitScriptFully
+	quit_script_fully
 
 .ows_fcaa
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d2
+	print_text_quit_fully Text06d2
 
 Func_fcad: ; fcad (3:7cad)
 	ld a, [wd10e]
@@ -7156,47 +6003,28 @@ Func_fcad: ; fcad (3:7cad)
 	set_flag_value EVENT_FLAG_72
 
 	start_script
-	run_command ScriptCommand_PlaySFX
-	db $56
+	play_sfx SFX_56
 	run_command Func_d396
 	db $00
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_72
-	db $00
-	dw .ows_fccc
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_72
-	db $02
-	dw .ows_fccf
-	run_command ScriptCommand_JumpIfFlagEqual
-	db EVENT_FLAG_72
-	db $03
-	dw .ows_fcd2
-	run_command ScriptCommand_Jump
-	dw Func_fc7a.ows_fcaa
+	jump_if_flag_equal EVENT_FLAG_72, $00, .ows_fccc
+	jump_if_flag_equal EVENT_FLAG_72, $02, .ows_fccf
+	jump_if_flag_equal EVENT_FLAG_72, $03, .ows_fcd2
+	script_jump Func_fc7a.ows_fcaa
 
 .ows_fccc
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d3
+	print_text_quit_fully Text06d3
 
 .ows_fccf
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d4
+	print_text_quit_fully Text06d4
 
 .ows_fcd2
-	run_command ScriptCommand_PrintTextQuitFully
-	tx Text06d5
+	print_text_quit_fully Text06d5
 
 .ows_fcd5
-	run_command ScriptCommand_MoveArbitraryNPC
-	db NPC_GIFT_CENTER_CLERK
-	dw NPCMovement_fce1
-	run_command ScriptCommand_PrintTextString
-	tx Text06d6
-	run_command ScriptCommand_MoveArbitraryNPC
-	db NPC_GIFT_CENTER_CLERK
-	dw NPCMovement_fce3
-	run_command ScriptCommand_QuitScriptFully
+	move_arbitrary_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce1
+	print_text_string Text06d6
+	move_arbitrary_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce3
+	quit_script_fully
 
 NPCMovement_fce1: ; fce1 (3:7ce1)
 	db SOUTH | NO_MOVE

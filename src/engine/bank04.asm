@@ -981,13 +981,13 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_MoveActiveNPCByDirection
 	dw ScriptCommand_CloseTextBox
 	dw ScriptCommand_GiveBoosterPacks
-	dw ScriptCommand_CheckIfCardInCollectionOrDecks
-	dw ScriptCommand_CheckIfCardInCollection
+	dw ScriptCommand_JumpIfCardOwned
+	dw ScriptCommand_JumpIfCardInCollection
 	dw ScriptCommand_GiveCard
 	dw ScriptCommand_TakeCard
 	dw Func_cf53
 	dw Func_cf7b
-	dw ScriptCommand_CheckRawAmountOfCardsOwned
+	dw ScriptCommand_JumpIfEnoughCardsOwned
 	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
 	dw Func_cfc6
 	dw Func_cfd4
@@ -1000,13 +1000,13 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_SetPlayerDirection
 	dw ScriptCommand_MovePlayer
 	dw ScriptCommand_ShowCardReceivedScreen
-	dw ScriptCommand_SetDialogName
-	dw ScriptCommand_SetNextNPCandScript
+	dw ScriptCommand_SetDialogNPC
+	dw ScriptCommand_SetNextNPCAndScript
 	dw Func_d095
 	dw Func_d0be
 	dw ScriptCommand_DoFrames
 	dw Func_d0d9
-	dw ScriptCommand_JumpIfPlayerCoordMatches
+	dw ScriptCommand_JumpIfPlayerCoordsMatch
 	dw ScriptCommand_MoveActiveNPC
 	dw ScriptCommand_GiveOneOfEachTrainerBooster
 	dw Func_d103
@@ -1023,9 +1023,9 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d1b3
 	dw ScriptCommand_QuitScriptFully
 	dw Func_d244
-	dw ScriptCommand_ShowMultichoiceTextbox_ChooseDeckToDuelAgainst
+	dw ScriptCommand_ChooseDeckToDuelAgainstMultichoice
 	dw ScriptCommand_OpenDeckMachine
-	dw ScriptCommand_ShowMultichoiceTextbox_ChooseStarterDeck
+	dw ScriptCommand_ChooseStarterDeckMultichoice
 	dw ScriptCommand_EnterMap
 	dw ScriptCommand_MoveArbitraryNPC
 	dw Func_d209

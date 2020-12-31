@@ -5302,7 +5302,7 @@ CopyOpponentName: ; 1c8e (0:1c8e)
 	jp CopyText
 
 ; return, in hl, the total amount of cards owned anywhere, including duplicates
-GetRawAmountOfCardsOwned: ; 1caa (0:1caa)
+GetAmountOfCardsOwned: ; 1caa (0:1caa)
 	push de
 	push bc
 	call EnableSRAM
