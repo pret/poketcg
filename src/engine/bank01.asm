@@ -5661,7 +5661,135 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ret
 ; 0x6423
 
-	INCROM $6423, $6510
+Func_6423: ; 6423 (1:6423)
+	ld hl, wDefaultText
+	ld e, $08
+.asm_6428
+	ld a, [hli]
+	call JPWriteByteToBGMap0
+	inc b
+	dec e
+	jr nz, .asm_6428
+	ret
+; 0x6431
+
+Func_6431: ; 6431 (1:6431)
+	xor a
+	ld [wSelectedDuelSubMenuItem], a
+	
+Func_6435:
+	call Func_64b0
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonIncluded
+	ld a, [wSelectedDuelSubMenuItem]
+	call InitializeMenuParameters
+	ld a, [wNumPlayAreaItems]
+	ld [wNumMenuItems], a
+.asm_6447
+	call DoFrame
+	call HandleMenuInput
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld [wHUDEnergyAndHPBarsX], a
+	jr nc, .asm_6447
+	cp $ff
+	jr z, .asm_649b
+	ld [wSelectedDuelSubMenuItem], a
+	ldh a, [hKeysPressed]
+	and $08
+	jr nz, .asm_649d
+	ldh a, [hCurMenuItem]
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, $c511
+	add hl, de
+	ld a, [hld]
+	cp $04
+	jr nz, .asm_6447
+	ld a, [hl]
+	ldh [hTempCardIndex_ff98], a
+	ld d, a
+	ld e, $00
+	call CopyMoveDataAndDamage_FromDeckIndex
+	call DisplayUsePokemonPowerScreen
+	ld a, $01
+	call TryExecuteEffectCommandFunction
+	jr nc, .asm_648c
+	ld hl, $40
+	call DrawWideTextBox_WaitForInput
+	jp Func_6435
+.asm_648c
+	ld hl, $3f
+	call YesOrNoMenuWithText
+	jp c, Func_6435
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+.asm_649b
+	scf
+	ret
+.asm_649d
+	ldh a, [hCurMenuItem]
+	add $bb
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	call LoadCardDataToBuffer1_FromCardID
+	call OpenCardPage_FromCheckPlayArea
+	jp Func_6435
+; 0x64b0
+
+Func_64b0: ; 64b0 (1:64b0)
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	call LoadDuelCardSymbolTiles
+	call LoadDuelCheckPokemonScreenTiles
+	ld de, wDuelTempList
+	call SetListPointer
+	ld a, $ef
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, $00
+.asm_64ca
+	push hl
+	push bc
+	ld a, b
+	ld [wHUDEnergyAndHPBarsX], a
+	ld a, b
+	add a
+	add b
+	ld [wCurPlayAreaY], a
+	ld a, b
+	add $bb
+	call GetTurnDuelistVariable
+	call SetNextElementOfList
+	call PrintPlayAreaCardHeader
+	call PrintPlayAreaCardLocation
+	call Func_64fc
+	ld a, [wLoadedCard1Move1Category]
+	call SetNextElementOfList
+	pop bc
+	pop hl
+	inc b
+	dec c
+	jr nz, .asm_64ca
+	ld a, b
+	ld [wNumPlayAreaItems], a
+	call EnableLCD
+	ret
+; 0x64fc
+
+Func_64fc: ; 64fc (1:64fc)
+	ld a, [wLoadedCard1Move1Category]
+	cp $04
+	ret nz
+	ld a, [wCurPlayAreaY]
+	inc a
+	ld e, a
+	ld d, $04
+	ld hl, wLoadedCard1Move1Name
+	call InitTextPrinting_ProcessTextFromPointerToID
+	ret
+; 0x6510
 
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
