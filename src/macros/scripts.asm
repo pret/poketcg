@@ -176,7 +176,7 @@ ENDM
 ; Gives the player up to 3 booster packs. Arguments can be replaced by NO_BOOSTER
 give_booster_packs: MACRO
 	run_command ScriptCommand_GiveBoosterPacks
-	db \1 ; booster pack (ex BOOSTER_LABORATORY_NEUTRAL
+	db \1 ; booster pack (ex BOOSTER_LABORATORY_NEUTRAL)
 	db \2 ; booster pack
 	db \3 ; booster pack
 ENDM
@@ -231,7 +231,7 @@ script_jump: MACRO
 	dw \1 ; Script Label
 ENDM
 
-; Attemps to send Dr. Mason's PC Packs to the player
+; Attempts to send Dr. Mason's PC Packs to the player
 try_give_medal_pc_packs: MACRO
 	run_command ScriptCommand_TryGiveMedalPCPacks
 ENDM
