@@ -1,8 +1,8 @@
 Music_Club2_Ch1: ; fa077 (3e:6077)
 	speed 6
 	duty 2
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	MainLoop
 	octave 4
 	Loop 8
@@ -95,8 +95,8 @@ Music_Club2_Ch1: ; fa077 (3e:6077)
 Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 	speed 6
 	duty 2
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	MainLoop
 	octave 2
 	Loop 8
@@ -209,15 +209,15 @@ Music_Club2_Ch2: ; fa0e3 (3e:60e3)
 Music_Club2_Ch3: ; fa164 (3e:6164)
 	speed 6
 	volume 32
-	musicdc 17
+	stereo_panning 1, 1
 	wave 0
 	vibrato_type 4
 	vibrato_delay 35
-	musice8 6
-	musice9 64
+	cutoff 6
+	echo 64
 	MainLoop
 	volume 96
-	musice8 8
+	cutoff 8
 	rest 2
 	octave 4
 	G_ 4
@@ -233,16 +233,16 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	rest 2
 	rest 14
 	volume 64
-	musice9 96
+	echo 96
 	music_call Branch_fa1cf
 	octave 4
-	musice8 8
+	cutoff 8
 	G_ 8
 	music_call Branch_fa1cf
-	musice9 64
+	echo 64
 	volume 32
 	octave 3
-	musice8 8
+	cutoff 8
 	G_ 8
 	music_call Branch_fa1f3
 	octave 3
@@ -251,7 +251,7 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	G_ 12
 	rest 16
 	rest 8
-	musice8 8
+	cutoff 8
 	E_ 8
 	music_call Branch_fa1f3
 	octave 3
@@ -263,10 +263,10 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	tie
 	G_ 8
 	rest 4
-	musice8 8
+	cutoff 8
 	A_ 2
 	G_ 2
-	musice8 6
+	cutoff 6
 	F# 16
 	tie
 	F# 12
@@ -284,34 +284,34 @@ Music_Club2_Ch3: ; fa164 (3e:6164)
 	A_ 16
 	rest 16
 	rest 16
-	musice9 96
+	echo 96
 	EndMainLoop
 
 Branch_fa1cf:
-	musice8 6
+	cutoff 6
 	octave 5
 	C# 1
 	tie
 	D_ 15
 	tie
 	D_ 12
-	musice8 8
+	cutoff 8
 	C_ 2
 	dec_octave
 	B_ 2
-	musice8 6
+	cutoff 6
 	G_ 16
 	tie
 	G_ 8
 	rest 4
-	musice8 8
+	cutoff 8
 	E_ 4
 	B_ 4
 	inc_octave
 	C_ 4
 	dec_octave
 	B_ 4
-	musice8 6
+	cutoff 6
 	A_ 16
 	tie
 	A_ 8
@@ -332,12 +332,12 @@ Branch_fa1f3:
 	B_ 4
 	inc_octave
 	C_ 4
-	musice8 6
+	cutoff 6
 	D_ 16
 	tie
 	D_ 8
 	rest 4
-	musice8 8
+	cutoff 8
 	C_ 2
 	dec_octave
 	B_ 2
@@ -345,6 +345,6 @@ Branch_fa1f3:
 	C_ 2
 	dec_octave
 	B_ 2
-	musice8 6
+	cutoff 6
 	music_ret
 ; 0xfa210

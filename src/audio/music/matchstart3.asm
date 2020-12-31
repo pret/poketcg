@@ -1,7 +1,7 @@
 Music_MatchStart3_Ch1: ; f7a0f (3d:7a0f)
 	speed 1
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 2
 	volume 240
 	duty 1
@@ -165,9 +165,9 @@ Music_MatchStart3_Ch1: ; f7a0f (3d:7a0f)
 
 Music_MatchStart3_Ch2: ; f7aba (3d:7aba)
 	speed 1
-	musicdc 17
-	musice8 8
-	musice4 6
+	stereo_panning 1, 1
+	cutoff 8
+	frequency_offset 6
 	rest 4
 	octave 2
 	volume 96

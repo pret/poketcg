@@ -1,8 +1,8 @@
 Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	octave 4
 	duty 2
 	volume 176
@@ -65,10 +65,10 @@ Music_MatchLoss_Ch1: ; f7c2e (3d:7c2e)
 
 
 Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 5
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	octave 3
 	duty 2
 	volume 144
@@ -89,42 +89,42 @@ Music_MatchLoss_Ch2: ; f7c87 (3d:7c87)
 
 
 Music_MatchLoss_Ch3: ; f7ca7 (3d:7ca7)
-	musicdc 17
+	stereo_panning 1, 1
 	wave 1
 	volume 32
-	musice8 8
-	musice9 64
+	cutoff 8
+	echo 64
 	octave 1
 	speed 5
 	A# 4
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 4
 	A# 4
 	dec_octave
-	musice8 8
+	cutoff 8
 	speed 7
 	G# 3
 	inc_octave
-	musice8 4
+	cutoff 4
 	speed 2
 	D# 11
 	G# 11
 	dec_octave
-	musice8 8
+	cutoff 8
 	speed 1
 	F# 11
 	tie
 	F# 12
 	inc_octave
-	musice8 4
+	cutoff 4
 	speed 12
 	C# 2
 	speed 2
 	F# 13
 	dec_octave
 	speed 9
-	musice8 8
+	cutoff 8
 	F_ 12
 	music_end
 ; 0xf7cdf

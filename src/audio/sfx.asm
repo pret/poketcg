@@ -474,7 +474,7 @@ SFX_end: ; fc249 (3f:4249)
 Func_fc26c: ; fc26c (3f:426c)
 	xor a
 	ld [wde53], a
-	ld [wdd83], a
+	ld [wSfxPriority], a
 	ld a, $80
 	ld [wCurSfxID], a
 	ret
