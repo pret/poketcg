@@ -1,7 +1,7 @@
 Music_CardPop_Ch1: ; f703a (3d:703a)
 	speed 4
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	duty 2
 	volume 144
 	MainLoop
@@ -11,10 +11,10 @@ Music_CardPop_Ch1: ; f703a (3d:703a)
 	rest 14
 	Loop 2
 	octave 5
-	musice8 8
+	cutoff 8
 	F# 1
 	G_ 1
-	musice8 6
+	cutoff 6
 	F# 1
 	volume 55
 	F# 1
@@ -63,10 +63,10 @@ Music_CardPop_Ch1: ; f703a (3d:703a)
 	rest 14
 	octave 5
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	F_ 1
-	musice8 6
+	cutoff 6
 	E_ 1
 	volume 55
 	E_ 1
@@ -121,11 +121,11 @@ Music_CardPop_Ch1: ; f703a (3d:703a)
 
 Music_CardPop_Ch2: ; f70df (3d:70df)
 	speed 4
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	duty 2
 	volume 96
-	musice8 3
+	cutoff 3
 	Loop 2
 	octave 2
 	A_ 2
@@ -208,10 +208,10 @@ Music_CardPop_Ch2: ; f70df (3d:70df)
 Music_CardPop_Ch3: ; f713a (3d:713a)
 	speed 4
 	wave 1
-	musicdc 17
+	stereo_panning 1, 1
 	volume 32
-	musice9 0
-	musice8 8
+	echo 0
+	cutoff 8
 	music_call Branch_f715b
 	C_ 2
 	C# 2

@@ -1,9 +1,9 @@
 Music_DuelTheme3_Ch1: ; f63a1 (3d:63a1)
 	speed 11
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	MainLoop
 	octave 2
 	duty 0
@@ -109,7 +109,7 @@ Music_DuelTheme3_Ch1: ; f63a1 (3d:63a1)
 	EndLoop
 	vibrato_delay 20
 	duty 2
-	musice8 6
+	cutoff 6
 	Loop 4
 	music_call Branch_f661d
 	EndLoop
@@ -148,7 +148,7 @@ Music_DuelTheme3_Ch1: ; f63a1 (3d:63a1)
 	speed 11
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 2
 	C# 2
 	dec_octave
@@ -475,14 +475,14 @@ Branch_f661d:
 
 Music_DuelTheme3_Ch2: ; f6649 (3d:6649)
 	speed 11
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	MainLoop
 	octave 2
 	duty 0
-	musice4 3
+	frequency_offset 3
 	Loop 4
 	Loop 4
 	volume 130
@@ -494,7 +494,7 @@ Music_DuelTheme3_Ch2: ; f6649 (3d:6649)
 	volume 133
 	F_ 2
 	EndLoop
-	musice4 0
+	frequency_offset 0
 	octave 3
 	Loop 4
 	rest 6
@@ -554,69 +554,69 @@ Music_DuelTheme3_Ch2: ; f6649 (3d:6649)
 	vibrato_delay 10
 	Loop 4
 	volume 163
-	musice8 6
+	cutoff 6
 	F# 1
 	F# 1
-	musice8 8
+	cutoff 8
 	speed 1
 	F# 5
 	volume 39
 	F# 6
 	volume 163
-	musice8 6
+	cutoff 6
 	speed 11
 	F# 1
 	inc_octave
 	volume 144
-	musice8 8
+	cutoff 8
 	C# 2
 	dec_octave
 	volume 163
-	musice8 6
+	cutoff 6
 	F# 1
 	F# 1
 	speed 1
-	musice8 8
+	cutoff 8
 	F# 5
 	volume 39
 	F# 6
 	volume 163
-	musice8 6
+	cutoff 6
 	speed 11
 	F# 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 2
 	volume 163
-	musice8 6
+	cutoff 6
 	F# 1
 	F# 1
-	musice8 8
+	cutoff 8
 	speed 1
 	F# 5
 	volume 39
 	F# 6
 	volume 163
-	musice8 6
+	cutoff 6
 	speed 11
 	F# 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 2
 	volume 163
-	musice8 6
+	cutoff 6
 	F# 1
 	F# 1
 	speed 1
-	musice8 8
+	cutoff 8
 	F# 5
 	volume 39
 	F# 6
 	volume 163
-	musice8 6
+	cutoff 6
 	speed 11
 	F# 1
-	musice8 8
+	cutoff 8
 	volume 144
 	A_ 2
 	G# 2
@@ -909,22 +909,22 @@ Branch_f6866:
 
 Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	speed 11
-	musicdc 17
+	stereo_panning 1, 1
 	volume 32
 	wave 1
-	musice9 96
+	echo 96
 	vibrato_type 8
 	vibrato_delay 0
-	musice8 8
+	cutoff 8
 	MainLoop
 	octave 1
 	Loop 4
 	Loop 4
-	musice8 4
+	cutoff 4
 	F# 2
 	rest 1
 	EndLoop
-	musice8 8
+	cutoff 8
 	E_ 2
 	F_ 2
 	EndLoop
@@ -958,7 +958,7 @@ Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	music_call Branch_f69f0
 	speed 11
 	octave 3
-	musice8 8
+	cutoff 8
 	D_ 2
 	C# 2
 	dec_octave
@@ -966,7 +966,7 @@ Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	EndLoop
 	music_call Branch_f69f0
 	octave 1
-	musice8 8
+	cutoff 8
 	F# 2
 	E_ 2
 	vibrato_delay 0
@@ -1004,7 +1004,7 @@ Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	E_ 2
 	F_ 2
 	EndLoop
-	musice8 7
+	cutoff 7
 	Loop 4
 	inc_octave
 	Loop 4
@@ -1037,7 +1037,7 @@ Music_DuelTheme3_Ch3: ; f68c2 (3d:68c2)
 	dec_octave
 	E_ 1
 	EndLoop
-	musice8 8
+	cutoff 8
 	EndMainLoop
 
 Branch_f6973:
@@ -1046,11 +1046,11 @@ Branch_f6973:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	E_ 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 2
 	F# 1
@@ -1060,11 +1060,11 @@ Branch_f6973:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	E_ 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	E_ 2
 	F_ 2
 	music_ret
@@ -1076,11 +1076,11 @@ Branch_f6992:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	E_ 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 2
 	F# 1
@@ -1090,11 +1090,11 @@ Branch_f6992:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	E_ 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 1
 	F# 2
@@ -1102,11 +1102,11 @@ Branch_f6992:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	F# 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 2
 	G_ 1
@@ -1116,22 +1116,22 @@ Branch_f6992:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	F# 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	F_ 2
 	F# 2
 	G_ 1
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	F# 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 2
 	G_ 1
@@ -1141,11 +1141,11 @@ Branch_f6992:
 	rest 1
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	F# 1
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 1
 	F_ 2
@@ -1153,67 +1153,67 @@ Branch_f6992:
 
 Branch_f69f0:
 	octave 1
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	C# 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C# 1
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	inc_octave
-	musice8 8
+	cutoff 8
 	F# 2
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	C# 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C# 1
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	inc_octave
-	musice8 8
+	cutoff 8
 	E_ 2
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	C# 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C# 1
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	inc_octave
-	musice8 8
+	cutoff 8
 	D# 2
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	inc_octave
 	C# 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C# 1
 	dec_octave
 	dec_octave
-	musice8 6
+	cutoff 6
 	F# 1
 	music_ret
 

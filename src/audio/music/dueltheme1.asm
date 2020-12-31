@@ -1,9 +1,9 @@
 Music_DuelTheme1_Ch1: ; f532a (3d:532a)
 	speed 7
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	duty 2
 	MainLoop
 	octave 2
@@ -177,7 +177,7 @@ Music_DuelTheme1_Ch1: ; f532a (3d:532a)
 	dec_octave
 	duty 1
 	volume 160
-	musice8 8
+	cutoff 8
 	Loop 3
 	A_ 1
 	rest 2
@@ -408,7 +408,7 @@ Branch_f5538:
 	rest 3
 	duty 1
 	volume 160
-	musice8 8
+	cutoff 8
 	dec_octave
 	Loop 3
 	G_ 1
@@ -511,10 +511,10 @@ Branch_f5580:
 
 Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	speed 7
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	MainLoop
 	duty 1
 	volume 144
@@ -540,7 +540,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	D_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 2
 	music_call Branch_f59f9
 	EndLoop
@@ -551,7 +551,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	music_call Branch_f59f9
 	octave 2
@@ -561,12 +561,12 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	C_ 2
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -575,12 +575,12 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 1
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 1
 	rest 2
 	inc_octave
@@ -592,7 +592,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	music_call Branch_f59f9
 	EndLoop
@@ -603,12 +603,12 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	C_ 2
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -617,12 +617,12 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 1
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 1
 	rest 2
 	inc_octave
@@ -632,7 +632,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	music_call Branch_f59f9
 	octave 2
@@ -642,23 +642,23 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	D_ 1
 	rest 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 1
 	Loop 2
@@ -667,22 +667,22 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	G_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 3
 	D_ 1
 	rest 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 2
 	EndLoop
@@ -691,7 +691,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	F# 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	inc_octave
 	C# 2
 	music_call Branch_f5a17
@@ -702,7 +702,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	E_ 2
 	music_call Branch_f5a17
 	E_ 1
@@ -710,22 +710,22 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	E_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 3
 	E_ 1
 	rest 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	B_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 2
 	A_ 1
@@ -733,22 +733,22 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	A_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 3
 	E_ 1
 	rest 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 2
 	D_ 1
@@ -756,11 +756,11 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	D_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -769,12 +769,12 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 1
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 1
 	rest 2
 	inc_octave
@@ -783,11 +783,11 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	D_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -796,7 +796,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	inc_octave
 	duty 2
 	volume 112
-	musice4 0
+	frequency_offset 0
 	E_ 1
 	F# 1
 	A_ 1
@@ -815,26 +815,26 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	F# 1
 	volume 162
-	musice8 6
+	cutoff 6
 	F# 2
 	volume 112
-	musice8 8
+	cutoff 8
 	A_ 10
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 2
 	D_ 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	inc_octave
 	D_ 2
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -856,19 +856,19 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 2
 	D_ 1
 	duty 2
 	inc_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	inc_octave
@@ -889,7 +889,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 2
 	G_ 1
@@ -907,11 +907,11 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	rest 1
 	dec_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 2
 	inc_octave
@@ -926,7 +926,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 2
 	F# 1
@@ -944,11 +944,11 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	rest 1
 	dec_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 2
 	inc_octave
@@ -963,7 +963,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 2
 	A_ 1
@@ -990,20 +990,20 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	F# 13
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 2
 	D_ 1
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	D_ 2
 	dec_octave
-	musice4 0
+	frequency_offset 0
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 2
 	music_call Branch_f59b4
@@ -1033,7 +1033,7 @@ Music_DuelTheme1_Ch2: ; f55e7 (3d:55e7)
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	Loop 3
 	D_ 1
 	rest 2
@@ -1154,7 +1154,7 @@ Branch_f594d:
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 1
 	inc_octave
@@ -1169,11 +1169,11 @@ Branch_f594d:
 	D_ 1
 	dec_octave
 	volume 162
-	musice8 6
+	cutoff 6
 	G_ 2
 	inc_octave
 	volume 112
-	musice8 8
+	cutoff 8
 	C_ 1
 	rest 1
 	music_ret
@@ -1252,7 +1252,7 @@ Branch_f59b4:
 	rest 3
 	speed 7
 	rest 3
-	musice8 8
+	cutoff 8
 	dec_octave
 	duty 1
 	volume 128
@@ -1279,7 +1279,7 @@ Branch_f59f9:
 	octave 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	dec_octave
@@ -1288,12 +1288,12 @@ Branch_f59f9:
 	inc_octave
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 1
 	dec_octave
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	B_ 1
 	rest 2
 	music_ret
@@ -1302,18 +1302,18 @@ Branch_f5a17:
 	octave 2
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 3
 	C# 1
 	rest 1
 	duty 2
 	volume 162
-	musice8 6
+	cutoff 6
 	A_ 1
 	duty 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 2
 	music_ret
@@ -1321,11 +1321,11 @@ Branch_f5a17:
 
 Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	speed 7
-	musicdc 17
+	stereo_panning 1, 1
 	volume 32
 	wave 4
-	musice9 96
-	musice8 8
+	echo 96
+	cutoff 8
 	octave 1
 	MainLoop
 	Loop 4
@@ -1342,11 +1342,11 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	D_ 1
 	inc_octave
 	inc_octave
-	musice8 3
+	cutoff 3
 	D_ 2
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1356,10 +1356,10 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	F# 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1368,11 +1368,11 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	D_ 1
 	inc_octave
 	inc_octave
-	musice8 3
+	cutoff 3
 	D_ 2
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1381,10 +1381,10 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1392,10 +1392,10 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 2
 	D_ 2
@@ -1451,30 +1451,30 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	music_call Branch_f5c60
 	octave 1
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 1
 	E_ 2
-	musice8 6
+	cutoff 6
 	B_ 2
 	music_call Branch_f5c60
 	octave 1
-	musice8 8
+	cutoff 8
 	F# 2
 	G_ 2
-	musice8 6
+	cutoff 6
 	G# 2
 	music_call Branch_f5c6f
 	octave 1
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 1
 	A_ 2
-	musice8 6
+	cutoff 6
 	E_ 2
 	music_call Branch_f5c6f
 	octave 1
-	musice8 8
+	cutoff 8
 	B_ 2
 	inc_octave
 	C_ 2
@@ -1492,9 +1492,9 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	E_ 1
 	rest 1
-	musice8 7
+	cutoff 7
 	E_ 1
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 1
 	E_ 2
@@ -1508,9 +1508,9 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	F# 1
 	rest 1
-	musice8 7
+	cutoff 7
 	F# 1
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 1
 	F# 2
@@ -1524,9 +1524,9 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	G_ 1
 	rest 1
-	musice8 7
+	cutoff 7
 	G_ 1
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 1
 	E_ 2
@@ -1541,9 +1541,9 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	B_ 1
 	rest 1
-	musice8 7
+	cutoff 7
 	B_ 1
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 1
 	F_ 2
@@ -1585,9 +1585,9 @@ Music_DuelTheme1_Ch3: ; f5a32 (3d:5a32)
 	rest 1
 	D_ 1
 	rest 1
-	musice8 7
+	cutoff 7
 	D_ 1
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 1
 	A_ 14
@@ -1599,10 +1599,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1610,10 +1610,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	G_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1622,10 +1622,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1634,10 +1634,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	G_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1645,10 +1645,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	music_call Branch_f5c47
@@ -1656,10 +1656,10 @@ Branch_f5b8d:
 	rest 2
 	D_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 3
 	D_ 1
@@ -1672,10 +1672,10 @@ Branch_f5b8d:
 	rest 2
 	G_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	B_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 3
 	D_ 1
@@ -1688,10 +1688,10 @@ Branch_f5b8d:
 	rest 2
 	F# 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	A_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 3
 	C# 1
@@ -1704,11 +1704,11 @@ Branch_f5b8d:
 	F# 1
 	inc_octave
 	inc_octave
-	musice8 3
+	cutoff 3
 	C# 2
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	F# 1
 	rest 3
 	C# 1
@@ -1720,10 +1720,10 @@ Branch_f5b8d:
 	rest 2
 	E_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	B_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 3
 	E_ 1
@@ -1735,10 +1735,10 @@ Branch_f5b8d:
 	rest 2
 	A_ 1
 	inc_octave
-	musice8 3
+	cutoff 3
 	B_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 3
 	E_ 1
@@ -1767,9 +1767,9 @@ Branch_f5c4d:
 	rest 1
 	D_ 1
 	rest 1
-	musice8 7
+	cutoff 7
 	D_ 1
-	musice8 8
+	cutoff 8
 	D_ 1
 	rest 1
 	D_ 2
@@ -1777,7 +1777,7 @@ Branch_f5c4d:
 
 Branch_f5c60:
 	octave 1
-	musice8 8
+	cutoff 8
 	E_ 1
 	rest 1
 	E_ 1
@@ -1786,13 +1786,13 @@ Branch_f5c60:
 	rest 1
 	E_ 1
 	rest 1
-	musice8 6
+	cutoff 6
 	E_ 1
 	music_ret
 
 Branch_f5c6f:
 	octave 1
-	musice8 8
+	cutoff 8
 	A_ 1
 	rest 1
 	A_ 1
@@ -1801,7 +1801,7 @@ Branch_f5c6f:
 	rest 1
 	A_ 1
 	rest 1
-	musice8 6
+	cutoff 6
 	A_ 1
 	music_ret
 

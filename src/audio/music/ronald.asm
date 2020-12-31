@@ -1,18 +1,18 @@
 Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 12
-	musice8 8
+	cutoff 8
 	duty 0
 	MainLoop
 	octave 3
 	speed 13
 	Loop 2
 	volume 146
-	musice8 3
+	cutoff 3
 	D_ 1
 	D_ 1
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 2
 	D_ 1
@@ -24,16 +24,16 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	F_ 1
 	rest 1
 	volume 144
-	musice8 8
+	cutoff 8
 	E_ 2
 	rest 1
 	dec_octave
 	volume 146
-	musice8 3
+	cutoff 3
 	G_ 1
 	inc_octave
 	D_ 1
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 2
 	F_ 1
@@ -44,7 +44,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	rest 1
 	A_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	volume 144
 	G_ 2
 	rest 1
@@ -86,7 +86,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	volume 144
 	rest 6
 	dec_octave
-	musice8 4
+	cutoff 4
 	G_ 7
 	inc_octave
 	F_ 6
@@ -101,12 +101,12 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	dec_octave
 	G_ 7
 	inc_octave
-	musice8 8
+	cutoff 8
 	C_ 4
 	C# 4
 	C_ 5
 	dec_octave
-	musice8 4
+	cutoff 4
 	A# 6
 	inc_octave
 	C_ 7
@@ -115,22 +115,22 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	G_ 7
 	F_ 6
 	F# 7
-	musice8 8
+	cutoff 8
 	G_ 6
-	musice8 4
+	cutoff 4
 	C# 7
 	C_ 6
 	dec_octave
 	A# 7
 	inc_octave
-	musice8 8
+	cutoff 8
 	C_ 4
 	C# 4
 	C_ 5
 	dec_octave
 	A# 6
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 7
 	dec_octave
 	A# 6
@@ -138,7 +138,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	F_ 6
 	F# 7
 	G_ 6
-	musice8 8
+	cutoff 8
 	A# 7
 	inc_octave
 	C_ 6
@@ -154,7 +154,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	volume 144
 	rest 6
 	dec_octave
-	musice8 4
+	cutoff 4
 	G_ 7
 	inc_octave
 	F_ 6
@@ -169,12 +169,12 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	dec_octave
 	G_ 7
 	inc_octave
-	musice8 8
+	cutoff 8
 	C_ 4
 	C# 4
 	C_ 5
 	dec_octave
-	musice8 4
+	cutoff 4
 	A# 6
 	inc_octave
 	C_ 7
@@ -184,20 +184,20 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	F_ 6
 	F# 7
 	G_ 6
-	musice8 8
+	cutoff 8
 	A# 7
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 6
 	dec_octave
 	A# 7
 	inc_octave
-	musice8 8
+	cutoff 8
 	C# 4
 	C_ 4
 	dec_octave
 	A# 5
-	musice8 4
+	cutoff 4
 	G_ 6
 	F_ 7
 	G_ 6
@@ -206,15 +206,15 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	dec_octave
 	A# 7
 	inc_octave
-	musice8 8
+	cutoff 8
 	C_ 4
 	C# 4
 	C_ 5
 	dec_octave
-	musice8 4
+	cutoff 4
 	A# 6
 	G_ 7
-	musice8 8
+	cutoff 8
 	music_call Branch_fa9cb
 	speed 1
 	octave 4
@@ -224,19 +224,19 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	duty 2
 	volume 144
 	rest 13
-	musice8 4
+	cutoff 4
 	F_ 6
 	rest 7
-	musice8 8
+	cutoff 8
 	E_ 4
 	F_ 4
 	E_ 5
-	musice8 4
+	cutoff 4
 	D_ 6
 	rest 7
-	musice8 8
+	cutoff 8
 	E_ 6
-	musice8 4
+	cutoff 4
 	C_ 7
 	dec_octave
 	G_ 6
@@ -245,33 +245,33 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	C# 6
 	D_ 7
 	dec_octave
-	musice8 8
+	cutoff 8
 	A# 6
-	musice8 4
+	cutoff 4
 	G_ 7
 	rest 6
 	F_ 7
-	musice8 8
+	cutoff 8
 	F# 6
-	musice8 4
+	cutoff 4
 	G_ 7
-	musice8 8
+	cutoff 8
 	A# 6
-	musice8 4
+	cutoff 4
 	G_ 7
 	A# 6
 	inc_octave
 	C_ 7
-	musice8 8
+	cutoff 8
 	C# 6
-	musice8 4
+	cutoff 4
 	D_ 7
 	F_ 6
 	D_ 7
-	musice8 8
+	cutoff 8
 	F_ 6
 	dec_octave
-	musice8 4
+	cutoff 4
 	G_ 7
 	dec_octave
 	G_ 6
@@ -279,7 +279,7 @@ Music_Ronald_Ch1: ; fa7a0 (3e:67a0)
 	D_ 7
 	duty 1
 	volume 160
-	musice8 8
+	cutoff 8
 	music_call Branch_fa9cb
 	speed 1
 	octave 4
@@ -508,10 +508,10 @@ Branch_fa9ec:
 
 
 Music_Ronald_Ch2: ; faa0e (3e:6a0e)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 8
 	vibrato_delay 12
-	musice8 8
+	cutoff 8
 	duty 0
 	MainLoop
 	octave 2
@@ -603,12 +603,12 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	EndLoop
 	Loop 4
 	music_call Branch_fab76
-	musice8 8
+	cutoff 8
 	volume 128
 	C_ 2
 	rest 1
 	music_call Branch_fab76
-	musice8 8
+	cutoff 8
 	volume 128
 	E_ 2
 	rest 1
@@ -620,14 +620,14 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	duty 1
 	octave 4
 	rest 2
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	D_ 1
 	dec_octave
 	dec_octave
-	musice8 4
+	cutoff 4
 	duty 0
 	volume 146
 	A# 1
@@ -638,11 +638,11 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	volume 128
 	C_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	D_ 1
-	musice8 3
+	cutoff 3
 	E_ 1
-	musice8 4
+	cutoff 4
 	C_ 1
 	rest 1
 	dec_octave
@@ -665,7 +665,7 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	rest 1
 	A_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	volume 144
 	G_ 2
 	rest 1
@@ -677,7 +677,7 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	vibrato_delay 12
 	duty 0
 	volume 146
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 2
 	F_ 1
@@ -690,7 +690,7 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	rest 1
 	A_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	volume 144
 	G_ 2
 	rest 1
@@ -699,7 +699,7 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	octave 3
 	rest 1
 	speed 1
-	musice8 8
+	cutoff 8
 	E_ 3
 	F_ 10
 	E_ 3
@@ -710,7 +710,7 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	vibrato_delay 12
 	duty 0
 	volume 146
-	musice8 4
+	cutoff 4
 	G_ 1
 	rest 1
 	inc_octave
@@ -718,26 +718,26 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	rest 1
 	D_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	volume 144
 	E_ 2
 	rest 1
 	music_call Branch_fabb1
 	rest 1
-	musice8 4
+	cutoff 4
 	octave 2
 	A# 1
 	rest 1
 	A# 1
 	rest 1
 	inc_octave
-	musice8 8
+	cutoff 8
 	volume 144
 	C_ 2
 	rest 1
 	volume 146
 	rest 2
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 2
 	F_ 1
@@ -748,33 +748,33 @@ Music_Ronald_Ch2: ; faa0e (3e:6a0e)
 	rest 1
 	A_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	volume 144
 	F_ 2
 	rest 1
 	music_call Branch_fabb1
 	rest 1
 	octave 2
-	musice8 4
+	cutoff 4
 	G_ 1
 	rest 1
 	G_ 1
 	rest 1
 	inc_octave
-	musice8 8
+	cutoff 8
 	volume 144
 	C_ 2
 	rest 1
 	rest 2
 	dec_octave
 	volume 146
-	musice8 4
+	cutoff 4
 	G_ 1
 	rest 2
 	G_ 1
 	rest 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	duty 1
 	volume 112
 	F# 8
@@ -788,7 +788,7 @@ Branch_fab76:
 	volume 146
 	speed 13
 	rest 2
-	musice8 4
+	cutoff 4
 	A# 1
 	rest 2
 	A# 1
@@ -808,10 +808,10 @@ Branch_fab8a:
 	volume 128
 	speed 13
 	C_ 1
-	musice8 3
+	cutoff 3
 	D_ 1
 	E_ 1
-	musice8 4
+	cutoff 4
 	C_ 1
 	rest 1
 	dec_octave
@@ -820,15 +820,15 @@ Branch_fab8a:
 	A# 1
 	rest 1
 	inc_octave
-	musice8 8
+	cutoff 8
 	C_ 1
-	musice8 3
+	cutoff 3
 	D_ 1
 	E_ 1
-	musice8 8
+	cutoff 8
 	C_ 1
 	dec_octave
-	musice8 4
+	cutoff 4
 	A_ 1
 	rest 1
 	A# 1
@@ -839,7 +839,7 @@ Branch_fabb1:
 	volume 146
 	speed 13
 	rest 2
-	musice8 4
+	cutoff 4
 	A# 1
 	rest 2
 	A# 1
@@ -851,11 +851,11 @@ Branch_fabb1:
 
 Music_Ronald_Ch3: ; fabc0 (3e:6bc0)
 	speed 1
-	musicdc 17
+	stereo_panning 1, 1
 	volume 32
 	wave 1
-	musice9 0
-	musice8 8
+	echo 0
+	cutoff 8
 	MainLoop
 	octave 1
 	Loop 4
