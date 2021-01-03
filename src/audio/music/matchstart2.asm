@@ -1,7 +1,7 @@
 Music_MatchStart2_Ch1: ; f7956 (3d:7956)
 	speed 1
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 2
 	volume 240
 	duty 0
@@ -90,9 +90,9 @@ Music_MatchStart2_Ch1: ; f7956 (3d:7956)
 
 Music_MatchStart2_Ch2: ; f79b4 (3d:79b4)
 	speed 1
-	musicdc 17
-	musice8 8
-	musice4 6
+	stereo_panning 1, 1
+	cutoff 8
+	frequency_offset 6
 	rest 4
 	octave 2
 	volume 96

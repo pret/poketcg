@@ -1,20 +1,20 @@
 Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	speed 7
 	duty 0
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
 	volume 160
-	musice8 8
+	cutoff 8
 	octave 3
 	G_ 1
 	volume 55
 	G_ 1
 	rest 1
 	volume 160
-	musice8 6
+	cutoff 6
 	F_ 1
-	musice8 8
+	cutoff 8
 	E_ 3
 	volume 55
 	E_ 1
@@ -28,10 +28,10 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	volume 55
 	D_ 1
 	volume 208
-	musice8 6
+	cutoff 6
 	C_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 10
 	volume 55
 	G_ 2
@@ -41,16 +41,16 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	E_ 1
 	rest 1
 	volume 160
-	musice8 6
+	cutoff 6
 	G_ 1
-	musice8 8
+	cutoff 8
 	G_ 5
 	volume 55
 	G_ 1
 	volume 160
-	musice8 6
+	cutoff 6
 	F_ 2
-	musice8 8
+	cutoff 8
 	F_ 2
 	speed 1
 	E_ 5
@@ -67,7 +67,7 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	volume 55
 	C_ 1
 	volume 160
-	musice8 8
+	cutoff 8
 	D_ 11
 	volume 55
 	D_ 1
@@ -77,9 +77,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	G_ 1
 	rest 1
 	volume 160
-	musice8 6
+	cutoff 6
 	F_ 1
-	musice8 8
+	cutoff 8
 	E_ 3
 	volume 55
 	E_ 1
@@ -93,10 +93,10 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	volume 55
 	D_ 1
 	volume 208
-	musice8 6
+	cutoff 6
 	E_ 2
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 8
 	volume 55
 	G_ 2
@@ -117,9 +117,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	volume 55
 	D_ 1
 	volume 208
-	musice8 6
+	cutoff 6
 	C_ 2
-	musice8 8
+	cutoff 8
 	G_ 9
 	volume 55
 	G_ 1
@@ -137,9 +137,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	E_ 1
 	rest 1
 	volume 160
-	musice8 6
+	cutoff 6
 	E_ 1
-	musice8 8
+	cutoff 8
 	EndLoop
 	E_ 12
 	volume 55
@@ -152,19 +152,19 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	D_ 1
 	rest 1
 	volume 160
-	musice8 6
+	cutoff 6
 	G_ 1
-	musice8 8
+	cutoff 8
 	G_ 8
 	volume 55
 	G_ 2
 	volume 160
 	speed 1
-	musice8 7
+	cutoff 7
 	G_ 5
 	G_ 4
 	G_ 5
-	musice8 8
+	cutoff 8
 	speed 7
 	G_ 9
 	volume 55
@@ -181,10 +181,10 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	volume 55
 	C_ 1
 	rest 1
-	musice8 6
+	cutoff 6
 	volume 160
 	E_ 1
-	musice8 8
+	cutoff 8
 	E_ 6
 	volume 55
 	E_ 2
@@ -207,9 +207,9 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 	B_ 2
 	volume 160
 	inc_octave
-	musice8 6
+	cutoff 6
 	C_ 1
-	musice8 8
+	cutoff 8
 	C_ 8
 	tie
 	C_ 8
@@ -223,11 +223,11 @@ Music_TitleScreen_Ch1: ; f5052 (3d:5052)
 Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	speed 7
 	duty 0
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
 	volume 128
-	musice8 8
+	cutoff 8
 	octave 2
 	B_ 1
 	volume 39
@@ -235,9 +235,9 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	inc_octave
 	volume 128
-	musice8 6
+	cutoff 6
 	D_ 1
-	musice8 8
+	cutoff 8
 	C_ 3
 	volume 39
 	C_ 1
@@ -246,23 +246,23 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	G_ 5
 	rest 1
-	musice8 6
+	cutoff 6
 	G_ 2
-	musice8 8
+	cutoff 8
 	E_ 10
 	rest 2
 	C_ 1
 	rest 2
-	musice8 6
+	cutoff 6
 	E_ 1
-	musice8 8
+	cutoff 8
 	F_ 5
 	rest 1
-	musice8 6
+	cutoff 6
 	C_ 2
-	musice8 7
+	cutoff 7
 	C_ 2
-	musice8 8
+	cutoff 8
 	C_ 2
 	dec_octave
 	G_ 1
@@ -273,18 +273,18 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	A_ 1
 	rest 2
 	inc_octave
-	musice8 6
+	cutoff 6
 	C_ 1
 	dec_octave
-	musice8 8
+	cutoff 8
 	B_ 3
 	rest 1
 	B_ 1
 	rest 2
 	inc_octave
-	musice8 6
+	cutoff 6
 	D_ 1
-	musice8 8
+	cutoff 8
 	C_ 3
 	volume 39
 	C_ 1
@@ -293,9 +293,9 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	G_ 5
 	rest 1
-	musice8 6
+	cutoff 6
 	G_ 2
-	musice8 8
+	cutoff 8
 	E_ 8
 	rest 2
 	C_ 2
@@ -307,9 +307,9 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	G# 5
 	rest 1
-	musice8 6
+	cutoff 6
 	F_ 2
-	musice8 8
+	cutoff 8
 	G# 9
 	rest 1
 	G# 2
@@ -325,9 +325,9 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	volume 128
 	inc_octave
-	musice8 6
+	cutoff 6
 	C_ 1
-	musice8 8
+	cutoff 8
 	dec_octave
 	B_ 10
 	rest 2
@@ -336,9 +336,9 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	G_ 1
 	rest 1
 	volume 128
-	musice8 6
+	cutoff 6
 	B_ 1
-	musice8 8
+	cutoff 8
 	A_ 12
 	volume 39
 	A_ 2
@@ -351,33 +351,33 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 1
 	volume 128
 	inc_octave
-	musice8 6
+	cutoff 6
 	D_ 1
-	musice8 8
+	cutoff 8
 	D_ 8
 	rest 2
 	speed 1
-	musice8 7
+	cutoff 7
 	D_ 5
 	D_ 4
 	D_ 5
 	speed 7
-	musice8 8
+	cutoff 8
 	C_ 9
 	rest 1
 	C_ 2
 	dec_octave
-	musice8 7
+	cutoff 7
 	G# 2
-	musice8 8
+	cutoff 8
 	G# 2
 	G_ 10
 	rest 2
 	G_ 1
 	rest 2
-	musice8 6
+	cutoff 6
 	G_ 1
-	musice8 8
+	cutoff 8
 	A_ 6
 	rest 2
 	F# 3
@@ -388,13 +388,13 @@ Music_TitleScreen_Ch2: ; f5193 (3d:5193)
 	rest 2
 	F_ 5
 	rest 2
-	musice8 6
+	cutoff 6
 	F_ 1
-	musice8 8
+	cutoff 8
 	F_ 7
 	rest 1
 	speed 1
-	musice8 8
+	cutoff 8
 	F_ 14
 	rest 5
 	D_ 13
@@ -412,9 +412,9 @@ Music_TitleScreen_Ch3: ; f5286 (3d:5286)
 	speed 7
 	wave 4
 	volume 32
-	musice9 0
-	musicdc 17
-	musice8 6
+	echo 0
+	stereo_panning 1, 1
+	cutoff 6
 	octave 2
 	rest 4
 	music_call Branch_f52f0
@@ -489,7 +489,7 @@ Music_TitleScreen_Ch3: ; f5286 (3d:5286)
 	tie
 	G_ 10
 	speed 7
-	musice8 8
+	cutoff 8
 	C_ 8
 	music_end
 

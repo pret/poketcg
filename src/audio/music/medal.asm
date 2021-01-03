@@ -1,8 +1,8 @@
 Music_Medal_Ch1: ; f7df8 (3d:7df8)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	octave 2
 	duty 1
 	volume 160
@@ -33,11 +33,11 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 	volume 55
 	A_ 5
 	volume 160
-	musice8 7
+	cutoff 7
 	A_ 5
 	A_ 5
 	A_ 5
-	musice8 8
+	cutoff 8
 	A_ 15
 	volume 55
 	A_ 5
@@ -63,10 +63,10 @@ Music_Medal_Ch1: ; f7df8 (3d:7df8)
 
 
 Music_Medal_Ch2: ; f7e4b (3d:7e4b)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	octave 1
 	duty 0
 	volume 144
@@ -96,11 +96,11 @@ Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 	volume 39
 	C_ 5
 	volume 160
-	musice8 7
+	cutoff 7
 	C_ 5
 	C_ 5
 	C_ 5
-	musice8 8
+	cutoff 8
 	D_ 15
 	volume 55
 	D_ 5
@@ -126,11 +126,11 @@ Music_Medal_Ch2: ; f7e4b (3d:7e4b)
 
 
 Music_Medal_Ch3: ; f7e9d (3d:7e9d)
-	musicdc 17
+	stereo_panning 1, 1
 	wave 1
 	volume 32
-	musice8 8
-	musice9 0
+	cutoff 8
+	echo 0
 	octave 1
 	speed 1
 	speed 15
@@ -140,11 +140,11 @@ Music_Medal_Ch3: ; f7e9d (3d:7e9d)
 	speed 1
 	F_ 10
 	rest 5
-	musice8 7
+	cutoff 7
 	F_ 5
 	F_ 5
 	F_ 5
-	musice8 8
+	cutoff 8
 	A# 15
 	rest 5
 	A# 16

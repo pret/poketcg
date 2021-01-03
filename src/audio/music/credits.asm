@@ -1,9 +1,9 @@
 Music_Credits_Ch1: ; fb1fe (3e:71fe)
 	speed 13
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	octave 2
 	duty 1
 	volume 79
@@ -850,10 +850,10 @@ Branch_fb651:
 
 
 Music_Credits_Ch2: ; fb68a (3e:768a)
-	musicdc 17
+	stereo_panning 1, 1
 	vibrato_type 1
 	vibrato_delay 20
-	musice8 8
+	cutoff 8
 	duty 1
 	octave 2
 	speed 13
@@ -904,9 +904,9 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	inc_octave
 	volume 128
 	D_ 1
-	musice8 4
+	cutoff 4
 	E_ 1
-	musice8 8
+	cutoff 8
 	C_ 3
 	dec_octave
 	volume 146
@@ -915,18 +915,18 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	inc_octave
 	volume 128
 	D_ 1
-	musice8 4
+	cutoff 4
 	E_ 1
 	dec_octave
-	musice8 8
+	cutoff 8
 	A_ 3
 	volume 146
 	C_ 1
 	rest 2
-	musice8 4
+	cutoff 4
 	volume 128
 	F_ 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	volume 128
@@ -948,10 +948,10 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	volume 128
 	B_ 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 1
 	volume 146
-	musice8 8
+	cutoff 8
 	D_ 1
 	volume 128
 	E_ 3
@@ -960,20 +960,20 @@ Music_Credits_Ch2: ; fb68a (3e:768a)
 	rest 1
 	volume 128
 	E_ 1
-	musice8 4
+	cutoff 4
 	F_ 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	volume 128
 	A_ 3
 	volume 146
 	C_ 1
-	musice8 4
+	cutoff 4
 	A_ 1
 	rest 1
 	F_ 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	volume 128
@@ -1261,17 +1261,17 @@ Branch_fb79e:
 	G_ 10
 	inc_octave
 	speed 13
-	musice8 4
+	cutoff 4
 	C_ 1
 	dec_octave
 	B_ 1
-	musice8 8
+	cutoff 8
 	A# 1
 	rest 1
 	music_call Branch_fbacb
 	octave 3
 	volume 146
-	musice8 8
+	cutoff 8
 	D_ 1
 	speed 1
 	volume 128
@@ -1297,44 +1297,44 @@ Branch_fb79e:
 	C_ 1
 	C_ 1
 	dec_octave
-	musice8 4
+	cutoff 4
 	F_ 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	volume 128
-	musice8 4
+	cutoff 4
 	D_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	F_ 1
 	volume 146
 	C_ 1
 	inc_octave
 	volume 128
 	C_ 2
-	musice8 4
+	cutoff 4
 	D_ 1
 	dec_octave
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	volume 128
-	musice8 4
+	cutoff 4
 	A_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	B_ 1
 	volume 146
 	C_ 1
 	volume 128
-	musice8 4
+	cutoff 4
 	A_ 1
-	musice8 8
+	cutoff 8
 	G_ 1
-	musice8 4
+	cutoff 4
 	A_ 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	inc_octave
@@ -1347,14 +1347,14 @@ Branch_fb79e:
 	C_ 10
 	dec_octave
 	speed 13
-	musice8 4
+	cutoff 4
 	B_ 1
-	musice8 6
+	cutoff 6
 	A# 2
 	music_call Branch_fbacb
 	octave 4
 	G_ 1
-	musice8 8
+	cutoff 8
 	E_ 1
 	speed 13
 	rest 1
@@ -1372,36 +1372,36 @@ Branch_fb79e:
 	C_ 1
 	inc_octave
 	volume 128
-	musice8 7
+	cutoff 7
 	C_ 2
-	musice8 8
+	cutoff 8
 	C_ 1
 	dec_octave
 	volume 146
 	C_ 1
 	volume 128
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	A_ 1
 	volume 146
 	C_ 1
 	inc_octave
 	volume 128
-	musice8 7
+	cutoff 7
 	C_ 2
-	musice8 8
+	cutoff 8
 	C_ 1
 	dec_octave
 	volume 146
 	C_ 1
 	volume 128
-	musice8 4
+	cutoff 4
 	F_ 1
 	rest 1
 	G# 1
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	speed 1
@@ -1416,10 +1416,10 @@ Branch_fb79e:
 	dec_octave
 	A_ 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 1
 	dec_octave
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	speed 1
@@ -1459,9 +1459,9 @@ Branch_fb79e:
 	C_ 1
 	rest 1
 	dec_octave
-	musice8 7
+	cutoff 7
 	G_ 1
-	musice8 8
+	cutoff 8
 	G_ 1
 	inc_octave
 	volume 146
@@ -1637,7 +1637,7 @@ Branch_fba9d:
 
 Branch_fbacb:
 	octave 3
-	musice8 8
+	cutoff 8
 	Loop 3
 	A# 1
 	rest 1
@@ -1651,10 +1651,10 @@ Branch_fbacb:
 	volume 128
 	A_ 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 1
 	dec_octave
-	musice8 8
+	cutoff 8
 	volume 146
 	C_ 1
 	speed 1
@@ -1685,7 +1685,7 @@ Branch_fbacb:
 	volume 128
 	B_ 1
 	inc_octave
-	musice8 4
+	cutoff 4
 	D_ 1
 	music_ret
 
@@ -1694,17 +1694,17 @@ Branch_fbb10:
 	speed 13
 	volume 128
 	C_ 1
-	musice8 3
+	cutoff 3
 	D_ 1
 	volume 146
-	musice8 8
+	cutoff 8
 	C_ 1
 	volume 128
 	B_ 2
-	musice8 3
+	cutoff 3
 	A_ 1
 	volume 147
-	musice8 8
+	cutoff 8
 	C_ 1
 	speed 1
 	volume 128
@@ -1782,21 +1782,21 @@ Branch_fbb10:
 	inc_octave
 	C_ 10
 	speed 13
-	musice8 3
+	cutoff 3
 	D_ 1
 	E_ 1
-	musice8 8
+	cutoff 8
 	F_ 2
 	music_ret
 
 
 Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	speed 1
-	musicdc 17
+	stereo_panning 1, 1
 	volume 32
 	wave 1
-	musice9 96
-	musice8 8
+	echo 96
+	cutoff 8
 	octave 1
 	Loop 12
 	G_ 6
@@ -1820,10 +1820,10 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	B_ 6
 	rest 7
 	EndLoop
@@ -1833,10 +1833,10 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	A_ 6
 	rest 7
 	EndLoop
@@ -1846,10 +1846,10 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	G# 6
 	rest 7
 	EndLoop
@@ -1869,11 +1869,11 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	rest 7
 	inc_octave
 	inc_octave
-	musice8 4
+	cutoff 4
 	D# 13
 	dec_octave
 	dec_octave
-	musice8 8
+	cutoff 8
 	G# 6
 	rest 7
 	EndLoop
@@ -1884,10 +1884,10 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	C# 6
 	rest 7
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	C# 6
 	rest 7
 	EndLoop
@@ -1896,10 +1896,10 @@ Music_Credits_Ch3: ; fbb9d (3e:7b9d)
 	C_ 6
 	rest 7
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	C_ 6
@@ -1928,9 +1928,9 @@ Branch_fbc46:
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	A_ 13
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	Loop 2
@@ -1938,10 +1938,10 @@ Branch_fbc46:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	C_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	music_call Branch_fbd47
@@ -1951,19 +1951,19 @@ Branch_fbc46:
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	G_ 13
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	Loop 2
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 13
 	tie
 	speed 13
@@ -2039,10 +2039,10 @@ Branch_fbc46:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	A# 6
 	rest 7
 	A# 6
@@ -2066,9 +2066,9 @@ Branch_fbd47:
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	G_ 13
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	EndLoop
@@ -2082,10 +2082,10 @@ Branch_fbd58:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	B_ 6
 	rest 7
 	EndLoop
@@ -2099,10 +2099,10 @@ Branch_fbd6b:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	A_ 6
 	rest 7
 	EndLoop
@@ -2116,10 +2116,10 @@ Branch_fbd7e:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 6
 	rest 7
 	EndLoop
@@ -2133,10 +2133,10 @@ Branch_fbd91:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	F_ 6
 	rest 7
 	EndLoop
@@ -2150,10 +2150,10 @@ Branch_fbda4:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	E_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	E_ 6
 	rest 7
 	EndLoop
@@ -2167,10 +2167,10 @@ Branch_fbdb7:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	D_ 6
 	rest 7
 	EndLoop
@@ -2184,10 +2184,10 @@ Branch_fbdca:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 6
 	rest 7
 	EndLoop
@@ -2201,10 +2201,10 @@ Branch_fbddd:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G# 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	F_ 6
 	rest 7
 	EndLoop
@@ -2218,10 +2218,10 @@ Branch_fbdf0:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	A# 6
 	rest 7
 	EndLoop
@@ -2250,10 +2250,10 @@ Branch_fbe10:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	G_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	E_ 6
 	rest 7
 	EndLoop
@@ -2265,18 +2265,18 @@ Branch_fbe23:
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	A_ 13
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	Loop 2
 	C_ 6
 	rest 7
 	EndLoop
-	musice8 4
+	cutoff 4
 	F_ 13
-	musice8 8
+	cutoff 8
 	C_ 6
 	rest 7
 	music_ret
@@ -2288,10 +2288,10 @@ Branch_fbe3d:
 	rest 7
 	EndLoop
 	inc_octave
-	musice8 4
+	cutoff 4
 	F_ 13
 	dec_octave
-	musice8 8
+	cutoff 8
 	G_ 6
 	rest 7
 	G_ 6

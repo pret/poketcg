@@ -1,7 +1,7 @@
-Music_DarkDiddly_Ch1: ; f7cdf (3d:7cdf)
+Music_MatchDraw_Ch1: ; f7cdf (3d:7cdf)
 	speed 3
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 4
 	duty 1
 	volume 176
@@ -45,10 +45,10 @@ Music_DarkDiddly_Ch1: ; f7cdf (3d:7cdf)
 	music_end
 
 
-Music_DarkDiddly_Ch2: ; f7d17 (3d:7d17)
+Music_MatchDraw_Ch2: ; f7d17 (3d:7d17)
 	speed 3
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 3
 	duty 1
 	volume 176
@@ -84,13 +84,13 @@ Music_DarkDiddly_Ch2: ; f7d17 (3d:7d17)
 	music_end
 
 
-Music_DarkDiddly_Ch3: ; f7d47 (3d:7d47)
+Music_MatchDraw_Ch3: ; f7d47 (3d:7d47)
 	speed 6
-	musicdc 17
+	stereo_panning 1, 1
 	wave 1
 	volume 32
-	musice8 8
-	musice9 0
+	cutoff 8
+	echo 0
 	octave 1
 	rest 16
 	G_ 2

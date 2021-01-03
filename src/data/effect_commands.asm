@@ -177,7 +177,7 @@ ExeggutorBigEggsplosionEffectCommands:
 
 NidokingThrashEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, Thrash_ModifierEffect
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_LowRecoilEffect
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, Thrash_RecoilEffect
 	dbw EFFECTCMDTYPE_AI, Thrash_AIEffect
 	db  $00
 

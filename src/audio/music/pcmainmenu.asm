@@ -1,7 +1,7 @@
 Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
 	speed 7
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 3
 	duty 2
 	MainLoop
@@ -9,12 +9,12 @@ Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
 	rest 4
 	dec_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	F_ 1
 	rest 1
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 180
 	A_ 1
 	volume 55
@@ -27,12 +27,12 @@ Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
 	C_ 1
 	dec_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	F_ 1
 	rest 1
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 180
 	B_ 1
 	volume 55
@@ -41,13 +41,13 @@ Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
 	rest 4
 	dec_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	F_ 1
 	rest 1
 	inc_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 180
 	E_ 1
 	volume 55
@@ -58,14 +58,14 @@ Music_PCMainMenu_Ch1: ; f9052 (3e:5052)
 	volume 55
 	C_ 1
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	dec_octave
 	F_ 1
 	rest 1
 	inc_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 180
 	D_ 1
 	volume 55
@@ -77,10 +77,10 @@ Branch_f90c2:
 	rest 4
 	duty 1
 	volume 97
-	musice8 5
+	cutoff 5
 	G_ 1
 	rest 3
-	musice8 8
+	cutoff 8
 	duty 2
 	volume 180
 	B_ 2
@@ -91,12 +91,12 @@ Branch_f90c2:
 	dec_octave
 	duty 1
 	volume 97
-	musice8 5
+	cutoff 5
 	G_ 1
 	rest 1
 	inc_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 180
 	C_ 1
 	volume 55
@@ -106,8 +106,8 @@ Branch_f90c2:
 
 Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
 	speed 7
-	musicdc 17
-	musice8 8
+	stereo_panning 1, 1
+	cutoff 8
 	octave 3
 	duty 2
 	MainLoop
@@ -115,13 +115,13 @@ Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
 	rest 4
 	inc_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 132
 	F_ 1
 	volume 39
@@ -132,14 +132,14 @@ Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
 	volume 39
 	A_ 1
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	inc_octave
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 132
 	G_ 1
 	volume 39
@@ -148,12 +148,12 @@ Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
 	rest 4
 	inc_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	C_ 1
 	rest 1
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 132
 	C_ 1
 	volume 39
@@ -167,12 +167,12 @@ Music_PCMainMenu_Ch2: ; f90ed (3e:50ed)
 	duty 1
 	inc_octave
 	volume 97
-	musice8 5
+	cutoff 5
 	C_ 1
 	rest 1
 	dec_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 132
 	B_ 1
 	volume 39
@@ -183,12 +183,12 @@ Branch_f915e:
 	octave 4
 	rest 4
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	D_ 1
 	rest 3
 	duty 2
-	musice8 8
+	cutoff 8
 	dec_octave
 	volume 132
 	G_ 2
@@ -197,13 +197,13 @@ Branch_f915e:
 	B_ 1
 	inc_octave
 	duty 1
-	musice8 5
+	cutoff 5
 	volume 97
 	D_ 1
 	rest 1
 	dec_octave
 	duty 2
-	musice8 8
+	cutoff 8
 	volume 132
 	A_ 1
 	volume 39
@@ -214,16 +214,16 @@ Branch_f915e:
 Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	volume 32
-	musicdc 17
+	stereo_panning 1, 1
 	wave 1
-	musice8 7
-	musice9 0
+	cutoff 7
+	echo 0
 	MainLoop
 	octave 1
-	musice8 7
+	cutoff 7
 	G_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 1
 	speed 1
@@ -234,22 +234,22 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	B_ 1
 	rest 1
-	musice8 4
+	cutoff 4
 	inc_octave
 	C_ 1
 	rest 1
 	C_ 1
-	musice8 8
+	cutoff 8
 	C# 2
 	D_ 2
 	dec_octave
 	G_ 1
 	tie
 	F# 1
-	musice8 7
+	cutoff 7
 	F_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	F_ 1
 	rest 1
 	speed 1
@@ -260,11 +260,11 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	A_ 1
 	rest 1
-	musice8 4
+	cutoff 4
 	A# 1
 	rest 1
 	A# 1
-	musice8 8
+	cutoff 8
 	B_ 2
 	inc_octave
 	C_ 2
@@ -272,10 +272,10 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	F_ 1
 	tie
 	F# 1
-	musice8 7
+	cutoff 7
 	G_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	G_ 1
 	rest 1
 	speed 1
@@ -286,22 +286,22 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	B_ 1
 	rest 1
-	musice8 4
+	cutoff 4
 	inc_octave
 	C_ 1
 	rest 1
 	C_ 1
-	musice8 8
+	cutoff 8
 	C# 2
 	D_ 2
 	dec_octave
 	G_ 1
 	tie
 	F# 1
-	musice8 7
+	cutoff 7
 	F_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	F_ 1
 	rest 1
 	speed 1
@@ -313,7 +313,7 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	speed 7
 	C_ 1
 	rest 1
-	musice8 8
+	cutoff 8
 	speed 1
 	F# 4
 	tie
@@ -321,9 +321,9 @@ Music_PCMainMenu_Ch3: ; f9189 (3e:5189)
 	tie
 	speed 7
 	G_ 1
-	musice8 4
+	cutoff 4
 	F_ 1
-	musice8 8
+	cutoff 8
 	C_ 2
 	F_ 2
 	speed 1

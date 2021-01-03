@@ -28,7 +28,7 @@ SongBanks1: ; f4ee6 (3d:4ee6)
 	db BANK(Music_MatchStart3)
 	db BANK(Music_MatchVictory)
 	db BANK(Music_MatchLoss)
-	db BANK(Music_DarkDiddly)
+	db BANK(Music_MatchDraw)
 	db BANK(Music_Unused1b)
 	db BANK(Music_BoosterPack)
 	db BANK(Music_Medal)
@@ -61,7 +61,7 @@ SongHeaderPointers1: ; f4f05 (3d:4f05)
 	dw Music_MatchStart3
 	dw Music_MatchVictory
 	dw Music_MatchLoss
-	dw Music_DarkDiddly
+	dw Music_MatchDraw
 	dw Music_Unused1b
 	dw Music_BoosterPack
 	dw Music_Medal
@@ -245,11 +245,11 @@ Music_MatchLoss: ; f501c (3d:501c)
 	dw Music_MatchLoss_Ch3
 	dw $0000
 
-Music_DarkDiddly: ; f5025 (3d:5025)
+Music_MatchDraw: ; f5025 (3d:5025)
 	db %0111
-	dw Music_DarkDiddly_Ch1
-	dw Music_DarkDiddly_Ch2
-	dw Music_DarkDiddly_Ch3
+	dw Music_MatchDraw_Ch1
+	dw Music_MatchDraw_Ch2
+	dw Music_MatchDraw_Ch3
 	dw $0000
 
 Music_Unused1b: ; f502e (3d:502e)

@@ -189,7 +189,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	cp TURN_PLAYER_LOST
 	jr z, .active_duelist_lost_battle
 	ld a, $5f
-	ld c, MUSIC_DARK_DIDDLY
+	ld c, MUSIC_MATCH_DRAW
 	ldtx hl, DuelWasADrawText
 	jr .handle_duel_finished
 

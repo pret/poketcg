@@ -2654,10 +2654,12 @@ wCurSongBank:: ; dd81
 wCurSfxID:: ; dd82
 	ds $1
 
-wdd83:: ; dd83
+; priority value of current sfx (0 if nothing is playing)
+wSfxPriority:: ; dd83
 	ds $1
 
-wMusicDC:: ; dd84
+; 8-bit output enable mask for left/right output for each channel
+wMusicStereoPanning:: ; dd84
 	ds $1
 
 wdd85:: ; dd85
@@ -2741,16 +2743,19 @@ wddba:: ; ddba
 wddbb:: ; ddbb
 	ds $4
 
-wMusicE8:: ; ddbf
+; the delay (1-8) before a note is cut off early (0 is disabled)
+wMusicCutoff:: ; ddbf
 	ds $4
 
 wddc3:: ; ddc3
 	ds $4
 
-wMusicE9:: ; ddc7
+; the volume to apply after a cutoff
+wMusicEcho:: ; ddc7
 	ds $4
 
-wMusicEC:: ; ddcb
+; the pitch offset to apply to each note (see Music1_Pitches)
+wMusicPitchOffset:: ; ddcb
 	ds $4
 
 wMusicSpeed:: ; ddcf
@@ -2774,7 +2779,8 @@ wdde3:: ; dde3
 wMusicVolume:: ; dde7
 	ds $3
 
-wMusicE4:: ; ddea
+; the frequency offset to apply to each note
+wMusicFrequencyOffset:: ; ddea
 	ds $3
 
 wdded:: ; dded
@@ -2853,7 +2859,7 @@ wCurSongIDBackup:: ; de55
 wCurSongBankBackup:: ; de56
 	ds $1
 
-wMusicDCBackup:: ; de57
+wMusicStereoPanningBackup:: ; de57
 	ds $1
 
 wMusicDuty1Backup:: ; de58
@@ -2895,16 +2901,16 @@ wde80:: ; de80
 wde84:: ; de84
 	ds $4
 
-wMusicE8Backup:: ; de88
+wMusicCutoffBackup:: ; de88
 	ds $4
 
 wde8c:: ; de8c
 	ds $4
 
-wMusicE9Backup:: ; de90
+wMusicEchoBackup:: ; de90
 	ds $4
 
-wMusicECBackup:: ; de94
+wMusicPitchOffsetBackup:: ; de94
 	ds $4
 
 wMusicSpeedBackup:: ; de98
@@ -2919,7 +2925,7 @@ wMusicVibratoDelayBackup:: ; dea0
 wMusicVolumeBackup:: ; dea4
 	ds $3
 
-wMusicE4Backup:: ; dea7
+wMusicFrequencyOffsetBackup:: ; dea7
 	ds $3
 
 wdeaa:: ; deaa
