@@ -923,26 +923,26 @@ glossary_entry: MACRO
 ENDM
 
 GlossaryData1:
-	glossary_entry 7, Text02fa, Text030c
-	glossary_entry 5, Text02fb, Text030d
-	glossary_entry 7, Text02fc, Text030e
-	glossary_entry 6, Text02fd, Text030f
-	glossary_entry 6, Text02fe, Text0310
-	glossary_entry 4, Text02ff, Text0311
-	glossary_entry 5, Text0300, Text0312
-	glossary_entry 7, Text0301, Text0313
-	glossary_entry 5, Text0302, Text0314
+	glossary_entry 7, AboutTheDeckText, DeckDescriptionText
+	glossary_entry 5, AboutTheDiscardPileText, DiscardPileDescriptionText
+	glossary_entry 7, AboutTheHandText, HandDescriptionText
+	glossary_entry 6, AboutTheArenaText, ArenaDescriptionText
+	glossary_entry 6, AboutTheBenchText, BenchDescriptionText
+	glossary_entry 4, AboutTheActivePokemonText, ActivePokemonDescriptionText
+	glossary_entry 5, AboutBenchPokemonText, BenchPokemonDescriptionText
+	glossary_entry 7, AboutPrizesText, PrizesDescriptionText
+	glossary_entry 5, AboutDamageCountersText, DamageCountersDescriptionText
 
 GlossaryData2:
-	glossary_entry 5, Text0303, Text0315
-	glossary_entry 5, Text0304, Text0316
-	glossary_entry 5, Text0305, Text0317
-	glossary_entry 5, Text0306, Text0318
-	glossary_entry 6, Text0307, Text0319
-	glossary_entry 5, Text0308, Text031a
-	glossary_entry 6, Text0309, Text031b
-	glossary_entry 6, Text030a, Text031c
-	glossary_entry 6, Text030b, Text031d
+	glossary_entry 5, AboutEnergyCardsText, EnergyCardsDescriptionText
+	glossary_entry 5, AboutTrainerCardsText, TrainerCardsDescriptionText
+	glossary_entry 5, AboutBasicPokemonText, BasicPokemonDescriptionText
+	glossary_entry 5, AboutEvolutionCardsText, EvolutionCardsDescriptionText
+	glossary_entry 6, AboutAttackingText, AttackingDescriptionText
+	glossary_entry 5, AboutPokemonPowerText, PokemonPowerDescriptionText
+	glossary_entry 6, AboutWeaknessText, WeaknessDescriptionText
+	glossary_entry 6, AboutResistanceText, ResistanceDescriptionText
+	glossary_entry 6, AboutRetreatingText, RetreatingDescriptionText
 
 Func_18661: ; 18661 (6:4661)
 	xor a
@@ -1619,7 +1619,7 @@ Func_1a68d: ; 1a68d (6:668d)
 	call SetupText
 	bank1call InitAndDrawCardListScreenLayout
 	ldtx hl, ChooseTheCardYouWishToExamineText
-	ldtx de, Text0196
+	ldtx de, BoosterPackText
 	bank1call SetCardListHeaderText
 	ld a, A_BUTTON | START
 	ld [wNoItemSelectionMenuKeys], a
@@ -1723,20 +1723,20 @@ WhatIsYourNameData: ; 1a75e (6:675e)
 ; without any bank description.
 ; That is, the developers hard-coded it. -_-;;
 Deck1Data: ; 1a763 (6:6763)
-	textitem 2, 1, Text022b
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck1Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck2Data: ; 1a76c (6:676c)
-	textitem 2, 1, Text022c
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck2Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck3Data: ; 1a775 (6:6775)
-	textitem 2, 1, Text022d
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck3Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck4Data: ; 1a77e (6:677e)
-	textitem 2, 1, Text022e
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck4Text
+	textitem 14, 1, DeckText
 	db $ff
 
 ; set each byte zero from hl for b bytes.
@@ -1933,7 +1933,7 @@ DrawNamingScreenBG: ; 1a892 (6:6892)
 	; print "End".
 	ld hl, .data
 	call PlaceTextItems
-	ldtx hl, Text0221
+	ldtx hl, PlayerNameKeyboardText
 	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID
@@ -2810,7 +2810,7 @@ Func_1ae99: ; 1ae99 (6:6e99)
 	ld hl, DrawNamingScreenBG.data
 	call PlaceTextItems
 	; print the keyboard characters.
-	ldtx hl, NamingScreenKeyboardText ; "A B C D..."
+	ldtx hl, DeckNameKeyboardText ; "A B C D..."
 	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID

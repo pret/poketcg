@@ -644,79 +644,79 @@ ChooseWordAndPressAButtonText: ; 3d48f (f:548f)
 	line "A button."
 	done
 
-Text02fa: ; 3d4b6 (f:54b6)
+AboutTheDeckText: ; 3d4b6 (f:54b6)
 	text "About the Deck"
 	done
 
-Text02fb: ; 3d4c6 (f:54c6)
+AboutTheDiscardPileText: ; 3d4c6 (f:54c6)
 	text "About the Discard Pile"
 	done
 
-Text02fc: ; 3d4de (f:54de)
+AboutTheHandText: ; 3d4de (f:54de)
 	text "About the Hand"
 	done
 
-Text02fd: ; 3d4ee (f:54ee)
+AboutTheArenaText: ; 3d4ee (f:54ee)
 	text "About the Arena"
 	done
 
-Text02fe: ; 3d4ff (f:54ff)
+AboutTheBenchText: ; 3d4ff (f:54ff)
 	text "About the Bench"
 	done
 
-Text02ff: ; 3d510 (f:5510)
+AboutTheActivePokemonText: ; 3d510 (f:5510)
 	text "About the Active Pokémon"
 	done
 
-Text0300: ; 3d52a (f:552a)
+AboutBenchPokemonText: ; 3d52a (f:552a)
 	text "About Bench Pokémon"
 	done
 
-Text0301: ; 3d53f (f:553f)
+AboutPrizesText: ; 3d53f (f:553f)
 	text "About Prizes"
 	done
 
-Text0302: ; 3d54d (f:554d)
+AboutDamageCountersText: ; 3d54d (f:554d)
 	text "About Damage Counters"
 	done
 
-Text0303: ; 3d564 (f:5564)
+AboutEnergyCardsText: ; 3d564 (f:5564)
 	text "About Energy Cards"
 	done
 
-Text0304: ; 3d578 (f:5578)
+AboutTrainerCardsText: ; 3d578 (f:5578)
 	text "About Trainer Cards"
 	done
 
-Text0305: ; 3d58d (f:558d)
+AboutBasicPokemonText: ; 3d58d (f:558d)
 	text "About Basic Pokémon"
 	done
 
-Text0306: ; 3d5a2 (f:55a2)
+AboutEvolutionCardsText: ; 3d5a2 (f:55a2)
 	text "About Evolution Cards"
 	done
 
-Text0307: ; 3d5b9 (f:55b9)
+AboutAttackingText: ; 3d5b9 (f:55b9)
 	text "About Attacking"
 	done
 
-Text0308: ; 3d5ca (f:55ca)
+AboutPokemonPowerText: ; 3d5ca (f:55ca)
 	text "About Pokémon Power"
 	done
 
-Text0309: ; 3d5df (f:55df)
+AboutWeaknessText: ; 3d5df (f:55df)
 	text "About Weakness"
 	done
 
-Text030a: ; 3d5ef (f:55ef)
+AboutResistanceText: ; 3d5ef (f:55ef)
 	text "About Resistance"
 	done
 
-Text030b: ; 3d601 (f:5601)
+AboutRetreatingText: ; 3d601 (f:5601)
 	text "About Retreating"
 	done
 
-Text030c: ; 3d613 (f:5613)
+DeckDescriptionText: ; 3d613 (f:5613)
 	text "The Deck is the pile of cards"
 	line "you will be drawing from."
 	line "At the beginning of your turn, you"
@@ -725,7 +725,7 @@ Text030c: ; 3d613 (f:5613)
 	line "from the Deck, you lose the game."
 	done
 
-Text030d: ; 3d6d0 (f:56d0)
+DiscardPileDescriptionText: ; 3d6d0 (f:56d0)
 	text "The pile in which you place used"
 	line "cards is called the Discard Pile."
 	line "You can look at both yours and your"
@@ -733,7 +733,7 @@ Text030d: ; 3d6d0 (f:56d0)
 	line "with the Check command."
 	done
 
-Text030e: ; 3d769 (f:5769)
+HandDescriptionText: ; 3d769 (f:5769)
 	text "The cards held by each player"
 	line "are called a Hand."
 	line "There is no restriction to the"
@@ -742,7 +742,7 @@ Text030e: ; 3d769 (f:5769)
 	line "cards in your Hand."
 	done
 
-Text030f: ; 3d807 (f:5807)
+ArenaDescriptionText: ; 3d807 (f:5807)
 	text "The place where the Pokémon"
 	line "that is actively fighting"
 	line "is placed is called the Arena."
@@ -750,7 +750,7 @@ Text030f: ; 3d807 (f:5807)
 	line "Active Pokémon in the Arena."
 	done
 
-Text0310: ; 3d899 (f:5899)
+BenchDescriptionText: ; 3d899 (f:5899)
 	text "The Bench is where your Pokémon"
 	line "that are in play but aren't actively"
 	line "fighting sit."
@@ -761,14 +761,14 @@ Text0310: ; 3d899 (f:5899)
 	line "the Bench."
 	done
 
-Text0311: ; 3d96e (f:596e)
+ActivePokemonDescriptionText: ; 3d96e (f:596e)
 	text "The Active Pokémon is the "
 	line "Pokémon that is in the Arena."
 	line "Only Active Pokémon can "
 	line "attack."
 	done
 
-Text0312: ; 3d9c9 (f:59c9)
+BenchPokemonDescriptionText: ; 3d9c9 (f:59c9)
 	text "The Pokémon that are in play"
 	line "but aren't actively fighting"
 	line "are called Bench Pokémon."
@@ -780,7 +780,7 @@ Text0312: ; 3d9c9 (f:59c9)
 	line "Pokémon, you lose the game."
 	done
 
-Text0313: ; 3dad1 (f:5ad1)
+PrizesDescriptionText: ; 3dad1 (f:5ad1)
 	text "Prizes are the cards placed to"
 	line "count the number of the opponent's"
 	line "Pokémon you Knocked Out."
@@ -791,7 +791,7 @@ Text0313: ; 3dad1 (f:5ad1)
 	line "you win the game."
 	done
 
-Text0314: ; 3dbc5 (f:5bc5)
+DamageCountersDescriptionText: ; 3dbc5 (f:5bc5)
 	text "A Damage Counter represents the"
 	line "amount of damage a certain Pokémon"
 	line "has taken."
@@ -803,7 +803,7 @@ Text0314: ; 3dbc5 (f:5bc5)
 	line "HP is 0."
 	done
 
-Text0315: ; 3dcb2 (f:5cb2)
+EnergyCardsDescriptionText: ; 3dcb2 (f:5cb2)
 	text "Energy Cards are cards that power"
 	line "your Pokémon, making them able"
 	line "to Attack."
@@ -816,7 +816,7 @@ Text0315: ; 3dcb2 (f:5cb2)
 	line "from your Hand per turn."
 	done
 
-Text0316: ; 3ddbe (f:5dbe)
+TrainerCardsDescriptionText: ; 3ddbe (f:5dbe)
 	text "Trainer Cards are support cards."
 	line "There are many Trainer Cards"
 	line "with different effects."
@@ -828,7 +828,7 @@ Text0316: ; 3ddbe (f:5dbe)
 	line "as you like."
 	done
 
-Text0317: ; 3deb0 (f:5eb0)
+BasicPokemonDescriptionText: ; 3deb0 (f:5eb0)
 	text "Basic Pokémon are cards that "
 	line "can be played directly from your "
 	line "hand into the play area. Basic "
@@ -838,7 +838,7 @@ Text0317: ; 3deb0 (f:5eb0)
 	line "examples of Basic Pokémon."
 	done
 
-Text0318: ; 3df82 (f:5f82)
+EvolutionCardsDescriptionText: ; 3df82 (f:5f82)
 	text "Evolution Cards are cards you"
 	line "play on top of a Basic Pokémon card"
 	line "(or sometimes on top of another"
@@ -853,7 +853,7 @@ Text0318: ; 3df82 (f:5f82)
 	line "place the Stage 2 Evolution Card."
 	done
 
-Text0319: ; 3e10a (f:610a)
+AttackingDescriptionText: ; 3e10a (f:610a)
 	text "By choosing Attack, your Pokémon"
 	line "will fight your opponent's Pokémon."
 	line "Your Pokémon require Energy"
@@ -864,7 +864,7 @@ Text0319: ; 3e10a (f:610a)
 	line "Pokémon that can Attack."
 	done
 
-Text031a: ; 3e1f7 (f:61f7)
+PokemonPowerDescriptionText: ; 3e1f7 (f:61f7)
 	text "Unlike Attacks, Pokémon Power"
 	line "can be used by Active or Benched"
 	line "Pokémon. Some Pokémon Power are"
@@ -874,14 +874,14 @@ Text031a: ; 3e1f7 (f:61f7)
 	line "command, PKMN Power."
 	done
 
-Text031b: ; 3e2c5 (f:62c5)
+WeaknessDescriptionText: ; 3e2c5 (f:62c5)
 	text "Some Pokémon have a Weakness."
 	line "If a Pokémon has a Weakness, it"
 	line "takes double damage when attacked by"
 	line "Pokémon of a certain type."
 	done
 
-Text031c: ; 3e344 (f:6344)
+ResistanceDescriptionText: ; 3e344 (f:6344)
 	text "Some Pokémon have Resistance."
 	line "If a Pokémon has Resistance, it"
 	line "takes 30 less damage whenever"
@@ -889,7 +889,7 @@ Text031c: ; 3e344 (f:6344)
 	line "a certain type."
 	done
 
-Text031d: ; 3e3c8 (f:63c8)
+RetreatingDescriptionText: ; 3e3c8 (f:63c8)
 	text "By choosing Retreat, you can"
 	line "switch the Active Pokémon with"
 	line "a Pokémon on your Bench."
@@ -1949,7 +1949,7 @@ Text03fd: ; 3f9d0 (f:79d0)
 	text "Please select the Deck you want."
 	done
 
-Text03fe: ; 3f9f2 (f:79f2)
+HowCanIHelpText: ; 3f9f2 (f:79f2)
 	text "Hi, <RAMNAME>."
 	line "How can I help you?"
 	done

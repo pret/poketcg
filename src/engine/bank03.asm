@@ -2856,7 +2856,7 @@ ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
 
 .multichoice_menu_args ; d30c
 	tx SamNPCName ; NPC title for textbox under menu
-	tx Text03fe ; text for textbox under menu
+	tx HowCanIHelpText ; text for textbox under menu
 	dw SamNormalMultichoice_ConfigurationTable ; location of table configuration in bank 4
 	db $03 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_Sam ; ram location to return result into
@@ -3954,35 +3954,35 @@ Script_Gal1: ; e0cf (3:60cf)
 	start_script
 	jump_if_flag_equal EVENT_FLAG_12, $02, .ows_e10e
 	jump_if_flag_equal EVENT_FLAG_12, $00, NULL
-	print_variable_text Text041d, Text041e
+	print_variable_text Gal1WantToTrade1Text, Gal1WantToTrade2Text
 	script_set_flag_value EVENT_FLAG_12, $01
-	ask_question_jump Text041f, .ows_e0eb
-	print_text_string Text0420
+	ask_question_jump Gal1WouldYouLikeToTradeText, .ows_e0eb
+	print_text_string Gal1DeclinedTradeText
 	quit_script_fully
 
 .ows_e0eb
 	jump_if_card_owned LAPRAS, .ows_e0f3
-	print_text_string Text0421
+	print_text_string Gal1DontOwnCardText
 	quit_script_fully
 
 .ows_e0f3
 	jump_if_card_in_collection LAPRAS, .ows_e0fb
-	print_text_string Text0422
+	print_text_string Gal1CardInDeckText
 	quit_script_fully
 
 .ows_e0fb
 	script_set_flag_value EVENT_FLAG_12, $02
-	print_text_string Text0423
+	print_text_string Gal1LetsTradeText
 	run_command Func_ccdc
-	tx Text0424
+	tx Gal1TradeCompleteText
 	take_card LAPRAS
 	give_card ARCANINE1
 	show_card_received_screen ARCANINE1
-	print_text_string Text0425
+	print_text_string Gal1ThanksText
 	quit_script_fully
 
 .ows_e10e
-	print_text_quit_fully Text0426
+	print_text_quit_fully Gal1AfterTradeText
 
 Script_Lass1: ; e111 (3:6111)
 	start_script
@@ -4971,7 +4971,7 @@ Script_ee76: ; ee76 (3:6e76)
 .ows_ee7d
 	script_set_flag_value EVENT_FLAG_21, $02
 	run_command Func_ccdc
-	tx Text06a2
+	tx FoundLv9SlowpokeText
 	give_card SLOWPOKE1
 	show_card_received_screen SLOWPOKE1
 	quit_script_fully
