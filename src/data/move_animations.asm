@@ -21,7 +21,7 @@ anim_end2: MACRO
 ENDM
 
 PointerTable_MoveAnimation:
-	dw $0000
+	dw NULL
 	dw MoveAnimation_52c6
 	dw MoveAnimation_52cf
 	dw MoveAnimation_52c6

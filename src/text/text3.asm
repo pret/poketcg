@@ -21,7 +21,7 @@ Text0271: ; 3c082 (f:4082)
 	text "Dismantled the Deck."
 	done
 
-Text0272: ; 3c098 (f:4098)
+OKIfFileDeletedText: ; 3c098 (f:4098)
 	text "OK if this file is deleted?"
 	done
 

@@ -1,5 +1,5 @@
 WarpDataPointers: ; 1c099 (7:4099)
-	dw $0000
+	dw NULL
 	dw MasonLaboratoryWarpData
 	dw DeckMachineRoomWarpData
 	dw IshiharasHouseWarpData

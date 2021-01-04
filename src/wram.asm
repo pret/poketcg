@@ -404,7 +404,10 @@ wDuelTempList:: ; c510
 ; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
 wDefaultText:: ; c590
-	ds $70
+	ds $2
+
+wc592:: ; c592
+	ds $6e
 
 SECTION "WRAM0 Text Engine", WRAM0
 
@@ -1619,6 +1622,7 @@ wce53:: ; ce53
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
+wce56:: ; ce56
 	ds $1
 
 ; it's used for restore the position of cursor
@@ -1635,7 +1639,10 @@ wInPlayAreaTemporaryPosition:: ; ce58
 wce59:: ; ce59
 	ds $1
 
-	ds $3
+	ds $2
+
+wce5c:: ; ce5c
+	ds $1
 
 ; stores whether there are Pokemon in play area
 ; player arena Pokemon sets bit 0
@@ -1927,7 +1934,7 @@ wd0a5:: ; d0a5
 wd0a6:: ; d0a6
 	ds $1
 
-dw0a7:: ; d0a7
+wd0a7:: ; d0a7
 	ds $2
 
 wd0a9:: ; d0a9
@@ -2112,6 +2119,7 @@ wd237:: ; d237
 wd238:: ; d238
 	ds $1
 
+wd239:: ; d239
 	ds $1
 
 wd23a:: ; d23a
@@ -2129,7 +2137,10 @@ wd23d:: ; d23d
 wd23e:: ; d23e
 	ds $1
 
-	ds $50
+	ds $4f
+
+wd28e:: ; d28e
+	ds $1
 
 wd28f:: ; d28f
 	ds $1
@@ -2354,6 +2365,7 @@ wd42a:: ; d42a
 wd42b:: ; d42b
 	ds $1
 
+wd42c:: ; d42c
 	ds $80
 
 wd4ac:: ; d4ac
@@ -2639,7 +2651,19 @@ wd696:: ; d696
 wd697:: ; d697
 	ds $1
 
-	ds $6e8
+wd698:: ; d698
+	ds $1
+
+wd699:: ; d699
+	ds $1
+
+wd69a:: ; d69a
+	ds $1
+
+wd69b:: ; d69b
+	ds $1
+
+	ds $6e4
 
 SECTION "WRAM1 Audio", WRAMX
 

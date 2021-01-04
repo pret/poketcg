@@ -7983,7 +7983,7 @@ NarrowTextBoxMenuParameters: ; 2a96 (0:2a96)
 	db 1 ; number of items
 	db SYM_CURSOR_D ; cursor tile number
 	db SYM_BOX_BOTTOM ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 ; draw a 20x6 text box aligned to the bottom of the screen
 DrawWideTextBox: ; 2a9e (0:2a9e)
@@ -8020,7 +8020,7 @@ WideTextBoxMenuParameters: ; 2ac8 (0:2ac8)
 	db 1 ; number of items
 	db SYM_CURSOR_D ; cursor tile number
 	db SYM_BOX_BOTTOM ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 ; display a two-item horizontal menu with custom text provided in hl and handle input
 TwoItemHorizontalMenu: ; 2ad0 (0:2ad0)
@@ -8793,7 +8793,7 @@ LoadTxRam3: ; 2ec4 (0:2ec4)
 
 ; load data of card with text id of name at de to wLoadedCard1
 LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
-	ld hl, CardPointers + 2 ; skip first $0000 pointer
+	ld hl, CardPointers + 2 ; skip first NULL pointer
 	ld a, BANK(CardPointers)
 	call BankpushROM2
 .find_card_loop
@@ -9051,7 +9051,7 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld a, l
 	or h
 	jr nz, .not_null_pointer
-	; return carry if pointer is $0000
+	; return carry if pointer is NULL
 	scf
 	ret
 
@@ -10639,7 +10639,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	ld [wd112], a
 	call EnableSRAM
 	xor a
-	ld [$ba44], a
+	ld [sba44], a
 	call DisableSRAM
 	call Func_3a3b
 	bank1call StartDuel
@@ -10652,7 +10652,7 @@ GameEvent_ChallengeMachine: ; 38db (0:38db)
 	call Func_39fc
 	call EnableSRAM
 	xor a
-	ld [$ba44], a
+	ld [sba44], a
 	call DisableSRAM
 .asm_38ed
 	farcall Func_131d3
@@ -10667,7 +10667,7 @@ GameEvent_ContinueDuel: ; 38fb (0:38fb)
 	ld [wd112], a
 	bank1call TryContinueDuel
 	call EnableSRAM
-	ld a, [$ba44]
+	ld a, [sba44]
 	call DisableSRAM
 	cp $ff
 	jr z, GameEvent_ChallengeMachine.asm_38ed
@@ -11059,9 +11059,9 @@ RunOverworldScript: ; 3aed (0:3aed)
 Func_3b11: ; 3b11 (0:3b11)
 	ldh a, [hBankROM]
 	push af
-	ld a, $04
+	ld a, BANK(_GameLoop)
 	call BankswitchROM
-	call $66d1
+	call _GameLoop
 	pop af
 	call BankswitchROM
 	ret
@@ -11123,7 +11123,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	push hl
 	push bc
 	push de
-	ld a, $07
+	ld a, BANK(Func_1ca31) ; BANK(Func_1c8ef)
 	call BankswitchROM
 	ld a, [wTempAnimation]
 	cp $61
@@ -11135,10 +11135,10 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	call CheckAnyAnimationPlaying
 	jr nc, .asm_3b95
 .asm_3b90
-	call $4a31
+	call Func_1ca31
 	jr .asm_3b9a
 .asm_3b95
-	call $48ef
+	call Func_1c8ef
 	jr .asm_3b9a
 .asm_3b9a
 	pop de
@@ -11151,9 +11151,9 @@ Func_3b6a: ; 3b6a (0:3b6a)
 Func_3ba2: ; 3ba2 (0:3ba2)
 	ldh a, [hBankROM]
 	push af
-	ld a, $07
+	ld a, BANK(Func_1cac5)
 	call BankswitchROM
-	call $4ac5
+	call Func_1cac5
 	call Func_3cb4
 	pop af
 	call BankswitchROM
@@ -11184,7 +11184,7 @@ SetDoFrameFunction: ; 3bd2 (0:3bd2)
 
 ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	push hl
-	ld hl, $0000
+	ld hl, NULL
 	call SetDoFrameFunction
 	pop hl
 	ret
@@ -11617,9 +11617,9 @@ Func_3e17: ; 3e17 (0:3e17)
 	ld [wd131], a
 	ldh a, [hBankROM]
 	push af
-	ld a, $4
+	ld a, BANK(Func_12fc6)
 	call BankswitchROM
-	call $6fc6
+	call Func_12fc6
 	pop af
 	call BankswitchROM
 	ret
@@ -11634,9 +11634,9 @@ Func_3e31: ; 3e31 (0:3e31)
 	ldh a, [hBankROM]
 	push af
 	call Func_3cb4
-	ld a, $20
+	ld a, BANK(Func_804d8)
 	call BankswitchROM
-	call $44d8
+	call Func_804d8
 	pop af
 	call BankswitchROM
 	ret

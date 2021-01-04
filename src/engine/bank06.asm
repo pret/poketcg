@@ -1076,7 +1076,7 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, $00
 	ld [wd4ae], a
 	ld a, $01
-	ld [$d4b3], a
+	ld [wd4b3], a
 	xor a
 	ld [wd4b0], a
 	ld a, [de]
@@ -1144,10 +1144,10 @@ Func_19014: ; 19014 (6:5014)
 	ld a, $97
 	call Func_3b6a
 	ld a, [wce81]
-	ld [$d4b3], a
+	ld [wd4b3], a
 	push de
 	ld hl, wce7f
-	ld de, $d4b1
+	ld de, wd4b1
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -1189,7 +1189,7 @@ Func_19014: ; 19014 (6:5014)
 Func_19079: ; 19079 (6:5079)
 	ld a, [de]
 	inc de
-	ld [$d4b3], a
+	ld [wd4b3], a
 	ld a, [wce82]
 	ld [wd4b0], a
 	call Func_1909d
@@ -1207,7 +1207,7 @@ PointerTable_006_508f: ; 1908f (6:508f)
 	dw Func_19013
 
 Func_1909d: ; 1909d (6:509d)
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, .asm_50ad
 	cp $01
@@ -1261,7 +1261,7 @@ Func_1909d: ; 1909d (6:509d)
 
 ; this part is not perfectly analyzed.
 ; needs some fix.
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, Func_190fb.asm_510f
 Func_190fb: ; 190fb (6:50fb)
@@ -1336,25 +1336,25 @@ Func_19168: ; 19168 (6:5168)
 	jr z, .asm_5188
 	call LoadTxRam3
 	ld a, [wce81]
-	ld hl, $003a
+	ldtx hl, AttackDamageText
 	and $06
 	ret z
-	ld hl, $0038
+	ldtx hl, WeaknessMoreDamage2Text
 	cp $06
 	ret z
 	and $02
-	ld hl, $0037
+	ldtx hl, WeaknessMoreDamageText
 	ret nz
-	ld hl, $0036
+	ldtx hl, ResistanceLessDamageText
 	ret
 .asm_5188
 	call CheckNoDamageOrEffect
 	ret c
-	ld hl, $003b
+	ldtx hl, NoDamageText
 	ld a, [wce81]
 	and $04
 	ret z
-	ld hl, $0039
+	ldtx hl, ResistanceNoDamageText
 	ret
 
 ; needs analyze.
@@ -1679,12 +1679,12 @@ Func_1a6cd: ; 1a6cd (6:66cd)
 	ld hl, $00a3
 	bank1call DrawWholeScreenTextBox
 	ld a, $0a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	xor a
 	ldh [hBankSRAM], a
-	ld [$4000], a
-	ld [$a000], a
-	ld [$0000], a
+	ld [MBC3SRamBank], a
+	ld [MBC3RTC], a
+	ld [MBC3SRamEnable], a
 	jp Reset
 	ret
 
@@ -1707,7 +1707,7 @@ Func_1a73a: ; 1a73a (6:673a)
 	or b
 	jr nz, .asm_6749
 	ld a, $0a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	ld a, e
 	ld [s0a00b], a
 	pop bc
@@ -3292,7 +3292,7 @@ Func_1bae4: ; 1bae4 (6:7ae4)
 	push af
 	ld hl, wd088
 	ld b, [hl]
-	farcall $2, $7625
+	farcall Func_b625
 	jr c, .asm_7af5
 	pop af
 	ld [wd0a6], a

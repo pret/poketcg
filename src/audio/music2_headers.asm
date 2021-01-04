@@ -36,15 +36,15 @@ SongBanks2: ; f8ee6 (3e:4ee6)
 
 SongHeaderPointers2: ; f8f05 (3e:4f05)
 	dw Music_Stop
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 	dw Music_PCMainMenu
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw Music_PokemonDome
 	dw Music_ChallengeHall
 	dw Music_Club1
@@ -54,56 +54,56 @@ SongHeaderPointers2: ; f8f05 (3e:4f05)
 	dw Music_Imakuni
 	dw Music_HallOfHonor
 	dw Music_Credits
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Stop
 	db %0000
 
 ;Music_TitleScreen
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_DuelTheme1
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_DuelTheme2
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_DuelTheme3
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_PauseMenu
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 Music_PCMainMenu: ; f8f71 (3e:4f71)
 	db %1111
@@ -114,24 +114,24 @@ Music_PCMainMenu: ; f8f71 (3e:4f71)
 
 ;Music_DeckMachine
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_CardPop
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Overworld
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 Music_PokemonDome: ; f8f95 (3e:4f95)
 	db %1111
@@ -159,7 +159,7 @@ Music_Club2: ; f8fb0 (3e:4fb0)
 	dw Music_Club2_Ch1
 	dw Music_Club2_Ch2
 	dw Music_Club2_Ch3
-	dw $0000
+	dw NULL
 
 Music_Club3: ; f8fb9 (3e:4fb9)
 	db %1111
@@ -187,7 +187,7 @@ Music_HallOfHonor: ; f8fd4 (3e:4fd4)
 	dw Music_HallOfHonor_Ch1
 	dw Music_HallOfHonor_Ch2
 	dw Music_HallOfHonor_Ch3
-	dw $0000
+	dw NULL
 
 Music_Credits: ; f8fdd (3e:4fdd)
 	db %1111
@@ -198,84 +198,84 @@ Music_Credits: ; f8fdd (3e:4fdd)
 
 ;Music_Unused13
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Unused14
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchStart1
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchStart2
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchStart3
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchVictory
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchLoss
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_MatchDraw
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Unused1b
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_BoosterPack
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Medal
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ;Music_Unused1e
 	db %0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL

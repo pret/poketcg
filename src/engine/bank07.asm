@@ -112,7 +112,7 @@ Func_1c461: ; 1c461 (7:4461)
 	ld a, b
 	ld [hli], a
 	ld [hl], c
-	call $46e3
+	call Func_1c6e3
 	pop bc
 	pop hl
 	ret
@@ -214,7 +214,7 @@ Func_1c50a: ; 1c50a (7:450a)
 	ld a, [hl]
 	or a
 	jr z, .asm_1c52c
-	call $44fa
+	call Func_1c4fa
 	jr nc, .asm_1c521
 	xor a
 	ld [wd3b8], a
@@ -223,7 +223,7 @@ Func_1c50a: ; 1c50a (7:450a)
 	xor a
 	ld [hli], a
 	ld a, [hl]
-	farcall $4, $69fd
+	farcall Func_129fd
 	ld hl, wd349
 	dec [hl]
 
@@ -337,7 +337,7 @@ Func_1c5e9: ; 1c5e9 (7:45e9)
 	ld l, LOADED_NPC_FIELD_07
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-	ld bc, $fffd
+	ld bc, -3
 	add hl, bc
 	ld [hl], a
 	call Func_1c58e
@@ -346,6 +346,7 @@ Func_1c5e9: ; 1c5e9 (7:45e9)
 	ret
 ; 0x1c5ff
 
+Func_1c5ff: ; 1c5ff (7:45ff)
 	INCROM $1c5ff, $1c610
 
 Func_1c610: ; 1c610 (7:4610)
@@ -382,7 +383,7 @@ Func_1c719: ; 1c719 (7:4719)
 	ld b, a
 	ld c, [hl]
 	ld a, $40
-	call $3937
+	call UpdatePermissionOfMapPosition
 	pop bc
 	pop hl
 	ret
@@ -473,12 +474,12 @@ Func_1c78d: ; 1c78d (7:478d)
 	inc hl
 	ld [hl], b
 	dec hl
-	call $39ea
+	call Func_39ea
 	cp $f0
 	jr nc, .asm_1c7bb
 	push af
 	and $7f
-	call $45ff
+	call Func_1c5ff
 	pop af
 	bit 7, a
 	jr z, .asm_1c7dc
@@ -489,7 +490,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	cp $ff
 	jr z, .asm_1c7d2
 	inc bc
-	call $39ea
+	call Func_39ea
 	push hl
 	ld l, a
 	ld h, $0
@@ -551,8 +552,8 @@ Func_1c83d: ; 1c83d (7:483d)
 	pop bc
 	pop hl
 	ret
-; 0x1c858
 
+Func_1c858: ; 1c858 (7:4858)
 	INCROM $1c858, $1c8bc
 
 Func_1c8bc: ; 1c8bc (7:48bc)
@@ -598,7 +599,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld a, [wTempAnimation]
 	ld [wd4bf], a
 	cp $61
-	jp nc, $4b5e ; asm_007_4b5e
+	jp nc, Func_1cb5e
 	push hl
 	push bc
 	push de
@@ -672,7 +673,7 @@ Func_1c94a: ; 1c94a (7:494a)
 	ld [wd4ca], a
 	ld [wd4cb], a
 	ld a, [hli]
-	farcall $20, $4418
+	farcall Func_80418
 	ld a, [hli]
 
 	push af
@@ -824,7 +825,7 @@ Data_1ca04:
 	macro_1ca04 $2838, $00
 	macro_1ca04 $2818, $00
 
-Func_1ca31: ; 1ca31 (7:4a6b)
+Func_1ca31: ; 1ca31 (7:4a31)
 	push hl
 	push bc
 	ld a, [wd4ac]
@@ -835,10 +836,10 @@ Func_1ca31: ; 1ca31 (7:4a6b)
 	add %00001000
 	and %01111111
 	cp b
-	jp z, .asm_007_4a6b
+	jp z, .asm_1ca6b
 	ld [hl], a
 	ld b, 0
-	ld hl, $d42c
+	ld hl, wd42c
 	add hl, bc
 	ld a, [wTempAnimation]
 	ld [hli], a
@@ -848,15 +849,15 @@ Func_1ca31: ; 1ca31 (7:4a6b)
 	ld [hli], a
 	ld a, [wd4b0]
 	ld [hli], a
-	ld a, [$d4b1]
+	ld a, [wd4b1]
 	ld [hli], a
-	ld a, [$d4b2]
+	ld a, [wd4b2]
 	ld [hli], a
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	ld [hli], a
 	ld a, [wd4be]
 	ld [hl], a
-.asm_007_4a6b
+.asm_1ca6b
 	pop bc
 	pop hl
 	ret
@@ -878,6 +879,7 @@ Func_1cab3: ; 1cab3 (7:4ab3)
 	pop bc
 	ret
 
+Func_1cac5: ; 1cac5 (7:4ac5)
 	INCROM $1cac5, $1cb18
 
 Func_1cb18: ; 1cb18 (7:4b18)
@@ -894,7 +896,7 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	ld [wd4c0], a
 	ld a, [wd42a]
 	cp $ff
-	call nz, $4cd4
+	call nz, Func_1ccd4
 	ld hl, wAnimationQueue
 	ld c, $07
 .asm_1cb3b
@@ -903,7 +905,7 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	cp $ff
 	jr z, .asm_1cb4b
 	ld [wWhichSprite], a
-	farcall $4, $69fa
+	farcall Func_129fa
 	ld a, $ff
 	ld [hl], a
 .asm_1cb4b
@@ -924,6 +926,7 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	jr .asm_1cb57
 ; 0x1cb5e
 
+Func_1cb5e: ; 1cb5e (7:4b5e)
 	INCROM $1cb5e, $1ccbc
 
 Func_1ccbc: ; 1ccbc (7:4cbc)
@@ -941,6 +944,7 @@ Func_1ccbc: ; 1ccbc (7:4cbc)
 	ret
 ; 0x1ccd4
 
+Func_1ccd4: ; 1ccd4 (7:4cd4)
 	INCROM $1ccd4, $1d078
 
 Func_1d078: ; 1d078 (7:5078)
@@ -951,8 +955,8 @@ Func_1d078: ; 1d078 (7:5078)
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_3ca0
-	call $5335
-	call $53ce
+	call Func_1d335
+	call Func_1d3ce
 	xor a
 	ld [wd635], a
 	ld a, $3c
@@ -960,7 +964,7 @@ Func_1d078: ; 1d078 (7:5078)
 .asm_1d095
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
-	call $5614
+	call Func_1d614
 	ld hl, wd635
 	inc [hl]
 	call AssertSongFinished
@@ -984,46 +988,46 @@ Func_1d078: ; 1d078 (7:5078)
 	farcall Func_10ab4
 
 .asm_1d0c7
-	call $50fa
-	call $511c
+	call Func_1d0fa
+	call Func_1d11c
 	ld a, [wd628]
 	cp $2
 	jr nz, .asm_1d0db
-	call $5289
+	call Func_1d289
 	jr c, Func_1d078
 	jr .asm_1d0e7
 .asm_1d0db
 	ld a, [wd628]
 	cp $1
 	jr nz, .asm_1d0e7
-	call $52b8
+	call Func_1d2b8
 	jr c, Func_1d078
 .asm_1d0e7
 	ld a, [wd628]
 	cp $0
 	jr nz, .asm_1d0f3
-	call $52dd
+	call Func_1d2dd
 	jr c, Func_1d078
 .asm_1d0f3
 	call ResetDoFrameFunction
 	call Func_3ca0
 	ret
-; 0x1d0fa
 
+Func_1d0fa: ; 1d0fa (7:50fa)
 	INCROM $1d0fa, $1d11c
 
 Func_1d11c: ; 1d11c (7:511c)
 	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call DisableLCD
-	farcall $4, $4000
+	farcall Func_10000
 	lb de, $30, $8f
 	call SetupText
 	call Func_3ca0
 	xor a
 	ld [wLineSeparation], a
-	call $51e1
-	call $517f
+	call Func_1d1e1
+	call Func_1d17f
 	ld a, $ff
 	ld [wd626], a
 	ld a, [wd627]
@@ -1036,13 +1040,13 @@ Func_1d11c: ; 1d11c (7:511c)
 .asm_1d14f
 	ld hl, wd636
 	farcall Func_111e9
-	farcall $4, $4031
+	farcall Func_10031
 .asm_1d15a
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	call HandleMenuInput
 	push af
-	call $51e9
+	call Func_1d1e9
 	pop af
 	jr nc, .asm_1d15a
 	ldh a, [hCurMenuItem]
@@ -1058,12 +1062,30 @@ Func_1d11c: ; 1d11c (7:511c)
 	ld a, e
 	ld [wd628], a
 	ret
-; 0x1d17f
 
-	INCROM $1d17f, $1d306
+Func_1d17f: ; 1d17f (7:517f)
+	INCROM $1d17f, $1d1e1
+
+Func_1d1e1: ; 1d1e1 (7:51e1)
+	INCROM $1d1e1, $1d1e9
+
+Func_1d1e9: ; 1d1e9 (7:51e9)
+	INCROM $1d1e9, $1d289
+
+Func_1d289: ; 1d289 (7:5289)
+	INCROM $1d289, $1d2b8
+
+Func_1d2b8: ; 1d2b8 (7:52b8)
+	INCROM $1d2b8, $1d2dd
+
+Func_1d2dd: ; 1d2dd (7:52dd)
+	INCROM $1d2dd, $1d306
 
 Func_1d306: ; 1d306 (7:5306)
-	INCROM $1d306, $1d386
+	INCROM $1d306, $1d335
+
+Func_1d335: ; 1d335 (7:5335)
+	INCROM $1d335, $1d386
 
 Titlescreen_1d386: ; 1d386 (7:5386)
 	call AssertSongFinished
@@ -1083,7 +1105,10 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 	ret
 
 Func_1d3a9: ; 1d3a9 (7:53a9)
-	INCROM $1d3a9, $1d42e
+	INCROM $1d3a9, $1d3ce
+
+Func_1d3ce: ; 1d3ce (7:53ce)
+	INCROM $1d3ce, $1d42e
 
 Func_1d42e: ; 1d42e (7:542e)
 	INCROM $1d42e, $1d519
@@ -1099,35 +1124,38 @@ Titlescreen_1d519: ; 1d519 (7:5519)
 	INCROM $1d523, $1d59c
 
 Func_1d59c: ; 1d59c (7:559c)
-	INCROM $1d59c, $1d6ad
+	INCROM $1d59c, $1d614
+
+Func_1d614: ; 1d614 (7:5614)
+	INCROM $1d614, $1d6ad
 
 Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_STOP
 	call PlaySong
-	call $5705
-	call $4858
+	call Func_1d705
+	call Func_1c858
 	xor a
 	ld [wd324], a
 	ld a, MUSIC_CREDITS
 	call PlaySong
-	farcall $4, $4031
-	call $57fc
+	farcall Func_10031
+	call Func_1d7fc
 .asm_1d6c8
 	call DoFrameIfLCDEnabled
-	call $5765
-	call $580b
+	call Func_1d765
+	call Func_1d80b
 	ld a, [wd633]
 	cp $ff
 	jr nz, .asm_1d6c8
 	call WaitForSongToFinish
 	ld a, $8
-	farcall $4, $6863
+	farcall Func_12863
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_10ab4
 	call Func_3ca4
 	call Set_WD_off
-	call $5758
+	call Func_1d758
 	call EnableLCD
 	call DoFrameIfLCDEnabled
 	call DisableLCD
@@ -1135,6 +1163,18 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	set 1, [hl]
 	call ResetDoFrameFunction
 	ret
-; 0x1d705
 
-	INCROM $1d705, $1e1c4
+Func_1d705: ; 1d705 (7:5705)
+	INCROM $1d705, $1d758
+
+Func_1d758: ; 1d758 (7:5758)
+	INCROM $1d758, $1d765
+
+Func_1d765: ; 1d765 (7:5765)
+	INCROM $1d765, $1d7fc
+
+Func_1d7fc: ; 1d7fc (7:57fc)
+	INCROM $1d7fc, $1d80b
+
+Func_1d80b: ; 1d80b (7:580b)
+	INCROM $1d80b, $1e1c4

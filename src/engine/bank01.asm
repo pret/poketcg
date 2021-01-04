@@ -509,7 +509,7 @@ OpenActivePokemonScreen: ; 4376 (1:4376)
 
 ; triggered by selecting the "Pkmn Power" item in the duel menu
 DuelMenu_PkmnPower: ; 438e (1:438e)
-	call $6431
+	call Func_6431
 	jp c, DuelMainInterface
 	call UseAttackOrPokemonPower
 	jp DuelMainInterface
@@ -1026,7 +1026,7 @@ EnergyDiscardCardListParameters: ; 46f3 (1:46f3)
 	db 4 ; number of items selectable without scrolling
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 ; triggered by selecting the "Attack" item in the duel menu
 DuelMenu_Attack: ; 46fc (1:46fc)
@@ -1167,28 +1167,28 @@ AttackMenuParameters: ; 47e4 (1:47e4)
 	db 2 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 ; display the card page with id at wMovePageNumber of wLoadedCard1
-DisplayMovePage: ; $47ec (1:47ec)
+DisplayMovePage: ; 47ec (1:47ec)
 	ld a, [wMovePageNumber]
 	ld hl, MovePageDisplayPointerTable
 	jp JumpToFunctionInTable
 
-MovePageDisplayPointerTable: ; $47f5 (1:47f5)
+MovePageDisplayPointerTable: ; 47f5 (1:47f5)
 	dw DisplayMovePage_Move1Page1 ; MOVEPAGE_MOVE1_1
 	dw DisplayMovePage_Move1Page2 ; MOVEPAGE_MOVE1_2
 	dw DisplayMovePage_Move2Page1 ; MOVEPAGE_MOVE2_1
 	dw DisplayMovePage_Move2Page2 ; MOVEPAGE_MOVE2_2
 
 ; display MOVEPAGE_MOVE1_1
-DisplayMovePage_Move1Page1: ; $47fd (1:47fd)
+DisplayMovePage_Move1Page1: ; 47fd (1:47fd)
 	call DisplayCardPage_PokemonMove1Page1
 	jr SwitchMovePage
 
 ; display MOVEPAGE_MOVE1_2 if it exists. otherwise return in order
 ; to switch back to MOVEPAGE_MOVE1_1 and display it instead.
-DisplayMovePage_Move1Page2: ; $4802 (1:4802)
+DisplayMovePage_Move1Page2: ; 4802 (1:4802)
 	ld hl, wLoadedCard1Move1Description + 2
 	ld a, [hli]
 	or [hl]
@@ -1197,13 +1197,13 @@ DisplayMovePage_Move1Page2: ; $4802 (1:4802)
 	jr SwitchMovePage
 
 ; display MOVEPAGE_MOVE2_1
-DisplayMovePage_Move2Page1: ; $480d (1:480d)
+DisplayMovePage_Move2Page1: ; 480d (1:480d)
 	call DisplayCardPage_PokemonMove2Page1
 	jr SwitchMovePage
 
 ; display MOVEPAGE_MOVE2_2 if it exists. otherwise return in order
 ; to switch back to MOVEPAGE_MOVE2_1 and display it instead.
-DisplayMovePage_Move2Page2: ; $4812 (1:4812)
+DisplayMovePage_Move2Page2: ; 4812 (1:4812)
 	ld hl, wLoadedCard1Move2Description + 2
 	ld a, [hli]
 	or [hl]
@@ -1213,7 +1213,7 @@ DisplayMovePage_Move2Page2: ; $4812 (1:4812)
 
 ; switch to MOVEPAGE_MOVE*_2 if in MOVEPAGE_MOVE*_1 and vice versa.
 ; sets the next move page to switch to if Right or Left are pressed.
-SwitchMovePage: ; $481b (1:481b)
+SwitchMovePage: ; 481b (1:481b)
 	ld hl, wMovePageNumber
 	ld a, $01
 	xor [hl]
@@ -2148,7 +2148,7 @@ NoBasicPokemonCardListParameters: ; 4e37 (1:4e37)
 	db 7 ; number of items selectable without scrolling
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 ; used only during the practice duel with Sam.
 ; displays the list with the player's cards in hand, and the player's name above the list.
@@ -2631,7 +2631,7 @@ DoPracticeDuelAction: ; 51e7 (1:51e7)
 	jp JumpToFunctionInTable
 
 PracticeDuelActionTable: ; 51f8 (1:51f8)
-	dw $0000
+	dw NULL
 	dw PracticeDuel_DrawSevenCards
 	dw PracticeDuel_PlayGoldeen
 	dw PracticeDuel_PutStaryuInBench
@@ -3451,7 +3451,7 @@ ItemSelectionMenuParameters: ; 5708 (1:5708)
 	db 2 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 CardListParameters: ; 5710 (1:5710)
 	db 1, 3 ; cursor x, cursor y
@@ -5661,7 +5661,10 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ret
 ; 0x6423
 
-	INCROM $6423, $6510
+	INCROM $6423, $6431
+
+Func_6431: ; 6431 (1:6431)
+	INCROM $6431, $6510
 
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
@@ -6803,7 +6806,7 @@ HandleBetweenTurnsEvents: ; 6baf (1:6baf)
 .asm_6c3a
 	call DiscardAttachedDefenders
 	call SwapTurn
-	call $6e4c
+	call Func_6e4c
 	ret
 
 ; discard any PLUSPOWER attached to the turn holder's arena and/or bench Pokemon
@@ -7128,6 +7131,9 @@ ApplyStatusConditionToArenaPokemon: ; 6e38 (1:6e38)
 
 Func_6e49: ; 6e49 (1:6e49)
 	call HandleDestinyBondSubstatus
+	; fallthrough
+
+Func_6e4c: ; 6e4c (1:6e4c)
 	call ClearDamageReductionSubstatus2OfKnockedOutPokemon
 	xor a
 	ld [wcce8], a
@@ -7778,12 +7784,12 @@ _TossCoin: ; 71ad (1:71ad)
 	ld a, [wcd9e]
 	or a
 	jr z, .asm_7236
-	call $7324
+	call Func_7324
 	jr .asm_723c
 
 .asm_7236
 	call WaitForWideTextBoxInput
-	call $72ff
+	call Func_72ff
 
 .asm_723c
 	call Func_3b21
@@ -7802,7 +7808,7 @@ _TossCoin: ; 71ad (1:71ad)
 	or a
 	jr z, .asm_725e
 	ld a, e
-	call $7310
+	call Func_7310
 	ld e, a
 	jr .asm_726c
 
@@ -7813,7 +7819,7 @@ _TossCoin: ; 71ad (1:71ad)
 	pop de
 	jr c, .asm_725e
 	ld a, e
-	call $72ff
+	call Func_72ff
 
 .asm_726c
 	ld b, $5c
@@ -7879,7 +7885,7 @@ _TossCoin: ; 71ad (1:71ad)
 	ld hl, wcd9c
 	cp [hl]
 	call z, WaitForWideTextBoxInput
-	call $7324
+	call Func_7324
 	ld a, [wcd9c]
 	ld hl, wCoinTossNumHeads
 	or [hl]
@@ -7889,7 +7895,7 @@ _TossCoin: ; 71ad (1:71ad)
 
 .asm_72dc
 	call WaitForWideTextBoxInput
-	call $72ff
+	call Func_72ff
 
 .asm_72e2
 	call Func_3b31
@@ -7922,13 +7928,15 @@ Func_7310: ; 7310 (1:7310)
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
-	jr z, .asm_7338
+	jr z, Func_7324.asm_7338
 .asm_7319
 	call DoFrame
 	call CheckAnyAnimationPlaying
 	jr c, .asm_7319
 	ldh a, [hff96]
 	ret
+
+Func_7324: ; 7324 (1:7324)
 	ldh [hff96], a
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
@@ -8042,7 +8050,7 @@ Func_73d8: ; 73d8 (1:73d8)
 	ld [hli], a
 	ld [hl], a
 .asm_73ec
-	ld hl, $7408
+	ld hl, Data_7408
 	call PlaceTextItems
 	call DrawDuelistPortraitsAndNames
 	ld a, [wOpponentDeckID]
@@ -8052,8 +8060,8 @@ Func_73d8: ; 73d8 (1:73d8)
 	lb bc, 15, 10
 	call WriteTwoByteNumberInTxSymbolFormat
 	ret
-; 0x7408
 
+Data_7408: ; 7408 (1:7408)
 	INCROM $7408, $7415
 
 Func_7415: ; 7415 (1:7415)

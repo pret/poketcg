@@ -14,7 +14,7 @@ ENDM
 ; For the energy or energy generation function, there are three options:
 ; - Pointer to a function that generates energies (some generate one, some generate a full pack)
 ; - A single energy of a specific type
-; - $0000 if no card in the pack is an energy
+; - NULL if no card in the pack is an energy
 
 ; As for Card Type Chances, note that whenever one card of the 10 is drawn, the chances of
 ; the type of that card are reduced by the original average of all 8 types (capping the result at 1).
@@ -232,7 +232,7 @@ BoosterPack_EvolutionTrainer:: ; 1e580 (7:6580)
 
 BoosterPack_MysteryNeutral:: ; 1e58c (7:658c)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 17 ; Grass Type Chance
@@ -247,7 +247,7 @@ BoosterPack_MysteryNeutral:: ; 1e58c (7:658c)
 
 BoosterPack_MysteryGrassColorless:: ; 1e598 (7:6598)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 48 ; Grass Type Chance
@@ -262,7 +262,7 @@ BoosterPack_MysteryGrassColorless:: ; 1e598 (7:6598)
 
 BoosterPack_MysteryWaterColorless:: ; 1e5a4 (7:65a4)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 12 ; Grass Type Chance
@@ -277,7 +277,7 @@ BoosterPack_MysteryWaterColorless:: ; 1e5a4 (7:65a4)
 
 BoosterPack_MysteryLightningColorless:: ; 1e5b0 (7:65b0)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 12 ; Grass Type Chance
@@ -292,7 +292,7 @@ BoosterPack_MysteryLightningColorless:: ; 1e5b0 (7:65b0)
 
 BoosterPack_MysteryFightingColorless:: ; 1e5bc (7:65bc)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 12 ; Grass Type Chance
@@ -307,7 +307,7 @@ BoosterPack_MysteryFightingColorless:: ; 1e5bc (7:65bc)
 
 BoosterPack_MysteryTrainerColorless:: ; 1e5c8 (7:65c8)
 	booster_set MYSTERY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 12 ; Grass Type Chance
@@ -322,7 +322,7 @@ BoosterPack_MysteryTrainerColorless:: ; 1e5c8 (7:65c8)
 
 BoosterPack_LaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
 	booster_set LABORATORY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 20 ; Grass Type Chance
@@ -337,7 +337,7 @@ BoosterPack_LaboratoryMostlyNeutral:: ; 1e5d4 (7:65d4)
 
 BoosterPack_LaboratoryGrass:: ; 1e5e0 (7:65e0)
 	booster_set LABORATORY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 48 ; Grass Type Chance
@@ -352,7 +352,7 @@ BoosterPack_LaboratoryGrass:: ; 1e5e0 (7:65e0)
 
 BoosterPack_LaboratoryWater:: ; 1e5ec (7:65ec)
 	booster_set LABORATORY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 16 ; Grass Type Chance
@@ -367,7 +367,7 @@ BoosterPack_LaboratoryWater:: ; 1e5ec (7:65ec)
 
 BoosterPack_LaboratoryPsychic:: ; 1e5f8 (7:65f8)
 	booster_set LABORATORY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 16 ; Grass Type Chance
@@ -382,7 +382,7 @@ BoosterPack_LaboratoryPsychic:: ; 1e5f8 (7:65f8)
 
 BoosterPack_LaboratoryTrainer:: ; 1e604 (7:6604)
 	booster_set LABORATORY ; booster pack set
-	dw $0000 ; energy or energy generation function
+	dw NULL ; energy or energy generation function
 
 ; Card Type Chances
 	db 16 ; Grass Type Chance

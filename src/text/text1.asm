@@ -222,12 +222,12 @@ ResistanceLessDamageText: ; 365e1 (d:65e1)
 	line "<RAMNUM> damage due to Resistance!"
 	done
 
-Text0037: ; 36609 (d:6609)
+WeaknessMoreDamageText: ; 36609 (d:6609)
 	text "<RAMTEXT> received"
 	line "<RAMNUM> damage due to Weakness!"
 	done
 
-Text0038: ; 3662f (d:662f)
+WeaknessMoreDamage2Text: ; 3662f (d:662f)
 	text "<RAMTEXT> received"
 	line "<RAMNUM> damage due to Weakness!"
 	done

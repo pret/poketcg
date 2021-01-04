@@ -468,7 +468,16 @@ Func_c36a: ; c36a (3:436a)
 	ret
 ; 0xc37a
 
-	INCROM $c37a, $c41c
+	INCROM $c37a, $c38f
+
+Func_c38f: ; c38f (3:438f)
+	INCROM $c38f, $c3ca
+
+Func_c3ca: ; c3ca (3:43ca)
+	INCROM $c3ca, $c3ee
+
+Func_c3ee: ; c3ee (3:43ee)
+	INCROM $c3ee, $c41c
 
 Func_c41c: ; c41c (3:441c)
 	ld a, [wd332]
@@ -1068,7 +1077,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOnText
 	call PrintScrollableText_NoTextBoxLabel
-	call $484e
+	call Func_c84e
 .asm_c801
 	ld a, $1
 	call Func_c29b
@@ -1085,9 +1094,9 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr z, .asm_c82f
 	call Func_c2a3
 	ld a, [wd0b9]
-	ld hl, $4846
+	ld hl, Unknown_c846
 	call JumpToFunctionInTable
-	ld hl, $484e
+	ld hl, Func_c84e
 	call Func_c32b
 	jr .asm_c801
 .asm_c82f
@@ -1100,9 +1109,12 @@ PC_c7ea: ; c7ea (3:47ea)
 	ld [wd112], a
 	call Func_39fc
 	ret
-; 0xc846
 
-	INCROM $c846, $c891
+Unknown_c846: ; c846 (3:4846)
+	INCROM $c846, $c84e
+
+Func_c84e: ; c84e (3:484e)
+	INCROM $c84e, $c891
 
 Func_c891: ; c891 (3:4891)
 	push hl
@@ -1158,7 +1170,7 @@ Func_c8ba: ; c8ba (3:48ba)
 	call Func_c241
 	call Func_c915
 	call DoFrameIfLCDEnabled
-	call $2c62
+	call PrintScrollableText_WithTextBoxLabel
 	ret
 
 Func_c8ed: ; c8ed (3:48ed)
@@ -1198,7 +1210,7 @@ Func_c915: ; c915 (3:4915)
 	ld de, $000c
 	ld bc, $1406
 	call AdjustCoordinatesForBGScroll
-	call $43ca
+	call Func_c3ca
 	pop de
 	pop bc
 	ret
@@ -2546,11 +2558,11 @@ Func_d103: ; d103 (3:5103)
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	jr c, .asm_d119
-	call $54d1
+	call ScriptCommand_JumpIfFlagNonzero2.passTryJump
 	jr .asm_d11c
 
 .asm_d119
-	call $54e6
+	call ScriptCommand_JumpIfFlagZero2.fail
 
 .asm_d11c
 	pop af
@@ -2643,7 +2655,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 ;	fallthrough
 
 .asm_d1c3
-	ld hl, $51dc
+	ld hl, Unknown_d1dc
 asm_d1c6:
 	ld e, a
 	add a
@@ -2659,6 +2671,7 @@ asm_d1c6:
 	ld [wTxRam2 + 1], a
 	jp IncreaseScriptPointerBy1
 
+Unknown_d1dc: ; d1dc (3:51dc)
 	INCROM $d1dc, $d209
 
 Func_d209: ; d209 (3:5209)
@@ -2748,7 +2761,7 @@ ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	tx Text03fd ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
 	db $00 ; the value to return when b is pressed
-	dw $d693 ; ram location to return result into
+	dw wd693 ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
 .text_entries
@@ -3493,7 +3506,32 @@ Script_d932: ; d932 (3:5932)
 	quit_script_fully
 ; 0xd93f
 
-	INCROM $d93f, $dadd
+Script_d93f: ; d93f (3:593f)
+	INCROM $d93f, $d995
+
+Script_d995: ; d995 (3:5995)
+	INCROM $d995, $d9c2
+
+Script_d9c2: ; d9c2 (3:59c2)
+	INCROM $d9c2, $d9ef
+
+Script_d9ef: ; d9ef (3:59ef)
+	INCROM $d9ef, $da1c
+
+Script_da1c: ; da1c (3:5a1c)
+	INCROM $da1c, $da49
+
+Script_da49: ; da49 (3:5a49)
+	INCROM $da49, $da76
+
+Script_da76: ; da76 (3:5a76)
+	INCROM $da76, $daa3
+
+Script_daa3: ; daa3 (3:5aa3)
+	INCROM $daa3, $dad0
+
+Script_dad0: ; dad0 (3:5ad0)
+	INCROM $dad0, $dadd
 
 Preload_NikkiInIshiharasHouse: ; dadd (3:5add)
 	get_flag_value EVENT_FLAG_35
@@ -4637,7 +4675,7 @@ TryFirstRonaldEncounter: ; e813 (3:6813)
 
 TryFirstRonaldFight: ; e822 (3:6822)
 	ld a, NPC_RONALD2
-	ld [$d3ab], a
+	ld [wTempNPC], a
 	call FindLoadedNPC
 	ret c
 	get_flag_value EVENT_FLAG_4C
@@ -4648,7 +4686,7 @@ TryFirstRonaldFight: ; e822 (3:6822)
 
 TrySecondRonaldFight: ; e837 (3:6837)
 	ld a, NPC_RONALD3
-	ld [$d3ab], a
+	ld [wTempNPC], a
 	call FindLoadedNPC
 	ret c
 	get_flag_value EVENT_FLAG_4D
@@ -4708,9 +4746,10 @@ Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	do_frames $3c
 	move_active_npc NPCMovement_e90d
 	print_text_string Text064a
-	jump_if_player_coords_match $08, $02, $68d6
+	jump_if_player_coords_match $08, $02, .ows_e8d6
 	set_player_direction WEST
 	move_player WEST, 1
+.ows_e8d6
 	set_player_direction SOUTH
 	move_player SOUTH, 1
 	move_player SOUTH, 1
@@ -5208,7 +5247,7 @@ ChallengeHallLobbyLoadMap: ; f088 (3:7088)
 	ld a, $02
 	ld [wTempNPC], a
 	call FindLoadedNPC
-	ld bc, $7166
+	ld bc, Script_f166
 	jp SetNextNPCAndScript
 
 Script_Pappy3: ; f09c (3:709c)
@@ -5316,7 +5355,10 @@ Unknown_f146: ; f146 (3:7146)
 	INCROM $f146, $f156
 
 Unknown_f156: ; f156 (3:7156)
-	INCROM $f156, $f239
+	INCROM $f156, $f166
+
+Script_f166: ; f166 (3:7166)
+	INCROM $f166, $f239
 
 ChallengeHallAfterDuel: ; f239 (3:7239)
 	ld c, $00
@@ -5808,11 +5850,11 @@ Func_f580: ; f580 (3:7580)
 	ld a, d
 	call Random
 	ld c, a
-	call $75cc
+	call Func_f5cc
 	jr c, .asm_f598
-	call $75d4
+	call Func_f5d4
 	ld b, $0
-	ld hl, $75b3
+	ld hl, Unknown_f5b3
 	add hl, bc
 	ld a, [hl]
 
@@ -5820,16 +5862,22 @@ Func_f580: ; f580 (3:7580)
 	ld [wTempNPC], a
 	ld [wd696], a
 	ret
-; 0xf5b3
 
-	INCROM $f5b3, $f5db
+Unknown_f5b3: ; f5b3 (3:75b3)
+	INCROM $f5b3, $f5cc
+
+Func_f5cc: ; f5cc (3:75cc)
+	INCROM $f5cc, $f5d4
+
+Func_f5d4: ; f5d4 (3:75d4)
+	INCROM $f5d4, $f5db
 
 Func_f5db: ; f5db (3:75db)
 	xor a
-	ld [$d698], a
-	ld [$d699], a
-	ld [$d69a], a
-	ld [$d69b], a
+	ld [wd698], a
+	ld [wd699], a
+	ld [wd69a], a
+	ld [wd69b], a
 	ret
 ; 0xf5e9
 
@@ -5848,7 +5896,10 @@ Script_f631: ; f631 (3:7631)
 	ret
 
 .ows_f63c
-	INCROM $f63c, $f71f
+	INCROM $f63c, $f6af
+
+Script_f6af: ; f6af (3:76af)
+	INCROM $f6af, $f71f
 
 Script_Courtney: ; f71f (3:771f)
 	INCROM $f71f, $f72a
@@ -5868,6 +5919,7 @@ HallOfHonorLoadMap: ; fbdb (3:7bdb)
 	ret
 ; 0xfbe1
 
+Script_fbe1: ; fbe1 (3:7be1)
 	INCROM $fbe1, $fbf1
 
 Script_fbf1: ; fbf1 (3:7bf1)

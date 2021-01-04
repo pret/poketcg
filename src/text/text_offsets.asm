@@ -56,8 +56,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0034                                           ; 0x0034
 	textpointer PokemonsAttackText                                 ; 0x0035
 	textpointer ResistanceLessDamageText                           ; 0x0036
-	textpointer Text0037                                           ; 0x0037
-	textpointer Text0038                                           ; 0x0038
+	textpointer WeaknessMoreDamageText                             ; 0x0037
+	textpointer WeaknessMoreDamage2Text                            ; 0x0038
 	textpointer ResistanceNoDamageText                             ; 0x0039
 	textpointer AttackDamageText                                   ; 0x003a
 	textpointer NoDamageText                                       ; 0x003b
@@ -627,7 +627,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text026f                                           ; 0x026f
 	textpointer Text0270                                           ; 0x0270
 	textpointer Text0271                                           ; 0x0271
-	textpointer Text0272                                           ; 0x0272
+	textpointer OKIfFileDeletedText                                ; 0x0272
 	textpointer Text0273                                           ; 0x0273
 	textpointer Text0274                                           ; 0x0274
 	textpointer Text0275                                           ; 0x0275

@@ -60,92 +60,92 @@ DeckMachineRoomObjects: ; 13b4d (3:7b4d)
 	tx PokemonTradingCards101Text
 
 	db NORTH, 6, 2
-	dw $593f
+	dw Script_d93f
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 8, 2
-	dw $593f
+	dw Script_d93f
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 10, 2
-	dw $5995
+	dw Script_d995
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 12, 2
-	dw $5995
+	dw Script_d995
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 14, 2
-	dw $59c2
+	dw Script_d9c2
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 16, 2
-	dw $59c2
+	dw Script_d9c2
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 18, 2
-	dw $59ef
+	dw Script_d9ef
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 20, 2
-	dw $59ef
+	dw Script_d9ef
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 14, 10
-	dw $5a1c
+	dw Script_da1c
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 16, 10
-	dw $5a1c
+	dw Script_da1c
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 18, 10
-	dw $5a49
+	dw Script_da49
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 20, 10
-	dw $5a49
+	dw Script_da49
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 14, 18
-	dw $5a76
+	dw Script_da76
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 16, 18
-	dw $5a76
+	dw Script_da76
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 18, 18
-	dw $5aa3
+	dw Script_daa3
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 20, 18
-	dw $5aa3
+	dw Script_daa3
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 2, 18
-	dw $5ad0
+	dw Script_dad0
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 4, 18
-	dw $5ad0
+	dw Script_dad0
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -564,12 +564,12 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	tx Text0507
 
 	db NORTH, 22, 0
-	dw $76af
+	dw Script_f6af
 	tx Text0558
 	tx Text0509
 
 	db NORTH, 24, 0
-	dw $76af
+	dw Script_f6af
 	tx Text0558
 	tx Text0509
 
@@ -585,22 +585,22 @@ HallOfHonorObjects: ; 13ec2 (3:7ec2)
 	; Legendary Cards
 	db NORTH, 10, 10
 	dw Script_fbf1
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 	; Legendary Cards
 	db NORTH, 12, 10
 	dw Script_fbf1
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 	db NORTH, 10, 2
-	dw $7be1
+	dw Script_fbe1
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
 	db NORTH, 12, 2
-	dw $7be1
+	dw Script_fbe1
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
