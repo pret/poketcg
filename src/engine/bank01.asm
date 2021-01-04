@@ -5703,7 +5703,7 @@ Func_6435:
 	ld hl, wDuelTempList + 1
 	add hl, de
 	ld a, [hld]
-	cp $04
+	cp POKEMON_POWER
 	jr nz, .asm_6447
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
@@ -5785,7 +5785,7 @@ Func_64fc: ; 64fc (1:64fc)
 	ld a, [wCurPlayAreaY]
 	inc a
 	ld e, a
-	ld d, $04
+	ld d, POKEMON_POWER
 	ld hl, wLoadedCard1Move1Name
 	call InitTextPrinting_ProcessTextFromPointerToID
 	ret
