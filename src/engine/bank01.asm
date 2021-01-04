@@ -5694,13 +5694,13 @@ Func_6435:
 	jr z, .asm_649b
 	ld [wSelectedDuelSubMenuItem], a
 	ldh a, [hKeysPressed]
-	and $08
+	and START
 	jr nz, .asm_649d
 	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
 	ld d, $00
-	ld hl, $c511
+	ld hl, wDuelTempList + 1
 	add hl, de
 	ld a, [hld]
 	cp $04
@@ -5711,14 +5711,14 @@ Func_6435:
 	ld e, $00
 	call CopyMoveDataAndDamage_FromDeckIndex
 	call DisplayUsePokemonPowerScreen
-	ld a, $01
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
 	jr nc, .asm_648c
-	ld hl, $40
+	ldtx hl, PokemonPowerSelectNotRequiredText
 	call DrawWideTextBox_WaitForInput
 	jp Func_6435
 .asm_648c
-	ld hl, $3f
+	ldtx hl, UseThisPokemonPowerText
 	call YesOrNoMenuWithText
 	jp c, Func_6435
 	ldh a, [hTempCardIndex_ff98]
@@ -5730,7 +5730,7 @@ Func_6435:
 	ret
 .asm_649d
 	ldh a, [hCurMenuItem]
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call GetCardIDFromDeckIndex
 	call LoadCardDataToBuffer1_FromCardID
@@ -5780,7 +5780,7 @@ Func_64b0: ; 64b0 (1:64b0)
 
 Func_64fc: ; 64fc (1:64fc)
 	ld a, [wLoadedCard1Move1Category]
-	cp $04
+	cp POKEMON_POWER
 	ret nz
 	ld a, [wCurPlayAreaY]
 	inc a
