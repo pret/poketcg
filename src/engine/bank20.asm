@@ -492,10 +492,10 @@ Func_80418: ; 80418 (20:4418)
 	jr z, .check_palette_size
 
 .obp1
-	ld a, [hli]
+	ld a, [hli] ; pallete for OBP1
 	push hl
 	push bc
-	call SetOBP1 ; pallete for OBP1
+	call SetOBP1
 	pop bc
 	pop hl
 	dec c

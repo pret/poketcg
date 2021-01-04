@@ -669,7 +669,11 @@ Duel66Gfx:: ; a3fb4 (28:7fb4)
 
 Palette117:: ; a3ff6 (28:7ff6)
 	db 0, 1
-	db $7b, $63, $ff, $03, $1f, $00, $00, $4d
+
+	rgb 27, 27, 24
+	rgb 31, 31,  0
+	rgb 31,  0,  0
+	rgb  0,  8, 19
 
 SECTION "Gfx 11", ROMX
 
@@ -972,11 +976,19 @@ SECTION "Anims 3", ROMX
 
 Palette31:: ; b3feb (2c:7feb)
 	db 1, $d2, 1
-	db $00, $00, $ff, $1f, $1f, $1b, $6b, $00
+
+	rgb  0,  0,  0
+	rgb 31, 31,  7
+	rgb 31, 24,  6
+	rgb 11,  3,  0
 
 Palette119:: ; b3ff6 (2c:7ff6)
 	db 0, 1
-	db $9c, $63, $1c, $32, $9c, $20, $00, $20
+
+	rgb 28, 28, 24
+	rgb 28, 16, 12
+	rgb 28,  4,  8
+	rgb  0,  0,  8
 
 SECTION "Anims 4", ROMX
 	INCLUDE "data/anims4.asm"
