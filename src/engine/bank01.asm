@@ -5745,7 +5745,7 @@ Func_64b0: ; 64b0 (1:64b0)
 	call LoadDuelCheckPokemonScreenTiles
 	ld de, wDuelTempList
 	call SetListPointer
-	ld a, $ef
+	ld a, LOW(wPlayerNumberOfPokemonInPlayArea)
 	call GetTurnDuelistVariable
 	ld c, a
 	ld b, $00
