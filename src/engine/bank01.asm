@@ -5759,7 +5759,7 @@ Func_64b0: ; 64b0 (1:64b0)
 	add b
 	ld [wCurPlayAreaY], a
 	ld a, b
-	add $bb
+	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call SetNextElementOfList
 	call PrintPlayAreaCardHeader
