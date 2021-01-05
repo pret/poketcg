@@ -1,5 +1,15 @@
+; palette data are read by Func_80418, expected to be structured as so:
+; the first byte has possible values of 0, 1 or 2
+; - if 0, nothing is done;
+; - if 1, then the next byte is written to OBP0 (or to OBP1 if wd4ca == $1);
+; - if 2, then the next 2 bytes are written to OBP0 and OBP1 respectively
+;   (or only the first written to OBP1 if wd4ca == $1, skipping the second byte)
+; next there is a byte declaring the size of the palette data
+; indicating the number of palettes
+
 Palette0:: ; b738a (2d:738a)
-	db 1, $e4, 8
+	db 1, %11100100
+	db 8
 
 	rgb 28, 28, 24
 	rgb 20, 20, 16
@@ -42,7 +52,8 @@ Palette0:: ; b738a (2d:738a)
 	rgb 28, 28,  0
 
 Palette1:: ; b73cd (2d:73cd)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -85,7 +96,8 @@ Palette1:: ; b73cd (2d:73cd)
 	rgb  1,  0,  5
 
 Palette2:: ; b740f (2d:740f)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -128,7 +140,8 @@ Palette2:: ; b740f (2d:740f)
 	rgb  1, 10,  0
 
 Palette3:: ; b7451 (2d:7451)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -171,7 +184,8 @@ Palette3:: ; b7451 (2d:7451)
 	rgb 28, 28,  0
 
 Palette4:: ; b7493 (2d:7493)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -214,7 +228,8 @@ Palette4:: ; b7493 (2d:7493)
 	rgb  5,  3,  0
 
 Palette5:: ; b74d5 (2d:74d5)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -257,7 +272,8 @@ Palette5:: ; b74d5 (2d:74d5)
 	rgb  5,  3,  0
 
 Palette6:: ; b7517 (2d:7517)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -300,7 +316,8 @@ Palette6:: ; b7517 (2d:7517)
 	rgb  5,  3,  0
 
 Palette7:: ; b7559 (2d:7559)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -343,7 +360,8 @@ Palette7:: ; b7559 (2d:7559)
 	rgb  5,  3,  0
 
 Palette8:: ; b759b (2d:759b)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -386,7 +404,8 @@ Palette8:: ; b759b (2d:759b)
 	rgb  5,  3,  0
 
 Palette9:: ; b75dd (2d:75dd)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -429,7 +448,8 @@ Palette9:: ; b75dd (2d:75dd)
 	rgb  5,  3,  0
 
 Palette10:: ; b761f (2d:761f)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -472,7 +492,8 @@ Palette10:: ; b761f (2d:761f)
 	rgb  5,  3,  0
 
 Palette11:: ; b7661 (2d:7661)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -515,7 +536,8 @@ Palette11:: ; b7661 (2d:7661)
 	rgb  5,  3,  0
 
 Palette12:: ; b76a3 (2d:76a3)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -558,7 +580,8 @@ Palette12:: ; b76a3 (2d:76a3)
 	rgb  0,  0,  6
 
 Palette13:: ; b76e5 (2d:76e5)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -601,7 +624,8 @@ Palette13:: ; b76e5 (2d:76e5)
 	rgb  0,  0,  6
 
 Palette14:: ; b7727 (2d:7727)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -644,7 +668,8 @@ Palette14:: ; b7727 (2d:7727)
 	rgb 31, 31,  0
 
 Palette15:: ; b7769 (2d:7769)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -687,7 +712,8 @@ Palette15:: ; b7769 (2d:7769)
 	rgb  1, 10,  0
 
 Palette16:: ; b77ab (2d:77ab)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -730,7 +756,8 @@ Palette16:: ; b77ab (2d:77ab)
 	rgb 28, 28,  0
 
 Palette17:: ; b77ed (2d:77ed)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 30
 	rgb 20, 20, 16
@@ -773,7 +800,8 @@ Palette17:: ; b77ed (2d:77ed)
 	rgb 11,  2,  0
 
 Palette18:: ; b782f (2d:782f)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -816,7 +844,8 @@ Palette18:: ; b782f (2d:782f)
 	rgb 28, 28,  0
 
 Palette19:: ; b7871 (2d:7871)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -859,7 +888,8 @@ Palette19:: ; b7871 (2d:7871)
 	rgb 28, 28,  0
 
 Palette20:: ; b78b3 (2d:78b3)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -902,7 +932,8 @@ Palette20:: ; b78b3 (2d:78b3)
 	rgb 28, 28,  0
 
 Palette21:: ; b78f5 (2d:78f5)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -945,7 +976,8 @@ Palette21:: ; b78f5 (2d:78f5)
 	rgb  5,  3,  0
 
 Palette22:: ; b7937 (2d:7937)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -988,7 +1020,8 @@ Palette22:: ; b7937 (2d:7937)
 	rgb  2,  0,  0
 
 Palette23:: ; b7979 (2d:7979)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -1031,7 +1064,8 @@ Palette23:: ; b7979 (2d:7979)
 	rgb  2,  0,  0
 
 Palette24:: ; b79bb (2d:79bb)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 20, 20, 16
@@ -1074,7 +1108,8 @@ Palette24:: ; b79bb (2d:79bb)
 	rgb  4,  2,  1
 
 Palette25:: ; b79fd (2d:79fd)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 28, 28, 24
 	rgb 18, 18, 16
@@ -1117,7 +1152,8 @@ Palette25:: ; b79fd (2d:79fd)
 	rgb 31, 31,  0
 
 Palette26:: ; b7a3f (2d:7a3f)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 27, 27, 24
 	rgb 20, 20, 17
@@ -1160,7 +1196,8 @@ Palette26:: ; b7a3f (2d:7a3f)
 	rgb 31, 31,  0
 
 Palette27:: ; b7a81 (2d:7a81)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 28, 28, 24
 	rgb 21, 21, 16
@@ -1203,7 +1240,8 @@ Palette27:: ; b7a81 (2d:7a81)
 	rgb 31, 31,  0
 
 Palette28:: ; b7ac3 (2d:7ac3)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 27, 27, 24
 	rgb 20, 20, 17
@@ -1246,7 +1284,8 @@ Palette28:: ; b7ac3 (2d:7ac3)
 	rgb 31, 31,  0
 
 Palette29:: ; b7b05 (2d:7b05)
-	db 2, $d3, $e3, 8
+	db 2, %11010011, %11100011
+	db 8
 
 	rgb  6, 14, 11
 	rgb 30, 27, 24
@@ -1289,7 +1328,8 @@ Palette29:: ; b7b05 (2d:7b05)
 	rgb  0,  0,  0
 
 Palette30:: ; b7b49 (2d:7b49)
-	db 2, $d2, $ff, 8
+	db 2, %11010010, %11111111
+	db 8
 
 	rgb  0,  0,  0
 	rgb 28, 28, 24
@@ -1332,7 +1372,8 @@ Palette30:: ; b7b49 (2d:7b49)
 	rgb 31, 31,  0
 
 Palette32:: ; b7b8d (2d:7b8d)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 28, 28, 24
@@ -1340,7 +1381,8 @@ Palette32:: ; b7b8d (2d:7b8d)
 	rgb  0,  0,  0
 
 Palette33:: ; b7b98 (2d:7b98)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1348,7 +1390,8 @@ Palette33:: ; b7b98 (2d:7b98)
 	rgb  0,  0,  0
 
 Palette34:: ; b7ba3 (2d:7ba3)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31,  0
@@ -1356,7 +1399,8 @@ Palette34:: ; b7ba3 (2d:7ba3)
 	rgb 11,  4,  0
 
 Palette35:: ; b7bae (2d:7bae)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 17, 17, 29
@@ -1364,7 +1408,8 @@ Palette35:: ; b7bae (2d:7bae)
 	rgb  0,  0, 10
 
 Palette36:: ; b7bb9 (2d:7bb9)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 23, 23
@@ -1372,7 +1417,8 @@ Palette36:: ; b7bb9 (2d:7bb9)
 	rgb  0,  0,  0
 
 Palette37:: ; b7bc4 (2d:7bc4)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1380,7 +1426,8 @@ Palette37:: ; b7bc4 (2d:7bc4)
 	rgb  0,  0,  0
 
 Palette38:: ; b7bcf (2d:7bcf)
-	db 1, $c2, 1
+	db 1, %11000010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1388,7 +1435,8 @@ Palette38:: ; b7bcf (2d:7bcf)
 	rgb  0,  0,  0
 
 Palette39:: ; b7bda (2d:7bda)
-	db 1, $c2, 1
+	db 1, %11000010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1396,7 +1444,8 @@ Palette39:: ; b7bda (2d:7bda)
 	rgb  0,  0,  0
 
 Palette40:: ; b7be5 (2d:7be5)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1404,7 +1453,8 @@ Palette40:: ; b7be5 (2d:7be5)
 	rgb  0,  0,  0
 
 Palette41:: ; b7bf0 (2d:7bf0)
-	db 1, $c2, 1
+	db 1, %11000010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1412,7 +1462,8 @@ Palette41:: ; b7bf0 (2d:7bf0)
 	rgb  0,  0,  0
 
 Palette42:: ; b7bfb (2d:7bfb)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 30, 28, 13
@@ -1420,7 +1471,8 @@ Palette42:: ; b7bfb (2d:7bfb)
 	rgb 12,  0,  0
 
 Palette43:: ; b7c06 (2d:7c06)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 30, 28, 13
@@ -1428,7 +1480,8 @@ Palette43:: ; b7c06 (2d:7c06)
 	rgb 12,  0,  0
 
 Palette44:: ; b7c11 (2d:7c11)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 30, 28, 13
@@ -1436,7 +1489,8 @@ Palette44:: ; b7c11 (2d:7c11)
 	rgb 12,  0,  0
 
 Palette45:: ; b7c1c (2d:7c1c)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb 16, 23, 20
 	rgb 20, 31, 31
@@ -1444,7 +1498,8 @@ Palette45:: ; b7c1c (2d:7c1c)
 	rgb 14,  0, 31
 
 Palette46:: ; b7c27 (2d:7c27)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb  0, 31, 31
@@ -1452,7 +1507,8 @@ Palette46:: ; b7c27 (2d:7c27)
 	rgb  0,  0, 21
 
 Palette47:: ; b7c32 (2d:7c32)
-	db 1, $92, 1
+	db 1, %10010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb  0, 31, 31
@@ -1460,7 +1516,8 @@ Palette47:: ; b7c32 (2d:7c32)
 	rgb  0,  0,  9
 
 Palette48:: ; b7c3d (2d:7c3d)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb  0, 31, 31
@@ -1468,7 +1525,8 @@ Palette48:: ; b7c3d (2d:7c3d)
 	rgb  0,  0, 21
 
 Palette49:: ; b7c48 (2d:7c48)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1476,7 +1534,8 @@ Palette49:: ; b7c48 (2d:7c48)
 	rgb  0, 15, 31
 
 Palette50:: ; b7c53 (2d:7c53)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb  0,  0,  0
 	rgb  7, 20, 31
@@ -1484,7 +1543,8 @@ Palette50:: ; b7c53 (2d:7c53)
 	rgb  0,  1,  8
 
 Palette51:: ; b7c5e (2d:7c5e)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 28, 28, 24
 	rgb 31, 31, 31
@@ -1492,7 +1552,8 @@ Palette51:: ; b7c5e (2d:7c5e)
 	rgb  7,  0,  3
 
 Palette52:: ; b7c69 (2d:7c69)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 28, 20, 20
@@ -1500,7 +1561,8 @@ Palette52:: ; b7c69 (2d:7c69)
 	rgb 12,  4,  4
 
 Palette53:: ; b7c74 (2d:7c74)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 22
@@ -1508,7 +1570,8 @@ Palette53:: ; b7c74 (2d:7c74)
 	rgb  0,  0,  0
 
 Palette54:: ; b7c7f (2d:7c7f)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 28, 28, 24
 	rgb 31, 31, 31
@@ -1516,7 +1579,8 @@ Palette54:: ; b7c7f (2d:7c7f)
 	rgb  0,  0,  0
 
 Palette55:: ; b7c8a (2d:7c8a)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb 28, 28, 24
 	rgb 31, 12,  0
@@ -1524,7 +1588,8 @@ Palette55:: ; b7c8a (2d:7c8a)
 	rgb  8,  0,  0
 
 Palette56:: ; b7c95 (2d:7c95)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1532,7 +1597,8 @@ Palette56:: ; b7c95 (2d:7c95)
 	rgb  0,  0,  0
 
 Palette57:: ; b7ca0 (2d:7ca0)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 18
@@ -1540,7 +1606,8 @@ Palette57:: ; b7ca0 (2d:7ca0)
 	rgb  6,  7,  0
 
 Palette58:: ; b7cab (2d:7cab)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 18
@@ -1548,7 +1615,8 @@ Palette58:: ; b7cab (2d:7cab)
 	rgb  6,  7,  0
 
 Palette59:: ; b7cb6 (2d:7cb6)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 18
@@ -1556,7 +1624,8 @@ Palette59:: ; b7cb6 (2d:7cb6)
 	rgb  6,  7,  0
 
 Palette60:: ; b7cc1 (2d:7cc1)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 28, 28, 28
@@ -1564,7 +1633,8 @@ Palette60:: ; b7cc1 (2d:7cc1)
 	rgb  6,  7,  0
 
 Palette61:: ; b7ccc (2d:7ccc)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 16, 23, 20
 	rgb 31, 31,  0
@@ -1572,7 +1642,8 @@ Palette61:: ; b7ccc (2d:7ccc)
 	rgb  7,  1,  0
 
 Palette62:: ; b7cd7 (2d:7cd7)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1580,7 +1651,8 @@ Palette62:: ; b7cd7 (2d:7cd7)
 	rgb  6,  7,  0
 
 Palette63:: ; b7ce2 (2d:7ce2)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb  1, 10, 23
@@ -1588,7 +1660,8 @@ Palette63:: ; b7ce2 (2d:7ce2)
 	rgb  6,  7,  0
 
 Palette64:: ; b7ced (2d:7ced)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 28, 25, 31
@@ -1596,7 +1669,8 @@ Palette64:: ; b7ced (2d:7ced)
 	rgb  0,  0, 13
 
 Palette65:: ; b7cf8 (2d:7cf8)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 30, 31, 29
@@ -1604,7 +1678,8 @@ Palette65:: ; b7cf8 (2d:7cf8)
 	rgb  1,  1,  1
 
 Palette66:: ; b7d03 (2d:7d03)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1612,7 +1687,8 @@ Palette66:: ; b7d03 (2d:7d03)
 	rgb 10,  9,  0
 
 Palette67:: ; b7d0e (2d:7d0e)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 26, 31, 18
@@ -1620,7 +1696,8 @@ Palette67:: ; b7d0e (2d:7d0e)
 	rgb  6,  7,  0
 
 Palette68:: ; b7d19 (2d:7d19)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 26, 29, 31
@@ -1628,7 +1705,8 @@ Palette68:: ; b7d19 (2d:7d19)
 	rgb  6,  7,  0
 
 Palette69:: ; b7d24 (2d:7d24)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 27, 31, 27
@@ -1636,7 +1714,8 @@ Palette69:: ; b7d24 (2d:7d24)
 	rgb  6,  7,  0
 
 Palette70:: ; b7d2f (2d:7d2f)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 26, 31
@@ -1644,7 +1723,8 @@ Palette70:: ; b7d2f (2d:7d2f)
 	rgb 14,  0,  5
 
 Palette71:: ; b7d3a (2d:7d3a)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1652,7 +1732,8 @@ Palette71:: ; b7d3a (2d:7d3a)
 	rgb  0,  0,  2
 
 Palette72:: ; b7d45 (2d:7d45)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1660,7 +1741,8 @@ Palette72:: ; b7d45 (2d:7d45)
 	rgb  0,  0,  2
 
 Palette73:: ; b7d50 (2d:7d50)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 24
@@ -1668,7 +1750,8 @@ Palette73:: ; b7d50 (2d:7d50)
 	rgb 13, 10,  0
 
 Palette74:: ; b7d5b (2d:7d5b)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1676,7 +1759,8 @@ Palette74:: ; b7d5b (2d:7d5b)
 	rgb  5,  2,  0
 
 Palette75:: ; b7d66 (2d:7d66)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 23
@@ -1684,7 +1768,8 @@ Palette75:: ; b7d66 (2d:7d66)
 	rgb 16,  3,  0
 
 Palette76:: ; b7d71 (2d:7d71)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 28, 31
@@ -1692,7 +1777,8 @@ Palette76:: ; b7d71 (2d:7d71)
 	rgb 19,  8, 12
 
 Palette77:: ; b7d7c (2d:7d7c)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 23
@@ -1700,7 +1786,8 @@ Palette77:: ; b7d7c (2d:7d7c)
 	rgb  6,  7,  0
 
 Palette78:: ; b7d87 (2d:7d87)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 28
@@ -1708,7 +1795,8 @@ Palette78:: ; b7d87 (2d:7d87)
 	rgb  1, 11,  8
 
 Palette79:: ; b7d92 (2d:7d92)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 30, 31, 31
@@ -1716,7 +1804,8 @@ Palette79:: ; b7d92 (2d:7d92)
 	rgb  0,  0,  5
 
 Palette80:: ; b7d9d (2d:7d9d)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 27, 29, 31
@@ -1724,7 +1813,8 @@ Palette80:: ; b7d9d (2d:7d9d)
 	rgb  8,  4, 10
 
 Palette81:: ; b7da8 (2d:7da8)
-	db 1, $c2, 1
+	db 1, %11000010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1732,7 +1822,8 @@ Palette81:: ; b7da8 (2d:7da8)
 	rgb  0,  0,  3
 
 Palette82:: ; b7db3 (2d:7db3)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 30
@@ -1740,7 +1831,8 @@ Palette82:: ; b7db3 (2d:7db3)
 	rgb 12,  2,  0
 
 Palette83:: ; b7dbe (2d:7dbe)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb 11, 11, 11
 	rgb 31, 31, 26
@@ -1748,7 +1840,8 @@ Palette83:: ; b7dbe (2d:7dbe)
 	rgb  3,  3,  3
 
 Palette84:: ; b7dc9 (2d:7dc9)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1756,7 +1849,8 @@ Palette84:: ; b7dc9 (2d:7dc9)
 	rgb  6,  7,  0
 
 Palette85:: ; b7dd4 (2d:7dd4)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 29, 24, 24
@@ -1764,7 +1858,8 @@ Palette85:: ; b7dd4 (2d:7dd4)
 	rgb  6,  7,  0
 
 Palette86:: ; b7ddf (2d:7ddf)
-	db 1, $e6, 1
+	db 1, %11100110
+	db 1
 
 	rgb 11, 11, 11
 	rgb 25, 23, 23
@@ -1772,7 +1867,8 @@ Palette86:: ; b7ddf (2d:7ddf)
 	rgb  3,  3,  3
 
 Palette87:: ; b7dea (2d:7dea)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31,  7
@@ -1780,7 +1876,8 @@ Palette87:: ; b7dea (2d:7dea)
 	rgb 11,  3,  0
 
 Palette88:: ; b7df5 (2d:7df5)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1788,7 +1885,8 @@ Palette88:: ; b7df5 (2d:7df5)
 	rgb  6,  7,  0
 
 Palette89:: ; b7e00 (2d:7e00)
-	db 1, $e2, 1
+	db 1, %11100010
+	db 1
 
 	rgb 28, 28, 24
 	rgb 31, 31,  0
@@ -1796,7 +1894,8 @@ Palette89:: ; b7e00 (2d:7e00)
 	rgb  9,  3,  0
 
 Palette90:: ; b7e0b (2d:7e0b)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31, 31
@@ -1804,7 +1903,8 @@ Palette90:: ; b7e0b (2d:7e0b)
 	rgb  6,  7,  0
 
 Palette91:: ; b7e16 (2d:7e16)
-	db 1, $e6, 1
+	db 1, %11100110
+	db 1
 
 	rgb 16, 16, 20
 	rgb 28, 28, 24
@@ -1812,7 +1912,8 @@ Palette91:: ; b7e16 (2d:7e16)
 	rgb  0,  0,  0
 
 Palette92:: ; b7e21 (2d:7e21)
-	db 1, $e4, 1
+	db 1, %11100100
+	db 1
 
 	rgb 28, 28, 24
 	rgb 31, 19,  0
@@ -1820,7 +1921,8 @@ Palette92:: ; b7e21 (2d:7e21)
 	rgb  0,  0,  0
 
 Palette93:: ; b7e2c (2d:7e2c)
-	db 1, $c9, 1
+	db 1, %11001001
+	db 1
 
 	rgb 20, 20, 16
 	rgb 31,  0,  0
@@ -1828,7 +1930,8 @@ Palette93:: ; b7e2c (2d:7e2c)
 	rgb  0,  0,  0
 
 Palette94:: ; b7e37 (2d:7e37)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb  0,  0,  0
 	rgb  1,  0,  0
@@ -1871,7 +1974,8 @@ Palette94:: ; b7e37 (2d:7e37)
 	rgb 31,  0,  0
 
 Palette95:: ; b7e79 (2d:7e79)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 31, 30, 30
@@ -1914,7 +2018,8 @@ Palette95:: ; b7e79 (2d:7e79)
 	rgb 31,  0,  0
 
 Palette96:: ; b7ebb (2d:7ebb)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb  0,  0,  0
 	rgb  0,  1,  0
@@ -1957,7 +2062,8 @@ Palette96:: ; b7ebb (2d:7ebb)
 	rgb  0, 31,  0
 
 Palette97:: ; b7efd (2d:7efd)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 30, 31, 30
@@ -2000,7 +2106,8 @@ Palette97:: ; b7efd (2d:7efd)
 	rgb  0, 31,  0
 
 Palette98:: ; b7f3f (2d:7f3f)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 31,  0,  0
@@ -2043,7 +2150,8 @@ Palette98:: ; b7f3f (2d:7f3f)
 	rgb  0,  0,  0
 
 Palette99:: ; b7f81 (2d:7f81)
-	db 0, 8
+	db 0
+	db 8
 
 	rgb 31, 31, 31
 	rgb 15, 15, 15
@@ -2086,7 +2194,8 @@ Palette99:: ; b7f81 (2d:7f81)
 	rgb  0, 31,  0
 
 Palette101:: ; b7fc3 (2d:7fc3)
-	db 0, 7
+	db 0
+	db 7
 
 	rgb 28, 28, 28
 	rgb 28, 28,  0
@@ -2124,5 +2233,6 @@ Palette101:: ; b7fc3 (2d:7fc3)
 	rgb 28, 28,  0
 
 Palette108:: ; b7ffd (2d:7ffd)
-	db 1, $e4, 0
+	db 1, %11100100
+	db 0
 

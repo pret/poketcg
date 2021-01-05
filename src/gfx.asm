@@ -131,7 +131,8 @@ AnimData2:: ; 8bfe4 (22:7fe4)
 	frame_data 0, 0, 0, 0
 
 Palette109:: ; 8bffb (22:7ffb)
-	db 1, $e4, 0
+	db 1, %11100100
+	db 0
 
 rept $2
 	db $ff
@@ -668,7 +669,8 @@ Duel66Gfx:: ; a3fb4 (28:7fb4)
 	INCBIN "gfx/duel/anims/66.2bpp"
 
 Palette117:: ; a3ff6 (28:7ff6)
-	db 0, 1
+	db 0
+	db 1
 
 	rgb 27, 27, 24
 	rgb 31, 31,  0
@@ -975,7 +977,8 @@ SECTION "Anims 3", ROMX
 	INCLUDE "data/anims3.asm"
 
 Palette31:: ; b3feb (2c:7feb)
-	db 1, $d2, 1
+	db 1, %11010010
+	db 1
 
 	rgb  0,  0,  0
 	rgb 31, 31,  7
@@ -983,7 +986,8 @@ Palette31:: ; b3feb (2c:7feb)
 	rgb 11,  3,  0
 
 Palette119:: ; b3ff6 (2c:7ff6)
-	db 0, 1
+	db 0
+	db 1
 
 	rgb 28, 28, 24
 	rgb 28, 16, 12
