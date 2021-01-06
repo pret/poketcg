@@ -1094,7 +1094,7 @@ PC_c7ea: ; c7ea (3:47ea)
 	jr z, .asm_c82f
 	call Func_c2a3
 	ld a, [wd0b9]
-	ld hl, Unknown_c846
+	ld hl, PointerTable_c846
 	call JumpToFunctionInTable
 	ld hl, Func_c84e
 	call Func_c32b
@@ -1110,11 +1110,26 @@ PC_c7ea: ; c7ea (3:47ea)
 	call Func_39fc
 	ret
 
-Unknown_c846: ; c846 (3:4846)
-	INCROM $c846, $c84e
+PointerTable_c846: ; c846 (3:4846)
+	dw Func_c859
+	dw Func_c86d
+	dw Func_c872
+	dw Func_c877
 
 Func_c84e: ; c84e (3:484e)
-	INCROM $c84e, $c891
+	INCROM $c84e, $c859
+
+Func_c859: ; c859 (3:4859)
+	INCROM $c859, $c86d
+
+Func_c86d: ; c86d (3:486d)
+	INCROM $c86d, $c872
+
+Func_c872: ; c872 (3:4872)
+	INCROM $c872, $c877
+
+Func_c877: ; c877 (3:4877)
+	INCROM $c877, $c891
 
 Func_c891: ; c891 (3:4891)
 	push hl
@@ -1813,9 +1828,10 @@ SetScriptPointer: ; cc8b (3:4c8b)
 	inc hl
 	ld [hl], b
 	ret
-; 0xcc92
 
-	INCROM $cc92, $cc96
+GetScriptArgs5AfterPointer: ; cc92 (3:4c92)
+	ld a, $5
+	jr GetScriptArgsAfterPointer
 
 GetScriptArgs1AfterPointer: ; cc96 (3:4c96)
 	ld a, $1
@@ -2590,7 +2606,7 @@ Func_d135: ; d135 (3:5135)
 	rlca
 	ld c, a
 	ld b, $0
-	ld hl, $5151
+	ld hl, MapNames - 2
 	add hl, bc
 	ld e, [hl]
 	inc hl
@@ -2601,7 +2617,19 @@ Func_d135: ; d135 (3:5135)
 	ld [hl], d
 	jp IncreaseScriptPointerBy2
 
-	INCROM $d153, $d16b
+MapNames: ; d153 (3:5153)
+	tx MasonLaboratoryMapNameText
+	tx MrIshiharasHouseMapNameText
+	tx FightingClubMapNameText
+	tx RockClubMapNameText
+	tx WaterClubMapNameText
+	tx LightningClubMapNameText
+	tx GrassClubMapNameText
+	tx PsychicClubMapNameText
+	tx ScienceClubMapNameText
+	tx FireClubMapNameText
+	tx ChallengeHallMapNameText
+	tx PokemonDomeMapNameText
 
 Func_d16b: ; d16b (3:516b)
 	ld hl, wCurrentNPCNameTx
@@ -2655,7 +2683,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 ;	fallthrough
 
 .asm_d1c3
-	ld hl, Unknown_d1dc
+	ld hl, TradeCardNames
 asm_d1c6:
 	ld e, a
 	add a
@@ -2671,8 +2699,51 @@ asm_d1c6:
 	ld [wTxRam2 + 1], a
 	jp IncreaseScriptPointerBy1
 
-Unknown_d1dc: ; d1dc (3:51dc)
-	INCROM $d1dc, $d209
+TradeCardNames: ; d1dc (3:51dc)
+	db MEWTWO2
+	tx MewtwoTradeCardName
+
+	db MEW1
+	tx MewTradeCardName
+
+	db ARCANINE1
+	tx ArcanineTradeCardName
+
+	db PIKACHU3
+	tx PikachuTradeCardName
+
+	db PIKACHU4
+	tx PikachuTradeCardName
+
+	db SURFING_PIKACHU1
+	tx SurfingPikachuTradeCardName
+
+	db SURFING_PIKACHU2
+	tx SurfingPikachuTradeCardName
+
+	db ELECTABUZZ1
+	tx ElectabuzzTradeCardName
+
+	db SLOWPOKE1
+	tx SlowpokeTradeCardName
+
+	db MEWTWO3
+	tx MewtwoTradeCardName
+
+	db MEWTWO2
+	tx MewtwoTradeCardName
+
+	db MEW1
+	tx MewTradeCardName
+
+	db JIGGLYPUFF1
+	tx JigglypuffTradeCardName
+
+	db SUPER_ENERGY_RETRIEVAL
+	tx SuperEnergyRetrievalTradeCardName
+
+	db FLYING_PIKACHU
+	tx FlyingPikachuTradeCardName
 
 Func_d209: ; d209 (3:5209)
 	get_flag_value EVENT_FLAG_71
@@ -2706,13 +2777,16 @@ Func_d209: ; d209 (3:5209)
 
 LegendaryCards: ; d234 (3:5234)
 	db ZAPDOS3
-	tx Text03f0
+	tx ZapdosLegendaryCardName
+
 	db MOLTRES2
-	tx Text03f1
+	tx MoltresLegendaryCardName
+
 	db ARTICUNO2
-	tx Text03f2
+	tx ArticunoLegendaryCardName
+
 	db DRAGONITE1
-	tx Text03f3
+	tx DragoniteLegendaryCardName
 
 Flags_d240: ; d240 (3:5240)
 	db EVENT_FLAG_6D
@@ -2747,7 +2821,7 @@ ScriptCommand_ChooseDeckToDuelAgainstMultichoice: ; d24c (3:524c)
 	tx Text03f7
 	tx Text03f8
 
-	INCROM $d26f, $d271
+	dw NULL
 
 ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	ld hl, .multichoice_menu_args
@@ -5670,10 +5744,16 @@ Func_f121: ; f121 (3:7121)
 	ret
 
 Unknown_f146: ; f146 (3:7146)
-	INCROM $f146, $f156
+	db $01, $00, EVENT_FLAG_50, $01
+	db $03, $03, EVENT_FLAG_51, $02
+	db $07, $03, EVENT_FLAG_52, $03
+	db $07, $00, EVENT_FLAG_53, $04
 
 Unknown_f156: ; f156 (3:7156)
-	INCROM $f156, $f166
+	db $01, $00, EVENT_FLAG_54, $05
+	db $03, $03, EVENT_FLAG_55, $06
+	db $07, $03, EVENT_FLAG_56, $07
+	db $07, $00, EVENT_FLAG_57, $08
 
 Script_f166: ; f166 (3:7166)
 	INCROM $f166, $f239
@@ -6151,36 +6231,61 @@ Preload_ChallengeHallOpponent: ; f559 (3:7559)
 Func_f580: ; f580 (3:7580)
 	get_flag_value EVENT_FLAG_44
 	cp $3
-	jr z, .asm_f596
+	jr z, .pick_challenger_include_ronald
 	get_flag_value EVENT_FLAG_45
 	cp $3
-	ld d, $18
-	jr nz, .asm_f598
-	ld a, $2
-	jr .asm_f5ac
+	ld d, ChallengeHallNPCsEnd - ChallengeHallNPCs - 1 ; discount Ronald
+	jr nz, .pick_challenger
+	ld a, NPC_RONALD1
+	jr .force_ronald
 
-.asm_f596
-	ld d, $19
+.pick_challenger_include_ronald
+	ld d, ChallengeHallNPCsEnd - ChallengeHallNPCs
 
-.asm_f598
+.pick_challenger
 	ld a, d
 	call Random
 	ld c, a
 	call Func_f5cc
-	jr c, .asm_f598
+	jr c, .pick_challenger
 	call Func_f5d4
 	ld b, $0
-	ld hl, Unknown_f5b3
+	ld hl, ChallengeHallNPCs
 	add hl, bc
 	ld a, [hl]
 
-.asm_f5ac
+.force_ronald
 	ld [wTempNPC], a
 	ld [wd696], a
 	ret
 
-Unknown_f5b3: ; f5b3 (3:75b3)
-	INCROM $f5b3, $f5cc
+ChallengeHallNPCs: ; f5b3 (3:75b3)
+	db NPC_CHRIS
+	db NPC_MICHAEL
+	db NPC_JESSICA
+	db NPC_MATTHEW
+	db NPC_RYAN
+	db NPC_ANDREW
+	db NPC_SARA
+	db NPC_AMANDA
+	db NPC_JOSHUA
+	db NPC_JENNIFER
+	db NPC_NICHOLAS
+	db NPC_BRANDON
+	db NPC_BRITTANY
+	db NPC_KRISTIN
+	db NPC_HEATHER
+	db NPC_ROBERT
+	db NPC_DANIEL
+	db NPC_STEPHANIE
+	db NPC_JOSEPH
+	db NPC_DAVID
+	db NPC_ERIK
+	db NPC_JOHN
+	db NPC_ADAM
+	db NPC_JONATHAN
+	db NPC_RONALD1
+ChallengeHallNPCsEnd:
 
 Func_f5cc: ; f5cc (3:75cc)
 	INCROM $f5cc, $f5d4
@@ -6385,16 +6490,16 @@ Func_fc2b: ; fc2b (3:7c2b)
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	ld a, $b0
+	ld a, LOW(ClerkNPCName_)
 	ld [wCurrentNPCNameTx], a
-	ld a, $3
+	ld a, HIGH(ClerkNPCName_)
 	ld [wCurrentNPCNameTx+1], a
 	jp SetNextScript
 
 PointerTable_fc4c: ; fc4c (3:7c4c)
-	dw Unknown_fc64
-	dw Unknown_fc68
-	dw Unknown_fc60
+	dw Script_fc64
+	dw Script_fc68
+	dw Script_fc60
 
 Script_fc52: ; fc52 (3:7c52)
 	start_script
@@ -6406,14 +6511,17 @@ Script_fc52: ; fc52 (3:7c52)
 	run_command Func_cd76
 	quit_script_fully
 
-Unknown_fc60: ; fc60 (3:7c60)
-	INCROM $fc60, $fc64
+Script_fc60: ; fc60 (3:7c60)
+	start_script
+	print_text_quit_fully Text06ca
 
-Unknown_fc64: ; fc64 (3:7c64)
-	INCROM $fc64, $fc68
+Script_fc64: ; fc64 (3:7c64)
+	start_script
+	print_text_quit_fully Text06cb
 
-Unknown_fc68: ; fc68 (3:7c68)
-	INCROM $fc68, $fc6c
+Script_fc68: ; fc68 (3:7c68)
+	start_script
+	print_text_quit_fully Text06cc
 
 ; Clerk looks away from you if you can't use infrared
 ; This is one of the preloads that does not change whether or not they appear

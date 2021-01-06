@@ -994,51 +994,51 @@ Text032f: ; 3e768 (f:6768)
 	text "     ??'s House     "
 	done
 
-Text0330: ; 3e77e (f:677e)
+MasonLaboratoryMapNameText: ; 3e77e (f:677e)
 	text "Mason Laboratory"
 	done
 
-Text0331: ; 3e790 (f:6790)
+MrIshiharasHouseMapNameText: ; 3e790 (f:6790)
 	text "Mr Ishihara's House"
 	done
 
-Text0332: ; 3e7a5 (f:67a5)
+FightingClubMapNameText: ; 3e7a5 (f:67a5)
 	text "Fighting"
 	done
 
-Text0333: ; 3e7af (f:67af)
+RockClubMapNameText: ; 3e7af (f:67af)
 	text "Rock"
 	done
 
-Text0334: ; 3e7b5 (f:67b5)
+WaterClubMapNameText: ; 3e7b5 (f:67b5)
 	text "Water"
 	done
 
-Text0335: ; 3e7bc (f:67bc)
+LightningClubMapNameText: ; 3e7bc (f:67bc)
 	text "Lightning"
 	done
 
-Text0336: ; 3e7c7 (f:67c7)
+GrassClubMapNameText: ; 3e7c7 (f:67c7)
 	text "Grass"
 	done
 
-Text0337: ; 3e7ce (f:67ce)
+PsychicClubMapNameText: ; 3e7ce (f:67ce)
 	text "Psychic"
 	done
 
-Text0338: ; 3e7d7 (f:67d7)
+ScienceClubMapNameText: ; 3e7d7 (f:67d7)
 	text "Science"
 	done
 
-Text0339: ; 3e7e0 (f:67e0)
+FireClubMapNameText: ; 3e7e0 (f:67e0)
 	text "Fire"
 	done
 
-Text033a: ; 3e7e6 (f:67e6)
+ChallengeHallMapNameText: ; 3e7e6 (f:67e6)
 	text "Challenge Hall"
 	done
 
-Text033b: ; 3e7f6 (f:67f6)
+PokemonDomeMapNameText: ; 3e7f6 (f:67f6)
 	text "Pokémon Dome"
 	done
 
@@ -1860,59 +1860,59 @@ AaronNPCName: ; 3f823 (f:7823)
 	text "Aaron"
 	done
 
-Text03e8: ; 3f82a (f:782a)
+MewtwoTradeCardName: ; 3f82a (f:782a)
 	text "<Lv>60 MEWTWO "
 	done
 
-Text03e9: ; 3f838 (f:7838)
+MewTradeCardName: ; 3f838 (f:7838)
 	text "<Lv>8 MEW "
 	done
 
-Text03ea: ; 3f842 (f:7842)
+ArcanineTradeCardName: ; 3f842 (f:7842)
 	text "<Lv>34 ARCANINE"
 	done
 
-Text03eb: ; 3f851 (f:7851)
+PikachuTradeCardName: ; 3f851 (f:7851)
 	text "<Lv>16 PIKACHU"
 	done
 
-Text03ec: ; 3f85f (f:785f)
+SurfingPikachuTradeCardName: ; 3f85f (f:785f)
 	text "<Lv>13 SURFING PIKACHU"
 	done
 
-Text03ed: ; 3f875 (f:7875)
+ElectabuzzTradeCardName: ; 3f875 (f:7875)
 	text "<Lv>20 ELECTABUZZ"
 	done
 
-Text03ee: ; 3f886 (f:7886)
+SlowpokeTradeCardName: ; 3f886 (f:7886)
 	text "<Lv>9 SLOWPOKE"
 	done
 
-Text03ef: ; 3f894 (f:7894)
+JigglypuffTradeCardName: ; 3f894 (f:7894)
 	text "<Lv>12 JIGGLYPUFF"
 	done
 
-Text03f0: ; 3f8a5 (f:78a5)
+ZapdosLegendaryCardName: ; 3f8a5 (f:78a5)
 	text "<Lv>68 ZAPDOS"
 	done
 
-Text03f1: ; 3f8b2 (f:78b2)
+MoltresLegendaryCardName: ; 3f8b2 (f:78b2)
 	text "<Lv>37 MOLTRES"
 	done
 
-Text03f2: ; 3f8c0 (f:78c0)
+ArticunoLegendaryCardName: ; 3f8c0 (f:78c0)
 	text "<Lv>37 ARTICUNO"
 	done
 
-Text03f3: ; 3f8cf (f:78cf)
+DragoniteLegendaryCardName: ; 3f8cf (f:78cf)
 	text "<Lv>41 DRAGONITE"
 	done
 
-Text03f4: ; 3f8df (f:78df)
+SuperEnergyRetrievalTradeCardName: ; 3f8df (f:78df)
 	text "Super Energy Retrieval"
 	done
 
-Text03f5: ; 3f8f7 (f:78f7)
+FlyingPikachuTradeCardName: ; 3f8f7 (f:78f7)
 	text "<Lv>12 FLYING PIKACHU"
 	done
 

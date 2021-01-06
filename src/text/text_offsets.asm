@@ -817,18 +817,18 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text032d                                           ; 0x032d
 	textpointer Text032e                                           ; 0x032e
 	textpointer Text032f                                           ; 0x032f
-	textpointer Text0330                                           ; 0x0330
-	textpointer Text0331                                           ; 0x0331
-	textpointer Text0332                                           ; 0x0332
-	textpointer Text0333                                           ; 0x0333
-	textpointer Text0334                                           ; 0x0334
-	textpointer Text0335                                           ; 0x0335
-	textpointer Text0336                                           ; 0x0336
-	textpointer Text0337                                           ; 0x0337
-	textpointer Text0338                                           ; 0x0338
-	textpointer Text0339                                           ; 0x0339
-	textpointer Text033a                                           ; 0x033a
-	textpointer Text033b                                           ; 0x033b
+	textpointer MasonLaboratoryMapNameText                         ; 0x0330
+	textpointer MrIshiharasHouseMapNameText                        ; 0x0331
+	textpointer FightingClubMapNameText                            ; 0x0332
+	textpointer RockClubMapNameText                                ; 0x0333
+	textpointer WaterClubMapNameText                               ; 0x0334
+	textpointer LightningClubMapNameText                           ; 0x0335
+	textpointer GrassClubMapNameText                               ; 0x0336
+	textpointer PsychicClubMapNameText                             ; 0x0337
+	textpointer ScienceClubMapNameText                             ; 0x0338
+	textpointer FireClubMapNameText                                ; 0x0339
+	textpointer ChallengeHallMapNameText                           ; 0x033a
+	textpointer PokemonDomeMapNameText                             ; 0x033b
 	textpointer Text033c                                           ; 0x033c
 	textpointer Text033d                                           ; 0x033d
 	textpointer Text033e                                           ; 0x033e
@@ -1001,20 +1001,20 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer GrannyNPCName                                      ; 0x03e5
 	textpointer GuideNPCName                                       ; 0x03e6
 	textpointer AaronNPCName                                       ; 0x03e7
-	textpointer Text03e8                                           ; 0x03e8
-	textpointer Text03e9                                           ; 0x03e9
-	textpointer Text03ea                                           ; 0x03ea
-	textpointer Text03eb                                           ; 0x03eb
-	textpointer Text03ec                                           ; 0x03ec
-	textpointer Text03ed                                           ; 0x03ed
-	textpointer Text03ee                                           ; 0x03ee
-	textpointer Text03ef                                           ; 0x03ef
-	textpointer Text03f0                                           ; 0x03f0
-	textpointer Text03f1                                           ; 0x03f1
-	textpointer Text03f2                                           ; 0x03f2
-	textpointer Text03f3                                           ; 0x03f3
-	textpointer Text03f4                                           ; 0x03f4
-	textpointer Text03f5                                           ; 0x03f5
+	textpointer MewtwoTradeCardName                                ; 0x03e8
+	textpointer MewTradeCardName                                   ; 0x03e9
+	textpointer ArcanineTradeCardName                              ; 0x03ea
+	textpointer PikachuTradeCardName                               ; 0x03eb
+	textpointer SurfingPikachuTradeCardName                        ; 0x03ec
+	textpointer ElectabuzzTradeCardName                            ; 0x03ed
+	textpointer SlowpokeTradeCardName                              ; 0x03ee
+	textpointer JigglypuffTradeCardName                            ; 0x03ef
+	textpointer ZapdosLegendaryCardName                            ; 0x03f0
+	textpointer MoltresLegendaryCardName                           ; 0x03f1
+	textpointer ArticunoLegendaryCardName                          ; 0x03f2
+	textpointer DragoniteLegendaryCardName                         ; 0x03f3
+	textpointer SuperEnergyRetrievalTradeCardName                  ; 0x03f4
+	textpointer FlyingPikachuTradeCardName                         ; 0x03f5
 	textpointer Text03f6                                           ; 0x03f6
 	textpointer Text03f7                                           ; 0x03f7
 	textpointer Text03f8                                           ; 0x03f8
