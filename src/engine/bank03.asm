@@ -2754,7 +2754,6 @@ ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	xor a
 	call ShowMultichoiceTextbox
 	jp IncreaseScriptPointerBy1
-; 0xd27b
 
 .multichoice_menu_args ; d27b
 	dw NULL ; NPC title for textbox under menu
@@ -2768,7 +2767,6 @@ ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	tx Text03fa
 	tx Text03fb
 	tx Text03fc
-
 
 ; displays a textbox with multiple choices and a cursor.
 ; takes as an argument in h1 a pointer to a table
@@ -2865,7 +2863,6 @@ ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
 	xor a
 	ld [wMultichoiceTextboxResult_Sam], a
 	jp IncreaseScriptPointerBy1
-; 0xd30c
 
 .multichoice_menu_args ; d30c
 	tx SamNPCName ; NPC title for textbox under menu
@@ -3071,7 +3068,7 @@ ScriptCommand_JumpIfFlagZero1: ; d460 (3:5460)
 	ld a, c
 	call GetEventFlagValue
 	or a
-	jr z, ScriptCommand_JumpIfFlagZero1.passTryJump
+	jr z, .passTryJump
 
 .fail
 	call SetScriptControlByteFail
@@ -3154,7 +3151,7 @@ ScriptCommand_JumpIfFlagNonzero2: ; d4ca (3:54ca)
 	or a
 	jr z, ScriptCommand_JumpIfFlagZero2.fail
 
-.passTryJump:
+.passTryJump
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
 	jr z, .noJumpArgs
@@ -3220,8 +3217,8 @@ MasonLaboratoryAfterDuel: ; d53b (3:553b)
 .after_duel_table
 	db NPC_SAM
 	db NPC_SAM
-	dw $568a
-	dw $569f
+	dw Script_BeatSam
+	dw Script_LostToSam
 	db $00
 
 MasonLabLoadMap: ; d549 (3:5549)
@@ -3272,13 +3269,28 @@ Script_Tech3: ; d5d5 (3:55d5)
 	INCROM $d5d5, $d5e0
 
 Script_Tech4: ; d5e0 (3:55e0)
-	INCROM $d5e0, $d5f9
+	INCROM $d5e0, $d5eb
+
+Preload_Tech5: ; d5eb (3:55eb)
+	INCROM $d5eb, $d5f9
 
 Script_Tech5: ; d5f9 (3:55f9)
-	INCROM $d5f9, $d61d
+	INCROM $d5f9, $d604
+
+Preload_Sam: ; d604 (3:5604)
+	INCROM $d604, $d61d
 
 Script_Sam: ; d61d (3:561d)
-	INCROM $d61d, $d727
+	INCROM $d61d, $d68a
+
+Script_BeatSam: ; d68a (3:568a)
+	INCROM $d68a, $d69f
+
+Script_LostToSam: ; d69f (3:569f)
+	INCROM $d69f, $d710
+
+Preload_DrMason: ; d710 (3:5710)
+	INCROM $d710, $d727
 
 Script_DrMason: ; d727 (3:5727)
 	INCROM $d727, $d753
@@ -3478,9 +3490,21 @@ NPCMovement_d896: ; d896 (3:5896)
 	db EAST
 	db SOUTH | NO_MOVE
 	db $ff
-; 0xd89f
 
-	INCROM $d89f, $d8bb
+DeckMachineRoomAfterDuel: ; d89f (3:589f)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_AARON
+	db NPC_AARON
+	dw Script_BeatAaron
+	dw Script_LostToAaron
+	db $00
+
+DeckMachineRoomCloseTextBox: ; d8ad (3:58ad)
+	INCROM $d8ad, $d8bb
 
 Script_Tech6: ; d8bb (3:58bb)
 	INCROM $d8bb, $d8c6
@@ -3492,7 +3516,13 @@ Script_Tech8: ; d8d1 (3:58d1)
 	INCROM $d8d1, $d8dd
 
 Script_Aaron: ; d8dd (3:58dd)
-	INCROM $d8dd, $d932
+	INCROM $d8dd, $d903
+
+Script_BeatAaron: ; d903 (3:5903)
+	INCROM $d903, $d92e
+
+Script_LostToAaron: ; d92e (3:592e)
+	INCROM $d92e, $d932
 
 Script_d932: ; d932 (3:5932)
 	start_script
@@ -3504,7 +3534,6 @@ Script_d932: ; d932 (3:5932)
 .ows_d93c
 	open_deck_machine $09
 	quit_script_fully
-; 0xd93f
 
 Script_d93f: ; d93f (3:593f)
 	INCROM $d93f, $d995
@@ -3707,7 +3736,10 @@ FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	db $00
 
 Script_Man1: ; dc76 (3:5c76)
-	INCROM $dc76, $dd0d
+	INCROM $dc76, $dceb
+
+Preload_ImakuniInFightingClubLobby: ; dceb (3:5ceb)
+	INCROM $dceb, $dd0d
 
 Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
@@ -3787,41 +3819,40 @@ Script_Specs1: ; dd82 (3:5d82)
 	INCROM $dd82, $dd8d
 
 Script_Butch: ; dd8d (3:5d8d)
-	INCROM $dd8d, $dd9f
+	INCROM $dd8d, $dd98
+
+Preload_Granny1: ; dd98 (3:5d98)
+	INCROM $dd98, $dd9f
 
 Script_Granny1: ; dd9f (3:5d9f)
 	INCROM $dd9f, $dda3
-
 
 FightingClubAfterDuel: ; dda3 (3:5da3)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xddaa
 
 .after_duel_table
 	db NPC_CHRIS
 	db NPC_CHRIS
-	dw $5e69
-	dw $5e75
+	dw Script_BeatChrisInFightingClub
+	dw Script_LostToChrisInFightingClub
 
 	db NPC_MICHAEL
 	db NPC_MICHAEL
-	dw $5e95
-	dw $5ea1
+	dw Script_BeatMichaelInFightingClub
+	dw Script_LostToMichaelInFightingClub
 
 	db NPC_JESSICA
 	db NPC_JESSICA
-	dw $5ec1
-	dw $5ecd
+	dw Script_BeatJessicaInFightingClub
+	dw Script_LostToJessicaInFightingClub
 
 	db NPC_MITCH
 	db NPC_MITCH
 	dw Script_BeatMitch
-	dw Script_LoseToMitch
-
+	dw Script_LostToMitch
 	db $00
-; ddc3
 
 Script_Mitch: ; ddc3 (3:5dc3)
 	start_script
@@ -3835,27 +3866,21 @@ Script_Mitch: ; ddc3 (3:5dc3)
 	script_set_flag_value EVENT_FLAG_17, $01
 	script_set_flag_value EVENT_FLAG_20, $01
 	quit_script_fully
-; 0xdde2
 .three_pupils_remaining
 	print_text_quit_fully Text0478
-; 0xdde5
 .two_pupils_remaining
 	print_text_quit_fully Text0479
-; 0xdde8
 .one_pupil_remaining
 	print_text_quit_fully Text047a
-; 0xddeb
 .all_pupils_defeated
 	print_text_string Text047b
 	ask_question_jump Text047c, .do_battle
 	print_text_string Text047d
 	quit_script_fully
-; 0xddf7
 .do_battle
 	print_text_string Text047e
 	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
-; 0xddff
 
 Script_BeatMitch: ; ddff (3:5dff)
 	start_script
@@ -3871,38 +3896,57 @@ Script_BeatMitch: ; ddff (3:5dff)
 	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
 	print_text_string Text0481
 	quit_script_fully
-; 0xde19
 
-Script_LoseToMitch: ; de19 (3:5e19)
+Script_LostToMitch: ; de19 (3:5e19)
 	start_script
 	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_PrintTrainHarderText
 	print_text_quit_fully Text0482
-; 0xde21
 
-Script_Mitch_AlreadyHaveMedal: ; 0xde21
+Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
 	print_text_string Text0483
 	ask_question_jump Text047c, .do_battle
 	print_text_string Text0484
 	quit_script_fully
-; 0xde2d
 .do_battle
 	print_text_string Text0485
 	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
-; 0xde35
 
 Script_Mitch_GiveBoosters:
 	print_text_string Text0486
 	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
 	print_text_string Text0487
 	quit_script_fully
-; 0xde40
 
 Script_Mitch_PrintTrainHarderText:
 	print_text_quit_fully Text0488
-; 0xde43
 
-	INCROM $de43, $ded1
+Preload_ChrisInFightingClub: ; de43 (3:5e43)
+	INCROM $de43, $de69
+
+Script_BeatChrisInFightingClub: ; de69 (3:5e69)
+	INCROM $de69, $de75
+
+Script_LostToChrisInFightingClub: ; de75 (3:5e75)
+	INCROM $de75, $de79
+
+Preload_MichaelInFightingClub: ; de79 (3:5e79)
+	INCROM $de79, $de95
+
+Script_BeatMichaelInFightingClub: ; de95 (3:5e95)
+	INCROM $de95, $dea1
+
+Script_LostToMichaelInFightingClub: ; dea1 (3:5ea1)
+	INCROM $dea1, $dea5
+
+Preload_JessicaInFightingClub: ; dea5 (3:5ea5)
+	INCROM $dea5, $dec1
+
+Script_BeatJessicaInFightingClub: ; dec1 (3:5ec1)
+	INCROM $dec1, $decd
+
+Script_LostToJessicaInFightingClub: ; decd (3:5ecd)
+	INCROM $decd, $ded1
 
 Script_Clerk2: ; ded1 (3:5ed1)
 	INCROM $ded1, $ded5
@@ -3911,56 +3955,108 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xdedc
 
 .after_duel_table
 	db NPC_CHRIS
 	db NPC_CHRIS
-	dw $5f0c
-	dw $5f20
+	dw Script_BeatChrisInRockClubLobby
+	dw Script_LostToChrisInRockClubLobby
 
 	db NPC_MATTHEW
 	db NPC_MATTHEW
-	dw $5f63
-	dw $5f78
+	dw Script_BeatMatthew
+	dw Script_LostToMatthew
 	db $00
-; 0xdee9
 
+Preload_ChrisInRockClubLobby: ; dee9 (3:5ee9)
 	INCROM $dee9, $def2
 
 Script_Chris: ; def2 (3:5ef2)
-	INCROM $def2, $df39
+	INCROM $def2, $df0c
+
+Script_BeatChrisInRockClubLobby: ; df0c (3:5f0c)
+	INCROM $df0c, $df20
+
+Script_LostToChrisInRockClubLobby: ; df20 (3:5f20)
+	INCROM $df20, $df39
 
 Script_Matthew: ; df39 (3:5f39)
-	INCROM $df39, $df83
+	INCROM $df39, $df63
+
+Script_BeatMatthew: ; df63 (3:5f63)
+	INCROM $df63, $df78
+
+Script_LostToMatthew: ; df78 (3:5f78)
+	INCROM $df78, $df83
 
 Script_Woman1: ; df83 (3:5f83)
 	INCROM $df83, $dfc0
 
 Script_Chap1: ; dfc0 (3:5fc0)
-	INCROM $dfc0, $dfd2
+	INCROM $dfc0, $dfcb
+
+Preload_Lass3: ; dfcb (3:5fcb)
+	INCROM $dfcb, $dfd2
 
 Script_Lass3: ; dfd2 (3:5fd2)
-	INCROM $dfd2, $dff0
+	INCROM $dfd2, $dfd6
+
+RockClubAfterDuel: ; dfd6 (3:5fd6)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_RYAN
+	db NPC_RYAN
+	dw Script_BeatRyan
+	dw Script_LostToRyan
+
+	db NPC_ANDREW
+	db NPC_ANDREW
+	dw Script_BeatAndrew
+	dw Script_LostToAndrew
+
+	db NPC_GENE
+	db NPC_GENE
+	dw Script_BeatGene
+	dw Script_LostToGene
+	db $00
 
 Script_Ryan: ; dff0 (3:5ff0)
-	INCROM $dff0, $e017
+	INCROM $dff0, $e007
+
+Script_BeatRyan: ; e007 (3:6007)
+	INCROM $e007, $e013
+
+Script_LostToRyan: ; e013 (3:6013)
+	INCROM $e013, $e017
 
 Script_Andrew: ; e017 (3:6017)
-	INCROM $e017, $e03e
+	INCROM $e017, $e02e
+
+Script_BeatAndrew: ; e02e (3:602e)
+	INCROM $e02e, $e03a
+
+Script_LostToAndrew: ; e03a (3:603a)
+	INCROM $e03a, $e03e
 
 Script_Gene: ; e03e (3:603e)
-	INCROM $e03e, $e09e
+	INCROM $e03e, $e059
+
+Script_BeatGene: ; e059 (3:6059)
+	INCROM $e059, $e073
+
+Script_LostToGene: ; e073 (3:6073)
+	INCROM $e073, $e09e
 
 Script_Clerk3: ; e09e (3:609e)
 	INCROM $e09e, $e0a2
-
 
 WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe0a9
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -3968,7 +4064,6 @@ WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	dw Script_BeatImakuni
 	dw Script_LostToImakuni
 	db $00
-; 0xe0b0
 
 Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
@@ -4038,7 +4133,7 @@ Script_Lass1: ; e111 (3:6111)
 .ows_e12d
 	print_text_quit_fully Text0429
 
-Preload_Man2InWaterClubLobby: ; e130 (3:6130)
+Preload_Man2: ; e130 (3:6130)
 	get_flag_value EVENT_JOSHUA_STATE
 	cp JOSHUA_BEATEN
 	ret
@@ -4063,7 +4158,7 @@ WaterClubMovePlayer: ; e13f (3:613f)
 	ld bc, Script_NotReadyToSeeAmy
 	jp SetNextNPCAndScript
 
-WaterClubAfterDuel: ;e157 (3:6157)
+WaterClubAfterDuel: ; e157 (3:6157)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
@@ -4227,7 +4322,7 @@ Script_Joshua: ; e21c (3:621c)
 	print_variable_text Text0440, Text0441
 	quit_script_fully
 
-.startDuel:
+.startDuel
 	print_text_string Text0442
 	try_give_pc_pack $04
 	start_battle PRIZES_4, SOUND_OF_THE_WAVES_DECK_ID, MUSIC_DUEL_THEME_1
@@ -4249,7 +4344,7 @@ Script_BeatJoshua: ; e26c (3:626c)
 	jump_if_flag_not_equal EVENT_JOSHUA_STATE, JOSHUA_BEATEN, .firstJoshuaWin
 	quit_script_fully
 
-.firstJoshuaWin:
+.firstJoshuaWin
 	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_BEATEN
 	print_text_string Text0449
 	close_text_box
@@ -4394,7 +4489,6 @@ ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
 	print_text_string Text0459
 	start_battle PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
-; 0xe369
 
 Script_Clerk4: ; e369 (3:6369)
 	INCROM $e369, $e36d
@@ -4403,7 +4497,6 @@ LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe374
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -4411,9 +4504,9 @@ LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	dw Script_BeatImakuni
 	dw Script_LostToImakuni
 	db $00
-; 0xe37B
 
-	INCROM $e37B, $e39a
+Preload_ImakuniInLightningClubLobby: ; e37b (3:637b)
+	INCROM $e37b, $e39a
 
 Script_Chap2: ; e39a (3:639a)
 	INCROM $e39a, $e3d9
@@ -4422,19 +4515,73 @@ Script_Lass4: ; e3d9 (3:63d9)
 	INCROM $e3d9, $e3dd
 
 Script_Hood1: ; e3dd (3:63dd)
-	INCROM $e3dd, $e408
+	INCROM $e3dd, $e3e8
+
+LightningClubAfterDuel: ; e3e8 (3:63e8)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_JENNIFER
+	db NPC_JENNIFER
+	dw Script_BeatJennifer
+	dw Script_LostToJennifer
+
+	db NPC_NICHOLAS
+	db NPC_NICHOLAS
+	dw Script_BeatNicholas
+	dw Script_LostToNicholas
+
+	db NPC_BRANDON
+	db NPC_BRANDON
+	dw Script_BeatBrandon
+	dw Script_LostToBrandon
+
+	db NPC_ISAAC
+	db NPC_ISAAC
+	dw Script_BeatIsaac
+	dw Script_LostToIsaac
+	db $00
 
 Script_Jennifer: ; e408 (3:6408)
-	INCROM $e408, $e42f
+	INCROM $e408, $e41d
+
+Script_BeatJennifer: ; e41d (3:641d)
+	INCROM $e41d, $e42b
+
+Script_LostToJennifer: ; e42b (3:642b)
+	INCROM $e42b, $e42f
 
 Script_Nicholas: ; e42f (3:642f)
-	INCROM $e42f, $e456
+	INCROM $e42f, $e444
+
+Script_BeatNicholas: ; e444 (3:6444)
+	INCROM $e444, $e452
+
+Script_LostToNicholas: ; e452 (3:6452)
+	INCROM $e452, $e456
 
 Script_Brandon: ; e456 (3:6456)
-	INCROM $e456, $e4ad
+	INCROM $e456, $e480
+
+Script_BeatBrandon: ; e480 (3:6480)
+	INCROM $e480, $e490
+
+Script_LostToBrandon: ; e490 (3:6490)
+	INCROM $e490, $e494
+
+Preload_Isaac: ; e494 (3:6494)
+	INCROM $e494, $e4ad
 
 Script_Isaac: ; e4ad (3:64ad)
-	INCROM $e4ad, $e525
+	INCROM $e4ad, $e4e1
+
+Script_BeatIsaac: ; e4e1 (3:64e1)
+	INCROM $e4e1, $e4fb
+
+Script_LostToIsaac: ; e4fb (3:64fb)
+	INCROM $e4fb, $e525
 
 GrassClubEntranceAfterDuel: ; e525 (3:6525)
 	ld hl, GrassClubEntranceAfterDuelTable
@@ -4474,8 +4621,8 @@ FindEndOfBattleScript: ; e52c (3:652c)
 GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
 	db NPC_MICHAEL
 	db NPC_MICHAEL
-	dw $6597
-	dw $65ab
+	dw Script_BeatMichaelInGrassClubEntrance
+	dw Script_LostToMichaelInGrassClubEntrance
 
 	db NPC_RONALD2
 	db NPC_RONALD2
@@ -4489,10 +4636,19 @@ GrassClubEntranceAfterDuelTable: ; e553 (3:6553)
 	db $00
 
 Script_Clerk5: ; e566 (3:6566)
-	INCROM $e566, $e573
+	INCROM $e566, $e56a
+
+Preload_MichaelInGrassClubEntrance: ; e56a (3:656a)
+	INCROM $e56a, $e573
 
 Script_Michael: ; e573 (3:6573)
-	INCROM $e573, $e5c4
+	INCROM $e573, $e597
+
+Script_BeatMichaelInGrassClubEntrance: ; e597 (3:6597)
+	INCROM $e597, $e5ab
+
+Script_LostToMichaelInGrassClubEntrance: ; e5ab (3:65ab)
+	INCROM $e5ab, $e5c4
 
 GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 	ld hl, .after_duel_table
@@ -4624,22 +4780,67 @@ Script_Lass2: ; e61f (3:661f)
 	give_card BLASTOISE
 	show_card_received_screen BLASTOISE
 	print_text_quit_fully Text06f3
-; 0xe6d8
 
 Script_Granny2: ; e6d8 (3:66d8)
-	INCROM $e6d8, $e6e3
+	INCROM $e6d8, $e6dc
+
+Preload_Gal2: ; e6dc (3:66dc)
+	INCROM $e6dc, $e6e3
 
 Script_Gal2: ; e6e3 (3:66e3)
-	INCROM $e6e3, $e701
+	INCROM $e6e3, $e6e7
+
+GrassClubAfterDuel: ; e6e7 (3:66e7)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_KRISTIN
+	db NPC_KRISTIN
+	dw Script_BeatKristin
+	dw Script_LostToKristin
+
+	db NPC_HEATHER
+	db NPC_HEATHER
+	dw Script_BeatHeather
+	dw Script_LostToHeather
+
+	db NPC_NIKKI
+	db NPC_NIKKI
+	dw Script_BeatNikki
+	dw Script_LostToNikki
+	db $00
 
 Script_Kristin: ; e701 (3:6701)
-	INCROM $e701, $e745
+	INCROM $e701, $e71c
+
+Script_BeatKristin: ; e71c (3:671c)
+	INCROM $e71c, $e741
+
+Script_LostToKristin: ; e741 (3:6741)
+	INCROM $e741, $e745
 
 Script_Heather: ; e745 (3:6745)
-	INCROM $e745, $e79e
+	INCROM $e745, $e760
+
+Script_BeatHeather: ; e760 (3:6760)
+	INCROM $e760, $e78a
+
+Script_LostToHeather: ; e78a (3:678a)
+	INCROM $e78a, $e796
+
+Preload_NikkiInGrassClub: ; e796 (3:6796)
+	INCROM $e796, $e79e
 
 Script_Nikki: ; e79e (3:679e)
-	INCROM $e79e, $e7f6
+	INCROM $e79e, $e7d3
+
+Script_BeatNikki: ; e7d3 (3:67d3)
+	INCROM $e7d3, $e7f2
+
+Script_LostToNikki: ; e7f2 (3:67f2)
+	INCROM $e7f2, $e7f6
 
 ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	ld hl, .after_duel_table
@@ -4694,13 +4895,15 @@ TrySecondRonaldFight: ; e837 (3:6837)
 	ret nz
 	ld bc, ScriptSecondRonaldFight
 	jp SetNextNPCAndScript
-; 0xe84c
 
 Script_Clerk6: ; e84c (3:684c)
 	INCROM $e84c, $e850
 
 Script_Lad3: ; e850 (3:6850)
-	INCROM $e850, $e862
+	INCROM $e850, $e85b
+
+Preload_Ronald1InClubEntrance: ; e85b (3:685b)
+	INCROM $e85b, $e862
 
 Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
@@ -4736,8 +4939,8 @@ NPCMovement_e894: ; e894 (3:6894)
 	db SOUTH
 	db SOUTH
 	db $ff
-; e89a
 
+Preload_Ronald2InClubEntrance: ; e89a (3:689a)
 	INCROM $e89a, $e8c0
 
 Script_FirstRonaldFight: ; e8c0 (3:68c0)
@@ -4799,8 +5002,8 @@ NPCMovement_e90f: ; e90f (3:690f)
 	db SOUTH
 	db SOUTH
 	db $ff
-; e915
 
+Preload_Ronald3InClubEntrance: ; e915 (3:6915)
 	INCROM $e915, $e91e
 
 ScriptSecondRonaldFight: ; e91e (3:691e)
@@ -4840,58 +5043,105 @@ ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 	run_command Func_cdcb
 	run_command Func_d41d
 	quit_script_fully
-; 0xe963
-
 
 PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xe96a
 
 .after_duel_table
-
 	db NPC_ROBERT
 	db NPC_ROBERT
-	dw $6995
-	dw $69a1
+	dw Script_BeatRobert
+	dw Script_LostToRobert
 	db $00
 
+PsychicClubLobbyLoadMap: ; e971 (3:6971)
 	INCROM $e971, $e980
 
 Script_Robert: ; e980 (3:6980)
-	INCROM $e980, $e9a5
+	INCROM $e980, $e995
+
+Script_BeatRobert: ; e995 (3:6995)
+	INCROM $e995, $e9a1
+
+Script_LostToRobert: ; e9a1 (3:69a1)
+	INCROM $e9a1, $e9a5
 
 Script_Pappy1: ; e9a5 (3:69a5)
-	INCROM $e9a5, $ea30
+	INCROM $e9a5, $e9f7
+
+Preload_Ronald1InPsychicClubLobby: ; e9f7 (3:69f7)
+	INCROM $e9f7, $ea30
 
 Script_Gal3: ; ea30 (3:6a30)
 	INCROM $ea30, $ea3b
 
 Script_Chap4: ; ea3b (3:6a3b)
-	INCROM $ea3b, $ea60
+	INCROM $ea3b, $ea46
+
+PsychicClubAfterDuel: ; ea46 (3:6a46)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_DANIEL
+	db NPC_DANIEL
+	dw Script_BeatDaniel
+	dw Script_LostToDaniel
+
+	db NPC_STEPHANIE
+	db NPC_STEPHANIE
+	dw Script_BeatStephanie
+	dw Script_LostToStephanie
+
+	db NPC_MURRAY1
+	db NPC_MURRAY1
+	dw Script_BeatMurray
+	dw Script_LostToMurray
+	db $00
 
 Script_Daniel: ; ea60 (3:6a60)
-	INCROM $ea60, $eaa2
+	INCROM $ea60, $ea92
+
+Script_BeatDaniel: ; ea92 (3:6a92)
+	INCROM $ea92, $ea9e
+
+Script_LostToDaniel: ; ea9e (3:6a9e)
+	INCROM $ea9e, $eaa2
 
 Script_Stephanie: ; eaa2 (3:6aa2)
-	INCROM $eaa2, $eadf
+	INCROM $eaa2, $eac0
 
-Script_Murray2: ; eadf (3:6adf)
-	INCROM $eadf, $eadf
+Script_BeatStephanie: ; eac0 (3:6ac0)
+	INCROM $eac0, $eacc
 
-Script_Murray1: ; eadf (3:6adf)
-	INCROM $eadf, $eb53
+Script_LostToStephanie: ; eacc (3:6acc)
+	INCROM $eacc, $ead0
+
+Preload_Murray2: ; ead0 (3:6ad0)
+	INCROM $ead0, $eada
+
+Preload_Murray1: ; eada (3:6ada)
+	INCROM $eada, $eadf
+
+Script_Murray: ; eadf (3:6adf)
+	INCROM $eadf, $eb0f
+
+Script_BeatMurray: ; eb0f (3:6b0f)
+	INCROM $eb0f, $eb29
+
+Script_LostToMurray: ; eb29 (3:6b29)
+	INCROM $eb29, $eb53
 
 Script_Clerk7: ; eb53 (3:6b53)
 	INCROM $eb53, $eb57
-
 
 ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xeb5e
 
 .after_duel_table
 	db NPC_IMAKUNI
@@ -4899,8 +5149,8 @@ ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 	dw Script_BeatImakuni
 	dw Script_LostToImakuni
 	db $00
-; 0xeb65
 
+Preload_ImakuniInScienceClubLobby: ; eb65 (3:6b65)
 	INCROM $eb65, $eb84
 
 Script_Lad1: ; eb84 (3:6b84)
@@ -4913,19 +5163,73 @@ Script_Specs2: ; ebc5 (3:6bc5)
 	INCROM $ebc5, $ebed
 
 Script_Specs3: ; ebed (3:6bed)
-	INCROM $ebed, $ec11
+	INCROM $ebed, $ebf1
+
+ScienceClubAfterDuel: ; ebf1 (3:6bf1)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_JOSEPH
+	db NPC_JOSEPH
+	dw Script_BeatJoseph
+	dw Script_LostToJoseph
+
+	db NPC_DAVID
+	db NPC_DAVID
+	dw Script_BeatDavid
+	dw Script_LostToDavid
+
+	db NPC_ERIK
+	db NPC_ERIK
+	dw Script_BeatErik
+	dw Script_LostToErik
+
+	db NPC_RICK
+	db NPC_RICK
+	dw Script_BeatRick
+	dw Script_LostToRick
+	db $00
 
 Script_David: ; ec11 (3:6c11)
-	INCROM $ec11, $ec42
+	INCROM $ec11, $ec2f
+
+Script_BeatDavid: ; ec2f (3:6c2f)
+	INCROM $ec2f, $ec3e
+
+Script_LostToDavid: ; ec3e (3:6c3e)
+	INCROM $ec3e, $ec42
 
 Script_Erik: ; ec42 (3:6c42)
-	INCROM $ec42, $ec67
+	INCROM $ec42, $ec57
+
+Script_BeatErik: ; ec57 (3:6c57)
+	INCROM $ec57, $ec63
+
+Script_LostToErik: ; ec63 (3:6c63)
+	INCROM $ec63, $ec67
 
 Script_Rick: ; ec67 (3:6c67)
-	INCROM $ec67, $ecdb
+	INCROM $ec67, $ec80
+
+Script_BeatRick: ; ec80 (3:6c80)
+	INCROM $ec80, $ec9a
+
+Script_LostToRick: ; ec9a (3:6c9a)
+	INCROM $ec9a, $ecc4
+
+Preload_Joseph: ; ecc4 (3:6cc4)
+	INCROM $ecc4, $ecdb
 
 Script_Joseph: ; ecdb (3:6cdb)
-	INCROM $ecdb, $ed45
+	INCROM $ecdb, $ecf6
+
+Script_BeatJoseph: ; ecf6 (3:6cf6)
+	INCROM $ecf6, $ed1c
+
+Script_LostToJoseph: ; ed1c (3:6d1c)
+	INCROM $ed1c, $ed45
 
 Script_Clerk8: ; ed45 (3:6d45)
 	INCROM $ed45, $ed49
@@ -4934,16 +5238,13 @@ FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
-; 0xed50
 
 .after_duel_table
 	db NPC_JESSICA
 	db NPC_JESSICA
-	dw $6dba
-	dw $6dce
+	dw Script_BeatJessicaInFireClubLobby
+	dw Script_LostToJessicaInFireClubLobby
 	db $00
-
-; 0xed57
 
 FireClubPressedA: ; ed57 (3:6d57)
 	ld hl, SlowpokePaintingObjectTable
@@ -4989,15 +5290,24 @@ FindExtraInteractableObjects: ; ed64 (3:6d64)
 	call SetNextScript
 	scf
 	ret
-; 0xed8d
 
+Preload_JessicaInFireClubLobby: ; ed8d (3:6d8d)
 	INCROM $ed8d, $ed96
 
 Script_Jessica: ; ed96 (3:6d96)
-	INCROM $ed96, $ede8
+	INCROM $ed96, $edba
+
+Script_BeatJessicaInFireClubLobby: ; edba (3:6dba)
+	INCROM $edba, $edce
+
+Script_LostToJessicaInFireClubLobby: ; edce (3:6dce)
+	INCROM $edce, $ede8
 
 Script_Chap3: ; ede8 (3:6de8)
-	INCROM $ede8, $ee2c
+	INCROM $ede8, $ee25
+
+Preload_Lad2: ; ee25 (3:6e25)
+	INCROM $ee25, $ee2c
 
 Script_Lad2: ; ee2c (3:6e2c)
 	INCROM $ee2c, $ee76
@@ -5014,13 +5324,11 @@ Script_ee76: ; ee76 (3:6e76)
 	give_card SLOWPOKE1
 	show_card_received_screen SLOWPOKE1
 	quit_script_fully
-; 0xee88
 
 Script_Mania: ; ee88 (3:6e88)
 	INCROM $ee88, $ee93
 
-
-FireClubAfterDuel: ;ee93  (3:6e93)
+FireClubAfterDuel: ; ee93  (3:6e93)
 	ld hl, .after_duel_table
 	call FindEndOfBattleScript
 	ret
@@ -5028,35 +5336,51 @@ FireClubAfterDuel: ;ee93  (3:6e93)
 .after_duel_table
 	db NPC_JOHN
 	db NPC_JOHN
-	dw $6ec8
-	dw $6ed4
+	dw Script_BeatJohn
+	dw Script_LostToJohn
 
 	db NPC_ADAM
 	db NPC_ADAM
-	dw $6eed
-	dw $6ef9
+	dw Script_BeatAdam
+	dw Script_LostToAdam
 
 	db NPC_JONATHAN
 	db NPC_JONATHAN
-	dw $6f12
-	dw $6f1e
+	dw Script_BeatJonathan
+	dw Script_LostToJonathan
 
 	db NPC_KEN
 	db NPC_KEN
 	dw Script_BeatKen
-	dw Script_LoseToKen
-
+	dw Script_LostToKen
 	db $00
-; 0xeeb3
 
 Script_John: ; eeb3 (3:6eb3)
-	INCROM $eeb3, $eed8
+	INCROM $eeb3, $eec8
+
+Script_BeatJohn: ; eec8 (3:6ec8)
+	INCROM $eec8, $eed4
+
+Script_LostToJohn: ; eed4 (3:6ed4)
+	INCROM $eed4, $eed8
 
 Script_Adam: ; eed8 (3:6ed8)
-	INCROM $eed8, $eefd
+	INCROM $eed8, $eeed
+
+Script_BeatAdam: ; eeed (3:6eed)
+	INCROM $eeed, $eef9
+
+Script_LostToAdam: ; eef9 (3:6ef9)
+	INCROM $eef9, $eefd
 
 Script_Jonathan: ; eefd (3:6efd)
-	INCROM $eefd, $ef22
+	INCROM $eefd, $ef12
+
+Script_BeatJonathan: ; ef12 (3:6f12)
+	INCROM $ef12, $ef1e
+
+Script_LostToJonathan: ; ef1e (3:6f1e)
+	INCROM $ef1e, $ef22
 
 Script_Ken: ; ef22 (3:6f22)
 	start_script
@@ -5080,7 +5404,6 @@ Script_Ken: ; ef22 (3:6f22)
 	print_text_string Text06c0
 	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
-; 0xef5e
 
 Script_BeatKen: ; ef5e (3:6f5e)
 	start_script
@@ -5097,16 +5420,12 @@ Script_BeatKen: ; ef5e (3:6f5e)
 	give_booster_packs BOOSTER_MYSTERY_NEUTRAL, BOOSTER_MYSTERY_NEUTRAL, NO_BOOSTER
 	print_text_string Text06c3
 	quit_script_fully
-; 0xef78
 
-
-
-Script_LoseToKen: ; ef78 (3:6f78)
+Script_LostToKen: ; ef78 (3:6f78)
 	start_script
 	jump_if_flag_zero_2 EVENT_FLAG_0A, NULL
 	print_variable_text Text06c4, Text06c5
 	quit_script_fully
-; 0xef83
 
 Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
 	print_text_string Text06c6
@@ -5116,7 +5435,6 @@ Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
 	print_text_string Text06c7
 	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
-; 0xef96
 
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks
@@ -5499,7 +5817,6 @@ Script_Clerk12: ; f295 (3:7295)
 	set_next_npc_and_script $4a, Script_f353
 	end_script_loop
 	ret
-; f349
 
 NPCMovement_f349: ; f349 (3:7349)
 	db NORTH
@@ -5809,7 +6126,6 @@ ScriptJump_f4db: ; f4db (3:74db)
 	set_next_npc_and_script NPC_CLERK12, Script_f3e9
 	end_script_loop
 	ret
-; f559
 
 ; Loads the NPC to fight at the challenge hall
 Preload_ChallengeHallOpponent: ; f559 (3:7559)
@@ -5884,7 +6200,13 @@ Func_f5db: ; f5db (3:75db)
 	INCROM $f5e9, $f602
 
 Func_f602: ; f602 (3:7602)
-	INCROM $f602, $f631
+	INCROM $f602, $f607
+
+PokemonDomeEntranceLoadMap: ; f607 (3:7607)
+	INCROM $f607, $f62a
+
+PokemonDomeEntranceCloseTextBox: ; f62a (3:762a)
+	INCROM $f62a, $f631
 
 Script_f631: ; f631 (3:7631)
 	start_script
@@ -5899,7 +6221,48 @@ Script_f631: ; f631 (3:7631)
 	INCROM $f63c, $f6af
 
 Script_f6af: ; f6af (3:76af)
-	INCROM $f6af, $f71f
+	INCROM $f6af, $f6c6
+
+PokemonDomeMovePlayer: ; f6c6 (3:76c6)
+	INCROM $f6c6, $f6e0
+
+PokemonDomeAfterDuel: ; f6e0 (3:76e0)
+	ld hl, .after_duel_table
+	call FindEndOfBattleScript
+	ret
+
+.after_duel_table
+	db NPC_COURTNEY
+	db NPC_COURTNEY
+	dw Script_BeatCourtney
+	dw Script_LostToCourtney
+
+	db NPC_STEVE
+	db NPC_STEVE
+	dw Script_BeatSteve
+	dw Script_LostToSteve
+
+	db NPC_JACK
+	db NPC_JACK
+	dw Script_BeatJack
+	dw Script_LostToJack
+
+	db NPC_ROD
+	db NPC_ROD
+	dw Script_BeatRod
+	dw Script_LostToRod
+
+	db NPC_RONALD1
+	db NPC_RONALD1
+	dw Script_BeatRonald1InPokemonDome
+	dw Script_LostToRonald1InPokemonDome
+	db $00
+
+PokemonDomeLoadMap: ; f706 (3:7706)
+	INCROM $f706, $f718
+
+PokemonDomeCloseTextBox: ; f718 (3:7718)
+	INCROM $f718, $f71f
 
 Script_Courtney: ; f71f (3:771f)
 	INCROM $f71f, $f72a
@@ -5911,13 +6274,57 @@ Script_Jack: ; f735 (3:7735)
 	INCROM $f735, $f740
 
 Script_Rod: ; f740 (3:7740)
-	INCROM $f740, $fbdb
+	INCROM $f740, $f74b
+
+Preload_Courtney: ; f74b (3:774b)
+	INCROM $f74b, $f78c
+
+Preload_Steve: ; f78c (3:778c)
+	INCROM $f78c, $f7a3
+
+Preload_Jack: ; f7a3 (3:77a3)
+	INCROM $f7a3, $f7ba
+
+Preload_Rod: ; f7ba (3:77ba)
+	INCROM $f7ba, $f7d6
+
+Preload_Ronald1InPokemonDome: ; f7d6 (3:77d6)
+	INCROM $f7d6, $f93f
+
+Script_LostToCourtney: ; f93f (3:793f)
+	INCROM $f93f, $f95a
+
+Script_BeatCourtney: ; f95a (3:795a)
+	INCROM $f95a, $f9b7
+
+Script_LostToSteve: ; f9b7 (3:79b7)
+	INCROM $f9b7, $f9c8
+
+Script_BeatSteve: ; f9c8 (3:79c8)
+	INCROM $f9c8, $fa23
+
+Script_LostToJack: ; fa23 (3:7a23)
+	INCROM $fa23, $fa34
+
+Script_BeatJack: ; fa34 (3:7a34)
+	INCROM $fa34, $fa98
+
+Script_LostToRod: ; fa98 (3:7a98)
+	INCROM $fa98, $faae
+
+Script_BeatRod: ; faae (3:7aae)
+	INCROM $faae, $fb48
+
+Script_LostToRonald1InPokemonDome: ; fb48 (3:7b48)
+	INCROM $fb48, $fb53
+
+Script_BeatRonald1InPokemonDome: ; fb53 (3:7b53)
+	INCROM $fb53, $fbdb
 
 HallOfHonorLoadMap: ; fbdb (3:7bdb)
 	ld a, SFX_10
 	call PlaySFX
 	ret
-; 0xfbe1
 
 Script_fbe1: ; fbe1 (3:7be1)
 	INCROM $fbe1, $fbf1
@@ -6085,7 +6492,7 @@ NPCMovement_fce1: ; fce1 (3:7ce1)
 NPCMovement_fce3: ; fce3 (3:7ce3)
 	db NORTH | NO_MOVE
 	db $ff
-; fce5
+; 0xfce5
 
 rept $31b
 	db $ff

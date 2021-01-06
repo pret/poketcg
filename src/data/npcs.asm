@@ -710,7 +710,7 @@ Murray1NPCHeader:
 	db $00
 	db $12
 	db $00
-	dw Script_Murray1
+	dw Script_Murray
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID
@@ -723,7 +723,7 @@ Murray2NPCHeader:
 	db $03
 	db $15
 	db $10
-	dw Script_Murray2
+	dw Script_Murray
 	tx MurrayNPCName
 	db MURRAY_PIC
 	db STRANGE_PSYSHOCK_DECK_ID

@@ -38,9 +38,9 @@ MapScripts: ; 1162a (4:562a)
 	dw DeckMachineRoomObjects
 	dw NULL
 	dw NULL
-	dw $589f
+	dw DeckMachineRoomAfterDuel
 	dw NULL
-	dw $58ad
+	dw DeckMachineRoomCloseTextBox
 
 ; ISHIHARAS_HOUSE
 	dw IshiharasHouseNPCS
@@ -108,7 +108,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $5fd6
+	dw RockClubAfterDuel
 	dw NULL
 	dw NULL
 
@@ -168,7 +168,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $63e8
+	dw LightningClubAfterDuel
 	dw NULL
 	dw NULL
 
@@ -198,7 +198,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $66e7
+	dw GrassClubAfterDuel
 	dw NULL
 	dw NULL
 
@@ -217,7 +217,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw PsychicClubLobbyObjects
 	dw NULL
-	dw $6971
+	dw PsychicClubLobbyLoadMap
 	dw PsychicClubLobbyAfterDuel
 	dw NULL
 	dw NULL
@@ -228,7 +228,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $6a46
+	dw PsychicClubAfterDuel
 	dw NULL
 	dw NULL
 
@@ -258,7 +258,7 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $6bf1
+	dw ScienceClubAfterDuel
 	dw NULL
 	dw NULL
 
@@ -327,20 +327,20 @@ MapScripts: ; 1162a (4:562a)
 	dw NULL
 	dw PokemonDomeEntranceObjects
 	dw NULL
-	dw $7607
+	dw PokemonDomeEntranceLoadMap
 	dw NULL
 	dw NULL
-	dw $762a
+	dw PokemonDomeEntranceCloseTextBox
 
 ; POKEMON_DOME
 	dw PokemonDomeNPCS
 	dw NULL
 	dw NULL
 	dw NULL
-	dw $7706
-	dw $76e0
-	dw $76c6
-	dw $7718
+	dw PokemonDomeLoadMap
+	dw PokemonDomeAfterDuel
+	dw PokemonDomeMovePlayer
+	dw PokemonDomeCloseTextBox
 
 ; HALL_OF_HONOR
 	dw HallOfHonorNPCS
