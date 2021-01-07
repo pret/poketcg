@@ -494,7 +494,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 INCLUDE "data/overworld_indexes.asm"
 
 Func_10fbc: ; 10fbc (4:4fbc)
-	ld a, $25
+	ld a, SPRITE_OW_MAP_OAM
 	farcall CreateSpriteAndAnimBufferEntry
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
@@ -517,7 +517,7 @@ Func_10fde: ; 10fde (4:4fde)
 	ld [wd33d], a
 	xor a
 	ld [wd33e], a
-	ld a, $25
+	ld a, SPRITE_OW_MAP_OAM
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wd33b], a
@@ -859,7 +859,7 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wTempNPC], a
 	ld a, [hli]
-	ld [wd3b3], a
+	ld [wNPCSpriteID], a
 	ld a, [hli]
 	ld [wd3b1], a
 	ld a, [hli]
@@ -1175,8 +1175,8 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call DisplayPlayerNamingScreen
 	farcall Func_1996e
 	call EnableSRAM
-	ld a, [s0a007]
-	ld [wd421], a
+	ld a, [sAnimationsDisabled]
+	ld [wAnimationsDisabled], a
 	ld a, [s0a006]
 	ld [wTextSpeed], a
 	call DisableSRAM
@@ -1288,8 +1288,44 @@ endr
 Unknown_128fb: ; 128fb
 	INCROM $128fb, $1296e
 
+; disables all sprite animations
+; and clears memory related to sprites
 Func_1296e: ; 1296e (4:696e)
-	INCROM $1296e, $1299f
+	push af
+	ld a, [wd5d7]
+	or a
+	jr z, .asm_12977
+	pop af
+	ret
+
+.asm_12977
+	pop af
+	push bc
+	push hl
+	xor a
+	ld [wWhichSprite], a
+	call GetFirstSpriteAnimBufferProperty
+	lb bc, 0, SPRITE_ANIM_LENGTH
+
+; disable all sprite animations
+.loop_sprites
+	xor a
+	ld [hl], a ; set SPRITE_ANIM_ENABLED to 0
+	add hl, bc
+	ld a, [wWhichSprite]
+	inc a
+	ld [wWhichSprite], a
+	cp SPRITE_ANIM_BUFFER_CAPACITY
+	jr nz, .loop_sprites
+
+	call Func_12bf3
+	call ZeroObjectPositions
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop hl
+	pop bc
+	ret
+; 0x1299f
 
 ; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
 CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
@@ -1359,7 +1395,37 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	ret
 ; 0x129fa
 
-	INCROM $129fa, $12a21
+Func_129fa: ; 129fa (4:69fa)
+	ld a, [wWhichSprite]
+	push af
+	ld a, [wd5d7]
+	or a
+	jr z, .asm_12a06
+	pop af
+	ret
+.asm_12a06
+	pop af
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_ENABLED
+	call GetSpriteAnimBufferProperty_SpriteInA
+	ld [hl], $00
+	pop bc
+	pop hl
+	ret
+; 0x12a13
+
+Func_12a13: ; 12a13 (4:6a13)
+	ld a, [wWhichSprite]
+	push hl
+	push bc
+	ld c, SPRITE_ANIM_COUNTER
+	call GetSpriteAnimBufferProperty_SpriteInA
+	ld a, [hl]
+	pop bc
+	pop hl
+	ret
+; 0x12a21
 
 HandleAllSpriteAnimations: ; 12a21 (4:6a21)
 	push af
@@ -1415,7 +1481,7 @@ LoadSpriteDataForAnimationFrame: ; 12a5b (4:6a5b)
 	ld bc, SPRITE_ANIM_FLAGS - SPRITE_ANIM_TILE_ID
 	add hl, bc
 	ld a, [hl]
-	and 1 << SPRITE_ANIM_FLAG_SKIP_DRAW
+	and 1 << SPRITE_ANIM_FLAG_UNSKIPPABLE
 	jr nz, .quit
 	ld bc, SPRITE_ANIM_FRAME_BANK - SPRITE_ANIM_FLAGS
 	add hl, bc
@@ -1475,6 +1541,9 @@ StartNewSpriteAnimation: ; 12ab5 (4:6ab5)
 	cp [hl]
 	pop hl
 	ret z
+	; fallthrough
+
+StartSpriteAnimation: ; 12ac0 (4:6ac0)
 	push hl
 	call LoadSpriteAnimPointers
 	call HandleAnimationFrame
@@ -1482,7 +1551,26 @@ StartNewSpriteAnimation: ; 12ab5 (4:6ab5)
 	ret
 ; 0x12ac9
 
-	INCROM $12ac9, $12ae2
+Func_12ac9: ; 12ac9 (4:6ac9)
+	push bc
+	ld b, a
+	ld a, c
+	or a
+	ld a, b
+	pop bc
+	jr z, StartSpriteAnimation
+
+	push hl
+	push bc
+	call LoadSpriteAnimPointers
+	ld a, $ff
+	call GetAnimFramePointerFromOffset
+	pop bc
+	ld a, c
+	call SetAnimationCounterAndLoop
+	pop hl
+	ret
+; 0x12ae2
 
 ; Given an animation ID, fills the current sprite's Animation Pointer and Frame Offset Pointer
 ; a - Animation ID for current sprite
@@ -1508,6 +1596,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	ld a, [wTempPointer + 1]
 	ld [hli], a
 	ld b, a
+	; offset pointer = pointer + $3
 	ld a, $3
 	add c
 	ld [hli], a
@@ -1531,6 +1620,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	add hl, bc
 	ld a, [hli]
 	ld [wTempPointerBank], a
+
 	inc hl
 	inc hl
 	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
@@ -1541,6 +1631,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	ld [wTempPointer + 1], a
 	adc 0
 	ld [hl], a
+
 	ld de, wd23e
 	ld bc, SPRITE_FRAME_OFFSET_SIZE
 	call CopyBankedDataToDE
@@ -1582,11 +1673,12 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	pop bc
 	ret
 
-; Calls GetAnimationFramePointer after setting up wTempPointerBank and wd4ca
+; Calls GetAnimationFramePointer after setting up wTempPointerBank
+; and wVRAMTileOffset
 ; a - frame offset from Animation Data
 ; hl - beginning of Sprite Anim Buffer
 GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	push hl
 	push bc
 	push de
@@ -1619,7 +1711,7 @@ SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
 	ld bc, SPRITE_ANIM_POINTER - SPRITE_ANIM_COUNTER
 	add hl, bc
 	ld a, [hli]
-	add 3 ; skip base bank/pointer at beginning of data structure
+	add $3 ; skip base bank/pointer at beginning of data structure
 	ld c, a
 	ld a, [hli]
 	adc 0
@@ -1638,9 +1730,26 @@ Func_12ba7: ; 12ba7 (4:6ba7)
 	INCROM $12ba7, $12bcd
 
 Func_12bcd: ; 12bcd (4:6bcd)
-	INCROM $12bcd, $12c05
+	INCROM $12bcd, $12bf3
 
-; gets some value based on the sprite in b and wd5d8
+; clears wSpriteVRAMBufferSize and wSpriteVRAMBuffer
+Func_12bf3: ; 12bf3 (4:6bf3)
+	push hl
+	push bc
+	xor a
+	ld [wSpriteVRAMBufferSize], a
+	ld c, $40
+	ld hl, wSpriteVRAMBuffer
+.asm_12bfe
+	ld [hli], a
+	dec c
+	jr nz, .asm_12bfe
+	pop bc
+	pop hl
+	ret
+; 0x12c05
+
+; gets some value based on the sprite in a and wSpriteVRAMBuffer
 ; loads the sprites data if it doesn't already exist
 Func_12c05: ; 12c05 (4:6c05)
 	push hl
@@ -1648,9 +1757,9 @@ Func_12c05: ; 12c05 (4:6c05)
 	push de
 	ld b, a
 	ld d, $0
-	ld a, [wd618]
+	ld a, [wSpriteVRAMBufferSize]
 	ld c, a
-	ld hl, wd5d8
+	ld hl, wSpriteVRAMBuffer
 	or a
 	jr z, .tryToAddSprite
 
@@ -1661,40 +1770,43 @@ Func_12c05: ; 12c05 (4:6c05)
 	jr z, .foundSpriteMatch
 	inc hl
 	ld a, [hli]
-	add [hl]
+	add [hl] ; add tile size to tile offset
 	ld d, a
 	inc hl
 	dec c
 	jr nz, .findSpriteMatchLoop
+
 .tryToAddSprite
-	ld a, [wd618]
+	ld a, [wSpriteVRAMBufferSize]
 	cp $10
 	jr nc, .quitFail
 	inc a
-	ld [wd618], a
+	ld [wSpriteVRAMBufferSize], a ; increase number of entries by 1
 	inc hl
 	push hl
 	ld a, b
-	ld [hli], a
+	ld [hli], a ; store sprite index
 	call Func_12c4f
 	push af
 	ld a, d
-	ld [hli], a
+	ld [hli], a ; store tile offset
 	pop af
-	ld [hl], a
+	ld [hl], a ; store tile size
 	pop hl
+
 .foundSpriteMatch
 	dec hl
-	inc [hl]
+	inc [hl] ; mark this entry as valid
 	inc hl
 	inc hl
 	ld a, [hli]
 	add [hl]
 	cp $81
-	jr nc, .quitFail
+	jr nc, .quitFail ; exceeds total tile size
 	ld a, d
 	or a
 	jr .quitSucceed
+
 .quitFail
 	debug_ret
 	xor a
@@ -1705,12 +1817,17 @@ Func_12c05: ; 12c05 (4:6c05)
 	pop hl
 	ret
 
+; input:
+; a = sprite index within the data map
+; d = tile offset in VRAM
+; output:
+; a = number of tiles in sprite
 Func_12c4f: ; 12c4f (4:6c4f)
 	push af
 	xor a
 	ld [wd4cb], a
 	ld a, d
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	pop af
 	farcall Func_8025b
 	ret

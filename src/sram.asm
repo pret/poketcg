@@ -11,8 +11,12 @@ s0a005:: ; a005
 	ds $1
 s0a006:: ; a006
 	ds $1
-s0a007:: ; a007
+
+; store settings for animation enabled/disabled
+; 0 means enabled, 1 means disabled
+sAnimationsDisabled:: ; a007
 	ds $1
+
 s0a008:: ; a008
 	ds $1
 s0a009:: ; a009

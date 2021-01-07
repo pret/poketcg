@@ -10739,7 +10739,8 @@ GetPermissionByteOfMapPosition: ; 3946 (0:3946)
 	pop bc
 	ret
 
-Func_395a: ; 395a (0:395a)
+; copy c bytes of data from hl in bank wTempPointerBank to de, b times.
+CopyGfxDataFromTempBank: ; 395a (0:395a)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
@@ -11072,7 +11073,6 @@ Func_3b21: ; 3b21 (0:3b21)
 	ld a, BANK(Func_1c8bc)
 	call BankswitchROM
 	call Func_1c8bc
-	
 	pop af
 	call BankswitchROM
 	ret
@@ -11115,32 +11115,39 @@ CheckAnyAnimationPlaying: ; 3b52 (0:3b52)
 	pop hl
 	ret
 
+; input:
+; - a = animation index
 Func_3b6a: ; 3b6a (0:3b6a)
 	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
 	ld [wd4be], a
+
 	push hl
 	push bc
 	push de
-	ld a, $07
+	ld a, BANK(Func_1ca31)
 	call BankswitchROM
 	ld a, [wTempAnimation]
 	cp $61
 	jr nc, .asm_3b90
+
 	ld hl, wd4ad
 	ld a, [wd4ac]
 	cp [hl]
 	jr nz, .asm_3b90
 	call CheckAnyAnimationPlaying
 	jr nc, .asm_3b95
+
 .asm_3b90
-	call $4a31
-	jr .asm_3b9a
+	call Func_1ca31
+	jr .done
+
 .asm_3b95
-	call $48ef
-	jr .asm_3b9a
-.asm_3b9a
+	call Func_1c8ef
+	jr .done
+
+.done
 	pop de
 	pop bc
 	pop hl
@@ -11151,9 +11158,9 @@ Func_3b6a: ; 3b6a (0:3b6a)
 Func_3ba2: ; 3ba2 (0:3ba2)
 	ldh a, [hBankROM]
 	push af
-	ld a, $07
+	ld a, BANK(Func_1cac5)
 	call BankswitchROM
-	call $4ac5
+	call Func_1cac5
 	call Func_3cb4
 	pop af
 	call BankswitchROM
@@ -11348,6 +11355,7 @@ WaitForSongToFinish: ; 3c96 (0:3c96)
 Func_3ca0: ; 3ca0 (0:3ca0)
 	xor a
 	ld [wd5d7], a
+	; fallthrough
 
 Func_3ca4: ; 3ca4 (0:3ca4)
 	ldh a, [hBankROM]
@@ -11470,7 +11478,7 @@ DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 	and (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP) | (1 << OAM_PRIORITY)
 	or b
 	ld b, a
-	inc hl
+	inc hl ; unnecessary
 	call SetOneObjectAttributes
 .endCurrentIteration
 	pop hl
@@ -11507,6 +11515,7 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 	ld a, [wTempPointerBank]
 	call BankswitchROM
 	ld a, [hli]
+
 	push af
 	ld a, [wd4ca]
 	rlca
@@ -11518,6 +11527,7 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 	adc 0
 	ld d, a
 	pop af
+
 .loadPointer
 	add BANK(SpriteNullAnimationPointer)
 	pop hl
@@ -11535,6 +11545,8 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 	call BankswitchROM
 	ret
 
+; return hl pointing to the start of a sprite in wSpriteAnimBuffer.
+; the sprite is identified by its index in wWhichSprite.
 GetFirstSpriteAnimBufferProperty: ; 3db7 (0:3db7)
 	push bc
 	ld c, SPRITE_ANIM_ENABLED

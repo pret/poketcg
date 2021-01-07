@@ -81,6 +81,18 @@ gfx: MACRO
 	dw ($4000 * (BANK(\1) - BANK(CardGraphics)) + (\1 - $4000)) / 8
 ENDM
 
+frame_table: MACRO
+	db BANK(\1) - BANK(AnimData1) ; maybe use better reference for Bank20?
+	dw \1
+ENDM
+
+frame_data: MACRO
+	db \1 ; frame index
+	db \2 ; anim count
+	db \3 ; x translation
+	db \4 ; y translation
+ENDM
+
 tx: MACRO
 	dw \1_
 ENDM

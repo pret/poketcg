@@ -1055,10 +1055,11 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
+
 	ld l, a
 	ld h, 0
 	add hl, hl
-	ld de, PointerTable_MoveAnimation
+	ld de, PointerTable_AttackAnimation
 .asm_4fa8
 	add hl, de
 	ld e, [hl]
@@ -1073,8 +1074,8 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	call Func_3b21
 	pop de
 	push de
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ld a, $01
 	ld [$d4b3], a
 	xor a
@@ -1129,17 +1130,19 @@ Func_19013: ; 19013 (6:5013)
 Func_19014: ; 19014 (6:5014)
 	ld a, [de]
 	inc de
-	cp $09
+	cp DUEL_ANIM_SHOW_DAMAGE
 	jr z, .asm_502b
-	cp $fa
+	cp DUEL_ANIM_SHAKE1
 	jr z, .asm_5057
-	cp $fb
+	cp DUEL_ANIM_SHAKE2
 	jr z, .asm_505d
-	cp $fc
+	cp DUEL_ANIM_SHAKE3
 	jr z, .asm_5063
-.asm_5026
+
+.play_anim
 	call Func_3b6a
 	jr Func_18f9c.asm_4fd4
+
 .asm_502b
 	ld a, $97
 	call Func_3b6a
@@ -1178,13 +1181,13 @@ Func_19014: ; 19014 (6:5014)
 	ldh a, [hWhoseTurn]
 	cp $c2
 	ld a, c
-	jr z, .asm_5026
+	jr z, .play_anim
 	ld a, [wDuelType]
 	cp $00
 	ld a, c
-	jr z, .asm_5026
+	jr z, .play_anim
 	ld a, b
-	jr .asm_5026
+	jr .play_anim
 
 Func_19079: ; 19079 (6:5079)
 	ld a, [de]
@@ -1212,8 +1215,8 @@ Func_1909d: ; 1909d (6:509d)
 	jr z, .asm_50ad
 	cp $01
 	ret nz
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ret
 .asm_50ad
 	ld a, [wd4b0]
@@ -1239,24 +1242,24 @@ Func_1909d: ; 1909d (6:509d)
 .asm_50d2
 	ld l, $04
 	ld h, $c2
-	ld a, $01
+	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50da
 	ld l, $04
 	ld h, $c3
-	ld a, $01
+	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50e2
 	ld l, $05
 	ld h, $c3
-	ld a, $02
+	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 	jr .asm_50f0
 .asm_50ea
 	ld l, $05
 	ld h, $c2
-	ld a, $02
+	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 .asm_50f0:
-	ld [wd4ae], a
+	ld [wDuelAnimationScreen], a
 	ret
 
 ; this part is not perfectly analyzed.
@@ -1267,8 +1270,8 @@ Func_1909d: ; 1909d (6:509d)
 Func_190fb: ; 190fb (6:50fb)
 	cp $01
 	jr nz, .asm_510e
-	ld a, $00
-	ld [wd4ae], a
+	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
+	ld [wDuelAnimationScreen], a
 	ld a, [wDuelDisplayedScreen]
 	cp $01
 	jr z, .asm_510e
@@ -1366,7 +1369,7 @@ Func_19168: ; 19168 (6:5168)
 
 	ret
 
-INCLUDE "data/move_animations.asm"
+INCLUDE "data/attack_animations.asm"
 
 	INCROM $19674, $1991f
 
@@ -1466,7 +1469,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [s0a006], a
 	ld [wTextSpeed], a
 	xor a
-	ld [s0a007], a
+	ld [sAnimationsDisabled], a
 	ld [s0a009], a
 	ld [s0a004], a
 	ld [s0a005], a
