@@ -11331,7 +11331,7 @@ DivideBCbyDE: ; 3c5a (0:3c5a)
 	jr nz, .asm_3c63
 	ret
 
-CallPlaySong: ; 3c83 (0:3c83)
+ScriptPlaySong: ; 3c83 (0:3c83)
 	call PlaySong
 	ret
 

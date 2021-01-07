@@ -3086,9 +3086,9 @@ Func_d408: ; d408 (3:5408)
 	ld [wd111], a
 	jp IncreaseScriptPointerBy2
 
-Func_d40f: ; d40f (3:540f)
+ScriptCommand_PlaySong: ; d40f (3:540f)
 	ld a, c
-	call CallPlaySong
+	call ScriptPlaySong
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlaySFX: ; d416 (3:5416)
@@ -3332,15 +3332,67 @@ ChallengeMachineObjectTable: ; d572 (3:5572)
 Script_ChallengeMachine: ; d57d (3:557d)
 	start_script
 	run_command Func_ccdc
-	tx Text05bd
+	tx ItsTheChallengeMachineText
 	run_command Func_d43d
 	quit_script_fully
 
 Script_Tech1: ; d583 (3:5583)
-	INCROM $d583, $d5ca
+	lb bc, 0, EnergyCardListEnd - EnergyCardList
+	ld hl, EnergyCardList
+.count_loop
+	ld a, [hli]
+	call GetCardCountInCollection
+	add b
+	ld b, a
+	dec c
+	jr nz, .count_loop
+	ld a, b
+	cp 10
+	jr c, .low_on_energies
+
+	start_script
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
+	print_variable_text Tech1MasterMedalExplanationText, Tech1AutoDeckMachineExplanationText
+	quit_script_fully
+
+.low_on_energies
+	ld c, EnergyCardListEnd - EnergyCardList
+	ld hl, EnergyCardList
+.next_energy_card
+	ld b, 10
+	ld a, [hli]
+.add_loop
+	push af
+	call AddCardToCollection
+	pop af
+	dec b
+	jr nz, .add_loop
+	dec c
+	jr nz, .next_energy_card
+
+	start_script
+	print_text_string Tech1FewEnergyCardsText
+	pause_song
+	play_song MUSIC_BOOSTER_PACK
+	print_text_string Tech1ReceivedEnergyCardsText
+	wait_for_song_to_finish
+	resume_song
+	print_text_quit_fully Tech1GoodbyeText
+
+EnergyCardList: ; d5c4 (3:55c4)
+	db GRASS_ENERGY
+	db FIRE_ENERGY
+	db WATER_ENERGY
+	db LIGHTNING_ENERGY
+	db FIGHTING_ENERGY
+	db PSYCHIC_ENERGY
+EnergyCardListEnd:
 
 Script_Tech2: ; d5ca (3:55ca)
-	INCROM $d5ca, $d5d5
+	start_script
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
+	print_variable_text Tech2LegendaryCardsExplanationText, Tech2LegendaryCardsCongratsText
+	quit_script_fully
 
 Script_Tech3: ; d5d5 (3:55d5)
 	INCROM $d5d5, $d5e0
@@ -3513,8 +3565,7 @@ AfterTutorialBattleScript: ; d834 (3:5834)
 	print_text_string Text05f4
 	close_text_box
 	pause_song
-	run_command Func_d40f
-	try_give_medal_pc_packs
+	play_song MUSIC_BOOSTER_PACK
 	run_command Func_ccdc
 	tx Text05f5
 	wait_for_song_to_finish

@@ -77,7 +77,7 @@ ENDM
 	const Func_d3e0_index                                                    ; $45
 	const Func_d3fe_index                                                    ; $46
 	const Func_d408_index                                                    ; $47
-	const Func_d40f_index                                                    ; $48
+	const ScriptCommand_PlaySong_index                                       ; $48
 	const ScriptCommand_PlaySFX_index                                        ; $49
 	const ScriptCommand_PauseSong_index                                      ; $4a
 	const ScriptCommand_ResumeSong_index                                     ; $4b
@@ -344,6 +344,12 @@ ENDM
 ; Nothing.
 script_nop: MACRO
 	run_command ScriptCommand_nop
+ENDM
+
+; Plays a song
+play_song: MACRO
+	run_command ScriptCommand_PlaySong
+	db \1 ; Song ID (ex MUSIC_BOOSTER_PACK)
 ENDM
 
 ; Plays a sound effect

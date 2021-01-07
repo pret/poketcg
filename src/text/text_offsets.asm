@@ -1470,14 +1470,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text05ba                                           ; 0x05ba
 	textpointer Text05bb                                           ; 0x05bb
 	textpointer Text05bc                                           ; 0x05bc
-	textpointer Text05bd                                           ; 0x05bd
-	textpointer Text05be                                           ; 0x05be
-	textpointer Text05bf                                           ; 0x05bf
-	textpointer Text05c0                                           ; 0x05c0
-	textpointer Text05c1                                           ; 0x05c1
-	textpointer Text05c2                                           ; 0x05c2
-	textpointer Text05c3                                           ; 0x05c3
-	textpointer Text05c4                                           ; 0x05c4
+	textpointer ItsTheChallengeMachineText                         ; 0x05bd
+	textpointer Tech1MasterMedalExplanationText                    ; 0x05be
+	textpointer Tech1AutoDeckMachineExplanationText                ; 0x05bf
+	textpointer Tech1FewEnergyCardsText                            ; 0x05c0
+	textpointer Tech1ReceivedEnergyCardsText                       ; 0x05c1
+	textpointer Tech1GoodbyeText                                   ; 0x05c2
+	textpointer Tech2LegendaryCardsExplanationText                 ; 0x05c3
+	textpointer Tech2LegendaryCardsCongratsText                    ; 0x05c4
 	textpointer Text05c5                                           ; 0x05c5
 	textpointer Text05c6                                           ; 0x05c6
 	textpointer Text05c7                                           ; 0x05c7

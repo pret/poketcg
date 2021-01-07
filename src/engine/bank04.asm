@@ -1067,7 +1067,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw Func_d3e0
 	dw Func_d3fe
 	dw Func_d408
-	dw Func_d40f
+	dw ScriptCommand_PlaySong
 	dw ScriptCommand_PlaySFX
 	dw ScriptCommand_PauseSong
 	dw ScriptCommand_ResumeSong
