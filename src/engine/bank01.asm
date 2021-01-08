@@ -5703,7 +5703,7 @@ Func_6435:
 	ld hl, wDuelTempList + 1
 	add hl, de
 	ld a, [hld]
-	cp POKEMON_POWER
+	cp $04
 	jr nz, .asm_6447
 	ld a, [hl]
 	ldh [hTempCardIndex_ff98], a
@@ -5745,7 +5745,7 @@ Func_64b0: ; 64b0 (1:64b0)
 	call LoadDuelCheckPokemonScreenTiles
 	ld de, wDuelTempList
 	call SetListPointer
-	ld a, LOW(wPlayerNumberOfPokemonInPlayArea)
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetTurnDuelistVariable
 	ld c, a
 	ld b, $00
@@ -5785,7 +5785,7 @@ Func_64fc: ; 64fc (1:64fc)
 	ld a, [wCurPlayAreaY]
 	inc a
 	ld e, a
-	ld d, POKEMON_POWER
+	ld d, $04
 	ld hl, wLoadedCard1Move1Name
 	call InitTextPrinting_ProcessTextFromPointerToID
 	ret
