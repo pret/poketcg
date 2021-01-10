@@ -477,13 +477,6 @@ zero_out_flag_value: MACRO
 	db \1 ; flag (ex EVENT_FLAG_11)
 ENDM
 
-; Jumps to a script position if a flag is zero
-jump_if_flag_zero_2: MACRO
-	run_command ScriptCommand_JumpIfFlagZero2
-	db \1 ; flag (ex EVENT_FLAG_11)
-	dw \2 ; Script Label
-ENDM
-
 ; Jumps to a script position if a flag is nonzero
 jump_if_flag_nonzero_2: MACRO
 	run_command ScriptCommand_JumpIfFlagNonzero2
@@ -491,8 +484,15 @@ jump_if_flag_nonzero_2: MACRO
 	dw \2 ; Script Label
 ENDM
 
+; Jumps to a script position if a flag is zero
+jump_if_flag_zero_2: MACRO
+	run_command ScriptCommand_JumpIfFlagZero2
+	db \1 ; flag (ex EVENT_FLAG_11)
+	dw \2 ; Script Label
+ENDM
+
 ; Increments given flags value (truncates the new value)
-script_increment_flag_value: MACRO
+increment_flag_value: MACRO
 	run_command ScriptCommand_IncrementFlagValue
 	db \1 ; flag (ex EVENT_FLAG_11)
 ENDM

@@ -2425,7 +2425,11 @@ Func_cfd4: ; cfd4 (3:4fd4)
 	jp IncreaseScriptPointerBy1
 
 Data_d006: ; d006 (3:5006)
-	INCROM $d006, $d00b
+	db GRAVELER
+	db OMASTAR
+	db PARASECT
+	db RAPIDASH
+	db WEEZING
 
 Func_d00b: ; d00b (3:500b)
 	sla c
@@ -2813,16 +2817,16 @@ ScriptCommand_ChooseDeckToDuelAgainstMultichoice: ; d24c (3:524c)
 
 .multichoice_menu_args ; d25e
 	dw NULL ; NPC title for textbox under menu
-	tx Text03f9 ; text for textbox under menu
+	tx SelectDeckToDuelText ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst ; location of table configuration in bank 4
 	db $03 ; the value to return when b is pressed
 	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
 .text_entries ; d269
-	tx Text03f6
-	tx Text03f7
-	tx Text03f8
+	tx LightningAndFireDeckChoiceText
+	tx WaterAndFightingDeckChoiceText
+	tx GrassAndPsychicDeckChoiceText
 
 	dw NULL
 
@@ -2834,16 +2838,16 @@ ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 
 .multichoice_menu_args ; d27b
 	dw NULL ; NPC title for textbox under menu
-	tx Text03fd ; text for textbox under menu
+	tx SelectDeckToTakeText ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
 	db $00 ; the value to return when b is pressed
 	dw wd693 ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
 .text_entries
-	tx Text03fa
-	tx Text03fb
-	tx Text03fc
+	tx CharmanderAndFriendsDeckChoiceText
+	tx SquirtleAndFriendsDeckChoiceText
+	tx BulbasaurAndFriendsDeckChoiceText
 
 ; displays a textbox with multiple choices and a cursor.
 ; takes as an argument in h1 a pointer to a table
@@ -3395,28 +3399,156 @@ Script_Tech2: ; d5ca (3:55ca)
 	quit_script_fully
 
 Script_Tech3: ; d5d5 (3:55d5)
-	INCROM $d5d5, $d5e0
+	start_script
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
+	print_variable_text Tech3BoosterPackExplanationText, Tech3LegendaryCardsCongratsText
+	quit_script_fully
 
 Script_Tech4: ; d5e0 (3:55e0)
-	INCROM $d5e0, $d5eb
+	start_script
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
+	print_variable_text Tech4ClubsExplanationText, Tech4DefeatedTheGrandMastersText
+	quit_script_fully
 
 Preload_Tech5: ; d5eb (3:55eb)
-	INCROM $d5eb, $d5f9
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	or a
+	jr z, .skip
+	ld hl, wLoadNPCXPos
+	inc [hl]
+	inc [hl]
+.skip
+	scf
+	ret
 
 Script_Tech5: ; d5f9 (3:55f9)
-	INCROM $d5f9, $d604
+	start_script
+	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
+	print_variable_text Tech5DiaryAndEmailExplanationText, Tech5ChallengeMachineExplanationText
+	quit_script_fully
 
 Preload_Sam: ; d604 (3:5604)
-	INCROM $d604, $d61d
+	get_flag_value EVENT_FLAG_3E
+	cp $01
+	jr nc, .skip
+	ld a, $0a
+	ld [wLoadNPCXPos], a
+	ld a, $08
+	ld [wLoadNPCYPos], a
+	ld a, SOUTH
+	ld [wLoadNPCDirection], a
+.skip
+	scf
+	ret
 
 Script_Sam: ; d61d (3:561d)
-	INCROM $d61d, $d68a
+	start_script
+	show_sam_normal_multichoice
+	close_text_box
+	jump_if_flag_equal EVENT_FLAG_75, $00, .ows_d63b
+	jump_if_flag_equal EVENT_FLAG_75, $02, Script_d6b0
+	jump_if_flag_equal EVENT_FLAG_75, $03, .ows_d637
+	print_text_string Text05cb
+	ask_question_jump Text05cc, .ows_d647
+.ows_d637
+	print_text_string Text05cd
+	quit_script_fully
+
+.ows_d63b
+	print_text_string Text05ce
+	ask_question_jump Text05cf, .ows_d647
+	print_text_string Text05d0
+	quit_script_fully
+
+.ows_d647
+	close_text_box
+	jump_if_player_coords_match 4, 12, .ows_above_sam
+	jump_if_player_coords_match 2, 14, .ows_left_of_sam
+; ows_below_sam
+	set_player_direction WEST
+	move_player WEST, 1
+	set_player_direction NORTH
+	move_player NORTH, 1
+.ows_left_of_sam
+	set_player_direction NORTH
+	move_player NORTH, 1
+	set_player_direction EAST
+	move_player EAST, 1
+.ows_above_sam
+	set_player_direction EAST
+	move_player EAST, 1
+	move_player EAST, 1
+	move_player EAST, 1
+	set_player_direction SOUTH
+	move_player SOUTH, 1
+	set_player_direction WEST
+	move_active_npc NPCMovement_d889
+	jump_if_flag_equal EVENT_FLAG_75, $00, .ows_d685
+	start_battle PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
+
+.ows_d685
+	start_battle PRIZES_2, SAMS_NORMAL_DECK_ID, MUSIC_DUEL_THEME_1
+	quit_script_fully
 
 Script_BeatSam: ; d68a (3:568a)
-	INCROM $d68a, $d69f
+	start_script
+	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_d82d
+	jump_if_flag_equal EVENT_FLAG_75, $01, Script_d6ad
+	print_text_string Text05d1
+	give_booster_packs BOOSTER_ENERGY_RANDOM, NO_BOOSTER, NO_BOOSTER
+	print_text_quit_fully Text05d2
 
 Script_LostToSam: ; d69f (3:569f)
-	INCROM $d69f, $d710
+	start_script
+	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_d82d
+	jump_if_flag_equal EVENT_FLAG_75, $01, Script_d6ad
+	print_text_quit_fully Text05d3
+
+Script_d6ad:
+	print_text_quit_fully Text05d4
+
+Script_d6b0:
+	print_text_string Text05d5
+.ows_d6b3
+	close_text_box
+	show_sam_tutorial_multichoice
+	close_text_box
+	jump_if_flag_equal EVENT_FLAG_75, $07, Script_Sam.ows_d637
+	jump_if_flag_equal EVENT_FLAG_75, $01, .ows_d6df
+	jump_if_flag_equal EVENT_FLAG_75, $02, .ows_d6e5
+	jump_if_flag_equal EVENT_FLAG_75, $03, .ows_d6eb
+	jump_if_flag_equal EVENT_FLAG_75, $04, .ows_d6f1
+	jump_if_flag_equal EVENT_FLAG_75, $05, .ows_d6f7
+	jump_if_flag_equal EVENT_FLAG_75, $06, .ows_d6fd
+	print_text_string Text05d6
+	script_jump .ows_d6b3
+.ows_d6df
+	print_text_string Text05d7
+	script_jump .ows_d6b3
+.ows_d6e5
+	print_text_string Text05d8
+	script_jump .ows_d6b3
+.ows_d6eb
+	print_text_string Text05d9
+	script_jump .ows_d6b3
+.ows_d6f1
+	print_text_string Text05da
+	script_jump .ows_d6b3
+.ows_d6f7
+	print_text_string Text05db
+	script_jump .ows_d6b3
+.ows_d6fd
+	print_text_string Text05dc
+	script_jump .ows_d6b3
+
+Func_d703: ; d703 (3:5703)
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	or a
+	ret z
+	ld a, $0a
+	farcall Func_80ba4
+	ret
 
 Preload_DrMason: ; d710 (3:5710)
 	INCROM $d710, $d727
@@ -3532,9 +3664,12 @@ Script_d827: ; d827 (3:5827)
 	start_script
 	start_battle PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
-; 0xd82d
 
-	INCROM $d82d, $d834
+Script_d82d:
+	close_advanced_text_box
+	set_next_npc_and_script $01, AfterTutorialBattleScript
+	end_script_loop
+	ret
 
 AfterTutorialBattleScript: ; d834 (3:5834)
 	start_script
@@ -3590,6 +3725,7 @@ NPCMovement_d882: ; d882 (3:5882)
 	db WEST
 	db WEST
 	db SOUTH
+NPCMovement_d889: ; d889 (3:5889)
 	db EAST | NO_MOVE
 	db $ff
 
@@ -3887,7 +4023,7 @@ Script_Imakuni: ; dd0d (3:5d0d)
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $07, .giveBoosters
-	script_increment_flag_value EVENT_IMAKUNI_WIN_COUNT
+	increment_flag_value EVENT_IMAKUNI_WIN_COUNT
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $03, .threeWins
 	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $06, .sixWins
 .giveBoosters

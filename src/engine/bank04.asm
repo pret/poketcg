@@ -74,7 +74,7 @@ Medal_1029e: ; 1029e (4:429e)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_1030b
+	ld hl, MasterMedalNames
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -104,8 +104,15 @@ Medal_1029e: ; 1029e (4:429e)
 	ld [wd291], a
 	ret
 
-Unknown_1030b: ; 1030b (4:430b)
-	INCROM $1030b, $1031b
+MasterMedalNames: ; 1030b (4:430b)
+	tx GrassClubMapNameText
+	tx ScienceClubMapNameText
+	tx FireClubMapNameText
+	tx WaterClubMapNameText
+	tx LightningClubMapNameText
+	tx PsychicClubMapNameText
+	tx RockClubMapNameText
+	tx FightingClubMapNameText
 
 BoosterPack_1031b: ; 1031b (4:431b)
 	ld c, a
@@ -1105,11 +1112,11 @@ MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
-	tx Text03f6     ; text id to print next
+	tx LightningAndFireDeckChoiceText     ; text id to print next
 	db $06, $04     ; x, y coordinate to start printing next text
-	tx Text03f7     ; text id to print next
+	tx WaterAndFightingDeckChoiceText     ; text id to print next
 	db $06, $06     ; x, y coordinate to start printing next text
-	tx Text03f8     ; text id to print next 
+	tx GrassAndPsychicDeckChoiceText      ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
@@ -1122,11 +1129,11 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
-	tx Text03fa     ; text id to print next
+	tx CharmanderAndFriendsDeckChoiceText     ; text id to print next
 	db $06, $04     ; x, y coordinate to start printing next text
-	tx Text03fb     ; text id to print next
+	tx SquirtleAndFriendsDeckChoiceText       ; text id to print next
 	db $06, $06     ; x, y coordinate to start printing next text
-	tx Text03fc     ; text id to print next
+	tx BulbasaurAndFriendsDeckChoiceText      ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
@@ -1142,7 +1149,7 @@ SamNormalMultichoice_ConfigurationTable: ;1227d
 	tx Text03ff     ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $0b, $02     ; cursor starting x, y
-	db $02          ; number of tiles the cursor moves per toggle 
+	db $02          ; number of tiles the cursor moves per toggle
 	db $04          ; cursor max index
 	db $0f          ; cursor image
 

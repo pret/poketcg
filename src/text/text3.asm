@@ -1916,36 +1916,36 @@ FlyingPikachuTradeCardName: ; 3f8f7 (f:78f7)
 	text "<Lv>12 FLYING PIKACHU"
 	done
 
-Text03f6: ; 3f90c (f:790c)
+LightningAndFireDeckChoiceText: ; 3f90c (f:790c)
 	text "Lightning & Fire Deck"
 	done
 
-Text03f7: ; 3f923 (f:7923)
+WaterAndFightingDeckChoiceText: ; 3f923 (f:7923)
 	text "Water & Fighting Deck"
 	done
 
-Text03f8: ; 3f93a (f:793a)
+GrassAndPsychicDeckChoiceText: ; 3f93a (f:793a)
 	text "Grass & Psychic Deck"
 	done
 
-Text03f9: ; 3f950 (f:7950)
+SelectDeckToDuelText: ; 3f950 (f:7950)
 	text "Please select the Deck"
 	line "you wish to Duel against."
 	done
 
-Text03fa: ; 3f982 (f:7982)
+CharmanderAndFriendsDeckChoiceText: ; 3f982 (f:7982)
 	text "CHARMANDER & Friends Deck"
 	done
 
-Text03fb: ; 3f99d (f:799d)
+SquirtleAndFriendsDeckChoiceText: ; 3f99d (f:799d)
 	text "SQUIRTLE & Friends Deck"
 	done
 
-Text03fc: ; 3f9b6 (f:79b6)
+BulbasaurAndFriendsDeckChoiceText: ; 3f9b6 (f:79b6)
 	text "BULBASAUR & Friends Deck"
 	done
 
-Text03fd: ; 3f9d0 (f:79d0)
+SelectDeckToTakeText: ; 3f9d0 (f:79d0)
 	text "Please select the Deck you want."
 	done
 

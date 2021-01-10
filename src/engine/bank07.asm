@@ -1160,7 +1160,7 @@ Func_1cc03: ; 1cc03 (7:4c03)
 	ret
 ; 0x1cc2f
 
-.Func_1cc2f 
+.Func_1cc2f
 	ld a, $4e
 .loop
 	inc a

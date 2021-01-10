@@ -495,7 +495,7 @@ ApplyAndAnimateHPRecovery: ; 2c221 (b:4221)
 	ld e, a
 	ld a, 0
 	adc d
-	ld d, a 
+	ld d, a
 	; de = damage dealt + current HP
 	; bc = max HP of card
 	call CompareDEtoBC
@@ -9097,7 +9097,7 @@ MorphEffect: ; 2eff6 (b:6ff6)
 .successful
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
-	or a 
+	or a
 	jr z, .skip_discard_stage_below
 
 ; if this is a stage 1 Pokemon (in case it's used

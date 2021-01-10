@@ -1015,14 +1015,14 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DragoniteLegendaryCardName                         ; 0x03f3
 	textpointer SuperEnergyRetrievalTradeCardName                  ; 0x03f4
 	textpointer FlyingPikachuTradeCardName                         ; 0x03f5
-	textpointer Text03f6                                           ; 0x03f6
-	textpointer Text03f7                                           ; 0x03f7
-	textpointer Text03f8                                           ; 0x03f8
-	textpointer Text03f9                                           ; 0x03f9
-	textpointer Text03fa                                           ; 0x03fa
-	textpointer Text03fb                                           ; 0x03fb
-	textpointer Text03fc                                           ; 0x03fc
-	textpointer Text03fd                                           ; 0x03fd
+	textpointer LightningAndFireDeckChoiceText                     ; 0x03f6
+	textpointer WaterAndFightingDeckChoiceText                     ; 0x03f7
+	textpointer GrassAndPsychicDeckChoiceText                      ; 0x03f8
+	textpointer SelectDeckToDuelText                               ; 0x03f9
+	textpointer CharmanderAndFriendsDeckChoiceText                 ; 0x03fa
+	textpointer SquirtleAndFriendsDeckChoiceText                   ; 0x03fb
+	textpointer BulbasaurAndFriendsDeckChoiceText                  ; 0x03fc
+	textpointer SelectDeckToTakeText                               ; 0x03fd
 	textpointer HowCanIHelpText                                    ; 0x03fe
 	textpointer Text03ff                                           ; 0x03ff
 	textpointer Text0400                                           ; 0x0400
@@ -1478,12 +1478,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Tech1GoodbyeText                                   ; 0x05c2
 	textpointer Tech2LegendaryCardsExplanationText                 ; 0x05c3
 	textpointer Tech2LegendaryCardsCongratsText                    ; 0x05c4
-	textpointer Text05c5                                           ; 0x05c5
-	textpointer Text05c6                                           ; 0x05c6
-	textpointer Text05c7                                           ; 0x05c7
-	textpointer Text05c8                                           ; 0x05c8
-	textpointer Text05c9                                           ; 0x05c9
-	textpointer Text05ca                                           ; 0x05ca
+	textpointer Tech3BoosterPackExplanationText                    ; 0x05c5
+	textpointer Tech3LegendaryCardsCongratsText                    ; 0x05c6
+	textpointer Tech4ClubsExplanationText                          ; 0x05c7
+	textpointer Tech4DefeatedTheGrandMastersText                   ; 0x05c8
+	textpointer Tech5DiaryAndEmailExplanationText                  ; 0x05c9
+	textpointer Tech5ChallengeMachineExplanationText               ; 0x05ca
 	textpointer Text05cb                                           ; 0x05cb
 	textpointer Text05cc                                           ; 0x05cc
 	textpointer Text05cd                                           ; 0x05cd
