@@ -2,6 +2,16 @@
 
 import argparse
 
+from constants import boosters
+from constants import cards
+from constants import decks
+from constants import directions
+from constants import events
+from constants import maps
+from constants import npcs
+from constants import sfxs
+from constants import songs
+
 args = None
 rom = None
 
@@ -14,18 +24,18 @@ script_commands = {
 	0x02: { "name": "print_text_string",                       "params": [ "text" ] },
 	0x03: { "name": "Func_ccdc",                               "params": [ "text" ] }, # print text and ???
 	0x04: { "name": "ask_question_jump",                       "params": [ "text", "label" ] },
-	0x05: { "name": "start_battle",                            "params": [ "byte", "byte", "byte" ] }, # prizes, deck, song
+	0x05: { "name": "start_battle",                            "params": [ "prizes", "deck", "song" ] },
 	0x06: { "name": "print_variable_text",                     "params": [ "text", "text" ] },
 	0x07: { "name": "Func_cda8",                               "params": [ "text", "text" ] }, # print variable text and ???
 	0x08: { "name": "print_text_quit_fully",                   "params": [ "text" ] },
 	0x09: { "name": "Func_cdcb",                               "params": [] },
 	0x0a: { "name": "move_active_npc_by_direction",            "params": [ "movement_table" ] },
 	0x0b: { "name": "close_text_box",                          "params": [] },
-	0x0c: { "name": "give_booster_packs",                      "params": [ "byte", "byte", "byte" ] }, # booster, booster, booster
-	0x0d: { "name": "jump_if_card_owned",                      "params": [ "byte", "label" ] }, # card
-	0x0e: { "name": "jump_if_card_in_collection",              "params": [ "byte", "label" ] }, # card
-	0x0f: { "name": "give_card",                               "params": [ "byte" ] }, # card
-	0x10: { "name": "take_card",                               "params": [ "byte" ] }, # card
+	0x0c: { "name": "give_booster_packs",                      "params": [ "booster", "booster", "booster" ] },
+	0x0d: { "name": "jump_if_card_owned",                      "params": [ "card", "label" ] },
+	0x0e: { "name": "jump_if_card_in_collection",              "params": [ "card", "label" ] },
+	0x0f: { "name": "give_card",                               "params": [ "card" ] },
+	0x10: { "name": "take_card",                               "params": [ "card" ] },
 	0x11: { "name": "Func_cf53",                               "params": [ "label" ] }, # jump if any energy cards in collection
 	0x12: { "name": "Func_cf7b",                               "params": [] }, # remove all energy cards from collection
 	0x13: { "name": "jump_if_enough_cards_owned",              "params": [ "word_decimal", "label" ] },
@@ -40,9 +50,9 @@ script_commands = {
 	0x1c: { "name": "try_give_medal_pc_packs",                 "params": [] },
 	0x1d: { "name": "set_player_direction",                    "params": [ "direction" ] },
 	0x1e: { "name": "move_player",                             "params": [ "direction", "byte_decimal" ] },
-	0x1f: { "name": "show_card_received_screen",               "params": [ "byte" ] }, # card
-	0x20: { "name": "set_dialog_npc",                          "params": [ "byte" ] }, # npc
-	0x21: { "name": "set_next_npc_and_script",                 "params": [ "byte", "label" ] }, # npc
+	0x1f: { "name": "show_card_received_screen",               "params": [ "card" ] },
+	0x20: { "name": "set_dialog_npc",                          "params": [ "npc" ] },
+	0x21: { "name": "set_next_npc_and_script",                 "params": [ "npc", "label" ] },
 	0x22: { "name": "Func_d095",                               "params": [ "byte", "byte", "byte" ] }, # LOADED_NPC_FIELD_05 and LOADED_NPC_FIELD_06
 	0x23: { "name": "Func_d0be",                               "params": [ "byte", "byte" ] }, # coords
 	0x24: { "name": "do_frames",                               "params": [ "byte_decimal" ] },
@@ -50,11 +60,11 @@ script_commands = {
 	0x26: { "name": "jump_if_player_coords_match",             "params": [ "byte_decimal", "byte_decimal", "label" ] },
 	0x27: { "name": "move_active_npc",                         "params": [ "movement" ] },
 	0x28: { "name": "give_one_of_each_trainer_booster",        "params": [] },
-	0x29: { "name": "Func_d103",                               "params": [ "byte", "label" ] }, # npc, jump if npc loaded
-	0x2a: { "name": "Func_d125",                               "params": [ "byte" ] }, # give medal
+	0x29: { "name": "Func_d103",                               "params": [ "npc", "label" ] }, # jump if npc loaded
+	0x2a: { "name": "Func_d125",                               "params": [ "event" ] }, # give medal
 	0x2b: { "name": "Func_d135",                               "params": [ "byte" ] }, # load current map name into tx ram slot
 	0x2c: { "name": "Func_d16b",                               "params": [ "byte" ] }, # load current npc name into tx ram slot
-	0x2d: { "name": "Func_cd4f",                               "params": [ "byte", "byte", "byte" ] }, # prizes, deck, song
+	0x2d: { "name": "Func_cd4f",                               "params": [ "prizes", "deck", "song" ] },
 	0x2e: { "name": "Func_cd94",                               "params": [ "text", "text", "text" ] },
 	0x2f: { "name": "move_wram_npc",                           "params": [ "movement" ] },
 	0x30: { "name": "Func_cdd8",                               "params": [] },
@@ -67,8 +77,8 @@ script_commands = {
 	0x37: { "name": "choose_deck_to_duel_against_multichoice", "params": [] },
 	0x38: { "name": "open_deck_machine",                       "params": [ "byte" ] },
 	0x39: { "name": "choose_starter_deck_multichoice",         "params": [] },
-	0x3a: { "name": "enter_map",                               "params": [ "byte", "byte", "byte_decimal", "byte_decimal", "direction" ] },
-	0x3b: { "name": "move_arbitrary_npc",                      "params": [ "byte", "movement" ] },
+	0x3a: { "name": "enter_map",                               "params": [ "byte", "map", "byte_decimal", "byte_decimal", "direction" ] },
+	0x3b: { "name": "move_arbitrary_npc",                      "params": [ "npc", "movement" ] },
 	0x3c: { "name": "Func_d209",                               "params": [] }, # pick legendary card
 	0x3d: { "name": "Func_d38f",                               "params": [ "byte" ] },
 	0x3e: { "name": "Func_d396",                               "params": [ "byte" ] },
@@ -79,13 +89,13 @@ script_commands = {
 	0x43: { "name": "script_nop",                              "params": [] },
 	0x44: { "name": "Func_d3d4",                               "params": [] },
 	0x45: { "name": "Func_d3e0",                               "params": [] },
-	0x46: { "name": "Func_d3fe",                               "params": [ "byte" ] }, # song
-	0x47: { "name": "Func_d408",                               "params": [ "byte" ] }, # set default song?
+	0x46: { "name": "Func_d3fe",                               "params": [ "song" ] },
+	0x47: { "name": "Func_d408",                               "params": [ "song" ] }, # set default song
 	0x48: { "name": "play_song",                               "params": [ "byte" ] },
-	0x49: { "name": "play_sfx",                                "params": [ "byte" ] },
+	0x49: { "name": "play_sfx",                                "params": [ "sfx" ] },
 	0x4a: { "name": "pause_song",                              "params": [] },
 	0x4b: { "name": "resume_song",                             "params": [] },
-	0x4c: { "name": "Func_d41d",                               "params": [] }, # play default song?
+	0x4c: { "name": "Func_d41d",                               "params": [] }, # play default song
 	0x4d: { "name": "wait_for_song_to_finish",                 "params": [] },
 	0x4e: { "name": "Func_d435",                               "params": [ "byte" ] },
 	0x4f: { "name": "ask_question_jump_default_yes",           "params": [ "text", "label" ] },
@@ -135,21 +145,22 @@ quit_commands = [
 param_lengths = {
 	"byte":           1,
 	"byte_decimal":   1,
-	"event":          1,
+	"booster":        1,
+	"card":           1,
+	"deck":           1,
 	"direction":      1,
+	"event":          1,
+	"map":            1,
+	"npc":            1,
+	"prizes":         1,
+	"sfx":            1,
+	"song":           1,
 	"word_decimal":   2,
 	"movement":       2,
 	"movement_table": 2,
 	"text":           2,
 	"label":          2,
 }
-
-directions = [
-	"NORTH",
-	"EAST",
-	"SOUTH",
-	"WEST",
-]
 
 def get_bank(address):
 	return int(address / 0x4000)
@@ -231,14 +242,46 @@ def dump_script(start_address, address=None, visited=set()):
 				if not macro_mode:
 					output += "\n\tdb"
 				output += " {}".format(param)
-			elif param_type == "event":
+			elif param_type == "booster":
 				if not macro_mode:
 					output += "\n\tdb"
-				output += " EVENT_FLAG_{:02X}".format(param)
+				output += " {}".format(boosters[param])
+			elif param_type == "card":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(cards[param])
+			elif param_type == "deck":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(decks[param])
 			elif param_type == "direction":
 				if not macro_mode:
 					output += "\n\tdb"
 				output += " {}".format(directions[param])
+			elif param_type == "event":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(events[param])
+			elif param_type == "map":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(maps[param])
+			elif param_type == "npc":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(npcs[param])
+			elif param_type == "prizes":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " PRIZES_{}".format(param)
+			elif param_type == "sfx":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(sfxs[param])
+			elif param_type == "song":
+				if not macro_mode:
+					output += "\n\tdb"
+				output += " {}".format(songs[param])
 			elif param_type == "word_decimal":
 				if not macro_mode:
 					output += "\n\tdw"
