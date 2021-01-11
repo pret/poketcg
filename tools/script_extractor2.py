@@ -192,7 +192,13 @@ def dump_movement(address):
 	while 1:
 		movement = rom[address]
 		if movement == 0xff:
-			blobs.append(make_blob(address, "\tdb $ff\n\n", address + 1))
+			blobs.append(make_blob(address, "\tdb ${:02x}\n\n".format(movement), address + 1))
+			break
+		if movement == 0xfe:
+			jump = rom[address + 1]
+			if jump > 127:
+				jump -= 256
+			blobs.append(make_blob(address, "\tdb ${:02x}, {}\n\n".format(movement, jump), address + 2))
 			break
 		blobs.append(make_blob(address, "\tdb {}".format(directions[movement & 0b01111111]) + (" | NO_MOVE\n" if movement & 0b10000000 else "\n"), address + 1))
 		address += 1
@@ -339,7 +345,7 @@ def dump_script(start_address, address=None, visited=set()):
 	for branch in branches:
 		blobs += dump_script(start_address, branch, visited)
 	return blobs
- 
+
 def fill_gap(start, end):
 	output = ""
 	for address in range(start, end):
