@@ -91,7 +91,7 @@ script_commands = {
 	0x45: { "name": "Func_d3e0",                               "params": [] },
 	0x46: { "name": "Func_d3fe",                               "params": [ "song" ] },
 	0x47: { "name": "Func_d408",                               "params": [ "song" ] }, # set default song
-	0x48: { "name": "play_song",                               "params": [ "byte" ] },
+	0x48: { "name": "play_song",                               "params": [ "song" ] },
 	0x49: { "name": "play_sfx",                                "params": [ "sfx" ] },
 	0x4a: { "name": "pause_song",                              "params": [] },
 	0x4b: { "name": "resume_song",                             "params": [] },
@@ -222,6 +222,8 @@ def dump_script(start_address, address=None, visited=set()):
 	if address is None:
 		blobs.append(make_blob(start_address, "Script_{:x}:".format(start_address) + make_address_comment(start_address)))
 		address = start_address
+	else:
+		blobs.append(make_blob(address, ".ows_{:x}\n".format(address)))
 	if address in visited:
 		return blobs
 	visited.add(address)
@@ -325,9 +327,8 @@ def dump_script(start_address, address=None, visited=set()):
 					label = "Script_{:x}".format(param)
 				else:
 					label = ".ows_{:x}".format(param)
-					if (param > start_address or args.allow_backward_jumps):
+					if param > start_address or args.allow_backward_jumps:
 						branches.add(param)
-						blobs.append(make_blob(param, ".ows_{:x}\n".format(param)))
 				if not macro_mode:
 					output += "\n\tdw"
 				output += " {}".format(label)
@@ -336,7 +337,7 @@ def dump_script(start_address, address=None, visited=set()):
 				output += ","
 		output += "\n"
 		blobs.append(make_blob(command_address, output, address))
-		if (command_id in quit_commands):
+		if command_id in quit_commands:
 			if rom[address] == 0xc9:
 				blobs.append(make_blob(address, "\tret\n", address + 1))
 				address += 1
@@ -354,7 +355,7 @@ def fill_gap(start, end):
 	return output
 
 def sort_and_filter(blobs):
-	blobs.sort(key=lambda b: (b["start"], b["end"], len(b["output"]), not b["output"].startswith(";")))
+	blobs.sort(key=lambda b: (b["start"], b["end"], not b["output"].startswith(";")))
 	filtered = []
 	for blob, next in zip(blobs, blobs[1:]+[None]):
 		if next and blob["start"] == next["start"] and blob["output"] == next["output"]:
@@ -365,20 +366,26 @@ def sort_and_filter(blobs):
 			else:
 				blob["output"] += "; gap from 0x{:x} to 0x{:x}\n\n".format(blob["end"], next["start"])
 		filtered.append(blob)
-	filtered[-1]["output"] = filtered[-1]["output"].rstrip("\n")
+	if len(filtered) > 0:
+		filtered[-1]["output"] = filtered[-1]["output"].rstrip("\n")
 	return filtered
 
 if __name__ == "__main__":
 	ap = argparse.ArgumentParser(description="Pokemon TCG Script Extractor")
 	ap.add_argument("-b", "--allow-backward-jumps", action="store_true", help="extract scripts that are found before the starting address")
 	ap.add_argument("-g", "--fill-gaps", action="store_true", help="use 'db's to fill the gaps between visited locations")
+	ap.add_argument("-i", "--ignore-errors", action="store_true", help="silently proceed to the next address if an error occurs")
 	ap.add_argument("-r", "--rom", default="baserom.gbc", help="rom file to extract script from")
 	ap.add_argument("addresses", nargs="+", help="addresses to extract from")
 	args = ap.parse_args()
 	rom = bytearray(open(args.rom, "rb").read())
 	blobs = []
 	for address in args.addresses:
-		blobs += dump_script(int(address, 16))
+		try:
+			blobs += dump_script(int(address, 16))
+		except:
+			if not args.ignore_errors:
+				raise
 	blobs = sort_and_filter(blobs)
 	output = ""
 	for blob in blobs:
