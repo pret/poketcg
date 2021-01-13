@@ -8171,25 +8171,25 @@ Func_741a: ; 741a (1:741a)
 	ld d, a
 	inc hl
 	ld a, [hli]
-	ld e, $7e
+	ld e, ATK_ANIM_SLEEP
 	cp ASLEEP
 	jr z, .got_anim
-	ld e, $7d
+	ld e, ATK_ANIM_PARALYSIS
 	cp PARALYZED
 	jr z, .got_anim
-	ld e, $7b
+	ld e, ATK_ANIM_POISON
 	cp POISONED
 	jr z, .got_anim
-	ld e, $7b
+	ld e, ATK_ANIM_POISON
 	cp DOUBLE_POISONED
 	jr z, .got_anim
-	ld e, $7c
+	ld e, ATK_ANIM_CONFUSION
 	cp CONFUSED
 	jr nz, .loop
 	ldh a, [hWhoseTurn]
 	cp d
 	jr nz, .got_anim
-	ld e, $7f
+	ld e, ATK_ANIM_IMAKUNI_CONFUSION
 .got_anim
 	ld a, e
 	ld [wLoadedMoveAnimation], a
@@ -8266,15 +8266,18 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	ld [hl], e
 	inc hl
 	ld [hl], d
+
+; if damage >= 70, ATK_ANIM_HIT becomes ATK_ANIM_BIG_HIT
 	ld a, [wLoadedMoveAnimation]
-	cp $01
-	jr nz, .asm_74d1
+	cp ATK_ANIM_HIT
+	jr nz, .got_anim
 	ld a, e
-	cp $46
-	jr c, .asm_74d1
-	ld a, $02
+	cp 70
+	jr c, .got_anim
+	ld a, ATK_ANIM_BIG_HIT
 	ld [wLoadedMoveAnimation], a
-.asm_74d1
+
+.got_anim
 	farcall Func_18f9c
 	pop bc
 	pop de

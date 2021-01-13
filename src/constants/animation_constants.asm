@@ -17,9 +17,9 @@
 	; Normal animations
 	const DUEL_ANIM_NONE               ; $00
 	const DUEL_ANIM_GLOW               ; $01
-	const DUEL_ANIM_2                  ; $02
+	const DUEL_ANIM_PARALYSIS          ; $02
 	const DUEL_ANIM_SLEEP              ; $03
-	const DUEL_ANIM_4                  ; $04
+	const DUEL_ANIM_CONFUSION          ; $04
 	const DUEL_ANIM_POISON             ; $05
 	const DUEL_ANIM_6                  ; $06
 	const DUEL_ANIM_HIT                ; $07
@@ -32,14 +32,14 @@
 	const DUEL_ANIM_SMALL_FLAME        ; $0e
 	const DUEL_ANIM_BIG_FLAME          ; $0f
 	const DUEL_ANIM_FIRE_SPIN          ; $10
-	const DUEL_ANIM_17                 ; $11
+	const DUEL_ANIM_DIVE_BOMB          ; $11
 	const DUEL_ANIM_WATER_JETS         ; $12
 	const DUEL_ANIM_WATER_GUN          ; $13
 	const DUEL_ANIM_WHIRLPOOL          ; $14
 	const DUEL_ANIM_HYDRO_PUMP         ; $15
 	const DUEL_ANIM_BLIZZARD           ; $16
 	const DUEL_ANIM_PSYCHIC            ; $17
-	const DUEL_ANIM_24                 ; $18
+	const DUEL_ANIM_GLARE              ; $18
 	const DUEL_ANIM_BEAM               ; $19
 	const DUEL_ANIM_HYPER_BEAM         ; $1a
 	const DUEL_ANIM_ROCK_THROW         ; $1b

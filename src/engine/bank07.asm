@@ -1471,7 +1471,7 @@ Animations: ; 1ce32 (7:4e32)
 	db SFX_11 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_2
+	; DUEL_ANIM_PARALYSIS
 	db SPRITE_DUEL_1 ; sprite ID
 	db $20 ; palette ID
 	db $48 ; anim ID
@@ -1487,7 +1487,7 @@ Animations: ; 1ce32 (7:4e32)
 	db SFX_13 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_4
+	; DUEL_ANIM_CONFUSION
 	db SPRITE_DUEL_55 ; sprite ID
 	db $22 ; palette ID
 	db $4a ; anim ID
@@ -1591,7 +1591,7 @@ Animations: ; 1ce32 (7:4e32)
 	db SFX_1E ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_17
+	; DUEL_ANIM_DIVE_BOMB
 	db SPRITE_DUEL_10 ; sprite ID
 	db $2c ; palette ID
 	db $64 ; anim ID
@@ -1647,7 +1647,7 @@ Animations: ; 1ce32 (7:4e32)
 	db SFX_25 ; sound FX ID
 	db $00 ; handler function
 
-	; DUEL_ANIM_24
+	; DUEL_ANIM_GLARE
 	db SPRITE_DUEL_15 ; sprite ID
 	db $33 ; palette ID
 	db $6f ; anim ID
