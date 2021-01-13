@@ -21,167 +21,167 @@ anim_end2: MACRO
 ENDM
 
 PointerTable_AttackAnimation:
-	dw $0000                ; ATK_ANIM_NONE
-	dw AttackAnimation_52c6 ; ATK_ANIM_1
-	dw AttackAnimation_52cf ; ATK_ANIM_2
-	dw AttackAnimation_52c6 ; ATK_ANIM_3
-	dw AttackAnimation_52c6 ; ATK_ANIM_4
-	dw AttackAnimation_52c6 ; ATK_ANIM_5
-	dw AttackAnimation_52d8 ; ATK_ANIM_6
-	dw AttackAnimation_52d8 ; ATK_ANIM_7
-	dw AttackAnimation_52e3 ; ATK_ANIM_8
-	dw AttackAnimation_52d8 ; ATK_ANIM_9
-	dw AttackAnimation_52f0 ; ATK_ANIM_10
-	dw AttackAnimation_52f0 ; ATK_ANIM_11
-	dw AttackAnimation_52f0 ; ATK_ANIM_12
-	dw AttackAnimation_52f0 ; ATK_ANIM_13
-	dw AttackAnimation_52fd ; ATK_ANIM_14
-	dw AttackAnimation_5308 ; ATK_ANIM_15
-	dw AttackAnimation_5313 ; ATK_ANIM_16
-	dw AttackAnimation_531e ; ATK_ANIM_17
-	dw AttackAnimation_5329 ; ATK_ANIM_18
-	dw AttackAnimation_5334 ; ATK_ANIM_19
-	dw AttackAnimation_533f ; ATK_ANIM_20
-	dw AttackAnimation_534a ; ATK_ANIM_21
-	dw AttackAnimation_5357 ; ATK_ANIM_22
-	dw AttackAnimation_5362 ; ATK_ANIM_23
-	dw AttackAnimation_5362 ; ATK_ANIM_24
-	dw AttackAnimation_536d ; ATK_ANIM_25
-	dw AttackAnimation_536d ; ATK_ANIM_26
-	dw AttackAnimation_536d ; ATK_ANIM_27
-	dw AttackAnimation_5378 ; ATK_ANIM_28
-	dw AttackAnimation_5383 ; ATK_ANIM_29
-	dw AttackAnimation_538e ; ATK_ANIM_30
-	dw AttackAnimation_5383 ; ATK_ANIM_31
-	dw AttackAnimation_5399 ; ATK_ANIM_32
-	dw AttackAnimation_53a4 ; ATK_ANIM_33
-	dw AttackAnimation_53af ; ATK_ANIM_34
-	dw AttackAnimation_53ba ; ATK_ANIM_35
-	dw AttackAnimation_53c5 ; ATK_ANIM_36
-	dw AttackAnimation_53d0 ; ATK_ANIM_37
-	dw AttackAnimation_53d5 ; ATK_ANIM_38
-	dw AttackAnimation_53e0 ; ATK_ANIM_39
-	dw AttackAnimation_53eb ; ATK_ANIM_40
-	dw AttackAnimation_53f6 ; ATK_ANIM_41
-	dw AttackAnimation_53f6 ; ATK_ANIM_42
-	dw AttackAnimation_53f6 ; ATK_ANIM_43
-	dw AttackAnimation_5401 ; ATK_ANIM_44
-	dw AttackAnimation_540c ; ATK_ANIM_45
-	dw AttackAnimation_5417 ; ATK_ANIM_46
-	dw AttackAnimation_5422 ; ATK_ANIM_47
-	dw AttackAnimation_542d ; ATK_ANIM_48
-	dw AttackAnimation_542d ; ATK_ANIM_49
-	dw AttackAnimation_5438 ; ATK_ANIM_50
-	dw AttackAnimation_5438 ; ATK_ANIM_51
-	dw AttackAnimation_5438 ; ATK_ANIM_52
-	dw AttackAnimation_5438 ; ATK_ANIM_53
-	dw AttackAnimation_5438 ; ATK_ANIM_54
-	dw AttackAnimation_5443 ; ATK_ANIM_55
-	dw AttackAnimation_5443 ; ATK_ANIM_56
-	dw AttackAnimation_544e ; ATK_ANIM_57
-	dw AttackAnimation_5443 ; ATK_ANIM_58
-	dw AttackAnimation_5443 ; ATK_ANIM_59
-	dw AttackAnimation_5443 ; ATK_ANIM_60
-	dw AttackAnimation_5453 ; ATK_ANIM_61
-	dw AttackAnimation_5453 ; ATK_ANIM_62
-	dw AttackAnimation_5460 ; ATK_ANIM_63
-	dw AttackAnimation_5453 ; ATK_ANIM_64
-	dw AttackAnimation_5467 ; ATK_ANIM_65
-	dw AttackAnimation_5467 ; ATK_ANIM_66
-	dw AttackAnimation_5472 ; ATK_ANIM_67
-	dw AttackAnimation_5472 ; ATK_ANIM_68
-	dw AttackAnimation_547d ; ATK_ANIM_69
-	dw AttackAnimation_5488 ; ATK_ANIM_70
-	dw AttackAnimation_548f ; ATK_ANIM_71
-	dw AttackAnimation_549c ; ATK_ANIM_72
-	dw AttackAnimation_549c ; ATK_ANIM_73
-	dw AttackAnimation_54a9 ; ATK_ANIM_74
-	dw AttackAnimation_54a9 ; ATK_ANIM_75
-	dw AttackAnimation_54ae ; ATK_ANIM_76
-	dw AttackAnimation_54ae ; ATK_ANIM_77
-	dw AttackAnimation_54b3 ; ATK_ANIM_78
-	dw AttackAnimation_54be ; ATK_ANIM_79
-	dw AttackAnimation_54c3 ; ATK_ANIM_80
-	dw AttackAnimation_54c8 ; ATK_ANIM_81
-	dw AttackAnimation_54d3 ; ATK_ANIM_82
-	dw AttackAnimation_54e0 ; ATK_ANIM_83
-	dw AttackAnimation_54eb ; ATK_ANIM_84
-	dw AttackAnimation_54f2 ; ATK_ANIM_85
-	dw AttackAnimation_54f9 ; ATK_ANIM_86
-	dw AttackAnimation_5504 ; ATK_ANIM_87
-	dw AttackAnimation_5513 ; ATK_ANIM_88
-	dw AttackAnimation_5516 ; ATK_ANIM_89
-	dw AttackAnimation_5521 ; ATK_ANIM_90
-	dw AttackAnimation_552e ; ATK_ANIM_91
-	dw AttackAnimation_5533 ; ATK_ANIM_92
-	dw AttackAnimation_553a ; ATK_ANIM_93
-	dw AttackAnimation_5543 ; ATK_ANIM_94
-	dw AttackAnimation_554a ; ATK_ANIM_95
-	dw AttackAnimation_5555 ; ATK_ANIM_96
-	dw AttackAnimation_555e ; ATK_ANIM_97
-	dw AttackAnimation_556d ; ATK_ANIM_98
-	dw AttackAnimation_5574 ; ATK_ANIM_99
-	dw AttackAnimation_557b ; ATK_ANIM_100
-	dw AttackAnimation_557e ; ATK_ANIM_101
-	dw AttackAnimation_5583 ; ATK_ANIM_102
-	dw AttackAnimation_5583 ; ATK_ANIM_103
-	dw AttackAnimation_5583 ; ATK_ANIM_104
-	dw AttackAnimation_558c ; ATK_ANIM_105
-	dw AttackAnimation_5597 ; ATK_ANIM_106
-	dw AttackAnimation_559c ; ATK_ANIM_107
-	dw AttackAnimation_55a1 ; ATK_ANIM_108
-	dw AttackAnimation_55a4 ; ATK_ANIM_109
-	dw AttackAnimation_55a9 ; ATK_ANIM_110
-	dw AttackAnimation_55b4 ; ATK_ANIM_111
-	dw AttackAnimation_55b4 ; ATK_ANIM_112
-	dw AttackAnimation_55bf ; ATK_ANIM_113
-	dw AttackAnimation_55c4 ; ATK_ANIM_114
-	dw AttackAnimation_55c9 ; ATK_ANIM_115
-	dw AttackAnimation_55ce ; ATK_ANIM_116
-	dw AttackAnimation_55d5 ; ATK_ANIM_117
-	dw AttackAnimation_55e0 ; ATK_ANIM_118
-	dw AttackAnimation_55e5 ; ATK_ANIM_119
-	dw AttackAnimation_55e6 ; ATK_ANIM_120
-	dw AttackAnimation_55ed ; ATK_ANIM_121
-	dw AttackAnimation_55f2 ; ATK_ANIM_122
-	dw AttackAnimation_55fb ; ATK_ANIM_123
-	dw AttackAnimation_55fe ; ATK_ANIM_124
-	dw AttackAnimation_5601 ; ATK_ANIM_125
-	dw AttackAnimation_5604 ; ATK_ANIM_126
-	dw AttackAnimation_5607 ; ATK_ANIM_127
-	dw AttackAnimation_560a ; ATK_ANIM_128
-	dw AttackAnimation_560f ; ATK_ANIM_129
-	dw AttackAnimation_5612 ; ATK_ANIM_130
-	dw AttackAnimation_561d ; ATK_ANIM_131
-	dw AttackAnimation_5628 ; ATK_ANIM_132
-	dw AttackAnimation_562d ; ATK_ANIM_133
-	dw AttackAnimation_5632 ; ATK_ANIM_134
-	dw AttackAnimation_5637 ; ATK_ANIM_135
-	dw AttackAnimation_5644 ; ATK_ANIM_136
-	dw AttackAnimation_564f ; ATK_ANIM_137
-	dw AttackAnimation_5654 ; ATK_ANIM_138
-	dw AttackAnimation_5659 ; ATK_ANIM_139
-	dw AttackAnimation_565e ; ATK_ANIM_140
-	dw AttackAnimation_5665 ; ATK_ANIM_141
-	dw AttackAnimation_5668 ; ATK_ANIM_142
-	dw AttackAnimation_5673 ; ATK_ANIM_143
-	dw AttackAnimation_5673 ; ATK_ANIM_144
+	dw $0000                            ; ATK_ANIM_NONE
+	dw AttackAnimation_Hit              ; ATK_ANIM_HIT
+	dw AttackAnimation_BigHit           ; ATK_ANIM_BIG_HIT
+	dw AttackAnimation_Hit              ; ATK_ANIM_3
+	dw AttackAnimation_Hit              ; ATK_ANIM_HIT_RECOIL
+	dw AttackAnimation_Hit              ; ATK_ANIM_HIT_EFFECT
+	dw AttackAnimation_ThunderShock     ; ATK_ANIM_THUNDERSHOCK
+	dw AttackAnimation_ThunderShock     ; ATK_ANIM_THUNDER
+	dw AttackAnimation_Thunderbolt      ; ATK_ANIM_THUNDERBOLT
+	dw AttackAnimation_ThunderShock     ; ATK_ANIM_9
+	dw AttackAnimation_52f0             ; ATK_ANIM_THUNDER_WHOLE_SCREEN
+	dw AttackAnimation_52f0             ; ATK_ANIM_11
+	dw AttackAnimation_52f0             ; ATK_ANIM_THUNDERSTORM
+	dw AttackAnimation_52f0             ; ATK_ANIM_CHAIN_LIGHTNING
+	dw AttackAnimation_SmallFlame       ; ATK_ANIM_SMALL_FLAME
+	dw AttackAnimation_BigFlame         ; ATK_ANIM_BIG_FLAME
+	dw AttackAnimation_FireSpin         ; ATK_ANIM_FIRE_SPIN
+	dw AttackAnimation_531e             ; ATK_ANIM_17
+	dw AttackAnimation_WaterJets        ; ATK_ANIM_WATER_JETS
+	dw AttackAnimation_WaterGun         ; ATK_ANIM_WATER_GUN
+	dw AttackAnimation_Whirlpool        ; ATK_ANIM_WHIRLPOOL
+	dw AttackAnimation_DragonRage       ; ATK_ANIM_DRAGON_RAGE
+	dw AttackAnimation_HydroPump        ; ATK_ANIM_HYDRO_PUMP
+	dw AttackAnimation_Blizzard         ; ATK_ANIM_23
+	dw AttackAnimation_Blizzard         ; ATK_ANIM_BLIZZARD
+	dw AttackAnimation_PsychicHit       ; ATK_ANIM_PSYCHIC_HIT
+	dw AttackAnimation_PsychicHit       ; ATK_ANIM_NIGHTMARE
+	dw AttackAnimation_PsychicHit       ; ATK_ANIM_27
+	dw AttackAnimation_DarkMind         ; ATK_ANIM_DARK_MIND
+	dw AttackAnimation_Beam             ; ATK_ANIM_BEAM
+	dw AttackAnimation_HyperBeam        ; ATK_ANIM_HYPER_BEAM
+	dw AttackAnimation_Beam             ; ATK_ANIM_31
+	dw AttackAnimation_RockThrow        ; ATK_ANIM_ROCK_THROW
+	dw AttackAnimation_StoneBarrage     ; ATK_ANIM_STONE_BARRAGE
+	dw AttackAnimation_Punch            ; ATK_ANIM_PUNCH
+	dw AttackAnimation_Thunderpunch     ; ATK_ANIM_THUNDERPUNCH
+	dw AttackAnimation_FirePunch        ; ATK_ANIM_FIRE_PUNCH
+	dw AttackAnimation_StretchKick      ; ATK_ANIM_STRETCH_KICK
+	dw AttackAnimation_Slash            ; ATK_ANIM_SLASH
+	dw AttackAnimation_Whip             ; ATK_ANIM_WHIP
+	dw AttackAnimation_Tear             ; ATK_ANIM_TEAR
+	dw AttackAnimation_MultipleSlash    ; ATK_ANIM_MULTIPLE_SLASH
+	dw AttackAnimation_MultipleSlash    ; ATK_ANIM_42
+	dw AttackAnimation_MultipleSlash    ; ATK_ANIM_RAMPAGE
+	dw AttackAnimation_Drill            ; ATK_ANIM_DRILL
+	dw AttackAnimation_PotSmash         ; ATK_ANIM_POT_SMASH
+	dw AttackAnimation_Bonemerang       ; ATK_ANIM_BONEMERANG
+	dw AttackAnimation_SeismicToss      ; ATK_ANIM_SEISMIC_TOSS
+	dw AttackAnimation_Needles          ; ATK_ANIM_NEEDLES
+	dw AttackAnimation_Needles          ; ATK_ANIM_49
+	dw AttackAnimation_WhiteGas         ; ATK_ANIM_SMOG
+	dw AttackAnimation_WhiteGas         ; ATK_ANIM_51
+	dw AttackAnimation_WhiteGas         ; ATK_ANIM_52
+	dw AttackAnimation_WhiteGas         ; ATK_ANIM_FOUL_GAS
+	dw AttackAnimation_WhiteGas         ; ATK_ANIM_FOUL_ODOR
+	dw AttackAnimation_Powder           ; ATK_ANIM_POWDER_EFFECT_CHANCE
+	dw AttackAnimation_Powder           ; ATK_ANIM_POWDER_HIT_POISON
+	dw AttackAnimation_544e             ; ATK_ANIM_POISON_POWDER
+	dw AttackAnimation_Powder           ; ATK_ANIM_58
+	dw AttackAnimation_Powder           ; ATK_ANIM_59
+	dw AttackAnimation_Powder           ; ATK_ANIM_60
+	dw AttackAnimation_Goo              ; ATK_ANIM_GOO
+	dw AttackAnimation_Goo              ; ATK_ANIM_62
+	dw AttackAnimation_5460             ; ATK_ANIM_SPIT_POISON
+	dw AttackAnimation_Goo              ; ATK_ANIM_64
+	dw AttackAnimation_Bubbles          ; ATK_ANIM_BUBBLES
+	dw AttackAnimation_Bubbles          ; ATK_ANIM_66
+	dw AttackAnimation_StringShot       ; ATK_ANIM_STRING_SHOT
+	dw AttackAnimation_StringShot       ; ATK_ANIM_68
+	dw AttackAnimation_Boyfriends       ; ATK_ANIM_BOYFRIENDS
+	dw AttackAnimation_Lure             ; ATK_ANIM_LURE
+	dw AttackAnimation_Toxic            ; ATK_ANIM_TOXIC
+	dw AttackAnimation_ConfuseRay       ; ATK_ANIM_CONFUSE_RAY
+	dw AttackAnimation_ConfuseRay       ; ATK_ANIM_73
+	dw AttackAnimation_Sing             ; ATK_ANIM_SING
+	dw AttackAnimation_Sing             ; ATK_ANIM_LULLABY
+	dw AttackAnimation_Supersonic       ; ATK_ANIM_SUPERSONIC
+	dw AttackAnimation_Supersonic       ; ATK_ANIM_77
+	dw AttackAnimation_PetalDance       ; ATK_ANIM_PETAL_DANCE
+	dw AttackAnimation_Protect          ; ATK_ANIM_PROTECT
+	dw AttackAnimation_Barrier          ; ATK_ANIM_BARRIER
+	dw AttackAnimation_QuickAttack      ; ATK_ANIM_QUICK_ATTACK
+	dw AttackAnimation_54d3             ; ATK_ANIM_82
+	dw AttackAnimation_Whirlwind        ; ATK_ANIM_WHIRLWIND
+	dw AttackAnimation_Cry              ; ATK_ANIM_CRY
+	dw AttackAnimation_Amnesia          ; ATK_ANIM_AMNESIA
+	dw AttackAnimation_Selfdestruct     ; ATK_ANIM_SELFDESTRUCT
+	dw AttackAnimation_BigSelfdestruct  ; ATK_ANIM_BIG_SELFDESTRUCTION
+	dw AttackAnimation_Recover          ; ATK_ANIM_RECOVER
+	dw AttackAnimation_Drain            ; ATK_ANIM_DRAIN
+	dw AttackAnimation_DarkGas          ; ATK_ANIM_DARK_GAS
+	dw AttackAnimation_GlowEffect       ; ATK_ANIM_GLOW_EFFECT
+	dw AttackAnimation_MirrorMove       ; ATK_ANIM_MIRROR_MOVE
+	dw AttackAnimation_553a             ; ATK_ANIM_93
+	dw AttackAnimation_5543             ; ATK_ANIM_PKMN_POWER_1
+	dw AttackAnimation_Firegiver        ; ATK_ANIM_FIREGIVER
+	dw AttackAnimation_Quickfreeze      ; ATK_ANIM_QUICKFREEZE
+	dw AttackAnimation_PealOfThunder    ; ATK_ANIM_PEAL_OF_THUNDER
+	dw AttackAnimation_HealingWind      ; ATK_ANIM_HEALING_WIND
+	dw AttackAnimation_WhirlwindZigzag  ; ATK_ANIM_WHIRLWIND_ZIGZAG
+	dw AttackAnimation_BigThunder       ; ATK_ANIM_BIG_THUNDER
+	dw AttackAnimation_SolarPower       ; ATK_ANIM_SOLAR_POWER
+	dw AttackAnimation_PoisonFang       ; ATK_ANIM_POISON_FANG
+	dw AttackAnimation_PoisonFang       ; ATK_ANIM_103
+	dw AttackAnimation_PoisonFang       ; ATK_ANIM_104
+	dw AttackAnimation_558c             ; ATK_ANIM_105
+	dw AttackAnimation_5597             ; ATK_ANIM_106
+	dw AttackAnimation_559c             ; ATK_ANIM_107
+	dw AttackAnimation_CatPunch         ; ATK_ANIM_CAT_PUNCH
+	dw AttackAnimation_MagneticStorm    ; ATK_ANIM_MAGNETIC_STORM
+	dw AttackAnimation_PoisonWhip       ; ATK_ANIM_POISON_WHIP
+	dw AttackAnimation_ThunderWave      ; ATK_ANIM_THUNDER_WAVE
+	dw AttackAnimation_ThunderWave      ; ATK_ANIM_112
+	dw AttackAnimation_Spore            ; ATK_ANIM_SPORE
+	dw AttackAnimation_Hypnosis         ; ATK_ANIM_HYPNOSIS
+	dw AttackAnimation_EnergyConversion ; ATK_ANIM_ENERGY_CONVERSION
+	dw AttackAnimation_55ce             ; ATK_ANIM_116
+	dw AttackAnimation_55d5             ; ATK_ANIM_117
+	dw AttackAnimation_55e0             ; ATK_ANIM_118
+	dw AttackAnimation_55e5             ; ATK_ANIM_119
+	dw AttackAnimation_55e6             ; ATK_ANIM_120
+	dw AttackAnimation_55ed             ; ATK_ANIM_121
+	dw AttackAnimation_55f2             ; ATK_ANIM_122
+	dw AttackAnimation_55fb             ; ATK_ANIM_123
+	dw AttackAnimation_55fe             ; ATK_ANIM_124
+	dw AttackAnimation_5601             ; ATK_ANIM_125
+	dw AttackAnimation_5604             ; ATK_ANIM_126
+	dw AttackAnimation_5607             ; ATK_ANIM_127
+	dw AttackAnimation_SleepingGas      ; ATK_ANIM_SLEEPING_GAS
+	dw AttackAnimation_560f             ; ATK_ANIM_129
+	dw AttackAnimation_5612             ; ATK_ANIM_130
+	dw AttackAnimation_561d             ; ATK_ANIM_131
+	dw AttackAnimation_5628             ; ATK_ANIM_132
+	dw AttackAnimation_562d             ; ATK_ANIM_133
+	dw AttackAnimation_5632             ; ATK_ANIM_134
+	dw AttackAnimation_5637             ; ATK_ANIM_135
+	dw AttackAnimation_Expand           ; ATK_ANIM_EXPAND
+	dw AttackAnimation_564f             ; ATK_ANIM_137
+	dw AttackAnimation_5654             ; ATK_ANIM_138
+	dw AttackAnimation_5659             ; ATK_ANIM_139
+	dw AttackAnimation_565e             ; ATK_ANIM_140
+	dw AttackAnimation_5665             ; ATK_ANIM_141
+	dw AttackAnimation_5668             ; ATK_ANIM_142
+	dw AttackAnimation_5673             ; ATK_ANIM_143
+	dw AttackAnimation_5673             ; ATK_ANIM_144
 
-AttackAnimation_52c6: ; (6:52c6)
+AttackAnimation_Hit: ; (6:52c6)
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_52cf:
+AttackAnimation_BigHit:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_8
 	anim_normal         DUEL_ANIM_SHAKE2
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_52d8:
+AttackAnimation_ThunderShock:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_THUNDER_SHOCK
 	anim_opponent       DUEL_ANIM_HIT
@@ -189,7 +189,7 @@ AttackAnimation_52d8:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_52e3:
+AttackAnimation_Thunderbolt:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_11
 	anim_opponent       DUEL_ANIM_12
@@ -207,7 +207,7 @@ AttackAnimation_52f0:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_52fd:
+AttackAnimation_SmallFlame:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_14
 	anim_opponent       DUEL_ANIM_HIT
@@ -215,7 +215,7 @@ AttackAnimation_52fd:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5308:
+AttackAnimation_BigFlame:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_15
 	anim_opponent       DUEL_ANIM_HIT
@@ -223,7 +223,7 @@ AttackAnimation_5308:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5313:
+AttackAnimation_FireSpin:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_16
 	anim_opponent       DUEL_ANIM_HIT
@@ -239,7 +239,7 @@ AttackAnimation_531e:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5329:
+AttackAnimation_WaterJets:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_18
 	anim_opponent       DUEL_ANIM_HIT
@@ -247,7 +247,7 @@ AttackAnimation_5329:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5334:
+AttackAnimation_WaterGun:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_19
 	anim_opponent       DUEL_ANIM_HIT
@@ -255,7 +255,7 @@ AttackAnimation_5334:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_533f:
+AttackAnimation_Whirlpool:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_20
 	anim_opponent       DUEL_ANIM_HIT
@@ -263,7 +263,7 @@ AttackAnimation_533f:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_534a:
+AttackAnimation_DragonRage:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_11
 	anim_opponent       DUEL_ANIM_19
@@ -272,7 +272,7 @@ AttackAnimation_534a:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5357:
+AttackAnimation_HydroPump:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_21
 	anim_opponent       DUEL_ANIM_HIT
@@ -280,7 +280,7 @@ AttackAnimation_5357:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5362:
+AttackAnimation_Blizzard:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_22
 	anim_opponent       DUEL_ANIM_HIT
@@ -288,7 +288,7 @@ AttackAnimation_5362:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_536d:
+AttackAnimation_PsychicHit:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_23
 	anim_opponent       DUEL_ANIM_HIT
@@ -296,7 +296,7 @@ AttackAnimation_536d:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5378:
+AttackAnimation_DarkMind:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_24
 	anim_opponent       DUEL_ANIM_HIT
@@ -304,7 +304,7 @@ AttackAnimation_5378:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5383:
+AttackAnimation_Beam:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_25
 	anim_opponent       DUEL_ANIM_HIT
@@ -312,7 +312,7 @@ AttackAnimation_5383:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_538e:
+AttackAnimation_HyperBeam:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_26
 	anim_opponent       DUEL_ANIM_HIT
@@ -320,7 +320,7 @@ AttackAnimation_538e:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5399:
+AttackAnimation_RockThrow:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_27
 	anim_opponent       DUEL_ANIM_HIT
@@ -328,7 +328,7 @@ AttackAnimation_5399:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53a4:
+AttackAnimation_StoneBarrage:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_28
 	anim_opponent       DUEL_ANIM_HIT
@@ -336,7 +336,7 @@ AttackAnimation_53a4:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53af:
+AttackAnimation_Punch:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_29
 	anim_opponent       DUEL_ANIM_HIT
@@ -344,7 +344,7 @@ AttackAnimation_53af:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53ba:
+AttackAnimation_Thunderpunch:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_30
 	anim_opponent       DUEL_ANIM_HIT
@@ -352,7 +352,7 @@ AttackAnimation_53ba:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53c5:
+AttackAnimation_FirePunch:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_31
 	anim_opponent       DUEL_ANIM_HIT
@@ -360,12 +360,12 @@ AttackAnimation_53c5:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53d0:
+AttackAnimation_StretchKick:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_32
 	anim_end
 
-AttackAnimation_53d5:
+AttackAnimation_Slash:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_33
 	anim_opponent       DUEL_ANIM_HIT
@@ -373,7 +373,7 @@ AttackAnimation_53d5:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53e0:
+AttackAnimation_Whip:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_34
 	anim_opponent       DUEL_ANIM_HIT
@@ -381,7 +381,7 @@ AttackAnimation_53e0:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53eb:
+AttackAnimation_Tear:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_35
 	anim_opponent       DUEL_ANIM_HIT
@@ -389,7 +389,7 @@ AttackAnimation_53eb:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_53f6:
+AttackAnimation_MultipleSlash:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_FURY_SWIPES
 	anim_opponent       DUEL_ANIM_HIT
@@ -397,7 +397,7 @@ AttackAnimation_53f6:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5401:
+AttackAnimation_Drill:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_37
 	anim_opponent       DUEL_ANIM_HIT
@@ -405,7 +405,7 @@ AttackAnimation_5401:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_540c:
+AttackAnimation_PotSmash:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_38
 	anim_opponent       DUEL_ANIM_HIT
@@ -413,7 +413,7 @@ AttackAnimation_540c:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5417:
+AttackAnimation_Bonemerang:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_39
 	anim_opponent       DUEL_ANIM_HIT
@@ -421,7 +421,7 @@ AttackAnimation_5417:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5422:
+AttackAnimation_SeismicToss:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_40
 	anim_opponent       DUEL_ANIM_HIT
@@ -429,7 +429,7 @@ AttackAnimation_5422:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_542d:
+AttackAnimation_Needles:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_41
 	anim_opponent       DUEL_ANIM_HIT
@@ -437,7 +437,7 @@ AttackAnimation_542d:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5438:
+AttackAnimation_WhiteGas:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_42
 	anim_opponent       DUEL_ANIM_HIT
@@ -445,7 +445,7 @@ AttackAnimation_5438:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5443:
+AttackAnimation_Powder:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_43
 	anim_opponent       DUEL_ANIM_HIT
@@ -458,7 +458,7 @@ AttackAnimation_544e:
 	anim_opponent       DUEL_ANIM_43
 	anim_end
 
-AttackAnimation_5453:
+AttackAnimation_Goo:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_44
 	anim_normal         $66
@@ -473,7 +473,7 @@ AttackAnimation_5460:
 	anim_normal         $66
 	anim_end
 
-AttackAnimation_5467:
+AttackAnimation_Bubbles:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_45
 	anim_opponent       DUEL_ANIM_HIT
@@ -481,7 +481,7 @@ AttackAnimation_5467:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5472:
+AttackAnimation_StringShot:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_46
 	anim_opponent       DUEL_ANIM_HIT
@@ -489,7 +489,7 @@ AttackAnimation_5472:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_547d:
+AttackAnimation_Boyfriends:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_47
 	anim_opponent       DUEL_ANIM_HIT
@@ -497,13 +497,13 @@ AttackAnimation_547d:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5488:
+AttackAnimation_Lure:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_48
 	anim_normal         $66
 	anim_end
 
-AttackAnimation_548f:
+AttackAnimation_Toxic:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $66
 	anim_opponent       DUEL_ANIM_49
@@ -512,7 +512,7 @@ AttackAnimation_548f:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_549c:
+AttackAnimation_ConfuseRay:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $65
 	anim_opponent       DUEL_ANIM_50
@@ -521,17 +521,17 @@ AttackAnimation_549c:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_54a9:
+AttackAnimation_Sing:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_51
 	anim_end
 
-AttackAnimation_54ae:
+AttackAnimation_Supersonic:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_52
 	anim_end
 
-AttackAnimation_54b3:
+AttackAnimation_PetalDance:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_53
 	anim_opponent       DUEL_ANIM_HIT
@@ -539,17 +539,17 @@ AttackAnimation_54b3:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_54be:
+AttackAnimation_Protect:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_54
 	anim_end
 
-AttackAnimation_54c3:
+AttackAnimation_Barrier:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_55
 	anim_end
 
-AttackAnimation_54c8:
+AttackAnimation_QuickAttack:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_56
 	anim_opponent       DUEL_ANIM_HIT
@@ -566,7 +566,7 @@ AttackAnimation_54d3:
 	anim_player         DUEL_ANIM_54
 	anim_end
 
-AttackAnimation_54e0:
+AttackAnimation_Whirlwind:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_57
 	anim_opponent       DUEL_ANIM_HIT
@@ -574,19 +574,19 @@ AttackAnimation_54e0:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_54eb:
+AttackAnimation_Cry:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_58
 	anim_normal         DUEL_ANIM_SHAKE1
 	anim_end
 
-AttackAnimation_54f2:
+AttackAnimation_Amnesia:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         DUEL_ANIM_SHAKE1
 	anim_opponent       DUEL_ANIM_59
 	anim_end
 
-AttackAnimation_54f9:
+AttackAnimation_Selfdestruct:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_60
 	anim_opponent       DUEL_ANIM_HIT
@@ -594,7 +594,7 @@ AttackAnimation_54f9:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5504:
+AttackAnimation_BigSelfdestruct:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_61
 	anim_normal         $65
@@ -604,11 +604,11 @@ AttackAnimation_5504:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5513:
+AttackAnimation_Recover:
 	anim_player         DUEL_ANIM_GLOW
 	anim_end
 
-AttackAnimation_5516:
+AttackAnimation_Drain:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_63
 	anim_opponent       DUEL_ANIM_HIT
@@ -616,7 +616,7 @@ AttackAnimation_5516:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_5521:
+AttackAnimation_DarkGas:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_64
 	anim_opponent       DUEL_ANIM_HIT
@@ -625,12 +625,12 @@ AttackAnimation_5521:
 	anim_opponent       DUEL_ANIM_59
 	anim_end
 
-AttackAnimation_552e:
+AttackAnimation_GlowEffect:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $65
 	anim_end
 
-AttackAnimation_5533:
+AttackAnimation_MirrorMove:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $65
 	anim_opponent       DUEL_ANIM_GLOW
@@ -649,7 +649,7 @@ AttackAnimation_5543:
 	anim_normal         $65
 	anim_end
 
-AttackAnimation_554a:
+AttackAnimation_Firegiver:
 	anim_unknown        DUEL_ANIM_4
 	anim_unknown2       DUEL_ANIM_70
 	anim_normal         $65
@@ -657,14 +657,14 @@ AttackAnimation_554a:
 	anim_unknown2       DUEL_ANIM_71
 	anim_end
 
-AttackAnimation_5555:
+AttackAnimation_Quickfreeze:
 	anim_unknown        DUEL_ANIM_4
 	anim_unknown2       DUEL_ANIM_70
 	anim_normal         DUEL_ANIM_69
 	anim_unknown        DUEL_ANIM_GLOW
 	anim_end
 
-AttackAnimation_555e:
+AttackAnimation_PealOfThunder:
 	anim_unknown        DUEL_ANIM_4
 	anim_unknown2       DUEL_ANIM_70
 	anim_unknown2       DUEL_ANIM_68
@@ -674,28 +674,28 @@ AttackAnimation_555e:
 	anim_unknown2       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_556d:
+AttackAnimation_HealingWind:
 	anim_unknown        DUEL_ANIM_4
 	anim_unknown2       DUEL_ANIM_70
 	anim_unknown2       DUEL_ANIM_73
 	anim_end
 
-AttackAnimation_5574:
+AttackAnimation_WhirlwindZigzag:
 	anim_player         DUEL_ANIM_GLOW
 	anim_unknown        DUEL_ANIM_4
 	anim_normal         DUEL_ANIM_74
 	anim_end
 
-AttackAnimation_557b:
+AttackAnimation_BigThunder:
 	anim_player         DUEL_ANIM_GLOW
 	anim_end
 
-AttackAnimation_557e:
+AttackAnimation_SolarPower:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $65
 	anim_end
 
-AttackAnimation_5583:
+AttackAnimation_PoisonFang:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
@@ -720,16 +720,16 @@ AttackAnimation_559c:
 	anim_player         DUEL_ANIM_75
 	anim_end
 
-AttackAnimation_55a1:
+AttackAnimation_CatPunch:
 	anim_player         DUEL_ANIM_GLOW
 	anim_end
 
-AttackAnimation_55a4:
+AttackAnimation_MagneticStorm:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_77
 	anim_end
 
-AttackAnimation_55a9:
+AttackAnimation_PoisonWhip:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_34
 	anim_opponent       DUEL_ANIM_HIT
@@ -737,7 +737,7 @@ AttackAnimation_55a9:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_55b4:
+AttackAnimation_ThunderWave:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_77
 	anim_opponent       DUEL_ANIM_HIT
@@ -745,17 +745,17 @@ AttackAnimation_55b4:
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
 	anim_end
 
-AttackAnimation_55bf:
+AttackAnimation_Spore:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_43
 	anim_end
 
-AttackAnimation_55c4:
+AttackAnimation_Hypnosis:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_23
 	anim_end
 
-AttackAnimation_55c9:
+AttackAnimation_EnergyConversion:
 	anim_player         DUEL_ANIM_GLOW
 	anim_normal         $65
 	anim_end
@@ -820,7 +820,7 @@ AttackAnimation_5607:
 	anim_player         DUEL_ANIM_4
 	anim_end
 
-AttackAnimation_560a:
+AttackAnimation_SleepingGas:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_42
 	anim_end
@@ -869,7 +869,7 @@ AttackAnimation_5637:
 	anim_normal         $65
 	anim_end
 
-AttackAnimation_5644:
+AttackAnimation_Expand:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_75
 	anim_opponent       DUEL_ANIM_HIT
