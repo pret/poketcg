@@ -1218,6 +1218,7 @@ Func_1909d: ; 1909d (6:509d)
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	ret
+
 .asm_50ad
 	ld a, [wd4b0]
 	ld l, a
@@ -1304,10 +1305,11 @@ Func_190fb: ; 190fb (6:50fb)
 	push bc
 	push de
 	ld a, [wLoadedMoveAnimation]
-	cp $79
+	cp ATK_ANIM_HEAL
 	jr z, .asm_5164
-	cp $86
+	cp ATK_ANIM_HEALING_WIND_PLAY_AREA
 	jr z, .asm_5164
+
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
 	ld d, $00

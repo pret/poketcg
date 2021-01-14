@@ -5694,10 +5694,135 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ret
 ; 0x6423
 
-	INCROM $6423, $6431
+Func_6423: ; 6423 (1:6423)
+	ld hl, wDefaultText
+	ld e, $08
+.asm_6428
+	ld a, [hli]
+	call JPWriteByteToBGMap0
+	inc b
+	dec e
+	jr nz, .asm_6428
+	ret
+; 0x6431
 
 Func_6431: ; 6431 (1:6431)
-	INCROM $6431, $6510
+	xor a
+	ld [wSelectedDuelSubMenuItem], a
+
+Func_6435:
+	call Func_64b0
+	ld hl, PlayAreaScreenMenuParameters_ActivePokemonIncluded
+	ld a, [wSelectedDuelSubMenuItem]
+	call InitializeMenuParameters
+	ld a, [wNumPlayAreaItems]
+	ld [wNumMenuItems], a
+.asm_6447
+	call DoFrame
+	call HandleMenuInput
+	ldh [hTempPlayAreaLocation_ff9d], a
+	ld [wHUDEnergyAndHPBarsX], a
+	jr nc, .asm_6447
+	cp $ff
+	jr z, .asm_649b
+	ld [wSelectedDuelSubMenuItem], a
+	ldh a, [hKeysPressed]
+	and START
+	jr nz, .asm_649d
+	ldh a, [hCurMenuItem]
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, wDuelTempList + 1
+	add hl, de
+	ld a, [hld]
+	cp $04
+	jr nz, .asm_6447
+	ld a, [hl]
+	ldh [hTempCardIndex_ff98], a
+	ld d, a
+	ld e, $00
+	call CopyMoveDataAndDamage_FromDeckIndex
+	call DisplayUsePokemonPowerScreen
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
+	call TryExecuteEffectCommandFunction
+	jr nc, .asm_648c
+	ldtx hl, PokemonPowerSelectNotRequiredText
+	call DrawWideTextBox_WaitForInput
+	jp Func_6435
+.asm_648c
+	ldtx hl, UseThisPokemonPowerText
+	call YesOrNoMenuWithText
+	jp c, Func_6435
+	ldh a, [hTempCardIndex_ff98]
+	ldh [hTemp_ffa0], a
+	or a
+	ret
+.asm_649b
+	scf
+	ret
+.asm_649d
+	ldh a, [hCurMenuItem]
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call GetCardIDFromDeckIndex
+	call LoadCardDataToBuffer1_FromCardID
+	call OpenCardPage_FromCheckPlayArea
+	jp Func_6435
+; 0x64b0
+
+Func_64b0: ; 64b0 (1:64b0)
+	call ZeroObjectPositionsAndToggleOAMCopy
+	call EmptyScreen
+	call LoadDuelCardSymbolTiles
+	call LoadDuelCheckPokemonScreenTiles
+	ld de, wDuelTempList
+	call SetListPointer
+	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
+	call GetTurnDuelistVariable
+	ld c, a
+	ld b, $00
+.asm_64ca
+	push hl
+	push bc
+	ld a, b
+	ld [wHUDEnergyAndHPBarsX], a
+	ld a, b
+	add a
+	add b
+	ld [wCurPlayAreaY], a
+	ld a, b
+	add DUELVARS_ARENA_CARD
+	call GetTurnDuelistVariable
+	call SetNextElementOfList
+	call PrintPlayAreaCardHeader
+	call PrintPlayAreaCardLocation
+	call Func_64fc
+	ld a, [wLoadedCard1Move1Category]
+	call SetNextElementOfList
+	pop bc
+	pop hl
+	inc b
+	dec c
+	jr nz, .asm_64ca
+	ld a, b
+	ld [wNumPlayAreaItems], a
+	call EnableLCD
+	ret
+; 0x64fc
+
+Func_64fc: ; 64fc (1:64fc)
+	ld a, [wLoadedCard1Move1Category]
+	cp POKEMON_POWER
+	ret nz
+	ld a, [wCurPlayAreaY]
+	inc a
+	ld e, a
+	ld d, $04
+	ld hl, wLoadedCard1Move1Name
+	call InitTextPrinting_ProcessTextFromPointerToID
+	ret
+; 0x6510
 
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
@@ -8174,25 +8299,25 @@ Func_741a: ; 741a (1:741a)
 	ld d, a
 	inc hl
 	ld a, [hli]
-	ld e, $7e
+	ld e, ATK_ANIM_SLEEP
 	cp ASLEEP
 	jr z, .got_anim
-	ld e, $7d
+	ld e, ATK_ANIM_PARALYSIS
 	cp PARALYZED
 	jr z, .got_anim
-	ld e, $7b
+	ld e, ATK_ANIM_POISON
 	cp POISONED
 	jr z, .got_anim
-	ld e, $7b
+	ld e, ATK_ANIM_POISON
 	cp DOUBLE_POISONED
 	jr z, .got_anim
-	ld e, $7c
+	ld e, ATK_ANIM_CONFUSION
 	cp CONFUSED
 	jr nz, .loop
 	ldh a, [hWhoseTurn]
 	cp d
 	jr nz, .got_anim
-	ld e, $7f
+	ld e, ATK_ANIM_IMAKUNI_CONFUSION
 .got_anim
 	ld a, e
 	ld [wLoadedMoveAnimation], a
@@ -8269,15 +8394,18 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	ld [hl], e
 	inc hl
 	ld [hl], d
+
+; if damage >= 70, ATK_ANIM_HIT becomes ATK_ANIM_BIG_HIT
 	ld a, [wLoadedMoveAnimation]
-	cp $01
-	jr nz, .asm_74d1
+	cp ATK_ANIM_HIT
+	jr nz, .got_anim
 	ld a, e
-	cp $46
-	jr c, .asm_74d1
-	ld a, $02
+	cp 70
+	jr c, .got_anim
+	ld a, ATK_ANIM_BIG_HIT
 	ld [wLoadedMoveAnimation], a
-.asm_74d1
+
+.got_anim
 	farcall Func_18f9c
 	pop bc
 	pop de
