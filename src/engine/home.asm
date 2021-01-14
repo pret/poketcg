@@ -4529,7 +4529,7 @@ HandleConfusionDamageToSelf: ; 1828 (0:1828)
 	ld [wIsDamageToSelf], a
 	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
-	ld a, $75
+	ld a, ATK_ANIM_CONFUSION_HIT
 	ld [wLoadedMoveAnimation], a
 	ld a, 20 ; damage
 	call DealConfusionDamageToSelf
@@ -4700,7 +4700,7 @@ LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 ; display recoil animation
 DealRecoilDamageToSelf: ; 1955 (0:1955)
 	push af
-	ld a, $7a
+	ld a, ATK_ANIM_RECOIL_HIT
 	ld [wLoadedMoveAnimation], a
 	pop af
 ;	fallthrough
@@ -4977,7 +4977,7 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 ; shows the defending player's play area screen when dealing the damage
 ; instead of the main duel interface with regular attack animation.
 DealDamageToPlayAreaPokemon_RegularAnim: ; 1af3 (0:1af3)
-	ld a, $78
+	ld a, ATK_ANIM_BENCH_HIT
 	ld [wLoadedMoveAnimation], a
 ;	fallthrough
 
