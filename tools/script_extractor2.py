@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import argparse
+import sys
 
 from constants import boosters
 from constants import cards
@@ -14,6 +17,8 @@ from constants import songs
 
 args = None
 rom = None
+symbols = None
+texts = None
 
 # script command names and parameter lists
 script_commands = {
@@ -181,14 +186,17 @@ def get_pointer(address, bank=None):
 	return (raw_pointer % 0x4000) + bank * 0x4000
 
 def make_address_comment(address):
-	return " ; {:x} ({:x}:{:x})\n".format(address, get_bank(address), get_relative_address(address))
+	return ": ; {:x} ({:x}:{:x})\n".format(address, get_bank(address), get_relative_address(address))
 
 def make_blob(start, output, end=None):
 	return { "start": start, "output": output, "end": end if end else start }
 
 def dump_movement(address):
 	blobs = []
-	blobs.append(make_blob(address, "NPCMovement_{:x}:".format(address) + make_address_comment(address)))
+	label = "NPCMovement_{:x}".format(address)
+	if address in symbols:
+		label = symbols[address]
+	blobs.append(make_blob(address, label + make_address_comment(address)))
 	while 1:
 		movement = rom[address]
 		if movement == 0xff:
@@ -206,7 +214,10 @@ def dump_movement(address):
 
 def dump_movement_table(address):
 	blobs = []
-	blobs.append(make_blob(address, "NPCMovementTable_{:x}:".format(address) + make_address_comment(address)))
+	label = "NPCMovementTable_{:x}".format(address)
+	if address in symbols:
+		label = symbols[address]
+	blobs.append(make_blob(address, label + make_address_comment(address)))
 	for i in range(4):
 		pointer = get_pointer(address)
 		blobs.append(make_blob(address, "\tdw NPCMovement_{:x}\n".format(pointer) + ("\n" if i == 3 else ""), address + 2))
@@ -220,10 +231,20 @@ def dump_script(start_address, address=None, visited=set()):
 	blobs = []
 	branches = set()
 	if address is None:
-		blobs.append(make_blob(start_address, "Script_{:x}:".format(start_address) + make_address_comment(start_address)))
+		label = "Script_{:x}".format(start_address)
+		if start_address in symbols:
+			label = symbols[start_address]
+		blobs.append(make_blob(start_address, label + make_address_comment(start_address)))
 		address = start_address
 	else:
-		blobs.append(make_blob(address, ".ows_{:x}\n".format(address)))
+		label = ".ows_{:x}\n".format(address)
+		if address in symbols:
+			label = symbols[address]
+			if label.startswith("."):
+				label += "\n"
+			else:
+				label += make_address_comment(address)
+		blobs.append(make_blob(address, label))
 	if address in visited:
 		return blobs
 	visited.add(address)
@@ -297,6 +318,8 @@ def dump_script(start_address, address=None, visited=set()):
 			elif param_type == "movement":
 				param = get_pointer(address)
 				label = "NPCMovement_{:x}".format(param)
+				if param in symbols:
+					label = symbols[param]
 				if not macro_mode:
 					output += "\n\tdw"
 				output += " {}".format(label)
@@ -304,6 +327,8 @@ def dump_script(start_address, address=None, visited=set()):
 			elif param_type == "movement_table":
 				param = get_pointer(address)
 				label = "NPCMovementTable_{:x}".format(param)
+				if param in symbols:
+					label = symbols[param]
 				if not macro_mode:
 					output += "\n\tdw"
 				output += " {}".format(label)
@@ -318,15 +343,19 @@ def dump_script(start_address, address=None, visited=set()):
 				if text_id == 0x0000:
 					output += " NULL"
 				else:
-					output += " Text{:04x}".format(text_id)
+					output += " {}".format(texts[text_id])
 			elif param_type == "label":
 				param = get_pointer(address)
 				if param == 0x0000:
 					label = "NULL"
 				elif param == start_address:
 					label = "Script_{:x}".format(param)
+					if param in symbols:
+						label = symbols[param]
 				else:
 					label = ".ows_{:x}".format(param)
+					if param in symbols:
+						label = symbols[param]
 					if param > start_address or args.allow_backward_jumps:
 						branches.add(param)
 				if not macro_mode:
@@ -370,20 +399,45 @@ def sort_and_filter(blobs):
 		filtered[-1]["output"] = filtered[-1]["output"].rstrip("\n")
 	return filtered
 
+def load_symbols(symfile):
+	sym = {}
+	for line in open(symfile):
+		line = line.split(";")[0].strip()
+		# NOTE: only worry about bank 3 symbols for now
+		if line.startswith("03:"):
+			bank_address, label = line.split(" ")[:2]
+			bank, address = bank_address.split(":")
+			address = (int(address, 16) % 0x4000) + int(bank, 16) * 0x4000
+			if "." in label:
+				label = "." + label.split(".")[1]
+			sym[address] = label
+	return sym
+
+def load_texts(txfile):
+	tx = [None]
+	for line in open(txfile):
+		if line.startswith("\ttextpointer"):
+			tx.append(line.split()[1])
+	return tx
+
 if __name__ == "__main__":
 	ap = argparse.ArgumentParser(description="Pokemon TCG Script Extractor")
 	ap.add_argument("-b", "--allow-backward-jumps", action="store_true", help="extract scripts that are found before the starting address")
 	ap.add_argument("-g", "--fill-gaps", action="store_true", help="use 'db's to fill the gaps between visited locations")
 	ap.add_argument("-i", "--ignore-errors", action="store_true", help="silently proceed to the next address if an error occurs")
 	ap.add_argument("-r", "--rom", default="baserom.gbc", help="rom file to extract script from")
+	ap.add_argument("-s", "--symfile", default="poketcg.sym", help="symfile to extract symbols from")
 	ap.add_argument("addresses", nargs="+", help="addresses to extract from")
 	args = ap.parse_args()
 	rom = bytearray(open(args.rom, "rb").read())
+	symbols = load_symbols(args.symfile)
+	texts = load_texts("src/text/text_offsets.asm")
 	blobs = []
 	for address in args.addresses:
 		try:
 			blobs += dump_script(int(address, 16))
 		except:
+			print("Parsing script failed: 0x{:x}".format(int(address, 16)), file=sys.stderr)
 			if not args.ignore_errors:
 				raise
 	blobs = sort_and_filter(blobs)
