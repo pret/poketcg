@@ -399,6 +399,53 @@ def sort_and_filter(blobs):
 		filtered[-1]["output"] = filtered[-1]["output"].rstrip("\n")
 	return filtered
 
+def find_unreachable_labels(input):
+	scope = ""
+	label_scopes = {}
+	local_labels = set()
+	local_references = set()
+	unreachable_labels = set()
+	for line in input.split("\n"):
+		line = line.split(";")[0].rstrip()
+		if line.startswith("\t"):
+			for word in [x.rstrip(",") for x in line.split()]:
+				if word.startswith("."):
+					local_references.add(word)
+		elif line.startswith("."):
+			label = line.split()[0]
+			local_labels.add(label)
+			label_scopes[label] = scope
+		elif line.endswith(":"):
+			for label in local_references:
+				if label not in local_labels:
+					unreachable_labels.add(label)
+			scope = line[:-1]
+			local_labels = set()
+			local_references = set()
+	for label in local_references:
+		if label not in local_labels:
+			unreachable_labels.add(label)
+	unreachable_labels = list(unreachable_labels)
+	for i in range(len(unreachable_labels)):
+		label = unreachable_labels[i]
+		unreachable_labels[i] = { "scope": label_scopes.get(label, ""), "label": label }
+	return unreachable_labels
+
+def fix_unreachable_labels(input, unreachable_labels):
+	scope = ""
+	output = ""
+	for line in input.split("\n"):
+		stripped_line = line.split(";")[0].rstrip()
+		if line.startswith("\t"):
+			for label in unreachable_labels:
+				if label["label"] in line and label["scope"] != scope:
+					line = line.replace(label["label"], label["scope"] + label["label"])
+		elif stripped_line.endswith(":"):
+			scope = stripped_line[:-1]
+		output += line + "\n"
+	output = output.rstrip("\n")
+	return output
+
 def load_symbols(symfile):
 	sym = {}
 	for line in open(symfile):
@@ -423,6 +470,7 @@ def load_texts(txfile):
 if __name__ == "__main__":
 	ap = argparse.ArgumentParser(description="Pokemon TCG Script Extractor")
 	ap.add_argument("-b", "--allow-backward-jumps", action="store_true", help="extract scripts that are found before the starting address")
+	ap.add_argument("-f", "--fix-unreachable", action="store_true", help="fix unreachable labels that are referenced from the wrong scope")
 	ap.add_argument("-g", "--fill-gaps", action="store_true", help="use 'db's to fill the gaps between visited locations")
 	ap.add_argument("-i", "--ignore-errors", action="store_true", help="silently proceed to the next address if an error occurs")
 	ap.add_argument("-r", "--rom", default="baserom.gbc", help="rom file to extract script from")
@@ -444,4 +492,7 @@ if __name__ == "__main__":
 	output = ""
 	for blob in blobs:
 		output += blob["output"]
+	if args.fix_unreachable:
+		unreachable_labels = find_unreachable_labels(output)
+		output = fix_unreachable_labels(output, unreachable_labels)
 	print(output)
