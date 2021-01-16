@@ -47,7 +47,7 @@ script_commands = {
 	0x14: { "name": "fight_club_pupil_jump",                      "params": [ "label", "label", "label", "label", "label" ] },
 	0x15: { "name": "set_active_npc_direction",                   "params": [ "direction" ] },
 	0x16: { "name": "pick_next_man1_requested_card",              "params": [] },
-	0x17: { "name": "get_man1_requested_card_name_text",          "params": [] },
+	0x17: { "name": "load_man1_requested_card_into_txram_slot",   "params": [ "byte" ] },
 	0x18: { "name": "jump_if_man1_requested_card_owned",          "params": [ "label" ] },
 	0x19: { "name": "jump_if_man1_requested_card_in_collection",  "params": [ "label" ] },
 	0x1a: { "name": "remove_man1_requested_card_from_collection", "params": [] },

@@ -28,7 +28,7 @@ ENDM
 	const ScriptCommand_JumpBasedOnFightingClubPupilStatus_index             ; $14
 	const ScriptCommand_SetActiveNPCDirection_index                          ; $15
 	const ScriptCommand_PickNextMan1RequestedCard_index                      ; $16
-	const ScriptCommand_GetMan1RequestedCardNameText_index                   ; $17
+	const ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot_index             ; $17
 	const ScriptCommand_JumpIfMan1RequestedCardOwned_index                   ; $18
 	const ScriptCommand_JumpIfMan1RequestedCardInCollection_index            ; $19
 	const ScriptCommand_RemoveMan1RequestedCardFromCollection_index          ; $1a
@@ -265,9 +265,10 @@ pick_next_man1_requested_card: MACRO
 	run_command ScriptCommand_PickNextMan1RequestedCard
 ENDM
 
-; Loads the name text for the card gift requested by NPC_MAN1
-get_man1_requested_card_name_text: MACRO
-	run_command ScriptCommand_GetMan1RequestedCardNameText
+; Loads into the given txram slot the name of the card gift requested by NPC_MAN1
+load_man1_requested_card_into_txram_slot: MACRO
+	run_command ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot
+	db \1 ; TxRam slot
 ENDM
 
 ; Jumps to the given script position if the player owns the card gift requested by NPC_MAN1

@@ -1028,7 +1028,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
 	dw ScriptCommand_SetActiveNPCDirection
 	dw ScriptCommand_PickNextMan1RequestedCard
-	dw ScriptCommand_GetMan1RequestedCardNameText
+	dw ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot
 	dw ScriptCommand_JumpIfMan1RequestedCardOwned
 	dw ScriptCommand_JumpIfMan1RequestedCardInCollection
 	dw ScriptCommand_RemoveMan1RequestedCardFromCollection

@@ -2421,7 +2421,7 @@ Data_d006: ; d006 (3:5006)
 	db RAPIDASH
 	db WEEZING
 
-ScriptCommand_GetMan1RequestedCardNameText: ; d00b (3:500b)
+ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot: ; d00b (3:500b)
 	sla c
 	ld b, $0
 	ld hl, wTxRam2
@@ -4359,27 +4359,57 @@ Script_Man1: ; dc76 (3:5c76)
 	jump_if_flag_nonzero_2 EVENT_FLAG_29, .ows_dc91
 	max_out_flag_value EVENT_FLAG_29
 	pick_next_man1_requested_card
-	get_man1_requested_card_name_text
-	end_script
-; 0xdc89
-
-	INCROM $dc89, $dc91
+	load_man1_requested_card_into_txram_slot $00
+	print_npc_text Text045b
+	max_out_flag_value EVENT_FLAG_2A
+	script_jump .ows_dca5
 
 .ows_dc91
 	jump_if_flag_zero_2 EVENT_FLAG_2A, .ows_dc9d
-	get_man1_requested_card_name_text
-	end_script
-; 0xdc97
-
-	INCROM $dc97, $dc9d
+	load_man1_requested_card_into_txram_slot $00
+	print_npc_text Text045c
+	script_jump .ows_dca5
 
 .ows_dc9d
 	pick_next_man1_requested_card
-	get_man1_requested_card_name_text
-	end_script
-; 0xdca0
+	load_man1_requested_card_into_txram_slot $00
+	print_npc_text Text045d
+	max_out_flag_value EVENT_FLAG_2A
+.ows_dca5
+	load_man1_requested_card_into_txram_slot $00
+	ask_question_jump Text045e, .ows_dcaf
+	print_text_quit_fully Text045f
 
-	INCROM $dca0, $dce5
+.ows_dcaf
+	jump_if_man1_requested_card_owned .ows_dcb9
+	load_man1_requested_card_into_txram_slot $00
+	load_man1_requested_card_into_txram_slot $01
+	print_text_quit_fully Text0460
+
+.ows_dcb9
+	jump_if_man1_requested_card_in_collection .ows_dcc3
+	load_man1_requested_card_into_txram_slot $00
+	load_man1_requested_card_into_txram_slot $01
+	print_text_quit_fully Text0461
+
+.ows_dcc3
+	load_man1_requested_card_into_txram_slot $00
+	load_man1_requested_card_into_txram_slot $01
+	print_npc_text Text0462
+	remove_man1_requested_card_from_collection
+	max_out_flag_value EVENT_FLAG_01
+	zero_out_flag_value EVENT_FLAG_2A
+	increment_flag_value EVENT_FLAG_2C
+	jump_if_flag_equal EVENT_FLAG_2C, $05, .ows_dcd7
+	quit_script_fully
+
+.ows_dcd7
+	print_npc_text Text0463
+	give_card PIKACHU4
+	show_card_received_screen PIKACHU4
+	print_npc_text Text0464
+	script_set_flag_value EVENT_FLAG_2C, $06
+	quit_script_fully
 
 .ows_dce5
 	print_text_quit_fully Text0465
