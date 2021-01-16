@@ -59,7 +59,7 @@
 	const EVENT_FLAG_39                         ; $39
 	const EVENT_FLAG_3A                         ; $3a
 	const EVENT_FLAG_3B                         ; $3b
-	const FLAG_BEAT_BRITTANY                    ; $3c
+	const EVENT_BEAT_BRITTANY                   ; $3c
 	const EVENT_FLAG_3D                         ; $3d
 	const EVENT_FLAG_3E                         ; $3e
 	const EVENT_FLAG_3F                         ; $3f

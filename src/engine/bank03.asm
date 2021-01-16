@@ -1677,7 +1677,7 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def $0c, %00000001 ; EVENT_FLAG_39
 	flag_def $0d, %10000000 ; EVENT_FLAG_3A
 	flag_def $0d, %01000000 ; EVENT_FLAG_3B
-	flag_def $0d, %00100000 ; FLAG_BEAT_BRITTANY
+	flag_def $0d, %00100000 ; EVENT_BEAT_BRITTANY
 	flag_def $0d, %00010000 ; EVENT_FLAG_3D
 	flag_def $0d, %00001110 ; EVENT_FLAG_3E
 	flag_def $0e, %11100000 ; EVENT_FLAG_3F
@@ -2071,7 +2071,7 @@ ScriptCommand_SetChallengeHallNPCCoords: ; cdf5 (3:4df5)
 	ld [wLoadNPCXPos], a
 	ld a, b
 	ld [wLoadNPCYPos], a
-	ld a, $2
+	ld a, SOUTH
 	ld [wLoadNPCDirection], a
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
@@ -3546,7 +3546,17 @@ Func_d703: ; d703 (3:5703)
 	ret
 
 Preload_DrMason: ; d710 (3:5710)
-	INCROM $d710, $d727
+	call Func_d703
+	get_flag_value EVENT_FLAG_3E
+	cp $01
+	jr nz, .asm_d725
+	ld a, $06
+	ld [wLoadNPCXPos], a
+	ld a, $0c
+	ld [wLoadNPCYPos], a
+.asm_d725
+	scf
+	ret
 
 Script_DrMason: ; d727 (3:5727)
 	start_script
@@ -3782,7 +3792,15 @@ DeckMachineRoomAfterDuel: ; d89f (3:589f)
 	db $00
 
 DeckMachineRoomCloseTextBox: ; d8ad (3:58ad)
-	INCROM $d8ad, $d8bb
+	ld a, $02
+.asm_d8af
+	push af
+	farcall Func_80b89
+	pop af
+	inc a
+	cp $0a
+	jr c, .asm_d8af
+	ret
 
 Script_Tech6: ; d8bb (3:58bb)
 	start_script
@@ -4418,7 +4436,24 @@ Script_Man1: ; dc76 (3:5c76)
 	print_text_quit_fully Text0466
 
 Preload_ImakuniInFightingClubLobby: ; dceb (3:5ceb)
-	INCROM $dceb, $dd0d
+	get_flag_value EVENT_IMAKUNI_STATE
+	cp IMAKUNI_MENTIONED
+	jr z, .asm_dd06
+	or a
+	jr z, .asm_dd04
+	get_flag_value EVENT_TEMP_DUELED_IMAKUNI
+	jr nz, .asm_dd04
+	get_flag_value EVENT_IMAKUNI_ROOM
+	cp IMAKUNI_FIGHTING_CLUB
+	jr z, .asm_dd06
+.asm_dd04
+	or a
+	ret
+.asm_dd06
+	ld a, MUSIC_IMAKUNI
+	ld [wd111], a
+	scf
+	ret
 
 Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
@@ -4504,7 +4539,9 @@ Script_Butch: ; dd8d (3:5d8d)
 	quit_script_fully
 
 Preload_Granny1: ; dd98 (3:5d98)
-	INCROM $dd98, $dd9f
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	cp $01
+	ret
 
 Script_Granny1: ; dd9f (3:5d9f)
 	start_script
@@ -4609,7 +4646,10 @@ Script_Mitch_PrintTrainHarderText: ; de40 (3:5e40)
 	print_text_quit_fully Text0488
 
 Preload_ChrisInFightingClub: ; de43 (3:5e43)
-	INCROM $de43, $de4b
+	get_flag_value EVENT_FLAG_17
+	cp $08
+	ccf
+	ret
 
 Script_de4b: ; de4b (3:5e4b)
 	jump_if_flag_equal EVENT_FLAG_17, $08, NULL
@@ -4636,7 +4676,10 @@ Script_LostToChrisInFightingClub: ; de75 (3:5e75)
 	print_text_quit_fully Text0490
 
 Preload_MichaelInFightingClub: ; de79 (3:5e79)
-	INCROM $de79, $de81
+	get_flag_value EVENT_FLAG_11
+	cp $08
+	ccf
+	ret
 
 Script_de81: ; de81 (3:5e81)
 	print_npc_text Text0491
@@ -4661,7 +4704,10 @@ Script_LostToMichaelInFightingClub: ; dea1 (3:5ea1)
 	print_text_quit_fully Text0497
 
 Preload_JessicaInFightingClub: ; dea5 (3:5ea5)
-	INCROM $dea5, $dead
+	get_flag_value EVENT_FLAG_20
+	cp $08
+	ccf
+	ret
 
 Script_dead: ; dead (3:5ead)
 	print_npc_text Text0498
@@ -4707,7 +4753,11 @@ RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	db $00
 
 Preload_ChrisInRockClubLobby: ; dee9 (3:5ee9)
-	INCROM $dee9, $def2
+	get_flag_value EVENT_FLAG_17
+	or a
+	ret z
+	cp $08
+	ret
 
 Script_Chris: ; def2 (3:5ef2)
 	start_script
@@ -4834,7 +4884,9 @@ Script_Chap1: ; dfc0 (3:5fc0)
 	quit_script_fully
 
 Preload_Lass3: ; dfcb (3:5fcb)
-	INCROM $dfcb, $dfd2
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	cp $01
+	ret
 
 Script_Lass3: ; dfd2 (3:5fd2)
 	start_script
@@ -4992,7 +5044,7 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	or a
 	ret
 .asm_e0c8
-	ld a, $10
+	ld a, MUSIC_IMAKUNI
 	ld [wd111], a
 	scf
 	ret
@@ -5398,7 +5450,22 @@ LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	db $00
 
 Preload_ImakuniInLightningClubLobby: ; e37b (3:637b)
-	INCROM $e37b, $e39a
+	get_flag_value EVENT_IMAKUNI_STATE
+	cp IMAKUNI_TALKED
+	jr c, .asm_e391
+	get_flag_value EVENT_TEMP_DUELED_IMAKUNI
+	jr nz, .asm_e391
+	get_flag_value EVENT_IMAKUNI_ROOM
+	cp IMAKUNI_LIGHTNING_CLUB
+	jr z, .asm_e393
+.asm_e391
+	or a
+	ret
+.asm_e393
+	ld a, MUSIC_IMAKUNI
+	ld [wd111], a
+	scf
+	ret
 
 Script_Chap2: ; e39a (3:639a)
 	start_script
@@ -5552,7 +5619,17 @@ Script_LostToBrandon: ; e490 (3:6490)
 	print_text_quit_fully Text0631
 
 Preload_Isaac: ; e494 (3:6494)
-	INCROM $e494, $e4ad
+	get_flag_value EVENT_FLAG_25
+	jr z, .asm_e4ab
+	get_flag_value EVENT_FLAG_26
+	jr z, .asm_e4ab
+	get_flag_value EVENT_FLAG_27
+	jr z, .asm_e4ab
+	ld a, SOUTH
+	ld [wLoadNPCDirection], a
+.asm_e4ab
+	scf
+	ret
 
 Script_Isaac: ; e4ad (3:64ad)
 	start_script
@@ -5674,7 +5751,11 @@ Script_Clerk5: ; e566 (3:6566)
 	print_text_quit_fully Text06d7
 
 Preload_MichaelInGrassClubEntrance: ; e56a (3:656a)
-	INCROM $e56a, $e573
+	get_flag_value EVENT_FLAG_11
+	or a
+	ret z
+	cp $08
+	ret
 
 Script_Michael: ; e573 (3:6573)
 	start_script
@@ -5759,7 +5840,7 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
 	jump_if_flag_less_than EVENT_FLAG_35, $02, NULL
 	print_variable_npc_text Text06e6, Text06e7
-	max_out_flag_value FLAG_BEAT_BRITTANY
+	max_out_flag_value EVENT_BEAT_BRITTANY
 	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .quit
 	jump_if_flag_zero_2 EVENT_FLAG_3A, .quit
 	jump_if_flag_zero_2 EVENT_FLAG_3B, .quit
@@ -5861,7 +5942,9 @@ Script_Granny2: ; e6d8 (3:66d8)
 	print_text_quit_fully Text0702
 
 Preload_Gal2: ; e6dc (3:66dc)
-	INCROM $e6dc, $e6e3
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	cp $01
+	ret
 
 Script_Gal2: ; e6e3 (3:66e3)
 	start_script
@@ -5909,7 +5992,7 @@ Script_BeatKristin: ; e71c (3:671c)
 	print_npc_text Text070a
 	max_out_flag_value EVENT_FLAG_3A
 	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .ows_e740
-	jump_if_flag_zero_2 FLAG_BEAT_BRITTANY, .ows_e740
+	jump_if_flag_zero_2 EVENT_BEAT_BRITTANY, .ows_e740
 	jump_if_flag_zero_2 EVENT_FLAG_3B, .ows_e740
 	script_set_flag_value EVENT_FLAG_35, $01
 	max_out_flag_value EVENT_FLAG_1E
@@ -5941,7 +6024,7 @@ Script_BeatHeather: ; e760 (3:6760)
 	print_npc_text Text0714
 	max_out_flag_value EVENT_FLAG_3B
 	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .ows_e789
-	jump_if_flag_zero_2 FLAG_BEAT_BRITTANY, .ows_e789
+	jump_if_flag_zero_2 EVENT_BEAT_BRITTANY, .ows_e789
 	jump_if_flag_zero_2 EVENT_FLAG_3A, .ows_e789
 	script_set_flag_value EVENT_FLAG_35, $01
 	max_out_flag_value EVENT_FLAG_1E
@@ -5956,7 +6039,10 @@ Script_LostToHeather: ; e78a (3:678a)
 	quit_script_fully
 
 Preload_NikkiInGrassClub: ; e796 (3:6796)
-	INCROM $e796, $e79e
+	get_flag_value EVENT_FLAG_35
+	cp $02
+	ccf
+	ret
 
 Script_Nikki: ; e79e (3:679e)
 	ld a, [wCurMap]
@@ -6066,7 +6152,9 @@ Script_Lad3: ; e850 (3:6850)
 	quit_script_fully
 
 Preload_Ronald1InClubEntrance: ; e85b (3:685b)
-	INCROM $e85b, $e862
+	get_flag_value EVENT_FLAG_4B
+	cp $01
+	ret
 
 Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
@@ -6103,7 +6191,28 @@ NPCMovement_e894: ; e894 (3:6894)
 	db $ff
 
 Preload_Ronald2InClubEntrance: ; e89a (3:689a)
-	INCROM $e89a, $e8c0
+	get_flag_value EVENT_FLAG_4C
+	ld e, $02
+Func_e8a0: ; e8a0 (3:68a0)
+	cp $01
+	jr z, .asm_e8b4
+	cp $02
+	jr nc, .asm_e8b2
+	call TryGiveMedalPCPacks
+	get_flag_value EVENT_MEDAL_COUNT
+	cp e
+	jr z, .asm_e8be
+.asm_e8b2
+	or a
+	ret
+.asm_e8b4
+	ld a, $08
+	ld [wLoadNPCXPos], a
+	ld a, $08
+	ld [wLoadNPCYPos], a
+.asm_e8be
+	scf
+	ret
 
 Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	start_script
@@ -6165,7 +6274,9 @@ NPCMovement_e90f: ; e90f (3:690f)
 	db $ff
 
 Preload_Ronald3InClubEntrance: ; e915 (3:6915)
-	INCROM $e915, $e91e
+	get_flag_value EVENT_FLAG_4D
+	ld e, $05
+	jp Func_e8a0
 
 Script_SecondRonaldFight: ; e91e (3:691e)
 	start_script
@@ -6217,7 +6328,12 @@ PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	db $00
 
 PsychicClubLobbyLoadMap: ; e971 (3:6971)
-	INCROM $e971, $e980
+	ld a, NPC_RONALD1
+	ld [wTempNPC], a
+	call FindLoadedNPC
+	ret c
+	ld bc, Script_ea02
+	jp SetNextNPCAndScript
 
 Script_Robert: ; e980 (3:6980)
 	start_script
@@ -6269,12 +6385,27 @@ Script_Pappy1: ; e9a5 (3:69a5)
 
 .ows_e9de
 	print_text_quit_fully Text0663
-; 0xe9e1
 
-	INCROM $e9e1, $e9f7
+Func_e9e1: ; e9e1 (3:69e1)
+	call TryGiveMedalPCPacks
+	get_flag_value EVENT_MEDAL_COUNT
+	cp $04
+	jr nz, .asm_e9f5
+	get_flag_value EVENT_FLAG_32
+	or a
+	jr nz, .asm_e9f5
+	scf
+	ret
+.asm_e9f5
+	or a
+	ret
 
 Preload_Ronald1InPsychicClubLobby: ; e9f7 (3:69f7)
-	INCROM $e9f7, $ea02
+	call Func_e9e1
+	ret nc
+	ld a, [wPlayerYCoord]
+	ld [wLoadNPCYPos], a
+	ret
 
 Script_ea02: ; ea02 (3:6a02)
 	start_script
@@ -6412,10 +6543,15 @@ Script_LostToStephanie: ; eacc (3:6acc)
 	print_text_quit_fully Text067a
 
 Preload_Murray2: ; ead0 (3:6ad0)
-	INCROM $ead0, $eada
+	call TryGiveMedalPCPacks
+	get_flag_value EVENT_MEDAL_COUNT
+	cp $04
+	ret
 
 Preload_Murray1: ; eada (3:6ada)
-	INCROM $eada, $eadf
+	call Preload_Murray2
+	ccf
+	ret
 
 Script_Murray: ; eadf (3:6adf)
 	start_script
@@ -6495,7 +6631,22 @@ ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 	db $00
 
 Preload_ImakuniInScienceClubLobby: ; eb65 (3:6b65)
-	INCROM $eb65, $eb84
+	get_flag_value EVENT_IMAKUNI_STATE
+	cp IMAKUNI_TALKED
+	jr c, .asm_eb7b
+	get_flag_value EVENT_TEMP_DUELED_IMAKUNI
+	jr nz, .asm_eb7b
+	get_flag_value EVENT_IMAKUNI_ROOM
+	cp IMAKUNI_SCIENCE_CLUB
+	jr z, .asm_eb7d
+.asm_eb7b
+	or a
+	ret
+.asm_eb7d
+	ld a, MUSIC_IMAKUNI
+	ld [wd111], a
+	scf
+	ret
 
 Script_Lad1: ; eb84 (3:6b84)
 	start_script
@@ -6695,7 +6846,18 @@ Script_LostToRick: ; ec9a (3:6c9a)
 	print_text_quit_fully Text076b
 
 Preload_Joseph: ; ecc4 (3:6cc4)
-	INCROM $ecc4, $ecdb
+	ld a, EVENT_FLAG_1B
+	call GetEventFlagValue
+	or a
+	jr z, .asm_ecd9
+	ld a, [wLoadNPCXPos]
+	add $02
+	ld [wLoadNPCXPos], a
+	ld a, $03
+	ld [wLoadNPCDirection], a
+.asm_ecd9
+	scf
+	ret
 
 Script_Joseph: ; ecdb (3:6cdb)
 	start_script
@@ -6821,7 +6983,11 @@ FindExtraInteractableObjects: ; ed64 (3:6d64)
 	ret
 
 Preload_JessicaInFireClubLobby: ; ed8d (3:6d8d)
-	INCROM $ed8d, $ed96
+	get_flag_value EVENT_FLAG_20
+	or a
+	ret z
+	cp $08
+	ret
 
 Script_Jessica: ; ed96 (3:6d96)
 	start_script
@@ -6909,7 +7075,9 @@ Script_Chap3: ; ede8 (3:6de8)
 	print_text_quit_fully Text069a
 
 Preload_Lad2: ; ee25 (3:6e25)
-	INCROM $ee25, $ee2c
+	get_flag_value EVENT_FLAG_21
+	cp $01
+	ret
 
 Script_Lad2: ; ee2c (3:6e2c)
 	start_script
@@ -7204,7 +7372,7 @@ Preload_Clerk9: ; ef96 (3:6f96)
 .asm_f016
 	set_flag_value EVENT_FLAG_44
 	max_flag_value EVENT_FLAG_42
-	ld a, $0b
+	ld a, MUSIC_CHALLENGE_HALL
 	ld [wd111], a
 .asm_f023
 	scf
@@ -7249,7 +7417,7 @@ Preload_ChallengeHallNPCs1: ; f07a (3:707a)
 	get_flag_value EVENT_FLAG_42
 	or a
 	jr z, .quit
-	ld a, $0b
+	ld a, MUSIC_CHALLENGE_HALL
 	ld [wd111], a
 	scf
 .quit
@@ -8012,10 +8180,22 @@ Func_f602: ; f602 (3:7602)
 	INCROM $f602, $f607
 
 PokemonDomeEntranceLoadMap: ; f607 (3:7607)
-	INCROM $f607, $f62a
+	zero_flag_value EVENT_FLAG_63
+	zero_flag_value2 EVENT_FLAG_65
+	zero_flag_value2 EVENT_FLAG_68
+	zero_flag_value2 EVENT_FLAG_69
+	zero_flag_value2 EVENT_FLAG_6A
+	zero_flag_value2 EVENT_FLAG_6B
+	get_flag_value EVENT_RECEIVED_LEGENDARY_CARD
+	or a
+	ret nz
+	zero_flag_value2 EVENT_FLAG_6C
+	ret
 
 PokemonDomeEntranceCloseTextBox: ; f62a (3:762a)
-	INCROM $f62a, $f631
+	ld a, $00
+	farcall Func_80b89
+	ret
 
 Script_f631: ; f631 (3:7631)
 	start_script
@@ -8111,7 +8291,18 @@ Script_f6af: ; f6af (3:76af)
 	quit_script_fully
 
 PokemonDomeMovePlayer: ; f6c6 (3:76c6)
-	INCROM $f6c6, $f6e0
+	ld a, [wPlayerYCoord]
+	cp $16
+	ret nz
+	ld a, [wPlayerXCoord]
+	cp $0e
+	ret c
+	cp $11
+	ret nc
+	ld a, NPC_ROD
+	ld [wTempNPC], a
+	ld bc, Script_f84c
+	jp SetNextNPCAndScript
 
 PokemonDomeAfterDuel: ; f6e0 (3:76e0)
 	ld hl, .after_duel_table
@@ -8146,10 +8337,18 @@ PokemonDomeAfterDuel: ; f6e0 (3:76e0)
 	db $00
 
 PokemonDomeLoadMap: ; f706 (3:7706)
-	INCROM $f706, $f718
+	ld a, $0d
+	farcall TryGivePCPack
+	get_flag_value EVENT_FLAG_66
+	or a
+	ret z
+	ld bc, Script_f80b
+	jp SetNextScript
 
 PokemonDomeCloseTextBox: ; f718 (3:7718)
-	INCROM $f718, $f71f
+	ld a, $01
+	farcall Func_80b89
+	ret
 
 Script_Courtney: ; f71f (3:771f)
 	start_script
@@ -8176,19 +8375,96 @@ Script_Rod: ; f740 (3:7740)
 	quit_script_fully
 
 Preload_Courtney: ; f74b (3:774b)
-	INCROM $f74b, $f78c
+	get_flag_value EVENT_FLAG_68
+	cp $01
+	jr z, Func_f76c
+	lb bc, $16, $0c
+	cp $02
+	jr z, Func_f77d
+	get_flag_value EVENT_FLAG_64
+	jr nz, Func_f762
+	scf
+	ret
+
+Func_f762: ; f762 (3:7762)
+	ld a, [wLoadNPCYPos]
+	add $02
+	ld [wLoadNPCYPos], a
+	scf
+	ret
+
+Func_f76c: ; f76c (3:776c)
+	ld a, $12
+	ld [wLoadNPCXPos], a
+	ld a, $0e
+	ld [wLoadNPCYPos], a
+	ld a, WEST
+	ld [wLoadNPCDirection], a
+	scf
+	ret
+
+Func_f77d: ; f77d (3:777d)
+	ld a, WEST
+	ld [wLoadNPCDirection], a
+Func_f782: ; f782 (3:7782)
+	ld a, b
+	ld [wLoadNPCXPos], a
+	ld a, c
+	ld [wLoadNPCYPos], a
+	scf
+	ret
 
 Preload_Steve: ; f78c (3:778c)
-	INCROM $f78c, $f7a3
+	get_flag_value EVENT_FLAG_69
+	cp $01
+	jr z, Func_f76c
+	lb bc, $16, $0e
+	cp $02
+	jr z, Func_f77d
+	get_flag_value EVENT_FLAG_64
+	jr nz, Func_f762
+	scf
+	ret
 
 Preload_Jack: ; f7a3 (3:77a3)
-	INCROM $f7a3, $f7ba
+	get_flag_value EVENT_FLAG_6A
+	cp $01
+	jr z, Func_f76c
+	lb bc, $14, $0a
+	cp $02
+	jr z, Func_f77d
+	get_flag_value EVENT_FLAG_64
+	jr nz, Func_f762
+	scf
+	ret
 
 Preload_Rod: ; f7ba (3:77ba)
-	INCROM $f7ba, $f7d6
+	get_flag_value EVENT_FLAG_6B
+	cp $01
+	jr z, Func_f76c
+	get_flag_value EVENT_FLAG_65
+	lb bc, $10, $0a
+	cp $02
+	jr z, Func_f782
+	lb bc, $0e, $0a
+	cp $01
+	jr z, Func_f782
+	scf
+	ret
 
 Preload_Ronald1InPokemonDome: ; f7d6 (3:77d6)
-	INCROM $f7d6, $f7ed
+	get_flag_value EVENT_FLAG_6C
+	cp $02
+	ret nc
+	get_flag_value EVENT_FLAG_6C
+	or a
+	jr z, .asm_f7eb
+	ld a, MUSIC_RONALD
+	ld [wd111], a
+	jr Func_f76c
+.asm_f7eb
+	scf
+	ret
 
 Script_f7ed: ; f7ed (3:77ed)
 	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_f7f9
