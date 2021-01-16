@@ -2116,9 +2116,9 @@ ScriptCommand_MoveActiveNPC: ; ce4a (3:4e4a)
 	ld [wLoadedNPCTempIndex], a
 	jr ExecuteNPCMovement
 
-; Begin a series of NPC movements on an arbitrary NPC
+; Begin a series of NPC movements on the Challenge Hall opponent NPC
 ; based on the series of directions pointed to by bc
-ScriptCommand_MoveWramNPC: ; ce52 (3:4e52)
+ScriptCommand_MoveChallengeHallNPC: ; ce52 (3:4e52)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -7791,13 +7791,13 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	load_active_npc_name_into_txram_slot $00
 	print_npc_text Text053e
 	close_text_box
-	move_wram_npc NPCMovement_f4c8
+	move_challenge_hall_npc NPCMovement_f4c8
 	unload_challenge_hall_npc
 	print_npc_text Text053f
 	close_text_box
 	pick_challenge_hall_opponent
 	set_challenge_hall_npc_coords 20, 20
-	move_wram_npc NPCMovement_f4d0
+	move_challenge_hall_npc NPCMovement_f4d0
 	load_active_npc_name_into_txram_slot $00
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
 	print_variable_npc_text Text0540, Text0541
@@ -7865,18 +7865,18 @@ Script_f4db: ; f4db (3:74db)
 	set_dialog_npc NPC_RONALD1
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
 	print_variable_npc_text Text054c, Text054d
-	move_wram_npc NPCMovement_f4d8
+	move_challenge_hall_npc NPCMovement_f4d8
 	do_frames 40
-	move_wram_npc NPCMovement_f34c
+	move_challenge_hall_npc NPCMovement_f34c
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
 	print_variable_npc_text Text054e, Text054f
 	set_dialog_npc NPC_HOST
 	close_text_box
-	move_wram_npc NPCMovement_f4c9
+	move_challenge_hall_npc NPCMovement_f4c9
 	script_jump .ows_f516
 
 .ows_f513
-	move_wram_npc NPCMovement_f4c8
+	move_challenge_hall_npc NPCMovement_f4c8
 .ows_f516
 	unload_challenge_hall_npc
 	move_active_npc NPCMovement_f383

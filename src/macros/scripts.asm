@@ -52,7 +52,7 @@ ENDM
 	const ScriptCommand_LoadActiveNPCNameIntoTxRamSlot_index                 ; $2c
 	const ScriptCommand_StartChallengeHallDuel_index                         ; $2d
 	const ScriptCommand_PrintTextForChallengeCup_index                       ; $2e
-	const ScriptCommand_MoveWramNPC_index                                    ; $2f
+	const ScriptCommand_MoveChallengeHallNPC_index                           ; $2f
 	const ScriptCommand_UnloadChallengeHallNPC_index                         ; $30
 	const ScriptCommand_SetChallengeHallNPCCoords_index                      ; $31
 	const ScriptCommand_PickChallengeHallOpponent_index                      ; $32
@@ -421,9 +421,9 @@ print_text_for_challenge_cup: MACRO
 	tx \3 ; Text Pointer for Challenge Cup #3
 ENDM
 
-; Moves the NPC in wTempNPC using an NPCMovement
-move_wram_npc: MACRO
-	run_command ScriptCommand_MoveWramNPC
+; Moves the Challenge Hall opponent NPC using an NPCMovement
+move_challenge_hall_npc: MACRO
+	run_command ScriptCommand_MoveChallengeHallNPC
 	dw \1 ; NPCMovement (ex NPCMovement_d880)
 ENDM
 

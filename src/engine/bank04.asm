@@ -1052,7 +1052,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_LoadActiveNPCNameIntoTxRamSlot
 	dw ScriptCommand_StartChallengeHallDuel
 	dw ScriptCommand_PrintTextForChallengeCup
-	dw ScriptCommand_MoveWramNPC
+	dw ScriptCommand_MoveChallengeHallNPC
 	dw ScriptCommand_UnloadChallengeHallNPC
 	dw ScriptCommand_SetChallengeHallNPCCoords
 	dw ScriptCommand_PickChallengeHallOpponent
