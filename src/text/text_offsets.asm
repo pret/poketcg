@@ -830,7 +830,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ChallengeHallMapNameText                           ; 0x033a
 	textpointer PokemonDomeMapNameText                             ; 0x033b
 	textpointer Text033c                                           ; 0x033c
-	textpointer Text033d                                           ; 0x033d
+	textpointer PauseMenuOptionsText                               ; 0x033d
 	textpointer Text033e                                           ; 0x033e
 	textpointer PlayerStatusNameText                               ; 0x033f
 	textpointer PlayerStatusAlbumText                              ; 0x0340

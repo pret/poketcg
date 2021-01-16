@@ -1046,7 +1046,7 @@ Text033c: ; 3e804 (f:6804)
 	text "??'s House"
 	done
 
-Text033d: ; 3e810 (f:6810)
+PauseMenuOptionsText: ; 3e810 (f:6810)
 	text "Status"
 	line "Diary"
 	line "Deck"

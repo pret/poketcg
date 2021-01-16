@@ -253,13 +253,19 @@ Unknown_10456: ; 10456 (4:4456)
 	INCROM $10456, $1045b
 
 Unknown_1045b: ; 1045b (4:445b)
-	INCROM $1045b, $10548
+	INCROM $1045b, $1052f
+
+Func_1052f: ; 1052f (4:452f)
+	INCROM $1052f, $10548
 
 Func_10548: ; 10548 (4:4548)
 	INCROM $10548, $10756
 
 Func_10756: ; 10756 (4:4756)
-	INCROM $10756, $10a70
+	INCROM $10756, $1076d
+
+Func_1076d: ; 1076d (4:476d)
+	INCROM $1076d, $10a70
 
 ; gives the pc pack described in a
 TryGivePCPack: ; 10a70 (4:4a70)
@@ -340,7 +346,10 @@ Func_10cea: ; 10cea (4:4cea)
 	INCROM $10cea, $10d98
 
 Unknown_10d98: ; 10d98 (4:4d98)
-	INCROM $10d98, $10dba
+	INCROM $10d98, $10da9
+
+Unknown_10da9: ; 10da9 (4:4da9)
+	INCROM $10da9, $10dba
 
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1

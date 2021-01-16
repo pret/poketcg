@@ -319,7 +319,7 @@ asm_c25d:
 	ret
 
 Func_c268: ; c268 (3:4268)
-	ld hl, Unknown_c27c
+	ld hl, PauseMenuTextList
 .asm_c26b
 	push hl
 	ld a, [hli]
@@ -336,8 +336,9 @@ Func_c268: ; c268 (3:4268)
 	pop hl
 	ret
 
-Unknown_c27c: ; c27c (3:427c)
-	INCROM $c27c, $c280
+PauseMenuTextList: ; c27c (3:427c)
+	tx PauseMenuOptionsText
+	dw NULL
 
 Func_c280: ; c280 (3:4280)
 	call Func_c228
@@ -466,18 +467,121 @@ Func_c36a: ; c36a (3:436a)
 	ld [wd324], a
 .asm_c379
 	ret
-; 0xc37a
 
-	INCROM $c37a, $c38f
+Func_c37a: ; c37a (3:437a)
+	push hl
+	push bc
+	ld hl, wBoosterViableCardList
+	push hl
+	ld a, $80
+	ld c, $00
+.asm_c384
+	ld [hli], a
+	dec c
+	jr nz, .asm_c384
+	pop hl
+	call Func_c38f
+	pop bc
+	pop hl
+	ret
 
 Func_c38f: ; c38f (3:438f)
-	INCROM $c38f, $c3ca
+	push hl
+	push bc
+	ld a, [wd23a]
+	ld e, a
+	ld a, [wd23b]
+	ld d, a
+	or e
+	jr z, .asm_c3c7
+	push hl
+	ld b, $c0
+	call Func_08bf
+	ld a, [wd23d]
+	ld [wTempPointerBank], a
+	ld a, [wd130]
+	inc a
+	srl a
+	ld b, a
+	ld a, [wd12f]
+	inc a
+	srl a
+	ld c, a
+	pop de
+.asm_c3b7
+	push bc
+	ld b, $00
+	call Func_3be4
+	ld hl, $10
+	add hl, de
+	ld d, h
+	ld e, l
+	pop bc
+	dec b
+	jr nz, .asm_c3b7
+.asm_c3c7
+	pop bc
+	pop hl
+	ret
 
 Func_c3ca: ; c3ca (3:43ca)
-	INCROM $c3ca, $c3ee
+	push hl
+	push bc
+	push de
+	push bc
+	push de
+	pop bc
+	call GetPermissionByteOfMapPosition
+	pop bc
+	srl b
+	srl c
+	ld de, $10
+.asm_c3db
+	push bc
+	push hl
+.asm_c3dd
+	ld a, [hl]
+	or $10
+	ld [hli], a
+	dec b
+	jr nz, .asm_c3dd
+	pop hl
+	add hl, de
+	pop bc
+	dec c
+	jr nz, .asm_c3db
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_c3ee: ; c3ee (3:43ee)
-	INCROM $c3ee, $c41c
+	push hl
+	push bc
+	ld c, $00
+	ld hl, wBoosterViableCardList
+.asm_c3f5
+	ld a, [hl]
+	and $ef
+	ld [hli], a
+	dec c
+	jr nz, .asm_c3f5
+	pop bc
+	pop hl
+	ret
+
+Func_c3ff: ; c3ff (3:43ff)
+	ld a, [wd12f]
+	sub $14
+	ld [wd237], a
+	ld a, [wd130]
+	sub $12
+	ld [wd238], a
+	call Func_c41c
+	call Func_c469
+	call SetScreenScrollWram
+	call SetScreenScroll
+	ret
 
 Func_c41c: ; c41c (3:441c)
 	ld a, [wd332]
@@ -1120,19 +1224,40 @@ PointerTable_c846: ; c846 (3:4846)
 	dw Func_c877
 
 Func_c84e: ; c84e (3:484e)
-	INCROM $c84e, $c859
+	ld a, [wd0b9]
+	ld hl, Unknown_10da9
+	farcall Func_111e9
+	ret
 
 Func_c859: ; c859 (3:4859)
-	INCROM $c859, $c86d
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	call Set_OBJ_8x16
+	farcall Func_1288c
+	farcall Func_a913
+	call Set_OBJ_8x8
+	ret
 
 Func_c86d: ; c86d (3:486d)
-	INCROM $c86d, $c872
+	farcall Func_1076d
+	ret
 
 Func_c872: ; c872 (3:4872)
-	INCROM $c872, $c877
+	farcall Func_1052f
+	ret
 
 Func_c877: ; c877 (3:4877)
-	INCROM $c877, $c891
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	call Set_OBJ_8x16
+	farcall Func_1288c
+	farcall Func_ad51
+	call Set_OBJ_8x8
+	call WhiteOutDMGPals
+	call DoFrameIfLCDEnabled
+	ret
 
 Func_c891: ; c891 (3:4891)
 	push hl
@@ -3054,7 +3179,8 @@ ScriptCommand_GiveStarterDeck: ; d3d4 (3:53d4)
 	bank1call Func_7576
 	jp IncreaseScriptPointerBy1
 
-	INCROM $d3dd, $d3e0
+Unknown_d3dd: ; d3dd (3:53dd)
+	db $03, $05, $07
 
 ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
 	ld a, $1
@@ -8160,10 +8286,19 @@ ChallengeHallNPCs: ; f5b3 (3:75b3)
 ChallengeHallNPCsEnd:
 
 Func_f5cc: ; f5cc (3:75cc)
-	INCROM $f5cc, $f5d4
+	call Func_f5e9
+	ld a, [hl]
+	and b
+	ret z
+	scf
+	ret
 
 Func_f5d4: ; f5d4 (3:75d4)
-	INCROM $f5d4, $f5db
+	call Func_f5e9
+	ld a, [hl]
+	or b
+	ld [hl], a
+	ret
 
 Func_f5db: ; f5db (3:75db)
 	xor a
@@ -8172,12 +8307,30 @@ Func_f5db: ; f5db (3:75db)
 	ld [wd69a], a
 	ld [wd69b], a
 	ret
-; 0xf5e9
 
-	INCROM $f5e9, $f602
+Func_f5e9: ; f5e9 (3:75e9)
+	ld hl, wd698
+	ld a, c
+.asm_f5ed
+	cp $08
+	jr c, .asm_f5f6
+	sub $08
+	inc hl
+	jr .asm_f5ed
+.asm_f5f6
+	ld b, $80
+	jr .asm_f5fd
+.asm_f5fa
+	srl b
+	dec a
+.asm_f5fd
+	cp $00
+	jr nz, .asm_f5fa
+	ret
 
 Func_f602: ; f602 (3:7602)
-	INCROM $f602, $f607
+	zero_flag_value EVENT_FLAG_46
+	ret
 
 PokemonDomeEntranceLoadMap: ; f607 (3:7607)
 	zero_flag_value EVENT_FLAG_63

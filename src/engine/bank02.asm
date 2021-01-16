@@ -2718,7 +2718,13 @@ Func_9e41: ; 9e41 (2:5e41)
 	INCROM $9e41, $a288
 
 Func_a288: ; a288 (2:6288)
-	INCROM $a288, $adfe
+	INCROM $a288, $a913
+
+Func_a913: ; a913 (2:6913)
+	INCROM $a913, $ad51
+
+Func_ad51: ; ad51 (2:6d51)
+	INCROM $ad51, $adfe
 
 Func_adfe: ; adfe (2:6dfe)
 	INCROM $adfe, $b177
