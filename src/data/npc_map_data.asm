@@ -1,4 +1,4 @@
-; NPC Map data. Note: pre-load functions also run after battles
+; NPC Map data. Note: pre-load functions also run after duels
 ; Format:
 ; NPC, X position, Y Position, Direction,
 ; pre-load function. (Resets c flag if NPC should not be loaded)

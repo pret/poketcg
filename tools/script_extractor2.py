@@ -22,112 +22,112 @@ texts = None
 
 # script command names and parameter lists
 script_commands = {
-	0xe7: { "name": "start_script",                            "params": [] },
+	0xe7: { "name": "start_script",                               "params": [] },
 
-	0x00: { "name": "end_script_loop",                         "params": [] },
-	0x01: { "name": "close_advanced_text_box",                 "params": [] },
-	0x02: { "name": "print_text_string",                       "params": [ "text" ] },
-	0x03: { "name": "Func_ccdc",                               "params": [ "text" ] }, # print text and ???
-	0x04: { "name": "ask_question_jump",                       "params": [ "text", "label" ] },
-	0x05: { "name": "start_battle",                            "params": [ "prizes", "deck", "song" ] },
-	0x06: { "name": "print_variable_text",                     "params": [ "text", "text" ] },
-	0x07: { "name": "Func_cda8",                               "params": [ "text", "text" ] }, # print variable text and ???
-	0x08: { "name": "print_text_quit_fully",                   "params": [ "text" ] },
-	0x09: { "name": "Func_cdcb",                               "params": [] },
-	0x0a: { "name": "move_active_npc_by_direction",            "params": [ "movement_table" ] },
-	0x0b: { "name": "close_text_box",                          "params": [] },
-	0x0c: { "name": "give_booster_packs",                      "params": [ "booster", "booster", "booster" ] },
-	0x0d: { "name": "jump_if_card_owned",                      "params": [ "card", "label" ] },
-	0x0e: { "name": "jump_if_card_in_collection",              "params": [ "card", "label" ] },
-	0x0f: { "name": "give_card",                               "params": [ "card" ] },
-	0x10: { "name": "take_card",                               "params": [ "card" ] },
-	0x11: { "name": "Func_cf53",                               "params": [ "label" ] }, # jump if any energy cards in collection
-	0x12: { "name": "Func_cf7b",                               "params": [] }, # remove all energy cards from collection
-	0x13: { "name": "jump_if_enough_cards_owned",              "params": [ "word_decimal", "label" ] },
-	0x14: { "name": "fight_club_pupil_jump",                   "params": [ "label", "label", "label", "label", "label" ] },
-	0x15: { "name": "Func_cfc6",                               "params": [ "byte" ] },
-	0x16: { "name": "Func_cfd4",                               "params": [] },
-	0x17: { "name": "Func_d00b",                               "params": [] }, # get card name for EVENT_FLAG_2B
-	0x18: { "name": "Func_d025",                               "params": [ "label" ] }, # jump if card in EVENT_FLAG_2B is in collection or decks
-	0x19: { "name": "Func_d032",                               "params": [ "label" ] }, # jump if card in EVENT_FLAG_2B is in collection
-	0x1a: { "name": "Func_d03f",                               "params": [] }, # remove card in EVENT_FLAG_2B from collection
-	0x1b: { "name": "script_jump",                             "params": [ "label" ] },
-	0x1c: { "name": "try_give_medal_pc_packs",                 "params": [] },
-	0x1d: { "name": "set_player_direction",                    "params": [ "direction" ] },
-	0x1e: { "name": "move_player",                             "params": [ "direction", "byte_decimal" ] },
-	0x1f: { "name": "show_card_received_screen",               "params": [ "card" ] },
-	0x20: { "name": "set_dialog_npc",                          "params": [ "npc" ] },
-	0x21: { "name": "set_next_npc_and_script",                 "params": [ "npc", "label" ] },
-	0x22: { "name": "Func_d095",                               "params": [ "byte", "byte", "byte" ] }, # LOADED_NPC_FIELD_05 and LOADED_NPC_FIELD_06
-	0x23: { "name": "Func_d0be",                               "params": [ "byte", "byte" ] }, # coords
-	0x24: { "name": "do_frames",                               "params": [ "byte_decimal" ] },
-	0x25: { "name": "Func_d0d9",                               "params": [ "byte", "byte", "label" ] }, # coords, jump if npc coords match
-	0x26: { "name": "jump_if_player_coords_match",             "params": [ "byte_decimal", "byte_decimal", "label" ] },
-	0x27: { "name": "move_active_npc",                         "params": [ "movement" ] },
-	0x28: { "name": "give_one_of_each_trainer_booster",        "params": [] },
-	0x29: { "name": "Func_d103",                               "params": [ "npc", "label" ] }, # jump if npc loaded
-	0x2a: { "name": "Func_d125",                               "params": [ "event" ] }, # give medal
-	0x2b: { "name": "Func_d135",                               "params": [ "byte" ] }, # load current map name into tx ram slot
-	0x2c: { "name": "Func_d16b",                               "params": [ "byte" ] }, # load current npc name into tx ram slot
-	0x2d: { "name": "Func_cd4f",                               "params": [ "prizes", "deck", "song" ] },
-	0x2e: { "name": "Func_cd94",                               "params": [ "text", "text", "text" ] },
-	0x2f: { "name": "move_wram_npc",                           "params": [ "movement" ] },
-	0x30: { "name": "Func_cdd8",                               "params": [] },
-	0x31: { "name": "Func_cdf5",                               "params": [ "byte", "byte" ] }, # coords
-	0x32: { "name": "Func_d195",                               "params": [] }, # pick challenge hall opponent
-	0x33: { "name": "Func_d1ad",                               "params": [] }, # open menu
-	0x34: { "name": "Func_d1b3",                               "params": [] }, # pick trade card
-	0x35: { "name": "quit_script_fully",                       "params": [] },
-	0x36: { "name": "Func_d244",                               "params": [ "byte" ] },
-	0x37: { "name": "choose_deck_to_duel_against_multichoice", "params": [] },
-	0x38: { "name": "open_deck_machine",                       "params": [ "byte" ] },
-	0x39: { "name": "choose_starter_deck_multichoice",         "params": [] },
-	0x3a: { "name": "enter_map",                               "params": [ "byte", "map", "byte_decimal", "byte_decimal", "direction" ] },
-	0x3b: { "name": "move_arbitrary_npc",                      "params": [ "npc", "movement" ] },
-	0x3c: { "name": "Func_d209",                               "params": [] }, # pick legendary card
-	0x3d: { "name": "Func_d38f",                               "params": [ "byte" ] },
-	0x3e: { "name": "Func_d396",                               "params": [ "byte" ] },
-	0x3f: { "name": "Func_cd76",                               "params": [] },
-	0x40: { "name": "Func_d39d",                               "params": [ "byte" ] },
-	0x41: { "name": "Func_d3b9",                               "params": [] },
-	0x42: { "name": "try_give_pc_pack",                        "params": [ "byte" ] },
-	0x43: { "name": "script_nop",                              "params": [] },
-	0x44: { "name": "Func_d3d4",                               "params": [] },
-	0x45: { "name": "Func_d3e0",                               "params": [] },
-	0x46: { "name": "Func_d3fe",                               "params": [ "song" ] },
-	0x47: { "name": "Func_d408",                               "params": [ "song" ] }, # set default song
-	0x48: { "name": "play_song",                               "params": [ "song" ] },
-	0x49: { "name": "play_sfx",                                "params": [ "sfx" ] },
-	0x4a: { "name": "pause_song",                              "params": [] },
-	0x4b: { "name": "resume_song",                             "params": [] },
-	0x4c: { "name": "Func_d41d",                               "params": [] }, # play default song
-	0x4d: { "name": "wait_for_song_to_finish",                 "params": [] },
-	0x4e: { "name": "Func_d435",                               "params": [ "byte" ] },
-	0x4f: { "name": "ask_question_jump_default_yes",           "params": [ "text", "label" ] },
-	0x50: { "name": "show_sam_normal_multichoice",             "params": [] },
-	0x51: { "name": "show_sam_tutorial_multichoice",           "params": [] },
-	0x52: { "name": "Func_d43d",                               "params": [] },
-	0x53: { "name": "end_script_loop_2",                       "params": [] },
-	0x54: { "name": "end_script_loop_3",                       "params": [] },
-	0x55: { "name": "end_script_loop_4",                       "params": [] },
-	0x56: { "name": "end_script_loop_5",                       "params": [] },
-	0x57: { "name": "end_script_loop_6",                       "params": [] },
-	0x58: { "name": "script_set_flag_value",                   "params": [ "event", "byte" ] },
-	0x59: { "name": "jump_if_flag_zero_1",                     "params": [ "event", "label" ] },
-	0x5a: { "name": "jump_if_flag_nonzero_1",                  "params": [ "event", "label" ] },
-	0x5b: { "name": "jump_if_flag_equal",                      "params": [ "event", "byte", "label" ] },
-	0x5c: { "name": "jump_if_flag_not_equal",                  "params": [ "event", "byte", "label" ] },
-	0x5d: { "name": "jump_if_flag_not_less_than",              "params": [ "event", "byte", "label" ] },
-	0x5e: { "name": "jump_if_flag_less_than",                  "params": [ "event", "byte", "label" ] },
-	0x5f: { "name": "max_out_flag_value",                      "params": [ "event" ] },
-	0x60: { "name": "zero_out_flag_value",                     "params": [ "event" ] },
-	0x61: { "name": "jump_if_flag_nonzero_2",                  "params": [ "event", "label"] },
-	0x62: { "name": "jump_if_flag_zero_2",                     "params": [ "event", "label" ] },
-	0x63: { "name": "increment_flag_value",                    "params": [ "event" ] },
-	0x64: { "name": "end_script_loop_7",                       "params": [] },
-	0x65: { "name": "end_script_loop_8",                       "params": [] },
-	0x66: { "name": "end_script_loop_9",                       "params": [] },
-	0x67: { "name": "end_script_loop_10",                      "params": [] },
+	0x00: { "name": "end_script",                                 "params": [] },
+	0x01: { "name": "close_advanced_text_box",                    "params": [] },
+	0x02: { "name": "print_npc_text",                             "params": [ "text" ] },
+	0x03: { "name": "Func_ccdc",                                  "params": [ "text" ] }, # print text without npc name
+	0x04: { "name": "ask_question_jump",                          "params": [ "text", "label" ] },
+	0x05: { "name": "start_duel",                                 "params": [ "prizes", "deck", "song" ] },
+	0x06: { "name": "print_variable_npc_text",                    "params": [ "text", "text" ] },
+	0x07: { "name": "Func_cda8",                                  "params": [ "text", "text" ] }, # print variable text without npc name
+	0x08: { "name": "print_text_quit_fully",                      "params": [ "text" ] },
+	0x09: { "name": "Func_cdcb",                                  "params": [] }, # unload active npc
+	0x0a: { "name": "move_active_npc_by_direction",               "params": [ "movement_table" ] },
+	0x0b: { "name": "close_text_box",                             "params": [] },
+	0x0c: { "name": "give_booster_packs",                         "params": [ "booster", "booster", "booster" ] },
+	0x0d: { "name": "jump_if_card_owned",                         "params": [ "card", "label" ] },
+	0x0e: { "name": "jump_if_card_in_collection",                 "params": [ "card", "label" ] },
+	0x0f: { "name": "give_card",                                  "params": [ "card" ] },
+	0x10: { "name": "take_card",                                  "params": [ "card" ] },
+	0x11: { "name": "Func_cf53",                                  "params": [ "label" ] }, # jump if any energy cards in collection
+	0x12: { "name": "Func_cf7b",                                  "params": [] }, # remove all energy cards from collection
+	0x13: { "name": "jump_if_enough_cards_owned",                 "params": [ "word_decimal", "label" ] },
+	0x14: { "name": "fight_club_pupil_jump",                      "params": [ "label", "label", "label", "label", "label" ] },
+	0x15: { "name": "Func_cfc6",                                  "params": [ "direction" ] }, # set active npc direction
+	0x16: { "name": "Func_cfd4",                                  "params": [] }, # pick next man1 requested card (EVENT_FLAG_2B)
+	0x17: { "name": "Func_d00b",                                  "params": [] }, # get man1 requested card name text (EVENT_FLAG_2B)
+	0x18: { "name": "Func_d025",                                  "params": [ "label" ] }, # jump if man1 requested card owned (EVENT_FLAG_2B)
+	0x19: { "name": "Func_d032",                                  "params": [ "label" ] }, # jump if man1 requested card in collection (EVENT_FLAG_2B)
+	0x1a: { "name": "Func_d03f",                                  "params": [] }, # remove man1 requested card from collection (EVENT_FLAG_2B)
+	0x1b: { "name": "script_jump",                                "params": [ "label" ] },
+	0x1c: { "name": "try_give_medal_pc_packs",                    "params": [] },
+	0x1d: { "name": "set_player_direction",                       "params": [ "direction" ] },
+	0x1e: { "name": "move_player",                                "params": [ "direction", "byte_decimal" ] },
+	0x1f: { "name": "show_card_received_screen",                  "params": [ "card" ] },
+	0x20: { "name": "set_dialog_npc",                             "params": [ "npc" ] },
+	0x21: { "name": "set_next_npc_and_script",                    "params": [ "npc", "label" ] },
+	0x22: { "name": "Func_d095",                                  "params": [ "byte", "byte", "byte" ] }, # set sprite attributes LOADED_NPC_FIELD_05 and LOADED_NPC_FIELD_06
+	0x23: { "name": "Func_d0be",                                  "params": [ "byte_decimal", "byte_decimal" ] }, # coords, set active npc coords
+	0x24: { "name": "do_frames",                                  "params": [ "byte_decimal" ] },
+	0x25: { "name": "Func_d0d9",                                  "params": [ "byte_decimal", "byte_decimal", "label" ] }, # coords, jump if active npc coords match
+	0x26: { "name": "jump_if_player_coords_match",                "params": [ "byte_decimal", "byte_decimal", "label" ] },
+	0x27: { "name": "move_active_npc",                            "params": [ "movement" ] },
+	0x28: { "name": "give_one_of_each_trainer_booster",           "params": [] },
+	0x29: { "name": "Func_d103",                                  "params": [ "npc", "label" ] }, # jump if npc loaded
+	0x2a: { "name": "Func_d125",                                  "params": [ "event" ] }, # show medal received screen ?
+	0x2b: { "name": "Func_d135",                                  "params": [ "byte" ] }, # load current map name into tx ram slot
+	0x2c: { "name": "Func_d16b",                                  "params": [ "byte" ] }, # load active npc name into tx ram slot
+	0x2d: { "name": "Func_cd4f",                                  "params": [ "prizes", "deck", "song" ] }, # start challenge hall duel
+	0x2e: { "name": "Func_cd94",                                  "params": [ "text", "text", "text" ] }, # print text based on challenge cup number
+	0x2f: { "name": "move_wram_npc",                              "params": [ "movement" ] },
+	0x30: { "name": "Func_cdd8",                                  "params": [] }, # unload challenge hall npc
+	0x31: { "name": "Func_cdf5",                                  "params": [ "byte", "byte" ] }, # coords, set challenge hall npc coords
+	0x32: { "name": "Func_d195",                                  "params": [] }, # pick challenge hall opponent
+	0x33: { "name": "Func_d1ad",                                  "params": [] }, # open menu
+	0x34: { "name": "Func_d1b3",                                  "params": [] }, # pick challenge cup prize card
+	0x35: { "name": "quit_script_fully",                          "params": [] },
+	0x36: { "name": "Func_d244",                                  "params": [ "byte" ] }, # replace map blocks (dech machines, pokemon dome doors, hall of honor doors, challenge machine)
+	0x37: { "name": "choose_deck_to_duel_against",                "params": [] },
+	0x38: { "name": "open_deck_machine",                          "params": [ "byte" ] },
+	0x39: { "name": "choose_starter_deck",                        "params": [] },
+	0x3a: { "name": "enter_map",                                  "params": [ "byte", "map", "byte_decimal", "byte_decimal", "direction" ] },
+	0x3b: { "name": "move_npc",                                   "params": [ "npc", "movement" ] },
+	0x3c: { "name": "Func_d209",                                  "params": [] }, # pick legendary card
+	0x3d: { "name": "Func_d38f",                                  "params": [ "byte" ] }, # flash screen (bool arg, true to stay white)
+	0x3e: { "name": "Func_d396",                                  "params": [ "byte" ] }, # save game (bool arg, true to go back to dr mason lab)
+	0x3f: { "name": "Func_cd76",                                  "params": [] }, # battle center
+	0x40: { "name": "Func_d39d",                                  "params": [ "byte" ] }, # gift center (bool arg, false for menu, true to executing selection)
+	0x41: { "name": "Func_d3b9",                                  "params": [] }, # play credits
+	0x42: { "name": "try_give_pc_pack",                           "params": [ "byte" ] },
+	0x43: { "name": "script_nop",                                 "params": [] },
+	0x44: { "name": "Func_d3d4",                                  "params": [] }, # give starter deck
+	0x45: { "name": "Func_d3e0",                                  "params": [] }, # walk player to dr mason lab
+	0x46: { "name": "Func_d3fe",                                  "params": [ "song" ] }, # override song
+	0x47: { "name": "Func_d408",                                  "params": [ "song" ] }, # set default song
+	0x48: { "name": "play_song",                                  "params": [ "song" ] },
+	0x49: { "name": "play_sfx",                                   "params": [ "sfx" ] },
+	0x4a: { "name": "pause_song",                                 "params": [] },
+	0x4b: { "name": "resume_song",                                "params": [] },
+	0x4c: { "name": "Func_d41d",                                  "params": [] }, # play default song
+	0x4d: { "name": "wait_for_song_to_finish",                    "params": [] },
+	0x4e: { "name": "Func_d435",                                  "params": [ "byte" ] }, # record master win (8 clubs plus ronald card master)
+	0x4f: { "name": "ask_question_jump_default_yes",              "params": [ "text", "label" ] },
+	0x50: { "name": "show_sam_normal_multichoice",                "params": [] },
+	0x51: { "name": "show_sam_tutorial_multichoice",              "params": [] },
+	0x52: { "name": "Func_d43d",                                  "params": [] }, # challenge machine
+	0x53: { "name": "end_script_2",                               "params": [] },
+	0x54: { "name": "end_script_3",                               "params": [] },
+	0x55: { "name": "end_script_4",                               "params": [] },
+	0x56: { "name": "end_script_5",                               "params": [] },
+	0x57: { "name": "end_script_6",                               "params": [] },
+	0x58: { "name": "script_set_flag_value",                      "params": [ "event", "byte" ] },
+	0x59: { "name": "jump_if_flag_zero_1",                        "params": [ "event", "label" ] },
+	0x5a: { "name": "jump_if_flag_nonzero_1",                     "params": [ "event", "label" ] },
+	0x5b: { "name": "jump_if_flag_equal",                         "params": [ "event", "byte", "label" ] },
+	0x5c: { "name": "jump_if_flag_not_equal",                     "params": [ "event", "byte", "label" ] },
+	0x5d: { "name": "jump_if_flag_not_less_than",                 "params": [ "event", "byte", "label" ] },
+	0x5e: { "name": "jump_if_flag_less_than",                     "params": [ "event", "byte", "label" ] },
+	0x5f: { "name": "max_out_flag_value",                         "params": [ "event" ] },
+	0x60: { "name": "zero_out_flag_value",                        "params": [ "event" ] },
+	0x61: { "name": "jump_if_flag_nonzero_2",                     "params": [ "event", "label"] },
+	0x62: { "name": "jump_if_flag_zero_2",                        "params": [ "event", "label" ] },
+	0x63: { "name": "increment_flag_value",                       "params": [ "event" ] },
+	0x64: { "name": "end_script_7",                               "params": [] },
+	0x65: { "name": "end_script_8",                               "params": [] },
+	0x66: { "name": "end_script_9",                               "params": [] },
+	0x67: { "name": "end_script_10",                              "params": [] },
 }
 
 quit_commands = [

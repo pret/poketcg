@@ -2,7 +2,7 @@
 	const EVENT_FLAG_00                         ; $00
 	const EVENT_FLAG_01                         ; $01
 	const EVENT_TEMP_TALKED_TO_IMAKUNI          ; $02
-	const EVENT_TEMP_BATTLED_IMAKUNI            ; $03
+	const EVENT_TEMP_DUELED_IMAKUNI             ; $03
 	const EVENT_FLAG_04                         ; $04
 	const EVENT_FLAG_05                         ; $05
 	const EVENT_FLAG_06                         ; $06

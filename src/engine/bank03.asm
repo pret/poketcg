@@ -1024,7 +1024,7 @@ MainMenu_c75a: ; c75a (3:475a)
 
 Func_c797: ; c797 (3:4797)
 	ld a, [wd0b8]
-	ld hl, Unknown_cd98
+	ld hl, Unknown_10d98
 	farcall Func_111e9
 	ret
 
@@ -1565,7 +1565,7 @@ TryGiveMedalPCPacks: ; cad8 (3:4ad8)
 	cp $7
 	jr nc, .givePacksForSevenMedals
 	cp $3
-	jr nc, .givePacksForTwoMedals
+	jr nc, .givePacksForThreeMedals
 	jr .finish
 
 .givePacksForEightMedals
@@ -1576,7 +1576,7 @@ TryGiveMedalPCPacks: ; cad8 (3:4ad8)
 	ld a, $b
 	farcall TryGivePCPack
 
-.givePacksForTwoMedals
+.givePacksForThreeMedals
 	ld a, $a
 	farcall TryGivePCPack
 
@@ -1620,7 +1620,7 @@ EventFlagMods: ; cb37 (3:4b37)
 	flag_def $3f, %10000000 ; EVENT_FLAG_00 ; 0-7 are reset when game resets
 	flag_def $3f, %01000000 ; EVENT_FLAG_01
 	flag_def $3f, %00100000 ; EVENT_TEMP_TALKED_TO_IMAKUNI
-	flag_def $3f, %00010000 ; EVENT_TEMP_BATTLED_IMAKUNI
+	flag_def $3f, %00010000 ; EVENT_TEMP_DUELED_IMAKUNI
 	flag_def $3f, %00001000 ; EVENT_FLAG_04
 	flag_def $3f, %00000100 ; EVENT_FLAG_05
 	flag_def $3f, %00000010 ; EVENT_FLAG_06
@@ -1873,16 +1873,7 @@ SetScriptControlByteFail: ; ccb9 (3:4cb9)
 	ret
 
 ; Exits Script mode and runs the next instruction like normal
-ScriptCommand_EndScriptLoop1: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop2: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop3: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop4: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop5: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop6: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop7: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop8: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop9: ; ccbe (3:4cbe)
-ScriptCommand_EndScriptLoop10: ; ccbe (3:4cbe)
+ScriptCommand_EndScript: ; ccbe (3:4cbe)
 	ld a, $01
 	ld [wBreakScriptLoop], a
 	jp IncreaseScriptPointerBy1
@@ -1893,12 +1884,12 @@ ScriptCommand_CloseAdvancedTextBox: ; ccc6 (3:4cc6)
 
 ScriptCommand_QuitScriptFully: ; cccc (3:4ccc)
 	call ScriptCommand_CloseAdvancedTextBox
-	call ScriptCommand_EndScriptLoop1
+	call ScriptCommand_EndScript
 	pop hl
 	ret
 
 ; args: 2-Text String Index
-ScriptCommand_PrintTextString: ; ccd4 (3:4cd4)
+ScriptCommand_PrintNPCText: ; ccd4 (3:4cd4)
 	ld l, c
 	ld h, b
 	call Func_cc32
@@ -1932,8 +1923,8 @@ ScriptCommand_AskQuestionJump: ; cce9 (3:4ce9)
 	jp IncreaseScriptPointerBy5
 
 ; args - prize cards, deck id, duel theme index
-; sets a battle up, doesn't start until we break out of the script system.
-ScriptCommand_StartBattle: ; cd01 (3:4d01)
+; sets a duel up, doesn't start until we break out of the script system.
+ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	call Func_cd66
 	ld a, [wScriptNPC]
 	ld l, LOADED_NPC_ID
@@ -2001,7 +1992,7 @@ Func_cd76: ; cd76 (3:4d76)
 	jp IncreaseScriptPointerBy1
 
 ; prints text arg 1 or arg 2 depending on wScriptControlByte.
-ScriptCommand_PrintVariableText: ; cd83 (3:4d83)
+ScriptCommand_PrintVariableNPCText: ; cd83 (3:4d83)
 	ld a, [wScriptControlByte]
 	or a
 	jr nz, .printText
@@ -2014,7 +2005,6 @@ ScriptCommand_PrintVariableText: ; cd83 (3:4d83)
 
 Func_cd94: ; cd94 (3:4d94)
 	get_flag_value EVENT_FLAG_44
-Unknown_cd98:
 	dec a
 	and $3
 	add a
@@ -2690,7 +2680,7 @@ Func_d1b3: ; d1b3 (3:51b3)
 ;	fallthrough
 
 .asm_d1c3
-	ld hl, TradeCardNames
+	ld hl, ChallengeCupPrizeCards
 asm_d1c6:
 	ld e, a
 	add a
@@ -2706,7 +2696,7 @@ asm_d1c6:
 	ld [wTxRam2 + 1], a
 	jp IncreaseScriptPointerBy1
 
-TradeCardNames: ; d1dc (3:51dc)
+ChallengeCupPrizeCards: ; d1dc (3:51dc)
 	db MEWTWO2
 	tx MewtwoTradeCardName
 
@@ -3292,7 +3282,7 @@ Script_BeginGame: ; d52e (3:552e)
 
 MasonLaboratoryAfterDuel: ; d53b (3:553b)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -3356,7 +3346,7 @@ Script_Tech1: ; d583 (3:5583)
 
 	start_script
 	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
-	print_variable_text Tech1MasterMedalExplanationText, Tech1AutoDeckMachineExplanationText
+	print_variable_npc_text Tech1MasterMedalExplanationText, Tech1AutoDeckMachineExplanationText
 	quit_script_fully
 
 .low_on_energies
@@ -3375,10 +3365,10 @@ Script_Tech1: ; d583 (3:5583)
 	jr nz, .next_energy_card
 
 	start_script
-	print_text_string Tech1FewEnergyCardsText
+	print_npc_text Tech1FewEnergyCardsText
 	pause_song
 	play_song MUSIC_BOOSTER_PACK
-	print_text_string Tech1ReceivedEnergyCardsText
+	print_npc_text Tech1ReceivedEnergyCardsText
 	wait_for_song_to_finish
 	resume_song
 	print_text_quit_fully Tech1GoodbyeText
@@ -3395,19 +3385,19 @@ EnergyCardListEnd:
 Script_Tech2: ; d5ca (3:55ca)
 	start_script
 	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
-	print_variable_text Tech2LegendaryCardsExplanationText, Tech2LegendaryCardsCongratsText
+	print_variable_npc_text Tech2LegendaryCardsExplanationText, Tech2LegendaryCardsCongratsText
 	quit_script_fully
 
 Script_Tech3: ; d5d5 (3:55d5)
 	start_script
 	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
-	print_variable_text Tech3BoosterPackExplanationText, Tech3LegendaryCardsCongratsText
+	print_variable_npc_text Tech3BoosterPackExplanationText, Tech3LegendaryCardsCongratsText
 	quit_script_fully
 
 Script_Tech4: ; d5e0 (3:55e0)
 	start_script
 	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
-	print_variable_text Tech4ClubsExplanationText, Tech4DefeatedTheGrandMastersText
+	print_variable_npc_text Tech4ClubsExplanationText, Tech4DefeatedTheGrandMastersText
 	quit_script_fully
 
 Preload_Tech5: ; d5eb (3:55eb)
@@ -3424,7 +3414,7 @@ Preload_Tech5: ; d5eb (3:55eb)
 Script_Tech5: ; d5f9 (3:55f9)
 	start_script
 	jump_if_flag_zero_2 EVENT_RECEIVED_LEGENDARY_CARD, NULL
-	print_variable_text Tech5DiaryAndEmailExplanationText, Tech5ChallengeMachineExplanationText
+	print_variable_npc_text Tech5DiaryAndEmailExplanationText, Tech5ChallengeMachineExplanationText
 	quit_script_fully
 
 Preload_Sam: ; d604 (3:5604)
@@ -3446,18 +3436,18 @@ Script_Sam: ; d61d (3:561d)
 	show_sam_normal_multichoice
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_75, $00, .ows_d63b
-	jump_if_flag_equal EVENT_FLAG_75, $02, Script_d6b0
+	jump_if_flag_equal EVENT_FLAG_75, $02, Script_LostToSam.ows_d6b0
 	jump_if_flag_equal EVENT_FLAG_75, $03, .ows_d637
-	print_text_string Text05cb
+	print_npc_text Text05cb
 	ask_question_jump Text05cc, .ows_d647
 .ows_d637
-	print_text_string Text05cd
+	print_npc_text Text05cd
 	quit_script_fully
 
 .ows_d63b
-	print_text_string Text05ce
+	print_npc_text Text05ce
 	ask_question_jump Text05cf, .ows_d647
-	print_text_string Text05d0
+	print_npc_text Text05d0
 	quit_script_fully
 
 .ows_d647
@@ -3484,32 +3474,32 @@ Script_Sam: ; d61d (3:561d)
 	set_player_direction WEST
 	move_active_npc NPCMovement_d889
 	jump_if_flag_equal EVENT_FLAG_75, $00, .ows_d685
-	start_battle PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
+	start_duel PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 .ows_d685
-	start_battle PRIZES_2, SAMS_NORMAL_DECK_ID, MUSIC_DUEL_THEME_1
+	start_duel PRIZES_2, SAMS_NORMAL_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatSam: ; d68a (3:568a)
 	start_script
-	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_d82d
-	jump_if_flag_equal EVENT_FLAG_75, $01, Script_d6ad
-	print_text_string Text05d1
+	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_EnterLabFirstTime.ows_d82d
+	jump_if_flag_equal EVENT_FLAG_75, $01, Script_LostToSam.ows_d6ad
+	print_npc_text Text05d1
 	give_booster_packs BOOSTER_ENERGY_RANDOM, NO_BOOSTER, NO_BOOSTER
 	print_text_quit_fully Text05d2
 
 Script_LostToSam: ; d69f (3:569f)
 	start_script
-	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_d82d
-	jump_if_flag_equal EVENT_FLAG_75, $01, Script_d6ad
+	jump_if_flag_equal EVENT_FLAG_3E, $01, Script_EnterLabFirstTime.ows_d82d
+	jump_if_flag_equal EVENT_FLAG_75, $01, .ows_d6ad
 	print_text_quit_fully Text05d3
 
-Script_d6ad:
+.ows_d6ad
 	print_text_quit_fully Text05d4
 
-Script_d6b0:
-	print_text_string Text05d5
+.ows_d6b0
+	print_npc_text Text05d5
 .ows_d6b3
 	close_text_box
 	show_sam_tutorial_multichoice
@@ -3521,25 +3511,25 @@ Script_d6b0:
 	jump_if_flag_equal EVENT_FLAG_75, $04, .ows_d6f1
 	jump_if_flag_equal EVENT_FLAG_75, $05, .ows_d6f7
 	jump_if_flag_equal EVENT_FLAG_75, $06, .ows_d6fd
-	print_text_string Text05d6
+	print_npc_text Text05d6
 	script_jump .ows_d6b3
 .ows_d6df
-	print_text_string Text05d7
+	print_npc_text Text05d7
 	script_jump .ows_d6b3
 .ows_d6e5
-	print_text_string Text05d8
+	print_npc_text Text05d8
 	script_jump .ows_d6b3
 .ows_d6eb
-	print_text_string Text05d9
+	print_npc_text Text05d9
 	script_jump .ows_d6b3
 .ows_d6f1
-	print_text_string Text05da
+	print_npc_text Text05da
 	script_jump .ows_d6b3
 .ows_d6f7
-	print_text_string Text05db
+	print_npc_text Text05db
 	script_jump .ows_d6b3
 .ows_d6fd
-	print_text_string Text05dc
+	print_npc_text Text05dc
 	script_jump .ows_d6b3
 
 Func_d703: ; d703 (3:5703)
@@ -3567,33 +3557,33 @@ Script_EnterLabFirstTime: ; d753 (3:5753)
 	move_player NORTH, 2
 	move_player NORTH, 2
 	move_player NORTH, 2
-	print_text_string Text05e3
+	print_npc_text Text05e3
 	close_advanced_text_box
-	set_next_npc_and_script NPC_SAM, Script_d779
-	end_script_loop
+	set_next_npc_and_script NPC_SAM, .ows_d779
+	end_script
 	ret
 
-Script_d779: ; d779 (03:5779)
+.ows_d779
 	start_script
 	move_active_npc NPCMovement_d880
-	print_text_string Text05e4
+	print_npc_text Text05e4
 	set_dialog_npc NPC_DRMASON
-	print_text_string Text05e5
+	print_npc_text Text05e5
 	close_text_box
 	move_active_npc NPCMovement_d882
 	run_command Func_cfc6
 	db $01
 	set_player_direction WEST
 	close_advanced_text_box
-	set_next_npc_and_script NPC_DRMASON, Script_d794
-	end_script_loop
+	set_next_npc_and_script NPC_DRMASON, .ows_d794
+	end_script
 	ret
 
-Script_d794: ; d794 (3:5794)
+.ows_d794
 	start_script
 	move_active_npc NPCMovement_d88b
 	do_frames 40
-	print_text_string Text05e6
+	print_npc_text Text05e6
 	close_text_box
 	move_player WEST, 1
 	move_player WEST, 1
@@ -3603,9 +3593,9 @@ Script_d794: ; d794 (3:5794)
 	move_player SOUTH, 1
 	set_player_direction WEST
 	move_active_npc NPCMovement_d894
-	print_text_string Text05e7
+	print_npc_text Text05e7
 	set_dialog_npc $07
-	print_text_string Text05e8
+	print_npc_text Text05e8
 
 .ows_d7bc
 	close_text_box
@@ -3618,63 +3608,63 @@ Script_d794: ; d794 (3:5794)
 	jump_if_flag_equal EVENT_FLAG_75, $04, .ows_d7fa
 	jump_if_flag_equal EVENT_FLAG_75, $05, .ows_d800
 	jump_if_flag_equal EVENT_FLAG_75, $06, .ows_d806
-	print_text_string Text05d6
+	print_npc_text Text05d6
 	script_jump .ows_d7bc
 
 .ows_d7e8
-	print_text_string Text05d7
+	print_npc_text Text05d7
 	script_jump .ows_d7bc
 
 .ows_d7ee
-	print_text_string Text05d8
+	print_npc_text Text05d8
 	script_jump .ows_d7bc
 
 .ows_d7f4
-	print_text_string Text05d9
+	print_npc_text Text05d9
 	script_jump .ows_d7bc
 
 .ows_d7fa
-	print_text_string Text05da
+	print_npc_text Text05da
 	script_jump .ows_d7bc
 
 .ows_d800
-	print_text_string Text05db
+	print_npc_text Text05db
 	script_jump .ows_d7bc
 
 .ows_d806
-	print_text_string Text05dc
+	print_npc_text Text05dc
 	script_jump .ows_d7bc
 
 .ows_d80c
-	print_text_string Text05e9
+	print_npc_text Text05e9
 	ask_question_jump_default_yes NULL, .ows_d817
 	script_jump .ows_d7bc
 
 .ows_d817
 	set_dialog_npc $01
-	print_text_string Text05ea
+	print_npc_text Text05ea
 	script_nop
 	script_set_flag_value EVENT_FLAG_3E, $01
 	close_advanced_text_box
-	set_next_npc_and_script NPC_SAM, Script_d827
-	end_script_loop
+	set_next_npc_and_script NPC_SAM, .ows_d827
+	end_script
 	ret
 
-Script_d827: ; d827 (3:5827)
+.ows_d827
 	start_script
-	start_battle PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
+	start_duel PRIZES_2, SAMS_PRACTICE_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
-Script_d82d:
+.ows_d82d
 	close_advanced_text_box
-	set_next_npc_and_script $01, AfterTutorialBattleScript
-	end_script_loop
+	set_next_npc_and_script $01, Script_AfterPracticeDuel
+	end_script
 	ret
 
-AfterTutorialBattleScript: ; d834 (3:5834)
+Script_AfterPracticeDuel: ; d834 (3:5834)
 	start_script
-	print_text_string Text05eb
-	print_text_string Text05ef
+	print_npc_text Text05eb
+	print_npc_text Text05ef
 	close_text_box
 	move_active_npc NPCMovement_d896
 	set_player_direction NORTH
@@ -3685,19 +3675,19 @@ AfterTutorialBattleScript: ; d834 (3:5834)
 	move_player EAST, 1
 	move_player EAST, 1
 	set_player_direction NORTH
-	print_text_string Text05f0
+	print_npc_text Text05f0
 	close_text_box
 	run_command Func_ccdc
 	tx Text05f1
 	close_text_box
-	print_text_string Text05f2
+	print_npc_text Text05f2
 .ows_d85f
-	choose_starter_deck_multichoice
+	choose_starter_deck
 	close_text_box
 	ask_question_jump Text05f3, .ows_d869
 	script_jump .ows_d85f
 .ows_d869
-	print_text_string Text05f4
+	print_npc_text Text05f4
 	close_text_box
 	pause_song
 	play_song MUSIC_BOOSTER_PACK
@@ -3708,7 +3698,7 @@ AfterTutorialBattleScript: ; d834 (3:5834)
 	close_text_box
 	script_set_flag_value EVENT_FLAG_3E, $03
 	run_command Func_d3d4
-	print_text_string Text05f6
+	print_npc_text Text05f6
 	run_command Func_d396
 	db $00
 	quit_script_fully
@@ -3757,7 +3747,7 @@ NPCMovement_d896: ; d896 (3:5896)
 
 DeckMachineRoomAfterDuel: ; d89f (3:589f)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -3783,7 +3773,12 @@ Script_Aaron: ; d8dd (3:58dd)
 	INCROM $d8dd, $d903
 
 Script_BeatAaron: ; d903 (3:5903)
-	INCROM $d903, $d92e
+	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
+	ld c, a
+	set_flag_value EVENT_FLAG_73
+; 0xd90b
+
+	INCROM $d90b, $d92e
 
 Script_LostToAaron: ; d92e (3:592e)
 	INCROM $d92e, $d932
@@ -3800,28 +3795,85 @@ Script_d932: ; d932 (3:5932)
 	quit_script_fully
 
 Script_d93f: ; d93f (3:593f)
-	INCROM $d93f, $d995
+	ld a, $02
+	call Func_d96c
+; 0xd944
+
+	INCROM $d944, $d96c
+
+Func_d96c: ; d96c (3:596c)
+	sub $02
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, ClubMapNames
+	add hl, bc
+	ld a, [hli]
+	ld [wTxRam2], a
+	ld [wTxRam2_b], a
+	ld a, [hl]
+	ld [wTxRam2 + 1], a
+	ld [wTxRam2_b + 1], a
+	ret
+
+ClubMapNames: ; d985 (3:5985)
+	tx FightingClubMapNameText
+	tx RockClubMapNameText
+	tx WaterClubMapNameText
+	tx LightningClubMapNameText
+	tx GrassClubMapNameText
+	tx PsychicClubMapNameText
+	tx ScienceClubMapNameText
+	tx FireClubMapNameText
 
 Script_d995: ; d995 (3:5995)
-	INCROM $d995, $d9c2
+	ld a, $03
+	call Func_d96c
+; 0xd99a
+
+	INCROM $d99a, $d9c2
 
 Script_d9c2: ; d9c2 (3:59c2)
-	INCROM $d9c2, $d9ef
+	ld a, $04
+	call Func_d96c
+; 0xd9c7
+
+	INCROM $d9c7, $d9ef
 
 Script_d9ef: ; d9ef (3:59ef)
-	INCROM $d9ef, $da1c
+	ld a, $05
+	call Func_d96c
+; 0xd9f4
+
+	INCROM $d9f4, $da1c
 
 Script_da1c: ; da1c (3:5a1c)
-	INCROM $da1c, $da49
+	ld a, $06
+	call Func_d96c
+; 0xda21
+
+	INCROM $da21, $da49
 
 Script_da49: ; da49 (3:5a49)
-	INCROM $da49, $da76
+	ld a, $07
+	call Func_d96c
+; 0xda4e
+
+	INCROM $da4e, $da76
 
 Script_da76: ; da76 (3:5a76)
-	INCROM $da76, $daa3
+	ld a, $08
+	call Func_d96c
+; 0xda7b
+
+	INCROM $da7b, $daa3
 
 Script_daa3: ; daa3 (3:5aa3)
-	INCROM $daa3, $dad0
+	ld a, $09
+	call Func_d96c
+; 0xdaa8
+
+	INCROM $daa8, $dad0
 
 Script_dad0: ; dad0 (3:5ad0)
 	INCROM $dad0, $dadd
@@ -3837,6 +3889,7 @@ Preload_NikkiInIshiharasHouse: ; dadd (3:5add)
 	ret
 ; 0xdae9
 
+Script_dae9: ; dae9 (3:5ae9)
 	INCROM $dae9, $db3d
 
 Preload_IshiharaInIshiharasHouse: ; db3d (3:5b3d)
@@ -3876,16 +3929,16 @@ Script_Ishihara: ; db4a (3:5b4a)
 
 .ows_db93
 	jump_if_flag_equal EVENT_FLAG_1F, $01, NULL
-	print_variable_text Text0729, Text072a
+	print_variable_npc_text Text0729, Text072a
 	script_set_flag_value EVENT_FLAG_1F, $02
-	ask_question_jump Text072b, .check_ifhave_clefable_incollectionordecks
+	ask_question_jump Text072b, .check_if_clefable_owned
 	print_text_quit_fully Text072c
 
-.check_ifhave_clefable_incollectionordecks
-	jump_if_card_owned CLEFABLE, .check_ifhave_clefable_incollectiononly
+.check_if_clefable_owned
+	jump_if_card_owned CLEFABLE, .check_if_clefable_in_collection
 	print_text_quit_fully Text072d
 
-.check_ifhave_clefable_incollectiononly
+.check_if_clefable_in_collection
 	jump_if_card_in_collection CLEFABLE, .do_clefable_trade
 	print_text_quit_fully Text072e
 
@@ -3893,7 +3946,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $03
 	zero_out_flag_value EVENT_FLAG_38
-	print_text_string Text072f
+	print_npc_text Text072f
 	run_command Func_ccdc
 	tx Text0730
 	take_card CLEFABLE
@@ -3903,16 +3956,16 @@ Script_Ishihara: ; db4a (3:5b4a)
 
 .ows_dbcc
 	jump_if_flag_equal EVENT_FLAG_1F, $03, NULL
-	print_variable_text Text0732, Text0733
+	print_variable_npc_text Text0732, Text0733
 	script_set_flag_value EVENT_FLAG_1F, $04
-	ask_question_jump Text072b, .check_ifhave_ditto_incollectionordecks
+	ask_question_jump Text072b, .check_if_ditto_owned
 	print_text_quit_fully Text072c
 
-.check_ifhave_ditto_incollectionordecks
-	jump_if_card_owned DITTO, .check_ifhave_ditto_incollectiononly
+.check_if_ditto_owned
+	jump_if_card_owned DITTO, .check_if_ditto_in_collection
 	print_text_quit_fully Text0734
 
-.check_ifhave_ditto_incollectiononly
+.check_if_ditto_in_collection
 	jump_if_card_in_collection DITTO, .do_ditto_trade
 	print_text_quit_fully Text0735
 
@@ -3920,7 +3973,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $05
 	zero_out_flag_value EVENT_FLAG_38
-	print_text_string Text072f
+	print_npc_text Text072f
 	run_command Func_ccdc
 	tx Text0736
 	take_card DITTO
@@ -3930,16 +3983,16 @@ Script_Ishihara: ; db4a (3:5b4a)
 
 .ows_dc05
 	jump_if_flag_equal EVENT_FLAG_1F, $05, NULL
-	print_variable_text Text0738, Text0739
+	print_variable_npc_text Text0738, Text0739
 	script_set_flag_value EVENT_FLAG_1F, $06
-	ask_question_jump Text072b, .check_ifhave_chansey_incollectionordecks
+	ask_question_jump Text072b, .check_if_chansey_owned
 	print_text_quit_fully Text072c
 
-.check_ifhave_chansey_incollectionordecks
-	jump_if_card_owned CHANSEY, .check_ifhave_chansey_incollectiononly
+.check_if_chansey_owned
+	jump_if_card_owned CHANSEY, .check_if_chansey_in_collection
 	print_text_quit_fully Text073a
 
-.check_ifhave_chansey_incollectiononly
+.check_if_chansey_in_collection
 	jump_if_card_in_collection CHANSEY, .do_chansey_trade
 	print_text_quit_fully Text073b
 
@@ -3947,7 +4000,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	max_out_flag_value EVENT_FLAG_00
 	script_set_flag_value EVENT_FLAG_1F, $07
 	zero_out_flag_value EVENT_FLAG_38
-	print_text_string Text072f
+	print_npc_text Text072f
 	run_command Func_ccdc
 	tx Text073c
 	take_card CHANSEY
@@ -3972,7 +4025,7 @@ Script_Ronald: ; dc4b (3:5c4b)
 	print_text_quit_fully Text073f
 
 .ows_dc55
-	print_text_string Text0740
+	print_npc_text Text0740
 	ask_question_jump Text0741, .ows_dc60
 	print_text_quit_fully Text0742
 
@@ -3989,7 +4042,7 @@ Script_Clerk1: ; dc64 (3:5c64)
 
 FightingClubLobbyAfterDuel: ; dc68 (3:5c68)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4009,47 +4062,46 @@ Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
 	script_set_flag_value EVENT_IMAKUNI_STATE, IMAKUNI_TALKED
 	jump_if_flag_zero_2 EVENT_TEMP_TALKED_TO_IMAKUNI, NULL
-	print_variable_text Text0467, Text0468
+	print_variable_npc_text Text0467, Text0468
 	max_out_flag_value EVENT_TEMP_TALKED_TO_IMAKUNI
-	ask_question_jump Text0469, .acceptDuel
-	print_text_string Text046a
+	ask_question_jump Text0469, .start_duel
+	print_npc_text Text046a
 	quit_script_fully
 
-.acceptDuel
-	print_text_string Text046b
-	start_battle PRIZES_6, IMAKUNI_DECK_ID, MUSIC_IMAKUNI
+.start_duel
+	print_npc_text Text046b
+	start_duel PRIZES_6, IMAKUNI_DECK_ID, MUSIC_IMAKUNI
 	quit_script_fully
 
 Script_BeatImakuni: ; dd2d (3:5d2d)
 	start_script
-	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $07, .giveBoosters
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $07, .give_boosters
 	increment_flag_value EVENT_IMAKUNI_WIN_COUNT
-	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $03, .threeWins
-	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $06, .sixWins
-.giveBoosters
-	print_text_string Text046c
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $03, .three_wins
+	jump_if_flag_equal EVENT_IMAKUNI_WIN_COUNT, $06, .six_wins
+.give_boosters
+	print_npc_text Text046c
 	give_one_of_each_trainer_booster
 	script_jump .done
 
-.threeWins
-	print_text_string Text046d
-	script_jump .giveImakuniCard
+.three_wins
+	print_npc_text Text046d
+	script_jump .give_imakuni_card
 
-.sixWins
-	print_text_string Text046e
-.giveImakuniCard
-	print_text_string Text046f
+.six_wins
+	print_npc_text Text046e
+.give_imakuni_card
+	print_npc_text Text046f
 	give_card IMAKUNI_CARD
 	show_card_received_screen IMAKUNI_CARD
 .done
-	print_text_string Text0470
-	script_jump ScriptJump_ImakuniCommon
+	print_npc_text Text0470
+	script_jump Script_LostToImakuni.imakuni_common
 
 Script_LostToImakuni: ; dd5c (3:5d5c)
 	start_script
-	print_text_string Text0471
-
-ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
+	print_npc_text Text0471
+.imakuni_common
 	close_text_box
 	jump_if_player_coords_match 18, 4, .ows_dd69
 	script_jump .ows_dd6e
@@ -4061,7 +4113,7 @@ ScriptJump_ImakuniCommon: ; dd60 (3:5d60)
 .ows_dd6e
 	move_active_npc NPCMovement_dd78
 	run_command Func_cdcb
-	max_out_flag_value EVENT_TEMP_BATTLED_IMAKUNI
+	max_out_flag_value EVENT_TEMP_DUELED_IMAKUNI
 	run_command Func_d408
 	db $09
 	run_command Func_d41d
@@ -4093,7 +4145,7 @@ Script_Granny1: ; dd9f (3:5d9f)
 
 FightingClubAfterDuel: ; dda3 (3:5da3)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4125,7 +4177,7 @@ Script_Mitch: ; ddc3 (3:5dc3)
 	fight_club_pupil_jump .first_interaction, .three_pupils_remaining, \
 		.two_pupils_remaining, .one_pupil_remaining, .all_pupils_defeated
 .first_interaction
-	print_text_string Text0477
+	print_npc_text Text0477
 	script_set_flag_value EVENT_FLAG_11, $01
 	script_set_flag_value EVENT_FLAG_17, $01
 	script_set_flag_value EVENT_FLAG_20, $01
@@ -4137,28 +4189,28 @@ Script_Mitch: ; ddc3 (3:5dc3)
 .one_pupil_remaining
 	print_text_quit_fully Text047a
 .all_pupils_defeated
-	print_text_string Text047b
-	ask_question_jump Text047c, .do_battle
-	print_text_string Text047d
+	print_npc_text Text047b
+	ask_question_jump Text047c, .start_duel
+	print_npc_text Text047d
 	quit_script_fully
-.do_battle
-	print_text_string Text047e
-	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text047e
+	start_duel PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Script_BeatMitch: ; ddff (3:5dff)
 	start_script
 	jump_if_flag_nonzero_2 EVENT_FLAG_0F, Script_Mitch_GiveBoosters
-	print_text_string Text047f
+	print_npc_text Text047f
 	max_out_flag_value EVENT_FLAG_0F
 	try_give_medal_pc_packs
 	run_command Func_d125
 	db $0f
 	run_command Func_d435
 	db $01
-	print_text_string Text0480
+	print_npc_text Text0480
 	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
-	print_text_string Text0481
+	print_npc_text Text0481
 	quit_script_fully
 
 Script_LostToMitch: ; de19 (3:5e19)
@@ -4167,22 +4219,22 @@ Script_LostToMitch: ; de19 (3:5e19)
 	print_text_quit_fully Text0482
 
 Script_Mitch_AlreadyHaveMedal: ; de21 (3:5e21)
-	print_text_string Text0483
-	ask_question_jump Text047c, .do_battle
-	print_text_string Text0484
+	print_npc_text Text0483
+	ask_question_jump Text047c, .start_duel
+	print_npc_text Text0484
 	quit_script_fully
-.do_battle
-	print_text_string Text0485
-	start_battle PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text0485
+	start_duel PRIZES_6, FIRST_STRIKE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
-Script_Mitch_GiveBoosters:
-	print_text_string Text0486
+Script_Mitch_GiveBoosters: ; de35 (3:5e35)
+	print_npc_text Text0486
 	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
-	print_text_string Text0487
+	print_npc_text Text0487
 	quit_script_fully
 
-Script_Mitch_PrintTrainHarderText:
+Script_Mitch_PrintTrainHarderText: ; de40 (3:5e40)
 	print_text_quit_fully Text0488
 
 Preload_ChrisInFightingClub: ; de43 (3:5e43)
@@ -4217,7 +4269,7 @@ Script_Clerk2: ; ded1 (3:5ed1)
 
 RockClubLobbyAfterDuel: ; ded5 (3:5ed5)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4267,7 +4319,7 @@ Script_Lass3: ; dfd2 (3:5fd2)
 
 RockClubAfterDuel: ; dfd6 (3:5fd6)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4319,7 +4371,7 @@ Script_Clerk3: ; e09e (3:609e)
 
 WaterClubLobbyAfterDuel: ; e0a2 (3:60a2)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4333,7 +4385,7 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 	get_flag_value EVENT_IMAKUNI_STATE
 	cp IMAKUNI_TALKED
 	jr c, .asm_e0c6
-	get_flag_value EVENT_TEMP_BATTLED_IMAKUNI
+	get_flag_value EVENT_TEMP_DUELED_IMAKUNI
 	jr nz, .asm_e0c6
 	get_flag_value EVENT_IMAKUNI_ROOM
 	cp IMAKUNI_WATER_CLUB
@@ -4351,31 +4403,31 @@ Script_Gal1: ; e0cf (3:60cf)
 	start_script
 	jump_if_flag_equal EVENT_FLAG_12, $02, .ows_e10e
 	jump_if_flag_equal EVENT_FLAG_12, $00, NULL
-	print_variable_text Gal1WantToTrade1Text, Gal1WantToTrade2Text
+	print_variable_npc_text Gal1WantToTrade1Text, Gal1WantToTrade2Text
 	script_set_flag_value EVENT_FLAG_12, $01
 	ask_question_jump Gal1WouldYouLikeToTradeText, .ows_e0eb
-	print_text_string Gal1DeclinedTradeText
+	print_npc_text Gal1DeclinedTradeText
 	quit_script_fully
 
 .ows_e0eb
 	jump_if_card_owned LAPRAS, .ows_e0f3
-	print_text_string Gal1DontOwnCardText
+	print_npc_text Gal1DontOwnCardText
 	quit_script_fully
 
 .ows_e0f3
 	jump_if_card_in_collection LAPRAS, .ows_e0fb
-	print_text_string Gal1CardInDeckText
+	print_npc_text Gal1CardInDeckText
 	quit_script_fully
 
 .ows_e0fb
 	script_set_flag_value EVENT_FLAG_12, $02
-	print_text_string Gal1LetsTradeText
+	print_npc_text Gal1LetsTradeText
 	run_command Func_ccdc
 	tx Gal1TradeCompleteText
 	take_card LAPRAS
 	give_card ARCANINE1
 	show_card_received_screen ARCANINE1
-	print_text_string Gal1ThanksText
+	print_npc_text Gal1ThanksText
 	quit_script_fully
 
 .ows_e10e
@@ -4384,14 +4436,14 @@ Script_Gal1: ; e0cf (3:60cf)
 Script_Lass1: ; e111 (3:6111)
 	start_script
 	jump_if_flag_equal EVENT_FLAG_14, $01, .ows_e121
-	print_text_string Text0427
+	print_npc_text Text0427
 	script_set_flag_value EVENT_FLAG_14, $01
 	script_set_flag_value EVENT_IMAKUNI_STATE, IMAKUNI_MENTIONED
 	quit_script_fully
 
 .ows_e121
 	jump_if_flag_not_equal EVENT_IMAKUNI_ROOM, IMAKUNI_WATER_CLUB, .ows_e12d
-	jump_if_flag_nonzero_2 EVENT_TEMP_BATTLED_IMAKUNI, .ows_e12d
+	jump_if_flag_nonzero_2 EVENT_TEMP_DUELED_IMAKUNI, .ows_e12d
 	print_text_quit_fully Text0428
 
 .ows_e12d
@@ -4424,7 +4476,7 @@ WaterClubMovePlayer: ; e13f (3:613f)
 
 WaterClubAfterDuel: ; e157 (3:6157)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4451,21 +4503,21 @@ WaterClubAfterDuel: ; e157 (3:6157)
 
 Script_Sara: ; e177 (3:6177)
 	start_script
-	print_text_string Text042c
-	ask_question_jump Text042d, .yes_duel
-	print_text_string Text042e
+	print_npc_text Text042c
+	ask_question_jump Text042d, .start_duel
+	print_npc_text Text042e
 	quit_script_fully
-.yes_duel
-	print_text_string Text042f
-	start_battle PRIZES_2, WATERFRONT_POKEMON_DECK_ID, MUSIC_DUEL_THEME_1
+.start_duel
+	print_npc_text Text042f
+	start_duel PRIZES_2, WATERFRONT_POKEMON_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatSara: ; e18c (3:618c)
 	start_script
 	max_out_flag_value EVENT_BEAT_SARA
-	print_text_string Text0430
+	print_npc_text Text0430
 	give_booster_packs BOOSTER_COLOSSEUM_WATER, BOOSTER_COLOSSEUM_WATER, NO_BOOSTER
-	print_text_string Text0431
+	print_npc_text Text0431
 	quit_script_fully
 
 Script_LostToSara: ; e19a (03:619a)
@@ -4474,21 +4526,21 @@ Script_LostToSara: ; e19a (03:619a)
 
 Script_Amanda: ; e19e (03:619e)
 	start_script
-	print_text_string Text0433
-	ask_question_jump Text0434, .yes_duel
-	print_text_string Text0435
+	print_npc_text Text0433
+	ask_question_jump Text0434, .start_duel
+	print_npc_text Text0435
 	quit_script_fully
-.yes_duel
-	print_text_string Text0436
-	start_battle PRIZES_3, LONELY_FRIENDS_DECK_ID, MUSIC_DUEL_THEME_1
+.start_duel
+	print_npc_text Text0436
+	start_duel PRIZES_3, LONELY_FRIENDS_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatAmanda: ; e1b3 (03:61b3)
 	start_script
 	max_out_flag_value EVENT_BEAT_AMANDA
-	print_text_string Text0437
+	print_npc_text Text0437
 	give_booster_packs BOOSTER_MYSTERY_LIGHTNING_COLORLESS, BOOSTER_MYSTERY_LIGHTNING_COLORLESS, NO_BOOSTER
-	print_text_string Text0438
+	print_npc_text Text0438
 	quit_script_fully
 
 Script_LostToAmanda: ; e1c1 (03:61c1)
@@ -4503,7 +4555,7 @@ Script_NotReadyToSeeAmy: ; e1c5 (03:61c5)
 .ows_e1d5
 	move_player SOUTH, 4
 	move_active_npc NPCMovement_e213
-	print_text_string Text043a
+	print_npc_text Text043a
 	jump_if_player_coords_match $12, $0a, .ows_e1fe
 	jump_if_player_coords_match $14, $0a, .ows_e202
 	move_active_npc NPCMovement_e215
@@ -4570,55 +4622,55 @@ Script_Joshua: ; e21c (3:621c)
 	script_jump .beat_sara_and_amanda
 .sara_and_amanda_not_beaten
 	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_text_string Text043b
+	print_npc_text Text043b
 	quit_script_fully
 
 .beat_sara_and_amanda
 	jump_if_flag_nonzero_1 EVENT_JOSHUA_STATE, .already_talked
 	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_TALKED
-	print_text_string Text043b
-	print_text_string Text043c
+	print_npc_text Text043b
+	print_npc_text Text043c
 .already_talked
 	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
-	print_variable_text Text043d, Text043e
-	ask_question_jump Text043f, .startDuel
+	print_variable_npc_text Text043d, Text043e
+	ask_question_jump Text043f, .start_duel
 	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
-	print_variable_text Text0440, Text0441
+	print_variable_npc_text Text0440, Text0441
 	quit_script_fully
 
-.startDuel
-	print_text_string Text0442
+.start_duel
+	print_npc_text Text0442
 	try_give_pc_pack $04
-	start_battle PRIZES_4, SOUND_OF_THE_WAVES_DECK_ID, MUSIC_DUEL_THEME_1
+	start_duel PRIZES_4, SOUND_OF_THE_WAVES_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_LostToJoshua: ; e260 (3:6260)
 	start_script
 	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
-	print_variable_text Text0443, Text0444
+	print_variable_npc_text Text0443, Text0444
 	quit_script_fully
 
 Script_BeatJoshua: ; e26c (3:626c)
 	start_script
 	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
-	print_variable_text Text0445, Text0446
+	print_variable_npc_text Text0445, Text0446
 	give_booster_packs BOOSTER_MYSTERY_WATER_COLORLESS, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
 	jump_if_flag_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
-	print_variable_text Text0447, Text0448
-	jump_if_flag_not_equal EVENT_JOSHUA_STATE, JOSHUA_BEATEN, .firstJoshuaWin
+	print_variable_npc_text Text0447, Text0448
+	jump_if_flag_not_equal EVENT_JOSHUA_STATE, JOSHUA_BEATEN, .first_joshua_win
 	quit_script_fully
 
-.firstJoshuaWin
+.first_joshua_win
 	script_set_flag_value EVENT_JOSHUA_STATE, JOSHUA_BEATEN
-	print_text_string Text0449
+	print_npc_text Text0449
 	close_text_box
 	move_active_npc_by_direction NPCMovementTable_e2a1
-	print_text_string Text044a
+	print_npc_text Text044a
 	run_command Func_cfc6
 	db $00
 	close_advanced_text_box
 	set_next_npc_and_script NPC_AMY, Script_MeetAmy
-	end_script_loop
+	end_script
 	ret
 
 NPCMovementTable_e2a1: ; e2a1 (3:62a1)
@@ -4657,11 +4709,11 @@ Preload_Amy: ; e2ad (3:62ad)
 
 Script_MeetAmy: ; e2d1 (3:62d1)
 	start_script
-	print_text_string Text044b
+	print_npc_text Text044b
 	set_dialog_npc NPC_JOSHUA
-	print_text_string Text044c
+	print_npc_text Text044c
 	set_dialog_npc NPC_AMY
-	print_text_string Text044d
+	print_npc_text Text044d
 	close_text_box
 	run_command Func_d095
 	db $09
@@ -4680,45 +4732,45 @@ Script_MeetAmy: ; e2d1 (3:62d1)
 	set_player_direction NORTH
 	move_player NORTH, 1
 	move_player NORTH, 1
-	move_arbitrary_npc NPC_JOSHUA, NPCMovement_e2ab
-	print_text_string Text044e
-	script_jump Script_Amy.askConfirmDuel
+	move_npc NPC_JOSHUA, NPCMovement_e2ab
+	print_npc_text Text044e
+	script_jump Script_Amy.ask_for_duel
 
 Script_Amy: ; e304 (3:6304)
 	start_script
-	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, ScriptJump_TalkToAmyAgain
-	print_text_string Text044f
-.askConfirmDuel
-	ask_question_jump Text0450, .startDuel
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, Script_Amy_AlreadyHaveMedal
+	print_npc_text Text044f
+.ask_for_duel
+	ask_question_jump Text0450, .start_duel
 
-.denyDuel
-	print_text_string Text0451
+.deny_duel
+	print_npc_text Text0451
 	run_command Func_d0d9
 	db $14
 	db $04
 	dw Script_LostToAmy.ows_e34e
 	quit_script_fully
 
-.startDuel
-	print_text_string Text0452
-	start_battle PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text0452
+	start_duel PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Script_BeatAmy: ; e322 (3:6322)
 	start_script
-	print_text_string Text0453
-	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, .beatAmyCommon
-	print_text_string Text0454
+	print_npc_text Text0453
+	jump_if_flag_nonzero_2 EVENT_BEAT_AMY, .give_booster_packs
+	print_npc_text Text0454
 	max_out_flag_value EVENT_BEAT_AMY
 	try_give_medal_pc_packs
 	run_command Func_d125
 	db EVENT_BEAT_AMY
 	run_command Func_d435
 	db $03
-	print_text_string Text0455
-.beatAmyCommon
+	print_npc_text Text0455
+.give_booster_packs
 	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
-	print_text_string Text0456
+	print_npc_text Text0456
 	run_command Func_d0d9
 	db $14
 	db $04
@@ -4727,7 +4779,7 @@ Script_BeatAmy: ; e322 (3:6322)
 
 Script_LostToAmy: ; e344 (3:6344)
 	start_script
-	print_text_string Text0457
+	print_npc_text Text0457
 	run_command Func_d0d9
 	db $14
 	db $04
@@ -4744,14 +4796,14 @@ Script_LostToAmy: ; e344 (3:6344)
 	db $04
 	quit_script_fully
 
-ScriptJump_TalkToAmyAgain: ; e356 (3:6356)
-	print_text_string Text0458
-	ask_question_jump Text0450, .startDuel
-	script_jump Script_Amy.denyDuel
+Script_Amy_AlreadyHaveMedal: ; e356 (3:6356)
+	print_npc_text Text0458
+	ask_question_jump Text0450, .start_duel
+	script_jump Script_Amy.deny_duel
 
-.startDuel
-	print_text_string Text0459
-	start_battle PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text0459
+	start_duel PRIZES_6, GO_GO_RAIN_DANCE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Script_Clerk4: ; e369 (3:6369)
@@ -4759,7 +4811,7 @@ Script_Clerk4: ; e369 (3:6369)
 
 LightningClubLobbyAfterDuel: ; e36d (3:636d)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4783,7 +4835,7 @@ Script_Hood1: ; e3dd (3:63dd)
 
 LightningClubAfterDuel: ; e3e8 (3:63e8)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4849,10 +4901,10 @@ Script_LostToIsaac: ; e4fb (3:64fb)
 
 GrassClubEntranceAfterDuel: ; e525 (3:6525)
 	ld hl, GrassClubEntranceAfterDuelTable
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
-FindEndOfBattleScript: ; e52c (3:652c)
+FindEndOfDuelScript: ; e52c (3:652c)
 	ld c, $0
 	ld a, [wDuelResult]
 	or a ; cp DUEL_WIN
@@ -4916,7 +4968,7 @@ Script_LostToMichaelInGrassClubEntrance: ; e5ab (3:65ab)
 
 GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -4929,30 +4981,30 @@ GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 Script_Brittany: ; e5d2 (3:65d2)
 	start_script
 	jump_if_flag_less_than EVENT_FLAG_35, $01, NULL
-	print_variable_text Text06e0, Text06e1
-	ask_question_jump Text06e2, .wantToDuel
-	print_text_string Text06e3
+	print_variable_npc_text Text06e0, Text06e1
+	ask_question_jump Text06e2, .start_duel
+	print_npc_text Text06e3
 	quit_script_fully
 
-.wantToDuel
-	print_text_string Text06e4
-	start_battle PRIZES_4, ETCETERA_DECK_ID, MUSIC_DUEL_THEME_1
+.start_duel
+	print_npc_text Text06e4
+	start_duel PRIZES_4, ETCETERA_DECK_ID, MUSIC_DUEL_THEME_1
 	quit_script_fully
 
 Script_BeatBrittany: ; e5ee (3:65ee)
 	start_script
-	print_text_string Text06e5
+	print_npc_text Text06e5
 	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
 	jump_if_flag_less_than EVENT_FLAG_35, $02, NULL
-	print_variable_text Text06e6, Text06e7
+	print_variable_npc_text Text06e6, Text06e7
 	max_out_flag_value FLAG_BEAT_BRITTANY
-	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .finishScript
-	jump_if_flag_zero_2 EVENT_FLAG_3A, .finishScript
-	jump_if_flag_zero_2 EVENT_FLAG_3B, .finishScript
+	jump_if_flag_not_less_than EVENT_FLAG_35, $02, .quit
+	jump_if_flag_zero_2 EVENT_FLAG_3A, .quit
+	jump_if_flag_zero_2 EVENT_FLAG_3B, .quit
 	script_set_flag_value EVENT_FLAG_35, $01
 	max_out_flag_value EVENT_FLAG_1E
-	print_text_string Text06e8
-.finishScript
+	print_npc_text Text06e8
+.quit
 	quit_script_fully
 
 Script_LostToBrittany: ; e618 (3:6618)
@@ -4969,7 +5021,7 @@ Script_Lass2: ; e61f (3:661f)
 	jump_if_flag_not_less_than EVENT_FLAG_37, $04, .ows_e6a1
 	jump_if_flag_not_less_than EVENT_FLAG_37, $02, .ows_e66a
 	jump_if_flag_equal EVENT_FLAG_37, $00, NULL
-	print_variable_text Text06eb, Text06ec
+	print_variable_npc_text Text06eb, Text06ec
 	script_set_flag_value EVENT_FLAG_37, $01
 	ask_question_jump Text06ed, .ows_e648
 	print_text_quit_fully Text06ee
@@ -4985,7 +5037,7 @@ Script_Lass2: ; e61f (3:661f)
 .ows_e656
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $02
-	print_text_string Text06f1
+	print_npc_text Text06f1
 	run_command Func_ccdc
 	tx Text06f2
 	take_card ODDISH
@@ -4995,7 +5047,7 @@ Script_Lass2: ; e61f (3:661f)
 
 .ows_e66a
 	jump_if_flag_equal EVENT_FLAG_37, $02, NULL
-	print_variable_text Text06f4, Text06f5
+	print_variable_npc_text Text06f4, Text06f5
 	script_set_flag_value EVENT_FLAG_37, $03
 	ask_question_jump Text06ed, .ows_e67f
 	print_text_quit_fully Text06f6
@@ -5011,7 +5063,7 @@ Script_Lass2: ; e61f (3:661f)
 .ows_e68d
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $04
-	print_text_string Text06f9
+	print_npc_text Text06f9
 	run_command Func_ccdc
 	tx Text06fa
 	take_card CLEFAIRY
@@ -5021,7 +5073,7 @@ Script_Lass2: ; e61f (3:661f)
 
 .ows_e6a1
 	jump_if_flag_equal EVENT_FLAG_37, $04, NULL
-	print_variable_text Text06fb, Text06fc
+	print_variable_npc_text Text06fb, Text06fc
 	script_set_flag_value EVENT_FLAG_37, $05
 	ask_question_jump Text06ed, .ows_e6b6
 	print_text_quit_fully Text06fd
@@ -5037,7 +5089,7 @@ Script_Lass2: ; e61f (3:661f)
 .ows_e6c4
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $06
-	print_text_string Text0700
+	print_npc_text Text0700
 	run_command Func_ccdc
 	tx Text0701
 	take_card CHARIZARD
@@ -5056,7 +5108,7 @@ Script_Gal2: ; e6e3 (3:66e3)
 
 GrassClubAfterDuel: ; e6e7 (3:66e7)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5098,7 +5150,12 @@ Preload_NikkiInGrassClub: ; e796 (3:6796)
 	INCROM $e796, $e79e
 
 Script_Nikki: ; e79e (3:679e)
-	INCROM $e79e, $e7d3
+	ld a, [wCurMap]
+	cp ISHIHARAS_HOUSE
+	jp z, Script_dae9
+; 0xe7a6
+
+	INCROM $e7a6, $e7d3
 
 Script_BeatNikki: ; e7d3 (3:67d3)
 	INCROM $e7d3, $e7f2
@@ -5108,7 +5165,7 @@ Script_LostToNikki: ; e7f2 (3:67f2)
 
 ClubEntranceAfterDuel: ; e7f6 (3:67f6)
 	ld hl, .after_duel_table
-	jp FindEndOfBattleScript
+	jp FindEndOfDuelScript
 
 .after_duel_table
 	db NPC_RONALD2
@@ -5157,7 +5214,7 @@ TrySecondRonaldFight: ; e837 (3:6837)
 	get_flag_value EVENT_FLAG_4D
 	or a
 	ret nz
-	ld bc, ScriptSecondRonaldFight
+	ld bc, Script_SecondRonaldFight
 	jp SetNextNPCAndScript
 
 Script_Clerk6: ; e84c (3:684c)
@@ -5175,19 +5232,19 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	move_active_npc NPCMovement_e894
 	run_command Func_d135
 	db $00
-	print_text_string Text0645
+	print_npc_text Text0645
 	close_text_box
 	move_player NORTH, 1
 	move_player NORTH, 1
-	print_text_string Text0646
+	print_npc_text Text0646
 	ask_question_jump_default_yes NULL, .ows_e882
-	print_text_string Text0647
+	print_npc_text Text0647
 	script_jump .ows_e885
 
 .ows_e882
-	print_text_string Text0648
+	print_npc_text Text0648
 .ows_e885
-	print_text_string Text0649
+	print_npc_text Text0649
 	close_text_box
 	set_player_direction WEST
 	move_player EAST, 4
@@ -5212,7 +5269,7 @@ Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	move_active_npc NPCMovement_e905
 	do_frames $3c
 	move_active_npc NPCMovement_e90d
-	print_text_string Text064a
+	print_npc_text Text064a
 	jump_if_player_coords_match $08, $02, .ows_e8d6
 	set_player_direction WEST
 	move_player WEST, 1
@@ -5220,24 +5277,23 @@ Script_FirstRonaldFight: ; e8c0 (3:68c0)
 	set_player_direction SOUTH
 	move_player SOUTH, 1
 	move_player SOUTH, 1
-	print_text_string Text064b
+	print_npc_text Text064b
 	script_set_flag_value $4c, $01
-	start_battle PRIZES_6, IM_RONALD_DECK_ID, MUSIC_RONALD
+	start_duel PRIZES_6, IM_RONALD_DECK_ID, MUSIC_RONALD
 	quit_script_fully
 
 Script_BeatFirstRonaldFight: ; e8e9 (3:68e9)
 	start_script
-	print_text_string Text064c
+	print_npc_text Text064c
 	give_card JIGGLYPUFF1
 	show_card_received_screen JIGGLYPUFF1
-	print_text_string Text064d
-	script_jump ScriptJump_FinishedFirstRonaldFight
+	print_npc_text Text064d
+	script_jump Script_LostToFirstRonaldFight.ows_e8fb
 
 Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	start_script
-	print_text_string Text064e
-
-ScriptJump_FinishedFirstRonaldFight:
+	print_npc_text Text064e
+.ows_e8fb
 	script_set_flag_value EVENT_FLAG_4C, $02
 	close_text_box
 	move_active_npc NPCMovement_e90f
@@ -5270,12 +5326,12 @@ NPCMovement_e90f: ; e90f (3:690f)
 Preload_Ronald3InClubEntrance: ; e915 (3:6915)
 	INCROM $e915, $e91e
 
-ScriptSecondRonaldFight: ; e91e (3:691e)
+Script_SecondRonaldFight: ; e91e (3:691e)
 	start_script
 	move_active_npc NPCMovement_e905
 	do_frames 60
 	move_active_npc NPCMovement_e90d
-	print_text_string Text064f
+	print_npc_text Text064f
 	jump_if_player_coords_match $08, $02, .ows_6934
 	set_player_direction WEST
 	move_player WEST, 1
@@ -5283,24 +5339,23 @@ ScriptSecondRonaldFight: ; e91e (3:691e)
 	set_player_direction SOUTH
 	move_player SOUTH, 1
 	move_player SOUTH, 1
-	print_text_string Text0650
+	print_npc_text Text0650
 	script_set_flag_value EVENT_FLAG_4D, $01
-	start_battle PRIZES_6, POWERFUL_RONALD_DECK_ID, MUSIC_RONALD
+	start_duel PRIZES_6, POWERFUL_RONALD_DECK_ID, MUSIC_RONALD
 	quit_script_fully
 
 Script_BeatSecondRonaldFight: ; e947 (3:6947)
 	start_script
-	print_text_string Text0651
+	print_npc_text Text0651
 	give_card SUPER_ENERGY_RETRIEVAL
 	show_card_received_screen SUPER_ENERGY_RETRIEVAL
-	print_text_string Text0652
-	script_jump ScriptJump_FinishedSecondRonaldFight
+	print_npc_text Text0652
+	script_jump Script_LostToSecondRonaldFight.ows_e959
 
 Script_LostToSecondRonaldFight: ; e955 (3:6955)
 	start_script
-	print_text_string Text0653
-
-ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
+	print_npc_text Text0653
+.ows_e959
 	script_set_flag_value EVENT_FLAG_4D, $02
 	close_text_box
 	move_active_npc NPCMovement_e90f
@@ -5310,7 +5365,7 @@ ScriptJump_FinishedSecondRonaldFight: ; e959 (3:6959)
 
 PsychicClubLobbyAfterDuel: ; e963 (3:6963)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5346,7 +5401,7 @@ Script_Chap4: ; ea3b (3:6a3b)
 
 PsychicClubAfterDuel: ; ea46 (3:6a46)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5404,7 +5459,7 @@ Script_Clerk7: ; eb53 (3:6b53)
 
 ScienceClubLobbyAfterDuel:; eb57 (3:6b57)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5424,14 +5479,37 @@ Script_Man3: ; ebc1 (3:6bc1)
 	INCROM $ebc1, $ebc5
 
 Script_Specs2: ; ebc5 (3:6bc5)
-	INCROM $ebc5, $ebed
+	call UpdateRNGSources
+	and $03
+	ld c, a
+	ld b, $00
+	ld hl, Data_ebe7
+	add hl, bc
+	ld e, [hl]
+	ld d, $00
+	call GetCardName
+	ld hl, wTxRam2
+	ld a, e
+	ld [hli], a
+	ld [hl], d
+; 0xebdd
+
+	INCROM $ebdd, $ebe7
+
+Data_ebe7: ; ebe7 (3:6be7)
+	db PORYGON
+	db DITTO
+	db MUK
+	db WEEZING
+
+	INCROM $ebeb, $ebed
 
 Script_Specs3: ; ebed (3:6bed)
 	INCROM $ebed, $ebf1
 
 ScienceClubAfterDuel: ; ebf1 (3:6bf1)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5500,7 +5578,7 @@ Script_Clerk8: ; ed45 (3:6d45)
 
 FireClubLobbyAfterDuel: ; ed49 (3:6d49)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5594,7 +5672,7 @@ Script_Mania: ; ee88 (3:6e88)
 
 FireClubAfterDuel: ; ee93  (3:6e93)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -5652,26 +5730,26 @@ Script_Ken: ; ef22 (3:6f22)
 	jump_if_flag_nonzero_2 EVENT_FLAG_23, .have_300_cards
 	jump_if_enough_cards_owned 300, .have_300_cards
 	jump_if_flag_zero_1 EVENT_FLAG_24, NULL
-	print_variable_text Text06ba, Text06bb
+	print_variable_npc_text Text06ba, Text06bb
 	script_set_flag_value EVENT_FLAG_24, $01
 	quit_script_fully
 .have_300_cards
 	max_out_flag_value EVENT_FLAG_23
-	jump_if_flag_nonzero_2 EVENT_FLAG_0A, Script_KenBattle_AlreadyHaveMedal
+	jump_if_flag_nonzero_2 EVENT_FLAG_0A, Script_Ken_AlreadyHaveMedal
 	jump_if_flag_zero_1 EVENT_FLAG_24, NULL
-	print_variable_text Text06bc, Text06bd
+	print_variable_npc_text Text06bc, Text06bd
 	script_set_flag_value EVENT_FLAG_24, $01
-	ask_question_jump Text06be, .do_battle
-	print_text_string Text06bf
+	ask_question_jump Text06be, .start_duel
+	print_npc_text Text06bf
 	quit_script_fully
-.do_battle
-	print_text_string Text06c0
-	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text06c0
+	start_duel PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Script_BeatKen: ; ef5e (3:6f5e)
 	start_script
-	print_text_string Text06c1
+	print_npc_text Text06c1
 	jump_if_flag_nonzero_2 EVENT_FLAG_0A, .give_booster_packs
 	max_out_flag_value EVENT_FLAG_0A
 	try_give_medal_pc_packs
@@ -5679,25 +5757,25 @@ Script_BeatKen: ; ef5e (3:6f5e)
 	db $0a
 	run_command Func_d435
 	db $08
-	print_text_string Text06c2
+	print_npc_text Text06c2
 .give_booster_packs
 	give_booster_packs BOOSTER_MYSTERY_NEUTRAL, BOOSTER_MYSTERY_NEUTRAL, NO_BOOSTER
-	print_text_string Text06c3
+	print_npc_text Text06c3
 	quit_script_fully
 
 Script_LostToKen: ; ef78 (3:6f78)
 	start_script
 	jump_if_flag_zero_2 EVENT_FLAG_0A, NULL
-	print_variable_text Text06c4, Text06c5
+	print_variable_npc_text Text06c4, Text06c5
 	quit_script_fully
 
-Script_KenBattle_AlreadyHaveMedal: ; ef83 (3:6f83)
-	print_text_string Text06c6
-	ask_question_jump Text06be, .do_battle
+Script_Ken_AlreadyHaveMedal: ; ef83 (3:6f83)
+	print_npc_text Text06c6
+	ask_question_jump Text06be, .start_duel
 	print_text_quit_fully Text06bf
-.do_battle
-	print_text_string Text06c7
-	start_battle PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
+.start_duel
+	print_npc_text Text06c7
+	start_duel PRIZES_6, FIRE_CHARGE_DECK_ID, MUSIC_DUEL_THEME_2
 	quit_script_fully
 
 Preload_Clerk9: ; ef96 (3:6f96)
@@ -5966,8 +6044,8 @@ ChallengeHallAfterDuel: ; f239 (3:7239)
 	jp SetNextNPCAndScript
 
 ChallengeHallAfterDuelTable:
-	dw WonAtChallengeHall
-	dw LostAtChallengeHall
+	dw Script_WonAtChallengeHall
+	dw Script_LostAtChallengeHall
 
 ChallengeHallLoadMap: ; f258 (3:7258)
 	get_flag_value EVENT_FLAG_47
@@ -6026,23 +6104,23 @@ Script_Clerk12: ; f295 (3:7295)
 	print_text_quit_fully Text052a
 
 .ows_f2c7
-	print_text_string Text052b
+	print_npc_text Text052b
 	script_jump .ows_f2d6
 
 .ows_f2cd
-	print_text_string Text052c
+	print_npc_text Text052c
 	script_jump .ows_f2d6
 
 .ows_f2d3
-	print_text_string Text052d
+	print_npc_text Text052d
 .ows_f2d6
-	print_text_string Text052e
+	print_npc_text Text052e
 	ask_question_jump Text052f, .ows_f2e1
 	print_text_quit_fully Text0530
 
 .ows_f2e1
 	max_out_flag_value EVENT_FLAG_59
-	print_text_string Text0531
+	print_npc_text Text0531
 	close_text_box
 	move_active_npc NPCMovement_f349
 	jump_if_player_coords_match 8, 18, .ows_f2fa
@@ -6085,7 +6163,7 @@ Script_Clerk12: ; f295 (3:7295)
 	move_active_npc NPCMovement_f34e
 	close_advanced_text_box
 	set_next_npc_and_script $4a, Script_f353
-	end_script_loop
+	end_script
 	ret
 
 NPCMovement_f349: ; f349 (3:7349)
@@ -6115,16 +6193,16 @@ Script_f353: ; f353 (3:7353)
 	move_active_npc NPCMovement_f390
 	run_command Func_d16b
 	db $00
-	print_text_string Text0532
+	print_npc_text Text0532
 	close_text_box
 	move_active_npc NPCMovement_f37f
-	print_text_string Text0533
+	print_npc_text Text0533
 	close_text_box
 	move_active_npc NPCMovement_f388
-	print_text_string Text0534
+	print_npc_text Text0534
 	close_text_box
 	move_active_npc NPCMovement_f38e
-	print_text_string Text0535
+	print_npc_text Text0535
 	run_command Func_cd4f
 	db $04
 	db $00
@@ -6168,23 +6246,23 @@ NPCMovement_f390: ; f390 (3:7390)
 	db SOUTH | NO_MOVE
 	db $ff
 
-LostAtChallengeHall: ; f392 (3:7392)
+Script_LostAtChallengeHall: ; f392 (3:7392)
 	start_script
 	do_frames 20
 	move_active_npc NPCMovement_f37d
 	do_frames 20
 	move_active_npc NPCMovement_f390
-	jump_if_flag_equal EVENT_FLAG_45, $02, ScriptJump_f410
-	jump_if_flag_equal EVENT_FLAG_45, $03, ScriptJump_f410.ows_f41a
+	jump_if_flag_equal EVENT_FLAG_45, $02, Script_f410
+	jump_if_flag_equal EVENT_FLAG_45, $03, Script_f410.ows_f41a
 	run_command Func_d16b
 	db $00
 	run_command Func_d16b
 	db $01
-	print_text_string Text0536
+	print_npc_text Text0536
 .ows_f3ae
 	close_text_box
 	move_active_npc NPCMovement_f38b
-	print_text_string Text0537
+	print_npc_text Text0537
 	close_text_box
 	move_active_npc NPCMovement_f38e
 	jump_if_flag_equal EVENT_FLAG_44, $02, .ows_f3ce
@@ -6205,7 +6283,7 @@ LostAtChallengeHall: ; f392 (3:7392)
 .ows_f3e2
 	close_advanced_text_box
 	set_next_npc_and_script NPC_CLERK12, Script_f3e9
-	end_script_loop
+	end_script
 	ret
 
 Script_f3e9: ; f3e9 (3:73e9)
@@ -6233,23 +6311,23 @@ NPCMovement_f40d: ; f40d (3:740d)
 	db SOUTH | NO_MOVE
 	db $ff
 
-ScriptJump_f410: ; f410 (4:7410)
+Script_f410: ; f410 (4:7410)
 	run_command Func_d16b
 	db $00
 	run_command Func_d16b
 	db $01
-	print_text_string Text0538
-	script_jump LostAtChallengeHall.ows_f3ae
+	print_npc_text Text0538
+	script_jump Script_LostAtChallengeHall.ows_f3ae
 
 .ows_f41a
-	print_text_string Text0539
+	print_npc_text Text0539
 	set_dialog_npc NPC_RONALD1
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f42e
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
-	print_variable_text Text053a, Text053b
+	print_variable_npc_text Text053a, Text053b
 .ows_f42e
 	set_dialog_npc NPC_HOST
-	script_jump LostAtChallengeHall.ows_f3ae
+	script_jump Script_LostAtChallengeHall.ows_f3ae
 
 Script_f433: ; f433 (3:7433)
 	start_script
@@ -6257,27 +6335,27 @@ Script_f433: ; f433 (3:7433)
 	move_active_npc NPCMovement_f37d
 	do_frames 20
 	move_active_npc NPCMovement_f390
-	script_jump WonAtChallengeHall.ows_f4a4
+	script_jump Script_WonAtChallengeHall.ows_f4a4
 
-WonAtChallengeHall: ; f441 (3:7441)
+Script_WonAtChallengeHall: ; f441 (3:7441)
 	start_script
 	do_frames 20
 	move_active_npc NPCMovement_f37d
 	do_frames 20
 	move_active_npc NPCMovement_f390
-	jump_if_flag_equal EVENT_FLAG_45, $03, ScriptJump_f4db
+	jump_if_flag_equal EVENT_FLAG_45, $03, Script_f4db
 	jump_if_flag_equal EVENT_FLAG_45, $02, .ows_f456
 .ows_f456
 	jump_if_flag_equal EVENT_FLAG_45, $01, NULL
-	print_variable_text Text053c, Text053d
+	print_variable_npc_text Text053c, Text053d
 	move_active_npc NPCMovement_f37f
 	run_command Func_d16b
 	db $00
-	print_text_string Text053e
+	print_npc_text Text053e
 	close_text_box
 	move_wram_npc NPCMovement_f4c8
 	run_command Func_cdd8
-	print_text_string Text053f
+	print_npc_text Text053f
 	close_text_box
 	run_command Func_d195
 	run_command Func_cdf5
@@ -6287,31 +6365,31 @@ WonAtChallengeHall: ; f441 (3:7441)
 	run_command Func_d16b
 	db $00
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
-	print_variable_text Text0540, Text0541
+	print_variable_npc_text Text0540, Text0541
 	move_active_npc NPCMovement_f383
 	jump_if_flag_equal EVENT_FLAG_45, $02, .ows_f4a4
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f4a1
 	close_text_box
 	set_dialog_npc $02
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
-	print_variable_text Text0542, Text0543
+	print_variable_npc_text Text0542, Text0543
 	set_dialog_npc NPC_HOST
 	close_text_box
 .ows_f4a1
-	print_text_string Text0544
+	print_npc_text Text0544
 .ows_f4a4
 	zero_out_flag_value EVENT_FLAG_47
-	print_text_string Text0545
+	print_npc_text Text0545
 	ask_question_jump_default_yes Text0546, .ows_f4bd
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
-	print_variable_text Text0547, Text0548
+	print_variable_npc_text Text0547, Text0548
 	run_command Func_cd4f
 	db $04
 	db $00
 	db $00
 	quit_script_fully
 .ows_f4bd
-	print_text_string Text0549
+	print_npc_text Text0549
 	close_text_box
 	max_out_flag_value EVENT_FLAG_47
 	run_command Func_d1ad
@@ -6344,22 +6422,22 @@ NPCMovement_f4d8: ; f4d8 (3:74d8)
 	db SOUTH | NO_MOVE
 	db $ff
 
-ScriptJump_f4db: ; f4db (3:74db)
-	print_text_string Text054a
+Script_f4db: ; f4db (3:74db)
+	print_npc_text Text054a
 	move_active_npc NPCMovement_f37f
 	run_command Func_d16b
 	db $00
-	print_text_string Text054b
+	print_npc_text Text054b
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f513
 	set_dialog_npc $02
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
-	print_variable_text Text054c, Text054d
+	print_variable_npc_text Text054c, Text054d
 	move_wram_npc NPCMovement_f4d8
 	do_frames 40
 	move_wram_npc NPCMovement_f34c
 	jump_if_flag_equal EVENT_FLAG_44, $01, NULL
-	print_variable_text Text054e, Text054f
+	print_variable_npc_text Text054e, Text054f
 	set_dialog_npc NPC_HOST
 	close_text_box
 	move_wram_npc NPCMovement_f4c9
@@ -6369,14 +6447,14 @@ ScriptJump_f4db: ; f4db (3:74db)
 .ows_f516
 	run_command Func_cdd8
 	move_active_npc NPCMovement_f383
-	print_text_string Text0550
+	print_npc_text Text0550
 	close_text_box
 	move_active_npc NPCMovement_f38b
 	run_command Func_d1b3
-	print_text_string Text0551
+	print_npc_text Text0551
 	give_card VARIABLE_CARD
 	show_card_received_screen $00
-	print_text_string Text0552
+	print_npc_text Text0552
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_44, $02, .ows_f540
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f549
@@ -6394,7 +6472,7 @@ ScriptJump_f4db: ; f4db (3:74db)
 .ows_f552
 	close_advanced_text_box
 	set_next_npc_and_script NPC_CLERK12, Script_f3e9
-	end_script_loop
+	end_script
 	ret
 
 ; Loads the NPC to fight at the challenge hall
@@ -6505,15 +6583,24 @@ PokemonDomeEntranceCloseTextBox: ; f62a (3:762a)
 
 Script_f631: ; f631 (3:7631)
 	start_script
-	print_text_string Text0508
+	print_npc_text Text0508
 	close_advanced_text_box
 	set_next_npc_and_script NPC_RONALD1, .ows_f63c
-	end_script_loop
-
+	end_script
 	ret
 
 .ows_f63c
-	INCROM $f63c, $f6af
+	call TryGiveMedalPCPacks
+	get_flag_value EVENT_MEDAL_COUNT
+	ld [wTxRam3], a
+	inc a
+	ld [wTxRam3_b], a
+	xor a
+	ld [wTxRam3 + 1], a
+	ld [wTxRam3_b + 1], a
+; 0xf651
+
+	INCROM $f651, $f6af
 
 Script_f6af: ; f6af (3:76af)
 	INCROM $f6af, $f6c6
@@ -6523,7 +6610,7 @@ PokemonDomeMovePlayer: ; f6c6 (3:76c6)
 
 PokemonDomeAfterDuel: ; f6e0 (3:76e0)
 	ld hl, .after_duel_table
-	call FindEndOfBattleScript
+	call FindEndOfDuelScript
 	ret
 
 .after_duel_table
@@ -6693,7 +6780,7 @@ PointerTable_fc4c: ; fc4c (3:7c4c)
 
 Script_fc52: ; fc52 (3:7c52)
 	start_script
-	print_text_string Text06c8
+	print_npc_text Text06c8
 	ask_question_jump_default_yes NULL, .ows_fc5e
 	print_text_quit_fully Text06c9
 
@@ -6732,13 +6819,13 @@ Func_fc7a: ; fc7a (3:7c7a)
 
 	start_script
 	jump_if_flag_not_equal EVENT_FLAG_74, $02, Func_fcad.ows_fcd5
-	print_text_string Text06cd
+	print_npc_text Text06cd
 	run_command Func_d39d
 	db $00
 	jump_if_flag_not_less_than EVENT_FLAG_72, $04, Func_fc7a.ows_fcaa
-	print_text_string Text06ce
+	print_npc_text Text06ce
 	ask_question_jump_default_yes Text06cf, .ows_fca0
-	print_text_string Text06d0
+	print_npc_text Text06d0
 	script_jump Func_fc7a.ows_fcaa
 
 .ows_fca0
@@ -6778,9 +6865,9 @@ Func_fcad: ; fcad (3:7cad)
 	print_text_quit_fully Text06d5
 
 .ows_fcd5
-	move_arbitrary_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce1
-	print_text_string Text06d6
-	move_arbitrary_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce3
+	move_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce1
+	print_npc_text Text06d6
+	move_npc NPC_GIFT_CENTER_CLERK, NPCMovement_fce3
 	quit_script_fully
 
 NPCMovement_fce1: ; fce1 (3:7ce1)

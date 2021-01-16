@@ -2310,9 +2310,9 @@ wd3b9:: ; d3b9
 	ds $2
 
 wd3bb:: ; d3bb
-	ds $1
+	ds $a
 
-	ds $14
+	ds $b
 
 wd3d0:: ; d3d0
 	ds $1

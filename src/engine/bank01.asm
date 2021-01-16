@@ -188,29 +188,29 @@ MainDuelLoop: ; 40ee (1:40ee)
 ; load the correct music and animation depending on result
 	ld a, [wDuelFinished]
 	cp TURN_PLAYER_WON
-	jr z, .active_duelist_won_battle
+	jr z, .active_duelist_won_duel
 	cp TURN_PLAYER_LOST
-	jr z, .active_duelist_lost_battle
+	jr z, .active_duelist_lost_duel
 	ld a, DUEL_ANIM_DUEL_DRAW
 	ld c, MUSIC_MATCH_DRAW
 	ldtx hl, DuelWasADrawText
 	jr .handle_duel_finished
-.active_duelist_won_battle
+.active_duelist_won_duel
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr nz, .opponent_won_battle
-.player_won_battle
+	jr nz, .opponent_won_duel
+.player_won_duel
 	xor a ; DUEL_WIN
 	ld [wDuelResult], a
 	ld a, DUEL_ANIM_DUEL_WIN
 	ld c, MUSIC_MATCH_VICTORY
 	ldtx hl, WonDuelText
 	jr .handle_duel_finished
-.active_duelist_lost_battle
+.active_duelist_lost_duel
 	ldh a, [hWhoseTurn]
 	cp PLAYER_TURN
-	jr nz, .player_won_battle
-.opponent_won_battle
+	jr nz, .player_won_duel
+.opponent_won_duel
 	ld a, DUEL_LOSS
 	ld [wDuelResult], a
 	ld a, DUEL_ANIM_DUEL_LOSS
@@ -232,7 +232,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	jr nz, .wait_song
 	ld a, [wDuelFinished]
 	cp TURN_PLAYER_TIED
-	jr z, .tied_battle
+	jr z, .tied_duel
 	call Func_39fc
 	call WaitForWideTextBoxInput
 	call Func_3b31
@@ -241,7 +241,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	ldh [hWhoseTurn], a
 	ret
 
-.tied_battle
+.tied_duel
 	call WaitForWideTextBoxInput
 	call Func_3b31
 	ld a, [wDuelTheme]

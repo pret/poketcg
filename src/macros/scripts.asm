@@ -5,13 +5,13 @@ run_command: MACRO
 ENDM
 
 	const_def
-	const ScriptCommand_EndScriptLoop1_index                                 ; $00
+	const ScriptCommand_EndScript_index                                      ; $00
 	const ScriptCommand_CloseAdvancedTextBox_index                           ; $01
-	const ScriptCommand_PrintTextString_index                                ; $02
+	const ScriptCommand_PrintNPCText_index                                   ; $02
 	const Func_ccdc_index                                                    ; $03
 	const ScriptCommand_AskQuestionJump_index                                ; $04
-	const ScriptCommand_StartBattle_index                                    ; $05
-	const ScriptCommand_PrintVariableText_index                              ; $06
+	const ScriptCommand_StartDuel_index                                      ; $05
+	const ScriptCommand_PrintVariableNPCText_index                           ; $06
 	const Func_cda8_index                                                    ; $07
 	const ScriptCommand_PrintTextQuitFully_index                             ; $08
 	const Func_cdcb_index                                                    ; $09
@@ -88,11 +88,11 @@ ENDM
 	const ScriptCommand_ShowSamNormalMultichoice_index                       ; $50
 	const ScriptCommand_ShowSamTutorialMultichoice_index                     ; $51
 	const Func_d43d_index                                                    ; $52
-	const ScriptCommand_EndScriptLoop2_index                                 ; $53
-	const ScriptCommand_EndScriptLoop3_index                                 ; $54
-	const ScriptCommand_EndScriptLoop4_index                                 ; $55
-	const ScriptCommand_EndScriptLoop5_index                                 ; $56
-	const ScriptCommand_EndScriptLoop6_index                                 ; $57
+	const ScriptCommand_EndScript2_index                                     ; $53
+	const ScriptCommand_EndScript3_index                                     ; $54
+	const ScriptCommand_EndScript4_index                                     ; $55
+	const ScriptCommand_EndScript5_index                                     ; $56
+	const ScriptCommand_EndScript6_index                                     ; $57
 	const ScriptCommand_SetFlagValue_index                                   ; $58
 	const ScriptCommand_JumpIfFlagZero1_index                                ; $59
 	const ScriptCommand_JumpIfFlagNonzero1_index                             ; $5a
@@ -105,16 +105,16 @@ ENDM
 	const ScriptCommand_JumpIfFlagNonzero2_index                             ; $61
 	const ScriptCommand_JumpIfFlagZero2_index                                ; $62
 	const ScriptCommand_IncrementFlagValue_index                             ; $63
-	const ScriptCommand_EndScriptLoop7_index                                 ; $64
-	const ScriptCommand_EndScriptLoop8_index                                 ; $65
-	const ScriptCommand_EndScriptLoop9_index                                 ; $66
-	const ScriptCommand_EndScriptLoop10_index                                ; $67
+	const ScriptCommand_EndScript7_index                                     ; $64
+	const ScriptCommand_EndScript8_index                                     ; $65
+	const ScriptCommand_EndScript9_index                                     ; $66
+	const ScriptCommand_EndScript10_index                                    ; $67
 
 ; Script Macros
 
 ; Stops the current script and returns control flow back to assembly
-end_script_loop: MACRO
-	run_command ScriptCommand_EndScriptLoop1
+end_script: MACRO
+	run_command ScriptCommand_EndScript
 ENDM
 
 ; Closes current dialog window
@@ -122,9 +122,9 @@ close_advanced_text_box: MACRO
 	run_command ScriptCommand_CloseAdvancedTextBox
 ENDM
 
-; Opens a new dialog window and displays the given text
-print_text_string: MACRO
-	run_command ScriptCommand_PrintTextString
+; Opens a new dialog window and displays the given text and active npc name
+print_npc_text: MACRO
+	run_command ScriptCommand_PrintNPCText
 	tx \1 ; Text Pointer
 ENDM
 
@@ -140,17 +140,17 @@ ENDC
 	dw \2 ; Jump Location
 ENDM
 
-; Begins a battle with the NPC currently being spoken to
-start_battle: MACRO
-	run_command ScriptCommand_StartBattle
+; Begins a duel with the NPC currently being spoken to
+start_duel: MACRO
+	run_command ScriptCommand_StartDuel
 	db \1 ; Prize Amount (ex PRIZES_2)
 	db \2 ; Deck ID (ex SAMS_PRACTICE_DECK_ID)
 	db \3 ; Duel Music (ex MUSIC_DUEL_THEME_1)
 ENDM
 
 ; Prints the first or second text depending on if wScriptControlByte is nonzero or zero respectively
-print_variable_text: MACRO
-	run_command ScriptCommand_PrintVariableText
+print_variable_npc_text: MACRO
+	run_command ScriptCommand_PrintVariableNPCText
 	tx \1 ; Text Pointer
 	tx \2 ; Text Pointer
 ENDM
@@ -304,7 +304,7 @@ quit_script_fully: MACRO
 	run_command ScriptCommand_QuitScriptFully
 ENDM
 
-choose_deck_to_duel_against_multichoice: MACRO
+choose_deck_to_duel_against: MACRO
 	run_command ScriptCommand_ChooseDeckToDuelAgainstMultichoice
 ENDM
 
@@ -314,7 +314,7 @@ open_deck_machine: MACRO
 	db \1 ; Deck Machine Type?
 ENDM
 
-choose_starter_deck_multichoice: MACRO
+choose_starter_deck: MACRO
 	run_command ScriptCommand_ChooseStarterDeckMultichoice
 ENDM
 
@@ -329,7 +329,7 @@ enter_map: MACRO
 ENDM
 
 ; Moves any NPC using an NPCMovement
-move_arbitrary_npc: MACRO
+move_npc: MACRO
 	run_command ScriptCommand_MoveArbitraryNPC
 	db \1 ; NPC (ex NPC_JOSHUA)
 	dw \2 ; NPCMovement (NPCMovement_e2ab)
@@ -390,26 +390,6 @@ ENDM
 
 show_sam_tutorial_multichoice: MACRO
 	run_command ScriptCommand_ShowSamTutorialMultichoice
-ENDM
-
-end_script_loop_2: MACRO
-	run_command ScriptCommand_EndScriptLoop2
-ENDM
-
-end_script_loop_3: MACRO
-	run_command ScriptCommand_EndScriptLoop3
-ENDM
-
-end_script_loop_4: MACRO
-	run_command ScriptCommand_EndScriptLoop4
-ENDM
-
-end_script_loop_5: MACRO
-	run_command ScriptCommand_EndScriptLoop5
-ENDM
-
-end_script_loop_6: MACRO
-	run_command ScriptCommand_EndScriptLoop6
 ENDM
 
 ; Sets a flag's value
@@ -495,22 +475,6 @@ ENDM
 increment_flag_value: MACRO
 	run_command ScriptCommand_IncrementFlagValue
 	db \1 ; flag (ex EVENT_FLAG_11)
-ENDM
-
-end_script_loop_7: MACRO
-	run_command ScriptCommand_EndScriptLoop7
-ENDM
-
-end_script_loop_8: MACRO
-	run_command ScriptCommand_EndScriptLoop8
-ENDM
-
-end_script_loop_9: MACRO
-	run_command ScriptCommand_EndScriptLoop9
-ENDM
-
-end_script_loop_10: MACRO
-	run_command ScriptCommand_EndScriptLoop10
 ENDM
 
 

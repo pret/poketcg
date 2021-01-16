@@ -337,7 +337,10 @@ Func_10cbb: ; 10cbb (4:4cbb)
 	INCROM $10cbb, $10cea
 
 Func_10cea: ; 10cea (4:4cea)
-	INCROM $10cea, $10dba
+	INCROM $10cea, $10d98
+
+Unknown_10d98: ; 10d98 (4:4d98)
+	INCROM $10d98, $10dba
 
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1
@@ -1002,13 +1005,13 @@ Func_11f4e: ; 11f4e (4:5f4e)
 	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
-	dw ScriptCommand_EndScriptLoop1
+	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox
-	dw ScriptCommand_PrintTextString
+	dw ScriptCommand_PrintNPCText
 	dw Func_ccdc
 	dw ScriptCommand_AskQuestionJump
-	dw ScriptCommand_StartBattle
-	dw ScriptCommand_PrintVariableText
+	dw ScriptCommand_StartDuel
+	dw ScriptCommand_PrintVariableNPCText
 	dw Func_cda8
 	dw ScriptCommand_PrintTextQuitFully
 	dw Func_cdcb
@@ -1085,11 +1088,11 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_ShowSamNormalMultichoice
 	dw ScriptCommand_ShowSamTutorialMultichoice
 	dw Func_d43d
-	dw ScriptCommand_EndScriptLoop2
-	dw ScriptCommand_EndScriptLoop3
-	dw ScriptCommand_EndScriptLoop4
-	dw ScriptCommand_EndScriptLoop5
-	dw ScriptCommand_EndScriptLoop6
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
 	dw ScriptCommand_SetFlagValue
 	dw ScriptCommand_JumpIfFlagZero1
 	dw ScriptCommand_JumpIfFlagNonzero1
@@ -1102,10 +1105,10 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfFlagNonzero2
 	dw ScriptCommand_JumpIfFlagZero2
 	dw ScriptCommand_IncrementFlagValue
-	dw ScriptCommand_EndScriptLoop7
-	dw ScriptCommand_EndScriptLoop8
-	dw ScriptCommand_EndScriptLoop9
-	dw ScriptCommand_EndScriptLoop10
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
 
 
 MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
