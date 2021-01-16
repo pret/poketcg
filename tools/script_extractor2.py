@@ -27,13 +27,13 @@ script_commands = {
 	0x00: { "name": "end_script",                                 "params": [] },
 	0x01: { "name": "close_advanced_text_box",                    "params": [] },
 	0x02: { "name": "print_npc_text",                             "params": [ "text" ] },
-	0x03: { "name": "Func_ccdc",                                  "params": [ "text" ] }, # print text without npc name
+	0x03: { "name": "print_text",                                 "params": [ "text" ] },
 	0x04: { "name": "ask_question_jump",                          "params": [ "text", "label" ] },
 	0x05: { "name": "start_duel",                                 "params": [ "prizes", "deck", "song" ] },
 	0x06: { "name": "print_variable_npc_text",                    "params": [ "text", "text" ] },
-	0x07: { "name": "Func_cda8",                                  "params": [ "text", "text" ] }, # print variable text without npc name
+	0x07: { "name": "print_variable_text",                        "params": [ "text", "text" ] },
 	0x08: { "name": "print_text_quit_fully",                      "params": [ "text" ] },
-	0x09: { "name": "Func_cdcb",                                  "params": [] }, # unload active npc
+	0x09: { "name": "unload_active_npc",                          "params": [] },
 	0x0a: { "name": "move_active_npc_by_direction",               "params": [ "movement_table" ] },
 	0x0b: { "name": "close_text_box",                             "params": [] },
 	0x0c: { "name": "give_booster_packs",                         "params": [ "booster", "booster", "booster" ] },
@@ -41,16 +41,16 @@ script_commands = {
 	0x0e: { "name": "jump_if_card_in_collection",                 "params": [ "card", "label" ] },
 	0x0f: { "name": "give_card",                                  "params": [ "card" ] },
 	0x10: { "name": "take_card",                                  "params": [ "card" ] },
-	0x11: { "name": "Func_cf53",                                  "params": [ "label" ] }, # jump if any energy cards in collection
-	0x12: { "name": "Func_cf7b",                                  "params": [] }, # remove all energy cards from collection
+	0x11: { "name": "jump_if_any_energy_cards_in_collection",     "params": [ "label" ] },
+	0x12: { "name": "remove_all_energy_cards_from_collection",    "params": [] },
 	0x13: { "name": "jump_if_enough_cards_owned",                 "params": [ "word_decimal", "label" ] },
 	0x14: { "name": "fight_club_pupil_jump",                      "params": [ "label", "label", "label", "label", "label" ] },
-	0x15: { "name": "Func_cfc6",                                  "params": [ "direction" ] }, # set active npc direction
-	0x16: { "name": "Func_cfd4",                                  "params": [] }, # pick next man1 requested card (EVENT_FLAG_2B)
-	0x17: { "name": "Func_d00b",                                  "params": [] }, # get man1 requested card name text (EVENT_FLAG_2B)
-	0x18: { "name": "Func_d025",                                  "params": [ "label" ] }, # jump if man1 requested card owned (EVENT_FLAG_2B)
-	0x19: { "name": "Func_d032",                                  "params": [ "label" ] }, # jump if man1 requested card in collection (EVENT_FLAG_2B)
-	0x1a: { "name": "Func_d03f",                                  "params": [] }, # remove man1 requested card from collection (EVENT_FLAG_2B)
+	0x15: { "name": "set_active_npc_direction",                   "params": [ "direction" ] },
+	0x16: { "name": "pick_next_man1_requested_card",              "params": [] },
+	0x17: { "name": "get_man1_requested_card_name_text",          "params": [] },
+	0x18: { "name": "jump_if_man1_requested_card_owned",          "params": [ "label" ] },
+	0x19: { "name": "jump_if_man1_requested_card_in_collection",  "params": [ "label" ] },
+	0x1a: { "name": "remove_man1_requested_card_from_collection", "params": [] },
 	0x1b: { "name": "script_jump",                                "params": [ "label" ] },
 	0x1c: { "name": "try_give_medal_pc_packs",                    "params": [] },
 	0x1d: { "name": "set_player_direction",                       "params": [ "direction" ] },
@@ -58,55 +58,55 @@ script_commands = {
 	0x1f: { "name": "show_card_received_screen",                  "params": [ "card" ] },
 	0x20: { "name": "set_dialog_npc",                             "params": [ "npc" ] },
 	0x21: { "name": "set_next_npc_and_script",                    "params": [ "npc", "label" ] },
-	0x22: { "name": "Func_d095",                                  "params": [ "byte", "byte", "byte" ] }, # set sprite attributes LOADED_NPC_FIELD_05 and LOADED_NPC_FIELD_06
-	0x23: { "name": "Func_d0be",                                  "params": [ "byte_decimal", "byte_decimal" ] }, # coords, set active npc coords
+	0x22: { "name": "set_sprite_attributes",                      "params": [ "byte", "byte", "byte" ] },
+	0x23: { "name": "set_active_npc_coords",                      "params": [ "byte_decimal", "byte_decimal" ] },
 	0x24: { "name": "do_frames",                                  "params": [ "byte_decimal" ] },
-	0x25: { "name": "Func_d0d9",                                  "params": [ "byte_decimal", "byte_decimal", "label" ] }, # coords, jump if active npc coords match
+	0x25: { "name": "jump_if_active_npc_coords_match",            "params": [ "byte_decimal", "byte_decimal", "label" ] },
 	0x26: { "name": "jump_if_player_coords_match",                "params": [ "byte_decimal", "byte_decimal", "label" ] },
 	0x27: { "name": "move_active_npc",                            "params": [ "movement" ] },
 	0x28: { "name": "give_one_of_each_trainer_booster",           "params": [] },
-	0x29: { "name": "Func_d103",                                  "params": [ "npc", "label" ] }, # jump if npc loaded
-	0x2a: { "name": "Func_d125",                                  "params": [ "event" ] }, # show medal received screen ?
-	0x2b: { "name": "Func_d135",                                  "params": [ "byte" ] }, # load current map name into tx ram slot
-	0x2c: { "name": "Func_d16b",                                  "params": [ "byte" ] }, # load active npc name into tx ram slot
-	0x2d: { "name": "Func_cd4f",                                  "params": [ "prizes", "deck", "song" ] }, # start challenge hall duel
-	0x2e: { "name": "Func_cd94",                                  "params": [ "text", "text", "text" ] }, # print text based on challenge cup number
+	0x29: { "name": "jump_if_npc_loaded",                         "params": [ "npc", "label" ] },
+	0x2a: { "name": "show_medal_received_screen",                 "params": [ "event" ] },
+	0x2b: { "name": "load_current_map_name_into_txram_slot",      "params": [ "byte" ] },
+	0x2c: { "name": "load_active_npc_name_into_txram_slot",       "params": [ "byte" ] },
+	0x2d: { "name": "start_challenge_hall_duel",                  "params": [ "prizes", "deck", "song" ] },
+	0x2e: { "name": "print_text_for_challenge_cup",               "params": [ "text", "text", "text" ] },
 	0x2f: { "name": "move_wram_npc",                              "params": [ "movement" ] },
-	0x30: { "name": "Func_cdd8",                                  "params": [] }, # unload challenge hall npc
-	0x31: { "name": "Func_cdf5",                                  "params": [ "byte", "byte" ] }, # coords, set challenge hall npc coords
-	0x32: { "name": "Func_d195",                                  "params": [] }, # pick challenge hall opponent
-	0x33: { "name": "Func_d1ad",                                  "params": [] }, # open menu
-	0x34: { "name": "Func_d1b3",                                  "params": [] }, # pick challenge cup prize card
+	0x30: { "name": "unload_challenge_hall_npc",                  "params": [] },
+	0x31: { "name": "set_challenge_hall_npc_coords",              "params": [ "byte_decimal", "byte_decimal" ] },
+	0x32: { "name": "pick_challenge_hall_opponent",               "params": [] },
+	0x33: { "name": "open_menu",                                  "params": [] },
+	0x34: { "name": "pick_challenge_cup_prize_card",              "params": [] },
 	0x35: { "name": "quit_script_fully",                          "params": [] },
-	0x36: { "name": "Func_d244",                                  "params": [ "byte" ] }, # replace map blocks (dech machines, pokemon dome doors, hall of honor doors, challenge machine)
+	0x36: { "name": "replace_map_blocks",                         "params": [ "byte" ] },
 	0x37: { "name": "choose_deck_to_duel_against",                "params": [] },
 	0x38: { "name": "open_deck_machine",                          "params": [ "byte" ] },
 	0x39: { "name": "choose_starter_deck",                        "params": [] },
 	0x3a: { "name": "enter_map",                                  "params": [ "byte", "map", "byte_decimal", "byte_decimal", "direction" ] },
 	0x3b: { "name": "move_npc",                                   "params": [ "npc", "movement" ] },
-	0x3c: { "name": "Func_d209",                                  "params": [] }, # pick legendary card
-	0x3d: { "name": "Func_d38f",                                  "params": [ "byte" ] }, # flash screen (bool arg, true to stay white)
-	0x3e: { "name": "Func_d396",                                  "params": [ "byte" ] }, # save game (bool arg, true to go back to dr mason lab)
-	0x3f: { "name": "Func_cd76",                                  "params": [] }, # battle center
-	0x40: { "name": "Func_d39d",                                  "params": [ "byte" ] }, # gift center (bool arg, false for menu, true to executing selection)
-	0x41: { "name": "Func_d3b9",                                  "params": [] }, # play credits
+	0x3c: { "name": "pick_legendary_card",                        "params": [] },
+	0x3d: { "name": "flash_screen",                               "params": [ "byte" ] },
+	0x3e: { "name": "save_game",                                  "params": [ "byte" ] },
+	0x3f: { "name": "battle_center",                              "params": [] },
+	0x40: { "name": "gift_center",                                "params": [ "byte" ] },
+	0x41: { "name": "play_credits",                               "params": [] },
 	0x42: { "name": "try_give_pc_pack",                           "params": [ "byte" ] },
 	0x43: { "name": "script_nop",                                 "params": [] },
-	0x44: { "name": "Func_d3d4",                                  "params": [] }, # give starter deck
-	0x45: { "name": "Func_d3e0",                                  "params": [] }, # walk player to dr mason lab
-	0x46: { "name": "Func_d3fe",                                  "params": [ "song" ] }, # override song
-	0x47: { "name": "Func_d408",                                  "params": [ "song" ] }, # set default song
+	0x44: { "name": "give_stater_deck",                           "params": [] },
+	0x45: { "name": "walk_player_to_mason_lab",                   "params": [] },
+	0x46: { "name": "override_song",                              "params": [ "song" ] },
+	0x47: { "name": "set_default_song",                           "params": [ "song" ] },
 	0x48: { "name": "play_song",                                  "params": [ "song" ] },
 	0x49: { "name": "play_sfx",                                   "params": [ "sfx" ] },
 	0x4a: { "name": "pause_song",                                 "params": [] },
 	0x4b: { "name": "resume_song",                                "params": [] },
-	0x4c: { "name": "Func_d41d",                                  "params": [] }, # play default song
+	0x4c: { "name": "play_default_song",                          "params": [] },
 	0x4d: { "name": "wait_for_song_to_finish",                    "params": [] },
-	0x4e: { "name": "Func_d435",                                  "params": [ "byte" ] }, # record master win (8 clubs plus ronald card master)
+	0x4e: { "name": "record_master_win",                          "params": [ "byte" ] },
 	0x4f: { "name": "ask_question_jump_default_yes",              "params": [ "text", "label" ] },
 	0x50: { "name": "show_sam_normal_multichoice",                "params": [] },
 	0x51: { "name": "show_sam_tutorial_multichoice",              "params": [] },
-	0x52: { "name": "Func_d43d",                                  "params": [] }, # challenge machine
+	0x52: { "name": "challenge_machine",                          "params": [] },
 	0x53: { "name": "end_script_2",                               "params": [] },
 	0x54: { "name": "end_script_3",                               "params": [] },
 	0x55: { "name": "end_script_4",                               "params": [] },
@@ -253,75 +253,43 @@ def dump_script(start_address, address=None, visited=set()):
 		command_id = rom[command_address]
 		command = script_commands[command_id]
 		address += 1
-		macro_mode = not command["name"].startswith("Func_")
-		if macro_mode:
-			output = "\t{}".format(command["name"])
-		else:
-			output = "\trun_command {}".format(command["name"])
+		output = "\t{}".format(command["name"])
 		# print all params for current command
 		for i in range(len(command["params"])):
 			param = rom[address]
 			param_type = command["params"][i]
 			param_length = param_lengths[param_type]
 			if param_type == "byte":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " ${:02x}".format(param)
 			elif param_type == "byte_decimal":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(param)
 			elif param_type == "booster":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(boosters[param])
 			elif param_type == "card":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(cards[param])
 			elif param_type == "deck":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(decks[param])
 			elif param_type == "direction":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(directions[param])
 			elif param_type == "event":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(events[param])
 			elif param_type == "map":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(maps[param])
 			elif param_type == "npc":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(npcs[param])
 			elif param_type == "prizes":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " PRIZES_{}".format(param)
 			elif param_type == "sfx":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(sfxs[param])
 			elif param_type == "song":
-				if not macro_mode:
-					output += "\n\tdb"
 				output += " {}".format(songs[param])
 			elif param_type == "word_decimal":
-				if not macro_mode:
-					output += "\n\tdw"
 				output += " {}".format(param + rom[address + 1] * 0x100)
 			elif param_type == "movement":
 				param = get_pointer(address)
 				label = "NPCMovement_{:x}".format(param)
 				if param in symbols:
 					label = symbols[param]
-				if not macro_mode:
-					output += "\n\tdw"
 				output += " {}".format(label)
 				blobs += dump_movement(param)
 			elif param_type == "movement_table":
@@ -329,17 +297,10 @@ def dump_script(start_address, address=None, visited=set()):
 				label = "NPCMovementTable_{:x}".format(param)
 				if param in symbols:
 					label = symbols[param]
-				if not macro_mode:
-					output += "\n\tdw"
 				output += " {}".format(label)
 				blobs += dump_movement_table(param)
 			elif param_type == "text":
 				text_id = param + rom[address + 1] * 0x100
-				if not macro_mode:
-					if text_id == 0x0000:
-						output += "\n\tdw"
-					else:
-						output += "\n\ttx"
 				if text_id == 0x0000:
 					output += " NULL"
 				else:
@@ -358,11 +319,9 @@ def dump_script(start_address, address=None, visited=set()):
 						label = symbols[param]
 					if param > start_address or args.allow_backward_jumps:
 						branches.add(param)
-				if not macro_mode:
-					output += "\n\tdw"
 				output += " {}".format(label)
 			address += param_length
-			if macro_mode and i < len(command["params"]) - 1:
+			if i < len(command["params"]) - 1:
 				output += ","
 		output += "\n"
 		blobs.append(make_blob(command_address, output, address))

@@ -8,13 +8,13 @@ ENDM
 	const ScriptCommand_EndScript_index                                      ; $00
 	const ScriptCommand_CloseAdvancedTextBox_index                           ; $01
 	const ScriptCommand_PrintNPCText_index                                   ; $02
-	const Func_ccdc_index                                                    ; $03
+	const ScriptCommand_PrintText_index                                      ; $03
 	const ScriptCommand_AskQuestionJump_index                                ; $04
 	const ScriptCommand_StartDuel_index                                      ; $05
 	const ScriptCommand_PrintVariableNPCText_index                           ; $06
-	const Func_cda8_index                                                    ; $07
+	const ScriptCommand_PrintVariableText_index                              ; $07
 	const ScriptCommand_PrintTextQuitFully_index                             ; $08
-	const Func_cdcb_index                                                    ; $09
+	const ScriptCommand_UnloadActiveNPC_index                                ; $09
 	const ScriptCommand_MoveActiveNPCByDirection_index                       ; $0a
 	const ScriptCommand_CloseTextBox_index                                   ; $0b
 	const ScriptCommand_GiveBoosterPacks_index                               ; $0c
@@ -22,16 +22,16 @@ ENDM
 	const ScriptCommand_JumpIfCardInCollection_index                         ; $0e
 	const ScriptCommand_GiveCard_index                                       ; $0f
 	const ScriptCommand_TakeCard_index                                       ; $10
-	const Func_cf53_index                                                    ; $11
-	const Func_cf7b_index                                                    ; $12
+	const ScriptCommand_JumpIfAnyEnergyCardsInCollection_index               ; $11
+	const ScriptCommand_RemoveAllEnergyCardsFromCollection_index             ; $12
 	const ScriptCommand_JumpIfEnoughCardsOwned_index                         ; $13
 	const ScriptCommand_JumpBasedOnFightingClubPupilStatus_index             ; $14
-	const Func_cfc6_index                                                    ; $15
-	const Func_cfd4_index                                                    ; $16
-	const Func_d00b_index                                                    ; $17
-	const Func_d025_index                                                    ; $18
-	const Func_d032_index                                                    ; $19
-	const Func_d03f_index                                                    ; $1a
+	const ScriptCommand_SetActiveNPCDirection_index                          ; $15
+	const ScriptCommand_PickNextMan1RequestedCard_index                      ; $16
+	const ScriptCommand_GetMan1RequestedCardNameText_index                   ; $17
+	const ScriptCommand_JumpIfMan1RequestedCardOwned_index                   ; $18
+	const ScriptCommand_JumpIfMan1RequestedCardInCollection_index            ; $19
+	const ScriptCommand_RemoveMan1RequestedCardFromCollection_index          ; $1a
 	const ScriptCommand_Jump_index                                           ; $1b
 	const ScriptCommand_TryGiveMedalPCPacks_index                            ; $1c
 	const ScriptCommand_SetPlayerDirection_index                             ; $1d
@@ -39,55 +39,55 @@ ENDM
 	const ScriptCommand_ShowCardReceivedScreen_index                         ; $1f
 	const ScriptCommand_SetDialogNPC_index                                   ; $20
 	const ScriptCommand_SetNextNPCAndScript_index                            ; $21
-	const Func_d095_index                                                    ; $22
-	const Func_d0be_index                                                    ; $23
+	const ScriptCommand_SetSpriteAttributes_index                            ; $22
+	const ScriptCommand_SetActiveNPCCoords_index                             ; $23
 	const ScriptCommand_DoFrames_index                                       ; $24
-	const Func_d0d9_index                                                    ; $25
+	const ScriptCommand_JumpIfActiveNPCCoordsMatch_index                     ; $25
 	const ScriptCommand_JumpIfPlayerCoordsMatch_index                        ; $26
 	const ScriptCommand_MoveActiveNPC_index                                  ; $27
 	const ScriptCommand_GiveOneOfEachTrainerBooster_index                    ; $28
-	const Func_d103_index                                                    ; $29
-	const Func_d125_index                                                    ; $2a
-	const Func_d135_index                                                    ; $2b
-	const Func_d16b_index                                                    ; $2c
-	const Func_cd4f_index                                                    ; $2d
-	const Func_cd94_index                                                    ; $2e
+	const ScriptCommand_JumpIfNPCLoaded_index                                ; $29
+	const ScriptCommand_ShowMedalReceivedScreen_index                        ; $2a
+	const ScriptCommand_LoadCurrentMapNameIntoTxRamSlot_index                ; $2b
+	const ScriptCommand_LoadActiveNPCNameIntoTxRamSlot_index                 ; $2c
+	const ScriptCommand_StartChallengeHallDuel_index                         ; $2d
+	const ScriptCommand_PrintTextForChallengeCup_index                       ; $2e
 	const ScriptCommand_MoveWramNPC_index                                    ; $2f
-	const Func_cdd8_index                                                    ; $30
-	const Func_cdf5_index                                                    ; $31
-	const Func_d195_index                                                    ; $32
-	const Func_d1ad_index                                                    ; $33
-	const Func_d1b3_index                                                    ; $34
+	const ScriptCommand_UnloadChallengeHallNPC_index                         ; $30
+	const ScriptCommand_SetChallengeHallNPCCoords_index                      ; $31
+	const ScriptCommand_PickChallengeHallOpponent_index                      ; $32
+	const ScriptCommand_OpenMenu_index                                       ; $33
+	const ScriptCommand_PickChallengeCupPrizeCard_index                      ; $34
 	const ScriptCommand_QuitScriptFully_index                                ; $35
-	const Func_d244_index                                                    ; $36
+	const ScriptCommand_ReplaceMapBlocks_index                               ; $36
 	const ScriptCommand_ChooseDeckToDuelAgainstMultichoice_index             ; $37
 	const ScriptCommand_OpenDeckMachine_index                                ; $38
 	const ScriptCommand_ChooseStarterDeckMultichoice_index                   ; $39
 	const ScriptCommand_EnterMap_index                                       ; $3a
 	const ScriptCommand_MoveArbitraryNPC_index                               ; $3b
-	const Func_d209_index                                                    ; $3c
-	const Func_d38f_index                                                    ; $3d
-	const Func_d396_index                                                    ; $3e
-	const Func_cd76_index                                                    ; $3f
-	const Func_d39d_index                                                    ; $40
-	const Func_d3b9_index                                                    ; $41
+	const ScriptCommand_PickLegendaryCard_index                              ; $3c
+	const ScriptCommand_FlashScreen_index                                    ; $3d
+	const ScriptCommand_SaveGame_index                                       ; $3e
+	const ScriptCommand_BattleCenter_index                                   ; $3f
+	const ScriptCommand_GiftCenter_index                                     ; $40
+	const ScriptCommand_PlayCredits_index                                    ; $41
 	const ScriptCommand_TryGivePCPack_index                                  ; $42
 	const ScriptCommand_nop_index                                            ; $43
-	const Func_d3d4_index                                                    ; $44
-	const Func_d3e0_index                                                    ; $45
-	const Func_d3fe_index                                                    ; $46
-	const Func_d408_index                                                    ; $47
+	const ScriptCommand_GiveStarterDeck_index                                ; $44
+	const ScriptCommand_WalkPlayerToMasonLaboratory_index                    ; $45
+	const ScriptCommand_OverrideSong_index                                   ; $46
+	const ScriptCommand_SetDefaultSong_index                                 ; $47
 	const ScriptCommand_PlaySong_index                                       ; $48
 	const ScriptCommand_PlaySFX_index                                        ; $49
 	const ScriptCommand_PauseSong_index                                      ; $4a
 	const ScriptCommand_ResumeSong_index                                     ; $4b
-	const Func_d41d_index                                                    ; $4c
+	const ScriptCommand_PlayDefaultSong_index                                ; $4c
 	const ScriptCommand_WaitForSongToFinish_index                            ; $4d
-	const Func_d435_index                                                    ; $4e
+	const ScriptCommand_RecordMasterWin_index                                ; $4e
 	const ScriptCommand_AskQuestionJumpDefaultYes_index                      ; $4f
 	const ScriptCommand_ShowSamNormalMultichoice_index                       ; $50
 	const ScriptCommand_ShowSamTutorialMultichoice_index                     ; $51
-	const Func_d43d_index                                                    ; $52
+	const ScriptCommand_ChallengeMachine_index                               ; $52
 	const ScriptCommand_EndScript2_index                                     ; $53
 	const ScriptCommand_EndScript3_index                                     ; $54
 	const ScriptCommand_EndScript4_index                                     ; $55
@@ -128,6 +128,12 @@ print_npc_text: MACRO
 	tx \1 ; Text Pointer
 ENDM
 
+; Opens a new dialog window and displays the given text
+print_text: MACRO
+	run_command ScriptCommand_PrintText
+	tx \1 ; Text Pointer
+ENDM
+
 ; Displays text and allows players to choose yes or no. Will jump on yes.
 ; if first argument is 0000 (NULL), will overwrite last text with yes/no.
 ask_question_jump: MACRO
@@ -148,9 +154,16 @@ start_duel: MACRO
 	db \3 ; Duel Music (ex MUSIC_DUEL_THEME_1)
 ENDM
 
-; Prints the first or second text depending on if wScriptControlByte is nonzero or zero respectively
+; Prints the first or second npc text depending on if wScriptControlByte is nonzero or zero respectively
 print_variable_npc_text: MACRO
 	run_command ScriptCommand_PrintVariableNPCText
+	tx \1 ; Text Pointer
+	tx \2 ; Text Pointer
+ENDM
+
+; Prints the first or second text depending on if wScriptControlByte is nonzero or zero respectively
+print_variable_text: MACRO
+	run_command ScriptCommand_PrintVariableText
 	tx \1 ; Text Pointer
 	tx \2 ; Text Pointer
 ENDM
@@ -159,6 +172,11 @@ ENDM
 print_text_quit_fully: MACRO
 	run_command ScriptCommand_PrintTextQuitFully
 	tx \1 ; Text Pointer
+ENDM
+
+; Removes the current NPC from the map
+unload_active_npc: MACRO
+	run_command ScriptCommand_UnloadActiveNPC
 ENDM
 
 ; Moves the current NPC depending on their current direction
@@ -208,6 +226,17 @@ take_card: MACRO
 	db \1 ; card ID (ex LAPRAS)
 ENDM
 
+; Jumps to a given script position if the player has any energy cards in their collection
+jump_if_any_energy_cards_in_collection: MACRO
+	run_command ScriptCommand_JumpIfAnyEnergyCardsInCollection
+	dw \1 ; script label
+ENDM
+
+; Removes all of the player's energy cards from their collection
+remove_all_energy_cards_from_collection: MACRO
+	run_command ScriptCommand_RemoveAllEnergyCardsFromCollection
+ENDM
+
 ; Jumps to a given script position if the player owns enough cards
 jump_if_enough_cards_owned: MACRO
 	run_command ScriptCommand_JumpIfEnoughCardsOwned
@@ -223,6 +252,39 @@ fight_club_pupil_jump: MACRO
 	dw \3 ; Script Label (Two Pupils Remaining)
 	dw \4 ; Script Label (One Pupil Remaining)
 	dw \5 ; Script Label (All Pupils Defeated)
+ENDM
+
+; Causes the active NPC to face the specified direction
+set_active_npc_direction: MACRO
+	run_command ScriptCommand_SetActiveNPCDirection
+	db \1 ; Direction (ex NORTH)
+ENDM
+
+; Picks the next card gift that will be requested by NPC_MAN1
+pick_next_man1_requested_card: MACRO
+	run_command ScriptCommand_PickNextMan1RequestedCard
+ENDM
+
+; Loads the name text for the card gift requested by NPC_MAN1
+get_man1_requested_card_name_text: MACRO
+	run_command ScriptCommand_GetMan1RequestedCardNameText
+ENDM
+
+; Jumps to the given script position if the player owns the card gift requested by NPC_MAN1
+jump_if_man1_requested_card_owned: MACRO
+	run_command ScriptCommand_JumpIfMan1RequestedCardOwned
+	dw \1 ; Script Label
+ENDM
+
+; Jumps to the given script position if the player's collection contains the card gift requested by NPC_MAN1
+jump_if_man1_requested_card_in_collection: MACRO
+	run_command ScriptCommand_JumpIfMan1RequestedCardInCollection
+	dw \1 ; Script Label
+ENDM
+
+; Removes from the player's collection the card gift requested by NPC_MAN1
+remove_man1_requested_card_from_collection: MACRO
+	run_command ScriptCommand_RemoveMan1RequestedCardFromCollection
 ENDM
 
 ; Jumps to a given script position
@@ -268,10 +330,33 @@ set_next_npc_and_script: MACRO
 	dw \2 ; Script Label
 ENDM
 
+; Sets some NPC sprite attributes
+set_sprite_attributes: MACRO
+	run_command ScriptCommand_SetSpriteAttributes
+	db \1 ; Relates to LOADED_NPC_FIELD_05
+	db \2 ; Relates to LOADED_NPC_FIELD_05
+	db \3 ; Relates to LOADED_NPC_FIELD_06
+ENDM
+
+; Sets the active NPC's coords
+set_active_npc_coords: MACRO
+	run_command ScriptCommand_SetActiveNPCCoords
+	db \1 ; X Coord
+	db \2 ; Y Coord
+ENDM
+
 ; Waits a number of frames
 do_frames: MACRO
 	run_command ScriptCommand_DoFrames
 	db \1 ; Number of frames to wait
+ENDM
+
+; Jumps to a script position if the active NPC's X and Y match the given values
+jump_if_active_npc_coords_match: MACRO
+	run_command ScriptCommand_JumpIfActiveNPCCoordsMatch
+	db \1 ; X Coord
+	db \2 ; Y Coord
+	dw \3 ; Script Label
 ENDM
 
 ; Jumps to a script position if the player's X and Y match the given values
@@ -293,15 +378,91 @@ give_one_of_each_trainer_booster: MACRO
 	run_command ScriptCommand_GiveOneOfEachTrainerBooster
 ENDM
 
+; Jumps to a script position if the NPC is loaded
+jump_if_npc_loaded: MACRO
+	run_command ScriptCommand_JumpIfNPCLoaded
+	db \1 ; NPC (ex NPC_DRMASON)
+	dw \2 ; Script Label
+ENDM
+
+; Shows the medal received screen for the given master medal
+show_medal_received_screen: MACRO
+	run_command ScriptCommand_ShowMedalReceivedScreen
+	db \1 ; medal event
+ENDM
+
+; Loads the current map name into the given txram slot
+load_current_map_name_into_txram_slot: MACRO
+	run_command ScriptCommand_LoadCurrentMapNameIntoTxRamSlot
+	db \1 ; TxRam slot
+ENDM
+
+; Loads the active NPC name into the given txram slot
+load_active_npc_name_into_txram_slot: MACRO
+	run_command ScriptCommand_LoadActiveNPCNameIntoTxRamSlot
+	db \1 ; TxRam slot
+ENDM
+
+; Begins a duel with the challenge hall opponent
+; The deck and song arguments are overwritten when the duel is initialized
+start_challenge_hall_duel: MACRO
+	run_command ScriptCommand_StartChallengeHallDuel
+	db \1 ; Prize Amount (ex PRIZES_2)
+	db \2 ; Deck ID (ex SAMS_PRACTICE_DECK_ID)
+	db \3 ; Duel Music (ex MUSIC_DUEL_THEME_1)
+ENDM
+
+; Prints the text based on the current challenge cup number
+print_text_for_challenge_cup: MACRO
+	run_command ScriptCommand_PrintTextForChallengeCup
+	tx \1 ; Text Pointer for Challenge Cup #1
+	tx \2 ; Text Pointer for Challenge Cup #2
+	tx \3 ; Text Pointer for Challenge Cup #3
+ENDM
+
 ; Moves the NPC in wTempNPC using an NPCMovement
 move_wram_npc: MACRO
 	run_command ScriptCommand_MoveWramNPC
 	dw \1 ; NPCMovement (ex NPCMovement_d880)
 ENDM
 
+; Unloads the Challenge Hall opponent NPC
+unload_challenge_hall_npc: MACRO
+	run_command ScriptCommand_UnloadChallengeHallNPC
+ENDM
+
+; Sets the Challenge Hall opponent NPC's coords
+set_challenge_hall_npc_coords: MACRO
+	run_command ScriptCommand_SetChallengeHallNPCCoords
+	db \1 ; X Coord
+	db \2 ; Y Coord
+ENDM
+
+; Picks the next Challenge Hall opponent NPC
+pick_challenge_hall_opponent: MACRO
+	run_command ScriptCommand_PickChallengeHallOpponent
+ENDM
+
+; Opens the pause menu
+open_menu: MACRO
+	run_command ScriptCommand_OpenMenu
+ENDM
+
+; Picks the Challenge Cup prize card
+pick_challenge_cup_prize_card: MACRO
+	run_command ScriptCommand_PickChallengeCupPrizeCard
+ENDM
+
 ; Closes Advanced TextBoxes then Ends Script Loop
 quit_script_fully: MACRO
 	run_command ScriptCommand_QuitScriptFully
+ENDM
+
+; Replaces map blocks
+; used for deck machines, challenge machine, Pokemon Dome doors, Hall of Honor doors etc
+replace_map_blocks: MACRO
+	run_command ScriptCommand_ReplaceMapBlocks
+	db \1 ; id
 ENDM
 
 choose_deck_to_duel_against: MACRO
@@ -335,6 +496,45 @@ move_npc: MACRO
 	dw \2 ; NPCMovement (NPCMovement_e2ab)
 ENDM
 
+; Picks the next legendary card
+pick_legendary_card: MACRO
+	run_command ScriptCommand_PickLegendaryCard
+ENDM
+
+; Flashes the screen to white
+; if arg is non-zero, keep the screen white
+; otherwise, fade the screen back in
+flash_screen: MACRO
+	run_command ScriptCommand_FlashScreen
+	db \1 ; keep screen white?
+ENDM
+
+; Saves the game
+; if arg is non-zero, save the player in MASON_LABORATORY
+; otherwise, save the player in their current location
+save_game: MACRO
+	run_command ScriptCommand_SaveGame
+	db \1 ; send to MASON_LABORATORY?
+ENDM
+
+; Loads the Battle Center
+battle_center: MACRO
+	run_command ScriptCommand_BattleCenter
+ENDM
+
+; Loads the Gift Center
+; if arg is zero, display the options selection menu
+; otherwise, execute the player's previously chosen selection
+gift_center: MACRO
+	run_command ScriptCommand_GiftCenter
+	db \1 ; execute selection?
+ENDM
+
+; Plays the credits
+play_credits: MACRO
+	run_command ScriptCommand_PlayCredits
+ENDM
+
 ; Tries to give the player a specific PC Pack from Dr. Mason
 try_give_pc_pack: MACRO
 	run_command ScriptCommand_TryGivePCPack
@@ -344,6 +544,28 @@ ENDM
 ; Nothing.
 script_nop: MACRO
 	run_command ScriptCommand_nop
+ENDM
+
+; Gives the player their previously chosen starter deck
+give_stater_deck: MACRO
+	run_command ScriptCommand_GiveStarterDeck
+ENDM
+
+; Walks the player across the overworld map to MASON_LABORATORY
+walk_player_to_mason_lab: MACRO
+	run_command ScriptCommand_WalkPlayerToMasonLaboratory
+ENDM
+
+; Plays a song and saves it to wd112
+override_song: MACRO
+	run_command ScriptCommand_OverrideSong
+	db \1 ; Song ID (ex MUSIC_BOOSTER_PACK)
+ENDM
+
+; Sets the default song for the overworld
+set_default_song: MACRO
+	run_command ScriptCommand_SetDefaultSong
+	db \1 ; Song ID (ex MUSIC_BOOSTER_PACK)
 ENDM
 
 ; Plays a song
@@ -368,9 +590,22 @@ resume_song: MACRO
 	run_command ScriptCommand_ResumeSong
 ENDM
 
+; Plays the default overworld song
+play_default_song: MACRO
+	run_command ScriptCommand_PlayDefaultSong
+ENDM
+
 ; Waits for the current song to finish
 wait_for_song_to_finish: MACRO
 	run_command ScriptCommand_WaitForSongToFinish
+ENDM
+
+; Records when the player defeats a master (the 8 Club Masters or the Ronald Grand Master duel)
+; the order of wins is stored in wd3bb
+; the purpose of this is still unknown
+record_master_win: MACRO
+	run_command ScriptCommand_RecordMasterWin
+	db \1 ; which master duel
 ENDM
 
 ; Asks the player a question then jumps
@@ -390,6 +625,11 @@ ENDM
 
 show_sam_tutorial_multichoice: MACRO
 	run_command ScriptCommand_ShowSamTutorialMultichoice
+ENDM
+
+; Runs the Challenge Machine
+challenge_machine: MACRO
+	run_command ScriptCommand_ChallengeMachine
 ENDM
 
 ; Sets a flag's value
@@ -429,7 +669,7 @@ jump_if_flag_not_equal: MACRO
 	dw \3 ; Script Label
 ENDM
 
-; Jump to a script position if a flag is not less than a given value
+; Jumps to a script position if a flag is not less than a given value
 jump_if_flag_not_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagNotLessThan
 	db \1 ; flag (ex EVENT_FLAG_11)
@@ -437,7 +677,7 @@ jump_if_flag_not_less_than: MACRO
 	dw \3 ; Script Label
 ENDM
 
-; Jump to a script position if a flag is less than a given value
+; Jumps to a script position if a flag is less than a given value
 jump_if_flag_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagLessThan
 	db \1 ; flag (ex EVENT_FLAG_11)

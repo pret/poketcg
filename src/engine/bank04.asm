@@ -1008,13 +1008,13 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox
 	dw ScriptCommand_PrintNPCText
-	dw Func_ccdc
+	dw ScriptCommand_PrintText
 	dw ScriptCommand_AskQuestionJump
 	dw ScriptCommand_StartDuel
 	dw ScriptCommand_PrintVariableNPCText
-	dw Func_cda8
+	dw ScriptCommand_PrintVariableText
 	dw ScriptCommand_PrintTextQuitFully
-	dw Func_cdcb
+	dw ScriptCommand_UnloadActiveNPC
 	dw ScriptCommand_MoveActiveNPCByDirection
 	dw ScriptCommand_CloseTextBox
 	dw ScriptCommand_GiveBoosterPacks
@@ -1022,16 +1022,16 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfCardInCollection
 	dw ScriptCommand_GiveCard
 	dw ScriptCommand_TakeCard
-	dw Func_cf53
-	dw Func_cf7b
+	dw ScriptCommand_JumpIfAnyEnergyCardsInCollection
+	dw ScriptCommand_RemoveAllEnergyCardsFromCollection
 	dw ScriptCommand_JumpIfEnoughCardsOwned
 	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
-	dw Func_cfc6
-	dw Func_cfd4
-	dw Func_d00b
-	dw Func_d025
-	dw Func_d032
-	dw Func_d03f
+	dw ScriptCommand_SetActiveNPCDirection
+	dw ScriptCommand_PickNextMan1RequestedCard
+	dw ScriptCommand_GetMan1RequestedCardNameText
+	dw ScriptCommand_JumpIfMan1RequestedCardOwned
+	dw ScriptCommand_JumpIfMan1RequestedCardInCollection
+	dw ScriptCommand_RemoveMan1RequestedCardFromCollection
 	dw ScriptCommand_Jump
 	dw ScriptCommand_TryGiveMedalPCPacks
 	dw ScriptCommand_SetPlayerDirection
@@ -1039,55 +1039,55 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_ShowCardReceivedScreen
 	dw ScriptCommand_SetDialogNPC
 	dw ScriptCommand_SetNextNPCAndScript
-	dw Func_d095
-	dw Func_d0be
+	dw ScriptCommand_SetSpriteAttributes
+	dw ScriptCommand_SetActiveNPCCoords
 	dw ScriptCommand_DoFrames
-	dw Func_d0d9
+	dw ScriptCommand_JumpIfActiveNPCCoordsMatch
 	dw ScriptCommand_JumpIfPlayerCoordsMatch
 	dw ScriptCommand_MoveActiveNPC
 	dw ScriptCommand_GiveOneOfEachTrainerBooster
-	dw Func_d103
-	dw Func_d125
-	dw Func_d135
-	dw Func_d16b
-	dw Func_cd4f
-	dw Func_cd94
+	dw ScriptCommand_JumpIfNPCLoaded
+	dw ScriptCommand_ShowMedalReceivedScreen
+	dw ScriptCommand_LoadCurrentMapNameIntoTxRamSlot
+	dw ScriptCommand_LoadActiveNPCNameIntoTxRamSlot
+	dw ScriptCommand_StartChallengeHallDuel
+	dw ScriptCommand_PrintTextForChallengeCup
 	dw ScriptCommand_MoveWramNPC
-	dw Func_cdd8
-	dw Func_cdf5
-	dw Func_d195
-	dw Func_d1ad
-	dw Func_d1b3
+	dw ScriptCommand_UnloadChallengeHallNPC
+	dw ScriptCommand_SetChallengeHallNPCCoords
+	dw ScriptCommand_PickChallengeHallOpponent
+	dw ScriptCommand_OpenMenu
+	dw ScriptCommand_PickChallengeCupPrizeCard
 	dw ScriptCommand_QuitScriptFully
-	dw Func_d244
+	dw ScriptCommand_ReplaceMapBlocks
 	dw ScriptCommand_ChooseDeckToDuelAgainstMultichoice
 	dw ScriptCommand_OpenDeckMachine
 	dw ScriptCommand_ChooseStarterDeckMultichoice
 	dw ScriptCommand_EnterMap
 	dw ScriptCommand_MoveArbitraryNPC
-	dw Func_d209
-	dw Func_d38f
-	dw Func_d396
-	dw Func_cd76
-	dw Func_d39d
-	dw Func_d3b9
+	dw ScriptCommand_PickLegendaryCard
+	dw ScriptCommand_FlashScreen
+	dw ScriptCommand_SaveGame
+	dw ScriptCommand_BattleCenter
+	dw ScriptCommand_GiftCenter
+	dw ScriptCommand_PlayCredits
 	dw ScriptCommand_TryGivePCPack
 	dw ScriptCommand_nop
-	dw Func_d3d4
-	dw Func_d3e0
-	dw Func_d3fe
-	dw Func_d408
+	dw ScriptCommand_GiveStarterDeck
+	dw ScriptCommand_WalkPlayerToMasonLaboratory
+	dw ScriptCommand_OverrideSong
+	dw ScriptCommand_SetDefaultSong
 	dw ScriptCommand_PlaySong
 	dw ScriptCommand_PlaySFX
 	dw ScriptCommand_PauseSong
 	dw ScriptCommand_ResumeSong
-	dw Func_d41d
+	dw ScriptCommand_PlayDefaultSong
 	dw ScriptCommand_WaitForSongToFinish
-	dw Func_d435
+	dw ScriptCommand_RecordMasterWin
 	dw ScriptCommand_AskQuestionJumpDefaultYes
 	dw ScriptCommand_ShowSamNormalMultichoice
 	dw ScriptCommand_ShowSamTutorialMultichoice
-	dw Func_d43d
+	dw ScriptCommand_ChallengeMachine
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript

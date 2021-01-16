@@ -1895,7 +1895,7 @@ ScriptCommand_PrintNPCText: ; ccd4 (3:4cd4)
 	call Func_cc32
 	jp IncreaseScriptPointerBy3
 
-Func_ccdc: ; ccdc (3:4cdc)
+ScriptCommand_PrintText: ; ccdc (3:4cdc)
 	ld l, c
 	ld h, b
 	call Func_c891
@@ -1960,7 +1960,7 @@ asm_cd2f:
 	set 6, [hl]
 	jp IncreaseScriptPointerBy4
 
-Func_cd4f: ; cd4f (3:4d4f)
+ScriptCommand_StartChallengeHallDuel: ; cd4f (3:4d4f)
 	call Func_cd66
 	ld a, [wd696]
 	farcall Func_118bf
@@ -1984,7 +1984,7 @@ Func_cd66: ; cd66 (3:4d66)
 	ld [wDuelTheme], a
 	ret
 
-Func_cd76: ; cd76 (3:4d76)
+ScriptCommand_BattleCenter: ; cd76 (3:4d76)
 	ld a, GAME_EVENT_BATTLE_CENTER
 	ld [wGameEvent], a
 	ld hl, wd0b4
@@ -2003,7 +2003,7 @@ ScriptCommand_PrintVariableNPCText: ; cd83 (3:4d83)
 	call Func_cc32
 	jp IncreaseScriptPointerBy5
 
-Func_cd94: ; cd94 (3:4d94)
+ScriptCommand_PrintTextForChallengeCup: ; cd94 (3:4d94)
 	get_flag_value EVENT_FLAG_44
 	dec a
 	and $3
@@ -2015,7 +2015,7 @@ Func_cd94: ; cd94 (3:4d94)
 	call Func_cc32
 	jp IncreaseScriptPointerBy7
 
-Func_cda8: ; cda8 (3:4da8)
+ScriptCommand_PrintVariableText: ; cda8 (3:4da8)
 	ld a, [wScriptControlByte]
 	or a
 	jr nz, .asm_cdb1
@@ -2038,14 +2038,14 @@ ScriptCommand_PrintTextQuitFully: ; cdb9 (3:4db9)
 	pop hl
 	ret
 
-Func_cdcb: ; cdcb (3:4dcb)
+ScriptCommand_UnloadActiveNPC: ; cdcb (3:4dcb)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 Func_cdd1: ; cdd1 (3:4dd1)
 	farcall Func_1c50a
 	jp IncreaseScriptPointerBy1
 
-Func_cdd8: ; cdd8 (3:4dd8)
+ScriptCommand_UnloadChallengeHallNPC: ; cdd8 (3:4dd8)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -2060,7 +2060,7 @@ Func_cdd8: ; cdd8 (3:4dd8)
 	ld [wLoadedNPCTempIndex], a
 	ret
 
-Func_cdf5: ; cdf5 (3:4df5)
+ScriptCommand_SetChallengeHallNPCCoords: ; cdf5 (3:4df5)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -2292,7 +2292,7 @@ ScriptCommand_TakeCard: ; cf4c (3:4f4c)
 	call RemoveCardFromCollection
 	jp IncreaseScriptPointerBy2
 
-Func_cf53: ; cf53 (3:4f53)
+ScriptCommand_JumpIfAnyEnergyCardsInCollection: ; cf53 (3:4f53)
 	ld c, $1
 	ld b, $0
 .asm_cf57
@@ -2320,7 +2320,7 @@ Func_cf6d: ; cf6d (3:4f6d)
 .asm_cf78
 	jp IncreaseScriptPointerBy3
 
-Func_cf7b: ; cf7b (3:4f7b)
+ScriptCommand_RemoveAllEnergyCardsFromCollection: ; cf7b (3:4f7b)
 	ld c, $1
 .asm_cf7d
 	push bc
@@ -2373,14 +2373,14 @@ Func_cfc0: ; cfc0 (3:4fc0)
 	call GetScriptArgs1AfterPointer
 	jp SetScriptPointer
 
-Func_cfc6: ; cfc6 (3:4fc6)
+ScriptCommand_SetActiveNPCDirection: ; cfc6 (3:4fc6)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 	ld a, c
 	farcall Func_1c52e
 	jp IncreaseScriptPointerBy2
 
-Func_cfd4: ; cfd4 (3:4fd4)
+ScriptCommand_PickNextMan1RequestedCard: ; cfd4 (3:4fd4)
 	get_flag_value EVENT_FLAG_2D
 	ld b, a
 .asm_cfd9
@@ -2421,7 +2421,7 @@ Data_d006: ; d006 (3:5006)
 	db RAPIDASH
 	db WEEZING
 
-Func_d00b: ; d00b (3:500b)
+ScriptCommand_GetMan1RequestedCardNameText: ; d00b (3:500b)
 	sla c
 	ld b, $0
 	ld hl, wTxRam2
@@ -2437,19 +2437,19 @@ Func_d00b: ; d00b (3:500b)
 	ld [hl], d
 	jp IncreaseScriptPointerBy2
 
-Func_d025: ; d025 (3:5025)
+ScriptCommand_JumpIfMan1RequestedCardOwned: ; d025 (3:5025)
 	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollectionAndDecks
 	jp c, Func_cf67
 	jp Func_cf6d
 
-Func_d032: ; d032 (3:5032)
+ScriptCommand_JumpIfMan1RequestedCardInCollection: ; d032 (3:5032)
 	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollection
 	jp c, Func_cf67
 	jp Func_cf6d
 
-Func_d03f: ; d03f (3:503f)
+ScriptCommand_RemoveMan1RequestedCardFromCollection: ; d03f (3:503f)
 	get_flag_value EVENT_FLAG_2B
 	call RemoveCardFromCollection
 	jp IncreaseScriptPointerBy1
@@ -2498,7 +2498,7 @@ ScriptCommand_SetNextNPCAndScript: ; d088 (3:5088)
 	call SetNextNPCAndScript
 	jp IncreaseScriptPointerBy4
 
-Func_d095: ; d095 (3:5095)
+ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 	push bc
@@ -2522,7 +2522,7 @@ Func_d095: ; d095 (3:5095)
 	farcall Func_1c57b
 	jp IncreaseScriptPointerBy4
 
-Func_d0be: ; d0be (3:50be)
+ScriptCommand_SetActiveNPCCoords: ; d0be (3:50be)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 	ld a, c
@@ -2539,7 +2539,7 @@ ScriptCommand_DoFrames: ; d0ce (3:50ce)
 	jr nz, ScriptCommand_DoFrames
 	jp IncreaseScriptPointerBy2
 
-Func_d0d9: ; d0d9 (3:50d9)
+ScriptCommand_JumpIfActiveNPCCoordsMatch: ; d0d9 (3:50d9)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 	ld d, c
@@ -2562,7 +2562,7 @@ ScriptCommand_JumpIfPlayerCoordsMatch: ; d0f2 (3:50f2)
 	jp nz, ScriptEventFailedNoJump
 	jp ScriptEventPassedTryJump
 
-Func_d103: ; d103 (3:5103)
+ScriptCommand_JumpIfNPCLoaded: ; d103 (3:5103)
 	ld a, [wLoadedNPCTempIndex]
 	push af
 	ld a, [wTempNPC]
@@ -2584,7 +2584,7 @@ Func_d103: ; d103 (3:5103)
 	ld [wLoadedNPCTempIndex], a
 	ret
 
-Func_d125: ; d125 (3:5125)
+ScriptCommand_ShowMedalReceivedScreen: ; d125 (3:5125)
 	ld a, c
 	push af
 	call Func_c2a3
@@ -2593,7 +2593,7 @@ Func_d125: ; d125 (3:5125)
 	call Func_c2d4
 	jp IncreaseScriptPointerBy2
 
-Func_d135: ; d135 (3:5135)
+ScriptCommand_LoadCurrentMapNameIntoTxRamSlot: ; d135 (3:5135)
 	sla c
 	ld b, $0
 	ld hl, wTxRam2
@@ -2628,7 +2628,7 @@ MapNames: ; d153 (3:5153)
 	tx ChallengeHallMapNameText
 	tx PokemonDomeMapNameText
 
-Func_d16b: ; d16b (3:516b)
+ScriptCommand_LoadActiveNPCNameIntoTxRamSlot: ; d16b (3:516b)
 	ld hl, wCurrentNPCNameTx
 	ld e, [hl]
 	inc hl
@@ -2653,7 +2653,7 @@ Func_d16b: ; d16b (3:516b)
 	ld [hl], d
 	jp IncreaseScriptPointerBy2
 
-Func_d195: ; d195 (3:5195)
+ScriptCommand_PickChallengeHallOpponent: ; d195 (3:5195)
 	ld a, [wTempNPC]
 	push af
 	get_flag_value EVENT_FLAG_45
@@ -2665,11 +2665,11 @@ Func_d195: ; d195 (3:5195)
 	ld [wTempNPC], a
 	jp IncreaseScriptPointerBy1
 
-Func_d1ad: ; d1ad (3:51ad)
+ScriptCommand_OpenMenu: ; d1ad (3:51ad)
 	call MainMenu_c75a
 	jp IncreaseScriptPointerBy1
 
-Func_d1b3: ; d1b3 (3:51b3)
+ScriptCommand_PickChallengeCupPrizeCard: ; d1b3 (3:51b3)
 	get_flag_value EVENT_FLAG_44
 	dec a
 	cp $2
@@ -2742,7 +2742,7 @@ ChallengeCupPrizeCards: ; d1dc (3:51dc)
 	db FLYING_PIKACHU
 	tx FlyingPikachuTradeCardName
 
-Func_d209: ; d209 (3:5209)
+ScriptCommand_PickLegendaryCard: ; d209 (3:5209)
 	get_flag_value EVENT_FLAG_71
 	ld e, a
 .asm_d20e
@@ -2791,7 +2791,7 @@ Flags_d240: ; d240 (3:5240)
 	db EVENT_FLAG_6F
 	db EVENT_FLAG_70
 
-Func_d244: ; d244 (3:5244)
+ScriptCommand_ReplaceMapBlocks: ; d244 (3:5244)
 	ld a, c
 	farcall Func_80ba4
 	jp IncreaseScriptPointerBy2
@@ -3007,15 +3007,15 @@ ScriptCommand_EnterMap: ; d36d (3:536d)
 	set 4, [hl]
 	jp IncreaseScriptPointerBy6
 
-Func_d38f: ; d38f (3:538f)
+ScriptCommand_FlashScreen: ; d38f (3:538f)
 	farcall Func_10c96
 	jp IncreaseScriptPointerBy2
 
-Func_d396: ; d396 (3:5396)
+ScriptCommand_SaveGame: ; d396 (3:5396)
 	farcall Func_1157c
 	jp IncreaseScriptPointerBy2
 
-Func_d39d: ; d39d (3:539d)
+ScriptCommand_GiftCenter: ; d39d (3:539d)
 	ld a, c
 	or a
 	jr nz, .asm_d3ac
@@ -3033,7 +3033,7 @@ Func_d39d: ; d39d (3:539d)
 .asm_d3b6
 	jp IncreaseScriptPointerBy2
 
-Func_d3b9: ; d3b9 (3:53b9)
+ScriptCommand_PlayCredits: ; d3b9 (3:53b9)
 	call Func_3917
 	ld a, GAME_EVENT_CREDITS
 	ld [wGameEvent], a
@@ -3049,14 +3049,14 @@ ScriptCommand_TryGivePCPack: ; d3c9 (3:53c9)
 ScriptCommand_nop: ; d3d1 (3:53d1)
 	jp IncreaseScriptPointerBy1
 
-Func_d3d4: ; d3d4 (3:53d4)
+ScriptCommand_GiveStarterDeck: ; d3d4 (3:53d4)
 	ld a, [wd693]
 	bank1call Func_7576
 	jp IncreaseScriptPointerBy1
 
 	INCROM $d3dd, $d3e0
 
-Func_d3e0: ; d3e0 (3:53e0)
+ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
 	ld a, $1
 	ld [wd32e], a
 	farcall Func_11024
@@ -3069,13 +3069,13 @@ Func_d3e0: ; d3e0 (3:53e0)
 	farcall Func_10f2e
 	jp IncreaseScriptPointerBy1
 
-Func_d3fe: ; d3fe (3:53fe)
+ScriptCommand_OverrideSong: ; d3fe (3:53fe)
 	ld a, c
 	ld [wd112], a
 	call PlaySong
 	jp IncreaseScriptPointerBy2
 
-Func_d408: ; d408 (3:5408)
+ScriptCommand_SetDefaultSong: ; d408 (3:5408)
 	ld a, c
 	ld [wd111], a
 	jp IncreaseScriptPointerBy2
@@ -3090,7 +3090,7 @@ ScriptCommand_PlaySFX: ; d416 (3:5416)
 	call PlaySFX
 	jp IncreaseScriptPointerBy2
 
-Func_d41d: ; d41d (3:541d)
+ScriptCommand_PlayDefaultSong: ; d41d (3:541d)
 	call Func_39fc
 	jp IncreaseScriptPointerBy1
 
@@ -3106,12 +3106,12 @@ ScriptCommand_WaitForSongToFinish: ; d42f (3:542f)
 	call WaitForSongToFinish
 	jp IncreaseScriptPointerBy1
 
-Func_d435: ; d435 (3:5435)
+ScriptCommand_RecordMasterWin: ; d435 (3:5435)
 	ld a, c
 	farcall Func_1c83d
 	jp IncreaseScriptPointerBy2
 
-Func_d43d: ; d43d (3:543d)
+ScriptCommand_ChallengeMachine: ; d43d (3:543d)
 	ld a, GAME_EVENT_CHALLENGE_MACHINE
 	ld [wGameEvent], a
 	ld hl, wd0b4
@@ -3275,7 +3275,7 @@ Func_d4fb: ; d4fb (3:54fb)
 Script_BeginGame: ; d52e (3:552e)
 	start_script
 	do_frames 60
-	run_command Func_d3e0
+	walk_player_to_mason_lab
 	do_frames 120
 	enter_map $02, MASON_LABORATORY, 14, 26, NORTH
 	quit_script_fully
@@ -3325,9 +3325,8 @@ ChallengeMachineObjectTable: ; d572 (3:5572)
 
 Script_ChallengeMachine: ; d57d (3:557d)
 	start_script
-	run_command Func_ccdc
-	tx ItsTheChallengeMachineText
-	run_command Func_d43d
+	print_text ItsTheChallengeMachineText
+	challenge_machine
 	quit_script_fully
 
 Script_Tech1: ; d583 (3:5583)
@@ -3571,8 +3570,7 @@ Script_EnterLabFirstTime: ; d753 (3:5753)
 	print_npc_text Text05e5
 	close_text_box
 	move_active_npc NPCMovement_d882
-	run_command Func_cfc6
-	db $01
+	set_active_npc_direction EAST
 	set_player_direction WEST
 	close_advanced_text_box
 	set_next_npc_and_script NPC_DRMASON, .ows_d794
@@ -3677,8 +3675,7 @@ Script_AfterPracticeDuel: ; d834 (3:5834)
 	set_player_direction NORTH
 	print_npc_text Text05f0
 	close_text_box
-	run_command Func_ccdc
-	tx Text05f1
+	print_text Text05f1
 	close_text_box
 	print_npc_text Text05f2
 .ows_d85f
@@ -3691,16 +3688,14 @@ Script_AfterPracticeDuel: ; d834 (3:5834)
 	close_text_box
 	pause_song
 	play_song MUSIC_BOOSTER_PACK
-	run_command Func_ccdc
-	tx Text05f5
+	print_text Text05f5
 	wait_for_song_to_finish
 	resume_song
 	close_text_box
 	script_set_flag_value EVENT_FLAG_3E, $03
-	run_command Func_d3d4
+	give_stater_deck
 	print_npc_text Text05f6
-	run_command Func_d396
-	db $00
+	save_game $00
 	quit_script_fully
 
 NPCMovement_d880: ; d880 (3:5880)
@@ -3785,8 +3780,7 @@ Script_LostToAaron: ; d92e (3:592e)
 
 Script_d932: ; d932 (3:5932)
 	start_script
-	run_command Func_ccdc
-	tx Text0605
+	print_text Text0605
 	ask_question_jump_default_yes Text0606, .ows_d93c
 	quit_script_fully
 
@@ -3947,8 +3941,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	script_set_flag_value EVENT_FLAG_1F, $03
 	zero_out_flag_value EVENT_FLAG_38
 	print_npc_text Text072f
-	run_command Func_ccdc
-	tx Text0730
+	print_text Text0730
 	take_card CLEFABLE
 	give_card SURFING_PIKACHU1
 	show_card_received_screen SURFING_PIKACHU1
@@ -3974,8 +3967,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	script_set_flag_value EVENT_FLAG_1F, $05
 	zero_out_flag_value EVENT_FLAG_38
 	print_npc_text Text072f
-	run_command Func_ccdc
-	tx Text0736
+	print_text Text0736
 	take_card DITTO
 	give_card FLYING_PIKACHU
 	show_card_received_screen FLYING_PIKACHU
@@ -4001,8 +3993,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	script_set_flag_value EVENT_FLAG_1F, $07
 	zero_out_flag_value EVENT_FLAG_38
 	print_npc_text Text072f
-	run_command Func_ccdc
-	tx Text073c
+	print_text Text073c
 	take_card CHANSEY
 	give_card SURFING_PIKACHU2
 	show_card_received_screen SURFING_PIKACHU2
@@ -4112,11 +4103,10 @@ Script_LostToImakuni: ; dd5c (3:5d5c)
 
 .ows_dd6e
 	move_active_npc NPCMovement_dd78
-	run_command Func_cdcb
+	unload_active_npc
 	max_out_flag_value EVENT_TEMP_DUELED_IMAKUNI
-	run_command Func_d408
-	db $09
-	run_command Func_d41d
+	set_default_song MUSIC_OVERWORLD
+	play_default_song
 	quit_script_fully
 
 NPCMovement_dd78: ; dd78 (3:5d78)
@@ -4204,10 +4194,8 @@ Script_BeatMitch: ; ddff (3:5dff)
 	print_npc_text Text047f
 	max_out_flag_value EVENT_FLAG_0F
 	try_give_medal_pc_packs
-	run_command Func_d125
-	db $0f
-	run_command Func_d435
-	db $01
+	show_medal_received_screen EVENT_FLAG_0F
+	record_master_win $01
 	print_npc_text Text0480
 	give_booster_packs BOOSTER_LABORATORY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL, NO_BOOSTER
 	print_npc_text Text0481
@@ -4422,8 +4410,7 @@ Script_Gal1: ; e0cf (3:60cf)
 .ows_e0fb
 	script_set_flag_value EVENT_FLAG_12, $02
 	print_npc_text Gal1LetsTradeText
-	run_command Func_ccdc
-	tx Gal1TradeCompleteText
+	print_text Gal1TradeCompleteText
 	take_card LAPRAS
 	give_card ARCANINE1
 	show_card_received_screen ARCANINE1
@@ -4666,8 +4653,7 @@ Script_BeatJoshua: ; e26c (3:626c)
 	close_text_box
 	move_active_npc_by_direction NPCMovementTable_e2a1
 	print_npc_text Text044a
-	run_command Func_cfc6
-	db $00
+	set_active_npc_direction NORTH
 	close_advanced_text_box
 	set_next_npc_and_script NPC_AMY, Script_MeetAmy
 	end_script
@@ -4715,18 +4701,10 @@ Script_MeetAmy: ; e2d1 (3:62d1)
 	set_dialog_npc NPC_AMY
 	print_npc_text Text044d
 	close_text_box
-	run_command Func_d095
-	db $09
-	db $2f
-	db $10
+	set_sprite_attributes $09, $2f, $10
 	do_frames $20
-	run_command Func_d095
-	db $04
-	db $0e
-	db $00
-	run_command Func_d0be
-	db $14
-	db $04
+	set_sprite_attributes $04, $0e, $00
+	set_active_npc_coords $14, $04
 	set_player_direction WEST
 	move_player WEST, 1
 	set_player_direction NORTH
@@ -4745,10 +4723,7 @@ Script_Amy: ; e304 (3:6304)
 
 .deny_duel
 	print_npc_text Text0451
-	run_command Func_d0d9
-	db $14
-	db $04
-	dw Script_LostToAmy.ows_e34e
+	jump_if_active_npc_coords_match $14, $04, Script_LostToAmy.ows_e34e
 	quit_script_fully
 
 .start_duel
@@ -4763,37 +4738,24 @@ Script_BeatAmy: ; e322 (3:6322)
 	print_npc_text Text0454
 	max_out_flag_value EVENT_BEAT_AMY
 	try_give_medal_pc_packs
-	run_command Func_d125
-	db EVENT_BEAT_AMY
-	run_command Func_d435
-	db $03
+	show_medal_received_screen EVENT_BEAT_AMY
+	record_master_win $03
 	print_npc_text Text0455
 .give_booster_packs
 	give_booster_packs BOOSTER_LABORATORY_WATER, BOOSTER_LABORATORY_WATER, NO_BOOSTER
 	print_npc_text Text0456
-	run_command Func_d0d9
-	db $14
-	db $04
-	dw Script_LostToAmy.ows_e34e
+	jump_if_active_npc_coords_match $14, $04, Script_LostToAmy.ows_e34e
 	quit_script_fully
 
 Script_LostToAmy: ; e344 (3:6344)
 	start_script
 	print_npc_text Text0457
-	run_command Func_d0d9
-	db $14
-	db $04
-	dw .ows_e34e
+	jump_if_active_npc_coords_match $14, $04, .ows_e34e
 	quit_script_fully
 
 .ows_e34e
-	run_command Func_d095
-	db $08
-	db $2e
-	db $10
-	run_command Func_d0be
-	db $16
-	db $04
+	set_sprite_attributes $08, $2e, $10
+	set_active_npc_coords $16, $04
 	quit_script_fully
 
 Script_Amy_AlreadyHaveMedal: ; e356 (3:6356)
@@ -5038,8 +5000,7 @@ Script_Lass2: ; e61f (3:661f)
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $02
 	print_npc_text Text06f1
-	run_command Func_ccdc
-	tx Text06f2
+	print_text Text06f2
 	take_card ODDISH
 	give_card VILEPLUME
 	show_card_received_screen VILEPLUME
@@ -5064,8 +5025,7 @@ Script_Lass2: ; e61f (3:661f)
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $04
 	print_npc_text Text06f9
-	run_command Func_ccdc
-	tx Text06fa
+	print_text Text06fa
 	take_card CLEFAIRY
 	give_card PIKACHU3
 	show_card_received_screen PIKACHU3
@@ -5090,8 +5050,7 @@ Script_Lass2: ; e61f (3:661f)
 	max_out_flag_value EVENT_FLAG_04
 	script_set_flag_value EVENT_FLAG_37, $06
 	print_npc_text Text0700
-	run_command Func_ccdc
-	tx Text0701
+	print_text Text0701
 	take_card CHARIZARD
 	give_card BLASTOISE
 	show_card_received_screen BLASTOISE
@@ -5230,8 +5189,7 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	start_script
 	max_out_flag_value EVENT_FLAG_4B
 	move_active_npc NPCMovement_e894
-	run_command Func_d135
-	db $00
+	load_current_map_name_into_txram_slot $00
 	print_npc_text Text0645
 	close_text_box
 	move_player NORTH, 1
@@ -5249,8 +5207,8 @@ Script_FirstRonaldEncounter: ; e862 (3:6862)
 	set_player_direction WEST
 	move_player EAST, 4
 	move_active_npc NPCMovement_e894
-	run_command Func_cdcb
-	run_command Func_d41d
+	unload_active_npc
+	play_default_song
 	quit_script_fully
 
 NPCMovement_e894: ; e894 (3:6894)
@@ -5297,8 +5255,8 @@ Script_LostToFirstRonaldFight: ; e8f7 (3:68f7)
 	script_set_flag_value EVENT_FLAG_4C, $02
 	close_text_box
 	move_active_npc NPCMovement_e90f
-	run_command Func_cdcb
-	run_command Func_d41d
+	unload_active_npc
+	play_default_song
 	quit_script_fully
 
 NPCMovement_e905: ; e905 (3:6905)
@@ -5359,8 +5317,8 @@ Script_LostToSecondRonaldFight: ; e955 (3:6955)
 	script_set_flag_value EVENT_FLAG_4D, $02
 	close_text_box
 	move_active_npc NPCMovement_e90f
-	run_command Func_cdcb
-	run_command Func_d41d
+	unload_active_npc
+	play_default_song
 	quit_script_fully
 
 PsychicClubLobbyAfterDuel: ; e963 (3:6963)
@@ -5661,8 +5619,7 @@ Script_ee76: ; ee76 (3:6e76)
 
 .ows_ee7d
 	script_set_flag_value EVENT_FLAG_21, $02
-	run_command Func_ccdc
-	tx FoundLv9SlowpokeText
+	print_text FoundLv9SlowpokeText
 	give_card SLOWPOKE1
 	show_card_received_screen SLOWPOKE1
 	quit_script_fully
@@ -5753,10 +5710,8 @@ Script_BeatKen: ; ef5e (3:6f5e)
 	jump_if_flag_nonzero_2 EVENT_FLAG_0A, .give_booster_packs
 	max_out_flag_value EVENT_FLAG_0A
 	try_give_medal_pc_packs
-	run_command Func_d125
-	db $0a
-	run_command Func_d435
-	db $08
+	show_medal_received_screen EVENT_FLAG_0A
+	record_master_win $08
 	print_npc_text Text06c2
 .give_booster_packs
 	give_booster_packs BOOSTER_MYSTERY_NEUTRAL, BOOSTER_MYSTERY_NEUTRAL, NO_BOOSTER
@@ -6191,8 +6146,7 @@ Script_f353: ; f353 (3:7353)
 	move_active_npc NPCMovement_f37d
 	do_frames 20
 	move_active_npc NPCMovement_f390
-	run_command Func_d16b
-	db $00
+	load_active_npc_name_into_txram_slot $00
 	print_npc_text Text0532
 	close_text_box
 	move_active_npc NPCMovement_f37f
@@ -6203,10 +6157,7 @@ Script_f353: ; f353 (3:7353)
 	close_text_box
 	move_active_npc NPCMovement_f38e
 	print_npc_text Text0535
-	run_command Func_cd4f
-	db $04
-	db $00
-	db $00
+	start_challenge_hall_duel PRIZES_4, SAMS_PRACTICE_DECK_ID, MUSIC_STOP
 	quit_script_fully
 
 NPCMovement_f37d: ; f37d (3:737d)
@@ -6254,10 +6205,8 @@ Script_LostAtChallengeHall: ; f392 (3:7392)
 	move_active_npc NPCMovement_f390
 	jump_if_flag_equal EVENT_FLAG_45, $02, Script_f410
 	jump_if_flag_equal EVENT_FLAG_45, $03, Script_f410.ows_f41a
-	run_command Func_d16b
-	db $00
-	run_command Func_d16b
-	db $01
+	load_active_npc_name_into_txram_slot $00
+	load_active_npc_name_into_txram_slot $01
 	print_npc_text Text0536
 .ows_f3ae
 	close_text_box
@@ -6312,10 +6261,8 @@ NPCMovement_f40d: ; f40d (3:740d)
 	db $ff
 
 Script_f410: ; f410 (4:7410)
-	run_command Func_d16b
-	db $00
-	run_command Func_d16b
-	db $01
+	load_active_npc_name_into_txram_slot $00
+	load_active_npc_name_into_txram_slot $01
 	print_npc_text Text0538
 	script_jump Script_LostAtChallengeHall.ows_f3ae
 
@@ -6349,21 +6296,17 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	jump_if_flag_equal EVENT_FLAG_45, $01, NULL
 	print_variable_npc_text Text053c, Text053d
 	move_active_npc NPCMovement_f37f
-	run_command Func_d16b
-	db $00
+	load_active_npc_name_into_txram_slot $00
 	print_npc_text Text053e
 	close_text_box
 	move_wram_npc NPCMovement_f4c8
-	run_command Func_cdd8
+	unload_challenge_hall_npc
 	print_npc_text Text053f
 	close_text_box
-	run_command Func_d195
-	run_command Func_cdf5
-	db $14
-	db $14
+	pick_challenge_hall_opponent
+	set_challenge_hall_npc_coords $14, $14
 	move_wram_npc NPCMovement_f4d0
-	run_command Func_d16b
-	db $00
+	load_active_npc_name_into_txram_slot $00
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
 	print_variable_npc_text Text0540, Text0541
 	move_active_npc NPCMovement_f383
@@ -6383,16 +6326,13 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	ask_question_jump_default_yes Text0546, .ows_f4bd
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
 	print_variable_npc_text Text0547, Text0548
-	run_command Func_cd4f
-	db $04
-	db $00
-	db $00
+	start_challenge_hall_duel PRIZES_4, SAMS_PRACTICE_DECK_ID, MUSIC_STOP
 	quit_script_fully
 .ows_f4bd
 	print_npc_text Text0549
 	close_text_box
 	max_out_flag_value EVENT_FLAG_47
-	run_command Func_d1ad
+	open_menu
 	close_text_box
 	script_jump .ows_f4a4
 
@@ -6425,8 +6365,7 @@ NPCMovement_f4d8: ; f4d8 (3:74d8)
 Script_f4db: ; f4db (3:74db)
 	print_npc_text Text054a
 	move_active_npc NPCMovement_f37f
-	run_command Func_d16b
-	db $00
+	load_active_npc_name_into_txram_slot $00
 	print_npc_text Text054b
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f513
@@ -6445,12 +6384,12 @@ Script_f4db: ; f4db (3:74db)
 .ows_f513
 	move_wram_npc NPCMovement_f4c8
 .ows_f516
-	run_command Func_cdd8
+	unload_challenge_hall_npc
 	move_active_npc NPCMovement_f383
 	print_npc_text Text0550
 	close_text_box
 	move_active_npc NPCMovement_f38b
-	run_command Func_d1b3
+	pick_challenge_cup_prize_card
 	print_npc_text Text0551
 	give_card VARIABLE_CARD
 	show_card_received_screen $00
@@ -6715,42 +6654,33 @@ Script_fbf1: ; fbf1 (3:7bf1)
 	start_script
 	jump_if_flag_nonzero_2 EVENT_RECEIVED_LEGENDARY_CARD, .ows_fc10
 	max_out_flag_value EVENT_RECEIVED_LEGENDARY_CARD
-	run_command Func_ccdc
-	tx Text05b8
+	print_text Text05b8
 	give_card ZAPDOS3
 	give_card MOLTRES2
 	give_card ARTICUNO2
 	give_card DRAGONITE1
 	show_card_received_screen $ff
 .ows_fc05
-	run_command Func_d38f
-	db $00
-	run_command Func_ccdc
-	tx Text05b9
+	flash_screen $00
+	print_text Text05b9
 .ows_fc0a
-	run_command Func_d38f
-	db $01
-	run_command Func_d396
-	db $01
-	run_command Func_d3b9
+	flash_screen $01
+	save_game $01
+	play_credits
 	quit_script_fully
 
 .ows_fc10
 	jump_if_flag_equal EVENT_FLAG_71, $0f, .ows_fc20
-	run_command Func_d209
-	run_command Func_ccdc
-	tx Text05ba
+	pick_legendary_card
+	print_text Text05ba
 	give_card VARIABLE_CARD
 	show_card_received_screen VARIABLE_CARD
 	script_jump .ows_fc05
 
 .ows_fc20
-	run_command Func_ccdc
-	tx Text05bb
-	run_command Func_d38f
-	db $00
-	run_command Func_ccdc
-	tx Text05bc
+	print_text Text05bb
+	flash_screen $00
+	print_text Text05bc
 	script_jump .ows_fc0a
 
 Func_fc2b: ; fc2b (3:7c2b)
@@ -6785,7 +6715,7 @@ Script_fc52: ; fc52 (3:7c52)
 	print_text_quit_fully Text06c9
 
 .ows_fc5e
-	run_command Func_cd76
+	battle_center
 	quit_script_fully
 
 Script_fc60: ; fc60 (3:7c60)
@@ -6820,8 +6750,7 @@ Func_fc7a: ; fc7a (3:7c7a)
 	start_script
 	jump_if_flag_not_equal EVENT_FLAG_74, $02, Func_fcad.ows_fcd5
 	print_npc_text Text06cd
-	run_command Func_d39d
-	db $00
+	gift_center $00
 	jump_if_flag_not_less_than EVENT_FLAG_72, $04, Func_fc7a.ows_fcaa
 	print_npc_text Text06ce
 	ask_question_jump_default_yes Text06cf, .ows_fca0
@@ -6829,13 +6758,10 @@ Func_fc7a: ; fc7a (3:7c7a)
 	script_jump Func_fc7a.ows_fcaa
 
 .ows_fca0
-	run_command Func_d396
-	db $00
+	save_game $00
 	play_sfx SFX_56
-	run_command Func_ccdc
-	tx Text06d1
-	run_command Func_d39d
-	db $01
+	print_text Text06d1
+	gift_center $01
 	quit_script_fully
 
 .ows_fcaa
@@ -6848,8 +6774,7 @@ Func_fcad: ; fcad (3:7cad)
 
 	start_script
 	play_sfx SFX_56
-	run_command Func_d396
-	db $00
+	save_game $00
 	jump_if_flag_equal EVENT_FLAG_72, $00, .ows_fccc
 	jump_if_flag_equal EVENT_FLAG_72, $02, .ows_fccf
 	jump_if_flag_equal EVENT_FLAG_72, $03, .ows_fcd2
