@@ -10750,31 +10750,35 @@ CopyGfxDataFromTempBank: ; 395a (0:395a)
 	call BankswitchROM
 	ret
 
-Unknown_396b: ; 396b (0:396b)
-	db $00, -$01, $01, $00, $00, $01, -$01, $00
-
 ; Movement offsets for player movements
-PlayerMovementOffsetTable: ; 3973 (0:3973)
-	db  0, -2 ; move 2 tiles up
-	db  2,  0 ; move 2 tiles right
-	db  0,  2 ; move 2 tiles down
-	db -2,  0 ; move 2 tiles left
+PlayerMovementOffsetTable: ; 396b (0:396b)
+	db  0, -1 ; NORTH
+	db  1,  0 ; EAST
+	db  0,  1 ; SOUTH
+	db -1,  0 ; WEST
 
-Unknown_397b: ; 397b (0:397b)
-	dw $0323
-	dw $0323
-	dw $0324
-	dw $0325
-	dw $0326
-	dw $0327
-	dw $0328
-	dw $0329
-	dw $032a
-	dw $032b
-	dw $032c
-	dw $032d
-	dw $032e
-	dw $032f
+; Movement offsets for player movements, in tiles
+PlayerMovementOffsetTable_Tiles: ; 3973 (0:3973)
+	db  0, -2 ; NORTH
+	db  2,  0 ; EAST
+	db  0,  2 ; SOUTH
+	db -2,  0 ; WEST
+
+OverworldMapNames: ; 397b (0:397b)
+	tx OverworldMapMasonLaboratoryText
+	tx OverworldMapMasonLaboratoryText
+	tx OverworldMapIshiharasHouseText
+	tx OverworldMapFightingClubText
+	tx OverworldMapRockClubText
+	tx OverworldMapWaterClubText
+	tx OverworldMapLightningClubText
+	tx OverworldMapGrassClubText
+	tx OverworldMapPsychicClubText
+	tx OverworldMapScienceClubText
+	tx OverworldMapFireClubText
+	tx OverworldMapChallengeHallText
+	tx OverworldMapPokemonDomeText
+	tx OverworldMapMysteryHouseText
 
 Func_3997: ; 3997 (0:3997)
 	ldh a, [hBankROM]

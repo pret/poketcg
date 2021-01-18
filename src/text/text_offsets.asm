@@ -804,19 +804,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0320                                           ; 0x0320
 	textpointer Text0321                                           ; 0x0321
 	textpointer Text0322                                           ; 0x0322
-	textpointer Text0323                                           ; 0x0323
-	textpointer Text0324                                           ; 0x0324
-	textpointer Text0325                                           ; 0x0325
-	textpointer Text0326                                           ; 0x0326
-	textpointer Text0327                                           ; 0x0327
-	textpointer Text0328                                           ; 0x0328
-	textpointer Text0329                                           ; 0x0329
-	textpointer Text032a                                           ; 0x032a
-	textpointer Text032b                                           ; 0x032b
-	textpointer Text032c                                           ; 0x032c
-	textpointer Text032d                                           ; 0x032d
-	textpointer Text032e                                           ; 0x032e
-	textpointer Text032f                                           ; 0x032f
+	textpointer OverworldMapMasonLaboratoryText                    ; 0x0323
+	textpointer OverworldMapIshiharasHouseText                     ; 0x0324
+	textpointer OverworldMapFightingClubText                       ; 0x0325
+	textpointer OverworldMapRockClubText                           ; 0x0326
+	textpointer OverworldMapWaterClubText                          ; 0x0327
+	textpointer OverworldMapLightningClubText                      ; 0x0328
+	textpointer OverworldMapGrassClubText                          ; 0x0329
+	textpointer OverworldMapPsychicClubText                        ; 0x032a
+	textpointer OverworldMapScienceClubText                        ; 0x032b
+	textpointer OverworldMapFireClubText                           ; 0x032c
+	textpointer OverworldMapChallengeHallText                      ; 0x032d
+	textpointer OverworldMapPokemonDomeText                        ; 0x032e
+	textpointer OverworldMapMysteryHouseText                       ; 0x032f
 	textpointer MasonLaboratoryMapNameText                         ; 0x0330
 	textpointer MrIshiharasHouseMapNameText                        ; 0x0331
 	textpointer FightingClubMapNameText                            ; 0x0332
@@ -831,7 +831,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer PokemonDomeMapNameText                             ; 0x033b
 	textpointer Text033c                                           ; 0x033c
 	textpointer PauseMenuOptionsText                               ; 0x033d
-	textpointer Text033e                                           ; 0x033e
+	textpointer DebugPauseMenuOptionsText                          ; 0x033e
 	textpointer PlayerStatusNameText                               ; 0x033f
 	textpointer PlayerStatusAlbumText                              ; 0x0340
 	textpointer PlayerStatusPlayTimeText                           ; 0x0341

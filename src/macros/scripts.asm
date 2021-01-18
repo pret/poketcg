@@ -49,7 +49,7 @@ ENDM
 	const ScriptCommand_JumpIfNPCLoaded_index                                ; $29
 	const ScriptCommand_ShowMedalReceivedScreen_index                        ; $2a
 	const ScriptCommand_LoadCurrentMapNameIntoTxRamSlot_index                ; $2b
-	const ScriptCommand_LoadActiveNPCNameIntoTxRamSlot_index                 ; $2c
+	const ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot_index              ; $2c
 	const ScriptCommand_StartChallengeHallDuel_index                         ; $2d
 	const ScriptCommand_PrintTextForChallengeCup_index                       ; $2e
 	const ScriptCommand_MoveChallengeHallNPC_index                           ; $2f
@@ -334,9 +334,9 @@ ENDM
 ; Sets some NPC sprite attributes
 set_sprite_attributes: MACRO
 	run_command ScriptCommand_SetSpriteAttributes
-	db \1 ; Relates to LOADED_NPC_FIELD_05
-	db \2 ; Relates to LOADED_NPC_FIELD_05
-	db \3 ; Relates to LOADED_NPC_FIELD_06
+	db \1 ; Relates to LOADED_NPC_FIELD_06
+	db \2 ; Relates to LOADED_NPC_FIELD_06
+	db \3 ; Relates to LOADED_NPC_FIELD_05
 ENDM
 
 ; Sets the active NPC's coords
@@ -398,9 +398,9 @@ load_current_map_name_into_txram_slot: MACRO
 	db \1 ; TxRam slot
 ENDM
 
-; Loads the active NPC name into the given txram slot
-load_active_npc_name_into_txram_slot: MACRO
-	run_command ScriptCommand_LoadActiveNPCNameIntoTxRamSlot
+; Loads the challenge hall opponent NPC name into the given txram slot
+load_challenge_hall_npc_into_txram_slot: MACRO
+	run_command ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot
 	db \1 ; TxRam slot
 ENDM
 

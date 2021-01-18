@@ -68,7 +68,7 @@ script_commands = {
 	0x29: { "name": "jump_if_npc_loaded",                         "params": [ "npc", "label" ] },
 	0x2a: { "name": "show_medal_received_screen",                 "params": [ "event" ] },
 	0x2b: { "name": "load_current_map_name_into_txram_slot",      "params": [ "byte" ] },
-	0x2c: { "name": "load_active_npc_name_into_txram_slot",       "params": [ "byte" ] },
+	0x2c: { "name": "load_challenge_hall_npc_into_txram_slot",    "params": [ "byte" ] },
 	0x2d: { "name": "start_challenge_hall_duel",                  "params": [ "prizes", "deck", "song" ] },
 	0x2e: { "name": "print_text_for_challenge_cup",               "params": [ "text", "text", "text" ] },
 	0x2f: { "name": "move_challenge_hall_npc",                    "params": [ "movement" ] },

@@ -41,7 +41,7 @@ MasonLabObjects: ; 13b04 (3:7b04)
 	tx Text04ab
 
 	db NORTH, 2, 2
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -233,7 +233,7 @@ FightingClubLobbyObjects: ; 13c6f (3:7c6f)
 	tx Text04c9
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -267,7 +267,7 @@ RockClubLobbyObjects: ; 13ca6 (3:7ca6)
 	tx Text04cf
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -301,7 +301,7 @@ WaterClubLobbyObjects: ; 13cdd (3:7cdd)
 	tx Text04d5
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -335,7 +335,7 @@ LightningClubLobbyObjects: ; 13d14 (3:7d14)
 	tx Text04db
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -369,7 +369,7 @@ GrassClubLobbyObjects: ; 13d4b (3:7d4b)
 	tx Text04e1
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -403,7 +403,7 @@ PsychicClubLobbyObjects: ; 13d82 (3:7d82)
 	tx Text04e7
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -437,7 +437,7 @@ ScienceClubLobbyObjects: ; 13db9 (3:7db9)
 	tx Text04ed
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -471,7 +471,7 @@ FireClubLobbyObjects: ; 13df0 (3:7df0)
 	tx Text04f3
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -505,7 +505,7 @@ ChallengeHallLobbyObjects: ; 13e27 (3:7e27)
 	tx Text04f9
 
 	db NORTH, 2, 8
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 
@@ -574,7 +574,7 @@ PokemonDomeEntranceObjects: ; 13e5e (3:7e5e)
 	tx Text0509
 
 	db NORTH, 28, 2
-	dw PC_c7ea
+	dw PCMenu
 	tx PlaceholderMessageText
 	tx PokemonTradingCards101Text
 

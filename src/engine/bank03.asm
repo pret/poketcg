@@ -114,8 +114,8 @@ SetScriptData: ; c0f1 (3:40f1)
 	ld a, c
 	ld [wNextScript], a
 	ld a, b
-	ld [wNextScript+1], a
-	ld a, $3
+	ld [wNextScript + 1], a
+	ld a, OWMODE_SCRIPT
 	ld [wOverworldMode], a
 	jr EnterScript
 
@@ -190,19 +190,19 @@ Func_c158: ; c158 (3:4158)
 
 Func_c17a: ; c17a (3:417a)
 	ld a, [wOverworldMode]
-	cp $3
+	cp OWMODE_SCRIPT
 	ret z
 	call Func_c9b8
 	ret
 
 Func_c184: ; c184 (3:4184)
 	push bc
-	ld c, $1
+	ld c, OWMODE_MOVE
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
-	jr nz, .asm_c190
-	ld c, $0
-.asm_c190
+	jr nz, .not_map
+	ld c, OWMODE_MAP
+.not_map
 	ld a, c
 	ld [wOverworldMode], a
 	ld [wd0c0], a
@@ -230,13 +230,13 @@ WhiteOutDMGPals: ; c1a4 (3:41a4)
 Func_c1b1: ; c1b1 (3:41b1)
 	ld a, $c
 	ld [wd32e], a
-	ld a, $0
+	ld a, OVERWORLD_MAP
 	ld [wTempMap], a
 	ld a, $c
 	ld [wTempPlayerXCoord], a
 	ld a, $c
 	ld [wTempPlayerYCoord], a
-	ld a, $2
+	ld a, SOUTH
 	ld [wTempPlayerDirection], a
 	call Func_c9cb
 	call Func_c9dd
@@ -303,13 +303,13 @@ Func_c251: ; c251 (3:4251)
 	ldh a, [hffb0]
 	push af
 	ld a, $1
-	jr asm_c25d
+	jr Func_c258.asm_c25d
 
 Func_c258: ; c258 (3:4258)
 	ldh a, [hffb0]
 	push af
 	ld a, $2
-asm_c25d:
+.asm_c25d
 	ldh [hffb0], a
 	push hl
 	call Func_c268
@@ -320,19 +320,19 @@ asm_c25d:
 
 Func_c268: ; c268 (3:4268)
 	ld hl, PauseMenuTextList
-.asm_c26b
+.loop
 	push hl
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	or h
-	jr z, .asm_c27a
+	jr z, .done
 	call ProcessTextFromID
 	pop hl
 	inc hl
 	inc hl
-	jr .asm_c26b
-.asm_c27a
+	jr .loop
+.done
 	pop hl
 	ret
 
@@ -686,10 +686,10 @@ Func_c4b9: ; c4b9 (3:44b9)
 	farcall Func_80418
 	ld b, $0
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_c4d1
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
 	ld b, $1e
-.asm_c4d1
+.not_cgb
 	ld a, b
 	ld [wd337], a
 
@@ -699,13 +699,13 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld a, [wWhichSprite]
 	ld [wPlayerSpriteIndex], a
 
-	ld b, $2
+	ld b, SOUTH
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
-	jr z, .asm_c4ee
+	jr z, .ow_map
 	ld a, [wTempPlayerDirection]
 	ld b, a
-.asm_c4ee
+.ow_map
 	ld a, b
 	ld [wPlayerDirection], a
 	call UpdatePlayerSprite
@@ -717,9 +717,9 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld [wd338], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
-	jr nz, .asm_c50f
+	jr nz, .not_ow_map
 	farcall Func_10fde
-.asm_c50f
+.not_ow_map
 	ret
 
 HandlePlayerMoveMode: ; c510 (3:4510)
@@ -732,14 +732,14 @@ HandlePlayerMoveMode: ; c510 (3:4510)
 	call z, HandlePlayerMoveModeInput
 	ld a, [wPlayerCurrentlyMoving]
 	or a
-	jr z, .notMoving
+	jr z, .not_moving
 	bit 0, a
 	call nz, Func_c66c
 	ld a, [wPlayerCurrentlyMoving]
 	bit 1, a
 	call nz, Func_c6dc
 	ret
-.notMoving
+.not_moving
 	ldh a, [hKeysPressed]
 	and START
 	call nz, OpenStartMenu
@@ -761,10 +761,10 @@ Func_c554: ; c554 (3:4554)
 	ld [wWhichSprite], a
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
-	jr nz, .asm_c566
+	jr nz, .not_ow_map
 	farcall Func_10e28
 	ret
-.asm_c566
+.not_ow_map
 	push hl
 	push bc
 	push de
@@ -814,13 +814,13 @@ Func_c58b: ; c58b (3:458b)
 HandlePlayerMoveModeInput: ; c5ac (3:45ac)
 	ldh a, [hKeysHeld]
 	and D_PAD
-	jr z, .skipMoving
+	jr z, .skip_moving
 	call UpdatePlayerDirectionFromDPad
 	call AttemptPlayerMovementFromDirection
 	ld a, [wPlayerCurrentlyMoving]
 	and $1
 	jr nz, .done
-.skipMoving
+.skip_moving
 	ldh a, [hKeysPressed]
 	and A_BUTTON
 	jr z, .done
@@ -840,13 +840,13 @@ GetDirectionFromDPad: ; c5d5 (3:45d5)
 	push hl
 	ld hl, KeypadDirectionMap
 	or a
-	jr z, .loadDirectionMapping
-.findDirectionMappingLoop
+	jr z, .get_direction
+.loop
 	rlca
-	jr c, .loadDirectionMapping
+	jr c, .get_direction
 	inc hl
-	jr .findDirectionMappingLoop
-.loadDirectionMapping
+	jr .loop
+.get_direction
 	ld a, [hl]
 	pop hl
 	ret
@@ -926,7 +926,7 @@ FindPlayerMovementWithOffset: ; c656 (3:4656)
 	ld c, a
 	ld b, $0
 	push hl
-	ld hl, PlayerMovementOffsetTable
+	ld hl, PlayerMovementOffsetTable_Tiles
 	add hl, bc
 	ld a, [wPlayerXCoord]
 	add [hl]
@@ -972,7 +972,7 @@ Func_c694: ; c694 (3:4694)
 	rlca
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_396b
+	ld hl, PlayerMovementOffsetTable
 	add hl, bc
 	pop bc
 .asm_c6a0
@@ -1028,7 +1028,7 @@ Func_c6dc: ; c6dc (3:46dc)
 	call Func_3997
 	call Func_c70d
 	ld a, [wOverworldMode]
-	cp $1
+	cp OWMODE_MOVE
 	call z, Func_c9c0
 	pop hl
 	ret
@@ -1064,23 +1064,23 @@ FindNPCOrObject: ; c71e (3:471e)
 	call FindPlayerMovementFromDirection
 	call GetPermissionOfMapPosition
 	and $40
-	jr z, .noNPC
+	jr z, .no_npc
 	farcall FindNPCAtLocation
-	jr c, .noNPC
+	jr c, .no_npc
 	ld a, [wLoadedNPCTempIndex]
 	ld [wScriptNPC], a
 	ld a, OWMODE_START_SCRIPT
-	jr .changeStateExit
+	jr .set_mode
 
-.noNPC
+.no_npc
 	call HandleMoveModeAPress
 	jr nc, .exit
 	ld a, OWMODE_SCRIPT
-	jr .changeStateExit
+	jr .set_mode
 .exit
 	or a
 	ret
-.changeStateExit
+.set_mode
 	ld [wOverworldMode], a
 	scf
 	ret
@@ -1089,40 +1089,40 @@ OpenStartMenu: ; c74d (3:474d)
 	push hl
 	push bc
 	push de
-	call MainMenu_c75a
+	call StartMenu
 	call CloseAdvancedDialogueBox
 	pop de
 	pop bc
 	pop hl
 	ret
 
-MainMenu_c75a: ; c75a (3:475a)
+StartMenu: ; c75a (3:475a)
 	call PauseSong
 	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
 	call Func_c797
-.asm_c765
+.loop
 	ld a, $1
 	call Func_c29b
-.asm_c76a
+.wait_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
-	jr nc, .asm_c76a
+	jr nc, .wait_input
 	ld a, e
 	ld [wd0b8], a
 	ldh a, [hCurMenuItem]
 	cp e
-	jr nz, .asm_c793
+	jr nz, .exit
 	cp $5
-	jr z, .asm_c793
+	jr z, .exit
 	call Func_c2a3
 	ld a, [wd0b8]
 	ld hl, PointerTable_c7a2
 	call JumpToFunctionInTable
 	ld hl, Func_c797
 	call Func_c32b
-	jr .asm_c765
-.asm_c793
+	jr .loop
+.exit
 	call ResumeSong
 	ret
 
@@ -1176,7 +1176,7 @@ Func_c7e5: ; c7e5 (3:47e5)
 	farcall Func_103d2
 	ret
 
-PC_c7ea: ; c7ea (3:47ea)
+PCMenu: ; c7ea (3:47ea)
 	ld a, MUSIC_PC_MAIN_MENU
 	call PlaySong
 	call Func_c241
@@ -1185,28 +1185,28 @@ PC_c7ea: ; c7ea (3:47ea)
 	ldtx hl, TurnedPCOnText
 	call PrintScrollableText_NoTextBoxLabel
 	call Func_c84e
-.asm_c801
+.loop
 	ld a, $1
 	call Func_c29b
-.asm_c806
+.wait_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
-	jr nc, .asm_c806
+	jr nc, .wait_input
 	ld a, e
 	ld [wd0b9], a
 	ldh a, [hCurMenuItem]
 	cp e
-	jr nz, .asm_c82f
+	jr nz, .exit
 	cp $4
-	jr z, .asm_c82f
+	jr z, .exit
 	call Func_c2a3
 	ld a, [wd0b9]
 	ld hl, PointerTable_c846
 	call JumpToFunctionInTable
 	ld hl, Func_c84e
 	call Func_c32b
-	jr .asm_c801
-.asm_c82f
+	jr .loop
+.exit
 	call CloseTextBox
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOffText
@@ -1350,8 +1350,8 @@ Func_c8ed: ; c8ed (3:48ed)
 Func_c915: ; c915 (3:4915)
 	push bc
 	push de
-	ld de, $000c
-	ld bc, $1406
+	lb de, $00, $0c
+	lb bc, $14, $06
 	call AdjustCoordinatesForBGScroll
 	call Func_c3ca
 	pop de
@@ -1373,7 +1373,7 @@ SetNextScript: ; c935 (3:4935)
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld a, $3
+	ld a, OWMODE_SCRIPT
 	ld [wOverworldMode], a
 	pop hl
 	ret
@@ -1385,7 +1385,7 @@ Func_c943: ; c943 (3:4943)
 	ld l, MAP_SCRIPT_NPCS
 	call GetMapScriptPointer
 	jr nc, .quit
-.loadNPCLoop
+.load_npc_loop
 	ld a, l
 	ld [wTempPointer], a
 	ld a, h
@@ -1401,22 +1401,22 @@ Func_c943: ; c943 (3:4943)
 	push hl
 	ld a, [wLoadNPCFunction]
 	ld l, a
-	ld a, [wLoadNPCFunction+1]
+	ld a, [wLoadNPCFunction + 1]
 	ld h, a
 	or l
-	jr z, .noScript
+	jr z, .no_script
 	call CallHL2
-	jr nc, .nextNPC
-.noScript
+	jr nc, .next_npc
+.no_script
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
 	call Func_c998
 	farcall Func_1c485
-.nextNPC
+.next_npc
 	pop hl
 	ld bc, NPC_MAP_SIZE
 	add hl, bc
-	jr .loadNPCLoop
+	jr .load_npc_loop
 .quit
 	ld l, MAP_SCRIPT_POST_NPC
 	call CallMapScriptPointerIfExists
@@ -1427,17 +1427,17 @@ Func_c943: ; c943 (3:4943)
 
 Func_c998: ; c998 (3:4998)
 	ld a, [wTempNPC]
-	cp $22
+	cp NPC_AMY
 	ret nz
 	ld a, [wd3d0]
 	or a
 	ret z
 	ld b, $4
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_c9ae
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
 	ld b, $e
-.asm_c9ae
+.not_cgb
 	ld a, b
 	ld [wd3b1], a
 	ld a, $0
@@ -1468,14 +1468,14 @@ Func_c9cb: ; c9cb (3:49cb)
 	push hl
 	push bc
 	ld hl, wEventFlags
-	ld bc, $0040
-.asm_c9d3
+	ld bc, EVENT_FLAG_BYTES
+.loop
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, b
 	or c
-	jr nz, .asm_c9d3
+	jr nz, .loop
 	pop bc
 	pop hl
 	ret
@@ -1494,18 +1494,18 @@ DetermineImakuniRoom: ; c9e8 (3:49e8)
 	ld c, $0
 	get_flag_value EVENT_IMAKUNI_STATE
 	cp IMAKUNI_TALKED
-	jr c, .finish
-.tryLoadImakuniLoop
+	jr c, .skip
+.loop
 	call UpdateRNGSources
-	and $3
+	and %11
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, ImakuniPossibleRooms
 	add hl, bc
 	ld a, [wTempMap]
 	cp [hl]
-	jr z, .tryLoadImakuniLoop
-.finish
+	jr z, .loop
+.skip
 	ld a, c
 	set_flag_value EVENT_IMAKUNI_ROOM
 	ret
@@ -1575,13 +1575,13 @@ GetEventFlagValue: ; ca6c (3:4a6c)
 	call GetEventFlag
 	ld c, [hl]
 	ld a, [wLoadedFlagBits]
-.shiftLoop
+.loop
 	bit 0, a
-	jr nz, .lsbReached
+	jr nz, .done
 	srl a
 	srl c
-	jr .shiftLoop
-.lsbReached
+	jr .loop
+.done
 	and c
 	pop bc
 	pop hl
@@ -1609,13 +1609,13 @@ SetEventFlagValue: ; ca92 (3:4a92)
 	push bc
 	call GetEventFlag
 	ld a, [wLoadedFlagBits]
-.asm_ca9a
+.loop
 	bit 0, a
-	jr nz, .asm_caa4
+	jr nz, .done
 	srl a
 	sla c
-	jr .asm_ca9a
-.asm_caa4
+	jr .loop
+.done
 	ld a, [wLoadedFlagBits]
 	and c
 	ld c, a
@@ -1631,7 +1631,7 @@ SetEventFlagValue: ; ca92 (3:4a92)
 ; returns in a the byte db'd after the call to a function that calls this
 GetByteAfterCall: ; cab3 (3:4ab3)
 	push hl
-	ld hl, sp+$4
+	ld hl, sp+4
 	push bc
 	ld c, [hl]
 	inc hl
@@ -1671,41 +1671,41 @@ TryGiveMedalPCPacks: ; cad8 (3:4ad8)
 	push hl
 	push bc
 	ld hl, MedalEventFlags
-	ld bc, $0008
-.countMedalsLoop
+	lb bc, 0, 8
+.loop
 	ld a, [hli]
 	call GetEventFlagValue
-	jr z, .noMedal
+	jr z, .no_medal
 	inc b
-.noMedal
+.no_medal
 	dec c
-	jr nz, .countMedalsLoop
+	jr nz, .loop
 
 	ld c, b
 	set_flag_value EVENT_MEDAL_COUNT
 	ld a, c
 	push af
-	cp $8
-	jr nc, .givePacksForEightMedals
-	cp $7
-	jr nc, .givePacksForSevenMedals
-	cp $3
-	jr nc, .givePacksForThreeMedals
-	jr .finish
+	cp 8
+	jr nc, .give_packs_for_eight_medals
+	cp 7
+	jr nc, .give_packs_for_seven_medals
+	cp 3
+	jr nc, .give_packs_for_three_medals
+	jr .done
 
-.givePacksForEightMedals
+.give_packs_for_eight_medals
 	ld a, $c
 	farcall TryGivePCPack
 
-.givePacksForSevenMedals
+.give_packs_for_seven_medals
 	ld a, $b
 	farcall TryGivePCPack
 
-.givePacksForThreeMedals
+.give_packs_for_three_medals
 	ld a, $a
 	farcall TryGivePCPack
 
-.finish
+.done
 	pop af
 	pop bc
 	pop hl
@@ -1725,24 +1725,27 @@ MedalEventFlags: ; cb15 (3:4b15)
 GetEventFlag: ; cb1d (3:4b1d)
 	push bc
 	ld c, a
-	ld b, $0
+	ld b, 0
 	sla c
 	rl b
-	ld hl, EventFlagMods
+	ld hl, EventFlagMasks
 	add hl, bc
 	ld a, [hli]
 	ld c, a
 	ld a, [hl]
 	ld [wLoadedFlagBits], a
-	ld b, $0
+	ld b, 0
 	ld hl, wEventFlags
 	add hl, bc
 	pop bc
 	ret
 
-; offset - bytes to set or reset
-EventFlagMods: ; cb37 (3:4b37)
-	flag_def $3f, %10000000 ; EVENT_FLAG_00 ; 0-7 are reset when game resets
+; location in wEventFlags of each event flag:
+; offset - which byte holds the event flag
+; mask - which bits in the byte hold the value
+; events 0-7 are reset when game resets
+EventFlagMasks: ; cb37 (3:4b37)
+	flag_def $3f, %10000000 ; EVENT_FLAG_00
 	flag_def $3f, %01000000 ; EVENT_FLAG_01
 	flag_def $3f, %00100000 ; EVENT_TEMP_TALKED_TO_IMAKUNI
 	flag_def $3f, %00010000 ; EVENT_TEMP_DUELED_IMAKUNI
@@ -1905,14 +1908,14 @@ RST20: ; cc42 (3:4c42)
 	ld a, l
 	ld [wScriptPointer], a
 	ld a, h
-	ld [wScriptPointer+1], a
+	ld [wScriptPointer + 1], a
 	xor a
 	ld [wBreakScriptLoop], a
-.continueScriptLoop
+.loop
 	call RunOverworldScript
 	ld a, [wBreakScriptLoop] ; if you break out, it jumps
 	or a
-	jr z, .continueScriptLoop
+	jr z, .loop
 	ld hl, wScriptPointer
 	ld a, [hli]
 	ld c, a
@@ -1922,32 +1925,37 @@ RST20: ; cc42 (3:4c42)
 IncreaseScriptPointerBy1: ; cc60 (3:4c60)
 	ld a, 1
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy2: ; cc64 (3:4c64)
 	ld a, 2
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy4: ; cc68 (3:4c68)
 	ld a, 4
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy5: ; cc6c (3:4c6c)
 	ld a, 5
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy6: ; cc70 (3:4c70)
 	ld a, 6
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy7: ; cc74 (3:4c74)
 	ld a, 7
 	jr IncreaseScriptPointer
+
 IncreaseScriptPointerBy3: ; cc78 (3:4c78)
 	ld a, 3
-
 IncreaseScriptPointer: ; cc7a (3:4c7a)
 	ld c, a
 	ld a, [wScriptPointer]
 	add c
 	ld [wScriptPointer], a
-	ld a, [wScriptPointer+1]
+	ld a, [wScriptPointer + 1]
 	adc 0
-	ld [wScriptPointer+1], a
+	ld [wScriptPointer + 1], a
 	ret
 
 SetScriptPointer: ; cc8b (3:4c8b)
@@ -1958,27 +1966,27 @@ SetScriptPointer: ; cc8b (3:4c8b)
 	ret
 
 GetScriptArgs5AfterPointer: ; cc92 (3:4c92)
-	ld a, $5
+	ld a, 5
 	jr GetScriptArgsAfterPointer
 
 GetScriptArgs1AfterPointer: ; cc96 (3:4c96)
-	ld a, $1
+	ld a, 1
 	jr GetScriptArgsAfterPointer
 
 GetScriptArgs2AfterPointer: ; cc9a (3:4c9a)
-	ld a, $2
+	ld a, 2
 	jr GetScriptArgsAfterPointer
-GetScriptArgs3AfterPointer: ; cc9e (3:4c9e)
-	ld a, $3
 
+GetScriptArgs3AfterPointer: ; cc9e (3:4c9e)
+	ld a, 3
 GetScriptArgsAfterPointer: ; cca0 (3:4ca0)
 	push hl
 	ld l, a
 	ld a, [wScriptPointer]
 	add l
 	ld l, a
-	ld a, [wScriptPointer+1]
-	adc $0
+	ld a, [wScriptPointer + 1]
+	adc 0
 	ld h, a
 	ld a, [hli]
 	ld c, a
@@ -1999,7 +2007,7 @@ SetScriptControlByteFail: ; ccb9 (3:4cb9)
 
 ; Exits Script mode and runs the next instruction like normal
 ScriptCommand_EndScript: ; ccbe (3:4cbe)
-	ld a, $01
+	ld a, TRUE
 	ld [wBreakScriptLoop], a
 	jp IncreaseScriptPointerBy1
 
@@ -2027,7 +2035,7 @@ ScriptCommand_PrintText: ; ccdc (3:4cdc)
 	jp IncreaseScriptPointerBy3
 
 ScriptCommand_AskQuestionJumpDefaultYes: ; cce4 (3:4ce4)
-	ld a, $1
+	ld a, TRUE
 	ld [wDefaultYesOrNo], a
 ;	fallthrough
 
@@ -2039,12 +2047,12 @@ ScriptCommand_AskQuestionJump: ; cce9 (3:4ce9)
 	call Func_c8ed
 	ld a, [hCurMenuItem]
 	ld [wScriptControlByte], a
-	jr c, .asm_ccfe
+	jr c, .no_jump
 	call GetScriptArgs3AfterPointer
-	jr z, .asm_ccfe
+	jr z, .no_jump
 	jp SetScriptPointer
 
-.asm_ccfe
+.no_jump
 	jp IncreaseScriptPointerBy5
 
 ; args - prize cards, deck id, duel theme index
@@ -2058,20 +2066,20 @@ ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	farcall Func_118d3
 	ld a, [wcc19]
 	cp $ff
-	jr nz, .asm_cd26
+	jr nz, .not_aaron_duel
 	ld a, [wd695]
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, AaronDeckIDs
 	add hl, bc
 	ld a, [hl]
 	ld [wcc19], a
-.asm_cd26
+.not_aaron_duel
 	ld a, [wScriptNPC]
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-asm_cd2f:
+.start_duel
 	ld [wd0c4], a
 	ld [wcc14], a
 	push af
@@ -2089,10 +2097,10 @@ ScriptCommand_StartChallengeHallDuel: ; cd4f (3:4d4f)
 	call Func_cd66
 	ld a, [wd696]
 	farcall Func_118bf
-	ld a, $16
+	ld a, MUSIC_MATCH_START_2
 	ld [wMatchStartTheme], a
 	ld a, [wd696]
-	jr asm_cd2f
+	jr ScriptCommand_StartDuel.start_duel
 
 AaronDeckIDs: ; cd63 (3:4d63)
 	db LIGHTNING_AND_FIRE_DECK_ID
@@ -2120,9 +2128,9 @@ ScriptCommand_BattleCenter: ; cd76 (3:4d76)
 ScriptCommand_PrintVariableNPCText: ; cd83 (3:4d83)
 	ld a, [wScriptControlByte]
 	or a
-	jr nz, .printText
+	jr nz, .print_text
 	call GetScriptArgs3AfterPointer
-.printText
+.print_text
 	ld l, c
 	ld h, b
 	call Func_cc32
@@ -2131,7 +2139,7 @@ ScriptCommand_PrintVariableNPCText: ; cd83 (3:4d83)
 ScriptCommand_PrintTextForChallengeCup: ; cd94 (3:4d94)
 	get_flag_value EVENT_FLAG_44
 	dec a
-	and $3
+	and %11
 	add a
 	inc a
 	call GetScriptArgsAfterPointer
@@ -2143,9 +2151,9 @@ ScriptCommand_PrintTextForChallengeCup: ; cd94 (3:4d94)
 ScriptCommand_PrintVariableText: ; cda8 (3:4da8)
 	ld a, [wScriptControlByte]
 	or a
-	jr nz, .asm_cdb1
+	jr nz, .print_text
 	call GetScriptArgs3AfterPointer
-.asm_cdb1
+.print_text
 	ld l, c
 	ld h, b
 	call Func_c891
@@ -2157,7 +2165,7 @@ ScriptCommand_PrintTextQuitFully: ; cdb9 (3:4db9)
 	ld h, b
 	call Func_cc32
 	call CloseAdvancedDialogueBox
-	ld a, $1
+	ld a, TRUE
 	ld [wBreakScriptLoop], a
 	call IncreaseScriptPointerBy3
 	pop hl
@@ -2217,7 +2225,7 @@ ScriptCommand_MoveActiveNPCByDirection: ; ce26 (3:4e26)
 	add c
 	ld l, a
 	ld a, b
-	adc $0
+	adc 0
 	ld h, a
 	ld c, [hl]
 	inc hl
@@ -2228,10 +2236,10 @@ ScriptCommand_MoveActiveNPCByDirection: ; ce26 (3:4e26)
 ; set bit 7 to only rotate the NPC
 ExecuteNPCMovement: ; ce3a (3:4e3a)
 	farcall Func_1c78d
-.asm_ce3e
+.loop
 	call DoFrameIfLCDEnabled
 	farcall Func_1c7de
-	jr nz, .asm_ce3e
+	jr nz, .loop
 	jp IncreaseScriptPointerBy3
 
 ; Begin a series of NPC movements on the currently talking NPC
@@ -2296,14 +2304,14 @@ ScriptCommand_GiveBoosterPacks: ; ce8a (3:4e8a)
 	pop bc
 	ld a, b
 	cp NO_BOOSTER
-	jr z, .asm_ceb4
+	jr z, .done
 	farcall BoosterPack_1031b
 	call GetScriptArgs3AfterPointer
 	ld a, c
 	cp NO_BOOSTER
-	jr z, .asm_ceb4
+	jr z, .done
 	farcall BoosterPack_1031b
-.asm_ceb4
+.done
 	call Func_c2d4
 	jp IncreaseScriptPointerBy4
 
@@ -2312,7 +2320,7 @@ ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	ld [wd117], a
 	call Func_c2a3
 	ld hl, .booster_type_table
-.giveBoosterLoop
+.loop
 	ld a, [hl]
 	cp NO_BOOSTER
 	jr z, .done
@@ -2322,7 +2330,7 @@ ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	ld [wd117], a
 	pop hl
 	inc hl
-	jr .giveBoosterLoop
+	jr .loop
 .done
 	call Func_c2d4
 	jp IncreaseScriptPointerBy1
@@ -2335,17 +2343,17 @@ ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	db NO_BOOSTER ; $ff
 
 ; Shows the card received screen for a given promotional card
-; arg can either be the card, $00 for a wram card, or $ff for the 4 legends
+; arg can either be the card, $00 for a wram card, or $ff for the 4 legendary cards
 ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	call Func_c2a3
 	ld a, c
 	cp $ff
-	jr z, .asm_cf09
+	jr z, .legendary_card
 	or a
-	jr nz, .asm_cef0
+	jr nz, .show_card
 	ld a, [wd697]
 
-.asm_cef0
+.show_card
 	push af
 	farcall Func_10000
 	farcall Func_10031
@@ -2356,34 +2364,34 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	call Func_c2d4
 	jp IncreaseScriptPointerBy2
 
-.asm_cf09
+.legendary_card
 	xor a
-	jr .asm_cef0
+	jr .show_card
 
 ScriptCommand_JumpIfCardOwned: ; cf0c (3:4f0c)
 	ld a, c
 	call GetCardCountInCollectionAndDecks
-	jr asm_cf16
+	jr ScriptCommand_JumpIfCardInCollection.count_check
 
 ScriptCommand_JumpIfCardInCollection: ; cf12 (3:4f12)
 	ld a, c
 	call GetCardCountInCollection
 
-asm_cf16:
+.count_check
 	or a
-	jr nz, asm_cf1f
+	jr nz, .pass_try_jump
 
-asm_cf19:
+.fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
 
-asm_cf1f:
+.pass_try_jump
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
-	jr z, asm_cf2a
+	jr z, .no_jump
 	jp SetScriptPointer
 
-asm_cf2a:
+.no_jump
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_JumpIfEnoughCardsOwned: ; cf2d (3:4f2d)
@@ -2393,22 +2401,22 @@ ScriptCommand_JumpIfEnoughCardsOwned: ; cf2d (3:4f2d)
 	call GetAmountOfCardsOwned
 	ld a, h
 	cp b
-	jr nz, .asm_cf3b
+	jr nz, .high_byte_not_equal
 	ld a, l
 	cp c
 
-.asm_cf3b
-	jr nc, asm_cf1f
-	jr asm_cf19
+.high_byte_not_equal
+	jr nc, ScriptCommand_JumpIfCardInCollection.pass_try_jump
+	jr ScriptCommand_JumpIfCardInCollection.fail
 
 ; Gives the first arg as a card. If that's 0 pulls from wd697
 ScriptCommand_GiveCard: ; cf3f (3:4f3f)
 	ld a, c
 	or a
-	jr nz, .giveCard
+	jr nz, .give_card
 	ld a, [wd697]
 
-.giveCard
+.give_card
 	call AddCardToCollection
 	jp IncreaseScriptPointerBy2
 
@@ -2418,83 +2426,82 @@ ScriptCommand_TakeCard: ; cf4c (3:4f4c)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_JumpIfAnyEnergyCardsInCollection: ; cf53 (3:4f53)
-	ld c, $1
-	ld b, $0
-.asm_cf57
+	ld c, GRASS_ENERGY
+	ld b, 0
+.loop
 	ld a, c
 	call GetCardCountInCollection
 	add b
 	ld b, a
 	inc c
 	ld a, c
-	cp $8
-	jr c, .asm_cf57
+	cp DOUBLE_COLORLESS_ENERGY + 1
+	jr c, .loop
 	ld a, b
 	or a
-	jr nz, Func_cf6d
-Func_cf67: ; cf67 (3:4f67)
+	jr nz, .pass_try_jump
+
+.fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy3
 
-Func_cf6d: ; cf6d (3:4f6d)
+.pass_try_jump
 	call SetScriptControlBytePass
 	call GetScriptArgs1AfterPointer
-	jr z, .asm_cf78
+	jr z, .no_jump
 	jp SetScriptPointer
 
-.asm_cf78
+.no_jump
 	jp IncreaseScriptPointerBy3
 
 ScriptCommand_RemoveAllEnergyCardsFromCollection: ; cf7b (3:4f7b)
-	ld c, $1
-.asm_cf7d
+	ld c, GRASS_ENERGY
+.next_energy
 	push bc
 	ld a, c
 	call GetCardCountInCollection
-	jr c, .asm_cf8c
+	jr c, .no_energy
 	ld b, a
-.asm_cf85
+.remove_loop
 	ld a, c
 	call RemoveCardFromCollection
 	dec b
-	jr nz, .asm_cf85
+	jr nz, .remove_loop
 
-.asm_cf8c
+.no_energy
 	pop bc
 	inc c
 	ld a, c
-	cp $8
-	jr c, .asm_cf7d
+	cp DOUBLE_COLORLESS_ENERGY + 1
+	jr c, .next_energy
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_JumpBasedOnFightingClubPupilStatus: ; cf96 (3:4f96)
-	ld c, $0
+	ld c, 0
 	get_flag_value EVENT_FLAG_11
 	or a
-	jr z, Func_cfc0
-	cp a, $08
-	jr c, .asm_cfa4
+	jr z, .first_interaction
+	cp 8
+	jr c, .pupil1_not_defeated
 	inc c
-
-.asm_cfa4
+.pupil1_not_defeated
 	get_flag_value EVENT_FLAG_17
-	cp $8
-	jr c, .asm_cfad
+	cp 8
+	jr c, .pupil2_not_defeated
 	inc c
-
-.asm_cfad
+.pupil2_not_defeated
 	get_flag_value EVENT_FLAG_20
-	cp a, $08
-	jr c, .asm_cfb6
+	cp 8
+	jr c, .pupil3_not_defeated
 	inc c
-.asm_cfb6
+.pupil3_not_defeated
 	ld a, c
 	rlca
-	add $3
+	add 3
 	call GetScriptArgsAfterPointer
 	jp SetScriptPointer
 
-Func_cfc0: ; cfc0 (3:4fc0)
+.first_interaction
 	call GetScriptArgs1AfterPointer
 	jp SetScriptPointer
 
@@ -2508,53 +2515,53 @@ ScriptCommand_SetActiveNPCDirection: ; cfc6 (3:4fc6)
 ScriptCommand_PickNextMan1RequestedCard: ; cfd4 (3:4fd4)
 	get_flag_value EVENT_FLAG_2D
 	ld b, a
-.asm_cfd9
-	ld a, $5
+.choose_again
+	ld a, Man1RequestedCardsList.end - Man1RequestedCardsList
 	call Random
-	ld e, $1
+	ld e, 1
 	ld c, a
 	push bc
 	or a
-	jr z, .asm_cfea
-.asm_cfe5
+	jr z, .skip_shift
+.shift_loop
 	sla e
 	dec c
-	jr nz, .asm_cfe5
-
-.asm_cfea
+	jr nz, .shift_loop
+.skip_shift
 	ld a, e
-	and b
+	and b ; has this card already been chosed before?
 	pop bc
-	jr nz, .asm_cfd9
+	jr nz, .choose_again
 	ld a, e
 	or b
 	push bc
 	ld c, a
 	set_flag_value EVENT_FLAG_2D
 	pop bc
-	ld b, $0
-	ld hl, Data_d006
+	ld b, 0
+	ld hl, Man1RequestedCardsList
 	add hl, bc
 	ld c, [hl]
 	set_flag_value EVENT_FLAG_2B
 	jp IncreaseScriptPointerBy1
 
-Data_d006: ; d006 (3:5006)
+Man1RequestedCardsList: ; d006 (3:5006)
 	db GRAVELER
 	db OMASTAR
 	db PARASECT
 	db RAPIDASH
 	db WEEZING
+.end
 
 ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot: ; d00b (3:500b)
 	sla c
-	ld b, $0
+	ld b, 0
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	get_flag_value EVENT_FLAG_2B
 	ld e, a
-	ld d, $0
+	ld d, 0
 	call GetCardName
 	pop hl
 	ld [hl], e
@@ -2565,14 +2572,14 @@ ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot: ; d00b (3:500b)
 ScriptCommand_JumpIfMan1RequestedCardOwned: ; d025 (3:5025)
 	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollectionAndDecks
-	jp c, Func_cf67
-	jp Func_cf6d
+	jp c, ScriptCommand_JumpIfAnyEnergyCardsInCollection.fail
+	jp ScriptCommand_JumpIfAnyEnergyCardsInCollection.pass_try_jump
 
 ScriptCommand_JumpIfMan1RequestedCardInCollection: ; d032 (3:5032)
 	get_flag_value EVENT_FLAG_2B
 	call GetCardCountInCollection
-	jp c, Func_cf67
-	jp Func_cf6d
+	jp c, ScriptCommand_JumpIfAnyEnergyCardsInCollection.fail
+	jp ScriptCommand_JumpIfAnyEnergyCardsInCollection.pass_try_jump
 
 ScriptCommand_RemoveMan1RequestedCardFromCollection: ; d03f (3:503f)
 	get_flag_value EVENT_FLAG_2B
@@ -2592,7 +2599,7 @@ ScriptCommand_SetPlayerDirection: ; d055 (3:5055)
 	call UpdatePlayerDirection
 	jp IncreaseScriptPointerBy2
 
-; arg1 - Direction (index in PlayerMovementOffsetTable)
+; arg1 - Direction (index in PlayerMovementOffsetTable_Tiles)
 ; arg2 - Tiles Moves (Speed)
 ScriptCommand_MovePlayer: ; 505c (3:505c)
 	ld a, c
@@ -2600,13 +2607,13 @@ ScriptCommand_MovePlayer: ; 505c (3:505c)
 	ld a, b
 	ld [wd33a], a
 	call StartScriptedMovement
-.asm_d067
+.wait
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
 	call Func_c53d
 	ld a, [wPlayerCurrentlyMoving]
 	and $03
-	jr nz, .asm_d067
+	jr nz, .wait
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
 	jp IncreaseScriptPointerBy3
@@ -2638,11 +2645,10 @@ ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	pop bc
 	ld e, c
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_d0b6
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
 	ld e, b
-
-.asm_d0b6
+.not_cgb
 	ld a, e
 	farcall Func_1c57b
 	jp IncreaseScriptPointerBy4
@@ -2672,20 +2678,20 @@ ScriptCommand_JumpIfActiveNPCCoordsMatch: ; d0d9 (3:50d9)
 	farcall Func_1c477
 	ld a, e
 	cp c
-	jp nz, ScriptEventFailedNoJump
+	jp nz, ScriptCommand_JumpIfFlagEqual.fail
 	ld a, d
 	cp b
-	jp nz, ScriptEventFailedNoJump
-	jp ScriptEventPassedTryJump
+	jp nz, ScriptCommand_JumpIfFlagEqual.fail
+	jp ScriptCommand_JumpIfFlagEqual.pass_try_jump
 
 ScriptCommand_JumpIfPlayerCoordsMatch: ; d0f2 (3:50f2)
 	ld a, [wPlayerXCoord]
 	cp c
-	jp nz, ScriptEventFailedNoJump
+	jp nz, ScriptCommand_JumpIfFlagEqual.fail
 	ld a, [wPlayerYCoord]
 	cp b
-	jp nz, ScriptEventFailedNoJump
-	jp ScriptEventPassedTryJump
+	jp nz, ScriptCommand_JumpIfFlagEqual.fail
+	jp ScriptCommand_JumpIfFlagEqual.pass_try_jump
 
 ScriptCommand_JumpIfNPCLoaded: ; d103 (3:5103)
 	ld a, [wLoadedNPCTempIndex]
@@ -2695,14 +2701,14 @@ ScriptCommand_JumpIfNPCLoaded: ; d103 (3:5103)
 	ld a, c
 	ld [wTempNPC], a
 	call FindLoadedNPC
-	jr c, .asm_d119
-	call ScriptCommand_JumpIfFlagNonzero2.passTryJump
-	jr .asm_d11c
+	jr c, .not_loaded
+	call ScriptCommand_JumpIfFlagNonzero2.pass_try_jump
+	jr .done
 
-.asm_d119
+.not_loaded
 	call ScriptCommand_JumpIfFlagZero2.fail
 
-.asm_d11c
+.done
 	pop af
 	ld [wTempNPC], a
 	pop af
@@ -2720,14 +2726,14 @@ ScriptCommand_ShowMedalReceivedScreen: ; d125 (3:5125)
 
 ScriptCommand_LoadCurrentMapNameIntoTxRamSlot: ; d135 (3:5135)
 	sla c
-	ld b, $0
+	ld b, 0
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
 	ld a, [wd32e]
 	rlca
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, MapNames - 2
 	add hl, bc
 	ld e, [hl]
@@ -2753,14 +2759,14 @@ MapNames: ; d153 (3:5153)
 	tx ChallengeHallMapNameText
 	tx PokemonDomeMapNameText
 
-ScriptCommand_LoadActiveNPCNameIntoTxRamSlot: ; d16b (3:516b)
+ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot: ; d16b (3:516b)
 	ld hl, wCurrentNPCNameTx
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
 	push de
 	sla c
-	ld b, $0
+	ld b, 0
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
@@ -2769,7 +2775,7 @@ ScriptCommand_LoadActiveNPCNameIntoTxRamSlot: ; d16b (3:516b)
 	pop hl
 	ld a, [wCurrentNPCNameTx]
 	ld [hli], a
-	ld a, [wCurrentNPCNameTx+1]
+	ld a, [wCurrentNPCNameTx + 1]
 	ld [hl], a
 	pop de
 	ld hl, wCurrentNPCNameTx
@@ -2791,27 +2797,25 @@ ScriptCommand_PickChallengeHallOpponent: ; d195 (3:5195)
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_OpenMenu: ; d1ad (3:51ad)
-	call MainMenu_c75a
+	call StartMenu
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_PickChallengeCupPrizeCard: ; d1b3 (3:51b3)
 	get_flag_value EVENT_FLAG_44
 	dec a
-	cp $2
-	jr c, .asm_d1c3
-	ld a, $d
+	cp 2
+	jr c, .first_or_second_cup
+	ld a, (ChallengeCupPrizeCards.end - ChallengeCupPrizeCards) / 3 - 2
 	call Random
-	add $2
-;	fallthrough
-
-.asm_d1c3
+	add 2
+.first_or_second_cup
 	ld hl, ChallengeCupPrizeCards
-asm_d1c6:
+.get_card_from_list
 	ld e, a
 	add a
 	add e
 	ld e, a
-	ld d, $0
+	ld d, 0
 	add hl, de
 	ld a, [hli]
 	ld [wd697], a
@@ -2866,36 +2870,36 @@ ChallengeCupPrizeCards: ; d1dc (3:51dc)
 
 	db FLYING_PIKACHU
 	tx FlyingPikachuTradeCardName
+.end
 
 ScriptCommand_PickLegendaryCard: ; d209 (3:5209)
 	get_flag_value EVENT_FLAG_71
 	ld e, a
-.asm_d20e
+.new_random
 	call UpdateRNGSources
-	ld d, $8
-	and $3
+	ld d, %00001000
+	and %11
 	ld c, a
 	ld b, a
-.asm_d217
-	jr z, .asm_d21e
+.loop
+	jr z, .done
 	srl d
 	dec b
-	jr .asm_d217
-
-.asm_d21e
+	jr .loop
+.done
 	ld a, d
-	and e
-	jr nz, .asm_d20e
+	and e ; has this legendary been given already?
+	jr nz, .new_random
 	push bc
-	ld b, $0
+	ld b, 0
 	ld hl, Flags_d240
 	add hl, bc
 	ld a, [hl]
-	call MaxOutEventFlag
+	call MaxOutEventFlag ; also modifies EVENT_FLAG_71
 	pop bc
 	ld hl, LegendaryCards
 	ld a, c
-	jr asm_d1c6
+	jr ScriptCommand_PickChallengeCupPrizeCard.get_card_from_list
 
 LegendaryCards: ; d234 (3:5234)
 	db ZAPDOS3
@@ -2989,10 +2993,9 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld h, [hl]
 	ld l, a
 	or h
-	jr z, .asm_d2a8
+	jr z, .no_text
 	call Func_c8ba
-
-.asm_d2a8
+.no_text
 	ld a, $1
 	call Func_c29b
 	pop hl
@@ -3009,27 +3012,27 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld [wd417], a
 	push hl
 
-.asm_d2c1
+.wait_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
-	jr nc, .asm_d2c1
+	jr nc, .wait_input
 	ld a, [hCurMenuItem]
 	cp e
-	jr z, .asm_d2d9
+	jr z, .got_result
 	ld a, [wd417]
 	or a
-	jr z, .asm_d2c1
+	jr z, .wait_input
 	ld e, a
 	ld [hCurMenuItem], a
 
-.asm_d2d9
+.got_result
 	pop hl
 	ld a, [hli]
 	push hl
 	ld h, [hl]
 	ld l, a
 	ld a, e
-	ld [hl], a
+	ld [hl], a ; store result
 	add a
 	ld c, a
 	ld b, $0
@@ -3039,14 +3042,13 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld h, [hl]
 	ld l, a
 	or h
-	jr z, .asm_d2f5
+	jr z, .no_text_2
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-
-.asm_d2f5
+.no_text_2
 	ret
 
 ScriptCommand_ShowSamNormalMultichoice: ; d2f6 (3:52f6)
@@ -3116,7 +3118,7 @@ ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 ScriptCommand_EnterMap: ; d36d (3:536d)
 	ld a, [wScriptPointer]
 	ld l, a
-	ld a, [wScriptPointer+1]
+	ld a, [wScriptPointer + 1]
 	ld h, a
 	inc hl
 	ld a, [hli]
@@ -3143,19 +3145,19 @@ ScriptCommand_SaveGame: ; d396 (3:5396)
 ScriptCommand_GiftCenter: ; d39d (3:539d)
 	ld a, c
 	or a
-	jr nz, .asm_d3ac
+	jr nz, .load_gift_center
+	; show menu
 	farcall Func_10dba
 	ld c, a
 	set_flag_value EVENT_FLAG_72
-	jr .asm_d3b6
+	jr .done
 
-.asm_d3ac
+.load_gift_center
 	ld a, GAME_EVENT_GIFT_CENTER
 	ld [wGameEvent], a
 	ld hl, wd0b4
 	set 6, [hl]
-
-.asm_d3b6
+.done
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlayCredits: ; d3b9 (3:53b9)
@@ -3265,64 +3267,64 @@ ScriptCommand_JumpIfFlagZero1: ; d460 (3:5460)
 	ld a, c
 	call GetEventFlagValue
 	or a
-	jr z, .passTryJump
+	jr z, .pass_try_jump
 
 .fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy4
 
-.passTryJump
+.pass_try_jump
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
-	jr z, .noJumpTarget
+	jr z, .no_jump
 	jp SetScriptPointer
 
-.noJumpTarget
+.no_jump
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_JumpIfFlagNonzero1: ; d47b (3:547b)
 	ld a, c
 	call GetEventFlagValue
 	or a
-	jr nz, ScriptCommand_JumpIfFlagZero1.passTryJump
+	jr nz, ScriptCommand_JumpIfFlagZero1.pass_try_jump
 	jr ScriptCommand_JumpIfFlagZero1.fail
 
 ; args - event flag, value, jump address
 ScriptCommand_JumpIfFlagEqual: ; d484 (3:5484)
 	call GetEventFlagValueBC
 	cp c
-	jr z, ScriptEventPassedTryJump
+	jr z, .pass_try_jump
 
-ScriptEventFailedNoJump: ; d48a (3:548a)
+.fail
 	call SetScriptControlByteFail
 	jp IncreaseScriptPointerBy5
 
-ScriptEventPassedTryJump: ; d490 (3:5490)
+.pass_try_jump
 	call SetScriptControlBytePass
 	call GetScriptArgs3AfterPointer
-	jr z, .noJumpAddress
+	jr z, .no_jump
 	jp SetScriptPointer
 
-.noJumpAddress
+.no_jump
 	jp IncreaseScriptPointerBy5
 
 ScriptCommand_JumpIfFlagNotEqual: ; d49e (3:549e)
 	call GetEventFlagValueBC
 	cp c
-	jr nz, ScriptEventPassedTryJump
-	jr ScriptEventFailedNoJump
+	jr nz, ScriptCommand_JumpIfFlagEqual.pass_try_jump
+	jr ScriptCommand_JumpIfFlagEqual.fail
 
 ScriptCommand_JumpIfFlagNotLessThan: ; d4a6 (3:54a6)
 	call GetEventFlagValueBC
 	cp c
-	jr nc, ScriptEventPassedTryJump
-	jr ScriptEventFailedNoJump
+	jr nc, ScriptCommand_JumpIfFlagEqual.pass_try_jump
+	jr ScriptCommand_JumpIfFlagEqual.fail
 
 ScriptCommand_JumpIfFlagLessThan: ; d4ae (3:54ae)
 	call GetEventFlagValueBC
 	cp c
-	jr c, ScriptEventPassedTryJump
-	jr ScriptEventFailedNoJump
+	jr c, ScriptCommand_JumpIfFlagEqual.pass_try_jump
+	jr ScriptCommand_JumpIfFlagEqual.fail
 
 ; Gets event flag at c (Script defaults)
 ; c takes on the value of b as a side effect
@@ -3348,19 +3350,20 @@ ScriptCommand_JumpIfFlagNonzero2: ; d4ca (3:54ca)
 	or a
 	jr z, ScriptCommand_JumpIfFlagZero2.fail
 
-.passTryJump
+.pass_try_jump
 	call SetScriptControlBytePass
 	call GetScriptArgs2AfterPointer
-	jr z, .noJumpArgs
+	jr z, .no_jump
 	jp SetScriptPointer
-.noJumpArgs
+
+.no_jump
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_JumpIfFlagZero2: ; d4df (3:54df)
 	ld a, c
 	call GetEventFlagValue
 	or a
-	jr z, ScriptCommand_JumpIfFlagNonzero2.passTryJump
+	jr z, ScriptCommand_JumpIfFlagNonzero2.pass_try_jump
 
 .fail
 	call SetScriptControlByteFail
@@ -3456,7 +3459,7 @@ Script_ChallengeMachine: ; d57d (3:557d)
 	quit_script_fully
 
 Script_Tech1: ; d583 (3:5583)
-	lb bc, 0, EnergyCardListEnd - EnergyCardList
+	lb bc, 0, EnergyCardList.end - EnergyCardList
 	ld hl, EnergyCardList
 .count_loop
 	ld a, [hli]
@@ -3475,7 +3478,7 @@ Script_Tech1: ; d583 (3:5583)
 	quit_script_fully
 
 .low_on_energies
-	ld c, EnergyCardListEnd - EnergyCardList
+	ld c, EnergyCardList.end - EnergyCardList
 	ld hl, EnergyCardList
 .next_energy_card
 	ld b, 10
@@ -3505,7 +3508,7 @@ EnergyCardList: ; d5c4 (3:55c4)
 	db LIGHTNING_ENERGY
 	db FIGHTING_ENERGY
 	db PSYCHIC_ENERGY
-EnergyCardListEnd:
+.end
 
 Script_Tech2: ; d5ca (3:55ca)
 	start_script
@@ -4263,10 +4266,10 @@ Script_dad0: ; dad0 (3:5ad0)
 Preload_NikkiInIshiharasHouse: ; dadd (3:5add)
 	get_flag_value EVENT_FLAG_35
 	cp $01
-	jr nz, .dontLoadNikki
+	jr nz, .dont_load
 	scf
 	ret
-.dontLoadNikki
+.dont_load
 	or a
 	ret
 
@@ -4807,7 +4810,7 @@ Preload_MichaelInFightingClub: ; de79 (3:5e79)
 	ccf
 	ret
 
-Script_de81: ; de81 (3:5e81)
+Script_MichaelRematch: ; de81 (3:5e81)
 	print_npc_text Text0491
 	ask_question_jump Text0492, .ows_de8d
 	print_npc_text Text0493
@@ -5885,7 +5888,7 @@ Preload_MichaelInGrassClubEntrance: ; e56a (3:656a)
 
 Script_Michael: ; e573 (3:6573)
 	start_script
-	jump_if_flag_not_less_than EVENT_FLAG_11, $08, Script_de81
+	jump_if_flag_not_less_than EVENT_FLAG_11, $08,  Script_MichaelRematch
 	jump_if_flag_equal EVENT_FLAG_11, $01, NULL
 	print_variable_npc_text Text06d8, Text06d9
 	script_set_flag_value EVENT_FLAG_11, $02
@@ -7078,27 +7081,27 @@ SlowpokePaintingObjectTable: ; ed5e (3:6d5e)
 ; Searches to try to find a match, and starts a Script if possible
 FindExtraInteractableObjects: ; ed64 (3:6d64)
 	ld de, $5
-.findObjectMatchLoop
+.loop
 	ld a, [hl]
 	or a
 	ret z
 	push hl
 	ld a, [wPlayerXCoord]
 	cp [hl]
-	jr nz, .didNotMatch
+	jr nz, .not_match
 	inc hl
 	ld a, [wPlayerYCoord]
 	cp [hl]
-	jr nz, .didNotMatch
+	jr nz, .not_match
 	inc hl
 	ld a, [wPlayerDirection]
 	cp [hl]
-	jr z, .foundObject
-.didNotMatch
+	jr z, .match
+.not_match
 	pop hl
 	add hl, de
-	jr .findObjectMatchLoop
-.foundObject
+	jr .loop
+.match
 	inc hl
 	ld c, [hl]
 	inc hl
@@ -7430,13 +7433,13 @@ Script_Ken_AlreadyHaveMedal: ; ef83 (3:6f83)
 Preload_Clerk9: ; ef96 (3:6f96)
 	call TryGiveMedalPCPacks
 	get_flag_value EVENT_MEDAL_COUNT
-	ld hl, .jumpTable
+	ld hl, .jump_table
 	cp $09
 	jp c, JumpToFunctionInTable
 	debug_ret
 	jr .asm_efe4
 
-.jumpTable
+.jump_table
 	dw .asm_efe4
 	dw .asm_efe4
 	dw .asm_efe4
@@ -7553,7 +7556,7 @@ ChallengeHallLobbyLoadMap: ; f088 (3:7088)
 	get_flag_value EVENT_FLAG_58
 	or a
 	ret z
-	ld a, $02
+	ld a, NPC_RONALD1
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	ld bc, Script_f166
@@ -7933,7 +7936,7 @@ Script_f353: ; f353 (3:7353)
 	move_active_npc NPCMovement_f37d
 	do_frames 20
 	move_active_npc NPCMovement_f390
-	load_active_npc_name_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $00
 	print_npc_text Text0532
 	close_text_box
 	move_active_npc NPCMovement_f37f
@@ -7988,8 +7991,8 @@ Script_LostAtChallengeHall: ; f392 (3:7392)
 	move_active_npc NPCMovement_f390
 	jump_if_flag_equal EVENT_FLAG_45, $02, Script_f410
 	jump_if_flag_equal EVENT_FLAG_45, $03, Script_f410.ows_f41a
-	load_active_npc_name_into_txram_slot $00
-	load_active_npc_name_into_txram_slot $01
+	load_challenge_hall_npc_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $01
 	print_npc_text Text0536
 .ows_f3ae
 	close_text_box
@@ -8047,8 +8050,8 @@ NPCMovement_f40d: ; f40d (3:740d)
 	db $ff
 
 Script_f410: ; f410 (3:7410)
-	load_active_npc_name_into_txram_slot $00
-	load_active_npc_name_into_txram_slot $01
+	load_challenge_hall_npc_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $01
 	print_npc_text Text0538
 	script_jump Script_LostAtChallengeHall.ows_f3ae
 
@@ -8082,7 +8085,7 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	jump_if_flag_equal EVENT_FLAG_45, $01, NULL
 	print_variable_npc_text Text053c, Text053d
 	move_active_npc NPCMovement_f37f
-	load_active_npc_name_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $00
 	print_npc_text Text053e
 	close_text_box
 	move_challenge_hall_npc NPCMovement_f4c8
@@ -8092,7 +8095,7 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	pick_challenge_hall_opponent
 	set_challenge_hall_npc_coords 20, 20
 	move_challenge_hall_npc NPCMovement_f4d0
-	load_active_npc_name_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $00
 	jump_if_flag_equal EVENT_FLAG_45, $02, NULL
 	print_variable_npc_text Text0540, Text0541
 	move_active_npc NPCMovement_f383
@@ -8152,7 +8155,7 @@ NPCMovement_f4d8: ; f4d8 (3:74d8)
 Script_f4db: ; f4db (3:74db)
 	print_npc_text Text054a
 	move_active_npc NPCMovement_f37f
-	load_active_npc_name_into_txram_slot $00
+	load_challenge_hall_npc_into_txram_slot $00
 	print_npc_text Text054b
 	close_text_box
 	jump_if_flag_equal EVENT_FLAG_44, $03, .ows_f513
@@ -8232,13 +8235,13 @@ Func_f580: ; f580 (3:7580)
 	jr z, .pick_challenger_include_ronald
 	get_flag_value EVENT_FLAG_45
 	cp $3
-	ld d, ChallengeHallNPCsEnd - ChallengeHallNPCs - 1 ; discount Ronald
+	ld d, ChallengeHallNPCs.end - ChallengeHallNPCs - 1 ; discount Ronald
 	jr nz, .pick_challenger
 	ld a, NPC_RONALD1
 	jr .force_ronald
 
 .pick_challenger_include_ronald
-	ld d, ChallengeHallNPCsEnd - ChallengeHallNPCs
+	ld d, ChallengeHallNPCs.end - ChallengeHallNPCs
 
 .pick_challenger
 	ld a, d
@@ -8283,7 +8286,7 @@ ChallengeHallNPCs: ; f5b3 (3:75b3)
 	db NPC_ADAM
 	db NPC_JONATHAN
 	db NPC_RONALD1
-ChallengeHallNPCsEnd:
+.end
 
 Func_f5cc: ; f5cc (3:75cc)
 	call Func_f5e9
@@ -9264,7 +9267,7 @@ Func_fc2b: ; fc2b (3:7c2b)
 	ld a, LOW(ClerkNPCName_)
 	ld [wCurrentNPCNameTx], a
 	ld a, HIGH(ClerkNPCName_)
-	ld [wCurrentNPCNameTx+1], a
+	ld [wCurrentNPCNameTx + 1], a
 	jp SetNextScript
 
 PointerTable_fc4c: ; fc4c (3:7c4c)
@@ -9299,10 +9302,10 @@ Script_fc68: ; fc68 (3:7c68)
 Preload_GiftCenterClerk: ; fc6c (3:7c6c)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr z, .notCGB
+	jr z, .cgb
 	ld a, NORTH
 	ld [wLoadNPCDirection], a
-.notCGB
+.cgb
 	scf
 	ret
 

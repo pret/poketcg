@@ -942,55 +942,55 @@ Text0322: ; 3e64c (f:664c)
 	line ""
 	done
 
-Text0323: ; 3e660 (f:6660)
+OverworldMapMasonLaboratoryText: ; 3e660 (f:6660)
 	text "  Mason Laboratory  "
 	done
 
-Text0324: ; 3e676 (f:6676)
+OverworldMapIshiharasHouseText: ; 3e676 (f:6676)
 	text "  ISHIHARA's House  "
 	done
 
-Text0325: ; 3e68c (f:668c)
+OverworldMapFightingClubText: ; 3e68c (f:668c)
 	text "   Fighting Club    "
 	done
 
-Text0326: ; 3e6a2 (f:66a2)
+OverworldMapRockClubText: ; 3e6a2 (f:66a2)
 	text "     Rock Club      "
 	done
 
-Text0327: ; 3e6b8 (f:66b8)
+OverworldMapWaterClubText: ; 3e6b8 (f:66b8)
 	text "     Water Club     "
 	done
 
-Text0328: ; 3e6ce (f:66ce)
+OverworldMapLightningClubText: ; 3e6ce (f:66ce)
 	text "   Lightning Club   "
 	done
 
-Text0329: ; 3e6e4 (f:66e4)
+OverworldMapGrassClubText: ; 3e6e4 (f:66e4)
 	text "     Grass Club     "
 	done
 
-Text032a: ; 3e6fa (f:66fa)
+OverworldMapPsychicClubText: ; 3e6fa (f:66fa)
 	text "    Psychic Club    "
 	done
 
-Text032b: ; 3e710 (f:6710)
+OverworldMapScienceClubText: ; 3e710 (f:6710)
 	text "    Science Club    "
 	done
 
-Text032c: ; 3e726 (f:6726)
+OverworldMapFireClubText: ; 3e726 (f:6726)
 	text "     Fire Club      "
 	done
 
-Text032d: ; 3e73c (f:673c)
+OverworldMapChallengeHallText: ; 3e73c (f:673c)
 	text "   Challenge Hall   "
 	done
 
-Text032e: ; 3e752 (f:6752)
+OverworldMapPokemonDomeText: ; 3e752 (f:6752)
 	text "    Pokémon Dome    "
 	done
 
-Text032f: ; 3e768 (f:6768)
+OverworldMapMysteryHouseText: ; 3e768 (f:6768)
 	text "     ??'s House     "
 	done
 
@@ -1055,7 +1055,7 @@ PauseMenuOptionsText: ; 3e810 (f:6810)
 	line "Exit"
 	done
 
-Text033e: ; 3e834 (f:6834)
+DebugPauseMenuOptionsText: ; 3e834 (f:6834)
 	text "Status"
 	line "Diary"
 	line "Deck"

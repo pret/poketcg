@@ -484,7 +484,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	rlca
 	ld e, a
 	ld d, $0
-	ld hl, Unknown_397b
+	ld hl, OverworldMapNames
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -1058,7 +1058,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfNPCLoaded
 	dw ScriptCommand_ShowMedalReceivedScreen
 	dw ScriptCommand_LoadCurrentMapNameIntoTxRamSlot
-	dw ScriptCommand_LoadActiveNPCNameIntoTxRamSlot
+	dw ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot
 	dw ScriptCommand_StartChallengeHallDuel
 	dw ScriptCommand_PrintTextForChallengeCup
 	dw ScriptCommand_MoveChallengeHallNPC
