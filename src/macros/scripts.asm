@@ -389,7 +389,7 @@ ENDM
 ; Shows the medal received screen for the given master medal
 show_medal_received_screen: MACRO
 	run_command ScriptCommand_ShowMedalReceivedScreen
-	db \1 ; medal event
+	db \1 ; medal event (ex EVENT_BEAT_NIKKI)
 ENDM
 
 ; Loads the current map name into the given txram slot
@@ -636,28 +636,28 @@ ENDM
 ; Sets a flag's value
 script_set_flag_value: MACRO
 	run_command ScriptCommand_SetFlagValue
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; new value
 ENDM
 
 ; Jumps to a script position if a given flag is zero
 jump_if_flag_zero_1: MACRO
 	run_command ScriptCommand_JumpIfFlagZero1
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
 ; Jumps to a script position if a given flag is nonzero
 jump_if_flag_nonzero_1: MACRO
 	run_command ScriptCommand_JumpIfFlagNonzero1
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
 ; Jumps to a script position if a flag matches given value
 jump_if_flag_equal: MACRO
 	run_command ScriptCommand_JumpIfFlagEqual
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
@@ -665,7 +665,7 @@ ENDM
 ; Jumps to a script position if a flag does not match a given value
 jump_if_flag_not_equal: MACRO
 	run_command ScriptCommand_JumpIfFlagNotEqual
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
@@ -673,7 +673,7 @@ ENDM
 ; Jumps to a script position if a flag is not less than a given value
 jump_if_flag_not_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
@@ -681,7 +681,7 @@ ENDM
 ; Jumps to a script position if a flag is less than a given value
 jump_if_flag_less_than: MACRO
 	run_command ScriptCommand_JumpIfFlagLessThan
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
@@ -689,33 +689,31 @@ ENDM
 ; Sets a flag to its maximum possible value
 max_out_flag_value: MACRO
 	run_command ScriptCommand_MaxOutFlagValue
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
 
 ; Sets a flags value to zero
 zero_out_flag_value: MACRO
 	run_command ScriptCommand_ZeroOutFlagValue
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
 
 ; Jumps to a script position if a flag is nonzero
 jump_if_flag_nonzero_2: MACRO
 	run_command ScriptCommand_JumpIfFlagNonzero2
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
 ; Jumps to a script position if a flag is zero
 jump_if_flag_zero_2: MACRO
 	run_command ScriptCommand_JumpIfFlagZero2
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
 ; Increments given flags value (truncates the new value)
 increment_flag_value: MACRO
 	run_command ScriptCommand_IncrementFlagValue
-	db \1 ; flag (ex EVENT_FLAG_11)
+	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
-
-
