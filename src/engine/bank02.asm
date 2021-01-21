@@ -1379,8 +1379,8 @@ Func_8764: ; 8764 (2:4764)
 	call LoadCursorTile
 ; reset ce5c and ce56
 	xor a
-	ld [$ce5c], a
-	ld [$ce56], a
+	ld [wce5c], a
+	ld [wce56], a
 
 ; draw play area screen for the turn player
 	ldh a, [hWhoseTurn]
@@ -1389,13 +1389,13 @@ Func_8764: ; 8764 (2:4764)
 	call DrawYourOrOppPlayAreaScreen
 
 .swap
-	ld a, [$ce56]
+	ld a, [wce56]
 	or a
 	jr z, .draw_menu
 ; if ce56 != 0, swap turn
 	call SwapTurn
 	xor a
-	ld [$ce56], a
+	ld [wce56], a
 
 .draw_menu
 	xor a
@@ -1430,7 +1430,7 @@ Func_8764: ; 8764 (2:4764)
 	ld l, a
 	call DrawYourOrOppPlayAreaScreen
 	xor a
-	ld [$ce56], a
+	ld [wce56], a
 
 .text
 	call DrawWideTextBox
@@ -1482,7 +1482,7 @@ PlayAreaMenuParameters: ; 8811 (2:4811)
 	db 2 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 
 Func_8819: ; 8819 (2:4819)
 	ld a, [wPrizeCardCursorPosition]
@@ -1506,7 +1506,7 @@ Func_8819: ; 8819 (2:4819)
 
 	ld a, c
 	add $40
-	ld [$ce5c], a
+	ld [wce5c], a
 	ld a, c
 	add DUELVARS_PRIZE_CARDS
 	call GetTurnDuelistVariable
@@ -1524,7 +1524,7 @@ Func_8849: ; 8849 (2:4849)
 	call CreateDeckCardList
 	ret c
 	ld a, %01111111
-	ld [$ce5c], a
+	ld [wce5c], a
 	ld a, [wDuelTempList]
 ; fallthrough
 
@@ -1535,11 +1535,11 @@ Func_8849: ; 8849 (2:4849)
 ; with upper bit set if turn was swapped
 Func_8855: ; 8855 (2:4855)
 	ld b, a
-	ld a, [$ce5c]
+	ld a, [wce5c]
 	or a
 	jr nz, .display
 	ld a, b
-	ld [$ce5c], a
+	ld [wce5c], a
 .display
 	ld a, b
 	call LoadCardDataToBuffer1_FromDeckIndex
@@ -1550,15 +1550,15 @@ Func_8855: ; 8855 (2:4855)
 	pop af
 
 ; if ce56 != 0, swap turn
-	ld a, [$ce56]
+	ld a, [wce56]
 	or a
 	jr z, .dont_swap
 	call SwapTurn
-	ld a, [$ce5c]
+	ld a, [wce5c]
 	or %10000000
 	ret
 .dont_swap
-	ld a, [$ce5c]
+	ld a, [wce5c]
 	ret
 
 Func_8883: ; 8883 (2:4883)
@@ -1597,7 +1597,7 @@ Func_8883: ; 8883 (2:4883)
 
 	call SwapTurn
 	ld a, $01
-	ld [$ce56], a
+	ld [wce56], a
 	jp Func_8764.loop_2
 
 Func_8764_TransitionTable: ; 88c2 (2:48c2)
@@ -1866,13 +1866,13 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 Func_8cf9: ; 8cf9 (2:4cf9)
 	call EnableSRAM
 	xor a
-	ld hl, $b703
+	ld hl, sb703
 	ld [hli], a
 	inc a
 	ld [hli], a
 	ld [hli], a
 	ld [hl], a
-	ld [$b701], a
+	ld [sb701], a
 	call DisableSRAM
 Func_8d0b: ; 8d0b (2:4d0b)
 	ld hl, Unknown_8d15
@@ -2106,7 +2106,7 @@ Func_8f05: ; 8f05 (2:4f05)
 	ret
 
 Func_8f38: ; 8f38 (2:4f38)
-	ld hl, $b701
+	ld hl, sb701
 	call EnableSRAM
 	ld a, [hli]
 	ld h, [hl]
@@ -2127,7 +2127,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	inc hl
 	ld [hl], $20
 	inc hl
-	ld de, $c592
+	ld de, wc592
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -2138,7 +2138,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld [hli], a
 	xor a
 	ld [hl], a
-	ld hl, $b701
+	ld hl, sb701
 	call EnableSRAM
 	ld e, [hl]
 	inc hl
@@ -2447,17 +2447,17 @@ Func_9152: ; 9152 (2:5152)
 Func_9168: ; 9168 (2:5168)
 	ld [hffb5], a
 	call Func_8d56
-	ld de, $0000
-	ld bc, $1404
+	lb de, 0,  0
+	lb bc, 20, 4
 	call DrawRegularTextBox
-	ld de, $0003
-	ld bc, $1404
+	lb de, 0,  3
+	lb bc, 20, 4
 	call DrawRegularTextBox
-	ld de, $0006
-	ld bc, $1404
+	lb de, 0,  6
+	lb bc, 20, 4
 	call DrawRegularTextBox
-	ld de, $0009
-	ld bc, $1404
+	lb de, 0,  9
+	lb bc, 20, 4
 	call DrawRegularTextBox
 	ld hl, Unknown_9242
 	call PlaceTextItems
@@ -2709,13 +2709,25 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	pop af
 	ret
 
-	INCROM $98c7, $9e41
+	INCROM $98c7, $9a6d
+
+Func_9a6d: ; 9a6d (2:5a6d)
+	INCROM $9a6d, $9e41
 
 Func_9e41: ; 9e41 (2:5e41)
 	INCROM $9e41, $a288
 
 Func_a288: ; a288 (2:6288)
-	INCROM $a288, $b177
+	INCROM $a288, $a913
+
+Func_a913: ; a913 (2:6913)
+	INCROM $a913, $ad51
+
+Func_ad51: ; ad51 (2:6d51)
+	INCROM $ad51, $adfe
+
+Func_adfe: ; adfe (2:6dfe)
+	INCROM $adfe, $b177
 
 Func_b177: ; b177 (2:7177)
 	INCROM $b177, $b19d
@@ -2728,20 +2740,20 @@ Func_b19d: ; b19d (2:719d)
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	call $7379
+	call Func_b379
 	ld a, $3c
 	ld [wd0a5], a
 	xor a
 .asm_b1b3
-	ld hl, $76fb
-	call $5a6d
-	call $7704
-	call $7545
+	ld hl, Unknown_b6fb
+	call Func_9a6d
+	call Func_b704
+	call Func_b545
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld de, $0224 ; PleaseSelectDeckText?
-	call $7285
-	call $729f
+	call Func_b285
+	call Func_b29f
 	jr c, .asm_b1b3
 	cp $ff
 	ret z
@@ -2751,15 +2763,16 @@ Func_b19d: ; b19d (2:719d)
 	ld [wd088], a
 	call ResetCheckMenuCursorPositionAndBlink
 	call DrawWideTextBox
-	ld hl, $7274
+	ld hl, Unknown_b274
 	call PlaceTextItems
+.asm_b1e7
 	call DoFrame
 	call HandleCheckMenuInput
-	jp nc, $71e7
+	jp nc, .asm_b1e7
 	cp $ff
 	jr nz, .asm_b1fa
 	ld a, [wd086]
-	jp $71b3
+	jp .asm_b1b3
 
 .asm_b1fa
 	ld a, [wCheckMenuCursorYPosition]
@@ -2768,66 +2781,108 @@ Func_b19d: ; b19d (2:719d)
 	add [hl]
 	or a
 	jr nz, .asm_b22c
-	call $735b
+	call Func_b35b
 	jr nc, .asm_b216
-	call $7592
+	call Func_b592
 	ld a, [wd086]
-	jp c, $71b3
+	jp c, .asm_b1b3
 	jr .asm_b25e
 
 .asm_b216
-	ld hl, $0272
+	ldtx hl, OKIfFileDeletedText
 	call YesOrNoMenuWithText
 	ld a, [wd086]
 	jr c, .asm_b1b3
-	call $7592
+	call Func_b592
 	ld a, [wd086]
-	jp c, $71b3
+	jp c, .asm_b1b3
 	jr .asm_b25e
 
 .asm_b22c
 	cp $1
 	jr nz, .asm_b24c
-	call $735b
+	call Func_b35b
 	jr c, .asm_b240
-	call $76ca
+	call Func_b6ca
 	ld a, [wd086]
-	jp c, $71b3
+	jp c, .asm_b1b3
 	jr .asm_b25e
 
 .asm_b240
 	ld hl, WaitForVBlank
 	call DrawWideTextBox_WaitForInput
 	ld a, [wd086]
-	jp $71b3
+	jp .asm_b1b3
 
 .asm_b24c
 	cp $2
 	jr nz, .asm_b273
-	call $735b
+	call Func_b35b
 	jr c, .asm_b240
-	call $77c6
+	call Func_b7c6
 	ld a, [wd086]
-	jp nc, $71b3
+	jp nc, .asm_b1b3
 
 .asm_b25e
 	ld a, [wd087]
 	ld [wcea1], a
-	call $7379
-	call $7704
-	call $7545
+	call Func_b379
+	call Func_b704
+	call Func_b545
 	ld a, [wd086]
-	jp $71b3
+	jp .asm_b1b3
 
 .asm_b273
 	ret
-; 0xb274
 
-	INCROM $b274, $ba04
+Unknown_b274: ; b274 (2:7274)
+	INCROM $b274, $b285
+
+Func_b285: ; b285 (2:7285)
+	INCROM $b285, $b29f
+
+Func_b29f: ; b29f (2:729f)
+	INCROM $b29f, $b35b
+
+Func_b35b: ; b35b (2:735b)
+	INCROM $b35b, $b379
+
+Func_b379: ; b379 (2:7379)
+	INCROM $b379, $b3fe
+
+Unknown_b3fe: ; b3fe (2:73fe)
+	INCROM $b3fe, $b545
+
+Func_b545: ; b545 (2:7545)
+	INCROM $b545, $b592
+
+Func_b592: ; b592 (2:7592)
+	INCROM $b592, $b625
+
+Func_b625: ; b625 (2:7625)
+	INCROM $b625, $b644
+
+Func_b644: ; b644 (2:7644)
+	INCROM $b644, $b653
+
+Func_b653: ; b653 (2:7653)
+	INCROM $b653, $b6ca
+
+Func_b6ca: ; b6ca (2:76ca)
+	INCROM $b6ca, $b6fb
+
+Unknown_b6fb: ; b6fb (2:76fb)
+	INCROM $b6fb, $b704
+
+Func_b704: ; b704 (2:7704)
+	INCROM $b704, $b7c6
+
+Func_b7c6: ; b7c6 (2:77c6)
+	INCROM $b7c6, $ba04
 
 Func_ba04: ; ba04 (2:7a04)
 	ld a, [wd0a9]
-	ld hl, $7b83
+	ld hl, Data_bb83
 	sla a
 	ld c, a
 	ld b, $0
@@ -2840,17 +2895,20 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [de], a
 	xor a
 	ld [wcea1], a
-	call $7b97
+	call Func_bb97
 	ld a, $5
 	ld [wd0a5], a
 	xor a
-	ld hl, $7b6e
+	; fallthrough
+
+Func_ba25: ; ba25 (2:7a25)
+	ld hl, Func_bb6e
 	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
 	ld a, $5
 	ld [wNamingScreenKeyboardHeight], a
-	ld hl, $73fe
+	ld hl, Unknown_b3fe
 	ld d, h
 	ld a, l
 	ld hl, wcece
@@ -2882,7 +2940,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld b, $0
 	ld hl, wd00d
 	add hl, bc
-	call $7653
+	call Func_b653
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2893,19 +2951,19 @@ Func_ba04: ; ba04 (2:7a04)
 	ld e, l
 	ld a, [hl]
 	pop hl
-	call $7644
+	call Func_b644
 	or a
 	jr z, .asm_ba40
 	ld a, $1
 	call PlaySFXConfirmOrCancel
-	call $7653
+	call Func_b653
 	call Func_8e1f
-	call $7644
+	call Func_b644
 	ld a, [wd087]
 	ld [wcea1], a
-	call $7b97
+	call Func_bb97
 	ld a, [wd086]
-	jp $7a25
+	jp Func_ba25
 
 .asm_baa3
 	call DrawCursor2
@@ -2915,21 +2973,22 @@ Func_ba04: ; ba04 (2:7a04)
 	ld [wd086], a
 	ldh a, [hCurMenuItem]
 	cp $ff
-	jp z, $7b0d
+	jp z, .asm_bb0d
 	ld [wd088], a
 	call ResetCheckMenuCursorPositionAndBlink
 	xor a
 	ld [wce5e], a
 	call DrawWideTextBox
-	ld hl, $7b76
+	ld hl, Data_bb76
 	call PlaceTextItems
+.asm_bacc
 	call DoFrame
-	call $46ac
-	jp nc, $7acc
+	call HandleCheckMenuInput_YourOrOppPlayArea
+	jp nc, .asm_bacc
 	cp $ff
 	jr nz, .asm_badf
 	ld a, [wd086]
-	jp $7a25
+	jp Func_ba25
 
 .asm_badf
 	ld a, [wCheckMenuCursorYPosition]
@@ -2938,20 +2997,21 @@ Func_ba04: ; ba04 (2:7a04)
 	add [hl]
 	or a
 	jr nz, .asm_bb09
-	call $7653
-	call $77c6
-	call $7644
+	call Func_b653
+	call Func_b7c6
+	call Func_b644
 	ld a, [wd086]
-	jp nc, $7a25
+	jp nc, Func_ba25
 	ld a, [wd087]
 	ld [wcea1], a
-	call $7b97
+	call Func_bb97
 	ld a, [wd086]
-	jp $7a25
+	jp Func_ba25
 
 .asm_bb09
 	cp $1
 	jr nz, .asm_bb12
+.asm_bb0d
 	xor a
 	ld [wd0a4], a
 	ret
@@ -2979,7 +3039,7 @@ Func_ba04: ; ba04 (2:7a04)
 	ld a, [hl]
 	ld [bc], a
 	pop hl
-	call $7653
+	call Func_b653
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2990,20 +3050,29 @@ Func_ba04: ; ba04 (2:7a04)
 	ld e, l
 	ld a, [hl]
 	pop hl
-	call $7644
+	call Func_b644
 	or a
-	jp z, $7a40
+	jp z, .asm_ba40
 	ld a, $1
 	call PlaySFXConfirmOrCancel
-	call $7653
+	call Func_b653
 	xor a
-	call $6dfe
-	call $7644
+	call Func_adfe
+	call Func_b644
 	ld a, [wd087]
 	ld [wcea1], a
-	call $7b97
+	call Func_bb97
 	ld a, [wd086]
-	jp $7a25
-; 0xbb6e
+	jp Func_ba25
 
-	INCROM $bb6e, $c000
+Func_bb6e: ; bb6e (2:7b6e)
+	INCROM $bb6e, $bb76
+
+Data_bb76: ; bb76 (2:7b76)
+	INCROM $bb76, $bb83
+
+Data_bb83: ; bb83 (2:7b83)
+	INCROM $bb83, $bb97
+
+Func_bb97: ; bb97 (2:7b97)
+	INCROM $bb97, $c000

@@ -54,7 +54,7 @@ DeckPointers: ; 30000 (c:4000)
 	dw FlamethrowerDeck
 	dw ReshuffleDeck
 	dw ImakuniDeck
-	dw $0000
+	dw NULL
 
 UnnamedDeck: ; 30070 (c:4070)
 	db 20, PSYCHIC_ENERGY

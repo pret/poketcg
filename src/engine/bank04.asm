@@ -28,13 +28,13 @@ Func_10031: ; 10031 (4:4031)
 	push af
 	ld a, $1
 	call BankswitchSRAM
-	call $4cbb
+	call Func_10cbb
 	call DisableSRAM
-	call $4b28
+	call Func_10b28
 	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
-	call $4cea
+	call Func_10cea
 	call FlushAllPalettes
 	pop af
 	call BankswitchSRAM
@@ -45,7 +45,13 @@ Func_10059: ; 10059 (4:4059)
 	INCROM $10059, $100a2
 
 Func_100a2: ; 100a2 (4:40a2)
-	INCROM $100a2, $1029e
+	INCROM $100a2, $1010c
+
+Func_1010c: ; 1010c (4:410c)
+	INCROM $1010c, $10197
+
+Func_10197: ; 10197 (4:4197)
+	INCROM $10197, $1029e
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -59,22 +65,22 @@ Medal_1029e: ; 1029e (4:429e)
 	call PlaySong
 	farcall Func_70000
 	call DisableLCD
-	call $4000
+	call Func_10000
 	ld a, $fa
 	ld [wd114], a
-	call $410c
+	call Func_1010c
 	pop bc
 	ld a, c
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_1030b
+	ld hl, MasterMedalNames
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call $4031
+	call Func_10031
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld a, $ff
@@ -86,7 +92,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld [wd116], a
 	and $f
 	jr nz, .asm_102e2
-	call $4197
+	call Func_10197
 	ld a, [wd116]
 	cp $e0
 	jr nz, .asm_102e2
@@ -98,8 +104,15 @@ Medal_1029e: ; 1029e (4:429e)
 	ld [wd291], a
 	ret
 
-Unknown_1030b: ; 1030b (4:430b)
-	INCROM $1030b, $1031b
+MasterMedalNames: ; 1030b (4:430b)
+	tx GrassClubMapNameText
+	tx ScienceClubMapNameText
+	tx FireClubMapNameText
+	tx WaterClubMapNameText
+	tx LightningClubMapNameText
+	tx PsychicClubMapNameText
+	tx RockClubMapNameText
+	tx FightingClubMapNameText
 
 BoosterPack_1031b: ; 1031b (4:431b)
 	ld c, a
@@ -107,25 +120,25 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	push af
 	push bc
 	call DisableLCD
-	call $4000
+	call Func_10000
 	xor a
 	ld [wTextBoxFrameType], a
 	pop bc
 	push bc
 	ld b, $0
-	ld hl, $43a5
+	ld hl, Unknown_103a5
 	add hl, bc
 	ld a, [hl]
 	ld c, a
 	add a
 	add a
 	ld c, a
-	ld hl, $43c2
+	ld hl, Unknown_103c2
 	add hl, bc
 	ld a, [hli]
 	push hl
 	ld bc, $0600
-	call $70ca
+	call Func_130ca
 	pop hl
 	ld a, [hli]
 	ld [wTxRam3], a
@@ -135,7 +148,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call $4031
+	call Func_10031
 	call PauseSong
 	ld a, MUSIC_BOOSTER_PACK
 	call PlaySong
@@ -166,9 +179,12 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	pop af
 	ld [wd291], a
 	ret
-; 0x103a5
 
-	INCROM $103a5, $103d2
+Unknown_103a5: ; 103a5 (4:43a5)
+	INCROM $103a5, $103c2
+
+Unknown_103c2: ; 103c2 (4:43c2)
+	INCROM $103c2, $103d2
 
 Func_103d2: ; 103d2 (4:43d2)
 	INCROM $103d2, $103d3
@@ -177,7 +193,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld a, [wd291]
 	push af
 	call DisableLCD
-	call $4000
+	call Func_10000
 	ld a, $4
 	ld [wTextBoxFrameType], a
 	lb de, 0, 12
@@ -188,7 +204,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, $445b
+	ld hl, Unknown_1045b
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -199,8 +215,8 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wTxRam2_b], a
 	ld a, [wOpponentName + 1]
 	ld [wTxRam2_b + 1], a
-	ld hl, $4451
-	call $51b3 ; LoadDuelistName
+	ld hl, Unknown_10451
+	call Func_111b3 ; LoadDuelistName
 	pop hl
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -209,8 +225,8 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wTxRam2 + 1], a
 	or c
 	jr z, .asm_10425
-	ld hl, $4456
-	call $51b3 ; LoadDeckName
+	ld hl, Unknown_10456
+	call Func_111b3 ; LoadDeckName
 
 .asm_10425
 	ld bc, $0703
@@ -218,7 +234,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
-	call $4031
+	call Func_10031
 	call DoFrameIfLCDEnabled
 	lb bc, $2f, $1d ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
@@ -229,15 +245,27 @@ Duel_Init: ; 103d3 (4:43d3)
 	pop af
 	ld [wd291], a
 	ret
-; 0x10451
 
-	INCROM $10451, $10548
+Unknown_10451: ; 10451 (4:4451)
+	INCROM $10451, $10456
+
+Unknown_10456: ; 10456 (4:4456)
+	INCROM $10456, $1045b
+
+Unknown_1045b: ; 1045b (4:445b)
+	INCROM $1045b, $1052f
+
+Func_1052f: ; 1052f (4:452f)
+	INCROM $1052f, $10548
 
 Func_10548: ; 10548 (4:4548)
 	INCROM $10548, $10756
 
 Func_10756: ; 10756 (4:4756)
-	INCROM $10756, $10a70
+	INCROM $10756, $1076d
+
+Func_1076d: ; 1076d (4:476d)
+	INCROM $1076d, $10a70
 
 ; gives the pc pack described in a
 TryGivePCPack: ; 10a70 (4:4a70)
@@ -284,7 +312,10 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 	INCROM $10ab4, $10af9
 
 Func_10af9: ; 10af9 (4:4af9)
-	INCROM $10af9, $10c96
+	INCROM $10af9, $10b28
+
+Func_10b28: ; 10b28 (4:4b28)
+	INCROM $10b28, $10c96
 
 Func_10c96: ; 10c96 (4:4c96)
 	ldh a, [hBankSRAM]
@@ -292,13 +323,13 @@ Func_10c96: ; 10c96 (4:4c96)
 	push bc
 	ld a, $1
 	call BankswitchSRAM
-	call $4cbb
+	call Func_10cbb
 	call Func_10ab4
 	pop bc
 	ld a, c
 	or a
 	jr nz, .asm_10cb0
-	call $4cea
+	call Func_10cea
 	call Func_10af9
 
 .asm_10cb0
@@ -307,15 +338,24 @@ Func_10c96: ; 10c96 (4:4c96)
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
-; 0x10cbb
 
-	INCROM $10cbb, $10dba
+Func_10cbb: ; 10cbb (4:4cbb)
+	INCROM $10cbb, $10cea
+
+Func_10cea: ; 10cea (4:4cea)
+	INCROM $10cea, $10d98
+
+Unknown_10d98: ; 10d98 (4:4d98)
+	INCROM $10d98, $10da9
+
+Unknown_10da9: ; 10da9 (4:4da9)
+	INCROM $10da9, $10dba
 
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1
 	farcall Func_c29b
 	ld a, [wd0ba]
-	ld hl, $4e17
+	ld hl, Unknown_10e17
 	farcall Func_111e9
 .asm_10dca
 	call DoFrameIfLCDEnabled
@@ -331,15 +371,18 @@ Func_10dba: ; 10dba (4:4dba)
 .asm_10ddd
 	ld [wd10e], a
 	push af
-	ld hl, $4df0
+	ld hl, Unknown_10df0
 	call JumpToFunctionInTable
 	farcall CloseTextBox
 	call DoFrameIfLCDEnabled
 	pop af
 	ret
-; 0x10df0
 
-	INCROM $10df0, $10e28
+Unknown_10df0: ; 10df0 (4:4df0)
+	INCROM $10df0, $10e17
+
+Unknown_10e17: ; 10e17 (4:4e17)
+	INCROM $10e17, $10e28
 
 Func_10e28: ; 10e28 (4:4e28)
 	INCROM $10e28, $10e55
@@ -441,7 +484,7 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	rlca
 	ld e, a
 	ld d, $0
-	ld hl, Unknown_397b
+	ld hl, OverworldMapNames
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -788,12 +831,15 @@ Func_11184: ; 11184 (4:5184)
 	ld hl, wd341
 	dec [hl]
 	ret
-; 0x111b3
 
+Func_111b3: ; 111b3 (4:51b3)
 	INCROM $111b3, $111e9
 
 Func_111e9: ; 111e9 (4:51e9)
-	INCROM $111e9, $1124d
+	INCROM $111e9, $11238
+
+Func_11238: ; 11238 (4:5238)
+	INCROM $11238, $1124d
 
 Func_1124d: ; 1124d (4:524d)
 	INCROM $1124d, $11320
@@ -830,7 +876,7 @@ Func_1157c: ; 1157c (4:557c)
 	ld [wd32e], a
 
 .asm_1159f
-	call $5238
+	call Func_11238
 	ret
 
 Func_115a3: ; 115a3 (4:55a3)
@@ -968,16 +1014,16 @@ Func_11f4e: ; 11f4e (4:5f4e)
 	INCROM $11f4e, $1217b
 
 OverworldScriptTable: ; 1217b (4:617b)
-	dw ScriptCommand_EndScriptLoop1
+	dw ScriptCommand_EndScript
 	dw ScriptCommand_CloseAdvancedTextBox
-	dw ScriptCommand_PrintTextString
-	dw Func_ccdc
+	dw ScriptCommand_PrintNPCText
+	dw ScriptCommand_PrintText
 	dw ScriptCommand_AskQuestionJump
-	dw ScriptCommand_StartBattle
+	dw ScriptCommand_StartDuel
+	dw ScriptCommand_PrintVariableNPCText
 	dw ScriptCommand_PrintVariableText
-	dw Func_cda8
 	dw ScriptCommand_PrintTextQuitFully
-	dw Func_cdcb
+	dw ScriptCommand_UnloadActiveNPC
 	dw ScriptCommand_MoveActiveNPCByDirection
 	dw ScriptCommand_CloseTextBox
 	dw ScriptCommand_GiveBoosterPacks
@@ -985,16 +1031,16 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfCardInCollection
 	dw ScriptCommand_GiveCard
 	dw ScriptCommand_TakeCard
-	dw Func_cf53
-	dw Func_cf7b
+	dw ScriptCommand_JumpIfAnyEnergyCardsInCollection
+	dw ScriptCommand_RemoveAllEnergyCardsFromCollection
 	dw ScriptCommand_JumpIfEnoughCardsOwned
 	dw ScriptCommand_JumpBasedOnFightingClubPupilStatus
-	dw Func_cfc6
-	dw Func_cfd4
-	dw Func_d00b
-	dw Func_d025
-	dw Func_d032
-	dw Func_d03f
+	dw ScriptCommand_SetActiveNPCDirection
+	dw ScriptCommand_PickNextMan1RequestedCard
+	dw ScriptCommand_LoadMan1RequestedCardIntoTxRamSlot
+	dw ScriptCommand_JumpIfMan1RequestedCardOwned
+	dw ScriptCommand_JumpIfMan1RequestedCardInCollection
+	dw ScriptCommand_RemoveMan1RequestedCardFromCollection
 	dw ScriptCommand_Jump
 	dw ScriptCommand_TryGiveMedalPCPacks
 	dw ScriptCommand_SetPlayerDirection
@@ -1002,60 +1048,60 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_ShowCardReceivedScreen
 	dw ScriptCommand_SetDialogNPC
 	dw ScriptCommand_SetNextNPCAndScript
-	dw Func_d095
-	dw Func_d0be
+	dw ScriptCommand_SetSpriteAttributes
+	dw ScriptCommand_SetActiveNPCCoords
 	dw ScriptCommand_DoFrames
-	dw Func_d0d9
+	dw ScriptCommand_JumpIfActiveNPCCoordsMatch
 	dw ScriptCommand_JumpIfPlayerCoordsMatch
 	dw ScriptCommand_MoveActiveNPC
 	dw ScriptCommand_GiveOneOfEachTrainerBooster
-	dw Func_d103
-	dw Func_d125
-	dw Func_d135
-	dw Func_d16b
-	dw Func_cd4f
-	dw Func_cd94
-	dw ScriptCommand_MoveWramNPC
-	dw Func_cdd8
-	dw Func_cdf5
-	dw Func_d195
-	dw Func_d1ad
-	dw Func_d1b3
+	dw ScriptCommand_JumpIfNPCLoaded
+	dw ScriptCommand_ShowMedalReceivedScreen
+	dw ScriptCommand_LoadCurrentMapNameIntoTxRamSlot
+	dw ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot
+	dw ScriptCommand_StartChallengeHallDuel
+	dw ScriptCommand_PrintTextForChallengeCup
+	dw ScriptCommand_MoveChallengeHallNPC
+	dw ScriptCommand_UnloadChallengeHallNPC
+	dw ScriptCommand_SetChallengeHallNPCCoords
+	dw ScriptCommand_PickChallengeHallOpponent
+	dw ScriptCommand_OpenMenu
+	dw ScriptCommand_PickChallengeCupPrizeCard
 	dw ScriptCommand_QuitScriptFully
-	dw Func_d244
+	dw ScriptCommand_ReplaceMapBlocks
 	dw ScriptCommand_ChooseDeckToDuelAgainstMultichoice
 	dw ScriptCommand_OpenDeckMachine
 	dw ScriptCommand_ChooseStarterDeckMultichoice
 	dw ScriptCommand_EnterMap
 	dw ScriptCommand_MoveArbitraryNPC
-	dw Func_d209
-	dw Func_d38f
-	dw Func_d396
-	dw Func_cd76
-	dw Func_d39d
-	dw Func_d3b9
+	dw ScriptCommand_PickLegendaryCard
+	dw ScriptCommand_FlashScreen
+	dw ScriptCommand_SaveGame
+	dw ScriptCommand_BattleCenter
+	dw ScriptCommand_GiftCenter
+	dw ScriptCommand_PlayCredits
 	dw ScriptCommand_TryGivePCPack
 	dw ScriptCommand_nop
-	dw Func_d3d4
-	dw Func_d3e0
-	dw Func_d3fe
-	dw Func_d408
-	dw Func_d40f
+	dw ScriptCommand_GiveStarterDeck
+	dw ScriptCommand_WalkPlayerToMasonLaboratory
+	dw ScriptCommand_OverrideSong
+	dw ScriptCommand_SetDefaultSong
+	dw ScriptCommand_PlaySong
 	dw ScriptCommand_PlaySFX
 	dw ScriptCommand_PauseSong
 	dw ScriptCommand_ResumeSong
-	dw Func_d41d
+	dw ScriptCommand_PlayDefaultSong
 	dw ScriptCommand_WaitForSongToFinish
-	dw Func_d435
+	dw ScriptCommand_RecordMasterWin
 	dw ScriptCommand_AskQuestionJumpDefaultYes
 	dw ScriptCommand_ShowSamNormalMultichoice
 	dw ScriptCommand_ShowSamTutorialMultichoice
-	dw Func_d43d
-	dw ScriptCommand_EndScriptLoop2
-	dw ScriptCommand_EndScriptLoop3
-	dw ScriptCommand_EndScriptLoop4
-	dw ScriptCommand_EndScriptLoop5
-	dw ScriptCommand_EndScriptLoop6
+	dw ScriptCommand_ChallengeMachine
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
 	dw ScriptCommand_SetFlagValue
 	dw ScriptCommand_JumpIfFlagZero1
 	dw ScriptCommand_JumpIfFlagNonzero1
@@ -1068,21 +1114,21 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfFlagNonzero2
 	dw ScriptCommand_JumpIfFlagZero2
 	dw ScriptCommand_IncrementFlagValue
-	dw ScriptCommand_EndScriptLoop7
-	dw ScriptCommand_EndScriptLoop8
-	dw ScriptCommand_EndScriptLoop9
-	dw ScriptCommand_EndScriptLoop10
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
+	dw ScriptCommand_EndScript
 
 
 MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
-	tx Text03f6     ; text id to print next
+	tx LightningAndFireDeckChoiceText     ; text id to print next
 	db $06, $04     ; x, y coordinate to start printing next text
-	tx Text03f7     ; text id to print next
+	tx WaterAndFightingDeckChoiceText     ; text id to print next
 	db $06, $06     ; x, y coordinate to start printing next text
-	tx Text03f8     ; text id to print next 
+	tx GrassAndPsychicDeckChoiceText      ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
@@ -1095,11 +1141,11 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
-	tx Text03fa     ; text id to print next
+	tx CharmanderAndFriendsDeckChoiceText     ; text id to print next
 	db $06, $04     ; x, y coordinate to start printing next text
-	tx Text03fb     ; text id to print next
+	tx SquirtleAndFriendsDeckChoiceText       ; text id to print next
 	db $06, $06     ; x, y coordinate to start printing next text
-	tx Text03fc     ; text id to print next
+	tx BulbasaurAndFriendsDeckChoiceText      ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
@@ -1115,7 +1161,7 @@ SamNormalMultichoice_ConfigurationTable: ;1227d
 	tx Text03ff     ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $0b, $02     ; cursor starting x, y
-	db $02          ; number of tiles the cursor moves per toggle 
+	db $02          ; number of tiles the cursor moves per toggle
 	db $04          ; cursor max index
 	db $0f          ; cursor image
 
@@ -1202,7 +1248,7 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	farcall Func_70000
 	call EnableSRAM
 	xor a
-	ld [$ba44], a
+	ld [sba44], a
 	call DisableSRAM
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
@@ -1234,7 +1280,10 @@ MainMenu_ContinueDuel: ; 1277e (4:677e)
 	ret
 ; 0x1279a
 
-	INCROM $1279a, $12871
+	INCROM $1279a, $12863
+
+Func_12863: ; 12863 (4:6863)
+	INCROM $12863, $12871
 
 Func_12871: ; 12871 (4:6871)
 	INCROM $12871, $1288c
@@ -1393,10 +1442,12 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	pop bc
 	pop hl
 	ret
-; 0x129fa
 
 Func_129fa: ; 129fa (4:69fa)
 	ld a, [wWhichSprite]
+	; fallthrough
+
+Func_129fd: ; 129fd (4:69fd)
 	push af
 	ld a, [wd5d7]
 	or a
@@ -1836,7 +1887,13 @@ Func_12c5e: ; 12c5e (4:6c5e)
 	INCROM $12c5e, $12c7f
 
 Func_12c7f: ; 12c7f (4:6c7f)
-	INCROM $12c7f, $131b3
+	INCROM $12c7f, $12fc6
+
+Func_12fc6: ; 12fc6 (4:6fc6)
+	INCROM $12fc6, $130ca
+
+Func_130ca: ; 130ca (4:70ca)
+	INCROM $130ca, $131b3
 
 Func_131b3: ; 131b3 (4:71b3)
 	INCROM $131b3, $131d3
@@ -1859,12 +1916,12 @@ Func_1344d: ; 1344d (4:744d)
 
 Func_13485: ; 13485 (4:7485)
 	call EnableSRAM
-	ld a, [$ba68]
+	ld a, [sba68]
 	or a
 	ret z
-	ld a, [$ba56]
+	ld a, [sba56]
 	ld [wTxRam3], a
-	ld a, [$ba57]
+	ld a, [sba57]
 	ld [wTxRam3 + 1], a
 	call DisableSRAM
 	call PauseSong

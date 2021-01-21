@@ -70,6 +70,32 @@ s0a3f8:: ; a3f8
 sCurrentlySelectedDeck:: ; b700
 	ds $1
 
+sb701:: ; b701
+	ds $1
+
+	ds $1
+
+sb703:: ; b703
+	ds $1
+
+	ds $340
+
+sba44:: ; ba44
+	ds $1
+
+	ds $11
+
+sba56:: ; ba56
+	ds $1
+
+sba57:: ; ba57
+	ds $1
+
+	ds $10
+
+sba68:: ; ba68
+	ds $1
+
 SECTION "SRAM1", SRAM
 
 SECTION "SRAM2", SRAM

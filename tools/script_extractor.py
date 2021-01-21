@@ -86,9 +86,9 @@ def decodeLine(scriptList, game_data, loc, ignore_broken, locList):
 			wordLoc = (game_data[loc] + (game_data[loc+1]<<8))
 			if wordLoc == 0000:
 				if macroMode:
-					ret += "NO_JUMP, "
+					ret += "NULL, "
 				else:
-					ret += "\tdw NO_JUMP\n"
+					ret += "\tdw NULL\n"
 			else:
 				if macroMode:
 					ret += ".ows_" + format(wordLoc+0x8000,"04x") + ", "
@@ -285,7 +285,7 @@ def createList(): # this is a func just so all this can go at the bottom
 	("Func_d3e0", "", DO_NOT_QUIT,""),
 	("Func_d3fe", "q", DO_NOT_QUIT,""),
 	("Func_d408", "b", DO_NOT_QUIT,""),
-	("Func_d40f", "q", DO_NOT_QUIT,""),
+	("ScriptCommand_PlaySong", "b", DO_NOT_QUIT,"play_song"),
 	("ScriptCommand_PlaySFX", "b", DO_NOT_QUIT,"play_sfx"),
 	("ScriptCommand_PauseSong", "", DO_NOT_QUIT,"pause_song"),
 	("ScriptCommand_ResumeSong", "", DO_NOT_QUIT,"resume_song"),

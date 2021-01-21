@@ -804,7 +804,7 @@ EstimateDamage_VersusDefendingCard: ; 143e5 (5:43e5)
 	push hl
 	ld [hl], $00
 	call CalculateDamage_VersusDefendingPokemon
-; ...and subsequently recovered to continue the battle normally
+; ...and subsequently recovered to continue the duel normally
 	pop hl
 	pop af
 	ld [hl], a
@@ -1025,7 +1025,7 @@ EstimateDamage_FromDefendingPokemon: ; 1450b (5:450b)
 	push hl
 	ld [hl], $00
 	call CalculateDamage_FromDefendingPokemon
-; ...and subsequently recovered to continue the battle normally
+; ...and subsequently recovered to continue the duel normally
 	pop hl
 	pop af
 	ld [hl], a

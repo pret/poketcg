@@ -495,7 +495,7 @@ ApplyAndAnimateHPRecovery: ; 2c221 (b:4221)
 	ld e, a
 	ld a, 0
 	adc d
-	ld d, a 
+	ld d, a
 	; de = damage dealt + current HP
 	; bc = max HP of card
 	call CompareDEtoBC
@@ -877,7 +877,7 @@ HandleDefendingPokemonAttackSelection: ; 2c391 (b:4391)
 	db 2 ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 ; 0x2c3fc
 
 ; loads in hl the pointer to attack's name.
@@ -1244,7 +1244,7 @@ HandleColorChangeScreen: ; 2c588 (b:4588)
 	db MAX_PLAY_AREA_POKEMON ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 ; 0x2c5be
 
 .DrawScreen: ; 2c5be (b:45be)
@@ -1444,7 +1444,7 @@ PlayAreaSelectionMenuParameters: ; 2c6e0 (b:46e0)
 	db MAX_PLAY_AREA_POKEMON ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 ; 0x2c6e8
 
 BenchSelectionMenuParameters: ; 2c6e8 (b:46e8)
@@ -1453,7 +1453,7 @@ BenchSelectionMenuParameters: ; 2c6e8 (b:46e8)
 	db MAX_PLAY_AREA_POKEMON ; number of items
 	db SYM_CURSOR_R ; cursor tile number
 	db SYM_SPACE ; tile behind cursor
-	dw $0000 ; function pointer if non-0
+	dw NULL ; function pointer if non-0
 ; 0x2c6f0
 
 SpitPoison_AIEffect: ; 2c6f0 (b:46f0)
@@ -9097,7 +9097,7 @@ MorphEffect: ; 2eff6 (b:6ff6)
 .successful
 	ld a, DUELVARS_ARENA_CARD_STAGE
 	call GetTurnDuelistVariable
-	or a 
+	or a
 	jr z, .skip_discard_stage_below
 
 ; if this is a stage 1 Pokemon (in case it's used

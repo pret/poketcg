@@ -320,11 +320,11 @@ Text0419: ; 41965 (10:5965)
 	line "attached Booster Pack."
 	done
 
-Text041a: ; 4199b (10:599b)
+PokemonTradingCards101Text: ; 4199b (10:599b)
 	text "”Pokémon Trading Cards 101”"
 	done
 
-Text041b: ; 419b8 (10:59b8)
+PlaceholderMessageText: ; 419b8 (10:59b8)
 	text "This message is not in yet!"
 	done
 
@@ -338,7 +338,7 @@ Text041c: ; 419d5 (10:59d5)
 	line "just to collect them."
 	done
 
-Text041d: ; 41a74 (10:5a74)
+Gal1WantToTrade1Text: ; 41a74 (10:5a74)
 	text "We don't use Fire Pokémon cards"
 	line "here at the Water Club."
 	line "I have this rare Arcanine, but"
@@ -347,17 +347,17 @@ Text041d: ; 41a74 (10:5a74)
 	line "mind trading it for my Arcanine?"
 	done
 
-Text041e: ; 41b1d (10:5b1d)
+Gal1WantToTrade2Text: ; 41b1d (10:5b1d)
 	text "Hi! We meet again!"
 	line "Have you decided to trade your"
 	line "Lapras for my rare Arcanine?"
 	done
 
-Text041f: ; 41b6d (10:5b6d)
+Gal1WouldYouLikeToTradeText: ; 41b6d (10:5b6d)
 	text "Would you like to trade?"
 	done
 
-Text0420: ; 41b87 (10:5b87)
+Gal1DeclinedTradeText: ; 41b87 (10:5b87)
 	text "Aw, you're not going to"
 	line "trade with me?"
 	line "Well, that's too bad..."
@@ -365,13 +365,13 @@ Text0420: ; 41b87 (10:5b87)
 	line "come look for me."
 	done
 
-Text0421: ; 41bf6 (10:5bf6)
+Gal1DontOwnCardText: ; 41bf6 (10:5bf6)
 	text "Hey! What are you trying to pull?"
 	line "You don't have a Lapras!?!"
 	line "Come see me when you get a Lapras."
 	done
 
-Text0422: ; 41c57 (10:5c57)
+Gal1CardInDeckText: ; 41c57 (10:5c57)
 	text "OK! Let's trade your Lapras"
 	line "for my Arcanine..."
 	line "Oh! I see your Lapras"
@@ -382,23 +382,23 @@ Text0422: ; 41c57 (10:5c57)
 	line ""
 	done
 
-Text0423: ; 41cf7 (10:5cf7)
+Gal1LetsTradeText: ; 41cf7 (10:5cf7)
 	text "OK then, let's trade your"
 	line "Lapras for my Arcanine."
 	done
 
-Text0424: ; 41d2a (10:5d2a)
+Gal1TradeCompleteText: ; 41d2a (10:5d2a)
 	text "<RAMNAME> traded a Lapras"
 	line "for an Arcanine!"
 	done
 
-Text0425: ; 41d4e (10:5d4e)
+Gal1ThanksText: ; 41d4e (10:5d4e)
 	text "Thanks, <RAMNAME>!"
 	line "I'll take good care"
 	line "of this Lapras."
 	done
 
-Text0426: ; 41d7e (10:5d7e)
+Gal1AfterTradeText: ; 41d7e (10:5d7e)
 	text "Hey! You're the one who"
 	line "gave me your Lapras!"
 	line "I'm taking good care of"

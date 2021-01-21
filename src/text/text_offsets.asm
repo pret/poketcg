@@ -56,8 +56,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0034                                           ; 0x0034
 	textpointer PokemonsAttackText                                 ; 0x0035
 	textpointer ResistanceLessDamageText                           ; 0x0036
-	textpointer Text0037                                           ; 0x0037
-	textpointer Text0038                                           ; 0x0038
+	textpointer WeaknessMoreDamageText                             ; 0x0037
+	textpointer WeaknessMoreDamage2Text                            ; 0x0038
 	textpointer ResistanceNoDamageText                             ; 0x0039
 	textpointer AttackDamageText                                   ; 0x003a
 	textpointer NoDamageText                                       ; 0x003b
@@ -407,7 +407,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ReceivedPromotionalSurfingPikachuText              ; 0x0193
 	textpointer Text0194                                           ; 0x0194
 	textpointer Text0195                                           ; 0x0195
-	textpointer Text0196                                           ; 0x0196
+	textpointer BoosterPackText                                    ; 0x0196
 	textpointer Text0197                                           ; 0x0197
 	textpointer Text0198                                           ; 0x0198
 	textpointer Text0199                                           ; 0x0199
@@ -538,7 +538,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer InchesText                                         ; 0x0216
 	textpointer YourDiscardPileText                                ; 0x0217
 	textpointer OpponentsDiscardPileText                           ; 0x0218
-	textpointer Text0219                                           ; 0x0219
+	textpointer DeckText                                           ; 0x0219
 	textpointer Text021a                                           ; 0x021a
 	textpointer Text021b                                           ; 0x021b
 	textpointer Text021c                                           ; 0x021c
@@ -546,8 +546,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer WhatIsYourNameText                                 ; 0x021e
 	textpointer Text021f                                           ; 0x021f
 	textpointer Text0220                                           ; 0x0220
-	textpointer Text0221                                           ; 0x0221
-	textpointer NamingScreenKeyboardText                           ; 0x0222
+	textpointer PlayerNameKeyboardText                             ; 0x0221
+	textpointer DeckNameKeyboardText                               ; 0x0222
 	textpointer NewDeckText                                        ; 0x0223
 	textpointer PleaseSelectDeckText                               ; 0x0224
 	textpointer Text0225                                           ; 0x0225
@@ -556,10 +556,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0228                                           ; 0x0228
 	textpointer Text0229                                           ; 0x0229
 	textpointer ChosenAsDuelingDeckText                            ; 0x022a
-	textpointer Text022b                                           ; 0x022b
-	textpointer Text022c                                           ; 0x022c
-	textpointer Text022d                                           ; 0x022d
-	textpointer Text022e                                           ; 0x022e
+	textpointer Deck1Text                                          ; 0x022b
+	textpointer Deck2Text                                          ; 0x022c
+	textpointer Deck3Text                                          ; 0x022d
+	textpointer Deck4Text                                          ; 0x022e
 	textpointer ThereIsNoDeckHereText                              ; 0x022f
 	textpointer Text0230                                           ; 0x0230
 	textpointer Text0231                                           ; 0x0231
@@ -627,7 +627,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text026f                                           ; 0x026f
 	textpointer Text0270                                           ; 0x0270
 	textpointer Text0271                                           ; 0x0271
-	textpointer Text0272                                           ; 0x0272
+	textpointer OKIfFileDeletedText                                ; 0x0272
 	textpointer Text0273                                           ; 0x0273
 	textpointer Text0274                                           ; 0x0274
 	textpointer Text0275                                           ; 0x0275
@@ -763,75 +763,75 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer GlossaryMenuPage1Text                              ; 0x02f7
 	textpointer GlossaryMenuPage2Text                              ; 0x02f8
 	textpointer ChooseWordAndPressAButtonText                      ; 0x02f9
-	textpointer Text02fa                                           ; 0x02fa
-	textpointer Text02fb                                           ; 0x02fb
-	textpointer Text02fc                                           ; 0x02fc
-	textpointer Text02fd                                           ; 0x02fd
-	textpointer Text02fe                                           ; 0x02fe
-	textpointer Text02ff                                           ; 0x02ff
-	textpointer Text0300                                           ; 0x0300
-	textpointer Text0301                                           ; 0x0301
-	textpointer Text0302                                           ; 0x0302
-	textpointer Text0303                                           ; 0x0303
-	textpointer Text0304                                           ; 0x0304
-	textpointer Text0305                                           ; 0x0305
-	textpointer Text0306                                           ; 0x0306
-	textpointer Text0307                                           ; 0x0307
-	textpointer Text0308                                           ; 0x0308
-	textpointer Text0309                                           ; 0x0309
-	textpointer Text030a                                           ; 0x030a
-	textpointer Text030b                                           ; 0x030b
-	textpointer Text030c                                           ; 0x030c
-	textpointer Text030d                                           ; 0x030d
-	textpointer Text030e                                           ; 0x030e
-	textpointer Text030f                                           ; 0x030f
-	textpointer Text0310                                           ; 0x0310
-	textpointer Text0311                                           ; 0x0311
-	textpointer Text0312                                           ; 0x0312
-	textpointer Text0313                                           ; 0x0313
-	textpointer Text0314                                           ; 0x0314
-	textpointer Text0315                                           ; 0x0315
-	textpointer Text0316                                           ; 0x0316
-	textpointer Text0317                                           ; 0x0317
-	textpointer Text0318                                           ; 0x0318
-	textpointer Text0319                                           ; 0x0319
-	textpointer Text031a                                           ; 0x031a
-	textpointer Text031b                                           ; 0x031b
-	textpointer Text031c                                           ; 0x031c
-	textpointer Text031d                                           ; 0x031d
+	textpointer AboutTheDeckText                                   ; 0x02fa
+	textpointer AboutTheDiscardPileText                            ; 0x02fb
+	textpointer AboutTheHandText                                   ; 0x02fc
+	textpointer AboutTheArenaText                                  ; 0x02fd
+	textpointer AboutTheBenchText                                  ; 0x02fe
+	textpointer AboutTheActivePokemonText                          ; 0x02ff
+	textpointer AboutBenchPokemonText                              ; 0x0300
+	textpointer AboutPrizesText                                    ; 0x0301
+	textpointer AboutDamageCountersText                            ; 0x0302
+	textpointer AboutEnergyCardsText                               ; 0x0303
+	textpointer AboutTrainerCardsText                              ; 0x0304
+	textpointer AboutBasicPokemonText                              ; 0x0305
+	textpointer AboutEvolutionCardsText                            ; 0x0306
+	textpointer AboutAttackingText                                 ; 0x0307
+	textpointer AboutPokemonPowerText                              ; 0x0308
+	textpointer AboutWeaknessText                                  ; 0x0309
+	textpointer AboutResistanceText                                ; 0x030a
+	textpointer AboutRetreatingText                                ; 0x030b
+	textpointer DeckDescriptionText                                ; 0x030c
+	textpointer DiscardPileDescriptionText                         ; 0x030d
+	textpointer HandDescriptionText                                ; 0x030e
+	textpointer ArenaDescriptionText                               ; 0x030f
+	textpointer BenchDescriptionText                               ; 0x0310
+	textpointer ActivePokemonDescriptionText                       ; 0x0311
+	textpointer BenchPokemonDescriptionText                        ; 0x0312
+	textpointer PrizesDescriptionText                              ; 0x0313
+	textpointer DamageCountersDescriptionText                      ; 0x0314
+	textpointer EnergyCardsDescriptionText                         ; 0x0315
+	textpointer TrainerCardsDescriptionText                        ; 0x0316
+	textpointer BasicPokemonDescriptionText                        ; 0x0317
+	textpointer EvolutionCardsDescriptionText                      ; 0x0318
+	textpointer AttackingDescriptionText                           ; 0x0319
+	textpointer PokemonPowerDescriptionText                        ; 0x031a
+	textpointer WeaknessDescriptionText                            ; 0x031b
+	textpointer ResistanceDescriptionText                          ; 0x031c
+	textpointer RetreatingDescriptionText                          ; 0x031d
 	textpointer Text031e                                           ; 0x031e
 	textpointer Text031f                                           ; 0x031f
 	textpointer Text0320                                           ; 0x0320
 	textpointer Text0321                                           ; 0x0321
 	textpointer Text0322                                           ; 0x0322
-	textpointer Text0323                                           ; 0x0323
-	textpointer Text0324                                           ; 0x0324
-	textpointer Text0325                                           ; 0x0325
-	textpointer Text0326                                           ; 0x0326
-	textpointer Text0327                                           ; 0x0327
-	textpointer Text0328                                           ; 0x0328
-	textpointer Text0329                                           ; 0x0329
-	textpointer Text032a                                           ; 0x032a
-	textpointer Text032b                                           ; 0x032b
-	textpointer Text032c                                           ; 0x032c
-	textpointer Text032d                                           ; 0x032d
-	textpointer Text032e                                           ; 0x032e
-	textpointer Text032f                                           ; 0x032f
-	textpointer Text0330                                           ; 0x0330
-	textpointer Text0331                                           ; 0x0331
-	textpointer Text0332                                           ; 0x0332
-	textpointer Text0333                                           ; 0x0333
-	textpointer Text0334                                           ; 0x0334
-	textpointer Text0335                                           ; 0x0335
-	textpointer Text0336                                           ; 0x0336
-	textpointer Text0337                                           ; 0x0337
-	textpointer Text0338                                           ; 0x0338
-	textpointer Text0339                                           ; 0x0339
-	textpointer Text033a                                           ; 0x033a
-	textpointer Text033b                                           ; 0x033b
+	textpointer OverworldMapMasonLaboratoryText                    ; 0x0323
+	textpointer OverworldMapIshiharasHouseText                     ; 0x0324
+	textpointer OverworldMapFightingClubText                       ; 0x0325
+	textpointer OverworldMapRockClubText                           ; 0x0326
+	textpointer OverworldMapWaterClubText                          ; 0x0327
+	textpointer OverworldMapLightningClubText                      ; 0x0328
+	textpointer OverworldMapGrassClubText                          ; 0x0329
+	textpointer OverworldMapPsychicClubText                        ; 0x032a
+	textpointer OverworldMapScienceClubText                        ; 0x032b
+	textpointer OverworldMapFireClubText                           ; 0x032c
+	textpointer OverworldMapChallengeHallText                      ; 0x032d
+	textpointer OverworldMapPokemonDomeText                        ; 0x032e
+	textpointer OverworldMapMysteryHouseText                       ; 0x032f
+	textpointer MasonLaboratoryMapNameText                         ; 0x0330
+	textpointer MrIshiharasHouseMapNameText                        ; 0x0331
+	textpointer FightingClubMapNameText                            ; 0x0332
+	textpointer RockClubMapNameText                                ; 0x0333
+	textpointer WaterClubMapNameText                               ; 0x0334
+	textpointer LightningClubMapNameText                           ; 0x0335
+	textpointer GrassClubMapNameText                               ; 0x0336
+	textpointer PsychicClubMapNameText                             ; 0x0337
+	textpointer ScienceClubMapNameText                             ; 0x0338
+	textpointer FireClubMapNameText                                ; 0x0339
+	textpointer ChallengeHallMapNameText                           ; 0x033a
+	textpointer PokemonDomeMapNameText                             ; 0x033b
 	textpointer Text033c                                           ; 0x033c
-	textpointer Text033d                                           ; 0x033d
-	textpointer Text033e                                           ; 0x033e
+	textpointer PauseMenuOptionsText                               ; 0x033d
+	textpointer DebugPauseMenuOptionsText                          ; 0x033e
 	textpointer PlayerStatusNameText                               ; 0x033f
 	textpointer PlayerStatusAlbumText                              ; 0x0340
 	textpointer PlayerStatusPlayTimeText                           ; 0x0341
@@ -1001,29 +1001,29 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer GrannyNPCName                                      ; 0x03e5
 	textpointer GuideNPCName                                       ; 0x03e6
 	textpointer AaronNPCName                                       ; 0x03e7
-	textpointer Text03e8                                           ; 0x03e8
-	textpointer Text03e9                                           ; 0x03e9
-	textpointer Text03ea                                           ; 0x03ea
-	textpointer Text03eb                                           ; 0x03eb
-	textpointer Text03ec                                           ; 0x03ec
-	textpointer Text03ed                                           ; 0x03ed
-	textpointer Text03ee                                           ; 0x03ee
-	textpointer Text03ef                                           ; 0x03ef
-	textpointer Text03f0                                           ; 0x03f0
-	textpointer Text03f1                                           ; 0x03f1
-	textpointer Text03f2                                           ; 0x03f2
-	textpointer Text03f3                                           ; 0x03f3
-	textpointer Text03f4                                           ; 0x03f4
-	textpointer Text03f5                                           ; 0x03f5
-	textpointer Text03f6                                           ; 0x03f6
-	textpointer Text03f7                                           ; 0x03f7
-	textpointer Text03f8                                           ; 0x03f8
-	textpointer Text03f9                                           ; 0x03f9
-	textpointer Text03fa                                           ; 0x03fa
-	textpointer Text03fb                                           ; 0x03fb
-	textpointer Text03fc                                           ; 0x03fc
-	textpointer Text03fd                                           ; 0x03fd
-	textpointer Text03fe                                           ; 0x03fe
+	textpointer MewtwoTradeCardName                                ; 0x03e8
+	textpointer MewTradeCardName                                   ; 0x03e9
+	textpointer ArcanineTradeCardName                              ; 0x03ea
+	textpointer PikachuTradeCardName                               ; 0x03eb
+	textpointer SurfingPikachuTradeCardName                        ; 0x03ec
+	textpointer ElectabuzzTradeCardName                            ; 0x03ed
+	textpointer SlowpokeTradeCardName                              ; 0x03ee
+	textpointer JigglypuffTradeCardName                            ; 0x03ef
+	textpointer ZapdosLegendaryCardName                            ; 0x03f0
+	textpointer MoltresLegendaryCardName                           ; 0x03f1
+	textpointer ArticunoLegendaryCardName                          ; 0x03f2
+	textpointer DragoniteLegendaryCardName                         ; 0x03f3
+	textpointer SuperEnergyRetrievalTradeCardName                  ; 0x03f4
+	textpointer FlyingPikachuTradeCardName                         ; 0x03f5
+	textpointer LightningAndFireDeckChoiceText                     ; 0x03f6
+	textpointer WaterAndFightingDeckChoiceText                     ; 0x03f7
+	textpointer GrassAndPsychicDeckChoiceText                      ; 0x03f8
+	textpointer SelectDeckToDuelText                               ; 0x03f9
+	textpointer CharmanderAndFriendsDeckChoiceText                 ; 0x03fa
+	textpointer SquirtleAndFriendsDeckChoiceText                   ; 0x03fb
+	textpointer BulbasaurAndFriendsDeckChoiceText                  ; 0x03fc
+	textpointer SelectDeckToTakeText                               ; 0x03fd
+	textpointer HowCanIHelpText                                    ; 0x03fe
 	textpointer Text03ff                                           ; 0x03ff
 	textpointer Text0400                                           ; 0x0400
 	textpointer Text0401                                           ; 0x0401
@@ -1051,19 +1051,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0417                                           ; 0x0417
 	textpointer Text0418                                           ; 0x0418
 	textpointer Text0419                                           ; 0x0419
-	textpointer Text041a                                           ; 0x041a
-	textpointer Text041b                                           ; 0x041b
+	textpointer PokemonTradingCards101Text                         ; 0x041a
+	textpointer PlaceholderMessageText                             ; 0x041b
 	textpointer Text041c                                           ; 0x041c
-	textpointer Text041d                                           ; 0x041d
-	textpointer Text041e                                           ; 0x041e
-	textpointer Text041f                                           ; 0x041f
-	textpointer Text0420                                           ; 0x0420
-	textpointer Text0421                                           ; 0x0421
-	textpointer Text0422                                           ; 0x0422
-	textpointer Text0423                                           ; 0x0423
-	textpointer Text0424                                           ; 0x0424
-	textpointer Text0425                                           ; 0x0425
-	textpointer Text0426                                           ; 0x0426
+	textpointer Gal1WantToTrade1Text                               ; 0x041d
+	textpointer Gal1WantToTrade2Text                               ; 0x041e
+	textpointer Gal1WouldYouLikeToTradeText                        ; 0x041f
+	textpointer Gal1DeclinedTradeText                              ; 0x0420
+	textpointer Gal1DontOwnCardText                                ; 0x0421
+	textpointer Gal1CardInDeckText                                 ; 0x0422
+	textpointer Gal1LetsTradeText                                  ; 0x0423
+	textpointer Gal1TradeCompleteText                              ; 0x0424
+	textpointer Gal1ThanksText                                     ; 0x0425
+	textpointer Gal1AfterTradeText                                 ; 0x0426
 	textpointer Text0427                                           ; 0x0427
 	textpointer Text0428                                           ; 0x0428
 	textpointer Text0429                                           ; 0x0429
@@ -1184,7 +1184,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text049c                                           ; 0x049c
 	textpointer Text049d                                           ; 0x049d
 	textpointer Text049e                                           ; 0x049e
-	textpointer Text049f                                           ; 0x049f
+	textpointer WhatIsADeckText                                    ; 0x049f
 	textpointer Text04a0                                           ; 0x04a0
 	textpointer Text04a1                                           ; 0x04a1
 	textpointer Text04a2                                           ; 0x04a2
@@ -1470,20 +1470,20 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text05ba                                           ; 0x05ba
 	textpointer Text05bb                                           ; 0x05bb
 	textpointer Text05bc                                           ; 0x05bc
-	textpointer Text05bd                                           ; 0x05bd
-	textpointer Text05be                                           ; 0x05be
-	textpointer Text05bf                                           ; 0x05bf
-	textpointer Text05c0                                           ; 0x05c0
-	textpointer Text05c1                                           ; 0x05c1
-	textpointer Text05c2                                           ; 0x05c2
-	textpointer Text05c3                                           ; 0x05c3
-	textpointer Text05c4                                           ; 0x05c4
-	textpointer Text05c5                                           ; 0x05c5
-	textpointer Text05c6                                           ; 0x05c6
-	textpointer Text05c7                                           ; 0x05c7
-	textpointer Text05c8                                           ; 0x05c8
-	textpointer Text05c9                                           ; 0x05c9
-	textpointer Text05ca                                           ; 0x05ca
+	textpointer ItsTheChallengeMachineText                         ; 0x05bd
+	textpointer Tech1MasterMedalExplanationText                    ; 0x05be
+	textpointer Tech1AutoDeckMachineExplanationText                ; 0x05bf
+	textpointer Tech1FewEnergyCardsText                            ; 0x05c0
+	textpointer Tech1ReceivedEnergyCardsText                       ; 0x05c1
+	textpointer Tech1GoodbyeText                                   ; 0x05c2
+	textpointer Tech2LegendaryCardsExplanationText                 ; 0x05c3
+	textpointer Tech2LegendaryCardsCongratsText                    ; 0x05c4
+	textpointer Tech3BoosterPackExplanationText                    ; 0x05c5
+	textpointer Tech3LegendaryCardsCongratsText                    ; 0x05c6
+	textpointer Tech4ClubsExplanationText                          ; 0x05c7
+	textpointer Tech4DefeatedTheGrandMastersText                   ; 0x05c8
+	textpointer Tech5DiaryAndEmailExplanationText                  ; 0x05c9
+	textpointer Tech5ChallengeMachineExplanationText               ; 0x05ca
 	textpointer Text05cb                                           ; 0x05cb
 	textpointer Text05cc                                           ; 0x05cc
 	textpointer Text05cd                                           ; 0x05cd
@@ -1699,7 +1699,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text069f                                           ; 0x069f
 	textpointer Text06a0                                           ; 0x06a0
 	textpointer Text06a1                                           ; 0x06a1
-	textpointer Text06a2                                           ; 0x06a2
+	textpointer FoundLv9SlowpokeText                               ; 0x06a2
 	textpointer Text06a3                                           ; 0x06a3
 	textpointer Text06a4                                           ; 0x06a4
 	textpointer Text06a5                                           ; 0x06a5

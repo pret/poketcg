@@ -2,7 +2,7 @@
 ; convenience once the meaning of all fields is figured out.
 
 CardPointers: ; 30c5c (c:4c5c)
-	dw $0000
+	dw NULL
 	dw GrassEnergyCard
 	dw FireEnergyCard
 	dw WaterEnergyCard
@@ -231,7 +231,7 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw PokemonFluteCard
 	dw GamblerCard
 	dw RecycleCard
-	dw $0000
+	dw NULL
 
 BulbasaurCard: ; 30e28 (c:4e28)
 	db TYPE_PKMN_GRASS ; type

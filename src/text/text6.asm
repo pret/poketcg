@@ -932,12 +932,12 @@ Text05bc: ; 4ab23 (12:6b23)
 	line "  A new journey has just begun...”"
 	done
 
-Text05bd: ; 4ad20 (12:6d20)
+ItsTheChallengeMachineText: ; 4ad20 (12:6d20)
 	text "It's the Challenge Machine,"
 	line "created by Dr. Mason!"
 	done
 
-Text05be: ; 4ad53 (12:6d53)
+Tech1MasterMedalExplanationText: ; 4ad53 (12:6d53)
 	text "The 8 Club Masters each own a"
 	line "Master Medal."
 	line "The secret of each Club's deck is"
@@ -949,7 +949,7 @@ Text05be: ; 4ad53 (12:6d53)
 	line "different Decks!"
 	done
 
-Text05bf: ; 4ae4d (12:6e4d)
+Tech1AutoDeckMachineExplanationText: ; 4ae4d (12:6e4d)
 	text "You finally inherited the"
 	line "Legendary Pokémon Cards!"
 	line "Did you see the Legendary Auto"
@@ -960,7 +960,7 @@ Text05bf: ; 4ae4d (12:6e4d)
 	line "to a very powerful deck!"
 	done
 
-Text05c0: ; 4af26 (12:6f26)
+Tech1FewEnergyCardsText: ; 4af26 (12:6f26)
 	text "Excuse me, but you don't seem "
 	line "to have many Energy cards."
 	line "Building a deck must be difficult "
@@ -968,17 +968,17 @@ Text05c0: ; 4af26 (12:6f26)
 	line "Here, take these!"
 	done
 
-Text05c1: ; 4afb0 (12:6fb0)
+Tech1ReceivedEnergyCardsText: ; 4afb0 (12:6fb0)
 	text "<RAMNAME> received some "
 	line "Energy cards!"
 	done
 
-Text05c2: ; 4afd0 (12:6fd0)
+Tech1GoodbyeText: ; 4afd0 (12:6fd0)
 	text "Goodbye!"
 	line "Take care!"
 	done
 
-Text05c3: ; 4afe5 (12:6fe5)
+Tech2LegendaryCardsExplanationText: ; 4afe5 (12:6fe5)
 	text "Are you also hoping to inherit"
 	line "the Legendary Pokémon Cards?"
 	line "If you want the Legendary Cards,"
@@ -991,14 +991,14 @@ Text05c3: ; 4afe5 (12:6fe5)
 	line "more about the Legendary Cards."
 	done
 
-Text05c4: ; 4b129 (12:7129)
+Tech2LegendaryCardsCongratsText: ; 4b129 (12:7129)
 	text "You finally inherited the"
 	line "Legendary Pokémon Cards!"
 	line "Amazing!"
 	line "Congratulations, <RAMNAME>!!!"
 	done
 
-Text05c5: ; 4b17c (12:717c)
+Tech3BoosterPackExplanationText: ; 4b17c (12:717c)
 	text "When you defeat a Club Member,"
 	line "you'll receive a Booster Pack."
 	line "Each Booster Pack has 10 cards."
@@ -1009,7 +1009,7 @@ Text05c5: ; 4b17c (12:717c)
 	line "so choose your opponents well."
 	done
 
-Text05c6: ; 4b274 (12:7274)
+Tech3LegendaryCardsCongratsText: ; 4b274 (12:7274)
 	text "Congratulations on inheriting "
 	line "the Legendary Pokémon Cards,"
 	line ""
@@ -1019,7 +1019,7 @@ Text05c6: ; 4b274 (12:7274)
 	line "you'll have a good time!"
 	done
 
-Text05c7: ; 4b323 (12:7323)
+Tech4ClubsExplanationText: ; 4b323 (12:7323)
 	text "I'm sure you already know, but there"
 	line "are 8 Clubs: the Fighting, Water,"
 	line "Lightning, Grass, Psychic, Fire,"
@@ -1028,14 +1028,14 @@ Text05c7: ; 4b323 (12:7323)
 	line "are specific to that Club."
 	done
 
-Text05c8: ; 4b3e2 (12:73e2)
+Tech4DefeatedTheGrandMastersText: ; 4b3e2 (12:73e2)
 	text "Amazing! You beat the 8 Club "
 	line "Masters!"
 	line "And you even defeated the"
 	line "4 Grand Masters! Amazing!"
 	done
 
-Text05c9: ; 4b43e (12:743e)
+Tech5DiaryAndEmailExplanationText: ; 4b43e (12:743e)
 	text "To save your game, press START"
 	line "and choose Diary from the Menu."
 	line "You can do all sorts of stuff with"
@@ -1044,7 +1044,7 @@ Text05c9: ; 4b43e (12:743e)
 	line "Dr. Mason on that PC, too!"
 	done
 
-Text05ca: ; 4b4ea (12:74ea)
+Tech5ChallengeMachineExplanationText: ; 4b4ea (12:74ea)
 	text "This is the Challenge Machine"
 	line "created by Dr. Mason!"
 	line "The Challenge Machine is a "

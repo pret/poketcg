@@ -844,7 +844,7 @@ Text0195: ; 39f03 (e:5f03)
 	line "Please wait..."
 	done
 
-Text0196: ; 39f21 (e:5f21)
+BoosterPackText: ; 39f21 (e:5f21)
 	text "Booster Pack"
 	done
 
@@ -1507,7 +1507,7 @@ OpponentsDiscardPileText: ; 3b7cf (e:77cf)
 	text "Opponent's Discard Pile"
 	done
 
-Text0219: ; 3b7e8 (e:77e8)
+DeckText: ; 3b7e8 (e:77e8)
 	text "Deck"
 	done
 
@@ -1563,7 +1563,7 @@ Text0220: ; 3b886 (e:7886)
 	textfw0 "-(2)"
 	done
 
-Text0221: ; 3b8f2 (e:78f2)
+PlayerNameKeyboardText: ; 3b8f2 (e:78f2)
 	textfw3 "A", " ", "B", " ", "C", " ", "D", " ", "E", " ", "F", " ", "G", " ", "H", " ", "I"
 	line ""
 	textfw3 "J", " ", "K", " ", "L", " ", "M", " ", "N", " ", "O", " ", "P", " ", "Q", " ", "R"
@@ -1580,7 +1580,7 @@ Text0221: ; 3b8f2 (e:78f2)
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done
 
-NamingScreenKeyboardText: ; 3b97b (e:797b)
+DeckNameKeyboardText: ; 3b97b (e:797b)
 	textfw3 "A", " ", "B", " ", "C", " ", "D", " ", "E", " ", "F", " ", "G", " ", "H", " ", "I"
 	line ""
 	textfw3 "J", " ", "K", " ", "L", " ", "M", " ", "N", " ", "O", " ", "P", " ", "Q", " ", "R"
@@ -1632,19 +1632,19 @@ ChosenAsDuelingDeckText: ; 3ba55 (e:7a55)
 	line "chosen as the dueling deck!"
 	done
 
-Text022b: ; 3ba78 (e:7a78)
+Deck1Text: ; 3ba78 (e:7a78)
 	textfw0 "1", "·"
 	done
 
-Text022c: ; 3ba7b (e:7a7b)
+Deck2Text: ; 3ba7b (e:7a7b)
 	textfw0 "2", "·"
 	done
 
-Text022d: ; 3ba7e (e:7a7e)
+Deck3Text: ; 3ba7e (e:7a7e)
 	textfw0 "3", "·"
 	done
 
-Text022e: ; 3ba81 (e:7a81)
+Deck4Text: ; 3ba81 (e:7a81)
 	textfw0 "4", "·"
 	done
 

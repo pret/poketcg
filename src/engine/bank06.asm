@@ -923,26 +923,26 @@ glossary_entry: MACRO
 ENDM
 
 GlossaryData1:
-	glossary_entry 7, Text02fa, Text030c
-	glossary_entry 5, Text02fb, Text030d
-	glossary_entry 7, Text02fc, Text030e
-	glossary_entry 6, Text02fd, Text030f
-	glossary_entry 6, Text02fe, Text0310
-	glossary_entry 4, Text02ff, Text0311
-	glossary_entry 5, Text0300, Text0312
-	glossary_entry 7, Text0301, Text0313
-	glossary_entry 5, Text0302, Text0314
+	glossary_entry 7, AboutTheDeckText, DeckDescriptionText
+	glossary_entry 5, AboutTheDiscardPileText, DiscardPileDescriptionText
+	glossary_entry 7, AboutTheHandText, HandDescriptionText
+	glossary_entry 6, AboutTheArenaText, ArenaDescriptionText
+	glossary_entry 6, AboutTheBenchText, BenchDescriptionText
+	glossary_entry 4, AboutTheActivePokemonText, ActivePokemonDescriptionText
+	glossary_entry 5, AboutBenchPokemonText, BenchPokemonDescriptionText
+	glossary_entry 7, AboutPrizesText, PrizesDescriptionText
+	glossary_entry 5, AboutDamageCountersText, DamageCountersDescriptionText
 
 GlossaryData2:
-	glossary_entry 5, Text0303, Text0315
-	glossary_entry 5, Text0304, Text0316
-	glossary_entry 5, Text0305, Text0317
-	glossary_entry 5, Text0306, Text0318
-	glossary_entry 6, Text0307, Text0319
-	glossary_entry 5, Text0308, Text031a
-	glossary_entry 6, Text0309, Text031b
-	glossary_entry 6, Text030a, Text031c
-	glossary_entry 6, Text030b, Text031d
+	glossary_entry 5, AboutEnergyCardsText, EnergyCardsDescriptionText
+	glossary_entry 5, AboutTrainerCardsText, TrainerCardsDescriptionText
+	glossary_entry 5, AboutBasicPokemonText, BasicPokemonDescriptionText
+	glossary_entry 5, AboutEvolutionCardsText, EvolutionCardsDescriptionText
+	glossary_entry 6, AboutAttackingText, AttackingDescriptionText
+	glossary_entry 5, AboutPokemonPowerText, PokemonPowerDescriptionText
+	glossary_entry 6, AboutWeaknessText, WeaknessDescriptionText
+	glossary_entry 6, AboutResistanceText, ResistanceDescriptionText
+	glossary_entry 6, AboutRetreatingText, RetreatingDescriptionText
 
 Func_18661: ; 18661 (6:4661)
 	xor a
@@ -1077,7 +1077,7 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	ld a, $01
-	ld [$d4b3], a
+	ld [wd4b3], a
 	xor a
 	ld [wd4b0], a
 	ld a, [de]
@@ -1147,10 +1147,10 @@ Func_19014: ; 19014 (6:5014)
 	ld a, $97
 	call Func_3b6a
 	ld a, [wce81]
-	ld [$d4b3], a
+	ld [wd4b3], a
 	push de
 	ld hl, wce7f
-	ld de, $d4b1
+	ld de, wd4b1
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -1192,7 +1192,7 @@ Func_19014: ; 19014 (6:5014)
 Func_19079: ; 19079 (6:5079)
 	ld a, [de]
 	inc de
-	ld [$d4b3], a
+	ld [wd4b3], a
 	ld a, [wce82]
 	ld [wd4b0], a
 	call Func_1909d
@@ -1210,7 +1210,7 @@ PointerTable_006_508f: ; 1908f (6:508f)
 	dw Func_19013
 
 Func_1909d: ; 1909d (6:509d)
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, .asm_50ad
 	cp $01
@@ -1265,7 +1265,7 @@ Func_1909d: ; 1909d (6:509d)
 
 ; this part is not perfectly analyzed.
 ; needs some fix.
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, Func_190fb.asm_510f
 Func_190fb: ; 190fb (6:50fb)
@@ -1341,25 +1341,25 @@ Func_19168: ; 19168 (6:5168)
 	jr z, .asm_5188
 	call LoadTxRam3
 	ld a, [wce81]
-	ld hl, $003a
+	ldtx hl, AttackDamageText
 	and $06
 	ret z
-	ld hl, $0038
+	ldtx hl, WeaknessMoreDamage2Text
 	cp $06
 	ret z
 	and $02
-	ld hl, $0037
+	ldtx hl, WeaknessMoreDamageText
 	ret nz
-	ld hl, $0036
+	ldtx hl, ResistanceLessDamageText
 	ret
 .asm_5188
 	call CheckNoDamageOrEffect
 	ret c
-	ld hl, $003b
+	ldtx hl, NoDamageText
 	ld a, [wce81]
 	and $04
 	ret z
-	ld hl, $0039
+	ldtx hl, ResistanceNoDamageText
 	ret
 
 ; needs analyze.
@@ -1624,7 +1624,7 @@ Func_1a68d: ; 1a68d (6:668d)
 	call SetupText
 	bank1call InitAndDrawCardListScreenLayout
 	ldtx hl, ChooseTheCardYouWishToExamineText
-	ldtx de, Text0196
+	ldtx de, BoosterPackText
 	bank1call SetCardListHeaderText
 	ld a, A_BUTTON | START
 	ld [wNoItemSelectionMenuKeys], a
@@ -1684,12 +1684,12 @@ Func_1a6cd: ; 1a6cd (6:66cd)
 	ld hl, $00a3
 	bank1call DrawWholeScreenTextBox
 	ld a, $0a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	xor a
 	ldh [hBankSRAM], a
-	ld [$4000], a
-	ld [$a000], a
-	ld [$0000], a
+	ld [MBC3SRamBank], a
+	ld [MBC3RTC], a
+	ld [MBC3SRamEnable], a
 	jp Reset
 	ret
 
@@ -1712,7 +1712,7 @@ Func_1a73a: ; 1a73a (6:673a)
 	or b
 	jr nz, .asm_6749
 	ld a, $0a
-	ld [$0000], a
+	ld [MBC3SRamEnable], a
 	ld a, e
 	ld [s0a00b], a
 	pop bc
@@ -1728,20 +1728,20 @@ WhatIsYourNameData: ; 1a75e (6:675e)
 ; without any bank description.
 ; That is, the developers hard-coded it. -_-;;
 Deck1Data: ; 1a763 (6:6763)
-	textitem 2, 1, Text022b
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck1Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck2Data: ; 1a76c (6:676c)
-	textitem 2, 1, Text022c
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck2Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck3Data: ; 1a775 (6:6775)
-	textitem 2, 1, Text022d
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck3Text
+	textitem 14, 1, DeckText
 	db $ff
 Deck4Data: ; 1a77e (6:677e)
-	textitem 2, 1, Text022e
-	textitem 14, 1, Text0219
+	textitem 2, 1, Deck4Text
+	textitem 14, 1, DeckText
 	db $ff
 
 ; set each byte zero from hl for b bytes.
@@ -1938,7 +1938,7 @@ DrawNamingScreenBG: ; 1a892 (6:6892)
 	; print "End".
 	ld hl, .data
 	call PlaceTextItems
-	ldtx hl, Text0221
+	ldtx hl, PlayerNameKeyboardText
 	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID
@@ -2815,7 +2815,7 @@ Func_1ae99: ; 1ae99 (6:6e99)
 	ld hl, DrawNamingScreenBG.data
 	call PlaceTextItems
 	; print the keyboard characters.
-	ldtx hl, NamingScreenKeyboardText ; "A B C D..."
+	ldtx hl, DeckNameKeyboardText ; "A B C D..."
 	lb de, 2, 4
 	call InitTextPrinting
 	call ProcessTextFromID
@@ -3297,7 +3297,7 @@ Func_1bae4: ; 1bae4 (6:7ae4)
 	push af
 	ld hl, wd088
 	ld b, [hl]
-	farcall $2, $7625
+	farcall Func_b625
 	jr c, .asm_7af5
 	pop af
 	ld [wd0a6], a

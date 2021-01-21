@@ -5,9 +5,9 @@ Func_80028: ; 80028 (20:4028)
 	call Func_801f1
 	ld bc, $0000
 	call Func_80077
-	farcall $3, $49c7
-	call $41a1
-	farcall $3, $43ee
+	farcall Func_c9c7
+	call Func_801a1
+	farcall Func_c3ee
 	ret
 ; 0x8003d
 
@@ -16,12 +16,12 @@ Func_80028: ; 80028 (20:4028)
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
 	ld [wd292], a
-	jr .asm_80082
+	jr Func_80082
 
 	xor a
 	ld [wd292], a
 
-.asm_80082
+Func_80082: ; 80082 (20:4082)
 	push hl
 	push bc
 	push de
@@ -78,7 +78,7 @@ Func_800bd: ; 800bd (20:40bd)
 
 Func_800e0: ; 800e0 (20:40e0)
 	push hl
-	ld hl, $d28e
+	ld hl, wd28e
 	ld a, [wd12f]
 	ld [hl], a
 	ld a, [wd23c]
@@ -99,7 +99,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	push bc
 	push de
 	ld b, $00
-	ld a, [$d28e]
+	ld a, [wd28e]
 	ld c, a
 	ld de, wd23e
 	call Func_3be4
@@ -138,17 +138,17 @@ Func_800e0: ; 800e0 (20:40e0)
 	ret
 
 Func_80148: ; 80148 (20:4148)
-	ld a, [$d291]
+	ld a, [wd291]
 	or a
 	ret z
-	ld a, [$d23c]
+	ld a, [wd23c]
 	or a
 	jr z, .asm_80162
 	push hl
 	push bc
 .asm_80155
 	push bc
-	ld a, [$d291]
+	ld a, [wd291]
 	add [hl]
 	ld [hli], a
 	pop bc
@@ -160,7 +160,7 @@ Func_80148: ; 80148 (20:4148)
 .asm_80162
 	push hl
 	push bc
-	ld a, [$d291]
+	ld a, [wd291]
 .asm_80167
 	ld [hli], a
 	dec b
@@ -411,7 +411,7 @@ Func_803b9: ; 803b9 (20:43b9)
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
 	ld a, [hl]
-	ld [$d239], a
+	ld [wd239], a
 	ret
 ; 0x803c9
 
@@ -570,9 +570,9 @@ Func_80b89: ; 80b89 (20:4b89)
 	push af
 	ld c, a
 	ld a, $01
-	ld [$d292], a
+	ld [wd292], a
 	ld b, $00
-	ld hl, $d323
+	ld hl, wd323
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -618,7 +618,7 @@ Func_80baa: ; 80baa (20:4baa)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, $4c21
+	ld hl, Unknown_80c21
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
@@ -636,7 +636,7 @@ Func_80baa: ; 80baa (20:4baa)
 	ld a, [hl]
 	ld [wd131], a
 	push bc
-	farcall $20, $4082
+	farcall Func_80082
 	pop bc
 	srl b
 	ld a, c
@@ -648,7 +648,7 @@ Func_80baa: ; 80baa (20:4baa)
 	ld b, $0
 	ld hl, wBoosterViableCardList
 	add hl, bc
-	farcall $3, $438f
+	farcall Func_c38f
 	pop af
 	ld [wd23b], a
 	pop af
@@ -665,8 +665,8 @@ Func_80baa: ; 80baa (20:4baa)
 	pop bc
 	pop hl
 	ret
-; 0x80c21
 
+Unknown_80c21: ; 80c21 (20:4c21)
 	INCROM $80c21, $80e5a
 
 SpriteNullAnimationPointer: ; 80e5a (20:4e5a)

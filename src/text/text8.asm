@@ -205,7 +205,7 @@ Text06a1: ; 509f2 (14:49f2)
 	line "Bye!"
 	done
 
-Text06a2: ; 50a9e (14:4a9e)
+FoundLv9SlowpokeText: ; 50a9e (14:4a9e)
 	text "<RAMNAME>"
 	line "checked the wall!"
 	line ""

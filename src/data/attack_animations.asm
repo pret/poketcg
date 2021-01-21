@@ -21,7 +21,7 @@ anim_end2: MACRO
 ENDM
 
 PointerTable_AttackAnimation:
-	dw $0000                               ; ATK_ANIM_NONE
+	dw NULL                                ; ATK_ANIM_NONE
 	dw AttackAnimation_Hit                 ; ATK_ANIM_HIT
 	dw AttackAnimation_BigHit              ; ATK_ANIM_BIG_HIT
 	dw AttackAnimation_Hit                 ; ATK_ANIM_3

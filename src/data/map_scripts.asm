@@ -1,7 +1,7 @@
 ; each map has a maximum of 8 scripts
 ; scripts are referenced with ids [0,2,4,6,8,a,c,e]
 ; each script id is used for a specific event
-; if a script pointer is $0000, that map has no script for that event
+; if a script pointer is NULL, that map has no script for that event
 ; 0: NPC data
 ; 2: Called after every NPC is loaded (unused)
 ; 4: Interactable Objects
@@ -13,341 +13,341 @@
 
 MapScripts: ; 1162a (4:562a)
 ; OVERWORLD_MAP
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadOverworld
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 
 ; MASON_LABORATORY
 	dw MasonLabNPCS
-	dw $0000
+	dw NULL
 	dw MasonLabObjects
 	dw MasonLabPressedA
 	dw MasonLabLoadMap
 	dw MasonLaboratoryAfterDuel
-	dw $0000
+	dw NULL
 	dw MasonLabCloseTextBox
 
 ; DECK_MACHINE_ROOM
 	dw DeckMachineRoomNPCS
-	dw $0000
+	dw NULL
 	dw DeckMachineRoomObjects
-	dw $0000
-	dw $0000
-	dw $589f
-	dw $0000
-	dw $58ad
+	dw NULL
+	dw NULL
+	dw DeckMachineRoomAfterDuel
+	dw NULL
+	dw DeckMachineRoomCloseTextBox
 
 ; ISHIHARAS_HOUSE
 	dw IshiharasHouseNPCS
-	dw $0000
+	dw NULL
 	dw IshiharasHouseObjects
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ; FIGHTING_CLUB_ENTRANCE
 	dw FightingClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; FIGHTING_CLUB_LOBBY
 	dw FightingClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw FightingClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw FightingClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; FIGHTING_CLUB
 	dw FightingClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 	dw FightingClubAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; ROCK_CLUB_ENTRANCE
 	dw RockClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; ROCK_CLUB_LOBBY
 	dw RockClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw RockClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw RockClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; ROCK_CLUB
 	dw RockClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $5fd6
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw RockClubAfterDuel
+	dw NULL
+	dw NULL
 
 ; WATER_CLUB_ENTRANCE
 	dw WaterClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; WATER_CLUB_LOBBY
 	dw WaterClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw WaterClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw WaterClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; WATER_CLUB
 	dw WaterClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 	dw WaterClubAfterDuel
 	dw WaterClubMovePlayer
-	dw $0000
+	dw NULL
 
 ; LIGHTNING_CLUB_ENTRANCE
 	dw LightningClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; LIGHTNING_CLUB_LOBBY
 	dw LightningClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw LightningClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw LightningClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; LIGHTNING_CLUB
 	dw LightningClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $63e8
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw LightningClubAfterDuel
+	dw NULL
+	dw NULL
 
 ; GRASS_CLUB_ENTRANCE
 	dw GrassClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw GrassClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; GRASS_CLUB_LOBBY
 	dw GrassClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw GrassClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw GrassClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; GRASS_CLUB
 	dw GrassClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $66e7
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw GrassClubAfterDuel
+	dw NULL
+	dw NULL
 
 ; PSYCHIC_CLUB_ENTRANCE
 	dw PsychicClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; PSYCHIC_CLUB_LOBBY
 	dw PsychicClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw PsychicClubLobbyObjects
-	dw $0000
-	dw $6971
+	dw NULL
+	dw PsychicClubLobbyLoadMap
 	dw PsychicClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; PSYCHIC_CLUB
 	dw PsychicClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $6a46
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw PsychicClubAfterDuel
+	dw NULL
+	dw NULL
 
 ; SCIENCE_CLUB_ENTRANCE
 	dw ScienceClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; SCIENCE_CLUB_LOBBY
 	dw ScienceClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw ScienceClubLobbyObjects
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 	dw ScienceClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; SCIENCE_CLUB
 	dw ScienceClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $6bf1
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw ScienceClubAfterDuel
+	dw NULL
+	dw NULL
 
 ; FIRE_CLUB_ENTRANCE
 	dw FireClubEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw LoadClubEntrance
 	dw ClubEntranceAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; FIRE_CLUB_LOBBY
 	dw FireClubLobbyNPCS
-	dw $0000
+	dw NULL
 	dw FireClubLobbyObjects
 	dw FireClubPressedA
-	dw $0000
+	dw NULL
 	dw FireClubLobbyAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; FIRE_CLUB
 	dw FireClubNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 	dw FireClubAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; CHALLENGE_HALL_ENTRANCE
 	dw ChallengeHallEntranceNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
+	dw NULL
 
 ; CHALLENGE_HALL_LOBBY
 	dw ChallengeHallLobbyNPCS
-	dw $0000
+	dw NULL
 	dw ChallengeHallLobbyObjects
-	dw $0000
+	dw NULL
 	dw ChallengeHallLobbyLoadMap
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 
 ; CHALLENGE_HALL
 	dw ChallengeHallNPCS
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
 	dw ChallengeHallLoadMap
 	dw ChallengeHallAfterDuel
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
 
 ; POKEMON_DOME_ENTRANCE
 	dw PokemonDomeEntranceNPCS
-	dw $0000
+	dw NULL
 	dw PokemonDomeEntranceObjects
-	dw $0000
-	dw $7607
-	dw $0000
-	dw $0000
-	dw $762a
+	dw NULL
+	dw PokemonDomeEntranceLoadMap
+	dw NULL
+	dw NULL
+	dw PokemonDomeEntranceCloseTextBox
 
 ; POKEMON_DOME
 	dw PokemonDomeNPCS
-	dw $0000
-	dw $0000
-	dw $0000
-	dw $7706
-	dw $76e0
-	dw $76c6
-	dw $7718
+	dw NULL
+	dw NULL
+	dw NULL
+	dw PokemonDomeLoadMap
+	dw PokemonDomeAfterDuel
+	dw PokemonDomeMovePlayer
+	dw PokemonDomeCloseTextBox
 
 ; HALL_OF_HONOR
 	dw HallOfHonorNPCS
-	dw $0000
+	dw NULL
 	dw HallOfHonorObjects
-	dw $0000
+	dw NULL
 	dw HallOfHonorLoadMap
-	dw $0000
-	dw $0000
-	dw $0000
+	dw NULL
+	dw NULL
+	dw NULL
