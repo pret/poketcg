@@ -2217,7 +2217,33 @@ Func_8ff2: ; 8ff2 (2:4ff2)
 	ret
 ; 0x9001
 
-	INCROM $9001, $9026
+Func_9001: ; 9001 (2:5001)
+	ld de, $d00a
+	ld bc, $ff9c
+	call Func_9017
+	ld bc, $fff6
+	call Func_9017
+	ld bc, rIE
+	call Func_9017
+	ret
+; 0x9017
+
+Func_9017: ; 9017 (2:5017)
+	ld a, $1f
+.asm_9019
+	inc a
+	add hl, bc
+	jr c, .asm_9019
+	ld [de], a
+	inc de
+	ld a, l
+	sub c
+	ld l, a
+	ld a, h
+	sbc b
+	ld h, a
+	ret
+; 0x9026
 
 Func_9026: ; 9026 (2:5026)
 	ret
@@ -2608,7 +2634,40 @@ Func_92b4: ; 92b4 (2:52b4)
 	ret
 ; 0x92be
 
-	INCROM $92be, $9314
+Func_92be: ; 92be (2:52be)
+	push hl
+	call Func_9314
+	pop hl
+	ret c
+	push de
+	ld de, wDefaultText
+	call Func_92b4
+	ld hl, wDefaultText
+	call GetTextLengthInTiles
+	ld a, c
+	cp $15
+	jr c, .asm_92d8
+	ld c, $15
+.asm_92d8
+	ld b, $00
+	ld hl, wDefaultText
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld hl, $52f8
+	ld b, $1c
+	call Func_a281
+	xor a
+	ld [$c5aa], a
+	pop de
+	ld hl, wDefaultText
+	call InitTextPrinting
+	call ProcessText
+	or a
+	ret
+; 0x92f8
+
+	INCROM $92f8, $9314
 
 Func_9314: ; 9314 (2:5314)
 	ld bc, $0018
@@ -2708,17 +2767,119 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	pop bc
 	pop af
 	ret
+	
+Func_98c7: ; 98c7 (2:58c7)
+	call CalculateOnesAndTensDigits
+	push hl
+	ld hl, wOnesAndTensPlace
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	pop hl
+	ld [hl], $05
+	inc hl
+	ld [hli], a
+	ld [hl], $05
+	inc hl
+	ld a, b
+	ld [hli], a
+	ret
+; 0x98dc
 
-	INCROM $98c7, $9a6d
+Func_98dc: ; 98dc (2:58dc)
+	push de
+	push hl
+	ld hl, $0
+	ld b, a
+	ld c, $00
+.asm_98e4
+	push hl
+	push bc
+	ld bc, wcf17
+	add hl, bc
+	ld a, [hl]
+	pop bc
+	pop hl
+	inc l
+	or a
+	jr z, .asm_9912
+	ld e, a
+	call GetCardType
+	jr c, .asm_9912
+	push hl
+	ld l, a
+	ld a, b
+	and $20
+	cp $20
+	jr z, .asm_9907
+	ld a, l
+	pop hl
+	cp b
+	jr nz, .asm_98e4
+	jr .asm_990f
+.asm_9907
+	ld a, l
+	pop hl
+	and $08
+	cp $08
+	jr nz, .asm_98e4
+.asm_990f
+	inc c
+	jr .asm_98e4
+.asm_9912
+	ld a, c
+	pop hl
+	pop de
+	ret
+; 0x9916
+
+Func_9916: ; 9916 (2:5916)
+	ld bc, $0
+	ld hl, wDefaultText
+.asm_991c
+	push hl
+	ld hl, wcebb
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	push bc
+	call Func_98c7
+	pop bc
+	inc c
+	ld a, $09
+	cp c
+	jr nz, .asm_991c
+	ld [hl], $00
+	ld de, $104
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0x993d
+
+	INCROM $993d, $9a6d
 
 Func_9a6d: ; 9a6d (2:5a6d)
 	INCROM $9a6d, $9e41
 
 Func_9e41: ; 9e41 (2:5e41)
-	INCROM $9e41, $a288
+	INCROM $9e41, $a281
+	
+Func_a281: ; a281 (2:6281)
+.asm_a281
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .asm_a281
+	ret
+; 0xa288
 
 Func_a288: ; a288 (2:6288)
-	INCROM $a288, $a913
+	INCROM $a288, $a3ca
+	
+Func_a3ca: ; a3ca (2:63ca)
+	INCROM $a3ca, $a913
 
 Func_a913: ; a913 (2:6913)
 	INCROM $a913, $ad51
@@ -2730,7 +2891,32 @@ Func_adfe: ; adfe (2:6dfe)
 	INCROM $adfe, $b177
 
 Func_b177: ; b177 (2:7177)
-	INCROM $b177, $b19d
+	ld a, [wd10e]
+	and $03
+	ld hl, $7195
+	call JumpToFunctionInTable
+	jr c, .asm_b18f
+	or a
+	jr nz, .asm_b18f
+	xor a
+	ld [wTxRam2], a
+	ld [$ce40], a
+	ret
+.asm_b18f
+	ld a, $ff
+	ld [wd10e], a
+	ret
+; 0xb195
+
+Func_b195: ; b195 (2:7195)
+	dec e
+	ld l, a
+	sbc b
+	ld l, a
+	inc b
+	ld a, h
+	ld a, d
+	ld a, h
 
 Func_b19d: ; b19d (2:719d)
 	xor a
@@ -2839,37 +3025,425 @@ Unknown_b274: ; b274 (2:7274)
 	INCROM $b274, $b285
 
 Func_b285: ; b285 (2:7285)
-	INCROM $b285, $b29f
+	ld a, $05
+	ld [wNamingScreenKeyboardHeight], a
+	ld hl, wd0a7
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld hl, $7403
+	ld d, h
+	ld a, l
+	ld hl, wcece
+	ld [hli], a
+	ld [hl], d
+	xor a
+	ld [$ced2], a
+	ret
+; 0xb29f
 
 Func_b29f: ; b29f (2:729f)
 	INCROM $b29f, $b35b
 
 Func_b35b: ; b35b (2:735b)
-	INCROM $b35b, $b379
+	ld a, [wd088]
+	sla a
+	ld l, a
+	ld h, $00
+	ld bc, wd00d
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld bc, $18
+	add hl, bc
+	call EnableSRAM
+	ld a, [hl]
+	call DisableSRAM
+	or a
+	ret nz
+	scf
+	ret
+; 0xb379
 
 Func_b379: ; b379 (2:7379)
-	INCROM $b379, $b3fe
+	INCROM $b379, $b3b3
+	
+Func_b3b3: ; b3b3 (2:73b3)
+    ld de, $100
+    call InitTextPrinting
+    ld hl, wd0a2
+    ld a, [hli]
+    ld h, [hl]
+    ld l, a
+    call ProcessTextFromID
+    ret
+; 0xb3c3
+
+Func_b3c3: ; b3c3 (2:73c3)
+	ld a, $3c
+	add $3c
+	ld hl, wd00d
+	call Func_9843
+	ld de, wd00d
+	ld hl, s0a350
+	ld bc, $54
+	ld a, $3c
+.asm_b3d8
+	push af
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	inc de
+	add hl, bc
+	pop af
+	dec a
+	jr nz, .asm_b3d8
+	ret
+; 0xb3e5
+
+Func_b3e5: ; b3e5 (2:73e5)
+	ld a, [wcea1]
+	ld de, $202
+	ld b, $05
+.asm_b3ed
+	push af
+	push bc
+	push de
+	call Func_b424
+	pop de
+	pop bc
+	pop af
+	ret c
+	dec b
+	ret z
+	inc a
+	inc e
+	inc e
+	jr .asm_b3ed
+; 0xb3fe
 
 Unknown_b3fe: ; b3fe (2:73fe)
-	INCROM $b3fe, $b545
+	call Func_b704
+	jr Func_b3e5
+; 0xb403
+
+Func_b403: ; b403 (2:7403)
+	call Func_b704
+	ld hl, hffb0
+	ld [hl], $01
+	call Func_b3b3
+	ld de, $10e
+	call InitTextPrinting
+	ld hl, wd0a7
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call ProcessTextFromID
+	ld hl, hffb0
+	ld [hl], $00
+	jr Func_b3e5
+; 0xb424
+
+Func_b424: ; b424 (2:7424)
+	ld b, a
+	push bc
+	ld hl, wDefaultText
+	inc a
+	call Func_98c7
+	ld [hl], $77
+	inc hl
+	ld [hl], $00
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	pop af
+	push af
+	sla a
+	ld l, a
+	ld h, $00
+	ld bc, wd00d
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	inc d
+	inc d
+	inc d
+	push de
+	call Func_92be
+	pop de
+	pop bc
+	jr nc, .asm_b46b
+	call InitTextPrinting
+	ld hl, $25b
+	call ProcessTextFromID
+	ld d, $0d
+	inc e
+	call InitTextPrinting
+	ld hl, $74d4
+	call ProcessText
+	scf
+	ret
+.asm_b46b
+	push de
+	push bc
+	ld d, $12
+	call InitTextPrinting
+	ld a, $00
+	call Func_b625
+	pop bc
+	ld hl, wDefaultText
+	jr c, .asm_b482
+	ld de, $35f
+	jr .asm_b4c2
+.asm_b482
+	push bc
+	ld a, $ff
+	call Func_b625
+	jr c, .asm_b490
+	pop bc
+	ld de, $360
+	jr .asm_b4c2
+.asm_b490
+	ld de, $6c
+	call Func_22ca
+	pop bc
+	pop de
+	push bc
+	ld d, $11
+	inc e
+	call InitTextPrinting
+	pop bc
+	call Func_b4e1
+	call CalculateOnesAndTensDigits
+	ld hl, wOnesAndTensPlace
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	ld hl, wDefaultText
+	ld [hl], $05
+	inc hl
+	ld [hli], a
+	ld [hl], $05
+	inc hl
+	ld a, b
+	ld [hli], a
+	ld [hl], $00
+	ld hl, wDefaultText
+	call ProcessText
+	or a
+	ret
+.asm_b4c2
+	call Func_22ca
+	pop de
+	ld d, $0d
+	inc e
+	call InitTextPrinting
+	ld hl, $74d4
+	call ProcessText
+	or a
+	ret
+; 0xb4d4
+
+Func_b4d4: ; b4d4 (2:74d4)
+	dec b
+	nop
+	dec b
+	nop
+	dec b
+	nop
+	dec b
+	nop
+	dec b
+	nop
+	dec b
+	nop
+	nop
+	
+Func_b4e1: ; b4e1 (2:74e1)
+	push bc
+	call Func_b644
+	call Func_a3ca
+	call Func_b664
+	pop bc
+	sla b
+	ld c, b
+	ld b, $00
+	ld hl, wd00d
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld bc, $18
+	add hl, bc
+	call EnableSRAM
+	ld de, wc000
+	ld bc, $0
+.asm_b505
+	inc b
+	ld a, $3c
+	cp b
+	jr c, .asm_b520
+	ld a, [hli]
+	push hl
+	ld l, a
+	ld h, $00
+	add hl, de
+	ld a, [hl]
+	and $7f
+	or a
+	jr z, .asm_b51c
+	dec a
+	ld [hl], a
+	pop hl
+	jr .asm_b505
+.asm_b51c
+	inc c
+	pop hl
+	jr .asm_b505
+.asm_b520
+	ld a, c
+	call DisableSRAM
+	ret
+; 0xb525
+
+	INCROM $b525, $b545
 
 Func_b545: ; b545 (2:7545)
-	INCROM $b545, $b592
+	ld a, [$d085]
+	ld hl, wDefaultText
+	call Func_98c7
+	ld a, $05
+	ld [hli], a
+	ld a, $2e
+	ld [hli], a
+	ld a, $3c
+	call Func_98c7
+	ld [hl], $00
+	ld de, SerialHandleSend.send_escaped
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0xb568
+
+Func_b568: ; b568 (2:7568)
+	ld a, [wNamingScreenCursorY]
+	ld b, a
+	ld a, [wcea1]
+	add b
+	inc a
+	ld hl, wDefaultText
+	call Func_98c7
+	ld a, $05
+	ld [hli], a
+	ld a, $2e
+	ld [hli], a
+	ld a, [$d085]
+	call Func_98c7
+	ld [hl], $00
+	ld de, SerialHandleSend.send_escaped
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0xb592
 
 Func_b592: ; b592 (2:7592)
-	INCROM $b592, $b625
+	INCROM $b592, $b611
+
+Func_b611: ; b611 (2:7611)
+	push af
+	push hl
+	ld a, [wd088]
+	sla a
+	ld e, a
+	ld d, $00
+	ld hl, wd00d
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	pop hl
+	pop af
+	ret
+; 0xb625
 
 Func_b625: ; b625 (2:7625)
 	INCROM $b625, $b644
 
 Func_b644: ; b644 (2:7644)
-	INCROM $b644, $b653
+	push af
+	ldh a, [hBankSRAM]
+	or a
+	jr z, .asm_b651
+	ld [wd0a4], a
+	xor a
+	call BankswitchSRAM
+.asm_b651
+	pop af
+	ret
+; 0xb653
 
 Func_b653: ; b653 (2:7653)
-	INCROM $b653, $b6ca
+	push af
+	ldh a, [hBankSRAM]
+	cp $01
+	jr z, .asm_b662
+	ld [wd0a4], a
+	ld a, $01
+	call BankswitchSRAM
+.asm_b662
+	pop af
+	ret
+; 0xb664
+
+Func_b664: ; b664 (2:7664)
+	push af
+	push bc
+	ldh a, [hBankSRAM]
+	ld b, a
+	ld a, [wd0a4]
+	cp b
+	jr z, .asm_b672
+	call BankswitchSRAM
+.asm_b672
+	pop bc
+	pop af
+	ret
+; 0xb675
+
+	INCROM $b675, $b6ca
 
 Func_b6ca: ; b6ca (2:76ca)
-	INCROM $b6ca, $b6fb
+	ld hl, $266
+	call YesOrNoMenuWithText
+	jr c, .asm_b6f6
+	call Func_b611
+	ld l, e
+	ld h, d
+	push hl
+	call EnableSRAM
+	call Func_9253
+	pop hl
+	ld a, $54
+	call Func_9843
+	call DisableSRAM
+	xor a
+	ld [wTxRam2], a
+	ld [$ce40], a
+	ld hl, $267
+	call DrawWideTextBox_WaitForInput
+	or a
+	ret
+.asm_b6f6
+	ld a, [wNamingScreenCursorY]
+	scf
+	ret
+; 0xb6fb
 
 Unknown_b6fb: ; b6fb (2:76fb)
 	INCROM $b6fb, $b704
