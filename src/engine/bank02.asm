@@ -3446,10 +3446,47 @@ Func_b6ca: ; b6ca (2:76ca)
 ; 0xb6fb
 
 Unknown_b6fb: ; b6fb (2:76fb)
-	INCROM $b6fb, $b704
-
+	ld bc, $202
+	nop
+	dec b
+	rrca
+	nop
+	nop
+	nop
+	
 Func_b704: ; b704 (2:7704)
-	INCROM $b704, $b7c6
+	ld a, [wcea1]
+	or a
+	jr z, .asm_b70e
+	ld a, $0c
+	jr .asm_b710
+.asm_b70e
+	ld a, $1f
+.asm_b710
+	ld bc, $1301
+	call WriteByteToBGMap0
+	ld a, [wcea1]
+	add $06
+	ld b, a
+	ld a, [wd0a5]
+	cp b
+	jr c, .asm_b72a
+	xor a
+	ld [$cecd], a
+	ld a, $2f
+	jr .asm_b731
+.asm_b72a
+	ld a, $01
+	ld [$cecd], a
+	ld a, $1f
+.asm_b731
+	ld bc, $130b
+	call WriteByteToBGMap0
+	ret
+; 0xb738
+
+Func_b738: ; b704 (2:7704)
+	INCROM $b738, $b7c6
 
 Func_b7c6: ; b7c6 (2:77c6)
 	INCROM $b7c6, $ba04
