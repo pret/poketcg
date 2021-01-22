@@ -2728,7 +2728,94 @@ Func_9649: ; 9649 (2:5649)
 	INCROM $9667, $9843
 
 Func_9843: ; 9843 (2:5843)
-	INCROM $9843, $98a6
+	push af
+	push bc
+	push hl
+	ld b, a
+	xor a
+.asm_9848
+	ld [hli], a
+	dec b
+	jr nz, .asm_9848
+	pop hl
+	pop bc
+	pop af
+	ret
+; 0x9850
+
+Func_9850: ; 9850 (2:5850)
+	push hl
+	ld hl, wcf17
+	ld d, $00
+.asm_9856
+	ld a, [hli]
+	or a
+	jr z, .asm_9860
+	cp e
+	jr nz, .asm_9856
+	inc d
+	jr .asm_9856
+.asm_9860
+	ld a, d
+	pop hl
+	ret
+; 0x9863
+
+Func_9863: ; 9863 (2:5863)
+	push hl
+	ld hl, wHandTempList
+	ld d, $ff
+.asm_9869
+	inc d
+	ld a, [hli]
+	or a
+	jr z, .asm_987d
+	cp e
+	jr nz, .asm_9869
+	ld hl, wTempHandCardList
+	push de
+	ld e, d
+	ld d, $00
+	add hl, de
+	pop de
+	ld a, [hl]
+	pop hl
+	ret
+.asm_987d
+	xor a
+	pop hl
+	ret
+; 0x9880
+
+Func_9880: ; 9880 (2:5880)
+	push af
+	push bc
+	push de
+	push hl
+.asm_9884
+	ld a, [hl]
+	or a
+	jr z, .asm_988b
+	inc hl
+	jr .asm_9884
+.asm_988b
+	push de
+	call Func_9850
+	call Func_98c7
+	ld [hl], $05
+	inc hl
+	ld [hl], $2e
+	inc hl
+	pop de
+	call Func_9863
+	call Func_98c7
+	ld [hl], $00
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0x98a6
 
 ; determines the ones and tens digits in a for printing
 ; the ones place is added $20 (SYM_0) so that it maps to a numerical character
@@ -2879,7 +2966,62 @@ Func_a288: ; a288 (2:6288)
 	INCROM $a288, $a3ca
 	
 Func_a3ca: ; a3ca (2:63ca)
-	INCROM $a3ca, $a913
+	ld [hffb5], a
+	ld hl, sCardCollection
+	ld de, wc000
+	ld b, $ff
+	call EnableSRAM
+	call Func_a281.asm_a281
+	call DisableSRAM
+	ld a, [hffb5]
+	bit 0, a
+	jr z, .asm_a3eb
+	ld de, sDeck1Cards
+	call Func_a412
+.asm_a3eb
+	ld a, [hffb5]
+	bit 1, a
+	jr z, .asm_a3f8
+	ld de, sDeck2Cards
+	call Func_a412
+.asm_a3f8
+	ld a, [hffb5]
+	bit 2, a
+	jr z, .asm_a405
+	ld de, sDeck3Cards
+	call Func_a412
+.asm_a405
+	ld a, [hffb5]
+	bit 3, a
+	ret z
+	ld de, sDeck4Cards
+	call Func_a412
+	ret
+; 0xa412
+
+Func_a412: ; a412 (2:6412)
+	call EnableSRAM
+	ld bc, wc000
+	ld h, $3c
+.asm_a41a
+	ld a, [de]
+	inc de
+	or a
+	jr z, .asm_a429
+	push hl
+	ld h, $00
+	ld l, a
+	add hl, bc
+	inc [hl]
+	pop hl
+	dec h
+	jr nz, .asm_a41a
+.asm_a429
+	call DisableSRAM
+	ret
+; 0xa42d
+
+	INCROM $a42d, $a913
 
 Func_a913: ; a913 (2:6913)
 	INCROM $a913, $ad51
@@ -2888,7 +3030,24 @@ Func_ad51: ; ad51 (2:6d51)
 	INCROM $ad51, $adfe
 
 Func_adfe: ; adfe (2:6dfe)
-	INCROM $adfe, $b177
+	push de
+	ld de, wcfb9
+	call Func_92b4
+	pop de
+	ld hl, wcf17
+	call Func_8cd4
+	ld a, $09
+	ld hl, wcebb
+	call Func_9843
+	ld a, $3c
+	ld [wcecc], a
+	ld hl, wcebb
+	ld [hl], a
+	call Func_ae21
+	ret
+; 0xae21
+Func_ae21: ; ae21 (2:6e21)
+	INCROM $ae21, $b177
 
 Func_b177: ; b177 (2:7177)
 	ld a, [wd10e]
