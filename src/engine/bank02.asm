@@ -3068,117 +3068,10 @@ Func_b177: ; b177 (2:7177)
 ; 0xb195
 
 Func_b195: ; b195 (2:7195)
-	dec e
-	ld l, a
-	sbc b
-	ld l, a
-	inc b
-	ld a, h
-	ld a, d
-	ld a, h
+	INCROM $b195, $b19d
 
 Func_b19d: ; b19d (2:719d)
-	xor a
-	ld [wcea1], a
-	ld de, CheckForCGB
-	ld hl, wd0a2
-	ld [hl], e
-	inc hl
-	ld [hl], d
-	call Func_b379
-	ld a, $3c
-	ld [wd0a5], a
-	xor a
-.asm_b1b3
-	ld hl, Unknown_b6fb
-	call Func_9a6d
-	call Func_b704
-	call Func_b545
-	ldtx hl, PleaseSelectDeckText
-	call DrawWideTextBox_PrintText
-	ld de, $0224 ; PleaseSelectDeckText?
-	call Func_b285
-	call Func_b29f
-	jr c, .asm_b1b3
-	cp $ff
-	ret z
-	ld b, a
-	ld a, [wcea1]
-	add b
-	ld [wd088], a
-	call ResetCheckMenuCursorPositionAndBlink
-	call DrawWideTextBox
-	ld hl, Unknown_b274
-	call PlaceTextItems
-.asm_b1e7
-	call DoFrame
-	call HandleCheckMenuInput
-	jp nc, .asm_b1e7
-	cp $ff
-	jr nz, .asm_b1fa
-	ld a, [wd086]
-	jp .asm_b1b3
-
-.asm_b1fa
-	ld a, [wCheckMenuCursorYPosition]
-	sla a
-	ld hl, wCheckMenuCursorXPosition
-	add [hl]
-	or a
-	jr nz, .asm_b22c
-	call Func_b35b
-	jr nc, .asm_b216
-	call Func_b592
-	ld a, [wd086]
-	jp c, .asm_b1b3
-	jr .asm_b25e
-
-.asm_b216
-	ldtx hl, OKIfFileDeletedText
-	call YesOrNoMenuWithText
-	ld a, [wd086]
-	jr c, .asm_b1b3
-	call Func_b592
-	ld a, [wd086]
-	jp c, .asm_b1b3
-	jr .asm_b25e
-
-.asm_b22c
-	cp $1
-	jr nz, .asm_b24c
-	call Func_b35b
-	jr c, .asm_b240
-	call Func_b6ca
-	ld a, [wd086]
-	jp c, .asm_b1b3
-	jr .asm_b25e
-
-.asm_b240
-	ld hl, WaitForVBlank
-	call DrawWideTextBox_WaitForInput
-	ld a, [wd086]
-	jp .asm_b1b3
-
-.asm_b24c
-	cp $2
-	jr nz, .asm_b273
-	call Func_b35b
-	jr c, .asm_b240
-	call Func_b7c6
-	ld a, [wd086]
-	jp nc, .asm_b1b3
-
-.asm_b25e
-	ld a, [wd087]
-	ld [wcea1], a
-	call Func_b379
-	call Func_b704
-	call Func_b545
-	ld a, [wd086]
-	jp .asm_b1b3
-
-.asm_b273
-	ret
+	INCROM $b19d, $b274
 
 Unknown_b274: ; b274 (2:7274)
 	INCROM $b274, $b285
@@ -3407,20 +3300,8 @@ Func_b424: ; b424 (2:7424)
 	ret
 ; 0xb4d4
 
-Func_b4d4: ; b4d4 (2:74d4)
-	dec b
-	nop
-	dec b
-	nop
-	dec b
-	nop
-	dec b
-	nop
-	dec b
-	nop
-	dec b
-	nop
-	nop
+Func_b4d4:
+	INCROM $b4d4, $b4e1
 	
 Func_b4e1: ; b4e1 (2:74e1)
 	push bc
@@ -3605,13 +3486,7 @@ Func_b6ca: ; b6ca (2:76ca)
 ; 0xb6fb
 
 Unknown_b6fb: ; b6fb (2:76fb)
-	ld bc, $202
-	nop
-	dec b
-	rrca
-	nop
-	nop
-	nop
+	INCROM $b6fb, $b704
 	
 Func_b704: ; b704 (2:7704)
 	ld a, [wcea1]
