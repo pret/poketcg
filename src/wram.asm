@@ -2147,7 +2147,9 @@ wd292:: ; d292
 
 	ds $4
 
-wd297:: ; d297
+; temporarily holds the palettes from
+; wBackgroundPalettesCGB
+wTempBackgroundPalettesCGB:: ; d297
 	ds 8 palettes
 
 	ds $4c
@@ -2426,10 +2428,13 @@ wd4b7:: ; d4b7
 wd4b8:: ; d4b8
 	ds $1
 
-wd4b9:: ; d4b9
+; pointer to a function to update
+; the current screen animation
+wScreenAnimUpdatePtr:: ; d4b9
 	ds $2
 
-wd4bb:: ; d4bb
+; duration of the current screen animation
+wScreenAnimDuration:: ; d4bb
 	ds $1
 
 wd4bc:: ; d4bc

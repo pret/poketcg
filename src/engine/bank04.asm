@@ -1415,7 +1415,7 @@ Func_129fa: ; 129fa (4:69fa)
 	ret
 ; 0x12a13
 
-Func_12a13: ; 12a13 (4:6a13)
+GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	ld a, [wWhichSprite]
 	push hl
 	push bc

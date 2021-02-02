@@ -1170,18 +1170,18 @@ Func_19014: ; 19014 (6:5014)
 	jp Func_18f9c.asm_4fd4
 
 .shake_1
-	ld c, $61
-	ld b, $63
+	ld c, DUEL_ANIM_SMALL_SHAKE_X
+	ld b, DUEL_ANIM_SMALL_SHAKE_Y
 	jr .asm_5067
 
 .shake_2
-	ld c, $62
-	ld b, $64
+	ld c, DUEL_ANIM_BIG_SHAKE_X
+	ld b, DUEL_ANIM_BIG_SHAKE_Y
 	jr .asm_5067
 
 .shake_3
-	ld c, $63
-	ld b, $61
+	ld c, DUEL_ANIM_SMALL_SHAKE_Y
+	ld b, DUEL_ANIM_SMALL_SHAKE_X
 
 .asm_5067
 	ldh a, [hWhoseTurn]

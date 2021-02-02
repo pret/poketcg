@@ -113,6 +113,13 @@
 	const DUEL_ANIM_DUEL_DRAW          ; $5f
 	const DUEL_ANIM_96                 ; $60
 
+	const DUEL_ANIM_SMALL_SHAKE_X      ; $61
+	const DUEL_ANIM_BIG_SHAKE_X        ; $62
+	const DUEL_ANIM_SMALL_SHAKE_Y      ; $63
+	const DUEL_ANIM_BIG_SHAKE_Y        ; $64
+	const DUEL_ANIM_FLASH              ; $65
+	const DUEL_ANIM_DISTORT            ; $66
+
 	; Special animations
 	const_def $fa
 	const DUEL_ANIM_SHAKE1             ; $fa
