@@ -573,8 +573,8 @@ Func_1c8bc: ; 1c8bc (7:48bc)
 	ld [wd42a], a
 	ld [wd4c0], a
 	xor a
-	ld [wd4ac], a
-	ld [wd4ad], a
+	ld [wDuelAnimBufferCurPos], a
+	ld [wDuelAnimBufferSize], a
 	ld [wd4b3], a
 	call Func_1ccbc
 	call Func_3ca0
@@ -583,7 +583,7 @@ Func_1c8bc: ; 1c8bc (7:48bc)
 	ret
 ; 0x1c8ef
 
-Func_1c8ef: ; 1c8ef (7:48ef)
+PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 	ld a, [wDoFrameFunction + 0]
 	cp LOW(Func_3ba2)
 	jr nz, .error
@@ -603,7 +603,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	push hl
 	push bc
 	push de
-	call Func_1cab3
+	call GetAnimationData
 ; hl: pointer
 
 	ld a, [wAnimationsDisabled]
@@ -684,7 +684,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld [wd4cb], a
 
 	ld a, [hli] ; ANIM_PALETTE_ID
-	farcall Func_80418
+	farcall LoadPaletteData
 	ld a, [hli] ; ANIM_SPRITE_ANIM_ID
 
 	push af
@@ -830,18 +830,20 @@ AnimationCoordinates:
 	anim_coords 56,  40, $00
 	anim_coords 24,  40, $00
 
-Func_1ca31: ; 1ca31 (7:4a31)
+; appends to end of wDuelAnimBuffer
+; the current duel animation
+LoadDuelAnimationToBuffer: ; 1ca31 (7:4a31)
 	push hl
 	push bc
-	ld a, [wd4ac]
+	ld a, [wDuelAnimBufferCurPos]
 	ld b, a
-	ld hl, wd4ad
+	ld hl, wDuelAnimBufferSize
 	ld a, [hl]
 	ld c, a
 	add DUEL_ANIM_STRUCT_SIZE
 	and %01111111
 	cp b
-	jp z, .asm_007_4a6b
+	jp z, .skip
 	ld [hl], a
 
 	ld b, $00
@@ -864,25 +866,27 @@ Func_1ca31: ; 1ca31 (7:4a31)
 	ld a, [wDuelAnimReturnBank]
 	ld [hl], a
 
-.asm_007_4a6b
+.skip
 	pop bc
 	pop hl
 	ret
 
-Func_1ca6e: ; 1ca6e (7:4a6e)
+; loads the animations from wDuelAnimBuffer
+; in acending order, starting at wDuelAnimBufferCurPos
+PlayBufferedDuelAnimations: ; 1ca6e (7:4a6e)
 	push hl
 	push bc
-.asm_1ca70
-	ld a, [wd4ad]
+.next_duel_anim
+	ld a, [wDuelAnimBufferSize]
 	ld b, a
-	ld a, [wd4ac]
+	ld a, [wDuelAnimBufferCurPos]
 	cp b
-	jr z, .asm_1cab0
+	jr z, .skip
 
 	ld c, a
 	add DUEL_ANIM_STRUCT_SIZE
 	and %01111111
-	ld [wd4ac], a
+	ld [wDuelAnimBufferCurPos], a
 
 	ld b, $00
 	ld hl, wDuelAnimBuffer
@@ -904,18 +908,19 @@ Func_1ca6e: ; 1ca6e (7:4a6e)
 	ld a, [hl]
 	ld [wDuelAnimReturnBank], a
 
-	call Func_1c8ef
+	call PlayLoadedDuelAnimation
 	call CheckAnyAnimationPlaying
-	jr nc, .asm_1ca70
+	jr nc, .next_duel_anim
 
-.asm_1cab0
+.skip
 	pop bc
 	pop hl
 	ret
 ; 0x1cab3
 
 ; gets data from Animations for anim ID in a
-Func_1cab3: ; 1cab3 (7:4ab3)
+; outputs the pointer to the data in hl
+GetAnimationData: ; 1cab3 (7:4ab3)
 	push bc
 	ld a, [wTempAnimation]
 	ld l, a
@@ -965,7 +970,7 @@ Func_1cac5: ; 1cac5 (7:4ac5)
 .asm_1cafb
 	cp $ff
 	jr nz, .asm_1cb02
-	call Func_1ca6e
+	call PlayBufferedDuelAnimations
 .asm_1cb02
 	ret
 
@@ -1016,8 +1021,8 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	dec c
 	jr nz, .asm_1cb3b
 	xor a
-	ld [wd4ac], a
-	ld [wd4ad], a
+	ld [wDuelAnimBufferCurPos], a
+	ld [wDuelAnimBufferSize], a
 .asm_1cb57
 	pop de
 	pop bc
@@ -1049,7 +1054,7 @@ Func_1cb5e: ; 1cb5e (7:4b5e)
 	ld [wd4cb], a
 
 	ld a, $25
-	farcall Func_80418
+	farcall LoadPaletteData
 	call Func_1cba6
 
 	ld hl, wd4b3

@@ -1084,7 +1084,7 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	cp $04
 	jr z, .asm_4fd3
 	ld a, $96
-	call Func_3b6a
+	call PlayDuelAnimation
 .asm_4fd3
 	pop de
 .asm_4fd4
@@ -1140,12 +1140,12 @@ Func_19014: ; 19014 (6:5014)
 	jr z, .shake_3
 
 .play_anim
-	call Func_3b6a
+	call PlayDuelAnimation
 	jr Func_18f9c.asm_4fd4
 
 .show_damage
 	ld a, $97
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [wce81]
 	ld [wd4b3], a
 
@@ -1160,12 +1160,12 @@ Func_19014: ; 19014 (6:5014)
 	pop de
 
 	ld a, $8c
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [wDuelDisplayedScreen]
 	cp DUEL_MAIN_SCENE
 	jr nz, .asm_5054
 	ld a, $98
-	call Func_3b6a
+	call PlayDuelAnimation
 .asm_5054
 	jp Func_18f9c.asm_4fd4
 
@@ -1203,7 +1203,7 @@ Func_19079: ; 19079 (6:5079)
 	ld [wDuelAnimLocationParam], a
 	call Func_1909d
 	ld a, $96
-	call Func_3b6a
+	call PlayDuelAnimation
 	jp Func_18f9c.asm_4fd4
 
 PointerTable_006_508f: ; 1908f (6:508f)

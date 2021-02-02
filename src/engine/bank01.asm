@@ -218,7 +218,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	ldtx hl, LostDuelText
 
 .handle_duel_finished
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, c
 	call PlaySong
 	ld a, OPPONENT_TURN
@@ -1523,7 +1523,7 @@ PlayTurnDuelistDrawAnimation: ; 49a8 (1:49a8)
 	ld e, DUEL_ANIM_OPP_DRAW
 .got_duelist
 	ld a, e
-	call Func_3b6a
+	call PlayDuelAnimation
 
 .loop_anim
 	call DoFrame
@@ -2229,11 +2229,11 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 	ld hl, sp+$03
 	; play animation 3 times
 	ld a, [hl]
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [hl]
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [hl]
-	call Func_3b6a
+	call PlayDuelAnimation
 
 .loop_shuffle_anim
 	call DoFrame
@@ -2255,7 +2255,7 @@ PlayShuffleAndDrawCardsAnimation: ; 4e98 (1:4e98)
 ; get the draw animation from input value of c
 	ld hl, sp+$00
 	ld a, [hl]
-	call Func_3b6a
+	call PlayDuelAnimation
 
 .loop_drawing_anim
 	call DoFrame
@@ -2328,11 +2328,11 @@ Func_4f2d: ; 4f2d (1:4f2d)
 .load_anim
 ; play animation 3 times
 	ld a, e
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, e
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, e
-	call Func_3b6a
+	call PlayDuelAnimation
 
 .loop_anim
 	call DoFrame
@@ -6942,7 +6942,7 @@ Func_6cab: ; 6cab (1:6cab)
 	pop af
 
 ; play animation
-	call Func_3b6a
+	call PlayDuelAnimation
 .loop_anim
 	call DoFrame
 	call CheckAnyAnimationPlaying
@@ -7844,7 +7844,7 @@ _TossCoin: ; 71ad (1:71ad)
 .asm_7223
 	call Func_3b21
 	ld a, DUEL_ANIM_COIN_SPIN
-	call Func_3b6a
+	call PlayDuelAnimation
 
 	ld a, [wCoinTossDuelistType]
 	or a
@@ -7871,7 +7871,7 @@ _TossCoin: ; 71ad (1:71ad)
 ; load the correct tossing animation
 ; and wait for it to finish
 	ld a, d
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [wCoinTossDuelistType]
 	or a
 	jr z, .wait_anim
@@ -7901,7 +7901,7 @@ _TossCoin: ; 71ad (1:71ad)
 
 .show_result
 	ld a, b
-	call Func_3b6a
+	call PlayDuelAnimation
 
 ; load correct sound effect
 ; the sound of the coin toss result

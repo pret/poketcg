@@ -33,7 +33,7 @@ Func_80077: ; 80077 (20:4077)
 	call Func_803b9
 	ld a, [wTempPointerBank]
 	ld [wd23d], a
-	ld de, wd23e
+	ld de, wLoadedPalData
 	ld bc, $0006
 	call CopyBankedDataToDE
 	ld l, e
@@ -87,7 +87,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	sla [hl]
 .asm_800f0
 	ld c, $40
-	ld hl, wd23e
+	ld hl, wLoadedPalData
 	xor a
 .asm_800f6
 	ld [hli], a
@@ -101,13 +101,13 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld b, $00
 	ld a, [$d28e]
 	ld c, a
-	ld de, wd23e
+	ld de, wLoadedPalData
 	call Func_3be4
 	ld a, [wd12f]
 	ld b, a
 	pop de
 	push de
-	ld hl, wd23e
+	ld hl, wLoadedPalData
 	call Func_8016e
 	ld a, [wConsole]
 	cp $02
@@ -116,7 +116,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld a, [wd12f]
 	ld c, a
 	ld b, $00
-	ld hl, wd23e
+	ld hl, wLoadedPalData
 	add hl, bc
 	pop de
 	push de
@@ -422,7 +422,7 @@ Func_803b9: ; 803b9 (20:43b9)
 ; b = palette index
 ; c = palette size
 ; hl = palette data to copy
-LoadPaletteData: ; 803ec (20:43ec)
+LoadPaletteDataFromHL: ; 803ec (20:43ec)
 	push hl
 	push bc
 	push de
@@ -466,13 +466,14 @@ LoadPaletteData: ; 803ec (20:43ec)
 	ret
 ; 0x80418
 
-Func_80418: ; 80418 (20:4418)
+; loads palette index a
+LoadPaletteData: ; 80418 (20:4418)
 	push hl
 	push bc
 	push de
 	call CopyPaletteDataToBuffer
 
-	ld hl, wd23e
+	ld hl, wLoadedPalData
 	ld a, [hli] ; number palettes
 	ld c, a
 	or a
@@ -513,7 +514,7 @@ Func_80418: ; 80418 (20:4418)
 	; ensure it's a palette index starting from wObjectPalettesCGB
 	or NUM_BACKGROUND_PALETTES
 	ld b, a
-	call LoadPaletteData
+	call LoadPaletteDataFromHL
 
 .done
 	pop de
@@ -522,7 +523,7 @@ Func_80418: ; 80418 (20:4418)
 	ret
 ; 0x80456
 
-; copies palette data of index in a to wd23e
+; copies palette data of index in a to wLoadedPalData
 CopyPaletteDataToBuffer: ; 80456 (20:4456)
 	push hl
 	push bc
@@ -545,7 +546,7 @@ CopyPaletteDataToBuffer: ; 80456 (20:4456)
 	ld c, a
 	ld b, $00
 
-	ld de, wd23e
+	ld de, wLoadedPalData
 	call CopyBankedDataToDE
 	pop de
 	pop bc

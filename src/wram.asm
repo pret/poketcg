@@ -2129,10 +2129,9 @@ wd23c:: ; d23c
 wd23d:: ; d23d
 	ds $1
 
-wd23e:: ; d23e
-	ds $1
-
-	ds $50
+; palette loaded from Palette* data
+wLoadedPalData:: ; d23e
+	ds $51
 
 wd28f:: ; d28f
 	ds $1
@@ -2383,10 +2382,10 @@ wDuelAnimBuffer:: ; d42c
 	duel_anim_struct wDuelAnim15
 	duel_anim_struct wDuelAnim16
 
-wd4ac:: ; d4ac
+wDuelAnimBufferCurPos:: ; d4ac
 	ds $1
 
-wd4ad:: ; d4ad
+wDuelAnimBufferSize:: ; d4ad
 	ds $1
 
 ; used to know what coordinate offsets to use to place animations

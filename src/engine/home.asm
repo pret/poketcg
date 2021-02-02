@@ -11115,9 +11115,12 @@ CheckAnyAnimationPlaying: ; 3b52 (0:3b52)
 	pop hl
 	ret
 
+; plays duel animation
+; the animations are loaded to a buffer
+; and played in order, so they can be stacked
 ; input:
 ; - a = animation index
-Func_3b6a: ; 3b6a (0:3b6a)
+PlayDuelAnimation: ; 3b6a (0:3b6a)
 	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
@@ -11126,25 +11129,25 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	push hl
 	push bc
 	push de
-	ld a, BANK(Func_1ca31)
+	ld a, BANK(LoadDuelAnimationToBuffer)
 	call BankswitchROM
 	ld a, [wTempAnimation]
 	cp $61
-	jr nc, .asm_3b90
+	jr nc, .load_buffer
 
-	ld hl, wd4ad
-	ld a, [wd4ac]
+	ld hl, wDuelAnimBufferSize
+	ld a, [wDuelAnimBufferCurPos]
 	cp [hl]
-	jr nz, .asm_3b90
+	jr nz, .load_buffer
 	call CheckAnyAnimationPlaying
-	jr nc, .asm_3b95
+	jr nc, .play_anim
 
-.asm_3b90
-	call Func_1ca31
+.load_buffer
+	call LoadDuelAnimationToBuffer
 	jr .done
 
-.asm_3b95
-	call Func_1c8ef
+.play_anim
+	call PlayLoadedDuelAnimation
 	jr .done
 
 .done
