@@ -113,12 +113,27 @@
 	const DUEL_ANIM_DUEL_DRAW          ; $5f
 	const DUEL_ANIM_96                 ; $60
 
+; animations passed this point are treated differently
+DUEL_SPECIAL_ANIMS EQU const_value
+
+DUEL_SCREEN_ANIMS EQU const_value
 	const DUEL_ANIM_SMALL_SHAKE_X      ; $61
 	const DUEL_ANIM_BIG_SHAKE_X        ; $62
 	const DUEL_ANIM_SMALL_SHAKE_Y      ; $63
 	const DUEL_ANIM_BIG_SHAKE_Y        ; $64
 	const DUEL_ANIM_FLASH              ; $65
 	const DUEL_ANIM_DISTORT            ; $66
+
+	const_def $96
+	const DUEL_ANIM_150                ; $96
+	const DUEL_ANIM_PRINT_DAMAGE       ; $97
+	const DUEL_ANIM_UPDATE_HUD         ; $98
+	const DUEL_ANIM_153                ; $99
+	const DUEL_ANIM_154                ; $9a
+	const DUEL_ANIM_155                ; $9b
+	const DUEL_ANIM_156                ; $9c
+	const DUEL_ANIM_157                ; $9d
+	const DUEL_ANIM_158                ; $9e
 
 	; Special animations
 	const_def $fa

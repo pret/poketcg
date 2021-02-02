@@ -8196,7 +8196,7 @@ Func_741a: ; 741a (1:741a)
 	xor a
 	ld [wDuelAnimLocationParam], a
 	push hl
-	farcall Func_18f9c
+	farcall PlayAttackAnimationCommands
 	pop hl
 	jr .loop
 .done
@@ -8278,7 +8278,7 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	ld [wLoadedMoveAnimation], a
 
 .got_anim
-	farcall Func_18f9c
+	farcall PlayAttackAnimationCommands
 	pop bc
 	pop de
 	pop hl

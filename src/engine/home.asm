@@ -11132,7 +11132,7 @@ PlayDuelAnimation: ; 3b6a (0:3b6a)
 	ld a, BANK(LoadDuelAnimationToBuffer)
 	call BankswitchROM
 	ld a, [wTempAnimation]
-	cp $61
+	cp DUEL_SPECIAL_ANIMS
 	jr nc, .load_buffer
 
 	ld hl, wDuelAnimBufferSize

@@ -597,7 +597,7 @@ PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 .okay
 	ld a, [wTempAnimation]
 	ld [wd4bf], a
-	cp $61
+	cp DUEL_SPECIAL_ANIMS
 	jp nc, Func_1cb5e
 
 	push hl
@@ -1117,7 +1117,7 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	call GetAnimCoordsAndFlags
 
 	ld a, [wd4b7]
-	add $fd
+	add -3
 	ld e, a
 	ld a, $4b
 	adc 0
@@ -1229,7 +1229,7 @@ InitScreenAnimation: ; 1cc76 (7:4c76)
 	jr nz, .skip
 	ld a, [wTempAnimation]
 	ld [wd42a], a
-	sub $61
+	sub DUEL_SCREEN_ANIMS
 	add a
 	add a
 	ld c, a
@@ -1485,27 +1485,35 @@ DistortScreen: ; 1cdc3 (7:4dc3)
 ; 0x1ce03
 
 Func_1ce03: ; 1ce03 (7:4e03)
-	cp $9e
+	cp DUEL_ANIM_158
 	jr z, .asm_1ce17
 	sub $96
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, $4e22
+	ld hl, .pointer_table
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	jp Func_3bb5
+	
 .asm_1ce17
 	ld a, [wDuelAnimDamage]
 	ld l, a
 	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 	jp Func_3bb5
-; 0x1ce22
 
-	INCROM $1ce22, $1ce32
+.pointer_table
+	dw Func_190f4         ; DUEL_ANIM_150
+	dw PrintDamageText    ; DUEL_ANIM_PRINT_DAMAGE
+	dw UpdateMainSceneHUD ; DUEL_ANIM_UPDATE_HUD
+	dw Func_191a3         ; DUEL_ANIM_153
+	dw Func_191a3         ; DUEL_ANIM_154
+	dw Func_191a3         ; DUEL_ANIM_155
+	dw Func_191a3         ; DUEL_ANIM_156
+	dw Func_191a3         ; DUEL_ANIM_157
 
 ; data for each animation ID (see src/constants/sprite_constants.asm)
 Animations: ; 1ce32 (7:4e32)
