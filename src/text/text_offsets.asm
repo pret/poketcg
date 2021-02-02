@@ -55,10 +55,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer UsedText                                           ; 0x0033
 	textpointer Text0034                                           ; 0x0034
 	textpointer PokemonsAttackText                                 ; 0x0035
-	textpointer ResistanceLessDamageText                           ; 0x0036
-	textpointer Text0037                                           ; 0x0037
-	textpointer Text0038                                           ; 0x0038
-	textpointer ResistanceNoDamageText                             ; 0x0039
+	textpointer ReceivedDamageDueToResistanceText                  ; 0x0036
+	textpointer ReceivedDamageDueToWeaknessText                    ; 0x0037
+	textpointer ReceivedDamageDueToWeaknessAltText                 ; 0x0038
+	textpointer DidNotReceiveDamageResistanceText                  ; 0x0039
 	textpointer AttackDamageText                                   ; 0x003a
 	textpointer NoDamageText                                       ; 0x003b
 	textpointer NoSelectableAttackText                             ; 0x003c

@@ -217,22 +217,22 @@ PokemonsAttackText: ; 365d8 (d:65d8)
 	text "<RAMTEXT>!"
 	done
 
-ResistanceLessDamageText: ; 365e1 (d:65e1)
+ReceivedDamageDueToResistanceText: ; 365e1 (d:65e1)
 	text "<RAMTEXT> received"
 	line "<RAMNUM> damage due to Resistance!"
 	done
 
-Text0037: ; 36609 (d:6609)
+ReceivedDamageDueToWeaknessText: ; 36609 (d:6609)
 	text "<RAMTEXT> received"
 	line "<RAMNUM> damage due to Weakness!"
 	done
 
-Text0038: ; 3662f (d:662f)
+ReceivedDamageDueToWeaknessAltText: ; 3662f (d:662f)
 	text "<RAMTEXT> received"
 	line "<RAMNUM> damage due to Weakness!"
 	done
 
-ResistanceNoDamageText: ; 36655 (d:6655)
+DidNotReceiveDamageResistanceText: ; 36655 (d:6655)
 	text "<RAMTEXT> did not"
 	line "receive damage due to Resistance."
 	done

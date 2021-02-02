@@ -118,3 +118,15 @@
 	const DUEL_ANIM_SHAKE1             ; $fa
 	const DUEL_ANIM_SHAKE2             ; $fb
 	const DUEL_ANIM_SHAKE3             ; $fc
+
+	; Duel Anim Struct constants
+	const_def
+	const DUEL_ANIM_STRUCT_ID             ; $0
+	const DUEL_ANIM_STRUCT_SCREEN         ; $1
+	const DUEL_ANIM_STRUCT_DUELIST_SIDE   ; $2
+	const DUEL_ANIM_STRUCT_LOCATION_PARAM ; $3
+	const DUEL_ANIM_STRUCT_DAMAGE         ; $4
+const_value = const_value + 1
+	const DUEL_ANIM_STRUCT_UNKNOWN_2      ; $6
+	const DUEL_ANIM_STRUCT_BANK           ; $7
+DUEL_ANIM_STRUCT_SIZE EQU const_value

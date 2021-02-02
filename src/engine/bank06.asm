@@ -1077,9 +1077,9 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	ld a, $01
-	ld [$d4b3], a
+	ld [wd4b3], a
 	xor a
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	ld a, [de]
 	cp $04
 	jr z, .asm_4fd3
@@ -1098,30 +1098,30 @@ Func_18fdc: ; 18fdc (6:4fdc)
 
 Func_18fdd: ; 18fdd (6:4fdd)
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	ld a, [wDuelType]
 	cp $00
 	jr nz, Func_19014
-	ld a, $c2
-	ld [wd4af], a
+	ld a, PLAYER_TURN
+	ld [wDuelAnimDuelistSide], a
 	jr Func_19014
 
 Func_18ff0: ; 18ff0 (6:4ff0)
 	call SwapTurn
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	call SwapTurn
 	ld a, [wDuelType]
 	cp $00
 	jr nz, Func_19014
-	ld a, $c3
-	ld [wd4af], a
+	ld a, OPPONENT_TURN
+	ld [wDuelAnimDuelistSide], a
 	jr Func_19014
 
 Func_19009: ; 19009 (6:5009)
 	ld a, [wce82]
 	and $7f
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	jr Func_19014
 
 Func_19013: ; 19013 (6:5013)
@@ -1131,55 +1131,61 @@ Func_19014: ; 19014 (6:5014)
 	ld a, [de]
 	inc de
 	cp DUEL_ANIM_SHOW_DAMAGE
-	jr z, .asm_502b
+	jr z, .show_damage
 	cp DUEL_ANIM_SHAKE1
-	jr z, .asm_5057
+	jr z, .shake_1
 	cp DUEL_ANIM_SHAKE2
-	jr z, .asm_505d
+	jr z, .shake_2
 	cp DUEL_ANIM_SHAKE3
-	jr z, .asm_5063
+	jr z, .shake_3
 
 .play_anim
 	call Func_3b6a
 	jr Func_18f9c.asm_4fd4
 
-.asm_502b
+.show_damage
 	ld a, $97
 	call Func_3b6a
 	ld a, [wce81]
-	ld [$d4b3], a
+	ld [wd4b3], a
+
 	push de
 	ld hl, wce7f
-	ld de, $d4b1
+	ld de, wDuelAnimDamage
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hli]
 	ld [de], a
 	pop de
+
 	ld a, $8c
 	call Func_3b6a
 	ld a, [wDuelDisplayedScreen]
-	cp $01
+	cp DUEL_MAIN_SCENE
 	jr nz, .asm_5054
 	ld a, $98
 	call Func_3b6a
 .asm_5054
 	jp Func_18f9c.asm_4fd4
-.asm_5057
+
+.shake_1
 	ld c, $61
 	ld b, $63
 	jr .asm_5067
-.asm_505d
+
+.shake_2
 	ld c, $62
 	ld b, $64
 	jr .asm_5067
-.asm_5063
+
+.shake_3
 	ld c, $63
 	ld b, $61
+
 .asm_5067
 	ldh a, [hWhoseTurn]
-	cp $c2
+	cp PLAYER_TURN
 	ld a, c
 	jr z, .play_anim
 	ld a, [wDuelType]
@@ -1192,9 +1198,9 @@ Func_19014: ; 19014 (6:5014)
 Func_19079: ; 19079 (6:5079)
 	ld a, [de]
 	inc de
-	ld [$d4b3], a
+	ld [wd4b3], a
 	ld a, [wce82]
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	call Func_1909d
 	ld a, $96
 	call Func_3b6a
@@ -1210,7 +1216,7 @@ PointerTable_006_508f: ; 1908f (6:508f)
 	dw Func_19013
 
 Func_1909d: ; 1909d (6:509d)
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, .asm_50ad
 	cp $01
@@ -1220,11 +1226,11 @@ Func_1909d: ; 1909d (6:509d)
 	ret
 
 .asm_50ad
-	ld a, [wd4b0]
+	ld a, [wDuelAnimLocationParam]
 	ld l, a
 	ld a, [wWhoseTurn]
 	ld h, a
-	cp $c2
+	cp PLAYER_TURN
 	jr z, .asm_50cc
 	ld a, [wDuelType]
 	cp $00
@@ -1240,24 +1246,25 @@ Func_1909d: ; 1909d (6:509d)
 	bit 7, l
 	jr z, .asm_50d2
 	jr .asm_50e2
+
 .asm_50d2
 	ld l, $04
-	ld h, $c2
+	ld h, PLAYER_TURN
 	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50da
 	ld l, $04
-	ld h, $c3
+	ld h, OPPONENT_TURN
 	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
 	jr .asm_50f0
 .asm_50e2
 	ld l, $05
-	ld h, $c3
+	ld h, OPPONENT_TURN
 	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 	jr .asm_50f0
 .asm_50ea
 	ld l, $05
-	ld h, $c2
+	ld h, PLAYER_TURN
 	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 .asm_50f0:
 	ld [wDuelAnimationScreen], a
@@ -1265,7 +1272,7 @@ Func_1909d: ; 1909d (6:509d)
 
 ; this part is not perfectly analyzed.
 ; needs some fix.
-	ld a, [$d4b3]
+	ld a, [wd4b3]
 	cp $04
 	jr z, Func_190fb.asm_510f
 Func_190fb: ; 190fb (6:50fb)
@@ -1325,7 +1332,7 @@ Func_190fb: ; 190fb (6:50fb)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_19168
+	call GetDamageText
 	ld a, l
 	or h
 	call nz, DrawWideTextBox_PrintText
@@ -1335,32 +1342,35 @@ Func_190fb: ; 190fb (6:50fb)
 	pop hl
 	ret
 
-Func_19168: ; 19168 (6:5168)
+; returns in hl the text id associated with
+; the damage in hl and its effectiveness
+GetDamageText: ; 19168 (6:5168)
 	ld a, l
 	or h
-	jr z, .asm_5188
+	jr z, .no_damage
 	call LoadTxRam3
 	ld a, [wce81]
-	ld hl, $003a
-	and $06
-	ret z
-	ld hl, $0038
-	cp $06
-	ret z
-	and $02
-	ld hl, $0037
-	ret nz
-	ld hl, $0036
-	ret
-.asm_5188
+	ldtx hl, AttackDamageText
+	and (1 << RESISTANCE) | (1 << WEAKNESS)
+	ret z ; not weak or resistant
+	ldtx hl, ReceivedDamageDueToWeaknessAltText
+	cp (1 << RESISTANCE) | (1 << WEAKNESS)
+	ret z ; weak and resistant
+	and (1 << WEAKNESS)
+	ldtx hl, ReceivedDamageDueToWeaknessText
+	ret nz ; weak
+	ldtx hl, ReceivedDamageDueToResistanceText
+	ret ; resistant
+
+.no_damage
 	call CheckNoDamageOrEffect
 	ret c
-	ld hl, $003b
+	ldtx hl, NoDamageText
 	ld a, [wce81]
-	and $04
-	ret z
-	ld hl, $0039
-	ret
+	and (1 << RESISTANCE)
+	ret z ; not resistant
+	ldtx hl, DidNotReceiveDamageResistanceText
+	ret ; resistant
 
 ; needs analyze.
 	ld a, [wDuelDisplayedScreen]

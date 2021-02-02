@@ -2365,8 +2365,23 @@ wd42a:: ; d42a
 wAnimFlags:: ; d42b
 	ds $1
 
-wd42c:: ; d42c
-	ds $80
+wDuelAnimBuffer:: ; d42c
+	duel_anim_struct wDuelAnim1
+	duel_anim_struct wDuelAnim2
+	duel_anim_struct wDuelAnim3
+	duel_anim_struct wDuelAnim4
+	duel_anim_struct wDuelAnim5
+	duel_anim_struct wDuelAnim6
+	duel_anim_struct wDuelAnim7
+	duel_anim_struct wDuelAnim8
+	duel_anim_struct wDuelAnim9
+	duel_anim_struct wDuelAnim10
+	duel_anim_struct wDuelAnim11
+	duel_anim_struct wDuelAnim12
+	duel_anim_struct wDuelAnim13
+	duel_anim_struct wDuelAnim14
+	duel_anim_struct wDuelAnim15
+	duel_anim_struct wDuelAnim16
 
 wd4ac:: ; d4ac
 	ds $1
@@ -2382,17 +2397,21 @@ wd4ad:: ; d4ad
 wDuelAnimationScreen:: ; d4ae
 	ds $1
 
-wd4af:: ; d4af
+; which side to play animation
+; uses PLAYER_TURN and OPPONENT_TURN constants
+wDuelAnimDuelistSide:: ; d4af
 	ds $1
 
-wd4b0:: ; d4b0
+; used in GetAnimCoordsAndFlags to determine
+; what coordinates to draw the animation in.
+; e.g. used to know what Play Area card
+; to draw a hit animation in the Play Area screen.
+wDuelAnimLocationParam:: ; d4b0
 	ds $1
 
-wd4b1:: ; d4b1
-	ds $1
-
-wd4b2:: ; d4b2
-	ds $1
+; damage value to display with animation
+wDuelAnimDamage:: ; d4b1
+	ds $2
 
 wd4b3:: ; d4b3
 	ds $1
@@ -2417,7 +2436,8 @@ wd4bb:: ; d4bb
 wd4bc:: ; d4bc
 	ds $2
 
-wd4be:: ; d4be
+; bank number to return to after processing animation
+wDuelAnimReturnBank:: ; d4be
 	ds $1
 
 wd4bf:: ; d4bf

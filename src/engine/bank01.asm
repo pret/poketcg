@@ -6926,17 +6926,17 @@ Func_6cab: ; 6cab (1:6cab)
 	jr z, .store_duelist_turn
 	call SwapTurn
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	call SwapTurn
 	jr .asm_6ccb
 
 .store_duelist_turn
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 
 .asm_6ccb
 	xor a
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	pop af
@@ -7028,9 +7028,9 @@ HandlePoisonDamage: ; 6d3f (1:6d3f)
 
 .not_double_poisoned
 	push af
-	ld [wd4b1], a
+	ld [wDuelAnimDamage], a
 	xor a
-	ld [wd4b2], a
+	ld [wDuelAnimDamage + 1], a
 
 	push hl
 	call Func_6c7e
@@ -8194,7 +8194,7 @@ Func_741a: ; 741a (1:741a)
 	ld a, e
 	ld [wLoadedMoveAnimation], a
 	xor a
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	push hl
 	farcall Func_18f9c
 	pop hl

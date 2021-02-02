@@ -754,7 +754,7 @@ GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
 	add a ; 12 * [wDuelAnimationScreen]
 	ld c, a
 
-	ld a, [wd4af]
+	ld a, [wDuelAnimDuelistSide]
 	cp PLAYER_TURN
 	jr z, .player_side
 ; opponent side
@@ -762,8 +762,8 @@ GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
 	add c
 	ld c, a
 .player_side
-	ld a, [wd4b0]
-	add c ; a = [wd4b0] + c
+	ld a, [wDuelAnimLocationParam]
+	add c ; a = [wDuelAnimLocationParam] + c
 	ld c, a
 	ld b, 0
 	ld hl, AnimationCoordinatesIndex
@@ -838,30 +838,30 @@ Func_1ca31: ; 1ca31 (7:4a31)
 	ld hl, wd4ad
 	ld a, [hl]
 	ld c, a
-	add %00001000
+	add DUEL_ANIM_STRUCT_SIZE
 	and %01111111
 	cp b
 	jp z, .asm_007_4a6b
 	ld [hl], a
 
 	ld b, $00
-	ld hl, wd42c
+	ld hl, wDuelAnimBuffer
 	add hl, bc
 	ld a, [wTempAnimation]
 	ld [hli], a
 	ld a, [wDuelAnimationScreen]
 	ld [hli], a
-	ld a, [wd4af]
+	ld a, [wDuelAnimDuelistSide]
 	ld [hli], a
-	ld a, [wd4b0]
+	ld a, [wDuelAnimLocationParam]
 	ld [hli], a
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld [hli], a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld [hli], a
 	ld a, [wd4b3]
 	ld [hli], a
-	ld a, [wd4be]
+	ld a, [wDuelAnimReturnBank]
 	ld [hl], a
 
 .asm_007_4a6b
@@ -880,29 +880,29 @@ Func_1ca6e: ; 1ca6e (7:4a6e)
 	jr z, .asm_1cab0
 
 	ld c, a
-	add $08
-	and $7f
+	add DUEL_ANIM_STRUCT_SIZE
+	and %01111111
 	ld [wd4ac], a
 
 	ld b, $00
-	ld hl, wd42c
+	ld hl, wDuelAnimBuffer
 	add hl, bc
 	ld a, [hli]
 	ld [wTempAnimation], a
 	ld a, [hli]
 	ld [wDuelAnimationScreen], a
 	ld a, [hli]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	ld a, [hli]
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	ld a, [hli]
-	ld [wd4b1], a
+	ld [wDuelAnimDamage], a
 	ld a, [hli]
-	ld [wd4b2], a
+	ld [wDuelAnimDamage + 1], a
 	ld a, [hli]
 	ld [wd4b3], a
 	ld a, [hl]
-	ld [wd4be], a
+	ld [wDuelAnimReturnBank], a
 
 	call Func_1c8ef
 	call CheckAnyAnimationPlaying
@@ -1035,10 +1035,10 @@ Func_1cb5e: ; 1cb5e (7:4b5e)
 	jp nz, Func_1cc76
 	jr .asm_1cb6a ; redundant
 .asm_1cb6a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	cp $03
 	jr nz, .asm_1cb76
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	cp $e8
 .asm_1cb76
 	ret nc
@@ -1131,9 +1131,9 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	INCROM $1cbfd, $1cc03
 
 Func_1cc03: ; 1cc03 (7:4c03)
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld l, a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 
 	ld de, wd4b4
@@ -1444,9 +1444,9 @@ Func_1ce03: ; 1ce03 (7:4e03)
 	ld l, a
 	jp Func_3bb5
 .asm_1ce17
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld l, a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 	jp Func_3bb5
 ; 0x1ce22

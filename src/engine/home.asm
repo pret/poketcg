@@ -11121,7 +11121,7 @@ Func_3b6a: ; 3b6a (0:3b6a)
 	ld [wTempAnimation], a ; hold an animation temporarily
 	ldh a, [hBankROM]
 	push af
-	ld [wd4be], a
+	ld [wDuelAnimReturnBank], a
 
 	push hl
 	push bc
@@ -11171,7 +11171,7 @@ Func_3bb5: ; 3bb5 (0:3bb5)
 	ld [wd4c0], a
 	ldh a, [hBankROM]
 	push af
-	ld a, [wd4be]
+	ld a, [wDuelAnimReturnBank]
 	call BankswitchROM
 	call Func_3cb4
 	call CallHL2
