@@ -64,7 +64,7 @@ Func_800bd: ; 800bd (20:40bd)
 	ld a, [wTempPointer + 1]
 	adc $00
 	ld d, a
-	ld b, $c0
+	ld b, HIGH(wc000)
 	call Func_08bf
 	ld a, [wVRAMPointer]
 	ld e, a
@@ -86,16 +86,18 @@ Func_800e0: ; 800e0 (20:40e0)
 	jr z, .asm_800f0
 	sla [hl]
 .asm_800f0
+
 	ld c, $40
 	ld hl, wLoadedPalData
 	xor a
-.asm_800f6
+.loop_clear
 	ld [hli], a
 	dec c
-	jr nz, .asm_800f6
+	jr nz, .loop_clear
+
 	ld a, [wd130]
 	ld c, a
-.asm_800fe
+.loop
 	push bc
 	push de
 	ld b, $00
@@ -110,8 +112,10 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld hl, wLoadedPalData
 	call Func_8016e
 	ld a, [wConsole]
-	cp $02
+	cp CONSOLE_CGB
 	jr nz, .asm_8013b
+
+	; cgb only
 	call BankswitchVRAM1
 	ld a, [wd12f]
 	ld c, a
@@ -125,6 +129,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	call Func_80148
 	call Func_8016e
 	call BankswitchVRAM0
+
 .asm_8013b
 	pop de
 	ld hl, $20
@@ -133,7 +138,8 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld d, h
 	pop bc
 	dec c
-	jr nz, .asm_800fe
+	jr nz, .loop
+
 	pop hl
 	ret
 
@@ -173,12 +179,13 @@ Func_8016e: ; 8016e (20:416e)
 	ld a, [wd292]
 	or a
 	jp z, SafeCopyDataHLtoDE
+
 	push hl
 	push bc
 	push de
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $01
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
 	ld hl, $800
@@ -191,12 +198,12 @@ Func_8016e: ; 8016e (20:416e)
 	ld e, l
 	ld d, h
 	pop hl
-.asm_80190
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_80190
+	jr nz, .loop
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -684,113 +691,120 @@ MapDataPointers: ; 80e5d (20:4e5d)
 	dw SpriteAnimationPointers
 	dw MapDataPointers_81697
 
+; \1 = pointer
+; \2 = unknown
+macro_80e67: MACRO
+	dwb \1, BANK(\1) - BANK(MapDataPointers_80e67)
+	db \2
+ENDM
+
 MapDataPointers_80e67: ; 80e67 (20:4e67)
-	db $1b, $59, $00, $00
-	db $22, $5a, $00, $00
-	db $13, $5c, $00, $01
-	db $2e, $5d, $00, $01
-	db $d1, $5e, $00, $01
-	db $f5, $5e, $00, $01
-	db $26, $5f, $00, $01
-	db $eb, $5f, $00, $01
-	db $43, $61, $00, $01
-	db $50, $61, $00, $01
-	db $60, $61, $00, $02
-	db $22, $62, $00, $02
-	db $36, $63, $00, $03
-	db $00, $64, $00, $03
-	db $1d, $65, $00, $03
-	db $e7, $65, $00, $03
-	db $04, $67, $00, $03
-	db $ce, $67, $00, $03
-	db $eb, $68, $00, $03
-	db $b5, $69, $00, $03
-	db $d2, $6a, $00, $03
-	db $9c, $6b, $00, $03
-	db $b9, $6c, $00, $03
-	db $83, $6d, $00, $03
-	db $a0, $6e, $00, $03
-	db $6a, $6f, $00, $03
-	db $87, $70, $00, $03
-	db $51, $71, $00, $03
-	db $6e, $72, $00, $03
-	db $21, $73, $00, $03
-	db $24, $74, $00, $04
-	db $45, $75, $00, $04
-	db $db, $76, $00, $05
-	db $8c, $77, $00, $05
-	db $8d, $78, $00, $06
-	db $d6, $79, $00, $06
-	db $00, $40, $01, $07
-	db $88, $41, $01, $07
-	db $bb, $43, $01, $08
-	db $33, $45, $01, $08
-	db $2e, $47, $01, $09
-	db $d8, $48, $01, $09
-	db $73, $4b, $01, $0a
-	db $6f, $4c, $01, $0a
-	db $fe, $4d, $01, $0b
-	db $1d, $4f, $01, $0b
-	db $b6, $50, $01, $0c
-	db $91, $51, $01, $0c
-	db $15, $53, $01, $0d
-	db $b3, $54, $01, $0d
-	db $0a, $57, $01, $0e
-	db $ce, $57, $01, $0e
-	db $f1, $7b, $00, $0e
-	db $03, $7c, $00, $0e
-	db $ef, $58, $01, $0f
-	db $79, $5a, $01, $0f
-	db $1a, $7c, $00, $0f
-	db $26, $7c, $00, $0f
-	db $e2, $5c, $01, $10
-	db $f4, $5d, $01, $10
-	db $7c, $5f, $01, $11
-	db $7f, $60, $01, $11
-	db $36, $7c, $00, $12
-	db $7d, $61, $01, $12
-	db $93, $61, $01, $12
-	db $a9, $61, $01, $12
-	db $bf, $61, $01, $12
-	db $d5, $61, $01, $12
-	db $eb, $61, $01, $12
-	db $01, $62, $01, $12
-	db $17, $62, $01, $13
-	db $da, $62, $01, $13
-	db $64, $63, $01, $13
-	db $43, $64, $01, $13
-	db $df, $64, $01, $14
-	db $b5, $65, $01, $14
-	db $47, $66, $01, $15
-	db $b8, $66, $01, $16
-	db $3e, $67, $01, $17
-	db $af, $67, $01, $18
-	db $33, $68, $01, $19
-	db $a4, $68, $01, $1a
-	db $25, $69, $01, $1b
-	db $96, $69, $01, $1c
-	db $14, $6a, $01, $1d
-	db $85, $6a, $01, $1e
-	db $28, $6b, $01, $1f
-	db $99, $6b, $01, $20
-	db $34, $6c, $01, $21
-	db $a5, $6c, $01, $22
-	db $37, $6d, $01, $23
-	db $cc, $6d, $01, $24
-	db $8a, $6e, $01, $25
-	db $18, $6f, $01, $25
-	db $c0, $6f, $01, $25
-	db $4f, $70, $01, $26
-	db $a5, $71, $01, $27
-	db $97, $73, $01, $28
-	db $b7, $73, $01, $29
-	db $e5, $73, $01, $2a
-	db $13, $74, $01, $2b
-	db $38, $75, $01, $2c
-	db $9f, $76, $01, $2d
-	db $f6, $76, $01, $2d
-	db $7c, $77, $01, $2e
-	db $c4, $77, $01, $2f
+	macro_80e67 Data_8191b, $00
+	macro_80e67 Data_81a22, $00
+	macro_80e67 Data_81c13, $01
+	macro_80e67 Data_81d2e, $01
+	macro_80e67 Data_81ed1, $01
+	macro_80e67 Data_81ef5, $01
+	macro_80e67 Data_81f26, $01
+	macro_80e67 Data_81feb, $01
+	macro_80e67 Data_82143, $01
+	macro_80e67 Data_82150, $01
+	macro_80e67 Data_82160, $02
+	macro_80e67 Data_82222, $02
+	macro_80e67 Data_82336, $03
+	macro_80e67 Data_82400, $03
+	macro_80e67 Data_8251d, $03
+	macro_80e67 Data_825e7, $03
+	macro_80e67 Data_82704, $03
+	macro_80e67 Data_827ce, $03
+	macro_80e67 Data_828eb, $03
+	macro_80e67 Data_829b5, $03
+	macro_80e67 Data_82ad2, $03
+	macro_80e67 Data_82b9c, $03
+	macro_80e67 Data_82cb9, $03
+	macro_80e67 Data_82d83, $03
+	macro_80e67 Data_82ea0, $03
+	macro_80e67 Data_82f6a, $03
+	macro_80e67 Data_83087, $03
+	macro_80e67 Data_83151, $03
+	macro_80e67 Data_8326e, $03
+	macro_80e67 Data_83321, $03
+	macro_80e67 Data_83424, $04
+	macro_80e67 Data_83545, $04
+	macro_80e67 Data_836db, $05
+	macro_80e67 Data_8378c, $05
+	macro_80e67 Data_8388d, $06
+	macro_80e67 Data_839d6, $06
+	macro_80e67 Data_84000, $07
+	macro_80e67 Data_84188, $07
+	macro_80e67 Data_843bb, $08
+	macro_80e67 Data_84533, $08
+	macro_80e67 Data_8472e, $09
+	macro_80e67 Data_848d8, $09
+	macro_80e67 Data_84b73, $0a
+	macro_80e67 Data_84c6f, $0a
+	macro_80e67 Data_84dfe, $0b
+	macro_80e67 Data_84f1d, $0b
+	macro_80e67 Data_850b6, $0c
+	macro_80e67 Data_85191, $0c
+	macro_80e67 Data_85315, $0d
+	macro_80e67 Data_854b3, $0d
+	macro_80e67 Data_8570a, $0e
+	macro_80e67 Data_857ce, $0e
+	macro_80e67 Data_83bf1, $0e
+	macro_80e67 Data_83c03, $0e
+	macro_80e67 Data_858ef, $0f
+	macro_80e67 Data_85a79, $0f
+	macro_80e67 Data_83c1a, $0f
+	macro_80e67 Data_83c26, $0f
+	macro_80e67 Data_85ce2, $10
+	macro_80e67 Data_85df4, $10
+	macro_80e67 Data_85f7c, $11
+	macro_80e67 Data_8607f, $11
+	macro_80e67 Data_83c36, $12
+	macro_80e67 Data_8617d, $12
+	macro_80e67 Data_86193, $12
+	macro_80e67 Data_861a9, $12
+	macro_80e67 Data_861bf, $12
+	macro_80e67 Data_861d5, $12
+	macro_80e67 Data_861eb, $12
+	macro_80e67 Data_86201, $12
+	macro_80e67 Data_86217, $13
+	macro_80e67 Data_862da, $13
+	macro_80e67 Data_86364, $13
+	macro_80e67 Data_86443, $13
+	macro_80e67 Data_864df, $14
+	macro_80e67 Data_865b5, $14
+	macro_80e67 Data_86647, $15
+	macro_80e67 Data_866b8, $16
+	macro_80e67 Data_8673e, $17
+	macro_80e67 Data_867af, $18
+	macro_80e67 Data_86833, $19
+	macro_80e67 Data_868a4, $1a
+	macro_80e67 Data_86925, $1b
+	macro_80e67 Data_86996, $1c
+	macro_80e67 Data_86a14, $1d
+	macro_80e67 Data_86a85, $1e
+	macro_80e67 Data_86b28, $1f
+	macro_80e67 Data_86b99, $20
+	macro_80e67 Data_86c34, $21
+	macro_80e67 Data_86ca5, $22
+	macro_80e67 Data_86d37, $23
+	macro_80e67 Data_86dcc, $24
+	macro_80e67 Data_86e8a, $25
+	macro_80e67 Data_86f18, $25
+	macro_80e67 Data_86fc0, $25
+	macro_80e67 Data_8704f, $26
+	macro_80e67 Data_871a5, $27
+	macro_80e67 Data_87397, $28
+	macro_80e67 Data_873b7, $29
+	macro_80e67 Data_873e5, $2a
+	macro_80e67 Data_87413, $2b
+	macro_80e67 Data_87538, $2c
+	macro_80e67 Data_8769f, $2d
+	macro_80e67 Data_876f6, $2d
+	macro_80e67 Data_8777c, $2e
+	macro_80e67 Data_877c4, $2f
 
 MapDataPointers_8100f: ; 8100f (20:500f)
 	db $00, $40, $02, $c1
@@ -1400,7 +1414,374 @@ MapDataPointers_81697: ; 81697 (20:5697)
 	palette_pointer Palette159, 1, 0 ; PALETTE_159
 	palette_pointer Palette160, 1, 0 ; PALETTE_160
 
-	INCROM $8191b, $83c4c
+Data_8191b:: ; 8191b (20:591b)
+	db $14
+	db $12
+	dw $0000
+	db $00
+	db $dd
+
+	INCROM $81921, $81a22
+
+Data_81a22:: ; 81a22 (20:5a22)
+	db $14
+	db $12
+	dw $0000
+	db $01
+	db $dd
+
+	INCROM $81a28, $81c13
+
+Data_81c13:: ; 81c13 (20:5c13)
+	db $1c
+	db $1e
+	dw $5d11
+	db $00
+	db $e7
+
+	INCROM $81c19, $81d2e
+
+Data_81d2e:: ; 81d2e (20:5d2e)
+	db $1c
+	db $1e
+	dw $5eb4
+	db $01
+	db $e7
+
+	INCROM $81d34, $81ed1
+
+Data_81ed1:: ; 81ed1 (20:5ed1)
+	db $04
+	db $06
+	dw $5ef0
+	db $00
+	db $ff
+
+	INCROM $81ed7, $81ef5
+
+Data_81ef5:: ; 81ef5 (20:5ef5)
+	db $04
+	db $06
+	dw $5f21
+	db $01
+	db $fb
+
+	INCROM $81efb, $81f26
+
+Data_81f26:: ; 81f26 (20:5f26)
+	db $18
+	db $1e
+	dw $5fd3
+	db $00
+	db $fd
+
+	INCROM $81f2c, $81feb
+
+Data_81feb:: ; 81feb (20:5feb)
+	db $18
+	db $1e
+	dw $612b
+	db $01
+	db $fd
+
+	INCROM $81ff1, $82143
+
+Data_82143:: ; 82143 (20:6143)
+	db $04
+	db $01
+	dw $614d
+	db $00
+	db $f0
+
+	INCROM $82149, $82150
+
+Data_82150:: ; 82150 (20:6150)
+	db $04
+	db $01
+	dw $615d
+	db $01
+	db $f8
+
+	INCROM $82156, $82160
+
+Data_82160:: ; 82160 (20:6160)
+	db $14
+	db $18
+	dw $620e
+	db $00
+	db $ef
+
+	INCROM $82166, $82222
+
+Data_82222:: ; 82222 (20:6222)
+	db $14
+	db $18
+	dw $6322
+	db $01
+	db $ee
+
+	INCROM $82228, $82336
+
+Data_82336:: ; 82336 (20:6336)
+	db $14
+	db $12
+	dw $63ec
+	db $00
+	db $ef
+
+	INCROM $8233c, $82400
+
+Data_82400:: ; 82400 (20:6400)
+	db $14
+	db $12
+	dw $6509
+	db $01
+	db $ef
+
+	INCROM $82406, $8251d
+
+Data_8251d:: ; 8251d (20:651d)
+	db $14
+	db $12
+	dw $65d3
+	db $00
+	db $ef
+
+	INCROM $82523, $825e7
+
+Data_825e7:: ; 825e7 (20:65e7)
+	db $14
+	db $12
+	dw $66f0
+	db $01
+	db $ef
+
+	INCROM $825ed, $82704
+
+Data_82704:: ; 82704 (20:6704)
+	db $14
+	db $12
+	dw $67ba
+	db $00
+	db $ef
+
+	INCROM $8270a, $827ce
+
+Data_827ce:: ; 827ce (20:67ce)
+	db $14
+	db $12
+	dw $68d7
+	db $01
+	db $ef
+
+	INCROM $827d4, $828eb
+
+Data_828eb:: ; 828eb (20:68eb)
+	db $14
+	db $12
+	dw $69a1
+	db $00
+	db $ef
+
+	INCROM $828f1, $829b5
+
+Data_829b5:: ; 829b5 (20:69b5)
+	db $14
+	db $12
+	dw $6abe
+	db $01
+	db $ef
+
+	INCROM $829bb, $82ad2
+
+Data_82ad2:: ; 82ad2 (20:6ad2)
+	db $14
+	db $12
+	dw $6b88
+	db $00
+	db $ef
+
+	INCROM $82ad8, $82b9c
+
+Data_82b9c:: ; 82b9c (20:6b9c)
+	db $14
+	db $12
+	dw $6ca5
+	db $01
+	db $ef
+
+	INCROM $82ba2, $82cb9
+
+Data_82cb9:: ; 82cb9 (20:6cb9)
+	db $14
+	db $12
+	dw $6d6f
+	db $00
+	db $ef
+
+	INCROM $82cbf, $82d83
+
+Data_82d83:: ; 82d83 (20:6d83)
+	db $14
+	db $12
+	dw $6e8c
+	db $01
+	db $ef
+
+	INCROM $82d89, $82ea0
+
+Data_82ea0:: ; 82ea0 (20:6ea0)
+	db $14
+	db $12
+	dw $6f56
+	db $00
+	db $ef
+
+	INCROM $82ea6, $82f6a
+
+Data_82f6a:: ; 82f6a (20:6f6a)
+	db $14
+	db $12
+	dw $7073
+	db $01
+	db $ef
+
+	INCROM $82f70, $83087
+
+Data_83087:: ; 83087 (20:7087)
+	db $14
+	db $12
+	dw $713d
+	db $00
+	db $ef
+
+	INCROM $8308d, $83151
+
+Data_83151:: ; 83151 (20:7151)
+	db $14
+	db $12
+	dw $725a
+	db $01
+	db $ef
+
+	INCROM $83157, $8326e
+
+Data_8326e:: ; 8326e (20:726e)
+	db $14
+	db $12
+	dw $730d
+	db $00
+	db $ef
+
+	INCROM $83274, $83321
+
+Data_83321:: ; 83321 (20:7321)
+	db $14
+	db $12
+	dw $7410
+	db $01
+	db $ef
+
+	INCROM $83327, $83424
+
+Data_83424:: ; 83424 (20:7424)
+	db $1c
+	db $1a
+	dw $7529
+	db $00
+	db $e7
+
+	INCROM $8342a, $83545
+
+Data_83545:: ; 83545 (20:7545)
+	db $1c
+	db $1a
+	dw $76bf
+	db $01
+	db $e7
+
+	INCROM $8354b, $836db
+
+Data_836db:: ; 836db (20:76db)
+	db $18
+	db $12
+	dw $777b
+	db $00
+	db $e7
+
+	INCROM $836e1, $8378c
+
+Data_8378c:: ; 8378c (20:778c)
+	db $18
+	db $12
+	dw $787c
+	db $01
+	db $e7
+
+	INCROM $83792, $8388d
+
+Data_8388d:: ; 8388d (20:788d)
+	db $1c
+	db $1e
+	dw $79b5
+	db $00
+	db $e7
+
+	INCROM $83893, $839d6
+
+Data_839d6:: ; 839d6 (20:79d6)
+	db $1c
+	db $1e
+	dw $7bd0
+	db $01
+	db $e7
+
+	INCROM $839dc, $83bf1
+
+Data_83bf1:: ; 83bf1 (20:7bf1)
+	db $04
+	db $03
+	dw $7c00
+	db $00
+	db $d8
+
+	INCROM $83bf7, $83c03
+
+Data_83c03:: ; 83c03 (20:7c03)
+	db $04
+	db $03
+	dw $7c17
+	db $01
+	db $d6
+
+	INCROM $83c09, $83c1a
+
+Data_83c1a:: ; 83c1a (20:7c1a)
+	db $04
+	db $03
+	dw $7c23
+	db $00
+	db $80
+
+	INCROM $83c20, $83c26
+
+Data_83c26:: ; 83c26 (20:7c26)
+	db $04
+	db $03
+	dw $7c33
+	db $01
+	db $a0
+
+	INCROM $83c2c, $83c36
+
+Data_83c36:: ; 83c36 (20:7c36)
+	db $03
+	db $03
+	dw $0000
+	db $01
+	db $f7
+
+	INCROM $83c3c, $83c4c
 
 AnimData1:: ; 83c4c (20:7c4c)
 	frame_table AnimFrameTable0

@@ -1536,8 +1536,10 @@ Func_08bf: ; 08bf (0:08bf)
 	inc hl
 	ld [hli], a ; 0
 	ld [hl], $ef
+
+; clear wc000
 	ld h, b
-	ld l, $0
+	ld l, LOW(wc000)
 	xor a
 .asm_8d9
 	ld [hl], a
@@ -1545,10 +1547,11 @@ Func_08bf: ; 08bf (0:08bf)
 	jr nz, .asm_8d9
 	ret
 
+; loops bc times
 Func_08de: ; 08de (0:08de)
 	push hl
 	push de
-.asm_8e0
+.loop
 	push bc
 	call Func_08ef
 	ld [de], a
@@ -1557,7 +1560,7 @@ Func_08de: ; 08de (0:08de)
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_8e0
+	jr nz, .loop
 	pop de
 	pop hl
 	ret
@@ -11203,6 +11206,7 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	pop hl
 	ret
 
+; runs function bc times
 Func_3be4: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
