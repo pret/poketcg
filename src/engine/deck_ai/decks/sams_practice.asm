@@ -104,7 +104,7 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	xor a
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld [wSelectedAttack], a
-	call CheckIfSelectedMoveIsUnusable
+	call CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
 	call AITryUseAttack
 	ret

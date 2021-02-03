@@ -351,7 +351,7 @@ DuelMainInterface: ; 426d (1:426d)
 	call AIDoAction_Turn
 	ld a, $ff
 	ld [wPlayerAttackingCardIndex], a
-	ld [wPlayerAttackingMoveIndex], a
+	ld [wPlayerAttackingAttackIndex], a
 	ret
 
 PrintDuelMenuAndHandleInput: ; 4295 (1:4295)
@@ -1043,7 +1043,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
 .try_open_attack_menu
-	call PrintAndLoadMovesToDuelTempList
+	call PrintAndLoadAttacksToDuelTempList
 	or a
 	jr nz, .open_attack_menu
 	ldtx hl, NoSelectableAttackText
@@ -1067,13 +1067,13 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call DoFrame
 	ldh a, [hKeysPressed]
 	and START
-	jr nz, .display_selected_move_info
+	jr nz, .display_selected_attack_info
 	call HandleMenuInput
 	jr nc, .wait_for_input
 	cp -1 ; was B pressed?
 	jp z, PrintDuelMenuAndHandleInput
 	ld [wSelectedDuelSubMenuItem], a
-	call CheckIfEnoughEnergiesToMove
+	call CheckIfEnoughEnergiesToAttack
 	jr nc, .enough_energy
 	ldtx hl, NotEnoughEnergyCardsText
 	call DrawWideTextBox_WaitForInput
@@ -1089,7 +1089,7 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call HandleAmnesiaSubstatus
 	jr c, .cannot_use_due_to_amnesia
 	ld a, PRACTICEDUEL_VERIFY_PLAYER_TURN_ACTIONS
@@ -1104,14 +1104,14 @@ DuelMenu_Attack: ; 46fc (1:46fc)
 	call DrawWideTextBox_WaitForInput
 	jr .try_open_attack_menu
 
-.display_selected_move_info
-	call OpenMovePage
+.display_selected_attack_info
+	call OpenAttackPage
 	call DrawDuelMainScene
 	jp .try_open_attack_menu
 
-; draw the move page of the card at wLoadedCard1 and of the move selected in the Attack
+; draw the attack page of the card at wLoadedCard1 and of the attack selected in the Attack
 ; menu by hCurMenuItem, and listen for input in order to switch the page or to exit.
-OpenMovePage: ; 478b (1:478b)
+OpenAttackPage: ; 478b (1:478b)
 	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
 	xor a
@@ -1136,23 +1136,23 @@ OpenMovePage: ; 478b (1:478b)
 	add hl, de
 	ld a, [hl]
 	or a
-	jr nz, .move_2
-	xor a ; MOVEPAGE_MOVE1_1
-	jr .move_1
+	jr nz, .attack_2
+	xor a ; ATTACKPAGE_ATTACK1_1
+	jr .attack_1
 
-.move_2
-	ld a, MOVEPAGE_MOVE2_1
+.attack_2
+	ld a, ATTACKPAGE_ATTACK2_1
 
-.move_1
-	ld [wMovePageNumber], a
+.attack_1
+	ld [wAttackPageNumber], a
 
 .open_page
-	call DisplayMovePage
+	call DisplayAttackPage
 	call EnableLCD
 
 .loop
 	call DoFrame
-	; switch page (see SwitchMovePage) if Right or Left pressed
+	; switch page (see SwitchAttackPage) if Right or Left pressed
 	ldh a, [hDPadHeld]
 	and D_RIGHT | D_LEFT
 	jr nz, .open_page
@@ -1170,64 +1170,64 @@ AttackMenuParameters: ; 47e4 (1:47e4)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-; display the card page with id at wMovePageNumber of wLoadedCard1
-DisplayMovePage: ; 47ec (1:47ec)
-	ld a, [wMovePageNumber]
-	ld hl, MovePageDisplayPointerTable
+; display the card page with id at wAttackPageNumber of wLoadedCard1
+DisplayAttackPage: ; 47ec (1:47ec)
+	ld a, [wAttackPageNumber]
+	ld hl, AttackPageDisplayPointerTable
 	jp JumpToFunctionInTable
 
-MovePageDisplayPointerTable: ; 47f5 (1:47f5)
-	dw DisplayMovePage_Move1Page1 ; MOVEPAGE_MOVE1_1
-	dw DisplayMovePage_Move1Page2 ; MOVEPAGE_MOVE1_2
-	dw DisplayMovePage_Move2Page1 ; MOVEPAGE_MOVE2_1
-	dw DisplayMovePage_Move2Page2 ; MOVEPAGE_MOVE2_2
+AttackPageDisplayPointerTable: ; 47f5 (1:47f5)
+	dw DisplayAttackPage_Attack1Page1 ; ATTACKPAGE_ATTACK1_1
+	dw DisplayAttackPage_Attack1Page2 ; ATTACKPAGE_ATTACK1_2
+	dw DisplayAttackPage_Attack2Page1 ; ATTACKPAGE_ATTACK2_1
+	dw DisplayAttackPage_Attack2Page2 ; ATTACKPAGE_ATTACK2_2
 
-; display MOVEPAGE_MOVE1_1
-DisplayMovePage_Move1Page1: ; 47fd (1:47fd)
-	call DisplayCardPage_PokemonMove1Page1
-	jr SwitchMovePage
+; display ATTACKPAGE_ATTACK1_1
+DisplayAttackPage_Attack1Page1: ; 47fd (1:47fd)
+	call DisplayCardPage_PokemonAttack1Page1
+	jr SwitchAttackPage
 
-; display MOVEPAGE_MOVE1_2 if it exists. otherwise return in order
-; to switch back to MOVEPAGE_MOVE1_1 and display it instead.
-DisplayMovePage_Move1Page2: ; 4802 (1:4802)
-	ld hl, wLoadedCard1Move1Description + 2
+; display ATTACKPAGE_ATTACK1_2 if it exists. otherwise return in order
+; to switch back to ATTACKPAGE_ATTACK1_1 and display it instead.
+DisplayAttackPage_Attack1Page2: ; 4802 (1:4802)
+	ld hl, wLoadedCard1Atk1Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
-	call DisplayCardPage_PokemonMove1Page2
-	jr SwitchMovePage
+	call DisplayCardPage_PokemonAttack1Page2
+	jr SwitchAttackPage
 
-; display MOVEPAGE_MOVE2_1
-DisplayMovePage_Move2Page1: ; 480d (1:480d)
-	call DisplayCardPage_PokemonMove2Page1
-	jr SwitchMovePage
+; display ATTACKPAGE_ATTACK2_1
+DisplayAttackPage_Attack2Page1: ; 480d (1:480d)
+	call DisplayCardPage_PokemonAttack2Page1
+	jr SwitchAttackPage
 
-; display MOVEPAGE_MOVE2_2 if it exists. otherwise return in order
-; to switch back to MOVEPAGE_MOVE2_1 and display it instead.
-DisplayMovePage_Move2Page2: ; 4812 (1:4812)
-	ld hl, wLoadedCard1Move2Description + 2
+; display ATTACKPAGE_ATTACK2_2 if it exists. otherwise return in order
+; to switch back to ATTACKPAGE_ATTACK2_1 and display it instead.
+DisplayAttackPage_Attack2Page2: ; 4812 (1:4812)
+	ld hl, wLoadedCard1Atk2Description + 2
 	ld a, [hli]
 	or [hl]
 	ret z
-	call DisplayCardPage_PokemonMove2Page2
+	call DisplayCardPage_PokemonAttack2Page2
 ;	fallthrough
 
-; switch to MOVEPAGE_MOVE*_2 if in MOVEPAGE_MOVE*_1 and vice versa.
-; sets the next move page to switch to if Right or Left are pressed.
-SwitchMovePage: ; 481b (1:481b)
-	ld hl, wMovePageNumber
+; switch to ATTACKPAGE_ATTACK*_2 if in ATTACKPAGE_ATTACK*_1 and vice versa.
+; sets the next attack page to switch to if Right or Left are pressed.
+SwitchAttackPage: ; 481b (1:481b)
+	ld hl, wAttackPageNumber
 	ld a, $01
 	xor [hl]
 	ld [hl], a
 	ret
 
-; given the card at hTempCardIndex_ff98, for each non-empty, non-Pokemon Power moveslot,
-; prints its information at lines 13 (first move, if any), and 15 (second move, if any)
+; given the card at hTempCardIndex_ff98, for each non-empty, non-Pokemon Power attack slot,
+; prints its information at lines 13 (first attack, if any), and 15 (second attack, if any)
 ; also, copies zero, one, or both of the following to wDuelTempList, $ff terminated:
-;   if pokemon's first moveslot isn't empty or a Pokemon Power: <card_index>, 0
-;   if pokemon's second moveslot isn't empty or a Pokemon Power: <card_index>, 1
+;   if pokemon's first attack slot isn't empty or a Pokemon Power: <card_index>, 0
+;   if pokemon's second attack slot isn't empty or a Pokemon Power: <card_index>, 1
 ; return the amount of non-empty, non-Pokemon Power attacks in a.
-PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
+PrintAndLoadAttacksToDuelTempList: ; 4823 (1:4823)
 	call DrawWideTextBox
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -1238,9 +1238,9 @@ PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
 	ld hl, wDuelTempList
 	xor a
 	ld [wCardPageNumber], a
-	ld de, wLoadedCard1Move1Name
-	call CheckMoveslotEmptyOrPokemonPower
-	jr c, .check_second_moveslot
+	ld de, wLoadedCard1Atk1Name
+	call CheckAttackSlotEmptyOrPokemonPower
+	jr c, .check_second_atk_slot
 	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
 	xor a
@@ -1249,16 +1249,16 @@ PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, wLoadedCard1Move1Name
-	call PrintMoveOrPkmnPowerInformation
+	ld hl, wLoadedCard1Atk1Name
+	call PrintAttackOrPkmnPowerInformation
 	pop bc
 	pop hl
 	inc b
 	inc b ; 15
 
-.check_second_moveslot
-	ld de, wLoadedCard1Move2Name
-	call CheckMoveslotEmptyOrPokemonPower
+.check_second_atk_slot
+	ld de, wLoadedCard1Atk2Name
+	call CheckAttackSlotEmptyOrPokemonPower
 	jr c, .done
 	ldh a, [hTempCardIndex_ff98]
 	ld [hli], a
@@ -1268,8 +1268,8 @@ PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
 	push hl
 	push bc
 	ld e, b
-	ld hl, wLoadedCard1Move2Name
-	call PrintMoveOrPkmnPowerInformation
+	ld hl, wLoadedCard1Atk2Name
+	call PrintAttackOrPkmnPowerInformation
 	pop bc
 	pop hl
 
@@ -1277,9 +1277,9 @@ PrintAndLoadMovesToDuelTempList: ; 4823 (1:4823)
 	ld a, c
 	ret
 
-; given de = wLoadedCard*Move*Name, return carry if the move is a
-; Pkmn Power or if the moveslot is empty.
-CheckMoveslotEmptyOrPokemonPower: ; 4872 (1:4872)
+; given de = wLoadedCard*Atk*Name, return carry if the attack is a
+; Pkmn Power or if the attack slot is empty.
+CheckAttackSlotEmptyOrPokemonPower: ; 4872 (1:4872)
 	push hl
 	push de
 	push bc
@@ -1288,27 +1288,27 @@ CheckMoveslotEmptyOrPokemonPower: ; 4872 (1:4872)
 	inc de
 	ld a, [de]
 	or c
-	jr z, .return_no_move_found
-	ld hl, CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_NAME + 1)
+	jr z, .return_no_atk_found
+	ld hl, CARD_DATA_ATTACK1_CATEGORY - (CARD_DATA_ATTACK1_NAME + 1)
 	add hl, de
 	ld a, [hl]
 	and $ff ^ RESIDUAL
 	cp POKEMON_POWER
-	jr z, .return_no_move_found
+	jr z, .return_no_atk_found
 	or a
 .return
 	pop bc
 	pop de
 	pop hl
 	ret
-.return_no_move_found
+.return_no_atk_found
 	scf
 	jr .return
 
 ; check if the arena pokemon card has enough energy attached to it
-; in order to use the selected move.
+; in order to use the selected attack.
 ; returns: carry if not enough energy, nc if enough energy.
-CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
+CheckIfEnoughEnergiesToAttack: ; 488f (1:488f)
 	push hl
 	push bc
 	ld e, PLAY_AREA_ARENA
@@ -1323,36 +1323,36 @@ CheckIfEnoughEnergiesToMove: ; 488f (1:488f)
 	ld d, [hl] ; card's deck index (0 to 59)
 	inc hl
 	ld e, [hl] ; attack index (0 or 1)
-	call _CheckIfEnoughEnergiesToMove
+	call _CheckIfEnoughEnergiesToAttack
 	pop bc
 	pop hl
 	ret
 
-; check if a pokemon card has enough energy attached to it in order to use a move
+; check if a pokemon card has enough energy attached to it in order to use an attack
 ; input:
 ;   d = deck index of card (0 to 59)
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
+_CheckIfEnoughEnergiesToAttack: ; 48ac (1:48ac)
 	push de
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
 	pop bc
 	push bc
-	ld de, wLoadedCard1Move1EnergyCost
+	ld de, wLoadedCard1Atk1EnergyCost
 	ld a, c
 	or a
-	jr z, .got_move
-	ld de, wLoadedCard1Move2EnergyCost
+	jr z, .got_atk
+	ld de, wLoadedCard1Atk2EnergyCost
 
-.got_move
-	ld hl, CARD_DATA_MOVE1_NAME - CARD_DATA_MOVE1_ENERGY_COST
+.got_atk
+	ld hl, CARD_DATA_ATTACK1_NAME - CARD_DATA_ATTACK1_ENERGY_COST
 	add hl, de
 	ld a, [hli]
 	or [hl]
 	jr z, .not_usable_or_not_enough_energies
-	ld hl, CARD_DATA_MOVE1_CATEGORY - CARD_DATA_MOVE1_ENERGY_COST
+	ld hl, CARD_DATA_ATTACK1_CATEGORY - CARD_DATA_ATTACK1_ENERGY_COST
 	add hl, de
 	ld a, [hl]
 	cp POKEMON_POWER
@@ -1394,7 +1394,7 @@ _CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
 
 ; given the amount of energies of a specific type required for an attack in the
 ; lower nybble of register a, test if the pokemon card has enough energies of that type
-; to use the move. Return carry if not enough energy, nc if enough energy.
+; to use the attack. Return carry if not enough energy, nc if enough energy.
 CheckIfEnoughEnergiesOfType: ; 4900 (1:4900)
 	and $f
 	push af
@@ -3781,10 +3781,10 @@ LoadSelectedCardGfx: ; 58aa (1:58aa)
 CardPageDisplayPointerTable: ; 58c2 (1:58c2)
 	dw DrawDuelMainScene
 	dw DisplayCardPage_PokemonOverview    ; CARDPAGE_POKEMON_OVERVIEW
-	dw DisplayCardPage_PokemonMove1Page1  ; CARDPAGE_POKEMON_MOVE1_1
-	dw DisplayCardPage_PokemonMove1Page2  ; CARDPAGE_POKEMON_MOVE1_2
-	dw DisplayCardPage_PokemonMove2Page1  ; CARDPAGE_POKEMON_MOVE2_1
-	dw DisplayCardPage_PokemonMove2Page2  ; CARDPAGE_POKEMON_MOVE2_2
+	dw DisplayCardPage_PokemonAttack1Page1  ; CARDPAGE_POKEMON_ATTACK1_1
+	dw DisplayCardPage_PokemonAttack1Page2  ; CARDPAGE_POKEMON_ATTACK1_2
+	dw DisplayCardPage_PokemonAttack2Page1  ; CARDPAGE_POKEMON_ATTACK2_1
+	dw DisplayCardPage_PokemonAttack2Page2  ; CARDPAGE_POKEMON_ATTACK2_2
 	dw DisplayCardPage_PokemonDescription ; CARDPAGE_POKEMON_DESCRIPTION
 	dw DrawDuelMainScene
 	dw DrawDuelMainScene
@@ -3869,10 +3869,10 @@ SwitchCardPage: ; 5930 (1:5930)
 CardPageSwitchPointerTable: ; 5936 (1:5936)
 	dw CardPageSwitch_00
 	dw CardPageSwitch_PokemonOverviewOrDescription ; CARDPAGE_POKEMON_OVERVIEW
-	dw CardPageSwitch_PokemonMove1Page1 ; CARDPAGE_POKEMON_MOVE1_1
-	dw CardPageSwitch_PokemonMove1Page2 ; CARDPAGE_POKEMON_MOVE1_2
-	dw CardPageSwitch_PokemonMove2Page1 ; CARDPAGE_POKEMON_MOVE2_1
-	dw CardPageSwitch_PokemonMove2Page2 ; CARDPAGE_POKEMON_MOVE2_2
+	dw CardPageSwitch_PokemonAttack1Page1 ; CARDPAGE_POKEMON_ATTACK1_1
+	dw CardPageSwitch_PokemonAttack1Page2 ; CARDPAGE_POKEMON_ATTACK1_2
+	dw CardPageSwitch_PokemonAttack2Page1 ; CARDPAGE_POKEMON_ATTACK2_1
+	dw CardPageSwitch_PokemonAttack2Page2 ; CARDPAGE_POKEMON_ATTACK2_2
 	dw CardPageSwitch_PokemonOverviewOrDescription ; CARDPAGE_POKEMON_DESCRIPTION
 	dw CardPageSwitch_PokemonEnd
 	dw CardPageSwitch_08
@@ -3896,28 +3896,28 @@ CardPageSwitch_PokemonOverviewOrDescription: ; 595a (1:595a)
 	or a
 	ret ; nz
 
-; return with current page if [wLoadedCard1Move1Name] non-0
-; (if card has at least one move)
-CardPageSwitch_PokemonMove1Page1: ; 595e (1:595e)
-	ld hl, wLoadedCard1Move1Name
+; return with current page if [wLoadedCard1Atk1Name] non-0
+; (if card has at least one attack)
+CardPageSwitch_PokemonAttack1Page1: ; 595e (1:595e)
+	ld hl, wLoadedCard1Atk1Name
 	jr CheckCardPageExists
 
-; return with current page if [wLoadedCard1Move1Description + 2] non-0
-; (if card's first move has a two-page description)
-CardPageSwitch_PokemonMove1Page2: ; 5963 (1:5963)
-	ld hl, wLoadedCard1Move1Description + 2
+; return with current page if [wLoadedCard1Atk1Description + 2] non-0
+; (if card's first attack has a two-page description)
+CardPageSwitch_PokemonAttack1Page2: ; 5963 (1:5963)
+	ld hl, wLoadedCard1Atk1Description + 2
 	jr CheckCardPageExists
 
-; return with current page if [wLoadedCard1Move2Name] non-0
-; (if card has two moves)
-CardPageSwitch_PokemonMove2Page1: ; 5968 (1:5968)
-	ld hl, wLoadedCard1Move2Name
+; return with current page if [wLoadedCard1Atk2Name] non-0
+; (if card has two attacks)
+CardPageSwitch_PokemonAttack2Page1: ; 5968 (1:5968)
+	ld hl, wLoadedCard1Atk2Name
 	jr CheckCardPageExists
 
-; return with current page if [wLoadedCard1Move1Description + 2] non-0
-; (if card's second move has a two-page description)
-CardPageSwitch_PokemonMove2Page2: ; 596d (1:596d)
-	ld hl, wLoadedCard1Move2Description + 2
+; return with current page if [wLoadedCard1Atk1Description + 2] non-0
+; (if card's second attack has a two-page description)
+CardPageSwitch_PokemonAttack2Page2: ; 596d (1:596d)
+	ld hl, wLoadedCard1Atk2Description + 2
 ;	fallthrough
 
 CheckCardPageExists: ; 5970 (1:5970)
@@ -4369,17 +4369,17 @@ DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 	lb bc, 16, 16
 	ld a, [wLoadedCard1PokedexNumber]
 	call WriteTwoByteNumberInTxSymbolFormat
-	; print the name, damage, and energy cost of each move and/or Pokemon power that exists
-	; first move at 5,10 and second at 5,12
+	; print the name, damage, and energy cost of each attack and/or Pokemon power that exists
+	; first attack at 5,10 and second at 5,12
 	lb bc, 5, 10
 	ld e, c
-	ld hl, wLoadedCard1Move1Name
-	call PrintMoveOrPkmnPowerInformation
+	ld hl, wLoadedCard1Atk1Name
+	call PrintAttackOrPkmnPowerInformation
 	inc c
 	inc c ; 12
 	ld e, c
-	ld hl, wLoadedCard1Move2Name
-	call PrintMoveOrPkmnPowerInformation
+	ld hl, wLoadedCard1Atk2Name
+	call PrintAttackOrPkmnPowerInformation
 	; print the retreat cost (some amount of colorless energies) at 8,14
 	inc c
 	inc c ; 14
@@ -4422,12 +4422,12 @@ DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 	call PrintCardPageWeaknessesOrResistances
 	ret
 
-; displays the name, damage, and energy cost of a move or Pokemon power.
+; displays the name, damage, and energy cost of an attack or Pokemon power.
 ; used in the Attack menu and in the card page of a Pokemon.
 ; input:
-   ; hl: pointer to move 1 name in a move_data_struct (which can be inside at card_data_struct)
+   ; hl: pointer to attack 1 name in a atk_data_struct (which can be inside at card_data_struct)
    ; e: Y coordinate to start printing the data at
-PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
+PrintAttackOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	ld a, [hli]
 	or [hl]
 	ret z
@@ -4447,10 +4447,10 @@ PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	ld a, [hli]
 	or [hl]
 	jr z, .print_damage
-	; if in Attack menu and move 1 description exists, print at 18,e:
+	; if in Attack menu and attack 1 description exists, print at 18,e:
 	ld b, 18
 	ld c, e
-	ld a, SYM_MOVE_DESCR
+	ld a, SYM_ATK_DESCR
 	call WriteByteToBGMap0
 .print_damage
 	inc hl
@@ -4460,7 +4460,7 @@ PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	ld a, [hl]
 	or a
 	jr z, .print_category
-	; print move damage at 15,(e+1) if non-0
+	; print attack damage at 15,(e+1) if non-0
 	ld b, 15 ; unless damage has three digits, this is effectively 16
 	ld c, e
 	inc c
@@ -4482,7 +4482,7 @@ PrintMoveOrPkmnPowerInformation: ; 5c33 (1:5c33)
 	call WriteByteToBGMap0
 	jr .print_energy_cost
 .print_energy_cost
-	ld bc, CARD_DATA_MOVE1_ENERGY_COST - CARD_DATA_MOVE1_CATEGORY
+	ld bc, CARD_DATA_ATTACK1_ENERGY_COST - CARD_DATA_ATTACK1_CATEGORY
 	add hl, bc
 	ld c, e
 	ld b, 2 ; bc = 2, e
@@ -4548,7 +4548,7 @@ PrintCardPageWeaknessesOrResistances: ; 5cac (1:5cac)
 	ret
 
 ; prints surrounding box, card name at 5,1, type, set 2, and rarity.
-; used in all CARDPAGE_POKEMON_* and MOVEPAGE_*, except in
+; used in all CARDPAGE_POKEMON_* and ATTACKPAGE_*, except in
 ; CARDPAGE_POKEMON_OVERVIEW when wCardPageType is CARDPAGETYPE_PLAY_AREA.
 PrintPokemonCardPageGenericInformation: ; 5cc4 (1:5cc4)
 	call DrawCardPageSurroundingBox
@@ -4599,50 +4599,50 @@ CardPageNoTextTileData: ; 5d1a (1:5d1a)
 	db 15, 16, SYM_No, 0
 	db $ff
 
-DisplayCardPage_PokemonMove1Page1: ; 5d1f (1:5d1f)
-	ld hl, wLoadedCard1Move1Name
-	ld de, wLoadedCard1Move1Description
-	jr DisplayPokemonMoveCardPage
+DisplayCardPage_PokemonAttack1Page1: ; 5d1f (1:5d1f)
+	ld hl, wLoadedCard1Atk1Name
+	ld de, wLoadedCard1Atk1Description
+	jr DisplayPokemonAttackCardPage
 
-DisplayCardPage_PokemonMove1Page2: ; 5d27 (1:5d27)
-	ld hl, wLoadedCard1Move1Name
-	ld de, wLoadedCard1Move1Description + 2
-	jr DisplayPokemonMoveCardPage
+DisplayCardPage_PokemonAttack1Page2: ; 5d27 (1:5d27)
+	ld hl, wLoadedCard1Atk1Name
+	ld de, wLoadedCard1Atk1Description + 2
+	jr DisplayPokemonAttackCardPage
 
-DisplayCardPage_PokemonMove2Page1: ; 5d2f (1:5d2f)
-	ld hl, wLoadedCard1Move2Name
-	ld de, wLoadedCard1Move2Description
-	jr DisplayPokemonMoveCardPage
+DisplayCardPage_PokemonAttack2Page1: ; 5d2f (1:5d2f)
+	ld hl, wLoadedCard1Atk2Name
+	ld de, wLoadedCard1Atk2Description
+	jr DisplayPokemonAttackCardPage
 
-DisplayCardPage_PokemonMove2Page2: ; 5d37 (1:5d37)
-	ld hl, wLoadedCard1Move2Name
-	ld de, wLoadedCard1Move2Description + 2
+DisplayCardPage_PokemonAttack2Page2: ; 5d37 (1:5d37)
+	ld hl, wLoadedCard1Atk2Name
+	ld de, wLoadedCard1Atk2Description + 2
 ;	fallthrough
 
 ; input:
-   ; hl = address of the move's name (text id)
-   ; de = address of the move's description (either first or second text id)
-DisplayPokemonMoveCardPage: ; 5d3d (1:5d3d)
+   ; hl = address of the attack's name (text id)
+   ; de = address of the attack's description (either first or second text id)
+DisplayPokemonAttackCardPage: ; 5d3d (1:5d3d)
 	push de
 	push hl
 	; print surrounding box, card name at 5,1, type, set 2, and rarity
 	call PrintPokemonCardPageGenericInformation
-	; print name, damage, and energy cost of move or Pokemon power starting at line 2
+	; print name, damage, and energy cost of attack or Pokemon power starting at line 2
 	ld e, 2
 	pop hl
-	call PrintMoveOrPkmnPowerInformation
+	call PrintAttackOrPkmnPowerInformation
 	pop hl
 ;	fallthrough
 
-; print, if non-null, the description of the trainer card, energy card, move,
+; print, if non-null, the description of the trainer card, energy card, attack,
 ; or Pokemon power, given as a pointer to text id in hl, starting from 1,11
-PrintMoveOrNonPokemonCardDescription: ; 5d49 (1:5d49)
+PrintAttackOrNonPokemonCardDescription: ; 5d49 (1:5d49)
 	ld a, [hli]
 	or [hl]
 	ret z
 	dec hl
 	lb de, 1, 11
-	call PrintMoveOrCardDescription
+	call PrintAttackOrCardDescription
 	ret
 
 DisplayCardPage_PokemonDescription: ; 5d54 (1:5d54)
@@ -4793,7 +4793,7 @@ DisplayEnergyOrTrainerCardPage: ; 5e2d (1:5e2d)
 	; print the set 2 icon and rarity symbol of the card
 	call DrawCardPageSet2AndRarityIcons
 	pop hl
-	call PrintMoveOrNonPokemonCardDescription
+	call PrintAttackOrNonPokemonCardDescription
 	ret
 
 ; display the card details of the card in wLoadedCard1
@@ -5742,7 +5742,7 @@ Func_6435:
 	ldh [hTempCardIndex_ff98], a
 	ld d, a
 	ld e, $00
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call DisplayUsePokemonPowerScreen
 	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_1
 	call TryExecuteEffectCommandFunction
@@ -5798,7 +5798,7 @@ Func_64b0: ; 64b0 (1:64b0)
 	call PrintPlayAreaCardHeader
 	call PrintPlayAreaCardLocation
 	call Func_64fc
-	ld a, [wLoadedCard1Move1Category]
+	ld a, [wLoadedCard1Atk1Category]
 	call SetNextElementOfList
 	pop bc
 	pop hl
@@ -5812,14 +5812,14 @@ Func_64b0: ; 64b0 (1:64b0)
 ; 0x64fc
 
 Func_64fc: ; 64fc (1:64fc)
-	ld a, [wLoadedCard1Move1Category]
+	ld a, [wLoadedCard1Atk1Category]
 	cp POKEMON_POWER
 	ret nz
 	ld a, [wCurPlayAreaY]
 	inc a
 	ld e, a
 	ld d, $04
-	ld hl, wLoadedCard1Move1Name
+	ld hl, wLoadedCard1Atk1Name
 	call InitTextPrinting_ProcessTextFromPointerToID
 	ret
 ; 0x6510
@@ -5840,17 +5840,17 @@ DisplayUsePokemonPowerScreen: ; 6510 (1:6510)
 	call PrintPlayAreaCardInformationAndLocation
 	lb de, 1, 4
 	call InitTextPrinting
-	ld hl, wLoadedCard1Move1Name
+	ld hl, wLoadedCard1Atk1Name
 	call InitTextPrinting_ProcessTextFromPointerToID
 	lb de, 1, 6
-	ld hl, wLoadedCard1Move1Description
-	call PrintMoveOrCardDescription
+	ld hl, wLoadedCard1Atk1Description
+	call PrintAttackOrCardDescription
 	ret
 
-; print the description of a move, a Pokemon power, or a trainer or energy card
+; print the description of an attack, a Pokemon power, or a trainer or energy card
 ; x,y coordinates of where to start printing the text are given at de
 ; don't separate lines of text
-PrintMoveOrCardDescription: ; 653e (1:653e)
+PrintAttackOrCardDescription: ; 653e (1:653e)
 	call SetNoLineSeparation
 	ld a, [hli]
 	ld h, [hl]
@@ -6029,8 +6029,8 @@ DrawHPBar: ; 6614 (1:6614)
 	ret
 
 ; when an opponent's Pokemon card attacks, this displays a screen
-; containing the description and information of the used move
-DisplayOpponentUsedMoveScreen: ; 6635 (1:6635)
+; containing the description and information of the used attack
+DisplayOpponentUsedAttackScreen: ; 6635 (1:6635)
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
 	call LoadDuelCardSymbolTiles
@@ -6041,17 +6041,17 @@ DisplayOpponentUsedMoveScreen: ; 6635 (1:6635)
 	call LoadCardDataToBuffer1_FromCardID
 	ld a, CARDPAGE_POKEMON_OVERVIEW
 	ld [wCardPageNumber], a
-	ld hl, wLoadedCard1Move1Name
+	ld hl, wLoadedCard1Atk1Name
 	ld a, [wSelectedAttack]
 	or a
-	jr z, .first_move
-	ld hl, wLoadedCard1Move2Name
-.first_move
+	jr z, .first_atk
+	ld hl, wLoadedCard1Atk2Name
+.first_atk
 	ld e, 1
-	call PrintMoveOrPkmnPowerInformation
+	call PrintAttackOrPkmnPowerInformation
 	lb de, 1, 4
-	ld hl, wLoadedMoveDescription
-	call PrintMoveOrCardDescription
+	ld hl, wLoadedAttackDescription
+	call PrintAttackOrCardDescription
 	ret
 
 ; display card detail when a trainer card is used, and print "Used xxx"
@@ -6699,7 +6699,7 @@ OppAction_BeginUseAttack: ; 6a4e (1:6a4e)
 	ld d, a
 	ldh a, [hTemp_ffa0]
 	ld e, a
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call Func_16f6
 	ld a, $01
 	ld [wSkipDuelistIsThinkingDelay], a
@@ -6735,7 +6735,7 @@ OppAction_UseAttack: ; 6a8c (1:6a8c)
 	call TryExecuteEffectCommandFunction
 	call CheckSelfConfusionDamage
 	jr c, .confusion_damage
-	call DisplayOpponentUsedMoveScreen
+	call DisplayOpponentUsedAttackScreen
 	call PrintPokemonsAttackText
 	call WaitForWideTextBoxInput
 	call ExchangeRNG
@@ -6775,13 +6775,13 @@ OppAction_UsePokemonPower: ; 6ad9 (1:6ad9)
 	ldh a, [hTempCardIndex_ff9f]
 	ld d, a
 	ld e, $00
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	ldh a, [hTemp_ffa0]
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call DisplayUsePokemonPowerScreen
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardNameToTxRam2
-	ld hl, wLoadedMoveName
+	ld hl, wLoadedAttackName
 	ld a, [hli]
 	ld [wTxRam2_b], a
 	ld a, [hl]
@@ -6846,12 +6846,12 @@ OppAction_UseMetronomeAttack: ; 6b3e (1:6b3e)
 	call SerialRecv8Bytes
 	push bc
 	call SwapTurn
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call SwapTurn
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wPlayerAttackingCardIndex], a
 	ld a, [wSelectedAttack]
-	ld [wPlayerAttackingMoveIndex], a
+	ld [wPlayerAttackingAttackIndex], a
 	ld a, [wTempCardID_ccc2]
 	ld [wPlayerAttackingCardID], a
 	call Func_16f6
@@ -7236,13 +7236,13 @@ ConvertSpecialTrainerCardToPokemon: ; 6d84 (1:6d84)
 
 .trainer_to_pkmn_data
 	db 10                 ; CARD_DATA_HP
-	ds $07                ; CARD_DATA_MOVE1_NAME - (CARD_DATA_HP + 1)
-	tx DiscardName        ; CARD_DATA_MOVE1_NAME
-	tx DiscardDescription ; CARD_DATA_MOVE1_DESCRIPTION
-	ds $03                ; CARD_DATA_MOVE1_CATEGORY - (CARD_DATA_MOVE1_DESCRIPTION + 2)
-	db POKEMON_POWER      ; CARD_DATA_MOVE1_CATEGORY
-	dw TrainerCardAsPokemonEffectCommands ; CARD_DATA_MOVE1_EFFECT_COMMANDS
-	ds $18                ; CARD_DATA_RETREAT_COST - (CARD_DATA_MOVE1_EFFECT_COMMANDS + 2)
+	ds $07                ; CARD_DATA_ATTACK1_NAME - (CARD_DATA_HP + 1)
+	tx DiscardName        ; CARD_DATA_ATTACK1_NAME
+	tx DiscardDescription ; CARD_DATA_ATTACK1_DESCRIPTION
+	ds $03                ; CARD_DATA_ATTACK1_CATEGORY - (CARD_DATA_ATTACK1_DESCRIPTION + 2)
+	db POKEMON_POWER      ; CARD_DATA_ATTACK1_CATEGORY
+	dw TrainerCardAsPokemonEffectCommands ; CARD_DATA_ATTACK1_EFFECT_COMMANDS
+	ds $18                ; CARD_DATA_RETREAT_COST - (CARD_DATA_ATTACK1_EFFECT_COMMANDS + 2)
 	db UNABLE_RETREAT     ; CARD_DATA_RETREAT_COST
 	ds $0d                ; PKMN_CARD_DATA_LENGTH - (CARD_DATA_RETREAT_COST + 1)
 
@@ -7595,7 +7595,7 @@ PrintThereWasNoEffectFromStatusText: ; 700a (1:700a)
 	ld a, [wNoEffectFromWhichStatus]
 	or a
 	jr nz, .status
-	ld hl, wLoadedMoveName
+	ld hl, wLoadedAttackName
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -7717,7 +7717,7 @@ InitVariablesToBeginDuel: ; 70aa (1:70aa)
 	ld a, $ff
 	ld [wcc0f], a
 	ld [wPlayerAttackingCardIndex], a
-	ld [wPlayerAttackingMoveIndex], a
+	ld [wPlayerAttackingAttackIndex], a
 	call EnableSRAM
 	ld a, [s0a009]
 	ld [wSkipDelayAllowed], a
@@ -7860,10 +7860,10 @@ TakeAPrizes: ; 7161 (1:7161)
 	ld [hl], b
 	ret
 
-; clear the non-turn holder's duelvars starting at DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+; clear the non-turn holder's duelvars starting at DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 ; these duelvars only last a two-player turn at most.
 ClearNonTurnTemporaryDuelvars: ; 717a (1:717a)
-	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+	ld a, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	call GetNonTurnDuelistVariable
 	xor a
 	ld [hli], a
@@ -8320,7 +8320,7 @@ Func_741a: ; 741a (1:741a)
 	ld e, ATK_ANIM_IMAKUNI_CONFUSION
 .got_anim
 	ld a, e
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	xor a
 	ld [wDuelAnimLocationParam], a
 	push hl
@@ -8336,8 +8336,8 @@ Func_741a: ; 741a (1:741a)
 PlayAttackAnimation_DealAttackDamageSimple: ; 7469 (1:7469)
 	push hl
 	push de
-	call PlayMoveAnimation
-	call WaitMoveAnimation
+	call PlayAttackAnimation
+	call WaitAttackAnimation
 	pop de
 	pop hl
 	call SubtractHP
@@ -8351,9 +8351,9 @@ PlayAttackAnimation_DealAttackDamageSimple: ; 7469 (1:7469)
 	pop hl
 	ret
 
-; if [wLoadedMoveAnimation] != 0, wait until the animation is over
-WaitMoveAnimation: ; 7484 (1:7484)
-	ld a, [wLoadedMoveAnimation]
+; if [wLoadedAttackAnimation] != 0, wait until the animation is over
+WaitAttackAnimation: ; 7484 (1:7484)
+	ld a, [wLoadedAttackAnimation]
 	or a
 	ret z
 	push de
@@ -8364,12 +8364,12 @@ WaitMoveAnimation: ; 7484 (1:7484)
 	pop de
 	ret
 
-; play move animation
+; play attack animation
 ; input:
-; - [wLoadedMoveAnimation]: animation to play
-; - de: damage dealt by the move (to display the animation with the number)
+; - [wLoadedAttackAnimation]: animation to play
+; - de: damage dealt by the attack (to display the animation with the number)
 ; - c: a wDamageEffectiveness constant (to print WEAK or RESIST if necessary)
-PlayMoveAnimation: ; 7494 (1:7494)
+PlayAttackAnimation: ; 7494 (1:7494)
 	ldh a, [hWhoseTurn]
 	push af
 	push hl
@@ -8396,14 +8396,14 @@ PlayMoveAnimation: ; 7494 (1:7494)
 	ld [hl], d
 
 ; if damage >= 70, ATK_ANIM_HIT becomes ATK_ANIM_BIG_HIT
-	ld a, [wLoadedMoveAnimation]
+	ld a, [wLoadedAttackAnimation]
 	cp ATK_ANIM_HIT
 	jr nz, .got_anim
 	ld a, e
 	cp 70
 	jr c, .got_anim
 	ld a, ATK_ANIM_BIG_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 
 .got_anim
 	farcall PlayAttackAnimationCommands
