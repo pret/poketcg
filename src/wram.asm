@@ -2137,10 +2137,9 @@ wd23c:: ; d23c
 wd23d:: ; d23d
 	ds $1
 
-wd23e:: ; d23e
-	ds $1
-
-	ds $4f
+; palette loaded from Palette* data
+wLoadedPalData:: ; d23e
+	ds $50
 
 wd28e:: ; d28e
 	ds $1
@@ -2159,7 +2158,9 @@ wd292:: ; d292
 
 	ds $4
 
-wd297:: ; d297
+; temporarily holds the palettes from
+; wBackgroundPalettesCGB
+wTempBackgroundPalettesCGB:: ; d297
 	ds 8 palettes
 
 	ds $4c
@@ -2376,13 +2377,28 @@ wd42a:: ; d42a
 wAnimFlags:: ; d42b
 	ds $1
 
-wd42c:: ; d42c
-	ds $80
+wDuelAnimBuffer:: ; d42c
+	duel_anim_struct wDuelAnim1
+	duel_anim_struct wDuelAnim2
+	duel_anim_struct wDuelAnim3
+	duel_anim_struct wDuelAnim4
+	duel_anim_struct wDuelAnim5
+	duel_anim_struct wDuelAnim6
+	duel_anim_struct wDuelAnim7
+	duel_anim_struct wDuelAnim8
+	duel_anim_struct wDuelAnim9
+	duel_anim_struct wDuelAnim10
+	duel_anim_struct wDuelAnim11
+	duel_anim_struct wDuelAnim12
+	duel_anim_struct wDuelAnim13
+	duel_anim_struct wDuelAnim14
+	duel_anim_struct wDuelAnim15
+	duel_anim_struct wDuelAnim16
 
-wd4ac:: ; d4ac
+wDuelAnimBufferCurPos:: ; d4ac
 	ds $1
 
-wd4ad:: ; d4ad
+wDuelAnimBufferSize:: ; d4ad
 	ds $1
 
 ; used to know what coordinate offsets to use to place animations
@@ -2393,17 +2409,21 @@ wd4ad:: ; d4ad
 wDuelAnimationScreen:: ; d4ae
 	ds $1
 
-wd4af:: ; d4af
+; which side to play animation
+; uses PLAYER_TURN and OPPONENT_TURN constants
+wDuelAnimDuelistSide:: ; d4af
 	ds $1
 
-wd4b0:: ; d4b0
+; used in GetAnimCoordsAndFlags to determine
+; what coordinates to draw the animation in.
+; e.g. used to know what Play Area card
+; to draw a hit animation in the Play Area screen.
+wDuelAnimLocationParam:: ; d4b0
 	ds $1
 
-wd4b1:: ; d4b1
-	ds $1
-
-wd4b2:: ; d4b2
-	ds $1
+; damage value to display with animation
+wDuelAnimDamage:: ; d4b1
+	ds $2
 
 wd4b3:: ; d4b3
 	ds $1
@@ -2419,16 +2439,20 @@ wd4b7:: ; d4b7
 wd4b8:: ; d4b8
 	ds $1
 
-wd4b9:: ; d4b9
+; pointer to a function to update
+; the current screen animation
+wScreenAnimUpdatePtr:: ; d4b9
 	ds $2
 
-wd4bb:: ; d4bb
+; duration of the current screen animation
+wScreenAnimDuration:: ; d4bb
 	ds $1
 
 wd4bc:: ; d4bc
 	ds $2
 
-wd4be:: ; d4be
+; bank number to return to after processing animation
+wDuelAnimReturnBank:: ; d4be
 	ds $1
 
 wd4bf:: ; d4bf

@@ -1051,7 +1051,9 @@ Func_18661: ; 18661 (6:4661)
 ; (6:46f7)
 INCLUDE "data/effect_commands.asm"
 
-Func_18f9c: ; 18f9c (6:4f9c)
+; reads the animation commands from PointerTable_AttackAnimation
+; of attack in wLoadedMoveAnimation and plays them
+PlayAttackAnimationCommands: ; 18f9c (6:4f9c)
 	ld a, [wLoadedMoveAnimation]
 	or a
 	ret z
@@ -1060,126 +1062,137 @@ Func_18f9c: ; 18f9c (6:4f9c)
 	ld h, 0
 	add hl, hl
 	ld de, PointerTable_AttackAnimation
-.asm_4fa8
 	add hl, de
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
+
 	push de
 	ld hl, wce7e
 	ld a, [hl]
 	or a
-	jr nz, .asm_4fd3
+	jr nz, .read_command
 	ld [hl], $01
 	call Func_3b21
 	pop de
+
 	push de
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	ld a, $01
 	ld [wd4b3], a
 	xor a
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	ld a, [de]
 	cp $04
-	jr z, .asm_4fd3
-	ld a, $96
-	call Func_3b6a
-.asm_4fd3
+	jr z, .read_command
+	ld a, DUEL_ANIM_150
+	call PlayDuelAnimation
+.read_command
 	pop de
-.asm_4fd4
+	; fallthrough
+
+PlayAttackAnimationCommands_NextCommand: ; 18fd4 (6:4fd4)
 	ld a, [de]
 	inc de
-	ld hl, PointerTable_006_508f
+	ld hl, AnimationCommandPointerTable
 	jp JumpToFunctionInTable
 
-Func_18fdc: ; 18fdc (6:4fdc)
+AnimationCommand_AnimEnd: ; 18fdc (6:4fdc)
 	ret
 
-Func_18fdd: ; 18fdd (6:4fdd)
+AnimationCommand_AnimPlayer: ; 18fdd (6:4fdd)
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	ld a, [wDuelType]
 	cp $00
-	jr nz, Func_19014
-	ld a, $c2
-	ld [wd4af], a
-	jr Func_19014
+	jr nz, AnimationCommand_AnimNormal
+	ld a, PLAYER_TURN
+	ld [wDuelAnimDuelistSide], a
+	jr AnimationCommand_AnimNormal
 
-Func_18ff0: ; 18ff0 (6:4ff0)
+AnimationCommand_AnimOpponent: ; 18ff0 (6:4ff0)
 	call SwapTurn
 	ldh a, [hWhoseTurn]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	call SwapTurn
 	ld a, [wDuelType]
 	cp $00
-	jr nz, Func_19014
-	ld a, $c3
-	ld [wd4af], a
-	jr Func_19014
+	jr nz, AnimationCommand_AnimNormal
+	ld a, OPPONENT_TURN
+	ld [wDuelAnimDuelistSide], a
+	jr AnimationCommand_AnimNormal
 
-Func_19009: ; 19009 (6:5009)
+AnimationCommand_AnimUnknown2: ; 19009 (6:5009)
 	ld a, [wce82]
 	and $7f
-	ld [wd4b0], a
-	jr Func_19014
+	ld [wDuelAnimLocationParam], a
+	jr AnimationCommand_AnimNormal
 
-Func_19013: ; 19013 (6:5013)
+AnimationCommand_AnimEnd2: ; 19013 (6:5013)
 	ret
 
-Func_19014: ; 19014 (6:5014)
+AnimationCommand_AnimNormal: ; 19014 (6:5014)
 	ld a, [de]
 	inc de
 	cp DUEL_ANIM_SHOW_DAMAGE
-	jr z, .asm_502b
+	jr z, .show_damage
 	cp DUEL_ANIM_SHAKE1
-	jr z, .asm_5057
+	jr z, .shake_1
 	cp DUEL_ANIM_SHAKE2
-	jr z, .asm_505d
+	jr z, .shake_2
 	cp DUEL_ANIM_SHAKE3
-	jr z, .asm_5063
+	jr z, .shake_3
 
 .play_anim
-	call Func_3b6a
-	jr Func_18f9c.asm_4fd4
+	call PlayDuelAnimation
+	jr PlayAttackAnimationCommands_NextCommand
 
-.asm_502b
-	ld a, $97
-	call Func_3b6a
+.show_damage
+	ld a, DUEL_ANIM_PRINT_DAMAGE
+	call PlayDuelAnimation
 	ld a, [wce81]
 	ld [wd4b3], a
+
 	push de
 	ld hl, wce7f
-	ld de, wd4b1
+	ld de, wDuelAnimDamage
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hli]
 	ld [de], a
 	pop de
+
 	ld a, $8c
-	call Func_3b6a
+	call PlayDuelAnimation
 	ld a, [wDuelDisplayedScreen]
-	cp $01
-	jr nz, .asm_5054
-	ld a, $98
-	call Func_3b6a
-.asm_5054
-	jp Func_18f9c.asm_4fd4
-.asm_5057
-	ld c, $61
-	ld b, $63
-	jr .asm_5067
-.asm_505d
-	ld c, $62
-	ld b, $64
-	jr .asm_5067
-.asm_5063
-	ld c, $63
-	ld b, $61
-.asm_5067
+	cp DUEL_MAIN_SCENE
+	jr nz, .skip_update_hud
+	ld a, DUEL_ANIM_UPDATE_HUD
+	call PlayDuelAnimation
+.skip_update_hud
+	jp PlayAttackAnimationCommands_NextCommand
+
+; screen shake happens differently
+; depending on whose turn it is
+.shake_1
+	ld c, DUEL_ANIM_SMALL_SHAKE_X
+	ld b, DUEL_ANIM_SMALL_SHAKE_Y
+	jr .check_duelist
+
+.shake_2
+	ld c, DUEL_ANIM_BIG_SHAKE_X
+	ld b, DUEL_ANIM_BIG_SHAKE_Y
+	jr .check_duelist
+
+.shake_3
+	ld c, DUEL_ANIM_SMALL_SHAKE_Y
+	ld b, DUEL_ANIM_SMALL_SHAKE_X
+
+.check_duelist
 	ldh a, [hWhoseTurn]
-	cp $c2
+	cp PLAYER_TURN
 	ld a, c
 	jr z, .play_anim
 	ld a, [wDuelType]
@@ -1189,85 +1202,97 @@ Func_19014: ; 19014 (6:5014)
 	ld a, b
 	jr .play_anim
 
-Func_19079: ; 19079 (6:5079)
+AnimationCommand_AnimUnknown: ; 19079 (6:5079)
 	ld a, [de]
 	inc de
 	ld [wd4b3], a
 	ld a, [wce82]
-	ld [wd4b0], a
-	call Func_1909d
-	ld a, $96
-	call Func_3b6a
-	jp Func_18f9c.asm_4fd4
+	ld [wDuelAnimLocationParam], a
+	call SetDuelAnimationScreen
+	ld a, DUEL_ANIM_150
+	call PlayDuelAnimation
+	jp PlayAttackAnimationCommands_NextCommand
 
-PointerTable_006_508f: ; 1908f (6:508f)
-	dw Func_18fdc
-	dw Func_19014
-	dw Func_18fdd
-	dw Func_18ff0
-	dw Func_19079
-	dw Func_19009
-	dw Func_19013
+AnimationCommandPointerTable: ; 1908f (6:508f)
+	dw AnimationCommand_AnimEnd      ; anim_end
+	dw AnimationCommand_AnimNormal   ; anim_normal
+	dw AnimationCommand_AnimPlayer   ; anim_player
+	dw AnimationCommand_AnimOpponent ; anim_opponent
+	dw AnimationCommand_AnimUnknown  ; anim_unknown
+	dw AnimationCommand_AnimUnknown2 ; anim_unknown2
+	dw AnimationCommand_AnimEnd2     ; anim_end2 (unused)
 
-Func_1909d: ; 1909d (6:509d)
+; sets wDuelAnimationScreen according to wd4b3
+; if wd4b3 == $01, set it to Main Scene
+; if wd4b3 == $04, st it to Play Area scene
+SetDuelAnimationScreen: ; 1909d (6:509d)
 	ld a, [wd4b3]
 	cp $04
-	jr z, .asm_50ad
+	jr z, .set_play_area_screen
 	cp $01
 	ret nz
 	ld a, DUEL_ANIM_SCREEN_MAIN_SCENE
 	ld [wDuelAnimationScreen], a
 	ret
 
-.asm_50ad
-	ld a, [wd4b0]
+.set_play_area_screen
+	ld a, [wDuelAnimLocationParam]
 	ld l, a
 	ld a, [wWhoseTurn]
 	ld h, a
-	cp $c2
-	jr z, .asm_50cc
+	cp PLAYER_TURN
+	jr z, .player
+
+; opponent
 	ld a, [wDuelType]
 	cp $00
 	jr z, .asm_50c6
+
+; link duel or vs. AI
 	bit 7, l
 	jr z, .asm_50e2
 	jr .asm_50d2
+
 .asm_50c6
 	bit 7, l
 	jr z, .asm_50da
 	jr .asm_50ea
-.asm_50cc
+
+.player
 	bit 7, l
 	jr z, .asm_50d2
 	jr .asm_50e2
+
 .asm_50d2
-	ld l, $04
-	ld h, $c2
+	ld l, UNKNOWN_SCREEN_4
+	ld h, PLAYER_TURN
 	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
-	jr .asm_50f0
+	jr .ok
 .asm_50da
-	ld l, $04
-	ld h, $c3
+	ld l, UNKNOWN_SCREEN_4
+	ld h, OPPONENT_TURN
 	ld a, DUEL_ANIM_SCREEN_PLAYER_PLAY_AREA
-	jr .asm_50f0
+	jr .ok
 .asm_50e2
-	ld l, $05
-	ld h, $c3
+	ld l, UNKNOWN_SCREEN_5
+	ld h, OPPONENT_TURN
 	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
-	jr .asm_50f0
+	jr .ok
 .asm_50ea
-	ld l, $05
-	ld h, $c2
+	ld l, UNKNOWN_SCREEN_5
+	ld h, PLAYER_TURN
 	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
-.asm_50f0:
+
+.ok:
 	ld [wDuelAnimationScreen], a
 	ret
 
-; this part is not perfectly analyzed.
-; needs some fix.
+Func_190f4: ; 190f4 (6:50f4)
 	ld a, [wd4b3]
 	cp $04
-	jr z, Func_190fb.asm_510f
+	jr z, Func_1910f
+	; fallthrough
+
 Func_190fb: ; 190fb (6:50fb)
 	cp $01
 	jr nz, .asm_510e
@@ -1279,14 +1304,15 @@ Func_190fb: ; 190fb (6:50fb)
 	bank1call DrawDuelMainScene
 .asm_510e
 	ret
-.asm_510f
-	call Func_1909d
+
+Func_1910f: ; 1910f (6:510f)
+	call SetDuelAnimationScreen
 	ld a, [wDuelDisplayedScreen]
 	cp l
-	jr z, .asm_512e
+	jr z, .skip_change_screen
 	ld a, l
 	push af
-	ld l, $c2
+	ld l, PLAYER_TURN
 	ld a, [wDuelType]
 	cp $00
 	jr nz, .asm_5127
@@ -1296,27 +1322,30 @@ Func_190fb: ; 190fb (6:50fb)
 	call DrawYourOrOppPlayAreaScreen_Bank0
 	pop af
 	ld [wDuelDisplayedScreen], a
-.asm_512e
+.skip_change_screen
 	call DrawWideTextBox
 	ret
 
-; needs analyze.
+; prints text related to the damage received
+; by card stored in wTempNonTurnDuelistCardID
+; takes into account type effectiveness
+PrintDamageText: ; 19132 (6:5132)
 	push hl
 	push bc
 	push de
 	ld a, [wLoadedMoveAnimation]
 	cp ATK_ANIM_HEAL
-	jr z, .asm_5164
+	jr z, .skip
 	cp ATK_ANIM_HEALING_WIND_PLAY_AREA
-	jr z, .asm_5164
+	jr z, .skip
 
 	ld a, [wTempNonTurnDuelistCardID]
 	ld e, a
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
-	ld a, $12
+	ld a, 18
 	call CopyCardNameAndLevel
-	ld [hl], $00
+	ld [hl], TX_END
 	ld hl, wTxRam2
 	xor a
 	ld [hli], a
@@ -1325,50 +1354,54 @@ Func_190fb: ; 190fb (6:50fb)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_19168
+	call GetDamageText
 	ld a, l
 	or h
 	call nz, DrawWideTextBox_PrintText
-.asm_5164
+.skip
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_19168: ; 19168 (6:5168)
+; returns in hl the text id associated with
+; the damage in hl and its effectiveness
+GetDamageText: ; 19168 (6:5168)
 	ld a, l
 	or h
-	jr z, .asm_5188
+	jr z, .no_damage
 	call LoadTxRam3
 	ld a, [wce81]
 	ldtx hl, AttackDamageText
-	and $06
-	ret z
+	and (1 << RESISTANCE) | (1 << WEAKNESS)
+	ret z ; not weak or resistant
 	ldtx hl, WeaknessMoreDamage2Text
-	cp $06
-	ret z
-	and $02
+	cp (1 << RESISTANCE) | (1 << WEAKNESS)
+	ret z ; weak and resistant
+	and (1 << WEAKNESS)
 	ldtx hl, WeaknessMoreDamageText
-	ret nz
+	ret nz ; weak
 	ldtx hl, ResistanceLessDamageText
-	ret
-.asm_5188
+	ret ; resistant
+
+.no_damage
 	call CheckNoDamageOrEffect
 	ret c
 	ldtx hl, NoDamageText
 	ld a, [wce81]
-	and $04
-	ret z
+	and (1 << RESISTANCE)
+	ret z ; not resistant
 	ldtx hl, ResistanceNoDamageText
-	ret
+	ret ; resistant
 
-; needs analyze.
+UpdateMainSceneHUD: ; 19199 (6:5199)
 	ld a, [wDuelDisplayedScreen]
-	cp $01
+	cp DUEL_MAIN_SCENE
 	ret nz
 	bank1call DrawDuelHUDs
 	ret
 
+Func_191a3: ; 191a3 (6:51a3)
 	ret
 
 INCLUDE "data/attack_animations.asm"

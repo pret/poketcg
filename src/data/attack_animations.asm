@@ -200,7 +200,7 @@ AttackAnimation_Thunderbolt:
 
 AttackAnimation_BigLightning:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_normal         DUEL_ANIM_BIG_LIGHTNING
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
@@ -461,7 +461,7 @@ AttackAnimation_544e:
 AttackAnimation_Goo:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_GOO
-	anim_normal         $66
+	anim_normal         DUEL_ANIM_DISTORT
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
@@ -470,7 +470,7 @@ AttackAnimation_Goo:
 AttackAnimation_SpitPoisonFail:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_GOO
-	anim_normal         $66
+	anim_normal         DUEL_ANIM_DISTORT
 	anim_end
 
 AttackAnimation_Bubbles:
@@ -500,12 +500,12 @@ AttackAnimation_Boyfriends:
 AttackAnimation_Lure:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_LURE
-	anim_normal         $66
+	anim_normal         DUEL_ANIM_DISTORT
 	anim_end
 
 AttackAnimation_Toxic:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $66
+	anim_normal         DUEL_ANIM_DISTORT
 	anim_opponent       DUEL_ANIM_TOXIC
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
@@ -514,7 +514,7 @@ AttackAnimation_Toxic:
 
 AttackAnimation_ConfuseRay:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_opponent       DUEL_ANIM_CONFUSE_RAY
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
@@ -597,7 +597,7 @@ AttackAnimation_Selfdestruct:
 AttackAnimation_BigSelfdestruct:
 	anim_player         DUEL_ANIM_GLOW
 	anim_player         DUEL_ANIM_BIG_SELFDESTRUCT_1
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_player         DUEL_ANIM_BIG_SELFDESTRUCT_2
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
@@ -627,18 +627,18 @@ AttackAnimation_DarkGas:
 
 AttackAnimation_GlowEffect:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_end
 
 AttackAnimation_MirrorMove:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_opponent       DUEL_ANIM_GLOW
 	anim_end
 
 AttackAnimation_DevolutionBeam:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_unknown        $04
 	anim_unknown2       DUEL_ANIM_70
 	anim_end
@@ -646,13 +646,13 @@ AttackAnimation_DevolutionBeam:
 AttackAnimation_5543:
 	anim_unknown        $04
 	anim_unknown2       DUEL_ANIM_70
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_end
 
 AttackAnimation_Firegiver:
 	anim_unknown        $04
 	anim_unknown2       DUEL_ANIM_70
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_unknown2       DUEL_ANIM_71
 	anim_unknown2       DUEL_ANIM_71
 	anim_end
@@ -692,7 +692,7 @@ AttackAnimation_BigThunder:
 
 AttackAnimation_SolarPower:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_end
 
 AttackAnimation_PoisonFang:
@@ -757,7 +757,7 @@ AttackAnimation_Hypnosis:
 
 AttackAnimation_EnergyConversion:
 	anim_player         DUEL_ANIM_GLOW
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_end
 
 AttackAnimation_Leer:
@@ -866,7 +866,7 @@ AttackAnimation_Gale:
 	anim_opponent       DUEL_ANIM_HIT
 	anim_normal         DUEL_ANIM_SHAKE1
 	anim_opponent       DUEL_ANIM_SHOW_DAMAGE
-	anim_normal         $65
+	anim_normal         DUEL_ANIM_FLASH
 	anim_end
 
 AttackAnimation_Expand:
@@ -895,7 +895,7 @@ AttackAnimation_5659:
 AttackAnimation_SpitPoisonSuccess:
 	anim_player         DUEL_ANIM_GLOW
 	anim_opponent       DUEL_ANIM_GOO
-	anim_normal         $66
+	anim_normal         DUEL_ANIM_DISTORT
 	anim_end
 
 AttackAnimation_GustOfWind:

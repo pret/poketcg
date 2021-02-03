@@ -574,17 +574,17 @@ Func_1c8bc: ; 1c8bc (7:48bc)
 	ld [wd42a], a
 	ld [wd4c0], a
 	xor a
-	ld [wd4ac], a
-	ld [wd4ad], a
+	ld [wDuelAnimBufferCurPos], a
+	ld [wDuelAnimBufferSize], a
 	ld [wd4b3], a
-	call Func_1ccbc
+	call DefaultScreenAnimationUpdate
 	call Func_3ca0
 	pop bc
 	pop hl
 	ret
 ; 0x1c8ef
 
-Func_1c8ef: ; 1c8ef (7:48ef)
+PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 	ld a, [wDoFrameFunction + 0]
 	cp LOW(Func_3ba2)
 	jr nz, .error
@@ -598,13 +598,13 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 .okay
 	ld a, [wTempAnimation]
 	ld [wd4bf], a
-	cp $61
+	cp DUEL_SPECIAL_ANIMS
 	jp nc, Func_1cb5e
 
 	push hl
 	push bc
 	push de
-	call Func_1cab3
+	call GetAnimationData
 ; hl: pointer
 
 	ld a, [wAnimationsDisabled]
@@ -685,7 +685,7 @@ Func_1c8ef: ; 1c8ef (7:48ef)
 	ld [wd4cb], a
 
 	ld a, [hli] ; ANIM_PALETTE_ID
-	farcall Func_80418
+	farcall LoadPaletteData
 	ld a, [hli] ; ANIM_SPRITE_ANIM_ID
 
 	push af
@@ -755,7 +755,7 @@ GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
 	add a ; 12 * [wDuelAnimationScreen]
 	ld c, a
 
-	ld a, [wd4af]
+	ld a, [wDuelAnimDuelistSide]
 	cp PLAYER_TURN
 	jr z, .player_side
 ; opponent side
@@ -763,8 +763,8 @@ GetAnimCoordsAndFlags: ; 1c9a2 (7:49a2)
 	add c
 	ld c, a
 .player_side
-	ld a, [wd4b0]
-	add c ; a = [wd4b0] + c
+	ld a, [wDuelAnimLocationParam]
+	add c ; a = [wDuelAnimLocationParam] + c
 	ld c, a
 	ld b, 0
 	ld hl, AnimationCoordinatesIndex
@@ -831,92 +831,97 @@ AnimationCoordinates:
 	anim_coords 56,  40, $00
 	anim_coords 24,  40, $00
 
-Func_1ca31: ; 1ca31 (7:4a31)
+; appends to end of wDuelAnimBuffer
+; the current duel animation
+LoadDuelAnimationToBuffer: ; 1ca31 (7:4a31)
 	push hl
 	push bc
-	ld a, [wd4ac]
+	ld a, [wDuelAnimBufferCurPos]
 	ld b, a
-	ld hl, wd4ad
+	ld hl, wDuelAnimBufferSize
 	ld a, [hl]
 	ld c, a
-	add %00001000
+	add DUEL_ANIM_STRUCT_SIZE
 	and %01111111
 	cp b
-	jp z, .asm_1ca6b
+	jp z, .skip
 	ld [hl], a
 
 	ld b, $00
-	ld hl, wd42c
+	ld hl, wDuelAnimBuffer
 	add hl, bc
 	ld a, [wTempAnimation]
 	ld [hli], a
 	ld a, [wDuelAnimationScreen]
 	ld [hli], a
-	ld a, [wd4af]
+	ld a, [wDuelAnimDuelistSide]
 	ld [hli], a
-	ld a, [wd4b0]
+	ld a, [wDuelAnimLocationParam]
 	ld [hli], a
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld [hli], a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld [hli], a
 	ld a, [wd4b3]
 	ld [hli], a
-	ld a, [wd4be]
+	ld a, [wDuelAnimReturnBank]
 	ld [hl], a
 
-.asm_1ca6b
+.skip
 	pop bc
 	pop hl
 	ret
 
-Func_1ca6e: ; 1ca6e (7:4a6e)
+; loads the animations from wDuelAnimBuffer
+; in acending order, starting at wDuelAnimBufferCurPos
+PlayBufferedDuelAnimations: ; 1ca6e (7:4a6e)
 	push hl
 	push bc
-.asm_1ca70
-	ld a, [wd4ad]
+.next_duel_anim
+	ld a, [wDuelAnimBufferSize]
 	ld b, a
-	ld a, [wd4ac]
+	ld a, [wDuelAnimBufferCurPos]
 	cp b
-	jr z, .asm_1cab0
+	jr z, .skip
 
 	ld c, a
-	add $08
-	and $7f
-	ld [wd4ac], a
+	add DUEL_ANIM_STRUCT_SIZE
+	and %01111111
+	ld [wDuelAnimBufferCurPos], a
 
 	ld b, $00
-	ld hl, wd42c
+	ld hl, wDuelAnimBuffer
 	add hl, bc
 	ld a, [hli]
 	ld [wTempAnimation], a
 	ld a, [hli]
 	ld [wDuelAnimationScreen], a
 	ld a, [hli]
-	ld [wd4af], a
+	ld [wDuelAnimDuelistSide], a
 	ld a, [hli]
-	ld [wd4b0], a
+	ld [wDuelAnimLocationParam], a
 	ld a, [hli]
-	ld [wd4b1], a
+	ld [wDuelAnimDamage], a
 	ld a, [hli]
-	ld [wd4b2], a
+	ld [wDuelAnimDamage + 1], a
 	ld a, [hli]
 	ld [wd4b3], a
 	ld a, [hl]
-	ld [wd4be], a
+	ld [wDuelAnimReturnBank], a
 
-	call Func_1c8ef
+	call PlayLoadedDuelAnimation
 	call CheckAnyAnimationPlaying
-	jr nc, .asm_1ca70
+	jr nc, .next_duel_anim
 
-.asm_1cab0
+.skip
 	pop bc
 	pop hl
 	ret
 ; 0x1cab3
 
 ; gets data from Animations for anim ID in a
-Func_1cab3: ; 1cab3 (7:4ab3)
+; outputs the pointer to the data in hl
+GetAnimationData: ; 1cab3 (7:4ab3)
 	push bc
 	ld a, [wTempAnimation]
 	ld l, a
@@ -942,36 +947,38 @@ Func_1cac5: ; 1cac5 (7:4ac5)
 	cp $80
 	jr z, .asm_1cb11
 	ld hl, wAnimationQueue
-	ld c, $07
-.asm_1cadb
+	ld c, ANIMATION_QUEUE_LENGTH
+.loop_queue
 	push af
 	push bc
 	ld a, [hl]
 	cp $ff
-	jr z, .asm_1caf4
+	jr z, .next
 	ld [wWhichSprite], a
-	farcall Func_12a13
+	farcall GetSpriteAnimCounter
 	cp $ff
-	jr nz, .asm_1caf4
+	jr nz, .next
 	farcall Func_129fa
 	ld a, $ff
 	ld [hl], a
-.asm_1caf4
+
+.next
 	pop bc
 	pop af
 	and [hl]
 	inc hl
 	dec c
-	jr nz, .asm_1cadb
+	jr nz, .loop_queue
+
 .asm_1cafb
 	cp $ff
-	jr nz, .asm_1cb02
-	call Func_1ca6e
-.asm_1cb02
+	jr nz, .skip_play_anims
+	call PlayBufferedDuelAnimations
+.skip_play_anims
 	ret
 
 .asm_1cb03
-	ld hl, wd4b9
+	ld hl, wScreenAnimUpdatePtr
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -1017,8 +1024,8 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	dec c
 	jr nz, .asm_1cb3b
 	xor a
-	ld [wd4ac], a
-	ld [wd4ad], a
+	ld [wDuelAnimBufferCurPos], a
+	ld [wDuelAnimBufferSize], a
 .asm_1cb57
 	pop de
 	pop bc
@@ -1033,13 +1040,13 @@ Func_1cb5e: ; 1cb5e (7:4b5e)
 	cp $96
 	jp nc, Func_1ce03
 	cp $8c
-	jp nz, Func_1cc76
+	jp nz, InitScreenAnimation
 	jr .asm_1cb6a ; redundant
 .asm_1cb6a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	cp $03
 	jr nz, .asm_1cb76
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	cp $e8
 .asm_1cb76
 	ret nc
@@ -1050,7 +1057,7 @@ Func_1cb5e: ; 1cb5e (7:4b5e)
 	ld [wd4cb], a
 
 	ld a, $25
-	farcall Func_80418
+	farcall LoadPaletteData
 	call Func_1cba6
 
 	ld hl, wd4b3
@@ -1111,7 +1118,7 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	call GetAnimCoordsAndFlags
 
 	ld a, [wd4b7]
-	add $fd
+	add -3
 	ld e, a
 	ld a, $4b
 	adc 0
@@ -1132,9 +1139,9 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	INCROM $1cbfd, $1cc03
 
 Func_1cc03: ; 1cc03 (7:4c03)
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld l, a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 
 	ld de, wd4b4
@@ -1214,13 +1221,16 @@ Func_1cc66: ; 1cc66 (7:4c66)
 	ret
 ; 0x1cc76
 
-Func_1cc76: ; 1cc76 (7:4c76)
+; initializes a screen animation from wTempAnimation
+; loads a function pointer for updating a frame
+; and initializes the duration of the animation.
+InitScreenAnimation: ; 1cc76 (7:4c76)
 	ld a, [wAnimationsDisabled]
 	or a
-	jr nz, .asm_1cc9e
+	jr nz, .skip
 	ld a, [wTempAnimation]
 	ld [wd42a], a
-	sub $61
+	sub DUEL_SCREEN_ANIMS
 	add a
 	add a
 	ld c, a
@@ -1228,39 +1238,50 @@ Func_1cc76: ; 1cc76 (7:4c76)
 	ld hl, Data_1cc9f
 	add hl, bc
 	ld a, [hli]
-	ld [wd4b9], a
+	ld [wScreenAnimUpdatePtr], a
 	ld c, a
 	ld a, [hli]
-	ld [wd4b9 + 1], a
+	ld [wScreenAnimUpdatePtr + 1], a
 	ld b, a
 	ld a, [hl]
-	ld [wd4bb], a
+	ld [wScreenAnimDuration], a
 	call CallBC
-.asm_1cc9e
+.skip
 	ret
 ; 0x1cc9f
 
-macro_1cc9f: MACRO
-	dw \1
-	db \2
-	db \3
+; for the following animations, these functions
+; are run with the corresponding duration.
+; this duration decides different effects,
+; depending on which function runs
+; and is decreased by one each time.
+; when it is down to 0, the animation is done.
+
+screen_effect: MACRO
+	dw \1 ; function pointer
+	db \2 ; duration
+	db $00 ; padding
 ENDM
 
 Data_1cc9f: ; 1cc9f (7:4c9f)
-	macro_1cc9f Func_1cce4, $18, $00
-	macro_1cc9f Func_1cce9, $20, $00
-	macro_1cc9f Func_1cd10, $18, $00
-	macro_1cc9f Func_1cd15, $20, $00
-	macro_1cc9f Func_1cd76, $08, $00
-	macro_1cc9f Func_1cdc3, $3f, $00
+; function pointer, duration
+	screen_effect ShakeScreenX_Small, 24 ; DUEL_ANIM_SMALL_SHAKE_X
+	screen_effect ShakeScreenX_Big,   32 ; DUEL_ANIM_BIG_SHAKE_X
+	screen_effect ShakeScreenY_Small, 24 ; DUEL_ANIM_SMALL_SHAKE_Y
+	screen_effect ShakeScreenY_Big,   32 ; DUEL_ANIM_BIG_SHAKE_Y
+	screen_effect WhiteFlashScreen,    8 ; DUEL_ANIM_FLASH
+	screen_effect DistortScreen,      63 ; DUEL_ANIM_DISTORT
 
-Func_1ccb7: ; 1ccb7 (7:4cb7)
-	ld a, [wd4bb]
+; checks if screen animation duration is over
+; and if so, loads the default update function
+LoadDefaultScreenAnimationUpdateWhenFinished: ; 1ccb7 (7:4cb7)
+	ld a, [wScreenAnimDuration]
 	or a
 	ret nz
 	; fallthrough
 
-Func_1ccbc: ; 1ccbc (7:4cbc)
+; function called for the screen animation update when it is over
+DefaultScreenAnimationUpdate: ; 1ccbc (7:4cbc)
 	ld a, $ff
 	ld [wd42a], a
 	call DisableInt_LYCoincidence
@@ -1268,81 +1289,92 @@ Func_1ccbc: ; 1ccbc (7:4cbc)
 	ldh [hSCX], a
 	ldh [rSCX], a
 	ldh [hSCY], a
-	ld hl, wd4b9
-	ld [hl], LOW(Func_1ccbc)
+	ld hl, wScreenAnimUpdatePtr
+	ld [hl], LOW(DefaultScreenAnimationUpdate)
 	inc hl
-	ld [hl], HIGH(Func_1ccbc)
+	ld [hl], HIGH(DefaultScreenAnimationUpdate)
 	ret
 ; 0x1ccd4
 
 Func_1ccd4: ; 1ccd4 (7:4cd4)
-	INCROM $1ccd4, $1cce4
+	ld a, 1
+	ld [wScreenAnimDuration], a
+	ld hl, wScreenAnimUpdatePtr
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CallHL2
+	jr DefaultScreenAnimationUpdate
+; 0x1cce4
 
-Func_1cce4: ; 1cce4 (7:4ce4)
-	ld hl, Data_1cd55
-	jr Func_1ccee
+ShakeScreenX_Small: ; 1cce4 (7:4ce4)
+	ld hl, SmallShakeOffsets
+	jr ShakeScreenX
 
-Func_1cce9: ; 1cce9 (7:4ce9)
-	ld hl, Data_1cd61
-	jr Func_1ccee
+ShakeScreenX_Big: ; 1cce9 (7:4ce9)
+	ld hl, BigShakeOffsets
+	jr ShakeScreenX
 
-Func_1ccee: ; 1ccee (7:4cee)
+ShakeScreenX: ; 1ccee (7:4cee)
 	ld a, l
 	ld [wd4bc], a
 	ld a, h
 	ld [wd4bc + 1], a
 
-	ld hl, wd4b9
-	ld [hl], LOW(.asm_1ccff)
+	ld hl, wScreenAnimUpdatePtr
+	ld [hl], LOW(.update)
 	inc hl
-	ld [hl], HIGH(.asm_1ccff)
+	ld [hl], HIGH(.update)
 	ret
 
-.asm_1ccff
-	call Func_1cd71
-	call Func_1cd3c
-	jp nc, Func_1ccb7
+.update
+	call DecrementScreenAnimDuration
+	call UpdateShakeOffset
+	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
 	ldh a, [hSCX]
 	add [hl]
 	ldh [hSCX], a
-	jp Func_1ccb7
+	jp LoadDefaultScreenAnimationUpdateWhenFinished
 ; 0x1cd10
 
-Func_1cd10: ; 1cd10 (7:4d10)
-	ld hl, Data_1cd55
-	jr Func_1cd1a
+ShakeScreenY_Small: ; 1cd10 (7:4d10)
+	ld hl, SmallShakeOffsets
+	jr ShakeScreenY
 
-Func_1cd15: ; 1cd15 (7:4d15)
-	ld hl, Data_1cd61
-	jr Func_1cd1a
+ShakeScreenY_Big: ; 1cd15 (7:4d15)
+	ld hl, BigShakeOffsets
+	jr ShakeScreenY
 
-Func_1cd1a: ; 1cd1a (7:4d1a)
+ShakeScreenY: ; 1cd1a (7:4d1a)
 	ld a, l
 	ld [wd4bc], a
 	ld a, h
 	ld [wd4bc + 1], a
-	ld hl, wd4b9
-	ld [hl], LOW(.asm_1cd2b)
+	ld hl, wScreenAnimUpdatePtr
+	ld [hl], LOW(.update)
 	inc hl
-	ld [hl], HIGH(.asm_1cd2b)
+	ld [hl], HIGH(.update)
 	ret
 
-.asm_1cd2b
-	call Func_1cd71
-	call Func_1cd3c
-	jp nc, Func_1ccb7
+.update
+	call DecrementScreenAnimDuration
+	call UpdateShakeOffset
+	jp nc, LoadDefaultScreenAnimationUpdateWhenFinished
 	ldh a, [hSCY]
 	add [hl]
 	ldh [hSCY], a
-	jp Func_1ccb7
+	jp LoadDefaultScreenAnimationUpdateWhenFinished
 ; 0x1cd3c
 
-Func_1cd3c: ; 1cd3c (7:4d3c)
+; get the displacement of the current frame
+; depending on the value of wScreenAnimDuration
+; returns carry if displacement was updated
+UpdateShakeOffset: ; 1cd3c (7:4d3c)
 	ld hl, wd4bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wd4bb]
+	ld a, [wScreenAnimDuration]
 	cp [hl]
 	ret nc
 	inc hl
@@ -1357,103 +1389,132 @@ Func_1cd3c: ; 1cd3c (7:4d3c)
 	ret
 ; 0x1cd55
 
-Data_1cd55: ; 1cd55 (7:4d55)
-	db $15, $02, $11, $fe, $0d, $02, $09, $fe, $05, $01, $01, $ff
+SmallShakeOffsets: ; 1cd55 (7:4d55)
+	db 21,  2
+	db 17, -2
+	db 13,  2
+	db  9, -2
+	db  5,  1
+	db  1, -1
 
-Data_1cd61: ; 1cd61 (7:4d61)
-	db $1d, $04, $19, $fc, $15, $04, $11, $fc, $0d, $03, $09, $fd, $05, $02, $01, $fe
+BigShakeOffsets: ; 1cd61 (7:4d61)
+	db 29,  4
+	db 25, -4
+	db 21,  4
+	db 17, -4
+	db 13,  3
+	db  9, -3
+	db  5,  2
+	db  1, -2
 
-Func_1cd71: ; 1cd71 (7:4d71)
-	ld hl, wd4bb
+DecrementScreenAnimDuration: ; 1cd71 (7:4d71)
+	ld hl, wScreenAnimDuration
 	dec [hl]
 	ret
 ; 0x1cd76
 
-Func_1cd76: ; 1cd76 (7:4d76)
-	ld hl, wd4b9
-	ld [hl], $a3
+WhiteFlashScreen: ; 1cd76 (7:4d76)
+	ld hl, wScreenAnimUpdatePtr
+	ld [hl], LOW(.update)
 	inc hl
-	ld [hl], $4d
+	ld [hl], HIGH(.update)
 	ld a, [wBGP]
 	ld [wd4bc], a
+	; backup the current background pals
 	ld hl, wBackgroundPalettesCGB
-	ld de, wd297
+	ld de, wTempBackgroundPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
-	ld de, $7fff
+	ld de, $7fff ; rgb 31, 31, 31
 	ld hl, wBackgroundPalettesCGB
-	ld bc, $20
+	ld bc, (8 palettes) / 2
 	call FillMemoryWithDE
 	xor a
 	call SetBGP
 	call FlushAllPalettes
-	call Func_1cd71
-	ld a, [wd4bb]
+
+.update
+	call DecrementScreenAnimDuration
+	ld a, [wScreenAnimDuration]
 	or a
 	ret nz
-	ld hl, wd297
+	; retreive the previous background pals
+	ld hl, wTempBackgroundPalettesCGB
 	ld de, wBackgroundPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	ld a, [wd4bc]
 	call SetBGP
 	call FlushAllPalettes
-	jp Func_1ccbc
+	jp DefaultScreenAnimationUpdate
 ; 0x1cdc3
 
-Func_1cdc3: ; 1cdc3 (7:4dc3)
-	ld hl, wd4b9
-	ld [hl], $df
+DistortScreen: ; 1cdc3 (7:4dc3)
+	ld hl, wScreenAnimUpdatePtr
+	ld [hl], LOW(.update)
 	inc hl
-	ld [hl], $4d
+	ld [hl], HIGH(.update)
 	xor a
 	ld [wApplyBGScroll], a
-	ld hl, $cace
-	ld [hl], $a6
+	ld hl, wLCDCFunctionTrampoline + 1
+	ld [hl], LOW(ApplyBackgroundScroll)
 	inc hl
-	ld [hl], $3e
-	ld a, $01
+	ld [hl], HIGH(ApplyBackgroundScroll)
+	ld a, 1
 	ld [wBGScrollMod], a
 	call EnableInt_LYCoincidence
-	ld a, [$d4bb]
+
+.update
+	ld a, [wScreenAnimDuration]
 	srl a
 	srl a
 	srl a
-	and $07
+	and %00000111
 	ld c, a
 	ld b, $00
-	ld hl, $4dfb
+	ld hl, .BGScrollModData
 	add hl, bc
 	ld a, [hl]
 	ld [wBGScrollMod], a
-	call Func_1cd71
-	jp Func_1ccb7
-; 0x1cdfb
+	call DecrementScreenAnimDuration
+	jp LoadDefaultScreenAnimationUpdateWhenFinished
 
-	INCROM $1cdfb, $1ce03
+; each value is applied for 8 "ticks" of wScreenAnimDuration
+; starting from the last and running backwards
+.BGScrollModData
+	db 4, 3, 2, 1, 1, 1, 1, 2
+; 0x1ce03
 
 Func_1ce03: ; 1ce03 (7:4e03)
-	cp $9e
+	cp DUEL_ANIM_158
 	jr z, .asm_1ce17
 	sub $96
 	add a
 	ld c, a
 	ld b, $00
-	ld hl, $4e22
+	ld hl, .pointer_table
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	jp Func_3bb5
+	
 .asm_1ce17
-	ld a, [wd4b1]
+	ld a, [wDuelAnimDamage]
 	ld l, a
-	ld a, [wd4b2]
+	ld a, [wDuelAnimDamage + 1]
 	ld h, a
 	jp Func_3bb5
-; 0x1ce22
 
-	INCROM $1ce22, $1ce32
+.pointer_table
+	dw Func_190f4         ; DUEL_ANIM_150
+	dw PrintDamageText    ; DUEL_ANIM_PRINT_DAMAGE
+	dw UpdateMainSceneHUD ; DUEL_ANIM_UPDATE_HUD
+	dw Func_191a3         ; DUEL_ANIM_153
+	dw Func_191a3         ; DUEL_ANIM_154
+	dw Func_191a3         ; DUEL_ANIM_155
+	dw Func_191a3         ; DUEL_ANIM_156
+	dw Func_191a3         ; DUEL_ANIM_157
 
 ; data for each animation ID (see src/constants/sprite_constants.asm)
 Animations: ; 1ce32 (7:4e32)
