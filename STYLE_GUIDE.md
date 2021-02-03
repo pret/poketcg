@@ -48,7 +48,7 @@ When naming a function, it should be concise but also capture the purpose and co
 * ``OpenNonTurnHolderDiscardPileScreen``
 * ``LoadCardDataToBuffer1_FromCardID``
 * ``LoadCardDataToBuffer1_FromDeckIndex``
-* ``CheckIfEnoughEnergiesToMove``
+* ``CheckIfEnoughEnergiesToAttack``
 * ``CheckIfEnoughEnergiesOfType``
 
 Sometimes a function is the most top-level function of this kind, so it can be given a very direct name that suggests it, like:
@@ -134,13 +134,13 @@ CopyLine: ; 1ea5 (0:1ea5)
 ```
 
 ```
-; check if a pokemon card has enough energy attached to it in order to use a move
+; check if a pokemon card has enough energy attached to it in order to use an attack
 ; input:
 ;   d = deck index of card (0 to 59)
 ;   e = attack index (0 or 1)
 ;   wAttachedEnergies and wTotalAttachedEnergies
 ; returns: carry if not enough energy, nc if enough energy.
-_CheckIfEnoughEnergiesToMove: ; 48ac (1:48ac)
+_CheckIfEnoughEnergiesToAttack: ; 48ac (1:48ac)
 ```
 
 ```

@@ -1,5 +1,5 @@
 EffectCommands: ; 186f7 (6:46f7)
-; Each move has a two-byte effect pointer (move's 7th param) that points to one of these structures.
+; Each attack has a two-byte effect pointer (attack's 7th param) that points to one of these structures.
 ; Similarly, trainer cards have a two-byte pointer (7th param) to one of these structures, which determines the card's function.
 ; Energy cards also point to one of these, but their data is just $00.
 ;	db EFFECTCMDTYPE_* ($01 - $0a)
@@ -8,29 +8,29 @@ EffectCommands: ; 186f7 (6:46f7)
 ;	db $00
 
 ; Commands are associated to a time or a scope (EFFECTCMDTYPE_*) that determines when their function is executed during the turn.
-; - EFFECTCMDTYPE_INITIAL_EFFECT_1: Executed right after move or trainer card is used. Bypasses Smokescreen and Sand Attack effects.
-; - EFFECTCMDTYPE_INITIAL_EFFECT_2: Executed right after move, Pokemon Power, or trainer card is used.
-; - EFFECTCMDTYPE_DISCARD_ENERGY: For moves or trainer cards that require putting one or more attached energy cards into the discard pile.
-; - EFFECTCMDTYPE_REQUIRE_SELECTION: For moves, Pokemon Powers, or trainer cards requiring the user to select a card (from e.g. play area screen or card list).
-; - EFFECTCMDTYPE_BEFORE_DAMAGE: Effect command of a move executed prior to the damage step. For trainer card or Pokemon Power, usually the main effect.
+; - EFFECTCMDTYPE_INITIAL_EFFECT_1: Executed right after attack or trainer card is used. Bypasses Smokescreen and Sand Attack effects.
+; - EFFECTCMDTYPE_INITIAL_EFFECT_2: Executed right after attack, Pokemon Power, or trainer card is used.
+; - EFFECTCMDTYPE_DISCARD_ENERGY: For attacks or trainer cards that require putting one or more attached energy cards into the discard pile.
+; - EFFECTCMDTYPE_REQUIRE_SELECTION: For attacks, Pokemon Powers, or trainer cards requiring the user to select a card (from e.g. play area screen or card list).
+; - EFFECTCMDTYPE_BEFORE_DAMAGE: Effect command of an attack executed prior to the damage step. For trainer card or Pokemon Power, usually the main effect.
 ; - EFFECTCMDTYPE_AFTER_DAMAGE: Effect command executed after the damage step.
-; - EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN: For moves that may result in the defending Pokemon being switched out. Called only for AI-executed moves.
+; - EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN: For attacks that may result in the defending Pokemon being switched out. Called only for AI-executed attacks.
 ; - EFFECTCMDTYPE_PKMN_POWER_TRIGGER: Pokemon Power effects that trigger the moment the Pokemon card is played.
 ; - EFFECTCMDTYPE_AI: Used for AI scoring.
 ; - EFFECTCMDTYPE_AI_SELECTION: When AI is required to select a card
 
-; Moves that have an EFFECTCMDTYPE_REQUIRE_SELECTION also must have either an EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN or an
+; Attacks that have an EFFECTCMDTYPE_REQUIRE_SELECTION also must have either an EFFECTCMDTYPE_AI_SWITCH_DEFENDING_PKMN or an
 ; EFFECTCMDTYPE_AI_SELECTION (for anything not involving switching the defending Pokemon), to handle selections involving the AI.
 
-; Similar move effects of different Pokemon cards all point to a different command list,
+; Similar attack effects of different Pokemon cards all point to a different command list,
 ; even though in some cases their commands and function pointers match.
 
 ; Function name examples
-;	PoisonEffect                     ; generic effect shared by multiple moves.
+;	PoisonEffect                     ; generic effect shared by multiple attacks.
 ;	Paralysis50PercentEffect         ;
-;	KakunaStiffenEffect              ; unique effect from a move known by multiple cards.
+;	KakunaStiffenEffect              ; unique effect from an attack known by multiple cards.
 ;	MetapodStiffenEffect             ;
-;	AcidEffect                       ; unique effect from a move known by a single card
+;	AcidEffect                       ; unique effect from an attack known by a single card
 ;	FoulOdorEffect                   ;
 ;	SpitPoison_Poison50PercentEffect ; unique effect made of more than one command.
 ;	SpitPoison_AIEffect              ;

@@ -244,7 +244,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 2 ; energies
 	tx LeechSeedName ; name
 	tx BulbasaursLeechSeedDescription ; description
@@ -258,7 +258,7 @@ BulbasaurCard: ; 30e28 (c:4e28)
 	db 1
 	db ATK_ANIM_DRAIN ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -295,7 +295,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db STAGE1 ; stage
 	tx BulbasaurName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx VineWhipName ; name
 	dw NONE ; description
@@ -309,7 +309,7 @@ IvysaurCard: ; 30e69 (c:4e69)
 	db 0
 	db ATK_ANIM_WHIP ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx PoisonPowderName ; name
 	tx InflictPoisonDescription ; description
@@ -346,7 +346,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db STAGE2 ; stage
 	tx IvysaurName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx SolarPowerName ; name
 	tx SolarPowerDescription ; description
@@ -360,7 +360,7 @@ Venusaur1Card: ; 30eaa (c:4eaa)
 	db 0
 	db ATK_ANIM_SOLAR_POWER ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 4 ; energies
 	tx MegaDrainName ; name
 	tx VenusaursMegaDrainDescription ; description
@@ -397,7 +397,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db STAGE2 ; stage
 	tx IvysaurName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx EnergyTransName ; name
 	tx EnergyTransDescription ; description
@@ -411,7 +411,7 @@ Venusaur2Card: ; 30eeb (c:4eeb)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 4 ; energies
 	tx SolarBeamName ; name
 	dw NONE ; description
@@ -448,7 +448,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx StringShotName ; name
 	tx MayInflictParalysisDescription ; description
@@ -462,7 +462,7 @@ CaterpieCard: ; 30f2c (c:4f2c)
 	db 0
 	db ATK_ANIM_STRING_SHOT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -499,7 +499,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db STAGE1 ; stage
 	tx CaterpieName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx StiffenName ; name
 	tx MetapodsStiffenDescription ; description
@@ -513,7 +513,7 @@ MetapodCard: ; 30f6d (c:4f6d)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx StunSporeName ; name
 	tx MayInflictParalysisDescription ; description
@@ -550,7 +550,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db STAGE2 ; stage
 	tx MetapodName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx WhirlwindName ; name
 	tx WhirlwindDescription ; description
@@ -564,7 +564,7 @@ ButterfreeCard: ; 30fae (c:4fae)
 	db 0
 	db ATK_ANIM_WHIRLWIND ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 4 ; energies
 	tx MegaDrainName ; name
 	tx ButterfreesMegaDrainDescription ; description
@@ -601,7 +601,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx PoisonStingName ; name
 	tx MayInflictPoisonDescription ; description
@@ -615,7 +615,7 @@ WeedleCard: ; 30fef (c:4fef)
 	db 0
 	db ATK_ANIM_NEEDLES ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -652,7 +652,7 @@ KakunaCard: ; 31030 (c:5030)
 	db STAGE1 ; stage
 	tx WeedleName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx StiffenName ; name
 	tx KakunasStiffenDescription ; description
@@ -666,7 +666,7 @@ KakunaCard: ; 31030 (c:5030)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx PoisonPowderName ; name
 	tx MayInflictPoisonDescription ; description
@@ -703,7 +703,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db STAGE2 ; stage
 	tx KakunaName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx TwineedleName ; name
 	tx DoubleAttackX30Description ; description
@@ -717,7 +717,7 @@ BeedrillCard: ; 31071 (c:5071)
 	db 0
 	db ATK_ANIM_NEEDLES ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx PoisonStingName ; name
 	tx MayInflictPoisonDescription ; description
@@ -754,7 +754,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx SpitPoisonName ; name
 	tx MayInflictPoisonDescription ; description
@@ -768,7 +768,7 @@ EkansCard: ; 310b2 (c:50b2)
 	db 0
 	db ATK_ANIM_SPIT_POISON ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
 	tx WrapName ; name
 	tx MayInflictParalysisDescription ; description
@@ -805,7 +805,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db STAGE1 ; stage
 	tx EkansName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx TerrorStrikeName ; name
 	tx TerrorStrikeDescription ; description
@@ -819,7 +819,7 @@ ArbokCard: ; 310f3 (c:50f3)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
 	tx PoisonFangName ; name
 	tx InflictPoisonDescription ; description
@@ -856,7 +856,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx FurySwipesName ; name
 	tx TripleAttackX10Description ; description
@@ -870,7 +870,7 @@ NidoranFCard: ; 31134 (c:5134)
 	db 0
 	db ATK_ANIM_MULTIPLE_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx CallForFamilyName ; name
 	tx NidoranFsCallForFamilyDescription ; description
@@ -907,7 +907,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db STAGE1 ; stage
 	tx NidoranFName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx SupersonicName ; name
 	tx MayInflictConfusionDescription ; description
@@ -921,7 +921,7 @@ NidorinaCard: ; 31175 (c:5175)
 	db 0
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx DoubleKickName ; name
 	tx DoubleAttackX30Description ; description
@@ -958,7 +958,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db STAGE2 ; stage
 	tx NidorinaName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1, COLORLESS, 1 ; energies
 	tx BoyfriendsName ; name
 	tx BoyfriendsDescription ; description
@@ -972,7 +972,7 @@ NidoqueenCard: ; 311b6 (c:51b6)
 	db 0
 	db ATK_ANIM_BOYFRIENDS ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
 	tx MegaPunchName ; name
 	dw NONE ; description
@@ -1009,7 +1009,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx HornHazardName ; name
 	tx MayDoNothingDescription ; description
@@ -1023,7 +1023,7 @@ NidoranMCard: ; 311f7 (c:51f7)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -1060,7 +1060,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db STAGE1 ; stage
 	tx NidoranMName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx DoubleKickName ; name
 	tx DoubleAttackX30Description ; description
@@ -1074,7 +1074,7 @@ NidorinoCard: ; 31238 (c:5238)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
 	tx HornDrillName ; name
 	dw NONE ; description
@@ -1111,7 +1111,7 @@ NidokingCard: ; 31279 (c:5279)
 	db STAGE2 ; stage
 	tx NidorinoName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1, COLORLESS, 2 ; energies
 	tx ThrashName ; name
 	tx ThrashDescription ; description
@@ -1125,7 +1125,7 @@ NidokingCard: ; 31279 (c:5279)
 	db 0
 	db ATK_ANIM_MULTIPLE_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx ToxicName ; name
 	tx ToxicDescription ; description
@@ -1162,7 +1162,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx SupersonicName ; name
 	tx MayInflictConfusionDescription ; description
@@ -1176,7 +1176,7 @@ ZubatCard: ; 312ba (c:52ba)
 	db 0
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
 	tx LeechLifeName ; name
 	tx ZubatsLeechLifeDescription ; description
@@ -1213,7 +1213,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db STAGE1 ; stage
 	tx ZubatName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx WingAttackName ; name
 	dw NONE ; description
@@ -1227,7 +1227,7 @@ GolbatCard: ; 312fb (c:52fb)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
 	tx LeechLifeName ; name
 	tx GolbatsLeechLifeDescription ; description
@@ -1264,7 +1264,7 @@ OddishCard: ; 3133c (c:533c)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx StunSporeName ; name
 	tx MayInflictParalysisDescription ; description
@@ -1278,7 +1278,7 @@ OddishCard: ; 3133c (c:533c)
 	db 0
 	db ATK_ANIM_POWDER_EFFECT_CHANCE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx SproutName ; name
 	tx SproutDescription ; description
@@ -1315,7 +1315,7 @@ GloomCard: ; 3137d (c:537d)
 	db STAGE1 ; stage
 	tx OddishName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx PoisonPowderName ; name
 	tx InflictPoisonDescription ; description
@@ -1329,7 +1329,7 @@ GloomCard: ; 3137d (c:537d)
 	db 3
 	db ATK_ANIM_POISON_POWDER ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx FoulOdorName ; name
 	tx FoulOdorDescription ; description
@@ -1366,7 +1366,7 @@ VileplumeCard: ; 313be (c:53be)
 	db STAGE2 ; stage
 	tx GloomName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx HealName ; name
 	tx HealDescription ; description
@@ -1380,7 +1380,7 @@ VileplumeCard: ; 313be (c:53be)
 	db 1
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx PetalDanceName ; name
 	tx PetalDanceDescription ; description
@@ -1417,7 +1417,7 @@ ParasCard: ; 313ff (c:53ff)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx ScratchName ; name
 	dw NONE ; description
@@ -1431,7 +1431,7 @@ ParasCard: ; 313ff (c:53ff)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx SporeName ; name
 	tx InflictSleepDescription ; description
@@ -1468,7 +1468,7 @@ ParasectCard: ; 31440 (c:5440)
 	db STAGE1 ; stage
 	tx ParasName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 2 ; energies
 	tx SporeName ; name
 	tx InflictSleepDescription ; description
@@ -1482,7 +1482,7 @@ ParasectCard: ; 31440 (c:5440)
 	db 0
 	db ATK_ANIM_SPORE ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx SlashName ; name
 	dw NONE ; description
@@ -1519,7 +1519,7 @@ VenonatCard: ; 31481 (c:5481)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx StunSporeName ; name
 	tx MayInflictParalysisDescription ; description
@@ -1533,7 +1533,7 @@ VenonatCard: ; 31481 (c:5481)
 	db 0
 	db ATK_ANIM_POWDER_EFFECT_CHANCE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1, COLORLESS, 1 ; energies
 	tx LeechLifeName ; name
 	tx VenonatLeechLifeDescription ; description
@@ -1570,7 +1570,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db STAGE1 ; stage
 	tx VenonatName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx ShiftName ; name
 	tx ShiftDescription ; description
@@ -1584,7 +1584,7 @@ VenomothCard: ; 314c2 (c:54c2)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx VenomPowderName ; name
 	tx VenomPowderDescription ; description
@@ -1621,7 +1621,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx VineWhipName ; name
 	dw NONE ; description
@@ -1635,7 +1635,7 @@ BellsproutCard: ; 31503 (c:5503)
 	db 0
 	db ATK_ANIM_WHIP ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1 ; energies
 	tx CallForFamilyName ; name
 	tx BellsproutsCallForFamilyDescription ; description
@@ -1672,7 +1672,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db STAGE1 ; stage
 	tx BellsproutName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx PoisonPowderName ; name
 	tx MayInflictPoisonDescription ; description
@@ -1686,7 +1686,7 @@ WeepinbellCard: ; 31544 (c:5544)
 	db 0
 	db ATK_ANIM_POWDER_EFFECT_CHANCE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx RazorLeafName ; name
 	dw NONE ; description
@@ -1723,7 +1723,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db STAGE2 ; stage
 	tx WeepinbellName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx LureName ; name
 	tx VictreebelsLureDescription ; description
@@ -1737,7 +1737,7 @@ VictreebelCard: ; 31585 (c:5585)
 	db 0
 	db ATK_ANIM_LURE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx AcidName ; name
 	tx VictreebelsAcidDescription ; description
@@ -1774,7 +1774,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx NastyGooName ; name
 	tx MayInflictParalysisDescription ; description
@@ -1788,7 +1788,7 @@ GrimerCard: ; 315c6 (c:55c6)
 	db 0
 	db ATK_ANIM_GOO ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 1 ; energies
 	tx MinimizeName ; name
 	tx GrimersMinimizeDescription ; description
@@ -1825,7 +1825,7 @@ MukCard: ; 31607 (c:5607)
 	db STAGE1 ; stage
 	tx GrimerName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx ToxicGasName ; name
 	tx ToxicGasDescription ; description
@@ -1839,7 +1839,7 @@ MukCard: ; 31607 (c:5607)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx SludgeName ; name
 	tx MayInflictPoisonDescription ; description
@@ -1876,7 +1876,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx HypnosisName ; name
 	tx InflictSleepDescription ; description
@@ -1890,7 +1890,7 @@ ExeggcuteCard: ; 31648 (c:5648)
 	db 0
 	db ATK_ANIM_HYPNOSIS ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2 ; energies
 	tx LeechSeedName ; name
 	tx ExeggcutesLeechSeedDescription ; description
@@ -1927,7 +1927,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db STAGE1 ; stage
 	tx ExeggcuteName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx TeleportName ; name
 	tx TeleportDescription ; description
@@ -1941,7 +1941,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 1 ; energies
 	tx BigEggsplosionName ; name
 	tx BigEggsplosionDescription ; description
@@ -1978,7 +1978,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 2 ; energies
 	tx FoulGasName ; name
 	tx FoulGasDescription ; description
@@ -1992,7 +1992,7 @@ KoffingCard: ; 316ca (c:56ca)
 	db 0
 	db ATK_ANIM_FOUL_GAS ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -2029,7 +2029,7 @@ WeezingCard: ; 3170b (c:570b)
 	db STAGE1 ; stage
 	tx KoffingName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 2 ; energies
 	tx SmogName ; name
 	tx MayInflictPoisonDescription ; description
@@ -2043,7 +2043,7 @@ WeezingCard: ; 3170b (c:570b)
 	db 0
 	db ATK_ANIM_SMOG ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
 	tx SelfdestructName ; name
 	tx WeezingsSelfdestructDescription ; description
@@ -2080,7 +2080,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1, COLORLESS, 1 ; energies
 	tx BindName ; name
 	tx MayInflictParalysisDescription ; description
@@ -2094,7 +2094,7 @@ Tangela1Card: ; 3174c (c:574c)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 3 ; energies
 	tx PoisonPowderName ; name
 	tx InflictPoisonDescription ; description
@@ -2131,7 +2131,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx StunSporeName ; name
 	tx MayInflictParalysisDescription ; description
@@ -2145,7 +2145,7 @@ Tangela2Card: ; 3178d (c:578d)
 	db 0
 	db ATK_ANIM_POWDER_EFFECT_CHANCE ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 1 ; energies
 	tx PoisonWhipName ; name
 	tx InflictPoisonDescription ; description
@@ -2182,7 +2182,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 1 ; energies
 	tx SwordsDanceName ; name
 	tx SwordsDanceDescription ; description
@@ -2196,7 +2196,7 @@ ScytherCard: ; 317ce (c:57ce)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx SlashName ; name
 	dw NONE ; description
@@ -2233,7 +2233,7 @@ PinsirCard: ; 3180f (c:580f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy GRASS, 2 ; energies
 	tx IronGripName ; name
 	tx MayInflictParalysisDescription ; description
@@ -2247,7 +2247,7 @@ PinsirCard: ; 3180f (c:580f)
 	db 0
 	db ATK_ANIM_HIT_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy GRASS, 2, COLORLESS, 2 ; energies
 	tx GuillotineName ; name
 	dw NONE ; description
@@ -2284,7 +2284,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx ScratchName ; name
 	dw NONE ; description
@@ -2298,7 +2298,7 @@ CharmanderCard: ; 31850 (c:5850)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 1, COLORLESS, 1 ; energies
 	tx EmberName ; name
 	tx EmberDescription ; description
@@ -2335,7 +2335,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db STAGE1 ; stage
 	tx CharmanderName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx SlashName ; name
 	dw NONE ; description
@@ -2349,7 +2349,7 @@ CharmeleonCard: ; 31891 (c:5891)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
 	tx FlamethrowerName ; name
 	tx CharmeleonsFlamethrowerDescription ; description
@@ -2386,7 +2386,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db STAGE2 ; stage
 	tx CharmeleonName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx EnergyBurnName ; name
 	tx EnergyBurnDescription ; description
@@ -2400,7 +2400,7 @@ CharizardCard: ; 318d2 (c:58d2)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 4 ; energies
 	tx FireSpinName ; name
 	tx FireSpinDescription ; description
@@ -2437,7 +2437,7 @@ VulpixCard: ; 31913 (c:5913)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 2 ; energies
 	tx ConfuseRayName ; name
 	tx MayInflictConfusionDescription ; description
@@ -2451,7 +2451,7 @@ VulpixCard: ; 31913 (c:5913)
 	db 0
 	db ATK_ANIM_CONFUSE_RAY ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -2488,7 +2488,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx LureName ; name
 	tx NinetailsLureDescription ; description
@@ -2502,7 +2502,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	db 0
 	db ATK_ANIM_LURE ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 4 ; energies
 	tx FireBlastName ; name
 	tx FireBlastDescription ; description
@@ -2539,7 +2539,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 2 ; energies
 	tx MixUpName ; name
 	tx MixUpDescription ; description
@@ -2553,7 +2553,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 3 ; energies
 	tx DancingEmbersName ; name
 	tx DancingEmbersDescription ; description
@@ -2590,7 +2590,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 1, COLORLESS, 1 ; energies
 	tx FlareName ; name
 	dw NONE ; description
@@ -2604,7 +2604,7 @@ GrowlitheCard: ; 319d6 (c:59d6)
 	db 0
 	db ATK_ANIM_SMALL_FLAME ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -2641,7 +2641,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db STAGE1 ; stage
 	tx GrowlitheName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx QuickAttackDescription ; description
@@ -2655,7 +2655,7 @@ Arcanine1Card: ; 31a17 (c:5a17)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2 ; energies
 	tx FlamesOfRageName ; name
 	tx FlamesOfRageDescription ; description
@@ -2692,7 +2692,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db STAGE1 ; stage
 	tx GrowlitheName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 2, COLORLESS, 1 ; energies
 	tx FlamethrowerName ; name
 	tx ArcaninesFlamethrowerDescription ; description
@@ -2706,7 +2706,7 @@ Arcanine2Card: ; 31a58 (c:5a58)
 	db 3
 	db ATK_ANIM_BIG_FLAME ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2, COLORLESS, 2 ; energies
 	tx TakeDownName ; name
 	tx TakeDownDescription ; description
@@ -2743,7 +2743,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx SmashKickName ; name
 	dw NONE ; description
@@ -2757,7 +2757,7 @@ PonytaCard: ; 31a99 (c:5a99)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2 ; energies
 	tx FlameTailName ; name
 	dw NONE ; description
@@ -2794,7 +2794,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db STAGE1 ; stage
 	tx PonytaName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx StompName ; name
 	tx StompDescription ; description
@@ -2808,7 +2808,7 @@ RapidashCard: ; 31ada (c:5ada)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
 	tx AgilityName ; name
 	tx RapidashsAgilityDescription ; description
@@ -2845,7 +2845,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 2 ; energies
 	tx FirePunchName ; name
 	dw NONE ; description
@@ -2859,7 +2859,7 @@ Magmar1Card: ; 31b1b (c:5b1b)
 	db 0
 	db ATK_ANIM_FIRE_PUNCH ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2, COLORLESS, 1 ; energies
 	tx FlamethrowerName ; name
 	tx FirePunchDescription ; description
@@ -2896,7 +2896,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 1 ; energies
 	tx SmokescreenName ; name
 	tx MagmarsSmokescreenDescription ; description
@@ -2910,7 +2910,7 @@ Magmar2Card: ; 31b5c (c:5b5c)
 	db 0
 	db ATK_ANIM_DARK_GAS ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2 ; energies
 	tx SmogName ; name
 	tx MayInflictPoisonDescription ; description
@@ -2947,7 +2947,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx BiteName ; name
 	dw NONE ; description
@@ -2961,7 +2961,7 @@ Flareon1Card: ; 31b9d (c:5b9d)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx RageName ; name
 	tx FlareonsRageDescription ; description
@@ -2998,7 +2998,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx QuickAttackDescription ; description
@@ -3012,7 +3012,7 @@ Flareon2Card: ; 31bde (c:5bde)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 2, COLORLESS, 2 ; energies
 	tx FlamethrowerName ; name
 	tx FlareonsFlamethrowerDescription ; description
@@ -3049,7 +3049,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIRE, 1 ; energies
 	tx WildfireName ; name
 	tx WildfireDescription ; description
@@ -3063,7 +3063,7 @@ Moltres1Card: ; 31c1f (c:5c1f)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 4 ; energies
 	tx DiveBombName ; name
 	tx MayDoNothingDescription ; description
@@ -3100,7 +3100,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx FiregiverName ; name
 	tx FiregiverDescription ; description
@@ -3114,7 +3114,7 @@ Moltres2Card: ; 31c60 (c:5c60)
 	db 0
 	db ATK_ANIM_FIREGIVER ; animation
 
-	; move 2
+	; attack 2
 	energy FIRE, 3 ; energies
 	tx DiveBombName ; name
 	tx MayDoNothingDescription ; description
@@ -3151,7 +3151,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx BubbleName ; name
 	tx MayInflictParalysisDescription ; description
@@ -3165,7 +3165,7 @@ SquirtleCard: ; 31ca1 (c:5ca1)
 	db 0
 	db ATK_ANIM_BUBBLES ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx WithdrawName ; name
 	tx SquirtlesWithdrawDescription ; description
@@ -3202,7 +3202,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db STAGE1 ; stage
 	tx SquirtleName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx WithdrawName ; name
 	tx WartortlesWithdrawDescription ; description
@@ -3216,7 +3216,7 @@ WartortleCard: ; 31ce2 (c:5ce2)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 2 ; energies
 	tx BiteName ; name
 	dw NONE ; description
@@ -3253,7 +3253,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db STAGE2 ; stage
 	tx WartortleName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx RainDanceName ; name
 	tx RainDanceDescription ; description
@@ -3267,7 +3267,7 @@ BlastoiseCard: ; 31d23 (c:5d23)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 3 ; energies
 	tx HydroPumpName ; name
 	tx HydroPumpDescription ; description
@@ -3304,7 +3304,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx HeadacheName ; name
 	tx HeadacheDescription ; description
@@ -3318,7 +3318,7 @@ PsyduckCard: ; 31d64 (c:5d64)
 	db 2
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1 ; energies
 	tx FurySwipesName ; name
 	tx TripleAttackX10Description ; description
@@ -3355,7 +3355,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db STAGE1 ; stage
 	tx PsyduckName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx PsyshockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -3369,7 +3369,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	db 0
 	db ATK_ANIM_PSYCHIC_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx HyperBeamName ; name
 	tx Discard1EnergyFromTargetDescription ; description
@@ -3406,7 +3406,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx WaterGunName ; name
 	tx PoliwagsWaterGunDescription ; description
@@ -3420,7 +3420,7 @@ PoliwagCard: ; 31de6 (c:5de6)
 	db MAX_ENERGY_BOOST_IS_LIMITED
 	db ATK_ANIM_WATER_GUN ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -3457,7 +3457,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db STAGE1 ; stage
 	tx PoliwagName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2 ; energies
 	tx AmnesiaName ; name
 	tx PoliwhirlsAmnesiaDescription ; description
@@ -3471,7 +3471,7 @@ PoliwhirlCard: ; 31e27 (c:5e27)
 	db 0
 	db ATK_ANIM_AMNESIA ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx DoubleslapName ; name
 	tx DoubleAttackX30Description ; description
@@ -3508,7 +3508,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db STAGE2 ; stage
 	tx PoliwhirlName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx WaterGunName ; name
 	tx PoliwrathsWaterGunDescription ; description
@@ -3522,7 +3522,7 @@ PoliwrathCard: ; 31e68 (c:5e68)
 	db MAX_ENERGY_BOOST_IS_LIMITED
 	db ATK_ANIM_WATER_GUN ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 2 ; energies
 	tx WhirlpoolName ; name
 	tx Discard1EnergyFromTargetDescription ; description
@@ -3559,7 +3559,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx CowardiceName ; name
 	tx CowardiceDescription ; description
@@ -3573,7 +3573,7 @@ TentacoolCard: ; 31ea9 (c:5ea9)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1 ; energies
 	tx AcidName ; name
 	dw NONE ; description
@@ -3610,7 +3610,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db STAGE1 ; stage
 	tx TentacoolName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx SupersonicName ; name
 	tx MayInflictConfusionDescription ; description
@@ -3624,7 +3624,7 @@ TentacruelCard: ; 31eea (c:5eea)
 	db 0
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2 ; energies
 	tx JellyfishStingName ; name
 	tx InflictPoisonDescription ; description
@@ -3661,7 +3661,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx HeadbuttName ; name
 	dw NONE ; description
@@ -3675,7 +3675,7 @@ SeelCard: ; 31f2b (c:5f2b)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -3712,7 +3712,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db STAGE1 ; stage
 	tx SeelName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx AuroraBeamName ; name
 	dw NONE ; description
@@ -3726,7 +3726,7 @@ DewgongCard: ; 31f6c (c:5f6c)
 	db 0
 	db ATK_ANIM_BEAM ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 2 ; energies
 	tx IceBeamName ; name
 	tx MayInflictParalysisDescription ; description
@@ -3763,7 +3763,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx SupersonicName ; name
 	tx MayInflictConfusionDescription ; description
@@ -3777,7 +3777,7 @@ ShellderCard: ; 31fad (c:5fad)
 	db 0
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1 ; energies
 	tx HideInShellName ; name
 	tx HideInShellDescription ; description
@@ -3814,7 +3814,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db STAGE1 ; stage
 	tx ShellderName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2 ; energies
 	tx ClampName ; name
 	tx ClampDescription ; description
@@ -3828,7 +3828,7 @@ CloysterCard: ; 31fee (c:5fee)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2 ; energies
 	tx SpikeCannonName ; name
 	tx DoubleAttackX30Description ; description
@@ -3865,7 +3865,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx CallForFamilyName ; name
 	tx KrabbysCallForFamilyDescription ; description
@@ -3879,7 +3879,7 @@ KrabbyCard: ; 3202f (c:602f)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx IronGripName ; name
 	dw NONE ; description
@@ -3916,7 +3916,7 @@ KinglerCard: ; 32070 (c:6070)
 	db STAGE1 ; stage
 	tx KrabbyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx FlailName ; name
 	tx KinglersFlailDescription ; description
@@ -3930,7 +3930,7 @@ KinglerCard: ; 32070 (c:6070)
 	db 0
 	db ATK_ANIM_BIG_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx CrabhammerName ; name
 	dw NONE ; description
@@ -3967,7 +3967,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx SmokescreenName ; name
 	tx OpponentAttackMayDoNothingDescription ; description
@@ -3981,7 +3981,7 @@ HorseaCard: ; 320b1 (c:60b1)
 	db 0
 	db ATK_ANIM_DARK_GAS ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -4018,7 +4018,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db STAGE1 ; stage
 	tx HorseaName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx WaterGunName ; name
 	tx SeadrasWaterGunDescription ; description
@@ -4032,7 +4032,7 @@ SeadraCard: ; 320f2 (c:60f2)
 	db MAX_ENERGY_BOOST_IS_LIMITED
 	db ATK_ANIM_WATER_GUN ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 2 ; energies
 	tx AgilityName ; name
 	tx SeadrasAgilityDescription ; description
@@ -4069,7 +4069,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx HornAttackName ; name
 	dw NONE ; description
@@ -4083,7 +4083,7 @@ GoldeenCard: ; 32133 (c:6133)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -4120,7 +4120,7 @@ SeakingCard: ; 32174 (c:6174)
 	db STAGE1 ; stage
 	tx GoldeenName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx HornAttackName ; name
 	dw NONE ; description
@@ -4134,7 +4134,7 @@ SeakingCard: ; 32174 (c:6174)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx WaterfallName ; name
 	dw NONE ; description
@@ -4171,7 +4171,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx SlapName ; name
 	dw NONE ; description
@@ -4185,7 +4185,7 @@ StaryuCard: ; 321b5 (c:61b5)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -4222,7 +4222,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db STAGE1 ; stage
 	tx StaryuName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2 ; energies
 	tx RecoverName ; name
 	tx StarmiesRecoverDescription ; description
@@ -4236,7 +4236,7 @@ StarmieCard: ; 321f6 (c:61f6)
 	db 3
 	db ATK_ANIM_RECOVER ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1, COLORLESS, 2 ; energies
 	tx StarFreezeName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4273,7 +4273,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx TackleName ; name
 	dw NONE ; description
@@ -4287,7 +4287,7 @@ MagikarpCard: ; 32237 (c:6237)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1 ; energies
 	tx FlailName ; name
 	tx MagikarpsFlailDescription ; description
@@ -4324,7 +4324,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db STAGE1 ; stage
 	tx MagikarpName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 3 ; energies
 	tx DragonRageName ; name
 	dw NONE ; description
@@ -4338,7 +4338,7 @@ GyaradosCard: ; 32278 (c:6278)
 	db 0
 	db ATK_ANIM_DRAGON_RAGE ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 4 ; energies
 	tx BubblebeamName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4375,7 +4375,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1 ; energies
 	tx WaterGunName ; name
 	tx LaprasWaterGunDescription ; description
@@ -4389,7 +4389,7 @@ LaprasCard: ; 322b9 (c:62b9)
 	db MAX_ENERGY_BOOST_IS_LIMITED
 	db ATK_ANIM_WATER_GUN ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2 ; energies
 	tx ConfuseRayName ; name
 	tx MayInflictConfusionDescription ; description
@@ -4426,7 +4426,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx FocusEnergyName ; name
 	tx FocusEnergyDescription ; description
@@ -4440,7 +4440,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx BiteName ; name
 	dw NONE ; description
@@ -4477,7 +4477,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx QuickAttackDescription ; description
@@ -4491,7 +4491,7 @@ Vaporeon2Card: ; 3233b (c:633b)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2, COLORLESS, 1 ; energies
 	tx WaterGunName ; name
 	tx VaporeonsWaterGunDescription ; description
@@ -4528,7 +4528,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db STAGE1 ; stage
 	tx MysteriousFossilName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx ClairvoyanceName ; name
 	tx ClairvoyanceDescription ; description
@@ -4542,7 +4542,7 @@ OmanyteCard: ; 3237c (c:637c)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 1 ; energies
 	tx WaterGunName ; name
 	tx OmanytesWaterGunDescription ; description
@@ -4579,7 +4579,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db STAGE2 ; stage
 	tx OmanyteName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 1, COLORLESS, 1 ; energies
 	tx WaterGunName ; name
 	tx OmastarsWaterGunDescription ; description
@@ -4593,7 +4593,7 @@ OmastarCard: ; 323bd (c:63bd)
 	db MAX_ENERGY_BOOST_IS_LIMITED
 	db ATK_ANIM_WATER_GUN ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 2 ; energies
 	tx SpikeCannonName ; name
 	tx DoubleAttackX30Description ; description
@@ -4630,7 +4630,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 3 ; energies
 	tx FreezeDryName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4644,7 +4644,7 @@ Articuno1Card: ; 323fe (c:63fe)
 	db 0
 	db ATK_ANIM_BEAM ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 4 ; energies
 	tx BlizzardName ; name
 	tx BlizzardDescription ; description
@@ -4681,7 +4681,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx QuickfreezeName ; name
 	tx QuickfreezeDescription ; description
@@ -4695,7 +4695,7 @@ Articuno2Card: ; 3243f (c:643f)
 	db 0
 	db ATK_ANIM_QUICKFREEZE ; animation
 
-	; move 2
+	; attack 2
 	energy WATER, 3 ; energies
 	tx IceBreathName ; name
 	tx IceBreathDescription ; description
@@ -4732,7 +4732,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx GnawName ; name
 	dw NONE ; description
@@ -4746,7 +4746,7 @@ Pikachu1Card: ; 32480 (c:6480)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	tx ThunderJoltName ; name
 	tx ThunderJoltDescription ; description
@@ -4783,7 +4783,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 2 ; energies
 	tx SparkName ; name
 	tx SparkDescription ; description
@@ -4797,7 +4797,7 @@ Pikachu2Card: ; 324c1 (c:64c1)
 	db 10
 	db ATK_ANIM_THUNDER_WHOLE_SCREEN ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -4834,7 +4834,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx GrowlName ; name
 	tx GrowlDescription ; description
@@ -4848,7 +4848,7 @@ Pikachu3Card: ; 32502 (c:6502)
 	db 10
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 2 ; energies
 	tx ThundershockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4885,7 +4885,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx GrowlName ; name
 	tx GrowlDescription ; description
@@ -4899,7 +4899,7 @@ Pikachu4Card: ; 32543 (c:6543)
 	db 10
 	db ATK_ANIM_SUPERSONIC ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 2 ; energies
 	tx ThundershockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4936,7 +4936,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1 ; energies
 	tx ThundershockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -4950,7 +4950,7 @@ FlyingPikachuCard: ; 32584 (c:6584)
 	db 0
 	db ATK_ANIM_THUNDERSHOCK ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx FlyName ; name
 	tx FlyDescription ; description
@@ -4987,7 +4987,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2 ; energies
 	tx SurfName ; name
 	dw NONE ; description
@@ -5001,7 +5001,7 @@ SurfingPikachu1Card: ; 325c5 (c:65c5)
 	db 0
 	db ATK_ANIM_WATER_JETS ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5038,7 +5038,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy WATER, 2 ; energies
 	tx SurfName ; name
 	dw NONE ; description
@@ -5052,7 +5052,7 @@ SurfingPikachu2Card: ; 32606 (c:6606)
 	db 0
 	db ATK_ANIM_WATER_JETS ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5089,7 +5089,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db STAGE1 ; stage
 	tx PikachuName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1, COLORLESS, 2 ; energies
 	tx AgilityName ; name
 	tx RaichusAgilityDescription ; description
@@ -5103,7 +5103,7 @@ Raichu1Card: ; 32647 (c:6647)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 3, COLORLESS, 1 ; energies
 	tx ThunderName ; name
 	tx RaichusThunderDescription ; description
@@ -5140,7 +5140,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db STAGE1 ; stage
 	tx PikachuName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 4 ; energies
 	tx GigashockName ; name
 	tx GigashockDescription ; description
@@ -5154,7 +5154,7 @@ Raichu2Card: ; 32688 (c:6688)
 	db 10
 	db ATK_ANIM_THUNDER_WHOLE_SCREEN ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5191,7 +5191,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1 ; energies
 	tx ThunderWaveName ; name
 	tx MayInflictParalysisDescription ; description
@@ -5205,7 +5205,7 @@ Magnemite1Card: ; 326c9 (c:66c9)
 	db 0
 	db ATK_ANIM_THUNDER_WAVE ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	tx SelfdestructName ; name
 	tx MagnemitesSelfdestructDescription ; description
@@ -5242,7 +5242,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx TackleName ; name
 	dw NONE ; description
@@ -5256,7 +5256,7 @@ Magnemite2Card: ; 3270a (c:670a)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	tx MagneticStormName ; name
 	tx MagneticStormDescription ; description
@@ -5293,7 +5293,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db STAGE1 ; stage
 	tx MagnemiteName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 2, COLORLESS, 1 ; energies
 	tx ThunderWaveName ; name
 	tx MayInflictParalysisDescription ; description
@@ -5307,7 +5307,7 @@ Magneton1Card: ; 3274b (c:674b)
 	db 0
 	db ATK_ANIM_THUNDER_WAVE ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 2, COLORLESS, 2 ; energies
 	tx SelfdestructName ; name
 	tx Magneton1sSelfdestructDescription ; description
@@ -5344,7 +5344,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db STAGE1 ; stage
 	tx MagnemiteName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	tx SonicboomName ; name
 	tx SonicboomDescription ; description
@@ -5358,7 +5358,7 @@ Magneton2Card: ; 3278c (c:678c)
 	db 0
 	db ATK_ANIM_TEAR ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 4 ; energies
 	tx SelfdestructName ; name
 	tx Magneton2sSelfdestructDescription ; description
@@ -5395,7 +5395,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx TackleName ; name
 	dw NONE ; description
@@ -5409,7 +5409,7 @@ VoltorbCard: ; 327cd (c:67cd)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5446,7 +5446,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db STAGE1 ; stage
 	tx VoltorbName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 2 ; energies
 	tx SonicboomName ; name
 	tx SonicboomDescription ; description
@@ -5460,7 +5460,7 @@ Electrode1Card: ; 3280e (c:680e)
 	db 0
 	db ATK_ANIM_TEAR ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 3 ; energies
 	tx EnergySpikeName ; name
 	tx EnergySpikeDescription ; description
@@ -5497,7 +5497,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db STAGE1 ; stage
 	tx VoltorbName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx TackleName ; name
 	dw NONE ; description
@@ -5511,7 +5511,7 @@ Electrode2Card: ; 3284f (c:684f)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 3 ; energies
 	tx ChainLightningName ; name
 	tx ChainLightningDescription ; description
@@ -5548,7 +5548,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1 ; energies
 	tx LightScreenName ; name
 	tx LightScreenDescription ; description
@@ -5562,7 +5562,7 @@ Electabuzz1Card: ; 32890 (c:6890)
 	db 0
 	db ATK_ANIM_BARRIER ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx ElectabuzzsQuickAttackDescription ; description
@@ -5599,7 +5599,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 1 ; energies
 	tx ThundershockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -5613,7 +5613,7 @@ Electabuzz2Card: ; 328d1 (c:68d1)
 	db 0
 	db ATK_ANIM_THUNDERSHOCK ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 1, COLORLESS, 1 ; energies
 	tx ThunderpunchName ; name
 	tx ThunderpunchDescription ; description
@@ -5650,7 +5650,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx DoubleKickName ; name
 	tx DoubleAttackX20Description ; description
@@ -5664,7 +5664,7 @@ Jolteon1Card: ; 32912 (c:6912)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx StunNeedleName ; name
 	tx MayInflictParalysisDescription ; description
@@ -5701,7 +5701,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db STAGE1 ; stage
 	tx EeveeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx QuickAttackDescription ; description
@@ -5715,7 +5715,7 @@ Jolteon2Card: ; 32953 (c:6953)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 2, COLORLESS, 1 ; energies
 	tx PinMissileName ; name
 	tx QuadrupleAttackX20Description ; description
@@ -5752,7 +5752,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 4 ; energies
 	tx ThunderstormName ; name
 	tx ThunderstormDescription ; description
@@ -5766,7 +5766,7 @@ Zapdos1Card: ; 32994 (c:6994)
 	db 0
 	db ATK_ANIM_THUNDERSTORM ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5803,7 +5803,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy LIGHTNING, 3, COLORLESS, 1 ; energies
 	tx ThunderName ; name
 	tx ZapdosThunderDescription ; description
@@ -5817,7 +5817,7 @@ Zapdos2Card: ; 329d5 (c:69d5)
 	db 0
 	db ATK_ANIM_THUNDER ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 4 ; energies
 	tx ThunderboltName ; name
 	tx ThunderboltDescription ; description
@@ -5854,7 +5854,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx PealOfThunderName ; name
 	tx PealOfThunderDescription ; description
@@ -5868,7 +5868,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	db 0
 	db ATK_ANIM_PEAL_OF_THUNDER ; animation
 
-	; move 2
+	; attack 2
 	energy LIGHTNING, 3 ; energies
 	tx BigThunderName ; name
 	tx BigThunderDescription ; description
@@ -5905,7 +5905,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1 ; energies
 	tx SandAttackName ; name
 	tx OpponentAttackMayDoNothingDescription ; description
@@ -5919,7 +5919,7 @@ SandshrewCard: ; 32a57 (c:6a57)
 	db 0
 	db ATK_ANIM_DARK_GAS ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -5956,7 +5956,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db STAGE1 ; stage
 	tx SandshrewName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx SlashName ; name
 	dw NONE ; description
@@ -5970,7 +5970,7 @@ SandslashCard: ; 32a98 (c:6a98)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2 ; energies
 	tx FurySwipesName ; name
 	tx TripleAttackX20Description ; description
@@ -6007,7 +6007,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1 ; energies
 	tx DigName ; name
 	dw NONE ; description
@@ -6021,7 +6021,7 @@ DiglettCard: ; 32ad9 (c:6ad9)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2 ; energies
 	tx MudSlapName ; name
 	dw NONE ; description
@@ -6058,7 +6058,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db STAGE1 ; stage
 	tx DiglettName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx SlashName ; name
 	dw NONE ; description
@@ -6072,7 +6072,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 4 ; energies
 	tx EarthquakeName ; name
 	tx EarthquakeDescription ; description
@@ -6109,7 +6109,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx PeekName ; name
 	tx PeekDescription ; description
@@ -6123,7 +6123,7 @@ MankeyCard: ; 32b5b (c:6b5b)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 1 ; energies
 	tx ScratchName ; name
 	dw NONE ; description
@@ -6160,7 +6160,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db STAGE1 ; stage
 	tx MankeyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2 ; energies
 	tx FurySwipesName ; name
 	tx TripleAttackX20Description ; description
@@ -6174,7 +6174,7 @@ PrimeapeCard: ; 32b9c (c:6b9c)
 	db 0
 	db ATK_ANIM_MULTIPLE_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx TantrumName ; name
 	tx TantrumDescription ; description
@@ -6211,7 +6211,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1 ; energies
 	tx LowKickName ; name
 	dw NONE ; description
@@ -6225,7 +6225,7 @@ MachopCard: ; 32bdd (c:6bdd)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -6262,7 +6262,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db STAGE1 ; stage
 	tx MachopName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx KarateChopName ; name
 	tx KarateChopDescription ; description
@@ -6276,7 +6276,7 @@ MachokeCard: ; 32c1e (c:6c1e)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2, COLORLESS, 2 ; energies
 	tx SubmissionName ; name
 	tx SubmissionDescription ; description
@@ -6313,7 +6313,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db STAGE2 ; stage
 	tx MachokeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx StrikesBackName ; name
 	tx StrikesBackDescription ; description
@@ -6327,7 +6327,7 @@ MachampCard: ; 32c5f (c:6c5f)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 3, COLORLESS, 1 ; energies
 	tx SeismicTossName ; name
 	dw NONE ; description
@@ -6364,7 +6364,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1, COLORLESS, 1 ; energies
 	tx StoneBarrageName ; name
 	tx StoneBarrageDescription ; description
@@ -6378,7 +6378,7 @@ GeodudeCard: ; 32ca0 (c:6ca0)
 	db 0
 	db ATK_ANIM_STONE_BARRAGE ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -6415,7 +6415,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db STAGE1 ; stage
 	tx GeodudeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2 ; energies
 	tx HardenName ; name
 	tx GravelersHardenDescription ; description
@@ -6429,7 +6429,7 @@ GravelerCard: ; 32ce1 (c:6ce1)
 	db 0
 	db ATK_ANIM_PROTECT ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx RockThrowName ; name
 	dw NONE ; description
@@ -6466,7 +6466,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db STAGE2 ; stage
 	tx GravelerName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 3, COLORLESS, 1 ; energies
 	tx AvalancheName ; name
 	dw NONE ; description
@@ -6480,7 +6480,7 @@ GolemCard: ; 32d22 (c:6d22)
 	db 0
 	db ATK_ANIM_ROCK_THROW ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 4 ; energies
 	tx SelfdestructName ; name
 	tx GolemsSelfdestructDescription ; description
@@ -6517,7 +6517,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1 ; energies
 	tx RockThrowName ; name
 	dw NONE ; description
@@ -6531,7 +6531,7 @@ OnixCard: ; 32d63 (c:6d63)
 	db 0
 	db ATK_ANIM_ROCK_THROW ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2 ; energies
 	tx HardenName ; name
 	tx OnixsHardenDescription ; description
@@ -6568,7 +6568,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx SnivelName ; name
 	tx SnivelDescription ; description
@@ -6582,7 +6582,7 @@ CuboneCard: ; 32da4 (c:6da4)
 	db 10
 	db ATK_ANIM_CRY ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2 ; energies
 	tx RageName ; name
 	tx CubonesRageDescription ; description
@@ -6619,7 +6619,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db STAGE1 ; stage
 	tx CuboneName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2 ; energies
 	tx BonemerangName ; name
 	tx DoubleAttackX30Description ; description
@@ -6633,7 +6633,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	db 0
 	db ATK_ANIM_BONEMERANG ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx CallforFriendName ; name
 	tx CallforFriendDescription ; description
@@ -6670,7 +6670,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db STAGE1 ; stage
 	tx CuboneName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1, COLORLESS, 1 ; energies
 	tx BoneAttackName ; name
 	tx BoneAttackDescription ; description
@@ -6684,7 +6684,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	db 0
 	db ATK_ANIM_BONEMERANG ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 3 ; energies
 	tx WailName ; name
 	tx WailDescription ; description
@@ -6721,7 +6721,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2 ; energies
 	tx StretchKickName ; name
 	tx StretchKickDescription ; description
@@ -6735,7 +6735,7 @@ HitmonleeCard: ; 32e67 (c:6e67)
 	db 3
 	db ATK_ANIM_STRETCH_KICK ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 3 ; energies
 	tx HighJumpKickName ; name
 	dw NONE ; description
@@ -6772,7 +6772,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1 ; energies
 	tx JabName ; name
 	dw NONE ; description
@@ -6786,7 +6786,7 @@ HitmonchanCard: ; 32ea8 (c:6ea8)
 	db 0
 	db ATK_ANIM_PUNCH ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 2, COLORLESS, 1 ; energies
 	tx SpecialPunch ; name
 	dw NONE ; description
@@ -6823,7 +6823,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx LeerName ; name
 	tx LeerDescription ; description
@@ -6837,7 +6837,7 @@ RhyhornCard: ; 32ee9 (c:6ee9)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 1, COLORLESS, 2 ; energies
 	tx HornAttackName ; name
 	dw NONE ; description
@@ -6874,7 +6874,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db STAGE1 ; stage
 	tx RhyhornName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 1, COLORLESS, 2 ; energies
 	tx HornAttackName ; name
 	dw NONE ; description
@@ -6888,7 +6888,7 @@ RhydonCard: ; 32f2a (c:6f2a)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 4 ; energies
 	tx RamName ; name
 	tx RamDescription ; description
@@ -6925,7 +6925,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db STAGE1 ; stage
 	tx MysteriousFossilName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx KabutoArmorName ; name
 	tx KabutoArmorDescription ; description
@@ -6939,7 +6939,7 @@ KabutoCard: ; 32f6b (c:6f6b)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 1 ; energies
 	tx ScratchName ; name
 	dw NONE ; description
@@ -6976,7 +6976,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db STAGE2 ; stage
 	tx KabutoName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy FIGHTING, 2 ; energies
 	tx SharpSickleName ; name
 	dw NONE ; description
@@ -6990,7 +6990,7 @@ KabutopsCard: ; 32fac (c:6fac)
 	db 0
 	db ATK_ANIM_TEAR ; animation
 
-	; move 2
+	; attack 2
 	energy FIGHTING, 4 ; energies
 	tx AbsorbName ; name
 	tx AbsorbDescription ; description
@@ -7027,7 +7027,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db STAGE1 ; stage
 	tx MysteriousFossilName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx PrehistoricPowerName ; name
 	tx PrehistoricPowerDescription ; description
@@ -7041,7 +7041,7 @@ AerodactylCard: ; 32fed (c:6fed)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx WingAttackName ; name
 	dw NONE ; description
@@ -7078,7 +7078,7 @@ AbraCard: ; 3302e (c:702e)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx PsyshockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -7092,7 +7092,7 @@ AbraCard: ; 3302e (c:702e)
 	db 0
 	db ATK_ANIM_PSYCHIC_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -7129,7 +7129,7 @@ KadabraCard: ; 3306f (c:706f)
 	db STAGE1 ; stage
 	tx AbraName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 2 ; energies
 	tx RecoverName ; name
 	tx KadabrasRecoverDescription ; description
@@ -7143,7 +7143,7 @@ KadabraCard: ; 3306f (c:706f)
 	db 3
 	db ATK_ANIM_RECOVER ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	tx SuperPsiName ; name
 	dw NONE ; description
@@ -7180,7 +7180,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db STAGE2 ; stage
 	tx KadabraName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx DamageSwapName ; name
 	tx DamageSwapDescription ; description
@@ -7194,7 +7194,7 @@ AlakazamCard: ; 330b0 (c:70b0)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 3 ; energies
 	tx ConfuseRayName ; name
 	tx MayInflictConfusionDescription ; description
@@ -7231,7 +7231,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx HeadbuttName ; name
 	dw NONE ; description
@@ -7245,7 +7245,7 @@ Slowpoke1Card: ; 330f1 (c:70f1)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx AmnesiaName ; name
 	tx SlowpokesAmnesiaDescription ; description
@@ -7282,7 +7282,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx SpacingOutName ; name
 	tx SpacingOutDescription ; description
@@ -7296,7 +7296,7 @@ Slowpoke2Card: ; 33132 (c:7132)
 	db 1
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx ScavengeName ; name
 	tx ScavengeDescription ; description
@@ -7333,7 +7333,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db STAGE1 ; stage
 	tx SlowpokeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx StrangeBehaviorName ; name
 	tx StrangeBehaviorDescription ; description
@@ -7347,7 +7347,7 @@ SlowbroCard: ; 33173 (c:7173)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx PsyshockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -7384,7 +7384,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx SleepingGasName ; name
 	tx MayInflictSleepDescription ; description
@@ -7398,7 +7398,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	db 0
 	db ATK_ANIM_SLEEPING_GAS ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	tx DestinyBondName ; name
 	tx DestinyBondDescription ; description
@@ -7435,7 +7435,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx LickName ; name
 	tx MayInflictParalysisDescription ; description
@@ -7449,7 +7449,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	db 0
 	db ATK_ANIM_GOO ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx EnergyConversionName ; name
 	tx EnergyConversionDescription ; description
@@ -7486,7 +7486,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db STAGE1 ; stage
 	tx GastlyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx TransparencyName ; name
 	tx TransparencyDescription ; description
@@ -7500,7 +7500,7 @@ Haunter1Card: ; 33236 (c:7236)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	tx NightmareName ; name
 	tx InflictSleepDescription ; description
@@ -7537,7 +7537,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db STAGE1 ; stage
 	tx GastlyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx HypnosisName ; name
 	tx InflictSleepDescription ; description
@@ -7551,7 +7551,7 @@ Haunter2Card: ; 33277 (c:7277)
 	db 0
 	db ATK_ANIM_HYPNOSIS ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx DreamEaterName ; name
 	tx DreamEaterDescription ; description
@@ -7588,7 +7588,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db STAGE2 ; stage
 	tx HaunterName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx CurseName ; name
 	tx CurseDescription ; description
@@ -7602,7 +7602,7 @@ GengarCard: ; 332b8 (c:72b8)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 3 ; energies
 	tx DarkMindName ; name
 	tx DarkMindDescription ; description
@@ -7639,7 +7639,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx PoundName ; name
 	dw NONE ; description
@@ -7653,7 +7653,7 @@ DrowzeeCard: ; 332f9 (c:72f9)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx ConfuseRayName ; name
 	tx MayInflictConfusionDescription ; description
@@ -7690,7 +7690,7 @@ HypnoCard: ; 3333a (c:733a)
 	db STAGE1 ; stage
 	tx DrowzeeName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx ProphecyName ; name
 	tx ProphecyDescription ; description
@@ -7704,7 +7704,7 @@ HypnoCard: ; 3333a (c:733a)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 3 ; energies
 	tx DarkMindName ; name
 	tx DarkMindDescription ; description
@@ -7741,7 +7741,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx InvisibleWallName ; name
 	tx InvisibleWallDescription ; description
@@ -7755,7 +7755,7 @@ MrMimeCard: ; 3337b (c:737b)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	tx MeditateName ; name
 	tx MrMimesMeditateDescription ; description
@@ -7792,7 +7792,7 @@ JynxCard: ; 333bc (c:73bc)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx DoubleslapName ; name
 	tx DoubleAttackX10Description ; description
@@ -7806,7 +7806,7 @@ JynxCard: ; 333bc (c:73bc)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	tx MeditateName ; name
 	tx JynxsMeditateDescription ; description
@@ -7843,7 +7843,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	tx PsychicName ; name
 	tx PsychicDescription ; description
@@ -7857,7 +7857,7 @@ Mewtwo1Card: ; 333fd (c:73fd)
 	db 0
 	db ATK_ANIM_PSYCHIC_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx BarrierName ; name
 	tx BarrierDescription ; description
@@ -7894,7 +7894,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx EnergyAbsorptionName ; name
 	tx EnergyAbsorptionDescription ; description
@@ -7908,7 +7908,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	tx PsyburnName ; name
 	dw NONE ; description
@@ -7945,7 +7945,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx EnergyAbsorptionName ; name
 	tx EnergyAbsorptionDescription ; description
@@ -7959,7 +7959,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2, COLORLESS, 1 ; energies
 	tx PsyburnName ; name
 	dw NONE ; description
@@ -7996,7 +7996,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx NeutralizingShieldName ; name
 	tx NeutralizingShieldDescription ; description
@@ -8010,7 +8010,7 @@ Mew1Card: ; 334c0 (c:74c0)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 1 ; energies
 	tx PsyshockName ; name
 	tx MayInflictParalysisDescription ; description
@@ -8047,7 +8047,7 @@ Mew2Card: ; 33501 (c:7501)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1, COLORLESS, 1 ; energies
 	tx MysteryAttackName ; name
 	tx MysteryAttackDescription ; description
@@ -8061,7 +8061,7 @@ Mew2Card: ; 33501 (c:7501)
 	db 0
 	db ATK_ANIM_HIT_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -8098,7 +8098,7 @@ Mew3Card: ; 33542 (c:7542)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy PSYCHIC, 1 ; energies
 	tx PsywaveName ; name
 	tx PsywaveDescription ; description
@@ -8112,7 +8112,7 @@ Mew3Card: ; 33542 (c:7542)
 	db 0
 	db ATK_ANIM_PSYCHIC_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy PSYCHIC, 2 ; energies
 	tx DevolutionBeamName ; name
 	tx DevolutionBeamDescription ; description
@@ -8149,7 +8149,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx WhirlwindName ; name
 	tx WhirlwindDescription ; description
@@ -8163,7 +8163,7 @@ PidgeyCard: ; 33583 (c:7583)
 	db 0
 	db ATK_ANIM_WHIRLWIND ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -8200,7 +8200,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db STAGE1 ; stage
 	tx PidgeyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx WhirlwindName ; name
 	tx WhirlwindDescription ; description
@@ -8214,7 +8214,7 @@ PidgeottoCard: ; 335c4 (c:75c4)
 	db 0
 	db ATK_ANIM_WHIRLWIND ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx MirrorMoveName ; name
 	tx PidgeottosMirrorMoveDescription ; description
@@ -8251,7 +8251,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db STAGE2 ; stage
 	tx PidgeottoName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx SlicingWindName ; name
 	tx SlicingWildDescription ; description
@@ -8265,7 +8265,7 @@ Pidgeot1Card: ; 33605 (c:7605)
 	db 2
 	db ATK_ANIM_WHIRLWIND_ZIGZAG ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx GaleName ; name
 	tx GaleDescription ; description
@@ -8302,7 +8302,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db STAGE2 ; stage
 	tx PidgeottoName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx WingAttackName ; name
 	dw NONE ; description
@@ -8316,7 +8316,7 @@ Pidgeot2Card: ; 33646 (c:7646)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx HurricaneName ; name
 	tx HurricaneDescription ; description
@@ -8353,7 +8353,7 @@ RattataCard: ; 33687 (c:7687)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx BiteName ; name
 	dw NONE ; description
@@ -8367,7 +8367,7 @@ RattataCard: ; 33687 (c:7687)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -8404,7 +8404,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db STAGE1 ; stage
 	tx RattataName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx BiteName ; name
 	dw NONE ; description
@@ -8418,7 +8418,7 @@ RaticateCard: ; 336c8 (c:76c8)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx SuperFangName ; name
 	tx SuperFangDescription ; description
@@ -8455,7 +8455,7 @@ SpearowCard: ; 33709 (c:7709)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx PeckName ; name
 	dw NONE ; description
@@ -8469,7 +8469,7 @@ SpearowCard: ; 33709 (c:7709)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx MirrorMoveName ; name
 	tx SpearowsMirrorMoveDescription ; description
@@ -8506,7 +8506,7 @@ FearowCard: ; 3374a (c:774a)
 	db STAGE1 ; stage
 	tx SpearowName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx AgilityName ; name
 	tx FearowsAgilityDescription ; description
@@ -8520,7 +8520,7 @@ FearowCard: ; 3374a (c:774a)
 	db 0
 	db ATK_ANIM_QUICK_ATTACK ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx DrillPeckName ; name
 	dw NONE ; description
@@ -8557,7 +8557,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx SingName ; name
 	tx MayInflictSleepDescription ; description
@@ -8571,7 +8571,7 @@ ClefairyCard: ; 3378b (c:778b)
 	db 0
 	db ATK_ANIM_SING ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx MetronomeName ; name
 	tx ClefairysMetronomeDescription ; description
@@ -8608,7 +8608,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db STAGE1 ; stage
 	tx ClefairyName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx MetronomeName ; name
 	tx ClefablesMetronomeDescription ; description
@@ -8622,7 +8622,7 @@ ClefableCard: ; 337cc (c:77cc)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx MinimizeName ; name
 	tx ClefablesMinimizeDescription ; description
@@ -8659,7 +8659,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx FirstAidName ; name
 	tx FirstAidDescription ; description
@@ -8673,7 +8673,7 @@ Jigglypuff1Card: ; 3380d (c:780d)
 	db 1
 	db ATK_ANIM_RECOVER ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx DoubleEdgeName ; name
 	tx JigglypuffsDoubleEdgeDescription ; description
@@ -8710,7 +8710,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx FriendshipSongName ; name
 	tx FriendshipSongDescription ; description
@@ -8724,7 +8724,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx ExpandName ; name
 	tx ExpandDescription ; description
@@ -8761,7 +8761,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx LullabyName ; name
 	tx InflictSleepDescription ; description
@@ -8775,7 +8775,7 @@ Jigglypuff3Card: ; 3388f (c:788f)
 	db 0
 	db ATK_ANIM_LULLABY ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx PoundName ; name
 	dw NONE ; description
@@ -8812,7 +8812,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db STAGE1 ; stage
 	tx JigglypuffName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx LullabyName ; name
 	tx InflictSleepDescription ; description
@@ -8826,7 +8826,7 @@ WigglytuffCard: ; 338d0 (c:78d0)
 	db 0
 	db ATK_ANIM_LULLABY ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx DoTheWaveName ; name
 	tx DoTheWaveDescription ; description
@@ -8863,7 +8863,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx CatPunchName ; name
 	tx CatPunchDescription ; description
@@ -8877,7 +8877,7 @@ Meowth1Card: ; 33911 (c:7911)
 	db 2
 	db ATK_ANIM_CAT_PUNCH ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -8914,7 +8914,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx PayDayName ; name
 	tx PayDayDescription ; description
@@ -8928,7 +8928,7 @@ Meowth2Card: ; 33952 (c:7952)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -8965,7 +8965,7 @@ PersianCard: ; 33993 (c:7993)
 	db STAGE1 ; stage
 	tx MeowthName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx ScratchName ; name
 	dw NONE ; description
@@ -8979,7 +8979,7 @@ PersianCard: ; 33993 (c:7993)
 	db 0
 	db ATK_ANIM_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx PounceName ; name
 	tx PounceDescription ; description
@@ -9016,7 +9016,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx LeekSlapName ; name
 	tx LeekSlapDescription ; description
@@ -9030,7 +9030,7 @@ FarfetchdCard: ; 339d4 (c:79d4)
 	db 0
 	db ATK_ANIM_WHIP ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx PotSmashName ; name
 	dw NONE ; description
@@ -9067,7 +9067,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx FuryAttackName ; name
 	tx DoubleAttackX10Description ; description
@@ -9081,7 +9081,7 @@ DoduoCard: ; 33a15 (c:7a15)
 	db 0
 	db ATK_ANIM_MULTIPLE_SLASH ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -9118,7 +9118,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db STAGE1 ; stage
 	tx DoduoName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx RetreatAidName ; name
 	tx RetreatAidDescription ; description
@@ -9132,7 +9132,7 @@ DodrioCard: ; 33a56 (c:7a56)
 	db 0
 	db ATK_ANIM_PKMN_POWER_1 ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx RageName ; name
 	tx DodriosRageDescription ; description
@@ -9169,7 +9169,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx TongueWrapName ; name
 	tx MayInflictParalysisDescription ; description
@@ -9183,7 +9183,7 @@ LickitungCard: ; 33a97 (c:7a97)
 	db 0
 	db ATK_ANIM_GOO ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx SupersonicName ; name
 	tx MayInflictConfusionDescription ; description
@@ -9220,7 +9220,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx ScrunchName ; name
 	tx ScrunchDescription ; description
@@ -9234,7 +9234,7 @@ ChanseyCard: ; 33ad8 (c:7ad8)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx DoubleEdgeName ; name
 	tx ChanseysDoubleEdgeDescription ; description
@@ -9271,7 +9271,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx FetchName ; name
 	tx FetchDescription ; description
@@ -9285,7 +9285,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx CometPunchName ; name
 	tx QuadrupleAttackX20Description ; description
@@ -9322,7 +9322,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx StompName ; name
 	tx StompDescription ; description
@@ -9336,7 +9336,7 @@ TaurosCard: ; 33b5a (c:7b5a)
 	db 1
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx RampageName ; name
 	tx RampageDescription ; description
@@ -9373,7 +9373,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx PoundName ; name
 	dw NONE ; description
@@ -9387,7 +9387,7 @@ DittoCard: ; 33b9b (c:7b9b)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx MorphName ; name
 	tx MorphDescription ; description
@@ -9424,7 +9424,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx TailWagName ; name
 	tx TailWagDescription ; description
@@ -9438,7 +9438,7 @@ EeveeCard: ; 33bdc (c:7bdc)
 	db 0
 	db ATK_ANIM_NONE ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx QuickAttackName ; name
 	tx QuickAttackDescription ; description
@@ -9475,7 +9475,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx Conversion1Name ; name
 	tx Conversion1Description ; description
@@ -9489,7 +9489,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 2 ; energies
 	tx Conversion2Name ; name
 	tx Conversion2Description ; description
@@ -9526,7 +9526,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx ThickSkinnedName ; name
 	tx ThickSkinnedDescription ; description
@@ -9540,7 +9540,7 @@ SnorlaxCard: ; 33c5e (c:7c5e)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx BodySlamName ; name
 	tx MayInflictParalysisDescription ; description
@@ -9577,7 +9577,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db BASIC ; stage
 	dw NONE ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 1 ; energies
 	tx PoundName ; name
 	dw NONE ; description
@@ -9591,7 +9591,7 @@ DratiniCard: ; 33c9f (c:7c9f)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy 0 ; energies
 	dw NONE ; name
 	dw NONE ; description
@@ -9628,7 +9628,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db STAGE1 ; stage
 	tx DratiniName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy COLORLESS, 3 ; energies
 	tx SlamName ; name
 	tx DoubleAttackX30Description ; description
@@ -9642,7 +9642,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	db 0
 	db ATK_ANIM_HIT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx HyperBeamName ; name
 	tx Discard1EnergyFromTargetDescription ; description
@@ -9679,7 +9679,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db STAGE2 ; stage
 	tx DragonairName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx HealingWindName ; name
 	tx HealingWindDescription ; description
@@ -9693,7 +9693,7 @@ Dragonite1Card: ; 33d21 (c:7d21)
 	db 0
 	db ATK_ANIM_HEALING_WIND ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 3 ; energies
 	tx SlamName ; name
 	tx DoubleAttackX30Description ; description
@@ -9730,7 +9730,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db STAGE2 ; stage
 	tx DragonairName ; pre-evo name
 
-	; move 1
+	; attack 1
 	energy 0 ; energies
 	tx StepInName ; name
 	tx StepInDescription ; description
@@ -9744,7 +9744,7 @@ Dragonite2Card: ; 33d62 (c:7d62)
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
-	; move 2
+	; attack 2
 	energy COLORLESS, 4 ; energies
 	tx SlamName ; name
 	tx DoubleAttackX40Description ; description

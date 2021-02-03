@@ -79,7 +79,7 @@ hTempCardIndex_ff9f:: ; ff9f
 
 UNION
 
-; multipurpose temp storage (card's deck index, selected move index, status condition...)
+; multipurpose temp storage (card's deck index, selected attack index, status condition...)
 hTemp_ffa0:: ; ffa0
 	ds $1
 

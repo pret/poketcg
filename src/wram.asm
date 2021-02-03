@@ -187,8 +187,8 @@ wPlayerArenaCardStatus:: ; c2f0
 wPlayerDuelistType:: ; c2f1
 	ds $1
 
-; if under the effects of amnesia, which move (0 or 1) can't be used
-wPlayerArenaCardDisabledMoveIndex:: ; c2f2
+; if under the effects of amnesia, which attack (0 or 1) can't be used
+wPlayerArenaCardDisabledAttackIndex:: ; c2f2
 	ds $1
 
 ; damage taken the last time the opponent attacked (0 if no damage)
@@ -347,7 +347,7 @@ wOpponentArenaCardStatus:: ; c3f0
 wOpponentDuelistType:: ; c3f1
 	ds $1
 
-wOpponentArenaCardDisabledMoveIndex:: ; c3f2
+wOpponentArenaCardDisabledAttackIndex:: ; c3f2
 	ds $1
 
 wOpponentArenaCardLastTurnDamage:: ; c3f3
@@ -655,7 +655,7 @@ wCurrentDuelMenuItem:: ; cbc6
 	ds $1
 
 ; When we're viewing a card's information, the page we are currently at.
-; For Pokemon cards, values from $1 to $6 (two pages for move descriptions)
+; For Pokemon cards, values from $1 to $6 (two pages for attack descriptions)
 ; For Energy cards, it's always $9
 ; For Trainer cards, $d or $e (two pages for trainer card descriptions)
 ; see CARDPAGE_* constants
@@ -699,7 +699,7 @@ wEnergyCardsRequiredToRetreat:: ; cbcc
 wcbcd:: ; cbcd
 	ds $1
 
-; used in CheckIfEnoughEnergiesToMove for the calculation
+; used in CheckIfEnoughEnergiesToAttack for the calculation
 wAttachedEnergiesAccum:: ; cbce
 	ds $1
 
@@ -840,9 +840,10 @@ wcc01:: ; cc01
 wPokemonLengthPrintOffset:: ; cc03
 	ds $1
 
-; used when opening the card page of a move when attacking, serving as an index for MovePageDisplayPointerTable.
-; see MOVEPAGE_* constants
-wMovePageNumber:: ; cc04
+; used when opening the card page of an attack when attacking,
+; serving as an index for AttackPageDisplayPointerTable.
+; see ATTACKPAGE_* constants
+wAttackPageNumber:: ; cc04
 	ds $1
 
 ; the value of hWhoseTurn gets loaded here at the beginning of each duelist's turn.
@@ -895,9 +896,9 @@ wOpponentDeckID:: ; cc0e
 wcc0f:: ; cc0f
 	ds $1
 
-; index (0-1) of the move or Pokemon Power being used by the player's arena card
+; index (0-1) of the attack or Pokemon Power being used by the player's arena card
 ; set to $ff when the duel starts and at the end of the opponent's turn
-wPlayerAttackingMoveIndex:: ; cc10
+wPlayerAttackingAttackIndex:: ; cc10
 	ds $1
 
 ; deck index of the player's arena card that is attacking or using a Pokemon Power
@@ -948,10 +949,10 @@ wLoadedCard1:: ; cc24
 	card_data_struct wLoadedCard1
 wLoadedCard2:: ; cc65
 	card_data_struct wLoadedCard2
-wLoadedMove:: ; cca6
-	move_data_struct wLoadedMove
+wLoadedAttack:: ; cca6
+	atk_data_struct wLoadedAttack
 
-; the damage field of an used move is loaded here
+; the damage field of a used attack is loaded here
 ; doubles as "wAIAverageDamage" when complementing wAIMinDamage and wAIMaxDamage
 ; little-endian
 ; second byte may have UNAFFECTED_BY_WEAKNESS_RESISTANCE_F set/unset
@@ -959,8 +960,8 @@ wDamage:: ; ccb9
 	ds $2
 
 ; wAIMinDamage and wAIMaxDamage appear to be used for AI scoring
-; they are updated with the minimum (or floor) damage of the current move
-; and with the maximum (or ceiling) damage of the current move
+; they are updated with the minimum (or floor) damage of the current attack
+; and with the maximum (or ceiling) damage of the current attack
 wAIMinDamage:: ; ccbb
 	ds $1
 
@@ -1292,12 +1293,12 @@ wcdb4:: ; cdb4
 	ds $1
 
 ; information about various properties of
-; loaded move for AI calculations
-wTempLoadedMoveEnergyCost:: ; cdb5
+; loaded attack for AI calculations
+wTempLoadedAttackEnergyCost:: ; cdb5
 	ds $1
-wTempLoadedMoveEnergyNeededType:: ; cdb6
+wTempLoadedAttackEnergyNeededType:: ; cdb6
 	ds $1
-wTempLoadedMoveEnergyNeededAmount:: ; cdb7
+wTempLoadedAttackEnergyNeededAmount:: ; cdb7
 	ds $1
 
 ; used for the AI to store various
@@ -1450,11 +1451,11 @@ wce00:: ; ce00
 wce01:: ; ce01
 	ds $1
 
-; whether AI's move is a damaging move or not
-; (move that only damages bench is treated as non-damaging)
-; $00 = is a damaging move
-; $01 = is a non damaging move
-wAIMoveIsNonDamaging:: ; ce02
+; whether AI's attack is damaging or not
+; (attacks that only damages bench are treated as non-damaging)
+; $00 = is a damaging attack
+; $01 = is a non damaging attack
+wAIAttackIsNonDamaging:: ; ce02
 	ds $1
 
 ; whether AI already retreated this turn or not.

@@ -216,7 +216,7 @@ AIPlay_Potion: ; 201b5 (8:41b5)
 ; check if defending Pokémon can KO active card
 ; next turn after using Potion.
 ; if it cannot, return carry.
-; also take into account whether move is high recoil.
+; also take into account whether attack is high recoil.
 AIDecide_Potion1: ; 201d1 (8:41d1)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
@@ -360,18 +360,18 @@ AIDecide_Potion2: ; 20204 (8:4204)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .second_attack
-	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedAttackFlag
 	jr c, .set_carry
 .second_attack
 	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .false
-	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedAttackFlag
 	jr c, .set_carry
 .false
 	pop de
@@ -406,7 +406,7 @@ AIPlay_SuperPotion: ; 202a8 (8:42a8)
 ; any energy cards attached,  check if defending Pokémon can KO
 ; active card next turn after using Super Potion.
 ; if it cannot, return carry.
-; also take into account whether move is high recoil.
+; also take into account whether attack is high recoil.
 AIDecide_SuperPotion1: ; 202cc (8:42cc)
 	farcall AIDecideWhetherToRetreat
 	jr c, .no_carry
@@ -576,18 +576,18 @@ AIDecide_SuperPotion2: ; 2030f (8:430f)
 	push de
 	xor a ; FIRST_ATTACK_OR_PKMN_POWER
 	ld [wSelectedAttack], a
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .second_attack_1
-	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedAttackFlag
 	jr c, .true_1
 .second_attack_1
 	ld a, SECOND_ATTACK
 	ld [wSelectedAttack], a
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .false_1
-	ld a, MOVE_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG3_ADDRESS | BOOST_IF_TAKEN_DAMAGE_F
+	call CheckLoadedAttackFlag
 	jr c, .true_1
 .false_1
 	pop de
@@ -647,21 +647,21 @@ AIPlay_Defender: ; 203f8 (8:43f8)
 AIDecide_Defender1: ; 20406 (8:4406)
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .cannot_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .no_carry
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry
 
 .cannot_ko
 ; check if any of the defending Pokémon's attacks deal
 ; damage exactly equal to current HP, and if so,
-; only continue if that move is useable.
+; only continue if that attack is useable.
 	farcall CheckIfAnyDefendingPokemonAttackDealsSameDamageAsHP
 	jr nc, .no_carry
 	call SwapTurn
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	call SwapTurn
 	jr c, .no_carry
 
@@ -680,13 +680,13 @@ AIDecide_Defender1: ; 20406 (8:4406)
 	ld [wSelectedAttack], a
 	push de
 	call SwapTurn
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	call SwapTurn
 	pop de
 	jr c, .switch_back
 
 ; the other attack is useable.
-; compare its damage to the selected move.
+; compare its damage to the selected attack.
 	ld a, [wSelectedAttack]
 	push de
 	farcall EstimateDamage_FromDefendingPokemon
@@ -695,8 +695,8 @@ AIDecide_Defender1: ; 20406 (8:4406)
 	cp d
 	jr nc, .subtract
 
-; in case the non-selected move is useable
-; and deals less damage than the selected move,
+; in case the non-selected attack is useable
+; and deals less damage than the selected attack,
 ; switch back to the other attack.
 .switch_back
 	ld a, [wSelectedAttack]
@@ -729,11 +729,11 @@ AIDecide_Defender1: ; 20406 (8:4406)
 ; return carry if using Defender prevents Pokémon
 ; from being knocked out by an attack with recoil.
 AIDecide_Defender2: ; 20486 (8:4486)
-	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG1_ADDRESS | HIGH_RECOIL_F
+	call CheckLoadedAttackFlag
 	jr c, .recoil
-	ld a, MOVE_FLAG1_ADDRESS | LOW_RECOIL_F
-	call CheckLoadedMoveFlag
+	ld a, ATTACK_FLAG1_ADDRESS | LOW_RECOIL_F
+	call CheckLoadedAttackFlag
 	jr c, .recoil
 	or a
 	ret
@@ -746,10 +746,10 @@ AIDecide_Defender2: ; 20486 (8:4486)
 	or a
 	jr nz, .second_attack
 ; first attack
-	ld a, [wLoadedCard2Move1EffectParam]
+	ld a, [wLoadedCard2Atk1EffectParam]
 	jr .check_weak
 .second_attack
-	ld a, [wLoadedCard2Move2EffectParam]
+	ld a, [wLoadedCard2Atk2EffectParam]
 
 ; double recoil damage if card is weak to its own color.
 .check_weak
@@ -826,11 +826,11 @@ AIDecide_Pluspower1: ; 20501 (8:4501)
 ; if there's an attack that can, only continue
 ; if it's unusable and there's no card in hand
 ; to fulfill its energy cost.
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .cannot_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .no_carry
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry
 
 ; cannot use an attack that knocks out.
@@ -886,10 +886,10 @@ AIDecide_Pluspower1: ; 20501 (8:4501)
 	scf
 	ret
 
-; return carry if move is useable and KOs
+; return carry if attack is useable and KOs
 ; defending Pokémon with Pluspower boost.
 .check_ko_with_pluspower ; 20562 (8:4562)
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
@@ -933,7 +933,7 @@ AIDecide_Pluspower1: ; 20501 (8:4501)
 	ret
 
 ; returns carry 7/10 of the time
-; if selected move is useable, can't KO without Pluspower boost
+; if selected attack is useable, can't KO without Pluspower boost
 ; can damage Mr. Mime even with Pluspower boost
 ; and has a minimum damage > 0.
 ; outputs in a the attack to use.
@@ -971,9 +971,9 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 	scf
 	ret
 
-; return carry if move is useable but cannot KO.
+; return carry if attack is useable but cannot KO.
 .check_can_ko ; 205d7 (8:45d7)
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
@@ -992,9 +992,9 @@ AIDecide_Pluspower2: ; 205a5 (8:45a5)
 	ret
 
 ; return carry 7/10 of the time if
-; move is useable and minimum damage > 0.
+; attack is useable and minimum damage > 0.
 .check_random ; 205f6 (8:45f6)
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr c, .unusable
 	ld a, [wSelectedAttack]
 	farcall EstimateDamage_VersusDefendingCard
@@ -1094,16 +1094,16 @@ AIDecide_GustOfWind: ; 2067e (8:467e)
 	and AI_FLAG_USED_GUST_OF_WIND
 	ret nz
 
-	farcall CheckIfActivePokemonCanUseAnyNonResidualMove
-	ret nc ; no non-residual move can be used
+	farcall CheckIfActivePokemonCanUseAnyNonResidualAttack
+	ret nc ; no non-residual attack can be used
 
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .check_id ; if can't KO
-	farcall CheckIfSelectedMoveIsUnusable
-	jr nc, .no_carry ; if KO move is useable
-	farcall LookForEnergyNeededForMoveInHand
+	farcall CheckIfSelectedAttackIsUnusable
+	jr nc, .no_carry ; if KO attack is useable
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry ; if energy card is in hand
 
 .check_id
@@ -1275,10 +1275,10 @@ AIDecide_GustOfWind: ; 2067e (8:467e)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
-	call CopyMoveDataAndDamage_FromDeckIndex
-	ld a, [wLoadedMoveCategory]
+	call CopyAttackDataAndDamage_FromDeckIndex
+	ld a, [wLoadedAttackCategory]
 
-	; skip if move is a Power or has 0 damage
+	; skip if attack is a Power or has 0 damage
 	cp POKEMON_POWER
 	jr z, .no_damage
 	ld a, [wDamage]
@@ -1330,9 +1330,9 @@ AIDecide_GustOfWind: ; 2067e (8:467e)
 	ldh [hTempPlayAreaLocation_ff9d], a
 	call .CheckIfAnyAttackKnocksOut
 	jr nc, .next
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .found
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .found
 
 ; the following two local routines can be condensed into one
@@ -1488,11 +1488,11 @@ AIDecide_EnergyRemoval: ; 20895 (8:4895)
 ; active card to remove its attached energy
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .cannot_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .can_ko
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr nc, .cannot_ko
 
 .can_ko
@@ -1627,7 +1627,7 @@ AIDecide_EnergyRemoval: ; 20895 (8:4895)
 ; but second attack has enough energy to be used
 ; check if there's surplus energy for attack and, if so, return carry
 .check_surplus
-	farcall CheckIfNoSurplusEnergyForMove
+	farcall CheckIfNoSurplusEnergyForAttack
 	pop de
 	ccf
 	ret
@@ -1755,11 +1755,11 @@ AIDecide_SuperEnergyRemoval: ; 209bc (8:49bc)
 ; active card to remove its attached energy
 	xor a ; PLAY_AREA_ARENA
 	ldh [hTempPlayAreaLocation_ff9d], a
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .cannot_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .can_ko
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr nc, .cannot_ko
 
 .can_ko
@@ -1911,7 +1911,7 @@ AIDecide_SuperEnergyRemoval: ; 209bc (8:49bc)
 ; check if there's surplus energy for attack and, if so,
 ; return carry if this surplus energy is at least 2
 .check_surplus
-	farcall CheckIfNoSurplusEnergyForMove
+	farcall CheckIfNoSurplusEnergyForAttack
 	cp 2
 	jr c, .enough_energy
 	pop de
@@ -3144,11 +3144,11 @@ AIDecide_PokemonCenter: ; 210eb (8:50eb)
 	ldh [hTempPlayAreaLocation_ff9d], a
 
 ; return if active Pokemon can KO player's card.
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .start
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .no_carry
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry
 
 .start
@@ -4018,11 +4018,11 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 
 ; if it can KO the defending Pokemon this turn,
 ; return no carry.
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .cannot_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .no_carry
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry
 
 .cannot_ko
@@ -4120,11 +4120,11 @@ AIDecide_ScoopUp: ; 21506 (8:5506)
 
 ; if it can KO the defending Pokemon this turn,
 ; return no carry.
-	farcall CheckIfAnyMoveKnocksOutDefendingCard
+	farcall CheckIfAnyAttackKnocksOutDefendingCard
 	jr nc, .check_ko
-	farcall CheckIfSelectedMoveIsUnusable
+	farcall CheckIfSelectedAttackIsUnusable
 	jr nc, .no_carry
-	farcall LookForEnergyNeededForMoveInHand
+	farcall LookForEnergyNeededForAttackInHand
 	jr c, .no_carry
 .check_ko
 	farcall CheckIfDefendingPokemonCanKnockOut
@@ -6504,7 +6504,7 @@ AIEnergyTransTransferEnergyToBench: ; 222ca (8:62ca)
 	ldh [hTempCardIndex_ff9f], a
 	ld d, a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	ld a, OPPACTION_6B15
 	bank1call AIMakeDecision
 	jr .loop_energy
@@ -6560,8 +6560,8 @@ HandleAIPkmnPowers: ; 2237f (8:637f)
 	ld a, c
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
-	call CopyMoveDataAndDamage_FromDeckIndex
-	ld a, [wLoadedMoveCategory]
+	call CopyAttackDataAndDamage_FromDeckIndex
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	jr z, .execute_effect
 	pop bc
@@ -8303,7 +8303,7 @@ FindDuplicatePokemonCards: ; 22b6f (8:6b6f)
 	or a
 	ret
 
-; return carry flag if move is not high recoil.
+; return carry flag if attack is not high recoil.
 Func_22bad: ; 22bad (8:6bad)
 	farcall AIProcessButDontUseAttack
 	ret nc
@@ -8312,9 +8312,9 @@ Func_22bad: ; 22bad (8:6bad)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	ld d, a
-	call CopyMoveDataAndDamage_FromDeckIndex
-	ld a, MOVE_FLAG1_ADDRESS | HIGH_RECOIL_F
-	call CheckLoadedMoveFlag
+	call CopyAttackDataAndDamage_FromDeckIndex
+	ld a, ATTACK_FLAG1_ADDRESS | HIGH_RECOIL_F
+	call CheckLoadedAttackFlag
 	ccf
 	ret
 

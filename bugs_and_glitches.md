@@ -30,12 +30,12 @@ Fixes are written in the `diff` format.
 
 When the AI is scoring each Play Area Pokémon card to attach an Energy card, it first checks whether it's the Arena card and, if so, checks whether the attack can KO the Defending Pokémon. If it's true, then 20 is added to the score. Then it does the same Arena card check to increase the score further. The intention is probably to score the card with 20 if it can KO the opponent regardless of Play Area position, and additionally if it's the Arena card it should score 10 more points.
 
-**Fix:** Edit `DetermineAIScoreOfMoveEnergyRequirement` in [src/engine/bank05.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank05.asm):
+**Fix:** Edit `DetermineAIScoreOfAttackEnergyRequirement` in [src/engine/bank05.asm](https://github.com/pret/poketcg/blob/master/src/engine/bank05.asm):
 ```diff
-DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
+DetermineAIScoreOfAttackEnergyRequirement: ; 16695 (5:6695)
  	...
--; if the move KOs player and this is the active card, add to AI score.
-+; if the move KOs player add to AI score.
+-; if the attack KOs player and this is the active card, add to AI score.
++; if the attack KOs player add to AI score.
 -	ldh a, [hTempPlayAreaLocation_ff9d]
 -	or a
 -	jr nz, .check_evolution
@@ -45,9 +45,9 @@ DetermineAIScoreOfMoveEnergyRequirement: ; 16695 (5:6695)
 	call GetNonTurnDuelistVariable
 	ld hl, wDamage
 	sub [hl]
-	jr z, .move_kos_defending
+	jr z, .atk_kos_defending
 	jr nc, .check_evolution
-.move_kos_defending
+.atk_kos_defending
 	ld a, 20
 	call AddToAIScore
 
