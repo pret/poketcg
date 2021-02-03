@@ -37,6 +37,8 @@ HEADER_POKEMON EQU $02
 ; wDuelDisplayedScreen constants
 DUEL_MAIN_SCENE     EQU $01
 PLAY_AREA_CARD_LIST EQU $02
+UNKNOWN_SCREEN_4    EQU $04 ; used for some animations
+UNKNOWN_SCREEN_5    EQU $05 ; used for some animations
 COIN_TOSS           EQU $06
 DRAW_CARDS          EQU $07
 LARGE_CARD_PICTURE  EQU $08

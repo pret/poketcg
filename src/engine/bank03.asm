@@ -683,7 +683,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
 	ld a, $1d
-	farcall Func_80418
+	farcall LoadPaletteData
 	ld b, $0
 	ld a, [wConsole]
 	cp CONSOLE_CGB

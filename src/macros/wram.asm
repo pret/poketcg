@@ -83,3 +83,13 @@ sprite_vram_struct: MACRO
 \1TileOffset:: ds 1
 \1TileSize::   ds 1
 ENDM
+
+duel_anim_struct: MACRO
+\1ID::             ds 1
+\1Screen::         ds 1
+\1DuelistSide::    ds 1
+\1LocationParam::  ds 1
+\1Damage::         ds 2
+\1Unknown2::       ds 1
+\1Bank::           ds 1
+ENDM

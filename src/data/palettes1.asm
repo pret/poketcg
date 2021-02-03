@@ -1,4 +1,4 @@
-; palette data are read by Func_80418, expected to be structured as so:
+; palette data are read by LoadPaletteData, expected to be structured as so:
 ; the first byte has possible values of 0, 1 or 2
 ; - if 0, nothing is done;
 ; - if 1, then the next byte is written to OBP0 (or to OBP1 if wd4ca == $1);

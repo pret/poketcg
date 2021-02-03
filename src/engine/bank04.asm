@@ -1466,7 +1466,7 @@ Func_129fd: ; 129fd (4:69fd)
 	ret
 ; 0x12a13
 
-Func_12a13: ; 12a13 (4:6a13)
+GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	ld a, [wWhichSprite]
 	push hl
 	push bc
@@ -1683,11 +1683,11 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	adc 0
 	ld [hl], a
 
-	ld de, wd23e
+	ld de, wLoadedPalData
 	ld bc, SPRITE_FRAME_OFFSET_SIZE
 	call CopyBankedDataToDE
 	pop hl ; beginning of current sprite_anim_buffer
-	ld de, wd23e
+	ld de, wLoadedPalData
 	ld a, [de]
 	call GetAnimFramePointerFromOffset
 	inc de
