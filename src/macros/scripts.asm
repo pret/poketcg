@@ -86,7 +86,7 @@ ENDM
 	const ScriptCommand_RecordMasterWin_index                                ; $4e
 	const ScriptCommand_AskQuestionJumpDefaultYes_index                      ; $4f
 	const ScriptCommand_ShowSamNormalMultichoice_index                       ; $50
-	const ScriptCommand_ShowSamTutorialMultichoice_index                     ; $51
+	const ScriptCommand_ShowSamRulesMultichoice_index                        ; $51
 	const ScriptCommand_ChallengeMachine_index                               ; $52
 	const ScriptCommand_EndScript2_index                                     ; $53
 	const ScriptCommand_EndScript3_index                                     ; $54
@@ -624,8 +624,8 @@ show_sam_normal_multichoice: MACRO
 	run_command ScriptCommand_ShowSamNormalMultichoice
 ENDM
 
-show_sam_tutorial_multichoice: MACRO
-	run_command ScriptCommand_ShowSamTutorialMultichoice
+show_sam_rules_multichoice: MACRO
+	run_command ScriptCommand_ShowSamRulesMultichoice
 ENDM
 
 ; Runs the Challenge Machine

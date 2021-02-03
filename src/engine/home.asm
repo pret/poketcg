@@ -8888,7 +8888,7 @@ GetCardType: ; 2f32 (0:2f32)
 	pop hl
 	ret
 
-; return in a the 2-byte text id of the name of the card with id at e
+; return in de the 2-byte text id of the name of the card with id at e
 GetCardName: ; 2f45 (0:2f45)
 	push hl
 	call GetCardPointer

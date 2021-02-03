@@ -105,7 +105,7 @@ script_commands = {
 	0x4e: { "name": "record_master_win",                          "params": [ "byte" ] },
 	0x4f: { "name": "ask_question_jump_default_yes",              "params": [ "text", "label" ] },
 	0x50: { "name": "show_sam_normal_multichoice",                "params": [] },
-	0x51: { "name": "show_sam_tutorial_multichoice",              "params": [] },
+	0x51: { "name": "show_sam_rules_multichoice",                 "params": [] },
 	0x52: { "name": "challenge_machine",                          "params": [] },
 	0x53: { "name": "end_script_2",                               "params": [] },
 	0x54: { "name": "end_script_3",                               "params": [] },

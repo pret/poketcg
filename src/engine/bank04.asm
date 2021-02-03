@@ -1095,7 +1095,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_RecordMasterWin
 	dw ScriptCommand_AskQuestionJumpDefaultYes
 	dw ScriptCommand_ShowSamNormalMultichoice
-	dw ScriptCommand_ShowSamTutorialMultichoice
+	dw ScriptCommand_ShowSamRulesMultichoice
 	dw ScriptCommand_ChallengeMachine
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
@@ -1120,7 +1120,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 
 
-MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
+MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ; 1224b (4:624b)
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
@@ -1137,7 +1137,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ;1224b
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
-MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
+MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
 	db $04, $00     ; x, y to start drawing box
 	db $10, $08     ; width, height of box
 	db $06, $02     ; x, y coordinate to start printing next text
@@ -1154,7 +1154,7 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ;12264
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
-SamNormalMultichoice_ConfigurationTable: ;1227d
+SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
 	db $0A, $00     ; x, y to start drawing box
 	db $0A, $0A     ;  width, height of box
 	db $0C, $02     ; x, y coordinate to start printing next text
@@ -1167,7 +1167,7 @@ SamNormalMultichoice_ConfigurationTable: ;1227d
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
-SamTutorialMultichoice_ConfigurationTable: ;1228e
+SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 	db $06, $00     ; x, y to start drawing box
 	db $0E, $12     ; width, height of box
 	db $08, $02     ; x coordinate to start printing text

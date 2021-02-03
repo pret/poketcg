@@ -1996,7 +1996,7 @@ wd0c1:: ; d0c1
 wd0c2:: ; d0c2
 	ds $1
 
-; stores the player's result in a duel (0: loss, 1: win, 2: ???, -1: transmission error?)
+; stores the player's result in a duel (0: win, 1: loss, 2: ???, -1: transmission error?)
 ; to be read by the overworld caller
 wDuelResult:: ; d0c3
 	ds $1
@@ -2702,19 +2702,8 @@ wd693:: ; d693
 wMultichoiceTextboxResult_Sam:: ; d694
 	ds $1
 
-UNION
-
 wMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; d695
 	ds $1
-
-NEXTU
-
-wd695:: ; d695
-	ds $1
-
-ENDU
-
-
 
 wd696:: ; d696
 	ds $1
