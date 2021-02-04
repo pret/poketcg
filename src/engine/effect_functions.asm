@@ -241,14 +241,14 @@ DealDamageToAllBenchedPokemon: ; 2c117 (b:4117)
 	ret
 
 Func_2c12e: ; 2c12e (b:412e)
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld b, a
 	ld c, $0 ; neither WEAKNESS nor RESISTANCE
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 	ret
 
 ; apply a status condition of type 1 identified by register a to the target
@@ -478,9 +478,9 @@ ApplyAndAnimateHPRecovery: ; 2c221 (b:4221)
 ; load correct animation
 	push de
 	ld a, ATK_ANIM_HEAL
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld bc, $01 ; arrow
-	bank1call PlayMoveAnimation
+	bank1call PlayAttackAnimation
 
 ; compare HP to be restored with max HP
 ; if HP to be restored would cause HP to
@@ -506,7 +506,7 @@ ApplyAndAnimateHPRecovery: ; 2c221 (b:4221)
 
 .skip_cap
 	ld [hl], e ; apply new HP to arena card
-	bank1call WaitMoveAnimation
+	bank1call WaitAttackAnimation
 	ret
 ; 0x2c25b
 
@@ -818,7 +818,7 @@ HandleDefendingPokemonAttackSelection: ; 2c391 (b:4391)
 	ldh [hCurSelectionItem], a
 
 .start
-	bank1call PrintAndLoadMovesToDuelTempList
+	bank1call PrintAndLoadAttacksToDuelTempList
 	push af
 	ldh a, [hCurSelectionItem]
 	ld hl, .menu_parameters
@@ -833,13 +833,13 @@ HandleDefendingPokemonAttackSelection: ; 2c391 (b:4391)
 	bit B_BUTTON_F, a
 	jr nz, .set_carry
 	and START
-	jr nz, .open_move_page
+	jr nz, .open_atk_page
 	call HandleMenuInput
 	jr nc, .loop_input
 	cp -1
 	jr z, .loop_input
 
-; a move was selected
+; an attack was selected
 	ldh a, [hCurMenuItem]
 	add a
 	ld e, a
@@ -858,13 +858,13 @@ HandleDefendingPokemonAttackSelection: ; 2c391 (b:4391)
 	scf
 	ret
 
-.open_move_page
+.open_atk_page
 	ldh a, [hCurMenuItem]
 	ldh [hCurSelectionItem], a
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer1_FromDeckIndex
-	bank1call OpenMovePage
+	bank1call OpenAttackPage
 	call SwapTurn
 	bank1call DrawDuelMainScene
 	call SwapTurn
@@ -887,11 +887,11 @@ HandleDefendingPokemonAttackSelection: ; 2c391 (b:4391)
 GetAttackName: ; 2c3fc (b:43fc)
 	ld a, d
 	call LoadCardDataToBuffer1_FromDeckIndex
-	ld hl, wLoadedCard1Move1Name
+	ld hl, wLoadedCard1Atk1Name
 	inc e
 	dec e
 	jr z, .load_name
-	ld hl, wLoadedCard1Move2Name
+	ld hl, wLoadedCard1Atk2Name
 .load_name
 	ld a, [hli]
 	ld h, [hl]
@@ -906,10 +906,10 @@ CheckIfDefendingPokemonHasAnyAttack: ; 2c40e (b:440e)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
-	ld a, [wLoadedCard2Move1Category]
+	ld a, [wLoadedCard2Atk1Category]
 	cp POKEMON_POWER
 	jr nz, .has_attack
-	ld hl, wLoadedCard2Move2Name
+	ld hl, wLoadedCard2Atk2Name
 	ld a, [hli]
 	or [hl]
 	jr nz, .has_attack
@@ -1021,12 +1021,12 @@ DuelistSelectForcedSwitch: ; 2c487 (b:4487)
 	bank1call AIDoAction_ForcedSwitch
 	call SwapTurn
 
-	ld a, [wPlayerAttackingMoveIndex]
+	ld a, [wPlayerAttackingAttackIndex]
 	ld e, a
 	ld a, [wPlayerAttackingCardIndex]
 	ld d, a
 	ld a, [wPlayerAttackingCardID]
-	call CopyMoveDataAndDamage_FromCardID
+	call CopyAttackDataAndDamage_FromCardID
 	call Func_16f6
 	ret
 
@@ -1142,18 +1142,18 @@ AIPickAttackForAmnesia: ; 2c532 (b:4532)
 	ld d, a
 	call LoadCardDataToBuffer2_FromDeckIndex
 ; if has no attack 1 name, return
-	ld hl, wLoadedCard2Move1Name
+	ld hl, wLoadedCard2Atk1Name
 	ld a, [hli]
 	or [hl]
 	jr z, .chosen
 
 ; if Defending Pokemon has enough energy for second attack, choose it
 	ld e, SECOND_ATTACK
-	bank1call _CheckIfEnoughEnergiesToMove
+	bank1call _CheckIfEnoughEnergiesToAttack
 	jr nc, .chosen
 ; otherwise if first attack isn't a Pkmn Power, choose it instead.
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
-	ld a, [wLoadedCard2Move1Category]
+	ld a, [wLoadedCard2Atk1Category]
 	cp POKEMON_POWER
 	jr nz, .chosen
 ; if it is a Pkmn Power, choose second attack.
@@ -1467,7 +1467,7 @@ SpitPoison_Poison50PercentEffect: ; 2c6f8 (b:46f8)
 	call TossCoin_BankB
 	jp c, PoisonEffect
 	ld a, ATK_ANIM_SPIT_POISON_SUCCESS
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	call SetNoEffectFromStatus
 	ret
 
@@ -1591,7 +1591,7 @@ KakunaStiffenEffect: ; 2c7a0 (b:47a0)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -1700,7 +1700,7 @@ MetapodStiffenEffect: ; 2c836 (b:4836)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_STIFFEN
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -2111,7 +2111,7 @@ HornHazard_NoDamage50PercentEffect: ; 2ca96 (b:4a96)
 	ret
 .heads
 	ld a, ATK_ANIM_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2caac
 
@@ -2798,15 +2798,15 @@ SolarPower_CheckUse: ; 2ce53 (b:4e53)
 
 SolarPower_RemoveStatusEffect: ; 2ce82 (b:4e82)
 	ld a, ATK_ANIM_HEAL_BOTH_SIDES
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	bank1call Func_7415
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld b, a
 	ld c, $00
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 
 	ldh a, [hTemp_ffa0]
 	add DUELVARS_ARENA_CARD_FLAGS
@@ -2941,7 +2941,7 @@ WartortleWithdrawEffect: ; 2cf32 (b:4f32)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_10
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -3181,7 +3181,7 @@ SeadraAgilityEffect: ; 2d08b (b:508b)
 	call TossCoin_BankB
 	ret nc ; return if tails
 	ld a, ATK_ANIM_AGILITY_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_AGILITY
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -3198,7 +3198,7 @@ HideInShellEffect: ; 2d0a4 (b:50a4)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_11
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -3282,7 +3282,7 @@ SquirtleWithdrawEffect: ; 2d120 (b:5120)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_10
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -3312,10 +3312,10 @@ PoliwhirlAmnesia_CheckAttacks: ; 2d149 (b:5149)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
 	call LoadCardDataToBuffer2_FromDeckIndex
-	ld a, [wLoadedCard2Move1Category]
+	ld a, [wLoadedCard2Atk1Category]
 	cp POKEMON_POWER
 	jr nz, .has_attack
-	ld hl, wLoadedCard2Move2Name
+	ld hl, wLoadedCard2Atk2Name
 	ld a, [hli]
 	or [hl]
 	jr nz, .has_attack
@@ -3365,7 +3365,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 	ret nz ; no effect
 
 ; set selected attack as disabled
-	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+	ld a, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	call GetNonTurnDuelistVariable
 	ldh a, [hTemp_ffa0]
 	ld [hl], a
@@ -3377,7 +3377,7 @@ ApplyAmnesiaToAttack: ; 2d18a (b:518a)
 	ret c ; return if Player
 
 ; the rest of the routine if for Opponent
-; to announce which move was used for Amnesia.
+; to announce which attack was used for Amnesia.
 	call SwapTurn
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -3474,13 +3474,13 @@ PoliwagWaterGunEffect: ; 2d227 (b:5227)
 
 ClampEffect: ; 2d22d (b:522d)
 	ld a, ATK_ANIM_HIT_EFFECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ldtx de, SuccessCheckIfHeadsAttackIsSuccessfulText
 	call TossCoin_BankB
 	jp c, ParalysisEffect
 ; unsuccessful
 	xor a ; ATK_ANIM_NONE
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
@@ -3634,9 +3634,9 @@ Quickfreeze_Paralysis50PercentEffect: ; 2d2f3 (b:52f3)
 	ld c, $00
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
+	bank1call PlayAttackAnimation
 	bank1call Func_741a
-	bank1call WaitMoveAnimation
+	bank1call WaitAttackAnimation
 	bank1call Func_6df1
 	bank1call DrawDuelHUDs
 	bank1call Func_1bca
@@ -3817,7 +3817,7 @@ RapidashAgilityEffect: ; 2d413 (b:5413)
 	call TossCoin_BankB
 	ret nc ; return if tails
 	ld a, ATK_ANIM_AGILITY_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_AGILITY
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -4044,7 +4044,7 @@ Moltres1DiveBomb_Success50PercentEffect: ; 2d52b (b:552b)
 	ret
 .heads
 	ld a, ATK_ANIM_DIVE_BOMB
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2d541
 
@@ -4413,7 +4413,7 @@ Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
 	ld d, ATK_ANIM_FIREGIVER_OPP
 .player_1
 	ld a, d
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 
 ; start loop for adding Energy cards to hand
 	ldh a, [hCurSelectionItem]
@@ -4425,14 +4425,14 @@ Firegiver_AddToHandEffect: ; 2d6c2 (b:56c2)
 	ld bc, $0
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 
 ; load correct coordinates to update the number of cards
 ; in hand and deck during animation.
 	lb bc, 18, 7 ; x, y for hand number
 	ld e, 3 ; y for deck number
-	ld a, [wLoadedMoveAnimation]
+	ld a, [wLoadedAttackAnimation]
 	cp ATK_ANIM_FIREGIVER_PLAYER
 	jr z, .player_2
 	lb bc, 4, 5 ; x, y for hand number
@@ -4489,7 +4489,7 @@ Moltres2DiveBomb_Success50PercentEffect: ; 2d776 (b:5776)
 	ret
 .heads
 	ld a, ATK_ANIM_DIVE_BOMB
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2d78c
 
@@ -5493,7 +5493,7 @@ DevolutionBeam_AISelectEffect: ; 2dc9e (b:5c9e)
 
 DevolutionBeam_LoadAnimation: ; 2dcb6 (b:5cb6)
 	xor a ; ATK_ANIM_NONE
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2dcbb
 
@@ -5518,14 +5518,14 @@ DevolutionBeam_DevolveEffect: ; 2dcbb (b:5cbb)
 
 .DevolvePokemon
 	ld a, ATK_ANIM_DEVOLUTION_BEAM
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ldh a, [hTempPlayAreaLocation_ffa1]
 	ld b, a
 	ld c, $00
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 
 ; load selected card's data
 	ldh a, [hTempPlayAreaLocation_ffa1]
@@ -5924,7 +5924,7 @@ SpacingOut_Success50PercentEffect: ; 2dee0 (b:5ee0)
 	ldh [hTemp_ffa0], a
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_RECOVER
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2def1
 
@@ -6153,7 +6153,7 @@ MysteryAttack_RandomEffect: ; 2e009 (b:6009)
 
 .no_damage
 	ld a, ATK_ANIM_GLOW_EFFECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	xor a
 	call SetDefiniteDamage
 	call SetNoEffectFromStatus
@@ -6235,7 +6235,7 @@ TantrumEffect: ; 2e099 (b:6099)
 	ret c ; return if heads
 ; confuse Pokemon
 	ld a, ATK_ANIM_MULTIPLE_SLASH
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	call SwapTurn
 	call ConfusionEffect
 	call SwapTurn
@@ -6506,7 +6506,7 @@ LeerEffect: ; 2e21d (b:621d)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_LEER
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS2_LEER
 	call ApplySubstatus2ToDefendingCard
 	ret
@@ -7002,13 +7002,13 @@ Fly_Success50PercentEffect: ; 2e4fc (b:64fc)
 	call TossCoin_BankB
 	jr c, .heads
 	xor a ; ATK_ANIM_NONE
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	call SetDefiniteDamage
 	call SetWasUnsuccessful
 	ret
 .heads
 	ld a, ATK_ANIM_AGILITY_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_FLY
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -7154,7 +7154,7 @@ RaichuAgilityEffect: ; 2e5dc (b:65dc)
 	call TossCoin_BankB
 	ret nc ; skip if got tails
 	ld a, ATK_ANIM_AGILITY_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_AGILITY
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -7507,7 +7507,7 @@ RandomlyDamagePlayAreaPokemon: ; 2e78d (b:678d)
 
 .damage
 	ld a, ATK_ANIM_THUNDER_PLAY_AREA
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	call DealDamageToPlayAreaPokemon
 	ret
 
@@ -7819,7 +7819,7 @@ TailWagEffect: ; 2e94e (b:694e)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_LURE
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS2_TAIL_WAG
 	call ApplySubstatus2ToDefendingCard
 	ret
@@ -7965,7 +7965,7 @@ MirrorMoveEffects: ; 2e98c (b:698c)
 	or [hl]
 	jr z, .no_damage
 	ld a, ATK_ANIM_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 .no_damage
 	inc hl
 	inc hl ; DUELVARS_ARENA_CARD_LAST_TURN_STATUS
@@ -8095,7 +8095,7 @@ FearowAgilityEffect: ; 2eab8 (b:6ab8)
 	call TossCoin_BankB
 	ret nc
 	ld a, ATK_ANIM_AGILITY_PROTECT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_AGILITY
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -8556,16 +8556,16 @@ HandlePlayerMetronomeEffect: ; 2ed18 (b:6d18)
 ; the attack that is loaded, which is Metronome.
 ; if equal, then cannot select it.
 ; (i.e. cannot use Metronome with Metronome.)
-	ld hl, wLoadedMoveName
+	ld hl, wLoadedAttackName
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	push hl
 	call SwapTurn
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call SwapTurn
 	pop de
-	ld hl, wLoadedMoveName
+	ld hl, wLoadedAttackName
 	ld a, e
 	cp [hl]
 	jr nz, .try_use
@@ -8607,7 +8607,7 @@ HandlePlayerMetronomeEffect: ; 2ed18 (b:6d18)
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wPlayerAttackingCardIndex], a
 	ld a, [wSelectedAttack]
-	ld [wPlayerAttackingMoveIndex], a
+	ld [wPlayerAttackingAttackIndex], a
 	ld a, [wTempCardID_ccc2]
 	ld [wPlayerAttackingCardID], a
 	or a
@@ -8832,10 +8832,10 @@ AISelectConversionColor: ; 2ee7f (b:6e7f)
 	cp COLORLESS
 	jr z, .skip_pkmn_atk ; skip colorless Pokemon
 	ld e, FIRST_ATTACK_OR_PKMN_POWER
-	bank1call _CheckIfEnoughEnergiesToMove
+	bank1call _CheckIfEnoughEnergiesToAttack
 	jr nc, .found
 	ld e, SECOND_ATTACK
-	bank1call _CheckIfEnoughEnergiesToMove
+	bank1call _CheckIfEnoughEnergiesToAttack
 	jr nc, .found
 .skip_pkmn_atk
 	pop de
@@ -8891,7 +8891,7 @@ ScrunchEffect: ; 2eee7 (b:6ee7)
 	call TossCoin_BankB
 	jp nc, SetWasUnsuccessful
 	ld a, ATK_ANIM_SCRUNCH
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, SUBSTATUS1_NO_DAMAGE_17
 	call ApplySubstatus1ToDefendingCard
 	ret
@@ -8973,10 +8973,10 @@ HealingWind_PlayAreaHealEffect: ; 2ef53 (b:6f53)
 	ld c, $00
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 	ld a, ATK_ANIM_HEALING_WIND_PLAY_AREA
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 
 
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
@@ -9011,8 +9011,8 @@ HealingWind_PlayAreaHealEffect: ; 2ef53 (b:6f53)
 	ld c, $01
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 .next_pkmn
 	pop de
 	inc e
@@ -9079,7 +9079,7 @@ CatPunchEffect: ; 2efe0 (b:6fe0)
 	call PickRandomPlayAreaCard
 	ld b, a
 	ld a, ATK_ANIM_CAT_PUNCH_PLAY_AREA
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld de, 20
 	call DealDamageToPlayAreaPokemon
 	call SwapTurn
@@ -9235,7 +9235,7 @@ SlicingWindEffect: ; 2f0bf (b:70bf)
 
 Gale_LoadAnimation: ; 2f0d0 (b:70d0)
 	ld a, ATK_ANIM_GALE
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ret
 ; 0x2f0d6
 
@@ -11757,13 +11757,13 @@ GustOfWind_SwitchEffect: ; 2fe90 (b:7e90)
 ; input:
 ;	a = attack animation to play
 Func_2fea9: ; 2fea9 (b:7ea9)
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	bank1call Func_7415
 	ld bc, $0
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 	ret
 ; 0x2febc
 
@@ -11781,14 +11781,14 @@ HealPlayAreaCardHP: ; 2febc (b:7ebc)
 	push de
 	bank1call Func_7415
 	ld a, ATK_ANIM_HEALING_WIND_PLAY_AREA
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	ld b, a
 	ld c, $01
 	ldh a, [hWhoseTurn]
 	ld h, a
-	bank1call PlayMoveAnimation
-	bank1call WaitMoveAnimation
+	bank1call PlayAttackAnimation
+	bank1call WaitAttackAnimation
 	pop hl
 
 ; print Pokemon card name and damage healed

@@ -1052,9 +1052,9 @@ Func_18661: ; 18661 (6:4661)
 INCLUDE "data/effect_commands.asm"
 
 ; reads the animation commands from PointerTable_AttackAnimation
-; of attack in wLoadedMoveAnimation and plays them
+; of attack in wLoadedAttackAnimation and plays them
 PlayAttackAnimationCommands: ; 18f9c (6:4f9c)
-	ld a, [wLoadedMoveAnimation]
+	ld a, [wLoadedAttackAnimation]
 	or a
 	ret z
 
@@ -1333,7 +1333,7 @@ PrintDamageText: ; 19132 (6:5132)
 	push hl
 	push bc
 	push de
-	ld a, [wLoadedMoveAnimation]
+	ld a, [wLoadedAttackAnimation]
 	cp ATK_ANIM_HEAL
 	jr z, .skip
 	cp ATK_ANIM_HEALING_WIND_PLAY_AREA

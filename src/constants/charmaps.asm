@@ -339,7 +339,7 @@ ENDM
 	txsymbol PARALYZED  ; $0b
 	txsymbol CURSOR_U   ; $0c
 	txsymbol POKEMON    ; $0d
-	txsymbol MOVE_DESCR ; $0e
+	txsymbol ATK_DESCR ; $0e
 	txsymbol CURSOR_R   ; $0f
 	txsymbol HP         ; $10
 	txsymbol Lv         ; $11

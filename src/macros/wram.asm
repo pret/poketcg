@@ -10,8 +10,8 @@ card_data_struct: MACRO
 \1Stage::         ds 1
 \1NonPokemonDescription:: ; ds 2
 \1PreEvoName::    ds 2
-\1Move1::         move_data_struct \1Move1
-\1Move2::         move_data_struct \1Move2
+\1Atk1::         atk_data_struct \1Atk1
+\1Atk2::         atk_data_struct \1Atk2
 \1RetreatCost::   ds 1
 \1Weakness::      ds 1
 \1Resistance::    ds 1
@@ -25,7 +25,7 @@ card_data_struct: MACRO
 \1Unknown2::      ds 1
 ENDM
 
-move_data_struct: MACRO
+atk_data_struct: MACRO
 \1EnergyCost::     ds NUM_TYPES / 2
 \1Name::           ds 2
 \1Description::    ds 4

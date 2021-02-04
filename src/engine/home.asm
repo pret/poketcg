@@ -3871,7 +3871,7 @@ ClearAllStatusConditions: ; 1461 (0:1461)
 	ld [hl], a
 	ld l, DUELVARS_ARENA_CARD_SUBSTATUS3
 	res SUBSTATUS3_THIS_TURN_DOUBLE_DAMAGE, [hl]
-	ld l, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+	ld l, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
@@ -4237,14 +4237,14 @@ Func_161e: ; 161e (0:161e)
 	ldh a, [hTempCardIndex_ff98]
 	ld d, a
 	ld e, $00
-	call CopyMoveDataAndDamage_FromDeckIndex
+	call CopyAttackDataAndDamage_FromDeckIndex
 	call Func_16f6
 	ldh a, [hTempCardIndex_ff98]
 	ldh [hTempCardIndex_ff9f], a
 	call GetCardIDFromDeckIndex
 	ld a, e
 	ld [wTempTurnDuelistCardID], a
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret nz
 	call DisplayUsePokemonPowerScreen
@@ -4271,7 +4271,7 @@ Func_161e: ; 161e (0:161e)
 	ret
 
 .use_pokemon_power
-	ld hl, wLoadedMoveEffectCommands
+	ld hl, wLoadedAttackEffectCommands
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -4288,7 +4288,7 @@ Func_161e: ; 161e (0:161e)
 	ld [hli], a
 	ld a, [de]
 	ld [hli], a
-	ld de, wLoadedMoveName
+	ld de, wLoadedAttackName
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -4304,10 +4304,10 @@ Func_161e: ; 161e (0:161e)
 
 ; copies, given a card identified by register a (card ID):
 ; - e into wSelectedAttack and d into hTempCardIndex_ff9f
-; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
-; - Also from that move, its Damage field into wDamage
+; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
+; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
-CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
+CopyAttackDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	push de
 	push af
 	ld a, e
@@ -4319,14 +4319,14 @@ CopyMoveDataAndDamage_FromCardID: ; 16ad (0:16ad)
 	ld d, $00
 	call LoadCardDataToBuffer1_FromCardID
 	pop de
-	jr CopyMoveDataAndDamage
+	jr CopyAttackDataAndDamage
 
 ; copies, given a card identified by register d (0-59 deck index):
 ; - e into wSelectedAttack and d into hTempCardIndex_ff9f
-; - Move1 (if e == 0) or Move2 (if e == 1) data into wLoadedMove
-; - Also from that move, its Damage field into wDamage
+; - Attack1 (if e == 0) or Attack2 (if e == 1) data into wLoadedAttack
+; - Also from that attack, its Damage field into wDamage
 ; finally, clears wNoDamageOrEffect and wDealtDamage
-CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
+CopyAttackDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	ld a, e
 	ld [wSelectedAttack], a
 	ld a, d
@@ -4334,23 +4334,23 @@ CopyMoveDataAndDamage_FromDeckIndex: ; 16c0 (0:16c0)
 	call LoadCardDataToBuffer1_FromDeckIndex
 ;	fallthrough
 
-CopyMoveDataAndDamage: ; 16ca (0:16ca)
+CopyAttackDataAndDamage: ; 16ca (0:16ca)
 	ld a, [wLoadedCard1ID]
 	ld [wTempCardID_ccc2], a
-	ld hl, wLoadedCard1Move1
+	ld hl, wLoadedCard1Atk1
 	dec e
-	jr nz, .got_move
-	ld hl, wLoadedCard1Move2
-.got_move
-	ld de, wLoadedMove
-	ld c, CARD_DATA_MOVE2 - CARD_DATA_MOVE1
+	jr nz, .got_atk
+	ld hl, wLoadedCard1Atk2
+.got_atk
+	ld de, wLoadedAttack
+	ld c, CARD_DATA_ATTACK2 - CARD_DATA_ATTACK1
 .copy_loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec c
 	jr nz, .copy_loop
-	ld a, [wLoadedMoveDamage]
+	ld a, [wLoadedAttackDamage]
 	ld hl, wDamage
 	ld [hli], a
 	xor a
@@ -4393,12 +4393,12 @@ Func_16f6: ; 16f6 (0:16f6)
 ; Use an attack (from DuelMenu_Attack) or a Pokemon Power (from DuelMenu_PkmnPower)
 UseAttackOrPokemonPower: ; 1730 (0:1730)
 	ld a, [wSelectedAttack]
-	ld [wPlayerAttackingMoveIndex], a
+	ld [wPlayerAttackingAttackIndex], a
 	ldh a, [hTempCardIndex_ff9f]
 	ld [wPlayerAttackingCardIndex], a
 	ld a, [wTempCardID_ccc2]
 	ld [wPlayerAttackingCardID], a
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	jp z, UsePokemonPower
 	call Func_16f6
@@ -4437,7 +4437,7 @@ UseAttackOrPokemonPower: ; 1730 (0:1730)
 
 PlayAttackAnimation_DealAttackDamage: ; 179a (0:179a)
 	call Func_7415
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	and RESIDUAL
 	jr nz, .deal_damage
 	call SwapTurn
@@ -4461,9 +4461,9 @@ PlayAttackAnimation_DealAttackDamage: ; 179a (0:179a)
 	call GetNonTurnDuelistVariable
 	push de
 	push hl
-	call PlayMoveAnimation
+	call PlayAttackAnimation
 	call Func_741a
-	call WaitMoveAnimation
+	call WaitAttackAnimation
 	pop hl
 	pop de
 	call SubtractHP
@@ -4494,7 +4494,7 @@ Func_17fb: ; 17fb (0:17fb)
 	call TryExecuteEffectCommandFunction
 	pop af
 	ld [wTempNonTurnDuelistCardID], a
-	call HandleStrikesBack_AgainstResidualMove
+	call HandleStrikesBack_AgainstResidualAttack
 	bank1call Func_6df1
 	call Func_1bb4
 	bank1call Func_7195
@@ -4530,7 +4530,7 @@ HandleConfusionDamageToSelf: ; 1828 (0:1828)
 	ldtx hl, DamageToSelfDueToConfusionText
 	call DrawWideTextBox_PrintText
 	ld a, ATK_ANIM_CONFUSION_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	ld a, 20 ; damage
 	call DealConfusionDamageToSelf
 	call Func_1bb4
@@ -4574,7 +4574,7 @@ SendAttackDataToLinkOpponent: ; 1874 (0:1874)
 	ld [wccec], a
 	ld a, [wPlayerAttackingCardIndex]
 	ldh [hTempCardIndex_ff9f], a
-	ld a, [wPlayerAttackingMoveIndex]
+	ld a, [wPlayerAttackingAttackIndex]
 	ldh [hTemp_ffa0], a
 	ld a, OPPACTION_BEGIN_ATTACK
 	call SetOppAction_SerialSendDuelData
@@ -4586,7 +4586,7 @@ SendAttackDataToLinkOpponent: ; 1874 (0:1874)
 	ret
 
 Func_189d: ; 189d (0:189d)
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	bit RESIDUAL_F, a
 	ret nz
 	ld a, [wNoDamageOrEffect]
@@ -4642,7 +4642,7 @@ CheckSelfConfusionDamage: ; 18d7 (0:18d7)
 	ret
 
 ; play the trainer card with deck index at hTempCardIndex_ff98.
-; a trainer card is like a move effect, with its own effect commands.
+; a trainer card is like an attack effect, with its own effect commands.
 ; return nc if the card was played, carry if it wasn't.
 PlayTrainerCard: ; 18f9 (0:18f9)
 	call CheckCantUseTrainerDueToHeadache
@@ -4683,12 +4683,12 @@ PlayTrainerCard: ; 18f9 (0:18f9)
 	ret
 
 ; loads the effect commands of a (trainer or energy) card with deck index (0-59) at hTempCardIndex_ff9f
-; into wLoadedMoveEffectCommands. in practice, only used for trainer cards
+; into wLoadedAttackEffectCommands. in practice, only used for trainer cards
 LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 	ldh a, [hTempCardIndex_ff9f]
 	call LoadCardDataToBuffer1_FromDeckIndex
 	ld hl, wLoadedCard1EffectCommands
-	ld de, wLoadedMoveEffectCommands
+	ld de, wLoadedAttackEffectCommands
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -4701,12 +4701,12 @@ LoadNonPokemonCardEffectCommands: ; 1944 (0:1944)
 DealRecoilDamageToSelf: ; 1955 (0:1955)
 	push af
 	ld a, ATK_ANIM_RECOIL_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 	pop af
 ;	fallthrough
 
 ; Make turn holder deal A damage to self due to confusion
-; display animation at wLoadedMoveAnimation
+; display animation at wLoadedAttackAnimation
 DealConfusionDamageToSelf: ; 195c (0:195c)
 	ld hl, wDamage
 	ld [hli], a
@@ -4978,14 +4978,14 @@ PrintKnockedOut: ; 1ad3 (0:1ad3)
 ; instead of the main duel interface with regular attack animation.
 DealDamageToPlayAreaPokemon_RegularAnim: ; 1af3 (0:1af3)
 	ld a, ATK_ANIM_BENCH_HIT
-	ld [wLoadedMoveAnimation], a
+	ld [wLoadedAttackAnimation], a
 ;	fallthrough
 
 ; deal damage to turn holder's Pokemon card at play area location at b (PLAY_AREA_*).
 ; damage to deal is given in de.
 ; shows the defending player's play area screen when dealing the damage
 ; instead of the main duel interface.
-; plays animation that is loaded in wLoadedMoveAnimation.
+; plays animation that is loaded in wLoadedAttackAnimation.
 DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 	ld a, b
 	ld [wTempPlayAreaLocation_cceb], a
@@ -5023,7 +5023,7 @@ DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 	call ApplyAttachedPluspower
 	call SwapTurn
 .next
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	jr z, .skip_defender
 	ld a, [wTempPlayAreaLocation_cceb]
@@ -5069,7 +5069,7 @@ DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 	call PrintKnockedOutIfHLZero
 	pop de
 .skip_knocked_out
-	call HandleStrikesBack_AgainstDamagingMove
+	call HandleStrikesBack_AgainstDamagingAttack
 	pop bc
 	pop de
 	pop hl
@@ -5077,14 +5077,14 @@ DealDamageToPlayAreaPokemon: ; 1af8 (0:1af8)
 
 ; draw duel main scene, then print the "<Pokemon Lvxx>'s <attack>" text
 ; The Pokemon's name is the turn holder's arena Pokemon, and the
-; attack's name is taken from wLoadedMoveName.
+; attack's name is taken from wLoadedAttackName.
 DrawDuelMainScene_PrintPokemonsAttackText: ; 1b8d (0:1b8d)
 	bank1call DrawDuelMainScene
 ;	fallthrough
 
 ; print the "<Pokemon Lvxx>'s <attack>" text
 ; The Pokemon's name is the turn holder's arena Pokemon, and the
-; attack's name is taken from wLoadedMoveName.
+; attack's name is taken from wLoadedAttackName.
 PrintPokemonsAttackText: ; 1b90 (0:1b90)
 	ld a, DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
@@ -5097,9 +5097,9 @@ PrintPokemonsAttackText: ; 1b90 (0:1b90)
 	xor a
 	ld [hli], a
 	ld [hli], a
-	ld a, [wLoadedMoveName]
+	ld a, [wLoadedAttackName]
 	ld [hli], a ; wTxRam2_b
-	ld a, [wLoadedMoveName + 1]
+	ld a, [wLoadedAttackName + 1]
 	ld [hli], a
 	ldtx hl, PokemonsAttackText
 	call DrawWideTextBox_PrintText
@@ -5134,7 +5134,7 @@ Func_1bca: ; 1bca (0:1bca)
 	ld [hl], $0
 	ld hl, $0000
 	call LoadTxRam2
-	ld hl, wLoadedMoveName
+	ld hl, wLoadedAttackName
 	ld de, wTxRam2_b
 	ld a, [hli]
 	ld [de], a
@@ -5215,13 +5215,13 @@ GetCardDamageAndMaxHP: ; 1c35 (0:1c35)
 	pop hl
 	ret
 
-; check if a flag of wLoadedMove is set
+; check if a flag of wLoadedAttack is set
 ; input:
    ; a = %fffffbbb, where
-      ; fffff = flag address counting from wLoadedMoveFlag1
+      ; fffff = flag address counting from wLoadedAttackFlag1
       ; bbb = flag bit
 ; return carry if the flag is set
-CheckLoadedMoveFlag: ; 1c50 (0:1c50)
+CheckLoadedAttackFlag: ; 1c50 (0:1c50)
 	push hl
 	push de
 	push bc
@@ -5238,12 +5238,12 @@ CheckLoadedMoveFlag: ; 1c50 (0:1c50)
 	rra
 	and $1f
 	ld e, a ; %000fffff
-	ld hl, wLoadedMoveFlag1
+	ld hl, wLoadedAttackFlag1
 	add hl, de
 	ld a, [hl]
 	and b
 	jr z, .done
-	scf ; set carry if the move has this flag set
+	scf ; set carry if the attack has this flag set
 .done
 	pop bc
 	pop de
@@ -9006,15 +9006,15 @@ CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
 	call BankpopROM
 	ret
 
-; Checks if the command type at a is one of the commands of the move or
+; Checks if the command type at a is one of the commands of the attack or
 ; card effect currently in use, and executes its associated function if so.
 ; input:
    ; a = command type to check
-   ; [wLoadedMoveEffectCommands] = pointer to list of commands of current move or trainer card
+   ; [wLoadedAttackEffectCommands] = pointer to list of commands of current attack or trainer card
 TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	push af
-	; grab pointer to command list from wLoadedMoveEffectCommands
-	ld hl, wLoadedMoveEffectCommands
+	; grab pointer to command list from wLoadedAttackEffectCommands
+	ld hl, wLoadedAttackEffectCommands
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -9044,7 +9044,7 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 
 ; input:
    ; a = command type to check
-   ; hl = list of commands of current move or trainer card
+   ; hl = list of commands of current attack or trainer card
 ; return nc if command type matching a is found, carry otherwise
 CheckMatchingCommand: ; 2ffe (0:2ffe)
 	ld c, a
@@ -9553,7 +9553,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	call CheckCannotUseDueToStatus
 	ret c
 .pkmn_power
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret z
 	ld a, [wTempNonTurnDuelistCardID]
@@ -9594,7 +9594,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 	ld d, h
 	ret
 .prevent_less_than_30_damage
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret z
 	ld bc, 30
@@ -9616,7 +9616,7 @@ HandleDamageReductionExceptSubstatus2: ; 3269 (0:3269)
 ; check for Invisible Wall, Kabuto Armor, NShield, or Transparency, in order to
 ; possibly reduce or make zero the damage at de.
 HandleDamageReductionOrNoDamageFromPkmnPowerEffects: ; 32f7 (0:32f7)
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret z
 	ld a, MUK
@@ -9637,8 +9637,8 @@ HandleDamageReductionOrNoDamageFromPkmnPowerEffects: ; 32f7 (0:32f7)
 ; when MACHAMP is damaged, if its Strikes Back is active, the
 ; attacking Pokemon (turn holder's arena Pokemon) takes 10 damage.
 ; ignore if damage taken at de is 0.
-; used to bounce back a damaging move.
-HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
+; used to bounce back a damaging attack.
+HandleStrikesBack_AgainstDamagingAttack: ; 3317 (0:3317)
 	ld a, e
 	or d
 	ret z
@@ -9651,7 +9651,7 @@ HandleStrikesBack_AgainstDamagingMove: ; 3317 (0:3317)
 	ld a, MUK
 	call CountPokemonIDInBothPlayAreas
 	ret c
-	ld a, [wLoadedMoveCategory] ; category of attack used
+	ld a, [wLoadedAttackCategory] ; category of attack used
 	cp POKEMON_POWER
 	ret z
 	ld a, [wTempPlayAreaLocation_cceb] ; defending Pokemon's PLAY_AREA_*
@@ -9760,7 +9760,7 @@ HandleCantAttackSubstatus: ; 33c1 (0:33c1)
 	ret
 
 ; return carry if the turn holder's arena Pokemon cannot use
-; selected move at wSelectedAttack due to amnesia
+; selected attack at wSelectedAttack due to amnesia
 HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS2
 	call GetTurnDuelistVariable
@@ -9770,15 +9770,15 @@ HandleAmnesiaSubstatus: ; 33e1 (0:33e1)
 .check_amnesia
 	cp SUBSTATUS2_AMNESIA
 	jr z, .affected_by_amnesia
-.not_the_disabled_move
+.not_the_disabled_atk
 	or a
 	ret
 .affected_by_amnesia
-	ld a, DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX
+	ld a, DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX
 	call GetTurnDuelistVariable
 	ld a, [wSelectedAttack]
 	cp [hl]
-	jr nz, .not_the_disabled_move
+	jr nz, .not_the_disabled_atk
 	ldtx hl, UnableToUseAttackDueToAmnesiaText
 	scf
 	ret
@@ -9823,7 +9823,7 @@ CheckSandAttackOrSmokescreenSubstatus: ; 3414 (0:3414)
 HandleNoDamageOrEffectSubstatus: ; 3432 (0:3432)
 	xor a
 	ld [wNoDamageOrEffect], a
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	ret z
 	ld a, DUELVARS_ARENA_CARD_SUBSTATUS1
@@ -9881,7 +9881,7 @@ HandleTransparency: ; 348a (0:348a)
 	or a
 	ret
 .transparency
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	cp POKEMON_POWER
 	jr z, .done ; Transparency has no effect against Pkmn Powers
 	ld a, [wTempPlayAreaLocation_cceb]
@@ -9944,7 +9944,7 @@ IsClairvoyanceActive: ; 34e2 (0:34e2)
 	ret
 
 ; returns carry if turn holder's arena card is paralyzed, asleep, confused,
-; and/or toxic gas in play, meaning that move and/or pkmn power cannot be used
+; and/or toxic gas in play, meaning that attack and/or pkmn power cannot be used
 CheckCannotUseDueToStatus: ; 34ef (0:34ef)
 	xor a
 
@@ -10232,14 +10232,14 @@ HandleDestinyBondSubstatus: ; 363b (0:363b)
 
 ; when MACHAMP is damaged, if its Strikes Back is active, the
 ; attacking Pokemon (turn holder's arena Pokemon) takes 10 damage.
-; used to bounce back a move of the RESIDUAL category
-HandleStrikesBack_AgainstResidualMove: ; 367b (0:367b)
+; used to bounce back an attack of the RESIDUAL category
+HandleStrikesBack_AgainstResidualAttack: ; 367b (0:367b)
 	ld a, [wTempNonTurnDuelistCardID]
 	cp MACHAMP
 	jr z, .strikes_back
 	ret
 .strikes_back
-	ld a, [wLoadedMoveCategory]
+	ld a, [wLoadedAttackCategory]
 	and RESIDUAL
 	ret nz
 	ld a, [wDealtDamage]
@@ -10250,11 +10250,11 @@ HandleStrikesBack_AgainstResidualMove: ; 367b (0:367b)
 	call SwapTurn
 	ret c
 	ld hl, 10 ; damage to be dealt to attacker
-	call ApplyStrikesBack_AgainstResidualMove
+	call ApplyStrikesBack_AgainstResidualAttack
 	call nc, WaitForWideTextBoxInput
 	ret
 
-ApplyStrikesBack_AgainstResidualMove: ; 36a2 (0:36a2)
+ApplyStrikesBack_AgainstResidualAttack: ; 36a2 (0:36a2)
 	push hl
 	call LoadTxRam3
 	ld a, [wTempTurnDuelistCardID]

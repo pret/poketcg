@@ -74,7 +74,7 @@ DUELVARS_NUMBER_OF_CARDS_IN_HAND          EQUS "LOW(wPlayerNumberOfCardsInHand)"
 DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA   EQUS "LOW(wPlayerNumberOfPokemonInPlayArea)"   ; ef
 DUELVARS_ARENA_CARD_STATUS                EQUS "LOW(wPlayerArenaCardStatus)"             ; f0
 DUELVARS_DUELIST_TYPE                     EQUS "LOW(wPlayerDuelistType)"                 ; f1
-DUELVARS_ARENA_CARD_DISABLED_MOVE_INDEX   EQUS "LOW(wPlayerArenaCardDisabledMoveIndex)"  ; f2
+DUELVARS_ARENA_CARD_DISABLED_ATTACK_INDEX EQUS "LOW(wPlayerArenaCardDisabledAttackIndex)" ; f2
 DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE      EQUS "LOW(wPlayerArenaCardLastTurnDamage)"     ; f3
 DUELVARS_ARENA_CARD_LAST_TURN_STATUS      EQUS "LOW(wPlayerArenaCardLastTurnStatus)"     ; f5
 DUELVARS_ARENA_CARD_LAST_TURN_SUBSTATUS2  EQUS "LOW(wPlayerArenaCardLastTurnSubstatus2)" ; f6
