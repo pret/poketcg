@@ -266,7 +266,7 @@ z80_table = [
 	('db $fc', 2),                 # fc
 	('db $fd', 2),                 # fd
 	('cp ${:02x}', 1),             # fe
-	('debug_ret', 0),              # ff
+	('debug_nop', 0),              # ff
 ]
 
 bit_ops_table = [
@@ -310,8 +310,8 @@ call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc, 0xdf, 0xef]
 relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
 unconditional_jumps = [0xc3, 0x18]
 
-# the flag macros found in bank 3. They db a byte after calling so need to be treated specially
-flag_macros = [(0xca8f,"set_flag_value {}"),(0xcacd,"zero_flag_value {}"),(0xca84,"zero_flag_value2 {}"), (0xcac2,"max_flag_value {}"), (0xca69,"get_flag_value {}")]
+# the event macros found in bank 3. They db a byte after calling so need to be treated specially
+event_macros = [(0xca8f,"set_event_value {}"),(0xcacd,"zero_event_value {}"),(0xca84,"zero_event_value2 {}"), (0xcac2,"max_event_value {}"), (0xca69,"get_event_value {}")]
 
 def asm_label(address):
 	"""
@@ -761,22 +761,22 @@ class Disassembler(object):
 					# regular call or jump instructions
 						target_label = self.find_label(local_target_offset, bank_id)
 
-					# handle the special flag macros
-					found_flag_macro = False
+					# handle the special event macros
+					found_event_macro = False
 					if opcode_byte == 0xcd:
-						for flag_macro in flag_macros:
-							if flag_macro[0] == target_offset:
-								found_flag_macro = True
-								current_flag_macro = flag_macro
-								event_flag = "EVENT_FLAG_" + format(opcode_arg_3, "02X")
-								opcode_output_str = flag_macro[1].format(event_flag)
+						for event_macro in event_macros:
+							if event_macro[0] == target_offset:
+								found_event_macro = True
+								current_event_macro = event_macro
+								event_var = "EVENT_FLAG_" + format(opcode_arg_3, "02X")
+								opcode_output_str = event_macro[1].format(event_var)
 
 								# we need to skip a byte since this macro takes one extra
 								opcode_nargs+=1
 								break
 
 
-					if not found_flag_macro and opcode_byte in call_commands + absolute_jumps:
+					if not found_event_macro and opcode_byte in call_commands + absolute_jumps:
 
 						if target_label is None:
 						# if this is a call or jump opcode and the target label is not defined, create an undocumented label descriptor

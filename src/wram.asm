@@ -2319,11 +2319,11 @@ wd3bb:: ; d3bb
 wd3d0:: ; d3d0
 	ds $1
 
-; the bits relevant to the currently worked on flag, obtained from EventFlagMods
-wLoadedFlagBits:: ; d3d1
+; the bits relevant to the currently worked on event, obtained from EventVarMasks
+wLoadedEventBits:: ; d3d1
 	ds $1
 
-wEventFlags:: ; d3d2
+wEventVars:: ; d3d2
 	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
@@ -2333,7 +2333,7 @@ wBreakScriptLoop:: ; d412
 wScriptPointer:: ; d413
 	ds $2
 
-; generally set to ff when a flag check passes, 0 otherwise
+; generally set to ff when an event check passes, 0 otherwise
 wScriptControlByte:: ; d415
 	ds $1
 

@@ -93,18 +93,18 @@ ENDM
 	const ScriptCommand_EndScript4_index                                     ; $55
 	const ScriptCommand_EndScript5_index                                     ; $56
 	const ScriptCommand_EndScript6_index                                     ; $57
-	const ScriptCommand_SetFlagValue_index                                   ; $58
-	const ScriptCommand_JumpIfFlagZero1_index                                ; $59
-	const ScriptCommand_JumpIfFlagNonzero1_index                             ; $5a
-	const ScriptCommand_JumpIfFlagEqual_index                                ; $5b
-	const ScriptCommand_JumpIfFlagNotEqual_index                             ; $5c
-	const ScriptCommand_JumpIfFlagNotLessThan_index                          ; $5d
-	const ScriptCommand_JumpIfFlagLessThan_index                             ; $5e
-	const ScriptCommand_MaxOutFlagValue_index                                ; $5f
-	const ScriptCommand_ZeroOutFlagValue_index                               ; $60
-	const ScriptCommand_JumpIfFlagNonzero2_index                             ; $61
-	const ScriptCommand_JumpIfFlagZero2_index                                ; $62
-	const ScriptCommand_IncrementFlagValue_index                             ; $63
+	const ScriptCommand_SetEventValue_index                                  ; $58
+	const ScriptCommand_JumpIfEventZero1_index                               ; $59
+	const ScriptCommand_JumpIfEventNonzero1_index                            ; $5a
+	const ScriptCommand_JumpIfEventEqual_index                               ; $5b
+	const ScriptCommand_JumpIfEventNotEqual_index                            ; $5c
+	const ScriptCommand_JumpIfEventNotLessThan_index                         ; $5d
+	const ScriptCommand_JumpIfEventLessThan_index                            ; $5e
+	const ScriptCommand_MaxOutEventValue_index                               ; $5f
+	const ScriptCommand_ZeroOutEventValue_index                              ; $60
+	const ScriptCommand_JumpIfEventNonzero2_index                            ; $61
+	const ScriptCommand_JumpIfEventZero2_index                               ; $62
+	const ScriptCommand_IncrementEventValue_index                            ; $63
 	const ScriptCommand_EndScript7_index                                     ; $64
 	const ScriptCommand_EndScript8_index                                     ; $65
 	const ScriptCommand_EndScript9_index                                     ; $66
@@ -633,87 +633,87 @@ challenge_machine: MACRO
 	run_command ScriptCommand_ChallengeMachine
 ENDM
 
-; Sets a flag's value
-script_set_flag_value: MACRO
-	run_command ScriptCommand_SetFlagValue
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Sets an event's value
+set_event: MACRO
+	run_command ScriptCommand_SetEventValue
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; new value
 ENDM
 
-; Jumps to a script position if a given flag is zero
-jump_if_flag_zero_1: MACRO
-	run_command ScriptCommand_JumpIfFlagZero1
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if a given event is zero
+jump_if_event_zero_1: MACRO
+	run_command ScriptCommand_JumpIfEventZero1
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
-; Jumps to a script position if a given flag is nonzero
-jump_if_flag_nonzero_1: MACRO
-	run_command ScriptCommand_JumpIfFlagNonzero1
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if a given event is nonzero
+jump_if_event_nonzero_1: MACRO
+	run_command ScriptCommand_JumpIfEventNonzero1
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
-; Jumps to a script position if a flag matches given value
-jump_if_flag_equal: MACRO
-	run_command ScriptCommand_JumpIfFlagEqual
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event matches given value
+jump_if_event_equal: MACRO
+	run_command ScriptCommand_JumpIfEventEqual
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
 
-; Jumps to a script position if a flag does not match a given value
-jump_if_flag_not_equal: MACRO
-	run_command ScriptCommand_JumpIfFlagNotEqual
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event does not match a given value
+jump_if_event_not_equal: MACRO
+	run_command ScriptCommand_JumpIfEventNotEqual
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
 
-; Jumps to a script position if a flag is not less than a given value
-jump_if_flag_not_less_than: MACRO
-	run_command ScriptCommand_JumpIfFlagNotLessThan
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is not less than a given value
+jump_if_event_not_less_than: MACRO
+	run_command ScriptCommand_JumpIfEventNotLessThan
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
 
-; Jumps to a script position if a flag is less than a given value
-jump_if_flag_less_than: MACRO
-	run_command ScriptCommand_JumpIfFlagLessThan
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is less than a given value
+jump_if_event_less_than: MACRO
+	run_command ScriptCommand_JumpIfEventLessThan
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
 ENDM
 
-; Sets a flag to its maximum possible value
-max_out_flag_value: MACRO
-	run_command ScriptCommand_MaxOutFlagValue
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Sets an event to its maximum possible value
+max_out_event_value: MACRO
+	run_command ScriptCommand_MaxOutEventValue
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
 
-; Sets a flags value to zero
-zero_out_flag_value: MACRO
-	run_command ScriptCommand_ZeroOutFlagValue
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Sets an event's value to zero
+zero_out_event_value: MACRO
+	run_command ScriptCommand_ZeroOutEventValue
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
 
-; Jumps to a script position if a flag is nonzero
-jump_if_flag_nonzero_2: MACRO
-	run_command ScriptCommand_JumpIfFlagNonzero2
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is nonzero
+jump_if_event_nonzero_2: MACRO
+	run_command ScriptCommand_JumpIfEventNonzero2
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
-; Jumps to a script position if a flag is zero
-jump_if_flag_zero_2: MACRO
-	run_command ScriptCommand_JumpIfFlagZero2
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is zero
+jump_if_event_zero_2: MACRO
+	run_command ScriptCommand_JumpIfEventZero2
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
-; Increments given flags value (truncates the new value)
-increment_flag_value: MACRO
-	run_command ScriptCommand_IncrementFlagValue
-	db \1 ; flag (ex EVENT_IMAKUNI_WIN_COUNT)
+; Increments given event's value (truncates the new value)
+increment_event_value: MACRO
+	run_command ScriptCommand_IncrementEventValue
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM

@@ -2993,7 +2993,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [hl]
 	or a
 	ret nz
-	debug_ret
+	debug_nop
 	scf
 	ret
 
@@ -10681,7 +10681,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 
 Func_3917: ; 3917 (0:3917)
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
-	farcall GetEventFlagValue
+	farcall GetEventValue
 	call EnableSRAM
 	ld [s0a00a], a
 	call DisableSRAM
@@ -10801,7 +10801,7 @@ GetItemInLoadedNPCIndex: ; 39ad (0:39ad)
 	push bc
 	cp LOADED_NPC_MAX
 	jr c, .asm_39b4
-	debug_ret
+	debug_nop
 	xor a
 .asm_39b4
 	add a
@@ -11570,7 +11570,7 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
-	debug_ret
+	debug_nop
 	ld a, SPRITE_ANIM_BUFFER_CAPACITY - 1 ; default to last sprite
 .got_sprite
 	push bc

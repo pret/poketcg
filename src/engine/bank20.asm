@@ -457,7 +457,7 @@ LoadPaletteDataFromHL: ; 803ec (20:43ec)
 	jr .success_return
 
 .fail_return
-	debug_ret
+	debug_nop
 
 .success_return
 	pop de

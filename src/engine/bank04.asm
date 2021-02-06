@@ -291,7 +291,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	inc hl
 	dec c
 	jr nz, .findFreeSlotLoop
-	debug_ret
+	debug_nop
 	jr .quit
 
 .foundFreeSlot
@@ -500,8 +500,8 @@ Func_10f4a: ; 10f4a (4:4f4a)
 	cp $2
 	jr nz, .asm_10f5f
 	ld c, a
-	ld a, $1e
-	farcall GetEventFlagValue
+	ld a, EVENT_ISHIHARAS_HOUSE_MENTIONED
+	farcall GetEventValue
 	or a
 	ld a, c
 	jr nz, .asm_10f5f
@@ -573,8 +573,8 @@ Func_10fde: ; 10fde (4:4fde)
 	ld a, b
 	ld [wd33c], a
 	call StartNewSpriteAnimation
-	ld a, $3e
-	farcall GetEventFlagValue
+	ld a, EVENT_MASON_LAB_STATE
+	farcall GetEventValue
 	or a
 	jr nz, .asm_11015
 	ld c, SPRITE_ANIM_FLAGS
@@ -1102,18 +1102,18 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
-	dw ScriptCommand_SetFlagValue
-	dw ScriptCommand_JumpIfFlagZero1
-	dw ScriptCommand_JumpIfFlagNonzero1
-	dw ScriptCommand_JumpIfFlagEqual
-	dw ScriptCommand_JumpIfFlagNotEqual
-	dw ScriptCommand_JumpIfFlagNotLessThan
-	dw ScriptCommand_JumpIfFlagLessThan
-	dw ScriptCommand_MaxOutFlagValue
-	dw ScriptCommand_ZeroOutFlagValue
-	dw ScriptCommand_JumpIfFlagNonzero2
-	dw ScriptCommand_JumpIfFlagZero2
-	dw ScriptCommand_IncrementFlagValue
+	dw ScriptCommand_SetEventValue
+	dw ScriptCommand_JumpIfEventZero1
+	dw ScriptCommand_JumpIfEventNonzero1
+	dw ScriptCommand_JumpIfEventEqual
+	dw ScriptCommand_JumpIfEventNotEqual
+	dw ScriptCommand_JumpIfEventNotLessThan
+	dw ScriptCommand_JumpIfEventLessThan
+	dw ScriptCommand_MaxOutEventValue
+	dw ScriptCommand_ZeroOutEventValue
+	dw ScriptCommand_JumpIfEventNonzero2
+	dw ScriptCommand_JumpIfEventZero2
+	dw ScriptCommand_IncrementEventValue
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
@@ -1404,7 +1404,7 @@ CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	ld [wWhichSprite], a
 	cp $10
 	jr nz, .findFirstEmptyAnimField
-	debug_ret
+	debug_nop
 	scf
 	jr .quit
 .foundEmptyAnimField
@@ -1859,7 +1859,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	jr .quitSucceed
 
 .quitFail
-	debug_ret
+	debug_nop
 	xor a
 	scf
 .quitSucceed

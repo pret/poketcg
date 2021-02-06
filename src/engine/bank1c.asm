@@ -3,8 +3,8 @@ Func_70000: ; 70000 (1c:4000)
 	cp $1
 	ret nz
 	ld b, $1
-	ld a, $22
-	farcall GetEventFlagValue
+	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
+	farcall GetEventValue
 	or a
 	jr z, .asm_70013
 	ld b, $2
@@ -292,8 +292,8 @@ Func_70214: ; 70214 (1c:4214)
 	cp $49
 	ret nz
 	ld hl, Unknown_7024a
-	ld a, $10
-	farcall GetEventFlagValue
+	ld a, EVENT_MEDAL_FLAGS
+	farcall GetEventValue
 	ld c, $8
 .asm_70227
 	push bc

@@ -148,7 +148,7 @@ Func_1c485: ; 1c485 (7:4485)
 	dec c
 	jr nz, .findEmptyIndexLoop
 	ld hl, wLoadedNPCs
-	debug_ret
+	debug_nop
 	jr .exit
 .foundEmptyIndex
 	ld a, b
@@ -541,7 +541,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	inc hl
 	dec c
 	jr nz, .asm_1c845
-	debug_ret
+	debug_nop
 	jr .asm_1c855
 
 .asm_1c853
@@ -592,7 +592,7 @@ PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 	cp HIGH(Func_3ba2)
 	jr z, .okay
 .error
-	debug_ret
+	debug_nop
 	ret
 
 .okay
