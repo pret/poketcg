@@ -3478,7 +3478,7 @@ Script_Tech1: ; d583 (3:5583)
 	jr c, .low_on_energies
 
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech1MasterMedalExplanationText, Tech1AutoDeckMachineExplanationText
 	quit_script_fully
 
@@ -3517,19 +3517,19 @@ EnergyCardList: ; d5c4 (3:55c4)
 
 Script_Tech2: ; d5ca (3:55ca)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech2LegendaryCardsExplanationText, Tech2LegendaryCardsCongratsText
 	quit_script_fully
 
 Script_Tech3: ; d5d5 (3:55d5)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech3BoosterPackExplanationText, Tech3LegendaryCardsCongratsText
 	quit_script_fully
 
 Script_Tech4: ; d5e0 (3:55e0)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech4ClubsExplanationText, Tech4DefeatedTheGrandMastersText
 	quit_script_fully
 
@@ -3546,7 +3546,7 @@ Preload_Tech5: ; d5eb (3:55eb)
 
 Script_Tech5: ; d5f9 (3:55f9)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Tech5DiaryAndEmailExplanationText, Tech5ChallengeMachineExplanationText
 	quit_script_fully
 
@@ -3941,19 +3941,19 @@ DeckMachineRoomCloseTextBox: ; d8ad (3:58ad)
 
 Script_Tech6: ; d8bb (3:58bb)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text05f7, Text05f8
 	quit_script_fully
 
 Script_Tech7: ; d8c6 (3:58c6)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text05f9, Text05fa
 	quit_script_fully
 
 Script_Tech8: ; d8d1 (3:58d1)
 	start_script
-	jump_if_event_not_equal EVENT_ALL_DECK_MACHINE_FLAGS, $ff, NULL
+	test_if_event_not_equal EVENT_ALL_DECK_MACHINE_FLAGS, $ff
 	print_variable_npc_text Text05fb, Text05fc
 	quit_script_fully
 
@@ -4386,7 +4386,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text0728
 
 .ows_db93
-	jump_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_1_RUMORED, NULL
+	test_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_1_RUMORED
 	print_variable_npc_text Text0729, Text072a
 	set_event EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_1_OFFERED
 	ask_question_jump Text072b, .check_if_clefable_owned
@@ -4412,7 +4412,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text0731
 
 .ows_dbcc
-	jump_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, NULL
+	test_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED
 	print_variable_npc_text Text0732, Text0733
 	set_event EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_OFFERED
 	ask_question_jump Text072b, .check_if_ditto_owned
@@ -4438,7 +4438,7 @@ Script_Ishihara: ; db4a (3:5b4a)
 	print_text_quit_fully Text0737
 
 .ows_dc05
-	jump_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, NULL
+	test_if_event_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED
 	print_variable_npc_text Text0738, Text0739
 	set_event EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_OFFERED
 	ask_question_jump Text072b, .check_if_chansey_owned
@@ -4596,7 +4596,7 @@ Preload_ImakuniInFightingClubLobby: ; dceb (3:5ceb)
 Script_Imakuni: ; dd0d (3:5d0d)
 	start_script
 	set_event EVENT_IMAKUNI_STATE, IMAKUNI_TALKED
-	jump_if_event_false EVENT_TEMP_TALKED_TO_IMAKUNI, NULL
+	test_if_event_false EVENT_TEMP_TALKED_TO_IMAKUNI
 	print_variable_npc_text Text0467, Text0468
 	max_out_event_value EVENT_TEMP_TALKED_TO_IMAKUNI
 	ask_question_jump Text0469, .start_duel
@@ -4666,13 +4666,13 @@ NPCMovement_dd78: ; dd78 (3:5d78)
 
 Script_Specs1: ; dd82 (3:5d82)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0472, Text0473
 	quit_script_fully
 
 Script_Butch: ; dd8d (3:5d8d)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0474, Text0475
 	quit_script_fully
 
@@ -4790,7 +4790,7 @@ Preload_ChrisInFightingClub: ; de43 (3:5e43)
 	ret
 
 Script_de4b: ; de4b (3:5e4b)
-	jump_if_event_equal EVENT_PUPIL_CHRIS_STATE, PUPIL_DEFEATED, NULL
+	test_if_event_equal EVENT_PUPIL_CHRIS_STATE, PUPIL_DEFEATED
 	print_variable_npc_text Text0489, Text048a
 	set_event EVENT_PUPIL_CHRIS_STATE, PUPIL_REVISITED
 	ask_question_jump Text048b, .ows_de61
@@ -4951,7 +4951,7 @@ Script_Matthew: ; df39 (3:5f39)
 	start_script
 	try_give_pc_pack $03
 	jump_if_event_true EVENT_RECEIVED_LEGENDARY_CARDS, .ows_df4c
-	jump_if_event_zero EVENT_MATTHEW_STATE, NULL
+	test_if_event_zero EVENT_MATTHEW_STATE
 	print_variable_npc_text Text0781, Text0782
 	script_jump .ows_df4f
 
@@ -4971,7 +4971,7 @@ Script_Matthew: ; df39 (3:5f39)
 Script_BeatMatthew: ; df63 (3:5f63)
 	start_script
 	set_event EVENT_MATTHEW_STATE, MATTHEW_DEFEATED
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0787, Text0788
 	give_booster_packs BOOSTER_MYSTERY_FIGHTING_COLORLESS, BOOSTER_MYSTERY_FIGHTING_COLORLESS, NO_BOOSTER
 	print_npc_text Text0789
@@ -4979,7 +4979,7 @@ Script_BeatMatthew: ; df63 (3:5f63)
 
 Script_LostToMatthew: ; df78 (3:5f78)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text078a, Text078b
 	quit_script_fully
 
@@ -5017,7 +5017,7 @@ Script_Woman1: ; df83 (3:5f83)
 
 Script_Chap1: ; dfc0 (3:5fc0)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0792, Text0793
 	quit_script_fully
 
@@ -5191,7 +5191,7 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 Script_Gal1: ; e0cf (3:60cf)
 	start_script
 	jump_if_event_equal EVENT_GAL1_TRADE_STATE, GAL1_TRADE_COMPLETED, .ows_e10e
-	jump_if_event_equal EVENT_GAL1_TRADE_STATE, GAL1_TRADE_NOT_OFFERED, NULL
+	test_if_event_equal EVENT_GAL1_TRADE_STATE, GAL1_TRADE_NOT_OFFERED
 	print_variable_npc_text Gal1WantToTrade1Text, Gal1WantToTrade2Text
 	set_event EVENT_GAL1_TRADE_STATE, GAL1_TRADE_OFFERED
 	ask_question_jump Gal1WouldYouLikeToTradeText, .ows_e0eb
@@ -5423,10 +5423,10 @@ Script_Joshua: ; e21c (3:621c)
 	print_npc_text Text043b
 	print_npc_text Text043c
 .already_talked
-	jump_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
 	print_variable_npc_text Text043d, Text043e
 	ask_question_jump Text043f, .start_duel
-	jump_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
 	print_variable_npc_text Text0440, Text0441
 	quit_script_fully
 
@@ -5438,16 +5438,16 @@ Script_Joshua: ; e21c (3:621c)
 
 Script_LostToJoshua: ; e260 (3:6260)
 	start_script
-	jump_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
 	print_variable_npc_text Text0443, Text0444
 	quit_script_fully
 
 Script_BeatJoshua: ; e26c (3:626c)
 	start_script
-	jump_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
 	print_variable_npc_text Text0445, Text0446
 	give_booster_packs BOOSTER_MYSTERY_WATER_COLORLESS, BOOSTER_MYSTERY_WATER_COLORLESS, NO_BOOSTER
-	jump_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED, NULL
+	test_if_event_equal EVENT_JOSHUA_STATE, JOSHUA_TALKED
 	print_variable_npc_text Text0447, Text0448
 	jump_if_event_not_equal EVENT_JOSHUA_STATE, JOSHUA_DEFEATED, .first_joshua_win
 	quit_script_fully
@@ -5610,7 +5610,7 @@ Preload_ImakuniInLightningClubLobby: ; e37b (3:637b)
 Script_Chap2: ; e39a (3:639a)
 	start_script
 	jump_if_event_equal EVENT_CHAP2_TRADE_STATE, CHAP2_TRADE_COMPLETED, .ows_e3d6
-	jump_if_event_equal EVENT_CHAP2_TRADE_STATE, CHAP2_TRADE_NOT_OFFERED, NULL
+	test_if_event_equal EVENT_CHAP2_TRADE_STATE, CHAP2_TRADE_NOT_OFFERED
 	print_variable_npc_text Text060f, Text0610
 	set_event EVENT_CHAP2_TRADE_STATE, CHAP2_TRADE_OFFERED
 	ask_question_jump Text0611, .ows_e3b6
@@ -5645,7 +5645,7 @@ Script_Lass4: ; e3d9 (3:63d9)
 
 Script_Hood1: ; e3dd (3:63dd)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0619, Text061a
 	quit_script_fully
 
@@ -5784,7 +5784,7 @@ Script_Isaac: ; e4ad (3:64ad)
 
 .ows_e4c1
 	jump_if_event_true EVENT_BEAT_ISAAC, Script_LostToIsaac.ows_e503
-	jump_if_event_false EVENT_ISAAC_TALKED, NULL
+	test_if_event_false EVENT_ISAAC_TALKED
 	print_variable_npc_text Text0633, Text0634
 	max_out_event_value EVENT_ISAAC_TALKED
 	ask_question_jump Text0635, .ows_e4d9
@@ -5900,7 +5900,7 @@ Preload_MichaelInGrassClubEntrance: ; e56a (3:656a)
 Script_Michael: ; e573 (3:6573)
 	start_script
 	jump_if_event_greater_or_equal EVENT_PUPIL_MICHAEL_STATE, PUPIL_DEFEATED,  Script_MichaelRematch
-	jump_if_event_equal EVENT_PUPIL_MICHAEL_STATE, PUPIL_ACTIVE, NULL
+	test_if_event_equal EVENT_PUPIL_MICHAEL_STATE, PUPIL_ACTIVE
 	print_variable_npc_text Text06d8, Text06d9
 	set_event EVENT_PUPIL_MICHAEL_STATE, PUPIL_TALKED
 	ask_question_jump Text06da, .ows_e58f
@@ -5963,7 +5963,7 @@ GrassClubLobbyAfterDuel: ; e5c4 (3:65c4)
 
 Script_Brittany: ; e5d2 (3:65d2)
 	start_script
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
 	print_variable_npc_text Text06e0, Text06e1
 	ask_question_jump Text06e2, .start_duel
 	print_npc_text Text06e3
@@ -5978,7 +5978,7 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	start_script
 	print_npc_text Text06e5
 	give_booster_packs BOOSTER_MYSTERY_GRASS_COLORLESS, BOOSTER_MYSTERY_GRASS_COLORLESS, NO_BOOSTER
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB
 	print_variable_npc_text Text06e6, Text06e7
 	max_out_event_value EVENT_BEAT_BRITTANY
 	jump_if_event_greater_or_equal EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .quit
@@ -6003,7 +6003,7 @@ Script_Lass2: ; e61f (3:661f)
 	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADES_COMPLETE, Script_e61c
 	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_AVAILABLE, .ows_e6a1
 	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_AVAILABLE, .ows_e66a
-	jump_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_1_AVAILABLE, NULL
+	test_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_1_AVAILABLE
 	print_variable_npc_text Text06eb, Text06ec
 	set_event EVENT_LASS2_TRADE_STATE, LASS2_TRADE_1_OFFERED
 	ask_question_jump Text06ed, .ows_e648
@@ -6028,7 +6028,7 @@ Script_Lass2: ; e61f (3:661f)
 	print_text_quit_fully Text06f3
 
 .ows_e66a
-	jump_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_AVAILABLE, NULL
+	test_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_AVAILABLE
 	print_variable_npc_text Text06f4, Text06f5
 	set_event EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_OFFERED
 	ask_question_jump Text06ed, .ows_e67f
@@ -6053,7 +6053,7 @@ Script_Lass2: ; e61f (3:661f)
 	print_text_quit_fully Text06f3
 
 .ows_e6a1
-	jump_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_AVAILABLE, NULL
+	test_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_AVAILABLE
 	print_variable_npc_text Text06fb, Text06fc
 	set_event EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_OFFERED
 	ask_question_jump Text06ed, .ows_e6b6
@@ -6114,7 +6114,7 @@ GrassClubAfterDuel: ; e6e7 (3:66e7)
 
 Script_Kristin: ; e701 (3:6701)
 	start_script
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
 	print_variable_npc_text Text0704, Text0705
 	ask_question_jump Text0706, .ows_e714
 	print_text_quit_fully Text0707
@@ -6146,7 +6146,7 @@ Script_LostToKristin: ; e741 (3:6741)
 
 Script_Heather: ; e745 (3:6745)
 	start_script
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
 	print_variable_npc_text Text070d, Text070e
 	ask_question_jump Text070f, .ows_e758
 	print_text_quit_fully Text0710
@@ -6158,7 +6158,7 @@ Script_Heather: ; e745 (3:6745)
 
 Script_BeatHeather: ; e760 (3:6760)
 	start_script
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB
 	print_variable_npc_text Text0712, Text0713
 	give_booster_packs BOOSTER_COLOSSEUM_GRASS, BOOSTER_COLOSSEUM_GRASS, NO_BOOSTER
 	print_npc_text Text0714
@@ -6174,7 +6174,7 @@ Script_BeatHeather: ; e760 (3:6760)
 
 Script_LostToHeather: ; e78a (3:678a)
 	start_script
-	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, NULL
+	test_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB
 	print_variable_npc_text Text0716, Text0717
 	quit_script_fully
 
@@ -6190,10 +6190,10 @@ Script_Nikki: ; e79e (3:679e)
 	jp z, Script_NikkiInIshiharasHouse
 
 	start_script
-	jump_if_event_false EVENT_BEAT_NIKKI, NULL
+	test_if_event_false EVENT_BEAT_NIKKI
 	print_variable_npc_text Text0718, Text0719
 	ask_question_jump Text071a, .ows_e7bf
-	jump_if_event_false EVENT_BEAT_NIKKI, NULL
+	test_if_event_false EVENT_BEAT_NIKKI
 	print_variable_npc_text Text071b, Text071c
 	quit_script_fully
 
@@ -6210,7 +6210,7 @@ Script_Nikki: ; e79e (3:679e)
 
 Script_BeatNikki: ; e7d3 (3:67d3)
 	start_script
-	jump_if_event_false EVENT_BEAT_NIKKI, NULL
+	test_if_event_false EVENT_BEAT_NIKKI
 	print_variable_npc_text Text071f, Text0720
 	jump_if_event_true EVENT_BEAT_NIKKI, .ows_e7eb
 	max_out_event_value EVENT_BEAT_NIKKI
@@ -6287,7 +6287,7 @@ Script_Clerk6: ; e84c (3:684c)
 
 Script_Lad3: ; e850 (3:6850)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0643, Text0644
 	quit_script_fully
 
@@ -6517,7 +6517,7 @@ Script_Pappy1: ; e9a5 (3:69a5)
 	print_text_quit_fully Text065f
 
 .ows_e9cb
-	jump_if_event_zero EVENT_PAPPY1_STATE, NULL
+	test_if_event_zero EVENT_PAPPY1_STATE
 	print_variable_npc_text Text0660, Text0661
 	give_card MEWTWO3
 	show_card_received_screen MEWTWO3
@@ -6585,13 +6585,13 @@ NPCMovement_ea2c: ; ea2c (3:6a2c)
 
 Script_Gal3: ; ea30 (3:6a30)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0665, Text0666
 	quit_script_fully
 
 Script_Chap4: ; ea3b (3:6a3b)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0667, Text0668
 	quit_script_fully
 
@@ -6705,7 +6705,7 @@ Script_Murray: ; eadf (3:6adf)
 
 .ows_eaef
 	jump_if_event_true EVENT_BEAT_MURRAY, Script_LostToMurray.ows_eb31
-	jump_if_event_false EVENT_MURRAY_TALKED, NULL
+	test_if_event_false EVENT_MURRAY_TALKED
 	print_variable_npc_text Text067d, Text067e
 	max_out_event_value EVENT_MURRAY_TALKED
 	ask_question_jump Text067f, .ows_eb07
@@ -6889,7 +6889,7 @@ ScienceClubAfterDuel: ; ebf1 (3:6bf1)
 
 Script_David: ; ec11 (3:6c11)
 	start_script
-	jump_if_event_zero EVENT_DAVID_STATE, NULL
+	test_if_event_zero EVENT_DAVID_STATE
 	print_variable_npc_text Text074f, Text0750
 	set_event EVENT_DAVID_STATE, DAVID_TALKED
 	ask_question_jump Text0751, .ows_ec27
@@ -7135,7 +7135,7 @@ Preload_JessicaInFireClubLobby: ; ed8d (3:6d8d)
 Script_Jessica: ; ed96 (3:6d96)
 	start_script
 	jump_if_event_greater_or_equal EVENT_PUPIL_JESSICA_STATE, PUPIL_DEFEATED, Script_dead
-	jump_if_event_equal EVENT_PUPIL_JESSICA_STATE, PUPIL_ACTIVE, NULL
+	test_if_event_equal EVENT_PUPIL_JESSICA_STATE, PUPIL_ACTIVE
 	print_variable_npc_text Text068d, Text068e
 	set_event EVENT_PUPIL_JESSICA_STATE, PUPIL_TALKED
 	ask_question_jump Text068f, .ows_edb2
@@ -7289,7 +7289,7 @@ Script_ee76: ; ee76 (3:6e76)
 
 Script_Mania: ; ee88 (3:6e88)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text06a3, Text06a4
 	quit_script_fully
 
@@ -7394,7 +7394,7 @@ Script_Ken: ; ef22 (3:6f22)
 	try_give_pc_pack $09
 	jump_if_event_true EVENT_KEN_HAD_ENOUGH_CARDS, .have_300_cards
 	jump_if_enough_cards_owned 300, .have_300_cards
-	jump_if_event_zero EVENT_KEN_TALKED, NULL
+	test_if_event_zero EVENT_KEN_TALKED
 	print_variable_npc_text Text06ba, Text06bb
 	set_event EVENT_KEN_TALKED, TRUE
 	quit_script_fully
@@ -7402,7 +7402,7 @@ Script_Ken: ; ef22 (3:6f22)
 .have_300_cards
 	max_out_event_value EVENT_KEN_HAD_ENOUGH_CARDS
 	jump_if_event_true EVENT_BEAT_KEN, Script_Ken_AlreadyHaveMedal
-	jump_if_event_zero EVENT_KEN_TALKED, NULL
+	test_if_event_zero EVENT_KEN_TALKED
 	print_variable_npc_text Text06bc, Text06bd
 	set_event EVENT_KEN_TALKED, TRUE
 	ask_question_jump Text06be, .start_duel
@@ -7430,7 +7430,7 @@ Script_BeatKen: ; ef5e (3:6f5e)
 
 Script_LostToKen: ; ef78 (3:6f78)
 	start_script
-	jump_if_event_false EVENT_BEAT_KEN, NULL
+	test_if_event_false EVENT_BEAT_KEN
 	print_variable_npc_text Text06c4, Text06c5
 	quit_script_fully
 
@@ -8080,7 +8080,7 @@ Script_f410: ; f410 (3:7410)
 	print_npc_text Text0539
 	set_dialog_npc NPC_RONALD1
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f42e
-	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
 	print_variable_npc_text Text053a, Text053b
 .ows_f42e
 	set_dialog_npc NPC_HOST
@@ -8103,7 +8103,7 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 3, Script_f4db
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, .ows_f456
 .ows_f456
-	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 1, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 1
 	print_variable_npc_text Text053c, Text053d
 	move_active_npc NPCMovement_f37f
 	load_challenge_hall_npc_into_txram_slot 0
@@ -8117,14 +8117,14 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	set_challenge_hall_npc_coords 20, 20
 	move_challenge_hall_npc NPCMovement_f4d0
 	load_challenge_hall_npc_into_txram_slot 0
-	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2
 	print_variable_npc_text Text0540, Text0541
 	move_active_npc NPCMovement_f383
 	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, .ows_f4a4
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f4a1
 	close_text_box
 	set_dialog_npc NPC_RONALD1
-	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
 	print_variable_npc_text Text0542, Text0543
 	set_dialog_npc NPC_HOST
 	close_text_box
@@ -8134,7 +8134,7 @@ Script_WonAtChallengeHall: ; f441 (3:7441)
 	zero_out_event_value EVENT_CHALLENGE_CUP_IN_MENU
 	print_npc_text Text0545
 	ask_question_jump_default_yes Text0546, .ows_f4bd
-	jump_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_OPPONENT_NUMBER, 2
 	print_variable_npc_text Text0547, Text0548
 	start_challenge_hall_duel PRIZES_4, SAMS_PRACTICE_DECK_ID, MUSIC_STOP
 	quit_script_fully
@@ -8181,12 +8181,12 @@ Script_f4db: ; f4db (3:74db)
 	close_text_box
 	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 3, .ows_f513
 	set_dialog_npc NPC_RONALD1
-	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
 	print_variable_npc_text Text054c, Text054d
 	move_challenge_hall_npc NPCMovement_f4d8
 	do_frames 40
 	move_challenge_hall_npc NPCMovement_f34c
-	jump_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1, NULL
+	test_if_event_equal EVENT_CHALLENGE_CUP_NUMBER, 1
 	print_variable_npc_text Text054e, Text054f
 	set_dialog_npc NPC_HOST
 	close_text_box
@@ -8530,25 +8530,25 @@ PokemonDomeCloseTextBox: ; f718 (3:7718)
 
 Script_Courtney: ; f71f (3:771f)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text055a, Text055b
 	quit_script_fully
 
 Script_Steve: ; f72a (3:772a)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text055c, Text055d
 	quit_script_fully
 
 Script_Jack: ; f735 (3:7735)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text055e, Text055f
 	quit_script_fully
 
 Script_Rod: ; f740 (3:7740)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0560, Text0561
 	quit_script_fully
 
@@ -8737,7 +8737,7 @@ Script_f84c: ; f84c (3:784c)
 	move_player EAST, 1
 	move_player EAST, 1
 	set_player_direction NORTH
-	jump_if_event_false EVENT_CHALLENGED_GRAND_MASTERS, NULL
+	test_if_event_false EVENT_CHALLENGED_GRAND_MASTERS
 	print_variable_npc_text Text0569, Text056a
 	move_active_npc NPCMovement_fb8c
 	jump_if_event_true EVENT_CHALLENGED_GRAND_MASTERS, .ows_f8ef
@@ -8794,7 +8794,7 @@ Script_f84c: ; f84c (3:784c)
 	script_jump .ows_f8f8
 
 .ows_f8ef
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text056f, Text0570
 .ows_f8f8
 	print_npc_text Text0571
@@ -8817,20 +8817,20 @@ Script_f84c: ; f84c (3:784c)
 	try_give_pc_pack $0e
 	set_event EVENT_COURTNEY_STATE, COURTNEY_CHALLENGED
 	set_dialog_npc NPC_ROD
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0572, Text0573
 	close_text_box
 	set_dialog_npc NPC_COURTNEY
 	move_active_npc NPCMovement_fba6
 	set_active_npc_direction WEST
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0574, Text0575
 	start_duel PRIZES_6, LEGENDARY_MOLTRES_DECK_ID, MUSIC_DUEL_THEME_3
 	quit_script_fully
 
 Script_LostToCourtney: ; f93f (3:793f)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0576, Text0577
 	close_advanced_text_box
 	set_next_npc_and_script NPC_ROD, .ows_f950
@@ -8846,7 +8846,7 @@ Script_LostToCourtney: ; f93f (3:793f)
 Script_BeatCourtney: ; f95a (3:795a)
 	start_script
 	set_event EVENT_COURTNEY_STATE, COURTNEY_DEFEATED
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0579, Text057a
 	close_text_box
 	move_active_npc NPCMovement_fbb7
@@ -8861,13 +8861,13 @@ Script_BeatCourtney: ; f95a (3:795a)
 	try_give_pc_pack $0f
 	set_event EVENT_STEVE_STATE, STEVE_CHALLENGED
 	set_dialog_npc NPC_ROD
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text057b, Text057c
 	close_text_box
 	set_dialog_npc NPC_STEVE
 	move_active_npc NPCMovement_fba4
 	set_active_npc_direction WEST
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text057d, Text057e
 .ows_f996
 	zero_out_event_value EVENT_POKEMON_DOME_IN_MENU
@@ -8889,7 +8889,7 @@ Script_BeatCourtney: ; f95a (3:795a)
 
 Script_LostToSteve: ; f9b7 (3:79b7)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0583, Text0584
 	close_advanced_text_box
 	set_next_npc_and_script NPC_ROD, Script_LostToCourtney.ows_f950
@@ -8899,7 +8899,7 @@ Script_LostToSteve: ; f9b7 (3:79b7)
 Script_BeatSteve: ; f9c8 (3:79c8)
 	start_script
 	set_event EVENT_STEVE_STATE, STEVE_DEFEATED
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0585, Text0586
 	close_text_box
 	move_active_npc NPCMovement_fbb8
@@ -8913,13 +8913,13 @@ Script_BeatSteve: ; f9c8 (3:79c8)
 	start_script
 	set_event EVENT_JACK_STATE, JACK_CHALLENGED
 	set_dialog_npc NPC_ROD
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0587, Text0588
 	close_text_box
 	set_dialog_npc NPC_JACK
 	move_active_npc NPCMovement_fbbc
 	set_active_npc_direction WEST
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0589, Text058a
 .ows_fa02
 	zero_out_event_value EVENT_POKEMON_DOME_IN_MENU
@@ -8941,7 +8941,7 @@ Script_BeatSteve: ; f9c8 (3:79c8)
 
 Script_LostToJack: ; fa23 (3:7a23)
 	start_script
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text058f, Text0590
 	close_advanced_text_box
 	set_next_npc_and_script NPC_ROD, Script_LostToCourtney.ows_f950
@@ -8951,7 +8951,7 @@ Script_LostToJack: ; fa23 (3:7a23)
 Script_BeatJack: ; fa34 (3:7a34)
 	start_script
 	set_event EVENT_JACK_STATE, JACK_DEFEATED
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0591, Text0592
 	close_text_box
 	move_active_npc NPCMovement_fbc2
@@ -8965,13 +8965,13 @@ Script_BeatJack: ; fa34 (3:7a34)
 .ows_fa52
 	start_script
 	set_event EVENT_ROD_STATE, ROD_CHALLENGED
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text0593, Text0594
 	close_text_box
 	move_active_npc NPCMovement_fbaf
 	set_active_npc_direction WEST
 	jump_if_event_true EVENT_RECEIVED_LEGENDARY_CARDS, .ows_fa75
-	jump_if_event_false EVENT_CHALLENGED_RONALD, NULL
+	test_if_event_false EVENT_CHALLENGED_RONALD
 	print_variable_npc_text Text0595, Text0596
 	script_jump .ows_fa78
 
@@ -8981,7 +8981,7 @@ Script_BeatJack: ; fa34 (3:7a34)
 	zero_out_event_value EVENT_POKEMON_DOME_IN_MENU
 	print_npc_text Text0598
 	ask_question_jump_default_yes Text0599, .ows_fa90
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text059a, Text059b
 	start_duel PRIZES_6, LEGENDARY_DRAGONITE_DECK_ID, MUSIC_DUEL_THEME_3
 	quit_script_fully
@@ -8999,7 +8999,7 @@ Script_LostToRod: ; fa98 (3:7a98)
 	close_text_box
 	move_active_npc NPCMovement_fb9d
 	set_active_npc_direction SOUTH
-	jump_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS, NULL
+	test_if_event_false EVENT_RECEIVED_LEGENDARY_CARDS
 	print_variable_npc_text Text059d, Text059e
 	script_jump Script_f7ed.ows_f804
 
@@ -9007,12 +9007,12 @@ Script_BeatRod: ; faae (3:7aae)
 	start_script
 	set_event EVENT_ROD_STATE, ROD_DEFEATED
 	jump_if_event_true EVENT_RECEIVED_LEGENDARY_CARDS, .ows_fad5
-	jump_if_event_false EVENT_CHALLENGED_RONALD, NULL
+	test_if_event_false EVENT_CHALLENGED_RONALD
 	print_variable_npc_text Text059f, Text05a0
 	close_text_box
 	move_active_npc NPCMovement_fb90
 	set_active_npc_direction SOUTH
-	jump_if_event_false EVENT_CHALLENGED_RONALD, NULL
+	test_if_event_false EVENT_CHALLENGED_RONALD
 	print_variable_npc_text Text05a1, Text05a2
 	close_advanced_text_box
 	set_next_npc_and_script NPC_RONALD1, .ows_fae9

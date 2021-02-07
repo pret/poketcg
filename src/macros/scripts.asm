@@ -647,6 +647,13 @@ jump_if_event_zero: MACRO
 	dw \2 ; Script Label
 ENDM
 
+; Tests if a given event is zero
+test_if_event_zero: MACRO
+	run_command ScriptCommand_JumpIfEventZero
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+	dw NULL
+ENDM
+
 ; Jumps to a script position if a given event is nonzero
 jump_if_event_nonzero: MACRO
 	run_command ScriptCommand_JumpIfEventNonzero
@@ -662,12 +669,28 @@ jump_if_event_equal: MACRO
 	dw \3 ; Script Label
 ENDM
 
+; Tests if an event matches given value
+test_if_event_equal: MACRO
+	run_command ScriptCommand_JumpIfEventEqual
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+	db \2 ; value
+	dw NULL
+ENDM
+
 ; Jumps to a script position if an event does not match a given value
 jump_if_event_not_equal: MACRO
 	run_command ScriptCommand_JumpIfEventNotEqual
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
+ENDM
+
+; Tests if an event does not match a given value
+test_if_event_not_equal: MACRO
+	run_command ScriptCommand_JumpIfEventNotEqual
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+	db \2 ; value
+	dw NULL
 ENDM
 
 ; Jumps to a script position if an event is greater than or equal to a given value
@@ -684,6 +707,14 @@ jump_if_event_less_than: MACRO
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label
+ENDM
+
+; Tests if an event is less than a given value
+test_if_event_less_than: MACRO
+	run_command ScriptCommand_JumpIfEventLessThan
+	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+	db \2 ; value
+	dw NULL
 ENDM
 
 ; Sets an event to its maximum possible value
@@ -710,6 +741,13 @@ jump_if_event_false: MACRO
 	run_command ScriptCommand_JumpIfEventFalse
 	db \1 ; event (ex EVENT_RECEIVED_LEGENDARY_CARDS)
 	dw \2 ; Script Label
+ENDM
+
+; Tests if an event is false
+test_if_event_false: MACRO
+	run_command ScriptCommand_JumpIfEventFalse
+	db \1 ; event (ex EVENT_RECEIVED_LEGENDARY_CARDS)
+	dw NULL
 ENDM
 
 ; Increments given event's value (truncates the new value)
