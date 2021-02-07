@@ -117,7 +117,7 @@ script_commands = {
 	0x5a: { "name": "jump_if_event_nonzero_1",                    "params": [ "event", "label" ] },
 	0x5b: { "name": "jump_if_event_equal",                        "params": [ "event", "byte", "label" ] },
 	0x5c: { "name": "jump_if_event_not_equal",                    "params": [ "event", "byte", "label" ] },
-	0x5d: { "name": "jump_if_event_not_less_than",                "params": [ "event", "byte", "label" ] },
+	0x5d: { "name": "jump_if_event_greater_or_equal",             "params": [ "event", "byte", "label" ] },
 	0x5e: { "name": "jump_if_event_less_than",                    "params": [ "event", "byte", "label" ] },
 	0x5f: { "name": "max_out_event_value",                        "params": [ "event" ] },
 	0x60: { "name": "zero_out_event_value",                       "params": [ "event" ] },

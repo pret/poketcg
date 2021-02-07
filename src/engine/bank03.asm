@@ -1666,7 +1666,7 @@ ZeroStackEventValue: ; cacd (3:4acd)
 
 ZeroOutEventValue: ; cad0 (3:4ad0)
 	push bc
-	ld c, $0
+	ld c, 0
 	call SetEventValue
 	pop bc
 	ret
@@ -3318,7 +3318,7 @@ ScriptCommand_JumpIfEventNotEqual: ; d49e (3:549e)
 	jr nz, ScriptCommand_JumpIfEventEqual.pass_try_jump
 	jr ScriptCommand_JumpIfEventEqual.fail
 
-ScriptCommand_JumpIfEventNotLessThan: ; d4a6 (3:54a6)
+ScriptCommand_JumpIfEventGreaterOrEqual: ; d4a6 (3:54a6)
 	call GetEventValueBC
 	cp c
 	jr nc, ScriptCommand_JumpIfEventEqual.pass_try_jump
@@ -3701,11 +3701,11 @@ Script_DrMason: ; d727 (3:5727)
 
 .ows_d72f
 	try_give_medal_pc_packs
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 2, .ows_d738
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 2, .ows_d738
 	print_text_quit_fully Text05de
 
 .ows_d738
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 7, .ows_d740
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 7, .ows_d740
 	print_text_quit_fully Text05df
 
 .ows_d740
@@ -4899,7 +4899,7 @@ Preload_ChrisInRockClubLobby: ; dee9 (3:5ee9)
 
 Script_Chris: ; def2 (3:5ef2)
 	start_script
-	jump_if_event_not_less_than EVENT_PUPIL_CHRIS_STATE, PUPIL_DEFEATED, Script_de4b
+	jump_if_event_greater_or_equal EVENT_PUPIL_CHRIS_STATE, PUPIL_DEFEATED, Script_de4b
 	print_npc_text Text077a
 	ask_question_jump Text077b, .ows_df04
 	print_npc_text Text077c
@@ -4985,7 +4985,7 @@ Script_LostToMatthew: ; df78 (3:5f78)
 
 Script_Woman1: ; df83 (3:5f83)
 	start_script
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_dfba
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_dfba
 	jump_if_event_nonzero_2 EVENT_ISHIHARA_MET, .ows_df96
 	max_out_event_value EVENT_ISHIHARA_MENTIONED
 	max_out_event_value EVENT_ISHIHARAS_HOUSE_MENTIONED
@@ -4994,8 +4994,8 @@ Script_Woman1: ; df83 (3:5f83)
 
 .ows_df96
 	jump_if_event_nonzero_2 EVENT_TEMP_TRADED_WITH_ISHIHARA, .ows_dfb7
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_dfae
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_dfa9
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_dfae
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_dfa9
 	max_out_event_value EVENT_ISHIHARA_WANTS_TO_TRADE
 	print_text_quit_fully Text078d
 
@@ -5899,7 +5899,7 @@ Preload_MichaelInGrassClubEntrance: ; e56a (3:656a)
 
 Script_Michael: ; e573 (3:6573)
 	start_script
-	jump_if_event_not_less_than EVENT_PUPIL_MICHAEL_STATE, PUPIL_DEFEATED,  Script_MichaelRematch
+	jump_if_event_greater_or_equal EVENT_PUPIL_MICHAEL_STATE, PUPIL_DEFEATED,  Script_MichaelRematch
 	jump_if_event_equal EVENT_PUPIL_MICHAEL_STATE, PUPIL_ACTIVE, NULL
 	print_variable_npc_text Text06d8, Text06d9
 	set_event EVENT_PUPIL_MICHAEL_STATE, PUPIL_TALKED
@@ -5981,7 +5981,7 @@ Script_BeatBrittany: ; e5ee (3:65ee)
 	jump_if_event_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, NULL
 	print_variable_npc_text Text06e6, Text06e7
 	max_out_event_value EVENT_BEAT_BRITTANY
-	jump_if_event_not_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .quit
+	jump_if_event_greater_or_equal EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .quit
 	jump_if_event_zero_2 EVENT_BEAT_KRISTIN, .quit
 	jump_if_event_zero_2 EVENT_BEAT_HEATHER, .quit
 	set_event EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
@@ -6000,9 +6000,9 @@ Script_e61c: ; e61c (3:661c)
 Script_Lass2: ; e61f (3:661f)
 	start_script
 	jump_if_event_nonzero_2 EVENT_TEMP_TRADED_WITH_LASS2, Script_e61c
-	jump_if_event_not_less_than EVENT_LASS2_TRADE_STATE, LASS2_TRADES_COMPLETE, Script_e61c
-	jump_if_event_not_less_than EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_AVAILABLE, .ows_e6a1
-	jump_if_event_not_less_than EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_AVAILABLE, .ows_e66a
+	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADES_COMPLETE, Script_e61c
+	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_3_AVAILABLE, .ows_e6a1
+	jump_if_event_greater_or_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_2_AVAILABLE, .ows_e66a
 	jump_if_event_equal EVENT_LASS2_TRADE_STATE, LASS2_TRADE_1_AVAILABLE, NULL
 	print_variable_npc_text Text06eb, Text06ec
 	set_event EVENT_LASS2_TRADE_STATE, LASS2_TRADE_1_OFFERED
@@ -6131,7 +6131,7 @@ Script_BeatKristin: ; e71c (3:671c)
 	give_booster_packs BOOSTER_EVOLUTION_GRASS, BOOSTER_EVOLUTION_GRASS, NO_BOOSTER
 	print_npc_text Text070a
 	max_out_event_value EVENT_BEAT_KRISTIN
-	jump_if_event_not_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .ows_e740
+	jump_if_event_greater_or_equal EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .ows_e740
 	jump_if_event_zero_2 EVENT_BEAT_BRITTANY, .ows_e740
 	jump_if_event_zero_2 EVENT_BEAT_HEATHER, .ows_e740
 	set_event EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
@@ -6163,7 +6163,7 @@ Script_BeatHeather: ; e760 (3:6760)
 	give_booster_packs BOOSTER_COLOSSEUM_GRASS, BOOSTER_COLOSSEUM_GRASS, NO_BOOSTER
 	print_npc_text Text0714
 	max_out_event_value EVENT_BEAT_HEATHER
-	jump_if_event_not_less_than EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .ows_e789
+	jump_if_event_greater_or_equal EVENT_NIKKI_STATE, NIKKI_IN_GRASS_CLUB, .ows_e789
 	jump_if_event_zero_2 EVENT_BEAT_BRITTANY, .ows_e789
 	jump_if_event_zero_2 EVENT_BEAT_KRISTIN, .ows_e789
 	set_event EVENT_NIKKI_STATE, NIKKI_IN_ISHIHARAS_HOUSE
@@ -6620,12 +6620,12 @@ PsychicClubAfterDuel: ; ea46 (3:6a46)
 Script_Daniel: ; ea60 (3:6a60)
 	start_script
 	try_give_medal_pc_packs
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 4, .ows_ea7e
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 4, .ows_ea7e
 	jump_if_event_nonzero_2 EVENT_DANIEL_TALKED, .ows_ea70
 	max_out_event_value EVENT_DANIEL_TALKED
 	print_npc_text Text0669
 .ows_ea70
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 1, .ows_ea78
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 1, .ows_ea78
 	print_text_quit_fully Text066a
 
 .ows_ea78
@@ -6658,7 +6658,7 @@ Script_LostToDaniel: ; ea9e (3:6a9e)
 Script_Stephanie: ; eaa2 (3:6aa2)
 	start_script
 	try_give_medal_pc_packs
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 2, .ows_eaac
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 2, .ows_eaac
 	print_text_quit_fully Text0673
 
 .ows_eaac
@@ -6698,7 +6698,7 @@ Script_Murray: ; eadf (3:6adf)
 	start_script
 	try_give_pc_pack $07
 	try_give_medal_pc_packs
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 4, .ows_eaef
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 4, .ows_eaef
 	print_npc_text Text067b
 	print_text Text067c
 	quit_script_fully
@@ -6792,7 +6792,7 @@ Preload_ImakuniInScienceClubLobby: ; eb65 (3:6b65)
 
 Script_Lad1: ; eb84 (3:6b84)
 	start_script
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_ebbb
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_ebbb
 	jump_if_event_nonzero_2 EVENT_ISHIHARA_MET, .ows_eb97
 	max_out_event_value EVENT_ISHIHARA_MENTIONED
 	max_out_event_value EVENT_ISHIHARAS_HOUSE_MENTIONED
@@ -6801,8 +6801,8 @@ Script_Lad1: ; eb84 (3:6b84)
 
 .ows_eb97
 	jump_if_event_nonzero_2 EVENT_TEMP_TRADED_WITH_ISHIHARA, .ows_ebb8
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_ebaf
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_ebaa
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_ebaf
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_ebaa
 	max_out_event_value EVENT_ISHIHARA_WANTS_TO_TRADE
 	print_text_quit_fully Text0746
 
@@ -7134,7 +7134,7 @@ Preload_JessicaInFireClubLobby: ; ed8d (3:6d8d)
 
 Script_Jessica: ; ed96 (3:6d96)
 	start_script
-	jump_if_event_not_less_than EVENT_PUPIL_JESSICA_STATE, PUPIL_DEFEATED, Script_dead
+	jump_if_event_greater_or_equal EVENT_PUPIL_JESSICA_STATE, PUPIL_DEFEATED, Script_dead
 	jump_if_event_equal EVENT_PUPIL_JESSICA_STATE, PUPIL_ACTIVE, NULL
 	print_variable_npc_text Text068d, Text068e
 	set_event EVENT_PUPIL_JESSICA_STATE, PUPIL_TALKED
@@ -7187,7 +7187,7 @@ NPCMovement_ede4: ; ede4 (3:6de4)
 
 Script_Chap3: ; ede8 (3:6de8)
 	start_script
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_ee1f
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADES_COMPLETE, .ows_ee1f
 	jump_if_event_nonzero_2 EVENT_ISHIHARA_MET, .ows_edfb
 	max_out_event_value EVENT_ISHIHARA_MENTIONED
 	max_out_event_value EVENT_ISHIHARAS_HOUSE_MENTIONED
@@ -7196,8 +7196,8 @@ Script_Chap3: ; ede8 (3:6de8)
 
 .ows_edfb
 	jump_if_event_nonzero_2 EVENT_TEMP_TRADED_WITH_ISHIHARA, .ows_ee1c
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_ee13
-	jump_if_event_not_less_than EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_ee0e
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_3_RUMORED, .ows_ee13
+	jump_if_event_greater_or_equal EVENT_ISHIHARA_TRADE_STATE, ISHIHARA_TRADE_2_RUMORED, .ows_ee0e
 	max_out_event_value EVENT_ISHIHARA_WANTS_TO_TRADE
 	print_text_quit_fully Text0696
 
@@ -7225,7 +7225,7 @@ Preload_Lad2: ; ee25 (3:6e25)
 Script_Lad2: ; ee2c (3:6e2c)
 	start_script
 	try_give_medal_pc_packs
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 3, .ows_ee36
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 3, .ows_ee36
 	print_text_quit_fully Text069b
 
 .ows_ee36
@@ -8394,7 +8394,7 @@ Script_f631: ; f631 (3:7631)
 	ld [wTxRam3_b + 1], a
 
 	start_script
-	jump_if_event_not_less_than EVENT_MEDAL_COUNT, 7, .ows_f69b
+	jump_if_event_greater_or_equal EVENT_MEDAL_COUNT, 7, .ows_f69b
 	jump_if_event_zero_2 EVENT_RONALD_FIRST_CLUB_ENTRANCE_ENCOUNTER, .ows_f69b
 	jump_if_event_nonzero_2 EVENT_RONALD_POKEMON_DOME_ENTRANCE_ENCOUNTER, .ows_f69b
 	override_song MUSIC_RONALD
@@ -9340,7 +9340,7 @@ Func_fc7a: ; fc7a (3:7c7a)
 	jump_if_event_not_equal EVENT_CONSOLE, CONSOLE_CGB, Func_fcad.ows_fcd5
 	print_npc_text Text06cd
 	gift_center 0
-	jump_if_event_not_less_than EVENT_GIFT_CENTER_MENU_CHOICE, GIFT_CENTER_MENU_EXIT, .ows_fcaa
+	jump_if_event_greater_or_equal EVENT_GIFT_CENTER_MENU_CHOICE, GIFT_CENTER_MENU_EXIT, .ows_fcaa
 	print_npc_text Text06ce
 	ask_question_jump_default_yes Text06cf, .ows_fca0
 	print_npc_text Text06d0

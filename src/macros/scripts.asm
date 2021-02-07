@@ -98,7 +98,7 @@ ENDM
 	const ScriptCommand_JumpIfEventNonzero1_index                            ; $5a
 	const ScriptCommand_JumpIfEventEqual_index                               ; $5b
 	const ScriptCommand_JumpIfEventNotEqual_index                            ; $5c
-	const ScriptCommand_JumpIfEventNotLessThan_index                         ; $5d
+	const ScriptCommand_JumpIfEventGreaterOrEqual_index                      ; $5d
 	const ScriptCommand_JumpIfEventLessThan_index                            ; $5e
 	const ScriptCommand_MaxOutEventValue_index                               ; $5f
 	const ScriptCommand_ZeroOutEventValue_index                              ; $60
@@ -670,9 +670,9 @@ jump_if_event_not_equal: MACRO
 	dw \3 ; Script Label
 ENDM
 
-; Jumps to a script position if an event is not less than a given value
-jump_if_event_not_less_than: MACRO
-	run_command ScriptCommand_JumpIfEventNotLessThan
+; Jumps to a script position if an event is greater than or equal to a given value
+jump_if_event_greater_or_equal: MACRO
+	run_command ScriptCommand_JumpIfEventGreaterOrEqual
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	db \2 ; value
 	dw \3 ; Script Label

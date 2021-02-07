@@ -1107,7 +1107,7 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_JumpIfEventNonzero1
 	dw ScriptCommand_JumpIfEventEqual
 	dw ScriptCommand_JumpIfEventNotEqual
-	dw ScriptCommand_JumpIfEventNotLessThan
+	dw ScriptCommand_JumpIfEventGreaterOrEqual
 	dw ScriptCommand_JumpIfEventLessThan
 	dw ScriptCommand_MaxOutEventValue
 	dw ScriptCommand_ZeroOutEventValue
