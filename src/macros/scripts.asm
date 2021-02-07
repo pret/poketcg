@@ -94,16 +94,16 @@ ENDM
 	const ScriptCommand_EndScript5_index                                     ; $56
 	const ScriptCommand_EndScript6_index                                     ; $57
 	const ScriptCommand_SetEventValue_index                                  ; $58
-	const ScriptCommand_JumpIfEventZero1_index                               ; $59
-	const ScriptCommand_JumpIfEventNonzero1_index                            ; $5a
+	const ScriptCommand_JumpIfEventZero_index                                ; $59
+	const ScriptCommand_JumpIfEventNonzero_index                             ; $5a
 	const ScriptCommand_JumpIfEventEqual_index                               ; $5b
 	const ScriptCommand_JumpIfEventNotEqual_index                            ; $5c
 	const ScriptCommand_JumpIfEventGreaterOrEqual_index                      ; $5d
 	const ScriptCommand_JumpIfEventLessThan_index                            ; $5e
 	const ScriptCommand_MaxOutEventValue_index                               ; $5f
 	const ScriptCommand_ZeroOutEventValue_index                              ; $60
-	const ScriptCommand_JumpIfEventNonzero2_index                            ; $61
-	const ScriptCommand_JumpIfEventZero2_index                               ; $62
+	const ScriptCommand_JumpIfEventTrue_index                                ; $61
+	const ScriptCommand_JumpIfEventFalse_index                               ; $62
 	const ScriptCommand_IncrementEventValue_index                            ; $63
 	const ScriptCommand_EndScript7_index                                     ; $64
 	const ScriptCommand_EndScript8_index                                     ; $65
@@ -641,15 +641,15 @@ set_event: MACRO
 ENDM
 
 ; Jumps to a script position if a given event is zero
-jump_if_event_zero_1: MACRO
-	run_command ScriptCommand_JumpIfEventZero1
+jump_if_event_zero: MACRO
+	run_command ScriptCommand_JumpIfEventZero
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
 
 ; Jumps to a script position if a given event is nonzero
-jump_if_event_nonzero_1: MACRO
-	run_command ScriptCommand_JumpIfEventNonzero1
+jump_if_event_nonzero: MACRO
+	run_command ScriptCommand_JumpIfEventNonzero
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 	dw \2 ; Script Label
 ENDM
@@ -698,17 +698,17 @@ zero_out_event_value: MACRO
 	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
 ENDM
 
-; Jumps to a script position if an event is nonzero
-jump_if_event_nonzero_2: MACRO
-	run_command ScriptCommand_JumpIfEventNonzero2
-	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is true
+jump_if_event_true: MACRO
+	run_command ScriptCommand_JumpIfEventTrue
+	db \1 ; event (ex EVENT_RECEIVED_LEGENDARY_CARDS)
 	dw \2 ; Script Label
 ENDM
 
-; Jumps to a script position if an event is zero
-jump_if_event_zero_2: MACRO
-	run_command ScriptCommand_JumpIfEventZero2
-	db \1 ; event (ex EVENT_IMAKUNI_WIN_COUNT)
+; Jumps to a script position if an event is false
+jump_if_event_false: MACRO
+	run_command ScriptCommand_JumpIfEventFalse
+	db \1 ; event (ex EVENT_RECEIVED_LEGENDARY_CARDS)
 	dw \2 ; Script Label
 ENDM
 

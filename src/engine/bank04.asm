@@ -1103,16 +1103,16 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_SetEventValue
-	dw ScriptCommand_JumpIfEventZero1
-	dw ScriptCommand_JumpIfEventNonzero1
+	dw ScriptCommand_JumpIfEventZero
+	dw ScriptCommand_JumpIfEventNonzero
 	dw ScriptCommand_JumpIfEventEqual
 	dw ScriptCommand_JumpIfEventNotEqual
 	dw ScriptCommand_JumpIfEventGreaterOrEqual
 	dw ScriptCommand_JumpIfEventLessThan
 	dw ScriptCommand_MaxOutEventValue
 	dw ScriptCommand_ZeroOutEventValue
-	dw ScriptCommand_JumpIfEventNonzero2
-	dw ScriptCommand_JumpIfEventZero2
+	dw ScriptCommand_JumpIfEventTrue
+	dw ScriptCommand_JumpIfEventFalse
 	dw ScriptCommand_IncrementEventValue
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript

@@ -33,14 +33,16 @@ set_event_value: MACRO
 ENDM
 
 ; runs ZeroOutEventValue with the next byte as the event
-zero_event_value: MACRO
-	call ZeroStackEventValue
+; functionally identical to set_event_zero but intended for single-bit events
+set_event_false: MACRO
+	call SetStackEventFalse
 	db \1
 ENDM
 
-; a second version of the above with no real differences
-zero_event_value2: MACRO
-	call ZeroStackEventValue2
+; runs ZeroOutEventValue with the next byte as the event
+; functionally identical to set_event_false but intended for multi-bit events
+set_event_zero: MACRO
+	call SetStackEventZero
 	db \1
 ENDM
 

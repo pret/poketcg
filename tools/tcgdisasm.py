@@ -311,7 +311,7 @@ relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
 unconditional_jumps = [0xc3, 0x18]
 
 # the event macros found in bank 3. They db a byte after calling so need to be treated specially
-event_macros = [(0xca8f,"set_event_value {}"),(0xcacd,"zero_event_value {}"),(0xca84,"zero_event_value2 {}"), (0xcac2,"max_event_value {}"), (0xca69,"get_event_value {}")]
+event_macros = [(0xca8f,"set_event_value {}"),(0xcacd,"set_event_false {}"),(0xca84,"set_event_zero {}"), (0xcac2,"max_event_value {}"), (0xca69,"get_event_value {}")]
 
 def asm_label(address):
 	"""
