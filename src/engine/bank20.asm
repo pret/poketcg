@@ -720,112 +720,112 @@ macro_80e67: MACRO
 ENDM
 
 MapDataPointers_80e67: ; 80e67 (20:4e67)
-	macro_80e67 Data_8191b, $00
-	macro_80e67 Data_81a22, $00
-	macro_80e67 Data_81c13, $01
-	macro_80e67 Data_81d2e, $01
-	macro_80e67 Data_81ed1, $01
-	macro_80e67 Data_81ef5, $01
-	macro_80e67 Data_81f26, $01
-	macro_80e67 Data_81feb, $01
-	macro_80e67 Data_82143, $01
-	macro_80e67 Data_82150, $01
-	macro_80e67 Data_82160, $02
-	macro_80e67 Data_82222, $02
-	macro_80e67 Data_82336, $03
-	macro_80e67 Data_82400, $03
-	macro_80e67 Data_8251d, $03
-	macro_80e67 Data_825e7, $03
-	macro_80e67 Data_82704, $03
-	macro_80e67 Data_827ce, $03
-	macro_80e67 Data_828eb, $03
-	macro_80e67 Data_829b5, $03
-	macro_80e67 Data_82ad2, $03
-	macro_80e67 Data_82b9c, $03
-	macro_80e67 Data_82cb9, $03
-	macro_80e67 Data_82d83, $03
-	macro_80e67 Data_82ea0, $03
-	macro_80e67 Data_82f6a, $03
-	macro_80e67 Data_83087, $03
-	macro_80e67 Data_83151, $03
-	macro_80e67 Data_8326e, $03
-	macro_80e67 Data_83321, $03
-	macro_80e67 Data_83424, $04
-	macro_80e67 Data_83545, $04
-	macro_80e67 Data_836db, $05
-	macro_80e67 Data_8378c, $05
-	macro_80e67 Data_8388d, $06
-	macro_80e67 Data_839d6, $06
-	macro_80e67 Data_84000, $07
-	macro_80e67 Data_84188, $07
-	macro_80e67 Data_843bb, $08
-	macro_80e67 Data_84533, $08
-	macro_80e67 Data_8472e, $09
-	macro_80e67 Data_848d8, $09
-	macro_80e67 Data_84b73, $0a
-	macro_80e67 Data_84c6f, $0a
-	macro_80e67 Data_84dfe, $0b
-	macro_80e67 Data_84f1d, $0b
-	macro_80e67 Data_850b6, $0c
-	macro_80e67 Data_85191, $0c
-	macro_80e67 Data_85315, $0d
-	macro_80e67 Data_854b3, $0d
-	macro_80e67 Data_8570a, $0e
-	macro_80e67 Data_857ce, $0e
-	macro_80e67 Data_83bf1, $0e
-	macro_80e67 Data_83c03, $0e
-	macro_80e67 Data_858ef, $0f
-	macro_80e67 Data_85a79, $0f
-	macro_80e67 Data_83c1a, $0f
-	macro_80e67 Data_83c26, $0f
-	macro_80e67 Data_85ce2, $10
-	macro_80e67 Data_85df4, $10
-	macro_80e67 Data_85f7c, $11
-	macro_80e67 Data_8607f, $11
-	macro_80e67 Data_83c36, $12
-	macro_80e67 Data_8617d, $12
-	macro_80e67 Data_86193, $12
-	macro_80e67 Data_861a9, $12
-	macro_80e67 Data_861bf, $12
-	macro_80e67 Data_861d5, $12
-	macro_80e67 Data_861eb, $12
-	macro_80e67 Data_86201, $12
-	macro_80e67 Data_86217, $13
-	macro_80e67 Data_862da, $13
-	macro_80e67 Data_86364, $13
-	macro_80e67 Data_86443, $13
-	macro_80e67 Data_864df, $14
-	macro_80e67 Data_865b5, $14
-	macro_80e67 Data_86647, $15
-	macro_80e67 Data_866b8, $16
-	macro_80e67 Data_8673e, $17
-	macro_80e67 Data_867af, $18
-	macro_80e67 Data_86833, $19
-	macro_80e67 Data_868a4, $1a
-	macro_80e67 Data_86925, $1b
-	macro_80e67 Data_86996, $1c
-	macro_80e67 Data_86a14, $1d
-	macro_80e67 Data_86a85, $1e
-	macro_80e67 Data_86b28, $1f
-	macro_80e67 Data_86b99, $20
-	macro_80e67 Data_86c34, $21
-	macro_80e67 Data_86ca5, $22
-	macro_80e67 Data_86d37, $23
-	macro_80e67 Data_86dcc, $24
-	macro_80e67 Data_86e8a, $25
-	macro_80e67 Data_86f18, $25
-	macro_80e67 Data_86fc0, $25
-	macro_80e67 Data_8704f, $26
-	macro_80e67 Data_871a5, $27
-	macro_80e67 Data_87397, $28
-	macro_80e67 Data_873b7, $29
-	macro_80e67 Data_873e5, $2a
-	macro_80e67 Data_87413, $2b
-	macro_80e67 Data_87538, $2c
-	macro_80e67 Data_8769f, $2d
-	macro_80e67 Data_876f6, $2d
-	macro_80e67 Data_8777c, $2e
-	macro_80e67 Data_877c4, $2f
+	macro_80e67 Data_8191b, $00 ; 0
+	macro_80e67 Data_81a22, $00 ; 1
+	macro_80e67 Data_81c13, $01 ; 2
+	macro_80e67 Data_81d2e, $01 ; 3
+	macro_80e67 Data_81ed1, $01 ; 4
+	macro_80e67 Data_81ef5, $01 ; 5
+	macro_80e67 Data_81f26, $01 ; 6
+	macro_80e67 Data_81feb, $01 ; 7
+	macro_80e67 Data_82143, $01 ; 8
+	macro_80e67 Data_82150, $01 ; 9
+	macro_80e67 Data_82160, $02 ; 10
+	macro_80e67 Data_82222, $02 ; 11
+	macro_80e67 Data_82336, $03 ; 12
+	macro_80e67 Data_82400, $03 ; 13
+	macro_80e67 Data_8251d, $03 ; 14
+	macro_80e67 Data_825e7, $03 ; 15
+	macro_80e67 Data_82704, $03 ; 16
+	macro_80e67 Data_827ce, $03 ; 17
+	macro_80e67 Data_828eb, $03 ; 18
+	macro_80e67 Data_829b5, $03 ; 19
+	macro_80e67 Data_82ad2, $03 ; 20
+	macro_80e67 Data_82b9c, $03 ; 21
+	macro_80e67 Data_82cb9, $03 ; 22
+	macro_80e67 Data_82d83, $03 ; 23
+	macro_80e67 Data_82ea0, $03 ; 24
+	macro_80e67 Data_82f6a, $03 ; 25
+	macro_80e67 Data_83087, $03 ; 26
+	macro_80e67 Data_83151, $03 ; 27
+	macro_80e67 Data_8326e, $03 ; 28
+	macro_80e67 Data_83321, $03 ; 29
+	macro_80e67 Data_83424, $04 ; 30
+	macro_80e67 Data_83545, $04 ; 31
+	macro_80e67 Data_836db, $05 ; 32
+	macro_80e67 Data_8378c, $05 ; 33
+	macro_80e67 Data_8388d, $06 ; 34
+	macro_80e67 Data_839d6, $06 ; 35
+	macro_80e67 Data_84000, $07 ; 36
+	macro_80e67 Data_84188, $07 ; 37
+	macro_80e67 Data_843bb, $08 ; 38
+	macro_80e67 Data_84533, $08 ; 39
+	macro_80e67 Data_8472e, $09 ; 40
+	macro_80e67 Data_848d8, $09 ; 41
+	macro_80e67 Data_84b73, $0a ; 42
+	macro_80e67 Data_84c6f, $0a ; 43
+	macro_80e67 Data_84dfe, $0b ; 44
+	macro_80e67 Data_84f1d, $0b ; 45
+	macro_80e67 Data_850b6, $0c ; 46
+	macro_80e67 Data_85191, $0c ; 47
+	macro_80e67 Data_85315, $0d ; 48
+	macro_80e67 Data_854b3, $0d ; 49
+	macro_80e67 Data_8570a, $0e ; 50
+	macro_80e67 Data_857ce, $0e ; 51
+	macro_80e67 Data_83bf1, $0e ; 52
+	macro_80e67 Data_83c03, $0e ; 53
+	macro_80e67 Data_858ef, $0f ; 54
+	macro_80e67 Data_85a79, $0f ; 55
+	macro_80e67 Data_83c1a, $0f ; 56
+	macro_80e67 Data_83c26, $0f ; 57
+	macro_80e67 Data_85ce2, $10 ; 58
+	macro_80e67 Data_85df4, $10 ; 59
+	macro_80e67 Data_85f7c, $11 ; 60
+	macro_80e67 Data_8607f, $11 ; 61
+	macro_80e67 Data_83c36, $12 ; 62
+	macro_80e67 Data_8617d, $12 ; 63
+	macro_80e67 Data_86193, $12 ; 64
+	macro_80e67 Data_861a9, $12 ; 65
+	macro_80e67 Data_861bf, $12 ; 66
+	macro_80e67 Data_861d5, $12 ; 67
+	macro_80e67 Data_861eb, $12 ; 68
+	macro_80e67 Data_86201, $12 ; 69
+	macro_80e67 Data_86217, $13 ; 70
+	macro_80e67 Data_862da, $13 ; 71
+	macro_80e67 Data_86364, $13 ; 72
+	macro_80e67 Data_86443, $13 ; 73
+	macro_80e67 Data_864df, $14 ; 74
+	macro_80e67 Data_865b5, $14 ; 75
+	macro_80e67 Data_86647, $15 ; 76
+	macro_80e67 Data_866b8, $16 ; 77
+	macro_80e67 Data_8673e, $17 ; 78
+	macro_80e67 Data_867af, $18 ; 79
+	macro_80e67 Data_86833, $19 ; 80
+	macro_80e67 Data_868a4, $1a ; 81
+	macro_80e67 Data_86925, $1b ; 82
+	macro_80e67 Data_86996, $1c ; 83
+	macro_80e67 Data_86a14, $1d ; 84
+	macro_80e67 Data_86a85, $1e ; 85
+	macro_80e67 Data_86b28, $1f ; 86
+	macro_80e67 Data_86b99, $20 ; 87
+	macro_80e67 Data_86c34, $21 ; 88
+	macro_80e67 Data_86ca5, $22 ; 89
+	macro_80e67 Data_86d37, $23 ; 90
+	macro_80e67 Data_86dcc, $24 ; 91
+	macro_80e67 Data_86e8a, $25 ; 92
+	macro_80e67 Data_86f18, $25 ; 93
+	macro_80e67 Data_86fc0, $25 ; 94
+	macro_80e67 Data_8704f, $26 ; 95
+	macro_80e67 Data_871a5, $27 ; 96
+	macro_80e67 Data_87397, $28 ; 97
+	macro_80e67 Data_873b7, $29 ; 98
+	macro_80e67 Data_873e5, $2a ; 99
+	macro_80e67 Data_87413, $2b ; 100
+	macro_80e67 Data_87538, $2c ; 101
+	macro_80e67 Data_8769f, $2d ; 102
+	macro_80e67 Data_876f6, $2d ; 103
+	macro_80e67 Data_8777c, $2e ; 104
+	macro_80e67 Data_877c4, $2f ; 105
 
 MapDataPointers_8100f: ; 8100f (20:500f)
 	db $00, $40, $02, $c1
@@ -1441,7 +1441,7 @@ Data_8191b:: ; 8191b (20:591b)
 	dw $0000
 	db $00
 
-	INCROM $81920, $81a22
+	INCBIN "data/maps/map0.bin"
 
 Data_81a22:: ; 81a22 (20:5a22)
 	db $14 ; width
@@ -1449,7 +1449,7 @@ Data_81a22:: ; 81a22 (20:5a22)
 	dw $0000
 	db $01
 
-	INCROM $81a27, $81c13
+	INCBIN "data/maps/map1.bin"
 
 Data_81c13:: ; 81c13 (20:5c13)
 	db $1c ; width
@@ -1457,7 +1457,7 @@ Data_81c13:: ; 81c13 (20:5c13)
 	dw $5d11
 	db $00
 
-	INCROM $81c18, $81d2e
+	INCBIN "data/maps/map2.bin"
 
 Data_81d2e:: ; 81d2e (20:5d2e)
 	db $1c ; width
@@ -1465,7 +1465,7 @@ Data_81d2e:: ; 81d2e (20:5d2e)
 	dw $5eb4
 	db $01
 
-	INCROM $81d33, $81ed1
+	INCBIN "data/maps/map3.bin"
 
 Data_81ed1:: ; 81ed1 (20:5ed1)
 	db $04 ; width
@@ -1473,7 +1473,7 @@ Data_81ed1:: ; 81ed1 (20:5ed1)
 	dw $5ef0
 	db $00
 
-	INCROM $81ed6, $81ef5
+	INCBIN "data/maps/map4.bin"
 
 Data_81ef5:: ; 81ef5 (20:5ef5)
 	db $04 ; width
@@ -1481,7 +1481,7 @@ Data_81ef5:: ; 81ef5 (20:5ef5)
 	dw $5f21
 	db $01
 
-	INCROM $81efa, $81f26
+	INCBIN "data/maps/map5.bin"
 
 Data_81f26:: ; 81f26 (20:5f26)
 	db $18 ; width
@@ -1489,7 +1489,7 @@ Data_81f26:: ; 81f26 (20:5f26)
 	dw $5fd3
 	db $00
 
-	INCROM $81f2b, $81feb
+	INCBIN "data/maps/map6.bin"
 
 Data_81feb:: ; 81feb (20:5feb)
 	db $18 ; width
@@ -1497,7 +1497,7 @@ Data_81feb:: ; 81feb (20:5feb)
 	dw $612b
 	db $01
 
-	INCROM $81ff0, $82143
+	INCBIN "data/maps/map7.bin"
 
 Data_82143:: ; 82143 (20:6143)
 	db $04 ; width
@@ -1505,7 +1505,7 @@ Data_82143:: ; 82143 (20:6143)
 	dw $614d
 	db $00
 
-	INCROM $82148, $82150
+	INCBIN "data/maps/map8.bin"
 
 Data_82150:: ; 82150 (20:6150)
 	db $04 ; width
@@ -1513,7 +1513,7 @@ Data_82150:: ; 82150 (20:6150)
 	dw $615d
 	db $01
 
-	INCROM $82155, $82160
+	INCBIN "data/maps/map9.bin"
 
 Data_82160:: ; 82160 (20:6160)
 	db $14 ; width
@@ -1521,7 +1521,7 @@ Data_82160:: ; 82160 (20:6160)
 	dw $620e
 	db $00
 
-	INCROM $82165, $82222
+	INCBIN "data/maps/map10.bin"
 
 Data_82222:: ; 82222 (20:6222)
 	db $14 ; width
@@ -1529,7 +1529,7 @@ Data_82222:: ; 82222 (20:6222)
 	dw $6322
 	db $01
 
-	INCROM $82227, $82336
+	INCBIN "data/maps/map11.bin"
 
 Data_82336:: ; 82336 (20:6336)
 	db $14 ; width
@@ -1537,7 +1537,7 @@ Data_82336:: ; 82336 (20:6336)
 	dw $63ec
 	db $00
 
-	INCROM $8233b, $82400
+	INCBIN "data/maps/map12.bin"
 
 Data_82400:: ; 82400 (20:6400)
 	db $14 ; width
@@ -1545,7 +1545,7 @@ Data_82400:: ; 82400 (20:6400)
 	dw $6509
 	db $01
 
-	INCROM $82405, $8251d
+	INCBIN "data/maps/map13.bin"
 
 Data_8251d:: ; 8251d (20:651d)
 	db $14 ; width
@@ -1553,7 +1553,7 @@ Data_8251d:: ; 8251d (20:651d)
 	dw $65d3
 	db $00
 
-	INCROM $82522, $825e7
+	INCBIN "data/maps/map14.bin"
 
 Data_825e7:: ; 825e7 (20:65e7)
 	db $14 ; width
@@ -1561,7 +1561,7 @@ Data_825e7:: ; 825e7 (20:65e7)
 	dw $66f0
 	db $01
 
-	INCROM $825ec, $82704
+	INCBIN "data/maps/map15.bin"
 
 Data_82704:: ; 82704 (20:6704)
 	db $14 ; width
@@ -1569,7 +1569,7 @@ Data_82704:: ; 82704 (20:6704)
 	dw $67ba
 	db $00
 
-	INCROM $82709, $827ce
+	INCBIN "data/maps/map16.bin"
 
 Data_827ce:: ; 827ce (20:67ce)
 	db $14 ; width
@@ -1577,7 +1577,7 @@ Data_827ce:: ; 827ce (20:67ce)
 	dw $68d7
 	db $01
 
-	INCROM $827d3, $828eb
+	INCBIN "data/maps/map17.bin"
 
 Data_828eb:: ; 828eb (20:68eb)
 	db $14 ; width
@@ -1585,7 +1585,7 @@ Data_828eb:: ; 828eb (20:68eb)
 	dw $69a1
 	db $00
 
-	INCROM $828f0, $829b5
+	INCBIN "data/maps/map18.bin"
 
 Data_829b5:: ; 829b5 (20:69b5)
 	db $14 ; width
@@ -1593,7 +1593,7 @@ Data_829b5:: ; 829b5 (20:69b5)
 	dw $6abe
 	db $01
 
-	INCROM $829ba, $82ad2
+	INCBIN "data/maps/map19.bin"
 
 Data_82ad2:: ; 82ad2 (20:6ad2)
 	db $14 ; width
@@ -1601,7 +1601,7 @@ Data_82ad2:: ; 82ad2 (20:6ad2)
 	dw $6b88
 	db $00
 
-	INCROM $82ad7, $82b9c
+	INCBIN "data/maps/map20.bin"
 
 Data_82b9c:: ; 82b9c (20:6b9c)
 	db $14 ; width
@@ -1609,7 +1609,7 @@ Data_82b9c:: ; 82b9c (20:6b9c)
 	dw $6ca5
 	db $01
 
-	INCROM $82ba1, $82cb9
+	INCBIN "data/maps/map21.bin"
 
 Data_82cb9:: ; 82cb9 (20:6cb9)
 	db $14 ; width
@@ -1617,7 +1617,7 @@ Data_82cb9:: ; 82cb9 (20:6cb9)
 	dw $6d6f
 	db $00
 
-	INCROM $82cbe, $82d83
+	INCBIN "data/maps/map22.bin"
 
 Data_82d83:: ; 82d83 (20:6d83)
 	db $14 ; width
@@ -1625,7 +1625,7 @@ Data_82d83:: ; 82d83 (20:6d83)
 	dw $6e8c
 	db $01
 
-	INCROM $82d88, $82ea0
+	INCBIN "data/maps/map23.bin"
 
 Data_82ea0:: ; 82ea0 (20:6ea0)
 	db $14 ; width
@@ -1633,7 +1633,7 @@ Data_82ea0:: ; 82ea0 (20:6ea0)
 	dw $6f56
 	db $00
 
-	INCROM $82ea5, $82f6a
+	INCBIN "data/maps/map24.bin"
 
 Data_82f6a:: ; 82f6a (20:6f6a)
 	db $14 ; width
@@ -1641,7 +1641,7 @@ Data_82f6a:: ; 82f6a (20:6f6a)
 	dw $7073
 	db $01
 
-	INCROM $82f6f, $83087
+	INCBIN "data/maps/map25.bin"
 
 Data_83087:: ; 83087 (20:7087)
 	db $14 ; width
@@ -1649,7 +1649,7 @@ Data_83087:: ; 83087 (20:7087)
 	dw $713d
 	db $00
 
-	INCROM $8308c, $83151
+	INCBIN "data/maps/map26.bin"
 
 Data_83151:: ; 83151 (20:7151)
 	db $14 ; width
@@ -1657,7 +1657,7 @@ Data_83151:: ; 83151 (20:7151)
 	dw $725a
 	db $01
 
-	INCROM $83156, $8326e
+	INCBIN "data/maps/map27.bin"
 
 Data_8326e:: ; 8326e (20:726e)
 	db $14 ; width
@@ -1665,7 +1665,7 @@ Data_8326e:: ; 8326e (20:726e)
 	dw $730d
 	db $00
 
-	INCROM $83273, $83321
+	INCBIN "data/maps/map28.bin"
 
 Data_83321:: ; 83321 (20:7321)
 	db $14 ; width
@@ -1673,7 +1673,7 @@ Data_83321:: ; 83321 (20:7321)
 	dw $7410
 	db $01
 
-	INCROM $83326, $83424
+	INCBIN "data/maps/map29.bin"
 
 Data_83424:: ; 83424 (20:7424)
 	db $1c ; width
@@ -1681,7 +1681,7 @@ Data_83424:: ; 83424 (20:7424)
 	dw $7529
 	db $00
 
-	INCROM $83429, $83545
+	INCBIN "data/maps/map30.bin"
 
 Data_83545:: ; 83545 (20:7545)
 	db $1c ; width
@@ -1689,7 +1689,7 @@ Data_83545:: ; 83545 (20:7545)
 	dw $76bf
 	db $01
 
-	INCROM $8354a, $836db
+	INCBIN "data/maps/map31.bin"
 
 Data_836db:: ; 836db (20:76db)
 	db $18 ; width
@@ -1697,7 +1697,7 @@ Data_836db:: ; 836db (20:76db)
 	dw $777b
 	db $00
 
-	INCROM $836e0, $8378c
+	INCBIN "data/maps/map32.bin"
 
 Data_8378c:: ; 8378c (20:778c)
 	db $18 ; width
@@ -1705,7 +1705,7 @@ Data_8378c:: ; 8378c (20:778c)
 	dw $787c
 	db $01
 
-	INCROM $83791, $8388d
+	INCBIN "data/maps/map33.bin"
 
 Data_8388d:: ; 8388d (20:788d)
 	db $1c ; width
@@ -1713,7 +1713,7 @@ Data_8388d:: ; 8388d (20:788d)
 	dw $79b5
 	db $00
 
-	INCROM $83892, $839d6
+	INCBIN "data/maps/map34.bin"
 
 Data_839d6:: ; 839d6 (20:79d6)
 	db $1c ; width
@@ -1721,7 +1721,7 @@ Data_839d6:: ; 839d6 (20:79d6)
 	dw $7bd0
 	db $01
 
-	INCROM $839db, $83bf1
+	INCBIN "data/maps/map35.bin"
 
 Data_83bf1:: ; 83bf1 (20:7bf1)
 	db $04 ; width
@@ -1729,7 +1729,7 @@ Data_83bf1:: ; 83bf1 (20:7bf1)
 	dw $7c00
 	db $00
 
-	INCROM $83bf6, $83c03
+	INCBIN "data/maps/map52.bin"
 
 Data_83c03:: ; 83c03 (20:7c03)
 	db $04 ; width
@@ -1737,7 +1737,7 @@ Data_83c03:: ; 83c03 (20:7c03)
 	dw $7c17
 	db $01
 
-	INCROM $83c08, $83c1a
+	INCBIN "data/maps/map53.bin"
 
 Data_83c1a:: ; 83c1a (20:7c1a)
 	db $04 ; width
@@ -1745,7 +1745,7 @@ Data_83c1a:: ; 83c1a (20:7c1a)
 	dw $7c23
 	db $00
 
-	INCROM $83c1f, $83c26
+	INCBIN "data/maps/map56.bin"
 
 Data_83c26:: ; 83c26 (20:7c26)
 	db $04 ; width
@@ -1753,7 +1753,7 @@ Data_83c26:: ; 83c26 (20:7c26)
 	dw $7c33
 	db $01
 
-	INCROM $83c2b, $83c36
+	INCBIN "data/maps/map57.bin"
 
 Data_83c36:: ; 83c36 (20:7c36)
 	db $03 ; width
@@ -1761,7 +1761,7 @@ Data_83c36:: ; 83c36 (20:7c36)
 	dw $0000
 	db $01
 
-	INCROM $83c3b, $83c4c
+	INCBIN "data/maps/map62.bin"
 
 AnimData1:: ; 83c4c (20:7c4c)
 	frame_table AnimFrameTable0

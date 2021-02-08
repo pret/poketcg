@@ -53,7 +53,7 @@ Data_84000:: ; 84000 (21:4000)
 	dw $4164
 	db $00
 
-	INCROM $84005, $84188
+	INCBIN "data/maps/map36.bin"
 
 Data_84188:: ; 84188 (21:4188)
 	db $1c ; width
@@ -61,7 +61,7 @@ Data_84188:: ; 84188 (21:4188)
 	dw $4397
 	db $01
 
-	INCROM $8418d, $843bb
+	INCBIN "data/maps/map37.bin"
 
 Data_843bb:: ; 843bb (21:43bb)
 	db $1c ; width
@@ -69,7 +69,7 @@ Data_843bb:: ; 843bb (21:43bb)
 	dw $4511
 	db $00
 
-	INCROM $843c0, $84533
+	INCBIN "data/maps/map38.bin"
 
 Data_84533:: ; 84533 (21:4533)
 	db $1c ; width
@@ -77,7 +77,7 @@ Data_84533:: ; 84533 (21:4533)
 	dw $470c
 	db $01
 
-	INCROM $84538, $8472e
+	INCBIN "data/maps/map39.bin"
 
 Data_8472e:: ; 8472e (21:472e)
 	db $1c ; width
@@ -85,7 +85,7 @@ Data_8472e:: ; 8472e (21:472e)
 	dw $48b4
 	db $00
 
-	INCROM $84733, $848d8
+	INCBIN "data/maps/map40.bin"
 
 Data_848d8:: ; 848d8 (21:48d8)
 	db $1c ; width
@@ -93,7 +93,7 @@ Data_848d8:: ; 848d8 (21:48d8)
 	dw $4b4f
 	db $01
 
-	INCROM $848dd, $84b73
+	INCBIN "data/maps/map41.bin"
 
 Data_84b73:: ; 84b73 (21:4b73)
 	db $1c ; width
@@ -101,7 +101,7 @@ Data_84b73:: ; 84b73 (21:4b73)
 	dw $4c50
 	db $00
 
-	INCROM $84b78, $84c6f
+	INCBIN "data/maps/map42.bin"
 
 Data_84c6f:: ; 84c6f (21:4c6f)
 	db $1c ; width
@@ -109,7 +109,7 @@ Data_84c6f:: ; 84c6f (21:4c6f)
 	dw $4ddf
 	db $01
 
-	INCROM $84c74, $84dfe
+	INCBIN "data/maps/map43.bin"
 
 Data_84dfe:: ; 84dfe (21:4dfe)
 	db $1c ; width
@@ -117,7 +117,7 @@ Data_84dfe:: ; 84dfe (21:4dfe)
 	dw $4efe
 	db $00
 
-	INCROM $84e03, $84f1d
+	INCBIN "data/maps/map44.bin"
 
 Data_84f1d:: ; 84f1d (21:4f1d)
 	db $1c ; width
@@ -125,7 +125,7 @@ Data_84f1d:: ; 84f1d (21:4f1d)
 	dw $5097
 	db $01
 
-	INCROM $84f22, $850b6
+	INCBIN "data/maps/map45.bin"
 
 Data_850b6:: ; 850b6 (21:50b6)
 	db $1c ; width
@@ -133,7 +133,7 @@ Data_850b6:: ; 850b6 (21:50b6)
 	dw $5175
 	db $00
 
-	INCROM $850bb, $85191
+	INCBIN "data/maps/map46.bin"
 
 Data_85191:: ; 85191 (21:5191)
 	db $1c ; width
@@ -141,7 +141,7 @@ Data_85191:: ; 85191 (21:5191)
 	dw $52f9
 	db $01
 
-	INCROM $85196, $85315
+	INCBIN "data/maps/map47.bin"
 
 Data_85315:: ; 85315 (21:5315)
 	db $20 ; width
@@ -149,7 +149,7 @@ Data_85315:: ; 85315 (21:5315)
 	dw $5484
 	db $00
 
-	INCROM $8531a, $854b3
+	INCBIN "data/maps/map48.bin"
 
 Data_854b3:: ; 854b3 (21:54b3)
 	db $20 ; width
@@ -157,7 +157,7 @@ Data_854b3:: ; 854b3 (21:54b3)
 	dw $56db
 	db $01
 
-	INCROM $854b8, $8570a
+	INCBIN "data/maps/map49.bin"
 
 Data_8570a:: ; 8570a (21:570a)
 	db $20 ; width
@@ -165,7 +165,7 @@ Data_8570a:: ; 8570a (21:570a)
 	dw $57ba
 	db $00
 
-	INCROM $8570f, $857ce
+	INCBIN "data/maps/map50.bin"
 
 Data_857ce:: ; 857ce (21:57ce)
 	db $20 ; width
@@ -173,7 +173,7 @@ Data_857ce:: ; 857ce (21:57ce)
 	dw $58db
 	db $01
 
-	INCROM $857d3, $858ef
+	INCBIN "data/maps/map51.bin"
 
 Data_858ef:: ; 858ef (21:58ef)
 	db $20 ; width
@@ -181,7 +181,7 @@ Data_858ef:: ; 858ef (21:58ef)
 	dw $5a58
 	db $00
 
-	INCROM $858f4, $85a79
+	INCBIN "data/maps/map54.bin"
 
 Data_85a79:: ; 85a79 (21:5a79)
 	db $20 ; width
@@ -189,7 +189,7 @@ Data_85a79:: ; 85a79 (21:5a79)
 	dw $5cc1
 	db $01
 
-	INCROM $85a7e, $85ce2
+	INCBIN "data/maps/map55.bin"
 
 Data_85ce2:: ; 85ce2 (21:5ce2)
 	db $18 ; width
@@ -197,7 +197,7 @@ Data_85ce2:: ; 85ce2 (21:5ce2)
 	dw $5ddc
 	db $00
 
-	INCROM $85ce7, $85df4
+	INCBIN "data/maps/map58.bin"
 
 Data_85df4:: ; 85df4 (21:5df4)
 	db $18 ; width
@@ -205,7 +205,7 @@ Data_85df4:: ; 85df4 (21:5df4)
 	dw $5f64
 	db $01
 
-	INCROM $85df9, $85f7c
+	INCBIN "data/maps/map59.bin"
 
 Data_85f7c:: ; 85f7c (21:5f7c)
 	db $14 ; width
@@ -213,7 +213,7 @@ Data_85f7c:: ; 85f7c (21:5f7c)
 	dw $0000
 	db $01
 
-	INCROM $85f81, $8607f
+	INCBIN "data/maps/map60.bin"
 
 Data_8607f:: ; 8607f (21:607f)
 	db $14 ; width
@@ -221,7 +221,7 @@ Data_8607f:: ; 8607f (21:607f)
 	dw $0000
 	db $01
 
-	INCROM $86084, $8617d
+	INCBIN "data/maps/map61.bin"
 
 Data_8617d:: ; 8617d (21:617d)
 	db $03 ; width
@@ -229,7 +229,7 @@ Data_8617d:: ; 8617d (21:617d)
 	dw $0000
 	db $01
 
-	INCROM $86182, $86193
+	INCBIN "data/maps/map63.bin"
 
 Data_86193:: ; 86193 (21:6193)
 	db $03 ; width
@@ -237,7 +237,7 @@ Data_86193:: ; 86193 (21:6193)
 	dw $0000
 	db $01
 
-	INCROM $86198, $861a9
+	INCBIN "data/maps/map64.bin"
 
 Data_861a9:: ; 861a9 (21:61a9)
 	db $03 ; width
@@ -245,7 +245,7 @@ Data_861a9:: ; 861a9 (21:61a9)
 	dw $0000
 	db $01
 
-	INCROM $861ae, $861bf
+	INCBIN "data/maps/map65.bin"
 
 Data_861bf:: ; 861bf (21:61bf)
 	db $03 ; width
@@ -253,7 +253,7 @@ Data_861bf:: ; 861bf (21:61bf)
 	dw $0000
 	db $01
 
-	INCROM $861c4, $861d5
+	INCBIN "data/maps/map66.bin"
 
 Data_861d5:: ; 861d5 (21:61d5)
 	db $03 ; width
@@ -261,7 +261,7 @@ Data_861d5:: ; 861d5 (21:61d5)
 	dw $0000
 	db $01
 
-	INCROM $861da, $861eb
+	INCBIN "data/maps/map67.bin"
 
 Data_861eb:: ; 861eb (21:61eb)
 	db $03 ; width
@@ -269,7 +269,7 @@ Data_861eb:: ; 861eb (21:61eb)
 	dw $0000
 	db $01
 
-	INCROM $861f0, $86201
+	INCBIN "data/maps/map68.bin"
 
 Data_86201:: ; 86201 (21:6201)
 	db $03 ; width
@@ -277,7 +277,7 @@ Data_86201:: ; 86201 (21:6201)
 	dw $0000
 	db $01
 
-	INCROM $86206, $86217
+	INCBIN "data/maps/map69.bin"
 
 Data_86217:: ; 86217 (21:6217)
 	db $14 ; width
@@ -285,7 +285,7 @@ Data_86217:: ; 86217 (21:6217)
 	dw $0000
 	db $01
 
-	INCROM $8621c, $862da
+	INCBIN "data/maps/map70.bin"
 
 Data_862da:: ; 862da (21:62da)
 	db $14 ; width
@@ -293,7 +293,7 @@ Data_862da:: ; 862da (21:62da)
 	dw $0000
 	db $00
 
-	INCROM $862df, $86364
+	INCBIN "data/maps/map71.bin"
 
 Data_86364:: ; 86364 (21:6364)
 	db $14 ; width
@@ -301,7 +301,7 @@ Data_86364:: ; 86364 (21:6364)
 	dw $0000
 	db $01
 
-	INCROM $86369, $86443
+	INCBIN "data/maps/map72.bin"
 
 Data_86443:: ; 86443 (21:6443)
 	db $14 ; width
@@ -309,7 +309,7 @@ Data_86443:: ; 86443 (21:6443)
 	dw $0000
 	db $00
 
-	INCROM $86448, $864df
+	INCBIN "data/maps/map73.bin"
 
 Data_864df:: ; 864df (21:64df)
 	db $14 ; width
@@ -317,7 +317,7 @@ Data_864df:: ; 864df (21:64df)
 	dw $0000
 	db $01
 
-	INCROM $864e4, $865b5
+	INCBIN "data/maps/map74.bin"
 
 Data_865b5:: ; 865b5 (21:65b5)
 	db $14 ; width
@@ -325,7 +325,7 @@ Data_865b5:: ; 865b5 (21:65b5)
 	dw $0000
 	db $00
 
-	INCROM $865ba, $86647
+	INCBIN "data/maps/map75.bin"
 
 Data_86647:: ; 86647 (21:6647)
 	db $08 ; width
@@ -333,7 +333,7 @@ Data_86647:: ; 86647 (21:6647)
 	dw $0000
 	db $00
 
-	INCROM $8664c, $866b8
+	INCBIN "data/maps/map76.bin"
 
 Data_866b8:: ; 866b8 (21:66b8)
 	db $08 ; width
@@ -341,7 +341,7 @@ Data_866b8:: ; 866b8 (21:66b8)
 	dw $0000
 	db $01
 
-	INCROM $866bd, $8673e
+	INCBIN "data/maps/map77.bin"
 
 Data_8673e:: ; 8673e (21:673e)
 	db $08 ; width
@@ -349,7 +349,7 @@ Data_8673e:: ; 8673e (21:673e)
 	dw $0000
 	db $00
 
-	INCROM $86743, $867af
+	INCBIN "data/maps/map78.bin"
 
 Data_867af:: ; 867af (21:67af)
 	db $08 ; width
@@ -357,7 +357,7 @@ Data_867af:: ; 867af (21:67af)
 	dw $0000
 	db $01
 
-	INCROM $867b4, $86833
+	INCBIN "data/maps/map79.bin"
 
 Data_86833:: ; 86833 (21:6833)
 	db $08 ; width
@@ -365,7 +365,7 @@ Data_86833:: ; 86833 (21:6833)
 	dw $0000
 	db $00
 
-	INCROM $86838, $868a4
+	INCBIN "data/maps/map80.bin"
 
 Data_868a4:: ; 868a4 (21:68a4)
 	db $08 ; width
@@ -373,7 +373,7 @@ Data_868a4:: ; 868a4 (21:68a4)
 	dw $0000
 	db $01
 
-	INCROM $868a9, $86925
+	INCBIN "data/maps/map81.bin"
 
 Data_86925:: ; 86925 (21:6925)
 	db $08 ; width
@@ -381,7 +381,7 @@ Data_86925:: ; 86925 (21:6925)
 	dw $0000
 	db $00
 
-	INCROM $8692a, $86996
+	INCBIN "data/maps/map82.bin"
 
 Data_86996:: ; 86996 (21:6996)
 	db $08 ; width
@@ -389,7 +389,7 @@ Data_86996:: ; 86996 (21:6996)
 	dw $0000
 	db $01
 
-	INCROM $8699b, $86a14
+	INCBIN "data/maps/map83.bin"
 
 Data_86a14:: ; 86a14 (21:6a14)
 	db $08 ; width
@@ -397,7 +397,7 @@ Data_86a14:: ; 86a14 (21:6a14)
 	dw $0000
 	db $00
 
-	INCROM $86a19, $86a85
+	INCBIN "data/maps/map84.bin"
 
 Data_86a85:: ; 86a85 (21:6a85)
 	db $08 ; width
@@ -405,7 +405,7 @@ Data_86a85:: ; 86a85 (21:6a85)
 	dw $0000
 	db $01
 
-	INCROM $86a8a, $86b28
+	INCBIN "data/maps/map85.bin"
 
 Data_86b28:: ; 86b28 (21:6b28)
 	db $08 ; width
@@ -413,7 +413,7 @@ Data_86b28:: ; 86b28 (21:6b28)
 	dw $0000
 	db $00
 
-	INCROM $86b2d, $86b99
+	INCBIN "data/maps/map86.bin"
 
 Data_86b99:: ; 86b99 (21:6b99)
 	db $08 ; width
@@ -421,7 +421,7 @@ Data_86b99:: ; 86b99 (21:6b99)
 	dw $0000
 	db $01
 
-	INCROM $86b9e, $86c34
+	INCBIN "data/maps/map87.bin"
 
 Data_86c34:: ; 86c34 (21:6c34)
 	db $08 ; width
@@ -429,7 +429,7 @@ Data_86c34:: ; 86c34 (21:6c34)
 	dw $0000
 	db $00
 
-	INCROM $86c39, $86ca5
+	INCBIN "data/maps/map88.bin"
 
 Data_86ca5:: ; 86ca5 (21:6ca5)
 	db $08 ; width
@@ -437,7 +437,7 @@ Data_86ca5:: ; 86ca5 (21:6ca5)
 	dw $0000
 	db $01
 
-	INCROM $86caa, $86d37
+	INCBIN "data/maps/map89.bin"
 
 Data_86d37:: ; 86d37 (21:6d37)
 	db $14 ; width
@@ -445,7 +445,7 @@ Data_86d37:: ; 86d37 (21:6d37)
 	dw $0000
 	db $00
 
-	INCROM $86d3c, $86dcc
+	INCBIN "data/maps/map90.bin"
 
 Data_86dcc:: ; 86dcc (21:6dcc)
 	db $14 ; width
@@ -453,7 +453,7 @@ Data_86dcc:: ; 86dcc (21:6dcc)
 	dw $0000
 	db $01
 
-	INCROM $86dd1, $86e8a
+	INCBIN "data/maps/map91.bin"
 
 Data_86e8a:: ; 86e8a (21:6e8a)
 	db $14 ; width
@@ -461,7 +461,7 @@ Data_86e8a:: ; 86e8a (21:6e8a)
 	dw $0000
 	db $01
 
-	INCROM $86e8f, $86f18
+	INCBIN "data/maps/map92.bin"
 
 Data_86f18:: ; 86f18 (21:6f18)
 	db $14 ; width
@@ -469,7 +469,7 @@ Data_86f18:: ; 86f18 (21:6f18)
 	dw $0000
 	db $01
 
-	INCROM $86f1d, $86fc0
+	INCBIN "data/maps/map93.bin"
 
 Data_86fc0:: ; 86fc0 (21:6fc0)
 	db $14 ; width
@@ -477,7 +477,7 @@ Data_86fc0:: ; 86fc0 (21:6fc0)
 	dw $0000
 	db $01
 
-	INCROM $86fc5, $8704f
+	INCBIN "data/maps/map94.bin"
 
 Data_8704f:: ; 8704f (21:704f)
 	db $14 ; width
@@ -485,7 +485,7 @@ Data_8704f:: ; 8704f (21:704f)
 	dw $0000
 	db $00
 
-	INCROM $87054, $871a5
+	INCBIN "data/maps/map95.bin"
 
 Data_871a5:: ; 871a5 (21:71a5)
 	db $14 ; width
@@ -493,7 +493,7 @@ Data_871a5:: ; 871a5 (21:71a5)
 	dw $0000
 	db $01
 
-	INCROM $871aa, $87397
+	INCBIN "data/maps/map96.bin"
 
 Data_87397:: ; 87397 (21:7397)
 	db $08 ; width
@@ -501,7 +501,7 @@ Data_87397:: ; 87397 (21:7397)
 	dw $0000
 	db $01
 
-	INCROM $8739c, $873b7
+	INCBIN "data/maps/map97.bin"
 
 Data_873b7:: ; 873b7 (21:73b7)
 	db $06 ; width
@@ -509,7 +509,7 @@ Data_873b7:: ; 873b7 (21:73b7)
 	dw $0000
 	db $00
 
-	INCROM $873bc, $873e5
+	INCBIN "data/maps/map98.bin"
 
 Data_873e5:: ; 873e5 (21:73e5)
 	db $06 ; width
@@ -517,7 +517,7 @@ Data_873e5:: ; 873e5 (21:73e5)
 	dw $0000
 	db $00
 
-	INCROM $873ea, $87413
+	INCBIN "data/maps/map99.bin"
 
 Data_87413:: ; 87413 (21:7413)
 	db $14 ; width
@@ -525,7 +525,7 @@ Data_87413:: ; 87413 (21:7413)
 	dw $0000
 	db $00
 
-	INCROM $87418, $87538
+	INCBIN "data/maps/map100.bin"
 
 Data_87538:: ; 87538 (21:7538)
 	db $14 ; width
@@ -533,7 +533,7 @@ Data_87538:: ; 87538 (21:7538)
 	dw $0000
 	db $01
 
-	INCROM $8753d, $8769f
+	INCBIN "data/maps/map101.bin"
 
 Data_8769f:: ; 8769f (21:769f)
 	db $14 ; width
@@ -541,7 +541,7 @@ Data_8769f:: ; 8769f (21:769f)
 	dw $0000
 	db $00
 
-	INCROM $876a4, $876f6
+	INCBIN "data/maps/map102.bin"
 
 Data_876f6:: ; 876f6 (21:76f6)
 	db $14 ; width
@@ -549,7 +549,7 @@ Data_876f6:: ; 876f6 (21:76f6)
 	dw $0000
 	db $01
 
-	INCROM $876fb, $8777c
+	INCBIN "data/maps/map103.bin"
 
 Data_8777c:: ; 8777c (21:777c)
 	db $14 ; width
@@ -557,7 +557,7 @@ Data_8777c:: ; 8777c (21:777c)
 	dw $0000
 	db $00
 
-	INCROM $87781, $877c4
+	INCBIN "data/maps/map104.bin"
 
 Data_877c4:: ; 877c4 (21:77c4)
 	db $14 ; width
@@ -565,7 +565,7 @@ Data_877c4:: ; 877c4 (21:77c4)
 	dw $0000
 	db $00
 
-	INCROM $877c9, $87828
+	INCBIN "data/maps/map105.bin"
 
 
 IshiharaTilesetGfx: ; 87828 (21:7828)
