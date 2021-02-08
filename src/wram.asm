@@ -2076,10 +2076,10 @@ wPCLastDirectionPressed:: ; d12d
 
 	ds $1
 
-wd12f:: ; d12f
+wBGMapWidth:: ; d12f
 	ds $1
 
-wd130:: ; d130
+wBGMapHeight:: ; d130
 	ds $1
 
 wd131:: ; d131
@@ -2127,10 +2127,7 @@ wd239:: ; d239
 	ds $1
 
 wd23a:: ; d23a
-	ds $1
-
-wd23b:: ; d23b
-	ds $1
+	ds $2
 
 wd23c:: ; d23c
 	ds $1
@@ -2138,9 +2135,19 @@ wd23c:: ; d23c
 wd23d:: ; d23d
 	ds $1
 
+UNION
+
 ; palette loaded from Palette* data
 wLoadedPalData:: ; d23e
 	ds $50
+
+NEXTU
+
+; where BG map data is decompressed
+wBGMapBuffer:: ; d23e
+	ds $40
+
+ENDU
 
 wd28e:: ; d28e
 	ds $1
@@ -2154,7 +2161,10 @@ wd290:: ; d290
 wd291:: ; d291
 	ds $1
 
-wd292:: ; d292
+; determines where to copy BG Map data
+; $0 = copies to VRAM
+; $1 = copies to SRAM
+wBGMapCopyMode:: ; d292
 	ds $1
 
 	ds $4

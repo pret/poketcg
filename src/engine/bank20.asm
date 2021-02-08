@@ -15,11 +15,12 @@ Func_80028: ; 80028 (20:4028)
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	jr Func_80082
 
 	xor a
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
+;	fallthrough
 
 Func_80082: ; 80082 (20:4082)
 	push hl
@@ -30,24 +31,29 @@ Func_80082: ; 80082 (20:4082)
 	ld [hl], e
 	inc hl
 	ld [hl], d
+
+; get pointer and bank for BG Map
 	call Func_803b9
 	ld a, [wTempPointerBank]
 	ld [wd23d], a
-	ld de, wLoadedPalData
-	ld bc, $0006
+
+; store header data
+	ld de, wBGMapBuffer
+	ld bc, $0006 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
 	ld h, d
 	ld a, [hli]
-	ld [wd12f], a
+	ld [wBGMapWidth], a
 	ld a, [hli]
-	ld [wd130], a
+	ld [wBGMapHeight], a
 	ld a, [hli]
 	ld [wd23a], a
 	ld a, [hli]
-	ld [wd23b], a
+	ld [wd23a + 1], a
 	ld a, [hli]
 	ld [wd23c], a
+
 	call Func_800bd
 	pop de
 	pop bc
@@ -65,7 +71,7 @@ Func_800bd: ; 800bd (20:40bd)
 	adc $00
 	ld d, a
 	ld b, HIGH(wc000)
-	call Func_08bf
+	call InitBGMapDecompression
 	ld a, [wVRAMPointer]
 	ld e, a
 	ld a, [wVRAMPointer + 1]
@@ -77,9 +83,10 @@ Func_800bd: ; 800bd (20:40bd)
 	ret
 
 Func_800e0: ; 800e0 (20:40e0)
+; if wd23c != 0, then use double wBGMapWidth
 	push hl
 	ld hl, wd28e
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld [hl], a
 	ld a, [wd23c]
 	or a
@@ -88,14 +95,15 @@ Func_800e0: ; 800e0 (20:40e0)
 .asm_800f0
 
 	ld c, $40
-	ld hl, wLoadedPalData
+	ld hl, wBGMapBuffer
 	xor a
 .loop_clear
 	ld [hli], a
 	dec c
 	jr nz, .loop_clear
 
-	ld a, [wd130]
+; loop each row, up to the number of tiles in height
+	ld a, [wBGMapHeight]
 	ld c, a
 .loop
 	push bc
@@ -103,36 +111,37 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld b, $00
 	ld a, [wd28e]
 	ld c, a
-	ld de, wLoadedPalData
-	call Func_3be4
-	ld a, [wd12f]
+	ld de, wBGMapBuffer
+	call DecompressBGMapFromBank
+
+	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
 	push de
-	ld hl, wLoadedPalData
-	call Func_8016e
+	ld hl, wBGMapBuffer
+	call CopyBGDataToVRAMOrSRAM
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_8013b
+	jr nz, .next_row
 
 	; cgb only
 	call BankswitchVRAM1
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld c, a
 	ld b, $00
-	ld hl, wLoadedPalData
+	ld hl, wBGMapBuffer
 	add hl, bc
 	pop de
 	push de
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld b, a
 	call Func_80148
-	call Func_8016e
+	call CopyBGDataToVRAMOrSRAM
 	call BankswitchVRAM0
 
-.asm_8013b
+.next_row
 	pop de
-	ld hl, $20
+	ld hl, BG_MAP_WIDTH
 	add hl, de
 	ld e, l
 	ld d, h
@@ -150,36 +159,47 @@ Func_80148: ; 80148 (20:4148)
 	ld a, [wd23c]
 	or a
 	jr z, .asm_80162
+
+; add wd291 to b bytes in hl
 	push hl
 	push bc
-.asm_80155
+.loop_1
 	push bc
 	ld a, [wd291]
 	add [hl]
 	ld [hli], a
 	pop bc
 	dec b
-	jr nz, .asm_80155
+	jr nz, .loop_1
 	pop bc
 	pop hl
 	ret
+
+; store wd291 to b bytes in hl
 .asm_80162
 	push hl
 	push bc
 	ld a, [wd291]
-.asm_80167
+.loop_2
 	ld [hli], a
 	dec b
-	jr nz, .asm_80167
+	jr nz, .loop_2
 	pop bc
 	pop hl
 	ret
 
-Func_8016e: ; 8016e (20:416e)
-	ld a, [wd292]
+; copies BG Map data pointed by hl
+; to either VRAM or SRAM, depending on wBGMapCopyMode
+; de is the target address in VRAM,
+; if SRAM is the target address to copy,
+; copies data to s0BGMap or s1BGMap
+; for VRAM0 or VRAM1 respectively
+CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
+	ld a, [wBGMapCopyMode]
 	or a
 	jp z, SafeCopyDataHLtoDE
 
+; copies b bytes from hl to SRAM1
 	push hl
 	push bc
 	push de
@@ -188,12 +208,12 @@ Func_8016e: ; 8016e (20:416e)
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
-	ld hl, $800
+	ld hl, s0BGMap - v0BGMap0
 	ldh a, [hBankVRAM]
 	or a
-	jr z, .asm_8018c
-	ld hl, $c00
-.asm_8018c
+	jr z, .got_pointer
+	ld hl, s1BGMap - v1BGMap0
+.got_pointer
 	add hl, de
 	ld e, l
 	ld d, h
@@ -412,6 +432,7 @@ Func_802bb: ; 802bb (20:42bb)
 
 	INCROM $802d4, $803b9
 
+; gets pointer to BG map with ID from wd131
 Func_803b9: ; 803b9 (20:43b9)
 	ld l, $00
 	ld a, [wd131]
@@ -578,7 +599,7 @@ Func_80b89: ; 80b89 (20:4b89)
 	push af
 	ld c, a
 	ld a, $01
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	ld b, $00
 	ld hl, wd323
 	add hl, bc
@@ -596,7 +617,7 @@ Func_80b89: ; 80b89 (20:4b89)
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	pop af
 ;	Fallthrough
 
@@ -609,13 +630,13 @@ Func_80baa: ; 80baa (20:4baa)
 	push af
 	ld a, [wd23d]
 	push af
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	push af
-	ld a, [wd130]
+	ld a, [wBGMapHeight]
 	push af
 	ld a, [wd23a]
 	push af
-	ld a, [wd23b]
+	ld a, [wd23a + 1]
 	push af
 	ld b, $0
 	ld hl, wd323
@@ -658,13 +679,13 @@ Func_80baa: ; 80baa (20:4baa)
 	add hl, bc
 	farcall Func_c38f
 	pop af
-	ld [wd23b], a
+	ld [wd23a + 1], a
 	pop af
 	ld [wd23a], a
 	pop af
-	ld [wd130], a
+	ld [wBGMapHeight], a
 	pop af
-	ld [wd12f], a
+	ld [wBGMapWidth], a
 	pop af
 	ld [wd23d], a
 	pop af
@@ -1415,373 +1436,332 @@ MapDataPointers_81697: ; 81697 (20:5697)
 	palette_pointer Palette160, 1, 0 ; PALETTE_160
 
 Data_8191b:: ; 8191b (20:591b)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $dd
 
-	INCROM $81921, $81a22
+	INCROM $81920, $81a22
 
 Data_81a22:: ; 81a22 (20:5a22)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $dd
 
-	INCROM $81a28, $81c13
+	INCROM $81a27, $81c13
 
 Data_81c13:: ; 81c13 (20:5c13)
-	db $1c
-	db $1e
+	db $1c ; width
+	db $1e ; height
 	dw $5d11
 	db $00
-	db $e7
 
-	INCROM $81c19, $81d2e
+	INCROM $81c18, $81d2e
 
 Data_81d2e:: ; 81d2e (20:5d2e)
-	db $1c
-	db $1e
+	db $1c ; width
+	db $1e ; height
 	dw $5eb4
 	db $01
-	db $e7
 
-	INCROM $81d34, $81ed1
+	INCROM $81d33, $81ed1
 
 Data_81ed1:: ; 81ed1 (20:5ed1)
-	db $04
-	db $06
+	db $04 ; width
+	db $06 ; height
 	dw $5ef0
 	db $00
-	db $ff
 
-	INCROM $81ed7, $81ef5
+	INCROM $81ed6, $81ef5
 
 Data_81ef5:: ; 81ef5 (20:5ef5)
-	db $04
-	db $06
+	db $04 ; width
+	db $06 ; height
 	dw $5f21
 	db $01
-	db $fb
 
-	INCROM $81efb, $81f26
+	INCROM $81efa, $81f26
 
 Data_81f26:: ; 81f26 (20:5f26)
-	db $18
-	db $1e
+	db $18 ; width
+	db $1e ; height
 	dw $5fd3
 	db $00
-	db $fd
 
-	INCROM $81f2c, $81feb
+	INCROM $81f2b, $81feb
 
 Data_81feb:: ; 81feb (20:5feb)
-	db $18
-	db $1e
+	db $18 ; width
+	db $1e ; height
 	dw $612b
 	db $01
-	db $fd
 
-	INCROM $81ff1, $82143
+	INCROM $81ff0, $82143
 
 Data_82143:: ; 82143 (20:6143)
-	db $04
-	db $01
+	db $04 ; width
+	db $01 ; height
 	dw $614d
 	db $00
-	db $f0
 
-	INCROM $82149, $82150
+	INCROM $82148, $82150
 
 Data_82150:: ; 82150 (20:6150)
-	db $04
-	db $01
+	db $04 ; width
+	db $01 ; height
 	dw $615d
 	db $01
-	db $f8
 
-	INCROM $82156, $82160
+	INCROM $82155, $82160
 
 Data_82160:: ; 82160 (20:6160)
-	db $14
-	db $18
+	db $14 ; width
+	db $18 ; height
 	dw $620e
 	db $00
-	db $ef
 
-	INCROM $82166, $82222
+	INCROM $82165, $82222
 
 Data_82222:: ; 82222 (20:6222)
-	db $14
-	db $18
+	db $14 ; width
+	db $18 ; height
 	dw $6322
 	db $01
-	db $ee
 
-	INCROM $82228, $82336
+	INCROM $82227, $82336
 
 Data_82336:: ; 82336 (20:6336)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $63ec
 	db $00
-	db $ef
 
-	INCROM $8233c, $82400
+	INCROM $8233b, $82400
 
 Data_82400:: ; 82400 (20:6400)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6509
 	db $01
-	db $ef
 
-	INCROM $82406, $8251d
+	INCROM $82405, $8251d
 
 Data_8251d:: ; 8251d (20:651d)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $65d3
 	db $00
-	db $ef
 
-	INCROM $82523, $825e7
+	INCROM $82522, $825e7
 
 Data_825e7:: ; 825e7 (20:65e7)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $66f0
 	db $01
-	db $ef
 
-	INCROM $825ed, $82704
+	INCROM $825ec, $82704
 
 Data_82704:: ; 82704 (20:6704)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $67ba
 	db $00
-	db $ef
 
-	INCROM $8270a, $827ce
+	INCROM $82709, $827ce
 
 Data_827ce:: ; 827ce (20:67ce)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $68d7
 	db $01
-	db $ef
 
-	INCROM $827d4, $828eb
+	INCROM $827d3, $828eb
 
 Data_828eb:: ; 828eb (20:68eb)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $69a1
 	db $00
-	db $ef
 
-	INCROM $828f1, $829b5
+	INCROM $828f0, $829b5
 
 Data_829b5:: ; 829b5 (20:69b5)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6abe
 	db $01
-	db $ef
 
-	INCROM $829bb, $82ad2
+	INCROM $829ba, $82ad2
 
 Data_82ad2:: ; 82ad2 (20:6ad2)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6b88
 	db $00
-	db $ef
 
-	INCROM $82ad8, $82b9c
+	INCROM $82ad7, $82b9c
 
 Data_82b9c:: ; 82b9c (20:6b9c)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6ca5
 	db $01
-	db $ef
 
-	INCROM $82ba2, $82cb9
+	INCROM $82ba1, $82cb9
 
 Data_82cb9:: ; 82cb9 (20:6cb9)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6d6f
 	db $00
-	db $ef
 
-	INCROM $82cbf, $82d83
+	INCROM $82cbe, $82d83
 
 Data_82d83:: ; 82d83 (20:6d83)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6e8c
 	db $01
-	db $ef
 
-	INCROM $82d89, $82ea0
+	INCROM $82d88, $82ea0
 
 Data_82ea0:: ; 82ea0 (20:6ea0)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $6f56
 	db $00
-	db $ef
 
-	INCROM $82ea6, $82f6a
+	INCROM $82ea5, $82f6a
 
 Data_82f6a:: ; 82f6a (20:6f6a)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $7073
 	db $01
-	db $ef
 
-	INCROM $82f70, $83087
+	INCROM $82f6f, $83087
 
 Data_83087:: ; 83087 (20:7087)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $713d
 	db $00
-	db $ef
 
-	INCROM $8308d, $83151
+	INCROM $8308c, $83151
 
 Data_83151:: ; 83151 (20:7151)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $725a
 	db $01
-	db $ef
 
-	INCROM $83157, $8326e
+	INCROM $83156, $8326e
 
 Data_8326e:: ; 8326e (20:726e)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $730d
 	db $00
-	db $ef
 
-	INCROM $83274, $83321
+	INCROM $83273, $83321
 
 Data_83321:: ; 83321 (20:7321)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $7410
 	db $01
-	db $ef
 
-	INCROM $83327, $83424
+	INCROM $83326, $83424
 
 Data_83424:: ; 83424 (20:7424)
-	db $1c
-	db $1a
+	db $1c ; width
+	db $1a ; height
 	dw $7529
 	db $00
-	db $e7
 
-	INCROM $8342a, $83545
+	INCROM $83429, $83545
 
 Data_83545:: ; 83545 (20:7545)
-	db $1c
-	db $1a
+	db $1c ; width
+	db $1a ; height
 	dw $76bf
 	db $01
-	db $e7
 
-	INCROM $8354b, $836db
+	INCROM $8354a, $836db
 
 Data_836db:: ; 836db (20:76db)
-	db $18
-	db $12
+	db $18 ; width
+	db $12 ; height
 	dw $777b
 	db $00
-	db $e7
 
-	INCROM $836e1, $8378c
+	INCROM $836e0, $8378c
 
 Data_8378c:: ; 8378c (20:778c)
-	db $18
-	db $12
+	db $18 ; width
+	db $12 ; height
 	dw $787c
 	db $01
-	db $e7
 
-	INCROM $83792, $8388d
+	INCROM $83791, $8388d
 
 Data_8388d:: ; 8388d (20:788d)
-	db $1c
-	db $1e
+	db $1c ; width
+	db $1e ; height
 	dw $79b5
 	db $00
-	db $e7
 
-	INCROM $83893, $839d6
+	INCROM $83892, $839d6
 
 Data_839d6:: ; 839d6 (20:79d6)
-	db $1c
-	db $1e
+	db $1c ; width
+	db $1e ; height
 	dw $7bd0
 	db $01
-	db $e7
 
-	INCROM $839dc, $83bf1
+	INCROM $839db, $83bf1
 
 Data_83bf1:: ; 83bf1 (20:7bf1)
-	db $04
-	db $03
+	db $04 ; width
+	db $03 ; height
 	dw $7c00
 	db $00
-	db $d8
 
-	INCROM $83bf7, $83c03
+	INCROM $83bf6, $83c03
 
 Data_83c03:: ; 83c03 (20:7c03)
-	db $04
-	db $03
+	db $04 ; width
+	db $03 ; height
 	dw $7c17
 	db $01
-	db $d6
 
-	INCROM $83c09, $83c1a
+	INCROM $83c08, $83c1a
 
 Data_83c1a:: ; 83c1a (20:7c1a)
-	db $04
-	db $03
+	db $04 ; width
+	db $03 ; height
 	dw $7c23
 	db $00
-	db $80
 
-	INCROM $83c20, $83c26
+	INCROM $83c1f, $83c26
 
 Data_83c26:: ; 83c26 (20:7c26)
-	db $04
-	db $03
+	db $04 ; width
+	db $03 ; height
 	dw $7c33
 	db $01
-	db $a0
 
-	INCROM $83c2c, $83c36
+	INCROM $83c2b, $83c36
 
 Data_83c36:: ; 83c36 (20:7c36)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $83c3c, $83c4c
+	INCROM $83c3b, $83c4c
 
 AnimData1:: ; 83c4c (20:7c4c)
 	frame_table AnimFrameTable0
@@ -1792,4 +1772,6 @@ AnimData1:: ; 83c4c (20:7c4c)
 Palette110:: ; 83c5b (20:7c5b)
 	db $00, $00
 
-	INCROM $83c5d, $84000
+rept $3a3
+	db $ff
+endr

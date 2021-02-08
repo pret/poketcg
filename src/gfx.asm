@@ -48,589 +48,524 @@ endr
 SECTION "Gfx 3", ROMX
 
 Data_84000:: ; 84000 (21:4000)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $4164
 	db $00
-	db $e7
 
-	INCROM $84006, $84188
+	INCROM $84005, $84188
 
 Data_84188:: ; 84188 (21:4188)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $4397
 	db $01
-	db $e7
 
-	INCROM $8418e, $843bb
+	INCROM $8418d, $843bb
 
 Data_843bb:: ; 843bb (21:43bb)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $4511
 	db $00
-	db $e7
 
-	INCROM $843c1, $84533
+	INCROM $843c0, $84533
 
 Data_84533:: ; 84533 (21:4533)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $470c
 	db $01
-	db $e7
 
-	INCROM $84539, $8472e
+	INCROM $84538, $8472e
 
 Data_8472e:: ; 8472e (21:472e)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $48b4
 	db $00
-	db $e7
 
-	INCROM $84734, $848d8
+	INCROM $84733, $848d8
 
 Data_848d8:: ; 848d8 (21:48d8)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $4b4f
 	db $01
-	db $e7
 
-	INCROM $848de, $84b73
+	INCROM $848dd, $84b73
 
 Data_84b73:: ; 84b73 (21:4b73)
-	db $1c
-	db $1c
+	db $1c ; width
+	db $1c ; height
 	dw $4c50
 	db $00
-	db $e7
 
-	INCROM $84b79, $84c6f
+	INCROM $84b78, $84c6f
 
 Data_84c6f:: ; 84c6f (21:4c6f)
-	db $1c
-	db $1c
+	db $1c ; width
+	db $1c ; height
 	dw $4ddf
 	db $01
-	db $e7
 
-	INCROM $84c75, $84dfe
+	INCROM $84c74, $84dfe
 
 Data_84dfe:: ; 84dfe (21:4dfe)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $4efe
 	db $00
-	db $eb
 
-	INCROM $84e04, $84f1d
+	INCROM $84e03, $84f1d
 
 Data_84f1d:: ; 84f1d (21:4f1d)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $5097
 	db $01
-	db $eb
 
-	INCROM $84f23, $850b6
+	INCROM $84f22, $850b6
 
 Data_850b6:: ; 850b6 (21:50b6)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $5175
 	db $00
-	db $e7
 
-	INCROM $850bc, $85191
+	INCROM $850bb, $85191
 
 Data_85191:: ; 85191 (21:5191)
-	db $1c
-	db $20
+	db $1c ; width
+	db $20 ; height
 	dw $52f9
 	db $01
-	db $e7
 
-	INCROM $85197, $85315
+	INCROM $85196, $85315
 
 Data_85315:: ; 85315 (21:5315)
-	db $20
-	db $20
+	db $20 ; width
+	db $20 ; height
 	dw $5484
 	db $00
-	db $e7
 
-	INCROM $8531b, $854b3
+	INCROM $8531a, $854b3
 
 Data_854b3:: ; 854b3 (21:54b3)
-	db $20
-	db $20
+	db $20 ; width
+	db $20 ; height
 	dw $56db
 	db $01
-	db $e7
 
-	INCROM $854b9, $8570a
+	INCROM $854b8, $8570a
 
 Data_8570a:: ; 8570a (21:570a)
-	db $20
-	db $12
+	db $20 ; width
+	db $12 ; height
 	dw $57ba
 	db $00
-	db $ee
 
-	INCROM $85710, $857ce
+	INCROM $8570f, $857ce
 
 Data_857ce:: ; 857ce (21:57ce)
-	db $20
-	db $12
+	db $20 ; width
+	db $12 ; height
 	dw $58db
 	db $01
-	db $ee
 
-	INCROM $857d4, $858ef
+	INCROM $857d3, $858ef
 
 Data_858ef:: ; 858ef (21:58ef)
-	db $20
-	db $20
+	db $20 ; width
+	db $20 ; height
 	dw $5a58
 	db $00
-	db $ec
 
-	INCROM $858f5, $85a79
+	INCROM $858f4, $85a79
 
 Data_85a79:: ; 85a79 (21:5a79)
-	db $20
-	db $20
+	db $20 ; width
+	db $20 ; height
 	dw $5cc1
 	db $01
-	db $ec
 
-	INCROM $85a7f, $85ce2
+	INCROM $85a7e, $85ce2
 
 Data_85ce2:: ; 85ce2 (21:5ce2)
-	db $18
-	db $1a
+	db $18 ; width
+	db $1a ; height
 	dw $5ddc
 	db $00
-	db $e7
 
-	INCROM $85ce8, $85df4
+	INCROM $85ce7, $85df4
 
 Data_85df4:: ; 85df4 (21:5df4)
-	db $18
-	db $1a
+	db $18 ; width
+	db $1a ; height
 	dw $5f64
 	db $01
-	db $e7
 
-	INCROM $85dfa, $85f7c
+	INCROM $85df9, $85f7c
 
 Data_85f7c:: ; 85f7c (21:5f7c)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $90
 
-	INCROM $85f82, $8607f
+	INCROM $85f81, $8607f
 
 Data_8607f:: ; 8607f (21:607f)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $81
 
-	INCROM $86085, $8617d
+	INCROM $86084, $8617d
 
 Data_8617d:: ; 8617d (21:617d)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $86183, $86193
+	INCROM $86182, $86193
 
 Data_86193:: ; 86193 (21:6193)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $86199, $861a9
+	INCROM $86198, $861a9
 
 Data_861a9:: ; 861a9 (21:61a9)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $861af, $861bf
+	INCROM $861ae, $861bf
 
 Data_861bf:: ; 861bf (21:61bf)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $861c5, $861d5
+	INCROM $861c4, $861d5
 
 Data_861d5:: ; 861d5 (21:61d5)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $861db, $861eb
+	INCROM $861da, $861eb
 
 Data_861eb:: ; 861eb (21:61eb)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $861f1, $86201
+	INCROM $861f0, $86201
 
 Data_86201:: ; 86201 (21:6201)
-	db $03
-	db $03
+	db $03 ; width
+	db $03 ; height
 	dw $0000
 	db $01
-	db $f7
 
-	INCROM $86207, $86217
+	INCROM $86206, $86217
 
 Data_86217:: ; 86217 (21:6217)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $80
 
-	INCROM $8621d, $862da
+	INCROM $8621c, $862da
 
 Data_862da:: ; 862da (21:62da)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $83
 
-	INCROM $862e0, $86364
+	INCROM $862df, $86364
 
 Data_86364:: ; 86364 (21:6364)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $80
 
-	INCROM $8636a, $86443
+	INCROM $86369, $86443
 
 Data_86443:: ; 86443 (21:6443)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $83
 
-	INCROM $86449, $864df
+	INCROM $86448, $864df
 
 Data_864df:: ; 864df (21:64df)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $80
 
-	INCROM $864e5, $865b5
+	INCROM $864e4, $865b5
 
 Data_865b5:: ; 865b5 (21:65b5)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $8f
 
-	INCROM $865bb, $86647
+	INCROM $865ba, $86647
 
 Data_86647:: ; 86647 (21:6647)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $8664d, $866b8
+	INCROM $8664c, $866b8
 
 Data_866b8:: ; 866b8 (21:66b8)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $d6
 
-	INCROM $866be, $8673e
+	INCROM $866bd, $8673e
 
 Data_8673e:: ; 8673e (21:673e)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $86744, $867af
+	INCROM $86743, $867af
 
 Data_867af:: ; 867af (21:67af)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $d6
 
-	INCROM $867b5, $86833
+	INCROM $867b4, $86833
 
 Data_86833:: ; 86833 (21:6833)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $86839, $868a4
+	INCROM $86838, $868a4
 
 Data_868a4:: ; 868a4 (21:68a4)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $d6
 
-	INCROM $868aa, $86925
+	INCROM $868a9, $86925
 
 Data_86925:: ; 86925 (21:6925)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $8692b, $86996
+	INCROM $8692a, $86996
 
 Data_86996:: ; 86996 (21:6996)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $d6
 
-	INCROM $8699c, $86a14
+	INCROM $8699b, $86a14
 
 Data_86a14:: ; 86a14 (21:6a14)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $86a1a, $86a85
+	INCROM $86a19, $86a85
 
 Data_86a85:: ; 86a85 (21:6a85)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $ff
 
-	INCROM $86a8b, $86b28
+	INCROM $86a8a, $86b28
 
 Data_86b28:: ; 86b28 (21:6b28)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $86b2e, $86b99
+	INCROM $86b2d, $86b99
 
 Data_86b99:: ; 86b99 (21:6b99)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $ff
 
-	INCROM $86b9f, $86c34
+	INCROM $86b9e, $86c34
 
 Data_86c34:: ; 86c34 (21:6c34)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $86c3a, $86ca5
+	INCROM $86c39, $86ca5
 
 Data_86ca5:: ; 86ca5 (21:6ca5)
-	db $08
-	db $0c
+	db $08 ; width
+	db $0c ; height
 	dw $0000
 	db $01
-	db $ff
 
-	INCROM $86cab, $86d37
+	INCROM $86caa, $86d37
 
 Data_86d37:: ; 86d37 (21:6d37)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $9e
 
-	INCROM $86d3d, $86dcc
+	INCROM $86d3c, $86dcc
 
 Data_86dcc:: ; 86dcc (21:6dcc)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $91
 
-	INCROM $86dd2, $86e8a
+	INCROM $86dd1, $86e8a
 
 Data_86e8a:: ; 86e8a (21:6e8a)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $bf
 
-	INCROM $86e90, $86f18
+	INCROM $86e8f, $86f18
 
 Data_86f18:: ; 86f18 (21:6f18)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $b0
 
-	INCROM $86f1e, $86fc0
+	INCROM $86f1d, $86fc0
 
 Data_86fc0:: ; 86fc0 (21:6fc0)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $a3
 
-	INCROM $86fc6, $8704f
+	INCROM $86fc5, $8704f
 
 Data_8704f:: ; 8704f (21:704f)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $87055, $871a5
+	INCROM $87054, $871a5
 
 Data_871a5:: ; 871a5 (21:71a5)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $ff
 
-	INCROM $871ab, $87397
+	INCROM $871aa, $87397
 
 Data_87397:: ; 87397 (21:7397)
-	db $08
-	db $04
+	db $08 ; width
+	db $04 ; height
 	dw $0000
 	db $01
-	db $bf
 
-	INCROM $8739d, $873b7
+	INCROM $8739c, $873b7
 
 Data_873b7:: ; 873b7 (21:73b7)
-	db $06
-	db $06
+	db $06 ; width
+	db $06 ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $873bd, $873e5
+	INCROM $873bc, $873e5
 
 Data_873e5:: ; 873e5 (21:73e5)
-	db $06
-	db $06
+	db $06 ; width
+	db $06 ; height
 	dw $0000
 	db $00
-	db $ff
 
-	INCROM $873eb, $87413
+	INCROM $873ea, $87413
 
 Data_87413:: ; 87413 (21:7413)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $7e
 
-	INCROM $87419, $87538
+	INCROM $87418, $87538
 
 Data_87538:: ; 87538 (21:7538)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $7e
 
-	INCROM $8753e, $8769f
+	INCROM $8753d, $8769f
 
 Data_8769f:: ; 8769f (21:769f)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $03
 
-	INCROM $876a5, $876f6
+	INCROM $876a4, $876f6
 
 Data_876f6:: ; 876f6 (21:76f6)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $01
-	db $00
 
-	INCROM $876fc, $8777c
+	INCROM $876fb, $8777c
 
 Data_8777c:: ; 8777c (21:777c)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $01
 
-	INCROM $87782, $877c4
+	INCROM $87781, $877c4
 
 Data_877c4:: ; 877c4 (21:77c4)
-	db $14
-	db $12
+	db $14 ; width
+	db $12 ; height
 	dw $0000
 	db $00
-	db $07
 
-	INCROM $877ca, $87828
+	INCROM $877c9, $87828
 
 
 IshiharaTilesetGfx: ; 87828 (21:7828)

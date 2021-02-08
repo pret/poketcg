@@ -260,11 +260,11 @@ Func_701e9: ; 701e9 (1c:41e9)
 	push bc
 	ld e, l
 	ld d, h
-	ld b, $c0
-	call Func_08bf
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
 	pop bc
 	pop de
-	call Func_08de
+	call DecompressBGMap
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
