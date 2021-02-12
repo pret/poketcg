@@ -328,4 +328,7 @@ Func_70214: ; 70214 (1c:4214)
 	ret
 
 Unknown_7024a: ; 7024a (1c:424a)
-	INCROM $7024a, $74000
+	INCROM $7024a, $7036a
+
+Func_7036a: ; 7036a (1c:436a)
+	INCROM $7036a, $74000

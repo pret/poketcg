@@ -11,7 +11,31 @@ Func_80028: ; 80028 (20:4028)
 	ret
 ; 0x8003d
 
-	INCROM $8003d, $80077
+Func_8003d: ; 8003d (20:403d)
+	farcall Func_1c33b
+	farcall Func_7036a
+	ld bc, $0
+	call Func_80077
+	ld a, $80
+	ld [wd4ca], a
+	xor a
+	ld [wd4cb], a
+	call LoadTilesetGfx
+	xor a
+	ld [wd4ca], a
+	ld a, [wd291]
+	ld [wd4cb], a
+	ld a, [wd28f]
+	call Func_803c9
+	ld a, [wd291]
+	ld [wd4cb], a
+	ld a, [wd290]
+	or a
+	jr z, .asm_80076
+	call Func_803c9
+.asm_80076
+	ret
+; 0x80077
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
@@ -350,7 +374,7 @@ Func_8025b: ; 8025b (20:425b)
 	call LoadGraphicsPointerFromHL
 	ld a, [hl] ; sprite number of tiles
 	push af
-	ld [wCurSpriteNumTiles], a
+	ld [wTotalNumTiles], a
 	ld a, TILE_SIZE
 	ld [wCurSpriteTileSize], a
 	call LoadGfxDataFromTempPointerToVRAMBank
@@ -365,7 +389,7 @@ LoadGfxDataFromTempPointerToVRAMBank: ; 80274 (20:4274)
 	jr LoadGfxDataFromTempPointer
 
 Func_80279: ; 80279 (20:4279)
-	call Func_802bb
+	call GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2
 
 ; loads graphics data pointed by wTempPointer in wTempPointerBank
 ; to wVRAMPointer
@@ -373,7 +397,7 @@ LoadGfxDataFromTempPointer:
 	push hl
 	push bc
 	push de
-	ld a, [wCurSpriteNumTiles]
+	ld a, [wTotalNumTiles]
 	ld b, a
 	ld a, [wCurSpriteTileSize]
 	ld c, a
@@ -405,7 +429,7 @@ GetTileOffsetPointerAndSwitchVRAM: ; 8029f (20:429f)
 	and $f0
 	ld [wVRAMPointer], a
 	pop af
-	and $f
+	and $0f
 	add HIGH(v0Tiles0) ; $80
 	ld [wVRAMPointer + 1], a
 
@@ -416,21 +440,190 @@ GetTileOffsetPointerAndSwitchVRAM: ; 8029f (20:429f)
 	call BankswitchVRAM
 	ret
 
-Func_802bb: ; 802bb (20:42bb)
-	ld a, [wd4ca]
+; converts wVRAMTileOffset to address in VRAM
+; and stores it in wVRAMPointer
+; switches VRAM according to wd4cb
+; then changes wVRAMPointer such that
+; addresses to Tiles0 is changed to Tiles2
+GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2: ; 802bb (20:42bb)
+	ld a, [wVRAMTileOffset]
 	push af
-	xor $80
-	ld [wd4ca], a
+	xor $80 ; toggle top bit
+	ld [wVRAMTileOffset], a
 	call GetTileOffsetPointerAndSwitchVRAM
 	ld a, [wVRAMPointer + 1]
 	add $8
 	ld [wVRAMPointer + 1], a
 	pop af
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	ret
 ; 0x802d4
 
-	INCROM $802d4, $803b9
+; loads tileset gfx to VRAM corresponding to wCurTileset
+LoadTilesetGfx: ; 802d4 (20:42d4)
+	push hl
+	ld l, $02
+	ld a, [wCurTileset]
+	call GetMapDataPointer
+	call LoadGraphicsPointerFromHL
+	call .LoadTileGfx
+	call BankswitchVRAM0
+	pop hl
+	ret
+; 0x802e8
+
+; loads gfx data from wTempPointerBank:wTempPointer
+.LoadTileGfx ; 802e8 (20:42e8)
+	push hl
+	push bc
+	push de
+	ld hl, wTempPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [wTempPointerBank]
+	call GetFarByte ; get number of tiles (low byte)
+	ld [wTotalNumTiles], a
+	inc hl
+	ld a, [wTempPointerBank]
+	call GetFarByte ; get number of tiles (high byte)
+	ld [wTotalNumTiles + 1], a
+	inc hl
+	ld a, l
+	ld [wTempPointer], a
+	ld a, h
+	ld [wTempPointer + 1], a
+
+; used to sequentially copy gfx data in the order
+; v0Tiles1 -> v0Tiles2 -> v1Tiles1 -> v1Tiles2
+
+	lb bc, $0, LOW(v0Tiles2 / TILE_SIZE) ; $00
+	call .CopyGfxData
+	jr z, .done
+	lb bc, $0, LOW(v0Tiles1 / TILE_SIZE) ; $80
+	call .CopyGfxData
+	jr z, .done
+	; VRAM1 only used in CGB console
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .done
+	lb bc, $1, LOW(v1Tiles2 / TILE_SIZE) ; $00
+	call .CopyGfxData
+	jr z, .done
+	lb bc, $1, LOW(v1Tiles1 / TILE_SIZE) ; $80
+	call .CopyGfxData
+
+.done
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x80336
+
+; copies gfx data from wTempPointer to VRAM
+; c must match with wVRAMTileOffset
+; if c = $00, copies it to Tiles2
+; if c = $80, copies it to Tiles1
+; b must match with VRAM bank in wd4cb
+; prepares next call to this routine if data wasn't fully copied
+; so that it copies to the right VRAM section
+.CopyGfxData ; 80336 (20:4336)
+	push hl
+	push bc
+	push de
+	ld a, [wd4cb]
+	cp b
+	jr nz, .skip
+	ld a, [wVRAMTileOffset]
+	ld d, a
+	xor c
+	bit 7, a
+	jr nz, .skip
+
+; (wd4cb == b) and
+; bit 7 in c is same as bit 7 in wVRAMTileOffset
+	ld a, c
+	add $80
+	sub d
+	ld d, a ; total number of tiles
+	ld a, [wTotalNumTiles + 1]
+	or a
+	jr nz, .asm_8035a
+	; if d > wTotalNumTiles,
+	; overwrite it with wTotalNumTiles
+	ld a, [wTotalNumTiles]
+	cp d
+	jr nc, .asm_8035a
+	ld d, a
+.asm_8035a
+	ld a, [wTotalNumTiles]
+	sub d
+	ld [wTotalNumTiles], a
+	ld a, [wTotalNumTiles + 1]
+	sbc $00
+	ld [wTotalNumTiles + 1], a
+	call GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2
+
+	ld b, d ; number of tiles
+	ld c, TILE_SIZE
+	ld hl, wVRAMPointer
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld hl, wTempPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push bc
+	push hl
+	ldh a, [hBankVRAM]
+	push af
+	ld a, [wd4cb]
+	and $01
+	call BankswitchVRAM
+	call CopyGfxDataFromTempBank
+	pop af
+	call BankswitchVRAM
+	pop de
+	pop bc
+
+	; add number of tiles * TILE_SIZE
+	; to wVRAMPointer and store it in wTempPointer
+	ld l, b
+	ld h, $00
+	add hl, hl ; *2
+	add hl, hl ; *4
+	add hl, hl ; *8
+	add hl, hl ; *16 (TILE_SIZE)
+	add hl, de
+	ld a, l
+	ld [wTempPointer], a
+	ld a, h
+	ld [wTempPointer + 1], a
+
+	ld hl, wVRAMTileOffset
+	ld a, [hl]
+	add $80
+	push af
+	and $80 ; start of next group of tiles
+	ld [hli], a
+	pop af
+	; if it overflows
+	; (which means a tile group after Tiles2)
+	; then set wd4cb for VRAM1
+	ld a, [hl] ; wd4cb
+	adc $00
+	ld [hl], a
+
+.skip
+	ld hl, wTotalNumTiles
+	ld a, [hli]
+	or [hl] ; wTotalNumTiles + 1
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x803b9
 
 ; gets pointer to BG map with ID from wd131
 Func_803b9: ; 803b9 (20:43b9)
@@ -439,11 +632,37 @@ Func_803b9: ; 803b9 (20:43b9)
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
 	ld a, [hl]
-	ld [wd239], a
+	ld [wCurTileset], a
 	ret
 ; 0x803c9
 
-	INCROM $803c9, $803ec
+Func_803c9: ; 803c9 (20:43c9)
+	push hl
+	push bc
+	push de
+	call CopyPaletteDataToBuffer
+	ld hl, wLoadedPalData
+	ld a, [hli]
+	or a
+	jr z, .asm_803dc
+	ld a, [hli]
+	push hl
+	call SetBGP
+	pop hl
+.asm_803dc
+	ld a, [hli]
+	or a
+	jr z, .asm_803e8
+	ld c, a
+	ld a, [wd4cb]
+	ld b, a
+	call LoadPaletteDataFromHL
+.asm_803e8
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x803ec
 
 ; copies from palette data in hl c*8 bytes to palette index b
 ; in WRAM, starting from wBackgroundPalettesCGB
@@ -707,214 +926,221 @@ SpriteNullAnimationFrame:
 ; might be closer to "screen specific data" than map data
 MapDataPointers: ; 80e5d (20:4e5d)
 	dw MapDataPointers_80e67
-	dw MapDataPointers_8100f
+	dw Tilesets
 	dw MapDataPointers_8116b
 	dw SpriteAnimationPointers
 	dw MapDataPointers_81697
 
 ; \1 = pointer
-; \2 = unknown
+; \2 = tileset
 macro_80e67: MACRO
 	dwb \1, BANK(\1) - BANK(MapDataPointers_80e67)
 	db \2
 ENDM
 
 MapDataPointers_80e67: ; 80e67 (20:4e67)
-	macro_80e67 Data_8191b, $00 ; 0
-	macro_80e67 Data_81a22, $00 ; 1
-	macro_80e67 Data_81c13, $01 ; 2
-	macro_80e67 Data_81d2e, $01 ; 3
-	macro_80e67 Data_81ed1, $01 ; 4
-	macro_80e67 Data_81ef5, $01 ; 5
-	macro_80e67 Data_81f26, $01 ; 6
-	macro_80e67 Data_81feb, $01 ; 7
-	macro_80e67 Data_82143, $01 ; 8
-	macro_80e67 Data_82150, $01 ; 9
-	macro_80e67 Data_82160, $02 ; 10
-	macro_80e67 Data_82222, $02 ; 11
-	macro_80e67 Data_82336, $03 ; 12
-	macro_80e67 Data_82400, $03 ; 13
-	macro_80e67 Data_8251d, $03 ; 14
-	macro_80e67 Data_825e7, $03 ; 15
-	macro_80e67 Data_82704, $03 ; 16
-	macro_80e67 Data_827ce, $03 ; 17
-	macro_80e67 Data_828eb, $03 ; 18
-	macro_80e67 Data_829b5, $03 ; 19
-	macro_80e67 Data_82ad2, $03 ; 20
-	macro_80e67 Data_82b9c, $03 ; 21
-	macro_80e67 Data_82cb9, $03 ; 22
-	macro_80e67 Data_82d83, $03 ; 23
-	macro_80e67 Data_82ea0, $03 ; 24
-	macro_80e67 Data_82f6a, $03 ; 25
-	macro_80e67 Data_83087, $03 ; 26
-	macro_80e67 Data_83151, $03 ; 27
-	macro_80e67 Data_8326e, $03 ; 28
-	macro_80e67 Data_83321, $03 ; 29
-	macro_80e67 Data_83424, $04 ; 30
-	macro_80e67 Data_83545, $04 ; 31
-	macro_80e67 Data_836db, $05 ; 32
-	macro_80e67 Data_8378c, $05 ; 33
-	macro_80e67 Data_8388d, $06 ; 34
-	macro_80e67 Data_839d6, $06 ; 35
-	macro_80e67 Data_84000, $07 ; 36
-	macro_80e67 Data_84188, $07 ; 37
-	macro_80e67 Data_843bb, $08 ; 38
-	macro_80e67 Data_84533, $08 ; 39
-	macro_80e67 Data_8472e, $09 ; 40
-	macro_80e67 Data_848d8, $09 ; 41
-	macro_80e67 Data_84b73, $0a ; 42
-	macro_80e67 Data_84c6f, $0a ; 43
-	macro_80e67 Data_84dfe, $0b ; 44
-	macro_80e67 Data_84f1d, $0b ; 45
-	macro_80e67 Data_850b6, $0c ; 46
-	macro_80e67 Data_85191, $0c ; 47
-	macro_80e67 Data_85315, $0d ; 48
-	macro_80e67 Data_854b3, $0d ; 49
-	macro_80e67 Data_8570a, $0e ; 50
-	macro_80e67 Data_857ce, $0e ; 51
-	macro_80e67 Data_83bf1, $0e ; 52
-	macro_80e67 Data_83c03, $0e ; 53
-	macro_80e67 Data_858ef, $0f ; 54
-	macro_80e67 Data_85a79, $0f ; 55
-	macro_80e67 Data_83c1a, $0f ; 56
-	macro_80e67 Data_83c26, $0f ; 57
-	macro_80e67 Data_85ce2, $10 ; 58
-	macro_80e67 Data_85df4, $10 ; 59
-	macro_80e67 Data_85f7c, $11 ; 60
-	macro_80e67 Data_8607f, $11 ; 61
-	macro_80e67 Data_83c36, $12 ; 62
-	macro_80e67 Data_8617d, $12 ; 63
-	macro_80e67 Data_86193, $12 ; 64
-	macro_80e67 Data_861a9, $12 ; 65
-	macro_80e67 Data_861bf, $12 ; 66
-	macro_80e67 Data_861d5, $12 ; 67
-	macro_80e67 Data_861eb, $12 ; 68
-	macro_80e67 Data_86201, $12 ; 69
-	macro_80e67 Data_86217, $13 ; 70
-	macro_80e67 Data_862da, $13 ; 71
-	macro_80e67 Data_86364, $13 ; 72
-	macro_80e67 Data_86443, $13 ; 73
-	macro_80e67 Data_864df, $14 ; 74
-	macro_80e67 Data_865b5, $14 ; 75
-	macro_80e67 Data_86647, $15 ; 76
-	macro_80e67 Data_866b8, $16 ; 77
-	macro_80e67 Data_8673e, $17 ; 78
-	macro_80e67 Data_867af, $18 ; 79
-	macro_80e67 Data_86833, $19 ; 80
-	macro_80e67 Data_868a4, $1a ; 81
-	macro_80e67 Data_86925, $1b ; 82
-	macro_80e67 Data_86996, $1c ; 83
-	macro_80e67 Data_86a14, $1d ; 84
-	macro_80e67 Data_86a85, $1e ; 85
-	macro_80e67 Data_86b28, $1f ; 86
-	macro_80e67 Data_86b99, $20 ; 87
-	macro_80e67 Data_86c34, $21 ; 88
-	macro_80e67 Data_86ca5, $22 ; 89
-	macro_80e67 Data_86d37, $23 ; 90
-	macro_80e67 Data_86dcc, $24 ; 91
-	macro_80e67 Data_86e8a, $25 ; 92
-	macro_80e67 Data_86f18, $25 ; 93
-	macro_80e67 Data_86fc0, $25 ; 94
-	macro_80e67 Data_8704f, $26 ; 95
-	macro_80e67 Data_871a5, $27 ; 96
-	macro_80e67 Data_87397, $28 ; 97
-	macro_80e67 Data_873b7, $29 ; 98
-	macro_80e67 Data_873e5, $2a ; 99
-	macro_80e67 Data_87413, $2b ; 100
-	macro_80e67 Data_87538, $2c ; 101
-	macro_80e67 Data_8769f, $2d ; 102
-	macro_80e67 Data_876f6, $2d ; 103
-	macro_80e67 Data_8777c, $2e ; 104
-	macro_80e67 Data_877c4, $2f ; 105
+	macro_80e67 Data_8191b, TILESET_OVERWORLD_MAP         ; 0
+	macro_80e67 Data_81a22, TILESET_OVERWORLD_MAP         ; 1
+	macro_80e67 Data_81c13, TILESET_MASON_LABORATORY      ; 2
+	macro_80e67 Data_81d2e, TILESET_MASON_LABORATORY      ; 3
+	macro_80e67 Data_81ed1, TILESET_MASON_LABORATORY      ; 4
+	macro_80e67 Data_81ef5, TILESET_MASON_LABORATORY      ; 5
+	macro_80e67 Data_81f26, TILESET_MASON_LABORATORY      ; 6
+	macro_80e67 Data_81feb, TILESET_MASON_LABORATORY      ; 7
+	macro_80e67 Data_82143, TILESET_MASON_LABORATORY      ; 8
+	macro_80e67 Data_82150, TILESET_MASON_LABORATORY      ; 9
+	macro_80e67 Data_82160, TILESET_ISHIHARA              ; 10
+	macro_80e67 Data_82222, TILESET_ISHIHARA              ; 11
+	macro_80e67 Data_82336, TILESET_CLUB_ENTRANCE         ; 12
+	macro_80e67 Data_82400, TILESET_CLUB_ENTRANCE         ; 13
+	macro_80e67 Data_8251d, TILESET_CLUB_ENTRANCE         ; 14
+	macro_80e67 Data_825e7, TILESET_CLUB_ENTRANCE         ; 15
+	macro_80e67 Data_82704, TILESET_CLUB_ENTRANCE         ; 16
+	macro_80e67 Data_827ce, TILESET_CLUB_ENTRANCE         ; 17
+	macro_80e67 Data_828eb, TILESET_CLUB_ENTRANCE         ; 18
+	macro_80e67 Data_829b5, TILESET_CLUB_ENTRANCE         ; 19
+	macro_80e67 Data_82ad2, TILESET_CLUB_ENTRANCE         ; 20
+	macro_80e67 Data_82b9c, TILESET_CLUB_ENTRANCE         ; 21
+	macro_80e67 Data_82cb9, TILESET_CLUB_ENTRANCE         ; 22
+	macro_80e67 Data_82d83, TILESET_CLUB_ENTRANCE         ; 23
+	macro_80e67 Data_82ea0, TILESET_CLUB_ENTRANCE         ; 24
+	macro_80e67 Data_82f6a, TILESET_CLUB_ENTRANCE         ; 25
+	macro_80e67 Data_83087, TILESET_CLUB_ENTRANCE         ; 26
+	macro_80e67 Data_83151, TILESET_CLUB_ENTRANCE         ; 27
+	macro_80e67 Data_8326e, TILESET_CLUB_ENTRANCE         ; 28
+	macro_80e67 Data_83321, TILESET_CLUB_ENTRANCE         ; 29
+	macro_80e67 Data_83424, TILESET_CLUB_LOBBY            ; 30
+	macro_80e67 Data_83545, TILESET_CLUB_LOBBY            ; 31
+	macro_80e67 Data_836db, TILESET_FIGHTING_CLUB         ; 32
+	macro_80e67 Data_8378c, TILESET_FIGHTING_CLUB         ; 33
+	macro_80e67 Data_8388d, TILESET_ROCK_CLUB             ; 34
+	macro_80e67 Data_839d6, TILESET_ROCK_CLUB             ; 35
+	macro_80e67 Data_84000, TILESET_WATER_CLUB            ; 36
+	macro_80e67 Data_84188, TILESET_WATER_CLUB            ; 37
+	macro_80e67 Data_843bb, TILESET_LIGHTNING_CLUB        ; 38
+	macro_80e67 Data_84533, TILESET_LIGHTNING_CLUB        ; 39
+	macro_80e67 Data_8472e, TILESET_GRASS_CLUB            ; 40
+	macro_80e67 Data_848d8, TILESET_GRASS_CLUB            ; 41
+	macro_80e67 Data_84b73, TILESET_PSYCHIC_CLUB          ; 42
+	macro_80e67 Data_84c6f, TILESET_PSYCHIC_CLUB          ; 43
+	macro_80e67 Data_84dfe, TILESET_SCIENCE_CLUB          ; 44
+	macro_80e67 Data_84f1d, TILESET_SCIENCE_CLUB          ; 45
+	macro_80e67 Data_850b6, TILESET_FIRE_CLUB             ; 46
+	macro_80e67 Data_85191, TILESET_FIRE_CLUB             ; 47
+	macro_80e67 Data_85315, TILESET_CHALLENGE_HALL        ; 48
+	macro_80e67 Data_854b3, TILESET_CHALLENGE_HALL        ; 49
+	macro_80e67 Data_8570a, TILESET_POKEMON_DOME_ENTRANCE ; 50
+	macro_80e67 Data_857ce, TILESET_POKEMON_DOME_ENTRANCE ; 51
+	macro_80e67 Data_83bf1, TILESET_POKEMON_DOME_ENTRANCE ; 52
+	macro_80e67 Data_83c03, TILESET_POKEMON_DOME_ENTRANCE ; 53
+	macro_80e67 Data_858ef, TILESET_POKEMON_DOME          ; 54
+	macro_80e67 Data_85a79, TILESET_POKEMON_DOME          ; 55
+	macro_80e67 Data_83c1a, TILESET_POKEMON_DOME          ; 56
+	macro_80e67 Data_83c26, TILESET_POKEMON_DOME          ; 57
+	macro_80e67 Data_85ce2, TILESET_HALL_OF_HONOR         ; 58
+	macro_80e67 Data_85df4, TILESET_HALL_OF_HONOR         ; 59
+	macro_80e67 Data_85f7c, TILESET_CARD_POP_1            ; 60
+	macro_80e67 Data_8607f, TILESET_CARD_POP_1            ; 61
+	macro_80e67 Data_83c36, TILESET_MEDAL                 ; 62
+	macro_80e67 Data_8617d, TILESET_MEDAL                 ; 63
+	macro_80e67 Data_86193, TILESET_MEDAL                 ; 64
+	macro_80e67 Data_861a9, TILESET_MEDAL                 ; 65
+	macro_80e67 Data_861bf, TILESET_MEDAL                 ; 66
+	macro_80e67 Data_861d5, TILESET_MEDAL                 ; 67
+	macro_80e67 Data_861eb, TILESET_MEDAL                 ; 68
+	macro_80e67 Data_86201, TILESET_MEDAL                 ; 69
+	macro_80e67 Data_86217, TILESET_CARD_POP_2            ; 70
+	macro_80e67 Data_862da, TILESET_CARD_POP_2            ; 71
+	macro_80e67 Data_86364, TILESET_CARD_POP_2            ; 72
+	macro_80e67 Data_86443, TILESET_CARD_POP_2            ; 73
+	macro_80e67 Data_864df, TILESET_CARD_POP_3            ; 74
+	macro_80e67 Data_865b5, TILESET_CARD_POP_3            ; 75
+	macro_80e67 Data_86647, TILESET_COLOSSEUM_1           ; 76
+	macro_80e67 Data_866b8, TILESET_COLOSSEUM_2           ; 77
+	macro_80e67 Data_8673e, TILESET_EVOLUTION_1           ; 78
+	macro_80e67 Data_867af, TILESET_EVOLUTION_2           ; 79
+	macro_80e67 Data_86833, TILESET_MYSTERY_1             ; 80
+	macro_80e67 Data_868a4, TILESET_MYSTERY_2             ; 81
+	macro_80e67 Data_86925, TILESET_LABORATORY_1          ; 82
+	macro_80e67 Data_86996, TILESET_LABORATORY_2          ; 83
+	macro_80e67 Data_86a14, TILESET_CHARIZARD_INTRO_1     ; 84
+	macro_80e67 Data_86a85, TILESET_CHARIZARD_INTRO_2     ; 85
+	macro_80e67 Data_86b28, TILESET_SCYTHER_INTRO_1       ; 86
+	macro_80e67 Data_86b99, TILESET_SCYTHER_INTRO_2       ; 87
+	macro_80e67 Data_86c34, TILESET_AERODACTYL_INTRO_1    ; 88
+	macro_80e67 Data_86ca5, TILESET_AERODACTYL_INTRO_2    ; 89
+	macro_80e67 Data_86d37, TILESET_TITLE_SCREEN_1        ; 90
+	macro_80e67 Data_86dcc, TILESET_TITLE_SCREEN_2        ; 91
+	macro_80e67 Data_86e8a, TILESET_SOLID_TILES_1         ; 92
+	macro_80e67 Data_86f18, TILESET_SOLID_TILES_1         ; 93
+	macro_80e67 Data_86fc0, TILESET_SOLID_TILES_1         ; 94
+	macro_80e67 Data_8704f, TILESET_TITLE_SCREEN_3        ; 95
+	macro_80e67 Data_871a5, TILESET_TITLE_SCREEN_4        ; 96
+	macro_80e67 Data_87397, TILESET_SOLID_TILES_2         ; 97
+	macro_80e67 Data_873b7, TILESET_PLAYER                ; 98
+	macro_80e67 Data_873e5, TILESET_RONALD                ; 99
+	macro_80e67 Data_87413, TILESET_TITLE_SCREEN_5        ; 100
+	macro_80e67 Data_87538, TILESET_TITLE_SCREEN_6        ; 101
+	macro_80e67 Data_8769f, TILESET_COPYRIGHT             ; 102
+	macro_80e67 Data_876f6, TILESET_COPYRIGHT             ; 103
+	macro_80e67 Data_8777c, TILESET_NINTENDO              ; 104
+	macro_80e67 Data_877c4, TILESET_COMPANIES             ; 105
 
-MapDataPointers_8100f: ; 8100f (20:500f)
-	db $00, $40, $02, $c1
-	db $12, $4c, $02, $97
-	db $28, $78, $01, $4d
-	db $84, $55, $02, $81
-	db $96, $5d, $02, $78
-	db $18, $65, $02, $63
-	db $4a, $6b, $02, $3c
-	db $0c, $6f, $02, $a1
-	db $00, $40, $03, $83
-	db $1e, $79, $02, $57
-	db $32, $48, $03, $3a
-	db $d4, $4b, $03, $52
-	db $f6, $50, $03, $57
-	db $68, $56, $03, $9d
-	db $3a, $60, $03, $4e
-	db $1c, $65, $03, $cf
-	db $0e, $72, $03, $79
-	db $00, $40, $04, $bd
-	db $a0, $79, $03, $48
-	db $d2, $4b, $04, $6d
-	db $a4, $52, $04, $5d
-	db $76, $58, $04, $60
-	db $78, $5e, $04, $56
-	db $da, $63, $04, $60
-	db $dc, $69, $04, $56
-	db $3e, $6f, $04, $60
-	db $40, $75, $04, $56
-	db $00, $40, $05, $60
-	db $02, $46, $05, $56
-	db $64, $4b, $05, $60
-	db $66, $51, $05, $60
-	db $68, $57, $05, $60
-	db $6a, $5d, $05, $60
-	db $6c, $63, $05, $60
-	db $6e, $69, $05, $60
-	db $70, $6f, $05, $61
-	db $82, $75, $05, $61
-	db $fa, $7c, $01, $04
-	db $00, $40, $06, $f4
-	db $42, $4f, $06, $3b
-	db $3c, $7d, $01, $04
-	db $7e, $7d, $01, $24
-	db $a2, $7a, $04, $24
-	db $f4, $62, $06, $dc
-	db $b6, $70, $06, $d4
-	db $e4, $7c, $04, $24
-	db $22, $7e, $03, $18
-	db $94, $7b, $05, $31
-	db $00, $40, $07, $24
-	db $42, $42, $07, $24
-	db $84, $44, $07, $24
-	db $c6, $46, $07, $24
-	db $08, $49, $07, $24
-	db $4a, $4b, $07, $24
-	db $8c, $4d, $07, $24
-	db $ce, $4f, $07, $24
-	db $10, $52, $07, $24
-	db $52, $54, $07, $24
-	db $94, $56, $07, $24
-	db $d6, $58, $07, $24
-	db $18, $5b, $07, $24
-	db $5a, $5d, $07, $24
-	db $9c, $5f, $07, $24
-	db $de, $61, $07, $24
-	db $20, $64, $07, $24
-	db $62, $66, $07, $24
-	db $a4, $68, $07, $24
-	db $e6, $6a, $07, $24
-	db $28, $6d, $07, $24
-	db $6a, $6f, $07, $24
-	db $ac, $71, $07, $24
-	db $ee, $73, $07, $24
-	db $30, $76, $07, $24
-	db $72, $78, $07, $24
-	db $b4, $7a, $07, $24
-	db $f6, $7c, $07, $24
-	db $00, $40, $08, $24
-	db $42, $42, $08, $24
-	db $84, $44, $08, $24
-	db $c6, $46, $08, $24
-	db $08, $49, $08, $24
-	db $4a, $4b, $08, $24
-	db $8c, $4d, $08, $24
-	db $ce, $4f, $08, $24
-	db $10, $52, $08, $24
-	db $52, $54, $08, $24
-	db $94, $56, $08, $24
+; \1 = pointer
+; \2 = number of tiles
+tileset: MACRO
+	dwb \1, BANK(\1) - BANK(Tilesets)
+	db \2
+ENDM
+
+Tilesets: ; 8100f (20:500f)
+	tileset OverworldMapTiles,             193 ; TILESET_OVERWORLD_MAP
+	tileset MasonLaboratoryTilesetGfx,     151 ; TILESET_MASON_LABORATORY
+	tileset IshiharaTilesetGfx,             77 ; TILESET_ISHIHARA
+	tileset ClubEntranceTilesetGfx,        129 ; TILESET_CLUB_ENTRANCE
+	tileset ClubLobbyTilesetGfx,           120 ; TILESET_CLUB_LOBBY
+	tileset FightingClubTilesetGfx,         99 ; TILESET_FIGHTING_CLUB
+	tileset RockClubTilesetGfx,             60 ; TILESET_ROCK_CLUB
+	tileset WaterClubTilesetGfx,           161 ; TILESET_WATER_CLUB
+	tileset LightningClubTilesetGfx,       131 ; TILESET_LIGHTNING_CLUB
+	tileset GrassClubTilesetGfx,            87 ; TILESET_GRASS_CLUB
+	tileset PsychicClubTilesetGfx,          58 ; TILESET_PSYCHIC_CLUB
+	tileset ScienceClubTilesetGfx,          82 ; TILESET_SCIENCE_CLUB
+	tileset FireClubTilesetGfx,             87 ; TILESET_FIRE_CLUB
+	tileset ChallengeHallTilesetGfx,       157 ; TILESET_CHALLENGE_HALL
+	tileset PokemonDomeEntranceTilesetGfx,  78 ; TILESET_POKEMON_DOME_ENTRANCE
+	tileset PokemonDomeTilesetGfx,         207 ; TILESET_POKEMON_DOME
+	tileset HallOfHonorTilesetGfx,         121 ; TILESET_HALL_OF_HONOR
+	tileset CardPop1Gfx,                   189 ; TILESET_CARD_POP_1
+	tileset MedalGfx,                       72 ; TILESET_MEDAL
+	tileset CardPop2Gfx,                   109 ; TILESET_CARD_POP_2
+	tileset CardPop3Gfx,                    93 ; TILESET_CARD_POP_3
+	tileset Colosseum1Gfx,                  96 ; TILESET_COLOSSEUM_1
+	tileset Colosseum2Gfx,                  86 ; TILESET_COLOSSEUM_2
+	tileset Evolution1Gfx,                  96 ; TILESET_EVOLUTION_1
+	tileset Evolution2Gfx,                  86 ; TILESET_EVOLUTION_2
+	tileset Mystery1Gfx,                    96 ; TILESET_MYSTERY_1
+	tileset Mystery2Gfx,                    86 ; TILESET_MYSTERY_2
+	tileset Laboratory1Gfx,                 96 ; TILESET_LABORATORY_1
+	tileset Laboratory2Gfx,                 86 ; TILESET_LABORATORY_2
+	tileset CharizardIntro1Gfx,             96 ; TILESET_CHARIZARD_INTRO_1
+	tileset CharizardIntro2Gfx,             96 ; TILESET_CHARIZARD_INTRO_2
+	tileset ScytherIntro1Gfx,               96 ; TILESET_SCYTHER_INTRO_1
+	tileset ScytherIntro2Gfx,               96 ; TILESET_SCYTHER_INTRO_2
+	tileset AerodactylIntro1Gfx,            96 ; TILESET_AERODACTYL_INTRO_1
+	tileset AerodactylIntro2Gfx,            96 ; TILESET_AERODACTYL_INTRO_2
+	tileset Titlescreen1Gfx,                97 ; TILESET_TITLE_SCREEN_1
+	tileset Titlescreen2Gfx,                97 ; TILESET_TITLE_SCREEN_2
+	tileset SolidTiles1,                     4 ; TILESET_SOLID_TILES_1
+	tileset Titlescreen3Gfx,               244 ; TILESET_TITLE_SCREEN_3
+	tileset Titlescreen4Gfx,                59 ; TILESET_TITLE_SCREEN_4
+	tileset SolidTiles2,                     4 ; TILESET_SOLID_TILES_2
+	tileset PlayerGfx,                      36 ; TILESET_PLAYER
+	tileset RonaldGfx,                      36 ; TILESET_RONALD
+	tileset Titlescreen5Gfx,               220 ; TILESET_TITLE_SCREEN_5
+	tileset Titlescreen6Gfx,               212 ; TILESET_TITLE_SCREEN_6
+	tileset CopyrightGfx,                   36 ; TILESET_COPYRIGHT
+	tileset NintendoGfx,                    24 ; TILESET_NINTENDO
+	tileset CompaniesGfx,                   49 ; TILESET_COMPANIES
+	tileset SamGfx,                         36 ; TILESET_SAM
+	tileset ImakuniGfx,                     36 ; TILESET_IMAKUNI
+	tileset NikkiGfx,                       36 ; TILESET_NIKKI
+	tileset RickGfx,                        36 ; TILESET_RICK
+	tileset KenGfx,                         36 ; TILESET_KEN
+	tileset AmyGfx,                         36 ; TILESET_AMY
+	tileset IsaacGfx,                       36 ; TILESET_ISAAC
+	tileset MitchGfx,                       36 ; TILESET_MITCH
+	tileset GeneGfx,                        36 ; TILESET_GENE
+	tileset MurrayGfx,                      36 ; TILESET_MURRAY
+	tileset CourtneyGfx,                    36 ; TILESET_COURTNEY
+	tileset SteveGfx,                       36 ; TILESET_STEVE
+	tileset JackGfx,                        36 ; TILESET_JACK
+	tileset RodGfx,                         36 ; TILESET_ROD
+	tileset JosephGfx,                      36 ; TILESET_JOSEPH
+	tileset DavidGfx,                       36 ; TILESET_DAVID
+	tileset ErikGfx,                        36 ; TILESET_ERIK
+	tileset JohnGfx,                        36 ; TILESET_JOHN
+	tileset AdamGfx,                        36 ; TILESET_ADAM
+	tileset JonathanGfx,                    36 ; TILESET_JONATHAN
+	tileset JoshuaGfx,                      36 ; TILESET_JOSHUA
+	tileset NicholasGfx,                    36 ; TILESET_NICHOLAS
+	tileset BrandonGfx,                     36 ; TILESET_BRANDON
+	tileset MatthewGfx,                     36 ; TILESET_MATTHEW
+	tileset RyanGfx,                        36 ; TILESET_RYAN
+	tileset AndrewGfx,                      36 ; TILESET_ANDREW
+	tileset ChrisGfx,                       36 ; TILESET_CHRIS
+	tileset MichaelGfx,                     36 ; TILESET_MICHAEL
+	tileset DanielGfx,                      36 ; TILESET_DANIEL
+	tileset RobertGfx,                      36 ; TILESET_ROBERT
+	tileset BrittanyGfx,                    36 ; TILESET_BRITTANY
+	tileset KristinGfx,                     36 ; TILESET_KRISTIN
+	tileset HeatherGfx,                     36 ; TILESET_HEATHER
+	tileset SaraGfx,                        36 ; TILESET_SARA
+	tileset AmandaGfx,                      36 ; TILESET_AMANDA
+	tileset JenniferGfx,                    36 ; TILESET_JENNIFER
+	tileset JessicaGfx,                     36 ; TILESET_JESSICA
+	tileset StephanieGfx,                   36 ; TILESET_STEPHANIE
+	tileset AaronGfx,                       36 ; TILESET_AARON
 
 ; \1 = gfx pointer
 ; \2 = number of tiles

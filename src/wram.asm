@@ -2123,7 +2123,9 @@ wd237:: ; d237
 wd238:: ; d238
 	ds $1
 
-wd239:: ; d239
+; current tileset to load to VRAM
+; TILESET_* constant
+wCurTileset:: ; d239
 	ds $1
 
 wd23a:: ; d23a
@@ -2489,11 +2491,9 @@ wTempPointerBank:: ; d4c6
 wCurSpriteTileSize:: ; d4c7
 	ds $1
 
-; stores number of tiles that current sprite has
-wCurSpriteNumTiles:: ; d4c8
-	ds $1
-
-	ds $1
+; stores number of tiles that current sprite/tileset has
+wTotalNumTiles:: ; d4c8
+	ds $2
 
 ; stores tile offset in VRAM
 wVRAMTileOffset:: ; d4ca
@@ -2501,6 +2501,8 @@ wVRAMTileOffset:: ; d4ca
 wd4ca:: ; d4ca
 	ds $1
 
+; bottom bit stores which VRAM bank to draw certain gfx
+; $0 = VRAM0, $1 = VRAM1
 wd4cb:: ; d4cb
 	ds $1
 

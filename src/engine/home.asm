@@ -11300,7 +11300,8 @@ FillMemoryWithDE: ; 3c1f (0:3c1f)
 	pop hl
 	ret
 
-Func_3c2d: ; 3c2d (0:3c2d)
+; gets far byte a:hl, outputs value in a
+GetFarByte: ; 3c2d (0:3c2d)
 	push hl
 	push af
 	ldh a, [hBankROM]
