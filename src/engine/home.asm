@@ -11669,7 +11669,7 @@ Func_3e10: ; 3e10 (0:3e10)
 ;	fallthrough
 
 Func_3e17: ; 3e17 (0:3e17)
-	ld [wd131], a
+	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_12fc6)

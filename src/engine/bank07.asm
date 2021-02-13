@@ -64,7 +64,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	ld hl, MapHeaders
 	add hl, bc
 	ld a, [hli]
-	ld [wd131], a
+	ld [wCurTilemap], a
 	ld a, [hli]
 	ld c, a
 	ld a, [hli]
@@ -75,14 +75,17 @@ Func_1c33b: ; 1c33b (7:433b)
 	ld [wd290], a
 	ld a, [hli]
 	ld [wd111], a
+
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_1c370
+	cp CONSOLE_CGB
+	jr nz, .got_tilemap
+	; use CGB variant, if valid
 	ld a, c
 	or a
-	jr z, .asm_1c370
-	ld [wd131], a
-.asm_1c370
+	jr z, .got_tilemap
+	ld [wCurTilemap], a
+.got_tilemap
+
 	pop de
 	pop bc
 	pop hl
