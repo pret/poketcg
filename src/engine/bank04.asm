@@ -114,7 +114,7 @@ MasterMedalNames: ; 1030b (4:430b)
 	tx RockClubMapNameText
 	tx FightingClubMapNameText
 
-BoosterPack_1031b: ; 1031b (4:431b)
+GiveBoosterPack: ; 1031b (4:431b)
 	ld c, a
 	ld a, [wd291]
 	push af
@@ -156,7 +156,7 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, c
 	farcall GenerateBoosterPack
 	ldtx hl, ReceivedBoosterPackText
-	ld a, [wd117]
+	ld a, [wAnotherBoosterPack]
 	cp $1
 	jr nz, .asm_10373
 	ldtx hl, AndAnotherBoosterPackText
@@ -199,7 +199,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	lb de, 0, 12
 	lb bc, 20, 6
 	call DrawRegularTextBox
-	ld a, [wcc19]
+	ld a, [wNPCDuelDeckID]
 	add a
 	add a
 	ld c, a
@@ -385,7 +385,29 @@ Unknown_10e17: ; 10e17 (4:4e17)
 	INCROM $10e17, $10e28
 
 Func_10e28: ; 10e28 (4:4e28)
-	INCROM $10e28, $10e55
+	push hl
+	push bc
+	push de
+	ld a, [wd33b]
+	ld [wWhichSprite], a
+	ld a, [wOverworldMapSelection]
+	ld d, $00
+	ld e, $f4
+	call Func_10ef0
+	ld a, [wd33e]
+	or a
+	jr nz, .asm_10e51
+	ld a, [wPlayerSpriteIndex]
+	ld [wWhichSprite], a
+	ld a, [wd33d]
+	ld d, $00
+	ld e, $00
+	call Func_10ef0
+.asm_10e51
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wPlayerSpriteIndex]
@@ -393,7 +415,7 @@ Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wd33e]
 	or a
 	jr nz, .asm_10e65
-	call Func_10e71
+	call OverworldMap_HandleKeyPress
 	ret
 .asm_10e65
 	cp $2
@@ -404,53 +426,139 @@ Func_10e55: ; 10e55 (4:4e55)
 	call LoadOverworldMapSelection
 	ret
 
-Func_10e71: ; 10e71 (4:4e71)
+OverworldMap_HandleKeyPress: ; 10e71 (4:4e71)
 	ldh a, [hKeysPressed]
 	and D_PAD
-	jr z, .asm_10e83
+	jr z, .no_d_pad
 	farcall GetDirectionFromDPad
 	ld [wPlayerDirection], a
-	call Func_10e97
-	jr .asm_10e96
-.asm_10e83
+	call OverworldMap_HandleDPad
+	jr .done
+.no_d_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON
-	jr z, .asm_10e96
+	jr z, .done
 	ld a, SFX_02
 	call PlaySFX
-	call Func_11016
+	call Func_11016 ; load map?
 	call Func_11024
-	jr .asm_10e96
-.asm_10e96
+	jr .done
+.done
 	ret
 
-Func_10e97: ; 10e97 (4:4e97)
+OverworldMap_HandleDPad: ; 10e97 (4:4e97)
 	push hl
 	pop hl
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	rlca
 	rlca
 	ld c, a
 	ld a, [wPlayerDirection]
 	add c
 	ld c, a
-	ld b, $0
-	ld hl, Unknown_10ebc
+	ld b, 0
+	ld hl, OverworldMap_CursorTransitions
 	add hl, bc
 	ld a, [hl]
 	or a
-	jr z, .asm_10eb9
-	ld [wd32e], a
-	call Func_10f2e
+	jr z, .no_transition
+	ld [wOverworldMapSelection], a
+	call PrintOverworldMapName ; update cursor oam?
 	ld a, SFX_01
 	call PlaySFX
-.asm_10eb9
+.no_transition
 	pop bc
 	pop hl
 	ret
 
-Unknown_10ebc: ; 10ebc (4:4ebc)
-	INCROM $10ebc, $10efd
+OverworldMap_CursorTransitions: ; 10ebc (4:4ebc)
+	; unused
+	db OWMAP_SCIENCE_CLUB     ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_SCIENCE_CLUB     ; SOUTH
+	db OWMAP_SCIENCE_CLUB     ; WEST
+
+	; OWMAP_MASON_LABORATORY
+	db OWMAP_LIGHTNING_CLUB   ; NORTH
+	db OWMAP_FIGHTING_CLUB    ; EAST
+	db $00                    ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_ISHIHARAS_HOUSE
+	db $00                    ; NORTH
+	db OWMAP_CHALLENGE_HALL   ; EAST
+	db OWMAP_ROCK_CLUB        ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_FIGHTING_CLUB
+	db OWMAP_LIGHTNING_CLUB   ; NORTH
+	db OWMAP_WATER_CLUB       ; EAST
+	db $00                    ; SOUTH
+	db OWMAP_MASON_LABORATORY ; WEST
+
+	; OWMAP_ROCK_CLUB
+	db OWMAP_ISHIHARAS_HOUSE  ; NORTH
+	db OWMAP_POKEMON_DOME     ; EAST
+	db OWMAP_LIGHTNING_CLUB   ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_WATER_CLUB
+	db OWMAP_GRASS_CLUB       ; NORTH
+	db $00                    ; EAST
+	db $00                    ; SOUTH
+	db OWMAP_FIGHTING_CLUB    ; WEST
+
+	; OWMAP_LIGHTNING_CLUB
+	db OWMAP_ROCK_CLUB        ; NORTH
+	db OWMAP_POKEMON_DOME     ; EAST
+	db OWMAP_FIGHTING_CLUB    ; SOUTH
+	db OWMAP_MASON_LABORATORY ; WEST
+
+	; OWMAP_GRASS_CLUB
+	db OWMAP_SCIENCE_CLUB     ; NORTH
+	db $00                    ; EAST
+	db OWMAP_WATER_CLUB       ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_PSYCHIC_CLUB
+	db OWMAP_FIRE_CLUB        ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_GRASS_CLUB       ; SOUTH
+	db OWMAP_POKEMON_DOME     ; WEST
+
+	; OWMAP_SCIENCE_CLUB
+	db OWMAP_FIRE_CLUB        ; NORTH
+	db $00                    ; EAST
+	db OWMAP_GRASS_CLUB       ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_FIRE_CLUB
+	db $00                    ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_SCIENCE_CLUB     ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_CHALLENGE_HALL
+	db $00                    ; NORTH
+	db OWMAP_PSYCHIC_CLUB     ; EAST
+	db OWMAP_POKEMON_DOME     ; SOUTH
+	db OWMAP_ISHIHARAS_HOUSE  ; WEST
+
+	; OWMAP_POKEMON_DOME
+	db OWMAP_CHALLENGE_HALL   ; NORTH
+	db OWMAP_PSYCHIC_CLUB     ; EAST
+	db OWMAP_FIGHTING_CLUB    ; SOUTH
+	db OWMAP_ROCK_CLUB        ; WEST
+
+Func_10ef0: ; 10ef0 (4:4ef0)
+	call Func_10efd
+	ld c, $02
+	call GetSpriteAnimBufferProperty
+	ld a, d
+	ld [hli], a
+	ld a, e
+	ld [hl], a
+	ret
 
 Func_10efd: ; 10efd (4:4efd)
 	push hl
@@ -475,12 +583,12 @@ Func_10efd: ; 10efd (4:4efd)
 Unknown_10f14: ; 10f14 (4:4f14)
 	INCROM $10f14, $10f2e
 
-Func_10f2e: ; 10f2e (4:4f2e)
+PrintOverworldMapName: ; 10f2e (4:4f2e)
 	push hl
 	push de
 	lb de, 1, 1
 	call InitTextPrinting
-	call Func_10f4a
+	call GetOverworldMapName
 	rlca
 	ld e, a
 	ld d, $0
@@ -494,10 +602,10 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	pop hl
 	ret
 
-Func_10f4a: ; 10f4a (4:4f4a)
+GetOverworldMapName: ; 10f4a (4:4f4a)
 	push bc
-	ld a, [wd32e]
-	cp $2
+	ld a, [wOverworldMapSelection]
+	cp OWMAP_ISHIHARAS_HOUSE
 	jr nz, .asm_10f5f
 	ld c, a
 	ld a, EVENT_ISHIHARAS_HOUSE_MENTIONED
@@ -513,11 +621,11 @@ Func_10f4a: ; 10f4a (4:4f4a)
 LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	push hl
 	push bc
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	rlca
 	rlca
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, OverworldMapIndexes
 	add hl, bc
 	ld a, [hli]
@@ -526,7 +634,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	ld [wTempPlayerXCoord], a
 	ld a, [hli]
 	ld [wTempPlayerYCoord], a
-	ld a, $0
+	ld a, NORTH
 	ld [wTempPlayerDirection], a
 	ld hl, wd0b4
 	set 4, [hl]
@@ -545,18 +653,18 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld [hli], a
 	ld a, $10
 	ld [hl], a
-	ld b, $34
+	ld b, $34 ; non-cgb volcano smoke
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_10fd8
-	ld b, $37
-.asm_10fd8
+	jr nz, .not_cgb
+	ld b, $37 ; cgb volcano smoke
+.not_cgb
 	ld a, b
 	farcall StartNewSpriteAnimation
 	ret
 
 Func_10fde: ; 10fde (4:4fde)
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	ld [wd33d], a
 	xor a
 	ld [wd33e], a
@@ -564,12 +672,12 @@ Func_10fde: ; 10fde (4:4fde)
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wd33b], a
-	ld b, $35
+	ld b, $35 ; blue overworld map cursor
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_10ffe
-	ld b, $38
-.asm_10ffe
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	ld b, $38 ; red overworld map cursor
+.not_cgb
 	ld a, b
 	ld [wd33c], a
 	call StartNewSpriteAnimation
@@ -609,7 +717,7 @@ Func_11024: ; 11024 (4:5024)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	dec a
 	add a
 	ld c, a
@@ -625,6 +733,7 @@ Func_11024: ; 11024 (4:5024)
 	ld [wd341], a
 	ret
 
+; used while animating the player across the overworld map
 Func_11060: ; 11060 (4:5060)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
@@ -647,7 +756,7 @@ Func_11060: ; 11060 (4:5060)
 	jr nz, .asm_11094
 	ld a, [wd33d]
 	ld e, a
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	cp e
 	jr z, .asm_110a0
 	ld de, $0000
@@ -856,26 +965,29 @@ Func_11416: ; 11416 (4:5416)
 Func_11430: ; 11430 (4:5430)
 	INCROM $11430, $1157c
 
-Func_1157c: ; 1157c (4:557c)
+; save the game
+; if c is 0, save the player at their current position
+; otherwise, save the player in Mason's lab
+_SaveGame: ; 1157c (4:557c)
 	ld a, c
 	or a
-	jr nz, .asm_11586
-	farcall Func_c228
-	jr .asm_1159f
+	jr nz, .force_mason_lab
+	farcall BackupPlayerPosition
+	jr .save
 
-.asm_11586
+.force_mason_lab
 	ld a, $2
 	ld [wTempPlayerXCoord], a
 	ld a, $4
 	ld [wTempPlayerYCoord], a
-	ld a, $2
+	ld a, SOUTH
 	ld [wTempPlayerDirection], a
-	ld a, $1
+	ld a, MASON_LABORATORY
 	ld [wTempMap], a
-	ld a, $1
-	ld [wd32e], a
+	ld a, OWMAP_MASON_LABORATORY
+	ld [wOverworldMapSelection], a
 
-.asm_1159f
+.save
 	call Func_11238
 	ret
 
@@ -886,12 +998,11 @@ INCLUDE "data/map_scripts.asm"
 
 ; loads a pointer into hl found on NPCHeaderPointers
 GetNPCHeaderPointer: ; 1184a (4:584a)
-	; this may have been a macro
 	rlca
 	add LOW(NPCHeaderPointers)
 	ld l, a
 	ld a, HIGH(NPCHeaderPointers)
-	adc $00
+	adc 0
 	ld h, a
 	ld a, [hli]
 	ld h, [hl]
@@ -915,10 +1026,10 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	pop bc
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_1187a
+	jr nz, .not_cgb
 	ld a, b
 	ld [wd3b1], a
-.asm_1187a
+.not_cgb
 	pop bc
 	pop hl
 	ret
@@ -936,7 +1047,7 @@ GetNPCNameAndScript: ; 1187d (4:587d)
 	ld a, [hli]
 	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wCurrentNPCNameTx+1], a
+	ld [wCurrentNPCNameTx + 1], a
 	pop hl
 	ret
 
@@ -950,16 +1061,17 @@ SetNPCDialogName: ; 11893 (4:5893)
 	ld a, [hli]
 	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wCurrentNPCNameTx+1], a
+	ld [wCurrentNPCNameTx + 1], a
 	pop bc
 	pop hl
 	ret
 
-Func_118a7: ; 118a7 (4:58a7)
+; set the opponent name and portrait for the NPC id in register a
+SetNPCOpponentNameAndPortrait: ; 118a7 (4:58a7)
 	push hl
 	push bc
 	call GetNPCHeaderPointer
-	ld bc, $0007
+	ld bc, NPC_DATA_NAME_TEXT
 	add hl, bc
 	ld a, [hli]
 	ld [wOpponentName], a
@@ -971,39 +1083,41 @@ Func_118a7: ; 118a7 (4:58a7)
 	pop hl
 	ret
 
-Func_118bf: ; 118bf (4:58bf)
+; set the deck id and duel theme for the NPC id in register a
+SetNPCDeckIDAndDuelTheme: ; 118bf (4:58bf)
 	push hl
 	push bc
 	call GetNPCHeaderPointer
-	ld bc, $000a
+	ld bc, NPC_DATA_DECK_ID
 	add hl, bc
 	ld a, [hli]
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 	ld a, [hli]
 	ld [wDuelTheme], a
 	pop bc
 	pop hl
 	ret
 
-Func_118d3: ; 118d3 (4:58d3)
+; set the start theme for the NPC id in register a
+SetNPCMatchStartTheme: ; 118d3 (4:58d3)
 	push hl
 	push bc
 	push af
 	call GetNPCHeaderPointer
-	ld bc, $000c
+	ld bc, NPC_DATA_MATCH_START_ID
 	add hl, bc
 	ld a, [hli]
 	ld [wMatchStartTheme], a
 	pop af
-	cp $2
-	jr nz, .asm_118f2
+	cp NPC_RONALD1
+	jr nz, .not_ronald_final_duel
 	ld a, [wCurMap]
 	cp POKEMON_DOME
-	jr nz, .asm_118f2
+	jr nz, .not_ronald_final_duel
 	ld a, MUSIC_MATCH_START_3
 	ld [wMatchStartTheme], a
 
-.asm_118f2
+.not_ronald_final_duel
 	pop bc
 	pop hl
 	ret
@@ -1229,9 +1343,9 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
-	ld a, $9
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_OVERWORLD
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	farcall Func_1d306
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a

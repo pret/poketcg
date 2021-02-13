@@ -30,3 +30,5 @@
 	const MUSIC_BOOSTER_PACK   ; $1c
 	const MUSIC_MEDAL          ; $1d
 	const MUSIC_UNUSED_1E      ; $1e
+
+NUM_SONGS = const_value

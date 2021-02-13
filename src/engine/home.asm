@@ -10533,7 +10533,7 @@ Func_37c5: ; 37c5 (0:37c5)
 	jr nz, .asm_37c7
 	ret
 
-Func_380e: ; 380e (0:380e)
+OverworldDoFrameFunction: ; 380e (0:380e)
 	ld a, [wd0c1]
 	bit 7, a
 	ret nz
@@ -10647,18 +10647,18 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	ret
 
 GameEvent_ChallengeMachine: ; 38db (0:38db)
-	ld a, $6
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_PC_MAIN_MENU
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	call EnableSRAM
 	xor a
 	ld [sba44], a
 	call DisableSRAM
 .asm_38ed
 	farcall Func_131d3
-	ld a, $9
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_OVERWORLD
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	scf
 	ret
 
@@ -10850,11 +10850,11 @@ FindLoadedNPC: ; 39c3 (0:39c3)
 	pop hl
 	ret
 
-Func_39ea: ; 39ea (0:39ea)
+GetNextNPCMovementByte: ; 39ea (0:39ea)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	ld a, $03
+	ld a, BANK(ExecuteNPCMovement)
 	call BankswitchROM
 	ld a, [bc]
 	ld c, a
@@ -10864,13 +10864,13 @@ Func_39ea: ; 39ea (0:39ea)
 	pop bc
 	ret
 
-Func_39fc: ; 39fc (0:39fc)
+PlayDefaultSong: ; 39fc (0:39fc)
 	push hl
 	push bc
 	call AssertSongFinished
 	or a
 	push af
-	call Func_3a1f
+	call GetDefaultSong
 	ld c, a
 	pop af
 	jr z, .asm_3a11
@@ -10880,7 +10880,7 @@ Func_39fc: ; 39fc (0:39fc)
 	jr z, .asm_3a1c
 .asm_3a11
 	ld a, c
-	cp $1f
+	cp NUM_SONGS
 	jr nc, .asm_3a1c
 	ld [wd112], a
 	call PlaySong
@@ -10889,21 +10889,22 @@ Func_39fc: ; 39fc (0:39fc)
 	pop hl
 	ret
 
-Func_3a1f: ; 3a1f (0:3a1f)
+; returns [wDefaultSong] or MUSIC_RONALD in a
+GetDefaultSong: ; 3a1f (0:3a1f)
 	ld a, [wd3b8]
 	or a
-	jr z, .asm_3a37
-	ld a, [wd32e]
-	cp $2
-	jr z, .asm_3a37
-	cp $b
-	jr z, .asm_3a37
-	cp $c
-	jr z, .asm_3a37
+	jr z, .default_song
+	ld a, [wOverworldMapSelection]
+	cp OWMAP_ISHIHARAS_HOUSE
+	jr z, .default_song
+	cp OWMAP_CHALLENGE_HALL
+	jr z, .default_song
+	cp OWMAP_POKEMON_DOME
+	jr z, .default_song
 	ld a, MUSIC_RONALD
 	ret
-.asm_3a37
-	ld a, [wd111]
+.default_song
+	ld a, [wDefaultSong]
 	ret
 
 Func_3a3b: ; 3a3b (0:3a3b)
@@ -10922,13 +10923,13 @@ Func_3a4a: ; 3a4a (0:3a4a)
 	farcall Func_115a3
 	ret
 
-Func_3a4f: ; 3a4f (0:3a4f)
+SaveGame: ; 3a4f (0:3a4f)
 	push af
 	push bc
 	push de
 	push hl
 	ld c, $00
-	farcall Func_1157c
+	farcall _SaveGame
 	pop hl
 	pop de
 	pop bc

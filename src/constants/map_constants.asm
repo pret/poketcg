@@ -34,6 +34,20 @@
 	const POKEMON_DOME            ; $20
 	const HALL_OF_HONOR           ; $21
 
+; overworld map selections
+	const_def 1
+	const OWMAP_MASON_LABORATORY ; $01
+	const OWMAP_ISHIHARAS_HOUSE  ; $02
+	const OWMAP_FIGHTING_CLUB    ; $03
+	const OWMAP_ROCK_CLUB        ; $04
+	const OWMAP_WATER_CLUB       ; $05
+	const OWMAP_LIGHTNING_CLUB   ; $06
+	const OWMAP_GRASS_CLUB       ; $07
+	const OWMAP_PSYCHIC_CLUB     ; $08
+	const OWMAP_SCIENCE_CLUB     ; $09
+	const OWMAP_FIRE_CLUB        ; $0A
+	const OWMAP_CHALLENGE_HALL   ; $0B
+	const OWMAP_POKEMON_DOME     ; $0C
 
 ; Size of map data. See data/npc_map_data.asm and data/map_objects.asm
 ; for more info on what these represent

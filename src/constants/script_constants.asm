@@ -277,4 +277,4 @@ SOUTH    EQU $02
 WEST     EQU $03
 NO_MOVE  EQU %10000000 ; For rotations without movement
 
-VARIABLE_CARD	EQU 0 ; use the card located in wd697 instead of using the script's argument
+VARIABLE_CARD	EQU 0 ; use the card located in wCardReceived instead of using the script's argument

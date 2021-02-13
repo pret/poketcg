@@ -50,7 +50,7 @@ Func_1c056: ; 1c056 (7:4056)
 
 INCLUDE "data/warps.asm"
 
-Func_1c33b: ; 1c33b (7:433b)
+LoadMapHeader: ; 1c33b (7:433b)
 	push hl
 	push bc
 	push de
@@ -60,7 +60,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	add a
 	add c
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, MapHeaders
 	add hl, bc
 	ld a, [hli]
@@ -74,9 +74,9 @@ Func_1c33b: ; 1c33b (7:433b)
 	ld a, [hli]
 	ld [wd290], a
 	ld a, [hli]
-	ld [wd111], a
+	ld [wDefaultSong], a
 	ld a, [wConsole]
-	cp $2
+	cp CONSOLE_CGB
 	jr nz, .asm_1c370
 	ld a, c
 	or a
@@ -474,7 +474,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	inc hl
 	ld [hl], b
 	dec hl
-	call Func_39ea
+	call GetNextNPCMovementByte
 	cp $f0
 	jr nc, .asm_1c7bb
 	push af
@@ -490,7 +490,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	cp $ff
 	jr z, .asm_1c7d2
 	inc bc
-	call Func_39ea
+	call GetNextNPCMovementByte
 	push hl
 	ld l, a
 	ld h, $0

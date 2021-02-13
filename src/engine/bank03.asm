@@ -43,11 +43,11 @@ LoadMap: ; c000 (3:4000)
 	call Func_c943
 	call Func_c158
 	farcall Func_80480
-	call Func_c199
+	call SetOverworldDoFrameFunction
 	xor a
 	ld [wd0b4], a
 	ld [wd0c1], a
-	call Func_39fc
+	call PlayDefaultSong
 	farcall Func_10af9
 	call Func_c141
 	call Func_c17a
@@ -175,7 +175,7 @@ Func_c158: ; c158 (3:4158)
 	ld a, [wd0c2]
 	cp $1
 	ret nz
-	ld a, [wd0c4]
+	ld a, [wNPCDuelist]
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	jr c, .asm_c179
@@ -209,8 +209,8 @@ Func_c184: ; c184 (3:4184)
 	pop bc
 	ret
 
-Func_c199: ; c199 (3:4199)
-	ld hl, Func_380e
+SetOverworldDoFrameFunction: ; c199 (3:4199)
+	ld hl, OverworldDoFrameFunction
 	call SetDoFrameFunction
 	ret
 
@@ -228,8 +228,8 @@ WhiteOutDMGPals: ; c1a4 (3:41a4)
 	ret
 
 Func_c1b1: ; c1b1 (3:41b1)
-	ld a, $c
-	ld [wd32e], a
+	ld a, OWMAP_POKEMON_DOME
+	ld [wOverworldMapSelection], a
 	ld a, OVERWORLD_MAP
 	ld [wTempMap], a
 	ld a, $c
@@ -264,7 +264,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd0ba], a
 	ld [wd11b], a
 	ld [wd0c2], a
-	ld [wd111], a
+	ld [wDefaultSong], a
 	ld [wd112], a
 	ld [wd3b8], a
 	call EnableSRAM
@@ -276,7 +276,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	farcall Func_10756
 	ret
 
-Func_c228: ; c228 (3:4228)
+BackupPlayerPosition: ; c228 (3:4228)
 	ld a, [wCurMap]
 	ld [wTempMap], a
 	ld a, [wPlayerXCoord]
@@ -341,7 +341,7 @@ PauseMenuTextList: ; c27c (3:427c)
 	dw NULL
 
 Func_c280: ; c280 (3:4280)
-	call Func_c228
+	call BackupPlayerPosition
 	call Func_3ca0
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
@@ -400,11 +400,11 @@ Func_c2db: ; c2db (3:42db)
 	ldh [hWhoseTurn], a
 	call Func_c241
 	call EmptyScreen
-	ld a, [wd111]
+	ld a, [wDefaultSong]
 	push af
 	farcall Func_80000
 	pop af
-	ld [wd111], a
+	ld [wDefaultSong], a
 	ld hl, wd0c1
 	res 0, [hl]
 	call Func_c34e
@@ -584,10 +584,10 @@ Func_c3ff: ; c3ff (3:43ff)
 	ret
 
 Func_c41c: ; c41c (3:441c)
-	ld a, [wd332]
+	ld a, [wPlayerXCoordPixels]
 	sub $40
 	ld [wSCXBuffer], a
-	ld a, [wd333]
+	ld a, [wPlayerYCoordPixels]
 	sub $40
 	ld [wSCYBuffer], a
 	call Func_c430
@@ -668,14 +668,14 @@ Func_c49c: ; c49c (3:449c)
 	rlca
 	rlca
 	rlca
-	ld [wd332], a
+	ld [wPlayerXCoordPixels], a
 	ld a, [wPlayerYCoord]
 	and $1f
 	ld [wPlayerYCoord], a
 	rlca
 	rlca
 	rlca
-	ld [wd333], a
+	ld [wPlayerYCoordPixels], a
 	ret
 
 Func_c4b9: ; c4b9 (3:44b9)
@@ -777,11 +777,11 @@ Func_c554: ; c554 (3:4554)
 	ld e, a
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
-	ld a, [wd332]
+	ld a, [wPlayerXCoordPixels]
 	sub d
 	add $8
 	ld [hli], a
-	ld a, [wd333]
+	ld a, [wPlayerYCoordPixels]
 	sub e
 	add $10
 	ld [hli], a
@@ -1007,7 +1007,7 @@ Func_c694: ; c694 (3:4694)
 
 Func_c6cc: ; c6cc (3:46cc)
 	push hl
-	ld hl, wd332
+	ld hl, wPlayerXCoordPixels
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -1015,7 +1015,7 @@ Func_c6cc: ; c6cc (3:46cc)
 
 Func_c6d4: ; c6d4 (3:46d4)
 	push hl
-	ld hl, wd333
+	ld hl, wPlayerYCoordPixels
 	add [hl]
 	ld [hl], a
 	pop hl
@@ -1217,7 +1217,7 @@ PCMenu: ; c7ea (3:47ea)
 	call CloseAdvancedDialogueBox
 	xor a
 	ld [wd112], a
-	call Func_39fc
+	call PlayDefaultSong
 	ret
 
 PointerTable_c846: ; c846 (3:4846)
@@ -1520,8 +1520,8 @@ ImakuniPossibleRooms: ; ca0a (3:4a04)
 	db WATER_CLUB_LOBBY
 
 Func_ca0e: ; ca0e (3:4a0e)
-	ld a, [wd32e]
-	cp $b
+	ld a, [wOverworldMapSelection]
+	cp OWMAP_CHALLENGE_HALL
 	jr z, .done
 	get_event_value EVENT_RECEIVED_LEGENDARY_CARDS
 	or a
@@ -2062,13 +2062,13 @@ ScriptCommand_AskQuestionJump: ; cce9 (3:4ce9)
 ; args - prize cards, deck id, duel theme index
 ; sets a duel up, doesn't start until we break out of the script system.
 ScriptCommand_StartDuel: ; cd01 (3:4d01)
-	call Func_cd66
+	call SetNPCDuelParams
 	ld a, [wScriptNPC]
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-	farcall Func_118d3
-	ld a, [wcc19]
+	farcall SetNPCMatchStartTheme
+	ld a, [wNPCDuelDeckID]
 	cp $ff
 	jr nz, .not_aaron_duel
 	ld a, [wMultichoiceTextboxResult_ChooseDeckToDuelAgainst]
@@ -2077,20 +2077,20 @@ ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	ld hl, AaronDeckIDs
 	add hl, bc
 	ld a, [hl]
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 .not_aaron_duel
 	ld a, [wScriptNPC]
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
 .start_duel
-	ld [wd0c4], a
-	ld [wcc14], a
+	ld [wNPCDuelist], a
+	ld [wNPCDuelistCopy], a
 	push af
 	farcall Func_1c557
 	ld [wd0c5], a
 	pop af
-	farcall Func_118a7
+	farcall SetNPCOpponentNameAndPortrait
 	ld a, GAME_EVENT_DUEL
 	ld [wGameEvent], a
 	ld hl, wd0b4
@@ -2098,12 +2098,12 @@ ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_StartChallengeHallDuel: ; cd4f (3:4d4f)
-	call Func_cd66
-	ld a, [wd696]
-	farcall Func_118bf
+	call SetNPCDuelParams
+	ld a, [wChallengeHallNPC]
+	farcall SetNPCDeckIDAndDuelTheme
 	ld a, MUSIC_MATCH_START_2
 	ld [wMatchStartTheme], a
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 	jr ScriptCommand_StartDuel.start_duel
 
 AaronDeckIDs: ; cd63 (3:4d63)
@@ -2111,11 +2111,11 @@ AaronDeckIDs: ; cd63 (3:4d63)
 	db WATER_AND_FIGHTING_DECK_ID
 	db GRASS_AND_PSYCHIC_DECK_ID
 
-Func_cd66: ; cd66 (3:4d66)
+SetNPCDuelParams: ; cd66 (3:4d66)
 	ld a, c
-	ld [wcc18], a
+	ld [wNPCDuelPrizes], a
 	ld a, b
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 	call GetScriptArgs3AfterPointer
 	ld a, c
 	ld [wDuelTheme], a
@@ -2187,7 +2187,7 @@ ScriptCommand_UnloadChallengeHallNPC: ; cdd8 (3:4dd8)
 	push af
 	ld a, [wTempNPC]
 	push af
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 	ld [wTempNPC], a
 	call FindLoadedNPC
 	call Func_cdd1
@@ -2202,7 +2202,7 @@ ScriptCommand_SetChallengeHallNPCCoords: ; cdf5 (3:4df5)
 	push af
 	ld a, [wTempNPC]
 	push af
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 	ld [wTempNPC], a
 	ld a, c
 	ld [wLoadNPCXPos], a
@@ -2260,7 +2260,7 @@ ScriptCommand_MoveChallengeHallNPC: ; ce52 (3:4e52)
 	push af
 	ld a, [wTempNPC]
 	push af
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 ;	fallthrough
 
 ; Executes movement on an arbitrary NPC using values in a and on the stack
@@ -2296,32 +2296,32 @@ ScriptCommand_CloseTextBox: ; ce84 (3:4e84)
 ; args: booster pack index, booster pack index, booster pack index
 ScriptCommand_GiveBoosterPacks: ; ce8a (3:4e8a)
 	xor a
-	ld [wd117], a
+	ld [wAnotherBoosterPack], a
 	push bc
 	call Func_c2a3
 	pop bc
 	push bc
 	ld a, c
-	farcall BoosterPack_1031b
-	ld a, 1
-	ld [wd117], a
+	farcall GiveBoosterPack
+	ld a, TRUE
+	ld [wAnotherBoosterPack], a
 	pop bc
 	ld a, b
 	cp NO_BOOSTER
 	jr z, .done
-	farcall BoosterPack_1031b
+	farcall GiveBoosterPack
 	call GetScriptArgs3AfterPointer
 	ld a, c
 	cp NO_BOOSTER
 	jr z, .done
-	farcall BoosterPack_1031b
+	farcall GiveBoosterPack
 .done
 	call Func_c2d4
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	xor a
-	ld [wd117], a
+	ld [wAnotherBoosterPack], a
 	call Func_c2a3
 	ld hl, .booster_type_table
 .loop
@@ -2329,9 +2329,9 @@ ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	cp NO_BOOSTER
 	jr z, .done
 	push hl
-	farcall BoosterPack_1031b
-	ld a, $1
-	ld [wd117], a
+	farcall GiveBoosterPack
+	ld a, TRUE
+	ld [wAnotherBoosterPack], a
 	pop hl
 	inc hl
 	jr .loop
@@ -2355,7 +2355,7 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	jr z, .legendary_card
 	or a
 	jr nz, .show_card
-	ld a, [wd697]
+	ld a, [wCardReceived]
 
 .show_card
 	push af
@@ -2413,12 +2413,12 @@ ScriptCommand_JumpIfEnoughCardsOwned: ; cf2d (3:4f2d)
 	jr nc, ScriptCommand_JumpIfCardInCollection.pass_try_jump
 	jr ScriptCommand_JumpIfCardInCollection.fail
 
-; Gives the first arg as a card. If that's 0 pulls from wd697
+; Gives the first arg as a card. If that's 0 pulls from wCardReceived
 ScriptCommand_GiveCard: ; cf3f (3:4f3f)
 	ld a, c
 	or a
 	jr nz, .give_card
-	ld a, [wd697]
+	ld a, [wCardReceived]
 
 .give_card
 	call AddCardToCollection
@@ -2734,7 +2734,7 @@ ScriptCommand_LoadCurrentMapNameIntoTxRamSlot: ; d135 (3:5135)
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	rlca
 	ld c, a
 	ld b, 0
@@ -2774,7 +2774,7 @@ ScriptCommand_LoadChallengeHallNPCIntoTxRamSlot: ; d16b (3:516b)
 	ld hl, wTxRam2
 	add hl, bc
 	push hl
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 	farcall SetNPCDialogName
 	pop hl
 	ld a, [wCurrentNPCNameTx]
@@ -2822,7 +2822,7 @@ ScriptCommand_PickChallengeCupPrizeCard: ; d1b3 (3:51b3)
 	ld d, 0
 	add hl, de
 	ld a, [hli]
-	ld [wd697], a
+	ld [wCardReceived], a
 	ld a, [hli]
 	ld [wTxRam2], a
 	ld a, [hl]
@@ -2964,7 +2964,7 @@ ScriptCommand_ChooseStarterDeckMultichoice: ; d271 (3:5271)
 	tx SelectDeckToTakeText ; text for textbox under menu
 	dw MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck ; location of table configuration in bank 4
 	db $00 ; the value to return when b is pressed
-	dw wd693 ; ram location to return result into
+	dw wStarterDeckChoice ; ram location to return result into
 	dw .text_entries ; location of table containing text entries
 
 .text_entries
@@ -3143,7 +3143,7 @@ ScriptCommand_FlashScreen: ; d38f (3:538f)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_SaveGame: ; d396 (3:5396)
-	farcall Func_1157c
+	farcall _SaveGame
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_GiftCenter: ; d39d (3:539d)
@@ -3181,7 +3181,7 @@ ScriptCommand_nop: ; d3d1 (3:53d1)
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_GiveStarterDeck: ; d3d4 (3:53d4)
-	ld a, [wd693]
+	ld a, [wStarterDeckChoice]
 	bank1call Func_7576
 	jp IncreaseScriptPointerBy1
 
@@ -3189,8 +3189,8 @@ Unknown_d3dd: ; d3dd (3:53dd)
 	db $03, $05, $07
 
 ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
-	ld a, $1
-	ld [wd32e], a
+	ld a, OWMAP_MASON_LABORATORY
+	ld [wOverworldMapSelection], a
 	farcall Func_11024
 .asm_d3e9
 	call DoFrameIfLCDEnabled
@@ -3198,7 +3198,7 @@ ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
 	ld a, [wd33e]
 	cp $2
 	jr nz, .asm_d3e9
-	farcall Func_10f2e
+	farcall PrintOverworldMapName
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_OverrideSong: ; d3fe (3:53fe)
@@ -3209,7 +3209,7 @@ ScriptCommand_OverrideSong: ; d3fe (3:53fe)
 
 ScriptCommand_SetDefaultSong: ; d408 (3:5408)
 	ld a, c
-	ld [wd111], a
+	ld [wDefaultSong], a
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlaySong: ; d40f (3:540f)
@@ -3223,7 +3223,7 @@ ScriptCommand_PlaySFX: ; d416 (3:5416)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlayDefaultSong: ; d41d (3:541d)
-	call Func_39fc
+	call PlayDefaultSong
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_PauseSong: ; d423 (3:5423)
@@ -4589,7 +4589,7 @@ Preload_ImakuniInFightingClubLobby: ; dceb (3:5ceb)
 
 .load_imakuni
 	ld a, MUSIC_IMAKUNI
-	ld [wd111], a
+	ld [wDefaultSong], a
 	scf
 	ret
 
@@ -5184,7 +5184,7 @@ Preload_ImakuniInWaterClubLobby: ; e0b0 (3:60b0)
 
 .load_imakuni
 	ld a, MUSIC_IMAKUNI
-	ld [wd111], a
+	ld [wDefaultSong], a
 	scf
 	ret
 
@@ -5603,7 +5603,7 @@ Preload_ImakuniInLightningClubLobby: ; e37b (3:637b)
 
 .load_imakuni
 	ld a, MUSIC_IMAKUNI
-	ld [wd111], a
+	ld [wDefaultSong], a
 	scf
 	ret
 
@@ -5847,7 +5847,7 @@ FindEndOfDuelScript: ; e52c (3:652c)
 	ld c, 2
 
 .player_won
-	ld a, [wd0c4]
+	ld a, [wNPCDuelist]
 	ld b, a
 	ld de, 5
 .check_enemy_byte_loop
@@ -6786,7 +6786,7 @@ Preload_ImakuniInScienceClubLobby: ; eb65 (3:6b65)
 
 .load_imakuni
 	ld a, MUSIC_IMAKUNI
-	ld [wd111], a
+	ld [wDefaultSong], a
 	scf
 	ret
 
@@ -7516,7 +7516,7 @@ Preload_Clerk9: ; ef96 (3:6f96)
 	set_event_value EVENT_CHALLENGE_CUP_NUMBER
 	max_event_value EVENT_CHALLENGE_CUP_STARTING
 	ld a, MUSIC_CHALLENGE_HALL
-	ld [wd111], a
+	ld [wDefaultSong], a
 .no_challenge_cup
 	scf
 	ret
@@ -7561,7 +7561,7 @@ Preload_ChallengeHallNPCs1: ; f07a (3:707a)
 	or a
 	jr z, .quit
 	ld a, MUSIC_CHALLENGE_HALL
-	ld [wd111], a
+	ld [wDefaultSong], a
 	scf
 .quit
 	ret
@@ -8237,7 +8237,7 @@ Preload_ChallengeHallOpponent: ; f559 (3:7559)
 	get_event_value EVENT_CHALLENGE_CUP_OPPONENT_CHOSEN
 	or a
 	jr z, .asm_f56e
-	ld a, [wd696]
+	ld a, [wChallengeHallNPC]
 	ld [wTempNPC], a
 	scf
 	ret
@@ -8279,7 +8279,7 @@ Func_f580: ; f580 (3:7580)
 
 .force_ronald
 	ld [wTempNPC], a
-	ld [wd696], a
+	ld [wChallengeHallNPC], a
 	ret
 
 ChallengeHallNPCs: ; f5b3 (3:75b3)
@@ -8327,10 +8327,10 @@ Func_f5d4: ; f5d4 (3:75d4)
 
 Func_f5db: ; f5db (3:75db)
 	xor a
-	ld [wd698], a
-	ld [wd699], a
-	ld [wd69a], a
-	ld [wd69b], a
+	ld [wd698 + 0], a
+	ld [wd698 + 1], a
+	ld [wd698 + 2], a
+	ld [wd698 + 3], a
 	ret
 
 Func_f5e9: ; f5e9 (3:75e9)
@@ -8555,7 +8555,7 @@ Script_Rod: ; f740 (3:7740)
 Preload_Courtney: ; f74b (3:774b)
 	get_event_value EVENT_COURTNEY_STATE
 	cp COURTNEY_CHALLENGED
-	jr z, Func_f76c
+	jr z, PlacePokemonDomeOpponentAtDuelTable
 	lb bc, $16, $0c
 	cp COURTNEY_DEFEATED
 	jr z, Func_f77d
@@ -8571,7 +8571,7 @@ Func_f762: ; f762 (3:7762)
 	scf
 	ret
 
-Func_f76c: ; f76c (3:776c)
+PlacePokemonDomeOpponentAtDuelTable: ; f76c (3:776c)
 	ld a, $12
 	ld [wLoadNPCXPos], a
 	ld a, $0e
@@ -8595,7 +8595,7 @@ Func_f782: ; f782 (3:7782)
 Preload_Steve: ; f78c (3:778c)
 	get_event_value EVENT_STEVE_STATE
 	cp STEVE_CHALLENGED
-	jr z, Func_f76c
+	jr z, PlacePokemonDomeOpponentAtDuelTable
 	lb bc, $16, $0e
 	cp STEVE_DEFEATED
 	jr z, Func_f77d
@@ -8607,7 +8607,7 @@ Preload_Steve: ; f78c (3:778c)
 Preload_Jack: ; f7a3 (3:77a3)
 	get_event_value EVENT_JACK_STATE
 	cp JACK_CHALLENGED
-	jr z, Func_f76c
+	jr z, PlacePokemonDomeOpponentAtDuelTable
 	lb bc, $14, $0a
 	cp JACK_DEFEATED
 	jr z, Func_f77d
@@ -8619,7 +8619,7 @@ Preload_Jack: ; f7a3 (3:77a3)
 Preload_Rod: ; f7ba (3:77ba)
 	get_event_value EVENT_ROD_STATE
 	cp ROD_CHALLENGED
-	jr z, Func_f76c
+	jr z, PlacePokemonDomeOpponentAtDuelTable
 	get_event_value EVENT_POKEMON_DOME_STATE
 	lb bc, $10, $0a
 	cp POKEMON_DOME_DEFEATED
@@ -8638,8 +8638,8 @@ Preload_Ronald1InPokemonDome: ; f7d6 (3:77d6)
 	or a
 	jr z, .not_challenged
 	ld a, MUSIC_RONALD
-	ld [wd111], a
-	jr Func_f76c
+	ld [wDefaultSong], a
+	jr PlacePokemonDomeOpponentAtDuelTable
 .not_challenged
 	scf
 	ret
