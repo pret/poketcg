@@ -47,22 +47,541 @@ endr
 
 SECTION "Gfx 3", ROMX
 
-	INCROM $84000, $87828
+WaterClubTilemap:: ; 84000 (21:4000)
+	db $1c ; width
+	db $20 ; height
+	dw $4164
+	db $00
 
-IshiharaTilesetGfx: ; 87828 (21:7828)
-	dw $4d
+	INCBIN "data/maps/map36.bin"
+
+WaterClubCGBTilemap:: ; 84188 (21:4188)
+	db $1c ; width
+	db $20 ; height
+	dw $4397
+	db $01
+
+	INCBIN "data/maps/map37.bin"
+
+LightningClubTilemap:: ; 843bb (21:43bb)
+	db $1c ; width
+	db $20 ; height
+	dw $4511
+	db $00
+
+	INCBIN "data/maps/map38.bin"
+
+LightningClubCGBTilemap:: ; 84533 (21:4533)
+	db $1c ; width
+	db $20 ; height
+	dw $470c
+	db $01
+
+	INCBIN "data/maps/map39.bin"
+
+GrassClubTilemap:: ; 8472e (21:472e)
+	db $1c ; width
+	db $20 ; height
+	dw $48b4
+	db $00
+
+	INCBIN "data/maps/map40.bin"
+
+GrassClubCGBTilemap:: ; 848d8 (21:48d8)
+	db $1c ; width
+	db $20 ; height
+	dw $4b4f
+	db $01
+
+	INCBIN "data/maps/map41.bin"
+
+PsychicClubTilemap:: ; 84b73 (21:4b73)
+	db $1c ; width
+	db $1c ; height
+	dw $4c50
+	db $00
+
+	INCBIN "data/maps/map42.bin"
+
+PsychicClubCGBTilemap:: ; 84c6f (21:4c6f)
+	db $1c ; width
+	db $1c ; height
+	dw $4ddf
+	db $01
+
+	INCBIN "data/maps/map43.bin"
+
+ScienceClubTilemap:: ; 84dfe (21:4dfe)
+	db $1c ; width
+	db $20 ; height
+	dw $4efe
+	db $00
+
+	INCBIN "data/maps/map44.bin"
+
+ScienceClubCGBTilemap:: ; 84f1d (21:4f1d)
+	db $1c ; width
+	db $20 ; height
+	dw $5097
+	db $01
+
+	INCBIN "data/maps/map45.bin"
+
+FireClubTilemap:: ; 850b6 (21:50b6)
+	db $1c ; width
+	db $20 ; height
+	dw $5175
+	db $00
+
+	INCBIN "data/maps/map46.bin"
+
+FireClubCGBTilemap:: ; 85191 (21:5191)
+	db $1c ; width
+	db $20 ; height
+	dw $52f9
+	db $01
+
+	INCBIN "data/maps/map47.bin"
+
+ChallengeHallTilemap:: ; 85315 (21:5315)
+	db $20 ; width
+	db $20 ; height
+	dw $5484
+	db $00
+
+	INCBIN "data/maps/map48.bin"
+
+ChallengeHallCGBTilemap:: ; 854b3 (21:54b3)
+	db $20 ; width
+	db $20 ; height
+	dw $56db
+	db $01
+
+	INCBIN "data/maps/map49.bin"
+
+PokemonDomeEntranceTilemap:: ; 8570a (21:570a)
+	db $20 ; width
+	db $12 ; height
+	dw $57ba
+	db $00
+
+	INCBIN "data/maps/map50.bin"
+
+PokemonDomeEntranceCGBTilemap:: ; 857ce (21:57ce)
+	db $20 ; width
+	db $12 ; height
+	dw $58db
+	db $01
+
+	INCBIN "data/maps/map51.bin"
+
+PokemonDomeTilemap:: ; 858ef (21:58ef)
+	db $20 ; width
+	db $20 ; height
+	dw $5a58
+	db $00
+
+	INCBIN "data/maps/map54.bin"
+
+PokemonDomeGBTilemap:: ; 85a79 (21:5a79)
+	db $20 ; width
+	db $20 ; height
+	dw $5cc1
+	db $01
+
+	INCBIN "data/maps/map55.bin"
+
+HallOfHonorTilemap:: ; 85ce2 (21:5ce2)
+	db $18 ; width
+	db $1a ; height
+	dw $5ddc
+	db $00
+
+	INCBIN "data/maps/map58.bin"
+
+HallOfHonorCGBTilemap:: ; 85df4 (21:5df4)
+	db $18 ; width
+	db $1a ; height
+	dw $5f64
+	db $01
+
+	INCBIN "data/maps/map59.bin"
+
+CardPop1Tilemap:: ; 85f7c (21:5f7c)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map60.bin"
+
+CardPop1CGBTilemap:: ; 8607f (21:607f)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map61.bin"
+
+ScienceMedalTilemap:: ; 8617d (21:617d)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map63.bin"
+
+FireMedalTilemap:: ; 86193 (21:6193)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map64.bin"
+
+WaterMedalTilemap:: ; 861a9 (21:61a9)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map65.bin"
+
+LightningMedalTilemap:: ; 861bf (21:61bf)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map66.bin"
+
+FightingMedalTilemap:: ; 861d5 (21:61d5)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map67.bin"
+
+RockMedalTilemap:: ; 861eb (21:61eb)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map68.bin"
+
+PsychicMedalTilemap:: ; 86201 (21:6201)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map69.bin"
+
+CardPop2Tilemap:: ; 86217 (21:6217)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map70.bin"
+
+CardPop2CGBTilemap:: ; 862da (21:62da)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map71.bin"
+
+CardPop2Unknown1Tilemap:: ; 86364 (21:6364)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map72.bin"
+
+CardPop2Unknown2Tilemap:: ; 86443 (21:6443)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map73.bin"
+
+CardPop3Tilemap:: ; 864df (21:64df)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map74.bin"
+
+CardPop3CGBTilemap:: ; 865b5 (21:65b5)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map75.bin"
+
+ColosseumTilemap:: ; 86647 (21:6647)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map76.bin"
+
+ColosseumCGBTilemap:: ; 866b8 (21:66b8)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map77.bin"
+
+EvolutionTilemap:: ; 8673e (21:673e)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map78.bin"
+
+EvolutionCGBTilemap:: ; 867af (21:67af)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map79.bin"
+
+MysteryTilemap:: ; 86833 (21:6833)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map80.bin"
+
+MysteryCGBTilemap:: ; 868a4 (21:68a4)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map81.bin"
+
+LaboratoryTilemap:: ; 86925 (21:6925)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map82.bin"
+
+LaboratoryCGBTilemap:: ; 86996 (21:6996)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map83.bin"
+
+CharizardIntroTilemap:: ; 86a14 (21:6a14)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map84.bin"
+
+CharizardIntroCGBTilemap:: ; 86a85 (21:6a85)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map85.bin"
+
+ScytherIntroTilemap:: ; 86b28 (21:6b28)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map86.bin"
+
+ScytherIntroCGBTilemap:: ; 86b99 (21:6b99)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map87.bin"
+
+AerodactylIntroTilemap:: ; 86c34 (21:6c34)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map88.bin"
+
+AerodactylIntroCGBTilemap:: ; 86ca5 (21:6ca5)
+	db $08 ; width
+	db $0c ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map89.bin"
+
+TitleScreen1Tilemap:: ; 86d37 (21:6d37)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map90.bin"
+
+TitleScreen2Tilemap:: ; 86dcc (21:6dcc)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map91.bin"
+
+SolidTiles1Tilemap:: ; 86e8a (21:6e8a)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map92.bin"
+
+SolidTiles2Tilemap:: ; 86f18 (21:6f18)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map93.bin"
+
+SolidTiles3Tilemap:: ; 86fc0 (21:6fc0)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map94.bin"
+
+TitleScreen3Tilemap:: ; 8704f (21:704f)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map95.bin"
+
+TitleScreen4Tilemap:: ; 871a5 (21:71a5)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map96.bin"
+
+SolidTiles4Tilemap:: ; 87397 (21:7397)
+	db $08 ; width
+	db $04 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map97.bin"
+
+PlayerTilemap:: ; 873b7 (21:73b7)
+	db $06 ; width
+	db $06 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map98.bin"
+
+OpponentTilemap:: ; 873e5 (21:73e5)
+	db $06 ; width
+	db $06 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map99.bin"
+
+TitleScreen5Tilemap:: ; 87413 (21:7413)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map100.bin"
+
+TitleScreen6Tilemap:: ; 87538 (21:7538)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map101.bin"
+
+CopyrightTilemap:: ; 8769f (21:769f)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map102.bin"
+
+CopyrightCGBTilemap:: ; 876f6 (21:76f6)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map103.bin"
+
+NintendoTilemap:: ; 8777c (21:777c)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map104.bin"
+
+CompaniesTilemap:: ; 877c4 (21:77c4)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map105.bin"
+
+
+IshiharaTilesetGfx:: ; 87828 (21:7828)
+	dw 77
 	INCBIN "gfx/tilesets/ishihara.2bpp"
 
-SolidTiles1: ; 87cfa (21:7cfa)
-	dw $4
+SolidTiles1:: ; 87cfa (21:7cfa)
+	dw 4
 	INCBIN "gfx/solid_tiles.2bpp"
 
-SolidTiles2: ; 87d3c (21:7d3c)
-	dw $4
+SolidTiles2:: ; 87d3c (21:7d3c)
+	dw 4
 	INCBIN "gfx/solid_tiles.2bpp"
 
-PlayerGfx: ; 87d7e (21:7d7e)
-	dw $24
+PlayerGfx:: ; 87d7e (21:7d7e)
+	dw 36
 	INCBIN "gfx/duelists/player.2bpp"
 
 Duel55Gfx:: ; 87fc0 (21:7fc0)
@@ -82,36 +601,36 @@ AnimData12:: ; 87ff4 (21:7ff4)
 
 SECTION "Gfx 4", ROMX
 
-OverworldMapTiles: ; 88000 (22:4000)
-	dw $c1
+OverworldMapTiles:: ; 88000 (22:4000)
+	dw 193
 	INCBIN "gfx/overworld_map.2bpp"
 
-MasonLaboratoryTilesetGfx: ; 88c12 (22:4c12)
-	dw $97
+MasonLaboratoryTilesetGfx:: ; 88c12 (22:4c12)
+	dw 151
 	INCBIN "gfx/tilesets/masonlaboratory.2bpp"
 
-ClubEntranceTilesetGfx: ; 89584 (22:5584)
-	dw $81
+ClubEntranceTilesetGfx:: ; 89584 (22:5584)
+	dw 129
 	INCBIN "gfx/tilesets/clubentrance.2bpp"
 
-ClubLobbyTilesetGfx: ; 89d96 (22:5d96)
-	dw $78
+ClubLobbyTilesetGfx:: ; 89d96 (22:5d96)
+	dw 120
 	INCBIN "gfx/tilesets/clublobby.2bpp"
 
-FightingClubTilesetGfx: ; 8a518 (22:6518)
-	dw $63
+FightingClubTilesetGfx:: ; 8a518 (22:6518)
+	dw 99
 	INCBIN "gfx/tilesets/fightingclub.2bpp"
 
-RockClubTilesetGfx: ; 8ab4a (22:6b4a)
-	dw $3c
+RockClubTilesetGfx:: ; 8ab4a (22:6b4a)
+	dw 60
 	INCBIN "gfx/tilesets/rockclub.2bpp"
 
-WaterClubTilesetGfx: ; 8af0c (22:6f0c)
-	dw $a1
+WaterClubTilesetGfx:: ; 8af0c (22:6f0c)
+	dw 161
 	INCBIN "gfx/tilesets/waterclub.2bpp"
 
-GrassClubTilesetGfx: ; 8b91e (22:791e)
-	dw $57
+GrassClubTilesetGfx:: ; 8b91e (22:791e)
+	dw 87
 	INCBIN "gfx/tilesets/grassclub.2bpp"
 
 OWPlayerGfx:: ; 8be90 (22:7e90)
@@ -140,40 +659,40 @@ endr
 
 SECTION "Gfx 5", ROMX
 
-LightningClubTilesetGfx: ; 8c000 (23:4000)
-	dw $83
+LightningClubTilesetGfx:: ; 8c000 (23:4000)
+	dw 131
 	INCBIN "gfx/tilesets/lightningclub.2bpp"
 
-PsychicClubTilesetGfx: ; 8c832 (23:4832)
-	dw $3a
+PsychicClubTilesetGfx:: ; 8c832 (23:4832)
+	dw 58
 	INCBIN "gfx/tilesets/psychicclub.2bpp"
 
-ScienceClubTilesetGfx: ; 8cbd4 (23:4bd4)
-	dw $52
+ScienceClubTilesetGfx:: ; 8cbd4 (23:4bd4)
+	dw 82
 	INCBIN "gfx/tilesets/scienceclub.2bpp"
 
-FireClubTilesetGfx: ; 8d0f6 (23:50f6)
-	dw $57
+FireClubTilesetGfx:: ; 8d0f6 (23:50f6)
+	dw 87
 	INCBIN "gfx/tilesets/fireclub.2bpp"
 
-ChallengeHallTilesetGfx: ; 8d668 (23:5668)
-	dw $9d
+ChallengeHallTilesetGfx:: ; 8d668 (23:5668)
+	dw 157
 	INCBIN "gfx/tilesets/challengehall.2bpp"
 
-PokemonDomeEntranceTilesetGfx: ; 8e03a (23:603a)
-	dw $4e
+PokemonDomeEntranceTilesetGfx:: ; 8e03a (23:603a)
+	dw 78
 	INCBIN "gfx/tilesets/pokemondomeentrance.2bpp"
 
-PokemonDomeTilesetGfx: ; 8e51c (23:651c)
-	dw $cf
+PokemonDomeTilesetGfx:: ; 8e51c (23:651c)
+	dw 207
 	INCBIN "gfx/tilesets/pokemondome.2bpp"
 
-HallOfHonorTilesetGfx: ; 8f20e (23:720e)
-	dw $79
+HallOfHonorTilesetGfx:: ; 8f20e (23:720e)
+	dw 121
 	INCBIN "gfx/tilesets/hallofhonor.2bpp"
 
-MedalGfx: ; 8f9a0 (23:79a0)
-	dw $48
+MedalGfx:: ; 8f9a0 (23:79a0)
+	dw 72
 	INCBIN "gfx/medals.2bpp", $0, $c0
 	INCBIN "gfx/medals.2bpp", $240, $30
 	INCBIN "gfx/medals.2bpp", $340, $10
@@ -193,8 +712,8 @@ MedalGfx: ; 8f9a0 (23:79a0)
 	INCBIN "gfx/medals.2bpp", $420, $30
 	INCBIN "gfx/medals.2bpp", $3f0, $20
 
-NintendoGfx: ; 8fe22 (23:7e22)
-	dw $18
+NintendoGfx:: ; 8fe22 (23:7e22)
+	dw 24
 	INCBIN "gfx/nintendo.2bpp"
 
 Duel58Gfx:: ; 8ffa4 (23:7fa4)
@@ -214,48 +733,48 @@ AnimData11:: ; 8fff5 (23:7ff5)
 
 SECTION "Gfx 6", ROMX
 
-CardPop1Gfx: ; 90000 (24:4000)
-	dw $bd
+CardPop1Gfx:: ; 90000 (24:4000)
+	dw 189
 	INCBIN "gfx/cardpop/cardpop1.2bpp"
 
-CardPop2Gfx: ; 90bd2 (24:4bd2)
-	dw $6d
+CardPop2Gfx:: ; 90bd2 (24:4bd2)
+	dw 109
 	INCBIN "gfx/cardpop/cardpop2.2bpp"
 
-CardPop3Gfx: ; 912a4 (24:52a4)
-	dw $5d
+CardPop3Gfx:: ; 912a4 (24:52a4)
+	dw 93
 	INCBIN "gfx/cardpop/cardpop3.2bpp"
 
-Colosseum1Gfx: ; 91876 (24:5876)
-	dw $60
+Colosseum1Gfx:: ; 91876 (24:5876)
+	dw 96
 	INCBIN "gfx/booster_packs/colosseum1.2bpp"
 
-Colosseum2Gfx: ; 91e78 (24:5e78)
-	dw $56
+Colosseum2Gfx:: ; 91e78 (24:5e78)
+	dw 86
 	INCBIN "gfx/booster_packs/colosseum2.2bpp"
 
-Evolution1Gfx: ; 923da (24:63da)
-	dw $60
+Evolution1Gfx:: ; 923da (24:63da)
+	dw 96
 	INCBIN "gfx/booster_packs/evolution1.2bpp"
 
-Evolution2Gfx: ; 929dc (24:69dc)
-	dw $56
+Evolution2Gfx:: ; 929dc (24:69dc)
+	dw 86
 	INCBIN "gfx/booster_packs/evolution2.2bpp"
 
-Mystery1Gfx: ; 92f3e (24:6f3e)
-	dw $60
+Mystery1Gfx:: ; 92f3e (24:6f3e)
+	dw 96
 	INCBIN "gfx/booster_packs/mystery1.2bpp"
 
-Mystery2Gfx: ; 93540 (24:7540)
-	dw $56
+Mystery2Gfx:: ; 93540 (24:7540)
+	dw 86
 	INCBIN "gfx/booster_packs/mystery2.2bpp"
 
-RonaldGfx: ; 93aa2 (24:7aa2)
-	dw $24
+RonaldGfx:: ; 93aa2 (24:7aa2)
+	dw 36
 	INCBIN "gfx/duelists/ronald.2bpp"
 
-CopyrightGfx: ; 93ce4 (24:7ce4)
-	dw $24
+CopyrightGfx:: ; 93ce4 (24:7ce4)
+	dw 36
 	INCBIN "gfx/copyright.2bpp"
 
 OWClerkGfx:: ; 93f26 (24:7f26)
@@ -276,48 +795,48 @@ endr
 
 SECTION "Gfx 7", ROMX
 
-Laboratory1Gfx: ; 94000 (25:4000)
-	dw $60
+Laboratory1Gfx:: ; 94000 (25:4000)
+	dw 96
 	INCBIN "gfx/booster_packs/laboratory1.2bpp"
 
-Laboratory2Gfx: ; 94602 (25:4602)
-	dw $56
+Laboratory2Gfx:: ; 94602 (25:4602)
+	dw 86
 	INCBIN "gfx/booster_packs/laboratory2.2bpp"
 
-CharizardIntro1Gfx: ; 94b64 (25:4b64)
-	dw $60
+CharizardIntro1Gfx:: ; 94b64 (25:4b64)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/charizardintro1.2bpp"
 
-CharizardIntro2Gfx: ; 95166 (25:5166)
-	dw $60
+CharizardIntro2Gfx:: ; 95166 (25:5166)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/charizardintro2.2bpp"
 
-ScytherIntro1Gfx: ; 95768 (25:5768)
-	dw $60
+ScytherIntro1Gfx:: ; 95768 (25:5768)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/scytherintro1.2bpp"
 
-ScytherIntro2Gfx: ; 95d6a (25:5d6a)
-	dw $60
+ScytherIntro2Gfx:: ; 95d6a (25:5d6a)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/scytherintro2.2bpp"
 
-AerodactylIntro1Gfx: ; 9636c (25:636c)
-	dw $60
+AerodactylIntro1Gfx:: ; 9636c (25:636c)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro1.2bpp"
 
-AerodactylIntro2Gfx: ; 9696e (25:696e)
-	dw $60
+AerodactylIntro2Gfx:: ; 9696e (25:696e)
+	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro2.2bpp"
 
-Titlescreen1Gfx: ; 96f70 (25:6f70)
-	dw $61
+Titlescreen1Gfx:: ; 96f70 (25:6f70)
+	dw 97
 	INCBIN "gfx/titlescreen/titlescreen1.2bpp"
 
-Titlescreen2Gfx: ; 97582 (25:7582)
-	dw $61
+Titlescreen2Gfx:: ; 97582 (25:7582)
+	dw 97
 	INCBIN "gfx/titlescreen/titlescreen2.2bpp"
 
-CompaniesGfx: ; 97b94 (25:7b94)
-	dw $31
+CompaniesGfx:: ; 97b94 (25:7b94)
+	dw 49
 	INCBIN "gfx/companies.2bpp"
 
 OWRonaldGfx:: ; 97ea6 (25:7ea6)
@@ -336,20 +855,20 @@ endr
 
 SECTION "Gfx 8", ROMX
 
-Titlescreen3Gfx: ; 98000 (26:4000)
-	dw $f4
+Titlescreen3Gfx:: ; 98000 (26:4000)
+	dw 244
 	INCBIN "gfx/titlescreen/titlescreen3.2bpp"
 
-Titlescreen4Gfx: ; 98f42 (26:4f42)
-	dw $13b
+Titlescreen4Gfx:: ; 98f42 (26:4f42)
+	dw 315
 	INCBIN "gfx/titlescreen/titlescreen4.2bpp"
 
-Titlescreen5Gfx: ; 9a2f4 (26:62f4)
-	dw $dc
+Titlescreen5Gfx:: ; 9a2f4 (26:62f4)
+	dw 220
 	INCBIN "gfx/titlescreen/titlescreen5.2bpp"
 
-Titlescreen6Gfx: ; 9b0b6 (26:70b6)
-	dw $d4
+Titlescreen6Gfx:: ; 9b0b6 (26:70b6)
+	dw 212
 	INCBIN "gfx/titlescreen/titlescreen6.2bpp"
 
 OWDrMasonGfx:: ; 9bdf8 (26:7df8)
@@ -370,116 +889,116 @@ Duel62Gfx:: ; 9bfee (26:7fee)
 
 SECTION "Gfx 9", ROMX
 
-SamGfx: ; 9c000 (27:4000)
-	dw $24
+SamGfx:: ; 9c000 (27:4000)
+	dw 36
 	INCBIN "gfx/duelists/sam.2bpp"
 
-ImakuniGfx: ; 9c242 (27:4242)
-	dw $24
+ImakuniGfx:: ; 9c242 (27:4242)
+	dw 36
 	INCBIN "gfx/duelists/imakuni.2bpp"
 
-NikkiGfx: ; 9c484 (27:4484)
-	dw $24
+NikkiGfx:: ; 9c484 (27:4484)
+	dw 36
 	INCBIN "gfx/duelists/nikki.2bpp"
 
-RickGfx: ; 9c6c6 (27:46c6)
-	dw $24
+RickGfx:: ; 9c6c6 (27:46c6)
+	dw 36
 	INCBIN "gfx/duelists/rick.2bpp"
 
-KenGfx: ; 9c908 (27:4908)
-	dw $24
+KenGfx:: ; 9c908 (27:4908)
+	dw 36
 	INCBIN "gfx/duelists/ken.2bpp"
 
-AmyGfx: ; 9cb4a (27:4b4a)
-	dw $24
+AmyGfx:: ; 9cb4a (27:4b4a)
+	dw 36
 	INCBIN "gfx/duelists/amy.2bpp"
 
-IsaacGfx: ; 9cd8c (27:4d8c)
-	dw $24
+IsaacGfx:: ; 9cd8c (27:4d8c)
+	dw 36
 	INCBIN "gfx/duelists/isaac.2bpp"
 
-MitchGfx: ; 9cfce (27:4fce)
-	dw $24
+MitchGfx:: ; 9cfce (27:4fce)
+	dw 36
 	INCBIN "gfx/duelists/mitch.2bpp"
 
-GeneGfx: ; 9d210 (27:5210)
-	dw $24
+GeneGfx:: ; 9d210 (27:5210)
+	dw 36
 	INCBIN "gfx/duelists/gene.2bpp"
 
-MurrayGfx: ; 9d452 (27:5452)
-	dw $24
+MurrayGfx:: ; 9d452 (27:5452)
+	dw 36
 	INCBIN "gfx/duelists/murray.2bpp"
 
-CourtneyGfx: ; 9d694 (27:5694)
-	dw $24
+CourtneyGfx:: ; 9d694 (27:5694)
+	dw 36
 	INCBIN "gfx/duelists/courtney.2bpp"
 
-SteveGfx: ; 9d8d6 (27:58d6)
-	dw $24
+SteveGfx:: ; 9d8d6 (27:58d6)
+	dw 36
 	INCBIN "gfx/duelists/steve.2bpp"
 
-JackGfx: ; 9db18 (27:5b18)
-	dw $24
+JackGfx:: ; 9db18 (27:5b18)
+	dw 36
 	INCBIN "gfx/duelists/jack.2bpp"
 
-RodGfx: ; 9dd5a (27:5d5a)
-	dw $24
+RodGfx:: ; 9dd5a (27:5d5a)
+	dw 36
 	INCBIN "gfx/duelists/rod.2bpp"
 
-JosephGfx: ; 9df9c (27:5f9c)
-	dw $24
+JosephGfx:: ; 9df9c (27:5f9c)
+	dw 36
 	INCBIN "gfx/duelists/joseph.2bpp"
 
-DavidGfx: ; 9e1de (27:61de)
-	dw $24
+DavidGfx:: ; 9e1de (27:61de)
+	dw 36
 	INCBIN "gfx/duelists/david.2bpp"
 
-ErikGfx: ; 9e420 (27:6420)
-	dw $24
+ErikGfx:: ; 9e420 (27:6420)
+	dw 36
 	INCBIN "gfx/duelists/erik.2bpp"
 
-JohnGfx: ; 9e662 (27:6662)
-	dw $24
+JohnGfx:: ; 9e662 (27:6662)
+	dw 36
 	INCBIN "gfx/duelists/john.2bpp"
 
-AdamGfx: ; 9e8a4 (27:68a4)
-	dw $24
+AdamGfx:: ; 9e8a4 (27:68a4)
+	dw 36
 	INCBIN "gfx/duelists/adam.2bpp"
 
-JonathanGfx: ; 9eae6 (27:6ae6)
-	dw $24
+JonathanGfx:: ; 9eae6 (27:6ae6)
+	dw 36
 	INCBIN "gfx/duelists/jonathan.2bpp"
 
-JoshuaGfx: ; 9ed28 (27:6d28)
-	dw $24
+JoshuaGfx:: ; 9ed28 (27:6d28)
+	dw 36
 	INCBIN "gfx/duelists/joshua.2bpp"
 
-NicholasGfx: ; 9ef6a (27:6f6a)
-	dw $24
+NicholasGfx:: ; 9ef6a (27:6f6a)
+	dw 36
 	INCBIN "gfx/duelists/nicholas.2bpp"
 
-BrandonGfx: ; 9f1ac (27:71ac)
-	dw $24
+BrandonGfx:: ; 9f1ac (27:71ac)
+	dw 36
 	INCBIN "gfx/duelists/brandon.2bpp"
 
-MatthewGfx: ; 9f3ee (27:73ee)
-	dw $24
+MatthewGfx:: ; 9f3ee (27:73ee)
+	dw 36
 	INCBIN "gfx/duelists/matthew.2bpp"
 
-RyanGfx: ; 9f630 (27:7630)
-	dw $24
+RyanGfx:: ; 9f630 (27:7630)
+	dw 36
 	INCBIN "gfx/duelists/ryan.2bpp"
 
-AndrewGfx: ; 9f872 (27:7872)
-	dw $24
+AndrewGfx:: ; 9f872 (27:7872)
+	dw 36
 	INCBIN "gfx/duelists/andrew.2bpp"
 
-ChrisGfx: ; 9fab4 (27:7ab4)
-	dw $24
+ChrisGfx:: ; 9fab4 (27:7ab4)
+	dw 36
 	INCBIN "gfx/duelists/chris.2bpp"
 
-MichaelGfx: ; 9fcf6 (27:7cf6)
-	dw $24
+MichaelGfx:: ; 9fcf6 (27:7cf6)
+	dw 36
 	INCBIN "gfx/duelists/michael.2bpp"
 
 Duel63Gfx:: ; 9ff38 (27:7f38)
@@ -496,48 +1015,48 @@ endr
 
 SECTION "Gfx 10", ROMX
 
-DanielGfx: ; a0000 (28:4000)
-	dw $24
+DanielGfx:: ; a0000 (28:4000)
+	dw 36
 	INCBIN "gfx/duelists/daniel.2bpp"
 
-RobertGfx: ; a0242 (28:4242)
-	dw $24
+RobertGfx:: ; a0242 (28:4242)
+	dw 36
 	INCBIN "gfx/duelists/robert.2bpp"
 
-BrittanyGfx: ; a0484 (28:4484)
-	dw $24
+BrittanyGfx:: ; a0484 (28:4484)
+	dw 36
 	INCBIN "gfx/duelists/brittany.2bpp"
 
-KristinGfx: ; a06c6 (28:46c6)
-	dw $24
+KristinGfx:: ; a06c6 (28:46c6)
+	dw 36
 	INCBIN "gfx/duelists/kristin.2bpp"
 
-HeatherGfx: ; a0908 (28:4908)
-	dw $24
+HeatherGfx:: ; a0908 (28:4908)
+	dw 36
 	INCBIN "gfx/duelists/heather.2bpp"
 
-SaraGfx: ; a0b4a (28:4b4a)
-	dw $24
+SaraGfx:: ; a0b4a (28:4b4a)
+	dw 36
 	INCBIN "gfx/duelists/sara.2bpp"
 
-AmandaGfx: ; a0d8c (28:4d8c)
-	dw $24
+AmandaGfx:: ; a0d8c (28:4d8c)
+	dw 36
 	INCBIN "gfx/duelists/amanda.2bpp"
 
-JenniferGfx: ; a0fce (28:4fce)
-	dw $24
+JenniferGfx:: ; a0fce (28:4fce)
+	dw 36
 	INCBIN "gfx/duelists/jennifer.2bpp"
 
-JessicaGfx: ; a1210 (28:5210)
-	dw $24
+JessicaGfx:: ; a1210 (28:5210)
+	dw 36
 	INCBIN "gfx/duelists/jessica.2bpp"
 
-StephanieGfx: ; a1452 (28:5452)
-	dw $24
+StephanieGfx:: ; a1452 (28:5452)
+	dw 36
 	INCBIN "gfx/duelists/stephanie.2bpp"
 
-AaronGfx: ; a1694 (28:5694)
-	dw $24
+AaronGfx:: ; a1694 (28:5694)
+	dw 36
 	INCBIN "gfx/duelists/aaron.2bpp"
 
 OWIshiharaGfx:: ; a18d6 (28:58d6)

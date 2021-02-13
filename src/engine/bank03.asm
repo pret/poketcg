@@ -490,20 +490,21 @@ Func_c38f: ; c38f (3:438f)
 	push bc
 	ld a, [wd23a]
 	ld e, a
-	ld a, [wd23b]
+	ld a, [wd23a + 1]
 	ld d, a
 	or e
-	jr z, .asm_c3c7
+	jr z, .skip
+
 	push hl
-	ld b, $c0
-	call Func_08bf
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
 	ld a, [wd23d]
 	ld [wTempPointerBank], a
-	ld a, [wd130]
+	ld a, [wBGMapHeight]
 	inc a
 	srl a
 	ld b, a
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	inc a
 	srl a
 	ld c, a
@@ -511,7 +512,7 @@ Func_c38f: ; c38f (3:438f)
 .asm_c3b7
 	push bc
 	ld b, $00
-	call Func_3be4
+	call DecompressBGMapFromBank
 	ld hl, $10
 	add hl, de
 	ld d, h
@@ -519,7 +520,8 @@ Func_c38f: ; c38f (3:438f)
 	pop bc
 	dec b
 	jr nz, .asm_c3b7
-.asm_c3c7
+
+.skip
 	pop bc
 	pop hl
 	ret
@@ -571,10 +573,10 @@ Func_c3ee: ; c3ee (3:43ee)
 	ret
 
 Func_c3ff: ; c3ff (3:43ff)
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	sub $14
 	ld [wd237], a
-	ld a, [wd130]
+	ld a, [wBGMapHeight]
 	sub $12
 	ld [wd238], a
 	call Func_c41c

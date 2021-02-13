@@ -11,15 +11,40 @@ Func_80028: ; 80028 (20:4028)
 	ret
 ; 0x8003d
 
-	INCROM $8003d, $80077
+Func_8003d: ; 8003d (20:403d)
+	farcall Func_1c33b
+	farcall Func_7036a
+	ld bc, $0
+	call Func_80077
+	ld a, $80
+	ld [wd4ca], a
+	xor a
+	ld [wd4cb], a
+	call LoadTilesetGfx
+	xor a
+	ld [wd4ca], a
+	ld a, [wd291]
+	ld [wd4cb], a
+	ld a, [wd28f]
+	call Func_803c9
+	ld a, [wd291]
+	ld [wd4cb], a
+	ld a, [wd290]
+	or a
+	jr z, .asm_80076
+	call Func_803c9
+.asm_80076
+	ret
+; 0x80077
 
 Func_80077: ; 80077 (20:4077)
 	ld a, $1
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	jr Func_80082
 
 	xor a
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
+;	fallthrough
 
 Func_80082: ; 80082 (20:4082)
 	push hl
@@ -30,24 +55,29 @@ Func_80082: ; 80082 (20:4082)
 	ld [hl], e
 	inc hl
 	ld [hl], d
+
+; get pointer and bank for BG Map
 	call Func_803b9
 	ld a, [wTempPointerBank]
 	ld [wd23d], a
-	ld de, wLoadedPalData
-	ld bc, $0006
+
+; store header data
+	ld de, wBGMapBuffer
+	ld bc, $0006 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
 	ld h, d
 	ld a, [hli]
-	ld [wd12f], a
+	ld [wBGMapWidth], a
 	ld a, [hli]
-	ld [wd130], a
+	ld [wBGMapHeight], a
 	ld a, [hli]
 	ld [wd23a], a
 	ld a, [hli]
-	ld [wd23b], a
+	ld [wd23a + 1], a
 	ld a, [hli]
 	ld [wd23c], a
+
 	call Func_800bd
 	pop de
 	pop bc
@@ -64,8 +94,8 @@ Func_800bd: ; 800bd (20:40bd)
 	ld a, [wTempPointer + 1]
 	adc $00
 	ld d, a
-	ld b, $c0
-	call Func_08bf
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
 	ld a, [wVRAMPointer]
 	ld e, a
 	ld a, [wVRAMPointer + 1]
@@ -77,63 +107,72 @@ Func_800bd: ; 800bd (20:40bd)
 	ret
 
 Func_800e0: ; 800e0 (20:40e0)
+; if wd23c != 0, then use double wBGMapWidth
 	push hl
 	ld hl, wd28e
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld [hl], a
 	ld a, [wd23c]
 	or a
 	jr z, .asm_800f0
 	sla [hl]
 .asm_800f0
+
 	ld c, $40
-	ld hl, wLoadedPalData
+	ld hl, wBGMapBuffer
 	xor a
-.asm_800f6
+.loop_clear
 	ld [hli], a
 	dec c
-	jr nz, .asm_800f6
-	ld a, [wd130]
+	jr nz, .loop_clear
+
+; loop each row, up to the number of tiles in height
+	ld a, [wBGMapHeight]
 	ld c, a
-.asm_800fe
+.loop
 	push bc
 	push de
 	ld b, $00
 	ld a, [wd28e]
 	ld c, a
-	ld de, wLoadedPalData
-	call Func_3be4
-	ld a, [wd12f]
+	ld de, wBGMapBuffer
+	call DecompressBGMapFromBank
+
+	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
 	push de
-	ld hl, wLoadedPalData
-	call Func_8016e
+	ld hl, wBGMapBuffer
+	call CopyBGDataToVRAMOrSRAM
 	ld a, [wConsole]
-	cp $02
-	jr nz, .asm_8013b
+	cp CONSOLE_CGB
+	jr nz, .next_row
+
+	; cgb only
 	call BankswitchVRAM1
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld c, a
 	ld b, $00
-	ld hl, wLoadedPalData
+	ld hl, wBGMapBuffer
 	add hl, bc
 	pop de
 	push de
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	ld b, a
 	call Func_80148
-	call Func_8016e
+	call CopyBGDataToVRAMOrSRAM
 	call BankswitchVRAM0
-.asm_8013b
+
+.next_row
 	pop de
-	ld hl, $20
+	ld hl, BG_MAP_WIDTH
 	add hl, de
 	ld e, l
 	ld d, h
 	pop bc
 	dec c
-	jr nz, .asm_800fe
+	jr nz, .loop
+
 	pop hl
 	ret
 
@@ -144,59 +183,71 @@ Func_80148: ; 80148 (20:4148)
 	ld a, [wd23c]
 	or a
 	jr z, .asm_80162
+
+; add wd291 to b bytes in hl
 	push hl
 	push bc
-.asm_80155
+.loop_1
 	push bc
 	ld a, [wd291]
 	add [hl]
 	ld [hli], a
 	pop bc
 	dec b
-	jr nz, .asm_80155
-	pop bc
-	pop hl
-	ret
-.asm_80162
-	push hl
-	push bc
-	ld a, [wd291]
-.asm_80167
-	ld [hli], a
-	dec b
-	jr nz, .asm_80167
+	jr nz, .loop_1
 	pop bc
 	pop hl
 	ret
 
-Func_8016e: ; 8016e (20:416e)
-	ld a, [wd292]
+; store wd291 to b bytes in hl
+.asm_80162
+	push hl
+	push bc
+	ld a, [wd291]
+.loop_2
+	ld [hli], a
+	dec b
+	jr nz, .loop_2
+	pop bc
+	pop hl
+	ret
+
+; copies BG Map data pointed by hl
+; to either VRAM or SRAM, depending on wBGMapCopyMode
+; de is the target address in VRAM,
+; if SRAM is the target address to copy,
+; copies data to s0BGMap or s1BGMap
+; for VRAM0 or VRAM1 respectively
+CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
+	ld a, [wBGMapCopyMode]
 	or a
 	jp z, SafeCopyDataHLtoDE
+
+; copies b bytes from hl to SRAM1
 	push hl
 	push bc
 	push de
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $01
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
-	ld hl, $800
+	ld hl, s0BGMap - v0BGMap0
 	ldh a, [hBankVRAM]
 	or a
-	jr z, .asm_8018c
-	ld hl, $c00
-.asm_8018c
+	jr z, .got_pointer
+	ld hl, s1BGMap - v1BGMap0
+.got_pointer
 	add hl, de
 	ld e, l
 	ld d, h
 	pop hl
-.asm_80190
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_80190
+	jr nz, .loop
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -323,7 +374,7 @@ Func_8025b: ; 8025b (20:425b)
 	call LoadGraphicsPointerFromHL
 	ld a, [hl] ; sprite number of tiles
 	push af
-	ld [wCurSpriteNumTiles], a
+	ld [wTotalNumTiles], a
 	ld a, TILE_SIZE
 	ld [wCurSpriteTileSize], a
 	call LoadGfxDataFromTempPointerToVRAMBank
@@ -338,7 +389,7 @@ LoadGfxDataFromTempPointerToVRAMBank: ; 80274 (20:4274)
 	jr LoadGfxDataFromTempPointer
 
 Func_80279: ; 80279 (20:4279)
-	call Func_802bb
+	call GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2
 
 ; loads graphics data pointed by wTempPointer in wTempPointerBank
 ; to wVRAMPointer
@@ -346,7 +397,7 @@ LoadGfxDataFromTempPointer:
 	push hl
 	push bc
 	push de
-	ld a, [wCurSpriteNumTiles]
+	ld a, [wTotalNumTiles]
 	ld b, a
 	ld a, [wCurSpriteTileSize]
 	ld c, a
@@ -378,7 +429,7 @@ GetTileOffsetPointerAndSwitchVRAM: ; 8029f (20:429f)
 	and $f0
 	ld [wVRAMPointer], a
 	pop af
-	and $f
+	and $0f
 	add HIGH(v0Tiles0) ; $80
 	ld [wVRAMPointer + 1], a
 
@@ -389,33 +440,229 @@ GetTileOffsetPointerAndSwitchVRAM: ; 8029f (20:429f)
 	call BankswitchVRAM
 	ret
 
-Func_802bb: ; 802bb (20:42bb)
-	ld a, [wd4ca]
+; converts wVRAMTileOffset to address in VRAM
+; and stores it in wVRAMPointer
+; switches VRAM according to wd4cb
+; then changes wVRAMPointer such that
+; addresses to Tiles0 is changed to Tiles2
+GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2: ; 802bb (20:42bb)
+	ld a, [wVRAMTileOffset]
 	push af
-	xor $80
-	ld [wd4ca], a
+	xor $80 ; toggle top bit
+	ld [wVRAMTileOffset], a
 	call GetTileOffsetPointerAndSwitchVRAM
 	ld a, [wVRAMPointer + 1]
 	add $8
 	ld [wVRAMPointer + 1], a
 	pop af
-	ld [wd4ca], a
+	ld [wVRAMTileOffset], a
 	ret
 ; 0x802d4
 
-	INCROM $802d4, $803b9
+; loads tileset gfx to VRAM corresponding to wCurTileset
+LoadTilesetGfx: ; 802d4 (20:42d4)
+	push hl
+	ld l, $02
+	ld a, [wCurTileset]
+	call GetMapDataPointer
+	call LoadGraphicsPointerFromHL
+	call .LoadTileGfx
+	call BankswitchVRAM0
+	pop hl
+	ret
+; 0x802e8
 
+; loads gfx data from wTempPointerBank:wTempPointer
+.LoadTileGfx ; 802e8 (20:42e8)
+	push hl
+	push bc
+	push de
+	ld hl, wTempPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [wTempPointerBank]
+	call GetFarByte ; get number of tiles (low byte)
+	ld [wTotalNumTiles], a
+	inc hl
+	ld a, [wTempPointerBank]
+	call GetFarByte ; get number of tiles (high byte)
+	ld [wTotalNumTiles + 1], a
+	inc hl
+	ld a, l
+	ld [wTempPointer], a
+	ld a, h
+	ld [wTempPointer + 1], a
+
+; used to sequentially copy gfx data in the order
+; v0Tiles1 -> v0Tiles2 -> v1Tiles1 -> v1Tiles2
+
+	lb bc, $0, LOW(v0Tiles2 / TILE_SIZE) ; $00
+	call .CopyGfxData
+	jr z, .done
+	lb bc, $0, LOW(v0Tiles1 / TILE_SIZE) ; $80
+	call .CopyGfxData
+	jr z, .done
+	; VRAM1 only used in CGB console
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .done
+	lb bc, $1, LOW(v1Tiles2 / TILE_SIZE) ; $00
+	call .CopyGfxData
+	jr z, .done
+	lb bc, $1, LOW(v1Tiles1 / TILE_SIZE) ; $80
+	call .CopyGfxData
+
+.done
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x80336
+
+; copies gfx data from wTempPointer to VRAM
+; c must match with wVRAMTileOffset
+; if c = $00, copies it to Tiles2
+; if c = $80, copies it to Tiles1
+; b must match with VRAM bank in wd4cb
+; prepares next call to this routine if data wasn't fully copied
+; so that it copies to the right VRAM section
+.CopyGfxData ; 80336 (20:4336)
+	push hl
+	push bc
+	push de
+	ld a, [wd4cb]
+	cp b
+	jr nz, .skip
+	ld a, [wVRAMTileOffset]
+	ld d, a
+	xor c
+	bit 7, a
+	jr nz, .skip
+
+; (wd4cb == b) and
+; bit 7 in c is same as bit 7 in wVRAMTileOffset
+	ld a, c
+	add $80
+	sub d
+	ld d, a ; total number of tiles
+	ld a, [wTotalNumTiles + 1]
+	or a
+	jr nz, .asm_8035a
+	; if d > wTotalNumTiles,
+	; overwrite it with wTotalNumTiles
+	ld a, [wTotalNumTiles]
+	cp d
+	jr nc, .asm_8035a
+	ld d, a
+.asm_8035a
+	ld a, [wTotalNumTiles]
+	sub d
+	ld [wTotalNumTiles], a
+	ld a, [wTotalNumTiles + 1]
+	sbc $00
+	ld [wTotalNumTiles + 1], a
+	call GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2
+
+	ld b, d ; number of tiles
+	ld c, TILE_SIZE
+	ld hl, wVRAMPointer
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld hl, wTempPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	push bc
+	push hl
+	ldh a, [hBankVRAM]
+	push af
+	ld a, [wd4cb]
+	and $01
+	call BankswitchVRAM
+	call CopyGfxDataFromTempBank
+	pop af
+	call BankswitchVRAM
+	pop de
+	pop bc
+
+	; add number of tiles * TILE_SIZE
+	; to wVRAMPointer and store it in wTempPointer
+	ld l, b
+	ld h, $00
+	add hl, hl ; *2
+	add hl, hl ; *4
+	add hl, hl ; *8
+	add hl, hl ; *16 (TILE_SIZE)
+	add hl, de
+	ld a, l
+	ld [wTempPointer], a
+	ld a, h
+	ld [wTempPointer + 1], a
+
+	ld hl, wVRAMTileOffset
+	ld a, [hl]
+	add $80
+	push af
+	and $80 ; start of next group of tiles
+	ld [hli], a
+	pop af
+	; if it overflows
+	; (which means a tile group after Tiles2)
+	; then set wd4cb for VRAM1
+	ld a, [hl] ; wd4cb
+	adc $00
+	ld [hl], a
+
+.skip
+	ld hl, wTotalNumTiles
+	ld a, [hli]
+	or [hl] ; wTotalNumTiles + 1
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x803b9
+
+; gets pointer to BG map with ID from wCurTilemap
 Func_803b9: ; 803b9 (20:43b9)
 	ld l, $00
-	ld a, [wd131]
+	ld a, [wCurTilemap]
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
 	ld a, [hl]
-	ld [wd239], a
+	ld [wCurTileset], a
 	ret
 ; 0x803c9
 
-	INCROM $803c9, $803ec
+Func_803c9: ; 803c9 (20:43c9)
+	push hl
+	push bc
+	push de
+	call CopyPaletteDataToBuffer
+	ld hl, wLoadedPalData
+	ld a, [hli]
+	or a
+	jr z, .asm_803dc
+	ld a, [hli]
+	push hl
+	call SetBGP
+	pop hl
+.asm_803dc
+	ld a, [hli]
+	or a
+	jr z, .asm_803e8
+	ld c, a
+	ld a, [wd4cb]
+	ld b, a
+	call LoadPaletteDataFromHL
+.asm_803e8
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x803ec
 
 ; copies from palette data in hl c*8 bytes to palette index b
 ; in WRAM, starting from wBackgroundPalettesCGB
@@ -571,7 +818,7 @@ Func_80b89: ; 80b89 (20:4b89)
 	push af
 	ld c, a
 	ld a, $01
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	ld b, $00
 	ld hl, wd323
 	add hl, bc
@@ -589,7 +836,7 @@ Func_80b89: ; 80b89 (20:4b89)
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
-	ld [wd292], a
+	ld [wBGMapCopyMode], a
 	pop af
 ;	Fallthrough
 
@@ -598,17 +845,17 @@ Func_80baa: ; 80baa (20:4baa)
 	push bc
 	push de
 	ld c, a
-	ld a, [wd131]
+	ld a, [wCurTilemap]
 	push af
 	ld a, [wd23d]
 	push af
-	ld a, [wd12f]
+	ld a, [wBGMapWidth]
 	push af
-	ld a, [wd130]
+	ld a, [wBGMapHeight]
 	push af
 	ld a, [wd23a]
 	push af
-	ld a, [wd23b]
+	ld a, [wd23a + 1]
 	push af
 	ld b, $0
 	ld hl, wd323
@@ -635,7 +882,7 @@ Func_80baa: ; 80baa (20:4baa)
 
 .asm_80be7
 	ld a, [hl]
-	ld [wd131], a
+	ld [wCurTilemap], a
 	push bc
 	farcall Func_80082
 	pop bc
@@ -651,17 +898,17 @@ Func_80baa: ; 80baa (20:4baa)
 	add hl, bc
 	farcall Func_c38f
 	pop af
-	ld [wd23b], a
+	ld [wd23a + 1], a
 	pop af
 	ld [wd23a], a
 	pop af
-	ld [wd130], a
+	ld [wBGMapHeight], a
 	pop af
-	ld [wd12f], a
+	ld [wBGMapWidth], a
 	pop af
 	ld [wd23d], a
 	pop af
-	ld [wd131], a
+	ld [wCurTilemap], a
 	pop de
 	pop bc
 	pop hl
@@ -678,208 +925,222 @@ SpriteNullAnimationFrame:
 
 ; might be closer to "screen specific data" than map data
 MapDataPointers: ; 80e5d (20:4e5d)
-	dw MapDataPointers_80e67
-	dw MapDataPointers_8100f
+	dw Tilemaps
+	dw Tilesets
 	dw MapDataPointers_8116b
 	dw SpriteAnimationPointers
 	dw MapDataPointers_81697
 
-MapDataPointers_80e67: ; 80e67 (20:4e67)
-	db $1b, $59, $00, $00
-	db $22, $5a, $00, $00
-	db $13, $5c, $00, $01
-	db $2e, $5d, $00, $01
-	db $d1, $5e, $00, $01
-	db $f5, $5e, $00, $01
-	db $26, $5f, $00, $01
-	db $eb, $5f, $00, $01
-	db $43, $61, $00, $01
-	db $50, $61, $00, $01
-	db $60, $61, $00, $02
-	db $22, $62, $00, $02
-	db $36, $63, $00, $03
-	db $00, $64, $00, $03
-	db $1d, $65, $00, $03
-	db $e7, $65, $00, $03
-	db $04, $67, $00, $03
-	db $ce, $67, $00, $03
-	db $eb, $68, $00, $03
-	db $b5, $69, $00, $03
-	db $d2, $6a, $00, $03
-	db $9c, $6b, $00, $03
-	db $b9, $6c, $00, $03
-	db $83, $6d, $00, $03
-	db $a0, $6e, $00, $03
-	db $6a, $6f, $00, $03
-	db $87, $70, $00, $03
-	db $51, $71, $00, $03
-	db $6e, $72, $00, $03
-	db $21, $73, $00, $03
-	db $24, $74, $00, $04
-	db $45, $75, $00, $04
-	db $db, $76, $00, $05
-	db $8c, $77, $00, $05
-	db $8d, $78, $00, $06
-	db $d6, $79, $00, $06
-	db $00, $40, $01, $07
-	db $88, $41, $01, $07
-	db $bb, $43, $01, $08
-	db $33, $45, $01, $08
-	db $2e, $47, $01, $09
-	db $d8, $48, $01, $09
-	db $73, $4b, $01, $0a
-	db $6f, $4c, $01, $0a
-	db $fe, $4d, $01, $0b
-	db $1d, $4f, $01, $0b
-	db $b6, $50, $01, $0c
-	db $91, $51, $01, $0c
-	db $15, $53, $01, $0d
-	db $b3, $54, $01, $0d
-	db $0a, $57, $01, $0e
-	db $ce, $57, $01, $0e
-	db $f1, $7b, $00, $0e
-	db $03, $7c, $00, $0e
-	db $ef, $58, $01, $0f
-	db $79, $5a, $01, $0f
-	db $1a, $7c, $00, $0f
-	db $26, $7c, $00, $0f
-	db $e2, $5c, $01, $10
-	db $f4, $5d, $01, $10
-	db $7c, $5f, $01, $11
-	db $7f, $60, $01, $11
-	db $36, $7c, $00, $12
-	db $7d, $61, $01, $12
-	db $93, $61, $01, $12
-	db $a9, $61, $01, $12
-	db $bf, $61, $01, $12
-	db $d5, $61, $01, $12
-	db $eb, $61, $01, $12
-	db $01, $62, $01, $12
-	db $17, $62, $01, $13
-	db $da, $62, $01, $13
-	db $64, $63, $01, $13
-	db $43, $64, $01, $13
-	db $df, $64, $01, $14
-	db $b5, $65, $01, $14
-	db $47, $66, $01, $15
-	db $b8, $66, $01, $16
-	db $3e, $67, $01, $17
-	db $af, $67, $01, $18
-	db $33, $68, $01, $19
-	db $a4, $68, $01, $1a
-	db $25, $69, $01, $1b
-	db $96, $69, $01, $1c
-	db $14, $6a, $01, $1d
-	db $85, $6a, $01, $1e
-	db $28, $6b, $01, $1f
-	db $99, $6b, $01, $20
-	db $34, $6c, $01, $21
-	db $a5, $6c, $01, $22
-	db $37, $6d, $01, $23
-	db $cc, $6d, $01, $24
-	db $8a, $6e, $01, $25
-	db $18, $6f, $01, $25
-	db $c0, $6f, $01, $25
-	db $4f, $70, $01, $26
-	db $a5, $71, $01, $27
-	db $97, $73, $01, $28
-	db $b7, $73, $01, $29
-	db $e5, $73, $01, $2a
-	db $13, $74, $01, $2b
-	db $38, $75, $01, $2c
-	db $9f, $76, $01, $2d
-	db $f6, $76, $01, $2d
-	db $7c, $77, $01, $2e
-	db $c4, $77, $01, $2f
+; \1 = pointer
+; \2 = tileset
+tilemap: MACRO
+	dwb \1, BANK(\1) - BANK(Tilemaps)
+	db \2
+ENDM
 
-MapDataPointers_8100f: ; 8100f (20:500f)
-	db $00, $40, $02, $c1
-	db $12, $4c, $02, $97
-	db $28, $78, $01, $4d
-	db $84, $55, $02, $81
-	db $96, $5d, $02, $78
-	db $18, $65, $02, $63
-	db $4a, $6b, $02, $3c
-	db $0c, $6f, $02, $a1
-	db $00, $40, $03, $83
-	db $1e, $79, $02, $57
-	db $32, $48, $03, $3a
-	db $d4, $4b, $03, $52
-	db $f6, $50, $03, $57
-	db $68, $56, $03, $9d
-	db $3a, $60, $03, $4e
-	db $1c, $65, $03, $cf
-	db $0e, $72, $03, $79
-	db $00, $40, $04, $bd
-	db $a0, $79, $03, $48
-	db $d2, $4b, $04, $6d
-	db $a4, $52, $04, $5d
-	db $76, $58, $04, $60
-	db $78, $5e, $04, $56
-	db $da, $63, $04, $60
-	db $dc, $69, $04, $56
-	db $3e, $6f, $04, $60
-	db $40, $75, $04, $56
-	db $00, $40, $05, $60
-	db $02, $46, $05, $56
-	db $64, $4b, $05, $60
-	db $66, $51, $05, $60
-	db $68, $57, $05, $60
-	db $6a, $5d, $05, $60
-	db $6c, $63, $05, $60
-	db $6e, $69, $05, $60
-	db $70, $6f, $05, $61
-	db $82, $75, $05, $61
-	db $fa, $7c, $01, $04
-	db $00, $40, $06, $f4
-	db $42, $4f, $06, $3b
-	db $3c, $7d, $01, $04
-	db $7e, $7d, $01, $24
-	db $a2, $7a, $04, $24
-	db $f4, $62, $06, $dc
-	db $b6, $70, $06, $d4
-	db $e4, $7c, $04, $24
-	db $22, $7e, $03, $18
-	db $94, $7b, $05, $31
-	db $00, $40, $07, $24
-	db $42, $42, $07, $24
-	db $84, $44, $07, $24
-	db $c6, $46, $07, $24
-	db $08, $49, $07, $24
-	db $4a, $4b, $07, $24
-	db $8c, $4d, $07, $24
-	db $ce, $4f, $07, $24
-	db $10, $52, $07, $24
-	db $52, $54, $07, $24
-	db $94, $56, $07, $24
-	db $d6, $58, $07, $24
-	db $18, $5b, $07, $24
-	db $5a, $5d, $07, $24
-	db $9c, $5f, $07, $24
-	db $de, $61, $07, $24
-	db $20, $64, $07, $24
-	db $62, $66, $07, $24
-	db $a4, $68, $07, $24
-	db $e6, $6a, $07, $24
-	db $28, $6d, $07, $24
-	db $6a, $6f, $07, $24
-	db $ac, $71, $07, $24
-	db $ee, $73, $07, $24
-	db $30, $76, $07, $24
-	db $72, $78, $07, $24
-	db $b4, $7a, $07, $24
-	db $f6, $7c, $07, $24
-	db $00, $40, $08, $24
-	db $42, $42, $08, $24
-	db $84, $44, $08, $24
-	db $c6, $46, $08, $24
-	db $08, $49, $08, $24
-	db $4a, $4b, $08, $24
-	db $8c, $4d, $08, $24
-	db $ce, $4f, $08, $24
-	db $10, $52, $08, $24
-	db $52, $54, $08, $24
-	db $94, $56, $08, $24
+Tilemaps: ; 80e67 (20:4e67)
+	tilemap OverworldMapTilemap,             TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP
+	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP_CGB
+	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY
+	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY_CGB
+	tilemap Unused1Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_1
+	tilemap Unused2Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_2
+	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM
+	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM_CGB
+	tilemap Unused3Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_3
+	tilemap Unused4Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_4
+	tilemap IshiharaTilemap,                 TILESET_ISHIHARA              ; TILEMAP_ISHIHARA
+	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA              ; TILEMAP_ISHIHARA_CGB
+	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE
+	tilemap FightingClubEntranceCGBTilemap,  TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
+	tilemap RockClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE
+	tilemap RockClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
+	tilemap WaterClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE
+	tilemap WaterClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
+	tilemap LightningClubEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
+	tilemap LightningClubEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
+	tilemap GrassClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE
+	tilemap GrassClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
+	tilemap PsychicClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
+	tilemap PsychicClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
+	tilemap ScienceClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE
+	tilemap ScienceClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
+	tilemap FireClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE
+	tilemap FireClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
+	tilemap ChallengeHallEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE
+	tilemap ChallengeHallEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
+	tilemap ClubLobbyTilemap,                TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY
+	tilemap ClubLobbyCGBTilemap,             TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY_CGB
+	tilemap FightingClubTilemap,             TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB
+	tilemap FightingClubCGBTilemap,          TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB_CGB
+	tilemap RockClubTilemap,                 TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB
+	tilemap RockClubCGBTilemap,              TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB_CGB
+	tilemap WaterClubTilemap,                TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB
+	tilemap WaterClubCGBTilemap,             TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB_CGB
+	tilemap LightningClubTilemap,            TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB
+	tilemap LightningClubCGBTilemap,         TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB_CGB
+	tilemap GrassClubTilemap,                TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB
+	tilemap GrassClubCGBTilemap,             TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB_CGB
+	tilemap PsychicClubTilemap,              TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB
+	tilemap PsychicClubCGBTilemap,           TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB_CGB
+	tilemap ScienceClubTilemap,              TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB
+	tilemap ScienceClubCGBTilemap,           TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB_CGB
+	tilemap FireClubTilemap,                 TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB
+	tilemap FireClubCGBTilemap,              TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB_CGB
+	tilemap ChallengeHallTilemap,            TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL
+	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL_CGB
+	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE
+	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
+	tilemap Unused5Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_5
+	tilemap Unused6Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_6
+	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME
+	tilemap PokemonDomeGBTilemap,            TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME_CGB
+	tilemap Unused7Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_7
+	tilemap Unused8Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_8
+	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR
+	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR_CGB
+	tilemap CardPop1Tilemap,                 TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1
+	tilemap CardPop1CGBTilemap,              TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1_CGB
+	tilemap GrassMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_GRASS_MEDAL
+	tilemap ScienceMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_SCIENCE_MEDAL
+	tilemap FireMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_FIRE_MEDAL
+	tilemap WaterMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_WATER_MEDAL
+	tilemap LightningMedalTilemap,           TILESET_MEDAL                 ; TILEMAP_LIGHTNING_MEDAL
+	tilemap FightingMedalTilemap,            TILESET_MEDAL                 ; TILEMAP_FIGHTING_MEDAL
+	tilemap RockMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_ROCK_MEDAL
+	tilemap PsychicMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_PSYCHIC_MEDAL
+	tilemap CardPop2Tilemap,                 TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2
+	tilemap CardPop2CGBTilemap,              TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_CGB
+	tilemap CardPop2Unknown1Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_1
+	tilemap CardPop2Unknown2Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_2
+	tilemap CardPop3Tilemap,                 TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3
+	tilemap CardPop3CGBTilemap,              TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3_CGB
+	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1           ; TILEMAP_COLOSSEUM
+	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2           ; TILEMAP_COLOSSEUM_CGB
+	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1           ; TILEMAP_EVOLUTION
+	tilemap EvolutionCGBTilemap,             TILESET_EVOLUTION_2           ; TILEMAP_EVOLUTION_CGB
+	tilemap MysteryTilemap,                  TILESET_MYSTERY_1             ; TILEMAP_MYSTERY
+	tilemap MysteryCGBTilemap,               TILESET_MYSTERY_2             ; TILEMAP_MYSTERY_CGB
+	tilemap LaboratoryTilemap,               TILESET_LABORATORY_1          ; TILEMAP_LABORATORY
+	tilemap LaboratoryCGBTilemap,            TILESET_LABORATORY_2          ; TILEMAP_LABORATORY_CGB
+	tilemap CharizardIntroTilemap,           TILESET_CHARIZARD_INTRO_1     ; TILEMAP_CHARIZARD_INTRO
+	tilemap CharizardIntroCGBTilemap,        TILESET_CHARIZARD_INTRO_2     ; TILEMAP_CHARIZARD_INTRO_CGB
+	tilemap ScytherIntroTilemap,             TILESET_SCYTHER_INTRO_1       ; TILEMAP_SCYTHER_INTRO
+	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2       ; TILEMAP_SCYTHER_INTRO_CGB
+	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1    ; TILEMAP_AERODACTYL_INTRO
+	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2    ; TILEMAP_AERODACTYL_INTRO_CGB
+	tilemap TitleScreen1Tilemap,             TILESET_TITLE_SCREEN_1        ; TILEMAP_TITLE_SCREEN_1
+	tilemap TitleScreen2Tilemap,             TILESET_TITLE_SCREEN_2        ; TILEMAP_TITLE_SCREEN_2
+	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_1
+	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_2
+	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_3
+	tilemap TitleScreen3Tilemap,             TILESET_TITLE_SCREEN_3        ; TILEMAP_TITLE_SCREEN_3
+	tilemap TitleScreen4Tilemap,             TILESET_TITLE_SCREEN_4        ; TILEMAP_TITLE_SCREEN_4
+	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2         ; TILEMAP_SOLID_TILES_4
+	tilemap PlayerTilemap,                   TILESET_PLAYER                ; TILEMAP_PLAYER
+	tilemap OpponentTilemap,                 TILESET_RONALD                ; TILEMAP_OPPONENT
+	tilemap TitleScreen5Tilemap,             TILESET_TITLE_SCREEN_5        ; TILEMAP_TITLE_SCREEN_5
+	tilemap TitleScreen6Tilemap,             TILESET_TITLE_SCREEN_6        ; TILEMAP_TITLE_SCREEN_6
+	tilemap CopyrightTilemap,                TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT
+	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT_CGB
+	tilemap NintendoTilemap,                 TILESET_NINTENDO              ; TILEMAP_NINTENDO
+	tilemap CompaniesTilemap,                TILESET_COMPANIES             ; TILEMAP_COMPANIES
+
+; \1 = pointer
+; \2 = number of tiles
+tileset: MACRO
+	dwb \1, BANK(\1) - BANK(Tilesets)
+	db \2
+ENDM
+
+Tilesets: ; 8100f (20:500f)
+	tileset OverworldMapTiles,             193 ; TILESET_OVERWORLD_MAP
+	tileset MasonLaboratoryTilesetGfx,     151 ; TILESET_MASON_LABORATORY
+	tileset IshiharaTilesetGfx,             77 ; TILESET_ISHIHARA
+	tileset ClubEntranceTilesetGfx,        129 ; TILESET_CLUB_ENTRANCE
+	tileset ClubLobbyTilesetGfx,           120 ; TILESET_CLUB_LOBBY
+	tileset FightingClubTilesetGfx,         99 ; TILESET_FIGHTING_CLUB
+	tileset RockClubTilesetGfx,             60 ; TILESET_ROCK_CLUB
+	tileset WaterClubTilesetGfx,           161 ; TILESET_WATER_CLUB
+	tileset LightningClubTilesetGfx,       131 ; TILESET_LIGHTNING_CLUB
+	tileset GrassClubTilesetGfx,            87 ; TILESET_GRASS_CLUB
+	tileset PsychicClubTilesetGfx,          58 ; TILESET_PSYCHIC_CLUB
+	tileset ScienceClubTilesetGfx,          82 ; TILESET_SCIENCE_CLUB
+	tileset FireClubTilesetGfx,             87 ; TILESET_FIRE_CLUB
+	tileset ChallengeHallTilesetGfx,       157 ; TILESET_CHALLENGE_HALL
+	tileset PokemonDomeEntranceTilesetGfx,  78 ; TILESET_POKEMON_DOME_ENTRANCE
+	tileset PokemonDomeTilesetGfx,         207 ; TILESET_POKEMON_DOME
+	tileset HallOfHonorTilesetGfx,         121 ; TILESET_HALL_OF_HONOR
+	tileset CardPop1Gfx,                   189 ; TILESET_CARD_POP_1
+	tileset MedalGfx,                       72 ; TILESET_MEDAL
+	tileset CardPop2Gfx,                   109 ; TILESET_CARD_POP_2
+	tileset CardPop3Gfx,                    93 ; TILESET_CARD_POP_3
+	tileset Colosseum1Gfx,                  96 ; TILESET_COLOSSEUM_1
+	tileset Colosseum2Gfx,                  86 ; TILESET_COLOSSEUM_2
+	tileset Evolution1Gfx,                  96 ; TILESET_EVOLUTION_1
+	tileset Evolution2Gfx,                  86 ; TILESET_EVOLUTION_2
+	tileset Mystery1Gfx,                    96 ; TILESET_MYSTERY_1
+	tileset Mystery2Gfx,                    86 ; TILESET_MYSTERY_2
+	tileset Laboratory1Gfx,                 96 ; TILESET_LABORATORY_1
+	tileset Laboratory2Gfx,                 86 ; TILESET_LABORATORY_2
+	tileset CharizardIntro1Gfx,             96 ; TILESET_CHARIZARD_INTRO_1
+	tileset CharizardIntro2Gfx,             96 ; TILESET_CHARIZARD_INTRO_2
+	tileset ScytherIntro1Gfx,               96 ; TILESET_SCYTHER_INTRO_1
+	tileset ScytherIntro2Gfx,               96 ; TILESET_SCYTHER_INTRO_2
+	tileset AerodactylIntro1Gfx,            96 ; TILESET_AERODACTYL_INTRO_1
+	tileset AerodactylIntro2Gfx,            96 ; TILESET_AERODACTYL_INTRO_2
+	tileset Titlescreen1Gfx,                97 ; TILESET_TITLE_SCREEN_1
+	tileset Titlescreen2Gfx,                97 ; TILESET_TITLE_SCREEN_2
+	tileset SolidTiles1,                     4 ; TILESET_SOLID_TILES_1
+	tileset Titlescreen3Gfx,               244 ; TILESET_TITLE_SCREEN_3
+	tileset Titlescreen4Gfx,                59 ; TILESET_TITLE_SCREEN_4
+	tileset SolidTiles2,                     4 ; TILESET_SOLID_TILES_2
+	tileset PlayerGfx,                      36 ; TILESET_PLAYER
+	tileset RonaldGfx,                      36 ; TILESET_RONALD
+	tileset Titlescreen5Gfx,               220 ; TILESET_TITLE_SCREEN_5
+	tileset Titlescreen6Gfx,               212 ; TILESET_TITLE_SCREEN_6
+	tileset CopyrightGfx,                   36 ; TILESET_COPYRIGHT
+	tileset NintendoGfx,                    24 ; TILESET_NINTENDO
+	tileset CompaniesGfx,                   49 ; TILESET_COMPANIES
+	tileset SamGfx,                         36 ; TILESET_SAM
+	tileset ImakuniGfx,                     36 ; TILESET_IMAKUNI
+	tileset NikkiGfx,                       36 ; TILESET_NIKKI
+	tileset RickGfx,                        36 ; TILESET_RICK
+	tileset KenGfx,                         36 ; TILESET_KEN
+	tileset AmyGfx,                         36 ; TILESET_AMY
+	tileset IsaacGfx,                       36 ; TILESET_ISAAC
+	tileset MitchGfx,                       36 ; TILESET_MITCH
+	tileset GeneGfx,                        36 ; TILESET_GENE
+	tileset MurrayGfx,                      36 ; TILESET_MURRAY
+	tileset CourtneyGfx,                    36 ; TILESET_COURTNEY
+	tileset SteveGfx,                       36 ; TILESET_STEVE
+	tileset JackGfx,                        36 ; TILESET_JACK
+	tileset RodGfx,                         36 ; TILESET_ROD
+	tileset JosephGfx,                      36 ; TILESET_JOSEPH
+	tileset DavidGfx,                       36 ; TILESET_DAVID
+	tileset ErikGfx,                        36 ; TILESET_ERIK
+	tileset JohnGfx,                        36 ; TILESET_JOHN
+	tileset AdamGfx,                        36 ; TILESET_ADAM
+	tileset JonathanGfx,                    36 ; TILESET_JONATHAN
+	tileset JoshuaGfx,                      36 ; TILESET_JOSHUA
+	tileset NicholasGfx,                    36 ; TILESET_NICHOLAS
+	tileset BrandonGfx,                     36 ; TILESET_BRANDON
+	tileset MatthewGfx,                     36 ; TILESET_MATTHEW
+	tileset RyanGfx,                        36 ; TILESET_RYAN
+	tileset AndrewGfx,                      36 ; TILESET_ANDREW
+	tileset ChrisGfx,                       36 ; TILESET_CHRIS
+	tileset MichaelGfx,                     36 ; TILESET_MICHAEL
+	tileset DanielGfx,                      36 ; TILESET_DANIEL
+	tileset RobertGfx,                      36 ; TILESET_ROBERT
+	tileset BrittanyGfx,                    36 ; TILESET_BRITTANY
+	tileset KristinGfx,                     36 ; TILESET_KRISTIN
+	tileset HeatherGfx,                     36 ; TILESET_HEATHER
+	tileset SaraGfx,                        36 ; TILESET_SARA
+	tileset AmandaGfx,                      36 ; TILESET_AMANDA
+	tileset JenniferGfx,                    36 ; TILESET_JENNIFER
+	tileset JessicaGfx,                     36 ; TILESET_JESSICA
+	tileset StephanieGfx,                   36 ; TILESET_STEPHANIE
+	tileset AaronGfx,                       36 ; TILESET_AARON
 
 ; \1 = gfx pointer
 ; \2 = number of tiles
@@ -1238,169 +1499,495 @@ palette_pointer: MACRO
 ENDM
 
 MapDataPointers_81697: ; 81697 (20:5697)
-	palette_pointer Palette0,   8, 1 ; $00
-	palette_pointer Palette1,   8, 0 ; $01
-	palette_pointer Palette2,   8, 0 ; $02
-	palette_pointer Palette3,   8, 0 ; $03
-	palette_pointer Palette4,   8, 0 ; $04
-	palette_pointer Palette5,   8, 0 ; $05
-	palette_pointer Palette6,   8, 0 ; $06
-	palette_pointer Palette7,   8, 0 ; $07
-	palette_pointer Palette8,   8, 0 ; $08
-	palette_pointer Palette9,   8, 0 ; $09
-	palette_pointer Palette10,  8, 0 ; $0a
-	palette_pointer Palette11,  8, 0 ; $0b
-	palette_pointer Palette12,  8, 0 ; $0c
-	palette_pointer Palette13,  8, 0 ; $0d
-	palette_pointer Palette14,  8, 0 ; $0e
-	palette_pointer Palette15,  8, 0 ; $0f
-	palette_pointer Palette16,  8, 0 ; $10
-	palette_pointer Palette17,  8, 0 ; $11
-	palette_pointer Palette18,  8, 0 ; $12
-	palette_pointer Palette19,  8, 0 ; $13
-	palette_pointer Palette20,  8, 0 ; $14
-	palette_pointer Palette21,  8, 0 ; $15
-	palette_pointer Palette22,  8, 0 ; $16
-	palette_pointer Palette23,  8, 0 ; $17
-	palette_pointer Palette24,  8, 0 ; $18
-	palette_pointer Palette25,  8, 0 ; $19
-	palette_pointer Palette26,  8, 0 ; $1a
-	palette_pointer Palette27,  8, 0 ; $1b
-	palette_pointer Palette28,  8, 0 ; $1c
-	palette_pointer Palette29,  8, 2 ; $1d
-	palette_pointer Palette30,  8, 2 ; $1e
-	palette_pointer Palette31,  1, 1 ; $1f
-	palette_pointer Palette32,  1, 1 ; $20
-	palette_pointer Palette33,  1, 1 ; $21
-	palette_pointer Palette34,  1, 1 ; $22
-	palette_pointer Palette35,  1, 1 ; $23
-	palette_pointer Palette36,  1, 1 ; $24
-	palette_pointer Palette37,  1, 1 ; $25
-	palette_pointer Palette38,  1, 1 ; $26
-	palette_pointer Palette39,  1, 1 ; $27
-	palette_pointer Palette40,  1, 1 ; $28
-	palette_pointer Palette41,  1, 1 ; $29
-	palette_pointer Palette42,  1, 1 ; $2a
-	palette_pointer Palette43,  1, 1 ; $2b
-	palette_pointer Palette44,  1, 1 ; $2c
-	palette_pointer Palette45,  1, 1 ; $2d
-	palette_pointer Palette46,  1, 1 ; $2e
-	palette_pointer Palette47,  1, 1 ; $2f
-	palette_pointer Palette48,  1, 1 ; $30
-	palette_pointer Palette49,  1, 1 ; $31
-	palette_pointer Palette50,  1, 1 ; $32
-	palette_pointer Palette51,  1, 1 ; $33
-	palette_pointer Palette52,  1, 1 ; $34
-	palette_pointer Palette53,  1, 1 ; $35
-	palette_pointer Palette54,  1, 1 ; $36
-	palette_pointer Palette55,  1, 1 ; $37
-	palette_pointer Palette56,  1, 1 ; $38
-	palette_pointer Palette57,  1, 1 ; $39
-	palette_pointer Palette58,  1, 1 ; $3a
-	palette_pointer Palette59,  1, 1 ; $3b
-	palette_pointer Palette60,  1, 1 ; $3c
-	palette_pointer Palette61,  1, 1 ; $3d
-	palette_pointer Palette62,  1, 1 ; $3e
-	palette_pointer Palette63,  1, 1 ; $3f
-	palette_pointer Palette64,  1, 1 ; $40
-	palette_pointer Palette65,  1, 1 ; $41
-	palette_pointer Palette66,  1, 1 ; $42
-	palette_pointer Palette67,  1, 1 ; $43
-	palette_pointer Palette68,  1, 1 ; $44
-	palette_pointer Palette69,  1, 1 ; $45
-	palette_pointer Palette70,  1, 1 ; $46
-	palette_pointer Palette71,  1, 1 ; $47
-	palette_pointer Palette72,  1, 1 ; $48
-	palette_pointer Palette73,  1, 1 ; $49
-	palette_pointer Palette74,  1, 1 ; $4a
-	palette_pointer Palette75,  1, 1 ; $4b
-	palette_pointer Palette76,  1, 1 ; $4c
-	palette_pointer Palette77,  1, 1 ; $4d
-	palette_pointer Palette78,  1, 1 ; $4e
-	palette_pointer Palette79,  1, 1 ; $4f
-	palette_pointer Palette80,  1, 1 ; $50
-	palette_pointer Palette81,  1, 1 ; $51
-	palette_pointer Palette82,  1, 1 ; $52
-	palette_pointer Palette83,  1, 1 ; $53
-	palette_pointer Palette84,  1, 1 ; $54
-	palette_pointer Palette85,  1, 1 ; $55
-	palette_pointer Palette86,  1, 1 ; $56
-	palette_pointer Palette87,  1, 1 ; $57
-	palette_pointer Palette88,  1, 1 ; $58
-	palette_pointer Palette89,  1, 1 ; $59
-	palette_pointer Palette90,  1, 1 ; $a5
-	palette_pointer Palette91,  1, 1 ; $5b
-	palette_pointer Palette92,  1, 1 ; $5c
-	palette_pointer Palette93,  1, 1 ; $5d
-	palette_pointer Palette94,  8, 0 ; $5e
-	palette_pointer Palette95,  8, 0 ; $5f
-	palette_pointer Palette96,  8, 0 ; $60
-	palette_pointer Palette97,  8, 0 ; $61
-	palette_pointer Palette98,  8, 0 ; $62
-	palette_pointer Palette99,  8, 0 ; $63
-	palette_pointer Palette100, 8, 0 ; $64
-	palette_pointer Palette101, 7, 0 ; $65
-	palette_pointer Palette102, 7, 0 ; $66
-	palette_pointer Palette103, 7, 0 ; $67
-	palette_pointer Palette104, 7, 0 ; $68
-	palette_pointer Palette105, 7, 0 ; $69
-	palette_pointer Palette106, 7, 0 ; $6a
-	palette_pointer Palette107, 7, 0 ; $6b
-	palette_pointer Palette108, 0, 1 ; $6c
-	palette_pointer Palette109, 0, 1 ; $6d
-	palette_pointer Palette110, 0, 0 ; $6e
-	palette_pointer Palette111, 8, 1 ; $6f
-	palette_pointer Palette112, 8, 1 ; $70
-	palette_pointer Palette113, 8, 1 ; $71
-	palette_pointer Palette114, 4, 2 ; $72
-	palette_pointer Palette115, 4, 2 ; $73
-	palette_pointer Palette116, 4, 2 ; $74
-	palette_pointer Palette117, 1, 0 ; $75
-	palette_pointer Palette118, 6, 0 ; $76
-	palette_pointer Palette119, 1, 0 ; $77
-	palette_pointer Palette120, 1, 0 ; $78
-	palette_pointer Palette121, 1, 0 ; $79
-	palette_pointer Palette122, 1, 0 ; $7a
-	palette_pointer Palette123, 1, 0 ; $7b
-	palette_pointer Palette124, 1, 0 ; $7c
-	palette_pointer Palette125, 1, 0 ; $7d
-	palette_pointer Palette126, 1, 0 ; $7e
-	palette_pointer Palette127, 1, 0 ; $7f
-	palette_pointer Palette128, 1, 0 ; $80
-	palette_pointer Palette129, 1, 0 ; $81
-	palette_pointer Palette130, 1, 0 ; $82
-	palette_pointer Palette131, 1, 0 ; $83
-	palette_pointer Palette132, 1, 0 ; $84
-	palette_pointer Palette133, 1, 0 ; $85
-	palette_pointer Palette134, 1, 0 ; $86
-	palette_pointer Palette135, 1, 0 ; $87
-	palette_pointer Palette136, 1, 0 ; $88
-	palette_pointer Palette137, 1, 0 ; $89
-	palette_pointer Palette138, 1, 0 ; $8a
-	palette_pointer Palette139, 1, 0 ; $8b
-	palette_pointer Palette140, 1, 0 ; $8c
-	palette_pointer Palette141, 1, 0 ; $8d
-	palette_pointer Palette142, 1, 0 ; $8e
-	palette_pointer Palette143, 1, 0 ; $8f
-	palette_pointer Palette144, 1, 0 ; $90
-	palette_pointer Palette145, 1, 0 ; $91
-	palette_pointer Palette146, 1, 0 ; $92
-	palette_pointer Palette147, 1, 0 ; $93
-	palette_pointer Palette148, 1, 0 ; $94
-	palette_pointer Palette149, 1, 0 ; $95
-	palette_pointer Palette150, 1, 0 ; $96
-	palette_pointer Palette151, 1, 0 ; $97
-	palette_pointer Palette152, 1, 0 ; $98
-	palette_pointer Palette153, 1, 0 ; $99
-	palette_pointer Palette154, 1, 0 ; $9a
-	palette_pointer Palette155, 1, 0 ; $9b
-	palette_pointer Palette156, 1, 0 ; $9c
-	palette_pointer Palette157, 1, 0 ; $9d
-	palette_pointer Palette158, 1, 0 ; $9e
-	palette_pointer Palette159, 1, 0 ; $9f
-	palette_pointer Palette160, 1, 0 ; $a0
+	palette_pointer Palette0,   8, 1 ; PALETTE_0
+	palette_pointer Palette1,   8, 0 ; PALETTE_1
+	palette_pointer Palette2,   8, 0 ; PALETTE_2
+	palette_pointer Palette3,   8, 0 ; PALETTE_3
+	palette_pointer Palette4,   8, 0 ; PALETTE_4
+	palette_pointer Palette5,   8, 0 ; PALETTE_5
+	palette_pointer Palette6,   8, 0 ; PALETTE_6
+	palette_pointer Palette7,   8, 0 ; PALETTE_7
+	palette_pointer Palette8,   8, 0 ; PALETTE_8
+	palette_pointer Palette9,   8, 0 ; PALETTE_9
+	palette_pointer Palette10,  8, 0 ; PALETTE_10
+	palette_pointer Palette11,  8, 0 ; PALETTE_11
+	palette_pointer Palette12,  8, 0 ; PALETTE_12
+	palette_pointer Palette13,  8, 0 ; PALETTE_13
+	palette_pointer Palette14,  8, 0 ; PALETTE_14
+	palette_pointer Palette15,  8, 0 ; PALETTE_15
+	palette_pointer Palette16,  8, 0 ; PALETTE_16
+	palette_pointer Palette17,  8, 0 ; PALETTE_17
+	palette_pointer Palette18,  8, 0 ; PALETTE_18
+	palette_pointer Palette19,  8, 0 ; PALETTE_19
+	palette_pointer Palette20,  8, 0 ; PALETTE_20
+	palette_pointer Palette21,  8, 0 ; PALETTE_21
+	palette_pointer Palette22,  8, 0 ; PALETTE_22
+	palette_pointer Palette23,  8, 0 ; PALETTE_23
+	palette_pointer Palette24,  8, 0 ; PALETTE_24
+	palette_pointer Palette25,  8, 0 ; PALETTE_25
+	palette_pointer Palette26,  8, 0 ; PALETTE_26
+	palette_pointer Palette27,  8, 0 ; PALETTE_27
+	palette_pointer Palette28,  8, 0 ; PALETTE_28
+	palette_pointer Palette29,  8, 2 ; PALETTE_29
+	palette_pointer Palette30,  8, 2 ; PALETTE_30
+	palette_pointer Palette31,  1, 1 ; PALETTE_31
+	palette_pointer Palette32,  1, 1 ; PALETTE_32
+	palette_pointer Palette33,  1, 1 ; PALETTE_33
+	palette_pointer Palette34,  1, 1 ; PALETTE_34
+	palette_pointer Palette35,  1, 1 ; PALETTE_35
+	palette_pointer Palette36,  1, 1 ; PALETTE_36
+	palette_pointer Palette37,  1, 1 ; PALETTE_37
+	palette_pointer Palette38,  1, 1 ; PALETTE_38
+	palette_pointer Palette39,  1, 1 ; PALETTE_39
+	palette_pointer Palette40,  1, 1 ; PALETTE_40
+	palette_pointer Palette41,  1, 1 ; PALETTE_41
+	palette_pointer Palette42,  1, 1 ; PALETTE_42
+	palette_pointer Palette43,  1, 1 ; PALETTE_43
+	palette_pointer Palette44,  1, 1 ; PALETTE_44
+	palette_pointer Palette45,  1, 1 ; PALETTE_45
+	palette_pointer Palette46,  1, 1 ; PALETTE_46
+	palette_pointer Palette47,  1, 1 ; PALETTE_47
+	palette_pointer Palette48,  1, 1 ; PALETTE_48
+	palette_pointer Palette49,  1, 1 ; PALETTE_49
+	palette_pointer Palette50,  1, 1 ; PALETTE_50
+	palette_pointer Palette51,  1, 1 ; PALETTE_51
+	palette_pointer Palette52,  1, 1 ; PALETTE_52
+	palette_pointer Palette53,  1, 1 ; PALETTE_53
+	palette_pointer Palette54,  1, 1 ; PALETTE_54
+	palette_pointer Palette55,  1, 1 ; PALETTE_55
+	palette_pointer Palette56,  1, 1 ; PALETTE_56
+	palette_pointer Palette57,  1, 1 ; PALETTE_57
+	palette_pointer Palette58,  1, 1 ; PALETTE_58
+	palette_pointer Palette59,  1, 1 ; PALETTE_59
+	palette_pointer Palette60,  1, 1 ; PALETTE_60
+	palette_pointer Palette61,  1, 1 ; PALETTE_61
+	palette_pointer Palette62,  1, 1 ; PALETTE_62
+	palette_pointer Palette63,  1, 1 ; PALETTE_63
+	palette_pointer Palette64,  1, 1 ; PALETTE_64
+	palette_pointer Palette65,  1, 1 ; PALETTE_65
+	palette_pointer Palette66,  1, 1 ; PALETTE_66
+	palette_pointer Palette67,  1, 1 ; PALETTE_67
+	palette_pointer Palette68,  1, 1 ; PALETTE_68
+	palette_pointer Palette69,  1, 1 ; PALETTE_69
+	palette_pointer Palette70,  1, 1 ; PALETTE_70
+	palette_pointer Palette71,  1, 1 ; PALETTE_71
+	palette_pointer Palette72,  1, 1 ; PALETTE_72
+	palette_pointer Palette73,  1, 1 ; PALETTE_73
+	palette_pointer Palette74,  1, 1 ; PALETTE_74
+	palette_pointer Palette75,  1, 1 ; PALETTE_75
+	palette_pointer Palette76,  1, 1 ; PALETTE_76
+	palette_pointer Palette77,  1, 1 ; PALETTE_77
+	palette_pointer Palette78,  1, 1 ; PALETTE_78
+	palette_pointer Palette79,  1, 1 ; PALETTE_79
+	palette_pointer Palette80,  1, 1 ; PALETTE_80
+	palette_pointer Palette81,  1, 1 ; PALETTE_81
+	palette_pointer Palette82,  1, 1 ; PALETTE_82
+	palette_pointer Palette83,  1, 1 ; PALETTE_83
+	palette_pointer Palette84,  1, 1 ; PALETTE_84
+	palette_pointer Palette85,  1, 1 ; PALETTE_85
+	palette_pointer Palette86,  1, 1 ; PALETTE_86
+	palette_pointer Palette87,  1, 1 ; PALETTE_87
+	palette_pointer Palette88,  1, 1 ; PALETTE_88
+	palette_pointer Palette89,  1, 1 ; PALETTE_89
+	palette_pointer Palette90,  1, 1 ; PALETTE_90
+	palette_pointer Palette91,  1, 1 ; PALETTE_91
+	palette_pointer Palette92,  1, 1 ; PALETTE_92
+	palette_pointer Palette93,  1, 1 ; PALETTE_93
+	palette_pointer Palette94,  8, 0 ; PALETTE_94
+	palette_pointer Palette95,  8, 0 ; PALETTE_95
+	palette_pointer Palette96,  8, 0 ; PALETTE_96
+	palette_pointer Palette97,  8, 0 ; PALETTE_97
+	palette_pointer Palette98,  8, 0 ; PALETTE_98
+	palette_pointer Palette99,  8, 0 ; PALETTE_99
+	palette_pointer Palette100, 8, 0 ; PALETTE_100
+	palette_pointer Palette101, 7, 0 ; PALETTE_101
+	palette_pointer Palette102, 7, 0 ; PALETTE_102
+	palette_pointer Palette103, 7, 0 ; PALETTE_103
+	palette_pointer Palette104, 7, 0 ; PALETTE_104
+	palette_pointer Palette105, 7, 0 ; PALETTE_105
+	palette_pointer Palette106, 7, 0 ; PALETTE_106
+	palette_pointer Palette107, 7, 0 ; PALETTE_107
+	palette_pointer Palette108, 0, 1 ; PALETTE_108
+	palette_pointer Palette109, 0, 1 ; PALETTE_109
+	palette_pointer Palette110, 0, 0 ; PALETTE_110
+	palette_pointer Palette111, 8, 1 ; PALETTE_111
+	palette_pointer Palette112, 8, 1 ; PALETTE_112
+	palette_pointer Palette113, 8, 1 ; PALETTE_113
+	palette_pointer Palette114, 4, 2 ; PALETTE_114
+	palette_pointer Palette115, 4, 2 ; PALETTE_115
+	palette_pointer Palette116, 4, 2 ; PALETTE_116
+	palette_pointer Palette117, 1, 0 ; PALETTE_117
+	palette_pointer Palette118, 6, 0 ; PALETTE_118
+	palette_pointer Palette119, 1, 0 ; PALETTE_119
+	palette_pointer Palette120, 1, 0 ; PALETTE_120
+	palette_pointer Palette121, 1, 0 ; PALETTE_121
+	palette_pointer Palette122, 1, 0 ; PALETTE_122
+	palette_pointer Palette123, 1, 0 ; PALETTE_123
+	palette_pointer Palette124, 1, 0 ; PALETTE_124
+	palette_pointer Palette125, 1, 0 ; PALETTE_125
+	palette_pointer Palette126, 1, 0 ; PALETTE_126
+	palette_pointer Palette127, 1, 0 ; PALETTE_127
+	palette_pointer Palette128, 1, 0 ; PALETTE_128
+	palette_pointer Palette129, 1, 0 ; PALETTE_129
+	palette_pointer Palette130, 1, 0 ; PALETTE_130
+	palette_pointer Palette131, 1, 0 ; PALETTE_131
+	palette_pointer Palette132, 1, 0 ; PALETTE_132
+	palette_pointer Palette133, 1, 0 ; PALETTE_133
+	palette_pointer Palette134, 1, 0 ; PALETTE_134
+	palette_pointer Palette135, 1, 0 ; PALETTE_135
+	palette_pointer Palette136, 1, 0 ; PALETTE_136
+	palette_pointer Palette137, 1, 0 ; PALETTE_137
+	palette_pointer Palette138, 1, 0 ; PALETTE_138
+	palette_pointer Palette139, 1, 0 ; PALETTE_139
+	palette_pointer Palette140, 1, 0 ; PALETTE_140
+	palette_pointer Palette141, 1, 0 ; PALETTE_141
+	palette_pointer Palette142, 1, 0 ; PALETTE_142
+	palette_pointer Palette143, 1, 0 ; PALETTE_143
+	palette_pointer Palette144, 1, 0 ; PALETTE_144
+	palette_pointer Palette145, 1, 0 ; PALETTE_145
+	palette_pointer Palette146, 1, 0 ; PALETTE_146
+	palette_pointer Palette147, 1, 0 ; PALETTE_147
+	palette_pointer Palette148, 1, 0 ; PALETTE_148
+	palette_pointer Palette149, 1, 0 ; PALETTE_149
+	palette_pointer Palette150, 1, 0 ; PALETTE_150
+	palette_pointer Palette151, 1, 0 ; PALETTE_151
+	palette_pointer Palette152, 1, 0 ; PALETTE_152
+	palette_pointer Palette153, 1, 0 ; PALETTE_153
+	palette_pointer Palette154, 1, 0 ; PALETTE_154
+	palette_pointer Palette155, 1, 0 ; PALETTE_155
+	palette_pointer Palette156, 1, 0 ; PALETTE_156
+	palette_pointer Palette157, 1, 0 ; PALETTE_157
+	palette_pointer Palette158, 1, 0 ; PALETTE_158
+	palette_pointer Palette159, 1, 0 ; PALETTE_159
+	palette_pointer Palette160, 1, 0 ; PALETTE_160
 
-	INCROM $8191b, $83c4c
+OverworldMapTilemap:: ; 8191b (20:591b)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $00
+
+	INCBIN "data/maps/map0.bin"
+
+OverworldMapCGBTilemap:: ; 81a22 (20:5a22)
+	db $14 ; width
+	db $12 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map1.bin"
+
+MasonLaboratoryTilemap:: ; 81c13 (20:5c13)
+	db $1c ; width
+	db $1e ; height
+	dw $5d11
+	db $00
+
+	INCBIN "data/maps/map2.bin"
+
+MasonLaboratoryCGBTilemap:: ; 81d2e (20:5d2e)
+	db $1c ; width
+	db $1e ; height
+	dw $5eb4
+	db $01
+
+	INCBIN "data/maps/map3.bin"
+
+Unused1Tilemap:: ; 81ed1 (20:5ed1)
+	db $04 ; width
+	db $06 ; height
+	dw $5ef0
+	db $00
+
+	INCBIN "data/maps/map4.bin"
+
+Unused2Tilemap:: ; 81ef5 (20:5ef5)
+	db $04 ; width
+	db $06 ; height
+	dw $5f21
+	db $01
+
+	INCBIN "data/maps/map5.bin"
+
+DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
+	db $18 ; width
+	db $1e ; height
+	dw $5fd3
+	db $00
+
+	INCBIN "data/maps/map6.bin"
+
+DeckMachineRoomCGBTilemap:: ; 81feb (20:5feb)
+	db $18 ; width
+	db $1e ; height
+	dw $612b
+	db $01
+
+	INCBIN "data/maps/map7.bin"
+
+Unused3Tilemap:: ; 82143 (20:6143)
+	db $04 ; width
+	db $01 ; height
+	dw $614d
+	db $00
+
+	INCBIN "data/maps/map8.bin"
+
+Unused4Tilemap:: ; 82150 (20:6150)
+	db $04 ; width
+	db $01 ; height
+	dw $615d
+	db $01
+
+	INCBIN "data/maps/map9.bin"
+
+IshiharaTilemap:: ; 82160 (20:6160)
+	db $14 ; width
+	db $18 ; height
+	dw $620e
+	db $00
+
+	INCBIN "data/maps/map10.bin"
+
+IshiharaCGBTilemap:: ; 82222 (20:6222)
+	db $14 ; width
+	db $18 ; height
+	dw $6322
+	db $01
+
+	INCBIN "data/maps/map11.bin"
+
+FightingClubEntranceTilemap:: ; 82336 (20:6336)
+	db $14 ; width
+	db $12 ; height
+	dw $63ec
+	db $00
+
+	INCBIN "data/maps/map12.bin"
+
+FightingClubEntranceCGBTilemap:: ; 82400 (20:6400)
+	db $14 ; width
+	db $12 ; height
+	dw $6509
+	db $01
+
+	INCBIN "data/maps/map13.bin"
+
+RockClubEntranceTilemap:: ; 8251d (20:651d)
+	db $14 ; width
+	db $12 ; height
+	dw $65d3
+	db $00
+
+	INCBIN "data/maps/map14.bin"
+
+RockClubEntranceCGBTilemap:: ; 825e7 (20:65e7)
+	db $14 ; width
+	db $12 ; height
+	dw $66f0
+	db $01
+
+	INCBIN "data/maps/map15.bin"
+
+WaterClubEntranceTilemap:: ; 82704 (20:6704)
+	db $14 ; width
+	db $12 ; height
+	dw $67ba
+	db $00
+
+	INCBIN "data/maps/map16.bin"
+
+WaterClubEntranceCGBTilemap:: ; 827ce (20:67ce)
+	db $14 ; width
+	db $12 ; height
+	dw $68d7
+	db $01
+
+	INCBIN "data/maps/map17.bin"
+
+LightningClubEntranceTilemap:: ; 828eb (20:68eb)
+	db $14 ; width
+	db $12 ; height
+	dw $69a1
+	db $00
+
+	INCBIN "data/maps/map18.bin"
+
+LightningClubEntranceCGBTilemap:: ; 829b5 (20:69b5)
+	db $14 ; width
+	db $12 ; height
+	dw $6abe
+	db $01
+
+	INCBIN "data/maps/map19.bin"
+
+GrassClubEntranceTilemap:: ; 82ad2 (20:6ad2)
+	db $14 ; width
+	db $12 ; height
+	dw $6b88
+	db $00
+
+	INCBIN "data/maps/map20.bin"
+
+GrassClubEntranceCGBTilemap:: ; 82b9c (20:6b9c)
+	db $14 ; width
+	db $12 ; height
+	dw $6ca5
+	db $01
+
+	INCBIN "data/maps/map21.bin"
+
+PsychicClubEntranceTilemap:: ; 82cb9 (20:6cb9)
+	db $14 ; width
+	db $12 ; height
+	dw $6d6f
+	db $00
+
+	INCBIN "data/maps/map22.bin"
+
+PsychicClubEntranceCGBTilemap:: ; 82d83 (20:6d83)
+	db $14 ; width
+	db $12 ; height
+	dw $6e8c
+	db $01
+
+	INCBIN "data/maps/map23.bin"
+
+ScienceClubEntranceTilemap:: ; 82ea0 (20:6ea0)
+	db $14 ; width
+	db $12 ; height
+	dw $6f56
+	db $00
+
+	INCBIN "data/maps/map24.bin"
+
+ScienceClubEntranceCGBTilemap:: ; 82f6a (20:6f6a)
+	db $14 ; width
+	db $12 ; height
+	dw $7073
+	db $01
+
+	INCBIN "data/maps/map25.bin"
+
+FireClubEntranceTilemap:: ; 83087 (20:7087)
+	db $14 ; width
+	db $12 ; height
+	dw $713d
+	db $00
+
+	INCBIN "data/maps/map26.bin"
+
+FireClubEntranceCGBTilemap:: ; 83151 (20:7151)
+	db $14 ; width
+	db $12 ; height
+	dw $725a
+	db $01
+
+	INCBIN "data/maps/map27.bin"
+
+ChallengeHallEntranceTilemap:: ; 8326e (20:726e)
+	db $14 ; width
+	db $12 ; height
+	dw $730d
+	db $00
+
+	INCBIN "data/maps/map28.bin"
+
+ChallengeHallEntranceCGBTilemap:: ; 83321 (20:7321)
+	db $14 ; width
+	db $12 ; height
+	dw $7410
+	db $01
+
+	INCBIN "data/maps/map29.bin"
+
+ClubLobbyTilemap:: ; 83424 (20:7424)
+	db $1c ; width
+	db $1a ; height
+	dw $7529
+	db $00
+
+	INCBIN "data/maps/map30.bin"
+
+ClubLobbyCGBTilemap:: ; 83545 (20:7545)
+	db $1c ; width
+	db $1a ; height
+	dw $76bf
+	db $01
+
+	INCBIN "data/maps/map31.bin"
+
+FightingClubTilemap:: ; 836db (20:76db)
+	db $18 ; width
+	db $12 ; height
+	dw $777b
+	db $00
+
+	INCBIN "data/maps/map32.bin"
+
+FightingClubCGBTilemap:: ; 8378c (20:778c)
+	db $18 ; width
+	db $12 ; height
+	dw $787c
+	db $01
+
+	INCBIN "data/maps/map33.bin"
+
+RockClubTilemap:: ; 8388d (20:788d)
+	db $1c ; width
+	db $1e ; height
+	dw $79b5
+	db $00
+
+	INCBIN "data/maps/map34.bin"
+
+RockClubCGBTilemap:: ; 839d6 (20:79d6)
+	db $1c ; width
+	db $1e ; height
+	dw $7bd0
+	db $01
+
+	INCBIN "data/maps/map35.bin"
+
+Unused5Tilemap:: ; 83bf1 (20:7bf1)
+	db $04 ; width
+	db $03 ; height
+	dw $7c00
+	db $00
+
+	INCBIN "data/maps/map52.bin"
+
+Unused6Tilemap:: ; 83c03 (20:7c03)
+	db $04 ; width
+	db $03 ; height
+	dw $7c17
+	db $01
+
+	INCBIN "data/maps/map53.bin"
+
+Unused7Tilemap:: ; 83c1a (20:7c1a)
+	db $04 ; width
+	db $03 ; height
+	dw $7c23
+	db $00
+
+	INCBIN "data/maps/map56.bin"
+
+Unused8Tilemap:: ; 83c26 (20:7c26)
+	db $04 ; width
+	db $03 ; height
+	dw $7c33
+	db $01
+
+	INCBIN "data/maps/map57.bin"
+
+GrassMedalTilemap:: ; 83c36 (20:7c36)
+	db $03 ; width
+	db $03 ; height
+	dw $0000
+	db $01
+
+	INCBIN "data/maps/map62.bin"
 
 AnimData1:: ; 83c4c (20:7c4c)
 	frame_table AnimFrameTable0
@@ -1411,4 +1998,6 @@ AnimData1:: ; 83c4c (20:7c4c)
 Palette110:: ; 83c5b (20:7c5b)
 	db $00, $00
 
-	INCROM $83c5d, $84000
+rept $3a3
+	db $ff
+endr

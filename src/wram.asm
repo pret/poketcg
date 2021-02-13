@@ -2076,13 +2076,15 @@ wPCLastDirectionPressed:: ; d12d
 
 	ds $1
 
-wd12f:: ; d12f
+wBGMapWidth:: ; d12f
 	ds $1
 
-wd130:: ; d130
+wBGMapHeight:: ; d130
 	ds $1
 
-wd131:: ; d131
+; current tilemap to load
+; TILEMAP_* constant
+wCurTilemap:: ; d131
 	ds $1
 
 wd132:: ; d132
@@ -2123,14 +2125,13 @@ wd237:: ; d237
 wd238:: ; d238
 	ds $1
 
-wd239:: ; d239
+; current tileset to load to VRAM
+; TILESET_* constant
+wCurTileset:: ; d239
 	ds $1
 
 wd23a:: ; d23a
-	ds $1
-
-wd23b:: ; d23b
-	ds $1
+	ds $2
 
 wd23c:: ; d23c
 	ds $1
@@ -2138,9 +2139,19 @@ wd23c:: ; d23c
 wd23d:: ; d23d
 	ds $1
 
+UNION
+
 ; palette loaded from Palette* data
 wLoadedPalData:: ; d23e
 	ds $50
+
+NEXTU
+
+; where BG map data is decompressed
+wBGMapBuffer:: ; d23e
+	ds $40
+
+ENDU
 
 wd28e:: ; d28e
 	ds $1
@@ -2154,7 +2165,10 @@ wd290:: ; d290
 wd291:: ; d291
 	ds $1
 
-wd292:: ; d292
+; determines where to copy BG Map data
+; $0 = copies to VRAM
+; $1 = copies to SRAM
+wBGMapCopyMode:: ; d292
 	ds $1
 
 	ds $4
@@ -2479,11 +2493,9 @@ wTempPointerBank:: ; d4c6
 wCurSpriteTileSize:: ; d4c7
 	ds $1
 
-; stores number of tiles that current sprite has
-wCurSpriteNumTiles:: ; d4c8
-	ds $1
-
-	ds $1
+; stores number of tiles that current sprite/tileset has
+wTotalNumTiles:: ; d4c8
+	ds $2
 
 ; stores tile offset in VRAM
 wVRAMTileOffset:: ; d4ca
@@ -2491,6 +2503,8 @@ wVRAMTileOffset:: ; d4ca
 wd4ca:: ; d4ca
 	ds $1
 
+; bottom bit stores which VRAM bank to draw certain gfx
+; $0 = VRAM0, $1 = VRAM1
 wd4cb:: ; d4cb
 	ds $1
 
