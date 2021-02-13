@@ -2082,7 +2082,9 @@ wBGMapWidth:: ; d12f
 wBGMapHeight:: ; d130
 	ds $1
 
-wd131:: ; d131
+; current tilemap to load
+; TILEMAP_* constant
+wCurTilemap:: ; d131
 	ds $1
 
 wd132:: ; d132

@@ -625,10 +625,10 @@ LoadTilesetGfx: ; 802d4 (20:42d4)
 	ret
 ; 0x803b9
 
-; gets pointer to BG map with ID from wd131
+; gets pointer to BG map with ID from wCurTilemap
 Func_803b9: ; 803b9 (20:43b9)
 	ld l, $00
-	ld a, [wd131]
+	ld a, [wCurTilemap]
 	call GetMapDataPointer
 	call LoadGraphicsPointerFromHL
 	ld a, [hl]
@@ -845,7 +845,7 @@ Func_80baa: ; 80baa (20:4baa)
 	push bc
 	push de
 	ld c, a
-	ld a, [wd131]
+	ld a, [wCurTilemap]
 	push af
 	ld a, [wd23d]
 	push af
@@ -882,7 +882,7 @@ Func_80baa: ; 80baa (20:4baa)
 
 .asm_80be7
 	ld a, [hl]
-	ld [wd131], a
+	ld [wCurTilemap], a
 	push bc
 	farcall Func_80082
 	pop bc
@@ -908,7 +908,7 @@ Func_80baa: ; 80baa (20:4baa)
 	pop af
 	ld [wd23d], a
 	pop af
-	ld [wd131], a
+	ld [wCurTilemap], a
 	pop de
 	pop bc
 	pop hl
@@ -925,7 +925,7 @@ SpriteNullAnimationFrame:
 
 ; might be closer to "screen specific data" than map data
 MapDataPointers: ; 80e5d (20:4e5d)
-	dw MapDataPointers_80e67
+	dw Tilemaps
 	dw Tilesets
 	dw MapDataPointers_8116b
 	dw SpriteAnimationPointers
@@ -933,118 +933,118 @@ MapDataPointers: ; 80e5d (20:4e5d)
 
 ; \1 = pointer
 ; \2 = tileset
-macro_80e67: MACRO
-	dwb \1, BANK(\1) - BANK(MapDataPointers_80e67)
+tilemap: MACRO
+	dwb \1, BANK(\1) - BANK(Tilemaps)
 	db \2
 ENDM
 
-MapDataPointers_80e67: ; 80e67 (20:4e67)
-	macro_80e67 Data_8191b, TILESET_OVERWORLD_MAP         ; 0
-	macro_80e67 Data_81a22, TILESET_OVERWORLD_MAP         ; 1
-	macro_80e67 Data_81c13, TILESET_MASON_LABORATORY      ; 2
-	macro_80e67 Data_81d2e, TILESET_MASON_LABORATORY      ; 3
-	macro_80e67 Data_81ed1, TILESET_MASON_LABORATORY      ; 4
-	macro_80e67 Data_81ef5, TILESET_MASON_LABORATORY      ; 5
-	macro_80e67 Data_81f26, TILESET_MASON_LABORATORY      ; 6
-	macro_80e67 Data_81feb, TILESET_MASON_LABORATORY      ; 7
-	macro_80e67 Data_82143, TILESET_MASON_LABORATORY      ; 8
-	macro_80e67 Data_82150, TILESET_MASON_LABORATORY      ; 9
-	macro_80e67 Data_82160, TILESET_ISHIHARA              ; 10
-	macro_80e67 Data_82222, TILESET_ISHIHARA              ; 11
-	macro_80e67 Data_82336, TILESET_CLUB_ENTRANCE         ; 12
-	macro_80e67 Data_82400, TILESET_CLUB_ENTRANCE         ; 13
-	macro_80e67 Data_8251d, TILESET_CLUB_ENTRANCE         ; 14
-	macro_80e67 Data_825e7, TILESET_CLUB_ENTRANCE         ; 15
-	macro_80e67 Data_82704, TILESET_CLUB_ENTRANCE         ; 16
-	macro_80e67 Data_827ce, TILESET_CLUB_ENTRANCE         ; 17
-	macro_80e67 Data_828eb, TILESET_CLUB_ENTRANCE         ; 18
-	macro_80e67 Data_829b5, TILESET_CLUB_ENTRANCE         ; 19
-	macro_80e67 Data_82ad2, TILESET_CLUB_ENTRANCE         ; 20
-	macro_80e67 Data_82b9c, TILESET_CLUB_ENTRANCE         ; 21
-	macro_80e67 Data_82cb9, TILESET_CLUB_ENTRANCE         ; 22
-	macro_80e67 Data_82d83, TILESET_CLUB_ENTRANCE         ; 23
-	macro_80e67 Data_82ea0, TILESET_CLUB_ENTRANCE         ; 24
-	macro_80e67 Data_82f6a, TILESET_CLUB_ENTRANCE         ; 25
-	macro_80e67 Data_83087, TILESET_CLUB_ENTRANCE         ; 26
-	macro_80e67 Data_83151, TILESET_CLUB_ENTRANCE         ; 27
-	macro_80e67 Data_8326e, TILESET_CLUB_ENTRANCE         ; 28
-	macro_80e67 Data_83321, TILESET_CLUB_ENTRANCE         ; 29
-	macro_80e67 Data_83424, TILESET_CLUB_LOBBY            ; 30
-	macro_80e67 Data_83545, TILESET_CLUB_LOBBY            ; 31
-	macro_80e67 Data_836db, TILESET_FIGHTING_CLUB         ; 32
-	macro_80e67 Data_8378c, TILESET_FIGHTING_CLUB         ; 33
-	macro_80e67 Data_8388d, TILESET_ROCK_CLUB             ; 34
-	macro_80e67 Data_839d6, TILESET_ROCK_CLUB             ; 35
-	macro_80e67 Data_84000, TILESET_WATER_CLUB            ; 36
-	macro_80e67 Data_84188, TILESET_WATER_CLUB            ; 37
-	macro_80e67 Data_843bb, TILESET_LIGHTNING_CLUB        ; 38
-	macro_80e67 Data_84533, TILESET_LIGHTNING_CLUB        ; 39
-	macro_80e67 Data_8472e, TILESET_GRASS_CLUB            ; 40
-	macro_80e67 Data_848d8, TILESET_GRASS_CLUB            ; 41
-	macro_80e67 Data_84b73, TILESET_PSYCHIC_CLUB          ; 42
-	macro_80e67 Data_84c6f, TILESET_PSYCHIC_CLUB          ; 43
-	macro_80e67 Data_84dfe, TILESET_SCIENCE_CLUB          ; 44
-	macro_80e67 Data_84f1d, TILESET_SCIENCE_CLUB          ; 45
-	macro_80e67 Data_850b6, TILESET_FIRE_CLUB             ; 46
-	macro_80e67 Data_85191, TILESET_FIRE_CLUB             ; 47
-	macro_80e67 Data_85315, TILESET_CHALLENGE_HALL        ; 48
-	macro_80e67 Data_854b3, TILESET_CHALLENGE_HALL        ; 49
-	macro_80e67 Data_8570a, TILESET_POKEMON_DOME_ENTRANCE ; 50
-	macro_80e67 Data_857ce, TILESET_POKEMON_DOME_ENTRANCE ; 51
-	macro_80e67 Data_83bf1, TILESET_POKEMON_DOME_ENTRANCE ; 52
-	macro_80e67 Data_83c03, TILESET_POKEMON_DOME_ENTRANCE ; 53
-	macro_80e67 Data_858ef, TILESET_POKEMON_DOME          ; 54
-	macro_80e67 Data_85a79, TILESET_POKEMON_DOME          ; 55
-	macro_80e67 Data_83c1a, TILESET_POKEMON_DOME          ; 56
-	macro_80e67 Data_83c26, TILESET_POKEMON_DOME          ; 57
-	macro_80e67 Data_85ce2, TILESET_HALL_OF_HONOR         ; 58
-	macro_80e67 Data_85df4, TILESET_HALL_OF_HONOR         ; 59
-	macro_80e67 Data_85f7c, TILESET_CARD_POP_1            ; 60
-	macro_80e67 Data_8607f, TILESET_CARD_POP_1            ; 61
-	macro_80e67 Data_83c36, TILESET_MEDAL                 ; 62
-	macro_80e67 Data_8617d, TILESET_MEDAL                 ; 63
-	macro_80e67 Data_86193, TILESET_MEDAL                 ; 64
-	macro_80e67 Data_861a9, TILESET_MEDAL                 ; 65
-	macro_80e67 Data_861bf, TILESET_MEDAL                 ; 66
-	macro_80e67 Data_861d5, TILESET_MEDAL                 ; 67
-	macro_80e67 Data_861eb, TILESET_MEDAL                 ; 68
-	macro_80e67 Data_86201, TILESET_MEDAL                 ; 69
-	macro_80e67 Data_86217, TILESET_CARD_POP_2            ; 70
-	macro_80e67 Data_862da, TILESET_CARD_POP_2            ; 71
-	macro_80e67 Data_86364, TILESET_CARD_POP_2            ; 72
-	macro_80e67 Data_86443, TILESET_CARD_POP_2            ; 73
-	macro_80e67 Data_864df, TILESET_CARD_POP_3            ; 74
-	macro_80e67 Data_865b5, TILESET_CARD_POP_3            ; 75
-	macro_80e67 Data_86647, TILESET_COLOSSEUM_1           ; 76
-	macro_80e67 Data_866b8, TILESET_COLOSSEUM_2           ; 77
-	macro_80e67 Data_8673e, TILESET_EVOLUTION_1           ; 78
-	macro_80e67 Data_867af, TILESET_EVOLUTION_2           ; 79
-	macro_80e67 Data_86833, TILESET_MYSTERY_1             ; 80
-	macro_80e67 Data_868a4, TILESET_MYSTERY_2             ; 81
-	macro_80e67 Data_86925, TILESET_LABORATORY_1          ; 82
-	macro_80e67 Data_86996, TILESET_LABORATORY_2          ; 83
-	macro_80e67 Data_86a14, TILESET_CHARIZARD_INTRO_1     ; 84
-	macro_80e67 Data_86a85, TILESET_CHARIZARD_INTRO_2     ; 85
-	macro_80e67 Data_86b28, TILESET_SCYTHER_INTRO_1       ; 86
-	macro_80e67 Data_86b99, TILESET_SCYTHER_INTRO_2       ; 87
-	macro_80e67 Data_86c34, TILESET_AERODACTYL_INTRO_1    ; 88
-	macro_80e67 Data_86ca5, TILESET_AERODACTYL_INTRO_2    ; 89
-	macro_80e67 Data_86d37, TILESET_TITLE_SCREEN_1        ; 90
-	macro_80e67 Data_86dcc, TILESET_TITLE_SCREEN_2        ; 91
-	macro_80e67 Data_86e8a, TILESET_SOLID_TILES_1         ; 92
-	macro_80e67 Data_86f18, TILESET_SOLID_TILES_1         ; 93
-	macro_80e67 Data_86fc0, TILESET_SOLID_TILES_1         ; 94
-	macro_80e67 Data_8704f, TILESET_TITLE_SCREEN_3        ; 95
-	macro_80e67 Data_871a5, TILESET_TITLE_SCREEN_4        ; 96
-	macro_80e67 Data_87397, TILESET_SOLID_TILES_2         ; 97
-	macro_80e67 Data_873b7, TILESET_PLAYER                ; 98
-	macro_80e67 Data_873e5, TILESET_RONALD                ; 99
-	macro_80e67 Data_87413, TILESET_TITLE_SCREEN_5        ; 100
-	macro_80e67 Data_87538, TILESET_TITLE_SCREEN_6        ; 101
-	macro_80e67 Data_8769f, TILESET_COPYRIGHT             ; 102
-	macro_80e67 Data_876f6, TILESET_COPYRIGHT             ; 103
-	macro_80e67 Data_8777c, TILESET_NINTENDO              ; 104
-	macro_80e67 Data_877c4, TILESET_COMPANIES             ; 105
+Tilemaps: ; 80e67 (20:4e67)
+	tilemap OverworldMapTilemap,             TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP
+	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP_CGB
+	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY
+	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY_CGB
+	tilemap Unused1Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_1
+	tilemap Unused2Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_2
+	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM
+	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM_CGB
+	tilemap Unused3Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_3
+	tilemap Unused4Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_4
+	tilemap IshiharaTilemap,                 TILESET_ISHIHARA              ; TILEMAP_ISHIHARA
+	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA              ; TILEMAP_ISHIHARA_CGB
+	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE
+	tilemap FightingClubEntranceCGBTilemap,  TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
+	tilemap RockClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE
+	tilemap RockClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
+	tilemap WaterClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE
+	tilemap WaterClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
+	tilemap LightningClubEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
+	tilemap LightningClubEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
+	tilemap GrassClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE
+	tilemap GrassClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
+	tilemap PsychicClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
+	tilemap PsychicClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
+	tilemap ScienceClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE
+	tilemap ScienceClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
+	tilemap FireClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE
+	tilemap FireClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
+	tilemap ChallengeHallEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE
+	tilemap ChallengeHallEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
+	tilemap ClubLobbyTilemap,                TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY
+	tilemap ClubLobbyCGBTilemap,             TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY_CGB
+	tilemap FightingClubTilemap,             TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB
+	tilemap FightingClubCGBTilemap,          TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB_CGB
+	tilemap RockClubTilemap,                 TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB
+	tilemap RockClubCGBTilemap,              TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB_CGB
+	tilemap WaterClubTilemap,                TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB
+	tilemap WaterClubCGBTilemap,             TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB_CGB
+	tilemap LightningClubTilemap,            TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB
+	tilemap LightningClubCGBTilemap,         TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB_CGB
+	tilemap GrassClubTilemap,                TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB
+	tilemap GrassClubCGBTilemap,             TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB_CGB
+	tilemap PsychicClubTilemap,              TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB
+	tilemap PsychicClubCGBTilemap,           TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB_CGB
+	tilemap ScienceClubTilemap,              TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB
+	tilemap ScienceClubCGBTilemap,           TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB_CGB
+	tilemap FireClubTilemap,                 TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB
+	tilemap FireClubCGBTilemap,              TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB_CGB
+	tilemap ChallengeHallTilemap,            TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL
+	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL_CGB
+	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE
+	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
+	tilemap Unused5Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_5
+	tilemap Unused6Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_6
+	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME
+	tilemap PokemonDomeGBTilemap,            TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME_CGB
+	tilemap Unused7Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_7
+	tilemap Unused8Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_8
+	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR
+	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR_CGB
+	tilemap CardPop1Tilemap,                 TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1
+	tilemap CardPop1CGBTilemap,              TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1_CGB
+	tilemap GrassMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_GRASS_MEDAL
+	tilemap ScienceMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_SCIENCE_MEDAL
+	tilemap FireMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_FIRE_MEDAL
+	tilemap WaterMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_WATER_MEDAL
+	tilemap LightningMedalTilemap,           TILESET_MEDAL                 ; TILEMAP_LIGHTNING_MEDAL
+	tilemap FightingMedalTilemap,            TILESET_MEDAL                 ; TILEMAP_FIGHTING_MEDAL
+	tilemap RockMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_ROCK_MEDAL
+	tilemap PsychicMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_PSYCHIC_MEDAL
+	tilemap CardPop2Tilemap,                 TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2
+	tilemap CardPop2CGBTilemap,              TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_CGB
+	tilemap CardPop2Unknown1Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_1
+	tilemap CardPop2Unknown2Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_2
+	tilemap CardPop3Tilemap,                 TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3
+	tilemap CardPop3CGBTilemap,              TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3_CGB
+	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1           ; TILEMAP_COLOSSEUM
+	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2           ; TILEMAP_COLOSSEUM_CGB
+	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1           ; TILEMAP_EVOLUTION
+	tilemap EvolutionCGBTilemap,             TILESET_EVOLUTION_2           ; TILEMAP_EVOLUTION_CGB
+	tilemap MysteryTilemap,                  TILESET_MYSTERY_1             ; TILEMAP_MYSTERY
+	tilemap MysteryCGBTilemap,               TILESET_MYSTERY_2             ; TILEMAP_MYSTERY_CGB
+	tilemap LaboratoryTilemap,               TILESET_LABORATORY_1          ; TILEMAP_LABORATORY
+	tilemap LaboratoryCGBTilemap,            TILESET_LABORATORY_2          ; TILEMAP_LABORATORY_CGB
+	tilemap CharizardIntroTilemap,           TILESET_CHARIZARD_INTRO_1     ; TILEMAP_CHARIZARD_INTRO
+	tilemap CharizardIntroCGBTilemap,        TILESET_CHARIZARD_INTRO_2     ; TILEMAP_CHARIZARD_INTRO_CGB
+	tilemap ScytherIntroTilemap,             TILESET_SCYTHER_INTRO_1       ; TILEMAP_SCYTHER_INTRO
+	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2       ; TILEMAP_SCYTHER_INTRO_CGB
+	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1    ; TILEMAP_AERODACTYL_INTRO
+	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2    ; TILEMAP_AERODACTYL_INTRO_CGB
+	tilemap TitleScreen1Tilemap,             TILESET_TITLE_SCREEN_1        ; TILEMAP_TITLE_SCREEN_1
+	tilemap TitleScreen2Tilemap,             TILESET_TITLE_SCREEN_2        ; TILEMAP_TITLE_SCREEN_2
+	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_1
+	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_2
+	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_3
+	tilemap TitleScreen3Tilemap,             TILESET_TITLE_SCREEN_3        ; TILEMAP_TITLE_SCREEN_3
+	tilemap TitleScreen4Tilemap,             TILESET_TITLE_SCREEN_4        ; TILEMAP_TITLE_SCREEN_4
+	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2         ; TILEMAP_SOLID_TILES_4
+	tilemap PlayerTilemap,                   TILESET_PLAYER                ; TILEMAP_PLAYER
+	tilemap OpponentTilemap,                 TILESET_RONALD                ; TILEMAP_OPPONENT
+	tilemap TitleScreen5Tilemap,             TILESET_TITLE_SCREEN_5        ; TILEMAP_TITLE_SCREEN_5
+	tilemap TitleScreen6Tilemap,             TILESET_TITLE_SCREEN_6        ; TILEMAP_TITLE_SCREEN_6
+	tilemap CopyrightTilemap,                TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT
+	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT_CGB
+	tilemap NintendoTilemap,                 TILESET_NINTENDO              ; TILEMAP_NINTENDO
+	tilemap CompaniesTilemap,                TILESET_COMPANIES             ; TILEMAP_COMPANIES
 
 ; \1 = pointer
 ; \2 = number of tiles
@@ -1661,7 +1661,7 @@ MapDataPointers_81697: ; 81697 (20:5697)
 	palette_pointer Palette159, 1, 0 ; PALETTE_159
 	palette_pointer Palette160, 1, 0 ; PALETTE_160
 
-Data_8191b:: ; 8191b (20:591b)
+OverworldMapTilemap:: ; 8191b (20:591b)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -1669,7 +1669,7 @@ Data_8191b:: ; 8191b (20:591b)
 
 	INCBIN "data/maps/map0.bin"
 
-Data_81a22:: ; 81a22 (20:5a22)
+OverworldMapCGBTilemap:: ; 81a22 (20:5a22)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -1677,7 +1677,7 @@ Data_81a22:: ; 81a22 (20:5a22)
 
 	INCBIN "data/maps/map1.bin"
 
-Data_81c13:: ; 81c13 (20:5c13)
+MasonLaboratoryTilemap:: ; 81c13 (20:5c13)
 	db $1c ; width
 	db $1e ; height
 	dw $5d11
@@ -1685,7 +1685,7 @@ Data_81c13:: ; 81c13 (20:5c13)
 
 	INCBIN "data/maps/map2.bin"
 
-Data_81d2e:: ; 81d2e (20:5d2e)
+MasonLaboratoryCGBTilemap:: ; 81d2e (20:5d2e)
 	db $1c ; width
 	db $1e ; height
 	dw $5eb4
@@ -1693,7 +1693,7 @@ Data_81d2e:: ; 81d2e (20:5d2e)
 
 	INCBIN "data/maps/map3.bin"
 
-Data_81ed1:: ; 81ed1 (20:5ed1)
+Unused1Tilemap:: ; 81ed1 (20:5ed1)
 	db $04 ; width
 	db $06 ; height
 	dw $5ef0
@@ -1701,7 +1701,7 @@ Data_81ed1:: ; 81ed1 (20:5ed1)
 
 	INCBIN "data/maps/map4.bin"
 
-Data_81ef5:: ; 81ef5 (20:5ef5)
+Unused2Tilemap:: ; 81ef5 (20:5ef5)
 	db $04 ; width
 	db $06 ; height
 	dw $5f21
@@ -1709,7 +1709,7 @@ Data_81ef5:: ; 81ef5 (20:5ef5)
 
 	INCBIN "data/maps/map5.bin"
 
-Data_81f26:: ; 81f26 (20:5f26)
+DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
 	db $18 ; width
 	db $1e ; height
 	dw $5fd3
@@ -1717,7 +1717,7 @@ Data_81f26:: ; 81f26 (20:5f26)
 
 	INCBIN "data/maps/map6.bin"
 
-Data_81feb:: ; 81feb (20:5feb)
+DeckMachineRoomCGBTilemap:: ; 81feb (20:5feb)
 	db $18 ; width
 	db $1e ; height
 	dw $612b
@@ -1725,7 +1725,7 @@ Data_81feb:: ; 81feb (20:5feb)
 
 	INCBIN "data/maps/map7.bin"
 
-Data_82143:: ; 82143 (20:6143)
+Unused3Tilemap:: ; 82143 (20:6143)
 	db $04 ; width
 	db $01 ; height
 	dw $614d
@@ -1733,7 +1733,7 @@ Data_82143:: ; 82143 (20:6143)
 
 	INCBIN "data/maps/map8.bin"
 
-Data_82150:: ; 82150 (20:6150)
+Unused4Tilemap:: ; 82150 (20:6150)
 	db $04 ; width
 	db $01 ; height
 	dw $615d
@@ -1741,7 +1741,7 @@ Data_82150:: ; 82150 (20:6150)
 
 	INCBIN "data/maps/map9.bin"
 
-Data_82160:: ; 82160 (20:6160)
+IshiharaTilemap:: ; 82160 (20:6160)
 	db $14 ; width
 	db $18 ; height
 	dw $620e
@@ -1749,7 +1749,7 @@ Data_82160:: ; 82160 (20:6160)
 
 	INCBIN "data/maps/map10.bin"
 
-Data_82222:: ; 82222 (20:6222)
+IshiharaCGBTilemap:: ; 82222 (20:6222)
 	db $14 ; width
 	db $18 ; height
 	dw $6322
@@ -1757,7 +1757,7 @@ Data_82222:: ; 82222 (20:6222)
 
 	INCBIN "data/maps/map11.bin"
 
-Data_82336:: ; 82336 (20:6336)
+FightingClubEntranceTilemap:: ; 82336 (20:6336)
 	db $14 ; width
 	db $12 ; height
 	dw $63ec
@@ -1765,7 +1765,7 @@ Data_82336:: ; 82336 (20:6336)
 
 	INCBIN "data/maps/map12.bin"
 
-Data_82400:: ; 82400 (20:6400)
+FightingClubEntranceCGBTilemap:: ; 82400 (20:6400)
 	db $14 ; width
 	db $12 ; height
 	dw $6509
@@ -1773,7 +1773,7 @@ Data_82400:: ; 82400 (20:6400)
 
 	INCBIN "data/maps/map13.bin"
 
-Data_8251d:: ; 8251d (20:651d)
+RockClubEntranceTilemap:: ; 8251d (20:651d)
 	db $14 ; width
 	db $12 ; height
 	dw $65d3
@@ -1781,7 +1781,7 @@ Data_8251d:: ; 8251d (20:651d)
 
 	INCBIN "data/maps/map14.bin"
 
-Data_825e7:: ; 825e7 (20:65e7)
+RockClubEntranceCGBTilemap:: ; 825e7 (20:65e7)
 	db $14 ; width
 	db $12 ; height
 	dw $66f0
@@ -1789,7 +1789,7 @@ Data_825e7:: ; 825e7 (20:65e7)
 
 	INCBIN "data/maps/map15.bin"
 
-Data_82704:: ; 82704 (20:6704)
+WaterClubEntranceTilemap:: ; 82704 (20:6704)
 	db $14 ; width
 	db $12 ; height
 	dw $67ba
@@ -1797,7 +1797,7 @@ Data_82704:: ; 82704 (20:6704)
 
 	INCBIN "data/maps/map16.bin"
 
-Data_827ce:: ; 827ce (20:67ce)
+WaterClubEntranceCGBTilemap:: ; 827ce (20:67ce)
 	db $14 ; width
 	db $12 ; height
 	dw $68d7
@@ -1805,7 +1805,7 @@ Data_827ce:: ; 827ce (20:67ce)
 
 	INCBIN "data/maps/map17.bin"
 
-Data_828eb:: ; 828eb (20:68eb)
+LightningClubEntranceTilemap:: ; 828eb (20:68eb)
 	db $14 ; width
 	db $12 ; height
 	dw $69a1
@@ -1813,7 +1813,7 @@ Data_828eb:: ; 828eb (20:68eb)
 
 	INCBIN "data/maps/map18.bin"
 
-Data_829b5:: ; 829b5 (20:69b5)
+LightningClubEntranceCGBTilemap:: ; 829b5 (20:69b5)
 	db $14 ; width
 	db $12 ; height
 	dw $6abe
@@ -1821,7 +1821,7 @@ Data_829b5:: ; 829b5 (20:69b5)
 
 	INCBIN "data/maps/map19.bin"
 
-Data_82ad2:: ; 82ad2 (20:6ad2)
+GrassClubEntranceTilemap:: ; 82ad2 (20:6ad2)
 	db $14 ; width
 	db $12 ; height
 	dw $6b88
@@ -1829,7 +1829,7 @@ Data_82ad2:: ; 82ad2 (20:6ad2)
 
 	INCBIN "data/maps/map20.bin"
 
-Data_82b9c:: ; 82b9c (20:6b9c)
+GrassClubEntranceCGBTilemap:: ; 82b9c (20:6b9c)
 	db $14 ; width
 	db $12 ; height
 	dw $6ca5
@@ -1837,7 +1837,7 @@ Data_82b9c:: ; 82b9c (20:6b9c)
 
 	INCBIN "data/maps/map21.bin"
 
-Data_82cb9:: ; 82cb9 (20:6cb9)
+PsychicClubEntranceTilemap:: ; 82cb9 (20:6cb9)
 	db $14 ; width
 	db $12 ; height
 	dw $6d6f
@@ -1845,7 +1845,7 @@ Data_82cb9:: ; 82cb9 (20:6cb9)
 
 	INCBIN "data/maps/map22.bin"
 
-Data_82d83:: ; 82d83 (20:6d83)
+PsychicClubEntranceCGBTilemap:: ; 82d83 (20:6d83)
 	db $14 ; width
 	db $12 ; height
 	dw $6e8c
@@ -1853,7 +1853,7 @@ Data_82d83:: ; 82d83 (20:6d83)
 
 	INCBIN "data/maps/map23.bin"
 
-Data_82ea0:: ; 82ea0 (20:6ea0)
+ScienceClubEntranceTilemap:: ; 82ea0 (20:6ea0)
 	db $14 ; width
 	db $12 ; height
 	dw $6f56
@@ -1861,7 +1861,7 @@ Data_82ea0:: ; 82ea0 (20:6ea0)
 
 	INCBIN "data/maps/map24.bin"
 
-Data_82f6a:: ; 82f6a (20:6f6a)
+ScienceClubEntranceCGBTilemap:: ; 82f6a (20:6f6a)
 	db $14 ; width
 	db $12 ; height
 	dw $7073
@@ -1869,7 +1869,7 @@ Data_82f6a:: ; 82f6a (20:6f6a)
 
 	INCBIN "data/maps/map25.bin"
 
-Data_83087:: ; 83087 (20:7087)
+FireClubEntranceTilemap:: ; 83087 (20:7087)
 	db $14 ; width
 	db $12 ; height
 	dw $713d
@@ -1877,7 +1877,7 @@ Data_83087:: ; 83087 (20:7087)
 
 	INCBIN "data/maps/map26.bin"
 
-Data_83151:: ; 83151 (20:7151)
+FireClubEntranceCGBTilemap:: ; 83151 (20:7151)
 	db $14 ; width
 	db $12 ; height
 	dw $725a
@@ -1885,7 +1885,7 @@ Data_83151:: ; 83151 (20:7151)
 
 	INCBIN "data/maps/map27.bin"
 
-Data_8326e:: ; 8326e (20:726e)
+ChallengeHallEntranceTilemap:: ; 8326e (20:726e)
 	db $14 ; width
 	db $12 ; height
 	dw $730d
@@ -1893,7 +1893,7 @@ Data_8326e:: ; 8326e (20:726e)
 
 	INCBIN "data/maps/map28.bin"
 
-Data_83321:: ; 83321 (20:7321)
+ChallengeHallEntranceCGBTilemap:: ; 83321 (20:7321)
 	db $14 ; width
 	db $12 ; height
 	dw $7410
@@ -1901,7 +1901,7 @@ Data_83321:: ; 83321 (20:7321)
 
 	INCBIN "data/maps/map29.bin"
 
-Data_83424:: ; 83424 (20:7424)
+ClubLobbyTilemap:: ; 83424 (20:7424)
 	db $1c ; width
 	db $1a ; height
 	dw $7529
@@ -1909,7 +1909,7 @@ Data_83424:: ; 83424 (20:7424)
 
 	INCBIN "data/maps/map30.bin"
 
-Data_83545:: ; 83545 (20:7545)
+ClubLobbyCGBTilemap:: ; 83545 (20:7545)
 	db $1c ; width
 	db $1a ; height
 	dw $76bf
@@ -1917,7 +1917,7 @@ Data_83545:: ; 83545 (20:7545)
 
 	INCBIN "data/maps/map31.bin"
 
-Data_836db:: ; 836db (20:76db)
+FightingClubTilemap:: ; 836db (20:76db)
 	db $18 ; width
 	db $12 ; height
 	dw $777b
@@ -1925,7 +1925,7 @@ Data_836db:: ; 836db (20:76db)
 
 	INCBIN "data/maps/map32.bin"
 
-Data_8378c:: ; 8378c (20:778c)
+FightingClubCGBTilemap:: ; 8378c (20:778c)
 	db $18 ; width
 	db $12 ; height
 	dw $787c
@@ -1933,7 +1933,7 @@ Data_8378c:: ; 8378c (20:778c)
 
 	INCBIN "data/maps/map33.bin"
 
-Data_8388d:: ; 8388d (20:788d)
+RockClubTilemap:: ; 8388d (20:788d)
 	db $1c ; width
 	db $1e ; height
 	dw $79b5
@@ -1941,7 +1941,7 @@ Data_8388d:: ; 8388d (20:788d)
 
 	INCBIN "data/maps/map34.bin"
 
-Data_839d6:: ; 839d6 (20:79d6)
+RockClubCGBTilemap:: ; 839d6 (20:79d6)
 	db $1c ; width
 	db $1e ; height
 	dw $7bd0
@@ -1949,7 +1949,7 @@ Data_839d6:: ; 839d6 (20:79d6)
 
 	INCBIN "data/maps/map35.bin"
 
-Data_83bf1:: ; 83bf1 (20:7bf1)
+Unused5Tilemap:: ; 83bf1 (20:7bf1)
 	db $04 ; width
 	db $03 ; height
 	dw $7c00
@@ -1957,7 +1957,7 @@ Data_83bf1:: ; 83bf1 (20:7bf1)
 
 	INCBIN "data/maps/map52.bin"
 
-Data_83c03:: ; 83c03 (20:7c03)
+Unused6Tilemap:: ; 83c03 (20:7c03)
 	db $04 ; width
 	db $03 ; height
 	dw $7c17
@@ -1965,7 +1965,7 @@ Data_83c03:: ; 83c03 (20:7c03)
 
 	INCBIN "data/maps/map53.bin"
 
-Data_83c1a:: ; 83c1a (20:7c1a)
+Unused7Tilemap:: ; 83c1a (20:7c1a)
 	db $04 ; width
 	db $03 ; height
 	dw $7c23
@@ -1973,7 +1973,7 @@ Data_83c1a:: ; 83c1a (20:7c1a)
 
 	INCBIN "data/maps/map56.bin"
 
-Data_83c26:: ; 83c26 (20:7c26)
+Unused8Tilemap:: ; 83c26 (20:7c26)
 	db $04 ; width
 	db $03 ; height
 	dw $7c33
@@ -1981,7 +1981,7 @@ Data_83c26:: ; 83c26 (20:7c26)
 
 	INCBIN "data/maps/map57.bin"
 
-Data_83c36:: ; 83c36 (20:7c36)
+GrassMedalTilemap:: ; 83c36 (20:7c36)
 	db $03 ; width
 	db $03 ; height
 	dw $0000

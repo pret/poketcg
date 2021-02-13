@@ -47,7 +47,7 @@ endr
 
 SECTION "Gfx 3", ROMX
 
-Data_84000:: ; 84000 (21:4000)
+WaterClubTilemap:: ; 84000 (21:4000)
 	db $1c ; width
 	db $20 ; height
 	dw $4164
@@ -55,7 +55,7 @@ Data_84000:: ; 84000 (21:4000)
 
 	INCBIN "data/maps/map36.bin"
 
-Data_84188:: ; 84188 (21:4188)
+WaterClubCGBTilemap:: ; 84188 (21:4188)
 	db $1c ; width
 	db $20 ; height
 	dw $4397
@@ -63,7 +63,7 @@ Data_84188:: ; 84188 (21:4188)
 
 	INCBIN "data/maps/map37.bin"
 
-Data_843bb:: ; 843bb (21:43bb)
+LightningClubTilemap:: ; 843bb (21:43bb)
 	db $1c ; width
 	db $20 ; height
 	dw $4511
@@ -71,7 +71,7 @@ Data_843bb:: ; 843bb (21:43bb)
 
 	INCBIN "data/maps/map38.bin"
 
-Data_84533:: ; 84533 (21:4533)
+LightningClubCGBTilemap:: ; 84533 (21:4533)
 	db $1c ; width
 	db $20 ; height
 	dw $470c
@@ -79,7 +79,7 @@ Data_84533:: ; 84533 (21:4533)
 
 	INCBIN "data/maps/map39.bin"
 
-Data_8472e:: ; 8472e (21:472e)
+GrassClubTilemap:: ; 8472e (21:472e)
 	db $1c ; width
 	db $20 ; height
 	dw $48b4
@@ -87,7 +87,7 @@ Data_8472e:: ; 8472e (21:472e)
 
 	INCBIN "data/maps/map40.bin"
 
-Data_848d8:: ; 848d8 (21:48d8)
+GrassClubCGBTilemap:: ; 848d8 (21:48d8)
 	db $1c ; width
 	db $20 ; height
 	dw $4b4f
@@ -95,7 +95,7 @@ Data_848d8:: ; 848d8 (21:48d8)
 
 	INCBIN "data/maps/map41.bin"
 
-Data_84b73:: ; 84b73 (21:4b73)
+PsychicClubTilemap:: ; 84b73 (21:4b73)
 	db $1c ; width
 	db $1c ; height
 	dw $4c50
@@ -103,7 +103,7 @@ Data_84b73:: ; 84b73 (21:4b73)
 
 	INCBIN "data/maps/map42.bin"
 
-Data_84c6f:: ; 84c6f (21:4c6f)
+PsychicClubCGBTilemap:: ; 84c6f (21:4c6f)
 	db $1c ; width
 	db $1c ; height
 	dw $4ddf
@@ -111,7 +111,7 @@ Data_84c6f:: ; 84c6f (21:4c6f)
 
 	INCBIN "data/maps/map43.bin"
 
-Data_84dfe:: ; 84dfe (21:4dfe)
+ScienceClubTilemap:: ; 84dfe (21:4dfe)
 	db $1c ; width
 	db $20 ; height
 	dw $4efe
@@ -119,7 +119,7 @@ Data_84dfe:: ; 84dfe (21:4dfe)
 
 	INCBIN "data/maps/map44.bin"
 
-Data_84f1d:: ; 84f1d (21:4f1d)
+ScienceClubCGBTilemap:: ; 84f1d (21:4f1d)
 	db $1c ; width
 	db $20 ; height
 	dw $5097
@@ -127,7 +127,7 @@ Data_84f1d:: ; 84f1d (21:4f1d)
 
 	INCBIN "data/maps/map45.bin"
 
-Data_850b6:: ; 850b6 (21:50b6)
+FireClubTilemap:: ; 850b6 (21:50b6)
 	db $1c ; width
 	db $20 ; height
 	dw $5175
@@ -135,7 +135,7 @@ Data_850b6:: ; 850b6 (21:50b6)
 
 	INCBIN "data/maps/map46.bin"
 
-Data_85191:: ; 85191 (21:5191)
+FireClubCGBTilemap:: ; 85191 (21:5191)
 	db $1c ; width
 	db $20 ; height
 	dw $52f9
@@ -143,7 +143,7 @@ Data_85191:: ; 85191 (21:5191)
 
 	INCBIN "data/maps/map47.bin"
 
-Data_85315:: ; 85315 (21:5315)
+ChallengeHallTilemap:: ; 85315 (21:5315)
 	db $20 ; width
 	db $20 ; height
 	dw $5484
@@ -151,7 +151,7 @@ Data_85315:: ; 85315 (21:5315)
 
 	INCBIN "data/maps/map48.bin"
 
-Data_854b3:: ; 854b3 (21:54b3)
+ChallengeHallCGBTilemap:: ; 854b3 (21:54b3)
 	db $20 ; width
 	db $20 ; height
 	dw $56db
@@ -159,7 +159,7 @@ Data_854b3:: ; 854b3 (21:54b3)
 
 	INCBIN "data/maps/map49.bin"
 
-Data_8570a:: ; 8570a (21:570a)
+PokemonDomeEntranceTilemap:: ; 8570a (21:570a)
 	db $20 ; width
 	db $12 ; height
 	dw $57ba
@@ -167,7 +167,7 @@ Data_8570a:: ; 8570a (21:570a)
 
 	INCBIN "data/maps/map50.bin"
 
-Data_857ce:: ; 857ce (21:57ce)
+PokemonDomeEntranceCGBTilemap:: ; 857ce (21:57ce)
 	db $20 ; width
 	db $12 ; height
 	dw $58db
@@ -175,7 +175,7 @@ Data_857ce:: ; 857ce (21:57ce)
 
 	INCBIN "data/maps/map51.bin"
 
-Data_858ef:: ; 858ef (21:58ef)
+PokemonDomeTilemap:: ; 858ef (21:58ef)
 	db $20 ; width
 	db $20 ; height
 	dw $5a58
@@ -183,7 +183,7 @@ Data_858ef:: ; 858ef (21:58ef)
 
 	INCBIN "data/maps/map54.bin"
 
-Data_85a79:: ; 85a79 (21:5a79)
+PokemonDomeGBTilemap:: ; 85a79 (21:5a79)
 	db $20 ; width
 	db $20 ; height
 	dw $5cc1
@@ -191,7 +191,7 @@ Data_85a79:: ; 85a79 (21:5a79)
 
 	INCBIN "data/maps/map55.bin"
 
-Data_85ce2:: ; 85ce2 (21:5ce2)
+HallOfHonorTilemap:: ; 85ce2 (21:5ce2)
 	db $18 ; width
 	db $1a ; height
 	dw $5ddc
@@ -199,7 +199,7 @@ Data_85ce2:: ; 85ce2 (21:5ce2)
 
 	INCBIN "data/maps/map58.bin"
 
-Data_85df4:: ; 85df4 (21:5df4)
+HallOfHonorCGBTilemap:: ; 85df4 (21:5df4)
 	db $18 ; width
 	db $1a ; height
 	dw $5f64
@@ -207,7 +207,7 @@ Data_85df4:: ; 85df4 (21:5df4)
 
 	INCBIN "data/maps/map59.bin"
 
-Data_85f7c:: ; 85f7c (21:5f7c)
+CardPop1Tilemap:: ; 85f7c (21:5f7c)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -215,7 +215,7 @@ Data_85f7c:: ; 85f7c (21:5f7c)
 
 	INCBIN "data/maps/map60.bin"
 
-Data_8607f:: ; 8607f (21:607f)
+CardPop1CGBTilemap:: ; 8607f (21:607f)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -223,7 +223,7 @@ Data_8607f:: ; 8607f (21:607f)
 
 	INCBIN "data/maps/map61.bin"
 
-Data_8617d:: ; 8617d (21:617d)
+ScienceMedalTilemap:: ; 8617d (21:617d)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -231,7 +231,7 @@ Data_8617d:: ; 8617d (21:617d)
 
 	INCBIN "data/maps/map63.bin"
 
-Data_86193:: ; 86193 (21:6193)
+FireMedalTilemap:: ; 86193 (21:6193)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -239,7 +239,7 @@ Data_86193:: ; 86193 (21:6193)
 
 	INCBIN "data/maps/map64.bin"
 
-Data_861a9:: ; 861a9 (21:61a9)
+WaterMedalTilemap:: ; 861a9 (21:61a9)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -247,7 +247,7 @@ Data_861a9:: ; 861a9 (21:61a9)
 
 	INCBIN "data/maps/map65.bin"
 
-Data_861bf:: ; 861bf (21:61bf)
+LightningMedalTilemap:: ; 861bf (21:61bf)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -255,7 +255,7 @@ Data_861bf:: ; 861bf (21:61bf)
 
 	INCBIN "data/maps/map66.bin"
 
-Data_861d5:: ; 861d5 (21:61d5)
+FightingMedalTilemap:: ; 861d5 (21:61d5)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -263,7 +263,7 @@ Data_861d5:: ; 861d5 (21:61d5)
 
 	INCBIN "data/maps/map67.bin"
 
-Data_861eb:: ; 861eb (21:61eb)
+RockMedalTilemap:: ; 861eb (21:61eb)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -271,7 +271,7 @@ Data_861eb:: ; 861eb (21:61eb)
 
 	INCBIN "data/maps/map68.bin"
 
-Data_86201:: ; 86201 (21:6201)
+PsychicMedalTilemap:: ; 86201 (21:6201)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
@@ -279,7 +279,7 @@ Data_86201:: ; 86201 (21:6201)
 
 	INCBIN "data/maps/map69.bin"
 
-Data_86217:: ; 86217 (21:6217)
+CardPop2Tilemap:: ; 86217 (21:6217)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -287,7 +287,7 @@ Data_86217:: ; 86217 (21:6217)
 
 	INCBIN "data/maps/map70.bin"
 
-Data_862da:: ; 862da (21:62da)
+CardPop2CGBTilemap:: ; 862da (21:62da)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -295,7 +295,7 @@ Data_862da:: ; 862da (21:62da)
 
 	INCBIN "data/maps/map71.bin"
 
-Data_86364:: ; 86364 (21:6364)
+CardPop2Unknown1Tilemap:: ; 86364 (21:6364)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -303,7 +303,7 @@ Data_86364:: ; 86364 (21:6364)
 
 	INCBIN "data/maps/map72.bin"
 
-Data_86443:: ; 86443 (21:6443)
+CardPop2Unknown2Tilemap:: ; 86443 (21:6443)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -311,7 +311,7 @@ Data_86443:: ; 86443 (21:6443)
 
 	INCBIN "data/maps/map73.bin"
 
-Data_864df:: ; 864df (21:64df)
+CardPop3Tilemap:: ; 864df (21:64df)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -319,7 +319,7 @@ Data_864df:: ; 864df (21:64df)
 
 	INCBIN "data/maps/map74.bin"
 
-Data_865b5:: ; 865b5 (21:65b5)
+CardPop3CGBTilemap:: ; 865b5 (21:65b5)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -327,7 +327,7 @@ Data_865b5:: ; 865b5 (21:65b5)
 
 	INCBIN "data/maps/map75.bin"
 
-Data_86647:: ; 86647 (21:6647)
+ColosseumTilemap:: ; 86647 (21:6647)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -335,7 +335,7 @@ Data_86647:: ; 86647 (21:6647)
 
 	INCBIN "data/maps/map76.bin"
 
-Data_866b8:: ; 866b8 (21:66b8)
+ColosseumCGBTilemap:: ; 866b8 (21:66b8)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -343,7 +343,7 @@ Data_866b8:: ; 866b8 (21:66b8)
 
 	INCBIN "data/maps/map77.bin"
 
-Data_8673e:: ; 8673e (21:673e)
+EvolutionTilemap:: ; 8673e (21:673e)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -351,7 +351,7 @@ Data_8673e:: ; 8673e (21:673e)
 
 	INCBIN "data/maps/map78.bin"
 
-Data_867af:: ; 867af (21:67af)
+EvolutionCGBTilemap:: ; 867af (21:67af)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -359,7 +359,7 @@ Data_867af:: ; 867af (21:67af)
 
 	INCBIN "data/maps/map79.bin"
 
-Data_86833:: ; 86833 (21:6833)
+MysteryTilemap:: ; 86833 (21:6833)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -367,7 +367,7 @@ Data_86833:: ; 86833 (21:6833)
 
 	INCBIN "data/maps/map80.bin"
 
-Data_868a4:: ; 868a4 (21:68a4)
+MysteryCGBTilemap:: ; 868a4 (21:68a4)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -375,7 +375,7 @@ Data_868a4:: ; 868a4 (21:68a4)
 
 	INCBIN "data/maps/map81.bin"
 
-Data_86925:: ; 86925 (21:6925)
+LaboratoryTilemap:: ; 86925 (21:6925)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -383,7 +383,7 @@ Data_86925:: ; 86925 (21:6925)
 
 	INCBIN "data/maps/map82.bin"
 
-Data_86996:: ; 86996 (21:6996)
+LaboratoryCGBTilemap:: ; 86996 (21:6996)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -391,7 +391,7 @@ Data_86996:: ; 86996 (21:6996)
 
 	INCBIN "data/maps/map83.bin"
 
-Data_86a14:: ; 86a14 (21:6a14)
+CharizardIntroTilemap:: ; 86a14 (21:6a14)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -399,7 +399,7 @@ Data_86a14:: ; 86a14 (21:6a14)
 
 	INCBIN "data/maps/map84.bin"
 
-Data_86a85:: ; 86a85 (21:6a85)
+CharizardIntroCGBTilemap:: ; 86a85 (21:6a85)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -407,7 +407,7 @@ Data_86a85:: ; 86a85 (21:6a85)
 
 	INCBIN "data/maps/map85.bin"
 
-Data_86b28:: ; 86b28 (21:6b28)
+ScytherIntroTilemap:: ; 86b28 (21:6b28)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -415,7 +415,7 @@ Data_86b28:: ; 86b28 (21:6b28)
 
 	INCBIN "data/maps/map86.bin"
 
-Data_86b99:: ; 86b99 (21:6b99)
+ScytherIntroCGBTilemap:: ; 86b99 (21:6b99)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -423,7 +423,7 @@ Data_86b99:: ; 86b99 (21:6b99)
 
 	INCBIN "data/maps/map87.bin"
 
-Data_86c34:: ; 86c34 (21:6c34)
+AerodactylIntroTilemap:: ; 86c34 (21:6c34)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -431,7 +431,7 @@ Data_86c34:: ; 86c34 (21:6c34)
 
 	INCBIN "data/maps/map88.bin"
 
-Data_86ca5:: ; 86ca5 (21:6ca5)
+AerodactylIntroCGBTilemap:: ; 86ca5 (21:6ca5)
 	db $08 ; width
 	db $0c ; height
 	dw $0000
@@ -439,7 +439,7 @@ Data_86ca5:: ; 86ca5 (21:6ca5)
 
 	INCBIN "data/maps/map89.bin"
 
-Data_86d37:: ; 86d37 (21:6d37)
+TitleScreen1Tilemap:: ; 86d37 (21:6d37)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -447,7 +447,7 @@ Data_86d37:: ; 86d37 (21:6d37)
 
 	INCBIN "data/maps/map90.bin"
 
-Data_86dcc:: ; 86dcc (21:6dcc)
+TitleScreen2Tilemap:: ; 86dcc (21:6dcc)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -455,7 +455,7 @@ Data_86dcc:: ; 86dcc (21:6dcc)
 
 	INCBIN "data/maps/map91.bin"
 
-Data_86e8a:: ; 86e8a (21:6e8a)
+SolidTiles1Tilemap:: ; 86e8a (21:6e8a)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -463,7 +463,7 @@ Data_86e8a:: ; 86e8a (21:6e8a)
 
 	INCBIN "data/maps/map92.bin"
 
-Data_86f18:: ; 86f18 (21:6f18)
+SolidTiles2Tilemap:: ; 86f18 (21:6f18)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -471,7 +471,7 @@ Data_86f18:: ; 86f18 (21:6f18)
 
 	INCBIN "data/maps/map93.bin"
 
-Data_86fc0:: ; 86fc0 (21:6fc0)
+SolidTiles3Tilemap:: ; 86fc0 (21:6fc0)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -479,7 +479,7 @@ Data_86fc0:: ; 86fc0 (21:6fc0)
 
 	INCBIN "data/maps/map94.bin"
 
-Data_8704f:: ; 8704f (21:704f)
+TitleScreen3Tilemap:: ; 8704f (21:704f)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -487,7 +487,7 @@ Data_8704f:: ; 8704f (21:704f)
 
 	INCBIN "data/maps/map95.bin"
 
-Data_871a5:: ; 871a5 (21:71a5)
+TitleScreen4Tilemap:: ; 871a5 (21:71a5)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -495,7 +495,7 @@ Data_871a5:: ; 871a5 (21:71a5)
 
 	INCBIN "data/maps/map96.bin"
 
-Data_87397:: ; 87397 (21:7397)
+SolidTiles4Tilemap:: ; 87397 (21:7397)
 	db $08 ; width
 	db $04 ; height
 	dw $0000
@@ -503,7 +503,7 @@ Data_87397:: ; 87397 (21:7397)
 
 	INCBIN "data/maps/map97.bin"
 
-Data_873b7:: ; 873b7 (21:73b7)
+PlayerTilemap:: ; 873b7 (21:73b7)
 	db $06 ; width
 	db $06 ; height
 	dw $0000
@@ -511,7 +511,7 @@ Data_873b7:: ; 873b7 (21:73b7)
 
 	INCBIN "data/maps/map98.bin"
 
-Data_873e5:: ; 873e5 (21:73e5)
+OpponentTilemap:: ; 873e5 (21:73e5)
 	db $06 ; width
 	db $06 ; height
 	dw $0000
@@ -519,7 +519,7 @@ Data_873e5:: ; 873e5 (21:73e5)
 
 	INCBIN "data/maps/map99.bin"
 
-Data_87413:: ; 87413 (21:7413)
+TitleScreen5Tilemap:: ; 87413 (21:7413)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -527,7 +527,7 @@ Data_87413:: ; 87413 (21:7413)
 
 	INCBIN "data/maps/map100.bin"
 
-Data_87538:: ; 87538 (21:7538)
+TitleScreen6Tilemap:: ; 87538 (21:7538)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -535,7 +535,7 @@ Data_87538:: ; 87538 (21:7538)
 
 	INCBIN "data/maps/map101.bin"
 
-Data_8769f:: ; 8769f (21:769f)
+CopyrightTilemap:: ; 8769f (21:769f)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -543,7 +543,7 @@ Data_8769f:: ; 8769f (21:769f)
 
 	INCBIN "data/maps/map102.bin"
 
-Data_876f6:: ; 876f6 (21:76f6)
+CopyrightCGBTilemap:: ; 876f6 (21:76f6)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -551,7 +551,7 @@ Data_876f6:: ; 876f6 (21:76f6)
 
 	INCBIN "data/maps/map103.bin"
 
-Data_8777c:: ; 8777c (21:777c)
+NintendoTilemap:: ; 8777c (21:777c)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -559,7 +559,7 @@ Data_8777c:: ; 8777c (21:777c)
 
 	INCBIN "data/maps/map104.bin"
 
-Data_877c4:: ; 877c4 (21:77c4)
+CompaniesTilemap:: ; 877c4 (21:77c4)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
