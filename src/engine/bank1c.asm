@@ -260,11 +260,11 @@ Func_701e9: ; 701e9 (1c:41e9)
 	push bc
 	ld e, l
 	ld d, h
-	ld b, $c0
-	call Func_08bf
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
 	pop bc
 	pop de
-	call Func_08de
+	call DecompressBGMap
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
@@ -328,4 +328,7 @@ Func_70214: ; 70214 (1c:4214)
 	ret
 
 Unknown_7024a: ; 7024a (1c:424a)
-	INCROM $7024a, $74000
+	INCROM $7024a, $7036a
+
+Func_7036a: ; 7036a (1c:436a)
+	INCROM $7036a, $74000

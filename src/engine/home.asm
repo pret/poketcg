@@ -1519,7 +1519,13 @@ UpdateRNGSources: ; 089b (0:089b)
 	pop hl
 	ret
 
-Func_08bf: ; 08bf (0:08bf)
+; initilizes variables used to decompress
+; BG Map data in DecompressBGMap
+; de points to the source of compressed data
+; b is used as the HIGH byte of the
+; WRAM address to write to ($100 bytes of buffer space)
+; also clears this $100 byte space
+InitBGMapDecompression: ; 08bf (0:08bf)
 	ld hl, wcad6
 	ld [hl], e
 	inc hl
@@ -1528,70 +1534,90 @@ Func_08bf: ; 08bf (0:08bf)
 	ld [hl], $1
 	inc hl
 	xor a
-	ld [hli], a
-	ld [hli], a
-	ld [hli], a
-	ld [hli], a
-	ld [hl], b
+	ld [hli], a ; wcad9
+	ld [hli], a ; wcada
+	ld [hli], a ; wcadb
+	ld [hli], a ; wcadc
+	ld [hl], b  ; wcadd
 	inc hl
-	ld [hli], a ; 0
-	ld [hl], $ef
+	ld [hli], a ; wcade
+	ld [hl], $ef ; wcadf
+
+; clear buffer
 	ld h, b
-	ld l, $0
+	ld l, LOW(wc000)
 	xor a
-.asm_8d9
+.loop
 	ld [hl], a
 	inc l
-	jr nz, .asm_8d9
+	jr nz, .loop
 	ret
 
-Func_08de: ; 08de (0:08de)
+; decompresses BG Map data
+; uses values initialized by InitBGMapDecompression
+; wcad6 holds the pointer for compressed source
+; input:
+; bc = map width
+; de = buffer to place decompressed data
+DecompressBGMap: ; 08de (0:08de)
 	push hl
 	push de
-.asm_8e0
+.loop
 	push bc
-	call Func_08ef
+	call .Decompress
 	ld [de], a
 	inc de
 	pop bc
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_8e0
+	jr nz, .loop
 	pop de
 	pop hl
 	ret
 
-Func_08ef: ; 08ef (0:08ef)
+; instructions start with a byte stored in wcad9
+; its bits are read from higher to lower bit
+; wcad8 stores the current bit being read
+; bit set:
+; - 1 byte read and copied literally
+; bit not set:
+; - 2 bytes read WW XY ZZ, byte in pos WW
+; copied (X + 1) times, then in pos ZZ
+; copied (Y + 1) times
+.Decompress: ; 08ef (0:08ef)
 	ld hl, wcadc
 	ld a, [hl]
 	or a
-	jr z, .asm_902
+	jr z, .read_instruction
+
+; still repeating byte
 	dec [hl]
 	inc hl
-.asm_8f8
-	ld b, [hl]
+.repeat_byte
+	ld b, [hl] ; wcadd
 	inc hl
-	ld c, [hl]
+	ld c, [hl] ; wcade
 	inc [hl]
 	inc hl
 	ld a, [bc]
-	ld c, [hl]
+	ld c, [hl] ; wcadf
 	inc [hl]
 	ld [bc], a
 	ret
-.asm_902
+
+.read_instruction
 	ld hl, wcad6
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	inc hl
+	inc hl ; wcad8
 	dec [hl]
-	inc hl
+	inc hl ; wcad9
 	jr nz, .asm_914
-	dec hl
-	ld [hl], $8
-	inc hl
+	dec hl ; wcad8
+	ld [hl], $8 ; number of bits
+	inc hl ; wcad9
 	ld a, [bc]
 	inc bc
 	ld [hl], a
@@ -1600,6 +1626,8 @@ Func_08ef: ; 08ef (0:08ef)
 	ld a, [bc]
 	inc bc
 	jr nc, .asm_92a
+
+; copy 1 byte literally
 	ld hl, wcad6
 	ld [hl], c
 	inc hl
@@ -1608,10 +1636,11 @@ Func_08ef: ; 08ef (0:08ef)
 	ld b, [hl]
 	inc hl
 	inc hl
-	ld c, [hl]
+	ld c, [hl] ; wcadf
 	inc [hl]
 	ld [bc], a
 	ret
+
 .asm_92a
 	ld [wcade], a
 	ld hl, wcada
@@ -1621,23 +1650,24 @@ Func_08ef: ; 08ef (0:08ef)
 	inc hl
 	ld a, [bc]
 	inc bc
-	ld [hli], a
+	ld [hli], a ; wcadb
 	swap a
 .asm_93c
 	and $f
-	inc a
-	ld [hli], a
+	inc a ; number of times to repeat
+	ld [hli], a ; wcadc
 	push hl
 	ld hl, wcad6
 	ld [hl], c
 	inc hl
 	ld [hl], b
 	pop hl
-	jr .asm_8f8
+	jr .repeat_byte
+
 .asm_94a
 	res 0, [hl]
 	inc hl
-	ld a, [hli]
+	ld a, [hli] ; wcadb
 	jr .asm_93c
 
 ; set attributes for [hl] sprites starting from wOAM + [wOAMOffset] / 4
@@ -11204,12 +11234,17 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	pop hl
 	ret
 
-Func_3be4: ; 3be4 (0:3be4)
+; decompresses BG Map data from a given bank
+; uses values initialized by InitBGMapDecompression
+; input:
+; bc = map width
+; de = buffer to place decompressed data
+DecompressBGMapFromBank: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
 	call BankswitchROM
-	call Func_08de
+	call DecompressBGMap
 	pop af
 	call BankswitchROM
 	ret
@@ -11266,7 +11301,8 @@ FillMemoryWithDE: ; 3c1f (0:3c1f)
 	pop hl
 	ret
 
-Func_3c2d: ; 3c2d (0:3c2d)
+; gets far byte a:hl, outputs value in a
+GetFarByte: ; 3c2d (0:3c2d)
 	push hl
 	push af
 	ldh a, [hBankROM]
@@ -11634,7 +11670,7 @@ Func_3e10: ; 3e10 (0:3e10)
 ;	fallthrough
 
 Func_3e17: ; 3e17 (0:3e17)
-	ld [wd131], a
+	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_12fc6)
