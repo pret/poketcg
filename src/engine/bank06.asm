@@ -1626,8 +1626,8 @@ Func_1a61f: ; 1a61f (6:661f)
 	bank1call OpenCardPage_FromHand
 	ret
 
-Func_1a68d: ; 1a68d (6:668d)
-	ld a, $c2 ; player's turn
+_OpenBoosterPack: ; 1a68d (6:668d)
+	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld h, a
 	ld l, $00

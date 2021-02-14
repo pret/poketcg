@@ -7333,7 +7333,7 @@ Gigashock_AISelectEffect: ; 2e6c3 (b:66c3)
 	ret
 
 .start_selection
-; has more than 3 Bench cards,proceed to sort them
+; has more than 3 Bench cards, proceed to sort them
 ; by lowest remaining HP to highest, and pick first 3.
 	call SwapTurn
 	dec a

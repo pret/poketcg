@@ -1668,9 +1668,9 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 	call DisableLCD
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
-	ld bc, $0000
-	ld a, $0
-	call Func_3df3
+	lb bc, 0, 0
+	ld a, SCENE_TITLE_SCREEN
+	call LoadScene
 	call Func_1d59c
 .asm_1d39f
 	call Func_3ca0

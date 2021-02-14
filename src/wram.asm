@@ -2583,17 +2583,34 @@ wSpriteVRAMBuffer:: ; d5d8
 wSpriteVRAMBufferSize:: ; d618
 	ds $1
 
-	ds $2
-
-wd61b:: ; d61b
+wSceneSprite:: ; d619
 	ds $1
 
-	ds $2
+wSceneSpriteAnimation:: ; d61a
+	ds $1
+
+wSceneSpriteIndex:: ; d61b
+	ds $1
+
+; base X position in pixels of loaded scene
+wSceneBaseX:: ; d61c
+	ds $1
+
+; base Y position in pixels of loaded scene
+wSceneBaseY:: ; d61d
+	ds $1
 
 wd61e:: ; d61e
 	ds $1
 
-	ds $5
+wd61f:: ; d61f
+	ds $1
+
+wSceneSGBPacketPtr:: ; d620
+	ds $2
+
+wSceneSGBRoutinePtr:: ; d622
+	ds $2
 
 wd624:: ; d624
 	ds $1

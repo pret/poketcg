@@ -42,6 +42,7 @@ Func_80077: ; 80077 (20:4077)
 	ld [wBGMapCopyMode], a
 	jr Func_80082
 
+Func_8007e: ; 8007e (20:407e)
 	xor a
 	ld [wBGMapCopyMode], a
 ;	fallthrough

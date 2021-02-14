@@ -8436,8 +8436,8 @@ Func_7594: ; 7594 (1:7594)
 	farcall Func_1a61f
 	ret
 
-Func_7599: ; 7599 (1:7599)
-	farcall Func_1a68d
+OpenBoosterPack: ; 7599 (1:7599)
+	farcall _OpenBoosterPack
 	ret
 
 rept $a62

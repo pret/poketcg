@@ -11644,22 +11644,22 @@ Func_3de7: ; 3de7 (0:3de7)
 	pop hl
 	ret
 
-Func_3df3: ; 3df3 (0:3df3)
+LoadScene: ; 3df3 (0:3df3)
 	push af
 	ldh a, [hBankROM]
 	push af
 	push hl
-	ld a, BANK(Func_12c7f)
+	ld a, BANK(_LoadScene)
 	call BankswitchROM
 	ld hl, sp+$5
 	ld a, [hl]
-	call Func_12c7f
+	call _LoadScene
 	call FlushAllPalettes
 	pop hl
 	pop af
 	call BankswitchROM
 	pop af
-	ld a, [wd61b]
+	ld a, [wSceneSpriteIndex]
 	ret
 
 ; draws player's portrait at b,c

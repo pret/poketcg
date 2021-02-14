@@ -331,4 +331,118 @@ Unknown_7024a: ; 7024a (1c:424a)
 	INCROM $7024a, $7036a
 
 Func_7036a: ; 7036a (1c:436a)
-	INCROM $7036a, $74000
+	INCROM $7036a, $703cb
+
+Func_703cb: ; 703cb (1c:43cb)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	push bc
+	push de
+	call Func_70403
+	ld hl, wBGMapBuffer
+	ld de, wTempSGBPacket + $1
+	ld bc, $8
+	call CopyDataHLtoDE
+	ld hl, wBGMapBuffer + $22
+	ld de, wTempSGBPacket + $9
+	ld bc, $6
+	call CopyDataHLtoDE
+	xor a
+	ld [wTempSGBPacket + $f], a
+	ld hl, wTempSGBPacket
+	ld a, $09
+	ld [hl], a
+	call Func_704c7
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_70403: ; 70403 (1c:4403)
+	push hl
+	push bc
+	push de
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	push bc
+	ld e, l
+	ld d, h
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
+	pop bc
+	ld de, wBGMapBuffer
+	call DecompressBGMap
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x7041d
+
+	INCROM $7041d, $70498
+
+Func_70498: ; 70498 (1c:4498)
+	INCROM $70498, $704c7
+
+Func_704c7: ; 704c7 (1c:44c7)
+	push af
+	push hl
+	inc hl
+	ld a, $9c
+	ld [hli], a
+	ld a, $63
+	ld [hl], a
+	pop hl
+	pop af
+	ret
+; 0x704d3
+
+	INCROM $704d3, $73393
+
+SGBData_CharizardIntro: ; 73393 (1c:7393)
+	dw $20 ; width
+	INCROM $73395, $733b8
+
+SGBData_ScytherIntro: ; 733b8 (1c:73b8)
+	dw $20 ; width
+	INCROM $733ba, $733dd
+
+SGBData_AerodactylIntro: ; 733dd (1c:73dd)
+	dw $20 ; width
+	INCROM $733df, $73402
+
+SGBData_ColosseumBooster: ; 73402 (1c:7402)
+	dw $20 ; width
+	INCROM $73404, $73427
+
+SGBData_EvolutionBooster: ; 73427 (1c:7427)
+	dw $20 ; width
+	INCROM $73429, $7344c
+
+SGBData_MysteryBooster: ; 7344c (1c:744c)
+	dw $20 ; width
+	INCROM $7344e, $73471
+
+SGBData_LaboratoryBooster: ; 73471 (1c:7471)
+	dw $20 ; width
+	INCROM $73473, $73aa8
+
+SGBData_GameBoyLink: ; 73aa8 (1c:7aa8)
+	dw $40 ; width
+	INCROM $73aaa, $73ad8
+
+SGBData_CardPop: ; 73ad8 (1c:7ad8)
+	dw $40 ; width
+	INCROM $73ada, $73b05
+
+SGBData_GameBoyPrinter: ; 73b05 (1c:7b05)
+	dw $40 ; width
+	INCROM $73b07, $73b33
+
+SGBData_TitleScreen: ; 73b33 (1c:7b33)
+	dw $40 ; width
+	INCROM $73b35, $74000

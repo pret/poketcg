@@ -125,20 +125,20 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ld [wTextBoxFrameType], a
 	pop bc
 	push bc
-	ld b, $0
-	ld hl, Unknown_103a5
+	ld b, 0
+	ld hl, BoosterTypes
 	add hl, bc
 	ld a, [hl]
 	ld c, a
 	add a
 	add a
 	ld c, a
-	ld hl, Unknown_103c2
+	ld hl, BoosterScenesAndNameTexts
 	add hl, bc
 	ld a, [hli]
 	push hl
-	ld bc, $0600
-	call Func_130ca
+	lb bc, 6, 0
+	call LoadBoosterGfx
 	pop hl
 	ld a, [hli]
 	ld [wTxRam3], a
@@ -157,10 +157,10 @@ GiveBoosterPack: ; 1031b (4:431b)
 	farcall GenerateBoosterPack
 	ldtx hl, ReceivedBoosterPackText
 	ld a, [wAnotherBoosterPack]
-	cp $1
-	jr nz, .asm_10373
+	cp TRUE
+	jr nz, .first_booster
 	ldtx hl, AndAnotherBoosterPackText
-.asm_10373
+.first_booster
 	call PrintScrollableText_NoTextBoxLabel
 	call WaitForSongToFinish
 	call ResumeSong
@@ -173,18 +173,56 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wTextBoxFrameType], a
-	farcall Func_7599
+	farcall OpenBoosterPack
 	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	pop af
 	ld [wd291], a
 	ret
 
-Unknown_103a5: ; 103a5 (4:43a5)
-	INCROM $103a5, $103c2
+BoosterTypes: ; 103a5 (4:43a5)
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_NEUTRAL
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_GRASS
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIRE
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_WATER
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_LIGHTNING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIGHTING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_TRAINER
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_NEUTRAL
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_GRASS
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_FIRE
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_WATER
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_FIGHTING
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_PSYCHIC
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_TRAINER
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_NEUTRAL
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_GRASS_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_WATER_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_LIGHTNING_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_FIGHTING_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_TRAINER_COLORLESS
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_NEUTRAL
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_GRASS
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_WATER
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_PSYCHIC
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_TRAINER
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_LIGHTNING_FIRE
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_WATER_FIGHTING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_GRASS_PSYCHIC
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_RANDOM
 
-Unknown_103c2: ; 103c2 (4:43c2)
-	INCROM $103c2, $103d2
+BoosterScenesAndNameTexts: ; 103c2 (4:43c2)
+	db SCENE_COLOSSEUM_BOOSTER, SCENE_COLOSSEUM_BOOSTER
+	tx ColosseumBoosterText
+
+	db SCENE_EVOLUTION_BOOSTER, SCENE_EVOLUTION_BOOSTER
+	tx EvolutionBoosterText
+
+	db SCENE_MYSTERY_BOOSTER, SCENE_MYSTERY_BOOSTER
+	tx MysteryBoosterText
+
+	db SCENE_LABORATORY_BOOSTER, SCENE_LABORATORY_BOOSTER
+	tx LaboratoryBoosterText
 
 Func_103d2: ; 103d2 (4:43d2)
 	INCROM $103d2, $103d3
@@ -552,7 +590,7 @@ OverworldMap_CursorTransitions: ; 10ebc (4:4ebc)
 
 Func_10ef0: ; 10ef0 (4:4ef0)
 	call Func_10efd
-	ld c, $02
+	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
 	ld a, d
 	ld [hli], a
@@ -2000,14 +2038,600 @@ Func_12c4f: ; 12c4f (4:6c4f)
 Func_12c5e: ; 12c5e (4:6c5e)
 	INCROM $12c5e, $12c7f
 
-Func_12c7f: ; 12c7f (4:6c7f)
-	INCROM $12c7f, $12fc6
+; input:
+; a = scene ID (SCENE_* constant)
+; b = base X position of scene in tiles
+; c = base Y position of scene in tiles
+_LoadScene: ; 12c7f (4:6c7f)
+	push hl
+	push bc
+	push de
+	ld e, a
+	ld a, [wCurTilemap]
+	push af
+	ld a, [wd291]
+	push af
+	ld a, e
+	push bc
+	push af
+	ld a, b
+	add a
+	add a
+	add a
+	add $08
+	ld [wSceneBaseX], a
+	ld a, c
+	add a
+	add a
+	add a
+	add $10
+	ld [wSceneBaseY], a
+	pop af
+	add a
+	ld c, a
+	ld b, 0
+	ld hl, ScenePointers
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [hli]
+	ld [wSceneSGBPacketPtr], a
+	ld a, [hli]
+	ld [wSceneSGBPacketPtr + 1], a
+	ld a, [hli]
+	ld [wSceneSGBRoutinePtr], a
+	ld a, [hli]
+	ld [wSceneSGBRoutinePtr + 1], a
+	call Func_12f45
+	ld a, %11100100
+	ld [wBGP], a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_1
+	ld a, [hl]
+.not_cgb_1
+	inc hl
+	push af
+	xor a
+	ld [wd4ca], a
+	ld a, [hli]
+	ld [wd4cb], a
+	ld [wd291], a
+	pop af
+	farcall Func_803c9
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_2
+	ld a, [hl]
+.not_cgb_2
+	inc hl
+	ld [wCurTilemap], a
+	pop bc
+	push bc
+	farcall Func_8007e
+	pop bc
+	call Func_12f5b
+	ld a, [hli]
+	ld [wd4ca], a
+	ld a, [hli]
+	ld [wd4cb], a
+	farcall LoadTilesetGfx
+.asm_12d02
+	ld a, [hli]
+	or a
+	jr z, .done
+	ld [wSceneSprite], a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_3
+	ld a, [hl]
+.not_cgb_3
+	inc hl
+	push af
+	xor a
+	ld [wd4ca], a
+	ld a, [hli]
+	ld [wd4cb], a
+	pop af
+	farcall LoadPaletteData
+.asm_12d21
+	ld a, [hli]
+	or a
+	jr z, .asm_12d02
+	dec hl
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_4
+	ld a, [hl]
+.not_cgb_4
+	inc hl
+	ld [wSceneSpriteAnimation], a
+	ld a, [wSceneSprite]
+	farcall CreateSpriteAndAnimBufferEntry
+	ld a, [wWhichSprite]
+	ld [wSceneSpriteIndex], a
+	push hl
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld e, l
+	ld d, h
+	pop hl
+	ld a, [wSceneBaseX]
+	add [hl]
+	ld [de], a
+	inc hl
+	inc de
+	ld a, [wSceneBaseY]
+	add [hl]
+	ld [de], a
+	inc hl
+	ld a, [wSceneSpriteAnimation]
+	cp $ff
+	jr z, .no_animation
+	farcall StartSpriteAnimation
+.no_animation
+	jr .asm_12d21
+.done
+	pop af
+	ld [wd291], a
+	pop af
+	ld [wCurTilemap], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+ScenePointers: ; 12d6f (4:6d6f)
+	dw Scene_TitleScreen
+	dw Scene_ColosseumBooster
+	dw Scene_EvolutionBooster
+	dw Scene_MysteryBooster
+	dw Scene_LaboratoryBooster
+	dw Scene_CharizardIntro
+	dw Scene_ScytherIntro
+	dw Scene_AerodactylIntro
+	dw Scene_GradientBlackAndRed
+	dw Scene_GradientWhiteAndRed
+	dw Scene_GradientBlackAndGreen
+	dw Scene_GradientWhiteAndGreen
+	dw Scene_ColorWheel
+	dw Scene_ColorTest
+	dw Scene_GameBoyLinkConnecting
+	dw Scene_GameBoyLinkTransmitting
+	dw Scene_GameBoyLinkNotConnected
+	dw Scene_GameBoyPrinterTransmitting
+	dw Scene_GameBoyPrinterNotConnected
+	dw Scene_CardPop
+	dw Scene_CardPopError
+	dw Scene_JapaneseTitleScreen
+	dw Scene_Nintendo
+	dw Scene_Companies
+	dw Scene_JapaneseTitleScreen2
+	dw Scene_Copyright
+	dw Scene_JapaneseTitleScreen2
+	dw Scene_ColorPalette
+
+; format:
+; dw compressed sgb packet
+; dw custom sgb packet loading routine
+; db palette (non-cgb), palette (cgb), palette offset
+; db tilemap (non-cgb), tilemap (cgb), vram tile offset, vram0 or vram1
+; db sprite
+;
+; if sprite is non-zero:
+; db palette (non-cgb), palette (cgb), palette offset
+; db animation (non-cgb), animation (cgb), x offset, y offset
+; dw 0-terminator
+
+Scene_TitleScreen: ; 12da7 (4:6da7)
+	dw SGBData_TitleScreen
+	dw NULL
+	db PALETTE_25, PALETTE_25, $00
+	db TILEMAP_TITLE_SCREEN_5, TILEMAP_TITLE_SCREEN_6, $00, $00
+	db $00
+
+Scene_JapaneseTitleScreen: ; 12db3 (4:6db3)
+	dw SGBData_TitleScreen
+	dw NULL
+	db PALETTE_25, PALETTE_25, $00
+	db TILEMAP_TITLE_SCREEN_1, TILEMAP_TITLE_SCREEN_2, $80, $00
+	db $00
+
+Scene_ColosseumBooster: ; 12dbf (4:6dbf)
+	dw SGBData_ColosseumBooster
+	dw NULL
+	db PALETTE_108, PALETTE_101, $01
+	db TILEMAP_COLOSSEUM, TILEMAP_COLOSSEUM_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
+	dw SGBData_EvolutionBooster
+	dw NULL
+	db PALETTE_108, PALETTE_102, $01
+	db TILEMAP_EVOLUTION, TILEMAP_EVOLUTION_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_MysteryBooster: ; 12de9 (4:6de9)
+	dw SGBData_MysteryBooster
+	dw NULL
+	db PALETTE_108, PALETTE_103, $01
+	db TILEMAP_MYSTERY, TILEMAP_MYSTERY_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
+	dw SGBData_LaboratoryBooster
+	dw NULL
+	db PALETTE_108, PALETTE_104, $01
+	db TILEMAP_LABORATORY, TILEMAP_LABORATORY_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_CharizardIntro: ; 12e13 (4:6e13)
+	dw SGBData_CharizardIntro
+	dw NULL
+	db PALETTE_108, PALETTE_105, $01
+	db TILEMAP_CHARIZARD_INTRO, TILEMAP_CHARIZARD_INTRO_CGB, $80, $00
+	db $00
+
+Scene_ScytherIntro: ; 12e1f (4:6e1f)
+	dw SGBData_ScytherIntro
+	dw NULL
+	db PALETTE_108, PALETTE_106, $01
+	db TILEMAP_SCYTHER_INTRO, TILEMAP_SCYTHER_INTRO_CGB, $80, $00
+	db $00
+
+Scene_AerodactylIntro: ; 12e2b (4:6e2b)
+	dw SGBData_AerodactylIntro
+	dw NULL
+	db PALETTE_108, PALETTE_107, $01
+	db TILEMAP_AERODACTYL_INTRO, TILEMAP_AERODACTYL_INTRO_CGB, $80, $00
+	db $00
+
+Scene_GradientBlackAndRed: ; 12e37 (4:6e37)
+	dw NULL
+	dw NULL
+	db PALETTE_94, PALETTE_94, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientWhiteAndRed: ; 12e43 (4:6e43)
+	dw NULL
+	dw NULL
+	db PALETTE_95, PALETTE_95, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientBlackAndGreen: ; 12e4f (4:6e4f)
+	dw NULL
+	dw NULL
+	db PALETTE_96, PALETTE_96, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientWhiteAndGreen: ; 12e5b (4:6e5b)
+	dw NULL
+	dw NULL
+	db PALETTE_97, PALETTE_97, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_ColorWheel: ; 12e67 (4:6e67)
+	dw NULL
+	dw NULL
+	db PALETTE_98, PALETTE_98, $00
+	db TILEMAP_SOLID_TILES_2, TILEMAP_SOLID_TILES_2, $01, $00
+	db $00
+
+Scene_ColorTest: ; 12e73 (4:6e73)
+	dw NULL
+	dw NULL
+	db PALETTE_99, PALETTE_99, $00
+	db TILEMAP_SOLID_TILES_3, TILEMAP_SOLID_TILES_3, $01, $00
+	db $00
+
+Scene_ColorPalette: ; 12e7f (4:6e7f)
+	dw NULL
+	dw NULL
+	db PALETTE_110, PALETTE_110, $00
+	db TILEMAP_SOLID_TILES_4, TILEMAP_SOLID_TILES_4, $fc, $01
+	db $00
+
+Scene_GameBoyLinkConnecting: ; 12e8b (4:6e8b)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_CARD_POP_2_UNKNOWN_2, TILEMAP_CARD_POP_2_UNKNOWN_1, $90, $00
+	db $00
+
+Scene_GameBoyLinkTransmitting: ; 12e97 (4:6e97)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_CARD_POP_2_CGB, TILEMAP_CARD_POP_2, $90, $00
+	db SPRITE_DUEL_52
+	db PALETTE_114, PALETTE_114, $00
+	db $b3, $b0, $50, $50
+	dw $00
+
+Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_CARD_POP_2_CGB, TILEMAP_CARD_POP_2, $90, $00
+	db SPRITE_DUEL_52
+	db PALETTE_114, PALETTE_114, $00
+	db $b4, $b1, $50, $50
+	dw $00
+
+Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
+	dw SGBData_GameBoyPrinter
+	dw Func_12f8c
+	db PALETTE_112, PALETTE_112, $00
+	db TILEMAP_CARD_POP_3_CGB, TILEMAP_CARD_POP_3, $90, $00
+	db SPRITE_DUEL_53
+	db PALETTE_115, PALETTE_115, $00
+	db $b7, $b5, $50, $30
+	dw $00
+
+Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
+	dw SGBData_GameBoyPrinter
+	dw Func_12f8c
+	db PALETTE_112, PALETTE_112, $00
+	db TILEMAP_CARD_POP_3_CGB, TILEMAP_CARD_POP_3, $90, $00
+	db SPRITE_DUEL_53
+	db PALETTE_115, PALETTE_115, $00
+	db $b8, $b6, $50, $30
+	dw $00
+
+Scene_CardPop: ; 12eeb (4:6eeb)
+	dw SGBData_CardPop
+	dw Func_12fa9
+	db PALETTE_113, PALETTE_113, $00
+	db TILEMAP_CARD_POP_1_CGB, TILEMAP_CARD_POP_1, $80, $00
+	db SPRITE_DUEL_54
+	db PALETTE_116, PALETTE_116, $00
+	db $bb, $b9, $50, $40
+	dw $00
+
+Scene_CardPopError: ; 12f00 (4:6f00)
+	dw SGBData_CardPop
+	dw Func_12fa9
+	db PALETTE_113, PALETTE_113, $00
+	db TILEMAP_CARD_POP_1_CGB, TILEMAP_CARD_POP_1, $80, $00
+	db SPRITE_DUEL_54
+	db PALETTE_116, PALETTE_116, $00
+	db $bc, $ba, $50, $40
+	dw $00
+
+Scene_Nintendo: ; 12f15 (4:6f15)
+	dw NULL
+	dw NULL
+	db PALETTE_27, PALETTE_27, $00
+	db TILEMAP_NINTENDO, TILEMAP_NINTENDO, $00, $00
+	db $00
+
+Scene_Companies: ; 12f21 (4:6f21)
+	dw NULL
+	dw NULL
+	db PALETTE_28, PALETTE_28, $00
+	db TILEMAP_COMPANIES, TILEMAP_COMPANIES, $00, $00
+	db $00
+
+Scene_Copyright: ; 12f2d (4:6f2d)
+	dw NULL
+	dw NULL
+	db PALETTE_26, PALETTE_26, $00
+	db TILEMAP_COPYRIGHT, TILEMAP_COPYRIGHT_CGB, $00, $00
+	db $00
+
+Scene_JapaneseTitleScreen2: ; 12f39 (4:6f39)
+	dw NULL
+	dw NULL
+	db PALETTE_109, PALETTE_100, $00
+	db TILEMAP_TITLE_SCREEN_3, TILEMAP_TITLE_SCREEN_4, $01, $00
+	db $00
+
+Func_12f45: ; 12f45 (4:6f45)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	ld hl, wSceneSGBPacketPtr
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .skip
+	farcall Func_703cb
+.skip
+	pop hl
+	ret
+
+Func_12f5b: ; 12f5b (4:6f5b)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	push bc
+	push de
+	ld hl, wSceneSGBPacketPtr
+	ld a, [hli]
+	or [hl]
+	jr z, .asm_12f88
+	ld hl, wSceneSGBRoutinePtr + 1
+	ld a, [hld]
+	or [hl]
+	jr z, .asm_12f7a
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CallHL2
+	jr .asm_12f88
+.asm_12f7a
+	ld l, $0a
+	ld a, [wBGMapWidth]
+	ld d, a
+	ld a, [wBGMapHeight]
+	ld e, a
+	farcall Func_70498
+.asm_12f88
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_12f8c: ; 12f8c (4:6f8c)
+	push hl
+	push bc
+	push de
+	ld hl, SGCPacket_GameBoyPrinter
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SGCPacket_GameBoyPrinter: ; 12f99 (4:6f99)
+	INCROM $12f99, $12fa9
+
+Func_12fa9: ; 12fa9 (4:6fa9)
+	push hl
+	push bc
+	push de
+	ld hl, SGCPacket_CardPop
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SGCPacket_CardPop: ; 12fb6 (4:6fb6)
+	INCROM $12fb6, $12fc6
 
 Func_12fc6: ; 12fc6 (4:6fc6)
 	INCROM $12fc6, $130ca
 
-Func_130ca: ; 130ca (4:70ca)
-	INCROM $130ca, $131b3
+LoadBoosterGfx: ; 130ca (4:70ca)
+	push hl
+	push bc
+	push de
+	ld e, a
+	ld a, [wCurTilemap]
+	push af
+	push bc
+	ld a, e
+	call _LoadScene
+	call FlushAllPalettes
+	call SetBoosterLogoOAM
+	pop bc
+	pop af
+	ld [wCurTilemap], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SetBoosterLogoOAM: ; 130e6 (4:70e6)
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ret nz
+	push hl
+	push bc
+	push de
+	push bc
+	xor a
+	ld [wd4cb], a
+	ld [wd4ca], a
+	ld a, SPRITE_BOOSTER_PACK_OAM
+	farcall Func_8025b
+	pop bc
+	call ZeroObjectPositions
+	ld hl, BoosterLogoOAM
+	ld c, [hl]
+	inc hl
+.oam_loop
+	push bc
+	ldh a, [hSCX]
+	ld d, a
+	ldh a, [hSCY]
+	ld e, a
+	ld a, [wSceneBaseY]
+	sub e
+	add [hl]
+	ld e, a
+	inc hl
+	ld a, [wSceneBaseX]
+	sub d
+	add [hl]
+	ld d, a
+	inc hl
+	ld a, [wd61f]
+	add [hl]
+	ld c, a
+	inc hl
+	ld b, [hl]
+	inc hl
+	call SetOneObjectAttributes
+	pop bc
+	dec c
+	jr nz, .oam_loop
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop de
+	pop bc
+	pop hl
+	ret
+
+BoosterLogoOAM: ; 13132 (4:7132)
+	db $20
+	db $00, $00, $00, $00
+	db $00, $08, $01, $00
+	db $00, $10, $02, $00
+	db $00, $18, $03, $00
+	db $00, $20, $04, $00
+	db $00, $28, $05, $00
+	db $00, $30, $06, $00
+	db $00, $38, $07, $00
+	db $08, $00, $10, $00
+	db $08, $08, $11, $00
+	db $08, $10, $12, $00
+	db $08, $18, $13, $00
+	db $08, $20, $14, $00
+	db $08, $28, $15, $00
+	db $08, $30, $16, $00
+	db $08, $38, $17, $00
+	db $10, $00, $08, $00
+	db $10, $08, $09, $00
+	db $10, $10, $0A, $00
+	db $10, $18, $0B, $00
+	db $10, $20, $0C, $00
+	db $10, $28, $0D, $00
+	db $10, $30, $0E, $00
+	db $10, $38, $0F, $00
+	db $18, $00, $18, $00
+	db $18, $08, $19, $00
+	db $18, $10, $1A, $00
+	db $18, $18, $1B, $00
+	db $18, $20, $1C, $00
+	db $18, $28, $1D, $00
+	db $18, $30, $1E, $00
+	db $18, $38, $1F, $00
 
 Func_131b3: ; 131b3 (4:71b3)
 	INCROM $131b3, $131d3
