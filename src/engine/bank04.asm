@@ -2083,7 +2083,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld [wSceneSGBRoutinePtr], a
 	ld a, [hli]
 	ld [wSceneSGBRoutinePtr + 1], a
-	call Func_12f45
+	call LoadScene_LoadCompressedSGBPacket
 	ld a, %11100100
 	ld [wBGP], a
 	ld a, [wConsole]
@@ -2093,14 +2093,14 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld a, [hl]
 .not_cgb_1
 	inc hl
-	push af
+	push af ; palette
 	xor a
 	ld [wd4ca], a
 	ld a, [hli]
-	ld [wd4cb], a
-	ld [wd291], a
-	pop af
-	farcall Func_803c9
+	ld [wd4cb], a ; palette offset
+	ld [wd291], a ; palette offset
+	pop af ; palette
+	farcall Func_803c9 ; load palette
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ld a, [hli]
@@ -2111,18 +2111,18 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld [wCurTilemap], a
 	pop bc
 	push bc
-	farcall Func_8007e
-	pop bc
-	call Func_12f5b
+	farcall Func_8007e ; load tilemap
+	pop bc ; base x,y
+	call LoadScene_LoadSGBPacket
 	ld a, [hli]
-	ld [wd4ca], a
+	ld [wd4ca], a ; tile offset
 	ld a, [hli]
-	ld [wd4cb], a
+	ld [wd4cb], a ; vram0 or vram1
 	farcall LoadTilesetGfx
-.asm_12d02
+.next_sprite
 	ld a, [hli]
 	or a
-	jr z, .done
+	jr z, .done ; no sprite
 	ld [wSceneSprite], a
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -2131,17 +2131,17 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld a, [hl]
 .not_cgb_3
 	inc hl
-	push af
+	push af ; sprite palette
 	xor a
 	ld [wd4ca], a
 	ld a, [hli]
-	ld [wd4cb], a
-	pop af
+	ld [wd4cb], a ; palette offset
+	pop af ; sprite palette
 	farcall LoadPaletteData
-.asm_12d21
+.next_animation
 	ld a, [hli]
 	or a
-	jr z, .asm_12d02
+	jr z, .next_sprite
 	dec hl
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -2175,7 +2175,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	jr z, .no_animation
 	farcall StartSpriteAnimation
 .no_animation
-	jr .asm_12d21
+	jr .next_animation
 .done
 	pop af
 	ld [wd291], a
@@ -2381,7 +2381,7 @@ Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
 
 Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
 	dw SGBData_GameBoyPrinter
-	dw Func_12f8c
+	dw LoadScene_SetGameBoyPrinterAttrBlk
 	db PALETTE_112, PALETTE_112, $00
 	db TILEMAP_CARD_POP_3_CGB, TILEMAP_CARD_POP_3, $90, $00
 	db SPRITE_DUEL_53
@@ -2391,7 +2391,7 @@ Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
 
 Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
 	dw SGBData_GameBoyPrinter
-	dw Func_12f8c
+	dw LoadScene_SetGameBoyPrinterAttrBlk
 	db PALETTE_112, PALETTE_112, $00
 	db TILEMAP_CARD_POP_3_CGB, TILEMAP_CARD_POP_3, $90, $00
 	db SPRITE_DUEL_53
@@ -2401,7 +2401,7 @@ Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
 
 Scene_CardPop: ; 12eeb (4:6eeb)
 	dw SGBData_CardPop
-	dw Func_12fa9
+	dw LoadScene_SetCardPopAttrBlk
 	db PALETTE_113, PALETTE_113, $00
 	db TILEMAP_CARD_POP_1_CGB, TILEMAP_CARD_POP_1, $80, $00
 	db SPRITE_DUEL_54
@@ -2411,7 +2411,7 @@ Scene_CardPop: ; 12eeb (4:6eeb)
 
 Scene_CardPopError: ; 12f00 (4:6f00)
 	dw SGBData_CardPop
-	dw Func_12fa9
+	dw LoadScene_SetCardPopAttrBlk
 	db PALETTE_113, PALETTE_113, $00
 	db TILEMAP_CARD_POP_1_CGB, TILEMAP_CARD_POP_1, $80, $00
 	db SPRITE_DUEL_54
@@ -2447,7 +2447,7 @@ Scene_JapaneseTitleScreen2: ; 12f39 (4:6f39)
 	db TILEMAP_TITLE_SCREEN_3, TILEMAP_TITLE_SCREEN_4, $01, $00
 	db $00
 
-Func_12f45: ; 12f45 (4:6f45)
+LoadScene_LoadCompressedSGBPacket: ; 12f45 (4:6f45)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -2463,7 +2463,7 @@ Func_12f45: ; 12f45 (4:6f45)
 	pop hl
 	ret
 
-Func_12f5b: ; 12f5b (4:6f5b)
+LoadScene_LoadSGBPacket: ; 12f5b (4:6f5b)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz
@@ -2473,56 +2473,74 @@ Func_12f5b: ; 12f5b (4:6f5b)
 	ld hl, wSceneSGBPacketPtr
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_12f88
+	jr z, .done
 	ld hl, wSceneSGBRoutinePtr + 1
 	ld a, [hld]
 	or [hl]
-	jr z, .asm_12f7a
+	jr z, .use_default
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	call CallHL2
-	jr .asm_12f88
-.asm_12f7a
-	ld l, $0a
+	jr .done
+.use_default
+	ld l, %001010 ; outside, border, inside palette numbers
 	ld a, [wBGMapWidth]
 	ld d, a
 	ld a, [wBGMapHeight]
 	ld e, a
 	farcall Func_70498
-.asm_12f88
+.done
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_12f8c: ; 12f8c (4:6f8c)
+LoadScene_SetGameBoyPrinterAttrBlk: ; 12f8c (4:6f8c)
 	push hl
 	push bc
 	push de
-	ld hl, SGCPacket_GameBoyPrinter
+	ld hl, SGBPacket_GameBoyPrinter
 	call SendSGB
 	pop de
 	pop bc
 	pop hl
 	ret
 
-SGCPacket_GameBoyPrinter: ; 12f99 (4:6f99)
-	INCROM $12f99, $12fa9
+SGBPacket_GameBoyPrinter: ; 12f99 (4:6f99)
+	sgb ATTR_BLK, 1
+	db 1 ; number of data sets
+	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
+	db %101111 ; Color Palette Designation
+	db 11 ; x1
+	db 0  ; y1
+	db 16 ; x2
+	db 9  ; y2
+	ds 6 ; data set 2
+	ds 2 ; data set 3
 
-Func_12fa9: ; 12fa9 (4:6fa9)
+LoadScene_SetCardPopAttrBlk: ; 12fa9 (4:6fa9)
 	push hl
 	push bc
 	push de
-	ld hl, SGCPacket_CardPop
+	ld hl, SGBPacket_CardPop
 	call SendSGB
 	pop de
 	pop bc
 	pop hl
 	ret
 
-SGCPacket_CardPop: ; 12fb6 (4:6fb6)
-	INCROM $12fb6, $12fc6
+SGBPacket_CardPop: ; 12fb6 (4:6fb6)
+	sgb ATTR_BLK, 1
+	db 1 ; number of data sets
+	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
+	db %101111 ; Color Palette Designation
+	db 0  ; x1
+	db 0  ; y1
+	db 19 ; x2
+	db 4  ; y3
+	ds 6 ; data set 2
+	ds 2 ; data set 3
 
 Func_12fc6: ; 12fc6 (4:6fc6)
 	INCROM $12fc6, $130ca

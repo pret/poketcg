@@ -385,8 +385,49 @@ Func_70403: ; 70403 (1c:4403)
 
 	INCROM $7041d, $70498
 
+; send an ATTR_BLK SGB packet
+; input:
+; b = x1 (left)
+; c = y1 (upper)
+; d = block width
+; e = block height
+; l = %00xxyyzz, palette number for: outside block, block border, inside block
 Func_70498: ; 70498 (1c:4498)
-	INCROM $70498, $704c7
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	push bc
+	push de
+	ld a, l
+	ld [wTempSGBPacket + 3], a ; Color Palette Designation
+	ld hl, wTempSGBPacket
+	push hl
+	ld a, ATTR_BLK << 3 + 1
+	ld [hli], a ; packet command and length
+	ld a, 1
+	ld [hli], a ; 1 data set
+	ld a, ATTR_BLK_CTRL_INSIDE
+	ld [hli], a ; control code
+	inc hl
+	ld a, b
+	ld [hli], a ; x1
+	ld a, c
+	ld [hli], a ; y1
+	ld a, d
+	dec a
+	add b
+	ld [hli], a ; x2
+	ld a, e
+	dec a
+	add c
+	ld [hli], a ; y2
+	pop hl
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_704c7: ; 704c7 (1c:44c7)
 	push af
