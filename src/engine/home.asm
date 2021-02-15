@@ -10577,9 +10577,9 @@ Func_380e: ; 380e (0:380e)
 	call BankswitchROM
 	call Func_1c610
 	call Func_3cb4
-	ld a, BANK(Func_804d8)
+	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
-	call Func_804d8
+	call DoLoadedFramesetSubgroupsFrame
 	call UpdateRNGSources
 	pop af
 	call BankswitchROM
@@ -11689,9 +11689,9 @@ Func_3e31: ; 3e31 (0:3e31)
 	ldh a, [hBankROM]
 	push af
 	call Func_3cb4
-	ld a, BANK(Func_804d8)
+	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
-	call Func_804d8
+	call DoLoadedFramesetSubgroupsFrame
 	pop af
 	call BankswitchROM
 	ret

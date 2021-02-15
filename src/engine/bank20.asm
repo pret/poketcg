@@ -803,7 +803,9 @@ CopyPaletteDataToBuffer: ; 80456 (20:4456)
 
 	INCROM $8047b, $80480
 
-Func_80480: ; 80480 (20:4480)
+; for the current map, process the animation
+; data of its corresponding OW tiles
+DoMapOWFrame: ; 80480 (20:4480)
 	push hl
 	push bc
 	ld a, [wCurMap]
@@ -817,160 +819,176 @@ Func_80480: ; 80480 (20:4480)
 	add 2
 	ld c, a
 .not_cgb
-	ld b, $00
-	ld hl, Data_805d6
+	ld b, $0
+	ld hl, MapOWFramesetPointers
 	add hl, bc
+	; got pointer for current map's frameset data
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_804a2
+	call ProcessOWFrameset
 	pop bc
 	pop hl
 	ret
 ; 0x804a2
 
-; hl written to wd318
-Func_804a2: ; 804a2 (20:44a2)
+; processes the OW frameset pointed by hl
+ProcessOWFrameset: ; 804a2 (20:44a2)
 	push hl
 	push bc
 	ld a, l
-	ld [wd318], a
+	ld [wCurMapOWFrameset], a
 	ld a, h
-	ld [wd318 + 1], a
+	ld [wCurMapOWFrameset + 1], a
 	xor a
-	ld [wd322], a
-	call Func_8059a
+	ld [wumLoadedFramesetSubgroups], a
+	call ClearOWFramesetSubgroups
 	ld c, 0
-.asm_804b5
-	call Func_805aa
-	call Func_804f3
-	ld a, [wd320]
-	cp $ff
-	jr z, .asm_804cf
-	ld a, [wd322]
+.loop_subgroups
+	call LoadOWFramesetSubgroup
+	call GetOWFramesetSubgroupData
+	ld a, [wCurOWFrameDataOffset]
+	cp -1
+	jr z, .next_subgroup
+	ld a, [wumLoadedFramesetSubgroups]
 	inc a
-	ld [wd322], a
-	call Func_8050c
-	call Func_805c1
-.asm_804cf
+	ld [wumLoadedFramesetSubgroups], a
+	call LoadOWFrameTiles
+	call StoreOWFramesetSubgroup
+.next_subgroup
 	inc c
 	ld a, c
-	cp 3
-	jr c, .asm_804b5
+	cp NUM_OW_FRAMESET_SUBGROUPS
+	jr c, .loop_subgroups
 	pop bc
 	pop hl
 	ret
 ; 0x804d8
 
-Func_804d8: ; 804d8 (20:44d8)
-	ld a, [wd322]
+; for each of the loaded frameset subgroups
+; load their tiles and advance their durations
+DoLoadedFramesetSubgroupsFrame: ; 804d8 (20:44d8)
+	ld a, [wumLoadedFramesetSubgroups]
 	or a
 	ret z
-	ld c, $00
-.asm_804df
-	call Func_805aa
-	cp $ff
-	jr z, .asm_804ec
-	call Func_8050c
-	call Func_805c1
-.asm_804ec
+	ld c, 0
+.loop_subgroups
+	call LoadOWFramesetSubgroup
+	cp -1
+	jr z, .next_subgroup
+	call LoadOWFrameTiles
+	call StoreOWFramesetSubgroup
+.next_subgroup
 	inc c
 	ld a, c
-	cp $03
-	jr c, .asm_804df
+	cp NUM_OW_FRAMESET_SUBGROUPS
+	jr c, .loop_subgroups
 	ret
 ; 0x804f3
 
-; c added to hl
-Func_804f3: ; 804f3 (20:44f3)
+; from subgroup in register c, get
+; from OW frameset in hl its corresponding
+; data offset and duration
+GetOWFramesetSubgroupData: ; 804f3 (20:44f3)
 	push hl
 	push bc
 	push hl
-	ld b, $00
+	ld b, $0
 	add hl, bc
 	ld c, [hl]
 	pop hl
 	add hl, bc
-	ld a, [hl]
-	cp $ff
-	jr z, .asm_80509
-	ld a, c
-	ld [wd320], a
+	ld a, [hl] ; beginning of OW_FRAME
+	cp -1
+	jr z, .end_of_list ; skip if it's end of list
+	ld a, c ; store its addr offset
+	ld [wCurOWFrameDataOffset], a
 	xor a
-	ld [wd321], a
-.asm_80509
+	ld [wCurOWFrameDuration], a
+.end_of_list
 	pop bc
 	pop hl
 	ret
 ; 0x8050c
 
-Func_8050c: ; 8050c (20:450c)
-	ld a, [wd321]
+; if wCurOWFrameDuration == 0, processes next frame for OW map
+; by loading the tiles corresponding to current frame
+; if wCurOWFrameDuration != 0, then simply decrements it and returns
+LoadOWFrameTiles: ; 8050c (20:450c)
+	ld a, [wCurOWFrameDuration]
 	or a
-	jr z, .asm_80517
+	jr z, .next_frame
 	dec a
-	ld [wd321], a
+	ld [wCurOWFrameDuration], a
 	ret
 
-.asm_80517
+.next_frame
 	push hl
 	push de
 	push bc
-	; add wd320 to pointer in wd318
-	ld a, [wd320]
+	; add wCurOWFrameDataOffset to pointer in wCurMapOWFrameset
+	ld a, [wCurOWFrameDataOffset]
 	ld c, a
-	ld a, [wd318]
+	ld a, [wCurMapOWFrameset]
 	add c
 	ld l, a
-	ld a, [wd318 + 1]
+	ld a, [wCurMapOWFrameset + 1]
 	adc 0
 	ld h, a
 
 	ld a, [hl]
-	ld [wd321], a
-.asm_8052d
-	call .Func_8055c
-	ld de, $8
-	add hl, de
+	ld [wCurOWFrameDuration], a
+.loop_ow_frames
+	call .LoadTile
+	ld de, OW_FRAME_STRUCT_SIZE
+	add hl, de ; next frame data
 	ld a, c
 	add e
 	ld c, a
+	; OW frames with 0 duration are processed
+	; at the same time as the previous frame data
 	ld a, [hl]
 	or a
-	jr z, .asm_8052d
+	jr z, .loop_ow_frames
 
 	cp -1
 	ld a, c
-	ld [wd320], a
-	jr nz, .asm_80558
+	ld [wCurOWFrameDataOffset], a
+	jr nz, .done
+
+; there's no more frames to process for this map
+; reset the frame data offset
 	pop bc
 	push bc
-	ld a, [wd321]
+	ld a, [wCurOWFrameDuration]
 	push af
-	ld a, [wd318]
+	ld a, [wCurMapOWFrameset]
 	ld l, a
-	ld a, [wd318 + 1]
+	ld a, [wCurMapOWFrameset + 1]
 	ld h, a
-	call Func_804f3
+	call GetOWFramesetSubgroupData
 	pop af
-	ld [wd321], a
-.asm_80558
+	ld [wCurOWFrameDuration], a
+
+.done
 	pop bc
 	pop de
 	pop hl
 	ret
 
-.Func_8055c
+; load a single tile specified
+; by the OW frame data pointed by hl
+.LoadTile
 	push hl
 	push bc
 	push de
 	ldh a, [hBankVRAM]
 	push af
 	inc hl
-	ld a, [hli]
+	ld a, [hli] ; tile number
 	xor $80
 	ld e, a
-	ld a, [hli]
+	ld a, [hli] ; VRAM bank
 
 ; get tile offset of register e
 ; and load its address in de
@@ -982,27 +1000,28 @@ Func_8050c: ; 8050c (20:450c)
 	add hl, hl ; *4
 	add hl, hl ; *8
 	add hl, hl ; *16
-	ld de, v0Tiles1
+	ld de, v0Tiles1 ; or v1Tiles1
 	add hl, de
 	ld e, l
 	ld d, h
 	pop hl
 
-	ld a, [hli]
-	add $20
+	ld a, [hli] ; bank of tileset
+	add BANK(MapOWFramesetPointers)
 	ld [wTempPointerBank], a
-	ld a, [hli]
+	ld a, [hli] ; tileset addr lo byte
 	ld c, a
-	ld a, [hli]
+	ld a, [hli] ; tileset addr hi byte
 	ld b, a
-	ld a, [hli]
-	ld h, [hl]
+	ld a, [hli] ; tile number lo byte
+	ld h, [hl]  ; tile number hi byte
 	ld l, a
 	add hl, hl ; *2
 	add hl, hl ; *4
 	add hl, hl ; *8
 	add hl, hl ; *16
 	add hl, bc
+	; copy tile from the tileset to VRAM addr
 	lb bc, 1, TILE_SIZE
 	call CopyGfxDataFromTempBank
 	pop af
@@ -1013,12 +1032,12 @@ Func_8050c: ; 8050c (20:450c)
 	ret
 ; 0x8059a
 
-; fills wd31a with $ff
-Func_8059a: ; 8059a (20:459a)
+; fills wOWFramesetSubgroups with $ff
+ClearOWFramesetSubgroups: ; 8059a (20:459a)
 	push hl
 	push bc
-	ld hl, wd31a
-	ld c, 3 * 2
+	ld hl, wOWFramesetSubgroups
+	ld c, NUM_OW_FRAMESET_SUBGROUPS * 2
 	ld a, $ff
 .loop
 	ld [hli], a
@@ -1029,312 +1048,46 @@ Func_8059a: ; 8059a (20:459a)
 	ret
 ; 0x805aa
 
-; copies wd31a + 2*c
-; to wd320 and wd321
-Func_805aa: ; 805aa (20:45aa)
+; copies wOWFramesetSubgroups + 2*c
+; to wCurOWFrameDataOffset and wCurOWFrameDuration
+; also returns its current duration
+LoadOWFramesetSubgroup: ; 805aa (20:45aa)
 	push hl
 	push bc
-	ld hl, wd31a
+	ld hl, wOWFramesetSubgroups
 	sla c
 	ld b, $00
 	add hl, bc
 	ld a, [hli]
-	ld [wd320], a
+	ld [wCurOWFrameDataOffset], a
 	push af
 	ld a, [hl]
-	ld [wd321], a
+	ld [wCurOWFrameDuration], a
 	pop af
 	pop bc
 	pop hl
 	ret
 ; 0x805c1
 
-; copies wd320 and wd321
-; to wd31a + 2*c
-Func_805c1: ; 805c1 (20:45c1)
+; copies wCurOWFrameDataOffset and wCurOWFrameDuration
+; to wOWFramesetSubgroups + 2*c
+StoreOWFramesetSubgroup: ; 805c1 (20:45c1)
 	push hl
 	push bc
-	ld hl, wd31a
+	ld hl, wOWFramesetSubgroups
 	sla c
 	ld b, $00
 	add hl, bc
-	ld a, [wd320]
+	ld a, [wCurOWFrameDataOffset]
 	ld [hli], a
-	ld a, [wd321]
+	ld a, [wCurOWFrameDuration]
 	ld [hl], a
 	pop bc
 	pop hl
 	ret
 ; 0x805d6
 
-Data_805d6: ; 805d6 (20:45d6)
-; non-cgb, cgb
-	dw Data_80662, Data_80696 ; OVERWORLD_MAP
-	dw Data_80742, Data_80742 ; MASON_LABORATORY
-	dw Data_80786, Data_8080a ; DECK_MACHINE_ROOM
-	dw Data_8055e, Data_8055e ; ISHIHARAS_HOUSE
-	dw Data_8055e, Data_8055e ; FIGHTING_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; FIGHTING_CLUB_LOBBY
-	dw Data_8055e, Data_8055e ; FIGHTING_CLUB
-	dw Data_8055e, Data_8055e ; ROCK_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; ROCK_CLUB_LOBBY
-	dw Data_8055e, Data_8055e ; ROCK_CLUB
-	dw Data_8055e, Data_8055e ; WATER_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; WATER_CLUB_LOBBY
-	dw Data_80996, Data_80996 ; WATER_CLUB
-	dw Data_8055e, Data_8055e ; LIGHTNING_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; LIGHTNING_CLUB_LOBBY
-	dw Data_80a5a, Data_80a5a ; LIGHTNING_CLUB
-	dw Data_8055e, Data_8055e ; GRASS_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; GRASS_CLUB_LOBBY
-	dw Data_8055e, Data_8055e ; GRASS_CLUB
-	dw Data_8055e, Data_8055e ; PSYCHIC_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; PSYCHIC_CLUB_LOBBY
-	dw Data_8055e, Data_8055e ; PSYCHIC_CLUB
-	dw Data_8055e, Data_8055e ; SCIENCE_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; SCIENCE_CLUB_LOBBY
-	dw Data_80b1e, Data_80b1e ; SCIENCE_CLUB
-	dw Data_8055e, Data_8055e ; FIRE_CLUB_ENTRANCE
-	dw Data_8055e, Data_8055e ; FIRE_CLUB_LOBBY
-	dw Data_8088e, Data_80912 ; FIRE_CLUB
-	dw Data_8055e, Data_8055e ; CHALLENGE_HALL_ENTRANCE
-	dw Data_8055e, Data_8055e ; CHALLENGE_HALL_LOBBY
-	dw Data_80b32, Data_80b32 ; CHALLENGE_HALL
-	dw Data_8055e, Data_8055e ; POKEMON_DOME_ENTRANCE
-	dw Data_8055e, Data_8055e ; POKEMON_DOME
-	dw Data_80b36, Data_80b36 ; HALL_OF_HONOR
-; 0x8065e
-
-; \1 = unknown
-; \2 = VRAM tile offset
-; \3 = VRAM
-; \4 = tileset
-; \5 = tileset offset
-macro_8055e: MACRO
-	db \1
-	db \2
-	db \3
-	dbw BANK(\4) - BANK(Data_805d6), \4 + $2
-	dw \5
-ENDM
-
-Data_8055e: ; 8055e (20:455e)
-	db $3, $3, $3
-	db -1 ; end
-
-Data_80662: ; 80662 (20:4662)
-	db $3, $33, $33
-
-	macro_8055e 7, $f3, 0, OverworldMapTiles, $73
-	macro_8055e 7, $f4, 0, OverworldMapTiles, $74
-	macro_8055e 7, $f3, 0, OverworldMapTiles, $74
-	macro_8055e 7, $f4, 0, OverworldMapTiles, $75
-	macro_8055e 7, $f3, 0, OverworldMapTiles, $75
-	macro_8055e 7, $f4, 0, OverworldMapTiles, $73
-	db -1 ; end
-
-Data_80696: ; 80696 (20:4696)
-	db $3, $ab, $ab
-
-	macro_8055e 4, $f3, 0, OverworldMapTiles, $73
-	macro_8055e 4, $f4, 0, OverworldMapTiles, $74
-	macro_8055e 4, $18, 1, OverworldMapTiles, $98
-	macro_8055e 0, $19, 1, OverworldMapTiles, $99
-	macro_8055e 0, $1a, 1, OverworldMapTiles, $9a
-	macro_8055e 0, $1b, 1, OverworldMapTiles, $9b
-	macro_8055e 0, $1c, 1, OverworldMapTiles, $9c
-	macro_8055e 4, $f3, 0, OverworldMapTiles, $74
-	macro_8055e 4, $f4, 0, OverworldMapTiles, $75
-	macro_8055e 4, $18, 1, OverworldMapTiles, $9d
-	macro_8055e 0, $19, 1, OverworldMapTiles, $9e
-	macro_8055e 0, $1a, 1, OverworldMapTiles, $9f
-	macro_8055e 0, $1b, 1, OverworldMapTiles, $a0
-	macro_8055e 0, $1c, 1, OverworldMapTiles, $a1
-	macro_8055e 7, $f3, 0, OverworldMapTiles, $75
-	macro_8055e 7, $f4, 0, OverworldMapTiles, $73
-	macro_8055e 4, $18, 1, OverworldMapTiles, $a2
-	macro_8055e 0, $19, 1, OverworldMapTiles, $a3
-	macro_8055e 0, $1a, 1, OverworldMapTiles, $a4
-	macro_8055e 0, $1b, 1, OverworldMapTiles, $a5
-	macro_8055e 0, $1c, 1, OverworldMapTiles, $a6
-	db -1 ; end
-
-Data_80742: ; 80742 (20:4742)
-	db $3, $43, $43
-
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $5d
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $5e
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $5f
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $60
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $61
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $62
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $63
-	db -1 ; end
-
-Data_80786: ; 80786 (20:4786)
-	db $3, $83, $83
-
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $5d
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $5e
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $5f
-	macro_8055e 5, $e4, 0, MasonLaboratoryTilesetGfx, $64
-	macro_8055e 0, $e5, 0, MasonLaboratoryTilesetGfx, $65
-	macro_8055e 0, $e6, 0, MasonLaboratoryTilesetGfx, $66
-	macro_8055e 0, $e7, 0, MasonLaboratoryTilesetGfx, $67
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $60
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $61
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $62
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $63
-	macro_8055e 5, $e4, 0, MasonLaboratoryTilesetGfx, $68
-	macro_8055e 0, $e5, 0, MasonLaboratoryTilesetGfx, $69
-	macro_8055e 0, $e6, 0, MasonLaboratoryTilesetGfx, $6a
-	macro_8055e 0, $e7, 0, MasonLaboratoryTilesetGfx, $6b
-	db -1 ; end
-
-Data_8080a: ; 8080a (20:480a)
-	db $3, $83, $83
-
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $5c
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $5d
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $5e
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $5f
-	macro_8055e 5, $03, 1, MasonLaboratoryTilesetGfx, $83
-	macro_8055e 0, $04, 1, MasonLaboratoryTilesetGfx, $84
-	macro_8055e 0, $05, 1, MasonLaboratoryTilesetGfx, $85
-	macro_8055e 0, $06, 1, MasonLaboratoryTilesetGfx, $86
-	macro_8055e 3, $dc, 0, MasonLaboratoryTilesetGfx, $60
-	macro_8055e 0, $dd, 0, MasonLaboratoryTilesetGfx, $61
-	macro_8055e 3, $de, 0, MasonLaboratoryTilesetGfx, $62
-	macro_8055e 0, $df, 0, MasonLaboratoryTilesetGfx, $63
-	macro_8055e 5, $03, 1, MasonLaboratoryTilesetGfx, $87
-	macro_8055e 0, $04, 1, MasonLaboratoryTilesetGfx, $88
-	macro_8055e 0, $05, 1, MasonLaboratoryTilesetGfx, $89
-	macro_8055e 0, $06, 1, MasonLaboratoryTilesetGfx, $8a
-	db -1 ; end
-
-Data_8088e: ; 8088e (20:488e)
-	db $3, $83, $83
-
-	macro_8055e 5, $9f, 0, FireClubTilesetGfx, $1f
-	macro_8055e 0, $a0, 0, FireClubTilesetGfx, $20
-	macro_8055e 0, $a1, 0, FireClubTilesetGfx, $21
-	macro_8055e 0, $a2, 0, FireClubTilesetGfx, $22
-	macro_8055e 6, $a3, 0, FireClubTilesetGfx, $23
-	macro_8055e 0, $a4, 0, FireClubTilesetGfx, $24
-	macro_8055e 0, $a5, 0, FireClubTilesetGfx, $25
-	macro_8055e 0, $a6, 0, FireClubTilesetGfx, $26
-	macro_8055e 5, $9f, 0, FireClubTilesetGfx, $27
-	macro_8055e 0, $a0, 0, FireClubTilesetGfx, $28
-	macro_8055e 0, $a1, 0, FireClubTilesetGfx, $29
-	macro_8055e 0, $a2, 0, FireClubTilesetGfx, $2a
-	macro_8055e 6, $a3, 0, FireClubTilesetGfx, $2b
-	macro_8055e 0, $a4, 0, FireClubTilesetGfx, $2c
-	macro_8055e 0, $a5, 0, FireClubTilesetGfx, $2d
-	macro_8055e 0, $a6, 0, FireClubTilesetGfx, $2e
-	db -1 ; end
-
-Data_80912: ; 80912 (20:4912)
-	db $3, $83, $83
-
-	macro_8055e 5, $bb, 0, FireClubTilesetGfx, $3b
-	macro_8055e 0, $bc, 0, FireClubTilesetGfx, $3c
-	macro_8055e 0, $bd, 0, FireClubTilesetGfx, $3d
-	macro_8055e 0, $be, 0, FireClubTilesetGfx, $3e
-	macro_8055e 6, $bf, 0, FireClubTilesetGfx, $3f
-	macro_8055e 0, $c0, 0, FireClubTilesetGfx, $40
-	macro_8055e 0, $c1, 0, FireClubTilesetGfx, $41
-	macro_8055e 0, $c2, 0, FireClubTilesetGfx, $42
-	macro_8055e 5, $bb, 0, FireClubTilesetGfx, $43
-	macro_8055e 0, $bc, 0, FireClubTilesetGfx, $44
-	macro_8055e 0, $bd, 0, FireClubTilesetGfx, $45
-	macro_8055e 0, $be, 0, FireClubTilesetGfx, $46
-	macro_8055e 6, $bf, 0, FireClubTilesetGfx, $47
-	macro_8055e 0, $c0, 0, FireClubTilesetGfx, $48
-	macro_8055e 0, $c1, 0, FireClubTilesetGfx, $49
-	macro_8055e 0, $c2, 0, FireClubTilesetGfx, $4a
-	db -1 ; end
-
-Data_80996: ; 80996 (20:4996)
-	db $3, $c3, $c3
-
-	macro_8055e 1, $e2, 0, WaterClubTilesetGfx, $62
-	macro_8055e 1, $e3, 0, WaterClubTilesetGfx, $63
-	macro_8055e 3, $e4, 0, WaterClubTilesetGfx, $64
-	macro_8055e 0, $e5, 0, WaterClubTilesetGfx, $65
-	macro_8055e 3, $e6, 0, WaterClubTilesetGfx, $66
-	macro_8055e 0, $e7, 0, WaterClubTilesetGfx, $67
-	macro_8055e 1, $e2, 0, WaterClubTilesetGfx, $68
-	macro_8055e 1, $e3, 0, WaterClubTilesetGfx, $69
-	macro_8055e 3, $e4, 0, WaterClubTilesetGfx, $6a
-	macro_8055e 0, $e5, 0, WaterClubTilesetGfx, $6b
-	macro_8055e 3, $e6, 0, WaterClubTilesetGfx, $6c
-	macro_8055e 0, $e7, 0, WaterClubTilesetGfx, $6d
-	macro_8055e 1, $e2, 0, WaterClubTilesetGfx, $62
-	macro_8055e 1, $e3, 0, WaterClubTilesetGfx, $63
-	macro_8055e 3, $e4, 0, WaterClubTilesetGfx, $64
-	macro_8055e 0, $e5, 0, WaterClubTilesetGfx, $65
-	macro_8055e 3, $e6, 0, WaterClubTilesetGfx, $66
-	macro_8055e 0, $e7, 0, WaterClubTilesetGfx, $67
-	macro_8055e 1, $e2, 0, WaterClubTilesetGfx, $6e
-	macro_8055e 1, $e3, 0, WaterClubTilesetGfx, $6f
-	macro_8055e 3, $e4, 0, WaterClubTilesetGfx, $70
-	macro_8055e 0, $e5, 0, WaterClubTilesetGfx, $71
-	macro_8055e 3, $e6, 0, WaterClubTilesetGfx, $72
-	macro_8055e 0, $e7, 0, WaterClubTilesetGfx, $73
-	db -1 ; end
-
-Data_80a5a: ; 80a5a (20:4a5a)
-	db $3, $c3, $c3
-
-	macro_8055e 10, $a2, 0, LightningClubTilesetGfx, $22
-	macro_8055e  0, $a3, 0, LightningClubTilesetGfx, $23
-	macro_8055e  0, $aa, 0, LightningClubTilesetGfx, $2a
-	macro_8055e  0, $ab, 0, LightningClubTilesetGfx, $2b
-	macro_8055e  4, $a5, 0, LightningClubTilesetGfx, $25
-	macro_8055e  0, $a6, 0, LightningClubTilesetGfx, $26
-	macro_8055e  0, $ac, 0, LightningClubTilesetGfx, $2c
-	macro_8055e  0, $ad, 0, LightningClubTilesetGfx, $2d
-	macro_8055e  4, $a7, 0, LightningClubTilesetGfx, $27
-	macro_8055e  0, $a8, 0, LightningClubTilesetGfx, $28
-	macro_8055e  0, $b0, 0, LightningClubTilesetGfx, $30
-	macro_8055e  0, $b1, 0, LightningClubTilesetGfx, $31
-	macro_8055e 10, $a2, 0, LightningClubTilesetGfx, $2a
-	macro_8055e  0, $a3, 0, LightningClubTilesetGfx, $2b
-	macro_8055e  0, $aa, 0, LightningClubTilesetGfx, $22
-	macro_8055e  0, $ab, 0, LightningClubTilesetGfx, $23
-	macro_8055e  4, $a5, 0, LightningClubTilesetGfx, $2d
-	macro_8055e  0, $a6, 0, LightningClubTilesetGfx, $2e
-	macro_8055e  0, $ac, 0, LightningClubTilesetGfx, $24
-	macro_8055e  0, $ad, 0, LightningClubTilesetGfx, $25
-	macro_8055e  4, $a7, 0, LightningClubTilesetGfx, $2f
-	macro_8055e  0, $a8, 0, LightningClubTilesetGfx, $30
-	macro_8055e  0, $b0, 0, LightningClubTilesetGfx, $28
-	macro_8055e  0, $b1, 0, LightningClubTilesetGfx, $29
-	db -1 ; end
-
-Data_80b1e: ; 80b1e (20:4b1e)
-	db $3, $13, $13
-	macro_8055e 11, $c7, 0, ScienceClubTilesetGfx, $47
-	macro_8055e 11, $c7, 0, ScienceClubTilesetGfx, $48
-	db -1 ; end
-
-Data_80b32: ; 80b32 (20:4b32)
-	db $3, $3, $3
-	db -1 ; end
-
-Data_80b36: ; 80b36 (20:4b36)
-	db $3, $43, $43
-	macro_8055e 11, $a4, 0, HallOfHonorTilesetGfx, $28
-	macro_8055e  0, $a5, 0, HallOfHonorTilesetGfx, $29
-	macro_8055e  0, $a6, 0, HallOfHonorTilesetGfx, $2a
-	macro_8055e  0, $a7, 0, HallOfHonorTilesetGfx, $2b
-	macro_8055e 11, $a4, 0, HallOfHonorTilesetGfx, $2c
-	macro_8055e  0, $a5, 0, HallOfHonorTilesetGfx, $2d
-	macro_8055e  0, $a6, 0, HallOfHonorTilesetGfx, $2e
-	macro_8055e  0, $a7, 0, HallOfHonorTilesetGfx, $2f
-	db -1 ; end
+INCLUDE "data/map_ow_framesets.asm"
 
 ; clears wd323
 Func_80b7a: ; 80b7a (20:4b7a)

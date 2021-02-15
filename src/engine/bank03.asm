@@ -42,7 +42,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c4b9
 	call Func_c943
 	call Func_c158
-	farcall Func_80480
+	farcall DoMapOWFrame
 	call Func_c199
 	xor a
 	ld [wd0b4], a

@@ -2180,19 +2180,27 @@ wTempBackgroundPalettesCGB:: ; d297
 
 	ds $41
 
-wd318:: ; d318
+; pointer to the data of current map OW frameset
+wCurMapOWFrameset:: ; d318
 	ds $2
 
-wd31a:: ; d31a
-	ds 3 * $2
+; stored data for each OW frameset subgroup
+; has frame data offset and duration
+wOWFramesetSubgroups:: ; d31a
+	ds NUM_OW_FRAMESET_SUBGROUPS * $2
 
-wd320:: ; d320
+; address offset of current OW frame
+; relative to wCurMapOWFrameset
+wCurOWFrameDataOffset:: ; d320
 	ds $1
 
-wd321:: ; d321
+; duration of the current map OW frame
+wCurOWFrameDuration:: ; d321
 	ds $1
 
-wd322:: ; d322
+; number of valid subgroups
+; that are currently loaded in wOWFramesetSubgroups
+wumLoadedFramesetSubgroups:: ; d322
 	ds $1
 
 wd323:: ; d323
