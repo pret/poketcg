@@ -2178,15 +2178,25 @@ wBGMapCopyMode:: ; d292
 wTempBackgroundPalettesCGB:: ; d297
 	ds 8 palettes
 
-	ds $4c
+	ds $41
+
+wd318:: ; d318
+	ds $2
+
+wd31a:: ; d31a
+	ds 3 * $2
+
+wd320:: ; d320
+	ds $1
+
+wd321:: ; d321
+	ds $1
+
+wd322:: ; d322
+	ds $1
 
 wd323:: ; d323
-	ds $1
-
-wd324:: ; d324
-	ds $1
-
-	ds $9
+	ds $b
 
 wd32e:: ; d32e
 	ds $1
@@ -2328,7 +2338,15 @@ wd3b9:: ; d3b9
 wd3bb:: ; d3bb
 	ds $a
 
-	ds $b
+	ds $6
+
+wd3cb:: ; d3cb
+	ds $1
+
+wd3cc:: ; d3cc
+	ds $1
+
+	ds $3
 
 wd3d0:: ; d3d0
 	ds $1
@@ -2727,16 +2745,7 @@ wd697:: ; d697
 	ds $1
 
 wd698:: ; d698
-	ds $1
-
-wd699:: ; d699
-	ds $1
-
-wd69a:: ; d69a
-	ds $1
-
-wd69b:: ; d69b
-	ds $1
+	ds $4
 
 	ds $6e4
 

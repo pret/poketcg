@@ -854,7 +854,124 @@ Func_11416: ; 11416 (4:5416)
 	INCROM $11416, $11430
 
 Func_11430: ; 11430 (4:5430)
-	INCROM $11430, $1157c
+	push de
+	ld de, sb800
+	call .Func_11439
+	pop de
+	ret
+
+.Func_11439
+	push hl
+	push bc
+	call EnableSRAM
+	call .Func_11447
+	call DisableSRAM
+	pop bc
+	pop hl
+	ret
+
+.Func_11447
+	push hl
+	push bc
+	push de
+	ld a, e
+	add $08
+	ld [wTempPointer], a
+	ld a, d
+	adc 0
+	ld [wTempPointer + 1], a
+	ld hl, .data_11498
+.asm_11459
+	ld a, [hli]
+	ld e, a
+	ld d, [hl]
+	or d
+	jr z, .done_copy
+	inc hl
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+
+; copy bc bytes from wTempPointer to de
+	push hl
+	ld a, [wTempPointer]
+	ld l, a
+	ld a, [wTempPointer + 1]
+	ld h, a
+.loop_copy
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop_copy
+
+	ld a, l
+	ld [wTempPointer], a
+	ld a, h
+	ld [wTempPointer + 1], a
+	pop hl
+	inc hl
+	inc hl
+	jr .asm_11459
+
+.done_copy
+	call EnableSRAM
+	ld a, [sAnimationsDisabled]
+	ld [wAnimationsDisabled], a
+	ld a, [sTextSpeed]
+	ld [wTextSpeed], a
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
+
+.data_11498
+; pointer, number of bytes, unknown
+	dw wd3cc,                 1, $ff00
+	dw wd3cb,                 1, $ff00
+	dw wPlayTimeCounter + 0,  1, $ff00
+	dw wPlayTimeCounter + 1,  1, $ff00
+	dw wPlayTimeCounter + 2,  1, $ff00
+	dw wPlayTimeCounter + 3,  2, $ff00
+	dw wd32e,                 1, $ff00
+	dw wTempMap,              1, $ff00
+	dw wTempPlayerXCoord,     1, $ff00
+	dw wTempPlayerYCoord,     1, $ff00
+	dw wTempPlayerDirection,  1, $ff00
+	dw wd0c2,                 1, $ff00
+	dw wDuelResult,           1, $ff00
+	dw wd0c4,                 1, $ff00
+	dw wd696,                 1, $ff00
+	dw wd698,                 4, $ff00
+	dw wd323,                11, $ff00
+	dw Data_1156c,            1, $ff00
+	dw wd0b8,                 1, $ff00
+	dw wd0b9,                 1, $ff00
+	dw wd11b,                 1, $ff00
+	dw wd0ba,                 1, $ff00
+	dw wPCPackSelection,      1, $0e00
+	dw wPCPacks,             15, $ff00
+	dw wd111,                 1, $ff00
+	dw wcad5,                 1, $ff00
+	dw wd3b8,                 1, $ff00
+	dw wd3bb,                10, $ff00
+	dw wd0c5,                 1, $ff00
+	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $ff00
+	dw wd10e,                 1, $ff00
+	dw Data_1156c,           15, $ff00
+	dw Data_1156c,           16, $ff00
+	dw Data_1156c,           16, $ff00
+	dw wEventFlags,          64, $ff00
+	dw NULL
+; 0x1156c
+
+Data_1156c: ; 1156c (4:556c)
+	db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+; 0x1157c
 
 Func_1157c: ; 1157c (4:557c)
 	ld a, c
@@ -1223,7 +1340,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a
-	ld a, [s0a006]
+	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	ld a, MUSIC_STOP

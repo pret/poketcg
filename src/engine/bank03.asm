@@ -270,7 +270,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a
-	ld a, [s0a006]
+	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	farcall Func_10756
@@ -464,7 +464,7 @@ Func_c36a: ; c36a (3:436a)
 	cp POKEMON_DOME_ENTRANCE
 	jr nz, .asm_c379
 	xor a
-	ld [wd324], a
+	ld [wd323 + 1], a
 .asm_c379
 	ret
 
@@ -8329,10 +8329,10 @@ Func_f5d4: ; f5d4 (3:75d4)
 
 Func_f5db: ; f5db (3:75db)
 	xor a
-	ld [wd698], a
-	ld [wd699], a
-	ld [wd69a], a
-	ld [wd69b], a
+	ld [wd698 + 0], a
+	ld [wd698 + 1], a
+	ld [wd698 + 2], a
+	ld [wd698 + 3], a
 	ret
 
 Func_f5e9: ; f5e9 (3:75e9)

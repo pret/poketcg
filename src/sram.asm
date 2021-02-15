@@ -9,7 +9,7 @@ s0a004:: ; a004
 	ds $1
 s0a005:: ; a005
 	ds $1
-s0a006:: ; a006
+sTextSpeed:: ; a006
 	ds $1
 
 ; store settings for animation enabled/disabled
@@ -78,7 +78,108 @@ sb701:: ; b701
 sb703:: ; b703
 	ds $1
 
-	ds $340
+	ds $fc
+
+sb800:: ; b800
+	ds $8
+
+sb808:: ; b808
+	ds $1
+
+sb809:: ; b809
+	ds $1
+
+sPlayTimeCounter:: ; b80a
+	ds $5
+
+sb80f:: ; b80f
+	ds $1
+
+sTempMap:: ; b810
+	ds $1
+
+sTempPlayerXCoord:: ; b811
+	ds $1
+
+sTempPlayerYCoord:: ; b812
+	ds $1
+
+sTempPlayerDirection:: ; b813
+	ds $1
+
+sb814:: ; b814
+	ds $1
+
+sDuelResult:: ; b815
+	ds $1
+
+sb816:: ; b816
+	ds $1
+
+sb817:: ; b817
+	ds $1
+
+sb818:: ; b818
+	ds $4
+
+sb81c:: ; b81c
+	ds $b
+
+sb827:: ; b827
+	ds $1
+
+sb828:: ; b828
+	ds $1
+
+sb829:: ; b829
+	ds $1
+
+sb82a:: ; b82a
+	ds $1
+
+sb82b:: ; b82b
+	ds $1
+
+sPCPackSelection:: ; b82c
+	ds $1
+
+sPCPacks:: ; b82d
+	ds $f
+
+sb83c:: ; b83c
+	ds $1
+
+sb83d:: ; b83d
+	ds $1
+
+sb83e:: ; b83e
+	ds $1
+
+sb83f:: ; b83f
+	ds $a
+
+sb849:: ; b849
+	ds $1
+
+sMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; b84a
+	ds $1
+
+sb84b:: ; b84b
+	ds $1
+
+sb84c:: ; b84c
+	ds $f
+
+sb85b:: ; b85b
+	ds $10
+
+sb86b:: ; b86b
+	ds $10
+
+sEventFlags:: ; b87b
+	ds $40
+
+	ds $189
 
 sba44:: ; ba44
 	ds $1

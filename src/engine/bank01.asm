@@ -7,7 +7,7 @@ GameLoop: ; 4000 (1:4000)
 	call EnableInt_VBlank
 	call EnableInt_Timer
 	call EnableSRAM
-	ld a, [s0a006]
+	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
 	ld a, [s0a009]
 	ld [wSkipDelayAllowed], a
