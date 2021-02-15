@@ -497,7 +497,7 @@ Func_c38f: ; c38f (3:438f)
 
 	push hl
 	ld b, HIGH(wc000)
-	call InitBGMapDecompression
+	call InitDataDecompression
 	ld a, [wd23d]
 	ld [wTempPointerBank], a
 	ld a, [wBGMapHeight]
@@ -512,7 +512,7 @@ Func_c38f: ; c38f (3:438f)
 .asm_c3b7
 	push bc
 	ld b, $00
-	call DecompressBGMapFromBank
+	call DecompressDataFromBank
 	ld hl, $10
 	add hl, de
 	ld d, h

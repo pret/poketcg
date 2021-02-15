@@ -63,7 +63,7 @@ Func_80082: ; 80082 (20:4082)
 	ld [wd23d], a
 
 ; store header data
-	ld de, wBGMapBuffer
+	ld de, wDecompressionBuffer
 	ld bc, $0006 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
@@ -96,7 +96,7 @@ Func_800bd: ; 800bd (20:40bd)
 	adc $00
 	ld d, a
 	ld b, HIGH(wc000)
-	call InitBGMapDecompression
+	call InitDataDecompression
 	ld a, [wVRAMPointer]
 	ld e, a
 	ld a, [wVRAMPointer + 1]
@@ -120,7 +120,7 @@ Func_800e0: ; 800e0 (20:40e0)
 .asm_800f0
 
 	ld c, $40
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	xor a
 .loop_clear
 	ld [hli], a
@@ -136,14 +136,14 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld b, $00
 	ld a, [wd28e]
 	ld c, a
-	ld de, wBGMapBuffer
-	call DecompressBGMapFromBank
+	ld de, wDecompressionBuffer
+	call DecompressDataFromBank
 
 	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
 	push de
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	call CopyBGDataToVRAMOrSRAM
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -154,7 +154,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld a, [wBGMapWidth]
 	ld c, a
 	ld b, $00
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	add hl, bc
 	pop de
 	push de

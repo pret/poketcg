@@ -2150,8 +2150,8 @@ wLoadedPalData:: ; d23e
 
 NEXTU
 
-; where BG map data is decompressed
-wBGMapBuffer:: ; d23e
+; where BG map data or other compressed data is decompressed
+wDecompressionBuffer:: ; d23e
 	ds $40
 
 ENDU

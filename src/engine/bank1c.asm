@@ -261,10 +261,10 @@ Func_701e9: ; 701e9 (1c:41e9)
 	ld e, l
 	ld d, h
 	ld b, HIGH(wc000)
-	call InitBGMapDecompression
+	call InitDataDecompression
 	pop bc
 	pop de
-	call DecompressBGMap
+	call DecompressData
 	ret
 
 Func_701fe: ; 701fe (1c:41fe)
@@ -341,11 +341,11 @@ Func_703cb: ; 703cb (1c:43cb)
 	push bc
 	push de
 	call Func_70403
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	ld de, wTempSGBPacket + $1
 	ld bc, $8
 	call CopyDataHLtoDE
-	ld hl, wBGMapBuffer + $22
+	ld hl, wDecompressionBuffer + $22
 	ld de, wTempSGBPacket + $9
 	ld bc, $6
 	call CopyDataHLtoDE
@@ -373,10 +373,10 @@ Func_70403: ; 70403 (1c:4403)
 	ld e, l
 	ld d, h
 	ld b, HIGH(wc000)
-	call InitBGMapDecompression
+	call InitDataDecompression
 	pop bc
-	ld de, wBGMapBuffer
-	call DecompressBGMap
+	ld de, wDecompressionBuffer
+	call DecompressData
 	pop de
 	pop bc
 	pop hl

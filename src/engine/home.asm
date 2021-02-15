@@ -1520,12 +1520,12 @@ UpdateRNGSources: ; 089b (0:089b)
 	ret
 
 ; initilizes variables used to decompress
-; BG Map data in DecompressBGMap
+; data in DecompressData
 ; de points to the source of compressed data
 ; b is used as the HIGH byte of the
 ; WRAM address to write to ($100 bytes of buffer space)
 ; also clears this $100 byte space
-InitBGMapDecompression: ; 08bf (0:08bf)
+InitDataDecompression: ; 08bf (0:08bf)
 	ld hl, wcad6
 	ld [hl], e
 	inc hl
@@ -1553,13 +1553,13 @@ InitBGMapDecompression: ; 08bf (0:08bf)
 	jr nz, .loop
 	ret
 
-; decompresses BG Map data
-; uses values initialized by InitBGMapDecompression
+; decompresses data
+; uses values initialized by InitDataDecompression
 ; wcad6 holds the pointer for compressed source
 ; input:
-; bc = map width
+; bc = row width
 ; de = buffer to place decompressed data
-DecompressBGMap: ; 08de (0:08de)
+DecompressData: ; 08de (0:08de)
 	push hl
 	push de
 .loop
@@ -11234,17 +11234,17 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	pop hl
 	ret
 
-; decompresses BG Map data from a given bank
-; uses values initialized by InitBGMapDecompression
+; decompresses data from a given bank
+; uses values initialized by InitDataDecompression
 ; input:
-; bc = map width
+; bc = row width
 ; de = buffer to place decompressed data
-DecompressBGMapFromBank: ; 3be4 (0:3be4)
+DecompressDataFromBank: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
 	call BankswitchROM
-	call DecompressBGMap
+	call DecompressData
 	pop af
 	call BankswitchROM
 	ret
