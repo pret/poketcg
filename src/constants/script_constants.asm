@@ -120,7 +120,7 @@
 	const EVENT_AARON_DECK_MENU_CHOICE                 ; $76
 EVENT_FLAG_AMOUNT EQU const_value
 
-EVENT_FLAG_BYTES EQU $40
+EVENT_VAR_BYTES EQU $40
 
 ; EVENT_PUPIL_MICHAEL_STATE
 ; EVENT_PUPIL_CHRIS_STATE
@@ -277,4 +277,4 @@ SOUTH    EQU $02
 WEST     EQU $03
 NO_MOVE  EQU %10000000 ; For rotations without movement
 
-VARIABLE_CARD	EQU 0 ; use the card located in wd697 instead of using the script's argument
+VARIABLE_CARD	EQU 0 ; use the card located in wCardReceived instead of using the script's argument

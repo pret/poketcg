@@ -13,6 +13,12 @@ NUM_CARDS_IN_BOOSTER EQU 10
 NUM_BOOSTER_CARD_TYPES EQU const_value
 
 	const_def
+	const BOOSTER_COLOSSEUM  ; $00
+	const BOOSTER_EVOLUTION  ; $01
+	const BOOSTER_MYSTERY    ; $02
+	const BOOSTER_LABORATORY ; $03
+
+	const_def
 	const BOOSTER_COLOSSEUM_NEUTRAL           ; $00
 	const BOOSTER_COLOSSEUM_GRASS             ; $01
 	const BOOSTER_COLOSSEUM_FIRE              ; $02

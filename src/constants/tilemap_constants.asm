@@ -59,8 +59,8 @@
 	const TILEMAP_UNUSED_8                    ; $39
 	const TILEMAP_HALL_OF_HONOR               ; $3a
 	const TILEMAP_HALL_OF_HONOR_CGB           ; $3b
-	const TILEMAP_CARD_POP_1                  ; $3c
-	const TILEMAP_CARD_POP_1_CGB              ; $3d
+	const TILEMAP_CARD_POP_CGB                ; $3c
+	const TILEMAP_CARD_POP                    ; $3d
 	const TILEMAP_GRASS_MEDAL                 ; $3e
 	const TILEMAP_SCIENCE_MEDAL               ; $3f
 	const TILEMAP_FIRE_MEDAL                  ; $40
@@ -69,12 +69,12 @@
 	const TILEMAP_FIGHTING_MEDAL              ; $43
 	const TILEMAP_ROCK_MEDAL                  ; $44
 	const TILEMAP_PSYCHIC_MEDAL               ; $45
-	const TILEMAP_CARD_POP_2                  ; $46
-	const TILEMAP_CARD_POP_2_CGB              ; $47
-	const TILEMAP_CARD_POP_2_UNKNOWN_1        ; $48
-	const TILEMAP_CARD_POP_2_UNKNOWN_2        ; $49
-	const TILEMAP_CARD_POP_3                  ; $4a
-	const TILEMAP_CARD_POP_3_CGB              ; $4b
+	const TILEMAP_GAMEBOY_LINK_CGB            ; $46
+	const TILEMAP_GAMEBOY_LINK                ; $47
+	const TILEMAP_GAMEBOY_LINK_CONNECTING_CGB ; $48
+	const TILEMAP_GAMEBOY_LINK_CONNECTING     ; $49
+	const TILEMAP_GAMEBOY_PRINTER_CGB         ; $4a
+	const TILEMAP_GAMEBOY_PRINTER             ; $4b
 	const TILEMAP_COLOSSEUM                   ; $4c
 	const TILEMAP_COLOSSEUM_CGB               ; $4d
 	const TILEMAP_EVOLUTION                   ; $4e
@@ -89,18 +89,18 @@
 	const TILEMAP_SCYTHER_INTRO_CGB           ; $57
 	const TILEMAP_AERODACTYL_INTRO            ; $58
 	const TILEMAP_AERODACTYL_INTRO_CGB        ; $59
-	const TILEMAP_TITLE_SCREEN_1              ; $5a
-	const TILEMAP_TITLE_SCREEN_2              ; $5b
+	const TILEMAP_JAPANESE_TITLE_SCREEN       ; $5a
+	const TILEMAP_JAPANESE_TITLE_SCREEN_CGB   ; $5b
 	const TILEMAP_SOLID_TILES_1               ; $5c
 	const TILEMAP_SOLID_TILES_2               ; $5d
 	const TILEMAP_SOLID_TILES_3               ; $5e
-	const TILEMAP_TITLE_SCREEN_3              ; $5f
-	const TILEMAP_TITLE_SCREEN_4              ; $60
+	const TILEMAP_JAPANESE_TITLE_SCREEN_2     ; $5f
+	const TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB ; $60
 	const TILEMAP_SOLID_TILES_4               ; $61
 	const TILEMAP_PLAYER                      ; $62
 	const TILEMAP_OPPONENT                    ; $63
-	const TILEMAP_TITLE_SCREEN_5              ; $64
-	const TILEMAP_TITLE_SCREEN_6              ; $65
+	const TILEMAP_TITLE_SCREEN                ; $64
+	const TILEMAP_TITLE_SCREEN_CGB            ; $65
 	const TILEMAP_COPYRIGHT                   ; $66
 	const TILEMAP_COPYRIGHT_CGB               ; $67
 	const TILEMAP_NINTENDO                    ; $68

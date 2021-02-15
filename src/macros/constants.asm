@@ -11,7 +11,7 @@ const: MACRO
 const_value = const_value + 1
 ENDM
 
-flag_def: MACRO
+event_def: MACRO
 	db \1
 	db \2
 ENDM

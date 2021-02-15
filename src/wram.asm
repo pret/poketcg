@@ -913,7 +913,7 @@ wPlayerAttackingCardID:: ; cc12
 wIsPracticeDuel:: ; cc13
 	ds $1
 
-wcc14:: ; cc14
+wNPCDuelistCopy:: ; cc14
 	ds $1
 
 wOpponentPortrait:: ; cc15
@@ -924,11 +924,11 @@ wOpponentName:: ; cc16
 	ds $2
 
 ; an overworld script starting a duel sets this address to the value to be written into wDuelInitialPrizes
-wcc18:: ; cc18
+wNPCDuelPrizes:: ; cc18
 	ds $1
 
 ; an overworld script starting a duel sets this address to the value to be written into wOpponentDeckID
-wcc19:: ; cc19
+wNPCDuelDeckID:: ; cc19
 	ds $1
 
 ; song played during a duel
@@ -2002,7 +2002,7 @@ wd0c2:: ; d0c2
 wDuelResult:: ; d0c3
 	ds $1
 
-wd0c4:: ; d0c4
+wNPCDuelist:: ; d0c4
 	ds $1
 
 wd0c5:: ; d0c5
@@ -2036,7 +2036,7 @@ wd10f:: ; d10f
 wd110:: ; d110
 	ds $1
 
-wd111:: ; d111
+wDefaultSong:: ; d111
 	ds $1
 
 wd112:: ; d112
@@ -2054,7 +2054,10 @@ wd115:: ; d115
 wd116:: ; d116
 	ds $1
 
-wd117:: ; d117
+; if FALSE, first booster being given
+; if TRUE, additional booster being given
+; used to control the text that is displayed when booster is opened
+wAnotherBoosterPack:: ; d117
 	ds $1
 
 	ds $3
@@ -2147,8 +2150,8 @@ wLoadedPalData:: ; d23e
 
 NEXTU
 
-; where BG map data is decompressed
-wBGMapBuffer:: ; d23e
+; where BG map data or other compressed data is decompressed
+wDecompressionBuffer:: ; d23e
 	ds $40
 
 ENDU
@@ -2188,7 +2191,8 @@ wd324:: ; d324
 
 	ds $9
 
-wd32e:: ; d32e
+; the OWMAP_* value for the current overworld map selection
+wOverworldMapSelection:: ; d32e
 	ds $1
 
 wCurMap:: ; d32f
@@ -2200,10 +2204,10 @@ wPlayerXCoord:: ; d330
 wPlayerYCoord:: ; d331
 	ds $1
 
-wd332:: ; d332
+wPlayerXCoordPixels:: ; d332
 	ds $1
 
-wd333:: ; d333
+wPlayerYCoordPixels:: ; d333
 	ds $1
 
 wPlayerDirection:: ; d334
@@ -2333,11 +2337,11 @@ wd3bb:: ; d3bb
 wd3d0:: ; d3d0
 	ds $1
 
-; the bits relevant to the currently worked on flag, obtained from EventFlagMods
-wLoadedFlagBits:: ; d3d1
+; the bits relevant to the currently worked on event, obtained from EventVarMasks
+wLoadedEventBits:: ; d3d1
 	ds $1
 
-wEventFlags:: ; d3d2
+wEventVars:: ; d3d2
 	ds $40
 
 ; 0 keeps looping, other values break the loop in RST20
@@ -2347,7 +2351,7 @@ wBreakScriptLoop:: ; d412
 wScriptPointer:: ; d413
 	ds $2
 
-; generally set to ff when a flag check passes, 0 otherwise
+; generally set to ff when an event check passes, 0 otherwise
 wScriptControlByte:: ; d415
 	ds $1
 
@@ -2579,17 +2583,34 @@ wSpriteVRAMBuffer:: ; d5d8
 wSpriteVRAMBufferSize:: ; d618
 	ds $1
 
-	ds $2
-
-wd61b:: ; d61b
+wSceneSprite:: ; d619
 	ds $1
 
-	ds $2
+wSceneSpriteAnimation:: ; d61a
+	ds $1
+
+wSceneSpriteIndex:: ; d61b
+	ds $1
+
+; base X position in pixels of loaded scene
+wSceneBaseX:: ; d61c
+	ds $1
+
+; base Y position in pixels of loaded scene
+wSceneBaseY:: ; d61d
+	ds $1
 
 wd61e:: ; d61e
 	ds $1
 
-	ds $5
+wd61f:: ; d61f
+	ds $1
+
+wSceneSGBPacketPtr:: ; d620
+	ds $2
+
+wSceneSGBRoutinePtr:: ; d622
+	ds $2
 
 wd624:: ; d624
 	ds $1
@@ -2711,7 +2732,7 @@ wBoosterData_TypeChances:: ; d689
 
 	ds $1
 
-wd693:: ; d693
+wStarterDeckChoice:: ; d693
 	ds $1
 
 wMultichoiceTextboxResult_Sam:: ; d694
@@ -2720,23 +2741,14 @@ wMultichoiceTextboxResult_Sam:: ; d694
 wMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; d695
 	ds $1
 
-wd696:: ; d696
+wChallengeHallNPC:: ; d696
 	ds $1
 
-wd697:: ; d697
+wCardReceived:: ; d697
 	ds $1
 
 wd698:: ; d698
-	ds $1
-
-wd699:: ; d699
-	ds $1
-
-wd69a:: ; d69a
-	ds $1
-
-wd69b:: ; d69b
-	ds $1
+	ds $4
 
 	ds $6e4
 

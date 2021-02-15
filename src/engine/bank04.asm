@@ -114,7 +114,7 @@ MasterMedalNames: ; 1030b (4:430b)
 	tx RockClubMapNameText
 	tx FightingClubMapNameText
 
-BoosterPack_1031b: ; 1031b (4:431b)
+GiveBoosterPack: ; 1031b (4:431b)
 	ld c, a
 	ld a, [wd291]
 	push af
@@ -125,20 +125,20 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wTextBoxFrameType], a
 	pop bc
 	push bc
-	ld b, $0
-	ld hl, Unknown_103a5
+	ld b, 0
+	ld hl, BoosterTypes
 	add hl, bc
 	ld a, [hl]
 	ld c, a
 	add a
 	add a
 	ld c, a
-	ld hl, Unknown_103c2
+	ld hl, BoosterScenesAndNameTexts
 	add hl, bc
 	ld a, [hli]
 	push hl
-	ld bc, $0600
-	call Func_130ca
+	lb bc, 6, 0
+	call LoadBoosterGfx
 	pop hl
 	ld a, [hli]
 	ld [wTxRam3], a
@@ -156,11 +156,11 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld a, c
 	farcall GenerateBoosterPack
 	ldtx hl, ReceivedBoosterPackText
-	ld a, [wd117]
-	cp $1
-	jr nz, .asm_10373
+	ld a, [wAnotherBoosterPack]
+	cp TRUE
+	jr nz, .first_booster
 	ldtx hl, AndAnotherBoosterPackText
-.asm_10373
+.first_booster
 	call PrintScrollableText_NoTextBoxLabel
 	call WaitForSongToFinish
 	call ResumeSong
@@ -173,18 +173,56 @@ BoosterPack_1031b: ; 1031b (4:431b)
 	ld [wVBlankOAMCopyToggle], a
 	ld a, $4
 	ld [wTextBoxFrameType], a
-	farcall Func_7599
+	farcall OpenBoosterPack
 	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	pop af
 	ld [wd291], a
 	ret
 
-Unknown_103a5: ; 103a5 (4:43a5)
-	INCROM $103a5, $103c2
+BoosterTypes: ; 103a5 (4:43a5)
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_NEUTRAL
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_GRASS
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIRE
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_WATER
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_LIGHTNING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_FIGHTING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_COLOSSEUM_TRAINER
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_NEUTRAL
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_GRASS
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_FIRE
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_WATER
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_FIGHTING
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_PSYCHIC
+	db BOOSTER_EVOLUTION  ; BOOSTER_EVOLUTION_TRAINER
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_NEUTRAL
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_GRASS_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_WATER_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_LIGHTNING_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_FIGHTING_COLORLESS
+	db BOOSTER_MYSTERY    ; BOOSTER_MYSTERY_TRAINER_COLORLESS
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_NEUTRAL
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_GRASS
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_WATER
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_PSYCHIC
+	db BOOSTER_LABORATORY ; BOOSTER_LABORATORY_TRAINER
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_LIGHTNING_FIRE
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_WATER_FIGHTING
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_GRASS_PSYCHIC
+	db BOOSTER_COLOSSEUM  ; BOOSTER_ENERGY_RANDOM
 
-Unknown_103c2: ; 103c2 (4:43c2)
-	INCROM $103c2, $103d2
+BoosterScenesAndNameTexts: ; 103c2 (4:43c2)
+	db SCENE_COLOSSEUM_BOOSTER, SCENE_COLOSSEUM_BOOSTER
+	tx ColosseumBoosterText
+
+	db SCENE_EVOLUTION_BOOSTER, SCENE_EVOLUTION_BOOSTER
+	tx EvolutionBoosterText
+
+	db SCENE_MYSTERY_BOOSTER, SCENE_MYSTERY_BOOSTER
+	tx MysteryBoosterText
+
+	db SCENE_LABORATORY_BOOSTER, SCENE_LABORATORY_BOOSTER
+	tx LaboratoryBoosterText
 
 Func_103d2: ; 103d2 (4:43d2)
 	INCROM $103d2, $103d3
@@ -199,7 +237,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	lb de, 0, 12
 	lb bc, 20, 6
 	call DrawRegularTextBox
-	ld a, [wcc19]
+	ld a, [wNPCDuelDeckID]
 	add a
 	add a
 	ld c, a
@@ -291,7 +329,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	inc hl
 	dec c
 	jr nz, .findFreeSlotLoop
-	debug_ret
+	debug_nop
 	jr .quit
 
 .foundFreeSlot
@@ -385,7 +423,29 @@ Unknown_10e17: ; 10e17 (4:4e17)
 	INCROM $10e17, $10e28
 
 Func_10e28: ; 10e28 (4:4e28)
-	INCROM $10e28, $10e55
+	push hl
+	push bc
+	push de
+	ld a, [wd33b]
+	ld [wWhichSprite], a
+	ld a, [wOverworldMapSelection]
+	ld d, $00
+	ld e, $f4
+	call Func_10ef0
+	ld a, [wd33e]
+	or a
+	jr nz, .asm_10e51
+	ld a, [wPlayerSpriteIndex]
+	ld [wWhichSprite], a
+	ld a, [wd33d]
+	ld d, $00
+	ld e, $00
+	call Func_10ef0
+.asm_10e51
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wPlayerSpriteIndex]
@@ -393,7 +453,7 @@ Func_10e55: ; 10e55 (4:4e55)
 	ld a, [wd33e]
 	or a
 	jr nz, .asm_10e65
-	call Func_10e71
+	call OverworldMap_HandleKeyPress
 	ret
 .asm_10e65
 	cp $2
@@ -404,53 +464,139 @@ Func_10e55: ; 10e55 (4:4e55)
 	call LoadOverworldMapSelection
 	ret
 
-Func_10e71: ; 10e71 (4:4e71)
+OverworldMap_HandleKeyPress: ; 10e71 (4:4e71)
 	ldh a, [hKeysPressed]
 	and D_PAD
-	jr z, .asm_10e83
+	jr z, .no_d_pad
 	farcall GetDirectionFromDPad
 	ld [wPlayerDirection], a
-	call Func_10e97
-	jr .asm_10e96
-.asm_10e83
+	call OverworldMap_HandleDPad
+	jr .done
+.no_d_pad
 	ldh a, [hKeysPressed]
 	and A_BUTTON
-	jr z, .asm_10e96
+	jr z, .done
 	ld a, SFX_02
 	call PlaySFX
-	call Func_11016
+	call Func_11016 ; load map?
 	call Func_11024
-	jr .asm_10e96
-.asm_10e96
+	jr .done
+.done
 	ret
 
-Func_10e97: ; 10e97 (4:4e97)
+OverworldMap_HandleDPad: ; 10e97 (4:4e97)
 	push hl
 	pop hl
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	rlca
 	rlca
 	ld c, a
 	ld a, [wPlayerDirection]
 	add c
 	ld c, a
-	ld b, $0
-	ld hl, Unknown_10ebc
+	ld b, 0
+	ld hl, OverworldMap_CursorTransitions
 	add hl, bc
 	ld a, [hl]
 	or a
-	jr z, .asm_10eb9
-	ld [wd32e], a
-	call Func_10f2e
+	jr z, .no_transition
+	ld [wOverworldMapSelection], a
+	call PrintOverworldMapName ; update cursor oam?
 	ld a, SFX_01
 	call PlaySFX
-.asm_10eb9
+.no_transition
 	pop bc
 	pop hl
 	ret
 
-Unknown_10ebc: ; 10ebc (4:4ebc)
-	INCROM $10ebc, $10efd
+OverworldMap_CursorTransitions: ; 10ebc (4:4ebc)
+	; unused
+	db OWMAP_SCIENCE_CLUB     ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_SCIENCE_CLUB     ; SOUTH
+	db OWMAP_SCIENCE_CLUB     ; WEST
+
+	; OWMAP_MASON_LABORATORY
+	db OWMAP_LIGHTNING_CLUB   ; NORTH
+	db OWMAP_FIGHTING_CLUB    ; EAST
+	db $00                    ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_ISHIHARAS_HOUSE
+	db $00                    ; NORTH
+	db OWMAP_CHALLENGE_HALL   ; EAST
+	db OWMAP_ROCK_CLUB        ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_FIGHTING_CLUB
+	db OWMAP_LIGHTNING_CLUB   ; NORTH
+	db OWMAP_WATER_CLUB       ; EAST
+	db $00                    ; SOUTH
+	db OWMAP_MASON_LABORATORY ; WEST
+
+	; OWMAP_ROCK_CLUB
+	db OWMAP_ISHIHARAS_HOUSE  ; NORTH
+	db OWMAP_POKEMON_DOME     ; EAST
+	db OWMAP_LIGHTNING_CLUB   ; SOUTH
+	db $00                    ; WEST
+
+	; OWMAP_WATER_CLUB
+	db OWMAP_GRASS_CLUB       ; NORTH
+	db $00                    ; EAST
+	db $00                    ; SOUTH
+	db OWMAP_FIGHTING_CLUB    ; WEST
+
+	; OWMAP_LIGHTNING_CLUB
+	db OWMAP_ROCK_CLUB        ; NORTH
+	db OWMAP_POKEMON_DOME     ; EAST
+	db OWMAP_FIGHTING_CLUB    ; SOUTH
+	db OWMAP_MASON_LABORATORY ; WEST
+
+	; OWMAP_GRASS_CLUB
+	db OWMAP_SCIENCE_CLUB     ; NORTH
+	db $00                    ; EAST
+	db OWMAP_WATER_CLUB       ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_PSYCHIC_CLUB
+	db OWMAP_FIRE_CLUB        ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_GRASS_CLUB       ; SOUTH
+	db OWMAP_POKEMON_DOME     ; WEST
+
+	; OWMAP_SCIENCE_CLUB
+	db OWMAP_FIRE_CLUB        ; NORTH
+	db $00                    ; EAST
+	db OWMAP_GRASS_CLUB       ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_FIRE_CLUB
+	db $00                    ; NORTH
+	db OWMAP_SCIENCE_CLUB     ; EAST
+	db OWMAP_SCIENCE_CLUB     ; SOUTH
+	db OWMAP_PSYCHIC_CLUB     ; WEST
+
+	; OWMAP_CHALLENGE_HALL
+	db $00                    ; NORTH
+	db OWMAP_PSYCHIC_CLUB     ; EAST
+	db OWMAP_POKEMON_DOME     ; SOUTH
+	db OWMAP_ISHIHARAS_HOUSE  ; WEST
+
+	; OWMAP_POKEMON_DOME
+	db OWMAP_CHALLENGE_HALL   ; NORTH
+	db OWMAP_PSYCHIC_CLUB     ; EAST
+	db OWMAP_FIGHTING_CLUB    ; SOUTH
+	db OWMAP_ROCK_CLUB        ; WEST
+
+Func_10ef0: ; 10ef0 (4:4ef0)
+	call Func_10efd
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld a, d
+	ld [hli], a
+	ld a, e
+	ld [hl], a
+	ret
 
 Func_10efd: ; 10efd (4:4efd)
 	push hl
@@ -475,12 +621,12 @@ Func_10efd: ; 10efd (4:4efd)
 Unknown_10f14: ; 10f14 (4:4f14)
 	INCROM $10f14, $10f2e
 
-Func_10f2e: ; 10f2e (4:4f2e)
+PrintOverworldMapName: ; 10f2e (4:4f2e)
 	push hl
 	push de
 	lb de, 1, 1
 	call InitTextPrinting
-	call Func_10f4a
+	call GetOverworldMapName
 	rlca
 	ld e, a
 	ld d, $0
@@ -494,14 +640,14 @@ Func_10f2e: ; 10f2e (4:4f2e)
 	pop hl
 	ret
 
-Func_10f4a: ; 10f4a (4:4f4a)
+GetOverworldMapName: ; 10f4a (4:4f4a)
 	push bc
-	ld a, [wd32e]
-	cp $2
+	ld a, [wOverworldMapSelection]
+	cp OWMAP_ISHIHARAS_HOUSE
 	jr nz, .asm_10f5f
 	ld c, a
-	ld a, $1e
-	farcall GetEventFlagValue
+	ld a, EVENT_ISHIHARAS_HOUSE_MENTIONED
+	farcall GetEventValue
 	or a
 	ld a, c
 	jr nz, .asm_10f5f
@@ -513,11 +659,11 @@ Func_10f4a: ; 10f4a (4:4f4a)
 LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	push hl
 	push bc
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	rlca
 	rlca
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, OverworldMapIndexes
 	add hl, bc
 	ld a, [hli]
@@ -526,7 +672,7 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 	ld [wTempPlayerXCoord], a
 	ld a, [hli]
 	ld [wTempPlayerYCoord], a
-	ld a, $0
+	ld a, NORTH
 	ld [wTempPlayerDirection], a
 	ld hl, wd0b4
 	set 4, [hl]
@@ -545,18 +691,18 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	ld [hli], a
 	ld a, $10
 	ld [hl], a
-	ld b, $34
+	ld b, $34 ; non-cgb volcano smoke
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_10fd8
-	ld b, $37
-.asm_10fd8
+	jr nz, .not_cgb
+	ld b, $37 ; cgb volcano smoke
+.not_cgb
 	ld a, b
 	farcall StartNewSpriteAnimation
 	ret
 
 Func_10fde: ; 10fde (4:4fde)
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	ld [wd33d], a
 	xor a
 	ld [wd33e], a
@@ -564,17 +710,17 @@ Func_10fde: ; 10fde (4:4fde)
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wd33b], a
-	ld b, $35
+	ld b, $35 ; blue overworld map cursor
 	ld a, [wConsole]
-	cp $2
-	jr nz, .asm_10ffe
-	ld b, $38
-.asm_10ffe
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	ld b, $38 ; red overworld map cursor
+.not_cgb
 	ld a, b
 	ld [wd33c], a
 	call StartNewSpriteAnimation
-	ld a, $3e
-	farcall GetEventFlagValue
+	ld a, EVENT_MASON_LAB_STATE
+	farcall GetEventValue
 	or a
 	jr nz, .asm_11015
 	ld c, SPRITE_ANIM_FLAGS
@@ -609,7 +755,7 @@ Func_11024: ; 11024 (4:5024)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	dec a
 	add a
 	ld c, a
@@ -625,6 +771,7 @@ Func_11024: ; 11024 (4:5024)
 	ld [wd341], a
 	ret
 
+; used while animating the player across the overworld map
 Func_11060: ; 11060 (4:5060)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
@@ -647,7 +794,7 @@ Func_11060: ; 11060 (4:5060)
 	jr nz, .asm_11094
 	ld a, [wd33d]
 	ld e, a
-	ld a, [wd32e]
+	ld a, [wOverworldMapSelection]
 	cp e
 	jr z, .asm_110a0
 	ld de, $0000
@@ -856,26 +1003,29 @@ Func_11416: ; 11416 (4:5416)
 Func_11430: ; 11430 (4:5430)
 	INCROM $11430, $1157c
 
-Func_1157c: ; 1157c (4:557c)
+; save the game
+; if c is 0, save the player at their current position
+; otherwise, save the player in Mason's lab
+_SaveGame: ; 1157c (4:557c)
 	ld a, c
 	or a
-	jr nz, .asm_11586
-	farcall Func_c228
-	jr .asm_1159f
+	jr nz, .force_mason_lab
+	farcall BackupPlayerPosition
+	jr .save
 
-.asm_11586
+.force_mason_lab
 	ld a, $2
 	ld [wTempPlayerXCoord], a
 	ld a, $4
 	ld [wTempPlayerYCoord], a
-	ld a, $2
+	ld a, SOUTH
 	ld [wTempPlayerDirection], a
-	ld a, $1
+	ld a, MASON_LABORATORY
 	ld [wTempMap], a
-	ld a, $1
-	ld [wd32e], a
+	ld a, OWMAP_MASON_LABORATORY
+	ld [wOverworldMapSelection], a
 
-.asm_1159f
+.save
 	call Func_11238
 	ret
 
@@ -886,12 +1036,11 @@ INCLUDE "data/map_scripts.asm"
 
 ; loads a pointer into hl found on NPCHeaderPointers
 GetNPCHeaderPointer: ; 1184a (4:584a)
-	; this may have been a macro
 	rlca
 	add LOW(NPCHeaderPointers)
 	ld l, a
 	ld a, HIGH(NPCHeaderPointers)
-	adc $00
+	adc 0
 	ld h, a
 	ld a, [hli]
 	ld h, [hl]
@@ -915,10 +1064,10 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	pop bc
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_1187a
+	jr nz, .not_cgb
 	ld a, b
 	ld [wd3b1], a
-.asm_1187a
+.not_cgb
 	pop bc
 	pop hl
 	ret
@@ -936,7 +1085,7 @@ GetNPCNameAndScript: ; 1187d (4:587d)
 	ld a, [hli]
 	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wCurrentNPCNameTx+1], a
+	ld [wCurrentNPCNameTx + 1], a
 	pop hl
 	ret
 
@@ -950,16 +1099,17 @@ SetNPCDialogName: ; 11893 (4:5893)
 	ld a, [hli]
 	ld [wCurrentNPCNameTx], a
 	ld a, [hli]
-	ld [wCurrentNPCNameTx+1], a
+	ld [wCurrentNPCNameTx + 1], a
 	pop bc
 	pop hl
 	ret
 
-Func_118a7: ; 118a7 (4:58a7)
+; set the opponent name and portrait for the NPC id in register a
+SetNPCOpponentNameAndPortrait: ; 118a7 (4:58a7)
 	push hl
 	push bc
 	call GetNPCHeaderPointer
-	ld bc, $0007
+	ld bc, NPC_DATA_NAME_TEXT
 	add hl, bc
 	ld a, [hli]
 	ld [wOpponentName], a
@@ -971,39 +1121,41 @@ Func_118a7: ; 118a7 (4:58a7)
 	pop hl
 	ret
 
-Func_118bf: ; 118bf (4:58bf)
+; set the deck id and duel theme for the NPC id in register a
+SetNPCDeckIDAndDuelTheme: ; 118bf (4:58bf)
 	push hl
 	push bc
 	call GetNPCHeaderPointer
-	ld bc, $000a
+	ld bc, NPC_DATA_DECK_ID
 	add hl, bc
 	ld a, [hli]
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 	ld a, [hli]
 	ld [wDuelTheme], a
 	pop bc
 	pop hl
 	ret
 
-Func_118d3: ; 118d3 (4:58d3)
+; set the start theme for the NPC id in register a
+SetNPCMatchStartTheme: ; 118d3 (4:58d3)
 	push hl
 	push bc
 	push af
 	call GetNPCHeaderPointer
-	ld bc, $000c
+	ld bc, NPC_DATA_MATCH_START_ID
 	add hl, bc
 	ld a, [hli]
 	ld [wMatchStartTheme], a
 	pop af
-	cp $2
-	jr nz, .asm_118f2
+	cp NPC_RONALD1
+	jr nz, .not_ronald_final_duel
 	ld a, [wCurMap]
 	cp POKEMON_DOME
-	jr nz, .asm_118f2
+	jr nz, .not_ronald_final_duel
 	ld a, MUSIC_MATCH_START_3
 	ld [wMatchStartTheme], a
 
-.asm_118f2
+.not_ronald_final_duel
 	pop bc
 	pop hl
 	ret
@@ -1102,18 +1254,18 @@ OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
-	dw ScriptCommand_SetFlagValue
-	dw ScriptCommand_JumpIfFlagZero1
-	dw ScriptCommand_JumpIfFlagNonzero1
-	dw ScriptCommand_JumpIfFlagEqual
-	dw ScriptCommand_JumpIfFlagNotEqual
-	dw ScriptCommand_JumpIfFlagNotLessThan
-	dw ScriptCommand_JumpIfFlagLessThan
-	dw ScriptCommand_MaxOutFlagValue
-	dw ScriptCommand_ZeroOutFlagValue
-	dw ScriptCommand_JumpIfFlagNonzero2
-	dw ScriptCommand_JumpIfFlagZero2
-	dw ScriptCommand_IncrementFlagValue
+	dw ScriptCommand_SetEventValue
+	dw ScriptCommand_JumpIfEventZero
+	dw ScriptCommand_JumpIfEventNonzero
+	dw ScriptCommand_JumpIfEventEqual
+	dw ScriptCommand_JumpIfEventNotEqual
+	dw ScriptCommand_JumpIfEventGreaterOrEqual
+	dw ScriptCommand_JumpIfEventLessThan
+	dw ScriptCommand_MaxOutEventValue
+	dw ScriptCommand_ZeroOutEventValue
+	dw ScriptCommand_JumpIfEventTrue
+	dw ScriptCommand_JumpIfEventFalse
+	dw ScriptCommand_IncrementEventValue
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
 	dw ScriptCommand_EndScript
@@ -1229,9 +1381,9 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	ld a, MUSIC_STOP
 	call PlaySong
 	farcall Func_70000
-	ld a, $9
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_OVERWORLD
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	farcall Func_1d306
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
@@ -1404,7 +1556,7 @@ CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
 	ld [wWhichSprite], a
 	cp $10
 	jr nz, .findFirstEmptyAnimField
-	debug_ret
+	debug_nop
 	scf
 	jr .quit
 .foundEmptyAnimField
@@ -1859,7 +2011,7 @@ Func_12c05: ; 12c05 (4:6c05)
 	jr .quitSucceed
 
 .quitFail
-	debug_ret
+	debug_nop
 	xor a
 	scf
 .quitSucceed
@@ -1886,14 +2038,618 @@ Func_12c4f: ; 12c4f (4:6c4f)
 Func_12c5e: ; 12c5e (4:6c5e)
 	INCROM $12c5e, $12c7f
 
-Func_12c7f: ; 12c7f (4:6c7f)
-	INCROM $12c7f, $12fc6
+; input:
+; a = scene ID (SCENE_* constant)
+; b = base X position of scene in tiles
+; c = base Y position of scene in tiles
+_LoadScene: ; 12c7f (4:6c7f)
+	push hl
+	push bc
+	push de
+	ld e, a
+	ld a, [wCurTilemap]
+	push af
+	ld a, [wd291]
+	push af
+	ld a, e
+	push bc
+	push af
+	ld a, b
+	add a
+	add a
+	add a
+	add $08
+	ld [wSceneBaseX], a
+	ld a, c
+	add a
+	add a
+	add a
+	add $10
+	ld [wSceneBaseY], a
+	pop af
+	add a
+	ld c, a
+	ld b, 0
+	ld hl, ScenePointers
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [hli]
+	ld [wSceneSGBPacketPtr], a
+	ld a, [hli]
+	ld [wSceneSGBPacketPtr + 1], a
+	ld a, [hli]
+	ld [wSceneSGBRoutinePtr], a
+	ld a, [hli]
+	ld [wSceneSGBRoutinePtr + 1], a
+	call LoadScene_LoadCompressedSGBPacket
+	ld a, %11100100
+	ld [wBGP], a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_1
+	ld a, [hl]
+.not_cgb_1
+	inc hl
+	push af ; palette
+	xor a
+	ld [wd4ca], a
+	ld a, [hli]
+	ld [wd4cb], a ; palette offset
+	ld [wd291], a ; palette offset
+	pop af ; palette
+	farcall Func_803c9 ; load palette
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_2
+	ld a, [hl]
+.not_cgb_2
+	inc hl
+	ld [wCurTilemap], a
+	pop bc
+	push bc
+	farcall Func_8007e ; load tilemap
+	pop bc ; base x,y
+	call LoadScene_LoadSGBPacket
+	ld a, [hli]
+	ld [wd4ca], a ; tile offset
+	ld a, [hli]
+	ld [wd4cb], a ; vram0 or vram1
+	farcall LoadTilesetGfx
+.next_sprite
+	ld a, [hli]
+	or a
+	jr z, .done ; no sprite
+	ld [wSceneSprite], a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_3
+	ld a, [hl]
+.not_cgb_3
+	inc hl
+	push af ; sprite palette
+	xor a
+	ld [wd4ca], a
+	ld a, [hli]
+	ld [wd4cb], a ; palette offset
+	pop af ; sprite palette
+	farcall LoadPaletteData
+.next_animation
+	ld a, [hli]
+	or a
+	jr z, .next_sprite
+	dec hl
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, [hli]
+	jr nz, .not_cgb_4
+	ld a, [hl]
+.not_cgb_4
+	inc hl
+	ld [wSceneSpriteAnimation], a
+	ld a, [wSceneSprite]
+	farcall CreateSpriteAndAnimBufferEntry
+	ld a, [wWhichSprite]
+	ld [wSceneSpriteIndex], a
+	push hl
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld e, l
+	ld d, h
+	pop hl
+	ld a, [wSceneBaseX]
+	add [hl]
+	ld [de], a
+	inc hl
+	inc de
+	ld a, [wSceneBaseY]
+	add [hl]
+	ld [de], a
+	inc hl
+	ld a, [wSceneSpriteAnimation]
+	cp $ff
+	jr z, .no_animation
+	farcall StartSpriteAnimation
+.no_animation
+	jr .next_animation
+.done
+	pop af
+	ld [wd291], a
+	pop af
+	ld [wCurTilemap], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+ScenePointers: ; 12d6f (4:6d6f)
+	dw Scene_TitleScreen
+	dw Scene_ColosseumBooster
+	dw Scene_EvolutionBooster
+	dw Scene_MysteryBooster
+	dw Scene_LaboratoryBooster
+	dw Scene_CharizardIntro
+	dw Scene_ScytherIntro
+	dw Scene_AerodactylIntro
+	dw Scene_GradientBlackAndRed
+	dw Scene_GradientWhiteAndRed
+	dw Scene_GradientBlackAndGreen
+	dw Scene_GradientWhiteAndGreen
+	dw Scene_ColorWheel
+	dw Scene_ColorTest
+	dw Scene_GameBoyLinkConnecting
+	dw Scene_GameBoyLinkTransmitting
+	dw Scene_GameBoyLinkNotConnected
+	dw Scene_GameBoyPrinterTransmitting
+	dw Scene_GameBoyPrinterNotConnected
+	dw Scene_CardPop
+	dw Scene_CardPopError
+	dw Scene_JapaneseTitleScreen
+	dw Scene_Nintendo
+	dw Scene_Companies
+	dw Scene_JapaneseTitleScreen2
+	dw Scene_Copyright
+	dw Scene_JapaneseTitleScreen2
+	dw Scene_ColorPalette
+
+; format:
+; dw compressed sgb packet
+; dw custom sgb packet loading routine
+; db palette (non-cgb), palette (cgb), palette offset
+; db tilemap (non-cgb), tilemap (cgb), vram tile offset, vram0 or vram1
+; db sprite
+;
+; if sprite is non-zero:
+; db palette (non-cgb), palette (cgb), palette offset
+; db animation (non-cgb), animation (cgb), x offset, y offset
+; dw 0-terminator
+
+Scene_TitleScreen: ; 12da7 (4:6da7)
+	dw SGBData_TitleScreen
+	dw NULL
+	db PALETTE_25, PALETTE_25, $00
+	db TILEMAP_TITLE_SCREEN, TILEMAP_TITLE_SCREEN_CGB, $00, $00
+	db $00
+
+Scene_JapaneseTitleScreen: ; 12db3 (4:6db3)
+	dw SGBData_TitleScreen
+	dw NULL
+	db PALETTE_25, PALETTE_25, $00
+	db TILEMAP_JAPANESE_TITLE_SCREEN, TILEMAP_JAPANESE_TITLE_SCREEN_CGB, $80, $00
+	db $00
+
+Scene_ColosseumBooster: ; 12dbf (4:6dbf)
+	dw SGBData_ColosseumBooster
+	dw NULL
+	db PALETTE_108, PALETTE_101, $01
+	db TILEMAP_COLOSSEUM, TILEMAP_COLOSSEUM_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
+	dw SGBData_EvolutionBooster
+	dw NULL
+	db PALETTE_108, PALETTE_102, $01
+	db TILEMAP_EVOLUTION, TILEMAP_EVOLUTION_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_MysteryBooster: ; 12de9 (4:6de9)
+	dw SGBData_MysteryBooster
+	dw NULL
+	db PALETTE_108, PALETTE_103, $01
+	db TILEMAP_MYSTERY, TILEMAP_MYSTERY_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
+	dw SGBData_LaboratoryBooster
+	dw NULL
+	db PALETTE_108, PALETTE_104, $01
+	db TILEMAP_LABORATORY, TILEMAP_LABORATORY_CGB, $80, $00
+	db SPRITE_BOOSTER_PACK_OAM
+	db PALETTE_117, PALETTE_117, $00
+	db $ff, $bd, $00, $00
+	dw $00
+
+Scene_CharizardIntro: ; 12e13 (4:6e13)
+	dw SGBData_CharizardIntro
+	dw NULL
+	db PALETTE_108, PALETTE_105, $01
+	db TILEMAP_CHARIZARD_INTRO, TILEMAP_CHARIZARD_INTRO_CGB, $80, $00
+	db $00
+
+Scene_ScytherIntro: ; 12e1f (4:6e1f)
+	dw SGBData_ScytherIntro
+	dw NULL
+	db PALETTE_108, PALETTE_106, $01
+	db TILEMAP_SCYTHER_INTRO, TILEMAP_SCYTHER_INTRO_CGB, $80, $00
+	db $00
+
+Scene_AerodactylIntro: ; 12e2b (4:6e2b)
+	dw SGBData_AerodactylIntro
+	dw NULL
+	db PALETTE_108, PALETTE_107, $01
+	db TILEMAP_AERODACTYL_INTRO, TILEMAP_AERODACTYL_INTRO_CGB, $80, $00
+	db $00
+
+Scene_GradientBlackAndRed: ; 12e37 (4:6e37)
+	dw NULL
+	dw NULL
+	db PALETTE_94, PALETTE_94, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientWhiteAndRed: ; 12e43 (4:6e43)
+	dw NULL
+	dw NULL
+	db PALETTE_95, PALETTE_95, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientBlackAndGreen: ; 12e4f (4:6e4f)
+	dw NULL
+	dw NULL
+	db PALETTE_96, PALETTE_96, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_GradientWhiteAndGreen: ; 12e5b (4:6e5b)
+	dw NULL
+	dw NULL
+	db PALETTE_97, PALETTE_97, $00
+	db TILEMAP_SOLID_TILES_1, TILEMAP_SOLID_TILES_1, $01, $00
+	db $00
+
+Scene_ColorWheel: ; 12e67 (4:6e67)
+	dw NULL
+	dw NULL
+	db PALETTE_98, PALETTE_98, $00
+	db TILEMAP_SOLID_TILES_2, TILEMAP_SOLID_TILES_2, $01, $00
+	db $00
+
+Scene_ColorTest: ; 12e73 (4:6e73)
+	dw NULL
+	dw NULL
+	db PALETTE_99, PALETTE_99, $00
+	db TILEMAP_SOLID_TILES_3, TILEMAP_SOLID_TILES_3, $01, $00
+	db $00
+
+Scene_ColorPalette: ; 12e7f (4:6e7f)
+	dw NULL
+	dw NULL
+	db PALETTE_110, PALETTE_110, $00
+	db TILEMAP_SOLID_TILES_4, TILEMAP_SOLID_TILES_4, $fc, $01
+	db $00
+
+Scene_GameBoyLinkConnecting: ; 12e8b (4:6e8b)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_GAMEBOY_LINK_CONNECTING, TILEMAP_GAMEBOY_LINK_CONNECTING_CGB, $90, $00
+	db $00
+
+Scene_GameBoyLinkTransmitting: ; 12e97 (4:6e97)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_GAMEBOY_LINK, TILEMAP_GAMEBOY_LINK_CGB, $90, $00
+	db SPRITE_DUEL_52
+	db PALETTE_114, PALETTE_114, $00
+	db $b3, $b0, $50, $50
+	dw $00
+
+Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
+	dw SGBData_GameBoyLink
+	dw NULL
+	db PALETTE_111, PALETTE_111, $00
+	db TILEMAP_GAMEBOY_LINK, TILEMAP_GAMEBOY_LINK_CGB, $90, $00
+	db SPRITE_DUEL_52
+	db PALETTE_114, PALETTE_114, $00
+	db $b4, $b1, $50, $50
+	dw $00
+
+Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
+	dw SGBData_GameBoyPrinter
+	dw LoadScene_SetGameBoyPrinterAttrBlk
+	db PALETTE_112, PALETTE_112, $00
+	db TILEMAP_GAMEBOY_PRINTER, TILEMAP_GAMEBOY_PRINTER_CGB, $90, $00
+	db SPRITE_DUEL_53
+	db PALETTE_115, PALETTE_115, $00
+	db $b7, $b5, $50, $30
+	dw $00
+
+Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
+	dw SGBData_GameBoyPrinter
+	dw LoadScene_SetGameBoyPrinterAttrBlk
+	db PALETTE_112, PALETTE_112, $00
+	db TILEMAP_GAMEBOY_PRINTER, TILEMAP_GAMEBOY_PRINTER_CGB, $90, $00
+	db SPRITE_DUEL_53
+	db PALETTE_115, PALETTE_115, $00
+	db $b8, $b6, $50, $30
+	dw $00
+
+Scene_CardPop: ; 12eeb (4:6eeb)
+	dw SGBData_CardPop
+	dw LoadScene_SetCardPopAttrBlk
+	db PALETTE_113, PALETTE_113, $00
+	db TILEMAP_CARD_POP, TILEMAP_CARD_POP_CGB, $80, $00
+	db SPRITE_DUEL_54
+	db PALETTE_116, PALETTE_116, $00
+	db $bb, $b9, $50, $40
+	dw $00
+
+Scene_CardPopError: ; 12f00 (4:6f00)
+	dw SGBData_CardPop
+	dw LoadScene_SetCardPopAttrBlk
+	db PALETTE_113, PALETTE_113, $00
+	db TILEMAP_CARD_POP, TILEMAP_CARD_POP_CGB, $80, $00
+	db SPRITE_DUEL_54
+	db PALETTE_116, PALETTE_116, $00
+	db $bc, $ba, $50, $40
+	dw $00
+
+Scene_Nintendo: ; 12f15 (4:6f15)
+	dw NULL
+	dw NULL
+	db PALETTE_27, PALETTE_27, $00
+	db TILEMAP_NINTENDO, TILEMAP_NINTENDO, $00, $00
+	db $00
+
+Scene_Companies: ; 12f21 (4:6f21)
+	dw NULL
+	dw NULL
+	db PALETTE_28, PALETTE_28, $00
+	db TILEMAP_COMPANIES, TILEMAP_COMPANIES, $00, $00
+	db $00
+
+Scene_Copyright: ; 12f2d (4:6f2d)
+	dw NULL
+	dw NULL
+	db PALETTE_26, PALETTE_26, $00
+	db TILEMAP_COPYRIGHT, TILEMAP_COPYRIGHT_CGB, $00, $00
+	db $00
+
+Scene_JapaneseTitleScreen2: ; 12f39 (4:6f39)
+	dw NULL
+	dw NULL
+	db PALETTE_109, PALETTE_100, $00
+	db TILEMAP_JAPANESE_TITLE_SCREEN_2, TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB, $01, $00
+	db $00
+
+LoadScene_LoadCompressedSGBPacket: ; 12f45 (4:6f45)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	ld hl, wSceneSGBPacketPtr
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .skip
+	farcall Func_703cb
+.skip
+	pop hl
+	ret
+
+LoadScene_LoadSGBPacket: ; 12f5b (4:6f5b)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz
+	push hl
+	push bc
+	push de
+	ld hl, wSceneSGBPacketPtr
+	ld a, [hli]
+	or [hl]
+	jr z, .done
+	ld hl, wSceneSGBRoutinePtr + 1
+	ld a, [hld]
+	or [hl]
+	jr z, .use_default
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call CallHL2
+	jr .done
+.use_default
+	ld l, %001010 ; outside, border, inside palette numbers
+	ld a, [wBGMapWidth]
+	ld d, a
+	ld a, [wBGMapHeight]
+	ld e, a
+	farcall Func_70498
+.done
+	pop de
+	pop bc
+	pop hl
+	ret
+
+LoadScene_SetGameBoyPrinterAttrBlk: ; 12f8c (4:6f8c)
+	push hl
+	push bc
+	push de
+	ld hl, SGBPacket_GameBoyPrinter
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SGBPacket_GameBoyPrinter: ; 12f99 (4:6f99)
+	sgb ATTR_BLK, 1
+	db 1 ; number of data sets
+	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
+	db %101111 ; Color Palette Designation
+	db 11 ; x1
+	db 0  ; y1
+	db 16 ; x2
+	db 9  ; y2
+	ds 6 ; data set 2
+	ds 2 ; data set 3
+
+LoadScene_SetCardPopAttrBlk: ; 12fa9 (4:6fa9)
+	push hl
+	push bc
+	push de
+	ld hl, SGBPacket_CardPop
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SGBPacket_CardPop: ; 12fb6 (4:6fb6)
+	sgb ATTR_BLK, 1
+	db 1 ; number of data sets
+	db ATTR_BLK_CTRL_OUTSIDE | ATTR_BLK_CTRL_LINE | ATTR_BLK_CTRL_INSIDE
+	db %101111 ; Color Palette Designation
+	db 0  ; x1
+	db 0  ; y1
+	db 19 ; x2
+	db 4  ; y3
+	ds 6 ; data set 2
+	ds 2 ; data set 3
 
 Func_12fc6: ; 12fc6 (4:6fc6)
 	INCROM $12fc6, $130ca
 
-Func_130ca: ; 130ca (4:70ca)
-	INCROM $130ca, $131b3
+LoadBoosterGfx: ; 130ca (4:70ca)
+	push hl
+	push bc
+	push de
+	ld e, a
+	ld a, [wCurTilemap]
+	push af
+	push bc
+	ld a, e
+	call _LoadScene
+	call FlushAllPalettes
+	call SetBoosterLogoOAM
+	pop bc
+	pop af
+	ld [wCurTilemap], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+SetBoosterLogoOAM: ; 130e6 (4:70e6)
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ret nz
+	push hl
+	push bc
+	push de
+	push bc
+	xor a
+	ld [wd4cb], a
+	ld [wd4ca], a
+	ld a, SPRITE_BOOSTER_PACK_OAM
+	farcall Func_8025b
+	pop bc
+	call ZeroObjectPositions
+	ld hl, BoosterLogoOAM
+	ld c, [hl]
+	inc hl
+.oam_loop
+	push bc
+	ldh a, [hSCX]
+	ld d, a
+	ldh a, [hSCY]
+	ld e, a
+	ld a, [wSceneBaseY]
+	sub e
+	add [hl]
+	ld e, a
+	inc hl
+	ld a, [wSceneBaseX]
+	sub d
+	add [hl]
+	ld d, a
+	inc hl
+	ld a, [wd61f]
+	add [hl]
+	ld c, a
+	inc hl
+	ld b, [hl]
+	inc hl
+	call SetOneObjectAttributes
+	pop bc
+	dec c
+	jr nz, .oam_loop
+	ld hl, wVBlankOAMCopyToggle
+	inc [hl]
+	pop de
+	pop bc
+	pop hl
+	ret
+
+BoosterLogoOAM: ; 13132 (4:7132)
+	db $20
+	db $00, $00, $00, $00
+	db $00, $08, $01, $00
+	db $00, $10, $02, $00
+	db $00, $18, $03, $00
+	db $00, $20, $04, $00
+	db $00, $28, $05, $00
+	db $00, $30, $06, $00
+	db $00, $38, $07, $00
+	db $08, $00, $10, $00
+	db $08, $08, $11, $00
+	db $08, $10, $12, $00
+	db $08, $18, $13, $00
+	db $08, $20, $14, $00
+	db $08, $28, $15, $00
+	db $08, $30, $16, $00
+	db $08, $38, $17, $00
+	db $10, $00, $08, $00
+	db $10, $08, $09, $00
+	db $10, $10, $0A, $00
+	db $10, $18, $0B, $00
+	db $10, $20, $0C, $00
+	db $10, $28, $0D, $00
+	db $10, $30, $0E, $00
+	db $10, $38, $0F, $00
+	db $18, $00, $18, $00
+	db $18, $08, $19, $00
+	db $18, $10, $1A, $00
+	db $18, $18, $1B, $00
+	db $18, $20, $1C, $00
+	db $18, $28, $1D, $00
+	db $18, $30, $1E, $00
+	db $18, $38, $1F, $00
 
 Func_131b3: ; 131b3 (4:71b3)
 	INCROM $131b3, $131d3
