@@ -176,7 +176,7 @@ sb85b:: ; b85b
 sb86b:: ; b86b
 	ds $10
 
-sEventFlags:: ; b87b
+sEventVars:: ; b87b
 	ds $40
 
 	ds $189

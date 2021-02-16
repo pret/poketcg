@@ -1212,7 +1212,7 @@ Func_11430: ; 11430 (4:5430)
 	dw Data_1156c,            15, $ff00 ; sb84c
 	dw Data_1156c,            16, $ff00 ; sb85b
 	dw Data_1156c,            16, $ff00 ; sb86b
-	dw wEventVars,            64, $ff00 ; sEventFlags
+	dw wEventVars,            64, $ff00 ; sEventVars
 	dw NULL
 ; 0x1156c
 
