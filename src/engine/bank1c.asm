@@ -367,7 +367,7 @@ SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	xor a
 	ld [wTempSGBPacket + 15], a
 	ld hl, wTempSGBPacket
-	ld a, $1
+	ld a, PAL01 << 3 + 1
 	ld [hl], a
 	call Func_704c7
 	call SendSGB
