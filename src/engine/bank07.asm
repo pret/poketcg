@@ -50,7 +50,8 @@ Func_1c056: ; 1c056 (7:4056)
 
 INCLUDE "data/warps.asm"
 
-Func_1c33b: ; 1c33b (7:433b)
+; loads data from the map header of wCurMap
+LoadCurMapHeaderData: ; 1c33b (7:433b)
 	push hl
 	push bc
 	push de
@@ -66,7 +67,7 @@ Func_1c33b: ; 1c33b (7:433b)
 	ld a, [hli]
 	ld [wCurTilemap], a
 	ld a, [hli]
-	ld c, a
+	ld c, a ; CGB tilemap variant
 	ld a, [hli]
 	ld [wd28f], a
 	ld a, [hli]

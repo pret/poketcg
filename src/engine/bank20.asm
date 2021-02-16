@@ -1,8 +1,22 @@
 Func_80000: ; 80000 (20:4000)
-	INCROM $80000, $80028
+	call ClearSRAMBGMaps
+	xor a
+	ld [wTextBoxFrameType], a
+	call Func_8003d
+	farcall Func_c37a
+	farcall Func_c9c7
+	call Func_801a1
+	farcall Func_c3ff
+	ld a, [wCurMap]
+	cp $00
+	ret nz
+	farcall Func_10f2e
+	farcall Func_10fbc
+	ret
+; 0x80028
 
 Func_80028: ; 80028 (20:4028)
-	call Func_801f1
+	call ClearSRAMBGMaps
 	ld bc, $0000
 	call Func_80077
 	farcall Func_c9c7
@@ -12,8 +26,8 @@ Func_80028: ; 80028 (20:4028)
 ; 0x8003d
 
 Func_8003d: ; 8003d (20:403d)
-	farcall Func_1c33b
-	farcall Func_7036a
+	farcall LoadCurMapHeaderData
+	farcall SetSGB2AndSGB3MapPalette
 	ld bc, $0
 	call Func_80077
 	ld a, $80
@@ -38,12 +52,12 @@ Func_8003d: ; 8003d (20:403d)
 ; 0x80077
 
 Func_80077: ; 80077 (20:4077)
-	ld a, $1
-	ld [wBGMapCopyMode], a
+	ld a, TRUE
+	ld [wWriteBGMapToSRAM], a
 	jr Func_80082
 
 	xor a
-	ld [wBGMapCopyMode], a
+	ld [wWriteBGMapToSRAM], a
 ;	fallthrough
 
 Func_80082: ; 80082 (20:4082)
@@ -213,13 +227,13 @@ Func_80148: ; 80148 (20:4148)
 	ret
 
 ; copies BG Map data pointed by hl
-; to either VRAM or SRAM, depending on wBGMapCopyMode
+; to either VRAM or SRAM, depending on wWriteBGMapToSRAM
 ; de is the target address in VRAM,
 ; if SRAM is the target address to copy,
 ; copies data to s0BGMap or s1BGMap
 ; for VRAM0 or VRAM1 respectively
 CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
-	ld a, [wBGMapCopyMode]
+	ld a, [wWriteBGMapToSRAM]
 	or a
 	jp z, SafeCopyDataHLtoDE
 
@@ -307,16 +321,16 @@ Func_801a1: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
-; Clears the first x800 bytes of S1:a000
-Func_801f1: ; 801f1 (20:41f1)
+; clears s0BGMap and s1BGMap
+ClearSRAMBGMaps: ; 801f1 (20:41f1)
 	push hl
 	push bc
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $1
+	ld a, BANK(s0BGMap) ; SRAM 1
 	call BankswitchSRAM
-	ld hl, $a000
-	ld bc, $0800
+	ld hl, s0BGMap
+	ld bc, $800 ; s0BGMap + s1BGMap
 	xor a
 	call FillMemoryWithA
 	pop af
@@ -1110,8 +1124,8 @@ Func_80b89: ; 80b89 (20:4b89)
 	push bc
 	push af
 	ld c, a
-	ld a, $01
-	ld [wBGMapCopyMode], a
+	ld a, TRUE
+	ld [wWriteBGMapToSRAM], a
 	ld b, $00
 	ld hl, wd323
 	add hl, bc
@@ -1129,9 +1143,9 @@ Func_80b89: ; 80b89 (20:4b89)
 Func_80ba4: ; 80ba4 (20:4ba4)
 	push af
 	xor a
-	ld [wBGMapCopyMode], a
+	ld [wWriteBGMapToSRAM], a
 	pop af
-;	Fallthrough
+;	fallthrough
 
 Func_80baa: ; 80baa (20:4baa)
 	push hl
@@ -1150,11 +1164,13 @@ Func_80baa: ; 80baa (20:4baa)
 	push af
 	ld a, [wd23a + 1]
 	push af
+
 	ld b, $0
 	ld hl, wd323
 	add hl, bc
 	ld a, $1
 	ld [hl], a
+
 	ld a, c
 	add a
 	ld c, a

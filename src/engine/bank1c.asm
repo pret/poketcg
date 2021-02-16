@@ -330,5 +330,103 @@ Func_70214: ; 70214 (1c:4214)
 Unknown_7024a: ; 7024a (1c:424a)
 	INCROM $7024a, $7036a
 
-Func_7036a: ; 7036a (1c:436a)
-	INCROM $7036a, $74000
+; decompresses palette data depending on wd132
+; then sends it as SGB packet
+SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz ; return if not SGB
+	ld a, [wd132]
+	or a
+	ret z ; not valid
+
+	push hl
+	push bc
+	push de
+	ld a, [wd132]
+	add a
+	ld c, a
+	ld b, $0
+	ld hl, .pal_data_pointers
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call DecompressSGBPalette
+
+	; load palettes to wTempSGBPacket
+	ld hl, wBGMapBuffer
+	ld de, wTempSGBPacket + 1 ; PAL Packet color #0 (PAL23's SGB2)
+	ld bc, 8 ; pal size
+	call CopyDataHLtoDE
+	ld hl, wBGMapBuffer + 34
+	ld de, wTempSGBPacket + 9 ; PAL Packet color #4 (PAL23's SGB3)
+	ld bc, 6
+	call CopyDataHLtoDE
+
+	xor a
+	ld [wTempSGBPacket + 15], a
+	ld hl, wTempSGBPacket
+	ld a, $1
+	ld [hl], a
+	call Func_704c7
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+
+.pal_data_pointers
+	dw $722f ; unused
+	dw $722f ; MAP_SGB_PALETTE_1
+	dw $7253 ; MAP_SGB_PALETTE_2
+	dw $7277 ; MAP_SGB_PALETTE_3
+	dw $729a ; MAP_SGB_PALETTE_4
+	dw $72bd ; MAP_SGB_PALETTE_5
+	dw $72e0 ; MAP_SGB_PALETTE_6
+	dw $7304 ; MAP_SGB_PALETTE_7
+	dw $7328 ; MAP_SGB_PALETTE_8
+	dw $734b ; MAP_SGB_PALETTE_9
+	dw $736f ; MAP_SGB_PALETTE_10
+
+	INCROM $703cb, $70403
+
+DecompressSGBPalette: ; 70403 (1c:4403)
+	push hl
+	push bc
+	push de
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	push bc
+	ld e, l
+	ld d, h
+	ld b, HIGH(wc000)
+	call InitBGMapDecompression
+	pop bc
+	ld de, wBGMapBuffer
+	call DecompressBGMap
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x7041d
+
+	INCROM $7041d, $704c7
+
+; load some values to wTempSGBPacket
+Func_704c7: ; 704c7 (1c:44c7)
+	push af
+	push hl
+	inc hl
+	ld a, $9c
+	ld [hli], a
+	ld a, $63
+	ld [hl], a
+	pop hl
+	pop af
+	ret
+; 0x704d3
+
+	INCROM $704d3, $74000

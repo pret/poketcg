@@ -2168,7 +2168,7 @@ wd291:: ; d291
 ; determines where to copy BG Map data
 ; $0 = copies to VRAM
 ; $1 = copies to SRAM
-wBGMapCopyMode:: ; d292
+wWriteBGMapToSRAM:: ; d292
 	ds $1
 
 	ds $4
