@@ -42,7 +42,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c4b9
 	call Func_c943
 	call Func_c158
-	farcall Func_80480
+	farcall DoMapOWFrame
 	call SetOverworldDoFrameFunction
 	xor a
 	ld [wd0b4], a
@@ -270,7 +270,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a
-	ld a, [s0a006]
+	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
 	call DisableSRAM
 	farcall Func_10756
@@ -464,7 +464,7 @@ Func_c36a: ; c36a (3:436a)
 	cp POKEMON_DOME_ENTRANCE
 	jr nz, .asm_c379
 	xor a
-	ld [wd324], a
+	ld [wd323 + 1], a
 .asm_c379
 	ret
 

@@ -2171,7 +2171,7 @@ wd291:: ; d291
 ; determines where to copy BG Map data
 ; $0 = copies to VRAM
 ; $1 = copies to SRAM
-wBGMapCopyMode:: ; d292
+wWriteBGMapToSRAM:: ; d292
 	ds $1
 
 	ds $4
@@ -2181,15 +2181,33 @@ wBGMapCopyMode:: ; d292
 wTempBackgroundPalettesCGB:: ; d297
 	ds 8 palettes
 
-	ds $4c
+	ds $41
+
+; pointer to the data of current map OW frameset
+wCurMapOWFrameset:: ; d318
+	ds $2
+
+; stored data for each OW frameset subgroup
+; has frame data offset and duration
+wOWFramesetSubgroups:: ; d31a
+	ds NUM_OW_FRAMESET_SUBGROUPS * $2
+
+; address offset of current OW frame
+; relative to wCurMapOWFrameset
+wCurOWFrameDataOffset:: ; d320
+	ds $1
+
+; duration of the current map OW frame
+wCurOWFrameDuration:: ; d321
+	ds $1
+
+; number of valid subgroups
+; that are currently loaded in wOWFramesetSubgroups
+wumLoadedFramesetSubgroups:: ; d322
+	ds $1
 
 wd323:: ; d323
-	ds $1
-
-wd324:: ; d324
-	ds $1
-
-	ds $9
+	ds $b
 
 ; the OWMAP_* value for the current overworld map selection
 wOverworldMapSelection:: ; d32e
@@ -2334,7 +2352,15 @@ wd3b9:: ; d3b9
 wd3bb:: ; d3bb
 	ds $a
 
-	ds $b
+	ds $6
+
+wd3cb:: ; d3cb
+	ds $1
+
+wd3cc:: ; d3cc
+	ds $1
+
+	ds $3
 
 wd3d0:: ; d3d0
 	ds $1

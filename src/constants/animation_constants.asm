@@ -152,3 +152,17 @@ const_value = const_value + 1
 	const DUEL_ANIM_STRUCT_UNKNOWN_2      ; $6
 	const DUEL_ANIM_STRUCT_BANK           ; $7
 DUEL_ANIM_STRUCT_SIZE EQU const_value
+
+	; ow_frame struct constants
+	const_def
+	const OW_FRAME_STRUCT_DURATION         ; $0
+	const OW_FRAME_STRUCT_VRAM_TILE_OFFSET ; $1
+	const OW_FRAME_STRUCT_VRAM_BANK        ; $2
+	const OW_FRAME_STRUCT_TILESET_BANK     ; $3
+	const OW_FRAME_STRUCT_TILESET          ; $4
+const_value = const_value + 1
+	const OW_FRAME_STRUCT_TILESET_OFFSET   ; $6
+const_value = const_value + 1
+OW_FRAME_STRUCT_SIZE EQU const_value
+
+NUM_OW_FRAMESET_SUBGROUPS EQU 3

@@ -50,6 +50,7 @@ Func_1c056: ; 1c056 (7:4056)
 
 INCLUDE "data/warps.asm"
 
+; loads data from the map header of wCurMap
 LoadMapHeader: ; 1c33b (7:433b)
 	push hl
 	push bc
@@ -66,7 +67,7 @@ LoadMapHeader: ; 1c33b (7:433b)
 	ld a, [hli]
 	ld [wCurTilemap], a
 	ld a, [hli]
-	ld c, a
+	ld c, a ; CGB tilemap variant
 	ld a, [hli]
 	ld [wd28f], a
 	ld a, [hli]
@@ -1709,7 +1710,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call Func_1d705
 	call Func_1c858
 	xor a
-	ld [wd324], a
+	ld [wd323 + 1], a
 	ld a, MUSIC_CREDITS
 	call PlaySong
 	farcall Func_10031
