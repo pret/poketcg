@@ -10,8 +10,8 @@ Func_80000: ; 80000 (20:4000)
 	ld a, [wCurMap]
 	cp $00
 	ret nz
-	farcall Func_10f2e
-	farcall Func_10fbc
+	farcall OverworldMap_PrintMapName
+	farcall OverworldMap_InitVolcanoSprite
 	ret
 ; 0x80028
 

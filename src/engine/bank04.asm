@@ -1127,7 +1127,7 @@ Func_11430: ; 11430 (4:5430)
 	ld a, d
 	adc 0
 	ld [wTempPointer + 1], a
-	ld hl, .data_11498
+	ld hl, .wram_map
 .asm_11459
 	ld a, [hli]
 	ld e, a
@@ -1176,43 +1176,43 @@ Func_11430: ; 11430 (4:5430)
 	pop hl
 	ret
 
-.data_11498
+.wram_map
 ; pointer, number of bytes, unknown
-	dw wd3cc,                 1, $ff00
-	dw wd3cb,                 1, $ff00
-	dw wPlayTimeCounter + 0,  1, $ff00
-	dw wPlayTimeCounter + 1,  1, $ff00
-	dw wPlayTimeCounter + 2,  1, $ff00
-	dw wPlayTimeCounter + 3,  2, $ff00
-	dw wd32e,                 1, $ff00
-	dw wTempMap,              1, $ff00
-	dw wTempPlayerXCoord,     1, $ff00
-	dw wTempPlayerYCoord,     1, $ff00
-	dw wTempPlayerDirection,  1, $ff00
-	dw wd0c2,                 1, $ff00
-	dw wDuelResult,           1, $ff00
-	dw wd0c4,                 1, $ff00
-	dw wd696,                 1, $ff00
-	dw wd698,                 4, $ff00
-	dw wd323,                11, $ff00
-	dw Data_1156c,            1, $ff00
-	dw wd0b8,                 1, $ff00
-	dw wd0b9,                 1, $ff00
-	dw wd11b,                 1, $ff00
-	dw wd0ba,                 1, $ff00
-	dw wPCPackSelection,      1, $0e00
-	dw wPCPacks,             15, $ff00
-	dw wd111,                 1, $ff00
-	dw wcad5,                 1, $ff00
-	dw wd3b8,                 1, $ff00
-	dw wd3bb,                10, $ff00
-	dw wd0c5,                 1, $ff00
-	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $ff00
-	dw wd10e,                 1, $ff00
-	dw Data_1156c,           15, $ff00
-	dw Data_1156c,           16, $ff00
-	dw Data_1156c,           16, $ff00
-	dw wEventFlags,          64, $ff00
+	dw wd3cc,                  1, $ff00 ; sb808
+	dw wd3cb,                  1, $ff00 ; sb809
+	dw wPlayTimeCounter + 0,   1, $ff00 ; sPlayTimeCounter
+	dw wPlayTimeCounter + 1,   1, $ff00
+	dw wPlayTimeCounter + 2,   1, $ff00
+	dw wPlayTimeCounter + 3,   2, $ff00
+	dw wOverworldMapSelection, 1, $ff00 ; sOverworldMapSelection
+	dw wTempMap,               1, $ff00 ; sTempMap
+	dw wTempPlayerXCoord,      1, $ff00 ; sTempPlayerXCoord
+	dw wTempPlayerYCoord,      1, $ff00 ; sTempPlayerYCoord
+	dw wTempPlayerDirection,   1, $ff00 ; sTempPlayerDirection
+	dw wd0c2,                  1, $ff00 ; sb814
+	dw wDuelResult,            1, $ff00 ; sDuelResult
+	dw wNPCDuelist,            1, $ff00 ; sNPCDuelist
+	dw wChallengeHallNPC,      1, $ff00 ; sChallengeHallNPC
+	dw wd698,                  4, $ff00 ; sb818
+	dw wd323,                 11, $ff00 ; sb81c
+	dw Data_1156c,             1, $ff00 ; sb827
+	dw wd0b8,                  1, $ff00 ; sb828
+	dw wd0b9,                  1, $ff00 ; sb829
+	dw wd11b,                  1, $ff00 ; sb82a
+	dw wd0ba,                  1, $ff00 ; sb82b
+	dw wPCPackSelection,       1, $0e00 ; sPCPackSelection
+	dw wPCPacks,              15, $ff00 ; sPCPacks
+	dw wDefaultSong,           1, $ff00 ; sDefaultSong
+	dw wcad5,                  1, $ff00 ; sb83d
+	dw wd3b8,                  1, $ff00 ; sb83e
+	dw wd3bb,                 10, $ff00 ; sb83f
+	dw wd0c5,                  1, $ff00 ; sb849
+	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $ff00 ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
+	dw wd10e,                  1, $ff00 ; sb84b
+	dw Data_1156c,            15, $ff00 ; sb84c
+	dw Data_1156c,            16, $ff00 ; sb85b
+	dw Data_1156c,            16, $ff00 ; sb86b
+	dw wEventVars,            64, $ff00 ; sEventFlags
 	dw NULL
 ; 0x1156c
 

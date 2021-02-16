@@ -92,7 +92,7 @@ sb809:: ; b809
 sPlayTimeCounter:: ; b80a
 	ds $5
 
-sb80f:: ; b80f
+sOverworldMapSelection:: ; b80f
 	ds $1
 
 sTempMap:: ; b810
@@ -113,10 +113,10 @@ sb814:: ; b814
 sDuelResult:: ; b815
 	ds $1
 
-sb816:: ; b816
+sNPCDuelist:: ; b816
 	ds $1
 
-sb817:: ; b817
+sChallengeHallNPC:: ; b817
 	ds $1
 
 sb818:: ; b818
@@ -146,7 +146,7 @@ sPCPackSelection:: ; b82c
 sPCPacks:: ; b82d
 	ds $f
 
-sb83c:: ; b83c
+sDefaultSong:: ; b83c
 	ds $1
 
 sb83d:: ; b83d

@@ -355,11 +355,11 @@ SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	call DecompressSGBPalette
 
 	; load palettes to wTempSGBPacket
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	ld de, wTempSGBPacket + 1 ; PAL Packet color #0 (PAL23's SGB2)
 	ld bc, 8 ; pal size
 	call CopyDataHLtoDE
-	ld hl, wBGMapBuffer + 34
+	ld hl, wDecompressionBuffer + 34
 	ld de, wTempSGBPacket + 9 ; PAL Packet color #4 (PAL23's SGB3)
 	ld bc, 6
 	call CopyDataHLtoDE
@@ -397,7 +397,7 @@ Func_703cb: ; 703cb (1c:43cb)
 	push hl
 	push bc
 	push de
-	call Func_70403
+	call DecompressSGBPalette
 	ld hl, wDecompressionBuffer
 	ld de, wTempSGBPacket + $1
 	ld bc, $8 ; palette 2, color 0-3
