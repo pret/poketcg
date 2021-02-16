@@ -51,7 +51,7 @@ Func_1c056: ; 1c056 (7:4056)
 INCLUDE "data/warps.asm"
 
 ; loads data from the map header of wCurMap
-LoadCurMapHeaderData: ; 1c33b (7:433b)
+LoadMapHeader: ; 1c33b (7:433b)
 	push hl
 	push bc
 	push de
@@ -61,7 +61,7 @@ LoadCurMapHeaderData: ; 1c33b (7:433b)
 	add a
 	add c
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, MapHeaders
 	add hl, bc
 	ld a, [hli]
@@ -75,7 +75,7 @@ LoadCurMapHeaderData: ; 1c33b (7:433b)
 	ld a, [hli]
 	ld [wd290], a
 	ld a, [hli]
-	ld [wd111], a
+	ld [wDefaultSong], a
 
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -152,7 +152,7 @@ Func_1c485: ; 1c485 (7:4485)
 	dec c
 	jr nz, .findEmptyIndexLoop
 	ld hl, wLoadedNPCs
-	debug_ret
+	debug_nop
 	jr .exit
 .foundEmptyIndex
 	ld a, b
@@ -478,7 +478,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	inc hl
 	ld [hl], b
 	dec hl
-	call Func_39ea
+	call GetNextNPCMovementByte
 	cp $f0
 	jr nc, .asm_1c7bb
 	push af
@@ -494,7 +494,7 @@ Func_1c78d: ; 1c78d (7:478d)
 	cp $ff
 	jr z, .asm_1c7d2
 	inc bc
-	call Func_39ea
+	call GetNextNPCMovementByte
 	push hl
 	ld l, a
 	ld h, $0
@@ -545,7 +545,7 @@ Func_1c83d: ; 1c83d (7:483d)
 	inc hl
 	dec c
 	jr nz, .asm_1c845
-	debug_ret
+	debug_nop
 	jr .asm_1c855
 
 .asm_1c853
@@ -596,7 +596,7 @@ PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 	cp HIGH(Func_3ba2)
 	jr z, .okay
 .error
-	debug_ret
+	debug_nop
 	ret
 
 .okay
@@ -1669,9 +1669,9 @@ Titlescreen_1d386: ; 1d386 (7:5386)
 	call DisableLCD
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
-	ld bc, $0000
-	ld a, $0
-	call Func_3df3
+	lb bc, 0, 0
+	ld a, SCENE_TITLE_SCREEN
+	call LoadScene
 	call Func_1d59c
 .asm_1d39f
 	call Func_3ca0

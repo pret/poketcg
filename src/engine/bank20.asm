@@ -26,7 +26,7 @@ Func_80028: ; 80028 (20:4028)
 ; 0x8003d
 
 Func_8003d: ; 8003d (20:403d)
-	farcall LoadCurMapHeaderData
+	farcall LoadMapHeader
 	farcall SetSGB2AndSGB3MapPalette
 	ld bc, $0
 	call Func_80077
@@ -56,6 +56,7 @@ Func_80077: ; 80077 (20:4077)
 	ld [wWriteBGMapToSRAM], a
 	jr Func_80082
 
+Func_8007e: ; 8007e (20:407e)
 	xor a
 	ld [wWriteBGMapToSRAM], a
 ;	fallthrough
@@ -76,7 +77,7 @@ Func_80082: ; 80082 (20:4082)
 	ld [wd23d], a
 
 ; store header data
-	ld de, wBGMapBuffer
+	ld de, wDecompressionBuffer
 	ld bc, $0006 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
@@ -109,7 +110,7 @@ Func_800bd: ; 800bd (20:40bd)
 	adc $00
 	ld d, a
 	ld b, HIGH(wc000)
-	call InitBGMapDecompression
+	call InitDataDecompression
 	ld a, [wVRAMPointer]
 	ld e, a
 	ld a, [wVRAMPointer + 1]
@@ -133,7 +134,7 @@ Func_800e0: ; 800e0 (20:40e0)
 .asm_800f0
 
 	ld c, $40
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	xor a
 .loop_clear
 	ld [hli], a
@@ -149,14 +150,14 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld b, $00
 	ld a, [wd28e]
 	ld c, a
-	ld de, wBGMapBuffer
-	call DecompressBGMapFromBank
+	ld de, wDecompressionBuffer
+	call DecompressDataFromBank
 
 	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
 	push de
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	call CopyBGDataToVRAMOrSRAM
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -167,7 +168,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld a, [wBGMapWidth]
 	ld c, a
 	ld b, $00
-	ld hl, wBGMapBuffer
+	ld hl, wDecompressionBuffer
 	add hl, bc
 	pop de
 	push de
@@ -718,7 +719,7 @@ LoadPaletteDataFromHL: ; 803ec (20:43ec)
 	jr .success_return
 
 .fail_return
-	debug_ret
+	debug_nop
 
 .success_return
 	pop de
@@ -1343,8 +1344,8 @@ Tilemaps: ; 80e67 (20:4e67)
 	tilemap Unused8Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_8
 	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR
 	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR_CGB
-	tilemap CardPop1Tilemap,                 TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1
-	tilemap CardPop1CGBTilemap,              TILESET_CARD_POP_1            ; TILEMAP_CARD_POP_1_CGB
+	tilemap CardPopCGBTilemap,               TILESET_CARD_POP              ; TILEMAP_CARD_POP_CGB
+	tilemap CardPopTilemap,                  TILESET_CARD_POP              ; TILEMAP_CARD_POP
 	tilemap GrassMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_GRASS_MEDAL
 	tilemap ScienceMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_SCIENCE_MEDAL
 	tilemap FireMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_FIRE_MEDAL
@@ -1353,12 +1354,12 @@ Tilemaps: ; 80e67 (20:4e67)
 	tilemap FightingMedalTilemap,            TILESET_MEDAL                 ; TILEMAP_FIGHTING_MEDAL
 	tilemap RockMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_ROCK_MEDAL
 	tilemap PsychicMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_PSYCHIC_MEDAL
-	tilemap CardPop2Tilemap,                 TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2
-	tilemap CardPop2CGBTilemap,              TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_CGB
-	tilemap CardPop2Unknown1Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_1
-	tilemap CardPop2Unknown2Tilemap,         TILESET_CARD_POP_2            ; TILEMAP_CARD_POP_2_UNKNOWN_2
-	tilemap CardPop3Tilemap,                 TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3
-	tilemap CardPop3CGBTilemap,              TILESET_CARD_POP_3            ; TILEMAP_CARD_POP_3_CGB
+	tilemap GameBoyLinkCGBTilemap,           TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CGB
+	tilemap GameBoyLinkTilemap,              TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK
+	tilemap GameBoyLinkConnectingCGBTilemap, TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CONNECTING_CGB
+	tilemap GameBoyLinkConnectingTilemap,    TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CONNECTING
+	tilemap GameBoyPrinterCGBTilemap,        TILESET_GAMEBOY_PRINTER       ; TILEMAP_GAMEBOY_PRINTER_CGB
+	tilemap GameBoyPrinterTilemap,           TILESET_GAMEBOY_PRINTER       ; TILEMAP_GAMEBOY_PRINTER
 	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1           ; TILEMAP_COLOSSEUM
 	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2           ; TILEMAP_COLOSSEUM_CGB
 	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1           ; TILEMAP_EVOLUTION
@@ -1373,18 +1374,18 @@ Tilemaps: ; 80e67 (20:4e67)
 	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2       ; TILEMAP_SCYTHER_INTRO_CGB
 	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1    ; TILEMAP_AERODACTYL_INTRO
 	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2    ; TILEMAP_AERODACTYL_INTRO_CGB
-	tilemap TitleScreen1Tilemap,             TILESET_TITLE_SCREEN_1        ; TILEMAP_TITLE_SCREEN_1
-	tilemap TitleScreen2Tilemap,             TILESET_TITLE_SCREEN_2        ; TILEMAP_TITLE_SCREEN_2
+	tilemap TitleScreen1Tilemap,             TILESET_TITLE_SCREEN_1        ; TILEMAP_JAPANESE_TITLE_SCREEN
+	tilemap TitleScreen2Tilemap,             TILESET_TITLE_SCREEN_2        ; TILEMAP_JAPANESE_TITLE_SCREEN_CGB
 	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_1
 	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_2
 	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_3
-	tilemap TitleScreen3Tilemap,             TILESET_TITLE_SCREEN_3        ; TILEMAP_TITLE_SCREEN_3
-	tilemap TitleScreen4Tilemap,             TILESET_TITLE_SCREEN_4        ; TILEMAP_TITLE_SCREEN_4
+	tilemap TitleScreen3Tilemap,             TILESET_TITLE_SCREEN_3        ; TILEMAP_JAPANESE_TITLE_SCREEN_2
+	tilemap TitleScreen4Tilemap,             TILESET_TITLE_SCREEN_4        ; TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB
 	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2         ; TILEMAP_SOLID_TILES_4
 	tilemap PlayerTilemap,                   TILESET_PLAYER                ; TILEMAP_PLAYER
 	tilemap OpponentTilemap,                 TILESET_RONALD                ; TILEMAP_OPPONENT
-	tilemap TitleScreen5Tilemap,             TILESET_TITLE_SCREEN_5        ; TILEMAP_TITLE_SCREEN_5
-	tilemap TitleScreen6Tilemap,             TILESET_TITLE_SCREEN_6        ; TILEMAP_TITLE_SCREEN_6
+	tilemap TitleScreen5Tilemap,             TILESET_TITLE_SCREEN_5        ; TILEMAP_TITLE_SCREEN
+	tilemap TitleScreen6Tilemap,             TILESET_TITLE_SCREEN_6        ; TILEMAP_TITLE_SCREEN_CGB
 	tilemap CopyrightTilemap,                TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT
 	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT_CGB
 	tilemap NintendoTilemap,                 TILESET_NINTENDO              ; TILEMAP_NINTENDO
@@ -1415,10 +1416,10 @@ Tilesets: ; 8100f (20:500f)
 	tileset PokemonDomeEntranceTilesetGfx,  78 ; TILESET_POKEMON_DOME_ENTRANCE
 	tileset PokemonDomeTilesetGfx,         207 ; TILESET_POKEMON_DOME
 	tileset HallOfHonorTilesetGfx,         121 ; TILESET_HALL_OF_HONOR
-	tileset CardPop1Gfx,                   189 ; TILESET_CARD_POP_1
+	tileset CardPopGfx,                    189 ; TILESET_CARD_POP
 	tileset MedalGfx,                       72 ; TILESET_MEDAL
-	tileset CardPop2Gfx,                   109 ; TILESET_CARD_POP_2
-	tileset CardPop3Gfx,                    93 ; TILESET_CARD_POP_3
+	tileset GameBoyLinkGfx,                109 ; TILESET_GAMEBOY_LINK
+	tileset GameBoyPrinterGfx,              93 ; TILESET_GAMEBOY_PRINTER
 	tileset Colosseum1Gfx,                  96 ; TILESET_COLOSSEUM_1
 	tileset Colosseum2Gfx,                  86 ; TILESET_COLOSSEUM_2
 	tileset Evolution1Gfx,                  96 ; TILESET_EVOLUTION_1

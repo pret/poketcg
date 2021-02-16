@@ -90,7 +90,7 @@ StartDuel: ; 409f (1:409f)
 	ldh [hWhoseTurn], a
 	ld a, DUELIST_TYPE_PLAYER
 	ld [wPlayerDuelistType], a
-	ld a, [wcc19]
+	ld a, [wNPCDuelDeckID]
 	ld [wOpponentDeckID], a
 	call LoadPlayerDeck
 	call SwapTurn
@@ -116,7 +116,7 @@ StartDuel: ; 409f (1:409f)
 	xor a
 	ld [wCurrentDuelMenuItem], a
 	call SetupDuel
-	ld a, [wcc18]
+	ld a, [wNPCDuelPrizes]
 	ld [wDuelInitialPrizes], a
 	call InitVariablesToBeginDuel
 	ld a, [wDuelTheme]
@@ -233,7 +233,7 @@ MainDuelLoop: ; 40ee (1:40ee)
 	ld a, [wDuelFinished]
 	cp TURN_PLAYER_TIED
 	jr z, .tied_duel
-	call Func_39fc
+	call PlayDefaultSong
 	call WaitForWideTextBoxInput
 	call Func_3b31
 	call ResetSerial
@@ -4108,9 +4108,9 @@ FlushAllPalettesOrSendPal23Packet: ; 5a34 (1:5a34)
 	ld a, PAL23 << 3 + 1
 	ld hl, wTempSGBPacket
 	ld [hli], a
-	ld a, $9c
+	ld a, LOW(24 << 10 | 28 << 5 | 28)
 	ld [hli], a
-	ld a, $63
+	ld a, HIGH(24 << 10 | 28 << 5 | 28)
 	ld [hld], a
 	dec hl
 	xor a
@@ -8245,7 +8245,7 @@ Func_7364: ; 7364 (1:7364)
 	ret
 .asm_73cd
 	ld a, [wOpponentDeckID]
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 	call Func_3ae8
 	or a
 	ret
@@ -8253,7 +8253,7 @@ Func_7364: ; 7364 (1:7364)
 
 Func_73d8: ; 73d8 (1:73d8)
 	ld a, [wOpponentDeckID]
-	ld [wcc19], a
+	ld [wNPCDuelDeckID], a
 	call Func_3ae8
 	jr c, .asm_73ec
 	xor a
@@ -8268,7 +8268,7 @@ Func_73d8: ; 73d8 (1:73d8)
 	ld a, [wOpponentDeckID]
 	lb bc, 5, 16
 	call WriteTwoByteNumberInTxSymbolFormat
-	ld a, [wcc18]
+	ld a, [wNPCDuelPrizes]
 	lb bc, 15, 10
 	call WriteTwoByteNumberInTxSymbolFormat
 	ret
@@ -8436,8 +8436,8 @@ Func_7594: ; 7594 (1:7594)
 	farcall Func_1a61f
 	ret
 
-Func_7599: ; 7599 (1:7599)
-	farcall Func_1a68d
+OpenBoosterPack: ; 7599 (1:7599)
+	farcall _OpenBoosterPack
 	ret
 
 rept $a62

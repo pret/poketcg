@@ -937,10 +937,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text03a5                                           ; 0x03a5
 	textpointer Text03a6                                           ; 0x03a6
 	textpointer Text03a7                                           ; 0x03a7
-	textpointer Text03a8                                           ; 0x03a8
-	textpointer Text03a9                                           ; 0x03a9
-	textpointer Text03aa                                           ; 0x03aa
-	textpointer Text03ab                                           ; 0x03ab
+	textpointer ColosseumBoosterText                               ; 0x03a8
+	textpointer EvolutionBoosterText                               ; 0x03a9
+	textpointer MysteryBoosterText                                 ; 0x03aa
+	textpointer LaboratoryBoosterText                              ; 0x03ab
 	textpointer DrMasonNPCName                                     ; 0x03ac
 	textpointer RonaldNPCName                                      ; 0x03ad
 	textpointer IshiharaNPCName                                    ; 0x03ae

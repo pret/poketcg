@@ -1520,12 +1520,12 @@ UpdateRNGSources: ; 089b (0:089b)
 	ret
 
 ; initilizes variables used to decompress
-; BG Map data in DecompressBGMap
+; data in DecompressData
 ; de points to the source of compressed data
 ; b is used as the HIGH byte of the
 ; WRAM address to write to ($100 bytes of buffer space)
 ; also clears this $100 byte space
-InitBGMapDecompression: ; 08bf (0:08bf)
+InitDataDecompression: ; 08bf (0:08bf)
 	ld hl, wcad6
 	ld [hl], e
 	inc hl
@@ -1553,13 +1553,13 @@ InitBGMapDecompression: ; 08bf (0:08bf)
 	jr nz, .loop
 	ret
 
-; decompresses BG Map data
-; uses values initialized by InitBGMapDecompression
+; decompresses data
+; uses values initialized by InitDataDecompression
 ; wcad6 holds the pointer for compressed source
 ; input:
-; bc = map width
+; bc = row width
 ; de = buffer to place decompressed data
-DecompressBGMap: ; 08de (0:08de)
+DecompressData: ; 08de (0:08de)
 	push hl
 	push de
 .loop
@@ -3023,7 +3023,7 @@ CopyDeckData: ; 1072 (0:1072)
 	ld a, [hl]
 	or a
 	ret nz
-	debug_ret
+	debug_nop
 	scf
 	ret
 
@@ -10563,7 +10563,7 @@ Func_37c5: ; 37c5 (0:37c5)
 	jr nz, .asm_37c7
 	ret
 
-Func_380e: ; 380e (0:380e)
+OverworldDoFrameFunction: ; 380e (0:380e)
 	ld a, [wd0c1]
 	bit 7, a
 	ret nz
@@ -10677,18 +10677,18 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	ret
 
 GameEvent_ChallengeMachine: ; 38db (0:38db)
-	ld a, $6
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_PC_MAIN_MENU
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	call EnableSRAM
 	xor a
 	ld [sba44], a
 	call DisableSRAM
 .asm_38ed
 	farcall Func_131d3
-	ld a, $9
-	ld [wd111], a
-	call Func_39fc
+	ld a, MUSIC_OVERWORLD
+	ld [wDefaultSong], a
+	call PlayDefaultSong
 	scf
 	ret
 
@@ -10711,7 +10711,7 @@ GameEvent_Credits: ; 3911 (0:3911)
 
 Func_3917: ; 3917 (0:3917)
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
-	farcall GetEventFlagValue
+	farcall GetEventValue
 	call EnableSRAM
 	ld [s0a00a], a
 	call DisableSRAM
@@ -10831,7 +10831,7 @@ GetItemInLoadedNPCIndex: ; 39ad (0:39ad)
 	push bc
 	cp LOADED_NPC_MAX
 	jr c, .asm_39b4
-	debug_ret
+	debug_nop
 	xor a
 .asm_39b4
 	add a
@@ -10880,11 +10880,11 @@ FindLoadedNPC: ; 39c3 (0:39c3)
 	pop hl
 	ret
 
-Func_39ea: ; 39ea (0:39ea)
+GetNextNPCMovementByte: ; 39ea (0:39ea)
 	push bc
 	ldh a, [hBankROM]
 	push af
-	ld a, $03
+	ld a, BANK(ExecuteNPCMovement)
 	call BankswitchROM
 	ld a, [bc]
 	ld c, a
@@ -10894,13 +10894,13 @@ Func_39ea: ; 39ea (0:39ea)
 	pop bc
 	ret
 
-Func_39fc: ; 39fc (0:39fc)
+PlayDefaultSong: ; 39fc (0:39fc)
 	push hl
 	push bc
 	call AssertSongFinished
 	or a
 	push af
-	call Func_3a1f
+	call GetDefaultSong
 	ld c, a
 	pop af
 	jr z, .asm_3a11
@@ -10910,7 +10910,7 @@ Func_39fc: ; 39fc (0:39fc)
 	jr z, .asm_3a1c
 .asm_3a11
 	ld a, c
-	cp $1f
+	cp NUM_SONGS
 	jr nc, .asm_3a1c
 	ld [wd112], a
 	call PlaySong
@@ -10919,21 +10919,22 @@ Func_39fc: ; 39fc (0:39fc)
 	pop hl
 	ret
 
-Func_3a1f: ; 3a1f (0:3a1f)
+; returns [wDefaultSong] or MUSIC_RONALD in a
+GetDefaultSong: ; 3a1f (0:3a1f)
 	ld a, [wd3b8]
 	or a
-	jr z, .asm_3a37
-	ld a, [wd32e]
-	cp $2
-	jr z, .asm_3a37
-	cp $b
-	jr z, .asm_3a37
-	cp $c
-	jr z, .asm_3a37
+	jr z, .default_song
+	ld a, [wOverworldMapSelection]
+	cp OWMAP_ISHIHARAS_HOUSE
+	jr z, .default_song
+	cp OWMAP_CHALLENGE_HALL
+	jr z, .default_song
+	cp OWMAP_POKEMON_DOME
+	jr z, .default_song
 	ld a, MUSIC_RONALD
 	ret
-.asm_3a37
-	ld a, [wd111]
+.default_song
+	ld a, [wDefaultSong]
 	ret
 
 Func_3a3b: ; 3a3b (0:3a3b)
@@ -10952,13 +10953,13 @@ Func_3a4a: ; 3a4a (0:3a4a)
 	farcall Func_115a3
 	ret
 
-Func_3a4f: ; 3a4f (0:3a4f)
+SaveGame: ; 3a4f (0:3a4f)
 	push af
 	push bc
 	push de
 	push hl
 	ld c, $00
-	farcall Func_1157c
+	farcall _SaveGame
 	pop hl
 	pop de
 	pop bc
@@ -11233,17 +11234,17 @@ ResetDoFrameFunction: ; 3bdb (0:3bdb)
 	pop hl
 	ret
 
-; decompresses BG Map data from a given bank
-; uses values initialized by InitBGMapDecompression
+; decompresses data from a given bank
+; uses values initialized by InitDataDecompression
 ; input:
-; bc = map width
+; bc = row width
 ; de = buffer to place decompressed data
-DecompressBGMapFromBank: ; 3be4 (0:3be4)
+DecompressDataFromBank: ; 3be4 (0:3be4)
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
 	call BankswitchROM
-	call DecompressBGMap
+	call DecompressData
 	pop af
 	call BankswitchROM
 	ret
@@ -11606,7 +11607,7 @@ GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
 GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
-	debug_ret
+	debug_nop
 	ld a, SPRITE_ANIM_BUFFER_CAPACITY - 1 ; default to last sprite
 .got_sprite
 	push bc
@@ -11643,29 +11644,29 @@ Func_3de7: ; 3de7 (0:3de7)
 	pop hl
 	ret
 
-Func_3df3: ; 3df3 (0:3df3)
+LoadScene: ; 3df3 (0:3df3)
 	push af
 	ldh a, [hBankROM]
 	push af
 	push hl
-	ld a, BANK(Func_12c7f)
+	ld a, BANK(_LoadScene)
 	call BankswitchROM
 	ld hl, sp+$5
 	ld a, [hl]
-	call Func_12c7f
+	call _LoadScene
 	call FlushAllPalettes
 	pop hl
 	pop af
 	call BankswitchROM
 	pop af
-	ld a, [wd61b]
+	ld a, [wSceneSpriteIndex]
 	ret
 
 ; draws player's portrait at b,c
 Func_3e10: ; 3e10 (0:3e10)
 	ld a, $1
 	ld [wd61e], a
-	ld a, $62
+	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
 Func_3e17: ; 3e17 (0:3e17)
@@ -11682,7 +11683,7 @@ Func_3e17: ; 3e17 (0:3e17)
 ; draws opponent's portrait given in a at b,c
 Func_3e2a: ; 3e2a (0:3e2a)
 	ld [wd61e], a
-	ld a, $63
+	ld a, TILEMAP_OPPONENT
 	jr Func_3e17
 
 Func_3e31: ; 3e31 (0:3e31)

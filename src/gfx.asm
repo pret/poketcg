@@ -207,7 +207,7 @@ HallOfHonorCGBTilemap:: ; 85df4 (21:5df4)
 
 	INCBIN "data/maps/map59.bin"
 
-CardPop1Tilemap:: ; 85f7c (21:5f7c)
+CardPopCGBTilemap:: ; 85f7c (21:5f7c)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -215,7 +215,7 @@ CardPop1Tilemap:: ; 85f7c (21:5f7c)
 
 	INCBIN "data/maps/map60.bin"
 
-CardPop1CGBTilemap:: ; 8607f (21:607f)
+CardPopTilemap:: ; 8607f (21:607f)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -279,7 +279,7 @@ PsychicMedalTilemap:: ; 86201 (21:6201)
 
 	INCBIN "data/maps/map69.bin"
 
-CardPop2Tilemap:: ; 86217 (21:6217)
+GameBoyLinkCGBTilemap:: ; 86217 (21:6217)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -287,7 +287,7 @@ CardPop2Tilemap:: ; 86217 (21:6217)
 
 	INCBIN "data/maps/map70.bin"
 
-CardPop2CGBTilemap:: ; 862da (21:62da)
+GameBoyLinkTilemap:: ; 862da (21:62da)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -295,7 +295,7 @@ CardPop2CGBTilemap:: ; 862da (21:62da)
 
 	INCBIN "data/maps/map71.bin"
 
-CardPop2Unknown1Tilemap:: ; 86364 (21:6364)
+GameBoyLinkConnectingCGBTilemap:: ; 86364 (21:6364)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -303,7 +303,7 @@ CardPop2Unknown1Tilemap:: ; 86364 (21:6364)
 
 	INCBIN "data/maps/map72.bin"
 
-CardPop2Unknown2Tilemap:: ; 86443 (21:6443)
+GameBoyLinkConnectingTilemap:: ; 86443 (21:6443)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -311,7 +311,7 @@ CardPop2Unknown2Tilemap:: ; 86443 (21:6443)
 
 	INCBIN "data/maps/map73.bin"
 
-CardPop3Tilemap:: ; 864df (21:64df)
+GameBoyPrinterCGBTilemap:: ; 864df (21:64df)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -319,7 +319,7 @@ CardPop3Tilemap:: ; 864df (21:64df)
 
 	INCBIN "data/maps/map74.bin"
 
-CardPop3CGBTilemap:: ; 865b5 (21:65b5)
+GameBoyPrinterTilemap:: ; 865b5 (21:65b5)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
@@ -733,17 +733,17 @@ AnimData11:: ; 8fff5 (23:7ff5)
 
 SECTION "Gfx 6", ROMX
 
-CardPop1Gfx:: ; 90000 (24:4000)
+CardPopGfx:: ; 90000 (24:4000)
 	dw 189
-	INCBIN "gfx/cardpop/cardpop1.2bpp"
+	INCBIN "gfx/link/cardpop.2bpp"
 
-CardPop2Gfx:: ; 90bd2 (24:4bd2)
+GameBoyLinkGfx:: ; 90bd2 (24:4bd2)
 	dw 109
-	INCBIN "gfx/cardpop/cardpop2.2bpp"
+	INCBIN "gfx/link/gameboylink.2bpp"
 
-CardPop3Gfx:: ; 912a4 (24:52a4)
+GameBoyPrinterGfx:: ; 912a4 (24:52a4)
 	dw 93
-	INCBIN "gfx/cardpop/cardpop3.2bpp"
+	INCBIN "gfx/link/gameboyprinter.2bpp"
 
 Colosseum1Gfx:: ; 91876 (24:5876)
 	dw 96

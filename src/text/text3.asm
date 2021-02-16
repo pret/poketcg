@@ -1604,19 +1604,19 @@ Text03a6: ; 3f631 (f:7631)
 Text03a7: ; 3f643 (f:7643)
 	done
 
-Text03a8: ; 3f644 (f:7644)
+ColosseumBoosterText: ; 3f644 (f:7644)
 	text "COLOSSEUM"
 	done
 
-Text03a9: ; 3f64f (f:764f)
+EvolutionBoosterText: ; 3f64f (f:764f)
 	text "EVOLUTION"
 	done
 
-Text03aa: ; 3f65a (f:765a)
+MysteryBoosterText: ; 3f65a (f:765a)
 	text "MYSTERY"
 	done
 
-Text03ab: ; 3f663 (f:7663)
+LaboratoryBoosterText: ; 3f663 (f:7663)
 	text "LABORATORY"
 	done
 
