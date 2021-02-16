@@ -94,13 +94,13 @@ HandleOverworldMode: ; c0ce (3:40ce)
 	jp hl
 
 OverworldModePointers: ; c0e0 (3:40e0)
-	dw Func_c0e8         ; on map
+	dw UpdateOverworldMap
 	dw CallHandlePlayerMoveMode
 	dw SetScriptData
 	dw EnterScript
 
-Func_c0e8: ; c0e8 (3:40e8)
-	farcall Func_10e55
+UpdateOverworldMap: ; c0e8 (3:40e8)
+	farcall OverworldMap_Update
 	ret
 
 CallHandlePlayerMoveMode: ; c0ed (3:40ed)
@@ -720,7 +720,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .not_ow_map
-	farcall Func_10fde
+	farcall OverworldMap_InitCursorSprite
 .not_ow_map
 	ret
 
@@ -765,7 +765,7 @@ Func_c554: ; c554 (3:4554)
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
 	jr nz, .not_ow_map
-	farcall Func_10e28
+	farcall OverworldMap_UpdatePlayerAndCursorSprites
 	ret
 
 .not_ow_map
@@ -3193,14 +3193,14 @@ Unknown_d3dd: ; d3dd (3:53dd)
 ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
 	ld a, OWMAP_MASON_LABORATORY
 	ld [wOverworldMapSelection], a
-	farcall Func_11024
+	farcall OverworldMap_BeginPlayerMovement
 .asm_d3e9
 	call DoFrameIfLCDEnabled
-	farcall Func_11060
-	ld a, [wd33e]
+	farcall OverworldMap_UpdatePlayerWalkingAnimation
+	ld a, [wOverworldMapPlayerAnimationState]
 	cp $2
 	jr nz, .asm_d3e9
-	farcall PrintOverworldMapName
+	farcall OverworldMap_PrintMapName
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_OverrideSong: ; d3fe (3:53fe)

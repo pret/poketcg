@@ -48,6 +48,7 @@
 	const OWMAP_FIRE_CLUB        ; $0A
 	const OWMAP_CHALLENGE_HALL   ; $0B
 	const OWMAP_POKEMON_DOME     ; $0C
+	const OWMAP_MYSTERY_HOUSE    ; $0D for OverworldMapNames
 
 ; Size of map data. See data/npc_map_data.asm and data/map_objects.asm
 ; for more info on what these represent

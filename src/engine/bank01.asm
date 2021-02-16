@@ -4108,9 +4108,9 @@ FlushAllPalettesOrSendPal23Packet: ; 5a34 (1:5a34)
 	ld a, PAL23 << 3 + 1
 	ld hl, wTempSGBPacket
 	ld [hli], a
-	ld a, $9c
+	ld a, LOW(24 << 10 | 28 << 5 | 28)
 	ld [hli], a
-	ld a, $63
+	ld a, HIGH(24 << 10 | 28 << 5 | 28)
 	ld [hld], a
 	dec hl
 	xor a

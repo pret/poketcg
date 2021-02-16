@@ -343,16 +343,16 @@ Func_703cb: ; 703cb (1c:43cb)
 	call Func_70403
 	ld hl, wDecompressionBuffer
 	ld de, wTempSGBPacket + $1
-	ld bc, $8
+	ld bc, $8 ; palette 2, color 0-3
 	call CopyDataHLtoDE
 	ld hl, wDecompressionBuffer + $22
 	ld de, wTempSGBPacket + $9
-	ld bc, $6
+	ld bc, $6 ; palette 3, color 1-3
 	call CopyDataHLtoDE
 	xor a
 	ld [wTempSGBPacket + $f], a
 	ld hl, wTempSGBPacket
-	ld a, $09
+	ld a, PAL23 << 3 + 1
 	ld [hl], a
 	call Func_704c7
 	call SendSGB
@@ -429,13 +429,16 @@ Func_70498: ; 70498 (1c:4498)
 	pop hl
 	ret
 
+; set color 0 to default white rgb(28, 28, 24)
+; input:
+; hl = pointer to start of SGB packet
 Func_704c7: ; 704c7 (1c:44c7)
 	push af
 	push hl
 	inc hl
-	ld a, $9c
+	ld a, LOW(24 << 10 | 28 << 5 | 28)
 	ld [hli], a
-	ld a, $63
+	ld a, HIGH(24 << 10 | 28 << 5 | 28)
 	ld [hl], a
 	pop hl
 	pop af

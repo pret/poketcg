@@ -422,48 +422,56 @@ Unknown_10df0: ; 10df0 (4:4df0)
 Unknown_10e17: ; 10e17 (4:4e17)
 	INCROM $10e17, $10e28
 
-Func_10e28: ; 10e28 (4:4e28)
+; refresh the cursor's position based on the currently selected map
+; and refresh the player's position based on the starting map
+; but only if the player is not being animated across the overworld
+OverworldMap_UpdatePlayerAndCursorSprites: ; 10e28 (4:4e28)
 	push hl
 	push bc
 	push de
-	ld a, [wd33b]
+	ld a, [wOverworldMapCursorSprite]
 	ld [wWhichSprite], a
 	ld a, [wOverworldMapSelection]
-	ld d, $00
-	ld e, $f4
-	call Func_10ef0
-	ld a, [wd33e]
+	ld d, 0
+	ld e, -12
+	call OverworldMap_SetSpritePosition
+	ld a, [wOverworldMapPlayerAnimationState]
 	or a
-	jr nz, .asm_10e51
+	jr nz, .player_walking
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld a, [wd33d]
-	ld d, $00
-	ld e, $00
-	call Func_10ef0
-.asm_10e51
+	ld a, [wOverworldMapStartingPosition]
+	ld d, 0
+	ld e, 0
+	call OverworldMap_SetSpritePosition
+.player_walking
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_10e55: ; 10e55 (4:4e55)
+; if no selection has been made yet, call OverworldMap_HandleKeyPress
+; if the player is being animated across the screen, call OverworldMap_UpdatePlayerWalkingAnimation
+; if the player has finished walking, call OverworldMap_LoadSelectedMap
+OverworldMap_Update: ; 10e55 (4:4e55)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld a, [wd33e]
+	ld a, [wOverworldMapPlayerAnimationState]
 	or a
-	jr nz, .asm_10e65
+	jr nz, .player_walking
 	call OverworldMap_HandleKeyPress
 	ret
-.asm_10e65
-	cp $2
-	jr z, .asm_10e6d
-	call Func_11060
+.player_walking
+	cp 2
+	jr z, .player_finished_walking
+	call OverworldMap_UpdatePlayerWalkingAnimation
 	ret
-.asm_10e6d
-	call LoadOverworldMapSelection
+.player_finished_walking
+	call OverworldMap_LoadSelectedMap
 	ret
 
+; update the map selection if the DPad is pressed
+; or finalize the selection if the A button is pressed
 OverworldMap_HandleKeyPress: ; 10e71 (4:4e71)
 	ldh a, [hKeysPressed]
 	and D_PAD
@@ -478,12 +486,13 @@ OverworldMap_HandleKeyPress: ; 10e71 (4:4e71)
 	jr z, .done
 	ld a, SFX_02
 	call PlaySFX
-	call Func_11016 ; load map?
-	call Func_11024
+	call OverworldMap_UpdateCursorAnimation
+	call OverworldMap_BeginPlayerMovement
 	jr .done
 .done
 	ret
 
+; update wOverworldMapSelection based on the pressed direction in wPlayerDirection
 OverworldMap_HandleDPad: ; 10e97 (4:4e97)
 	push hl
 	pop hl
@@ -501,7 +510,7 @@ OverworldMap_HandleDPad: ; 10e97 (4:4e97)
 	or a
 	jr z, .no_transition
 	ld [wOverworldMapSelection], a
-	call PrintOverworldMapName ; update cursor oam?
+	call OverworldMap_PrintMapName
 	ld a, SFX_01
 	call PlaySFX
 .no_transition
@@ -588,8 +597,13 @@ OverworldMap_CursorTransitions: ; 10ebc (4:4ebc)
 	db OWMAP_FIGHTING_CLUB    ; SOUTH
 	db OWMAP_ROCK_CLUB        ; WEST
 
-Func_10ef0: ; 10ef0 (4:4ef0)
-	call Func_10efd
+; set the active sprite (player or cursor) at the appropriate map position
+; input:
+; a = OWMAP_* value
+; d = x offset
+; e = y offset
+OverworldMap_SetSpritePosition: ; 10ef0 (4:4ef0)
+	call OverworldMap_GetMapPosition
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
 	ld a, d
@@ -598,13 +612,20 @@ Func_10ef0: ; 10ef0 (4:4ef0)
 	ld [hl], a
 	ret
 
-Func_10efd: ; 10efd (4:4efd)
+; input:
+; a = OWMAP_* value
+; d = x offset
+; e = y offset
+; output:
+; d = x position
+; e = y position
+OverworldMap_GetMapPosition: ; 10efd (4:4efd)
 	push hl
 	push de
 	rlca
 	ld e, a
-	ld d, $0
-	ld hl, Unknown_10f14
+	ld d, 0
+	ld hl, OverworldMap_MapPositions
 	add hl, de
 	pop de
 	ld a, [hli]
@@ -618,18 +639,30 @@ Func_10efd: ; 10efd (4:4efd)
 	pop hl
 	ret
 
-Unknown_10f14: ; 10f14 (4:4f14)
-	INCROM $10f14, $10f2e
+OverworldMap_MapPositions: ; 10f14 (4:4f14)
+	db $00, $00 ; unused
+	db $0C, $68 ; OWMAP_MASON_LABORATORY
+	db $04, $18 ; OWMAP_ISHIHARAS_HOUSE
+	db $34, $68 ; OWMAP_FIGHTING_CLUB
+	db $14, $38 ; OWMAP_ROCK_CLUB
+	db $6C, $64 ; OWMAP_WATER_CLUB
+	db $24, $50 ; OWMAP_LIGHTNING_CLUB
+	db $7C, $40 ; OWMAP_GRASS_CLUB
+	db $5C, $2C ; OWMAP_PSYCHIC_CLUB
+	db $7C, $20 ; OWMAP_SCIENCE_CLUB
+	db $6C, $10 ; OWMAP_FIRE_CLUB
+	db $3C, $20 ; OWMAP_CHALLENGE_HALL
+	db $44, $44 ; OWMAP_POKEMON_DOME
 
-PrintOverworldMapName: ; 10f2e (4:4f2e)
+OverworldMap_PrintMapName: ; 10f2e (4:4f2e)
 	push hl
 	push de
 	lb de, 1, 1
 	call InitTextPrinting
-	call GetOverworldMapName
+	call OverworldMap_GetOWMapID
 	rlca
 	ld e, a
-	ld d, $0
+	ld d, 0
 	ld hl, OverworldMapNames
 	add hl, de
 	ld a, [hli]
@@ -640,23 +673,26 @@ PrintOverworldMapName: ; 10f2e (4:4f2e)
 	pop hl
 	ret
 
-GetOverworldMapName: ; 10f4a (4:4f4a)
+; returns [wOverworldMapSelection] in a
+; or OWMAP_MYSTERY_HOUSE if [wOverworldMapSelection] == OWMAP_ISHIHARAS_HOUSE
+;   and EVENT_ISHIHARAS_HOUSE_MENTIONED == FALSE
+OverworldMap_GetOWMapID: ; 10f4a (4:4f4a)
 	push bc
 	ld a, [wOverworldMapSelection]
 	cp OWMAP_ISHIHARAS_HOUSE
-	jr nz, .asm_10f5f
+	jr nz, .got_map
 	ld c, a
 	ld a, EVENT_ISHIHARAS_HOUSE_MENTIONED
 	farcall GetEventValue
 	or a
 	ld a, c
-	jr nz, .asm_10f5f
-	ld a, $d
-.asm_10f5f
+	jr nz, .got_map
+	ld a, OWMAP_MYSTERY_HOUSE
+.got_map
 	pop bc
 	ret
 
-LoadOverworldMapSelection: ; 10f61 (4:4f61)
+OverworldMap_LoadSelectedMap: ; 10f61 (4:4f61)
 	push hl
 	push bc
 	ld a, [wOverworldMapSelection]
@@ -682,15 +718,15 @@ LoadOverworldMapSelection: ; 10f61 (4:4f61)
 
 INCLUDE "data/overworld_indexes.asm"
 
-Func_10fbc: ; 10fbc (4:4fbc)
+OverworldMap_InitVolcanoSprite: ; 10fbc (4:4fbc)
 	ld a, SPRITE_OW_MAP_OAM
 	farcall CreateSpriteAndAnimBufferEntry
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
 	ld a, $80
-	ld [hli], a
+	ld [hli], a ; x
 	ld a, $10
-	ld [hl], a
+	ld [hl], a ; y
 	ld b, $34 ; non-cgb volcano smoke
 	ld a, [wConsole]
 	cp CONSOLE_CGB
@@ -701,86 +737,99 @@ Func_10fbc: ; 10fbc (4:4fbc)
 	farcall StartNewSpriteAnimation
 	ret
 
-Func_10fde: ; 10fde (4:4fde)
+OverworldMap_InitCursorSprite: ; 10fde (4:4fde)
 	ld a, [wOverworldMapSelection]
-	ld [wd33d], a
+	ld [wOverworldMapStartingPosition], a
 	xor a
-	ld [wd33e], a
+	ld [wOverworldMapPlayerAnimationState], a
 	ld a, SPRITE_OW_MAP_OAM
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
-	ld [wd33b], a
-	ld b, $35 ; blue overworld map cursor
+	ld [wOverworldMapCursorSprite], a
+	ld b, $35 ; non-cgb overworld map cursor
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
-	ld b, $38 ; red overworld map cursor
+	ld b, $38 ; cgb overworld map cursor
 .not_cgb
 	ld a, b
-	ld [wd33c], a
+	ld [wOverworldMapCursorAnimation], a
 	call StartNewSpriteAnimation
 	ld a, EVENT_MASON_LAB_STATE
 	farcall GetEventValue
 	or a
-	jr nz, .asm_11015
+	jr nz, .visited_lab
 	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
-	set 7, [hl]
-.asm_11015
+	set SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+.visited_lab
 	ret
 
-Func_11016: ; 11016 (4:5016)
-	ld a, [wd33b]
+; play animation $36 (non-cgb) or $39 (cgb) to make the cursor blink faster
+; after a selection is made
+OverworldMap_UpdateCursorAnimation: ; 11016 (4:5016)
+	ld a, [wOverworldMapCursorSprite]
 	ld [wWhichSprite], a
-	ld a, [wd33c]
+	ld a, [wOverworldMapCursorAnimation]
 	inc a
 	call StartNewSpriteAnimation
 	ret
 
-Func_11024: ; 11024 (4:5024)
+; begin walking the player across the overworld
+; from wOverworldMapStartingPosition to wOverworldMapSelection
+OverworldMap_BeginPlayerMovement: ; 11024 (4:5024)
 	ld a, SFX_57
 	call PlaySFX
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
 	ld c, SPRITE_ANIM_FLAGS
 	call GetSpriteAnimBufferProperty
-	set 2, [hl]
-	ld hl, Unknown_1229f
-	ld a, [wd33d]
+	set SPRITE_ANIM_FLAG_SPEED, [hl]
+
+; get pointer table for starting map
+	ld hl, OverworldMap_PlayerMovementPaths
+	ld a, [wOverworldMapStartingPosition]
 	dec a
 	add a
 	ld c, a
-	ld b, $0
+	ld b, 0
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+
+; get path sequence for selected map
 	ld a, [wOverworldMapSelection]
 	dec a
 	add a
 	ld c, a
-	ld b, $0
+	ld b, 0
 	add hl, bc
 	ld a, [hli]
-	ld [wd33f], a
+	ld [wOverworldMapPlayerMovementPtr], a
 	ld a, [hl]
-	ld [wd340], a
-	ld a, $1
-	ld [wd33e], a
+	ld [wOverworldMapPlayerMovementPtr + 1], a
+
+	ld a, 1
+	ld [wOverworldMapPlayerAnimationState], a
 	xor a
-	ld [wd341], a
+	ld [wOverworldMapPlayerMovementCounter], a
 	ret
 
-; used while animating the player across the overworld map
-Func_11060: ; 11060 (4:5060)
+; update the player walking across the overworld
+; either by advancing along the current path
+; or determining the next direction to move along the path
+OverworldMap_UpdatePlayerWalkingAnimation: ; 11060 (4:5060)
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld a, [wd341]
+	ld a, [wOverworldMapPlayerMovementCounter]
 	or a
-	jp nz, Func_11184
-	ld a, [wd33f]
+	jp nz, OverworldMap_ContinuePlayerWalkingAnimation
+
+; get next x,y on the path
+	ld a, [wOverworldMapPlayerMovementPtr]
 	ld l, a
-	ld a, [wd340]
+	ld a, [wOverworldMapPlayerMovementPtr + 1]
 	ld h, a
 	ld a, [hli]
 	ld b, a
@@ -788,194 +837,245 @@ Func_11060: ; 11060 (4:5060)
 	ld c, a
 	and b
 	cp $ff
-	jr z, .asm_110a0
+	jr z, .player_finished_walking
 	ld a, c
 	or b
-	jr nz, .asm_11094
-	ld a, [wd33d]
+	jr nz, .next_point
+
+; point 0,0 means walk straight towards [wOverworldMapSelection]
+	ld a, [wOverworldMapStartingPosition]
 	ld e, a
 	ld a, [wOverworldMapSelection]
 	cp e
-	jr z, .asm_110a0
-	ld de, $0000
-	call Func_10efd
+	jr z, .player_finished_walking
+	lb de, 0, 0
+	call OverworldMap_GetMapPosition
 	ld b, d
 	ld c, e
-.asm_11094
+
+.next_point
 	ld a, l
-	ld [wd33f], a
+	ld [wOverworldMapPlayerMovementPtr], a
 	ld a, h
-	ld [wd340], a
-	call Func_110a6
-	ret
-.asm_110a0
-	ld a, $2
-	ld [wd33e], a
+	ld [wOverworldMapPlayerMovementPtr + 1], a
+	call OverworldMap_InitNextPlayerVelocity
 	ret
 
-Func_110a6: ; 110a6 (4:50a6)
+.player_finished_walking
+	ld a, 2
+	ld [wOverworldMapPlayerAnimationState], a
+	ret
+
+; input:
+; b = target x position
+; c = target y position
+OverworldMap_InitNextPlayerVelocity: ; 110a6 (4:50a6)
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
+
 	pop bc
 	ld a, b
-	sub [hl]
-	ld [wd343], a
-	ld a, $0
-	sbc $0
-	ld [wd344], a
+	sub [hl] ; a = target x - current x
+	ld [wOverworldMapPlayerPathHorizontalMovement], a
+	ld a, 0
+	sbc 0
+	ld [wOverworldMapPlayerPathHorizontalMovement + 1], a
+
 	inc hl
 	ld a, c
-	sub [hl]
-	ld [wd345], a
-	ld a, $0
-	sbc $0
-	ld [wd346], a
-	ld a, [wd343]
+	sub [hl] ; a = target y - current y
+	ld [wOverworldMapPlayerPathVerticalMovement], a
+	ld a, 0
+	sbc 0
+	ld [wOverworldMapPlayerPathVerticalMovement + 1], a
+
+	ld a, [wOverworldMapPlayerPathHorizontalMovement]
 	ld b, a
-	ld a, [wd344]
+	ld a, [wOverworldMapPlayerPathHorizontalMovement + 1]
 	bit 7, a
-	jr z, .asm_110d8
-	ld a, [wd343]
+	jr z, .positive
+; absolute value
+	ld a, [wOverworldMapPlayerPathHorizontalMovement]
 	cpl
 	inc a
 	ld b, a
-.asm_110d8
-	ld a, [wd345]
+
+.positive
+	ld a, [wOverworldMapPlayerPathVerticalMovement]
 	ld c, a
-	ld a, [wd346]
+	ld a, [wOverworldMapPlayerPathVerticalMovement + 1]
 	bit 7, a
-	jr z, .asm_110e9
-	ld a, [wd345]
+	jr z, .positive2
+; absolute value
+	ld a, [wOverworldMapPlayerPathVerticalMovement]
 	cpl
 	inc a
 	ld c, a
-.asm_110e9
+
+.positive2
+; if the absolute value of wOverworldMapPlayerPathVerticalMovement is larger than
+; the absolute value of wOverworldMapPlayerPathHorizontalMovement, this is dominantly
+; a north/south movement. otherswise, an east/west movement
 	ld a, b
 	cp c
-	jr c, .asm_110f2
-	call Func_11102
-	jr .asm_110f5
-.asm_110f2
-	call Func_1113e
-.asm_110f5
+	jr c, .north_south
+	call OverworldMap_InitPlayerEastWestMovement
+	jr .done
+.north_south
+	call OverworldMap_InitPlayerNorthSouthMovement
+.done
 	xor a
-	ld [wd347], a
-	ld [wd348], a
+	ld [wOverworldMapPlayerHorizontalSubPixelPosition], a
+	ld [wOverworldMapPlayerVerticalSubPixelPosition], a
 	farcall UpdatePlayerSprite
 	pop hl
 	ret
 
-Func_11102: ; 11102 (4:5102)
+; input:
+; b = absolute value of horizontal movement distance
+; c = absolute value of vertical movement distance
+OverworldMap_InitPlayerEastWestMovement: ; 11102 (4:5102)
+; use horizontal distance for counter
 	ld a, b
-	ld [wd341], a
+	ld [wOverworldMapPlayerMovementCounter], a
+
+; de = absolute horizontal distance, for later
 	ld e, a
-	ld d, $0
-	ld hl, wd343
+	ld d, 0
+
+; overwrite wOverworldMapPlayerPathHorizontalMovement with either -1.0 or +1.0
+; always move east/west by 1 pixel per frame
+	ld hl, wOverworldMapPlayerPathHorizontalMovement
 	xor a
 	ld [hli], a
 	bit 7, [hl]
-	jr z, .asm_11115
+	jr z, .east
 	dec a
-	jr .asm_11116
-.asm_11115
+	jr .west
+.east
 	inc a
-.asm_11116
+.west
 	ld [hl], a
-	ld b, c
-	ld c, $0
+
+; divide (total vertical distance * $100) by total horizontal distance
+	ld b, c ; vertical distance in high byte
+	ld c, 0
 	call DivideBCbyDE
-	ld a, [wd346]
+	ld a, [wOverworldMapPlayerPathVerticalMovement + 1]
 	bit 7, a
-	jr z, .asm_11127
-	call Func_11179
-.asm_11127
+	jr z, .positive
+; restore negative sign
+	call OverworldMap_NegateBC
+.positive
 	ld a, c
-	ld [wd345], a
+	ld [wOverworldMapPlayerPathVerticalMovement], a
 	ld a, b
-	ld [wd346], a
-	ld hl, wd344
-	ld a, $1
+	ld [wOverworldMapPlayerPathVerticalMovement + 1], a
+
+; set player direction
+	ld hl, wOverworldMapPlayerPathHorizontalMovement + 1
+	ld a, EAST
 	bit 7, [hl]
-	jr z, .asm_1113a
-	ld a, $3
-.asm_1113a
+	jr z, .east2
+	ld a, WEST
+.east2
 	ld [wPlayerDirection], a
 	ret
 
-Func_1113e: ; 1113e (4:513e)
+; input:
+; b = absolute value of horizontal movement distance
+; c = absolute value of vertical movement distance
+OverworldMap_InitPlayerNorthSouthMovement: ; 1113e (4:513e)
+; use vertical distance for counter
 	ld a, c
-	ld [wd341], a
+	ld [wOverworldMapPlayerMovementCounter], a
+
+; de = absolute vertical distance, for later
 	ld e, a
-	ld d, $0
-	ld hl, wd345
+	ld d, 0
+
+; overwrite wOverworldMapPlayerPathVerticalMovement with either -1.0 or +1.0
+; always move north/south by 1 pixel per frame
+	ld hl, wOverworldMapPlayerPathVerticalMovement
 	xor a
 	ld [hli], a
 	bit 7, [hl]
-	jr z, .asm_11151
+	jr z, .south
 	dec a
-	jr .asm_11152
-.asm_11151
+	jr .north
+.south
 	inc a
-.asm_11152
+.north
 	ld [hl], a
-	ld c, $0
+
+; divide (total horizontal distance * $100) by total vertical distance
+; horizontal distance in high byte
+	ld c, 0
 	call DivideBCbyDE
-	ld a, [wd344]
+	ld a, [wOverworldMapPlayerPathHorizontalMovement + 1]
 	bit 7, a
-	jr z, .asm_11162
-	call Func_11179
-.asm_11162
+	jr z, .positive
+; restore negative sign
+	call OverworldMap_NegateBC
+.positive
 	ld a, c
-	ld [wd343], a
+	ld [wOverworldMapPlayerPathHorizontalMovement], a
 	ld a, b
-	ld [wd344], a
-	ld hl, wd346
-	ld a, $2
+	ld [wOverworldMapPlayerPathHorizontalMovement + 1], a
+
+; set player direction
+	ld hl, wOverworldMapPlayerPathVerticalMovement + 1
+	ld a, SOUTH
 	bit 7, [hl]
-	jr z, .asm_11175
-	ld a, $0
-.asm_11175
+	jr z, .south2
+	ld a, NORTH
+.south2
 	ld [wPlayerDirection], a
 	ret
 
-Func_11179: ; 11179 (4:5179)
+; output:
+; bc = bc * -1
+OverworldMap_NegateBC: ; 11179 (4:5179)
 	ld a, c
 	cpl
-	add $1
+	add 1
 	ld c, a
 	ld a, b
 	cpl
-	adc $0
+	adc 0
 	ld b, a
 	ret
 
-Func_11184: ; 11184 (4:5184)
-	ld a, [wd347]
+; add the x/y speed to the current sprite position,
+; accounting for sub-pixel position
+; and decrement [wOverworldMapPlayerMovementCounter]
+OverworldMap_ContinuePlayerWalkingAnimation: ; 11184 (4:5184)
+	ld a, [wOverworldMapPlayerHorizontalSubPixelPosition]
 	ld d, a
-	ld a, [wd348]
+	ld a, [wOverworldMapPlayerVerticalSubPixelPosition]
 	ld e, a
 	ld c, SPRITE_ANIM_COORD_X
 	call GetSpriteAnimBufferProperty
-	ld a, [wd343]
+	ld a, [wOverworldMapPlayerPathHorizontalMovement]
 	add d
 	ld d, a
-	ld a, [wd344]
-	adc [hl]
+	ld a, [wOverworldMapPlayerPathHorizontalMovement + 1]
+	adc [hl] ; add carry from sub-pixel movement
 	ld [hl], a
 	inc hl
-	ld a, [wd345]
+	ld a, [wOverworldMapPlayerPathVerticalMovement]
 	add e
 	ld e, a
-	ld a, [wd346]
-	adc [hl]
+	ld a, [wOverworldMapPlayerPathVerticalMovement + 1]
+	adc [hl] ; add carry from sub-pixel movement
 	ld [hl], a
 	ld a, d
-	ld [wd347], a
+	ld [wOverworldMapPlayerHorizontalSubPixelPosition], a
 	ld a, e
-	ld [wd348], a
-	ld hl, wd341
+	ld [wOverworldMapPlayerVerticalSubPixelPosition], a
+	ld hl, wOverworldMapPlayerMovementCounter
 	dec [hl]
 	ret
 
@@ -1332,10 +1432,672 @@ SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 
 	db $00, $00, $00 ; marker bytes -- end of config table
 
+OverworldMap_PlayerMovementPaths: ; 1229f (4:629f)
+	dw OverworldMap_MasonLaboratoryPaths
+	dw OverworldMap_IshiharasHousePaths
+	dw OverworldMap_FightingClubPaths
+	dw OverworldMap_RockClubPaths
+	dw OverworldMap_WaterClubPaths
+	dw OverworldMap_LightningClubPaths
+	dw OverworldMap_GrassClubPaths
+	dw OverworldMap_PsychicClubPaths
+	dw OverworldMap_ScienceClubPaths
+	dw OverworldMap_FireClubPaths
+	dw OverworldMap_ChallengeHallPaths
+	dw OverworldMap_PokemonDomePaths
 
+OverworldMap_MasonLaboratoryPaths: ; 122b7 (4:62b7)
+	dw OverworldMap_NoMovement
+	dw OverworldMap_MasonLaboratoryPathToIshiharasHouse
+	dw OverworldMap_StraightPath
+	dw OverworldMap_MasonLaboratoryPathToRockClub
+	dw OverworldMap_MasonLaboratoryPathToWaterClub
+	dw OverworldMap_MasonLaboratoryPathToLightningClub
+	dw OverworldMap_MasonLaboratoryPathToGrassClub
+	dw OverworldMap_MasonLaboratoryPathToPsychicClub
+	dw OverworldMap_MasonLaboratoryPathToScienceClub
+	dw OverworldMap_MasonLaboratoryPathToFireClub
+	dw OverworldMap_MasonLaboratoryPathToChallengeHall
+	dw OverworldMap_MasonLaboratoryPathToPokemonDome
 
-Unknown_1229f: ; 1229f (4:629f)
-	INCROM $1229f, $126d1
+OverworldMap_IshiharasHousePaths: ; 122cf (4:62cf)
+	dw OverworldMap_IshiharasHousePathToMasonLaboratory
+	dw OverworldMap_NoMovement
+	dw OverworldMap_IshiharasHousePathToFightingClub
+	dw OverworldMap_IshiharasHousePathToRockClub
+	dw OverworldMap_IshiharasHousePathToWaterClub
+	dw OverworldMap_IshiharasHousePathToLightningClub
+	dw OverworldMap_IshiharasHousePathToGrassClub
+	dw OverworldMap_IshiharasHousePathToPsychicClub
+	dw OverworldMap_IshiharasHousePathToScienceClub
+	dw OverworldMap_IshiharasHousePathToFireClub
+	dw OverworldMap_IshiharasHousePathToChallengeHall
+	dw OverworldMap_IshiharasHousePathToPokemonDome
+
+OverworldMap_FightingClubPaths: ; 122e7 (4:62e7)
+	dw OverworldMap_StraightPath
+	dw OverworldMap_FightingClubPathToIshiharasHouse
+	dw OverworldMap_NoMovement
+	dw OverworldMap_FightingClubPathToRockClub
+	dw OverworldMap_FightingClubPathToWaterClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_FightingClubPathToPsychicClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_FightingClubPathToFireClub
+	dw OverworldMap_FightingClubPathToChallengeHall
+	dw OverworldMap_StraightPath
+
+OverworldMap_RockClubPaths: ; 122ff (4:62ff)
+	dw OverworldMap_RockClubPathToMasonLaboratory
+	dw OverworldMap_RockClubPathToIshiharasHouse
+	dw OverworldMap_RockClubPathToFightingClub
+	dw OverworldMap_NoMovement
+	dw OverworldMap_RockClubPathToWaterClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_RockClubPathToGrassClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_RockClubPathToScienceClub
+	dw OverworldMap_RockClubPathToFireClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+
+OverworldMap_WaterClubPaths: ; 12317 (4:6317)
+	dw OverworldMap_WaterClubPathToMasonLaboratory
+	dw OverworldMap_WaterClubPathToIshiharasHouse
+	dw OverworldMap_WaterClubPathToFightingClub
+	dw OverworldMap_WaterClubPathToRockClub
+	dw OverworldMap_NoMovement
+	dw OverworldMap_WaterClubPathToLightningClub
+	dw OverworldMap_WaterClubPathToGrassClub
+	dw OverworldMap_WaterClubPathToPsychicClub
+	dw OverworldMap_WaterClubPathToScienceClub
+	dw OverworldMap_WaterClubPathToFireClub
+	dw OverworldMap_WaterClubPathToChallengeHall
+	dw OverworldMap_WaterClubPathToPokemonDome
+
+OverworldMap_LightningClubPaths: ; 1232f (4:632f)
+	dw OverworldMap_LightningClubPathToMasonLaboratory
+	dw OverworldMap_LightningClubPathToIshiharasHouse
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_LightningClubPathToWaterClub
+	dw OverworldMap_NoMovement
+	dw OverworldMap_StraightPath
+	dw OverworldMap_LightningClubPathToPsychicClub
+	dw OverworldMap_LightningClubPathToScienceClub
+	dw OverworldMap_LightningClubPathToFireClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+
+OverworldMap_GrassClubPaths: ; 12347 (4:6347)
+	dw OverworldMap_GrassClubPathToMasonLaboratory
+	dw OverworldMap_GrassClubPathToIshiharasHouse
+	dw OverworldMap_StraightPath
+	dw OverworldMap_GrassClubPathToRockClub
+	dw OverworldMap_GrassClubPathToWaterClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_NoMovement
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_GrassClubPathToChallengeHall
+	dw OverworldMap_StraightPath
+
+OverworldMap_PsychicClubPaths: ; 1235f (4:635f)
+	dw OverworldMap_PsychicClubPathToMasonLaboratory
+	dw OverworldMap_PsychicClubPathToIshiharasHouse
+	dw OverworldMap_PsychicClubPathToFightingClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_PsychicClubPathToWaterClub
+	dw OverworldMap_PsychicClubPathToLightningClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_NoMovement
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+
+OverworldMap_ScienceClubPaths: ; 12377 (4:6377)
+	dw OverworldMap_ScienceClubPathToMasonLaboratory
+	dw OverworldMap_ScienceClubPathToIshiharasHouse
+	dw OverworldMap_StraightPath
+	dw OverworldMap_ScienceClubPathToRockClub
+	dw OverworldMap_ScienceClubPathToWaterClub
+	dw OverworldMap_ScienceClubPathToLightningClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_NoMovement
+	dw OverworldMap_StraightPath
+	dw OverworldMap_ScienceClubPathToChallengeHall
+	dw OverworldMap_StraightPath
+
+OverworldMap_FireClubPaths: ; 1238f (4:638f)
+	dw OverworldMap_FireClubPathToMasonLaboratory
+	dw OverworldMap_FireClubPathToIshiharasHouse
+	dw OverworldMap_FireClubPathToFightingClub
+	dw OverworldMap_FireClubPathToRockClub
+	dw OverworldMap_FireClubPathToWaterClub
+	dw OverworldMap_FireClubPathToLightningClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_NoMovement
+	dw OverworldMap_FireClubPathToChallengeHall
+	dw OverworldMap_FireClubPathToPokemonDome
+
+OverworldMap_ChallengeHallPaths: ; 123a7 (4:63a7)
+	dw OverworldMap_ChallengeHallPathToMasonLaboratory
+	dw OverworldMap_ChallengeHallPathToIshiharasHouse
+	dw OverworldMap_ChallengeHallPathToFightingClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_ChallengeHallPathToWaterClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_ChallengeHallPathToGrassClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_ChallengeHallPathToScienceClub
+	dw OverworldMap_ChallengeHallPathToFireClub
+	dw OverworldMap_NoMovement
+	dw OverworldMap_StraightPath
+
+OverworldMap_PokemonDomePaths: ; 123bf (4:63bf)
+	dw OverworldMap_PokemonDomePathToMasonLaboratory
+	dw OverworldMap_PokemonDomePathToIshiharasHouse
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_PokemonDomePathToWaterClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_StraightPath
+	dw OverworldMap_PokemonDomePathToFireClub
+	dw OverworldMap_StraightPath
+	dw OverworldMap_NoMovement
+
+OverworldMap_IshiharasHousePathToRockClub: ; 123d7 (4:63d7)
+OverworldMap_RockClubPathToIshiharasHouse: ; 123d7 (4:63d7)
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToWaterClub: ; 123dd (4:63dd)
+	db $2c, $78
+	db $3c, $68
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToMasonLaboratory: ; 123eb (4:63eb)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToFireClub: ; 123f9 (4:63f9)
+	db $2c, $28
+	db $3c, $40
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToIshiharasHouse: ; 12403 (4:6403)
+	db $5c, $30
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToIshiharasHouse: ; 1240d (4:640d)
+	db $2c, $78
+	db $3c, $68
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToMasonLaboratory: ; 12419 (4:6419)
+	db $2c, $28
+	db $3c, $40
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToRockClub: ; 12425 (4:6425)
+	db $2c, $78
+	db $3c, $68
+	db $3c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToMasonLaboratory: ; 1242f (4:642f)
+	db $3c, $48
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToLightningClub: ; 12439 (4:6439)
+OverworldMap_LightningClubPathToMasonLaboratory: ; 12439 (4:6439)
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToGrassClub: ; 1243f (4:643f)
+	db $2c, $78
+	db $3c, $68
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_GrassClubPathToMasonLaboratory: ; 12449 (4:6449)
+	db $5c, $68
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToPsychicClub: ; 12453 (4:6453)
+	db $2c, $78
+	db $3c, $68
+	db $5c, $68
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_PsychicClubPathToMasonLaboratory: ; 1245f (4:645f)
+	db $5c, $48
+	db $5c, $68
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToScienceClub: ; 1246b (4:646b)
+	db $2c, $78
+	db $3c, $68
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ScienceClubPathToMasonLaboratory: ; 12475 (4:6475)
+	db $5c, $68
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToFireClub: ; 1247f (4:647f)
+	db $2c, $78
+	db $3c, $68
+	db $5c, $68
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToMasonLaboratory: ; 1248b (4:648b)
+	db $5c, $30
+	db $5c, $68
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToChallengeHall: ; 12497 (4:6497)
+	db $2c, $78
+	db $3c, $68
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ChallengeHallPathToMasonLaboratory: ; 124a1 (4:64a1)
+	db $3c, $40
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_MasonLaboratoryPathToPokemonDome: ; 124ab (4:64ab)
+	db $2c, $78
+	db $3c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_PokemonDomePathToMasonLaboratory: ; 124b3 (4:64b3)
+	db $3c, $68
+	db $2c, $78
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToFightingClub: ; 124bb (4:64bb)
+OverworldMap_FightingClubPathToIshiharasHouse: ; 124bb (4:64bb)
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToWaterClub: ; 124c1 (4:64c1)
+	db $2c, $28
+	db $3c, $48
+	db $3c, $68
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToIshiharasHouse: ; 124d1 (4:64d1)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $3c, $68
+	db $3c, $48
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToLightningClub: ; 124e1 (4:64e1)
+OverworldMap_LightningClubPathToIshiharasHouse: ; 124e1 (4:64e1)
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToGrassClub: ; 124e7 (4:64e7)
+	db $2c, $28
+	db $3c, $40
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_GrassClubPathToIshiharasHouse: ; 124f1 (4:64f1)
+	db $5c, $48
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToPsychicClub: ; 124fb (4:64fb)
+	db $2c, $28
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_PsychicClubPathToIshiharasHouse: ; 12503 (4:6503)
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToScienceClub: ; 1250b (4:650b)
+	db $2c, $28
+	db $3c, $40
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ScienceClubPathToIshiharasHouse: ; 12515 (4:6515)
+	db $5c, $48
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToChallengeHall: ; 1251f (4:651f)
+	db $2c, $28
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ChallengeHallPathToIshiharasHouse: ; 12527 (4:6527)
+	db $3c, $40
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_IshiharasHousePathToPokemonDome: ; 1252f (4:652f)
+	db $2c, $28
+	db $3c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_PokemonDomePathToIshiharasHouse: ; 12537 (4:6537)
+	db $3c, $48
+	db $2c, $28
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FightingClubPathToRockClub: ; 1253f (4:653f)
+	db $3c, $68
+	db $3c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToFightingClub: ; 12547 (4:6547)
+	db $3c, $48
+	db $3c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FightingClubPathToWaterClub: ; 1254f (4:654f)
+	db $3c, $68
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToFightingClub: ; 1255b (4:655b)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $3c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FightingClubPathToPsychicClub: ; 12567 (4:6567)
+OverworldMap_PsychicClubPathToFightingClub: ; 12567 (4:6567)
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FightingClubPathToFireClub: ; 1256d (4:656d)
+	db $5c, $68
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToFightingClub: ; 12575 (4:6575)
+	db $5c, $30
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FightingClubPathToChallengeHall: ; 1257d (4:657d)
+OverworldMap_ChallengeHallPathToFightingClub: ; 1257d (4:657d)
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToWaterClub: ; 12583 (4:6583)
+	db $3c, $48
+	db $3c, $68
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToRockClub: ; 12591 (4:6591)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $3c, $68
+	db $3c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToGrassClub: ; 1259f (4:659f)
+OverworldMap_GrassClubPathToRockClub: ; 1259f (4:659f)
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToFireClub: ; 125a5 (4:65a5)
+	db $3c, $40
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToRockClub: ; 125ad (4:65ad)
+	db $5c, $30
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToLightningClub: ; 125b5 (4:65b5)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $3c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_LightningClubPathToWaterClub: ; 125c1 (4:65c1)
+	db $3c, $68
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToGrassClub: ; 125cd (4:65cd)
+OverworldMap_WaterClubPathToPsychicClub: ; 125cd (4:65cd)
+OverworldMap_WaterClubPathToScienceClub: ; 125cd (4:65cd)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_GrassClubPathToWaterClub: ; 125d7 (4:65d7)
+OverworldMap_PsychicClubPathToWaterClub: ; 125d7 (4:65d7)
+OverworldMap_ScienceClubPathToWaterClub: ; 125d7 (4:65d7)
+	db $5c, $68
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToFireClub: ; 125e1 (4:65e1)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToWaterClub: ; 125eb (4:65eb)
+	db $5c, $30
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToChallengeHall: ; 125f5 (4:65f5)
+	db $74, $7c
+	db $5c, $7c
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ChallengeHallPathToWaterClub: ; 125ff (4:65ff)
+	db $5c, $48
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_WaterClubPathToPokemonDome: ; 12609 (4:6609)
+	db $74, $7c
+	db $5c, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_PokemonDomePathToWaterClub: ; 12611 (4:6611)
+	db $5c, $7c
+	db $74, $7c
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_LightningClubPathToPsychicClub: ; 12619 (4:6619)
+OverworldMap_PsychicClubPathToLightningClub: ; 12619 (4:6619)
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_LightningClubPathToScienceClub: ; 1261f (4:661f)
+	db $3c, $68
+	db $5c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ScienceClubPathToLightningClub: ; 12627 (4:6627)
+	db $5c, $68
+	db $3c, $68
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_LightningClubPathToFireClub: ; 1262f (4:662f)
+	db $3c, $48
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToLightningClub: ; 12637 (4:6637)
+	db $5c, $30
+	db $3c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_GrassClubPathToChallengeHall: ; 1263f (4:663f)
+OverworldMap_ScienceClubPathToChallengeHall: ; 1263f (4:663f)
+OverworldMap_ChallengeHallPathToGrassClub: ; 1263f (4:663f)
+OverworldMap_ChallengeHallPathToScienceClub: ; 1263f (4:663f)
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_FireClubPathToChallengeHall: ; 12645 (4:6645)
+OverworldMap_FireClubPathToPokemonDome: ; 12645 (4:6645)
+OverworldMap_ChallengeHallPathToFireClub: ; 12645 (4:6645)
+OverworldMap_PokemonDomePathToFireClub: ; 12645 (4:6645)
+	db $5c, $30
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_RockClubPathToScienceClub: ; 1264b (4:664b)
+	db $3c, $40
+	db $5c, $48
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_ScienceClubPathToRockClub: ; 12653 (4:6653)
+	db $5c, $48
+	db $3c, $40
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_StraightPath: ; 1265b (4:665b)
+	db $00, $00
+	db $ff, $ff
+
+OverworldMap_NoMovement: ; 1265f (4:665f)
+	db $ff, $ff
+
+	INCROM $12661, $126d1
 
 ; usually, the game doesn't loop here at all, since as soon as a main menu option
 ; is selected, there is no need to come back to the menu.

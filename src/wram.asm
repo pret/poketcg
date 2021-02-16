@@ -2232,45 +2232,47 @@ wd339:: ; d339
 wd33a:: ; d33a
 	ds $1
 
-wd33b:: ; d33b
+wOverworldMapCursorSprite:: ; d33b
 	ds $1
 
-wd33c:: ; d33c
+wOverworldMapCursorAnimation:: ; d33c
 	ds $1
 
-wd33d:: ; d33d
+wOverworldMapStartingPosition:: ; d33d
 	ds $1
 
-wd33e:: ; d33e
+; 0: selection not made, controlling cursor
+; 1: selection made, animating player across map
+; 2: player arrived at new map
+wOverworldMapPlayerAnimationState:: ; d33e
 	ds $1
 
-wd33f:: ; d33f
-	ds $1
+wOverworldMapPlayerMovementPtr:: ; d33f
+	ds $2
 
-wd340:: ; d340
-	ds $1
-
-wd341:: ; d341
+wOverworldMapPlayerMovementCounter:: ; d341
 	ds $1
 
 	ds $1
 
-wd343:: ; d343
+; during setup, this holds a signed 16-bit integer
+; representing the total horizontal distance between
+; the current point and the next point
+; afterward, this holds a signed fixed-point fractional number
+; where the high byte represents the number of pixels
+; to travel per frame and the low byte represents the
+; fraction of a pixel to travel per frame
+wOverworldMapPlayerPathHorizontalMovement:: ; d343
+	ds $2
+
+; works the same as above, but for vertical distance
+wOverworldMapPlayerPathVerticalMovement:: ; d345
+	ds $2
+
+wOverworldMapPlayerHorizontalSubPixelPosition:: ; d347
 	ds $1
 
-wd344:: ; d344
-	ds $1
-
-wd345:: ; d345
-	ds $1
-
-wd346:: ; d346
-	ds $1
-
-wd347:: ; d347
-	ds $1
-
-wd348:: ; d348
+wOverworldMapPlayerVerticalSubPixelPosition:: ; d348
 	ds $1
 
 wd349:: ; d349

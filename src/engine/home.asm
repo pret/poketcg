@@ -11666,7 +11666,7 @@ LoadScene: ; 3df3 (0:3df3)
 Func_3e10: ; 3e10 (0:3e10)
 	ld a, $1
 	ld [wd61e], a
-	ld a, $62
+	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
 Func_3e17: ; 3e17 (0:3e17)
@@ -11683,7 +11683,7 @@ Func_3e17: ; 3e17 (0:3e17)
 ; draws opponent's portrait given in a at b,c
 Func_3e2a: ; 3e2a (0:3e2a)
 	ld [wd61e], a
-	ld a, $63
+	ld a, TILEMAP_OPPONENT
 	jr Func_3e17
 
 Func_3e31: ; 3e31 (0:3e31)
