@@ -260,7 +260,7 @@ Func_701e9: ; 701e9 (1c:41e9)
 	push bc
 	ld e, l
 	ld d, h
-	ld b, HIGH(wc000)
+	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
 	pop bc
 	pop de
@@ -429,7 +429,7 @@ DecompressSGBPalette: ; 70403 (1c:4403)
 	push bc
 	ld e, l
 	ld d, h
-	ld b, HIGH(wc000)
+	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
 	pop bc
 	ld de, wDecompressionBuffer

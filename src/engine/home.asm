@@ -1519,33 +1519,31 @@ UpdateRNGSources: ; 089b (0:089b)
 	pop hl
 	ret
 
-; initilizes variables used to decompress
-; data in DecompressData
-; de points to the source of compressed data
-; b is used as the HIGH byte of the
-; WRAM address to write to ($100 bytes of buffer space)
+; initilizes variables used to decompress data in DecompressData
+; de = source of compressed data
+; b = HIGH byte of secondary buffer ($100 bytes of buffer space)
 ; also clears this $100 byte space
 InitDataDecompression: ; 08bf (0:08bf)
-	ld hl, wcad6
+	ld hl, wDecompSourcePosPtr
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	ld hl, wcad8
-	ld [hl], $1
+	ld hl, wDecompNumCommandBitsLeft
+	ld [hl], 1
 	inc hl
 	xor a
-	ld [hli], a ; wcad9
-	ld [hli], a ; wcada
-	ld [hli], a ; wcadb
-	ld [hli], a ; wcadc
-	ld [hl], b  ; wcadd
+	ld [hli], a ; wDecompCommandByte
+	ld [hli], a ; wDecompRepeatModeToggle
+	ld [hli], a ; wDecompRepeatLengths
+	ld [hli], a ; wDecompNumBytesToRepeat
+	ld [hl], b  ; wDecompSecondaryBufferPtrHigh
 	inc hl
-	ld [hli], a ; wcade
-	ld [hl], $ef ; wcadf
+	ld [hli], a ; wDecompRepeatSeqOffset
+	ld [hl], LOW(wDecompressionSecondaryBufferStart) ; wDecompSecondaryBufferPtrLow
 
 ; clear buffer
 	ld h, b
-	ld l, LOW(wc000)
+	ld l, LOW(wDecompressionSecondaryBuffer)
 	xor a
 .loop
 	ld [hl], a
@@ -1555,7 +1553,7 @@ InitDataDecompression: ; 08bf (0:08bf)
 
 ; decompresses data
 ; uses values initialized by InitDataDecompression
-; wcad6 holds the pointer for compressed source
+; wDecompSourcePosPtr holds the pointer for compressed source
 ; input:
 ; bc = row width
 ; de = buffer to place decompressed data
@@ -1576,99 +1574,110 @@ DecompressData: ; 08de (0:08de)
 	pop hl
 	ret
 
-; instructions start with a byte stored in wcad9
-; its bits are read from higher to lower bit
-; wcad8 stores the current bit being read
-; bit set:
-; - 1 byte read and copied literally
-; bit not set:
-; - 2 bytes read WW XY ZZ, byte in pos WW
-; copied (X + 1) times, then in pos ZZ
-; copied (Y + 1) times
+; decompression works as follows:
+; first a command byte is read that will dictate how the
+; following bytes will be copied
+; the position will then move to the next byte (0xXY), and 
+; the command byte's bits are read from higher to lower bit
+; - if command bit is set, then copy 0xXY to buffer;
+; - if command bit is not set, then decompression enters "repeat mode,"
+; which means it stores 0xXY in memory as number of bytes to repeat
+; from a given offset. This offset is in the next byte in the data,
+; 0xZZ, which tells the offset to start repeating. A toggle is switched
+; each time the algorithm hits "repeat mode":
+;  - if off -> on it reads 0xXY and stores it,
+;  then repeats (0x0X + 2) bytes from the offset starting at 0xZZ;
+;  - if on -> off, then the data only provides the offset,
+;  and the previous byte read for number of bytes to repeat, 0xXY, is reused
+;  in which case (0x0Y + 2) bytes are repeated starting from the offset.
 .Decompress: ; 08ef (0:08ef)
-	ld hl, wcadc
+	ld hl, wDecompNumBytesToRepeat
 	ld a, [hl]
 	or a
-	jr z, .read_instruction
+	jr z, .read_command
 
-; still repeating byte
+; still repeating sequence
 	dec [hl]
 	inc hl
 .repeat_byte
-	ld b, [hl] ; wcadd
+	ld b, [hl] ; wDecompSecondaryBufferPtrHigh
 	inc hl
-	ld c, [hl] ; wcade
+	ld c, [hl] ; wDecompRepeatSeqOffset
 	inc [hl]
 	inc hl
 	ld a, [bc]
-	ld c, [hl] ; wcadf
+	ld c, [hl] ; wDecompSecondaryBufferPtrLow
 	inc [hl]
 	ld [bc], a
 	ret
 
-.read_instruction
-	ld hl, wcad6
+.read_command
+	ld hl, wDecompSourcePosPtr
 	ld c, [hl]
 	inc hl
 	ld b, [hl]
-	inc hl ; wcad8
+	inc hl ; wDecompNumCommandBitsLeft
 	dec [hl]
-	inc hl ; wcad9
-	jr nz, .asm_914
-	dec hl ; wcad8
+	inc hl ; wDecompCommandByte
+	jr nz, .read_command_bit
+	dec hl ; wDecompNumCommandBitsLeft
 	ld [hl], $8 ; number of bits
-	inc hl ; wcad9
+	inc hl ; wDecompCommandByte
 	ld a, [bc]
 	inc bc
 	ld [hl], a
-.asm_914
+.read_command_bit
 	rl [hl]
 	ld a, [bc]
 	inc bc
-	jr nc, .asm_92a
+	jr nc, .repeat_command
 
 ; copy 1 byte literally
-	ld hl, wcad6
+	ld hl, wDecompSourcePosPtr
 	ld [hl], c
 	inc hl
 	ld [hl], b
-	ld hl, wcadd
+	ld hl, wDecompSecondaryBufferPtrHigh
 	ld b, [hl]
 	inc hl
 	inc hl
-	ld c, [hl] ; wcadf
+	ld c, [hl] ; wDecompSecondaryBufferPtrLow
 	inc [hl]
 	ld [bc], a
 	ret
 
-.asm_92a
-	ld [wcade], a
-	ld hl, wcada
+.repeat_command
+	ld [wDecompRepeatSeqOffset], a ; save the offset to repeat from
+	ld hl, wDecompRepeatModeToggle
 	bit 0, [hl]
-	jr nz, .asm_94a
+	jr nz, .repeat_mode_toggle_on
 	set 0, [hl]
 	inc hl
+; read byte for num of bytes to read
+; and use its higher nybble
 	ld a, [bc]
 	inc bc
-	ld [hli], a ; wcadb
+	ld [hli], a ; wDecompRepeatLengths
 	swap a
-.asm_93c
+.get_sequence_len
 	and $f
 	inc a ; number of times to repeat
-	ld [hli], a ; wcadc
+	ld [hli], a ; wDecompNumBytesToRepeat
 	push hl
-	ld hl, wcad6
+	ld hl, wDecompSourcePosPtr
 	ld [hl], c
 	inc hl
 	ld [hl], b
 	pop hl
 	jr .repeat_byte
 
-.asm_94a
+.repeat_mode_toggle_on
+; get the previous byte (num of bytes to repeat)
+; and use its lower nybble
 	res 0, [hl]
 	inc hl
-	ld a, [hli] ; wcadb
-	jr .asm_93c
+	ld a, [hli] ; wDecompRepeatLengths
+	jr .get_sequence_len
 
 ; set attributes for [hl] sprites starting from wOAM + [wOAMOffset] / 4
 ; return carry if reached end of wOAM before finishing

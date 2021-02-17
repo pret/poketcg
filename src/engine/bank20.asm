@@ -109,7 +109,7 @@ Func_800bd: ; 800bd (20:40bd)
 	ld a, [wTempPointer + 1]
 	adc $00
 	ld d, a
-	ld b, HIGH(wc000)
+	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
 	ld a, [wVRAMPointer]
 	ld e, a

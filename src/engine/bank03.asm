@@ -496,7 +496,7 @@ Func_c38f: ; c38f (3:438f)
 	jr z, .skip
 
 	push hl
-	ld b, HIGH(wc000)
+	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
 	ld a, [wd23d]
 	ld [wTempPointerBank], a
