@@ -1411,3 +1411,5 @@ PokeBallDescription: ; 63f39 (18:7f39)
 ScoopUpName: ; 63fed (18:7fed)
 	text "Scoop Up"
 	done
+
+	ds $9

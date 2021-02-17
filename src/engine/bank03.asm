@@ -9395,7 +9395,3 @@ NPCMovement_fce3: ; fce3 (3:7ce3)
 	db NORTH | NO_MOVE
 	db $ff
 ; 0xfce5
-
-rept $31b
-	db $ff
-endr

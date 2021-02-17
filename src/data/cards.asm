@@ -10220,7 +10220,3 @@ RecycleCard: ; 33fd3 (c:7fd3)
 	dw RecycleEffectCommands ; effect commands
 	tx RecycleDescription ; description
 	dw NONE ; description (cont)
-
-rept $1f
-	db $ff
-endr

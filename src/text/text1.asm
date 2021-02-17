@@ -1151,3 +1151,5 @@ DamageCheckIfHeadsXDamageText: ; 37fcd (d:7fcd)
 	text "Damage check!"
 	line "If Heads, x <RAMNUM> damage!!"
 	done
+
+	ds $d

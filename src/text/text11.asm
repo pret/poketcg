@@ -1428,3 +1428,5 @@ AlakazamName: ; 5ffb8 (17:7fb8)
 DamageSwapName: ; 5ffc2 (17:7fc2)
 	text "Damage Swap"
 	done
+
+	ds $31

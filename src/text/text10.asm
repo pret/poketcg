@@ -1591,3 +1591,5 @@ OpponentAttackMayDoNothingDescription: ; 5bf4b (16:7f4b)
 DragonName: ; 5bfd7 (16:7fd7)
 	text "Dragon"
 	done
+
+	ds $21

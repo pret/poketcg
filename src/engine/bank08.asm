@@ -8317,7 +8317,3 @@ Func_22bad: ; 22bad (8:6bad)
 	call CheckLoadedAttackFlag
 	ccf
 	ret
-
-rept $143a
-	db $ff
-endr
