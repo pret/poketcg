@@ -7279,6 +7279,3 @@ HandleLegendaryArticunoEnergyScoring: ; 175bd (5:75bd)
 .articuno_deck
 	call ScoreLegendaryArticunoCards
 	ret
-
-Func_175c9: ; 175c9 (5:75c9)
-	INCROM $175c9, $18000
