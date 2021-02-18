@@ -605,11 +605,12 @@ Func_c41c: ; c41c (3:441c)
 	ret
 
 Func_c430: ; c430 (3:4430)
+; update wSCXBuffer
 	push bc
 	ld a, [wd237]
 	sla a
 	sla a
-	sla a
+	sla a ; *8
 	ld b, a
 	ld a, [wSCXBuffer]
 	cp $b1
@@ -622,10 +623,12 @@ Func_c430: ; c430 (3:4430)
 	ld a, b
 .asm_c449
 	ld [wSCXBuffer], a
+
+; update wSCYBuffer
 	ld a, [wd238]
 	sla a
 	sla a
-	sla a
+	sla a ; *8
 	ld b, a
 	ld a, [wSCYBuffer]
 	cp $b9

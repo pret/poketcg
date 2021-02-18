@@ -5,7 +5,7 @@ Func_80000: ; 80000 (20:4000)
 	call Func_8003d
 	farcall LoadPermissionMap
 	farcall Func_c9c7
-	call Func_801a1
+	call SafelyCopyBGMapFromSRAMToVRAM
 	farcall Func_c3ff
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
@@ -20,7 +20,7 @@ Func_80028: ; 80028 (20:4028)
 	ld bc, $0000
 	call LoadTilemap_ToSRAM
 	farcall Func_c9c7
-	call Func_801a1
+	call SafelyCopyBGMapFromSRAMToVRAM
 	farcall Func_c3ee
 	ret
 ; 0x8003d
@@ -287,18 +287,21 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	pop hl
 	ret
 
-Func_801a1: ; 801a1 (20:41a1)
+; safely copies $20 bytes at a time
+; sBGMap0 -> v0BGMap0
+; sBGMap1 -> v0BGMap1 (if in CGB)
+SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	push hl
 	push bc
 	push de
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $1
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	ld hl, sBGMap0
 	ld de, v0BGMap0
 	ld c, $20
-.asm_801b4
+.loop
 	push bc
 	push hl
 	push de
@@ -306,30 +309,30 @@ Func_801a1: ; 801a1 (20:41a1)
 	call SafeCopyDataHLtoDE
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_801d6
+	jr nz, .skip_vram1
 	pop de
 	pop hl
 	push hl
 	push de
-	ld bc, $0400
+	ld bc, sBGMap1 - sBGMap0 ; $400
 	add hl, bc
 	call BankswitchVRAM1
 	ld b, $20
 	call SafeCopyDataHLtoDE
 	call BankswitchVRAM0
+.skip_vram1
 
-.asm_801d6
 	pop hl
-	ld de, $0020
+	ld de, $20
 	add hl, de
 	ld e, l
 	ld d, h
 	pop hl
-	ld bc, $0020
+	ld bc, $20
 	add hl, bc
 	pop bc
 	dec c
-	jr nz, .asm_801b4
+	jr nz, .loop
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
