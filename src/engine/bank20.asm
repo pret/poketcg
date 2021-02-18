@@ -1455,16 +1455,16 @@ Tilesets: ; 8100f (20:500f)
 	tileset ScytherIntro2Gfx,               96 ; TILESET_SCYTHER_INTRO_2
 	tileset AerodactylIntro1Gfx,            96 ; TILESET_AERODACTYL_INTRO_1
 	tileset AerodactylIntro2Gfx,            96 ; TILESET_AERODACTYL_INTRO_2
-	tileset Titlescreen1Gfx,                97 ; TILESET_JAPANESE_TITLE_SCREEN
-	tileset Titlescreen2Gfx,                97 ; TILESET_JAPANESE_TITLE_SCREEN_CGB
+	tileset JapaneseTitleScreenGfx,         97 ; TILESET_JAPANESE_TITLE_SCREEN
+	tileset JapaneseTitleScreenCGBGfx,      97 ; TILESET_JAPANESE_TITLE_SCREEN_CGB
 	tileset SolidTiles1,                     4 ; TILESET_SOLID_TILES_1
-	tileset Titlescreen3Gfx,               244 ; TILESET_JAPANESE_TITLE_SCREEN_2
-	tileset Titlescreen4Gfx,                59 ; TILESET_JAPANESE_TITLE_SCREEN_2_CGB
+	tileset JapaneseTitleScreen2Gfx,       244 ; TILESET_JAPANESE_TITLE_SCREEN_2
+	tileset JapaneseTitleScreen2CGBGfx,     59 ; TILESET_JAPANESE_TITLE_SCREEN_2_CGB
 	tileset SolidTiles2,                     4 ; TILESET_SOLID_TILES_2
 	tileset PlayerGfx,                      36 ; TILESET_PLAYER
 	tileset RonaldGfx,                      36 ; TILESET_RONALD
-	tileset Titlescreen5Gfx,               220 ; TILESET_TITLE_SCREEN
-	tileset Titlescreen6Gfx,               212 ; TILESET_TITLE_SCREEN_CGB
+	tileset TitleScreenGfx,                220 ; TILESET_TITLE_SCREEN
+	tileset TitleScreenCGBGfx,             212 ; TILESET_TITLE_SCREEN_CGB
 	tileset CopyrightGfx,                   36 ; TILESET_COPYRIGHT
 	tileset NintendoGfx,                    24 ; TILESET_NINTENDO
 	tileset CompaniesGfx,                   49 ; TILESET_COMPANIES

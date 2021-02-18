@@ -787,13 +787,13 @@ AerodactylIntro2Gfx:: ; 9696e (25:696e)
 	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro2.2bpp"
 
-Titlescreen1Gfx:: ; 96f70 (25:6f70)
+JapaneseTitleScreenGfx:: ; 96f70 (25:6f70)
 	dw 97
-	INCBIN "gfx/titlescreen/titlescreen1.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen.2bpp"
 
-Titlescreen2Gfx:: ; 97582 (25:7582)
+JapaneseTitleScreenCGBGfx:: ; 97582 (25:7582)
 	dw 97
-	INCBIN "gfx/titlescreen/titlescreen2.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_cgb.2bpp"
 
 CompaniesGfx:: ; 97b94 (25:7b94)
 	dw 49
@@ -811,21 +811,21 @@ AnimData5:: ; 97fe8 (25:7fe8)
 
 SECTION "Gfx 8", ROMX
 
-Titlescreen3Gfx:: ; 98000 (26:4000)
+JapaneseTitleScreen2Gfx:: ; 98000 (26:4000)
 	dw 244
-	INCBIN "gfx/titlescreen/titlescreen3.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_2.2bpp"
 
-Titlescreen4Gfx:: ; 98f42 (26:4f42)
+JapaneseTitleScreen2CGBGfx:: ; 98f42 (26:4f42)
 	dw 315
-	INCBIN "gfx/titlescreen/titlescreen4.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_2_cgb.2bpp"
 
-Titlescreen5Gfx:: ; 9a2f4 (26:62f4)
+TitleScreenGfx:: ; 9a2f4 (26:62f4)
 	dw 220
-	INCBIN "gfx/titlescreen/titlescreen5.2bpp"
+	INCBIN "gfx/titlescreen/title_screen.2bpp"
 
-Titlescreen6Gfx:: ; 9b0b6 (26:70b6)
+TitleScreenCGBGfx:: ; 9b0b6 (26:70b6)
 	dw 212
-	INCBIN "gfx/titlescreen/titlescreen6.2bpp"
+	INCBIN "gfx/titlescreen/title_screen_cgb.2bpp"
 
 OWDrMasonGfx:: ; 9bdf8 (26:7df8)
 	dw $14
