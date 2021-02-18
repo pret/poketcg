@@ -2167,10 +2167,15 @@ wd238:: ; d238
 wCurTileset:: ; d239
 	ds $1
 
-wd23a:: ; d23a
+; pointer to compressed data
+; of the current map's permission map
+wBGMapPermissionDataPtr:: ; d23a
 	ds $2
 
-wd23c:: ; d23c
+; whether the  BG Map is in CGB mode
+; this means half of the width is for
+; VRAM0 and the other half is for VRAM1
+wBGMapCGBMode:: ; d23c
 	ds $1
 
 wd23d:: ; d23d

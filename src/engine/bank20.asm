@@ -3,7 +3,7 @@ Func_80000: ; 80000 (20:4000)
 	xor a
 	ld [wTextBoxFrameType], a
 	call Func_8003d
-	farcall Func_c37a
+	farcall LoadPermissionMap
 	farcall Func_c9c7
 	call Func_801a1
 	farcall Func_c3ff
@@ -18,7 +18,7 @@ Func_80000: ; 80000 (20:4000)
 Func_80028: ; 80028 (20:4028)
 	call ClearSRAMBGMaps
 	ld bc, $0000
-	call Func_80077
+	call LoadTilemap_ToSRAM
 	farcall Func_c9c7
 	call Func_801a1
 	farcall Func_c3ee
@@ -28,15 +28,18 @@ Func_80028: ; 80028 (20:4028)
 Func_8003d: ; 8003d (20:403d)
 	farcall LoadMapHeader
 	farcall SetSGB2AndSGB3MapPalette
-	ld bc, $0
-	call Func_80077
-	ld a, $80
-	ld [wd4ca], a
-	xor a
+
+	lb bc, 0, 0
+	call LoadTilemap_ToSRAM
+
+	ld a, LOW(v0Tiles1 / TILE_SIZE)
+	ld [wVRAMTileOffset], a
+	xor a ; VRAM0
 	ld [wd4cb], a
 	call LoadTilesetGfx
-	xor a
-	ld [wd4ca], a
+
+	xor a ; LOW(v0Tiles2 / TILE_SIZE)
+	ld [wVRAMTileOffset], a
 	ld a, [wd291]
 	ld [wd4cb], a
 	ld a, [wd28f]
@@ -51,17 +54,21 @@ Func_8003d: ; 8003d (20:403d)
 	ret
 ; 0x80077
 
-Func_80077: ; 80077 (20:4077)
+LoadTilemap_ToSRAM: ; 80077 (20:4077)
 	ld a, TRUE
 	ld [wWriteBGMapToSRAM], a
-	jr Func_80082
+	jr LoadTilemap
 
-Func_8007e: ; 8007e (20:407e)
-	xor a
+LoadTilemap_ToVRAM: ; 8007e (20:407e)
+	xor a ; FALSE
 	ld [wWriteBGMapToSRAM], a
 ;	fallthrough
 
-Func_80082: ; 80082 (20:4082)
+; loads the BG map corresponding to wCurTilemap
+; either loads them in VRAM or SRAM,
+; depending on wWriteBGMapToSRAM
+; bc = starting coordinates
+LoadTilemap: ; 80082 (20:4082)
 	push hl
 	push bc
 	push de
@@ -78,7 +85,7 @@ Func_80082: ; 80082 (20:4082)
 
 ; store header data
 	ld de, wDecompressionBuffer
-	ld bc, $0006 ; header + 1st instruction
+	ld bc, $6 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
 	ld h, d
@@ -87,27 +94,29 @@ Func_80082: ; 80082 (20:4082)
 	ld a, [hli]
 	ld [wBGMapHeight], a
 	ld a, [hli]
-	ld [wd23a], a
+	ld [wBGMapPermissionDataPtr], a
 	ld a, [hli]
-	ld [wd23a + 1], a
+	ld [wBGMapPermissionDataPtr + 1], a
 	ld a, [hli]
-	ld [wd23c], a
-
-	call Func_800bd
+	ld [wBGMapCGBMode], a
+	call .InitAndDecompressBGMap
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_800bd: ; 800bd (20:40bd)
+; prepares the pointers for decompressing BG Map
+; and calls InitDataDecompression
+; then decompresses the data
+.InitAndDecompressBGMap ; 800bd (20:40bd)
 	push hl
 	push bc
 	push de
 	ld a, [wTempPointer]
-	add $05
+	add $5 ; header
 	ld e, a
 	ld a, [wTempPointer + 1]
-	adc $00
+	adc 0
 	ld d, a
 	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
@@ -115,24 +124,29 @@ Func_800bd: ; 800bd (20:40bd)
 	ld e, a
 	ld a, [wVRAMPointer + 1]
 	ld d, a
-	call Func_800e0
+	call .Decompress
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_800e0: ; 800e0 (20:40e0)
-; if wd23c != 0, then use double wBGMapWidth
+; wTempBank:wTempPointer = source of compressed data
+; wVRAMPointer = destination of decompressed data
+.Decompress ; 800e0 (20:40e0)
+; if wBGMapCGBMode is true, then use double wBGMapWidth
+; since one "width" length goes to VRAM0
+; and the onther "width" length goes to VRAM1
 	push hl
 	ld hl, wd28e
 	ld a, [wBGMapWidth]
 	ld [hl], a
-	ld a, [wd23c]
+	ld a, [wBGMapCGBMode]
 	or a
-	jr z, .asm_800f0
+	jr z, .skip_doubling_width
 	sla [hl]
-.asm_800f0
+.skip_doubling_width
 
+; clear wDecompressionBuffer
 	ld c, $40
 	ld hl, wDecompressionBuffer
 	xor a
@@ -153,6 +167,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld de, wDecompressionBuffer
 	call DecompressDataFromBank
 
+	; copy to VRAM0
 	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
@@ -164,17 +179,18 @@ Func_800e0: ; 800e0 (20:40e0)
 	jr nz, .next_row
 
 	; cgb only
+	; copy the second "half" to VRAM1
 	call BankswitchVRAM1
 	ld a, [wBGMapWidth]
 	ld c, a
-	ld b, $00
+	ld b, $0
 	ld hl, wDecompressionBuffer
 	add hl, bc
 	pop de
 	push de
 	ld a, [wBGMapWidth]
 	ld b, a
-	call Func_80148
+	call Func_80148 ; adds some wd291 offset to tiles
 	call CopyBGDataToVRAMOrSRAM
 	call BankswitchVRAM0
 
@@ -195,7 +211,7 @@ Func_80148: ; 80148 (20:4148)
 	ld a, [wd291]
 	or a
 	ret z
-	ld a, [wd23c]
+	ld a, [wBGMapCGBMode]
 	or a
 	jr z, .asm_80162
 
@@ -231,7 +247,7 @@ Func_80148: ; 80148 (20:4148)
 ; to either VRAM or SRAM, depending on wWriteBGMapToSRAM
 ; de is the target address in VRAM,
 ; if SRAM is the target address to copy,
-; copies data to s0BGMap or s1BGMap
+; copies data to sBGMap0 or sBGMap1
 ; for VRAM0 or VRAM1 respectively
 CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, [wWriteBGMapToSRAM]
@@ -247,11 +263,11 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
-	ld hl, s0BGMap - v0BGMap0
+	ld hl, sBGMap0 - v0BGMap0
 	ldh a, [hBankVRAM]
 	or a
 	jr z, .got_pointer
-	ld hl, s1BGMap - v1BGMap0
+	ld hl, sBGMap1 - v1BGMap0
 .got_pointer
 	add hl, de
 	ld e, l
@@ -279,7 +295,7 @@ Func_801a1: ; 801a1 (20:41a1)
 	push af
 	ld a, $1
 	call BankswitchSRAM
-	ld hl, v0End
+	ld hl, sBGMap0
 	ld de, v0BGMap0
 	ld c, $20
 .asm_801b4
@@ -322,16 +338,16 @@ Func_801a1: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
-; clears s0BGMap and s1BGMap
+; clears sBGMap0 and sBGMap1
 ClearSRAMBGMaps: ; 801f1 (20:41f1)
 	push hl
 	push bc
 	ldh a, [hBankSRAM]
 	push af
-	ld a, BANK(s0BGMap) ; SRAM 1
+	ld a, BANK(sBGMap0) ; SRAM 1
 	call BankswitchSRAM
-	ld hl, s0BGMap
-	ld bc, $800 ; s0BGMap + s1BGMap
+	ld hl, sBGMap0
+	ld bc, $800 ; sBGMap0 + sBGMap1
 	xor a
 	call FillMemoryWithA
 	pop af
@@ -651,28 +667,30 @@ Func_803b9: ; 803b9 (20:43b9)
 	ret
 ; 0x803c9
 
+; a = palette index to load
 Func_803c9: ; 803c9 (20:43c9)
 	push hl
 	push bc
 	push de
-	call CopyPaletteDataToBuffer
+	call LoadPaletteDataToBuffer
 	ld hl, wLoadedPalData
 	ld a, [hli]
 	or a
-	jr z, .asm_803dc
+	jr z, .skip_bgp
 	ld a, [hli]
 	push hl
 	call SetBGP
 	pop hl
-.asm_803dc
+.skip_bgp
+
 	ld a, [hli]
 	or a
-	jr z, .asm_803e8
+	jr z, .skip_pal
 	ld c, a
 	ld a, [wd4cb]
 	ld b, a
 	call LoadPaletteDataFromHL
-.asm_803e8
+.skip_pal
 	pop de
 	pop bc
 	pop hl
@@ -733,7 +751,7 @@ LoadPaletteData: ; 80418 (20:4418)
 	push hl
 	push bc
 	push de
-	call CopyPaletteDataToBuffer
+	call LoadPaletteDataToBuffer
 
 	ld hl, wLoadedPalData
 	ld a, [hli] ; number palettes
@@ -786,7 +804,7 @@ LoadPaletteData: ; 80418 (20:4418)
 ; 0x80456
 
 ; copies palette data of index in a to wLoadedPalData
-CopyPaletteDataToBuffer: ; 80456 (20:4456)
+LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	push hl
 	push bc
 	push de
@@ -1161,9 +1179,9 @@ Func_80baa: ; 80baa (20:4baa)
 	push af
 	ld a, [wBGMapHeight]
 	push af
-	ld a, [wd23a]
+	ld a, [wBGMapPermissionDataPtr]
 	push af
-	ld a, [wd23a + 1]
+	ld a, [wBGMapPermissionDataPtr + 1]
 	push af
 
 	ld b, $0
@@ -1194,7 +1212,7 @@ Func_80baa: ; 80baa (20:4baa)
 	ld a, [hl]
 	ld [wCurTilemap], a
 	push bc
-	farcall Func_80082 ; unnecessary farcall
+	farcall LoadTilemap ; unnecessary farcall
 	pop bc
 	srl b
 	ld a, c
@@ -1204,13 +1222,13 @@ Func_80baa: ; 80baa (20:4baa)
 	add b
 	ld c, a
 	ld b, $0
-	ld hl, wBoosterViableCardList
+	ld hl, wPermissionMap
 	add hl, bc
-	farcall Func_c38f
+	farcall DecompressPermissionMap
 	pop af
-	ld [wd23a + 1], a
+	ld [wBGMapPermissionDataPtr + 1], a
 	pop af
-	ld [wd23a], a
+	ld [wBGMapPermissionDataPtr], a
 	pop af
 	ld [wBGMapHeight], a
 	pop af
@@ -2010,7 +2028,7 @@ OverworldMapTilemap:: ; 8191b (20:591b)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map0.bin"
 
@@ -2018,7 +2036,7 @@ OverworldMapCGBTilemap:: ; 81a22 (20:5a22)
 	db $14 ; width
 	db $12 ; height
 	dw $0000
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map1.bin"
 
@@ -2026,7 +2044,7 @@ MasonLaboratoryTilemap:: ; 81c13 (20:5c13)
 	db $1c ; width
 	db $1e ; height
 	dw $5d11
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map2.bin"
 
@@ -2034,7 +2052,7 @@ MasonLaboratoryCGBTilemap:: ; 81d2e (20:5d2e)
 	db $1c ; width
 	db $1e ; height
 	dw $5eb4
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map3.bin"
 
@@ -2042,7 +2060,7 @@ Unused1Tilemap:: ; 81ed1 (20:5ed1)
 	db $04 ; width
 	db $06 ; height
 	dw $5ef0
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map4.bin"
 
@@ -2050,7 +2068,7 @@ Unused2Tilemap:: ; 81ef5 (20:5ef5)
 	db $04 ; width
 	db $06 ; height
 	dw $5f21
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map5.bin"
 
@@ -2058,7 +2076,7 @@ DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
 	db $18 ; width
 	db $1e ; height
 	dw $5fd3
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map6.bin"
 
@@ -2066,7 +2084,7 @@ DeckMachineRoomCGBTilemap:: ; 81feb (20:5feb)
 	db $18 ; width
 	db $1e ; height
 	dw $612b
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map7.bin"
 
@@ -2074,7 +2092,7 @@ Unused3Tilemap:: ; 82143 (20:6143)
 	db $04 ; width
 	db $01 ; height
 	dw $614d
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map8.bin"
 
@@ -2082,7 +2100,7 @@ Unused4Tilemap:: ; 82150 (20:6150)
 	db $04 ; width
 	db $01 ; height
 	dw $615d
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map9.bin"
 
@@ -2090,7 +2108,7 @@ IshiharaTilemap:: ; 82160 (20:6160)
 	db $14 ; width
 	db $18 ; height
 	dw $620e
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map10.bin"
 
@@ -2098,7 +2116,7 @@ IshiharaCGBTilemap:: ; 82222 (20:6222)
 	db $14 ; width
 	db $18 ; height
 	dw $6322
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map11.bin"
 
@@ -2106,7 +2124,7 @@ FightingClubEntranceTilemap:: ; 82336 (20:6336)
 	db $14 ; width
 	db $12 ; height
 	dw $63ec
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map12.bin"
 
@@ -2114,7 +2132,7 @@ FightingClubEntranceCGBTilemap:: ; 82400 (20:6400)
 	db $14 ; width
 	db $12 ; height
 	dw $6509
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map13.bin"
 
@@ -2122,7 +2140,7 @@ RockClubEntranceTilemap:: ; 8251d (20:651d)
 	db $14 ; width
 	db $12 ; height
 	dw $65d3
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map14.bin"
 
@@ -2130,7 +2148,7 @@ RockClubEntranceCGBTilemap:: ; 825e7 (20:65e7)
 	db $14 ; width
 	db $12 ; height
 	dw $66f0
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map15.bin"
 
@@ -2138,7 +2156,7 @@ WaterClubEntranceTilemap:: ; 82704 (20:6704)
 	db $14 ; width
 	db $12 ; height
 	dw $67ba
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map16.bin"
 
@@ -2146,7 +2164,7 @@ WaterClubEntranceCGBTilemap:: ; 827ce (20:67ce)
 	db $14 ; width
 	db $12 ; height
 	dw $68d7
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map17.bin"
 
@@ -2154,7 +2172,7 @@ LightningClubEntranceTilemap:: ; 828eb (20:68eb)
 	db $14 ; width
 	db $12 ; height
 	dw $69a1
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map18.bin"
 
@@ -2162,7 +2180,7 @@ LightningClubEntranceCGBTilemap:: ; 829b5 (20:69b5)
 	db $14 ; width
 	db $12 ; height
 	dw $6abe
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map19.bin"
 
@@ -2170,7 +2188,7 @@ GrassClubEntranceTilemap:: ; 82ad2 (20:6ad2)
 	db $14 ; width
 	db $12 ; height
 	dw $6b88
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map20.bin"
 
@@ -2178,7 +2196,7 @@ GrassClubEntranceCGBTilemap:: ; 82b9c (20:6b9c)
 	db $14 ; width
 	db $12 ; height
 	dw $6ca5
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map21.bin"
 
@@ -2186,7 +2204,7 @@ PsychicClubEntranceTilemap:: ; 82cb9 (20:6cb9)
 	db $14 ; width
 	db $12 ; height
 	dw $6d6f
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map22.bin"
 
@@ -2194,7 +2212,7 @@ PsychicClubEntranceCGBTilemap:: ; 82d83 (20:6d83)
 	db $14 ; width
 	db $12 ; height
 	dw $6e8c
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map23.bin"
 
@@ -2202,7 +2220,7 @@ ScienceClubEntranceTilemap:: ; 82ea0 (20:6ea0)
 	db $14 ; width
 	db $12 ; height
 	dw $6f56
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map24.bin"
 
@@ -2210,7 +2228,7 @@ ScienceClubEntranceCGBTilemap:: ; 82f6a (20:6f6a)
 	db $14 ; width
 	db $12 ; height
 	dw $7073
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map25.bin"
 
@@ -2218,7 +2236,7 @@ FireClubEntranceTilemap:: ; 83087 (20:7087)
 	db $14 ; width
 	db $12 ; height
 	dw $713d
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map26.bin"
 
@@ -2226,7 +2244,7 @@ FireClubEntranceCGBTilemap:: ; 83151 (20:7151)
 	db $14 ; width
 	db $12 ; height
 	dw $725a
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map27.bin"
 
@@ -2234,7 +2252,7 @@ ChallengeHallEntranceTilemap:: ; 8326e (20:726e)
 	db $14 ; width
 	db $12 ; height
 	dw $730d
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map28.bin"
 
@@ -2242,7 +2260,7 @@ ChallengeHallEntranceCGBTilemap:: ; 83321 (20:7321)
 	db $14 ; width
 	db $12 ; height
 	dw $7410
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map29.bin"
 
@@ -2250,7 +2268,7 @@ ClubLobbyTilemap:: ; 83424 (20:7424)
 	db $1c ; width
 	db $1a ; height
 	dw $7529
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map30.bin"
 
@@ -2258,7 +2276,7 @@ ClubLobbyCGBTilemap:: ; 83545 (20:7545)
 	db $1c ; width
 	db $1a ; height
 	dw $76bf
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map31.bin"
 
@@ -2266,7 +2284,7 @@ FightingClubTilemap:: ; 836db (20:76db)
 	db $18 ; width
 	db $12 ; height
 	dw $777b
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map32.bin"
 
@@ -2274,7 +2292,7 @@ FightingClubCGBTilemap:: ; 8378c (20:778c)
 	db $18 ; width
 	db $12 ; height
 	dw $787c
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map33.bin"
 
@@ -2282,7 +2300,7 @@ RockClubTilemap:: ; 8388d (20:788d)
 	db $1c ; width
 	db $1e ; height
 	dw $79b5
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map34.bin"
 
@@ -2290,7 +2308,7 @@ RockClubCGBTilemap:: ; 839d6 (20:79d6)
 	db $1c ; width
 	db $1e ; height
 	dw $7bd0
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map35.bin"
 
@@ -2298,7 +2316,7 @@ Unused5Tilemap:: ; 83bf1 (20:7bf1)
 	db $04 ; width
 	db $03 ; height
 	dw $7c00
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map52.bin"
 
@@ -2306,7 +2324,7 @@ Unused6Tilemap:: ; 83c03 (20:7c03)
 	db $04 ; width
 	db $03 ; height
 	dw $7c17
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map53.bin"
 
@@ -2314,7 +2332,7 @@ Unused7Tilemap:: ; 83c1a (20:7c1a)
 	db $04 ; width
 	db $03 ; height
 	dw $7c23
-	db $00
+	db FALSE ; cgb mode
 
 	INCBIN "data/maps/map56.bin"
 
@@ -2322,7 +2340,7 @@ Unused8Tilemap:: ; 83c26 (20:7c26)
 	db $04 ; width
 	db $03 ; height
 	dw $7c33
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map57.bin"
 
@@ -2330,7 +2348,7 @@ GrassMedalTilemap:: ; 83c36 (20:7c36)
 	db $03 ; width
 	db $03 ; height
 	dw $0000
-	db $01
+	db TRUE ; cgb mode
 
 	INCBIN "data/maps/map62.bin"
 

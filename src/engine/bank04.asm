@@ -2990,7 +2990,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld [wCurTilemap], a
 	pop bc
 	push bc
-	farcall Func_8007e ; load tilemap
+	farcall LoadTilemap_ToVRAM
 	pop bc ; base x,y
 	call LoadScene_LoadSGBPacket
 	ld a, [hli]

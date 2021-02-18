@@ -468,33 +468,41 @@ Func_c36a: ; c36a (3:436a)
 .asm_c379
 	ret
 
-Func_c37a: ; c37a (3:437a)
+; loads in wPermissionMap the permissions
+; of the map, which has its compressed permission data
+; pointed by wBGMapPermissionDataPtr
+LoadPermissionMap: ; c37a (3:437a)
 	push hl
 	push bc
-	ld hl, wBoosterViableCardList
+	ld hl, wPermissionMap
 	push hl
-	ld a, $80
+	ld a, $80 ; impassable and untalkable
 	ld c, $00
-.asm_c384
+.loop_map
 	ld [hli], a
 	dec c
-	jr nz, .asm_c384
+	jr nz, .loop_map
 	pop hl
-	call Func_c38f
+	call DecompressPermissionMap
 	pop bc
 	pop hl
 	ret
 
-Func_c38f: ; c38f (3:438f)
+; decompresses permission data pointed by wBGMapPermissionDataPtr
+; hl = address to write to
+DecompressPermissionMap: ; c38f (3:438f)
 	push hl
 	push bc
-	ld a, [wd23a]
+	ld a, [wBGMapPermissionDataPtr]
 	ld e, a
-	ld a, [wd23a + 1]
+	ld a, [wBGMapPermissionDataPtr + 1]
 	ld d, a
 	or e
 	jr z, .skip
 
+; permissions are applied to 2x2 square tiles
+; so the data is half the width and height
+; of the actual tile map
 	push hl
 	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
@@ -503,23 +511,24 @@ Func_c38f: ; c38f (3:438f)
 	ld a, [wBGMapHeight]
 	inc a
 	srl a
-	ld b, a
+	ld b, a ; (height + 1) / 2
 	ld a, [wBGMapWidth]
 	inc a
 	srl a
-	ld c, a
+	ld c, a ; (width + 1) / 2
 	pop de
-.asm_c3b7
+
+.loop
 	push bc
-	ld b, $00
+	ld b, 0 ; one row (with width in c)
 	call DecompressDataFromBank
-	ld hl, $10
+	ld hl, $10 ; next row
 	add hl, de
 	ld d, h
 	ld e, l
 	pop bc
 	dec b
-	jr nz, .asm_c3b7
+	jr nz, .loop
 
 .skip
 	pop bc
