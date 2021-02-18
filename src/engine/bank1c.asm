@@ -377,17 +377,17 @@ SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	ret
 
 .pal_data_pointers
-	dw $722f ; unused
-	dw $722f ; MAP_SGB_PALETTE_1
-	dw $7253 ; MAP_SGB_PALETTE_2
-	dw $7277 ; MAP_SGB_PALETTE_3
-	dw $729a ; MAP_SGB_PALETTE_4
-	dw $72bd ; MAP_SGB_PALETTE_5
-	dw $72e0 ; MAP_SGB_PALETTE_6
-	dw $7304 ; MAP_SGB_PALETTE_7
-	dw $7328 ; MAP_SGB_PALETTE_8
-	dw $734b ; MAP_SGB_PALETTE_9
-	dw $736f ; MAP_SGB_PALETTE_10
+	dw SGBData_MapPals1  ; unused
+	dw SGBData_MapPals1  ; MAP_SGB_PALS_1
+	dw SGBData_MapPals2  ; MAP_SGB_PALS_2
+	dw SGBData_MapPals3  ; MAP_SGB_PALS_3
+	dw SGBData_MapPals4  ; MAP_SGB_PALS_4
+	dw SGBData_MapPals5  ; MAP_SGB_PALS_5
+	dw SGBData_MapPals6  ; MAP_SGB_PALS_6
+	dw SGBData_MapPals7  ; MAP_SGB_PALS_7
+	dw SGBData_MapPals8  ; MAP_SGB_PALS_8
+	dw SGBData_MapPals9  ; MAP_SGB_PALS_9
+	dw SGBData_MapPals10 ; MAP_SGB_PALS_10
 ; 0x703cb
 
 Func_703cb: ; 703cb (1c:43cb)
@@ -502,48 +502,92 @@ Func_704c7: ; 704c7 (1c:44c7)
 	ret
 ; 0x704d3
 
-	INCROM $704d3, $73393
+	INCROM $704d3, $7322f
+
+SGBData_MapPals1: ; 7322f (1c:722f)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_1.bin"
+
+SGBData_MapPals2: ; 73253 (1c:7253)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_2.bin"
+
+SGBData_MapPals3: ; 73277 (1c:7277)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_3.bin"
+
+SGBData_MapPals4: ; 7329a (1c:729a)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_4.bin"
+
+SGBData_MapPals5: ; 732bd (1c:72bd)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_5.bin"
+
+SGBData_MapPals6: ; 732e0 (1c:72e0)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_6.bin"
+
+SGBData_MapPals7: ; 73304 (1c:7304)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_7.bin"
+
+SGBData_MapPals8: ; 73328 (1c:7328)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_8.bin"
+
+SGBData_MapPals9: ; 7334b (1c:734b)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_9.bin"
+
+SGBData_MapPals10: ; 7336f (1c:736f)
+	dw $20 ; length
+	INCBIN "data/sgb_data/map_pals_10.bin"
 
 SGBData_CharizardIntro: ; 73393 (1c:7393)
-	dw $20 ; width
-	INCROM $73395, $733b8
+	dw $20 ; length
+	INCBIN "data/sgb_data/charizard_intro_pals.bin"
 
 SGBData_ScytherIntro: ; 733b8 (1c:73b8)
-	dw $20 ; width
-	INCROM $733ba, $733dd
+	dw $20 ; length
+	INCBIN "data/sgb_data/scyther_intro_pals.bin"
 
 SGBData_AerodactylIntro: ; 733dd (1c:73dd)
-	dw $20 ; width
-	INCROM $733df, $73402
+	dw $20 ; length
+	INCBIN "data/sgb_data/aerodactyl_intro_pals.bin"
 
 SGBData_ColosseumBooster: ; 73402 (1c:7402)
-	dw $20 ; width
-	INCROM $73404, $73427
+	dw $20 ; length
+	INCBIN "data/sgb_data/colosseum_booster_pals.bin"
 
 SGBData_EvolutionBooster: ; 73427 (1c:7427)
-	dw $20 ; width
-	INCROM $73429, $7344c
+	dw $20 ; length
+	INCBIN "data/sgb_data/evolution_booster_pals.bin"
 
 SGBData_MysteryBooster: ; 7344c (1c:744c)
-	dw $20 ; width
-	INCROM $7344e, $73471
+	dw $20 ; length
+	INCBIN "data/sgb_data/mystery_booster_pals.bin"
 
 SGBData_LaboratoryBooster: ; 73471 (1c:7471)
-	dw $20 ; width
-	INCROM $73473, $73aa8
+	dw $20 ; length
+	INCBIN "data/sgb_data/laboratory_booster_pals.bin"
+
+	INCROM $73496, $73aa8
 
 SGBData_GameBoyLink: ; 73aa8 (1c:7aa8)
-	dw $40 ; width
-	INCROM $73aaa, $73ad8
+	dw $40 ; length
+	INCBIN "data/sgb_data/gameboy_link_pals.bin"
 
 SGBData_CardPop: ; 73ad8 (1c:7ad8)
-	dw $40 ; width
-	INCROM $73ada, $73b05
+	dw $40 ; length
+	INCBIN "data/sgb_data/card_pop_pals.bin"
 
 SGBData_GameBoyPrinter: ; 73b05 (1c:7b05)
-	dw $40 ; width
-	INCROM $73b07, $73b33
+	dw $40 ; length
+	INCBIN "data/sgb_data/gameboy_printer_pals.bin"
 
 SGBData_TitleScreen: ; 73b33 (1c:7b33)
-	dw $40 ; width
-	INCROM $73b35, $74000
+	dw $40 ; length
+	INCBIN "data/sgb_data/title_screen_pals.bin"
+
+	INCROM $73b63, $74000

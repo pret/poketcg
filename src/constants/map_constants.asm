@@ -68,13 +68,13 @@ MAP_SCRIPT_CLOSE_TEXTBOX EQU $0e
 
 ; map palettes for use in SGB mode
 	const_def 1
-	const MAP_SGB_PALETTE_1  ; $1
-	const MAP_SGB_PALETTE_2  ; $2
-	const MAP_SGB_PALETTE_3  ; $3
-	const MAP_SGB_PALETTE_4  ; $4
-	const MAP_SGB_PALETTE_5  ; $5
-	const MAP_SGB_PALETTE_6  ; $6
-	const MAP_SGB_PALETTE_7  ; $7
-	const MAP_SGB_PALETTE_8  ; $8
-	const MAP_SGB_PALETTE_9  ; $9
-	const MAP_SGB_PALETTE_10 ; $a
+	const MAP_SGB_PALS_1  ; $1
+	const MAP_SGB_PALS_2  ; $2
+	const MAP_SGB_PALS_3  ; $3
+	const MAP_SGB_PALS_4  ; $4
+	const MAP_SGB_PALS_5  ; $5
+	const MAP_SGB_PALS_6  ; $6
+	const MAP_SGB_PALS_7  ; $7
+	const MAP_SGB_PALS_8  ; $8
+	const MAP_SGB_PALS_9  ; $9
+	const MAP_SGB_PALS_10 ; $a

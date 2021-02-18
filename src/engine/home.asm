@@ -1621,7 +1621,7 @@ DecompressData: ; 08de (0:08de)
 	inc hl ; wDecompCommandByte
 	jr nz, .read_command_bit
 	dec hl ; wDecompNumCommandBitsLeft
-	ld [hl], $8 ; number of bits
+	ld [hl], 8 ; number of bits
 	inc hl ; wDecompCommandByte
 	ld a, [bc]
 	inc bc
