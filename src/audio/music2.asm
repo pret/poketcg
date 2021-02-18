@@ -1981,7 +1981,3 @@ INCLUDE "audio/music/ronald.asm"
 INCLUDE "audio/music/imakuni.asm"
 INCLUDE "audio/music/hallofhonor.asm"
 INCLUDE "audio/music/credits.asm"
-
-rept $109
-	db $ff
-endr

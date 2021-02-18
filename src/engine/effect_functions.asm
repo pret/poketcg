@@ -11815,7 +11815,3 @@ HealPlayAreaCardHP: ; 2febc (b:7ebc)
 	ld [hl], a
 	ret
 ; 0x2ff03
-
-rept $fd
-	db $ff
-endr

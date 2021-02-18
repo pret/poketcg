@@ -29,6 +29,8 @@ ROM0
 	"romheader"
 	org $0150
 	"start"
+	org $3fe0
+	"Bankswitch 3D To 3F"
 ROMX $01
 	"Bank 1"
 ROMX $02
@@ -44,10 +46,6 @@ ROMX $07
 	"Booster Packs"
 ROMX $08
 	"Bank 8"
-ROMX $09
-	"Empty Bank 9"
-ROMX $0a
-	"Empty Bank A"
 ROMX $0b
 	"Effect Functions"
 ROMX $0c
@@ -79,18 +77,12 @@ ROMX $18
 	"Text 12"
 ROMX $19
 	"Text 13"
-ROMX $1a
-	"Empty Bank 1A"
-ROMX $1b
-	"Empty Bank 1B"
 ROMX $1c
 	"Bank 1C"
 ROMX $1d
 	"Gfx 1"
 ROMX $1e
 	"Gfx 2"
-ROMX $1f
-	"Empty Bank 1F"
 ROMX $20
 	"Bank 20"
 ROMX $21
@@ -123,10 +115,6 @@ ROMX $2d
 	"Palettes1"
 ROMX $2e
 	"Palettes2"
-ROMX $2f
-	"Empty Bank 2F"
-ROMX $30
-	"Empty Bank 30"
 ROMX $31
 	"Card Gfx 1"
 ROMX $32
@@ -149,8 +137,6 @@ ROMX $3a
 	"Card Gfx 10"
 ROMX $3b
 	"Card Gfx 11"
-ROMX $3c
-	"Empty Bank 3C"
 ROMX $3d
 	"Audio 1"
 ROMX $3e

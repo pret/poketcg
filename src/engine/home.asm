@@ -1,37 +1,52 @@
 ; rst vectors
 SECTION "rst00", ROM0
 	ret
+	ds 7
 SECTION "rst08", ROM0
 	ret
+	ds 7
 SECTION "rst10", ROM0
 	ret
+	ds 7
 SECTION "rst18", ROM0
 	jp Bank1Call
+	ds 5
 SECTION "rst20", ROM0
 	jp RST20
+	ds 5
 SECTION "rst28", ROM0
 	jp FarCall
+	ds 5
 SECTION "rst30", ROM0
 	ret
+	ds 7
 SECTION "rst38", ROM0
 	ret
+	ds 7
 
 ; interrupts
 SECTION "vblank", ROM0
 	jp VBlankHandler
+	ds 5
 SECTION "lcdc", ROM0
 	call wLCDCFunctionTrampoline
 	reti
+	ds 4
 SECTION "timer", ROM0
 	jp TimerHandler
+	ds 5
 SECTION "serial", ROM0
 	jp SerialHandler
+	ds 5
 SECTION "joypad", ROM0
 	reti
+	ds $9f
 
 SECTION "romheader", ROM0
 	nop
 	jp Start
+
+	ds $4c
 
 SECTION "start", ROM0
 Start: ; 0150 (0:0150)
@@ -11874,9 +11889,7 @@ DisableInt_LYCoincidence: ; 3f68 (0:3f68)
 	pop hl
 	ret
 
-rept $6a
-	db $ff
-endr
+SECTION "Bankswitch 3D To 3F", ROM0
 
 ; jumps to 3f:hl, then switches to bank 3d
 Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
@@ -11893,7 +11906,3 @@ Bankswitch3dTo3f:: ; 3fe0 (0:3fe0)
 	ldh [hBankROM], a
 	ld [MBC3RomBank], a
 	ret
-
-rept $a
-	db $ff
-endr

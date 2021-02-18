@@ -44,12 +44,6 @@ rgb: MACRO
 	dw (\3 << 10 | \2 << 5 | \1)
 ENDM
 
-emptybank: MACRO
-	rept $4000
-	db $ff
-	endr
-ENDM
-
 ; poketcg specific macros below
 
 textpointer: MACRO

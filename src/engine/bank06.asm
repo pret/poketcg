@@ -3340,7 +3340,3 @@ Func_1bae4: ; 1bae4 (6:7ae4)
 	pop af
 	scf
 	ret
-
-rept $508
-	db $ff
-endr

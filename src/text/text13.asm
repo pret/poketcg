@@ -183,7 +183,3 @@ RecycleDescription: ; 6495e (19:495e)
 	line "in your discard pile on top of your"
 	line "deck."
 	done
-
-rept $3655
-	db $ff
-endr

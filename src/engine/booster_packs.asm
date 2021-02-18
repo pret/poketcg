@@ -595,5 +595,3 @@ LoadRarityAmountsToWram: ; 1e4ba (7:64ba)
 	ret
 
 INCLUDE "data/booster_packs.asm"
-
-	INCROM $1e640, $20000

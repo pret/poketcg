@@ -81,10 +81,10 @@ endif
 %.asm: ;
 
 
-opts = -cjsv -k 01 -l 0x33 -m 0x1b -p 0 -r 03 -t POKECARD -i AXQE
+opts = -cjsv -k 01 -l 0x33 -m 0x1b -p 0xff -r 03 -t POKECARD -i AXQE
 
 $(rom): $(rom_obj) src/layout.link
-	$(RGBLINK) -m $(rom:.gbc=.map) -n $(rom:.gbc=.sym) -l src/layout.link -o $@ $(filter %.o,$^)
+	$(RGBLINK) -p 0xff -m $(rom:.gbc=.map) -n $(rom:.gbc=.sym) -l src/layout.link -o $@ $(filter %.o,$^)
 	$(RGBFIX) $(opts) $@
 
 

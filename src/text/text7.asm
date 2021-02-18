@@ -1132,3 +1132,5 @@ Text0683: ; 4ffa9 (13:7fa9)
 	text "And here, take this"
 	line "LABORATORY Booster Pack!"
 	done
+
+	ds $29

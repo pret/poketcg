@@ -1233,3 +1233,5 @@ Text073e: ; 53d5b (14:7d5b)
 	line "Duels are worthy of"
 	line "the Legendary Pokémon Cards."
 	done
+
+	ds $17a

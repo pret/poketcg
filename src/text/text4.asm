@@ -1058,3 +1058,5 @@ Text048a: ; 43f61 (10:7f61)
 Text048b: ; 43fd9 (10:7fd9)
 	text "Would you like to duel Chris?"
 	done
+
+	ds $8

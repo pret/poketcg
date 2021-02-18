@@ -8439,7 +8439,3 @@ Func_7594: ; 7594 (1:7594)
 OpenBoosterPack: ; 7599 (1:7599)
 	farcall _OpenBoosterPack
 	ret
-
-rept $a62
-	db $ff
-endr

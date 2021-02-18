@@ -2342,7 +2342,3 @@ AnimData1:: ; 83c4c (20:7c4c)
 
 Palette110:: ; 83c5b (20:7c5b)
 	db $00, $00
-
-rept $3a3
-	db $ff
-endr

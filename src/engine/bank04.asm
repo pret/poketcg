@@ -3573,7 +3573,3 @@ Func_13485: ; 13485 (4:7485)
 
 INCLUDE "data/npc_map_data.asm"
 INCLUDE "data/map_objects.asm"
-
-rept $119
-	db $ff
-endr
