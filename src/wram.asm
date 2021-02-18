@@ -577,9 +577,9 @@ wDecompCommandByte:: ; cad9
 
 ; if bit 7 is changed from off to on, then
 ; decompression routine will read next two bytes
-; for repeating previous sequence (num of bytes, offset)
-; if changes from off to on, then the routine
-; will only read one byte, and reuse previous num of bytes
+; for repeating previous sequence (length, offset)
+; if it changes from on to off, then the routine
+; will only read one byte, and reuse previous length byte
 wDecompRepeatModeToggle:: ; cada
 	ds $1
 

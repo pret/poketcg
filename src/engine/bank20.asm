@@ -135,7 +135,7 @@ LoadTilemap: ; 80082 (20:4082)
 .Decompress ; 800e0 (20:40e0)
 ; if wBGMapCGBMode is true, then use double wBGMapWidth
 ; since one "width" length goes to VRAM0
-; and the onther "width" length goes to VRAM1
+; and the other "width" length goes to VRAM1
 	push hl
 	ld hl, wd28e
 	ld a, [wBGMapWidth]
