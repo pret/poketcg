@@ -15,6 +15,22 @@ NEXTU
 wc000:: ; c000
 	ds $100
 
+NEXTU
+
+; aside from wDecompressionBuffer, which stores the
+; de facto final decompressed data after decompression,
+; this buffer stores a secondary buffer that is used
+; for "lookbacks" when repeating byte sequences.
+; actually starts in the middle of the buffer,
+; at wDecompressionSecondaryBufferStart, then wraps back up
+; to wDecompressionSecondaryBuffer.
+; this is used so that $00 can be "looked back", since anything
+; before $ef is initialized to 0 when starting decompression.
+wDecompressionSecondaryBuffer:: ; c000
+	ds $ef
+wDecompressionSecondaryBufferStart:: ; ; c0ef
+	ds $11
+
 ENDU
 
 	ds $100
@@ -543,30 +559,48 @@ wDoFrameFunction:: ; cad3
 wcad5:: ; cad5
 	ds $1
 
-wcad6:: ; cad6
+; pointer to keep track of where
+; in the source data we are while
+; running the decompression algorithm
+wDecompSourcePosPtr:: ; cad6
 	ds $2
 
-wcad8:: ; cad8
+; number of bits that are still left
+; to read from the current command byte
+wDecompNumCommandBitsLeft:: ; cad8
 	ds $1
 
-wcad9:: ; cad9
+; command byte from which to read the bits
+; to decompress source data
+wDecompCommandByte:: ; cad9
 	ds $1
 
-wcada:: ; cada
+; if bit 7 is changed from off to on, then
+; decompression routine will read next two bytes
+; for repeating previous sequence (length, offset)
+; if it changes from on to off, then the routine
+; will only read one byte, and reuse previous length byte
+wDecompRepeatModeToggle:: ; cada
 	ds $1
 
-wcadb:: ; cadb
+; stores in both nybbles the length of the
+; sequences to copy in decompression
+; the high nybble is used first, then the low nybble
+; for a subsequent sequence repition
+wDecompRepeatLengths:: ; cadb
 	ds $1
 
-wcadc:: ; cadc
+wDecompNumBytesToRepeat:: ; cadc
 	ds $1
 
-wcadd:: ; cadd
+wDecompSecondaryBufferPtrHigh:: ; cadd
 	ds $1
 
-wcade:: ; cade
+; offset to repeat byte from decompressed data
+wDecompRepeatSeqOffset:: ; cade
 	ds $1
 
+wDecompSecondaryBufferPtrLow:: ; cadf
 	ds $1
 
 wTempSGBPacket:: ; cae0
@@ -2133,10 +2167,15 @@ wd238:: ; d238
 wCurTileset:: ; d239
 	ds $1
 
-wd23a:: ; d23a
+; pointer to compressed data
+; of the current map's permission map
+wBGMapPermissionDataPtr:: ; d23a
 	ds $2
 
-wd23c:: ; d23c
+; whether the  BG Map is in CGB mode
+; this means half of the width is for
+; VRAM0 and the other half is for VRAM1
+wBGMapCGBMode:: ; d23c
 	ds $1
 
 wd23d:: ; d23d

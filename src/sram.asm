@@ -200,9 +200,9 @@ sba68:: ; ba68
 SECTION "SRAM1", SRAM
 
 ; from VRAM0
-s0BGMap:: ds $400 ; a000
+sBGMap0:: ds $400 ; a000
 ; from VRAM1
-s1BGMap:: ds $400 ; a400
+sBGMap1:: ds $400 ; a400
 
 SECTION "SRAM2", SRAM
 

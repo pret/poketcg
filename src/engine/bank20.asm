@@ -3,9 +3,9 @@ Func_80000: ; 80000 (20:4000)
 	xor a
 	ld [wTextBoxFrameType], a
 	call Func_8003d
-	farcall Func_c37a
+	farcall LoadPermissionMap
 	farcall Func_c9c7
-	call Func_801a1
+	call SafelyCopyBGMapFromSRAMToVRAM
 	farcall Func_c3ff
 	ld a, [wCurMap]
 	cp OVERWORLD_MAP
@@ -18,9 +18,9 @@ Func_80000: ; 80000 (20:4000)
 Func_80028: ; 80028 (20:4028)
 	call ClearSRAMBGMaps
 	ld bc, $0000
-	call Func_80077
+	call LoadTilemap_ToSRAM
 	farcall Func_c9c7
-	call Func_801a1
+	call SafelyCopyBGMapFromSRAMToVRAM
 	farcall Func_c3ee
 	ret
 ; 0x8003d
@@ -28,15 +28,18 @@ Func_80028: ; 80028 (20:4028)
 Func_8003d: ; 8003d (20:403d)
 	farcall LoadMapHeader
 	farcall SetSGB2AndSGB3MapPalette
-	ld bc, $0
-	call Func_80077
-	ld a, $80
-	ld [wd4ca], a
-	xor a
+
+	lb bc, 0, 0
+	call LoadTilemap_ToSRAM
+
+	ld a, LOW(v0Tiles1 / TILE_SIZE)
+	ld [wVRAMTileOffset], a
+	xor a ; VRAM0
 	ld [wd4cb], a
 	call LoadTilesetGfx
-	xor a
-	ld [wd4ca], a
+
+	xor a ; LOW(v0Tiles2 / TILE_SIZE)
+	ld [wVRAMTileOffset], a
 	ld a, [wd291]
 	ld [wd4cb], a
 	ld a, [wd28f]
@@ -51,17 +54,21 @@ Func_8003d: ; 8003d (20:403d)
 	ret
 ; 0x80077
 
-Func_80077: ; 80077 (20:4077)
+LoadTilemap_ToSRAM: ; 80077 (20:4077)
 	ld a, TRUE
 	ld [wWriteBGMapToSRAM], a
-	jr Func_80082
+	jr LoadTilemap
 
-Func_8007e: ; 8007e (20:407e)
-	xor a
+LoadTilemap_ToVRAM: ; 8007e (20:407e)
+	xor a ; FALSE
 	ld [wWriteBGMapToSRAM], a
 ;	fallthrough
 
-Func_80082: ; 80082 (20:4082)
+; loads the BG map corresponding to wCurTilemap
+; either loads them in VRAM or SRAM,
+; depending on wWriteBGMapToSRAM
+; bc = starting coordinates
+LoadTilemap: ; 80082 (20:4082)
 	push hl
 	push bc
 	push de
@@ -78,7 +85,7 @@ Func_80082: ; 80082 (20:4082)
 
 ; store header data
 	ld de, wDecompressionBuffer
-	ld bc, $0006 ; header + 1st instruction
+	ld bc, $6 ; header + 1st instruction
 	call CopyBankedDataToDE
 	ld l, e
 	ld h, d
@@ -87,52 +94,59 @@ Func_80082: ; 80082 (20:4082)
 	ld a, [hli]
 	ld [wBGMapHeight], a
 	ld a, [hli]
-	ld [wd23a], a
+	ld [wBGMapPermissionDataPtr], a
 	ld a, [hli]
-	ld [wd23a + 1], a
+	ld [wBGMapPermissionDataPtr + 1], a
 	ld a, [hli]
-	ld [wd23c], a
-
-	call Func_800bd
+	ld [wBGMapCGBMode], a
+	call .InitAndDecompressBGMap
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_800bd: ; 800bd (20:40bd)
+; prepares the pointers for decompressing BG Map
+; and calls InitDataDecompression
+; then decompresses the data
+.InitAndDecompressBGMap ; 800bd (20:40bd)
 	push hl
 	push bc
 	push de
 	ld a, [wTempPointer]
-	add $05
+	add $5 ; header
 	ld e, a
 	ld a, [wTempPointer + 1]
-	adc $00
+	adc 0
 	ld d, a
-	ld b, HIGH(wc000)
+	ld b, HIGH(wDecompressionSecondaryBuffer)
 	call InitDataDecompression
 	ld a, [wVRAMPointer]
 	ld e, a
 	ld a, [wVRAMPointer + 1]
 	ld d, a
-	call Func_800e0
+	call .Decompress
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_800e0: ; 800e0 (20:40e0)
-; if wd23c != 0, then use double wBGMapWidth
+; wTempBank:wTempPointer = source of compressed data
+; wVRAMPointer = destination of decompressed data
+.Decompress ; 800e0 (20:40e0)
+; if wBGMapCGBMode is true, then use double wBGMapWidth
+; since one "width" length goes to VRAM0
+; and the other "width" length goes to VRAM1
 	push hl
 	ld hl, wd28e
 	ld a, [wBGMapWidth]
 	ld [hl], a
-	ld a, [wd23c]
+	ld a, [wBGMapCGBMode]
 	or a
-	jr z, .asm_800f0
+	jr z, .skip_doubling_width
 	sla [hl]
-.asm_800f0
+.skip_doubling_width
 
+; clear wDecompressionBuffer
 	ld c, $40
 	ld hl, wDecompressionBuffer
 	xor a
@@ -153,6 +167,7 @@ Func_800e0: ; 800e0 (20:40e0)
 	ld de, wDecompressionBuffer
 	call DecompressDataFromBank
 
+	; copy to VRAM0
 	ld a, [wBGMapWidth]
 	ld b, a
 	pop de
@@ -164,17 +179,18 @@ Func_800e0: ; 800e0 (20:40e0)
 	jr nz, .next_row
 
 	; cgb only
+	; copy the second "half" to VRAM1
 	call BankswitchVRAM1
 	ld a, [wBGMapWidth]
 	ld c, a
-	ld b, $00
+	ld b, $0
 	ld hl, wDecompressionBuffer
 	add hl, bc
 	pop de
 	push de
 	ld a, [wBGMapWidth]
 	ld b, a
-	call Func_80148
+	call Func_80148 ; adds some wd291 offset to tiles
 	call CopyBGDataToVRAMOrSRAM
 	call BankswitchVRAM0
 
@@ -195,7 +211,7 @@ Func_80148: ; 80148 (20:4148)
 	ld a, [wd291]
 	or a
 	ret z
-	ld a, [wd23c]
+	ld a, [wBGMapCGBMode]
 	or a
 	jr z, .asm_80162
 
@@ -231,7 +247,7 @@ Func_80148: ; 80148 (20:4148)
 ; to either VRAM or SRAM, depending on wWriteBGMapToSRAM
 ; de is the target address in VRAM,
 ; if SRAM is the target address to copy,
-; copies data to s0BGMap or s1BGMap
+; copies data to sBGMap0 or sBGMap1
 ; for VRAM0 or VRAM1 respectively
 CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, [wWriteBGMapToSRAM]
@@ -247,11 +263,11 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
-	ld hl, s0BGMap - v0BGMap0
+	ld hl, sBGMap0 - v0BGMap0
 	ldh a, [hBankVRAM]
 	or a
 	jr z, .got_pointer
-	ld hl, s1BGMap - v1BGMap0
+	ld hl, sBGMap1 - v1BGMap0
 .got_pointer
 	add hl, de
 	ld e, l
@@ -271,18 +287,21 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	pop hl
 	ret
 
-Func_801a1: ; 801a1 (20:41a1)
+; safely copies $20 bytes at a time
+; sBGMap0 -> v0BGMap0
+; sBGMap1 -> v0BGMap1 (if in CGB)
+SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	push hl
 	push bc
 	push de
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $1
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
-	ld hl, v0End
+	ld hl, sBGMap0
 	ld de, v0BGMap0
 	ld c, $20
-.asm_801b4
+.loop
 	push bc
 	push hl
 	push de
@@ -290,30 +309,30 @@ Func_801a1: ; 801a1 (20:41a1)
 	call SafeCopyDataHLtoDE
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_801d6
+	jr nz, .skip_vram1
 	pop de
 	pop hl
 	push hl
 	push de
-	ld bc, $0400
+	ld bc, sBGMap1 - sBGMap0 ; $400
 	add hl, bc
 	call BankswitchVRAM1
 	ld b, $20
 	call SafeCopyDataHLtoDE
 	call BankswitchVRAM0
+.skip_vram1
 
-.asm_801d6
 	pop hl
-	ld de, $0020
+	ld de, $20
 	add hl, de
 	ld e, l
 	ld d, h
 	pop hl
-	ld bc, $0020
+	ld bc, $20
 	add hl, bc
 	pop bc
 	dec c
-	jr nz, .asm_801b4
+	jr nz, .loop
 	pop af
 	call BankswitchSRAM
 	call DisableSRAM
@@ -322,16 +341,16 @@ Func_801a1: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
-; clears s0BGMap and s1BGMap
+; clears sBGMap0 and sBGMap1
 ClearSRAMBGMaps: ; 801f1 (20:41f1)
 	push hl
 	push bc
 	ldh a, [hBankSRAM]
 	push af
-	ld a, BANK(s0BGMap) ; SRAM 1
+	ld a, BANK(sBGMap0) ; SRAM 1
 	call BankswitchSRAM
-	ld hl, s0BGMap
-	ld bc, $800 ; s0BGMap + s1BGMap
+	ld hl, sBGMap0
+	ld bc, $800 ; sBGMap0 + sBGMap1
 	xor a
 	call FillMemoryWithA
 	pop af
@@ -651,28 +670,30 @@ Func_803b9: ; 803b9 (20:43b9)
 	ret
 ; 0x803c9
 
+; a = palette index to load
 Func_803c9: ; 803c9 (20:43c9)
 	push hl
 	push bc
 	push de
-	call CopyPaletteDataToBuffer
+	call LoadPaletteDataToBuffer
 	ld hl, wLoadedPalData
 	ld a, [hli]
 	or a
-	jr z, .asm_803dc
+	jr z, .skip_bgp
 	ld a, [hli]
 	push hl
 	call SetBGP
 	pop hl
-.asm_803dc
+.skip_bgp
+
 	ld a, [hli]
 	or a
-	jr z, .asm_803e8
+	jr z, .skip_pal
 	ld c, a
 	ld a, [wd4cb]
 	ld b, a
 	call LoadPaletteDataFromHL
-.asm_803e8
+.skip_pal
 	pop de
 	pop bc
 	pop hl
@@ -733,7 +754,7 @@ LoadPaletteData: ; 80418 (20:4418)
 	push hl
 	push bc
 	push de
-	call CopyPaletteDataToBuffer
+	call LoadPaletteDataToBuffer
 
 	ld hl, wLoadedPalData
 	ld a, [hli] ; number palettes
@@ -786,7 +807,7 @@ LoadPaletteData: ; 80418 (20:4418)
 ; 0x80456
 
 ; copies palette data of index in a to wLoadedPalData
-CopyPaletteDataToBuffer: ; 80456 (20:4456)
+LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	push hl
 	push bc
 	push de
@@ -1161,9 +1182,9 @@ Func_80baa: ; 80baa (20:4baa)
 	push af
 	ld a, [wBGMapHeight]
 	push af
-	ld a, [wd23a]
+	ld a, [wBGMapPermissionDataPtr]
 	push af
-	ld a, [wd23a + 1]
+	ld a, [wBGMapPermissionDataPtr + 1]
 	push af
 
 	ld b, $0
@@ -1194,7 +1215,7 @@ Func_80baa: ; 80baa (20:4baa)
 	ld a, [hl]
 	ld [wCurTilemap], a
 	push bc
-	farcall Func_80082 ; unnecessary farcall
+	farcall LoadTilemap ; unnecessary farcall
 	pop bc
 	srl b
 	ld a, c
@@ -1204,13 +1225,13 @@ Func_80baa: ; 80baa (20:4baa)
 	add b
 	ld c, a
 	ld b, $0
-	ld hl, wBoosterViableCardList
+	ld hl, wPermissionMap
 	add hl, bc
-	farcall Func_c38f
+	farcall DecompressPermissionMap
 	pop af
-	ld [wd23a + 1], a
+	ld [wBGMapPermissionDataPtr + 1], a
 	pop af
-	ld [wd23a], a
+	ld [wBGMapPermissionDataPtr], a
 	pop af
 	ld [wBGMapHeight], a
 	pop af
@@ -1238,27 +1259,27 @@ Func_80baa: ; 80baa (20:4baa)
 	dw .data_11
 
 .data_1
-	db $16, $00, TILEMAP_UNUSED_5, TILEMAP_UNUSED_6
+	db $16, $00, TILEMAP_UNKNOWN_3, TILEMAP_UNKNOWN_3_CGB
 .data_2
-	db $0e, $00, TILEMAP_UNUSED_7, TILEMAP_UNUSED_8
+	db $0e, $00, TILEMAP_UNKNOWN_4, TILEMAP_UNKNOWN_4_CGB
 .data_3
-	db $06, $02, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $06, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_4
-	db $0a, $02, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $0a, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_5
-	db $0e, $02, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $0e, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_6
-	db $12, $02, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $12, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_7
-	db $0e, $0a, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $0e, $0a, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_8
-	db $12, $0a, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $12, $0a, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_9
-	db $0e, $12, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $0e, $12, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_10
-	db $12, $12, TILEMAP_UNUSED_3, TILEMAP_UNUSED_4
+	db $12, $12, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
 .data_11
-	db $0a, $00, TILEMAP_UNUSED_1, TILEMAP_UNUSED_2
+	db $0a, $00, TILEMAP_UNKNOWN_1, TILEMAP_UNKNOWN_1_CGB
 
 	INCROM $80c63, $80e5a
 
@@ -1284,112 +1305,112 @@ tilemap: MACRO
 ENDM
 
 Tilemaps: ; 80e67 (20:4e67)
-	tilemap OverworldMapTilemap,             TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP
-	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP         ; TILEMAP_OVERWORLD_MAP_CGB
-	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY
-	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_MASON_LABORATORY_CGB
-	tilemap Unused1Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_1
-	tilemap Unused2Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_2
-	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM
-	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY      ; TILEMAP_DECK_MACHINE_ROOM_CGB
-	tilemap Unused3Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_3
-	tilemap Unused4Tilemap,                  TILESET_MASON_LABORATORY      ; TILEMAP_UNUSED_4
-	tilemap IshiharaTilemap,                 TILESET_ISHIHARA              ; TILEMAP_ISHIHARA
-	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA              ; TILEMAP_ISHIHARA_CGB
-	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE
-	tilemap FightingClubEntranceCGBTilemap,  TILESET_CLUB_ENTRANCE         ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
-	tilemap RockClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE
-	tilemap RockClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
-	tilemap WaterClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE
-	tilemap WaterClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
-	tilemap LightningClubEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
-	tilemap LightningClubEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
-	tilemap GrassClubEntranceTilemap,        TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE
-	tilemap GrassClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE         ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
-	tilemap PsychicClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
-	tilemap PsychicClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
-	tilemap ScienceClubEntranceTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE
-	tilemap ScienceClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE         ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
-	tilemap FireClubEntranceTilemap,         TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE
-	tilemap FireClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE         ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
-	tilemap ChallengeHallEntranceTilemap,    TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE
-	tilemap ChallengeHallEntranceCGBTilemap, TILESET_CLUB_ENTRANCE         ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
-	tilemap ClubLobbyTilemap,                TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY
-	tilemap ClubLobbyCGBTilemap,             TILESET_CLUB_LOBBY            ; TILEMAP_CLUB_LOBBY_CGB
-	tilemap FightingClubTilemap,             TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB
-	tilemap FightingClubCGBTilemap,          TILESET_FIGHTING_CLUB         ; TILEMAP_FIGHTING_CLUB_CGB
-	tilemap RockClubTilemap,                 TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB
-	tilemap RockClubCGBTilemap,              TILESET_ROCK_CLUB             ; TILEMAP_ROCK_CLUB_CGB
-	tilemap WaterClubTilemap,                TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB
-	tilemap WaterClubCGBTilemap,             TILESET_WATER_CLUB            ; TILEMAP_WATER_CLUB_CGB
-	tilemap LightningClubTilemap,            TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB
-	tilemap LightningClubCGBTilemap,         TILESET_LIGHTNING_CLUB        ; TILEMAP_LIGHTNING_CLUB_CGB
-	tilemap GrassClubTilemap,                TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB
-	tilemap GrassClubCGBTilemap,             TILESET_GRASS_CLUB            ; TILEMAP_GRASS_CLUB_CGB
-	tilemap PsychicClubTilemap,              TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB
-	tilemap PsychicClubCGBTilemap,           TILESET_PSYCHIC_CLUB          ; TILEMAP_PSYCHIC_CLUB_CGB
-	tilemap ScienceClubTilemap,              TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB
-	tilemap ScienceClubCGBTilemap,           TILESET_SCIENCE_CLUB          ; TILEMAP_SCIENCE_CLUB_CGB
-	tilemap FireClubTilemap,                 TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB
-	tilemap FireClubCGBTilemap,              TILESET_FIRE_CLUB             ; TILEMAP_FIRE_CLUB_CGB
-	tilemap ChallengeHallTilemap,            TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL
-	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL        ; TILEMAP_CHALLENGE_HALL_CGB
-	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE
-	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
-	tilemap Unused5Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_5
-	tilemap Unused6Tilemap,                  TILESET_POKEMON_DOME_ENTRANCE ; TILEMAP_UNUSED_6
-	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME
-	tilemap PokemonDomeGBTilemap,            TILESET_POKEMON_DOME          ; TILEMAP_POKEMON_DOME_CGB
-	tilemap Unused7Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_7
-	tilemap Unused8Tilemap,                  TILESET_POKEMON_DOME          ; TILEMAP_UNUSED_8
-	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR
-	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR         ; TILEMAP_HALL_OF_HONOR_CGB
-	tilemap CardPopCGBTilemap,               TILESET_CARD_POP              ; TILEMAP_CARD_POP_CGB
-	tilemap CardPopTilemap,                  TILESET_CARD_POP              ; TILEMAP_CARD_POP
-	tilemap GrassMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_GRASS_MEDAL
-	tilemap ScienceMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_SCIENCE_MEDAL
-	tilemap FireMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_FIRE_MEDAL
-	tilemap WaterMedalTilemap,               TILESET_MEDAL                 ; TILEMAP_WATER_MEDAL
-	tilemap LightningMedalTilemap,           TILESET_MEDAL                 ; TILEMAP_LIGHTNING_MEDAL
-	tilemap FightingMedalTilemap,            TILESET_MEDAL                 ; TILEMAP_FIGHTING_MEDAL
-	tilemap RockMedalTilemap,                TILESET_MEDAL                 ; TILEMAP_ROCK_MEDAL
-	tilemap PsychicMedalTilemap,             TILESET_MEDAL                 ; TILEMAP_PSYCHIC_MEDAL
-	tilemap GameBoyLinkCGBTilemap,           TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CGB
-	tilemap GameBoyLinkTilemap,              TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK
-	tilemap GameBoyLinkConnectingCGBTilemap, TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CONNECTING_CGB
-	tilemap GameBoyLinkConnectingTilemap,    TILESET_GAMEBOY_LINK          ; TILEMAP_GAMEBOY_LINK_CONNECTING
-	tilemap GameBoyPrinterCGBTilemap,        TILESET_GAMEBOY_PRINTER       ; TILEMAP_GAMEBOY_PRINTER_CGB
-	tilemap GameBoyPrinterTilemap,           TILESET_GAMEBOY_PRINTER       ; TILEMAP_GAMEBOY_PRINTER
-	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1           ; TILEMAP_COLOSSEUM
-	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2           ; TILEMAP_COLOSSEUM_CGB
-	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1           ; TILEMAP_EVOLUTION
-	tilemap EvolutionCGBTilemap,             TILESET_EVOLUTION_2           ; TILEMAP_EVOLUTION_CGB
-	tilemap MysteryTilemap,                  TILESET_MYSTERY_1             ; TILEMAP_MYSTERY
-	tilemap MysteryCGBTilemap,               TILESET_MYSTERY_2             ; TILEMAP_MYSTERY_CGB
-	tilemap LaboratoryTilemap,               TILESET_LABORATORY_1          ; TILEMAP_LABORATORY
-	tilemap LaboratoryCGBTilemap,            TILESET_LABORATORY_2          ; TILEMAP_LABORATORY_CGB
-	tilemap CharizardIntroTilemap,           TILESET_CHARIZARD_INTRO_1     ; TILEMAP_CHARIZARD_INTRO
-	tilemap CharizardIntroCGBTilemap,        TILESET_CHARIZARD_INTRO_2     ; TILEMAP_CHARIZARD_INTRO_CGB
-	tilemap ScytherIntroTilemap,             TILESET_SCYTHER_INTRO_1       ; TILEMAP_SCYTHER_INTRO
-	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2       ; TILEMAP_SCYTHER_INTRO_CGB
-	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1    ; TILEMAP_AERODACTYL_INTRO
-	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2    ; TILEMAP_AERODACTYL_INTRO_CGB
-	tilemap TitleScreen1Tilemap,             TILESET_TITLE_SCREEN_1        ; TILEMAP_JAPANESE_TITLE_SCREEN
-	tilemap TitleScreen2Tilemap,             TILESET_TITLE_SCREEN_2        ; TILEMAP_JAPANESE_TITLE_SCREEN_CGB
-	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_1
-	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_2
-	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1         ; TILEMAP_SOLID_TILES_3
-	tilemap TitleScreen3Tilemap,             TILESET_TITLE_SCREEN_3        ; TILEMAP_JAPANESE_TITLE_SCREEN_2
-	tilemap TitleScreen4Tilemap,             TILESET_TITLE_SCREEN_4        ; TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB
-	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2         ; TILEMAP_SOLID_TILES_4
-	tilemap PlayerTilemap,                   TILESET_PLAYER                ; TILEMAP_PLAYER
-	tilemap OpponentTilemap,                 TILESET_RONALD                ; TILEMAP_OPPONENT
-	tilemap TitleScreen5Tilemap,             TILESET_TITLE_SCREEN_5        ; TILEMAP_TITLE_SCREEN
-	tilemap TitleScreen6Tilemap,             TILESET_TITLE_SCREEN_6        ; TILEMAP_TITLE_SCREEN_CGB
-	tilemap CopyrightTilemap,                TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT
-	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT             ; TILEMAP_COPYRIGHT_CGB
-	tilemap NintendoTilemap,                 TILESET_NINTENDO              ; TILEMAP_NINTENDO
-	tilemap CompaniesTilemap,                TILESET_COMPANIES             ; TILEMAP_COMPANIES
+	tilemap OverworldMapTilemap,             TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP
+	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP_CGB
+	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY
+	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY_CGB
+	tilemap Unknown1Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_1
+	tilemap Unknown1CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_1_CGB
+	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM
+	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM_CGB
+	tilemap Unknown2Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_2
+	tilemap Unknown2CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_2_CGB
+	tilemap IshiharaTilemap,                 TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA
+	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA_CGB
+	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE
+	tilemap FightingClubEntranceCGBTilemap,  TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
+	tilemap RockClubEntranceTilemap,         TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE
+	tilemap RockClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
+	tilemap WaterClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE
+	tilemap WaterClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
+	tilemap LightningClubEntranceTilemap,    TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
+	tilemap LightningClubEntranceCGBTilemap, TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
+	tilemap GrassClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE
+	tilemap GrassClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
+	tilemap PsychicClubEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
+	tilemap PsychicClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
+	tilemap ScienceClubEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE
+	tilemap ScienceClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
+	tilemap FireClubEntranceTilemap,         TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE
+	tilemap FireClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
+	tilemap ChallengeHallEntranceTilemap,    TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE
+	tilemap ChallengeHallEntranceCGBTilemap, TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
+	tilemap ClubLobbyTilemap,                TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY
+	tilemap ClubLobbyCGBTilemap,             TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY_CGB
+	tilemap FightingClubTilemap,             TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB
+	tilemap FightingClubCGBTilemap,          TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB_CGB
+	tilemap RockClubTilemap,                 TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB
+	tilemap RockClubCGBTilemap,              TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB_CGB
+	tilemap WaterClubTilemap,                TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB
+	tilemap WaterClubCGBTilemap,             TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB_CGB
+	tilemap LightningClubTilemap,            TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB
+	tilemap LightningClubCGBTilemap,         TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB_CGB
+	tilemap GrassClubTilemap,                TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB
+	tilemap GrassClubCGBTilemap,             TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB_CGB
+	tilemap PsychicClubTilemap,              TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB
+	tilemap PsychicClubCGBTilemap,           TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB_CGB
+	tilemap ScienceClubTilemap,              TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB
+	tilemap ScienceClubCGBTilemap,           TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB_CGB
+	tilemap FireClubTilemap,                 TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB
+	tilemap FireClubCGBTilemap,              TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB_CGB
+	tilemap ChallengeHallTilemap,            TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL
+	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL_CGB
+	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE
+	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
+	tilemap Unknown3Tilemap,                 TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_UNKNOWN_3
+	tilemap Unknown3CGBTilemap,              TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_UNKNOWN_3_CGB
+	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME
+	tilemap PokemonDomeCGBTilemap,           TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME_CGB
+	tilemap Unknown4Tilemap,                 TILESET_POKEMON_DOME                ; TILEMAP_UNKNOWN_4
+	tilemap Unknown4CGBTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_UNKNOWN_4_CGB
+	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR
+	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR_CGB
+	tilemap CardPopCGBTilemap,               TILESET_CARD_POP                    ; TILEMAP_CARD_POP_CGB
+	tilemap CardPopTilemap,                  TILESET_CARD_POP                    ; TILEMAP_CARD_POP
+	tilemap GrassMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_GRASS_MEDAL
+	tilemap ScienceMedalTilemap,             TILESET_MEDAL                       ; TILEMAP_SCIENCE_MEDAL
+	tilemap FireMedalTilemap,                TILESET_MEDAL                       ; TILEMAP_FIRE_MEDAL
+	tilemap WaterMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_WATER_MEDAL
+	tilemap LightningMedalTilemap,           TILESET_MEDAL                       ; TILEMAP_LIGHTNING_MEDAL
+	tilemap FightingMedalTilemap,            TILESET_MEDAL                       ; TILEMAP_FIGHTING_MEDAL
+	tilemap RockMedalTilemap,                TILESET_MEDAL                       ; TILEMAP_ROCK_MEDAL
+	tilemap PsychicMedalTilemap,             TILESET_MEDAL                       ; TILEMAP_PSYCHIC_MEDAL
+	tilemap GameBoyLinkCGBTilemap,           TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CGB
+	tilemap GameBoyLinkTilemap,              TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK
+	tilemap GameBoyLinkConnectingCGBTilemap, TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING_CGB
+	tilemap GameBoyLinkConnectingTilemap,    TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING
+	tilemap GameBoyPrinterCGBTilemap,        TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER_CGB
+	tilemap GameBoyPrinterTilemap,           TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER
+	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1                 ; TILEMAP_COLOSSEUM
+	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2                 ; TILEMAP_COLOSSEUM_CGB
+	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1                 ; TILEMAP_EVOLUTION
+	tilemap EvolutionCGBTilemap,             TILESET_EVOLUTION_2                 ; TILEMAP_EVOLUTION_CGB
+	tilemap MysteryTilemap,                  TILESET_MYSTERY_1                   ; TILEMAP_MYSTERY
+	tilemap MysteryCGBTilemap,               TILESET_MYSTERY_2                   ; TILEMAP_MYSTERY_CGB
+	tilemap LaboratoryTilemap,               TILESET_LABORATORY_1                ; TILEMAP_LABORATORY
+	tilemap LaboratoryCGBTilemap,            TILESET_LABORATORY_2                ; TILEMAP_LABORATORY_CGB
+	tilemap CharizardIntroTilemap,           TILESET_CHARIZARD_INTRO_1           ; TILEMAP_CHARIZARD_INTRO
+	tilemap CharizardIntroCGBTilemap,        TILESET_CHARIZARD_INTRO_2           ; TILEMAP_CHARIZARD_INTRO_CGB
+	tilemap ScytherIntroTilemap,             TILESET_SCYTHER_INTRO_1             ; TILEMAP_SCYTHER_INTRO
+	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2             ; TILEMAP_SCYTHER_INTRO_CGB
+	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1          ; TILEMAP_AERODACTYL_INTRO
+	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2          ; TILEMAP_AERODACTYL_INTRO_CGB
+	tilemap JapaneseTitleScreenTilemap,      TILESET_JAPANESE_TITLE_SCREEN       ; TILEMAP_JAPANESE_TITLE_SCREEN
+	tilemap JapaneseTitleScreenCGBTilemap,   TILESET_JAPANESE_TITLE_SCREEN_CGB   ; TILEMAP_JAPANESE_TITLE_SCREEN_CGB
+	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_1
+	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_2
+	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_3
+	tilemap JapaneseTitleScreen2Tilemap,     TILESET_JAPANESE_TITLE_SCREEN_2     ; TILEMAP_JAPANESE_TITLE_SCREEN_2
+	tilemap JapaneseTitleScreen2CGBTilemap,  TILESET_JAPANESE_TITLE_SCREEN_2_CGB ; TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB
+	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2               ; TILEMAP_SOLID_TILES_4
+	tilemap PlayerTilemap,                   TILESET_PLAYER                      ; TILEMAP_PLAYER
+	tilemap OpponentTilemap,                 TILESET_RONALD                      ; TILEMAP_OPPONENT
+	tilemap TitleScreenTilemap,              TILESET_TITLE_SCREEN                ; TILEMAP_TITLE_SCREEN
+	tilemap TitleScreenCGBTilemap,           TILESET_TITLE_SCREEN_CGB            ; TILEMAP_TITLE_SCREEN_CGB
+	tilemap CopyrightTilemap,                TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT
+	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT_CGB
+	tilemap NintendoTilemap,                 TILESET_NINTENDO                    ; TILEMAP_NINTENDO
+	tilemap CompaniesTilemap,                TILESET_COMPANIES                   ; TILEMAP_COMPANIES
 
 ; \1 = pointer
 ; \2 = number of tiles
@@ -1434,16 +1455,16 @@ Tilesets: ; 8100f (20:500f)
 	tileset ScytherIntro2Gfx,               96 ; TILESET_SCYTHER_INTRO_2
 	tileset AerodactylIntro1Gfx,            96 ; TILESET_AERODACTYL_INTRO_1
 	tileset AerodactylIntro2Gfx,            96 ; TILESET_AERODACTYL_INTRO_2
-	tileset Titlescreen1Gfx,                97 ; TILESET_TITLE_SCREEN_1
-	tileset Titlescreen2Gfx,                97 ; TILESET_TITLE_SCREEN_2
+	tileset JapaneseTitleScreenGfx,         97 ; TILESET_JAPANESE_TITLE_SCREEN
+	tileset JapaneseTitleScreenCGBGfx,      97 ; TILESET_JAPANESE_TITLE_SCREEN_CGB
 	tileset SolidTiles1,                     4 ; TILESET_SOLID_TILES_1
-	tileset Titlescreen3Gfx,               244 ; TILESET_TITLE_SCREEN_3
-	tileset Titlescreen4Gfx,                59 ; TILESET_TITLE_SCREEN_4
+	tileset JapaneseTitleScreen2Gfx,       244 ; TILESET_JAPANESE_TITLE_SCREEN_2
+	tileset JapaneseTitleScreen2CGBGfx,     59 ; TILESET_JAPANESE_TITLE_SCREEN_2_CGB
 	tileset SolidTiles2,                     4 ; TILESET_SOLID_TILES_2
 	tileset PlayerGfx,                      36 ; TILESET_PLAYER
 	tileset RonaldGfx,                      36 ; TILESET_RONALD
-	tileset Titlescreen5Gfx,               220 ; TILESET_TITLE_SCREEN_5
-	tileset Titlescreen6Gfx,               212 ; TILESET_TITLE_SCREEN_6
+	tileset TitleScreenGfx,                220 ; TILESET_TITLE_SCREEN
+	tileset TitleScreenCGBGfx,             212 ; TILESET_TITLE_SCREEN_CGB
 	tileset CopyrightGfx,                   36 ; TILESET_COPYRIGHT
 	tileset NintendoGfx,                    24 ; TILESET_NINTENDO
 	tileset CompaniesGfx,                   49 ; TILESET_COMPANIES
@@ -2009,330 +2030,365 @@ MapDataPointers_81697: ; 81697 (20:5697)
 OverworldMapTilemap:: ; 8191b (20:591b)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map0.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/overworld_map.bin"
 
 OverworldMapCGBTilemap:: ; 81a22 (20:5a22)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map1.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/overworld_map_cgb.bin"
 
 MasonLaboratoryTilemap:: ; 81c13 (20:5c13)
 	db $1c ; width
 	db $1e ; height
-	dw $5d11
-	db $00
-
-	INCBIN "data/maps/map2.bin"
+	dw MasonLaboratoryPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/mason_laboratory.bin"
+MasonLaboratoryPermissions:
+	INCBIN "data/maps/permissions/mason_laboratory.bin"
 
 MasonLaboratoryCGBTilemap:: ; 81d2e (20:5d2e)
 	db $1c ; width
 	db $1e ; height
-	dw $5eb4
-	db $01
+	dw MasonLaboratoryCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/mason_laboratory_cgb.bin"
+MasonLaboratoryCGBPermissions:
+	INCBIN "data/maps/permissions/mason_laboratory_cgb.bin"
 
-	INCBIN "data/maps/map3.bin"
-
-Unused1Tilemap:: ; 81ed1 (20:5ed1)
+Unknown1Tilemap:: ; 81ed1 (20:5ed1)
 	db $04 ; width
 	db $06 ; height
-	dw $5ef0
-	db $00
+	dw Unknown1Permissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/unknown1.bin"
+Unknown1Permissions:
+	INCBIN "data/maps/permissions/unknown1.bin"
 
-	INCBIN "data/maps/map4.bin"
-
-Unused2Tilemap:: ; 81ef5 (20:5ef5)
+Unknown1CGBTilemap:: ; 81ef5 (20:5ef5)
 	db $04 ; width
 	db $06 ; height
-	dw $5f21
-	db $01
-
-	INCBIN "data/maps/map5.bin"
+	dw Unknown1CGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/unknown1_cgb.bin"
+Unknown1CGBPermissions:
+	INCBIN "data/maps/permissions/unknown1_cgb.bin"
 
 DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
 	db $18 ; width
 	db $1e ; height
-	dw $5fd3
-	db $00
-
-	INCBIN "data/maps/map6.bin"
+	dw DeckMachineRoomPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/deck_machine_room.bin"
+DeckMachineRoomPermissions:
+	INCBIN "data/maps/permissions/deck_machine_room.bin"
 
 DeckMachineRoomCGBTilemap:: ; 81feb (20:5feb)
 	db $18 ; width
 	db $1e ; height
-	dw $612b
-	db $01
+	dw DeckMachineRoomCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/deck_machine_room_cgb.bin"
+DeckMachineRoomCGBPermissions:
+	INCBIN "data/maps/permissions/deck_machine_room_cgb.bin"
 
-	INCBIN "data/maps/map7.bin"
-
-Unused3Tilemap:: ; 82143 (20:6143)
+Unknown2Tilemap:: ; 82143 (20:6143)
 	db $04 ; width
 	db $01 ; height
-	dw $614d
-	db $00
+	dw Unknown2Permissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_2.bin"
+Unknown2Permissions:
+	INCBIN "data/maps/permissions/unknown_2.bin"
 
-	INCBIN "data/maps/map8.bin"
-
-Unused4Tilemap:: ; 82150 (20:6150)
+Unknown2CGBTilemap:: ; 82150 (20:6150)
 	db $04 ; width
 	db $01 ; height
-	dw $615d
-	db $01
-
-	INCBIN "data/maps/map9.bin"
+	dw Unknown2CGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_2_cgb.bin"
+Unknown2CGBPermissions:
+	INCBIN "data/maps/permissions/unknown_2_cgb.bin"
 
 IshiharaTilemap:: ; 82160 (20:6160)
 	db $14 ; width
 	db $18 ; height
-	dw $620e
-	db $00
-
-	INCBIN "data/maps/map10.bin"
+	dw IshiharaPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/ishihara.bin"
+IshiharaPermissions:
+	INCBIN "data/maps/permissions/ishihara.bin"
 
 IshiharaCGBTilemap:: ; 82222 (20:6222)
 	db $14 ; width
 	db $18 ; height
-	dw $6322
-	db $01
-
-	INCBIN "data/maps/map11.bin"
+	dw IshiharaCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/ishihara_cgb.bin"
+IshiharaCGBPermissions:
+	INCBIN "data/maps/permissions/ishihara_cgb.bin"
 
 FightingClubEntranceTilemap:: ; 82336 (20:6336)
 	db $14 ; width
 	db $12 ; height
-	dw $63ec
-	db $00
-
-	INCBIN "data/maps/map12.bin"
+	dw FightingClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/fighting_club_entrance.bin"
+FightingClubEntrancePermissions:
+	INCBIN "data/maps/permissions/fighting_club_entrance.bin"
 
 FightingClubEntranceCGBTilemap:: ; 82400 (20:6400)
 	db $14 ; width
 	db $12 ; height
-	dw $6509
-	db $01
-
-	INCBIN "data/maps/map13.bin"
+	dw FightingClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fighting_club_entrance_cgb.bin"
+FightingClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/fighting_club_entrance_cgb.bin"
 
 RockClubEntranceTilemap:: ; 8251d (20:651d)
 	db $14 ; width
 	db $12 ; height
-	dw $65d3
-	db $00
-
-	INCBIN "data/maps/map14.bin"
+	dw RockClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/rock_club_entrance.bin"
+RockClubEntrancePermissions:
+	INCBIN "data/maps/permissions/rock_club_entrance.bin"
 
 RockClubEntranceCGBTilemap:: ; 825e7 (20:65e7)
 	db $14 ; width
 	db $12 ; height
-	dw $66f0
-	db $01
-
-	INCBIN "data/maps/map15.bin"
+	dw RockClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/rock_club_entrance_cgb.bin"
+RockClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/rock_club_entrance_cgb.bin"
 
 WaterClubEntranceTilemap:: ; 82704 (20:6704)
 	db $14 ; width
 	db $12 ; height
-	dw $67ba
-	db $00
-
-	INCBIN "data/maps/map16.bin"
+	dw WaterClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/water_club_entrance.bin"
+WaterClubEntrancePermissions:
+	INCBIN "data/maps/permissions/water_club_entrance.bin"
 
 WaterClubEntranceCGBTilemap:: ; 827ce (20:67ce)
 	db $14 ; width
 	db $12 ; height
-	dw $68d7
-	db $01
-
-	INCBIN "data/maps/map17.bin"
+	dw WaterClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/water_club_entrance_cgb.bin"
+WaterClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/water_club_entrance_cgb.bin"
 
 LightningClubEntranceTilemap:: ; 828eb (20:68eb)
 	db $14 ; width
 	db $12 ; height
-	dw $69a1
-	db $00
-
-	INCBIN "data/maps/map18.bin"
+	dw LightningClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/lightning_club_entrance.bin"
+LightningClubEntrancePermissions:
+	INCBIN "data/maps/permissions/lightning_club_entrance.bin"
 
 LightningClubEntranceCGBTilemap:: ; 829b5 (20:69b5)
 	db $14 ; width
 	db $12 ; height
-	dw $6abe
-	db $01
-
-	INCBIN "data/maps/map19.bin"
+	dw LightningClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/lightning_club_entrance_cgb.bin"
+LightningClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/lightning_club_entrance_cgb.bin"
 
 GrassClubEntranceTilemap:: ; 82ad2 (20:6ad2)
 	db $14 ; width
 	db $12 ; height
-	dw $6b88
-	db $00
-
-	INCBIN "data/maps/map20.bin"
+	dw GrassClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/grass_club_entrance.bin"
+GrassClubEntrancePermissions:
+	INCBIN "data/maps/permissions/grass_club_entrance.bin"
 
 GrassClubEntranceCGBTilemap:: ; 82b9c (20:6b9c)
 	db $14 ; width
 	db $12 ; height
-	dw $6ca5
-	db $01
-
-	INCBIN "data/maps/map21.bin"
+	dw GrassClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/grass_club_entrance_cgb.bin"
+GrassClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/grass_club_entrance_cgb.bin"
 
 PsychicClubEntranceTilemap:: ; 82cb9 (20:6cb9)
 	db $14 ; width
 	db $12 ; height
-	dw $6d6f
-	db $00
-
-	INCBIN "data/maps/map22.bin"
+	dw PsychicClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/psychic_club_entrance.bin"
+PsychicClubEntrancePermissions:
+	INCBIN "data/maps/permissions/psychic_club_entrance.bin"
 
 PsychicClubEntranceCGBTilemap:: ; 82d83 (20:6d83)
 	db $14 ; width
 	db $12 ; height
-	dw $6e8c
-	db $01
-
-	INCBIN "data/maps/map23.bin"
+	dw PsychicClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/psychic_club_entrance_cgb.bin"
+PsychicClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/psychic_club_entrance_cgb.bin"
 
 ScienceClubEntranceTilemap:: ; 82ea0 (20:6ea0)
 	db $14 ; width
 	db $12 ; height
-	dw $6f56
-	db $00
-
-	INCBIN "data/maps/map24.bin"
+	dw ScienceClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/science_club_entrance.bin"
+ScienceClubEntrancePermissions:
+	INCBIN "data/maps/permissions/science_club_entrance.bin"
 
 ScienceClubEntranceCGBTilemap:: ; 82f6a (20:6f6a)
 	db $14 ; width
 	db $12 ; height
-	dw $7073
-	db $01
-
-	INCBIN "data/maps/map25.bin"
+	dw ScienceClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/science_club_entrance_cgb.bin"
+ScienceClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/science_club_entrance_cgb.bin"
 
 FireClubEntranceTilemap:: ; 83087 (20:7087)
 	db $14 ; width
 	db $12 ; height
-	dw $713d
-	db $00
-
-	INCBIN "data/maps/map26.bin"
+	dw FireClubEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/fire_club_entrance.bin"
+FireClubEntrancePermissions:
+	INCBIN "data/maps/permissions/fire_club_entrance.bin"
 
 FireClubEntranceCGBTilemap:: ; 83151 (20:7151)
 	db $14 ; width
 	db $12 ; height
-	dw $725a
-	db $01
-
-	INCBIN "data/maps/map27.bin"
+	dw FireClubEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fire_club_entrance_cgb.bin"
+FireClubEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/fire_club_entrance_cgb.bin"
 
 ChallengeHallEntranceTilemap:: ; 8326e (20:726e)
 	db $14 ; width
 	db $12 ; height
-	dw $730d
-	db $00
-
-	INCBIN "data/maps/map28.bin"
+	dw ChallengeHallEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/challenge_hall_entrance.bin"
+ChallengeHallEntrancePermissions:
+	INCBIN "data/maps/permissions/challenge_hall_entrance.bin"
 
 ChallengeHallEntranceCGBTilemap:: ; 83321 (20:7321)
 	db $14 ; width
 	db $12 ; height
-	dw $7410
-	db $01
-
-	INCBIN "data/maps/map29.bin"
+	dw ChallengeHallEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/challenge_hall_entrance_cgb.bin"
+ChallengeHallEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/challenge_hall_entrance_cgb.bin"
 
 ClubLobbyTilemap:: ; 83424 (20:7424)
 	db $1c ; width
 	db $1a ; height
-	dw $7529
-	db $00
-
-	INCBIN "data/maps/map30.bin"
+	dw ClubLobbyPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/club_lobby.bin"
+ClubLobbyPermissions:
+	INCBIN "data/maps/permissions/club_lobby.bin"
 
 ClubLobbyCGBTilemap:: ; 83545 (20:7545)
 	db $1c ; width
 	db $1a ; height
-	dw $76bf
-	db $01
-
-	INCBIN "data/maps/map31.bin"
+	dw ClubLobbyCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/club_lobby_cgb.bin"
+ClubLobbyCGBPermissions:
+	INCBIN "data/maps/permissions/club_lobby_cgb.bin"
 
 FightingClubTilemap:: ; 836db (20:76db)
 	db $18 ; width
 	db $12 ; height
-	dw $777b
-	db $00
-
-	INCBIN "data/maps/map32.bin"
+	dw FightingClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/fighting_club.bin"
+FightingClubPermissions:
+	INCBIN "data/maps/permissions/fighting_club.bin"
 
 FightingClubCGBTilemap:: ; 8378c (20:778c)
 	db $18 ; width
 	db $12 ; height
-	dw $787c
-	db $01
-
-	INCBIN "data/maps/map33.bin"
+	dw FightingClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fighting_club_cgb.bin"
+FightingClubCGBPermissions:
+	INCBIN "data/maps/permissions/fighting_club_cgb.bin"
 
 RockClubTilemap:: ; 8388d (20:788d)
 	db $1c ; width
 	db $1e ; height
-	dw $79b5
-	db $00
-
-	INCBIN "data/maps/map34.bin"
+	dw RockClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/rock_club.bin"
+RockClubPermissions:
+	INCBIN "data/maps/permissions/rock_club.bin"
 
 RockClubCGBTilemap:: ; 839d6 (20:79d6)
 	db $1c ; width
 	db $1e ; height
-	dw $7bd0
-	db $01
+	dw RockClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/rock_club_cgb.bin"
+RockClubCGBPermissions:
+	INCBIN "data/maps/permissions/rock_club_cgb.bin"
 
-	INCBIN "data/maps/map35.bin"
-
-Unused5Tilemap:: ; 83bf1 (20:7bf1)
+Unknown3Tilemap:: ; 83bf1 (20:7bf1)
 	db $04 ; width
 	db $03 ; height
-	dw $7c00
-	db $00
+	dw Unknown3Permissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_3.bin"
+Unknown3Permissions:
+	INCBIN "data/maps/permissions/unknown_3.bin"
 
-	INCBIN "data/maps/map52.bin"
-
-Unused6Tilemap:: ; 83c03 (20:7c03)
+Unknown3CGBTilemap:: ; 83c03 (20:7c03)
 	db $04 ; width
 	db $03 ; height
-	dw $7c17
-	db $01
+	dw Unknown3CGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_3_cgb.bin"
+Unknown3CGBPermissions:
+	INCBIN "data/maps/permissions/unknown_3_cgb.bin"
 
-	INCBIN "data/maps/map53.bin"
-
-Unused7Tilemap:: ; 83c1a (20:7c1a)
+Unknown4Tilemap:: ; 83c1a (20:7c1a)
 	db $04 ; width
 	db $03 ; height
-	dw $7c23
-	db $00
+	dw Unknown4Permissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_4.bin"
+Unknown4Permissions:
+	INCBIN "data/maps/permissions/unknown_4.bin"
 
-	INCBIN "data/maps/map56.bin"
-
-Unused8Tilemap:: ; 83c26 (20:7c26)
+Unknown4CGBTilemap:: ; 83c26 (20:7c26)
 	db $04 ; width
 	db $03 ; height
-	dw $7c33
-	db $01
-
-	INCBIN "data/maps/map57.bin"
+	dw Unknown4CGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/unknown_4_cgb.bin"
+Unknown4CGBPermissions:
+	INCBIN "data/maps/permissions/unknown_4_cgb.bin"
 
 GrassMedalTilemap:: ; 83c36 (20:7c36)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map62.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/grass_medal.bin"
 
 AnimData1:: ; 83c4c (20:7c4c)
 	frame_table AnimFrameTable0

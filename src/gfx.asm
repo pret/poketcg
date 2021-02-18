@@ -46,523 +46,497 @@ SECTION "Gfx 3", ROMX
 WaterClubTilemap:: ; 84000 (21:4000)
 	db $1c ; width
 	db $20 ; height
-	dw $4164
-	db $00
-
-	INCBIN "data/maps/map36.bin"
+	dw WaterClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/water_club.bin"
+WaterClubPermissions:
+	INCBIN "data/maps/permissions/water_club.bin"
 
 WaterClubCGBTilemap:: ; 84188 (21:4188)
 	db $1c ; width
 	db $20 ; height
-	dw $4397
-	db $01
-
-	INCBIN "data/maps/map37.bin"
+	dw WaterClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/water_club_cgb.bin"
+WaterClubCGBPermissions:
+	INCBIN "data/maps/permissions/water_club_cgb.bin"
 
 LightningClubTilemap:: ; 843bb (21:43bb)
 	db $1c ; width
 	db $20 ; height
-	dw $4511
-	db $00
-
-	INCBIN "data/maps/map38.bin"
+	dw LightningClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/lightning_club.bin"
+LightningClubPermissions:
+	INCBIN "data/maps/permissions/lightning_club.bin"
 
 LightningClubCGBTilemap:: ; 84533 (21:4533)
 	db $1c ; width
 	db $20 ; height
-	dw $470c
-	db $01
-
-	INCBIN "data/maps/map39.bin"
+	dw LightningClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/lightning_club_cgb.bin"
+LightningClubCGBPermissions:
+	INCBIN "data/maps/permissions/lightning_club_cgb.bin"
 
 GrassClubTilemap:: ; 8472e (21:472e)
 	db $1c ; width
 	db $20 ; height
-	dw $48b4
-	db $00
-
-	INCBIN "data/maps/map40.bin"
+	dw GrassClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/grass_club.bin"
+GrassClubPermissions:
+	INCBIN "data/maps/permissions/grass_club.bin"
 
 GrassClubCGBTilemap:: ; 848d8 (21:48d8)
 	db $1c ; width
 	db $20 ; height
-	dw $4b4f
-	db $01
-
-	INCBIN "data/maps/map41.bin"
+	dw GrassClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/grass_club_cgb.bin"
+GrassClubCGBPermissions:
+	INCBIN "data/maps/permissions/grass_club_cgb.bin"
 
 PsychicClubTilemap:: ; 84b73 (21:4b73)
 	db $1c ; width
 	db $1c ; height
-	dw $4c50
-	db $00
-
-	INCBIN "data/maps/map42.bin"
+	dw PsychicClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/psychic_club.bin"
+PsychicClubPermissions:
+	INCBIN "data/maps/permissions/psychic_club.bin"
 
 PsychicClubCGBTilemap:: ; 84c6f (21:4c6f)
 	db $1c ; width
 	db $1c ; height
-	dw $4ddf
-	db $01
-
-	INCBIN "data/maps/map43.bin"
+	dw PsychicClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/psychic_club_cgb.bin"
+PsychicClubCGBPermissions:
+	INCBIN "data/maps/permissions/psychic_club_cgb.bin"
 
 ScienceClubTilemap:: ; 84dfe (21:4dfe)
 	db $1c ; width
 	db $20 ; height
-	dw $4efe
-	db $00
-
-	INCBIN "data/maps/map44.bin"
+	dw ScienceClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/science_club.bin"
+ScienceClubPermissions:
+	INCBIN "data/maps/permissions/science_club.bin"
 
 ScienceClubCGBTilemap:: ; 84f1d (21:4f1d)
 	db $1c ; width
 	db $20 ; height
-	dw $5097
-	db $01
-
-	INCBIN "data/maps/map45.bin"
+	dw ScienceClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/science_club_cgb.bin"
+ScienceClubCGBPermissions:
+	INCBIN "data/maps/permissions/science_club_cgb.bin"
 
 FireClubTilemap:: ; 850b6 (21:50b6)
 	db $1c ; width
 	db $20 ; height
-	dw $5175
-	db $00
-
-	INCBIN "data/maps/map46.bin"
+	dw FireClubPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/fire_club.bin"
+FireClubPermissions:
+	INCBIN "data/maps/permissions/fire_club.bin"
 
 FireClubCGBTilemap:: ; 85191 (21:5191)
 	db $1c ; width
 	db $20 ; height
-	dw $52f9
-	db $01
-
-	INCBIN "data/maps/map47.bin"
+	dw FireClubCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fire_club_cgb.bin"
+FireClubCGBPermissions:
+	INCBIN "data/maps/permissions/fire_club_cgb.bin"
 
 ChallengeHallTilemap:: ; 85315 (21:5315)
 	db $20 ; width
 	db $20 ; height
-	dw $5484
-	db $00
-
-	INCBIN "data/maps/map48.bin"
+	dw ChallengeHallPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/challenge_hall.bin"
+ChallengeHallPermissions:
+	INCBIN "data/maps/permissions/challenge_hall.bin"
 
 ChallengeHallCGBTilemap:: ; 854b3 (21:54b3)
 	db $20 ; width
 	db $20 ; height
-	dw $56db
-	db $01
-
-	INCBIN "data/maps/map49.bin"
+	dw ChallengeHallCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/challenge_hall_cgb.bin"
+ChallengeHallCGBPermissions:
+	INCBIN "data/maps/permissions/challenge_hall_cgb.bin"
 
 PokemonDomeEntranceTilemap:: ; 8570a (21:570a)
 	db $20 ; width
 	db $12 ; height
-	dw $57ba
-	db $00
-
-	INCBIN "data/maps/map50.bin"
+	dw PokemonDomeEntrancePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/pokemon_dome_entrance.bin"
+PokemonDomeEntrancePermissions:
+	INCBIN "data/maps/permissions/pokemon_dome_entrance.bin"
 
 PokemonDomeEntranceCGBTilemap:: ; 857ce (21:57ce)
 	db $20 ; width
 	db $12 ; height
-	dw $58db
-	db $01
-
-	INCBIN "data/maps/map51.bin"
+	dw PokemonDomeEntranceCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/pokemon_dome_entrance_cgb.bin"
+PokemonDomeEntranceCGBPermissions:
+	INCBIN "data/maps/permissions/pokemon_dome_entrance_cgb.bin"
 
 PokemonDomeTilemap:: ; 858ef (21:58ef)
 	db $20 ; width
 	db $20 ; height
-	dw $5a58
-	db $00
+	dw PokemonDomePermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/pokemon_dome.bin"
+PokemonDomePermissions:
+	INCBIN "data/maps/permissions/pokemon_dome.bin"
 
-	INCBIN "data/maps/map54.bin"
-
-PokemonDomeGBTilemap:: ; 85a79 (21:5a79)
+PokemonDomeCGBTilemap:: ; 85a79 (21:5a79)
 	db $20 ; width
 	db $20 ; height
-	dw $5cc1
-	db $01
-
-	INCBIN "data/maps/map55.bin"
+	dw PokemonDomeCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/pokemon_dome_cgb.bin"
+PokemonDomeCGBPermissions:
+	INCBIN "data/maps/permissions/pokemon_dome_cgb.bin"
 
 HallOfHonorTilemap:: ; 85ce2 (21:5ce2)
 	db $18 ; width
 	db $1a ; height
-	dw $5ddc
-	db $00
-
-	INCBIN "data/maps/map58.bin"
+	dw HallOfHonorPermissions
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/hall_of_honor.bin"
+HallOfHonorPermissions:
+	INCBIN "data/maps/permissions/hall_of_honor.bin"
 
 HallOfHonorCGBTilemap:: ; 85df4 (21:5df4)
 	db $18 ; width
 	db $1a ; height
-	dw $5f64
-	db $01
-
-	INCBIN "data/maps/map59.bin"
+	dw HallOfHonorCGBPermissions
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/hall_of_honor_cgb.bin"
+HallOfHonorCGBPermissions:
+	INCBIN "data/maps/permissions/hall_of_honor_cgb.bin"
 
 CardPopCGBTilemap:: ; 85f7c (21:5f7c)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map60.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/card_pop_cgb.bin"
 
 CardPopTilemap:: ; 8607f (21:607f)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map61.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/card_pop.bin"
 
 ScienceMedalTilemap:: ; 8617d (21:617d)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map63.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/science_medal.bin"
 
 FireMedalTilemap:: ; 86193 (21:6193)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map64.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fire_medal.bin"
 
 WaterMedalTilemap:: ; 861a9 (21:61a9)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map65.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/water_medal.bin"
 
 LightningMedalTilemap:: ; 861bf (21:61bf)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map66.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/lightning_medal.bin"
 
 FightingMedalTilemap:: ; 861d5 (21:61d5)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map67.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/fighting_medal.bin"
 
 RockMedalTilemap:: ; 861eb (21:61eb)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map68.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/rock_medal.bin"
 
 PsychicMedalTilemap:: ; 86201 (21:6201)
 	db $03 ; width
 	db $03 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map69.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/psychic_medal.bin"
 
 GameBoyLinkCGBTilemap:: ; 86217 (21:6217)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map70.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_link_cgb.bin"
 
 GameBoyLinkTilemap:: ; 862da (21:62da)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map71.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_link.bin"
 
 GameBoyLinkConnectingCGBTilemap:: ; 86364 (21:6364)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map72.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_link_connecting_cgb.bin"
 
 GameBoyLinkConnectingTilemap:: ; 86443 (21:6443)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map73.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_link_connecting.bin"
 
 GameBoyPrinterCGBTilemap:: ; 864df (21:64df)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map74.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_printer_cgb.bin"
 
 GameBoyPrinterTilemap:: ; 865b5 (21:65b5)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map75.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/gameboy_printer.bin"
 
 ColosseumTilemap:: ; 86647 (21:6647)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map76.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/colosseum.bin"
 
 ColosseumCGBTilemap:: ; 866b8 (21:66b8)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map77.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/colosseum_cgb.bin"
 
 EvolutionTilemap:: ; 8673e (21:673e)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map78.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/evolution.bin"
 
 EvolutionCGBTilemap:: ; 867af (21:67af)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map79.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/evolution_cgb.bin"
 
 MysteryTilemap:: ; 86833 (21:6833)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map80.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/mystery.bin"
 
 MysteryCGBTilemap:: ; 868a4 (21:68a4)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map81.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/mystery_cgb.bin"
 
 LaboratoryTilemap:: ; 86925 (21:6925)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map82.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/laboratory.bin"
 
 LaboratoryCGBTilemap:: ; 86996 (21:6996)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map83.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/laboratory_cgb.bin"
 
 CharizardIntroTilemap:: ; 86a14 (21:6a14)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map84.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/charizard_intro.bin"
 
 CharizardIntroCGBTilemap:: ; 86a85 (21:6a85)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map85.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/charizard_intro_cgb.bin"
 
 ScytherIntroTilemap:: ; 86b28 (21:6b28)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map86.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/scyther_intro.bin"
 
 ScytherIntroCGBTilemap:: ; 86b99 (21:6b99)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map87.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/scyther_intro_cgb.bin"
 
 AerodactylIntroTilemap:: ; 86c34 (21:6c34)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map88.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/aerodactyl_intro.bin"
 
 AerodactylIntroCGBTilemap:: ; 86ca5 (21:6ca5)
 	db $08 ; width
 	db $0c ; height
-	dw $0000
-	db $01
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/aerodactyl_intro_cgb.bin"
 
-	INCBIN "data/maps/map89.bin"
-
-TitleScreen1Tilemap:: ; 86d37 (21:6d37)
+JapaneseTitleScreenTilemap:: ; 86d37 (21:6d37)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/japanese_title_screen.bin"
 
-	INCBIN "data/maps/map90.bin"
-
-TitleScreen2Tilemap:: ; 86dcc (21:6dcc)
+JapaneseTitleScreenCGBTilemap:: ; 86dcc (21:6dcc)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map91.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/japanese_title_screen_cgb.bin"
 
 SolidTiles1Tilemap:: ; 86e8a (21:6e8a)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map92.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/solid_tiles_1.bin"
 
 SolidTiles2Tilemap:: ; 86f18 (21:6f18)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map93.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/solid_tiles_2.bin"
 
 SolidTiles3Tilemap:: ; 86fc0 (21:6fc0)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/solid_tiles_3.bin"
 
-	INCBIN "data/maps/map94.bin"
-
-TitleScreen3Tilemap:: ; 8704f (21:704f)
+JapaneseTitleScreen2Tilemap:: ; 8704f (21:704f)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/japanese_title_screen_2.bin"
 
-	INCBIN "data/maps/map95.bin"
-
-TitleScreen4Tilemap:: ; 871a5 (21:71a5)
+JapaneseTitleScreen2CGBTilemap:: ; 871a5 (21:71a5)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map96.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/japanese_title_screen_2_cgb.bin"
 
 SolidTiles4Tilemap:: ; 87397 (21:7397)
 	db $08 ; width
 	db $04 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map97.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/solid_tiles_4.bin"
 
 PlayerTilemap:: ; 873b7 (21:73b7)
 	db $06 ; width
 	db $06 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map98.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/player.bin"
 
 OpponentTilemap:: ; 873e5 (21:73e5)
 	db $06 ; width
 	db $06 ; height
-	dw $0000
-	db $00
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/opponent.bin"
 
-	INCBIN "data/maps/map99.bin"
-
-TitleScreen5Tilemap:: ; 87413 (21:7413)
+TitleScreenTilemap:: ; 87413 (21:7413)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/title_screen.bin"
 
-	INCBIN "data/maps/map100.bin"
-
-TitleScreen6Tilemap:: ; 87538 (21:7538)
+TitleScreenCGBTilemap:: ; 87538 (21:7538)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map101.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/title_screen_cgb.bin"
 
 CopyrightTilemap:: ; 8769f (21:769f)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map102.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/copyright.bin"
 
 CopyrightCGBTilemap:: ; 876f6 (21:76f6)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $01
-
-	INCBIN "data/maps/map103.bin"
+	dw NULL
+	db TRUE ; cgb mode
+	INCBIN "data/maps/tiles/copyright_cgb.bin"
 
 NintendoTilemap:: ; 8777c (21:777c)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map104.bin"
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/nintendo.bin"
 
 CompaniesTilemap:: ; 877c4 (21:77c4)
 	db $14 ; width
 	db $12 ; height
-	dw $0000
-	db $00
-
-	INCBIN "data/maps/map105.bin"
-
+	dw NULL
+	db FALSE ; cgb mode
+	INCBIN "data/maps/tiles/companies.bin"
 
 IshiharaTilesetGfx:: ; 87828 (21:7828)
 	dw 77
@@ -813,13 +787,13 @@ AerodactylIntro2Gfx:: ; 9696e (25:696e)
 	dw 96
 	INCBIN "gfx/titlescreen/booster_packs/aerodactylintro2.2bpp"
 
-Titlescreen1Gfx:: ; 96f70 (25:6f70)
+JapaneseTitleScreenGfx:: ; 96f70 (25:6f70)
 	dw 97
-	INCBIN "gfx/titlescreen/titlescreen1.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen.2bpp"
 
-Titlescreen2Gfx:: ; 97582 (25:7582)
+JapaneseTitleScreenCGBGfx:: ; 97582 (25:7582)
 	dw 97
-	INCBIN "gfx/titlescreen/titlescreen2.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_cgb.2bpp"
 
 CompaniesGfx:: ; 97b94 (25:7b94)
 	dw 49
@@ -837,21 +811,21 @@ AnimData5:: ; 97fe8 (25:7fe8)
 
 SECTION "Gfx 8", ROMX
 
-Titlescreen3Gfx:: ; 98000 (26:4000)
+JapaneseTitleScreen2Gfx:: ; 98000 (26:4000)
 	dw 244
-	INCBIN "gfx/titlescreen/titlescreen3.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_2.2bpp"
 
-Titlescreen4Gfx:: ; 98f42 (26:4f42)
+JapaneseTitleScreen2CGBGfx:: ; 98f42 (26:4f42)
 	dw 315
-	INCBIN "gfx/titlescreen/titlescreen4.2bpp"
+	INCBIN "gfx/titlescreen/japanese_title_screen_2_cgb.2bpp"
 
-Titlescreen5Gfx:: ; 9a2f4 (26:62f4)
+TitleScreenGfx:: ; 9a2f4 (26:62f4)
 	dw 220
-	INCBIN "gfx/titlescreen/titlescreen5.2bpp"
+	INCBIN "gfx/titlescreen/title_screen.2bpp"
 
-Titlescreen6Gfx:: ; 9b0b6 (26:70b6)
+TitleScreenCGBGfx:: ; 9b0b6 (26:70b6)
 	dw 212
-	INCBIN "gfx/titlescreen/titlescreen6.2bpp"
+	INCBIN "gfx/titlescreen/title_screen_cgb.2bpp"
 
 OWDrMasonGfx:: ; 9bdf8 (26:7df8)
 	dw $14
