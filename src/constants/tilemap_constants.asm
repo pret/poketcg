@@ -3,12 +3,12 @@
 	const TILEMAP_OVERWORLD_MAP_CGB           ; $01
 	const TILEMAP_MASON_LABORATORY            ; $02
 	const TILEMAP_MASON_LABORATORY_CGB        ; $03
-	const TILEMAP_UNUSED_1                    ; $04
-	const TILEMAP_UNUSED_2                    ; $05
+	const TILEMAP_UNKNOWN_1                    ; $04
+	const TILEMAP_UNKNOWN_1_CGB                    ; $05
 	const TILEMAP_DECK_MACHINE_ROOM           ; $06
 	const TILEMAP_DECK_MACHINE_ROOM_CGB       ; $07
-	const TILEMAP_UNUSED_3                    ; $08
-	const TILEMAP_UNUSED_4                    ; $09
+	const TILEMAP_UNKNOWN_2                    ; $08
+	const TILEMAP_UNKNOWN_2_CGB                    ; $09
 	const TILEMAP_ISHIHARA                    ; $0a
 	const TILEMAP_ISHIHARA_CGB                ; $0b
 	const TILEMAP_FIGHTING_CLUB_ENTRANCE      ; $0c
@@ -51,12 +51,12 @@
 	const TILEMAP_CHALLENGE_HALL_CGB          ; $31
 	const TILEMAP_POKEMON_DOME_ENTRANCE       ; $32
 	const TILEMAP_POKEMON_DOME_ENTRANCE_CGB   ; $33
-	const TILEMAP_UNUSED_5                    ; $34
-	const TILEMAP_UNUSED_6                    ; $35
+	const TILEMAP_UNKNOWN_3                    ; $34
+	const TILEMAP_UNKNOWN_3_CGB                    ; $35
 	const TILEMAP_POKEMON_DOME                ; $36
 	const TILEMAP_POKEMON_DOME_CGB            ; $37
-	const TILEMAP_UNUSED_7                    ; $38
-	const TILEMAP_UNUSED_8                    ; $39
+	const TILEMAP_UNKNOWN_4                    ; $38
+	const TILEMAP_UNKNOWN_4_CGB                    ; $39
 	const TILEMAP_HALL_OF_HONOR               ; $3a
 	const TILEMAP_HALL_OF_HONOR_CGB           ; $3b
 	const TILEMAP_CARD_POP_CGB                ; $3c
