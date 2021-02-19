@@ -38,7 +38,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c36a
 	call Func_c184
 	call Func_c49c
-	farcall Func_80000
+	farcall LoadMapGfxAndPermissions
 	call Func_c4b9
 	call Func_c943
 	call Func_c158
@@ -147,7 +147,7 @@ CloseAdvancedDialogueBox: ; c111 (3:4111)
 ; redraws the background and removes textbox control
 CloseTextBox: ; c135 (3:4135)
 	push hl
-	farcall Func_80028
+	farcall ReloadMapAfterTextClose
 	ld hl, wd0c1
 	res 0, [hl]
 	pop hl
@@ -402,7 +402,7 @@ Func_c2db: ; c2db (3:42db)
 	call EmptyScreen
 	ld a, [wDefaultSong]
 	push af
-	farcall Func_80000
+	farcall LoadMapGfxAndPermissions
 	pop af
 	ld [wDefaultSong], a
 	ld hl, wd0c1
@@ -566,17 +566,19 @@ Func_c3ca: ; c3ca (3:43ca)
 	pop hl
 	ret
 
+; removes flag in whole wPermissionMap
+; most likely relate to menu and text boxes
 Func_c3ee: ; c3ee (3:43ee)
 	push hl
 	push bc
 	ld c, $00
-	ld hl, wBoosterViableCardList
-.asm_c3f5
+	ld hl, wPermissionMap
+.loop
 	ld a, [hl]
-	and $ef
+	and ~$10 ; removes this flag
 	ld [hli], a
 	dec c
-	jr nz, .asm_c3f5
+	jr nz, .loop
 	pop bc
 	pop hl
 	ret

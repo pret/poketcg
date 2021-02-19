@@ -901,9 +901,9 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0381                                           ; 0x0381
 	textpointer Text0382                                           ; 0x0382
 	textpointer Text0383                                           ; 0x0383
-	textpointer Text0384                                           ; 0x0384
-	textpointer Text0385                                           ; 0x0385
-	textpointer Text0386                                           ; 0x0386
+	textpointer SPRText                                            ; 0x0384
+	textpointer WinLosePrizesDuelWithText                          ; 0x0385
+	textpointer UseDuelistsDeckText                                ; 0x0386
 	textpointer ReceivedBoosterPackText                            ; 0x0387
 	textpointer AndAnotherBoosterPackText                          ; 0x0388
 	textpointer CheckedCardsInBoosterPackText                      ; 0x0389

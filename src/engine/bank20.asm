@@ -1,8 +1,12 @@
-Func_80000: ; 80000 (20:4000)
+; loads the graphics and permissions for the current map
+; according to its Map Header configurations
+; if it's the Overworld Map, also prints the map name
+; and sets up the volcano animation
+LoadMapGfxAndPermissions: ; 80000 (20:4000)
 	call ClearSRAMBGMaps
 	xor a
 	ld [wTextBoxFrameType], a
-	call Func_8003d
+	call LoadMapTilesAndPals
 	farcall LoadPermissionMap
 	farcall Func_c9c7
 	call SafelyCopyBGMapFromSRAMToVRAM
@@ -15,9 +19,11 @@ Func_80000: ; 80000 (20:4000)
 	ret
 ; 0x80028
 
-Func_80028: ; 80028 (20:4028)
+; reloads the map tiles and permissions
+; after a textbox has been closed
+ReloadMapAfterTextClose: ; 80028 (20:4028)
 	call ClearSRAMBGMaps
-	ld bc, $0000
+	lb bc, 0, 0
 	call LoadTilemap_ToSRAM
 	farcall Func_c9c7
 	call SafelyCopyBGMapFromSRAMToVRAM
@@ -25,10 +31,9 @@ Func_80028: ; 80028 (20:4028)
 	ret
 ; 0x8003d
 
-Func_8003d: ; 8003d (20:403d)
+LoadMapTilesAndPals: ; 8003d (20:403d)
 	farcall LoadMapHeader
 	farcall SetSGB2AndSGB3MapPalette
-
 	lb bc, 0, 0
 	call LoadTilemap_ToSRAM
 
@@ -43,22 +48,26 @@ Func_8003d: ; 8003d (20:403d)
 	ld a, [wd291]
 	ld [wd4cb], a
 	ld a, [wd28f]
-	call Func_803c9
+	call SetBGPAndLoadedPal
 	ld a, [wd291]
 	ld [wd4cb], a
 	ld a, [wd290]
 	or a
 	jr z, .asm_80076
-	call Func_803c9
+	call SetBGPAndLoadedPal
 .asm_80076
 	ret
 ; 0x80077
 
+; loads the BG map corresponding to wCurTilemap to SRAM
+; bc = starting coordinates
 LoadTilemap_ToSRAM: ; 80077 (20:4077)
 	ld a, TRUE
 	ld [wWriteBGMapToSRAM], a
 	jr LoadTilemap
 
+; loads the BG map corresponding to wCurTilemap to VRAM
+; bc = starting coordinates
 LoadTilemap_ToVRAM: ; 8007e (20:407e)
 	xor a ; FALSE
 	ld [wWriteBGMapToSRAM], a
@@ -394,7 +403,25 @@ LoadGraphicsPointerFromHL: ; 80229 (20:4229)
 	ret
 ; 0x80238
 
-	INCROM $80238, $8025b
+; unreferenced?
+Func_80238: ; 80238 (20:4238)
+	push hl
+	ld l, $2
+	ld a, [wCurTileset]
+	call GetMapDataPointer
+	call LoadGraphicsPointerFromHL
+	ld a, [hl]
+	ld [wTotalNumTiles], a
+	ld a, $10
+	ld [wCurSpriteTileSize], a
+	xor a
+	ld [wd4cb], a
+	ld a, $80
+	ld [wd4ca], a
+	call LoadGfxDataFromTempPointerToVRAMBank_Tiles0ToTiles2
+	pop hl
+	ret
+; 0x8025b
 
 ; loads graphics data from third map data pointers
 ; input:
@@ -422,8 +449,9 @@ LoadGfxDataFromTempPointerToVRAMBank: ; 80274 (20:4274)
 	call GetTileOffsetPointerAndSwitchVRAM
 	jr LoadGfxDataFromTempPointer
 
-Func_80279: ; 80279 (20:4279)
+LoadGfxDataFromTempPointerToVRAMBank_Tiles0ToTiles2: ; 80279 (20:4279)
 	call GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2
+;	fallthrough
 
 ; loads graphics data pointed by wTempPointer in wTempPointerBank
 ; to wVRAMPointer
@@ -670,8 +698,10 @@ Func_803b9: ; 803b9 (20:43b9)
 	ret
 ; 0x803c9
 
+; sets BGP in wLoadedPalData (if any)
+; then loads the rest of the palette data
 ; a = palette index to load
-Func_803c9: ; 803c9 (20:43c9)
+SetBGPAndLoadedPal: ; 803c9 (20:43c9)
 	push hl
 	push bc
 	push de
@@ -837,7 +867,12 @@ LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	ret
 ; 0x8047b
 
-	INCROM $8047b, $80480
+; unreferenced?
+Func_8047b: ; 8047b (20:447b)
+	xor a
+	ld [wNumLoadedFramesetSubgroups], a
+	ret
+; 0x80480
 
 ; for the current map, process the animation
 ; data of its corresponding OW tiles
@@ -877,7 +912,7 @@ ProcessOWFrameset: ; 804a2 (20:44a2)
 	ld a, h
 	ld [wCurMapOWFrameset + 1], a
 	xor a
-	ld [wumLoadedFramesetSubgroups], a
+	ld [wNumLoadedFramesetSubgroups], a
 	call ClearOWFramesetSubgroups
 	ld c, 0
 .loop_subgroups
@@ -886,9 +921,9 @@ ProcessOWFrameset: ; 804a2 (20:44a2)
 	ld a, [wCurOWFrameDataOffset]
 	cp -1
 	jr z, .next_subgroup
-	ld a, [wumLoadedFramesetSubgroups]
+	ld a, [wNumLoadedFramesetSubgroups]
 	inc a
-	ld [wumLoadedFramesetSubgroups], a
+	ld [wNumLoadedFramesetSubgroups], a
 	call LoadOWFrameTiles
 	call StoreOWFramesetSubgroup
 .next_subgroup
@@ -904,7 +939,7 @@ ProcessOWFrameset: ; 804a2 (20:44a2)
 ; for each of the loaded frameset subgroups
 ; load their tiles and advance their durations
 DoLoadedFramesetSubgroupsFrame: ; 804d8 (20:44d8)
-	ld a, [wumLoadedFramesetSubgroups]
+	ld a, [wNumLoadedFramesetSubgroups]
 	or a
 	ret z
 	ld c, 0
@@ -1206,14 +1241,15 @@ Func_80baa: ; 80baa (20:4baa)
 	inc hl
 	ld c, [hl]
 	inc hl
+
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	jr nz, .asm_80be7
+	jr nz, .got_tilemap
 	inc hl
-
-.asm_80be7
+.got_tilemap
 	ld a, [hl]
 	ld [wCurTilemap], a
+
 	push bc
 	farcall LoadTilemap ; unnecessary farcall
 	pop bc
@@ -1281,7 +1317,269 @@ Func_80baa: ; 80baa (20:4baa)
 .data_11
 	db $0a, $00, TILEMAP_UNKNOWN_1, TILEMAP_UNKNOWN_1_CGB
 
-	INCROM $80c63, $80e5a
+	ret ; unreferenced stray ret?
+
+; unreferenced?
+Func_80c64: ; 80c64 (20:4c64)
+	ld a, [wLineSeparation]
+	push af
+	ld a, $01 ; no line separatior
+	ld [wLineSeparation], a
+	; load opponent's name
+	ld a, [wOpponentName]
+	ld [wTxRam2], a
+	ld a, [wOpponentName + 1]
+	ld [wTxRam2 + 1], a
+	ld a, [wNPCDuelistCopy]
+	ld [wTxRam3_b], a
+	xor a
+	ld [wTxRam3_b + 1], a
+	; load number of duel prizes
+	ld a, [wNPCDuelPrizes]
+	ld [wTxRam3], a
+	xor a
+	ld [wTxRam3 + 1], a
+
+	lb de, 2, 13
+	call InitTextPrinting
+	ldtx hl, WinLosePrizesDuelWithText
+	call PrintTextNoDelay
+
+	ld a, [wNPCDuelDeckID]
+	ld [wTxRam3], a
+	xor a
+	ld [wTxRam3 + 1], a
+	lb de, 2, 15
+	call InitTextPrinting
+	ldtx hl, UseDuelistsDeckText
+	call PrintTextNoDelay
+
+	pop af
+	ld [wLineSeparation], a
+	xor a
+	ld hl, .menu_parameters
+	call InitializeMenuParameters
+	ret
+
+.menu_parameters ; 80cbb (20:4cbb)
+	db 1, 13 ; cursor x, cursor y
+	db 1 ; y displacement between items
+	db 2 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+; unreferenced?
+; fills Tiles0 with random bytes
+Func_80cc3: ; 80cc3 (20:4cc3)
+	call DisableLCD
+	ld hl, v0Tiles0
+	ld bc, $800
+.loop
+	call UpdateRNGSources
+	ld [hli], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	ret
+; 0x80cd6
+
+	ret ; stray ret
+
+; unreferenced?
+; seems to be used to look at each OW NPC sprites
+; with functions to rotate NPC and animate them
+Func_80cd7: ; 80cd7 (20:4cd7)
+	call DisableLCD
+	call EmptyScreen
+	call Func_3ca4
+	xor a
+	ld [wd4ca], a
+	ld [wd4cb], a
+	ld a, PALETTE_0
+	farcall SetBGPAndLoadedPal
+	xor a
+	ld [wd4ca], a
+	ld [wd4cb], a
+	ld a, PALETTE_29
+	farcall LoadPaletteData
+	ld a, SOUTH
+	ld [wLoadNPCDirection], a
+	ld a, $01
+	ld [wLoadedNPCTempIndex], a
+	call .DrawNPCSprite
+	call .PrintNPCInfo
+	call EnableLCD
+.loop
+	call DoFrameIfLCDEnabled
+	call .HandleInput
+	call Func_3cb4
+	ldh a, [hKeysPressed]
+	and SELECT ; if select is pressed, exit
+	jr z, .loop
+	ret
+
+	ret ; stray ret
+
+; A button makes NPC rotate
+; D-pad scrolls through the NPCs
+; from $01 to $2c
+; these are not aligned with the regular NPC indices
+.HandleInput
+	ldh a, [hKeysPressed]
+	and A_BUTTON
+	jr z, .no_a_button
+	ld a, [wLoadNPCDirection]
+	inc a ; rotate NPC
+	and %11
+	ld [wLoadNPCDirection], a
+	call Func_3ca4
+	call .DrawNPCSprite
+.no_a_button
+	ldh a, [hKeysPressed]
+	and D_PAD
+	ret z
+	farcall GetDirectionFromDPad
+	ld hl, .func_table
+	jp JumpToFunctionInTable
+
+.func_table
+	dw .up ; D_UP
+	dw .right ; D_RIGHT
+	dw .down ; D_DOWN
+	dw .left ; D_LEFT
+.up
+	ld a, 10
+	jr .decr_npc_id
+.down
+	ld a, 10
+	jr .incr_npc_id
+.right
+	ld a, 1
+	jr .incr_npc_id
+.left
+	ld a, 1
+	jr .decr_npc_id
+
+.incr_npc_id
+	ld c, a
+	ld a, [wLoadedNPCTempIndex]
+	cp $2c
+	jr z, .load_first_npc
+	add c
+	jr c, .load_last_npc
+	cp $2c
+	jr nc, .load_last_npc
+	jr .got_npc
+
+.decr_npc_id
+	ld c, a
+	ld a, [wLoadedNPCTempIndex]
+	cp $01
+	jr z, .load_last_npc
+	sub c
+	jr c, .load_first_npc
+	cp $01
+	jr c, .load_first_npc
+	jr .got_npc
+.load_first_npc
+	ld a, $01
+	jr .got_npc
+.load_last_npc
+	ld a, $2c
+
+.got_npc
+	ld [wLoadedNPCTempIndex], a
+	call Func_3ca4
+	call .DrawNPCSprite
+	jr .PrintNPCInfo
+
+.PrintNPCInfo
+	lb de, 0, 4
+	call InitTextPrinting
+	ldtx hl, SPRText
+	call ProcessTextFromID
+	ld bc, FlushAllPalettes
+	ld a, [wLoadedNPCTempIndex]
+	farcall WriteTwoByteNumberInTxSymbolFormat
+	ret
+
+.DrawNPCSprite
+	ld a, [wLoadedNPCTempIndex]
+	ld c, a
+	add a
+	add c ; *3
+	ld c, a
+	ld b, $0
+	ld hl, .NPCSpriteAnimData - 3
+	add hl, bc
+	ld a, [hli]
+	cp $ff
+	jr z, .skip_draw_sprite
+	farcall CreateSpriteAndAnimBufferEntry
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	inc hl
+.not_cgb
+	ld a, [wLoadNPCDirection]
+	add [hl]
+	farcall StartNewSpriteAnimation
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld a, $48
+	ld [hli], a
+	ld a, $40
+	ld [hl], a ; SPRITE_ANIM_COORD_Y
+.skip_draw_sprite
+	ret
+
+.NPCSpriteAnimData
+	db SPRITE_OW_PLAYER,   $00, $1e ; $01
+	db $ff,                $00, $00 ; $02
+	db SPRITE_OW_RONALD,   $04, $0e ; $03
+	db $ff,                $00, $00 ; $04
+	db SPRITE_OW_DRMASON,  $00, $26 ; $05
+	db SPRITE_OW_ISHIHARA, $04, $22 ; $06
+	db SPRITE_OW_IMAKUNI,  $00, $0e ; $07
+	db SPRITE_OW_NIKKI,    $00, $1a ; $08
+	db SPRITE_OW_RICK,     $00, $0e ; $09
+	db SPRITE_OW_KEN,      $04, $1e ; $0a
+	db SPRITE_OW_AMY,      $04, $0e ; $0b
+	db SPRITE_OW_ISAAC,    $00, $16 ; $0c
+	db SPRITE_OW_MITCH,    $00, $0e ; $0d
+	db SPRITE_OW_GENE,     $04, $22 ; $0e
+	db SPRITE_OW_MURRAY,   $00, $12 ; $0f
+	db SPRITE_OW_COURTNEY, $00, $12 ; $10
+	db $ff,                $00, $00 ; $11
+	db SPRITE_OW_STEVE,    $00, $2a ; $12
+	db $ff,                $00, $00 ; $13
+	db SPRITE_OW_JACK,     $00, $26 ; $14
+	db $ff,                $00, $00 ; $15
+	db SPRITE_OW_ROD,      $00, $0e ; $16
+	db $ff,                $00, $00 ; $17
+	db SPRITE_OW_BOY,      $04, $16 ; $18
+	db SPRITE_OW_LAD,      $04, $1a ; $19
+	db SPRITE_OW_SPECS,    $00, $22 ; $1a
+	db SPRITE_OW_BUTCH,    $00, $16 ; $1b
+	db SPRITE_OW_MANIA,    $00, $26 ; $1c
+	db SPRITE_OW_JOSHUA,   $00, $26 ; $1d
+	db SPRITE_OW_HOOD,     $04, $1e ; $1e
+	db SPRITE_OW_TECH,     $00, $0e ; $1f
+	db SPRITE_OW_CHAP,     $00, $1a ; $20
+	db SPRITE_OW_MAN,      $00, $16 ; $21
+	db SPRITE_OW_PAPPY,    $00, $22 ; $22
+	db SPRITE_OW_GIRL,     $04, $0e ; $23
+	db SPRITE_OW_LASS1,    $04, $22 ; $24
+	db SPRITE_OW_LASS2,    $00, $1e ; $25
+	db SPRITE_OW_LASS3,    $04, $1a ; $26
+	db SPRITE_OW_SWIMMER,  $00, $16 ; $27
+	db SPRITE_OW_CLERK,    $0a, $30 ; $28
+	db SPRITE_OW_GAL,      $00, $16 ; $29
+	db SPRITE_OW_WOMAN,    $04, $1e ; $2a
+	db SPRITE_OW_GRANNY,   $00, $16 ; $2b
+	db SPRITE_OW_AMY,      $08, $2e ; $2c
 
 SpriteNullAnimationPointer: ; 80e5a (20:4e5a)
 	dw SpriteNullAnimationFrame

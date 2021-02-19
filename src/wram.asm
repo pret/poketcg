@@ -2137,6 +2137,7 @@ NEXTU
 
 ; permission map of the current room with impassable objects (walls, NPCs, etc).
 ; $00: passable (floor)
+; $10: text/menu box tile
 ; $40: impassable and talkable (NPC or talkable wall)
 ; $80: impassable and untalkable (wall)
 wPermissionMap:: ; d133
@@ -2242,7 +2243,7 @@ wCurOWFrameDuration:: ; d321
 
 ; number of valid subgroups
 ; that are currently loaded in wOWFramesetSubgroups
-wumLoadedFramesetSubgroups:: ; d322
+wNumLoadedFramesetSubgroups:: ; d322
 	ds $1
 
 wd323:: ; d323

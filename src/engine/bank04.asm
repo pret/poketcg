@@ -2979,7 +2979,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld [wd4cb], a ; palette offset
 	ld [wd291], a ; palette offset
 	pop af ; palette
-	farcall Func_803c9 ; load palette
+	farcall SetBGPAndLoadedPal ; load palette
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ld a, [hli]
