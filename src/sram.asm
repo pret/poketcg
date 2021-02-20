@@ -199,10 +199,25 @@ sba68:: ; ba68
 
 SECTION "SRAM1", SRAM
 
-; from VRAM0
-sBGMap0:: ds $400 ; a000
-; from VRAM1
-sBGMap1:: ds $400 ; a400
+; buffers used to temporary store gfx related data
+; such as tiles or BG maps
+sGfxBuffer0:: ; a000
+	ds $400
+	
+sGfxBuffer1:: ; a400
+	ds $400
+
+sGfxBuffer2:: ; a800
+	ds $400
+
+sGfxBuffer3:: ; ac00
+	ds $400
+
+sGfxBuffer4:: ; b000
+	ds $400
+
+sGfxBuffer5:: ; b400
+	ds $400
 
 SECTION "SRAM2", SRAM
 

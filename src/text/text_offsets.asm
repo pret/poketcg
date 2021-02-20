@@ -216,12 +216,12 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer UnableDueToToxicGasText                            ; 0x00d4
 	textpointer Text00d5                                           ; 0x00d5
 	textpointer BackUpIsBrokenText                                 ; 0x00d6
-	textpointer Text00d7                                           ; 0x00d7
-	textpointer Text00d8                                           ; 0x00d8
-	textpointer Text00d9                                           ; 0x00d9
-	textpointer Text00da                                           ; 0x00da
-	textpointer Text00db                                           ; 0x00db
-	textpointer Text00dc                                           ; 0x00dc
+	textpointer PrinterIsNotConnectedText                          ; 0x00d7
+	textpointer BatteriesHaveLostTheirChargeText                   ; 0x00d8
+	textpointer PrinterPaperIsJammedText                           ; 0x00d9
+	textpointer CheckCableOrPrinterSwitchText                      ; 0x00da
+	textpointer PrinterPacketErrorText                             ; 0x00db
+	textpointer PrintingWasInterruptedText                         ; 0x00dc
 	textpointer Text00dd                                           ; 0x00dd
 	textpointer SandAttackCheckText                                ; 0x00de
 	textpointer SmokescreenCheckText                               ; 0x00df
@@ -419,7 +419,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text019f                                           ; 0x019f
 	textpointer Text01a0                                           ; 0x01a0
 	textpointer Text01a1                                           ; 0x01a1
-	textpointer Text01a2                                           ; 0x01a2
+	textpointer NowPrintingText                                    ; 0x01a2
 	textpointer DrMasonText                                        ; 0x01a3
 	textpointer DrawSevenCardsPracticeDuelText                     ; 0x01a4
 	textpointer ChooseGoldeenPracticeDuelText                      ; 0x01a5

@@ -1406,7 +1406,49 @@ Func_191a3: ; 191a3 (6:51a3)
 
 INCLUDE "data/attack_animations.asm"
 
-	INCROM $19674, $1991f
+	INCROM $19674, $198e7
+
+; empties screen and replaces wVBlankFunctionTrampoline
+; with Func_3cb4
+Func_198e7: ; 198e7 (6:58e7)
+	call EmptyScreen
+	call Set_OBJ_8x8
+	call Func_3ca4
+	lb de, $38, $7f
+	call SetupText
+	ld hl, wVBlankFunctionTrampoline + 1
+	ld de, wVBlankFunctionTrampolineBackup
+	call BackupVBlankFunctionTrampoline
+	di
+	ld [hl], LOW(Func_3cb4)
+	inc hl
+	ld [hl], HIGH(Func_3cb4)
+	ei
+	ret
+; 0x19907
+
+Func_19907: ; 19907 (6:5907)
+	ld hl, wVBlankFunctionTrampolineBackup
+	ld de, wVBlankFunctionTrampoline + 1
+	call BackupVBlankFunctionTrampoline
+	call Func_3ca4
+	bank1call ZeroObjectPositionsAndToggleOAMCopy
+	ret
+; 0x19917
+
+; copies 2 bytes from hl to de while interrupts are disabled
+; used to load or store wVBlankFunctionTrampoline
+; to wVBlankFunctionTrampolineBackup
+BackupVBlankFunctionTrampoline: ; 19917 (6:5917)
+	di
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hld]
+	ld [de], a
+	ei
+	ret
+; 0x1991f
 
 Func_1991f: ; 1991f (6:591f)
 	add a
@@ -1563,7 +1605,642 @@ Func_19a12: ; 19a12 (6:5a12)
 	INCROM $19a1f, $19c20
 
 Func_19c20: ; 19c20 (6:5c20)
-	INCROM $19c20, $1a4cf
+	INCROM $19c20, $19e5a
+
+; shows message on screen depending on wPrinterStatus
+; also shows SCENE_GAMEBOY_PRINTER_NOT_CONNECTED.
+HandlePrinterError: ; 19e5a (6:5e5a)
+	ld a, [wPrinterStatus]
+	cp $ff
+	jr z, .cable_or_printer_switch
+	or a
+	jr z, .interrupted
+	bit PRINTER_ERROR_BATTERIES_LOST_CHARGE, a
+	jr nz, .batteries_lost_charge
+	bit PRINTER_ERROR_CABLE_PRINTER_SWITCH, a
+	jr nz, .cable_or_printer_switch
+	bit PRINTER_ERROR_PAPER_JAMMED, a
+	jr nz, .jammed_printer
+
+	ldtx hl, PrinterPacketErrorText
+	ld a, $04
+	jr .got_text
+.cable_or_printer_switch
+	ldtx hl, CheckCableOrPrinterSwitchText
+	ld a, $02
+	jr .got_text
+.jammed_printer
+	ldtx hl, PrinterPaperIsJammedText
+	ld a, $03
+	jr .got_text
+.batteries_lost_charge
+	ldtx hl, BatteriesHaveLostTheirChargeText
+	ld a, $01
+	jr .got_text
+.interrupted
+	ldtx hl, PrintingWasInterruptedText
+	call DrawWideTextBox_WaitForInput
+	scf
+	ret
+
+	ldtx hl, PrinterIsNotConnectedText
+	ld a, $02
+.got_text
+	push hl
+	; unnecessary loading TxRam, since the text data
+	; already incorporate the error number
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+
+	call Func_198e7
+	ld a, SCENE_GAMEBOY_PRINTER_NOT_CONNECTED
+	lb bc, 0, 0
+	call LoadScene
+	pop hl
+	call DrawWideTextBox_WaitForInput
+	call Func_19907
+	scf
+	ret
+; 0x19eb4
+
+; main card printer function
+Func_19eb4: ; 19eb4 (6:5eb4)
+	ld e, a
+	ld d, $0
+	call LoadCardDataToBuffer1_FromCardID
+	call Func_198e7
+	ld a, SCENE_GAMEBOY_PRINTER_TRANSMITTING
+	lb bc, 0, 0
+	call LoadScene
+	ld a, 20
+	call CopyCardNameAndLevel
+	ld [hl], TX_END
+	ld hl, $0
+	call LoadTxRam2
+	ldtx hl, NowPrintingText
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	call Func_1a035
+	call DrawTopCardInfoInSRAMGfxBuffer0
+	call Func_19f87
+	call DrawCardPicInSRAMGfxBuffer2
+	call Func_19f99
+	jr c, .error
+	call DrawBottomCardInfoInSRAMGfxBuffer0
+	call Func_1a011
+	jr c, .error
+	call Func_19907
+	call Func_1a06b
+	or a
+	ret
+.error
+	call Func_19907
+	call Func_1a06b
+	jp HandlePrinterError
+; 0x19f05
+
+DrawCardPicInSRAMGfxBuffer2: ; 19f05 (6:5f05)
+	ld hl, wLoadedCard1Gfx
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, sGfxBuffer2
+	call Func_37a5
+	; draw card's picture in sGfxBuffer2
+	ld a, $40
+	lb hl, 12,  1
+	lb de,  2, 68
+	lb bc, 16, 12
+	call FillRectangle
+	ret
+; 0x19f20
+
+; writes the tiles necessary to draw
+; the card's information in sGfxBuffer0
+; this includes card's type, lv, HP and attacks if Pokemon card
+; or otherwise just the card's name and type symbol
+DrawTopCardInfoInSRAMGfxBuffer0: ; 19f20 (6:5f20)
+	call Func_1a025
+	call Func_212f
+
+	; draw empty text box frame
+	ld hl, sGfxBuffer0
+	ld a, $34
+	lb de, $30, $31
+	ld b, 20
+	call CopyLine
+	ld c, 15
+.loop_lines
+	xor a ; SYM_SPACE
+	lb de, $36, $37
+	ld b, 20
+	call CopyLine
+	dec c
+	jr nz, .loop_lines
+
+	; draw card type symbol
+	ld a, $38
+	lb hl, 1,  2
+	lb de, 1, 65
+	lb bc, 2,  2
+	call FillRectangle
+	; print card's name
+	lb de, 4, 65
+	ld hl, wLoadedCard1Name
+	call InitTextPrinting_ProcessTextFromPointerToID
+
+; prints card's type, lv, HP and attacks if it's a Pokemon card
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .skip_pokemon_data
+	inc a ; symbol corresponding to card's type (color)
+	lb bc, 18, 65
+	call WriteByteToBGMap0
+	ld a, SYM_Lv
+	lb bc, 11, 66
+	call WriteByteToBGMap0
+	ld a, [wLoadedCard1Level]
+	lb bc, 12, 66
+	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	ld a, SYM_HP
+	lb bc, 15, 66
+	call WriteByteToBGMap0
+	ld a, [wLoadedCard1EffectCommands]
+	inc b
+	bank1call WriteTwoByteNumberInTxSymbolFormat
+.skip_pokemon_data
+	ret
+; 0x19f87
+
+Func_19f87: ; 19f87 (6:5f87)
+	call Func_1a089
+	ret c
+	ld hl, sGfxBuffer0
+	call Func_1a0cc
+	ret c
+	call Func_1a0cc
+	call Func_1a111
+	ret
+; 0x19f99
+
+Func_19f99: ; 19f99 (6:5f99)
+	call Func_1a089
+	ret c
+	ld hl, sGfxBuffer0 + $8 tiles
+	ld c, $06
+.asm_19fa2
+	call Func_1a0cc
+	ret c
+	dec c
+	jr nz, .asm_19fa2
+	call Func_1a111
+	ret
+; 0x19fad
+
+; writes the tiles necessary to draw
+; the card's information in sGfxBuffer0
+; this includes card's Retreat cost, Weakness, Resistance,
+; and attack if it's Pokemon card
+; or otherwise just the card's description.
+DrawBottomCardInfoInSRAMGfxBuffer0: ; 19fad (6:5fad)
+	call Func_1a025
+	xor a
+	ld [wCardPageType], a
+	ld hl, sGfxBuffer0
+	ld b, 20
+	ld c, 9
+.loop_lines
+	xor a ; SYM_SPACE
+	lb de, $36, $37
+	call CopyLine
+	dec c
+	jr nz, .loop_lines
+	ld a, $35
+	lb de, $32, $33
+	call CopyLine
+
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .not_pkmn_card
+	ld hl, RetreatWeakResistData
+	call PlaceTextItems
+	ld c, 66
+	bank1call DisplayCardPage_PokemonOverview.attacks
+	ld a, SYM_No
+	lb bc, 15, 72
+	call WriteByteToBGMap0
+	inc b
+	ld a, [wLoadedCard1PokedexNumber]
+	bank1call WriteTwoByteNumberInTxSymbolFormat
+	ret
+
+.not_pkmn_card
+	bank1call SetNoLineSeparation
+	lb de, 1, 66
+	ld a, SYM_No
+	call InitTextPrintingInTextbox
+	ld hl, wLoadedCard1NonPokemonDescription
+	call ProcessTextFromPointerToID
+	bank1call SetOneLineSeparation
+	ret
+; 0x1a004
+
+RetreatWeakResistData: ; 1a004 (6:6004)
+	textitem 1, 70, RetreatText
+	textitem 1, 71, WeaknessText
+	textitem 1, 72, ResistanceText
+	db $ff
+; 0x1a011
+
+Func_1a011: ; 1a011 (6:6011)
+	call Func_1a089
+	ret c
+	ld hl, sGfxBuffer0
+	ld c, $05
+.asm_1a01a
+	call Func_1a0cc
+	ret c
+	dec c
+	jr nz, .asm_1a01a
+	call Func_1a108
+	ret
+; 0x1a025
+
+; calls setup text and sets wTilePatternSelector
+Func_1a025: ; 1a025 (6:6025)
+	lb de, $40, $bf
+	call SetupText
+	ld a, $a4
+	ld [wTilePatternSelector], a
+	xor a
+	ld [wTilePatternSelectorCorrection], a
+	ret
+; 0x1a035
+
+; switches to CGB normal speed, resets serial
+; enables SRAM and switches to SRAM1
+; and clears sGfxBuffer0
+Func_1a035: ; 1a035 (6:6035)
+	call SwitchToCGBNormalSpeed
+	call ResetSerial
+	ld a, $10
+	ld [wce9b], a
+	call EnableSRAM
+	ld a, [s0a003]
+	ld [wce99], a
+	call DisableSRAM
+	ldh a, [hBankSRAM]
+	ld [wce8f], a
+	ld a, BANK("SRAM1")
+	call BankswitchSRAM
+	call EnableSRAM
+	; clear sGfxBuffer0
+	ld hl, sGfxBuffer0
+	ld bc, $400
+.loop
+	xor a
+	ld [hli], a
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop
+	xor a
+	ld [wce9f], a
+	ret
+; 0x1a06b
+
+Func_1a06b: ; 1a06b (6:606b)
+	push af
+	call SwitchToCGBDoubleSpeed
+	ld a, [wce8f]
+	call BankswitchSRAM
+	call DisableSRAM
+	lb de, $30, $bf
+	call SetupText
+	pop af
+	ret
+; 0x1a080
+
+	INCROM $1a080, $1a089
+
+; returns carry if operation was cancelled
+; or serial transfer took long
+Func_1a089: ; 1a089 (6:6089)
+	xor a
+	ld [wce9e], a
+.wait_input
+	call DoFrame
+	ldh a, [hKeysHeld]
+	and B_BUTTON
+	jr nz, .b_button
+	ld bc, $0
+	ld de, $f00
+	call Func_312d
+	jr c, .delay
+	and $0a
+	jr nz, .wait_input
+
+.asm_1a0a5
+	ld bc, $0
+	ld de, $100
+	call Func_312d
+	jr nc, .no_carry
+	ld hl, wce9e
+	inc [hl]
+	ld a, [hl]
+	cp 3
+	jr c, .wait_input
+	; time out
+	scf
+	ret
+.no_carry
+	ret
+
+.b_button
+	xor a
+	ld [wPrinterStatus], a
+	scf
+	ret
+
+.delay
+	ld c, 10
+.delay_loop
+	call DoFrame
+	dec c
+	jr nz, .delay_loop
+	jr .asm_1a0a5
+; 0x1a0cc
+
+; loads tiles given by map in hl to sGfxBuffer5
+; copies first 20 tiles, then offsets by 2 tiles
+; and copies another 20
+Func_1a0cc: ; 1a0cc (6:60cc)
+	push bc
+	ld de, sGfxBuffer5
+	call .Copy20Tiles
+	call .Copy20Tiles
+	push hl
+	call CompressDataForSerialTransfer
+	call Func_312d
+	pop hl
+	pop bc
+	ret
+
+; copies 20 tiles given by hl to de
+; then adds 2 tiles to hl
+.Copy20Tiles ; 1a0e0 (6:60e0)
+	push hl
+	ld c, 20
+.loop_tiles
+	ld a, [hli]
+	call .CopyTile
+	dec c
+	jr nz, .loop_tiles
+	pop hl
+	ld bc, 2 tiles
+	add hl, bc
+	ret
+
+; copies a tile to de
+; a = tile to get from sGfxBuffer1
+.CopyTile ; 1a0f0 (6:60f0)
+	push hl
+	push bc
+	ld l, a
+	ld h, $00
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl ; *TILE_SIZE
+	ld bc, sGfxBuffer1
+	add hl, bc
+	ld c, TILE_SIZE
+.loop_copy
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop_copy
+	pop bc
+	pop hl
+	ret
+; 0x1a108
+
+Func_1a108: ; 1a108 (6:6108)
+	call Func_1a138
+	push hl
+	ld hl, $301
+	jr Func_1a11e
+
+Func_1a111: ; 1a111 (6:6111)
+	call Func_1a138
+	push hl
+	ld hl, wce9b
+	ld a, [hl]
+	ld [hl], $00
+	ld h, a
+	ld l, $01
+;	fallthrough
+
+Func_1a11e: ; 1a11e (6:611e)
+	push hl
+	ld bc, $0
+	ld de, $400
+	call Func_312d
+	jr c, .asm_1a135
+	ld hl, sp+$00
+	ld bc, $4
+	ld de, $200
+	call Func_312d
+.asm_1a135
+	pop hl
+	pop hl
+	ret
+
+Func_1a138: ; 1a138 (6:6138)
+	ld a, [wce99]
+	ld e, a
+	ld d, $00
+	ld hl, .unknown_1a146
+	add hl, de
+	ld h, [hl]
+	ld l, $e4
+	ret
+
+.unknown_1a146
+	db $00, $20, $40, $60
+; 0x1a14a
+
+	INCROM $1a14a, $1a435
+
+; compresses $28 tiles in sGfxBuffer5
+; and writes it in sGfxBuffer5 + $28 tiles.
+; compressed data has 2 commands to instruct on how to decompress it.
+; - a command byte with bit 7 not set, means to copy that many + 1
+; bytes that are following it literally.
+; - a command byte with bit 7 set, means to copy the following byte
+; that many times + 2 (after masking the top bit of command byte).
+; returns in bc the size of the compressed data and
+; in de the address of where it starts.
+CompressDataForSerialTransfer: ; 1a435 (6:6435)
+	ld hl, sGfxBuffer5
+	ld de, sGfxBuffer5 + $28 tiles
+	ld bc, $28 tiles
+.loop_remaining_data
+	ld a, $ff
+	inc b
+	dec b
+	jr nz, .check_compression
+	ld a, c
+.check_compression
+	push bc
+	push de
+	ld c, a
+	call CheckDataCompression
+	ld a, e
+	ld c, e
+	pop de
+	jr c, .copy_byte
+	ld a, c
+	ld b, c
+	dec a
+	ld [de], a ; number of bytes to  copy literally - 1
+	inc de
+.copy_literal_sequence
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .copy_literal_sequence
+	ld c, b
+	jr .sub_added_bytes
+
+.copy_byte
+	ld a, c
+	dec a
+	dec a
+	or %10000000 ; set high bit
+	ld [de], a ; = (n times to copy - 2) | %10000000
+	inc de
+	ld a, [hl] ; byte to copy n times
+	ld [de], a
+	inc de
+	ld b, $0
+	add hl, bc
+
+.sub_added_bytes
+	ld a, c
+	cpl
+	inc a
+	pop bc
+	add c
+	ld c, a
+	ld a, $ff
+	adc b
+	ld b, a
+	or c
+	jr nz, .loop_remaining_data
+
+	ld hl, $10000 - (sGfxBuffer5 + $28 tiles)
+	add hl, de ; gets the size of the compressed data
+	ld c, l
+	ld b, h
+	ld hl, sGfxBuffer5 + $28 tiles
+	ld de, $401
+	ret
+; 0x1a485
+
+; checks whether the next byte sequence in hl, up to c bytes, can be compressed
+; returns carry if the next sequence of bytes can be compressed,
+; i.e. has at least 3 consecutive bytes with the same value.
+; in that case, returns in e the number of consecutive
+; same value bytes that were found.
+; if there are no bytes with same value, then count as many bytes left
+; as possible until either there are no more remaining data bytes,
+; or until a sequence of 3 bytes with the same value are found.
+; in that case, the number of bytes in this sequence is returned in e.
+CheckDataCompression: ; 1a485 (6:6485)
+	push hl
+	ld e, c
+	ld a, c
+; if number of remaining bytes is less than 4
+; then no point in compressing
+	cp 4
+	jr c, .no_carry
+
+; check first if there are at least
+; 3 consecutive bytes with the same value
+	ld b, c
+	ld a, [hli]
+	cp [hl]
+	inc hl
+	jr nz, .literal_copy ; not same
+	cp [hl]
+	inc hl
+	jr nz, .literal_copy ; not same
+
+; 3 consecutive bytes were found with same value
+; keep track of how many consecutive bytes
+; with the same value there are in e
+	dec c
+	dec c
+	dec c
+	ld e, 3
+.loop_same_value
+	cp [hl]
+	jr nz, .set_carry ; exit when a different byte is found
+	inc hl
+	inc e
+	dec c
+	jr z, .set_carry ; exit when there is no more remaining data
+	bit 5, e
+	; exit if number of consecutive bytes >= $20
+	jr z, .loop_same_value
+.set_carry
+	pop hl
+	scf
+	ret
+
+.literal_copy
+; consecutive bytes are not the same value
+; count the number of bytes there are left
+; until a sequence of 3 bytes with the same value is found
+	pop hl
+	push hl
+	ld c, b ; number of remaining bytes
+	ld e, 1
+	ld a, [hli]
+	dec c
+	jr z, .no_carry ; exit if no more data
+.reset_same_value_count
+	ld d, 2 ; number of consecutive same value bytes to exit
+.next_byte
+	inc e
+	dec c
+	jr z, .no_carry
+	bit 7, e
+	jr nz, .no_carry ; exit if >= $80
+	cp [hl]
+	jr z, .same_consecutive_value
+	ld a, [hli]
+	jr .reset_same_value_count
+.no_carry
+	pop hl
+	or a
+	ret
+
+.same_consecutive_value
+	inc hl
+	dec d
+	jr nz, .next_byte
+	; 3 consecutive bytes with same value found
+	; discard the last 3 bytes in the sequence
+	dec e
+	dec e
+	dec e
+	jr .no_carry
+; 0x1a4cf
 
 Func_1a4cf: ; 1a4cf (6:64cf)
 	INCROM $1a4cf, $1a61f

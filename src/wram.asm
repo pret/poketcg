@@ -1745,7 +1745,7 @@ wce6d:: ; ce6d
 wce6e:: ; ce6e
 	ds $1
 
-wce6f:: ; ce6f
+wPrinterStatus:: ; ce6f
 	ds $1
 
 wce70:: ; ce70
@@ -1793,7 +1793,34 @@ wce83:: ; ce83
 wce84:: ; ce84
 	ds $1
 
-	ds $1c
+	ds $8
+
+wVBlankFunctionTrampolineBackup:: ; ce8d
+	ds $2
+
+wce8f:: ; ce8f
+	ds $1
+
+	ds $9
+
+wce99:: ; ce99
+	ds $1
+
+wce9a:: ; ce9a
+	ds $1
+
+wce9b:: ; ce9b
+	ds $1
+
+	ds $2
+
+wce9e:: ; ce9e
+	ds $1
+
+wce9f:: ; ce9f
+	ds $1
+
+	ds $1
 
 wcea1:: ; cea1
 	ds $1

@@ -6267,13 +6267,15 @@ CopyFontsOrDuelGraphicsTiles: ; 2121 (0:2121)
 
 ; this function copies gfx data into sram
 Func_212f: ; 212f (0:212f)
+; loads symbols fonts to sGfxBuffer1
 	ld hl, SymbolsFont - $4000
-	ld de, $a400
+	ld de, sGfxBuffer1
 	ld b, $30
 	call CopyFontsOrDuelGraphicsTiles
-	ld hl, DuelOtherGraphics + $150
-	ld de, $a700
-	ld b, $08
+; text box frame tiles
+	ld hl, DuelOtherGraphics + $15 tiles
+	ld de, sGfxBuffer1 + $30 tiles
+	ld b, $8
 	call CopyFontsOrDuelGraphicsTiles
 	call GetCardSymbolData
 	sub $d0
@@ -6282,14 +6284,14 @@ Func_212f: ; 212f (0:212f)
 	add hl, hl
 	add hl, hl
 	add hl, hl
-	add hl, hl
+	add hl, hl ; *16
 	ld de, DuelDmgSgbSymbolGraphics - $4000
 	add hl, de
-	ld de, $a780
-	ld b, $04
+	ld de, sGfxBuffer1 + $38 tiles
+	ld b, $4
 	call CopyFontsOrDuelGraphicsTiles
 	ld hl, DuelDmgSgbSymbolGraphics - $4000
-	ld de, $b100
+	ld de, sGfxBuffer4 + $10 tiles
 	ld b, $30
 	jr CopyFontsOrDuelGraphicsTiles
 
@@ -9393,7 +9395,7 @@ Func_312d: ; 312d (0:312d)
 	ld a, [wce6e]
 	cp $81
 	jr nz, .asm_3182
-	ld a, [wce6f]
+	ld a, [wPrinterStatus]
 	ld l, a
 	and $f1
 	ld a, l
@@ -9402,7 +9404,7 @@ Func_312d: ; 312d (0:312d)
 	ret
 .asm_3182
 	ld a, $ff
-	ld [wce6f], a
+	ld [wPrinterStatus], a
 	scf
 	ret
 
@@ -9484,7 +9486,7 @@ Func_31ef: ; 31ef (0:31ef)
 
 Func_31f2: ; 31f2 (0:31f2)
 	ldh a, [rSB]
-	ld [wce6f], a
+	ld [wPrinterStatus], a
 	xor a
 	ld [wce63], a
 	ret

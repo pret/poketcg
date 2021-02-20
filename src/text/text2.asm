@@ -898,7 +898,7 @@ Text01a1: ; 3a0e1 (e:60e1)
 	line "wasn't successful."
 	done
 
-Text01a2: ; 3a111 (e:6111)
+NowPrintingText: ; 3a111 (e:6111)
 	text "Now printing..."
 	done
 
