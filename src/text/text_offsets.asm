@@ -140,7 +140,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DuelistIsThinkingText                              ; 0x0088
 	textpointer Text0089                                           ; 0x0089
 	textpointer SelectComputerOpponentText                         ; 0x008a
-	textpointer Text008b                                           ; 0x008b
+	textpointer NumberOfPrizesText                                 ; 0x008b
 	textpointer Text008c                                           ; 0x008c
 	textpointer Text008d                                           ; 0x008d
 	textpointer Text008e                                           ; 0x008e

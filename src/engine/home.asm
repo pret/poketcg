@@ -11084,8 +11084,16 @@ GetMapScriptPointer: ; 3abd (0:3abd)
 	pop bc
 	ret
 
-Func_3ae8: ; 3ae8 (0:3ae8)
-	farcall Func_11f4e
+; loads some configurations for the duel against
+; the NPC whose deck ID is stored in wNPCDuelDeckID
+; this includes NPC portrait, his/her name text ID,
+; and the number of prize cards
+; this was used in testing since these configurations
+; are stored in the script-related NPC data for normal gameplay
+; returns carry if a duel configuration was found
+; for the given NPC deck ID
+GetNPCDuelConfigurations: ; 3ae8 (0:3ae8)
+	farcall _GetNPCDuelConfigurations
 	ret
 
 ; finds a Script from the first byte and puts the next two bytes (usually arguments?) into cb

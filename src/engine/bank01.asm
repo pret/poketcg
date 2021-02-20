@@ -8184,6 +8184,11 @@ Func_7344: ; 7344 (1:7344)
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36", TX_END
 
+; possibly unreferenced, used for testing
+; enters computer opponent selection screen
+; handles input to select/cancel/scroll through deck IDs
+; loads the NPC duel configurations if one was selected
+; returns carry if selection was cancelled
 Func_7364: ; 7364 (1:7364)
 	xor a
 	ld [wTileMapFill], a
@@ -8194,75 +8199,91 @@ Func_7364: ; 7364 (1:7364)
 	call SetupText
 	call DrawWideTextBox
 	call EnableLCD
+
 	xor a
 	ld [wOpponentDeckID], a
-	call Func_73d8
-.asm_7384
+	call DrawOpponentSelectionScreen
+.wait_input
 	call DoFrame
 	ldh a, [hDPadHeld]
 	or a
-	jr z, .asm_7384
+	jr z, .wait_input
 	ld b, a
+
+	; handle selection/cancellation buttons
 	and A_BUTTON | START
-	jr nz, .asm_73cd
+	jr nz, .select_opp
 	bit B_BUTTON_F, b
-	jr nz, .asm_73cb
+	jr nz, .cancel
+
+; handle D-pad inputs
+; check right
 	ld a, [wOpponentDeckID]
 	bit D_RIGHT_F, b
-	jr z, .asm_73a2
-	inc a
-	cp $35
-	jr c, .asm_73a2
-	xor a
-.asm_73a2
+	jr z, .check_left
+	inc a ; next deck ID
+	cp DECK_IDS_END + 1
+	jr c, .check_left
+	xor a ; wrap around to first deck ID
+
+.check_left
 	bit D_LEFT_F, b
-	jr z, .asm_73ae
+	jr z, .check_up
 	or a
-	jr nz, .asm_73ad
-	ld a, IMAKUNI_DECK_ID
-	jr .asm_73ae
-.asm_73ad
-	dec a
-.asm_73ae
+	jr nz, .not_first_deck_id
+	ld a, DECK_IDS_END ; wrap around to last deck ID
+	jr .check_up
+.not_first_deck_id
+	dec a ; previous deck ID
+
+.check_up
 	bit D_UP_F, b
-	jr z, .asm_73b9
-	add $0a
-	cp $35
-	jr c, .asm_73b9
-	xor a
-.asm_73b9
+	jr z, .check_down
+	add 10
+	cp DECK_IDS_END + 1
+	jr c, .check_down
+	xor a ; wrap around to first deck ID
+
+.check_down
 	bit D_DOWN_F, b
-	jr z, .asm_73c3
-	sub $0a
-	jr nc, .asm_73c3
-	ld a, IMAKUNI_DECK_ID
-.asm_73c3
+	jr z, .got_deck_id
+	sub 10
+	jr nc, .got_deck_id
+	ld a, DECK_IDS_END ; wrap around to last deck ID
+
+.got_deck_id
 	ld [wOpponentDeckID], a
-	call Func_73d8
-	jr .asm_7384
-.asm_73cb
+	call DrawOpponentSelectionScreen
+	jr .wait_input
+
+.cancel
 	scf
 	ret
-.asm_73cd
+.select_opp
 	ld a, [wOpponentDeckID]
 	ld [wNPCDuelDeckID], a
-	call Func_3ae8
+	call GetNPCDuelConfigurations
 	or a
 	ret
 ; 0x73d8
 
-Func_73d8: ; 73d8 (1:73d8)
+; draws the current opponent to be selected
+; (his/her portrait and name)
+; and prints text box for selection
+DrawOpponentSelectionScreen: ; 73d8 (1:73d8)
 	ld a, [wOpponentDeckID]
 	ld [wNPCDuelDeckID], a
-	call Func_3ae8
-	jr c, .asm_73ec
+	call GetNPCDuelConfigurations
+	jr c, .ok
+	; duel configuration not found for the NPC
+	; so load a default portrait and name
 	xor a
 	ld [wOpponentPortrait], a
 	ld hl, wOpponentName
 	ld [hli], a
 	ld [hl], a
-.asm_73ec
-	ld hl, Data_7408
+.ok
+	ld hl, SelectComputerOpponentData
 	call PlaceTextItems
 	call DrawDuelistPortraitsAndNames
 	ld a, [wOpponentDeckID]
@@ -8272,9 +8293,14 @@ Func_73d8: ; 73d8 (1:73d8)
 	lb bc, 15, 10
 	call WriteTwoByteNumberInTxSymbolFormat
 	ret
+; 0x7408
 
-Data_7408: ; 7408 (1:7408)
-	INCROM $7408, $7415
+SelectComputerOpponentData: ; 7408 (1:7408)
+	textitem 10,  0, Text0089
+	textitem 10, 10, NumberOfPrizesText
+	textitem  3, 14, SelectComputerOpponentText
+	db $ff
+; 0x7415
 
 Func_7415: ; 7415 (1:7415)
 	xor a
