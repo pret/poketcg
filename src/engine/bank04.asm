@@ -1194,7 +1194,7 @@ Func_11430: ; 11430 (4:5430)
 	dw wNPCDuelist,            1, $ff00 ; sNPCDuelist
 	dw wChallengeHallNPC,      1, $ff00 ; sChallengeHallNPC
 	dw wd698,                  4, $ff00 ; sb818
-	dw wd323,                 11, $ff00 ; sb81c
+	dw wOWMapEvents,          11, $ff00 ; sOWMapEvents
 	dw Data_1156c,             1, $ff00 ; sb827
 	dw wd0b8,                  1, $ff00 ; sb828
 	dw wd0b9,                  1, $ff00 ; sb829
@@ -1379,8 +1379,543 @@ SetNPCMatchStartTheme: ; 118d3 (4:58d3)
 
 INCLUDE "data/npcs.asm"
 
-Func_11f4e: ; 11f4e (4:5f4e)
-	INCROM $11f4e, $1217b
+_GetNPCDuelConfigurations: ; 11f4e (4:5f4e)
+	push hl
+	push bc
+	push de
+	ld a, [wNPCDuelDeckID]
+	ld e, a
+	ld bc, 9 ; size of struct - 1
+	ld hl, DeckIDDuelConfigurations
+.loop_deck_ids
+	ld a, [hli]
+	cp -1 ; end of list?
+	jr z, .done
+	cp e
+	jr nz, .next_deck_id
+	ld a, [hli]
+	ld [wOpponentPortrait], a
+	ld a, [hli]
+	ld [wOpponentName], a
+	ld a, [hli]
+	ld [wOpponentName + 1], a
+	ld a, [hl]
+	ld [wNPCDuelPrizes], a
+	scf
+	jr .done
+.next_deck_id
+	add hl, bc
+	jr .loop_deck_ids
+.done
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x11f7d
+
+; this is most likely unreferenced
+; since it expects the duel theme song
+; to be stored in the duel configuration
+; associated with the NPC deck ID,
+; but this isn't found in the actual data
+Func_11f7d: ; 11f7d (4:5f7d)
+	push bc
+	push de
+	ld a, [wNPCDuelDeckID]
+	ld e, a
+	ld bc, 9 ; size of struct - 1
+	ld hl, DeckIDDuelConfigurations
+.loop_deck_ids
+	ld a, [hli]
+	cp -1 ; end of list?
+	jr z, .done
+	cp e
+	jr nz, .next_deck_id
+	push hl
+	ld a, [hli]
+	ld [wOpponentPortrait], a
+	ld a, [hli]
+	ld [wOpponentName], a
+	ld a, [hli]
+	ld [wOpponentName + 1], a
+	inc hl
+	ld a, [hli]
+	ld [wDuelTheme], a
+	pop hl
+	dec hl
+	scf
+	jr .done
+.next_deck_id
+	add hl, bc
+	jr .loop_deck_ids
+.done
+	pop de
+	pop bc
+	ret
+; 0x11fae
+
+DeckIDDuelConfigurations: ; 11fae (4:5fae)
+	db SAMS_PRACTICE_DECK_ID ; deck ID
+	db SAM_PIC ; NPC portrait
+	tx SamNPCName ; name text ID
+	db 2 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db SAMS_NORMAL_DECK_ID ; deck ID
+	db SAM_PIC ; NPC portrait
+	tx SamNPCName ; name text ID
+	db 2 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LIGHTNING_AND_FIRE_DECK_ID ; deck ID
+	db AARON_PIC ; NPC portrait
+	tx AaronNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $eb ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db WATER_AND_FIGHTING_DECK_ID ; deck ID
+	db AARON_PIC ; NPC portrait
+	tx AaronNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $eb ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db GRASS_AND_PSYCHIC_DECK_ID ; deck ID
+	db AARON_PIC ; NPC portrait
+	tx AaronNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $eb ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LEGENDARY_MOLTRES_DECK_ID ; deck ID
+	db COURTNEY_PIC ; NPC portrait
+	tx CourtneyNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $04 ; unknown
+	db $ed ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LEGENDARY_ZAPDOS_DECK_ID ; deck ID
+	db STEVE_PIC ; NPC portrait
+	tx SteveNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $04 ; unknown
+	db $ed ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LEGENDARY_ARTICUNO_DECK_ID ; deck ID
+	db JACK_PIC ; NPC portrait
+	tx JackNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $04 ; unknown
+	db $ed ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LEGENDARY_DRAGONITE_DECK_ID ; deck ID
+	db ROD_PIC ; NPC portrait
+	tx RodNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $04 ; unknown
+	db $ed ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db FIRST_STRIKE_DECK_ID ; deck ID
+	db MITCH_PIC ; NPC portrait
+	tx MitchNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db ROCK_CRUSHER_DECK_ID ; deck ID
+	db GENE_PIC ; NPC portrait
+	tx GeneNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db GO_GO_RAIN_DANCE_DECK_ID ; deck ID
+	db AMY_PIC ; NPC portrait
+	tx AmyNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $f8 ; unknown
+	db $07 ; unknown
+
+	db ZAPPING_SELFDESTRUCT_DECK_ID ; deck ID
+	db ISAAC_PIC ; NPC portrait
+	tx IsaacNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $f7 ; unknown
+	db $07 ; unknown
+
+	db FLOWER_POWER_DECK_ID ; deck ID
+	db NIKKI_PIC ; NPC portrait
+	tx NikkiNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db STRANGE_PSYSHOCK_DECK_ID ; deck ID
+	db MURRAY_PIC ; NPC portrait
+	tx MurrayNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $fa ; unknown
+	db $07 ; unknown
+
+	db WONDERS_OF_SCIENCE_DECK_ID ; deck ID
+	db RICK_PIC ; NPC portrait
+	tx RickNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db FIRE_CHARGE_DECK_ID ; deck ID
+	db KEN_PIC ; NPC portrait
+	tx KenNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $03 ; unknown
+	db $ea ; unknown
+	db $07 ; unknown
+	db $f6 ; unknown
+	db $07 ; unknown
+
+	db IM_RONALD_DECK_ID ; deck ID
+	db RONALD_PIC ; NPC portrait
+	tx RonaldNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db POWERFUL_RONALD_DECK_ID ; deck ID
+	db RONALD_PIC ; NPC portrait
+	tx RonaldNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db INVINCIBLE_RONALD_DECK_ID ; deck ID
+	db RONALD_PIC ; NPC portrait
+	tx RonaldNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db LEGENDARY_RONALD_DECK_ID ; deck ID
+	db RONALD_PIC ; NPC portrait
+	tx RonaldNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db MUSCLES_FOR_BRAINS_DECK_ID ; deck ID
+	db CHRIS_PIC ; NPC portrait
+	tx ChrisNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db HEATED_BATTLE_DECK_ID ; deck ID
+	db MICHAEL_PIC ; NPC portrait
+	tx MichaelNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db LOVE_TO_BATTLE_DECK_ID ; deck ID
+	db JESSICA_PIC ; NPC portrait
+	tx JessicaNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db EXCAVATION_DECK_ID ; deck ID
+	db RYAN_PIC ; NPC portrait
+	tx RyanNPCName ; name text ID
+	db 3 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db BLISTERING_POKEMON_DECK_ID ; deck ID
+	db ANDREW_PIC ; NPC portrait
+	tx AndrewNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db HARD_POKEMON_DECK_ID ; deck ID
+	db MATTHEW_PIC ; NPC portrait
+	tx MatthewNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f9 ; unknown
+	db $07 ; unknown
+
+	db WATERFRONT_POKEMON_DECK_ID ; deck ID
+	db SARA_PIC ; NPC portrait
+	tx SaraNPCName ; name text ID
+	db 2 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f8 ; unknown
+	db $07 ; unknown
+
+	db LONELY_FRIENDS_DECK_ID ; deck ID
+	db AMANDA_PIC ; NPC portrait
+	tx AmandaNPCName ; name text ID
+	db 3 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f8 ; unknown
+	db $07 ; unknown
+
+	db SOUND_OF_THE_WAVES_DECK_ID ; deck ID
+	db JOSHUA_PIC ; NPC portrait
+	tx JoshuaNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f8 ; unknown
+	db $07 ; unknown
+
+	db PIKACHU_DECK_ID ; deck ID
+	db JENNIFER_PIC ; NPC portrait
+	tx JenniferNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f7 ; unknown
+	db $07 ; unknown
+
+	db BOOM_BOOM_SELFDESTRUCT_DECK_ID ; deck ID
+	db NICHOLAS_PIC ; NPC portrait
+	tx NicholasNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f7 ; unknown
+	db $07 ; unknown
+
+	db POWER_GENERATOR_DECK_ID ; deck ID
+	db BRANDON_PIC ; NPC portrait
+	tx BrandonNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f7 ; unknown
+	db $07 ; unknown
+
+	db ETCETERA_DECK_ID ; deck ID
+	db BRITTANY_PIC ; NPC portrait
+	tx BrittanyNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db FLOWER_GARDEN_DECK_ID ; deck ID
+	db KRISTIN_PIC ; NPC portrait
+	tx KristinNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db KALEIDOSCOPE_DECK_ID ; deck ID
+	db HEATHER_PIC ; NPC portrait
+	tx HeatherNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db GHOST_DECK_ID ; deck ID
+	db ROBERT_PIC ; NPC portrait
+	tx RobertNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fa ; unknown
+	db $07 ; unknown
+
+	db NAP_TIME_DECK_ID ; deck ID
+	db DANIEL_PIC ; NPC portrait
+	tx DanielNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fa ; unknown
+	db $07 ; unknown
+
+	db STRANGE_POWER_DECK_ID ; deck ID
+	db STEPHANIE_PIC ; NPC portrait
+	tx StephanieNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fa ; unknown
+	db $07 ; unknown
+
+	db FLYIN_POKEMON_DECK_ID ; deck ID
+	db JOSEPH_PIC ; NPC portrait
+	tx JosephNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db LOVELY_NIDORAN_DECK_ID ; deck ID
+	db DAVID_PIC ; NPC portrait
+	tx DavidNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db POISON_DECK_ID ; deck ID
+	db ERIK_PIC ; NPC portrait
+	tx ErikNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $fb ; unknown
+	db $07 ; unknown
+
+	db ANGER_DECK_ID ; deck ID
+	db JOHN_PIC ; NPC portrait
+	tx JohnNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f6 ; unknown
+	db $07 ; unknown
+
+	db FLAMETHROWER_DECK_ID ; deck ID
+	db ADAM_PIC ; NPC portrait
+	tx AdamNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f6 ; unknown
+	db $07 ; unknown
+
+	db RESHUFFLE_DECK_ID ; deck ID
+	db JONATHAN_PIC ; NPC portrait
+	tx JonathanNPCName ; name text ID
+	db 4 ; number of prize cards
+	db $02 ; unknown
+	db $e9 ; unknown
+	db $07 ; unknown
+	db $f6 ; unknown
+	db $07 ; unknown
+
+	db IMAKUNI_DECK_ID ; deck ID
+	db IMAKUNI_PIC ; NPC portrait
+	tx ImakuniNPCName ; name text ID
+	db 6 ; number of prize cards
+	db $10 ; unknown
+	db $ec ; unknown
+	db $07 ; unknown
+	db $00 ; unknown
+	db $00 ; unknown
+
+	db -1 ; end
 
 OverworldScriptTable: ; 1217b (4:617b)
 	dw ScriptCommand_EndScript
@@ -2979,7 +3514,7 @@ _LoadScene: ; 12c7f (4:6c7f)
 	ld [wd4cb], a ; palette offset
 	ld [wd291], a ; palette offset
 	pop af ; palette
-	farcall Func_803c9 ; load palette
+	farcall SetBGPAndLoadedPal ; load palette
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	ld a, [hli]

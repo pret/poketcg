@@ -38,7 +38,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_c36a
 	call Func_c184
 	call Func_c49c
-	farcall Func_80000
+	farcall LoadMapGfxAndPermissions
 	call Func_c4b9
 	call Func_c943
 	call Func_c158
@@ -147,7 +147,7 @@ CloseAdvancedDialogueBox: ; c111 (3:4111)
 ; redraws the background and removes textbox control
 CloseTextBox: ; c135 (3:4135)
 	push hl
-	farcall Func_80028
+	farcall ReloadMapAfterTextClose
 	ld hl, wd0c1
 	res 0, [hl]
 	pop hl
@@ -402,7 +402,7 @@ Func_c2db: ; c2db (3:42db)
 	call EmptyScreen
 	ld a, [wDefaultSong]
 	push af
-	farcall Func_80000
+	farcall LoadMapGfxAndPermissions
 	pop af
 	ld [wDefaultSong], a
 	ld hl, wd0c1
@@ -459,12 +459,12 @@ Func_c34e: ; c34e (3:434e)
 
 Func_c36a: ; c36a (3:436a)
 	xor a
-	ld [wd323], a
+	ld [wOWMapEvents], a
 	ld a, [wCurMap]
 	cp POKEMON_DOME_ENTRANCE
 	jr nz, .asm_c379
 	xor a
-	ld [wd323 + 1], a
+	ld [wOWMapEvents + 1], a
 .asm_c379
 	ret
 
@@ -566,17 +566,19 @@ Func_c3ca: ; c3ca (3:43ca)
 	pop hl
 	ret
 
+; removes flag in whole wPermissionMap
+; most likely relate to menu and text boxes
 Func_c3ee: ; c3ee (3:43ee)
 	push hl
 	push bc
 	ld c, $00
-	ld hl, wBoosterViableCardList
-.asm_c3f5
+	ld hl, wPermissionMap
+.loop
 	ld a, [hl]
-	and $ef
+	and ~$10 ; removes this flag
 	ld [hli], a
 	dec c
-	jr nz, .asm_c3f5
+	jr nz, .loop
 	pop bc
 	pop hl
 	ret
@@ -3451,7 +3453,7 @@ MasonLabLoadMap: ; d549 (3:5549)
 	jp SetNextNPCAndScript
 
 MasonLabCloseTextBox: ; d55e (3:555e)
-	ld a, $0a
+	ld a, MAP_EVENT_CHALLENGE_MACHINE
 	farcall Func_80b89
 	ret
 
@@ -3943,13 +3945,13 @@ DeckMachineRoomAfterDuel: ; d89f (3:589f)
 	db $00
 
 DeckMachineRoomCloseTextBox: ; d8ad (3:58ad)
-	ld a, $02
+	ld a, MAP_EVENT_FIGHTING_DECK_MACHINE
 .asm_d8af
 	push af
 	farcall Func_80b89
 	pop af
 	inc a
-	cp $0a
+	cp MAP_EVENT_FIRE_DECK_MACHINE + 1
 	jr c, .asm_d8af
 	ret
 
@@ -4044,7 +4046,7 @@ Script_d93f: ; d93f (3:593f)
 .ows_d95a
 	play_sfx SFX_5A
 	max_out_event_value EVENT_FIGHTING_DECK_MACHINE_ACTIVE
-	replace_map_blocks $02
+	replace_map_blocks MAP_EVENT_FIGHTING_DECK_MACHINE
 	print_text Text060a
 .ows_d963
 	ask_question_jump_default_yes Text060b, .ows_d969
@@ -4097,7 +4099,7 @@ Script_d995: ; d995 (3:5995)
 .ows_d9b0
 	play_sfx SFX_5A
 	max_out_event_value EVENT_ROCK_DECK_MACHINE_ACTIVE
-	replace_map_blocks $03
+	replace_map_blocks MAP_EVENT_ROCK_DECK_MACHINE
 	print_text Text060a
 .ows_d9b9
 	ask_question_jump_default_yes Text060b, .ows_d9bf
@@ -4125,7 +4127,7 @@ Script_d9c2: ; d9c2 (3:59c2)
 .ows_d9dd
 	play_sfx SFX_5A
 	max_out_event_value EVENT_WATER_DECK_MACHINE_ACTIVE
-	replace_map_blocks $04
+	replace_map_blocks MAP_EVENT_WATER_DECK_MACHINE
 	print_text Text060a
 .ows_d9e6
 	ask_question_jump_default_yes Text060b, .ows_d9ec
@@ -4153,7 +4155,7 @@ Script_d9ef: ; d9ef (3:59ef)
 .ows_da0a
 	play_sfx SFX_5A
 	max_out_event_value EVENT_LIGHTNING_DECK_MACHINE_ACTIVE
-	replace_map_blocks $05
+	replace_map_blocks MAP_EVENT_LIGHTNING_DECK_MACHINE
 	print_text Text060a
 .ows_da13
 	ask_question_jump_default_yes Text060b, .ows_da19
@@ -4181,7 +4183,7 @@ Script_da1c: ; da1c (3:5a1c)
 .ows_da37
 	play_sfx SFX_5A
 	max_out_event_value EVENT_GRASS_DECK_MACHINE_ACTIVE
-	replace_map_blocks $06
+	replace_map_blocks MAP_EVENT_GRASS_DECK_MACHINE
 	print_text Text060a
 .ows_da40
 	ask_question_jump_default_yes Text060b, .ows_da46
@@ -4209,7 +4211,7 @@ Script_da49: ; da49 (3:5a49)
 .ows_da64
 	play_sfx SFX_5A
 	max_out_event_value EVENT_PSYCHIC_DECK_MACHINE_ACTIVE
-	replace_map_blocks $07
+	replace_map_blocks MAP_EVENT_PSYCHIC_DECK_MACHINE
 	print_text Text060a
 .ows_da6d
 	ask_question_jump_default_yes Text060b, .ows_da73
@@ -4237,7 +4239,7 @@ Script_da76: ; da76 (3:5a76)
 .ows_da91
 	play_sfx SFX_5A
 	max_out_event_value EVENT_SCIENCE_DECK_MACHINE_ACTIVE
-	replace_map_blocks $08
+	replace_map_blocks MAP_EVENT_SCIENCE_DECK_MACHINE
 	print_text Text060a
 .ows_da9a
 	ask_question_jump_default_yes Text060b, .ows_daa0
@@ -4265,7 +4267,7 @@ Script_daa3: ; daa3 (3:5aa3)
 .ows_dabe
 	play_sfx SFX_5A
 	max_out_event_value EVENT_FIRE_DECK_MACHINE_ACTIVE
-	replace_map_blocks $09
+	replace_map_blocks MAP_EVENT_FIRE_DECK_MACHINE
 	print_text Text060a
 .ows_dac7
 	ask_question_jump_default_yes Text060b, .ows_dacd
@@ -8385,7 +8387,7 @@ PokemonDomeEntranceLoadMap: ; f607 (3:7607)
 	ret
 
 PokemonDomeEntranceCloseTextBox: ; f62a (3:762a)
-	ld a, $00
+	ld a, MAP_EVENT_POKEMON_DOME_DOOR
 	farcall Func_80b89
 	ret
 
@@ -8477,7 +8479,7 @@ Script_f6af: ; f6af (3:76af)
 .ows_f6b9
 	print_npc_text Text0559
 	play_sfx SFX_0F
-	replace_map_blocks $00
+	replace_map_blocks MAP_EVENT_POKEMON_DOME_DOOR
 	do_frames 30
 	move_player NORTH, 1
 	quit_script_fully
@@ -8538,7 +8540,7 @@ PokemonDomeLoadMap: ; f706 (3:7706)
 	jp SetNextScript
 
 PokemonDomeCloseTextBox: ; f718 (3:7718)
-	ld a, $01
+	ld a, MAP_EVENT_HALL_OF_HONOR_DOOR
 	farcall Func_80b89
 	ret
 
@@ -9038,7 +9040,7 @@ Script_BeatRod: ; faae (3:7aae)
 	move_active_npc NPCMovement_fb96
 	set_active_npc_direction SOUTH
 	play_sfx SFX_0F
-	replace_map_blocks $01
+	replace_map_blocks MAP_EVENT_HALL_OF_HONOR_DOOR
 	set_event EVENT_POKEMON_DOME_STATE, POKEMON_DOME_DEFEATED
 	max_out_event_value EVENT_HALL_OF_HONOR_DOORS_OPEN
 	print_text_quit_fully Text05a4
@@ -9048,7 +9050,7 @@ Script_BeatRod: ; faae (3:7aae)
 	override_song MUSIC_STOP
 	set_event EVENT_RONALD_POKEMON_DOME_STATE, RONALD_CHALLENGED
 	play_sfx SFX_0F
-	replace_map_blocks $01
+	replace_map_blocks MAP_EVENT_HALL_OF_HONOR_DOOR
 	move_active_npc NPCMovement_fbd2
 	set_default_song MUSIC_RONALD
 	play_default_song

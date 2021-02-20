@@ -1450,16 +1450,16 @@ Text0383: ; 3f2b9 (f:72b9)
 	text "Right"
 	done
 
-Text0384: ; 3f2c0 (f:72c0)
+SPRText: ; 3f2c0 (f:72c0)
 	text "SPR_"
 	done
 
-Text0385: ; 3f2c6 (f:72c6)
+WinLosePrizesDuelWithText: ; 3f2c6 (f:72c6)
 	text "WIN      <RAMNUM> Prizes Duel"
 	line "LOSE     with <RAMTEXT>(<RAMNUM>)"
 	done
 
-Text0386: ; 3f2f1 (f:72f1)
+UseDuelistsDeckText: ; 3f2f1 (f:72f1)
 	text "         Use <RAMNUM>'s Deck"
 	done
 

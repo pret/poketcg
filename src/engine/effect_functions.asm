@@ -1335,8 +1335,8 @@ HandleColorChangeScreen: ; 2c588 (b:4588)
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .skip_vram1
-	pop hl  ; unnecessary
-	push hl ; unnecessary
+	pop hl
+	push hl
 	call BankswitchVRAM1
 	ld a, [hl]
 	lb hl, 0, 0

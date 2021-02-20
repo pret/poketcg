@@ -28,7 +28,7 @@ NEXTU
 ; before $ef is initialized to 0 when starting decompression.
 wDecompressionSecondaryBuffer:: ; c000
 	ds $ef
-wDecompressionSecondaryBufferStart:: ; ; c0ef
+wDecompressionSecondaryBufferStart:: ; c0ef
 	ds $11
 
 ENDU
@@ -2137,6 +2137,7 @@ NEXTU
 
 ; permission map of the current room with impassable objects (walls, NPCs, etc).
 ; $00: passable (floor)
+; $10: text/menu box tile
 ; $40: impassable and talkable (NPC or talkable wall)
 ; $80: impassable and untalkable (wall)
 wPermissionMap:: ; d133
@@ -2242,11 +2243,15 @@ wCurOWFrameDuration:: ; d321
 
 ; number of valid subgroups
 ; that are currently loaded in wOWFramesetSubgroups
-wumLoadedFramesetSubgroups:: ; d322
+wNumLoadedFramesetSubgroups:: ; d322
 	ds $1
 
-wd323:: ; d323
-	ds $b
+; holds the current state of each event
+; each corresponding to a MAP_EVENT_* constant
+; if $0, doors are closed / deck machines are deactivated
+; if $1, doors are open / deck machines are activated
+wOWMapEvents:: ; d323
+	ds NUM_MAP_EVENTS
 
 ; the OWMAP_* value for the current overworld map selection
 wOverworldMapSelection:: ; d32e

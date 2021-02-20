@@ -1710,7 +1710,7 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	call Func_1d705
 	call Func_1c858
 	xor a
-	ld [wd323 + 1], a
+	ld [wOWMapEvents + 1], a
 	ld a, MUSIC_CREDITS
 	call PlaySong
 	farcall Func_10031

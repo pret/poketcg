@@ -461,6 +461,7 @@ ENDM
 
 ; Replaces map blocks
 ; used for deck machines, challenge machine, Pokemon Dome doors, Hall of Honor doors etc
+; accepts as argument any of MAP_EVENT_* constants
 replace_map_blocks: MACRO
 	run_command ScriptCommand_ReplaceMapBlocks
 	db \1 ; id

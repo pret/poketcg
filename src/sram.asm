@@ -122,8 +122,8 @@ sChallengeHallNPC:: ; b817
 sb818:: ; b818
 	ds $4
 
-sb81c:: ; b81c
-	ds $b
+sOWMapEvents:: ; b81c
+	ds NUM_MAP_EVENTS
 
 sb827:: ; b827
 	ds $1

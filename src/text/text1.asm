@@ -620,7 +620,7 @@ SelectComputerOpponentText: ; 36f65 (d:6f65)
 	text "Select a computer opponent."
 	done
 
-Text008b: ; 36f82 (d:6f82)
+NumberOfPrizesText: ; 36f82 (d:6f82)
 	text "Number of Prizes"
 	done
 
