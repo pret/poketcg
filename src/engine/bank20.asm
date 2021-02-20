@@ -2364,18 +2364,18 @@ ChallengeMachineMapEventTilemap:: ; 81ed1 (20:5ed1)
 	db $06 ; height
 	dw ChallengeMachineMapEventPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/unknown1.bin"
+	INCBIN "data/maps/tiles/challenge_machine_map_event.bin"
 ChallengeMachineMapEventPermissions:
-	INCBIN "data/maps/permissions/unknown1.bin"
+	INCBIN "data/maps/permissions/challenge_machine_map_event.bin"
 
 ChallengeMachineMapEventCGBTilemap:: ; 81ef5 (20:5ef5)
 	db $04 ; width
 	db $06 ; height
 	dw ChallengeMachineMapEventCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/unknown1_cgb.bin"
+	INCBIN "data/maps/tiles/challenge_machine_map_event_cgb.bin"
 ChallengeMachineMapEventCGBPermissions:
-	INCBIN "data/maps/permissions/unknown1_cgb.bin"
+	INCBIN "data/maps/permissions/challenge_machine_map_event_cgb.bin"
 
 DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
 	db $18 ; width
@@ -2400,18 +2400,18 @@ DeckMachineMapEventTilemap:: ; 82143 (20:6143)
 	db $01 ; height
 	dw DeckMachineMapEventPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_2.bin"
+	INCBIN "data/maps/tiles/deck_machine_map_event.bin"
 DeckMachineMapEventPermissions:
-	INCBIN "data/maps/permissions/unknown_2.bin"
+	INCBIN "data/maps/permissions/deck_machine_map_event.bin"
 
 DeckMachineMapEventCGBTilemap:: ; 82150 (20:6150)
 	db $04 ; width
 	db $01 ; height
 	dw DeckMachineMapEventCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_2_cgb.bin"
+	INCBIN "data/maps/tiles/deck_machine_map_event_cgb.bin"
 DeckMachineMapEventCGBPermissions:
-	INCBIN "data/maps/permissions/unknown_2_cgb.bin"
+	INCBIN "data/maps/permissions/deck_machine_map_event_cgb.bin"
 
 IshiharaTilemap:: ; 82160 (20:6160)
 	db $14 ; width
@@ -2652,36 +2652,36 @@ PokemonDomeDoorMapEventTilemap:: ; 83bf1 (20:7bf1)
 	db $03 ; height
 	dw PokemonDomeDoorMapEventPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_3.bin"
+	INCBIN "data/maps/tiles/pokemon_dome_door_map_event.bin"
 PokemonDomeDoorMapEventPermissions:
-	INCBIN "data/maps/permissions/unknown_3.bin"
+	INCBIN "data/maps/permissions/pokemon_dome_door_map_event.bin"
 
 PokemonDomeDoorMapEventCGBTilemap:: ; 83c03 (20:7c03)
 	db $04 ; width
 	db $03 ; height
 	dw PokemonDomeDoorMapEventCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_3_cgb.bin"
+	INCBIN "data/maps/tiles/pokemon_dome_door_map_event_cgb.bin"
 PokemonDomeDoorMapEventCGBPermissions:
-	INCBIN "data/maps/permissions/unknown_3_cgb.bin"
+	INCBIN "data/maps/permissions/pokemon_dome_door_map_event_cgb.bin"
 
 HallOfHonorDoorMapEventTilemap:: ; 83c1a (20:7c1a)
 	db $04 ; width
 	db $03 ; height
 	dw HallOfHonorDoorMapEventPermissions
 	db FALSE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_4.bin"
+	INCBIN "data/maps/tiles/hall_of_honor_door_map_event.bin"
 HallOfHonorDoorMapEventPermissions:
-	INCBIN "data/maps/permissions/unknown_4.bin"
+	INCBIN "data/maps/permissions/hall_of_honor_door_map_event.bin"
 
 HallOfHonorDoorMapEventCGBTilemap:: ; 83c26 (20:7c26)
 	db $04 ; width
 	db $03 ; height
 	dw HallOfHonorDoorMapEventCGBPermissions
 	db TRUE ; cgb mode
-	INCBIN "data/maps/tiles/unknown_4_cgb.bin"
+	INCBIN "data/maps/tiles/hall_of_honor_door_map_event_cgb.bin"
 HallOfHonorDoorMapEventCGBPermissions:
-	INCBIN "data/maps/permissions/unknown_4_cgb.bin"
+	INCBIN "data/maps/permissions/hall_of_honor_door_map_event_cgb.bin"
 
 GrassMedalTilemap:: ; 83c36 (20:7c36)
 	db $03 ; width
