@@ -1424,7 +1424,7 @@ Func_11f7d: ; 11f7d (4:5f7d)
 	ld a, [wNPCDuelDeckID]
 	ld e, a
 	ld bc, 9 ; size of struct - 1
-	ld hl, $5fae
+	ld hl, DeckIDDuelConfigurations
 .loop_deck_ids
 	ld a, [hli]
 	cp -1 ; end of list?

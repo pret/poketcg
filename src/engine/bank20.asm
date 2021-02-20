@@ -1605,112 +1605,112 @@ tilemap: MACRO
 ENDM
 
 Tilemaps: ; 80e67 (20:4e67)
-	tilemap OverworldMapTilemap,             TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP
-	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP_CGB
-	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY
-	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY_CGB
-	tilemap Unknown1Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT
-	tilemap Unknown1CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT_CGB
-	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM
-	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM_CGB
-	tilemap Unknown2Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT
-	tilemap Unknown2CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
-	tilemap IshiharaTilemap,                 TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA
-	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA_CGB
-	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE
-	tilemap FightingClubEntranceCGBTilemap,  TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
-	tilemap RockClubEntranceTilemap,         TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE
-	tilemap RockClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
-	tilemap WaterClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE
-	tilemap WaterClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
-	tilemap LightningClubEntranceTilemap,    TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
-	tilemap LightningClubEntranceCGBTilemap, TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
-	tilemap GrassClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE
-	tilemap GrassClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
-	tilemap PsychicClubEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
-	tilemap PsychicClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
-	tilemap ScienceClubEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE
-	tilemap ScienceClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
-	tilemap FireClubEntranceTilemap,         TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE
-	tilemap FireClubEntranceCGBTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
-	tilemap ChallengeHallEntranceTilemap,    TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE
-	tilemap ChallengeHallEntranceCGBTilemap, TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
-	tilemap ClubLobbyTilemap,                TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY
-	tilemap ClubLobbyCGBTilemap,             TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY_CGB
-	tilemap FightingClubTilemap,             TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB
-	tilemap FightingClubCGBTilemap,          TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB_CGB
-	tilemap RockClubTilemap,                 TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB
-	tilemap RockClubCGBTilemap,              TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB_CGB
-	tilemap WaterClubTilemap,                TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB
-	tilemap WaterClubCGBTilemap,             TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB_CGB
-	tilemap LightningClubTilemap,            TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB
-	tilemap LightningClubCGBTilemap,         TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB_CGB
-	tilemap GrassClubTilemap,                TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB
-	tilemap GrassClubCGBTilemap,             TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB_CGB
-	tilemap PsychicClubTilemap,              TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB
-	tilemap PsychicClubCGBTilemap,           TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB_CGB
-	tilemap ScienceClubTilemap,              TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB
-	tilemap ScienceClubCGBTilemap,           TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB_CGB
-	tilemap FireClubTilemap,                 TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB
-	tilemap FireClubCGBTilemap,              TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB_CGB
-	tilemap ChallengeHallTilemap,            TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL
-	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL_CGB
-	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE
-	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
-	tilemap Unknown3Tilemap,                 TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT
-	tilemap Unknown3CGBTilemap,              TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT_CGB
-	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME
-	tilemap PokemonDomeCGBTilemap,           TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME_CGB
-	tilemap Unknown4Tilemap,                 TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT
-	tilemap Unknown4CGBTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT_CGB
-	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR
-	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR_CGB
-	tilemap CardPopCGBTilemap,               TILESET_CARD_POP                    ; TILEMAP_CARD_POP_CGB
-	tilemap CardPopTilemap,                  TILESET_CARD_POP                    ; TILEMAP_CARD_POP
-	tilemap GrassMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_GRASS_MEDAL
-	tilemap ScienceMedalTilemap,             TILESET_MEDAL                       ; TILEMAP_SCIENCE_MEDAL
-	tilemap FireMedalTilemap,                TILESET_MEDAL                       ; TILEMAP_FIRE_MEDAL
-	tilemap WaterMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_WATER_MEDAL
-	tilemap LightningMedalTilemap,           TILESET_MEDAL                       ; TILEMAP_LIGHTNING_MEDAL
-	tilemap FightingMedalTilemap,            TILESET_MEDAL                       ; TILEMAP_FIGHTING_MEDAL
-	tilemap RockMedalTilemap,                TILESET_MEDAL                       ; TILEMAP_ROCK_MEDAL
-	tilemap PsychicMedalTilemap,             TILESET_MEDAL                       ; TILEMAP_PSYCHIC_MEDAL
-	tilemap GameBoyLinkCGBTilemap,           TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CGB
-	tilemap GameBoyLinkTilemap,              TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK
-	tilemap GameBoyLinkConnectingCGBTilemap, TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING_CGB
-	tilemap GameBoyLinkConnectingTilemap,    TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING
-	tilemap GameBoyPrinterCGBTilemap,        TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER_CGB
-	tilemap GameBoyPrinterTilemap,           TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER
-	tilemap ColosseumTilemap,                TILESET_COLOSSEUM_1                 ; TILEMAP_COLOSSEUM
-	tilemap ColosseumCGBTilemap,             TILESET_COLOSSEUM_2                 ; TILEMAP_COLOSSEUM_CGB
-	tilemap EvolutionTilemap,                TILESET_EVOLUTION_1                 ; TILEMAP_EVOLUTION
-	tilemap EvolutionCGBTilemap,             TILESET_EVOLUTION_2                 ; TILEMAP_EVOLUTION_CGB
-	tilemap MysteryTilemap,                  TILESET_MYSTERY_1                   ; TILEMAP_MYSTERY
-	tilemap MysteryCGBTilemap,               TILESET_MYSTERY_2                   ; TILEMAP_MYSTERY_CGB
-	tilemap LaboratoryTilemap,               TILESET_LABORATORY_1                ; TILEMAP_LABORATORY
-	tilemap LaboratoryCGBTilemap,            TILESET_LABORATORY_2                ; TILEMAP_LABORATORY_CGB
-	tilemap CharizardIntroTilemap,           TILESET_CHARIZARD_INTRO_1           ; TILEMAP_CHARIZARD_INTRO
-	tilemap CharizardIntroCGBTilemap,        TILESET_CHARIZARD_INTRO_2           ; TILEMAP_CHARIZARD_INTRO_CGB
-	tilemap ScytherIntroTilemap,             TILESET_SCYTHER_INTRO_1             ; TILEMAP_SCYTHER_INTRO
-	tilemap ScytherIntroCGBTilemap,          TILESET_SCYTHER_INTRO_2             ; TILEMAP_SCYTHER_INTRO_CGB
-	tilemap AerodactylIntroTilemap,          TILESET_AERODACTYL_INTRO_1          ; TILEMAP_AERODACTYL_INTRO
-	tilemap AerodactylIntroCGBTilemap,       TILESET_AERODACTYL_INTRO_2          ; TILEMAP_AERODACTYL_INTRO_CGB
-	tilemap JapaneseTitleScreenTilemap,      TILESET_JAPANESE_TITLE_SCREEN       ; TILEMAP_JAPANESE_TITLE_SCREEN
-	tilemap JapaneseTitleScreenCGBTilemap,   TILESET_JAPANESE_TITLE_SCREEN_CGB   ; TILEMAP_JAPANESE_TITLE_SCREEN_CGB
-	tilemap SolidTiles1Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_1
-	tilemap SolidTiles2Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_2
-	tilemap SolidTiles3Tilemap,              TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_3
-	tilemap JapaneseTitleScreen2Tilemap,     TILESET_JAPANESE_TITLE_SCREEN_2     ; TILEMAP_JAPANESE_TITLE_SCREEN_2
-	tilemap JapaneseTitleScreen2CGBTilemap,  TILESET_JAPANESE_TITLE_SCREEN_2_CGB ; TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB
-	tilemap SolidTiles4Tilemap,              TILESET_SOLID_TILES_2               ; TILEMAP_SOLID_TILES_4
-	tilemap PlayerTilemap,                   TILESET_PLAYER                      ; TILEMAP_PLAYER
-	tilemap OpponentTilemap,                 TILESET_RONALD                      ; TILEMAP_OPPONENT
-	tilemap TitleScreenTilemap,              TILESET_TITLE_SCREEN                ; TILEMAP_TITLE_SCREEN
-	tilemap TitleScreenCGBTilemap,           TILESET_TITLE_SCREEN_CGB            ; TILEMAP_TITLE_SCREEN_CGB
-	tilemap CopyrightTilemap,                TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT
-	tilemap CopyrightCGBTilemap,             TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT_CGB
-	tilemap NintendoTilemap,                 TILESET_NINTENDO                    ; TILEMAP_NINTENDO
-	tilemap CompaniesTilemap,                TILESET_COMPANIES                   ; TILEMAP_COMPANIES
+	tilemap OverworldMapTilemap,               TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP
+	tilemap OverworldMapCGBTilemap,            TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP_CGB
+	tilemap MasonLaboratoryTilemap,            TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY
+	tilemap MasonLaboratoryCGBTilemap,         TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY_CGB
+	tilemap ChallengeMachineMapEventTilemap,   TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT
+	tilemap ChallengeMachineMapEventCGBTilemap,TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT_CGB
+	tilemap DeckMachineRoomTilemap,            TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM
+	tilemap DeckMachineRoomCGBTilemap,         TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM_CGB
+	tilemap DeckMachineMapEventTilemap,        TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT
+	tilemap DeckMachineMapEventCGBTilemap,     TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+	tilemap IshiharaTilemap,                   TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA
+	tilemap IshiharaCGBTilemap,                TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA_CGB
+	tilemap FightingClubEntranceTilemap,       TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE
+	tilemap FightingClubEntranceCGBTilemap,    TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE_CGB
+	tilemap RockClubEntranceTilemap,           TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE
+	tilemap RockClubEntranceCGBTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_ROCK_CLUB_ENTRANCE_CGB
+	tilemap WaterClubEntranceTilemap,          TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE
+	tilemap WaterClubEntranceCGBTilemap,       TILESET_CLUB_ENTRANCE               ; TILEMAP_WATER_CLUB_ENTRANCE_CGB
+	tilemap LightningClubEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE
+	tilemap LightningClubEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_LIGHTNING_CLUB_ENTRANCE_CGB
+	tilemap GrassClubEntranceTilemap,          TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE
+	tilemap GrassClubEntranceCGBTilemap,       TILESET_CLUB_ENTRANCE               ; TILEMAP_GRASS_CLUB_ENTRANCE_CGB
+	tilemap PsychicClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE
+	tilemap PsychicClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_PSYCHIC_CLUB_ENTRANCE_CGB
+	tilemap ScienceClubEntranceTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE
+	tilemap ScienceClubEntranceCGBTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_SCIENCE_CLUB_ENTRANCE_CGB
+	tilemap FireClubEntranceTilemap,           TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE
+	tilemap FireClubEntranceCGBTilemap,        TILESET_CLUB_ENTRANCE               ; TILEMAP_FIRE_CLUB_ENTRANCE_CGB
+	tilemap ChallengeHallEntranceTilemap,      TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE
+	tilemap ChallengeHallEntranceCGBTilemap,   TILESET_CLUB_ENTRANCE               ; TILEMAP_CHALLENGE_HALL_ENTRANCE_CGB
+	tilemap ClubLobbyTilemap,                  TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY
+	tilemap ClubLobbyCGBTilemap,               TILESET_CLUB_LOBBY                  ; TILEMAP_CLUB_LOBBY_CGB
+	tilemap FightingClubTilemap,               TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB
+	tilemap FightingClubCGBTilemap,            TILESET_FIGHTING_CLUB               ; TILEMAP_FIGHTING_CLUB_CGB
+	tilemap RockClubTilemap,                   TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB
+	tilemap RockClubCGBTilemap,                TILESET_ROCK_CLUB                   ; TILEMAP_ROCK_CLUB_CGB
+	tilemap WaterClubTilemap,                  TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB
+	tilemap WaterClubCGBTilemap,               TILESET_WATER_CLUB                  ; TILEMAP_WATER_CLUB_CGB
+	tilemap LightningClubTilemap,              TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB
+	tilemap LightningClubCGBTilemap,           TILESET_LIGHTNING_CLUB              ; TILEMAP_LIGHTNING_CLUB_CGB
+	tilemap GrassClubTilemap,                  TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB
+	tilemap GrassClubCGBTilemap,               TILESET_GRASS_CLUB                  ; TILEMAP_GRASS_CLUB_CGB
+	tilemap PsychicClubTilemap,                TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB
+	tilemap PsychicClubCGBTilemap,             TILESET_PSYCHIC_CLUB                ; TILEMAP_PSYCHIC_CLUB_CGB
+	tilemap ScienceClubTilemap,                TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB
+	tilemap ScienceClubCGBTilemap,             TILESET_SCIENCE_CLUB                ; TILEMAP_SCIENCE_CLUB_CGB
+	tilemap FireClubTilemap,                   TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB
+	tilemap FireClubCGBTilemap,                TILESET_FIRE_CLUB                   ; TILEMAP_FIRE_CLUB_CGB
+	tilemap ChallengeHallTilemap,              TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL
+	tilemap ChallengeHallCGBTilemap,           TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL_CGB
+	tilemap PokemonDomeEntranceTilemap,        TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE
+	tilemap PokemonDomeEntranceCGBTilemap,     TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
+	tilemap PokemonDomeDoorMapEventTilemap,    TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT
+	tilemap PokemonDomeDoorMapEventCGBTilemap, TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT_CGB
+	tilemap PokemonDomeTilemap,                TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME
+	tilemap PokemonDomeCGBTilemap,             TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME_CGB
+	tilemap HallOfHonorDoorMapEventTilemap,    TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT
+	tilemap HallOfHonorDoorMapEventCGBTilemap, TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT_CGB
+	tilemap HallOfHonorTilemap,                TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR
+	tilemap HallOfHonorCGBTilemap,             TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR_CGB
+	tilemap CardPopCGBTilemap,                 TILESET_CARD_POP                    ; TILEMAP_CARD_POP_CGB
+	tilemap CardPopTilemap,                    TILESET_CARD_POP                    ; TILEMAP_CARD_POP
+	tilemap GrassMedalTilemap,                 TILESET_MEDAL                       ; TILEMAP_GRASS_MEDAL
+	tilemap ScienceMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_SCIENCE_MEDAL
+	tilemap FireMedalTilemap,                  TILESET_MEDAL                       ; TILEMAP_FIRE_MEDAL
+	tilemap WaterMedalTilemap,                 TILESET_MEDAL                       ; TILEMAP_WATER_MEDAL
+	tilemap LightningMedalTilemap,             TILESET_MEDAL                       ; TILEMAP_LIGHTNING_MEDAL
+	tilemap FightingMedalTilemap,              TILESET_MEDAL                       ; TILEMAP_FIGHTING_MEDAL
+	tilemap RockMedalTilemap,                  TILESET_MEDAL                       ; TILEMAP_ROCK_MEDAL
+	tilemap PsychicMedalTilemap,               TILESET_MEDAL                       ; TILEMAP_PSYCHIC_MEDAL
+	tilemap GameBoyLinkCGBTilemap,             TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CGB
+	tilemap GameBoyLinkTilemap,                TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK
+	tilemap GameBoyLinkConnectingCGBTilemap,   TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING_CGB
+	tilemap GameBoyLinkConnectingTilemap,      TILESET_GAMEBOY_LINK                ; TILEMAP_GAMEBOY_LINK_CONNECTING
+	tilemap GameBoyPrinterCGBTilemap,          TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER_CGB
+	tilemap GameBoyPrinterTilemap,             TILESET_GAMEBOY_PRINTER             ; TILEMAP_GAMEBOY_PRINTER
+	tilemap ColosseumTilemap,                  TILESET_COLOSSEUM_1                 ; TILEMAP_COLOSSEUM
+	tilemap ColosseumCGBTilemap,               TILESET_COLOSSEUM_2                 ; TILEMAP_COLOSSEUM_CGB
+	tilemap EvolutionTilemap,                  TILESET_EVOLUTION_1                 ; TILEMAP_EVOLUTION
+	tilemap EvolutionCGBTilemap,               TILESET_EVOLUTION_2                 ; TILEMAP_EVOLUTION_CGB
+	tilemap MysteryTilemap,                    TILESET_MYSTERY_1                   ; TILEMAP_MYSTERY
+	tilemap MysteryCGBTilemap,                 TILESET_MYSTERY_2                   ; TILEMAP_MYSTERY_CGB
+	tilemap LaboratoryTilemap,                 TILESET_LABORATORY_1                ; TILEMAP_LABORATORY
+	tilemap LaboratoryCGBTilemap,              TILESET_LABORATORY_2                ; TILEMAP_LABORATORY_CGB
+	tilemap CharizardIntroTilemap,             TILESET_CHARIZARD_INTRO_1           ; TILEMAP_CHARIZARD_INTRO
+	tilemap CharizardIntroCGBTilemap,          TILESET_CHARIZARD_INTRO_2           ; TILEMAP_CHARIZARD_INTRO_CGB
+	tilemap ScytherIntroTilemap,               TILESET_SCYTHER_INTRO_1             ; TILEMAP_SCYTHER_INTRO
+	tilemap ScytherIntroCGBTilemap,            TILESET_SCYTHER_INTRO_2             ; TILEMAP_SCYTHER_INTRO_CGB
+	tilemap AerodactylIntroTilemap,            TILESET_AERODACTYL_INTRO_1          ; TILEMAP_AERODACTYL_INTRO
+	tilemap AerodactylIntroCGBTilemap,         TILESET_AERODACTYL_INTRO_2          ; TILEMAP_AERODACTYL_INTRO_CGB
+	tilemap JapaneseTitleScreenTilemap,        TILESET_JAPANESE_TITLE_SCREEN       ; TILEMAP_JAPANESE_TITLE_SCREEN
+	tilemap JapaneseTitleScreenCGBTilemap,     TILESET_JAPANESE_TITLE_SCREEN_CGB   ; TILEMAP_JAPANESE_TITLE_SCREEN_CGB
+	tilemap SolidTiles1Tilemap,                TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_1
+	tilemap SolidTiles2Tilemap,                TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_2
+	tilemap SolidTiles3Tilemap,                TILESET_SOLID_TILES_1               ; TILEMAP_SOLID_TILES_3
+	tilemap JapaneseTitleScreen2Tilemap,       TILESET_JAPANESE_TITLE_SCREEN_2     ; TILEMAP_JAPANESE_TITLE_SCREEN_2
+	tilemap JapaneseTitleScreen2CGBTilemap,    TILESET_JAPANESE_TITLE_SCREEN_2_CGB ; TILEMAP_JAPANESE_TITLE_SCREEN_2_CGB
+	tilemap SolidTiles4Tilemap,                TILESET_SOLID_TILES_2               ; TILEMAP_SOLID_TILES_4
+	tilemap PlayerTilemap,                     TILESET_PLAYER                      ; TILEMAP_PLAYER
+	tilemap OpponentTilemap,                   TILESET_RONALD                      ; TILEMAP_OPPONENT
+	tilemap TitleScreenTilemap,                TILESET_TITLE_SCREEN                ; TILEMAP_TITLE_SCREEN
+	tilemap TitleScreenCGBTilemap,             TILESET_TITLE_SCREEN_CGB            ; TILEMAP_TITLE_SCREEN_CGB
+	tilemap CopyrightTilemap,                  TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT
+	tilemap CopyrightCGBTilemap,               TILESET_COPYRIGHT                   ; TILEMAP_COPYRIGHT_CGB
+	tilemap NintendoTilemap,                   TILESET_NINTENDO                    ; TILEMAP_NINTENDO
+	tilemap CompaniesTilemap,                  TILESET_COMPANIES                   ; TILEMAP_COMPANIES
 
 ; \1 = pointer
 ; \2 = number of tiles
@@ -2359,22 +2359,22 @@ MasonLaboratoryCGBTilemap:: ; 81d2e (20:5d2e)
 MasonLaboratoryCGBPermissions:
 	INCBIN "data/maps/permissions/mason_laboratory_cgb.bin"
 
-Unknown1Tilemap:: ; 81ed1 (20:5ed1)
+ChallengeMachineMapEventTilemap:: ; 81ed1 (20:5ed1)
 	db $04 ; width
 	db $06 ; height
-	dw Unknown1Permissions
+	dw ChallengeMachineMapEventPermissions
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/unknown1.bin"
-Unknown1Permissions:
+ChallengeMachineMapEventPermissions:
 	INCBIN "data/maps/permissions/unknown1.bin"
 
-Unknown1CGBTilemap:: ; 81ef5 (20:5ef5)
+ChallengeMachineMapEventCGBTilemap:: ; 81ef5 (20:5ef5)
 	db $04 ; width
 	db $06 ; height
-	dw Unknown1CGBPermissions
+	dw ChallengeMachineMapEventCGBPermissions
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/unknown1_cgb.bin"
-Unknown1CGBPermissions:
+ChallengeMachineMapEventCGBPermissions:
 	INCBIN "data/maps/permissions/unknown1_cgb.bin"
 
 DeckMachineRoomTilemap:: ; 81f26 (20:5f26)
@@ -2395,22 +2395,22 @@ DeckMachineRoomCGBTilemap:: ; 81feb (20:5feb)
 DeckMachineRoomCGBPermissions:
 	INCBIN "data/maps/permissions/deck_machine_room_cgb.bin"
 
-Unknown2Tilemap:: ; 82143 (20:6143)
+DeckMachineMapEventTilemap:: ; 82143 (20:6143)
 	db $04 ; width
 	db $01 ; height
-	dw Unknown2Permissions
+	dw DeckMachineMapEventPermissions
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_2.bin"
-Unknown2Permissions:
+DeckMachineMapEventPermissions:
 	INCBIN "data/maps/permissions/unknown_2.bin"
 
-Unknown2CGBTilemap:: ; 82150 (20:6150)
+DeckMachineMapEventCGBTilemap:: ; 82150 (20:6150)
 	db $04 ; width
 	db $01 ; height
-	dw Unknown2CGBPermissions
+	dw DeckMachineMapEventCGBPermissions
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_2_cgb.bin"
-Unknown2CGBPermissions:
+DeckMachineMapEventCGBPermissions:
 	INCBIN "data/maps/permissions/unknown_2_cgb.bin"
 
 IshiharaTilemap:: ; 82160 (20:6160)
@@ -2647,40 +2647,40 @@ RockClubCGBTilemap:: ; 839d6 (20:79d6)
 RockClubCGBPermissions:
 	INCBIN "data/maps/permissions/rock_club_cgb.bin"
 
-Unknown3Tilemap:: ; 83bf1 (20:7bf1)
+PokemonDomeDoorMapEventTilemap:: ; 83bf1 (20:7bf1)
 	db $04 ; width
 	db $03 ; height
-	dw Unknown3Permissions
+	dw PokemonDomeDoorMapEventPermissions
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_3.bin"
-Unknown3Permissions:
+PokemonDomeDoorMapEventPermissions:
 	INCBIN "data/maps/permissions/unknown_3.bin"
 
-Unknown3CGBTilemap:: ; 83c03 (20:7c03)
+PokemonDomeDoorMapEventCGBTilemap:: ; 83c03 (20:7c03)
 	db $04 ; width
 	db $03 ; height
-	dw Unknown3CGBPermissions
+	dw PokemonDomeDoorMapEventCGBPermissions
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_3_cgb.bin"
-Unknown3CGBPermissions:
+PokemonDomeDoorMapEventCGBPermissions:
 	INCBIN "data/maps/permissions/unknown_3_cgb.bin"
 
-Unknown4Tilemap:: ; 83c1a (20:7c1a)
+HallOfHonorDoorMapEventTilemap:: ; 83c1a (20:7c1a)
 	db $04 ; width
 	db $03 ; height
-	dw Unknown4Permissions
+	dw HallOfHonorDoorMapEventPermissions
 	db FALSE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_4.bin"
-Unknown4Permissions:
+HallOfHonorDoorMapEventPermissions:
 	INCBIN "data/maps/permissions/unknown_4.bin"
 
-Unknown4CGBTilemap:: ; 83c26 (20:7c26)
+HallOfHonorDoorMapEventCGBTilemap:: ; 83c26 (20:7c26)
 	db $04 ; width
 	db $03 ; height
-	dw Unknown4CGBPermissions
+	dw HallOfHonorDoorMapEventCGBPermissions
 	db TRUE ; cgb mode
 	INCBIN "data/maps/tiles/unknown_4_cgb.bin"
-Unknown4CGBPermissions:
+HallOfHonorDoorMapEventCGBPermissions:
 	INCBIN "data/maps/permissions/unknown_4_cgb.bin"
 
 GrassMedalTilemap:: ; 83c36 (20:7c36)
