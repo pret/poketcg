@@ -1160,12 +1160,12 @@ StoreOWFramesetSubgroup: ; 805c1 (20:45c1)
 
 INCLUDE "data/map_ow_framesets.asm"
 
-; clears wd323
+; clears wOWMapEvents
 Func_80b7a: ; 80b7a (20:4b7a)
 	push hl
 	push bc
 	ld c, $b
-	ld hl, wd323
+	ld hl, wOWMapEvents
 	xor a
 .loop
 	ld [hli], a
@@ -1176,6 +1176,7 @@ Func_80b7a: ; 80b7a (20:4b7a)
 	ret
 ; 0x80b89
 
+; a = MAP_EVENT_* constant
 Func_80b89: ; 80b89 (20:4b89)
 	push hl
 	push bc
@@ -1183,8 +1184,8 @@ Func_80b89: ; 80b89 (20:4b89)
 	ld c, a
 	ld a, TRUE
 	ld [wWriteBGMapToSRAM], a
-	ld b, $00
-	ld hl, wd323
+	ld b, $0
+	ld hl, wOWMapEvents
 	add hl, bc
 	ld a, [hl]
 	or a
@@ -1223,7 +1224,7 @@ Func_80baa: ; 80baa (20:4baa)
 	push af
 
 	ld b, $0
-	ld hl, wd323
+	ld hl, wOWMapEvents
 	add hl, bc
 	ld a, $1
 	ld [hl], a
@@ -1232,7 +1233,7 @@ Func_80baa: ; 80baa (20:4baa)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, .unknown_80c21
+	ld hl, .tilemap_pointers
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
@@ -1281,41 +1282,42 @@ Func_80baa: ; 80baa (20:4baa)
 	pop hl
 	ret
 
-.unknown_80c21
-	dw .data_1
-	dw .data_2
-	dw .data_3
-	dw .data_4
-	dw .data_5
-	dw .data_6
-	dw .data_7
-	dw .data_8
-	dw .data_9
-	dw .data_10
-	dw .data_11
+.tilemap_pointers
+	dw .PokemonDomeDoor      ; MAP_EVENT_POKEMON_DOME_DOOR
+	dw .HallOfHonorDoor      ; MAP_EVENT_HALL_OF_HONOR_DOOR
+	dw .FightingDeckMachine  ; MAP_EVENT_FIGHTING_DECK_MACHINE
+	dw .RockDeckMachine      ; MAP_EVENT_ROCK_DECK_MACHINE
+	dw .WaterDeckMachine     ; MAP_EVENT_WATER_DECK_MACHINE
+	dw .LightningDeckMachine ; MAP_EVENT_LIGHTNING_DECK_MACHINE
+	dw .GrassDeckMachine     ; MAP_EVENT_GRASS_DECK_MACHINE
+	dw .PsychicDeckMachine   ; MAP_EVENT_PSYCHIC_DECK_MACHINE
+	dw .ScienceDeckMachine   ; MAP_EVENT_SCIENCE_DECK_MACHINE
+	dw .FireDeckMachine      ; MAP_EVENT_FIRE_DECK_MACHINE
+	dw .ChallengeMachine     ; MAP_EVENT_CHALLENGE_MACHINE
 
-.data_1
-	db $16, $00, TILEMAP_UNKNOWN_3, TILEMAP_UNKNOWN_3_CGB
-.data_2
-	db $0e, $00, TILEMAP_UNKNOWN_4, TILEMAP_UNKNOWN_4_CGB
-.data_3
-	db $06, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_4
-	db $0a, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_5
-	db $0e, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_6
-	db $12, $02, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_7
-	db $0e, $0a, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_8
-	db $12, $0a, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_9
-	db $0e, $12, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_10
-	db $12, $12, TILEMAP_UNKNOWN_2, TILEMAP_UNKNOWN_2_CGB
-.data_11
-	db $0a, $00, TILEMAP_UNKNOWN_1, TILEMAP_UNKNOWN_1_CGB
+; x coordinate, y coordinate, non-cgb tilemap, cgb tilemap
+.PokemonDomeDoor
+	db $16, $00, TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT, TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT_CGB
+.HallOfHonorDoor
+	db $0e, $00, TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT, TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT_CGB
+.FightingDeckMachine
+	db $06, $02, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.RockDeckMachine
+	db $0a, $02, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.WaterDeckMachine
+	db $0e, $02, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.LightningDeckMachine
+	db $12, $02, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.GrassDeckMachine
+	db $0e, $0a, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.PsychicDeckMachine
+	db $12, $0a, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.ScienceDeckMachine
+	db $0e, $12, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.FireDeckMachine
+	db $12, $12, TILEMAP_DECK_MACHINE_MAP_EVENT, TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
+.ChallengeMachine
+	db $0a, $00, TILEMAP_CHALLENGE_MACHINE_MAP_EVENT, TILEMAP_CHALLENGE_MACHINE_MAP_EVENT_CGB
 
 	ret ; unreferenced stray ret?
 
@@ -1607,12 +1609,12 @@ Tilemaps: ; 80e67 (20:4e67)
 	tilemap OverworldMapCGBTilemap,          TILESET_OVERWORLD_MAP               ; TILEMAP_OVERWORLD_MAP_CGB
 	tilemap MasonLaboratoryTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY
 	tilemap MasonLaboratoryCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_MASON_LABORATORY_CGB
-	tilemap Unknown1Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_1
-	tilemap Unknown1CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_1_CGB
+	tilemap Unknown1Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT
+	tilemap Unknown1CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_CHALLENGE_MACHINE_MAP_EVENT_CGB
 	tilemap DeckMachineRoomTilemap,          TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM
 	tilemap DeckMachineRoomCGBTilemap,       TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_ROOM_CGB
-	tilemap Unknown2Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_2
-	tilemap Unknown2CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_UNKNOWN_2_CGB
+	tilemap Unknown2Tilemap,                 TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT
+	tilemap Unknown2CGBTilemap,              TILESET_MASON_LABORATORY            ; TILEMAP_DECK_MACHINE_MAP_EVENT_CGB
 	tilemap IshiharaTilemap,                 TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA
 	tilemap IshiharaCGBTilemap,              TILESET_ISHIHARA                    ; TILEMAP_ISHIHARA_CGB
 	tilemap FightingClubEntranceTilemap,     TILESET_CLUB_ENTRANCE               ; TILEMAP_FIGHTING_CLUB_ENTRANCE
@@ -1655,12 +1657,12 @@ Tilemaps: ; 80e67 (20:4e67)
 	tilemap ChallengeHallCGBTilemap,         TILESET_CHALLENGE_HALL              ; TILEMAP_CHALLENGE_HALL_CGB
 	tilemap PokemonDomeEntranceTilemap,      TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE
 	tilemap PokemonDomeEntranceCGBTilemap,   TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_ENTRANCE_CGB
-	tilemap Unknown3Tilemap,                 TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_UNKNOWN_3
-	tilemap Unknown3CGBTilemap,              TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_UNKNOWN_3_CGB
+	tilemap Unknown3Tilemap,                 TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT
+	tilemap Unknown3CGBTilemap,              TILESET_POKEMON_DOME_ENTRANCE       ; TILEMAP_POKEMON_DOME_DOOR_MAP_EVENT_CGB
 	tilemap PokemonDomeTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME
 	tilemap PokemonDomeCGBTilemap,           TILESET_POKEMON_DOME                ; TILEMAP_POKEMON_DOME_CGB
-	tilemap Unknown4Tilemap,                 TILESET_POKEMON_DOME                ; TILEMAP_UNKNOWN_4
-	tilemap Unknown4CGBTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_UNKNOWN_4_CGB
+	tilemap Unknown4Tilemap,                 TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT
+	tilemap Unknown4CGBTilemap,              TILESET_POKEMON_DOME                ; TILEMAP_HALL_OF_HONOR_DOOR_MAP_EVENT_CGB
 	tilemap HallOfHonorTilemap,              TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR
 	tilemap HallOfHonorCGBTilemap,           TILESET_HALL_OF_HONOR               ; TILEMAP_HALL_OF_HONOR_CGB
 	tilemap CardPopCGBTilemap,               TILESET_CARD_POP                    ; TILEMAP_CARD_POP_CGB

@@ -1194,7 +1194,7 @@ Func_11430: ; 11430 (4:5430)
 	dw wNPCDuelist,            1, $ff00 ; sNPCDuelist
 	dw wChallengeHallNPC,      1, $ff00 ; sChallengeHallNPC
 	dw wd698,                  4, $ff00 ; sb818
-	dw wd323,                 11, $ff00 ; sb81c
+	dw wOWMapEvents,          11, $ff00 ; sOWMapEvents
 	dw Data_1156c,             1, $ff00 ; sb827
 	dw wd0b8,                  1, $ff00 ; sb828
 	dw wd0b9,                  1, $ff00 ; sb829
