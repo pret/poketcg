@@ -50,6 +50,22 @@ OWMODE_MOVE           EQU 1
 OWMODE_START_SCRIPT   EQU 2
 OWMODE_SCRIPT         EQU 3
 
+; max number of player names that
+; can be written to sCardPopNameList
+CARDPOP_NAME_LIST_MAX_ELEMS EQU 16
+CARDPOP_NAME_LIST_SIZE EQUS "CARDPOP_NAME_LIST_MAX_ELEMS * NAME_BUFFER_LENGTH"
+
+; commands transmitted through IR to be
+; executed by the other device
+; (see ExecuteReceivedIRCommands)
+	const_def
+	const IRCMD_CLOSE             ; $0
+	const IRCMD_RETURN_WO_CLOSING ; $1
+	const IRCMD_TRANSMIT_DATA     ; $2
+	const IRCMD_RECEIVE_DATA      ; $3
+	const IRCMD_CALL_FUNCTION     ; $4
+NUM_IR_COMMANDS EQU const_value
+
 NULL EQU $0000
 
 FALSE EQU 0

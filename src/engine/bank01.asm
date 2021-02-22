@@ -8493,8 +8493,9 @@ Func_74dc: ; 74dc (1:74dc)
 
 	INCROM $7528, $7571
 
-Func_7571: ; 7571 (1:7571)
-	farcall Func_19c20
+; handles all the Card Pop! functionality
+DoCardPop: ; 7571 (1:7571)
+	farcall _DoCardPop
 	ret
 
 Func_7576: ; 7576 (1:7576)

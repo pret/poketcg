@@ -784,27 +784,27 @@ Text0189: ; 39d1b (e:5d1b)
 	line "with <RAMNAME>."
 	done
 
-Text018a: ; 39d39 (e:5d39)
+AreYouBothReadyToCardPopText: ; 39d39 (e:5d39)
 	text "Are you both ready"
 	line "to Card Pop! ?"
 	done
 
-Text018b: ; 39d5c (e:5d5c)
+ThePopWasntSuccessfulText: ; 39d5c (e:5d5c)
 	text "The Pop! wasn't successful."
 	line "Please try again."
 	done
 
-Text018c: ; 39d8b (e:5d8b)
+CannotCardPopWithFriendPreviouslyPoppedWithText: ; 39d8b (e:5d8b)
 	text "You cannot Card Pop! with a"
 	line "friend you previously Popped! with."
 	done
 
-Text018d: ; 39dcc (e:5dcc)
+PositionGameBoyColorsAndPressAButtonText: ; 39dcc (e:5dcc)
 	text "Position the Game Boy Colors"
 	line "and press the A Button."
 	done
 
-Text018e: ; 39e02 (e:5e02)
+ReceivedThroughCardPopText: ; 39e02 (e:5e02)
 	text "Received <RAMTEXT>"
 	line "through Card Pop!"
 	done

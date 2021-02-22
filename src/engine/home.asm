@@ -2310,7 +2310,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ld [hl], $0
 	ret
 
-Func_0cc5: ; 0cc5 (0:0cc5)
+Func_cc5: ; 0cc5 (0:0cc5)
 	ld hl, wSerialRecvCounter
 	or a
 	jr nz, .asm_cdc
@@ -10975,8 +10975,10 @@ Func_3a45: ; 3a45 (0:3a45)
 	farcall Func_11343
 	ret
 
-Func_3a4a: ; 3a4a (0:3a4a)
-	farcall Func_115a3
+; adds card with card ID in register a to collection
+; and updates album progress in RAM
+AddCardToCollectionAndUpdateAlbumProgress: ; 3a4a (0:3a4a)
+	farcall _AddCardToCollectionAndUpdateAlbumProgress
 	ret
 
 SaveGame: ; 3a4f (0:3a4f)

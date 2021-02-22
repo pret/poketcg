@@ -1031,7 +1031,7 @@ PrintingWasInterruptedText: ; 37b42 (d:7b42)
 	text "Printing was interrupted."
 	done
 
-Text00dd: ; 37b5d (d:7b5d)
+CardPopCannotBePlayedWithTheGameBoyText: ; 37b5d (d:7b5d)
 	text "Card Pop! cannot be played"
 	line "with the Game Boy."
 	line "Please use a"

@@ -1089,7 +1089,31 @@ Func_11238: ; 11238 (4:5238)
 	INCROM $11238, $1124d
 
 Func_1124d: ; 1124d (4:524d)
-	INCROM $1124d, $11320
+	INCROM $1124d, $1127f
+
+; writes in de total num of cards collected
+; and in (de + 1) total num of cards to collect
+; also updates wTotalNumCardsCollected and wTotalNumCardsToCollect 
+UpdateAlbumProgress: ; 1127f (4:527f)
+	push hl
+	push de
+	push de
+	call GetCardAlbumProgress
+	call EnableSRAM
+	pop hl
+	ld a, d
+	ld [wTotalNumCardsCollected], a
+	ld [hli], a
+	ld a, e
+	ld [wTotalNumCardsToCollect], a
+	ld [hl], a
+	call DisableSRAM
+	pop de
+	pop hl
+	ret
+; 0x11299
+
+	INCROM $11299, $11320
 
 Func_11320: ; 11320 (4:5320)
 	INCROM $11320, $11343
@@ -1246,8 +1270,36 @@ _SaveGame: ; 1157c (4:557c)
 	call Func_11238
 	ret
 
-Func_115a3: ; 115a3 (4:55a3)
-	INCROM $115a3, $1162a
+_AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
+	ld [wCardToAddToCollection], a
+	push hl
+	push bc
+	push de
+	ldh a, [hBankSRAM]
+	push af
+	ld a, BANK(sAlbumProgress)
+	call BankswitchSRAM
+	ld a, [wCardToAddToCollection]
+	call AddCardToCollection
+	ld de, sAlbumProgress
+	call UpdateAlbumProgress
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM ; unnecessary
+
+; unintentional? runs the same write operation
+; on the same address but on the current SRAM bank
+	ld a, [wCardToAddToCollection]
+	call AddCardToCollection
+	ld de, $b8fe
+	call UpdateAlbumProgress
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x115d4
+
+	INCROM $115d4, $1162a
 
 INCLUDE "data/map_scripts.asm"
 
@@ -2825,7 +2877,7 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 MainMenu_CardPop: ; 12768 (4:6768)
 	ld a, MUSIC_CARD_POP
 	call PlaySong
-	bank1call Func_7571
+	bank1call DoCardPop
 	farcall WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	ld a, MUSIC_STOP
