@@ -2600,7 +2600,6 @@ CreateCardPopCandidateList: ; 19df7 (6:5df7)
 	push bc
 	ld b, a
 
-; first list all card IDs in hl which:
 	lb de, 0, GRASS_ENERGY
 .loop_card_ids
 	call LoadCardDataToBuffer1_FromCardID
