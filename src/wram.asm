@@ -31,11 +31,21 @@ wDecompressionSecondaryBuffer:: ; c000
 wDecompressionSecondaryBufferStart:: ; c0ef
 	ds $11
 
+NEXTU
+
+; names of the last players who have done
+; Card Pop! with current save file
+wCardPopNameList:: ; c000
+	ds CARDPOP_NAME_LIST_SIZE
+
 ENDU
 
 	ds $100
 
 SECTION "WRAM0 Duels 1", WRAM0
+
+; this union spans from c200 to c3ff
+UNION
 
 ; In order to be identified during a duel, the 60 cards of each duelist are given an index between 0 and 59.
 ; These indexes are assigned following the order of the card list in wPlayerDeck or wOpponentDeck,
@@ -387,6 +397,15 @@ wOpponentArenaCardLastTurnEffect:: ; c3f8
 
 	ds $7
 
+NEXTU
+
+; buffer used to store the Card Pop! name list
+; that is received from the other player
+wOtherPlayerCardPopNameList:: ; c200
+	ds CARDPOP_NAME_LIST_SIZE
+
+ENDU
+
 UNION
 
 ; temporary list of the cards drawn from a booster pack
@@ -401,6 +420,13 @@ wBoosterCardsDrawnEnd:: ; c416
 NEXTU
 
 wPlayerDeck:: ; c400
+	ds $80
+
+NEXTU
+
+; lists all the possible candidates of cards
+; that can be received through Card Pop!
+wCardPopCardCandidates:: ; c400
 	ds $80
 
 ENDU
@@ -423,7 +449,28 @@ wDefaultText:: ; c590
 	ds $2
 
 wc592:: ; c592
-	ds $6e
+	ds $3
+
+	ds $55
+
+wc5ea:: ; c5ea
+	ds $1
+
+; related with wc5ef for Card Pop! communications
+wc5eb:: ; c5eb
+	ds $4
+
+; related with wc5eb for Card Pop! communications
+wc5ef:: ; c5ef
+	ds $4
+
+; stores the result from LookUpNameInCardPopNameList
+; is $ff if name was found in the Card Pop! list
+; is $00 otherwise
+wCardPopNameSearchResult:: ; c5f3
+	ds $1
+
+	ds $c
 
 SECTION "WRAM0 Text Engine", WRAM0
 
@@ -1745,7 +1792,7 @@ wce6d:: ; ce6d
 wce6e:: ; ce6e
 	ds $1
 
-wce6f:: ; ce6f
+wPrinterStatus:: ; ce6f
 	ds $1
 
 wce70:: ; ce70
@@ -1793,7 +1840,39 @@ wce83:: ; ce83
 wce84:: ; ce84
 	ds $1
 
-	ds $1c
+; buffer to store data that will be sent/received through IR
+wIRDataBuffer:: ; ce85
+	ds $8
+
+wVBlankFunctionTrampolineBackup:: ; ce8d
+	ds $2
+
+wce8f:: ; ce8f
+	ds $1
+
+	ds $9
+
+wce99:: ; ce99
+	ds $1
+
+wce9a:: ; ce9a
+	ds $1
+
+wce9b:: ; ce9b
+	ds $1
+
+	ds $2
+
+wce9e:: ; ce9e
+	ds $1
+
+wce9f:: ; ce9f
+	ds $1
+
+; which song to play when obtaining the card from Card Pop!
+; the card's rarity determines which song to play
+wCardPopCardObtainSong:: ; cea0
+	ds $1
 
 wcea1:: ; cea1
 	ds $1
@@ -2404,7 +2483,18 @@ wd3cb:: ; d3cb
 wd3cc:: ; d3cc
 	ds $1
 
-	ds $3
+; total number of cards the player has collected
+wTotalNumCardsCollected:: ; d3cd
+	ds $1
+
+; total number of cards to be collected
+; doesn't count the Phantom cards (Venusaur1 and Mew2)
+; unless they have already been collected
+wTotalNumCardsToCollect:: ; d3ce
+	ds $1
+
+wCardToAddToCollection:: ; d3cf
+	ds $1
 
 wd3d0:: ; d3d0
 	ds $1

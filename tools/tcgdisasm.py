@@ -308,7 +308,7 @@ unconditional_returns = [0xc9, 0xd9, 0xe7] # e7 begins a script, which is not ha
 absolute_jumps = [0xc3, 0xc2, 0xca, 0xd2, 0xda]
 call_commands = [0xcd, 0xc4, 0xcc, 0xd4, 0xdc, 0xdf, 0xef]
 relative_jumps = [0x18, 0x20, 0x28, 0x30, 0x38]
-unconditional_jumps = [0xc3, 0x18]
+unconditional_jumps = [0xc3, 0x18, 0xe9]
 
 # the event macros found in bank 3. They db a byte after calling so need to be treated specially
 event_macros = [(0xca8f,"set_event_value {}"),(0xcacd,"set_event_false {}"),(0xca84,"set_event_zero {}"), (0xcac2,"max_event_value {}"), (0xca69,"get_event_value {}")]

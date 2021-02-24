@@ -4372,6 +4372,8 @@ DisplayCardPage_PokemonOverview: ; 5b7d (1:5b7d)
 	; print the name, damage, and energy cost of each attack and/or Pokemon power that exists
 	; first attack at 5,10 and second at 5,12
 	lb bc, 5, 10
+
+.attacks
 	ld e, c
 	ld hl, wLoadedCard1Atk1Name
 	call PrintAttackOrPkmnPowerInformation
@@ -8441,10 +8443,59 @@ PlayAttackAnimation: ; 7494 (1:7494)
 	ret
 ; 0x74dc
 
-	INCROM $74dc, $7571
+Func_74dc: ; 74dc (1:74dc)
+	call EmptyScreen
+	call EnableLCD
+	ld a, GRASS_ENERGY
+	ld [wce9a], a
+.wait_input
+	call DoFrame
+	ldh a, [hDPadHeld]
+	ld b, a
+	ld a, [wce9a]
+; left
+	bit D_LEFT_F, b
+	jr z, .right
+	dec a ; previous card
+.right
+	bit D_RIGHT_F, b
+	jr z, .up
+	inc a ; next card
+.up
+	bit D_UP_F, b
+	jr z, .down
+	add 10
+.down
+	bit D_DOWN_F, b
+	jr z, .got_card_id
+	sub 10
 
-Func_7571: ; 7571 (1:7571)
-	farcall Func_19c20
+.got_card_id
+	ld [wce9a], a
+	lb bc, 5, 5
+	bank1call WriteTwoByteNumberInTxSymbolFormat
+	ldh a, [hKeysPressed]
+	and START
+	jr z, .wait_input
+	ld a, [wce9a]
+	ld e, a
+	ld d, $0
+.asm_751b
+	call LoadCardDataToBuffer1_FromCardID
+	ret c ; card not found
+	push de
+	ld a, e
+	call Func_758a
+	pop de
+	inc de
+	jr .asm_751b
+; 0x7528
+
+	INCROM $7528, $7571
+
+; handles all the Card Pop! functionality
+DoCardPop: ; 7571 (1:7571)
+	farcall _DoCardPop
 	ret
 
 Func_7576: ; 7576 (1:7576)
@@ -8452,7 +8503,12 @@ Func_7576: ; 7576 (1:7576)
 	ret
 ; 0x757b
 
-	INCROM $757b, $758f
+	INCROM $757b, $758a
+
+Func_758a: ; 758a (1:758a)
+	farcall Func_19eb4
+	ret
+; 0x758f
 
 Func_758f: ; 758f (1:758f)
 	farcall Func_1a4cf

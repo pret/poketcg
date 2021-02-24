@@ -256,7 +256,7 @@ Func_80148: ; 80148 (20:4148)
 ; to either VRAM or SRAM, depending on wWriteBGMapToSRAM
 ; de is the target address in VRAM,
 ; if SRAM is the target address to copy,
-; copies data to sBGMap0 or sBGMap1
+; copies data to sGfxBuffer0 or sGfxBuffer1
 ; for VRAM0 or VRAM1 respectively
 CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, [wWriteBGMapToSRAM]
@@ -272,11 +272,11 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	push hl
-	ld hl, sBGMap0 - v0BGMap0
+	ld hl, sGfxBuffer0 - v0BGMap0
 	ldh a, [hBankVRAM]
 	or a
 	jr z, .got_pointer
-	ld hl, sBGMap1 - v1BGMap0
+	ld hl, sGfxBuffer1 - v1BGMap0
 .got_pointer
 	add hl, de
 	ld e, l
@@ -297,8 +297,8 @@ CopyBGDataToVRAMOrSRAM: ; 8016e (20:416e)
 	ret
 
 ; safely copies $20 bytes at a time
-; sBGMap0 -> v0BGMap0
-; sBGMap1 -> v0BGMap1 (if in CGB)
+; sGfxBuffer0 -> v0BGMap0
+; sGfxBuffer1 -> v0BGMap1 (if in CGB)
 SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	push hl
 	push bc
@@ -307,7 +307,7 @@ SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	push af
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
-	ld hl, sBGMap0
+	ld hl, sGfxBuffer0
 	ld de, v0BGMap0
 	ld c, $20
 .loop
@@ -323,7 +323,7 @@ SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	pop hl
 	push hl
 	push de
-	ld bc, sBGMap1 - sBGMap0 ; $400
+	ld bc, sGfxBuffer1 - sGfxBuffer0 ; $400
 	add hl, bc
 	call BankswitchVRAM1
 	ld b, $20
@@ -350,16 +350,16 @@ SafelyCopyBGMapFromSRAMToVRAM: ; 801a1 (20:41a1)
 	pop hl
 	ret
 
-; clears sBGMap0 and sBGMap1
+; clears sGfxBuffer0 and sGfxBuffer1
 ClearSRAMBGMaps: ; 801f1 (20:41f1)
 	push hl
 	push bc
 	ldh a, [hBankSRAM]
 	push af
-	ld a, BANK(sBGMap0) ; SRAM 1
+	ld a, BANK(sGfxBuffer0) ; SRAM 1
 	call BankswitchSRAM
-	ld hl, sBGMap0
-	ld bc, $800 ; sBGMap0 + sBGMap1
+	ld hl, sGfxBuffer0
+	ld bc, $800 ; sGfxBuffer0 + sGfxBuffer1
 	xor a
 	call FillMemoryWithA
 	pop af

@@ -7,8 +7,12 @@ s0a003:: ; a003
 	ds $1
 s0a004:: ; a004
 	ds $1
-s0a005:: ; a005
+
+; keeps track of the number of times Card Pop!
+; was done successfully within this save file
+sTotalCardPopsDone:: ; a005
 	ds $1
+
 sTextSpeed:: ; a006
 	ds $1
 
@@ -197,16 +201,47 @@ sba57:: ; ba57
 sba68:: ; ba68
 	ds $1
 
+	ds $97
+
+; keeps track of last 16 player's names that
+; this save file has done Card Pop! with
+sCardPopNameList:: ; bb00
+	ds CARDPOP_NAME_LIST_SIZE
+
 SECTION "SRAM1", SRAM
 
-; from VRAM0
-sBGMap0:: ds $400 ; a000
-; from VRAM1
-sBGMap1:: ds $400 ; a400
+; buffers used to temporary store gfx related data
+; such as tiles or BG maps
+sGfxBuffer0:: ; a000
+	ds $400
+	
+sGfxBuffer1:: ; a400
+	ds $400
+
+sGfxBuffer2:: ; a800
+	ds $400
+
+sGfxBuffer3:: ; ac00
+	ds $400
+
+sGfxBuffer4:: ; b000
+	ds $400
+
+sGfxBuffer5:: ; b400
+	ds $400
 
 SECTION "SRAM2", SRAM
 
-	ds $1c00
+	ds $18fe
+
+; byte 1 = total number of cards collected
+; byte 2 = total number of cards to collect
+;  (doesn't count Phantom cards unless they
+;   have been collected already)
+sAlbumProgress:: ; b8fe
+	ds $2
+
+	ds $300
 
 ; saved data of the current duel, including a two-byte checksum
 ; see SaveDuelDataToDE

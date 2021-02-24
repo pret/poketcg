@@ -1002,36 +1002,36 @@ BackUpIsBrokenText: ; 37a59 (d:7a59)
 	text "Back Up is broken."
 	done
 
-Text00d7: ; 37a6d (d:7a6d)
+PrinterIsNotConnectedText: ; 37a6d (d:7a6d)
 	text "Error No. 02:"
 	line "Printer is not connected."
 	done
 
-Text00d8: ; 37a96 (d:7a96)
+BatteriesHaveLostTheirChargeText: ; 37a96 (d:7a96)
 	text "Error No. 01:"
 	line "Batteries have lost their charge."
 	done
 
-Text00d9: ; 37ac7 (d:7ac7)
+PrinterPaperIsJammedText: ; 37ac7 (d:7ac7)
 	text "Error No. 03:"
 	line "Printer paper is jammed."
 	done
 
-Text00da: ; 37aef (d:7aef)
+CheckCableOrPrinterSwitchText: ; 37aef (d:7aef)
 	text "Error No. 02:"
 	line "Check cable or printer switch."
 	done
 
-Text00db: ; 37b1d (d:7b1d)
+PrinterPacketErrorText: ; 37b1d (d:7b1d)
 	text "Error No. 04:"
 	line "Printer Packet Error."
 	done
 
-Text00dc: ; 37b42 (d:7b42)
+PrintingWasInterruptedText: ; 37b42 (d:7b42)
 	text "Printing was interrupted."
 	done
 
-Text00dd: ; 37b5d (d:7b5d)
+CardPopCannotBePlayedWithTheGameBoyText: ; 37b5d (d:7b5d)
 	text "Card Pop! cannot be played"
 	line "with the Game Boy."
 	line "Please use a"

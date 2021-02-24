@@ -216,13 +216,13 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer UnableDueToToxicGasText                            ; 0x00d4
 	textpointer Text00d5                                           ; 0x00d5
 	textpointer BackUpIsBrokenText                                 ; 0x00d6
-	textpointer Text00d7                                           ; 0x00d7
-	textpointer Text00d8                                           ; 0x00d8
-	textpointer Text00d9                                           ; 0x00d9
-	textpointer Text00da                                           ; 0x00da
-	textpointer Text00db                                           ; 0x00db
-	textpointer Text00dc                                           ; 0x00dc
-	textpointer Text00dd                                           ; 0x00dd
+	textpointer PrinterIsNotConnectedText                          ; 0x00d7
+	textpointer BatteriesHaveLostTheirChargeText                   ; 0x00d8
+	textpointer PrinterPaperIsJammedText                           ; 0x00d9
+	textpointer CheckCableOrPrinterSwitchText                      ; 0x00da
+	textpointer PrinterPacketErrorText                             ; 0x00db
+	textpointer PrintingWasInterruptedText                         ; 0x00dc
+	textpointer CardPopCannotBePlayedWithTheGameBoyText            ; 0x00dd
 	textpointer SandAttackCheckText                                ; 0x00de
 	textpointer SmokescreenCheckText                               ; 0x00df
 	textpointer ParalysisCheckText                                 ; 0x00e0
@@ -395,11 +395,11 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0187                                           ; 0x0187
 	textpointer Text0188                                           ; 0x0188
 	textpointer Text0189                                           ; 0x0189
-	textpointer Text018a                                           ; 0x018a
-	textpointer Text018b                                           ; 0x018b
-	textpointer Text018c                                           ; 0x018c
-	textpointer Text018d                                           ; 0x018d
-	textpointer Text018e                                           ; 0x018e
+	textpointer AreYouBothReadyToCardPopText                       ; 0x018a
+	textpointer ThePopWasntSuccessfulText                          ; 0x018b
+	textpointer CannotCardPopWithFriendPreviouslyPoppedWithText    ; 0x018c
+	textpointer PositionGameBoyColorsAndPressAButtonText           ; 0x018d
+	textpointer ReceivedThroughCardPopText                         ; 0x018e
 	textpointer ReceivedCardText                                   ; 0x018f
 	textpointer ReceivedPromotionalCardText                        ; 0x0190
 	textpointer ReceivedLegendaryCardText                          ; 0x0191
@@ -419,7 +419,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text019f                                           ; 0x019f
 	textpointer Text01a0                                           ; 0x01a0
 	textpointer Text01a1                                           ; 0x01a1
-	textpointer Text01a2                                           ; 0x01a2
+	textpointer NowPrintingText                                    ; 0x01a2
 	textpointer DrMasonText                                        ; 0x01a3
 	textpointer DrawSevenCardsPracticeDuelText                     ; 0x01a4
 	textpointer ChooseGoldeenPracticeDuelText                      ; 0x01a5
