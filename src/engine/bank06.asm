@@ -171,7 +171,7 @@ OpenInPlayAreaScreen: ; 180d5 (6:40d5)
 .clairvoyance_on
 	ld de, OpenInPlayAreaScreen_TransitionTable2
 .clairvoyance_off
-	ld hl, wInPlayAreaInputTablePointer
+	ld hl, wMenuInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -481,7 +481,7 @@ in_play_area_cursor_transition: MACRO
 	cursor_transition \1, \2, \3, INPLAYAREA_\4, INPLAYAREA_\5, INPLAYAREA_\6, INPLAYAREA_\7
 ENDM
 
-; it's related to wInPlayAreaInputTablePointer.
+; it's related to wMenuInputTablePointer.
 ; with this table, the cursor moves into the proper location by the input.
 ; note that the unit of the position is not a 8x8 tile.
 OpenInPlayAreaScreen_TransitionTable1:
@@ -523,7 +523,7 @@ OpenInPlayAreaScreen_TransitionTable2:
 OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 	xor a
 	ld [wPlaysSfx], a
-	ld hl, wInPlayAreaInputTablePointer
+	ld hl, wMenuInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -696,7 +696,7 @@ OpenInPlayAreaScreen_HandleInput: ; 183bb (6:43bb)
 
 .draw_cursor ; 184a0 (6:44a0)
 	call ZeroObjectPositions
-	ld hl, wInPlayAreaInputTablePointer
+	ld hl, wMenuInputTablePointer
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -730,7 +730,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 	xor a
 	ld [wInPlayAreaCurPosition], a
 	ld de, OpenGlossaryScreen_TransitionTable ; this data is stored in bank 2.
-	ld hl, wInPlayAreaInputTablePointer
+	ld hl, wMenuInputTablePointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -2253,7 +2253,19 @@ Func_19b0d: ; 19b0d (6:5b0d)
 	ret
 ; 0x19b20
 
-	INCROM $19b20, $19c20
+	INCROM $19b20, $19b41
+
+Func_19b41: ; 19b41 (6:5b41)
+	INCROM $19b41, $19b8c
+
+Func_19b8c: ; 19b8c (6:5b8c)
+	INCROM $19b8c, $19bc5
+
+Func_19bc5: ; 19bc5 (6:5bc5)
+	INCROM $19bc5, $19bfb
+
+Func_19bfb: ; 19bfb (6:5bfb)
+	INCROM $19bfb, $19c20
 
 _DoCardPop: ; 19c20 (6:5c20)
 ; loads scene for Card Pop! screen
@@ -3125,10 +3137,10 @@ Func_1a138: ; 1a138 (6:6138)
 	ret
 
 .unknown_1a146
-	db $00, $20, $40, $60
-; 0x1a14a
+	db $00, $20, $40, $60, $7f
+; 0x1a14b
 
-	INCROM $1a14a, $1a435
+	INCROM $1a14b, $1a435
 
 ; compresses $28 tiles in sGfxBuffer5
 ; and writes it in sGfxBuffer5 + $28 tiles.

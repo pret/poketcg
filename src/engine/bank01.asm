@@ -8491,7 +8491,27 @@ Func_74dc: ; 74dc (1:74dc)
 	jr .asm_751b
 ; 0x7528
 
-	INCROM $7528, $7571
+	INCROM $7528, $755d
+
+Func_755d: ; 755d (1:755d)
+	farcall Func_19bfb
+	ret
+; 0x7562
+
+Func_7562: ; 7562 (1:7562)
+	farcall Func_19bc5
+	ret
+; 0x7567
+
+Func_7567: ; 7567 (1:7567)
+	farcall Func_19b8c
+	ret
+; 0x756c
+
+Func_756c: ; 756c (1:756c)
+	farcall Func_19b41
+	ret
+; 0x7571
 
 ; handles all the Card Pop! functionality
 DoCardPop: ; 7571 (1:7571)

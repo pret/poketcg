@@ -70,11 +70,11 @@ Text027b: ; 3c1f7 (f:41f7)
 	line "the Game Boy Printer OFF."
 	done
 
-Text027c: ; 3c22b (f:422b)
+ProceduresForSendingCardsText: ; 3c22b (f:422b)
 	text "Procedures for sending cards:"
 	done
 
-Text027d: ; 3c24a (f:424a)
+CardSendingProceduresText: ; 3c24a (f:424a)
 	text "1. Choose the card you wish to send."
 	line "   Press left/right to choose more."
 	line ""
@@ -85,38 +85,38 @@ Text027d: ; 3c24a (f:424a)
 	line "   the process."
 	done
 
-Text027e: ; 3c305 (f:4305)
+PleaseReadTheProceduresForSendingCardsText: ; 3c305 (f:4305)
 	text "Please read the procedures"
 	line "for sending cards."
 	done
 
-Text027f: ; 3c334 (f:4334)
+SendText: ; 3c334 (f:4334)
 	text "Send"
 	done
 
-Text0280: ; 3c33a (f:433a)
+CardReceivedText: ; 3c33a (f:433a)
 	text "Card received"
 	done
 
-Text0281: ; 3c349 (f:4349)
+CardToSendText: ; 3c349 (f:4349)
 	text "Card to send"
 	done
 
-Text0282: ; 3c357 (f:4357)
+SendTheseCardsText: ; 3c357 (f:4357)
 	text "Send these cards?"
 	done
 
-Text0283: ; 3c36a (f:436a)
+ReceivedTheseCardsFromText: ; 3c36a (f:436a)
 	text "Received these cards"
 	line "from  <RAMTEXT>!"
 	done
 
-Text0284: ; 3c389 (f:4389)
+PleaseChooseADeckConfigurationToSendText: ; 3c389 (f:4389)
 	text "Please choose a Deck "
 	line "configuration to send."
 	done
 
-Text0285: ; 3c3b7 (f:43b7)
+PleaseChooseASaveSlotText: ; 3c3b7 (f:43b7)
 	text "Please choose a Save Slot."
 	done
 
@@ -124,48 +124,48 @@ Text0286: ; 3c3d3 (f:43d3)
 	text "Receive configuration."
 	done
 
-Text0287: ; 3c3eb (f:43eb)
+ReceivedADeckConfigurationFromText: ; 3c3eb (f:43eb)
 	text "Received a deck configuration"
 	line "from  <RAMTEXT>!"
 	done
 
-Text0288: ; 3c413 (f:4413)
+FightingMachineText: ; 3c413 (f:4413)
 	text "  Fighting Machine  "
 	done
 
-Text0289: ; 3c429 (f:4429)
+RockMachineText: ; 3c429 (f:4429)
 	text "  Rock Machine  "
 	done
 
-Text028a: ; 3c43b (f:443b)
+WaterMachineText: ; 3c43b (f:443b)
 	text "  Water Machine   "
 	done
 
-Text028b: ; 3c44f (f:444f)
+LightningMachineText: ; 3c44f (f:444f)
 	text "  Lightning Machine   "
 	done
 
-Text028c: ; 3c467 (f:4467)
+GrassMachineText: ; 3c467 (f:4467)
 	text "  Grass Machine   "
 	done
 
-Text028d: ; 3c47b (f:447b)
+PsychicMachineText: ; 3c47b (f:447b)
 	text "  Psychic Machine   "
 	done
 
-Text028e: ; 3c491 (f:4491)
+ScienceMachineText: ; 3c491 (f:4491)
 	text "  Science Machine   "
 	done
 
-Text028f: ; 3c4a7 (f:44a7)
+FireMachineText: ; 3c4a7 (f:44a7)
 	text "  Fire Machine  "
 	done
 
-Text0290: ; 3c4b9 (f:44b9)
+AutoMachineText: ; 3c4b9 (f:44b9)
 	text "  Auto Machine  "
 	done
 
-Text0291: ; 3c4cb (f:44cb)
+LegendaryMachineText: ; 3c4cb (f:44cb)
 	text "  Legendary Machine   "
 	done
 
