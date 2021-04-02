@@ -1441,7 +1441,7 @@ Func_8764: ; 8764 (2:4764)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, TransitionTable_8764
+	ld de, Func_8764_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1589,7 +1589,7 @@ Func_8883: ; 8883 (2:4883)
 
 	xor a
 	ld [wPrizeCardCursorPosition], a
-	ld de, TransitionTable_8883
+	ld de, Func_8883_TransitionTable
 	ld hl, wce53
 	ld [hl], e
 	inc hl
@@ -1600,7 +1600,7 @@ Func_8883: ; 8883 (2:4883)
 	ld [wce56], a
 	jp Func_8764.loop_2
 
-TransitionTable_8764: ; 8764 (2:4764)
+Func_8764_TransitionTable: ; 88c2 (2:48c2)
 	cursor_transition $08, $28, $00, $04, $02, $01, $07
 	cursor_transition $30, $28, $20, $05, $03, $07, $00
 	cursor_transition $08, $38, $00, $00, $04, $03, $07
@@ -1610,7 +1610,7 @@ TransitionTable_8764: ; 8764 (2:4764)
 	cursor_transition $78, $50, $00, $07, $07, $00, $01
 	cursor_transition $78, $28, $00, $07, $07, $00, $01
 
-TransitionTable_8883: ; 8883 (2:4883)
+Func_8883_TransitionTable: ; 88fa (2:48fa)
 	cursor_transition $a0, $60, $20, $02, $04, $07, $01
 	cursor_transition $78, $60, $00, $03, $05, $00, $07
 	cursor_transition $a0, $50, $20, $04, $00, $06, $03
@@ -5560,7 +5560,7 @@ Func_b424: ; b424 (2:7424)
 	ld d, 13
 	inc e
 	call InitTextPrinting
-	ld hl, $74d4
+	ld hl, Text_b4d4
 	call ProcessText
 	scf
 	ret
@@ -5604,10 +5604,10 @@ Func_b424: ; b424 (2:7424)
 	ld b, a
 	ld a, [hl]
 	ld hl, wDefaultText
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld [hli], a
-	ld [hl], $05
+	ld [hl], TX_SYMBOL
 	inc hl
 	ld a, b
 	ld [hli], a
@@ -5623,13 +5623,21 @@ Func_b424: ; b424 (2:7424)
 	ld d, 13
 	inc e
 	call InitTextPrinting
-	ld hl, $74d4
+	ld hl, Text_b4d4
 	call ProcessText
 	or a
 	ret
 ; 0xb4d4
 
-	INCROM $b4d4, $b4e1
+Text_b4d4: ; b4d4 (2:74d4)
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_END
+; 0xb4e1
 
 Func_b4e1: ; b4e1 (2:74e1)
 	push bc
