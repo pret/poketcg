@@ -4329,7 +4329,7 @@ Func_161e: ; 161e (0:161e)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, $07
+	ld a, EFFECTCMDTYPE_PKMN_POWER_TRIGGER
 	call CheckMatchingCommand
 	ret c ; return if command not found
 	bank1call DrawDuelMainScene

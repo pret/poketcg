@@ -575,9 +575,30 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	db FIGHTING_ENERGY
 	db PSYCHIC_ENERGY
 	db DOUBLE_COLORLESS_ENERGY
+; 0x14323
 
+; returns carry if loaded attack effect has
+; an "initial effect 2" or "require selection" command type
+; unreferenced?
 Func_14323: ; 14323 (5:4323)
-	INCROM $14323, $1433d
+	ld hl, wLoadedAttackEffectCommands
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, EFFECTCMDTYPE_INITIAL_EFFECT_2
+	push hl
+	call CheckMatchingCommand
+	pop hl
+	jr nc, .set_carry
+	ld a, EFFECTCMDTYPE_REQUIRE_SELECTION
+	call CheckMatchingCommand
+	jr nc, .set_carry
+	or a
+	ret
+.set_carry
+	scf
+	ret
+; 0x1433d
 
 ; return carry depending on card index in a:
 ;	- if energy card, return carry if no energy card has been played yet
@@ -1785,8 +1806,98 @@ TrySetUpBossStartingPlayArea: ; 1581b (5:581b)
 	scf
 	ret
 
+; expects a $00-terminated list of 3-byte data with the following:
+; - non-zero value (anything but $1 is ignored)
+; - card ID to look for in Play Area
+; - number of energy cards
+; returns carry if a card ID is found in bench with at least the
+; listed number of energy cards
+; unreferenced?
 Func_1585b: ; 1585b (5:585b)
-	INCROM $1585b, $158b2
+	ld a, [hli]
+	or a
+	jr z, .no_carry
+	dec a
+	jr nz, .next_1
+	ld a, [hli]
+	ld b, PLAY_AREA_BENCH_1
+	push hl
+	call LookForCardIDInPlayArea_Bank5
+	jr nc, .next_2
+	ld e, a
+	push de
+	call CountNumberOfEnergyCardsAttached
+	pop de
+	pop hl
+	ld b, [hl]
+	cp b
+	jr nc, .set_carry
+	inc hl
+	jr Func_1585b
+
+.next_1
+	inc hl
+	inc hl
+	jr Func_1585b
+
+.next_2
+	pop hl
+	inc hl
+	jr Func_1585b
+
+.no_carry
+	or a
+	ret
+
+.set_carry
+	ld a, e
+	scf
+	ret
+; 0x15886
+
+; expects a $00-terminated list of 3-byte data with the following:
+; - non-zero value
+; - card ID
+; - number of energy cards
+; goes through the given list and if a card with a listed ID is found
+; with less than the number of energy cards corresponding to its entry
+; then have AI try to play an energy card from the hand to it
+; unreferenced?
+Func_15886: ; 15886 (5:5886)
+	push hl
+	call CreateEnergyCardListFromHand
+	pop hl
+	ret c ; quit if no energy cards in hand
+
+.loop_energy_cards
+	ld a, [hli]
+	or a
+	ret z ; done
+	ld a, [hli]
+	ld b, PLAY_AREA_ARENA
+	push hl
+	call LookForCardIDInPlayArea_Bank5
+	jr nc, .next ; skip if not found in Play Area
+	ld e, a
+	push de
+	call CountNumberOfEnergyCardsAttached
+	pop de
+	pop hl
+	cp [hl]
+	inc hl
+	jr nc, .loop_energy_cards
+	ld a, e
+	ldh [hTempPlayAreaLocation_ff9d], a
+	push hl
+	call AITryToPlayEnergyCard
+	pop hl
+	ret c
+	jr .loop_energy_cards
+.next
+	pop hl
+	inc hl
+	jr .loop_energy_cards
+; 0x158b2
 
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
@@ -3920,8 +4031,25 @@ CheckForEvolutionInDeck: ; 16451 (5:6451)
 	scf
 	ret
 
+; processes AI energy card playing logic
+; with AI_ENERGY_FLAG_DONT_PLAY flag on
+; unreferenced?
 Func_16488: ; 16488 (5:6488)
-	INCROM $16488, $164a1
+	ld a, AI_ENERGY_FLAG_DONT_PLAY
+	ld [wAIEnergyAttachLogicFlags], a
+	ld de, wTempPlayAreaAIScore
+	ld hl, wPlayAreaAIScore
+	ld b, MAX_PLAY_AREA_POKEMON
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+	ld a, [wAIScore]
+	ld [de], a
+	jr AIProcessAndTryToPlayEnergy.has_logic_flags
+; 0x164a1
 
 ; have AI choose an energy card to play, but do not play it.
 ; does not consider whether the cards have evolutions to be played.
@@ -3995,6 +4123,8 @@ RetrievePlayAreaAIScoreFromBackup1: ; 164d3 (5:64d3)
 AIProcessAndTryToPlayEnergy: ; 164e8 (5:64e8)
 	xor a
 	ld [wAIEnergyAttachLogicFlags], a
+
+.has_logic_flags
 	call CreateEnergyCardListFromHand
 	jr nc, AIProcessEnergyCards
 
