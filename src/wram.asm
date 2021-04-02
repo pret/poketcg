@@ -443,6 +443,8 @@ wNameBuffer:: ; c500
 wDuelTempList:: ; c510
 	ds $80
 
+UNION
+
 ; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
 wDefaultText:: ; c590
@@ -451,7 +453,24 @@ wDefaultText:: ; c590
 wc592:: ; c592
 	ds $3
 
-	ds $55
+	ds $15
+
+wc5aa:: ; c5aa
+	ds $1
+
+	ds $21
+
+NEXTU
+
+wc590:: ; c590
+	ds DECK_SIZE
+
+ENDU
+
+wc5cc:: ; c5cc
+	ds $1
+
+	ds $1d
 
 wc5ea:: ; c5ea
 	ds $1
@@ -1698,7 +1717,7 @@ wPrizeCardCursorPosition:: ; ce52
 	ds $1
 
 ; pointer to the table which contains information for each key-press.
-wInPlayAreaInputTablePointer:: ; ce53
+wMenuInputTablePointer:: ; ce53
 
 wce53:: ; ce53
 	ds $2
@@ -1932,31 +1951,73 @@ wOnesAndTensPlace:: ; ceb6
 	ds $3
 
 wcebb:: ; cebb
-	ds $1
+	ds $9
 
-	ds $10
+wcec4:: ; cec4
+	ds $7
+
+wcecb:: ; cecb
+	ds $1
 
 wcecc:: ; cecc
 	ds $1
 
+wcecd:: ; cecd
 	ds $1
 
 wcece:: ; cece
 	ds $2
 
-	ds $a
-
-; pointer to memory to store AI temporary hand card list
-wHandTempList:: ; ceda
+wced0:: ; ced0
 	ds $2
 
-	ds $3b
+wced2:: ; ced2
+	ds $1
+
+wced3:: ; ced3
+	ds $1
+
+wced4:: ; ced4
+	ds $1
+
+wced5:: ; ced5
+	ds $1
+
+wced6:: ; ced6
+	ds $1
+
+wced7:: ; ced7
+	ds $1
+
+wced8:: ; ced8
+	ds $1
+
+wced9:: ; ced9
+	ds $1
+
+; stores the list of all card IDs that filtered by its card type
+; (Fire, Water, ..., Energy card, Trainer card)
+wFilteredCardList:: ; ceda
+
+; stores AI temporary hand card list
+wHandTempList:: ; ceda
+
+wceda:: ; ceda
+	ds DECK_SIZE
+
+wcf16:: ; cf16
+	ds $1
 
 ; used in bank2, probably related to wTempHandCardList (another temp list?)
 wcf17:: ; cf17
 	ds DECK_SIZE
 
 	ds $15
+
+; stores the count number of cards owned
+; can be 0 in the case that a card is not available
+; i.e. already inside a built deck
+wOwnedCardsCountList:: ; cf68
 
 ; used by _AIProcessHandTrainerCards, AI related
 wTempHandCardList:: ; cf68
@@ -1965,19 +2026,30 @@ wTempHandCardList:: ; cf68
 	ds $15
 
 wcfb9:: ; cfb9
-	ds $1
+	ds $14
 
-	ds $17
+	ds $4
 
 wcfd1:: ; cfd1
-	ds $1
+	ds $7
 
-	ds $8
+wcfd8:: ; cfd8
+	ds $2
 
 wcfda:: ; cfda
 	ds $2
 
-	ds $7
+	ds $2
+
+; the tile to draw in place of the cursor, in case
+; the cursor is not to be drawn
+wCursorAlternateTile:: ; cfde
+	ds $1
+
+wcfdf:: ; cfdf
+	ds $1
+
+	ds $3
 
 ; a flag indicating whether sfx should be played.
 wPlaysSfx:: ; cfe3

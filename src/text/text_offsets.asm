@@ -553,7 +553,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0225                                           ; 0x0225
 	textpointer Text0226                                           ; 0x0226
 	textpointer Text0227                                           ; 0x0227
-	textpointer Text0228                                           ; 0x0228
+	textpointer CancelText                                         ; 0x0228
 	textpointer Text0229                                           ; 0x0229
 	textpointer ChosenAsDuelingDeckText                            ; 0x022a
 	textpointer Deck1Text                                          ; 0x022b
@@ -561,21 +561,21 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Deck3Text                                          ; 0x022d
 	textpointer Deck4Text                                          ; 0x022e
 	textpointer ThereIsNoDeckHereText                              ; 0x022f
-	textpointer Text0230                                           ; 0x0230
-	textpointer Text0231                                           ; 0x0231
-	textpointer Text0232                                           ; 0x0232
-	textpointer Text0233                                           ; 0x0233
-	textpointer Text0234                                           ; 0x0234
-	textpointer Text0235                                           ; 0x0235
-	textpointer Text0236                                           ; 0x0236
-	textpointer Text0237                                           ; 0x0237
-	textpointer Text0238                                           ; 0x0238
-	textpointer Text0239                                           ; 0x0239
-	textpointer Text023a                                           ; 0x023a
-	textpointer Text023b                                           ; 0x023b
-	textpointer Text023c                                           ; 0x023c
-	textpointer Text023d                                           ; 0x023d
-	textpointer Text023e                                           ; 0x023e
+	textpointer ConfirmText                                        ; 0x0230
+	textpointer DismantleText                                      ; 0x0231
+	textpointer ModifyText                                         ; 0x0232
+	textpointer SaveText                                           ; 0x0233
+	textpointer NameText                                           ; 0x0234
+	textpointer ThereIsOnly1DeckSoCannotBeDismantledText           ; 0x0235
+	textpointer ThereAreNoBasicPokemonInThisDeckText               ; 0x0236
+	textpointer YouMustIncludeABasicPokemonInTheDeckText           ; 0x0237
+	textpointer ThisIsntA60CardDeckText                            ; 0x0238
+	textpointer TheDeckMustInclude60CardsText                      ; 0x0239
+	textpointer ReturnToOriginalConfigurationText                  ; 0x023a
+	textpointer SaveThisDeckText                                   ; 0x023b
+	textpointer QuitModifyingTheDeckText                           ; 0x023c
+	textpointer DismantleThisDeckText                              ; 0x023d
+	textpointer NoCardsChosenText                                  ; 0x023e
 	textpointer YourPokemonText                                    ; 0x023f
 	textpointer YourDiscardPileText2                               ; 0x0240
 	textpointer YourHandText                                       ; 0x0241
@@ -605,7 +605,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0259                                           ; 0x0259
 	textpointer Text025a                                           ; 0x025a
 	textpointer Text025b                                           ; 0x025b
-	textpointer Text025c                                           ; 0x025c
+	textpointer DeckSaveMachineText                                ; 0x025c
 	textpointer Text025d                                           ; 0x025d
 	textpointer Text025e                                           ; 0x025e
 	textpointer Text025f                                           ; 0x025f
@@ -637,28 +637,28 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0279                                           ; 0x0279
 	textpointer Text027a                                           ; 0x027a
 	textpointer Text027b                                           ; 0x027b
-	textpointer Text027c                                           ; 0x027c
-	textpointer Text027d                                           ; 0x027d
-	textpointer Text027e                                           ; 0x027e
-	textpointer Text027f                                           ; 0x027f
-	textpointer Text0280                                           ; 0x0280
-	textpointer Text0281                                           ; 0x0281
-	textpointer Text0282                                           ; 0x0282
-	textpointer Text0283                                           ; 0x0283
-	textpointer Text0284                                           ; 0x0284
-	textpointer Text0285                                           ; 0x0285
+	textpointer ProceduresForSendingCardsText                      ; 0x027c
+	textpointer CardSendingProceduresText                          ; 0x027d
+	textpointer PleaseReadTheProceduresForSendingCardsText         ; 0x027e
+	textpointer SendText                                           ; 0x027f
+	textpointer CardReceivedText                                   ; 0x0280
+	textpointer CardToSendText                                     ; 0x0281
+	textpointer SendTheseCardsText                                 ; 0x0282
+	textpointer ReceivedTheseCardsFromText                         ; 0x0283
+	textpointer PleaseChooseADeckConfigurationToSendText           ; 0x0284
+	textpointer PleaseChooseASaveSlotText                          ; 0x0285
 	textpointer Text0286                                           ; 0x0286
-	textpointer Text0287                                           ; 0x0287
-	textpointer Text0288                                           ; 0x0288
-	textpointer Text0289                                           ; 0x0289
-	textpointer Text028a                                           ; 0x028a
-	textpointer Text028b                                           ; 0x028b
-	textpointer Text028c                                           ; 0x028c
-	textpointer Text028d                                           ; 0x028d
-	textpointer Text028e                                           ; 0x028e
-	textpointer Text028f                                           ; 0x028f
-	textpointer Text0290                                           ; 0x0290
-	textpointer Text0291                                           ; 0x0291
+	textpointer ReceivedADeckConfigurationFromText                 ; 0x0287
+	textpointer FightingMachineText                                ; 0x0288
+	textpointer RockMachineText                                    ; 0x0289
+	textpointer WaterMachineText                                   ; 0x028a
+	textpointer LightningMachineText                               ; 0x028b
+	textpointer GrassMachineText                                   ; 0x028c
+	textpointer PsychicMachineText                                 ; 0x028d
+	textpointer ScienceMachineText                                 ; 0x028e
+	textpointer FireMachineText                                    ; 0x028f
+	textpointer AutoMachineText                                    ; 0x0290
+	textpointer LegendaryMachineText                               ; 0x0291
 	textpointer Text0292                                           ; 0x0292
 	textpointer Text0293                                           ; 0x0293
 	textpointer Text0294                                           ; 0x0294

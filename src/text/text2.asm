@@ -1619,7 +1619,7 @@ Text0227: ; 3ba3c (e:7a3c)
 	text "Select deck"
 	done
 
-Text0228: ; 3ba49 (e:7a49)
+CancelText: ; 3ba49 (e:7a49)
 	text "Cancel"
 	done
 
@@ -1652,66 +1652,66 @@ ThereIsNoDeckHereText: ; 3ba84 (e:7a84)
 	text "There is no Deck here!"
 	done
 
-Text0230: ; 3ba9c (e:7a9c)
+ConfirmText: ; 3ba9c (e:7a9c)
 	text "Confirm"
 	done
 
-Text0231: ; 3baa5 (e:7aa5)
+DismantleText: ; 3baa5 (e:7aa5)
 	text "Dismantle"
 	done
 
-Text0232: ; 3bab0 (e:7ab0)
+ModifyText: ; 3bab0 (e:7ab0)
 	text "Modify"
 	done
 
-Text0233: ; 3bab8 (e:7ab8)
+SaveText: ; 3bab8 (e:7ab8)
 	text "Save"
 	done
 
-Text0234: ; 3babe (e:7abe)
+NameText: ; 3babe (e:7abe)
 	text "Name"
 	done
 
-Text0235: ; 3bac4 (e:7ac4)
+ThereIsOnly1DeckSoCannotBeDismantledText: ; 3bac4 (e:7ac4)
 	text "There is only 1 Deck, so this"
 	line "Deck cannot be dismantled."
 	done
 
-Text0236: ; 3bafe (e:7afe)
+ThereAreNoBasicPokemonInThisDeckText: ; 3bafe (e:7afe)
 	text "There are no Basic Pokémon"
 	line "in this Deck!"
 	done
 
-Text0237: ; 3bb28 (e:7b28)
+YouMustIncludeABasicPokemonInTheDeckText: ; 3bb28 (e:7b28)
 	text "You must include a Basic Pokémon"
 	line "in the Deck!"
 	done
 
-Text0238: ; 3bb57 (e:7b57)
+ThisIsntA60CardDeckText: ; 3bb57 (e:7b57)
 	text "This isn't a 60-card deck!"
 	done
 
-Text0239: ; 3bb73 (e:7b73)
+TheDeckMustInclude60CardsText: ; 3bb73 (e:7b73)
 	text "The Deck must include 60 cards!"
 	done
 
-Text023a: ; 3bb94 (e:7b94)
+ReturnToOriginalConfigurationText: ; 3bb94 (e:7b94)
 	text "Return to original configuration?"
 	done
 
-Text023b: ; 3bbb7 (e:7bb7)
+SaveThisDeckText: ; 3bbb7 (e:7bb7)
 	text "Save this Deck?"
 	done
 
-Text023c: ; 3bbc8 (e:7bc8)
+QuitModifyingTheDeckText: ; 3bbc8 (e:7bc8)
 	text "Quit modifying the Deck?"
 	done
 
-Text023d: ; 3bbe2 (e:7be2)
+DismantleThisDeckText: ; 3bbe2 (e:7be2)
 	text "Dismantle this Deck?"
 	done
 
-Text023e: ; 3bbf8 (e:7bf8)
+NoCardsChosenText: ; 3bbf8 (e:7bf8)
 	text "No cards chosen."
 	done
 
@@ -1832,7 +1832,7 @@ Text025b: ; 3bddb (e:7ddb)
 	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
 
-Text025c: ; 3bdea (e:7dea)
+DeckSaveMachineText: ; 3bdea (e:7dea)
 	text "  Deck Save Machine   "
 	done
 

@@ -168,7 +168,10 @@ hCurMenuItem:: ; ffb1
 hCurSelectionItem:: ; ffb2
 	ds $1
 
-	ds $2
+hffb3:: ; ffb3
+	ds $1
+
+	ds $1
 
 hffb5:: ; ffb5
 	ds $1

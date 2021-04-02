@@ -1434,7 +1434,7 @@ Func_8764: ; 8764 (2:4764)
 
 .text
 	call DrawWideTextBox
-	lb de, $01, $0e
+	lb de, 1, 14
 	call InitTextPrinting
 	ldtx hl, WhichCardWouldYouLikeToSeeText
 	call ProcessTextFromID
@@ -1582,7 +1582,7 @@ Func_8883: ; 8883 (2:4883)
 
 .text
 	call DrawWideTextBox
-	lb de, $01, $0e
+	lb de, 1, 14
 	call InitTextPrinting
 	ldtx hl, WhichCardWouldYouLikeToSeeText
 	call ProcessTextFromID
@@ -1610,7 +1610,7 @@ Func_8764_TransitionTable: ; 88c2 (2:48c2)
 	cursor_transition $78, $50, $00, $07, $07, $00, $01
 	cursor_transition $78, $28, $00, $07, $07, $00, $01
 
-Func_8883_TransitionTable:
+Func_8883_TransitionTable: ; 88fa (2:48fa)
 	cursor_transition $a0, $60, $20, $02, $04, $07, $01
 	cursor_transition $78, $60, $00, $03, $05, $00, $07
 	cursor_transition $a0, $50, $20, $04, $00, $06, $03
@@ -1844,16 +1844,17 @@ OpenGlossaryScreen_TransitionTable:
 	cursor_transition $58, $58, $00, $07, $09, $03, $03
 	cursor_transition $58, $68, $00, $08, $05, $04, $04
 
+; copies DECK_SIZE number of cards from de to hl in SRAM
 Func_8cd4: ; 8cd4 (2:4cd4)
 	push bc
 	call EnableSRAM
-	ld b, $3c
-.asm_8cda
+	ld b, DECK_SIZE
+.loop
 	ld a, [de]
 	inc de
 	ld [hli], a
 	dec b
-	jr nz, .asm_8cda
+	jr nz, .loop
 	xor a
 	ld [hl], a
 	call DisableSRAM
@@ -1861,7 +1862,18 @@ Func_8cd4: ; 8cd4 (2:4cd4)
 	ret
 ; 0x8ce7
 
-	INCROM $8ce7, $8cf9
+Func_8ce7: ; 8ce7 (2:4ce7)
+	xor a
+	ld hl, wceda
+	ld bc, DECK_SIZE
+	add hl, bc
+	ld [hl], a ; wcf16
+	ld hl, wcf17
+	ld bc, $50
+	add hl, bc
+	ld [hl], a
+	ret
+; 0x8cf9
 
 Func_8cf9: ; 8cf9 (2:4cf9)
 	call EnableSRAM
@@ -1874,14 +1886,18 @@ Func_8cf9: ; 8cf9 (2:4cf9)
 	ld [hl], a
 	ld [sb701], a
 	call DisableSRAM
-Func_8d0b: ; 8d0b (2:4d0b)
-	ld hl, Unknown_8d15
-	ld de, $9380
-	call Func_92ad
+;	fallthrough
+
+; loads the Hard Cards icon gfx to v0Tiles2
+LoadHandCardsIcon: ; 8d0b (2:4d0b)
+	ld hl, HandCardsGfx
+	ld de, v0Tiles2 + $38 tiles
+	call CopyListFromHLToDE
 	ret
 
-Unknown_8d15: ; 8d15 (2:4d15)
-	INCROM $8d15, $8d56
+HandCardsGfx: ; 8d15 (2:4d15)
+	INCBIN "gfx/hand_cards.2bpp"
+	db $00 ; end of data
 
 Func_8d56: ; 8d56 (2:4d56)
 	xor a
@@ -1892,31 +1908,54 @@ Func_8d56: ; 8d56 (2:4d56)
 	ld [wVBlankOAMCopyToggle], a
 	call LoadSymbolsFont
 	call LoadDuelCardSymbolTiles
-	call Func_8d0b
+	call LoadHandCardsIcon
 	bank1call SetDefaultPalettes
 	lb de, $3c, $bf
 	call SetupText
 	ret
 ; 0x8d78
 
-	INCROM $8d78, $8d9d
+; empties screen, zeroes object positions,
+; loads cursor tile, symbol fonts, duel card symbols
+; hand card icon and sets default palettes
+Func_8d78: ; 8d78 (2:4d78)
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositions
+	call EmptyScreen
+	ld a, $1
+	ld [wVBlankOAMCopyToggle], a
+	call LoadCursorTile
+	call LoadSymbolsFont
+	call LoadDuelCardSymbolTiles
+	call LoadHandCardsIcon
+	bank1call SetDefaultPalettes
+	lb de, $3c, $bf
+	call SetupText
+	ret
+; 0x8d9d
 
+; copies 7 bytes from hl to wcfd1
 Func_8d9d: ; 8d9d (2:4d9d)
 	ld de, wcfd1
 	ld b, $7
-.asm_8da2
+.loop
 	ld a, [hli]
 	ld [de], a
 	inc de
 	dec b
-	jr nz, .asm_8da2
+	jr nz, .loop
 	ret
 
-Unknown_8da9: ; 8da9 (2:4da9)
-	INCROM $8da9, $8db0
+Data_8da9: ; 8da9 (2:4da9)
+	db $50, $04, $01
+	dw HandleDeckConfigurationMenu
+	dw DeckConfigurationMenu_TransitionTable
+
+	INCROM $8db0, $8db0
 
 Func_8db0: ; 8db0 (2:4db0)
-	ld hl, Unknown_8da9
+	ld hl, Data_8da9
 	call Func_8d9d
 	ld a, $ff
 	call Func_9168
@@ -1971,17 +2010,19 @@ Func_8e05: ; 8e05 (2:4e05)
 	scf
 	ret
 
+; copies deck in hl to wcfb9
+; copies deck in de to wcf17
 Func_8e1f: ; 8e1f (2:4e1f)
 	push de
 	ld de, wcfb9
-	call Func_92b4
+	call CopyListFromHLToDEInSRAM
 	pop de
 	ld hl, wcf17
 	call Func_8cd4
-	ld a, $9
+	ld a, 9
 	ld hl, wcebb
-	call Func_9843
-	ld a, $3c
+	call ClearNBytesFromHL
+	ld a, DECK_SIZE
 	ld [wcecc], a
 	ld hl, wcebb
 	ld [hl], a
@@ -2014,12 +2055,12 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld d, h
 	ld hl, wcf17
 	call Func_8cd4
-	ld a, $14
+	ld a, 20
 	ld hl, wcfb9
-	call Func_9843
+	call ClearNBytesFromHL
 	ld de, wcfb9
 	call GetPointerToDeckName
-	call Func_92b4
+	call CopyListFromHLToDEInSRAM
 	call Func_9345
 	jr nc, .asm_8ec4
 	call EnableSRAM
@@ -2041,7 +2082,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	ld d, h
 	ld e, l
 	ld hl, wcfb9
-	call Func_92ad
+	call CopyListFromHLToDE
 	call GetPointerToDeckName
 	ld a, [hl]
 	call DisableSRAM
@@ -2058,18 +2099,18 @@ Func_8e42: ; 8e42 (2:4e42)
 	call Func_8fe8
 	jp Func_8dbc
 .asm_8edb
-	ld a, $14
+	ld a, 20
 	ld hl, wcfb9
-	call Func_9843
+	call ClearNBytesFromHL
 	ld de, wcfb9
 	call GetPointerToDeckName
-	call Func_92b4
+	call CopyListFromHLToDEInSRAM
 	call Func_8f05
 	call GetPointerToDeckName
 	ld d, h
 	ld e, l
 	ld hl, wcfb9
-	call Func_92b4
+	call CopyListFromHLToDEInSRAM
 	ld a, $ff
 	call Func_9168
 	ld a, [wceb1]
@@ -2185,7 +2226,7 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	call EnableSRAM
 	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
-	call Func_9326
+	call DrawHandCardsTileOnSelectedDeck
 	call GetPointerToDeckName
 	call EnableSRAM
 	call Func_9253
@@ -2422,12 +2463,50 @@ Func_910a: ; 910a (2:510a)
 	ret
 ; 0x9120
 
-	INCROM $9120, $9152
+Func_9120: ; 9120 (2:5120)
+	push hl
+	ld b, $00
+	ld d, DECK_SIZE
+.asm_9125
+	ld a, [hli]
+	or a
+	jr z, .done
+	ld c, a
+	push hl
+	push de
+	push bc
+	ld a, $ff
+	call Func_a3ca
+	pop bc
+	pop de
+	ld hl, wTempCardCollection
+	add hl, bc
+	ld a, [hl]
+	cp $63
+	jr z, .asm_914c
+	call EnableSRAM
+	ld hl, sCardCollection
+	add hl, bc
+	ld a, [hl]
+	cp $80
+	jr nz, .asm_914b
+	xor a
+	ld [hl], a
+.asm_914b
+	inc [hl]
+.asm_914c
+	pop hl
+	dec d
+	jr nz, .asm_9125
+.done
+	pop hl
+	ret
+; 0x9152
 
 Func_9152: ; 9152 (2:5152)
 	push hl
 	ld b, $0
-	ld d, $3c
+	ld d, DECK_SIZE
 .asm_9157
 	ld a, [hli]
 	or a
@@ -2461,14 +2540,14 @@ Func_9168: ; 9168 (2:5168)
 	call DrawRegularTextBox
 	ld hl, Unknown_9242
 	call PlaceTextItems
-	ld a, $4
+	ld a, 4
 	ld hl, wceb2
-	call Func_9843
-	ld a, [hffb5]
+	call ClearNBytesFromHL
+	ld a, [hffb5] ; should be ldh
 	bit 0, a
 	jr z, .asm_91b0
 	ld hl, sDeck1Name
-	ld de, $0602
+	lb de, 6, 2
 	call Func_926e
 .asm_91b0
 	ld hl, sDeck1Cards
@@ -2477,11 +2556,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [wceb2], a
 .asm_91bd
-	ld a, [hffb5]
+	ld a, [hffb5] ; should be ldh
 	bit 1, a
 	jr z, .asm_91cd
 	ld hl, sDeck2Name
-	ld de, $0605
+	lb de, 6, 5
 	call Func_926e
 .asm_91cd
 	ld hl, sDeck2Cards
@@ -2490,11 +2569,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [wceb3], a
 .asm_91da
-	ld a, [hffb5]
+	ld a, [hffb5] ; should be ldh
 	bit 2, a
 	jr z, .asm_91ea
 	ld hl, sDeck3Name
-	ld de, $0608
+	lb de, 6, 8
 	call Func_926e
 .asm_91ea
 	ld hl, sDeck3Cards
@@ -2503,11 +2582,11 @@ Func_9168: ; 9168 (2:5168)
 	ld a, $1
 	ld [wceb4], a
 .asm_91f7
-	ld a, [hffb5]
+	ld a, [hffb5] ; should be ldh
 	bit 3, a
 	jr z, .asm_9207
 	ld hl, sDeck4Name
-	ld de, $060b
+	lb de, 6, 11
 	call Func_926e
 .asm_9207
 	ld hl, sDeck4Cards
@@ -2539,7 +2618,7 @@ Func_9168: ; 9168 (2:5168)
 	ld a, c
 	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
-	call Func_9326
+	call DrawHandCardsTileOnSelectedDeck
 	call EnableLCD
 	ret
 
@@ -2548,7 +2627,7 @@ Unknown_9242: ; 9242 (2:5242)
 
 Func_9253: ; 9253 (2:5253)
 	ld de, wDefaultText
-	call Func_92ad
+	call CopyListFromHLToDE
 	ld hl, wDefaultText
 	call GetTextLengthInTiles
 	ld b, $0
@@ -2556,10 +2635,11 @@ Func_9253: ; 9253 (2:5253)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Unknown_92a7
-	call Func_92ad
+	ld hl, Data_92a7
+	call CopyListFromHLToDE
 	ret
 
+; de = coordinates to print text
 Func_926e: ; 926e (2:526e)
 	push hl
 	call Func_9314
@@ -2567,7 +2647,7 @@ Func_926e: ; 926e (2:526e)
 	jr c, .asm_929c
 	push de
 	ld de, wDefaultText
-	call Func_92b4
+	call CopyListFromHLToDEInSRAM
 	ld hl, wDefaultText
 	call GetTextLengthInTiles
 	ld b, $0
@@ -2575,8 +2655,8 @@ Func_926e: ; 926e (2:526e)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Unknown_92a7
-	call Func_92ad
+	ld hl, Data_92a7
+	call CopyListFromHLToDE
 	pop de
 	ld hl, wDefaultText
 	call InitTextPrinting
@@ -2590,25 +2670,63 @@ Func_926e: ; 926e (2:526e)
 	scf
 	ret
 
-Unknown_92a7: ; 92a7 (2:52a7)
-	INCROM $92a7, $92ad
+Data_92a7: ; 92a7 (2:52a7)
+	db " deck"
+	db TX_END
 
-Func_92ad: ; 92ad (2:52ad)
+; copies a $00-terminated list from hl to de
+CopyListFromHLToDE: ; 92ad (2:52ad)
 	ld a, [hli]
 	ld [de], a
 	or a
 	ret z
 	inc de
-	jr Func_92ad
+	jr CopyListFromHLToDE
 
-Func_92b4: ; 92b4 (2:52b4)
+; same as CopyListFromHLToDE, but for SRAM copying
+CopyListFromHLToDEInSRAM: ; 92b4 (2:52b4)
 	call EnableSRAM
-	call Func_92ad
+	call CopyListFromHLToDE
 	call DisableSRAM
 	ret
 ; 0x92be
 
-	INCROM $92be, $9314
+Func_92be: ; 92be (2:52be)
+	push hl
+	call Func_9314
+	pop hl
+	ret c
+	push de
+	ld de, wDefaultText
+	call CopyListFromHLToDEInSRAM
+	ld hl, wDefaultText
+	call GetTextLengthInTiles
+	ld a, c
+	cp 21
+	jr c, .asm_92d8
+	ld c, 21
+.asm_92d8
+	ld b, $0
+	ld hl, wDefaultText
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld hl, .text_start
+	ld b, .text_end - .text_start
+	call CopyNBytesFromHLToDE
+	xor a
+	ld [wc5aa], a
+	pop de
+	ld hl, wDefaultText
+	call InitTextPrinting
+	call ProcessText
+	or a
+	ret
+
+.text_start
+	db " deck                       "
+.text_end
+; 0x9314
 
 Func_9314: ; 9314 (2:5314)
 	ld bc, $0018
@@ -2624,7 +2742,9 @@ Func_9314: ; 9314 (2:5314)
 	or a
 	ret
 
-Func_9326: ; 9326 (2:5326)
+; calculates the y coordinate of the currently selected deck
+; and draws the hands card tile at that position
+DrawHandCardsTileOnSelectedDeck: ; 9326 (2:5326)
 	call EnableSRAM
 	ld a, [sCurrentlySelectedDeck]
 	call DisableSRAM
@@ -2632,44 +2752,883 @@ Func_9326: ; 9326 (2:5326)
 	ld l, a
 	call HtimesL
 	ld e, l
-	inc e
+	inc e ; (sCurrentlySelectedDeck * 3) + 1
 	ld d, 2
-	ld a, $38
+;	fallthrough
+
+; de = coordinates to draw rectangle
+DrawHandCardsTileAtDE: ; 9339 (2:5339)
+	ld a, $38 ; hand cards tile
 	lb hl, 1, 2
 	lb bc, 2, 2
 	call FillRectangle
 	ret
 
 Func_9345: ; 9345 (2:5345)
-	INCROM $9345, $9649
+	call Func_8ce7
+	call CountNumberOfCardsForEachCardType
+.skip_count
+	call DrawCardTypeIconsAndPrintCardCounts
 
-; checks if selected deck has any basics
+	xor a
+	ld [wcea1], a
+	ld [wced3], a
+	call Func_993d
+
+.skip_draw
+	ld hl, Data_9667
+	call Func_9a6d
+.wait_input
+	call DoFrame
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .no_start_btn
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	call ConfirmDeckConfiguration
+	ld a, [wced3]
+	ld [wNamingScreenCursorY], a
+	jr .wait_input
+.no_start_btn
+	ld a, [wced3]
+	ld b, a
+	ld a, [wNamingScreenCursorY]
+	cp b
+	jr z, .check_down_btn
+	ld [wced3], a
+	ld hl, wcea1
+	ld [hl], $00
+	call Func_993d
+	ld a, $09
+	ld [wNamingScreenKeyboardHeight], a
+
+.check_down_btn
+	ldh a, [hDPadHeld]
+	and D_DOWN
+	jr z, .no_down_btn
+	call Func_9ad7
+	jr .asm_93a9
+.no_down_btn
+	call Func_9a83
+	jr nc, .wait_input
+	ld a, [hffb3]
+	cp $ff
+	jp z, Func_9461
+.asm_93a9
+	ld a, [wceab + 3]
+	or a
+	jr z, .wait_input
+	xor a
+.asm_93b0
+	ld hl, Data_9670
+	call Func_9a6d
+	ld a, [wceab + 3]
+	ld [wcfe4 + 2], a
+	ld hl, wcecb
+	cp [hl]
+	jr nc, .asm_93c5
+	ld [wNamingScreenKeyboardHeight], a
+.asm_93c5
+	ld hl, PrintDeckBuildingCardList
+	ld d, h
+	ld a, l
+	ld hl, wcece
+	ld [hli], a
+	ld [hl], d
+
+	ld a, $01
+	ld [wced2], a
+.asm_93d4
+	call DoFrame
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .asm_93f0
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [wNamingScreenCursorY]
+	ld [wced5], a
+	call ConfirmDeckConfiguration
+	ld a, [wced5]
+	jr .asm_93b0
+.asm_93f0
+	call Func_9efc
+	jr c, .asm_93d4
+	call Func_9b25
+	jr c, .asm_9442
+	jr .asm_93d4
+.asm_93fc
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [wNamingScreenKeyboardHeight]
+	ld [wcfdf], a
+	ld a, [wNamingScreenCursorY]
+	ld [wced4], a
+	ld de, wceda
+	ld hl, wcfd8
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call Func_9c3f
+	call DrawCardTypeIconsAndPrintCardCounts
+	ld hl, Data_9667
+	call Func_9a6d
+	ld a, [wced3]
+	ld [wNamingScreenCursorY], a
+	call Func_9b20
+	call PrintDeckBuildingCardList
+	ld hl, Data_9670
+	call Func_9a6d
+	ld a, [wcfdf]
+	ld [wNamingScreenKeyboardHeight], a
+	ld a, [wced4]
+	ld [wNamingScreenCursorY], a
+	jr .asm_93d4
+.asm_9442
+	call Func_9c0e
+	ld a, [wNamingScreenCursorY]
+	ld [wced4], a
+	ld a, [hffb3]
+	cp $ff
+	jr nz, .asm_93fc
+	ld hl, Data_9667
+	call Func_9a6d
+	ld a, [wced3]
+	ld [wNamingScreenCursorY], a
+	jp .wait_input
+; 0x9461
+
+Func_9461: ; 9461 (2:5461)
+	xor a
+	ld [wPrizeCardCursorPosition], a
+	ld de, wcfd1 + 5
+	ld hl, wMenuInputTablePointer
+	ld a, [de]
+	ld [hli], a
+	inc de
+	ld a, [de]
+	ld [hl], a
+	ld a, $ff
+	ld [wDuelInitialPrizesUpperBitsSet], a
+.asm_9475
+	xor a
+	ld [wCheckMenuCursorBlinkCounter], a
+	ld hl, wcfd1 + 3
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	jp hl
+; 0x9480
+
+HandleDeckConfigurationMenu: ; 9480 (2:5480)
+	lb de, 0, 0
+	lb bc, 20, 6
+	call DrawRegularTextBox
+	ld hl, DeckBuildMenuData
+	call PlaceTextItems
+
+.do_frame
+	ld a, $1
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call Func_89ae
+	jr nc, .do_frame
+	ld [wced6], a
+	cp $ff
+	jr nz, .asm_94b5
+.draw_icons
+	call DrawCardTypeIconsAndPrintCardCounts
+	ld a, [wced4]
+	ld [wNamingScreenCursorY], a
+	ld a, [wced3]
+	call Func_993d
+	jp Func_9345.skip_draw
+
+.asm_94b5
+	push af
+	call Func_89ae.draw_cursor
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	pop af
+	ld hl, .func_table
+	call JumpToFunctionInTable
+	jr Func_9461.asm_9475
+
+.func_table
+	dw ConfirmDeckConfiguration ; Confirm
+	dw ModifyDeckConfiguration  ; Modify
+	dw ChangeDeckName           ; Name
+	dw SaveDeckConfiguration    ; Save
+	dw DismantleDeck            ; Dismantle
+	dw CancelDeckModifications  ; Cancel
+; 0x94d3
+
+ConfirmDeckConfiguration: ; 94d3 (2:54d3)
+	ld hl, wcea1
+	ld a, [hl]
+	ld hl, wced8
+	ld [hl], a
+	call Func_9e41
+	ld hl, wced8
+	ld a, [hl]
+	ld hl, wcea1
+	ld [hl], a
+	call DrawCardTypeIconsAndPrintCardCounts
+	ld hl, Data_9667
+	call Func_9a6d
+	ld a, [wced3]
+	ld [wNamingScreenCursorY], a
+	call Func_9b20
+	ld a, [wced3]
+	call Func_993d
+	ld a, [wced6]
+	ld [wNamingScreenCursorY], a
+	ret
+; 0x9505
+
+ModifyDeckConfiguration: ; 9505 (2:5505)
+	add sp, $2
+	jr HandleDeckConfigurationMenu.draw_icons
+; 0x9509
+
+; returns carry set if player chose to save deck
+CancelDeckModifications: ; 9509 (2:5509)
+	call Func_95c1
+	jr nc, .asm_9516
+	ldtx hl, QuitModifyingTheDeckText
+	call YesOrNoMenuWithText
+	jr c, SaveDeckConfiguration.go_back
+.asm_9516
+	add sp, $2
+	or a
+	ret
+
+SaveDeckConfiguration: ; 951a (2:551a)
+; handle deck configuration size
+	ld a, [wcecc]
+	cp DECK_SIZE
+	jp z, .ask_to_save_deck ; should be jr
+	ldtx hl, ThisIsntA60CardDeckText
+	call DrawWideTextBox_WaitForInput
+	ldtx hl, ReturnToOriginalConfigurationText
+	call YesOrNoMenuWithText
+	jr c, .print_deck_size_warning
+; return no carry
+	add sp, $2
+	or a
+	ret
+.print_deck_size_warning
+	ldtx hl, TheDeckMustInclude60CardsText
+	call DrawWideTextBox_WaitForInput
+	jr .go_back
+
+.ask_to_save_deck
+	ldtx hl, SaveThisDeckText
+	call YesOrNoMenuWithText
+	jr c, .go_back
+	call Func_9649
+	jr c, .set_carry
+	ldtx hl, ThereAreNoBasicPokemonInThisDeckText
+	call DrawWideTextBox_WaitForInput
+	ldtx hl, YouMustIncludeABasicPokemonInTheDeckText
+	call DrawWideTextBox_WaitForInput
+
+.go_back
+	call DrawCardTypeIconsAndPrintCardCounts
+	call PrintDeckBuildingCardList
+	ld a, [wced6]
+	ld [wNamingScreenCursorY], a
+	ret
+
+.set_carry
+	add sp, $2
+	scf
+	ret
+; 0x9566
+
+DismantleDeck: ; 9566 (2:5566)
+	ldtx hl, DismantleThisDeckText
+	call YesOrNoMenuWithText
+	jr c, SaveDeckConfiguration.go_back
+	call Func_9622
+	jp nc, .Dismantle ; should be jr
+	ldtx hl, ThereIsOnly1DeckSoCannotBeDismantledText
+	call DrawWideTextBox_WaitForInput
+	call EmptyScreen
+	ld hl, Data_9667
+	call Func_9a6d
+	ld a, [wced3]
+	ld [wNamingScreenCursorY], a
+	call Func_9b20
+	call PrintDeckBuildingCardList
+	call EnableLCD
+	ld a, [wced6]
+	ld [wNamingScreenCursorY], a
+	ret
+
+.Dismantle
+	call EnableSRAM
+	call GetPointerToDeckName
+	ld a, [hl]
+	or a
+	jr z, .done_dismantle
+	ld a, NAME_BUFFER_LENGTH
+	call ClearNBytesFromHL
+	call GetPointerToDeckCards
+	call Func_9152
+	ld a, DECK_SIZE
+	call ClearNBytesFromHL
+.done_dismantle
+	call DisableSRAM
+	add sp, $2
+	ret
+; 0x95b9
+
+ChangeDeckName: ; 95b9 (2:55b9)
+	call Func_8f05
+	add sp, $2
+	jp Func_9345.skip_count
+; 0x95c1
+
+Func_95c1: ; 95c1 (2:55c1)
+	ld a, [wcecc]
+	or a
+	jr z, .skip_size_check
+	cp DECK_SIZE
+	jr nz, .done
+.skip_size_check
+
+; copy the selected deck to wc590
+	call GetPointerToDeckCards
+	ld de, wc590
+	ld b, DECK_SIZE
+	call EnableSRAM
+	call CopyNBytesFromHLToDE
+	call DisableSRAM
+
+; loops through cards in wcf17
+; then if that card is found in wc590
+; overwrite it by $0
+	ld a, $ff
+	ld [wc5cc], a
+	ld de, wcf17
+.loop_outer
+	ld a, [de]
+	or a
+	jr z, .check_empty
+	ld b, a
+	inc de
+	ld hl, wc590
+.loop_inner
+	ld a, [hli]
+	cp $ff
+	jr z, .loop_outer
+	cp b
+	jr nz, .loop_inner
+	; found
+	dec hl
+	xor a
+	ld [hli], a ; remove
+	jr .loop_outer
+
+.check_empty
+	ld hl, wc590
+.loop_check_empty
+	ld a, [hli]
+	cp $ff
+	jr z, .is_empty
+	or a
+	jr nz, .done
+	jr .loop_check_empty
+
+; wc590 is empty (all $0)
+.is_empty
+	call GetPointerToDeckName
+	ld de, wcfb9
+	call EnableSRAM
+.asm_9610
+	ld a, [de]
+	cp [hl]
+	jr nz, .done
+	inc de
+	inc hl
+	or a
+	jr nz, .asm_9610
+	call DisableSRAM
+	ret
+.done
+	call DisableSRAM
+	scf
+	ret
+; 0x9622
+
+Func_9622: ; 9622 (2:5622)
+	ld hl, wceb2
+	ld bc, $0
+.loop
+	inc b
+	ld a, $04
+	cp b
+	jr c, .asm_963a
+	ld a, [hli]
+	or a
+	jr z, .loop
+	inc c
+	ld a, $01
+	cp c
+	jr nc, .loop
+.no_carry
+	or a
+	ret
+.asm_963a
+	call GetPointerToDeckCards
+	call EnableSRAM
+	ld a, [hl]
+	call DisableSRAM
+	or a
+	jr z, .no_carry
+	scf
+	ret
+; 0x9649
+
+; checks if wcf17 has any basics
+; returns carry set if there is at least
+; 1 Basic Pokemon card
 Func_9649: ; 9649 (2:5649)
 	ld hl, wcf17
-.asm_964c
+.loop_cards
 	ld a, [hli]
 	ld e, a
 	or a
-	jr z, .asm_9665
+	jr z, .no_carry
 	call LoadCardDataToBuffer1_FromCardID
-	jr c, .asm_9665
+	jr c, .no_carry
 	ld a, [wLoadedCard1Type]
-	and $08
-	jr nz, .asm_964c
+	and TYPE_ENERGY
+	jr nz, .loop_cards
 	ld a, [wLoadedCard1Stage]
 	or a
-	jr nz, .asm_964c
+	jr nz, .loop_cards
+	; is basic card
 	scf
 	ret
-.asm_9665
+.no_carry
 	or a
 	ret
 ; 0x9667
 
-	INCROM $9667, $9843
+Data_9667: ; 9667 (2:5667)
+	db $01, $01, $00, $02, $09, $2f, $00, $00, $00
 
-Func_9843: ; 9843 (2:5843)
-	INCROM $9843, $98a6
+Data_9670: ; 9670 (2:5670)
+	db $00, $07, $02, $00, $06, $0f, $00, $00, $00
+
+DeckConfigurationMenu_TransitionTable: ; 9679 (2:5679)
+	cursor_transition $10, $20, $00, $03, $03, $01, $02
+	cursor_transition $48, $20, $00, $04, $04, $02, $00
+	cursor_transition $80, $20, $00, $05, $05, $00, $01
+	cursor_transition $10, $30, $00, $00, $00, $04, $05
+	cursor_transition $48, $30, $00, $01, $01, $05, $03
+	cursor_transition $80, $30, $00, $02, $02, $03, $04
+
+; draws each card type icon in a line
+; the respective card counts underneath each icon
+; and prints"X/60" in the upper-right corner,
+; where X is the total card count
+DrawCardTypeIconsAndPrintCardCounts: ; 96a3 (2:56a3)
+	call Set_OBJ_8x8
+	call Func_8d78
+	lb bc, 0, 5
+	ld a, SYM_BOX_TOP
+	call FillBGMapLineWithA
+	call DrawCardTypeIcons
+	call PrintCardTypeCounts
+	lb de, 15, 0
+	call PrintTotalCardCount
+	lb de, 17, 0
+	call PrintSlashSixty
+	call EnableLCD
+	ret
+; 0x96c7
+
+; fills one line at coordinate bc in BG Map
+; with the byte in register a
+; fills the same line with $04 in VRAM1 if in CGB
+; bc = coordinates
+FillBGMapLineWithA: ; 96c7 (2:56c7)
+	call BCCoordToBGMap0Address
+	ld b, SCREEN_WIDTH
+	call FillDEWithA
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ret nz ; return if not CGB
+	ld a, $04
+	ld b, SCREEN_WIDTH
+	call BankswitchVRAM1
+	call FillDEWithA
+	call BankswitchVRAM0
+	ret
+; 0x96e3
+
+; saves the count of each type of card that is in wcf17
+; stores these values in wcebb
+CountNumberOfCardsForEachCardType: ; 96e3 (2:56e3)
+	ld hl, wcebb
+	ld de, CardTypeFilters
+.loop
+	ld a, [de]
+	cp -1
+	ret z
+	inc de
+	call CountNumberOfCardsOfType
+	ld [hli], a
+	jr .loop
+; 0x96f4
+
+; fills de with b bytes of the value in register a
+FillDEWithA: ; 96f4 (2:56f4)
+	push hl
+	ld l, e
+	ld h, d
+.loop
+	ld [hli], a
+	dec b
+	jr nz, .loop
+	pop hl
+	ret
+; 0x96fd
+
+; draws all the card type icons
+; in a line specified by .CardTypeIcons
+DrawCardTypeIcons: ; 96fd (2:56fd)
+	ld hl, .CardTypeIcons
+.loop
+	ld a, [hli]
+	or a
+	ret z ; done
+	ld d, [hl] ; x coord
+	inc hl
+	ld e, [hl] ; y coord
+	inc hl
+	call .DrawIcon
+	jr .loop
+
+; input:
+; de = coordinates
+.DrawIcon
+	push hl
+	push af
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
+	pop af
+	call GetCardTypeIconPalette
+	ld b, a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .not_cgb
+	ld a, b
+	lb bc, 2, 2
+	lb hl, 0, 0
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+.not_cgb
+	pop hl
+	ret
+
+.CardTypeIcons
+; icon tile, x coord, y coord
+	db ICON_TILE_GRASS,      1, 2
+	db ICON_TILE_FIRE,       3, 2
+	db ICON_TILE_WATER,      5, 2
+	db ICON_TILE_LIGHTNING,  7, 2
+	db ICON_TILE_FIGHTING,   9, 2
+	db ICON_TILE_PSYCHIC,   11, 2
+	db ICON_TILE_COLORLESS, 13, 2
+	db ICON_TILE_TRAINER,   15, 2
+	db ICON_TILE_ENERGY,    17, 2
+	db $00
+; 0x9751
+
+DeckBuildMenuData: ; 9751 (1:5751)
+	; x, y, text id
+	textitem  2, 2, ConfirmText
+	textitem  9, 2, ModifyText
+	textitem 16, 2, NameText
+	textitem  2, 4, SaveText
+	textitem  9, 4, DismantleText
+	textitem 16, 4, CancelText
+	db $ff
+
+; prints "/60" to the coordinates given in de
+PrintSlashSixty: ; 976a (2:576a)
+	ld hl, wDefaultText
+	ld a, TX_SYMBOL
+	ld [hli], a
+	ld a, SYM_SLASH
+	ld [hli], a
+	ld a, TX_SYMBOL
+	ld [hli], a
+	ld a, SYM_6
+	ld [hli], a
+	ld a, TX_SYMBOL
+	ld [hli], a
+	ld a, SYM_0
+	ld [hli], a
+	ld [hl], TX_END
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0x978b
+
+; creates two separate lists given the card type in register a
+; if a card matches the card type given, then it's added to wFilteredCardList
+; if a card has been owned by the player, and its card count is at least 1,
+; (or in case it's 0 if it's in any deck configurations saved)
+; then its collection count is also added to wOwnedCardsCountList
+; if input a is $ff, then all card types are included
+CreateFilteredCardList: ; 978b (2:578b)
+	push af
+	push bc
+	push de
+	push hl
+
+; clear wOwnedCardsCountList and wFilteredCardList
+	push af
+	ld a, DECK_SIZE
+	ld hl, wOwnedCardsCountList
+	call ClearNBytesFromHL
+	ld a, DECK_SIZE
+	ld hl, wFilteredCardList
+	call ClearNBytesFromHL
+	pop af
+
+; loops all cards in collection
+	ld hl, $0
+	ld de, $0
+	ld b, a ; input card type
+.loop_card_ids
+	inc e
+	call GetCardType
+	jr c, .add_terminator_byte
+	ld c, a
+	ld a, b
+	cp $ff
+	jr z, .add_card
+	and $20
+	cp $20
+	jr z, .check_energy
+	ld a, c
+	cp b
+	jr nz, .loop_card_ids
+	jr .add_card
+.check_energy
+	ld a, c
+	and TYPE_ENERGY
+	cp TYPE_ENERGY
+	jr nz, .loop_card_ids
+
+.add_card
+	push bc
+	push hl
+	ld bc, wFilteredCardList
+	add hl, bc
+	ld [hl], e
+	ld hl, wTempCardCollection
+	add hl, de
+	ld a, [hl]
+	pop hl
+	cp CARD_NOT_OWNED
+	jr z, .next_card ; jump if never seen card
+	or a
+	jr nz, .ok ; has at least 1
+	call IsCardInAnyDeck
+	jr c, .next_card ; jump if not in any deck
+.ok
+	push hl
+	ld bc, wOwnedCardsCountList
+	add hl, bc
+	ld [hl], a
+	pop hl
+	inc l
+.next_card
+	pop bc
+	jr .loop_card_ids
+
+.add_terminator_byte
+	ld a, l
+	ld [wceab + 3], a
+; add terminator bytes in both lists
+	xor a
+	ld c, l
+	ld b, h
+	ld hl, wFilteredCardList
+	add hl, bc
+	ld [hl], a ; $00
+	ld a, $ff
+	ld hl, wOwnedCardsCountList
+	add hl, bc
+	ld [hl], a ; $ff
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0x9803
+
+; returns carry if card ID in register e is not
+; found in any of the decks saved in SRAM
+IsCardInAnyDeck: ; 9803 (2:5803)
+	push af
+	push hl
+	ld hl, sDeck1Cards
+	call .FindCardInDeck
+	jr nc, .found_card
+	ld hl, sDeck2Cards
+	call .FindCardInDeck
+	jr nc, .found_card
+	ld hl, sDeck3Cards
+	call .FindCardInDeck
+	jr nc, .found_card
+	ld hl, sDeck4Cards
+	call .FindCardInDeck
+	jr nc, .found_card
+	pop hl
+	pop af
+	scf
+	ret
+.found_card
+	pop hl
+	pop af
+	or a
+	ret
+
+; returns carry if input card ID in register e
+; is not found in deck given by hl
+.FindCardInDeck
+	call EnableSRAM
+	ld b, DECK_SIZE
+.loop
+	ld a, [hli]
+	cp e
+	jr z, .not_found
+	dec b
+	jr nz, .loop
+; not found
+	call DisableSRAM
+	scf
+	ret
+.not_found
+	call DisableSRAM
+	or a
+	ret
+; 0x9843
+
+; preserves all registers
+; hl = start of bytes to set to $0
+; a = number of bytes to set to $0
+ClearNBytesFromHL: ; 9843 (2:5843)
+	push af
+	push bc
+	push hl
+	ld b, a
+	xor a
+.loop
+	ld [hli], a
+	dec b
+	jr nz, .loop
+	pop hl
+	pop bc
+	pop af
+	ret
+; 0x9850
+
+; finds instance of e in list wcf17
+; returns the position in the list that it was found
+; if not found, returns last position + 1
+Func_9850: ; 9850 (2:5850)
+	push hl
+	ld hl, wcf17
+	ld d, $00
+.loop
+	ld a, [hli]
+	or a
+	jr z, .done
+	cp e
+	jr nz, .loop
+	inc d
+	jr .loop
+.done
+	ld a, d
+	pop hl
+	ret
+; 0x9863
+
+; returns total count of card ID e
+; looks it up in wFilteredCardList
+; then uses the index to retrieve the count
+; value from wOwnedCardsCountList
+GetOwnedCardCount: ; 9863 (2:5863)
+	push hl
+	ld hl, wFilteredCardList
+	ld d, -1
+.loop
+	inc d
+	ld a, [hli]
+	or a
+	jr z, .not_found
+	cp e
+	jr nz, .loop
+	ld hl, wOwnedCardsCountList
+	push de
+	ld e, d
+	ld d, $00
+	add hl, de
+	pop de
+	ld a, [hl]
+	pop hl
+	ret
+.not_found
+	xor a
+	pop hl
+	ret
+; 0x9880
+
+; appends text "X/Y", where X is the number of included cards
+; and Y is the total number of cards in storage of a given card ID
+; input:
+; e = card ID
+AppendOwnedCardCountAndStorageCountNumbers: ; 9880 (2:5880)
+	push af
+	push bc
+	push de
+	push hl
+; count how many bytes untill $00
+.loop
+	ld a, [hl]
+	or a
+	jr z, .print
+	inc hl
+	jr .loop
+.print
+	push de
+	call Func_9850
+	call ConvertToNumericalDigits
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld [hl], SYM_SLASH
+	inc hl
+	pop de
+	call GetOwnedCardCount
+	call ConvertToNumericalDigits
+	ld [hl], TX_END
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0x98a6
 
 ; determines the ones and tens digits in a for printing
 ; the ones place is added $20 (SYM_0) so that it maps to a numerical character
@@ -2709,16 +3668,1330 @@ CalculateOnesAndTensDigits: ; 98a6 (2:58a6)
 	pop af
 	ret
 
-	INCROM $98c7, $9a6d
+; converts value in register a to
+; numerical symbols for ProcessText
+; places the symbols in hl
+ConvertToNumericalDigits: ; 98c7 (2:58c7)
+	call CalculateOnesAndTensDigits
+	push hl
+	ld hl, wOnesAndTensPlace
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	pop hl
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld [hli], a
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld a, b
+	ld [hli], a
+	ret
+; 0x98dc
 
+; counts the number of cards in wcf17
+; that are the same type as input in register a
+; if input is $20, counts all energy cards instead
+; input:
+; - a = card type
+; output:
+; - a = number of cards of same type
+CountNumberOfCardsOfType: ; 98dc (2:58dc)
+	push de
+	push hl
+	ld hl, $0
+	ld b, a
+	ld c, 0
+.loop_cards
+	push hl
+	push bc
+	ld bc, wcf17
+	add hl, bc
+	ld a, [hl]
+	pop bc
+	pop hl
+	inc l
+	or a
+	jr z, .done ; end of card list
+
+; get card type and compare it with input type
+; if input is $20, run a separate comparison
+; if it's the same type, increase the count
+	ld e, a
+	call GetCardType
+	jr c, .done
+	push hl
+	ld l, a
+	ld a, b
+	and $20
+	cp $20
+	jr z, .check_energy
+	ld a, l
+	pop hl
+	cp b
+	jr nz, .loop_cards
+	jr .incr_count
+
+; counts all energy cards as the same
+.check_energy
+	ld a, l
+	pop hl
+	and TYPE_ENERGY
+	cp TYPE_ENERGY
+	jr nz, .loop_cards
+.incr_count
+	inc c
+	jr .loop_cards
+.done
+	ld a, c
+	pop hl
+	pop de
+	ret
+; 0x9916
+
+; prints the card count of each individual card type
+; assumes CountNumberOfCardsForEachCardType was already called
+; this is done by processing text in a single line
+; and concatenating all digits
+PrintCardTypeCounts: ; 9916 (2:5916)
+	ld bc, $0
+	ld hl, wDefaultText
+.loop
+	push hl
+	ld hl, wcebb
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	push bc
+	call ConvertToNumericalDigits
+	pop bc
+	inc c
+	ld a, $9
+	cp c
+	jr nz, .loop
+	ld [hl], TX_END
+	lb de, 1, 4
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0x993d
+
+Func_993d: ; 993d (2:593d)
+	push af
+	ld hl, CardTypeFilters
+	ld b, $00
+	ld c, a
+	add hl, bc
+	ld a, [hl]
+	push af
+
+; copy sCardCollection to wTempCardCollection
+	call EnableSRAM
+	ld hl, sCardCollection
+	ld de, wTempCardCollection
+	ld b, $ff
+	call CopyNBytesFromHLToDE
+	call DisableSRAM
+
+	ld a, [wcfd1 + 2]
+	or a
+	jr z, .ok
+	call GetPointerToDeckCards
+	ld d, h
+	ld e, l
+	call GetDeckCardCounts
+.ok
+	pop af
+	call CreateFilteredCardList
+	ld a, $06
+	ld [wcecb], a
+	lb de, 1 ,7
+	ld hl, wced0
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call PrintDeckBuildingCardList
+	pop af
+	ret
+; 0x997d
+
+; used to filter the cards in the deck building/card selection screen
+CardTypeFilters: ; 997d (2:597d)
+	db TYPE_PKMN_GRASS
+	db TYPE_PKMN_FIRE
+	db TYPE_PKMN_WATER
+	db TYPE_PKMN_LIGHTNING
+	db TYPE_PKMN_FIGHTING
+	db TYPE_PKMN_PSYCHIC
+	db TYPE_PKMN_COLORLESS
+	db TYPE_TRAINER
+	db $20
+	db -1 ; end of list
+; 0x9987
+
+; counts all the cards from each card type
+; (stored in wcebb) and store it in wcecc
+; also prints it in coordinates de
+PrintTotalCardCount: ; 9987 (2:5987)
+	push de
+	ld bc, $0
+	ld hl, wcebb
+.loop
+	ld a, [hli]
+	add b
+	ld b, a
+	inc c
+	ld a, $9
+	cp c
+	jr nz, .loop
+	ld hl, wDefaultText
+	ld a, b
+	ld [wcecc], a
+	push bc
+	call ConvertToNumericalDigits
+	pop bc
+	ld [hl], TX_END
+	pop de
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0x99b0
+
+; prints the name, level and storage count of the cards
+; that are visible in the list window
+; in the form:
+; CARD NAME/LEVEL X/Y
+; where X is the current count of that card
+; and Y is the storage count of that card
+PrintDeckBuildingCardList: ; 99b0 (2:59b0)
+	push bc
+	ld hl, wced0
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld b, 19 ; x coord
+	ld c, e
+	dec c
+	ld a, [wcea1]
+	or a
+	jr z, .no_cursor
+	ld a, SYM_CURSOR_U
+	jr .got_cursor_tile
+.no_cursor
+	ld a, SYM_SPACE
+.got_cursor_tile
+	call WriteByteToBGMap0
+
+; iterates by decreasing value in wcecb
+; by 1 until it reaches 0
+	ld a, [wcea1]
+	ld c, a
+	ld b, $0
+	ld hl, wFilteredCardList
+	add hl, bc
+	ld a, [wcecb]
+.loop_filtered_cards
+	push de
+	or a
+	jr z, .exit_loop
+	ld b, a
+	ld a, [hli]
+	or a
+	jr z, .invalid_card ; card ID of 0
+	ld e, a
+	call Func_9a59
+	call LoadCardDataToBuffer1_FromCardID
+	ld a, 13
+	push bc
+	push hl
+	push de
+	call CopyCardNameAndLevel
+	pop de
+	call AppendOwnedCardCountAndStorageCountNumbers
+	pop hl
+	pop bc
+	pop de
+	push hl
+	call InitTextPrinting
+	ld hl, wDefaultText
+	jr .process_text
+
+.invalid_card
+	pop de
+	push hl
+	call InitTextPrinting
+	ld hl, Text_9a30
+.process_text
+	call ProcessText
+	pop hl
+
+	ld a, b
+	dec a
+	inc e
+	inc e
+	jr .loop_filtered_cards
+
+.exit_loop
+	ld a, [hli]
+	or a
+	jr z, .cannot_scroll
+	pop de
+; draw down cursor because
+; there are still more cards
+; to be scrolled down
+	xor a
+	ld [wcecd], a
+	ld a, SYM_CURSOR_D
+	jr .draw_cursor
+.cannot_scroll
+	pop de
+	ld a, $01
+	ld [wcecd], a
+	ld a, SYM_SPACE
+.draw_cursor
+	ld b, 19 ; x coord
+	ld c, e
+	dec c
+	dec c
+	call WriteByteToBGMap0
+	pop bc
+	ret
+
+Text_9a30:
+	db TX_SYMBOL, TX_END
+
+Text_9a32:
+	db TX_SYMBOL, TX_END
+
+Text_9a34:
+	db TX_SYMBOL, TX_END
+
+Text_9a36:
+	db TX_SYMBOL, TX_END
+
+Text_9a38:
+	db TX_SYMBOL, TX_END
+
+Text_9a3a:
+	db TX_SYMBOL, TX_END
+
+Text_9a3c:
+	db TX_SYMBOL, TX_END
+
+Text_9a3e:
+	db TX_SYMBOL, TX_END
+
+Text_9a40:
+	db TX_SYMBOL, TX_END
+
+Text_9a42:
+	db TX_SYMBOL, TX_END
+
+Text_9a44:
+	db TX_SYMBOL, TX_END
+
+Text_9a46:
+	db TX_SYMBOL, TX_END
+
+Text_9a48:
+	db TX_SYMBOL, TX_END
+
+Text_9a4a:
+	db TX_SYMBOL, TX_END
+
+Text_9a4c:
+	db TX_SYMBOL, TX_END
+
+Text_9a4e:
+	db TX_SYMBOL, TX_END
+
+Text_9a50:
+	db TX_SYMBOL, TX_END
+
+Text_9a52:
+	db TX_SYMBOL, TX_END
+
+Text_9a54:
+	db TX_SYMBOL, TX_END
+
+Text_9a56:
+	db TX_SYMBOL, TX_END
+
+Text_9a58:
+	db TX_END
+
+; input:
+; b = ?
+; e = card ID
+Func_9a59: ; 9a59 (2:5a59)
+	push af
+	push bc
+	push hl
+	ld hl, wcec4
+	ld c, b
+	ld a, [wcecb]
+	sub c
+	ld c, a
+	ld b, $00
+	add hl, bc ; = wcec4 + (wcecb - b)
+	ld [hl], e
+	pop hl
+	pop bc
+	pop af
+	ret
+; 0x9a6d
+
+; copies 9 bytes from hl to wcea5
 Func_9a6d: ; 9a6d (2:5a6d)
-	INCROM $9a6d, $9e41
+	ld [wNamingScreenCursorY], a
+	ld [hffb3], a
+	ld de, wcea5
+	ld b, $9
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, .loop
+	xor a
+	ld [wCheckMenuCursorBlinkCounter], a
+	ret
+; 0x9a83
+
+Func_9a83: ; 9a83 (2:5a83)
+	INCROM $9a83, $9ad7
+
+Func_9ad7: ; 9ad7 (2:5ad7)
+	call Func_9b20
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [wNamingScreenCursorY]
+	ld e, a
+	ld a, [hffb3]
+	scf
+	ret
+; 0x9ae8
+
+	INCROM $9ae8, $9b03
+
+Func_9b03: ; 9b03 (2:5b03)
+	ld e, a
+	ld a, [wcea5 + 3]
+	ld l, a
+	ld a, [wNamingScreenCursorY]
+	ld h, a
+	call HtimesL
+	ld a, l
+	ld hl, wcea5
+	add [hl]
+	ld b, a
+	ld hl, wcea5 + 1
+	ld a, [hl]
+	ld c, a
+	ld a, e
+	call WriteByteToBGMap0
+	or a
+	ret
+; 0x9b20
+
+Func_9b20: ; 9b20 (2:5b20)
+	ld a, [wceaa]
+	jr Func_9b03
+; 0x9b25
+
+Func_9b25: ; 9b25 (2:5b25)
+	INCROM $9b25, $9c0e
+
+Func_9c0e: ; 9c0e (2:5c0e)
+	INCROM $9c0e, $9c11
+
+; a = tile to write
+Func_9c11: ; 9c11 (2:5c11)
+	ld e, a
+	ld a, [wcea5 + 3]
+	ld l, a
+	ld a, [wNamingScreenCursorY]
+	ld h, a
+	call HtimesL
+	ld a, l
+	ld hl, wcea5
+	add [hl]
+	ld b, a
+	ld a, [wcea5 + 2]
+	ld l, a
+	ld a, [wNamingScreenCursorY]
+	ld h, a
+	call HtimesL
+	ld a, l
+	ld hl, wcea5 + 1
+	add [hl]
+	ld c, a
+	ld a, e
+	call WriteByteToBGMap0
+	or a
+	ret
+; 0x9c3a
+
+Func_9c3a: ; 9c3a (2:5c3a)
+	ld a, [wceaa]
+	jr Func_9c11
+; 0x9c3f
+
+Func_9c3f: ; 9c3f (2:5c3f)
+	INCROM $9c3f, $9e31
+
+Func_9e31: ; 9e31 (2:5e31)
+	ld hl, hffb0
+	ld [hl], $01
+	call Func_9fc0
+	ld hl, hffb0
+	ld [hl], $00
+	jp PrintConfirmationCardList
+; 0x9e41
 
 Func_9e41: ; 9e41 (2:5e41)
-	INCROM $9e41, $a288
+	ld a, [wcecc]
+	or a
+	jp z, Func_9f40
+	call Func_a028
+	call Func_a06e
+
+	xor a
+	ld [wcea1], a
+.asm_9e52
+	ld hl, Data_9eaf
+	call Func_9a6d
+	ld a, [wced9]
+	ld [wcfe4+ 2], a
+	cp $07
+	jr c, .asm_9e64
+	ld a, $07
+.asm_9e64
+	ld [wNamingScreenKeyboardHeight], a
+	ld [wcecb], a
+	call Func_9f52
+	ld hl, Func_9e31
+	ld d, h
+	ld a, l
+	ld hl, wcece
+	ld [hli], a
+	ld [hl], d
+	xor a
+	ld [wced2], a
+.asm_9e7b
+	call DoFrame
+	call Func_9b25
+	jr c, .asm_9ea7
+	call Func_9eb8
+	jr c, .asm_9e7b
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .asm_9e7b
+
+.asm_9e8e
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [wNamingScreenCursorY]
+	ld [wced7], a
+	ld de, wOwnedCardsCountList
+	ld hl, wcfd8
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call Func_9c3f
+	jr .asm_9e52
+
+.asm_9ea7
+	ld a, [hffb3]
+	cp $ff
+	ret z
+	jr .asm_9e8e
+; 0x9eaf
+
+Data_9eaf:
+	db $00, $05, $02, $00, $07, $0f, $00, $00, $00
+
+Func_9eb8: ; 9eb8 (2:5eb8)
+	ld a, [wNamingScreenKeyboardHeight]
+	ld d, a
+	ld a, [wcea1]
+	ld c, a
+	ldh a, [hDPadHeld]
+	cp D_RIGHT
+	jr z, .right
+	cp D_LEFT
+	jr z, .left
+	or a
+	ret
+
+.right
+	ld a, [wcea1]
+	add d
+	ld b, a
+	add d
+	ld hl, wcfe4 + 2
+	cp [hl]
+	jr c, .asm_9ee8
+	ld a, [wcfe4 + 2]
+	sub d
+	ld b, a
+	jr .asm_9ee8
+
+.left
+	ld a, [wcea1]
+	sub d
+	ld b, a
+	jr nc, .asm_9ee8
+	ld b, $00
+.asm_9ee8
+	ld a, b
+	ld [wcea1], a
+	cp c
+	jr z, .asm_9efa
+	ld a, SFX_01
+	call PlaySFX
+	ld hl, wcece
+	call CallIndirect
+.asm_9efa
+	scf
+	ret
+; 0x9efc
+
+Func_9efc: ; 9efc (2:5efc)
+	INCROM $9efc, $9f40
+
+Func_9f40: ; 9f40 (2:5f40)
+	call Func_9f81
+.wait_input
+	call DoFrame
+	ldh a, [hKeysPressed]
+	and B_BUTTON
+	jr z, .wait_input
+	ld a, $ff
+	call PlaySFXConfirmOrCancel
+	ret
+; 0x9f52
+
+Func_9f52: ; 9f52 (2:5f52)
+	call Func_9f81
+	lb de, 3, 5
+	ld hl, wced0
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call PrintConfirmationCardList
+	ret
+; 0x9f62
+
+; counts all values stored in wcebb
+; if the total count is 0, then
+; prints "No cards chosen."
+Func_9f62: ; 9f62 (2:5f62)
+	lb bc, 0, 0
+	ld hl, wcebb
+.loop
+	ld a, [hli]
+	add b
+	ld b, a
+	inc c
+	ld a, $9
+	cp c
+	jr nz, .loop
+	ld a, b
+	or a
+	ret nz
+	lb de, 11, 1
+	call InitTextPrinting
+	ldtx hl, NoCardsChosenText
+	call ProcessTextFromID
+	ret
+; 0x9f81
+
+Func_9f81: ; 9f81 (2:5f81)
+	call Func_8d56
+	lb de, 0, 0
+	lb bc, 20, 4
+	call DrawRegularTextBox
+	ld a, [wcfb9]
+	or a
+	jp z, .print_card_count ; should be jr
+	call Func_9fc0
+	ld a, [wceb1]
+	ld b, a
+	call EnableSRAM
+	ld a, [sCurrentlySelectedDeck]
+	call DisableSRAM
+	cp b
+	jr nz, .print_card_count
+	lb de, 2, 1
+	call DrawHandCardsTileAtDE
+
+.print_card_count
+	lb de, 14, 1
+	call PrintTotalCardCount
+	lb de, 16, 1
+	call PrintSlashSixty
+	call Func_9f62
+	call EnableLCD
+	ret
+; 0x9fc0
+
+Func_9fc0: ; 9fc0 (2:5fc0)
+	ld a, [wceb1]
+	cp $ff
+	jr z, .asm_9fea
+	lb de, 3, 2
+	call InitTextPrinting
+	ld a, [wceb1]
+	bit 7, a
+	jr z, .asm_9fd8
+	and $7f
+	jr .asm_9fd9
+.asm_9fd8
+	inc a
+.asm_9fd9
+	ld hl, wDefaultText
+	call ConvertToNumericalDigits
+	ld [hl], $77
+	inc hl
+	ld [hl], TX_END
+	ld hl, wDefaultText
+	call ProcessText
+
+.asm_9fea
+	ld hl, wcfb9
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	ld a, [wceb1]
+	cp $ff
+	jr z, .asm_a01b
+	ld hl, wDefaultText
+	call GetTextLengthInTiles
+	ld b, $0
+	ld hl, wDefaultText
+	add hl, bc
+	ld d, h
+	ld e, l
+	ld hl, Data_92a7
+	call CopyListFromHLToDE
+	lb de, 6, 2
+	ld hl, wDefaultText
+	call InitTextPrinting
+	call ProcessText
+	ret
+
+.asm_a01b
+	lb de, 2, 2
+	ld hl, wDefaultText
+	call InitTextPrinting
+	call ProcessText
+	ret
+; 0xa028
+
+Func_a028: ; a028 (2:6028)
+	ld hl, wcf17
+	ld de, wOpponentDeck
+	ld bc, wDuelTempList
+	ld a, -1
+	ld [bc], a
+.loop_copy
+	inc a
+	push af
+	ld a, [hli]
+	ld [de], a
+	inc de
+	or a
+	jr z, .sort_cards
+	pop af
+	ld [bc], a
+	inc bc
+	jr .loop_copy
+
+.sort_cards
+	pop af
+	ld a, $ff
+	ld [bc], a
+	ldh a, [hWhoseTurn]
+	push af
+	ld a, OPPONENT_TURN
+	ldh [hWhoseTurn], a
+	call SortCardsInDuelTempListByID
+	pop af
+	ldh [hWhoseTurn], a
+
+	ld hl, wcf17
+	ld de, wDuelTempList
+.asm_a058
+	ld a, [de]
+	cp $ff
+	jr z, .done
+	ld c, a
+	ld b, $0
+	push hl
+	ld hl, wOpponentDeck
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	ld [hli], a
+	inc de
+	jr .asm_a058
+
+.done
+	xor a
+	ld [hl], a
+	ret
+; 0xa06e
+
+; goes through list in wcf17, and for each card in it
+; creates list in wTempHandCardList of all unique cards
+; it finds (assuming wcf17 is sorted by ID)
+; also counts the number of the different cards
+Func_a06e: ; a06e (2:606e)
+	ld b, 0
+	ld c, $0
+	ld hl, wcf17
+	ld de, wTempHandCardList
+.loop
+	ld a, [hli]
+	cp c
+	jr z, .loop
+	ld c, a
+	ld [de], a
+	inc de
+	or a
+	jr z, .done
+	inc b
+	jr .loop
+.done
+	ld a, b
+	ld [wced9], a
+	ret
+; 0xa08a
+
+; prints the list of cards visible in the window
+; of the confirmation screen
+; card info is presented with name, level and
+; its count preceded by "x"
+PrintConfirmationCardList: ; a08a (2:608a)
+	push bc
+	ld hl, wced0
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld b, 19 ; x coord
+	ld c, e
+	dec c
+	ld a, [wcea1]
+	or a
+	jr z, .no_cursor
+	ld a, SYM_CURSOR_U
+	jr .got_cursor_tile_1
+.no_cursor
+	ld a, SYM_SPACE
+.got_cursor_tile_1
+	call WriteByteToBGMap0
+
+; iterates by decreasing value in wcecb
+; by 1 until it reaches 0
+	ld a, [wcea1]
+	ld c, a
+	ld b, $0
+	ld hl, wTempHandCardList
+	add hl, bc
+	ld a, [wcecb]
+.loop_cards
+	push de
+	or a
+	jr z, .exit_loop
+	ld b, a
+	ld a, [hli]
+	or a
+	jr z, .no_more_cards
+	ld e, a
+	call Func_9a59
+	call LoadCardDataToBuffer1_FromCardID
+	; places in wDefaultText the card's name and level
+	; then appends at the end "x" with the count of that card
+	; draws the card's type icon as well
+	ld a, 13
+	push bc
+	push hl
+	push de
+	call CopyCardNameAndLevel
+	pop de
+	call .PrintCardCount
+	pop hl
+	pop bc
+	pop de
+	call .DrawCardTypeIcon
+	push hl
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	pop hl
+	ld a, b
+	dec a
+	inc e
+	inc e
+	jr .loop_cards
+
+.exit_loop
+	ld a, [hli]
+	or a
+	jr z, .no_more_cards
+	pop de
+	xor a
+	ld [wcecd], a
+	ld a, SYM_CURSOR_D
+	jr .got_cursor_tile_2
+
+.no_more_cards
+	pop de
+	ld a, $01
+	ld [wcecd], a
+	ld a, SYM_SPACE
+.got_cursor_tile_2
+	ld b, 19 ; x coord
+	ld c, e
+	dec c
+	dec c
+	call WriteByteToBGMap0
+	pop bc
+	ret
+
+; prints the card count preceded by a cross
+; for example "x42"
+.PrintCardCount
+	push af
+	push bc
+	push de
+	push hl
+.loop_search
+	ld a, [hl]
+	or a
+	jr z, .found_card_id
+	inc hl
+	jr .loop_search
+.found_card_id
+	call Func_9850
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld [hl], SYM_CROSS
+	inc hl
+	call ConvertToNumericalDigits
+	ld [hl], TX_END
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
+; draws the icon corresponding to the loaded card's type
+; can be any of Pokemon stages (basic, 1st and 2nd stage)
+; Energy or Trainer
+; draws it 2 tiles to the left and 1 up to
+; the current coordinate in de
+.DrawCardTypeIcon
+	push hl
+	push de
+	push bc
+	ld a, [wLoadedCard1Type]
+	cp TYPE_ENERGY
+	jr nc, .not_pkmn_card
+
+; pokemon card
+	ld a, [wLoadedCard1Stage]
+	ld b, a
+	add b
+	add b
+	add b ; *4
+	add ICON_TILE_BASIC_POKEMON
+	jr .got_tile
+
+.not_pkmn_card
+	cp TYPE_TRAINER
+	jr nc, .trainer_card
+
+; energy card
+	sub TYPE_ENERGY
+	ld b, a
+	add b
+	add b
+	add b ; *4
+	add ICON_TILE_FIRE
+	jr .got_tile
+
+.trainer_card
+	ld a, ICON_TILE_TRAINER
+.got_tile
+	dec d
+	dec d
+	dec e
+	push af
+	lb hl, 1, 2
+	lb bc, 2, 2
+	call FillRectangle
+	pop af
+
+	call GetCardTypeIconPalette
+	ld b, a
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .skip_pal
+	ld a, b
+	lb bc, 2, 2
+	lb hl, 0, 0
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+.skip_pal
+	pop bc
+	pop de
+	pop hl
+	ret
+; 0xa173
+
+; returns in a the BG Pal corresponding to the
+; card type icon in input register a
+; if not found, returns $00
+GetCardTypeIconPalette: ; a173 (2:6173)
+	push bc
+	push hl
+	ld b, a
+	ld hl, .CardTypeIconPalettes
+.loop
+	ld a, [hli]
+	or a
+	jr z, .done
+	cp b
+	jr z, .done
+	inc hl
+	jp .loop ; should be jr
+.done
+	ld a, [hl]
+	pop hl
+	pop bc
+	ret
+
+.CardTypeIconPalettes
+; icon tile, BG pal
+	db ICON_TILE_FIRE,            1
+	db ICON_TILE_GRASS,           2
+	db ICON_TILE_LIGHTNING,       1
+	db ICON_TILE_WATER,           2
+	db ICON_TILE_FIGHTING,        3
+	db ICON_TILE_PSYCHIC,         3
+	db ICON_TILE_COLORLESS,       0
+	db ICON_TILE_ENERGY,          2
+	db ICON_TILE_BASIC_POKEMON,   2
+	db ICON_TILE_STAGE_1_POKEMON, 2
+	db ICON_TILE_STAGE_2_POKEMON, 1
+	db ICON_TILE_TRAINER,         2
+	db $00, $ff
+; 0xa1a2
+
+Func_a1a2: ; a1a2 (2:61a2)
+	ld hl, wcf17
+	ld a, DECK_SIZE + $15
+	call ClearNBytesFromHL
+	ld a, $ff
+	ld [wceb1], a
+	ld hl, .text
+	ld de, wcfb9
+	call CopyListFromHLToDE
+	ld hl, .unknown_a1d8
+	call Func_8d9d
+	call Func_9345
+	ret
+
+.text
+	text "Cards chosen to send"
+	db TX_END
+
+.unknown_a1d8
+	db $3c, $3c, $00
+	dw HandleSendDeckConfigurationMenu
+	dw SendDeckConfigurationMenu_TransitionTable
+; 0xa1df
+
+SendDeckConfigurationMenu_TransitionTable: ; a1df (2:61df)
+	cursor_transition $10, $20, $00, $00, $00, $01, $02
+	cursor_transition $48, $20, $00, $01, $01, $02, $00
+	cursor_transition $80, $20, $00, $02, $02, $00, $01
+
+SendDeckConfigurationMenuData: ; a1f4 (2:61f4)
+	textitem  2, 2, ConfirmText
+	textitem  9, 2, SendText
+	textitem 16, 2, CancelText
+	db $ff
+
+HandleSendDeckConfigurationMenu: ; a201 (2:6201)
+	ld de, $0
+	lb bc, 20, 6
+	call DrawRegularTextBox
+	ld hl, SendDeckConfigurationMenuData
+	call PlaceTextItems
+	ld a, $ff
+	ld [wDuelInitialPrizesUpperBitsSet], a
+.loop_input
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call DoFrame
+	call Func_89ae
+	jr nc, .loop_input
+	ld [wced6], a
+	cp $ff
+	jr nz, .asm_a23b
+	call DrawCardTypeIconsAndPrintCardCounts
+	ld a, [wced4]
+	ld [wNamingScreenCursorY], a
+	ld a, [wced3]
+	call Func_993d
+	jp Func_9345.skip_draw
+.asm_a23b
+	ld hl, .func_table
+	call JumpToFunctionInTable
+	jp Func_9461.asm_9475
+
+.func_table
+	dw ConfirmDeckConfiguration    ; Confirm
+	dw SendDeckConfiguration       ; Send
+	dw CancelSendDeckConfiguration ; Cancel
+; 0xa24a
+
+SendDeckConfiguration: ; a24a (2:624a)
+	ld a, [wcf17]
+	or a
+	jr z, CancelSendDeckConfiguration
+	xor a
+	ld [wcea1], a
+	ld hl, Data_b04a
+	call Func_9a6d
+	ld hl, wcf17
+	ld de, wDuelTempList
+	call CopyListFromHLToDE
+	call Func_b131
+	call Func_b088
+	call EnableLCD
+	ldtx hl, SendTheseCardsText
+	call YesOrNoMenuWithText
+	jr nc, .asm_a279
+	add sp, $2
+	jp Func_9345.skip_count
+.asm_a279
+	add sp, $2
+	scf
+	ret
+
+CancelSendDeckConfiguration: ; a27d (2:627d)
+	add sp, $2
+	or a
+	ret
+; 0xa281
+
+; copies b bytes from hl to de
+CopyNBytesFromHLToDE: ; a281 (2:6281)
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec b
+	jr nz, CopyNBytesFromHLToDE
+	ret
+; 0xa288
 
 Func_a288: ; a288 (2:6288)
-	INCROM $a288, $a913
+	INCROM $a288, $a3ca
+
+Func_a3ca: ; a3ca (2:63ca)
+	ld [hffb5], a
+	ld hl, sCardCollection
+	ld de, wTempCardCollection
+	ld b, $ff
+	call EnableSRAM
+	call CopyNBytesFromHLToDE
+	call DisableSRAM
+; deck_1
+	ld a, [hffb5] ; should be ldh
+	bit 0, a
+	jr z, .deck_2
+	ld de, sDeck1Cards
+	call GetDeckCardCounts
+.deck_2
+	ld a, [hffb5] ; should be ldh
+	bit 1, a
+	jr z, .deck_3
+	ld de, sDeck2Cards
+	call GetDeckCardCounts
+.deck_3
+	ld a, [hffb5] ; should be ldh
+	bit 2, a
+	jr z, .deck_4
+	ld de, sDeck3Cards
+	call GetDeckCardCounts
+.deck_4
+	ld a, [hffb5] ; should be ldh
+	bit 3, a
+	ret z
+	ld de, sDeck4Cards
+	call GetDeckCardCounts
+	ret
+; 0xa412
+
+; goes through deck cards in de
+; and gets the count of each card ID
+; in wTempCardCollection in card collection order
+GetDeckCardCounts: ; a412 (2:6412)
+	call EnableSRAM
+	ld bc, wTempCardCollection
+	ld h, DECK_SIZE
+.loop
+	ld a, [de]
+	inc de
+	or a
+	jr z, .done
+	push hl
+	ld h, $0
+	ld l, a
+	add hl, bc
+	inc [hl]
+	pop hl
+	dec h
+	jr nz, .loop
+.done
+	call DisableSRAM
+	ret
+; 0xa42d
+
+; prints the name, level and storage count of the cards
+; that are visible in the list window
+; in the form:
+; CARD NAME/LEVEL X
+; where X is the current count of that card
+PrintCardSelectionList: ; a42d (2:642d)
+	push bc
+	ld hl, wced0
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld b, 19 ; x coord
+	ld c, e
+	ld a, [wcea1]
+	or a
+	jr z, .alternate_cursor_tile
+	ld a, SYM_CURSOR_U
+	jr .got_cursor_tile_1
+.alternate_cursor_tile
+	ld a, [wCursorAlternateTile]
+.got_cursor_tile_1
+	call WriteByteToBGMap0
+
+; iterates by decreasing value in wcecb
+; by 1 until it reaches 0
+	ld a, [wcea1]
+	ld c, a
+	ld b, $0
+	ld hl, wFilteredCardList
+	add hl, bc
+	ld a, [wcecb]
+.loop_filtered_cards
+	push de
+	or a
+	jr z, .exit_loop
+	ld b, a
+	ld a, [hli]
+	or a
+	jr z, .invalid_card ; card ID of 0
+	ld e, a
+	call Func_9a59
+	call LoadCardDataToBuffer1_FromCardID
+	; places in wDefaultText the card's name and level
+	; then appends at the end the count of that card
+	; in the card storage
+	ld a, 14
+	push bc
+	push hl
+	push de
+	call CopyCardNameAndLevel
+	pop de
+	call AppendOwnedCardCountNumber
+	pop hl
+	pop bc
+	pop de
+	push hl
+	call InitTextPrinting
+	ld hl, wDefaultText
+	jr .process_text
+.invalid_card
+	pop de
+	push hl
+	call InitTextPrinting
+	ld hl, Text_9a36
+.process_text
+	call ProcessText
+	pop hl
+
+	ld a, b
+	dec a
+	inc e
+	inc e
+	jr .loop_filtered_cards
+
+.exit_loop
+	ld a, [hli]
+	or a
+	jr z, .cannot_scroll
+	pop de
+; draw down cursor because
+; there are still more cards
+; to be scrolled down
+	xor a
+	ld [wcecd], a
+	ld a, SYM_CURSOR_D
+	jr .got_cursor_tile_2
+.cannot_scroll
+	pop de
+	ld a, $01
+	ld [wcecd], a
+	ld a, [wCursorAlternateTile]
+.got_cursor_tile_2
+	ld b, 19 ; x coord
+	ld c, e
+	dec c
+	dec c
+	call WriteByteToBGMap0
+	pop bc
+	ret
+; 0xa4ae
+
+; appends the card count given in register e
+; to the list in hl, in numerical form
+; (i.e. its numeric symbol representation)
+AppendOwnedCardCountNumber: ; a4ae (2:64ae)
+	push af
+	push bc
+	push de
+	push hl
+; increment hl until end is reached ($00 byte)
+.loop
+	ld a, [hl]
+	or a
+	jr z, .end
+	inc hl
+	jr .loop
+.end
+	call GetOwnedCardCount
+	call ConvertToNumericalDigits
+	ld [hl], $00 ; insert byte terminator
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0xa4c6
+
+	INCROM $a4c6, $a913
 
 Func_a913: ; a913 (2:6913)
 	INCROM $a913, $ad51
@@ -2727,15 +5000,347 @@ Func_ad51: ; ad51 (2:6d51)
 	INCROM $ad51, $adfe
 
 Func_adfe: ; adfe (2:6dfe)
-	INCROM $adfe, $b177
+	INCROM $adfe, $af1d
+
+Func_af1d: ; af1d (2:6f1d)
+	xor a
+	ld [wTileMapFill], a
+	call ZeroObjectPositions
+	call EmptyScreen
+	ld a, $1
+	ld [wVBlankOAMCopyToggle], a
+	call LoadSymbolsFont
+	bank1call SetDefaultPalettes
+
+	lb de, $3c, $bf
+	call SetupText
+	lb de, 3, 1
+	call InitTextPrinting
+	ldtx hl, ProceduresForSendingCardsText
+	call ProcessTextFromID
+	lb de, 1, 3
+	call InitTextPrinting
+	ldtx hl, CardSendingProceduresText
+	ld a, $01
+	ld [wLineSeparation], a
+	call ProcessTextFromID
+	xor a
+	ld [wLineSeparation], a
+	ldtx hl, PleaseReadTheProceduresForSendingCardsText
+	call DrawWideTextBox_WaitForInput
+
+	call EnableLCD
+	call Func_a1a2
+	jr c, .asm_af6b
+	ld a, $01
+	or a
+	ret
+
+.asm_af6b
+	ld hl, wcf17
+	ld de, wDuelTempList
+	call CopyListFromHLToDE
+	xor a
+	ld [wNameBuffer], a
+	bank1call Func_756c
+	ret c
+	call EnableSRAM
+	ld hl, wcf17
+	call Func_910a
+	call DisableSRAM
+	call SaveGame
+	ld hl, wNameBuffer
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	xor a
+	ret
+
+; never reached
+	scf
+	ret
+; 0xaf98
+
+Func_af98: ; af98 (2:6f98)
+	xor a
+	ld [wDuelTempList], a
+	ld [wNameBuffer], a
+	bank1call Func_7567
+	ret c
+
+	call EnableSRAM
+	ld hl, wDuelTempList
+	call Func_9120
+	call DisableSRAM
+	call SaveGame
+	xor a
+	ld [wcea1], a
+	ld hl, Data_b04a
+	call Func_9a6d
+	call Func_b141
+	call Func_b088
+	call EnableLCD
+	ld a, [wceab + 3]
+	ld [wcfe4 + 2], a
+	ld hl, wcecb
+	cp [hl]
+	jr nc, .asm_afd4
+	ld [wNamingScreenKeyboardHeight], a
+.asm_afd4
+	ld hl, Func_b053
+	ld d, h
+	ld a, l
+	ld hl, wcece
+	ld [hli], a
+	ld [hl], d
+
+	xor a
+	ld [wced2], a
+.asm_afe2
+	call DoFrame
+	call Func_9b25
+	jr c, .asm_b02f
+	call Func_9eb8
+	jr c, .asm_afe2
+	ldh a, [hDPadHeld]
+	and START
+	jr z, .asm_afe2
+.asm_aff5
+	ld a, $01
+	call PlaySFXConfirmOrCancel
+	ld a, [wNamingScreenCursorY]
+	ld [wced4], a
+	ld de, wFilteredCardList
+	ld hl, wcfd8
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call Func_9c3f
+	call Func_b141
+	call PrintCardSelectionList
+	call EnableLCD
+	ld hl, Data_b04a
+	call Func_9a6d
+	ld a, [wceab + 3]
+	ld hl, wcecb
+	cp [hl]
+	jr nc, .asm_b027
+	ld [wNamingScreenKeyboardHeight], a
+.asm_b027
+	ld a, [wced4]
+	ld [wNamingScreenCursorY], a
+	jr .asm_afe2
+.asm_b02f
+	call Func_9c0e
+	ld a, [wNamingScreenCursorY]
+	ld [wced4], a
+	ld a, [hffb3]
+	cp $ff
+	jr nz, .asm_aff5
+	ld hl, wNameBuffer
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	or a
+	ret
+
+Data_b04a: ; b04a (2:704a)
+	db $01, $03, $02, $00, $05, $0f, $00, $00, $00
+
+Func_b053: ; b053 (2:7053)
+	ld hl, hffb0
+	ld [hl], $01
+	lb de, 1, 1
+	call InitTextPrinting
+	ldtx hl, CardReceivedText
+	call ProcessTextFromID
+	ld hl, wNameBuffer
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	xor a
+	ld [wTxRam2 + 0], a
+	ld [wTxRam2 + 1], a
+	lb de, 1, 14
+	call InitTextPrinting
+	ldtx hl, ReceivedTheseCardsFromText
+	call PrintTextNoDelay
+	ld hl, hffb0
+	ld [hl], $00
+	jp PrintCardSelectionList
+; 0xb088
+
+Func_b088: ; b088 (2:7088)
+	ld a, $ff
+	ld hl, wTempCardCollection
+	call ClearNBytesFromHL
+	ld de, wDuelTempList
+	call .Func_b0b2
+	ld a, $ff
+	call .Func_b0c0
+	ld a, $05
+	ld [wcecb], a
+	lb de, 2, 3
+	ld hl, wced0
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld a, SYM_BOX_RIGHT
+	ld [wCursorAlternateTile], a
+	call PrintCardSelectionList
+	ret
+
+.Func_b0b2
+	ld bc, wTempCardCollection
+.loop
+	ld a, [de]
+	inc de
+	or a
+	ret z
+	ld h, $00
+	ld l, a
+	add hl, bc
+	inc [hl]
+	jr .loop
+
+.Func_b0c0
+	push af
+	push bc
+	push de
+	push hl
+	push af
+	ld a, DECK_SIZE
+	ld hl, wOwnedCardsCountList
+	call ClearNBytesFromHL
+	ld a, DECK_SIZE
+	ld hl, wFilteredCardList
+	call ClearNBytesFromHL
+	pop af
+	ld hl, $0
+	ld de, $0
+	ld b, a
+.asm_b0dd
+	inc e
+	call GetCardType
+	jr c, .asm_b119
+	ld c, a
+	ld a, b
+	cp $ff
+	jr z, .asm_b0fc
+	and $20
+	cp $20
+	jr z, .asm_b0f5
+	ld a, c
+	cp b
+	jr nz, .asm_b0dd
+	jr .asm_b0fc
+.asm_b0f5
+	ld a, c
+	and TYPE_ENERGY
+	cp TYPE_ENERGY
+	jr nz, .asm_b0dd
+.asm_b0fc
+	push bc
+	push hl
+	ld bc, wFilteredCardList
+	add hl, bc
+	ld [hl], e
+	ld hl, wTempCardCollection
+	add hl, de
+	ld a, [hl]
+	and $7f
+	pop hl
+	or a
+	jr z, .asm_b116
+	push hl
+	ld bc, wOwnedCardsCountList
+	add hl, bc
+	ld [hl], a
+	pop hl
+	inc l
+.asm_b116
+	pop bc
+	jr .asm_b0dd
+
+.asm_b119
+	ld a, l
+	ld [wceab + 3], a
+	xor a
+	ld c, l
+	ld b, h
+	ld hl, wFilteredCardList
+	add hl, bc
+	ld [hl], a
+	ld a, $ff
+	ld hl, wOwnedCardsCountList
+	add hl, bc
+	ld [hl], a
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+; 0xb131
+
+Func_b131: ; b131 (2:7131)
+	call Func_b141.Func_b167
+	lb de, 1, 1
+	call InitTextPrinting
+	ldtx hl, CardToSendText
+	call ProcessTextFromID
+	ret
+; 0xb141
+
+Func_b141: ; b141 (2:7141)
+	call .Func_b167
+	lb de, 1, 1
+	call InitTextPrinting
+	ldtx hl, CardReceivedText
+	call ProcessTextFromID
+	ld hl, wNameBuffer
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	xor a
+	ld [wTxRam2 + 0], a
+	ld [wTxRam2 + 1], a
+	ldtx hl, ReceivedTheseCardsFromText
+	call DrawWideTextBox_PrintText
+	ret
+
+.Func_b167
+	call Set_OBJ_8x8
+	call Func_8d78
+	ld de, $0
+	lb bc, 20, 13
+	call DrawRegularTextBox
+	ret
+; 0xb177
 
 Func_b177: ; b177 (2:7177)
-	INCROM $b177, $b19d
+	ld a, [wd10e]
+	and $03
+	ld hl, .FunctionTable
+	call JumpToFunctionInTable
+	jr c, .asm_b18f
+	or a
+	jr nz, .asm_b18f
+	xor a
+	ld [wTxRam2 + 0], a
+	ld [wTxRam2 + 1], a
+	ret
+.asm_b18f
+	ld a, $ff
+	ld [wd10e], a
+	ret
+
+.FunctionTable
+	dw Func_af1d
+	dw Func_af98
+	dw Func_bc04
+	dw Func_bc7a
+; 0xb19d
 
 Func_b19d: ; b19d (2:719d)
 	xor a
 	ld [wcea1], a
-	ld de, CheckForCGB
+	ldtx de, DeckSaveMachineText
 	ld hl, wd0a2
 	ld [hl], e
 	inc hl
@@ -2745,13 +5350,13 @@ Func_b19d: ; b19d (2:719d)
 	ld [wd0a5], a
 	xor a
 .asm_b1b3
-	ld hl, Unknown_b6fb
+	ld hl, Data_b6fb
 	call Func_9a6d
 	call Func_b704
 	call Func_b545
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
-	ld de, $0224 ; PleaseSelectDeckText?
+	ldtx de, PleaseSelectDeckText
 	call Func_b285
 	call Func_b29f
 	jr c, .asm_b1b3
@@ -2839,7 +5444,22 @@ Unknown_b274: ; b274 (2:7274)
 	INCROM $b274, $b285
 
 Func_b285: ; b285 (2:7285)
-	INCROM $b285, $b29f
+	ld a, $05
+	ld [wNamingScreenKeyboardHeight], a
+	ld hl, wd0a7
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ld hl, Func_b403
+	ld d, h
+	ld a, l
+	ld hl, wcece
+	ld [hli], a
+	ld [hl], d
+	xor a
+	ld [wced2], a
+	ret
+; 0xb29f
 
 Func_b29f: ; b29f (2:729f)
 	INCROM $b29f, $b35b
@@ -2848,16 +5468,248 @@ Func_b35b: ; b35b (2:735b)
 	INCROM $b35b, $b379
 
 Func_b379: ; b379 (2:7379)
-	INCROM $b379, $b3fe
+	INCROM $b379, $b3b3
+
+Func_b3b3: ; b3b3 (2:73b3)
+	lb de, 1, 0
+	call InitTextPrinting
+	ld hl, wd0a2
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call ProcessTextFromID
+	ret
+; 0xb3c3
+
+	INCROM $b3c3, $b3e5
+
+Func_b3e5: ; b3e5 (2:73e5)
+	ld a, [wcea1]
+	ld de, $202
+	ld b, $05
+.asm_b3ed
+	push af
+	push bc
+	push de
+	call Func_b424
+	pop de
+	pop bc
+	pop af
+	ret c
+	dec b
+	ret z
+	inc a
+	inc e
+	inc e
+	jr .asm_b3ed
+; 0xb3fe
 
 Unknown_b3fe: ; b3fe (2:73fe)
-	INCROM $b3fe, $b545
+	INCROM $b3fe, $b403
+
+Func_b403: ; b403 (2:7403)
+	call Func_b704
+	ld hl, hffb0
+	ld [hl], $01
+	call Func_b3b3
+	lb de, 1, 14
+	call InitTextPrinting
+	ld hl, wd0a7
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call ProcessTextFromID
+	ld hl, hffb0
+	ld [hl], $00
+	jr Func_b3e5
+; 0xb424
+
+Func_b424: ; b424 (2:7424)
+	ld b, a
+	push bc
+	ld hl, wDefaultText
+	inc a
+	call ConvertToNumericalDigits
+	ld [hl], $77
+	inc hl
+	ld [hl], $00
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	pop af
+	push af
+	sla a
+	ld l, a
+	ld h, $00
+	ld bc, wd00d
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	inc d
+	inc d
+	inc d
+	push de
+	call Func_92be
+	pop de
+	pop bc
+	jr nc, .asm_b46b
+	call InitTextPrinting
+	ldtx hl, Text025b
+	call ProcessTextFromID
+	ld d, 13
+	inc e
+	call InitTextPrinting
+	ld hl, Text_b4d4
+	call ProcessText
+	scf
+	ret
+
+.asm_b46b
+	push de
+	push bc
+	ld d, 18
+	call InitTextPrinting
+	ld a, $00
+	call Func_b625
+	pop bc
+	ld hl, wDefaultText
+	jr c, .asm_b482
+	ld de, $35f
+	jr .asm_b4c2
+
+.asm_b482
+	push bc
+	ld a, $ff
+	call Func_b625
+	jr c, .asm_b490
+	pop bc
+	ld de, $360
+	jr .asm_b4c2
+
+.asm_b490
+	ld de, $6c
+	call Func_22ca
+	pop bc
+	pop de
+	push bc
+	ld d, 17
+	inc e
+	call InitTextPrinting
+	pop bc
+	call Func_b4e1
+	call CalculateOnesAndTensDigits
+	ld hl, wOnesAndTensPlace
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	ld hl, wDefaultText
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld [hli], a
+	ld [hl], TX_SYMBOL
+	inc hl
+	ld a, b
+	ld [hli], a
+	ld [hl], TX_END
+	ld hl, wDefaultText
+	call ProcessText
+	or a
+	ret
+
+.asm_b4c2
+	call Func_22ca
+	pop de
+	ld d, 13
+	inc e
+	call InitTextPrinting
+	ld hl, Text_b4d4
+	call ProcessText
+	or a
+	ret
+; 0xb4d4
+
+Text_b4d4: ; b4d4 (2:74d4)
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_SYMBOL, TX_END
+	db TX_END
+; 0xb4e1
+
+Func_b4e1: ; b4e1 (2:74e1)
+	push bc
+	call Func_b644
+	call Func_a3ca
+	call Func_b664
+	pop bc
+	sla b
+	ld c, b
+	ld b, $00
+	ld hl, wd00d
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld bc, $18
+	add hl, bc
+	call EnableSRAM
+	ld de, wTempCardCollection
+	ld bc, $0
+.asm_b505
+	inc b
+	ld a, DECK_SIZE
+	cp b
+	jr c, .asm_b520
+	ld a, [hli]
+	push hl
+	ld l, a
+	ld h, $00
+	add hl, de
+	ld a, [hl]
+	and $7f
+	or a
+	jr z, .asm_b51c
+	dec a
+	ld [hl], a
+	pop hl
+	jr .asm_b505
+.asm_b51c
+	inc c
+	pop hl
+	jr .asm_b505
+.asm_b520
+	ld a, c
+	call DisableSRAM
+	ret
+; 0xb525
+
+	INCROM $b525, $b545
 
 Func_b545: ; b545 (2:7545)
 	INCROM $b545, $b592
 
 Func_b592: ; b592 (2:7592)
-	INCROM $b592, $b625
+	INCROM $b592, $b611
+
+Func_b611: ; b611 (2:7611)
+	push af
+	push hl
+	ld a, [wd088]
+	sla a
+	ld e, a
+	ld d, $00
+	ld hl, wd00d
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	pop hl
+	pop af
+	ret
+; 0xb625
 
 Func_b625: ; b625 (2:7625)
 	INCROM $b625, $b644
@@ -2866,13 +5718,30 @@ Func_b644: ; b644 (2:7644)
 	INCROM $b644, $b653
 
 Func_b653: ; b653 (2:7653)
-	INCROM $b653, $b6ca
+	INCROM $b653, $b664
+
+Func_b664: ; b664 (2:7664)
+	push af
+	push bc
+	ldh a, [hBankSRAM]
+	ld b, a
+	ld a, [wd0a4]
+	cp b
+	jr z, .asm_b672
+	call BankswitchSRAM
+.asm_b672
+	pop bc
+	pop af
+	ret
+; 0xb675
+
+	INCROM $b675, $b6ca
 
 Func_b6ca: ; b6ca (2:76ca)
 	INCROM $b6ca, $b6fb
 
-Unknown_b6fb: ; b6fb (2:76fb)
-	INCROM $b6fb, $b704
+Data_b6fb: ; b6fb (2:76fb)
+	db $01, $02, $02, $00, $05, $0f, $00, $00, $00
 
 Func_b704: ; b704 (2:7704)
 	INCROM $b704, $b7c6
@@ -3072,7 +5941,159 @@ Data_bb76: ; bb76 (2:7b76)
 	INCROM $bb76, $bb83
 
 Data_bb83: ; bb83 (2:7b83)
-	INCROM $bb83, $bb97
+	tx FightingMachineText
+	tx RockMachineText
+	tx WaterMachineText
+	tx LightningMachineText
+	tx GrassMachineText
+	tx PsychicMachineText
+	tx ScienceMachineText
+	tx FireMachineText
+	tx AutoMachineText
+	tx LegendaryMachineText
 
 Func_bb97: ; bb97 (2:7b97)
-	INCROM $bb97, $c000
+	INCROM $bb97, $bc04
+
+Func_bc04: ; bc04 (2:7c04)
+	xor a
+	ld [wcea1], a
+	ldtx de, DeckSaveMachineText
+	ld hl, wd0a2
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call Func_b379
+	ld a, DECK_SIZE
+	ld [wd0a5], a
+	xor a
+.asm_bc1a
+	ld hl, Data_b6fb
+	call Func_9a6d
+	call Func_b704
+	call Func_b545
+	ldtx hl, PleaseChooseADeckConfigurationToSendText
+	call DrawWideTextBox_PrintText
+	ldtx de, PleaseChooseADeckConfigurationToSendText
+	call Func_b285
+.asm_bc32
+	call Func_b29f
+	jr c, .asm_bc1a
+	cp $ff
+	jr nz, .asm_bc3f
+	ld a, $01
+	or a
+	ret
+.asm_bc3f
+	ld b, a
+	ld a, [wcea1]
+	add b
+	ld [wd088], a
+	call Func_b35b
+	jr c, .asm_bc32
+
+	call Func_b611
+	ld l, e
+	ld h, d
+	ld de, wDuelTempList
+	ld b, $54
+	call EnableSRAM
+	call CopyNBytesFromHLToDE
+	call DisableSRAM
+
+	xor a
+	ld [wNameBuffer], a
+	bank1call Func_7562
+	ret c
+
+	call Func_b611
+	ld l, e
+	ld h, d
+	ld de, wDefaultText
+	call EnableSRAM
+	call CopyListFromHLToDE
+	call DisableSRAM
+	or a
+	ret
+; 0xbc7a
+
+Func_bc7a: ; bc7a (2:7c7a)
+	xor a
+	ld [wcea1], a
+	ldtx de, DeckSaveMachineText
+	ld hl, wd0a2
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	call Func_b379
+	ld a, DECK_SIZE
+	ld [wd0a5], a
+	xor a
+.asm_bc90
+	ld hl, Data_b6fb
+	call Func_9a6d
+	call Func_b704
+	call Func_b545
+	ldtx hl, PleaseChooseASaveSlotText
+	call DrawWideTextBox_PrintText
+	ldtx de, PleaseChooseASaveSlotText
+	call Func_b285
+	call Func_b29f
+	jr c, .asm_bc90
+	cp $ff
+	jr nz, .asm_bcb5
+	ld a, $01
+	or a
+	ret
+.asm_bcb5
+	ld b, a
+	ld a, [wcea1]
+	add b
+	ld [wd088], a
+	call Func_b35b
+	jr nc, .asm_bcc4
+	jr .asm_bcd1
+.asm_bcc4
+	ldtx hl, OKIfFileDeletedText
+	call YesOrNoMenuWithText
+	jr nc, .asm_bcd1
+	ld a, [wNamingScreenCursorY]
+	jr .asm_bc90
+.asm_bcd1
+	xor a
+	ld [wDuelTempList], a
+	ld [wNameBuffer], a
+	bank1call Func_755d
+	ret c
+	call EnableSRAM
+	ld hl, wDuelTempList
+	call Func_b611
+	ld b, $54
+	call CopyNBytesFromHLToDE
+	call DisableSRAM
+	call SaveGame
+	call Func_b379
+	ld a, [wNamingScreenCursorY]
+	ld hl, Data_b6fb
+	call Func_9a6d
+	call Func_b704
+	call Func_b545
+	call Func_9c3a
+	ld hl, wNameBuffer
+	ld de, wDefaultText
+	call CopyListFromHLToDE
+	xor a
+	ld [wTxRam2 + 0], a
+	ld [wTxRam2 + 1], a
+	ldtx hl, ReceivedADeckConfigurationFromText
+	call DrawWideTextBox_WaitForInput
+	call Func_b611
+	ld l, e
+	ld h, d
+	ld de, wDefaultText
+	call EnableSRAM
+	call CopyListFromHLToDE
+	call DisableSRAM
+	xor a
+	ret
+; 0xbd2e
