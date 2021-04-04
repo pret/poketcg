@@ -7,6 +7,8 @@ parser.add_argument('offsets', metavar='offsets', type=str, nargs='+',
                     help='start offset(s) of the compressed data')
 parser.add_argument('-s', metavar='suffix', dest='suffix', type=str, nargs=1, default=[],
                     help='suffix for output file names')
+parser.add_argument('-d', dest='decompress', action='store_true',
+                    help='whether the output file should be decompressed')
 
 args = parser.parse_args()
 
@@ -17,10 +19,6 @@ def getByteString(offset, len):
 
 def getByte(offset):
     return getByteString(offset, 1)[0]
-
-def convertOffset(ptrBytes, offset):
-    bank = floor(offset / 0x4000)
-    return (ptrBytes[0] + (ptrBytes[1] << 8)) + bank * 0x4000 - 0x4000
 
 def getFormattedOffset(offset):
     return '{:0x}'.format(offset)
@@ -44,8 +42,8 @@ def getCompressedData(offset):
         pos += 1
         data.append(cmdByte)
 
-        for b in range(8):
-            if (cmdByte & (1 << (7 - b)) != 0):
+        for bit in range(8):
+            if (cmdByte & (1 << (7 - bit)) != 0):
                 # copy one byte literally
                 data.append(getByte(pos))
                 pos += 1
@@ -75,9 +73,82 @@ def getCompressedData(offset):
 
     return bytes(data)
 
-def outputData(offset, filename):
+def decompressData(source):
+    buffer = [0x00 for i in range(0x100)]
+    sourcePos = 0
+    bufferPos = 0xef
+    lenByte = 0x00
+    repeatToggle = False
+
+    decompData = [] # final decompressed data that will be output
+
+    while True:
+        if sourcePos >= len(source):
+            # got to the end of the data
+            break
+
+        cmdByte = source[sourcePos]
+        sourcePos += 1
+
+        for cmdBit in range(8):
+            if sourcePos >= len(source):
+                # got to the end of the data
+                break
+
+            if (cmdByte & (1 << (7 - cmdBit)) != 0):
+                # copy one byte literally
+                byteToCopy = source[sourcePos]
+
+                decompData.append(byteToCopy)
+                buffer[bufferPos] = byteToCopy
+                sourcePos += 1
+                bufferPos = (bufferPos + 1) % 0x100
+            else:
+                # copy previous sequence
+                repeatToggle = not repeatToggle
+
+                if (repeatToggle):
+                    # sequence length
+                    offsetToCopy = source[sourcePos]
+                    lenByte = source[sourcePos + 1]
+                    bytesToCopy = []
+
+                    curLen = ((lenByte & 0xf0) >> 4) + 2
+                    for i in range(curLen):
+                        buffer[bufferPos] = buffer[offsetToCopy]
+                        bytesToCopy.append(buffer[offsetToCopy])
+                        offsetToCopy = (offsetToCopy + 1) % 0x100
+                        bufferPos = (bufferPos + 1) % 0x100
+
+                    decompData.extend(bytesToCopy)
+                    sourcePos += 2
+                else:
+                    # no sequence length byte if toggle is off
+                    offsetToCopy = source[sourcePos]
+                    bytesToCopy = []
+
+                    curLen = (lenByte & 0x0f) + 2
+                    for i in range(curLen):
+                        buffer[bufferPos] = buffer[offsetToCopy]
+                        bytesToCopy.append(buffer[offsetToCopy])
+                        offsetToCopy = (offsetToCopy + 1) % 0x100
+                        bufferPos = (bufferPos + 1) % 0x100
+
+                    decompData.extend(bytesToCopy)
+                    sourcePos += 1
+
+    return bytes(decompData)
+
+def outputData(offset, filename, decompress):
+    comprData = getCompressedData(offset)
+    data = []
+    if decompress:
+        data = decompressData(comprData)
+    else:
+        data = comprData
+
     with open(filename + '.bin', 'wb') as outFile:
-        outFile.write(getCompressedData(offset))
+        outFile.write(data)
 
 n = 1
 for offsetStr in args.offsets:
@@ -87,5 +158,5 @@ for offsetStr in args.offsets:
         filename = args.suffix[0]
         if (len(args.offsets) > 1):
             filename = filename + str(n)
-    outputData(offset, filename)
+    outputData(offset, filename, args.decompress)
     n += 1
