@@ -113,7 +113,7 @@ def decompressData(source):
                     lenByte = source[sourcePos + 1]
                     bytesToCopy = []
 
-                    curLen = ((lenByte & 0xf0) >> 4) + 2
+                    curLen = (lenByte >> 4) + 2
                     for i in range(curLen):
                         buffer[bufferPos] = buffer[offsetToCopy]
                         bytesToCopy.append(buffer[offsetToCopy])

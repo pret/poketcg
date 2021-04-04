@@ -1,7 +1,7 @@
 Func_70000: ; 70000 (1c:4000)
 	ld a, [wConsole]
-	cp $1
-	ret nz
+	cp CONSOLE_SGB
+	ret nz ; exit if not SGB
 	ld b, $1
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
 	farcall GetEventValue
@@ -15,8 +15,8 @@ Func_70000: ; 70000 (1c:4000)
 
 Func_70018: ; 70018 (1c:4018)
 	ld a, [wConsole]
-	cp $1
-	ret nz
+	cp CONSOLE_SGB
+	ret nz ; exit if not SGB
 	ld a, $0
 	call Func_70044
 	ret
@@ -35,10 +35,10 @@ IconEnPacket: ; 70034 (1c:4034)
 Func_70044: ; 70044 (1c:4044)
 	push hl
 	push bc
-	add a
+	add a ; *2
 	ld c, a
-	add a
-	add c
+	add a ; *4
+	add c ; *6
 	ld c, a
 	ld b, $0
 	ld hl, Unknown_70057
@@ -49,12 +49,17 @@ Func_70044: ; 70044 (1c:4044)
 	ret
 
 Unknown_70057: ; 70057 (1c:4057)
-	INCROM $70057, $70082
+	dw SGBBorderIntroGfxPointers,  SGBData_BorderIntro3,  SGBData_BorderIntro4
+	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals3, SGBData_BorderMedals5
+	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals4, SGBData_BorderMedals5
+; 0x70069
+
+	INCROM $70069, $70082
 
 Func_70082: ; 70082 (1c:4082)
 	ld a, [wConsole]
-	cp $1
-	ret nz
+	cp CONSOLE_SGB
+	ret nz ; exit if not SGB
 	push hl
 	push bc
 	ld a, [hli]
@@ -64,6 +69,7 @@ Func_70082: ; 70082 (1c:4082)
 	call Func_700a3
 	pop hl
 	inc hl
+
 	ld a, [hli]
 	ld e, a
 	ld a, [hli]
@@ -84,17 +90,19 @@ Func_700a3: ; 700a3 (1c:40a3)
 	push hl
 	call Func_70136
 	pop hl
+
 	push hl
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ld de, v0Tiles1
-	call Func_701e9
-	call Func_701fe
+	call DecompressSGBData
+	call PrepareBGMapForSendingSGBBorder
 	ld hl, ChrTrnPacket_BGTiles1
-	call Func_70177
+	call SendSGBBorder
 	pop hl
-	ld de, $0002
+
+	ld de, 2
 	add hl, de
 	ld a, [hli]
 	ld h, [hl]
@@ -105,9 +113,9 @@ Func_700a3: ; 700a3 (1c:40a3)
 	call Func_70136
 	dec hl
 	ld de, v0Tiles1
-	call Func_701e9
+	call DecompressSGBData
 	ld hl, ChrTrnPacket_BGTiles2
-	call Func_70177
+	call SendSGBBorder
 .asm_700da
 	pop de
 	pop bc
@@ -136,15 +144,16 @@ Func_700fe: ; 700fe (1c:40fe)
 	call Func_70136
 	pop hl
 	ld de, v0Tiles1
-	call Func_701e9
-	pop hl
+	call DecompressSGBData
+
+	pop hl ; input de
 	ld de, v0Tiles2
-	call Func_701e9
-	call Func_701fe
+	call DecompressSGBData
+	call PrepareBGMapForSendingSGBBorder
 	pop hl
 	call Func_70214
 	ld hl, PctTrnPacket
-	call Func_70177
+	call SendSGBBorder
 	pop de
 	pop bc
 	pop hl
@@ -167,6 +176,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld [wd41f], a
 	ld a, [wLCDC]
 	ld [wd420], a
+
 	di
 	ld hl, MaskEnPacket_Freeze_Bank1c
 	call SendSGB
@@ -178,6 +188,7 @@ Func_70136: ; 70136 (1c:4136)
 	ld a, %11100100
 	ldh [rBGP], a
 	call SetBGP
+
 	xor a
 	ldh [hSCX], a
 	ldh [rSCX], a
@@ -188,7 +199,7 @@ Func_70136: ; 70136 (1c:4136)
 	pop hl
 	ret
 
-Func_70177: ; 70177 (1c:4177)
+SendSGBBorder: ; 70177 (1c:4177)
 	push hl
 	push bc
 	push de
@@ -249,7 +260,8 @@ Func_701c0: ; 701c0 (1c:41c0)
 	pop hl
 	ret
 
-Func_701e9: ; 701e9 (1c:41e9)
+; decompresses data pointed by hl to de
+DecompressSGBData: ; 701e9 (1c:41e9)
 	ld a, [hli]
 	ld c, a
 	ld a, [hli]
@@ -267,13 +279,15 @@ Func_701e9: ; 701e9 (1c:41e9)
 	call DecompressData
 	ret
 
-Func_701fe: ; 701fe (1c:41fe)
+; fills a 20x13 rectangle in v0BGMap0
+; with values ascending bytes starting at $80
+PrepareBGMapForSendingSGBBorder: ; 701fe (1c:41fe)
 	ld hl, v0BGMap0
 	ld de, $000c
 	ld a, $80
 	ld c, $d
 .asm_70208
-	ld b, $14
+	ld b, SCREEN_WIDTH
 .asm_7020a
 	ld [hli], a
 	inc a
@@ -502,7 +516,57 @@ Func_704c7: ; 704c7 (1c:44c7)
 	ret
 ; 0x704d3
 
-	INCROM $704d3, $7322f
+	INCROM $704d3, $706dd
+
+SGBData_BorderIntro4: ; 706dd (1c:46dd)
+	dw $800 ; length
+	INCBIN "data/sgb_data/sgb_border_intro_4.bin"
+
+SGBData_BorderMedals5: ; 709dc (1c:49dc)
+	dw $800 ; length
+	INCBIN "data/sgb_data/sgb_border_medals_5.bin"
+
+	INCROM $70b96, $713a9
+
+SGBBorderIntroGfxPointers: ; 713a9 (1c:53a9)
+	dw SGBData_BorderIntro1
+	dw SGBData_BorderIntro2
+
+SGBData_BorderIntro1: ; 713ad (1c:53ad)
+	dw $1000 ; length
+	INCBIN "data/sgb_data/sgb_border_intro_1.bin"
+
+SGBData_BorderIntro2: ; 71ec0 (1c:5ec0)
+	dw $4e0 ; length
+	INCBIN "data/sgb_data/sgb_border_intro_2.bin"
+
+	INCROM $72271, $72273
+
+SGBBorderMedalsGfxPointers: ; 72273 (1c:6273)
+	dw SGBData_BorderMedals1
+	dw SGBData_BorderMedals2
+
+SGBData_BorderMedals1: ; 72277 (1c:5277)
+	dw $1000 ; length
+	INCBIN "data/sgb_data/sgb_border_medals_1.bin"
+
+SGBData_BorderMedals2: ; 72fe4 (1c:5fe4)
+	dw $100 ; length
+	INCBIN "data/sgb_data/sgb_border_medals_2.bin"
+
+	INCROM $730dc, $73146
+
+SGBData_BorderIntro3: ; 73146 (1c:7146)
+	dw $60 ; length
+	INCBIN "data/sgb_data/sgb_border_intro_3.bin"
+
+SGBData_BorderMedals3: ; 7319a (1c:719a)
+	dw $60 ; length
+	INCBIN "data/sgb_data/sgb_border_medals_3.bin"
+
+SGBData_BorderMedals4: ; 731e5 (1c:71e5)
+	dw $60 ; length
+	INCBIN "data/sgb_data/sgb_border_medals_4.bin"
 
 SGBData_MapPals1: ; 7322f (1c:722f)
 	dw $20 ; length
@@ -589,5 +653,3 @@ SGBData_GameBoyPrinter: ; 73b05 (1c:7b05)
 SGBData_TitleScreen: ; 73b33 (1c:7b33)
 	dw $40 ; length
 	INCBIN "data/sgb_data/title_screen_pals.bin"
-
-	INCROM $73b63, $74000
