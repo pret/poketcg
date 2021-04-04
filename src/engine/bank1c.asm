@@ -49,12 +49,14 @@ Func_70044: ; 70044 (1c:4044)
 	ret
 
 Unknown_70057: ; 70057 (1c:4057)
+	; tiles, pals (?), map (?)
 	dw SGBBorderIntroGfxPointers,  SGBData_BorderIntro3,  SGBData_BorderIntro4
 	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals3, SGBData_BorderMedals5
 	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals4, SGBData_BorderMedals5
-; 0x70069
+	dw SGBBorderDebugGfxPointers,  SGBData_BorderDebug3,  SGBData_BorderDebug4
+; 0x7006f
 
-	INCROM $70069, $70082
+	INCROM $7006f, $70082
 
 Func_70082: ; 70082 (1c:4082)
 	ld a, [wConsole]
@@ -516,7 +518,9 @@ Func_704c7: ; 704c7 (1c:44c7)
 	ret
 ; 0x704d3
 
-	INCROM $704d3, $706dd
+SGBData_BorderDebug4: ; 704d3 (1c:44d3)
+	dw $800 ; length
+	INCBIN "data/sgb_data/sgb_border_debug_4.bin"
 
 SGBData_BorderIntro4: ; 706dd (1c:46dd)
 	dw $800 ; length
@@ -526,7 +530,19 @@ SGBData_BorderMedals5: ; 709dc (1c:49dc)
 	dw $800 ; length
 	INCBIN "data/sgb_data/sgb_border_medals_5.bin"
 
-	INCROM $70b96, $713a9
+SGBBorderDebugGfxPointers: ; 70b96 (1c:4b96)
+	dw SGBData_BorderDebug1
+	dw SGBData_BorderDebug2
+
+SGBData_BorderDebug1: ; 70b9a (1c:45b9a)
+	dw $1000 ; length
+	INCBIN "data/sgb_data/sgb_border_debug_1.bin"
+
+SGBData_BorderDebug2: ; 71359 (1c:5359)
+	dw $a0 ; length
+	INCBIN "data/sgb_data/sgb_border_debug_2.bin"
+
+	INCROM $713a7, $713a9
 
 SGBBorderIntroGfxPointers: ; 713a9 (1c:53a9)
 	dw SGBData_BorderIntro1
@@ -553,8 +569,12 @@ SGBData_BorderMedals1: ; 72277 (1c:5277)
 SGBData_BorderMedals2: ; 72fe4 (1c:5fe4)
 	dw $100 ; length
 	INCBIN "data/sgb_data/sgb_border_medals_2.bin"
+	
+	INCROM $730dc, $730de
 
-	INCROM $730dc, $73146
+SGBData_BorderDebug3: ; 730de (1c:70de)
+	dw $60 ; length
+	INCBIN "data/sgb_data/sgb_border_debug_3.bin"
 
 SGBData_BorderIntro3: ; 73146 (1c:7146)
 	dw $60 ; length
