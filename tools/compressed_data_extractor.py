@@ -41,6 +41,7 @@ def getCompressedData(offset):
         cmdByte = getByte(pos)
         pos += 1
         data.append(cmdByte)
+        print('{:0x}'.format(cmdByte))
 
         for bit in range(8):
             if (cmdByte & (1 << (7 - bit)) != 0):
@@ -69,6 +70,11 @@ def getCompressedData(offset):
             # the decompression might finish while still
             # reading command bits, so break early when this happens
             if (size == 0):
+                if not repeatToggle:
+                    # extra bytes to match source
+                    data.append(getByte(pos))
+                    data.append(getByte(pos + 1))
+
                 break
 
     return bytes(data)

@@ -1,4 +1,4 @@
-Func_70000: ; 70000 (1c:4000)
+SetMainSGBBorder: ; 70000 (1c:4000)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -10,15 +10,15 @@ Func_70000: ; 70000 (1c:4000)
 	ld b, $2
 .asm_70013
 	ld a, b
-	call Func_70044
+	call SetSGBBorder
 	ret
 
-Func_70018: ; 70018 (1c:4018)
+SetIntroSGBBorder: ; 70018 (1c:4018)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
 	ld a, $0
-	call Func_70044
+	call SetSGBBorder
 	ret
 
 AtrcEnPacket_Disable: ; 70024 (1c:4024)
@@ -32,7 +32,12 @@ IconEnPacket: ; 70034 (1c:4034)
 	db $01
 	ds $0e
 
-Func_70044: ; 70044 (1c:4044)
+; sets SGB border corresponding with value in register a
+; $0 = intro
+; $1 = medals (gold)
+; $2 = medals (blue)
+; $3 = debug
+SetSGBBorder: ; 70044 (1c:4044)
 	push hl
 	push bc
 	add a ; *2
@@ -43,7 +48,7 @@ Func_70044: ; 70044 (1c:4044)
 	ld b, $0
 	ld hl, .SGBBorders
 	add hl, bc
-	call Func_70082
+	call DecompressAndSendSGBBorder
 	pop bc
 	pop hl
 	ret
@@ -56,9 +61,20 @@ Func_70044: ; 70044 (1c:4044)
 	dw SGBBorderDebugGfxPointers,  SGBData_BorderDebug3,  SGBData_BorderDebug4
 ; 0x7006f
 
-	INCROM $7006f, $70082
+; forces SGB border intro
+; unreferenced?
+Func_7006f: ; 7006f (1c:406f)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz ; exit if not SGB
+	ld de, SGBData_BorderIntro3
+	ld hl, SGBData_BorderIntro4
+	call SetMainSGBBorderPalsAndMap
+	call Func_701c0
+	ret
+; 0x70082
 
-Func_70082: ; 70082 (1c:4082)
+DecompressAndSendSGBBorder: ; 70082 (1c:4082)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; exit if not SGB
@@ -79,7 +95,7 @@ Func_70082: ; 70082 (1c:4082)
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call Func_700fe
+	call SetMainSGBBorderPalsAndMap
 	call Func_701c0
 	pop bc
 	pop hl
@@ -136,7 +152,9 @@ ChrTrnPacket_BGTiles2: ; 700ee (1c:40ee)
 	db 1
 	ds $0e
 
-Func_700fe: ; 700fe (1c:40fe)
+; de = pals
+; hl = map
+SetMainSGBBorderPalsAndMap: ; 700fe (1c:40fe)
 	push hl
 	push bc
 	push de
@@ -556,7 +574,84 @@ DecompressSGBPalette: ; 70403 (1c:4403)
 	ret
 ; 0x7041d
 
-	INCROM $7041d, $70498
+; sends an SGB packet related with palettes
+; unreferenced?
+Func_7041d: ; 7041d (1c:441d)
+	ld a, [wConsole]
+	cp CONSOLE_SGB
+	ret nz ; exit if not SGB
+
+	push hl
+	push bc
+	push de
+	push bc
+	push hl
+	push hl
+	ld hl, SGBData_UnusedPals1
+	call DecompressSGBPalette
+	ld hl, wLoadedPalData
+	ld de, wTempSGBPacket + $1
+	ld bc, $8
+	call CopyDataHLtoDE
+
+	pop hl
+	call DecompressSGBPalette
+	ld hl, wLoadedPalData + 2
+	ld de, wTempSGBPacket + $9
+	ld bc, $6
+	call CopyDataHLtoDE
+
+	xor a
+	ld [wTempSGBPacket + $f], a
+	ld hl, wTempSGBPacket
+	ld a, $09
+	ld [hl], a
+	call Func_704c7
+	call SendSGB
+
+	pop hl
+	ld c, $0f
+	ld a, l
+	cp LOW(SGBData_UnusedPals1)
+	jr nz, .asm_7046a
+	ld a, h
+	cp HIGH(SGBData_UnusedPals1)
+	jr nz, .asm_7046a
+	ld c, $0a
+
+.asm_7046a
+	ld a, c
+	ld [wTempSGBPacket + $3], a
+	pop bc
+	ld hl, wTempSGBPacket
+	push hl
+	ld a, $21
+	ld [hli], a
+	ld a, $01
+	ld [hli], a
+	ld a, $01
+	ld [hli], a
+	inc hl
+	ld a, b
+	ld [hli], a
+	ld a, c
+	ld [hli], a
+	ld a, $05
+	add b
+	ld [hli], a
+	ld a, $05
+	add c
+	ld [hli], a
+	xor a
+	ld [wTempSGBPacket + $e], a
+	ld [wTempSGBPacket + $f], a
+	pop hl
+	call SendSGB
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x70498
 
 ; send an ATTR_BLK SGB packet
 ; input:
@@ -620,15 +715,15 @@ Func_704c7: ; 704c7 (1c:44c7)
 
 SGBData_BorderDebug4: ; 704d3 (1c:44d3)
 	dw $800 ; length
-	INCBIN "data/sgb_data/sgb_border_debug_4.bin"
+	INCBIN "data/sgb_data/border_debug_4.bin"
 
 SGBData_BorderIntro4: ; 706dd (1c:46dd)
 	dw $800 ; length
-	INCBIN "data/sgb_data/sgb_border_intro_4.bin"
+	INCBIN "data/sgb_data/border_intro_4.bin"
 
 SGBData_BorderMedals5: ; 709dc (1c:49dc)
 	dw $800 ; length
-	INCBIN "data/sgb_data/sgb_border_medals_5.bin"
+	INCBIN "data/sgb_data/border_medals_5.bin"
 
 SGBBorderDebugGfxPointers: ; 70b96 (1c:4b96)
 	dw SGBData_BorderDebug1
@@ -636,13 +731,11 @@ SGBBorderDebugGfxPointers: ; 70b96 (1c:4b96)
 
 SGBData_BorderDebug1: ; 70b9a (1c:45b9a)
 	dw $1000 ; length
-	INCBIN "data/sgb_data/sgb_border_debug_1.bin"
+	INCBIN "data/sgb_data/border_debug_1.bin"
 
 SGBData_BorderDebug2: ; 71359 (1c:5359)
 	dw $a0 ; length
-	INCBIN "data/sgb_data/sgb_border_debug_2.bin"
-
-	INCROM $713a7, $713a9
+	INCBIN "data/sgb_data/border_debug_2.bin"
 
 SGBBorderIntroGfxPointers: ; 713a9 (1c:53a9)
 	dw SGBData_BorderIntro1
@@ -650,13 +743,11 @@ SGBBorderIntroGfxPointers: ; 713a9 (1c:53a9)
 
 SGBData_BorderIntro1: ; 713ad (1c:53ad)
 	dw $1000 ; length
-	INCBIN "data/sgb_data/sgb_border_intro_1.bin"
+	INCBIN "data/sgb_data/border_intro_1.bin"
 
 SGBData_BorderIntro2: ; 71ec0 (1c:5ec0)
 	dw $4e0 ; length
-	INCBIN "data/sgb_data/sgb_border_intro_2.bin"
-
-	INCROM $72271, $72273
+	INCBIN "data/sgb_data/border_intro_2.bin"
 
 SGBBorderMedalsGfxPointers: ; 72273 (1c:6273)
 	dw SGBData_BorderMedals1
@@ -664,29 +755,27 @@ SGBBorderMedalsGfxPointers: ; 72273 (1c:6273)
 
 SGBData_BorderMedals1: ; 72277 (1c:5277)
 	dw $1000 ; length
-	INCBIN "data/sgb_data/sgb_border_medals_1.bin"
+	INCBIN "data/sgb_data/border_medals_1.bin"
 
 SGBData_BorderMedals2: ; 72fe4 (1c:5fe4)
 	dw $100 ; length
-	INCBIN "data/sgb_data/sgb_border_medals_2.bin"
-	
-	INCROM $730dc, $730de
+	INCBIN "data/sgb_data/border_medals_2.bin"
 
 SGBData_BorderDebug3: ; 730de (1c:70de)
 	dw $60 ; length
-	INCBIN "data/sgb_data/sgb_border_debug_3.bin"
+	INCBIN "data/sgb_data/border_debug_3.bin"
 
 SGBData_BorderIntro3: ; 73146 (1c:7146)
 	dw $60 ; length
-	INCBIN "data/sgb_data/sgb_border_intro_3.bin"
+	INCBIN "data/sgb_data/border_intro_3.bin"
 
 SGBData_BorderMedals3: ; 7319a (1c:719a)
 	dw $60 ; length
-	INCBIN "data/sgb_data/sgb_border_medals_3.bin"
+	INCBIN "data/sgb_data/border_medals_3.bin"
 
 SGBData_BorderMedals4: ; 731e5 (1c:71e5)
 	dw $60 ; length
-	INCBIN "data/sgb_data/sgb_border_medals_4.bin"
+	INCBIN "data/sgb_data/border_medals_4.bin"
 
 SGBData_MapPals1: ; 7322f (1c:722f)
 	dw $20 ; length
@@ -756,7 +845,173 @@ SGBData_LaboratoryBooster: ; 73471 (1c:7471)
 	dw $20 ; length
 	INCBIN "data/sgb_data/laboratory_booster_pals.bin"
 
-	INCROM $73496, $73aa8
+SGBData_UnusedPals1: ; 73496 (1c:7496)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_1.bin"
+
+SGBData_UnusedPals2: ; 734bb (1c:74bb)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_2.bin"
+
+SGBData_UnusedPals_3: ; 734e0 (1c:74e0)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_3.bin"
+
+SGBData_UnusedPals_4: ; 73505 (1c:7505)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_4.bin"
+
+SGBData_UnusedPals_5: ; 7352a (1c:752a)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_5.bin"
+
+SGBData_UnusedPals_6: ; 7354f (1c:754f)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_6.bin"
+
+SGBData_UnusedPals_7: ; 73574 (1c:7574)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_7.bin"
+
+SGBData_UnusedPals_8: ; 73599 (1c:7599)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_8.bin"
+
+SGBData_UnusedPals_9: ; 735be (1c:75be)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_9.bin"
+
+SGBData_UnusedPals10: ; 735e3 (1c:75e3)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_10.bin"
+
+SGBData_UnusedPals11: ; 73608 (1c:7608)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_11.bin"
+
+SGBData_UnusedPals12: ; 7362d (1c:762d)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_12.bin"
+
+SGBData_UnusedPals13: ; 73652 (1c:7652)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_13.bin"
+
+SGBData_UnusedPals14: ; 73677 (1c:7677)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_14.bin"
+
+SGBData_UnusedPals15: ; 7369c (1c:769c)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_15.bin"
+
+SGBData_UnusedPals16: ; 736c1 (1c:76c1)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_16.bin"
+
+SGBData_UnusedPals17: ; 736e6 (1c:76e6)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_17.bin"
+
+SGBData_UnusedPals18: ; 7370b (1c:770b)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_18.bin"
+
+SGBData_UnusedPals19: ; 73730 (1c:7730)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_19.bin"
+
+SGBData_UnusedPals20: ; 73755 (1c:7755)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_20.bin"
+
+SGBData_UnusedPals21: ; 7377a (1c:777a)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_21.bin"
+
+SGBData_UnusedPals22: ; 7379f (1c:779f)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_22.bin"
+
+SGBData_UnusedPals23: ; 737c4 (1c:77c4)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_23.bin"
+
+SGBData_UnusedPals24: ; 737e9 (1c:77e9)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_24.bin"
+
+SGBData_UnusedPals25: ; 7380e (1c:780e)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_25.bin"
+
+SGBData_UnusedPals26: ; 73833 (1c:7833)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_26.bin"
+
+SGBData_UnusedPals27: ; 73858 (1c:7858)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_27.bin"
+
+SGBData_UnusedPals28: ; 7387d (1c:787d)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_28.bin"
+
+SGBData_UnusedPals29: ; 738a2 (1c:78a2)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_29.bin"
+
+SGBData_UnusedPals30: ; 738c7 (1c:78c7)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_30.bin"
+
+SGBData_UnusedPals31: ; 738ec (1c:78ec)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_31.bin"
+
+SGBData_UnusedPals32: ; 73911 (1c:7911)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_32.bin"
+
+SGBData_UnusedPals33: ; 73936 (1c:7936)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_33.bin"
+
+SGBData_UnusedPals34: ; 7395b (1c:795b)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_34.bin"
+
+SGBData_UnusedPals35: ; 73980 (1c:7980)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_35.bin"
+
+SGBData_UnusedPals36: ; 739a5 (1c:79a5)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_36.bin"
+
+SGBData_UnusedPals37: ; 739ca (1c:79ca)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_37.bin"
+
+SGBData_UnusedPals38: ; 739ef (1c:79ef)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_38.bin"
+
+SGBData_UnusedPals39: ; 73a14 (1c:7a14)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_39.bin"
+
+SGBData_UnusedPals40: ; 73a39 (1c:7a39)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_40.bin"
+
+SGBData_UnusedPals41: ; 73a5e (1c:7a5e)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_41.bin"
+
+SGBData_UnusedPals42: ; 73a83 (1c:7a83)
+	dw $20 ; length
+	INCBIN "data/sgb_data/unused_pals_42.bin"
 
 SGBData_GameBoyLink: ; 73aa8 (1c:7aa8)
 	dw $40 ; length

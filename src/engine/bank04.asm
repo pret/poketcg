@@ -63,7 +63,7 @@ Medal_1029e: ; 1029e (4:429e)
 	call PauseSong
 	ld a, MUSIC_STOP
 	call PlaySong
-	farcall Func_70000
+	farcall SetMainSGBBorder
 	call DisableLCD
 	call Func_10000
 	ld a, $fa
@@ -2810,7 +2810,7 @@ _GameLoop: ; 126d1 (4:66d1)
 	call ZeroObjectPositions
 	ld hl, wVBlankOAMCopyToggle
 	inc [hl]
-	farcall Func_70018
+	farcall SetIntroSGBBorder
 	ld a, $ff
 	ld [wd627], a
 .main_menu_loop
@@ -2846,7 +2846,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	call DisableSRAM
 	ld a, MUSIC_STOP
 	call PlaySong
-	farcall Func_70000
+	farcall SetMainSGBBorder
 	ld a, MUSIC_OVERWORLD
 	ld [wDefaultSong], a
 	call PlayDefaultSong
@@ -2863,7 +2863,7 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	call Func_11320
 	jr nc, MainMenu_NewGame
 	farcall Func_c1ed
-	farcall Func_70000
+	farcall SetMainSGBBorder
 	call EnableSRAM
 	xor a
 	ld [sba44], a
@@ -2890,7 +2890,7 @@ MainMenu_ContinueDuel: ; 1277e (4:677e)
 	call PlaySong
 	farcall Func_c9cb
 	farcall $04, Func_3a40
-	farcall Func_70000
+	farcall SetMainSGBBorder
 	ld a, GAME_EVENT_CONTINUE_DUEL
 	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent
