@@ -41,14 +41,14 @@ Func_70044: ; 70044 (1c:4044)
 	add c ; *6
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_70057
+	ld hl, .SGBBorders
 	add hl, bc
 	call Func_70082
 	pop bc
 	pop hl
 	ret
 
-Unknown_70057: ; 70057 (1c:4057)
+.SGBBorders
 	; tiles, pals (?), map (?)
 	dw SGBBorderIntroGfxPointers,  SGBData_BorderIntro3,  SGBData_BorderIntro4
 	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals3, SGBData_BorderMedals5
@@ -142,7 +142,7 @@ Func_700fe: ; 700fe (1c:40fe)
 	push de
 	push hl
 	push de
-	push hl
+	push hl ; input hl
 	call Func_70136
 	pop hl
 	ld de, v0Tiles1
@@ -152,8 +152,9 @@ Func_700fe: ; 700fe (1c:40fe)
 	ld de, v0Tiles2
 	call DecompressSGBData
 	call PrepareBGMapForSendingSGBBorder
-	pop hl
-	call Func_70214
+
+	pop hl ; input hl
+	call FillSGBBorderMedalSlots
 	ld hl, PctTrnPacket
 	call SendSGBBorder
 	pop de
@@ -300,25 +301,30 @@ PrepareBGMapForSendingSGBBorder: ; 701fe (1c:41fe)
 	jr nz, .asm_70208
 	ret
 
-Func_70214: ; 70214 (1c:4214)
+; iterates all the medals obtained by the player
+; and fills the corresponding medal slot in the SGB border
+FillSGBBorderMedalSlots: ; 70214 (1c:4214)
+; exit if not SGBData_BorderMedals5
 	ld a, l
-	cp $dc
+	cp LOW(SGBData_BorderMedals5)
 	ret nz
 	ld a, h
-	cp $49
+	cp HIGH(SGBData_BorderMedals5)
 	ret nz
-	ld hl, Unknown_7024a
+
+	ld hl, .SGBBorderMedalTiles
 	ld a, EVENT_MEDAL_FLAGS
 	farcall GetEventValue
-	ld c, $8
-.asm_70227
+	ld c, NUM_MEDALS
+.loop_medals
 	push bc
 	push hl
 	push af
 	bit 7, a
-	jr z, .asm_7023e
-	ld c, $9
-.asm_70230
+	jr z, .next_medal
+
+	ld c, 3 * 3
+.loop_tiles
 	push bc
 	ld e, [hl]
 	inc hl
@@ -331,20 +337,114 @@ Func_70214: ; 70214 (1c:4214)
 	ld [de], a
 	pop bc
 	dec c
-	jr nz, .asm_70230
-.asm_7023e
+	jr nz, .loop_tiles
+
+.next_medal
 	pop af
 	rlca
 	pop hl
-	ld bc, $0024
+	ld bc, 3 * 3 * 4
 	add hl, bc
 	pop bc
 	dec c
-	jr nz, .asm_70227
+	jr nz, .loop_medals
 	ret
 
-Unknown_7024a: ; 7024a (1c:424a)
-	INCROM $7024a, $7036a
+border_medal_tile: MACRO
+	dw \1 ; VRAM address
+	db \2 ; tile
+	db \3 ; pal (?)
+ENDM
+
+.SGBBorderMedalTiles
+; GRASS_MEDAL
+	border_medal_tile v0Tiles1 + $182, $3f, $10
+	border_medal_tile v0Tiles1 + $184, $40, $10
+	border_medal_tile v0Tiles1 + $186, $41, $10
+	border_medal_tile v0Tiles1 + $1c2, $42, $10
+	border_medal_tile v0Tiles1 + $1c4, $43, $10
+	border_medal_tile v0Tiles1 + $1c6, $44, $10
+	border_medal_tile v0Tiles1 + $202, $45, $10
+	border_medal_tile v0Tiles1 + $204, $46, $10
+	border_medal_tile v0Tiles1 + $206, $47, $10
+
+; SCIENCE_MEDAL
+	border_medal_tile v0Tiles1 + $282, $48, $10
+	border_medal_tile v0Tiles1 + $284, $49, $10
+	border_medal_tile v0Tiles1 + $286, $4a, $10
+	border_medal_tile v0Tiles1 + $2c2, $4b, $10
+	border_medal_tile v0Tiles1 + $2c4, $4c, $10
+	border_medal_tile v0Tiles1 + $2c6, $4d, $10
+	border_medal_tile v0Tiles1 + $302, $4e, $10
+	border_medal_tile v0Tiles1 + $304, $4f, $10
+	border_medal_tile v0Tiles1 + $306, $50, $10
+
+; FIRE_MEDAL
+	border_medal_tile v0Tiles1 + $382, $51, $10
+	border_medal_tile v0Tiles1 + $384, $52, $10
+	border_medal_tile v0Tiles1 + $386, $53, $10
+	border_medal_tile v0Tiles1 + $3c2, $54, $10
+	border_medal_tile v0Tiles1 + $3c4, $55, $10
+	border_medal_tile v0Tiles1 + $3c6, $56, $10
+	border_medal_tile v0Tiles1 + $402, $57, $10
+	border_medal_tile v0Tiles1 + $404, $58, $10
+	border_medal_tile v0Tiles1 + $406, $59, $10
+
+; WATER_MEDAL
+	border_medal_tile v0Tiles1 + $482, $5a, $10
+	border_medal_tile v0Tiles1 + $484, $5b, $10
+	border_medal_tile v0Tiles1 + $486, $5c, $10
+	border_medal_tile v0Tiles1 + $4c2, $5d, $10
+	border_medal_tile v0Tiles1 + $4c4, $5e, $10
+	border_medal_tile v0Tiles1 + $4c6, $5f, $10
+	border_medal_tile v0Tiles1 + $502, $60, $10
+	border_medal_tile v0Tiles1 + $504, $61, $10
+	border_medal_tile v0Tiles1 + $506, $62, $10
+
+; LIGHTNING_MEDAL
+	border_medal_tile v0Tiles1 + $1b8, $63, $10
+	border_medal_tile v0Tiles1 + $1ba, $64, $10
+	border_medal_tile v0Tiles1 + $1bc, $65, $10
+	border_medal_tile v0Tiles1 + $1f8, $66, $10
+	border_medal_tile v0Tiles1 + $1fa, $67, $10
+	border_medal_tile v0Tiles1 + $1fc, $68, $10
+	border_medal_tile v0Tiles1 + $238, $69, $10
+	border_medal_tile v0Tiles1 + $23a, $6a, $10
+	border_medal_tile v0Tiles1 + $23c, $6b, $10
+
+; FIGHTING_MEDAL
+	border_medal_tile v0Tiles1 + $2b8, $7e, $10
+	border_medal_tile v0Tiles1 + $2ba, $7f, $10
+	border_medal_tile v0Tiles1 + $2bc, $80, $10
+	border_medal_tile v0Tiles1 + $2f8, $81, $10
+	border_medal_tile v0Tiles1 + $2fa, $82, $10
+	border_medal_tile v0Tiles1 + $2fc, $83, $10
+	border_medal_tile v0Tiles1 + $338, $84, $10
+	border_medal_tile v0Tiles1 + $33a, $85, $10
+	border_medal_tile v0Tiles1 + $33c, $86, $10
+
+; ROCK_MEDAL
+	border_medal_tile v0Tiles1 + $3b8, $75, $10
+	border_medal_tile v0Tiles1 + $3ba, $76, $10
+	border_medal_tile v0Tiles1 + $3bc, $77, $10
+	border_medal_tile v0Tiles1 + $3f8, $78, $10
+	border_medal_tile v0Tiles1 + $3fa, $79, $10
+	border_medal_tile v0Tiles1 + $3fc, $7a, $10
+	border_medal_tile v0Tiles1 + $438, $7b, $10
+	border_medal_tile v0Tiles1 + $43a, $7c, $10
+	border_medal_tile v0Tiles1 + $43c, $7d, $10
+
+; PSYCHIC_MEDAL
+	border_medal_tile v0Tiles1 + $4b8, $6c, $10
+	border_medal_tile v0Tiles1 + $4ba, $6d, $10
+	border_medal_tile v0Tiles1 + $4bc, $6e, $10
+	border_medal_tile v0Tiles1 + $4f8, $6f, $10
+	border_medal_tile v0Tiles1 + $4fa, $70, $10
+	border_medal_tile v0Tiles1 + $4fc, $71, $10
+	border_medal_tile v0Tiles1 + $538, $72, $10
+	border_medal_tile v0Tiles1 + $53a, $73, $10
+	border_medal_tile v0Tiles1 + $53c, $74, $10
+; 0x7036a
 
 ; decompresses palette data depending on wd132
 ; then sends it as SGB packet

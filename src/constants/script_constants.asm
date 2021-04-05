@@ -278,3 +278,25 @@ WEST     EQU $03
 NO_MOVE  EQU %10000000 ; For rotations without movement
 
 VARIABLE_CARD	EQU 0 ; use the card located in wCardReceived instead of using the script's argument
+
+; medal flags set in EVENT_MEDAL_FLAGS
+	const_def
+	const PSYCHIC_MEDAL_F   ; 0
+	const ROCK_MEDAL_F      ; 1
+	const FIGHTING_MEDAL_F  ; 2
+	const LIGHTNING_MEDAL_F ; 3
+	const WATER_MEDAL_F     ; 4
+	const FIRE_MEDAL_F      ; 5
+	const SCIENCE_MEDAL_F   ; 6
+	const GRASS_MEDAL_F     ; 7
+
+PSYCHIC_MEDAL   EQU 1 << PSYCHIC_MEDAL_F
+ROCK_MEDAL      EQU 1 << ROCK_MEDAL_F
+FIGHTING_MEDAL  EQU 1 << FIGHTING_MEDAL_F
+LIGHTNING_MEDAL EQU 1 << LIGHTNING_MEDAL_F
+WATER_MEDAL     EQU 1 << WATER_MEDAL_F
+FIRE_MEDAL      EQU 1 << FIRE_MEDAL_F
+SCIENCE_MEDAL   EQU 1 << SCIENCE_MEDAL_F
+GRASS_MEDAL     EQU 1 << GRASS_MEDAL_F
+
+NUM_MEDALS EQU 8
