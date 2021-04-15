@@ -2087,8 +2087,8 @@ Func_1996e: ; 1996e (6:596e)
 	add hl, de
 	dec c
 	jr nz, .asm_199b2
-	ld a, $2
-	ld [s0a003], a
+	ld a, 2
+	ld [sPrinterContrastLevel], a
 	ld a, $2
 	ld [sTextSpeed], a
 	ld [wTextSpeed], a
@@ -2673,6 +2673,7 @@ CalculateNameHash: ; 19e32 (6:5e32)
 	ret
 ; 0x19e42
 
+Func_19e42: ; 19e42 (6:5e42)
 	INCROM $19e42, $19e5a
 
 ; shows message on screen depending on wPrinterStatus
@@ -2955,7 +2956,7 @@ Func_1a035: ; 1a035 (6:6035)
 	ld a, $10
 	ld [wce9b], a
 	call EnableSRAM
-	ld a, [s0a003]
+	ld a, [sPrinterContrastLevel]
 	ld [wce99], a
 	call DisableSRAM
 	ldh a, [hBankSRAM]
@@ -3140,7 +3141,13 @@ Func_1a138: ; 1a138 (6:6138)
 	db $00, $20, $40, $60, $7f
 ; 0x1a14b
 
-	INCROM $1a14b, $1a435
+	INCROM $1a14b, $1a162
+
+Func_1a162: ; 1a162 (6:6162)
+	INCROM $1a162, $1a270
+
+Func_1a270: ; 1a270 (6:6270)
+	INCROM $1a270, $1a435
 
 ; compresses $28 tiles in sGfxBuffer5
 ; and writes it in sGfxBuffer5 + $28 tiles.
@@ -4917,11 +4924,9 @@ KeyboardData_Deck: ; 1b019 (6:7019)
 ; unknown data.
 ; needs analyze.
 ; (6:70d6)
-	INCROM $1b0d6, $1ba12
+	INCROM $1b0d6, $1ba14
 
-Func_1ba12: ; 1ba12 (6:7a12)
-	push af
-	ld [bc], a
+Func_1ba14: ; 1ba14 (6:7a14)
 	call EnableSRAM
 	ld a, [wd0a9]
 	ld l, a

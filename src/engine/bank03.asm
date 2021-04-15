@@ -1272,7 +1272,7 @@ Func_c877: ; c877 (3:4877)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_ad51
+	farcall HandlePrinterMenu
 	call Set_OBJ_8x8
 	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled

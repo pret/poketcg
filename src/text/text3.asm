@@ -1,23 +1,23 @@
-Text026d: ; 3c000 (f:4000)
+YouDoNotOwnAllCardsNeededToBuildThisDeckText: ; 3c000 (f:4000)
 	text "You do not own all cards needed"
 	line "to build this Deck."
 	done
 
-Text026e: ; 3c035 (f:4035)
+BuiltDeckText: ; 3c035 (f:4035)
 	text "Built"
 	line "<RAMTEXT>"
 	done
 
-Text026f: ; 3c03e (f:403e)
+TheseCardsAreNeededToBuildThisDeckText: ; 3c03e (f:403e)
 	text "These cards are needed"
 	line "to build this Deck:"
 	done
 
-Text0270: ; 3c06a (f:406a)
+DismantleTheseDecksText: ; 3c06a (f:406a)
 	text "Dismantle these Decks?"
 	done
 
-Text0271: ; 3c082 (f:4082)
+DismantledTheDeckText: ; 3c082 (f:4082)
 	text "Dismantled the Deck."
 	done
 
@@ -25,11 +25,11 @@ OKIfFileDeletedText: ; 3c098 (f:4098)
 	text "OK if this file is deleted?"
 	done
 
-Text0273: ; 3c0b5 (f:40b5)
+ReadTheInstructionsText: ; 3c0b5 (f:40b5)
 	text "Read the Instructions"
 	done
 
-Text0274: ; 3c0cc (f:40cc)
+PrintThisCardYesNoText: ; 3c0cc (f:40cc)
 	text "Print this card?"
 	line "      Yes     No"
 	done
@@ -39,7 +39,7 @@ Text0275: ; 3c0ef (f:40ef)
 	line "to print."
 	done
 
-Text0276: ; 3c11d (f:411d)
+PrintThisDeckText: ; 3c11d (f:411d)
 	text "Print this Deck?"
 	done
 
@@ -48,7 +48,7 @@ Text0277: ; 3c12f (f:412f)
 	line "      Yes     No"
 	done
 
-Text0278: ; 3c156 (f:4156)
+PrintMenuItemsText: ; 3c156 (f:4156)
 	text "Pokémon Cards"
 	line "Deck Configuration"
 	line "Card List"
@@ -56,16 +56,16 @@ Text0278: ; 3c156 (f:4156)
 	line "Quit Print"
 	done
 
-Text0279: ; 3c19b (f:419b)
+WhatWouldYouLikeToPrintText: ; 3c19b (f:419b)
 	text "What would you like to print?"
 	done
 
-Text027a: ; 3c1ba (f:41ba)
+PleaseSetTheContrastText: ; 3c1ba (f:41ba)
 	text "Please set the contrast:"
 	line "  Light   1   2   3   4   5   Dark"
 	done
 
-Text027b: ; 3c1f7 (f:41f7)
+PleaseMakeSureToTurnGameBoyPrinterOffText: ; 3c1f7 (f:41f7)
 	text "Please make sure to turn"
 	line "the Game Boy Printer OFF."
 	done

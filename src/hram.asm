@@ -171,6 +171,7 @@ hCurSelectionItem:: ; ffb2
 hffb3:: ; ffb3
 	ds $1
 
+hffb4:: ; ffb4
 	ds $1
 
 hffb5:: ; ffb5

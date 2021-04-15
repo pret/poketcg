@@ -1740,9 +1740,14 @@ wInPlayAreaPreservedPosition:: ; ce57
 wInPlayAreaTemporaryPosition:: ; ce58
 	ds $1
 
-wce59:: ; ce59
+; number of prize cards still to be
+; picked by the player
+wNumberOfPrizeCardsToSelect:: ; ce59
 	ds $1
 
+; pointer to a $ff-terminated list
+; of the prize cards selected by the player
+wSelectedPrizeCardListPtr:: ; ce5a
 	ds $2
 
 wce5c:: ; ce5c
@@ -1917,7 +1922,13 @@ wceaa:: ; ceaa
 	ds $1
 
 wceab:: ; ceab
-	ds $4
+	ds $1
+
+wceac:: ; ceac
+	ds $2
+
+wceae:: ; ceae
+	ds $1
 
 wCheckMenuCursorXPosition:: ; ceaf
 	ds $1
@@ -1974,7 +1985,9 @@ wced0:: ; ced0
 wced2:: ; ced2
 	ds $1
 
-wced3:: ; ced3
+; the current filter being used
+; from the CardTypeFilters list
+wCurCardTypeFilter:: ; ced3
 	ds $1
 
 wced4:: ; ced4
@@ -2012,7 +2025,10 @@ wcf16:: ; cf16
 wcf17:: ; cf17
 	ds DECK_SIZE
 
-	ds $15
+wcf53:: ; cf53
+	ds $1
+
+	ds $14
 
 ; stores the count number of cards owned
 ; can be 0 in the case that a card is not available
@@ -2049,14 +2065,27 @@ wCursorAlternateTile:: ; cfde
 wcfdf:: ; cfdf
 	ds $1
 
-	ds $3
+wcfe0:: ; cfe0
+	ds $1
+
+wcfe1:: ; cfe1
+	ds $1
+
+wcfe2:: ; cfe2
+	ds $1
 
 ; a flag indicating whether sfx should be played.
 wPlaysSfx:: ; cfe3
 	ds $1
 
 wcfe4:: ; cfe4
-	ds $3
+	ds $1
+
+wcfe5:: ; cfe5
+	ds $1
+
+wcfe6:: ; cfe6
+	ds $1
 
 ; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7
@@ -2092,9 +2121,12 @@ wd009:: ; d009
 	ds $4
 
 wd00d:: ; d00d
-	ds $1
+	ds $18
 
-	ds $78
+	ds $60
+
+wd085:: ; d085
+	ds $1
 
 wd086:: ; d086
 	ds $1

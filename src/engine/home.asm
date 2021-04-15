@@ -9315,34 +9315,35 @@ Func_30e7: ; 30e7 (0:30e7)
 	ld a, b
 	ret
 
-Func_30f9: ; 30f9 (0:30f9)
+DrawAIPeekScreen: ; 30f9 (0:30f9)
 	ld b, a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8932)
+	ld a, BANK(_DrawAIPeekScreen)
 	call BankswitchROM
-	call Func_8932
+	call _DrawAIPeekScreen
 	pop af
 	call BankswitchROM
 	ret
 
-Func_310a: ; 310a (0:310a)
-	ld [wce59], a
+; a = number of prize cards for player to select to take
+SelectPrizeCards: ; 310a (0:310a)
+	ld [wNumberOfPrizeCardsToSelect], a
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8aaa)
+	ld a, BANK(_SelectPrizeCards)
 	call BankswitchROM
-	call Func_8aaa
+	call _SelectPrizeCards
 	pop af
 	call BankswitchROM
 	ret
 
-Func_311d: ; 311d (0:311d)
+DrawPlayAreaToPlacePrizeCards: ; 311d (0:311d)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8b85)
+	ld a, BANK(_DrawPlayAreaToPlacePrizeCards)
 	call BankswitchROM
-	call Func_8b85
+	call _DrawPlayAreaToPlacePrizeCards
 	pop af
 	call BankswitchROM
 	ret

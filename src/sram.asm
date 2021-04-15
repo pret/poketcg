@@ -3,7 +3,9 @@ SECTION "SRAM0", SRAM
 s0a000:: ; a000
 	ds $3
 
-s0a003:: ; a003
+; what was the last option selected by the player
+; for the printer contrast level (0 ~ 4)
+sPrinterContrastLevel:: ; a003
 	ds $1
 s0a004:: ; a004
 	ds $1
