@@ -746,7 +746,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 	and SELECT
 	jr nz, .on_select
 
-	farcall Func_89ae
+	farcall YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .next
 
 	cp -1 ; b button

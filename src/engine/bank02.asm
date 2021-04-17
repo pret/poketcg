@@ -1367,20 +1367,20 @@ DrawCheckMenuCursor_YourOrOppPlayArea: ; 8743 (2:4743)
 	call WriteByteToBGMap0
 	or a
 	ret
+; 0x8760
 
 DisplayCheckMenuCursor_YourOrOppPlayArea: ; 8760 (2:4760)
 	ld a, SYM_CURSOR_R ; load cursor byte
 	jr DrawCheckMenuCursor_YourOrOppPlayArea
 
-; seems to be function to deal with the Peek menu
-; to select a prize card to view
-Func_8764: ; 8764 (2:4764)
+; handles Peek Pkmn Power selection menus
+_HandlePeekSelection: ; 8764 (2:4764)
 	call Set_OBJ_8x8
 	call LoadCursorTile
-; reset ce5c and ce56
+; reset ce5c and wIsSwapTurnPending
 	xor a
 	ld [wce5c], a
-	ld [wce56], a
+	ld [wIsSwapTurnPending], a
 
 ; draw play area screen for the turn player
 	ldh a, [hWhoseTurn]
@@ -1388,51 +1388,51 @@ Func_8764: ; 8764 (2:4764)
 	ld l, a
 	call DrawYourOrOppPlayAreaScreen
 
-.swap
-	ld a, [wce56]
+.check_swap
+	ld a, [wIsSwapTurnPending]
 	or a
-	jr z, .draw_menu
-; if ce56 != 0, swap turn
+	jr z, .draw_menu_1
+; if wIsSwapTurnPending is TRUE, swap turn
 	call SwapTurn
 	xor a
-	ld [wce56], a
+	ld [wIsSwapTurnPending], a
 
-.draw_menu
+; prompt player to choose either own Play Area or opponent's
+.draw_menu_1
 	xor a
-	ld hl, PlayAreaMenuParameters
+	ld hl, .PlayAreaMenuParameters
 	call InitializeMenuParameters
 	call DrawWideTextBox
-
-	ld hl, YourOrOppPlayAreaData
+	ld hl, .YourOrOppPlayAreaData
 	call PlaceTextItems
 
-.loop_1
+.loop_input_1
 	call DoFrame
-	call HandleMenuInput ; await input
-	jr nc, .loop_1
-	cp $ff
-	jr z, .loop_1
+	call HandleMenuInput
+	jr nc, .loop_input_1
+	cp -1
+	jr z, .loop_input_1 ; can't use B btn
 
 	call EraseCursor
 	ldh a, [hCurMenuItem]
 	or a
-	jp nz, Func_8883 ; jump if not first option
+	jp nz, .PrepareYourPlayAreaSelection ; jump if not Opp Play Area
 
-; hCurMenuItem = 0
+; own Play Area was chosen
 	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
-	jr z, .text
+	jr z, .text_1
 
 ; switch the play area to draw
 	ld h, a
 	ld l, a
 	call DrawYourOrOppPlayAreaScreen
 	xor a
-	ld [wce56], a
+	ld [wIsSwapTurnPending], a
 
-.text
+.text_1
 	call DrawWideTextBox
 	lb de, 1, 14
 	call InitTextPrinting
@@ -1440,43 +1440,43 @@ Func_8764: ; 8764 (2:4764)
 	call ProcessTextFromID
 
 	xor a
-	ld [wPrizeCardCursorPosition], a
-	ld de, Func_8764_TransitionTable
-	ld hl, wce53
+	ld [wYourOrOppPlayAreaCurPosition], a
+	ld de, PeekYourPlayAreaTransitionTable
+	ld hl, wTransitionTablePtr
 	ld [hl], e
 	inc hl
 	ld [hl], d
 
-.loop_2
+.loop_input_2
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
-	call Func_89ae
-	jr c, .asm_87e7
-	jr .loop_2
-.asm_87e7
-	cp $ff
-	jr nz, .asm_87f0
+	call YourOrOppPlayAreaScreen_HandleInput
+	jr c, .selection_cancelled
+	jr .loop_input_2
+.selection_cancelled
+	cp -1
+	jr nz, .selection_made
 	call ZeroObjectPositionsWithCopyToggleOn
-	jr .swap
-.asm_87f0
-	ld hl, .asm_87f8
+	jr .check_swap
+.selection_made
+	ld hl, .SelectionFunctionTable
 	call JumpToFunctionInTable
-	jr .loop_2
+	jr .loop_input_2
 
-.asm_87f8
+.SelectionFunctionTable
 rept 6
-	dw Func_8819
+	dw .SelectedPrize
 endr
-	dw Func_883c
-	dw Func_8849
+	dw .SelectedOppsHand
+	dw .SelectedDeck
 
-YourOrOppPlayAreaData: ; 8808 (2:4808)
+.YourOrOppPlayAreaData ; 8808 (2:4808)
 	textitem 2, 14, YourPlayAreaText
 	textitem 2, 16, OppPlayAreaText
 	db $ff
 
-PlayAreaMenuParameters: ; 8811 (2:4811)
+.PlayAreaMenuParameters ; 8811 (2:4811)
 	db 1, 14 ; cursor x, cursor y
 	db 2 ; y displacement between items
 	db 2 ; number of items
@@ -1484,21 +1484,21 @@ PlayAreaMenuParameters: ; 8811 (2:4811)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Func_8819: ; 8819 (2:4819)
-	ld a, [wPrizeCardCursorPosition]
+.SelectedPrize: ; 8819 (2:4819)
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld c, a
 	ld b, $01
 
 ; left-shift b a number of times
 ; corresponding to this prize card
-.loop
+.loop_prize_bitmask
 	or a
-	jr z, .asm_8827
+	jr z, .got_prize_bitmask
 	sla b
 	dec a
-	jr .loop
+	jr .loop_prize_bitmask
 
-.asm_8827
+.got_prize_bitmask
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
 	and b
@@ -1510,17 +1510,17 @@ Func_8819: ; 8819 (2:4819)
 	ld a, c
 	add DUELVARS_PRIZE_CARDS
 	call GetTurnDuelistVariable
-	jr Func_8855
+	jr .ShowSelectedCard
 
-Func_883c: ; 883c (2:483c)
+.SelectedOppsHand ; 883c (2:483c)
 	call CreateHandCardList
 	ret c
 	ld hl, wDuelTempList
 	call ShuffleCards
 	ld a, [hl]
-	jr Func_8855
+	jr .ShowSelectedCard
 
-Func_8849: ; 8849 (2:4849)
+.SelectedDeck ; 8849 (2:4849)
 	call CreateDeckCardList
 	ret c
 	ld a, %01111111
@@ -1533,11 +1533,12 @@ Func_8849: ; 8849 (2:4849)
 ; output:
 ; a = ce5c
 ; with upper bit set if turn was swapped
-Func_8855: ; 8855 (2:4855)
+.ShowSelectedCard ; 8855 (2:4855)
 	ld b, a
 	ld a, [wce5c]
 	or a
 	jr nz, .display
+	; if wce5c is not set, set it as input deck index
 	ld a, b
 	ld [wce5c], a
 .display
@@ -1549,8 +1550,8 @@ Func_8855: ; 8855 (2:4855)
 	ld [wVBlankOAMCopyToggle], a
 	pop af
 
-; if ce56 != 0, swap turn
-	ld a, [wce56]
+; if wIsSwapTurnPending is TRUE, swap turn
+	ld a, [wIsSwapTurnPending]
 	or a
 	jr z, .dont_swap
 	call SwapTurn
@@ -1561,26 +1562,28 @@ Func_8855: ; 8855 (2:4855)
 	ld a, [wce5c]
 	ret
 
-Func_8883: ; 8883 (2:4883)
+; prepare menu parameters to handle selection
+; of player's own Play Area
+.PrepareYourPlayAreaSelection: ; 8883 (2:4883)
 	ld a, [wCheckMenuPlayAreaWhichDuelist]
 	ld b, a
 	ldh a, [hWhoseTurn]
 	cp b
-	jr nz, .text
+	jr nz, .text_2
 
 	ld l, a
 	cp PLAYER_TURN
 	jr nz, .opponent
 	ld a, OPPONENT_TURN
-	jr .draw
+	jr .draw_menu_2
 .opponent
 	ld a, PLAYER_TURN
 
-.draw
+.draw_menu_2
 	ld h, a
 	call DrawYourOrOppPlayAreaScreen
 
-.text
+.text_2
 	call DrawWideTextBox
 	lb de, 1, 14
 	call InitTextPrinting
@@ -1588,19 +1591,19 @@ Func_8883: ; 8883 (2:4883)
 	call ProcessTextFromID
 
 	xor a
-	ld [wPrizeCardCursorPosition], a
-	ld de, Func_8883_TransitionTable
-	ld hl, wce53
+	ld [wYourOrOppPlayAreaCurPosition], a
+	ld de, PeekOppPlayAreaTransitionTable
+	ld hl, wTransitionTablePtr
 	ld [hl], e
 	inc hl
 	ld [hl], d
 
 	call SwapTurn
-	ld a, $01
-	ld [wce56], a
-	jp Func_8764.loop_2
+	ld a, TRUE
+	ld [wIsSwapTurnPending], a ; mark pending to swap turn
+	jp .loop_input_2
 
-Func_8764_TransitionTable: ; 88c2 (2:48c2)
+PeekYourPlayAreaTransitionTable: ; 88c2 (2:48c2)
 	cursor_transition $08, $28, $00, $04, $02, $01, $07
 	cursor_transition $30, $28, $20, $05, $03, $07, $00
 	cursor_transition $08, $38, $00, $00, $04, $03, $07
@@ -1610,7 +1613,7 @@ Func_8764_TransitionTable: ; 88c2 (2:48c2)
 	cursor_transition $78, $50, $00, $07, $07, $00, $01
 	cursor_transition $78, $28, $00, $07, $07, $00, $01
 
-Func_8883_TransitionTable: ; 88fa (2:48fa)
+PeekOppPlayAreaTransitionTable: ; 88fa (2:48fa)
 	cursor_transition $a0, $60, $20, $02, $04, $07, $01
 	cursor_transition $78, $60, $00, $03, $05, $00, $07
 	cursor_transition $a0, $50, $20, $04, $00, $06, $03
@@ -1625,20 +1628,20 @@ _DrawAIPeekScreen: ; 8932 (2:4932)
 	call Set_OBJ_8x8
 	call LoadCursorTile
 	xor a
-	ld [wce56], a
+	ld [wIsSwapTurnPending], a
 	ldh a, [hWhoseTurn]
 	ld l, a
-	ld de, Func_8764_TransitionTable
+	ld de, PeekYourPlayAreaTransitionTable
 	pop bc
 	bit AI_PEEK_TARGET_HAND_F, b
 	jr z, .draw_play_area
 
 ; AI chose the hand
 	call SwapTurn
-	ld a, $01
-	ld [wce56], a
+	ld a, TRUE
+	ld [wIsSwapTurnPending], a ; mark pending to swap turn
 	ldh a, [hWhoseTurn]
-	ld de, Func_8883_TransitionTable
+	ld de, PeekOppPlayAreaTransitionTable
 .draw_play_area
 	ld h, a
 	push bc
@@ -1660,23 +1663,23 @@ _DrawAIPeekScreen: ; 8932 (2:4932)
 	jr nz, .prize_card
 ; cursor on the deck
 	ld a, $7
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 	jr .got_cursor_position
 .prize_card
 	bit AI_PEEK_TARGET_PRIZE_F, a
 	jr z, .hand
 	and $3f
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 	jr .got_cursor_position
 .hand
 	ld a, $6
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 .got_cursor_position
-	call Func_89ae.draw_cursor
+	call YourOrOppPlayAreaScreen_HandleInput.draw_cursor
 
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
-	ld a, [wce56]
+	ld a, [wIsSwapTurnPending]
 	or a
 	ret z
 	call SwapTurn
@@ -1694,24 +1697,26 @@ LoadCursorTile: ; 8992 (2:4992)
 	db $e0, $c0, $98, $b0, $84, $8c, $83, $82
 	db $86, $8f, $9d, $be, $f4, $f8, $50, $60
 
-; similar to OpenInPlayAreaScreen_HandleInput
-Func_89ae: ; 89ae (2:49ae)
+; handles input inside the "Your Play Area" or "Opp Play Area" screens
+; returns carry if either A or B button were pressed
+; returns -1 in a if B button was pressed
+YourOrOppPlayAreaScreen_HandleInput: ; 89ae (2:49ae)
 	xor a
 	ld [wPlaysSfx], a
 
-	ld hl, wce53
+; get the transition data for the prize card with cursor
+	ld hl, wTransitionTablePtr
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld [wPrizeCardCursorTemporaryPosition], a
 	ld l, a
-	ld h, 7
+	ld h, 7 ; length of each transition table item
 	call HtimesL
 	add hl, de
-; hl = [wce53] + 7 * wce52
 
+; get the transition index related to the directional input
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .check_button
@@ -1752,8 +1757,8 @@ Func_89ae: ; 89ae (2:49ae)
 	; left
 	ld a, [hl]
 .process_dpad
-	ld [wPrizeCardCursorPosition], a
-	cp $08 ; if a >= 0x8
+	ld [wYourOrOppPlayAreaCurPosition], a
+	cp $8 ; if a >= 0x8
 	jr nc, .next
 	ld b, $01
 
@@ -1776,7 +1781,7 @@ Func_89ae: ; 89ae (2:49ae)
 ; when no cards exist at the cursor,
 	ld a, [wPrizeCardCursorTemporaryPosition]
 	cp $06
-	jr nz, Func_89ae
+	jr nz, YourOrOppPlayAreaScreen_HandleInput
 	; move once more in the direction (recursively) until it reaches an existing item.
 
 ; check if one of the dpad, left or right, is pressed.
@@ -1785,33 +1790,40 @@ Func_89ae: ; 89ae (2:49ae)
 	bit D_RIGHT_F, a
 	jr nz, .left_or_right
 	bit D_LEFT_F, a
-	jr z, Func_89ae
+	jr z, YourOrOppPlayAreaScreen_HandleInput
 
 .left_or_right
+	; if started with 5 or 6 prize cards
+	; can switch sides normally,
 	ld a, [wDuelInitialPrizes]
-	cp $05
+	cp PRIZES_5
 	jr nc, .next
-	ld a, [wPrizeCardCursorPosition]
-	cp $05
-	jr nz, .asm_8a28
-	ld a, $03
-	ld [wPrizeCardCursorPosition], a
-	jr .asm_8a2d
+	; else if it's last card,
+	ld a, [wYourOrOppPlayAreaCurPosition]
+	cp 5
+	jr nz, .not_last_card
+	; place it at pos 3
+	ld a, 3
+	ld [wYourOrOppPlayAreaCurPosition], a
+	jr .ok
+.not_last_card
+	; otherwise place at pos 2
+	ld a, 2
+	ld [wYourOrOppPlayAreaCurPosition], a
 
-.asm_8a28
-	ld a, $02
-	ld [wPrizeCardCursorPosition], a
-.asm_8a2d
+.ok
 	ld a, [wDuelInitialPrizes]
-	cp $03
-	jr nc, .asm_8a3c
-	ld a, [wPrizeCardCursorPosition]
-	sub $02
-	ld [wPrizeCardCursorPosition], a
-.asm_8a3c
-	ld a, [wPrizeCardCursorPosition]
+	cp PRIZES_3
+	jr nc, .handled_cursor_pos
+	; in this case can just sub 2 from pos
+	ld a, [wYourOrOppPlayAreaCurPosition]
+	sub 2
+	ld [wYourOrOppPlayAreaCurPosition], a
+
+.handled_cursor_pos
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld [wPrizeCardCursorTemporaryPosition], a
-	ld b, $01
+	ld b, $1
 	jr .make_bitmask_loop
 
 .next
@@ -1838,7 +1850,7 @@ Func_89ae: ; 89ae (2:49ae)
 	call .draw_cursor
 	ld a, $01
 	call PlaySFXConfirmOrCancel
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	scf
 	ret
 
@@ -1858,16 +1870,16 @@ Func_89ae: ; 89ae (2:49ae)
 
 .draw_cursor
 	call ZeroObjectPositions
-	ld hl, wce53
+	ld hl, wTransitionTablePtr
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld l, a
 	ld h, 7
 	call HtimesL
 	add hl, de
-; hl = [wce53] + 7 * wce52
+; hl = [wTransitionTablePtr] + 7 * wce52
 
 	ld d, [hl]
 	inc hl
@@ -1890,7 +1902,7 @@ ZeroObjectPositionsWithCopyToggleOn: ; 8aa1 (2:4aa1)
 _SelectPrizeCards: ; 8aaa (2:4aaa)
 	xor a
 	call GetFirstSetPrizeCard
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 	ld de, hTempPlayAreaLocation_ffa1
 	ld hl, wSelectedPrizeCardListPtr
 	ld [hl], e
@@ -1936,7 +1948,7 @@ _SelectPrizeCards: ; 8aaa (2:4aaa)
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
-	call Func_89ae
+	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .loop_handle_input
 	cp $ff
 	jr z, .loop_handle_input
@@ -1945,7 +1957,7 @@ _SelectPrizeCards: ; 8aaa (2:4aaa)
 
 ; get prize bit mask that corresponds
 ; to the one pointed by the cursor
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld c, a
 	ld b, $1
 .loop
@@ -1992,9 +2004,9 @@ _SelectPrizeCards: ; 8aaa (2:4aaa)
 	ld a, [wNumberOfPrizeCardsToSelect]
 	dec a
 	ld [wNumberOfPrizeCardsToSelect], a
-	ld a, [wPrizeCardCursorPosition]
+	ld a, [wYourOrOppPlayAreaCurPosition]
 	call GetFirstSetPrizeCard
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 	jp .check_prize_cards_to_select
 
 .cursor_transition_table
@@ -2030,8 +2042,8 @@ _DrawPlayAreaToPlacePrizeCards: ; 8b85 (2:4b85)
 	call FillRectangle
 
 	call SwapTurn
-	ld a, $01
-	ld [wce56], a
+	ld a, TRUE
+	ld [wIsSwapTurnPending], a ; mark pending to swap turn
 	ldh a, [hWhoseTurn]
 	ld [wCheckMenuPlayAreaWhichDuelist], a
 	lb de, 6, 0
@@ -3195,7 +3207,7 @@ Func_9345: ; 9345 (2:5345)
 
 Func_9461: ; 9461 (2:5461)
 	xor a
-	ld [wPrizeCardCursorPosition], a
+	ld [wYourOrOppPlayAreaCurPosition], a
 	ld de, wcfd1 + 5
 	ld hl, wMenuInputTablePointer
 	ld a, [de]
@@ -3226,7 +3238,7 @@ HandleDeckConfigurationMenu: ; 9480 (2:5480)
 	ld a, $1
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
-	call Func_89ae
+	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .do_frame
 	ld [wced6], a
 	cp $ff
@@ -3241,7 +3253,7 @@ HandleDeckConfigurationMenu: ; 9480 (2:5480)
 
 .asm_94b5
 	push af
-	call Func_89ae.draw_cursor
+	call YourOrOppPlayAreaScreen_HandleInput.draw_cursor
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	pop af
@@ -5607,7 +5619,7 @@ HandleSendDeckConfigurationMenu: ; a201 (2:6201)
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	call DoFrame
-	call Func_89ae
+	call YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .loop_input
 	ld [wced6], a
 	cp $ff

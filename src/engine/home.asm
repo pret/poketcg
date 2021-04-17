@@ -9303,12 +9303,12 @@ DrawPlayersPrizeAndBenchCards: ; 30d7 (0:30d7)
 	call BankswitchROM
 	ret
 
-Func_30e7: ; 30e7 (0:30e7)
+HandlePeekSelection: ; 30e7 (0:30e7)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(Func_8764)
+	ld a, BANK(_HandlePeekSelection)
 	call BankswitchROM
-	call Func_8764
+	call _HandlePeekSelection
 	ld b, a
 	pop af
 	call BankswitchROM

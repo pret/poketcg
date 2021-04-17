@@ -1712,21 +1712,25 @@ wCheckMenuPlayAreaWhichLayout:: ; ce51
 ; the position of cursor in the "In Play Area" screen
 wInPlayAreaCurPosition:: ; ce52
 
-; holds the position of the cursor when selecting a prize card
-wPrizeCardCursorPosition:: ; ce52
+; holds the position of the cursor when selecting
+; in the "Your Play Area" or "Opp Play Area" screens
+wYourOrOppPlayAreaCurPosition:: ; ce52
 	ds $1
 
 ; pointer to the table which contains information for each key-press.
 wMenuInputTablePointer:: ; ce53
 
-wce53:: ; ce53
+; pointer to transition table data
+wTransitionTablePtr:: ; ce53
 	ds $2
 
 ; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
-wce56:: ; ce56
+; if TRUE, SwapTurn is called
+; after some operations are concluded
+wIsSwapTurnPending:: ; ce56
 	ds $1
 
 ; it's used for restore the position of cursor
