@@ -1917,7 +1917,16 @@ wNamingScreenCursorY:: ; cea4
 	ds $1
 
 wcea5:: ; cea5
-	ds $4
+	ds $1
+
+wcea6:: ; cea6
+	ds $1
+
+wcea7:: ; cea7
+	ds $1
+
+wcea8:: ; cea8
+	ds $1
 
 wNamingScreenKeyboardHeight:: ; cea9
 	ds $1
@@ -1940,20 +1949,18 @@ wCheckMenuCursorXPosition:: ; ceaf
 wCheckMenuCursorYPosition:: ; ceb0
 	ds $1
 
-wceb1:: ; ceb1
+; deck selected by the player in the Decks screen
+wCurDeck:: ; ceb1
 	ds $1
 
-wceb2:: ; ceb2
-	ds $1
-
-wceb3:: ; ceb3
-	ds $1
-
-wceb4:: ; ceb4
-	ds $1
-
-wceb5:: ; ceb5
-	ds $1
+; each of these are a boolean to
+; represent whether a given deck
+; that the player has is a valid deck
+wDecksValid::
+wDeck1Valid:: ds $1 ; ceb2
+wDeck2Valid:: ds $1 ; ceb3
+wDeck3Valid:: ds $1 ; ceb4
+wDeck4Valid:: ds $1 ; ceb5
 
 ; used to store the tens digit and
 ; ones digit of a value for printing
@@ -1965,8 +1972,11 @@ wOnesAndTensPlace:: ; ceb6
 
 	ds $3
 
-wcebb:: ; cebb
-	ds $9
+; each of these stores the card count
+; of each filter in the deck building screen
+; the order follows CardTypeFilters
+wCardFilterCounts:: ; cebb
+	ds NUM_FILTERS
 
 wcec4:: ; cec4
 	ds $7
@@ -1974,7 +1984,7 @@ wcec4:: ; cec4
 wcecb:: ; cecb
 	ds $1
 
-wcecc:: ; cecc
+wTotalCardCount:: ; cecc
 	ds $1
 
 wcecd:: ; cecd
@@ -1983,7 +1993,9 @@ wcecd:: ; cecd
 wcece:: ; cece
 	ds $2
 
-wced0:: ; ced0
+; holds y and x coordinates (in that order)
+; of start of card list (top-left corner)
+wCardListCoords:: ; ced0
 	ds $2
 
 wced2:: ; ced2
@@ -2009,7 +2021,8 @@ wced7:: ; ced7
 wced8:: ; ced8
 	ds $1
 
-wced9:: ; ced9
+; stores how many different cards there are in a deck
+wNumUniqueCards:: ; ced9
 	ds $1
 
 ; stores the list of all card IDs that filtered by its card type
@@ -2026,7 +2039,7 @@ wcf16:: ; cf16
 	ds $1
 
 ; used in bank2, probably related to wTempHandCardList (another temp list?)
-wcf17:: ; cf17
+wCurDeckCards:: ; cf17
 	ds DECK_SIZE
 
 wcf53:: ; cf53
@@ -2045,13 +2058,24 @@ wTempHandCardList:: ; cf68
 
 	ds $15
 
-wcfb9:: ; cfb9
-	ds $14
-
-	ds $4
+; name of the selected deck
+wCurDeckName:: ; cfb9
+	ds DECK_NAME_SIZE
 
 wcfd1:: ; cfd1
-	ds $7
+	ds $1
+
+wcfd2:: ; cfd2
+	ds $1
+
+wcfd3:: ; cfd3
+	ds $1
+
+wcfd4:: ; cfd4
+	ds $2
+
+wcfd6:: ; cfd6
+	ds $2
 
 wcfd8:: ; cfd8
 	ds $2

@@ -619,7 +619,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer DeletedTheConfigurationForText                     ; 0x0267
 	textpointer YouMayOnlyCarry4DecksText                          ; 0x0268
 	textpointer ChooseADeckToDismantleText                         ; 0x0269
-	textpointer Text026a                                           ; 0x026a
+	textpointer DismantledDeckText                                 ; 0x026a
 	textpointer Text026b                                           ; 0x026b
 	textpointer ThisDeckCanOnlyBeBuiltIfYouDismantleText           ; 0x026c
 	textpointer YouDoNotOwnAllCardsNeededToBuildThisDeckText       ; 0x026d

@@ -512,7 +512,7 @@ DrawInPlayAreaScreen: ; 82ce (2:42ce)
 	call DoFrame
 	call EmptyScreen
 
-	ld a, $0a
+	ld a, CHECK_PLAY_AREA
 	ld [wDuelDisplayedScreen], a
 	call Set_OBJ_8x8
 	call LoadCursorTile
@@ -1487,7 +1487,7 @@ endr
 .SelectedPrize: ; 8819 (2:4819)
 	ld a, [wYourOrOppPlayAreaCurPosition]
 	ld c, a
-	ld b, $01
+	ld b, $1
 
 ; left-shift b a number of times
 ; corresponding to this prize card
@@ -1760,7 +1760,7 @@ YourOrOppPlayAreaScreen_HandleInput: ; 89ae (2:49ae)
 	ld [wYourOrOppPlayAreaCurPosition], a
 	cp $8 ; if a >= 0x8
 	jr nc, .next
-	ld b, $01
+	ld b, $1
 
 ; this loop equals to
 ; b = (1 << a)
@@ -2138,7 +2138,7 @@ OpenGlossaryScreen_TransitionTable:
 	cursor_transition $58, $68, $00, $08, $05, $04, $04
 
 ; copies DECK_SIZE number of cards from de to hl in SRAM
-Func_8cd4: ; 8cd4 (2:4cd4)
+CopyDeckFromSRAM: ; 8cd4 (2:4cd4)
 	push bc
 	call EnableSRAM
 	ld b, DECK_SIZE
@@ -2161,7 +2161,7 @@ Func_8ce7: ; 8ce7 (2:4ce7)
 	ld bc, DECK_SIZE
 	add hl, bc
 	ld [hl], a ; wcf16
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld bc, $50
 	add hl, bc
 	ld [hl], a
@@ -2192,7 +2192,7 @@ HandCardsGfx: ; 8d15 (2:4d15)
 	INCBIN "gfx/hand_cards.2bpp"
 	db $00 ; end of data
 
-Func_8d56: ; 8d56 (2:4d56)
+EmptyScreenAndLoadFontDuelAndHandCardsIcons: ; 8d56 (2:4d56)
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
@@ -2250,25 +2250,26 @@ Func_8db0: ; 8db0 (2:4db0)
 	ld hl, Data_8da9
 	call Func_8d9d
 	ld a, $ff
-	call Func_9168
+	call DrawDecksScreen
 	xor a
+;	fallthrough
 
 Func_8dbc: ; 8dbc (2:4dbc)
 	ld hl, .DeckSelectionMenuParameters
 	call InitializeMenuParameters
 	ldtx hl, PleaseSelectDeckText
 	call DrawWideTextBox_PrintText
-.asm_8dc8
+.loop_input
 	call DoFrame
-	jr c, Func_8dbc
-	call Func_8dea
+	jr c, Func_8dbc ; reinit menu parameters
+	call HandleStartButtonInDeckSelectionMenu
 	jr c, Func_8dbc
 	call HandleMenuInput
-	jr nc, .asm_8dc8
+	jr nc, .loop_input
 	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
-	ld [wceb1], a
+	ld [wCurDeck], a
 	jp Func_8e42
 
 .DeckSelectionMenuParameters
@@ -2279,52 +2280,64 @@ Func_8dbc: ; 8dbc (2:4dbc)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-Func_8dea: ; 8dea (2:4dea)
+; handles START button press when in deck selection menu
+; does nothing if START button isn't pressed
+; if a press was handled, returns carry
+; prints "There is no deck here!" if the selected deck is empty
+HandleStartButtonInDeckSelectionMenu: ; 8dea (2:4dea)
 	ldh a, [hDPadHeld]
 	and START
-	ret z
+	ret z ; skip
+
+; set menu item as current deck
 	ld a, [wCurMenuItem]
-	ld [wceb1], a
-	call Func_8ff2
-	jp nc, Func_8e05
+	ld [wCurDeck], a
+	call CheckIfCurDeckIsValid
+	jp nc, .valid_deck ; can be jr
+
+; not a valid deck, cancel
 	ld a, $ff ; cancel
 	call PlaySFXConfirmOrCancel
-	call Func_8fe8
+	call PrintThereIsNoDeckHereText
 	scf
 	ret
 
-Func_8e05: ; 8e05 (2:4e05)
+.valid_deck
 	ld a, $1
 	call PlaySFXConfirmOrCancel
 	call GetPointerToDeckCards
 	push hl
 	call GetPointerToDeckName
 	pop de
-	call Func_8e1f
+	call HandleDeckConfirmationMenu
 	ld a, $ff
-	call Func_9168
-	ld a, [wceb1]
+	call DrawDecksScreen
+	ld a, [wCurDeck]
 	scf
 	ret
 
-; copies deck in hl to wcfb9
-; copies deck in de to wcf17
-Func_8e1f: ; 8e1f (2:4e1f)
+
+HandleDeckConfirmationMenu: ; 8e1f (2:4e1f)
+; copy deck name
 	push de
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call CopyListFromHLToDEInSRAM
 	pop de
-	ld hl, wcf17
-	call Func_8cd4
-	ld a, 9
-	ld hl, wcebb
+
+; copy deck cards
+	ld hl, wCurDeckCards
+	call CopyDeckFromSRAM
+
+	ld a, NUM_FILTERS
+	ld hl, wCardFilterCounts
 	call ClearNBytesFromHL
 	ld a, DECK_SIZE
-	ld [wcecc], a
-	ld hl, wcebb
+	ld [wTotalCardCount], a
+	ld hl, wCardFilterCounts
 	ld [hl], a
 	call Func_9e41
 	ret
+; 0x8e42
 
 Func_8e42: ; 8e42 (2:4e42)
 	call DrawWideTextBox
@@ -2338,7 +2351,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	cp $ff
 	jr nz, .asm_8e64
 	call EraseCheckMenuCursor
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	jp Func_8dbc
 .asm_8e64
 	ld a, [wCheckMenuCursorXPosition]
@@ -2350,25 +2363,25 @@ Func_8e42: ; 8e42 (2:4e42)
 	call GetPointerToDeckCards
 	ld e, l
 	ld d, h
-	ld hl, wcf17
-	call Func_8cd4
+	ld hl, wCurDeckCards
+	call CopyDeckFromSRAM
 	ld a, 20
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	call ClearNBytesFromHL
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call GetPointerToDeckName
 	call CopyListFromHLToDEInSRAM
 	call Func_9345
 	jr nc, .asm_8ec4
 	call EnableSRAM
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	call Func_910a
 	call GetPointerToDeckCards
 	call Func_9152
 	ld e, l
 	ld d, h
-	ld hl, wcf17
-	ld b, $3c
+	ld hl, wCurDeckCards
+	ld b, DECK_SIZE
 .asm_8ea9
 	ld a, [hli]
 	ld [de], a
@@ -2378,7 +2391,7 @@ Func_8e42: ; 8e42 (2:4e42)
 	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	call CopyListFromHLToDE
 	call GetPointerToDeckName
 	ld a, [hl]
@@ -2387,34 +2400,34 @@ Func_8e42: ; 8e42 (2:4e42)
 	jr z, .asm_8edb
 .asm_8ec4
 	ld a, $ff
-	call Func_9168
-	ld a, [wceb1]
+	call DrawDecksScreen
+	ld a, [wCurDeck]
 	jp Func_8dbc
 .asm_8ecf
-	call Func_8ff2
+	call CheckIfCurDeckIsValid
 	jp nc, .asm_8edb
-	call Func_8fe8
+	call PrintThereIsNoDeckHereText
 	jp Func_8dbc
 .asm_8edb
 	ld a, 20
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	call ClearNBytesFromHL
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call GetPointerToDeckName
 	call CopyListFromHLToDEInSRAM
 	call Func_8f05
 	call GetPointerToDeckName
 	ld d, h
 	ld e, l
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	call CopyListFromHLToDEInSRAM
 	ld a, $ff
-	call Func_9168
-	ld a, [wceb1]
+	call DrawDecksScreen
+	ld a, [wCurDeck]
 	jp Func_8dbc
 
 Func_8f05: ; 8f05 (2:4f05)
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	or a
 	jr nz, .asm_8f10
 	; it refers to a data in the other bank without any bank desc.
@@ -2435,9 +2448,9 @@ Func_8f05: ; 8f05 (2:4f05)
 .asm_8f23
 	ld a, MAX_DECK_NAME_LENGTH
 	lb bc, 4, 1
-	ld de, wcfb9
+	ld de, wCurDeckName
 	farcall InputDeckName
-	ld a, [wcfb9]
+	ld a, [wCurDeckName]
 	or a
 	ret nz
 	call Func_8f38
@@ -2452,7 +2465,7 @@ Func_8f38: ; 8f38 (2:4f38)
 	ld l, a
 	ld de, wDefaultText
 	call TwoByteNumberToText
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	ld [hl], $6
 	inc hl
 	ld [hl], $44
@@ -2500,9 +2513,9 @@ Func_8f8a: ; 8f8a (2:4f8a)
 	ld a, [wCheckMenuCursorYPosition]
 	or a
 	jp nz, Func_9026
-	call Func_8ff2
+	call CheckIfCurDeckIsValid
 	jp nc, Func_8f9d
-	call Func_8fe8
+	call PrintThereIsNoDeckHereText
 	jp Func_8dbc
 
 Func_8f9d: ; 8f9d (2:4f9d)
@@ -2519,11 +2532,11 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	lb hl, 0, 0
 	lb bc, 2, 2
 	call FillRectangle
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	call EnableSRAM
 	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
-	call DrawHandCardsTileOnSelectedDeck
+	call DrawHandCardsTileOnCurDeck
 	call GetPointerToDeckName
 	call EnableSRAM
 	call Func_9253
@@ -2533,26 +2546,28 @@ Func_8f9d: ; 8f9d (2:4f9d)
 	ld [wTxRam2 + 1], a
 	ldtx hl, ChosenAsDuelingDeckText
 	call DrawWideTextBox_WaitForInput
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	jp Func_8dbc
 
-Func_8fe8: ; 8fe8 (2:4fe8)
+PrintThereIsNoDeckHereText: ; 8fe8 (2:4fe8)
 	ldtx hl, ThereIsNoDeckHereText
 	call DrawWideTextBox_WaitForInput
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	ret
 
-Func_8ff2: ; 8ff2 (2:4ff2)
-	ld a, [wceb1]
-	ld hl, wceb2
+; returns carry if deck in wCurDeck
+; is not a valid deck
+CheckIfCurDeckIsValid: ; 8ff2 (2:4ff2)
+	ld a, [wCurDeck]
+	ld hl, wDecksValid
 	ld b, $0
 	ld c, a
 	add hl, bc
 	ld a, [hl]
 	or a
-	ret nz
+	ret nz ; is valid
 	scf
-	ret
+	ret ; is not valid
 ; 0x9001
 
 	INCROM $9001, $9026
@@ -2568,9 +2583,9 @@ DeckSelectionData: ; 9027 (2:5027)
 	db $ff
 ; 0x9038
 
-; return, in hl, the pointer to sDeckXName where X is [wceb1] + 1
+; return, in hl, the pointer to sDeckXName where X is [wCurDeck] + 1
 GetPointerToDeckName: ; 9038 (2:5038)
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	ld h, a
 	ld l, sDeck2Name - sDeck1Name
 	call HtimesL
@@ -2580,10 +2595,10 @@ GetPointerToDeckName: ; 9038 (2:5038)
 	pop de
 	ret
 
-; return, in hl, the pointer to sDeckXCards where X is [wceb1] + 1
+; return, in hl, the pointer to sDeckXCards where X is [wCurDeck] + 1
 GetPointerToDeckCards: ; 9048 (2:5048)
 	push af
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	ld h, a
 	ld l, sDeck2Cards - sDeck1Cards
 	call HtimesL
@@ -2747,7 +2762,7 @@ PlaySFXConfirmOrCancel: ; 90fb (2:50fb)
 Func_910a: ; 910a (2:510a)
 	push hl
 	ld b, $0
-	ld d, $3c
+	ld d, DECK_SIZE
 .asm_910f
 	ld a, [hli]
 	or a
@@ -2825,9 +2840,12 @@ Func_9152: ; 9152 (2:5152)
 	pop hl
 	ret
 
-Func_9168: ; 9168 (2:5168)
+; draws the screen which shows the player's current
+; deck configurations
+; a = some flags to pick which deck names to show
+DrawDecksScreen: ; 9168 (2:5168)
 	ld [hffb5], a
-	call Func_8d56
+	call EmptyScreenAndLoadFontDuelAndHandCardsIcons
 	lb de, 0,  0
 	lb bc, 20, 4
 	call DrawRegularTextBox
@@ -2842,85 +2860,100 @@ Func_9168: ; 9168 (2:5168)
 	call DrawRegularTextBox
 	ld hl, DeckNameMenuData
 	call PlaceTextItems
-	ld a, 4
-	ld hl, wceb2
+
+; mark all decks as invalid
+	ld a, NUM_DECKS
+	ld hl, wDecksValid
 	call ClearNBytesFromHL
+
+; for each deck, check if it has cards and if so
+; mark is as valid in wDecksValid
+
+; deck 1
 	ld a, [hffb5] ; should be ldh
 	bit 0, a
-	jr z, .asm_91b0
+	jr z, .skip_name_1
 	ld hl, sDeck1Name
 	lb de, 6, 2
-	call Func_926e
-.asm_91b0
+	call PrintDeckName
+.skip_name_1
 	ld hl, sDeck1Cards
-	call Func_9314
-	jr c, .asm_91bd
-	ld a, $1
-	ld [wceb2], a
-.asm_91bd
+	call CheckIfDeckHasCards
+	jr c, .deck_2
+	ld a, TRUE
+	ld [wDeck1Valid], a
+
+.deck_2
 	ld a, [hffb5] ; should be ldh
 	bit 1, a
-	jr z, .asm_91cd
+	jr z, .skip_name_2
 	ld hl, sDeck2Name
 	lb de, 6, 5
-	call Func_926e
-.asm_91cd
+	call PrintDeckName
+.skip_name_2
 	ld hl, sDeck2Cards
-	call Func_9314
-	jr c, .asm_91da
-	ld a, $1
-	ld [wceb3], a
-.asm_91da
+	call CheckIfDeckHasCards
+	jr c, .deck_3
+	ld a, TRUE
+	ld [wDeck2Valid], a
+
+.deck_3
 	ld a, [hffb5] ; should be ldh
 	bit 2, a
-	jr z, .asm_91ea
+	jr z, .skip_name_3
 	ld hl, sDeck3Name
 	lb de, 6, 8
-	call Func_926e
-.asm_91ea
+	call PrintDeckName
+.skip_name_3
 	ld hl, sDeck3Cards
-	call Func_9314
-	jr c, .asm_91f7
-	ld a, $1
-	ld [wceb4], a
-.asm_91f7
+	call CheckIfDeckHasCards
+	jr c, .deck_4
+	ld a, TRUE
+	ld [wDeck3Valid], a
+
+.deck_4
 	ld a, [hffb5] ; should be ldh
 	bit 3, a
-	jr z, .asm_9207
+	jr z, .skip_name_4
 	ld hl, sDeck4Name
 	lb de, 6, 11
-	call Func_926e
-.asm_9207
+	call PrintDeckName
+.skip_name_4
 	ld hl, sDeck4Cards
-	call Func_9314
-	jr c, .asm_9214
-	ld a, $1
-	ld [wceb5], a
-.asm_9214
+	call CheckIfDeckHasCards
+	jr c, .place_cursor
+	ld a, TRUE
+	ld [wDeck4Valid], a
+
+.place_cursor
+; places cursor on sCurrentlySelectedDeck
+; if it's an empty deck, then advance the cursor
+; until it's selecting a valid deck
 	call EnableSRAM
 	ld a, [sCurrentlySelectedDeck]
 	ld c, a
 	ld b, $0
-	ld d, $2
-.asm_921f
-	ld hl, wceb2
+	ld d, 2
+.check_valid_deck
+	ld hl, wDecksValid
 	add hl, bc
 	ld a, [hl]
 	or a
-	jr nz, .asm_9234
+	jr nz, .valid_selected_deck
 	inc c
-	ld a, $4
+	ld a, NUM_DECKS
 	cp c
-	jr nz, .asm_921f
-	ld c, $0
+	jr nz, .check_valid_deck
+	ld c, 0 ; roll back to deck 1
 	dec d
-	jr z, .asm_9234
-	jr .asm_921f
-.asm_9234
+	jr z, .valid_selected_deck
+	jr .check_valid_deck
+
+.valid_selected_deck
 	ld a, c
 	ld [sCurrentlySelectedDeck], a
 	call DisableSRAM
-	call DrawHandCardsTileOnSelectedDeck
+	call DrawHandCardsTileOnCurDeck
 	call EnableLCD
 	ret
 ; 0x9242
@@ -2943,16 +2976,22 @@ Func_9253: ; 9253 (2:5253)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Data_92a7
+	ld hl, DeckNameSuffix
 	call CopyListFromHLToDE
 	ret
 
+; prints deck name given in hl in position de
+; if it's an empty deck, print "NEW DECK" instead
+; returns carry if it's an empty deck
+; hl = deck name (sDeck1Name ~ sDeck4Name)
 ; de = coordinates to print text
-Func_926e: ; 926e (2:526e)
+PrintDeckName: ; 926e (2:526e)
 	push hl
-	call Func_9314
+	call CheckIfDeckHasCards
 	pop hl
-	jr c, .asm_929c
+	jr c, .new_deck
+
+; print "<deck name> deck"
 	push de
 	ld de, wDefaultText
 	call CopyListFromHLToDEInSRAM
@@ -2963,7 +3002,7 @@ Func_926e: ; 926e (2:526e)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Data_92a7
+	ld hl, DeckNameSuffix
 	call CopyListFromHLToDE
 	pop de
 	ld hl, wDefaultText
@@ -2971,14 +3010,16 @@ Func_926e: ; 926e (2:526e)
 	call ProcessText
 	or a
 	ret
-.asm_929c
+
+.new_deck
+; print "NEW DECK"
 	call InitTextPrinting
 	ldtx hl, NewDeckText
 	call ProcessTextFromID
 	scf
 	ret
 
-Data_92a7: ; 92a7 (2:52a7)
+DeckNameSuffix: ; 92a7 (2:52a7)
 	db " deck"
 	db TX_END
 
@@ -3001,7 +3042,7 @@ CopyListFromHLToDEInSRAM: ; 92b4 (2:52b4)
 
 Func_92be: ; 92be (2:52be)
 	push hl
-	call Func_9314
+	call CheckIfDeckHasCards
 	pop hl
 	ret c
 	push de
@@ -3036,23 +3077,31 @@ Func_92be: ; 92be (2:52be)
 .text_end
 ; 0x9314
 
-Func_9314: ; 9314 (2:5314)
-	ld bc, $0018
+; returns carry if the deck in hl
+; is not valid, that is, has no cards
+; alternatively, the direct address of the cards
+; can be used, since DECK_SIZE > DECK_NAME_SIZE
+; hl = deck name (sDeck1Name ~ sDeck4Name)
+;   or deck cards (sDeck1Cards ~ sDeck4Cards)
+CheckIfDeckHasCards: ; 9314 (2:5314)
+	ld bc, DECK_NAME_SIZE
 	add hl, bc
 	call EnableSRAM
 	ld a, [hl]
 	call DisableSRAM
+	; being max size means last char
+	; is not TX_END, i.e. $0
 	or a
-	jr nz, .asm_9324
+	jr nz, .max_size
 	scf
 	ret
-.asm_9324
+.max_size
 	or a
 	ret
 
 ; calculates the y coordinate of the currently selected deck
 ; and draws the hands card tile at that position
-DrawHandCardsTileOnSelectedDeck: ; 9326 (2:5326)
+DrawHandCardsTileOnCurDeck: ; 9326 (2:5326)
 	call EnableSRAM
 	ld a, [sCurrentlySelectedDeck]
 	call DisableSRAM
@@ -3208,7 +3257,7 @@ Func_9345: ; 9345 (2:5345)
 Func_9461: ; 9461 (2:5461)
 	xor a
 	ld [wYourOrOppPlayAreaCurPosition], a
-	ld de, wcfd1 + 5
+	ld de, wcfd6
 	ld hl, wMenuInputTablePointer
 	ld a, [de]
 	ld [hli], a
@@ -3220,7 +3269,7 @@ Func_9461: ; 9461 (2:5461)
 .asm_9475
 	xor a
 	ld [wCheckMenuCursorBlinkCounter], a
-	ld hl, wcfd1 + 3
+	ld hl, wcfd4
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -3312,9 +3361,9 @@ CancelDeckModifications: ; 9509 (2:5509)
 
 SaveDeckConfiguration: ; 951a (2:551a)
 ; handle deck configuration size
-	ld a, [wcecc]
+	ld a, [wTotalCardCount]
 	cp DECK_SIZE
-	jp z, .ask_to_save_deck ; should be jr
+	jp z, .ask_to_save_deck ; can be jr
 	ldtx hl, ThisIsntA60CardDeckText
 	call DrawWideTextBox_WaitForInput
 	ldtx hl, ReturnToOriginalConfigurationText
@@ -3358,7 +3407,7 @@ DismantleDeck: ; 9566 (2:5566)
 	call YesOrNoMenuWithText
 	jr c, SaveDeckConfiguration.go_back
 	call Func_9622
-	jp nc, .Dismantle ; should be jr
+	jp nc, .Dismantle ; can be jr
 	ldtx hl, ThereIsOnly1DeckSoCannotBeDismantledText
 	call DrawWideTextBox_WaitForInput
 	call EmptyScreen
@@ -3398,7 +3447,7 @@ ChangeDeckName: ; 95b9 (2:55b9)
 ; 0x95c1
 
 Func_95c1: ; 95c1 (2:55c1)
-	ld a, [wcecc]
+	ld a, [wTotalCardCount]
 	or a
 	jr z, .skip_size_check
 	cp DECK_SIZE
@@ -3413,12 +3462,12 @@ Func_95c1: ; 95c1 (2:55c1)
 	call CopyNBytesFromHLToDE
 	call DisableSRAM
 
-; loops through cards in wcf17
+; loops through cards in wCurDeckCards
 ; then if that card is found in wc590
 ; overwrite it by $0
 	ld a, $ff
 	ld [wc5cc], a
-	ld de, wcf17
+	ld de, wCurDeckCards
 .loop_outer
 	ld a, [de]
 	or a
@@ -3451,7 +3500,7 @@ Func_95c1: ; 95c1 (2:55c1)
 ; wc590 is empty (all $0)
 .is_empty
 	call GetPointerToDeckName
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call EnableSRAM
 .asm_9610
 	ld a, [de]
@@ -3470,7 +3519,7 @@ Func_95c1: ; 95c1 (2:55c1)
 ; 0x9622
 
 Func_9622: ; 9622 (2:5622)
-	ld hl, wceb2
+	ld hl, wDecksValid
 	ld bc, $0
 .loop
 	inc b
@@ -3498,11 +3547,11 @@ Func_9622: ; 9622 (2:5622)
 	ret
 ; 0x9649
 
-; checks if wcf17 has any basics
+; checks if wCurDeckCards has any basics
 ; returns carry set if there is at least
 ; 1 Basic Pokemon card
 Func_9649: ; 9649 (2:5649)
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 .loop_cards
 	ld a, [hli]
 	ld e, a
@@ -3525,10 +3574,16 @@ Func_9649: ; 9649 (2:5649)
 ; 0x9667
 
 Data_9667: ; 9667 (2:5667)
-	db $01, $01, $00, $02, $09, $2f, $00, $00, $00
+	db $01, $01, $00, $02, $09
+	db SYM_CURSOR_D
+	db SYM_SPACE
+	dw NULL
 
 Data_9670: ; 9670 (2:5670)
-	db $00, $07, $02, $00, $06, $0f, $00, $00, $00
+	db $00, $07, $02, $00, $06
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 
 DeckConfigurationMenu_TransitionTable: ; 9679 (2:5679)
 	cursor_transition $10, $20, $00, $03, $03, $01, $02
@@ -3577,10 +3632,10 @@ FillBGMapLineWithA: ; 96c7 (2:56c7)
 	ret
 ; 0x96e3
 
-; saves the count of each type of card that is in wcf17
-; stores these values in wcebb
+; saves the count of each type of card that is in wCurDeckCards
+; stores these values in wCardFilterCounts
 CountNumberOfCardsForEachCardType: ; 96e3 (2:56e3)
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 	ld de, CardTypeFilters
 .loop
 	ld a, [de]
@@ -3724,8 +3779,8 @@ CreateFilteredCardList: ; 978b (2:578b)
 	ld a, b
 	cp $ff
 	jr z, .add_card
-	and $20
-	cp $20
+	and FILTER_ENERGY
+	cp FILTER_ENERGY
 	jr z, .check_energy
 	ld a, c
 	cp b
@@ -3852,12 +3907,12 @@ ClearNBytesFromHL: ; 9843 (2:5843)
 	ret
 ; 0x9850
 
-; finds instance of e in list wcf17
+; finds instance of e in list wCurDeckCards
 ; returns the position in the list that it was found
 ; if not found, returns last position + 1
 Func_9850: ; 9850 (2:5850)
 	push hl
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld d, $00
 .loop
 	ld a, [hli]
@@ -3997,7 +4052,7 @@ ConvertToNumericalDigits: ; 98c7 (2:58c7)
 	ret
 ; 0x98dc
 
-; counts the number of cards in wcf17
+; counts the number of cards in wCurDeckCards
 ; that are the same type as input in register a
 ; if input is $20, counts all energy cards instead
 ; input:
@@ -4013,7 +4068,7 @@ CountNumberOfCardsOfType: ; 98dc (2:58dc)
 .loop_cards
 	push hl
 	push bc
-	ld bc, wcf17
+	ld bc, wCurDeckCards
 	add hl, bc
 	ld a, [hl]
 	pop bc
@@ -4023,7 +4078,7 @@ CountNumberOfCardsOfType: ; 98dc (2:58dc)
 	jr z, .done ; end of card list
 
 ; get card type and compare it with input type
-; if input is $20, run a separate comparison
+; if input is FILTER_ENERGY, run a separate comparison
 ; if it's the same type, increase the count
 	ld e, a
 	call GetCardType
@@ -4031,8 +4086,8 @@ CountNumberOfCardsOfType: ; 98dc (2:58dc)
 	push hl
 	ld l, a
 	ld a, b
-	and $20
-	cp $20
+	and FILTER_ENERGY
+	cp FILTER_ENERGY
 	jr z, .check_energy
 	ld a, l
 	pop hl
@@ -4066,7 +4121,7 @@ PrintCardTypeCounts: ; 9916 (2:5916)
 	ld hl, wDefaultText
 .loop
 	push hl
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 	add hl, bc
 	ld a, [hl]
 	pop hl
@@ -4074,7 +4129,7 @@ PrintCardTypeCounts: ; 9916 (2:5916)
 	call ConvertToNumericalDigits
 	pop bc
 	inc c
-	ld a, $9
+	ld a, NUM_FILTERS
 	cp c
 	jr nz, .loop
 	ld [hl], TX_END
@@ -4102,7 +4157,7 @@ Func_993d: ; 993d (2:593d)
 	call CopyNBytesFromHLToDE
 	call DisableSRAM
 
-	ld a, [wcfd1 + 2]
+	ld a, [wcfd3]
 	or a
 	jr z, .ok
 	call GetPointerToDeckCards
@@ -4114,8 +4169,8 @@ Func_993d: ; 993d (2:593d)
 	call CreateFilteredCardList
 	ld a, $06
 	ld [wcecb], a
-	lb de, 1 ,7
-	ld hl, wced0
+	lb de, 1, 7
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -4126,36 +4181,36 @@ Func_993d: ; 993d (2:593d)
 
 ; used to filter the cards in the deck building/card selection screen
 CardTypeFilters: ; 997d (2:597d)
-	db TYPE_PKMN_GRASS
-	db TYPE_PKMN_FIRE
-	db TYPE_PKMN_WATER
-	db TYPE_PKMN_LIGHTNING
-	db TYPE_PKMN_FIGHTING
-	db TYPE_PKMN_PSYCHIC
-	db TYPE_PKMN_COLORLESS
-	db TYPE_TRAINER
-	db $20
+	db FILTER_GRASS
+	db FILTER_FIRE
+	db FILTER_WATER
+	db FILTER_LIGHTNING
+	db FILTER_FIGHTING
+	db FILTER_PSYCHIC
+	db FILTER_COLORLESS
+	db FILTER_TRAINER
+	db FILTER_ENERGY
 	db -1 ; end of list
 ; 0x9987
 
 ; counts all the cards from each card type
-; (stored in wcebb) and store it in wcecc
+; (stored in wCardFilterCounts) and store it in wTotalCardCount
 ; also prints it in coordinates de
 PrintTotalCardCount: ; 9987 (2:5987)
 	push de
 	ld bc, $0
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 .loop
 	ld a, [hli]
 	add b
 	ld b, a
 	inc c
-	ld a, $9
+	ld a, NUM_FILTERS
 	cp c
 	jr nz, .loop
 	ld hl, wDefaultText
 	ld a, b
-	ld [wcecc], a
+	ld [wTotalCardCount], a
 	push bc
 	call ConvertToNumericalDigits
 	pop bc
@@ -4175,7 +4230,7 @@ PrintTotalCardCount: ; 9987 (2:5987)
 ; and Y is the storage count of that card
 PrintDeckBuildingCardList: ; 99b0 (2:59b0)
 	push bc
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -4452,9 +4507,10 @@ Func_9b00: ; 9b00 (2:5b00)
 	ld a, [wceab]
 ;	fallthrough
 
+; a = tile to write
 Func_9b03: ; 9b03 (2:5b03)
 	ld e, a
-	ld a, [wcea5 + 3]
+	ld a, [wcea8]
 	ld l, a
 	ld a, [wNamingScreenCursorY]
 	ld h, a
@@ -4463,7 +4519,7 @@ Func_9b03: ; 9b03 (2:5b03)
 	ld hl, wcea5
 	add [hl]
 	ld b, a
-	ld hl, wcea5 + 1
+	ld hl, wcea6
 	ld a, [hl]
 	ld c, a
 	ld a, e
@@ -4484,6 +4540,7 @@ Func_9b25: ; 9b25 (2:5b25)
 	ldh a, [hDPadHeld]
 	or a
 	jp z, .asm_9bb9
+
 	ld b, a
 	ld a, [wNamingScreenKeyboardHeight]
 	ld c, a
@@ -4541,6 +4598,7 @@ Func_9b25: ; 9b25 (2:5b25)
 	xor a ; FALSE
 	ld [wPlaysSfx], a
 	pop af
+
 .asm_9b8f
 	push af
 	call Func_9c0e
@@ -4564,6 +4622,7 @@ Func_9b25: ; 9b25 (2:5b25)
 	jr z, .asm_9bb9
 	call Func_9db3
 	call Func_9d0c
+
 .asm_9bb9
 	ld a, [wNamingScreenCursorY]
 	ld [hffb3], a
@@ -4590,7 +4649,7 @@ Func_9b25: ; 9b25 (2:5b25)
 .asm_9be2
 	ldh a, [hKeysPressed]
 	and A_BUTTON | B_BUTTON
-	jr z, .asm_9bf6
+	jr z, .check_sfx
 	and A_BUTTON
 	jr nz, .asm_9bd1
 	ld a, $ff
@@ -4599,7 +4658,7 @@ Func_9b25: ; 9b25 (2:5b25)
 	scf
 	ret
 
-.asm_9bf6
+.check_sfx
 	ld a, [wPlaysSfx]
 	or a
 	jr z, .handle_blink
@@ -4613,7 +4672,7 @@ Func_9b25: ; 9b25 (2:5b25)
 	ld a, [wceaa]
 	bit 4, [hl]
 	jr z, Func_9c11
-; 0x9c0e
+;	fallthrough
 
 Func_9c0e: ; 9c0e (2:5c0e)
 	ld a, [wceab]
@@ -4622,7 +4681,7 @@ Func_9c0e: ; 9c0e (2:5c0e)
 ; a = tile to write
 Func_9c11: ; 9c11 (2:5c11)
 	ld e, a
-	ld a, [wcea5 + 3]
+	ld a, [wcea8]
 	ld l, a
 	ld a, [wNamingScreenCursorY]
 	ld h, a
@@ -4631,13 +4690,13 @@ Func_9c11: ; 9c11 (2:5c11)
 	ld hl, wcea5
 	add [hl]
 	ld b, a
-	ld a, [wcea5 + 2]
+	ld a, [wcea7]
 	ld l, a
 	ld a, [wNamingScreenCursorY]
 	ld h, a
 	call HtimesL
 	ld a, l
-	ld hl, wcea5 + 1
+	ld hl, wcea6
 	add [hl]
 	ld c, a
 	ld a, e
@@ -4776,7 +4835,7 @@ Func_9d0c: ; 9d0c (2:5d0c)
 Func_9d22: ; 9d22 (2:5d22)
 	ld a, [wcfd1]
 	ld d, a
-	ld a, [wcecc]
+	ld a, [wTotalCardCount]
 	cp d
 	jr nz, .asm_9d2e
 	scf
@@ -4811,7 +4870,7 @@ Func_9d22: ; 9d22 (2:5d22)
 	ld a, [wCurCardTypeFilter]
 	ld c, a
 	ld b, $00
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 	add hl, bc
 	inc [hl]
 	pop de
@@ -4819,10 +4878,10 @@ Func_9d22: ; 9d22 (2:5d22)
 	ret
 ; 0x9d65
 
-; finds first empty slot in wcf17
+; finds first empty slot in wCurDeckCards
 ; then writes the value in e to it
 Func_9d65: ; 9d65 (2:5d65)
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 .loop
 	ld a, [hl]
 	or a
@@ -4849,12 +4908,12 @@ Func_9d74: ; 9d74 (2:5d74)
 .double_colorless
 
 ; compare this card's name to
-; the names of cards in list wcf17
+; the names of cards in list wCurDeckCards
 	ld a, [wLoadedCard1Name + 0]
 	ld c, a
 	ld a, [wLoadedCard1Name + 1]
 	ld b, a
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld d, $00
 	push de
 .loop
@@ -4873,7 +4932,7 @@ Func_9d74: ; 9d74 (2:5d74)
 	; has same name
 	pop de
 	inc d
-	ld a, [wcfd1 + 1]
+	ld a, [wcfd2]
 	cp d
 	push de
 	jr nz, .loop
@@ -4905,13 +4964,13 @@ Func_9dbf: ; 9dbf (2:5dbf)
 	ld hl, wc590
 	call ConvertToNumericalDigits
 	ld [hl], TX_END
-	ld a, [wcea5 + 2]
+	ld a, [wcea7]
 	ld l, a
 	ld a, [wNamingScreenCursorY]
 	ld h, a
 	call HtimesL
 	ld a, l
-	ld hl, wcea5 + 1
+	ld hl, wcea6
 	add [hl]
 	ld e, a
 	ld d, $0e
@@ -4947,7 +5006,7 @@ Func_9dfa: ; 9dfa (2:5dfa)
 	ld a, [wCurCardTypeFilter]
 	ld c, a
 	ld b, $00
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 	add hl, bc
 	dec [hl]
 	pop de
@@ -4956,7 +5015,7 @@ Func_9dfa: ; 9dfa (2:5dfa)
 ; 0x9e18
 
 Func_9e18: ; 9e18 (2:5e18)
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld d, $00
 .loop_1
 	inc d
@@ -4980,42 +5039,48 @@ Func_9e18: ; 9e18 (2:5e18)
 	ret
 ; 0x9e31
 
-Func_9e31: ; 9e31 (2:5e31)
+UpdateConfirmationCardScreen: ; 9e31 (2:5e31)
 	ld hl, hffb0
 	ld [hl], $01
-	call Func_9fc0
+	call PrintCurDeckNumberAndName
 	ld hl, hffb0
 	ld [hl], $00
 	jp PrintConfirmationCardList
 ; 0x9e41
 
 Func_9e41: ; 9e41 (2:5e41)
-	ld a, [wcecc]
+; if deck is empty, just show deck info header with empty card list
+	ld a, [wTotalCardCount]
 	or a
-	jp z, Func_9f40
-	call Func_a028
-	call Func_a06e
+	jp z, ShowDeckInfoHeaderAndWaitForBButton
+
+; create list of all unique cards
+	call SortCurDeckCardsByID
+	call CreateCurDeckUniqueCardList
 
 	xor a
 	ld [wcea1], a
 .asm_9e52
 	ld hl, Data_9eaf
 	call Func_9a6d
-	ld a, [wced9]
+	ld a, [wNumUniqueCards]
 	ld [wcfe6], a
 	cp $07
-	jr c, .asm_9e64
+	jr c, .no_cap
+	; cap to 7
 	ld a, $07
-.asm_9e64
+.no_cap
 	ld [wNamingScreenKeyboardHeight], a
 	ld [wcecb], a
-	call Func_9f52
-	ld hl, Func_9e31
+	call ShowConfirmationCardScreen
+
+	ld hl, UpdateConfirmationCardScreen
 	ld d, h
 	ld a, l
 	ld hl, wcece
 	ld [hli], a
 	ld [hl], d
+
 	xor a
 	ld [wced2], a
 .asm_9e7b
@@ -5049,7 +5114,10 @@ Func_9e41: ; 9e41 (2:5e41)
 ; 0x9eaf
 
 Data_9eaf:
-	db $00, $05, $02, $00, $07, $0f, $00, $00, $00
+	db $00, $05, $02, $00, $07
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 
 Func_9eb8: ; 9eb8 (2:5eb8)
 	ld a, [wNamingScreenKeyboardHeight]
@@ -5142,8 +5210,10 @@ Func_9efc: ; 9efc (2:5efc)
 	ret
 ; 0x9f40
 
-Func_9f40: ; 9f40 (2:5f40)
-	call Func_9f81
+; simply draws the deck info header
+; then awaits a b button press to exit
+ShowDeckInfoHeaderAndWaitForBButton: ; 9f40 (2:5f40)
+	call ShowDeckInfoHeader
 .wait_input
 	call DoFrame
 	ldh a, [hKeysPressed]
@@ -5154,10 +5224,10 @@ Func_9f40: ; 9f40 (2:5f40)
 	ret
 ; 0x9f52
 
-Func_9f52: ; 9f52 (2:5f52)
-	call Func_9f81
+ShowConfirmationCardScreen: ; 9f52 (2:5f52)
+	call ShowDeckInfoHeader
 	lb de, 3, 5
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -5165,18 +5235,18 @@ Func_9f52: ; 9f52 (2:5f52)
 	ret
 ; 0x9f62
 
-; counts all values stored in wcebb
+; counts all values stored in wCardFilterCounts
 ; if the total count is 0, then
 ; prints "No cards chosen."
 Func_9f62: ; 9f62 (2:5f62)
 	lb bc, 0, 0
-	ld hl, wcebb
+	ld hl, wCardFilterCounts
 .loop
 	ld a, [hli]
 	add b
 	ld b, a
 	inc c
-	ld a, $9
+	ld a, NUM_FILTERS
 	cp c
 	jr nz, .loop
 	ld a, b
@@ -5189,16 +5259,22 @@ Func_9f62: ; 9f62 (2:5f62)
 	ret
 ; 0x9f81
 
-Func_9f81: ; 9f81 (2:5f81)
-	call Func_8d56
+; draws a box on the top of the screen
+; with wCurDeck's number, name and card count
+; and draws the Hand Cards icon if it's
+; the current dueling deck
+ShowDeckInfoHeader: ; 9f81 (2:5f81)
+	call EmptyScreenAndLoadFontDuelAndHandCardsIcons
 	lb de, 0, 0
 	lb bc, 20, 4
 	call DrawRegularTextBox
-	ld a, [wcfb9]
+	ld a, [wCurDeckName]
 	or a
-	jp z, .print_card_count ; should be jr
-	call Func_9fc0
-	ld a, [wceb1]
+	jp z, .print_card_count ; can be jr
+
+; draw hand cards icon if it's the current dueling deck
+	call PrintCurDeckNumberAndName
+	ld a, [wCurDeck]
 	ld b, a
 	call EnableSRAM
 	ld a, [sCurrentlySelectedDeck]
@@ -5218,35 +5294,44 @@ Func_9f81: ; 9f81 (2:5f81)
 	ret
 ; 0x9fc0
 
-Func_9fc0: ; 9fc0 (2:5fc0)
-	ld a, [wceb1]
+; prints the name of wCurDeck in the form
+; "X· <deck name> deck", where X is the number
+; of the deck in the given menu
+; if no current deck, print blank line
+PrintCurDeckNumberAndName: ; 9fc0 (2:5fc0)
+	ld a, [wCurDeck]
 	cp $ff
-	jr z, .asm_9fea
+	jr z, .skip_deck_numeral
+
+; print the deck number in the menu
+; in the form "X·"
 	lb de, 3, 2
 	call InitTextPrinting
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	bit 7, a
-	jr z, .asm_9fd8
+	jr z, .incr_by_one
 	and $7f
-	jr .asm_9fd9
-.asm_9fd8
+	jr .got_deck_numeral
+.incr_by_one
 	inc a
-.asm_9fd9
+.got_deck_numeral
 	ld hl, wDefaultText
 	call ConvertToNumericalDigits
-	ld [hl], $77
+	ld [hl], "FW0_·"
 	inc hl
 	ld [hl], TX_END
 	ld hl, wDefaultText
 	call ProcessText
 
-.asm_9fea
-	ld hl, wcfb9
+.skip_deck_numeral
+	ld hl, wCurDeckName
 	ld de, wDefaultText
 	call CopyListFromHLToDE
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	cp $ff
-	jr z, .asm_a01b
+	jr z, .blank_deck_name
+
+; print "<deck name> deck"
 	ld hl, wDefaultText
 	call GetTextLengthInTiles
 	ld b, $0
@@ -5254,7 +5339,7 @@ Func_9fc0: ; 9fc0 (2:5fc0)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Data_92a7
+	ld hl, DeckNameSuffix
 	call CopyListFromHLToDE
 	lb de, 6, 2
 	ld hl, wDefaultText
@@ -5262,7 +5347,7 @@ Func_9fc0: ; 9fc0 (2:5fc0)
 	call ProcessText
 	ret
 
-.asm_a01b
+.blank_deck_name
 	lb de, 2, 2
 	ld hl, wDefaultText
 	call InitTextPrinting
@@ -5270,14 +5355,17 @@ Func_9fc0: ; 9fc0 (2:5fc0)
 	ret
 ; 0xa028
 
-Func_a028: ; a028 (2:6028)
-	ld hl, wcf17
+; sorts wCurDeckCards by ID
+SortCurDeckCardsByID: ; a028 (2:6028)
+; wOpponentDeck is used to temporarily store deck's cards
+; so that it can be later sorted by ID
+	ld hl, wCurDeckCards
 	ld de, wOpponentDeck
 	ld bc, wDuelTempList
 	ld a, -1
 	ld [bc], a
 .loop_copy
-	inc a
+	inc a ; incr deck index
 	push af
 	ld a, [hli]
 	ld [de], a
@@ -5285,14 +5373,16 @@ Func_a028: ; a028 (2:6028)
 	or a
 	jr z, .sort_cards
 	pop af
-	ld [bc], a
+	ld [bc], a ; store deck index
 	inc bc
 	jr .loop_copy
 
 .sort_cards
 	pop af
-	ld a, $ff
+	ld a, $ff ; terminator byte for wDuelTempList
 	ld [bc], a
+
+; force Opp Turn so that SortCardsInDuelTempListByID can be used
 	ldh a, [hWhoseTurn]
 	push af
 	ld a, OPPONENT_TURN
@@ -5301,9 +5391,13 @@ Func_a028: ; a028 (2:6028)
 	pop af
 	ldh [hWhoseTurn], a
 
-	ld hl, wcf17
+; given the ordered cards in wOpponentDeck,
+; each entry in it corresponds to its deck index
+; (first ordered card is deck index 0, second is deck index 1, etc)
+; place these in this order in wCurDeckCards
+	ld hl, wCurDeckCards
 	ld de, wDuelTempList
-.asm_a058
+.loop_order_by_deck_index
 	ld a, [de]
 	cp $ff
 	jr z, .done
@@ -5316,7 +5410,7 @@ Func_a028: ; a028 (2:6028)
 	pop hl
 	ld [hli], a
 	inc de
-	jr .asm_a058
+	jr .loop_order_by_deck_index
 
 .done
 	xor a
@@ -5324,14 +5418,14 @@ Func_a028: ; a028 (2:6028)
 	ret
 ; 0xa06e
 
-; goes through list in wcf17, and for each card in it
+; goes through list in wCurDeckCards, and for each card in it
 ; creates list in wOwnedCardsCountList of all unique cards
-; it finds (assuming wcf17 is sorted by ID)
+; it finds (assuming wCurDeckCards is sorted by ID)
 ; also counts the number of the different cards
-Func_a06e: ; a06e (2:606e)
+CreateCurDeckUniqueCardList: ; a06e (2:606e)
 	ld b, 0
 	ld c, $0
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld de, wOwnedCardsCountList
 .loop
 	ld a, [hli]
@@ -5346,7 +5440,7 @@ Func_a06e: ; a06e (2:606e)
 	jr .loop
 .done
 	ld a, b
-	ld [wced9], a
+	ld [wNumUniqueCards], a
 	ret
 ; 0xa08a
 
@@ -5356,7 +5450,7 @@ Func_a06e: ; a06e (2:606e)
 ; its count preceded by "x"
 PrintConfirmationCardList: ; a08a (2:608a)
 	push bc
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -5548,7 +5642,7 @@ GetCardTypeIconPalette: ; a173 (2:6173)
 	cp b
 	jr z, .done
 	inc hl
-	jp .loop ; should be jr
+	jp .loop ; can be jr
 .done
 	ld a, [hl]
 	pop hl
@@ -5573,13 +5667,13 @@ GetCardTypeIconPalette: ; a173 (2:6173)
 ; 0xa1a2
 
 Func_a1a2: ; a1a2 (2:61a2)
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld a, DECK_SIZE + $15
 	call ClearNBytesFromHL
 	ld a, $ff
-	ld [wceb1], a
+	ld [wCurDeck], a
 	ld hl, .text
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call CopyListFromHLToDE
 	ld hl, .unknown_a1d8
 	call Func_8d9d
@@ -5642,14 +5736,14 @@ HandleSendDeckConfigurationMenu: ; a201 (2:6201)
 ; 0xa24a
 
 SendDeckConfiguration: ; a24a (2:624a)
-	ld a, [wcf17]
+	ld a, [wCurDeckCards]
 	or a
 	jr z, CancelSendDeckConfiguration
 	xor a
 	ld [wcea1], a
 	ld hl, Data_b04a
 	call Func_9a6d
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld de, wDuelTempList
 	call CopyListFromHLToDE
 	call Func_b131
@@ -5811,7 +5905,10 @@ Func_a288: ; a288 (2:6288)
 ; 0xa396
 
 Data_a396: ; a396 (2:6396)
-	db $01, $05, $02, $00, $07, $0f, $00, $00, $00
+	db $01, $05, $02, $00, $07
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 ; 0xa39f
 
 ; a = which card type filter
@@ -5831,7 +5928,7 @@ Func_a39f: ; a39f (2:639f)
 	ld a, $07
 	ld [wcecb], a
 	lb de, 2, 5
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -5909,7 +6006,7 @@ GetDeckCardCounts: ; a412 (2:6412)
 ; where X is the current count of that card
 PrintCardSelectionList: ; a42d (2:642d)
 	push bc
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -6386,8 +6483,8 @@ Func_a6a0: ; a6a0 (2:66a0)
 	call Func_a596
 	ld a, $07
 	ld [wcecb], a
-	ld de, $204
-	ld hl, wced0
+	lb de, 2, 4
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -6420,7 +6517,7 @@ Func_a6ca: ; a6ca (2:66ca)
 .asm_a6ef
 	ld de, $330
 .asm_a6f2
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	ld [hl], d
 	inc hl
 	ld [hl], e
@@ -6430,7 +6527,7 @@ Func_a6ca: ; a6ca (2:66ca)
 
 Func_a6fa: ; a6fa (2:66fa)
 	push bc
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -6441,10 +6538,10 @@ Func_a6fa: ; a6fa (2:66fa)
 	ld a, [wcea1]
 	or a
 	jr z, .asm_a710
-	ld a, $0c
+	ld a, SYM_CURSOR_U
 	jr .asm_a712
 .asm_a710
-	ld a, $19
+	ld a, SYM_BOX_TOP_R
 .asm_a712
 	call WriteByteToBGMap0
 	ld a, [wcea1]
@@ -6475,12 +6572,12 @@ Func_a6fa: ; a6fa (2:66fa)
 	ld a, [hl]
 	cp $80
 	jr nz, .asm_a74c
-	ld hl, $6799
+	ld hl, .text
 	ld de, wc590
 	call CopyListFromHLToDE
 	jr .asm_a751
 .asm_a74c
-	ld a, $0d
+	ld a, 13
 	call CopyCardNameAndLevel
 .asm_a751
 	pop hl
@@ -6515,22 +6612,24 @@ Func_a6fa: ; a6fa (2:66fa)
 	pop de
 	xor a
 	ld [wcecd], a
-	ld a, $2f
+	ld a, SYM_CURSOR_D
 	jr .asm_a790
 .asm_a788
 	pop de
 	ld a, $01
 	ld [wcecd], a
-	ld a, $1b
+	ld a, SYM_BOX_BTM_R
 .asm_a790
-	ld b, $13
-	ld c, $11
+	ld b, 19
+	ld c, 17
 	call WriteByteToBGMap0
 	pop bc
 	ret
-; 0xa799
 
-	INCROM $a799, $a7a7
+.text
+	db "kkkkkkkkkkkkk"
+	db TX_END
+; 0xa7a7
 
 Func_a7a7: ; a7a7 (2:67a7)
 	push bc
@@ -6560,7 +6659,7 @@ Func_a7a7: ; a7a7 (2:67a7)
 	jr nz, .asm_a7d2
 	ld a, SYM_0
 .asm_a7d2
-	ld hl, wcfb9 + 2
+	ld hl, wCurDeckName + 2
 	ld [hl], TX_SYMBOL
 	inc hl
 	ld [hli], a
@@ -6573,7 +6672,7 @@ Func_a7a7: ; a7a7 (2:67a7)
 	xor a
 	ld [hli], a
 	ld [hl], a
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	pop de
 	pop bc
 	ret
@@ -6583,8 +6682,8 @@ Func_a7a7: ; a7a7 (2:67a7)
 	ld hl, wOnesAndTensPlace
 	ld a, [hli]
 	ld b, a
-	ld hl, wcfb9 + 2
-	ld de, $334
+	ld hl, wCurDeckName + 2
+	lb de, 3, "FW3_E"
 	ld [hl], d
 	inc hl
 	ld [hl], e
@@ -6602,13 +6701,13 @@ Func_a7a7: ; a7a7 (2:67a7)
 	xor a
 	ld [hli], a
 	ld [hl], a
-	ld hl, wcfb9 + 2
+	ld hl, wCurDeckName + 2
 	pop de
 	pop bc
 	ret
 
 .phantom_card
-	ld hl, wcfb9 + 2
+	ld hl, wCurDeckName + 2
 	ld [hl], $6c
 	inc hl
 	ld [hl], $6c
@@ -6618,7 +6717,7 @@ Func_a7a7: ; a7a7 (2:67a7)
 	xor a
 	ld [hli], a
 	ld [hl], a
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	pop de
 	pop bc
 	ret
@@ -6787,7 +6886,7 @@ Func_a913: ; a913 (2:6913)
 .loop_input_1
 	call DoFrame
 	call HandleMenuInput
-	jp nc, .loop_input_1 ; should be jr
+	jp nc, .loop_input_1 ; can be jr
 	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
@@ -6904,7 +7003,10 @@ Func_a913: ; a913 (2:6913)
 	dw NULL ; function pointer if non-0
 
 .data_aa0a
-	db $01, $04, $02, $00, $07, $0f, $00, $00, $00
+	db $01, $04, $02, $00, $07
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 
 .Func_aa13
 	ld hl, wHandTempList
@@ -7274,7 +7376,10 @@ PrinterMenu_PokemonCards: ; ab7b (2:6b7b)
 ; 0xad0e
 
 Data_ad05: ; ad05 (2:6d05)
-	db $03, $03, $00, $04, $02, $0f, $00, $00, $00
+	db $03, $03, $00, $04, $02
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 ; 0xad0e
 
 PrinterMenu_CardList: ; ad0e (2:6d0e)
@@ -7315,7 +7420,7 @@ HandlePrinterMenu: ; ad51 (2:6d51)
 .loop
 	ld hl, PrinterMenuParameters
 	call InitializeMenuParameters
-	call Func_8d56
+	call EmptyScreenAndLoadFontDuelAndHandCardsIcons
 	lb de, 4, 0
 	lb bc, 12, 12
 	call DrawRegularTextBox
@@ -7393,36 +7498,39 @@ PrinterMenu_PrintQuality: ; adb5 (2:6db5)
 ; 0xadf5
 
 Data_adf5: ; adf5 (2:6df5)
-	db $05, $10, $00, $02, $05, $0f, $00, $00, $00
+	db $05, $10, $00, $02, $05
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 ; 0xadfe
 
 Func_adfe: ; adfe (2:6dfe)
 	push de
-	ld de, wcfb9
+	ld de, wCurDeckName
 	call CopyListFromHLToDEInSRAM
 	pop de
-	ld hl, wcf17
-	call Func_8cd4
-	ld a, $09
-	ld hl, wcebb
+	ld hl, wCurDeckCards
+	call CopyDeckFromSRAM
+	ld a, NUM_FILTERS
+	ld hl, wCardFilterCounts
 	call ClearNBytesFromHL
 	ld a, DECK_SIZE
-	ld [wcecc], a
-	ld hl, wcebb
+	ld [wTotalCardCount], a
+	ld hl, wCardFilterCounts
 	ld [hl], a
 	call Func_ae21
 	ret
 ; 0xae21
 
 Func_ae21: ; ae21 (2:6e21)
-	call Func_a028
-	call Func_a06e
+	call SortCurDeckCardsByID
+	call CreateCurDeckUniqueCardList
 	xor a
 	ld [wcea1], a
 .loop
 	ld hl, Data_ae91
 	call Func_9a6d
-	ld a, [wced9]
+	ld a, [wNumUniqueCards]
 	ld [wcfe6], a
 	cp $05
 	jr c, .asm_ae3d
@@ -7476,7 +7584,10 @@ Func_ae21: ; ae21 (2:6e21)
 ; 0xae91
 
 Data_ae91: ; ae91 (2:6e91)
-	db $00, $03, $02, $00, $05, $0f, $00, $00, $00
+	db $00, $03, $02, $00, $05
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 ; 0xae9a
 
 Func_ae9a: ; ae9a (2:6e9a)
@@ -7497,8 +7608,8 @@ Func_ae9a: ; ae9a (2:6e9a)
 
 Func_aeb9: ; aeb9 (2:6eb9)
 	call .Func_aec9
-	ld de, $303
-	ld hl, wced0
+	lb de, 3, 3
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -7506,29 +7617,29 @@ Func_aeb9: ; aeb9 (2:6eb9)
 	ret
 
 .Func_aec9
-	call Func_8d56
+	call EmptyScreenAndLoadFontDuelAndHandCardsIcons
 	call Func_aed3
 	call EnableLCD
 	ret
 ; 0xaed3
 
 Func_aed3: ; aed3 (2:6ed3)
-	ld a, [wcfb9]
+	ld a, [wCurDeckName]
 	or a
 	ret z
 	ld de, $1
 	call InitTextPrinting
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	inc a
 	ld hl, wc590
 	call ConvertToNumericalDigits
-	ld [hl], $77
+	ld [hl], "FW0_·"
 	inc hl
 	ld [hl], TX_END
 	ld hl, wc590
 	call ProcessText
 
-	ld hl, wcfb9
+	ld hl, wCurDeckName
 	ld de, wc590
 	call CopyListFromHLToDE
 	ld hl, wc590
@@ -7538,7 +7649,7 @@ Func_aed3: ; aed3 (2:6ed3)
 	add hl, bc
 	ld d, h
 	ld e, l
-	ld hl, Data_92a7
+	ld hl, DeckNameSuffix
 	call CopyListFromHLToDE
 	ld de, $301
 	ld hl, wc590
@@ -7582,7 +7693,7 @@ Func_af1d: ; af1d (2:6f1d)
 	ret
 
 .asm_af6b
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	ld de, wDuelTempList
 	call CopyListFromHLToDE
 	xor a
@@ -7590,7 +7701,7 @@ Func_af1d: ; af1d (2:6f1d)
 	bank1call Func_756c
 	ret c
 	call EnableSRAM
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	call Func_910a
 	call DisableSRAM
 	call SaveGame
@@ -7688,7 +7799,10 @@ Func_af98: ; af98 (2:6f98)
 	ret
 
 Data_b04a: ; b04a (2:704a)
-	db $01, $03, $02, $00, $05, $0f, $00, $00, $00
+	db $01, $03, $02, $00, $05
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 
 Func_b053: ; b053 (2:7053)
 	ld hl, hffb0
@@ -7723,7 +7837,7 @@ Func_b088: ; b088 (2:7088)
 	ld a, $05
 	ld [wcecb], a
 	lb de, 2, 3
-	ld hl, wced0
+	ld hl, wCardListCoords
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -7769,8 +7883,8 @@ Func_b088: ; b088 (2:7088)
 	ld a, b
 	cp $ff
 	jr z, .asm_b0fc
-	and $20
-	cp $20
+	and FILTER_ENERGY
+	cp FILTER_ENERGY
 	jr z, .asm_b0f5
 	ld a, c
 	cp b
@@ -7852,7 +7966,7 @@ Func_b141: ; b141 (2:7141)
 .Func_b167
 	call Set_OBJ_8x8
 	call Func_8d78
-	ld de, $0
+	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
 	ret
@@ -8030,7 +8144,7 @@ Func_b29f: ; b29f (2:729f)
 	ld c, a
 	inc a
 	or $80
-	ld [wceb1], a
+	ld [wCurDeck], a
 	sla c
 	ld b, $00
 	ld hl, wd00d
@@ -8052,7 +8166,7 @@ Func_b29f: ; b29f (2:729f)
 
 	ld a, $01
 	call PlaySFXConfirmOrCancel
-	call Func_8e1f
+	call HandleDeckConfirmationMenu
 	ld a, [wd087]
 	ld [wcea1], a
 	call Func_b379
@@ -8247,9 +8361,9 @@ Func_b424: ; b424 (2:7424)
 	ld hl, wDefaultText
 	inc a
 	call ConvertToNumericalDigits
-	ld [hl], $77
+	ld [hl], "FW0_·"
 	inc hl
-	ld [hl], $00
+	ld [hl], TX_END
 	call InitTextPrinting
 	ld hl, wDefaultText
 	call ProcessText
@@ -8292,7 +8406,7 @@ Func_b424: ; b424 (2:7424)
 	pop bc
 	ld hl, wDefaultText
 	jr c, .asm_b482
-	ld de, $35f ; "○"
+	lb de, 3, "FW3_○"
 	jr .asm_b4c2
 
 .asm_b482
@@ -8301,11 +8415,11 @@ Func_b424: ; b424 (2:7424)
 	call Func_b625
 	jr c, .asm_b490
 	pop bc
-	ld de, $360 ; "❄"
+	lb de, 3, "FW3_❄"
 	jr .asm_b4c2
 
 .asm_b490
-	ld de, $6c ; "✕"
+	lb de, 0, "FW0_✕"
 	call Func_22ca
 	pop bc
 	pop de
@@ -8448,7 +8562,7 @@ Func_b545: ; b545 (2:7545)
 
 Func_b592: ; b592 (2:7592)
 	ld a, $ff
-	call Func_9168
+	call DrawDecksScreen
 	xor a
 .asm_b598
 	ld hl, DeckMachineMenuParameters
@@ -8457,18 +8571,18 @@ Func_b592: ; b592 (2:7592)
 	call DrawWideTextBox_PrintText
 .loop_input
 	call DoFrame
-	call Func_8dea
+	call HandleStartButtonInDeckSelectionMenu
 	jr c, .asm_b598
 	call HandleMenuInput
-	jp nc, .loop_input ; should be jr
+	jp nc, .loop_input ; can be jr
 	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
-	ld [wceb1], a
-	call Func_8ff2
+	ld [wCurDeck], a
+	call CheckIfCurDeckIsValid
 	jp nc, .Func_b5c8
-	call Func_8fe8
-	ld a, [wceb1]
+	call PrintThereIsNoDeckHereText
+	ld a, [wCurDeck]
 	jr .asm_b598
 
 .Func_b5c8
@@ -8691,7 +8805,10 @@ Func_b6ca: ; b6ca (2:76ca)
 ; 0xb6fb
 
 Data_b6fb: ; b6fb (2:76fb)
-	db $01, $02, $02, $00, $05, $0f, $00, $00, $00
+	db $01, $02, $02, $00, $05
+	db SYM_CURSOR_R
+	db SYM_SPACE
+	dw NULL
 
 Func_b704: ; b704 (2:7704)
 	ld a, [wcea1]
@@ -8730,7 +8847,7 @@ Func_b738: ; b738 (2:7738)
 	call DrawWideTextBox_WaitForInput
 	call Func_b644
 	ld a, $ff
-	call Func_9168
+	call DrawDecksScreen
 	xor a
 .init_menu_params
 	ld hl, DeckMachineMenuParameters
@@ -8739,10 +8856,10 @@ Func_b738: ; b738 (2:7738)
 	call DrawWideTextBox_PrintText
 .loop_input
 	call DoFrame
-	call Func_8dea
+	call HandleStartButtonInDeckSelectionMenu
 	jr c, .init_menu_params
 	call HandleMenuInput
-	jp nc, .loop_input ; should be jr
+	jp nc, .loop_input ; can be jr
 	ldh a, [hCurMenuItem]
 	cp $ff
 	jr nz, .asm_b76c
@@ -8751,11 +8868,11 @@ Func_b738: ; b738 (2:7738)
 	ret
 
 .asm_b76c
-	ld [wceb1], a
+	ld [wCurDeck], a
 	ldtx hl, DismantleThisDeckText
 	call YesOrNoMenuWithText
 	jr nc, .dismantle
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	jr .init_menu_params
 
 .dismantle
@@ -8774,8 +8891,8 @@ Func_b738: ; b738 (2:7738)
 	call ClearNBytesFromHL
 	call DisableSRAM
 	ld a, $ff
-	call Func_9168
-	ld a, [wceb1]
+	call DrawDecksScreen
+	ld a, [wCurDeck]
 	ld hl, DeckMachineMenuParameters
 	call InitializeMenuParameters
 	call DrawCursor2
@@ -8785,9 +8902,9 @@ Func_b738: ; b738 (2:7738)
 	xor a
 	ld [wTxRam2 + 0], a
 	ld [wTxRam2 + 1], a
-	ld hl, $26a
+	ldtx hl, DismantledDeckText
 	call DrawWideTextBox_WaitForInput
-	ld a, [wceb1]
+	ld a, [wCurDeck]
 	ret
 ; 0xb7c6
 
@@ -8862,9 +8979,9 @@ Func_b7c6: ; b7c6 (2:77c6)
 	call DisableSRAM
 
 	ld a, $ff
-	call Func_9168
+	call DrawDecksScreen
 	ld a, [wd08a + $17]
-	ld [wceb1], a
+	ld [wCurDeck], a
 	ld hl, DeckMachineMenuParameters
 	call InitializeMenuParameters
 	call DrawCursor2
@@ -8886,7 +9003,7 @@ Func_b7c6: ; b7c6 (2:77c6)
 Func_b87d: ; b87d (2:787d)
 	farcall Func_1ba9a
 	call Func_b644
-	call Func_9168
+	call DrawDecksScreen
 	ldtx hl, DismantleTheseDecksText
 	call YesOrNoMenuWithText
 	jr nc, .yes
@@ -8923,7 +9040,7 @@ Func_b87d: ; b87d (2:787d)
 .asm_b8c7
 	call DisableSRAM
 	ld a, [wd0a6]
-	call Func_9168
+	call DrawDecksScreen
 	call Func_b664
 	ldtx hl, DismantledTheDeckText
 	call DrawWideTextBox_WaitForInput
@@ -8948,19 +9065,19 @@ Func_b87d: ; b87d (2:787d)
 
 Func_b8f4: ; b8f4 (2:78f4)
 	ld a, [wd088]
-	ld [wceb1], a
+	ld [wCurDeck], a
 	call Func_b611
 	ld hl, $18
 	add hl, de
-	ld de, wcf17
+	ld de, wCurDeckCards
 	ld b, DECK_SIZE
 	call EnableSRAM
 	call CopyNBytesFromHLToDE
 	call DisableSRAM
 	xor a
 	ld [wcf53], a
-	call Func_a028
-	call Func_a06e
+	call SortCurDeckCardsByID
+	call CreateCurDeckUniqueCardList
 	ld a, $ff
 	call Func_b644
 	call Func_a3ca
@@ -8975,7 +9092,7 @@ Func_b8f4: ; b8f4 (2:78f4)
 	push bc
 	push de
 	push hl
-	ld hl, wcf17
+	ld hl, wCurDeckCards
 	call Func_b960
 	pop hl
 	pop de
@@ -9088,14 +9205,14 @@ PrinterMenu_DeckConfiguration: ; b991 (2:7991)
 	call Func_b611
 	ld hl, $18
 	add hl, de
-	ld de, wcf17
+	ld de, wCurDeckCards
 	ld b, DECK_SIZE
 	call EnableSRAM
 	call CopyNBytesFromHLToDE
 	call DisableSRAM
 	xor a
 	ld [wcf53], a
-	call Func_a028
+	call SortCurDeckCardsByID
 	ld a, [wd088]
 	bank1call Func_7580
 	call Func_b379
@@ -9161,7 +9278,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld c, a
 	inc a
 	or $80
-	ld [wceb1], a
+	ld [wCurDeck], a
 	sla c
 	ld b, $0
 	ld hl, wd00d
@@ -9171,7 +9288,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld h, [hl]
 	ld l, a
 	push hl
-	ld bc, $0018
+	ld bc, $18
 	add hl, bc
 	ld d, h
 	ld e, l
@@ -9183,7 +9300,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld a, $1
 	call PlaySFXConfirmOrCancel
 	call Func_b653
-	call Func_8e1f
+	call HandleDeckConfirmationMenu
 	call Func_b644
 	ld a, [wd087]
 	ld [wcea1], a
@@ -9250,7 +9367,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld [wd086], a
 	add b
 	ld c, a
-	ld [wceb1], a
+	ld [wCurDeck], a
 	sla c
 	ld b, $0
 	ld hl, wd00d
@@ -9270,7 +9387,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld h, [hl]
 	ld l, a
 	push hl
-	ld bc, $0018
+	ld bc, $18
 	add hl, bc
 	ld d, h
 	ld e, l

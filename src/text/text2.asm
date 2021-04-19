@@ -1894,7 +1894,7 @@ ChooseADeckToDismantleText: ; 3bf46 (e:7f46)
 	text "Choose a deck to dismantle."
 	done
 
-Text026a: ; 3bf63 (e:7f63)
+DismantledDeckText: ; 3bf63 (e:7f63)
 	text "Dismantled"
 	line ""
 	text "<RAMTEXT>."
