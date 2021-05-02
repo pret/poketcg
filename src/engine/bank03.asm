@@ -1173,7 +1173,7 @@ Func_c7b8: ; c7b8 (3:47b8)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_8db0
+	farcall DeckSelectionMenu
 	call Set_OBJ_8x8
 	ret
 

@@ -1828,7 +1828,7 @@ SCardsText: ; 3bdd1 (e:7dd1)
 	text "'s Cards"
 	done
 
-Text025b: ; 3bddb (e:7ddb)
+EmptyDeckNameText: ; 3bddb (e:7ddb)
 	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
 

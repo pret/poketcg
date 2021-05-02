@@ -448,17 +448,7 @@ UNION
 ; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
 wDefaultText:: ; c590
-	ds $2
-
-wc592:: ; c592
-	ds $3
-
-	ds $15
-
-wc5aa:: ; c5aa
-	ds $1
-
-	ds $21
+	ds $3c
 
 NEXTU
 
@@ -1913,28 +1903,38 @@ wcea1:: ; cea1
 wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
+; used to temporarily store wCurCardTypeFilter
+; to check whether a new filter is to be applied
+wTempCardTypeFilter:: ; cea4
+
+wCardListCursorPos:: ; cea4
+
 wNamingScreenCursorY:: ; cea4
 	ds $1
 
-wcea5:: ; cea5
+wCardListCursorXPos:: ; cea5
 	ds $1
 
-wcea6:: ; cea6
+wCardListCursorYPos:: ; cea6
 	ds $1
 
-wcea7:: ; cea7
+wCardListYSpacing:: ; cea7
 	ds $1
 
-wcea8:: ; cea8
+wCardListXSpacing:: ; cea8
 	ds $1
+
+wCardListNumCursorPositions:: ; cea9
 
 wNamingScreenKeyboardHeight:: ; cea9
 	ds $1
 
-wceaa:: ; ceaa
+; tile to draw when cursor is blinking
+wVisibleCursorTile:: ; ceaa
 	ds $1
 
-wceab:: ; ceab
+; tile to draw when cursor is visible
+wInvisibleCursorTile:: ; ceab
 	ds $1
 
 wceac:: ; ceac
@@ -1978,10 +1978,14 @@ wOnesAndTensPlace:: ; ceb6
 wCardFilterCounts:: ; cebb
 	ds NUM_FILTERS
 
-wcec4:: ; cec4
-	ds $7
+; buffer used to show which card IDs
+; are visible in a given list
+wVisibleListCardIDs:: ; cec4
+	ds MAX_DECK_CONFIRMATION_VISIBLE_CARDS
 
-wcecb:: ; cecb
+; number of visible entries
+; when showing a list of cards
+wNumVisibleCardListEntries:: ; cecb
 	ds $1
 
 wTotalCardCount:: ; cecc
@@ -2035,17 +2039,17 @@ wHandTempList:: ; ceda
 wceda:: ; ceda
 	ds DECK_SIZE
 
+; terminator for wceda
 wcf16:: ; cf16
 	ds $1
 
-; used in bank2, probably related to wTempHandCardList (another temp list?)
+; holds cards for the current deck
 wCurDeckCards:: ; cf17
-	ds DECK_SIZE
+	ds DECK_CONFIG_BUFFER_SIZE
 
-wcf53:: ; cf53
+wCurDeckCardsTerminator:: ; cf67
 	ds $1
-
-	ds $14
+wCurDeckCardsEnd::
 
 ; stores the count number of cards owned
 ; can be 0 in the case that a card is not available
@@ -2062,21 +2066,35 @@ wTempHandCardList:: ; cf68
 wCurDeckName:: ; cfb9
 	ds DECK_NAME_SIZE
 
-wcfd1:: ; cfd1
+; max number of cards that are allowed
+; to include when building a deck configuration
+wMaxNumCardsAllowed:: ; cfd1
 	ds $1
 
-wcfd2:: ; cfd2
+; max number of cards with same name that are allowed
+; to be included when building a deck configuration
+wSameNameCardsLimit:: ; cfd2
 	ds $1
 
-wcfd3:: ; cfd3
+; whether to include the cards in the selected deck
+; to appear in the filtered lists
+; is TRUE when building a deck (since the cards should be shown for removal)
+; is FALSE when choosing a deck configuration to send through Gift Center
+; (can't select cards that are included in already built decks)
+wIncludeCardsInDeck:: ; cfd3
 	ds $1
 
-wcfd4:: ; cfd4
+; pointer to a function that handles the menu
+; when building a deck configuration
+wDeckConfigurationMenuHandlerFunction:: ; cfd4
 	ds $2
 
-wcfd6:: ; cfd6
+; pointer to a transition table for the
+; function in wDeckConfigurationMenuHandlerFunction
+wDeckConfigurationMenuTransitionTable:: ; cfd6
 	ds $2
 
+; pointer to a list of cards
 wcfd8:: ; cfd8
 	ds $2
 
@@ -2109,7 +2127,8 @@ wPlaysSfx:: ; cfe3
 wcfe4:: ; cfe4
 	ds $1
 
-wcfe5:: ; cfe5
+; collection index of the first owned card
+wFirstOwnedCardIndex:: ; cfe5
 	ds $1
 
 wcfe6:: ; cfe6
@@ -2148,12 +2167,11 @@ wNamingScreenNamePosition:: ; d007
 wd009:: ; d009
 	ds $4
 
-wd00d:: ; d00d
-	ds $18
+; pointers to all decks of current deck machine
+wMachineDeckPtrs:: ; d00d
+	ds 2 * NUM_DECK_SAVE_MACHINE_SLOTS
 
-	ds $60
-
-wd085:: ; d085
+wNumSavedDecks:: ; d085
 	ds $1
 
 wd086:: ; d086
@@ -2174,7 +2192,7 @@ wd08a:: ; d08a
 wd0a2:: ; d0a2
 	ds $2
 
-wd0a4:: ; d0a4
+wTempBankSRAM:: ; d0a4
 	ds $1
 
 wd0a5:: ; d0a5

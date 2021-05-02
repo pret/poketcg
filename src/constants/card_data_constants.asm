@@ -8,9 +8,14 @@ CARD_NOT_OWNED       EQU 1 << CARD_NOT_OWNED_F
 CARD_COUNT_MASK      EQU $7f
 
 ; sDeck* and generic deck constants
-NUM_DECKS      EQU 4
-DECK_NAME_SIZE EQU 24
-DECK_SIZE      EQU 60
+NUM_DECKS                EQU 4
+DECK_NAME_SIZE           EQU 24
+DECK_NAME_SIZE_WO_SUFFIX EQU 21 ; name part before "deck"
+DECK_SIZE                EQU 60
+DECK_STRUCT_SIZE         EQU DECK_NAME_SIZE + DECK_SIZE
+DECK_CONFIG_BUFFER_SIZE  EQU 80
+MAX_NUM_SAME_NAME_CARDS  EQU 4
+MAX_UNNAMED_DECK_NUM     EQU 999
 
 ; card data offsets (data/cards.asm and card_data_struct)
 

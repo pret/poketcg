@@ -604,7 +604,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ViewWhichCardFileText                              ; 0x0258
 	textpointer Text0259                                           ; 0x0259
 	textpointer SCardsText                                         ; 0x025a
-	textpointer Text025b                                           ; 0x025b
+	textpointer EmptyDeckNameText                                  ; 0x025b
 	textpointer DeckSaveMachineText                                ; 0x025c
 	textpointer SaveADeckText                                      ; 0x025d
 	textpointer DeleteADeckText                                    ; 0x025e

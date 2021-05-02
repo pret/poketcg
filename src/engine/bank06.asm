@@ -2050,29 +2050,32 @@ Func_1996e: ; 1996e (6:596e)
 	ldh [hWhoseTurn], a
 	ld hl, sCardCollection
 	ld bc, $1607
-.asm_1997b
+.loop_clear
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_1997b
-	ld a, $5
-	ld hl, s0a350
+	jr nz, .loop_clear
+
+	ld a, CHARMANDER_AND_FRIENDS_DECK
+	ld hl, sSavedDeck1
 	call Func_199e0
-	ld a, $7
-	ld hl, s0a3a4
+	ld a, SQUIRTLE_AND_FRIENDS_DECK
+	ld hl, sSavedDeck2
 	call Func_199e0
-	ld a, $9
-	ld hl, s0a3f8
+	ld a, BULBASAUR_AND_FRIENDS_DECK
+	ld hl, sSavedDeck3
 	call Func_199e0
+
 	call EnableSRAM
 	ld hl, sCardCollection
 	ld a, CARD_NOT_OWNED
-.asm_199a2
+.loop_collection
 	ld [hl], a
 	inc l
-	jr nz, .asm_199a2
+	jr nz, .loop_collection
+
 	ld hl, sCurrentDuel
 	xor a
 	ld [hli], a
@@ -2080,13 +2083,14 @@ Func_1996e: ; 1996e (6:596e)
 	ld [hl], a
 
 	ld hl, sCardPopNameList
-	ld c, $10
-.asm_199b2
+	ld c, CARDPOP_NAME_LIST_MAX_ELEMS
+.loop_card_pop_names
 	ld [hl], $0
-	ld de, $0010
+	ld de, NAME_BUFFER_LENGTH
 	add hl, de
 	dec c
-	jr nz, .asm_199b2
+	jr nz, .loop_card_pop_names
+
 	ld a, 2
 	ld [sPrinterContrastLevel], a
 	ld a, $2
@@ -3592,9 +3596,9 @@ InputPlayerName: ; 1a7a3 (6:67a3)
 	ld a, $06
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
-	ld [wceaa], a
+	ld [wVisibleCursorTile], a
 	ld a, $00
-	ld [wceab], a
+	ld [wInvisibleCursorTile], a
 .loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -3950,12 +3954,12 @@ NamingScreen_CheckButtonState: ; 1a908 (6:6908)
 	inc [hl]
 	and $0f
 	ret nz
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
 	jr z, Func_1aa07.asm_6a0a
 
 Func_1aa07: ; 1aa07 (6:6a07)
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 .asm_6a0a
 	ld e, a
 	ld a, [wNamingScreenCursorX]
@@ -3974,7 +3978,7 @@ Func_1aa07: ; 1aa07 (6:6a07)
 	ret
 
 Func_1aa23: ; 1aa23 (6:6a23)
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	jr Func_1aa07.asm_6a0a
 
 Func_1aa28: ; 1aa28 (6:6a28)
@@ -3986,7 +3990,7 @@ Func_1aa28: ; 1aa28 (6:6a28)
 	call ZeroObjectPositions
 	pop af
 	ld b, a
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 	cp b
 	jr z, .asm_6a60
 	ld a, [wNamingScreenBufferLength]
@@ -4456,9 +4460,9 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld a, $07
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
-	ld [wceaa], a
+	ld [wVisibleCursorTile], a
 	ld a, $00
-	ld [wceab], a
+	ld [wInvisibleCursorTile], a
 .loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -4748,12 +4752,12 @@ Func_1aefb: ; 1aefb (6:6efb)
 	inc [hl]
 	and $0f
 	ret nz
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
 	jr z, Func_1afa1.asm_6fa4
 
 Func_1afa1: ; 1afa1 (6:6fa1)
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 .asm_6fa4
 	ld e, a
 	ld a, [wNamingScreenCursorX]
@@ -4772,7 +4776,7 @@ Func_1afa1: ; 1afa1 (6:6fa1)
 	ret
 
 Func_1afbd: ; 1afbd (6:6fbd)
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	jr Func_1afa1.asm_6fa4
 
 Func_1afc2: ; 1afc2 (6:6fc2)
@@ -4784,7 +4788,7 @@ Func_1afc2: ; 1afc2 (6:6fc2)
 	call ZeroObjectPositions
 	pop af
 	ld b, a
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 	cp b
 	jr z, .asm_6ffb
 	ld a, [wNamingScreenBufferLength]
@@ -4963,9 +4967,9 @@ Func_1ba14: ; 1ba14 (6:7a14)
 Func_1ba4c: ; 1ba4c (6:7a4c)
 	push hl
 	ld l, b
-	ld h, $54
+	ld h, DECK_STRUCT_SIZE
 	call HtimesL
-	ld de, s0a350
+	ld de, sSavedDecks
 	add hl, de
 	ld d, h
 	ld e, l
@@ -5080,7 +5084,7 @@ Func_1bae4: ; 1bae4 (6:7ae4)
 	push af
 	ld hl, wd088
 	ld b, [hl]
-	farcall Func_b625
+	farcall CheckIfCanBuildSavedDeck
 	jr c, .asm_7af5
 	pop af
 	ld [wd0a6], a
