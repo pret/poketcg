@@ -452,7 +452,10 @@ wDefaultText:: ; c590
 
 NEXTU
 
-wc590:: ; c590
+; used in CheckIfCurrentDeckWasChanged to determine whether
+; wCurDeckCards was changed from the original
+; deck it was based on 
+wCurDeckCardChanges:: ; c590
 	ds DECK_SIZE
 
 ENDU
@@ -1892,7 +1895,10 @@ wce9f:: ; ce9f
 wCardPopCardObtainSong:: ; cea0
 	ds $1
 
-wcea1:: ; cea1
+; first index in the current card list that is visible
+; used to calculate which element to get based
+; on the cursor position
+wCardListVisibleOffset:: ; cea1
 	ds $1
 
 	ds $1
@@ -1937,10 +1943,14 @@ wVisibleCursorTile:: ; ceaa
 wInvisibleCursorTile:: ; ceab
 	ds $1
 
-wceac:: ; ceac
+; unknown handler function run in HandleDeckCardSelectionList
+; is always NULL
+wCardListHandlerFunction:: ; ceac
 	ds $2
 
-wceae:: ; ceae
+; number of cards that are listed
+; in the current filtered list
+wNumEntriesInCurFilter:: ; ceae
 	ds $1
 
 wCheckMenuCursorXPosition:: ; ceaf
@@ -2010,15 +2020,17 @@ wced2:: ; ced2
 wCurCardTypeFilter:: ; ced3
 	ds $1
 
-wced4:: ; ced4
+; temporarily stores wCardListNumCursorPositions value
+wTempCardListCursorPos:: ; ced4
 	ds $1
 
-wced5:: ; ced5
+wTempFilteredCardListNumCursorPositions:: ; ced5
 	ds $1
 
 wced6:: ; ced6
 	ds $1
 
+; maybe unused, is written to but never read
 wced7:: ; ced7
 	ds $1
 
@@ -2094,8 +2106,9 @@ wDeckConfigurationMenuHandlerFunction:: ; cfd4
 wDeckConfigurationMenuTransitionTable:: ; cfd6
 	ds $2
 
-; pointer to a list of cards
-wcfd8:: ; cfd8
+; pointer to a list of cards that
+; is currently being shown/manipulated
+wCurCardListPtr:: ; cfd8
 	ds $2
 
 wcfda:: ; cfda
@@ -2108,7 +2121,8 @@ wcfda:: ; cfda
 wCursorAlternateTile:: ; cfde
 	ds $1
 
-wcfdf:: ; cfdf
+; temporarily stores value of wCardListNumCursorPositions
+wTempCardListNumCursorPositions:: ; cfdf
 	ds $1
 
 wcfe0:: ; cfe0
@@ -2131,7 +2145,7 @@ wcfe4:: ; cfe4
 wFirstOwnedCardIndex:: ; cfe5
 	ds $1
 
-wcfe6:: ; cfe6
+wNumCardListEntries:: ; cfe6
 	ds $1
 
 ; a name buffer in the naming screen.

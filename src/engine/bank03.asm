@@ -1183,7 +1183,7 @@ Func_c7cc: ; c7cc (3:47cc)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_a288
+	farcall HandlePlayersCardsScreen
 	call Set_OBJ_8x8
 	ret
 
