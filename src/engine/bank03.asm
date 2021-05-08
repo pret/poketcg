@@ -1254,7 +1254,7 @@ Func_c859: ; c859 (3:4859)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_a913
+	farcall HandleCardAlbumScreen
 	call Set_OBJ_8x8
 	ret
 

@@ -123,7 +123,10 @@ sUnnamedDeckCounter:: ; b701
 
 	ds $1
 
-sb703:: ; b703
+; whether player has had Promotional cards
+; to decide whether to show the option
+; in the Card Album PC menu
+sHasPromotionalCards:: ; b703
 	ds $4
 
 	ds $f9

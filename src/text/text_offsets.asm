@@ -602,7 +602,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Item4LaboratoryText                                ; 0x0256
 	textpointer Item5PromotionalCardText                           ; 0x0257
 	textpointer ViewWhichCardFileText                              ; 0x0258
-	textpointer Text0259                                           ; 0x0259
+	textpointer EmptyPromotionalCardText                           ; 0x0259
 	textpointer SCardsText                                         ; 0x025a
 	textpointer EmptyDeckNameText                                  ; 0x025b
 	textpointer DeckSaveMachineText                                ; 0x025c

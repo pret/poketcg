@@ -141,6 +141,7 @@ PROMOSTAR EQU $ff
 	const CARD_SET_LABORATORY  ; $3
 	const CARD_SET_PROMOTIONAL ; $4
 	const CARD_SET_ENERGY      ; $5
+NUM_CARD_SETS EQU const_value - 1
 
 ; CARD_DATA_SET constants (set 1)
 COLOSSEUM   EQU CARD_SET_COLOSSEUM   << 4

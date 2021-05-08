@@ -1820,7 +1820,7 @@ ViewWhichCardFileText: ; 3bdaf (e:7daf)
 	text "View which Card File?"
 	done
 
-Text0259: ; 3bdc6 (e:7dc6)
+EmptyPromotionalCardText: ; 3bdc6 (e:7dc6)
 	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
 

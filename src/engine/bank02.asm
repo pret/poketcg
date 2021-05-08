@@ -2174,7 +2174,7 @@ WriteCardListsTerminatorBytes: ; 8ce7 (2:4ce7)
 Func_8cf9: ; 8cf9 (2:4cf9)
 	call EnableSRAM
 	xor a
-	ld hl, sb703
+	ld hl, sHasPromotionalCards
 	ld [hli], a
 	inc a ; $1
 	ld [hli], a
@@ -3279,7 +3279,7 @@ HandleDeckBuildScreen: ; 9345 (2:5345)
 	ld hl, PrintDeckBuildingCardList
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 
@@ -4708,7 +4708,7 @@ HandleDeckCardSelectionList: ; 9b25 (2:5b25)
 	jr z, .asm_9b5a
 	dec a
 	ld [wCardListVisibleOffset], a
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	call CallIndirect
 	xor a
 	jr .asm_9b8f
@@ -4734,7 +4734,7 @@ HandleDeckCardSelectionList: ; 9b25 (2:5b25)
 	ld a, [wCardListVisibleOffset]
 	inc a
 	ld [wCardListVisibleOffset], a
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	call CallIndirect
 	pop af
 	dec a
@@ -5271,7 +5271,7 @@ HandleDeckConfirmationMenu: ; 9e41 (2:5e41)
 	ld hl, UpdateConfirmationCardScreen
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 
@@ -5363,7 +5363,7 @@ HandleLeftRightInCardList: ; 9eb8 (2:5eb8)
 	jr z, .asm_9efa
 	ld a, SFX_01
 	call PlaySFX
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	call CallIndirect
 .asm_9efa
 	scf
@@ -5413,7 +5413,7 @@ HandleSelectUpAndDownInList: ; 9efc (2:5efc)
 	jr z, .set_carry
 	ld a, SFX_01
 	call PlaySFX
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	call CallIndirect
 .set_carry
 	scf
@@ -6053,7 +6053,7 @@ HandlePlayersCardsScreen: ; a288 (2:6288)
 	ld hl, PrintCardSelectionList
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 	xor a
@@ -6078,9 +6078,9 @@ HandlePlayersCardsScreen: ; a288 (2:6288)
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 
-	; set wHandTempList as current card list
+	; set wFilteredCardList as current card list
 	; and show card page screen
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 	ld hl, wCurCardListPtr
 	ld [hl], e
 	inc hl
@@ -6490,17 +6490,20 @@ PrintTotalNumberOfCardsInCollection: ; a504 (2:6504)
 	ret
 ; 0xa596
 
+; fills wFilteredCardList and wOwnedCardsCountList
+; with cards IDs and counts, respectively,
+; from given Card Set in register a
 ; a = CARD_SET_* constant
-Func_a596: ; a596 (2:6596)
+CreateCardSetList: ; a596 (2:6596)
 	push af
 	ld a, DECK_SIZE
-	ld hl, wHandTempList
+	ld hl, wFilteredCardList
 	call ClearNBytesFromHL
 	ld a, DECK_SIZE
 	ld hl, wOwnedCardsCountList
 	call ClearNBytesFromHL
 	xor a
-	ld [wcfe2], a
+	ld [wOwnedPhantomCardFlags], a
 	pop af
 
 	ld hl, 0
@@ -6509,7 +6512,7 @@ Func_a596: ; a596 (2:6596)
 .loop_all_cards
 	inc e
 	call LoadCardDataToBuffer1_FromCardID
-	jr c, .asm_a5e6
+	jr c, .done_pkmn_cards
 	ld a, [wLoadedCard1Set]
 	and $f0 ; set 1
 	swap a
@@ -6519,13 +6522,13 @@ Func_a596: ; a596 (2:6596)
 ; it's same set as input
 	ld a, e
 	cp VENUSAUR1
-	jp z, .Func_a681
+	jp z, .SetVenusaur1OwnedFlag
 	cp MEW2
-	jp z, .Func_a667
+	jp z, .SetMew2OwnedFlag
 
 	push bc
 	push hl
-	ld bc, wHandTempList
+	ld bc, wFilteredCardList
 	add hl, bc
 	ld [hl], e ; card ID
 
@@ -6543,24 +6546,26 @@ Func_a596: ; a596 (2:6596)
 	pop bc
 	jr .loop_all_cards
 
-.asm_a5e6
+.done_pkmn_cards
+; for the energy cards, put all basic energy cards in Colosseum
+; and Double Colorless energy in Mystery
 	ld a, b
 	cp CARD_SET_MYSTERY
 	jr z, .mystery
 	or a
-	jr nz, .not_colosseum_or_mystery
+	jr nz, .skip_energy_cards
 
 ; colosseum
-; places all basic energy cards in wHandTempList
+; places all basic energy cards in wFilteredCardList
 	lb de, 0, 0
 .loop_basic_energy_cards
 	inc e
 	ld a, e
 	cp DOUBLE_COLORLESS_ENERGY
-	jr z, .not_colosseum_or_mystery
+	jr z, .skip_energy_cards
 	push bc
 	push hl
-	ld bc, wHandTempList
+	ld bc, wFilteredCardList
 	add hl, bc
 	ld [hl], e
 	ld hl, wTempCardCollection
@@ -6577,19 +6582,19 @@ Func_a596: ; a596 (2:6596)
 	jr .loop_basic_energy_cards
 
 .mystery
-; places double colorless energy card in wHandTempList
+; places double colorless energy card in wFilteredCardList
 	lb de, 0, 0
 .loop_find_double_colorless
 	inc e
 	ld a, e
 	cp BULBASAUR
-	jr z, .not_colosseum_or_mystery
+	jr z, .skip_energy_cards
 	cp DOUBLE_COLORLESS_ENERGY
 	jr nz, .loop_find_double_colorless
 	; double colorless energy
 	push bc
 	push hl
-	ld bc, wHandTempList
+	ld bc, wFilteredCardList
 	add hl, bc
 	ld [hl], e
 	ld hl, wTempCardCollection
@@ -6605,17 +6610,17 @@ Func_a596: ; a596 (2:6596)
 	pop bc
 	jr .loop_find_double_colorless
 
-.not_colosseum_or_mystery
-	ld a, [wcfe2]
-	bit 0, a
-	jr z, .asm_a63e
-	call .Func_a685
-.asm_a63e
-	bit 1, a
-	jr z, .asm_a645
-	call .Func_a69a
+.skip_energy_cards
+	ld a, [wOwnedPhantomCardFlags]
+	bit VENUSAUR_OWNED_PHANTOM_F, a
+	jr z, .check_mew
+	call .PlaceVenusaur1InList
+.check_mew
+	bit MEW_OWNED_PHANTOM_F, a
+	jr z, .find_first_owned
+	call .PlaceMew2InList
 
-.asm_a645
+.find_first_owned
 	dec l
 	ld c, l
 	ld b, h
@@ -6624,29 +6629,29 @@ Func_a596: ; a596 (2:6596)
 	add hl, bc
 	ld a, [hl]
 	cp CARD_NOT_OWNED
-	jr nz, .found_not_owned
+	jr nz, .found_owned
 	dec c
 	jr .loop_owned_cards
 
-.found_not_owned
+.found_owned
 	inc c
 	ld a, c
 	ld [wNumEntriesInCurFilter], a
 	xor a
-	ld hl, wHandTempList
+	ld hl, wFilteredCardList
 	add hl, bc
 	ld [hl], a
-	ld a, $ff
+	ld a, $ff ; terminator byte
 	ld hl, wOwnedCardsCountList
 	add hl, bc
 	ld [hl], a
 	ret
 
-.Func_a667
-	ld a, $02
+.SetMew2OwnedFlag
+	ld a, (1 << MEW_OWNED_PHANTOM_F)
 ;	fallthrough
 
-.Func_a669
+.SetPhantomOwnedFlag
 	push hl
 	push bc
 	ld b, a
@@ -6654,27 +6659,28 @@ Func_a596: ; a596 (2:6596)
 	add hl, de
 	ld a, [hl]
 	cp CARD_NOT_OWNED
-	jr z, .asm_a67c
-	ld a, [wcfe2]
+	jr z, .skip_set_flag
+	ld a, [wOwnedPhantomCardFlags]
 	or b
-	ld [wcfe2], a
-.asm_a67c
+	ld [wOwnedPhantomCardFlags], a
+.skip_set_flag
 	pop bc
 	pop hl
 	jp .loop_all_cards
 
-.Func_a681
-	ld a, $01
-	jr .Func_a669
+.SetVenusaur1OwnedFlag
+	ld a, (1 << VENUSAUR_OWNED_PHANTOM_F)
+	jr .SetPhantomOwnedFlag
 
-.Func_a685
+.PlaceVenusaur1InList
 	push af
 	push hl
 	ld e, VENUSAUR1
 ;	fallthrough
 
-.Func_a689
-	ld bc, wHandTempList
+; places card in register e directly in the list
+.PlaceCardInList
+	ld bc, wFilteredCardList
 	add hl, bc
 	ld [hl], e
 	pop hl
@@ -6687,15 +6693,15 @@ Func_a596: ; a596 (2:6596)
 	pop af
 	ret
 
-.Func_a69a
+.PlaceMew2InList
 	push af
 	push hl
 	ld e, MEW2
-	jr .Func_a689
+	jr .PlaceCardInList
 ; 0xa6a0
 
 ; a = CARD_SET_* constant
-Func_a6a0: ; a6a0 (2:66a0)
+CreateCardSetListAndInitListCoords: ; a6a0 (2:66a0)
 	push af
 	ld hl, sCardCollection
 	ld de, wTempCardCollection
@@ -6706,9 +6712,9 @@ Func_a6a0: ; a6a0 (2:66a0)
 	pop af
 
 	push af
-	call Func_a6ca
-	call Func_a596
-	ld a, MAX_DECK_CONFIRMATION_VISIBLE_CARDS
+	call .GetEntryPrefix
+	call CreateCardSetList
+	ld a, MAX_CARD_ALBUM_VISIBLE_CARDS
 	ld [wNumVisibleCardListEntries], a
 	lb de, 2, 4
 	ld hl, wCardListCoords
@@ -6717,33 +6723,34 @@ Func_a6a0: ; a6a0 (2:66a0)
 	ld [hl], d
 	pop af
 	ret
-; 0xa6ca
 
+; places in entry name the prefix associated with the selected Card Set
 ; a = CARD_SET_* constant
-Func_a6ca: ; a6ca (2:66ca)
+.GetEntryPrefix
 	push af
 	cp CARD_SET_PROMOTIONAL
-	jr nz, .asm_a6d4
-	ld de, $33f
-	jr .asm_a6f2
-.asm_a6d4
+	jr nz, .laboratory
+	lb de, 3, "FW3_P"
+	jr .got_prefix
+.laboratory
 	cp CARD_SET_LABORATORY
-	jr nz, .asm_a6dd
-	ld de, $333
-	jr .asm_a6f2
-.asm_a6dd
+	jr nz, .mystery
+	lb de, 3, "FW3_D"
+	jr .got_prefix
+.mystery
 	cp CARD_SET_MYSTERY
-	jr nz, .asm_a6e6
-	ld de, $332
-	jr .asm_a6f2
-.asm_a6e6
+	jr nz, .evolution
+	lb de, 3, "FW3_C"
+	jr .got_prefix
+.evolution
 	cp CARD_SET_EVOLUTION
-	jr nz, .asm_a6ef
-	ld de, $331
-	jr .asm_a6f2
-.asm_a6ef
-	ld de, $330
-.asm_a6f2
+	jr nz, .colosseum
+	lb de, 3, "FW3_B"
+	jr .got_prefix
+.colosseum
+	lb de, 3, "FW3_A"
+
+.got_prefix
 	ld hl, wCurDeckName
 	ld [hl], d
 	inc hl
@@ -6752,7 +6759,9 @@ Func_a6ca: ; a6ca (2:66ca)
 	ret
 ; 0xa6fa
 
-Func_a6fa: ; a6fa (2:66fa)
+; prints the cards being shown in the Card Album screen
+; for the corresponding Card Set
+PrintCardSetListEntries: ; a6fa (2:66fa)
 	push bc
 	ld hl, wCardListCoords
 	ld e, [hl]
@@ -6762,32 +6771,35 @@ Func_a6fa: ; a6fa (2:66fa)
 	ld c, e
 	dec c
 	dec c
+
+; draw up cursor on top right
 	ld a, [wCardListVisibleOffset]
 	or a
-	jr z, .asm_a710
+	jr z, .no_up_cursor
 	ld a, SYM_CURSOR_U
-	jr .asm_a712
-.asm_a710
+	jr .got_up_cursor_tile
+.no_up_cursor
 	ld a, SYM_BOX_TOP_R
-.asm_a712
+.got_up_cursor_tile
 	call WriteByteToBGMap0
+
 	ld a, [wCardListVisibleOffset]
 	ld l, a
 	ld h, $00
 	ld a, [wNumVisibleCardListEntries]
-.asm_a71e
+.loop_visible_cards
 	push de
 	or a
-	jr z, .asm_a777
+	jr z, .handle_down_cursor
 	ld b, a
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 	push hl
 	add hl, de
 	ld a, [hl]
 	pop hl
 	inc l
 	or a
-	jr z, .asm_a788
+	jr z, .no_down_cursor
 	ld e, a
 	call AddCardIDToVisibleList
 	call LoadCardDataToBuffer1_FromCardID
@@ -6798,15 +6810,15 @@ Func_a6fa: ; a6fa (2:66fa)
 	dec hl
 	ld a, [hl]
 	cp CARD_NOT_OWNED
-	jr nz, .asm_a74c
-	ld hl, .text
+	jr nz, .owned
+	ld hl, .EmptySlotText
 	ld de, wDefaultText
 	call CopyListFromHLToDE
-	jr .asm_a751
-.asm_a74c
+	jr .print_text
+.owned
 	ld a, 13
 	call CopyCardNameAndLevel
-.asm_a751
+.print_text
 	pop hl
 	pop bc
 	pop de
@@ -6814,14 +6826,17 @@ Func_a6fa: ; a6fa (2:66fa)
 	call InitTextPrinting
 	pop hl
 	push hl
-	call Func_a7a7
+	call .AppendCardListIndex
 	call ProcessText
 	ld hl, wDefaultText
 	jr .asm_a76d
+
+	; this code is never reached
 	pop de
 	push hl
 	call InitTextPrinting
 	ld hl, Text_9a36
+
 .asm_a76d
 	call ProcessText
 	pop hl
@@ -6829,43 +6844,44 @@ Func_a6fa: ; a6fa (2:66fa)
 	dec a
 	inc e
 	inc e
-	jr .asm_a71e
-.asm_a777
-	ld de, wHandTempList
+	jr .loop_visible_cards
+
+.handle_down_cursor
+	ld de, wFilteredCardList
 	add hl, de
 	ld a, [hl]
 	or a
-	jr z, .asm_a788
+	jr z, .no_down_cursor
 	pop de
 	xor a
 	ld [wcecd], a
 	ld a, SYM_CURSOR_D
-	jr .asm_a790
-.asm_a788
+	jr .got_down_cursor_tile
+.no_down_cursor
 	pop de
 	ld a, $01
 	ld [wcecd], a
 	ld a, SYM_BOX_BTM_R
-.asm_a790
+.got_down_cursor_tile
 	ld b, 19
 	ld c, 17
 	call WriteByteToBGMap0
 	pop bc
 	ret
 
-.text
-	db "kkkkkkkkkkkkk"
+.EmptySlotText
+	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
-; 0xa7a7
 
-Func_a7a7: ; a7a7 (2:67a7)
+; gets the index in the card list and adds it to wCurDeckName
+.AppendCardListIndex
 	push bc
 	push de
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 	add hl, de
 	dec hl
 	ld a, [hl]
-	cp BULBASAUR
+	cp DOUBLE_COLORLESS_ENERGY + 1
 	jr c, .energy_card
 	cp VENUSAUR1
 	jr z, .phantom_card
@@ -6883,20 +6899,20 @@ Func_a7a7: ; a7a7 (2:67a7)
 	ld b, a
 	ld a, [hl]
 	or a
-	jr nz, .asm_a7d2
+	jr nz, .got_index
 	ld a, SYM_0
-.asm_a7d2
-	ld hl, wCurDeckName + 2
+.got_index
+	ld hl, wCurDeckName + 2 ; skip prefix
 	ld [hl], TX_SYMBOL
 	inc hl
-	ld [hli], a
+	ld [hli], a ; tens place
 	ld [hl], TX_SYMBOL
 	inc hl
 	ld a, b
-	ld [hli], a
+	ld [hli], a ; ones place
 	ld [hl], TX_SYMBOL
 	inc hl
-	xor a
+	xor a ; SYM_SPACE
 	ld [hli], a
 	ld [hl], a
 	ld hl, wCurDeckName
@@ -6925,7 +6941,7 @@ Func_a7a7: ; a7a7 (2:67a7)
 	ld [hli], a
 	ld [hl], TX_SYMBOL
 	inc hl
-	xor a
+	xor a ; SYM_SPACE
 	ld [hli], a
 	ld [hl], a
 	ld hl, wCurDeckName + 2
@@ -6934,14 +6950,15 @@ Func_a7a7: ; a7a7 (2:67a7)
 	ret
 
 .phantom_card
+; phantom cards get only "✕✕" in their index number
 	ld hl, wCurDeckName + 2
-	ld [hl], "l"
+	ld [hl], "FW0_✕"
 	inc hl
-	ld [hl], "l"
+	ld [hl], "FW0_✕"
 	inc hl
 	ld [hl], TX_SYMBOL
 	inc hl
-	xor a
+	xor a ; SYM_SPACE
 	ld [hli], a
 	ld [hl], a
 	ld hl, wCurDeckName
@@ -6950,7 +6967,8 @@ Func_a7a7: ; a7a7 (2:67a7)
 	ret
 ; 0xa828
 
-Func_a828: ; a828 (2:6828)
+; handles opening card page, and inputs when inside Card Album
+HandleCardAlbumCardPage: ; a828 (2:6828)
 	ld a, [wCardListCursorPos]
 	ld b, a
 	ld a, [wCardListVisibleOffset]
@@ -6981,14 +6999,14 @@ Func_a828: ; a828 (2:6828)
 	ldh a, [hDPadHeld]
 	ld b, a
 	and A_BUTTON | B_BUTTON | SELECT | START
-	jp nz, .asm_a8f5
+	jp nz, .exit
 	xor a ; FALSE
 	ld [wPlaysSfx], a
 	ld a, [wCardListNumCursorPositions]
 	ld c, a
 	ld a, [wCardListCursorPos]
 	bit D_UP_F, b
-	jr z, .asm_a891
+	jr z, .check_d_down
 
 	push af
 	ld a, TRUE
@@ -6998,21 +7016,21 @@ Func_a828: ; a828 (2:6828)
 	add [hl]
 	ld hl, wFirstOwnedCardIndex
 	cp [hl]
-	jr z, .open_card_page_pop_af
+	jr z, .open_card_page_pop_af_2
 	pop af
 
 	dec a
 	bit 7, a
-	jr z, .asm_a8c3
+	jr z, .got_new_pos
 	ld a, [wCardListVisibleOffset]
 	or a
 	jr z, .open_card_page
 	dec a
 	ld [wCardListVisibleOffset], a
 	xor a
-	jr .asm_a8c3
+	jr .got_new_pos
 
-.asm_a891
+.check_d_down
 	bit D_DOWN_F, b
 	jr z, .asm_a8d6
 
@@ -7023,7 +7041,7 @@ Func_a828: ; a828 (2:6828)
 
 	inc a
 	cp c
-	jr c, .asm_a8c3
+	jr c, .got_new_pos
 	push af
 	ld hl, wCurCardListPtr
 	ld a, [hli]
@@ -7040,20 +7058,21 @@ Func_a828: ; a828 (2:6828)
 	add hl, bc
 	ld a, [hl]
 	or a
-	jr z, .asm_a8d3
+	jr z, .open_card_page_pop_af_1
 	ld a, [wCardListVisibleOffset]
 	inc a
 	ld [wCardListVisibleOffset], a
 	pop af
 	dec a
-.asm_a8c3
+.got_new_pos
+	; loop back to the start
 	ld [wCardListCursorPos], a
 	ld a, [wPlaysSfx]
 	or a
-	jp z, Func_a828
+	jp z, HandleCardAlbumCardPage
 	call PlaySFX
-	jp Func_a828
-.asm_a8d3
+	jp HandleCardAlbumCardPage
+.open_card_page_pop_af_1
 	pop af
 	jr .open_card_page
 
@@ -7062,15 +7081,15 @@ Func_a828: ; a828 (2:6828)
 	or a
 	jr z, .open_card_page
 	bit D_LEFT_F, b
-	jr z, .asm_a8e5
+	jr z, .check_d_right
 	call RemoveCardFromDeck
 	jr .open_card_page
-.asm_a8e5
+.check_d_right
 	bit D_RIGHT_F, b
 	jr z, .open_card_page
 	call TryAddCardToDeck
 
-.open_card_page_pop_af
+.open_card_page_pop_af_2
 	pop af
 .open_card_page
 	push de
@@ -7078,7 +7097,7 @@ Func_a828: ; a828 (2:6828)
 	pop de
 	jp .handle_input
 
-.asm_a8f5
+.exit
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
 	ld a, [wCardListCursorPos]
@@ -7101,15 +7120,15 @@ GetFirstOwnedCardIndex: ; a901 (2:6901)
 	ret
 ; 0xa913
 
-Func_a913: ; a913 (2:6913)
+HandleCardAlbumScreen: ; a913 (2:6913)
 	ld a, $01
 	ld [hffb4], a ; should be ldh
 
 	xor a
-.asm_a919
+.album_card_list
 	ld hl, .MenuParameters
 	call InitializeMenuParameters
-	call .Func_aade
+	call .DrawCardAlbumScreen
 .loop_input_1
 	call DoFrame
 	call HandleMenuInput
@@ -7117,21 +7136,23 @@ Func_a913: ; a913 (2:6913)
 	ldh a, [hCurMenuItem]
 	cp $ff
 	ret z
+
+	; ignore input if this Card Set is unavailable
 	ld c, a
-	ld b, $00
-	ld hl, wVisibleListCardIDs
+	ld b, $0
+	ld hl, wUnavailableAlbumCardSets
 	add hl, bc
 	ld a, [hl]
 	or a
 	jr nz, .loop_input_1
 
 	ld a, c
-	ld [wcfe0], a
-	call Func_a6a0
-	call .Func_aa24
+	ld [wSelectedCardSet], a
+	call CreateCardSetListAndInitListCoords
+	call .PrintCardCount
 	xor a
 	ld [wCardListVisibleOffset], a
-	call Func_a6fa
+	call PrintCardSetListEntries
 	call EnableLCD
 	ld a, [wNumEntriesInCurFilter]
 	or a
@@ -7145,12 +7166,12 @@ Func_a913: ; a913 (2:6913)
 	ld a, $ff
 	call PlaySFXConfirmOrCancel
 	ldh a, [hCurMenuItem]
-	jp .asm_a919
+	jp .album_card_list
 
 .asm_a968
-	call .Func_aa13
+	call .GetNumCardEntries
 	xor a
-	ld hl, .data_aa0a
+	ld hl, .CardSelectionParams
 	call InitCardSelectionParams
 	ld a, [wNumEntriesInCurFilter]
 	ld hl, wNumVisibleCardListEntries
@@ -7158,10 +7179,10 @@ Func_a913: ; a913 (2:6913)
 	jr nc, .asm_a97e
 	ld [wCardListNumCursorPositions], a
 .asm_a97e
-	ld hl, Func_a6fa
+	ld hl, PrintCardSetListEntries
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 
@@ -7170,13 +7191,13 @@ Func_a913: ; a913 (2:6913)
 .loop_input_3
 	call DoFrame
 	call HandleDeckCardSelectionList
-	jr c, .asm_a9ed
+	jr c, .selection_made
 	call HandleLeftRightInCardList
 	jr c, .loop_input_3
 	ldh a, [hDPadHeld]
 	and START
 	jr z, .loop_input_3
-.asm_a99f
+.open_card_page
 	ld a, $01
 	call PlaySFXConfirmOrCancel
 	ld a, [wCardListNumCursorPositions]
@@ -7194,19 +7215,19 @@ Func_a913: ; a913 (2:6913)
 	cp CARD_NOT_OWNED
 	jr z, .loop_input_3
 
-	; set wHandTempList as current card list
-	ld de, wHandTempList
+	; set wFilteredCardList as current card list
+	ld de, wFilteredCardList
 	ld hl, wCurCardListPtr
 	ld [hl], e
 	inc hl
 	ld [hl], d
 
 	call GetFirstOwnedCardIndex
-	call Func_a828
-	call .Func_aa24
-	call Func_a6fa
+	call HandleCardAlbumCardPage
+	call .PrintCardCount
+	call PrintCardSetListEntries
 	call EnableLCD
-	ld hl, .data_aa0a
+	ld hl, .CardSelectionParams
 	call InitCardSelectionParams
 	ld a, [wTempCardListNumCursorPositions]
 	ld [wCardListNumCursorPositions], a
@@ -7214,15 +7235,15 @@ Func_a913: ; a913 (2:6913)
 	ld [wCardListCursorPos], a
 	jr .loop_input_3
 
-.asm_a9ed
+.selection_made
 	call DrawListCursor_Invisible
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 	ld a, [hffb3]
 	cp $ff
-	jr nz, .asm_a99f
+	jr nz, .open_card_page
 	ldh a, [hCurMenuItem]
-	jp .asm_a919
+	jp .album_card_list
 
 .MenuParameters
 	db 3, 3 ; cursor x, cursor y
@@ -7232,31 +7253,33 @@ Func_a913: ; a913 (2:6913)
 	db SYM_SPACE ; tile behind cursor
 	dw NULL ; function pointer if non-0
 
-.data_aa0a
+.CardSelectionParams
 	db 1 ; x pos
 	db 4 ; y pos
 	db 2 ; y spacing
 	db 0 ; x spacing
-	db 7 ; num entries
+	db MAX_CARD_ALBUM_VISIBLE_CARDS ; num entries
 	db SYM_CURSOR_R ; visible cursor tile
 	db SYM_SPACE ; invisible cursor tile
 	dw NULL ; wCardListHandlerFunction
 
-.Func_aa13
-	ld hl, wHandTempList
+.GetNumCardEntries
+	ld hl, wFilteredCardList
 	ld b, $00
-.asm_aa18
+.loop_card_ids
 	ld a, [hli]
 	or a
 	jr z, .asm_aa1f
 	inc b
-	jr .asm_aa18
+	jr .loop_card_ids
 .asm_aa1f
 	ld a, b
 	ld [wNumCardListEntries], a
 	ret
 
-.Func_aa24
+; prints "X/Y" where X is number of cards owned in the set
+; and Y is the total card count of the Card Set
+.PrintCardCount
 	call Set_OBJ_8x8
 	xor a
 	ld [wTileMapFill], a
@@ -7273,50 +7296,52 @@ Func_a913: ; a913 (2:6913)
 	ld de, $101
 	call InitTextPrinting
 
-	ld a, [wcfe0]
+; print the total number of cards that are in the Card Set
+	ld a, [wSelectedCardSet]
 	cp CARD_SET_PROMOTIONAL
 	jr nz, .check_laboratory
+; promotional
 	ldtx hl, Item5PromotionalCardText
-	ld e, 18
-	ld a, [wcfe2]
-	bit 0, a
-	jr z, .asm_aa62
-	inc e ; 19
-.asm_aa62
-	bit 1, a
-	jr z, .asm_aa8f
-	inc e ; 20
-	jr .asm_aa8f
+	ld e, NUM_CARDS_PROMOTIONAL - 2 ; minus the phantom cards
+	ld a, [wOwnedPhantomCardFlags]
+	bit VENUSAUR_OWNED_PHANTOM_F, a
+	jr z, .check_owns_mew
+	inc e
+.check_owns_mew
+	bit MEW_OWNED_PHANTOM_F, a
+	jr z, .has_card_set_count
+	inc e
+	jr .has_card_set_count
 .check_laboratory
 	cp CARD_SET_LABORATORY
 	jr nz, .check_mystery
 	ldtx hl, Item4LaboratoryText
-	ld e, 51
-	jr .asm_aa8f
+	ld e, NUM_CARDS_LABORATORY
+	jr .has_card_set_count
 .check_mystery
 	cp CARD_SET_MYSTERY
 	jr nz, .check_evolution
 	ldtx hl, Item3MysteryText
-	ld e, 51
-	jr .asm_aa8f
+	ld e, NUM_CARDS_MYSTERY
+	jr .has_card_set_count
 .check_evolution
 	cp CARD_SET_EVOLUTION
 	jr nz, .colosseum
 	ldtx hl, Item2EvolutionText
-	ld e, 50
-	jr .asm_aa8f
+	ld e, NUM_CARDS_EVOLUTION
+	jr .has_card_set_count
 .colosseum
 	ldtx hl, Item1ColosseumText
-	ld e, 56
+	ld e, NUM_CARDS_COLOSSEUM
 
-.asm_aa8f
+.has_card_set_count
 	push de
 	call ProcessTextFromID
-	call .Func_aac8
-	ld de, SerialHandleSend.send_escaped
+	call .CountOwnedCardsInSet
+	ld de, $0e01
 	call InitTextPrinting
 
-	ld a, [wcfe1]
+	ld a, [wNumOwnedCardsInSet]
 	ld hl, wDefaultText
 	call ConvertToNumericalDigits
 	call CalculateOnesAndTensDigits
@@ -7337,29 +7362,31 @@ Func_a913: ; a913 (2:6913)
 	call EnableLCD
 	ret
 
-.Func_aac8
+; counts number of cards in wOwnedCardsCountList
+; that is not set as CARD_NOT_OWNED
+.CountOwnedCardsInSet
 	ld hl, wOwnedCardsCountList
-	ld b, $00
-.asm_aacd
+	ld b, 0
+.loop_card_count
 	ld a, [hli]
 	cp $ff
-	jr z, .asm_aad9
+	jr z, .got_num_owned_cards
 	cp CARD_NOT_OWNED
-	jr z, .asm_aacd
+	jr z, .loop_card_count
 	inc b
-	jr .asm_aacd
-.asm_aad9
+	jr .loop_card_count
+.got_num_owned_cards
 	ld a, b
-	ld [wcfe1], a
+	ld [wNumOwnedCardsInSet], a
 	ret
 
-.Func_aade
+.DrawCardAlbumScreen
 	xor a
 	ld [wTileMapFill], a
 	call EmptyScreen
 	ld a, [hffb4]
 	dec a
-	jr nz, .asm_ab0b
+	jr nz, .skip_clear_screen
 	ld [hffb4], a
 	call Set_OBJ_8x8
 	call ZeroObjectPositions
@@ -7372,41 +7399,48 @@ Func_a913: ; a913 (2:6913)
 	lb de, $3c, $ff
 	call SetupText
 
-.asm_ab0b
+.skip_clear_screen
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
 	ld hl, .BoosterPacksMenuData
 	call PlaceTextItems
-	ld a, 5
-	ld hl, wVisibleListCardIDs
+
+	; set all Card Sets as available
+	ld a, NUM_CARD_SETS
+	ld hl, wUnavailableAlbumCardSets
 	call ClearNBytesFromHL
+
+	; check whether player has had promotional cards
 	call EnableSRAM
-	ld a, [sb703]
+	ld a, [sHasPromotionalCards]
 	call DisableSRAM
 	or a
-	jr nz, .asm_ab58
+	jr nz, .has_promotional
 
+	; doesn't have promotional, check if
+	; this is still the case by checking the collection
 	ld a, CARD_SET_PROMOTIONAL
-	call Func_a6a0
-	ld a, [wHandTempList]
+	call CreateCardSetListAndInitListCoords
+	ld a, [wFilteredCardList]
 	or a
-	jr nz, .asm_ab4d
-	ld a, $01
-	ld [wVisibleListCardIDs + 4], a
+	jr nz, .set_has_promotional
+	; still has no promotional, print empty Card Set name
+	ld a, TRUE
+	ld [wUnavailableAlbumCardSets + CARD_SET_PROMOTIONAL], a
 	ld e, $0b
 	ld d, $05
 	call InitTextPrinting
-	ldtx hl, Text0259
+	ldtx hl, EmptyPromotionalCardText
 	call ProcessTextFromID
-	jr .asm_ab58
+	jr .has_promotional
 
-.asm_ab4d
+.set_has_promotional
 	call EnableSRAM
-	ld a, $01
-	ld [sb703], a
+	ld a, TRUE
+	ld [sHasPromotionalCards], a
 	call DisableSRAM
-.asm_ab58
+.has_promotional
 	ldtx hl, ViewWhichCardFileText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
@@ -7486,7 +7520,7 @@ PrinterMenu_PokemonCards: ; ab7b (2:6b7b)
 	ld hl, PrintCardSelectionList
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 	xor a
@@ -7509,9 +7543,9 @@ PrinterMenu_PokemonCards: ; ab7b (2:6b7b)
 	ld a, [wCardListCursorPos]
 	ld [wTempCardListCursorPos], a
 
-	; set wHandTempList as current card list
+	; set wFilteredCardList as current card list
 	; and show card page screen
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 	ld hl, wCurCardListPtr
 	ld [hl], e
 	inc hl
@@ -7573,7 +7607,7 @@ PrinterMenu_PokemonCards: ; ab7b (2:6b7b)
 	ld a, [hffb3]
 	or a
 	jr nz, .asm_acd5
-	ld hl, wHandTempList
+	ld hl, wFilteredCardList
 	ld a, [wTempCardListCursorPos]
 	ld c, a
 	ld b, $00
@@ -7794,7 +7828,7 @@ Func_adfe: ; adfe (2:6dfe)
 	ld hl, .Func_ae9a
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 	xor a
@@ -7994,7 +8028,7 @@ Func_af98: ; af98 (2:6f98)
 	ld hl, ShowReceivedCardsList
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 
@@ -8374,7 +8408,7 @@ Func_b285: ; b285 (2:7285)
 	ld hl, Func_b403
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 	xor a
@@ -9368,7 +9402,7 @@ Func_b8f4: ; b8f4 (2:78f4)
 	call CreateCardCollectionListWithDeckCards
 	call SafelySwitchToTempSRAMBank
 	ld hl, wTempHandCardList
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 .asm_b92a
 	ld a, [hli]
 	or a
@@ -9403,7 +9437,7 @@ Func_b8f4: ; b8f4 (2:78f4)
 	call GetSelectedSavedDeckPtr
 	ld h, d
 	ld l, e
-	ld de, wHandTempList
+	ld de, wFilteredCardList
 	call Func_adfe
 	jp Func_b7c6.asm_b7e5
 ; 0xb960
@@ -9539,7 +9573,7 @@ Func_ba25: ; ba25 (2:7a25)
 	ld hl, Func_b3fe
 	ld d, h
 	ld a, l
-	ld hl, wcece
+	ld hl, wCardListUpdateFunction
 	ld [hli], a
 	ld [hl], d
 .asm_ba40

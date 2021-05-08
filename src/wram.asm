@@ -1988,10 +1988,22 @@ wOnesAndTensPlace:: ; ceb6
 wCardFilterCounts:: ; cebb
 	ds NUM_FILTERS
 
+UNION
+
 ; buffer used to show which card IDs
 ; are visible in a given list
 wVisibleListCardIDs:: ; cec4
 	ds MAX_DECK_CONFIRMATION_VISIBLE_CARDS
+
+NEXTU
+
+; whether a given Card Set is unavailable in the Card Album screen
+; used only for CARD_SET_PROMOTIONAL, in which case
+; if it's unavailable, will print "----------" as the Card Set name
+wUnavailableAlbumCardSets:: ; cec4
+	ds NUM_CARD_SETS
+
+ENDU
 
 ; number of visible entries
 ; when showing a list of cards
@@ -2004,7 +2016,9 @@ wTotalCardCount:: ; cecc
 wcecd:: ; cecd
 	ds $1
 
-wcece:: ; cece
+; pointer to a function that should be called
+; to update the card list being shown
+wCardListUpdateFunction:: ; cece
 	ds $2
 
 ; holds y and x coordinates (in that order)
@@ -2125,13 +2139,17 @@ wCursorAlternateTile:: ; cfde
 wTempCardListNumCursorPositions:: ; cfdf
 	ds $1
 
-wcfe0:: ; cfe0
+; which Card Set selected by the player to view
+wSelectedCardSet:: ; cfe0
 	ds $1
 
-wcfe1:: ; cfe1
+; number of cards the player owns from the given Card Set
+wNumOwnedCardsInSet:: ; cfe1
 	ds $1
 
-wcfe2:: ; cfe2
+; flags that corresponds to each Phantom Card owned by the player
+; see src/constants/menu_constants.asm
+wOwnedPhantomCardFlags:: ; cfe2
 	ds $1
 
 ; a flag indicating whether sfx should be played.
