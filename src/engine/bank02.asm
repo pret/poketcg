@@ -2070,7 +2070,68 @@ _DrawPlayAreaToPlacePrizeCards: ; 8b85 (2:4b85)
 	db  0,  2
 ; 0x8bf2
 
-	INCROM $8bf2, $8c57
+; seems like a function to draw prize cards
+; given a list of coordinates in hl
+; unreferenced?
+; hl = pointer to coords
+Func_8bf2: ; 8bf2 (2:4bf2)
+	push hl
+	ld a, [wCheckMenuPlayAreaWhichDuelist]
+	ld h, a
+	ld l, DUELVARS_PRIZES
+	ld a, [hl]
+	pop hl
+
+	ld b, 0
+	push af
+.loop_prize_cards
+	inc b
+	ld a, [wDuelInitialPrizes]
+	inc a
+	cp b
+	jr z, .done
+	pop af
+	srl a
+	push af
+	jr c, .not_taken
+	; same tile whether the prize card is taken or not
+	ld a, $ac
+	jr .got_tile
+.not_taken
+	ld a, $ac
+.got_tile
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+	push hl
+	push bc
+	lb hl, 0, 0
+	lb bc, 1, 1
+	call FillRectangle
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .skip_pal
+	ld a, $02
+	lb bc, 1, 1
+	lb hl, 0, 0
+	call BankswitchVRAM1
+	call FillRectangle
+	call BankswitchVRAM0
+.skip_pal
+	pop bc
+	pop hl
+	jr .loop_prize_cards
+.done
+	pop af
+	ret
+; 0x8c3f
+
+; unknown data
+; unreferenced?
+Data_8c3f: ; 8c3f (6:4c3f)
+	db $06, $05, $06, $06, $07, $05, $07, $06, $08, $05, $08, $06, $05, $0e, $05, $0d, $04, $0e, $04, $0d, $03, $0e, $03, $0d
+; 0x8c57
 
 ; gets the first prize card index that is set
 ; beginning from index in register a
@@ -2620,7 +2681,35 @@ CheckIfCurDeckIsValid: ; 8ff2 (2:4ff2)
 	ret ; is not valid
 ; 0x9001
 
-	INCROM $9001, $9026
+; write to $d00a the decimal representation (number characters)
+; of the value in hl
+; unreferenced?
+Func_9001: ; 9001 (2:5001)
+	ld de, $d00a
+	ld bc, -100
+	call .GetNumberChar
+	ld bc, -10
+	call .GetNumberChar
+	ld bc, -1
+	call .GetNumberChar
+	ret
+	
+.GetNumberChar
+	ld a, SYM_0 - 1
+.loop
+	inc a
+	add hl, bc
+	jr c, .loop
+	ld [de], a
+	inc de
+	ld a, l
+	sub c
+	ld l, a
+	ld a, h
+	sbc b
+	ld h, a
+	ret
+; 0x9026
 
 CancelDeckSelectionSubMenu: ; 9026 (2:5026)
 	ret
@@ -4979,7 +5068,25 @@ OpenCardPageFromCardList: ; 9c3f (2:5c3f)
 	ret
 ; 0x9ced
 
-	INCROM $9ced, $9d0c
+; opens card page from the card list
+; unreferenced?
+Func_9ced: ; 9ced (2:5ced)
+	ld hl, wVisibleListCardIDs
+	ld a, [wCardListCursorPos]
+	ld c, a
+	ld b, $00
+	add hl, bc
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	call LoadCardDataToBuffer1_FromCardID
+	ld de, $389f
+	call SetupText
+	bank1call OpenCardPage_FromHand
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	ret
+; 0x9d0c
 
 ; adds card in register e to deck configuration
 ; and updates the values shown for its count
@@ -8916,7 +9023,30 @@ PrintNumSavedDecks: ; b545 (2:7545)
 	ret
 ; 0xb568
 
-	INCROM $b568, $b592
+; prints "X/Y" where X is the current list index
+; and Y is the total number of saved decks
+; unreferenced?
+Func_b568: ; b568 (2:7568)
+	ld a, [wCardListCursorPos]
+	ld b, a
+	ld a, [wCardListVisibleOffset]
+	add b
+	inc a
+	ld hl, wDefaultText
+	call ConvertToNumericalDigits
+	ld a, TX_SYMBOL
+	ld [hli], a
+	ld a, SYM_SLASH
+	ld [hli], a
+	ld a, [wNumSavedDecks]
+	call ConvertToNumericalDigits
+	ld [hl], TX_END
+	ld de, $0e01
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ret
+; 0xb592
 
 ; handles player choice in what deck to save
 ; in the Deck Save Machine
