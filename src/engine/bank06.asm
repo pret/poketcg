@@ -4925,28 +4925,32 @@ KeyboardData_Deck: ; 1b019 (6:7019)
 	db $0e, $12, $02
 	db $10, $0f, $01
 
-; unknown data.
-; needs analyze.
-; (6:70d6)
-	INCROM $1b0d6, $1ba14
+	ds 4 ; empty
 
-Func_1ba14: ; 1ba14 (6:7a14)
+INCLUDE "data/auto_deck_card_lists.asm"
+INCLUDE "data/auto_deck_machines.asm"
+
+; writes to sAutoDecks all the deck configurations
+; from the Auto Deck Machine in wCurAutoDeckMachine
+ReadAutoDeckConfiguration: ; 1ba14 (6:7a14)
 	call EnableSRAM
-	ld a, [wd0a9]
+	ld a, [wCurAutoDeckMachine]
 	ld l, a
-	ld h, $1e
+	ld h, 6 * NUM_DECK_MACHINE_SLOTS
 	call HtimesL
-	ld bc, $78e8
+	ld bc, AutoDeckMachineEntries
 	add hl, bc
-	ld b, $00
-.asm_7a26
-	call Func_1ba4c
-	call Func_1ba5b
-	call Func_1ba7d
+	ld b, 0
+.loop_decks
+	call .GetPointerToSRAMAutoDeck
+	call .ReadDeckConfiguration
+	call .ReadDeckName
+
+	; store deck description text ID
 	push hl
-	ld de, wd0aa
+	ld de, wAutoDeckMachineTextDescriptions
 	ld h, b
-	ld l, $02
+	ld l, 2
 	call HtimesL
 	add hl, de
 	ld d, h
@@ -4959,24 +4963,27 @@ Func_1ba14: ; 1ba14 (6:7a14)
 	ld [de], a
 	inc b
 	ld a, b
-	cp $05
-	jr nz, .asm_7a26
+	cp NUM_DECK_MACHINE_SLOTS
+	jr nz, .loop_decks
 	call DisableSRAM
 	ret
 
-Func_1ba4c: ; 1ba4c (6:7a4c)
+; outputs in de the saved deck with index b
+.GetPointerToSRAMAutoDeck
 	push hl
 	ld l, b
 	ld h, DECK_STRUCT_SIZE
 	call HtimesL
-	ld de, sSavedDecks
+	ld de, sAutoDecks
 	add hl, de
 	ld d, h
 	ld e, l
 	pop hl
 	ret
 
-Func_1ba5b: ; 1ba5b (6:7a5b)
+; writes the deck configuration in SRAM
+; by reading the given deck card list
+.ReadDeckConfiguration
 	push hl
 	push bc
 	push de
@@ -4985,24 +4992,24 @@ Func_1ba5b: ; 1ba5b (6:7a5b)
 	inc hl
 	ld d, [hl]
 	pop hl
-	ld bc, $0018
+	ld bc, DECK_NAME_SIZE
 	add hl, bc
-.asm_7a67
+.loop_create_deck
 	ld a, [de]
 	inc de
-	ld b, a
+	ld b, a ; card count
 	or a
-	jr z, .asm_7a77
+	jr z, .done_create_deck
 	ld a, [de]
 	inc de
-	ld c, a
-.asm_7a70
+	ld c, a ; card ID
+.loop_card_count
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .asm_7a70
-	jr .asm_7a67
-.asm_7a77
+	jr nz, .loop_card_count
+	jr .loop_create_deck
+.done_create_deck
 	pop de
 	pop bc
 	pop hl
@@ -5010,87 +5017,104 @@ Func_1ba5b: ; 1ba5b (6:7a5b)
 	inc hl
 	ret
 
-Func_1ba7d: ; 1ba7d (6:7a7d)
+.ReadDeckName
 	push hl
 	push bc
 	push de
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, wd089
+	ld de, wDismantledDeckName
 	call CopyText
 	pop hl
-	ld de, wd089
-.asm_7a8d
+	ld de, wDismantledDeckName
+.loop_copy_name
 	ld a, [de]
 	ld [hli], a
 	or a
-	jr z, .asm_7a95
+	jr z, .done_copy_name
 	inc de
-	jr .asm_7a8d
-.asm_7a95
+	jr .loop_copy_name
+.done_copy_name
 	pop bc
 	pop hl
 	inc hl
 	inc hl
 	ret
 
-; farcall from 0xb87e(2:787d): [EF|06|9A|7A]
-Func_1ba9a: ; 1ba9a (6:7a9a)
+; tries out all combinations of dismantling the player's decks
+; in order to build the deck in wSelectedDeckMachineEntry
+; if none of the combinations work, return carry set
+; otherwise, return in a which deck flags should be dismantled
+CheckWhichDecksToDismantleToBuildSavedDeck: ; 1ba9a (6:7a9a)
 	xor a
-	ld [wd0a6], a
-	ld a, $01
-.asm_7aa0
-	call Func_1bae4
+	ld [wDecksToBeDismantled], a
+
+; first check if it can be built by
+; only dismantling a single deck
+	ld a, DECK_1
+.loop_single_built_decks
+	call .CheckIfCanBuild
 	ret nc
-	sla a
-	cp $10
-	jr z, .asm_7aac
-	jr .asm_7aa0
-.asm_7aac
-	ld a, $03
-	call Func_1bae4
+	sla a ; next deck
+	cp (1 << NUM_DECKS)
+	jr z, .two_deck_combinations
+	jr .loop_single_built_decks
+
+.two_deck_combinations
+; next check all two deck combinations
+	ld a, DECK_1 | DECK_2
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $05
-	call Func_1bae4
+	ld a, DECK_1 | DECK_3
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $09
-	call Func_1bae4
+	ld a, DECK_1 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $06
-	call Func_1bae4
+	ld a, DECK_2 | DECK_3
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $0a
-	call Func_1bae4
+	ld a, DECK_2 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $0c
-	call Func_1bae4
+	ld a, DECK_3 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $f7
-.asm_7ad2
-	call Func_1bae4
+
+; all but one deck combinations
+	ld a, $ff ^ DECK_4
+.loop_three_deck_combinations
+	call .CheckIfCanBuild
 	ret nc
 	sra a
 	cp $ff
-	jr z, .asm_7ade
-	jr .asm_7ad2
-.asm_7ade
-	call Func_1bae4
+	jr z, .all_decks
+	jr .loop_three_deck_combinations
+
+.all_decks
+; finally check if can be built by dismantling all decks
+	call .CheckIfCanBuild
 	ret nc
+
+; none of the combinations work
 	scf
 	ret
 
-Func_1bae4: ; 1bae4 (6:7ae4)
+; returns cary if wSelectedDeckMachineEntry cannot be built
+; by dismantling the decks given by register a
+; a = DECK_* flags
+.CheckIfCanBuild
 	push af
-	ld hl, wd088
+	ld hl, wSelectedDeckMachineEntry
 	ld b, [hl]
 	farcall CheckIfCanBuildSavedDeck
-	jr c, .asm_7af5
+	jr c, .cannot_build
 	pop af
-	ld [wd0a6], a
+	ld [wDecksToBeDismantled], a
 	or a
 	ret
-.asm_7af5
+.cannot_build
 	pop af
 	scf
 	ret

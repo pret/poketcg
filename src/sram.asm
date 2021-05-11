@@ -44,6 +44,7 @@ sPlayerName:: ; a010
 sCardCollection:: ; a100
 	ds $100
 
+sBuiltDecks::
 sDeck1:: deck_struct sDeck1 ; a200
 sDeck2:: deck_struct sDeck2 ; a254
 sDeck3:: deck_struct sDeck3 ; a2a8
@@ -257,6 +258,8 @@ sCardPopNameList:: ; bb00
 
 SECTION "SRAM1", SRAM
 
+UNION
+
 ; buffers used to temporary store gfx related data
 ; such as tiles or BG maps
 sGfxBuffer0:: ; a000
@@ -276,6 +279,25 @@ sGfxBuffer4:: ; b000
 
 sGfxBuffer5:: ; b400
 	ds $400
+
+NEXTU
+
+	ds $350
+
+; buffer used to store the deck configuration
+; from the Auto Deck Machines
+; intentionally uses the same address as sSavedDecks
+; since TryBuildDeckMachineDeck uses the same
+; address in SRAM whether it's an auto deck or a saved deck
+; the difference is whether SRAM0 or SRAM1 are loaded
+sAutoDecks::
+sAutoDeck1::  deck_struct sAutoDeck1  ; a350
+sAutoDeck2::  deck_struct sAutoDeck2  ; a3a4
+sAutoDeck3::  deck_struct sAutoDeck3  ; a3f8
+sAutoDeck4::  deck_struct sAutoDeck4  ; a44c
+sAutoDeck5::  deck_struct sAutoDeck5  ; a4a0
+
+ENDU
 
 SECTION "SRAM2", SRAM
 

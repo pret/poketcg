@@ -38,6 +38,12 @@ NEXTU
 wCardPopNameList:: ; c000
 	ds CARDPOP_NAME_LIST_SIZE
 
+NEXTU
+
+; buffer used to store a deck that will be built
+wDeckToBuild:: ; c000
+	ds DECK_STRUCT_SIZE
+
 ENDU
 
 	ds $100
@@ -1993,7 +1999,7 @@ UNION
 ; buffer used to show which card IDs
 ; are visible in a given list
 wVisibleListCardIDs:: ; cec4
-	ds MAX_DECK_CONFIRMATION_VISIBLE_CARDS
+	ds NUM_DECK_CONFIRMATION_VISIBLE_CARDS
 
 NEXTU
 
@@ -2013,7 +2019,9 @@ wNumVisibleCardListEntries:: ; cecb
 wTotalCardCount:: ; cecc
 	ds $1
 
-wcecd:: ; cecd
+; is TRUE if list cannot be scrolled down
+; past the last visible entry
+wUnableToScrollDown:: ; cecd
 	ds $1
 
 ; pointer to a function that should be called
@@ -2077,6 +2085,10 @@ wCurDeckCardsTerminator:: ; cf67
 	ds $1
 wCurDeckCardsEnd::
 
+
+; list of all the different cards in a deck configuration
+wUniqueDeckCardList:: ; cf68
+
 ; stores the count number of cards owned
 ; can be 0 in the case that a card is not available
 ; i.e. already inside a built deck
@@ -2125,7 +2137,8 @@ wDeckConfigurationMenuTransitionTable:: ; cfd6
 wCurCardListPtr:: ; cfd8
 	ds $2
 
-wcfda:: ; cfda
+; text ID to print in the card confirmation screen text box
+wCardConfirmationText:: ; cfda
 	ds $2
 
 	ds $2
@@ -2206,43 +2219,52 @@ wMachineDeckPtrs:: ; d00d
 wNumSavedDecks:: ; d085
 	ds $1
 
-wd086:: ; d086
+; temporarily holds value of wCardListCursorPos
+wTempDeckMachineCursorPos:: ; d086
 	ds $1
 
-wd087:: ; d087
+; temporarily holds value of wCardListVisibleOffset
+wTempCardListVisibleOffset:: ; d087
 	ds $1
 
-wd088:: ; d088
+; which list entry was selected in the Deck Machine screen
+wSelectedDeckMachineEntry:: ; d088
 	ds $1
 
-wd089:: ; d089
+wDismantledDeckName:: ; d089
+	ds DECK_NAME_SIZE
+
+; which deck slot to be used to
+; build a new deck
+wDeckSlotForNewDeck:: ; d0a1
 	ds $1
 
-wd08a:: ; d08a
-	ds $18
-
-wd0a2:: ; d0a2
+wDeckMachineTitleText:: ; d0a2
 	ds $2
 
 wTempBankSRAM:: ; d0a4
 	ds $1
 
-wd0a5:: ; d0a5
+wNumDeckMachineEntries:: ; d0a5
 	ds $1
 
-wd0a6:: ; d0a6
+; DECK_* flags to be dismantled to build a given deck
+wDecksToBeDismantled:: ; d0a6
 	ds $1
 
-wd0a7:: ; d0a7
+; text ID to print in the text box when
+; inside the Deck Machine menu
+wDeckMachineText:: ; d0a7
 	ds $2
 
-wd0a9:: ; d0a9
+; which deck machine is being used
+wCurAutoDeckMachine:: ; d0a9
 	ds $1
 
-wd0aa:: ; d0aa
-	ds $1
-
-	ds $9
+; text IDs for each deck descriptions of the
+; Ato Deck Machine currently being shown
+wAutoDeckMachineTextDescriptions:: ; d0aa
+	ds 2 * NUM_DECK_MACHINE_SLOTS
 
 wd0b4:: ; d0b4
 	ds $1
