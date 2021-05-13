@@ -8855,7 +8855,7 @@ PrintDeckMachineEntry: ; b424 (2:7424)
 	ld d, 18
 	call InitTextPrinting
 
-; print the symbol hat symbolizes whether the deck can
+; print the symbol that symbolizes whether the deck can
 ; be built, or if another deck has to be dismantled to build it
 	ld a, $0 ; no decks dismantled
 	call CheckIfCanBuildSavedDeck
@@ -8980,7 +8980,7 @@ PrintDeckMachineEntry: ; b424 (2:7424)
 ; 0xb525
 
 ; counts how many decks in sSavedDecks are not empty
-; stored value in wNumSavedDecks
+; stores value in wNumSavedDecks
 GetSavedDeckCount: ; b525 (2:7525)
 	call EnableSRAM
 	ld hl, sSavedDecks
