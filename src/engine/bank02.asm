@@ -3360,7 +3360,7 @@ HandleDeckBuildScreen: ; 9345 (2:5345)
 	ld hl, wNumVisibleCardListEntries
 	cp [hl]
 	jr nc, .ok
-	; if total number of entries is greater or equal than
+	; if total number of entries is greater than or equal to
 	; the number of visible entries, then set number of cursor positions
 	; as number of visible entries
 	ld [wCardListNumCursorPositions], a
@@ -5316,9 +5316,9 @@ RemoveCardFromDeck: ; 9dfa (2:5dfa)
 ; and shift all elements up by one
 .RemoveCard
 	ld hl, wCurDeckCards
-	ld d, 0
+	ld d, 0 ; unnecessary
 .loop_1
-	inc d
+	inc d ; unnecessary
 	ld a, [hli]
 	cp e
 	jr nz, .loop_1
