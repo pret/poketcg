@@ -1,23 +1,23 @@
-Text026d: ; 3c000 (f:4000)
+YouDoNotOwnAllCardsNeededToBuildThisDeckText: ; 3c000 (f:4000)
 	text "You do not own all cards needed"
 	line "to build this Deck."
 	done
 
-Text026e: ; 3c035 (f:4035)
+BuiltDeckText: ; 3c035 (f:4035)
 	text "Built"
 	line "<RAMTEXT>"
 	done
 
-Text026f: ; 3c03e (f:403e)
+TheseCardsAreNeededToBuildThisDeckText: ; 3c03e (f:403e)
 	text "These cards are needed"
 	line "to build this Deck:"
 	done
 
-Text0270: ; 3c06a (f:406a)
+DismantleTheseDecksText: ; 3c06a (f:406a)
 	text "Dismantle these Decks?"
 	done
 
-Text0271: ; 3c082 (f:4082)
+DismantledTheDeckText: ; 3c082 (f:4082)
 	text "Dismantled the Deck."
 	done
 
@@ -25,21 +25,21 @@ OKIfFileDeletedText: ; 3c098 (f:4098)
 	text "OK if this file is deleted?"
 	done
 
-Text0273: ; 3c0b5 (f:40b5)
+ReadTheInstructionsText: ; 3c0b5 (f:40b5)
 	text "Read the Instructions"
 	done
 
-Text0274: ; 3c0cc (f:40cc)
+PrintThisCardYesNoText: ; 3c0cc (f:40cc)
 	text "Print this card?"
 	line "      Yes     No"
 	done
 
-Text0275: ; 3c0ef (f:40ef)
+PleaseChooseDeckConfigurationToPrintText: ; 3c0ef (f:40ef)
 	text "Please choose a Deck configuration"
 	line "to print."
 	done
 
-Text0276: ; 3c11d (f:411d)
+PrintThisDeckText: ; 3c11d (f:411d)
 	text "Print this Deck?"
 	done
 
@@ -48,7 +48,7 @@ Text0277: ; 3c12f (f:412f)
 	line "      Yes     No"
 	done
 
-Text0278: ; 3c156 (f:4156)
+PrintMenuItemsText: ; 3c156 (f:4156)
 	text "Pokémon Cards"
 	line "Deck Configuration"
 	line "Card List"
@@ -56,16 +56,16 @@ Text0278: ; 3c156 (f:4156)
 	line "Quit Print"
 	done
 
-Text0279: ; 3c19b (f:419b)
+WhatWouldYouLikeToPrintText: ; 3c19b (f:419b)
 	text "What would you like to print?"
 	done
 
-Text027a: ; 3c1ba (f:41ba)
+PleaseSetTheContrastText: ; 3c1ba (f:41ba)
 	text "Please set the contrast:"
 	line "  Light   1   2   3   4   5   Dark"
 	done
 
-Text027b: ; 3c1f7 (f:41f7)
+PleaseMakeSureToTurnGameBoyPrinterOffText: ; 3c1f7 (f:41f7)
 	text "Please make sure to turn"
 	line "the Game Boy Printer OFF."
 	done
@@ -169,452 +169,452 @@ LegendaryMachineText: ; 3c4cb (f:44cb)
 	text "  Legendary Machine   "
 	done
 
-Text0292: ; 3c4e3 (f:44e3)
+AllFightingPokemonText: ; 3c4e3 (f:44e3)
 	text "All Fighting Pokémon"
 	done
 
-Text0293: ; 3c4f9 (f:44f9)
+BenchAttackText: ; 3c4f9 (f:44f9)
 	text "Bench Attack"
 	done
 
-Text0294: ; 3c507 (f:4507)
+BattleContestText: ; 3c507 (f:4507)
 	text "Battle Contest"
 	done
 
-Text0295: ; 3c517 (f:4517)
+HeatedBattleText: ; 3c517 (f:4517)
 	text "Heated Battle"
 	done
 
-Text0296: ; 3c526 (f:4526)
+FirstStrikeText: ; 3c526 (f:4526)
 	text "First-Strike"
 	done
 
-Text0297: ; 3c534 (f:4534)
+SqueakingMouseText: ; 3c534 (f:4534)
 	text "Squeaking Mouse"
 	done
 
-Text0298: ; 3c545 (f:4545)
+GreatQuakeText: ; 3c545 (f:4545)
 	text "Great Quake"
 	done
 
-Text0299: ; 3c552 (f:4552)
+BoneAttackText: ; 3c552 (f:4552)
 	text "Bone Attack"
 	done
 
-Text029a: ; 3c55f (f:455f)
+ExcavationText: ; 3c55f (f:455f)
 	text "Excavation"
 	done
 
-Text029b: ; 3c56b (f:456b)
+RockCrusherText: ; 3c56b (f:456b)
 	text "Rock Crusher"
 	done
 
-Text029c: ; 3c579 (f:4579)
+BlueWaterText: ; 3c579 (f:4579)
 	text "Blue Water"
 	done
 
-Text029d: ; 3c585 (f:4585)
+OnTheBeachText: ; 3c585 (f:4585)
 	text "On the Beach"
 	done
 
-Text029e: ; 3c593 (f:4593)
+ParalyzeText: ; 3c593 (f:4593)
 	text "Paralyze!"
 	done
 
-Text029f: ; 3c59e (f:459e)
+EnergyRemovalText: ; 3c59e (f:459e)
 	text "Energy Removal"
 	done
 
-Text02a0: ; 3c5ae (f:45ae)
+RainDancerText: ; 3c5ae (f:45ae)
 	text "Rain Dancer"
 	done
 
-Text02a1: ; 3c5bb (f:45bb)
+CutePokemonText: ; 3c5bb (f:45bb)
 	text "Cute Pokémon"
 	done
 
-Text02a2: ; 3c5c9 (f:45c9)
+PokemonFluteText: ; 3c5c9 (f:45c9)
 	text "Pokémon Flute"
 	done
 
-Text02a3: ; 3c5d8 (f:45d8)
+YellowFlashText: ; 3c5d8 (f:45d8)
 	text "Yellow Flash"
 	done
 
-Text02a4: ; 3c5e6 (f:45e6)
+ElectricShockText: ; 3c5e6 (f:45e6)
 	text "Electric Shock"
 	done
 
-Text02a5: ; 3c5f6 (f:45f6)
+ZappingSelfdestructText: ; 3c5f6 (f:45f6)
 	text "Zapping Selfdestruct"
 	done
 
-Text02a6: ; 3c60c (f:460c)
+InsectCollectionText: ; 3c60c (f:460c)
 	text "Insect Collection"
 	done
 
-Text02a7: ; 3c61f (f:461f)
+JungleText: ; 3c61f (f:461f)
 	text "Jungle"
 	done
 
-Text02a8: ; 3c627 (f:4627)
+FlowerGardenText: ; 3c627 (f:4627)
 	text "Flower Garden"
 	done
 
-Text02a9: ; 3c636 (f:4636)
+KaleidoscopeText: ; 3c636 (f:4636)
 	text "Kaleidoscope"
 	done
 
-Text02aa: ; 3c644 (f:4644)
+FlowerPowerText: ; 3c644 (f:4644)
 	text "Flower Power"
 	done
 
-Text02ab: ; 3c652 (f:4652)
+PsychicPowerText: ; 3c652 (f:4652)
 	text "Psychic Power"
 	done
 
-Text02ac: ; 3c661 (f:4661)
+DreamEaterHaunterText: ; 3c661 (f:4661)
 	text "Dream Eater Haunter"
 	done
 
-Text02ad: ; 3c676 (f:4676)
+ScavengingSlowbroText: ; 3c676 (f:4676)
 	text "Scavenging Slowbro"
 	done
 
-Text02ae: ; 3c68a (f:468a)
+StrangePowerText: ; 3c68a (f:468a)
 	text "Strange Power"
 	done
 
-Text02af: ; 3c699 (f:4699)
+StrangePsyshockText: ; 3c699 (f:4699)
 	text "Strange Psyshock"
 	done
 
-Text02b0: ; 3c6ab (f:46ab)
+LovelyNidoranText: ; 3c6ab (f:46ab)
 	text "Lovely Nidoran"
 	done
 
-Text02b1: ; 3c6bb (f:46bb)
+ScienceCorpsText: ; 3c6bb (f:46bb)
 	text "Science Corps"
 	done
 
-Text02b2: ; 3c6ca (f:46ca)
+FlyinPokemonText: ; 3c6ca (f:46ca)
 	text "Flyin' Pokémon"
 	done
 
-Text02b3: ; 3c6da (f:46da)
+PoisonText: ; 3c6da (f:46da)
 	text "Poison"
 	done
 
-Text02b4: ; 3c6e2 (f:46e2)
+WondersOfScienceText: ; 3c6e2 (f:46e2)
 	text "Wonders of Science"
 	done
 
-Text02b5: ; 3c6f6 (f:46f6)
+ReplaceEmAllText: ; 3c6f6 (f:46f6)
 	text "Replace 'Em All"
 	done
 
-Text02b6: ; 3c707 (f:4707)
+ChariSaurText: ; 3c707 (f:4707)
 	text "Chari-Saur"
 	done
 
-Text02b7: ; 3c713 (f:4713)
+TrafficLightText: ; 3c713 (f:4713)
 	text "Traffic Light"
 	done
 
-Text02b8: ; 3c722 (f:4722)
+FirePokemonDeckText: ; 3c722 (f:4722)
 	text "Fire Pokémon"
 	done
 
-Text02b9: ; 3c730 (f:4730)
+FireChargeText: ; 3c730 (f:4730)
 	text "Fire Charge"
 	done
 
-Text02ba: ; 3c73d (f:473d)
+CharmanderAndFriendsText: ; 3c73d (f:473d)
 	text "Charmander & Friends"
 	done
 
-Text02bb: ; 3c753 (f:4753)
+SquirtleAndFriendsText: ; 3c753 (f:4753)
 	text "Squirtle & Friends"
 	done
 
-Text02bc: ; 3c767 (f:4767)
+BulbasaurAndFriendsText: ; 3c767 (f:4767)
 	text "Bulbasaur & Friends"
 	done
 
-Text02bd: ; 3c77c (f:477c)
+PsychicMachampText: ; 3c77c (f:477c)
 	text "Psychic Machamp"
 	done
 
-Text02be: ; 3c78d (f:478d)
+WaterBeetleText: ; 3c78d (f:478d)
 	text "Water Beetle"
 	done
 
-Text02bf: ; 3c79b (f:479b)
+LegendaryMoltresText: ; 3c79b (f:479b)
 	text "Legendary Moltres"
 	done
 
-Text02c0: ; 3c7ae (f:47ae)
+LegendaryZapdosText: ; 3c7ae (f:47ae)
 	text "Legendary Zapdos"
 	done
 
-Text02c1: ; 3c7c0 (f:47c0)
+LegendaryArticunoText: ; 3c7c0 (f:47c0)
 	text "Legendary Articuno"
 	done
 
-Text02c2: ; 3c7d4 (f:47d4)
+LegendaryDragoniteText: ; 3c7d4 (f:47d4)
 	text "Legendary Dragonite"
 	done
 
-Text02c3: ; 3c7e9 (f:47e9)
+MysteriousPokemonText: ; 3c7e9 (f:47e9)
 	text "Mysterious Pokémon"
 	done
 
-Text02c4: ; 3c7fd (f:47fd)
+AllFightingPokemonDescriptionText: ; 3c7fd (f:47fd)
 	text "A Deck of Fighting Pokémon:"
 	line "Feel their Fighting power!"
 	done
 
-Text02c5: ; 3c835 (f:4835)
+BenchAttackDescriptionText: ; 3c835 (f:4835)
 	text "A Deck of Pokémon that can"
 	line "attack the Bench."
 	done
 
-Text02c6: ; 3c863 (f:4863)
+BattleContestDescriptionText: ; 3c863 (f:4863)
 	text "A Deck which uses Fighting Attacks"
 	line "such as Slash and Punch."
 	done
 
-Text02c7: ; 3c8a0 (f:48a0)
+HeatedBattleDescriptionText: ; 3c8a0 (f:48a0)
 	text "A powerful Deck with both Fire"
 	line "and Fighting Pokémon."
 	done
 
-Text02c8: ; 3c8d6 (f:48d6)
+FirstStrikeDescriptionText: ; 3c8d6 (f:48d6)
 	text "A Deck for fast and furious "
 	line "attacks."
 	done
 
-Text02c9: ; 3c8fd (f:48fd)
+SqueakingMouseDescriptionText: ; 3c8fd (f:48fd)
 	text "A Deck made of Mouse Pokémon."
 	line "Uses PlusPower to Power up!"
 	done
 
-Text02ca: ; 3c938 (f:4938)
+GreatQuakeDescriptionText: ; 3c938 (f:4938)
 	text "Use Dugtrio's Earthquake"
 	line "to cause great damage."
 	done
 
-Text02cb: ; 3c969 (f:4969)
+BoneAttackDescriptionText: ; 3c969 (f:4969)
 	text "A Deck of Cubone and Marowak - "
 	line "A call for help."
 	done
 
-Text02cc: ; 3c99b (f:499b)
+ExcavationDescriptionText: ; 3c99b (f:499b)
 	text "A Deck which creates Pokémon by"
 	line "evolving Mysterious Fossils."
 	done
 
-Text02cd: ; 3c9d9 (f:49d9)
+RockCrusherDescriptionText: ; 3c9d9 (f:49d9)
 	text "A Deck of Rock Pokémon. It's"
 	line "Strong against Lightning Pokémon."
 	done
 
-Text02ce: ; 3ca19 (f:4a19)
+BlueWaterDescriptionText: ; 3ca19 (f:4a19)
 	text "A Deck of Water Pokémon: Their"
 	line "Blue Horror washes over enemies."
 	done
 
-Text02cf: ; 3ca5a (f:4a5a)
+OnTheBeachDescriptionText: ; 3ca5a (f:4a5a)
 	text "A well balanced Deck"
 	line "of Sandshrew and Water Pokémon!"
 	done
 
-Text02d0: ; 3ca90 (f:4a90)
+ParalyzeDescriptionText: ; 3ca90 (f:4a90)
 	text "Paralyze the opponent's Pokémon:"
 	line "Stop 'em and drop 'em!"
 	done
 
-Text02d1: ; 3cac9 (f:4ac9)
+EnergyRemovalDescriptionText: ; 3cac9 (f:4ac9)
 	text "Uses Whirlpool and Hyper Beam to"
 	line "remove opponents' Energy cards."
 	done
 
-Text02d2: ; 3cb0b (f:4b0b)
+RainDancerDescriptionText: ; 3cb0b (f:4b0b)
 	text "Use Rain Dance to attach Water"
 	line "Energy for powerful Attacks!"
 	done
 
-Text02d3: ; 3cb48 (f:4b48)
+CutePokemonDescriptionText: ; 3cb48 (f:4b48)
 	text "A Deck of cute Pokémon such as"
 	line "Pikachu and Eevee."
 	done
 
-Text02d4: ; 3cb7b (f:4b7b)
+PokemonFluteDescriptionText: ; 3cb7b (f:4b7b)
 	text "Use the Pokémon Flute to revive"
 	line "opponents' Pokémon and Attack!"
 	done
 
-Text02d5: ; 3cbbb (f:4bbb)
+YellowFlashDescriptionText: ; 3cbbb (f:4bbb)
 	text "A deck of Pokémon that use Lightning"
 	line "Energy to zap opponents."
 	done
 
-Text02d6: ; 3cbfa (f:4bfa)
+ElectricShockDescriptionText: ; 3cbfa (f:4bfa)
 	text "A Deck which Shocks and Paralyzes"
 	line "opponents with its Attacks."
 	done
 
-Text02d7: ; 3cc39 (f:4c39)
+ZappingSelfdestructDescriptionText: ; 3cc39 (f:4c39)
 	text "Selfdestruct causes great damage "
 	line "- even to the opponent's Bench."
 	done
 
-Text02d8: ; 3cc7c (f:4c7c)
+InsectCollectionDescriptionText: ; 3cc7c (f:4c7c)
 	text "A Deck made of Insect Pokémon"
 	line "Go Bug Power!"
 	done
 
-Text02d9: ; 3cca9 (f:4ca9)
+JungleDescriptionText: ; 3cca9 (f:4ca9)
 	text "A Deck of Grass Pokémon: There "
 	line "are many dangers in the Jungle."
 	done
 
-Text02da: ; 3ccea (f:4cea)
+FlowerGardenDescriptionText: ; 3ccea (f:4cea)
 	text "A Deck of Flower Pokémon:"
 	line "Beautiful but Dangerous"
 	done
 
-Text02db: ; 3cd1d (f:4d1d)
+KaleidoscopeDescriptionText: ; 3cd1d (f:4d1d)
 	text "Uses Venomoth's Pokémon Power to"
 	line "change the opponent's Weakness."
 	done
 
-Text02dc: ; 3cd5f (f:4d5f)
+FlowerPowerDescriptionText: ; 3cd5f (f:4d5f)
 	text "A powerful Big Eggsplosion "
 	line "and Energy Transfer combo!"
 	done
 
-Text02dd: ; 3cd97 (f:4d97)
+PsychicPowerDescriptionText: ; 3cd97 (f:4d97)
 	text "Use the Psychic power of the"
 	line "Psychic Pokémon to Attack!"
 	done
 
-Text02de: ; 3cdd0 (f:4dd0)
+DreamEaterHaunterDescriptionText: ; 3cdd0 (f:4dd0)
 	text "Uses Haunter's Dream Eater"
 	line "to cause great damage!"
 	done
 
-Text02df: ; 3ce03 (f:4e03)
+ScavengingSlowbroDescriptionText: ; 3ce03 (f:4e03)
 	text "Continually draw Trainer "
 	line "Cards from the Discard Pile!"
 	done
 
-Text02e0: ; 3ce3b (f:4e3b)
+StrangePowerDescriptionText: ; 3ce3b (f:4e3b)
 	text "Confuse opponents with"
 	line "mysterious power!"
 	done
 
-Text02e1: ; 3ce65 (f:4e65)
+StrangePsyshockDescriptionText: ; 3ce65 (f:4e65)
 	text "Use Alakazam's Damage Swap"
 	line "to move damage counters!"
 	done
 
-Text02e2: ; 3ce9a (f:4e9a)
+LovelyNidoranDescriptionText: ; 3ce9a (f:4e9a)
 	text "Uses Nidoqueen's Boyfriends to cause"
 	line "great damage to the opponent."
 	done
 
-Text02e3: ; 3cede (f:4ede)
+ScienceCorpsDescriptionText: ; 3cede (f:4ede)
 	text "The march of the Science Corps!"
 	line "Attack with the power of science!"
 	done
 
-Text02e4: ; 3cf21 (f:4f21)
+FlyinPokemonDescriptionText: ; 3cf21 (f:4f21)
 	text "Pokémon with feathers flock "
 	line "together! Retreating is easy!"
 	done
 
-Text02e5: ; 3cf5d (f:4f5d)
+PoisonDescriptionText: ; 3cf5d (f:4f5d)
 	text "A Deck that uses Poison to "
 	line "slowly Knock Out the opponent."
 	done
 
-Text02e6: ; 3cf99 (f:4f99)
+WondersOfScienceDescriptionText: ; 3cf99 (f:4f99)
 	text "Block Pokémon Powers with "
 	line "Muk and attack with Mewtwo!"
 	done
 
-Text02e7: ; 3cfd1 (f:4fd1)
+ReplaceEmAllDescriptionText: ; 3cfd1 (f:4fd1)
 	text "A Deck that shuffles"
 	line "the opponent's cards"
 	done
 
-Text02e8: ; 3cffc (f:4ffc)
+ChariSaurDescriptionText: ; 3cffc (f:4ffc)
 	text "Attack with Charizard - with "
 	line "just a few Fire Energy cards!"
 	done
 
-Text02e9: ; 3d039 (f:5039)
+TrafficLightDescriptionText: ; 3d039 (f:5039)
 	text "Pokémon that can Attack with"
 	line "Fire, Water or Lightning Energy!"
 	done
 
-Text02ea: ; 3d078 (f:5078)
+FirePokemonDescriptionText: ; 3d078 (f:5078)
 	text "With Fire Pokémon like Charizard, "
 	line "Rapidash and Magmar, it's hot!"
 	done
 
-Text02eb: ; 3d0bb (f:50bb)
+FireChargeDescriptionText: ; 3d0bb (f:50bb)
 	text "Desperate attacks Damage your "
 	line "opponent and you!"
 	done
 
-Text02ec: ; 3d0ed (f:50ed)
+CharmanderAndFriendsDescriptionText: ; 3d0ed (f:50ed)
 	text "A Fire, Grass and Water Deck:"
 	line "Charmander, Pinsir and Seel"
 	done
 
-Text02ed: ; 3d128 (f:5128)
+SquirtleAndFriendsDescriptionText: ; 3d128 (f:5128)
 	text "A Water, Fire, and Lightning Deck:"
 	line "Squirtle, Charmander and Pikachu"
 	done
 
-Text02ee: ; 3d16d (f:516d)
+BulbasaurAndFriendsDescriptionText: ; 3d16d (f:516d)
 	text "A Grass, Lightning and Psychic Deck:"
 	line "Bulbasaur, Pikachu and Abra"
 	done
 
-Text02ef: ; 3d1af (f:51af)
+PsychicMachampDescriptionText: ; 3d1af (f:51af)
 	text "Machamp, Hitmonlee, Hitmonchan"
 	line "Gengar and Alakazam are furious!"
 	done
 
-Text02f0: ; 3d1f0 (f:51f0)
+WaterBeetleDescriptionText: ; 3d1f0 (f:51f0)
 	text "An Evolution Deck with Weedle, "
 	line "Nidoran♂ and Bellsprout."
 	done
 
-Text02f1: ; 3d22a (f:522a)
+LegendaryMoltresDescriptionText: ; 3d22a (f:522a)
 	text "Gather Fire Energy with the"
 	line "Legendary Moltres!"
 	done
 
-Text02f2: ; 3d25a (f:525a)
+LegendaryZapdosDescriptionText: ; 3d25a (f:525a)
 	text "Zap opponents with the"
 	line "Legandary Zapdos!"
 	done
 
-Text02f3: ; 3d284 (f:5284)
+LegendaryArticunoDescriptionText: ; 3d284 (f:5284)
 	text "Paralyze opponents with the"
 	line "Legendary Articuno!"
 	done
 
-Text02f4: ; 3d2b5 (f:52b5)
+LegendaryDragoniteDescriptionText: ; 3d2b5 (f:52b5)
 	text "Heal your Pokémon with the"
 	line "Legendary Dragonite!"
 	done
 
-Text02f5: ; 3d2e6 (f:52e6)
+MysteriousPokemonDescriptionText: ; 3d2e6 (f:52e6)
 	text "A very special Deck made of"
 	line "very rare Pokémon cards!"
 	done

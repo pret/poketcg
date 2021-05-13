@@ -8,9 +8,14 @@ CARD_NOT_OWNED       EQU 1 << CARD_NOT_OWNED_F
 CARD_COUNT_MASK      EQU $7f
 
 ; sDeck* and generic deck constants
-NUM_DECKS      EQU 4
-DECK_NAME_SIZE EQU 24
-DECK_SIZE      EQU 60
+NUM_DECKS                EQU 4
+DECK_NAME_SIZE           EQU 24
+DECK_NAME_SIZE_WO_SUFFIX EQU 21 ; name part before "deck"
+DECK_SIZE                EQU 60
+DECK_STRUCT_SIZE         EQU DECK_NAME_SIZE + DECK_SIZE
+DECK_CONFIG_BUFFER_SIZE  EQU 80
+MAX_NUM_SAME_NAME_CARDS  EQU 4
+MAX_UNNAMED_DECK_NUM     EQU 999
 
 ; card data offsets (data/cards.asm and card_data_struct)
 
@@ -128,13 +133,23 @@ DIAMOND   EQU $1
 STAR      EQU $2
 PROMOSTAR EQU $ff
 
+; card set constants (set 1)
+	const_def
+	const CARD_SET_COLOSSEUM   ; $0
+	const CARD_SET_EVOLUTION   ; $1
+	const CARD_SET_MYSTERY     ; $2
+	const CARD_SET_LABORATORY  ; $3
+	const CARD_SET_PROMOTIONAL ; $4
+	const CARD_SET_ENERGY      ; $5
+NUM_CARD_SETS EQU const_value - 1
+
 ; CARD_DATA_SET constants (set 1)
-COLOSSEUM   EQU $0 << 4
-EVOLUTION   EQU $1 << 4
-MYSTERY     EQU $2 << 4
-LABORATORY  EQU $3 << 4
-PROMOTIONAL EQU $4 << 4
-ENERGY      EQU $5 << 4
+COLOSSEUM   EQU CARD_SET_COLOSSEUM   << 4
+EVOLUTION   EQU CARD_SET_EVOLUTION   << 4
+MYSTERY     EQU CARD_SET_MYSTERY     << 4
+LABORATORY  EQU CARD_SET_LABORATORY  << 4
+PROMOTIONAL EQU CARD_SET_PROMOTIONAL << 4
+ENERGY      EQU CARD_SET_ENERGY      << 4
 
 ; CARD_DATA_SET constants (set 2)
 JUNGLE EQU $1

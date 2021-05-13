@@ -38,6 +38,12 @@ NEXTU
 wCardPopNameList:: ; c000
 	ds CARDPOP_NAME_LIST_SIZE
 
+NEXTU
+
+; buffer used to store a deck that will be built
+wDeckToBuild:: ; c000
+	ds DECK_STRUCT_SIZE
+
 ENDU
 
 	ds $100
@@ -448,21 +454,14 @@ UNION
 ; this is kept updated with some default text that is used
 ; when the text printing functions are called with text id $0000
 wDefaultText:: ; c590
-	ds $2
-
-wc592:: ; c592
-	ds $3
-
-	ds $15
-
-wc5aa:: ; c5aa
-	ds $1
-
-	ds $21
+	ds $3c
 
 NEXTU
 
-wc590:: ; c590
+; used in CheckIfCurrentDeckWasChanged to determine whether
+; wCurDeckCards was changed from the original
+; deck it was based on 
+wCurDeckCardChanges:: ; c590
 	ds DECK_SIZE
 
 ENDU
@@ -1712,21 +1711,25 @@ wCheckMenuPlayAreaWhichLayout:: ; ce51
 ; the position of cursor in the "In Play Area" screen
 wInPlayAreaCurPosition:: ; ce52
 
-; holds the position of the cursor when selecting a prize card
-wPrizeCardCursorPosition:: ; ce52
+; holds the position of the cursor when selecting
+; in the "Your Play Area" or "Opp Play Area" screens
+wYourOrOppPlayAreaCurPosition:: ; ce52
 	ds $1
 
 ; pointer to the table which contains information for each key-press.
 wMenuInputTablePointer:: ; ce53
 
-wce53:: ; ce53
+; pointer to transition table data
+wTransitionTablePtr:: ; ce53
 	ds $2
 
 ; same as wDuelInitialPrizes but with upper 2 bits set
 wDuelInitialPrizesUpperBitsSet:: ; ce55
 	ds $1
 
-wce56:: ; ce56
+; if TRUE, SwapTurn is called
+; after some operations are concluded
+wIsSwapTurnPending:: ; ce56
 	ds $1
 
 ; it's used for restore the position of cursor
@@ -1740,9 +1743,14 @@ wInPlayAreaPreservedPosition:: ; ce57
 wInPlayAreaTemporaryPosition:: ; ce58
 	ds $1
 
-wce59:: ; ce59
+; number of prize cards still to be
+; picked by the player
+wNumberOfPrizeCardsToSelect:: ; ce59
 	ds $1
 
+; pointer to a $ff-terminated list
+; of the prize cards selected by the player
+wSelectedPrizeCardListPtr:: ; ce5a
 	ds $2
 
 wce5c:: ; ce5c
@@ -1893,7 +1901,10 @@ wce9f:: ; ce9f
 wCardPopCardObtainSong:: ; cea0
 	ds $1
 
-wcea1:: ; cea1
+; first index in the current card list that is visible
+; used to calculate which element to get based
+; on the cursor position
+wCardListVisibleOffset:: ; cea1
 	ds $1
 
 	ds $1
@@ -1904,20 +1915,49 @@ wcea1:: ; cea1
 wCheckMenuCursorBlinkCounter:: ; cea3
 	ds $1
 
+; used to temporarily store wCurCardTypeFilter
+; to check whether a new filter is to be applied
+wTempCardTypeFilter:: ; cea4
+
+wCardListCursorPos:: ; cea4
+
 wNamingScreenCursorY:: ; cea4
 	ds $1
 
-wcea5:: ; cea5
-	ds $4
+wCardListCursorXPos:: ; cea5
+	ds $1
+
+wCardListCursorYPos:: ; cea6
+	ds $1
+
+wCardListYSpacing:: ; cea7
+	ds $1
+
+wCardListXSpacing:: ; cea8
+	ds $1
+
+wCardListNumCursorPositions:: ; cea9
 
 wNamingScreenKeyboardHeight:: ; cea9
 	ds $1
 
-wceaa:: ; ceaa
+; tile to draw when cursor is blinking
+wVisibleCursorTile:: ; ceaa
 	ds $1
 
-wceab:: ; ceab
-	ds $4
+; tile to draw when cursor is visible
+wInvisibleCursorTile:: ; ceab
+	ds $1
+
+; unknown handler function run in HandleDeckCardSelectionList
+; is always NULL
+wCardListHandlerFunction:: ; ceac
+	ds $2
+
+; number of cards that are listed
+; in the current filtered list
+wNumEntriesInCurFilter:: ; ceae
+	ds $1
 
 wCheckMenuCursorXPosition:: ; ceaf
 	ds $1
@@ -1925,20 +1965,18 @@ wCheckMenuCursorXPosition:: ; ceaf
 wCheckMenuCursorYPosition:: ; ceb0
 	ds $1
 
-wceb1:: ; ceb1
+; deck selected by the player in the Decks screen
+wCurDeck:: ; ceb1
 	ds $1
 
-wceb2:: ; ceb2
-	ds $1
-
-wceb3:: ; ceb3
-	ds $1
-
-wceb4:: ; ceb4
-	ds $1
-
-wceb5:: ; ceb5
-	ds $1
+; each of these are a boolean to
+; represent whether a given deck
+; that the player has is a valid deck
+wDecksValid::
+wDeck1Valid:: ds $1 ; ceb2
+wDeck2Valid:: ds $1 ; ceb3
+wDeck3Valid:: ds $1 ; ceb4
+wDeck4Valid:: ds $1 ; ceb5
 
 ; used to store the tens digit and
 ; ones digit of a value for printing
@@ -1950,49 +1988,79 @@ wOnesAndTensPlace:: ; ceb6
 
 	ds $3
 
-wcebb:: ; cebb
-	ds $9
+; each of these stores the card count
+; of each filter in the deck building screen
+; the order follows CardTypeFilters
+wCardFilterCounts:: ; cebb
+	ds NUM_FILTERS
 
-wcec4:: ; cec4
-	ds $7
+UNION
 
-wcecb:: ; cecb
+; buffer used to show which card IDs
+; are visible in a given list
+wVisibleListCardIDs:: ; cec4
+	ds NUM_DECK_CONFIRMATION_VISIBLE_CARDS
+
+NEXTU
+
+; whether a given Card Set is unavailable in the Card Album screen
+; used only for CARD_SET_PROMOTIONAL, in which case
+; if it's unavailable, will print "----------" as the Card Set name
+wUnavailableAlbumCardSets:: ; cec4
+	ds NUM_CARD_SETS
+
+ENDU
+
+; number of visible entries
+; when showing a list of cards
+wNumVisibleCardListEntries:: ; cecb
 	ds $1
 
-wcecc:: ; cecc
+wTotalCardCount:: ; cecc
 	ds $1
 
-wcecd:: ; cecd
+; is TRUE if list cannot be scrolled down
+; past the last visible entry
+wUnableToScrollDown:: ; cecd
 	ds $1
 
-wcece:: ; cece
+; pointer to a function that should be called
+; to update the card list being shown
+wCardListUpdateFunction:: ; cece
 	ds $2
 
-wced0:: ; ced0
+; holds y and x coordinates (in that order)
+; of start of card list (top-left corner)
+wCardListCoords:: ; ced0
 	ds $2
 
 wced2:: ; ced2
 	ds $1
 
-wced3:: ; ced3
+; the current filter being used
+; from the CardTypeFilters list
+wCurCardTypeFilter:: ; ced3
 	ds $1
 
-wced4:: ; ced4
+; temporarily stores wCardListNumCursorPositions value
+wTempCardListCursorPos:: ; ced4
 	ds $1
 
-wced5:: ; ced5
+wTempFilteredCardListNumCursorPositions:: ; ced5
 	ds $1
 
 wced6:: ; ced6
 	ds $1
 
+; maybe unused, is written to but never read
 wced7:: ; ced7
 	ds $1
 
 wced8:: ; ced8
 	ds $1
 
-wced9:: ; ced9
+; stores how many different cards there are in a deck
+wNumUniqueCards:: ; ced9
 	ds $1
 
 ; stores the list of all card IDs that filtered by its card type
@@ -2005,14 +2073,21 @@ wHandTempList:: ; ceda
 wceda:: ; ceda
 	ds DECK_SIZE
 
+; terminator for wceda
 wcf16:: ; cf16
 	ds $1
 
-; used in bank2, probably related to wTempHandCardList (another temp list?)
-wcf17:: ; cf17
-	ds DECK_SIZE
+; holds cards for the current deck
+wCurDeckCards:: ; cf17
+	ds DECK_CONFIG_BUFFER_SIZE
 
-	ds $15
+wCurDeckCardsTerminator:: ; cf67
+	ds $1
+wCurDeckCardsEnd::
+
+
+; list of all the different cards in a deck configuration
+wUniqueDeckCardList:: ; cf68
 
 ; stores the count number of cards owned
 ; can be 0 in the case that a card is not available
@@ -2025,18 +2100,45 @@ wTempHandCardList:: ; cf68
 
 	ds $15
 
-wcfb9:: ; cfb9
-	ds $14
+; name of the selected deck
+wCurDeckName:: ; cfb9
+	ds DECK_NAME_SIZE
 
-	ds $4
+; max number of cards that are allowed
+; to include when building a deck configuration
+wMaxNumCardsAllowed:: ; cfd1
+	ds $1
 
-wcfd1:: ; cfd1
-	ds $7
+; max number of cards with same name that are allowed
+; to be included when building a deck configuration
+wSameNameCardsLimit:: ; cfd2
+	ds $1
 
-wcfd8:: ; cfd8
+; whether to include the cards in the selected deck
+; to appear in the filtered lists
+; is TRUE when building a deck (since the cards should be shown for removal)
+; is FALSE when choosing a deck configuration to send through Gift Center
+; (can't select cards that are included in already built decks)
+wIncludeCardsInDeck:: ; cfd3
+	ds $1
+
+; pointer to a function that handles the menu
+; when building a deck configuration
+wDeckConfigurationMenuHandlerFunction:: ; cfd4
 	ds $2
 
-wcfda:: ; cfda
+; pointer to a transition table for the
+; function in wDeckConfigurationMenuHandlerFunction
+wDeckConfigurationMenuTransitionTable:: ; cfd6
+	ds $2
+
+; pointer to a list of cards that
+; is currently being shown/manipulated
+wCurCardListPtr:: ; cfd8
+	ds $2
+
+; text ID to print in the card confirmation screen text box
+wCardConfirmationText:: ; cfda
 	ds $2
 
 	ds $2
@@ -2046,17 +2148,36 @@ wcfda:: ; cfda
 wCursorAlternateTile:: ; cfde
 	ds $1
 
-wcfdf:: ; cfdf
+; temporarily stores value of wCardListNumCursorPositions
+wTempCardListNumCursorPositions:: ; cfdf
 	ds $1
 
-	ds $3
+; which Card Set selected by the player to view
+wSelectedCardSet:: ; cfe0
+	ds $1
+
+; number of cards the player owns from the given Card Set
+wNumOwnedCardsInSet:: ; cfe1
+	ds $1
+
+; flags that corresponds to each Phantom Card owned by the player
+; see src/constants/menu_constants.asm
+wOwnedPhantomCardFlags:: ; cfe2
+	ds $1
 
 ; a flag indicating whether sfx should be played.
 wPlaysSfx:: ; cfe3
 	ds $1
 
 wcfe4:: ; cfe4
-	ds $3
+	ds $1
+
+; collection index of the first owned card
+wFirstOwnedCardIndex:: ; cfe5
+	ds $1
+
+wNumCardListEntries:: ; cfe6
+	ds $1
 
 ; a name buffer in the naming screen.
 wNamingScreenBuffer:: ; cfe7
@@ -2091,48 +2212,59 @@ wNamingScreenNamePosition:: ; d007
 wd009:: ; d009
 	ds $4
 
-wd00d:: ; d00d
+; pointers to all decks of current deck machine
+wMachineDeckPtrs:: ; d00d
+	ds 2 * NUM_DECK_SAVE_MACHINE_SLOTS
+
+wNumSavedDecks:: ; d085
 	ds $1
 
-	ds $78
-
-wd086:: ; d086
+; temporarily holds value of wCardListCursorPos
+wTempDeckMachineCursorPos:: ; d086
 	ds $1
 
-wd087:: ; d087
+; temporarily holds value of wCardListVisibleOffset
+wTempCardListVisibleOffset:: ; d087
 	ds $1
 
-wd088:: ; d088
+; which list entry was selected in the Deck Machine screen
+wSelectedDeckMachineEntry:: ; d088
 	ds $1
 
-wd089:: ; d089
+wDismantledDeckName:: ; d089
+	ds DECK_NAME_SIZE
+
+; which deck slot to be used to
+; build a new deck
+wDeckSlotForNewDeck:: ; d0a1
 	ds $1
 
-wd08a:: ; d08a
-	ds $18
-
-wd0a2:: ; d0a2
+wDeckMachineTitleText:: ; d0a2
 	ds $2
 
-wd0a4:: ; d0a4
+wTempBankSRAM:: ; d0a4
 	ds $1
 
-wd0a5:: ; d0a5
+wNumDeckMachineEntries:: ; d0a5
 	ds $1
 
-wd0a6:: ; d0a6
+; DECK_* flags to be dismantled to build a given deck
+wDecksToBeDismantled:: ; d0a6
 	ds $1
 
-wd0a7:: ; d0a7
+; text ID to print in the text box when
+; inside the Deck Machine menu
+wDeckMachineText:: ; d0a7
 	ds $2
 
-wd0a9:: ; d0a9
+; which deck machine is being used
+wCurAutoDeckMachine:: ; d0a9
 	ds $1
 
-wd0aa:: ; d0aa
-	ds $1
-
-	ds $9
+; text IDs for each deck descriptions of the
+; Auto Deck Machine currently being shown
+wAutoDeckMachineTextDescriptions:: ; d0aa
+	ds 2 * NUM_DECK_MACHINE_SLOTS
 
 wd0b4:: ; d0b4
 	ds $1

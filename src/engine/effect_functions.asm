@@ -6622,7 +6622,7 @@ Peek_SelectEffect: ; 2e2b4 (b:62b4)
 
 ; player
 	call Func_3b31
-	call Func_30e7
+	call HandlePeekSelection
 	ldh [hAIPkmnPowerEffectParam], a
 	call SerialSend8Bytes
 	ret
@@ -6660,7 +6660,7 @@ Peek_SelectEffect: ; 2e2b4 (b:62b4)
 	call SwapTurn
 	ldh a, [hAIPkmnPowerEffectParam]
 	xor $80
-	call Func_30f9
+	call DrawAIPeekScreen
 	call SwapTurn
 	ldtx hl, CardPeekWasUsedOnText
 	call DrawWideTextBox_WaitForInput

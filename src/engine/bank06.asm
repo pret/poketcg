@@ -746,7 +746,7 @@ OpenGlossaryScreen: ; 184c8 (6:44c8)
 	and SELECT
 	jr nz, .on_select
 
-	farcall Func_89ae
+	farcall YourOrOppPlayAreaScreen_HandleInput
 	jr nc, .next
 
 	cp -1 ; b button
@@ -2050,29 +2050,32 @@ Func_1996e: ; 1996e (6:596e)
 	ldh [hWhoseTurn], a
 	ld hl, sCardCollection
 	ld bc, $1607
-.asm_1997b
+.loop_clear
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, c
 	or b
-	jr nz, .asm_1997b
-	ld a, $5
-	ld hl, s0a350
+	jr nz, .loop_clear
+
+	ld a, CHARMANDER_AND_FRIENDS_DECK
+	ld hl, sSavedDeck1
 	call Func_199e0
-	ld a, $7
-	ld hl, s0a3a4
+	ld a, SQUIRTLE_AND_FRIENDS_DECK
+	ld hl, sSavedDeck2
 	call Func_199e0
-	ld a, $9
-	ld hl, s0a3f8
+	ld a, BULBASAUR_AND_FRIENDS_DECK
+	ld hl, sSavedDeck3
 	call Func_199e0
+
 	call EnableSRAM
 	ld hl, sCardCollection
 	ld a, CARD_NOT_OWNED
-.asm_199a2
+.loop_collection
 	ld [hl], a
 	inc l
-	jr nz, .asm_199a2
+	jr nz, .loop_collection
+
 	ld hl, sCurrentDuel
 	xor a
 	ld [hli], a
@@ -2080,15 +2083,16 @@ Func_1996e: ; 1996e (6:596e)
 	ld [hl], a
 
 	ld hl, sCardPopNameList
-	ld c, $10
-.asm_199b2
+	ld c, CARDPOP_NAME_LIST_MAX_ELEMS
+.loop_card_pop_names
 	ld [hl], $0
-	ld de, $0010
+	ld de, NAME_BUFFER_LENGTH
 	add hl, de
 	dec c
-	jr nz, .asm_199b2
-	ld a, $2
-	ld [s0a003], a
+	jr nz, .loop_card_pop_names
+
+	ld a, 2
+	ld [sPrinterContrastLevel], a
 	ld a, $2
 	ld [sTextSpeed], a
 	ld [wTextSpeed], a
@@ -2673,6 +2677,7 @@ CalculateNameHash: ; 19e32 (6:5e32)
 	ret
 ; 0x19e42
 
+Func_19e42: ; 19e42 (6:5e42)
 	INCROM $19e42, $19e5a
 
 ; shows message on screen depending on wPrinterStatus
@@ -2955,7 +2960,7 @@ Func_1a035: ; 1a035 (6:6035)
 	ld a, $10
 	ld [wce9b], a
 	call EnableSRAM
-	ld a, [s0a003]
+	ld a, [sPrinterContrastLevel]
 	ld [wce99], a
 	call DisableSRAM
 	ldh a, [hBankSRAM]
@@ -3140,7 +3145,13 @@ Func_1a138: ; 1a138 (6:6138)
 	db $00, $20, $40, $60, $7f
 ; 0x1a14b
 
-	INCROM $1a14b, $1a435
+	INCROM $1a14b, $1a162
+
+Func_1a162: ; 1a162 (6:6162)
+	INCROM $1a162, $1a270
+
+Func_1a270: ; 1a270 (6:6270)
+	INCROM $1a270, $1a435
 
 ; compresses $28 tiles in sGfxBuffer5
 ; and writes it in sGfxBuffer5 + $28 tiles.
@@ -3585,9 +3596,9 @@ InputPlayerName: ; 1a7a3 (6:67a3)
 	ld a, $06
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
-	ld [wceaa], a
+	ld [wVisibleCursorTile], a
 	ld a, $00
-	ld [wceab], a
+	ld [wInvisibleCursorTile], a
 .loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -3943,12 +3954,12 @@ NamingScreen_CheckButtonState: ; 1a908 (6:6908)
 	inc [hl]
 	and $0f
 	ret nz
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
 	jr z, Func_1aa07.asm_6a0a
 
 Func_1aa07: ; 1aa07 (6:6a07)
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 .asm_6a0a
 	ld e, a
 	ld a, [wNamingScreenCursorX]
@@ -3967,7 +3978,7 @@ Func_1aa07: ; 1aa07 (6:6a07)
 	ret
 
 Func_1aa23: ; 1aa23 (6:6a23)
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	jr Func_1aa07.asm_6a0a
 
 Func_1aa28: ; 1aa28 (6:6a28)
@@ -3979,7 +3990,7 @@ Func_1aa28: ; 1aa28 (6:6a28)
 	call ZeroObjectPositions
 	pop af
 	ld b, a
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 	cp b
 	jr z, .asm_6a60
 	ld a, [wNamingScreenBufferLength]
@@ -4449,9 +4460,9 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld a, $07
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
-	ld [wceaa], a
+	ld [wVisibleCursorTile], a
 	ld a, $00
-	ld [wceab], a
+	ld [wInvisibleCursorTile], a
 .loop
 	ld a, $01
 	ld [wVBlankOAMCopyToggle], a
@@ -4741,12 +4752,12 @@ Func_1aefb: ; 1aefb (6:6efb)
 	inc [hl]
 	and $0f
 	ret nz
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	bit 4, [hl]
 	jr z, Func_1afa1.asm_6fa4
 
 Func_1afa1: ; 1afa1 (6:6fa1)
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 .asm_6fa4
 	ld e, a
 	ld a, [wNamingScreenCursorX]
@@ -4765,7 +4776,7 @@ Func_1afa1: ; 1afa1 (6:6fa1)
 	ret
 
 Func_1afbd: ; 1afbd (6:6fbd)
-	ld a, [wceaa]
+	ld a, [wVisibleCursorTile]
 	jr Func_1afa1.asm_6fa4
 
 Func_1afc2: ; 1afc2 (6:6fc2)
@@ -4777,7 +4788,7 @@ Func_1afc2: ; 1afc2 (6:6fc2)
 	call ZeroObjectPositions
 	pop af
 	ld b, a
-	ld a, [wceab]
+	ld a, [wInvisibleCursorTile]
 	cp b
 	jr z, .asm_6ffb
 	ld a, [wNamingScreenBufferLength]
@@ -4914,30 +4925,32 @@ KeyboardData_Deck: ; 1b019 (6:7019)
 	db $0e, $12, $02
 	db $10, $0f, $01
 
-; unknown data.
-; needs analyze.
-; (6:70d6)
-	INCROM $1b0d6, $1ba12
+	ds 4 ; empty
 
-Func_1ba12: ; 1ba12 (6:7a12)
-	push af
-	ld [bc], a
+INCLUDE "data/auto_deck_card_lists.asm"
+INCLUDE "data/auto_deck_machines.asm"
+
+; writes to sAutoDecks all the deck configurations
+; from the Auto Deck Machine in wCurAutoDeckMachine
+ReadAutoDeckConfiguration: ; 1ba14 (6:7a14)
 	call EnableSRAM
-	ld a, [wd0a9]
+	ld a, [wCurAutoDeckMachine]
 	ld l, a
-	ld h, $1e
+	ld h, 6 * NUM_DECK_MACHINE_SLOTS
 	call HtimesL
-	ld bc, $78e8
+	ld bc, AutoDeckMachineEntries
 	add hl, bc
-	ld b, $00
-.asm_7a26
-	call Func_1ba4c
-	call Func_1ba5b
-	call Func_1ba7d
+	ld b, 0
+.loop_decks
+	call .GetPointerToSRAMAutoDeck
+	call .ReadDeckConfiguration
+	call .ReadDeckName
+
+	; store deck description text ID
 	push hl
-	ld de, wd0aa
+	ld de, wAutoDeckMachineTextDescriptions
 	ld h, b
-	ld l, $02
+	ld l, 2
 	call HtimesL
 	add hl, de
 	ld d, h
@@ -4950,24 +4963,27 @@ Func_1ba12: ; 1ba12 (6:7a12)
 	ld [de], a
 	inc b
 	ld a, b
-	cp $05
-	jr nz, .asm_7a26
+	cp NUM_DECK_MACHINE_SLOTS
+	jr nz, .loop_decks
 	call DisableSRAM
 	ret
 
-Func_1ba4c: ; 1ba4c (6:7a4c)
+; outputs in de the saved deck with index b
+.GetPointerToSRAMAutoDeck
 	push hl
 	ld l, b
-	ld h, $54
+	ld h, DECK_STRUCT_SIZE
 	call HtimesL
-	ld de, s0a350
+	ld de, sAutoDecks
 	add hl, de
 	ld d, h
 	ld e, l
 	pop hl
 	ret
 
-Func_1ba5b: ; 1ba5b (6:7a5b)
+; writes the deck configuration in SRAM
+; by reading the given deck card list
+.ReadDeckConfiguration
 	push hl
 	push bc
 	push de
@@ -4976,24 +4992,24 @@ Func_1ba5b: ; 1ba5b (6:7a5b)
 	inc hl
 	ld d, [hl]
 	pop hl
-	ld bc, $0018
+	ld bc, DECK_NAME_SIZE
 	add hl, bc
-.asm_7a67
+.loop_create_deck
 	ld a, [de]
 	inc de
-	ld b, a
+	ld b, a ; card count
 	or a
-	jr z, .asm_7a77
+	jr z, .done_create_deck
 	ld a, [de]
 	inc de
-	ld c, a
-.asm_7a70
+	ld c, a ; card ID
+.loop_card_count
 	ld [hl], c
 	inc hl
 	dec b
-	jr nz, .asm_7a70
-	jr .asm_7a67
-.asm_7a77
+	jr nz, .loop_card_count
+	jr .loop_create_deck
+.done_create_deck
 	pop de
 	pop bc
 	pop hl
@@ -5001,87 +5017,104 @@ Func_1ba5b: ; 1ba5b (6:7a5b)
 	inc hl
 	ret
 
-Func_1ba7d: ; 1ba7d (6:7a7d)
+.ReadDeckName
 	push hl
 	push bc
 	push de
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld de, wd089
+	ld de, wDismantledDeckName
 	call CopyText
 	pop hl
-	ld de, wd089
-.asm_7a8d
+	ld de, wDismantledDeckName
+.loop_copy_name
 	ld a, [de]
 	ld [hli], a
 	or a
-	jr z, .asm_7a95
+	jr z, .done_copy_name
 	inc de
-	jr .asm_7a8d
-.asm_7a95
+	jr .loop_copy_name
+.done_copy_name
 	pop bc
 	pop hl
 	inc hl
 	inc hl
 	ret
 
-; farcall from 0xb87e(2:787d): [EF|06|9A|7A]
-Func_1ba9a: ; 1ba9a (6:7a9a)
+; tries out all combinations of dismantling the player's decks
+; in order to build the deck in wSelectedDeckMachineEntry
+; if none of the combinations work, return carry set
+; otherwise, return in a which deck flags should be dismantled
+CheckWhichDecksToDismantleToBuildSavedDeck: ; 1ba9a (6:7a9a)
 	xor a
-	ld [wd0a6], a
-	ld a, $01
-.asm_7aa0
-	call Func_1bae4
+	ld [wDecksToBeDismantled], a
+
+; first check if it can be built by
+; only dismantling a single deck
+	ld a, DECK_1
+.loop_single_built_decks
+	call .CheckIfCanBuild
 	ret nc
-	sla a
-	cp $10
-	jr z, .asm_7aac
-	jr .asm_7aa0
-.asm_7aac
-	ld a, $03
-	call Func_1bae4
+	sla a ; next deck
+	cp (1 << NUM_DECKS)
+	jr z, .two_deck_combinations
+	jr .loop_single_built_decks
+
+.two_deck_combinations
+; next check all two deck combinations
+	ld a, DECK_1 | DECK_2
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $05
-	call Func_1bae4
+	ld a, DECK_1 | DECK_3
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $09
-	call Func_1bae4
+	ld a, DECK_1 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $06
-	call Func_1bae4
+	ld a, DECK_2 | DECK_3
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $0a
-	call Func_1bae4
+	ld a, DECK_2 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $0c
-	call Func_1bae4
+	ld a, DECK_3 | DECK_4
+	call .CheckIfCanBuild
 	ret nc
-	ld a, $f7
-.asm_7ad2
-	call Func_1bae4
+
+; all but one deck combinations
+	ld a, $ff ^ DECK_4
+.loop_three_deck_combinations
+	call .CheckIfCanBuild
 	ret nc
 	sra a
 	cp $ff
-	jr z, .asm_7ade
-	jr .asm_7ad2
-.asm_7ade
-	call Func_1bae4
+	jr z, .all_decks
+	jr .loop_three_deck_combinations
+
+.all_decks
+; finally check if can be built by dismantling all decks
+	call .CheckIfCanBuild
 	ret nc
+
+; none of the combinations work
 	scf
 	ret
 
-Func_1bae4: ; 1bae4 (6:7ae4)
+; returns carry if wSelectedDeckMachineEntry cannot be built
+; by dismantling the decks given by register a
+; a = DECK_* flags
+.CheckIfCanBuild
 	push af
-	ld hl, wd088
+	ld hl, wSelectedDeckMachineEntry
 	ld b, [hl]
-	farcall Func_b625
-	jr c, .asm_7af5
+	farcall CheckIfCanBuildSavedDeck
+	jr c, .cannot_build
 	pop af
-	ld [wd0a6], a
+	ld [wDecksToBeDismantled], a
 	or a
 	ret
-.asm_7af5
+.cannot_build
 	pop af
 	scf
 	ret

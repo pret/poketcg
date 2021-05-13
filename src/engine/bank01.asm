@@ -1813,7 +1813,7 @@ Func_4b60: ; 4b60 (1:4b60)
 	call ChooseInitialArenaAndBenchPokemon
 	call SwapTurn
 	jp c, .asm_4c77
-	call Func_311d
+	call DrawPlayAreaToPlacePrizeCards
 	ldtx hl, PlacingThePrizesText
 	call DrawWideTextBox_WaitForInput
 	call ExchangeRNG
@@ -3684,7 +3684,7 @@ Func_5805: ; 5805 (1:5805)
 	ldtx hl, WillDrawNPrizesText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wNumberPrizeCardsToTake]
-	call Func_310a
+	call SelectPrizeCards
 	ld hl, hTemp_ffa0
 	ld d, [hl]
 	inc hl
@@ -8523,7 +8523,20 @@ Func_7576: ; 7576 (1:7576)
 	ret
 ; 0x757b
 
-	INCROM $757b, $758a
+Func_757b: ; 757b (1:757b)
+	farcall Func_19e42
+	ret
+; 0x7580
+
+Func_7580: ; 7580 (1:7580)
+	farcall Func_1a162
+	ret
+; 0x7585
+
+Func_7585: ; 7585 (1:7585)
+	farcall Func_1a270
+	ret
+; 0x758a
 
 Func_758a: ; 758a (1:758a)
 	farcall Func_19eb4

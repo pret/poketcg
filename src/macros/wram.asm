@@ -93,3 +93,8 @@ duel_anim_struct: MACRO
 \1Unknown2::       ds 1
 \1Bank::           ds 1
 ENDM
+
+deck_struct: MACRO
+\1Name::  ds DECK_NAME_SIZE
+\1Cards:: ds DECK_SIZE
+ENDM

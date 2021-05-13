@@ -1173,7 +1173,7 @@ Func_c7b8: ; c7b8 (3:47b8)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_8db0
+	farcall DeckSelectionMenu
 	call Set_OBJ_8x8
 	ret
 
@@ -1183,7 +1183,7 @@ Func_c7cc: ; c7cc (3:47cc)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_a288
+	farcall HandlePlayersCardsScreen
 	call Set_OBJ_8x8
 	ret
 
@@ -1254,7 +1254,7 @@ Func_c859: ; c859 (3:4859)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_a913
+	farcall HandleCardAlbumScreen
 	call Set_OBJ_8x8
 	ret
 
@@ -1272,7 +1272,7 @@ Func_c877: ; c877 (3:4877)
 	ldh [hSCY], a
 	call Set_OBJ_8x16
 	farcall Func_1288c
-	farcall Func_ad51
+	farcall HandlePrinterMenu
 	call Set_OBJ_8x8
 	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
@@ -3124,11 +3124,11 @@ ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	or a
 	jr z, .asm_d360
 	dec a
-	ld [wd0a9], a
-	farcall Func_ba04
+	ld [wCurAutoDeckMachine], a
+	farcall HandleAutoDeckMenu
 	jr .asm_d364
 .asm_d360
-	farcall Func_b19d
+	farcall HandleDeckSaveMachineMenu
 .asm_d364
 	call ResumeSong
 	call Func_c2d4

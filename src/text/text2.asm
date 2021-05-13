@@ -1607,15 +1607,15 @@ PleaseSelectDeckText: ; 3ba0d (e:7a0d)
 	text "Please select deck."
 	done
 
-Text0225: ; 3ba22 (e:7a22)
+ModifyDeckText: ; 3ba22 (e:7a22)
 	text "Modify deck"
 	done
 
-Text0226: ; 3ba2f (e:7a2f)
+ChangeNameText: ; 3ba2f (e:7a2f)
 	text "Change name"
 	done
 
-Text0227: ; 3ba3c (e:7a3c)
+SelectDeckText: ; 3ba3c (e:7a3c)
 	text "Select deck"
 	done
 
@@ -1771,7 +1771,7 @@ WhichCardWouldYouLikeToSeeText: ; 3bce5 (e:7ce5)
 	text "Which card would you like to see?"
 	done
 
-Text024d: ; 3bd08 (e:7d08)
+PleaseChooseAPrizeText: ; 3bd08 (e:7d08)
 	text "Please choose a Prize."
 	done
 
@@ -1792,43 +1792,43 @@ EmptyLineText: ; 3bd42 (e:7d42)
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done
 
-Text0252: ; 3bd55 (e:7d55)
+BoosterPackTitleText: ; 3bd55 (e:7d55)
 	text "Booster Pack"
 	done
 
-Text0253: ; 3bd63 (e:7d63)
+Item1ColosseumText: ; 3bd63 (e:7d63)
 	text "1. Colosseum"
 	done
 
-Text0254: ; 3bd71 (e:7d71)
+Item2EvolutionText: ; 3bd71 (e:7d71)
 	text "2. Evolution"
 	done
 
-Text0255: ; 3bd7f (e:7d7f)
+Item3MysteryText: ; 3bd7f (e:7d7f)
 	text "3. Mystery"
 	done
 
-Text0256: ; 3bd8b (e:7d8b)
+Item4LaboratoryText: ; 3bd8b (e:7d8b)
 	text "4. Laboratory"
 	done
 
-Text0257: ; 3bd9a (e:7d9a)
+Item5PromotionalCardText: ; 3bd9a (e:7d9a)
 	text "5. Promotional Card"
 	done
 
-Text0258: ; 3bdaf (e:7daf)
+ViewWhichCardFileText: ; 3bdaf (e:7daf)
 	text "View which Card File?"
 	done
 
-Text0259: ; 3bdc6 (e:7dc6)
+EmptyPromotionalCardText: ; 3bdc6 (e:7dc6)
 	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
 
-Text025a: ; 3bdd1 (e:7dd1)
+SCardsText: ; 3bdd1 (e:7dd1)
 	text "'s Cards"
 	done
 
-Text025b: ; 3bddb (e:7ddb)
+EmptyDeckNameText: ; 3bddb (e:7ddb)
 	textfw0 "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"
 	done
 
@@ -1836,19 +1836,19 @@ DeckSaveMachineText: ; 3bdea (e:7dea)
 	text "  Deck Save Machine   "
 	done
 
-Text025d: ; 3be02 (e:7e02)
+SaveADeckText: ; 3be02 (e:7e02)
 	text "Save a Deck"
 	done
 
-Text025e: ; 3be0f (e:7e0f)
+DeleteADeckText: ; 3be0f (e:7e0f)
 	text "Delete a Deck"
 	done
 
-Text025f: ; 3be1e (e:7e1e)
+BuildADeckText: ; 3be1e (e:7e1e)
 	text "Build a Deck"
 	done
 
-Text0260: ; 3be2c (e:7e2c)
+ChooseADeckToSaveText: ; 3be2c (e:7e2c)
 	text "Choose a Deck to Save."
 	done
 
@@ -1861,7 +1861,7 @@ Text0262: ; 3be7d (e:7e7d)
 	text "for"
 	done
 
-Text0263: ; 3be82 (e:7e82)
+SavedTheConfigurationForText: ; 3be82 (e:7e82)
 	text "Saved the configuration for"
 	line ""
 	text "<RAMTEXT>! "
@@ -1876,25 +1876,25 @@ Text0265: ; 3beb7 (e:7eb7)
 	line "configuration to delete."
 	done
 
-Text0266: ; 3bee7 (e:7ee7)
+DoYouReallyWishToDeleteText: ; 3bee7 (e:7ee7)
 	text "Do you really wish to delete?"
 	done
 
-Text0267: ; 3bf06 (e:7f06)
+DeletedTheConfigurationForText: ; 3bf06 (e:7f06)
 	text "Deleted the configuration for"
 	line ""
 	text "<RAMTEXT>."
 	done
 
-Text0268: ; 3bf29 (e:7f29)
+YouMayOnlyCarry4DecksText: ; 3bf29 (e:7f29)
 	text "You may only carry 4 Decks!"
 	done
 
-Text0269: ; 3bf46 (e:7f46)
+ChooseADeckToDismantleText: ; 3bf46 (e:7f46)
 	text "Choose a deck to dismantle."
 	done
 
-Text026a: ; 3bf63 (e:7f63)
+DismantledDeckText: ; 3bf63 (e:7f63)
 	text "Dismantled"
 	line ""
 	text "<RAMTEXT>."
@@ -1905,7 +1905,7 @@ Text026b: ; 3bf73 (e:7f73)
 	line "you wish to Build."
 	done
 
-Text026c: ; 3bf9e (e:7f9e)
+ThisDeckCanOnlyBeBuiltIfYouDismantleText: ; 3bf9e (e:7f9e)
 	text "This Deck can only be built if"
 	line "you dismantle another Deck."
 	done

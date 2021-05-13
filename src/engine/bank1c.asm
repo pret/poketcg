@@ -430,7 +430,7 @@ ENDM
 	border_medal_tile v0Tiles1 + $23a, $6a, $10
 	border_medal_tile v0Tiles1 + $23c, $6b, $10
 
-; FIGHTING_MEDAL
+; PSYCHIC_MEDAL
 	border_medal_tile v0Tiles1 + $2b8, $7e, $10
 	border_medal_tile v0Tiles1 + $2ba, $7f, $10
 	border_medal_tile v0Tiles1 + $2bc, $80, $10
@@ -452,7 +452,7 @@ ENDM
 	border_medal_tile v0Tiles1 + $43a, $7c, $10
 	border_medal_tile v0Tiles1 + $43c, $7d, $10
 
-; PSYCHIC_MEDAL
+; FIGHTING_MEDAL
 	border_medal_tile v0Tiles1 + $4b8, $6c, $10
 	border_medal_tile v0Tiles1 + $4ba, $6d, $10
 	border_medal_tile v0Tiles1 + $4bc, $6e, $10

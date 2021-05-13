@@ -3,7 +3,9 @@ SECTION "SRAM0", SRAM
 s0a000:: ; a000
 	ds $3
 
-s0a003:: ; a003
+; what was the last option selected by the player
+; for the printer contrast level (0 ~ 4)
+sPrinterContrastLevel:: ; a003
 	ds $1
 s0a004:: ; a004
 	ds $1
@@ -42,47 +44,91 @@ sPlayerName:: ; a010
 sCardCollection:: ; a100
 	ds $100
 
-sDeck1Name:: ; a200
-	ds DECK_NAME_SIZE
-sDeck1Cards:: ; a218
-	ds DECK_SIZE
+sBuiltDecks::
+sDeck1:: deck_struct sDeck1 ; a200
+sDeck2:: deck_struct sDeck2 ; a254
+sDeck3:: deck_struct sDeck3 ; a2a8
+sDeck4:: deck_struct sDeck4 ; a2fc
 
-sDeck2Name:: ; a254
-	ds DECK_NAME_SIZE
-sDeck2Cards:: ; a26c
-	ds DECK_SIZE
-
-sDeck3Name:: ; a2a8
-	ds DECK_NAME_SIZE
-sDeck3Cards:: ; a2c0
-	ds DECK_SIZE
-
-sDeck4Name:: ; a2fc
-	ds DECK_NAME_SIZE
-sDeck4Cards:: ; a314
-	ds DECK_SIZE
-
-s0a350:: ; a350
-	ds DECK_NAME_SIZE + DECK_SIZE
-s0a3a4:: ; a3a4
-	ds DECK_NAME_SIZE + DECK_SIZE
-s0a3f8:: ; a3f8
-	ds DECK_NAME_SIZE + DECK_SIZE
-
-	ds $12b4
+sSavedDecks::
+sSavedDeck1::  deck_struct sSavedDeck1  ; a350
+sSavedDeck2::  deck_struct sSavedDeck2  ; a3a4
+sSavedDeck3::  deck_struct sSavedDeck3  ; a3f8
+sSavedDeck4::  deck_struct sSavedDeck4  ; a44c
+sSavedDeck5::  deck_struct sSavedDeck5  ; a4a0
+sSavedDeck6::  deck_struct sSavedDeck6  ; a4f4
+sSavedDeck7::  deck_struct sSavedDeck7  ; a548
+sSavedDeck8::  deck_struct sSavedDeck8  ; a59c
+sSavedDeck9::  deck_struct sSavedDeck9  ; a5f0
+sSavedDeck10:: deck_struct sSavedDeck10 ; a644
+sSavedDeck11:: deck_struct sSavedDeck11 ; a698
+sSavedDeck12:: deck_struct sSavedDeck12 ; a6ec
+sSavedDeck13:: deck_struct sSavedDeck13 ; a740
+sSavedDeck14:: deck_struct sSavedDeck14 ; a794
+sSavedDeck15:: deck_struct sSavedDeck15 ; a7e8
+sSavedDeck16:: deck_struct sSavedDeck16 ; a83c
+sSavedDeck17:: deck_struct sSavedDeck17 ; a890
+sSavedDeck18:: deck_struct sSavedDeck18 ; a8e4
+sSavedDeck19:: deck_struct sSavedDeck19 ; a938
+sSavedDeck20:: deck_struct sSavedDeck20 ; a98c
+sSavedDeck21:: deck_struct sSavedDeck21 ; a9e0
+sSavedDeck22:: deck_struct sSavedDeck22 ; aa34
+sSavedDeck23:: deck_struct sSavedDeck23 ; aa88
+sSavedDeck24:: deck_struct sSavedDeck24 ; aadc
+sSavedDeck25:: deck_struct sSavedDeck25 ; ab30
+sSavedDeck26:: deck_struct sSavedDeck26 ; ab84
+sSavedDeck27:: deck_struct sSavedDeck27 ; abd8
+sSavedDeck28:: deck_struct sSavedDeck28 ; ac2c
+sSavedDeck29:: deck_struct sSavedDeck29 ; ac80
+sSavedDeck30:: deck_struct sSavedDeck30 ; acd4
+sSavedDeck31:: deck_struct sSavedDeck31 ; ad28
+sSavedDeck32:: deck_struct sSavedDeck32 ; ad7c
+sSavedDeck33:: deck_struct sSavedDeck33 ; add0
+sSavedDeck34:: deck_struct sSavedDeck34 ; ae24
+sSavedDeck35:: deck_struct sSavedDeck35 ; ae78
+sSavedDeck36:: deck_struct sSavedDeck36 ; aecc
+sSavedDeck37:: deck_struct sSavedDeck37 ; af20
+sSavedDeck38:: deck_struct sSavedDeck38 ; af74
+sSavedDeck39:: deck_struct sSavedDeck39 ; afc8
+sSavedDeck40:: deck_struct sSavedDeck40 ; b01c
+sSavedDeck41:: deck_struct sSavedDeck41 ; b070
+sSavedDeck42:: deck_struct sSavedDeck42 ; b0c4
+sSavedDeck43:: deck_struct sSavedDeck43 ; b118
+sSavedDeck44:: deck_struct sSavedDeck44 ; b16c
+sSavedDeck45:: deck_struct sSavedDeck45 ; b1c0
+sSavedDeck46:: deck_struct sSavedDeck46 ; b214
+sSavedDeck47:: deck_struct sSavedDeck47 ; b268
+sSavedDeck48:: deck_struct sSavedDeck48 ; b2bc
+sSavedDeck49:: deck_struct sSavedDeck49 ; b310
+sSavedDeck50:: deck_struct sSavedDeck50 ; b364
+sSavedDeck51:: deck_struct sSavedDeck51 ; b3b8
+sSavedDeck52:: deck_struct sSavedDeck52 ; b40c
+sSavedDeck53:: deck_struct sSavedDeck53 ; b460
+sSavedDeck54:: deck_struct sSavedDeck54 ; b4b4
+sSavedDeck55:: deck_struct sSavedDeck55 ; b508
+sSavedDeck56:: deck_struct sSavedDeck56 ; b55c
+sSavedDeck57:: deck_struct sSavedDeck57 ; b5b0
+sSavedDeck58:: deck_struct sSavedDeck58 ; b604
+sSavedDeck59:: deck_struct sSavedDeck59 ; b658
+sSavedDeck60:: deck_struct sSavedDeck60 ; b6ac
 
 sCurrentlySelectedDeck:: ; b700
 	ds $1
 
-sb701:: ; b701
-	ds $1
+; keeps track of how many unnamed decks have been built
+; this is the number that gets appended at the end of
+; an unnamed deck (i.e. DECK XXX)
+; max number is MAX_UNNAMED_DECK_NUM
+sUnnamedDeckCounter:: ; b701
+	ds $2
 
-	ds $1
+; whether player has had Promotional cards
+; to decide whether to show the option
+; in the Card Album PC menu
+sHasPromotionalCards:: ; b703
+	ds $4
 
-sb703:: ; b703
-	ds $1
-
-	ds $fc
+	ds $f9
 
 sb800:: ; b800
 	ds $8
@@ -210,6 +256,8 @@ sCardPopNameList:: ; bb00
 
 SECTION "SRAM1", SRAM
 
+UNION
+
 ; buffers used to temporary store gfx related data
 ; such as tiles or BG maps
 sGfxBuffer0:: ; a000
@@ -229,6 +277,25 @@ sGfxBuffer4:: ; b000
 
 sGfxBuffer5:: ; b400
 	ds $400
+
+NEXTU
+
+	ds $350
+
+; buffer used to store the deck configuration
+; from the Auto Deck Machines
+; intentionally uses the same address as sSavedDecks
+; since TryBuildDeckMachineDeck uses the same
+; address in SRAM whether it's an auto deck or a saved deck
+; the difference is whether SRAM0 or SRAM1 are loaded
+sAutoDecks::
+sAutoDeck1::  deck_struct sAutoDeck1  ; a350
+sAutoDeck2::  deck_struct sAutoDeck2  ; a3a4
+sAutoDeck3::  deck_struct sAutoDeck3  ; a3f8
+sAutoDeck4::  deck_struct sAutoDeck4  ; a44c
+sAutoDeck5::  deck_struct sAutoDeck5  ; a4a0
+
+ENDU
 
 SECTION "SRAM2", SRAM
 
