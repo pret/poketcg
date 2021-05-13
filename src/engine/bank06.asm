@@ -5101,7 +5101,7 @@ CheckWhichDecksToDismantleToBuildSavedDeck: ; 1ba9a (6:7a9a)
 	scf
 	ret
 
-; returns cary if wSelectedDeckMachineEntry cannot be built
+; returns carry if wSelectedDeckMachineEntry cannot be built
 ; by dismantling the decks given by register a
 ; a = DECK_* flags
 .CheckIfCanBuild

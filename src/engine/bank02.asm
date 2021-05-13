@@ -434,7 +434,7 @@ _DrawYourOrOppPlayAreaScreen: ; 8211 (2:4211)
 ; a = (6 - name text in tiles) / 2 + 4
 	ld d, a ; text horizontal alignment
 
-	ld e, $00
+	ld e, 0
 	call InitTextPrinting
 	ldtx hl, DuelistsPlayAreaText
 	ldh a, [hWhoseTurn]
@@ -1935,7 +1935,7 @@ _SelectPrizeCards: ; 8aaa (2:4aaa)
 	ld l, a
 	call DrawYourOrOppPlayAreaScreen
 	call DrawWideTextBox
-	ld de, $10e
+	lb de, 1, 14
 	call InitTextPrinting
 	ldtx hl, PleaseChooseAPrizeText
 	call ProcessTextFromID
@@ -5266,7 +5266,7 @@ PrintNumberValueInCursorYPos: ; 9dbf (2:5dbf)
 	ld hl, wCardListCursorYPos
 	add [hl]
 	ld e, a
-	ld d, $0e
+	ld d, 14
 	call InitTextPrinting
 	ld hl, wDefaultText
 	call ProcessText
@@ -6476,7 +6476,7 @@ PrintPlayersCardsHeaderInfo: ; a4c6 (2:64c6)
 
 ; prints "<PLAYER>'s cards"
 PrintPlayersCardsText: ; a4de (2:64de)
-	ld de, $100
+	lb de, 1, 0
 	call InitTextPrinting
 	ld de, wDefaultText
 	call CopyPlayerName
@@ -6486,7 +6486,7 @@ PrintPlayersCardsText: ; a4de (2:64de)
 	call GetTextLengthInTiles
 	inc b
 	ld d, b
-	ld e, $00
+	ld e, 0
 	call InitTextPrinting
 	ldtx hl, SCardsText
 	call ProcessTextFromID
@@ -6528,7 +6528,7 @@ PrintTotalNumberOfCardsInCollection: ; a504 (2:6504)
 	ld a, $07
 	ld [hli], a
 	ld [hl], TX_END
-	ld de, $d00
+	lb de, 13, 0
 	call InitTextPrinting
 	ld hl, wTempCardCollection
 	call ProcessText
@@ -7400,7 +7400,7 @@ HandleCardAlbumScreen: ; a913 (2:6913)
 	bank1call SetDefaultPalettes
 	lb de, $3c, $ff
 	call SetupText
-	ld de, $101
+	lb de, 1, 1
 	call InitTextPrinting
 
 ; print the total number of cards that are in the Card Set
@@ -7445,7 +7445,7 @@ HandleCardAlbumScreen: ; a913 (2:6913)
 	push de
 	call ProcessTextFromID
 	call .CountOwnedCardsInSet
-	ld de, $0e01
+	lb de, 14, 1
 	call InitTextPrinting
 
 	ld a, [wNumOwnedCardsInSet]
@@ -7535,8 +7535,8 @@ HandleCardAlbumScreen: ; a913 (2:6913)
 	; still has no promotional, print empty Card Set name
 	ld a, TRUE
 	ld [wUnavailableAlbumCardSets + CARD_SET_PROMOTIONAL], a
-	ld e, $0b
-	ld d, $05
+	ld e, 11
+	ld d, 5
 	call InitTextPrinting
 	ldtx hl, EmptyPromotionalCardText
 	call ProcessTextFromID
@@ -7700,7 +7700,7 @@ PrinterMenu_PokemonCards: ; ab7b (2:6b7b)
 .asm_ac92
 	call DrawListCursor_Visible
 	call .Func_acde
-	ld de, $101
+	lb de, 1, 1
 	call InitTextPrinting
 	ldtx hl, PrintThisCardYesNoText
 	call ProcessTextFromID
@@ -7777,7 +7777,7 @@ PrinterMenu_CardList: ; ad0e (2:6d0e)
 	ld [wCurCardTypeFilter], a
 	call PrintFilteredCardSelectionList
 	call EnableLCD
-	ld de, $101
+	lb de, 1, 1
 	call InitTextPrinting
 	ld hl, EnableLCD
 	call ProcessTextFromID
@@ -7806,7 +7806,7 @@ HandlePrinterMenu: ; ad51 (2:6d51)
 	lb de, 4, 0
 	lb bc, 12, 12
 	call DrawRegularTextBox
-	ld de, $602
+	lb de, 6, 2
 	call InitTextPrinting
 	ldtx hl, PrintMenuItemsText
 	call ProcessTextFromID
@@ -7993,7 +7993,7 @@ HandleDeckMissingCardsList: ; adfe (2:6dfe)
 	ld hl, hffb0
 	ld [hl], $01
 	call .PrintDeckIndexAndName
-	ld de, $10e
+	lb de, 1, 14
 	call InitTextPrinting
 	ld hl, wCardConfirmationText
 	ld a, [hli]
@@ -8026,7 +8026,7 @@ HandleDeckMissingCardsList: ; adfe (2:6dfe)
 	ld a, [wCurDeckName]
 	or a
 	ret z ; not a valid deck
-	ld de, $1
+	lb de, 0, 1
 	call InitTextPrinting
 	ld a, [wCurDeck]
 	inc a
@@ -8050,7 +8050,7 @@ HandleDeckMissingCardsList: ; adfe (2:6dfe)
 	ld e, l
 	ld hl, DeckNameSuffix
 	call CopyListFromHLToDE
-	ld de, $301
+	lb de, 3, 1
 	ld hl, wDefaultText
 	call InitTextPrinting
 	call ProcessText
@@ -9016,7 +9016,7 @@ PrintNumSavedDecks: ; b545 (2:7545)
 	ld a, NUM_DECK_SAVE_MACHINE_SLOTS
 	call ConvertToNumericalDigits
 	ld [hl], TX_END
-	ld de, $0e01
+	lb de, 14, 1
 	call InitTextPrinting
 	ld hl, wDefaultText
 	call ProcessText
@@ -9041,7 +9041,7 @@ Func_b568: ; b568 (2:7568)
 	ld a, [wNumSavedDecks]
 	call ConvertToNumericalDigits
 	ld [hl], TX_END
-	ld de, $0e01
+	lb de, 14, 1
 	call InitTextPrinting
 	ld hl, wDefaultText
 	call ProcessText
@@ -10043,7 +10043,7 @@ HandleAutoDeckMenu: ; ba04 (2:7a04)
 	lb de, 0, 0
 	lb bc, 20, 13
 	call DrawRegularTextBox
-	ld de, $100
+	lb de, 1, 0
 	call InitTextPrinting
 	ld hl, wDeckMachineTitleText
 	ld a, [hli]

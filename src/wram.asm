@@ -2262,7 +2262,7 @@ wCurAutoDeckMachine:: ; d0a9
 	ds $1
 
 ; text IDs for each deck descriptions of the
-; Ato Deck Machine currently being shown
+; Auto Deck Machine currently being shown
 wAutoDeckMachineTextDescriptions:: ; d0aa
 	ds 2 * NUM_DECK_MACHINE_SLOTS
 

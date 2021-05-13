@@ -120,9 +120,7 @@ sCurrentlySelectedDeck:: ; b700
 ; an unnamed deck (i.e. DECK XXX)
 ; max number is MAX_UNNAMED_DECK_NUM
 sUnnamedDeckCounter:: ; b701
-	ds $1
-
-	ds $1
+	ds $2
 
 ; whether player has had Promotional cards
 ; to decide whether to show the option
