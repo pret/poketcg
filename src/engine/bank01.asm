@@ -6159,9 +6159,9 @@ Func_66e9: ; 66e9 (1:66e9)
 	ret c
 	ld de, sCurrentDuel
 	call LoadSavedDuelData
-	call Func_3a45
+	call ValidateGeneralSaveData
 	ret nc
-	call Func_3a40
+	call LoadGeneralSaveData
 	or a
 	ret
 

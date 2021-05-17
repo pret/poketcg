@@ -7064,10 +7064,10 @@ CheckIfOpponentHasBossDeckID: ; 17414 (5:7414)
 	ret
 
 ; sets carry if not a boss fight
-; and if s0a00a == 0
+; and if hasn't received legendary cards yet
 CheckIfNotABossDeckID: ; 17426 (5:7426)
 	call EnableSRAM
-	ld a, [s0a00a]
+	ld a, [sReceivedLegendaryCards]
 	call DisableSRAM
 	or a
 	jr nz, .no_carry

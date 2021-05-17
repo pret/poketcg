@@ -10698,7 +10698,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	xor a
 	ld [sba44], a
 	call DisableSRAM
-	call Func_3a3b
+	call SaveGeneralSaveData
 	bank1call StartDuel
 	scf
 	ret
@@ -10736,11 +10736,11 @@ GameEvent_Credits: ; 3911 (0:3911)
 	or a
 	ret
 
-Func_3917: ; 3917 (0:3917)
+GetReceivedLegendaryCards: ; 3917 (0:3917)
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
 	farcall GetEventValue
 	call EnableSRAM
-	ld [s0a00a], a
+	ld [sReceivedLegendaryCards], a
 	call DisableSRAM
 	ret
 
@@ -10966,16 +10966,16 @@ GetDefaultSong: ; 3a1f (0:3a1f)
 	ld a, [wDefaultSong]
 	ret
 
-Func_3a3b: ; 3a3b (0:3a3b)
-	farcall Func_1124d
+SaveGeneralSaveData: ; 3a3b (0:3a3b)
+	farcall _SaveGeneralSaveData
 	ret
 
-Func_3a40: ; 3a40 (0:3a40)
-	farcall Func_11430
+LoadGeneralSaveData: ; 3a40 (0:3a40)
+	farcall _LoadGeneralSaveData
 	ret
 
-Func_3a45: ; 3a45 (0:3a45)
-	farcall Func_11343
+ValidateGeneralSaveData: ; 3a45 (0:3a45)
+	farcall _ValidateGeneralSaveData
 	ret
 
 ; adds card with card ID in register a to collection

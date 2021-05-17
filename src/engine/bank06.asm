@@ -2101,7 +2101,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [s0a009], a
 	ld [s0a004], a
 	ld [sTotalCardPopsDone], a
-	ld [s0a00a], a
+	ld [sReceivedLegendaryCards], a
 	farcall Func_8cf9
 	call DisableSRAM
 	ret

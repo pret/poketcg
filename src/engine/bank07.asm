@@ -1940,13 +1940,13 @@ Func_1d078: ; 1d078 (7:5078)
 	ret
 
 Func_1d0fa: ; 1d0fa (7:50fa)
-	farcall Func_11320
+	farcall ValidateBackupGeneralSaveData
 	ld a, $01
-	jr c, .asm_1d104
+	jr c, .no_error
 	ld a, $00
-.asm_1d104
+.no_error
 	ld [wd624], a
-	cp $00
+	cp $00 ; or a
 	jr z, .asm_1d114
 	bank1call ValidateSavedNonLinkDuelData
 	ld a, $01
@@ -1954,7 +1954,7 @@ Func_1d0fa: ; 1d0fa (7:50fa)
 	ld a, $00
 .asm_1d114
 	ld [wd625], a
-	farcall Func_11320
+	farcall ValidateBackupGeneralSaveData
 	ret
 ; 0x1d11c
 

@@ -27,7 +27,7 @@ s0a008:: ; a008
 	ds $1
 s0a009:: ; a009
 	ds $1
-s0a00a:: ; a00a
+sReceivedLegendaryCards:: ; a00a
 	ds $1
 s0a00b:: ; a00b
 	ds $1
@@ -38,6 +38,8 @@ sPlayerName:: ; a010
 	ds NAME_BUFFER_LENGTH
 
 	ds $e0
+
+sCardAndDeckSaveData::
 
 ; for each card, how many (0-127) the player owns
 ; CARD_NOT_OWNED ($80) indicates that the player has not yet seen the card
@@ -127,16 +129,27 @@ sUnnamedDeckCounter:: ; b701
 ; in the Card Album PC menu
 sHasPromotionalCards:: ; b703
 	ds $4
+sCardAndDeckSaveDataEnd::
 
 	ds $f9
 
+sGeneralSaveData::
 sb800:: ; b800
-	ds $8
+	ds $2
 
-sb808:: ; b808
+sGeneralSaveDataByteCount:: ; b802
+	ds $2
+
+sGeneralSaveDataCheckSum:: ; b804
+	ds $2
+
+	ds $2
+sGeneralSaveDataHeaderEnd::
+
+sMedalCount:: ; b808
 	ds $1
 
-sb809:: ; b809
+sCurOverworldMap:: ; b809
 	ds $1
 
 sPlayTimeCounter:: ; b80a
@@ -229,7 +242,10 @@ sb86b:: ; b86b
 sEventVars:: ; b87b
 	ds $40
 
-	ds $189
+	ds $45
+sGeneralSaveDataEnd::
+
+	ds $144
 
 sba44:: ; ba44
 	ds $1
@@ -299,7 +315,12 @@ ENDU
 
 SECTION "SRAM2", SRAM
 
-	ds $18fe
+	ds $1800
+
+sBackupGeneralSaveData:: ; b800
+	ds $bb
+
+	ds $43
 
 ; byte 1 = total number of cards collected
 ; byte 2 = total number of cards to collect

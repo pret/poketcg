@@ -238,8 +238,8 @@ Func_c1b1: ; c1b1 (3:41b1)
 	ld [wTempPlayerYCoord], a
 	ld a, SOUTH
 	ld [wTempPlayerDirection], a
-	call Func_c9cb
-	call Func_c9dd
+	call ClearEvents
+	call DetermineImakuniAndChallengeHall
 	farcall Func_80b7a
 	farcall ClearMasterBeatenList
 	farcall Func_131b3
@@ -252,9 +252,9 @@ Func_c1b1: ; c1b1 (3:41b1)
 	ret
 
 Func_c1ed: ; c1ed (3:41ed)
-	call Func_c9cb
-	farcall Func_11416
-	call Func_c9dd
+	call ClearEvents
+	farcall LoadBackupSaveData
+	call DetermineImakuniAndChallengeHall
 	ret
 
 Func_c1f8: ; c1f8 (3:41f8)
@@ -1483,7 +1483,7 @@ Func_c9c7: ; c9c7 (3:49c7)
 	ld l, MAP_SCRIPT_CLOSE_TEXTBOX
 	jr CallMapScriptPointerIfExists
 
-Func_c9cb: ; c9cb (3:49cb)
+ClearEvents: ; c9cb (3:49cb)
 	push hl
 	push bc
 	ld hl, wEventVars
@@ -1500,11 +1500,11 @@ Func_c9cb: ; c9cb (3:49cb)
 	ret
 
 ; Clears temporary event vars before determining Imakuni Room
-Func_c9dd: ; c9dd (3:49dd)
+DetermineImakuniAndChallengeHall: ; c9dd (3:49dd)
 	xor a
 	ld [wEventVars + EVENT_VAR_BYTES - 1], a
 	call DetermineImakuniRoom
-	call Func_ca0e
+	call DetermineChallengeHallEvent
 	ret
 
 ; Determines what room Imakuni is in when you reset
@@ -1535,7 +1535,7 @@ ImakuniPossibleRooms: ; ca0a (3:4a04)
 	db LIGHTNING_CLUB_LOBBY
 	db WATER_CLUB_LOBBY
 
-Func_ca0e: ; ca0e (3:4a0e)
+DetermineChallengeHallEvent: ; ca0e (3:4a0e)
 	ld a, [wOverworldMapSelection]
 	cp OWMAP_CHALLENGE_HALL
 	jr z, .done
@@ -3181,7 +3181,7 @@ ScriptCommand_GiftCenter: ; d39d (3:539d)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlayCredits: ; d3b9 (3:53b9)
-	call Func_3917
+	call GetReceivedLegendaryCards
 	ld a, GAME_EVENT_CREDITS
 	ld [wGameEvent], a
 	ld hl, wd0b4

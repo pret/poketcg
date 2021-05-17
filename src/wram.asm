@@ -2689,13 +2689,18 @@ wGeneralSaveDataCheckSum:: ; d3c5
 wNumSRAMValidationErrors:: ; d3c7
 	ds $1
 
-wd3c8:: ; d3c8
+; play time hours and minutes
+; byte 0: minutes
+; byte 1: hours (lower byte)
+; byte 2: hours (higher byte)
+; unused?
+wPlayTimeHourMinutes:: ; d3c8
 	ds $3
 
-wd3cb:: ; d3cb
+wCurOverworldMap:: ; d3cb
 	ds $1
 
-wd3cc:: ; d3cc
+wMedalCount:: ; d3cc
 	ds $1
 
 ; total number of cards the player has collected
@@ -2878,7 +2883,7 @@ wCurSpriteTileSize:: ; d4c7
 wTotalNumTiles:: ; d4c8
 
 ; checksum?
-wNumGeneralSaveDataBytes:: ; d4c8
+wGeneralSaveDataByteCount:: ; d4c8
 	ds $2
 
 ; stores tile offset in VRAM

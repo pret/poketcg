@@ -1085,11 +1085,51 @@ Func_111b3: ; 111b3 (4:51b3)
 Func_111e9: ; 111e9 (4:51e9)
 	INCROM $111e9, $11238
 
-Func_11238: ; 11238 (4:5238)
-	INCROM $11238, $1124d
+; saves all data to SRAM, including
+; General save data and Album/Deck data
+; and backs up in SRAM2
+SaveAndBackupData: ; 11238 (4:5238)
+	push de
+	ld de, sGeneralSaveData
+	call SaveGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call UpdateAlbumProgress
+	call WriteBackupGeneralSaveData
+	call WriteBackupCardAndDeckSaveData
+	pop de
+	ret
+; 0x1124d
 
-Func_1124d: ; 1124d (4:524d)
-	INCROM $1124d, $1127f
+_SaveGeneralSaveData: ; 1124d (4:524d)
+	push de
+	call GetReceivedLegendaryCards
+	ld de, sGeneralSaveData
+	call SaveGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call UpdateAlbumProgress
+	pop de
+	ret
+; 0x1125f
+
+; de = pointer to general game data in SRAM
+SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
+	push hl
+	push bc
+	call EnableSRAM
+	push de
+	farcall TryGiveMedalPCPacks
+	ld [wMedalCount], a
+	farcall OverworldMap_GetOWMapID
+	ld [wCurOverworldMap], a
+	pop de
+	push de
+	call CopyGeneralSaveDataToSRAM
+	pop de
+	call DisableSRAM
+	pop bc
+	pop hl
+	ret
+; 0x1127f
 
 ; writes in de total num of cards collected
 ; and in (de + 1) total num of cards to collect
@@ -1113,16 +1153,107 @@ UpdateAlbumProgress: ; 1127f (4:527f)
 	ret
 ; 0x11299
 
-	INCROM $11299, $11320
+; save values that are listed in WRAMToSRAMMapper
+; from WRAM to SRAM, and calculate its checksum
+CopyGeneralSaveDataToSRAM: ; 11299 (4:5299)
+	push hl
+	push bc
+	push de
+	push de
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
+	add hl, de
+	ld e, l
+	ld d, h
+	xor a
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld [wGeneralSaveDataByteCount + 1], a
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld [wGeneralSaveDataCheckSum + 1], a
 
-Func_11320: ; 11320 (4:5320)
+	ld hl, WRAMToSRAMMapper
+.loop_map
+	ld a, [hli]
+	ld [wTempPointer + 0], a
+	ld c, a
+	ld a, [hli]
+	ld [wTempPointer + 1], a
+	or c
+	jr z, .done_copy
+	ld a, [hli]
+	ld c, a ; number of bytes LO
+	ld a, [hli]
+	ld b, a ; number of bytes HI
+	ld a, [wGeneralSaveDataByteCount + 0]
+	add c
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld a, [wGeneralSaveDataByteCount + 1]
+	adc b
+	ld [wGeneralSaveDataByteCount + 1], a
+	call .CopyBytesToSRAM
+	inc hl
+	inc hl
+	jr .loop_map
+
+.done_copy
+	pop hl
+	ld a, $08
+	ld [hli], a
+	ld a, $00
+	ld [hli], a
+	ld a, [wGeneralSaveDataByteCount + 0]
+	ld [hli], a
+	ld a, [wGeneralSaveDataByteCount + 1]
+	ld [hli], a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	ld [hli], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	ld [hli], a
+	pop de
+	pop bc
+	pop hl
+	ret
+
+.CopyBytesToSRAM
+	push hl
+	ld a, [wTempPointer + 0]
+	ld l, a
+	ld a, [wTempPointer + 1]
+	ld h, a
+.loop_bytes
+	push bc
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld c, a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	add c
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	adc 0
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop bc
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop_bytes
+	ld a, l
+	ld [wTempPointer + 0], a
+	ld a, h
+	ld [wTempPointer + 1], a
+	pop hl
+	ret
+; 0x11320
+
+; returns carry if no error
+; is found in sBackupGeneralSaveData
+ValidateBackupGeneralSaveData: ; 11320 (4:5320)
 	push de
 	ldh a, [hBankSRAM]
 	push af
-	ld a, $02
+	ld a, BANK(sBackupGeneralSaveData)
 	call BankswitchSRAM
-	ld de, sb800
-	call Func_1135d
+	ld de, sBackupGeneralSaveData
+	call ValidateGeneralSaveDataFromDE
 	ld de, sAlbumProgress
 	call LoadAlbumProgressFromSRAM
 	pop af
@@ -1134,10 +1265,25 @@ Func_11320: ; 11320 (4:5320)
 	ret
 ; 0x11343
 
-Func_11343: ; 11343 (4:5343)
-	INCROM $11343, $1135d
+; returns carry if no error
+; is found in sGeneralSaveData
+_ValidateGeneralSaveData: ; 11343 (4:5343)
+	push de
+	call EnableSRAM
+	ld de, sGeneralSaveData
+	call ValidateGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call LoadAlbumProgressFromSRAM
+	call DisableSRAM
+	pop de
+	ld a, [wNumSRAMValidationErrors]
+	cp 1
+	ret
+; 0x1135d
 
-Func_1135d: ; 1135d (4:535d)
+; validates the general game data saved in SRAM
+; de = pointer to general game data in SRAM
+ValidateGeneralSaveDataFromDE: ; 1135d (4:535d)
 	push hl
 	push bc
 	push de
@@ -1150,10 +1296,10 @@ Func_1135d: ; 1135d (4:535d)
 	inc de
 	ld a, [de]
 	inc de
-	ld [wNumGeneralSaveDataBytes + 0], a
+	ld [wGeneralSaveDataByteCount + 0], a
 	ld a, [de]
 	inc de
-	ld [wNumGeneralSaveDataBytes + 1], a
+	ld [wGeneralSaveDataByteCount + 1], a
 	ld a, [de]
 	inc de
 	ld [wGeneralSaveDataCheckSum + 0], a
@@ -1162,7 +1308,7 @@ Func_1135d: ; 1135d (4:535d)
 	ld [wGeneralSaveDataCheckSum + 1], a
 	pop de
 
-	ld hl, $8
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
 	add hl, de
 	ld e, l
 	ld d, h
@@ -1177,12 +1323,12 @@ Func_1135d: ; 1135d (4:535d)
 	ld c, a ; number of bytes LO
 	ld a, [hli]
 	ld b, a ; number of bytes HI
-	ld a, [wNumGeneralSaveDataBytes + 0]
+	ld a, [wGeneralSaveDataByteCount + 0]
 	sub c
-	ld [wNumGeneralSaveDataBytes + 0], a
-	ld a, [wNumGeneralSaveDataBytes + 1]
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld a, [wGeneralSaveDataByteCount + 1]
 	sbc b
-	ld [wNumGeneralSaveDataBytes + 1], a
+	ld [wGeneralSaveDataByteCount + 1], a
 
 ; loop all the bytes of this struct
 .loop_bytes
@@ -1226,12 +1372,12 @@ Func_1135d: ; 1135d (4:535d)
 .exit_loop
 	pop hl
 	ld a, [hli]
-	sub $08
+	sub $8
 	ld c, a
 	ld a, [hl]
 	sub 0
 	or c
-	ld hl, wNumGeneralSaveDataBytes
+	ld hl, wGeneralSaveDataByteCount
 	or [hl]
 	inc hl
 	or [hl]
@@ -1239,25 +1385,28 @@ Func_1135d: ; 1135d (4:535d)
 	or [hl]
 	inc hl
 	or [hl]
-	jr z, .asm_113ea
+	jr z, .no_header_error
 	ld hl, wNumSRAMValidationErrors
 	inc [hl]
-.asm_113ea
+.no_header_error
 	pop de
-	ld hl, $c
+	; copy play time minutes and hours
+	ld hl, (sPlayTimeCounter + 2) - sGeneralSaveData
 	add hl, de
 	ld a, [hli]
-	ld [wd3c8 + 0], a
+	ld [wPlayTimeHourMinutes + 0], a
 	ld a, [hli]
-	ld [wd3c8 + 1], a
+	ld [wPlayTimeHourMinutes + 1], a
 	ld a, [hli]
-	ld [wd3c8 + 2], a
-	ld hl, $8
+	ld [wPlayTimeHourMinutes + 2], a
+
+	; copy medal count and current overworld map
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
 	add hl, de
 	ld a, [hli]
-	ld [wd3cc], a
+	ld [wMedalCount], a
 	ld a, [hl]
-	ld [wd3cb], a
+	ld [wCurOverworldMap], a
 	pop bc
 	pop hl
 	ret
@@ -1274,36 +1423,53 @@ LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
 	ret
 ; 0x11416
 
-Func_11416: ; 11416 (4:5416)
-	INCROM $11416, $11430
-
-Func_11430: ; 11430 (4:5430)
+; first copies data from backup SRAM to main SRAM
+; then loads it to WRAM from main SRAM
+LoadBackupSaveData: ; 11416 (4:5416)
+	push hl
 	push de
-	ld de, sb800
-	call .Func_11439
+	call EnableSRAM
+	bank1call DiscardSavedDuelData
+	call DisableSRAM
+	call LoadBackupGeneralSaveData
+	call LoadBackupCardAndDeckSaveData
+	ld de, sGeneralSaveData
+	call LoadGeneralSaveDataFromDE
+	pop de
+	pop hl
+	ret
+; 0x11430
+
+_LoadGeneralSaveData: ; 11430 (4:5430)
+	push de
+	ld de, sGeneralSaveData
+	call LoadGeneralSaveDataFromDE
 	pop de
 	ret
+; 0x11439
 
-.Func_11439
+; de = pointer to save data
+LoadGeneralSaveDataFromDE: ; 11439 (4:5439)
 	push hl
 	push bc
 	call EnableSRAM
-	call .Func_11447
+	call .LoadData
 	call DisableSRAM
 	pop bc
 	pop hl
 	ret
 
-.Func_11447
+.LoadData
 	push hl
 	push bc
 	push de
 	ld a, e
-	add $08
+	add sGeneralSaveDataHeaderEnd - sGeneralSaveData
 	ld [wTempPointer + 0], a
 	ld a, d
 	adc 0
 	ld [wTempPointer + 1], a
+
 	ld hl, WRAMToSRAMMapper
 .asm_11459
 	ld a, [hli]
@@ -1367,8 +1533,8 @@ ENDM
 ; the saved values is SRAM are legal, within the given value range
 WRAMToSRAMMapper: ; 11498 (4:5498)
 ; pointer, number of bytes, unknown
-	wram_sram_map wd3cc,                              1, $00, $ff ; sb808
-	wram_sram_map wd3cb,                              1, $00, $ff ; sb809
+	wram_sram_map wMedalCount,                        1, $00, $ff ; sMedalCount
+	wram_sram_map wCurOverworldMap,                   1, $00, $ff ; sCurOverworldMap
 	wram_sram_map wPlayTimeCounter + 0,               1, $00, $ff ; sPlayTimeCounter
 	wram_sram_map wPlayTimeCounter + 1,               1, $00, $ff
 	wram_sram_map wPlayTimeCounter + 2,               1, $00, $ff
@@ -1433,7 +1599,7 @@ _SaveGame: ; 1157c (4:557c)
 	ld [wOverworldMapSelection], a
 
 .save
-	call Func_11238
+	call SaveAndBackupData
 	ret
 
 _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
@@ -1465,7 +1631,74 @@ _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
 	ret
 ; 0x115d4
 
-	INCROM $115d4, $1162a
+WriteBackupCardAndDeckSaveData: ; 115d4 (4:55d4)
+	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
+	ld hl, sCardCollection
+	jr WriteDataToBackup
+
+WriteBackupGeneralSaveData: ; 115dc (4:55dc)
+	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
+	ld hl, sGeneralSaveData
+;	fallthrough
+
+; bc = number of bytes to copy to backup
+; hl = pointer in SRAM of data to backup
+WriteDataToBackup: ; 115e2 (4:55e2)
+	ldh a, [hBankSRAM]
+	push af
+.loop
+	xor a ; SRAM0
+	call BankswitchSRAM
+	ld a, [hl]
+	push af
+	ld a, BANK("SRAM2")
+	call BankswitchSRAM
+	pop af
+	ld [hli], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x115ff
+
+LoadBackupCardAndDeckSaveData: ; 115ff (4:55ff)
+	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
+	ld hl, sCardCollection
+	jr LoadDataFromBackup
+
+LoadBackupGeneralSaveData: ; 11607 (4:5607)
+	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
+	ld hl, sGeneralSaveData
+;	fallthrough
+
+; bc = number of bytes to load from backup
+; hl = pointer in SRAM of backup data
+LoadDataFromBackup: ; 1160d (4:560d)
+	ldh a, [hBankSRAM]
+	push af
+
+.loop
+	ld a, BANK("SRAM2")
+	call BankswitchSRAM
+	ld a, [hl]
+	push af
+	xor a
+	call BankswitchSRAM
+	pop af
+	ld [hli], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x1162a
 
 INCLUDE "data/map_scripts.asm"
 
@@ -3026,7 +3259,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	ld a, MUSIC_STOP
 	call PlaySong
-	call Func_11320
+	call ValidateBackupGeneralSaveData
 	jr nc, MainMenu_NewGame
 	farcall Func_c1ed
 	farcall SetMainSGBBorder
@@ -3054,8 +3287,8 @@ MainMenu_CardPop: ; 12768 (4:6768)
 MainMenu_ContinueDuel: ; 1277e (4:677e)
 	ld a, MUSIC_STOP
 	call PlaySong
-	farcall Func_c9cb
-	farcall $04, Func_3a40
+	farcall ClearEvents
+	farcall $04, LoadGeneralSaveData
 	farcall SetMainSGBBorder
 	ld a, GAME_EVENT_CONTINUE_DUEL
 	ld [wGameEvent], a
@@ -3427,7 +3660,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	pop hl ; hl is animation bank
 	ld a, [wTempPointerBank]
 	ld [hli], a
-	ld a, [wTempPointer]
+	ld a, [wTempPointer + 0]
 	ld [hli], a
 	ld c, a
 	ld a, [wTempPointer + 1]
@@ -3461,7 +3694,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	inc hl
 	inc hl
 	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	add SPRITE_FRAME_OFFSET_SIZE ; advance FRAME_OFFSET_POINTER by 1 frame, 4 bytes
 	ld [hli], a
 	ld a, [hl]
@@ -3525,7 +3758,7 @@ GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
 	ld a, [hli]
 	ld [wTempPointerBank], a
 	ld a, [hli]
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	ld a, [hli]
 	ld [wTempPointer + 1], a
 	pop hl
