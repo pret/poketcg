@@ -28,7 +28,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_3ca0
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	farcall Func_1c440
+	farcall ClearNPCs
 	ld a, [wTempMap]
 	ld [wCurMap], a
 	ld a, [wTempPlayerXCoord]
@@ -184,7 +184,7 @@ Func_c158: ; c158 (3:4158)
 	call GetItemInLoadedNPCIndex
 	ld a, [wd0c5]
 	ld [hl], a
-	farcall Func_1c58e
+	farcall UpdateNPCAnimation
 .asm_c179
 	ret
 
@@ -241,7 +241,7 @@ Func_c1b1: ; c1b1 (3:41b1)
 	call Func_c9cb
 	call Func_c9dd
 	farcall Func_80b7a
-	farcall Func_1c82e
+	farcall ClearMasterBeatenList
 	farcall Func_131b3
 	xor a
 	ld [wPlayTimeCounter + 0], a
@@ -266,7 +266,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd0c2], a
 	ld [wDefaultSong], a
 	ld [wd112], a
-	ld [wd3b8], a
+	ld [wRonaldIsInMap], a
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a
@@ -409,7 +409,7 @@ Func_c2db: ; c2db (3:42db)
 	res 0, [hl]
 	call Func_c34e
 	farcall Func_12c5e
-	farcall Func_1c6f8
+	farcall SetAllNPCTilePermissions
 	ld hl, wd0c1
 	res 7, [hl]
 	ld hl, wd10f
@@ -1430,7 +1430,7 @@ Func_c943: ; c943 (3:4943)
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
 	call Func_c998
-	farcall Func_1c485
+	farcall LoadNPC
 .next_npc
 	pop hl
 	ld bc, NPC_MAP_SIZE
@@ -1458,9 +1458,9 @@ Func_c998: ; c998 (3:4998)
 	ld b, $e
 .not_cgb
 	ld a, b
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 	ld a, $0
-	ld [wd3b2], a
+	ld [wNPCAnimFlags], a
 	ret
 
 Func_c9b8: ; c9b8 (3:49b8)
@@ -2195,7 +2195,7 @@ ScriptCommand_UnloadActiveNPC: ; cdcb (3:4dcb)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 Func_cdd1: ; cdd1 (3:4dd1)
-	farcall Func_1c50a
+	farcall UnloadNPC
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_UnloadChallengeHallNPC: ; cdd8 (3:4dd8)
@@ -2228,7 +2228,7 @@ ScriptCommand_SetChallengeHallNPCCoords: ; cdf5 (3:4df5)
 	ld [wLoadNPCDirection], a
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
-	farcall Func_1c485
+	farcall LoadNPC
 	pop af
 	ld [wTempNPC], a
 	pop af
@@ -2255,10 +2255,10 @@ ScriptCommand_MoveActiveNPCByDirection: ; ce26 (3:4e26)
 ; Moves an NPC given the list of directions pointed to by bc
 ; set bit 7 to only rotate the NPC
 ExecuteNPCMovement: ; ce3a (3:4e3a)
-	farcall Func_1c78d
+	farcall StartNPCMovement
 .loop
 	call DoFrameIfLCDEnabled
-	farcall Func_1c7de
+	farcall CheckIsAnNPCMoving
 	jr nz, .loop
 	jp IncreaseScriptPointerBy3
 
@@ -2656,9 +2656,9 @@ ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	push bc
 	call GetScriptArgs3AfterPointer
 	ld a, [wScriptNPC]
-	ld l, LOADED_NPC_FIELD_05
+	ld l, LOADED_NPC_FLAGS
 	call GetItemInLoadedNPCIndex
-	res 4, [hl]
+	res NPC_FLAG_DIRECTIONLESS_F, [hl]
 	ld a, [hl]
 	or c
 	ld [hl], a
@@ -2670,7 +2670,7 @@ ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	ld e, b
 .not_cgb
 	ld a, e
-	farcall Func_1c57b
+	farcall SetNPCAnimation
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_SetActiveNPCCoords: ; d0be (3:50be)
@@ -2679,7 +2679,7 @@ ScriptCommand_SetActiveNPCCoords: ; d0be (3:50be)
 	ld a, c
 	ld c, b
 	ld b, a
-	farcall Func_1c461
+	farcall SetNPCPosition
 	jp IncreaseScriptPointerBy3
 
 ScriptCommand_DoFrames: ; d0ce (3:50ce)
@@ -2695,7 +2695,7 @@ ScriptCommand_JumpIfActiveNPCCoordsMatch: ; d0d9 (3:50d9)
 	ld [wLoadedNPCTempIndex], a
 	ld d, c
 	ld e, b
-	farcall Func_1c477
+	farcall GetNPCPosition
 	ld a, e
 	cp c
 	jp nz, ScriptCommand_JumpIfEventEqual.fail
@@ -3256,7 +3256,7 @@ ScriptCommand_WaitForSongToFinish: ; d42f (3:542f)
 
 ScriptCommand_RecordMasterWin: ; d435 (3:5435)
 	ld a, c
-	farcall Func_1c83d
+	farcall AddMasterBeatenToList
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_ChallengeMachine: ; d43d (3:543d)

@@ -2389,7 +2389,7 @@ wPCPackSelection:: ; d11d
 
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
-	ds $f
+	ds NUM_PC_PACKS
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
@@ -2620,7 +2620,8 @@ wOverworldMapPlayerHorizontalSubPixelPosition:: ; d347
 wOverworldMapPlayerVerticalSubPixelPosition:: ; d348
 	ds $1
 
-wd349:: ; d349
+; total number of NPCs that are currently loaded
+wNumLoadedNPCs:: ; d349
 	ds $1
 
 wLoadedNPCs:: ; d34a
@@ -2651,10 +2652,10 @@ wLoadNPCDirection:: ; d3ae
 wLoadNPCFunction:: ; d3af
 	ds $2
 
-wd3b1:: ; d3b1
+wNPCAnim:: ; d3b1
 	ds $1
 
-wd3b2:: ; d3b2
+wNPCAnimFlags:: ; d3b2
 	ds $1
 
 ; sprite ID of the NPC to load
@@ -2667,19 +2668,29 @@ wNPCSpriteID:: ; d3b3
 wScriptNPC:: ; d3b6
 	ds $1
 
-wc3b7:: ; d3b7
+; bit 6 will be set if an NPC is currently moving
+wIsAnNPCMoving:: ; d3b7
 	ds $1
 
-wd3b8:: ; d3b8
+; whether Ronald is in the current map
+; is used to load his theme whenever he is present
+wRonaldIsInMap:: ; d3b8
 	ds $1
 
 wd3b9:: ; d3b9
 	ds $2
 
-wd3bb:: ; d3bb
+wMastersBeatenList:: ; d3bb
 	ds $a
 
-	ds $6
+wGeneralSaveDataCheckSum:: ; d3c5
+	ds $2
+
+wNumSRAMValidationErrors:: ; d3c7
+	ds $1
+
+wd3c8:: ; d3c8
+	ds $3
 
 wd3cb:: ; d3cb
 	ds $1
@@ -2865,6 +2876,9 @@ wCurSpriteTileSize:: ; d4c7
 
 ; stores number of tiles that current sprite/tileset has
 wTotalNumTiles:: ; d4c8
+
+; checksum?
+wNumGeneralSaveDataBytes:: ; d4c8
 	ds $2
 
 ; stores tile offset in VRAM
@@ -2981,6 +2995,7 @@ wSceneSGBRoutinePtr:: ; d622
 wd624:: ; d624
 	ds $1
 
+wd625:: ; d625
 	ds $1
 
 wd626:: ; d626

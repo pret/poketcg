@@ -10600,9 +10600,9 @@ OverworldDoFrameFunction: ; 380e (0:380e)
 	call BankswitchROM
 	call SetScreenScrollWram
 	call Func_c554
-	ld a, BANK(Func_1c610)
+	ld a, BANK(HandleAllNPCMovement)
 	call BankswitchROM
-	call Func_1c610
+	call HandleAllNPCMovement
 	call Func_3cb4
 	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
@@ -10948,9 +10948,11 @@ PlayDefaultSong: ; 39fc (0:39fc)
 
 ; returns [wDefaultSong] or MUSIC_RONALD in a
 GetDefaultSong: ; 3a1f (0:3a1f)
-	ld a, [wd3b8]
+	ld a, [wRonaldIsInMap]
 	or a
 	jr z, .default_song
+	; only return Ronald's theme if it's
+	; not in one of the following maps
 	ld a, [wOverworldMapSelection]
 	cp OWMAP_ISHIHARAS_HOUSE
 	jr z, .default_song

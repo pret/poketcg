@@ -311,7 +311,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	push bc
 	push de
 	ld b, a
-	ld c, $f ; number of packs possible
+	ld c, NUM_PC_PACKS
 	ld hl, wPCPacks
 .searchLoop1
 	ld a, [hli]
@@ -320,7 +320,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	jr z, .quit
 	dec c
 	jr nz, .searchLoop1
-	ld c, $f
+	ld c, NUM_PC_PACKS
 	ld hl, wPCPacks
 .findFreeSlotLoop
 	ld a, [hl]
@@ -334,7 +334,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 
 .foundFreeSlot
 	ld a, b
-	or $80 ; mark pack as unopened
+	or PACK_OPENED ; mark pack as unopened
 	ld [hl], a
 
 .quit
@@ -1116,10 +1116,163 @@ UpdateAlbumProgress: ; 1127f (4:527f)
 	INCROM $11299, $11320
 
 Func_11320: ; 11320 (4:5320)
-	INCROM $11320, $11343
+	push de
+	ldh a, [hBankSRAM]
+	push af
+	ld a, $02
+	call BankswitchSRAM
+	ld de, sb800
+	call Func_1135d
+	ld de, sAlbumProgress
+	call LoadAlbumProgressFromSRAM
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	pop de
+	ld a, [wNumSRAMValidationErrors]
+	cp 1
+	ret
+; 0x11343
 
 Func_11343: ; 11343 (4:5343)
-	INCROM $11343, $11416
+	INCROM $11343, $1135d
+
+Func_1135d: ; 1135d (4:535d)
+	push hl
+	push bc
+	push de
+	xor a
+	ld [wNumSRAMValidationErrors], a
+	push de
+
+	push de
+	inc de
+	inc de
+	ld a, [de]
+	inc de
+	ld [wNumGeneralSaveDataBytes + 0], a
+	ld a, [de]
+	inc de
+	ld [wNumGeneralSaveDataBytes + 1], a
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop de
+
+	ld hl, $8
+	add hl, de
+	ld e, l
+	ld d, h
+	ld hl, WRAMToSRAMMapper
+.loop
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	or c
+	jr z, .exit_loop
+	ld a, [hli]
+	ld c, a ; number of bytes LO
+	ld a, [hli]
+	ld b, a ; number of bytes HI
+	ld a, [wNumGeneralSaveDataBytes + 0]
+	sub c
+	ld [wNumGeneralSaveDataBytes + 0], a
+	ld a, [wNumGeneralSaveDataBytes + 1]
+	sbc b
+	ld [wNumGeneralSaveDataBytes + 1], a
+
+; loop all the bytes of this struct
+.loop_bytes
+	push hl
+	push bc
+	ld a, [de]
+	push af
+	ld c, a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	sub c
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	sbc 0
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop af
+
+	; check if it's within the specified values
+	cp [hl] ; min value
+	jr c, .error
+	inc hl
+	cp [hl] ; max value
+	jr z, .next_byte
+	jr c, .next_byte
+.error
+	ld a, [wNumSRAMValidationErrors]
+	inc a
+	ld [wNumSRAMValidationErrors], a
+.next_byte
+	inc de
+	pop bc
+	pop hl
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop_bytes
+	; next mapped struct
+	inc hl
+	inc hl
+	jr .loop
+
+.exit_loop
+	pop hl
+	ld a, [hli]
+	sub $08
+	ld c, a
+	ld a, [hl]
+	sub 0
+	or c
+	ld hl, wNumGeneralSaveDataBytes
+	or [hl]
+	inc hl
+	or [hl]
+	ld hl, wGeneralSaveDataCheckSum
+	or [hl]
+	inc hl
+	or [hl]
+	jr z, .asm_113ea
+	ld hl, wNumSRAMValidationErrors
+	inc [hl]
+.asm_113ea
+	pop de
+	ld hl, $c
+	add hl, de
+	ld a, [hli]
+	ld [wd3c8 + 0], a
+	ld a, [hli]
+	ld [wd3c8 + 1], a
+	ld a, [hli]
+	ld [wd3c8 + 2], a
+	ld hl, $8
+	add hl, de
+	ld a, [hli]
+	ld [wd3cc], a
+	ld a, [hl]
+	ld [wd3cb], a
+	pop bc
+	pop hl
+	ret
+; 0x1140a
+
+LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
+	push de
+	ld a, [de]
+	ld [wTotalNumCardsCollected], a
+	inc de
+	ld a, [de]
+	ld [wTotalNumCardsToCollect], a
+	pop de
+	ret
+; 0x11416
 
 Func_11416: ; 11416 (4:5416)
 	INCROM $11416, $11430
@@ -1147,11 +1300,11 @@ Func_11430: ; 11430 (4:5430)
 	push de
 	ld a, e
 	add $08
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	ld a, d
 	adc 0
 	ld [wTempPointer + 1], a
-	ld hl, .wram_map
+	ld hl, WRAMToSRAMMapper
 .asm_11459
 	ld a, [hli]
 	ld e, a
@@ -1166,7 +1319,7 @@ Func_11430: ; 11430 (4:5430)
 
 ; copy bc bytes from wTempPointer to de
 	push hl
-	ld a, [wTempPointer]
+	ld a, [wTempPointer + 0]
 	ld l, a
 	ld a, [wTempPointer + 1]
 	ld h, a
@@ -1180,7 +1333,7 @@ Func_11430: ; 11430 (4:5430)
 	jr nz, .loop_copy
 
 	ld a, l
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	ld a, h
 	ld [wTempPointer + 1], a
 	pop hl
@@ -1199,48 +1352,61 @@ Func_11430: ; 11430 (4:5430)
 	pop bc
 	pop hl
 	ret
+; 0x11498
 
-.wram_map
+wram_sram_map: MACRO
+	dw \1 ; WRAM address
+	dw \2 ; number of bytes
+	db \3 ; min allowed value
+	db \4 ; max allowed value
+ENDM
+
+; maps WRAM addresses to SRAM addresses in order
+; to save and subsequently retreive them on game load
+; also works as a test in order check whether
+; the saved values is SRAM are legal, within the given value range
+WRAMToSRAMMapper: ; 11498 (4:5498)
 ; pointer, number of bytes, unknown
-	dw wd3cc,                  1, $ff00 ; sb808
-	dw wd3cb,                  1, $ff00 ; sb809
-	dw wPlayTimeCounter + 0,   1, $ff00 ; sPlayTimeCounter
-	dw wPlayTimeCounter + 1,   1, $ff00
-	dw wPlayTimeCounter + 2,   1, $ff00
-	dw wPlayTimeCounter + 3,   2, $ff00
-	dw wOverworldMapSelection, 1, $ff00 ; sOverworldMapSelection
-	dw wTempMap,               1, $ff00 ; sTempMap
-	dw wTempPlayerXCoord,      1, $ff00 ; sTempPlayerXCoord
-	dw wTempPlayerYCoord,      1, $ff00 ; sTempPlayerYCoord
-	dw wTempPlayerDirection,   1, $ff00 ; sTempPlayerDirection
-	dw wd0c2,                  1, $ff00 ; sb814
-	dw wDuelResult,            1, $ff00 ; sDuelResult
-	dw wNPCDuelist,            1, $ff00 ; sNPCDuelist
-	dw wChallengeHallNPC,      1, $ff00 ; sChallengeHallNPC
-	dw wd698,                  4, $ff00 ; sb818
-	dw wOWMapEvents,          11, $ff00 ; sOWMapEvents
-	dw Data_1156c,             1, $ff00 ; sb827
-	dw wd0b8,                  1, $ff00 ; sb828
-	dw wd0b9,                  1, $ff00 ; sb829
-	dw wd11b,                  1, $ff00 ; sb82a
-	dw wd0ba,                  1, $ff00 ; sb82b
-	dw wPCPackSelection,       1, $0e00 ; sPCPackSelection
-	dw wPCPacks,              15, $ff00 ; sPCPacks
-	dw wDefaultSong,           1, $ff00 ; sDefaultSong
-	dw wcad5,                  1, $ff00 ; sb83d
-	dw wd3b8,                  1, $ff00 ; sb83e
-	dw wd3bb,                 10, $ff00 ; sb83f
-	dw wd0c5,                  1, $ff00 ; sb849
-	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $ff00 ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
-	dw wd10e,                  1, $ff00 ; sb84b
-	dw Data_1156c,            15, $ff00 ; sb84c
-	dw Data_1156c,            16, $ff00 ; sb85b
-	dw Data_1156c,            16, $ff00 ; sb86b
-	dw wEventVars,            64, $ff00 ; sEventVars
+	wram_sram_map wd3cc,                              1, $00, $ff ; sb808
+	wram_sram_map wd3cb,                              1, $00, $ff ; sb809
+	wram_sram_map wPlayTimeCounter + 0,               1, $00, $ff ; sPlayTimeCounter
+	wram_sram_map wPlayTimeCounter + 1,               1, $00, $ff
+	wram_sram_map wPlayTimeCounter + 2,               1, $00, $ff
+	wram_sram_map wPlayTimeCounter + 3,               2, $00, $ff
+	wram_sram_map wOverworldMapSelection,             1, $00, $ff ; sOverworldMapSelection
+	wram_sram_map wTempMap,                           1, $00, $ff ; sTempMap
+	wram_sram_map wTempPlayerXCoord,                  1, $00, $ff ; sTempPlayerXCoord
+	wram_sram_map wTempPlayerYCoord,                  1, $00, $ff ; sTempPlayerYCoord
+	wram_sram_map wTempPlayerDirection,               1, $00, $ff ; sTempPlayerDirection
+	wram_sram_map wd0c2,                              1, $00, $ff ; sb814
+	wram_sram_map wDuelResult,                        1, $00, $ff ; sDuelResult
+	wram_sram_map wNPCDuelist,                        1, $00, $ff ; sNPCDuelist
+	wram_sram_map wChallengeHallNPC,                  1, $00, $ff ; sChallengeHallNPC
+	wram_sram_map wd698,                              4, $00, $ff ; sb818
+	wram_sram_map wOWMapEvents,          NUM_MAP_EVENTS, $00, $ff ; sOWMapEvents
+	wram_sram_map .EmptySRAMSlot,                     1, $00, $ff ; sb827
+	wram_sram_map wd0b8,                              1, $00, $ff ; sb828
+	wram_sram_map wd0b9,                              1, $00, $ff ; sb829
+	wram_sram_map wd11b,                              1, $00, $ff ; sb82a
+	wram_sram_map wd0ba,                              1, $00, $ff ; sb82b
+	wram_sram_map wPCPackSelection,                   1,   0,  14 ; sPCPackSelection
+	wram_sram_map wPCPacks,                NUM_PC_PACKS, $00, $ff ; sPCPacks
+	wram_sram_map wDefaultSong,                       1, $00, $ff ; sDefaultSong
+	wram_sram_map wcad5,                              1, $00, $ff ; sb83d
+	wram_sram_map wRonaldIsInMap,                     1, $00, $ff ; sRonaldIsInMap
+	wram_sram_map wMastersBeatenList,                10, $00, $ff ; sMastersBeatenList
+	wram_sram_map wd0c5,                              1, $00, $ff ; sb849
+	wram_sram_map wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $00, $ff ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
+	wram_sram_map wd10e,                              1, $00, $ff ; sb84b
+	wram_sram_map .EmptySRAMSlot,                    15, $00, $ff ; sb84c
+	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb85b
+	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb86b
+	wram_sram_map wEventVars,                        64, $00, $ff ; sEventVars
 	dw NULL
 ; 0x1156c
 
-Data_1156c: ; 1156c (4:556c)
+; fills an empty SRAM slot with zero
+.EmptySRAMSlot: ; 1156c (4:556c)
 	db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 ; 0x1157c
 
@@ -1325,17 +1491,17 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wNPCSpriteID], a
 	ld a, [hli]
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 	ld a, [hli]
 	push af
 	ld a, [hli]
-	ld [wd3b2], a
+	ld [wNPCAnimFlags], a
 	pop bc
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
 	ld a, b
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 .not_cgb
 	pop bc
 	pop hl
@@ -3061,24 +3227,26 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	pop hl
 	ret
 
-Func_129fa: ; 129fa (4:69fa)
+DisableCurSpriteAnim: ; 129fa (4:69fa)
 	ld a, [wWhichSprite]
 	; fallthrough
 
-Func_129fd: ; 129fd (4:69fd)
+; sets SPRITE_ANIM_ENABLED to false
+; of sprite in register a
+DisableSpriteAnim: ; 129fd (4:69fd)
 	push af
 	ld a, [wd5d7]
 	or a
-	jr z, .asm_12a06
+	jr z, .disable
 	pop af
 	ret
-.asm_12a06
+.disable
 	pop af
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_ENABLED
 	call GetSpriteAnimBufferProperty_SpriteInA
-	ld [hl], $00
+	ld [hl], FALSE
 	pop bc
 	pop hl
 	ret

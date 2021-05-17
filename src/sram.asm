@@ -194,7 +194,7 @@ sPCPackSelection:: ; b82c
 	ds $1
 
 sPCPacks:: ; b82d
-	ds $f
+	ds NUM_PC_PACKS
 
 sDefaultSong:: ; b83c
 	ds $1
@@ -202,10 +202,10 @@ sDefaultSong:: ; b83c
 sb83d:: ; b83d
 	ds $1
 
-sb83e:: ; b83e
+sRonaldIsInMap:: ; b83e
 	ds $1
 
-sb83f:: ; b83f
+sMastersBeatenList:: ; b83f
 	ds $a
 
 sb849:: ; b849
