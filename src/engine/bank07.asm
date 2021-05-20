@@ -2280,10 +2280,10 @@ Func_1d335: ; 1d335 (7:5335)
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction
 	call LoadTitleScreenSprites
-	ld a, LOW(Data_1d59d)
-	ld [wd631 + 0], a
-	ld a, HIGH(Data_1d59d)
-	ld [wd631 + 1], a
+	ld a, LOW(OpeningSequence)
+	ld [wSequenceCmdPtr + 0], a
+	ld a, HIGH(OpeningSequence)
+	ld [wSequenceCmdPtr + 1], a
 
 	xor a
 	ld [wd317], a
@@ -2382,9 +2382,9 @@ Func_1d408: ; 1d408 (7:5408)
 	ret
 
 .call_function
-	ld a, [wd631 + 0]
+	ld a, [wSequenceCmdPtr + 0]
 	ld l, a
-	ld a, [wd631 + 1]
+	ld a, [wSequenceCmdPtr + 1]
 	ld h, a
 	ld a, [hli]
 	ld e, a
@@ -2401,21 +2401,21 @@ Func_1d408: ; 1d408 (7:5408)
 	ret
 ; 0x1d42e
 
-Func_1d42e: ; 1d42e (7:542e)
-	ld a, $02
-	jr Func_1d438
+AdvanceOpeningSequenceCmdPtrBy2: ; 1d42e (7:542e)
+	ld a, 2
+	jr AdvanceOpeningSequenceCmdPtr
 
-Func_1d432: ; 1d432 (7:5432)
-	ld a, $03
-	jr Func_1d438
+AdvanceOpeningSequenceCmdPtrBy3: ; 1d432 (7:5432)
+	ld a, 3
+	jr AdvanceOpeningSequenceCmdPtr
 
-Func_1d436: ; 1d436 (7:5436)
-	ld a, $04
+AdvanceOpeningSequenceCmdPtrBy4: ; 1d436 (7:5436)
+	ld a, 4
 ;	fallthrough
 
-Func_1d438: ; 1d438 (7:5438)
+AdvanceOpeningSequenceCmdPtr: ; 1d438 (7:5438)
 	push hl
-	ld hl, wd631
+	ld hl, wSequenceCmdPtr
 	add [hl]
 	ld [hli], a
 	ld a, [hl]
@@ -2425,7 +2425,7 @@ Func_1d438: ; 1d438 (7:5438)
 	ret
 ; 0x1d444
 
-Func_1d444: ; 1d444 (7:5444)
+OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	ld c, $7
 	ld de, wTitleScreenSprites
 .loop
@@ -2437,7 +2437,7 @@ Func_1d444: ; 1d444 (7:5444)
 	inc de
 	dec c
 	jr nz, .loop
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
 
@@ -2446,15 +2446,15 @@ Func_1d444: ; 1d444 (7:5444)
 	ret
 ; 0x1d460
 
-Func_1d460: ; 1d460 (7:5460)
+OpeningSequenceCmd_Delay: ; 1d460 (7:5460)
 	ld a, c
 	ld [wd633], a
-	call Func_1d432
+	call AdvanceOpeningSequenceCmdPtrBy3
 	scf
 	ret
 ; 0x1d469
 
-Func_1d469: ; 1d469 (7:5469)
+OpeningSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	ld l, c
 	ld h, b
 
@@ -2473,12 +2473,12 @@ Func_1d469: ; 1d469 (7:5469)
 	dec c
 	jr nz, .loop
 
-	call Func_1d436
+	call AdvanceOpeningSequenceCmdPtrBy4
 	scf
 	ret
 ; 0x1d486
 
-Func_1d486: ; 1d486 (7:5486)
+OpeningSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	ld l, c
 	ld h, b
 
@@ -2508,13 +2508,12 @@ Func_1d486: ; 1d486 (7:5486)
 	dec c
 	jr nz, .loop
 
-	call Func_1d436
+	call AdvanceOpeningSequenceCmdPtrBy4
 	scf
 	ret
 ; 0x1d4b0
 
-; list of sprite animations
-Data_1d4b0: ; 1d4b0 (7:54b0)
+OpeningOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db $c0 ; GRASS
 	db $c1 ; FIRE
 	db $c1 ; WATER
@@ -2524,7 +2523,7 @@ Data_1d4b0: ; 1d4b0 (7:54b0)
 	db $c1 ; FIGHTING
 ; 0x1d4b7
 
-Data_1d4b7: ; 1d4b7 (7:54b7)
+OpeningOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	; x coord, y coord
 	db 240,  28 ; GRASS
 	db 160, 120 ; FIRE
@@ -2535,8 +2534,7 @@ Data_1d4b7: ; 1d4b7 (7:54b7)
 	db 160,  44 ; FIGHTING
 ; 0x1d4c5
 
-; list of sprite animations
-Data_1d4c5: ; 1d4c5 (7:54c5)
+OpeningOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db $c1 ; GRASS
 	db $c0 ; FIRE
 	db $c0 ; WATER
@@ -2546,7 +2544,7 @@ Data_1d4c5: ; 1d4c5 (7:54c5)
 	db $c0 ; FIGHTING
 ; 0x1d4cc
 
-Data_1d4cc: ; 1d4cc (7:54cc)
+OpeningOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	; x coord, y coord
 	db 160,  28 ; GRASS
 	db 240, 120 ; FIRE
@@ -2557,8 +2555,7 @@ Data_1d4cc: ; 1d4cc (7:54cc)
 	db 240,  44 ; FIGHTING
 ; 0x1d4da
 
-; list of sprite animations
-Data_1d4da: ; 1d4da (7:54da)
+OpeningOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db $c2 ; GRASS
 	db $c5 ; FIRE
 	db $c8 ; WATER
@@ -2568,7 +2565,7 @@ Data_1d4da: ; 1d4da (7:54da)
 	db $d4 ; FIGHTING
 ; 0x1d4e1
 
-Data_1d4e1: ; 1d4e1 (7:54e1)
+OpeningOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
 	; x coord, y coord
 	db 240,  32 ; GRASS
 	db 160, 112 ; FIRE
@@ -2579,8 +2576,7 @@ Data_1d4e1: ; 1d4e1 (7:54e1)
 	db 160,  48 ; FIGHTING
 ; 0x1d4ef
 
-; list of sprite animations
-Data_1d4ef: ; 1d4ef (7:54ef)
+OpeningOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db $c3 ; GRASS
 	db $c6 ; FIRE
 	db $c9 ; WATER
@@ -2590,7 +2586,7 @@ Data_1d4ef: ; 1d4ef (7:54ef)
 	db $d5 ; FIGHTING
 ; 0x1d4f6
 
-Data_1d4f6: ; 1d4f6 (7:54f6)
+OpeningOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	; x coord, y coord
 	db 112, 144 ; GRASS
 	db  12, 144 ; FIRE
@@ -2601,8 +2597,7 @@ Data_1d4f6: ; 1d4f6 (7:54f6)
 	db  72, 144 ; FIGHTING
 ; 0x1d504
 
-; list of sprite animations
-Data_1d504: ; 1d504 (7:5504)
+OpeningOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db $c4 ; GRASS
 	db $c7 ; FIRE
 	db $ca ; WATER
@@ -2612,7 +2607,7 @@ Data_1d504: ; 1d504 (7:5504)
 	db $d6 ; FIGHTING
 ; 0x1d50b
 
-Data_1d50b: ; 1d50b (7:550b)
+OpeningOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	; x coord, y coord
 	db 112,  76 ; GRASS
 	db   0,  28 ; FIRE
@@ -2623,19 +2618,19 @@ Data_1d50b: ; 1d50b (7:550b)
 	db  72,  76 ; FIGHTING
 ; 0x1d519
 
-Titlescreen_1d519: ; 1d519 (7:5519)
+OpeningSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
 	ld a, MUSIC_TITLESCREEN
 	call PlaySong
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
 ; 0x1d523
 
-Func_1d523: ; 1d523 (7:5523)
+OpeningSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 	call AssertSFXFinished
 	or a
 	jr nz, .no_carry
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
 
@@ -2644,48 +2639,48 @@ Func_1d523: ; 1d523 (7:5523)
 	ret
 ; 0x1d530
 
-Func_1d530: ; 1d530 (7:5530)
+OpeningSequenceCmd_PlaySFX: ; 1d530 (7:5530)
 	ld a, c
 	call PlaySFX
-	call Func_1d432
+	call AdvanceOpeningSequenceCmdPtrBy3
 	scf
 	ret
 ; 0x1d539
 
-Func_1d539: ; 1d539 (7:5539)
+OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
 	ld a, $01
 	ld [wd634], a
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
 ; 0x1d543
 
-Func_1d543: ; 1d543 (7:5543)
+OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	farcall Func_10d50
 	ld a, $01
 	ld [wd634], a
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
 ; 0x1d551
 
-ShowCharizardIntro: ; 1d551 (7:5551)
+OpeningSequenceCmd_ShowCharizardScene: ; 1d551 (7:5551)
 	lb bc, 6, 3
 	ld a, SCENE_CHARIZARD_INTRO
-	jr LoadIntroSceneAndUpdateSGBBorder
+	jr LoadOpeningSceneAndUpdateSGBBorder
 
-ShowScytherIntro: ; 1d558 (7:5558)
+OpeningSequenceCmd_ShowScytherScene: ; 1d558 (7:5558)
 	lb bc, 6, 3
 	ld a, SCENE_SCYTHER_INTRO
-	jr LoadIntroSceneAndUpdateSGBBorder
+	jr LoadOpeningSceneAndUpdateSGBBorder
 
-ShowAerodactylIntro: ; 1d55f (7:555f)
+OpeningSequenceCmd_ShowAerodactylScene: ; 1d55f (7:555f)
 	lb bc, 6, 3
 	ld a, SCENE_AERODACTYL_INTRO
 ;	fallthrough
 
-LoadIntroSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
-	call LoadIntroScene
+LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
+	call LoadOpeningScene
 	ld l, %001010
 	lb bc, 0, 0
 	lb de, 20, 18
@@ -2694,10 +2689,10 @@ LoadIntroSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
 	ret
 ; 0x1d575
 
-Func_1d575: ; 1d575 (7:5575)
+OpeningSequenceCmd_ShowTitleScreenScene: ; 1d575 (7:5575)
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
-	call LoadIntroScene
+	call LoadOpeningScene
 	call Func_1d59c
 	scf
 	ret
@@ -2705,7 +2700,7 @@ Func_1d575: ; 1d575 (7:5575)
 
 ; a = scene ID
 ; bc = coordinates for scene
-LoadIntroScene: ; 1d582 (7:5582)
+LoadOpeningScene: ; 1d582 (7:5582)
 	push af
 	push bc
 	call DisableLCD
@@ -2717,7 +2712,7 @@ LoadIntroScene: ; 1d582 (7:5582)
 
 	xor a
 	ld [wd634], a
-	call Func_1d42e
+	call AdvanceOpeningSequenceCmdPtrBy2
 	call EnableLCD
 	ret
 ; 0x1d59c
@@ -2726,52 +2721,52 @@ Func_1d59c: ; 1d59c (7:559c)
 	ret
 ; 0x1d59d
 
-Data_1d59d: ; 1d59d (7:559d)
-	dw ShowCharizardIntro
-	dwb Func_1d530, SFX_58
-	dw Func_1d486, Data_1d4b7
-	dw Func_1d469, Data_1d4b0
-	dwb Func_1d460, $2c
-	dw Func_1d539
-	dwb Func_1d460, $2c
-	dw Func_1d543
-	dwb Func_1d460, $1e
+OpeningSequence: ; 1d59d (7:559d)
+	dw OpeningSequenceCmd_ShowCharizardScene
+	dwb OpeningSequenceCmd_PlaySFX, SFX_58
+	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_CharizardScene
+	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_CharizardScene
+	dwb OpeningSequenceCmd_Delay, 44
+	dw OpeningSequenceCmd_FadeIn
+	dwb OpeningSequenceCmd_Delay, 44
+	dw OpeningSequenceCmd_FadeOut
+	dwb OpeningSequenceCmd_Delay, 30
 
-	dw ShowScytherIntro
-	dwb Func_1d530, SFX_58
-	dw Func_1d486, Data_1d4cc
-	dw Func_1d469, Data_1d4c5
-	dwb Func_1d460, $2c
-	dw Func_1d539
-	dwb Func_1d460, $2c
-	dw Func_1d543
-	dwb Func_1d460, $1e
+	dw OpeningSequenceCmd_ShowScytherScene
+	dwb OpeningSequenceCmd_PlaySFX, SFX_58
+	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_ScytherScene
+	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_ScytherScene
+	dwb OpeningSequenceCmd_Delay, 44
+	dw OpeningSequenceCmd_FadeIn
+	dwb OpeningSequenceCmd_Delay, 44
+	dw OpeningSequenceCmd_FadeOut
+	dwb OpeningSequenceCmd_Delay, 30
 	
-	dw ShowAerodactylIntro
-	dwb Func_1d530, SFX_59
-	dw Func_1d486, Data_1d4e1
-	dw Func_1d469, Data_1d4da
-	dwb Func_1d460, $2c
-	dw Func_1d539
-	dwb Func_1d460, $64
-	dw Func_1d543
-	dwb Func_1d460, $3c
+	dw OpeningSequenceCmd_ShowAerodactylScene
+	dwb OpeningSequenceCmd_PlaySFX, SFX_59
+	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_AerodactylScene
+	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_AerodactylScene
+	dwb OpeningSequenceCmd_Delay, 44
+	dw OpeningSequenceCmd_FadeIn
+	dwb OpeningSequenceCmd_Delay, 100
+	dw OpeningSequenceCmd_FadeOut
+	dwb OpeningSequenceCmd_Delay, 60
 
-	dw Func_1d575
-	dwb Func_1d530, SFX_5A
-	dw Func_1d486, Data_1d4f6
-	dw Func_1d469, Data_1d4ef
-	dw Func_1d444
-	dw Func_1d539
-	dwb Func_1d460, $10
-	dwb Func_1d530, SFX_5B
-	dw Func_1d486, Data_1d50b
-	dw Func_1d469, Data_1d504
-	dw Func_1d523
-	dw Titlescreen_1d519
-	dwb Func_1d460, $3c
-	dwb Func_1d460, $ff
-	; 0x1d614
+	dw OpeningSequenceCmd_ShowTitleScreenScene
+	dwb OpeningSequenceCmd_PlaySFX, SFX_5A
+	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_InitialTitleScreen
+	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_InitialTitleScreen
+	dw OpeningSequenceCmd_WaitOrbsAnimation
+	dw OpeningSequenceCmd_FadeIn
+	dwb OpeningSequenceCmd_Delay, 16
+	dwb OpeningSequenceCmd_PlaySFX, SFX_5B
+	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_InTitleScreen
+	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_InTitleScreen
+	dw OpeningSequenceCmd_WaitSFX
+	dw OpeningSequenceCmd_PlayTitleScreenMusic
+	dwb OpeningSequenceCmd_Delay, 60
+	dwb OpeningSequenceCmd_Delay, $ff
+; 0x1d614
 
 Func_1d614: ; 1d614 (7:5614)
 	INCROM $1d614, $1d6ad
@@ -2821,10 +2816,10 @@ Func_1d765: ; 1d765 (7:5765)
 	INCROM $1d765, $1d7fc
 
 Func_1d7fc: ; 1d7fc (7:57fc)
-	ld a, LOW(Data_1daef)
-	ld [wd631 + 0], a
-	ld a, HIGH(Data_1daef)
-	ld [wd631 + 1], a
+	ld a, LOW(CreditsSequence)
+	ld [wSequenceCmdPtr + 0], a
+	ld a, HIGH(CreditsSequence)
+	ld [wSequenceCmdPtr + 1], a
 	xor a
 	ld [wd633], a
 	ret
@@ -2855,7 +2850,7 @@ Func_1d845: ; 1d845 (7:5845)
 
 Func_1d847: ; 1d847 (7:5847)
 	push hl
-	ld hl, wd631
+	ld hl, wSequenceCmdPtr
 	add [hl]
 	ld [hli], a
 	ld a, [hl]
@@ -2903,7 +2898,7 @@ Func_1d9db: ; 1d9db (7:59db)
 
 	INCROM $1d9e1, $1daef
 
-Data_1daef: ; 1daef (7:5aef)
+CreditsSequence: ; 1daef (7:5aef)
 	dw Func_1d9db
 	dw Func_1d9d5
 ; 0x1daf3

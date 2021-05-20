@@ -3035,7 +3035,9 @@ wTitleScreenSprites:: ; d629
 
 	ds $1
 
-wd631:: ; d631
+; pointer to commands used by opening and credits sequence
+; (see OpeningSequence and CreditsSequence)
+wSequenceCmdPtr:: ; d631
 	ds $2
 
 wd633:: ; d633
