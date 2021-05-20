@@ -2664,17 +2664,17 @@ OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	ret
 ; 0x1d551
 
-OpeningSequenceCmd_ShowCharizardScene: ; 1d551 (7:5551)
+OpeningSequenceCmd_LoadCharizardScene: ; 1d551 (7:5551)
 	lb bc, 6, 3
 	ld a, SCENE_CHARIZARD_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-OpeningSequenceCmd_ShowScytherScene: ; 1d558 (7:5558)
+OpeningSequenceCmd_LoadScytherScene: ; 1d558 (7:5558)
 	lb bc, 6, 3
 	ld a, SCENE_SCYTHER_INTRO
 	jr LoadOpeningSceneAndUpdateSGBBorder
 
-OpeningSequenceCmd_ShowAerodactylScene: ; 1d55f (7:555f)
+OpeningSequenceCmd_LoadAerodactylScene: ; 1d55f (7:555f)
 	lb bc, 6, 3
 	ld a, SCENE_AERODACTYL_INTRO
 ;	fallthrough
@@ -2689,7 +2689,7 @@ LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
 	ret
 ; 0x1d575
 
-OpeningSequenceCmd_ShowTitleScreenScene: ; 1d575 (7:5575)
+OpeningSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
 	call LoadOpeningScene
@@ -2721,51 +2721,53 @@ Func_1d59c: ; 1d59c (7:559c)
 	ret
 ; 0x1d59d
 
+INCLUDE "macros/opening_sequence.asm"
+
 OpeningSequence: ; 1d59d (7:559d)
-	dw OpeningSequenceCmd_ShowCharizardScene
-	dwb OpeningSequenceCmd_PlaySFX, SFX_58
-	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_CharizardScene
-	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_CharizardScene
-	dwb OpeningSequenceCmd_Delay, 44
-	dw OpeningSequenceCmd_FadeIn
-	dwb OpeningSequenceCmd_Delay, 44
-	dw OpeningSequenceCmd_FadeOut
-	dwb OpeningSequenceCmd_Delay, 30
+	opening_seq_load_charizard_scene
+	opening_seq_play_sfx SFX_58
+	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_CharizardScene
+	opening_seq_set_orbs_animations OpeningOrbAnimations_CharizardScene
+	opening_seq_delay 44
+	opening_seq_fade_in
+	opening_seq_delay 44
+	opening_seq_fade_out
+	opening_seq_delay 30
 
-	dw OpeningSequenceCmd_ShowScytherScene
-	dwb OpeningSequenceCmd_PlaySFX, SFX_58
-	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_ScytherScene
-	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_ScytherScene
-	dwb OpeningSequenceCmd_Delay, 44
-	dw OpeningSequenceCmd_FadeIn
-	dwb OpeningSequenceCmd_Delay, 44
-	dw OpeningSequenceCmd_FadeOut
-	dwb OpeningSequenceCmd_Delay, 30
+	opening_seq_load_scyther_scene
+	opening_seq_play_sfx SFX_58
+	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_ScytherScene
+	opening_seq_set_orbs_animations OpeningOrbAnimations_ScytherScene
+	opening_seq_delay 44
+	opening_seq_fade_in
+	opening_seq_delay 44
+	opening_seq_fade_out
+	opening_seq_delay 30
 	
-	dw OpeningSequenceCmd_ShowAerodactylScene
-	dwb OpeningSequenceCmd_PlaySFX, SFX_59
-	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_AerodactylScene
-	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_AerodactylScene
-	dwb OpeningSequenceCmd_Delay, 44
-	dw OpeningSequenceCmd_FadeIn
-	dwb OpeningSequenceCmd_Delay, 100
-	dw OpeningSequenceCmd_FadeOut
-	dwb OpeningSequenceCmd_Delay, 60
+	opening_seq_load_aerodactyl_scene
+	opening_seq_play_sfx SFX_59
+	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_AerodactylScene
+	opening_seq_set_orbs_animations OpeningOrbAnimations_AerodactylScene
+	opening_seq_delay 44
+	opening_seq_fade_in
+	opening_seq_delay 100
+	opening_seq_fade_out
+	opening_seq_delay 60
 
-	dw OpeningSequenceCmd_ShowTitleScreenScene
-	dwb OpeningSequenceCmd_PlaySFX, SFX_5A
-	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_InitialTitleScreen
-	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_InitialTitleScreen
-	dw OpeningSequenceCmd_WaitOrbsAnimation
-	dw OpeningSequenceCmd_FadeIn
-	dwb OpeningSequenceCmd_Delay, 16
-	dwb OpeningSequenceCmd_PlaySFX, SFX_5B
-	dw OpeningSequenceCmd_SetOrbsCoordinates, OpeningOrbCoordinates_InTitleScreen
-	dw OpeningSequenceCmd_SetOrbsAnimations, OpeningOrbAnimations_InTitleScreen
-	dw OpeningSequenceCmd_WaitSFX
-	dw OpeningSequenceCmd_PlayTitleScreenMusic
-	dwb OpeningSequenceCmd_Delay, 60
-	dwb OpeningSequenceCmd_Delay, $ff
+	opening_seq_load_title_screen_scene
+	opening_seq_play_sfx SFX_5A
+	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_InitialTitleScreen
+	opening_seq_set_orbs_animations OpeningOrbAnimations_InitialTitleScreen
+	opening_seq_wait_orbs_animation
+	opening_seq_fade_in
+	opening_seq_delay 16
+	opening_seq_play_sfx SFX_5B
+	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_InTitleScreen
+	opening_seq_set_orbs_animations OpeningOrbAnimations_InTitleScreen
+	opening_seq_wait_sfx
+	opening_seq_play_title_screen_music
+	opening_seq_delay 60
+	opening_seq_end
 ; 0x1d614
 
 Func_1d614: ; 1d614 (7:5614)
@@ -2828,27 +2830,27 @@ Func_1d7fc: ; 1d7fc (7:57fc)
 Func_1d80b: ; 1d80b (7:580b)
 	INCROM $1d80b, $1d835
 
-Func_1d835: ; 1d835 (7:5835)
-	ld a, $02
-	jr Func_1d847
+AdvanceCreditsSequenceCmdPtrBy2: ; 1d835 (7:5835)
+	ld a, 2
+	jr AdvanceCreditsSequenceCmdPtr
 
-Func_1d839: ; 1d839 (7:5839)
-	ld a, $03
-	jr Func_1d847
+AdvanceCreditsSequenceCmdPtrBy3: ; 1d839 (7:5839)
+	ld a, 3
+	jr AdvanceCreditsSequenceCmdPtr
 
-Func_1d83d: ; 1d83d (7:583d)
-	ld a, $05
-	jr Func_1d847
+AdvanceCreditsSequenceCmdPtrBy5: ; 1d83d (7:583d)
+	ld a, 5
+	jr AdvanceCreditsSequenceCmdPtr
 
-Func_1d841: ; 1d841 (7:5841)
-	ld a, $06
-	jr Func_1d847
+AdvanceCreditsSequenceCmdPtrBy6: ; 1d841 (7:5841)
+	ld a, 6
+	jr AdvanceCreditsSequenceCmdPtr
 
-Func_1d845: ; 1d845 (7:5845)
-	ld a, $04
+AdvanceCreditsSequenceCmdPtrBy4: ; 1d845 (7:5845)
+	ld a, 4
 ;	fallthrough
 
-Func_1d847: ; 1d847 (7:5847)
+AdvanceCreditsSequenceCmdPtr: ; 1d847 (7:5847)
 	push hl
 	ld hl, wSequenceCmdPtr
 	add [hl]
@@ -2888,12 +2890,12 @@ Func_1d9a6: ; 1d9a6 (7:59a6)
 
 Func_1d9d5: ; 1d9d5 (7:59d5)
 	call Func_1d9a6
-	jp Func_1d83d
+	jp AdvanceCreditsSequenceCmdPtrBy5
 ; 0x1d9db
 
 Func_1d9db: ; 1d9db (7:59db)
 	call DisableLCD
-	jp Func_1d835
+	jp AdvanceCreditsSequenceCmdPtrBy2
 ; 0x1d9e1
 
 	INCROM $1d9e1, $1daef
