@@ -3030,7 +3030,7 @@ wStartMenuChoice:: ; d628
 	ds $1
 
 ; list of sprites used in the Title Screen
-wTitleScreenSprite:: ; d629
+wTitleScreenSprites:: ; d629
 	ds $7
 
 	ds $1

@@ -761,7 +761,21 @@ Func_10d17: ; 10d17 (4:4d17)
 	ret
 ; 0x10d50
 
-	INCROM $10d50, $10d74
+Func_10d50: ; 10d50 (4:4d50)
+	ld a, [wd293]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld de, PALRGB_WHITE
+	ld hl, wTempBackgroundPalettesCGB
+	ld bc, 4 palettes
+	call FillMemoryWithDE
+	ld a, $10
+	ld [wd317], a
+	ret
+; 0x10d74
 
 ; does stuff according to bottom 2 bits from wd317:
 ; - if equal to %01, modify wBGP
