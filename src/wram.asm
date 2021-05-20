@@ -2497,14 +2497,27 @@ wd291:: ; d291
 wWriteBGMapToSRAM:: ; d292
 	ds $1
 
-	ds $4
+wd293:: ; d293
+	ds $1
+
+wd294:: ; d294
+	ds $1
+
+wd295:: ; d295
+	ds $1
+
+wd296:: ; d296
+	ds $1
 
 ; temporarily holds the palettes from
 ; wBackgroundPalettesCGB
 wTempBackgroundPalettesCGB:: ; d297
 	ds 8 palettes
 
-	ds $41
+	ds $40
+
+wd317:: ; d317
+	ds $1
 
 ; pointer to the data of current map OW frameset
 wCurMapOWFrameset:: ; d318
@@ -2997,10 +3010,12 @@ wSceneSGBPacketPtr:: ; d620
 wSceneSGBRoutinePtr:: ; d622
 	ds $2
 
-wd624:: ; d624
+; whether there exists valid save data
+wHasSaveData:: ; d624
 	ds $1
 
-wd625:: ; d625
+; whether has valid duel save data
+wHasDuelSaveData:: ; d625
 	ds $1
 
 wd626:: ; d626
@@ -3009,23 +3024,35 @@ wd626:: ; d626
 wd627:: ; d627
 	ds $1
 
-wd628:: ; d628
+; START_MENU_* constant chosen
+; by the player in the Start Menu
+wStartMenuChoice:: ; d628
 	ds $1
 
-	ds $a
+; list of sprites used in the Title Screen
+wTitleScreenSprite:: ; d629
+	ds $7
+
+	ds $1
+
+wd631:: ; d631
+	ds $2
 
 wd633:: ; d633
 	ds $1
 
+wd634:: ; d634
 	ds $1
 
 wd635:: ; d635
 	ds $1
 
-wd636:: ; d635
-	ds $1
+; has parameters used for the Start Menu
+; check SetStartMenuParams for what parameters are set
+wStartMenuParams:: ; d636
+	ds $11
 
-	ds $14
+	ds $4
 
 ; wd64b to wd665 used by Func_3e44
 wd64b:: ; d64b

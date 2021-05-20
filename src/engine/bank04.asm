@@ -23,20 +23,24 @@ Func_10000: ; 10000 (4:4000)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
-Func_10031: ; 10031 (4:4031)
+; saves all pals to SRAM, then fills them with white.
+; after flushing, it loads back the saved pals from SRAM.
+FlashWhiteScreen: ; 10031 (4:4031)
 	ldh a, [hBankSRAM]
+
 	push af
-	ld a, $1
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
-	call Func_10cbb
+	call CopyPalsToSRAMBuffer
 	call DisableSRAM
 	call Func_10b28
 	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
-	call Func_10cea
+	call LoadPalsFromSRAMBuffer
 	call FlushAllPalettes
 	pop af
+
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
@@ -51,7 +55,13 @@ Func_1010c: ; 1010c (4:410c)
 	INCROM $1010c, $10197
 
 Func_10197: ; 10197 (4:4197)
-	INCROM $10197, $1029e
+	INCROM $10197, $101df
+
+Func_101df: ; 101df (4:41df)
+	INCROM $101df, $1024f
+
+Func_1024f: ; 1024f (4:424f)
+	INCROM $1024f, $1029e
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -80,7 +90,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call Func_10031
+	call FlashWhiteScreen
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld a, $ff
@@ -148,7 +158,7 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call Func_10031
+	call FlashWhiteScreen
 	call PauseSong
 	ld a, MUSIC_BOOSTER_PACK
 	call PlaySong
@@ -272,7 +282,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
-	call Func_10031
+	call FlashWhiteScreen
 	call DoFrameIfLCDEnabled
 	lb bc, $2f, $1d ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
@@ -285,10 +295,14 @@ Duel_Init: ; 103d3 (4:43d3)
 	ret
 
 Unknown_10451: ; 10451 (4:4451)
-	INCROM $10451, $10456
+	db 1, 14
+	tx Text0395
+	db $ff
 
 Unknown_10456: ; 10456 (4:4456)
-	INCROM $10456, $1045b
+	db 1, 16
+	tx Text0396
+	db $ff
 
 Unknown_1045b: ; 1045b (4:445b)
 	INCROM $1045b, $1052f
@@ -343,8 +357,28 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	pop hl
 	ret
 
+; writes wd293 with byte depending on console
+; every entry in the list is $00
 Func_10a9b: ; 10a9b (4:4a9b)
-	INCROM $10a9b, $10ab4
+	push hl
+	ld a, [wConsole]
+	add LOW(.data_10ab1)
+	ld l, a
+	ld a, HIGH(.data_10ab1)
+	adc $00
+	ld h, a
+	ld a, [hl]
+	ld [wd293], a
+	xor a
+	ld [wd317], a
+	pop hl
+	ret
+
+.data_10ab1
+	db $00 ; CONSOLE_DMG
+	db $00 ; CONSOLE_SGB
+	db $00 ; CONSOLE_CGB
+; 0x10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
 	INCROM $10ab4, $10af9
@@ -352,8 +386,269 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 Func_10af9: ; 10af9 (4:4af9)
 	INCROM $10af9, $10b28
 
+; fills wBackgroundPalettesCGB with white pal
 Func_10b28: ; 10b28 (4:4b28)
-	INCROM $10b28, $10c96
+	ld a, [wd293]
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	ret
+; 0x10b41
+
+	INCROM $10b41, $10b85
+
+; does something with wBGP given wd294
+; mixes them into a single value?
+Func_10b85: ; 10b85 (4:4b85)
+	push bc
+	ld c, $03
+	ld hl, wBGP
+	ld de, wd294
+.asm_10b8e
+	push bc
+	ld b, [hl]
+	ld a, [de]
+	ld c, a
+	call .Func_10b9e
+	ld [hl], a
+	pop bc
+	inc de
+	inc hl
+	dec c
+	jr nz, .asm_10b8e
+	pop bc
+	ret
+
+.Func_10b9e
+	push bc
+	push de
+	ld e, 4
+	ld d, $00
+.loop
+	call .Func_10bba
+	or d
+	rlca
+	rlca
+	ld d, a
+	rlc b
+	rlc b
+	rlc c
+	rlc c
+	dec e
+	jr nz, .loop
+	ld a, d
+	pop de
+	pop bc
+	ret
+
+; calculates ((b & %11) << 2) | (c & %11)
+; that is, %0000xxyy, where x and y are
+; the 2 lower bits of b and c respectively
+; and outputs the entry from a table given that value
+.Func_10bba
+	push hl
+	push bc
+	ld a, %11
+	and b
+	add a
+	add a
+	ld b, a
+	ld a, %11
+	and c
+	or b
+	ld c, a
+	ld b, $00
+	ld hl, .data_10bd1
+	add hl, bc
+	ld a, [hl]
+	pop bc
+	pop hl
+	ret
+
+.data_10bd1
+	db %00 ; b = %00 | c = %00
+	db %01 ; b = %00 | c = %01
+	db %01 ; b = %00 | c = %10
+	db %01 ; b = %00 | c = %11
+	db %00 ; b = %01 | c = %00
+	db %01 ; b = %01 | c = %01
+	db %10 ; b = %01 | c = %10
+	db %10 ; b = %01 | c = %11
+	db %01 ; b = %10 | c = %00
+	db %01 ; b = %10 | c = %01
+	db %10 ; b = %10 | c = %10
+	db %11 ; b = %10 | c = %11
+	db %10 ; b = %11 | c = %00
+	db %10 ; b = %11 | c = %01
+	db %10 ; b = %11 | c = %10
+	db %11 ; b = %11 | c = %11
+; 0x10be1
+
+	INCROM $10be1, $10bec
+
+FadeBGPalIntoTemp1: ; 10bec (4:4bec)
+	push bc
+	ld c, 2 palettes
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	jr FadePalIntoAnother
+
+FadeBGPalIntoTemp2: ; 10bf7 (4:4bf7)
+	push bc
+	ld c, 2 palettes
+	ld hl, wBackgroundPalettesCGB + 4 palettes
+	ld de, wTempBackgroundPalettesCGB + 4 palettes
+	jr FadePalIntoAnother
+
+	push bc
+	ld c, 4 palettes
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+;	fallthrough
+
+; hl = input pal to modify
+; de = pal to fade into
+; c = number of colors to fade
+FadePalIntoAnother: ; 10c0b (4:4c0b)
+	push bc
+	ld a, [de]
+	inc de
+	ld c, a
+	ld a, [de]
+	inc de
+	ld b, a
+	push de
+	push bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	pop de
+	call .GetFadedColor
+	; overwrite with new color
+	ld [hld], a
+	ld [hl], c
+	inc hl
+	inc hl
+	pop de
+	pop bc
+	dec c
+	jr nz, FadePalIntoAnother
+	pop bc
+	ret
+
+; fade pal bc to de
+; output resulting pal in a and c
+.GetFadedColor
+	push hl
+	ld a, c
+	cp e
+	jr nz, .unequal
+	ld a, b
+	cp d
+	jr z, .skip
+
+.unequal
+	; red
+	ld a, e
+	and %11111
+	ld l, a
+	ld a, c
+	and %11111
+	call .FadeColor
+	ldh [hffb6], a
+
+	; green
+	ld a, e
+	and %11100000
+	ld l, a
+	ld a, d
+	and %11
+	or l
+	swap a
+	rrca
+	ld l, a
+	ld a, c
+	and %11100000
+	ld h, a
+	ld a, b
+	and %11
+	or h
+	swap a
+	rrca
+	call .FadeColor
+	rlca
+	swap a
+	ld h, a
+	and %11
+	ldh [hffb7], a
+	ld a, %11100000
+	and h
+	ld h, a
+	ldh a, [hffb6]
+	or h
+	ld h, a
+
+	; blue
+	ld a, d
+	and %1111100
+	rrca
+	rrca
+	ld l, a
+	ld a, b
+	and %1111100
+	rrca
+	rrca
+	call .FadeColor
+	rlca
+	rlca
+	ld b, a
+	ldh a, [hffb7]
+	or b
+	ld c, h
+.skip
+	pop hl
+	ret
+
+; compares color in a and in l
+; if a is smaller/greater than l, then
+; increase/decrease its value up to l
+; up to a maximum of 4
+; a = pal color (red, green or blue)
+; l = pal color (red, green or blue)
+.FadeColor
+	cp l
+	ret z ; same value
+	jr c, .incr_a
+; decr a
+	dec a
+	cp l
+	ret z
+	dec a
+	cp l
+	ret z
+	dec a
+	cp l
+	ret z
+	dec a
+	ret
+
+.incr_a
+	inc a
+	cp l
+	ret z
+	inc a
+	cp l
+	ret z
+	inc a
+	cp l
+	ret z
+	inc a
+	ret
+; 0x10c96
 
 Func_10c96: ; 10c96 (4:4c96)
 	ldh a, [hBankSRAM]
@@ -361,13 +656,13 @@ Func_10c96: ; 10c96 (4:4c96)
 	push bc
 	ld a, $1
 	call BankswitchSRAM
-	call Func_10cbb
+	call CopyPalsToSRAMBuffer
 	call Func_10ab4
 	pop bc
 	ld a, c
 	or a
 	jr nz, .asm_10cb0
-	call Func_10cea
+	call LoadPalsFromSRAMBuffer
 	call Func_10af9
 
 .asm_10cb0
@@ -377,11 +672,123 @@ Func_10c96: ; 10c96 (4:4c96)
 	call DisableSRAM
 	ret
 
-Func_10cbb: ; 10cbb (4:4cbb)
-	INCROM $10cbb, $10cea
+; copies current BG and OP pals,
+; wBackgroundPalettesCGB and wObjectPalettesCGB
+; to sGfxBuffer2
+CopyPalsToSRAMBuffer: ; 10cbb (4:4cbb)
+	ldh a, [hBankSRAM]
 
-Func_10cea: ; 10cea (4:4cea)
-	INCROM $10cea, $10d98
+	push af
+	cp BANK("SRAM1")
+	jr z, .ok
+	debug_nop
+.ok
+	ld a, BANK("SRAM1")
+	call BankswitchSRAM
+	ld hl, sGfxBuffer2
+	ld a, [wBGP]
+	ld [hli], a
+	ld a, [wOBP0]
+	ld [hli], a
+	ld a, [wOBP1]
+	ld [hli], a
+	ld e, l
+	ld d, h
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x10cea
+
+; loads BG and OP pals,
+; wBackgroundPalettesCGB and wObjectPalettesCGB
+; from sGfxBuffer2
+LoadPalsFromSRAMBuffer: ; 10cea (4:4cea)
+	ldh a, [hBankSRAM]
+
+	push af
+	cp BANK("SRAM1")
+	jr z, .ok
+	debug_nop
+.ok
+	ld a, BANK("SRAM1")
+	call BankswitchSRAM
+	ld hl, sGfxBuffer2
+	ld a, [hli]
+	ld [wBGP], a
+	ld a, [hli]
+	ld [wOBP0], a
+	ld a, [hli]
+	ld [wOBP1], a
+	ld de, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x10d17
+
+; backs up all palettes
+; and writes 4 BG pals with white pal
+Func_10d17: ; 10d17 (4:4d17)
+	ld a, [wBGP]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+
+	ld a, [wd293]
+	ld [wBGP], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, 4 palettes
+	call FillMemoryWithDE
+	call FlushAllPalettes
+
+	ld a, $10
+	ld [wd317], a
+	ret
+; 0x10d50
+
+	INCROM $10d50, $10d74
+
+; does stuff according to bottom 2 bits from wd317:
+; - if equal to %01, modify wBGP
+; - if bottom bit not set, fade BG pals 0 and 1
+; - if bottom bit is set, fade BG pals 4 and 5
+;   and Flush Palettes
+; then decrements wd317
+; does nothing if wd317 is 0
+Func_10d74: ; 10d74 (4:4d74)
+	ld a, [wd317]
+	or a
+	ret z
+	and %11
+	ld c, a
+	cp $1
+	call z, Func_10b85
+	bit 0, c
+	call z, FadeBGPalIntoTemp1
+	bit 0, c
+	call nz, FadeBGPalIntoTemp2
+	bit 0, c
+	call nz, FlushAllPalettes
+	ld a, [wd317]
+	dec a
+	ld [wd317], a
+	ret
+; 0x10d98
 
 Unknown_10d98: ; 10d98 (4:4d98)
 	INCROM $10d98, $10da9
@@ -394,7 +801,7 @@ Func_10dba: ; 10dba (4:4dba)
 	farcall Func_c29b
 	ld a, [wd0ba]
 	ld hl, Unknown_10e17
-	farcall Func_111e9
+	farcall InitAndPrintStartMenu
 .asm_10dca
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -1079,11 +1486,107 @@ OverworldMap_ContinuePlayerWalkingAnimation: ; 11184 (4:5184)
 	dec [hl]
 	ret
 
+; prints $ff-terminated list of text to text box
+; given 2 bytes for text alignment and 2 bytes for text ID
 Func_111b3: ; 111b3 (4:51b3)
-	INCROM $111b3, $111e9
+	ldh a, [hffb0]
+	push af
+	ld a, $02
+	ldh [hffb0], a
 
-Func_111e9: ; 111e9 (4:51e9)
-	INCROM $111e9, $11238
+	push hl
+.loop_text_print_1
+	ld d, [hl]
+	inc hl
+	bit 7, d
+	jr nz, .next
+	inc hl
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	pop hl
+	inc hl
+	jr .loop_text_print_1
+
+.next
+	pop hl
+	pop af
+	ldh [hffb0], a
+.loop_text_print_2
+	ld d, [hl]
+	inc hl
+	bit 7, d
+	ret nz
+	ld e, [hl]
+	inc hl
+	call AdjustCoordinatesForBGScroll
+	call InitTextPrinting
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	pop hl
+	inc hl
+	jr .loop_text_print_2
+; 0x111e9
+
+InitAndPrintStartMenu: ; 111e9 (4:51e9)
+	push hl
+	push bc
+	push de
+	push af
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	push hl
+	call AdjustCoordinatesForBGScroll
+	farcall Func_c3ca
+	call DrawRegularTextBox
+	call DoFrameIfLCDEnabled
+	pop hl
+	call Func_111b3
+	pop af
+	call InitializeMenuParameters
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x1120f
+
+; xors sb800
+; this has the effect of invalidating the save data checksum
+; which the game interprets as being having no save data
+InvalidateSaveData: ; 1120f (4:520f)
+	push hl
+	ldh a, [hBankSRAM]
+
+	push af
+	ld a, $02
+	call BankswitchSRAM
+	ld a, $08
+	xor $ff
+	ld [sb800 + 0], a
+	ld a, $00
+	xor $ff
+	ld [sb800 + 1], a
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	call EnableSRAM
+	bank1call DiscardSavedDuelData
+	call DisableSRAM
+	pop hl
+	ret
+; 0x11238
 
 ; saves all data to SRAM, including
 ; General save data and Album/Deck data
@@ -3217,7 +3720,7 @@ _GameLoop: ; 126d1 (4:66d1)
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
 	farcall Func_1d078
-	ld a, [wd628]
+	ld a, [wStartMenuChoice]
 	ld hl, MainMenuFunctionTable
 	call JumpToFunctionInTable
 	jr c, .main_menu_loop ; return to main menu
@@ -3497,7 +4000,7 @@ GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	ret
 ; 0x12a21
 
-HandleAllSpriteAnimations: ; 12a21 (4:6a21)
+_HandleAllSpriteAnimations: ; 12a21 (4:6a21)
 	push af
 	ld a, [wd5d7] ; skip animating this frame if enabled
 	or a

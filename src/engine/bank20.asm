@@ -1416,7 +1416,7 @@ Func_80cd7: ; 80cd7 (20:4cd7)
 .loop
 	call DoFrameIfLCDEnabled
 	call .HandleInput
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	ldh a, [hKeysPressed]
 	and SELECT ; if select is pressed, exit
 	jr z, .loop

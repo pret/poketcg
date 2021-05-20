@@ -1955,7 +1955,7 @@ LoadRegistersFromIRDataBuffer: ; 198d0 (6:58d0)
 ; 0x198e7
 
 ; empties screen and replaces
-; wVBlankFunctionTrampoline with Func_3cb4
+; wVBlankFunctionTrampoline with HandleAllSpriteAnimations
 Func_198e7: ; 198e7 (6:58e7)
 	call EmptyScreen
 	call Set_OBJ_8x8
@@ -1966,9 +1966,9 @@ Func_198e7: ; 198e7 (6:58e7)
 	ld de, wVBlankFunctionTrampolineBackup
 	call BackupVBlankFunctionTrampoline
 	di
-	ld [hl], LOW(Func_3cb4)
+	ld [hl], LOW(HandleAllSpriteAnimations)
 	inc hl
-	ld [hl], HIGH(Func_3cb4)
+	ld [hl], HIGH(HandleAllSpriteAnimations)
 	ei
 	ret
 ; 0x19907

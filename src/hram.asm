@@ -180,3 +180,6 @@ hffb5:: ; ffb5
 ; used in DivideBCbyDE
 hffb6:: ; ffb6
 	ds $1
+
+hffb7:: ; ffb7
+	ds $1

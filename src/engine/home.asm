@@ -10603,7 +10603,7 @@ OverworldDoFrameFunction: ; 380e (0:380e)
 	ld a, BANK(HandleAllNPCMovement)
 	call BankswitchROM
 	call HandleAllNPCMovement
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
 	call DoLoadedFramesetSubgroupsFrame
@@ -11238,7 +11238,7 @@ Func_3ba2: ; 3ba2 (0:3ba2)
 	ld a, BANK(Func_1cac5)
 	call BankswitchROM
 	call Func_1cac5
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
@@ -11250,7 +11250,7 @@ Func_3bb5: ; 3bb5 (0:3bb5)
 	push af
 	ld a, [wDuelAnimReturnBank]
 	call BankswitchROM
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	call CallHL2
 	pop af
 	call BankswitchROM
@@ -11450,12 +11450,12 @@ Func_3ca4: ; 3ca4 (0:3ca4)
 	call BankswitchROM
 	ret
 
-Func_3cb4: ; 3cb4 (0:3cb4)
+HandleAllSpriteAnimations: ; 3cb4 (0:3cb4)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(HandleAllSpriteAnimations)
+	ld a, BANK(_HandleAllSpriteAnimations)
 	call BankswitchROM
-	call HandleAllSpriteAnimations
+	call _HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
@@ -11702,7 +11702,7 @@ LoadScene: ; 3df3 (0:3df3)
 	ret
 
 ; draws player's portrait at b,c
-Func_3e10: ; 3e10 (0:3e10)
+DrawPlayerPortrait: ; 3e10 (0:3e10)
 	ld a, $1
 	ld [wd61e], a
 	ld a, TILEMAP_PLAYER
@@ -11728,7 +11728,7 @@ Func_3e2a: ; 3e2a (0:3e2a)
 Func_3e31: ; 3e31 (0:3e31)
 	ldh a, [hBankROM]
 	push af
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
 	call DoLoadedFramesetSubgroupsFrame

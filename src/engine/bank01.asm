@@ -1643,7 +1643,7 @@ DrawDuelistPortraitsAndNames: ; 4a97 (1:4a97)
 	call ProcessText
 	; player's portrait
 	lb bc, 0, 5
-	call Func_3e10
+	call DrawPlayerPortrait
 	; opponent's name (aligned to the right)
 	ld de, wDefaultText
 	push de

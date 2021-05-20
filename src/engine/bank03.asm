@@ -698,7 +698,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	xor a
 	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
-	ld a, $1d
+	ld a, PALETTE_29
 	farcall LoadPaletteData
 	ld b, $0
 	ld a, [wConsole]
@@ -1148,7 +1148,7 @@ StartMenu: ; c75a (3:475a)
 Func_c797: ; c797 (3:4797)
 	ld a, [wd0b8]
 	ld hl, Unknown_10d98
-	farcall Func_111e9
+	farcall InitAndPrintStartMenu
 	ret
 
 PointerTable_c7a2: ; c7a2 (3:47a2)
@@ -1245,7 +1245,7 @@ PointerTable_c846: ; c846 (3:4846)
 Func_c84e: ; c84e (3:484e)
 	ld a, [wd0b9]
 	ld hl, Unknown_10da9
-	farcall Func_111e9
+	farcall InitAndPrintStartMenu
 	ret
 
 Func_c859: ; c859 (3:4859)
@@ -2376,7 +2376,7 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 .show_card
 	push af
 	farcall Func_10000
-	farcall Func_10031
+	farcall FlashWhiteScreen
 	pop af
 	bank1call Func_7594
 	call WhiteOutDMGPals
@@ -3025,7 +3025,7 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld h, [hl]
 	ld l, a
 	ld a, [wd416]
-	farcall Func_111e9
+	farcall InitAndPrintStartMenu
 	pop hl
 	inc hl
 	ld a, [hli]

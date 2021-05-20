@@ -877,19 +877,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0369                                           ; 0x0369
 	textpointer Text036a                                           ; 0x036a
 	textpointer Text036b                                           ; 0x036b
-	textpointer Text036c                                           ; 0x036c
-	textpointer Text036d                                           ; 0x036d
-	textpointer Text036e                                           ; 0x036e
-	textpointer Text036f                                           ; 0x036f
-	textpointer Text0370                                           ; 0x0370
-	textpointer Text0371                                           ; 0x0371
-	textpointer Text0372                                           ; 0x0372
-	textpointer Text0373                                           ; 0x0373
-	textpointer Text0374                                           ; 0x0374
-	textpointer Text0375                                           ; 0x0375
-	textpointer Text0376                                           ; 0x0376
-	textpointer Text0377                                           ; 0x0377
-	textpointer Text0378                                           ; 0x0378
+	textpointer NewGameText                                        ; 0x036c
+	textpointer CardPopContinueDiaryNewGameText                    ; 0x036d
+	textpointer CardPopContinueDiaryNewGameContinueDuelText        ; 0x036e
+	textpointer WhenYouCardPopWithFriendText                       ; 0x036f
+	textpointer ContinueFromDiarySummaryText                       ; 0x0370
+	textpointer StartANewGameText                                  ; 0x0371
+	textpointer TheGameWillContinueFromThePointInTheDuelText       ; 0x0372
+	textpointer SavedDataAlreadyExistsText                         ; 0x0373
+	textpointer OKToDeleteTheDataText                              ; 0x0374
+	textpointer AllDataWasDeletedText                              ; 0x0375
+	textpointer DataExistsWhenPowerWasTurnedOFFDuringDuelText      ; 0x0376
+	textpointer ContinueFromDiaryText                              ; 0x0377
+	textpointer YouCanAccessCardPopOnlyWithGameBoyColorsText       ; 0x0378
 	textpointer Text0379                                           ; 0x0379
 	textpointer Text037a                                           ; 0x037a
 	textpointer Text037b                                           ; 0x037b

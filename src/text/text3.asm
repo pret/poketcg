@@ -1269,29 +1269,29 @@ Text036b: ; 3ec03 (f:6c03)
 	text "Mail 15"
 	done
 
-Text036c: ; 3ec0c (f:6c0c)
+NewGameText: ; 3ec0c (f:6c0c)
 	text "NEW GAME"
 	done
 
-Text036d: ; 3ec16 (f:6c16)
+CardPopContinueDiaryNewGameText: ; 3ec16 (f:6c16)
 	text "CARD POP!"
 	line "CONTINUE FROM DIARY"
 	line "NEW GAME"
 	done
 
-Text036e: ; 3ec3e (f:6c3e)
+CardPopContinueDiaryNewGameContinueDuelText: ; 3ec3e (f:6c3e)
 	text "CARD POP!"
 	line "CONTINUE FROM DIARY"
 	line "New Game"
 	line "CONTINUE DUEL"
 	done
 
-Text036f: ; 3ec74 (f:6c74)
+WhenYouCardPopWithFriendText: ; 3ec74 (f:6c74)
 	text "When you CARD POP! with a friend,"
 	line "you will each receive a new card!"
 	done
 
-Text0370: ; 3ecb9 (f:6cb9)
+ContinueFromDiarySummaryText: ; 3ecb9 (f:6cb9)
 	text "  <RAMNAME>  <RAMTEXT>"
 	line "      Master Medals Won "
 	half2full
@@ -1307,32 +1307,32 @@ Text0370: ; 3ecb9 (f:6cb9)
 	text ""
 	done
 
-Text0371: ; 3ed14 (f:6d14)
+StartANewGameText: ; 3ed14 (f:6d14)
 	text "Start a New Game."
 	line ""
 	done
 
-Text0372: ; 3ed28 (f:6d28)
+TheGameWillContinueFromThePointInTheDuelText: ; 3ed28 (f:6d28)
 	text "The Game will continue from "
 	line "the point in the duel at"
 	line "which the power was turned OFF."
 	done
 
-Text0373: ; 3ed7f (f:6d7f)
+SavedDataAlreadyExistsText: ; 3ed7f (f:6d7f)
 	text "Saved data already exists."
 	line "If you continue, you will lose"
 	line "all the cards you have collected."
 	done
 
-Text0374: ; 3eddc (f:6ddc)
+OKToDeleteTheDataText: ; 3eddc (f:6ddc)
 	text "OK to delete the data?"
 	done
 
-Text0375: ; 3edf4 (f:6df4)
+AllDataWasDeletedText: ; 3edf4 (f:6df4)
 	text "All data was deleted."
 	done
 
-Text0376: ; 3ee0b (f:6e0b)
+DataExistsWhenPowerWasTurnedOFFDuringDuelText: ; 3ee0b (f:6e0b)
 	text "Data exists from when the power "
 	line "was turned OFF during a duel."
 	line "Choose CONTINUE DUEL on the"
@@ -1347,11 +1347,11 @@ Text0376: ; 3ee0b (f:6e0b)
 	line "from the point saved in"
 	done
 
-Text0377: ; 3ef50 (f:6f50)
+ContinueFromDiaryText: ; 3ef50 (f:6f50)
 	text "CONTINUE FROM DIARY?"
 	done
 
-Text0378: ; 3ef66 (f:6f66)
+YouCanAccessCardPopOnlyWithGameBoyColorsText: ; 3ef66 (f:6f66)
 	text "You can access Card Pop! only"
 	line "with two Game Boy Colors."
 	line "Please play using a Game Boy Color."
