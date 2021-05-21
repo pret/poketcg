@@ -867,8 +867,7 @@ LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	ret
 ; 0x8047b
 
-; unreferenced?
-Func_8047b: ; 8047b (20:447b)
+ClearNumLoadedFramesetSubgroups: ; 8047b (20:447b)
 	xor a
 	ld [wNumLoadedFramesetSubgroups], a
 	ret

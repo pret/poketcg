@@ -27,8 +27,8 @@ ENDM
 ; x coordinate
 ; y coordinate
 ; text ID
-credits_seq_print_text: MACRO
-	dw CreditsSequenceCmd_PrintText
+credits_seq_print_text_box: MACRO
+	dw CreditsSequenceCmd_PrintTextBox
 	db \1, \2
 	tx \3
 ENDM
@@ -36,8 +36,8 @@ ENDM
 ; x coordinate
 ; y coordinate
 ; text ID
-credits_seq_print_text_special: MACRO
-	dw CreditsSequenceCmd_PrintTextSpecial
+credits_seq_print_text: MACRO
+	dw CreditsSequenceCmd_PrintText
 	db \1, \2
 	tx \3
 ENDM
