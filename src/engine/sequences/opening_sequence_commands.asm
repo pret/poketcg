@@ -1,11 +1,12 @@
-Func_1d408: ; 1d408 (7:5408)
-	ld a, [wd633]
+ExecuteOpeningSequenceCmd: ; 1d408 (7:5408)
+	ld a, [wSequenceDelay]
 	or a
 	jr z, .call_function
 	cp $ff
-	ret z
-	dec a
-	ld [wd633], a
+	ret z ; sequence ended
+
+	dec a ; still waiting
+	ld [wSequenceDelay], a
 	ret
 
 .call_function
@@ -24,7 +25,7 @@ Func_1d408: ; 1d408 (7:5408)
 	ld l, e
 	ld h, d
 	call CallHL2
-	jr c, Func_1d408
+	jr c, ExecuteOpeningSequenceCmd
 	ret
 ; 0x1d42e
 
@@ -75,7 +76,7 @@ OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 
 OpeningSequenceCmd_Wait: ; 1d460 (7:5460)
 	ld a, c
-	ld [wd633], a
+	ld [wSequenceDelay], a
 	call AdvanceOpeningSequenceCmdPtrBy3
 	scf
 	ret

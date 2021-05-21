@@ -2288,7 +2288,7 @@ Func_1d335: ; 1d335 (7:5335)
 	xor a
 	ld [wd317], a
 	ld [wd634], a
-	ld [wd633], a
+	ld [wSequenceDelay], a
 	farcall FlashWhiteScreen
 
 .asm_1d364
@@ -2302,8 +2302,8 @@ Func_1d335: ; 1d335 (7:5335)
 	jr z, .asm_1d37a
 	farcall Func_10d74
 .asm_1d37a
-	call Func_1d408
-	ld a, [wd633]
+	call ExecuteOpeningSequenceCmd
+	ld a, [wSequenceDelay]
 	cp $ff
 	jr nz, .asm_1d364
 	jr .asm_1d39f
@@ -2388,12 +2388,12 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_CREDITS
 	call PlaySong
 	farcall FlashWhiteScreen
-	call Func_1d7fc
+	call SetCreditsSequenceCmdPtr
 .asm_1d6c8
 	call DoFrameIfLCDEnabled
 	call Func_1d765
-	call Func_1d80b
-	ld a, [wd633]
+	call ExecuteCreditsSequenceCmd
+	ld a, [wSequenceDelay]
 	cp $ff
 	jr nz, .asm_1d6c8
 	call WaitForSongToFinish

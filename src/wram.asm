@@ -3043,7 +3043,10 @@ wTitleScreenSprites:: ; d629
 wSequenceCmdPtr:: ; d631
 	ds $2
 
-wd633:: ; d633
+; when non-zero, is decremented and only
+; executes the next sequence command when it's 0
+; when it's $ff, it is interpreted as end of sequence
+wSequenceDelay:: ; d633
 	ds $1
 
 wd634:: ; d634

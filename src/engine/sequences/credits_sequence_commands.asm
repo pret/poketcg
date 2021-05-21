@@ -1,21 +1,22 @@
-Func_1d7fc: ; 1d7fc (7:57fc)
+SetCreditsSequenceCmdPtr: ; 1d7fc (7:57fc)
 	ld a, LOW(CreditsSequence)
 	ld [wSequenceCmdPtr + 0], a
 	ld a, HIGH(CreditsSequence)
 	ld [wSequenceCmdPtr + 1], a
 	xor a
-	ld [wd633], a
+	ld [wSequenceDelay], a
 	ret
 ; 0x1d80b
 
-Func_1d80b: ; 1d80b (7:580b)
-	ld a, [wd633]
+ExecuteCreditsSequenceCmd: ; 1d80b (7:580b)
+	ld a, [wSequenceDelay]
 	or a
 	jr z, .call_func
 	cp $ff
-	ret z
-	dec a
-	ld [wd633], a
+	ret z ; sequence ended
+
+	dec a ; still waiting
+	ld [wSequenceDelay], a
 	ret
 
 .call_func
@@ -38,7 +39,7 @@ Func_1d80b: ; 1d80b (7:580b)
 	ld d, a
 	pop hl
 	call CallHL2
-	jr Func_1d80b
+	jr ExecuteCreditsSequenceCmd
 ; 0x1d834
 
 	ret ; stray ret
@@ -77,7 +78,7 @@ AdvanceCreditsSequenceCmdPtr: ; 1d847 (7:5847)
 
 CreditsSequenceCmd_Wait: ; 1d853 (7:5853)
 	ld a, c
-	ld [wd633], a
+	ld [wSequenceDelay], a
 	jp AdvanceCreditsSequenceCmdPtrBy3
 ; 0x1d85a
 
@@ -453,7 +454,7 @@ CreditsSequenceCmd_TransformOverlay: ; 1daa5 (7:5aa5)
 	or a
 	jr z, .advance_sequence
 	ld a, $01
-	ld [wd633], a
+	ld [wSequenceDelay], a
 	ret
 
 .advance_sequence
