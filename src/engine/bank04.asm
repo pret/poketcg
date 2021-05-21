@@ -381,10 +381,55 @@ Func_10a9b: ; 10a9b (4:4a9b)
 ; 0x10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
-	INCROM $10ab4, $10af9
+	ld a, [wLCDC]
+	bit 7, a
+	jr z, .lcd_off
+	ld a, [wd293]
+	ld [wd294], a
+	ld [wd295], a
+	ld [wd296], a
+	ld de, PALRGB_WHITE
+	ld hl, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	call RestoreFirstColorInOBPals
+	call Func_10b5e
+	call DisableLCD
+	ret
+
+.lcd_off
+	ld a, [wd293]
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	call FlushAllPalettes
+	ret
+; 0x10af9
 
 Func_10af9: ; 10af9 (4:4af9)
-	INCROM $10af9, $10b28
+	call BackupPalsAndSetWhite
+	call RestoreFirstColorInOBPals
+	call FlushAllPalettes
+	call EnableLCD
+	jp Func_10b5e
+; 0x10b08
+
+BackupPalsAndSetWhite: ; 10b08 (4:4b08)
+	ld a, [wBGP]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	jr Func_10b28 ; can be fallthrough
 
 ; fills wBackgroundPalettesCGB with white pal
 Func_10b28: ; 10b28 (4:4b28)
@@ -399,7 +444,57 @@ Func_10b28: ; 10b28 (4:4b28)
 	ret
 ; 0x10b41
 
-	INCROM $10b41, $10b85
+; gets from backup OB pals the first color
+; of each pal and writes them in wObjectPalettesCGB
+RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
+	ld hl, wTempObjectPalettesCGB
+	ld de, wObjectPalettesCGB
+	ld c, NUM_OBJECT_PALETTES
+.loop_pals
+	push bc
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	ld bc, CGB_PAL_SIZE - 1
+	add hl, bc
+	ld a, c
+	add e
+	ld e, a
+	ld a, b
+	adc d
+	ld d, a
+	pop bc
+	dec c
+	jr nz, .loop_pals
+	ret
+; 0x10b5e
+
+Func_10b5e: ; 10b5e (4:4b5e)
+	ld a, [wVBlankCounter]
+	push af
+	ld c, $10
+.loop
+	push bc
+	ld a, c
+	and $03
+	cp $00
+	call z, Func_10b85
+	call FadeBGPalIntoTemp3
+	call FadeOBPalIntoTemp
+	call FlushAllPalettes
+	call DoFrameIfLCDEnabled
+	pop bc
+	dec c
+	dec c
+	jr nz, .loop
+	pop af
+	ld b, a
+	ld a, [wVBlankCounter]
+	sub b
+	ret
+; 0x10b85
 
 ; does something with wBGP given wd294
 ; mixes them into a single value?
@@ -488,7 +583,13 @@ Func_10b85: ; 10b85 (4:4b85)
 	db %11 ; b = %11 | c = %11
 ; 0x10be1
 
-	INCROM $10be1, $10bec
+FadeOBPalIntoTemp: ; 10be1 (4:4be1)
+	push bc
+	ld c, 4 palettes
+	ld hl, wObjectPalettesCGB
+	ld de, wTempObjectPalettesCGB
+	jr FadePalIntoAnother
+; 0x10bec
 
 FadeBGPalIntoTemp1: ; 10bec (4:4bec)
 	push bc
@@ -504,6 +605,7 @@ FadeBGPalIntoTemp2: ; 10bf7 (4:4bf7)
 	ld de, wTempBackgroundPalettesCGB + 4 palettes
 	jr FadePalIntoAnother
 
+FadeBGPalIntoTemp3: ; 10c02 (4:4c02)
 	push bc
 	ld c, 4 palettes
 	ld hl, wBackgroundPalettesCGB
@@ -3823,7 +3925,22 @@ Func_12871: ; 12871 (4:6871)
 	INCROM $12871, $1288c
 
 Func_1288c: ; 1288c (4:688c)
-	INCROM $1288c, $128a9
+	push hl
+	push bc
+	push de
+	ld a, %11100100
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld a, 4
+	ld [wTextBoxFrameType], a
+	bank1call SetDefaultPalettes
+	call FlushAllPalettes
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x128a9
 
 DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; clear the name buffer.

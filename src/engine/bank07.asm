@@ -2446,7 +2446,7 @@ OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	ret
 ; 0x1d460
 
-OpeningSequenceCmd_Delay: ; 1d460 (7:5460)
+OpeningSequenceCmd_Wait: ; 1d460 (7:5460)
 	ld a, c
 	ld [wd633], a
 	call AdvanceOpeningSequenceCmdPtrBy3
@@ -2728,31 +2728,31 @@ OpeningSequence: ; 1d59d (7:559d)
 	opening_seq_play_sfx SFX_58
 	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_CharizardScene
 	opening_seq_set_orbs_animations OpeningOrbAnimations_CharizardScene
-	opening_seq_delay 44
+	opening_seq_wait 44
 	opening_seq_fade_in
-	opening_seq_delay 44
+	opening_seq_wait 44
 	opening_seq_fade_out
-	opening_seq_delay 30
+	opening_seq_wait 30
 
 	opening_seq_load_scyther_scene
 	opening_seq_play_sfx SFX_58
 	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_ScytherScene
 	opening_seq_set_orbs_animations OpeningOrbAnimations_ScytherScene
-	opening_seq_delay 44
+	opening_seq_wait 44
 	opening_seq_fade_in
-	opening_seq_delay 44
+	opening_seq_wait 44
 	opening_seq_fade_out
-	opening_seq_delay 30
+	opening_seq_wait 30
 	
 	opening_seq_load_aerodactyl_scene
 	opening_seq_play_sfx SFX_59
 	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_AerodactylScene
 	opening_seq_set_orbs_animations OpeningOrbAnimations_AerodactylScene
-	opening_seq_delay 44
+	opening_seq_wait 44
 	opening_seq_fade_in
-	opening_seq_delay 100
+	opening_seq_wait 100
 	opening_seq_fade_out
-	opening_seq_delay 60
+	opening_seq_wait 60
 
 	opening_seq_load_title_screen_scene
 	opening_seq_play_sfx SFX_5A
@@ -2760,13 +2760,13 @@ OpeningSequence: ; 1d59d (7:559d)
 	opening_seq_set_orbs_animations OpeningOrbAnimations_InitialTitleScreen
 	opening_seq_wait_orbs_animation
 	opening_seq_fade_in
-	opening_seq_delay 16
+	opening_seq_wait 16
 	opening_seq_play_sfx SFX_5B
 	opening_seq_set_orbs_coordinates OpeningOrbCoordinates_InTitleScreen
 	opening_seq_set_orbs_animations OpeningOrbAnimations_InTitleScreen
 	opening_seq_wait_sfx
 	opening_seq_play_title_screen_music
-	opening_seq_delay 60
+	opening_seq_wait 60
 	opening_seq_end
 ; 0x1d614
 
@@ -2815,7 +2815,102 @@ Func_1d758: ; 1d758 (7:5758)
 	INCROM $1d758, $1d765
 
 Func_1d765: ; 1d765 (7:5765)
-	INCROM $1d765, $1d7fc
+	push hl
+	push bc
+	push de
+	xor a
+	ldh [hWY], a
+
+	ld hl, wd659
+	ld de, wd65f
+	ld a, [wd648]
+	or a
+	jr nz, .asm_1d785
+	ld a, $a7
+	ldh [hWX], a
+	ld [hli], a
+	push hl
+	ld hl, wLCDC
+	set 1, [hl]
+	pop hl
+	jr .asm_1d7e2
+
+.asm_1d785
+	ld a, [wd647]
+	or a
+	jr z, .asm_1d79e
+	dec a
+	ld [de], a
+	inc de
+	ld a, $a7
+	ldh [hWX], a
+	ld [hli], a
+	push hl
+	ld hl, wLCDC
+	set 1, [hl]
+	pop hl
+	ld a, $07
+	jr .asm_1d7a9
+
+.asm_1d79e
+	ld a, $07
+	ldh [hWX], a
+	push hl
+	ld hl, wLCDC
+	res 1, [hl]
+	pop hl
+.asm_1d7a9
+	ld [hli], a
+	ld a, [wd647]
+	dec a
+	ld c, a
+	ld a, [wd648]
+	add c
+	ld c, a
+	ld a, [wd649]
+	dec a
+	cp c
+	jr c, .asm_1d7d4
+	jr z, .asm_1d7d4
+	ld a, c
+	ld [de], a
+	inc de
+	push af
+	ld a, $a7
+	ld [hli], a
+	pop bc
+	ld a, [wd64a]
+	or a
+	jr z, .asm_1d7e2
+	ld a, [wd649]
+	dec a
+	ld [de], a
+	inc de
+	ld a, $07
+	ld [hli], a
+
+.asm_1d7d4
+	ld a, [wd649]
+	dec a
+	ld c, a
+	ld a, [wd64a]
+	add c
+	ld [de], a
+	inc de
+	ld a, $a7
+	ld [hli], a
+.asm_1d7e2
+	ld a, $ff
+	ld [de], a
+	ld a, $01
+	ld [wd665], a
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x1d7ee
+
+	INCROM $1d7ee, $1d7fc
 
 Func_1d7fc: ; 1d7fc (7:57fc)
 	ld a, LOW(CreditsSequence)
@@ -2828,7 +2923,39 @@ Func_1d7fc: ; 1d7fc (7:57fc)
 ; 0x1d80b
 
 Func_1d80b: ; 1d80b (7:580b)
-	INCROM $1d80b, $1d835
+	ld a, [wd633]
+	or a
+	jr z, .call_func
+	cp $ff
+	ret z
+	dec a
+	ld [wd633], a
+	ret
+
+.call_func
+	ld a, [wSequenceCmdPtr + 0]
+	ld l, a
+	ld a, [wSequenceCmdPtr + 1]
+	ld h, a
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	push de
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	pop hl
+	call CallHL2
+	jr Func_1d80b
+; 0x1d834
+
+	ret ; stray ret
 
 AdvanceCreditsSequenceCmdPtrBy2: ; 1d835 (7:5835)
 	ld a, 2
@@ -2862,20 +2989,216 @@ AdvanceCreditsSequenceCmdPtr: ; 1d847 (7:5847)
 	ret
 ; 0x1d853
 
-	INCROM $1d853, $1d9a6
+CreditsSequenceCmd_Wait: ; 1d853 (7:5853)
+	ld a, c
+	ld [wd633], a
+	jp AdvanceCreditsSequenceCmdPtrBy3
+; 0x1d85a
 
-Func_1d9a6: ; 1d9a6 (7:59a6)
+CreditsSequenceCmd_LoadScene: ; 1d85a (7:585a)
+	push bc
+	push de
+	farcall Func_8047b
+	call EmptyScreen
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	farcall Func_1288c
+	pop de
+	pop bc
+	ld a, c
+	ld c, b
+	ld b, a
+	ld a, e
+	call LoadScene
+	jp AdvanceCreditsSequenceCmdPtrBy5
+; 0x1d878
+
+CreditsSequenceCmd_LoadBooster: ; 1d878 (7:5878)
+	push bc
+	push de
+	farcall Func_8047b
+	call EmptyScreen
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	farcall Func_1288c
+	pop de
+	pop bc
+	ld a, c
+	ld c, b
+	ld b, a
+	ld a, e
+	farcall LoadBoosterGfx
+	jp AdvanceCreditsSequenceCmdPtrBy5
+; 0x1d897
+
+CreditsSequenceCmd_LoadClubMap: ; 1d897 (7:5897)
+	ld b, $00
+	ld hl, wMastersBeatenList
+	add hl, bc
+	ld a, [hl]
+	or a
+	jr nz, .at_least_1
+	inc a
+.at_least_1
+	dec a
+	ld c, a
+	add a
+	add a
+	add c ; *5
+	ld c, a
+	ld hl, .CreditsOWClubMaps
+	add hl, bc
+	ld a, [hli] ; map x coord
+	ld c, a
+	ld a, [hli] ; map y coord
+	ld b, a
+	ld a, [hli] ; map ID
+	ld e, a
+	push hl
+	call LoadOWMapForCreditsSequence
+	pop hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .done
+
+.loop_npcs
+	ld a, [hli] ; NPC ID
+	or a
+	jr z, .done
+	ld d, a
+	ld a, [hli] ; NPC x coord
+	ld c, a
+	ld a, [hli] ; NPC y coord
+	ld b, a
+	ld a, [hli] ; NPC direction
+	ld e, a
+	push hl
+	call LoadNPCForCreditsSequence
+	pop hl
+	jr .loop_npcs
+
+.done
+	jp AdvanceCreditsSequenceCmdPtrBy3
+
+credits_club_map: MACRO
+	db \1 ; x
+	db \2 ; y
+	db \3 ; OW map
+	dw \4 ; list of NPCs to load
+ENDM
+
+.CreditsOWClubMaps
+	credits_club_map 16,  0, FIGHTING_CLUB,  .CreditsNPCs_FightingClub
+	credits_club_map 32,  0, ROCK_CLUB,      .CreditsNPCs_RockClub
+	credits_club_map 64,  0, WATER_CLUB,     .CreditsNPCs_WaterClub
+	credits_club_map 32,  0, LIGHTNING_CLUB, .CreditsNPCs_LightningClub
+	credits_club_map 32,  0, GRASS_CLUB,     .CreditsNPCs_GrassClub
+	credits_club_map 32, 16, PSYCHIC_CLUB,   .CreditsNPCs_PsychicClub
+	credits_club_map  0,  0, SCIENCE_CLUB,   .CreditsNPCs_ScienceClub
+	credits_club_map 32,  0, FIRE_CLUB,      .CreditsNPCs_FireClub
+	credits_club_map 32,  0, CHALLENGE_HALL, .CreditsNPCs_ChallengeHall
+	credits_club_map 48,  0, POKEMON_DOME,   .CreditsNPCs_PokemonDome
+
+.CreditsNPCs_FightingClub
+	; NPC ID, x, y, direction
+	db NPC_CHRIS,           4,  8, SOUTH
+	db NPC_MICHAEL,        14, 10, SOUTH
+	db NPC_JESSICA,        18,  6, EAST
+	db NPC_MITCH,          10,  4, SOUTH
+	db NPC_PLAYER_CREDITS, 10,  6, NORTH
+	db $00
+
+.CreditsNPCs_RockClub
+	; NPC ID, x, y, direction
+	db NPC_RYAN,           20, 14, EAST
+	db NPC_GENE,           12,  6, SOUTH
+	db NPC_PLAYER_CREDITS, 12,  8, NORTH
+	db $00
+
+.CreditsNPCs_WaterClub
+	; NPC ID, x, y, direction
+	db NPC_JOSHUA,         22,  8, SOUTH
+	db NPC_AMY,            22,  4, NORTH
+	db NPC_PLAYER_CREDITS, 18, 10, NORTH
+	db $00
+
+.CreditsNPCs_LightningClub
+	; NPC ID, x, y, direction
+	db NPC_NICHOLAS,        6, 10, SOUTH
+	db NPC_BRANDON,        22, 12, NORTH
+	db NPC_ISAAC,          12,  4, NORTH
+	db NPC_PLAYER_CREDITS, 12, 10, NORTH
+	db $00
+
+.CreditsNPCs_GrassClub
+	; NPC ID, x, y, direction
+	db NPC_KRISTIN,         4, 10, EAST
+	db NPC_HEATHER,        14, 16, SOUTH
+	db NPC_NIKKI,          12,  4, SOUTH
+	db NPC_PLAYER_CREDITS, 12,  6, NORTH
+	db $00
+
+.CreditsNPCs_PsychicClub
+	; NPC ID, x, y, direction
+	db NPC_DANIEL,          8,  8, NORTH
+	db NPC_STEPHANIE,      22, 12, EAST
+	db NPC_MURRAY1,        12,  6, SOUTH
+	db NPC_PLAYER_CREDITS, 12,  8, NORTH
+	db $00
+
+.CreditsNPCs_ScienceClub
+	; NPC ID, x, y, direction
+	db NPC_JOSEPH,         10, 10, WEST
+	db NPC_RICK,            4,  4, SOUTH
+	db NPC_PLAYER_CREDITS,  4,  6, NORTH
+	db $00
+
+.CreditsNPCs_FireClub
+	; NPC ID, x, y, direction
+	db NPC_ADAM,            8, 14, SOUTH
+	db NPC_JONATHAN,       18, 10, SOUTH
+	db NPC_KEN,            14,  4, SOUTH
+	db NPC_PLAYER_CREDITS, 14,  6, NORTH
+	db $00
+
+.CreditsNPCs_ChallengeHall
+	; NPC ID, x, y, direction
+	db NPC_HOST,           14,  4, SOUTH
+	db NPC_RONALD1,        18,  8, WEST
+	db NPC_PLAYER_CREDITS, 12,  8, EAST
+	db $00
+
+.CreditsNPCs_PokemonDome
+	; NPC ID, x, y, direction
+	db NPC_COURTNEY,       18,  4, SOUTH
+	db NPC_STEVE,          22,  4, SOUTH
+	db NPC_JACK,            8,  4, SOUTH
+	db NPC_ROD,            14,  6, SOUTH
+	db NPC_PLAYER_CREDITS, 14, 10, NORTH
+	db $00
+; 0x1d9a6
+
+; bc = coordinates
+; e = OW map
+LoadOWMapForCreditsSequence: ; 1d9a6 (7:59a6)
 	push bc
 	push de
 	call EmptyScreen
 	pop de
 	pop bc
+
+	; set input coordinates and map
 	ld a, c
 	ldh [hSCX], a
 	ld a, b
 	ldh [hSCY], a
 	ld a, e
 	ld [wCurMap], a
+
 	farcall LoadMapTilesAndPals
 	farcall Func_c9c7
 	farcall SafelyCopyBGMapFromSRAMToVRAM
@@ -2883,26 +3206,596 @@ Func_1d9a6: ; 1d9a6 (7:59a6)
 	xor a
 	ld [wd4ca], a
 	ld [wd4cb], a
-	ld a, $1d
+	ld a, PALETTE_29
 	farcall LoadPaletteData
 	ret
 ; 0x1d9d5
 
-Func_1d9d5: ; 1d9d5 (7:59d5)
-	call Func_1d9a6
+CreditsSequenceCmd_LoadOWMap: ; 1d9d5 (7:59d5)
+	call LoadOWMapForCreditsSequence
 	jp AdvanceCreditsSequenceCmdPtrBy5
 ; 0x1d9db
 
-Func_1d9db: ; 1d9db (7:59db)
+CreditsSequenceCmd_DisableLCD: ; 1d9db (7:59db)
 	call DisableLCD
 	jp AdvanceCreditsSequenceCmdPtrBy2
 ; 0x1d9e1
 
-	INCROM $1d9e1, $1daef
+CreditsSequenceCmd_FadeIn: ; 1d9e1 (7:59e1)
+	call DisableLCD
+	call Set_WD_on
+	farcall Func_10af9
+	jp AdvanceCreditsSequenceCmdPtrBy2
+; 0x1d9ee
+
+CreditsSequenceCmd_FadeOut: ; 1d9ee (7:59ee)
+	farcall Func_10ab4
+	call Func_3ca4
+	call EnableLCD
+	call DoFrameIfLCDEnabled
+	call DisableLCD
+	call Set_WD_off
+	jp AdvanceCreditsSequenceCmdPtrBy2
+; 0x1da04
+
+CreditsSequenceCmd_DrawRectangle: ; 1da04 (7:5a04)
+	ld a, c
+	or $20
+	ld e, a
+	ld d, $00
+	ld c, b
+	ld b, 20
+	xor a
+	lb hl, 0, 0
+	call FillRectangle
+	jp AdvanceCreditsSequenceCmdPtrBy4
+; 0x1da17
+
+CreditsSequenceCmd_PrintTextSpecial: ; 1da17 (7:5a17)
+	ld a, $01
+	ld [wLineSeparation], a
+	push de
+	ld d, c
+	ld a, b
+	or $20
+	ld e, a
+	call InitTextPrinting
+	pop hl
+	call PrintTextNoDelay
+	jp AdvanceCreditsSequenceCmdPtrBy6
+; 0x1da2c
+
+CreditsSequenceCmd_PrintText: ; 1da2c (7:5a2c)
+	ld a, $01
+	ld [wLineSeparation], a
+	push de
+	ld d, c
+	ld e, b
+	call InitTextPrinting
+	pop hl
+	call PrintTextNoDelay
+	jp AdvanceCreditsSequenceCmdPtrBy6
+; 0x1da3e
+
+CreditsSequenceCmd_InitOverlay: ; 1da3e (7:5a3e)
+	ld a, c
+	ld [wd647], a
+	ld a, b
+	ld [wd648], a
+	ld a, e
+	ld [wd649], a
+	ld a, d
+	ld [wd64a], a
+	call Func_1d765
+	jp AdvanceCreditsSequenceCmdPtrBy6
+; 0x1da54
+
+CreditsSequenceCmd_LoadNPC: ; 1da54 (7:5a54)
+	call LoadNPCForCreditsSequence
+	jp AdvanceCreditsSequenceCmdPtrBy6
+; 0x1da5a
+
+; bc = coordinates
+; e = direction
+; d = NPC ID
+LoadNPCForCreditsSequence: ; 1da5a (7:5a5a)
+	ld a, c
+	ld [wLoadNPCXPos], a
+	ld a, b
+	ld [wLoadNPCYPos], a
+	ld a, e
+	ld [wLoadNPCDirection], a
+	ld a, d
+	farcall LoadNPCSpriteData
+	ld a, [wNPCSpriteID]
+	farcall CreateSpriteAndAnimBufferEntry
+
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ldh a, [hSCX]
+	ld c, a
+	ld a, [wLoadNPCXPos]
+	add a
+	add a
+	add a ; *8
+	add 8
+	sub c
+	ld [hli], a ; x
+	ldh a, [hSCY]
+	ld c, a
+	ld a, [wLoadNPCYPos]
+	add a
+	add a
+	add a ; *8
+	add 16
+	sub c
+	ld [hli], a ; y
+
+	ld a, [wNPCAnim]
+	ld c, a
+	ld a, [wLoadNPCDirection]
+	add c
+	farcall StartNewSpriteAnimation
+	ret
+; 0x1da9e
+
+CreditsSequenceCmd_InitVolcanoSprite: ; 1da9e (7:5a9e)
+	farcall OverworldMap_InitVolcanoSprite
+	jp AdvanceCreditsSequenceCmdPtrBy2
+; 0x1daa5
+
+CreditsSequenceCmd_TransformOverlay: ; 1daa5 (7:5aa5)
+; either stretches or shrinks overlay
+; to the input configurations
+	ld l, $00
+	ld a, [wd647]
+	call .Func_1dade
+	ld [wd647], a
+	ld a, [wd648]
+	ld c, b
+	call .Func_1dade
+	ld [wd648], a
+	ld a, [wd649]
+	ld c, e
+	call .Func_1dade
+	ld [wd649], a
+	ld a, [wd64a]
+	ld c, d
+	call .Func_1dade
+	ld [wd64a], a
+	ld a, l
+	or a
+	jr z, .advance_sequence
+	ld a, $01
+	ld [wd633], a
+	ret
+
+.advance_sequence
+	call Func_1d765
+	jp AdvanceCreditsSequenceCmdPtrBy6
+
+; compares a with c
+; if it's smaller: increase by 2 and increment l
+; if it's larger:  decrease by 2 and increment l
+; if it's equal or $ff: do nothing
+.Func_1dade
+	cp $ff
+	jr z, .done
+	cp c
+	jr z, .done
+	inc l
+	jr c, .incr_a
+; decr a
+	dec a
+	dec a
+	jr .done
+.incr_a
+	inc a
+	inc a
+.done
+	ret
+; 0x1daef
+
+INCLUDE "macros/credits_sequence.asm"
 
 CreditsSequence: ; 1daef (7:5aef)
-	dw Func_1d9db
-	dw Func_1d9d5
-; 0x1daf3
+	credits_seq_disable_lcd
+	credits_seq_load_ow_map 0, 0, OVERWORLD_MAP
+	credits_seq_init_volcano_sprite
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_print_text 2, 1, OverworldMapPokemonDomeText
+	credits_seq_print_text_special 0, 0, PokemonTradingCardGameStaffText
+	credits_seq_fade_in
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 32, 144, 0
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
 
-	INCROM $1daf3, $1e1c4
+	credits_seq_load_ow_map 0, 0, MASON_LABORATORY
+	credits_seq_load_npc 14, 6, SOUTH, NPC_DRMASON
+	credits_seq_load_npc 4, 14, EAST, NPC_SAM
+	credits_seq_load_npc 6, 4, SOUTH, NPC_TECH5
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 3
+	credits_seq_print_text_special 0, 0, ProducersText
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_ow_map 0, 0, DECK_MACHINE_ROOM
+	credits_seq_load_npc 6, 8, SOUTH, NPC_TECH6
+	credits_seq_load_npc 6, 22, WEST, NPC_TECH7
+	credits_seq_load_npc 10, 18, WEST, NPC_TECH8
+	credits_seq_load_npc 12, 12, WEST, NPC_AARON
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07b3 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 0
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 5
+	credits_seq_print_text_special 0, 0, Text07b4 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 1
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07b5 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 3
+	credits_seq_print_text_special 0, 4, Text07b6
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 3
+	credits_seq_print_text_special 0, 4, Text07b7
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 2
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07b8 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 5
+	credits_seq_print_text_special 0, 0, Text07b9
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 3
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07ba 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 5
+	credits_seq_print_text_special 0, 0, Text07bb
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_CHARIZARD_INTRO
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 6
+	credits_seq_print_text_special 0, 0, Text07bc 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_SCYTHER_INTRO
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 5
+	credits_seq_print_text_special 0, 0, Text07bd 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_AERODACTYL_INTRO
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 5
+	credits_seq_print_text_special 0, 0, Text07be 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_ow_map 0, 0, ISHIHARAS_HOUSE
+	credits_seq_load_npc 8, 8, SOUTH, NPC_ISHIHARA
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 8
+	credits_seq_print_text_special 0, 0, Text07bf 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 96, 48
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 4
+	credits_seq_print_text_special 0, 4, Text07c0
+	credits_seq_transform_overlay 0, 24, 96, 48
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_ow_map 16, 8, LIGHTNING_CLUB_LOBBY
+	credits_seq_load_npc 6, 4, SOUTH, NPC_CLERK10
+	credits_seq_load_npc 10, 4, SOUTH, NPC_GIFT_CENTER_CLERK
+	credits_seq_load_npc 18, 16, WEST, NPC_CHAP2
+	credits_seq_load_npc 18, 2, NORTH, NPC_IMAKUNI
+	credits_seq_load_npc 8, 12, SOUTH, NPC_LASS4
+	credits_seq_load_npc 20, 8, SOUTH, NPC_HOOD1
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 8
+	credits_seq_print_text_special 0, 0, Text07c1 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 4
+	credits_seq_print_text_special 0, 4, Text07c2
+	credits_seq_transform_overlay 0, 24, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_ow_map 48, 0, CHALLENGE_HALL
+	credits_seq_load_npc 14, 4, SOUTH, NPC_HOST
+	credits_seq_load_npc 18, 8, WEST, NPC_RONALD1
+	credits_seq_load_npc 12, 8, EAST, NPC_PLAYER_CREDITS
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07c3 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 32, 144, 0
+	credits_seq_transform_overlay 0, 32, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 32, 144, 0
+	credits_seq_draw_rectangle 4, 4
+	credits_seq_print_text_special 0, 5, Text07c4
+	credits_seq_transform_overlay 0, 32, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 32, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07c5
+	credits_seq_transform_overlay 0, 40, 144, 0
+	credits_seq_transform_overlay 0, 40, 112, 32
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 40, 144, 0
+	credits_seq_draw_rectangle 6, 4
+	credits_seq_print_text_special 0, 6, Text07c6
+	credits_seq_transform_overlay 0, 40, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 40, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_COLOSSEUM_BOOSTER
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 8
+	credits_seq_print_text_special 0, 0, Text07c7 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_EVOLUTION_BOOSTER
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 6
+	credits_seq_print_text_special 0, 0, Text07c8 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_MYSTERY_BOOSTER
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 6
+	credits_seq_print_text_special 0, 0, Text07c9 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_booster 6, 3, SCENE_LABORATORY_BOOSTER
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 6
+	credits_seq_print_text_special 0, 0, Text07ca 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 4
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07cb 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07cc 
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 5
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07cd 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 5
+	credits_seq_print_text_special 0, 4, Text07ce
+	credits_seq_transform_overlay 0, 24, 96, 48
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_draw_rectangle 4, 4
+	credits_seq_print_text_special 0, 4, Text07cf
+	credits_seq_transform_overlay 0, 24, 96, 48
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 6
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 8
+	credits_seq_print_text_special 0, 0, Text07d0 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 120, 24
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 7
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07d1 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_club_map 8
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07d2 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_ow_map 16, 16, HALL_OF_HONOR
+	credits_seq_load_npc 10, 8, NORTH, NPC_LEGENDARY_CARD_TOP_LEFT
+	credits_seq_load_npc 12, 8, NORTH, NPC_LEGENDARY_CARD_TOP_RIGHT
+	credits_seq_load_npc 8, 10, NORTH, NPC_LEGENDARY_CARD_LEFT_SPARK
+	credits_seq_load_npc 10, 10, NORTH, NPC_LEGENDARY_CARD_BOTTOM_LEFT
+	credits_seq_load_npc 12, 10, NORTH, NPC_LEGENDARY_CARD_BOTTOM_RIGHT
+	credits_seq_load_npc 14, 10, NORTH, NPC_LEGENDARY_CARD_RIGHT_SPARK
+	credits_seq_init_overlay 0, 0, 144, 0
+	credits_seq_draw_rectangle 0, 7
+	credits_seq_print_text_special 0, 0, Text07d3 
+	credits_seq_fade_in	
+	credits_seq_wait 60
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 24, 104, 40
+	credits_seq_wait 225
+	credits_seq_transform_overlay 0, 24, 144, 0
+	credits_seq_transform_overlay 0, 0, 144, 0
+	credits_seq_fade_out
+	
+	credits_seq_load_scene 0, 0, SCENE_COMPANIES
+	credits_seq_init_overlay 0, 0, 144, 0
+	
+	credits_seq_fade_in	
+	credits_seq_wait 225
+	credits_seq_end
+; 0x1e1c4
+
+	INCROM $1e1c4, $1e1c4

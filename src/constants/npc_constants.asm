@@ -191,7 +191,7 @@ NPC_DATA_LENGTH EQU const_value
 	const NPC_MURRAY2                     ; $70
 	const NPC_RONALD2                     ; $71
 	const NPC_RONALD3                     ; $72
-	const NPC_73                          ; $73 (unused)
+	const NPC_PLAYER_CREDITS              ; $73
 
 ; flags in LOADED_NPC_FLAGS
 	const_def 4

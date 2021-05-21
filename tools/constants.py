@@ -603,7 +603,7 @@ npcs = [
 	"NPC_MURRAY2",
 	"NPC_RONALD2",
 	"NPC_RONALD3",
-	"NPC_73",
+	"NPC_PLAYER_CREDITS",
 ]
 
 sfxs = [

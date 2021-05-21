@@ -1970,8 +1970,8 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text07ae                                           ; 0x07ae
 	textpointer Text07af                                           ; 0x07af
 	textpointer Text07b0                                           ; 0x07b0
-	textpointer Text07b1                                           ; 0x07b1
-	textpointer Text07b2                                           ; 0x07b2
+	textpointer PokemonTradingCardGameStaffText                    ; 0x07b1
+	textpointer ProducersText                                      ; 0x07b2
 	textpointer Text07b3                                           ; 0x07b3
 	textpointer Text07b4                                           ; 0x07b4
 	textpointer Text07b5                                           ; 0x07b5

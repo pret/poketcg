@@ -719,13 +719,13 @@ Text07b0: ; 56478 (15:6478)
 	line "when we Duel again!"
 	done
 
-Text07b1: ; 564db (15:64db)
+PokemonTradingCardGameStaffText: ; 564db (15:64db)
 	text ""
 	line "        Pokémon Trading Card Game "
 	line "                  Staff"
 	done
 
-Text07b2: ; 56518 (15:6518)
+ProducersText: ; 56518 (15:6518)
 	text ""
 	line "                Producers"
 	line ""

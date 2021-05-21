@@ -2512,9 +2512,12 @@ wd296:: ; d296
 ; temporarily holds the palettes from
 ; wBackgroundPalettesCGB
 wTempBackgroundPalettesCGB:: ; d297
-	ds 8 palettes
+	ds NUM_BACKGROUND_PALETTES palettes
 
-	ds $40
+; temporarily holds the palettes from
+; wObjectPalettesCGB
+wTempObjectPalettesCGB:: ; d2d7
+	ds NUM_OBJECT_PALETTES palettes
 
 wd317:: ; d317
 	ds $1
@@ -3054,7 +3057,17 @@ wd635:: ; d635
 wStartMenuParams:: ; d636
 	ds $11
 
-	ds $4
+wd647:: ; d647
+	ds $1
+
+wd648:: ; d648
+	ds $1
+
+wd649:: ; d649
+	ds $1
+
+wd64a:: ; d64a
+	ds $1
 
 ; wd64b to wd665 used by Func_3e44
 wd64b:: ; d64b

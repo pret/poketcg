@@ -3,8 +3,8 @@ opening_seq_wait_orbs_animation: MACRO
 ENDM
 
 ; argument = frames to delay
-opening_seq_delay: MACRO
-	dw OpeningSequenceCmd_Delay
+opening_seq_wait: MACRO
+	dw OpeningSequenceCmd_Wait
 	db \1
 ENDM
 
@@ -59,5 +59,5 @@ opening_seq_load_title_screen_scene: MACRO
 ENDM
 
 opening_seq_end: MACRO
-	opening_seq_delay $ff
+	opening_seq_wait $ff
 ENDM
