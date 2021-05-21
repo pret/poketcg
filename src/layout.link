@@ -43,6 +43,7 @@ ROMX $06
 	"Bank 6"
 ROMX $07
 	"Bank 7"
+	"Credits Sequence"
 	"Booster Packs"
 ROMX $08
 	"Bank 8"
