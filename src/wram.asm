@@ -3021,10 +3021,17 @@ wHasSaveData:: ; d624
 wHasDuelSaveData:: ; d625
 	ds $1
 
-wd626:: ; d626
+; keep track of which Start Menu item
+; is currently highlighted
+wCurHighlightedStartMenuItem:: ; d626
+
+; used to keep track of the time
+; in which the Title Screen ignores
+; the player's input
+wTitleScreenIgnoreInputCounter:: ; d626
 	ds $1
 
-wd627:: ; d627
+wLastSelectedStartMenuItem:: ; d627
 	ds $1
 
 ; START_MENU_* constant chosen
@@ -3049,7 +3056,7 @@ wSequenceCmdPtr:: ; d631
 wSequenceDelay:: ; d633
 	ds $1
 
-wd634:: ; d634
+wOpeningSequencePalsNeedUpdate:: ; d634
 	ds $1
 
 wd635:: ; d635

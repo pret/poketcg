@@ -276,8 +276,8 @@ OpeningSequenceCmd_PlaySFX: ; 1d530 (7:5530)
 ; 0x1d539
 
 OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
-	ld a, $01
-	ld [wd634], a
+	ld a, TRUE
+	ld [wOpeningSequencePalsNeedUpdate], a
 	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
@@ -285,8 +285,8 @@ OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
 
 OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	farcall Func_10d50
-	ld a, $01
-	ld [wd634], a
+	ld a, TRUE
+	ld [wOpeningSequencePalsNeedUpdate], a
 	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
@@ -321,7 +321,7 @@ OpeningSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
 	call LoadOpeningScene
-	call Func_1d59c
+	call OpeningSequenceEmptyFunc
 	scf
 	ret
 ; 0x1d582
@@ -339,12 +339,12 @@ LoadOpeningScene: ; 1d582 (7:5582)
 	farcall Func_10d17
 
 	xor a
-	ld [wd634], a
+	ld [wOpeningSequencePalsNeedUpdate], a
 	call AdvanceOpeningSequenceCmdPtrBy2
 	call EnableLCD
 	ret
 ; 0x1d59c
 
-Func_1d59c: ; 1d59c (7:559c)
+OpeningSequenceEmptyFunc: ; 1d59c (7:559c)
 	ret
 ; 0x1d59d

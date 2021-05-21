@@ -1873,43 +1873,55 @@ Func_1ce03: ; 1ce03 (7:4e03)
 
 INCLUDE "data/duel_animations.asm"
 
-Func_1d078: ; 1d078 (7:5078)
-	ld a, [wd627]
+; plays the Opening sequence, and handles player selection
+; in the Title Screen and Start Menu
+HandleTitleScreen: ; 1d078 (7:5078)
+; if last selected item in Start Menu is 0 (Card Pop!)
+; then skip straight to the Start Menu
+; this makes it so that returning from Card Pop!
+; doesn't play the Opening sequence
+	ld a, [wLastSelectedStartMenuItem]
 	or a
 	jr z, .start_menu
 
-.asm_1d07e
+.play_opening
 	ld a, MUSIC_STOP
 	call PlaySong
 	call Func_3ca0
-	call Func_1d335
+	call PlayOpeningSequence
 	call LoadTitleScreenSprites
+
 	xor a
 	ld [wd635], a
 	ld a, $3c
-	ld [wd626], a
-.asm_1d095
+	ld [wTitleScreenIgnoreInputCounter], a
+.loop
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
-	call Func_1d614
+	call AnimateRandomTitleScreenOrb
 	ld hl, wd635
 	inc [hl]
 	call AssertSongFinished
 	or a
-	jr nz, .asm_1d0ae
+	jr nz, .song_playing
+	; reset back to the opening sequence
 	farcall Func_10ab4
-	jr .asm_1d07e
-.asm_1d0ae
-	ld hl, wd626
+	jr .play_opening
+
+.song_playing
+	; should we ignore user input?
+	ld hl, wTitleScreenIgnoreInputCounter
 	ld a, [hl]
 	or a
-	jr z, .asm_1d0b8
+	jr z, .check_keys
+	; ignore input, decrement the counter
 	dec [hl]
-	jr .asm_1d095
-.asm_1d0b8
+	jr .loop
+
+.check_keys
 	ldh a, [hKeysPressed]
 	and A_BUTTON | START
-	jr z, .asm_1d095
+	jr z, .loop
 	ld a, SFX_02
 	call PlaySFX
 	farcall Func_10ab4
@@ -1923,20 +1935,20 @@ Func_1d078: ; 1d078 (7:5078)
 	cp START_MENU_NEW_GAME
 	jr nz, .continue_from_diary
 	call DeleteSaveDataForNewGame
-	jr c, Func_1d078
+	jr c, HandleTitleScreen
 	jr .card_pop
 .continue_from_diary
 	ld a, [wStartMenuChoice]
 	cp START_MENU_CONTINUE_FROM_DIARY
 	jr nz, .card_pop
 	call AskToContinueFromDiaryWithDuelData
-	jr c, Func_1d078
+	jr c, HandleTitleScreen
 .card_pop
 	ld a, [wStartMenuChoice]
 	cp START_MENU_CARD_POP
 	jr nz, .continue_duel
 	call ShowCardPopCGBDisclaimer
-	jr c, Func_1d078
+	jr c, HandleTitleScreen
 .continue_duel
 	call ResetDoFrameFunction
 	call Func_3ca0
@@ -1980,8 +1992,8 @@ HandleStartMenu: ; 1d11c (7:511c)
 	call .SetStartMenuParams
 
 	ld a, $ff
-	ld [wd626], a
-	ld a, [wd627]
+	ld [wTitleScreenIgnoreInputCounter], a
+	ld a, [wLastSelectedStartMenuItem]
 	cp $4
 	jr c, .init_menu
 	ld a, [wHasSaveData]
@@ -2005,7 +2017,7 @@ HandleStartMenu: ; 1d11c (7:511c)
 	cp e
 	jr nz, .wait_input
 
-	ld [wd627], a
+	ld [wLastSelectedStartMenuItem], a
 	ld a, [wHasSaveData]
 	or a
 	jr nz, .no_adjustment
@@ -2103,9 +2115,10 @@ PrintStartMenuDescriptionText: ; 1d1e9 (7:51e9)
 	push hl
 	push bc
 	push de
+	; don't print if it's already showing
 	ld a, [wCurMenuItem]
 	ld e, a
-	ld a, [wd626]
+	ld a, [wCurHighlightedStartMenuItem]
 	cp e
 	jr z, .skip
 	ld a, [wHasSaveData]
@@ -2127,7 +2140,7 @@ PrintStartMenuDescriptionText: ; 1d1e9 (7:51e9)
 	call JumpToFunctionInTable
 .skip
 	ld a, [wCurMenuItem]
-	ld [wd626], a
+	ld [wCurHighlightedStartMenuItem], a
 	pop de
 	pop bc
 	pop hl
@@ -2272,7 +2285,7 @@ ShowCardPopCGBDisclaimer: ; 1d2dd (7:52dd)
 Func_1d306: ; 1d306 (7:5306)
 	INCROM $1d306, $1d335
 
-Func_1d335: ; 1d335 (7:5335)
+PlayOpeningSequence: ; 1d335 (7:5335)
 	call DisableLCD
 	farcall Func_10a9b
 	farcall Func_10000
@@ -2280,6 +2293,7 @@ Func_1d335: ; 1d335 (7:5335)
 	ld hl, HandleAllSpriteAnimations
 	call SetDoFrameFunction
 	call LoadTitleScreenSprites
+
 	ld a, LOW(OpeningSequence)
 	ld [wSequenceCmdPtr + 0], a
 	ld a, HIGH(OpeningSequence)
@@ -2287,28 +2301,28 @@ Func_1d335: ; 1d335 (7:5335)
 
 	xor a
 	ld [wd317], a
-	ld [wd634], a
+	ld [wOpeningSequencePalsNeedUpdate], a
 	ld [wSequenceDelay], a
 	farcall FlashWhiteScreen
 
-.asm_1d364
+.loop_cmds
 	call DoFrameIfLCDEnabled
 	call UpdateRNGSources
 	ldh a, [hKeysPressed]
 	and A_BUTTON | START
-	jr nz, .TitleScreen
-	ld a, [wd634]
+	jr nz, .jump_to_title_screen
+	ld a, [wOpeningSequencePalsNeedUpdate]
 	or a
-	jr z, .asm_1d37a
+	jr z, .no_pal_update
 	farcall Func_10d74
-.asm_1d37a
+.no_pal_update
 	call ExecuteOpeningSequenceCmd
 	ld a, [wSequenceDelay]
 	cp $ff
-	jr nz, .asm_1d364
+	jr nz, .loop_cmds
 	jr .asm_1d39f
 
-.TitleScreen
+.jump_to_title_screen
 	call AssertSongFinished
 	or a
 	jr nz, .asm_1d39f
@@ -2318,16 +2332,33 @@ Func_1d335: ; 1d335 (7:5335)
 	lb bc, 0, 0
 	ld a, SCENE_TITLE_SCREEN
 	call LoadScene
-	call Func_1d59c
+	call OpeningSequenceEmptyFunc
 .asm_1d39f
 	call Func_3ca0
-	call Func_1d3a9
+	call .ShowPressStart
 	call EnableLCD
 	ret
-; 0x1d3a9
 
-Func_1d3a9: ; 1d3a9 (7:53a9)
-	INCROM $1d3a9, $1d3ce
+.ShowPressStart
+	ld a, SPRITE_PRESS_START
+	farcall CreateSpriteAndAnimBufferEntry
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld a, 48
+	ld [hli], a ; x
+	ld a, 112
+	ld [hl], a ; y
+	ld c, $be
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .asm_1d3c5
+	ld c, $bf
+.asm_1d3c5
+	ld a, c
+	ld bc, 60
+	farcall Func_12ac9
+	ret
+; 0x1d3ce
 
 LoadTitleScreenSprites: ; 1d3ce (7:53ce)
 	xor a
@@ -2375,8 +2406,73 @@ LoadTitleScreenSprites: ; 1d3ce (7:53ce)
 INCLUDE "engine/sequences/opening_sequence_commands.asm"
 INCLUDE "data/sequences/opening_sequence.asm"
 
-Func_1d614: ; 1d614 (7:5614)
-	INCROM $1d614, $1d6ad
+; once every 63 frames randomly choose an orb sprite
+; to animate, i.e. circle around the screen
+AnimateRandomTitleScreenOrb: ; 1d614 (7:5614)
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	call z, .UpdateSpriteAttributes
+	ld a, [wd635]
+	and 63
+	ret nz ; don't pick an orb now
+
+.pick_orb
+	ld a, $7
+	call Random
+	ld c, a
+	ld b, $00
+	ld hl, wTitleScreenSprites
+	add hl, bc
+	ld a, [hl]
+	ld [wWhichSprite], a
+	farcall GetSpriteAnimCounter
+	cp $ff
+	jr nz, .pick_orb
+
+	ld c, SPRITE_ANIM_ATTRIBUTES
+	call GetSpriteAnimBufferProperty
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	jr nz, .set_coords
+	set SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+
+.set_coords
+	inc hl
+	ld a, 248
+	ld [hli], a ; SPRITE_ANIM_COORD_X
+	ld a, 14
+	ld [hl], a ; SPRITE_ANIM_COORD_Y
+	ld a, [wConsole]
+	cp CONSOLE_CGB
+	ld a, $d7
+	jr nz, .start_anim
+	ld a, $d8
+.start_anim
+	farcall StartSpriteAnimation
+	ret
+
+.UpdateSpriteAttributes
+	ld c, $7
+	ld de, wTitleScreenSprites
+.loop_orbs
+	push bc
+	ld a, [de]
+	ld [wWhichSprite], a
+	ld c, SPRITE_ANIM_COORD_X
+	call GetSpriteAnimBufferProperty
+	ld a, [hld]
+	cp 152
+	jr nz, .skip
+	res SPRITE_ANIM_FLAG_UNSKIPPABLE, [hl]
+.skip
+	pop bc
+	inc de
+	dec c
+	jr nz, .loop_orbs
+	ret
+; 0x1d67b
+
+	INCROM $1d67b, $1d6ad
 
 Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_STOP

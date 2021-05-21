@@ -3830,12 +3830,12 @@ _GameLoop: ; 126d1 (4:66d1)
 	inc [hl]
 	farcall SetIntroSGBBorder
 	ld a, $ff
-	ld [wd627], a
+	ld [wLastSelectedStartMenuItem], a
 .main_menu_loop
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
-	farcall Func_1d078
+	farcall HandleTitleScreen
 	ld a, [wStartMenuChoice]
 	ld hl, MainMenuFunctionTable
 	call JumpToFunctionInTable
@@ -4255,6 +4255,8 @@ StartSpriteAnimation: ; 12ac0 (4:6ac0)
 	ret
 ; 0x12ac9
 
+; a = sprite animation
+; c = animation counter value
 Func_12ac9: ; 12ac9 (4:6ac9)
 	push bc
 	ld b, a
