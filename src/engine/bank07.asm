@@ -3435,7 +3435,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_npc 12, 12, WEST, NPC_AARON
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07b3 
+	credits_seq_print_text_special 0, 0, DirectorText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3448,7 +3448,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 0
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 5
-	credits_seq_print_text_special 0, 0, Text07b4 
+	credits_seq_print_text_special 0, 0, ProgrammersText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3461,7 +3461,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 1
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07b5 
+	credits_seq_print_text_special 0, 0, GBGraphicDesigners1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3469,12 +3469,12 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 3
-	credits_seq_print_text_special 0, 4, Text07b6
+	credits_seq_print_text_special 0, 4, GBGraphicDesigners2Text
 	credits_seq_transform_overlay 0, 24, 104, 40
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 3
-	credits_seq_print_text_special 0, 4, Text07b7
+	credits_seq_print_text_special 0, 4, GBGraphicDesigners3Text
 	credits_seq_transform_overlay 0, 24, 104, 40
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3484,7 +3484,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 2
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07b8 
+	credits_seq_print_text_special 0, 0, MusicText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3493,7 +3493,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 5
-	credits_seq_print_text_special 0, 0, Text07b9
+	credits_seq_print_text_special 0, 0, SoundEffectsText
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 24, 120, 24
 	credits_seq_wait 225
@@ -3504,7 +3504,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 3
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07ba 
+	credits_seq_print_text_special 0, 0, SoundDirectorText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3513,7 +3513,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 5
-	credits_seq_print_text_special 0, 0, Text07bb
+	credits_seq_print_text_special 0, 0, SoundSystemSupportText
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 24, 112, 32
 	credits_seq_wait 225
@@ -3524,7 +3524,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_CHARIZARD_INTRO
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 6
-	credits_seq_print_text_special 0, 0, Text07bc 
+	credits_seq_print_text_special 0, 0, CardGameCreator1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3537,7 +3537,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_SCYTHER_INTRO
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 5
-	credits_seq_print_text_special 0, 0, Text07bd 
+	credits_seq_print_text_special 0, 0, CardGameCreator2Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3550,7 +3550,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_AERODACTYL_INTRO
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 5
-	credits_seq_print_text_special 0, 0, Text07be 
+	credits_seq_print_text_special 0, 0, CardGameCreator3Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3564,7 +3564,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_npc 8, 8, SOUTH, NPC_ISHIHARA
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 8
-	credits_seq_print_text_special 0, 0, Text07bf 
+	credits_seq_print_text_special 0, 0, CardIllustrators1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3572,7 +3572,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 4
-	credits_seq_print_text_special 0, 4, Text07c0
+	credits_seq_print_text_special 0, 4, CardIllustrators2Text
 	credits_seq_transform_overlay 0, 24, 96, 48
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3588,7 +3588,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_npc 20, 8, SOUTH, NPC_HOOD1
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 8
-	credits_seq_print_text_special 0, 0, Text07c1 
+	credits_seq_print_text_special 0, 0, SpecialAppearances1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3596,7 +3596,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 4
-	credits_seq_print_text_special 0, 4, Text07c2
+	credits_seq_print_text_special 0, 4, SpecialAppearances2Text
 	credits_seq_transform_overlay 0, 24, 112, 32
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3609,7 +3609,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_npc 12, 8, EAST, NPC_PLAYER_CREDITS
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07c3 
+	credits_seq_print_text_special 0, 0, USCoordination1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 32, 144, 0
@@ -3617,19 +3617,19 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 32, 144, 0
 	credits_seq_draw_rectangle 4, 4
-	credits_seq_print_text_special 0, 5, Text07c4
+	credits_seq_print_text_special 0, 5, USCoordination2Text
 	credits_seq_transform_overlay 0, 32, 112, 32
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 32, 144, 0
 	credits_seq_transform_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07c5
+	credits_seq_print_text_special 0, 0, USCoordination3Text
 	credits_seq_transform_overlay 0, 40, 144, 0
 	credits_seq_transform_overlay 0, 40, 112, 32
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 40, 144, 0
 	credits_seq_draw_rectangle 6, 4
-	credits_seq_print_text_special 0, 6, Text07c6
+	credits_seq_print_text_special 0, 6, USCoordination4Text
 	credits_seq_transform_overlay 0, 40, 104, 40
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 40, 144, 0
@@ -3639,7 +3639,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_COLOSSEUM_BOOSTER
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 8
-	credits_seq_print_text_special 0, 0, Text07c7 
+	credits_seq_print_text_special 0, 0, TranslationDraftText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3652,7 +3652,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_EVOLUTION_BOOSTER
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 6
-	credits_seq_print_text_special 0, 0, Text07c8 
+	credits_seq_print_text_special 0, 0, MasteringText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3665,7 +3665,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_MYSTERY_BOOSTER
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 6
-	credits_seq_print_text_special 0, 0, Text07c9 
+	credits_seq_print_text_special 0, 0, ManualCreationText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3678,7 +3678,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_booster 6, 3, SCENE_LABORATORY_BOOSTER
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 6
-	credits_seq_print_text_special 0, 0, Text07ca 
+	credits_seq_print_text_special 0, 0, ManualIllustrationsText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3691,7 +3691,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 4
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07cb 
+	credits_seq_print_text_special 0, 0, PokemonOriginalStoryText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3700,7 +3700,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07cc 
+	credits_seq_print_text_special 0, 0, CreatedInCooperationWithText 
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_transform_overlay 0, 24, 104, 40
@@ -3712,7 +3712,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 5
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07cd 
+	credits_seq_print_text_special 0, 0, WithCooperation1Text 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3720,12 +3720,12 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 5
-	credits_seq_print_text_special 0, 4, Text07ce
+	credits_seq_print_text_special 0, 4, WithCooperation2Text
 	credits_seq_transform_overlay 0, 24, 96, 48
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
 	credits_seq_draw_rectangle 4, 4
-	credits_seq_print_text_special 0, 4, Text07cf
+	credits_seq_print_text_special 0, 4, WithCooperation3Text
 	credits_seq_transform_overlay 0, 24, 96, 48
 	credits_seq_wait 225
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3735,7 +3735,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 6
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 8
-	credits_seq_print_text_special 0, 0, Text07d0 
+	credits_seq_print_text_special 0, 0, ProjectManagerText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3748,7 +3748,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 7
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07d1 
+	credits_seq_print_text_special 0, 0, SupervisorText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3761,7 +3761,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_club_map 8
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07d2 
+	credits_seq_print_text_special 0, 0, ExecutiveProducerText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
@@ -3780,7 +3780,7 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_load_npc 14, 10, NORTH, NPC_LEGENDARY_CARD_RIGHT_SPARK
 	credits_seq_init_overlay 0, 0, 144, 0
 	credits_seq_draw_rectangle 0, 7
-	credits_seq_print_text_special 0, 0, Text07d3 
+	credits_seq_print_text_special 0, 0, CreatedByText 
 	credits_seq_fade_in	
 	credits_seq_wait 60
 	credits_seq_transform_overlay 0, 24, 144, 0
