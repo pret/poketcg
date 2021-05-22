@@ -759,7 +759,7 @@ HandlePlayerMoveMode: ; c510 (3:4510)
 .not_moving
 	ldh a, [hKeysPressed]
 	and START
-	call nz, OpenStartMenu
+	call nz, OpenPauseMenu
 	ret
 
 Func_c53d: ; c53d (3:453d)
@@ -1104,18 +1104,18 @@ FindNPCOrObject: ; c71e (3:471e)
 	scf
 	ret
 
-OpenStartMenu: ; c74d (3:474d)
+OpenPauseMenu: ; c74d (3:474d)
 	push hl
 	push bc
 	push de
-	call StartMenu
+	call PauseMenu
 	call CloseAdvancedDialogueBox
 	pop de
 	pop bc
 	pop hl
 	ret
 
-StartMenu: ; c75a (3:475a)
+PauseMenu: ; c75a (3:475a)
 	call PauseSong
 	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
@@ -1148,7 +1148,7 @@ StartMenu: ; c75a (3:475a)
 Func_c797: ; c797 (3:4797)
 	ld a, [wd0b8]
 	ld hl, Unknown_10d98
-	farcall InitAndPrintStartMenu
+	farcall InitAndPrintPauseMenu
 	ret
 
 PointerTable_c7a2: ; c7a2 (3:47a2)
@@ -1245,7 +1245,7 @@ PointerTable_c846: ; c846 (3:4846)
 Func_c84e: ; c84e (3:484e)
 	ld a, [wd0b9]
 	ld hl, Unknown_10da9
-	farcall InitAndPrintStartMenu
+	farcall InitAndPrintPauseMenu
 	ret
 
 Func_c859: ; c859 (3:4859)
@@ -2817,7 +2817,7 @@ ScriptCommand_PickChallengeHallOpponent: ; d195 (3:5195)
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_OpenMenu: ; d1ad (3:51ad)
-	call StartMenu
+	call PauseMenu
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_PickChallengeCupPrizeCard: ; d1b3 (3:51b3)
@@ -3025,7 +3025,7 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld h, [hl]
 	ld l, a
 	ld a, [wd416]
-	farcall InitAndPrintStartMenu
+	farcall InitAndPrintPauseMenu
 	pop hl
 	inc hl
 	ld a, [hli]

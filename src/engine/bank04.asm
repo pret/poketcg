@@ -917,7 +917,7 @@ Func_10dba: ; 10dba (4:4dba)
 	farcall Func_c29b
 	ld a, [wd0ba]
 	ld hl, Unknown_10e17
-	farcall InitAndPrintStartMenu
+	farcall InitAndPrintPauseMenu
 .asm_10dca
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -1649,7 +1649,7 @@ Func_111b3: ; 111b3 (4:51b3)
 	jr .loop_text_print_2
 ; 0x111e9
 
-InitAndPrintStartMenu: ; 111e9 (4:51e9)
+InitAndPrintPauseMenu: ; 111e9 (4:51e9)
 	push hl
 	push bc
 	push de

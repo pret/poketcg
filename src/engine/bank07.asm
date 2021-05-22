@@ -2002,7 +2002,7 @@ HandleStartMenu: ; 1d11c (7:511c)
 	ld a, 1 ; start at second menu option
 .init_menu
 	ld hl, wStartMenuParams
-	farcall InitAndPrintStartMenu
+	farcall InitAndPrintPauseMenu
 	farcall FlashWhiteScreen
 
 .wait_input
