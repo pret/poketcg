@@ -394,7 +394,6 @@ CreditsSequence: ; 1daef (7:5aef)
 	
 	credits_seq_load_scene 0, 0, SCENE_COMPANIES
 	credits_seq_init_overlay 0, 0, 144, 0
-	
 	credits_seq_fade_in	
 	credits_seq_wait 225
 	credits_seq_end
