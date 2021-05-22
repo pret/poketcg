@@ -2759,7 +2759,16 @@ wd416:: ; d416
 wd417:: ; d417
 	ds $1
 
-	ds $5
+	ds $3
+
+; used in Func_1c890
+wd41b:: ; d41b
+	ds $1
+
+; used in Func_1c890
+; is read like a sprite index
+wd41c:: ; d41c
+	ds $1
 
 wd41d:: ; d41d
 	ds $1

@@ -1,4 +1,55 @@
-	INCROM $1c000, $1c056
+Func_1c000: ; 1c000 (7:4000)
+	jp Set_WD_off
+; 0x1c003
+
+; unreferenced debug function
+; prints player's coordinates by pressing B
+; and draws palettes by pressing A
+Func_1c003: ; 1c003 (7:4003)
+	ld a, [wCurMap]
+	or a
+	jr z, Func_1c000
+	ld a, [wOverworldMode]
+	cp OWMODE_START_SCRIPT
+	jr nc, Func_1c000
+
+	ldh a, [hKeysHeld]
+	ld b, a
+	and A_BUTTON | B_BUTTON
+	cp b
+	jr nz, Func_1c000
+	and B_BUTTON
+	jr z, Func_1c000
+
+	ld bc, $20
+	ld a, [wPlayerXCoord]
+	bank1call WriteTwoByteNumberInTxSymbolFormat
+	ld bc, $320
+	ld a, [wPlayerYCoord]
+	bank1call WriteTwoByteNumberInTxSymbolFormat
+	ld a, $77
+	ldh [hWX], a
+	ld a, $88
+	ldh [hWY], a
+
+	ldh a, [hKeysPressed]
+	and A_BUTTON
+	jr z, .skip_load_scene
+	ld a, SCENE_COLOR_PALETTE
+	lb bc, 0, 33
+	call LoadScene
+.skip_load_scene
+	ldh a, [hKeysHeld]
+	and A_BUTTON
+	jr z, .set_wd_on
+	ld a, $67
+	ldh [hWX], a
+	ld a, $68
+	ldh [hWY], a
+.set_wd_on
+	call Set_WD_on
+	ret
+; 0x1c056
 
 Func_1c056: ; 1c056 (7:4056)
 	push hl
@@ -909,7 +960,75 @@ AddAllMastersToMastersBeatenList: ; 1c858 (7:4858)
 	ret
 ; 0x1c865
 
-	INCROM $1c865, $1c8bc
+	ret ; stray ret
+
+; unreferenced debug function
+; adjusts hSCX and hSCY by using the arrow keys
+; pressing B makes it scroll faster
+Func_1c866: ; 1c866 (7:4866)
+	ldh a, [hKeysHeld]
+	and B_BUTTON
+	call nz, .asm_1c86d ; executes following part twice
+.asm_1c86d
+	ldh a, [hSCX]
+	ld b, a
+	ldh a, [hSCY]
+	ld c, a
+	ldh a, [hKeysHeld]
+	bit D_UP_F, a
+	jr z, .check_d_down
+	inc c
+.check_d_down
+	bit D_DOWN_F, a
+	jr z, .check_d_left
+	dec c
+.check_d_left
+	bit D_LEFT_F, a
+	jr z, .check_d_right
+	inc b
+.check_d_right
+	bit D_RIGHT_F, a
+	jr z, .asm_1c889
+	dec b
+.asm_1c889
+	ld a, b
+	ldh [hSCX], a
+	ld a, c
+	ldh [hSCY], a
+	ret
+; 0x1c890
+
+; unreferenced
+; sets some flags on a given sprite
+Func_1c890: ; 1c890 (7:4890)
+	ld a, [wVBlankCounter]
+	and %111111
+	ret nz
+
+	ld a, [wd41b]
+	cp $11
+	jr z, .asm_1c8a3
+	cp $0e
+	ret c
+	cp $10
+	ret nc
+
+; wd41b == $11 || (wd41b >= $0e && wd41b < $10)
+.asm_1c8a3
+	ld a, [wd41c]
+	ld [wWhichSprite], a
+	ld c, SPRITE_ANIM_FLAGS
+	call GetSpriteAnimBufferProperty
+	call UpdateRNGSources
+	and (1 << SPRITE_ANIM_FLAG_X_SUBTRACT)
+	jr nz, .asm_1c8b9
+	res SPRITE_ANIM_FLAG_SPEED, [hl]
+	jr .asm_1c8bb
+.asm_1c8b9
+	set SPRITE_ANIM_FLAG_SPEED, [hl]
+.asm_1c8bb
+	ret
+; 0x1c8bc
 
 Func_1c8bc: ; 1c8bc (7:48bc)
 	push hl
@@ -1491,7 +1610,9 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	ret
 ; 0x1cbfd
 
-	INCROM $1cbfd, $1cc03
+; unreferenced data?
+	db $f0, $f8, $00, $08, $f8, $f0
+; 0x1cc03
 
 Func_1cc03: ; 1cc03 (7:4c03)
 	ld a, [wDuelAnimDamage]
@@ -2487,7 +2608,34 @@ AnimateRandomTitleScreenOrb: ; 1d614 (7:5614)
 	ret
 ; 0x1d67b
 
-	INCROM $1d67b, $1d6ad
+; unreferenced
+; shows Copyright information for 300 frames
+; or until Start button is pressed
+Func_1d67b: ; 1d67b (7:567b)
+	call DisableLCD
+	farcall Func_10a9b
+	farcall Func_10000
+	ld bc, $0
+	ld a, SCENE_COPYRIGHT
+	call LoadScene
+	farcall Func_10af9
+	ld bc, 300
+.loop_frame
+	push bc
+	call DoFrameIfLCDEnabled
+	call UpdateRNGSources
+	pop bc
+	ldh a, [hKeysPressed]
+	and START
+	jr nz, .exit
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop_frame
+.exit
+	farcall Func_10ab4
+	ret
+; 0x1d6ad
 
 Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_STOP
