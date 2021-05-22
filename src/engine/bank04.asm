@@ -393,7 +393,7 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 	ld bc, NUM_BACKGROUND_PALETTES palettes
 	call FillMemoryWithDE
 	call RestoreFirstColorInOBPals
-	call Func_10b5e
+	call FadeScreenToTempPals
 	call DisableLCD
 	ret
 
@@ -415,7 +415,7 @@ Func_10af9: ; 10af9 (4:4af9)
 	call RestoreFirstColorInOBPals
 	call FlushAllPalettes
 	call EnableLCD
-	jp Func_10b5e
+	jp FadeScreenToTempPals
 ; 0x10b08
 
 BackupPalsAndSetWhite: ; 10b08 (4:4b08)
@@ -471,15 +471,15 @@ RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
 	ret
 ; 0x10b5e
 
-Func_10b5e: ; 10b5e (4:4b5e)
+FadeScreenToTempPals: ; 10b5e (4:4b5e)
 	ld a, [wVBlankCounter]
 	push af
 	ld c, $10
 .loop
 	push bc
 	ld a, c
-	and $03
-	cp $00
+	and %11
+	cp 0
 	call z, Func_10b85
 	call FadeBGPalIntoTemp3
 	call FadeOBPalIntoTemp
@@ -3868,7 +3868,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	ld a, MUSIC_OVERWORLD
 	ld [wDefaultSong], a
 	call PlayDefaultSong
-	farcall Func_1d306
+	farcall DrawPlayerPortraitAndPrintNewGameText
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent

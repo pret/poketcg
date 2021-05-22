@@ -1357,7 +1357,7 @@ YouCanAccessCardPopOnlyWithGameBoyColorsText: ; 3ef66 (f:6f66)
 	line "Please play using a Game Boy Color."
 	done
 
-Text0379: ; 3efc3 (f:6fc3)
+IsCrazyAboutPokemonAndPokemonCardCollectingText: ; 3efc3 (f:6fc3)
 	text "<RAMNAME> is crazy about Pokémon"
 	line "and Pokémon card collecting!"
 	line "One day,"

@@ -434,7 +434,7 @@ CreditsSequenceCmd_InitVolcanoSprite: ; 1da9e (7:5a9e)
 CreditsSequenceCmd_TransformOverlay: ; 1daa5 (7:5aa5)
 ; either stretches or shrinks overlay
 ; to the input configurations
-	ld l, $00
+	ld l, 0
 	ld a, [wd647]
 	call .Func_1dade
 	ld [wd647], a
@@ -453,7 +453,7 @@ CreditsSequenceCmd_TransformOverlay: ; 1daa5 (7:5aa5)
 	ld a, l
 	or a
 	jr z, .advance_sequence
-	ld a, $01
+	ld a, 1
 	ld [wSequenceDelay], a
 	ret
 

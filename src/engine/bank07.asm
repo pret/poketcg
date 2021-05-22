@@ -2282,8 +2282,23 @@ ShowCardPopCGBDisclaimer: ; 1d2dd (7:52dd)
 	ret
 ; 0x1d306
 
-Func_1d306: ; 1d306 (7:5306)
-	INCROM $1d306, $1d335
+DrawPlayerPortraitAndPrintNewGameText: ; 1d306 (7:5306)
+	call DisableLCD
+	farcall Func_10a9b
+	farcall Func_10000
+	call Func_3ca0
+	ld hl, HandleAllSpriteAnimations
+	call SetDoFrameFunction
+	lb bc, 7, 3
+	farcall $4, DrawPlayerPortrait
+	farcall Func_10af9
+	call DoFrameIfLCDEnabled
+	ldtx hl, IsCrazyAboutPokemonAndPokemonCardCollectingText
+	call PrintScrollableText_NoTextBoxLabel
+	call ResetDoFrameFunction
+	call Func_3ca0
+	ret
+; 0x1d335
 
 PlayOpeningSequence: ; 1d335 (7:5335)
 	call DisableLCD
@@ -2510,10 +2525,58 @@ Credits_1d6ad: ; 1d6ad (7:56ad)
 	ret
 
 Func_1d705: ; 1d705 (7:5705)
-	INCROM $1d705, $1d758
+	call DisableLCD
+	farcall Func_10a9b
+	call Func_3ca0
+	farcall Func_10000
+	call Func_1d7ee
+	ld hl, Func_3e31
+	call SetDoFrameFunction
+	call .Func_1d720 ; can be fallthrough
+	ret
+
+.Func_1d720
+	ld a, $91
+	ld [wd647], a
+	ld [wd649], a
+	ld a, $01
+	ld [wd648], a
+	ld [wd64a], a
+	call Func_1d765
+	call Set_WD_on
+	call .Func_1d73a ; can bee fallthrough
+	ret
+
+.Func_1d73a
+	push hl
+	di
+	xor a
+	ld [wd657], a
+	ld hl, wLCDCFunctionTrampoline + 1
+	ld [hl], LOW(Func_3e44)
+	inc hl
+	ld [hl], HIGH(Func_3e44)
+	ei
+
+	ld hl, rSTAT
+	set STAT_LYC, [hl]
+	xor a
+	ldh [rLYC], a
+	ld hl, rIE
+	set INT_LCD_STAT, [hl]
+	pop hl
+	ret
+; 0x1d758
 
 Func_1d758: ; 1d758 (7:5758)
-	INCROM $1d758, $1d765
+	push hl
+	ld hl, rSTAT
+	res STAT_LYC, [hl]
+	ld hl, rIE
+	res INT_LCD_STAT, [hl]
+	pop hl
+	ret
+; 0x1d765
 
 Func_1d765: ; 1d765 (7:5765)
 	push hl
@@ -2611,4 +2674,11 @@ Func_1d765: ; 1d765 (7:5765)
 	ret
 ; 0x1d7ee
 
-	INCROM $1d7ee, $1d7fc
+Func_1d7ee: ; 1d7ee (7:57ee)
+	xor a
+	lb de, 0, 32
+	lb bc, 20, 18
+	lb hl, 0, 0
+	call FillRectangle
+	ret
+; 0x1d7fc
