@@ -1643,7 +1643,7 @@ DrawDuelistPortraitsAndNames: ; 4a97 (1:4a97)
 	call ProcessText
 	; player's portrait
 	lb bc, 0, 5
-	call Func_3e10
+	call DrawPlayerPortrait
 	; opponent's name (aligned to the right)
 	ld de, wDefaultText
 	push de
@@ -6159,9 +6159,9 @@ Func_66e9: ; 66e9 (1:66e9)
 	ret c
 	ld de, sCurrentDuel
 	call LoadSavedDuelData
-	call Func_3a45
+	call ValidateGeneralSaveData
 	ret nc
-	call Func_3a40
+	call LoadGeneralSaveData
 	or a
 	ret
 

@@ -2389,7 +2389,7 @@ wPCPackSelection:: ; d11d
 
 ; 7th bit of each pack corresponds to whether or not it's been read
 wPCPacks:: ; d11e
-	ds $f
+	ds NUM_PC_PACKS
 
 wPCLastDirectionPressed:: ; d12d
 	ds $1
@@ -2497,14 +2497,30 @@ wd291:: ; d291
 wWriteBGMapToSRAM:: ; d292
 	ds $1
 
-	ds $4
+wd293:: ; d293
+	ds $1
+
+wd294:: ; d294
+	ds $1
+
+wd295:: ; d295
+	ds $1
+
+wd296:: ; d296
+	ds $1
 
 ; temporarily holds the palettes from
 ; wBackgroundPalettesCGB
 wTempBackgroundPalettesCGB:: ; d297
-	ds 8 palettes
+	ds NUM_BACKGROUND_PALETTES palettes
 
-	ds $41
+; temporarily holds the palettes from
+; wObjectPalettesCGB
+wTempObjectPalettesCGB:: ; d2d7
+	ds NUM_OBJECT_PALETTES palettes
+
+wd317:: ; d317
+	ds $1
 
 ; pointer to the data of current map OW frameset
 wCurMapOWFrameset:: ; d318
@@ -2620,7 +2636,8 @@ wOverworldMapPlayerHorizontalSubPixelPosition:: ; d347
 wOverworldMapPlayerVerticalSubPixelPosition:: ; d348
 	ds $1
 
-wd349:: ; d349
+; total number of NPCs that are currently loaded
+wNumLoadedNPCs:: ; d349
 	ds $1
 
 wLoadedNPCs:: ; d34a
@@ -2651,10 +2668,10 @@ wLoadNPCDirection:: ; d3ae
 wLoadNPCFunction:: ; d3af
 	ds $2
 
-wd3b1:: ; d3b1
+wNPCAnim:: ; d3b1
 	ds $1
 
-wd3b2:: ; d3b2
+wNPCAnimFlags:: ; d3b2
 	ds $1
 
 ; sprite ID of the NPC to load
@@ -2667,24 +2684,39 @@ wNPCSpriteID:: ; d3b3
 wScriptNPC:: ; d3b6
 	ds $1
 
-wc3b7:: ; d3b7
+; bit 6 will be set if an NPC is currently moving
+wIsAnNPCMoving:: ; d3b7
 	ds $1
 
-wd3b8:: ; d3b8
+; whether Ronald is in the current map
+; is used to load his theme whenever he is present
+wRonaldIsInMap:: ; d3b8
 	ds $1
 
 wd3b9:: ; d3b9
 	ds $2
 
-wd3bb:: ; d3bb
+wMastersBeatenList:: ; d3bb
 	ds $a
 
-	ds $6
+wGeneralSaveDataCheckSum:: ; d3c5
+	ds $2
 
-wd3cb:: ; d3cb
+wNumSRAMValidationErrors:: ; d3c7
 	ds $1
 
-wd3cc:: ; d3cc
+; play time hours and minutes
+; byte 0: minutes
+; byte 1: hours (lower byte)
+; byte 2: hours (higher byte)
+; unused?
+wPlayTimeHourMinutes:: ; d3c8
+	ds $3
+
+wCurOverworldMap:: ; d3cb
+	ds $1
+
+wMedalCount:: ; d3cc
 	ds $1
 
 ; total number of cards the player has collected
@@ -2727,7 +2759,16 @@ wd416:: ; d416
 wd417:: ; d417
 	ds $1
 
-	ds $5
+	ds $3
+
+; used in Func_1c890
+wd41b:: ; d41b
+	ds $1
+
+; used in Func_1c890
+; is read like a sprite index
+wd41c:: ; d41c
+	ds $1
 
 wd41d:: ; d41d
 	ds $1
@@ -2865,6 +2906,9 @@ wCurSpriteTileSize:: ; d4c7
 
 ; stores number of tiles that current sprite/tileset has
 wTotalNumTiles:: ; d4c8
+
+; checksum?
+wGeneralSaveDataByteCount:: ; d4c8
 	ds $2
 
 ; stores tile offset in VRAM
@@ -2978,34 +3022,71 @@ wSceneSGBPacketPtr:: ; d620
 wSceneSGBRoutinePtr:: ; d622
 	ds $2
 
-wd624:: ; d624
+; whether there exists valid save data
+wHasSaveData:: ; d624
 	ds $1
 
+; whether has valid duel save data
+wHasDuelSaveData:: ; d625
 	ds $1
 
-wd626:: ; d626
+; keep track of which Start Menu item
+; is currently highlighted
+wCurHighlightedStartMenuItem:: ; d626
+
+; used to keep track of the time
+; in which the Title Screen ignores
+; the player's input
+wTitleScreenIgnoreInputCounter:: ; d626
 	ds $1
 
-wd627:: ; d627
+wLastSelectedStartMenuItem:: ; d627
 	ds $1
 
-wd628:: ; d628
+; START_MENU_* constant chosen
+; by the player in the Start Menu
+wStartMenuChoice:: ; d628
 	ds $1
 
-	ds $a
+; list of sprites used in the Title Screen
+wTitleScreenSprites:: ; d629
+	ds $7
 
-wd633:: ; d633
 	ds $1
 
+; pointer to commands used by opening and credits sequence
+; (see OpeningSequence and CreditsSequence)
+wSequenceCmdPtr:: ; d631
+	ds $2
+
+; when non-zero, is decremented and only
+; executes the next sequence command when it's 0
+; when it's $ff, it is interpreted as end of sequence
+wSequenceDelay:: ; d633
+	ds $1
+
+wOpeningSequencePalsNeedUpdate:: ; d634
 	ds $1
 
 wd635:: ; d635
 	ds $1
 
-wd636:: ; d635
+; has parameters used for the Start Menu
+; check SetStartMenuParams for what parameters are set
+wStartMenuParams:: ; d636
+	ds $11
+
+wd647:: ; d647
 	ds $1
 
-	ds $14
+wd648:: ; d648
+	ds $1
+
+wd649:: ; d649
+	ds $1
+
+wd64a:: ; d64a
+	ds $1
 
 ; wd64b to wd665 used by Func_3e44
 wd64b:: ; d64b

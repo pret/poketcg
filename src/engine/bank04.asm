@@ -23,20 +23,24 @@ Func_10000: ; 10000 (4:4000)
 	ld [wVBlankOAMCopyToggle], a
 	ret
 
-Func_10031: ; 10031 (4:4031)
+; saves all pals to SRAM, then fills them with white.
+; after flushing, it loads back the saved pals from SRAM.
+FlashWhiteScreen: ; 10031 (4:4031)
 	ldh a, [hBankSRAM]
+
 	push af
-	ld a, $1
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
-	call Func_10cbb
+	call CopyPalsToSRAMBuffer
 	call DisableSRAM
 	call Func_10b28
 	call FlushAllPalettes
 	call EnableLCD
 	call DoFrameIfLCDEnabled
-	call Func_10cea
+	call LoadPalsFromSRAMBuffer
 	call FlushAllPalettes
 	pop af
+
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
@@ -51,7 +55,13 @@ Func_1010c: ; 1010c (4:410c)
 	INCROM $1010c, $10197
 
 Func_10197: ; 10197 (4:4197)
-	INCROM $10197, $1029e
+	INCROM $10197, $101df
+
+Func_101df: ; 101df (4:41df)
+	INCROM $101df, $1024f
+
+Func_1024f: ; 1024f (4:424f)
+	INCROM $1024f, $1029e
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -80,7 +90,7 @@ Medal_1029e: ; 1029e (4:429e)
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call Func_10031
+	call FlashWhiteScreen
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld a, $ff
@@ -148,7 +158,7 @@ GiveBoosterPack: ; 1031b (4:431b)
 	ld [wTxRam2], a
 	ld a, [hl]
 	ld [wTxRam2 + 1], a
-	call Func_10031
+	call FlashWhiteScreen
 	call PauseSong
 	ld a, MUSIC_BOOSTER_PACK
 	call PlaySong
@@ -272,7 +282,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
 	call PlaySong
-	call Func_10031
+	call FlashWhiteScreen
 	call DoFrameIfLCDEnabled
 	lb bc, $2f, $1d ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
@@ -285,10 +295,14 @@ Duel_Init: ; 103d3 (4:43d3)
 	ret
 
 Unknown_10451: ; 10451 (4:4451)
-	INCROM $10451, $10456
+	db 1, 14
+	tx Text0395
+	db $ff
 
 Unknown_10456: ; 10456 (4:4456)
-	INCROM $10456, $1045b
+	db 1, 16
+	tx Text0396
+	db $ff
 
 Unknown_1045b: ; 1045b (4:445b)
 	INCROM $1045b, $1052f
@@ -311,7 +325,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	push bc
 	push de
 	ld b, a
-	ld c, $f ; number of packs possible
+	ld c, NUM_PC_PACKS
 	ld hl, wPCPacks
 .searchLoop1
 	ld a, [hli]
@@ -320,7 +334,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	jr z, .quit
 	dec c
 	jr nz, .searchLoop1
-	ld c, $f
+	ld c, NUM_PC_PACKS
 	ld hl, wPCPacks
 .findFreeSlotLoop
 	ld a, [hl]
@@ -334,7 +348,7 @@ TryGivePCPack: ; 10a70 (4:4a70)
 
 .foundFreeSlot
 	ld a, b
-	or $80 ; mark pack as unopened
+	or PACK_OPENED ; mark pack as unopened
 	ld [hl], a
 
 .quit
@@ -343,17 +357,400 @@ TryGivePCPack: ; 10a70 (4:4a70)
 	pop hl
 	ret
 
+; writes wd293 with byte depending on console
+; every entry in the list is $00
 Func_10a9b: ; 10a9b (4:4a9b)
-	INCROM $10a9b, $10ab4
+	push hl
+	ld a, [wConsole]
+	add LOW(.data_10ab1)
+	ld l, a
+	ld a, HIGH(.data_10ab1)
+	adc $00
+	ld h, a
+	ld a, [hl]
+	ld [wd293], a
+	xor a
+	ld [wd317], a
+	pop hl
+	ret
+
+.data_10ab1
+	db $00 ; CONSOLE_DMG
+	db $00 ; CONSOLE_SGB
+	db $00 ; CONSOLE_CGB
+; 0x10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
-	INCROM $10ab4, $10af9
+	ld a, [wLCDC]
+	bit 7, a
+	jr z, .lcd_off
+	ld a, [wd293]
+	ld [wd294], a
+	ld [wd295], a
+	ld [wd296], a
+	ld de, PALRGB_WHITE
+	ld hl, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	call RestoreFirstColorInOBPals
+	call FadeScreenToTempPals
+	call DisableLCD
+	ret
+
+.lcd_off
+	ld a, [wd293]
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	call FlushAllPalettes
+	ret
+; 0x10af9
 
 Func_10af9: ; 10af9 (4:4af9)
-	INCROM $10af9, $10b28
+	call BackupPalsAndSetWhite
+	call RestoreFirstColorInOBPals
+	call FlushAllPalettes
+	call EnableLCD
+	jp FadeScreenToTempPals
+; 0x10b08
 
+BackupPalsAndSetWhite: ; 10b08 (4:4b08)
+	ld a, [wBGP]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	jr Func_10b28 ; can be fallthrough
+
+; fills wBackgroundPalettesCGB with white pal
 Func_10b28: ; 10b28 (4:4b28)
-	INCROM $10b28, $10c96
+	ld a, [wd293]
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes
+	call FillMemoryWithDE
+	ret
+; 0x10b41
+
+; gets from backup OB pals the first color
+; of each pal and writes them in wObjectPalettesCGB
+RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
+	ld hl, wTempObjectPalettesCGB
+	ld de, wObjectPalettesCGB
+	ld c, NUM_OBJECT_PALETTES
+.loop_pals
+	push bc
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	ld bc, CGB_PAL_SIZE - 1
+	add hl, bc
+	ld a, c
+	add e
+	ld e, a
+	ld a, b
+	adc d
+	ld d, a
+	pop bc
+	dec c
+	jr nz, .loop_pals
+	ret
+; 0x10b5e
+
+FadeScreenToTempPals: ; 10b5e (4:4b5e)
+	ld a, [wVBlankCounter]
+	push af
+	ld c, $10
+.loop
+	push bc
+	ld a, c
+	and %11
+	cp 0
+	call z, Func_10b85
+	call FadeBGPalIntoTemp3
+	call FadeOBPalIntoTemp
+	call FlushAllPalettes
+	call DoFrameIfLCDEnabled
+	pop bc
+	dec c
+	dec c
+	jr nz, .loop
+	pop af
+	ld b, a
+	ld a, [wVBlankCounter]
+	sub b
+	ret
+; 0x10b85
+
+; does something with wBGP given wd294
+; mixes them into a single value?
+Func_10b85: ; 10b85 (4:4b85)
+	push bc
+	ld c, $03
+	ld hl, wBGP
+	ld de, wd294
+.asm_10b8e
+	push bc
+	ld b, [hl]
+	ld a, [de]
+	ld c, a
+	call .Func_10b9e
+	ld [hl], a
+	pop bc
+	inc de
+	inc hl
+	dec c
+	jr nz, .asm_10b8e
+	pop bc
+	ret
+
+.Func_10b9e
+	push bc
+	push de
+	ld e, 4
+	ld d, $00
+.loop
+	call .Func_10bba
+	or d
+	rlca
+	rlca
+	ld d, a
+	rlc b
+	rlc b
+	rlc c
+	rlc c
+	dec e
+	jr nz, .loop
+	ld a, d
+	pop de
+	pop bc
+	ret
+
+; calculates ((b & %11) << 2) | (c & %11)
+; that is, %0000xxyy, where x and y are
+; the 2 lower bits of b and c respectively
+; and outputs the entry from a table given that value
+.Func_10bba
+	push hl
+	push bc
+	ld a, %11
+	and b
+	add a
+	add a
+	ld b, a
+	ld a, %11
+	and c
+	or b
+	ld c, a
+	ld b, $00
+	ld hl, .data_10bd1
+	add hl, bc
+	ld a, [hl]
+	pop bc
+	pop hl
+	ret
+
+.data_10bd1
+	db %00 ; b = %00 | c = %00
+	db %01 ; b = %00 | c = %01
+	db %01 ; b = %00 | c = %10
+	db %01 ; b = %00 | c = %11
+	db %00 ; b = %01 | c = %00
+	db %01 ; b = %01 | c = %01
+	db %10 ; b = %01 | c = %10
+	db %10 ; b = %01 | c = %11
+	db %01 ; b = %10 | c = %00
+	db %01 ; b = %10 | c = %01
+	db %10 ; b = %10 | c = %10
+	db %11 ; b = %10 | c = %11
+	db %10 ; b = %11 | c = %00
+	db %10 ; b = %11 | c = %01
+	db %10 ; b = %11 | c = %10
+	db %11 ; b = %11 | c = %11
+; 0x10be1
+
+FadeOBPalIntoTemp: ; 10be1 (4:4be1)
+	push bc
+	ld c, 4 palettes
+	ld hl, wObjectPalettesCGB
+	ld de, wTempObjectPalettesCGB
+	jr FadePalIntoAnother
+; 0x10bec
+
+FadeBGPalIntoTemp1: ; 10bec (4:4bec)
+	push bc
+	ld c, 2 palettes
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	jr FadePalIntoAnother
+
+FadeBGPalIntoTemp2: ; 10bf7 (4:4bf7)
+	push bc
+	ld c, 2 palettes
+	ld hl, wBackgroundPalettesCGB + 4 palettes
+	ld de, wTempBackgroundPalettesCGB + 4 palettes
+	jr FadePalIntoAnother
+
+FadeBGPalIntoTemp3: ; 10c02 (4:4c02)
+	push bc
+	ld c, 4 palettes
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+;	fallthrough
+
+; hl = input pal to modify
+; de = pal to fade into
+; c = number of colors to fade
+FadePalIntoAnother: ; 10c0b (4:4c0b)
+	push bc
+	ld a, [de]
+	inc de
+	ld c, a
+	ld a, [de]
+	inc de
+	ld b, a
+	push de
+	push bc
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	pop de
+	call .GetFadedColor
+	; overwrite with new color
+	ld [hld], a
+	ld [hl], c
+	inc hl
+	inc hl
+	pop de
+	pop bc
+	dec c
+	jr nz, FadePalIntoAnother
+	pop bc
+	ret
+
+; fade pal bc to de
+; output resulting pal in a and c
+.GetFadedColor
+	push hl
+	ld a, c
+	cp e
+	jr nz, .unequal
+	ld a, b
+	cp d
+	jr z, .skip
+
+.unequal
+	; red
+	ld a, e
+	and %11111
+	ld l, a
+	ld a, c
+	and %11111
+	call .FadeColor
+	ldh [hffb6], a
+
+	; green
+	ld a, e
+	and %11100000
+	ld l, a
+	ld a, d
+	and %11
+	or l
+	swap a
+	rrca
+	ld l, a
+	ld a, c
+	and %11100000
+	ld h, a
+	ld a, b
+	and %11
+	or h
+	swap a
+	rrca
+	call .FadeColor
+	rlca
+	swap a
+	ld h, a
+	and %11
+	ldh [hffb7], a
+	ld a, %11100000
+	and h
+	ld h, a
+	ldh a, [hffb6]
+	or h
+	ld h, a
+
+	; blue
+	ld a, d
+	and %1111100
+	rrca
+	rrca
+	ld l, a
+	ld a, b
+	and %1111100
+	rrca
+	rrca
+	call .FadeColor
+	rlca
+	rlca
+	ld b, a
+	ldh a, [hffb7]
+	or b
+	ld c, h
+.skip
+	pop hl
+	ret
+
+; compares color in a and in l
+; if a is smaller/greater than l, then
+; increase/decrease its value up to l
+; up to a maximum of 4
+; a = pal color (red, green or blue)
+; l = pal color (red, green or blue)
+.FadeColor
+	cp l
+	ret z ; same value
+	jr c, .incr_a
+; decr a
+	dec a
+	cp l
+	ret z
+	dec a
+	cp l
+	ret z
+	dec a
+	cp l
+	ret z
+	dec a
+	ret
+
+.incr_a
+	inc a
+	cp l
+	ret z
+	inc a
+	cp l
+	ret z
+	inc a
+	cp l
+	ret z
+	inc a
+	ret
+; 0x10c96
 
 Func_10c96: ; 10c96 (4:4c96)
 	ldh a, [hBankSRAM]
@@ -361,13 +758,13 @@ Func_10c96: ; 10c96 (4:4c96)
 	push bc
 	ld a, $1
 	call BankswitchSRAM
-	call Func_10cbb
+	call CopyPalsToSRAMBuffer
 	call Func_10ab4
 	pop bc
 	ld a, c
 	or a
 	jr nz, .asm_10cb0
-	call Func_10cea
+	call LoadPalsFromSRAMBuffer
 	call Func_10af9
 
 .asm_10cb0
@@ -377,11 +774,137 @@ Func_10c96: ; 10c96 (4:4c96)
 	call DisableSRAM
 	ret
 
-Func_10cbb: ; 10cbb (4:4cbb)
-	INCROM $10cbb, $10cea
+; copies current BG and OP pals,
+; wBackgroundPalettesCGB and wObjectPalettesCGB
+; to sGfxBuffer2
+CopyPalsToSRAMBuffer: ; 10cbb (4:4cbb)
+	ldh a, [hBankSRAM]
 
-Func_10cea: ; 10cea (4:4cea)
-	INCROM $10cea, $10d98
+	push af
+	cp BANK("SRAM1")
+	jr z, .ok
+	debug_nop
+.ok
+	ld a, BANK("SRAM1")
+	call BankswitchSRAM
+	ld hl, sGfxBuffer2
+	ld a, [wBGP]
+	ld [hli], a
+	ld a, [wOBP0]
+	ld [hli], a
+	ld a, [wOBP1]
+	ld [hli], a
+	ld e, l
+	ld d, h
+	ld hl, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x10cea
+
+; loads BG and OP pals,
+; wBackgroundPalettesCGB and wObjectPalettesCGB
+; from sGfxBuffer2
+LoadPalsFromSRAMBuffer: ; 10cea (4:4cea)
+	ldh a, [hBankSRAM]
+
+	push af
+	cp BANK("SRAM1")
+	jr z, .ok
+	debug_nop
+.ok
+	ld a, BANK("SRAM1")
+	call BankswitchSRAM
+	ld hl, sGfxBuffer2
+	ld a, [hli]
+	ld [wBGP], a
+	ld a, [hli]
+	ld [wOBP0], a
+	ld a, [hli]
+	ld [wOBP1], a
+	ld de, wBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x10d17
+
+; backs up all palettes
+; and writes 4 BG pals with white pal
+Func_10d17: ; 10d17 (4:4d17)
+	ld a, [wBGP]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld hl, wBackgroundPalettesCGB
+	ld de, wTempBackgroundPalettesCGB
+	ld bc, NUM_BACKGROUND_PALETTES palettes + NUM_OBJECT_PALETTES palettes
+	call CopyDataHLtoDE_SaveRegisters
+
+	ld a, [wd293]
+	ld [wBGP], a
+	ld de, PALRGB_WHITE
+	ld hl, wBackgroundPalettesCGB
+	ld bc, 4 palettes
+	call FillMemoryWithDE
+	call FlushAllPalettes
+
+	ld a, $10
+	ld [wd317], a
+	ret
+; 0x10d50
+
+Func_10d50: ; 10d50 (4:4d50)
+	ld a, [wd293]
+	ld [wd294], a
+	ld a, [wOBP0]
+	ld [wd295], a
+	ld a, [wOBP1]
+	ld [wd296], a
+	ld de, PALRGB_WHITE
+	ld hl, wTempBackgroundPalettesCGB
+	ld bc, 4 palettes
+	call FillMemoryWithDE
+	ld a, $10
+	ld [wd317], a
+	ret
+; 0x10d74
+
+; does stuff according to bottom 2 bits from wd317:
+; - if equal to %01, modify wBGP
+; - if bottom bit not set, fade BG pals 0 and 1
+; - if bottom bit is set, fade BG pals 4 and 5
+;   and Flush Palettes
+; then decrements wd317
+; does nothing if wd317 is 0
+Func_10d74: ; 10d74 (4:4d74)
+	ld a, [wd317]
+	or a
+	ret z
+	and %11
+	ld c, a
+	cp $1
+	call z, Func_10b85
+	bit 0, c
+	call z, FadeBGPalIntoTemp1
+	bit 0, c
+	call nz, FadeBGPalIntoTemp2
+	bit 0, c
+	call nz, FlushAllPalettes
+	ld a, [wd317]
+	dec a
+	ld [wd317], a
+	ret
+; 0x10d98
 
 Unknown_10d98: ; 10d98 (4:4d98)
 	INCROM $10d98, $10da9
@@ -394,7 +917,7 @@ Func_10dba: ; 10dba (4:4dba)
 	farcall Func_c29b
 	ld a, [wd0ba]
 	ld hl, Unknown_10e17
-	farcall Func_111e9
+	farcall InitAndPrintPauseMenu
 .asm_10dca
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -1079,17 +1602,153 @@ OverworldMap_ContinuePlayerWalkingAnimation: ; 11184 (4:5184)
 	dec [hl]
 	ret
 
+; prints $ff-terminated list of text to text box
+; given 2 bytes for text alignment and 2 bytes for text ID
 Func_111b3: ; 111b3 (4:51b3)
-	INCROM $111b3, $111e9
+	ldh a, [hffb0]
+	push af
+	ld a, $02
+	ldh [hffb0], a
 
-Func_111e9: ; 111e9 (4:51e9)
-	INCROM $111e9, $11238
+	push hl
+.loop_text_print_1
+	ld d, [hl]
+	inc hl
+	bit 7, d
+	jr nz, .next
+	inc hl
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	pop hl
+	inc hl
+	jr .loop_text_print_1
 
-Func_11238: ; 11238 (4:5238)
-	INCROM $11238, $1124d
+.next
+	pop hl
+	pop af
+	ldh [hffb0], a
+.loop_text_print_2
+	ld d, [hl]
+	inc hl
+	bit 7, d
+	ret nz
+	ld e, [hl]
+	inc hl
+	call AdjustCoordinatesForBGScroll
+	call InitTextPrinting
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	pop hl
+	inc hl
+	jr .loop_text_print_2
+; 0x111e9
 
-Func_1124d: ; 1124d (4:524d)
-	INCROM $1124d, $1127f
+InitAndPrintPauseMenu: ; 111e9 (4:51e9)
+	push hl
+	push bc
+	push de
+	push af
+	ld d, [hl]
+	inc hl
+	ld e, [hl]
+	inc hl
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	push hl
+	call AdjustCoordinatesForBGScroll
+	farcall Func_c3ca
+	call DrawRegularTextBox
+	call DoFrameIfLCDEnabled
+	pop hl
+	call Func_111b3
+	pop af
+	call InitializeMenuParameters
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x1120f
+
+; xors sb800
+; this has the effect of invalidating the save data checksum
+; which the game interprets as being having no save data
+InvalidateSaveData: ; 1120f (4:520f)
+	push hl
+	ldh a, [hBankSRAM]
+
+	push af
+	ld a, $02
+	call BankswitchSRAM
+	ld a, $08
+	xor $ff
+	ld [sb800 + 0], a
+	ld a, $00
+	xor $ff
+	ld [sb800 + 1], a
+	pop af
+
+	call BankswitchSRAM
+	call DisableSRAM
+	call EnableSRAM
+	bank1call DiscardSavedDuelData
+	call DisableSRAM
+	pop hl
+	ret
+; 0x11238
+
+; saves all data to SRAM, including
+; General save data and Album/Deck data
+; and backs up in SRAM2
+SaveAndBackupData: ; 11238 (4:5238)
+	push de
+	ld de, sGeneralSaveData
+	call SaveGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call UpdateAlbumProgress
+	call WriteBackupGeneralSaveData
+	call WriteBackupCardAndDeckSaveData
+	pop de
+	ret
+; 0x1124d
+
+_SaveGeneralSaveData: ; 1124d (4:524d)
+	push de
+	call GetReceivedLegendaryCards
+	ld de, sGeneralSaveData
+	call SaveGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call UpdateAlbumProgress
+	pop de
+	ret
+; 0x1125f
+
+; de = pointer to general game data in SRAM
+SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
+	push hl
+	push bc
+	call EnableSRAM
+	push de
+	farcall TryGiveMedalPCPacks
+	ld [wMedalCount], a
+	farcall OverworldMap_GetOWMapID
+	ld [wCurOverworldMap], a
+	pop de
+	push de
+	call CopyGeneralSaveDataToSRAM
+	pop de
+	call DisableSRAM
+	pop bc
+	pop hl
+	ret
+; 0x1127f
 
 ; writes in de total num of cards collected
 ; and in (de + 1) total num of cards to collect
@@ -1113,45 +1772,324 @@ UpdateAlbumProgress: ; 1127f (4:527f)
 	ret
 ; 0x11299
 
-	INCROM $11299, $11320
-
-Func_11320: ; 11320 (4:5320)
-	INCROM $11320, $11343
-
-Func_11343: ; 11343 (4:5343)
-	INCROM $11343, $11416
-
-Func_11416: ; 11416 (4:5416)
-	INCROM $11416, $11430
-
-Func_11430: ; 11430 (4:5430)
+; save values that are listed in WRAMToSRAMMapper
+; from WRAM to SRAM, and calculate its checksum
+CopyGeneralSaveDataToSRAM: ; 11299 (4:5299)
+	push hl
+	push bc
 	push de
-	ld de, sb800
-	call .Func_11439
+	push de
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
+	add hl, de
+	ld e, l
+	ld d, h
+	xor a
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld [wGeneralSaveDataByteCount + 1], a
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld [wGeneralSaveDataCheckSum + 1], a
+
+	ld hl, WRAMToSRAMMapper
+.loop_map
+	ld a, [hli]
+	ld [wTempPointer + 0], a
+	ld c, a
+	ld a, [hli]
+	ld [wTempPointer + 1], a
+	or c
+	jr z, .done_copy
+	ld a, [hli]
+	ld c, a ; number of bytes LO
+	ld a, [hli]
+	ld b, a ; number of bytes HI
+	ld a, [wGeneralSaveDataByteCount + 0]
+	add c
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld a, [wGeneralSaveDataByteCount + 1]
+	adc b
+	ld [wGeneralSaveDataByteCount + 1], a
+	call .CopyBytesToSRAM
+	inc hl
+	inc hl
+	jr .loop_map
+
+.done_copy
+	pop hl
+	ld a, $08
+	ld [hli], a
+	ld a, $00
+	ld [hli], a
+	ld a, [wGeneralSaveDataByteCount + 0]
+	ld [hli], a
+	ld a, [wGeneralSaveDataByteCount + 1]
+	ld [hli], a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	ld [hli], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	ld [hli], a
 	pop de
+	pop bc
+	pop hl
 	ret
 
-.Func_11439
+.CopyBytesToSRAM
+	push hl
+	ld a, [wTempPointer + 0]
+	ld l, a
+	ld a, [wTempPointer + 1]
+	ld h, a
+.loop_bytes
+	push bc
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld c, a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	add c
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	adc 0
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop bc
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop_bytes
+	ld a, l
+	ld [wTempPointer + 0], a
+	ld a, h
+	ld [wTempPointer + 1], a
+	pop hl
+	ret
+; 0x11320
+
+; returns carry if no error
+; is found in sBackupGeneralSaveData
+ValidateBackupGeneralSaveData: ; 11320 (4:5320)
+	push de
+	ldh a, [hBankSRAM]
+	push af
+	ld a, BANK(sBackupGeneralSaveData)
+	call BankswitchSRAM
+	ld de, sBackupGeneralSaveData
+	call ValidateGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call LoadAlbumProgressFromSRAM
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	pop de
+	ld a, [wNumSRAMValidationErrors]
+	cp 1
+	ret
+; 0x11343
+
+; returns carry if no error
+; is found in sGeneralSaveData
+_ValidateGeneralSaveData: ; 11343 (4:5343)
+	push de
+	call EnableSRAM
+	ld de, sGeneralSaveData
+	call ValidateGeneralSaveDataFromDE
+	ld de, sAlbumProgress
+	call LoadAlbumProgressFromSRAM
+	call DisableSRAM
+	pop de
+	ld a, [wNumSRAMValidationErrors]
+	cp 1
+	ret
+; 0x1135d
+
+; validates the general game data saved in SRAM
+; de = pointer to general game data in SRAM
+ValidateGeneralSaveDataFromDE: ; 1135d (4:535d)
+	push hl
+	push bc
+	push de
+	xor a
+	ld [wNumSRAMValidationErrors], a
+	push de
+
+	push de
+	inc de
+	inc de
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataByteCount + 1], a
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [de]
+	inc de
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop de
+
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
+	add hl, de
+	ld e, l
+	ld d, h
+	ld hl, WRAMToSRAMMapper
+.loop
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	or c
+	jr z, .exit_loop
+	ld a, [hli]
+	ld c, a ; number of bytes LO
+	ld a, [hli]
+	ld b, a ; number of bytes HI
+	ld a, [wGeneralSaveDataByteCount + 0]
+	sub c
+	ld [wGeneralSaveDataByteCount + 0], a
+	ld a, [wGeneralSaveDataByteCount + 1]
+	sbc b
+	ld [wGeneralSaveDataByteCount + 1], a
+
+; loop all the bytes of this struct
+.loop_bytes
+	push hl
+	push bc
+	ld a, [de]
+	push af
+	ld c, a
+	ld a, [wGeneralSaveDataCheckSum + 0]
+	sub c
+	ld [wGeneralSaveDataCheckSum + 0], a
+	ld a, [wGeneralSaveDataCheckSum + 1]
+	sbc 0
+	ld [wGeneralSaveDataCheckSum + 1], a
+	pop af
+
+	; check if it's within the specified values
+	cp [hl] ; min value
+	jr c, .error
+	inc hl
+	cp [hl] ; max value
+	jr z, .next_byte
+	jr c, .next_byte
+.error
+	ld a, [wNumSRAMValidationErrors]
+	inc a
+	ld [wNumSRAMValidationErrors], a
+.next_byte
+	inc de
+	pop bc
+	pop hl
+	dec bc
+	ld a, c
+	or b
+	jr nz, .loop_bytes
+	; next mapped struct
+	inc hl
+	inc hl
+	jr .loop
+
+.exit_loop
+	pop hl
+	ld a, [hli]
+	sub $8
+	ld c, a
+	ld a, [hl]
+	sub 0
+	or c
+	ld hl, wGeneralSaveDataByteCount
+	or [hl]
+	inc hl
+	or [hl]
+	ld hl, wGeneralSaveDataCheckSum
+	or [hl]
+	inc hl
+	or [hl]
+	jr z, .no_header_error
+	ld hl, wNumSRAMValidationErrors
+	inc [hl]
+.no_header_error
+	pop de
+	; copy play time minutes and hours
+	ld hl, (sPlayTimeCounter + 2) - sGeneralSaveData
+	add hl, de
+	ld a, [hli]
+	ld [wPlayTimeHourMinutes + 0], a
+	ld a, [hli]
+	ld [wPlayTimeHourMinutes + 1], a
+	ld a, [hli]
+	ld [wPlayTimeHourMinutes + 2], a
+
+	; copy medal count and current overworld map
+	ld hl, sGeneralSaveDataHeaderEnd - sGeneralSaveData
+	add hl, de
+	ld a, [hli]
+	ld [wMedalCount], a
+	ld a, [hl]
+	ld [wCurOverworldMap], a
+	pop bc
+	pop hl
+	ret
+; 0x1140a
+
+LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
+	push de
+	ld a, [de]
+	ld [wTotalNumCardsCollected], a
+	inc de
+	ld a, [de]
+	ld [wTotalNumCardsToCollect], a
+	pop de
+	ret
+; 0x11416
+
+; first copies data from backup SRAM to main SRAM
+; then loads it to WRAM from main SRAM
+LoadBackupSaveData: ; 11416 (4:5416)
+	push hl
+	push de
+	call EnableSRAM
+	bank1call DiscardSavedDuelData
+	call DisableSRAM
+	call LoadBackupGeneralSaveData
+	call LoadBackupCardAndDeckSaveData
+	ld de, sGeneralSaveData
+	call LoadGeneralSaveDataFromDE
+	pop de
+	pop hl
+	ret
+; 0x11430
+
+_LoadGeneralSaveData: ; 11430 (4:5430)
+	push de
+	ld de, sGeneralSaveData
+	call LoadGeneralSaveDataFromDE
+	pop de
+	ret
+; 0x11439
+
+; de = pointer to save data
+LoadGeneralSaveDataFromDE: ; 11439 (4:5439)
 	push hl
 	push bc
 	call EnableSRAM
-	call .Func_11447
+	call .LoadData
 	call DisableSRAM
 	pop bc
 	pop hl
 	ret
 
-.Func_11447
+.LoadData
 	push hl
 	push bc
 	push de
 	ld a, e
-	add $08
-	ld [wTempPointer], a
+	add sGeneralSaveDataHeaderEnd - sGeneralSaveData
+	ld [wTempPointer + 0], a
 	ld a, d
 	adc 0
 	ld [wTempPointer + 1], a
-	ld hl, .wram_map
+
+	ld hl, WRAMToSRAMMapper
 .asm_11459
 	ld a, [hli]
 	ld e, a
@@ -1166,7 +2104,7 @@ Func_11430: ; 11430 (4:5430)
 
 ; copy bc bytes from wTempPointer to de
 	push hl
-	ld a, [wTempPointer]
+	ld a, [wTempPointer + 0]
 	ld l, a
 	ld a, [wTempPointer + 1]
 	ld h, a
@@ -1180,7 +2118,7 @@ Func_11430: ; 11430 (4:5430)
 	jr nz, .loop_copy
 
 	ld a, l
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	ld a, h
 	ld [wTempPointer + 1], a
 	pop hl
@@ -1199,48 +2137,61 @@ Func_11430: ; 11430 (4:5430)
 	pop bc
 	pop hl
 	ret
+; 0x11498
 
-.wram_map
+wram_sram_map: MACRO
+	dw \1 ; WRAM address
+	dw \2 ; number of bytes
+	db \3 ; min allowed value
+	db \4 ; max allowed value
+ENDM
+
+; maps WRAM addresses to SRAM addresses in order
+; to save and subsequently retreive them on game load
+; also works as a test in order check whether
+; the saved values is SRAM are legal, within the given value range
+WRAMToSRAMMapper: ; 11498 (4:5498)
 ; pointer, number of bytes, unknown
-	dw wd3cc,                  1, $ff00 ; sb808
-	dw wd3cb,                  1, $ff00 ; sb809
-	dw wPlayTimeCounter + 0,   1, $ff00 ; sPlayTimeCounter
-	dw wPlayTimeCounter + 1,   1, $ff00
-	dw wPlayTimeCounter + 2,   1, $ff00
-	dw wPlayTimeCounter + 3,   2, $ff00
-	dw wOverworldMapSelection, 1, $ff00 ; sOverworldMapSelection
-	dw wTempMap,               1, $ff00 ; sTempMap
-	dw wTempPlayerXCoord,      1, $ff00 ; sTempPlayerXCoord
-	dw wTempPlayerYCoord,      1, $ff00 ; sTempPlayerYCoord
-	dw wTempPlayerDirection,   1, $ff00 ; sTempPlayerDirection
-	dw wd0c2,                  1, $ff00 ; sb814
-	dw wDuelResult,            1, $ff00 ; sDuelResult
-	dw wNPCDuelist,            1, $ff00 ; sNPCDuelist
-	dw wChallengeHallNPC,      1, $ff00 ; sChallengeHallNPC
-	dw wd698,                  4, $ff00 ; sb818
-	dw wOWMapEvents,          11, $ff00 ; sOWMapEvents
-	dw Data_1156c,             1, $ff00 ; sb827
-	dw wd0b8,                  1, $ff00 ; sb828
-	dw wd0b9,                  1, $ff00 ; sb829
-	dw wd11b,                  1, $ff00 ; sb82a
-	dw wd0ba,                  1, $ff00 ; sb82b
-	dw wPCPackSelection,       1, $0e00 ; sPCPackSelection
-	dw wPCPacks,              15, $ff00 ; sPCPacks
-	dw wDefaultSong,           1, $ff00 ; sDefaultSong
-	dw wcad5,                  1, $ff00 ; sb83d
-	dw wd3b8,                  1, $ff00 ; sb83e
-	dw wd3bb,                 10, $ff00 ; sb83f
-	dw wd0c5,                  1, $ff00 ; sb849
-	dw wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $ff00 ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
-	dw wd10e,                  1, $ff00 ; sb84b
-	dw Data_1156c,            15, $ff00 ; sb84c
-	dw Data_1156c,            16, $ff00 ; sb85b
-	dw Data_1156c,            16, $ff00 ; sb86b
-	dw wEventVars,            64, $ff00 ; sEventVars
+	wram_sram_map wMedalCount,                        1, $00, $ff ; sMedalCount
+	wram_sram_map wCurOverworldMap,                   1, $00, $ff ; sCurOverworldMap
+	wram_sram_map wPlayTimeCounter + 0,               1, $00, $ff ; sPlayTimeCounter
+	wram_sram_map wPlayTimeCounter + 1,               1, $00, $ff
+	wram_sram_map wPlayTimeCounter + 2,               1, $00, $ff
+	wram_sram_map wPlayTimeCounter + 3,               2, $00, $ff
+	wram_sram_map wOverworldMapSelection,             1, $00, $ff ; sOverworldMapSelection
+	wram_sram_map wTempMap,                           1, $00, $ff ; sTempMap
+	wram_sram_map wTempPlayerXCoord,                  1, $00, $ff ; sTempPlayerXCoord
+	wram_sram_map wTempPlayerYCoord,                  1, $00, $ff ; sTempPlayerYCoord
+	wram_sram_map wTempPlayerDirection,               1, $00, $ff ; sTempPlayerDirection
+	wram_sram_map wd0c2,                              1, $00, $ff ; sb814
+	wram_sram_map wDuelResult,                        1, $00, $ff ; sDuelResult
+	wram_sram_map wNPCDuelist,                        1, $00, $ff ; sNPCDuelist
+	wram_sram_map wChallengeHallNPC,                  1, $00, $ff ; sChallengeHallNPC
+	wram_sram_map wd698,                              4, $00, $ff ; sb818
+	wram_sram_map wOWMapEvents,          NUM_MAP_EVENTS, $00, $ff ; sOWMapEvents
+	wram_sram_map .EmptySRAMSlot,                     1, $00, $ff ; sb827
+	wram_sram_map wd0b8,                              1, $00, $ff ; sb828
+	wram_sram_map wd0b9,                              1, $00, $ff ; sb829
+	wram_sram_map wd11b,                              1, $00, $ff ; sb82a
+	wram_sram_map wd0ba,                              1, $00, $ff ; sb82b
+	wram_sram_map wPCPackSelection,                   1,   0,  14 ; sPCPackSelection
+	wram_sram_map wPCPacks,                NUM_PC_PACKS, $00, $ff ; sPCPacks
+	wram_sram_map wDefaultSong,                       1, $00, $ff ; sDefaultSong
+	wram_sram_map wcad5,                              1, $00, $ff ; sb83d
+	wram_sram_map wRonaldIsInMap,                     1, $00, $ff ; sRonaldIsInMap
+	wram_sram_map wMastersBeatenList,                10, $00, $ff ; sMastersBeatenList
+	wram_sram_map wd0c5,                              1, $00, $ff ; sb849
+	wram_sram_map wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $00, $ff ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
+	wram_sram_map wd10e,                              1, $00, $ff ; sb84b
+	wram_sram_map .EmptySRAMSlot,                    15, $00, $ff ; sb84c
+	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb85b
+	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb86b
+	wram_sram_map wEventVars,                        64, $00, $ff ; sEventVars
 	dw NULL
 ; 0x1156c
 
-Data_1156c: ; 1156c (4:556c)
+; fills an empty SRAM slot with zero
+.EmptySRAMSlot: ; 1156c (4:556c)
 	db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 ; 0x1157c
 
@@ -1267,7 +2218,7 @@ _SaveGame: ; 1157c (4:557c)
 	ld [wOverworldMapSelection], a
 
 .save
-	call Func_11238
+	call SaveAndBackupData
 	ret
 
 _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
@@ -1299,7 +2250,74 @@ _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
 	ret
 ; 0x115d4
 
-	INCROM $115d4, $1162a
+WriteBackupCardAndDeckSaveData: ; 115d4 (4:55d4)
+	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
+	ld hl, sCardCollection
+	jr WriteDataToBackup
+
+WriteBackupGeneralSaveData: ; 115dc (4:55dc)
+	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
+	ld hl, sGeneralSaveData
+;	fallthrough
+
+; bc = number of bytes to copy to backup
+; hl = pointer in SRAM of data to backup
+WriteDataToBackup: ; 115e2 (4:55e2)
+	ldh a, [hBankSRAM]
+	push af
+.loop
+	xor a ; SRAM0
+	call BankswitchSRAM
+	ld a, [hl]
+	push af
+	ld a, BANK("SRAM2")
+	call BankswitchSRAM
+	pop af
+	ld [hli], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x115ff
+
+LoadBackupCardAndDeckSaveData: ; 115ff (4:55ff)
+	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
+	ld hl, sCardCollection
+	jr LoadDataFromBackup
+
+LoadBackupGeneralSaveData: ; 11607 (4:5607)
+	ld bc, sGeneralSaveDataEnd - sGeneralSaveData
+	ld hl, sGeneralSaveData
+;	fallthrough
+
+; bc = number of bytes to load from backup
+; hl = pointer in SRAM of backup data
+LoadDataFromBackup: ; 1160d (4:560d)
+	ldh a, [hBankSRAM]
+	push af
+
+.loop
+	ld a, BANK("SRAM2")
+	call BankswitchSRAM
+	ld a, [hl]
+	push af
+	xor a
+	call BankswitchSRAM
+	pop af
+	ld [hli], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	pop af
+	call BankswitchSRAM
+	call DisableSRAM
+	ret
+; 0x1162a
 
 INCLUDE "data/map_scripts.asm"
 
@@ -1325,17 +2343,17 @@ LoadNPCSpriteData: ; 11857 (4:5857)
 	ld a, [hli]
 	ld [wNPCSpriteID], a
 	ld a, [hli]
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 	ld a, [hli]
 	push af
 	ld a, [hli]
-	ld [wd3b2], a
+	ld [wNPCAnimFlags], a
 	pop bc
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
 	ld a, b
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 .not_cgb
 	pop bc
 	pop hl
@@ -2812,13 +3830,13 @@ _GameLoop: ; 126d1 (4:66d1)
 	inc [hl]
 	farcall SetIntroSGBBorder
 	ld a, $ff
-	ld [wd627], a
+	ld [wLastSelectedStartMenuItem], a
 .main_menu_loop
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	farcall Func_c1f8
-	farcall Func_1d078
-	ld a, [wd628]
+	farcall HandleTitleScreen
+	ld a, [wStartMenuChoice]
 	ld hl, MainMenuFunctionTable
 	call JumpToFunctionInTable
 	jr c, .main_menu_loop ; return to main menu
@@ -2850,7 +3868,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 	ld a, MUSIC_OVERWORLD
 	ld [wDefaultSong], a
 	call PlayDefaultSong
-	farcall Func_1d306
+	farcall DrawPlayerPortraitAndPrintNewGameText
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
 	farcall $03, ExecuteGameEvent
@@ -2860,7 +3878,7 @@ MainMenu_NewGame: ; 12704 (4:6704)
 MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	ld a, MUSIC_STOP
 	call PlaySong
-	call Func_11320
+	call ValidateBackupGeneralSaveData
 	jr nc, MainMenu_NewGame
 	farcall Func_c1ed
 	farcall SetMainSGBBorder
@@ -2888,8 +3906,8 @@ MainMenu_CardPop: ; 12768 (4:6768)
 MainMenu_ContinueDuel: ; 1277e (4:677e)
 	ld a, MUSIC_STOP
 	call PlaySong
-	farcall Func_c9cb
-	farcall $04, Func_3a40
+	farcall ClearEvents
+	farcall $04, LoadGeneralSaveData
 	farcall SetMainSGBBorder
 	ld a, GAME_EVENT_CONTINUE_DUEL
 	ld [wGameEvent], a
@@ -2907,7 +3925,22 @@ Func_12871: ; 12871 (4:6871)
 	INCROM $12871, $1288c
 
 Func_1288c: ; 1288c (4:688c)
-	INCROM $1288c, $128a9
+	push hl
+	push bc
+	push de
+	ld a, %11100100
+	ld [wBGP], a
+	ld [wOBP0], a
+	ld [wOBP1], a
+	ld a, 4
+	ld [wTextBoxFrameType], a
+	bank1call SetDefaultPalettes
+	call FlushAllPalettes
+	pop de
+	pop bc
+	pop hl
+	ret
+; 0x128a9
 
 DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; clear the name buffer.
@@ -3061,24 +4094,26 @@ FillNewSpriteAnimBufferEntry: ; 129d9 (4:69d9)
 	pop hl
 	ret
 
-Func_129fa: ; 129fa (4:69fa)
+DisableCurSpriteAnim: ; 129fa (4:69fa)
 	ld a, [wWhichSprite]
 	; fallthrough
 
-Func_129fd: ; 129fd (4:69fd)
+; sets SPRITE_ANIM_ENABLED to false
+; of sprite in register a
+DisableSpriteAnim: ; 129fd (4:69fd)
 	push af
 	ld a, [wd5d7]
 	or a
-	jr z, .asm_12a06
+	jr z, .disable
 	pop af
 	ret
-.asm_12a06
+.disable
 	pop af
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_ENABLED
 	call GetSpriteAnimBufferProperty_SpriteInA
-	ld [hl], $00
+	ld [hl], FALSE
 	pop bc
 	pop hl
 	ret
@@ -3096,7 +4131,7 @@ GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	ret
 ; 0x12a21
 
-HandleAllSpriteAnimations: ; 12a21 (4:6a21)
+_HandleAllSpriteAnimations: ; 12a21 (4:6a21)
 	push af
 	ld a, [wd5d7] ; skip animating this frame if enabled
 	or a
@@ -3220,6 +4255,8 @@ StartSpriteAnimation: ; 12ac0 (4:6ac0)
 	ret
 ; 0x12ac9
 
+; a = sprite animation
+; c = animation counter value
 Func_12ac9: ; 12ac9 (4:6ac9)
 	push bc
 	ld b, a
@@ -3259,7 +4296,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	pop hl ; hl is animation bank
 	ld a, [wTempPointerBank]
 	ld [hli], a
-	ld a, [wTempPointer]
+	ld a, [wTempPointer + 0]
 	ld [hli], a
 	ld c, a
 	ld a, [wTempPointer + 1]
@@ -3293,7 +4330,7 @@ HandleAnimationFrame: ; 12b13 (4:6b13)
 	inc hl
 	inc hl
 	ld a, [hl] ; SPRITE_ANIM_FRAME_OFFSET_POINTER
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	add SPRITE_FRAME_OFFSET_SIZE ; advance FRAME_OFFSET_POINTER by 1 frame, 4 bytes
 	ld [hli], a
 	ld a, [hl]
@@ -3357,7 +4394,7 @@ GetAnimFramePointerFromOffset: ; 12b6a (4:6b6a)
 	ld a, [hli]
 	ld [wTempPointerBank], a
 	ld a, [hli]
-	ld [wTempPointer], a
+	ld [wTempPointer + 0], a
 	ld a, [hli]
 	ld [wTempPointer + 1], a
 	pop hl

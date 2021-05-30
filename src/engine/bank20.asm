@@ -867,8 +867,7 @@ LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	ret
 ; 0x8047b
 
-; unreferenced?
-Func_8047b: ; 8047b (20:447b)
+ClearNumLoadedFramesetSubgroups: ; 8047b (20:447b)
 	xor a
 	ld [wNumLoadedFramesetSubgroups], a
 	ret
@@ -1416,7 +1415,7 @@ Func_80cd7: ; 80cd7 (20:4cd7)
 .loop
 	call DoFrameIfLCDEnabled
 	call .HandleInput
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	ldh a, [hKeysPressed]
 	and SELECT ; if select is pressed, exit
 	jr z, .loop

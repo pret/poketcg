@@ -28,7 +28,7 @@ LoadMap: ; c000 (3:4000)
 	call Func_3ca0
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
-	farcall Func_1c440
+	farcall ClearNPCs
 	ld a, [wTempMap]
 	ld [wCurMap], a
 	ld a, [wTempPlayerXCoord]
@@ -184,7 +184,7 @@ Func_c158: ; c158 (3:4158)
 	call GetItemInLoadedNPCIndex
 	ld a, [wd0c5]
 	ld [hl], a
-	farcall Func_1c58e
+	farcall UpdateNPCAnimation
 .asm_c179
 	ret
 
@@ -238,10 +238,10 @@ Func_c1b1: ; c1b1 (3:41b1)
 	ld [wTempPlayerYCoord], a
 	ld a, SOUTH
 	ld [wTempPlayerDirection], a
-	call Func_c9cb
-	call Func_c9dd
+	call ClearEvents
+	call DetermineImakuniAndChallengeHall
 	farcall Func_80b7a
-	farcall Func_1c82e
+	farcall ClearMasterBeatenList
 	farcall Func_131b3
 	xor a
 	ld [wPlayTimeCounter + 0], a
@@ -252,9 +252,9 @@ Func_c1b1: ; c1b1 (3:41b1)
 	ret
 
 Func_c1ed: ; c1ed (3:41ed)
-	call Func_c9cb
-	farcall Func_11416
-	call Func_c9dd
+	call ClearEvents
+	farcall LoadBackupSaveData
+	call DetermineImakuniAndChallengeHall
 	ret
 
 Func_c1f8: ; c1f8 (3:41f8)
@@ -266,7 +266,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd0c2], a
 	ld [wDefaultSong], a
 	ld [wd112], a
-	ld [wd3b8], a
+	ld [wRonaldIsInMap], a
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a
@@ -409,7 +409,7 @@ Func_c2db: ; c2db (3:42db)
 	res 0, [hl]
 	call Func_c34e
 	farcall Func_12c5e
-	farcall Func_1c6f8
+	farcall SetAllNPCTilePermissions
 	ld hl, wd0c1
 	res 7, [hl]
 	ld hl, wd10f
@@ -698,7 +698,7 @@ Func_c4b9: ; c4b9 (3:44b9)
 	xor a
 	ld [wVRAMTileOffset], a
 	ld [wd4cb], a
-	ld a, $1d
+	ld a, PALETTE_29
 	farcall LoadPaletteData
 	ld b, $0
 	ld a, [wConsole]
@@ -759,7 +759,7 @@ HandlePlayerMoveMode: ; c510 (3:4510)
 .not_moving
 	ldh a, [hKeysPressed]
 	and START
-	call nz, OpenStartMenu
+	call nz, OpenPauseMenu
 	ret
 
 Func_c53d: ; c53d (3:453d)
@@ -1104,18 +1104,18 @@ FindNPCOrObject: ; c71e (3:471e)
 	scf
 	ret
 
-OpenStartMenu: ; c74d (3:474d)
+OpenPauseMenu: ; c74d (3:474d)
 	push hl
 	push bc
 	push de
-	call StartMenu
+	call PauseMenu
 	call CloseAdvancedDialogueBox
 	pop de
 	pop bc
 	pop hl
 	ret
 
-StartMenu: ; c75a (3:475a)
+PauseMenu: ; c75a (3:475a)
 	call PauseSong
 	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
@@ -1148,7 +1148,7 @@ StartMenu: ; c75a (3:475a)
 Func_c797: ; c797 (3:4797)
 	ld a, [wd0b8]
 	ld hl, Unknown_10d98
-	farcall Func_111e9
+	farcall InitAndPrintPauseMenu
 	ret
 
 PointerTable_c7a2: ; c7a2 (3:47a2)
@@ -1245,7 +1245,7 @@ PointerTable_c846: ; c846 (3:4846)
 Func_c84e: ; c84e (3:484e)
 	ld a, [wd0b9]
 	ld hl, Unknown_10da9
-	farcall Func_111e9
+	farcall InitAndPrintPauseMenu
 	ret
 
 Func_c859: ; c859 (3:4859)
@@ -1430,7 +1430,7 @@ Func_c943: ; c943 (3:4943)
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
 	call Func_c998
-	farcall Func_1c485
+	farcall LoadNPC
 .next_npc
 	pop hl
 	ld bc, NPC_MAP_SIZE
@@ -1458,9 +1458,9 @@ Func_c998: ; c998 (3:4998)
 	ld b, $e
 .not_cgb
 	ld a, b
-	ld [wd3b1], a
+	ld [wNPCAnim], a
 	ld a, $0
-	ld [wd3b2], a
+	ld [wNPCAnimFlags], a
 	ret
 
 Func_c9b8: ; c9b8 (3:49b8)
@@ -1483,7 +1483,7 @@ Func_c9c7: ; c9c7 (3:49c7)
 	ld l, MAP_SCRIPT_CLOSE_TEXTBOX
 	jr CallMapScriptPointerIfExists
 
-Func_c9cb: ; c9cb (3:49cb)
+ClearEvents: ; c9cb (3:49cb)
 	push hl
 	push bc
 	ld hl, wEventVars
@@ -1500,11 +1500,11 @@ Func_c9cb: ; c9cb (3:49cb)
 	ret
 
 ; Clears temporary event vars before determining Imakuni Room
-Func_c9dd: ; c9dd (3:49dd)
+DetermineImakuniAndChallengeHall: ; c9dd (3:49dd)
 	xor a
 	ld [wEventVars + EVENT_VAR_BYTES - 1], a
 	call DetermineImakuniRoom
-	call Func_ca0e
+	call DetermineChallengeHallEvent
 	ret
 
 ; Determines what room Imakuni is in when you reset
@@ -1535,7 +1535,7 @@ ImakuniPossibleRooms: ; ca0a (3:4a04)
 	db LIGHTNING_CLUB_LOBBY
 	db WATER_CLUB_LOBBY
 
-Func_ca0e: ; ca0e (3:4a0e)
+DetermineChallengeHallEvent: ; ca0e (3:4a0e)
 	ld a, [wOverworldMapSelection]
 	cp OWMAP_CHALLENGE_HALL
 	jr z, .done
@@ -2195,7 +2195,7 @@ ScriptCommand_UnloadActiveNPC: ; cdcb (3:4dcb)
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 Func_cdd1: ; cdd1 (3:4dd1)
-	farcall Func_1c50a
+	farcall UnloadNPC
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_UnloadChallengeHallNPC: ; cdd8 (3:4dd8)
@@ -2228,7 +2228,7 @@ ScriptCommand_SetChallengeHallNPCCoords: ; cdf5 (3:4df5)
 	ld [wLoadNPCDirection], a
 	ld a, [wTempNPC]
 	farcall LoadNPCSpriteData
-	farcall Func_1c485
+	farcall LoadNPC
 	pop af
 	ld [wTempNPC], a
 	pop af
@@ -2255,10 +2255,10 @@ ScriptCommand_MoveActiveNPCByDirection: ; ce26 (3:4e26)
 ; Moves an NPC given the list of directions pointed to by bc
 ; set bit 7 to only rotate the NPC
 ExecuteNPCMovement: ; ce3a (3:4e3a)
-	farcall Func_1c78d
+	farcall StartNPCMovement
 .loop
 	call DoFrameIfLCDEnabled
-	farcall Func_1c7de
+	farcall CheckIsAnNPCMoving
 	jr nz, .loop
 	jp IncreaseScriptPointerBy3
 
@@ -2376,7 +2376,7 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 .show_card
 	push af
 	farcall Func_10000
-	farcall Func_10031
+	farcall FlashWhiteScreen
 	pop af
 	bank1call Func_7594
 	call WhiteOutDMGPals
@@ -2656,9 +2656,9 @@ ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	push bc
 	call GetScriptArgs3AfterPointer
 	ld a, [wScriptNPC]
-	ld l, LOADED_NPC_FIELD_05
+	ld l, LOADED_NPC_FLAGS
 	call GetItemInLoadedNPCIndex
-	res 4, [hl]
+	res NPC_FLAG_DIRECTIONLESS_F, [hl]
 	ld a, [hl]
 	or c
 	ld [hl], a
@@ -2670,7 +2670,7 @@ ScriptCommand_SetSpriteAttributes: ; d095 (3:5095)
 	ld e, b
 .not_cgb
 	ld a, e
-	farcall Func_1c57b
+	farcall SetNPCAnimation
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_SetActiveNPCCoords: ; d0be (3:50be)
@@ -2679,7 +2679,7 @@ ScriptCommand_SetActiveNPCCoords: ; d0be (3:50be)
 	ld a, c
 	ld c, b
 	ld b, a
-	farcall Func_1c461
+	farcall SetNPCPosition
 	jp IncreaseScriptPointerBy3
 
 ScriptCommand_DoFrames: ; d0ce (3:50ce)
@@ -2695,7 +2695,7 @@ ScriptCommand_JumpIfActiveNPCCoordsMatch: ; d0d9 (3:50d9)
 	ld [wLoadedNPCTempIndex], a
 	ld d, c
 	ld e, b
-	farcall Func_1c477
+	farcall GetNPCPosition
 	ld a, e
 	cp c
 	jp nz, ScriptCommand_JumpIfEventEqual.fail
@@ -2817,7 +2817,7 @@ ScriptCommand_PickChallengeHallOpponent: ; d195 (3:5195)
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_OpenMenu: ; d1ad (3:51ad)
-	call StartMenu
+	call PauseMenu
 	jp IncreaseScriptPointerBy1
 
 ScriptCommand_PickChallengeCupPrizeCard: ; d1b3 (3:51b3)
@@ -3025,7 +3025,7 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	ld h, [hl]
 	ld l, a
 	ld a, [wd416]
-	farcall Func_111e9
+	farcall InitAndPrintPauseMenu
 	pop hl
 	inc hl
 	ld a, [hli]
@@ -3181,7 +3181,7 @@ ScriptCommand_GiftCenter: ; d39d (3:539d)
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_PlayCredits: ; d3b9 (3:53b9)
-	call Func_3917
+	call GetReceivedLegendaryCards
 	ld a, GAME_EVENT_CREDITS
 	ld [wGameEvent], a
 	ld hl, wd0b4
@@ -3256,7 +3256,7 @@ ScriptCommand_WaitForSongToFinish: ; d42f (3:542f)
 
 ScriptCommand_RecordMasterWin: ; d435 (3:5435)
 	ld a, c
-	farcall Func_1c83d
+	farcall AddMasterBeatenToList
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_ChallengeMachine: ; d43d (3:543d)

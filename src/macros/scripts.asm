@@ -334,9 +334,9 @@ ENDM
 ; Sets some NPC sprite attributes
 set_sprite_attributes: MACRO
 	run_command ScriptCommand_SetSpriteAttributes
-	db \1 ; Relates to LOADED_NPC_FIELD_06
-	db \2 ; Relates to LOADED_NPC_FIELD_06
-	db \3 ; Relates to LOADED_NPC_FIELD_05
+	db \1 ; Relates to LOADED_NPC_ANIM
+	db \2 ; Relates to LOADED_NPC_ANIM
+	db \3 ; Relates to LOADED_NPC_FLAGS
 ENDM
 
 ; Sets the active NPC's coords
@@ -603,7 +603,7 @@ wait_for_song_to_finish: MACRO
 ENDM
 
 ; Records when the player defeats a master (the 8 Club Masters or the Ronald Grand Master duel)
-; the order of wins is stored in wd3bb
+; the order of wins is stored in wMastersBeatenList
 ; the purpose of this is still unknown
 record_master_win: MACRO
 	run_command ScriptCommand_RecordMasterWin

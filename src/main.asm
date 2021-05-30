@@ -24,6 +24,10 @@ INCLUDE "engine/bank06.asm"
 SECTION "Bank 7", ROMX
 INCLUDE "engine/bank07.asm"
 
+SECTION "Credits Sequence", ROMX
+INCLUDE "engine/sequences/credits_sequence_commands.asm"
+INCLUDE "data/sequences/credits_sequence.asm"
+
 SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"
 

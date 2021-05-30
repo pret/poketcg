@@ -10600,10 +10600,10 @@ OverworldDoFrameFunction: ; 380e (0:380e)
 	call BankswitchROM
 	call SetScreenScrollWram
 	call Func_c554
-	ld a, BANK(Func_1c610)
+	ld a, BANK(HandleAllNPCMovement)
 	call BankswitchROM
-	call Func_1c610
-	call Func_3cb4
+	call HandleAllNPCMovement
+	call HandleAllSpriteAnimations
 	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
 	call DoLoadedFramesetSubgroupsFrame
@@ -10698,7 +10698,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	xor a
 	ld [sba44], a
 	call DisableSRAM
-	call Func_3a3b
+	call SaveGeneralSaveData
 	bank1call StartDuel
 	scf
 	ret
@@ -10736,11 +10736,11 @@ GameEvent_Credits: ; 3911 (0:3911)
 	or a
 	ret
 
-Func_3917: ; 3917 (0:3917)
+GetReceivedLegendaryCards: ; 3917 (0:3917)
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
 	farcall GetEventValue
 	call EnableSRAM
-	ld [s0a00a], a
+	ld [sReceivedLegendaryCards], a
 	call DisableSRAM
 	ret
 
@@ -10948,9 +10948,11 @@ PlayDefaultSong: ; 39fc (0:39fc)
 
 ; returns [wDefaultSong] or MUSIC_RONALD in a
 GetDefaultSong: ; 3a1f (0:3a1f)
-	ld a, [wd3b8]
+	ld a, [wRonaldIsInMap]
 	or a
 	jr z, .default_song
+	; only return Ronald's theme if it's
+	; not in one of the following maps
 	ld a, [wOverworldMapSelection]
 	cp OWMAP_ISHIHARAS_HOUSE
 	jr z, .default_song
@@ -10964,16 +10966,16 @@ GetDefaultSong: ; 3a1f (0:3a1f)
 	ld a, [wDefaultSong]
 	ret
 
-Func_3a3b: ; 3a3b (0:3a3b)
-	farcall Func_1124d
+SaveGeneralSaveData: ; 3a3b (0:3a3b)
+	farcall _SaveGeneralSaveData
 	ret
 
-Func_3a40: ; 3a40 (0:3a40)
-	farcall Func_11430
+LoadGeneralSaveData: ; 3a40 (0:3a40)
+	farcall _LoadGeneralSaveData
 	ret
 
-Func_3a45: ; 3a45 (0:3a45)
-	farcall Func_11343
+ValidateGeneralSaveData: ; 3a45 (0:3a45)
+	farcall _ValidateGeneralSaveData
 	ret
 
 ; adds card with card ID in register a to collection
@@ -11236,7 +11238,7 @@ Func_3ba2: ; 3ba2 (0:3ba2)
 	ld a, BANK(Func_1cac5)
 	call BankswitchROM
 	call Func_1cac5
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
@@ -11248,7 +11250,7 @@ Func_3bb5: ; 3bb5 (0:3bb5)
 	push af
 	ld a, [wDuelAnimReturnBank]
 	call BankswitchROM
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	call CallHL2
 	pop af
 	call BankswitchROM
@@ -11448,12 +11450,12 @@ Func_3ca4: ; 3ca4 (0:3ca4)
 	call BankswitchROM
 	ret
 
-Func_3cb4: ; 3cb4 (0:3cb4)
+HandleAllSpriteAnimations: ; 3cb4 (0:3cb4)
 	ldh a, [hBankROM]
 	push af
-	ld a, BANK(HandleAllSpriteAnimations)
+	ld a, BANK(_HandleAllSpriteAnimations)
 	call BankswitchROM
-	call HandleAllSpriteAnimations
+	call _HandleAllSpriteAnimations
 	pop af
 	call BankswitchROM
 	ret
@@ -11700,7 +11702,7 @@ LoadScene: ; 3df3 (0:3df3)
 	ret
 
 ; draws player's portrait at b,c
-Func_3e10: ; 3e10 (0:3e10)
+DrawPlayerPortrait: ; 3e10 (0:3e10)
 	ld a, $1
 	ld [wd61e], a
 	ld a, TILEMAP_PLAYER
@@ -11726,7 +11728,7 @@ Func_3e2a: ; 3e2a (0:3e2a)
 Func_3e31: ; 3e31 (0:3e31)
 	ldh a, [hBankROM]
 	push af
-	call Func_3cb4
+	call HandleAllSpriteAnimations
 	ld a, BANK(DoLoadedFramesetSubgroupsFrame)
 	call BankswitchROM
 	call DoLoadedFramesetSubgroupsFrame

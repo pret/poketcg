@@ -553,7 +553,7 @@ AmyNPCHeader:
 	db SPRITE_OW_AMY
 	db $08
 	db $2e
-	db $10
+	db NPC_FLAG_DIRECTIONLESS
 	dw Script_Amy
 	tx AmyNPCName
 	db AMY_PIC
@@ -722,7 +722,7 @@ Murray2NPCHeader:
 	db SPRITE_OW_MURRAY
 	db $03
 	db $15
-	db $10
+	db NPC_FLAG_DIRECTIONLESS
 	dw Script_Murray
 	tx MurrayNPCName
 	db MURRAY_PIC
@@ -1463,7 +1463,7 @@ TorchNPCHeader:
 	db $26
 	db $3a
 	db $3a
-	db $10
+	db NPC_FLAG_DIRECTIONLESS
 	dw Script_Torch
 
 LegendaryCardTopLeftNPCHeader:
@@ -1471,7 +1471,7 @@ LegendaryCardTopLeftNPCHeader:
 	db $27
 	db $3b
 	db $41
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardTopLeft
 
 LegendaryCardTopRightNPCHeader:
@@ -1479,7 +1479,7 @@ LegendaryCardTopRightNPCHeader:
 	db $27
 	db $3c
 	db $42
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardTopRight
 
 LegendaryCardLeftSparkNPCHeader:
@@ -1487,7 +1487,7 @@ LegendaryCardLeftSparkNPCHeader:
 	db $27
 	db $3d
 	db $43
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardLeftSpark
 
 LegendaryCardBottomLeftNPCHeader:
@@ -1495,7 +1495,7 @@ LegendaryCardBottomLeftNPCHeader:
 	db $27
 	db $3e
 	db $44
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardBottomLeft
 
 LegendaryCardBottomRightNPCHeader:
@@ -1503,7 +1503,7 @@ LegendaryCardBottomRightNPCHeader:
 	db $27
 	db $3f
 	db $45
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardBottomRight
 
 LegendaryCardRightSparkNPCHeader:
@@ -1511,7 +1511,7 @@ LegendaryCardRightSparkNPCHeader:
 	db $27
 	db $40
 	db $46
-	db $50
+	db NPC_FLAG_DIRECTIONLESS | NPC_FLAG_UNKNOWN
 	dw Script_LegendaryCardRightSpark
 
 DummyNPCHeader:

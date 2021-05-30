@@ -877,20 +877,20 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0369                                           ; 0x0369
 	textpointer Text036a                                           ; 0x036a
 	textpointer Text036b                                           ; 0x036b
-	textpointer Text036c                                           ; 0x036c
-	textpointer Text036d                                           ; 0x036d
-	textpointer Text036e                                           ; 0x036e
-	textpointer Text036f                                           ; 0x036f
-	textpointer Text0370                                           ; 0x0370
-	textpointer Text0371                                           ; 0x0371
-	textpointer Text0372                                           ; 0x0372
-	textpointer Text0373                                           ; 0x0373
-	textpointer Text0374                                           ; 0x0374
-	textpointer Text0375                                           ; 0x0375
-	textpointer Text0376                                           ; 0x0376
-	textpointer Text0377                                           ; 0x0377
-	textpointer Text0378                                           ; 0x0378
-	textpointer Text0379                                           ; 0x0379
+	textpointer NewGameText                                        ; 0x036c
+	textpointer CardPopContinueDiaryNewGameText                    ; 0x036d
+	textpointer CardPopContinueDiaryNewGameContinueDuelText        ; 0x036e
+	textpointer WhenYouCardPopWithFriendText                       ; 0x036f
+	textpointer ContinueFromDiarySummaryText                       ; 0x0370
+	textpointer StartANewGameText                                  ; 0x0371
+	textpointer TheGameWillContinueFromThePointInTheDuelText       ; 0x0372
+	textpointer SavedDataAlreadyExistsText                         ; 0x0373
+	textpointer OKToDeleteTheDataText                              ; 0x0374
+	textpointer AllDataWasDeletedText                              ; 0x0375
+	textpointer DataExistsWhenPowerWasTurnedOFFDuringDuelText      ; 0x0376
+	textpointer ContinueFromDiaryText                              ; 0x0377
+	textpointer YouCanAccessCardPopOnlyWithGameBoyColorsText       ; 0x0378
+	textpointer IsCrazyAboutPokemonAndPokemonCardCollectingText    ; 0x0379
 	textpointer Text037a                                           ; 0x037a
 	textpointer Text037b                                           ; 0x037b
 	textpointer Text037c                                           ; 0x037c
@@ -1970,41 +1970,41 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text07ae                                           ; 0x07ae
 	textpointer Text07af                                           ; 0x07af
 	textpointer Text07b0                                           ; 0x07b0
-	textpointer Text07b1                                           ; 0x07b1
-	textpointer Text07b2                                           ; 0x07b2
-	textpointer Text07b3                                           ; 0x07b3
-	textpointer Text07b4                                           ; 0x07b4
-	textpointer Text07b5                                           ; 0x07b5
-	textpointer Text07b6                                           ; 0x07b6
-	textpointer Text07b7                                           ; 0x07b7
-	textpointer Text07b8                                           ; 0x07b8
-	textpointer Text07b9                                           ; 0x07b9
-	textpointer Text07ba                                           ; 0x07ba
-	textpointer Text07bb                                           ; 0x07bb
-	textpointer Text07bc                                           ; 0x07bc
-	textpointer Text07bd                                           ; 0x07bd
-	textpointer Text07be                                           ; 0x07be
-	textpointer Text07bf                                           ; 0x07bf
-	textpointer Text07c0                                           ; 0x07c0
-	textpointer Text07c1                                           ; 0x07c1
-	textpointer Text07c2                                           ; 0x07c2
-	textpointer Text07c3                                           ; 0x07c3
-	textpointer Text07c4                                           ; 0x07c4
-	textpointer Text07c5                                           ; 0x07c5
-	textpointer Text07c6                                           ; 0x07c6
-	textpointer Text07c7                                           ; 0x07c7
-	textpointer Text07c8                                           ; 0x07c8
-	textpointer Text07c9                                           ; 0x07c9
-	textpointer Text07ca                                           ; 0x07ca
-	textpointer Text07cb                                           ; 0x07cb
-	textpointer Text07cc                                           ; 0x07cc
-	textpointer Text07cd                                           ; 0x07cd
-	textpointer Text07ce                                           ; 0x07ce
-	textpointer Text07cf                                           ; 0x07cf
-	textpointer Text07d0                                           ; 0x07d0
-	textpointer Text07d1                                           ; 0x07d1
-	textpointer Text07d2                                           ; 0x07d2
-	textpointer Text07d3                                           ; 0x07d3
+	textpointer PokemonTradingCardGameStaffText                    ; 0x07b1
+	textpointer ProducersText                                      ; 0x07b2
+	textpointer DirectorText                                       ; 0x07b3
+	textpointer ProgrammersText                                    ; 0x07b4
+	textpointer GBGraphicDesigners1Text                            ; 0x07b5
+	textpointer GBGraphicDesigners2Text                            ; 0x07b6
+	textpointer GBGraphicDesigners3Text                            ; 0x07b7
+	textpointer MusicText                                          ; 0x07b8
+	textpointer SoundEffectsText                                   ; 0x07b9
+	textpointer SoundDirectorText                                  ; 0x07ba
+	textpointer SoundSystemSupportText                             ; 0x07bb
+	textpointer CardGameCreator1Text                               ; 0x07bc
+	textpointer CardGameCreator2Text                               ; 0x07bd
+	textpointer CardGameCreator3Text                               ; 0x07be
+	textpointer CardIllustrators1Text                              ; 0x07bf
+	textpointer CardIllustrators2Text                              ; 0x07c0
+	textpointer SpecialAppearances1Text                            ; 0x07c1
+	textpointer SpecialAppearances2Text                            ; 0x07c2
+	textpointer USCoordination1Text                                ; 0x07c3
+	textpointer USCoordination2Text                                ; 0x07c4
+	textpointer USCoordination3Text                                ; 0x07c5
+	textpointer USCoordination4Text                                ; 0x07c6
+	textpointer TranslationDraftText                               ; 0x07c7
+	textpointer MasteringText                                      ; 0x07c8
+	textpointer ManualCreationText                                 ; 0x07c9
+	textpointer ManualIllustrationsText                            ; 0x07ca
+	textpointer PokemonOriginalStoryText                           ; 0x07cb
+	textpointer CreatedInCooperationWithText                       ; 0x07cc
+	textpointer WithCooperation1Text                               ; 0x07cd
+	textpointer WithCooperation2Text                               ; 0x07ce
+	textpointer WithCooperation3Text                               ; 0x07cf
+	textpointer ProjectManagerText                                 ; 0x07d0
+	textpointer SupervisorText                                     ; 0x07d1
+	textpointer ExecutiveProducerText                              ; 0x07d2
+	textpointer CreatedByText                                      ; 0x07d3
 	textpointer Text07d4                                           ; 0x07d4
 	textpointer Text07d5                                           ; 0x07d5
 	textpointer Text07d6                                           ; 0x07d6
@@ -2124,7 +2124,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer CobraName                                          ; 0x0848
 	textpointer ArbokDescription                                   ; 0x0849
 	textpointer NidoranFName                                       ; 0x084a
-	textpointer FurySwipesName                                    ; 0x084b
+	textpointer FurySwipesName                                     ; 0x084b
 	textpointer TripleAttackX10Description                         ; 0x084c
 	textpointer CallForFamilyName                                  ; 0x084d
 	textpointer NidoranFsCallForFamilyDescription                  ; 0x084e

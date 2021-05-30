@@ -276,6 +276,7 @@ EAST     EQU $01
 SOUTH    EQU $02
 WEST     EQU $03
 NO_MOVE  EQU %10000000 ; For rotations without movement
+DIRECTION_MASK EQU $ff ^ NO_MOVE
 
 VARIABLE_CARD	EQU 0 ; use the card located in wCardReceived instead of using the script's argument
 
@@ -300,3 +301,7 @@ SCIENCE_MEDAL   EQU 1 << SCIENCE_MEDAL_F
 GRASS_MEDAL     EQU 1 << GRASS_MEDAL_F
 
 NUM_MEDALS EQU 8
+
+; total number of packs that are obtained through the PC
+NUM_PC_PACKS EQU 15
+PACK_OPENED EQU %10000000

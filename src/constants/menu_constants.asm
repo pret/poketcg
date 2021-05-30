@@ -46,3 +46,10 @@ NUM_CARDS_PROMOTIONAL EQU 20
 	const_def
 	const VENUSAUR_OWNED_PHANTOM_F ; $0
 	const MEW_OWNED_PHANTOM_F      ; $1
+
+; wStartMenuChoice enums
+	const_def
+	const START_MENU_CARD_POP            ; 0
+	const START_MENU_CONTINUE_FROM_DIARY ; 1
+	const START_MENU_NEW_GAME            ; 2
+	const START_MENU_CONTINUE_DUEL       ; 3
