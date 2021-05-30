@@ -2310,7 +2310,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ld [hl], $0
 	ret
 
-Func_cc5: ; 0cc5 (0:0cc5)
+Func_0cc5: ; 0cc5 (0:0cc5)
 	ld hl, wSerialRecvCounter
 	or a
 	jr nz, .asm_cdc
