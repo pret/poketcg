@@ -55,6 +55,8 @@ OWMODE_SCRIPT         EQU 3
 CARDPOP_NAME_LIST_MAX_ELEMS EQU 16
 CARDPOP_NAME_LIST_SIZE EQUS "CARDPOP_NAME_LIST_MAX_ELEMS * NAME_BUFFER_LENGTH"
 
+NUM_CHALLENGE_MACHINE_OPPONENTS EQU 5
+
 ; commands transmitted through IR to be
 ; executed by the other device
 ; (see ExecuteReceivedIRCommands)

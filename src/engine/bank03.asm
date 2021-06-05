@@ -20,7 +20,7 @@ LoadMap: ; c000 (3:4000)
 	ld [wLineSeparation], a
 	xor a
 	ld [wd291], a
-.asm_c037
+.warp
 	farcall Func_10ab4
 	call WhiteOutDMGPals
 	call Func_c241
@@ -45,37 +45,37 @@ LoadMap: ; c000 (3:4000)
 	farcall DoMapOWFrame
 	call SetOverworldDoFrameFunction
 	xor a
-	ld [wd0b4], a
+	ld [wOverworldTransition], a
 	ld [wd0c1], a
 	call PlayDefaultSong
 	farcall Func_10af9
 	call Func_c141
 	call Func_c17a
-.asm_c092
+.overworld_loop
 	call DoFrameIfLCDEnabled
 	call SetScreenScroll
 	call HandleOverworldMode
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	ld a, [hl]
-	and $d0
-	jr z, .asm_c092
+	and %11010000
+	jr z, .overworld_loop
 	call DoFrameIfLCDEnabled
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	ld a, [hl]
 	bit 4, [hl]
-	jr z, .asm_c0b6
+	jr z, .no_warp
 	ld a, SFX_0C
 	call PlaySFX
-	jp .asm_c037
-.asm_c0b6
+	jp .warp
+.no_warp
 	farcall Func_10ab4
 	call Func_c1a0
 	ld a, [wMatchStartTheme]
 	or a
-	jr z, .asm_c0ca
+	jr z, .no_duel
 	call Func_c280
 	farcall Duel_Init
-.asm_c0ca
+.no_duel
 	call Func_c280
 	ret
 
@@ -1069,7 +1069,7 @@ Func_c70d: ; c70d (3:470d)
 	ld a, [wCurMap]
 	cp [hl]
 	jr z, .asm_c71c
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 4, [hl]
 .asm_c71c
 	pop hl
@@ -2109,7 +2109,7 @@ ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	farcall SetNPCOpponentNameAndPortrait
 	ld a, GAME_EVENT_DUEL
 	ld [wGameEvent], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 6, [hl]
 	jp IncreaseScriptPointerBy4
 
@@ -2140,7 +2140,7 @@ SetNPCDuelParams: ; cd66 (3:4d66)
 ScriptCommand_BattleCenter: ; cd76 (3:4d76)
 	ld a, GAME_EVENT_BATTLE_CENTER
 	ld [wGameEvent], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 6, [hl]
 	jp IncreaseScriptPointerBy1
 
@@ -3150,7 +3150,7 @@ ScriptCommand_EnterMap: ; d36d (3:536d)
 	ld [wTempPlayerYCoord], a
 	ld a, [hli]
 	ld [wTempPlayerDirection], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 4, [hl]
 	jp IncreaseScriptPointerBy6
 
@@ -3175,7 +3175,7 @@ ScriptCommand_GiftCenter: ; d39d (3:539d)
 .load_gift_center
 	ld a, GAME_EVENT_GIFT_CENTER
 	ld [wGameEvent], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 6, [hl]
 .done
 	jp IncreaseScriptPointerBy2
@@ -3184,7 +3184,7 @@ ScriptCommand_PlayCredits: ; d3b9 (3:53b9)
 	call GetReceivedLegendaryCards
 	ld a, GAME_EVENT_CREDITS
 	ld [wGameEvent], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 6, [hl]
 	jp IncreaseScriptPointerBy1
 
@@ -3262,7 +3262,7 @@ ScriptCommand_RecordMasterWin: ; d435 (3:5435)
 ScriptCommand_ChallengeMachine: ; d43d (3:543d)
 	ld a, GAME_EVENT_CHALLENGE_MACHINE
 	ld [wGameEvent], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 6, [hl]
 	jp IncreaseScriptPointerBy1
 

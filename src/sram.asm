@@ -245,23 +245,49 @@ sEventVars:: ; b87b
 	ds $45
 sGeneralSaveDataEnd::
 
-	ds $144
+	ds $142
 
-sba44:: ; ba44
+sChallengeMachineMagic:: ; ba42
+	ds $2
+
+sChallengeMachineStart:: ; ba44
+
+sPlayerInChallengeMachine:: ; ba44
 	ds $1
 
-	ds $11
+sTotalChallengeMachineWins:: ; ba45
+	ds $2
 
-sba56:: ; ba56
+sPresentConsecutiveWins:: ; ba47
+	ds $2
+
+sPresentConsecutiveWinsBackup:: ; ba49
+	ds $2
+
+sChallengeMachineOpponents:: ; ba4b
+	ds NUM_CHALLENGE_MACHINE_OPPONENTS
+
+; 0: not dueled
+; 1: won
+; 2: lost
+sChallengeMachineDuelResults:: ; ba50
+	ds NUM_CHALLENGE_MACHINE_OPPONENTS
+
+; the current opponent number, 0-4
+sChallengeMachineOpponentNumber:: ; ba55
 	ds $1
 
-sba57:: ; ba57
+sMaximumConsecutiveWins:: ; ba56
+	ds $2
+
+sChallengeMachineRecordHolderName:: ; ba58
+	ds NAME_BUFFER_LENGTH
+
+; TRUE if just set new consecutive win record
+sConsecutiveWinRecordIncreased:: ; ba68
 	ds $1
 
-	ds $10
-
-sba68:: ; ba68
-	ds $1
+sChallengeMachineEnd:: ; ba69
 
 	ds $97
 

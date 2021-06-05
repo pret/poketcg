@@ -1529,79 +1529,79 @@ Text0394: ; 3f4d6 (f:74d6)
 	text "(Name of Deck transferring)"
 	done
 
-Text0395: ; 3f4f3 (f:74f3)
+OpponentTitleAndNameText: ; 3f4f3 (f:74f3)
 	text "<RAMTEXT>  <RAMTEXT>"
 	done
 
-Text0396: ; 3f4f9 (f:74f9)
+OpponentDeckNameText: ; 3f4f9 (f:74f9)
 	text "<RAMTEXT> Deck"
 	done
 
-Text0397: ; 3f501 (f:7501)
+FightingClubMemberText: ; 3f501 (f:7501)
 	text "Fighting Club Member"
 	done
 
-Text0398: ; 3f517 (f:7517)
+RockClubMemberText: ; 3f517 (f:7517)
 	text "Rock Club Member"
 	done
 
-Text0399: ; 3f529 (f:7529)
+WaterClubMemberText: ; 3f529 (f:7529)
 	text "Water Club Member"
 	done
 
-Text039a: ; 3f53c (f:753c)
+LightningClubMemberText: ; 3f53c (f:753c)
 	text "Lightning Club Member"
 	done
 
-Text039b: ; 3f553 (f:7553)
+GrassClubMemberText: ; 3f553 (f:7553)
 	text "Grass Club Member"
 	done
 
-Text039c: ; 3f566 (f:7566)
+PsychicClubMemberText: ; 3f566 (f:7566)
 	text "Psychic Club Member"
 	done
 
-Text039d: ; 3f57b (f:757b)
+ScienceClubMemberText: ; 3f57b (f:757b)
 	text "Science Club Member"
 	done
 
-Text039e: ; 3f590 (f:7590)
+FireClubMemberText: ; 3f590 (f:7590)
 	text "Fire Club Member"
 	done
 
-Text039f: ; 3f5a2 (f:75a2)
+FightingClubMasterText: ; 3f5a2 (f:75a2)
 	text "Fighting Club Master"
 	done
 
-Text03a0: ; 3f5b8 (f:75b8)
+RockClubMasterText: ; 3f5b8 (f:75b8)
 	text "Rock Club Master"
 	done
 
-Text03a1: ; 3f5ca (f:75ca)
+WaterClubMasterText: ; 3f5ca (f:75ca)
 	text "Water Club Master"
 	done
 
-Text03a2: ; 3f5dd (f:75dd)
+LightningClubMasterText: ; 3f5dd (f:75dd)
 	text "Lightning Club Master"
 	done
 
-Text03a3: ; 3f5f4 (f:75f4)
+GrassClubMasterText: ; 3f5f4 (f:75f4)
 	text "Grass Club Master"
 	done
 
-Text03a4: ; 3f607 (f:7607)
+PsychicClubMasterText: ; 3f607 (f:7607)
 	text "Psychic Club Master"
 	done
 
-Text03a5: ; 3f61c (f:761c)
+ScienceClubMasterText: ; 3f61c (f:761c)
 	text "Science Club Master"
 	done
 
-Text03a6: ; 3f631 (f:7631)
+FireClubMasterText: ; 3f631 (f:7631)
 	text "Fire Club Master"
 	done
 
-Text03a7: ; 3f643 (f:7643)
+EmptyText: ; 3f643 (f:7643)
 	done
 
 ColosseumBoosterText: ; 3f644 (f:7644)

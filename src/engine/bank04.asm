@@ -58,7 +58,10 @@ Func_10197: ; 10197 (4:4197)
 	INCROM $10197, $101df
 
 Func_101df: ; 101df (4:41df)
-	INCROM $101df, $1024f
+	INCROM $101df, $10217
+
+Func_10217: ; 10217 (4:4217)
+	INCROM $10217, $1024f
 
 Func_1024f: ; 1024f (4:424f)
 	INCROM $1024f, $1029e
@@ -252,7 +255,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	add a
 	ld c, a
 	ld b, $0
-	ld hl, Unknown_1045b
+	ld hl, OpponentTitlesAndDeckNames
 	add hl, bc
 	ld a, [hli]
 	ld [wTxRam2], a
@@ -263,7 +266,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wTxRam2_b], a
 	ld a, [wOpponentName + 1]
 	ld [wTxRam2_b + 1], a
-	ld hl, Unknown_10451
+	ld hl, OpponentTitleAndNameTextCoords
 	call Func_111b3 ; LoadDuelistName
 	pop hl
 	ld a, [hli]
@@ -273,7 +276,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wTxRam2 + 1], a
 	or c
 	jr z, .asm_10425
-	ld hl, Unknown_10456
+	ld hl, OpponentDeckNameTextCoords
 	call Func_111b3 ; LoadDeckName
 
 .asm_10425
@@ -294,18 +297,175 @@ Duel_Init: ; 103d3 (4:43d3)
 	ld [wd291], a
 	ret
 
-Unknown_10451: ; 10451 (4:4451)
+OpponentTitleAndNameTextCoords: ; 10451 (4:4451)
 	db 1, 14
-	tx Text0395
+	tx OpponentTitleAndNameText
 	db $ff
 
-Unknown_10456: ; 10456 (4:4456)
+OpponentDeckNameTextCoords: ; 10456 (4:4456)
 	db 1, 16
-	tx Text0396
+	tx OpponentDeckNameText
 	db $ff
 
-Unknown_1045b: ; 1045b (4:445b)
-	INCROM $1045b, $1052f
+OpponentTitlesAndDeckNames: ; 1045b (4:445b)
+	tx TechText
+	tx SamsPracticeDeckName
+
+	tx EmptyText
+	dw NULL
+
+	tx TechText
+	tx SamsPracticeDeckName
+
+	tx EmptyText
+	dw NULL
+
+	tx EmptyText
+	dw NULL
+
+	tx EmptyText
+	dw NULL
+
+	tx EmptyText
+	dw NULL
+
+	tx EmptyText
+	dw NULL
+
+	tx EmptyText
+	dw NULL
+
+	tx TechText
+	tx LightningAndFireDeckName
+
+	tx TechText
+	tx WaterAndFightingDeckName
+
+	tx TechText
+	tx GrassAndPsychicDeckName
+
+	tx GrandMasterText
+	tx LegendaryMoltresDeckName
+
+	tx GrandMasterText
+	tx LegendaryZapdosDeckName
+
+	tx GrandMasterText
+	tx LegendaryArticunoDeckName
+
+	tx GrandMasterText
+	tx LegendaryDragoniteDeckName
+
+	tx FightingClubMasterText
+	tx FirstStrikeDeckName
+
+	tx RockClubMasterText
+	tx RockCrusherDeckName
+
+	tx WaterClubMasterText
+	tx GoGoRainDanceDeckName
+
+	tx LightningClubMasterText
+	tx ZappingSelfdestructDeckName
+
+	tx GrassClubMasterText
+	tx FlowerPowerDeckName
+
+	tx PsychicClubMasterText
+	tx StrangePsyshockDeckName
+
+	tx ScienceClubMasterText
+	tx WondersofScienceDeckName
+
+	tx FireClubMasterText
+	tx FireChargeDeckName
+
+	tx EmptyText
+	tx ImRonaldDeckName
+
+	tx EmptyText
+	tx PowerfulRonaldDeckName
+
+	tx EmptyText
+	tx InvincibleRonaldDeckName
+
+	tx EmptyText
+	tx LegendaryRonaldDeckName
+
+	tx FightingClubMemberText
+	tx MusclesforBrainsDeckName
+
+	tx FightingClubMemberText
+	tx HeatedBattleDeckName
+
+	tx FightingClubMemberText
+	tx LovetoBattleDeckName
+
+	tx RockClubMemberText
+	tx ExcavationDeckName
+
+	tx RockClubMemberText
+	tx BlisteringPokemonDeckName
+
+	tx RockClubMemberText
+	tx HardPokemonDeckName
+
+	tx WaterClubMemberText
+	tx WaterfrontPokemonDeckName
+
+	tx WaterClubMemberText
+	tx LonelyFriendsDeckName
+
+	tx WaterClubMemberText
+	tx SoundoftheWavesDeckName
+
+	tx LightningClubMemberText
+	tx PikachuDeckName
+
+	tx LightningClubMemberText
+	tx BoomBoomSelfdestructDeckName
+
+	tx LightningClubMemberText
+	tx PowerGeneratorDeckName
+
+	tx GrassClubMemberText
+	tx EtceteraDeckName
+
+	tx GrassClubMemberText
+	tx FlowerGardenDeckName
+
+	tx GrassClubMemberText
+	tx KaleidoscopeDeckName
+
+	tx PsychicClubMemberText
+	tx GhostDeckName
+
+	tx PsychicClubMemberText
+	tx NapTimeDeckName
+
+	tx PsychicClubMemberText
+	tx StrangePowerDeckName
+
+	tx ScienceClubMemberText
+	tx FlyinPokemonDeckName
+
+	tx ScienceClubMemberText
+	tx LovelyNidoranDeckName
+
+	tx ScienceClubMemberText
+	tx PoisonDeckName
+
+	tx FireClubMemberText
+	tx AngerDeckName
+
+	tx FireClubMemberText
+	tx FlamethrowerDeckName
+
+	tx FireClubMemberText
+	tx ReshuffleDeckName
+
+	tx StrangeLifeformText
+	tx ImakuniDeckName
 
 Func_1052f: ; 1052f (4:452f)
 	INCROM $1052f, $10548
@@ -1233,7 +1393,7 @@ OverworldMap_LoadSelectedMap: ; 10f61 (4:4f61)
 	ld [wTempPlayerYCoord], a
 	ld a, NORTH
 	ld [wTempPlayerDirection], a
-	ld hl, wd0b4
+	ld hl, wOverworldTransition
 	set 4, [hl]
 	pop bc
 	pop hl
@@ -2483,12 +2643,7 @@ _GetNPCDuelConfigurations: ; 11f4e (4:5f4e)
 	ret
 ; 0x11f7d
 
-; this is most likely unreferenced
-; since it expects the duel theme song
-; to be stored in the duel configuration
-; associated with the NPC deck ID,
-; but this isn't found in the actual data
-Func_11f7d: ; 11f7d (4:5f7d)
+_GetChallengeMachineDuelConfigurations: ; 11f7d (4:5f7d)
 	push bc
 	push de
 	ld a, [wNPCDuelDeckID]
@@ -2528,462 +2683,370 @@ DeckIDDuelConfigurations: ; 11fae (4:5fae)
 	db SAMS_PRACTICE_DECK_ID ; deck ID
 	db SAM_PIC ; NPC portrait
 	tx SamNPCName ; name text ID
-	db 2 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_2 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db SAMS_NORMAL_DECK_ID ; deck ID
 	db SAM_PIC ; NPC portrait
 	tx SamNPCName ; name text ID
-	db 2 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_2 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db LIGHTNING_AND_FIRE_DECK_ID ; deck ID
 	db AARON_PIC ; NPC portrait
 	tx AaronNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $eb ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx TechText ; rank
+	dw NULL ; element
 
 	db WATER_AND_FIGHTING_DECK_ID ; deck ID
 	db AARON_PIC ; NPC portrait
 	tx AaronNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $eb ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx TechText ; rank
+	dw NULL ; element
 
 	db GRASS_AND_PSYCHIC_DECK_ID ; deck ID
 	db AARON_PIC ; NPC portrait
 	tx AaronNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $eb ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx TechText ; rank
+	dw NULL ; element
 
 	db LEGENDARY_MOLTRES_DECK_ID ; deck ID
 	db COURTNEY_PIC ; NPC portrait
 	tx CourtneyNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $04 ; unknown
-	db $ed ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_3 ; theme
+	tx GrandMasterText ; rank
+	dw NULL ; element
 
 	db LEGENDARY_ZAPDOS_DECK_ID ; deck ID
 	db STEVE_PIC ; NPC portrait
 	tx SteveNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $04 ; unknown
-	db $ed ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_3 ; theme
+	tx GrandMasterText ; rank
+	dw NULL ; element
 
 	db LEGENDARY_ARTICUNO_DECK_ID ; deck ID
 	db JACK_PIC ; NPC portrait
 	tx JackNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $04 ; unknown
-	db $ed ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_3 ; theme
+	tx GrandMasterText ; rank
+	dw NULL ; element
 
 	db LEGENDARY_DRAGONITE_DECK_ID ; deck ID
 	db ROD_PIC ; NPC portrait
 	tx RodNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $04 ; unknown
-	db $ed ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_3 ; theme
+	tx GrandMasterText ; rank
+	dw NULL ; element
 
 	db FIRST_STRIKE_DECK_ID ; deck ID
 	db MITCH_PIC ; NPC portrait
 	tx MitchNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db ROCK_CRUSHER_DECK_ID ; deck ID
 	db GENE_PIC ; NPC portrait
 	tx GeneNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db GO_GO_RAIN_DANCE_DECK_ID ; deck ID
 	db AMY_PIC ; NPC portrait
 	tx AmyNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $f8 ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineWaterIconText ; element
 
 	db ZAPPING_SELFDESTRUCT_DECK_ID ; deck ID
 	db ISAAC_PIC ; NPC portrait
 	tx IsaacNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $f7 ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineLightningIconText ; element
 
 	db FLOWER_POWER_DECK_ID ; deck ID
 	db NIKKI_PIC ; NPC portrait
 	tx NikkiNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db STRANGE_PSYSHOCK_DECK_ID ; deck ID
 	db MURRAY_PIC ; NPC portrait
 	tx MurrayNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $fa ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachinePsychicIconText ; element
 
 	db WONDERS_OF_SCIENCE_DECK_ID ; deck ID
 	db RICK_PIC ; NPC portrait
 	tx RickNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db FIRE_CHARGE_DECK_ID ; deck ID
 	db KEN_PIC ; NPC portrait
 	tx KenNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $03 ; unknown
-	db $ea ; unknown
-	db $07 ; unknown
-	db $f6 ; unknown
-	db $07 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_DUEL_THEME_2 ; theme
+	tx ClubMasterText ; rank
+	tx ChallengeMachineFireIconText ; element
 
 	db IM_RONALD_DECK_ID ; deck ID
 	db RONALD_PIC ; NPC portrait
 	tx RonaldNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db POWERFUL_RONALD_DECK_ID ; deck ID
 	db RONALD_PIC ; NPC portrait
 	tx RonaldNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db INVINCIBLE_RONALD_DECK_ID ; deck ID
 	db RONALD_PIC ; NPC portrait
 	tx RonaldNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db LEGENDARY_RONALD_DECK_ID ; deck ID
 	db RONALD_PIC ; NPC portrait
 	tx RonaldNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_STOP ; theme
+	dw NULL ; rank
+	dw NULL ; element
 
 	db MUSCLES_FOR_BRAINS_DECK_ID ; deck ID
 	db CHRIS_PIC ; NPC portrait
 	tx ChrisNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db HEATED_BATTLE_DECK_ID ; deck ID
 	db MICHAEL_PIC ; NPC portrait
 	tx MichaelNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db LOVE_TO_BATTLE_DECK_ID ; deck ID
 	db JESSICA_PIC ; NPC portrait
 	tx JessicaNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db EXCAVATION_DECK_ID ; deck ID
 	db RYAN_PIC ; NPC portrait
 	tx RyanNPCName ; name text ID
-	db 3 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_3 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db BLISTERING_POKEMON_DECK_ID ; deck ID
 	db ANDREW_PIC ; NPC portrait
 	tx AndrewNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db HARD_POKEMON_DECK_ID ; deck ID
 	db MATTHEW_PIC ; NPC portrait
 	tx MatthewNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f9 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFightingIconText ; element
 
 	db WATERFRONT_POKEMON_DECK_ID ; deck ID
 	db SARA_PIC ; NPC portrait
 	tx SaraNPCName ; name text ID
-	db 2 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f8 ; unknown
-	db $07 ; unknown
+	db PRIZES_2 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineWaterIconText ; element
 
 	db LONELY_FRIENDS_DECK_ID ; deck ID
 	db AMANDA_PIC ; NPC portrait
 	tx AmandaNPCName ; name text ID
-	db 3 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f8 ; unknown
-	db $07 ; unknown
+	db PRIZES_3 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineWaterIconText ; element
 
 	db SOUND_OF_THE_WAVES_DECK_ID ; deck ID
 	db JOSHUA_PIC ; NPC portrait
 	tx JoshuaNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f8 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineWaterIconText ; element
 
 	db PIKACHU_DECK_ID ; deck ID
 	db JENNIFER_PIC ; NPC portrait
 	tx JenniferNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f7 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineLightningIconText ; element
 
 	db BOOM_BOOM_SELFDESTRUCT_DECK_ID ; deck ID
 	db NICHOLAS_PIC ; NPC portrait
 	tx NicholasNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f7 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineLightningIconText ; element
 
 	db POWER_GENERATOR_DECK_ID ; deck ID
 	db BRANDON_PIC ; NPC portrait
 	tx BrandonNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f7 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineLightningIconText ; element
 
 	db ETCETERA_DECK_ID ; deck ID
 	db BRITTANY_PIC ; NPC portrait
 	tx BrittanyNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db FLOWER_GARDEN_DECK_ID ; deck ID
 	db KRISTIN_PIC ; NPC portrait
 	tx KristinNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db KALEIDOSCOPE_DECK_ID ; deck ID
 	db HEATHER_PIC ; NPC portrait
 	tx HeatherNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db GHOST_DECK_ID ; deck ID
 	db ROBERT_PIC ; NPC portrait
 	tx RobertNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fa ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachinePsychicIconText ; element
 
 	db NAP_TIME_DECK_ID ; deck ID
 	db DANIEL_PIC ; NPC portrait
 	tx DanielNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fa ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachinePsychicIconText ; element
 
 	db STRANGE_POWER_DECK_ID ; deck ID
 	db STEPHANIE_PIC ; NPC portrait
 	tx StephanieNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fa ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachinePsychicIconText ; element
 
 	db FLYIN_POKEMON_DECK_ID ; deck ID
 	db JOSEPH_PIC ; NPC portrait
 	tx JosephNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db LOVELY_NIDORAN_DECK_ID ; deck ID
 	db DAVID_PIC ; NPC portrait
 	tx DavidNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db POISON_DECK_ID ; deck ID
 	db ERIK_PIC ; NPC portrait
 	tx ErikNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $fb ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineGrassIconText ; element
 
 	db ANGER_DECK_ID ; deck ID
 	db JOHN_PIC ; NPC portrait
 	tx JohnNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f6 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFireIconText ; element
 
 	db FLAMETHROWER_DECK_ID ; deck ID
 	db ADAM_PIC ; NPC portrait
 	tx AdamNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f6 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFireIconText ; element
 
 	db RESHUFFLE_DECK_ID ; deck ID
 	db JONATHAN_PIC ; NPC portrait
 	tx JonathanNPCName ; name text ID
-	db 4 ; number of prize cards
-	db $02 ; unknown
-	db $e9 ; unknown
-	db $07 ; unknown
-	db $f6 ; unknown
-	db $07 ; unknown
+	db PRIZES_4 ; number of prize cards
+	db MUSIC_DUEL_THEME_1 ; theme
+	tx ClubMemberText ; rank
+	tx ChallengeMachineFireIconText ; element
 
 	db IMAKUNI_DECK_ID ; deck ID
 	db IMAKUNI_PIC ; NPC portrait
 	tx ImakuniNPCName ; name text ID
-	db 6 ; number of prize cards
-	db $10 ; unknown
-	db $ec ; unknown
-	db $07 ; unknown
-	db $00 ; unknown
-	db $00 ; unknown
+	db PRIZES_6 ; number of prize cards
+	db MUSIC_IMAKUNI ; theme
+	tx StrangeLifeformText ; rank
+	dw NULL ; element
 
 	db -1 ; end
 
@@ -3884,7 +3947,7 @@ MainMenu_ContinueFromDiary: ; 12741 (4:6741)
 	farcall SetMainSGBBorder
 	call EnableSRAM
 	xor a
-	ld [sba44], a
+	ld [sPlayerInChallengeMachine], a
 	call DisableSRAM
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
@@ -5157,30 +5220,376 @@ BoosterLogoOAM: ; 13132 (4:7132)
 Func_131b3: ; 131b3 (4:71b3)
 	INCROM $131b3, $131d3
 
-Func_131d3: ; 131d3 (4:71d3)
-	INCROM $131d3, $1344d
+; if a challenge is already in progress, then resume
+; otherwise, start a new 5 round challenge
+ChallengeMachine_Start: ; 131d3 (4:71d3)
+	ld a, 0
+	ld [wLineSeparation], a
+	call Func_10a9b
+	call ChallengeMachine_Initialize
 
-Func_1344d: ; 1344d (4:744d)
+	call EnableSRAM
+	ld a, [sPlayerInChallengeMachine]
+	call DisableSRAM
+	cp $ff
+	jr z, .resume_challenge
+
+; new challenge
+	call ChallengeMachine_PickOpponentSequnce
+	call ChallengeMachine_DrawScoreScreen
+	call FlashWhiteScreen
+	ldtx hl, PlayTheChallengeMachineText
+	call YesOrNoMenuWithText_SetCursorToYes
+	jp c, .end_challenge
+
+	ldtx hl, LetUsChooseYourOpponentText
+	call PrintScrollableText_NoTextBoxLabel
+	call Func_10ab4
+	call EnableSRAM
+	xor a
+	ld [sPresentConsecutiveWinsBackup], a
+	ld [sPresentConsecutiveWinsBackup + 1], a
+	call DisableSRAM
+
+	call ChallengeMachine_DrawOpponentList
+	call FlashWhiteScreen
+	ldtx hl, YourOpponentsForThisGameText
+	call PrintScrollableText_NoTextBoxLabel
+; begin challenge loop
+.next_opponent
+	call ChallengeMachine_GetCurrentOpponent
+	call ChallengeMachine_AreYouReady
+	jr nc, .start_duel
+	ldtx hl, IfYouQuitTheDuelText
+	call PrintScrollableText_NoTextBoxLabel
+	ldtx hl, WouldYouLikeToQuitTheDuelText
+	call YesOrNoMenuWithText
+	jr c, .next_opponent
+	jp .quit
+
+.start_duel
+	call EnableSRAM
+	ld a, $ff
+	ld [sPlayerInChallengeMachine], a
+	call DisableSRAM
+	call ChallengeMachine_Duel
+.resume_challenge
+	call EnableSRAM
+	xor a
+	ld [sPlayerInChallengeMachine], a
+	bank1call DiscardSavedDuelData
+	call DisableSRAM
+	call ChallengeMachine_GetCurrentOpponent
+	call ChallengeMachine_RecordDuelResult
+	call ChallengeMachine_DrawOpponentList
+	call FlashWhiteScreen
+	ld a, [wDuelResult]
+	or a
+	jr nz, .lost
+; won
+	call ChallengeMachine_DuelWon
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	cp NUM_CHALLENGE_MACHINE_OPPONENTS - 1
+	jr z, .defeated_five_opponents
+	ld hl, sChallengeMachineOpponentNumber
+	inc [hl]
+	call DisableSRAM
+	jr .next_opponent
+
+.defeated_five_opponents
+	ld hl, sTotalChallengeMachineWins
+	call ChallengeMachine_IncrementHLMax999
+	call Func_10ab4
+	call ChallengeMachine_CheckForNewRecord
+	call ChallengeMachine_DrawScoreScreen
+	call FlashWhiteScreen
+	call EnableSRAM
+	ld a, [sTotalChallengeMachineWins]
+	ld [wTxRam3], a
+	ld a, [sTotalChallengeMachineWins + 1]
+	ld [wTxRam3 + 1], a
+	call DisableSRAM
+	ldtx hl, SuccessfullyDefeated5OpponentsText
+	call PrintScrollableText_NoTextBoxLabel
+	jr .end_challenge
+
+.lost
+	call ChallengeMachine_GetCurrentOpponent
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	inc a
+	ld [wTxRam3], a
+	xor a
+	ld [wTxRam3 + 1], a
+	call DisableSRAM
+	call ChallengeMachine_GetOpponentNameAndDeck
+	ld a, [wOpponentName]
+	ld [wTxRam2], a
+	ld a, [wOpponentName + 1]
+	ld [wTxRam2 + 1], a
+	ldtx hl, LostToTheNthOpponentText
+	call PrintScrollableText_NoTextBoxLabel
+.quit
+	call ChallengeMachine_PrintFinalConsecutiveWinStreak
+	call Func_10ab4
+	call ChallengeMachine_CheckForNewRecord
+	call ChallengeMachine_DrawScoreScreen
+	call FlashWhiteScreen
+	call EnableSRAM
+; reset streak
+	xor a
+	ld [sPresentConsecutiveWins], a
+	ld [sPresentConsecutiveWins + 1], a
+	call DisableSRAM
+.end_challenge ; end, win or lose
+	call ChallengeMachine_CheckForNewRecord ; redundant?
+	call EnableSRAM
+	ld a, [sPresentConsecutiveWins]
+	ld [sPresentConsecutiveWinsBackup], a
+	ld a, [sPresentConsecutiveWins + 1]
+	ld [sPresentConsecutiveWinsBackup + 1], a
+	call ChallengeMachine_ShowNewRecord
+	call DisableSRAM
+	ldtx hl, WeAwaitYourNextChallengeText
+	call PrintScrollableText_NoTextBoxLabel
+	ret
+
+; update wChallengeMachineOpponent with the current
+; opponent in the sChallengeMachineOpponents list
+ChallengeMachine_GetCurrentOpponent: ; 1330b (4:730b)
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	ld e, a
+	ld d, 0
+	ld hl, sChallengeMachineOpponents
+	add hl, de
+	ld a, [hl]
+	ld [wChallengeMachineOpponent], a
+	call DisableSRAM
+	ret
+
+; play the appropriate match start theme
+; then duel the current opponent
+ChallengeMachine_Duel: ; 13320 (4:7320)
+	call ChallengeMachine_PrepareDuel
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	ld e, a
+	call DisableSRAM
+	ld d, 0
+	ld hl, ChallengeMachine_SongIDs
+	add hl, de
+	ld a, [hl]
+	call PlaySong
+	call WaitForSongToFinish
+	xor a
+	ld [wd112], a
+	call SaveGeneralSaveData
+	bank1call StartDuel
+	ret
+
+ChallengeMachine_SongIDs: ; 13345 (4:7345)
+	db MUSIC_MATCH_START_1
+	db MUSIC_MATCH_START_1
+	db MUSIC_MATCH_START_1
+	db MUSIC_MATCH_START_2
+	db MUSIC_MATCH_START_2
+
+; get the current opponent's name, deck, and prize count
+ChallengeMachine_PrepareDuel: ; 1334a (4:734a)
+	call ChallengeMachine_GetOpponentNameAndDeck
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	ld e, a
+	call DisableSRAM
+	ld d, 0
+	ld hl, ChallengeMachine_Prizes
+	add hl, de
+	ld a, [hl]
+	ld [wNPCDuelPrizes], a
+	ret
+
+ChallengeMachine_Prizes: ; 13362 (4:7362)
+	db PRIZES_4
+	db PRIZES_4
+	db PRIZES_4
+	db PRIZES_6
+	db PRIZES_6
+
+; store the result of the last duel in the current
+; position of the sChallengeMachineDuelResults list
+ChallengeMachine_RecordDuelResult: ; 13367 (4:7367)
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	ld e, a
+	ld d, 0
+	ld hl, sChallengeMachineDuelResults
+	add hl, de
+	ld a, [wDuelResult]
+	or a
+	jr nz, .lost
+	ld a, 1 ; won
+	ld [hl], a
+	call DisableSRAM
+	ld hl, sPresentConsecutiveWins
+	call ChallengeMachine_IncrementHLMax999
+	ret
+
+.lost
+	ld a, 2 ; lost
+	ld [hl], a
+	call DisableSRAM
+	ret
+
+; increment the value at hl
+; without going above 999
+ChallengeMachine_IncrementHLMax999: ; 1338e (4:738e)
+	call EnableSRAM
+	inc hl
+	ld a, [hld]
+	cp HIGH(999)
+	jr nz, .increment
+	ld a, [hl]
+	cp LOW(999)
+	jr z, .skip
+.increment
+	ld a, [hl]
+	add 1
+	ld [hli], a
+	ld a, [hl]
+	adc 0
+	ld [hl], a
+.skip
+	call DisableSRAM
+	ret
+
+; update sMaximumConsecutiveWins if the player set a new record
+ChallengeMachine_CheckForNewRecord: ; 133a8 (4:73a8)
+	call EnableSRAM
+	ld hl, sMaximumConsecutiveWins + 1
+	ld a, [sPresentConsecutiveWins + 1]
+	cp [hl]
+	jr nz, .high_bytes_different
+; high bytes equal, check low bytes
+	dec hl
+	ld a, [sPresentConsecutiveWins]
+	cp [hl]
+.high_bytes_different
+	jr c, .no_record
+	jr z, .no_record
+; new record
+	ld hl, sMaximumConsecutiveWins
+	ld a, [sPresentConsecutiveWins]
+	ld [hli], a
+	ld a, [sPresentConsecutiveWins + 1]
+	ld [hl], a
+	ld hl, sPlayerName
+	ld de, sChallengeMachineRecordHolderName
+	ld bc, NAME_BUFFER_LENGTH
+	call CopyDataHLtoDE_SaveRegisters
+; remember to show congrats message later
+	ld a, TRUE
+	ld [sConsecutiveWinRecordIncreased], a
+.no_record
+	call DisableSRAM
+	ret
+
+; print the next opponent's name and ask the
+; player if they want to begin the next duel
+ChallengeMachine_AreYouReady: ; 133dd (4:73dd)
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	inc a
+	ld [wTxRam3], a
+	ld [wTxRam3_b], a
+	xor a
+	ld [wTxRam3 + 1], a
+	ld [wTxRam3_b + 1], a
+	ldtx hl, NthOpponentIsText
+	ld a, [sPresentConsecutiveWins + 1]
+	or a
+	jr nz, .streak
+	ld a, [sPresentConsecutiveWins]
+	cp 2
+	jr c, .no_streak
+.streak
+	ldtx hl, XConsecutiveWinsNthOpponentIsText
+	ld a, [sPresentConsecutiveWins]
+	ld [wTxRam3], a
+	ld a, [sPresentConsecutiveWins + 1]
+	ld [wTxRam3 + 1], a
+.no_streak
+	call DisableSRAM
+	push hl ; text id
+	call ChallengeMachine_GetOpponentNameAndDeck
+	ld a, [wOpponentName]
+	ld [wTxRam2], a
+	ld a, [wOpponentName + 1]
+	ld [wTxRam2 + 1], a
+	pop hl ; text id
+	call PrintScrollableText_NoTextBoxLabel
+	ldtx hl, WouldYouLikeToBeginTheDuelText
+	call YesOrNoMenuWithText_SetCursorToYes
+	ret
+
+; print opponent win count
+; play a jingle for beating 5 opponents
+ChallengeMachine_DuelWon: ; 1342e (4:742e)
+	call EnableSRAM
+	ld a, [sChallengeMachineOpponentNumber]
+	inc a
+	ld [wTxRam3], a
+	xor a
+	ld [wTxRam3 + 1], a
+	ldtx hl, WonAgainstXOpponentsText
+	ld a, [sChallengeMachineOpponentNumber]
+	call DisableSRAM
+	cp NUM_CHALLENGE_MACHINE_OPPONENTS - 1
+	jr z, .beat_five_opponents
+	call PrintScrollableText_NoTextBoxLabel
+	ret
+
+.beat_five_opponents
 	call PauseSong
 	ld a, MUSIC_MEDAL
 	call PlaySong
-	ldtx hl, DefeatedFiveOpponentsText
+	ldtx hl, Defeated5OpponentsText
 	call PrintScrollableText_NoTextBoxLabel
 	call WaitForSongToFinish
 	call ResumeSong
 	ret
-; 0x13462
 
-	INCROM $13462, $13485
-
-Func_13485: ; 13485 (4:7485)
+; when a player's streak ends, print the final
+; consecutive win count
+ChallengeMachine_PrintFinalConsecutiveWinStreak: ; 13462 (4:7462)
 	call EnableSRAM
-	ld a, [sba68]
-	or a
-	ret z
-	ld a, [sba56]
+	ld a, [sPresentConsecutiveWins]
 	ld [wTxRam3], a
-	ld a, [sba57]
+	ld a, [sPresentConsecutiveWins + 1]
+	ld [wTxRam3 + 1], a
+	or a
+	jr nz, .streak
+	ld a, [sPresentConsecutiveWins]
+	cp 2
+	jr c, .no_streak
+.streak
+	ldtx hl, ConsecutiveWinsEndedAtText
+	call PrintScrollableText_NoTextBoxLabel
+.no_streak
+	call DisableSRAM
+	ret
+
+; if the player achieved a new record, play a jingle
+; otherwise, do nothing
+ChallengeMachine_ShowNewRecord: ; 13485 (4:7485)
+	call EnableSRAM
+	ld a, [sConsecutiveWinRecordIncreased]
+	or a
+	ret z ; no new record
+	ld a, [sMaximumConsecutiveWins]
+	ld [wTxRam3], a
+	ld a, [sMaximumConsecutiveWins + 1]
 	ld [wTxRam3 + 1], a
 	call DisableSRAM
 	call PauseSong
@@ -5191,9 +5600,442 @@ Func_13485: ; 13485 (4:7485)
 	call WaitForSongToFinish
 	call ResumeSong
 	ret
-; 0x134b1
 
-	INCROM $134b1, $1372f
+ChallengeMachine_DrawScoreScreen: ; 134b1 (4:74b1)
+	call Func_10000
+	lb de, $30, $bf
+	call SetupText
+	lb de,  0,  0
+	lb bc, 20, 13
+	call DrawRegularTextBox
+	lb de,  0, 12
+	lb bc, 20,  6
+	call DrawRegularTextBox
+	call EnableSRAM
+	ld hl, sChallengeMachineRecordHolderName
+	ld de, wDefaultText
+	ld bc, NAME_BUFFER_LENGTH
+	call CopyDataHLtoDE
+	call DisableSRAM
+	xor a
+	ld [wTxRam2], a
+	ld [wTxRam2 + 1], a
+	ld hl, ChallengeMachine_PlayerScoreTexts
+	call Func_111b3
+	ld hl, ChallengeMachine_PlayerScoreValues
+	call ChallengeMachine_PrintScores
+	ret
+
+ChallengeMachine_PlayerScoreTexts: ; 134f2 (4:74f2)
+	db 1, 0
+	tx ChallengeMachineText
+
+	db 1, 2
+	tx PlayersScoreText
+
+	db 2, 4
+	tx Defeated5OpponentsXTimesText
+
+	db 2, 6
+	tx PresentConsecutiveWinsText
+
+	db 1, 8
+	tx MaximumConsecutiveWinsText
+
+	db 17, 6
+	tx WinsText
+
+	db 16, 10
+	tx WinsText
+	db $ff
+
+ChallengeMachine_PlayerScoreValues: ; 1350f (4:750f)
+	dw sTotalChallengeMachineWins
+	db 12, 4
+
+	dw sPresentConsecutiveWins
+	db 14, 6
+
+	dw sMaximumConsecutiveWins
+	db 13, 10
+
+	dw NULL
+
+ChallengeMachine_DrawOpponentList: ; 1351d (4:751d)
+	call Func_10000
+	lb de, $30, $bf
+	call SetupText
+	lb de,  0,  0
+	lb bc, 20, 13
+	call DrawRegularTextBox
+	lb de,  0, 12
+	lb bc, 20,  6
+	call DrawRegularTextBox
+	ld hl, ChallengeMachine_OpponentNumberTexts
+	call Func_111b3
+	call ChallengeMachine_PrintOpponentInfo
+	call ChallengeMachine_PrintDuelResultIcons
+	ret
+
+ChallengeMachine_OpponentNumberTexts: ; 13545 (4:7545)
+	db 1, 0
+	tx ChallengeMachineText
+
+	db 2, 2
+	tx ChallengeMachineOpponent1Text
+
+	db 2, 4
+	tx ChallengeMachineOpponent2Text
+
+	db 2, 6
+	tx ChallengeMachineOpponent3Text
+
+	db 2, 8
+	tx ChallengeMachineOpponent4Text
+
+	db 2, 10
+	tx ChallengeMachineOpponent5Text
+	db $ff
+
+ChallengeMachine_PrintOpponentInfo: ; 1355e (4:755e)
+	ld hl, sChallengeMachineOpponents
+	ld bc, 2 ; beginning y-pos
+	ld e, NUM_CHALLENGE_MACHINE_OPPONENTS
+.loop
+	push hl
+	push bc
+	push de
+	call EnableSRAM
+	ld a, [hl]
+	ld [wChallengeMachineOpponent], a
+	ld b, 14 ; x-pos
+	call ChallengeMachine_PrintOpponentName
+	ld b, 4 ; x-pos
+	call ChallengeMachine_PrintOpponentClubStatus
+	pop de
+	pop bc
+	pop hl
+	inc hl
+
+; down two rows
+	inc c
+	inc c
+
+	dec e
+	jr nz, .loop
+	call DisableSRAM
+	ret
+
+ChallengeMachine_PrintOpponentName: ; 13587 (4:7587)
+	push bc
+	call ChallengeMachine_GetOpponentNameAndDeck
+	ld de, 2 ; name
+	add hl, de
+	call ChallengeMachine_PrintText
+	pop bc
+	ret
+
+ChallengeMachine_PrintText: ; 13594 (4:7594)
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld e, c
+	ld d, b
+	push de
+	call InitTextPrinting
+	call PrintTextNoDelay
+	pop de
+	ret
+
+; print the opponent's rank and element
+ChallengeMachine_PrintOpponentClubStatus: ; 135a2 (4:75a2)
+	push bc
+	call ChallengeMachine_GetOpponentNameAndDeck
+	push hl
+	ld de, 6 ; rank
+	add hl, de
+	call ChallengeMachine_PrintText
+	ld a, d
+	add $07
+	ld d, a
+	call InitTextPrinting
+	pop hl
+	ld bc, 8 ; element
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .no_element
+	call PrintTextNoDelay
+.no_element
+	pop bc
+	ret
+
+ChallengeMachine_GetOpponentNameAndDeck: ; 135c5 (4:75c5)
+	push de
+	ld a, [wChallengeMachineOpponent]
+	ld e, a
+	ld d, 0
+	ld hl, ChallengeMachine_OpponentDeckIDs
+	add hl, de
+	ld a, [hl]
+	ld [wNPCDuelDeckID], a
+	call _GetChallengeMachineDuelConfigurations
+	pop de
+	ret
+
+ChallengeMachine_PrintDuelResultIcons: ; 135d9 (4:75d9)
+	ld hl, sChallengeMachineDuelResults
+	ld c, NUM_CHALLENGE_MACHINE_OPPONENTS
+	lb de, 1, 2
+.print_loop
+	push hl
+	push bc
+	push de
+	call InitTextPrinting
+	call EnableSRAM
+	ld a, [hl]
+	add a
+	ld e, a
+	ld d, 0
+	ld hl, ChallengeMachine_DuelResultIcons
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call PrintTextNoDelay
+	pop de
+	pop bc
+	pop hl
+	inc hl
+
+; down two rows
+	inc e
+	inc e
+
+	dec c
+	jr nz, .print_loop
+	call DisableSRAM
+	ret
+
+ChallengeMachine_DuelResultIcons: ; 13606 (4:7606)
+	tx ChallengeMachineNotDuelledIconText
+	tx ChallengeMachineDuelWonIconText
+	tx ChallengeMachineDuelLostIconText
+
+; print all scores in the table pointed to by hl
+ChallengeMachine_PrintScores: ; 1360c (4:760c)
+.loop
+	call EnableSRAM
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	or e
+	jr z, .done
+	ld b, [hl]
+	inc hl
+	ld c, [hl]
+	inc hl
+	push hl
+	push bc
+	ld a, [de]
+	ld l, a
+	inc de
+	ld a, [de]
+	ld h, a
+	call Func_10217
+	pop bc
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4
+	ld b, 3
+	call SafeCopyDataHLtoDE
+	pop hl
+	jr .loop
+
+.done
+	call DisableSRAM
+	ret
+
+; if this is the first time the challenge machine has ever
+; been used on this cartridge, then clear all vars and
+; set Dr. Mason as the record holder
+ChallengeMachine_Initialize: ; 13637 (4:7637)
+	call EnableSRAM
+	ld a, [sChallengeMachineMagic]
+	cp $e3
+	jr nz, .init_vars
+	ld a, [sChallengeMachineMagic + 1]
+	cp $95
+	jr z, .done
+
+.init_vars
+	ld hl, sChallengeMachineMagic
+	ld c, sChallengeMachineEnd - sChallengeMachineStart
+	ld a, $e3
+	ld [hli], a
+	ld a, $95
+	ld [hli], a
+
+	xor a
+.clear_loop
+	ld [hli], a
+	dec c
+	jr nz, .clear_loop
+
+	ld hl, ChallengeMachine_DrMasonText
+	ld de, sChallengeMachineRecordHolderName
+	ld bc, NAME_BUFFER_LENGTH
+	call CopyDataHLtoDE_SaveRegisters
+	ld a, 1
+	ld [sMaximumConsecutiveWins], a
+	xor a
+	ld [sMaximumConsecutiveWins + 1], a
+
+.done
+	ld a, [sPlayerInChallengeMachine]
+	call DisableSRAM
+	ret
+
+ChallengeMachine_DrMasonText: ; 13674 (4:7674)
+	text "Dr. Mason", TX_END, TX_END, TX_END, TX_END, TX_END, TX_END
+
+; pick the next opponent sequence and clear challenge vars
+ChallengeMachine_PickOpponentSequnce: ; 13684 (4:7684)
+	call EnableSRAM
+
+; pick first opponent
+	ld a, CLUB_MASTERS_START
+	call Random
+	ld [sChallengeMachineOpponents], a
+
+.pick_second_opponent
+	ld a, CLUB_MASTERS_START
+	call Random
+	ld c, 1
+	call ChallengeMachine_CheckIfOpponentAlreadySelected
+	jr c, .pick_second_opponent
+	ld [sChallengeMachineOpponents + 1], a
+
+.pick_third_opponent
+	ld a, CLUB_MASTERS_START
+	call Random
+	ld c, 2
+	call ChallengeMachine_CheckIfOpponentAlreadySelected
+	jr c, .pick_third_opponent
+	ld [sChallengeMachineOpponents + 2], a
+
+; pick fourth opponent
+	ld a, GRAND_MASTERS_START - CLUB_MASTERS_START
+	call Random
+	add CLUB_MASTERS_START
+	ld [sChallengeMachineOpponents + 3], a
+
+; pick fifth opponent
+	call UpdateRNGSources
+	ld hl, ChallengeMachine_FinalOpponentProbabilities
+.next
+	sub [hl]
+	jr c, .got_opponent
+	inc hl
+	inc hl
+	jr .next
+.got_opponent
+	inc hl
+	ld a, [hl]
+	ld [sChallengeMachineOpponents + 4], a
+
+	xor a
+	ld [sChallengeMachineOpponentNumber], a
+	ld [sConsecutiveWinRecordIncreased], a
+	ld hl, sChallengeMachineDuelResults
+	ld c, NUM_CHALLENGE_MACHINE_OPPONENTS
+.clear_results
+	ld [hli], a
+	dec c
+	jr nz, .clear_results
+	ld a, [sPresentConsecutiveWinsBackup]
+	ld [sPresentConsecutiveWins], a
+	ld a, [sPresentConsecutiveWinsBackup + 1]
+	ld [sPresentConsecutiveWins + 1], a
+	call DisableSRAM
+	ret
+
+ChallengeMachine_FinalOpponentProbabilities: ; 136e9 (4:76e9)
+	db  56, GRAND_MASTERS_START + 0 ; 56/256, courtney
+	db  56, GRAND_MASTERS_START + 1 ; 56/256, steve
+	db  56, GRAND_MASTERS_START + 2 ; 56/256, jack
+	db  56, GRAND_MASTERS_START + 3 ; 56/256, rod
+	db   8, GRAND_MASTERS_START + 4 ;  8/256, aaron
+	db   8, GRAND_MASTERS_START + 5 ;  8/256, aaron
+	db   8, GRAND_MASTERS_START + 6 ;  8/256, aaron
+	db 255, GRAND_MASTERS_START + 7 ;  8/256, imakuni (catch-all)
+
+; return carry if the opponent in a is already among
+; the first c opponents in sChallengeMachineOpponents
+ChallengeMachine_CheckIfOpponentAlreadySelected: ; 136f9 (4:76f9)
+	ld hl, sChallengeMachineOpponents
+.loop
+	cp [hl]
+	jr z, .found
+	inc hl
+	dec c
+	jr nz, .loop
+; not found
+	or a
+	ret
+.found
+	scf
+	ret
+
+ChallengeMachine_OpponentDeckIDs: ; 13707 (4:7707)
+.club_members
+	db MUSCLES_FOR_BRAINS_DECK_ID
+	db HEATED_BATTLE_DECK_ID
+	db LOVE_TO_BATTLE_DECK_ID
+	db EXCAVATION_DECK_ID
+	db BLISTERING_POKEMON_DECK_ID
+	db HARD_POKEMON_DECK_ID
+	db WATERFRONT_POKEMON_DECK_ID
+	db LONELY_FRIENDS_DECK_ID
+	db SOUND_OF_THE_WAVES_DECK_ID
+	db PIKACHU_DECK_ID
+	db BOOM_BOOM_SELFDESTRUCT_DECK_ID
+	db POWER_GENERATOR_DECK_ID
+	db ETCETERA_DECK_ID
+	db FLOWER_GARDEN_DECK_ID
+	db KALEIDOSCOPE_DECK_ID
+	db GHOST_DECK_ID
+	db NAP_TIME_DECK_ID
+	db STRANGE_POWER_DECK_ID
+	db FLYIN_POKEMON_DECK_ID
+	db LOVELY_NIDORAN_DECK_ID
+	db POISON_DECK_ID
+	db ANGER_DECK_ID
+	db FLAMETHROWER_DECK_ID
+	db RESHUFFLE_DECK_ID
+.club_masters
+	db FIRST_STRIKE_DECK_ID
+	db ROCK_CRUSHER_DECK_ID
+	db GO_GO_RAIN_DANCE_DECK_ID
+	db ZAPPING_SELFDESTRUCT_DECK_ID
+	db FLOWER_POWER_DECK_ID
+	db STRANGE_PSYSHOCK_DECK_ID
+	db WONDERS_OF_SCIENCE_DECK_ID
+	db FIRE_CHARGE_DECK_ID
+.grand_masters
+	db LEGENDARY_MOLTRES_DECK_ID
+	db LEGENDARY_ZAPDOS_DECK_ID
+	db LEGENDARY_ARTICUNO_DECK_ID
+	db LEGENDARY_DRAGONITE_DECK_ID
+	db LIGHTNING_AND_FIRE_DECK_ID
+	db WATER_AND_FIGHTING_DECK_ID
+	db GRASS_AND_PSYCHIC_DECK_ID
+	db IMAKUNI_DECK_ID
+
+CLUB_MASTERS_START  EQU ChallengeMachine_OpponentDeckIDs.club_masters - ChallengeMachine_OpponentDeckIDs.club_members
+GRAND_MASTERS_START EQU ChallengeMachine_OpponentDeckIDs.grand_masters - ChallengeMachine_OpponentDeckIDs.club_members
 
 INCLUDE "data/npc_map_data.asm"
 INCLUDE "data/map_objects.asm"

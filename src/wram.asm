@@ -2266,7 +2266,11 @@ wCurAutoDeckMachine:: ; d0a9
 wAutoDeckMachineTextDescriptions:: ; d0aa
 	ds 2 * NUM_DECK_MACHINE_SLOTS
 
-wd0b4:: ; d0b4
+; if bit 4 is set, transition to another map via a warp
+; if bit 6 is set, transition to a special screen
+;   (duel, challenge machine, battle center, gift center, credits)
+; bit 7 may also be used for some unknown purpose
+wOverworldTransition:: ; d0b4
 	ds $1
 
 ; a GAME_EVENT_* constant corresponding to an entry in GameEventPointerTable
@@ -3177,6 +3181,9 @@ wBoosterData_EnergyFunctionPointer:: ; d687
 wBoosterData_TypeChances:: ; d689
 	ds NUM_BOOSTER_CARD_TYPES
 
+; index into ChallengeMachine_OpponentDeckIDs
+; not the typical NPC duelist ID
+wChallengeMachineOpponent:: ; d692
 	ds $1
 
 wStarterDeckChoice:: ; d693
