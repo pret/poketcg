@@ -34,7 +34,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ColorlessPokemonText                               ; 0x001e
 	textpointer TrainerCardText                                    ; 0x001f
 	textpointer EnergyCardText                                     ; 0x0020
-	textpointer Text0021                                           ; 0x0021
+	textpointer DeckPrinterText                                    ; 0x0021
 	textpointer Text0022                                           ; 0x0022
 	textpointer NoPokemonOnTheBenchText                            ; 0x0023
 	textpointer UnableDueToSleepText                               ; 0x0024
@@ -391,10 +391,10 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ThereWasNoEffectFromPoisonConfusionText            ; 0x0183
 	textpointer ExchangedCardsInDuelistsHandText                   ; 0x0184
 	textpointer Text0185                                           ; 0x0185
-	textpointer Text0186                                           ; 0x0186
-	textpointer Text0187                                           ; 0x0187
-	textpointer Text0188                                           ; 0x0188
-	textpointer Text0189                                           ; 0x0189
+	textpointer PrizesCardsText                                    ; 0x0186
+	textpointer ChooseTheNumberOfPrizesText                        ; 0x0187
+	textpointer PleaseWaitDecidingNumberOfPrizesText               ; 0x0188
+	textpointer BeginAPrizeDuelWithText                            ; 0x0189
 	textpointer AreYouBothReadyToCardPopText                       ; 0x018a
 	textpointer ThePopWasntSuccessfulText                          ; 0x018b
 	textpointer CannotCardPopWithFriendPreviouslyPoppedWithText    ; 0x018c
@@ -406,19 +406,19 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer ReceivedPromotionalFlyingPikachuText               ; 0x0192
 	textpointer ReceivedPromotionalSurfingPikachuText              ; 0x0193
 	textpointer Text0194                                           ; 0x0194
-	textpointer Text0195                                           ; 0x0195
+	textpointer NowPrintingPleaseWaitText                          ; 0x0195
 	textpointer BoosterPackText                                    ; 0x0196
-	textpointer Text0197                                           ; 0x0197
+	textpointer WouldYouLikeToTryAgainText                         ; 0x0197
 	textpointer Text0198                                           ; 0x0198
 	textpointer Text0199                                           ; 0x0199
-	textpointer Text019a                                           ; 0x019a
-	textpointer Text019b                                           ; 0x019b
-	textpointer Text019c                                           ; 0x019c
-	textpointer Text019d                                           ; 0x019d
-	textpointer Text019e                                           ; 0x019e
-	textpointer Text019f                                           ; 0x019f
-	textpointer Text01a0                                           ; 0x01a0
-	textpointer Text01a1                                           ; 0x01a1
+	textpointer SendingACardText                                   ; 0x019a
+	textpointer ReceivingACardText                                 ; 0x019b
+	textpointer SendingADeckConfigurationText                      ; 0x019c
+	textpointer ReceivingDeckConfigurationText                     ; 0x019d
+	textpointer CardTransferWasntSuccessful1Text                   ; 0x019e
+	textpointer CardTransferWasntSuccessful2Text                   ; 0x019f
+	textpointer DeckConfigurationTransferWasntSuccessful1Text      ; 0x01a0
+	textpointer DeckConfigurationTransferWasntSuccessful2Text      ; 0x01a1
 	textpointer NowPrintingText                                    ; 0x01a2
 	textpointer DrMasonText                                        ; 0x01a3
 	textpointer DrawSevenCardsPracticeDuelText                     ; 0x01a4

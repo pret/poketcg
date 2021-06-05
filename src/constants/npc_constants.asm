@@ -75,6 +75,7 @@ NPC_DATA_LENGTH EQU const_value
 	const JESSICA_PIC   ; $27
 	const STEPHANIE_PIC ; $28
 	const AARON_PIC     ; $29
+	const LINK_OPP_PIC  ; $2a
 
 	const_def 1
 	const NPC_DRMASON                     ; $01

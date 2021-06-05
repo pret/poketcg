@@ -5386,7 +5386,7 @@ ChallengeMachine_Duel: ; 13320 (4:7320)
 	xor a
 	ld [wd112], a
 	call SaveGeneralSaveData
-	bank1call StartDuel
+	bank1call StartDuel_VSAIOpp
 	ret
 
 ChallengeMachine_SongIDs: ; 13345 (4:7345)

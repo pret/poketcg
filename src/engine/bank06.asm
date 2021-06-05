@@ -1655,7 +1655,7 @@ ReceiveNBytesToHLThroughIR: ; 1977d (6:577d)
 
 ; disables interrupts, and sets joypad and IR communication port
 ; switches to CGB normal speed
-InitiateIRCommunications: ; 19792 (6:5792)
+StartIRCommunications: ; 19792 (6:5792)
 	di
 	call SwitchToCGBNormalSpeed
 	ld a, P14
@@ -1695,7 +1695,7 @@ ClearRP: ; 197b8 (6:57b8)
 ; in wIRDataBuffer + 1, then calls the subroutine
 ; corresponding to that command
 ExecuteReceivedIRCommands: ; 197bd (6:57bd)
-	call InitiateIRCommunications
+	call StartIRCommunications
 .loop_commands
 	call ReceiveIRDataBuffer
 	jr c, .error
@@ -1778,11 +1778,12 @@ ExecuteReceivedIRCommands: ; 197bd (6:57bd)
 	ret
 ; 0x1981d
 
-Func_1981d: ; 1981d (6:581d)
-	call InitiateIRCommunications
+; returns carry set if request sent was not acknowledged
+TrySendIRRequest: ; 1981d (6:581d)
+	call StartIRCommunications
 	ld hl, rRP
 	ld c, 4
-.asm_19825
+.send_request
 	ld a, $aa ; request
 	push bc
 	call TransmitByteThroughIR
@@ -1791,38 +1792,41 @@ Func_1981d: ; 1981d (6:581d)
 	call ReceiveByteThroughIR_ZeroIfUnsuccessful
 	pop bc
 	cp $33 ; acknowledgement
-	jr z, .asm_1983b
+	jr z, .received_ack
 	dec c
-	jr nz, .asm_19825
+	jr nz, .send_request
 	scf
-	jr .asm_1983c
-.asm_1983b
+	jr .close
+
+.received_ack
 	xor a
-.asm_1983c
+.close
 	push af
 	call CloseIRCommunications
 	pop af
 	ret
 ; 0x19842
 
-Func_19842: ; 19842 (6:5842)
-	call InitiateIRCommunications
+; returns carry set if request was not received
+TryReceiveIRRequest: ; 19842 (6:5842)
+	call StartIRCommunications
 	ld hl, rRP
-.asm_19848
+.wait_request
 	call ReceiveByteThroughIR_ZeroIfUnsuccessful
 	cp $aa ; request
-	jr z, .asm_19859
+	jr z, .send_ack
 	ldh a, [rJOYP]
 	cpl
 	and P10 | P11
-	jr z, .asm_19848
+	jr z, .wait_request
 	scf
-	jr .asm_1985f
-.asm_19859
+	jr .close
+
+.send_ack
 	ld a, $33 ; acknowledgement
 	call TransmitByteThroughIR
 	xor a
-.asm_1985f
+.close
 	push af
 	call CloseIRCommunications
 	pop af
@@ -1831,7 +1835,7 @@ Func_19842: ; 19842 (6:5842)
 
 ; sends request for other device to close current communication
 RequestCloseIRCommunication: ; 19865 (6:5865)
-	call InitiateIRCommunications
+	call StartIRCommunications
 	ld a, IRCMD_CLOSE
 	ld [wIRDataBuffer + 1], a
 	call TransmitIRDataBuffer
@@ -1890,7 +1894,7 @@ TransmitRegistersThroughIR: ; 198a3 (6:58a3)
 	push de
 	push bc
 	call StoreRegistersInIRDataBuffer
-	call InitiateIRCommunications
+	call StartIRCommunications
 	call TransmitIRDataBuffer
 	pop bc
 	pop de
@@ -1973,7 +1977,8 @@ Func_198e7: ; 198e7 (6:58e7)
 	ret
 ; 0x19907
 
-Func_19907: ; 19907 (6:5907)
+; sets backup VBlank function as wVBlankFunctionTrampoline
+RestoreVBlankFunction: ; 19907 (6:5907)
 	ld hl, wVBlankFunctionTrampolineBackup
 	ld de, wVBlankFunctionTrampoline + 1
 	call BackupVBlankFunctionTrampoline
@@ -2153,11 +2158,49 @@ Func_19a12: ; 19a12 (6:5a12)
 	ret
 ; 0x19a1f
 
-	INCROM $19a1f, $19a55
+; hl = text ID
+LoadLinkConnectingScene: ; 19a1f (6:5a1f)
+	push hl
+	call Func_198e7
+	ld a, SCENE_GAMEBOY_LINK_CONNECTING
+	lb bc, 0, 0
+	call LoadScene
+	pop hl
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	ret
+; 0x19a33
 
-; prepares data for Card Pop! communications
-InitializeCardPopCommunications: ; 19a55 (6:5a55)
-	ld hl, wc5eb
+; shows Link Not Connected scene
+; then asks the player whether they want to try again
+; if the player selectes "no", return carry
+; input:
+;  - hl = text ID
+LoadLinkNotConnectedSceneAndAskWhetherToTryAgain: ; 19a33 (6:5a33)
+	push hl
+	call RestoreVBlankFunction
+	call Func_198e7
+	ld a, SCENE_GAMEBOY_LINK_NOT_CONNECTED
+	lb bc, 0, 0
+	call LoadScene
+	pop hl
+	call DrawWideTextBox_WaitForInput
+	ldtx hl, WouldYouLikeToTryAgainText
+	call YesOrNoMenuWithText_SetCursorToYes
+;	fallthrough
+
+ClearRPAndRestoreVBlankFunction: ; 19a4c (6:5a4c)
+	push af
+	call ClearRP
+	call RestoreVBlankFunction
+	pop af
+	ret
+; 0x19a55
+
+; prepares IR communication parameter data
+; a = a IRPARAM_* constant for the function of this connection
+InitIRCommunications: ; 19a55 (6:5a55)
+	ld hl, wOwnIRCommunicationParams
 	ld [hl], a
 	inc hl
 	ld [hl], $50
@@ -2166,7 +2209,7 @@ InitializeCardPopCommunications: ; 19a55 (6:5a55)
 	inc hl
 	ld [hl], $31
 	ld a, $ff
-	ld [wc5ea], a
+	ld [wIRCommunicationErrorCode], a
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 ; clear wNameBuffer and wOpponentName
@@ -2191,25 +2234,66 @@ InitializeCardPopCommunications: ; 19a55 (6:5a55)
 	ret
 ; 0x19a89
 
-	INCROM $19a89, $19ab7
+; returns carry if communication was unsuccessful
+; if a = 0, then it was a communication error
+; if a = 1, then operation was cancelled by the player
+PrepareSendCardOrDeckConfigurationThroughIR: ; 19a89 (6:5a89)
+	call InitIRCommunications
 
-Func_19ab7: ; 19ab7 (6:5ab7)
-	ld hl, wc5eb
-	ld de, wc5ef
+; pressing A button triggers request for IR communication
+.loop_frame
+	call DoFrame
+	ldh a, [hKeysPressed]
+	bit B_BUTTON_F, a
+	jr nz, .b_btn
+	ldh a, [hKeysHeld]
+	bit A_BUTTON_F, a
+	jr z, .loop_frame
+; a btn
+	call TrySendIRRequest
+	jr nc, .request_success
+	or a
+	jr z, .loop_frame
+	xor a
+	scf
+	ret
+
+.b_btn
+	; cancelled by the player
+	ld a, $01
+	scf
+	ret
+
+.request_success
+	call ExchangeIRCommunicationParameters
+	ret c
+	ld a, [wOtherIRCommunicationParams + 3]
+	cp $31
+	jr nz, SetIRCommunicationErrorCode_Error
+	or a
+	ret
+; 0x19ab7
+
+; exchanges player names and IR communication parameters
+; checks whether parameters for communication match
+; and if they don't, an error is issued
+ExchangeIRCommunicationParameters: ; 19ab7 (6:5ab7)
+	ld hl, wOwnIRCommunicationParams
+	ld de, wOtherIRCommunicationParams
 	ld c, 4
 	call RequestDataTransmissionThroughIR
 	jr c, .error
-	ld hl, wc5ef + 1
+	ld hl, wOtherIRCommunicationParams + 1
 	ld a, [hli]
 	cp $50
 	jr nz, .error
 	ld a, [hli]
 	cp $4b
 	jr nz, .error
-	ld a, [wc5eb]
-	ld hl, wc5ef
-	cp [hl]
-	jr nz, .asm_19af9
+	ld a, [wOwnIRCommunicationParams]
+	ld hl, wOtherIRCommunicationParams
+	cp [hl] ; do parameters match?
+	jr nz, SetIRCommunicationErrorCode_Error
 
 ; receives wDefaultText from other device
 ; and writes it to wNameBuffer
@@ -2232,11 +2316,12 @@ Func_19ab7: ; 19ab7 (6:5ab7)
 	xor a
 	scf
 	ret
+; 0x19af9
 
-.asm_19af9
-	ld hl, wc5ea
+SetIRCommunicationErrorCode_Error: ; 19af9 (6:5af9)
+	ld hl, wIRCommunicationErrorCode
 	ld [hl], $01
-	ld de, wc5ea
+	ld de, wIRCommunicationErrorCode
 	ld c, 1
 	call RequestDataReceivalThroughIR
 	call RequestCloseIRCommunication
@@ -2245,10 +2330,10 @@ Func_19ab7: ; 19ab7 (6:5ab7)
 	ret
 ; 0x19b0d
 
-Func_19b0d: ; 19b0d (6:5b0d)
-	ld hl, wc5eb
+SetIRCommunicationErrorCode_NoError: ; 19b0d (6:5b0d)
+	ld hl, wOwnIRCommunicationParams
 	ld [hl], $00
-	ld de, wc5ea
+	ld de, wIRCommunicationErrorCode
 	ld c, 1
 	call RequestDataReceivalThroughIR
 	ret c
@@ -2257,19 +2342,158 @@ Func_19b0d: ; 19b0d (6:5b0d)
 	ret
 ; 0x19b20
 
-	INCROM $19b20, $19b41
+; makes device receptive to receive data from other device
+; to write in wDuelTempList (either list of cards or a deck configuration)
+; returns carry if some error occured
+TryReceiveCardOrDeckConfigurationThroughIR: ; 19b20 (6:5b20)
+	call InitIRCommunications
+.loop_receive_request
+	xor a
+	ld [wDuelTempList], a
+	call TryReceiveIRRequest
+	jr nc, .receive_data
+	bit 1, a
+	jr nz, .cancelled
+	jr .loop_receive_request
+.receive_data
+	call ExecuteReceivedIRCommands
+	ld a, [wIRCommunicationErrorCode]
+	or a
+	ret z ; no error
+	xor a
+	scf
+	ret
 
-Func_19b41: ; 19b41 (6:5b41)
-	INCROM $19b41, $19b8c
+.cancelled
+	ld a, $01
+	scf
+	ret
+; 0x19b41
 
-Func_19b8c: ; 19b8c (6:5b8c)
-	INCROM $19b8c, $19bc5
+; returns carry if card(s) wasn't successfully sent
+_SendCard: ; 19b41 (6:5b41)
+	call StopMusic
+	ldtx hl, SendingACardText
+	call LoadLinkConnectingScene
+	ld a, IRPARAM_SEND_CARDS
+	call PrepareSendCardOrDeckConfigurationThroughIR
+	jr c, .fail
 
-Func_19bc5: ; 19bc5 (6:5bc5)
-	INCROM $19bc5, $19bfb
+	; send cards
+	xor a
+	ld [wDuelTempList + DECK_SIZE], a
+	ld hl, wDuelTempList
+	ld e, l
+	ld d, h
+	ld c, DECK_SIZE + 1
+	call RequestDataReceivalThroughIR
+	jr c, .fail
+	call SetIRCommunicationErrorCode_NoError
+	jr c, .fail
+	call ExecuteReceivedIRCommands
+	jr c, .fail
+	ld a, [wOwnIRCommunicationParams + 1]
+	cp $4f
+	jr nz, .fail
+	call PlayCardPopSong
+	xor a
+	call ClearRPAndRestoreVBlankFunction
+	ret
 
-Func_19bfb: ; 19bfb (6:5bfb)
-	INCROM $19bfb, $19c20
+.fail
+	call PlayCardPopSong
+	ldtx hl, CardTransferWasntSuccessful1Text
+	call LoadLinkNotConnectedSceneAndAskWhetherToTryAgain
+	jr nc, _SendCard ; loop back and try again
+	; failed
+	scf
+	ret
+; 0x19b87
+
+PlayCardPopSong: ; 19b87 (6:5b87)
+	ld a, MUSIC_CARD_POP
+	jp PlaySong
+; 0x19b8c
+
+_ReceiveCard: ; 19b8c (6:5b8c)
+	call StopMusic
+	ldtx hl, ReceivingACardText
+	call LoadLinkConnectingScene
+	ld a, IRPARAM_SEND_CARDS
+	call TryReceiveCardOrDeckConfigurationThroughIR
+	ld a, $4f
+	ld [wOwnIRCommunicationParams + 1], a
+	ld hl, wOwnIRCommunicationParams
+	ld e, l
+	ld d, h
+	ld c, 4
+	call RequestDataReceivalThroughIR
+	jr c, .fail
+	call RequestCloseIRCommunication
+	jr c, .fail
+	call PlayCardPopSong
+	or a
+	call ClearRPAndRestoreVBlankFunction
+	ret
+
+.fail
+	call PlayCardPopSong
+	ldtx hl, CardTransferWasntSuccessful2Text
+	call LoadLinkNotConnectedSceneAndAskWhetherToTryAgain
+	jr nc, _ReceiveCard
+	scf
+	ret
+; 0x19bc5
+
+_SendDeckConfiguration: ; 19bc5 (6:5bc5)
+	call StopMusic
+	ldtx hl, SendingADeckConfigurationText
+	call LoadLinkConnectingScene
+	ld a, IRPARAM_SEND_DECK
+	call PrepareSendCardOrDeckConfigurationThroughIR
+	jr c, .fail
+	ld hl, wDuelTempList
+	ld e, l
+	ld d, h
+	ld c, DECK_STRUCT_SIZE
+	call RequestDataReceivalThroughIR
+	jr c, .fail
+	call SetIRCommunicationErrorCode_NoError
+	jr c, .fail
+	call PlayCardPopSong
+	call ClearRPAndRestoreVBlankFunction
+	or a
+	ret
+
+.fail
+	call PlayCardPopSong
+	ldtx hl, DeckConfigurationTransferWasntSuccessful1Text
+	call LoadLinkNotConnectedSceneAndAskWhetherToTryAgain
+	jr nc, _SendDeckConfiguration
+	scf
+	ret
+; 0x19bfb
+
+_ReceiveDeckConfiguration: ; 19bfb (6:5bfb)
+	call StopMusic
+	ldtx hl, ReceivingDeckConfigurationText
+	call LoadLinkConnectingScene
+	ld a, IRPARAM_SEND_DECK
+	call TryReceiveCardOrDeckConfigurationThroughIR
+	jr c, .fail
+	call PlayCardPopSong
+	call ClearRPAndRestoreVBlankFunction
+	or a
+	ret
+
+.fail
+	call PlayCardPopSong
+	ldtx hl, DeckConfigurationTransferWasntSuccessful2Text
+	call LoadLinkNotConnectedSceneAndAskWhetherToTryAgain
+	jr nc, _ReceiveDeckConfiguration ; loop back and try again
+	scf
+	ret
+; 0x19c20
 
 _DoCardPop: ; 19c20 (6:5c20)
 ; loads scene for Card Pop! screen
@@ -2281,7 +2505,7 @@ _DoCardPop: ; 19c20 (6:5c20)
 	call LoadScene
 	ldtx hl, AreYouBothReadyToCardPopText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_19907
+	call RestoreVBlankFunction
 	ldtx hl, CardPopCannotBePlayedWithTheGameBoyText
 	ld a, [wConsole]
 	cp CONSOLE_SGB
@@ -2300,7 +2524,7 @@ _DoCardPop: ; 19c20 (6:5c20)
 	push af
 	push hl
 	call ClearRP
-	call Func_19907
+	call RestoreVBlankFunction
 	pop hl
 	pop af
 	jr c, .error
@@ -2343,7 +2567,7 @@ _DoCardPop: ; 19c20 (6:5c20)
 	call LoadScene
 	pop hl
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_19907
+	call RestoreVBlankFunction
 	ret
 ; 0x19cb2
 
@@ -2359,18 +2583,18 @@ HandleCardPopCommunications: ; 19cb2 (6:5cb2)
 	call CopyDataHLtoDE
 	call DisableSRAM
 
-	ld a, $01
-	call InitializeCardPopCommunications
+	ld a, IRPARAM_CARD_POP
+	call InitIRCommunications
 .asm_19cc9
-	call Func_19842 ; send request
+	call TryReceiveIRRequest ; receive request
 	jr nc, .asm_19d05
 	bit 1, a
 	jr nz, .fail
-	call Func_1981d ; receive request
+	call TrySendIRRequest ; send request
 	jr c, .asm_19cc9
 
 ; do the player name search, then transmit the result
-	call Func_19ab7
+	call ExchangeIRCommunicationParameters
 	jr c, .fail
 	ld hl, wCardPopNameList
 	ld de, wOtherPlayerCardPopNameList
@@ -2383,7 +2607,7 @@ HandleCardPopCommunications: ; 19cb2 (6:5cb2)
 	ld c, 1
 	call RequestDataReceivalThroughIR
 	jr c, .fail
-	call Func_19b0d
+	call SetIRCommunicationErrorCode_NoError
 	jr c, .fail
 	call ExecuteReceivedIRCommands
 	jr c, .fail
@@ -2391,7 +2615,7 @@ HandleCardPopCommunications: ; 19cb2 (6:5cb2)
 
 .asm_19d05
 	call ExecuteReceivedIRCommands
-	ld a, [wc5ea]
+	ld a, [wIRCommunicationErrorCode]
 	or a
 	jr nz, .fail
 	call RequestCloseIRCommunication
@@ -2677,8 +2901,25 @@ CalculateNameHash: ; 19e32 (6:5e32)
 	ret
 ; 0x19e42
 
-Func_19e42: ; 19e42 (6:5e42)
-	INCROM $19e42, $19e5a
+; sends serial data to printer
+; if there's an error in connection,
+; show Printer Not Connected scene with error message
+_PreparePrinterConnection: ; 19e42 (6:5e42)
+	ld bc, $0
+	lb de, PRINTERPKT_DATA, $0
+	call SendPrinterPacket
+	ret nc ; return if no error
+
+	ld hl, wPrinterStatus
+	ld a, [hl]
+	or a
+	jr nz, .asm_19e55
+	ld [hl], $ff
+.asm_19e55
+	ld a, [hl]
+	cp $ff
+	jr z, ShowPrinterIsNotConnected
+;	falltrough
 
 ; shows message on screen depending on wPrinterStatus
 ; also shows SCENE_GAMEBOY_PRINTER_NOT_CONNECTED.
@@ -2697,28 +2938,33 @@ HandlePrinterError: ; 19e5a (6:5e5a)
 
 	ldtx hl, PrinterPacketErrorText
 	ld a, $04
-	jr .got_text
+	jr ShowPrinterConnectionErrorScene
 .cable_or_printer_switch
 	ldtx hl, CheckCableOrPrinterSwitchText
 	ld a, $02
-	jr .got_text
+	jr ShowPrinterConnectionErrorScene
 .jammed_printer
 	ldtx hl, PrinterPaperIsJammedText
 	ld a, $03
-	jr .got_text
+	jr ShowPrinterConnectionErrorScene
 .batteries_lost_charge
 	ldtx hl, BatteriesHaveLostTheirChargeText
 	ld a, $01
-	jr .got_text
+	jr ShowPrinterConnectionErrorScene
 .interrupted
 	ldtx hl, PrintingWasInterruptedText
 	call DrawWideTextBox_WaitForInput
 	scf
 	ret
 
+ShowPrinterIsNotConnected: ; 19e94 (6:5e94)
 	ldtx hl, PrinterIsNotConnectedText
 	ld a, $02
-.got_text
+;	fallthrough
+
+; a = error code
+; hl = text ID to print in text box
+ShowPrinterConnectionErrorScene: ; 19e99 (6:5e99)
 	push hl
 	; unnecessary loading TxRam, since the text data
 	; already incorporate the error number
@@ -2732,7 +2978,7 @@ HandlePrinterError: ; 19e5a (6:5e5a)
 	call LoadScene
 	pop hl
 	call DrawWideTextBox_WaitForInput
-	call Func_19907
+	call RestoreVBlankFunction
 	scf
 	ret
 ; 0x19eb4
@@ -2754,7 +3000,7 @@ Func_19eb4: ; 19eb4 (6:5eb4)
 	ldtx hl, NowPrintingText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-	call Func_1a035
+	call PrepareForPrinterCommunications
 	call DrawTopCardInfoInSRAMGfxBuffer0
 	call Func_19f87
 	call DrawCardPicInSRAMGfxBuffer2
@@ -2763,13 +3009,13 @@ Func_19eb4: ; 19eb4 (6:5eb4)
 	call DrawBottomCardInfoInSRAMGfxBuffer0
 	call Func_1a011
 	jr c, .error
-	call Func_19907
-	call Func_1a06b
+	call RestoreVBlankFunction
+	call ResetPrinterCommunicationSettings
 	or a
 	ret
 .error
-	call Func_19907
-	call Func_1a06b
+	call RestoreVBlankFunction
+	call ResetPrinterCommunicationSettings
 	jp HandlePrinterError
 ; 0x19f05
 
@@ -2847,7 +3093,7 @@ DrawTopCardInfoInSRAMGfxBuffer0: ; 19f20 (6:5f20)
 ; 0x19f87
 
 Func_19f87: ; 19f87 (6:5f87)
-	call Func_1a089
+	call TryInitPrinterCommunications
 	ret c
 	ld hl, sGfxBuffer0
 	call Func_1a0cc
@@ -2858,7 +3104,7 @@ Func_19f87: ; 19f87 (6:5f87)
 ; 0x19f99
 
 Func_19f99: ; 19f99 (6:5f99)
-	call Func_1a089
+	call TryInitPrinterCommunications
 	ret c
 	ld hl, sGfxBuffer0 + $8 tiles
 	ld c, $06
@@ -2927,7 +3173,7 @@ RetreatWeakResistData: ; 1a004 (6:6004)
 ; 0x1a011
 
 Func_1a011: ; 1a011 (6:6011)
-	call Func_1a089
+	call TryInitPrinterCommunications
 	ret c
 	ld hl, sGfxBuffer0
 	ld c, $05
@@ -2954,21 +3200,23 @@ Func_1a025: ; 1a025 (6:6025)
 ; switches to CGB normal speed, resets serial
 ; enables SRAM and switches to SRAM1
 ; and clears sGfxBuffer0
-Func_1a035: ; 1a035 (6:6035)
+PrepareForPrinterCommunications: ; 1a035 (6:6035)
 	call SwitchToCGBNormalSpeed
 	call ResetSerial
 	ld a, $10
 	ld [wce9b], a
 	call EnableSRAM
 	ld a, [sPrinterContrastLevel]
-	ld [wce99], a
+	ld [wPrinterContrastLevel], a
 	call DisableSRAM
 	ldh a, [hBankSRAM]
 	ld [wce8f], a
 	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	call EnableSRAM
-	; clear sGfxBuffer0
+;	fallthrough
+
+ClearPrinterGfxBuffer: ; 1a035 (6:6035)
 	ld hl, sGfxBuffer0
 	ld bc, $400
 .loop
@@ -2983,7 +3231,8 @@ Func_1a035: ; 1a035 (6:6035)
 	ret
 ; 0x1a06b
 
-Func_1a06b: ; 1a06b (6:606b)
+; reverts settings changed by PrepareForPrinterCommunications
+ResetPrinterCommunicationSettings: ; 1a06b (6:606b)
 	push af
 	call SwitchToCGBDoubleSpeed
 	ld a, [wce8f]
@@ -2995,31 +3244,39 @@ Func_1a06b: ; 1a06b (6:606b)
 	ret
 ; 0x1a080
 
-	INCROM $1a080, $1a089
+; unreferenced
+; send some bytes through serial
+Func_1a080: ; 1a080 (6:6080)
+	ld bc, $0
+	lb de, PRINTERPKT_NUL, $0
+	jp SendPrinterPacket
+; 0x1a089
 
+; tries initiating the communications for
+; sending data to printer
 ; returns carry if operation was cancelled
-; or serial transfer took long
-Func_1a089: ; 1a089 (6:6089)
+; by pressing B button or serial transfer took long
+TryInitPrinterCommunications: ; 1a089 (6:6089)
 	xor a
-	ld [wce9e], a
+	ld [wPrinterInitAttempts], a
 .wait_input
 	call DoFrame
 	ldh a, [hKeysHeld]
 	and B_BUTTON
 	jr nz, .b_button
 	ld bc, $0
-	ld de, $f00
-	call Func_312d
+	lb de, PRINTERPKT_NUL, $0
+	call SendPrinterPacket
 	jr c, .delay
-	and $0a
+	and (1 << PRINTER_STATUS_BUSY) | (1 << PRINTER_STATUS_PRINTING)
 	jr nz, .wait_input
 
-.asm_1a0a5
+.init
 	ld bc, $0
-	ld de, $100
-	call Func_312d
+	lb de, PRINTERPKT_INIT, $0
+	call SendPrinterPacket
 	jr nc, .no_carry
-	ld hl, wce9e
+	ld hl, wPrinterInitAttempts
 	inc [hl]
 	ld a, [hl]
 	cp 3
@@ -3042,7 +3299,7 @@ Func_1a089: ; 1a089 (6:6089)
 	call DoFrame
 	dec c
 	jr nz, .delay_loop
-	jr .asm_1a0a5
+	jr .init
 ; 0x1a0cc
 
 ; loads tiles given by map in hl to sGfxBuffer5
@@ -3054,8 +3311,8 @@ Func_1a0cc: ; 1a0cc (6:60cc)
 	call .Copy20Tiles
 	call .Copy20Tiles
 	push hl
-	call CompressDataForSerialTransfer
-	call Func_312d
+	call CompressDataForPrinterSerialTransfer
+	call SendPrinterPacket
 	pop hl
 	pop bc
 	ret
@@ -3101,13 +3358,13 @@ Func_1a0cc: ; 1a0cc (6:60cc)
 ; 0x1a108
 
 Func_1a108: ; 1a108 (6:6108)
-	call Func_1a138
+	call GetPrinterContrastSerialData
 	push hl
-	ld hl, $301
-	jr Func_1a11e
+	lb hl, $3, $1
+	jr SendPrinterInstructionPacket
 
 Func_1a111: ; 1a111 (6:6111)
-	call Func_1a138
+	call GetPrinterContrastSerialData
 	push hl
 	ld hl, wce9b
 	ld a, [hl]
@@ -3116,42 +3373,515 @@ Func_1a111: ; 1a111 (6:6111)
 	ld l, $01
 ;	fallthrough
 
-Func_1a11e: ; 1a11e (6:611e)
+SendPrinterInstructionPacket: ; 1a11e (6:611e)
 	push hl
 	ld bc, $0
-	ld de, $400
-	call Func_312d
+	lb de, PRINTERPKT_DATA, $0
+	call SendPrinterPacket
 	jr c, .asm_1a135
-	ld hl, sp+$00
-	ld bc, $4
-	ld de, $200
-	call Func_312d
+	ld hl, sp+$00 ; contrast level bytes
+	ld bc, $4 ; instruction packets are 4 bytes in size
+	lb de, PRINTERPKT_PRINT_INSTRUCTION, $0
+	call SendPrinterPacket
 .asm_1a135
 	pop hl
 	pop hl
 	ret
 
-Func_1a138: ; 1a138 (6:6138)
-	ld a, [wce99]
+; returns in h and l the bytes
+; to be sent through serial to the printer
+; for the set contrast level
+GetPrinterContrastSerialData: ; 1a138 (6:6138)
+	ld a, [wPrinterContrastLevel]
 	ld e, a
 	ld d, $00
-	ld hl, .unknown_1a146
+	ld hl, .contrast_level_data
 	add hl, de
 	ld h, [hl]
 	ld l, $e4
 	ret
 
-.unknown_1a146
+.contrast_level_data
 	db $00, $20, $40, $60, $7f
 ; 0x1a14b
 
-	INCROM $1a14b, $1a162
+; unreferenced
+Func_1a14b: ; 1a14b (6:614b)
+	ld a, $01
+	jr .asm_1a15d
+	ld a, $02
+	jr .asm_1a15d
+	ld a, $03
+	jr .asm_1a15d
+	ld a, $04
+	jr .asm_1a15d
+	ld a, $05
+.asm_1a15d
+	ld [wce9d], a
+	scf
+	ret
+; 0x1a162
 
-Func_1a162: ; 1a162 (6:6162)
-	INCROM $1a162, $1a270
+; a = saved deck index to print
+_PrintDeckConfiguration: ; 1a162 (6:6162)
+; copies selected deck from SRAM to wDuelTempList
+	call EnableSRAM
+	ld l, a
+	ld h, DECK_STRUCT_SIZE
+	call HtimesL
+	ld de, sSavedDeck1
+	add hl, de
+	ld de, wDuelTempList
+	ld bc, DECK_STRUCT_SIZE
+	call CopyDataHLtoDE
+	call DisableSRAM
 
-Func_1a270: ; 1a270 (6:6270)
-	INCROM $1a270, $1a435
+	call ShowPrinterTransmitting
+	call PrepareForPrinterCommunications
+	call Func_1a025
+	call Func_212f
+	lb de, 0, 64
+	lb bc, 20, 4
+	call DrawRegularTextBoxDMG
+	lb de, 4, 66
+	call InitTextPrinting
+	ld hl, wDuelTempList ; print deck name
+	call ProcessText
+	ldtx hl, DeckPrinterText
+	call ProcessTextFromID
+
+	ld a, 5
+	ld [wPrinterHorizontalOffset], a
+	ld hl, wPrinterTotalCardCount
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ld [wPrintOnlyStarRarity], a
+
+	ld hl, wCurDeckCards
+.loop_cards
+	ld a, [hl]
+	or a
+	jr z, .asm_1a1d6
+	ld e, a
+	ld d, $00
+	call LoadCardDataToBuffer1_FromCardID
+
+	; find out this card's count
+	ld a, [hli]
+	ld b, a
+	ld c, 1
+.loop_card_count
+	cp [hl]
+	jr nz, .got_card_count
+	inc hl
+	inc c
+	jr .loop_card_count
+
+.got_card_count
+	ld a, c
+	ld [wPrinterCardCount], a
+	call LoadCardInfoForPrinter
+	call AddToPrinterGfxBuffer
+	jr c, .printer_error
+	jr .loop_cards
+
+.asm_1a1d6
+	call SendCardListToPrinter
+	jr c, .printer_error
+	call ResetPrinterCommunicationSettings
+	call RestoreVBlankFunction
+	or a
+	ret
+
+.printer_error
+	call ResetPrinterCommunicationSettings
+	call RestoreVBlankFunction
+	jp HandlePrinterError
+; 0x1a1ec
+
+SendCardListToPrinter: ; 1a1ec (6:61ec)
+	ld a, [wPrinterHorizontalOffset]
+	cp 1
+	jr z, .skip_load_gfx
+	call LoadGfxBufferForPrinter
+	ret c
+.skip_load_gfx
+	call TryInitPrinterCommunications
+	ret c
+	call Func_1a108
+	ret
+; 0z1a1ff
+
+; increases printer horizontal offset by 2
+AddToPrinterGfxBuffer: ; 1a1ff (6:61ff)
+	push hl
+	ld hl, wPrinterHorizontalOffset
+	inc [hl]
+	inc [hl]
+	ld a, [hl]
+	pop hl
+	; return no carry if below 18
+	cp 18
+	ccf
+	ret nc
+	; >= 18
+;	fallthrough
+
+; copies Gfx to Gfx buffer and sends some serial data
+; returns carry set if unsuccessful
+LoadGfxBufferForPrinter: ; 1a20b (6:620b)
+	push hl
+	call TryInitPrinterCommunications
+	jr c, .set_carry
+	ld a, [wPrinterHorizontalOffset]
+	srl a
+	ld c, a
+	ld hl, sGfxBuffer0
+.loop_gfx_buffer
+	call Func_1a0cc
+	jr c, .set_carry
+	dec c
+	jr nz, .loop_gfx_buffer
+	call Func_1a111
+	jr c, .set_carry
+
+	call ClearPrinterGfxBuffer
+	ld a, 1
+	ld [wPrinterHorizontalOffset], a
+	pop hl
+	or a
+	ret
+
+.set_carry
+	pop hl
+	scf
+	ret
+
+; load symbol, name, level and card count to buffer
+LoadCardInfoForPrinter: ; 1a235 (6:6235)
+	push hl
+	ld a, [wPrinterHorizontalOffset]
+	or %1000000
+	ld e, a
+	ld d, 3
+	ld a, [wPrintOnlyStarRarity]
+	or a
+	jr nz, .skip_card_symbol
+	ld hl, wPrinterTotalCardCount
+	ld a, [hli]
+	or [hl]
+	call z, DrawCardSymbol
+.skip_card_symbol
+	ld a, 14
+	call CopyCardNameAndLevel
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ld a, [wPrinterHorizontalOffset]
+	or %1000000
+	ld c, a
+	ld b, 16
+	ld a, SYM_CROSS
+	call WriteByteToBGMap0
+	inc b
+	ld a, [wPrinterCardCount]
+	bank1call WriteTwoDigitNumberInTxSymbolFormat
+	pop hl
+	ret
+; 0x1a270
+
+_PrintCardList: ; 1a270 (6:6270)
+; if Select button is held when printing card list
+; only print cards with Star rarity (excluding Promotional cards)
+; even if it's not marked as seen in the collection
+	ld e, FALSE
+	ldh a, [hKeysHeld]
+	and SELECT
+	jr z, .no_select
+	inc e ; TRUE
+.no_select
+	ld a, e
+	ld [wPrintOnlyStarRarity], a
+
+	call ShowPrinterTransmitting
+	call CreateTempCardCollection
+	ld de, wDefaultText
+	call CopyPlayerName
+	call PrepareForPrinterCommunications
+	call Func_1a025
+	call Func_212f
+
+	lb de, 0, 64
+	lb bc, 20, 4
+	call DrawRegularTextBoxDMG
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
+	lb de, 2, 66
+	call InitTextPrinting
+	ld hl, wDefaultText
+	call ProcessText
+	ldtx hl, AllCardsOwnedText
+	call ProcessTextFromID
+	ld a, [wPrintOnlyStarRarity]
+	or a
+	jr z, .asm_1a2c2
+	ld a, TX_HALF2FULL
+	call ProcessSpecialTextCharacter
+	lb de, 3, 84
+	call Func_22ca
+.asm_1a2c2
+	ld a, $ff
+	ld [wCurPrinterCardType], a
+	xor a
+	ld hl, wPrinterTotalCardCount
+	ld [hli], a
+	ld [hl], a
+	ld [wPrinterNumCardTypes], a
+	ld a, 5
+	ld [wPrinterHorizontalOffset], a
+
+	ld e, GRASS_ENERGY
+.loop_cards
+	push de
+	ld d, $00
+	call LoadCardDataToBuffer1_FromCardID
+	jr c, .done_card_loop
+	ld d, HIGH(wTempCardCollection)
+	ld a, [de] ; card ID count in collection
+	ld [wPrinterCardCount], a
+	call .LoadCardTypeEntry
+	jr c, .printer_error_pop_de
+
+	ld a, [wPrintOnlyStarRarity]
+	or a
+	jr z, .all_owned_cards_mode
+	ld a, [wLoadedCard1Set]
+	and %11110000
+	cp PROMOTIONAL
+	jr z, .next_card
+	ld a, [wLoadedCard1Rarity]
+	cp STAR
+	jr nz, .next_card
+	; not Promotional, and Star rarity
+	ld hl, wPrinterCardCount
+	res CARD_NOT_OWNED_F, [hl]
+	jr .got_card_count
+
+.all_owned_cards_mode
+	ld a, [wPrinterCardCount]
+	or a
+	jr z, .next_card
+	cp CARD_NOT_OWNED
+	jr z, .next_card ; ignore not owned cards
+
+.got_card_count
+	ld a, [wPrinterCardCount]
+	and CARD_COUNT_MASK
+	ld c, a
+
+	; add to total card count
+	ld hl, wPrinterTotalCardCount
+	add [hl]
+	ld [hli], a
+	ld a, 0
+	adc [hl]
+	ld [hl], a
+
+	; add to current card type count
+	ld hl, wPrinterCurCardTypeCount
+	ld a, c
+	add [hl]
+	ld [hli], a
+	ld a, 0
+	adc [hl]
+	ld [hl], a
+
+	ld hl, wPrinterNumCardTypes
+	inc [hl]
+	ld hl, wce98
+	inc [hl]
+	call LoadCardInfoForPrinter
+	call AddToPrinterGfxBuffer
+	jr c, .printer_error_pop_de
+.next_card
+	pop de
+	inc e
+	jr .loop_cards
+
+.printer_error_pop_de
+	pop de
+.printer_error
+	call ResetPrinterCommunicationSettings
+	call RestoreVBlankFunction
+	jp HandlePrinterError
+
+.done_card_loop
+	pop de
+	; add separator line
+	ld a, [wPrinterHorizontalOffset]
+	dec a
+	or $40
+	ld c, a
+	ld b, 0
+	call BCCoordToBGMap0Address
+	ld a, $35
+	lb de, $35, $35
+	ld b, 20
+	call CopyLine
+	call AddToPrinterGfxBuffer
+	jr c, .printer_error
+
+	ld hl, wPrinterTotalCardCount
+	ld c, [hl]
+	inc hl
+	ld b, [hl]
+	ldtx hl, TotalNumberOfCardsText
+	call .PrintTextWithNumber
+	jr c, .printer_error
+	ld a, [wPrintOnlyStarRarity]
+	or a
+	jr nz, .done
+	ld a, [wPrinterNumCardTypes]
+	ld c, a
+	ld b, 0
+	ldtx hl, TypesOfCardsText
+	call .PrintTextWithNumber
+	jr c, .printer_error
+
+.done
+	call SendCardListToPrinter
+	jr c, .printer_error
+	call ResetPrinterCommunicationSettings
+	call RestoreVBlankFunction
+	or a
+	ret
+
+; prints text ID given in hl
+; with decimal representation of
+; the number given in bc
+; hl = text ID
+; bc = number
+.PrintTextWithNumber
+	push bc
+	ld a, [wPrinterHorizontalOffset]
+	dec a
+	or $40
+	ld e, a
+	ld d, 2
+	call InitTextPrinting
+	call ProcessTextFromID
+	ld d, 14
+	call InitTextPrinting
+	pop hl
+	call TwoByteNumberToTxSymbol_TrimLeadingZeros
+	ld hl, wStringBuffer
+	call ProcessText
+	call AddToPrinterGfxBuffer
+	ret
+
+; loads this card's type icon and text
+; if it's a new card type that hasn't been printed yet
+.LoadCardTypeEntry
+	ld a, [wLoadedCard1Type]
+	ld c, a
+	cp TYPE_ENERGY
+	jr c, .got_type ; jump if Pokemon card
+	ld c, $08
+	cp TYPE_TRAINER
+	jr nc, .got_type ; jump if Trainer card
+	ld c, $07
+.got_type
+	ld hl, wCurPrinterCardType
+	ld a, [hl]
+	cp c
+	ret z ; already handled this card type
+
+	; show corresponding icon and text
+	; for this new card type
+	ld a, c
+	ld [hl], a ; set it as current card type
+	add a
+	add c ; *3
+	ld c, a
+	ld b, $00
+	ld hl, .IconTextList
+	add hl, bc
+	ld a, [wPrinterHorizontalOffset]
+	dec a
+	or %1000000
+	ld e, a
+	ld d, 1
+	ld a, [hli]
+	push hl
+	lb bc, 2, 2
+	lb hl, 1, 2
+	call FillRectangle
+	pop hl
+	ld d, 3
+	inc e
+	call InitTextPrinting
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call ProcessTextFromID
+
+	call AddToPrinterGfxBuffer
+	ld hl, wPrinterCurCardTypeCount
+	xor a
+	ld [hli], a
+	ld [hl], a
+	ld [wce98], a
+	ret
+
+.IconTextList
+	; Fire
+	db $e0 ; icon tile
+	tx FirePokemonText
+
+	; Grass
+	db $e4 ; icon tile
+	tx GrassPokemonText
+
+	; Lightning
+	db $e8 ; icon tile
+	tx LightningPokemonText
+
+	; Water
+	db $ec ; icon tile
+	tx WaterPokemonText
+
+	; Fighting
+	db $f0 ; icon tile
+	tx FightingPokemonText
+
+	; Psychic
+	db $f4 ; icon tile
+	tx PsychicPokemonText
+
+	; Colorless
+	db $f8 ; icon tile
+	tx ColorlessPokemonText
+
+	; Energy
+	db $fc ; icon tile
+	tx EnergyCardText
+
+	; Trainer
+	db $dc ; icon tile
+	tx TrainerCardText
+; 0x1a420
+
+ShowPrinterTransmitting: ; 1a420 (6:6420)
+	call Func_198e7
+	ld a, SCENE_GAMEBOY_PRINTER_TRANSMITTING
+	lb bc, 0, 0
+	call LoadScene
+	ldtx hl, NowPrintingPleaseWaitText
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	ret
+; 0x1a435
 
 ; compresses $28 tiles in sGfxBuffer5
 ; and writes it in sGfxBuffer5 + $28 tiles.
@@ -3161,8 +3891,8 @@ Func_1a270: ; 1a270 (6:6270)
 ; - a command byte with bit 7 set, means to copy the following byte
 ; that many times + 2 (after masking the top bit of command byte).
 ; returns in bc the size of the compressed data and
-; in de the address of where it starts.
-CompressDataForSerialTransfer: ; 1a435 (6:6435)
+; in de the packet type data.
+CompressDataForPrinterSerialTransfer: ; 1a435 (6:6435)
 	ld hl, sGfxBuffer5
 	ld de, sGfxBuffer5 + $28 tiles
 	ld bc, $28 tiles
@@ -3226,7 +3956,7 @@ CompressDataForSerialTransfer: ; 1a435 (6:6435)
 	ld c, l
 	ld b, h
 	ld hl, sGfxBuffer5 + $28 tiles
-	ld de, $401
+	lb de, PRINTERPKT_DATA, $1
 	ret
 ; 0x1a485
 
@@ -3321,8 +4051,186 @@ CheckDataCompression: ; 1a485 (6:6485)
 	jr .no_carry
 ; 0x1a4cf
 
-Func_1a4cf: ; 1a4cf (6:64cf)
-	INCROM $1a4cf, $1a61f
+; sets up to start a link duel
+; decides which device will pick the number of prizes
+; then exchanges names and duels between the players
+; and starts the main duel routine
+_SetUpAndStartLinkDuel: ; 1a4cf (6:64cf)
+	ld hl, sp+$00
+	ld a, l
+	ld [wDuelReturnAddress + 0], a
+	ld a, h
+	ld [wDuelReturnAddress + 1], a
+	call Func_198e7
+
+	ld a, SCENE_GAMEBOY_LINK_TRANSMITTING
+	lb bc, 0, 0
+	call LoadScene
+
+	bank1call LoadPlayerDeck
+	call SwitchToCGBNormalSpeed
+	bank1call DecideLinkDuelVariables
+	push af
+	call RestoreVBlankFunction
+	pop af
+	jp c, .error
+
+	ld a, DUELIST_TYPE_PLAYER
+	ld [wPlayerDuelistType], a
+	ld a, DUELIST_TYPE_LINK_OPP
+	ld [wOpponentDuelistType], a
+	ld a, DUELTYPE_LINK
+	ld [wDuelType], a
+
+	call EmptyScreen
+	ld a, [wSerialOp]
+	cp $29
+	jr nz, .asm_1a540
+
+	ld a, PLAYER_TURN
+	ldh [hWhoseTurn], a
+	call .ExchangeNamesAndDecks
+	jr c, .error
+	lb de, 6, 2
+	lb bc, 8, 6
+	call DrawRegularTextBox
+	lb de, 7, 4
+	call InitTextPrinting
+	ldtx hl, PrizesCardsText
+	call ProcessTextFromID
+	ldtx hl, ChooseTheNumberOfPrizesText
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	call .PickNumberOfPrizeCards
+	ld a, [wNPCDuelPrizes]
+	call SerialSend8Bytes
+	jr .prizes_decided
+
+.asm_1a540
+	ld a, OPPONENT_TURN
+	ldh [hWhoseTurn], a
+	call .ExchangeNamesAndDecks
+	jr c, .error
+	ldtx hl, PleaseWaitDecidingNumberOfPrizesText
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+	call SerialRecv8Bytes
+	ld [wNPCDuelPrizes], a
+
+.prizes_decided
+	call ExchangeRNG
+	ld a, LINK_OPP_PIC
+	ld [wOpponentPortrait], a
+	ldh a, [hWhoseTurn]
+	push af
+	call EmptyScreen
+	bank1call SetDefaultPalettes
+	ld a, SHUFFLE_DECK
+	ld [wDuelDisplayedScreen], a
+	bank1call DrawDuelistPortraitsAndNames
+	ld a, OPPONENT_TURN
+	ldh [hWhoseTurn], a
+	ld a, [wNPCDuelPrizes]
+	ld l, a
+	ld h, $00
+	call LoadTxRam3
+	ldtx hl, BeginAPrizeDuelWithText
+	call DrawWideTextBox_WaitForInput
+	pop af
+	ldh [hWhoseTurn], a
+	call ExchangeRNG
+	bank1call StartDuel_VSLinkOpp
+	call SwitchToCGBDoubleSpeed
+	ret
+
+.error
+	ld a, -1
+	ld [wDuelResult], a
+	call Func_198e7
+
+	ld a, SCENE_GAMEBOY_LINK_NOT_CONNECTED
+	lb bc, 0, 0
+	call LoadScene
+
+	ldtx hl, TransmissionErrorText
+	call DrawWideTextBox_WaitForInput
+	call RestoreVBlankFunction
+	call ResetSerial
+	ret
+
+.ExchangeNamesAndDecks
+	ld de, wDefaultText
+	push de
+	call CopyPlayerName
+	pop hl
+	ld de, wNameBuffer
+	ld c, NAME_BUFFER_LENGTH
+	call SerialExchangeBytes
+	ret c
+	xor a
+	ld hl, wOpponentName
+	ld [hli], a
+	ld [hl], a
+	ld hl, wPlayerDeck
+	ld de, wOpponentDeck
+	ld c, DECK_SIZE
+	call SerialExchangeBytes
+	ret
+
+; handles player choice of number of prize cards
+; pressing left/right makes it decrease/increase respectively
+; selection is confirmed by pressing A button
+.PickNumberOfPrizeCards
+	ld a, PRIZES_4
+	ld [wNPCDuelPrizes], a
+	xor a
+	ld [wPrizeCardSelectionFrameCounter], a
+.loop_input
+	call DoFrame
+	ld a, [wNPCDuelPrizes]
+	add SYM_0
+	ld e, a
+	; check frame counter so that it
+	; either blinks or shows number
+	ld hl, wPrizeCardSelectionFrameCounter
+	ld a, [hl]
+	inc [hl]
+	and $10
+	jr z, .no_blink
+	ld e, SYM_SPACE
+.no_blink
+	ld a, e
+	lb bc, 9, 6
+	call WriteByteToBGMap0
+
+	ldh a, [hDPadHeld]
+	ld b, a
+	ld a, [wNPCDuelPrizes]
+	bit D_LEFT_F, b
+	jr z, .check_d_right
+	dec a
+	cp PRIZES_2
+	jr nc, .got_prize_count
+	ld a, PRIZES_6 ; wrap around to 6
+	jr .got_prize_count
+
+.check_d_right
+	bit D_RIGHT_F, b
+	jr z, .check_a_btn
+	inc a
+	cp PRIZES_6 + 1
+	jr c, .got_prize_count
+	ld a, PRIZES_2
+.got_prize_count
+	ld [wNPCDuelPrizes], a
+	xor a
+	ld [wPrizeCardSelectionFrameCounter], a
+
+.check_a_btn
+	bit A_BUTTON_F, b
+	jr z, .loop_input
+	ret
+; 0x1a61f
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af
