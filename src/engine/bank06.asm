@@ -3780,7 +3780,7 @@ _PrintCardList: ; 1a270 (6:6270)
 	call AddToPrinterGfxBuffer
 	ret
 
-; load's this card's type icon and text
+; loads this card's type icon and text
 ; if it's a new card type that hasn't been printed yet
 .LoadCardTypeEntry
 	ld a, [wLoadedCard1Type]
