@@ -85,7 +85,7 @@ HandleFailedToContinueDuel: ; 4097 (1:4097)
 
 ; this function begins the duel after the opponent's graphics, name and deck have been introduced
 ; loads both player's decks and sets up the variables and resources required to begin a duel.
-StartDuel: ; 409f (1:409f)
+StartDuel_VSAIOpp: ; 409f (1:409f)
 	ld a, PLAYER_TURN
 	ldh [hWhoseTurn], a
 	ld a, DUELIST_TYPE_PLAYER
@@ -96,9 +96,9 @@ StartDuel: ; 409f (1:409f)
 	call SwapTurn
 	call LoadOpponentDeck
 	call SwapTurn
-	jr .decks_loaded
+	jr StartDuel
 
-; unreferenced?
+StartDuel_VSLinkOpp: ; 40bc (1:40bc)
 	ld a, MUSIC_DUEL_THEME_1
 	ld [wDuelTheme], a
 	ld hl, wOpponentName
@@ -106,8 +106,9 @@ StartDuel: ; 409f (1:409f)
 	ld [hli], a
 	ld [hl], a
 	ld [wIsPracticeDuel], a
+;	fallthrough
 
-.decks_loaded
+StartDuel: ; 40ca (1:40ca)
 	ld hl, sp+$0
 	ld a, l
 	ld [wDuelReturnAddress], a
@@ -8447,12 +8448,12 @@ Func_74dc: ; 74dc (1:74dc)
 	call EmptyScreen
 	call EnableLCD
 	ld a, GRASS_ENERGY
-	ld [wce9a], a
+	ld [wPrizeCardSelectionFrameCounter], a
 .wait_input
 	call DoFrame
 	ldh a, [hDPadHeld]
 	ld b, a
-	ld a, [wce9a]
+	ld a, [wPrizeCardSelectionFrameCounter]
 ; left
 	bit D_LEFT_F, b
 	jr z, .right
@@ -8471,13 +8472,13 @@ Func_74dc: ; 74dc (1:74dc)
 	sub 10
 
 .got_card_id
-	ld [wce9a], a
+	ld [wPrizeCardSelectionFrameCounter], a
 	lb bc, 5, 5
 	bank1call WriteTwoByteNumberInTxSymbolFormat
 	ldh a, [hKeysPressed]
 	and START
 	jr z, .wait_input
-	ld a, [wce9a]
+	ld a, [wPrizeCardSelectionFrameCounter]
 	ld e, a
 	ld d, $0
 .asm_751b
@@ -8491,25 +8492,59 @@ Func_74dc: ; 74dc (1:74dc)
 	jr .asm_751b
 ; 0x7528
 
-	INCROM $7528, $755d
+; seems to communicate with other device
+; for starting a duel
+; outputs in hl either wPlayerDuelVariables
+; or wOpponentDuelVariables depending on wSerialOp
+DecideLinkDuelVariables: ; 7528 (1:7528)
+	call Func_0e8e
+	ldtx hl, PressStartWhenReadyText
+	call DrawWideTextBox_PrintText
+	call EnableLCD
+.loop_frame
+	call DoFrame
+	ldh a, [hKeysPressed]
+	bit B_BUTTON_F, a
+	jr nz, .cancel
+	and START
+	call Func_cc5
+	jr nc, .loop_frame
+	ld hl, wPlayerDuelVariables
+	ld a, [wSerialOp]
+	cp $29
+	jr z, .success
+	ld hl, wOpponentDuelVariables
+	cp $12
+	jr z, .success
+.cancel
+	call ResetSerial
+	scf
+	ret
 
-Func_755d: ; 755d (1:755d)
-	farcall Func_19bfb
+.success
+	or a
+	ret
+; 0x755c
+
+	ret ; stray ret
+
+ReceiveDeckConfiguration: ; 755d (1:755d)
+	farcall _ReceiveDeckConfiguration
 	ret
 ; 0x7562
 
-Func_7562: ; 7562 (1:7562)
-	farcall Func_19bc5
+SendDeckConfiguration: ; 7562 (1:7562)
+	farcall _SendDeckConfiguration
 	ret
 ; 0x7567
 
-Func_7567: ; 7567 (1:7567)
-	farcall Func_19b8c
+ReceiveCard: ; 7567 (1:7567)
+	farcall _ReceiveCard
 	ret
 ; 0x756c
 
-Func_756c: ; 756c (1:756c)
-	farcall Func_19b41
+SendCard: ; 756c (1:756c)
+	farcall _SendCard
 	ret
 ; 0x7571
 
@@ -8523,18 +8558,18 @@ Func_7576: ; 7576 (1:7576)
 	ret
 ; 0x757b
 
-Func_757b: ; 757b (1:757b)
-	farcall Func_19e42
+PreparePrinterConnection: ; 757b (1:757b)
+	farcall _PreparePrinterConnection
 	ret
 ; 0x7580
 
-Func_7580: ; 7580 (1:7580)
-	farcall Func_1a162
+PrintDeckConfiguration: ; 7580 (1:7580)
+	farcall _PrintDeckConfiguration
 	ret
 ; 0x7585
 
-Func_7585: ; 7585 (1:7585)
-	farcall Func_1a270
+PrintCardList: ; 7585 (1:7585)
+	farcall _PrintCardList
 	ret
 ; 0x758a
 
@@ -8543,8 +8578,8 @@ Func_758a: ; 758a (1:758a)
 	ret
 ; 0x758f
 
-Func_758f: ; 758f (1:758f)
-	farcall Func_1a4cf
+SetUpAndStartLinkDuel: ; 758f (1:758f)
+	farcall _SetUpAndStartLinkDuel
 	ret
 
 Func_7594: ; 7594 (1:7594)

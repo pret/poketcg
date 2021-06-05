@@ -126,7 +126,7 @@ EnergyCardText: ; 36453 (d:6453)
 	text "Energy Card"
 	done
 
-Text0021: ; 36460 (d:6460)
+DeckPrinterText: ; 36460 (d:6460)
 	text "Deck"
 	done
 

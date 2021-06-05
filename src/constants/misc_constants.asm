@@ -66,6 +66,13 @@ CARDPOP_NAME_LIST_SIZE EQUS "CARDPOP_NAME_LIST_MAX_ELEMS * NAME_BUFFER_LENGTH"
 	const IRCMD_CALL_FUNCTION     ; $4
 NUM_IR_COMMANDS EQU const_value
 
+; parameters for IR communication
+; (see InitIRCommunications)
+	const_def 1
+	const IRPARAM_CARD_POP    ; $1
+	const IRPARAM_SEND_CARDS  ; $2
+	const IRPARAM_SEND_DECK   ; $3
+
 NULL EQU $0000
 
 FALSE EQU 0

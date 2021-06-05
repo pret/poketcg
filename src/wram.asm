@@ -462,24 +462,24 @@ NEXTU
 ; wCurDeckCards was changed from the original
 ; deck it was based on 
 wCurDeckCardChanges:: ; c590
-	ds DECK_SIZE
+	ds DECK_SIZE + 1
 
 ENDU
 
-wc5cc:: ; c5cc
-	ds $1
-
 	ds $1d
 
-wc5ea:: ; c5ea
+; signals what error, if any, occured
+; during IR communications
+; 0 means there was no error
+wIRCommunicationErrorCode:: ; c5ea
 	ds $1
 
-; related with wc5ef for Card Pop! communications
-wc5eb:: ; c5eb
+; parameters set for IR communications on own device
+; and received from the other device respectively
+; these must match for successful communication
+wOwnIRCommunicationParams:: ; c5eb
 	ds $4
-
-; related with wc5eb for Card Pop! communications
-wc5ef:: ; c5ef
+wOtherIRCommunicationParams:: ; c5ef
 	ds $4
 
 ; stores the result from LookUpNameInCardPopNameList
@@ -1653,7 +1653,7 @@ wTextHeader4:: ; ce3a
 
 ; text id for the first TX_RAM2 of a text
 ; prints from wDefaultText if $0000
-wTxRam2:: ; cd3f
+wTxRam2:: ; ce3f
 	ds $2
 
 ; text id for the second TX_RAM2 of a text
@@ -1804,11 +1804,10 @@ wce68:: ; ce68
 wce69:: ; ce69
 	ds $1
 
-wce6a:: ; ce6a
-	ds $1
-
-wce6b:: ; ce6b
-	ds $1
+; pointer to memory of data to send
+; in the data packet to the printer
+wPrinterPacketDataPtr:: ; ce6a
+	ds $2
 
 wce6c:: ; ce6c
 	ds $1
@@ -1822,11 +1821,10 @@ wce6e:: ; ce6e
 wPrinterStatus:: ; ce6f
 	ds $1
 
-wce70:: ; ce70
-	ds $1
-
-wce71:: ; ce71
-	ds $1
+; pointer to packet data that is
+; being transmitted through serial
+wSerialDataPtr:: ; ce70
+	ds $2
 
 wce72:: ; ce72
 	ds $1
@@ -1877,20 +1875,52 @@ wVBlankFunctionTrampolineBackup:: ; ce8d
 wce8f:: ; ce8f
 	ds $1
 
-	ds $9
-
-wce99:: ; ce99
+wPrinterHorizontalOffset:: ; ce90
 	ds $1
 
-wce9a:: ; ce9a
+; the count of some card ID in the deck to be printed
+wPrinterCardCount:: ; ce91
 	ds $1
 
+; total card count of list to be printed
+wPrinterTotalCardCount:: ; ce92
+	ds $2
+
+wCurPrinterCardType:: ; ce94
+	ds $1
+
+; total card count of the current card type
+; in list to be printed
+wPrinterCurCardTypeCount:: ; ce95
+	ds $2
+
+wPrinterNumCardTypes:: ; ce97
+	ds $1
+
+; related to printer functions
+; only wrtten to but never read
+wce98:: ; ce98
+	ds $1
+
+wPrinterContrastLevel:: ; ce99
+	ds $1
+
+wPrizeCardSelectionFrameCounter:: ; ce9a
+	ds $1
+
+; related to printer serial stuff
 wce9b:: ; ce9b
 	ds $1
 
-	ds $2
+wPrintOnlyStarRarity:: ; ce9c
+	ds $1
 
-wce9e:: ; ce9e
+; only used in unreferenced function Func_1a14b
+; otherwise unused
+wce9d:: ; ce9d
+	ds $1
+
+wPrinterInitAttempts:: ; ce9e
 	ds $1
 
 wce9f:: ; ce9f

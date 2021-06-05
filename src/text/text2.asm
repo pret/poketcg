@@ -764,22 +764,22 @@ Text0185: ; 39ca8 (e:5ca8)
 	text "Battle Center"
 	done
 
-Text0186: ; 39cb7 (e:5cb7)
+PrizesCardsText: ; 39cb7 (e:5cb7)
 	text "Prizes"
 	line "       cards"
 	done
 
-Text0187: ; 39ccc (e:5ccc)
+ChooseTheNumberOfPrizesText: ; 39ccc (e:5ccc)
 	text "Choose the number"
 	line "of Prizes."
 	done
 
-Text0188: ; 39cea (e:5cea)
+PleaseWaitDecidingNumberOfPrizesText: ; 39cea (e:5cea)
 	text "Please wait..."
 	line "Deciding the number of Prizes..."
 	done
 
-Text0189: ; 39d1b (e:5d1b)
+BeginAPrizeDuelWithText: ; 39d1b (e:5d1b)
 	text "Begin a <RAMNUM>-Prize Duel"
 	line "with <RAMNAME>."
 	done
@@ -839,7 +839,7 @@ Text0194: ; 39ed3 (e:5ed3)
 	line "Looked at the card list!"
 	done
 
-Text0195: ; 39f03 (e:5f03)
+NowPrintingPleaseWaitText: ; 39f03 (e:5f03)
 	text "Now printing."
 	line "Please wait..."
 	done
@@ -848,7 +848,7 @@ BoosterPackText: ; 39f21 (e:5f21)
 	text "Booster Pack"
 	done
 
-Text0197: ; 39f2f (e:5f2f)
+WouldYouLikeToTryAgainText: ; 39f2f (e:5f2f)
 	text "Would you like to try again?"
 	done
 
@@ -860,40 +860,40 @@ Text0199: ; 39f59 (e:5f59)
 	text "Received from <RAMNAME>."
 	done
 
-Text019a: ; 39f6b (e:5f6b)
+SendingACardText: ; 39f6b (e:5f6b)
 	text "Sending a card...Move the Game"
 	line "Boys close and press the A Button."
 	done
 
-Text019b: ; 39fae (e:5fae)
+ReceivingACardText: ; 39fae (e:5fae)
 	text "Receiving a card...Move"
 	line "the Game Boys close together."
 	done
 
-Text019c: ; 39fe5 (e:5fe5)
+SendingADeckConfigurationText: ; 39fe5 (e:5fe5)
 	text "Sending a Deck Configuration..."
 	line "Position the Game Boys and press A."
 	done
 
-Text019d: ; 3a02a (e:602a)
+ReceivingDeckConfigurationText: ; 3a02a (e:602a)
 	text "Receiving Deck configuration..."
 	line "Position the Game Boys and press A."
 	done
 
-Text019e: ; 3a06f (e:606f)
+CardTransferWasntSuccessful1Text: ; 3a06f (e:606f)
 	text "Card transfer wasn't successful."
 	done
 
-Text019f: ; 3a091 (e:6091)
+CardTransferWasntSuccessful2Text: ; 3a091 (e:6091)
 	text "Card transfer wasn't successful"
 	done
 
-Text01a0: ; 3a0b2 (e:60b2)
+DeckConfigurationTransferWasntSuccessful1Text: ; 3a0b2 (e:60b2)
 	text "Deck configuration transfer"
 	line "wasn't successful"
 	done
 
-Text01a1: ; 3a0e1 (e:60e1)
+DeckConfigurationTransferWasntSuccessful2Text: ; 3a0e1 (e:60e1)
 	text "Deck configuration transfer"
 	line "wasn't successful."
 	done

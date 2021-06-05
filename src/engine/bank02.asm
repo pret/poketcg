@@ -2238,7 +2238,7 @@ Func_8cf9: ; 8cf9 (2:4cf9)
 	ld hl, sHasPromotionalCards
 	ld [hli], a
 	inc a ; $1
-	ld [hli], a
+	ld [hli], a ; sb704
 	ld [hli], a
 	ld [hl], a
 	ld [sUnnamedDeckCounter], a
@@ -3659,8 +3659,8 @@ CheckIfCurrentDeckWasChanged: ; 95c1 (2:55c1)
 ; loops through cards in wCurDeckCards
 ; then if that card is found in wCurDeckCardChanges
 ; overwrite it by $0
-	ld a, $ff
-	ld [wc5cc], a
+	ld a, $ff ; terminator byte
+	ld [wCurDeckCardChanges + DECK_SIZE], a
 	ld de, wCurDeckCards
 .loop_outer
 	ld a, [de]
@@ -6050,15 +6050,14 @@ HandleSendDeckConfigurationMenu: ; a201 (2:6201)
 	jp OpenDeckConfigurationMenu.skip_init
 
 .func_table
-	dw ConfirmDeckConfiguration    ; Confirm
-	dw SendDeckConfiguration       ; Send
-	dw CancelSendDeckConfiguration ; Cancel
-; 0xa24a
+	dw ConfirmDeckConfiguration     ; Confirm
+	dw .SendDeckConfiguration       ; Send
+	dw .CancelSendDeckConfiguration ; Cancel
 
-SendDeckConfiguration: ; a24a (2:624a)
+.SendDeckConfiguration
 	ld a, [wCurDeckCards]
 	or a
-	jr z, CancelSendDeckConfiguration
+	jr z, .CancelSendDeckConfiguration
 	xor a
 	ld [wCardListVisibleOffset], a
 	ld hl, Data_b04a
@@ -6079,7 +6078,7 @@ SendDeckConfiguration: ; a24a (2:624a)
 	scf
 	ret
 
-CancelSendDeckConfiguration: ; a27d (2:627d)
+.CancelSendDeckConfiguration
 	add sp, $2
 	or a
 	ret
@@ -7791,12 +7790,12 @@ PrinterMenu_CardList: ; ad0e (2:6d0e)
 	ld a, [hffb3]
 	or a
 	ret nz
-	bank1call Func_7585
+	bank1call PrintCardList
 	ret
 ; 0xad51
 
 HandlePrinterMenu: ; ad51 (2:6d51)
-	bank1call Func_757b
+	bank1call PreparePrinterConnection
 	ret c
 	xor a
 .loop
@@ -8097,7 +8096,7 @@ Func_af1d: ; af1d (2:6f1d)
 	call CopyListFromHLToDE
 	xor a
 	ld [wNameBuffer], a
-	bank1call Func_756c
+	bank1call SendCard
 	ret c
 	call EnableSRAM
 	ld hl, wCurDeckCards
@@ -8119,7 +8118,7 @@ Func_af98: ; af98 (2:6f98)
 	xor a
 	ld [wDuelTempList], a
 	ld [wNameBuffer], a
-	bank1call Func_7567
+	bank1call ReceiveCard
 	ret c
 
 	call EnableSRAM
@@ -9791,7 +9790,7 @@ PrinterMenu_DeckConfiguration: ; b991 (2:7991)
 	ld [wCurDeckCards + DECK_SIZE], a
 	call SortCurDeckCardsByID
 	ld a, [wSelectedDeckMachineEntry]
-	bank1call Func_7580
+	bank1call PrintDeckConfiguration
 	call ClearScreenAndDrawDeckMachineScreen
 
 .no
@@ -10131,7 +10130,7 @@ Func_bc04: ; bc04 (2:7c04)
 
 	xor a
 	ld [wNameBuffer], a
-	bank1call Func_7562
+	bank1call SendDeckConfiguration
 	ret c
 
 	call GetSelectedSavedDeckPtr
@@ -10191,7 +10190,7 @@ Func_bc7a: ; bc7a (2:7c7a)
 	xor a
 	ld [wDuelTempList], a
 	ld [wNameBuffer], a
-	bank1call Func_755d
+	bank1call ReceiveDeckConfiguration
 	ret c
 	call EnableSRAM
 	ld hl, wDuelTempList

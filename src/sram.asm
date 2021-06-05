@@ -128,7 +128,12 @@ sUnnamedDeckCounter:: ; b701
 ; to decide whether to show the option
 ; in the Card Album PC menu
 sHasPromotionalCards:: ; b703
-	ds $4
+	ds $1
+
+; these are initialized to 1 when
+; creating a new game but are never used
+sb704:: ; b704
+	ds $3
 sCardAndDeckSaveDataEnd::
 
 	ds $f9

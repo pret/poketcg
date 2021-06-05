@@ -9349,13 +9349,16 @@ DrawPlayAreaToPlacePrizeCards: ; 311d (0:311d)
 	ret
 
 ; serial transfer-related
-Func_312d: ; 312d (0:312d)
+SendPrinterPacket: ; 312d (0:312d)
 	push hl
 	ld hl, wce64
+	; Preamble
 	ld a, $88
 	ld [hli], a          ; [wce64] ← $88
 	ld a, $33
 	ld [hli], a          ; [wce65] ← $33
+
+	; Header
 	ld [hl], d           ; [wce66] ← d
 	inc hl
 	ld [hl], e           ; [wce67] ← e
@@ -9364,8 +9367,9 @@ Func_312d: ; 312d (0:312d)
 	inc hl
 	ld [hl], b           ; [wce69] ← b
 	inc hl
+
 	pop de
-	ld [hl], e           ; [wce6a] ← l
+	ld [hl], e           ; [wPrinterPacketDataPtr] ← l
 	inc hl
 	ld [hl], d           ; [wce6b] ← h
 	inc hl
@@ -9373,10 +9377,10 @@ Func_312d: ; 312d (0:312d)
 	ld [hl], e           ; [wce6c] ← $45
 	inc hl
 	ld [hl], d           ; [wce6d] ← $ff
-	ld hl, wce70
-	ld [hl], $64         ; [wce70] ← $64
+	ld hl, wSerialDataPtr
+	ld [hl], LOW(wce64)  ; [wSerialDataPtr] ← $64
 	inc hl
-	ld [hl], $ce         ; [wce71] ← $ce
+	ld [hl], HIGH(wce64) ; [wSerialDataPtr] ← $ce
 	call Func_0e8e
 	ld a, $1
 	ld [wce63], a        ; [wce63] ← 1
@@ -9387,12 +9391,14 @@ Func_312d: ; 312d (0:312d)
 	or a
 	jr nz, .asm_315d
 	call ResetSerial
-	ld bc, $05dc
+
+	ld bc, 1500
 .asm_316c
 	dec bc
 	ld a, b
 	or c
 	jr nz, .asm_316c
+
 	ld a, [wce6e]
 	cp $81
 	jr nz, .asm_3182
@@ -9403,6 +9409,7 @@ Func_312d: ; 312d (0:312d)
 	ret z
 	scf
 	ret
+
 .asm_3182
 	ld a, $ff
 	ld [wPrinterStatus], a
@@ -9440,17 +9447,19 @@ Func_31b0: ; 31b0 (0:31b0)
 	ld hl, wce68
 	ld a, [hli]
 	or [hl]
-	jr nz, .asm_31bf
+	jr nz, .set_data_ptr
 	call Func_31ab
 	jr Func_31dd
-.asm_31bf
-	ld hl, wce6a
-	ld de, wce70
+
+.set_data_ptr
+	ld hl, wPrinterPacketDataPtr
+	ld de, wSerialDataPtr
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hl]
 	ld [de], a
+;	fallthrough
 
 Func_31ca: ; 31ca (0:31ca)
 	call Func_31fc
@@ -9493,7 +9502,7 @@ Func_31f2: ; 31f2 (0:31f2)
 	ret
 
 Func_31fc: ; 31fc (0:31fc)
-	ld hl, wce70
+	ld hl, wSerialDataPtr
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -9503,6 +9512,7 @@ Func_31fc: ; 31fc (0:31fc)
 	dec hl
 	ld [hl], e
 	ld e, a
+
 	ld hl, wce6c
 	add [hl]
 	ld [hli], a
@@ -10480,8 +10490,8 @@ SetupSound: ; 377f (0:377f)
 	farcall _SetupSound
 	ret
 
-Func_3784: ; 3784 (0:3784)
-	xor a
+StopMusic: ; 3784 (0:3784)
+	xor a ; MUSIC_STOP
 PlaySong: ; 3785 (0:3785)
 	farcall _PlaySong
 	ret
@@ -10685,7 +10695,7 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ld [wDuelTheme], a
 	ld a, MUSIC_CARD_POP
 	call PlaySong
-	bank1call Func_758f
+	bank1call SetUpAndStartLinkDuel
 	scf
 	ret
 
@@ -10699,7 +10709,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	ld [sba44], a
 	call DisableSRAM
 	call SaveGeneralSaveData
-	bank1call StartDuel
+	bank1call StartDuel_VSAIOpp
 	scf
 	ret
 
