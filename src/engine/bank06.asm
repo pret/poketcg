@@ -4239,29 +4239,29 @@ Func_1a61f: ; 1a61f (6:661f)
 	pop af
 	or a
 	jr nz, .else
-	ld a, $40
+	ld a, MOLTRES2
 	call .legendary_card_text
-	ld a, $5f
+	ld a, ARTICUNO2
 	call .legendary_card_text
-	ld a, $76
+	ld a, ZAPDOS3
 	call .legendary_card_text
-	ld a, $c1
+	ld a, DRAGONITE1
 .legendary_card_text
 	ldtx hl, ReceivedLegendaryCardText
 	jr .print_text
 .else
 	ldtx hl, ReceivedCardText
-	cp $1e
+	cp VILEPLUME
 	jr z, .print_text
-	cp $43
+	cp BLASTOISE
 	jr z, .print_text
 	ldtx hl, ReceivedPromotionalFlyingPikachuText
-	cp $64
+	cp FLYING_PIKACHU
 	jr z, .print_text
 	ldtx hl, ReceivedPromotionalSurfingPikachuText
-	cp $65
+	cp SURFING_PIKACHU1
 	jr z, .print_text
-	cp $66
+	cp SURFING_PIKACHU2
 	jr z, .print_text
 	ldtx hl, ReceivedPromotionalCardText
 .print_text

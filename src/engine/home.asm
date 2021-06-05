@@ -2310,7 +2310,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ld [hl], $0
 	ret
 
-Func_cc5: ; 0cc5 (0:0cc5)
+Func_0cc5: ; 0cc5 (0:0cc5)
 	ld hl, wSerialRecvCounter
 	or a
 	jr nz, .asm_cdc
@@ -10706,7 +10706,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	ld [wd112], a
 	call EnableSRAM
 	xor a
-	ld [sba44], a
+	ld [sPlayerInChallengeMachine], a
 	call DisableSRAM
 	call SaveGeneralSaveData
 	bank1call StartDuel_VSAIOpp
@@ -10719,10 +10719,10 @@ GameEvent_ChallengeMachine: ; 38db (0:38db)
 	call PlayDefaultSong
 	call EnableSRAM
 	xor a
-	ld [sba44], a
+	ld [sPlayerInChallengeMachine], a
 	call DisableSRAM
 .asm_38ed
-	farcall Func_131d3
+	farcall ChallengeMachine_Start
 	ld a, MUSIC_OVERWORLD
 	ld [wDefaultSong], a
 	call PlayDefaultSong
@@ -10734,7 +10734,7 @@ GameEvent_ContinueDuel: ; 38fb (0:38fb)
 	ld [wd112], a
 	bank1call TryContinueDuel
 	call EnableSRAM
-	ld a, [sba44]
+	ld a, [sPlayerInChallengeMachine]
 	call DisableSRAM
 	cp $ff
 	jr z, GameEvent_ChallengeMachine.asm_38ed

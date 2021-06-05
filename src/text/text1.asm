@@ -612,7 +612,7 @@ DuelistIsThinkingText: ; 36f4a (d:6f4a)
 	text "<RAMNAME> is thinking."
 	done
 
-Text0089: ; 36f5a (d:6f5a)
+ClearOpponentNameText: ; 36f5a (d:6f5a)
 	textfw0 " ", " ", " ", " ", " ", " ", " ", " ", " ", " "
 	done
 

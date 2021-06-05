@@ -1006,92 +1006,92 @@ CreatedByText: ; 57027 (15:7027)
 	line "                 Hudson"
 	done
 
-Text07d4: ; 5705e (15:705e)
+ChallengeMachineText: ; 5705e (15:705e)
 	text "  Challenge Machine  "
 	done
 
-Text07d5: ; 57075 (15:7075)
+PlayersScoreText: ; 57075 (15:7075)
 	text "<RAMNAME>'s Score"
 	done
 
-Text07d6: ; 57080 (15:7080)
+Defeated5OpponentsXTimesText: ; 57080 (15:7080)
 	text "Defeated 5 opponents      time(s)."
 	done
 
-Text07d7: ; 570a4 (15:70a4)
+PresentConsecutiveWinsText: ; 570a4 (15:70a4)
 	text "Present Consecutive Wins"
 	done
 
-Text07d8: ; 570be (15:70be)
+MaximumConsecutiveWinsText: ; 570be (15:70be)
 	text "Maximum Consecutive Wins"
 	line "    [ <RAMTEXT>  ]"
 	done
 
-Text07d9: ; 570e3 (15:70e3)
+WinsText: ; 570e3 (15:70e3)
 	text "Wins"
 	done
 
-Text07da: ; 570e9 (15:70e9)
+XConsecutiveWinsNthOpponentIsText: ; 570e9 (15:70e9)
 	text "<RAMNAME> <RAMNUM> Consecutive Wins!"
 	line ""
 	text "<RAMNUM> opponent is <RAMTEXT>."
 	done
 
-Text07db: ; 57112 (15:7112)
+NthOpponentIsText: ; 57112 (15:7112)
 	text "<RAMNUM> opponent is <RAMTEXT>."
 	done
 
-Text07dc: ; 57124 (15:7124)
+WouldYouLikeToBeginTheDuelText: ; 57124 (15:7124)
 	text "Would you like to begin the Duel?"
 	done
 
-Text07dd: ; 57147 (15:7147)
+IfYouQuitTheDuelText: ; 57147 (15:7147)
 	text "If you quit the Duel,"
 	line "Your Consecutive Wins will end."
 	done
 
-Text07de: ; 5717e (15:717e)
+WouldYouLikeToQuitTheDuelText: ; 5717e (15:717e)
 	text "Would you like to quit the Duel?"
 	done
 
-Text07df: ; 571a0 (15:71a0)
+PlayTheChallengeMachineText: ; 571a0 (15:71a0)
 	text "Play the Challenge Machine?"
 	done
 
-Text07e0: ; 571bd (15:71bd)
+LetUsChooseYourOpponentText: ; 571bd (15:71bd)
 	text "OK,"
 	line "Let us choose your opponent."
 	done
 
-Text07e1: ; 571df (15:71df)
+LostToTheNthOpponentText: ; 571df (15:71df)
 	text "You lost to the <RAMNUM> opponent,"
 	line "<RAMTEXT>!"
 	done
 
-Text07e2: ; 571ff (15:71ff)
+ConsecutiveWinsEndedAtText: ; 571ff (15:71ff)
 	text "<RAMNAME>'s consecutive wins"
 	line "ended at <RAMNUM>."
 	done
 
-Text07e3: ; 57221 (15:7221)
+WeAwaitYourNextChallengeText: ; 57221 (15:7221)
 	text "We await your next challenge."
 	done
 
-Text07e4: ; 57240 (15:7240)
+YourOpponentsForThisGameText: ; 57240 (15:7240)
 	text "Your opponents for this game:"
 	done
 
-Text07e5: ; 5725f (15:725f)
+WonAgainstXOpponentsText: ; 5725f (15:725f)
 	text "Congratulations!"
 	line "You won against <RAMNUM> opponents!"
 	done
 
-DefeatedFiveOpponentsText: ; 5728e (15:728e)
+Defeated5OpponentsText: ; 5728e (15:728e)
 	text "Congratulations!"
 	line "You defeated 5 opponents!"
 	done
 
-Text07e7: ; 572ba (15:72ba)
+SuccessfullyDefeated5OpponentsText: ; 572ba (15:72ba)
 	text "<RAMNAME> successfully defeated "
 	line "5 opponents "
 	text "<RAMNUM> time(s)!!!"
@@ -1102,79 +1102,79 @@ ConsecutiveWinRecordIncreasedText: ; 572ee (15:72ee)
 	line "record increased to <RAMNUM>!"
 	done
 
-Text07e9: ; 5731a (15:731a)
+ClubMemberText: ; 5731a (15:731a)
 	text "Club Member"
 	done
 
-Text07ea: ; 57327 (15:7327)
+ClubMasterText: ; 57327 (15:7327)
 	text "Club Master"
 	done
 
-Text07eb: ; 57334 (15:7334)
+TechText: ; 57334 (15:7334)
 	text "TECH"
 	done
 
-Text07ec: ; 5733a (15:733a)
+StrangeLifeformText: ; 5733a (15:733a)
 	text "Strange Life-form"
 	done
 
-Text07ed: ; 5734d (15:734d)
+GrandMasterText: ; 5734d (15:734d)
 	text "Grand Master"
 	done
 
-Text07ee: ; 5735b (15:735b)
+ChallengeMachineOpponent1Text: ; 5735b (15:735b)
 	textfw0 "1"
 	done
 
-Text07ef: ; 5735d (15:735d)
+ChallengeMachineOpponent2Text: ; 5735d (15:735d)
 	textfw0 "2"
 	done
 
-Text07f0: ; 5735f (15:735f)
+ChallengeMachineOpponent3Text: ; 5735f (15:735f)
 	textfw0 "3"
 	done
 
-Text07f1: ; 57361 (15:7361)
+ChallengeMachineOpponent4Text: ; 57361 (15:7361)
 	textfw0 "4"
 	done
 
-Text07f2: ; 57363 (15:7363)
+ChallengeMachineOpponent5Text: ; 57363 (15:7363)
 	textfw0 "5"
 	done
 
-Text07f3: ; 57365 (15:7365)
+ChallengeMachineNotDuelledIconText: ; 57365 (15:7365)
 	textfw0 " "
 	done
 
-Text07f4: ; 57367 (15:7367)
+ChallengeMachineDuelWonIconText: ; 57367 (15:7367)
 	textfw3 "☆"
 	done
 
-Text07f5: ; 5736a (15:736a)
+ChallengeMachineDuelLostIconText: ; 5736a (15:736a)
 	textfw3 "★"
 	done
 
-Text07f6: ; 5736d (15:736d)
+ChallengeMachineFireIconText: ; 5736d (15:736d)
 	textfw3 "【", "<FIRE>", "】"
 	done
 
-Text07f7: ; 57374 (15:7374)
+ChallengeMachineLightningIconText: ; 57374 (15:7374)
 	textfw3 "【", "<LIGHTNING>", "】"
 	done
 
-Text07f8: ; 5737b (15:737b)
+ChallengeMachineWaterIconText: ; 5737b (15:737b)
 	textfw3 "【", "<WATER>", "】"
 	done
 
-Text07f9: ; 57382 (15:7382)
+ChallengeMachineFightingIconText: ; 57382 (15:7382)
 	textfw3 "【", "<FIGHTING>", "】"
 	done
 
-Text07fa: ; 57389 (15:7389)
+ChallengeMachinePsychicIconText: ; 57389 (15:7389)
 	textfw3 "【", "<PSYCHIC>", "】"
 	done
 
-Text07fb: ; 57390 (15:7390)
+ChallengeMachineGrassIconText: ; 57390 (15:7390)
 	textfw3 "【", "<GRASS>", "】"
 	done
 

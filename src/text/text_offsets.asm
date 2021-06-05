@@ -138,7 +138,7 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer SelectCheckText                                    ; 0x0086
 	textpointer Text0087                                           ; 0x0087
 	textpointer DuelistIsThinkingText                              ; 0x0088
-	textpointer Text0089                                           ; 0x0089
+	textpointer ClearOpponentNameText                              ; 0x0089
 	textpointer SelectComputerOpponentText                         ; 0x008a
 	textpointer NumberOfPrizesText                                 ; 0x008b
 	textpointer Text008c                                           ; 0x008c
@@ -918,25 +918,25 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer Text0392                                           ; 0x0392
 	textpointer Text0393                                           ; 0x0393
 	textpointer Text0394                                           ; 0x0394
-	textpointer Text0395                                           ; 0x0395
-	textpointer Text0396                                           ; 0x0396
-	textpointer Text0397                                           ; 0x0397
-	textpointer Text0398                                           ; 0x0398
-	textpointer Text0399                                           ; 0x0399
-	textpointer Text039a                                           ; 0x039a
-	textpointer Text039b                                           ; 0x039b
-	textpointer Text039c                                           ; 0x039c
-	textpointer Text039d                                           ; 0x039d
-	textpointer Text039e                                           ; 0x039e
-	textpointer Text039f                                           ; 0x039f
-	textpointer Text03a0                                           ; 0x03a0
-	textpointer Text03a1                                           ; 0x03a1
-	textpointer Text03a2                                           ; 0x03a2
-	textpointer Text03a3                                           ; 0x03a3
-	textpointer Text03a4                                           ; 0x03a4
-	textpointer Text03a5                                           ; 0x03a5
-	textpointer Text03a6                                           ; 0x03a6
-	textpointer Text03a7                                           ; 0x03a7
+	textpointer OpponentTitleAndNameText                           ; 0x0395
+	textpointer OpponentDeckNameText                               ; 0x0396
+	textpointer FightingClubMemberText                             ; 0x0397
+	textpointer RockClubMemberText                                 ; 0x0398
+	textpointer WaterClubMemberText                                ; 0x0399
+	textpointer LightningClubMemberText                            ; 0x039a
+	textpointer GrassClubMemberText                                ; 0x039b
+	textpointer PsychicClubMemberText                              ; 0x039c
+	textpointer ScienceClubMemberText                              ; 0x039d
+	textpointer FireClubMemberText                                 ; 0x039e
+	textpointer FightingClubMasterText                             ; 0x039f
+	textpointer RockClubMasterText                                 ; 0x03a0
+	textpointer WaterClubMasterText                                ; 0x03a1
+	textpointer LightningClubMasterText                            ; 0x03a2
+	textpointer GrassClubMasterText                                ; 0x03a3
+	textpointer PsychicClubMasterText                              ; 0x03a4
+	textpointer ScienceClubMasterText                              ; 0x03a5
+	textpointer FireClubMasterText                                 ; 0x03a6
+	textpointer EmptyText                                          ; 0x03a7
 	textpointer ColosseumBoosterText                               ; 0x03a8
 	textpointer EvolutionBoosterText                               ; 0x03a9
 	textpointer MysteryBoosterText                                 ; 0x03aa
@@ -2005,46 +2005,46 @@ TextOffsets:: ; 34000 (d:4000)
 	textpointer SupervisorText                                     ; 0x07d1
 	textpointer ExecutiveProducerText                              ; 0x07d2
 	textpointer CreatedByText                                      ; 0x07d3
-	textpointer Text07d4                                           ; 0x07d4
-	textpointer Text07d5                                           ; 0x07d5
-	textpointer Text07d6                                           ; 0x07d6
-	textpointer Text07d7                                           ; 0x07d7
-	textpointer Text07d8                                           ; 0x07d8
-	textpointer Text07d9                                           ; 0x07d9
-	textpointer Text07da                                           ; 0x07da
-	textpointer Text07db                                           ; 0x07db
-	textpointer Text07dc                                           ; 0x07dc
-	textpointer Text07dd                                           ; 0x07dd
-	textpointer Text07de                                           ; 0x07de
-	textpointer Text07df                                           ; 0x07df
-	textpointer Text07e0                                           ; 0x07e0
-	textpointer Text07e1                                           ; 0x07e1
-	textpointer Text07e2                                           ; 0x07e2
-	textpointer Text07e3                                           ; 0x07e3
-	textpointer Text07e4                                           ; 0x07e4
-	textpointer Text07e5                                           ; 0x07e5
-	textpointer DefeatedFiveOpponentsText                          ; 0x07e6
-	textpointer Text07e7                                           ; 0x07e7
+	textpointer ChallengeMachineText                               ; 0x07d4
+	textpointer PlayersScoreText                                   ; 0x07d5
+	textpointer Defeated5OpponentsXTimesText                       ; 0x07d6
+	textpointer PresentConsecutiveWinsText                         ; 0x07d7
+	textpointer MaximumConsecutiveWinsText                         ; 0x07d8
+	textpointer WinsText                                           ; 0x07d9
+	textpointer XConsecutiveWinsNthOpponentIsText                  ; 0x07da
+	textpointer NthOpponentIsText                                  ; 0x07db
+	textpointer WouldYouLikeToBeginTheDuelText                     ; 0x07dc
+	textpointer IfYouQuitTheDuelText                               ; 0x07dd
+	textpointer WouldYouLikeToQuitTheDuelText                      ; 0x07de
+	textpointer PlayTheChallengeMachineText                        ; 0x07df
+	textpointer LetUsChooseYourOpponentText                        ; 0x07e0
+	textpointer LostToTheNthOpponentText                           ; 0x07e1
+	textpointer ConsecutiveWinsEndedAtText                         ; 0x07e2
+	textpointer WeAwaitYourNextChallengeText                       ; 0x07e3
+	textpointer YourOpponentsForThisGameText                       ; 0x07e4
+	textpointer WonAgainstXOpponentsText                           ; 0x07e5
+	textpointer Defeated5OpponentsText                             ; 0x07e6
+	textpointer SuccessfullyDefeated5OpponentsText                 ; 0x07e7
 	textpointer ConsecutiveWinRecordIncreasedText                  ; 0x07e8
-	textpointer Text07e9                                           ; 0x07e9
-	textpointer Text07ea                                           ; 0x07ea
-	textpointer Text07eb                                           ; 0x07eb
-	textpointer Text07ec                                           ; 0x07ec
-	textpointer Text07ed                                           ; 0x07ed
-	textpointer Text07ee                                           ; 0x07ee
-	textpointer Text07ef                                           ; 0x07ef
-	textpointer Text07f0                                           ; 0x07f0
-	textpointer Text07f1                                           ; 0x07f1
-	textpointer Text07f2                                           ; 0x07f2
-	textpointer Text07f3                                           ; 0x07f3
-	textpointer Text07f4                                           ; 0x07f4
-	textpointer Text07f5                                           ; 0x07f5
-	textpointer Text07f6                                           ; 0x07f6
-	textpointer Text07f7                                           ; 0x07f7
-	textpointer Text07f8                                           ; 0x07f8
-	textpointer Text07f9                                           ; 0x07f9
-	textpointer Text07fa                                           ; 0x07fa
-	textpointer Text07fb                                           ; 0x07fb
+	textpointer ClubMemberText                                     ; 0x07e9
+	textpointer ClubMasterText                                     ; 0x07ea
+	textpointer TechText                                           ; 0x07eb
+	textpointer StrangeLifeformText                                ; 0x07ec
+	textpointer GrandMasterText                                    ; 0x07ed
+	textpointer ChallengeMachineOpponent1Text                      ; 0x07ee
+	textpointer ChallengeMachineOpponent2Text                      ; 0x07ef
+	textpointer ChallengeMachineOpponent3Text                      ; 0x07f0
+	textpointer ChallengeMachineOpponent4Text                      ; 0x07f1
+	textpointer ChallengeMachineOpponent5Text                      ; 0x07f2
+	textpointer ChallengeMachineNotDuelledIconText                 ; 0x07f3
+	textpointer ChallengeMachineDuelWonIconText                    ; 0x07f4
+	textpointer ChallengeMachineDuelLostIconText                   ; 0x07f5
+	textpointer ChallengeMachineFireIconText                       ; 0x07f6
+	textpointer ChallengeMachineLightningIconText                  ; 0x07f7
+	textpointer ChallengeMachineWaterIconText                      ; 0x07f8
+	textpointer ChallengeMachineFightingIconText                   ; 0x07f9
+	textpointer ChallengeMachinePsychicIconText                    ; 0x07fa
+	textpointer ChallengeMachineGrassIconText                      ; 0x07fb
 	textpointer GrassEnergyName                                    ; 0x07fc
 	textpointer GrassEnergyDescription                             ; 0x07fd
 	textpointer FireEnergyName                                     ; 0x07fe

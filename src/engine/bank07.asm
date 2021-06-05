@@ -310,7 +310,7 @@ Func_1c52e: ; 1c52e (7:452e)
 	push hl
 	push af
 	ld a, [wLoadedNPCTempIndex]
-	ld l, LOADED_NPC_UNKNOWN
+	ld l, LOADED_NPC_DIRECTION_BACKUP
 	call GetItemInLoadedNPCIndex
 	pop af
 	ld [hl], a
@@ -325,9 +325,9 @@ Func_1c53f: ; 1c53f (7:453f)
 	ld l, LOADED_NPC_DIRECTION
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-	ld bc, LOADED_NPC_UNKNOWN - LOADED_NPC_DIRECTION
+	ld bc, LOADED_NPC_DIRECTION_BACKUP - LOADED_NPC_DIRECTION
 	add hl, bc
-	ld [hl], a
+	ld [hl], a ; LOADED_NPC_DIRECTION_BACKUP
 	push af
 	call Func_1c5e9
 	pop af
@@ -442,17 +442,17 @@ ApplyRandomCountToNPCAnim: ; 1c5b9 (7:45b9)
 ; 0x1c5e9
 
 ; sets the loaded NPC's direction
-; to the direction that is in LOADED_NPC_UNKNOWN
+; to the direction that is in LOADED_NPC_DIRECTION_BACKUP
 Func_1c5e9: ; 1c5e9 (7:45e9)
 	push hl
 	push bc
 	ld a, [wLoadedNPCTempIndex]
-	ld l, LOADED_NPC_UNKNOWN
+	ld l, LOADED_NPC_DIRECTION_BACKUP
 	call GetItemInLoadedNPCIndex
 	ld a, [hl]
-	ld bc, LOADED_NPC_DIRECTION - LOADED_NPC_UNKNOWN
+	ld bc, LOADED_NPC_DIRECTION - LOADED_NPC_DIRECTION_BACKUP
 	add hl, bc
-	ld [hl], a
+	ld [hl], a ; LOADED_NPC_DIRECTION
 	call UpdateNPCAnimation
 	pop bc
 	pop hl

@@ -5695,7 +5695,6 @@ PrintPlayAreaCardAttachedEnergies: ; 63e6 (1:63e6)
 	ld b, NUM_TYPES
 	call SafeCopyDataHLtoDE
 	ret
-; 0x6423
 
 Func_6423: ; 6423 (1:6423)
 	ld hl, wDefaultText
@@ -5707,7 +5706,6 @@ Func_6423: ; 6423 (1:6423)
 	dec e
 	jr nz, .asm_6428
 	ret
-; 0x6431
 
 Func_6431: ; 6431 (1:6431)
 	xor a
@@ -5772,7 +5770,6 @@ Func_6435:
 	call LoadCardDataToBuffer1_FromCardID
 	call OpenCardPage_FromCheckPlayArea
 	jp Func_6435
-; 0x64b0
 
 Func_64b0: ; 64b0 (1:64b0)
 	call ZeroObjectPositionsAndToggleOAMCopy
@@ -5812,7 +5809,6 @@ Func_64b0: ; 64b0 (1:64b0)
 	ld [wNumPlayAreaItems], a
 	call EnableLCD
 	ret
-; 0x64fc
 
 Func_64fc: ; 64fc (1:64fc)
 	ld a, [wLoadedCard1Atk1Category]
@@ -5825,7 +5821,6 @@ Func_64fc: ; 64fc (1:64fc)
 	ld hl, wLoadedCard1Atk1Name
 	call InitTextPrinting_ProcessTextFromPointerToID
 	ret
-; 0x6510
 
 ; display the screen that prompts the player to use the selected card's
 ; Pokemon Power. Includes the card's information above, and the Pokemon Power's
@@ -8123,7 +8118,6 @@ _TossCoin: ; 71ad (1:71ad)
 	ret z
 	scf
 	ret
-; 0x72ff
 
 Func_72ff: ; 72ff (1:72ff)
 	ldh [hff96], a
@@ -8134,7 +8128,6 @@ Func_72ff: ; 72ff (1:72ff)
 	call SerialSendByte
 	call Func_7344
 	ret
-; 0x7310
 
 Func_7310: ; 7310 (1:7310)
 	ldh [hff96], a
@@ -8169,7 +8162,6 @@ Func_7338: ; 7338 (1:7338)
 	jr c, Func_7338
 	call Func_7344
 	ret
-; 0x7344
 
 Func_7344: ; 7344 (1:7344)
     push af
@@ -8182,7 +8174,6 @@ Func_7344: ; 7344 (1:7344)
     call Func_3b31
     call DuelTransmissionError
     ret
-; 0x7354
 
 BuildVersion: ; 7354 (1:7354)
 	db "VER 12/20 09:36", TX_END
@@ -8268,7 +8259,6 @@ Func_7364: ; 7364 (1:7364)
 	call GetNPCDuelConfigurations
 	or a
 	ret
-; 0x73d8
 
 ; draws the current opponent to be selected
 ; (his/her portrait and name)
@@ -8296,14 +8286,12 @@ DrawOpponentSelectionScreen: ; 73d8 (1:73d8)
 	lb bc, 15, 10
 	call WriteTwoByteNumberInTxSymbolFormat
 	ret
-; 0x7408
 
 SelectComputerOpponentData: ; 7408 (1:7408)
-	textitem 10,  0, Text0089
+	textitem 10,  0, ClearOpponentNameText
 	textitem 10, 10, NumberOfPrizesText
 	textitem  3, 14, SelectComputerOpponentText
 	db $ff
-; 0x7415
 
 Func_7415: ; 7415 (1:7415)
 	xor a
@@ -8442,7 +8430,6 @@ PlayAttackAnimation: ; 7494 (1:7494)
 	pop af
 	ldh [hWhoseTurn], a
 	ret
-; 0x74dc
 
 Func_74dc: ; 74dc (1:74dc)
 	call EmptyScreen
@@ -8481,7 +8468,7 @@ Func_74dc: ; 74dc (1:74dc)
 	ld a, [wPrizeCardSelectionFrameCounter]
 	ld e, a
 	ld d, $0
-.asm_751b
+.card_loop
 	call LoadCardDataToBuffer1_FromCardID
 	ret c ; card not found
 	push de
@@ -8489,8 +8476,7 @@ Func_74dc: ; 74dc (1:74dc)
 	call Func_758a
 	pop de
 	inc de
-	jr .asm_751b
-; 0x7528
+	jr .card_loop
 
 ; seems to communicate with other device
 ; for starting a duel
@@ -8501,52 +8487,46 @@ DecideLinkDuelVariables: ; 7528 (1:7528)
 	ldtx hl, PressStartWhenReadyText
 	call DrawWideTextBox_PrintText
 	call EnableLCD
-.loop_frame
+.input_loop
 	call DoFrame
 	ldh a, [hKeysPressed]
 	bit B_BUTTON_F, a
-	jr nz, .cancel
+	jr nz, .link_cancel
 	and START
-	call Func_cc5
-	jr nc, .loop_frame
+	call Func_0cc5
+	jr nc, .input_loop
 	ld hl, wPlayerDuelVariables
 	ld a, [wSerialOp]
 	cp $29
-	jr z, .success
+	jr z, .link_continue
 	ld hl, wOpponentDuelVariables
 	cp $12
-	jr z, .success
-.cancel
+	jr z, .link_continue
+.link_cancel
 	call ResetSerial
 	scf
 	ret
-
-.success
+.link_continue
 	or a
 	ret
-; 0x755c
 
 	ret ; stray ret
 
 ReceiveDeckConfiguration: ; 755d (1:755d)
 	farcall _ReceiveDeckConfiguration
 	ret
-; 0x7562
 
 SendDeckConfiguration: ; 7562 (1:7562)
 	farcall _SendDeckConfiguration
 	ret
-; 0x7567
 
 ReceiveCard: ; 7567 (1:7567)
 	farcall _ReceiveCard
 	ret
-; 0x756c
 
 SendCard: ; 756c (1:756c)
 	farcall _SendCard
 	ret
-; 0x7571
 
 ; handles all the Card Pop! functionality
 DoCardPop: ; 7571 (1:7571)
@@ -8556,27 +8536,22 @@ DoCardPop: ; 7571 (1:7571)
 Func_7576: ; 7576 (1:7576)
 	farcall Func_1991f
 	ret
-; 0x757b
 
 PreparePrinterConnection: ; 757b (1:757b)
 	farcall _PreparePrinterConnection
 	ret
-; 0x7580
 
 PrintDeckConfiguration: ; 7580 (1:7580)
 	farcall _PrintDeckConfiguration
 	ret
-; 0x7585
 
 PrintCardList: ; 7585 (1:7585)
 	farcall _PrintCardList
 	ret
-; 0x758a
 
 Func_758a: ; 758a (1:758a)
 	farcall Func_19eb4
 	ret
-; 0x758f
 
 SetUpAndStartLinkDuel: ; 758f (1:758f)
 	farcall _SetUpAndStartLinkDuel
