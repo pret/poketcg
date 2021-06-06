@@ -2753,7 +2753,6 @@ wNumSRAMValidationErrors:: ; d3c7
 ; byte 0: minutes
 ; byte 1: hours (lower byte)
 ; byte 2: hours (higher byte)
-; unused?
 wPlayTimeHourMinutes:: ; d3c8
 	ds $3
 
@@ -2812,11 +2811,13 @@ wDebugSGBBorder:: ; d419
 wDebugBoosterSelection:: ; d41a
 	ds $1
 
-; used in Func_1c890
+; used in unreferenced function Func_1c890
+; otherwise unused
 wd41b:: ; d41b
 	ds $1
 
-; used in Func_1c890
+; used in unreferenced function Func_1c890
+; otherwise unused
 ; is read like a sprite index
 wd41c:: ; d41c
 	ds $1

@@ -1388,7 +1388,6 @@ Func_80cc3: ; 80cc3 (20:4cc3)
 Func_80cd6: ; 80cd6 (20:4cd6)
 	ret
 
-; unreferenced?
 ; seems to be used to look at each OW NPC sprites
 ; with functions to rotate NPC and animate them
 Func_80cd7: ; 80cd7 (20:4cd7)
