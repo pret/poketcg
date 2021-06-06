@@ -7,7 +7,6 @@ It uses the following ROM as a base:
 - Pokémon Trading Card Game (U) [C][!].gbc `sha1: 0f8670a583255cff3e5b7ca71b5d7454d928fc48`
 
 To assemble, first download RGBDS (https://github.com/gbdev/rgbds/releases) and extract it to /usr/local/bin.
-Copy the above ROM to this directory as "baserom.gbc".
 Run `make` in your shell.
 
 This will output a file named "poketcg.gbc".

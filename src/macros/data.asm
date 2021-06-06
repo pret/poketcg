@@ -1,7 +1,3 @@
-INCROM: MACRO
-INCBIN "baserom.gbc", \1, \2 - \1
-ENDM
-
 dn: MACRO
 	db \1 << 4 | \2
 ENDM
