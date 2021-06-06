@@ -25,7 +25,7 @@ sAnimationsDisabled:: ; a007
 
 s0a008:: ; a008
 	ds $1
-s0a009:: ; a009
+sSkipDelayAllowed:: ; a009
 	ds $1
 sReceivedLegendaryCards:: ; a00a
 	ds $1
@@ -250,7 +250,13 @@ sEventVars:: ; b87b
 	ds $45
 sGeneralSaveDataEnd::
 
-	ds $142
+	ds $141
+
+; 0: normal duel
+; 1: skip
+; unused?
+sDebugDuelMode:: ; ba41
+	ds $1
 
 sChallengeMachineMagic:: ; ba42
 	ds $2

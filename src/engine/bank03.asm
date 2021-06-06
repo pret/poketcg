@@ -262,7 +262,7 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wd0b8], a
 	ld [wd0b9], a
 	ld [wd0ba], a
-	ld [wd11b], a
+	ld [wConfigCursorYPos], a
 	ld [wd0c2], a
 	ld [wDefaultSong], a
 	ld [wd112], a
@@ -1136,7 +1136,7 @@ PauseMenu: ; c75a (3:475a)
 	jr z, .exit
 	call Func_c2a3
 	ld a, [wd0b8]
-	ld hl, PointerTable_c7a2
+	ld hl, PauseMenuPointerTable
 	call JumpToFunctionInTable
 	ld hl, Func_c797
 	call Func_c32b
@@ -1151,23 +1151,23 @@ Func_c797: ; c797 (3:4797)
 	farcall InitAndPrintPauseMenu
 	ret
 
-PointerTable_c7a2: ; c7a2 (3:47a2)
-	dw Func_c7ae
-	dw Func_c7b3
-	dw Func_c7b8
-	dw Func_c7cc
-	dw Func_c7e0
-	dw Func_c7e5
+PauseMenuPointerTable: ; c7a2 (3:47a2)
+	dw PauseMenu_Status
+	dw PauseMenu_Diary
+	dw PauseMenu_Deck
+	dw PauseMenu_Card
+	dw PauseMenu_Config
+	dw PauseMenu_Exit
 
-Func_c7ae: ; c7ae (3:47ae)
-	farcall Func_10059
+PauseMenu_Status: ; c7ae (3:47ae)
+	farcall _PauseMenu_Status
 	ret
 
-Func_c7b3: ; c7b3 (3:47b3)
-	farcall Func_100a2
+PauseMenu_Diary: ; c7b3 (3:47b3)
+	farcall _PauseMenu_Diary
 	ret
 
-Func_c7b8: ; c7b8 (3:47b8)
+PauseMenu_Deck: ; c7b8 (3:47b8)
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -1177,7 +1177,7 @@ Func_c7b8: ; c7b8 (3:47b8)
 	call Set_OBJ_8x8
 	ret
 
-Func_c7cc: ; c7cc (3:47cc)
+PauseMenu_Card: ; c7cc (3:47cc)
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -1187,12 +1187,12 @@ Func_c7cc: ; c7cc (3:47cc)
 	call Set_OBJ_8x8
 	ret
 
-Func_c7e0: ; c7e0 (3:47e0)
-	farcall Func_10548
+PauseMenu_Config: ; c7e0 (3:47e0)
+	farcall _PauseMenu_Config
 	ret
 
-Func_c7e5: ; c7e5 (3:47e5)
-	farcall Func_103d2
+PauseMenu_Exit: ; c7e5 (3:47e5)
+	farcall _PauseMenu_Exit
 	ret
 
 PCMenu: ; c7ea (3:47ea)
@@ -1237,10 +1237,10 @@ PCMenu: ; c7ea (3:47ea)
 	ret
 
 PointerTable_c846: ; c846 (3:4846)
-	dw Func_c859
-	dw Func_c86d
-	dw Func_c872
-	dw Func_c877
+	dw PCMenu_CardAlbum
+	dw PCMenu_ReadMail
+	dw PCMenu_Glossary
+	dw PCMenu_Print
 
 Func_c84e: ; c84e (3:484e)
 	ld a, [wd0b9]
@@ -1248,7 +1248,7 @@ Func_c84e: ; c84e (3:484e)
 	farcall InitAndPrintPauseMenu
 	ret
 
-Func_c859: ; c859 (3:4859)
+PCMenu_CardAlbum: ; c859 (3:4859)
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -1258,15 +1258,15 @@ Func_c859: ; c859 (3:4859)
 	call Set_OBJ_8x8
 	ret
 
-Func_c86d: ; c86d (3:486d)
-	farcall Func_1076d
+PCMenu_ReadMail: ; c86d (3:486d)
+	farcall _PCMenu_ReadMail
 	ret
 
-Func_c872: ; c872 (3:4872)
-	farcall Func_1052f
+PCMenu_Glossary: ; c872 (3:4872)
+	farcall _PCMenu_Glossary
 	ret
 
-Func_c877: ; c877 (3:4877)
+PCMenu_Print: ; c877 (3:4877)
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a

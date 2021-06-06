@@ -45,26 +45,326 @@ FlashWhiteScreen: ; 10031 (4:4031)
 	call DisableSRAM
 	ret
 
-Func_10059: ; 10059 (4:4059)
-	INCROM $10059, $100a2
+_PauseMenu_Status: ; 10059 (4:4059)
+	ld a, [wd291]
+	push af
+	call Func_10000
+	xor a
+	ld [wMedalScreenYOffeset], a
+	call LoadCollectedMedalTilemaps
+	lb de,  0,  0
+	lb bc, 20,  8
+	call DrawRegularTextBox
+	ld hl, StatusScreenLabels
+	call Func_111b3
+	ld bc, $101
+	call Func_1029a
+	ld bc, $c04
+	call Func_1024a
+	ld bc, $d06
+	call Func_101cd
+	call FlashWhiteScreen
+	ld a, $0b
+	call Func_12863
+	pop af
+	ld [wd291], a
+	ret
 
-Func_100a2: ; 100a2 (4:40a2)
-	INCROM $100a2, $1010c
+StatusScreenLabels: ; 10095 (4:4095)
+	db 7, 2
+	tx PlayerStatusNameText
 
-Func_1010c: ; 1010c (4:410c)
-	INCROM $1010c, $10197
+	db 7, 4
+	tx PlayerStatusAlbumText
+
+	db 7, 6
+	tx PlayerStatusPlayTimeText
+
+	db $ff
+
+_PauseMenu_Diary: ; 100a2 (4:40a2)
+	ld a, [wd291]
+	push af
+	call Func_10000
+	lb de,  0,  0
+	lb bc, 20, 12
+	call DrawRegularTextBox
+	ld hl, Unknown_100f7
+	call Func_111b3
+	ld bc, $103
+	call Func_1029a
+	ld bc, $c08
+	call Func_1024a
+	ld bc, $d0a
+	call Func_101cd
+	lb bc, 16, 6
+	call Func_1027c
+	call FlashWhiteScreen
+	ldtx hl, PlayerDiarySaveQuestionText
+	call YesOrNoMenuWithText_SetCursorToYes
+	jr c, .asm_100ec
+	farcall BackupPlayerPosition
+	call SaveAndBackupData
+	ld a, SFX_56
+	call PlaySFX
+	ldtx hl, PlayerDiarySaveConfirmText
+	jr .asm_100ef
+.asm_100ec
+	ldtx hl, PlayerDiarySaveCancelText
+.asm_100ef
+	call PrintScrollableText_NoTextBoxLabel
+	pop af
+	ld [wd291], a
+	ret
+
+Unknown_100f7: ; 100f7 (4:40f7)
+	db 5, 1
+	tx PlayerDiaryTitleText
+
+	db 7, 4
+	tx PlayerStatusNameText
+
+	db 7, 6
+	tx PlayerDiaryMedalsWonText
+
+	db 7, 8
+	tx PlayerStatusAlbumText
+
+	db 7, 10
+	tx PlayerStatusPlayTimeText
+
+	db $ff
+
+LoadCollectedMedalTilemaps: ; 1010c (4:410c)
+	xor a
+	ld [wd291], a
+	lb de,  0,  8
+	ld a, [wMedalScreenYOffeset]
+	add e
+	ld e, a
+	lb bc, 20, 10
+	call DrawRegularTextBox
+	lb de, 6, 9
+	ld a, [wMedalScreenYOffeset]
+	add e
+	ld e, a
+	call AdjustCoordinatesForBGScroll
+	call InitTextPrinting
+	ldtx hl, PlayerStatusMedalsTitleText
+	call PrintTextNoDelay
+	ld hl, Unknown_1017f
+	ld a, EVENT_MEDAL_FLAGS
+	farcall GetEventValue
+	or a
+	jr z, .asm_1017e
+	ld c, NUM_MEDALS
+.asm_10140
+	push bc
+	push hl
+	push af
+	bit 7, a
+	jr z, .asm_10157
+	ld b, [hl]
+	inc hl
+	ld a, [wMedalScreenYOffeset]
+	add [hl]
+	ld c, a
+	inc hl
+	ld a, [hli]
+	ld [wCurTilemap], a
+	farcall LoadTilemap_ToVRAM
+.asm_10157
+	pop af
+	rlca
+	pop hl
+	ld bc, $3
+	add hl, bc
+	pop bc
+	dec c
+	jr nz, .asm_10140
+	ld a, $80
+	ld [wd4ca], a
+	xor a
+	ld [wd4cb], a
+	farcall LoadTilesetGfx
+	xor a
+	ld [wd4ca], a
+	ld a, $01
+	ld [wd4cb], a
+	ld a, $76
+	farcall SetBGPAndLoadedPal
+.asm_1017e
+	ret
+
+Unknown_1017f: ; 1017f (4:417f)
+; x, y, tilemap
+	db  1, 10, TILEMAP_GRASS_MEDAL
+	db  6, 10, TILEMAP_SCIENCE_MEDAL
+	db 11, 10, TILEMAP_FIRE_MEDAL
+	db 16, 10, TILEMAP_WATER_MEDAL
+	db  1, 14, TILEMAP_LIGHTNING_MEDAL
+	db  6, 14, TILEMAP_PSYCHIC_MEDAL
+	db 11, 14, TILEMAP_ROCK_MEDAL
+	db 16, 14, TILEMAP_FIGHTING_MEDAL
 
 Func_10197: ; 10197 (4:4197)
-	INCROM $10197, $101df
+	xor a
+	ld [wd291], a
+	ld hl, Unknown_1017f
+	ld a, [wd115]
+	ld c, a
+	add a
+	add c
+	ld c, a
+	ld b, $00
+	add hl, bc
+	ld b, [hl]
+	inc hl
+	ld a, [wMedalScreenYOffeset]
+	add [hl]
+	ld c, a
+	ld a, [wd116]
+	bit 4, a
+	jr z, .asm_101c3
+	xor a
+	ld e, c
+	ld d, b
+	lb bc, 3, 3
+	lb hl, 0, 0
+	call FillRectangle
+	ret
+.asm_101c3
+	inc hl
+	ld a, [hl]
+	ld [wCurTilemap], a
+	farcall LoadTilemap_ToVRAM
+	ret
 
+Func_101cd: ; 101cd (4:41cd)
+	ld a, [wPlayTimeCounter + 2]
+	ld [wPlayTimeHourMinutes], a
+	ld a, [wPlayTimeCounter + 3]
+	ld [wPlayTimeHourMinutes + 1], a
+	ld a, [wPlayTimeCounter + 4]
+	ld [wPlayTimeHourMinutes + 2], a
+;	fallthrough
 Func_101df: ; 101df (4:41df)
-	INCROM $101df, $10217
+	push bc
+	ld a, [wPlayTimeHourMinutes + 1]
+	ld l, a
+	ld a, [wPlayTimeHourMinutes + 2]
+	ld h, a
+	call Func_10217
+	pop bc
+	push bc
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4
+	ld b, $03
+	call SafeCopyDataHLtoDE
+	ld a, [wPlayTimeHourMinutes]
+	add 100
+	ld l, a
+	ld a, 0
+	adc 0
+	ld h, a
+	call Func_10217
+	pop bc
+	ld a, b
+	add $04
+	ld b, a
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4 + 1
+	ld b, $02
+	call SafeCopyDataHLtoDE
+	ret
 
 Func_10217: ; 10217 (4:4217)
-	INCROM $10217, $1024f
+	ld de, wd4b4
+	ld bc, -100
+	call Func_1023b
+	ld bc, -10
+	call Func_1023b
+	ld a, l
+	add $20
+	ld [de], a
+	ld hl, wd4b4
+	ld c, $02
+.asm_1022f
+	ld a, [hl]
+	cp $20
+	jr nz, .asm_1023a
+	ld [hl], $00
+	inc hl
+	dec c
+	jr nz, .asm_1022f
+.asm_1023a
+	ret
 
+Func_1023b: ; 1023b (4:423b)
+	ld a, $1f
+.asm_1023d
+	inc a
+	add hl, bc
+	jr c, .asm_1023d
+	ld [de], a
+	inc de
+	ld a, l
+	sub c
+	ld l, a
+	ld a, h
+	sbc b
+	ld h, a
+	ret
+
+Func_1024a: ; 1024a (4:424a)
+	push bc
+	call GetCardAlbumProgress
+	pop bc
+;	fallthrough
 Func_1024f: ; 1024f (4:424f)
-	INCROM $1024f, $1029e
+	push bc
+	push de
+	push bc
+	ld l, d
+	ld h, $00
+	call Func_10217
+	pop bc
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4
+	ld b, $03
+	call SafeCopyDataHLtoDE
+	pop de
+	ld l, e
+	ld h, $00
+	call Func_10217
+	pop bc
+	ld a, b
+	add $04
+	ld b, a
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4
+	ld b, $03
+	call SafeCopyDataHLtoDE
+	ret
+
+Func_1027c: ; 1027c (4:427c)
+	push bc
+	farcall TryGiveMedalPCPacks
+	ld a, EVENT_MEDAL_COUNT
+	farcall GetEventValue
+	ld l, a
+	ld h, $00
+	call Func_10217
+	pop bc
+	call BCCoordToBGMap0Address
+	ld hl, wd4b4 + 2
+	ld b, $01
+	call SafeCopyDataHLtoDE
+	ret
+
+Func_1029a: ; 1029a (4:429a)
+	call DrawPlayerPortrait
+	ret
 
 Medal_1029e: ; 1029e (4:429e)
 	sub $8
@@ -79,9 +379,9 @@ Medal_1029e: ; 1029e (4:429e)
 	farcall SetMainSGBBorder
 	call DisableLCD
 	call Func_10000
-	ld a, $fa
-	ld [wd114], a
-	call Func_1010c
+	ld a, -6
+	ld [wMedalScreenYOffeset], a
+	call LoadCollectedMedalTilemaps
 	pop bc
 	ld a, c
 	add a
@@ -237,8 +537,8 @@ BoosterScenesAndNameTexts: ; 103c2 (4:43c2)
 	db SCENE_LABORATORY_BOOSTER, SCENE_LABORATORY_BOOSTER
 	tx LaboratoryBoosterText
 
-Func_103d2: ; 103d2 (4:43d2)
-	INCROM $103d2, $103d3
+_PauseMenu_Exit: ; 103d2 (4:43d2)
+	ret
 
 Duel_Init: ; 103d3 (4:43d3)
 	ld a, [wd291]
@@ -247,8 +547,8 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_10000
 	ld a, $4
 	ld [wTextBoxFrameType], a
-	lb de, 0, 12
-	lb bc, 20, 6
+	lb de,  0, 12
+	lb bc, 20,  6
 	call DrawRegularTextBox
 	ld a, [wNPCDuelDeckID]
 	add a
@@ -280,7 +580,7 @@ Duel_Init: ; 103d3 (4:43d3)
 	call Func_111b3 ; LoadDeckName
 
 .asm_10425
-	ld bc, $0703
+	lb bc, 7, 3
 	ld a, [wOpponentPortrait]
 	call Func_3e2a ; LoadDuelistPortrait
 	ld a, [wMatchStartTheme]
@@ -467,17 +767,846 @@ OpponentTitlesAndDeckNames: ; 1045b (4:445b)
 	tx StrangeLifeformText
 	tx ImakuniDeckName
 
-Func_1052f: ; 1052f (4:452f)
-	INCROM $1052f, $10548
+_PCMenu_Glossary: ; 1052f (4:452f)
+	ld a, [wd291]
+	push af
+	call Func_10000
+	lb de, $30, $ff
+	call SetupText
+	call FlashWhiteScreen
+	farcall OpenGlossaryScreen
+	pop af
+	ld [wd291], a
+	ret
 
-Func_10548: ; 10548 (4:4548)
-	INCROM $10548, $10756
+_PauseMenu_Config: ; 10548 (4:4548)
+	ld a, [wd291]
+	push af
+	ld a, [wLineSeparation]
+	push af
+	xor a
+	ld [wConfigExitSettingsCursorPos], a
+	ld a, 1
+	ld [wLineSeparation], a
+	call Func_10000
+	lb de,  0,  3
+	lb bc, 20,  5
+	call DrawRegularTextBox
+	lb de,  0,  9
+	lb bc, 20,  5
+	call DrawRegularTextBox
+	ld hl, Unknown_105bc
+	call Func_111b3
+	call Func_105cd
+	ld a, 0
+	call ShowRighArrowCursor
+	ld a, 1
+	call ShowRighArrowCursor
+	xor a
+	ld [wCursorBlinkTimer], a
+	call FlashWhiteScreen
+.asm_10588
+	call DoFrameIfLCDEnabled
+	ld a, [wConfigCursorYPos]
+	call Func_10649
+	ld hl, wCursorBlinkTimer
+	inc [hl]
+	call ConfigScreenHandleDPadInput
+	ldh a, [hKeysPressed]
+	and B_BUTTON | START
+	jr nz, .asm_105ab
+	ld a, [wConfigCursorYPos]
+	cp $02
+	jr nz, .asm_10588
+	ldh a, [hKeysPressed]
+	and A_BUTTON
+	jr z, .asm_10588
+.asm_105ab
+	ld a, SFX_02
+	call PlaySFX
+	call Func_10606
+	pop af
+	ld [wLineSeparation], a
+	pop af
+	ld [wd291], a
+	ret
+
+Unknown_105bc: ; 105bc (4:45bc)
+	db 1, 1
+	tx ConfigMenuTitleText
+
+	db 1, 4
+	tx ConfigMenuMessageSpeedText
+
+	db 1, 10
+	tx ConfigMenuDuelAnimationText
+
+	db 1, 16
+	tx ConfigMenuExitText
+
+	db $ff
+
+Func_105cd: ; 105cd (4:45cd)
+	call EnableSRAM
+	ld c, $00
+	ld hl, Unknown_10644
+.loop
+	ld a, [sTextSpeed]
+	cp [hl]
+	jr nc, .match
+	inc hl
+	inc c
+	ld a, c
+	cp $04
+	jr c, .loop
+.match
+	ld a, c
+	ld [wConfigMessageSpeedCursorPos], a
+	ld a, [sSkipDelayAllowed]
+	and $01
+	rlca
+	ld c, a
+	ld a, [wAnimationsDisabled]
+	and $01
+	or c
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_10602
+	add hl, bc
+	ld a, [hl]
+	ld [wConfigDuelAnimationCursorPos], a
+	call DisableSRAM
+	ret
+
+; indexes into Unknown_1063c
+; $00: show all
+; $01: skip some
+; $02: none
+Unknown_10602: ; 10602 (4:4602)
+	db $00 ; skip delay allowed = false, animations disabled = false
+	db $00 ; skip delay allowed = false, animations disabled = true (unused)
+	db $01 ; skip delay allowed = true, animations disabled = false
+	db $02 ; skip delay allowed = true, animations disabled = true
+
+Func_10606: ; 10606 (4:4606)
+	call EnableSRAM
+	ld a, [wConfigDuelAnimationCursorPos]
+	and $03
+	rlca
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_1063c
+	add hl, bc
+	ld a, [hli]
+	ld [wAnimationsDisabled], a
+	ld [sAnimationsDisabled], a
+	ld a, [hl]
+	ld [sSkipDelayAllowed], a
+	call DisableSRAM
+	ld a, [wConfigMessageSpeedCursorPos]
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_10644
+	add hl, bc
+	call EnableSRAM
+	ld a, [hl]
+	ld [sTextSpeed], a
+	ld [wTextSpeed], a
+	call DisableSRAM
+	ret
+
+Unknown_1063c: ; 1063c (4:463c)
+; animation disabled, skip delay allowed
+	db FALSE, FALSE ; show all
+	db FALSE, TRUE  ; skip some
+	db TRUE,  TRUE  ; none
+	db FALSE, FALSE ; unused
+
+; text printing delay
+Unknown_10644: ; 10644 (4:4644)
+	; slow to fast
+	db 6, 4, 2, 1, 0
+
+Func_10649: ; 10649 (4:4649)
+	push af
+	ld a, [wCursorBlinkTimer]
+	and $10
+	jr z, .asm_10654
+	pop af
+	jr HideRighArrowCursor
+.asm_10654
+	pop af
+	jr ShowRighArrowCursor
+
+ShowRighArrowCursor: ; 10657 (4:4657)
+	push bc
+	ld c, a
+	ld a, SYM_CURSOR_R
+	call Func_10669
+	pop bc
+	ret
+
+HideRighArrowCursor: ; 10660 (4:4660)
+	push bc
+	ld c, a
+	ld a, SYM_SPACE
+	call Func_10669
+	pop bc
+	ret
+
+Func_10669: ; 10669 (4:4669)
+	push af
+	sla c
+	ld b, $00
+	ld hl, ConfigScreenCursorPositions
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+	ld a, [bc]
+	add a
+	ld c, a
+	ld b, $00
+	add hl, bc
+	ld a, [hli]
+	ld b, a
+	ld a, [hl]
+	ld c, a
+	pop af
+	call WriteByteToBGMap0
+	ret
+
+ConfigScreenCursorPositions: ; 10688 (4:4688)
+	dw MessageSpeedCursorPositions
+	dw DuelAnimationsCursorPositions
+	dw ExitSettingsCursorPosition
+
+MessageSpeedCursorPositions: ; 1068e (4:468e)
+	dw wConfigMessageSpeedCursorPos
+	db  5, 6
+	db  7, 6
+	db  9, 6
+	db 11, 6
+	db 13, 6
+
+DuelAnimationsCursorPositions: ; 1069a (4:469a)
+	dw wConfigDuelAnimationCursorPos
+	db  1, 12
+	db  7, 12
+	db 15, 12
+
+ExitSettingsCursorPosition: ; 106a2 (4:46a2)
+	dw wConfigExitSettingsCursorPos
+	db 1, 16
+
+	db 0
+
+ConfigScreenHandleDPadInput: ; 106a7 (4:46a7)
+	ldh a, [hDPadHeld]
+	and D_PAD
+	ret z
+	farcall GetDirectionFromDPad
+	ld hl, ConfigScreenDPadHandlers
+	jp JumpToFunctionInTable
+
+ConfigScreenDPadHandlers: ; 106b6 (4:46b6)
+	dw ConfigScreenDPadUp ; up
+	dw ConfigScreenDPadRight ; right
+	dw ConfigScreenDPadDown ; down
+	dw ConfigScreenDPadLeft ; left
+
+ConfigScreenDPadUp: ; 106be (4:46be)
+	ld a, -1
+	jr ConfigScreenDPadDown.up_or_down
+
+ConfigScreenDPadDown: ; 106c2 (4:46c2)
+	ld a, 1
+.up_or_down
+	push af
+	ld a, [wConfigCursorYPos]
+	cp 2
+	jr z, .hide_cursor
+	call ShowRighArrowCursor
+	jr .skip
+.hide_cursor
+; hide "exit settings" cursor if leaving bottom row
+	call HideRighArrowCursor
+.skip
+	ld a, [wConfigCursorYPos]
+	ld b, a
+	pop af
+	add b
+	cp 3
+	jr c, .valid
+	jr z, .wrap_min
+; wrap max
+	ld a, 2 ; max
+	jr .valid
+.wrap_min
+	xor a ; min
+.valid
+	ld [wConfigCursorYPos], a
+	ld c, a
+	ld b, 0
+	ld hl, Unknown_106ff
+	add hl, bc
+	ld a, [hl]
+	ld [wCursorBlinkTimer], a
+	ld a, [wConfigCursorYPos]
+	call Func_10649
+	ld a, SFX_01
+	call PlaySFX
+	ret
+
+Unknown_106ff: ; 106ff (4:46ff)
+	db $18 ; message speed, start hidden
+	db $18 ; duel animation, start hidden
+	db $8 ; exit settings, start visible
+
+ConfigScreenDPadRight: ; 10702 (4:4702)
+	ld a, $01
+	jr ConfigScreenDPadLeft.left_or_right
+
+ConfigScreenDPadLeft: ; 10706 (4:4706)
+	ld a, $ff
+.left_or_right
+	push af
+	ld a, [wConfigCursorYPos]
+	call HideRighArrowCursor
+	pop af
+	call Func_1071e
+	ld a, [wConfigCursorYPos]
+	call ShowRighArrowCursor
+	xor a
+	ld [wCursorBlinkTimer], a
+	ret
+
+Func_1071e: ; 1071e (4:471e)
+	push af
+	ld a, [wConfigCursorYPos]
+	ld c, a
+	add a
+	add c
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_1074d
+	add hl, bc
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	ld c, [hl]
+	ld a, [de]
+	ld b, a
+	pop af
+	add b
+	cp c
+	jr c, .asm_10742
+	jr z, .asm_10742
+	cp $80
+	jr c, .asm_10741
+	ld a, c
+	jr .asm_10742
+.asm_10741
+	xor a
+.asm_10742
+	ld [de], a
+	ld a, c
+	or a
+	jr z, .asm_1074c
+	ld a, SFX_01
+	call PlaySFX
+.asm_1074c
+	ret
+
+Unknown_1074d: ; 1074d (4:474d)
+; x pos variable, max x value
+	dwb wConfigMessageSpeedCursorPos, 4
+	dwb wConfigDuelAnimationCursorPos, 2
+	dwb wConfigExitSettingsCursorPos, 0
 
 Func_10756: ; 10756 (4:4756)
-	INCROM $10756, $1076d
+	push hl
+	push bc
+	xor a
+	ld [wPCPackSelection], a
+	ld hl, wPCPacks
+	ld c, NUM_PC_PACKS
+.asm_10761
+	ld [hli], a
+	dec c
+	jr nz, .asm_10761
+	ld a, $1
+	call TryGivePCPack
+	pop bc
+	pop hl
+	ret
 
-Func_1076d: ; 1076d (4:476d)
-	INCROM $1076d, $10a70
+_PCMenu_ReadMail: ; 1076d (4:476d)
+	ld a, [wd291]
+	push af
+	call Func_10000
+	lb de, $30, $ff
+	call SetupText
+	lb de,  0,  0
+	lb bc, 20, 12
+	call DrawRegularTextBox
+	lb de,  0, 12
+	lb bc, 20,  6
+	call DrawRegularTextBox
+	ld hl, Unknown_107d2
+	call Func_111b3
+	call Func_10996
+	xor a
+	ld [wCursorBlinkTimer], a
+	call FlashWhiteScreen
+.asm_1079c
+	call DoFrameIfLCDEnabled
+	ld a, [wPCPackSelection]
+	call Func_1097c
+	call Func_10a05
+	ld hl, wCursorBlinkTimer
+	inc [hl]
+	call PCMailHandleDPadInput
+	call PCMailHandleAInput
+	ldh a, [hKeysPressed]
+	and B_BUTTON
+	jr z, .asm_1079c
+	ld a, SFX_03
+	call PlaySFX
+	pop af
+	ld [wd291], a
+	ret
+; 0x107c2
+
+; unreferenced?
+	db $01, $00, $00, $4A, $21, $B5, $42, $E0
+	db $03, $4A, $29, $94, $52, $FF, $7F, $00
+
+Unknown_107d2: ; 107d2 (4:47d2)
+	db 1, 0
+	tx Text0359
+
+	db 1, 14
+	tx Text035a
+
+	db 0, 20
+	tx Text035b
+
+	db $ff
+
+PCMailHandleDPadInput: ; 107df (4:47df)
+	ldh a, [hDPadHeld]
+	and D_PAD
+	ret z
+	farcall GetDirectionFromDPad
+	ld [wPCLastDirectionPressed], a
+	ld a, [wPCPackSelection]
+	push af
+	call Func_10989
+.asm_107f2
+	ld a, [wPCPackSelection]
+	add a
+	add a
+	ld c, a
+	ld a, [wPCLastDirectionPressed]
+	add c
+	ld c, a
+	ld b, $00
+	ld hl, PCMailTransitionTable
+	add hl, bc
+	ld a, [hl]
+	ld [wPCPackSelection], a
+	ld c, a
+	ld hl, wPCPacks
+	add hl, bc
+	ld a, [hl]
+	or a
+	jr z, .asm_107f2
+	pop af
+	ld c, a
+	ld a, [wPCPackSelection]
+	cp c
+	jr z, .asm_1081d
+	ld a, SFX_01
+	call PlaySFX
+.asm_1081d
+	call Func_10985
+	xor a
+	ld [wCursorBlinkTimer], a
+	ret
+
+PCMailTransitionTable: ; 10825 (4:4825)
+; up, right, down, left
+	db $0C, $01, $03, $02 ; mail 1
+	db $0D, $02, $04, $00 ; mail 2
+	db $0E, $00, $05, $01 ; mail 3
+	db $00, $04, $06, $05 ; mail 4
+	db $01, $05, $07, $03 ; mail 5
+	db $02, $03, $08, $04 ; mail 6
+	db $03, $07, $09, $08 ; mail 7
+	db $04, $08, $0A, $06 ; mail 8
+	db $05, $06, $0B, $07 ; mail 9
+	db $06, $0A, $0C, $0B ; mail 10
+	db $07, $0B, $0D, $09 ; mail 11
+	db $08, $09, $0E, $0A ; mail 12
+	db $09, $0D, $00, $0E ; mail 13
+	db $0A, $0E, $01, $0C ; mail 14
+	db $0B, $0C, $02, $0D ; mail 15
+
+PCMailHandleAInput: ; 10861 (4:4861)
+	ldh a, [hKeysPressed]
+	and A_BUTTON
+	ret z
+	ld a, SFX_02
+	call PlaySFX
+	call Func_10996
+	call Func_10985
+	ld a, [wPCPackSelection]
+	ld c, a
+	ld b, $00
+	ld hl, wPCPacks
+	add hl, bc
+	ld a, [hl]
+	ld [wSelectedPCPack], a
+	and $7f
+	ld [hl], a
+	or a
+	ret z
+	add a
+	add a
+	ld c, a
+	ld hl, PCMailTextPages
+	add hl, bc
+	ld a, [hli]
+	push hl
+	ld h, [hl]
+	ld l, a
+	ld a, [wPCPackSelection]
+	call Func_109ab
+	call PrintScrollableText_WithTextBoxLabel
+	call TryOpenPCMailBoosterPack
+	call Func_10000
+	lb de, $30, $ff
+	call SetupText
+	lb de,  0,  0
+	lb bc, 20, 12
+	call DrawRegularTextBox
+	ld hl, Unknown_107d2
+	call Func_111b3
+	call Func_10996
+	call Func_10985
+	call FlashWhiteScreen
+	pop hl
+	inc hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	or h
+	jr z, .no_page_two
+	ld a, [wPCPackSelection]
+	call Func_109ab
+	call PrintScrollableText_WithTextBoxLabel
+.no_page_two
+	lb de,  0, 12
+	lb bc, 20,  6
+	call DrawRegularTextBox
+	ld hl, Unknown_107d2
+	call Func_111b3
+	call DoFrameIfLCDEnabled
+	ret
+
+PCMailTextPages: ; 108e0 (4:48e0)
+	; unused
+	dw NULL
+	dw NULL
+
+	; mail 1
+	tx Text0401
+	tx Text0402
+
+	; mail 2
+	tx Text0403
+	tx Text0404
+
+	; mail 3
+	tx Text0405
+	tx Text0406
+
+	; mail 4
+	tx Text0407
+	tx Text0408
+
+	; mail 5
+	tx Text0409
+	tx Text040a
+
+	; mail 6
+	tx Text040b
+	tx Text040c
+
+	; mail 7
+	tx Text040d
+	tx Text040e
+
+	; mail 8
+	tx Text040f
+	tx Text0410
+
+	; mail 9
+	tx Text0411
+	tx Text0412
+
+	; mail 10
+	tx Text0413
+	dw NULL
+
+	; mail 11
+	tx Text0414
+	dw NULL
+
+	; mail 12
+	tx Text0415
+	dw NULL
+
+	; mail 13
+	tx Text0416
+	dw NULL
+
+	; mail 14
+	tx Text0417
+	dw NULL
+
+	; mail 15
+	tx Text0418
+	dw NULL
+
+TryOpenPCMailBoosterPack: ; 10920 (4:4920)
+	xor a
+	ld [wAnotherBoosterPack], a
+	ld a, [wSelectedPCPack]
+	bit 7, a
+	jr z, .booster_already_open
+	and $7f
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, PCMailBoosterPacks
+	add hl, bc
+	ld a, [hli]
+	push hl
+	call GiveBoosterPack
+	ld a, $01
+	ld [wAnotherBoosterPack], a
+	pop hl
+	ld a, [hl]
+	or a
+	jr z, .done
+	call GiveBoosterPack
+.done
+	call DisableLCD
+	ret
+
+.booster_already_open
+	call Func_10000
+	lb de, $30, $ff
+	call SetupText
+	ldtx hl, Text0419
+	call PrintScrollableText_NoTextBoxLabel
+	jr .done
+
+PCMailBoosterPacks: ; 1095c (4:495c)
+	db $00, $00 ; unused
+	db BOOSTER_COLOSSEUM_NEUTRAL, $00 ; mail 1
+	db BOOSTER_LABORATORY_PSYCHIC, $00 ; mail 2
+	db BOOSTER_EVOLUTION_GRASS, $00 ; mail 3
+	db BOOSTER_MYSTERY_LIGHTNING_COLORLESS, $00 ; mail 4
+	db BOOSTER_EVOLUTION_FIGHTING, $00 ; mail 5
+	db BOOSTER_COLOSSEUM_FIRE, $00 ; mail 6
+	db BOOSTER_LABORATORY_PSYCHIC, $00 ; mail 7
+	db BOOSTER_LABORATORY_PSYCHIC, $00 ; mail 8
+	db BOOSTER_MYSTERY_WATER_COLORLESS, $00 ; mail 9
+	db BOOSTER_COLOSSEUM_NEUTRAL, BOOSTER_EVOLUTION_NEUTRAL ; mail 10
+	db BOOSTER_MYSTERY_NEUTRAL, BOOSTER_LABORATORY_NEUTRAL ; mail 11
+	db BOOSTER_COLOSSEUM_TRAINER, $00 ; mail 12
+	db BOOSTER_EVOLUTION_TRAINER, $00 ; mail 13
+	db BOOSTER_MYSTERY_TRAINER_COLORLESS, $00 ; mail 14
+	db BOOSTER_LABORATORY_TRAINER, $00 ; mail 15
+
+Func_1097c: ; 1097c (4:497c)
+	ld a, [wCursorBlinkTimer]
+	and $10
+	jr z, Func_10985
+	jr Func_10989
+Func_10985: ; 10985 (4:4985)
+	ld a, SYM_CURSOR_R
+	jr Func_1098d
+Func_10989: ; 10989 (4:4989)
+	ld a, SYM_SPACE
+	jr Func_1098d
+Func_1098d: ; 1098d (4:498d)
+	push af
+	call Func_10a41
+	pop af
+	call WriteByteToBGMap0
+	ret
+
+Func_10996: ; 10996 (4:4996)
+	ld e, $00
+	ld hl, wPCPacks
+.asm_1099b
+	ld a, [hl]
+	or a
+	jr z, .asm_109a3
+	ld a, e
+	call Func_109d7
+.asm_109a3
+	inc hl
+	inc e
+	ld a, e
+	cp $0f
+	jr c, .asm_1099b
+	ret
+
+Func_109ab: ; 109ab (4:49ab)
+	push hl
+	add a
+	ld e, a
+	ld d, $00
+	ld hl, Unknown_109b9
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	pop hl
+	ret
+
+Unknown_109b9: ; 109b9 (4:49b9)
+	tx Text035d
+	tx Text035e
+	tx Text035f
+	tx Text0360
+	tx Text0361
+	tx Text0362
+	tx Text0363
+	tx Text0364
+	tx Text0365
+	tx Text0366
+	tx Text0367
+	tx Text0368
+	tx Text0369
+	tx Text036a
+	tx Text036b
+
+Func_109d7: ; 109d7 (4:49d7)
+	push hl
+	push bc
+	push de
+	push af
+	call Func_109ab
+	ld l, e
+	ld h, d
+	pop af
+	call Func_10a2f
+	ld e, c
+	ld d, b
+	call InitTextPrinting
+	call PrintTextNoDelay
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_109f0: ; 109f0 (4:49f0)
+	push hl
+	push bc
+	push de
+	call Func_10a2f
+	ld e, c
+	ld d, b
+	call InitTextPrinting
+	ldtx hl, Text035c
+	call PrintTextNoDelay
+	pop de
+	pop bc
+	pop hl
+	ret
+
+Func_10a05: ; 10a05 (4:4a05)
+	ld e, $00
+	ld hl, wPCPacks
+.asm_10a0a
+	ld a, [hl]
+	or a
+	jr z, .asm_10a27
+	bit 7, a
+	jr z, .asm_10a27
+	ld a, [wCursorBlinkTimer]
+	and $0c
+	jr z, .asm_10a23
+	cp $0c
+	jr nz, .asm_10a27
+	ld a, e
+	call Func_109f0
+	jr .asm_10a27
+.asm_10a23
+	ld a, e
+	call Func_109d7
+.asm_10a27
+	inc hl
+	inc e
+	ld a, e
+	cp $0f
+	jr c, .asm_10a0a
+	ret
+
+Func_10a2f: ; 10a2f (4:4a2f)
+	ld c, a
+	ld a, [wPCPackSelection]
+	push af
+	ld a, c
+	ld [wPCPackSelection], a
+	call Func_10a41
+	inc b
+	pop af
+	ld [wPCPackSelection], a
+	ret
+
+Func_10a41: ; 10a41 (4:4a41)
+	push hl
+	ld a, [wPCPackSelection]
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, PCMailCoordinates
+	add hl, bc
+	ld a, [hli]
+	ld b, a
+	ld c, [hl]
+	pop hl
+	ret
+
+PCMailCoordinates: ; 10a52 (4:4a52)
+	db  1,  2 ; mail 1
+	db  7,  2 ; mail 2
+	db 13,  2 ; mail 3
+	db  1,  4 ; mail 4
+	db  7,  4 ; mail 5
+	db 13,  4 ; mail 6
+	db  1,  6 ; mail 7
+	db  7,  6 ; mail 8
+	db 13,  6 ; mail 9
+	db  1,  8 ; mail 10
+	db  7,  8 ; mail 11
+	db 13,  8 ; mail 12
+	db  1, 10 ; mail 13
+	db  7, 10 ; mail 14
+	db 13, 10 ; mail 15
 
 ; gives the pc pack described in a
 TryGivePCPack: ; 10a70 (4:4a70)
@@ -525,7 +1654,7 @@ Func_10a9b: ; 10a9b (4:4a9b)
 	add LOW(.data_10ab1)
 	ld l, a
 	ld a, HIGH(.data_10ab1)
-	adc $00
+	adc 0
 	ld h, a
 	ld a, [hl]
 	ld [wd293], a
@@ -916,7 +2045,7 @@ Func_10c96: ; 10c96 (4:4c96)
 	ldh a, [hBankSRAM]
 	push af
 	push bc
-	ld a, $1
+	ld a, BANK("SRAM1")
 	call BankswitchSRAM
 	call CopyPalsToSRAMBuffer
 	call Func_10ab4
@@ -1067,10 +2196,34 @@ Func_10d74: ; 10d74 (4:4d74)
 ; 0x10d98
 
 Unknown_10d98: ; 10d98 (4:4d98)
-	INCROM $10d98, $10da9
+	db 12,  0 ; start menu coords
+	db  8, 14 ; start menu text box dimensions
+
+	db 14, 2 ; text alignment for InitTextPrinting
+	tx PauseMenuOptionsText
+	db $ff
+
+	db 13, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 6 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
 
 Unknown_10da9: ; 10da9 (4:4da9)
-	INCROM $10da9, $10dba
+	db 10,  0 ; start menu coords
+	db 10, 12 ; start menu text box dimensions
+
+	db 12, 2 ; text alignment for InitTextPrinting
+	tx Text0351
+	db $ff
+
+	db 11, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 5 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
 
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1
@@ -1100,10 +2253,48 @@ Func_10dba: ; 10dba (4:4dba)
 	ret
 
 Unknown_10df0: ; 10df0 (4:4df0)
-	INCROM $10df0, $10e17
+	dw Func_10dfb
+	dw Func_10dfb
+	dw Func_10dfb
+	dw Func_10dfb
+	dw Func_10dfa
+
+Func_10dfa: ; 10dfa (4:4dfa)
+	ret
+
+Func_10dfb: ; 10dfb (4:4dfb)
+	ld a, [wd10e]
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_10e0f
+	add hl, bc
+	ld a, [hli]
+	ld [wTxRam2], a
+	ld a, [hl]
+	ld [wTxRam2 + 1], a
+	ret
+
+Unknown_10e0f: ; 10e0f (4:4e0f)
+	tx Text0355
+	tx Text0356
+	tx Text0357
+	tx Text0358
 
 Unknown_10e17: ; 10e17 (4:4e17)
-	INCROM $10e17, $10e28
+	db  4,  0 ; start menu coords
+	db 16, 12 ; start menu text box dimensions
+
+	db  6, 2 ; text alignment for InitTextPrinting
+	tx Text0354
+	db $ff
+
+	db 5, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 5 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
 
 ; refresh the cursor's position based on the currently selected map
 ; and refresh the player's position based on the starting map
@@ -1845,14 +3036,14 @@ InvalidateSaveData: ; 1120f (4:520f)
 	ldh a, [hBankSRAM]
 
 	push af
-	ld a, $02
+	ld a, BANK("SRAM2")
 	call BankswitchSRAM
 	ld a, $08
 	xor $ff
-	ld [sb800 + 0], a
+	ld [sBackupGeneralSaveData + 0], a
 	ld a, $00
 	xor $ff
-	ld [sb800 + 1], a
+	ld [sBackupGeneralSaveData + 1], a
 	pop af
 
 	call BankswitchSRAM
@@ -2332,7 +3523,7 @@ WRAMToSRAMMapper: ; 11498 (4:5498)
 	wram_sram_map .EmptySRAMSlot,                     1, $00, $ff ; sb827
 	wram_sram_map wd0b8,                              1, $00, $ff ; sb828
 	wram_sram_map wd0b9,                              1, $00, $ff ; sb829
-	wram_sram_map wd11b,                              1, $00, $ff ; sb82a
+	wram_sram_map wConfigCursorYPos,                              1, $00, $ff ; sb82a
 	wram_sram_map wd0ba,                              1, $00, $ff ; sb82b
 	wram_sram_map wPCPackSelection,                   1,   0,  14 ; sPCPackSelection
 	wram_sram_map wPCPacks,                NUM_PC_PACKS, $00, $ff ; sPCPacks
@@ -3170,9 +4361,9 @@ MultichoiceTextbox_ConfigTable_ChooseDeckToDuelAgainst: ; 1224b (4:624b)
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $03          ; cursor max index
-	db $0f          ; cursor image
-
-	db $00, $00, $00 ; marker bytes -- end of config table
+	db SYM_CURSOR_R ; cursor image
+	db SYM_SPACE    ; tile behind cursor
+	dw NULL         ; function pointer if non-0
 
 MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
 	db $04, $00     ; x, y to start drawing box
@@ -3187,9 +4378,9 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
 	db $05, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $03          ; cursor max index
-	db $0f          ; cursor image
-
-	db $00, $00, $00 ; marker bytes -- end of config table
+	db SYM_CURSOR_R ; cursor image
+	db SYM_SPACE    ; tile behind cursor
+	dw NULL         ; function pointer if non-0
 
 SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
 	db $0A, $00     ; x, y to start drawing box
@@ -3200,9 +4391,9 @@ SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
 	db $0b, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $04          ; cursor max index
-	db $0f          ; cursor image
-
-	db $00, $00, $00 ; marker bytes -- end of config table
+	db SYM_CURSOR_R ; cursor image
+	db SYM_SPACE    ; tile behind cursor
+	dw NULL         ; function pointer if non-0
 
 SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 	db $06, $00     ; x, y to start drawing box
@@ -3213,9 +4404,9 @@ SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 	db $07, $02     ; cursor starting x, y
 	db $02          ; number of tiles the cursor moves per toggle
 	db $08          ; cursor max index
-	db $0f          ; cursor image
-
-	db $00, $00, $00 ; marker bytes -- end of config table
+	db SYM_CURSOR_R ; cursor image
+	db SYM_SPACE    ; tile behind cursor
+	dw NULL         ; function pointer if non-0
 
 OverworldMap_PlayerMovementPaths: ; 1229f (4:629f)
 	dw OverworldMap_MasonLaboratoryPaths
@@ -3882,7 +5073,60 @@ OverworldMap_StraightPath: ; 1265b (4:665b)
 OverworldMap_NoMovement: ; 1265f (4:665f)
 	db $ff, $ff
 
-	INCROM $12661, $126d1
+; unreferenced debug menu
+Func_12661: ; 12661 (4:6661)
+	xor a
+	ld [wDebugMenuSelection], a
+	ld [wDebugBoosterSelection], a
+	ld a, $03
+	ld [wDebugSGBBorder], a
+.asm_1266d
+	call DisableLCD
+	ld a, $00
+	ld [wTileMapFill], a
+	call EmptyScreen
+	call LoadSymbolsFont
+	lb de, $30, $7f
+	call SetupText
+	call Func_3ca0
+	call Func_12871
+	ld a, $01
+	ld [wLineSeparation], a
+	ld a, [wDebugMenuSelection]
+	ld hl, Unknown_128f7
+	call InitAndPrintPauseMenu
+	call EnableLCD
+.asm_12698
+	call DoFrameIfLCDEnabled
+	call HandleMenuInput
+	jr nc, .asm_12698
+	ldh a, [hCurMenuItem]
+	bit 7, a
+	jr nz, .asm_12698
+	ld [wDebugMenuSelection], a
+	xor a
+	ld [wLineSeparation], a
+	call Func_126b3
+	jr c, .asm_1266d
+	ret
+
+Func_126b3: ; 126b3 (4:66b3)
+	ldh a, [hCurMenuItem]
+	ld hl, Unknown_126bb
+	jp JumpToFunctionInTable
+
+Unknown_126bb: ; 126bb (4:66bb)
+	dw _GameLoop
+	dw DebugDuelMode
+	dw MainMenu_ContinueFromDiary
+	dw DebugCGBTest
+	dw DebugSGBFrame
+	dw DebugStandardBGCharacter
+	dw DebugLookAtSprite
+	dw DebugVEffect
+	dw DebugCreateBoosterPack
+	dw DebugCredits
+	dw DebugQuit
 
 ; usually, the game doesn't loop here at all, since as soon as a main menu option
 ; is selected, there is no need to come back to the menu.
@@ -3977,15 +5221,159 @@ MainMenu_ContinueDuel: ; 1277e (4:677e)
 	farcall $03, ExecuteGameEvent
 	or a
 	ret
-; 0x1279a
 
-	INCROM $1279a, $12863
+DebugLookAtSprite: ; 1279a (4:679a)
+	farcall Func_80cd7
+	scf
+	ret
+
+DebugVEffect: ; 127a0 (4:67a0)
+	farcall Func_80cd6
+	scf
+	ret
+
+DebugCreateBoosterPack: ; 127a6 (4:67a6)
+.go_back
+	ld a, [wDebugBoosterSelection]
+	ld hl, Unknown_12919
+	call InitAndPrintPauseMenu
+.input_loop_1
+	call DoFrameIfLCDEnabled
+	call HandleMenuInput
+	jr nc, .input_loop_1
+	ldh a, [hCurMenuItem]
+	cp e
+	jr nz, .cancel
+	ld [wDebugBoosterSelection], a
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_127f1
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	xor a
+	call InitAndPrintPauseMenu
+.input_loop_2
+	call DoFrameIfLCDEnabled
+	call HandleMenuInput
+	jr nc, .input_loop_2
+	ldh a, [hCurMenuItem]
+	cp e
+	jr nz, .go_back
+	ld a, [wDebugBoosterSelection]
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_127fb
+	add hl, bc
+	ld a, [hl]
+	add e
+	farcall GenerateBoosterPack
+	farcall OpenBoosterPack
+.cancel
+	scf
+	ret
+
+Unknown_127f1: ; 127f1 (4:67f1)
+	dw Unknown_1292a
+	dw Unknown_1292a
+	dw Unknown_1293b
+	dw Unknown_1294c
+	dw Unknown_1295d
+
+Unknown_127fb: ; 127fb (4:67fb)
+	db BOOSTER_COLOSSEUM_NEUTRAL
+	db BOOSTER_EVOLUTION_NEUTRAL
+	db BOOSTER_MYSTERY_NEUTRAL
+	db BOOSTER_LABORATORY_NEUTRAL
+	db BOOSTER_ENERGY_LIGHTNING_FIRE
+
+DebugCredits: ; 12800 (4:6800)
+	farcall Credits_1d6ad
+	scf
+	ret
+
+DebugCGBTest: ; 12806 (4:6806)
+	farcall Func_1c865
+	scf
+	ret
+
+DebugSGBFrame: ; 1280c (4:680c)
+	call DisableLCD
+	ld a, [wDebugSGBBorder]
+	farcall SetSGBBorder
+	ld a, [wDebugSGBBorder]
+	inc a
+	cp $04
+	jr c, .asm_1281f
+	xor a
+.asm_1281f
+	ld [wDebugSGBBorder], a
+	scf
+	ret
+
+DebugDuelMode: ; 12824 (4:6824)
+	call EnableSRAM
+	ld a, [sDebugDuelMode]
+	and $01
+	ld [sDebugDuelMode], a
+	ld hl, Unknown_12908
+	call InitAndPrintPauseMenu
+.input_loop
+	call DoFrameIfLCDEnabled
+	call HandleMenuInput
+	jr nc, .input_loop
+	ldh a, [hCurMenuItem]
+	cp e
+	jr nz, .input_loop
+	and $01
+	ld [sDebugDuelMode], a
+	call DisableSRAM
+	scf
+	ret
+
+DebugStandardBGCharacter: ; 1284c (4:684c)
+	ld a, $80
+	ld de, $0
+	lb bc, 16, 16
+	lb hl,  1, 16
+	call FillRectangle
+	ld a, $ff
+	call Func_12863
+	scf
+	ret
+
+DebugQuit: ; 12861 (4:6861)
+	or a
+	ret
 
 Func_12863: ; 12863 (4:6863)
-	INCROM $12863, $12871
+	push bc
+	ld b, a
+.asm_12865
+	push bc
+	call DoFrameIfLCDEnabled
+	pop bc
+	ldh a, [hKeysPressed]
+	and b
+	jr z, .asm_12865
+	pop bc
+	ret
 
 Func_12871: ; 12871 (4:6871)
-	INCROM $12871, $1288c
+	call ZeroObjectPositions
+	ld a, $01
+	ld [wVBlankOAMCopyToggle], a
+	call Set_OBJ_8x8
+	call Func_1288c
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
+	ldh [hWX], a
+	ldh [hWY], a
+	call Set_WD_off
+	ret
 
 Func_1288c: ; 1288c (4:688c)
 	push hl
@@ -4026,7 +5414,7 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	or a
 	; check if anything typed.
 	jr nz, .no_name
-	ld hl, .data
+	ld hl, .default_name
 .no_name
 	; set the default name.
 	ld de, sPlayerName
@@ -4040,16 +5428,116 @@ DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	ld [sPlayerName+$f], a
 	call DisableSRAM
 	ret
-.data
+
+.default_name
 	; "MARK": default player name.
-	; last two bytes are reserved for RNG.
 	textfw3 "M", "A", "R", "K"
-rept 6
-	done
-endr
-	db $10, $12
-Unknown_128fb: ; 128fb
-	INCROM $128fb, $1296e
+	db TX_END, TX_END, TX_END, TX_END
+
+Unknown_128f7: ; 128f7 (4:68f7)
+	db  0,  0 ; start menu coords
+	db 16, 18 ; start menu text box dimensions
+
+	db  2, 2 ; text alignment for InitTextPrinting
+	tx Text037a
+	db $ff
+
+	db 1, 2 ; cursor x, cursor y
+	db 1 ; y displacement between items
+	db 11 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_12908: ; 12908 (4:6908)
+	db 10, 0 ; start menu coords
+	db 10, 6 ; start menu text box dimensions
+
+	db 12, 2 ; text alignment for InitTextPrinting
+	tx Text037b
+	db $ff
+
+	db 11, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 2 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_12919: ; 12919 (4:6919)
+	db  0,  0 ; start menu coords
+	db 12, 12 ; start menu text box dimensions
+
+	db  2, 2 ; text alignment for InitTextPrinting
+	tx Text037c
+	db $ff
+
+	db 1, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 5 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_1292a: ; 1292a (4:692a)
+	db 12,  0 ; start menu coords
+	db  4, 16 ; start menu text box dimensions
+
+	db 14, 2 ; text alignment for InitTextPrinting
+	tx Text037d
+	db $ff
+
+	db 13, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 7 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_1293b: ; 1293b (4:693b)
+	db 12,  0 ; start menu coords
+	db  4, 14 ; start menu text box dimensions
+
+	db 14, 2 ; text alignment for InitTextPrinting
+	tx Text037e
+	db $ff
+
+	db 13, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 6 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_1294c: ; 1294c (4:694c)
+	db 12,  0 ; start menu coords
+	db  4, 12 ; start menu text box dimensions
+
+	db 14, 2 ; text alignment for InitTextPrinting
+	tx Text037f
+	db $ff
+
+	db 13, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 5 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
+
+Unknown_1295d: ; 1295d (4:695d)
+	db 12,  0 ; start menu coords
+	db  4, 10 ; start menu text box dimensions
+
+	db 14, 2 ; text alignment for InitTextPrinting
+	tx Text0380
+	db $ff
+
+	db 13, 2 ; cursor x, cursor y
+	db 2 ; y displacement between items
+	db 4 ; number of items
+	db SYM_CURSOR_R ; cursor tile number
+	db SYM_SPACE ; tile behind cursor
+	dw NULL ; function pointer if non-0
 
 ; disables all sprite animations
 ; and clears memory related to sprites
@@ -4496,10 +5984,44 @@ SetAnimationCounterAndLoop: ; 12b89 (4:6b89)
 	ret
 
 Func_12ba7: ; 12ba7 (4:6ba7)
-	INCROM $12ba7, $12bcd
+	push hl
+	push bc
+	push de
+	call EnableSRAM
+	ld hl, wSpriteAnimBuffer
+	ld de, sGeneralSaveDataEnd
+	ld bc, $100
+	call CopyDataHLtoDE
+	ld hl, wSpriteVRAMBuffer
+	ld bc, $40
+	call CopyDataHLtoDE
+	ld a, [wSpriteVRAMBufferSize]
+	ld [de], a
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
 
 Func_12bcd: ; 12bcd (4:6bcd)
-	INCROM $12bcd, $12bf3
+	push hl
+	push bc
+	push de
+	call EnableSRAM
+	ld hl, sGeneralSaveDataEnd
+	ld de, wSpriteAnimBuffer
+	ld bc, $100
+	call CopyDataHLtoDE
+	ld de, wSpriteVRAMBuffer
+	ld bc, $40
+	call CopyDataHLtoDE
+	ld a, [hl]
+	ld [wSpriteVRAMBufferSize], a
+	call DisableSRAM
+	pop de
+	pop bc
+	pop hl
+	ret
 
 ; clears wSpriteVRAMBufferSize and wSpriteVRAMBuffer
 Func_12bf3: ; 12bf3 (4:6bf3)
@@ -4602,7 +6124,32 @@ Func_12c4f: ; 12c4f (4:6c4f)
 	ret
 
 Func_12c5e: ; 12c5e (4:6c5e)
-	INCROM $12c5e, $12c7f
+	push hl
+	push bc
+	push de
+	ld c, $10
+	ld de, $4
+	ld hl, wSpriteVRAMBuffer
+.asm_12c69
+	ld a, [hl]
+	or a
+	jr z, .asm_12c77
+	push hl
+	push de
+	inc hl
+	ld a, [hli]
+	ld d, [hl]
+	call Func_12c4f
+	pop de
+	pop hl
+.asm_12c77
+	add hl, de
+	dec c
+	jr nz, .asm_12c69
+	pop de
+	pop bc
+	pop hl
+	ret
 
 ; input:
 ; a = scene ID (SCENE_* constant)
@@ -5109,7 +6656,182 @@ SGBPacket_CardPop: ; 12fb6 (4:6fb6)
 	ds 2 ; data set 3
 
 Func_12fc6: ; 12fc6 (4:6fc6)
-	INCROM $12fc6, $130ca
+	ld a, [wd291]
+	push af
+	push de
+	push bc
+	ld de, wNamingScreenNamePosition
+	ld a, [wCurTilemap]
+	cp TILEMAP_PLAYER
+	jr z, .asm_12fd9
+	ld de, sTextSpeed
+.asm_12fd9
+	ld a, e
+	ld [wd291], a
+	farcall LoadTilemap_ToVRAM
+	ld a, [wd61e]
+	add a
+	add a
+	ld c, a
+	ld b, $00
+	ld hl, Unknown_1301e
+	add hl, bc
+	ld a, [hli]
+	push hl
+	ld [wCurTileset], a
+	ld a, d
+	ld [wd4ca], a
+	xor a
+	ld [wd4cb], a
+	farcall LoadTilesetGfx
+	pop hl
+	xor a
+	ld [wd4ca], a
+	ld a, [wd291]
+	ld [wd4cb], a
+	ld a, [hli]
+	push hl
+	farcall SetBGPAndLoadedPal
+	pop hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	pop bc
+	farcall Func_7041d
+	pop de
+	pop af
+	ld [wd291], a
+	ret
+
+Unknown_1301e: ; 1301e (4:701e)
+	db TILESET_PLAYER, PALETTE_119
+	dw SGBData_PlayerPortraitPals
+
+	db TILESET_PLAYER, PALETTE_119
+	dw SGBData_PlayerPortraitPals
+
+	db TILESET_RONALD, PALETTE_121
+	dw SGBData_RonaldPortraitPals
+
+	db TILESET_SAM, PALETTE_122
+	dw SGBData_SamPortraitPals
+
+	db TILESET_IMAKUNI, PALETTE_123
+	dw SGBData_ImakuniPortraitPals
+
+	db TILESET_NIKKI, PALETTE_124
+	dw SGBData_NikkiPortraitPals
+
+	db TILESET_RICK, PALETTE_125
+	dw SGBData_RickPortraitPals
+
+	db TILESET_KEN, PALETTE_126
+	dw SGBData_KenPortraitPals
+
+	db TILESET_AMY, PALETTE_127
+	dw SGBData_AmyPortraitPals
+
+	db TILESET_ISAAC, PALETTE_128
+	dw SGBData_IsaacPortraitPals
+
+	db TILESET_MITCH, PALETTE_129
+	dw SGBData_MitchPortraitPals
+
+	db TILESET_GENE, PALETTE_130
+	dw SGBData_GenePortraitPals
+
+	db TILESET_MURRAY, PALETTE_131
+	dw SGBData_MurrayPortraitPals
+
+	db TILESET_COURTNEY, PALETTE_132
+	dw SGBData_CourtneyPortraitPals
+
+	db TILESET_STEVE, PALETTE_133
+	dw SGBData_StevePortraitPals
+
+	db TILESET_JACK, PALETTE_134
+	dw SGBData_JackPortraitPals
+
+	db TILESET_ROD, PALETTE_135
+	dw SGBData_RodPortraitPals
+
+	db TILESET_JOSEPH, PALETTE_136
+	dw SGBData_JosephPortraitPals
+
+	db TILESET_DAVID, PALETTE_137
+	dw SGBData_DavidPortraitPals
+
+	db TILESET_ERIK, PALETTE_138
+	dw SGBData_ErikPortraitPals
+
+	db TILESET_JOHN, PALETTE_139
+	dw SGBData_JohnPortraitPals
+
+	db TILESET_ADAM, PALETTE_140
+	dw SGBData_AdamPortraitPals
+
+	db TILESET_JONATHAN, PALETTE_141
+	dw SGBData_JonathanPortraitPals
+
+	db TILESET_JOSHUA, PALETTE_142
+	dw SGBData_JoshuaPortraitPals
+
+	db TILESET_NICHOLAS, PALETTE_143
+	dw SGBData_NicholasPortraitPals
+
+	db TILESET_BRANDON, PALETTE_144
+	dw SGBData_BrandonPortraitPals
+
+	db TILESET_MATTHEW, PALETTE_145
+	dw SGBData_MatthewPortraitPals
+
+	db TILESET_RYAN, PALETTE_146
+	dw SGBData_RyanPortraitPals
+
+	db TILESET_ANDREW, PALETTE_147
+	dw SGBData_AndrewPortraitPals
+
+	db TILESET_CHRIS, PALETTE_148
+	dw SGBData_ChrisPortraitPals
+
+	db TILESET_MICHAEL, PALETTE_149
+	dw SGBData_MichaelPortraitPals
+
+	db TILESET_DANIEL, PALETTE_150
+	dw SGBData_DanielPortraitPals
+
+	db TILESET_ROBERT, PALETTE_151
+	dw SGBData_RobertPortraitPals
+
+	db TILESET_BRITTANY, PALETTE_152
+	dw SGBData_BrittanyPortraitPals
+
+	db TILESET_KRISTIN, PALETTE_153
+	dw SGBData_KristinPortraitPals
+
+	db TILESET_HEATHER, PALETTE_154
+	dw SGBData_HeatherPortraitPals
+
+	db TILESET_SARA, PALETTE_155
+	dw SGBData_SaraPortraitPals
+
+	db TILESET_AMANDA, PALETTE_156
+	dw SGBData_AmandaPortraitPals
+
+	db TILESET_JENNIFER, PALETTE_157
+	dw SGBData_JenniferPortraitPals
+
+	db TILESET_JESSICA, PALETTE_158
+	dw SGBData_JessicaPortraitPals
+
+	db TILESET_STEPHANIE, PALETTE_159
+	dw SGBData_StephaniePortraitPals
+
+	db TILESET_AARON, PALETTE_160
+	dw SGBData_AaronPortraitPals
+
+	db TILESET_PLAYER, PALETTE_120
+	dw SGBData_LinkOpponentPortraitPals
 
 LoadBoosterGfx: ; 130ca (4:70ca)
 	push hl
@@ -5218,7 +6940,18 @@ BoosterLogoOAM: ; 13132 (4:7132)
 	db $18, $38, $1F, $00
 
 Func_131b3: ; 131b3 (4:71b3)
-	INCROM $131b3, $131d3
+	call ChallengeMachine_Initialize
+	call EnableSRAM
+	xor a
+	ld [sTotalChallengeMachineWins], a
+	ld [sTotalChallengeMachineWins + 1], a
+	ld [sPresentConsecutiveWins], a
+	ld [sPresentConsecutiveWins + 1], a
+	ld [sPresentConsecutiveWinsBackup], a
+	ld [sPresentConsecutiveWinsBackup + 1], a
+	ld [sPlayerInChallengeMachine], a
+	call DisableSRAM
+	ret
 
 ; if a challenge is already in progress, then resume
 ; otherwise, start a new 5 round challenge

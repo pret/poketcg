@@ -575,7 +575,6 @@ DecompressSGBPalette: ; 70403 (1c:4403)
 ; 0x7041d
 
 ; sends an SGB packet related with palettes
-; unreferenced?
 Func_7041d: ; 7041d (1c:441d)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
@@ -587,7 +586,7 @@ Func_7041d: ; 7041d (1c:441d)
 	push bc
 	push hl
 	push hl
-	ld hl, SGBData_UnusedPals1
+	ld hl, SGBData_PlayerPortraitPals
 	call DecompressSGBPalette
 	ld hl, wLoadedPalData
 	ld de, wTempSGBPacket + $1
@@ -612,10 +611,10 @@ Func_7041d: ; 7041d (1c:441d)
 	pop hl
 	ld c, $0f
 	ld a, l
-	cp LOW(SGBData_UnusedPals1)
+	cp LOW(SGBData_PlayerPortraitPals)
 	jr nz, .asm_7046a
 	ld a, h
-	cp HIGH(SGBData_UnusedPals1)
+	cp HIGH(SGBData_PlayerPortraitPals)
 	jr nz, .asm_7046a
 	ld c, $0a
 
@@ -845,173 +844,173 @@ SGBData_LaboratoryBooster: ; 73471 (1c:7471)
 	dw $20 ; length
 	INCBIN "data/sgb_data/laboratory_booster_pals.bin"
 
-SGBData_UnusedPals1: ; 73496 (1c:7496)
+SGBData_PlayerPortraitPals: ; 73496 (1c:7496)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_1.bin"
+	INCBIN "data/sgb_data/player_pals.bin"
 
-SGBData_UnusedPals2: ; 734bb (1c:74bb)
+SGBData_LinkOpponentPortraitPals: ; 734bb (1c:74bb)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_2.bin"
+	INCBIN "data/sgb_data/link_opponent_pals.bin"
 
-SGBData_UnusedPals_3: ; 734e0 (1c:74e0)
+SGBData_RonaldPortraitPals: ; 734e0 (1c:74e0)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_3.bin"
+	INCBIN "data/sgb_data/ronald_pals.bin"
 
-SGBData_UnusedPals_4: ; 73505 (1c:7505)
+SGBData_SamPortraitPals: ; 73505 (1c:7505)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_4.bin"
+	INCBIN "data/sgb_data/sam_pals.bin"
 
-SGBData_UnusedPals_5: ; 7352a (1c:752a)
+SGBData_ImakuniPortraitPals: ; 7352a (1c:752a)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_5.bin"
+	INCBIN "data/sgb_data/imakuni_pals.bin"
 
-SGBData_UnusedPals_6: ; 7354f (1c:754f)
+SGBData_NikkiPortraitPals: ; 7354f (1c:754f)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_6.bin"
+	INCBIN "data/sgb_data/nikki_pals.bin"
 
-SGBData_UnusedPals_7: ; 73574 (1c:7574)
+SGBData_RickPortraitPals: ; 73574 (1c:7574)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_7.bin"
+	INCBIN "data/sgb_data/rick_pals.bin"
 
-SGBData_UnusedPals_8: ; 73599 (1c:7599)
+SGBData_KenPortraitPals: ; 73599 (1c:7599)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_8.bin"
+	INCBIN "data/sgb_data/ken_pals.bin"
 
-SGBData_UnusedPals_9: ; 735be (1c:75be)
+SGBData_AmyPortraitPals: ; 735be (1c:75be)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_9.bin"
+	INCBIN "data/sgb_data/amy_pals.bin"
 
-SGBData_UnusedPals10: ; 735e3 (1c:75e3)
+SGBData_IsaacPortraitPals: ; 735e3 (1c:75e3)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_10.bin"
+	INCBIN "data/sgb_data/isaac_pals.bin"
 
-SGBData_UnusedPals11: ; 73608 (1c:7608)
+SGBData_MitchPortraitPals: ; 73608 (1c:7608)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_11.bin"
+	INCBIN "data/sgb_data/mitch_pals.bin"
 
-SGBData_UnusedPals12: ; 7362d (1c:762d)
+SGBData_GenePortraitPals: ; 7362d (1c:762d)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_12.bin"
+	INCBIN "data/sgb_data/gene_pals.bin"
 
-SGBData_UnusedPals13: ; 73652 (1c:7652)
+SGBData_MurrayPortraitPals: ; 73652 (1c:7652)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_13.bin"
+	INCBIN "data/sgb_data/murray_pals.bin"
 
-SGBData_UnusedPals14: ; 73677 (1c:7677)
+SGBData_CourtneyPortraitPals: ; 73677 (1c:7677)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_14.bin"
+	INCBIN "data/sgb_data/courtney_pals.bin"
 
-SGBData_UnusedPals15: ; 7369c (1c:769c)
+SGBData_StevePortraitPals: ; 7369c (1c:769c)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_15.bin"
+	INCBIN "data/sgb_data/steve_pals.bin"
 
-SGBData_UnusedPals16: ; 736c1 (1c:76c1)
+SGBData_JackPortraitPals: ; 736c1 (1c:76c1)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_16.bin"
+	INCBIN "data/sgb_data/jack_pals.bin"
 
-SGBData_UnusedPals17: ; 736e6 (1c:76e6)
+SGBData_RodPortraitPals: ; 736e6 (1c:76e6)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_17.bin"
+	INCBIN "data/sgb_data/rod_pals.bin"
 
-SGBData_UnusedPals18: ; 7370b (1c:770b)
+SGBData_JosephPortraitPals: ; 7370b (1c:770b)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_18.bin"
+	INCBIN "data/sgb_data/joseph_pals.bin"
 
-SGBData_UnusedPals19: ; 73730 (1c:7730)
+SGBData_DavidPortraitPals: ; 73730 (1c:7730)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_19.bin"
+	INCBIN "data/sgb_data/david_pals.bin"
 
-SGBData_UnusedPals20: ; 73755 (1c:7755)
+SGBData_ErikPortraitPals: ; 73755 (1c:7755)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_20.bin"
+	INCBIN "data/sgb_data/erik_pals.bin"
 
-SGBData_UnusedPals21: ; 7377a (1c:777a)
+SGBData_JohnPortraitPals: ; 7377a (1c:777a)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_21.bin"
+	INCBIN "data/sgb_data/john_pals.bin"
 
-SGBData_UnusedPals22: ; 7379f (1c:779f)
+SGBData_AdamPortraitPals: ; 7379f (1c:779f)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_22.bin"
+	INCBIN "data/sgb_data/adam_pals.bin"
 
-SGBData_UnusedPals23: ; 737c4 (1c:77c4)
+SGBData_JonathanPortraitPals: ; 737c4 (1c:77c4)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_23.bin"
+	INCBIN "data/sgb_data/jonathan_pals.bin"
 
-SGBData_UnusedPals24: ; 737e9 (1c:77e9)
+SGBData_JoshuaPortraitPals: ; 737e9 (1c:77e9)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_24.bin"
+	INCBIN "data/sgb_data/joshua_pals.bin"
 
-SGBData_UnusedPals25: ; 7380e (1c:780e)
+SGBData_NicholasPortraitPals: ; 7380e (1c:780e)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_25.bin"
+	INCBIN "data/sgb_data/nicholas_pals.bin"
 
-SGBData_UnusedPals26: ; 73833 (1c:7833)
+SGBData_BrandonPortraitPals: ; 73833 (1c:7833)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_26.bin"
+	INCBIN "data/sgb_data/brandon_pals.bin"
 
-SGBData_UnusedPals27: ; 73858 (1c:7858)
+SGBData_MatthewPortraitPals: ; 73858 (1c:7858)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_27.bin"
+	INCBIN "data/sgb_data/matthew_pals.bin"
 
-SGBData_UnusedPals28: ; 7387d (1c:787d)
+SGBData_RyanPortraitPals: ; 7387d (1c:787d)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_28.bin"
+	INCBIN "data/sgb_data/ryan_pals.bin"
 
-SGBData_UnusedPals29: ; 738a2 (1c:78a2)
+SGBData_AndrewPortraitPals: ; 738a2 (1c:78a2)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_29.bin"
+	INCBIN "data/sgb_data/andrew_pals.bin"
 
-SGBData_UnusedPals30: ; 738c7 (1c:78c7)
+SGBData_ChrisPortraitPals: ; 738c7 (1c:78c7)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_30.bin"
+	INCBIN "data/sgb_data/chris_pals.bin"
 
-SGBData_UnusedPals31: ; 738ec (1c:78ec)
+SGBData_MichaelPortraitPals: ; 738ec (1c:78ec)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_31.bin"
+	INCBIN "data/sgb_data/michael_pals.bin"
 
-SGBData_UnusedPals32: ; 73911 (1c:7911)
+SGBData_DanielPortraitPals: ; 73911 (1c:7911)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_32.bin"
+	INCBIN "data/sgb_data/daniel_pals.bin"
 
-SGBData_UnusedPals33: ; 73936 (1c:7936)
+SGBData_RobertPortraitPals: ; 73936 (1c:7936)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_33.bin"
+	INCBIN "data/sgb_data/robert_pals.bin"
 
-SGBData_UnusedPals34: ; 7395b (1c:795b)
+SGBData_BrittanyPortraitPals: ; 7395b (1c:795b)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_34.bin"
+	INCBIN "data/sgb_data/brittany_pals.bin"
 
-SGBData_UnusedPals35: ; 73980 (1c:7980)
+SGBData_KristinPortraitPals: ; 73980 (1c:7980)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_35.bin"
+	INCBIN "data/sgb_data/kristin_pals.bin"
 
-SGBData_UnusedPals36: ; 739a5 (1c:79a5)
+SGBData_HeatherPortraitPals: ; 739a5 (1c:79a5)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_36.bin"
+	INCBIN "data/sgb_data/heather_pals.bin"
 
-SGBData_UnusedPals37: ; 739ca (1c:79ca)
+SGBData_SaraPortraitPals: ; 739ca (1c:79ca)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_37.bin"
+	INCBIN "data/sgb_data/sara_pals.bin"
 
-SGBData_UnusedPals38: ; 739ef (1c:79ef)
+SGBData_AmandaPortraitPals: ; 739ef (1c:79ef)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_38.bin"
+	INCBIN "data/sgb_data/amanda_pals.bin"
 
-SGBData_UnusedPals39: ; 73a14 (1c:7a14)
+SGBData_JenniferPortraitPals: ; 73a14 (1c:7a14)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_39.bin"
+	INCBIN "data/sgb_data/jennifer_pals.bin"
 
-SGBData_UnusedPals40: ; 73a39 (1c:7a39)
+SGBData_JessicaPortraitPals: ; 73a39 (1c:7a39)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_40.bin"
+	INCBIN "data/sgb_data/jessica_pals.bin"
 
-SGBData_UnusedPals41: ; 73a5e (1c:7a5e)
+SGBData_StephaniePortraitPals: ; 73a5e (1c:7a5e)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_41.bin"
+	INCBIN "data/sgb_data/stephanie_pals.bin"
 
-SGBData_UnusedPals42: ; 73a83 (1c:7a83)
+SGBData_AaronPortraitPals: ; 73a83 (1c:7a83)
 	dw $20 ; length
-	INCBIN "data/sgb_data/unused_pals_42.bin"
+	INCBIN "data/sgb_data/aaron_pals.bin"
 
 SGBData_GameBoyLink: ; 73aa8 (1c:7aa8)
 	dw $40 ; length

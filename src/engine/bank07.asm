@@ -958,9 +958,9 @@ AddAllMastersToMastersBeatenList: ; 1c858 (7:4858)
 	cp $0b
 	jr c, .loop
 	ret
-; 0x1c865
 
-	ret ; stray ret
+Func_1c865: ; 1c865 (7:4865)
+	ret
 
 ; unreferenced debug function
 ; adjusts hSCX and hSCY by using the arrow keys
@@ -1974,7 +1974,7 @@ Func_1ce03: ; 1ce03 (7:4e03)
 	ld h, [hl]
 	ld l, a
 	jp Func_3bb5
-	
+
 .asm_1ce17
 	ld a, [wDuelAnimDamage]
 	ld l, a

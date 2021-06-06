@@ -1384,9 +1384,9 @@ Func_80cc3: ; 80cc3 (20:4cc3)
 	or c
 	jr nz, .loop
 	ret
-; 0x80cd6
 
-	ret ; stray ret
+Func_80cd6: ; 80cd6 (20:4cd6)
+	ret
 
 ; unreferenced?
 ; seems to be used to look at each OW NPC sprites

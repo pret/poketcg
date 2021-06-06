@@ -9,7 +9,7 @@ GameLoop: ; 4000 (1:4000)
 	call EnableSRAM
 	ld a, [sTextSpeed]
 	ld [wTextSpeed], a
-	ld a, [s0a009]
+	ld a, [sSkipDelayAllowed]
 	ld [wSkipDelayAllowed], a
 	call DisableSRAM
 	ld a, 1
@@ -7717,7 +7717,7 @@ InitVariablesToBeginDuel: ; 70aa (1:70aa)
 	ld [wPlayerAttackingCardIndex], a
 	ld [wPlayerAttackingAttackIndex], a
 	call EnableSRAM
-	ld a, [s0a009]
+	ld a, [sSkipDelayAllowed]
 	ld [wSkipDelayAllowed], a
 	call DisableSRAM
 	ld a, [wPlayerDuelistType]

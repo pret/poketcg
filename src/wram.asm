@@ -1171,7 +1171,7 @@ wNoEffectFromWhichStatus:: ; ccf1
 	ds $1
 
 ; when non-0, allows the player to skip some delays during a duel by pressing B.
-; value read from s0a009. probably only used for debugging.
+; value read from sSkipDelayAllowed. probably only used for debugging.
 wSkipDelayAllowed:: ; ccf2
 	ds $1
 
@@ -2396,7 +2396,7 @@ wd112:: ; d112
 wMatchStartTheme:: ; d113
 	ds $1
 
-wd114:: ; d114
+wMedalScreenYOffeset:: ; d114
 	ds $1
 
 wd115:: ; d115
@@ -2411,11 +2411,20 @@ wd116:: ; d116
 wAnotherBoosterPack:: ; d117
 	ds $1
 
-	ds $3
-
-wd11b:: ; d11b
+wConfigMessageSpeedCursorPos:: ; d118
 	ds $1
 
+wConfigDuelAnimationCursorPos:: ; d119
+	ds $1
+
+wConfigExitSettingsCursorPos:: ; d11a
+	ds $1
+
+wConfigCursorYPos:: ; d11b
+	ds $1
+
+; cursor is invisible if bit 4 is set (every $10 ticks)
+wCursorBlinkTimer:: ; d11c
 	ds $1
 
 wPCPackSelection:: ; d11d
@@ -2428,6 +2437,7 @@ wPCPacks:: ; d11e
 wPCLastDirectionPressed:: ; d12d
 	ds $1
 
+wSelectedPCPack:: ; d12e
 	ds $1
 
 wBGMapWidth:: ; d12f
@@ -2793,7 +2803,14 @@ wd416:: ; d416
 wd417:: ; d417
 	ds $1
 
-	ds $3
+wDebugMenuSelection:: ; d418
+	ds $1
+
+wDebugSGBBorder:: ; d419
+	ds $1
+
+wDebugBoosterSelection:: ; d41a
+	ds $1
 
 ; used in Func_1c890
 wd41b:: ; d41b
@@ -2889,9 +2906,7 @@ wd4b3:: ; d4b3
 	ds $1
 
 wd4b4:: ; d4b4
-	ds $1
-
-	ds $2
+	ds $3
 
 wd4b7:: ; d4b7
 	ds $1

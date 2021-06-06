@@ -2103,7 +2103,7 @@ Func_1996e: ; 1996e (6:596e)
 	ld [wTextSpeed], a
 	xor a
 	ld [sAnimationsDisabled], a
-	ld [s0a009], a
+	ld [sSkipDelayAllowed], a
 	ld [s0a004], a
 	ld [sTotalCardPopsDone], a
 	ld [sReceivedLegendaryCards], a
