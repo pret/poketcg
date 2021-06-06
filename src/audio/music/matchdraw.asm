@@ -104,4 +104,3 @@ Music_MatchDraw_Ch3: ; f7d47 (3d:7d47)
 	inc_octave
 	C_ 1
 	music_end
-; 0xf7d60

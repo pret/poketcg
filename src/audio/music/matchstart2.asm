@@ -173,4 +173,3 @@ Music_MatchStart2_Ch2: ; f79b4 (3d:79b4)
 	C_ 1
 	E_ 1
 	music_end
-; 0xf7a0f

@@ -465,10 +465,10 @@ OpenInPlayAreaScreen_TextTable:
 	tx AttackText             ; INPLAYAREA_PLAYER_BENCH_3
 	tx PKMNPowerText          ; INPLAYAREA_PLAYER_BENCH_4
 	tx DoneText               ; INPLAYAREA_PLAYER_BENCH_5
-	dw NONE                   ; INPLAYAREA_PLAYER_ACTIVE
+	dw NULL                   ; INPLAYAREA_PLAYER_ACTIVE
 	tx DuelistHandText_2      ; INPLAYAREA_PLAYER_HAND
 	tx DuelistDiscardPileText ; INPLAYAREA_PLAYER_DISCARD_PILE
-	dw NONE                   ; INPLAYAREA_OPP_ACTIVE
+	dw NULL                   ; INPLAYAREA_OPP_ACTIVE
 	tx DuelistHandText_2      ; INPLAYAREA_OPP_HAND
 	tx DuelistDiscardPileText ; INPLAYAREA_OPP_DISCARD_PILE
 	tx HandText               ; INPLAYAREA_OPP_BENCH_1
@@ -1283,7 +1283,7 @@ SetDuelAnimationScreen: ; 1909d (6:509d)
 	ld h, PLAYER_TURN
 	ld a, DUEL_ANIM_SCREEN_OPP_PLAY_AREA
 
-.ok:
+.ok
 	ld [wDuelAnimationScreen], a
 	ret
 
@@ -1435,7 +1435,6 @@ Func_19674: ; 19674 (6:5674)
 	jr nz, .loop_delay_3
 	nop
 	ret
-; 0x19692
 
 ; input a = byte to transmit through IR
 TransmitByteThroughIR: ; 19692 (6:5692)
@@ -1472,7 +1471,6 @@ ReceiveByteThroughIR_ZeroIfUnsuccessful: ; 196ba (6:56ba)
 	ret nc
 	xor a
 	ret
-; 0x196c0
 
 ; returns carry if there's some time out
 ; and output in register a of $ff
@@ -1543,14 +1541,12 @@ ReceiveByteThroughIR: ; 196c0 (6:56c0)
 	pop de
 	or a
 	ret
-; 0x19700
 
 ReturnZFlagUnsetAndCarryFlagSet: ; 19700 (6:5700)
 	ld a, $ff
 	or a ; z not set
 	scf  ; carry set
 	ret
-; 0x19705
 
 ; called when expecting to transmit data
 Func_19705: ; 19705 (6:5705)
@@ -1568,7 +1564,6 @@ Func_19705: ; 19705 (6:5705)
 	jr nz, .asm_19708
 	xor a
 	ret
-; 0x1971e
 
 ; called when expecting to receive data
 Func_1971e: ; 1971e (6:571e)
@@ -1584,11 +1579,9 @@ Func_1971e: ; 1971e (6:571e)
 	call TransmitByteThroughIR
 	xor a
 	ret
-; 0x19735
 
 ReturnZFlagUnsetAndCarryFlagSet2: ; 19735 (6:5735)
 	jp ReturnZFlagUnsetAndCarryFlagSet
-; 0x19738
 
 TransmitIRDataBuffer: ; 19738 (6:5738)
 	call Func_19705
@@ -1651,7 +1644,6 @@ ReceiveNBytesToHLThroughIR: ; 1977d (6:577d)
 	or a
 	jr nz, ReturnZFlagUnsetAndCarryFlagSet2
 	ret
-; 0x19792
 
 ; disables interrupts, and sets joypad and IR communication port
 ; switches to CGB normal speed
@@ -1663,7 +1655,6 @@ StartIRCommunications: ; 19792 (6:5792)
 	ld a, $c0
 	ldh [rRP], a
 	ret
-; 0x1979f
 
 ; reenables interrupts, and switches CGB back to double speed
 CloseIRCommunications: ; 1979f (6:579f)
@@ -1682,14 +1673,12 @@ CloseIRCommunications: ; 1979f (6:579f)
 	call SwitchToCGBDoubleSpeed
 	ei
 	ret
-; 0x197b8
 
 ; set rRP to 0
 ClearRP: ; 197b8 (6:57b8)
 	ld a, $00
 	ldh [rRP], a
 	ret
-; 0x197bd
 
 ; expects to receive a command (IRCMD_* constant)
 ; in wIRDataBuffer + 1, then calls the subroutine
@@ -1776,7 +1765,6 @@ ExecuteReceivedIRCommands: ; 197bd (6:57bd)
 	call .jp_hl
 	call StoreRegistersInIRDataBuffer
 	ret
-; 0x1981d
 
 ; returns carry set if request sent was not acknowledged
 TrySendIRRequest: ; 1981d (6:581d)
@@ -1805,7 +1793,6 @@ TrySendIRRequest: ; 1981d (6:581d)
 	call CloseIRCommunications
 	pop af
 	ret
-; 0x19842
 
 ; returns carry set if request was not received
 TryReceiveIRRequest: ; 19842 (6:5842)
@@ -1831,7 +1818,6 @@ TryReceiveIRRequest: ; 19842 (6:5842)
 	call CloseIRCommunications
 	pop af
 	ret
-; 0x19865
 
 ; sends request for other device to close current communication
 RequestCloseIRCommunication: ; 19865 (6:5865)
@@ -1847,7 +1833,6 @@ SafelyCloseIRCommunications: ; 19870 (6:5870)
 	call CloseIRCommunications
 	pop af
 	ret
-; 0x19876
 
 ; sends a request for data to be transmitted
 ; from the other device
@@ -1865,7 +1850,6 @@ RequestDataTransmissionThroughIR: ; 19876 (6:5876)
 	jr c, SafelyCloseIRCommunications
 	call ReceiveNBytesToHLThroughIR
 	jr SafelyCloseIRCommunications
-; 0x19889
 
 ; transmits data to be written in the other device
 ; hl = start of data to transmit
@@ -1885,7 +1869,6 @@ RequestDataReceivalThroughIR: ; 19889 (6:5889)
 .asm_1989e
 	call ReturnZFlagUnsetAndCarryFlagSet
 	jr SafelyCloseIRCommunications
-; 0x198a3
 
 ; first stores all the current registers in wIRDataBuffer
 ; then transmits it through IR
@@ -1903,7 +1886,6 @@ TransmitRegistersThroughIR: ; 198a3 (6:58a3)
 	inc sp
 	inc sp
 	jr SafelyCloseIRCommunications
-; 0x198b7
 
 ; stores af, hl, de and bc in wIRDataBuffer
 StoreRegistersInIRDataBuffer: ; 198b7 (6:58b7)
@@ -1930,7 +1912,6 @@ StoreRegistersInIRDataBuffer: ; 198b7 (6:58b7)
 	inc hl
 	ld [hl], b ; <- b
 	ret
-; 0x198d0
 
 ; loads all the registers that were stored
 ; from StoreRegistersInIRDataBuffer
@@ -1956,7 +1937,6 @@ LoadRegistersFromIRDataBuffer: ; 198d0 (6:58d0)
 	pop hl
 	pop af
 	ret
-; 0x198e7
 
 ; empties screen and replaces
 ; wVBlankFunctionTrampoline with HandleAllSpriteAnimations
@@ -1975,7 +1955,6 @@ Func_198e7: ; 198e7 (6:58e7)
 	ld [hl], HIGH(HandleAllSpriteAnimations)
 	ei
 	ret
-; 0x19907
 
 ; sets backup VBlank function as wVBlankFunctionTrampoline
 RestoreVBlankFunction: ; 19907 (6:5907)
@@ -1985,7 +1964,6 @@ RestoreVBlankFunction: ; 19907 (6:5907)
 	call Func_3ca4
 	bank1call ZeroObjectPositionsAndToggleOAMCopy
 	ret
-; 0x19917
 
 ; copies 2 bytes from hl to de while interrupts are disabled
 ; used to load or store wVBlankFunctionTrampoline
@@ -1999,7 +1977,6 @@ BackupVBlankFunctionTrampoline: ; 19917 (6:5917)
 	ld [de], a
 	ei
 	ret
-; 0x1991f
 
 Func_1991f: ; 1991f (6:591f)
 	add a
@@ -2156,7 +2133,6 @@ Func_19a12: ; 19a12 (6:5a12)
 	ld de, wDefaultText
 	call CopyText
 	ret
-; 0x19a1f
 
 ; hl = text ID
 LoadLinkConnectingScene: ; 19a1f (6:5a1f)
@@ -2169,7 +2145,6 @@ LoadLinkConnectingScene: ; 19a1f (6:5a1f)
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 	ret
-; 0x19a33
 
 ; shows Link Not Connected scene
 ; then asks the player whether they want to try again
@@ -2195,7 +2170,6 @@ ClearRPAndRestoreVBlankFunction: ; 19a4c (6:5a4c)
 	call RestoreVBlankFunction
 	pop af
 	ret
-; 0x19a55
 
 ; prepares IR communication parameter data
 ; a = a IRPARAM_* constant for the function of this connection
@@ -2232,7 +2206,6 @@ InitIRCommunications: ; 19a55 (6:5a55)
 	jr nz, .loop
 	call DisableSRAM
 	ret
-; 0x19a89
 
 ; returns carry if communication was unsuccessful
 ; if a = 0, then it was a communication error
@@ -2272,7 +2245,6 @@ PrepareSendCardOrDeckConfigurationThroughIR: ; 19a89 (6:5a89)
 	jr nz, SetIRCommunicationErrorCode_Error
 	or a
 	ret
-; 0x19ab7
 
 ; exchanges player names and IR communication parameters
 ; checks whether parameters for communication match
@@ -2316,7 +2288,6 @@ ExchangeIRCommunicationParameters: ; 19ab7 (6:5ab7)
 	xor a
 	scf
 	ret
-; 0x19af9
 
 SetIRCommunicationErrorCode_Error: ; 19af9 (6:5af9)
 	ld hl, wIRCommunicationErrorCode
@@ -2328,7 +2299,6 @@ SetIRCommunicationErrorCode_Error: ; 19af9 (6:5af9)
 	ld a, $01
 	scf
 	ret
-; 0x19b0d
 
 SetIRCommunicationErrorCode_NoError: ; 19b0d (6:5b0d)
 	ld hl, wOwnIRCommunicationParams
@@ -2340,7 +2310,6 @@ SetIRCommunicationErrorCode_NoError: ; 19b0d (6:5b0d)
 	call RequestCloseIRCommunication
 	or a
 	ret
-; 0x19b20
 
 ; makes device receptive to receive data from other device
 ; to write in wDuelTempList (either list of cards or a deck configuration)
@@ -2368,7 +2337,6 @@ TryReceiveCardOrDeckConfigurationThroughIR: ; 19b20 (6:5b20)
 	ld a, $01
 	scf
 	ret
-; 0x19b41
 
 ; returns carry if card(s) wasn't successfully sent
 _SendCard: ; 19b41 (6:5b41)
@@ -2408,12 +2376,10 @@ _SendCard: ; 19b41 (6:5b41)
 	; failed
 	scf
 	ret
-; 0x19b87
 
 PlayCardPopSong: ; 19b87 (6:5b87)
 	ld a, MUSIC_CARD_POP
 	jp PlaySong
-; 0x19b8c
 
 _ReceiveCard: ; 19b8c (6:5b8c)
 	call StopMusic
@@ -2443,7 +2409,6 @@ _ReceiveCard: ; 19b8c (6:5b8c)
 	jr nc, _ReceiveCard
 	scf
 	ret
-; 0x19bc5
 
 _SendDeckConfiguration: ; 19bc5 (6:5bc5)
 	call StopMusic
@@ -2472,7 +2437,6 @@ _SendDeckConfiguration: ; 19bc5 (6:5bc5)
 	jr nc, _SendDeckConfiguration
 	scf
 	ret
-; 0x19bfb
 
 _ReceiveDeckConfiguration: ; 19bfb (6:5bfb)
 	call StopMusic
@@ -2493,7 +2457,6 @@ _ReceiveDeckConfiguration: ; 19bfb (6:5bfb)
 	jr nc, _ReceiveDeckConfiguration ; loop back and try again
 	scf
 	ret
-; 0x19c20
 
 _DoCardPop: ; 19c20 (6:5c20)
 ; loads scene for Card Pop! screen
@@ -2569,7 +2532,6 @@ _DoCardPop: ; 19c20 (6:5c20)
 	call PrintScrollableText_NoTextBoxLabel
 	call RestoreVBlankFunction
 	ret
-; 0x19cb2
 
 ; handles all communications to the other device to do Card Pop!
 ; returns carry if Card Pop! is unsuccessful
@@ -2665,7 +2627,6 @@ HandleCardPopCommunications: ; 19cb2 (6:5cb2)
 	ldtx hl, ThePopWasntSuccessfulText
 	scf
 	ret
-; 0x19d49
 
 ; looks up the name in wNameBuffer in wCardPopNameList
 ; used to know whether this save file has done Card Pop!
@@ -2732,7 +2693,6 @@ LookUpNameInCardPopNameList: ; 19d49 (6:5d49)
 .not_same
 	scf
 	ret
-; 0x19d92
 
 ; loads in wLoadedCard1 a random card to be received
 ; this selection is done based on the rarity that is
@@ -2823,7 +2783,6 @@ DecideCardToReceiveFromCardPop: ; 19d92 (6:5d92)
 	jr z, .got_card_id
 	ld e, MEW2
 	jr .got_card_id
-; 0x19df7
 
 ; lists in wCardPopCardCandidates all cards that:
 ; - are Pokemon cards;
@@ -2876,7 +2835,6 @@ CreateCardPopCandidateList: ; 19df7 (6:5df7)
 	pop de
 	pop hl
 	ret
-; 0x19e32
 
 ; creates a unique two-byte hash from the name given in hl
 ; the low byte is calculated by simply adding up all characters
@@ -2899,7 +2857,6 @@ CalculateNameHash: ; 19e32 (6:5e32)
 	dec c
 	jr nz, .loop
 	ret
-; 0x19e42
 
 ; sends serial data to printer
 ; if there's an error in connection,
@@ -2981,7 +2938,6 @@ ShowPrinterConnectionErrorScene: ; 19e99 (6:5e99)
 	call RestoreVBlankFunction
 	scf
 	ret
-; 0x19eb4
 
 ; main card printer function
 Func_19eb4: ; 19eb4 (6:5eb4)
@@ -3017,7 +2973,6 @@ Func_19eb4: ; 19eb4 (6:5eb4)
 	call RestoreVBlankFunction
 	call ResetPrinterCommunicationSettings
 	jp HandlePrinterError
-; 0x19f05
 
 DrawCardPicInSRAMGfxBuffer2: ; 19f05 (6:5f05)
 	ld hl, wLoadedCard1Gfx
@@ -3033,7 +2988,6 @@ DrawCardPicInSRAMGfxBuffer2: ; 19f05 (6:5f05)
 	lb bc, 16, 12
 	call FillRectangle
 	ret
-; 0x19f20
 
 ; writes the tiles necessary to draw
 ; the card's information in sGfxBuffer0
@@ -3090,7 +3044,6 @@ DrawTopCardInfoInSRAMGfxBuffer0: ; 19f20 (6:5f20)
 	bank1call WriteTwoByteNumberInTxSymbolFormat
 .skip_pokemon_data
 	ret
-; 0x19f87
 
 Func_19f87: ; 19f87 (6:5f87)
 	call TryInitPrinterCommunications
@@ -3101,7 +3054,6 @@ Func_19f87: ; 19f87 (6:5f87)
 	call Func_1a0cc
 	call Func_1a111
 	ret
-; 0x19f99
 
 Func_19f99: ; 19f99 (6:5f99)
 	call TryInitPrinterCommunications
@@ -3115,7 +3067,6 @@ Func_19f99: ; 19f99 (6:5f99)
 	jr nz, .asm_19fa2
 	call Func_1a111
 	ret
-; 0x19fad
 
 ; writes the tiles necessary to draw
 ; the card's information in sGfxBuffer0
@@ -3163,14 +3114,12 @@ DrawBottomCardInfoInSRAMGfxBuffer0: ; 19fad (6:5fad)
 	call ProcessTextFromPointerToID
 	bank1call SetOneLineSeparation
 	ret
-; 0x1a004
 
 RetreatWeakResistData: ; 1a004 (6:6004)
 	textitem 1, 70, RetreatText
 	textitem 1, 71, WeaknessText
 	textitem 1, 72, ResistanceText
 	db $ff
-; 0x1a011
 
 Func_1a011: ; 1a011 (6:6011)
 	call TryInitPrinterCommunications
@@ -3184,7 +3133,6 @@ Func_1a011: ; 1a011 (6:6011)
 	jr nz, .asm_1a01a
 	call Func_1a108
 	ret
-; 0x1a025
 
 ; calls setup text and sets wTilePatternSelector
 Func_1a025: ; 1a025 (6:6025)
@@ -3195,7 +3143,6 @@ Func_1a025: ; 1a025 (6:6025)
 	xor a
 	ld [wTilePatternSelectorCorrection], a
 	ret
-; 0x1a035
 
 ; switches to CGB normal speed, resets serial
 ; enables SRAM and switches to SRAM1
@@ -3229,7 +3176,6 @@ ClearPrinterGfxBuffer: ; 1a035 (6:6035)
 	xor a
 	ld [wce9f], a
 	ret
-; 0x1a06b
 
 ; reverts settings changed by PrepareForPrinterCommunications
 ResetPrinterCommunicationSettings: ; 1a06b (6:606b)
@@ -3242,7 +3188,6 @@ ResetPrinterCommunicationSettings: ; 1a06b (6:606b)
 	call SetupText
 	pop af
 	ret
-; 0x1a080
 
 ; unreferenced
 ; send some bytes through serial
@@ -3250,7 +3195,6 @@ Func_1a080: ; 1a080 (6:6080)
 	ld bc, $0
 	lb de, PRINTERPKT_NUL, $0
 	jp SendPrinterPacket
-; 0x1a089
 
 ; tries initiating the communications for
 ; sending data to printer
@@ -3300,7 +3244,6 @@ TryInitPrinterCommunications: ; 1a089 (6:6089)
 	dec c
 	jr nz, .delay_loop
 	jr .init
-; 0x1a0cc
 
 ; loads tiles given by map in hl to sGfxBuffer5
 ; copies first 20 tiles, then offsets by 2 tiles
@@ -3355,7 +3298,6 @@ Func_1a0cc: ; 1a0cc (6:60cc)
 	pop bc
 	pop hl
 	ret
-; 0x1a108
 
 Func_1a108: ; 1a108 (6:6108)
 	call GetPrinterContrastSerialData
@@ -3403,7 +3345,6 @@ GetPrinterContrastSerialData: ; 1a138 (6:6138)
 
 .contrast_level_data
 	db $00, $20, $40, $60, $7f
-; 0x1a14b
 
 ; unreferenced
 Func_1a14b: ; 1a14b (6:614b)
@@ -3420,7 +3361,6 @@ Func_1a14b: ; 1a14b (6:614b)
 	ld [wce9d], a
 	scf
 	ret
-; 0x1a162
 
 ; a = saved deck index to print
 _PrintDeckConfiguration: ; 1a162 (6:6162)
@@ -3498,7 +3438,6 @@ _PrintDeckConfiguration: ; 1a162 (6:6162)
 	call ResetPrinterCommunicationSettings
 	call RestoreVBlankFunction
 	jp HandlePrinterError
-; 0x1a1ec
 
 SendCardListToPrinter: ; 1a1ec (6:61ec)
 	ld a, [wPrinterHorizontalOffset]
@@ -3589,7 +3528,6 @@ LoadCardInfoForPrinter: ; 1a235 (6:6235)
 	bank1call WriteTwoDigitNumberInTxSymbolFormat
 	pop hl
 	ret
-; 0x1a270
 
 _PrintCardList: ; 1a270 (6:6270)
 ; if Select button is held when printing card list
@@ -3870,7 +3808,6 @@ _PrintCardList: ; 1a270 (6:6270)
 	; Trainer
 	db $dc ; icon tile
 	tx TrainerCardText
-; 0x1a420
 
 ShowPrinterTransmitting: ; 1a420 (6:6420)
 	call Func_198e7
@@ -3881,7 +3818,6 @@ ShowPrinterTransmitting: ; 1a420 (6:6420)
 	call DrawWideTextBox_PrintText
 	call EnableLCD
 	ret
-; 0x1a435
 
 ; compresses $28 tiles in sGfxBuffer5
 ; and writes it in sGfxBuffer5 + $28 tiles.
@@ -3958,7 +3894,6 @@ CompressDataForPrinterSerialTransfer: ; 1a435 (6:6435)
 	ld hl, sGfxBuffer5 + $28 tiles
 	lb de, PRINTERPKT_DATA, $1
 	ret
-; 0x1a485
 
 ; checks whether the next byte sequence in hl, up to c bytes, can be compressed
 ; returns carry if the next sequence of bytes can be compressed,
@@ -4049,7 +3984,6 @@ CheckDataCompression: ; 1a485 (6:6485)
 	dec e
 	dec e
 	jr .no_carry
-; 0x1a4cf
 
 ; sets up to start a link duel
 ; decides which device will pick the number of prizes
@@ -4230,7 +4164,6 @@ _SetUpAndStartLinkDuel: ; 1a4cf (6:64cf)
 	bit A_BUTTON_F, b
 	jr z, .loop_input
 	ret
-; 0x1a61f
 
 Func_1a61f: ; 1a61f (6:661f)
 	push af

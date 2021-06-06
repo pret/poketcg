@@ -21,7 +21,6 @@ AnimData131:: ; b0000 (2c:4000)
 	frame_data 6, 2, 0, 4
 	frame_data 6, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0057
 
 AnimFrameTable55:: ; b0057 (2c:4057)
 	dw .data_b0065
@@ -134,7 +133,6 @@ AnimFrameTable55:: ; b0057 (2c:4057)
 	db -8, 0, 2, $0
 	db 0, -9, 6, $0
 	db 0, -1, 8, $0
-; 0xb01b4
 
 AnimData132:: ; b01b4 (2c:41b4)
 	frame_table AnimFrameTable56
@@ -162,7 +160,6 @@ AnimData132:: ; b01b4 (2c:41b4)
 	frame_data -1, 4, 0, 0
 	frame_data -1, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0217
 
 AnimFrameTable56:: ; b0217 (2c:4217)
 	dw .data_b0239
@@ -452,7 +449,6 @@ AnimFrameTable56:: ; b0217 (2c:4217)
 	db -30, 6, 9, (1 << OAM_X_FLIP)
 	db -18, -6, 9, (1 << OAM_Y_FLIP)
 	db -18, 6, 9, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb05b6
 
 AnimData133:: ; b05b6 (2c:45b6)
 	frame_table AnimFrameTable57
@@ -470,7 +466,6 @@ AnimData133:: ; b05b6 (2c:45b6)
 	frame_data 11, 16, 0, 0
 	frame_data 11, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb05f1
 
 AnimFrameTable57:: ; b05f1 (2c:45f1)
 	dw .data_b0609
@@ -761,7 +756,6 @@ AnimFrameTable57:: ; b05f1 (2c:45f1)
 	db 0, -12, 44, $0
 	db -8, 3, 42, $0
 	db -8, -5, 44, $0
-; 0xb09d5
 
 AnimData134:: ; b09d5 (2c:49d5)
 	frame_table AnimFrameTable58
@@ -782,7 +776,6 @@ AnimData134:: ; b09d5 (2c:49d5)
 	frame_data 12, 8, 0, 0
 	frame_data 12, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0a1c
 
 AnimFrameTable58:: ; b0a1c (2c:4a1c)
 	dw .data_b0a36
@@ -979,7 +972,6 @@ AnimFrameTable58:: ; b0a1c (2c:4a1c)
 	db -8, 24, 3, $0
 	db -16, 32, 2, (1 << OAM_X_FLIP)
 	db -8, 32, 3, (1 << OAM_X_FLIP)
-; 0xb0c7b
 
 AnimData135:: ; b0c7b (2c:4c7b)
 	frame_table AnimFrameTable59
@@ -993,7 +985,6 @@ AnimData135:: ; b0c7b (2c:4c7b)
 	frame_data 7, 9, 0, 0
 	frame_data 7, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0ca6
 
 AnimFrameTable59:: ; b0ca6 (2c:4ca6)
 	dw .data_b0cb6
@@ -1094,7 +1085,6 @@ AnimFrameTable59:: ; b0ca6 (2c:4ca6)
 	db -32, 40, 5, $0
 	db -24, 36, 6, $0
 	db -32, 32, 5, (1 << OAM_X_FLIP)
-; 0xb0dc6
 
 AnimData136:: ; b0dc6 (2c:4dc6)
 	frame_table AnimFrameTable60
@@ -1116,7 +1106,6 @@ AnimData136:: ; b0dc6 (2c:4dc6)
 	frame_data 3, 8, 0, 0
 	frame_data 3, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0e11
 
 AnimFrameTable60:: ; b0e11 (2c:4e11)
 	dw .data_b0e19
@@ -1191,7 +1180,6 @@ AnimFrameTable60:: ; b0e11 (2c:4e11)
 	db 0, -16, 25, (1 << OAM_X_FLIP)
 	db 8, 0, 26, (1 << OAM_X_FLIP)
 	db 8, -8, 27, (1 << OAM_X_FLIP)
-; 0xb0efd
 
 AnimData137:: ; b0efd (2c:4efd)
 	frame_table AnimFrameTable61
@@ -1205,7 +1193,6 @@ AnimData137:: ; b0efd (2c:4efd)
 	frame_data 5, 6, 0, 0
 	frame_data 5, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb0f28
 
 AnimFrameTable61:: ; b0f28 (2c:4f28)
 	dw .data_b0f34
@@ -1274,7 +1261,6 @@ AnimFrameTable61:: ; b0f28 (2c:4f28)
 	db 4, -12, 2, (1 << OAM_X_FLIP)
 	db 12, -12, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db 12, -20, 2, (1 << OAM_Y_FLIP)
-; 0xb0fe2
 
 AnimData138:: ; b0fe2 (2c:4fe2)
 	frame_table AnimFrameTable62
@@ -1296,7 +1282,6 @@ AnimData138:: ; b0fe2 (2c:4fe2)
 	frame_data 7, 6, 0, 4
 	frame_data 7, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb102d
 
 AnimFrameTable62:: ; b102d (2c:502d)
 	dw .data_b103d
@@ -1395,7 +1380,6 @@ AnimFrameTable62:: ; b102d (2c:502d)
 	db 16, -23, 5, $0
 	db 16, -15, 6, $0
 	db 8, -15, 4, $0
-; 0xb1145
 
 AnimData139:: ; b1145 (2c:5145)
 	frame_table AnimFrameTable63
@@ -1426,7 +1410,6 @@ AnimData139:: ; b1145 (2c:5145)
 	frame_data 0, 8, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb11b4
 
 AnimFrameTable63:: ; b11b4 (2c:51b4)
 	dw .data_b11d2
@@ -1633,7 +1616,6 @@ AnimFrameTable63:: ; b11b4 (2c:51b4)
 	db 16, 16, 2, (1 << OAM_Y_FLIP)
 	db 8, 16, 4, (1 << OAM_Y_FLIP)
 	db 0, 16, 10, (1 << OAM_Y_FLIP)
-; 0xb1421
 
 AnimData140:: ; b1421 (2c:5421)
 	frame_table AnimFrameTable64
@@ -1654,7 +1636,6 @@ AnimData140:: ; b1421 (2c:5421)
 	frame_data 14, 6, 0, 0
 	frame_data 14, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1468
 
 AnimFrameTable64:: ; b1468 (2c:5468)
 	dw .data_b1486
@@ -1872,7 +1853,6 @@ AnimFrameTable64:: ; b1468 (2c:5468)
 	db -24, -16, 0, (1 << OAM_X_FLIP)
 	db -48, 24, 0, (1 << OAM_X_FLIP)
 	db -48, 64, 0, (1 << OAM_X_FLIP)
-; 0xb1701
 
 AnimData141:: ; b1701 (2c:5701)
 	frame_table AnimFrameTable65
@@ -1890,7 +1870,6 @@ AnimData141:: ; b1701 (2c:5701)
 	frame_data 11, 16, 0, 0
 	frame_data 11, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb173c
 
 AnimFrameTable65:: ; b173c (2c:573c)
 	dw .data_b1754
@@ -2149,7 +2128,6 @@ AnimFrameTable65:: ; b173c (2c:573c)
 	db -12, 8, 9, (1 << OAM_X_FLIP)
 	db -12, 0, 10, (1 << OAM_X_FLIP)
 	db -4, 8, 11, (1 << OAM_X_FLIP)
-; 0xb1aa0
 
 AnimData142:: ; b1aa0 (2c:5aa0)
 	frame_table AnimFrameTable66
@@ -2162,7 +2140,6 @@ AnimData142:: ; b1aa0 (2c:5aa0)
 	frame_data 6, 26, 0, 0
 	frame_data 6, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1ac7
 
 AnimFrameTable66:: ; b1ac7 (2c:5ac7)
 	dw .data_b1ad5
@@ -2313,7 +2290,6 @@ AnimFrameTable66:: ; b1ac7 (2c:5ac7)
 	db 16, -8, 17, $0
 	db 16, 0, 18, $0
 	db 16, 8, 19, $0
-; 0xb1cbc
 
 AnimData143:: ; b1cbc (2c:5cbc)
 	frame_table AnimFrameTable67
@@ -2338,7 +2314,6 @@ AnimData143:: ; b1cbc (2c:5cbc)
 	frame_data 1, 2, -20, -7
 	frame_data 1, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1d13
 
 AnimFrameTable67:: ; b1d13 (2c:5d13)
 	dw .data_b1d17
@@ -2387,7 +2362,6 @@ AnimFrameTable67:: ; b1d13 (2c:5d13)
 	db -71, -88, 1, (1 << OAM_X_FLIP)
 	db -72, -96, 2, (1 << OAM_X_FLIP)
 	db -64, -96, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb1db1
 
 AnimData144:: ; b1db1 (2c:5db1)
 	frame_table AnimFrameTable68
@@ -2402,7 +2376,6 @@ AnimData144:: ; b1db1 (2c:5db1)
 	frame_data 1, 8, 8, -10
 	frame_data 1, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1de0
 
 AnimFrameTable68:: ; b1de0 (2c:5de0)
 	dw .data_b1de6
@@ -2443,7 +2416,6 @@ AnimFrameTable68:: ; b1de0 (2c:5de0)
 	db -7, 0, 12, (1 << OAM_X_FLIP)
 	db 1, 8, 13, (1 << OAM_X_FLIP)
 	db 1, 0, 14, (1 << OAM_X_FLIP)
-; 0xb1e51
 
 AnimData145:: ; b1e51 (2c:5e51)
 	frame_table AnimFrameTable68
@@ -2479,7 +2451,6 @@ AnimData145:: ; b1e51 (2c:5e51)
 	frame_data 1, 3, 32, 0
 	frame_data 1, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1ed4
 
 AnimData146:: ; b1ed4 (2c:5ed4)
 	frame_table AnimFrameTable69
@@ -2502,7 +2473,6 @@ AnimData146:: ; b1ed4 (2c:5ed4)
 	frame_data 6, 9, 0, 0
 	frame_data 6, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb1f23
 
 AnimFrameTable69:: ; b1f23 (2c:5f23)
 	dw .data_b1f31
@@ -2614,7 +2584,6 @@ AnimFrameTable69:: ; b1f23 (2c:5f23)
 	db 8, -12, 6, (1 << OAM_X_FLIP)
 	db 16, 12, 5, (1 << OAM_X_FLIP)
 	db 24, 12, 6, (1 << OAM_X_FLIP)
-; 0xb207c
 
 AnimData147:: ; b207c (2c:607c)
 	frame_table AnimFrameTable70
@@ -2640,7 +2609,6 @@ AnimData147:: ; b207c (2c:607c)
 	frame_data 7, 16, 0, 0
 	frame_data 7, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb20d7
 
 AnimFrameTable70:: ; b20d7 (2c:60d7)
 	dw .data_b20e7
@@ -2800,7 +2768,6 @@ AnimFrameTable70:: ; b20d7 (2c:60d7)
 	db 1, -8, 8, $0
 	db 1, 0, 9, $0
 	db 9, -5, 5, $0
-; 0xb22e3
 
 AnimData148:: ; b22e3 (2c:62e3)
 	frame_table AnimFrameTable71
@@ -2809,7 +2776,6 @@ AnimData148:: ; b22e3 (2c:62e3)
 	frame_data 7, 8, 0, 0
 	frame_data 7, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb22fa
 
 AnimFrameTable71:: ; b22fa (2c:62fa)
 	dw .data_b230a
@@ -2956,7 +2922,6 @@ AnimFrameTable71:: ; b22fa (2c:62fa)
 	db -32, -32, 4, $0
 	db 24, -32, 4, $0
 	db -4, -40, 4, $0
-; 0xb24d2
 
 AnimData151:: ; b24d2 (2c:64d2)
 	frame_table AnimFrameTable72
@@ -2981,7 +2946,6 @@ AnimData151:: ; b24d2 (2c:64d2)
 	frame_data 2, 3, 0, 0
 	frame_data 2, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb2529
 
 AnimFrameTable72:: ; b2529 (2c:6529)
 	dw .data_b2533
@@ -3051,7 +3015,6 @@ AnimFrameTable72:: ; b2529 (2c:6529)
 	db 0, 8, 1, $0
 	db -36, -32, 0, $0
 	db 4, -24, 0, $0
-; 0xb25f4
 
 AnimData152:: ; b25f4 (2c:65f4)
 	frame_table AnimFrameTable72
@@ -3082,7 +3045,6 @@ AnimData152:: ; b25f4 (2c:65f4)
 	frame_data 3, 4, 8, 0
 	frame_data 3, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb2663
 
 AnimData153:: ; b2663 (2c:6663)
 	frame_table AnimFrameTable73
@@ -3107,7 +3069,6 @@ AnimData153:: ; b2663 (2c:6663)
 	frame_data 2, 3, 0, 0
 	frame_data 2, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb26ba
 
 AnimFrameTable73:: ; b26ba (2c:66ba)
 	dw .data_b26c0
@@ -3143,7 +3104,6 @@ AnimFrameTable73:: ; b26ba (2c:66ba)
 	db -28, 16, 0, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db -28, -8, 0, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db -28, -24, 0, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb2717
 
 AnimData154:: ; b2717 (2c:6717)
 	frame_table AnimFrameTable74
@@ -3158,7 +3118,6 @@ AnimData154:: ; b2717 (2c:6717)
 	frame_data 2, 4, 0, 0
 	frame_data 2, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb2746
 
 AnimFrameTable74:: ; b2746 (2c:6746)
 	dw .data_b274c
@@ -3185,7 +3144,6 @@ AnimFrameTable74:: ; b2746 (2c:6746)
 	db -8, 0, 2, (1 << OAM_X_FLIP)
 	db 0, -8, 2, (1 << OAM_Y_FLIP)
 	db 0, 0, 2, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb277f
 
 AnimData155:: ; b277f (2c:677f)
 	frame_table AnimFrameTable75
@@ -3204,7 +3162,6 @@ AnimData155:: ; b277f (2c:677f)
 	frame_data 6, 6, 0, 0
 	frame_data 6, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb27be
 
 AnimFrameTable75:: ; b27be (2c:67be)
 	dw .data_b27cc
@@ -3335,7 +3292,6 @@ AnimFrameTable75:: ; b27be (2c:67be)
 	db 0, 7, 4, (1 << OAM_Y_FLIP)
 	db 0, -1, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db -8, -1, 5, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb2963
 
 AnimData156:: ; b2963 (2c:6963)
 	frame_table AnimFrameTable76
@@ -3348,7 +3304,6 @@ AnimData156:: ; b2963 (2c:6963)
 	frame_data 3, 16, 0, 0
 	frame_data 3, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb298a
 
 AnimFrameTable76:: ; b298a (2c:698a)
 	dw .data_b2992
@@ -3388,7 +3343,6 @@ AnimFrameTable76:: ; b298a (2c:698a)
 	db 1, 0, 1, (1 << OAM_X_FLIP)
 	db -7, -16, 5, $0
 	db -7, 8, 5, (1 << OAM_X_FLIP)
-; 0xb29ea
 
 AnimData157:: ; b29ea (2c:69ea)
 	frame_table AnimFrameTable77
@@ -3436,7 +3390,6 @@ AnimData157:: ; b29ea (2c:69ea)
 	frame_data 5, 2, 0, 0
 	frame_data 5, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb2a9d
 
 AnimFrameTable77:: ; b2a9d (2c:6a9d)
 	dw .data_b2ab9
@@ -3695,7 +3648,6 @@ AnimFrameTable77:: ; b2a9d (2c:6a9d)
 	db 0, -32, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db 1, -40, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db 2, -48, 1, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb2de7
 
 AnimData158:: ; b2de7 (2c:6de7)
 	frame_table AnimFrameTable78
@@ -3709,7 +3661,6 @@ AnimData158:: ; b2de7 (2c:6de7)
 	frame_data 0, 6, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb2e12
 
 AnimFrameTable78:: ; b2e12 (2c:6e12)
 	dw .data_b2e68
@@ -4228,7 +4179,6 @@ AnimFrameTable78:: ; b2e12 (2c:6e12)
 	db -57, -52, 1, $0
 	db -49, -60, 3, $0
 	db -49, -52, 3, (1 << OAM_X_FLIP)
-; 0xb33f3
 
 AnimData159:: ; b33f3 (2c:73f3)
 	frame_table AnimFrameTable78
@@ -4242,7 +4192,6 @@ AnimData159:: ; b33f3 (2c:73f3)
 	frame_data 0, 1, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb341e
 
 AnimData160:: ; b341e (2c:741e)
 	frame_table AnimFrameTable78
@@ -4256,7 +4205,6 @@ AnimData160:: ; b341e (2c:741e)
 	frame_data 0, 1, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3449
 
 AnimData161:: ; b3449 (2c:7449)
 	frame_table AnimFrameTable78
@@ -4270,7 +4218,6 @@ AnimData161:: ; b3449 (2c:7449)
 	frame_data 0, 1, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3474
 
 AnimData163:: ; b3474 (2c:7474)
 	frame_table AnimFrameTable78
@@ -4282,7 +4229,6 @@ AnimData163:: ; b3474 (2c:7474)
 	frame_data 30, 6, 0, 0
 	frame_data 30, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3497
 
 AnimData164:: ; b3497 (2c:7497)
 	frame_table AnimFrameTable78
@@ -4294,7 +4240,6 @@ AnimData164:: ; b3497 (2c:7497)
 	frame_data 36, 6, 0, 0
 	frame_data 36, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb34ba
 
 AnimData165:: ; b34ba (2c:74ba)
 	frame_table AnimFrameTable78
@@ -4306,7 +4251,6 @@ AnimData165:: ; b34ba (2c:74ba)
 	frame_data 42, 6, 0, 0
 	frame_data 42, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb34dd
 
 AnimData167:: ; b34dd (2c:74dd)
 	frame_table AnimFrameTable79
@@ -4319,7 +4263,6 @@ AnimData167:: ; b34dd (2c:74dd)
 	frame_data 2, 4, 0, 0
 	frame_data 6, 4, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3504
 
 AnimFrameTable79:: ; b3504 (2c:7504)
 	dw .data_b3512
@@ -4395,7 +4338,6 @@ AnimFrameTable79:: ; b3504 (2c:7504)
 	db -8, -12, 19, (1 << OAM_Y_FLIP)
 	db -8, -4, 20, (1 << OAM_Y_FLIP)
 	db -8, 4, 19, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb35cd
 
 AnimData168:: ; b35cd (2c:75cd)
 	frame_table AnimFrameTable79
@@ -4434,7 +4376,6 @@ AnimData168:: ; b35cd (2c:75cd)
 	frame_data 0, 2, 0, 5
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb365c
 
 AnimData169:: ; b365c (2c:765c)
 	frame_table AnimFrameTable79
@@ -4473,26 +4414,22 @@ AnimData169:: ; b365c (2c:765c)
 	frame_data 4, 2, 0, 5
 	frame_data 4, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb36eb
 
 AnimData170:: ; b36eb (2c:76eb)
 	frame_table AnimFrameTable79
 	frame_data 0, 1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb36f6
 
 AnimData171:: ; b36f6 (2c:76f6)
 	frame_table AnimFrameTable79
 	frame_data 4, 1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3701
 
 AnimData172:: ; b3701 (2c:7701)
 	frame_table AnimFrameTable80
 	frame_data 1, 30, 0, 0
 	frame_data -1, 30, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3710
 
 AnimFrameTable80:: ; b3710 (2c:7710)
 	dw .data_b3716
@@ -4623,21 +4560,18 @@ AnimFrameTable80:: ; b3710 (2c:7710)
 	db -20, -40, 15, $0
 	db -12, -40, 31, $0
 	db -4, -40, 47, $0
-; 0xb38e9
 
 AnimData173:: ; b38e9 (2c:78e9)
 	frame_table AnimFrameTable80
 	frame_data 0, 30, 0, 0
 	frame_data -1, 30, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb38f8
 
 AnimData174:: ; b38f8 (2c:78f8)
 	frame_table AnimFrameTable80
 	frame_data 2, 30, 0, 0
 	frame_data -1, 30, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3907
 
 AnimData175:: ; b3907 (2c:7907)
 	frame_table AnimFrameTable81
@@ -4654,7 +4588,6 @@ AnimData175:: ; b3907 (2c:7907)
 	frame_data 9, 4, 0, 0
 	frame_data -1, 6, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb393e
 
 AnimFrameTable81:: ; b393e (2c:793e)
 	dw .data_b3982
@@ -5021,7 +4954,6 @@ AnimFrameTable81:: ; b393e (2c:793e)
 	db -32, 6, 8, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db -32, -2, 9, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
 	db -40, 6, 10, (1 << OAM_X_FLIP) | (1 << OAM_Y_FLIP)
-; 0xb3d34
 
 AnimData176:: ; b3d34 (2c:7d34)
 	frame_table AnimFrameTable81
@@ -5060,14 +4992,12 @@ AnimData176:: ; b3d34 (2c:7d34)
 	frame_data 21, 6, 0, 0
 	frame_data -1, 6, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3dc3
 
 AnimData177:: ; b3dc3 (2c:7dc3)
 	frame_table AnimFrameTable81
 	frame_data 33, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3dd2
 
 AnimData179:: ; b3dd2 (2c:7dd2)
 	frame_table AnimFrameTable82
@@ -5106,49 +5036,42 @@ AnimData179:: ; b3dd2 (2c:7dd2)
 	frame_data 21, 6, 0, 0
 	frame_data -1, 6, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3e61
 
 AnimData180:: ; b3e61 (2c:7e61)
 	frame_table AnimFrameTable82
 	frame_data 33, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3e70
 
 AnimData182:: ; b3e70 (2c:7e70)
 	frame_table AnimFrameTable83
 	frame_data 18, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3e7f
 
 AnimData184:: ; b3e7f (2c:7e7f)
 	frame_table AnimFrameTable84
 	frame_data 18, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3e8e
 
 AnimData186:: ; b3e8e (2c:7e8e)
 	frame_table AnimFrameTable85
 	frame_data 8, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3e9d
 
 AnimData188:: ; b3e9d (2c:7e9d)
 	frame_table AnimFrameTable86
 	frame_data 8, 8, 0, 0
 	frame_data -1, 8, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3eac
 
 AnimData189:: ; b3eac (2c:7eac)
 	frame_table AnimFrameTable87
 	frame_data 0, 1, 0, 0
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3ebb
 
 AnimFrameTable87:: ; b3ebb (2c:7ebb)
 	dw .data_b3ebd
@@ -5187,14 +5110,12 @@ AnimFrameTable87:: ; b3ebb (2c:7ebb)
 	db 24, 40, 29, $0
 	db 24, 48, 30, $0
 	db 24, 56, 31, $0
-; 0xb3f3e
 
 AnimData190:: ; b3f3e (2c:7f3e)
 	frame_table AnimFrameTable88
 	frame_data 0, 37, 0, 0
 	frame_data -1, 26, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3f4d
 
 AnimFrameTable88:: ; b3f4d (2c:7f4d)
 	dw .data_b3f4f
@@ -5221,7 +5142,6 @@ AnimFrameTable88:: ; b3f4d (2c:7f4d)
 	db 6, 73, 19, $0
 	db 6, 65, 18, $0
 	db 6, 57, 17, $0
-; 0xb3fa0
 
 AnimData196:: ; b3fa0 (2c:7fa0)
 	frame_table AnimFrameTable91
@@ -5243,4 +5163,3 @@ AnimData196:: ; b3fa0 (2c:7fa0)
 	frame_data 0, 1, 3, 1
 	frame_data 0, -1, 0, 0
 	frame_data 0, 0, 0, 0
-; 0xb3feb

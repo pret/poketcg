@@ -73,4 +73,3 @@ AIActionTable_FlowerPower: ; 1509b (5:509b)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x15122

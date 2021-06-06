@@ -27,7 +27,6 @@ ExecuteOpeningSequenceCmd: ; 1d408 (7:5408)
 	call CallHL2
 	jr c, ExecuteOpeningSequenceCmd
 	ret
-; 0x1d42e
 
 AdvanceOpeningSequenceCmdPtrBy2: ; 1d42e (7:542e)
 	ld a, 2
@@ -51,7 +50,6 @@ AdvanceOpeningSequenceCmdPtr: ; 1d438 (7:5438)
 	ld [hl], a
 	pop hl
 	ret
-; 0x1d444
 
 OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 	ld c, $7
@@ -72,7 +70,6 @@ OpeningSequenceCmd_WaitOrbsAnimation: ; 1d444 (7:5444)
 .no_carry
 	or a
 	ret
-; 0x1d460
 
 OpeningSequenceCmd_Wait: ; 1d460 (7:5460)
 	ld a, c
@@ -80,7 +77,6 @@ OpeningSequenceCmd_Wait: ; 1d460 (7:5460)
 	call AdvanceOpeningSequenceCmdPtrBy3
 	scf
 	ret
-; 0x1d469
 
 OpeningSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	ld l, c
@@ -104,7 +100,6 @@ OpeningSequenceCmd_SetOrbsAnimations: ; 1d469 (7:5469)
 	call AdvanceOpeningSequenceCmdPtrBy4
 	scf
 	ret
-; 0x1d486
 
 OpeningSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	ld l, c
@@ -139,7 +134,6 @@ OpeningSequenceCmd_SetOrbsCoordinates: ; 1d486 (7:5486)
 	call AdvanceOpeningSequenceCmdPtrBy4
 	scf
 	ret
-; 0x1d4b0
 
 OpeningOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db $c0 ; GRASS
@@ -149,7 +143,6 @@ OpeningOrbAnimations_CharizardScene: ; 1d4b0 (7:54b0)
 	db $c1 ; LIGHTNING
 	db $c0 ; PSYCHIC
 	db $c1 ; FIGHTING
-; 0x1d4b7
 
 OpeningOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	; x coord, y coord
@@ -160,7 +153,6 @@ OpeningOrbCoordinates_CharizardScene: ; 1d4b7 (7:54b7)
 	db 160,  84 ; LIGHTNING
 	db 240, 100 ; PSYCHIC
 	db 160,  44 ; FIGHTING
-; 0x1d4c5
 
 OpeningOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db $c1 ; GRASS
@@ -170,7 +162,6 @@ OpeningOrbAnimations_ScytherScene: ; 1d4c5 (7:54c5)
 	db $c0 ; LIGHTNING
 	db $c1 ; PSYCHIC
 	db $c0 ; FIGHTING
-; 0x1d4cc
 
 OpeningOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	; x coord, y coord
@@ -181,7 +172,6 @@ OpeningOrbCoordinates_ScytherScene: ; 1d4cc (7:54cc)
 	db 240,  84 ; LIGHTNING
 	db 160, 100 ; PSYCHIC
 	db 240,  44 ; FIGHTING
-; 0x1d4da
 
 OpeningOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db $c2 ; GRASS
@@ -191,18 +181,16 @@ OpeningOrbAnimations_AerodactylScene: ; 1d4da (7:54da)
 	db $ce ; LIGHTNING
 	db $d1 ; PSYCHIC
 	db $d4 ; FIGHTING
-; 0x1d4e1
 
 OpeningOrbCoordinates_AerodactylScene: ; 1d4e1 (7:54e1)
 	; x coord, y coord
 	db 240,  32 ; GRASS
 	db 160, 112 ; FIRE
-	db $A0,  16 ; WATER
+	db 160,  16 ; WATER
 	db 240,  64 ; COLORLESS
 	db 160,  80 ; LIGHTNING
 	db 240,  96 ; PSYCHIC
 	db 160,  48 ; FIGHTING
-; 0x1d4ef
 
 OpeningOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db $c3 ; GRASS
@@ -212,7 +200,6 @@ OpeningOrbAnimations_InitialTitleScreen: ; 1d4ef (7:54ef)
 	db $cf ; LIGHTNING
 	db $d2 ; PSYCHIC
 	db $d5 ; FIGHTING
-; 0x1d4f6
 
 OpeningOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	; x coord, y coord
@@ -223,7 +210,6 @@ OpeningOrbCoordinates_InitialTitleScreen: ; 1d4f6 (7:54f6)
 	db  52, 144 ; LIGHTNING
 	db 132, 144 ; PSYCHIC
 	db  72, 144 ; FIGHTING
-; 0x1d504
 
 OpeningOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db $c4 ; GRASS
@@ -233,7 +219,6 @@ OpeningOrbAnimations_InTitleScreen: ; 1d504 (7:5504)
 	db $d0 ; LIGHTNING
 	db $d3 ; PSYCHIC
 	db $d6 ; FIGHTING
-; 0x1d50b
 
 OpeningOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	; x coord, y coord
@@ -244,7 +229,6 @@ OpeningOrbCoordinates_InTitleScreen: ; 1d50b (7:550b)
 	db  52, 252 ; LIGHTNING
 	db 144,  28 ; PSYCHIC
 	db  72,  76 ; FIGHTING
-; 0x1d519
 
 OpeningSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
 	ld a, MUSIC_TITLESCREEN
@@ -252,7 +236,6 @@ OpeningSequenceCmd_PlayTitleScreenMusic: ; 1d519 (7:5519)
 	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
-; 0x1d523
 
 OpeningSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 	call AssertSFXFinished
@@ -265,7 +248,6 @@ OpeningSequenceCmd_WaitSFX: ; 1d523 (7:5523)
 .no_carry
 	or a
 	ret
-; 0x1d530
 
 OpeningSequenceCmd_PlaySFX: ; 1d530 (7:5530)
 	ld a, c
@@ -273,7 +255,6 @@ OpeningSequenceCmd_PlaySFX: ; 1d530 (7:5530)
 	call AdvanceOpeningSequenceCmdPtrBy3
 	scf
 	ret
-; 0x1d539
 
 OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
 	ld a, TRUE
@@ -281,7 +262,6 @@ OpeningSequenceCmd_FadeIn: ; 1d539 (7:5539)
 	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
-; 0x1d543
 
 OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	farcall Func_10d50
@@ -290,7 +270,6 @@ OpeningSequenceCmd_FadeOut: ; 1d543 (7:5543)
 	call AdvanceOpeningSequenceCmdPtrBy2
 	scf
 	ret
-; 0x1d551
 
 OpeningSequenceCmd_LoadCharizardScene: ; 1d551 (7:5551)
 	lb bc, 6, 3
@@ -315,7 +294,6 @@ LoadOpeningSceneAndUpdateSGBBorder: ; 1d564 (7:5564)
 	farcall Func_70498
 	scf
 	ret
-; 0x1d575
 
 OpeningSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 	lb bc, 0, 0
@@ -324,7 +302,6 @@ OpeningSequenceCmd_LoadTitleScreenScene: ; 1d575 (7:5575)
 	call OpeningSequenceEmptyFunc
 	scf
 	ret
-; 0x1d582
 
 ; a = scene ID
 ; bc = coordinates for scene
@@ -343,8 +320,6 @@ LoadOpeningScene: ; 1d582 (7:5582)
 	call AdvanceOpeningSequenceCmdPtrBy2
 	call EnableLCD
 	ret
-; 0x1d59c
 
 OpeningSequenceEmptyFunc: ; 1d59c (7:559c)
 	ret
-; 0x1d59d

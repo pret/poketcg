@@ -75,4 +75,3 @@ AIActionTable_WondersOfScience: ; 151ad (5:51ad)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x15232

@@ -203,4 +203,3 @@ AIPerformScriptedTurn: ; 1483a (5:483a)
 	ld e, FIGHTING_ENERGY
 	call AIAttachEnergyInHandToCardInPlayArea
 	ret
-; 0x148dc

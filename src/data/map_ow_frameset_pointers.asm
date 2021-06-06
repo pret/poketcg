@@ -34,4 +34,3 @@ MapOWFramesetPointers: ; 805d6 (20:45d6)
 	dw DefaultOWFrameset,         DefaultOWFrameset            ; POKEMON_DOME_ENTRANCE
 	dw DefaultOWFrameset,         DefaultOWFrameset            ; POKEMON_DOME
 	dw HallOfHonorOWFrameset,     HallOfHonorOWFrameset        ; HALL_OF_HONOR
-; 0x8065e

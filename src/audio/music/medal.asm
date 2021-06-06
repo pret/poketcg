@@ -157,4 +157,3 @@ Music_Medal_Ch3: ; f7e9d (3d:7e9d)
 	speed 1
 	A_ 2
 	music_end
-; 0xf7ec8

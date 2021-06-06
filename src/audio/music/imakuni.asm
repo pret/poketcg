@@ -536,4 +536,3 @@ Music_Imakuni_Ch4: ; fafa4 (3e:6fa4)
 	snare1 15
 	snare1 15
 	EndMainLoop
-; 0xfafea

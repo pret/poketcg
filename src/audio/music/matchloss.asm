@@ -127,4 +127,3 @@ Music_MatchLoss_Ch3: ; f7ca7 (3d:7ca7)
 	cutoff 8
 	F_ 12
 	music_end
-; 0xf7cdf

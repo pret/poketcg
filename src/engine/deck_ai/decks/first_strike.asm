@@ -74,4 +74,3 @@ AIActionTable_FirstStrike: ; 14e89 (5:4e89)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14f0e

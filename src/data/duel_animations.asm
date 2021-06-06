@@ -775,4 +775,3 @@ Animations: ; 1ce32 (7:4e32)
 	db (1 << SPRITE_ANIM_FLAG_UNSKIPPABLE) | (1 << SPRITE_ANIM_FLAG_SPEED) ; anim flags
 	db SFX_STOP ; sound FX ID
 	db $00 ; handler function
-; 0x1d078

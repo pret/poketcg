@@ -138,4 +138,3 @@ AIDoTurn_GeneralNoRetreat: ; 148ff (5:48ff)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x149e8

@@ -9408,4 +9408,3 @@ NPCMovement_fce1: ; fce1 (3:7ce1)
 NPCMovement_fce3: ; fce3 (3:7ce3)
 	db NORTH | NO_MOVE
 	db $ff
-; 0xfce5

@@ -45,4 +45,3 @@ OpeningSequence: ; 1d59d (7:559d)
 	opening_seq_play_title_screen_music
 	opening_seq_wait 60
 	opening_seq_end
-; 0x1d614

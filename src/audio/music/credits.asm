@@ -2428,4 +2428,3 @@ Branch_fbeea:
 	EndLoop
 	snare1 13
 	music_ret
-; 0xfbef7

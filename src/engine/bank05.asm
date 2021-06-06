@@ -575,7 +575,6 @@ ConvertColorToEnergyCardID: ; 1430f (5:430f)
 	db FIGHTING_ENERGY
 	db PSYCHIC_ENERGY
 	db DOUBLE_COLORLESS_ENERGY
-; 0x14323
 
 ; returns carry if loaded attack effect has
 ; an "initial effect 2" or "require selection" command type
@@ -598,7 +597,6 @@ Func_14323: ; 14323 (5:4323)
 .set_carry
 	scf
 	ret
-; 0x1433d
 
 ; return carry depending on card index in a:
 ;	- if energy card, return carry if no energy card has been played yet
@@ -1853,7 +1851,6 @@ Func_1585b: ; 1585b (5:585b)
 	ld a, e
 	scf
 	ret
-; 0x15886
 
 ; expects a $00-terminated list of 3-byte data with the following:
 ; - non-zero value
@@ -1897,7 +1894,6 @@ Func_15886: ; 15886 (5:5886)
 	pop hl
 	inc hl
 	jr .loop_energy_cards
-; 0x158b2
 
 ; determine AI score for retreating
 ; return carry if AI decides to retreat
@@ -4049,7 +4045,6 @@ Func_16488: ; 16488 (5:6488)
 	ld a, [wAIScore]
 	ld [de], a
 	jr AIProcessAndTryToPlayEnergy.has_logic_flags
-; 0x164a1
 
 ; have AI choose an energy card to play, but do not play it.
 ; does not consider whether the cards have evolutions to be played.

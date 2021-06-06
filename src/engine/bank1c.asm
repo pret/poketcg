@@ -59,7 +59,6 @@ SetSGBBorder: ; 70044 (1c:4044)
 	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals3, SGBData_BorderMedals5
 	dw SGBBorderMedalsGfxPointers, SGBData_BorderMedals4, SGBData_BorderMedals5
 	dw SGBBorderDebugGfxPointers,  SGBData_BorderDebug3,  SGBData_BorderDebug4
-; 0x7006f
 
 ; forces SGB border intro
 ; unreferenced?
@@ -72,7 +71,6 @@ Func_7006f: ; 7006f (1c:406f)
 	call SetMainSGBBorderPalsAndMap
 	call Func_701c0
 	ret
-; 0x70082
 
 DecompressAndSendSGBBorder: ; 70082 (1c:4082)
 	ld a, [wConsole]
@@ -462,7 +460,6 @@ ENDM
 	border_medal_tile v0Tiles1 + $538, $72, $10
 	border_medal_tile v0Tiles1 + $53a, $73, $10
 	border_medal_tile v0Tiles1 + $53c, $74, $10
-; 0x7036a
 
 ; decompresses palette data depending on wd132
 ; then sends it as SGB packet
@@ -522,7 +519,6 @@ SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	dw SGBData_MapPals8  ; MAP_SGB_PALS_8
 	dw SGBData_MapPals9  ; MAP_SGB_PALS_9
 	dw SGBData_MapPals10 ; MAP_SGB_PALS_10
-; 0x703cb
 
 Func_703cb: ; 703cb (1c:43cb)
 	ld a, [wConsole]
@@ -572,7 +568,6 @@ DecompressSGBPalette: ; 70403 (1c:4403)
 	pop bc
 	pop hl
 	ret
-; 0x7041d
 
 ; sends an SGB packet related with palettes
 Func_7041d: ; 7041d (1c:441d)
@@ -650,7 +645,6 @@ Func_7041d: ; 7041d (1c:441d)
 	pop bc
 	pop hl
 	ret
-; 0x70498
 
 ; send an ATTR_BLK SGB packet
 ; input:
@@ -710,7 +704,6 @@ Func_704c7: ; 704c7 (1c:44c7)
 	pop hl
 	pop af
 	ret
-; 0x704d3
 
 SGBData_BorderDebug4: ; 704d3 (1c:44d3)
 	dw $800 ; length

@@ -1525,4 +1525,3 @@ Branch_f6b9a:
 	snare1 1
 	EndLoop
 	music_ret
-; 0xf6bb7

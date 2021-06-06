@@ -1156,4 +1156,3 @@ MysteriousPokemonCardList: ; 1b8c3 (6:78c3)
 	db  2, SWITCH
 	db  1, POKEMON_CENTER
 	db  0 ; end of list
-; 0x1b8e8

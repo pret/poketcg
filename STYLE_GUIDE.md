@@ -70,7 +70,6 @@ Another common case is functions that are declared in the home bank for accessib
 CopyCardNameAndLevel: ; 29f5 (0:29f5)
 	farcall _CopyCardNameAndLevel
 	ret
-; 0x29fa  
  ```
 ## Data labels
 
@@ -203,7 +202,6 @@ DuelHorizontalSeparatorTileData: ; 5199 (1:5199)
 	db 9, 6, $33, $34, 0
 	db 9, 7, $35, $36, $37, $37, $37, $37, $37, $37, $37, $37, $37, 0
 	db $ff
-; 0x51c0
 ```
 
 

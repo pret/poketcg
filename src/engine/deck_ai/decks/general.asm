@@ -192,4 +192,3 @@ AIProcessRetreat: ; 14786 (5:4786)
 	ld a, AI_ENERGY_TRANS_RETREAT ; retreat
 	farcall HandleAIEnergyTrans
 	ret
-; 0x147bd

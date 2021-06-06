@@ -1,6 +1,5 @@
 Func_1c000: ; 1c000 (7:4000)
 	jp Set_WD_off
-; 0x1c003
 
 ; unreferenced debug function
 ; prints player's coordinates by pressing B
@@ -49,7 +48,6 @@ Func_1c003: ; 1c003 (7:4003)
 .set_wd_on
 	call Set_WD_on
 	ret
-; 0x1c056
 
 Func_1c056: ; 1c056 (7:4056)
 	push hl
@@ -160,7 +158,6 @@ ClearNPCs: ; 1c440 (7:4440)
 	pop bc
 	pop hl
 	ret
-; 0x1c455
 
 GetNPCDirection: ; 1c455 (7:4455)
 	push hl
@@ -402,7 +399,6 @@ UpdateNPCAnimation: ; 1c58e (7:458e)
 	pop bc
 	pop hl
 	ret
-; 0x1c5b9
 
 ; if NPC's sprite has an animation,
 ; give it a random initial value
@@ -439,7 +435,6 @@ ApplyRandomCountToNPCAnim: ; 1c5b9 (7:45b9)
 	pop bc
 	pop hl
 	ret
-; 0x1c5e9
 
 ; sets the loaded NPC's direction
 ; to the direction that is in LOADED_NPC_DIRECTION_BACKUP
@@ -457,7 +452,6 @@ Func_1c5e9: ; 1c5e9 (7:45e9)
 	pop bc
 	pop hl
 	ret
-; 0x1c5ff
 
 ; a = new direction
 SetNPCDirection: ; 1c5ff (7:45ff)
@@ -471,7 +465,6 @@ SetNPCDirection: ; 1c5ff (7:45ff)
 	call UpdateNPCAnimation
 	pop hl
 	ret
-; 0x1c610
 
 HandleAllNPCMovement: ; 1c610 (7:4610)
 	push hl
@@ -533,7 +526,6 @@ HandleAllNPCMovement: ; 1c610 (7:4610)
 	pop bc
 	pop hl
 	ret
-; 0x1c665
 
 UpdateNPCSpritePosition: ; 1c665 (7:4665)
 	push hl
@@ -628,7 +620,6 @@ UpdateNPCSpritePosition: ; 1c665 (7:4665)
 	ldh a, [hSCX]
 	ld b, a
 	ret
-; 0x1c6d3
 
 ; ands wIsAnNPCMoving with the current
 ; NPC's NPC_FLAG_MOVING_F
@@ -643,7 +634,6 @@ UpdateIsAnNPCMovingFlag: ; 1c6d3 (7:46d3)
 	pop bc
 	pop hl
 	ret
-; 0x1c6e3
 
 SetNPCsTilePermission: ; 1c6e3 (7:46e3)
 	push hl
@@ -684,7 +674,6 @@ SetAllNPCTilePermissions: ; 1c6f8 (7:46f8)
 	pop bc
 	pop hl
 	ret
-; 0x1c719
 
 UpdateNPCsTilePermission: ; 1c719 (7:4719)
 	push hl
@@ -840,7 +829,6 @@ CheckIsAnNPCMoving: ; 1c7de (7:47de)
 	ld a, [wIsAnNPCMoving]
 	and NPC_FLAG_MOVING
 	ret
-; 0x1c7e4
 
 ; while the NPC is moving, increment its movement step by 1
 ; once it reaches a value greater than 16, update
@@ -872,7 +860,6 @@ UpdateNPCMovementStep: ; 1c7e4 (7:47e4)
 	pop bc
 	pop hl
 	ret
-; 0x1c80d
 
 UpdateNPCPosition: ; 1c80d (7:480d)
 	push hl
@@ -900,7 +887,6 @@ UpdateNPCPosition: ; 1c80d (7:480d)
 	pop bc
 	pop hl
 	ret
-; 0x1c82e
 
 ClearMasterBeatenList: ; 1c82e (7:482e)
 	push hl
@@ -915,7 +901,6 @@ ClearMasterBeatenList: ; 1c82e (7:482e)
 	pop bc
 	pop hl
 	ret
-; 0x1c83d
 
 ; writes Master in register a to
 ; first empty slot in wMastersBeatenList
@@ -996,7 +981,6 @@ Func_1c866: ; 1c866 (7:4866)
 	ld a, c
 	ldh [hSCY], a
 	ret
-; 0x1c890
 
 ; unreferenced
 ; sets some flags on a given sprite
@@ -1028,7 +1012,6 @@ Func_1c890: ; 1c890 (7:4890)
 	set SPRITE_ANIM_FLAG_SPEED, [hl]
 .asm_1c8bb
 	ret
-; 0x1c8bc
 
 Func_1c8bc: ; 1c8bc (7:48bc)
 	push hl
@@ -1056,7 +1039,6 @@ Func_1c8bc: ; 1c8bc (7:48bc)
 	pop bc
 	pop hl
 	ret
-; 0x1c8ef
 
 PlayLoadedDuelAnimation: ; 1c8ef (7:48ef)
 	ld a, [wDoFrameFunction + 0]
@@ -1391,7 +1373,6 @@ PlayBufferedDuelAnimations: ; 1ca6e (7:4a6e)
 	pop bc
 	pop hl
 	ret
-; 0x1cab3
 
 ; gets data from Animations for anim ID in a
 ; outputs the pointer to the data in hl
@@ -1464,7 +1445,6 @@ Func_1cac5: ; 1cac5 (7:4ac5)
 	ld a, $ff
 	ld [wd4c0], a
 	jr .asm_1cafb
-; 0x1cb18
 
 Func_1cb18: ; 1cb18 (7:4b18)
 	push hl
@@ -1508,7 +1488,6 @@ Func_1cb18: ; 1cb18 (7:4b18)
 .asm_1cb5b
 	scf
 	jr .asm_1cb57
-; 0x1cb5e
 
 Func_1cb5e: ; 1cb5e (7:4b5e)
 	cp $96
@@ -1549,7 +1528,6 @@ Func_1cb5e: ; 1cb5e (7:4b5e)
 	xor a
 	ld [wd4b3], a
 	ret
-; 0x1cba6
 
 Func_1cba6: ; 1cba6 (7:4ba6)
 	call Func_1cc03
@@ -1577,7 +1555,6 @@ Func_1cba6: ; 1cba6 (7:4ba6)
 	cp $03
 	jr c, .asm_1cbb3
 	ret
-; 0x1cbcc
 
 Func_1cbcc: ; 1cbcc (7:4bcc)
 	push af
@@ -1608,11 +1585,10 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	pop af
 	farcall Func_12ac9
 	ret
-; 0x1cbfd
 
 ; unreferenced data?
+Unknown_1cbfd: ; 1cbfd (7:4bfd)
 	db $f0, $f8, $00, $08, $f8, $f0
-; 0x1cc03
 
 Func_1cc03: ; 1cc03 (7:4c03)
 	ld a, [wDuelAnimDamage]
@@ -1641,7 +1617,6 @@ Func_1cc03: ; 1cc03 (7:4c03)
 	jr nz, .asm_1cc23
 .asm_1cc2e
 	ret
-; 0x1cc2f
 
 .Func_1cc2f
 	ld a, $4e
@@ -1659,7 +1634,6 @@ Func_1cc03: ; 1cc03 (7:4c03)
 	sbc b
 	ld h, a
 	ret
-; 0x1cc3e
 
 Func_1cc3e: ; 1cc3e (7:4c3e)
 	push hl
@@ -1670,7 +1644,6 @@ Func_1cc3e: ; 1cc3e (7:4c3e)
 	call Func_1cbcc
 	pop hl
 	ret
-; 0x1cc4e
 
 Func_1cc4e: ; 1cc4e (7:4c4e)
 	push hl
@@ -1684,7 +1657,6 @@ Func_1cc4e: ; 1cc4e (7:4c4e)
 	ld [wd4b8], a
 	pop hl
 	ret
-; 0x1cc66
 
 Func_1cc66: ; 1cc66 (7:4c66)
 	push hl
@@ -1695,7 +1667,6 @@ Func_1cc66: ; 1cc66 (7:4c66)
 	call Func_1cbcc
 	pop hl
 	ret
-; 0x1cc76
 
 ; initializes a screen animation from wTempAnimation
 ; loads a function pointer for updating a frame
@@ -1724,7 +1695,6 @@ InitScreenAnimation: ; 1cc76 (7:4c76)
 	call CallBC
 .skip
 	ret
-; 0x1cc9f
 
 ; for the following animations, these functions
 ; are run with the corresponding duration.
@@ -1770,7 +1740,6 @@ DefaultScreenAnimationUpdate: ; 1ccbc (7:4cbc)
 	inc hl
 	ld [hl], HIGH(DefaultScreenAnimationUpdate)
 	ret
-; 0x1ccd4
 
 Func_1ccd4: ; 1ccd4 (7:4cd4)
 	ld a, 1
@@ -1781,7 +1750,6 @@ Func_1ccd4: ; 1ccd4 (7:4cd4)
 	ld l, a
 	call CallHL2
 	jr DefaultScreenAnimationUpdate
-; 0x1cce4
 
 ShakeScreenX_Small: ; 1cce4 (7:4ce4)
 	ld hl, SmallShakeOffsets
@@ -1811,7 +1779,6 @@ ShakeScreenX: ; 1ccee (7:4cee)
 	add [hl]
 	ldh [hSCX], a
 	jp LoadDefaultScreenAnimationUpdateWhenFinished
-; 0x1cd10
 
 ShakeScreenY_Small: ; 1cd10 (7:4d10)
 	ld hl, SmallShakeOffsets
@@ -1840,7 +1807,6 @@ ShakeScreenY: ; 1cd1a (7:4d1a)
 	add [hl]
 	ldh [hSCY], a
 	jp LoadDefaultScreenAnimationUpdateWhenFinished
-; 0x1cd3c
 
 ; get the displacement of the current frame
 ; depending on the value of wScreenAnimDuration
@@ -1863,7 +1829,6 @@ UpdateShakeOffset: ; 1cd3c (7:4d3c)
 	pop hl
 	scf
 	ret
-; 0x1cd55
 
 SmallShakeOffsets: ; 1cd55 (7:4d55)
 	db 21,  2
@@ -1887,7 +1852,6 @@ DecrementScreenAnimDuration: ; 1cd71 (7:4d71)
 	ld hl, wScreenAnimDuration
 	dec [hl]
 	ret
-; 0x1cd76
 
 WhiteFlashScreen: ; 1cd76 (7:4d76)
 	ld hl, wScreenAnimUpdatePtr
@@ -1923,7 +1887,6 @@ WhiteFlashScreen: ; 1cd76 (7:4d76)
 	call SetBGP
 	call FlushAllPalettes
 	jp DefaultScreenAnimationUpdate
-; 0x1cdc3
 
 DistortScreen: ; 1cdc3 (7:4dc3)
 	ld hl, wScreenAnimUpdatePtr
@@ -1959,7 +1922,6 @@ DistortScreen: ; 1cdc3 (7:4dc3)
 ; starting from the last and running backwards
 .BGScrollModData
 	db 4, 3, 2, 1, 1, 1, 1, 2
-; 0x1ce03
 
 Func_1ce03: ; 1ce03 (7:4e03)
 	cp DUEL_ANIM_158
@@ -2074,7 +2036,6 @@ HandleTitleScreen: ; 1d078 (7:5078)
 	call ResetDoFrameFunction
 	call Func_3ca0
 	ret
-; 0x1d0fa
 
 ; updates wHasSaveData and wHasDuelSaveData
 ; depending on whether the save data is valid or not
@@ -2095,7 +2056,6 @@ CheckIfHasSaveData: ; 1d0fa (7:50fa)
 	ld [wHasDuelSaveData], a
 	farcall ValidateBackupGeneralSaveData
 	ret
-; 0x1d11c
 
 ; handles printing the Start Menu
 ; and getting player input and choice
@@ -2228,7 +2188,6 @@ HandleStartMenu: ; 1d11c (7:511c)
 	lb bc, 14, 1
 	farcall $4, DrawPlayerPortrait
 	ret
-; 0x1d1e9
 
 ; prints the description for the current selected item
 ; in the Start Menu in the text box
@@ -2328,7 +2287,6 @@ PrintStartMenuDescriptionText: ; 1d1e9 (7:51e9)
 	ld bc, $a10
 	farcall Func_101df
 	ret
-; 0x1d289
 
 ; asks the player whether it's okay to delete
 ; the save data in order to create a new one
@@ -2354,7 +2312,6 @@ DeleteSaveDataForNewGame: ; 1d289 (7:5289)
 	call PrintScrollableText_NoTextBoxLabel
 	or a
 	ret
-; 0x1d2b8
 
 ; asks the player if the game should resume
 ; from diary even though there is Duel save data
@@ -2377,7 +2334,6 @@ AskToContinueFromDiaryWithDuelData: ; 1d2b8 (7:52b8)
 	ret c
 	or a
 	ret
-; 0x1d2dd
 
 ; shows disclaimer for Card Pop!
 ; in case player is not playing in CGB
@@ -2401,7 +2357,6 @@ ShowCardPopCGBDisclaimer: ; 1d2dd (7:52dd)
 	call WaitForButtonAorB
 	scf
 	ret
-; 0x1d306
 
 DrawPlayerPortraitAndPrintNewGameText: ; 1d306 (7:5306)
 	call DisableLCD
@@ -2419,7 +2374,6 @@ DrawPlayerPortraitAndPrintNewGameText: ; 1d306 (7:5306)
 	call ResetDoFrameFunction
 	call Func_3ca0
 	ret
-; 0x1d335
 
 PlayOpeningSequence: ; 1d335 (7:5335)
 	call DisableLCD
@@ -2494,7 +2448,6 @@ PlayOpeningSequence: ; 1d335 (7:5335)
 	ld bc, 60
 	farcall Func_12ac9
 	ret
-; 0x1d3ce
 
 LoadTitleScreenSprites: ; 1d3ce (7:53ce)
 	xor a
@@ -2536,7 +2489,6 @@ LoadTitleScreenSprites: ; 1d3ce (7:53ce)
 	db SPRITE_LIGHTNING
 	db SPRITE_PSYCHIC
 	db SPRITE_FIGHTING
-; 0x1d408
 
 ; TODO place in main.asm when possible
 INCLUDE "engine/sequences/opening_sequence_commands.asm"
@@ -2606,7 +2558,6 @@ AnimateRandomTitleScreenOrb: ; 1d614 (7:5614)
 	dec c
 	jr nz, .loop_orbs
 	ret
-; 0x1d67b
 
 ; unreferenced
 ; shows Copyright information for 300 frames
@@ -2635,7 +2586,6 @@ Func_1d67b: ; 1d67b (7:567b)
 .exit
 	farcall Func_10ab4
 	ret
-; 0x1d6ad
 
 Credits_1d6ad: ; 1d6ad (7:56ad)
 	ld a, MUSIC_STOP
@@ -2714,7 +2664,6 @@ Func_1d705: ; 1d705 (7:5705)
 	set INT_LCD_STAT, [hl]
 	pop hl
 	ret
-; 0x1d758
 
 Func_1d758: ; 1d758 (7:5758)
 	push hl
@@ -2724,7 +2673,6 @@ Func_1d758: ; 1d758 (7:5758)
 	res INT_LCD_STAT, [hl]
 	pop hl
 	ret
-; 0x1d765
 
 Func_1d765: ; 1d765 (7:5765)
 	push hl
@@ -2820,7 +2768,6 @@ Func_1d765: ; 1d765 (7:5765)
 	pop bc
 	pop hl
 	ret
-; 0x1d7ee
 
 Func_1d7ee: ; 1d7ee (7:57ee)
 	xor a
@@ -2829,4 +2776,3 @@ Func_1d7ee: ; 1d7ee (7:57ee)
 	lb hl, 0, 0
 	call FillRectangle
 	ret
-; 0x1d7fc

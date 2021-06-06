@@ -17,7 +17,6 @@ LoadMapGfxAndPermissions: ; 80000 (20:4000)
 	farcall OverworldMap_PrintMapName
 	farcall OverworldMap_InitVolcanoSprite
 	ret
-; 0x80028
 
 ; reloads the map tiles and permissions
 ; after a textbox has been closed
@@ -29,7 +28,6 @@ ReloadMapAfterTextClose: ; 80028 (20:4028)
 	call SafelyCopyBGMapFromSRAMToVRAM
 	farcall Func_c3ee
 	ret
-; 0x8003d
 
 LoadMapTilesAndPals: ; 8003d (20:403d)
 	farcall LoadMapHeader
@@ -57,7 +55,6 @@ LoadMapTilesAndPals: ; 8003d (20:403d)
 	call SetBGPAndLoadedPal
 .asm_80076
 	ret
-; 0x80077
 
 ; loads the BG map corresponding to wCurTilemap to SRAM
 ; bc = starting coordinates
@@ -401,7 +398,6 @@ LoadGraphicsPointerFromHL: ; 80229 (20:4229)
 	add BANK(MapDataPointers)
 	ld [wTempPointerBank], a
 	ret
-; 0x80238
 
 ; unreferenced?
 Func_80238: ; 80238 (20:4238)
@@ -421,7 +417,6 @@ Func_80238: ; 80238 (20:4238)
 	call LoadGfxDataFromTempPointerToVRAMBank_Tiles0ToTiles2
 	pop hl
 	ret
-; 0x8025b
 
 ; loads graphics data from third map data pointers
 ; input:
@@ -455,7 +450,7 @@ LoadGfxDataFromTempPointerToVRAMBank_Tiles0ToTiles2: ; 80279 (20:4279)
 
 ; loads graphics data pointed by wTempPointer in wTempPointerBank
 ; to wVRAMPointer
-LoadGfxDataFromTempPointer:
+LoadGfxDataFromTempPointer: ; 8027c (20:427c)
 	push hl
 	push bc
 	push de
@@ -519,7 +514,6 @@ GetTileOffsetPointerAndSwitchVRAM_Tiles0ToTiles2: ; 802bb (20:42bb)
 	pop af
 	ld [wVRAMTileOffset], a
 	ret
-; 0x802d4
 
 ; loads tileset gfx to VRAM corresponding to wCurTileset
 LoadTilesetGfx: ; 802d4 (20:42d4)
@@ -532,7 +526,6 @@ LoadTilesetGfx: ; 802d4 (20:42d4)
 	call BankswitchVRAM0
 	pop hl
 	ret
-; 0x802e8
 
 ; loads gfx data from wTempPointerBank:wTempPointer
 .LoadTileGfx ; 802e8 (20:42e8)
@@ -580,7 +573,6 @@ LoadTilesetGfx: ; 802d4 (20:42d4)
 	pop bc
 	pop hl
 	ret
-; 0x80336
 
 ; copies gfx data from wTempPointer to VRAM
 ; c must match with wVRAMTileOffset
@@ -685,7 +677,6 @@ LoadTilesetGfx: ; 802d4 (20:42d4)
 	pop bc
 	pop hl
 	ret
-; 0x803b9
 
 ; gets pointer to BG map with ID from wCurTilemap
 Func_803b9: ; 803b9 (20:43b9)
@@ -696,7 +687,6 @@ Func_803b9: ; 803b9 (20:43b9)
 	ld a, [hl]
 	ld [wCurTileset], a
 	ret
-; 0x803c9
 
 ; sets BGP in wLoadedPalData (if any)
 ; then loads the rest of the palette data
@@ -728,7 +718,6 @@ SetBGPAndLoadedPal: ; 803c9 (20:43c9)
 	pop bc
 	pop hl
 	ret
-; 0x803ec
 
 ; copies from palette data in hl c*8 bytes to palette index b
 ; in WRAM, starting from wBackgroundPalettesCGB
@@ -777,7 +766,6 @@ LoadPaletteDataFromHL: ; 803ec (20:43ec)
 	pop bc
 	pop hl
 	ret
-; 0x80418
 
 ; loads palette index a
 LoadPaletteData: ; 80418 (20:4418)
@@ -834,7 +822,6 @@ LoadPaletteData: ; 80418 (20:4418)
 	pop bc
 	pop hl
 	ret
-; 0x80456
 
 ; copies palette data of index in a to wLoadedPalData
 LoadPaletteDataToBuffer: ; 80456 (20:4456)
@@ -865,13 +852,11 @@ LoadPaletteDataToBuffer: ; 80456 (20:4456)
 	pop bc
 	pop hl
 	ret
-; 0x8047b
 
 ClearNumLoadedFramesetSubgroups: ; 8047b (20:447b)
 	xor a
 	ld [wNumLoadedFramesetSubgroups], a
 	ret
-; 0x80480
 
 ; for the current map, process the animation
 ; data of its corresponding OW tiles
@@ -900,7 +885,6 @@ DoMapOWFrame: ; 80480 (20:4480)
 	pop bc
 	pop hl
 	ret
-; 0x804a2
 
 ; processes the OW frameset pointed by hl
 ProcessOWFrameset: ; 804a2 (20:44a2)
@@ -933,7 +917,6 @@ ProcessOWFrameset: ; 804a2 (20:44a2)
 	pop bc
 	pop hl
 	ret
-; 0x804d8
 
 ; for each of the loaded frameset subgroups
 ; load their tiles and advance their durations
@@ -954,7 +937,6 @@ DoLoadedFramesetSubgroupsFrame: ; 804d8 (20:44d8)
 	cp NUM_OW_FRAMESET_SUBGROUPS
 	jr c, .loop_subgroups
 	ret
-; 0x804f3
 
 ; from subgroup in register c, get
 ; from OW frameset in hl its corresponding
@@ -979,7 +961,6 @@ GetOWFramesetSubgroupData: ; 804f3 (20:44f3)
 	pop bc
 	pop hl
 	ret
-; 0x8050c
 
 ; if wCurOWFrameDuration == 0, processes next frame for OW map
 ; by loading the tiles corresponding to current frame
@@ -1100,7 +1081,6 @@ LoadOWFrameTiles: ; 8050c (20:450c)
 	pop bc
 	pop hl
 	ret
-; 0x8059a
 
 ; fills wOWFramesetSubgroups with $ff
 ClearOWFramesetSubgroups: ; 8059a (20:459a)
@@ -1116,7 +1096,6 @@ ClearOWFramesetSubgroups: ; 8059a (20:459a)
 	pop bc
 	pop hl
 	ret
-; 0x805aa
 
 ; copies wOWFramesetSubgroups + 2*c
 ; to wCurOWFrameDataOffset and wCurOWFrameDuration
@@ -1137,7 +1116,6 @@ LoadOWFramesetSubgroup: ; 805aa (20:45aa)
 	pop bc
 	pop hl
 	ret
-; 0x805c1
 
 ; copies wCurOWFrameDataOffset and wCurOWFrameDuration
 ; to wOWFramesetSubgroups + 2*c
@@ -1155,7 +1133,6 @@ StoreOWFramesetSubgroup: ; 805c1 (20:45c1)
 	pop bc
 	pop hl
 	ret
-; 0x805d6
 
 INCLUDE "data/map_ow_framesets.asm"
 
@@ -1173,7 +1150,6 @@ Func_80b7a: ; 80b7a (20:4b7a)
 	pop bc
 	pop hl
 	ret
-; 0x80b89
 
 ; a = MAP_EVENT_* constant
 Func_80b89: ; 80b89 (20:4b89)

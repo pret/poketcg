@@ -51,4 +51,3 @@ Music_MatchStart1_Ch1: ; f7919 (3d:7919)
 	inc_octave
 	B_ 1
 	music_end
-; 0xf7956

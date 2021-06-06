@@ -78,4 +78,3 @@ AIActionTable_FireCharge: ; 15232 (5:5232)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x152bd

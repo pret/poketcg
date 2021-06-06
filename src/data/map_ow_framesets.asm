@@ -242,4 +242,3 @@ HallOfHonorOWFrameset: ; 80b36 (20:4b36)
 	ow_frame  0, $a6, 0, HallOfHonorTilesetGfx, $2e
 	ow_frame  0, $a7, 0, HallOfHonorTilesetGfx, $2f
 	db -1 ; end
-; 0x80b7a

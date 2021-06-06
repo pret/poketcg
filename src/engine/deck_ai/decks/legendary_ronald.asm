@@ -201,4 +201,3 @@ AIDoTurn_LegendaryRonald: ; 15507 (5:5507)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x155d2

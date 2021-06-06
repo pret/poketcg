@@ -151,4 +151,3 @@ AIDoTurn_LegendaryZapdos: ; 14b9a (5:4b9a)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x14c0b

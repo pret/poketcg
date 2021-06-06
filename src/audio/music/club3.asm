@@ -1099,4 +1099,3 @@ Branch_fa796:
 	snare4 1
 	bass 1
 	music_ret
-; 0xfa7a0

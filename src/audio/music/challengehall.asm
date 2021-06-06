@@ -1084,4 +1084,3 @@ Music_ChallengeHall_Ch4: ; f9ba9 (3e:5ba9)
 	snare1 3
 	rest 3
 	EndMainLoop
-; 0xf9be5

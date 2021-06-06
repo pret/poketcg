@@ -917,4 +917,3 @@ Branch_fa06f:
 	snare3 2
 	EndLoop
 	music_ret
-; 0xfa077

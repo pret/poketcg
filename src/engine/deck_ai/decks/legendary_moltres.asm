@@ -174,4 +174,3 @@ AIDoTurn_LegendaryMoltres: ; 14a81 (5:4a81)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x14b0f

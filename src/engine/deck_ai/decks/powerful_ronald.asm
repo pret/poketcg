@@ -90,4 +90,3 @@ AIActionTable_PowerfulRonald: ; 1534b (5:534b)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x153e8

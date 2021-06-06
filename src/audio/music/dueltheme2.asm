@@ -1235,4 +1235,3 @@ Branch_f6396:
 	snare1 1
 	EndLoop
 	music_ret
-; 0xf63a1

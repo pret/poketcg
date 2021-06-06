@@ -397,4 +397,3 @@ CreditsSequence: ; 1daef (7:5aef)
 	credits_seq_fade_in	
 	credits_seq_wait 225
 	credits_seq_end
-; 0x1e1c4

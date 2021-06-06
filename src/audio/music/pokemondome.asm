@@ -796,4 +796,3 @@ Music_PokemonDome_Ch4: ; f9629 (3e:5629)
 	snare2 3
 	EndLoop
 	EndMainLoop
-; 0xf9646

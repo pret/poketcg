@@ -164,4 +164,3 @@ AIDoTurn_LegendaryDragonite: ; 14def (5:4def)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x14e89

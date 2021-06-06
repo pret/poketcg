@@ -580,4 +580,3 @@ Music_PauseMenu_Ch4: ; f6ec8 (3d:6ec8)
 	EndLoop
 	EndLoop
 	EndMainLoop
-; 0xf6ef1

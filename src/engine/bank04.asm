@@ -1182,11 +1182,11 @@ _PCMenu_ReadMail: ; 1076d (4:476d)
 	pop af
 	ld [wd291], a
 	ret
-; 0x107c2
 
 ; unreferenced?
-	db $01, $00, $00, $4A, $21, $B5, $42, $E0
-	db $03, $4A, $29, $94, $52, $FF, $7F, $00
+Unknown_107c2: ; 107c2 (4:47c2)
+	db $01, $00, $00, $4a, $21, $b5, $42, $e0
+	db $03, $4a, $29, $94, $52, $fF, $7f, $00
 
 Unknown_107d2: ; 107d2 (4:47d2)
 	db 1, 0
@@ -1243,21 +1243,21 @@ PCMailHandleDPadInput: ; 107df (4:47df)
 
 PCMailTransitionTable: ; 10825 (4:4825)
 ; up, right, down, left
-	db $0C, $01, $03, $02 ; mail 1
-	db $0D, $02, $04, $00 ; mail 2
-	db $0E, $00, $05, $01 ; mail 3
+	db $0c, $01, $03, $02 ; mail 1
+	db $0d, $02, $04, $00 ; mail 2
+	db $0e, $00, $05, $01 ; mail 3
 	db $00, $04, $06, $05 ; mail 4
 	db $01, $05, $07, $03 ; mail 5
 	db $02, $03, $08, $04 ; mail 6
 	db $03, $07, $09, $08 ; mail 7
-	db $04, $08, $0A, $06 ; mail 8
-	db $05, $06, $0B, $07 ; mail 9
-	db $06, $0A, $0C, $0B ; mail 10
-	db $07, $0B, $0D, $09 ; mail 11
-	db $08, $09, $0E, $0A ; mail 12
-	db $09, $0D, $00, $0E ; mail 13
-	db $0A, $0E, $01, $0C ; mail 14
-	db $0B, $0C, $02, $0D ; mail 15
+	db $04, $08, $0a, $06 ; mail 8
+	db $05, $06, $0b, $07 ; mail 9
+	db $06, $0a, $0c, $0b ; mail 10
+	db $07, $0b, $0d, $09 ; mail 11
+	db $08, $09, $0e, $0a ; mail 12
+	db $09, $0d, $00, $0e ; mail 13
+	db $0a, $0e, $01, $0c ; mail 14
+	db $0b, $0c, $02, $0d ; mail 15
 
 PCMailHandleAInput: ; 10861 (4:4861)
 	ldh a, [hKeysPressed]
@@ -1667,7 +1667,6 @@ Func_10a9b: ; 10a9b (4:4a9b)
 	db $00 ; CONSOLE_DMG
 	db $00 ; CONSOLE_SGB
 	db $00 ; CONSOLE_CGB
-; 0x10ab4
 
 Func_10ab4: ; 10ab4 (4:4ab4)
 	ld a, [wLCDC]
@@ -1697,7 +1696,6 @@ Func_10ab4: ; 10ab4 (4:4ab4)
 	call FillMemoryWithDE
 	call FlushAllPalettes
 	ret
-; 0x10af9
 
 Func_10af9: ; 10af9 (4:4af9)
 	call BackupPalsAndSetWhite
@@ -1705,7 +1703,6 @@ Func_10af9: ; 10af9 (4:4af9)
 	call FlushAllPalettes
 	call EnableLCD
 	jp FadeScreenToTempPals
-; 0x10b08
 
 BackupPalsAndSetWhite: ; 10b08 (4:4b08)
 	ld a, [wBGP]
@@ -1731,7 +1728,6 @@ Func_10b28: ; 10b28 (4:4b28)
 	ld bc, NUM_BACKGROUND_PALETTES palettes
 	call FillMemoryWithDE
 	ret
-; 0x10b41
 
 ; gets from backup OB pals the first color
 ; of each pal and writes them in wObjectPalettesCGB
@@ -1758,7 +1754,6 @@ RestoreFirstColorInOBPals: ; 10b41 (4:4b41)
 	dec c
 	jr nz, .loop_pals
 	ret
-; 0x10b5e
 
 FadeScreenToTempPals: ; 10b5e (4:4b5e)
 	ld a, [wVBlankCounter]
@@ -1783,7 +1778,6 @@ FadeScreenToTempPals: ; 10b5e (4:4b5e)
 	ld a, [wVBlankCounter]
 	sub b
 	ret
-; 0x10b85
 
 ; does something with wBGP given wd294
 ; mixes them into a single value?
@@ -1870,7 +1864,6 @@ Func_10b85: ; 10b85 (4:4b85)
 	db %10 ; b = %11 | c = %01
 	db %10 ; b = %11 | c = %10
 	db %11 ; b = %11 | c = %11
-; 0x10be1
 
 FadeOBPalIntoTemp: ; 10be1 (4:4be1)
 	push bc
@@ -1878,7 +1871,6 @@ FadeOBPalIntoTemp: ; 10be1 (4:4be1)
 	ld hl, wObjectPalettesCGB
 	ld de, wTempObjectPalettesCGB
 	jr FadePalIntoAnother
-; 0x10bec
 
 FadeBGPalIntoTemp1: ; 10bec (4:4bec)
 	push bc
@@ -2039,7 +2031,6 @@ FadePalIntoAnother: ; 10c0b (4:4c0b)
 	ret z
 	inc a
 	ret
-; 0x10c96
 
 Func_10c96: ; 10c96 (4:4c96)
 	ldh a, [hBankSRAM]
@@ -2093,7 +2084,6 @@ CopyPalsToSRAMBuffer: ; 10cbb (4:4cbb)
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
-; 0x10cea
 
 ; loads BG and OP pals,
 ; wBackgroundPalettesCGB and wObjectPalettesCGB
@@ -2123,7 +2113,6 @@ LoadPalsFromSRAMBuffer: ; 10cea (4:4cea)
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
-; 0x10d17
 
 ; backs up all palettes
 ; and writes 4 BG pals with white pal
@@ -2150,7 +2139,6 @@ Func_10d17: ; 10d17 (4:4d17)
 	ld a, $10
 	ld [wd317], a
 	ret
-; 0x10d50
 
 Func_10d50: ; 10d50 (4:4d50)
 	ld a, [wd293]
@@ -2166,7 +2154,6 @@ Func_10d50: ; 10d50 (4:4d50)
 	ld a, $10
 	ld [wd317], a
 	ret
-; 0x10d74
 
 ; does stuff according to bottom 2 bits from wd317:
 ; - if equal to %01, modify wBGP
@@ -2193,7 +2180,6 @@ Func_10d74: ; 10d74 (4:4d74)
 	dec a
 	ld [wd317], a
 	ret
-; 0x10d98
 
 Unknown_10d98: ; 10d98 (4:4d98)
 	db 12,  0 ; start menu coords
@@ -2515,17 +2501,17 @@ OverworldMap_GetMapPosition: ; 10efd (4:4efd)
 
 OverworldMap_MapPositions: ; 10f14 (4:4f14)
 	db $00, $00 ; unused
-	db $0C, $68 ; OWMAP_MASON_LABORATORY
+	db $0c, $68 ; OWMAP_MASON_LABORATORY
 	db $04, $18 ; OWMAP_ISHIHARAS_HOUSE
 	db $34, $68 ; OWMAP_FIGHTING_CLUB
 	db $14, $38 ; OWMAP_ROCK_CLUB
-	db $6C, $64 ; OWMAP_WATER_CLUB
+	db $6c, $64 ; OWMAP_WATER_CLUB
 	db $24, $50 ; OWMAP_LIGHTNING_CLUB
-	db $7C, $40 ; OWMAP_GRASS_CLUB
-	db $5C, $2C ; OWMAP_PSYCHIC_CLUB
-	db $7C, $20 ; OWMAP_SCIENCE_CLUB
-	db $6C, $10 ; OWMAP_FIRE_CLUB
-	db $3C, $20 ; OWMAP_CHALLENGE_HALL
+	db $7c, $40 ; OWMAP_GRASS_CLUB
+	db $5c, $2c ; OWMAP_PSYCHIC_CLUB
+	db $7c, $20 ; OWMAP_SCIENCE_CLUB
+	db $6c, $10 ; OWMAP_FIRE_CLUB
+	db $3c, $20 ; OWMAP_CHALLENGE_HALL
 	db $44, $44 ; OWMAP_POKEMON_DOME
 
 OverworldMap_PrintMapName: ; 10f2e (4:4f2e)
@@ -2998,7 +2984,6 @@ Func_111b3: ; 111b3 (4:51b3)
 	pop hl
 	inc hl
 	jr .loop_text_print_2
-; 0x111e9
 
 InitAndPrintPauseMenu: ; 111e9 (4:51e9)
 	push hl
@@ -3026,7 +3011,6 @@ InitAndPrintPauseMenu: ; 111e9 (4:51e9)
 	pop bc
 	pop hl
 	ret
-; 0x1120f
 
 ; xors sb800
 ; this has the effect of invalidating the save data checksum
@@ -3053,7 +3037,6 @@ InvalidateSaveData: ; 1120f (4:520f)
 	call DisableSRAM
 	pop hl
 	ret
-; 0x11238
 
 ; saves all data to SRAM, including
 ; General save data and Album/Deck data
@@ -3068,7 +3051,6 @@ SaveAndBackupData: ; 11238 (4:5238)
 	call WriteBackupCardAndDeckSaveData
 	pop de
 	ret
-; 0x1124d
 
 _SaveGeneralSaveData: ; 1124d (4:524d)
 	push de
@@ -3079,7 +3061,6 @@ _SaveGeneralSaveData: ; 1124d (4:524d)
 	call UpdateAlbumProgress
 	pop de
 	ret
-; 0x1125f
 
 ; de = pointer to general game data in SRAM
 SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
@@ -3099,7 +3080,6 @@ SaveGeneralSaveDataFromDE: ; 1125f (4:525f)
 	pop bc
 	pop hl
 	ret
-; 0x1127f
 
 ; writes in de total num of cards collected
 ; and in (de + 1) total num of cards to collect
@@ -3121,7 +3101,6 @@ UpdateAlbumProgress: ; 1127f (4:527f)
 	pop de
 	pop hl
 	ret
-; 0x11299
 
 ; save values that are listed in WRAMToSRAMMapper
 ; from WRAM to SRAM, and calculate its checksum
@@ -3212,7 +3191,6 @@ CopyGeneralSaveDataToSRAM: ; 11299 (4:5299)
 	ld [wTempPointer + 1], a
 	pop hl
 	ret
-; 0x11320
 
 ; returns carry if no error
 ; is found in sBackupGeneralSaveData
@@ -3233,7 +3211,6 @@ ValidateBackupGeneralSaveData: ; 11320 (4:5320)
 	ld a, [wNumSRAMValidationErrors]
 	cp 1
 	ret
-; 0x11343
 
 ; returns carry if no error
 ; is found in sGeneralSaveData
@@ -3249,7 +3226,6 @@ _ValidateGeneralSaveData: ; 11343 (4:5343)
 	ld a, [wNumSRAMValidationErrors]
 	cp 1
 	ret
-; 0x1135d
 
 ; validates the general game data saved in SRAM
 ; de = pointer to general game data in SRAM
@@ -3380,7 +3356,6 @@ ValidateGeneralSaveDataFromDE: ; 1135d (4:535d)
 	pop bc
 	pop hl
 	ret
-; 0x1140a
 
 LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
 	push de
@@ -3391,7 +3366,6 @@ LoadAlbumProgressFromSRAM: ; 1140a (4:540a)
 	ld [wTotalNumCardsToCollect], a
 	pop de
 	ret
-; 0x11416
 
 ; first copies data from backup SRAM to main SRAM
 ; then loads it to WRAM from main SRAM
@@ -3408,7 +3382,6 @@ LoadBackupSaveData: ; 11416 (4:5416)
 	pop de
 	pop hl
 	ret
-; 0x11430
 
 _LoadGeneralSaveData: ; 11430 (4:5430)
 	push de
@@ -3416,7 +3389,6 @@ _LoadGeneralSaveData: ; 11430 (4:5430)
 	call LoadGeneralSaveDataFromDE
 	pop de
 	ret
-; 0x11439
 
 ; de = pointer to save data
 LoadGeneralSaveDataFromDE: ; 11439 (4:5439)
@@ -3488,7 +3460,6 @@ LoadGeneralSaveDataFromDE: ; 11439 (4:5439)
 	pop bc
 	pop hl
 	ret
-; 0x11498
 
 wram_sram_map: MACRO
 	dw \1 ; WRAM address
@@ -3539,12 +3510,10 @@ WRAMToSRAMMapper: ; 11498 (4:5498)
 	wram_sram_map .EmptySRAMSlot,                    16, $00, $ff ; sb86b
 	wram_sram_map wEventVars,                        64, $00, $ff ; sEventVars
 	dw NULL
-; 0x1156c
 
 ; fills an empty SRAM slot with zero
 .EmptySRAMSlot: ; 1156c (4:556c)
 	db $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-; 0x1157c
 
 ; save the game
 ; if c is 0, save the player at their current position
@@ -3599,7 +3568,6 @@ _AddCardToCollectionAndUpdateAlbumProgress: ; 115a3 (4:55a3)
 	pop bc
 	pop hl
 	ret
-; 0x115d4
 
 WriteBackupCardAndDeckSaveData: ; 115d4 (4:55d4)
 	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
@@ -3633,7 +3601,6 @@ WriteDataToBackup: ; 115e2 (4:55e2)
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
-; 0x115ff
 
 LoadBackupCardAndDeckSaveData: ; 115ff (4:55ff)
 	ld bc, sCardAndDeckSaveDataEnd - sCardAndDeckSaveData
@@ -3668,7 +3635,6 @@ LoadDataFromBackup: ; 1160d (4:560d)
 	call BankswitchSRAM
 	call DisableSRAM
 	ret
-; 0x1162a
 
 INCLUDE "data/map_scripts.asm"
 
@@ -3832,7 +3798,6 @@ _GetNPCDuelConfigurations: ; 11f4e (4:5f4e)
 	pop bc
 	pop hl
 	ret
-; 0x11f7d
 
 _GetChallengeMachineDuelConfigurations: ; 11f7d (4:5f7d)
 	push bc
@@ -3868,7 +3833,6 @@ _GetChallengeMachineDuelConfigurations: ; 11f7d (4:5f7d)
 	pop de
 	pop bc
 	ret
-; 0x11fae
 
 DeckIDDuelConfigurations: ; 11fae (4:5fae)
 	db SAMS_PRACTICE_DECK_ID ; deck ID
@@ -4383,9 +4347,9 @@ MultichoiceTextbox_ConfigTable_ChooseDeckStarterDeck: ; 12264 (4:6264)
 	dw NULL         ; function pointer if non-0
 
 SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
-	db $0A, $00     ; x, y to start drawing box
-	db $0A, $0A     ;  width, height of box
-	db $0C, $02     ; x, y coordinate to start printing next text
+	db $0a, $00     ; x, y to start drawing box
+	db $0a, $0a     ; width, height of box
+	db $0c, $02     ; x, y coordinate to start printing next text
 	tx Text03ff     ; text id to print next
 	db $ff          ; marker byte -- end text entries
 	db $0b, $02     ; cursor starting x, y
@@ -4397,7 +4361,7 @@ SamNormalMultichoice_ConfigurationTable: ; 1227d (4:627d)
 
 SamRulesMultichoice_ConfigurationTable: ; 1228e (4:628e)
 	db $06, $00     ; x, y to start drawing box
-	db $0E, $12     ; width, height of box
+	db $0e, $12     ; width, height of box
 	db $08, $02     ; x coordinate to start printing text
 	tx Text0400     ; text id to print next
 	db $ff          ; marker byte -- end text entries
@@ -5391,7 +5355,6 @@ Func_1288c: ; 1288c (4:688c)
 	pop bc
 	pop hl
 	ret
-; 0x128a9
 
 DisplayPlayerNamingScreen:: ; 128a9 (4:68a9)
 	; clear the name buffer.
@@ -5576,7 +5539,6 @@ Func_1296e: ; 1296e (4:696e)
 	pop hl
 	pop bc
 	ret
-; 0x1299f
 
 ; creates a new entry in SpriteAnimBuffer, else loads the sprite if need be
 CreateSpriteAndAnimBufferEntry: ; 1299f (4:699f)
@@ -5668,7 +5630,6 @@ DisableSpriteAnim: ; 129fd (4:69fd)
 	pop bc
 	pop hl
 	ret
-; 0x12a13
 
 GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	ld a, [wWhichSprite]
@@ -5680,7 +5641,6 @@ GetSpriteAnimCounter: ; 12a13 (4:6a13)
 	pop bc
 	pop hl
 	ret
-; 0x12a21
 
 _HandleAllSpriteAnimations: ; 12a21 (4:6a21)
 	push af
@@ -5804,7 +5764,6 @@ StartSpriteAnimation: ; 12ac0 (4:6ac0)
 	call HandleAnimationFrame
 	pop hl
 	ret
-; 0x12ac9
 
 ; a = sprite animation
 ; c = animation counter value
@@ -5827,7 +5786,6 @@ Func_12ac9: ; 12ac9 (4:6ac9)
 	call SetAnimationCounterAndLoop
 	pop hl
 	ret
-; 0x12ae2
 
 ; Given an animation ID, fills the current sprite's Animation Pointer and Frame Offset Pointer
 ; a - Animation ID for current sprite
@@ -6038,7 +5996,6 @@ Func_12bf3: ; 12bf3 (4:6bf3)
 	pop bc
 	pop hl
 	ret
-; 0x12c05
 
 ; gets some value based on the sprite in a and wSpriteVRAMBuffer
 ; loads the sprites data if it doesn't already exist
@@ -6924,20 +6881,20 @@ BoosterLogoOAM: ; 13132 (4:7132)
 	db $08, $38, $17, $00
 	db $10, $00, $08, $00
 	db $10, $08, $09, $00
-	db $10, $10, $0A, $00
-	db $10, $18, $0B, $00
-	db $10, $20, $0C, $00
-	db $10, $28, $0D, $00
-	db $10, $30, $0E, $00
-	db $10, $38, $0F, $00
+	db $10, $10, $0a, $00
+	db $10, $18, $0b, $00
+	db $10, $20, $0c, $00
+	db $10, $28, $0d, $00
+	db $10, $30, $0e, $00
+	db $10, $38, $0f, $00
 	db $18, $00, $18, $00
 	db $18, $08, $19, $00
-	db $18, $10, $1A, $00
-	db $18, $18, $1B, $00
-	db $18, $20, $1C, $00
-	db $18, $28, $1D, $00
-	db $18, $30, $1E, $00
-	db $18, $38, $1F, $00
+	db $18, $10, $1a, $00
+	db $18, $18, $1b, $00
+	db $18, $20, $1c, $00
+	db $18, $28, $1d, $00
+	db $18, $30, $1e, $00
+	db $18, $38, $1f, $00
 
 Func_131b3: ; 131b3 (4:71b3)
 	call ChallengeMachine_Initialize

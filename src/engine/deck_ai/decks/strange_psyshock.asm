@@ -79,4 +79,3 @@ AIActionTable_StrangePsyshock: ; 15122 (5:5122)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x151ad

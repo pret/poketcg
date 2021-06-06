@@ -111,4 +111,3 @@ Music_BoosterPack_Ch3: ; f7ddb (3d:7ddb)
 	tie
 	G_ 6
 	music_end
-; 0xf7df8

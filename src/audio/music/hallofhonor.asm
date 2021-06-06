@@ -395,4 +395,3 @@ Branch_fb1ec:
 	G_ 1
 	rest 1
 	music_ret
-; 0xfb1fe

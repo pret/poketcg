@@ -79,4 +79,3 @@ AutoDeckMachineEntries: ; 1b8e8 (6:78e8)
 	auto_deck LegendaryArticunoCardList,    LegendaryArticunoText,    LegendaryArticunoDescriptionText
 	auto_deck LegendaryDragoniteCardList,   LegendaryDragoniteText,   LegendaryDragoniteDescriptionText
 	auto_deck MysteriousPokemonCardList,    MysteriousPokemonText,    MysteriousPokemonDescriptionText
-; 0x1ba14

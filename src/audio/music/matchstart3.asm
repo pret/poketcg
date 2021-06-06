@@ -322,4 +322,3 @@ Music_MatchStart3_Ch2: ; f7aba (3d:7aba)
 	C_ 1
 	dec_octave
 	music_end
-; 0xf7b61

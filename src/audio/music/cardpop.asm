@@ -296,4 +296,3 @@ Branch_f7196:
 	bass 2
 	snare1 2
 	music_ret
-; 0xf71a0

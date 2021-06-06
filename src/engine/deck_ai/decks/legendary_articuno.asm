@@ -207,4 +207,3 @@ AIDoTurn_LegendaryArticuno: ; 14cf7 (5:4cf7)
 	ld a, OPPACTION_FINISH_NO_ATTACK
 	bank1call AIMakeDecision
 	ret
-; 0x14d60

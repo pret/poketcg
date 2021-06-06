@@ -147,4 +147,3 @@ Music_MatchVictory_Ch3: ; f7c09 (3d:7c09)
 	speed 8
 	A_ 12
 	music_end
-; 0xf7c2e

@@ -73,4 +73,3 @@ AIActionTable_ZappingSelfdestruct: ; 15019 (5:5019)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x1509b

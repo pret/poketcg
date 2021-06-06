@@ -72,4 +72,3 @@ AIActionTable_RockCrusher: ; 14f0e (5:4f0e)
 	; missing store_list_pointer wAICardListRetreatBonus, .list_retreat
 	store_list_pointer wAICardListEnergyBonus, .list_energy
 	ret
-; 0x14f8f
