@@ -46,7 +46,7 @@ ROMX $07
 	"Credits Sequence"
 	"Booster Packs"
 ROMX $08
-	"Bank 8"
+	"AI Logic"
 ROMX $0b
 	"Effect Functions"
 ROMX $0c

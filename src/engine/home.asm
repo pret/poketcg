@@ -8258,7 +8258,7 @@ AIDoAction_TakePrize: ; 2bd7 (0:2bd7)
 	jr AIDoAction ; this line is not needed
 
 ; calls the appropriate AI routine to handle action,
-; depending on the deck ID (see engine/deck_ai/deck_ai.asm)
+; depending on the deck ID (see engine/ai/deck_ai.asm)
 ; input:
 ;	- a = AIACTION_* constant
 AIDoAction: ; 2bdb (0:2bdb)

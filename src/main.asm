@@ -31,8 +31,10 @@ INCLUDE "data/sequences/credits_sequence.asm"
 SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"
 
-SECTION "Bank 8", ROMX
-INCLUDE "engine/bank08.asm"
+SECTION "AI Logic", ROMX
+INCLUDE "engine/ai/trainer_cards.asm"
+INCLUDE "engine/ai/pkmn_powers.asm"
+INCLUDE "engine/ai/common.asm"
 
 SECTION "Effect Functions", ROMX
 INCLUDE "engine/effect_functions.asm"

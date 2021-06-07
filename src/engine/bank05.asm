@@ -1205,7 +1205,7 @@ AIProcessHandTrainerCards: ; 14663 (5:4663)
 	farcall _AIProcessHandTrainerCards
 	ret
 
-INCLUDE "engine/deck_ai/deck_ai.asm"
+INCLUDE "engine/ai/deck_ai.asm"
 
 ; return carry if card ID loaded in a is found in hand
 ; and outputs in a the deck index of that card
