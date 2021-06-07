@@ -39,6 +39,8 @@ ROMX $03
 	"Bank 3"
 ROMX $04
 	"Bank 4"
+ROMX $05
+	"AI Logic 1"
 ROMX $06
 	"Bank 6"
 ROMX $07
@@ -46,7 +48,7 @@ ROMX $07
 	"Credits Sequence"
 	"Booster Packs"
 ROMX $08
-	"AI Logic"
+	"AI Logic 2"
 ROMX $0b
 	"Effect Functions"
 ROMX $0c

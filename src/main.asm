@@ -15,8 +15,9 @@ INCLUDE "engine/bank03.asm"
 SECTION "Bank 4", ROMX
 INCLUDE "engine/bank04.asm"
 
-SECTION "Bank 5", ROMX
-INCLUDE "engine/bank05.asm"
+SECTION "AI Logic 1", ROMX
+INCLUDE "data/deck_ai_pointers.asm"
+INCLUDE "engine/ai/core.asm"
 
 SECTION "Bank 6", ROMX
 INCLUDE "engine/bank06.asm"
@@ -31,7 +32,7 @@ INCLUDE "data/sequences/credits_sequence.asm"
 SECTION "Booster Packs", ROMX
 INCLUDE "engine/booster_packs.asm"
 
-SECTION "AI Logic", ROMX
+SECTION "AI Logic 2", ROMX
 INCLUDE "engine/ai/trainer_cards.asm"
 INCLUDE "engine/ai/pkmn_powers.asm"
 INCLUDE "engine/ai/common.asm"
