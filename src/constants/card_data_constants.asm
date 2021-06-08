@@ -211,7 +211,7 @@ FLAG_2_BIT_7_F             EQU %111
 ; bit 1 covers a wide variety of effects
 ; bits 2-7 are unused
 BOOST_IF_TAKEN_DAMAGE_F    EQU %000
-FLAG_3_BIT_1_F             EQU %001
+SPECIAL_AI_HANDLING_F      EQU %001
 
 ; CARD_DATA_ATTACK*_FLAG1_F constants
 INFLICT_POISON           EQU $1 << INFLICT_POISON_F
@@ -238,7 +238,7 @@ FLAG_2_BIT_7             EQU $1 << FLAG_2_BIT_7_F
 ; bit 1 covers a wide variety of effects
 ; bits 2-7 are unused
 BOOST_IF_TAKEN_DAMAGE    EQU $1 << BOOST_IF_TAKEN_DAMAGE_F
-FLAG_3_BIT_1             EQU $1 << FLAG_3_BIT_1_F
+SPECIAL_AI_HANDLING      EQU $1 << SPECIAL_AI_HANDLING_F
 
 ; special CARD_DATA_RETREAT_COST values
 UNABLE_RETREAT EQU $64

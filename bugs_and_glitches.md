@@ -134,7 +134,7 @@ Each deck AI lists some Pokémon card IDs that have an associated score for retr
 
 However, the game never actually stores the pointer to these lists (a notable expection being the Legendary Moltres deck), so the AI cannot access these score modifiers.
 
-**Fix:** Edit all applicable decks in `src/engine/deck_ai/decks/`, uncommenting the following line:
+**Fix:** Edit all applicable decks in `src/engine/ai/decks/`, uncommenting the following line:
 ```diff
 .store_list_pointers
 	store_list_pointer wAICardListAvoidPrize, .list_prize
@@ -283,7 +283,7 @@ AIDecide_PokemonTrader_PowerGenerator: ; 2200b (8:600b)
 
 ## AI never uses Energy Trans in order to retreat Arena card
 
-There is a mistake in the AI retreat logic, in [src/engine/deck_ai/decks/general.asm](https://github.com/pret/poketcg/blob/master/src/engine/deck_ai/decks/general.asm):
+There is a mistake in the AI retreat logic, in [src/engine/ai/decks/general.asm](https://github.com/pret/poketcg/blob/master/src/engine/ai/decks/general.asm):
 ```
 .used_switch
 ; if AI used switch, unset its AI flag
@@ -308,7 +308,7 @@ There is a mistake in the AI retreat logic, in [src/engine/deck_ai/decks/general
 
 ## Sam's practice deck does wrong card ID check
 
-There is a mistake in the AI logic for deciding which Pokémon for Sam to switch to, in [src/engine/deck_ai/decks/sams_practice.asm](https://github.com/pret/poketcg/blob/master/src/engine/deck_ai/decks/sams_practice.asm):
+There is a mistake in the AI logic for deciding which Pokémon for Sam to switch to, in [src/engine/ai/decks/sams_practice.asm](https://github.com/pret/poketcg/blob/master/src/engine/ai/decks/sams_practice.asm):
 ```
 ; this is a bug, it's attempting to compare a card ID with a deck index.
 ; the intention was to change the card to switch to depending on whether

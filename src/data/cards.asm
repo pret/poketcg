@@ -880,7 +880,7 @@ NidoranFCard: ; 31134 (c:5134)
 	dw NidoranFCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -1288,7 +1288,7 @@ OddishCard: ; 3133c (c:533c)
 	dw OddishSproutEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -1645,7 +1645,7 @@ BellsproutCard: ; 31503 (c:5503)
 	dw BellsproutCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -1937,7 +1937,7 @@ ExeggutorCard: ; 31689 (c:5689)
 	dw ExeggutorTeleportEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -2192,7 +2192,7 @@ ScytherCard: ; 317ce (c:57ce)
 	dw ScytherSwordsDanceEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -2549,7 +2549,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	dw NinetailsMixUpEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -3379,7 +3379,7 @@ GolduckCard: ; 31da5 (c:5da5)
 	dw GolduckHyperBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_HYPER_BEAM ; animation
 
@@ -3875,7 +3875,7 @@ KrabbyCard: ; 3202f (c:602f)
 	dw KrabbyCallForFamilyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -4436,7 +4436,7 @@ Vaporeon1Card: ; 322fa (c:62fa)
 	dw VaporeonFocusEnergyEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -5470,7 +5470,7 @@ Electrode1Card: ; 3280e (c:680e)
 	dw ElectrodeEnergySpikeEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -5521,7 +5521,7 @@ Electrode2Card: ; 3284f (c:684f)
 	dw ElectrodeChainLightningEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_CHAIN_LIGHTNING ; animation
 
@@ -5878,7 +5878,7 @@ Zapdos3Card: ; 32a16 (c:6a16)
 	dw ZapdosBigThunderEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_BIG_THUNDER ; animation
 
@@ -6082,7 +6082,7 @@ DugtrioCard: ; 32b1a (c:6b1a)
 	dw DugtrioEarthquakeEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_HIT ; animation
 
@@ -6643,7 +6643,7 @@ Marowak1Card: ; 32de5 (c:6de5)
 	dw MarowakCallforFriendEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -6694,7 +6694,7 @@ Marowak2Card: ; 32e26 (c:6e26)
 	dw MarowakWailEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_CRY ; animation
 
@@ -7408,7 +7408,7 @@ Gastly1Card: ; 331b4 (c:71b4)
 	dw GastlyDestinyBondEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 3
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -7459,7 +7459,7 @@ Gastly2Card: ; 331f5 (c:71f5)
 	dw GastlyEnergyConversionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 10
 	db ATK_ANIM_ENERGY_CONVERSION ; animation
 
@@ -7904,7 +7904,7 @@ Mewtwo2Card: ; 3343e (c:743e)
 	dw Mewtwo2EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -7955,7 +7955,7 @@ Mewtwo3Card: ; 3347f (c:747f)
 	dw Mewtwo3EnergyAbsorptionEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -8122,7 +8122,7 @@ Mew3Card: ; 33542 (c:7542)
 	dw MewDevolutionBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_NONE ; animation
 
@@ -8720,7 +8720,7 @@ Jigglypuff2Card: ; 3384e (c:784e)
 	dw JigglypuffFriendshipSongEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_NONE ; animation
 
@@ -9281,7 +9281,7 @@ KangaskhanCard: ; 33b19 (c:7b19)
 	dw KangaskhanFetchEffectCommands ; effect commands
 	db DRAW_CARD ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -9485,7 +9485,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	dw PorygonConversion1EffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -9499,7 +9499,7 @@ PorygonCard: ; 33c1d (c:7c1d)
 	dw PorygonConversion2EffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_GLOW_EFFECT ; animation
 
@@ -9652,7 +9652,7 @@ DragonairCard: ; 33ce0 (c:7ce0)
 	dw DragonairHyperBeamEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
-	db FLAG_3_BIT_1 ; flags 3
+	db SPECIAL_AI_HANDLING ; flags 3
 	db 0
 	db ATK_ANIM_HYPER_BEAM ; animation
 
