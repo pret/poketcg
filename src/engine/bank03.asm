@@ -2549,7 +2549,7 @@ ScriptCommand_PickNextMan1RequestedCard: ; cfd4 (3:4fd4)
 	jr nz, .shift_loop
 .skip_shift
 	ld a, e
-	and b ; has this card already been chosed before?
+	and b ; has this card already been chosen before?
 	pop bc
 	jr nz, .choose_again
 	ld a, e

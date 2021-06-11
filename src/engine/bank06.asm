@@ -1827,7 +1827,7 @@ RequestCloseIRCommunication: ; 19865 (6:5865)
 	call TransmitIRDataBuffer
 ;	fallthrough
 
-; calls CloseIRCommunications while perserving af
+; calls CloseIRCommunications while preserving af
 SafelyCloseIRCommunications: ; 19870 (6:5870)
 	push af
 	call CloseIRCommunications
@@ -2148,7 +2148,7 @@ LoadLinkConnectingScene: ; 19a1f (6:5a1f)
 
 ; shows Link Not Connected scene
 ; then asks the player whether they want to try again
-; if the player selectes "no", return carry
+; if the player selects "no", return carry
 ; input:
 ;  - hl = text ID
 LoadLinkNotConnectedSceneAndAskWhetherToTryAgain: ; 19a33 (6:5a33)
@@ -2313,7 +2313,7 @@ SetIRCommunicationErrorCode_NoError: ; 19b0d (6:5b0d)
 
 ; makes device receptive to receive data from other device
 ; to write in wDuelTempList (either list of cards or a deck configuration)
-; returns carry if some error occured
+; returns carry if some error occurred
 TryReceiveCardOrDeckConfigurationThroughIR: ; 19b20 (6:5b20)
 	call InitIRCommunications
 .loop_receive_request
@@ -2732,7 +2732,7 @@ DecideCardToReceiveFromCardPop: ; 19d92 (6:5d92)
 ; depending on the values obtained from the hashes,
 ; determine which rarity card to give to the player
 ; along with the song to play with each rarity
-; the probabilites of each possibility can be calculated
+; the probabilities of each possibility can be calculated
 ; as follows (given 2 random player names):
 ; 101/256 ~ 39% for Circle
 ;  90/256 ~ 35% for Diamond
@@ -2876,7 +2876,7 @@ _PreparePrinterConnection: ; 19e42 (6:5e42)
 	ld a, [hl]
 	cp $ff
 	jr z, ShowPrinterIsNotConnected
-;	falltrough
+;	fallthrough
 
 ; shows message on screen depending on wPrinterStatus
 ; also shows SCENE_GAMEBOY_PRINTER_NOT_CONNECTED.

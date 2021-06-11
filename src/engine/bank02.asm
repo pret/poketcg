@@ -3749,8 +3749,8 @@ FiltersCardSelectionParams: ; 9667 (2:5667)
 	db 0 ; y spacing
 	db 2 ; x spacing
 	db NUM_FILTERS ; num entries
-	db SYM_CURSOR_D ; visible cusor tile
-	db SYM_SPACE ; invisible cusor tile
+	db SYM_CURSOR_D ; visible cursor tile
+	db SYM_SPACE ; invisible cursor tile
 	dw NULL ; wCardListHandlerFunction
 
 FilteredCardListSelectionParams: ; 9670 (2:5670)
@@ -4133,7 +4133,7 @@ AppendOwnedCardCountAndStorageCountNumbers: ; 9880 (2:5880)
 	push bc
 	push de
 	push hl
-; count how many bytes untill $00
+; count how many bytes until $00
 .loop
 	ld a, [hl]
 	or a

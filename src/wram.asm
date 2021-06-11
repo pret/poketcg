@@ -468,7 +468,7 @@ ENDU
 
 	ds $1d
 
-; signals what error, if any, occured
+; signals what error, if any, occurred
 ; during IR communications
 ; 0 means there was no error
 wIRCommunicationErrorCode:: ; c5ea
@@ -651,7 +651,7 @@ wDecompRepeatModeToggle:: ; cada
 ; stores in both nybbles the length of the
 ; sequences to copy in decompression
 ; the high nybble is used first, then the low nybble
-; for a subsequent sequence repition
+; for a subsequent sequence repetition
 wDecompRepeatLengths:: ; cadb
 	ds $1
 
@@ -1898,7 +1898,7 @@ wPrinterNumCardTypes:: ; ce97
 	ds $1
 
 ; related to printer functions
-; only wrtten to but never read
+; only written to but never read
 wce98:: ; ce98
 	ds $1
 
@@ -2396,7 +2396,7 @@ wd112:: ; d112
 wMatchStartTheme:: ; d113
 	ds $1
 
-wMedalScreenYOffeset:: ; d114
+wMedalScreenYOffset:: ; d114
 	ds $1
 
 wd115:: ; d115

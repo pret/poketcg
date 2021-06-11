@@ -50,7 +50,7 @@ _PauseMenu_Status: ; 10059 (4:4059)
 	push af
 	call Func_10000
 	xor a
-	ld [wMedalScreenYOffeset], a
+	ld [wMedalScreenYOffset], a
 	call LoadCollectedMedalTilemaps
 	lb de,  0,  0
 	lb bc, 20,  8
@@ -139,13 +139,13 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	xor a
 	ld [wd291], a
 	lb de,  0,  8
-	ld a, [wMedalScreenYOffeset]
+	ld a, [wMedalScreenYOffset]
 	add e
 	ld e, a
 	lb bc, 20, 10
 	call DrawRegularTextBox
 	lb de, 6, 9
-	ld a, [wMedalScreenYOffeset]
+	ld a, [wMedalScreenYOffset]
 	add e
 	ld e, a
 	call AdjustCoordinatesForBGScroll
@@ -166,7 +166,7 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	jr z, .asm_10157
 	ld b, [hl]
 	inc hl
-	ld a, [wMedalScreenYOffeset]
+	ld a, [wMedalScreenYOffset]
 	add [hl]
 	ld c, a
 	inc hl
@@ -220,7 +220,7 @@ Func_10197: ; 10197 (4:4197)
 	add hl, bc
 	ld b, [hl]
 	inc hl
-	ld a, [wMedalScreenYOffeset]
+	ld a, [wMedalScreenYOffset]
 	add [hl]
 	ld c, a
 	ld a, [wd116]
@@ -380,7 +380,7 @@ Medal_1029e: ; 1029e (4:429e)
 	call DisableLCD
 	call Func_10000
 	ld a, -6
-	ld [wMedalScreenYOffeset], a
+	ld [wMedalScreenYOffset], a
 	call LoadCollectedMedalTilemaps
 	pop bc
 	ld a, c
@@ -799,9 +799,9 @@ _PauseMenu_Config: ; 10548 (4:4548)
 	call Func_111b3
 	call Func_105cd
 	ld a, 0
-	call ShowRighArrowCursor
+	call ShowRightArrowCursor
 	ld a, 1
-	call ShowRighArrowCursor
+	call ShowRightArrowCursor
 	xor a
 	ld [wCursorBlinkTimer], a
 	call FlashWhiteScreen
@@ -933,12 +933,12 @@ Func_10649: ; 10649 (4:4649)
 	and $10
 	jr z, .asm_10654
 	pop af
-	jr HideRighArrowCursor
+	jr HideRightArrowCursor
 .asm_10654
 	pop af
-	jr ShowRighArrowCursor
+	jr ShowRightArrowCursor
 
-ShowRighArrowCursor: ; 10657 (4:4657)
+ShowRightArrowCursor: ; 10657 (4:4657)
 	push bc
 	ld c, a
 	ld a, SYM_CURSOR_R
@@ -946,7 +946,7 @@ ShowRighArrowCursor: ; 10657 (4:4657)
 	pop bc
 	ret
 
-HideRighArrowCursor: ; 10660 (4:4660)
+HideRightArrowCursor: ; 10660 (4:4660)
 	push bc
 	ld c, a
 	ld a, SYM_SPACE
@@ -1031,11 +1031,11 @@ ConfigScreenDPadDown: ; 106c2 (4:46c2)
 	ld a, [wConfigCursorYPos]
 	cp 2
 	jr z, .hide_cursor
-	call ShowRighArrowCursor
+	call ShowRightArrowCursor
 	jr .skip
 .hide_cursor
 ; hide "exit settings" cursor if leaving bottom row
-	call HideRighArrowCursor
+	call HideRightArrowCursor
 .skip
 	ld a, [wConfigCursorYPos]
 	ld b, a
@@ -1077,11 +1077,11 @@ ConfigScreenDPadLeft: ; 10706 (4:4706)
 .left_or_right
 	push af
 	ld a, [wConfigCursorYPos]
-	call HideRighArrowCursor
+	call HideRightArrowCursor
 	pop af
 	call Func_1071e
 	ld a, [wConfigCursorYPos]
-	call ShowRighArrowCursor
+	call ShowRightArrowCursor
 	xor a
 	ld [wCursorBlinkTimer], a
 	ret
@@ -2777,7 +2777,7 @@ OverworldMap_InitNextPlayerVelocity: ; 110a6 (4:50a6)
 .positive2
 ; if the absolute value of wOverworldMapPlayerPathVerticalMovement is larger than
 ; the absolute value of wOverworldMapPlayerPathHorizontalMovement, this is dominantly
-; a north/south movement. otherswise, an east/west movement
+; a north/south movement. otherwise, an east/west movement
 	ld a, b
 	cp c
 	jr c, .north_south
@@ -3469,7 +3469,7 @@ wram_sram_map: MACRO
 ENDM
 
 ; maps WRAM addresses to SRAM addresses in order
-; to save and subsequently retreive them on game load
+; to save and subsequently retrieve them on game load
 ; also works as a test in order check whether
 ; the saved values is SRAM are legal, within the given value range
 WRAMToSRAMMapper: ; 11498 (4:5498)
@@ -6925,7 +6925,7 @@ ChallengeMachine_Start: ; 131d3 (4:71d3)
 	jr z, .resume_challenge
 
 ; new challenge
-	call ChallengeMachine_PickOpponentSequnce
+	call ChallengeMachine_PickOpponentSequence
 	call ChallengeMachine_DrawScoreScreen
 	call FlashWhiteScreen
 	ldtx hl, PlayTheChallengeMachineText
@@ -7592,7 +7592,7 @@ ChallengeMachine_DrMasonText: ; 13674 (4:7674)
 	text "Dr. Mason", TX_END, TX_END, TX_END, TX_END, TX_END, TX_END
 
 ; pick the next opponent sequence and clear challenge vars
-ChallengeMachine_PickOpponentSequnce: ; 13684 (4:7684)
+ChallengeMachine_PickOpponentSequence: ; 13684 (4:7684)
 	call EnableSRAM
 
 ; pick first opponent

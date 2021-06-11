@@ -1534,7 +1534,7 @@ UpdateRNGSources: ; 089b (0:089b)
 	pop hl
 	ret
 
-; initilizes variables used to decompress data in DecompressData
+; initializes variables used to decompress data in DecompressData
 ; de = source of compressed data
 ; b = HIGH byte of secondary buffer ($100 bytes of buffer space)
 ; also clears this $100 byte space

@@ -1329,7 +1329,7 @@ LoadDuelAnimationToBuffer: ; 1ca31 (7:4a31)
 	ret
 
 ; loads the animations from wDuelAnimBuffer
-; in acending order, starting at wDuelAnimBufferCurPos
+; in ascending order, starting at wDuelAnimBufferCurPos
 PlayBufferedDuelAnimations: ; 1ca6e (7:4a6e)
 	push hl
 	push bc
@@ -1878,7 +1878,7 @@ WhiteFlashScreen: ; 1cd76 (7:4d76)
 	ld a, [wScreenAnimDuration]
 	or a
 	ret nz
-	; retreive the previous background pals
+	; retrieve the previous background pals
 	ld hl, wTempBackgroundPalettesCGB
 	ld de, wBackgroundPalettesCGB
 	ld bc, 8 palettes

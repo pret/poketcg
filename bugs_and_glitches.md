@@ -132,7 +132,7 @@ Each deck AI lists some Pokémon card IDs that have an associated score for retr
 	db $00
 ```
 
-However, the game never actually stores the pointer to these lists (a notable expection being the Legendary Moltres deck), so the AI cannot access these score modifiers.
+However, the game never actually stores the pointer to these lists (a notable exception being the Legendary Moltres deck), so the AI cannot access these score modifiers.
 
 **Fix:** Edit all applicable decks in `src/engine/ai/decks/`, uncommenting the following line:
 ```diff

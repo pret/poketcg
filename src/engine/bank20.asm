@@ -784,7 +784,7 @@ LoadPaletteData: ; 80418 (20:4418)
 	cp $01
 	jr z, .obp1
 
-	ld a, [hli] ; pallete for OBP0
+	ld a, [hli] ; palette for OBP0
 	push hl
 	push bc
 	call SetOBP0
@@ -794,7 +794,7 @@ LoadPaletteData: ; 80418 (20:4418)
 	jr z, .check_palette_size
 
 .obp1
-	ld a, [hli] ; pallete for OBP1
+	ld a, [hli] ; palette for OBP1
 	push hl
 	push bc
 	call SetOBP1
@@ -1300,7 +1300,7 @@ Func_80baa: ; 80baa (20:4baa)
 Func_80c64: ; 80c64 (20:4c64)
 	ld a, [wLineSeparation]
 	push af
-	ld a, $01 ; no line separatior
+	ld a, $01 ; no line separator
 	ld [wLineSeparation], a
 	; load opponent's name
 	ld a, [wOpponentName]
