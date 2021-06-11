@@ -2235,4 +2235,3 @@ Palette101:: ; b7fc3 (2d:7fc3)
 Palette108:: ; b7ffd (2d:7ffd)
 	db 1, %11100100
 	db 0
-
