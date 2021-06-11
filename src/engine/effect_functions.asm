@@ -3632,14 +3632,14 @@ RapidashAgilityEffect: ; 2d413 (b:5413)
 	ret
 
 ; returns carry if Opponent has no Pokemon in bench
-NinetailsLure_CheckBench: ; 2d425 (b:5425)
+NinetalesLure_CheckBench: ; 2d425 (b:5425)
 	ld a, DUELVARS_NUMBER_OF_POKEMON_IN_PLAY_AREA
 	call GetNonTurnDuelistVariable
 	ldtx hl, EffectNoPokemonOnTheBenchText
 	cp 2
 	ret
 
-NinetailsLure_PlayerSelectEffect: ; 2d430 (b:5430)
+NinetalesLure_PlayerSelectEffect: ; 2d430 (b:5430)
 	ldtx hl, SelectPkmnOnBenchToSwitchWithActiveText
 	call DrawWideTextBox_WaitForInput
 	call SwapTurn
@@ -3652,12 +3652,12 @@ NinetailsLure_PlayerSelectEffect: ; 2d430 (b:5430)
 	call SwapTurn
 	ret
 
-NinetailsLure_AISelectEffect: ; 2d449 (b:5449)
+NinetalesLure_AISelectEffect: ; 2d449 (b:5449)
 	call GetBenchPokemonWithLowestHP
 	ldh [hTemp_ffa0], a
 	ret
 
-NinetailsLure_SwitchEffect: ; 2d44f (b:544f)
+NinetalesLure_SwitchEffect: ; 2d44f (b:544f)
 	call SwapTurn
 	ldh a, [hTemp_ffa0]
 	ld e, a

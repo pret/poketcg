@@ -586,14 +586,14 @@ RapidashAgilityEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, RapidashAgilityEffect
 	db  $00
 
-NinetailsLureEffectCommands:
-	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, NinetailsLure_CheckBench
-	dbw EFFECTCMDTYPE_AFTER_DAMAGE, NinetailsLure_SwitchEffect
-	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, NinetailsLure_PlayerSelectEffect
-	dbw EFFECTCMDTYPE_AI_SELECTION, NinetailsLure_AISelectEffect
+NinetalesLureEffectCommands:
+	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, NinetalesLure_CheckBench
+	dbw EFFECTCMDTYPE_AFTER_DAMAGE, NinetalesLure_SwitchEffect
+	dbw EFFECTCMDTYPE_REQUIRE_SELECTION, NinetalesLure_PlayerSelectEffect
+	dbw EFFECTCMDTYPE_AI_SELECTION, NinetalesLure_AISelectEffect
 	db  $00
 
-NinetailsFireBlastEffectCommands:
+NinetalesFireBlastEffectCommands:
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_1, FireBlast_CheckEnergy
 	dbw EFFECTCMDTYPE_INITIAL_EFFECT_2, FireBlast_PlayerSelectEffect
 	dbw EFFECTCMDTYPE_DISCARD_ENERGY, FireBlast_DiscardEffect
@@ -675,11 +675,11 @@ FlareonRageEffectCommands:
 	dbw EFFECTCMDTYPE_AI, FlareonRage_AIEffect
 	db  $00
 
-NinetailsMixUpEffectCommands:
+NinetalesMixUpEffectCommands:
 	dbw EFFECTCMDTYPE_AFTER_DAMAGE, MixUpEffect
 	db  $00
 
-NinetailsDancingEmbersEffectCommands:
+NinetalesDancingEmbersEffectCommands:
 	dbw EFFECTCMDTYPE_BEFORE_DAMAGE, DancingEmbers_MultiplierEffect
 	dbw EFFECTCMDTYPE_AI, DancingEmbers_AIEffect
 	db  $00

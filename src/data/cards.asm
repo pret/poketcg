@@ -54,8 +54,8 @@ CardPointers: ; 30c5c (c:4c5c)
 	dw CharmeleonCard
 	dw CharizardCard
 	dw VulpixCard
-	dw Ninetails1Card
-	dw Ninetails2Card
+	dw Ninetales1Card
+	dw Ninetales2Card
 	dw GrowlitheCard
 	dw Arcanine1Card
 	dw Arcanine2Card
@@ -2477,13 +2477,13 @@ VulpixCard: ; 31913 (c:5913)
 	tx VulpixDescription ; description
 	db 18
 
-Ninetails1Card: ; 31954 (c:5954)
+Ninetales1Card: ; 31954 (c:5954)
 	db TYPE_PKMN_FIRE ; type
-	gfx Ninetails1CardGfx ; gfx
-	tx NinetailsName ; name
+	gfx Ninetales1CardGfx ; gfx
+	tx NinetalesName ; name
 	db STAR ; rarity
 	db MYSTERY | NONE ; sets
-	db NINETAILS1
+	db NINETALES1
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
@@ -2491,11 +2491,11 @@ Ninetails1Card: ; 31954 (c:5954)
 	; attack 1
 	energy COLORLESS, 2 ; energies
 	tx LureName ; name
-	tx NinetailsLureDescription ; description
+	tx NinetalesLureDescription ; description
 	dw NONE ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw NinetailsLureEffectCommands ; effect commands
+	dw NinetalesLureEffectCommands ; effect commands
 	db NONE ; flags 1
 	db SWITCH_OPPONENT_POKEMON ; flags 2
 	db NONE ; flags 3
@@ -2509,7 +2509,7 @@ Ninetails1Card: ; 31954 (c:5954)
 	dw NONE ; description (cont)
 	db 80 ; damage
 	db DAMAGE_NORMAL ; category
-	dw NinetailsFireBlastEffectCommands ; effect commands
+	dw NinetalesFireBlastEffectCommands ; effect commands
 	db NONE ; flags 1
 	db DISCARD_ENERGY ; flags 2
 	db NONE ; flags 3
@@ -2525,16 +2525,16 @@ Ninetails1Card: ; 31954 (c:5954)
 	db 32 ; level
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
-	tx Ninetails1Description ; description
+	tx Ninetales1Description ; description
 	db 0
 
-Ninetails2Card: ; 31995 (c:5995)
+Ninetales2Card: ; 31995 (c:5995)
 	db TYPE_PKMN_FIRE ; type
-	gfx Ninetails2CardGfx ; gfx
-	tx NinetailsName ; name
+	gfx Ninetales2CardGfx ; gfx
+	tx NinetalesName ; name
 	db STAR ; rarity
 	db LABORATORY | GB ; sets
-	db NINETAILS2
+	db NINETALES2
 	db 80 ; hp
 	db STAGE1 ; stage
 	tx VulpixName ; pre-evo name
@@ -2546,7 +2546,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	tx MixUpDescriptionCont ; description (cont)
 	db 0 ; damage
 	db RESIDUAL ; category
-	dw NinetailsMixUpEffectCommands ; effect commands
+	dw NinetalesMixUpEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db SPECIAL_AI_HANDLING ; flags 3
@@ -2560,7 +2560,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	dw NONE ; description (cont)
 	db 10 ; damage
 	db DAMAGE_X ; category
-	dw NinetailsDancingEmbersEffectCommands ; effect commands
+	dw NinetalesDancingEmbersEffectCommands ; effect commands
 	db NONE ; flags 1
 	db NONE ; flags 2
 	db NONE ; flags 3
@@ -2576,7 +2576,7 @@ Ninetails2Card: ; 31995 (c:5995)
 	db 35 ; level
 	db 3, 7 ; length
 	dw 44 * 10 ; weight
-	tx Ninetails2Description ; description
+	tx Ninetales2Description ; description
 	db 0
 
 GrowlitheCard: ; 319d6 (c:59d6)

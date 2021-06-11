@@ -364,7 +364,7 @@ UnnamedDeck2: ; 301e7 (c:41e7)
 ; 30278 (c:4278)
 	db 24, FIRE_ENERGY
 	db 4, FLAREON1
-	db 4, NINETAILS2
+	db 4, NINETALES2
 	db 4, MOLTRES2
 	db 4, EEVEE
 	db 4, CHARMANDER
@@ -870,7 +870,7 @@ GrassAndPsychicDeck: ; 305d6 (c:45d6)
 LegendaryMoltresDeck: ; 30609 (c:4609)
 	db 25, FIRE_ENERGY
 	db 4, VULPIX
-	db 3, NINETAILS2
+	db 3, NINETALES2
 	db 4, GROWLITHE
 	db 2, ARCANINE2
 	db 2, MAGMAR1
@@ -1719,7 +1719,7 @@ FlamethrowerDeck: ; 30be5 (c:4be5)
 	db 2, CHARMELEON
 	db 1, CHARIZARD
 	db 2, VULPIX
-	db 1, NINETAILS1
+	db 1, NINETALES1
 	db 2, GROWLITHE
 	db 1, ARCANINE2
 	db 3, MAGMAR1
@@ -1739,7 +1739,7 @@ ReshuffleDeck: ; 30c0e (c:4c0e)
 	db 23, FIRE_ENERGY
 	db 2, DOUBLE_COLORLESS_ENERGY
 	db 4, VULPIX
-	db 3, NINETAILS2
+	db 3, NINETALES2
 	db 2, GROWLITHE
 	db 1, ARCANINE2
 	db 2, PONYTA

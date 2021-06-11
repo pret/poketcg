@@ -64,7 +64,7 @@ AIActionTable_LegendaryMoltres: ; 149e8 (05:49e8)
 
 .list_energy ; 14a2e (5:4a2e)
 	ai_energy VULPIX,     3, +0
-	ai_energy NINETAILS2, 3, +1
+	ai_energy NINETALES2, 3, +1
 	ai_energy GROWLITHE,  3, +1
 	ai_energy ARCANINE2,  4, +1
 	ai_energy MAGMAR1,    4, -1

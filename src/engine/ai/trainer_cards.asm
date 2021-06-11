@@ -6034,11 +6034,11 @@ AIDecide_PokemonTrader_Flamethrower: ; 22133 (8:6133)
 	call LookForCardIDInDeck_GivenCardIDInHand
 	jr c, .find_duplicates
 	ld b, VULPIX
-	ld a, NINETAILS1
+	ld a, NINETALES1
 	call LookForCardIDInDeck_GivenCardIDInHandAndPlayArea
 	jr c, .find_duplicates
 	ld a, VULPIX
-	ld b, NINETAILS1
+	ld b, NINETALES1
 	call LookForCardIDInDeck_GivenCardIDInHand
 	jr c, .find_duplicates
 	ld b, GROWLITHE

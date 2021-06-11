@@ -50,8 +50,8 @@
 	const CHARMELEON              ; $31
 	const CHARIZARD               ; $32
 	const VULPIX                  ; $33
-	const NINETAILS1              ; $34
-	const NINETAILS2              ; $35
+	const NINETALES1              ; $34
+	const NINETALES2              ; $35
 	const GROWLITHE               ; $36
 	const ARCANINE1               ; $37
 	const ARCANINE2               ; $38

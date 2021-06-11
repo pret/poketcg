@@ -781,8 +781,8 @@ WondersOfScienceCardList: ; 1b616 (6:7616)
 ReplaceEmAllCardList: ; 1b63d (6:763d)
 	db 24, FIRE_ENERGY
 	db  4, VULPIX
-	db  2, NINETAILS1
-	db  1, NINETAILS2
+	db  2, NINETALES1
+	db  1, NINETALES2
 	db  4, GROWLITHE
 	db  1, ARCANINE1
 	db  1, ARCANINE2
@@ -844,8 +844,8 @@ FirePokemonCardList: ; 1b6a4 (6:76a4)
 	db  2, CHARMELEON
 	db  1, CHARIZARD
 	db  3, VULPIX
-	db  1, NINETAILS1
-	db  1, NINETAILS2
+	db  1, NINETALES1
+	db  1, NINETALES2
 	db  2, GROWLITHE
 	db  1, ARCANINE2
 	db  2, PONYTA
@@ -1061,7 +1061,7 @@ WaterBeetleCardList: ; 1b7fc (6:77fc)
 LegendaryMoltresCardList: ; 1b83b (6:783b)
 	db 25, FIRE_ENERGY
 	db  4, VULPIX
-	db  3, NINETAILS2
+	db  3, NINETALES2
 	db  4, GROWLITHE
 	db  2, ARCANINE2
 	db  2, MAGMAR1

@@ -39,7 +39,7 @@ HandleSpecialAIAttacks: ; 16dcd (5:6dcd)
 	jp z, .EnergyAbsorption
 	cp MEWTWO2
 	jp z, .EnergyAbsorption
-	cp NINETAILS2
+	cp NINETALES2
 	jp z, .MixUp
 	cp ZAPDOS3
 	jp z, .BigThunder

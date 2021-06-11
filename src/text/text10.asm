@@ -869,11 +869,11 @@ VulpixDescription: ; 5a163 (16:6163)
 	line "tip as it grows older."
 	done
 
-NinetailsName: ; 5a1c0 (16:61c0)
+NinetalesName: ; 5a1c0 (16:61c0)
 	text "Ninetails"
 	done
 
-NinetailsLureDescription: ; 5a1cb (16:61cb)
+NinetalesLureDescription: ; 5a1cb (16:61cb)
 	text "If your opponent has any Benched"
 	line "Pokémon, choose 1 of them and switch"
 	line "it with the Defending Pokémon."
@@ -889,7 +889,7 @@ FireBlastDescription: ; 5a23d (16:623d)
 	line "attack."
 	done
 
-Ninetails1Description: ; 5a28a (16:628a)
+Ninetales1Description: ; 5a28a (16:628a)
 	text "Very smart and very vengeful."
 	line "Grabbing one of its many tails could"
 	line "result in a 1,000-year curse."
@@ -924,7 +924,7 @@ DancingEmbersDescription: ; 5a441 (16:6441)
 	line "damage times the number of heads."
 	done
 
-Ninetails2Description: ; 5a486 (16:6486)
+Ninetales2Description: ; 5a486 (16:6486)
 	text "According to an enduring legend,"
 	line "9 noble heroes were united and"
 	line "reincarnated as this."
