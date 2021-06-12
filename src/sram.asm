@@ -196,16 +196,16 @@ sOWMapEvents:: ; b81c
 sb827:: ; b827
 	ds $1
 
-sb828:: ; b828
+sSelectedPauseMenuItem:: ; b828
 	ds $1
 
-sb829:: ; b829
+sSelectedPCMenuItem:: ; b829
 	ds $1
 
-sb82a:: ; b82a
+sConfigCursorYPos:: ; b82a
 	ds $1
 
-sb82b:: ; b82b
+sSelectedGiftCenterMenuItem:: ; b82b
 	ds $1
 
 sPCPackSelection:: ; b82c
@@ -217,7 +217,7 @@ sPCPacks:: ; b82d
 sDefaultSong:: ; b83c
 	ds $1
 
-sb83d:: ; b83d
+sDebugPauseAllowed:: ; b83d
 	ds $1
 
 sRonaldIsInMap:: ; b83e
@@ -226,7 +226,7 @@ sRonaldIsInMap:: ; b83e
 sMastersBeatenList:: ; b83f
 	ds $a
 
-sb849:: ; b849
+sNPCDuelistDirection:: ; b849
 	ds $1
 
 sMultichoiceTextboxResult_ChooseDeckToDuelAgainst:: ; b84a

@@ -2214,7 +2214,7 @@ Unknown_10da9: ; 10da9 (4:4da9)
 Func_10dba: ; 10dba (4:4dba)
 	ld a, $1
 	farcall Func_c29b
-	ld a, [wd0ba]
+	ld a, [wSelectedGiftCenterMenuItem]
 	ld hl, Unknown_10e17
 	farcall InitAndPrintPauseMenu
 .asm_10dca
@@ -2222,7 +2222,7 @@ Func_10dba: ; 10dba (4:4dba)
 	call HandleMenuInput
 	jr nc, .asm_10dca
 	ld a, e
-	ld [wd0ba], a
+	ld [wSelectedGiftCenterMenuItem], a
 	ldh a, [hCurMenuItem]
 	cp e
 	jr z, .asm_10ddd
@@ -3473,7 +3473,6 @@ ENDM
 ; also works as a test in order check whether
 ; the saved values is SRAM are legal, within the given value range
 WRAMToSRAMMapper: ; 11498 (4:5498)
-; pointer, number of bytes, unknown
 	wram_sram_map wMedalCount,                        1, $00, $ff ; sMedalCount
 	wram_sram_map wCurOverworldMap,                   1, $00, $ff ; sCurOverworldMap
 	wram_sram_map wPlayTimeCounter + 0,               1, $00, $ff ; sPlayTimeCounter
@@ -3492,17 +3491,17 @@ WRAMToSRAMMapper: ; 11498 (4:5498)
 	wram_sram_map wd698,                              4, $00, $ff ; sb818
 	wram_sram_map wOWMapEvents,          NUM_MAP_EVENTS, $00, $ff ; sOWMapEvents
 	wram_sram_map .EmptySRAMSlot,                     1, $00, $ff ; sb827
-	wram_sram_map wd0b8,                              1, $00, $ff ; sb828
-	wram_sram_map wd0b9,                              1, $00, $ff ; sb829
-	wram_sram_map wConfigCursorYPos,                              1, $00, $ff ; sb82a
-	wram_sram_map wd0ba,                              1, $00, $ff ; sb82b
+	wram_sram_map wSelectedPauseMenuItem,             1, $00, $ff ; sSelectedPauseMenuItem
+	wram_sram_map wSelectedPCMenuItem,                1, $00, $ff ; sSelectedPCMenuItem
+	wram_sram_map wConfigCursorYPos,                  1, $00, $ff ; sConfigCursorYPos
+	wram_sram_map wSelectedGiftCenterMenuItem,        1, $00, $ff ; sSelectedGiftCenterMenuItem
 	wram_sram_map wPCPackSelection,                   1,   0,  14 ; sPCPackSelection
 	wram_sram_map wPCPacks,                NUM_PC_PACKS, $00, $ff ; sPCPacks
 	wram_sram_map wDefaultSong,                       1, $00, $ff ; sDefaultSong
-	wram_sram_map wcad5,                              1, $00, $ff ; sb83d
+	wram_sram_map wDebugPauseAllowed,                 1, $00, $ff ; sDebugPauseAllowed
 	wram_sram_map wRonaldIsInMap,                     1, $00, $ff ; sRonaldIsInMap
 	wram_sram_map wMastersBeatenList,                10, $00, $ff ; sMastersBeatenList
-	wram_sram_map wd0c5,                              1, $00, $ff ; sb849
+	wram_sram_map wNPCDuelistDirection,               1, $00, $ff ; sNPCDuelistDirection
 	wram_sram_map wMultichoiceTextboxResult_ChooseDeckToDuelAgainst, 1, $00, $ff ; sMultichoiceTextboxResult_ChooseDeckToDuelAgainst
 	wram_sram_map wd10e,                              1, $00, $ff ; sb84b
 	wram_sram_map .EmptySRAMSlot,                    15, $00, $ff ; sb84c

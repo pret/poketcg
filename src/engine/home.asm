@@ -768,7 +768,7 @@ DoAFrames: ; 0536 (0:0536)
 	ret
 
 ; updates background, sprites and other game variables, halts until vblank, and reads user input
-; if wcad5 is not 0, the game can be paused (and resumed) by pressing the SELECT button
+; if wDebugPauseAllowed is not 0, the game can be paused (and resumed) by pressing the SELECT button
 DoFrame: ; 053f (0:053f)
 	push af
 	push hl
@@ -779,7 +779,7 @@ DoFrame: ; 053f (0:053f)
 	call WaitForVBlank
 	call ReadJoypad
 	call HandleDPadRepeat
-	ld a, [wcad5]
+	ld a, [wDebugPauseAllowed]
 	or a
 	jr z, .done
 	ldh a, [hKeysPressed]
@@ -3035,7 +3035,7 @@ CopyDeckData: ; 1072 (0:1072)
 	jr nz, .card_quantity_loop
 	jr .next_card
 .done
-	ld hl, wcce9
+	ld hl, wDeckName
 	ld a, [de]
 	inc de
 	ld [hli], a
@@ -3778,7 +3778,7 @@ EvolvePokemonCard: ; 13ac (0:13ac)
 	ld e, a
 	add DUELVARS_ARENA_CARD
 	call GetTurnDuelistVariable
-	ld [wccee], a ; save pre-evolved Pokemon card into wccee
+	ld [wPreEvolutionPokemonCard], a ; save pre-evolved Pokemon card into wPreEvolutionPokemonCard
 	call LoadCardDataToBuffer2_FromDeckIndex
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
@@ -10669,7 +10669,7 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 	call PauseSong
 	ld a, MUSIC_CARD_POP
 	call PlaySong
-	ld a, $3
+	ld a, GAME_EVENT_GIFT_CENTER
 	ld [wd0c2], a
 	ld a, [wd10e]
 	or $10
@@ -10685,7 +10685,7 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 	ret
 
 GameEvent_BattleCenter: ; 38a3 (0:38a3)
-	ld a, $2
+	ld a, GAME_EVENT_BATTLE_CENTER
 	ld [wd0c2], a
 	xor a
 	ld [wd112], a
@@ -10700,7 +10700,7 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ret
 
 GameEvent_Duel: ; 38c0 (0:38c0)
-	ld a, $1
+	ld a, GAME_EVENT_DUEL
 	ld [wd0c2], a
 	xor a
 	ld [wd112], a

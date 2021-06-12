@@ -3735,10 +3735,10 @@ Wildfire_PlayerSelectEffect: ; 2d4a9 (b:54a9)
 ; just increase a counter and store it.
 ; this will be the output used by Wildfire_DiscardEnergyEffect.
 	xor a
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 .loop
 	ldh a, [hCurSelectionItem]
-	ld [wcbfb], a
+	ld [wEnergyDiscardMenuNumerator], a
 	bank1call HandleEnergyDiscardMenuInput
 	jr c, .done
 	ld hl, hCurSelectionItem
@@ -3954,14 +3954,14 @@ FireSpin_PlayerSelectEffect: ; 2d5cd (b:55cd)
 	bank1call DisplayEnergyDiscardScreen
 
 	ld a, 2
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 .loop_input
 	bank1call HandleEnergyDiscardMenuInput
 	ret c
 	call GetNextPositionInTempList
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
-	ld hl, wcbfb
+	ld hl, wEnergyDiscardMenuNumerator
 	inc [hl]
 	ldh a, [hCurSelectionItem]
 	cp 2
@@ -10865,7 +10865,7 @@ SuperEnergyRemoval_PlayerSelection: ; 2fce4 (b:7ce4)
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	bank1call DisplayEnergyDiscardScreen
 	ld a, 2
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 
 .loop_discard_energy_selection
 	bank1call HandleEnergyDiscardMenuInput
@@ -10875,14 +10875,14 @@ SuperEnergyRemoval_PlayerSelection: ; 2fce4 (b:7ce4)
 	call AskWhetherToQuitSelectingCards
 	jr nc, .done ; finish operation
 	; player selected to continue selection
-	ld a, [wcbfb]
+	ld a, [wEnergyDiscardMenuNumerator]
 	push af
 	ldh a, [hTempPlayAreaLocation_ff9d]
 	bank1call DisplayEnergyDiscardScreen
 	ld a, 2
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 	pop af
-	ld [wcbfb], a
+	ld [wEnergyDiscardMenuNumerator], a
 	jr .loop_discard_energy_selection
 
 .energy_selected
@@ -10891,7 +10891,7 @@ SuperEnergyRemoval_PlayerSelection: ; 2fce4 (b:7ce4)
 	ldh a, [hTempCardIndex_ff98]
 	ld [hl], a
 	call RemoveCardFromDuelTempList
-	ld hl, wcbfb
+	ld hl, wEnergyDiscardMenuNumerator
 	inc [hl]
 	ldh a, [hCurSelectionItem]
 	cp 5

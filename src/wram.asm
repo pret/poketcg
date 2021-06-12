@@ -621,7 +621,8 @@ wVBlankFunctionTrampoline:: ; cad0
 wDoFrameFunction:: ; cad3
 	ds $2
 
-wcad5:: ; cad5
+; if non-zero, the game screen can be paused at any time with the select button
+wDebugPauseAllowed:: ; cad5
 	ds $1
 
 ; pointer to keep track of where
@@ -704,10 +705,7 @@ wSerialTimeoutCounter:: ; cb78
 	ds $1
 
 wcb79:: ; cb79
-	ds $1
-
-wcb7a:: ; cb7a
-	ds $1
+	ds $2
 
 wcb7b:: ; cb7b
 	ds $2
@@ -784,7 +782,7 @@ wCurPlayAreaY:: ; cbca
 ; obviously different for player and opponent side. used by DrawDuelHUD.
 wHUDEnergyAndHPBarsY:: ; cbca
 
-wcbca:: ; cbca
+wPracticeDuelTextY:: ; cbca
 	ds $1
 
 ; selected bench slot (1-5, that is, a PLAY_AREA_BENCH_* constant)
@@ -795,7 +793,7 @@ wBenchSelectedPokemon:: ; cbcb
 wEnergyCardsRequiredToRetreat:: ; cbcc
 	ds $1
 
-wcbcd:: ; cbcd
+wNumRetreatEnergiesSelected:: ; cbcd
 	ds $1
 
 ; used in CheckIfEnoughEnergiesToAttack for the calculation
@@ -820,13 +818,14 @@ wCardPageType:: ; cbd1
 wExcludeArenaPokemon:: ; cbd2
 	ds $1
 
-wcbd3:: ; cbd3
+wPlayAreaScreenLoaded:: ; cbd3
 	ds $1
 
 wcbd4:: ; cbd4
 	ds $1
 
-wcbd5:: ; cbd5
+; low byte of the address of the next slot in the hTempRetreatCostCards array to be used
+wTempRetreatCostCardsPos:: ; cbd5
 	ds $1
 
 ; in a card list, which keys (among START and A_BUTTON) do not open the item selection
@@ -841,7 +840,7 @@ wCardPageExitKeys:: ; cbd7
 
 ; used to store function pointer for printing card order
 ; in card list reordering screen.
-wcbd8:: ; cbd8
+wPrintSortNumberInCardListPtr:: ; cbd8
 	ds $2
 
 ; in the hand or discard pile card screen, id of the text printed in the bottom-left box
@@ -881,7 +880,8 @@ wOppRNGCounter:: ; cbe4
 wDuelReturnAddress:: ; cbe5
 	ds $2
 
-wcbe7:: ; cbe7
+; if non-zero, duel menu input is not checked
+wDebugSkipDuelMenuInput:: ; cbe7
 	ds $1
 
 wNumCardsTryingToDraw:: ; cbe8
@@ -908,18 +908,20 @@ wcbf7:: ; cbf7
 wSkipDuelistIsThinkingDelay:: ; cbf9
 	ds $1
 
-wcbfa:: ; cbfa
+wEnergyDiscardMenuDenominator:: ; cbfa
 	ds $1
 
-wcbfb:: ; cbfb
+wEnergyDiscardMenuNumerator:: ; cbfb
 	ds $1
 
 ; used by Func_5805 to store the remaining Prizes, so that if more than that
 ; amount would be taken, only the remaining amount is taken
-wcbfc:: ; cbfc
+wTempNumRemainingPrizeCards:: ; cbfc
 	ds $1
 
-wcbfd:: ; cbfd
+; if FALSE, player is placing initial arena pokemon
+; if TRUE, player is placing initial bench pokemon
+wPlacingInitialBenchPokemon:: ; cbfd
 	ds $1
 
 ; during a practice duel, identifies an entry of PracticeDuelActionTable
@@ -932,7 +934,8 @@ wcbff:: ; cbff
 wPracticeDuelTurn:: ; cc00
 	ds $1
 
-wcc01:: ; cc01
+; pointer from PracticeDuelTextPointerTable
+wPracticeDuelTextPointer:: ; cc01
 	ds $2
 
 ; used to print a Pokemon card's length in feet and inches
@@ -1134,8 +1137,8 @@ wcce7:: ; cce7
 wcce8:: ; cce8
 	ds $1
 
-; used in CopyDeckData
-wcce9:: ; cce9
+; text ID of the name of the deck loaded by CopyDeckData
+wDeckName:: ; cce9
 	ds $2
 
 ; a PLAY_AREA_* constant (0: arena card, 1-5: bench card)
@@ -1150,7 +1153,7 @@ wccec:: ; ccec
 wEffectFailed:: ; cced
 	ds $1
 
-wccee:: ; ccee
+wPreEvolutionPokemonCard:: ; ccee
 	ds $1
 
 ; flag to determine whether DUELVARS_ARENA_CARD_LAST_TURN_DAMAGE
@@ -2314,13 +2317,13 @@ wSCX:: ; d0b6
 wSCY:: ; d0b7
 	ds $1
 
-wd0b8:: ; d0b8
+wSelectedPauseMenuItem:: ; d0b8
 	ds $1
 
-wd0b9:: ; d0b9
+wSelectedPCMenuItem:: ; d0b9
 	ds $1
 
-wd0ba:: ; d0ba
+wSelectedGiftCenterMenuItem:: ; d0ba
 	ds $1
 
 wTempMap:: ; d0bb
@@ -2356,7 +2359,7 @@ wDuelResult:: ; d0c3
 wNPCDuelist:: ; d0c4
 	ds $1
 
-wd0c5:: ; d0c5
+wNPCDuelistDirection:: ; d0c5
 	ds $1
 
 ; used to store the location of an overworld script, which is jumped to later

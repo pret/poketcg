@@ -391,7 +391,7 @@ PrintDuelMenuAndHandleInput: ; 4295 (1:4295)
 	ldh a, [hKeysPressed]
 	bit SELECT_F, a
 	jp nz, DuelMenuShortcut_BothActivePokemon
-	ld a, [wcbe7]
+	ld a, [wDebugSkipDuelMenuInput]
 	or a
 	jr nz, .handle_input
 	call HandleDuelMenuInput
@@ -877,7 +877,7 @@ CheckIfEnoughEnergiesToRetreat: ; 45f4 (1:45f4)
 	ld a, [wTotalAttachedEnergies]
 	cp c
 	ret c
-	ld [wcbcd], a
+	ld [wNumRetreatEnergiesSelected], a
 	ld a, c
 	ld [wEnergyCardsRequiredToRetreat], a
 	or a
@@ -894,24 +894,24 @@ DisplayRetreatScreen: ; 4611 (1:4611)
 	or a
 	ret z ; return if no energy cards are required at all
 	xor a
-	ld [wcbcd], a
+	ld [wNumRetreatEnergiesSelected], a
 	call CreateArenaOrBenchEnergyCardList
 	call SortCardsInDuelTempListByID
 	ld a, LOW(hTempRetreatCostCards)
-	ld [wcbd5], a
+	ld [wTempRetreatCostCardsPos], a
 	xor a
 	call DisplayEnergyDiscardScreen
 	ld a, [wEnergyCardsRequiredToRetreat]
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 .select_energies_loop
-	ld a, [wcbcd]
-	ld [wcbfb], a
+	ld a, [wNumRetreatEnergiesSelected]
+	ld [wEnergyDiscardMenuNumerator], a
 	call HandleEnergyDiscardMenuInput
 	ret c
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardDataToBuffer2_FromDeckIndex
 	; append selected energy card to hTempRetreatCostCards
-	ld hl, wcbd5
+	ld hl, wTempRetreatCostCardsPos
 	ld c, [hl]
 	inc [hl]
 	ldh a, [hTempCardIndex_ff98]
@@ -923,7 +923,7 @@ DisplayRetreatScreen: ; 4611 (1:4611)
 	jr nz, .not_double
 	inc c
 .not_double
-	ld hl, wcbcd
+	ld hl, wNumRetreatEnergiesSelected
 	ld a, [hl]
 	add c
 	ld [hl], a
@@ -937,7 +937,7 @@ DisplayRetreatScreen: ; 4611 (1:4611)
 	jr .select_energies_loop
 .enough
 	; terminate hTempRetreatCostCards array with $ff
-	ld a, [wcbd5]
+	ld a, [wTempRetreatCostCardsPos]
 	ld c, a
 	ld a, $ff
 	ld [$ff00+c], a
@@ -959,9 +959,9 @@ DisplayEnergyDiscardScreen: ; 4673 (1:4673)
 	ld [hl], 0 ; wCurPlayAreaY
 	call PrintPlayAreaCardInformation
 	xor a
-	ld [wcbfb], a
+	ld [wEnergyDiscardMenuNumerator], a
 	inc a
-	ld [wcbfa], a
+	ld [wEnergyDiscardMenuDenominator], a
 ;	fallthrough
 
 ; display the menu that belongs to the energy discard screen that lets the player
@@ -982,30 +982,30 @@ DisplayEnergyDiscardMenu: ; 4693 (1:4693)
 	ld [wCardListIndicatorYPosition], a
 	ret
 
-; if [wcbfa] non-0:
-   ; prints "[wcbfb]/[wcbfa]" at 16,16, where [wcbfb] is the total amount
-   ; of energy cards already selected to discard, and [wcbfa] is the total
-   ; amount of energies that are required to discard.
-; if [wcbfa] == 0:
-	; prints only "[wcbfb]"
+; if [wEnergyDiscardMenuDenominator] non-0:
+   ; prints "[wEnergyDiscardMenuNumerator]/[wEnergyDiscardMenuDenominator]" at 16,16
+   ; where [wEnergyDiscardMenuNumerator] is the number of energy cards already selected to discard
+   ; and [wEnergyDiscardMenuDenominator] is the total number of energies that are required to discard.
+; if [wEnergyDiscardMenuDenominator] == 0:
+	; prints only "[wEnergyDiscardMenuNumerator]"
 HandleEnergyDiscardMenuInput: ; 46b7 (1:46b7)
 	lb bc, 16, 16
-	ld a, [wcbfa]
+	ld a, [wEnergyDiscardMenuDenominator]
 	or a
 	jr z, .print_single_number
-	ld a, [wcbfb]
+	ld a, [wEnergyDiscardMenuNumerator]
 	add SYM_0
 	call WriteByteToBGMap0
 	inc b
 	ld a, SYM_SLASH
 	call WriteByteToBGMap0
 	inc b
-	ld a, [wcbfa]
+	ld a, [wEnergyDiscardMenuDenominator]
 	add SYM_0
 	call WriteByteToBGMap0
 	jr .wait_input
 .print_single_number
-	ld a, [wcbfb]
+	ld a, [wEnergyDiscardMenuNumerator]
 	inc b
 	call WriteTwoDigitNumberInTxSymbolFormat
 .wait_input
@@ -2010,7 +2010,7 @@ ChooseInitialArenaAndBenchPokemon: ; 4cd5 (1:4cd5)
 	ld a, PRACTICEDUEL_PUT_STARYU_IN_BENCH
 	call DoPracticeDuelAction
 .bench_loop
-	ld a, $1
+	ld a, TRUE
 	ldtx hl, ChooseYourBenchPokemonText
 	call DisplayPlaceInitialPokemonCardsScreen
 	jr c, .bench_done
@@ -2912,15 +2912,15 @@ PrintPracticeDuelInstructionsForCurrentTurn: ; 5382 (1:5382)
 ; a numbered instruction text, that is later printed without text delay.
 PrintPracticeDuelInstructions: ; 5396 (1:5396)
 	xor a
-	ld [wcbca], a
+	ld [wPracticeDuelTextY], a
 	ld a, l
-	ld [wcc01], a
+	ld [wPracticeDuelTextPointer], a
 	ld a, h
-	ld [wcc01 + 1], a
+	ld [wPracticeDuelTextPointer + 1], a
 .print_instructions_loop
-	call Func_53fa
+	call PrintNextPracticeDuelInstruction
 	ld a, [hli]
-	ld [wcbca], a
+	ld [wPracticeDuelTextY], a
 	or a
 	jr z, PrintPracticeDuelLetsPlayTheGame
 	ld e, [hl]
@@ -2941,7 +2941,7 @@ PrintPracticeDuelInstructions: ; 5396 (1:5396)
 	call SetNoLineSeparation
 	ld l, e
 	ld h, d
-	ld a, [wcbca]
+	ld a, [wPracticeDuelTextY]
 	ld e, a
 	ld d, 1
 	call InitTextPrinting_ProcessTextFromID
@@ -2961,8 +2961,8 @@ PrintPracticeDuelInstructions_Fast: ; 53da (1:53da)
 	ld a, [hli]
 	or a
 	jr z, PrintPracticeDuelLetsPlayTheGame
-	ld e, a
-	ld d, 1
+	ld e, a ; y
+	ld d, 1 ; x
 	call PrintPracticeDuelNumberedInstruction
 	jr PrintPracticeDuelInstructions_Fast
 
@@ -2984,27 +2984,28 @@ PrintPracticeDuelNumberedInstruction: ; 53e6 (1:53e6)
 	pop hl
 	ret
 
-Func_53fa: ; 53fa (1:53fa)
+; print a single instruction bullet for the current turn
+PrintNextPracticeDuelInstruction: ; 53fa (1:53fa)
 	ld a, $01
 	ldh [hffb0], a
 	push hl
 	call PrintPracticeDuelInstructionsTextBoxLabel
-	ld hl, wcc01
+	ld hl, wPracticeDuelTextPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-.asm_5408
-	ld a, [wcbca]
+.next
+	ld a, [wPracticeDuelTextY]
 	cp [hl]
-	jr c, .asm_541a
+	jr c, .done
 	ld a, [hli]
 	or a
-	jr z, .asm_541a
-	ld e, a
-	ld d, $01
+	jr z, .done
+	ld e, a ; y
+	ld d, 1 ; x
 	call PrintPracticeDuelNumberedInstruction
-	jr .asm_5408
-.asm_541a
+	jr .next
+.done
 	pop hl
 	xor a
 	ldh [hffb0], a
@@ -3144,7 +3145,7 @@ DuelMenuData: ; 54e9 (1:54e9)
    ; a = 1 -> prompted to place Pokemon card in bench
 ; return carry if no card was placed (only allowed for bench)
 DisplayPlaceInitialPokemonCardsScreen: ; 5502 (1:5502)
-	ld [wcbfd], a
+	ld [wPlacingInitialBenchPokemon], a
 	push hl
 	call CreateHandCardList
 	call InitAndDrawCardListScreenLayout
@@ -3156,7 +3157,7 @@ DisplayPlaceInitialPokemonCardsScreen: ; 5502 (1:5502)
 	call DisplayCardList
 	jr nc, .card_selected
 	; attempted to exit screen
-	ld a, [wcbfd]
+	ld a, [wPlacingInitialBenchPokemon]
 	or a
 	; player is forced to place a Pokemon card in the arena
 	jr z, .display_card_list
@@ -3253,7 +3254,7 @@ InitAndDrawCardListScreenLayout: ; 559a (1:559a)
 	ld [hli], a
 	ld [hl], a
 	ld [wSortCardListByID], a
-	ld hl, wcbd8
+	ld hl, wPrintSortNumberInCardListPtr
 	ld [hli], a
 	ld [hl], a
 	ld [wCardListItemSelectionMenuType], a
@@ -3521,7 +3522,7 @@ CardListFunction: ; 5719 (1:5719)
 	ret
 
 Func_5735: ; 5735 (1:5735)
-	ld hl, wcbd8
+	ld hl, wPrintSortNumberInCardListPtr
 	ld de, PrintSortNumberInCardList
 	ld [hl], e
 	inc hl
@@ -3531,7 +3532,7 @@ Func_5735: ; 5735 (1:5735)
 	ret
 
 Func_5744: ; 5744 (1:5744)
-	ld hl, wcbd8
+	ld hl, wPrintSortNumberInCardListPtr
 	jp CallIndirect
 
 ; goes through list in wDuelTempList + 10
@@ -3705,7 +3706,7 @@ Func_5805: ; 5805 (1:5805)
 	ldtx hl, WillDrawNPrizesText
 	call DrawWideTextBox_PrintText
 	call CountPrizes
-	ld [wcbfc], a
+	ld [wTempNumRemainingPrizeCards], a
 	ld a, DUELVARS_DUELIST_TYPE
 	call GetTurnDuelistVariable
 	cp DUELIST_TYPE_LINK_OPP
@@ -3727,7 +3728,7 @@ Func_5805: ; 5805 (1:5805)
 	cp $ff
 	call nz, AddCardToHand
 .asm_586f
-	ld a, [wcbfc]
+	ld a, [wTempNumRemainingPrizeCards]
 	ld hl, wNumberPrizeCardsToTake
 	cp [hl]
 	jr nc, .asm_587e
@@ -5002,7 +5003,7 @@ _HasAlivePokemonInPlayArea: ; 5fde (1:5fde)
 	ld b, 0
 	inc c
 	xor a
-	ld [wcbd3], a
+	ld [wPlayAreaScreenLoaded], a
 	ld [wcbd4], a
 	jr .next_pkmn
 .loop
@@ -5031,13 +5032,13 @@ DisplayPlayAreaScreen: ; 600e (1:600e)
 	ld [wNoItemSelectionMenuKeys], a
 	ldh a, [hTempCardIndex_ff98]
 	push af
-	ld a, [wcbd3]
+	ld a, [wPlayAreaScreenLoaded]
 	or a
 	jr nz, .skip_ahead
 	xor a
 	ld [wSelectedDuelSubMenuItem], a
 	inc a
-	ld [wcbd3], a
+	ld [wPlayAreaScreenLoaded], a
 .asm_6022
 	call ZeroObjectPositionsAndToggleOAMCopy
 	call EmptyScreen
@@ -6501,12 +6502,12 @@ PrintAttachedEnergyToPokemon: ; 68e4 (1:68e4)
 	call DrawWideTextBox_WaitForInput
 	ret
 
-; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wccee,
+; print the PokemonEvolvedIntoPokemonText, given the Pokemon card to evolve in wPreEvolutionPokemonCard,
 ; and the evolved Pokemon card in hTempCardIndex_ff98. also play a sound effect.
 PrintPokemonEvolvedIntoPokemon: ; 68fa (1:68fa)
 	ld a, SFX_5E
 	call PlaySFX
-	ld a, [wccee]
+	ld a, [wPreEvolutionPokemonCard]
 	call LoadCardNameToTxRam2
 	ldh a, [hTempCardIndex_ff98]
 	call LoadCardNameToTxRam2_b

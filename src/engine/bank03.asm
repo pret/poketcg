@@ -182,7 +182,7 @@ Func_c158: ; c158 (3:4158)
 	ld a, [wLoadedNPCTempIndex]
 	ld l, LOADED_NPC_DIRECTION
 	call GetItemInLoadedNPCIndex
-	ld a, [wd0c5]
+	ld a, [wNPCDuelistDirection]
 	ld [hl], a
 	farcall UpdateNPCAnimation
 .asm_c179
@@ -259,9 +259,9 @@ Func_c1ed: ; c1ed (3:41ed)
 
 Func_c1f8: ; c1f8 (3:41f8)
 	xor a
-	ld [wd0b8], a
-	ld [wd0b9], a
-	ld [wd0ba], a
+	ld [wSelectedPauseMenuItem], a
+	ld [wSelectedPCMenuItem], a
+	ld [wSelectedGiftCenterMenuItem], a
 	ld [wConfigCursorYPos], a
 	ld [wd0c2], a
 	ld [wDefaultSong], a
@@ -1128,14 +1128,14 @@ PauseMenu: ; c75a (3:475a)
 	call HandleMenuInput
 	jr nc, .wait_input
 	ld a, e
-	ld [wd0b8], a
+	ld [wSelectedPauseMenuItem], a
 	ldh a, [hCurMenuItem]
 	cp e
 	jr nz, .exit
 	cp $5
 	jr z, .exit
 	call Func_c2a3
-	ld a, [wd0b8]
+	ld a, [wSelectedPauseMenuItem]
 	ld hl, PauseMenuPointerTable
 	call JumpToFunctionInTable
 	ld hl, Func_c797
@@ -1146,7 +1146,7 @@ PauseMenu: ; c75a (3:475a)
 	ret
 
 Func_c797: ; c797 (3:4797)
-	ld a, [wd0b8]
+	ld a, [wSelectedPauseMenuItem]
 	ld hl, Unknown_10d98
 	farcall InitAndPrintPauseMenu
 	ret
@@ -1212,14 +1212,14 @@ PCMenu: ; c7ea (3:47ea)
 	call HandleMenuInput
 	jr nc, .wait_input
 	ld a, e
-	ld [wd0b9], a
+	ld [wSelectedPCMenuItem], a
 	ldh a, [hCurMenuItem]
 	cp e
 	jr nz, .exit
 	cp $4
 	jr z, .exit
 	call Func_c2a3
-	ld a, [wd0b9]
+	ld a, [wSelectedPCMenuItem]
 	ld hl, PointerTable_c846
 	call JumpToFunctionInTable
 	ld hl, Func_c84e
@@ -1243,7 +1243,7 @@ PointerTable_c846: ; c846 (3:4846)
 	dw PCMenu_Print
 
 Func_c84e: ; c84e (3:484e)
-	ld a, [wd0b9]
+	ld a, [wSelectedPCMenuItem]
 	ld hl, Unknown_10da9
 	farcall InitAndPrintPauseMenu
 	ret
@@ -2104,7 +2104,7 @@ ScriptCommand_StartDuel: ; cd01 (3:4d01)
 	ld [wNPCDuelistCopy], a
 	push af
 	farcall Func_1c557
-	ld [wd0c5], a
+	ld [wNPCDuelistDirection], a
 	pop af
 	farcall SetNPCOpponentNameAndPortrait
 	ld a, GAME_EVENT_DUEL
