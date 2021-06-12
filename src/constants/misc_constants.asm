@@ -50,6 +50,11 @@ OWMODE_MOVE           EQU 1
 OWMODE_START_SCRIPT   EQU 2
 OWMODE_SCRIPT         EQU 3
 
+; overworld NPC flag constants (see wOverworldNPCFlags)
+AUTO_CLOSE_TEXTBOX       EQU 0
+RESTORE_FACING_DIRECTION EQU 1
+HIDE_ALL_NPC_SPRITES     EQU 7
+
 ; max number of player names that
 ; can be written to sCardPopNameList
 CARDPOP_NAME_LIST_MAX_ELEMS EQU 16

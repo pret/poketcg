@@ -3,7 +3,7 @@
 _CopyCardNameAndLevel: ; 18000 (6:4000)
 	push bc
 	push de
-	ld [wcd9b], a
+	ld [wCardNameLength], a
 	ld hl, wLoadedCard1Name
 	ld a, [hli]
 	ld h, [hl]
@@ -18,7 +18,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 
 ; the name doesn't start with TX_HALFWIDTH
 ; this doesn't appear to be ever the case (unless caller manipulates wLoadedCard1Name)
-	ld a, [wcd9b]
+	ld a, [wCardNameLength]
 	ld c, a
 	ld a, [wLoadedCard1Type]
 	cp TYPE_ENERGY
@@ -91,7 +91,7 @@ _CopyCardNameAndLevel: ; 18000 (6:4000)
 
 ; the name starts with TX_HALFWIDTH
 _CopyCardNameAndLevel_HalfwidthText: ; 18086 (6:4086)
-	ld a, [wcd9b]
+	ld a, [wCardNameLength]
 	inc a
 	add a
 	ld b, a
@@ -4433,7 +4433,7 @@ InputPlayerName: ; 1a7a3 (6:67a3)
 	ld [wNamingScreenCursorX], a
 	ld [wNamingScreenCursorY], a
 	ld a, $09
-	ld [wd005], a
+	ld [wNamingScreenNumColumns], a
 	ld a, $06
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
@@ -4651,7 +4651,7 @@ NamingScreen_CheckButtonState: ; 1a908 (6:6908)
 	xor a
 	jr .asm_69a7
 .asm_6937
-	ld a, [wd005]
+	ld a, [wNamingScreenNumColumns]
 	ld c, a
 	ld a, h
 	bit D_LEFT_F, b
@@ -5297,7 +5297,7 @@ InputDeckName: ; 1ad89 (6:6d89)
 	ld [wNamingScreenCursorY], a
 
 	ld a, $09
-	ld [wd005], a
+	ld [wNamingScreenNumColumns], a
 	ld a, $07
 	ld [wNamingScreenKeyboardHeight], a
 	ld a, $0f
@@ -5523,7 +5523,7 @@ Func_1aefb: ; 1aefb (6:6efb)
 .asm_6f2a
 	cp $06
 	jr z, .asm_6f73
-	ld a, [wd005]
+	ld a, [wNamingScreenNumColumns]
 	ld c, a
 	ld a, h
 	bit 5, b

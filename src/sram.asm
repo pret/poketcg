@@ -175,7 +175,7 @@ sTempPlayerYCoord:: ; b812
 sTempPlayerDirection:: ; b813
 	ds $1
 
-sb814:: ; b814
+sActiveGameEvent:: ; b814
 	ds $1
 
 sDuelResult:: ; b815

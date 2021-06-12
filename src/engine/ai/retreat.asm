@@ -434,7 +434,7 @@ AIDecideWhetherToRetreat: ; 158b2 (5:58b2)
 	jr .set_carry
 
 ; if player's turn and loaded attack is not a Pokémon Power OR
-; if opponent's turn and wcddb == 0
+; if opponent's turn and wAITriedAttack == 0
 ; set wcdda's bit 7 flag
 Func_15b54: ; 15b54 (5:5b54)
 	xor a
@@ -450,7 +450,7 @@ Func_15b54: ; 15b54 (5:5b54)
 	jr .set_flag
 
 .opponent
-	ld a, [wcddb]
+	ld a, [wAITriedAttack]
 	or a
 	ret nz
 

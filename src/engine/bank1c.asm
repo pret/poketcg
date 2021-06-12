@@ -461,20 +461,20 @@ ENDM
 	border_medal_tile v0Tiles1 + $53a, $73, $10
 	border_medal_tile v0Tiles1 + $53c, $74, $10
 
-; decompresses palette data depending on wd132
+; decompresses palette data depending on wCurMapSGBPals
 ; then sends it as SGB packet
 SetSGB2AndSGB3MapPalette: ; 7036a (1c:436a)
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	ret nz ; return if not SGB
-	ld a, [wd132]
+	ld a, [wCurMapSGBPals]
 	or a
 	ret z ; not valid
 
 	push hl
 	push bc
 	push de
-	ld a, [wd132]
+	ld a, [wCurMapSGBPals]
 	add a
 	ld c, a
 	ld b, $0

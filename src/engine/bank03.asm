@@ -6,8 +6,8 @@ LoadMap: ; c000 (3:4000)
 	ld a, GAME_EVENT_OVERWORLD
 	ld [wGameEvent], a
 	xor a
-	ld [wd10f], a
-	ld [wd110], a
+	ld [wReloadOverworldCallbackPtr], a
+	ld [wReloadOverworldCallbackPtr + 1], a
 	ld [wMatchStartTheme], a
 	farcall Func_10a9b
 	call WhiteOutDMGPals
@@ -46,7 +46,7 @@ LoadMap: ; c000 (3:4000)
 	call SetOverworldDoFrameFunction
 	xor a
 	ld [wOverworldTransition], a
-	ld [wd0c1], a
+	ld [wOverworldNPCFlags], a
 	call PlayDefaultSong
 	farcall Func_10af9
 	call Func_c141
@@ -128,19 +128,19 @@ EnterScript: ; c10a (3:410a)
 
 ; closes dialogue window. seems to be for other things as well.
 CloseAdvancedDialogueBox: ; c111 (3:4111)
-	ld a, [wd0c1]
-	bit 0, a
+	ld a, [wOverworldNPCFlags]
+	bit AUTO_CLOSE_TEXTBOX, a
 	call nz, CloseTextBox
-	ld a, [wd0c1]
-	bit 1, a
-	jr z, .asm_c12a
+	ld a, [wOverworldNPCFlags]
+	bit RESTORE_FACING_DIRECTION, a
+	jr z, .skip
 	ld a, [wScriptNPC]
 	ld [wLoadedNPCTempIndex], a
 	farcall Func_1c5e9
-.asm_c12a
+.skip
 	xor a
-	ld [wd0c1], a
-	ld a, [wd0c0]
+	ld [wOverworldNPCFlags], a
+	ld a, [wOverworldModeBackup]
 	ld [wOverworldMode], a
 	ret
 
@@ -148,32 +148,32 @@ CloseAdvancedDialogueBox: ; c111 (3:4111)
 CloseTextBox: ; c135 (3:4135)
 	push hl
 	farcall ReloadMapAfterTextClose
-	ld hl, wd0c1
-	res 0, [hl]
+	ld hl, wOverworldNPCFlags
+	res AUTO_CLOSE_TEXTBOX, [hl]
 	pop hl
 	ret
 
 Func_c141: ; c141 (3:4141)
-	ld hl, wd0c2
+	ld hl, wActiveGameEvent
 	ld a, [hl]
 	or a
 	ret z
 	push af
 	xor a
-	ld [hl], a
+	ld [hl], a ; clear game event
 	pop af
 	dec a
 	ld hl, PointerTable_c152
 	jp JumpToFunctionInTable
 
 PointerTable_c152: ; c152 (3:4152)
-	dw Func_c9bc
-	dw Func_fc2b
-	dw Func_fcad
+	dw Func_c9bc ; GAME_EVENT_DUEL
+	dw Func_fc2b ; GAME_EVENT_BATTLE_CENTER
+	dw Func_fcad ; GAME_EVENT_GIFT_CENTER
 
 Func_c158: ; c158 (3:4158)
-	ld a, [wd0c2]
-	cp $1
+	ld a, [wActiveGameEvent]
+	cp GAME_EVENT_DUEL
 	ret nz
 	ld a, [wNPCDuelist]
 	ld [wTempNPC], a
@@ -205,7 +205,7 @@ Func_c184: ; c184 (3:4184)
 .not_map
 	ld a, c
 	ld [wOverworldMode], a
-	ld [wd0c0], a
+	ld [wOverworldModeBackup], a
 	pop bc
 	ret
 
@@ -263,9 +263,9 @@ Func_c1f8: ; c1f8 (3:41f8)
 	ld [wSelectedPCMenuItem], a
 	ld [wSelectedGiftCenterMenuItem], a
 	ld [wConfigCursorYPos], a
-	ld [wd0c2], a
+	ld [wActiveGameEvent], a
 	ld [wDefaultSong], a
-	ld [wd112], a
+	ld [wSongOverride], a
 	ld [wRonaldIsInMap], a
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
@@ -352,9 +352,9 @@ Func_c280: ; c280 (3:4280)
 	farcall Func_12871
 	ret
 
-Func_c29b: ; c29b (3:429b)
+SetOverworldNPCFlags: ; c29b (3:429b)
 	push hl
-	ld hl, wd0c1
+	ld hl, wOverworldNPCFlags
 	or [hl]
 	ld [hl], a
 	pop hl
@@ -364,10 +364,10 @@ Func_c2a3: ; c2a3 (3:42a3)
 	push hl
 	push bc
 	push de
-	call Func_c335
+	call BackupObjectPalettes
 	farcall Func_10ab4
-	ld a, $80
-	call Func_c29b
+	ld a, 1 << HIDE_ALL_NPC_SPRITES
+	call SetOverworldNPCFlags
 	lb de, $30, $7f
 	call SetupText
 	farcall Func_12ba7
@@ -383,12 +383,13 @@ Func_c2a3: ; c2a3 (3:42a3)
 	pop hl
 	ret
 
-Func_c2d4: ; c2d4 (3:42d4)
+ReturnToOverworldNoCallback: ; c2d4 (3:42d4)
 	xor a
-	ld [wd10f], a
-	ld [wd110], a
+	ld [wReloadOverworldCallbackPtr], a
+	ld [wReloadOverworldCallbackPtr + 1], a
+;	fallthrough
 
-Func_c2db: ; c2db (3:42db)
+ReturnToOverworld: ; c2db (3:42db)
 	push hl
 	push bc
 	push de
@@ -405,52 +406,52 @@ Func_c2db: ; c2db (3:42db)
 	farcall LoadMapGfxAndPermissions
 	pop af
 	ld [wDefaultSong], a
-	ld hl, wd0c1
-	res 0, [hl]
-	call Func_c34e
+	ld hl, wOverworldNPCFlags
+	res AUTO_CLOSE_TEXTBOX, [hl]
+	call RestoreObjectPalettes
 	farcall Func_12c5e
 	farcall SetAllNPCTilePermissions
-	ld hl, wd0c1
-	res 7, [hl]
-	ld hl, wd10f
+	ld hl, wOverworldNPCFlags
+	res HIDE_ALL_NPC_SPRITES, [hl]
+	ld hl, wReloadOverworldCallbackPtr
 	ld a, [hli]
 	or [hl]
-	jr z, .asm_c323
+	jr z, .no_callback
 	ld a, [hld]
 	ld l, [hl]
 	ld h, a
 	call CallHL2
-.asm_c323
+.no_callback
 	farcall Func_10af9
 	pop de
 	pop bc
 	pop hl
 	ret
 
-Func_c32b: ; c32b (3:432b)
+ReturnToOverworldWithCallback: ; c32b (3:432b)
 	ld a, l
-	ld [wd10f], a
+	ld [wReloadOverworldCallbackPtr], a
 	ld a, h
-	ld [wd110], a
-	jr Func_c2db
+	ld [wReloadOverworldCallbackPtr + 1], a
+	jr ReturnToOverworld
 
-Func_c335: ; c335 (3:4335)
+BackupObjectPalettes: ; c335 (3:4335)
 	ld a, [wOBP0]
-	ld [wd10c], a
+	ld [wOBP0Backup], a
 	ld a, [wOBP1]
-	ld [wd10d], a
+	ld [wOBP1Backup], a
 	ld hl, wObjectPalettesCGB
-	ld de, wd0cc
+	ld de, wObjectPalettesCGBBackup
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
 	ret
 
-Func_c34e: ; c34e (3:434e)
-	ld a, [wd10c]
+RestoreObjectPalettes: ; c34e (3:434e)
+	ld a, [wOBP0Backup]
 	ld [wOBP0], a
-	ld a, [wd10d]
+	ld a, [wOBP1Backup]
 	ld [wOBP1], a
-	ld hl, wd0cc
+	ld hl, wObjectPalettesCGBBackup
 	ld de, wObjectPalettesCGB
 	ld bc, 8 palettes
 	call CopyDataHLtoDE_SaveRegisters
@@ -585,10 +586,10 @@ Func_c3ee: ; c3ee (3:43ee)
 
 Func_c3ff: ; c3ff (3:43ff)
 	ld a, [wBGMapWidth]
-	sub $14
+	sub SCREEN_WIDTH
 	ld [wd237], a
 	ld a, [wBGMapHeight]
-	sub $12
+	sub SCREEN_HEIGHT
 	ld [wd238], a
 	call Func_c41c
 	call Func_c469
@@ -700,14 +701,14 @@ Func_c4b9: ; c4b9 (3:44b9)
 	ld [wd4cb], a
 	ld a, PALETTE_29
 	farcall LoadPaletteData
-	ld b, $0
+	ld b, SPRITE_ANIM_LIGHT_NPC_UP
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
-	ld b, $1e
+	ld b, SPRITE_ANIM_RED_NPC_UP
 .not_cgb
 	ld a, b
-	ld [wd337], a
+	ld [wPlayerSpriteBaseAnimation], a
 
 	; load Player's sprite for overworld
 	ld a, SPRITE_OW_PLAYER
@@ -877,7 +878,7 @@ UpdatePlayerSprite: ; c5e9 (3:45e9)
 	push bc
 	ld a, [wPlayerSpriteIndex]
 	ld [wWhichSprite], a
-	ld a, [wd337]
+	ld a, [wPlayerSpriteBaseAnimation]
 	ld b, a
 	ld a, [wPlayerDirection]
 	add b
@@ -1119,10 +1120,10 @@ PauseMenu: ; c75a (3:475a)
 	call PauseSong
 	ld a, MUSIC_PAUSE_MENU
 	call PlaySong
-	call Func_c797
+	call DisplayPauseMenu
 .loop
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 .wait_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -1138,14 +1139,14 @@ PauseMenu: ; c75a (3:475a)
 	ld a, [wSelectedPauseMenuItem]
 	ld hl, PauseMenuPointerTable
 	call JumpToFunctionInTable
-	ld hl, Func_c797
-	call Func_c32b
+	ld hl, DisplayPauseMenu
+	call ReturnToOverworldWithCallback
 	jr .loop
 .exit
 	call ResumeSong
 	ret
 
-Func_c797: ; c797 (3:4797)
+DisplayPauseMenu: ; c797 (3:4797)
 	ld a, [wSelectedPauseMenuItem]
 	ld hl, Unknown_10d98
 	farcall InitAndPrintPauseMenu
@@ -1203,10 +1204,10 @@ PCMenu: ; c7ea (3:47ea)
 	call DoFrameIfLCDEnabled
 	ldtx hl, TurnedPCOnText
 	call PrintScrollableText_NoTextBoxLabel
-	call Func_c84e
+	call DisplayPCMenu
 .loop
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 .wait_input
 	call DoFrameIfLCDEnabled
 	call HandleMenuInput
@@ -1222,8 +1223,8 @@ PCMenu: ; c7ea (3:47ea)
 	ld a, [wSelectedPCMenuItem]
 	ld hl, PointerTable_c846
 	call JumpToFunctionInTable
-	ld hl, Func_c84e
-	call Func_c32b
+	ld hl, DisplayPCMenu
+	call ReturnToOverworldWithCallback
 	jr .loop
 .exit
 	call CloseTextBox
@@ -1232,7 +1233,7 @@ PCMenu: ; c7ea (3:47ea)
 	call Func_c891
 	call CloseAdvancedDialogueBox
 	xor a
-	ld [wd112], a
+	ld [wSongOverride], a
 	call PlayDefaultSong
 	ret
 
@@ -1242,7 +1243,7 @@ PointerTable_c846: ; c846 (3:4846)
 	dw PCMenu_Glossary
 	dw PCMenu_Print
 
-Func_c84e: ; c84e (3:484e)
+DisplayPCMenu: ; c84e (3:484e)
 	ld a, [wSelectedPCMenuItem]
 	ld hl, Unknown_10da9
 	farcall InitAndPrintPauseMenu
@@ -1280,8 +1281,8 @@ PCMenu_Print: ; c877 (3:4877)
 
 Func_c891: ; c891 (3:4891)
 	push hl
-	ld a, [wd0c1]
-	bit 0, a
+	ld a, [wOverworldNPCFlags]
+	bit AUTO_CLOSE_TEXTBOX, a
 	jr z, .asm_c8a1
 	ld hl, wd3b9
 	ld a, [hli]
@@ -1294,8 +1295,8 @@ Func_c891: ; c891 (3:4891)
 	ld [hli], a
 	ld [hl], a
 	pop hl
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 	call Func_c241
 	call Func_c915
 	call DoFrameIfLCDEnabled
@@ -1307,8 +1308,8 @@ Func_c8ba: ; c8ba (3:48ba)
 	or d
 	jr z, Func_c891
 	push hl
-	ld a, [wd0c1]
-	bit 0, a
+	ld a, [wOverworldNPCFlags]
+	bit AUTO_CLOSE_TEXTBOX, a
 	jr z, .asm_c8d4
 	ld hl, wd3b9
 	ld a, [hli]
@@ -1327,8 +1328,8 @@ Func_c8ba: ; c8ba (3:48ba)
 	inc hl
 	ld [hl], d
 	pop hl
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 	call Func_c241
 	call Func_c915
 	call DoFrameIfLCDEnabled
@@ -1340,8 +1341,8 @@ Func_c8ed: ; c8ed (3:48ed)
 	push bc
 	push de
 	push hl
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 	call Func_c915
 	call DoFrameIfLCDEnabled
 	pop hl
@@ -2332,7 +2333,7 @@ ScriptCommand_GiveBoosterPacks: ; ce8a (3:4e8a)
 	jr z, .done
 	farcall GiveBoosterPack
 .done
-	call Func_c2d4
+	call ReturnToOverworldNoCallback
 	jp IncreaseScriptPointerBy4
 
 ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
@@ -2352,7 +2353,7 @@ ScriptCommand_GiveOneOfEachTrainerBooster: ; ceba (3:4eba)
 	inc hl
 	jr .loop
 .done
-	call Func_c2d4
+	call ReturnToOverworldNoCallback
 	jp IncreaseScriptPointerBy1
 
 .booster_type_table
@@ -2381,7 +2382,7 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	bank1call Func_7594
 	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
-	call Func_c2d4
+	call ReturnToOverworldNoCallback
 	jp IncreaseScriptPointerBy2
 
 .legendary_card
@@ -2740,8 +2741,8 @@ ScriptCommand_ShowMedalReceivedScreen: ; d125 (3:5125)
 	push af
 	call Func_c2a3
 	pop af
-	farcall Medal_1029e
-	call Func_c2d4
+	farcall ShowMedalReceivedScreen
+	call ReturnToOverworldNoCallback
 	jp IncreaseScriptPointerBy2
 
 ScriptCommand_LoadCurrentMapNameIntoTxRamSlot: ; d135 (3:5135)
@@ -3016,8 +3017,8 @@ ShowMultichoiceTextbox: ; d28c (3:528c)
 	jr z, .no_text
 	call Func_c8ba
 .no_text
-	ld a, $1
-	call Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	call SetOverworldNPCFlags
 	pop hl
 	inc hl
 	ld a, [hli]
@@ -3131,7 +3132,7 @@ ScriptCommand_OpenDeckMachine: ; d336 (3:5336)
 	farcall HandleDeckSaveMachineMenu
 .asm_d364
 	call ResumeSong
-	call Func_c2d4
+	call ReturnToOverworldNoCallback
 	jp IncreaseScriptPointerBy2
 
 ; args: unused, room, new player x, new player y, new player direction
@@ -3219,7 +3220,7 @@ ScriptCommand_WalkPlayerToMasonLaboratory: ; d3e0 (3:53e0)
 
 ScriptCommand_OverrideSong: ; d3fe (3:53fe)
 	ld a, c
-	ld [wd112], a
+	ld [wSongOverride], a
 	call PlaySong
 	jp IncreaseScriptPointerBy2
 
@@ -5497,7 +5498,7 @@ NPCMovement_e2ab: ; e2ab (3:62ab)
 Preload_Amy: ; e2ad (3:62ad)
 	xor a
 	ld [wd3d0], a
-	ld a, [wd0c2]
+	ld a, [wActiveGameEvent]
 	or a
 	jr z, .asm_e2cf
 	ld a, [wPlayerXCoord]

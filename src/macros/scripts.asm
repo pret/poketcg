@@ -558,7 +558,7 @@ walk_player_to_mason_lab: MACRO
 	run_command ScriptCommand_WalkPlayerToMasonLaboratory
 ENDM
 
-; Plays a song and saves it to wd112
+; Plays a song and saves it to wSongOverride
 override_song: MACRO
 	run_command ScriptCommand_OverrideSong
 	db \1 ; Song ID (ex MUSIC_BOOSTER_PACK)

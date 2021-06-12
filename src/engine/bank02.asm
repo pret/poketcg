@@ -1376,7 +1376,7 @@ DisplayCheckMenuCursor_YourOrOppPlayArea: ; 8760 (2:4760)
 _HandlePeekSelection: ; 8764 (2:4764)
 	call Set_OBJ_8x8
 	call LoadCursorTile
-; reset ce5c and wIsSwapTurnPending
+; reset wce5c and wIsSwapTurnPending
 	xor a
 	ld [wce5c], a
 	ld [wIsSwapTurnPending], a
@@ -1530,7 +1530,7 @@ endr
 ; input:
 ; a = deck index of card to be loaded
 ; output:
-; a = ce5c
+; a = wce5c
 ; with upper bit set if turn was swapped
 .ShowSelectedCard ; 8855 (2:4855)
 	ld b, a
@@ -3485,10 +3485,10 @@ HandleDeckConfigurationMenu: ; 9480 (2:5480)
 ConfirmDeckConfiguration: ; 94d3 (2:54d3)
 	ld hl, wCardListVisibleOffset
 	ld a, [hl]
-	ld hl, wced8
+	ld hl, wCardListVisibleOffsetBackup
 	ld [hl], a
 	call HandleDeckConfirmationMenu
-	ld hl, wced8
+	ld hl, wCardListVisibleOffsetBackup
 	ld a, [hl]
 	ld hl, wCardListVisibleOffset
 	ld [hl], a
@@ -7714,10 +7714,10 @@ HandlePrinterMenu: ; ad51 (2:6d51)
 	ldh a, [hCurMenuItem]
 	cp $ff
 	call z, PrinterMenu_QuitPrint
-	ld [wcfe4], a
+	ld [wSelectedPrinterMenuItem], a
 	ld hl, PrinterMenuFunctionTable
 	call JumpToFunctionInTable
-	ld a, [wcfe4]
+	ld a, [wSelectedPrinterMenuItem]
 	jr .loop
 
 PrinterMenu_QuitPrint: ; ad9a (2:6d9a)
@@ -7761,7 +7761,7 @@ PrinterMenu_PrintQuality: ; adb5 (2:6db5)
 	call DisableSRAM
 .asm_ade2
 	add sp, $2 ; exit menu
-	ld a, [wcfe4]
+	ld a, [wSelectedPrinterMenuItem]
 	ld hl, PrinterMenuParameters
 	call InitializeMenuParameters
 	ldtx hl, WhatWouldYouLikeToPrintText

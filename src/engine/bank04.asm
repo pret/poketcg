@@ -152,7 +152,7 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 	call InitTextPrinting
 	ldtx hl, PlayerStatusMedalsTitleText
 	call PrintTextNoDelay
-	ld hl, Unknown_1017f
+	ld hl, MedalCoordsAndTilemaps
 	ld a, EVENT_MEDAL_FLAGS
 	farcall GetEventValue
 	or a
@@ -196,7 +196,7 @@ LoadCollectedMedalTilemaps: ; 1010c (4:410c)
 .asm_1017e
 	ret
 
-Unknown_1017f: ; 1017f (4:417f)
+MedalCoordsAndTilemaps: ; 1017f (4:417f)
 ; x, y, tilemap
 	db  1, 10, TILEMAP_GRASS_MEDAL
 	db  6, 10, TILEMAP_SCIENCE_MEDAL
@@ -207,11 +207,11 @@ Unknown_1017f: ; 1017f (4:417f)
 	db 11, 14, TILEMAP_ROCK_MEDAL
 	db 16, 14, TILEMAP_FIGHTING_MEDAL
 
-Func_10197: ; 10197 (4:4197)
+FlashReceivedMedal: ; 10197 (4:4197)
 	xor a
 	ld [wd291], a
-	ld hl, Unknown_1017f
-	ld a, [wd115]
+	ld hl, MedalCoordsAndTilemaps
+	ld a, [wWhichMedal]
 	ld c, a
 	add a
 	add c
@@ -223,9 +223,10 @@ Func_10197: ; 10197 (4:4197)
 	ld a, [wMedalScreenYOffset]
 	add [hl]
 	ld c, a
-	ld a, [wd116]
+	ld a, [wMedalDisplayTimer]
 	bit 4, a
-	jr z, .asm_101c3
+	jr z, .show
+; hide
 	xor a
 	ld e, c
 	ld d, b
@@ -233,7 +234,8 @@ Func_10197: ; 10197 (4:4197)
 	lb hl, 0, 0
 	call FillRectangle
 	ret
-.asm_101c3
+
+.show
 	inc hl
 	ld a, [hl]
 	ld [wCurTilemap], a
@@ -366,10 +368,10 @@ Func_1029a: ; 1029a (4:429a)
 	call DrawPlayerPortrait
 	ret
 
-Medal_1029e: ; 1029e (4:429e)
+ShowMedalReceivedScreen: ; 1029e (4:429e)
 	sub $8
 	ld c, a
-	ld [wd115], a
+	ld [wWhichMedal], a
 	ld a, [wd291]
 	push af
 	push bc
@@ -397,18 +399,18 @@ Medal_1029e: ; 1029e (4:429e)
 	ld a, MUSIC_MEDAL
 	call PlaySong
 	ld a, $ff
-	ld [wd116], a
-.asm_102e2
+	ld [wMedalDisplayTimer], a
+.flash_loop
 	call DoFrameIfLCDEnabled
-	ld a, [wd116]
+	ld a, [wMedalDisplayTimer]
 	inc a
-	ld [wd116], a
+	ld [wMedalDisplayTimer], a
 	and $f
-	jr nz, .asm_102e2
-	call Func_10197
-	ld a, [wd116]
+	jr nz, .flash_loop
+	call FlashReceivedMedal
+	ld a, [wMedalDisplayTimer]
 	cp $e0
-	jr nz, .asm_102e2
+	jr nz, .flash_loop
 	ldtx hl, WonTheMedalText
 	call PrintScrollableText_NoTextBoxLabel
 	call WaitForSongToFinish
@@ -2212,8 +2214,8 @@ Unknown_10da9: ; 10da9 (4:4da9)
 	dw NULL ; function pointer if non-0
 
 Func_10dba: ; 10dba (4:4dba)
-	ld a, $1
-	farcall Func_c29b
+	ld a, 1 << AUTO_CLOSE_TEXTBOX
+	farcall SetOverworldNPCFlags
 	ld a, [wSelectedGiftCenterMenuItem]
 	ld hl, Unknown_10e17
 	farcall InitAndPrintPauseMenu
@@ -2587,11 +2589,11 @@ OverworldMap_InitVolcanoSprite: ; 10fbc (4:4fbc)
 	ld [hli], a ; x
 	ld a, $10
 	ld [hl], a ; y
-	ld b, $34 ; non-cgb volcano smoke
+	ld b, SPRITE_ANIM_SGB_VOLCANO_SMOKE
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
-	ld b, $37 ; cgb volcano smoke
+	ld b, SPRITE_ANIM_CGB_VOLCANO_SMOKE
 .not_cgb
 	ld a, b
 	farcall StartNewSpriteAnimation
@@ -2606,11 +2608,11 @@ OverworldMap_InitCursorSprite: ; 10fde (4:4fde)
 	call CreateSpriteAndAnimBufferEntry
 	ld a, [wWhichSprite]
 	ld [wOverworldMapCursorSprite], a
-	ld b, $35 ; non-cgb overworld map cursor
+	ld b, SPRITE_ANIM_SGB_OWMAP_CURSOR
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .not_cgb
-	ld b, $38 ; cgb overworld map cursor
+	ld b, SPRITE_ANIM_CGB_OWMAP_CURSOR
 .not_cgb
 	ld a, b
 	ld [wOverworldMapCursorAnimation], a
@@ -2625,8 +2627,8 @@ OverworldMap_InitCursorSprite: ; 10fde (4:4fde)
 .visited_lab
 	ret
 
-; play animation $36 (non-cgb) or $39 (cgb) to make the cursor blink faster
-; after a selection is made
+; play animation SPRITE_ANIM_SGB_OWMAP_CURSOR_FAST (non-cgb) or SPRITE_ANIM_CGB_OWMAP_CURSOR_FAST (cgb)
+; to make the cursor blink faster after a selection is made
 OverworldMap_UpdateCursorAnimation: ; 11016 (4:5016)
 	ld a, [wOverworldMapCursorSprite]
 	ld [wWhichSprite], a
@@ -3484,7 +3486,7 @@ WRAMToSRAMMapper: ; 11498 (4:5498)
 	wram_sram_map wTempPlayerXCoord,                  1, $00, $ff ; sTempPlayerXCoord
 	wram_sram_map wTempPlayerYCoord,                  1, $00, $ff ; sTempPlayerYCoord
 	wram_sram_map wTempPlayerDirection,               1, $00, $ff ; sTempPlayerDirection
-	wram_sram_map wd0c2,                              1, $00, $ff ; sb814
+	wram_sram_map wActiveGameEvent,                   1, $00, $ff ; sActiveGameEvent
 	wram_sram_map wDuelResult,                        1, $00, $ff ; sDuelResult
 	wram_sram_map wNPCDuelist,                        1, $00, $ff ; sNPCDuelist
 	wram_sram_map wChallengeHallNPC,                  1, $00, $ff ; sChallengeHallNPC
@@ -5798,7 +5800,7 @@ LoadSpriteAnimPointers: ; 12ae2 (4:6ae2)
 	add hl, bc
 	ld [hli], a
 	push hl
-	ld l, 6 ; 4th entry in MapDataPointers
+	ld l, 6 ; SpriteAnimations
 	farcall GetMapDataPointer
 	farcall LoadGraphicsPointerFromHL
 	pop hl ; hl is animation bank
@@ -6318,7 +6320,7 @@ Scene_ColosseumBooster: ; 12dbf (4:6dbf)
 	db TILEMAP_COLOSSEUM, TILEMAP_COLOSSEUM_CGB, $80, $00
 	db SPRITE_BOOSTER_PACK_OAM
 	db PALETTE_117, PALETTE_117, $00
-	db $ff, $bd, $00, $00
+	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
 Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
@@ -6328,7 +6330,7 @@ Scene_EvolutionBooster: ; 12dd4 (4:6dd4)
 	db TILEMAP_EVOLUTION, TILEMAP_EVOLUTION_CGB, $80, $00
 	db SPRITE_BOOSTER_PACK_OAM
 	db PALETTE_117, PALETTE_117, $00
-	db $ff, $bd, $00, $00
+	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
 Scene_MysteryBooster: ; 12de9 (4:6de9)
@@ -6338,7 +6340,7 @@ Scene_MysteryBooster: ; 12de9 (4:6de9)
 	db TILEMAP_MYSTERY, TILEMAP_MYSTERY_CGB, $80, $00
 	db SPRITE_BOOSTER_PACK_OAM
 	db PALETTE_117, PALETTE_117, $00
-	db $ff, $bd, $00, $00
+	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
 Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
@@ -6348,7 +6350,7 @@ Scene_LaboratoryBooster: ; 12dfe (4:6dfe)
 	db TILEMAP_LABORATORY, TILEMAP_LABORATORY_CGB, $80, $00
 	db SPRITE_BOOSTER_PACK_OAM
 	db PALETTE_117, PALETTE_117, $00
-	db $ff, $bd, $00, $00
+	db $ff, SPRITE_ANIM_189, $00, $00
 	dw $00
 
 Scene_CharizardIntro: ; 12e13 (4:6e13)
@@ -6435,7 +6437,7 @@ Scene_GameBoyLinkTransmitting: ; 12e97 (4:6e97)
 	db TILEMAP_GAMEBOY_LINK, TILEMAP_GAMEBOY_LINK_CGB, $90, $00
 	db SPRITE_DUEL_52
 	db PALETTE_114, PALETTE_114, $00
-	db $b3, $b0, $50, $50
+	db SPRITE_ANIM_179, SPRITE_ANIM_176, $50, $50
 	dw $00
 
 Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
@@ -6445,7 +6447,7 @@ Scene_GameBoyLinkNotConnected: ; 12eac (4:6eac)
 	db TILEMAP_GAMEBOY_LINK, TILEMAP_GAMEBOY_LINK_CGB, $90, $00
 	db SPRITE_DUEL_52
 	db PALETTE_114, PALETTE_114, $00
-	db $b4, $b1, $50, $50
+	db SPRITE_ANIM_180, SPRITE_ANIM_177, $50, $50
 	dw $00
 
 Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
@@ -6455,7 +6457,7 @@ Scene_GameBoyPrinterTransmitting: ; 12ec1 (4:6ec1)
 	db TILEMAP_GAMEBOY_PRINTER, TILEMAP_GAMEBOY_PRINTER_CGB, $90, $00
 	db SPRITE_DUEL_53
 	db PALETTE_115, PALETTE_115, $00
-	db $b7, $b5, $50, $30
+	db SPRITE_ANIM_183, SPRITE_ANIM_181, $50, $30
 	dw $00
 
 Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
@@ -6465,7 +6467,7 @@ Scene_GameBoyPrinterNotConnected: ; 12ed6 (4:6ed6)
 	db TILEMAP_GAMEBOY_PRINTER, TILEMAP_GAMEBOY_PRINTER_CGB, $90, $00
 	db SPRITE_DUEL_53
 	db PALETTE_115, PALETTE_115, $00
-	db $b8, $b6, $50, $30
+	db SPRITE_ANIM_184, SPRITE_ANIM_182, $50, $30
 	dw $00
 
 Scene_CardPop: ; 12eeb (4:6eeb)
@@ -6475,7 +6477,7 @@ Scene_CardPop: ; 12eeb (4:6eeb)
 	db TILEMAP_CARD_POP, TILEMAP_CARD_POP_CGB, $80, $00
 	db SPRITE_DUEL_54
 	db PALETTE_116, PALETTE_116, $00
-	db $bb, $b9, $50, $40
+	db SPRITE_ANIM_187, SPRITE_ANIM_185, $50, $40
 	dw $00
 
 Scene_CardPopError: ; 12f00 (4:6f00)
@@ -6485,7 +6487,7 @@ Scene_CardPopError: ; 12f00 (4:6f00)
 	db TILEMAP_CARD_POP, TILEMAP_CARD_POP_CGB, $80, $00
 	db SPRITE_DUEL_54
 	db PALETTE_116, PALETTE_116, $00
-	db $bc, $ba, $50, $40
+	db SPRITE_ANIM_188, SPRITE_ANIM_186, $50, $40
 	dw $00
 
 Scene_Nintendo: ; 12f15 (4:6f15)
@@ -7073,7 +7075,7 @@ ChallengeMachine_Duel: ; 13320 (4:7320)
 	call PlaySong
 	call WaitForSongToFinish
 	xor a
-	ld [wd112], a
+	ld [wSongOverride], a
 	call SaveGeneralSaveData
 	bank1call StartDuel_VSAIOpp
 	ret

@@ -147,8 +147,8 @@ AIProcessAttacks: ; 169fc (5:69fc)
 ; return carry if attack is chosen
 ; and AI tries to use it.
 .use_attack
-	ld a, $01
-	ld [wcddb], a
+	ld a, TRUE
+	ld [wAITriedAttack], a
 	call AITryUseAttack
 	scf
 	ret

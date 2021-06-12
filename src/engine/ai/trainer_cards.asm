@@ -1,7 +1,7 @@
 INCLUDE "data/ai_trainer_card_logic.asm"
 
 _AIProcessHandTrainerCards: ; 200e5 (8:40e5)
-	ld [wce18], a
+	ld [wAITrainerCardPhase], a
 ; create hand list in wDuelTempList and wTempHandCardList.
 	call CreateHandCardList
 	ld hl, wDuelTempList
@@ -16,7 +16,7 @@ _AIProcessHandTrainerCards: ; 200e5 (8:40e5)
 	ret z
 
 	push hl
-	ld a, [wce18]
+	ld a, [wAITrainerCardPhase]
 	ld d, a
 	ld hl, AITrainerCardLogic
 .loop_data

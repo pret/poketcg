@@ -19,7 +19,7 @@ InitAITurnVars: ; 15649 (5:5649)
 
 	xor a
 	ld [wPreviousAIFlags], a
-	ld [wcddb], a
+	ld [wAITriedAttack], a
 	ld [wcddc], a
 	ld [wAIRetreatedThisTurn], a
 

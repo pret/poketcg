@@ -118,11 +118,11 @@ LoadMapHeader: ; 1c33b (7:433b)
 	ld a, [hli]
 	ld c, a ; CGB tilemap variant
 	ld a, [hli]
-	ld [wd28f], a
+	ld [wCurMapInitialPalette], a ; always 0?
 	ld a, [hli]
-	ld [wd132], a
+	ld [wCurMapSGBPals], a
 	ld a, [hli]
-	ld [wd290], a
+	ld [wCurMapPalette], a
 	ld a, [hli]
 	ld [wDefaultSong], a
 
@@ -751,8 +751,8 @@ SetNewScriptNPC: ; 1c768 (7:4768)
 	xor $02
 	ld [hl], a
 	call UpdateNPCAnimation
-	ld a, $02
-	farcall Func_c29b
+	ld a, 1 << RESTORE_FACING_DIRECTION
+	farcall SetOverworldNPCFlags
 	ld a, [wLoadedNPCTempIndex]
 	call GetLoadedNPCID
 	ld a, [hl]
@@ -1569,9 +1569,9 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	call GetAnimCoordsAndFlags
 
 	ld a, [wd4b7]
-	add -3
+	add LOW(Unknown_1cbfd)
 	ld e, a
-	ld a, $4b
+	ld a, HIGH(Unknown_1cbfd)
 	adc 0
 	ld d, a
 	ld a, [de]
@@ -1586,9 +1586,8 @@ Func_1cbcc: ; 1cbcc (7:4bcc)
 	farcall Func_12ac9
 	ret
 
-; unreferenced data?
 Unknown_1cbfd: ; 1cbfd (7:4bfd)
-	db $f0, $f8, $00, $08, $f8, $f0
+	db -$10, -$8, $0, $8, -$8, -$10
 
 Func_1cc03: ; 1cc03 (7:4c03)
 	ld a, [wDuelAnimDamage]
@@ -1640,7 +1639,7 @@ Func_1cc3e: ; 1cc3e (7:4c3e)
 	ld a, $03
 	ld [wd4b7], a
 	ld de, wAnimationQueue + 4
-	ld a, $5b
+	ld a, SPRITE_ANIM_91
 	call Func_1cbcc
 	pop hl
 	ret
@@ -1650,7 +1649,7 @@ Func_1cc4e: ; 1cc4e (7:4c4e)
 	ld a, $04
 	ld [wd4b7], a
 	ld de, wAnimationQueue + 5
-	ld a, $5a
+	ld a, SPRITE_ANIM_90
 	call Func_1cbcc
 	ld a, [wd4b8]
 	add $12
@@ -1663,7 +1662,7 @@ Func_1cc66: ; 1cc66 (7:4c66)
 	ld a, $05
 	ld [wd4b7], a
 	ld de, wAnimationQueue + 6
-	ld a, $59
+	ld a, SPRITE_ANIM_89
 	call Func_1cbcc
 	pop hl
 	ret
@@ -2438,11 +2437,11 @@ PlayOpeningSequence: ; 1d335 (7:5335)
 	ld [hli], a ; x
 	ld a, 112
 	ld [hl], a ; y
-	ld c, $be
+	ld c, SPRITE_ANIM_190
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr nz, .asm_1d3c5
-	ld c, $bf
+	ld c, SPRITE_ANIM_191
 .asm_1d3c5
 	ld a, c
 	ld bc, 60
@@ -2532,9 +2531,9 @@ AnimateRandomTitleScreenOrb: ; 1d614 (7:5614)
 	ld [hl], a ; SPRITE_ANIM_COORD_Y
 	ld a, [wConsole]
 	cp CONSOLE_CGB
-	ld a, $d7
+	ld a, SPRITE_ANIM_215
 	jr nz, .start_anim
-	ld a, $d8
+	ld a, SPRITE_ANIM_216
 .start_anim
 	farcall StartSpriteAnimation
 	ret

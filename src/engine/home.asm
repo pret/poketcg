@@ -9082,10 +9082,10 @@ TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
 	ret
 
 .execute_function
-	; execute the function at [wce22]:hl
+	; execute the function at [wEffectFunctionsBank]:hl
 	ldh a, [hBankROM]
 	push af
-	ld a, [wce22]
+	ld a, [wEffectFunctionsBank]
 	call BankswitchROM
 	or a
 	call CallHL
@@ -9116,9 +9116,9 @@ CheckMatchingCommand: ; 2ffe (0:2ffe)
 	push af
 	ld a, BANK(EffectCommands)
 	call BankswitchROM
-	; store the bank number of command functions ($b) in wce22
-	ld a, $b
-	ld [wce22], a
+	; store the bank number of command functions ($b) in wEffectFunctionsBank
+	ld a, BANK("Effect Functions")
+	ld [wEffectFunctionsBank], a
 .check_command_loop
 	ld a, [hli]
 	or a
@@ -10601,8 +10601,8 @@ Func_37c5: ; 37c5 (0:37c5)
 	ret
 
 OverworldDoFrameFunction: ; 380e (0:380e)
-	ld a, [wd0c1]
-	bit 7, a
+	ld a, [wOverworldNPCFlags]
+	bit HIDE_ALL_NPC_SPRITES, a
 	ret nz
 	ldh a, [hBankROM]
 	push af
@@ -10670,7 +10670,7 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 	ld a, MUSIC_CARD_POP
 	call PlaySong
 	ld a, GAME_EVENT_GIFT_CENTER
-	ld [wd0c2], a
+	ld [wActiveGameEvent], a
 	ld a, [wd10e]
 	or $10
 	ld [wd10e], a
@@ -10686,9 +10686,9 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 
 GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	ld a, GAME_EVENT_BATTLE_CENTER
-	ld [wd0c2], a
+	ld [wActiveGameEvent], a
 	xor a
-	ld [wd112], a
+	ld [wSongOverride], a
 	ld a, -1
 	ld [wDuelResult], a
 	ld a, MUSIC_DUEL_THEME_1
@@ -10701,9 +10701,9 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 
 GameEvent_Duel: ; 38c0 (0:38c0)
 	ld a, GAME_EVENT_DUEL
-	ld [wd0c2], a
+	ld [wActiveGameEvent], a
 	xor a
-	ld [wd112], a
+	ld [wSongOverride], a
 	call EnableSRAM
 	xor a
 	ld [sPlayerInChallengeMachine], a
@@ -10731,7 +10731,7 @@ GameEvent_ChallengeMachine: ; 38db (0:38db)
 
 GameEvent_ContinueDuel: ; 38fb (0:38fb)
 	xor a
-	ld [wd112], a
+	ld [wSongOverride], a
 	bank1call TryContinueDuel
 	call EnableSRAM
 	ld a, [sPlayerInChallengeMachine]
@@ -10942,14 +10942,14 @@ PlayDefaultSong: ; 39fc (0:39fc)
 	pop af
 	jr z, .asm_3a11
 	ld a, c
-	ld hl, wd112
+	ld hl, wSongOverride
 	cp [hl]
 	jr z, .asm_3a1c
 .asm_3a11
 	ld a, c
 	cp NUM_SONGS
 	jr nc, .asm_3a1c
-	ld [wd112], a
+	ld [wSongOverride], a
 	call PlaySong
 .asm_3a1c
 	pop bc
