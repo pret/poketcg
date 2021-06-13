@@ -1799,9 +1799,9 @@ Bank1Call: ; 09ae (0:09ae)
 	dec hl
 	ldh a, [hBankROM]
 	ld [hld], a
-	ld [hl], $9
+	ld [hl], HIGH(SwitchToBankAtSP)
 	dec hl
-	ld [hl], $dc
+	ld [hl], LOW(SwitchToBankAtSP)
 	dec hl
 	inc de
 	ld a, [de]
@@ -1857,9 +1857,9 @@ FarCall: ; 09e9 (0:09e9)
 	dec hl
 	ldh a, [hBankROM]
 	ld [hld], a
-	ld [hl], $9
+	ld [hl], HIGH(SwitchToBankAtSP)
 	dec hl
-	ld [hl], $dc
+	ld [hl], LOW(SwitchToBankAtSP)
 	dec hl
 	inc de
 	inc de
