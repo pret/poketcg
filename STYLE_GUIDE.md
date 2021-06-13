@@ -17,7 +17,7 @@ If you have plans to contribute to the poketcg disassembly, consider giving this
 - [Constants](#constants)
 - [Numbers](#numbers)
 - [Macros](#macros)
-- [Refractoring](#refractoring)
+- [Refactoring](#refactoring)
 
 
 # Disassembling code
@@ -312,7 +312,7 @@ BUTTONS    EQU A_BUTTON | B_BUTTON | SELECT | START  ; $0f
 D_PAD      EQU D_RIGHT  | D_LEFT   | D_UP   | D_DOWN ; $f0
 ```
 
-Finally, note that constants that are exclusive to a specific feature or function should generally be local, and thus placed above the code that uses them. This is usually not the case, however, so you should usually be looking to declare them inside the constants/ directory as mentioned before. This kind of refractoring is also more appropriate when the disassembly is in a more advanced state as well.
+Finally, note that constants that are exclusive to a specific feature or function should generally be local, and thus placed above the code that uses them. This is usually not the case, however, so you should usually be looking to declare them inside the constants/ directory as mentioned before. This kind of refactoring is also more appropriate when the disassembly is in a more advanced state as well.
 
 # Numbers
 
@@ -328,6 +328,6 @@ When disassembling code and declaring data make sure to have a quick look at the
 If a macro is very specific to a feature and you are almost 100% sure that it won't be ever used anywhere else, it's a good idea to put it along with the data structure that uses it (right above it) instead of in the macros/ directory. This makes the macro more immediate to look up. As a more general suggestion, I would advice against creating a macro for a data structure that has not been fully understood. The macro tends to hide its internal structure, which makes it harder to eventaully refractor and also to follow the code that travels through said data structure.
 
 
-# Refractoring
+# Refactoring
 
 If some data structure is large enough to warrant its own file inside the src/data/ directory, or a big module of code that comprises all the code corresponding to a given game feature, feel free to move it over to its own separate place. For the most part, it's generally not a good idea to split or move things around too much when there's still a lot of work to do because it makes it more annoying to locate and modify things.
