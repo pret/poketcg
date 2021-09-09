@@ -1,5 +1,5 @@
 ; Save a pointer to a list, given at de, to wListPointer
-SetListPointer: ; 0c6c (0:0c6c)
+SetListPointer:
 	push hl
 	ld hl, wListPointer
 	ld [hl], e
@@ -10,7 +10,7 @@ SetListPointer: ; 0c6c (0:0c6c)
 
 ; Return the current element of the list at wListPointer,
 ; and advance the list to the next element
-GetNextElementOfList: ; 0c75 (0:0c75)
+GetNextElementOfList:
 	push hl
 	push de
 	ld hl, wListPointer
@@ -21,7 +21,7 @@ GetNextElementOfList: ; 0c75 (0:0c75)
 	inc de
 ;	fallthrough
 
-SetListToNextPosition: ; 0c7f (0:0c7f)
+SetListToNextPosition:
 	ld [hl], d
 	dec hl
 	ld [hl], e
@@ -31,7 +31,7 @@ SetListToNextPosition: ; 0c7f (0:0c7f)
 
 ; Set the current element of the list at wListPointer to a,
 ; and advance the list to the next element
-SetNextElementOfList: ; 0c85 (0:0c85)
+SetNextElementOfList:
 	push hl
 	push de
 	ld hl, wListPointer

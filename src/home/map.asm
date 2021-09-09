@@ -1,5 +1,5 @@
 
-OverworldDoFrameFunction: ; 380e (0:380e)
+OverworldDoFrameFunction:
 	ld a, [wOverworldNPCFlags]
 	bit HIDE_ALL_NPC_SPRITES, a
 	ret nz
@@ -23,7 +23,7 @@ OverworldDoFrameFunction: ; 380e (0:380e)
 
 ; enable the play time counter and execute the game event at [wGameEvent].
 ; then return to the overworld, or restart the game (only after Credits).
-ExecuteGameEvent: ; 383d (0:383d)
+ExecuteGameEvent:
 	ld a, 1
 	ld [wPlayTimeCounterEnable], a
 	ldh a, [hBankROM]
@@ -39,7 +39,7 @@ ExecuteGameEvent: ; 383d (0:383d)
 	ret
 
 ; execute a game event at [wGameEvent] from GameEventPointerTable
-_ExecuteGameEvent: ; 3855 (0:3855)
+_ExecuteGameEvent:
 	ld a, [wGameEvent]
 	cp NUM_GAME_EVENTS
 	jr c, .got_game_event
@@ -48,7 +48,7 @@ _ExecuteGameEvent: ; 3855 (0:3855)
 	ld hl, GameEventPointerTable
 	jp JumpToFunctionInTable
 
-GameEventPointerTable: ; 3864 (0:3864)
+GameEventPointerTable:
 	dw GameEvent_Overworld
 	dw GameEvent_Duel
 	dw GameEvent_BattleCenter
@@ -58,11 +58,11 @@ GameEventPointerTable: ; 3864 (0:3864)
 	dw GameEvent_ChallengeMachine
 	dw GameEvent_Overworld
 
-GameEvent_Overworld: ; 3874 (0:3874)
+GameEvent_Overworld:
 	scf
 	ret
 
-GameEvent_GiftCenter: ; 3876 (0:3876)
+GameEvent_GiftCenter:
 	ldh a, [hBankROM]
 	push af
 	call PauseSong
@@ -83,7 +83,7 @@ GameEvent_GiftCenter: ; 3876 (0:3876)
 	scf
 	ret
 
-GameEvent_BattleCenter: ; 38a3 (0:38a3)
+GameEvent_BattleCenter:
 	ld a, GAME_EVENT_BATTLE_CENTER
 	ld [wActiveGameEvent], a
 	xor a
@@ -98,7 +98,7 @@ GameEvent_BattleCenter: ; 38a3 (0:38a3)
 	scf
 	ret
 
-GameEvent_Duel: ; 38c0 (0:38c0)
+GameEvent_Duel:
 	ld a, GAME_EVENT_DUEL
 	ld [wActiveGameEvent], a
 	xor a
@@ -112,7 +112,7 @@ GameEvent_Duel: ; 38c0 (0:38c0)
 	scf
 	ret
 
-GameEvent_ChallengeMachine: ; 38db (0:38db)
+GameEvent_ChallengeMachine:
 	ld a, MUSIC_PC_MAIN_MENU
 	ld [wDefaultSong], a
 	call PlayDefaultSong
@@ -128,7 +128,7 @@ GameEvent_ChallengeMachine: ; 38db (0:38db)
 	scf
 	ret
 
-GameEvent_ContinueDuel: ; 38fb (0:38fb)
+GameEvent_ContinueDuel:
 	xor a
 	ld [wSongOverride], a
 	bank1call TryContinueDuel
@@ -140,12 +140,12 @@ GameEvent_ContinueDuel: ; 38fb (0:38fb)
 	scf
 	ret
 
-GameEvent_Credits: ; 3911 (0:3911)
+GameEvent_Credits:
 	farcall Credits_1d6ad
 	or a
 	ret
 
-GetReceivedLegendaryCards: ; 3917 (0:3917)
+GetReceivedLegendaryCards:
 	ld a, EVENT_RECEIVED_LEGENDARY_CARDS
 	farcall GetEventValue
 	call EnableSRAM
@@ -154,7 +154,7 @@ GetReceivedLegendaryCards: ; 3917 (0:3917)
 	ret
 
 ; return in a the permission byte corresponding to the current map's x,y coordinates at bc
-GetPermissionOfMapPosition: ; 3927 (0:3927)
+GetPermissionOfMapPosition:
 	push hl
 	call GetPermissionByteOfMapPosition
 	ld a, [hl]
@@ -162,7 +162,7 @@ GetPermissionOfMapPosition: ; 3927 (0:3927)
 	ret
 
 ; set to a the permission byte corresponding to the current map's x,y coordinates at bc
-SetPermissionOfMapPosition: ; 392e (0:392e)
+SetPermissionOfMapPosition:
 	push hl
 	push af
 	call GetPermissionByteOfMapPosition
@@ -173,7 +173,7 @@ SetPermissionOfMapPosition: ; 392e (0:392e)
 
 ; set the permission byte corresponding to the current map's x,y coordinates at bc
 ; to the value of register a anded by its current value
-UpdatePermissionOfMapPosition: ; 3937 (0:3937)
+UpdatePermissionOfMapPosition:
 	push hl
 	push bc
 	push de
@@ -190,7 +190,7 @@ UpdatePermissionOfMapPosition: ; 3937 (0:3937)
 
 ; returns in hl the address within wPermissionMap that corresponds to
 ; the current map's x,y coordinates at bc
-GetPermissionByteOfMapPosition: ; 3946 (0:3946)
+GetPermissionByteOfMapPosition:
 	push bc
 	srl b
 	srl c
@@ -206,7 +206,7 @@ GetPermissionByteOfMapPosition: ; 3946 (0:3946)
 	ret
 
 ; copy c bytes of data from hl in bank wTempPointerBank to de, b times.
-CopyGfxDataFromTempBank: ; 395a (0:395a)
+CopyGfxDataFromTempBank:
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
@@ -217,20 +217,20 @@ CopyGfxDataFromTempBank: ; 395a (0:395a)
 	ret
 
 ; Movement offsets for player movements
-PlayerMovementOffsetTable: ; 396b (0:396b)
+PlayerMovementOffsetTable:
 	db  0, -1 ; NORTH
 	db  1,  0 ; EAST
 	db  0,  1 ; SOUTH
 	db -1,  0 ; WEST
 
 ; Movement offsets for player movements, in tiles
-PlayerMovementOffsetTable_Tiles: ; 3973 (0:3973)
+PlayerMovementOffsetTable_Tiles:
 	db  0, -2 ; NORTH
 	db  2,  0 ; EAST
 	db  0,  2 ; SOUTH
 	db -2,  0 ; WEST
 
-OverworldMapNames: ; 397b (0:397b)
+OverworldMapNames:
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapMasonLaboratoryText
 	tx OverworldMapIshiharasHouseText
@@ -246,7 +246,7 @@ OverworldMapNames: ; 397b (0:397b)
 	tx OverworldMapPokemonDomeText
 	tx OverworldMapMysteryHouseText
 
-Func_3997: ; 3997 (0:3997)
+Func_3997:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1c056)
@@ -257,13 +257,13 @@ Func_3997: ; 3997 (0:3997)
 	ret
 
 ; returns in hl a pointer to the first element for the a'th NPC
-GetLoadedNPCID: ; 39a7 (0:39a7)
+GetLoadedNPCID:
 	ld l, LOADED_NPC_ID
 	call GetItemInLoadedNPCIndex
 	ret
 
 ; return in hl a pointer to the a'th items element l
-GetItemInLoadedNPCIndex: ; 39ad (0:39ad)
+GetItemInLoadedNPCIndex:
 	push bc
 	cp LOADED_NPC_MAX
 	jr c, .asm_39b4
@@ -286,7 +286,7 @@ GetItemInLoadedNPCIndex: ; 39ad (0:39ad)
 ; Finds the index on wLoadedNPCs table of the npc in wTempNPC
 ; returns it in a and puts it into wLoadedNPCTempIndex
 ; c flag set if no npc found
-FindLoadedNPC: ; 39c3 (0:39c3)
+FindLoadedNPC:
 	push hl
 	push bc
 	push de
@@ -316,7 +316,7 @@ FindLoadedNPC: ; 39c3 (0:39c3)
 	pop hl
 	ret
 
-GetNextNPCMovementByte: ; 39ea (0:39ea)
+GetNextNPCMovementByte:
 	push bc
 	ldh a, [hBankROM]
 	push af
@@ -330,7 +330,7 @@ GetNextNPCMovementByte: ; 39ea (0:39ea)
 	pop bc
 	ret
 
-PlayDefaultSong: ; 39fc (0:39fc)
+PlayDefaultSong:
 	push hl
 	push bc
 	call AssertSongFinished
@@ -356,7 +356,7 @@ PlayDefaultSong: ; 39fc (0:39fc)
 	ret
 
 ; returns [wDefaultSong] or MUSIC_RONALD in a
-GetDefaultSong: ; 3a1f (0:3a1f)
+GetDefaultSong:
 	ld a, [wRonaldIsInMap]
 	or a
 	jr z, .default_song

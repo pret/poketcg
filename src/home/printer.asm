@@ -1,5 +1,5 @@
 ; serial transfer-related
-SendPrinterPacket: ; 312d (0:312d)
+SendPrinterPacket:
 	push hl
 	ld hl, wce64
 	; Preamble
@@ -66,12 +66,12 @@ SendPrinterPacket: ; 312d (0:312d)
 	scf
 	ret
 
-Func_3189: ; 3189 (0:3189)
+Func_3189:
 	ld hl, PointerTable_3190
 	dec a
 	jp JumpToFunctionInTable
 
-PointerTable_3190: ; 3190 (0:3190)
+PointerTable_3190:
 	dw Func_31a8
 	dw Func_31a8
 	dw Func_31a8
@@ -85,14 +85,14 @@ PointerTable_3190: ; 3190 (0:3190)
 	dw Func_31ea
 	dw Func_31f2
 
-Func_31a8: ; 31a8 (0:31a8)
+Func_31a8:
 	call Func_31fc
-Func_31ab: ; 31ab (0:31ab)
+Func_31ab:
 	ld hl, wce63
 	inc [hl]
 	ret
 
-Func_31b0: ; 31b0 (0:31b0)
+Func_31b0:
 	call Func_31ab
 	ld hl, wce68
 	ld a, [hli]
@@ -111,7 +111,7 @@ Func_31b0: ; 31b0 (0:31b0)
 	ld [de], a
 ;	fallthrough
 
-Func_31ca: ; 31ca (0:31ca)
+Func_31ca:
 	call Func_31fc
 	ld hl, wce68
 	ld a, [hl]
@@ -127,31 +127,31 @@ Func_31ca: ; 31ca (0:31ca)
 	jr z, Func_31ab
 	ret
 
-Func_31dd: ; 31dd (0:31dd)
+Func_31dd:
 	ld a, [wce6c]
-Func_31e0: ; 31e0 (0:31e0)
+Func_31e0:
 	call Func_3212
 	jr Func_31ab
 
-Func_31e5: ; 31e5 (0:31e5)
+Func_31e5:
 	ld a, [wce6d]
 	jr Func_31e0
 
-Func_31ea: ; 31ea (0:31ea)
+Func_31ea:
 	ldh a, [rSB]
 	ld [wce6e], a
-Func_31ef: ; 31ef (0:31ef)
+Func_31ef:
 	xor a
 	jr Func_31e0
 
-Func_31f2: ; 31f2 (0:31f2)
+Func_31f2:
 	ldh a, [rSB]
 	ld [wPrinterStatus], a
 	xor a
 	ld [wce63], a
 	ret
 
-Func_31fc: ; 31fc (0:31fc)
+Func_31fc:
 	ld hl, wSerialDataPtr
 	ld e, [hl]
 	inc hl
@@ -172,7 +172,7 @@ Func_31fc: ; 31fc (0:31fc)
 	ld a, e
 ;	fallthrough
 
-Func_3212: ; 3212 (0:3212)
+Func_3212:
 	ldh [rSB], a
 	ld a, SC_INTERNAL
 	ldh [rSC], a

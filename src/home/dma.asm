@@ -1,5 +1,5 @@
 ; copy DMA to hDMAFunction
-CopyDMAFunction: ; 0593 (0:0593)
+CopyDMAFunction:
 	ld c, LOW(hDMAFunction)
 	ld b, JumpToFunctionInTable - DMA
 	ld hl, DMA
@@ -12,7 +12,7 @@ CopyDMAFunction: ; 0593 (0:0593)
 	ret
 
 ; CopyDMAFunction copies this function to hDMAFunction ($ff83)
-DMA: ; 05a1 (0:05a1)
+DMA:
 	ld a, HIGH(wOAM)
 	ldh [rDMA], a
 	ld a, $28

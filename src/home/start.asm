@@ -1,5 +1,5 @@
 SECTION "start", ROM0
-Start: ; 0150 (0:0150)
+Start:
 	di
 	ld sp, $fffe
 	push af

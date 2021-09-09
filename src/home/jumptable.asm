@@ -1,5 +1,5 @@
 ; jumps to index a in pointer table hl
-JumpToFunctionInTable: ; 05ab (0:05ab)
+JumpToFunctionInTable:
 	add a
 	add l
 	ld l, a
@@ -12,7 +12,7 @@ JumpToFunctionInTable: ; 05ab (0:05ab)
 	jp hl
 
 ; call function at [hl] if non-NULL
-CallIndirect: ; 05b6 (0:05b6)
+CallIndirect:
 	push af
 	ld a, [hli]
 	or [hl]
@@ -26,5 +26,5 @@ CallIndirect: ; 05b6 (0:05b6)
 	pop af
 ;	fallthrough
 
-CallHL: ; 05c1 (0:05c1)
+CallHL:
 	jp hl

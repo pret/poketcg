@@ -8,7 +8,7 @@ SwitchToCGBNormalSpeed: ; 7db (0:7db)
 	jr CGBSpeedSwitch
 
 ; switch to CGB Double Speed Mode if playing on CGB and current mode is Normal Speed Mode
-SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
+SwitchToCGBDoubleSpeed:
 	call CheckForCGB
 	ret c
 	ld hl, rKEY1
@@ -17,7 +17,7 @@ SwitchToCGBDoubleSpeed: ; 07e7 (0:07e7)
 ;	fallthrough
 
 ; switch between CGB Double Speed Mode and Normal Speed Mode
-CGBSpeedSwitch: ; 07f1 (0:07f1)
+CGBSpeedSwitch:
 	ldh a, [rIE]
 	push af
 	xor a

@@ -1,5 +1,5 @@
 ; setup SNES memory $810-$867 and palette
-InitSGB: ; 0a0d (0:0a0d)
+InitSGB:
 	ld hl, MaskEnPacket_Freeze
 	call SendSGB
 	ld hl, DataSndPacket1
@@ -24,65 +24,65 @@ InitSGB: ; 0a0d (0:0a0d)
 	call SendSGB
 	ret
 
-DataSndPacket1: ; 0a50 (0:0a50)
+DataSndPacket1:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $085d, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $8c, $d0, $f4, $60, $00, $00, $00, $00, $00, $00, $00 ; data bytes
 
-DataSndPacket2: ; 0a60 (0:0a60)
+DataSndPacket2:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $0852, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $a9, $e7, $9f, $01, $c0, $7e, $e8, $e8, $e8, $e8, $e0 ; data bytes
 
-DataSndPacket3: ; 0a70 (0:0a70)
+DataSndPacket3:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $0847, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $c4, $d0, $16, $a5, $cb, $c9, $05, $d0, $10, $a2, $28 ; data bytes
 
-DataSndPacket4: ; 0a80 (0:0a80)
+DataSndPacket4:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $083c, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $f0, $12, $a5, $c9, $c9, $c8, $d0, $1c, $a5, $ca, $c9 ; data bytes
 
-DataSndPacket5: ; 0a90 (0:0a90)
+DataSndPacket5:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $0831, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $0c, $a5, $ca, $c9, $7e, $d0, $06, $a5, $cb, $c9, $7e ; data bytes
 
-DataSndPacket6: ; 0aa0 (0:0aa0)
+DataSndPacket6:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $0826, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $39, $cd, $48, $0c, $d0, $34, $a5, $c9, $c9, $80, $d0 ; data bytes
 
-DataSndPacket7: ; 0ab0 (0:0ab0)
+DataSndPacket7:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $081b, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $ea, $ea, $ea, $ea, $ea, $a9, $01, $cd, $4f, $0c, $d0 ; data bytes
 
-DataSndPacket8: ; 0ac0 (0:0ac0)
+DataSndPacket8:
 	sgb DATA_SND, 1 ; sgb_command, length
 	dwb $0810, $00 ; destination address, bank
 	db $0b ; number of bytes to write
 	db $4c, $20, $08, $ea, $ea, $ea, $ea, $ea, $60, $ea, $ea ; data bytes
 
-MaskEnPacket_Freeze: ; 0ad0 (0:0ad0)
+MaskEnPacket_Freeze:
 	sgb MASK_EN, 1 ; sgb_command, length
 	db MASK_EN_FREEZE_SCREEN
 	ds $0e
 
-MaskEnPacket_Cancel: ; 0ae0 (0:0ae0)
+MaskEnPacket_Cancel:
 	sgb MASK_EN, 1 ; sgb_command, length
 	db MASK_EN_CANCEL_MASK
 	ds $0e
 
-Pal01Packet_InitSGB: ; 0af0 (0:0af0)
+Pal01Packet_InitSGB:
 	sgb PAL01, 1 ; sgb_command, length
 	rgb 28, 28, 24
 	rgb 20, 20, 16
@@ -93,7 +93,7 @@ Pal01Packet_InitSGB: ; 0af0 (0:0af0)
 	rgb 7, 0, 0
 	db $00
 
-Pal23Packet_0b00: ; 0b00 (0:0b00)
+Pal23Packet_0b00:
 	sgb PAL23, 1 ; sgb_command, length
 	rgb 0, 31, 0
 	rgb 0, 15, 0
@@ -104,7 +104,7 @@ Pal23Packet_0b00: ; 0b00 (0:0b00)
 	rgb 0, 0, 7
 	db $00
 
-AttrBlkPacket_0b10: ; 0b10 (0:0b10)
+AttrBlkPacket_0b10:
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
 	; Control Code, Color Palette Designation, X1, Y1, X2, Y2
@@ -113,7 +113,7 @@ AttrBlkPacket_0b10: ; 0b10 (0:0b10)
 	ds 2 ; data set 3
 
 ; send SGB packet at hl (or packets, if length > 1)
-SendSGB: ; 0b20 (0:0b20)
+SendSGB:
 	ld a, [hl]
 	and $7
 	ret z ; return if packet length is 0
@@ -157,7 +157,7 @@ SendSGB: ; 0b20 (0:0b20)
 
 ; SGB hardware detection
 ; return carry if SGB detected and disable multi-controller mode before returning
-DetectSGB: ; 0b59 (0:0b59)
+DetectSGB:
 	ld bc, 60
 	call Wait
 	ld hl, MltReq2Packet
@@ -199,12 +199,12 @@ DetectSGB: ; 0b59 (0:0b59)
 	scf
 	ret
 
-MltReq1Packet: ; 0bab (0:0bab)
+MltReq1Packet:
 	sgb MLT_REQ, 1 ; sgb_command, length
 	db MLT_REQ_1_PLAYER
 	ds $0e
 
-MltReq2Packet: ; 0bbb (0:0bbb)
+MltReq2Packet:
 	sgb MLT_REQ, 1 ; sgb_command, length
 	db MLT_REQ_2_PLAYERS
 	ds $0e
@@ -212,7 +212,7 @@ MltReq2Packet: ; 0bbb (0:0bbb)
 ; fill v*Tiles1 and v*Tiles2 with data at hl
 ; write $0d sequences of $80,$81,$82,...,$94 separated each by $0c bytes to v*BGMap0
 ; send the SGB packet at de
-Func_0bcb: ; 0bcb (0:0bcb)
+Func_0bcb:
 	di
 	push de
 .wait_vblank
@@ -255,7 +255,7 @@ Func_0bcb: ; 0bcb (0:0bcb)
 	ret
 
 ; loops 63000 * bc cycles (~15 * bc ms)
-Wait: ; 0c08 (0:0c08)
+Wait:
 	ld de, 1750
 .loop
 	nop

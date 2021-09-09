@@ -1,5 +1,5 @@
 ; copy b bytes of data from hl to de, but only during hblank
-HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
+HblankCopyDataHLtoDE:
 	push bc
 .loop
 	ei
@@ -21,7 +21,7 @@ HblankCopyDataHLtoDE: ; 0c19 (0:0c19)
 	ret
 
 ; copy c bytes of data from de to hl, but only during hblank
-HblankCopyDataDEtoHL: ; 0c32 (0:0c32)
+HblankCopyDataDEtoHL:
 	push bc
 .loop
 	ei

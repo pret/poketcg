@@ -1,6 +1,6 @@
 ; converts the two-digit BCD number provided in a to text (ascii) format,
 ; writes them to [wStringBuffer] and [wStringBuffer + 1], and to the BGMap0 address at bc
-WriteTwoDigitBCDNumber: ; 05c2 (0:05c2)
+WriteTwoDigitBCDNumber:
 	push hl
 	push bc
 	push de
@@ -20,7 +20,7 @@ WriteTwoDigitBCDNumber: ; 05c2 (0:05c2)
 
 ; converts the one-digit BCD number provided in the lower nybble of a to text
 ; (ascii) format, and writes it to [wStringBuffer] and to the BGMap0 address at bc
-WriteOneDigitBCDNumber: ; 05db (0:05db)
+WriteOneDigitBCDNumber:
 	push hl
 	push bc
 	push de
@@ -40,7 +40,7 @@ WriteOneDigitBCDNumber: ; 05db (0:05db)
 
 ; converts the four-digit BCD number provided in h and l to text (ascii) format,
 ; writes them to [wStringBuffer] through [wStringBuffer + 3], and to the BGMap0 address at bc
-WriteFourDigitBCDNumber: ; 05f4 (0:05f4)
+WriteFourDigitBCDNumber:
 	push hl
 	push bc
 	push de
@@ -66,7 +66,7 @@ WriteFourDigitBCDNumber: ; 05f4 (0:05f4)
 ; given two BCD digits in the two nybbles of register a,
 ; write them in text (ascii) format to hl (most significant nybble first).
 ; numbers above 9 end up converted to half-width font tiles.
-WriteBCDNumberInTextFormat: ; 0614 (0:0614)
+WriteBCDNumberInTextFormat:
 	push af
 	swap a
 	call WriteBCDDigitInTextFormat
@@ -75,7 +75,7 @@ WriteBCDNumberInTextFormat: ; 0614 (0:0614)
 
 ; given a BCD digit in the (lower nybble) of register a, write it in text (ascii)
 ;  format to hl. numbers above 9 end up converted to half-width font tiles.
-WriteBCDDigitInTextFormat: ; 061b (0:061b)
+WriteBCDDigitInTextFormat:
 	and $0f
 	add "0"
 	cp "9" + 1
@@ -87,7 +87,7 @@ WriteBCDDigitInTextFormat: ; 061b (0:061b)
 
 ; converts the one-byte number at a to text (ascii) format,
 ; and writes it to [wStringBuffer] and the BGMap0 address at bc
-WriteOneByteNumber: ; 0627 (0:0627)
+WriteOneByteNumber:
 	push bc
 	push hl
 	ld l, a
@@ -112,7 +112,7 @@ WriteOneByteNumber: ; 0627 (0:0627)
 
 ; converts the two-byte number at hl to text (ascii) format,
 ; and writes it to [wStringBuffer] and the BGMap0 address at bc
-WriteTwoByteNumber: ; 0650 (0:0650)
+WriteTwoByteNumber:
 	push bc
 	ld de, wStringBuffer
 	push de
@@ -125,7 +125,7 @@ WriteTwoByteNumber: ; 0650 (0:0650)
 	ret
 
 ; convert the number at hl to text (ascii) format and write it to de
-TwoByteNumberToText: ; 0663 (0:0663)
+TwoByteNumberToText:
 	push bc
 	ld bc, -10000
 	call .get_digit

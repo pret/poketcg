@@ -1,5 +1,5 @@
 ; return, in hl, the total amount of cards owned anywhere, including duplicates
-GetAmountOfCardsOwned: ; 1caa (0:1caa)
+GetAmountOfCardsOwned:
 	push de
 	push bc
 	call EnableSRAM
@@ -43,7 +43,7 @@ GetAmountOfCardsOwned: ; 1caa (0:1caa)
 ; return carry if the count in sCardCollection plus the count in each deck (sDeck*)
 ; of the card with id given in a is 0 (if card not owned).
 ; also return the count (total owned amount) in a.
-GetCardCountInCollectionAndDecks: ; 1ce1 (0:1ce1)
+GetCardCountInCollectionAndDecks:
 	push hl
 	push de
 	push bc
@@ -94,7 +94,7 @@ GetCardCountInCollectionAndDecks: ; 1ce1 (0:1ce1)
 
 ; return carry if the count in sCardCollection of the card with id given in a is 0.
 ; also return the count (amount owned outside of decks) in a.
-GetCardCountInCollection: ; 1d1d (0:1d1d)
+GetCardCountInCollection:
 	push hl
 	call EnableSRAM
 	ld h, HIGH(sCardCollection)
@@ -108,7 +108,7 @@ GetCardCountInCollection: ; 1d1d (0:1d1d)
 	ret
 
 ; creates a list at wTempCardCollection of every card the player owns and how many
-CreateTempCardCollection: ; 1d2e (0:1d2e)
+CreateTempCardCollection:
 	call EnableSRAM
 	ld hl, sCardCollection
 	ld de, wTempCardCollection
@@ -126,7 +126,7 @@ CreateTempCardCollection: ; 1d2e (0:1d2e)
 	ret
 
 ; adds the cards from a deck to wTempCardCollection given de = sDeck*Name
-AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
+AddDeckCardsToTempCardCollection:
 	ld a, [de]
 	or a
 	ret z ; return if empty name (empty deck)
@@ -147,7 +147,7 @@ AddDeckCardsToTempCardCollection: ; 1d59 (0:1d59)
 
 ; add card with id given in a to sCardCollection, provided that
 ; the player has less than MAX_AMOUNT_OF_CARD (99) of them
-AddCardToCollection: ; 1d6e (0:1d6e)
+AddCardToCollection:
 	push hl
 	push de
 	push bc
@@ -174,7 +174,7 @@ AddCardToCollection: ; 1d6e (0:1d6e)
 	ret
 
 ; remove a card with id given in a from sCardCollection (decrement its count if non-0)
-RemoveCardFromCollection: ; 1d91 (0:1d91)
+RemoveCardFromCollection:
 	push hl
 	call EnableSRAM
 	ld h, HIGH(sCardCollection)
@@ -191,7 +191,7 @@ RemoveCardFromCollection: ; 1d91 (0:1d91)
 
 ; return the amount of different cards that the player has collected in d
 ; return NUM_CARDS in e, minus 1 if VENUSAUR1 or MEW2 has not been collected (minus 2 if neither)
-GetCardAlbumProgress: ; 1da4 (0:1da4)
+GetCardAlbumProgress:
 	push hl
 	call EnableSRAM
 	ld e, NUM_CARDS

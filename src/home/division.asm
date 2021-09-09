@@ -1,5 +1,5 @@
 ; divides BC by DE. Stores result in BC and stores remainder in HL
-DivideBCbyDE: ; 3c5a (0:3c5a)
+DivideBCbyDE:
 	ld hl, $0000
 	rl c
 	rl b

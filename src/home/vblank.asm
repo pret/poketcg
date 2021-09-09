@@ -1,5 +1,5 @@
 ; vblank interrupt handler
-VBlankHandler: ; 019b (0:019b)
+VBlankHandler:
 	push af
 	push bc
 	push de

@@ -3,7 +3,7 @@
 ; input:
    ; a = command type to check
    ; [wLoadedAttackEffectCommands] = pointer to list of commands of current attack or trainer card
-   TryExecuteEffectCommandFunction: ; 2fd9 (0:2fd9)
+   TryExecuteEffectCommandFunction:
    push af
    ; grab pointer to command list from wLoadedAttackEffectCommands
    ld hl, wLoadedAttackEffectCommands
@@ -38,7 +38,7 @@
   ; a = command type to check
   ; hl = list of commands of current attack or trainer card
 ; return nc if command type matching a is found, carry otherwise
-CheckMatchingCommand: ; 2ffe (0:2ffe)
+CheckMatchingCommand:
    ld c, a
    ld a, l
    or h

@@ -1,10 +1,10 @@
 ; clear [SOMETHING] - something relating to animations
-Func_3ca0: ; 3ca0 (0:3ca0)
+Func_3ca0:
 	xor a
 	ld [wd5d7], a
 	; fallthrough
 
-Func_3ca4: ; 3ca4 (0:3ca4)
+Func_3ca4:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1296e)
@@ -14,7 +14,7 @@ Func_3ca4: ; 3ca4 (0:3ca4)
 	call BankswitchROM
 	ret
 
-HandleAllSpriteAnimations: ; 3cb4 (0:3cb4)
+HandleAllSpriteAnimations:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(_HandleAllSpriteAnimations)
@@ -26,7 +26,7 @@ HandleAllSpriteAnimations: ; 3cb4 (0:3cb4)
 
 ; hl - pointer to animation frame
 ; wd5d6 - bank of animation frame
-DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
+DrawSpriteAnimationFrame:
 	ldh a, [hBankROM]
 	push af
 	ld a, [wd5d6]
@@ -143,7 +143,7 @@ DrawSpriteAnimationFrame: ; 3cc4 (0:3cc4)
 ; the current frame's offset
 ; [wd4ca] - current frame offset
 ; wTempPointer* - Pointer to current Animation
-GetAnimationFramePointer: ; 3d72 (0:3d72)
+GetAnimationFramePointer:
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -194,7 +194,7 @@ GetAnimationFramePointer: ; 3d72 (0:3d72)
 
 ; return hl pointing to the start of a sprite in wSpriteAnimBuffer.
 ; the sprite is identified by its index in wWhichSprite.
-GetFirstSpriteAnimBufferProperty: ; 3db7 (0:3db7)
+GetFirstSpriteAnimBufferProperty:
 	push bc
 	ld c, SPRITE_ANIM_ENABLED
 	call GetSpriteAnimBufferProperty
@@ -203,11 +203,11 @@ GetFirstSpriteAnimBufferProperty: ; 3db7 (0:3db7)
 
 ; return hl pointing to the property (byte) c of a sprite in wSpriteAnimBuffer.
 ; the sprite is identified by its index in wWhichSprite.
-GetSpriteAnimBufferProperty: ; 3dbf (0:3dbf)
+GetSpriteAnimBufferProperty:
 	ld a, [wWhichSprite]
 ;	fallthrough
 
-GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
+GetSpriteAnimBufferProperty_SpriteInA:
 	cp SPRITE_ANIM_BUFFER_CAPACITY
 	jr c, .got_sprite
 	debug_nop
@@ -227,7 +227,7 @@ GetSpriteAnimBufferProperty_SpriteInA: ; 3dc2 (0:3dc2)
 	pop bc
 	ret
 
-Func_3ddb: ; 3ddb (0:3ddb)
+Func_3ddb:
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_FLAGS
@@ -237,7 +237,7 @@ Func_3ddb: ; 3ddb (0:3ddb)
 	pop hl
 	ret
 
-Func_3de7: ; 3de7 (0:3de7)
+Func_3de7:
 	push hl
 	push bc
 	ld c, SPRITE_ANIM_FLAGS
@@ -247,7 +247,7 @@ Func_3de7: ; 3de7 (0:3de7)
 	pop hl
 	ret
 
-LoadScene: ; 3df3 (0:3df3)
+LoadScene:
 	push af
 	ldh a, [hBankROM]
 	push af
@@ -266,13 +266,13 @@ LoadScene: ; 3df3 (0:3df3)
 	ret
 
 ; draws player's portrait at b,c
-DrawPlayerPortrait: ; 3e10 (0:3e10)
+DrawPlayerPortrait:
 	ld a, $1
 	ld [wd61e], a
 	ld a, TILEMAP_PLAYER
 ;	fallthrough
 
-Func_3e17: ; 3e17 (0:3e17)
+Func_3e17:
 	ld [wCurTilemap], a
 	ldh a, [hBankROM]
 	push af
@@ -284,12 +284,12 @@ Func_3e17: ; 3e17 (0:3e17)
 	ret
 
 ; draws opponent's portrait given in a at b,c
-Func_3e2a: ; 3e2a (0:3e2a)
+Func_3e2a:
 	ld [wd61e], a
 	ld a, TILEMAP_OPPONENT
 	jr Func_3e17
 
-Func_3e31: ; 3e31 (0:3e31)
+Func_3e31:
 	ldh a, [hBankROM]
 	push af
 	call HandleAllSpriteAnimations

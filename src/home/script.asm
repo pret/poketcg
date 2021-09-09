@@ -1,4 +1,4 @@
-HandleMoveModeAPress: ; 3a5e (0:3a5e)
+HandleMoveModeAPress:
 	ldh a, [hBankROM]
 	push af
 	ld l, MAP_SCRIPT_OBJECTS
@@ -59,7 +59,7 @@ HandleMoveModeAPress: ; 3a5e (0:3a5e)
 ; returns a map script pointer in hl given
 ; current map in wCurMap and which sub-script in l
 ; sets c if pointer is found
-GetMapScriptPointer: ; 3abd (0:3abd)
+GetMapScriptPointer:
 	push bc
 	push hl
 	ld a, [wCurMap]
@@ -100,12 +100,12 @@ GetMapScriptPointer: ; 3abd (0:3abd)
 ; are stored in the script-related NPC data for normal gameplay
 ; returns carry if a duel configuration was found
 ; for the given NPC deck ID
-GetNPCDuelConfigurations: ; 3ae8 (0:3ae8)
+GetNPCDuelConfigurations:
 	farcall _GetNPCDuelConfigurations
 	ret
 
 ; finds a Script from the first byte and puts the next two bytes (usually arguments?) into cb
-RunOverworldScript: ; 3aed (0:3aed)
+RunOverworldScript:
 	ld hl, wScriptPointer
 	ld a, [hli]
 	ld h, [hl]
@@ -132,7 +132,7 @@ RunOverworldScript: ; 3aed (0:3aed)
 	pop bc
 	jp hl
 
-Func_3b11: ; 3b11 (0:3b11)
+Func_3b11:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(_GameLoop)
@@ -142,7 +142,7 @@ Func_3b11: ; 3b11 (0:3b11)
 	call BankswitchROM
 	ret
 
-Func_3b21: ; 3b21 (0:3b21)
+Func_3b21:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1c8bc)
@@ -152,7 +152,7 @@ Func_3b21: ; 3b21 (0:3b21)
 	call BankswitchROM
 	ret
 
-Func_3b31: ; 3b31 (0:3b31)
+Func_3b31:
 	ldh a, [hBankROM]
 	push af
 	ld a, BANK(Func_1cb18)

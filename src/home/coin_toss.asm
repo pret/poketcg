@@ -2,7 +2,7 @@
 ; displaying each result ([O] or [X]) starting from the top left corner of the screen.
 ; text at de is printed in a text box during the coin toss.
 ; returns: the number of heads in a and in wCoinTossNumHeads, and carry if at least one heads
-TossCoinATimes: ; 3071 (0:3071)
+TossCoinATimes:
 	push hl
 	ld hl, wCoinTossScreenTextID
 	ld [hl], e
@@ -16,7 +16,7 @@ TossCoinATimes: ; 3071 (0:3071)
 ; text at de is printed in a text box during the coin toss.
 ; returns: - carry, and 1 in a and in wCoinTossNumHeads if heads
 ;          - nc, and 0 in a and in wCoinTossNumHeads if tails
-TossCoin: ; 307d (0:307d)
+TossCoin:
 	push hl
 	ld hl, wCoinTossScreenTextID
 	ld [hl], e
@@ -30,7 +30,7 @@ TossCoin: ; 307d (0:307d)
 	ret
 
 ; cp de, bc
-CompareDEtoBC: ; 3090 (0:3090)
+CompareDEtoBC:
 	ld a, d
 	cp b
 	ret nz

@@ -2,7 +2,7 @@
 ; de = source of compressed data
 ; b = HIGH byte of secondary buffer ($100 bytes of buffer space)
 ; also clears this $100 byte space
-InitDataDecompression: ; 08bf (0:08bf)
+InitDataDecompression:
 	ld hl, wDecompSourcePosPtr
 	ld [hl], e
 	inc hl
@@ -36,7 +36,7 @@ InitDataDecompression: ; 08bf (0:08bf)
 ; input:
 ; bc = row width
 ; de = buffer to place decompressed data
-DecompressData: ; 08de (0:08de)
+DecompressData:
 	push hl
 	push de
 .loop
@@ -69,7 +69,7 @@ DecompressData: ; 08de (0:08de)
 ;  - if on -> off, then the data only provides the offset,
 ;  and the previous byte read for number of bytes to repeat, 0xXY, is reused
 ;  in which case (0x0Y + 2) bytes are repeated starting from the offset.
-.Decompress: ; 08ef (0:08ef)
+.Decompress:
 	ld hl, wDecompNumBytesToRepeat
 	ld a, [hl]
 	or a

@@ -1,7 +1,7 @@
 ; writes n items of text each given in the following format in hl:
 ; x coord, y coord, text id
 ; $ff-terminated
-PlaceTextItems: ; 2c08 (0:2c08)
+PlaceTextItems:
 	ld d, [hl] ; x coord
 	inc hl
 	bit 7, d
@@ -17,18 +17,18 @@ PlaceTextItems: ; 2c08 (0:2c08)
 	jr PlaceTextItems ; do next item
 
 ; like ProcessTextFromID, except it calls InitTextPrinting first
-InitTextPrinting_ProcessTextFromID: ; 2c1b (0:2c1b)
+InitTextPrinting_ProcessTextFromID:
 	call InitTextPrinting
 	jr ProcessTextFromID
 
 ; like ProcessTextFromPointerToID, except it calls InitTextPrinting first
-InitTextPrinting_ProcessTextFromPointerToID: ; 2c20 (0:2c20)
+InitTextPrinting_ProcessTextFromPointerToID:
 	call InitTextPrinting
 ;	fallthrough
 
 ; like ProcessTextFromID below, except a memory address containing a text ID is
 ; provided in hl rather than the text ID directly.
-ProcessTextFromPointerToID: ; 2c23 (0:2c23)
+ProcessTextFromPointerToID:
 	ld a, [hli]
 	or [hl]
 	ret z
@@ -40,7 +40,7 @@ ProcessTextFromPointerToID: ; 2c23 (0:2c23)
 ; given the ID of a text in hl, reads the characters from it processes them.
 ; loops until TX_END is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
 ; restores original ROM bank before returning.
-ProcessTextFromID: ; 2c29 (0:2c29)
+ProcessTextFromID:
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
@@ -51,7 +51,7 @@ ProcessTextFromID: ; 2c29 (0:2c29)
 
 ; return, in a, the number of lines of the text given in hl as an ID
 ; this is calculated by counting the amount of '\n' characters and adding 1 to the result
-CountLinesOfTextFromID: ; 2c37 (0:2c37)
+CountLinesOfTextFromID:
 	push hl
 	push de
 	push bc
@@ -86,11 +86,11 @@ CountLinesOfTextFromID: ; 2c37 (0:2c37)
 
 ; call PrintScrollableText with text box label, then wait for the
 ; player to press A or B to advance the printed text
-PrintScrollableText_WithTextBoxLabel: ; 2c62 (0:2c62)
+PrintScrollableText_WithTextBoxLabel:
 	call PrintScrollableText_WithTextBoxLabel_NoWait
 	jr WaitForPlayerToAdvanceText
 
-PrintScrollableText_WithTextBoxLabel_NoWait: ; 2c67 (0:2c67)
+PrintScrollableText_WithTextBoxLabel_NoWait:
 	push hl
 	ld hl, wTextBoxLabel
 	ld [hl], e
@@ -102,14 +102,14 @@ PrintScrollableText_WithTextBoxLabel_NoWait: ; 2c67 (0:2c67)
 
 ; call PrintScrollableText with no text box label, then wait for the
 ; player to press A or B to advance the printed text
-PrintScrollableText_NoTextBoxLabel: ; 2c73 (0:2c73)
+PrintScrollableText_NoTextBoxLabel:
 	xor a
 	call PrintScrollableText
 ;	fallthrough
 
 ; when a text box is full or the text is over, prompt the player to
 ; press A or B in order to clear the text and print the next lines.
-WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
+WaitForPlayerToAdvanceText:
 	lb bc, SYM_CURSOR_D, SYM_BOX_BOTTOM ; cursor tile, tile behind cursor
 	lb de, 18, 17 ; x, y
 	call SetCursorParametersForTextBox
@@ -121,7 +121,7 @@ WaitForPlayerToAdvanceText: ; 2c77 (0:2c77)
 ; to advance the page or close the text. register a determines whether the textbox is
 ; labeled or not. if labeled, the text id of the label is provided in wTextBoxLabel.
 ; PrintScrollableText is used mostly for overworld NPC text.
-PrintScrollableText: ; 2c84 (0:2c84)
+PrintScrollableText:
 	ld [wIsTextBoxLabeled], a
 	ldh a, [hBankROM]
 	push af
@@ -165,7 +165,7 @@ PrintScrollableText: ; 2c84 (0:2c84)
 
 ; zero wWhichTextHeader, wWhichTxRam2 and wWhichTxRam3, and set hJapaneseSyllabary to TX_KATAKANA
 ; fill wTextHeader1 with TX_KATAKANA, wFontWidth, hBankROM, and register bc for the text's pointer.
-ResetTxRam_WriteToTextHeader: ; 2cc8 (0:2cc8)
+ResetTxRam_WriteToTextHeader:
 	xor a
 	ld [wWhichTextHeader], a
 	ld [wWhichTxRam2], a
@@ -176,7 +176,7 @@ ResetTxRam_WriteToTextHeader: ; 2cc8 (0:2cc8)
 
 ; fill the wTextHeader specified in wWhichTextHeader (0-3) with hJapaneseSyllabary,
 ; wFontWidth, hBankROM, and register bc for the text's pointer.
-WriteToTextHeader: ; 2cd7 (0:2cd7)
+WriteToTextHeader:
 	push hl
 	call GetPointerToTextHeader
 	pop bc
@@ -194,7 +194,7 @@ WriteToTextHeader: ; 2cd7 (0:2cd7)
 ; same as WriteToTextHeader, except it then increases wWhichTextHeader to
 ; set the next text header to the current one (usually, because
 ; it will soon be written to due to a TX_RAM command).
-WriteToTextHeader_MoveToNext: ; 2ceb (0:2ceb)
+WriteToTextHeader_MoveToNext:
 	call WriteToTextHeader
 	ld hl, wWhichTextHeader
 	inc [hl]
@@ -203,7 +203,7 @@ WriteToTextHeader_MoveToNext: ; 2ceb (0:2ceb)
 ; read the wTextHeader specified in wWhichTextHeader (0-3) and use the data to
 ; populate the corresponding memory addresses. also switch to the text's rombank
 ; and return the address of the next character in hl.
-ReadTextHeader: ; 2cf3 (0:2cf3)
+ReadTextHeader:
 	call GetPointerToTextHeader
 	ld a, [hli]
 	ld [hJapaneseSyllabary], a
@@ -217,7 +217,7 @@ ReadTextHeader: ; 2cf3 (0:2cf3)
 	ret
 
 ; return in hl, the address of the wTextHeader specified in wWhichTextHeader (0-3)
-GetPointerToTextHeader: ; 2d06 (0:2d06)
+GetPointerToTextHeader:
 	ld a, [wWhichTextHeader]
 	ld e, a
 	add a
@@ -232,7 +232,7 @@ GetPointerToTextHeader: ; 2d06 (0:2d06)
 ; draws a wide text box with or without label depending on wIsTextBoxLabeled
 ; if labeled, the label's text ID is provided in wTextBoxLabel
 ; calls InitTextPrintingInTextbox after drawing the text box
-DrawTextReadyLabeledOrRegularTextBox: ; 2d15 (0:2d15)
+DrawTextReadyLabeledOrRegularTextBox:
 	push hl
 	lb de, 0, 12
 	lb bc, 20, 6
@@ -261,7 +261,7 @@ DrawTextReadyLabeledOrRegularTextBox: ; 2d15 (0:2d15)
 ; then updates the current wTextHeader to point to the next character.
 ; a TX_RAM command causes a switch to a wTextHeader in the level below, and a TX_END
 ; command terminates the text unless there is a pending wTextHeader in the above level.
-ProcessTextHeader: ; 2d43 (0:2d43)
+ProcessTextHeader:
 	call ReadTextHeader
 	ld a, [hli]
 	or a ; TX_END
@@ -349,7 +349,7 @@ ProcessTextHeader: ; 2d43 (0:2d43)
   ; hl: wWhichTxRam2 or wWhichTxRam3
 ; return, in hl, the contents of the contents of the
 ; wTxRam* buffer's current entry, and increment wWhichTxRam*.
-HandleTxRam2Or3: ; 2de0 (0:2de0)
+HandleTxRam2Or3:
 	push de
 	ld a, [hl]
 	inc [hl]
@@ -365,7 +365,7 @@ HandleTxRam2Or3: ; 2de0 (0:2de0)
 
 ; uses the two byte text id in hl to read the three byte text offset
 ; loads the correct bank for the specific text and returns the pointer in hl
-GetTextOffsetFromTextID: ; 2ded (0:2ded)
+GetTextOffsetFromTextID:
 	push de
 	ld e, l
 	ld d, h
@@ -399,7 +399,7 @@ GetTextOffsetFromTextID: ; 2ded (0:2ded)
 ; if [wFontWidth] == FULL_WIDTH:
 ;   convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
 ;   replace leading zeros with SYM_SPACE
-TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
+TwoByteNumberToText_CountLeadingZeros:
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	jp z, TwoByteNumberToTxSymbol_TrimLeadingZeros
@@ -419,7 +419,7 @@ TwoByteNumberToText_CountLeadingZeros: ; 2e12 (0:2e12)
 
 ; in the overworld: copy the player's name to wStringBuffer
 ; in a duel: copy the name of the duelist whose turn it is to wStringBuffer
-CopyPlayerNameOrTurnDuelistName: ; 2e2c (0:2e2c)
+CopyPlayerNameOrTurnDuelistName:
 	ld de, wStringBuffer
 	push de
 	ldh a, [hWhoseTurn]
@@ -435,7 +435,7 @@ CopyPlayerNameOrTurnDuelistName: ; 2e2c (0:2e2c)
 
 ; prints text with id at hl, with letter delay, in a textbox area.
 ; the text must fit in the textbox; PrintScrollableText should be used instead.
-PrintText: ; 2e41 (0:2e41)
+PrintText:
 	ld a, l
 	or h
 	jr z, .from_ram
@@ -474,7 +474,7 @@ PrintText: ; 2e41 (0:2e41)
 
 ; prints text with id at hl, without letter delay, in a textbox area.
 ; the text must fit in the textbox; PrintScrollableText should be used instead.
-PrintTextNoDelay: ; 2e76 (0:2e76)
+PrintTextNoDelay:
 	ldh a, [hBankROM]
 	push af
 	call GetTextOffsetFromTextID
@@ -488,7 +488,7 @@ PrintTextNoDelay: ; 2e76 (0:2e76)
 
 ; copies a text given its id at hl, to de
 ; if hl is 0, the name of the turn duelist is copied instead
-CopyText: ; 2e89 (0:2e89)
+CopyText:
 	ld a, l
 	or h
 	jr z, .special
@@ -515,7 +515,7 @@ CopyText: ; 2e89 (0:2e89)
 ; then terminate the text with TX_END if it doesn't contain it already.
 ; fill any remaining bytes with spaces plus TX_END to match the length specified in a.
 ; return the text's actual length in characters (i.e. before the first TX_END) in e.
-CopyTextData_FromTextID: ; 2ea9 (0:2ea9)
+CopyTextData_FromTextID:
 	ldh [hff96], a
 	ldh a, [hBankROM]
 	push af
@@ -527,7 +527,7 @@ CopyTextData_FromTextID: ; 2ea9 (0:2ea9)
 	ret
 
 ; text id (usually of a card name) for TX_RAM2
-LoadTxRam2: ; 2ebb (0:2ebb)
+LoadTxRam2:
 	ld a, l
 	ld [wTxRam2], a
 	ld a, h
@@ -535,7 +535,7 @@ LoadTxRam2: ; 2ebb (0:2ebb)
 	ret
 
 ; a number between 0 and 65535 for TX_RAM3
-LoadTxRam3: ; 2ec4 (0:2ec4)
+LoadTxRam3:
 	ld a, l
 	ld [wTxRam3], a
 	ld a, h

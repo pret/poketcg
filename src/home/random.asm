@@ -1,5 +1,5 @@
 ; returns h * l in hl
-HtimesL: ; 0879 (0:0879)
+HtimesL:
 	push de
 	ld a, h
 	ld e, l
@@ -20,7 +20,7 @@ HtimesL: ; 0879 (0:0879)
 	ret
 
 ; return a random number between 0 and a (exclusive) in a
-Random: ; 088f (0:088f)
+Random:
 	push hl
 	ld h, a
 	call UpdateRNGSources
@@ -31,7 +31,7 @@ Random: ; 088f (0:088f)
 	ret
 
 ; get the next random numbers of the wRNG1 and wRNG2 sequences
-UpdateRNGSources: ; 089b (0:089b)
+UpdateRNGSources:
 	push hl
 	push de
 	ld hl, wRNG1

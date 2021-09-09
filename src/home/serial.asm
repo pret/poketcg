@@ -1,5 +1,5 @@
 ; called at roughly 240Hz by TimerHandler
-SerialTimerHandler: ; 0c91 (0:0c91)
+SerialTimerHandler:
 	ld a, [wSerialOp]
 	cp $29
 	jr z, .begin_transfer
@@ -35,7 +35,7 @@ SerialTimerHandler: ; 0c91 (0:0c91)
 	ld [hl], $0
 	ret
 
-Func_0cc5: ; 0cc5 (0:0cc5)
+Func_0cc5:
 	ld hl, wSerialRecvCounter
 	or a
 	jr nz, .asm_cdc
@@ -94,7 +94,7 @@ Func_0cc5: ; 0cc5 (0:0cc5)
 	scf
 	ret
 
-SerialHandler: ; 0d26 (0:0d26)
+SerialHandler:
 	push af
 	push hl
 	push de
@@ -148,7 +148,7 @@ SerialHandler: ; 0d26 (0:0d26)
 
 ; handles a byte read from serial transfer by decoding it and storing it into
 ; the receive buffer
-SerialHandleRecv: ; 0d77 (0:0d77)
+SerialHandleRecv:
 	ld hl, wSerialLastReadCA
 	ld e, [hl]
 	dec e
@@ -210,7 +210,7 @@ SerialHandleRecv: ; 0d77 (0:0d77)
 
 ; prepares a byte to send over serial transfer, either from the send-save byte
 ; slot or the send buffer
-SerialHandleSend: ; 0dc8 (0:0dc8)
+SerialHandleSend:
 	ld hl, wSerialSendSave
 	ld a, [hl]
 	or a
@@ -260,7 +260,7 @@ SerialHandleSend: ; 0dc8 (0:0dc8)
 	ret
 
 ; store byte at a in wSerialSendBuf for sending
-SerialSendByte: ; 0e0a (0:0e0a)
+SerialSendByte:
 	push hl
 	push de
 	push bc
@@ -290,7 +290,7 @@ SerialSendByte: ; 0e0a (0:0e0a)
 	ret
 
 ; sets carry if [wSerialRecvCounter] nonzero
-Func_0e32: ; 0e32 (0:0e32)
+Func_0e32:
 	ld a, [wSerialRecvCounter]
 	or a
 	ret z
@@ -298,7 +298,7 @@ Func_0e32: ; 0e32 (0:0e32)
 	ret
 
 ; receive byte in wSerialRecvBuf
-SerialRecvByte: ; 0e39 (0:0e39)
+SerialRecvByte:
 	push hl
 	ld hl, wSerialRecvCounter
 	ld a, [hl]
@@ -331,7 +331,7 @@ SerialRecvByte: ; 0e39 (0:0e39)
 	ret
 
 ; exchange c bytes. send bytes at hl and store received bytes in de
-SerialExchangeBytes: ; 0e63 (0:0e63)
+SerialExchangeBytes:
 	ld b, c
 .asm_e64
 	ld a, b
@@ -368,7 +368,7 @@ SerialExchangeBytes: ; 0e63 (0:0e63)
 	ret
 
 ; go into slave mode (external clock) for serial transfer?
-Func_0e8e: ; 0e8e (0:0e8e)
+Func_0e8e:
 	call ClearSerialData
 	ld a, $12
 	ldh [rSB], a         ; send $12
@@ -383,7 +383,7 @@ Func_0e8e: ; 0e8e (0:0e8e)
 	ret
 
 ; disable serial interrupt, and clear rSB, rSC, and serial registers in WRAM
-ResetSerial: ; 0ea6 (0:0ea6)
+ResetSerial:
 	ldh a, [rIE]
 	and ~(1 << INT_SERIAL)
 	ldh [rIE], a
@@ -393,7 +393,7 @@ ResetSerial: ; 0ea6 (0:0ea6)
 ;	fallthrough
 
 ; zero serial registers in WRAM
-ClearSerialData: ; 0eb1 (0:0eb1)
+ClearSerialData:
 	ld hl, wSerialOp
 	ld bc, wSerialEnd - wSerialOp
 .loop
@@ -406,7 +406,7 @@ ClearSerialData: ; 0eb1 (0:0eb1)
 	ret
 
 ; store bc bytes from hl in wSerialSendBuf for sending
-SerialSendBytes: ; 0ebf (0:0ebf)
+SerialSendBytes:
 	push bc
 .send_loop
 	ld a, [hli]
@@ -427,7 +427,7 @@ SerialSendBytes: ; 0ebf (0:0ebf)
 	ret
 
 ; receive bc bytes in wSerialRecvBuf and save them to hl
-SerialRecvBytes: ; 0ed5 (0:0ed5)
+SerialRecvBytes:
 	push bc
 .recv_loop
 	call SerialRecvByte
@@ -452,7 +452,7 @@ SerialRecvBytes: ; 0ed5 (0:0ed5)
 	scf
 	ret
 
-Func_0ef1: ; 0ef1 (0:0ef1)
+Func_0ef1:
 	ld de, wcb79
 	ld hl, sp+$fe
 	ld a, l
@@ -471,7 +471,7 @@ Func_0ef1: ; 0ef1 (0:0ef1)
 	or a
 	ret
 
-Func_0f05: ; 0f05 (0:0f05)
+Func_0f05:
 	push hl
 	ld hl, wcb7b
 	ld a, [hli]
@@ -491,7 +491,7 @@ Func_0f05: ; 0f05 (0:0f05)
 	scf
 	ret
 
-Func_0f1d: ; 0f1d (0:0f1d)
+Func_0f1d:
 	ld a, [wSerialFlags]
 	or a
 	jr nz, .asm_f27
@@ -510,7 +510,7 @@ Func_0f1d: ; 0f1d (0:0f1d)
 
 ; load the number at wSerialFlags (error code?) to TxRam3, print
 ; TransmissionErrorText, exit the duel, and reset serial registers.
-DuelTransmissionError: ; 0f35 (0:0f35)
+DuelTransmissionError:
 	ld a, [wSerialFlags]
 	ld l, a
 	ld h, 0
@@ -530,7 +530,7 @@ DuelTransmissionError: ; 0f35 (0:0f35)
 	ret
 
 ; exchange RNG during a link duel between both games
-ExchangeRNG: ; 0f58 (0:0f58)
+ExchangeRNG:
 	ld a, [wDuelType]
 	cp DUELTYPE_LINK
 	jr z, .link_duel
@@ -559,7 +559,7 @@ ExchangeRNG: ; 0f58 (0:0f58)
 ; finally exchange RNG data.
 ; the receiving side will use this data to read the OPPACTION_* value in
 ; [hOppActionTableIndex] and match it by calling the corresponding OppAction* function
-SetOppAction_SerialSendDuelData: ; 0f7f (0:0f7f)
+SetOppAction_SerialSendDuelData:
 	push hl
 	push bc
 	ldh [hOppActionTableIndex], a
@@ -579,7 +579,7 @@ SetOppAction_SerialSendDuelData: ; 0f7f (0:0f7f)
 ; receive 10 bytes of data from wSerialRecvBuf and store them into hOppActionTableIndex,
 ; hTempCardIndex_ff9f, hTemp_ffa0, and hTempPlayAreaLocation_ffa1,
 ; and hTempRetreatCostCards. also exchange RNG data.
-SerialRecvDuelData: ; 0f9b (0:0f9b)
+SerialRecvDuelData:
 	push hl
 	push bc
 	ld hl, hOppActionTableIndex
@@ -592,7 +592,7 @@ SerialRecvDuelData: ; 0f9b (0:0f9b)
 
 ; serial send 8 bytes at f, a, l, h, e, d, c, b
 ; only during a duel against a link opponent
-SerialSend8Bytes: ; 0fac (0:0fac)
+SerialSend8Bytes:
 	push hl
 	push af
 	ld a, DUELVARS_DUELIST_TYPE
@@ -643,7 +643,7 @@ SerialSend8Bytes: ; 0fac (0:0fac)
 	ret
 
 ; serial recv 8 bytes to f, a, l, h, e, d, c, b
-SerialRecv8Bytes: ; 0fe9 (0:0fe9)
+SerialRecv8Bytes:
 	ld hl, wTempSerialBuf
 	ld bc, 8
 	push hl

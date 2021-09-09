@@ -1,7 +1,7 @@
 ; similar to ProcessText except it calls InitTextPrinting first
 ; with the first two bytes of hl being used to set hTextBGMap0Address.
 ; (the caller to ProcessText usually calls InitTextPrinting first)
-InitTextPrinting_ProcessText: ; 21ba (0:21ba)
+InitTextPrinting_ProcessText:
 	push de
 	push bc
 	ld d, [hl]
@@ -13,7 +13,7 @@ InitTextPrinting_ProcessText: ; 21ba (0:21ba)
 
 ; reads the characters from the text at hl processes them. loops until
 ; TX_END is found. ignores TX_RAM1, TX_RAM2, and TX_RAM3 characters.
-ProcessText: ; 21c5 (0:21c5)
+ProcessText:
 	push de
 	push bc
 	call InitTextFormat
@@ -48,7 +48,7 @@ ProcessText: ; 21c5 (0:21c5)
 ; processes the text character provided in a checking for specific control characters.
 ; hl points to the text character coming right after the one loaded into a.
 ; returns carry if the character was not processed by this function.
-ProcessSpecialTextCharacter: ; 21f2 (0:21f2)
+ProcessSpecialTextCharacter:
 	or a ; TX_END
 	jr z, .tx_end
 	cp TX_HIRAGANA
@@ -136,7 +136,7 @@ ProcessSpecialTextCharacter: ; 21f2 (0:21f2)
 ; calls InitTextFormat, selects tiles at $8800-$97FF for text, and clears the wc600.
 ; selects the first and last tile to be reserved for constructing text tiles in VRAM
 ; based on the values given in d and e respectively.
-SetupText: ; 2275 (0:2275)
+SetupText:
 	ld a, d
 	dec a
 	ld [wcd04], a
@@ -162,7 +162,7 @@ SetupText: ; 2275 (0:2275)
 ; hTextLineCurPos <- 0
 ; wHalfWidthPrintState <- 0
 ; hJapaneseSyllabary <- TX_KATAKANA
-InitTextFormat: ; 2298 (0:2298)
+InitTextFormat:
 	xor a ; FULL_WIDTH
 	ld [wFontWidth], a
 	ldh [hTextLineCurPos], a
@@ -173,7 +173,7 @@ InitTextFormat: ; 2298 (0:2298)
 
 ; call InitTextPrinting
 ; hTextLineLength <- a
-InitTextPrintingInTextbox: ; 22a6 (0:22a6)
+InitTextPrintingInTextbox:
 	push af
 	call InitTextPrinting
 	pop af
@@ -185,7 +185,7 @@ InitTextPrintingInTextbox: ; 22a6 (0:22a6)
 ; wCurTextLine <- 0
 ; write BGMap0-translated DE to hTextBGMap0Address
 ; call InitTextFormat
-InitTextPrinting: ; 22ae (0:22ae)
+InitTextPrinting:
 	push hl
 	ld a, d
 	ldh [hTextHorizontalAlign], a
@@ -208,7 +208,7 @@ InitTextPrinting: ; 22ae (0:22ae)
    ; hffb0 == $0: generate and place text tile
    ; hffb0 == $2 (bit 1 set): only generate text tile?
    ; hffb0 == $1 (bit 0 set): not even generate it, but just update text buffers?
-Func_22ca: ; 22ca (0:22ca)
+Func_22ca:
 	push hl
 	push de
 	push bc
@@ -237,7 +237,7 @@ Func_22ca: ; 22ca (0:22ca)
 
 ; writes a to wCurTextTile and to the tile pointed to by hTextBGMap0Address,
 ; then increments hTextBGMap0Address and hTextLineCurPos
-PlaceNextTextTile: ; 22f2 (0:22f2)
+PlaceNextTextTile:
 	ld [wCurTextTile], a
 	ld hl, hTextBGMap0Address
 	ld e, [hl]
@@ -260,7 +260,7 @@ PlaceNextTextTile: ; 22f2 (0:22f2)
 ; when terminating half-width text with "\n" or TX_END, or switching to full-width
 ; with TX_HALF2FULL or to symbols with TX_SYMBOL, check if it's necessary to append
 ; a half-width space to finish an incomplete character pair.
-TerminateHalfWidthText: ; 230f (0:230f)
+TerminateHalfWidthText:
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	ret z
@@ -277,7 +277,7 @@ TerminateHalfWidthText: ; 230f (0:230f)
 	pop hl
 	ret
 
-Func_2325: ; 2325 (0:2325)
+Func_2325:
 	call Func_235e
 	ret c
 	or a
@@ -324,7 +324,7 @@ Func_2325: ; 2325 (0:2325)
 
 ; search linked-list for text characters e/d (registers), if found hoist
 ; the result to head of list and return it. carry flag denotes success.
-Func_235e: ; 235e (0:235e)
+Func_235e:
 	ld a, [wFontWidth]
 	or a
 	jr z, .print
@@ -391,7 +391,7 @@ Func_235e: ; 235e (0:235e)
 	ret                  ; (return new linked-list head in a)
 
 ; uppercases e if [wUppercaseHalfWidthLetters] is nonzero
-CaseHalfWidthLetter: ; 23b1 (0:23b1)
+CaseHalfWidthLetter:
 	ld a, [wUppercaseHalfWidthLetters]
 	or a
 	ret z
@@ -410,7 +410,7 @@ CaseHalfWidthLetter: ; 23b1 (0:23b1)
 ;   b = length of text in tiles
 ;   c = length of text in bytes
 ;   a = -b
-GetTextLengthInTiles: ; 23c1 (0:23c1)
+GetTextLengthInTiles:
 	ld a, [hl]
 	cp TX_HALFWIDTH
 	jr nz, .full_width
@@ -431,7 +431,7 @@ GetTextLengthInTiles: ; 23c1 (0:23c1)
 ;   b = length of text in half-tiles
 ;   c = length of text in bytes
 ;   a = -b
-GetTextLengthInHalfTiles: ; 23d3 (0:23d3)
+GetTextLengthInHalfTiles:
 	push hl
 	push de
 	lb bc, $00, $00
@@ -472,7 +472,7 @@ GetTextLengthInHalfTiles: ; 23d3 (0:23d3)
 ; the text with TX_END if it doesn't contain it already.
 ; fill any remaining bytes with spaces plus TX_END to match the length specified in a.
 ; return the text's actual length in characters (i.e. before the first TX_END) in e.
-CopyTextData: ; 23fd (0:23fd)
+CopyTextData:
 	ld [wTextMaxLength], a
 	ld a, [hl]
 	cp TX_HALFWIDTH
@@ -552,7 +552,7 @@ CopyTextData: ; 23fd (0:23fd)
 
 ; convert the number at hl to TX_SYMBOL text format and write it to wStringBuffer
 ; replace leading zeros with SYM_SPACE
-TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
+TwoByteNumberToTxSymbol_TrimLeadingZeros:
 	push de
 	push bc
 	ld de, wStringBuffer
@@ -614,7 +614,7 @@ TwoByteNumberToTxSymbol_TrimLeadingZeros: ; 245d (0:245d)
 	; d = half-width character 1 (left)
 	; e = half-width character 2 (right)
 ; b = destination VRAM tile number
-GenerateTextTile: ; 24ac (0:24ac)
+GenerateTextTile:
 	push hl
 	push de
 	push bc
@@ -637,7 +637,7 @@ GenerateTextTile: ; 24ac (0:24ac)
 
 ; create, at wTextTileBuffer, a half-width font tile
 ; made from the ascii characters given in d and e
-CreateHalfWidthFontTile: ; 24ca (0:24ca)
+CreateHalfWidthFontTile:
 	push bc
 	ldh a, [hBankROM]
 	push af
@@ -673,7 +673,7 @@ CreateHalfWidthFontTile: ; 24ca (0:24ca)
 ; copies a 1bpp tile corresponding to a half-width font character to de.
 ; the ascii value of the character to copy is provided in a.
 ; assumes BANK(HalfWidthFont) is already loaded.
-CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
+CopyHalfWidthCharacterToDE:
 	sub $20 ; HalfWidthFont begins at ascii $20
 	ld l, a
 	ld h, $0
@@ -695,7 +695,7 @@ CopyHalfWidthCharacterToDE: ; 24fa (0:24fa)
 ; create, at wTextTileBuffer, a full-width font tile given its tile
 ; number within the full-width font graphics (FullWidthFonts) in de.
 ; return its v*Tiles address in hl, and return c = TILE_SIZE.
-CreateFullWidthFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
+CreateFullWidthFontTile_ConvertToTileDataAddress:
 	push bc
 	call GetFullWidthFontTileOffset
 	call CreateFullWidthFontTile
@@ -706,7 +706,7 @@ CreateFullWidthFontTile_ConvertToTileDataAddress: ; 2510 (0:2510)
 ; wTilePatternSelector and wTilePatternSelectorCorrection are used to select the source:
 ; - if wTilePatternSelector == $80 and wTilePatternSelectorCorrection == $00 -> $8000-$8FFF
 ; - if wTilePatternSelector == $88 and wTilePatternSelectorCorrection == $80 -> $8800-$97FF
-ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
+ConvertTileNumberToTileDataAddress:
 	ld hl, wTilePatternSelectorCorrection
 	ld a, b
 	xor [hl]
@@ -725,7 +725,7 @@ ConvertTileNumberToTileDataAddress: ; 2518 (0:2518)
 
 ; create, at wTextTileBuffer, a full-width font tile given its
 ; within the full-width font graphics (FullWidthFonts) in hl
-CreateFullWidthFontTile: ; 252e (0:252e)
+CreateFullWidthFontTile:
 	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld de, wTextTileBuffer
@@ -746,7 +746,7 @@ CreateFullWidthFontTile: ; 252e (0:252e)
 ; given two text characters at de, use the char at e (first one)
 ; to determine which type of text this pair of characters belongs to.
 ; return carry if TX_FULLWIDTH1 to TX_FULLWIDTH4.
-ClassifyTextCharacterPair: ; 2546 (0:2546)
+ClassifyTextCharacterPair:
 	ld a, [wFontWidth]
 	or a ; FULL_WIDTH
 	jr nz, .half_width
@@ -786,7 +786,7 @@ ClassifyTextCharacterPair: ; 2546 (0:2546)
 ;   if d == TX_KATAKANA: get tile from the 0_0_katakana.1bpp font.
 ;   if d == TX_HIRAGANA or d == $0: get tile from the 0_1_hiragana.1bpp or 0_2_digits_kanji1.1bpp font.
 ;   if d >= TX_FULLWIDTH1 and d <= TX_FULLWIDTH4: get tile from one of the other full-width fonts.
-GetFullWidthFontTileOffset: ; 256d (0:256d)
+GetFullWidthFontTileOffset:
 	ld bc, $50 tiles_1bpp
 	ld a, d
 	cp TX_HIRAGANA
@@ -810,7 +810,7 @@ GetFullWidthFontTileOffset: ; 256d (0:256d)
 
 ; pointers to VRAM?
 ; unreferenced
-Unknown_2589: ; 2589 (0:2589)
+Unknown_2589:
 	db $18
 	dw $8140
 	dw $817e

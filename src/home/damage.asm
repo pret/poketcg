@@ -1,5 +1,5 @@
 ; [wDamage] += a
-AddToDamage: ; 3055 (0:3055)
+AddToDamage:
 	push hl
 	ld hl, wDamage
 	add [hl]
@@ -11,7 +11,7 @@ AddToDamage: ; 3055 (0:3055)
 	ret
 
 ; [wDamage] -= a
-SubtractFromDamage: ; 3061 (0:3061)
+SubtractFromDamage:
 	push de
 	push hl
 	ld e, a

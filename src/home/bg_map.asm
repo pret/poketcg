@@ -4,7 +4,7 @@
 ;   ...
 ;   $ff
 ; for each struct, writes data to BGMap0-translated x,y
-WriteDataBlocksToBGMap0: ; 0695 (0:0695)
+WriteDataBlocksToBGMap0:
 	call WriteDataBlockToBGMap0
 	bit 7, [hl] ; check for $ff
 	jr z, WriteDataBlocksToBGMap0
@@ -13,7 +13,7 @@ WriteDataBlocksToBGMap0: ; 0695 (0:0695)
 ; reads struct:
 ;   x (1 byte), y (1 byte), data (n bytes), $00
 ; writes data to BGMap0-translated x,y
-WriteDataBlockToBGMap0: ; 069d (0:069d)
+WriteDataBlockToBGMap0:
 	ld b, [hl]
 	inc hl
 	ld c, [hl]
@@ -49,7 +49,7 @@ WriteDataBlockToBGMap0: ; 069d (0:069d)
 	ret
 
 ; writes a to [v*BGMap0 + BG_MAP_WIDTH * c + b]
-WriteByteToBGMap0: ; 06c3 (0:06c3)
+WriteByteToBGMap0:
 	push af
 	ld a, [wLCDC]
 	rla
@@ -88,7 +88,7 @@ HblankWriteByteToBGMap0: ; 06d9
 	ret
 
 ; copy a bytes of data from hl to vBGMap0 address pointed to by coord at bc
-CopyDataToBGMap0: ; 06ee (0:06ee)
+CopyDataToBGMap0:
 	push bc
 	push hl
 	push af
@@ -113,5 +113,5 @@ SafeCopyDataHLtoDE: ; 6fc (0:6fc)
 	dec b
 	jr nz, .lcd_off_loop
 	ret
-JPHblankCopyDataHLtoDE: ; 0709 (0:0709)
+JPHblankCopyDataHLtoDE:
 	jp HblankCopyDataHLtoDE

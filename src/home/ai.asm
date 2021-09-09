@@ -1,7 +1,7 @@
 ; loads opponent deck at wOpponentDeckID to wOpponentDeck, and initializes wPlayerDuelistType.
 ; on a duel against Sam, also loads PRACTICE_PLAYER_DECK to wPlayerDeck.
 ; also, sets wRNG1, wRNG2, and wRNGCounter to $57.
-LoadOpponentDeck: ; 2b78 (0:2b78)
+LoadOpponentDeck:
 	xor a
 	ld [wIsPracticeDuel], a
 	ld a, [wOpponentDeckID]
@@ -45,27 +45,27 @@ LoadOpponentDeck: ; 2b78 (0:2b78)
 	ld [hl], a
 	ret
 
-AIDoAction_Turn: ; 2bbf (0:2bbf)
+AIDoAction_Turn:
 	ld a, AIACTION_DO_TURN
 	jr AIDoAction
 
-AIDoAction_StartDuel: ; 2bc3 (0:2bc3)
+AIDoAction_StartDuel:
 	ld a, AIACTION_START_DUEL
 	jr AIDoAction
 
-AIDoAction_ForcedSwitch: ; 2bc7 (0:2bc7)
+AIDoAction_ForcedSwitch:
 	ld a, AIACTION_FORCED_SWITCH
 	call AIDoAction
 	ldh [hTempPlayAreaLocation_ff9d], a
 	ret
 
-AIDoAction_KOSwitch: ; 2bcf (0:2bcf)
+AIDoAction_KOSwitch:
 	ld a, AIACTION_KO_SWITCH
 	call AIDoAction
 	ldh [hTemp_ffa0], a
 	ret
 
-AIDoAction_TakePrize: ; 2bd7 (0:2bd7)
+AIDoAction_TakePrize:
 	ld a, AIACTION_TAKE_PRIZE
 	jr AIDoAction ; this line is not needed
 
@@ -73,7 +73,7 @@ AIDoAction_TakePrize: ; 2bd7 (0:2bd7)
 ; depending on the deck ID (see engine/ai/deck_ai.asm)
 ; input:
 ;	- a = AIACTION_* constant
-AIDoAction: ; 2bdb (0:2bdb)
+AIDoAction:
 	ld c, a
 
 ; load bank for Opponent Deck pointer table

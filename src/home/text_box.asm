@@ -1,7 +1,7 @@
 
 ; copy c bytes of data from de to hl
 ; if LCD on, copy during h-blank only
-SafeCopyDataDEtoHL: ; 1dca (0:1dca)
+SafeCopyDataDEtoHL:
 	ld a, [wLCDC]        ;
 	bit LCDC_ENABLE_F, a ;
 	jr nz, .lcd_on       ; assert that LCD is on
@@ -17,7 +17,7 @@ SafeCopyDataDEtoHL: ; 1dca (0:1dca)
 
 ; returns v*BGMap0 + BG_MAP_WIDTH * e + d in hl.
 ; used to map coordinates at de to a BGMap0 address.
-DECoordToBGMap0Address: ; 1ddb (0:1ddb)
+DECoordToBGMap0Address:
 	ld l, e
 	ld h, $0
 	add hl, hl
@@ -34,7 +34,7 @@ DECoordToBGMap0Address: ; 1ddb (0:1ddb)
 	ret
 
 ; Apply SCX and SCY correction to xy coordinates at de
-AdjustCoordinatesForBGScroll: ; 1deb (0:1deb)
+AdjustCoordinatesForBGScroll:
 	push af
 	ldh a, [hSCX]
 	rra
@@ -56,7 +56,7 @@ AdjustCoordinatesForBGScroll: ; 1deb (0:1deb)
 ; Draws a bxc text box at de printing a name in the left side of the top border.
 ; The name's text id must be at hl when this function is called.
 ; Mostly used to print text boxes for talked-to NPCs, but occasionally used in duels as well.
-DrawLabeledTextBox: ; 1e00 (0:1e00)
+DrawLabeledTextBox:
 	ld a, [wConsole]
 	cp CONSOLE_SGB
 	jr nz, .draw_textbox
@@ -150,7 +150,7 @@ DrawLabeledTextBox: ; 1e00 (0:1e00)
 ; Draws a bxc text box at de to print menu data in the overworld.
 ; Also used to print a text box during a duel.
 ; When talking to NPCs, DrawLabeledTextBox is used instead.
-DrawRegularTextBox: ; 1e7c (0:1e7c)
+DrawRegularTextBox:
 	ld a, [wConsole]
 	cp CONSOLE_CGB
 	jr z, DrawRegularTextBoxCGB
@@ -158,7 +158,7 @@ DrawRegularTextBox: ; 1e7c (0:1e7c)
 	jp z, DrawRegularTextBoxSGB
 ;	fallthrough
 
-DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
+DrawRegularTextBoxDMG:
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -168,7 +168,7 @@ DrawRegularTextBoxDMG: ; 1e88 (0:1e88)
 
 ; continue drawing a labeled or regular textbox on DMG or SGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxDMGorSGB: ; 1e93 (0:1e93)
+ContinueDrawingTextBoxDMGorSGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -187,7 +187,7 @@ ContinueDrawingTextBoxDMGorSGB: ; 1e93 (0:1e93)
 ; e = value of byte b
 ; a = value of bytes [1, b-1]
 ; b is supposed to be BG_MAP_WIDTH or smaller, else the stack would get corrupted
-CopyLine: ; 1ea5 (0:1ea5)
+CopyLine:
 	add sp, -BG_MAP_WIDTH
 	push hl
 	push bc
@@ -219,7 +219,7 @@ CopyLine: ; 1ea5 (0:1ea5)
 	ret
 
 ; DrawRegularTextBox branches here on CGB console
-DrawRegularTextBoxCGB: ; 1ec9 (0:1ec9)
+DrawRegularTextBoxCGB:
 	call DECoordToBGMap0Address
 	; top line (border) of the text box
 	ld a, SYM_BOX_TOP
@@ -229,7 +229,7 @@ DrawRegularTextBoxCGB: ; 1ec9 (0:1ec9)
 
 ; continue drawing a labeled or regular textbox on CGB:
 ; body and bottom line of either type of textbox
-ContinueDrawingTextBoxCGB: ; 1ed4 (0:1ed4)
+ContinueDrawingTextBoxCGB:
 	dec c
 	dec c
 .draw_text_box_body_loop
@@ -257,13 +257,13 @@ ContinueDrawingTextBoxCGB: ; 1ed4 (0:1ed4)
 ; e = id of top right tile
 ; a = id of rest of tiles
 ; Assumes b = SCREEN_WIDTH and that VRAM bank 0 is loaded
-CopyCurrentLineTilesAndAttrCGB: ; 1efb (0:1efb)
+CopyCurrentLineTilesAndAttrCGB:
 	push hl
 	call CopyLine
 	pop hl
 ;	fallthrough
 
-CopyCurrentLineAttrCGB: ; 1f00 (0:1f00)
+CopyCurrentLineAttrCGB:
 	call BankswitchVRAM1
 	ld a, [wTextBoxFrameType] ; on CGB, wTextBoxFrameType determines the palette and the other attributes
 	ld e, a
@@ -273,7 +273,7 @@ CopyCurrentLineAttrCGB: ; 1f00 (0:1f00)
 	ret
 
 ; DrawRegularTextBox branches here on SGB console
-DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
+DrawRegularTextBoxSGB:
 	push bc
 	push de
 	call DrawRegularTextBoxDMG
@@ -284,7 +284,7 @@ DrawRegularTextBoxSGB: ; 1f0f (0:1f0f)
 	ret z
 ;	fallthrough
 
-ColorizeTextBoxSGB: ; 1f1b (0:1f1b)
+ColorizeTextBoxSGB:
 	push bc
 	push de
 	ld hl, wTempSGBPacket
@@ -326,7 +326,7 @@ ColorizeTextBoxSGB: ; 1f1b (0:1f1b)
 	call SendSGB
 	ret
 
-AttrBlkPacket_TextBox: ; 1f4f (0:1f4f)
+AttrBlkPacket_TextBox:
 	sgb ATTR_BLK, 1 ; sgb_command, length
 	db 1 ; number of data sets
 	; Control Code, Color Palette Designation, X1, Y1, X2, Y2

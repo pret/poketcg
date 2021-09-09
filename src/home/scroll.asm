@@ -1,5 +1,5 @@
 ; something window scroll
-Func_3e44: ; 3e44 (0:3e44)
+Func_3e44:
 	push af
 	push hl
 	push bc
@@ -57,7 +57,7 @@ Func_3e44: ; 3e44 (0:3e44)
 
 ; apply background scroll for lines 0 to 96 using the values at BGScrollData
 ; skip if wApplyBGScroll is non-0
-ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
+ApplyBackgroundScroll:
 	push af
 	push hl
 	call DisableInt_LYCoincidence
@@ -109,7 +109,7 @@ ApplyBackgroundScroll: ; 3ea6 (0:3ea6)
 	pop af
 	ret
 
-BGScrollData: ; 3ef8 (0:3ef8)
+BGScrollData:
 	db  0,  0,  0,  1,  1,  1,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3
 	db  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  1,  1,  1,  0,  0
 	db  0, -1, -1, -1, -2, -2, -2, -3, -3, -3, -4, -4, -4, -4, -4, -4
@@ -118,7 +118,7 @@ BGScrollData: ; 3ef8 (0:3ef8)
 
 ; x = BGScrollData[(wVBlankCounter + a) & $3f]
 ; return, in register a, x rotated right [wBGScrollMod]-1 times (max 3 times)
-GetNextBackgroundScroll: ; 3f38 (0:3f38)
+GetNextBackgroundScroll:
 	ld hl, wVBlankCounter
 	add [hl]
 	and $3f
@@ -145,7 +145,7 @@ GetNextBackgroundScroll: ; 3f38 (0:3f38)
 	ret
 
 ; enable lcdc interrupt on LYC=LC coincidence
-EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
+EnableInt_LYCoincidence:
 	push hl
 	ld hl, rSTAT
 	set STAT_LYC, [hl]
@@ -156,7 +156,7 @@ EnableInt_LYCoincidence: ; 3f5a (0:3f5a)
 	ret
 
 ; disable lcdc interrupt and the LYC=LC coincidence trigger
-DisableInt_LYCoincidence: ; 3f68 (0:3f68)
+DisableInt_LYCoincidence:
 	push hl
 	ld hl, rSTAT
 	res STAT_LYC, [hl]

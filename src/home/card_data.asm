@@ -1,5 +1,5 @@
 ; load data of card with text id of name at de to wLoadedCard1
-LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
+LoadCardDataToBuffer1_FromName:
 	ld hl, CardPointers + 2 ; skip first NULL pointer
 	ld a, BANK(CardPointers)
 	call BankpushROM2
@@ -45,18 +45,18 @@ LoadCardDataToBuffer1_FromName: ; 2ecd (0:2ecd)
 	ret
 
 ; load data of card with id at e to wLoadedCard2
-LoadCardDataToBuffer2_FromCardID: ; 2f0a (0:2f0a)
+LoadCardDataToBuffer2_FromCardID:
 	push hl
 	ld hl, wLoadedCard2
 	jr LoadCardDataToHL_FromCardID
 
 ; load data of card with id at e to wLoadedCard1
-LoadCardDataToBuffer1_FromCardID: ; 2f10 (0:2f10)
+LoadCardDataToBuffer1_FromCardID:
 	push hl
 	ld hl, wLoadedCard1
 ;	fallthrough
 
-LoadCardDataToHL_FromCardID: ; 2f14 (0:2f14)
+LoadCardDataToHL_FromCardID:
 	push de
 	push bc
 	push hl
@@ -81,7 +81,7 @@ LoadCardDataToHL_FromCardID: ; 2f14 (0:2f14)
 	ret
 
 ; return in a the type (TYPE_* constant) of the card with id at e
-GetCardType: ; 2f32 (0:2f32)
+GetCardType:
 	push hl
 	call GetCardPointer
 	jr c, .done
@@ -96,7 +96,7 @@ GetCardType: ; 2f32 (0:2f32)
 	ret
 
 ; return in de the 2-byte text id of the name of the card with id at e
-GetCardName: ; 2f45 (0:2f45)
+GetCardName:
 	push hl
 	call GetCardPointer
 	jr c, .done
@@ -114,7 +114,7 @@ GetCardName: ; 2f45 (0:2f45)
 	ret
 
 ; from the card id in a, returns type into a, rarity into b, and set into c
-GetCardTypeRarityAndSet: ; 2f5d (0:2f5d)
+GetCardTypeRarityAndSet:
 	push hl
 	push de
 	ld d, 0
@@ -139,7 +139,7 @@ GetCardTypeRarityAndSet: ; 2f5d (0:2f5d)
 
 ; return at hl the pointer to the data of the card with id at e
 ; return carry if e was out of bounds, so no pointer was returned
-GetCardPointer: ; 2f7c (0:2f7c)
+GetCardPointer:
 	push de
 	push bc
 	ld l, e
@@ -173,7 +173,7 @@ GetCardPointer: ; 2f7c (0:2f7c)
    ; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
-LoadCardGfx: ; 2fa0 (0:2fa0)
+LoadCardGfx:
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -205,7 +205,7 @@ LoadCardGfx: ; 2fa0 (0:2fa0)
 	ret
 
 ; identical to CopyFontsOrDuelGraphicsTiles
-CopyFontsOrDuelGraphicsTiles2: ; 2fcb (0:2fcb)
+CopyFontsOrDuelGraphicsTiles2:
 	ld a, BANK(Fonts) ; BANK(DuelGraphics)
 	call BankpushROM
 	ld c, TILE_SIZE

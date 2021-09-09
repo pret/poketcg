@@ -1,38 +1,38 @@
-SetupSound: ; 377f (0:377f)
+SetupSound:
 	farcall _SetupSound
 	ret
 
-StopMusic: ; 3784 (0:3784)
+StopMusic:
 	xor a ; MUSIC_STOP
-PlaySong: ; 3785 (0:3785)
+PlaySong:
 	farcall _PlaySong
 	ret
 
 ; return a = 0: song finished, a = 1: song not finished
-AssertSongFinished: ; 378a (0:378a)
+AssertSongFinished:
 	farcall _AssertSongFinished
 	ret
 
 ; return a = 0: SFX finished, a = 1: SFX not finished
-AssertSFXFinished: ; 378f (0:378f)
+AssertSFXFinished:
 	farcall _AssertSFXFinished
 	ret
 
-Func_3794: ; 3794 (0:3794)
+Func_3794:
 	ld a, $04
-PlaySFX: ; 3796 (0:3796)
+PlaySFX:
 	farcall _PlaySFX
 	ret
 
-PauseSong: ; 379b (0:379b)
+PauseSong:
 	farcall _PauseSong
 	ret
 
-ResumeSong: ; 37a0 (0:37a0)
+ResumeSong:
 	farcall _ResumeSong
 	ret
 
-Func_37a5: ; 37a5 (0:37a5)
+Func_37a5:
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -53,7 +53,7 @@ Func_37a5: ; 37a5 (0:37a5)
 	call BankswitchROM
 	ret
 
-Func_37c5: ; 37c5 (0:37c5)
+Func_37c5:
 	ld c, $08
 .asm_37c7
 	ld b, $06

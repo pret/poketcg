@@ -3,7 +3,7 @@
 ; input:
 ; bc = row width
 ; de = buffer to place decompressed data
-DecompressDataFromBank: ; 3be4 (0:3be4)
+DecompressDataFromBank:
 	ldh a, [hBankROM]
 	push af
 	ld a, [wTempPointerBank]
@@ -14,7 +14,7 @@ DecompressDataFromBank: ; 3be4 (0:3be4)
 	ret
 
 ; Copies bc bytes from [wTempPointer] to de
-CopyBankedDataToDE: ; 3bf5 (0:3bf5)
+CopyBankedDataToDE:
 	ldh a, [hBankROM]
 	push af
 	push hl
@@ -31,7 +31,7 @@ CopyBankedDataToDE: ; 3bf5 (0:3bf5)
 	ret
 
 ; fill bc bytes of data at hl with a
-FillMemoryWithA: ; 3c10 (0:3c10)
+FillMemoryWithA:
 	push hl
 	push de
 	push bc
@@ -49,7 +49,7 @@ FillMemoryWithA: ; 3c10 (0:3c10)
 	ret
 
 ; fill 2*bc bytes of data at hl with d,e
-FillMemoryWithDE: ; 3c1f (0:3c1f)
+FillMemoryWithDE:
 	push hl
 	push bc
 .loop
@@ -66,7 +66,7 @@ FillMemoryWithDE: ; 3c1f (0:3c1f)
 	ret
 
 ; gets far byte a:hl, outputs value in a
-GetFarByte: ; 3c2d (0:3c2d)
+GetFarByte:
 	push hl
 	push af
 	ldh a, [hBankROM]
