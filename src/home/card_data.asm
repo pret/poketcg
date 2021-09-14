@@ -168,9 +168,9 @@ GetCardPointer:
 	ret
 
 ; input:
-   ; hl = card_gfx_index
-   ; de = where to load the card gfx to
-   ; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
+; hl = card_gfx_index
+; de = where to load the card gfx to
+; bc are supposed to be $30 (number of tiles of a card gfx) and TILE_SIZE respectively
 ; card_gfx_index = (<Name>CardGfx - CardGraphics) / 8  (using absolute ROM addresses)
 ; also copies the card's palette to wCardPalette
 LoadCardGfx:
