@@ -3683,6 +3683,7 @@ Func_5805: ; 5805 (1:5805)
 	cp DUELIST_TYPE_PLAYER
 	jr nz, .opponent
 
+; player
 	ldtx hl, WillDrawNPrizesText
 	call DrawWideTextBox_WaitForInput
 	ld a, [wNumberPrizeCardsToTake]
@@ -3692,7 +3693,8 @@ Func_5805: ; 5805 (1:5805)
 	inc hl
 	ld e, [hl]
 	call SerialSend8Bytes
-.asm_582f
+
+.return_has_prizes
 	call ExchangeRNG
 	ld a, DUELVARS_PRIZES
 	call GetTurnDuelistVariable
@@ -3712,11 +3714,11 @@ Func_5805: ; 5805 (1:5805)
 	cp DUELIST_TYPE_LINK_OPP
 	jr z, .link_opponent
 	call AIDoAction_TakePrize
-	ld c, DECK_SIZE
-.asm_5858
+	ld c, 60
+.delay_loop
 	call DoFrame
 	dec c
-	jr nz, .asm_5858
+	jr nz, .delay_loop
 	jr .asm_586f
 
 .link_opponent
@@ -3727,6 +3729,7 @@ Func_5805: ; 5805 (1:5805)
 	ld a, e
 	cp $ff
 	call nz, AddCardToHand
+
 .asm_586f
 	ld a, [wTempNumRemainingPrizeCards]
 	ld hl, wNumberPrizeCardsToTake
@@ -3739,7 +3742,7 @@ Func_5805: ; 5805 (1:5805)
 	farcall Func_82b6
 	ldtx hl, DrewNPrizesText
 	call DrawWideTextBox_WaitForInput
-	jr .asm_582f
+	jr .return_has_prizes
 
 Func_588a: ; 588a (1:588a)
 	ld l, PLAYER_TURN

@@ -30,7 +30,7 @@ ROM0
 	org $0150
 	"start"
 	org $3fe0
-	"Bankswitch 3D To 3F"
+	"Audio Callback"
 ROMX $01
 	"Bank 1"
 ROMX $02
