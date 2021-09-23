@@ -2225,7 +2225,7 @@ WriteCardListsTerminatorBytes: ; 8ce7 (2:4ce7)
 	ret
 
 ; inits some SRAM addresses
-Func_8cf9: ; 8cf9 (2:4cf9)
+InitPromotionalCardAndDeckCounterSaveData: ; 8cf9 (2:4cf9)
 	call EnableSRAM
 	xor a
 	ld hl, sHasPromotionalCards

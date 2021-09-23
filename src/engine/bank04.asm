@@ -5127,7 +5127,7 @@ MainMenuFunctionTable: ; 126fc (4:66fc)
 MainMenu_NewGame: ; 12704 (4:6704)
 	farcall Func_c1b1
 	call DisplayPlayerNamingScreen
-	farcall Func_1996e
+	farcall InitSaveData
 	call EnableSRAM
 	ld a, [sAnimationsDisabled]
 	ld [wAnimationsDisabled], a

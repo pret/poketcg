@@ -18,7 +18,7 @@ ValidateSRAM:
 	jr nz, .check_pattern_loop
 	call RestartSRAM
 	scf
-	call Func_4050
+	call InitSaveDataAndSetUppercase
 	call DisableSRAM
 	ret
 .check_sequence
@@ -36,7 +36,7 @@ ValidateSRAM:
 .restart_sram
 	call RestartSRAM
 	or a
-	call Func_4050
+	call InitSaveDataAndSetUppercase
 	call DisableSRAM
 	ret
 

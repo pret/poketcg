@@ -1,4 +1,4 @@
-INCLUDE "data/ai_trainer_card_logic.asm"
+INCLUDE "data/duel/ai_trainer_card_logic.asm"
 
 _AIProcessHandTrainerCards: ; 200e5 (8:40e5)
 	ld [wAITrainerCardPhase], a

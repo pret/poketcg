@@ -32,7 +32,9 @@ ROM0
 	org $3fe0
 	"Audio Callback"
 ROMX $01
-	"Bank 1"
+	"Game Loop"
+	"Duel Core"
+	"Menus Common"
 ROMX $02
 	"Bank 2"
 ROMX $03

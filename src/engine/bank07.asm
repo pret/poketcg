@@ -1450,44 +1450,52 @@ Func_1cb18: ; 1cb18 (7:4b18)
 	push hl
 	push bc
 	push de
+
+	; if Func_3ba2 is not set as
+	; wDoFrameFunction, quit and set carry
 	ld a, [wDoFrameFunction]
 	cp LOW(Func_3ba2)
-	jr nz, .asm_1cb5b
+	jr nz, .carry
 	ld a, [wDoFrameFunction + 1]
 	cp HIGH(Func_3ba2)
-	jr nz, .asm_1cb5b
+	jr nz, .carry
+
 	ld a, $ff
 	ld [wd4c0], a
 	ld a, [wd42a]
 	cp $ff
-	call nz, Func_1ccd4
+	call nz, DoScreenAnimationUpdate
+
+; clear all queued animations
+; and disable their sprite anims
 	ld hl, wAnimationQueue
-	ld c, $07
-.asm_1cb3b
+	ld c, ANIMATION_QUEUE_LENGTH
+.loop_queue
 	push bc
 	ld a, [hl]
 	cp $ff
-	jr z, .asm_1cb4b
+	jr z, .next_queued
 	ld [wWhichSprite], a
 	farcall DisableCurSpriteAnim
 	ld a, $ff
 	ld [hl], a
-.asm_1cb4b
+.next_queued
 	pop bc
 	inc hl
 	dec c
-	jr nz, .asm_1cb3b
+	jr nz, .loop_queue
+
 	xor a
 	ld [wDuelAnimBufferCurPos], a
 	ld [wDuelAnimBufferSize], a
-.asm_1cb57
+.done
 	pop de
 	pop bc
 	pop hl
 	ret
-.asm_1cb5b
+.carry
 	scf
-	jr .asm_1cb57
+	jr .done
 
 Func_1cb5e: ; 1cb5e (7:4b5e)
 	cp $96
@@ -1740,7 +1748,8 @@ DefaultScreenAnimationUpdate: ; 1ccbc (7:4cbc)
 	ld [hl], HIGH(DefaultScreenAnimationUpdate)
 	ret
 
-Func_1ccd4: ; 1ccd4 (7:4cd4)
+; runs the screen update function set in wScreenAnimUpdatePtr
+DoScreenAnimationUpdate: ; 1ccd4 (7:4cd4)
 	ld a, 1
 	ld [wScreenAnimDuration], a
 	ld hl, wScreenAnimUpdatePtr
@@ -1953,7 +1962,7 @@ Func_1ce03: ; 1ce03 (7:4e03)
 	dw Func_191a3         ; DUEL_ANIM_156
 	dw Func_191a3         ; DUEL_ANIM_157
 
-INCLUDE "data/duel_animations.asm"
+INCLUDE "data/duel/animations/duel_animations.asm"
 
 ; plays the Opening sequence, and handles player selection
 ; in the Title Screen and Start Menu

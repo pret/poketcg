@@ -3,8 +3,14 @@ INCLUDE "constants.asm"
 
 INCLUDE "engine/home.asm"
 
-SECTION "Bank 1", ROMX
-INCLUDE "engine/bank01.asm"
+SECTION "Game Loop", ROMX
+INCLUDE "engine/game_loop.asm"
+
+SECTION "Duel Core", ROMX
+INCLUDE "engine/duel/core.asm"
+
+SECTION "Menus Common", ROMX
+INCLUDE "engine/menus/common.asm"
 
 SECTION "Bank 2", ROMX
 INCLUDE "engine/bank02.asm"

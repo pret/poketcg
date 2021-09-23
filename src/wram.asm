@@ -1327,7 +1327,10 @@ wCoinTossNumTossed:: ; cd9f
 
 	ds $5
 
-wcda5:: ; cda5
+wAIDuelVars::
+; saves the prizes that the AI already used Peek on
+; each bit corresponds to a Prize card
+wAIPeekedPrizes:: ; cda5
 	ds $1
 
 ; this is used by AI in order to determine whether
@@ -1393,6 +1396,8 @@ wAICardListEnergyBonus:: ; cdb2
 
 wcdb4:: ; cdb4
 	ds $1
+
+wAIDuelVarsEnd::
 
 ; information about various properties of
 ; loaded attack for AI calculations
