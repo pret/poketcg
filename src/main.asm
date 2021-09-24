@@ -12,8 +12,14 @@ INCLUDE "engine/duel/core.asm"
 SECTION "Menus Common", ROMX
 INCLUDE "engine/menus/common.asm"
 
-SECTION "Bank 2", ROMX
-INCLUDE "engine/bank02.asm"
+SECTION "Menus", ROMX
+INCLUDE "engine/menus/duel.asm"
+INCLUDE "engine/menus/deck_selection.asm"
+INCLUDE "engine/menus/deck_check.asm"
+INCLUDE "engine/menus/deck_configuration.asm"
+INCLUDE "engine/menus/card_album.asm"
+INCLUDE "engine/menus/printer.asm"
+INCLUDE "engine/menus/deck_machine.asm"
 
 SECTION "Bank 3", ROMX
 INCLUDE "engine/bank03.asm"

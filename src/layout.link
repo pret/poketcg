@@ -36,7 +36,7 @@ ROMX $01
 	"Duel Core"
 	"Menus Common"
 ROMX $02
-	"Bank 2"
+	"Menus"
 ROMX $03
 	"Bank 3"
 ROMX $04
