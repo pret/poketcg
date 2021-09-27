@@ -19,8 +19,8 @@ DoCardPop:
 	farcall _DoCardPop
 	ret
 
-Func_7576:
-	farcall Func_1991f
+AddStarterDeck:
+	farcall _AddStarterDeck
 	ret
 
 PreparePrinterConnection:
@@ -43,8 +43,8 @@ SetUpAndStartLinkDuel:
 	farcall _SetUpAndStartLinkDuel
 	ret
 
-Func_7594:
-	farcall Func_1a61f
+ShowPromotionalCardScreen:
+	farcall _ShowPromotionalCardScreen
 	ret
 
 OpenBoosterPack:

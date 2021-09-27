@@ -2379,7 +2379,7 @@ ScriptCommand_ShowCardReceivedScreen: ; cee2 (3:4ee2)
 	farcall Func_10000
 	farcall FlashWhiteScreen
 	pop af
-	bank1call Func_7594
+	bank1call ShowPromotionalCardScreen
 	call WhiteOutDMGPals
 	call DoFrameIfLCDEnabled
 	call ReturnToOverworldNoCallback
@@ -3199,7 +3199,7 @@ ScriptCommand_nop: ; d3d1 (3:53d1)
 
 ScriptCommand_GiveStarterDeck: ; d3d4 (3:53d4)
 	ld a, [wStarterDeckChoice]
-	bank1call Func_7576
+	bank1call AddStarterDeck
 	jp IncreaseScriptPointerBy1
 
 Unknown_d3dd: ; d3dd (3:53dd)

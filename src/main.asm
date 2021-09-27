@@ -12,7 +12,7 @@ INCLUDE "engine/duel/core.asm"
 SECTION "Menus Common", ROMX
 INCLUDE "engine/menus/common.asm"
 
-SECTION "Menus", ROMX
+SECTION "Menus 1", ROMX
 INCLUDE "engine/menus/duel.asm"
 INCLUDE "engine/menus/deck_selection.asm"
 INCLUDE "engine/menus/deck_check.asm"
@@ -31,8 +31,47 @@ SECTION "AI Logic 1", ROMX
 INCLUDE "data/deck_ai_pointers.asm"
 INCLUDE "engine/ai/core.asm"
 
-SECTION "Bank 6", ROMX
-INCLUDE "engine/bank06.asm"
+SECTION "Menus 2", ROMX
+INCLUDE "engine/copy_card_name.asm"
+INCLUDE "engine/menus/play_area.asm"
+INCLUDE "engine/menus/glossary.asm"
+INCLUDE "engine/menus/unknown.asm"
+
+SECTION "Effect Commands", ROMX
+INCLUDE "engine/duel/effect_commands.asm"
+
+SECTION "Animations Engine", ROMX
+INCLUDE "engine/duel/animations.asm"
+
+SECTION "IR Communications Core", ROMX
+INCLUDE "engine/link/ir_core.asm"
+
+SECTION "Sprite Animations VBlank", ROMX
+INCLUDE "engine/sprite_vblank.asm"
+
+SECTION "Starter Deck", ROMX
+INCLUDE "engine/starter_deck.asm"
+
+SECTION "Link Functions", ROMX
+INCLUDE "engine/link/ir_functions.asm"
+INCLUDE "engine/link/card_pop.asm"
+INCLUDE "engine/link/printer.asm"
+INCLUDE "engine/link/link_duel.asm"
+
+SECTION "Promotional Card", ROMX
+INCLUDE "engine/promotional_card.asm"
+
+SECTION "Booster Pack Menu", ROMX
+INCLUDE "engine/menus/booster_pack.asm"
+
+SECTION "Unused Save Validation", ROMX
+INCLUDE "engine/unused_save_validation.asm"
+
+SECTION "Input Name", ROMX
+INCLUDE "engine/input_name.asm"
+
+SECTION "Auto Deck Machines", ROMX
+INCLUDE "engine/auto_deck_machines.asm"
 
 SECTION "Bank 7", ROMX
 INCLUDE "engine/bank07.asm"

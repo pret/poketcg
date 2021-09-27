@@ -36,7 +36,7 @@ ROMX $01
 	"Duel Core"
 	"Menus Common"
 ROMX $02
-	"Menus"
+	"Menus 1"
 ROMX $03
 	"Bank 3"
 ROMX $04
@@ -44,7 +44,18 @@ ROMX $04
 ROMX $05
 	"AI Logic 1"
 ROMX $06
-	"Bank 6"
+	"Menus 2"
+	"Effect Commands"
+	"Animations Engine"
+	"IR Communications Core"
+	"Sprite Animations VBlank"
+	"Starter Deck"
+	"Link Functions"
+	"Promotional Card"
+	"Booster Pack Menu"
+	"Unused Save Validation"
+	"Input Name"
+	"Auto Deck Machines"
 ROMX $07
 	"Bank 7"
 	"Credits Sequence"
